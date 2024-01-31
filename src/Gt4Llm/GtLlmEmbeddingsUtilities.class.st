@@ -18,6 +18,22 @@ GtLlmEmbeddingsUtilities class >> distanceMetrics [
 ]
 
 { #category : #distances }
+GtLlmEmbeddingsUtilities class >> distancechebyshevFrom: anEmbedding to: aQueryEmbedding [
+	<distanceMetric: 'chebyshev'>
+	| diff |
+	diff := (anEmbedding - aQueryEmbedding) abs.
+	^ diff max
+]
+
+{ #category : #distances }
+GtLlmEmbeddingsUtilities class >> distancecityblockFrom: anEmbedding to: aQueryEmbedding [
+	<distanceMetric: 'cityblock'>
+	| diff |
+	diff := (anEmbedding - aQueryEmbedding) abs.
+	^ diff sum
+]
+
+{ #category : #distances }
 GtLlmEmbeddingsUtilities class >> distancecorrelationFrom: anEmbedding to: aQueryEmbedding [
 	<distanceMetric: 'correlation'>
 	| uv uu vv dist |
