@@ -29,7 +29,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-30T13:47:58.612389+01:00"
+						"dateAndTimeString" : "2024-01-31T14:50:15.650499+01:00"
 					}
 				},
 				"uid" : {
@@ -39,7 +39,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "[Embeddings](https://platform.openai.com/docs/guides/embeddings) are used for search and recommendations. We can use the OpenAI client to generate recommendations."
+				"string" : "We can use the OpenAI client to generate embeddings."
 			},
 			{
 				"__type" : "textSnippet",
