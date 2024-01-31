@@ -65,10 +65,12 @@ GtLlmEmbeddingsUtilities class >> distancesFromEmbeddings: listOfEmbeddings to: 
 GtLlmEmbeddingsUtilities class >> distancesFromEmbeddings: listOfEmbeddings to: aQueryEmbedding usingMetric: aMetric [
 	^ listOfEmbeddings
 		collect: [ :anEmbedding | 
-			(self
-				distanceFrom: anEmbedding embedding
-				to: aQueryEmbedding embedding
-				usingMetric: aMetric) -> anEmbedding ]
+			GtLlmNearestEmbedding new
+				distance: (self
+						distanceFrom: anEmbedding embedding
+						to: aQueryEmbedding embedding
+						usingMetric: aMetric);
+				embedding: anEmbedding ]
 ]
 
 { #category : #view }
