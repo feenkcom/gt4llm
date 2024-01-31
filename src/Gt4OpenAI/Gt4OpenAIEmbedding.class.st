@@ -11,7 +11,7 @@ Class {
 Gt4OpenAIEmbedding class >> from: anArray [
 	^ self new
 		rawData: anArray;
-		embedding: anArray
+		embedding: (anArray collect: [ :aNumber | aNumber ] as: FloatArray)
 ]
 
 { #category : #accessing }
