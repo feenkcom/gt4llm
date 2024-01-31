@@ -11,5 +11,5 @@ Gt4OpenAIListModelsAPIClient >> request [
 
 { #category : #accessing }
 Gt4OpenAIListModelsAPIClient >> serializationClass [
-	^ Gt4OpenAIModelsList
+	^ Gt4OpenAIModelsGroup
 ]

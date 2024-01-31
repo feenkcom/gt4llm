@@ -26,6 +26,14 @@ Gt4OpenAIClient >> baseUrl: anObject [
 	baseUrl := anObject asZnUrl
 ]
 
+{ #category : #accessing }
+Gt4OpenAIClient >> checkForErrors: aResponse [
+	(aResponse includesKey: 'error')
+		ifTrue: [ ^ (Gt4OpenAIError from: (aResponse at: 'error')) signal ].
+
+	^ aResponse
+]
+
 { #category : #'as yet unclassified' }
 Gt4OpenAIClient >> completeChatWithModel: aString andMessages: aCollection [
 	^ Gt4OpenAICompleteChatAPIClient new
@@ -51,9 +59,9 @@ Gt4OpenAIClient >> generateEmbeddingWithModel: aString andInput: anInputString [
 
 { #category : #accessing }
 Gt4OpenAIClient >> get: aUrl [
-	client url: self baseUrl/ aUrl.
-	
-	^ client get
+	client url: self baseUrl / aUrl.
+
+	^ self checkForErrors: client get
 ]
 
 { #category : #accessing }
@@ -84,5 +92,5 @@ Gt4OpenAIClient >> post: aString withEntity: anEntity [
 
 	client contents: anEntity.
 
-	^ client post
+	^ self checkForErrors: client post
 ]
