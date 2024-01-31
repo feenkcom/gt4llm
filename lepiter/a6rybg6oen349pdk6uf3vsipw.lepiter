@@ -18,7 +18,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-30T13:45:42.913645+01:00"
+						"dateAndTimeString" : "2024-01-31T14:49:48.202913+01:00"
 					}
 				},
 				"editEmail" : {
@@ -29,17 +29,17 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-30T13:47:58.612389+01:00"
+						"dateAndTimeString" : "2024-01-31T14:50:54.397557+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "qXNl4IrMDQCc/EukATK6Xg=="
+					"uidString" : "ws+i45/MDQCZvu/cCm8XrA=="
 				},
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "[Embeddings](https://platform.openai.com/docs/guides/embeddings) are used for search and recommendations. We can use the OpenAI client to generate recommendations."
+				"string" : "Embeddings can be saved in a registry to avoid recreating them. The registry also allows us to search for a given number of related embeddings."
 			},
 			{
 				"__type" : "textSnippet",
@@ -55,7 +55,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-30T13:47:58.974983+01:00"
+						"dateAndTimeString" : "2024-01-31T14:51:14.565554+01:00"
 					}
 				},
 				"editEmail" : {
@@ -66,17 +66,17 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-30T13:48:24.565098+01:00"
+						"dateAndTimeString" : "2024-01-31T14:51:31.448846+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "0Q+16IrMDQCfxB7uATK6Xg=="
+					"uidString" : "YIrI6J/MDQCdq+VECm8XrA=="
 				},
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "Using the client initialization code from [[Getting Started]]"
+				"string" : "To generate embeddings if necessary, we may create a client."
 			},
 			{
 				"__type" : "pharoSnippet",
@@ -92,7 +92,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-30T13:48:16.487584+01:00"
+						"dateAndTimeString" : "2024-01-31T14:51:05.475169+01:00"
 					}
 				},
 				"editEmail" : {
@@ -103,12 +103,12 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-30T13:48:16.940167+01:00"
+						"dateAndTimeString" : "2024-01-31T14:51:06.260848+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "U0nA6YrMDQChAdPjATK6Xg=="
+					"uidString" : "gtM96J/MDQCddD9eCm8XrA=="
 				},
 				"code" : "apiKey := Clipboard clipboardText.\rclient := Gt4OpenAIClient new apiKey: apiKey"
 			},
@@ -126,7 +126,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-30T13:48:28.218122+01:00"
+						"dateAndTimeString" : "2024-01-31T14:51:10.394158+01:00"
 					}
 				},
 				"editEmail" : {
@@ -137,17 +137,17 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-30T13:48:44.637341+01:00"
+						"dateAndTimeString" : "2024-01-31T14:51:54.132205+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "2U5z6orMDQChjzkcATK6Xg=="
+					"uidString" : "+e6I6J/MDQCdfh2HCm8XrA=="
 				},
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "we can now use this client to generate an embedding for text."
+				"string" : "We can now try to query the registry."
 			},
 			{
 				"__type" : "pharoSnippet",
@@ -163,7 +163,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-30T13:45:49.43395+01:00"
+						"dateAndTimeString" : "2024-01-31T14:51:59.764981+01:00"
 					}
 				},
 				"editEmail" : {
@@ -174,14 +174,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-30T13:45:50.100301+01:00"
+						"dateAndTimeString" : "2024-01-31T14:54:05.293314+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "m3D84IrMDQCdmOF5ATK6Xg=="
+					"uidString" : "L0J665/MDQChJXJECm8XrA=="
 				},
-				"code" : "client generateEmbeddingWithModel: 'text-embedding-3-small' andInput: ('A text to embed')"
+				"code" : "input := 'A text for an embedding.'.\r\rembedding := GtLlmEmbeddingRegistry uniqueInstance at: input"
 			},
 			{
 				"__type" : "textSnippet",
@@ -197,7 +197,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-31T11:18:54.214696+01:00"
+						"dateAndTimeString" : "2024-01-31T14:52:35.080256+01:00"
 					}
 				},
 				"editEmail" : {
@@ -208,17 +208,17 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-31T11:19:23.163057+01:00"
+						"dateAndTimeString" : "2024-01-31T14:53:12.855491+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "Uz9m8ZzMDQC7tUzqCm8XrA=="
+					"uidString" : "cSKV7Z/MDQCiBxjoCm8XrA=="
 				},
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "If we want to preserve the input, we can also use the {{gtClass:GtLlmEmbedding}} utility class for that."
+				"string" : "This code will raise an error if the embedding is not found. We can use the client to instead create it if it isn’t found."
 			},
 			{
 				"__type" : "pharoSnippet",
@@ -234,7 +234,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-31T11:19:29.016213+01:00"
+						"dateAndTimeString" : "2024-01-31T14:52:31.213488+01:00"
 					}
 				},
 				"editEmail" : {
@@ -245,14 +245,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-31T11:21:02.168453+01:00"
+						"dateAndTimeString" : "2024-01-31T14:54:09.871842+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "xkN585zMDQC91kJBCm8XrA=="
+					"uidString" : "eiRa7Z/MDQCiAuMXCm8XrA=="
 				},
-				"code" : "input := 'A text to embed'.\r\rembedding := GtLlmEmbedding new\r\tinput: input;\r\tembedding: (client generateEmbeddingWithModel: 'text-embedding-3-small' andInput: input) items first embedding"
+				"code" : "embedding := GtLlmEmbeddingRegistry\r\tuniqueInstance\r\t\tat: input\r\t\tifAbsentCreateEmbedding: [ (client generateEmbeddingWithModel: 'text-embedding-ada-002' andInput: input)\r\t\t\t\titems first embedding ]"
 			},
 			{
 				"__type" : "textSnippet",
@@ -268,7 +268,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-31T11:21:34.68269+01:00"
+						"dateAndTimeString" : "2024-01-31T14:54:13.528116+01:00"
 					}
 				},
 				"editEmail" : {
@@ -279,20 +279,20 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-31T11:29:37.858442+01:00"
+						"dateAndTimeString" : "2024-01-31T14:54:42.697211+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "UeZU+pzMDQCAAX6FCm8XrA=="
+					"uidString" : "81Rz85/MDQCllSJ7Cm8XrA=="
 				},
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "We can then for instance apply distance functions on them using {{gtMethod:GtLlmEmbeddingsUtilities class>>distancesFromEmbeddings:to:}}. The default distance metric is `cosine`. To explore them, you can look at the distance metrics view on the {{gtClass:GtLlmEmbeddingsUtilities}} class."
+				"string" : "We can then query the registry for the most related embeddings we can find in the registry."
 			},
 			{
-				"__type" : "exampleSnippet",
+				"__type" : "pharoSnippet",
 				"children" : {
 					"__type" : "snippets",
 					"items" : [ ]
@@ -305,7 +305,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-31T11:29:41.871638+01:00"
+						"dateAndTimeString" : "2024-01-31T14:54:45.24646+01:00"
 					}
 				},
 				"editEmail" : {
@@ -316,20 +316,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-31T11:29:41.871638+01:00"
+						"dateAndTimeString" : "2024-01-31T14:54:52.390443+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "kbcAGJ3MDQCGoDlaCm8XrA=="
+					"uidString" : "REhX9Z/MDQCn7cPKCm8XrA=="
 				},
-				"exampleSelector" : "yourself",
-				"previewHeight" : 200,
-				"previewShowSelector" : "gtDistanceMetricsFor:",
-				"exampleBehaviorName" : "GtLlmEmbeddingsUtilities class",
-				"codeExpanded" : true,
-				"previewExpanded" : true,
-				"noCode" : true
+				"code" : "GtLlmEmbeddingRegistry uniqueInstance findNearest: 3 for: embedding"
 			}
 		]
 	},
@@ -341,7 +335,7 @@
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2024-01-30T13:45:39.495301+01:00"
+			"dateAndTimeString" : "2024-01-31T14:49:48.160415+01:00"
 		}
 	},
 	"editEmail" : {
@@ -352,15 +346,15 @@
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2024-01-30T13:45:39.495301+01:00"
+			"dateAndTimeString" : "2024-01-31T14:49:48.160415+01:00"
 		}
 	},
 	"pageType" : {
 		"__type" : "namedPage",
-		"title" : "Generating Embeddings"
+		"title" : "Using the embedding registry"
 	},
 	"uid" : {
 		"__type" : "uuid",
-		"uuid" : "3ad064e0-8acc-0d00-9cfb-a5770132ba5e"
+		"uuid" : "c428a2e3-9fcc-0d00-99bd-aa360a6f17ac"
 	}
 }

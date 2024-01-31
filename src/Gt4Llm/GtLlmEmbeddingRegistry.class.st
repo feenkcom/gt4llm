@@ -31,7 +31,7 @@ GtLlmEmbeddingRegistry >> at: anInput ifAbsentCreateEmbedding: aBlock [
 
 { #category : #accessing }
 GtLlmEmbeddingRegistry >> findNearest: aNumber for: anEmbedding [
-	^ self findNearest: aNumber for: anEmbedding usingMetric: GtLlmEmbeddingsUtilities defaultMetric
+	^ GtLlmEmbeddingsGroup withAll: (self findNearest: aNumber for: anEmbedding usingMetric: GtLlmEmbeddingsUtilities defaultMetric)
 ]
 
 { #category : #accessing }
@@ -57,4 +57,9 @@ GtLlmEmbeddingRegistry >> initialize [
 { #category : #accessing }
 GtLlmEmbeddingRegistry >> put: anEmbedding [
 	^ embeddings at: anEmbedding input put: anEmbedding
+]
+
+{ #category : #accessing }
+GtLlmEmbeddingRegistry >> reset [
+	embeddings := Dictionary new
 ]
