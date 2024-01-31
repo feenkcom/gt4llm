@@ -211,12 +211,12 @@
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2024-01-30T13:18:18.374603+01:00"
+			"dateAndTimeString" : "2024-01-31T10:02:56.480923+01:00"
 		}
 	},
 	"pageType" : {
 		"__type" : "namedPage",
-		"title" : "GT 4 OpenAI"
+		"title" : "gt4openai"
 	},
 	"uid" : {
 		"__type" : "uuid",

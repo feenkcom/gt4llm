@@ -1,13 +1,16 @@
 Class {
-	#name : #Gt4OpenAIMessagesList,
-	#superclass : #Object,
-	#traits : 'TGtGroupWithItems',
-	#classTraits : 'TGtGroupWithItems classTrait',
+	#name : #Gt4OpenAIMessagesGroup,
+	#superclass : #Gt4OpenAIGroup,
 	#category : #'Gt4OpenAI-Models'
 }
 
 { #category : #accessing }
-Gt4OpenAIMessagesList >> gtMessagesFor: aView [
+Gt4OpenAIMessagesGroup class >> itemClass [
+	^ Gt4OpenAIChatMessage
+]
+
+{ #category : #accessing }
+Gt4OpenAIMessagesGroup >> gtMessagesFor: aView [
 	<gtView>
 	^ aView columnedList
 		title: 'Messages';

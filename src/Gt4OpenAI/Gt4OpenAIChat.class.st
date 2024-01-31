@@ -71,7 +71,7 @@ Gt4OpenAIChat >> initializeClient [
 
 { #category : #accessing }
 Gt4OpenAIChat >> initializeMessages [
-	messages := Gt4OpenAIMessagesList new
+	messages := Gt4OpenAIMessagesGroup new
 ]
 
 { #category : #accessing }
