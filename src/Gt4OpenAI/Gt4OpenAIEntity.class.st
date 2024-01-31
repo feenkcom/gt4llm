@@ -51,4 +51,5 @@ Gt4OpenAIEntity >> rawData: anObject [
 Gt4OpenAIEntity >> serialize [
 	^ (self class serializationProperties
 		collect: [ :aPair | aPair key -> (self perform: aPair value) ]) asDictionary
+		reject: #isNil
 ]

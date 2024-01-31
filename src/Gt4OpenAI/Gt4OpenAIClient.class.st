@@ -43,6 +43,23 @@ Gt4OpenAIClient >> completeChatWithModel: aString andMessages: aCollection [
 		perform
 ]
 
+{ #category : #accessing }
+Gt4OpenAIClient >> createAssistant: anAssistant [ 
+	^ Gt4OpenAICreateAssistantAPIClient new
+		client: self;
+		assistant: anAssistant;
+		perform
+]
+
+{ #category : #accessing }
+Gt4OpenAIClient >> createAssistantFile: aFile forAssistant: anAssistant [ 
+	^ Gt4OpenAICreateAssistantFileAPIClient new
+		client: self;
+		assistant: anAssistant;
+		file: aFile;
+		perform
+]
+
 { #category : #default }
 Gt4OpenAIClient >> defaultBaseUrl [
 	^ 'https://api.openai.com/v1' asZnUrl
@@ -76,6 +93,7 @@ Gt4OpenAIClient >> initialize [
 Gt4OpenAIClient >> initializeClient [
 	client := ZnClient new.
 	client forJsonREST.
+	client headerAt: 'OpenAI-Beta' put: 'assistants=v1'.
 	client timeout: 60
 ]
 
@@ -93,4 +111,22 @@ Gt4OpenAIClient >> post: aString withEntity: anEntity [
 	client contents: anEntity.
 
 	^ self checkForErrors: client post
+]
+
+{ #category : #accessing }
+Gt4OpenAIClient >> postFile: aString withEntity: anEntity [
+	client url: self baseUrl / aString.
+
+	client entity: anEntity.
+
+	^ self checkForErrors: client post
+]
+
+{ #category : #accessing }
+Gt4OpenAIClient >> uploadFile: aFileReference withPurpose: aString [ 
+	^ Gt4OpenAIUploadFileAPIClient new
+		client: self;
+		file: aFileReference;
+		purpose: aString;
+		perform
 ]

@@ -38,5 +38,5 @@ Gt4OpenAIGenerateEmbeddingAPIClient >> request [
 
 { #category : #accessing }
 Gt4OpenAIGenerateEmbeddingAPIClient >> serializationClass [
-	^ Gt4OpenEmbeddingsList
+	^ Gt4OpenAIEmbeddingsGroup
 ]
