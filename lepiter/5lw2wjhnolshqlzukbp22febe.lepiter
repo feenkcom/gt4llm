@@ -182,6 +182,154 @@
 					"uidString" : "m3D84IrMDQCdmOF5ATK6Xg=="
 				},
 				"code" : "client generateEmbeddingWithModel: 'text-embedding-3-small' andInput: ('A text to embed')"
+			},
+			{
+				"__type" : "textSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-01-31T11:18:54.214696+01:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-01-31T11:19:23.163057+01:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "Uz9m8ZzMDQC7tUzqCm8XrA=="
+				},
+				"paragraphStyle" : {
+					"__type" : "textStyle"
+				},
+				"string" : "If we want to preserve the input, we can also use the {{gtClass:GtLlmEmbedding}} utility class for that."
+			},
+			{
+				"__type" : "pharoSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-01-31T11:19:29.016213+01:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-01-31T11:21:02.168453+01:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "xkN585zMDQC91kJBCm8XrA=="
+				},
+				"code" : "input := 'A text to embed'.\r\rembedding := GtLlmEmbedding new\r\tinput: input;\r\tembedding: (client generateEmbeddingWithModel: 'text-embedding-3-small' andInput: input) items first embedding"
+			},
+			{
+				"__type" : "textSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-01-31T11:21:34.68269+01:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-01-31T11:29:37.858442+01:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "UeZU+pzMDQCAAX6FCm8XrA=="
+				},
+				"paragraphStyle" : {
+					"__type" : "textStyle"
+				},
+				"string" : "We can then for instance apply distance functions on them using {{gtMethod:GtLlmEmbeddingsUtilities class>>distancesFromEmbeddings:to:}}. The default distance metric is `cosine`. To explore them, you can look at the distance metrics view on the {{gtClass:GtLlmEmbeddingsUtilities}} class."
+			},
+			{
+				"__type" : "exampleSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-01-31T11:29:41.871638+01:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-01-31T11:29:41.871638+01:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "kbcAGJ3MDQCGoDlaCm8XrA=="
+				},
+				"exampleSelector" : "yourself",
+				"previewHeight" : 200,
+				"previewShowSelector" : "gtDistanceMetricsFor:",
+				"exampleBehaviorName" : "GtLlmEmbeddingsUtilities class",
+				"codeExpanded" : true,
+				"previewExpanded" : true,
+				"noCode" : true
 			}
 		]
 	},
