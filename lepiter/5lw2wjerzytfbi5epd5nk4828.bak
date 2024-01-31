@@ -29,7 +29,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-30T13:20:16.404359+01:00"
+						"dateAndTimeString" : "2024-01-31T10:01:35.349579+01:00"
 					}
 				},
 				"uid" : {
@@ -39,7 +39,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "[gt4openai](https:github.com/feenkcom/gt4openai) is a software package to interact with [OpenAI](https://openai.com) from within Glamorous Toolkit."
+				"string" : "`gt4openai` is a software package to interact with [OpenAI](https://openai.com) from within Glamorous Toolkit. It is part of the broader [gt4] package."
 			},
 			{
 				"__type" : "textSnippet",
@@ -103,7 +103,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-30T13:20:54.538936+01:00"
+						"dateAndTimeString" : "2024-01-30T13:21:13.797851+01:00"
 					}
 				},
 				"uid" : {
@@ -113,7 +113,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "You might want to find out how to [[Get Started]]."
+				"string" : "You might want to begin by reading [[Getting Started]]."
 			}
 		]
 	},
