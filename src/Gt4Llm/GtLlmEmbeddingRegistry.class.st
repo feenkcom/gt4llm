@@ -52,6 +52,26 @@ GtLlmEmbeddingRegistry >> findNearest: aNumber for: anEmbedding usingMetric: aSt
 ]
 
 { #category : #accessing }
+GtLlmEmbeddingRegistry >> gtEmbeddingsFor: aView [
+	<gtView>
+	^ aView columnedList
+		title: 'Embeddings';
+		priority: 1;
+		items: [ embeddings associations ];
+		column: 'Input' text: [ :aPair | aPair value input ];
+		column: 'Actions'
+			stencil: [ :aPair | 
+				BrButton new
+					aptitude: BrGlamorousButtonWithIconAptitude;
+					label: 'Remove';
+					icon: BrGlamorousVectorIcons remove;
+					action: [ :aButton | 
+						embeddings removeKey: aPair key.
+						aButton phlow fireUpdateWish ] ]
+			width: 80
+]
+
+{ #category : #accessing }
 GtLlmEmbeddingRegistry >> initialize [
 	embeddings := Dictionary new
 ]
