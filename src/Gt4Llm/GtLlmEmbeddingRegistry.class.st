@@ -31,7 +31,10 @@ GtLlmEmbeddingRegistry >> at: anInput ifAbsentCreateEmbedding: aBlock [
 
 { #category : #accessing }
 GtLlmEmbeddingRegistry >> findNearest: aNumber for: anEmbedding [
-	^ GtLlmEmbeddingsGroup withAll: (self findNearest: aNumber for: anEmbedding usingMetric: GtLlmEmbeddingsUtilities defaultMetric)
+	^ self
+		findNearest: aNumber
+		for: anEmbedding
+		usingMetric: GtLlmEmbeddingsUtilities defaultMetric
 ]
 
 { #category : #accessing }
@@ -43,10 +46,9 @@ GtLlmEmbeddingRegistry >> findNearest: aNumber for: anEmbedding usingMetric: aSt
 			to: anEmbedding
 			usingMetric: aString.
 
-	sortedByDistance := (embeddingsWithDistances sorted: [ :a :b | a key < b key ])
-			collect: #value.
+	sortedByDistance := (embeddingsWithDistances sorted: [ :a :b | a distance < b distance ]).
 
-	^ sortedByDistance first: aNumber
+	^ GtLlmNearestEmbeddingsGroup withAll: (sortedByDistance first: aNumber)
 ]
 
 { #category : #accessing }
