@@ -4,6 +4,11 @@ Class {
 	#category : #'Gt4Llm-Embeddings'
 }
 
+{ #category : #accessing }
+GtLlmEmbeddingsUtilities class >> defaultMetric [
+	^ 'cosine'
+]
+
 { #category : #distances }
 GtLlmEmbeddingsUtilities class >> distanceFrom: anEmbedding to: aQueryEmbedding usingMetric: aMetric [
 	^ self
@@ -53,7 +58,7 @@ GtLlmEmbeddingsUtilities class >> distancecosineFrom: anEmbedding to: aQueryEmbe
 
 { #category : #distances }
 GtLlmEmbeddingsUtilities class >> distancesFromEmbeddings: listOfEmbeddings to: anEmbedding [ 
-	^ self distancesFromEmbeddings: listOfEmbeddings to: anEmbedding usingMetric: 'cosine'
+	^ self distancesFromEmbeddings: listOfEmbeddings to: anEmbedding usingMetric: self defaultMetric
 ]
 
 { #category : #distances }
