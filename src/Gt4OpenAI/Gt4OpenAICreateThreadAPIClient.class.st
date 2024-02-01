@@ -19,7 +19,9 @@ Gt4OpenAICreateThreadAPIClient >> messages: anObject [
 
 { #category : #accessing }
 Gt4OpenAICreateThreadAPIClient >> request [
-	^ self client post: 'threads' withEntity: nil
+	^ self client
+		post: 'threads'
+		withEntity: {'messages' -> (self messages collect: #serialize)} asDictionary
 ]
 
 { #category : #accessing }

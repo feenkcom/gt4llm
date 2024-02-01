@@ -2,7 +2,8 @@ Class {
 	#name : #Gt4OpenAIEntity,
 	#superclass : #Object,
 	#instVars : [
-		'rawData'
+		'rawData',
+		'client'
 	],
 	#category : #'Gt4OpenAI-Models'
 }
@@ -23,6 +24,16 @@ Gt4OpenAIEntity class >> from: aDictionary [
 { #category : #accessing }
 Gt4OpenAIEntity class >> serializationProperties [
 	^ #()
+]
+
+{ #category : #accessing }
+Gt4OpenAIEntity >> client [
+	^ client
+]
+
+{ #category : #accessing }
+Gt4OpenAIEntity >> client: anObject [
+	client := anObject
 ]
 
 { #category : #accessing }

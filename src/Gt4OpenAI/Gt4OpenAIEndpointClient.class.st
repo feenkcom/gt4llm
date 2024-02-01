@@ -22,7 +22,7 @@ Gt4OpenAIEndpointClient >> perform [
 	| aResult |
 	aResult := self request.
 
-	^ self serializationClass from: aResult
+	^ (self serializationClass from: aResult) client: self client
 ]
 
 { #category : #accessing }
