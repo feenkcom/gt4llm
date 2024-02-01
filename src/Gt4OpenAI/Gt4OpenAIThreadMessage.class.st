@@ -9,10 +9,26 @@ Class {
 		'fileIds',
 		'assistantId',
 		'runId',
-		'metadata'
+		'metadata',
+		'role'
 	],
 	#category : #'Gt4OpenAI-Models'
 }
+
+{ #category : #accessing }
+Gt4OpenAIThreadMessage class >> serializationProperties [
+	^ {
+		#assistant_id -> #assistantId.
+		#content -> #content.
+		#created_at -> #createdAt.
+		#file_ids -> #fileIds.
+		#id -> #id.
+		#metadata -> #metadata.
+		#run_id -> #runId.
+		#thread_d -> #threadId.
+		#role -> #role
+	}
+]
 
 { #category : #accessing }
 Gt4OpenAIThreadMessage >> assistantId [
@@ -36,7 +52,7 @@ Gt4OpenAIThreadMessage >> content: anObject [
 
 { #category : #accessing }
 Gt4OpenAIThreadMessage >> contentText [
-	^ content at: #text at: #value
+	^ '' join: (content collect: [ :aValue | aValue at: #text at: #value ])
 ]
 
 { #category : #accessing }
@@ -60,6 +76,15 @@ Gt4OpenAIThreadMessage >> fileIds: anObject [
 ]
 
 { #category : #accessing }
+Gt4OpenAIThreadMessage >> gtContentFor: aView [
+	<gtView>
+	^ aView textEditor
+		title: 'Content';
+		priority: 1;
+		text: [ self contentText ]
+]
+
+{ #category : #accessing }
 Gt4OpenAIThreadMessage >> id [
 	^ id
 ]
@@ -77,6 +102,16 @@ Gt4OpenAIThreadMessage >> metadata [
 { #category : #accessing }
 Gt4OpenAIThreadMessage >> metadata: anObject [
 	metadata := anObject
+]
+
+{ #category : #accessing }
+Gt4OpenAIThreadMessage >> role [
+	^ role
+]
+
+{ #category : #accessing }
+Gt4OpenAIThreadMessage >> role: anObject [
+	role := anObject
 ]
 
 { #category : #accessing }
