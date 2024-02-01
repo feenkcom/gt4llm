@@ -11,8 +11,10 @@ Class {
 { #category : #accessing }
 Gt4OpenAIEntity class >> from: aDictionary [
 	| entity |
+	(aDictionary isKindOf: self) ifTrue: [ ^ aDictionary ].
+
 	entity := self new.
-	
+
 	entity rawData: aDictionary.
 
 	self serializationProperties
