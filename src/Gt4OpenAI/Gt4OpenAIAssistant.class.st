@@ -61,6 +61,16 @@ Gt4OpenAIAssistant >> fileIds: anObject [
 ]
 
 { #category : #accessing }
+Gt4OpenAIAssistant >> gtToolsFor: aView [
+	<gtView>
+	^ aView list
+		title: 'Tools';
+		priority: 2;
+		items: [ self tools ];
+		itemText: #type
+]
+
+{ #category : #accessing }
 Gt4OpenAIAssistant >> id [
 	^ id
 ]
@@ -125,5 +135,5 @@ Gt4OpenAIAssistant >> tools [
 
 { #category : #accessing }
 Gt4OpenAIAssistant >> tools: anObject [
-	tools := anObject
+	tools := anObject collect: [ :aValue | Gt4OpenAITool from: aValue ]
 ]

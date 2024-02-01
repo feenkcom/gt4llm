@@ -61,7 +61,7 @@ Gt4OpenAIThreadRun >> cancelledAt [
 
 { #category : #accessing }
 Gt4OpenAIThreadRun >> cancelledAt: anObject [
-	cancelledAt := anObject
+	cancelledAt := anObject ifNotNil: [ DateAndTime fromUnixTime: anObject ]
 ]
 
 { #category : #accessing }
@@ -71,7 +71,7 @@ Gt4OpenAIThreadRun >> completedAt [
 
 { #category : #accessing }
 Gt4OpenAIThreadRun >> completedAt: anObject [
-	completedAt := anObject
+	completedAt := anObject ifNotNil: [ DateAndTime fromUnixTime: anObject ]
 ]
 
 { #category : #accessing }
@@ -81,7 +81,7 @@ Gt4OpenAIThreadRun >> createdAt [
 
 { #category : #accessing }
 Gt4OpenAIThreadRun >> createdAt: anObject [
-	createdAt := anObject
+	createdAt := anObject ifNotNil: [ DateAndTime fromUnixTime: anObject ]
 ]
 
 { #category : #accessing }
@@ -91,7 +91,7 @@ Gt4OpenAIThreadRun >> expiresAt [
 
 { #category : #accessing }
 Gt4OpenAIThreadRun >> expiresAt: anObject [
-	expiresAt := anObject
+	expiresAt := anObject ifNotNil: [ DateAndTime fromUnixTime: anObject ]
 ]
 
 { #category : #accessing }
@@ -101,7 +101,7 @@ Gt4OpenAIThreadRun >> failedAt [
 
 { #category : #accessing }
 Gt4OpenAIThreadRun >> failedAt: anObject [
-	failedAt := anObject
+	failedAt := anObject ifNotNil: [ DateAndTime fromUnixTime: anObject ]
 ]
 
 { #category : #accessing }
@@ -112,6 +112,27 @@ Gt4OpenAIThreadRun >> fileIds [
 { #category : #accessing }
 Gt4OpenAIThreadRun >> fileIds: anObject [
 	fileIds := anObject
+]
+
+{ #category : #accessing }
+Gt4OpenAIThreadRun >> gtErrorFor: aView [
+	<gtView>
+	self isFailed ifFalse: [ ^ aView empty ].
+
+	^ aView textEditor
+		title: 'Failure';
+		priority: 1;
+		text: [ self lastError at: 'message' ]
+]
+
+{ #category : #accessing }
+Gt4OpenAIThreadRun >> gtToolsFor: aView [
+	<gtView>
+	^ aView list
+		title: 'Tools';
+		priority: 2;
+		items: [ self tools ];
+		itemText: #type
 ]
 
 { #category : #accessing }
@@ -132,6 +153,26 @@ Gt4OpenAIThreadRun >> instructions [
 { #category : #accessing }
 Gt4OpenAIThreadRun >> instructions: anObject [
 	instructions := anObject
+]
+
+{ #category : #accessing }
+Gt4OpenAIThreadRun >> isCancelled [
+	^ self status = 'cancelled'
+]
+
+{ #category : #accessing }
+Gt4OpenAIThreadRun >> isFailed [
+	^ self status = 'failed'
+]
+
+{ #category : #accessing }
+Gt4OpenAIThreadRun >> isInProgress [
+	^ self status = 'in_progress'
+]
+
+{ #category : #accessing }
+Gt4OpenAIThreadRun >> isQueued [
+	^ self status = 'queued'
 ]
 
 { #category : #accessing }
@@ -171,7 +212,7 @@ Gt4OpenAIThreadRun >> startedAt [
 
 { #category : #accessing }
 Gt4OpenAIThreadRun >> startedAt: anObject [
-	startedAt := anObject
+	startedAt := anObject ifNotNil: [ DateAndTime fromUnixTime: anObject ]
 ]
 
 { #category : #accessing }
@@ -201,7 +242,7 @@ Gt4OpenAIThreadRun >> tools [
 
 { #category : #accessing }
 Gt4OpenAIThreadRun >> tools: anObject [
-	tools := anObject
+	tools := anObject collect: [ :aValue | Gt4OpenAITool from: aValue ]
 ]
 
 { #category : #accessing }
@@ -211,5 +252,5 @@ Gt4OpenAIThreadRun >> usage [
 
 { #category : #accessing }
 Gt4OpenAIThreadRun >> usage: anObject [
-	usage := anObject
+	usage := Gt4OpenAIUsage from: anObject
 ]
