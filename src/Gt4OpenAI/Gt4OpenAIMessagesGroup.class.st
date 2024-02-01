@@ -17,6 +17,5 @@ Gt4OpenAIMessagesGroup >> gtMessagesFor: aView [
 		priority: 1;
 		items: [ self items ];
 		column: 'Role' text: #role width: 60;
-		column: 'Message' text: #content;
-		actionUpdateButton
+		column: 'Message' text: #content
 ]

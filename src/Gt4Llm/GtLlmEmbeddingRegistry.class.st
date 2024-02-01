@@ -68,7 +68,8 @@ GtLlmEmbeddingRegistry >> gtEmbeddingsFor: aView [
 					action: [ :aButton | 
 						embeddings removeKey: aPair key.
 						aButton phlow fireUpdateWish ] ]
-			width: 80
+			width: 80;
+		send: #value
 ]
 
 { #category : #accessing }
