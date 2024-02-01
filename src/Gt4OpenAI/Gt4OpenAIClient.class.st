@@ -60,6 +60,23 @@ Gt4OpenAIClient >> createAssistantFile: aFile forAssistant: anAssistant [
 		perform
 ]
 
+{ #category : #accessing }
+Gt4OpenAIClient >> createRunForThread: aThread usingAssistant: anAssistant [
+	^ Gt4OpenAICreateThreadRunAPIClient new
+		client: self;
+		assistant: anAssistant;
+		thread: aThread;
+		perform
+]
+
+{ #category : #accessing }
+Gt4OpenAIClient >> createThreadWithMessages: aListOfMessages [ 
+	^ Gt4OpenAICreateThreadAPIClient new
+		client: self;
+		messages: aListOfMessages;
+		perform
+]
+
 { #category : #default }
 Gt4OpenAIClient >> defaultBaseUrl [
 	^ 'https://api.openai.com/v1' asZnUrl
@@ -77,6 +94,8 @@ Gt4OpenAIClient >> generateEmbeddingWithModel: aString andInput: anInputString [
 { #category : #accessing }
 Gt4OpenAIClient >> get: aUrl [
 	client url: self baseUrl / aUrl.
+	
+	client entity: nil.
 
 	^ self checkForErrors: client get
 ]
@@ -95,6 +114,14 @@ Gt4OpenAIClient >> initializeClient [
 	client forJsonREST.
 	client headerAt: 'OpenAI-Beta' put: 'assistants=v1'.
 	client timeout: 60
+]
+
+{ #category : #accessing }
+Gt4OpenAIClient >> listMessagesForThread: aThread [ 
+	^ Gt4OpenAIListThreadMessagesAPIClient new
+		client: self;
+		thread: aThread;
+		perform
 ]
 
 { #category : #accessing }
