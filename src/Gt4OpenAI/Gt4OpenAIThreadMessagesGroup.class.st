@@ -17,6 +17,5 @@ Gt4OpenAIThreadMessagesGroup >> gtMessagesFor: aView [
 		priority: 1;
 		items: [ self items ];
 		column: 'Role' text: #role width: 60;
-		column: 'Message' text: #contentText;
-		actionUpdateButton
+		column: 'Message' text: #contentText
 ]

@@ -2,7 +2,6 @@ Class {
 	#name : #Gt4OpenAIClient,
 	#superclass : #Object,
 	#instVars : [
-		'client',
 		'baseUrl',
 		'apiKey'
 	],
@@ -11,9 +10,7 @@ Class {
 
 { #category : #accessing }
 Gt4OpenAIClient >> apiKey: anApiKey [
-	apiKey := anApiKey.
-
-	client setBearerAuthentication: apiKey
+	apiKey := anApiKey
 ]
 
 { #category : #accessing }
@@ -93,27 +90,41 @@ Gt4OpenAIClient >> generateEmbeddingWithModel: aString andInput: anInputString [
 
 { #category : #accessing }
 Gt4OpenAIClient >> get: aUrl [
-	client url: self baseUrl / aUrl.
+	| aClient |
+	aClient := self initializeClient.
+	aClient url: self baseUrl / aUrl.
 	
-	client entity: nil.
+	aClient entity: nil.
 
-	^ self checkForErrors: client get
+	^ self checkForErrors: aClient get
+]
+
+{ #category : #accessing }
+Gt4OpenAIClient >> getRun: aRun forThread: aThread [
+	^ Gt4OpenAIGetThreadRunAPIClient new
+		client: self;
+		run: aRun;
+		thread: aThread;
+		perform
 ]
 
 { #category : #accessing }
 Gt4OpenAIClient >> initialize [
 	super initialize.
-	
-	self initializeClient.
+
 	self baseUrl: self defaultBaseUrl
 ]
 
 { #category : #accessing }
 Gt4OpenAIClient >> initializeClient [
-	client := ZnClient new.
-	client forJsonREST.
-	client headerAt: 'OpenAI-Beta' put: 'assistants=v1'.
-	client timeout: 60
+	| aClient |
+	aClient := ZnClient new.
+	aClient forJsonREST.
+	aClient headerAt: 'OpenAI-Beta' put: 'assistants=v1'.
+	aClient timeout: 60.
+	aClient setBearerAuthentication: apiKey.
+	aClient beOneShot.
+	^ aClient
 ]
 
 { #category : #accessing }
@@ -133,20 +144,24 @@ Gt4OpenAIClient >> listModels [
 
 { #category : #accessing }
 Gt4OpenAIClient >> post: aString withEntity: anEntity [
-	client url: self baseUrl / aString.
+	| aClient |
+	aClient := self initializeClient.
+	aClient url: self baseUrl / aString.
 
-	client contents: anEntity.
+	aClient contents: anEntity.
 
-	^ self checkForErrors: client post
+	^ self checkForErrors: aClient post
 ]
 
 { #category : #accessing }
 Gt4OpenAIClient >> postFile: aString withEntity: anEntity [
-	client url: self baseUrl / aString.
+	| aClient |
+	aClient := self initializeClient.
+	aClient url: self baseUrl / aString.
 
-	client entity: anEntity.
+	aClient entity: anEntity.
 
-	^ self checkForErrors: client post
+	^ self checkForErrors: aClient post
 ]
 
 { #category : #accessing }
