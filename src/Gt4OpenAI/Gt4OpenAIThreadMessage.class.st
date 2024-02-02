@@ -31,6 +31,18 @@ Gt4OpenAIThreadMessage class >> serializationProperties [
 ]
 
 { #category : #accessing }
+Gt4OpenAIThreadMessage >> annotations [
+	^ content flatCollect: [ :aValue | aValue at: #text at: #annotations ]
+]
+
+{ #category : #accessing }
+Gt4OpenAIThreadMessage >> asChatMessage [
+	^ Gt4OpenAIChatMessage
+		from: {'role' -> self role.
+				'content' -> self contentText} asDictionary
+]
+
+{ #category : #accessing }
 Gt4OpenAIThreadMessage >> assistantId [
 	^ assistantId
 ]
@@ -73,6 +85,15 @@ Gt4OpenAIThreadMessage >> fileIds [
 { #category : #accessing }
 Gt4OpenAIThreadMessage >> fileIds: anObject [
 	fileIds := anObject
+]
+
+{ #category : #accessing }
+Gt4OpenAIThreadMessage >> gtAnnotationsFor: aView [
+	<gtView>
+	^ aView list
+		title: 'Annotations';
+		priority: 2;
+		items: [ self annotations ]
 ]
 
 { #category : #accessing }
