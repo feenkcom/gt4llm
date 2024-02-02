@@ -31,8 +31,8 @@ Gt4OpenAICreateAssistantFileAPIClient >> file: anObject [
 { #category : #accessing }
 Gt4OpenAICreateAssistantFileAPIClient >> request [
 	^ self client
-		post: 'assistants/' , self assistant id , '/files'
-		withEntity: {'file_id' -> self file id} asDictionary
+		post: 'assistants/' , self assistant , '/files'
+		withEntity: {'file_id' -> self file} asDictionary
 ]
 
 { #category : #accessing }

@@ -49,20 +49,20 @@ Gt4OpenAIClient >> createAssistant: anAssistant [
 ]
 
 { #category : #accessing }
-Gt4OpenAIClient >> createAssistantFile: aFile forAssistant: anAssistant [ 
+Gt4OpenAIClient >> createAssistantFile: aFileId forAssistant: anAssistantId [ 
 	^ Gt4OpenAICreateAssistantFileAPIClient new
 		client: self;
-		assistant: anAssistant;
-		file: aFile;
+		assistant: anAssistantId;
+		file: aFileId;
 		perform
 ]
 
 { #category : #accessing }
-Gt4OpenAIClient >> createRunForThread: aThread usingAssistant: anAssistant [
+Gt4OpenAIClient >> createRunForThread: aThreadId usingAssistant: anAssistantId [
 	^ Gt4OpenAICreateThreadRunAPIClient new
 		client: self;
-		assistant: anAssistant;
-		thread: aThread;
+		assistant: anAssistantId;
+		thread: aThreadId;
 		perform
 ]
 
@@ -100,11 +100,11 @@ Gt4OpenAIClient >> get: aUrl [
 ]
 
 { #category : #accessing }
-Gt4OpenAIClient >> getRun: aRun forThread: aThread [
+Gt4OpenAIClient >> getRun: aRunId forThread: aThreadId [
 	^ Gt4OpenAIGetThreadRunAPIClient new
 		client: self;
-		run: aRun;
-		thread: aThread;
+		run: aRunId;
+		thread: aThreadId;
 		perform
 ]
 
@@ -128,10 +128,10 @@ Gt4OpenAIClient >> initializeClient [
 ]
 
 { #category : #accessing }
-Gt4OpenAIClient >> listMessagesForThread: aThread [ 
+Gt4OpenAIClient >> listMessagesForThread: aThreadId [ 
 	^ Gt4OpenAIListThreadMessagesAPIClient new
 		client: self;
-		thread: aThread;
+		thread: aThreadId;
 		perform
 ]
 
