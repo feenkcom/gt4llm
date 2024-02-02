@@ -100,6 +100,14 @@ Gt4OpenAIClient >> get: aUrl [
 ]
 
 { #category : #accessing }
+Gt4OpenAIClient >> getFile: aFileId [
+	^ Gt4OpenAIGetFileAPIClient new
+		client: self;
+		file: aFileId;
+		perform
+]
+
+{ #category : #accessing }
 Gt4OpenAIClient >> getRun: aRunId forThread: aThreadId [
 	^ Gt4OpenAIGetThreadRunAPIClient new
 		client: self;

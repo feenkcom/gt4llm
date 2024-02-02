@@ -18,7 +18,8 @@ Class {
 		'tools',
 		'fileIds',
 		'metadata',
-		'usage'
+		'usage',
+		'files'
 	],
 	#category : #'Gt4OpenAI-Models'
 }
@@ -115,6 +116,13 @@ Gt4OpenAIThreadRun >> fileIds: anObject [
 ]
 
 { #category : #accessing }
+Gt4OpenAIThreadRun >> files [
+	^ files
+		ifNil: [ files := Gt4OpenAIFilesGroup
+					withAll: (self fileIds collect: [ :aFileId | self client getFile: aFileId ]) ]
+]
+
+{ #category : #accessing }
 Gt4OpenAIThreadRun >> gtActionReloadFor: anAction [
 	<gtAction>
 	^ anAction button
@@ -133,6 +141,16 @@ Gt4OpenAIThreadRun >> gtErrorFor: aView [
 		title: 'Failure';
 		priority: 1;
 		text: [ self lastError at: 'message' ]
+]
+
+{ #category : #accessing }
+Gt4OpenAIThreadRun >> gtFilesFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Files';
+		priority: 5;
+		object: [ self files ];
+		view: #gtFilesFor:
 ]
 
 { #category : #accessing }
@@ -171,6 +189,21 @@ Gt4OpenAIThreadRun >> isCancelled [
 ]
 
 { #category : #accessing }
+Gt4OpenAIThreadRun >> isCancelling [
+	^ self status = 'cancelling'
+]
+
+{ #category : #accessing }
+Gt4OpenAIThreadRun >> isCompleted [
+	^ self status = 'completed'
+]
+
+{ #category : #accessing }
+Gt4OpenAIThreadRun >> isExpired [
+	^ self status = 'expired'
+]
+
+{ #category : #accessing }
 Gt4OpenAIThreadRun >> isFailed [
 	^ self status = 'failed'
 ]
@@ -183,6 +216,11 @@ Gt4OpenAIThreadRun >> isInProgress [
 { #category : #accessing }
 Gt4OpenAIThreadRun >> isQueued [
 	^ self status = 'queued'
+]
+
+{ #category : #accessing }
+Gt4OpenAIThreadRun >> isRequiringAction [
+	^ self status = 'requires_action'
 ]
 
 { #category : #accessing }
@@ -262,5 +300,5 @@ Gt4OpenAIThreadRun >> usage [
 
 { #category : #accessing }
 Gt4OpenAIThreadRun >> usage: anObject [
-	usage := Gt4OpenAIUsage from: anObject
+	usage := anObject ifNotNil: [ Gt4OpenAIUsage from: anObject ]
 ]

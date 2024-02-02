@@ -65,6 +65,41 @@ Gt4OpenAIFile >> id: anObject [
 ]
 
 { #category : #accessing }
+Gt4OpenAIFile >> isAssistantsOutput [
+	^ self purpose = 'assistants-output'
+]
+
+{ #category : #accessing }
+Gt4OpenAIFile >> isError [
+	^ self status = 'error'
+]
+
+{ #category : #accessing }
+Gt4OpenAIFile >> isFinetuningResults [
+	^ self purpose = 'fine-tune-results'
+]
+
+{ #category : #accessing }
+Gt4OpenAIFile >> isForAssistants [
+	^ self purpose = 'assistants'
+]
+
+{ #category : #accessing }
+Gt4OpenAIFile >> isForFinetuning [
+	^ self purpose = 'fine-tune'
+]
+
+{ #category : #accessing }
+Gt4OpenAIFile >> isProcessed [
+	^ self status = 'processed'
+]
+
+{ #category : #accessing }
+Gt4OpenAIFile >> isUploaded [
+	^ self status = 'uploaded'
+]
+
+{ #category : #accessing }
 Gt4OpenAIFile >> purpose [
 	^ purpose
 ]
