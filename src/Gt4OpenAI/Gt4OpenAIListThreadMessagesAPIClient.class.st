@@ -9,7 +9,7 @@ Class {
 
 { #category : #accessing }
 Gt4OpenAIListThreadMessagesAPIClient >> request [
-	^ self client get: 'threads/' , self thread id , '/messages'
+	^ self client get: 'threads/' , self thread , '/messages'
 ]
 
 { #category : #accessing }

@@ -10,7 +10,7 @@ Class {
 
 { #category : #accessing }
 Gt4OpenAIGetThreadRunAPIClient >> request [
-	^ self client get: 'threads/' , self thread id , '/runs/' , self run id
+	^ self client get: 'threads/' , self thread , '/runs/' , self run
 ]
 
 { #category : #accessing }

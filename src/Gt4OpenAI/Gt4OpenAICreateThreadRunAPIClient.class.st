@@ -21,8 +21,8 @@ Gt4OpenAICreateThreadRunAPIClient >> assistant: anObject [
 { #category : #accessing }
 Gt4OpenAICreateThreadRunAPIClient >> request [
 	^ self client
-		post: 'threads/' , self thread id , '/runs'
-		withEntity: {'assistant_id' -> self assistant id} asDictionary
+		post: 'threads/' , self thread , '/runs'
+		withEntity: {'assistant_id' -> self assistant} asDictionary
 ]
 
 { #category : #accessing }
