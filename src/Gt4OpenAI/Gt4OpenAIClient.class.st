@@ -9,6 +9,15 @@ Class {
 }
 
 { #category : #accessing }
+Gt4OpenAIClient >> addMessage: aMessage toThread: aThreadId [
+	^ Gt4OpenAIAddMessageToThreadAPIClient new
+		client: self;
+		message: aMessage;
+		thread: aThreadId;
+		perform
+]
+
+{ #category : #accessing }
 Gt4OpenAIClient >> apiKey: anApiKey [
 	apiKey := anApiKey
 ]
