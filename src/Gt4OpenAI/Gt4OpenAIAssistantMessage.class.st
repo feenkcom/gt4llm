@@ -5,6 +5,6 @@ Class {
 }
 
 { #category : #accessing }
-Gt4OpenAIAssistantMessage >> defaultRole [
+Gt4OpenAIAssistantMessage class >> defaultRole [
 	^ 'assistant'
 ]

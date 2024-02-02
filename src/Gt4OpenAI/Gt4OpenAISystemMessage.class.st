@@ -5,6 +5,6 @@ Class {
 }
 
 { #category : #accessing }
-Gt4OpenAISystemMessage >> defaultRole [
+Gt4OpenAISystemMessage class >> defaultRole [
 	^ 'system'
 ]
