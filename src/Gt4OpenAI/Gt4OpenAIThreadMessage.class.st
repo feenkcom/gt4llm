@@ -10,7 +10,8 @@ Class {
 		'assistantId',
 		'runId',
 		'metadata',
-		'role'
+		'role',
+		'annotations'
 	],
 	#category : #'Gt4OpenAI-Models'
 }
@@ -32,7 +33,12 @@ Gt4OpenAIThreadMessage class >> serializationProperties [
 
 { #category : #accessing }
 Gt4OpenAIThreadMessage >> annotations [
-	^ content flatCollect: [ :aValue | aValue at: #text at: #annotations ]
+	^ annotations
+		ifNil: [ annotations := Gt4OpenAIAnnotationsGroup
+					withAll: (content
+							flatCollect: [ :aValue | 
+								(aValue at: #text at: #annotations)
+									collect: [ :anAnnotation | (Gt4OpenAIAnnotation from: anAnnotation) client: self client ] ]) ]
 ]
 
 { #category : #accessing }
@@ -90,10 +96,11 @@ Gt4OpenAIThreadMessage >> fileIds: anObject [
 { #category : #accessing }
 Gt4OpenAIThreadMessage >> gtAnnotationsFor: aView [
 	<gtView>
-	^ aView list
+	^ aView forward
 		title: 'Annotations';
 		priority: 2;
-		items: [ self annotations ]
+		object: [ self annotations ];
+		view: #gtAnnotationsFor:
 ]
 
 { #category : #accessing }
@@ -102,7 +109,8 @@ Gt4OpenAIThreadMessage >> gtContentFor: aView [
 	^ aView textEditor
 		title: 'Content';
 		priority: 1;
-		text: [ self contentText ]
+		text: [ self contentText ];
+		styler: (Gt4OpenAIThreadMessageStyler new annotations: self annotations)
 ]
 
 { #category : #accessing }
