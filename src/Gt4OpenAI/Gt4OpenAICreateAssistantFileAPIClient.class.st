@@ -29,10 +29,18 @@ Gt4OpenAICreateAssistantFileAPIClient >> file: anObject [
 ]
 
 { #category : #accessing }
-Gt4OpenAICreateAssistantFileAPIClient >> request [
+Gt4OpenAICreateAssistantFileAPIClient >> makeRequest [
 	^ self client
 		post: 'assistants/' , self assistant , '/files'
 		withEntity: {'file_id' -> self file} asDictionary
+]
+
+{ #category : #accessing }
+Gt4OpenAICreateAssistantFileAPIClient >> request [
+	"the file API fails the first time certain (seemingly larger) files are being associated with assistants; retry once if it happens"
+	^ [ self makeRequest ]
+		on: Gt4OpenAIError
+		do: [ self makeRequest ]
 ]
 
 { #category : #accessing }
