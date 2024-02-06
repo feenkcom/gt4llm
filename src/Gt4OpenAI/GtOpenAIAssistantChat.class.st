@@ -148,6 +148,7 @@ GtOpenAIAssistantChat >> sendMessage: aString [
 { #category : #accessing }
 GtOpenAIAssistantChat >> summary [
 	^ {'Status' -> (lastRun ifNil: [ 'Ready' ] ifNotNil: [ lastRun status ]).
-		'Last run started at' -> (lastRun ifNil: [ '' ] ifNotNil: [ lastRun startedAt ]).
-		'Last run finished at' -> (lastRun ifNil: [ '' ] ifNotNil: [ lastRun completedAt ])}
+		'Last run started at'
+			-> (lastRun ifNil: [ '' ] ifNotNil: [ lastRun startedAt ]).
+		'Last run done at' -> (lastRun ifNil: [ '' ] ifNotNil: [ lastRun doneAt ])}
 ]
