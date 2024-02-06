@@ -86,6 +86,11 @@ Gt4OpenAIThreadRun >> createdAt: anObject [
 ]
 
 { #category : #accessing }
+Gt4OpenAIThreadRun >> doneAt [
+	^ self cancelledAt ifNil: [ self completedAt ifNil: [ self failedAt ] ]
+]
+
+{ #category : #accessing }
 Gt4OpenAIThreadRun >> expiresAt [
 	^ expiresAt
 ]
