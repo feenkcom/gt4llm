@@ -11,7 +11,8 @@ Class {
 		'assistantDescription',
 		'tools',
 		'chats',
-		'output'
+		'output',
+		'codeSnippets'
 	],
 	#category : #'Gt4OpenAI-Tutor'
 }
@@ -183,6 +184,24 @@ Gt4OpenAIGtTutor >> gtChatsFor: aView [
 ]
 
 { #category : #accessing }
+Gt4OpenAIGtTutor >> gtCodeSnippetsFor: aView [
+	<gtView>
+	^ aView explicit
+		title: 'Code snippets';
+		priority: 1;
+		stencil: [ BrVerticalPane new matchParent
+				addChildren: (codeSnippets
+						collect: [ :aSnippet | 
+							| aSnippetElement aSnippetViewModel |
+							aSnippetViewModel := aSnippet asSnippetViewModel.
+							aSnippetElement := aSnippetViewModel snippetView asElement.
+							aSnippetElement padding: (BlInsets all: 10).
+							aSnippetElement snippetViewModel: aSnippetViewModel.
+							aSnippetElement ]) ];
+		actionUpdateButton
+]
+
+{ #category : #accessing }
 Gt4OpenAIGtTutor >> initialize [
 	super initialize.
 	
@@ -192,7 +211,8 @@ Gt4OpenAIGtTutor >> initialize [
 	assistantDescription := self defaultAssistantDescription.
 	tools := self defaultTools.
 	chats := OrderedCollection new.
-	output :=  ''
+	output :=  ''.
+	codeSnippets := OrderedCollection new
 ]
 
 { #category : #accessing }
@@ -212,12 +232,16 @@ Gt4OpenAIGtTutor >> onApiKeyChanged [
 
 { #category : #accessing }
 Gt4OpenAIGtTutor >> onThreadRun: aRunAnnouncement [
-	| aChat code |
-	aChat := chats detect: [ :aLocalChat | aLocalChat lastRun id = aRunAnnouncement run id ].
+	| aChat code aRegex |
+	aChat := chats
+			detect: [ :aLocalChat | aLocalChat lastRun id = aRunAnnouncement run id ].
 
 	code := aChat messages first contentText.
-	
-	self codeRegex matchesIn: code
+
+	aRegex := self codeRegex.
+	(aRegex matches: code)
+		ifTrue: [ (aRegex subexpressions: 3)
+				do: [ :aCode | codeSnippets add: (LePharoSnippet new code: aCode) ] ]
 ]
 
 { #category : #accessing }
