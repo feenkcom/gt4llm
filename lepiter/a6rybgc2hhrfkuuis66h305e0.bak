@@ -279,14 +279,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-31T09:57:35.140423+01:00"
+						"dateAndTimeString" : "2024-01-31T09:57:38.484516+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "taRtwJvMDQCdJ/aNCm8XrA=="
 				},
-				"code" : "chat sendMessage: 'I have the following object in Glamorous Toolkit: ', objectDefinition, '.\r\rIts code definition is as follows:\r\r```\r', classDefinition, '\r```\r\rCan you tell me a bit about the object? In particular, what are the views t'.\r\rchat messages last"
+				"code" : "chat sendMessage: 'I have the following object in Glamorous Toolkit: ', objectDefinition, '.\r\rIts code definition is as follows:\r\r```\r', classDefinition, '\r```\r\rCan you tell me a bit about the object? In particular, what are the views defined on the class?'.\r\rchat messages last"
 			}
 		]
 	},

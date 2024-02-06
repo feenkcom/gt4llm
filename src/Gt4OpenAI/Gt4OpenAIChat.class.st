@@ -10,6 +10,12 @@ Class {
 }
 
 { #category : #accessing }
+Gt4OpenAIChat class >> withApiKeyFromClipboard [
+	<gtExample>
+	^ self new apiKey: Clipboard clipboardText
+]
+
+{ #category : #accessing }
 Gt4OpenAIChat >> addMessage: aMessage [
 	messages add: aMessage
 ]
