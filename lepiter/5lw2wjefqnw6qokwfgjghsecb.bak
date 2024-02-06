@@ -216,40 +216,6 @@
 					"uidString" : "RfoZlYrMDQCaiB6QATK6Xg=="
 				},
 				"code" : "messages := {\r\tGt4OpenAISystemMessage new content: 'You are a helpful assistant.'.\r\tGt4OpenAIUserMessage new content: 'Hello ChatGPT! How are you today?'\r}.\r\rclient completeChatWithModel: 'gpt-3.5-turbo' andMessages: messages"
-			},
-			{
-				"__type" : "pharoSnippet",
-				"children" : {
-					"__type" : "snippets",
-					"items" : [ ]
-				},
-				"createEmail" : {
-					"__type" : "email",
-					"emailString" : "<unknown>"
-				},
-				"createTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-30T13:29:48.052629+01:00"
-					}
-				},
-				"editEmail" : {
-					"__type" : "email",
-					"emailString" : "<unknown>"
-				},
-				"editTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-30T13:45:24.787538+01:00"
-					}
-				},
-				"uid" : {
-					"__type" : "uid",
-					"uidString" : "ruyup4rMDQCa8N1MATK6Xg=="
-				},
-				"code" : ""
 			}
 		]
 	},

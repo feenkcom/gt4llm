@@ -9,6 +9,12 @@ Class {
 }
 
 { #category : #accessing }
+Gt4OpenAIClient class >> withApiKeyFromClipboard [
+	<gtExample>
+	^ self new apiKey: Clipboard clipboardText
+]
+
+{ #category : #accessing }
 Gt4OpenAIClient >> addMessage: aMessage toThread: aThreadId [
 	^ Gt4OpenAIAddMessageToThreadAPIClient new
 		client: self;
