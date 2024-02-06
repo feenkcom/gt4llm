@@ -1,11 +1,15 @@
 Class {
 	#name : #GtOpenAIAssistantChat,
 	#superclass : #Object,
+	#traits : 'TGtAnnouncer',
+	#classTraits : 'TGtAnnouncer classTrait',
 	#instVars : [
 		'assistant',
 		'files',
 		'thread',
-		'lastRun'
+		'lastRun',
+		'announcer',
+		'future'
 	],
 	#category : #'Gt4OpenAI-Chats'
 }
@@ -17,6 +21,13 @@ GtOpenAIAssistantChat >> addFile: aFile [
 	self assistant client
 		createAssistantFile: aFile id
 		forAssistant: self assistant id
+]
+
+{ #category : #accessing }
+GtOpenAIAssistantChat >> announcer [
+
+	<return: #Announcer>
+	^ announcer ifNil: [ announcer := Announcer new ]
 ]
 
 { #category : #accessing }
@@ -33,7 +44,12 @@ GtOpenAIAssistantChat >> assistant: anObject [
 
 { #category : #accessing }
 GtOpenAIAssistantChat >> getRun [
-	lastRun := self assistant client getRun: lastRun id forThread: thread id
+	lastRun := self assistant client getRun: lastRun id forThread: thread id.
+
+	self announcer
+		announce: (Gt4OpenAIThreadRunUpdatedAnnouncement new run: lastRun).
+		
+	^ lastRun
 ]
 
 { #category : #accessing }
@@ -49,11 +65,14 @@ GtOpenAIAssistantChat >> gtFilesFor: aView [
 { #category : #accessing }
 GtOpenAIAssistantChat >> gtMessagesFor: aView [
 	<gtView>
-	^ aView forward
+	"cannot be a forward because the update wouldn’t work"
+	^ aView columnedList
 		title: 'Messages';
 		priority: 1;
-		object: [ thread ];
-		view: #gtMessagesFor:
+		items: [ thread updateMessages ];
+		column: 'Role' text: #role width: 60;
+		column: 'Message' text: #contentText;
+		updateWhen: Gt4OpenAIThreadRunAnnouncement in: self announcer
 ]
 
 { #category : #accessing }
@@ -65,11 +84,13 @@ GtOpenAIAssistantChat >> gtSummaryFor: aView [
 		items: [ self summary ];
 		column: 'Property' text: #key;
 		column: 'Value' text: #value;
+		updateWhen: Gt4OpenAIThreadRunAnnouncement in: self announcer;
 		actionButtonIcon: BrGlamorousVectorIcons refresh
 			tooltip: 'Update'
 			action: [ :aButton :aTab | 
 				self getRun.
-				aTab viewContentElement phlow update ]
+				aTab viewContentElement phlow update ];
+		send: [ self lastRun ]
 ]
 
 { #category : #accessing }
@@ -95,8 +116,18 @@ GtOpenAIAssistantChat >> initialize [
 ]
 
 { #category : #accessing }
+GtOpenAIAssistantChat >> lastRun [
+	^ lastRun
+]
+
+{ #category : #accessing }
 GtOpenAIAssistantChat >> onAssistantSet [
 	thread := assistant client createThreadWithMessages: {}
+]
+
+{ #category : #accessing }
+GtOpenAIAssistantChat >> runFuture [
+	^ Gt4OpenAIThreadRunFuture new chat: self
 ]
 
 { #category : #accessing }
@@ -105,7 +136,13 @@ GtOpenAIAssistantChat >> sendMessage: aString [
 	aMessage := Gt4OpenAIUserMessage new content: aString.
 
 	assistant client addMessage: aMessage toThread: thread id.
-	lastRun := assistant client createRunForThread: thread id usingAssistant: assistant id
+	lastRun := assistant client
+			createRunForThread: thread id
+			usingAssistant: assistant id.
+
+	future := (self runFuture
+			then: [ :aRun | self announcer announce: (Gt4OpenAIThreadRunIsDoneAnnouncement new run: aRun) ])
+			await
 ]
 
 { #category : #accessing }
