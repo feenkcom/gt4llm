@@ -199,6 +199,11 @@ Gt4OpenAIThreadRun >> isCompleted [
 ]
 
 { #category : #accessing }
+Gt4OpenAIThreadRun >> isDone [
+	^ self isCancelled or: [ self isExpired or: [ self isFailed ] ]
+]
+
+{ #category : #accessing }
 Gt4OpenAIThreadRun >> isExpired [
 	^ self status = 'expired'
 ]
