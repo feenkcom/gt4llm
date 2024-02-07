@@ -171,6 +171,8 @@ Gt4OpenAIGtTutor >> gtChatsFor: aView [
 		priority: 1;
 		items: [ chats ];
 		column: 'Assistant' text: [ :aChat | aChat assistant id ];
+		column: 'Messages' text: [ :aChat | aChat messages size ];
+		column: 'Last run' text: [ :aChat | aChat lastRun ifNil: [ '' ] ];
 		actionButtonIcon: BrGlamorousVectorIcons add
 			tooltip: 'New Chat'
 			action: [ :aButton :aTab | 
@@ -183,7 +185,7 @@ Gt4OpenAIGtTutor >> gtCodeSnippetsFor: aView [
 	<gtView>
 	^ aView explicit
 		title: 'Code snippets';
-		priority: 1;
+		priority: 2;
 		stencil: [ BrVerticalPane new matchParent
 				addChildren: (codeSnippets
 						collect: [ :aSnippet | 
@@ -200,7 +202,7 @@ Gt4OpenAIGtTutor >> gtCodeSnippetsFor: aView [
 Gt4OpenAIGtTutor >> gtPromptFor: aView [
 	<gtView>
 	^ aView textEditor
-		title: 'Tutor prompt';
+		title: 'Tutor instructions';
 		priority: 5;
 		text: [ self prompt ]
 ]
