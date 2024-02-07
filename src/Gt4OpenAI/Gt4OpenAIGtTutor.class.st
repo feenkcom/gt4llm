@@ -76,11 +76,6 @@ Gt4OpenAIGtTutor >> assistantName: anObject [
 ]
 
 { #category : #accessing }
-Gt4OpenAIGtTutor >> codeRegex [
-	^ '```([sS]malltalk)?(.*)```' asRegex
-]
-
-{ #category : #accessing }
 Gt4OpenAIGtTutor >> createAssistant [
 	assistant := client
 			createAssistant: (Gt4OpenAIAssistant new
@@ -202,6 +197,15 @@ Gt4OpenAIGtTutor >> gtCodeSnippetsFor: aView [
 ]
 
 { #category : #accessing }
+Gt4OpenAIGtTutor >> gtPromptFor: aView [
+	<gtView>
+	^ aView textEditor
+		title: 'Tutor prompt';
+		priority: 5;
+		text: [ self prompt ]
+]
+
+{ #category : #accessing }
 Gt4OpenAIGtTutor >> initialize [
 	super initialize.
 	
@@ -232,16 +236,12 @@ Gt4OpenAIGtTutor >> onApiKeyChanged [
 
 { #category : #accessing }
 Gt4OpenAIGtTutor >> onThreadRun: aRunAnnouncement [
-	| aChat code aRegex |
+	| aChat |
 	aChat := chats
 			detect: [ :aLocalChat | aLocalChat lastRun id = aRunAnnouncement run id ].
 
-	code := aChat messages first contentText.
-
-	aRegex := self codeRegex.
-	(aRegex matches: code)
-		ifTrue: [ (aRegex subexpressions: 3)
-				do: [ :aCode | codeSnippets add: (LePharoSnippet new code: aCode) ] ]
+	aChat messages first codeBlocks
+		do: [ :aCode | codeSnippets add: (LePharoSnippet new code: aCode) ]
 ]
 
 { #category : #accessing }
