@@ -215,7 +215,7 @@ Gt4OpenAIGtTutor >> initialize [
 	assistantDescription := self defaultAssistantDescription.
 	tools := self defaultTools.
 	chats := OrderedCollection new.
-	output :=  ''.
+	output :=  BlTextStream new.
 	codeSnippets := OrderedCollection new
 ]
 
