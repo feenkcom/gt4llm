@@ -9,7 +9,8 @@ Class {
 		'thread',
 		'lastRun',
 		'announcer',
-		'future'
+		'future',
+		'tutor'
 	],
 	#category : #'Gt4OpenAI-Chats'
 }
@@ -69,7 +70,7 @@ GtOpenAIAssistantChat >> gtMessagesFor: aView [
 	^ aView columnedList
 		title: 'Messages';
 		priority: 1;
-		items: [ thread updateMessages ];
+		items: [ self messages ];
 		column: 'Role' text: #role width: 60;
 		column: 'Message' text: #contentText;
 		updateWhen: Gt4OpenAIThreadRunAnnouncement in: self announcer
@@ -121,8 +122,17 @@ GtOpenAIAssistantChat >> lastRun [
 ]
 
 { #category : #accessing }
+GtOpenAIAssistantChat >> lastUpdate [
+	^ self lastRun ifNotNil: [ :aRun | aRun doneAt ifNil: [ aRun startedAt ] ]
+]
+
+{ #category : #accessing }
 GtOpenAIAssistantChat >> messages [
 	^ thread updateMessages
+		collect: [ :aMessage | 
+			aMessage
+				tutor: self tutor;
+				chat: self ]
 ]
 
 { #category : #accessing }
@@ -157,4 +167,14 @@ GtOpenAIAssistantChat >> summary [
 		'Last run started at'
 			-> (lastRun ifNil: [ '' ] ifNotNil: [ lastRun startedAt ]).
 		'Last run done at' -> (lastRun ifNil: [ '' ] ifNotNil: [ lastRun doneAt ])}
+]
+
+{ #category : #accessing }
+GtOpenAIAssistantChat >> tutor [
+	^ tutor
+]
+
+{ #category : #accessing }
+GtOpenAIAssistantChat >> tutor: anObject [
+	tutor := anObject
 ]
