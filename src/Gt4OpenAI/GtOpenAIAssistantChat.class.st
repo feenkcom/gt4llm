@@ -99,7 +99,14 @@ GtOpenAIAssistantChat >> gtWriteFor: aView [
 	^ aView textEditor
 		title: 'Write';
 		priority: 2;
-		text: [ 'Write a message here' ];
+		aptitude: [ | aptitude |
+			aptitude := BrGlamorousRegularEditorAptitude new.
+			aptitude attributesBuilder
+				attribute: (BrGhostTextAttribute
+						for: ('Write a message here' asRopedText glamorousRegularFontAndSize
+								foreground: Color lightGray)).
+			aptitude ];
+		text: [ '' ];
 		actionButtonIcon: BrGlamorousVectorIcons play
 			tooltip: 'Send'
 			action: [ :aButton | 
