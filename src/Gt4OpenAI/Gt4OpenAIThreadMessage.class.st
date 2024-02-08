@@ -11,7 +11,9 @@ Class {
 		'runId',
 		'metadata',
 		'role',
-		'annotations'
+		'annotations',
+		'tutor',
+		'chat'
 	],
 	#category : #'Gt4OpenAI-Models'
 }
@@ -56,6 +58,16 @@ Gt4OpenAIThreadMessage >> assistantId [
 { #category : #accessing }
 Gt4OpenAIThreadMessage >> assistantId: anObject [
 	assistantId := anObject
+]
+
+{ #category : #accessing }
+Gt4OpenAIThreadMessage >> chat [
+	^ chat
+]
+
+{ #category : #accessing }
+Gt4OpenAIThreadMessage >> chat: anObject [
+	chat := anObject
 ]
 
 { #category : #accessing }
@@ -126,7 +138,14 @@ Gt4OpenAIThreadMessage >> gtCodeBlocksFor: aView [
 							aSnippetElement padding: (BlInsets all: 10).
 							aSnippetElement snippetViewModel: aSnippetViewModel.
 							aSnippetElement ]) ];
-		actionUpdateButton
+		actionButtonIcon: BrGlamorousVectorIcons play
+			tooltip: 'Execute'
+			action: [ | output |
+				output := 'LAST SCRIPT OUTPUT: '
+						, (self tutor execute: ('.' join: self codeBlocks)).
+				output size > self maximumMessageSize
+					ifTrue: [ output := output first: self maximumMessageSize ].
+				self chat sendMessage: output ]
 ]
 
 { #category : #accessing }
@@ -136,7 +155,7 @@ Gt4OpenAIThreadMessage >> gtContentFor: aView [
 		title: 'Content';
 		priority: 1;
 		text: [ self contentText ];
-		styler: (Gt4OpenAIThreadMessageStyler new annotations: self annotations)
+		styler: self styler
 ]
 
 { #category : #accessing }
@@ -147,6 +166,11 @@ Gt4OpenAIThreadMessage >> id [
 { #category : #accessing }
 Gt4OpenAIThreadMessage >> id: anObject [
 	id := anObject
+]
+
+{ #category : #accessing }
+Gt4OpenAIThreadMessage >> maximumMessageSize [
+	^ 30000
 ]
 
 { #category : #accessing }
@@ -185,6 +209,14 @@ Gt4OpenAIThreadMessage >> runId: anObject [
 ]
 
 { #category : #accessing }
+Gt4OpenAIThreadMessage >> styler [
+	^ BlCompositeStyler new
+		stylers: {LeSnippetStyler new
+					snippetViewModel: (LeTextSnippet string: self) asSnippetViewModel.
+				Gt4OpenAIThreadMessageStyler new annotations: self annotations}
+]
+
+{ #category : #accessing }
 Gt4OpenAIThreadMessage >> threadId [
 	^ threadId
 ]
@@ -192,4 +224,14 @@ Gt4OpenAIThreadMessage >> threadId [
 { #category : #accessing }
 Gt4OpenAIThreadMessage >> threadId: anObject [
 	threadId := anObject
+]
+
+{ #category : #accessing }
+Gt4OpenAIThreadMessage >> tutor [
+	^ tutor
+]
+
+{ #category : #accessing }
+Gt4OpenAIThreadMessage >> tutor: anObject [
+	tutor := anObject
 ]

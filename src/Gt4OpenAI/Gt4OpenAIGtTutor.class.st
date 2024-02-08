@@ -25,7 +25,9 @@ Gt4OpenAIGtTutor class >> withApiKeyFromClipboard [
 { #category : #accessing }
 Gt4OpenAIGtTutor >> addChat [
 	| aChat |
-	aChat := GtOpenAIAssistantChat new assistant: assistant.
+	aChat := GtOpenAIAssistantChat new
+			assistant: assistant;
+			tutor: self.
 	chats add: aChat.
 	aChat announcer
 		when: Gt4OpenAIThreadRunIsDoneAnnouncement
@@ -164,6 +166,21 @@ Gt4OpenAIGtTutor >> defaultTools [
 ]
 
 { #category : #accessing }
+Gt4OpenAIGtTutor >> execute: aString [
+	| result |
+	[ OpalCompiler new
+		source: aString;
+		receiver: self;
+		evaluate ] on: Error do: [ :anError | self output print: anError trace ].
+
+	result := self output contents.
+
+	self resetOutput.
+
+	^ result asString
+]
+
+{ #category : #accessing }
 Gt4OpenAIGtTutor >> gtChatsFor: aView [
 	<gtView>
 	^ aView columnedList
@@ -171,6 +188,7 @@ Gt4OpenAIGtTutor >> gtChatsFor: aView [
 		priority: 1;
 		items: [ chats ];
 		column: 'Assistant' text: [ :aChat | aChat assistant id ];
+		column: 'Last update' text: [ :aChat | aChat lastUpdate ifNil: [ '' ] ];
 		actionButtonIcon: BrGlamorousVectorIcons add
 			tooltip: 'New Chat'
 			action: [ :aButton :aTab | 
@@ -186,8 +204,9 @@ Gt4OpenAIGtTutor >> gtCodeSnippetsFor: aView [
 		priority: 1;
 		stencil: [ BrVerticalPane new matchParent
 				addChildren: (codeSnippets
-						collect: [ :aSnippet | 
-							| aSnippetElement aSnippetViewModel |
+						collect: [ :aText | 
+							| aSnippet aSnippetElement aSnippetViewModel |
+							aSnippet := LePharoSnippet new code: aText.
 							aSnippetViewModel := aSnippet asSnippetViewModel.
 							aSnippetElement := aSnippetViewModel snippetView asElement.
 							aSnippetElement padding: (BlInsets all: 10).
@@ -240,8 +259,7 @@ Gt4OpenAIGtTutor >> onThreadRun: aRunAnnouncement [
 	aChat := chats
 			detect: [ :aLocalChat | aLocalChat lastRun id = aRunAnnouncement run id ].
 
-	aChat messages first codeBlocks
-		do: [ :aCode | codeSnippets add: (LePharoSnippet new code: aCode) ]
+	aChat messages first codeBlocks do: [ :aCode | codeSnippets add: aCode ]
 ]
 
 { #category : #accessing }
@@ -262,6 +280,11 @@ Gt4OpenAIGtTutor >> prompt [
 { #category : #accessing }
 Gt4OpenAIGtTutor >> prompt: anObject [
 	prompt := anObject
+]
+
+{ #category : #accessing }
+Gt4OpenAIGtTutor >> resetOutput [
+	self output: BlTextStream new
 ]
 
 { #category : #accessing }
