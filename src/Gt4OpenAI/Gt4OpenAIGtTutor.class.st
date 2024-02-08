@@ -188,7 +188,8 @@ Gt4OpenAIGtTutor >> gtChatsFor: aView [
 		priority: 1;
 		items: [ chats ];
 		column: 'Assistant' text: [ :aChat | aChat assistant id ];
-		column: 'Last update' text: [ :aChat | aChat lastUpdate ifNil: [ '' ] ];
+		column: 'Messages' text: [ :aChat | aChat messages size ];
+		column: 'Last updated' text: [ :aChat | aChat lastUpdate ifNil: [ '' ] ];
 		actionButtonIcon: BrGlamorousVectorIcons add
 			tooltip: 'New Chat'
 			action: [ :aButton :aTab | 
@@ -201,7 +202,7 @@ Gt4OpenAIGtTutor >> gtCodeSnippetsFor: aView [
 	<gtView>
 	^ aView explicit
 		title: 'Code snippets';
-		priority: 1;
+		priority: 2;
 		stencil: [ BrVerticalPane new matchParent
 				addChildren: (codeSnippets
 						collect: [ :aText | 
