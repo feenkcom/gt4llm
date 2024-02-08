@@ -219,7 +219,7 @@ Gt4OpenAIGtTutor >> gtCodeSnippetsFor: aView [
 Gt4OpenAIGtTutor >> gtPromptFor: aView [
 	<gtView>
 	^ aView textEditor
-		title: 'Tutor prompt';
+		title: 'Tutor instructions';
 		priority: 5;
 		text: [ self prompt ]
 ]
