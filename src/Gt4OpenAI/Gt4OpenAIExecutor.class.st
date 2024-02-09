@@ -8,6 +8,24 @@ Class {
 }
 
 { #category : #accessing }
+Gt4OpenAIExecutor >> createStackString: anError [
+	| errorStack thisStack |
+	errorStack := anError signalContext stack.
+	thisStack := thisContext stack allButFirst: 9.
+	errorStack := errorStack
+			copyFrom: 1
+			to: errorStack size - thisStack size.
+
+	^ String
+		streamContents: [ :stream | 
+			errorStack
+				do: [ :stackItem | 
+					stream
+						print: stackItem;
+						cr ] ]
+]
+
+{ #category : #accessing }
 Gt4OpenAIExecutor >> execute: aString [
 	| result |
 	[ OpalCompiler new
@@ -17,7 +35,7 @@ Gt4OpenAIExecutor >> execute: aString [
 		on: Error
 		do: [ :anError | 
 			self resetOutput.
-			^ Gt4OpenAIExecutionError new content: anError stackString ].
+			^ Gt4OpenAIExecutionError new content: (self createStackString: anError) ].
 
 	result := self output contents.
 
