@@ -28,7 +28,8 @@ Gt4OpenAIGtTutor >> addChat [
 	aChat := GtOpenAIAssistantChat new
 			assistant: self assistant;
 			executor: self executor.
-	chats add: aChat
+	chats add: aChat.
+	^ aChat
 ]
 
 { #category : #accessing }
@@ -79,6 +80,11 @@ Gt4OpenAIGtTutor >> assistantName [
 { #category : #accessing }
 Gt4OpenAIGtTutor >> assistantName: anObject [
 	assistantName := anObject
+]
+
+{ #category : #accessing }
+Gt4OpenAIGtTutor >> chats [
+	^ chats
 ]
 
 { #category : #accessing }
@@ -184,6 +190,7 @@ Gt4OpenAIGtTutor >> defaultTools [
 
 { #category : #accessing }
 Gt4OpenAIGtTutor >> execute: aString [
+	<return: #Gt4OpenAIExecutionResult>
 	^ executor execute: aString
 ]
 

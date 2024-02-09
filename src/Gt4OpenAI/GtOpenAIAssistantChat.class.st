@@ -145,11 +145,15 @@ GtOpenAIAssistantChat >> lastUpdate [
 
 { #category : #accessing }
 GtOpenAIAssistantChat >> messages [
-	^ thread updateMessages
-		collect: [ :aMessage | 
+	<return: #Gt4OpenAIThreadMessagesGroup>
+	| givenMessages |
+	givenMessages := thread updateMessages.
+	givenMessages
+		do: [ :aMessage | 
 			aMessage
 				executor: self executor;
-				chat: self ]
+				chat: self ].
+	^ givenMessages
 ]
 
 { #category : #accessing }
