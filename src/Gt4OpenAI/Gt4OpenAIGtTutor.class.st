@@ -11,8 +11,7 @@ Class {
 		'assistantDescription',
 		'tools',
 		'chats',
-		'output',
-		'codeSnippets'
+		'executor'
 	],
 	#category : #'Gt4OpenAI-Tutor'
 }
@@ -27,12 +26,8 @@ Gt4OpenAIGtTutor >> addChat [
 	| aChat |
 	aChat := GtOpenAIAssistantChat new
 			assistant: assistant;
-			tutor: self.
-	chats add: aChat.
-	aChat announcer
-		when: Gt4OpenAIThreadRunIsDoneAnnouncement
-		send: #onThreadRun:
-		to: self
+			executor: self executor.
+	chats add: aChat
 ]
 
 { #category : #accessing }
@@ -127,10 +122,10 @@ A typical "CONTINUE" interaction looks like this:
     iii. Write a short Pharo SCRIPT to print that and then print the word "CONTINUE"
 3. The compiler
     i. Checks and runs your SCRIPT
-    ii. Captures the output and appends it to the conversation as "LAST SCRIPT OUTPUT:"
+    ii. Captures the output and appends it to the conversation as "LAST SCRIPT OUTPUT:". If an error occurs the output will be "LAST SCRIPT ERROR:".
     iii. Finds the word "CONTINUE" and sends control back to you
 4. You again:
-    i. Look at the original PROMPT + the "LAST SCRIPT OUTPUT:" to determine what needs to be done
+    i. Look at the original PROMPT + the "LAST SCRIPT OUTPUT:" or "LAST SCRIPT ERROR:" to determine what needs to be done
     ii. Write a short Pharo SCRIPT to do it
     iii. Communicate back to the user by printing to the transcript in that SCRIPT.  The transcript is accessed using `self output`.
 5. The compiler...
@@ -167,17 +162,7 @@ Gt4OpenAIGtTutor >> defaultTools [
 
 { #category : #accessing }
 Gt4OpenAIGtTutor >> execute: aString [
-	| result |
-	[ OpalCompiler new
-		source: aString;
-		receiver: self;
-		evaluate ] on: Error do: [ :anError | self output print: anError trace ].
-
-	result := self output contents.
-
-	self resetOutput.
-
-	^ result asString
+	^ executor execute: aString
 ]
 
 { #category : #accessing }
@@ -195,25 +180,6 @@ Gt4OpenAIGtTutor >> gtChatsFor: aView [
 			action: [ :aButton :aTab | 
 				self addChat.
 				aTab viewContentElement phlow update ]
-]
-
-{ #category : #accessing }
-Gt4OpenAIGtTutor >> gtCodeSnippetsFor: aView [
-	<gtView>
-	^ aView explicit
-		title: 'Code snippets';
-		priority: 2;
-		stencil: [ BrVerticalPane new matchParent
-				addChildren: (codeSnippets
-						collect: [ :aText | 
-							| aSnippet aSnippetElement aSnippetViewModel |
-							aSnippet := LePharoSnippet new code: aText.
-							aSnippetViewModel := aSnippet asSnippetViewModel.
-							aSnippetElement := aSnippetViewModel snippetView asElement.
-							aSnippetElement padding: (BlInsets all: 10).
-							aSnippetElement snippetViewModel: aSnippetViewModel.
-							aSnippetElement ]) ];
-		actionUpdateButton
 ]
 
 { #category : #accessing }
@@ -235,8 +201,7 @@ Gt4OpenAIGtTutor >> initialize [
 	assistantDescription := self defaultAssistantDescription.
 	tools := self defaultTools.
 	chats := OrderedCollection new.
-	output :=  BlTextStream new.
-	codeSnippets := OrderedCollection new
+	executor :=  Gt4OpenAIExecutor new
 ]
 
 { #category : #accessing }
@@ -255,25 +220,6 @@ Gt4OpenAIGtTutor >> onApiKeyChanged [
 ]
 
 { #category : #accessing }
-Gt4OpenAIGtTutor >> onThreadRun: aRunAnnouncement [
-	| aChat |
-	aChat := chats
-			detect: [ :aLocalChat | aLocalChat lastRun id = aRunAnnouncement run id ].
-
-	aChat messages first codeBlocks do: [ :aCode | codeSnippets add: aCode ]
-]
-
-{ #category : #accessing }
-Gt4OpenAIGtTutor >> output [
-	^ output
-]
-
-{ #category : #accessing }
-Gt4OpenAIGtTutor >> output: anObject [
-	output := anObject
-]
-
-{ #category : #accessing }
 Gt4OpenAIGtTutor >> prompt [
 	^ prompt
 ]
@@ -281,11 +227,6 @@ Gt4OpenAIGtTutor >> prompt [
 { #category : #accessing }
 Gt4OpenAIGtTutor >> prompt: anObject [
 	prompt := anObject
-]
-
-{ #category : #accessing }
-Gt4OpenAIGtTutor >> resetOutput [
-	self output: BlTextStream new
 ]
 
 { #category : #accessing }

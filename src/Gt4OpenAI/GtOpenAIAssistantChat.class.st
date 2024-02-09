@@ -10,7 +10,7 @@ Class {
 		'lastRun',
 		'announcer',
 		'future',
-		'tutor'
+		'executor'
 	],
 	#category : #'Gt4OpenAI-Chats'
 }
@@ -41,6 +41,16 @@ GtOpenAIAssistantChat >> assistant: anObject [
 	assistant := anObject.
 	
 	self onAssistantSet
+]
+
+{ #category : #accessing }
+GtOpenAIAssistantChat >> executor [
+	^ executor
+]
+
+{ #category : #accessing }
+GtOpenAIAssistantChat >> executor: anExecutor [
+	executor := anExecutor
 ]
 
 { #category : #accessing }
@@ -138,7 +148,7 @@ GtOpenAIAssistantChat >> messages [
 	^ thread updateMessages
 		collect: [ :aMessage | 
 			aMessage
-				tutor: self tutor;
+				executor: self executor;
 				chat: self ]
 ]
 
@@ -174,14 +184,4 @@ GtOpenAIAssistantChat >> summary [
 		'Last run started at'
 			-> (lastRun ifNil: [ '' ] ifNotNil: [ lastRun startedAt ]).
 		'Last run done at' -> (lastRun ifNil: [ '' ] ifNotNil: [ lastRun doneAt ])}
-]
-
-{ #category : #accessing }
-GtOpenAIAssistantChat >> tutor [
-	^ tutor
-]
-
-{ #category : #accessing }
-GtOpenAIAssistantChat >> tutor: anObject [
-	tutor := anObject
 ]
