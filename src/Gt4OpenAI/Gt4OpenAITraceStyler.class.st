@@ -46,3 +46,14 @@ Gt4OpenAITraceStyler >> privateStyle: aText [
 	aParser sea star optimize parse: aString.
 	^ aText
 ]
+
+{ #category : #accessing }
+Gt4OpenAITraceStyler >> style: aBlText [
+	<return: #BlText>
+	^ BlTextStylerTelemetry
+		rootTimeSync: [ Processor activeProcess name , '  ' , self class name , ': '
+				, (aBlText first: (20 min: aBlText size)) asString ]
+		during: [ | aStyledText |
+			aStyledText := self privateStyle: aBlText characters.
+			aStyledText text ]
+]
