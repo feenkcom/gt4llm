@@ -8,8 +8,15 @@ Class {
 }
 
 { #category : #accessing }
+Gt4OpenAIExecutionResult class >> prefix [
+	^ self subclassResponsibility
+]
+
+{ #category : #accessing }
 Gt4OpenAIExecutionResult >> asString [
-	^ self prefix, self content
+	^ self class prefix, '```text
+', self content, '
+```'
 ]
 
 { #category : #accessing }
@@ -20,9 +27,4 @@ Gt4OpenAIExecutionResult >> content [
 { #category : #accessing }
 Gt4OpenAIExecutionResult >> content: aString [
 	content := aString
-]
-
-{ #category : #accessing }
-Gt4OpenAIExecutionResult >> prefix [
-	^ self subclassResponsibility
 ]

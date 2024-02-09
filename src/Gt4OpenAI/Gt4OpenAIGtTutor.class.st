@@ -11,7 +11,8 @@ Class {
 		'assistantDescription',
 		'tools',
 		'chats',
-		'executor'
+		'executor',
+		'files'
 	],
 	#category : #'Gt4OpenAI-Tutor'
 }
@@ -28,6 +29,11 @@ Gt4OpenAIGtTutor >> addChat [
 			assistant: assistant;
 			executor: self executor.
 	chats add: aChat
+]
+
+{ #category : #accessing }
+Gt4OpenAIGtTutor >> addFile: aFile [
+	files add: aFile
 ]
 
 { #category : #accessing }
@@ -80,7 +86,13 @@ Gt4OpenAIGtTutor >> createAssistant [
 					name: self assistantName;
 					description: self assistantDescription;
 					instructions: self prompt;
-					tools: self tools)
+					tools: self tools).
+
+	files
+		do: [ :aFile | 
+			| file |
+			file := client uploadFile: aFile withPurpose: 'assistants'.
+			client createAssistantFile: file id forAssistant: assistant id ]
 ]
 
 { #category : #accessing }
@@ -91,6 +103,13 @@ Gt4OpenAIGtTutor >> defaultAssistantDescription [
 { #category : #accessing }
 Gt4OpenAIGtTutor >> defaultAssistantName [
 	^ 'GT Tutor'
+]
+
+{ #category : #accessing }
+Gt4OpenAIGtTutor >> defaultFiles [
+	^ self
+		packageNamesToFiles: {#'GToolkit-Phlow'.
+				#'GToolkit-Phlow-Examples'}
 ]
 
 { #category : #accessing }
@@ -166,11 +185,21 @@ Gt4OpenAIGtTutor >> execute: aString [
 ]
 
 { #category : #accessing }
+Gt4OpenAIGtTutor >> files [
+	^ files
+]
+
+{ #category : #accessing }
+Gt4OpenAIGtTutor >> files: aCollection [
+	files := aCollection
+]
+
+{ #category : #accessing }
 Gt4OpenAIGtTutor >> gtChatsFor: aView [
 	<gtView>
 	^ aView columnedList
 		title: 'Chats';
-		priority: 1;
+		priority: 2;
 		items: [ chats ];
 		column: 'Assistant' text: [ :aChat | aChat assistant id ];
 		column: 'Messages' text: [ :aChat | aChat messages size ];
@@ -183,12 +212,33 @@ Gt4OpenAIGtTutor >> gtChatsFor: aView [
 ]
 
 { #category : #accessing }
+Gt4OpenAIGtTutor >> gtFilesFor: aView [
+	<gtView>
+	^ aView list
+		title: 'Files';
+		priority: 7;
+		items: [ self files ]
+]
+
+{ #category : #accessing }
 Gt4OpenAIGtTutor >> gtPromptFor: aView [
 	<gtView>
 	^ aView textEditor
 		title: 'Tutor instructions';
 		priority: 5;
 		text: [ self prompt ]
+]
+
+{ #category : #accessing }
+Gt4OpenAIGtTutor >> gtSummaryFor: aView [
+	<gtView>
+	^ aView columnedList
+		title: 'Summary';
+		priority: 1;
+		items: [ self summaryItems ];
+		column: 'Property' text: #key;
+		column: 'Value' text: #value;
+		send: #value
 ]
 
 { #category : #accessing }
@@ -201,7 +251,8 @@ Gt4OpenAIGtTutor >> initialize [
 	assistantDescription := self defaultAssistantDescription.
 	tools := self defaultTools.
 	chats := OrderedCollection new.
-	executor :=  Gt4OpenAIExecutor new
+	executor :=  Gt4OpenAIExecutor new.
+	files := OrderedCollection withAll: self defaultFiles
 ]
 
 { #category : #accessing }
@@ -220,6 +271,24 @@ Gt4OpenAIGtTutor >> onApiKeyChanged [
 ]
 
 { #category : #accessing }
+Gt4OpenAIGtTutor >> packageNamesToFiles: aCollectionOfPackageNames [
+	^ aCollectionOfPackageNames
+		collect: [ :aPackageName | 
+			| classes aFile |
+			classes := aPackageName asPackage definedClasses.
+			aFile := FileLocator temp / aPackageName , 'package'.
+			aFile ensureDelete.
+			aFile
+				writeStreamDo: [ :aStream | 
+					aStream
+						nextPutAll: ('
+'
+								join: (classes
+										collect: [ :aClass | String streamContents: [ :s | aClass fileOutOn: s ] ])) ].
+			aFile ]
+]
+
+{ #category : #accessing }
 Gt4OpenAIGtTutor >> prompt [
 	^ prompt
 ]
@@ -227,6 +296,15 @@ Gt4OpenAIGtTutor >> prompt [
 { #category : #accessing }
 Gt4OpenAIGtTutor >> prompt: anObject [
 	prompt := anObject
+]
+
+{ #category : #accessing }
+Gt4OpenAIGtTutor >> summaryItems [
+	^ {'Name' -> self assistantName.
+		'Description' -> self assistantDescription.
+		'Model' -> self model.
+		'Tools' -> self tools.
+		'Prompt' -> self prompt}
 ]
 
 { #category : #accessing }

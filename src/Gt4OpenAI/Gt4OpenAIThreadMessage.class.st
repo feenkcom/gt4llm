@@ -73,7 +73,7 @@ Gt4OpenAIThreadMessage >> chat: anObject [
 { #category : #accessing }
 Gt4OpenAIThreadMessage >> codeBlocks [
 	^ self parse children
-		select: [ :aNode | aNode isKindOf: LeCodeBlockNode ]
+		select: [ :aNode | (aNode isKindOf: LeCodeBlockNode) and: [ aNode isForSmalltalk ] ]
 		thenCollect: [ :aNode | aNode code value ]
 ]
 
@@ -164,7 +164,7 @@ Gt4OpenAIThreadMessage >> gtContentFor: aView [
 		title: 'Content';
 		priority: 1;
 		text: [ self contentText ];
-		styler: self styler
+		styler: self styler 
 ]
 
 { #category : #accessing }
@@ -222,6 +222,7 @@ Gt4OpenAIThreadMessage >> styler [
 	^ BlCompositeStyler new
 		stylers: {LeSnippetStyler new
 					snippetViewModel: (LeTextSnippet string: self) asSnippetViewModel.
+				Gt4OpenAITraceStyler new.
 				Gt4OpenAIThreadMessageStyler new annotations: self annotations}
 ]
 

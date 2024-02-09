@@ -5,6 +5,6 @@ Class {
 }
 
 { #category : #accessing }
-Gt4OpenAIExecutionSuccess >> prefix [
+Gt4OpenAIExecutionSuccess class >> prefix [
 	^ 'LAST SCRIPT OUTPUT: '
 ]
