@@ -26,7 +26,7 @@ Gt4OpenAIGtTutor class >> withApiKeyFromClipboard [
 Gt4OpenAIGtTutor >> addChat [
 	| aChat |
 	aChat := GtOpenAIAssistantChat new
-			assistant: assistant;
+			assistant: self assistant;
 			executor: self executor.
 	chats add: aChat
 ]
@@ -50,6 +50,9 @@ Gt4OpenAIGtTutor >> apiKey: anObject [
 
 { #category : #accessing }
 Gt4OpenAIGtTutor >> assistant [
+	self
+		assert: [ assistant isNotNil ]
+		description: [ 'Assistant must be created explicitly, e.g., by calling #createAssistant' ].
 	^ assistant
 ]
 
