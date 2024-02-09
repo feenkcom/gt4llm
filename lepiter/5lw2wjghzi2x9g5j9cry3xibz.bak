@@ -82,6 +82,43 @@
 				"__type" : "textSnippet",
 				"children" : {
 					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-02-09T12:36:06.690958-03:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-02-09T12:36:07.915837-03:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "zSdlbFbNDQCU50ZfAob6ZA=="
+				},
+				"paragraphStyle" : {
+					"__type" : "textStyle"
+				},
+				"string" : "[["
+			},
+			{
+				"__type" : "textSnippet",
+				"children" : {
+					"__type" : "snippets",
 					"items" : [
 						{
 							"__type" : "textSnippet",
@@ -145,7 +182,7 @@
 								"__type" : "time",
 								"time" : {
 									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2024-01-31T14:49:46.049744+01:00"
+									"dateAndTimeString" : "2024-01-31T14:49:47.218774+01:00"
 								}
 							},
 							"uid" : {
@@ -155,7 +192,7 @@
 							"paragraphStyle" : {
 								"__type" : "textStyle"
 							},
-							"string" : "[[Using the embedding registr"
+							"string" : "[[Using the embedding registry]]"
 						}
 					]
 				},

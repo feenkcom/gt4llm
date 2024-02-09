@@ -82,6 +82,43 @@
 				"__type" : "textSnippet",
 				"children" : {
 					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-02-09T12:36:13.412805-03:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-02-09T12:36:15.127669-03:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "zSdlbFbNDQCU50ZfAob6ZA=="
+				},
+				"paragraphStyle" : {
+					"__type" : "textStyle"
+				},
+				"string" : "[[OpenAI conversation using assistants]] "
+			},
+			{
+				"__type" : "textSnippet",
+				"children" : {
+					"__type" : "snippets",
 					"items" : [
 						{
 							"__type" : "textSnippet",
