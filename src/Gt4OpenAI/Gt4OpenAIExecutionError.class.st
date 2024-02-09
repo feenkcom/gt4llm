@@ -5,6 +5,6 @@ Class {
 }
 
 { #category : #accessing }
-Gt4OpenAIExecutionError >> prefix [
+Gt4OpenAIExecutionError class >> prefix [
 	^ 'LAST SCRIPT ERROR: '
 ]

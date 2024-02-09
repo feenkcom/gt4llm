@@ -13,6 +13,16 @@ Gt4OpenAITool class >> serializationProperties [
 ]
 
 { #category : #accessing }
+Gt4OpenAITool >> printOn: aStream [
+	super printOn: aStream.
+
+	aStream
+		nextPut: $(;
+		nextPutAll: self type;
+		nextPut: $)
+]
+
+{ #category : #accessing }
 Gt4OpenAITool >> type [
 	^ type
 ]
