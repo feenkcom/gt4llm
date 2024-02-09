@@ -12,7 +12,7 @@ Class {
 		'metadata',
 		'role',
 		'annotations',
-		'tutor',
+		'executor',
 		'chat'
 	],
 	#category : #'Gt4OpenAI-Models'
@@ -103,6 +103,16 @@ Gt4OpenAIThreadMessage >> createdAt: anObject [
 ]
 
 { #category : #accessing }
+Gt4OpenAIThreadMessage >> executor [
+	^ executor
+]
+
+{ #category : #accessing }
+Gt4OpenAIThreadMessage >> executor: anExecutor [
+	executor := anExecutor
+]
+
+{ #category : #accessing }
 Gt4OpenAIThreadMessage >> fileIds [
 	^ fileIds
 ]
@@ -141,8 +151,7 @@ Gt4OpenAIThreadMessage >> gtCodeBlocksFor: aView [
 		actionButtonIcon: BrGlamorousVectorIcons play
 			tooltip: 'Execute'
 			action: [ | output |
-				output := 'LAST SCRIPT OUTPUT: '
-						, (self tutor execute: ('.' join: self codeBlocks)).
+				output := (self executor execute: ('.' join: self codeBlocks)) asString.
 				output size > self maximumMessageSize
 					ifTrue: [ output := output first: self maximumMessageSize ].
 				self chat sendMessage: output ]
@@ -224,14 +233,4 @@ Gt4OpenAIThreadMessage >> threadId [
 { #category : #accessing }
 Gt4OpenAIThreadMessage >> threadId: anObject [
 	threadId := anObject
-]
-
-{ #category : #accessing }
-Gt4OpenAIThreadMessage >> tutor [
-	^ tutor
-]
-
-{ #category : #accessing }
-Gt4OpenAIThreadMessage >> tutor: anObject [
-	tutor := anObject
 ]
