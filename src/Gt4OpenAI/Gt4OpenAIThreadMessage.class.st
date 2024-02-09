@@ -70,6 +70,15 @@ Gt4OpenAIThreadMessage >> chat: anObject [
 	chat := anObject
 ]
 
+{ #category : #actions }
+Gt4OpenAIThreadMessage >> codeBlockExecutor [
+	^ Gt4OpenAICodeBlocksExecutor new
+		codeBlocks: self codeBlocks;
+		codeExecutor: self executor;
+		chat: self chat;
+		maximumMessageSize: self maximumMessageSize
+]
+
 { #category : #accessing }
 Gt4OpenAIThreadMessage >> codeBlocks [
 	^ self parse children
@@ -150,11 +159,9 @@ Gt4OpenAIThreadMessage >> gtCodeBlocksFor: aView [
 							aSnippetElement ]) ];
 		actionButtonIcon: BrGlamorousVectorIcons play
 			tooltip: 'Execute'
-			action: [ | output |
-				output := (self executor execute: ('.' join: self codeBlocks)) asString.
-				output size > self maximumMessageSize
-					ifTrue: [ output := output first: self maximumMessageSize ].
-				self chat sendMessage: output ]
+			action: [ | aCodeExecutor |
+				aCodeExecutor := self codeBlockExecutor.
+				aCodeExecutor execute ]
 ]
 
 { #category : #accessing }
@@ -175,6 +182,16 @@ Gt4OpenAIThreadMessage >> id [
 { #category : #accessing }
 Gt4OpenAIThreadMessage >> id: anObject [
 	id := anObject
+]
+
+{ #category : #testing }
+Gt4OpenAIThreadMessage >> isAssistantRole [
+	^ self role = #assistant
+]
+
+{ #category : #testing }
+Gt4OpenAIThreadMessage >> isUserRole [
+	^ self role = #user
 ]
 
 { #category : #accessing }
