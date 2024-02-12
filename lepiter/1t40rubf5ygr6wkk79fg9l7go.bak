@@ -165,13 +165,13 @@
 				},
 				"editEmail" : {
 					"__type" : "email",
-					"emailString" : "juraj.kubelka@icloud.com"
+					"emailString" : "<unknown>"
 				},
 				"editTime" : {
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-09T12:18:49.353494-03:00"
+						"dateAndTimeString" : "2024-02-12T08:26:25.408845-03:00"
 					}
 				},
 				"uid" : {
@@ -181,7 +181,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "Create a tutor, an assistant, and an assistant chat"
+				"string" : "Create a tutor, an [assistant](https://platform.openai.com/assistants), and an assistant chat"
 			},
 			{
 				"__type" : "pharoSnippet",
