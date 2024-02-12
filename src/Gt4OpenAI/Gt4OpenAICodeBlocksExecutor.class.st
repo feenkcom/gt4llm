@@ -13,6 +13,11 @@ Class {
 	#category : #'Gt4OpenAI-Executor'
 }
 
+{ #category : #executing }
+Gt4OpenAICodeBlocksExecutor >> await [
+	^ self future await: Gt4OpenAIUtilities executionConfiguration
+]
+
 { #category : #accessing }
 Gt4OpenAICodeBlocksExecutor >> chat [
 	^ chat
@@ -51,6 +56,11 @@ Gt4OpenAICodeBlocksExecutor >> execute [
 	output size > self maximumMessageSize
 		ifTrue: [ output := output first: self maximumMessageSize ].
 	self chat sendMessage: output
+]
+
+{ #category : #executing }
+Gt4OpenAICodeBlocksExecutor >> future [
+	^ [ self execute ] asAsyncFuture
 ]
 
 { #category : #accessing }

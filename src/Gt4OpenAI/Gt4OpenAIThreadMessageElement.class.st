@@ -34,6 +34,7 @@ Gt4OpenAIThreadMessageElement >> initializeContentsElement [
 	contentsElement := BrEditor new
 			hMatchParent;
 			vFitContent;
+			styler: Gt4LlmMessageStyler new;
 			aptitude: BrGlamorousRegularEditorAptitude;
 			beReadOnlyWithSelection
 ]
@@ -55,7 +56,6 @@ Gt4OpenAIThreadMessageElement >> onThreadMessageChanged [
 { #category : #'private - updating' }
 Gt4OpenAIThreadMessageElement >> updateContentsElement [
 	contentsElement text: threadMessage contentText.
-	contentsElement styler: threadMessage styler
 ]
 
 { #category : #'private - updating' }

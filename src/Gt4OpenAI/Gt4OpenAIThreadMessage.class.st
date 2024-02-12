@@ -158,10 +158,28 @@ Gt4OpenAIThreadMessage >> gtCodeBlocksFor: aView [
 							aSnippetElement snippetViewModel: aSnippetViewModel.
 							aSnippetElement ]) ];
 		actionButtonIcon: BrGlamorousVectorIcons play
-			tooltip: 'Execute'
-			action: [ | aCodeExecutor |
-				aCodeExecutor := self codeBlockExecutor.
-				aCodeExecutor execute ]
+			label: 'Run all'
+			tooltip: 'Execute all snippets (assuming all are Pharo snippets)'
+			action: [ :aButton | 
+				| aCodeExecutor |
+				aButton
+					withAsyncFutureDo: [ :anElementFuture | 
+						anElementFuture
+							whenPending: [ :theButton | 
+								theButton
+									disable;
+									label: 'Running...' ];
+							whenError: [ :theButton :anError | 
+								theButton
+									enable;
+									label: 'Execution error' ];
+							whenSuccess: [ :theButton :aResult | 
+								theButton
+									enable;
+									label: 'Finished' ].
+
+						aCodeExecutor := self codeBlockExecutor.
+						anElementFuture future: aCodeExecutor future ] ]
 ]
 
 { #category : #accessing }
