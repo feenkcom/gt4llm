@@ -80,13 +80,17 @@ GtLlmInspectorSummary >> slots: anObject [
 
 { #category : #accessing }
 GtLlmInspectorSummary >> summaryString [
-	^ 'A ', self objectClass asString, ' with: 
-- ', ('
--' join:(self slots collect: #summaryString)), '
+	^ 'A ' , self objectClass asString , ' (' , self object asString
+		, ') with: 
+'
+		, ('
+' join: (self slots collect: [ :aSlot | '- ' , aSlot summaryString ]))
+		, '
 
 Available views:
-- ', ('
--' join:(self views collect: #summaryString))
+'
+		, ('
+' join: (self views collect: [ :aView | '- ' , aView summaryString ]))
 ]
 
 { #category : #accessing }

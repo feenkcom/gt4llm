@@ -10,6 +10,9 @@ Class {
 { #category : #accessing }
 Gt4OpenAIExecutor >> createStackString: anError [
 	| errorStack thisStack |
+	(anError isKindOf: SyntaxErrorNotification) ifTrue: [
+		^ 'Syntax Error: ', anError messageText
+	].
 	errorStack := anError signalContext stack.
 	thisStack := thisContext stack allButFirst: 9.
 	errorStack := errorStack
@@ -26,7 +29,7 @@ Gt4OpenAIExecutor >> createStackString: anError [
 ]
 
 { #category : #accessing }
-Gt4OpenAIExecutor >> execute: aString [
+Gt4OpenAIExecutor >> execute: aString [	
 	[ ^ Gt4OpenAIExecutionSuccess new
 		content: (OpalCompiler new
 				source: aString;
