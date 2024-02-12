@@ -15,10 +15,20 @@ TGt4OpenAIWithAssistantChat >> assistantChat [
 { #category : #accessing }
 TGt4OpenAIWithAssistantChat >> assistantChat: anObject [
 	assistantChat = anObject ifTrue: [ ^ self ].
+	assistantChat ifNotNil: [ self unsubscribeFromAssistantChat ].
 	assistantChat := anObject.
-	self onAssistantChatChanged
+	self onAssistantChatChanged.
+	self subscribeToAssistantChat.
 ]
 
 { #category : #'private - hooks' }
 TGt4OpenAIWithAssistantChat >> onAssistantChatChanged [
+]
+
+{ #category : #'private - hooks' }
+TGt4OpenAIWithAssistantChat >> subscribeToAssistantChat [
+]
+
+{ #category : #'private - hooks' }
+TGt4OpenAIWithAssistantChat >> unsubscribeFromAssistantChat [
 ]

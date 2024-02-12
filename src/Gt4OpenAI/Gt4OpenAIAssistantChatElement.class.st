@@ -4,15 +4,15 @@ Class {
 	#traits : 'TGt4OpenAIWithAssistantChat + TBrLayoutResizable',
 	#classTraits : 'TGt4OpenAIWithAssistantChat classTrait + TBrLayoutResizable classTrait',
 	#instVars : [
-		'listElement'
+		'listElement',
+		'newThreadMessage'
 	],
 	#category : #'Gt4OpenAI-Widgets'
 }
 
 { #category : #'private - updating' }
 Gt4OpenAIAssistantChatElement >> allListItems [
-	^ assistantChat messages asArray reversed
-		copyWith: (Gt4OpenAINewThreadMessage new assistantChat: assistantChat)
+	^ assistantChat messages asArray reversed copyWith: newThreadMessage
 ]
 
 { #category : #'initialization ' }
@@ -23,6 +23,8 @@ Gt4OpenAIAssistantChatElement >> defaultLayout [
 { #category : #initialization }
 Gt4OpenAIAssistantChatElement >> initialize [
 	super initialize.
+	newThreadMessage := Gt4OpenAINewThreadMessage new.
+	
 	self initializeListElement.
 	self addChild: listElement as: #list.
 	self padding: (BlInsets all: 3).
@@ -44,7 +46,26 @@ Gt4OpenAIAssistantChatElement >> initializeListElement [
 
 { #category : #'private - hooks' }
 Gt4OpenAIAssistantChatElement >> onAssistantChatChanged [
+	self updateNewThreadMessage.
 	self updateElement
+]
+
+{ #category : #'private - event handling' }
+Gt4OpenAIAssistantChatElement >> onThreadRunAnnouncement: anAnnouncement [
+	self updateListElement
+]
+
+{ #category : #'private - hooks' }
+Gt4OpenAIAssistantChatElement >> subscribeToAssistantChat [
+	assistantChat weak
+		when: Gt4OpenAIThreadRunAnnouncement
+		send: #onThreadRunAnnouncement:
+		to: self
+]
+
+{ #category : #'private - hooks' }
+Gt4OpenAIAssistantChatElement >> unsubscribeFromAssistantChat [
+	assistantChat unsubscribe: self
 ]
 
 { #category : #'private - updating' }
@@ -55,4 +76,9 @@ Gt4OpenAIAssistantChatElement >> updateElement [
 { #category : #'private - updating' }
 Gt4OpenAIAssistantChatElement >> updateListElement [
 	listElement items: self allListItems
+]
+
+{ #category : #'private - updating' }
+Gt4OpenAIAssistantChatElement >> updateNewThreadMessage [
+	newThreadMessage assistantChat: assistantChat
 ]
