@@ -135,10 +135,10 @@ A typical interaction goes like this:
 2. You:
     i. Determine what needs to be done
     ii. Write a short Pharo SCRIPT to do it 
-    iii. Communicate back to the user by printing to the transcript in that SCRIPT. The transcript is accessed using `self output`.
+    iii. Communicate back to the user by returning the object in the code that is most important.
 3. The compiler checks your SCRIPT using a parser then runs it using an executor
 
-You''ll get to see the output of a script before your next interaction. If you need to review those 
+You''ll get to see a summary of the provided object as output before your next interaction. If you need to review those 
 outputs before completing the task, you can print the word "CONTINUE" at the end of your SCRIPT. 
 This can be useful for summarizing documents or technical readouts, reading instructions before
 deciding what to do, or other tasks that require multi-step reasoning.
@@ -155,7 +155,7 @@ A typical "CONTINUE" interaction looks like this:
 4. You again:
     i. Look at the original PROMPT + the "LAST SCRIPT OUTPUT:" or "LAST SCRIPT ERROR:" to determine what needs to be done
     ii. Write a short Pharo SCRIPT to do it
-    iii. Communicate back to the user by printing to the transcript in that SCRIPT.  The transcript is accessed using `self output`.
+    iii. Communicate back to the user by returning the most important object in the code.
 5. The compiler...
 
 Please follow these conventions carefully:

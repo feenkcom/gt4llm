@@ -3,7 +3,7 @@ Class {
 	#superclass : #BlTextStyler,
 	#traits : 'TLeContentNodeVisitor',
 	#classTraits : 'TLeContentNodeVisitor classTrait',
-	#category : #Gt4Llm
+	#category : #'Gt4Llm-Stylers'
 }
 
 { #category : #generated }

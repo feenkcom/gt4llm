@@ -50,7 +50,8 @@ Gt4OpenAICodeBlocksExecutor >> execute [
 	output := executionResponse asString.
 	output size > self maximumMessageSize
 		ifTrue: [ output := output first: self maximumMessageSize ].
-	self chat sendMessage: output
+	self chat sendMessage: output.
+	^ executionResponse content
 ]
 
 { #category : #accessing }

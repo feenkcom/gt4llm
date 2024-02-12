@@ -8,3 +8,8 @@ Class {
 Gt4OpenAIExecutionSuccess class >> prefix [
 	^ 'LAST SCRIPT OUTPUT: '
 ]
+
+{ #category : #accessing }
+Gt4OpenAIExecutionSuccess >> contentString [
+	^ self content summaryString
+]
