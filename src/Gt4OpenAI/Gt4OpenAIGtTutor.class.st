@@ -111,7 +111,7 @@ Gt4OpenAIGtTutor >> defaultAssistantDescription [
 
 { #category : #accessing }
 Gt4OpenAIGtTutor >> defaultAssistantName [
-	^ 'GT Tutor'
+	^ 'GT Tutor - ' , FileLocator home basename
 ]
 
 { #category : #accessing }
