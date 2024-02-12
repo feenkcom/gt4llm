@@ -197,6 +197,11 @@ Gt4OpenAIThreadMessage >> gtContentFor: aView [
 		styler: self styler 
 ]
 
+{ #category : #testing }
+Gt4OpenAIThreadMessage >> hasResponse [
+	^ content anySatisfy: [ :aValue | (aValue at: #text at: #value) isNotEmpty ]
+]
+
 { #category : #accessing }
 Gt4OpenAIThreadMessage >> id [
 	^ id

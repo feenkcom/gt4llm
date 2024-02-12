@@ -5,7 +5,8 @@ Class {
 	#classTraits : 'TGt4OpenAIWithThreadMessage classTrait + TBrLayoutResizable classTrait',
 	#instVars : [
 		'senderElement',
-		'contentsElement'
+		'contentsElement',
+		'progressElement'
 	],
 	#category : #'Gt4OpenAI-Widgets'
 }
@@ -28,14 +29,22 @@ Gt4OpenAIThreadMessageElement >> defaultLayout [
 	^ BlLinearLayout vertical
 ]
 
+{ #category : #'private - updating' }
+Gt4OpenAIThreadMessageElement >> hideProgressElement [
+	contentsElement visibility: BlVisibility visible.
+	progressElement visibility: BlVisibility gone.
+]
+
 { #category : #initialization }
 Gt4OpenAIThreadMessageElement >> initialize [
 	super initialize.
 	self initializeSenderElement.
 	self initializeContentsElement.
+	self initializeProgressElement.
 
 	self addChild: senderElement as: #sender.
 	self addChild: contentsElement as: #contents.
+	self addChild: progressElement as: #progress.
 
 	self hMatchParent.
 	self vFitContent.
@@ -50,6 +59,14 @@ Gt4OpenAIThreadMessageElement >> initializeContentsElement [
 			styler: Gt4LlmMessageStyler new;
 			aptitude: BrGlamorousRegularEditorAptitude;
 			beReadOnlyWithSelection
+]
+
+{ #category : #initialization }
+Gt4OpenAIThreadMessageElement >> initializeProgressElement [
+	progressElement := BrProgress new
+			aptitude: BrGlamorousProgressWithBarAptitude;
+			constraintsDo: [ :c | c maxWidth: 100 ];
+			visibility: BlVisibility gone
 ]
 
 { #category : #initialization }
@@ -69,6 +86,12 @@ Gt4OpenAIThreadMessageElement >> onThreadMessageChanged [
 ]
 
 { #category : #'private - updating' }
+Gt4OpenAIThreadMessageElement >> showProgressElement [
+	contentsElement visibility: BlVisibility gone.
+	progressElement visibility: BlVisibility visible.
+]
+
+{ #category : #'private - updating' }
 Gt4OpenAIThreadMessageElement >> updateContentsElement [
 	contentsElement text: threadMessage contentText.
 ]
@@ -77,6 +100,14 @@ Gt4OpenAIThreadMessageElement >> updateContentsElement [
 Gt4OpenAIThreadMessageElement >> updateElement [
 	self updateSenderElement.
 	self updateContentsElement.
+	self updateProgressElement.
+]
+
+{ #category : #'private - updating' }
+Gt4OpenAIThreadMessageElement >> updateProgressElement [
+	threadMessage hasResponse
+		ifTrue: [ self hideProgressElement ]
+		ifFalse: [ self showProgressElement ]
 ]
 
 { #category : #'private - updating' }
