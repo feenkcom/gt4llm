@@ -75,7 +75,10 @@ Gt4OpenAIAssistantChatElement >> updateElement [
 
 { #category : #'private - updating' }
 Gt4OpenAIAssistantChatElement >> updateListElement [
-	listElement items: self allListItems
+	| allItems |
+	allItems := self allListItems.
+	listElement items: allItems.
+	listElement scrollToItem: allItems last 
 ]
 
 { #category : #'private - updating' }
