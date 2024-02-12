@@ -78,12 +78,23 @@ GtOpenAIAssistantChat >> gtMessagesFor: aView [
 	<gtView>
 	"cannot be a forward because the update wouldn’t work"
 	^ aView columnedList
-		title: 'Messages';
-		priority: 1;
+		title: 'Messages list';
+		priority: 1.1;
 		items: [ self messages ];
 		column: 'Role' text: #role width: 60;
 		column: 'Message' text: #contentText;
 		updateWhen: Gt4OpenAIThreadRunAnnouncement in: self announcer
+]
+
+{ #category : #accessing }
+GtOpenAIAssistantChat >> gtMessagesWidgetFor: aView [
+	"cannot be a forward because the update wouldn’t work"
+
+	<gtView>
+	^ aView explicit
+		title: 'Messages';
+		priority: 1;
+		stencil: [ Gt4OpenAIAssistantChatElement new assistantChat: self ]
 ]
 
 { #category : #accessing }

@@ -111,6 +111,11 @@ Gt4OpenAIThreadMessage >> createdAt: anObject [
 	createdAt := DateAndTime fromUnixTime: anObject
 ]
 
+{ #category : #ui }
+Gt4OpenAIThreadMessage >> elementClass [
+	^ Gt4OpenAIThreadMessageElement
+]
+
 { #category : #accessing }
 Gt4OpenAIThreadMessage >> executor [
 	^ executor
@@ -202,6 +207,11 @@ Gt4OpenAIThreadMessage >> gtMethodsFor: aView [
 		priority: 4;
 		stencil: [ BrVerticalPane new matchParent
 				addChildren: (self methods collect: [ :aMethod | aMethod coder asElement ]) ]
+]
+
+{ #category : #testing }
+Gt4OpenAIThreadMessage >> hasResponse [
+	^ content anySatisfy: [ :aValue | (aValue at: #text at: #value) isNotEmpty ]
 ]
 
 { #category : #accessing }
