@@ -11,5 +11,5 @@ Gt4OpenAIExecutionSuccess class >> prefix [
 
 { #category : #accessing }
 Gt4OpenAIExecutionSuccess >> contentString [
-	^ self content summaryString
+	^ (GtLlmInspectorSummarizer new summarize: self content) summaryString
 ]
