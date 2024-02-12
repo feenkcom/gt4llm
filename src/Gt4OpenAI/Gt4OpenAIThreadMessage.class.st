@@ -159,9 +159,9 @@ Gt4OpenAIThreadMessage >> gtCodeBlocksFor: aView [
 							aSnippetElement ]) ];
 		actionButtonIcon: BrGlamorousVectorIcons play
 			tooltip: 'Execute'
-			action: [ | aCodeExecutor |
+			action: [ :aButton | | aCodeExecutor |
 				aCodeExecutor := self codeBlockExecutor.
-				aCodeExecutor execute ]
+				aButton phlow spawnObject: aCodeExecutor execute ]
 ]
 
 { #category : #accessing }
