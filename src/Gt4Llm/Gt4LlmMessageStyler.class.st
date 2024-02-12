@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLlmMessageStyler,
+	#name : #Gt4LlmMessageStyler,
 	#superclass : #BlTextStyler,
 	#traits : 'TLeContentNodeVisitor',
 	#classTraits : 'TLeContentNodeVisitor classTrait',
@@ -7,7 +7,7 @@ Class {
 }
 
 { #category : #generated }
-GtLlmMessageStyler >> evaluateCodeBlock: aCodeBlock expanded: aBoolean from: aButton [
+Gt4LlmMessageStyler >> evaluateCodeBlock: aCodeBlock expanded: aBoolean from: aButton [
 	| aSnippetCoder aSnippetCoderViewModel aResult position source |
 	
 	source := aCodeBlock code source.
@@ -25,7 +25,7 @@ GtLlmMessageStyler >> evaluateCodeBlock: aCodeBlock expanded: aBoolean from: aBu
 ]
 
 { #category : #generated }
-GtLlmMessageStyler >> fontSizeForHeadingLevel: aHeadingLevel [
+Gt4LlmMessageStyler >> fontSizeForHeadingLevel: aHeadingLevel [
 	"Compute the relative (em) font size for a text with a given heading level (1-6)"
 	<return: #BlFontSize>
 	"
@@ -47,7 +47,7 @@ GtLlmMessageStyler >> fontSizeForHeadingLevel: aHeadingLevel [
 ]
 
 { #category : #accessing }
-GtLlmMessageStyler >> privateStyle: aText [ 
+Gt4LlmMessageStyler >> privateStyle: aText [ 
 	<return: #BlText>
 	| ast |
 	text := aText.
@@ -57,7 +57,7 @@ GtLlmMessageStyler >> privateStyle: aText [
 ]
 
 { #category : #generated }
-GtLlmMessageStyler >> styleAutoHiding: anInterval text: aSubText [
+Gt4LlmMessageStyler >> styleAutoHiding: anInterval text: aSubText [
 	| anAttribute aMarkerAttribute cursorAttribute |
 	
 	aMarkerAttribute := BrTextInvisibleMarkerAttribute new.
@@ -100,7 +100,7 @@ GtLlmMessageStyler >> styleAutoHiding: anInterval text: aSubText [
 ]
 
 { #category : #generated }
-GtLlmMessageStyler >> styleHeader: aHeaderNode [
+Gt4LlmMessageStyler >> styleHeader: aHeaderNode [
 	aHeaderNode parts isEmpty ifTrue: [ ^ self ].
 
 	(self text from: aHeaderNode startPosition to: aHeaderNode stopPosition)
@@ -122,7 +122,7 @@ GtLlmMessageStyler >> styleHeader: aHeaderNode [
 ]
 
 { #category : #generated }
-GtLlmMessageStyler >> styleSmalltalkCodeBlock: aCodeNode [ 
+Gt4LlmMessageStyler >> styleSmalltalkCodeBlock: aCodeNode [ 
 	| aStyler |
 	aStyler := BrRBTextStyler new.
 	aStyler workspace: self variableBindings.
@@ -134,22 +134,22 @@ GtLlmMessageStyler >> styleSmalltalkCodeBlock: aCodeNode [
 ]
 
 { #category : #generated }
-GtLlmMessageStyler >> text [
+Gt4LlmMessageStyler >> text [
 	^ text
 ]
 
 { #category : #generated }
-GtLlmMessageStyler >> variableBindings [
+Gt4LlmMessageStyler >> variableBindings [
 	^ GtSharedVariablesBindings new
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmMessageStyler >> visitClassAnnotation: aLeClassAnnotationNode [ 
+Gt4LlmMessageStyler >> visitClassAnnotation: aLeClassAnnotationNode [ 
 	self shouldBeImplemented.
 ]
 
 { #category : #generated }
-GtLlmMessageStyler >> visitCodeBlock: aCodeNode [
+Gt4LlmMessageStyler >> visitCodeBlock: aCodeNode [
 	aCodeNode isForSmalltalk ifTrue: [ self styleSmalltalkCodeBlock: aCodeNode ].
 	(self text from: aCodeNode startPosition to: aCodeNode stopPosition)
 		glamorousCodeFont.
@@ -174,7 +174,7 @@ GtLlmMessageStyler >> visitCodeBlock: aCodeNode [
 ]
 
 { #category : #generated }
-GtLlmMessageStyler >> visitHeader: aHeader [
+Gt4LlmMessageStyler >> visitHeader: aHeader [
 	self styleHeader: aHeader.
 	^ self visitContent: aHeader
 ]
