@@ -63,9 +63,12 @@ Gt4OpenAIThreadMessageElement >> initializeContentsElement [
 
 { #category : #initialization }
 Gt4OpenAIThreadMessageElement >> initializeProgressElement [
-	progressElement := BrProgress new
-			aptitude: BrGlamorousProgressWithBarAptitude;
-			constraintsDo: [ :c | c maxWidth: 100 ];
+	progressElement := BrLabel new
+			fitContent;
+			aptitude: (BrGlamorousLabelAptitude new
+					foreground: BrGlamorousColors disabledButtonTextColor);
+			beSmallSize;
+			text: 'Typing...';
 			visibility: BlVisibility gone
 ]
 
