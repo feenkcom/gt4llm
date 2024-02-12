@@ -10,6 +10,19 @@ Class {
 	#category : #'Gt4OpenAI-Widgets'
 }
 
+{ #category : #factory }
+Gt4OpenAIThreadMessageElement class >> newForChatList [
+	^ self new
+		geometry: (BlRoundedRectangleGeometry cornerRadius: 2);
+		background: Color white;
+		addAptitude: BrGlamorousFocusableShadowAptitude new;
+		margin: (BlInsets
+				top: 3
+				bottom: 12
+				left: 5
+				right: 10)
+]
+
 { #category : #initialization }
 Gt4OpenAIThreadMessageElement >> defaultLayout [
 	^ BlLinearLayout vertical
@@ -44,7 +57,9 @@ Gt4OpenAIThreadMessageElement >> initializeSenderElement [
 	senderElement := BrLabel new
 			hFitContentLimited;
 			vFitContent;
-			aptitude: BrGlamorousLabelAptitude new bold;
+			aptitude: (BrGlamorousLabelAptitude new
+					foreground: BrGlamorousColors disabledButtonTextColor);
+			beSmallSize;
 			text: ''
 ]
 
