@@ -111,6 +111,11 @@ Gt4OpenAIThreadMessage >> createdAt: anObject [
 	createdAt := DateAndTime fromUnixTime: anObject
 ]
 
+{ #category : #ui }
+Gt4OpenAIThreadMessage >> elementClass [
+	^ Gt4OpenAIAssistantChatElement
+]
+
 { #category : #accessing }
 Gt4OpenAIThreadMessage >> executor [
 	^ executor

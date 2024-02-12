@@ -25,14 +25,14 @@ Gt4OpenAIAssistantChatElement >> initialize [
 
 { #category : #initialization }
 Gt4OpenAIAssistantChatElement >> initializeListElement [
-	listElement := BrSimpleList new
+	listElement := BrSimpleList vertical
 			hMatchParent;
 			vMatchParent;
 			padding: (BlInsets all: 5);
-			itemStencil: [ Gt4OpenAIThreadMessageElement new
-				background: Color white;
-				addAptitude: BrGlamorousFocusableShadowAptitude new;
-				margin: (BlInsets bottom: 3) ];
+			itemType: [ :aFactory :anItem :anIndex | anItem elementClass ];
+			itemId: [ :anItem :anIndex | anItem id ];
+			itemStencil: [ :anElementClass :aListWidget | 
+				Gt4OpenAIThreadMessageElement newForChatList ];
 			itemDataBinder: [ :anItemElement :anItem | anItemElement threadMessage: anItem ]
 ]
 
