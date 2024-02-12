@@ -11,6 +11,10 @@ TGt4OpenAIWithThreadMessage >> onThreadMessageChanged [
 	
 ]
 
+{ #category : #'private - hooks' }
+TGt4OpenAIWithThreadMessage >> subscribeToThreadMessage [
+]
+
 { #category : #accessing }
 TGt4OpenAIWithThreadMessage >> threadMessage [
 	^ threadMessage
@@ -19,6 +23,13 @@ TGt4OpenAIWithThreadMessage >> threadMessage [
 { #category : #accessing }
 TGt4OpenAIWithThreadMessage >> threadMessage: aMessage [
 	threadMessage = aMessage ifTrue: [ ^ self ].
+	threadMessage ifNotNil: [ :anOldMessage | 
+		self unsubscribeFromThreadMessage ].
 	threadMessage := aMessage.
-	self onThreadMessageChanged
+	self onThreadMessageChanged.
+	self subscribeToThreadMessage
+]
+
+{ #category : #'private - hooks' }
+TGt4OpenAIWithThreadMessage >> unsubscribeFromThreadMessage [
 ]

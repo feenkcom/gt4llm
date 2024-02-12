@@ -9,6 +9,12 @@ Class {
 	#category : #'Gt4OpenAI-Widgets'
 }
 
+{ #category : #'private - updating' }
+Gt4OpenAIAssistantChatElement >> allListItems [
+	^ assistantChat messages asArray reversed
+		copyWith: (Gt4OpenAINewThreadMessage new assistantChat: assistantChat)
+]
+
 { #category : #'initialization ' }
 Gt4OpenAIAssistantChatElement >> defaultLayout [
 	^ BlLinearLayout vertical
@@ -19,7 +25,7 @@ Gt4OpenAIAssistantChatElement >> initialize [
 	super initialize.
 	self initializeListElement.
 	self addChild: listElement as: #list.
-	self padding: (BlInsets all: 5).
+	self padding: (BlInsets all: 3).
 	self matchParent
 ]
 
@@ -32,7 +38,7 @@ Gt4OpenAIAssistantChatElement >> initializeListElement [
 			itemType: [ :aFactory :anItem :anIndex | anItem elementClass ];
 			itemId: [ :anItem :anIndex | anItem id ];
 			itemStencil: [ :anElementClass :aListWidget | 
-				Gt4OpenAIThreadMessageElement newForChatList ];
+				anElementClass newForChatList ];
 			itemDataBinder: [ :anItemElement :anItem | anItemElement threadMessage: anItem ]
 ]
 
@@ -48,5 +54,5 @@ Gt4OpenAIAssistantChatElement >> updateElement [
 
 { #category : #'private - updating' }
 Gt4OpenAIAssistantChatElement >> updateListElement [
-	listElement items: assistantChat messages asArray reversed
+	listElement items: self allListItems
 ]
