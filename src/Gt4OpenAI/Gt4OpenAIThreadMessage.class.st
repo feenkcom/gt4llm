@@ -113,7 +113,7 @@ Gt4OpenAIThreadMessage >> createdAt: anObject [
 
 { #category : #ui }
 Gt4OpenAIThreadMessage >> elementClass [
-	^ Gt4OpenAIAssistantChatElement
+	^ Gt4OpenAIThreadMessageElement
 ]
 
 { #category : #accessing }
