@@ -195,6 +195,16 @@ Gt4OpenAIThreadMessage >> gtContentFor: aView [
 ]
 
 { #category : #accessing }
+Gt4OpenAIThreadMessage >> gtMethodsFor: aView [
+	<gtView>
+	^ aView explicit
+		title: 'Methods';
+		priority: 4;
+		stencil: [ BrVerticalPane new matchParent
+				addChildren: (self methods collect: [ :aMethod | aMethod coder asElement ]) ]
+]
+
+{ #category : #accessing }
 Gt4OpenAIThreadMessage >> id [
 	^ id
 ]
@@ -227,6 +237,18 @@ Gt4OpenAIThreadMessage >> metadata [
 { #category : #accessing }
 Gt4OpenAIThreadMessage >> metadata: anObject [
 	metadata := anObject
+]
+
+{ #category : #accessing }
+Gt4OpenAIThreadMessage >> methods [
+	^ self parse children
+		select: [ :aNode | 
+			(aNode isKindOf: LeCodeBlockNode)
+				and: [ aNode isForLanguage: 'smalltalk-method' ] ]
+		thenCollect: [ :aNode | |aString |aString := aNode code value trim.
+			GtLlmMessageMethod new
+				methodClass: aString lines first asClass;
+				methodBody: (Character lf join: aString lines allButFirst) ]
 ]
 
 { #category : #accessing }
