@@ -23,13 +23,13 @@
 				},
 				"editEmail" : {
 					"__type" : "email",
-					"emailString" : "juraj.kubelka@icloud.com"
+					"emailString" : "<unknown>"
 				},
 				"editTime" : {
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-09T12:20:39.067979-03:00"
+						"dateAndTimeString" : "2024-02-12T08:26:09.926627-03:00"
 					}
 				},
 				"uid" : {
@@ -39,7 +39,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "This page describes an interaction with OpenAI assistant using chat, showing different kind of question and responses."
+				"string" : "This page describes an interaction with OpenAI [assistant](https://platform.openai.com/assistants) using chat, showing different kind of question and responses."
 			},
 			{
 				"__type" : "textSnippet",
@@ -208,14 +208,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-12T08:22:32.176189-03:00"
+						"dateAndTimeString" : "2024-02-12T08:24:41.867023-03:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "7REkNI/NDQCHsFrIBtrTtQ=="
 				},
-				"code" : "tutor := Gt4OpenAIGtTutor new\r\t\tapiKey: apiKey;\r\t\tassistantName: 'GT Tutor - ', FileLocator home basename;\r\t\tcreateAssistant"
+				"code" : "tutor := Gt4OpenAIGtTutor new\r\t\tapiKey: apiKey;\r\t\tcreateAssistant"
 			},
 			{
 				"__type" : "pharoSnippet",
