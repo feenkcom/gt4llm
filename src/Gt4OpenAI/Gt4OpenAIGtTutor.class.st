@@ -229,7 +229,7 @@ Gt4OpenAIGtTutor >> deleteAssistant [
 { #category : #accessing }
 Gt4OpenAIGtTutor >> deleteFiles [
 	apiFiles do: [ :aFile | client deleteFile: aFile id ].
-	apiFiles := OrderedCollection new.
+	apiFiles := Gt4OpenAIFilesGroup new
 ]
 
 { #category : #accessing }
@@ -259,13 +259,11 @@ Gt4OpenAIGtTutor >> finalize [
 { #category : #accessing }
 Gt4OpenAIGtTutor >> gtChatsFor: aView [
 	<gtView>
-	^ aView columnedList
+	^ aView forward
 		title: 'Chats';
 		priority: 2;
-		items: [ chats ];
-		column: 'Assistant' text: [ :aChat | aChat assistant id ];
-		column: 'Messages' text: [ :aChat | aChat messages size ];
-		column: 'Last updated' text: [ :aChat | aChat lastUpdate ifNil: [ '' ] ];
+		object: [ chats ];
+		view: #gtChatsFor:;
 		actionButtonIcon: BrGlamorousVectorIcons add
 			tooltip: 'New Chat'
 			action: [ :aButton :aTab | 
@@ -312,10 +310,10 @@ Gt4OpenAIGtTutor >> initialize [
 	assistantName := self defaultAssistantName.
 	assistantDescription := self defaultAssistantDescription.
 	tools := self defaultTools.
-	chats := OrderedCollection new.
+	chats := GtOpenAIAssistantChatGroup new.
 	executor :=  Gt4OpenAIExecutor new.
 	files := OrderedCollection withAll: self defaultFiles.
-	apiFiles := OrderedCollection new
+	apiFiles := Gt4OpenAIFilesGroup new
 ]
 
 { #category : #accessing }
