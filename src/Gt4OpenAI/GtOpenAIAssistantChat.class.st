@@ -187,10 +187,11 @@ GtOpenAIAssistantChat >> sendMessage: aString [
 			createRunForThread: thread id
 			usingAssistant: assistant id.
 
+	self announcer announce: (Gt4OpenAIThreadRunStartedAnnouncement new run: lastRun).
+
 	future := (self runFuture
-			then: [ :aRun | 
-				self announcer
-					announce: (Gt4OpenAIThreadRunIsDoneAnnouncement new run: aRun) ]) await: Gt4OpenAIUtilities executionConfiguration
+			then: [ :aRun | self announcer announce: (Gt4OpenAIThreadRunIsDoneAnnouncement new run: aRun) ])
+			await: Gt4OpenAIUtilities executionConfiguration
 ]
 
 { #category : #accessing }
