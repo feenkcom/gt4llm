@@ -35,6 +35,7 @@ GtLlmInspectorSummarizer >> summarizeViews: anObject [
 		withAll: (pragmas
 				collect: [ :aPragma | 
 					GtLlmInspectorViewSummary new
+						viewClass: aPragma methodClass;
 						selector: aPragma methodSelector;
 						code: aPragma method sourceCode ])
 ]
