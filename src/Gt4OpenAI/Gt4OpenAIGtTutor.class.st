@@ -38,6 +38,26 @@ Gt4OpenAIGtTutor >> addFile: aFile [
 ]
 
 { #category : #accessing }
+Gt4OpenAIGtTutor >> allViewsToFile [
+	| views aFile |
+	views := 'gtView' gtPragmas.
+	aFile := FileLocator temp / 'AllViews' , 'st'.
+	aFile ensureDelete.
+	aFile
+		writeStreamDo: [ :aStream | 
+			aStream
+				nextPutAll: ('
+'
+						join: (views contents
+								collect: [ :aMethod | 
+									'```smalltalk-method
+' , aMethod sourceCode
+										, '
+```' ])) ].
+	^ aFile
+]
+
+{ #category : #accessing }
 Gt4OpenAIGtTutor >> apiKey [
 	^ apiKey
 ]
@@ -116,9 +136,9 @@ Gt4OpenAIGtTutor >> defaultAssistantName [
 
 { #category : #accessing }
 Gt4OpenAIGtTutor >> defaultFiles [
-	^ self
+	^ (self
 		packageNamesToFiles: {#'GToolkit-Phlow'.
-				#'GToolkit-Phlow-Examples'}
+				#'GToolkit-Phlow-Examples'}) , {self allViewsToFile}
 ]
 
 { #category : #accessing }
@@ -170,6 +190,7 @@ Please follow these conventions carefully:
 - When looking through files, use git as available to skip files, and skip hidden files (.env, .git, etc) by default.
 - You can enrich any object with inspector views for visualization.
 - ALWAYS Return your SCRIPT inside of a single pair of ``` delimiters. Only the console output of the first such SCRIPT is visible to the user, so make sure that it''s complete and don''t bother returning anything else. Smalltalk language snippets must be annotated as such, and new methods must always be annotated using smalltalk-method.
+- You have access to a few Smalltalk package files as well as a file that represents all the views currently defined in the system (`AllViews.st`). Any new views must match the API used in the already defined views. 
 - When writing about classes, always use the notation \{\{gtClass:CLASSNAME\}\}, where CLASSNAME is the name of the class. Example: \{\{gtClass:Object\}\} for the Object class.
 - When writing about methods, always use the notation \{\{gtMethod:CLASSNAME>>#METHODNAME\}\}, where CLASSNAME is the name of the class and METHODNAME is the name of the method. Example: \{\{gtMethod:Object>>#perform:\}\} for the perform: method on the Object class.
 - Smalltalk methods must always be formatted such that the class name is on the first line, and the method body follows. Example:
