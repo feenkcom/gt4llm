@@ -3,7 +3,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'selector',
-		'code'
+		'code',
+		'viewClass'
 	],
 	#category : #'Gt4Llm-Summarizer'
 }
@@ -43,9 +44,20 @@ GtLlmInspectorViewSummary >> selector: anObject [
 
 { #category : #accessing }
 GtLlmInspectorViewSummary >> summaryString [
-	^ self selector
-		, ': 
-```' , self code
+	^ '{{gtMethod:' , self viewClass asString , '>>#' , self selector
+		, '}}: 
+```smalltalk-method
+' , self code
 		, '
 ```'
+]
+
+{ #category : #accessing }
+GtLlmInspectorViewSummary >> viewClass [
+	^ viewClass
+]
+
+{ #category : #accessing }
+GtLlmInspectorViewSummary >> viewClass: anObject [
+	viewClass := anObject
 ]
