@@ -95,6 +95,33 @@ Gt4OpenAIClient >> defaultBaseUrl [
 ]
 
 { #category : #accessing }
+Gt4OpenAIClient >> delete: aUrl [
+	| aClient |
+	aClient := self initializeClient.
+	aClient url: self baseUrl / aUrl.
+	
+	aClient entity: nil.
+
+	^ self checkForErrors: aClient delete
+]
+
+{ #category : #accessing }
+Gt4OpenAIClient >> deleteAssistant: anAssistantId [
+	^ Gt4OpenAIDeleteAssistantAPIClient new
+		client: self;
+		assistant: anAssistantId;
+		perform
+]
+
+{ #category : #accessing }
+Gt4OpenAIClient >> deleteFile: aFileId [
+	^ Gt4OpenAIDeleteFileAPIClient new
+		client: self;
+		file: aFileId;
+		perform
+]
+
+{ #category : #accessing }
 Gt4OpenAIClient >> generateEmbeddingWithModel: aString andInput: anInputString [
 	^ Gt4OpenAIGenerateEmbeddingAPIClient new
 		client: self;

@@ -12,7 +12,8 @@ Class {
 		'tools',
 		'chats',
 		'executor',
-		'files'
+		'files',
+		'apiFiles'
 	],
 	#category : #'Gt4OpenAI-Tutor'
 }
@@ -121,7 +122,8 @@ Gt4OpenAIGtTutor >> createAssistant [
 		do: [ :aFile | 
 			| file |
 			file := client uploadFile: aFile withPurpose: 'assistants'.
-			client createAssistantFile: file id forAssistant: assistant id ]
+			client createAssistantFile: file id forAssistant: assistant id.
+			apiFiles add: file ]
 ]
 
 { #category : #accessing }
@@ -218,6 +220,19 @@ Gt4OpenAIGtTutor >> defaultTools [
 ]
 
 { #category : #accessing }
+Gt4OpenAIGtTutor >> deleteAssistant [
+	assistant
+		ifNotNil: [ client deleteAssistant: assistant id.
+			assistant := nil ]
+]
+
+{ #category : #accessing }
+Gt4OpenAIGtTutor >> deleteFiles [
+	apiFiles do: [ :aFile | client deleteFile: aFile id ].
+	apiFiles := OrderedCollection new.
+]
+
+{ #category : #accessing }
 Gt4OpenAIGtTutor >> execute: aString [
 	<return: #Gt4OpenAIExecutionResult>
 	^ executor execute: aString
@@ -231,6 +246,14 @@ Gt4OpenAIGtTutor >> files [
 { #category : #accessing }
 Gt4OpenAIGtTutor >> files: aCollection [
 	files := aCollection
+]
+
+{ #category : #accessing }
+Gt4OpenAIGtTutor >> finalize [
+	self deleteAssistant.
+	self deleteFiles.
+	
+	super finalize
 ]
 
 { #category : #accessing }
@@ -291,7 +314,8 @@ Gt4OpenAIGtTutor >> initialize [
 	tools := self defaultTools.
 	chats := OrderedCollection new.
 	executor :=  Gt4OpenAIExecutor new.
-	files := OrderedCollection withAll: self defaultFiles
+	files := OrderedCollection withAll: self defaultFiles.
+	apiFiles := OrderedCollection new
 ]
 
 { #category : #accessing }
