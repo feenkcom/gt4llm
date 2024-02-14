@@ -10,9 +10,14 @@ Class {
 { #category : #accessing }
 GtLlmCheckPipeline class >> defaultPipeline [
 	<gtExample>
+	^ self forLanguage: 'Smalltalk'
+]
+
+{ #category : #accessing }
+GtLlmCheckPipeline class >> forLanguage: aString [
 	^ self new
-		addChecker: GtLlmSmalltalkParserChecker new;
-		addChecker: GtLlmSmalltalkExecutionChecker new
+		addChecker: (GtLlmParserChecker forLanguage: aString);
+		addChecker: (GtLlmExecutorChecker forLanguage: aString)
 ]
 
 { #category : #accessing }
@@ -33,6 +38,11 @@ GtLlmCheckPipeline >> checkers [
 { #category : #accessing }
 GtLlmCheckPipeline >> checkers: anObject [
 	checkers := anObject
+]
+
+{ #category : #accessing }
+GtLlmCheckPipeline >> executor [
+	^ self checkers executor
 ]
 
 { #category : #accessing }
@@ -65,4 +75,9 @@ GtLlmCheckPipeline >> initialize [
 	super initialize.
 	
 	checkers := GtLlmCheckerGroup new
+]
+
+{ #category : #accessing }
+GtLlmCheckPipeline >> parsers [
+	^ self checkers parsers
 ]

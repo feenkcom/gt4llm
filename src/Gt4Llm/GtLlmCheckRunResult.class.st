@@ -39,13 +39,28 @@ GtLlmCheckRunResult >> checkers: anObject [
 ]
 
 { #category : #accessing }
+GtLlmCheckRunResult >> executionResult [
+	^ (self results at: self checkers executor) content
+]
+
+{ #category : #accessing }
 GtLlmCheckRunResult >> gtCheckersFor: aView [
 	<gtView>
 	^ aView forward
 		title: 'Checkers';
-		priority: 2;
+		priority: 3;
 		object: [ self checkers ];
 		view: #gtCheckersFor:
+]
+
+{ #category : #accessing }
+GtLlmCheckRunResult >> gtExecutionResultFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Execution result';
+		priority: 1;
+		object: [ self executionResult ];
+		view: #gtLiveFor:
 ]
 
 { #category : #accessing }
@@ -53,9 +68,9 @@ GtLlmCheckRunResult >> gtResultsFor: aView [
 	<gtView>
 	^ aView columnedList
 		title: 'Results';
-		priority: 1;
+		priority: 2;
 		items: [ self checkers ];
-		column: 'Check' text: #name;
+		column: 'Check' text: #checkName;
 		column: 'State'
 			stencil: [ :aChecker | 
 				| state |
