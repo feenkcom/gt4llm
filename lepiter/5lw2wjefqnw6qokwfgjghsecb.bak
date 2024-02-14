@@ -66,14 +66,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-30T13:23:27.590775+01:00"
+						"dateAndTimeString" : "2024-02-06T11:01:09.920375+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "UmMbkIrMDQCW0cHKATK6Xg=="
 				},
-				"code" : "apiKey := Clipboard clipboardText.\rclient := Gt4OpenAIClient new apiKey: apiKey"
+				"code" : "apiKey := Clipboard clipboardText.\rclient := Gt4OpenAIClient new apiKey: apiKey.\r\r\"or, as a convenience function\"\r\rclient := Gt4OpenAIClient withApiKeyFromClipboard"
 			},
 			{
 				"__type" : "textSnippet",

@@ -66,14 +66,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-06T11:02:10.076955+01:00"
+						"dateAndTimeString" : "2024-02-06T11:02:15.10521+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "RPmtMIzMDQCj/ESZCNpZAg=="
 				},
-				"code" : "apiKey := Clipboard clipboardText.\rchat := Gt4OpenAIChat withAp\r\t\tmodel: 'gpt-3.5-turbo'.\r\t\t\rchat sendMessage: 'Hello GPT! Can you help me find my lost key?'.\r\rchat messages last"
+				"code" : "chat := Gt4OpenAIChat withApiKeyFromClipboard model: 'gpt-3.5-turbo'.\r\rchat sendMessage: 'Hello GPT! Can you help me find my lost key?'.\r\rchat messages last"
 			}
 		]
 	},
