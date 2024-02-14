@@ -19,7 +19,7 @@ GtLlmParserChecker class >> forLanguage: aString [
 
 { #category : #accessing }
 GtLlmParserChecker class >> isForLanguage: aString [
-	^ self language = aString
+	^ self language asLowercase = aString asLowercase
 ]
 
 { #category : #accessing }
