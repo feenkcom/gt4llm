@@ -19,7 +19,7 @@ GtLlmExecutorChecker class >> forLanguage: aString [
 
 { #category : #accessing }
 GtLlmExecutorChecker class >> isForLanguage: aString [
-	^ self language = aString
+	^ self language asLowercase = aString asLowercase
 ]
 
 { #category : #accessing }
