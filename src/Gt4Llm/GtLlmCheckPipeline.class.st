@@ -9,9 +9,15 @@ Class {
 
 { #category : #accessing }
 GtLlmCheckPipeline class >> defaultPipeline [
+	<gtExample>
+	^ self forLanguage: 'Smalltalk'
+]
+
+{ #category : #accessing }
+GtLlmCheckPipeline class >> forLanguage: aString [
 	^ self new
-		addChecker: GtLlmSmalltalkParserChecker new;
-		addChecker: GtLlmSmalltalkExecutionChecker new
+		addChecker: (GtLlmParserChecker forLanguage: aString);
+		addChecker: (GtLlmExecutorChecker forLanguage: aString)
 ]
 
 { #category : #accessing }
@@ -35,6 +41,26 @@ GtLlmCheckPipeline >> checkers: anObject [
 ]
 
 { #category : #accessing }
+GtLlmCheckPipeline >> executor [
+	^ self checkers executor
+]
+
+{ #category : #accessing }
+GtLlmCheckPipeline >> gtCheckFor: aView [
+	<gtView>
+	^ aView textEditor
+		title: 'Check';
+		priority: 2;
+		aptitude: [ BrGlamorousCodeEditorAptitude ];
+		text: [ '' ];
+		actionButtonIcon: BrGlamorousVectorIcons play
+			tooltip: 'Check'
+			action: [ :aButton :aTab | 
+				aButton phlow
+					spawnObject: (self check: aTab viewContentElement children first text asString) ]
+]
+
+{ #category : #accessing }
 GtLlmCheckPipeline >> gtCheckersFor: aView [
 	<gtView>
 	^ aView forward
@@ -49,4 +75,9 @@ GtLlmCheckPipeline >> initialize [
 	super initialize.
 	
 	checkers := GtLlmCheckerGroup new
+]
+
+{ #category : #accessing }
+GtLlmCheckPipeline >> parsers [
+	^ self checkers parsers
 ]

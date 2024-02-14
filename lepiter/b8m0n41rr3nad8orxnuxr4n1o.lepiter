@@ -103,14 +103,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-13T10:42:21.605396+01:00"
+						"dateAndTimeString" : "2024-02-14T12:27:01.323129+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "vpQX8qHNDQCMVJlOBQLYvQ=="
 				},
-				"code" : "tutor := Gt4OpenAIGtTutor withApiKeyFromClipboard createAssistant"
+				"code" : "tutor := GtOpenAIGtTutor withApiKeyFromClipboard createAssistant"
 			},
 			{
 				"__type" : "textSnippet",
@@ -279,7 +279,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-13T10:50:09.475152+01:00"
+						"dateAndTimeString" : "2024-02-14T12:30:35.839912+01:00"
 					}
 				},
 				"uid" : {
@@ -289,7 +289,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "The answer is computed asynchronously. You can either subscribe to the {{gtClass:Gt4OpenAIThreadRunIsDoneAnnouncement}} class on the chat announcer ({{gtMethod:GtOpenAIAssistantChat>>#announcer}}) or periodically check whether an answer has arrived yet by looking at the last message (the firast method is recommended)."
+				"string" : "The answer is computed asynchronously. You can either subscribe to the {{gtClass:GtOpenAIThreadRunIsDoneAnnouncement}} class on the chat announcer ({{gtMethod:GtOpenAIAssistantChat>>#announcer}}) or periodically check whether an answer has arrived yet by looking at the last message (the firast method is recommended)."
 			},
 			{
 				"__type" : "pharoSnippet",
@@ -455,7 +455,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-13T10:45:26.125917+01:00"
+						"dateAndTimeString" : "2024-02-14T12:27:31.411624+01:00"
 					}
 				},
 				"uid" : {
@@ -465,7 +465,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "If we want to change the prompt of the assistant or the files it has access to, we can do so before calling {{gtMethod:Gt4OpenAIGtTutor>>#createAssistant}}."
+				"string" : "If we want to change the prompt of the assistant or the files it has access to, we can do so before calling {{gtMethod:GtOpenAIGtTutor>>#createAssistant}}."
 			},
 			{
 				"__type" : "textSnippet",

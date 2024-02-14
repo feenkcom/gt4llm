@@ -39,13 +39,51 @@ GtLlmCheckRunResult >> checkers: anObject [
 ]
 
 { #category : #accessing }
+GtLlmCheckRunResult >> executionResult [
+	^ (self results at: self checkers executor) content
+]
+
+{ #category : #accessing }
 GtLlmCheckRunResult >> gtCheckersFor: aView [
 	<gtView>
 	^ aView forward
 		title: 'Checkers';
-		priority: 2;
+		priority: 3;
 		object: [ self checkers ];
 		view: #gtCheckersFor:
+]
+
+{ #category : #accessing }
+GtLlmCheckRunResult >> gtErrorsFor: aView [
+	<gtView>
+	self hasErrors ifFalse: [ ^ aView empty ].
+
+	^ aView columnedList
+		title: 'Errors';
+		priority: 1;
+		items: [ self checkers select: [ :aChecker | (self results at: aChecker) isError ] ];
+		column: 'Check' text: #checkName;
+		column: 'Exception'
+			text: [ :aChecker | 
+				| state |
+				state := self results at: aChecker.
+				state content ];
+		send: [ :aChecker | self results at: aChecker ]
+]
+
+{ #category : #accessing }
+GtLlmCheckRunResult >> gtExecutionResultFor: aView [
+	<gtView>
+	self hasErrors ifTrue: [ ^ aView empty ].
+
+	^ aView forward
+		title: 'Execution result';
+		priority: 1;
+		object: [ self executionResult ];
+		view: #gtLiveFor:;
+		actionButtonIcon: BrGlamorousVectorIcons inspect
+			tooltip: 'Inspect result'
+			action: [ :aButton | aButton phlow spawnObject: self executionResult ]
 ]
 
 { #category : #accessing }
@@ -53,9 +91,9 @@ GtLlmCheckRunResult >> gtResultsFor: aView [
 	<gtView>
 	^ aView columnedList
 		title: 'Results';
-		priority: 1;
+		priority: 2;
 		items: [ self checkers ];
-		column: 'Check' text: #name;
+		column: 'Check' text: #checkName;
 		column: 'State'
 			stencil: [ :aChecker | 
 				| state |

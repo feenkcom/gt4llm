@@ -1,15 +1,12 @@
 Class {
 	#name : #GtLlmSmalltalkExecutionChecker,
-	#superclass : #GtLlmChecker,
-	#instVars : [
-		'output'
-	],
+	#superclass : #GtLlmExecutorChecker,
 	#category : #'Gt4Llm-Checker'
 }
 
 { #category : #accessing }
-GtLlmSmalltalkExecutionChecker >> check: aString [
-	^ self execute: aString
+GtLlmSmalltalkExecutionChecker class >> language [
+	^ 'Smalltalk'
 ]
 
 { #category : #accessing }
@@ -34,22 +31,22 @@ GtLlmSmalltalkExecutionChecker >> createStackString: anError [
 ]
 
 { #category : #accessing }
-GtLlmSmalltalkExecutionChecker >> execute: aString [
-	[ ^ GtLlmCheckerSuccess new
-		checker: self;
-		content: (OpalCompiler new
-				source: aString;
-				receiver: self;
-				evaluate) ]
-		on: Exception
-		do: [ :anError | 
-			^ GtLlmCheckerError new
-				checker: self;
-				content: anError;
-				contentString: (self createStackString: anError) ]
+GtLlmSmalltalkExecutionChecker >> errorToCatch [
+	^ Error
 ]
 
 { #category : #accessing }
-GtLlmSmalltalkExecutionChecker >> name [
-	^ 'Smalltalk Execution Checker'
+GtLlmSmalltalkExecutionChecker >> execute: aString [
+	^ OpalCompiler new
+		source: aString;
+		receiver: self;
+		evaluate
+]
+
+{ #category : #accessing }
+GtLlmSmalltalkExecutionChecker >> handlError: anError [
+	^ GtLlmCheckerError new
+		checker: self;
+		content: anError;
+		contentString: (self createStackString: anError)
 ]
