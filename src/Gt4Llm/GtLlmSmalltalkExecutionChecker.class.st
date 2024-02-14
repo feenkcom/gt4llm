@@ -1,14 +1,19 @@
 Class {
-	#name : #Gt4OpenAIExecutor,
-	#superclass : #Object,
+	#name : #GtLlmSmalltalkExecutionChecker,
+	#superclass : #GtLlmChecker,
 	#instVars : [
 		'output'
 	],
-	#category : #'Gt4OpenAI-Executor'
+	#category : #'Gt4Llm-Checker'
 }
 
 { #category : #accessing }
-Gt4OpenAIExecutor >> createStackString: anError [
+GtLlmSmalltalkExecutionChecker >> check: aString [
+	^ self execute: aString
+]
+
+{ #category : #accessing }
+GtLlmSmalltalkExecutionChecker >> createStackString: anError [
 	| errorStack thisStack |
 	(anError isKindOf: SyntaxErrorNotification) ifTrue: [
 		^ 'Syntax Error: ', anError messageText
@@ -29,15 +34,22 @@ Gt4OpenAIExecutor >> createStackString: anError [
 ]
 
 { #category : #accessing }
-Gt4OpenAIExecutor >> execute: aString [	
-	[ ^ Gt4OpenAIExecutionSuccess new
+GtLlmSmalltalkExecutionChecker >> execute: aString [
+	[ ^ GtLlmCheckerSuccess new
+		checker: self;
 		content: (OpalCompiler new
 				source: aString;
 				receiver: self;
 				evaluate) ]
 		on: Exception
 		do: [ :anError | 
-			^ Gt4OpenAIExecutionError new
+			^ GtLlmCheckerError new
+				checker: self;
 				content: anError;
-				stackString: (self createStackString: anError) ]
+				contentString: (self createStackString: anError) ]
+]
+
+{ #category : #accessing }
+GtLlmSmalltalkExecutionChecker >> name [
+	^ 'Smalltalk Execution Checker'
 ]

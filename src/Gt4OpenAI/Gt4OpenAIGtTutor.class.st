@@ -11,9 +11,9 @@ Class {
 		'assistantDescription',
 		'tools',
 		'chats',
-		'executor',
 		'files',
-		'apiFiles'
+		'apiFiles',
+		'pipeline'
 	],
 	#category : #'Gt4OpenAI-Tutor'
 }
@@ -28,7 +28,7 @@ Gt4OpenAIGtTutor >> addChat [
 	| aChat |
 	aChat := GtOpenAIAssistantChat new
 			assistant: self assistant;
-			executor: self executor.
+			pipeline: pipeline.
 	chats add: aChat.
 	^ aChat
 ]
@@ -106,6 +106,12 @@ Gt4OpenAIGtTutor >> assistantName: anObject [
 { #category : #accessing }
 Gt4OpenAIGtTutor >> chats [
 	^ chats
+]
+
+{ #category : #accessing }
+Gt4OpenAIGtTutor >> check: aString [
+	<return: #GtLlmCheckerResult>
+	^ pipeline check: aString
 ]
 
 { #category : #accessing }
@@ -233,12 +239,6 @@ Gt4OpenAIGtTutor >> deleteFiles [
 ]
 
 { #category : #accessing }
-Gt4OpenAIGtTutor >> execute: aString [
-	<return: #Gt4OpenAIExecutionResult>
-	^ executor execute: aString
-]
-
-{ #category : #accessing }
 Gt4OpenAIGtTutor >> files [
 	^ files
 ]
@@ -311,7 +311,7 @@ Gt4OpenAIGtTutor >> initialize [
 	assistantDescription := self defaultAssistantDescription.
 	tools := self defaultTools.
 	chats := GtOpenAIAssistantChatGroup new.
-	executor :=  Gt4OpenAIExecutor new.
+	pipeline :=  GtLlmCheckPipeline defaultPipeline.
 	files := OrderedCollection withAll: self defaultFiles.
 	apiFiles := Gt4OpenAIFilesGroup new
 ]

@@ -10,7 +10,7 @@ Class {
 		'lastRun',
 		'announcer',
 		'future',
-		'executor'
+		'pipeline'
 	],
 	#category : #'Gt4OpenAI-Chats'
 }
@@ -41,16 +41,6 @@ GtOpenAIAssistantChat >> assistant: anObject [
 	assistant := anObject.
 	
 	self onAssistantSet
-]
-
-{ #category : #accessing }
-GtOpenAIAssistantChat >> executor [
-	^ executor
-]
-
-{ #category : #accessing }
-GtOpenAIAssistantChat >> executor: anExecutor [
-	executor := anExecutor
 ]
 
 { #category : #accessing }
@@ -162,7 +152,7 @@ GtOpenAIAssistantChat >> messages [
 	givenMessages
 		do: [ :aMessage | 
 			aMessage
-				executor: self executor;
+				pipeline: pipeline;
 				chat: self ].
 	^ givenMessages
 ]
@@ -170,6 +160,11 @@ GtOpenAIAssistantChat >> messages [
 { #category : #accessing }
 GtOpenAIAssistantChat >> onAssistantSet [
 	thread := assistant client createThreadWithMessages: {}
+]
+
+{ #category : #accessing }
+GtOpenAIAssistantChat >> pipeline: aPipeline [
+	pipeline := aPipeline
 ]
 
 { #category : #accessing }
