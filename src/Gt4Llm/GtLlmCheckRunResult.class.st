@@ -54,8 +54,28 @@ GtLlmCheckRunResult >> gtCheckersFor: aView [
 ]
 
 { #category : #accessing }
+GtLlmCheckRunResult >> gtErrorsFor: aView [
+	<gtView>
+	self hasErrors ifFalse: [ ^ aView empty ].
+
+	^ aView columnedList
+		title: 'Errors';
+		priority: 1;
+		items: [ self checkers select: [ :aChecker | (self results at: aChecker) isError ] ];
+		column: 'Check' text: #checkName;
+		column: 'Exception'
+			text: [ :aChecker | 
+				| state |
+				state := self results at: aChecker.
+				state content ];
+		send: [ :aChecker | self results at: aChecker ]
+]
+
+{ #category : #accessing }
 GtLlmCheckRunResult >> gtExecutionResultFor: aView [
 	<gtView>
+	self hasErrors ifTrue: [ ^ aView empty ].
+
 	^ aView forward
 		title: 'Execution result';
 		priority: 1;
