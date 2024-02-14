@@ -11,8 +11,8 @@ GtLlmParserChecker class >> checkName [
 
 { #category : #accessing }
 GtLlmParserChecker class >> forLanguage: aString [
-	^ self subclasses
-		detect: [ :aClass | aClass isForLanguage: aString ]
+	^ self allSubclasses
+		detect: [ :aClass | aClass hasAbstractMethods not and: [ aClass isForLanguage: aString ] ]
 		ifOne: #new
 		ifNone: [ self error: 'No parser for language ' , aString , ' found' ]
 ]

@@ -11,7 +11,7 @@ GtLlmExecutorChecker class >> checkName [
 
 { #category : #accessing }
 GtLlmExecutorChecker class >> forLanguage: aString [
-	^ self subclasses
+	^ self allSubclasses
 		detect: [ :aClass | aClass isForLanguage: aString ]
 		ifOne: #new
 		ifNone: [ self error: 'No executor for language ' , aString , ' found' ]
@@ -29,11 +29,25 @@ GtLlmExecutorChecker class >> language [
 
 { #category : #accessing }
 GtLlmExecutorChecker >> check: aString [
-	^ self execute: aString
+	[ ^ GtLlmCheckerSuccess new
+		checker: self;
+		content: (self execute: aString) ]
+		on: self errorToCatch
+		do: [ :anError | ^ self handlError: anError ]
+]
+
+{ #category : #accessing }
+GtLlmExecutorChecker >> errorToCatch [
+	^ self subclassResponsibility
 ]
 
 { #category : #accessing }
 GtLlmExecutorChecker >> execute: aString [
+	^ self subclassResponsibility
+]
+
+{ #category : #accessing }
+GtLlmExecutorChecker >> handlError: anError [
 	^ self subclassResponsibility
 ]
 
