@@ -20,6 +20,7 @@ Class {
 
 { #category : #accessing }
 GtOpenAIGtTutor class >> withApiKeyFromClipboard [
+	<gtExample>
 	^ self new apiKey: Clipboard clipboardText
 ]
 
