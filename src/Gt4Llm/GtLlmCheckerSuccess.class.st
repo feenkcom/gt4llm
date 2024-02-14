@@ -18,3 +18,13 @@ GtLlmCheckerSuccess >> color [
 GtLlmCheckerSuccess >> contentString [
 	^ (GtLlmInspectorSummarizer new summarize: self content) summaryString
 ]
+
+{ #category : #accessing }
+GtLlmCheckerSuccess >> printOn: aStream [
+	super printOn: aStream.
+
+	aStream
+		nextPut: $(;
+		nextPutAll: self checker checkName;
+		nextPut: $)
+]
