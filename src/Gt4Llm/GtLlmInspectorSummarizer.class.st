@@ -18,7 +18,7 @@ GtLlmInspectorSummarizer >> summarizeSlots: anObject [
 	^ GtLlmInspectorSlotSummaryGroup
 		withAll: (anObject class slots
 				collect: [ :aSlot | 
-					Gt4LlmInspectorSlotSummary new
+					GtLlmInspectorSlotSummary new
 						slot: aSlot;
 						name: aSlot name;
 						slotValue: (aSlot read: anObject) ])
