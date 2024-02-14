@@ -28,6 +28,12 @@ Gt4OpenAIError >> code: anObject [
 	code := anObject
 ]
 
+{ #category : #'gt - extensions' }
+Gt4OpenAIError >> gtMessageTextFor: aView [
+	<gtExceptionDebuggingView>
+	^ super gtMessageTextFor: aView
+]
+
 { #category : #accessing }
 Gt4OpenAIError >> param [
 	^ param
