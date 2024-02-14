@@ -316,14 +316,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-13T10:50:19.755322+01:00"
+						"dateAndTimeString" : "2024-02-13T10:51:05.5874+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "mw/fDqLNDQChm2PVBQLYvQ=="
 				},
-				"code" : "chat messages last"
+				"code" : "chat messages first"
 			},
 			{
 				"__type" : "textSnippet",

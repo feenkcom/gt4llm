@@ -208,14 +208,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-12T08:24:41.867023-03:00"
+						"dateAndTimeString" : "2024-02-14T12:27:07.461859+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "7REkNI/NDQCHsFrIBtrTtQ=="
 				},
-				"code" : "tutor := Gt4OpenAIGtTutor new\r\t\tapiKey: apiKey;\r\t\tcreateAssistant"
+				"code" : "tutor := GtOpenAIGtTutor new\r\t\tapiKey: apiKey;\r\t\tcreateAssistant"
 			},
 			{
 				"__type" : "pharoSnippet",
@@ -384,14 +384,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-12T08:41:46.280874-03:00"
+						"dateAndTimeString" : "2024-02-14T12:27:20.403943+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "y0jbLlXNDQCyVxnGDOiMHg=="
 				},
-				"code" : "(chat messages detect: #isAssistantRole) codeBlockExecutor await"
+				"code" : "(chat messages detect: #isAssistantRole) codeBlockChecker await"
 			},
 			{
 				"__type" : "textSnippet",

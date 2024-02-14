@@ -103,14 +103,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-30T13:48:16.940167+01:00"
+						"dateAndTimeString" : "2024-02-06T11:01:18.749499+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "U0nA6YrMDQChAdPjATK6Xg=="
 				},
-				"code" : "apiKey := Clipboard clipboardText.\rclient := Gt4OpenAIClient new apiKey: apiKey"
+				"code" : "client := Gt4OpenAIClient withApiKeyFromClipboard"
 			},
 			{
 				"__type" : "textSnippet",
