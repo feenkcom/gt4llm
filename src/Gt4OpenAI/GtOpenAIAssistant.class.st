@@ -17,17 +17,15 @@ Class {
 
 { #category : #accessing }
 GtOpenAIAssistant class >> serializationProperties [
-	^ {
-  #id -> #id.
-  #created_at -> #createdAt.
-  #name -> #name.
-  #description -> #description.
-  #model -> #model.
-  #instructions -> #instructions.
-  #tools -> #tools.
-  #file_ids -> #fileIds.
-  #metadata -> #metadata
-}
+	^ {#id -> #id.
+		#created_at -> #createdAt.
+		#name -> #name.
+		#description -> #description.
+		#model -> #model.
+		#instructions -> #instructions.
+		#tools -> #tools.
+		#file_ids -> #fileIds.
+		#metadata -> #metadata}
 ]
 
 { #category : #accessing }

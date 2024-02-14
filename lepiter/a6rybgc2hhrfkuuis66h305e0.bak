@@ -103,14 +103,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-31T09:51:36.124694+01:00"
+						"dateAndTimeString" : "2024-02-06T11:02:28.764051+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "SuSmt5vMDQCZ8bEDCm8XrA=="
 				},
-				"code" : "apiKey := Clipboard clipboardText.\rchat := Gt4OpenAIChat new\r\t\tapiKey: apiKey;\r\t\tmodel: 'gpt-3.5-turbo'"
+				"code" : "chat := Gt4OpenAIChat withApiKeyFromClipboard model: 'gpt-3.5-turbo'"
 			},
 			{
 				"__type" : "textSnippet",

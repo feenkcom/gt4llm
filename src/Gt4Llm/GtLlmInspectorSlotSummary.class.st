@@ -1,5 +1,5 @@
 Class {
-	#name : #Gt4LlmInspectorSlotSummary,
+	#name : #GtLlmInspectorSlotSummary,
 	#superclass : #Object,
 	#instVars : [
 		'slot',
@@ -10,36 +10,36 @@ Class {
 }
 
 { #category : #accessing }
-Gt4LlmInspectorSlotSummary >> name [
+GtLlmInspectorSlotSummary >> name [
 	^ name
 ]
 
 { #category : #accessing }
-Gt4LlmInspectorSlotSummary >> name: anObject [
+GtLlmInspectorSlotSummary >> name: anObject [
 	name := anObject
 ]
 
 { #category : #accessing }
-Gt4LlmInspectorSlotSummary >> slot [
+GtLlmInspectorSlotSummary >> slot [
 	^ slot
 ]
 
 { #category : #accessing }
-Gt4LlmInspectorSlotSummary >> slot: anObject [
+GtLlmInspectorSlotSummary >> slot: anObject [
 	slot := anObject
 ]
 
 { #category : #accessing }
-Gt4LlmInspectorSlotSummary >> slotValue [
+GtLlmInspectorSlotSummary >> slotValue [
 	^ slotValue
 ]
 
 { #category : #accessing }
-Gt4LlmInspectorSlotSummary >> slotValue: anObject [
+GtLlmInspectorSlotSummary >> slotValue: anObject [
 	slotValue := anObject
 ]
 
 { #category : #accessing }
-Gt4LlmInspectorSlotSummary >> summaryString [
+GtLlmInspectorSlotSummary >> summaryString [
 	^ self name, ': ', self slotValue asString
 ]

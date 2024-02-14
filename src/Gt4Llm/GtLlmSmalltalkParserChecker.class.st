@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLlmSmalltalkParserChecker,
-	#superclass : #GtLlmChecker,
+	#superclass : #GtLlmParserChecker,
 	#instVars : [
 		'output'
 	],
@@ -8,13 +8,13 @@ Class {
 }
 
 { #category : #accessing }
-GtLlmSmalltalkParserChecker >> check: aString [
-	^ self parse: aString
+GtLlmSmalltalkParserChecker class >> language [
+	^ 'Smalltalk'
 ]
 
 { #category : #accessing }
-GtLlmSmalltalkParserChecker >> name [
-	^ 'Smalltalk Parser Checker'
+GtLlmSmalltalkParserChecker >> check: aString [
+	^ self parse: aString
 ]
 
 { #category : #accessing }
