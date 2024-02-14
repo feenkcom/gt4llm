@@ -1,15 +1,12 @@
 Class {
 	#name : #GtLlmSmalltalkExecutionChecker,
-	#superclass : #GtLlmChecker,
-	#instVars : [
-		'output'
-	],
+	#superclass : #GtLlmExecutorChecker,
 	#category : #'Gt4Llm-Checker'
 }
 
 { #category : #accessing }
-GtLlmSmalltalkExecutionChecker >> check: aString [
-	^ self execute: aString
+GtLlmSmalltalkExecutionChecker class >> language [
+	^ 'Smalltalk'
 ]
 
 { #category : #accessing }
@@ -47,9 +44,4 @@ GtLlmSmalltalkExecutionChecker >> execute: aString [
 				checker: self;
 				content: anError;
 				contentString: (self createStackString: anError) ]
-]
-
-{ #category : #accessing }
-GtLlmSmalltalkExecutionChecker >> name [
-	^ 'Smalltalk Execution Checker'
 ]
