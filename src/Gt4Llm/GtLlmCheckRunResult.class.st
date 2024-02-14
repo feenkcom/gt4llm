@@ -60,7 +60,10 @@ GtLlmCheckRunResult >> gtExecutionResultFor: aView [
 		title: 'Execution result';
 		priority: 1;
 		object: [ self executionResult ];
-		view: #gtLiveFor:
+		view: #gtLiveFor:;
+		actionButtonIcon: BrGlamorousVectorIcons inspect
+			tooltip: 'Inspect result'
+			action: [ :aButton | aButton phlow spawnObject: self executionResult ]
 ]
 
 { #category : #accessing }

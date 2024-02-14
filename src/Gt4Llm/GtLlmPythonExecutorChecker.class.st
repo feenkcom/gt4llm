@@ -11,7 +11,7 @@ GtLlmPythonExecutorChecker class >> language [
 
 { #category : #accessing }
 GtLlmPythonExecutorChecker >> errorToCatch [
-	^ LanguageLinkError
+	^ PharoLinkRemoteError
 ]
 
 { #category : #accessing }
@@ -19,7 +19,8 @@ GtLlmPythonExecutorChecker >> execute: aString [
 	^ PBApplication
 		do: [ :application | 
 			application newCommandStringFactory
-				resultExpression: aString;
+				script: (Character lf join: aString lines allButLast);
+				resultExpression: aString lines last;
 				sendAndWait ]
 ]
 
