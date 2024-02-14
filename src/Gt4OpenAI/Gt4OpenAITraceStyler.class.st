@@ -9,11 +9,11 @@ Gt4OpenAITraceStyler >> privateStyle: aText [
 	| aString aParser |
 	aString := aText asString.
 
-	(aString beginsWith: Gt4OpenAIExecutionError prefix) ifFalse: [ ^ aText ].
+	(aString beginsWith: GtLlmCheckerError prefix) ifFalse: [ ^ aText ].
 
 	aText foreground: Color lightGray.
 
-	(aText from: 1 to: Gt4OpenAIExecutionError prefix size)
+	(aText from: 1 to: GtLlmCheckerError prefix size)
 		foreground: Color black;
 		highlight: BrGlamorousColors paleErrorBackgroundColor.
 

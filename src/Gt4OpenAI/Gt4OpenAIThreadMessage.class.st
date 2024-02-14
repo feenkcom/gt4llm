@@ -12,7 +12,7 @@ Class {
 		'metadata',
 		'role',
 		'annotations',
-		'executor',
+		'pipeline',
 		'chat'
 	],
 	#category : #'Gt4OpenAI-Models'
@@ -71,10 +71,10 @@ Gt4OpenAIThreadMessage >> chat: anObject [
 ]
 
 { #category : #actions }
-Gt4OpenAIThreadMessage >> codeBlockExecutor [
-	^ Gt4OpenAICodeBlocksExecutor new
+Gt4OpenAIThreadMessage >> codeBlockChecker [
+	^ Gt4OpenAICodeBlocksChecker new
 		codeBlocks: self codeBlocks;
-		codeExecutor: self executor;
+		pipeline: pipeline;
 		chat: self chat;
 		maximumMessageSize: self maximumMessageSize
 ]
@@ -114,16 +114,6 @@ Gt4OpenAIThreadMessage >> createdAt: anObject [
 { #category : #ui }
 Gt4OpenAIThreadMessage >> elementClass [
 	^ Gt4OpenAIThreadMessageElement
-]
-
-{ #category : #accessing }
-Gt4OpenAIThreadMessage >> executor [
-	^ executor
-]
-
-{ #category : #accessing }
-Gt4OpenAIThreadMessage >> executor: anExecutor [
-	executor := anExecutor
 ]
 
 { #category : #accessing }
@@ -175,7 +165,6 @@ Gt4OpenAIThreadMessage >> gtCodeBlocksFor: aView [
 									disable;
 									label: 'Running...' ];
 							whenError: [ :theButton :anError | 
-								
 								theButton
 									enable;
 									label: 'Execution error' ];
@@ -185,7 +174,7 @@ Gt4OpenAIThreadMessage >> gtCodeBlocksFor: aView [
 									label: 'Finished'.
 								theButton phlow spawnObject: aResult ].
 
-						aCodeExecutor := self codeBlockExecutor.
+						aCodeExecutor := self codeBlockChecker.
 						anElementFuture future: aCodeExecutor future ] ]
 ]
 
@@ -264,6 +253,11 @@ Gt4OpenAIThreadMessage >> methods [
 { #category : #accessing }
 Gt4OpenAIThreadMessage >> parse [
 	^ LeParser parse: self contentText
+]
+
+{ #category : #accessing }
+Gt4OpenAIThreadMessage >> pipeline: aPipeline [
+	pipeline := aPipeline
 ]
 
 { #category : #accessing }
