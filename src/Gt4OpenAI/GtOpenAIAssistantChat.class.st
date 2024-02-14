@@ -48,7 +48,7 @@ GtOpenAIAssistantChat >> getRun [
 	lastRun := self assistant client getRun: lastRun id forThread: thread id.
 
 	self announcer
-		announce: (Gt4OpenAIThreadRunUpdatedAnnouncement new run: lastRun).
+		announce: (GtOpenAIThreadRunUpdatedAnnouncement new run: lastRun).
 		
 	^ lastRun
 ]
@@ -73,7 +73,7 @@ GtOpenAIAssistantChat >> gtMessagesFor: aView [
 		items: [ self messages ];
 		column: 'Role' text: #role width: 60;
 		column: 'Message' text: #contentText;
-		updateWhen: Gt4OpenAIThreadRunAnnouncement in: self announcer
+		updateWhen: GtOpenAIThreadRunAnnouncement in: self announcer
 ]
 
 { #category : #accessing }
@@ -84,7 +84,7 @@ GtOpenAIAssistantChat >> gtMessagesWidgetFor: aView [
 	^ aView explicit
 		title: 'Messages';
 		priority: 1;
-		stencil: [ Gt4OpenAIAssistantChatElement new assistantChat: self ]
+		stencil: [ GtOpenAIAssistantChatElement new assistantChat: self ]
 ]
 
 { #category : #accessing }
@@ -96,7 +96,7 @@ GtOpenAIAssistantChat >> gtSummaryFor: aView [
 		items: [ self summary ];
 		column: 'Property' text: #key;
 		column: 'Value' text: #value;
-		updateWhen: Gt4OpenAIThreadRunAnnouncement in: self announcer;
+		updateWhen: GtOpenAIThreadRunAnnouncement in: self announcer;
 		actionButtonIcon: BrGlamorousVectorIcons refresh
 			tooltip: 'Update'
 			action: [ :aButton :aTab | 
@@ -131,7 +131,7 @@ GtOpenAIAssistantChat >> gtWriteFor: aView [
 
 { #category : #accessing }
 GtOpenAIAssistantChat >> initialize [
-	files := Gt4OpenAIFilesGroup new
+	files := GtOpenAIFilesGroup new
 ]
 
 { #category : #accessing }
@@ -146,7 +146,7 @@ GtOpenAIAssistantChat >> lastUpdate [
 
 { #category : #accessing }
 GtOpenAIAssistantChat >> messages [
-	<return: #Gt4OpenAIThreadMessagesGroup>
+	<return: #GtOpenAIThreadMessagesGroup>
 	| givenMessages |
 	givenMessages := thread updateMessages.
 	givenMessages
@@ -169,24 +169,24 @@ GtOpenAIAssistantChat >> pipeline: aPipeline [
 
 { #category : #accessing }
 GtOpenAIAssistantChat >> runFuture [
-	^ Gt4OpenAIThreadRunFuture new chat: self
+	^ GtOpenAIThreadRunFuture new chat: self
 ]
 
 { #category : #accessing }
 GtOpenAIAssistantChat >> sendMessage: aString [
 	| aMessage |
-	aMessage := Gt4OpenAIUserMessage new content: aString.
+	aMessage := GtOpenAIUserMessage new content: aString.
 
 	assistant client addMessage: aMessage toThread: thread id.
 	lastRun := assistant client
 			createRunForThread: thread id
 			usingAssistant: assistant id.
 
-	self announcer announce: (Gt4OpenAIThreadRunStartedAnnouncement new run: lastRun).
+	self announcer announce: (GtOpenAIThreadRunStartedAnnouncement new run: lastRun).
 
 	future := (self runFuture
-			then: [ :aRun | self announcer announce: (Gt4OpenAIThreadRunIsDoneAnnouncement new run: aRun) ])
-			await: Gt4OpenAIUtilities executionConfiguration
+			then: [ :aRun | self announcer announce: (GtOpenAIThreadRunIsDoneAnnouncement new run: aRun) ])
+			await: GtOpenAIUtilities executionConfiguration
 ]
 
 { #category : #accessing }

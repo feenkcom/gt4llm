@@ -1,6 +1,6 @@
 Class {
 	#name : #GtOpenAIAssistantChatGroup,
-	#superclass : #Gt4OpenAIGroup,
+	#superclass : #GtOpenAIGroup,
 	#category : #'Gt4OpenAI-Groups'
 }
 
