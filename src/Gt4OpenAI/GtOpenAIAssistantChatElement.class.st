@@ -1,19 +1,14 @@
 Class {
 	#name : #GtOpenAIAssistantChatElement,
 	#superclass : #BlElement,
-	#traits : 'TGtOpenAIWithAssistantChat + TBrLayoutResizable',
-	#classTraits : 'TGtOpenAIWithAssistantChat classTrait + TBrLayoutResizable classTrait',
+	#traits : 'TGtOpenAIWithAssistantChatViewModel + TBrLayoutResizable',
+	#classTraits : 'TGtOpenAIWithAssistantChatViewModel classTrait + TBrLayoutResizable classTrait',
 	#instVars : [
 		'listElement',
 		'newThreadMessage'
 	],
 	#category : #'Gt4OpenAI-Widgets'
 }
-
-{ #category : #'private - updating' }
-GtOpenAIAssistantChatElement >> allListItems [
-	^ assistantChat messages asArray reversed copyWith: newThreadMessage
-]
 
 { #category : #'initialization ' }
 GtOpenAIAssistantChatElement >> defaultLayout [
@@ -41,12 +36,11 @@ GtOpenAIAssistantChatElement >> initializeListElement [
 			itemId: [ :anItem :anIndex | anItem id ];
 			itemStencil: [ :anElementClass :aListWidget | 
 				anElementClass newForChatList ];
-			itemDataBinder: [ :anItemElement :anItem | anItemElement threadMessage: anItem ]
+			itemDataBinder: [ :anItemElement :anItem | anItemElement threadMessageViewModel: anItem ]
 ]
 
 { #category : #'private - hooks' }
-GtOpenAIAssistantChatElement >> onAssistantChatChanged [
-	self updateNewThreadMessage.
+GtOpenAIAssistantChatElement >> onAssistantChatViewModelChanged [
 	self updateElement
 ]
 
@@ -56,16 +50,16 @@ GtOpenAIAssistantChatElement >> onThreadRunAnnouncement: anAnnouncement [
 ]
 
 { #category : #'private - hooks' }
-GtOpenAIAssistantChatElement >> subscribeToAssistantChat [
-	assistantChat weak
+GtOpenAIAssistantChatElement >> subscribeToAssistantChatViewModel [
+	self assistantChat weak
 		when: GtOpenAIThreadRunAnnouncement
 		send: #onThreadRunAnnouncement:
 		to: self
 ]
 
 { #category : #'private - hooks' }
-GtOpenAIAssistantChatElement >> unsubscribeFromAssistantChat [
-	assistantChat unsubscribe: self
+GtOpenAIAssistantChatElement >> unsubscribeFromAssistantChatViewModel [
+	self assistantChat unsubscribe: self
 ]
 
 { #category : #'private - updating' }
@@ -76,12 +70,7 @@ GtOpenAIAssistantChatElement >> updateElement [
 { #category : #'private - updating' }
 GtOpenAIAssistantChatElement >> updateListElement [
 	| allItems |
-	allItems := self allListItems.
+	allItems := assistantChatViewModel threadMessageViewModels.
 	listElement items: allItems.
-	listElement scrollToItem: allItems last 
-]
-
-{ #category : #'private - updating' }
-GtOpenAIAssistantChatElement >> updateNewThreadMessage [
-	newThreadMessage assistantChat: assistantChat
+	listElement scrollToItem: allItems last
 ]
