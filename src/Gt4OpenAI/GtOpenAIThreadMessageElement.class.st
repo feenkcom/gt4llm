@@ -56,7 +56,7 @@ GtOpenAIThreadMessageElement >> initializeContentsElement [
 	contentsElement := BrEditor new
 			hMatchParent;
 			vFitContent;
-			styler: Gt4LlmMessageStyler new;
+			styler: GtLlmMessageStyler new;
 			aptitude: BrGlamorousRegularEditorAptitude;
 			beReadOnlyWithSelection
 ]
