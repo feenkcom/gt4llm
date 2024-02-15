@@ -4,8 +4,7 @@ Class {
 	#traits : 'TGtOpenAIWithAssistantChatViewModel + TBrLayoutResizable',
 	#classTraits : 'TGtOpenAIWithAssistantChatViewModel classTrait + TBrLayoutResizable classTrait',
 	#instVars : [
-		'listElement',
-		'newThreadMessage'
+		'listElement'
 	],
 	#category : #'Gt4OpenAI-Widgets'
 }
@@ -18,8 +17,7 @@ GtOpenAIAssistantChatElement >> defaultLayout [
 { #category : #initialization }
 GtOpenAIAssistantChatElement >> initialize [
 	super initialize.
-	newThreadMessage := GtOpenAINewThreadMessage new.
-	
+
 	self initializeListElement.
 	self addChild: listElement as: #list.
 	self padding: (BlInsets all: 3).
