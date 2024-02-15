@@ -283,8 +283,7 @@ GtOpenAIThreadMessage >> runId: anObject [
 { #category : #accessing }
 GtOpenAIThreadMessage >> styler [
 	^ BlCompositeStyler new
-		stylers: {LeSnippetStyler new
-					snippetViewModel: (LeTextSnippet string: self) asSnippetViewModel.
+		stylers: {GtLlmMessageStyler new.
 				GtOpenAITraceStyler new.
 				GtOpenAIThreadMessageStyler new annotations: self annotations}
 ]
