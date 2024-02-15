@@ -1,8 +1,8 @@
 Class {
 	#name : #GtOpenAIThreadMessageElement,
 	#superclass : #BlElement,
-	#traits : 'TGtOpenAIWithThreadMessage + TBrLayoutResizable',
-	#classTraits : 'TGtOpenAIWithThreadMessage classTrait + TBrLayoutResizable classTrait',
+	#traits : 'TGtOpenAIWithThreadMessageViewModel + TBrLayoutResizable',
+	#classTraits : 'TGtOpenAIWithThreadMessageViewModel classTrait + TBrLayoutResizable classTrait',
 	#instVars : [
 		'senderElement',
 		'contentsElement',
@@ -84,7 +84,7 @@ GtOpenAIThreadMessageElement >> initializeSenderElement [
 ]
 
 { #category : #'private - hooks' }
-GtOpenAIThreadMessageElement >> onThreadMessageChanged [
+GtOpenAIThreadMessageElement >> onThreadMessageViewModelChanged [
 	self updateElement
 ]
 
@@ -96,7 +96,7 @@ GtOpenAIThreadMessageElement >> showProgressElement [
 
 { #category : #'private - updating' }
 GtOpenAIThreadMessageElement >> updateContentsElement [
-	contentsElement text: threadMessage contentText.
+	contentsElement text: self threadMessage contentText.
 ]
 
 { #category : #'private - updating' }
@@ -108,14 +108,14 @@ GtOpenAIThreadMessageElement >> updateElement [
 
 { #category : #'private - updating' }
 GtOpenAIThreadMessageElement >> updateProgressElement [
-	threadMessage hasResponse
+	self threadMessage hasResponse
 		ifTrue: [ self hideProgressElement ]
 		ifFalse: [ self showProgressElement ]
 ]
 
 { #category : #'private - updating' }
 GtOpenAIThreadMessageElement >> updateSenderElement [
-	threadMessage isAssistantRole
+	self threadMessage isAssistantRole
 		ifTrue: [ senderElement text: 'ChatGPT' ]
 		ifFalse: [ senderElement text: 'You' ]
 ]
