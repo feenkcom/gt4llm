@@ -81,6 +81,11 @@ GtOpenAIChat >> initializeMessages [
 ]
 
 { #category : #accessing }
+GtOpenAIChat >> maximumMessageSize [
+	^ 30000
+]
+
+{ #category : #accessing }
 GtOpenAIChat >> messages [
 	^ messages
 ]
@@ -102,8 +107,11 @@ GtOpenAIChat >> model: anObject [
 
 { #category : #accessing }
 GtOpenAIChat >> sendMessage: aMessage [
-	| result |
-	messages add: (GtOpenAIUserMessage new content: aMessage).
+	| result output |
+	output := aMessage.
+	output size > self maximumMessageSize
+		ifTrue: [ output := output first: self maximumMessageSize ].
+	messages add: (GtOpenAIUserMessage new content: output).
 
 	result := client completeChatWithModel: self model andMessages: messages.
 

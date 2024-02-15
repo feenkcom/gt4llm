@@ -80,8 +80,7 @@ GtOpenAIThreadMessage >> codeBlockChecker [
 	^ GtOpenAICodeBlocksChecker new
 		codeBlocks: self codeBlocks;
 		pipeline: pipeline;
-		chat: self chat;
-		maximumMessageSize: self maximumMessageSize
+		chat: self chat
 ]
 
 { #category : #accessing }
@@ -151,31 +150,7 @@ GtOpenAIThreadMessage >> gtCodeBlocksFor: aView [
 							aSnippetElement := aSnippetViewModel snippetView asElement.
 							aSnippetElement padding: (BlInsets all: 10).
 							aSnippetElement snippetViewModel: aSnippetViewModel.
-							aSnippetElement ]) ];
-		actionButtonIcon: BrGlamorousVectorIcons play
-			label: 'Run all'
-			tooltip: 'Execute all snippets (assuming all are Pharo snippets)'
-			action: [ :aButton | 
-				| aCodeExecutor |
-				aButton
-					withAsyncFutureDo: [ :anElementFuture | 
-						anElementFuture
-							whenPending: [ :theButton | 
-								theButton
-									disable;
-									label: 'Running...' ];
-							whenError: [ :theButton :anError | 
-								theButton
-									enable;
-									label: 'Execution error' ];
-							whenSuccess: [ :theButton :aResult | 
-								theButton
-									enable;
-									label: 'Finished'.
-								theButton phlow spawnObject: aResult ].
-
-						aCodeExecutor := self codeBlockChecker.
-						anElementFuture future: aCodeExecutor future ] ]
+							aSnippetElement ]) ]
 ]
 
 { #category : #accessing }
@@ -222,11 +197,6 @@ GtOpenAIThreadMessage >> isAssistantRole [
 { #category : #testing }
 GtOpenAIThreadMessage >> isUserRole [
 	^ self role = #user
-]
-
-{ #category : #accessing }
-GtOpenAIThreadMessage >> maximumMessageSize [
-	^ 30000
 ]
 
 { #category : #accessing }

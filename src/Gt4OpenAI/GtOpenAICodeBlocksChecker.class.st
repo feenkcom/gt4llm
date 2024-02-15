@@ -3,12 +3,7 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'codeBlocks',
-		'chat',
-		'output',
-		'mergedCode',
-		'maximumMessageSize',
-		'pipeline',
-		'checkResult'
+		'pipeline'
 	],
 	#category : #'Gt4OpenAI-Executor'
 }
@@ -18,16 +13,6 @@ GtOpenAICodeBlocksChecker >> await [
 	^ self future await: GtOpenAIUtilities executionConfiguration
 ]
 
-{ #category : #accessing }
-GtOpenAICodeBlocksChecker >> chat [
-	^ chat
-]
-
-{ #category : #accessing }
-GtOpenAICodeBlocksChecker >> chat: anObject [
-	chat := anObject
-]
-
 { #category : #executing }
 GtOpenAICodeBlocksChecker >> check [
 	^ self check: ('.' join: self codeBlocks)
@@ -35,12 +20,7 @@ GtOpenAICodeBlocksChecker >> check [
 
 { #category : #accessing }
 GtOpenAICodeBlocksChecker >> check: aString [
-	checkResult := pipeline check: aString.
-	output := checkResult asString.
-	output size > self maximumMessageSize
-		ifTrue: [ output := output first: self maximumMessageSize ].
-	self chat sendMessage: output.
-	^ checkResult
+	^ pipeline check: aString
 ]
 
 { #category : #accessing }
@@ -74,16 +54,6 @@ GtOpenAICodeBlocksChecker >> gtCodeBlocksFor: aView [
 							aSnippetElement padding: (BlInsets all: 10).
 							aSnippetElement snippetViewModel: aSnippetViewModel.
 							aSnippetElement ]) ]
-]
-
-{ #category : #accessing }
-GtOpenAICodeBlocksChecker >> maximumMessageSize [
-	^ maximumMessageSize
-]
-
-{ #category : #accessing }
-GtOpenAICodeBlocksChecker >> maximumMessageSize: anObject [
-	maximumMessageSize := anObject
 ]
 
 { #category : #accessing }
