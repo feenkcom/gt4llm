@@ -3,25 +3,42 @@ Class {
 	#superclass : #BlTextStyler,
 	#traits : 'TLeContentNodeVisitor',
 	#classTraits : 'TLeContentNodeVisitor classTrait',
+	#instVars : [
+		'executionResults',
+		'pipeline',
+		'threadMessageViewModel'
+	],
 	#category : #'Gt4Llm-Stylers'
 }
 
 { #category : #generated }
 GtLlmMessageStyler >> evaluateCodeBlock: aCodeBlock expanded: aBoolean from: aButton [
-	| aSnippetCoder aSnippetCoderViewModel aResult position source |
-	
+	| aResult position source |
 	source := aCodeBlock code source.
-	
-	aSnippetCoder := GtPharoSnippetCoder forSource: source.
-	aSnippetCoderViewModel := aSnippetCoder asCoderViewModel.
-"	aSnippetCoderViewModel selfObject: self evaluationReceiver."
-	aSnippetCoderViewModel sharedBindings: self variableBindings.
-	aResult := aSnippetCoderViewModel doItAll.
+
+	aResult := self pipeline check: source.
 
 	position := source size.
 	[ position > 1 and: [ (source at: position) isLineBreak ] ]
 		whileTrue: [ position := position - 1 ].
-	aBoolean ifTrue: [ aButton phlow spawnObject: aResult value ].
+	self executionResults
+		at: aCodeBlock code
+		put: (LeEvaluationResult new
+				value: aResult;
+				expanded: aBoolean;
+				position: position).
+	self threadMessageViewModel requestStyleSourceText.
+	aBoolean ifTrue: [ aButton phlow spawnObject: aResult value ]
+]
+
+{ #category : #accessing }
+GtLlmMessageStyler >> executionResults [
+	^ executionResults
+]
+
+{ #category : #accessing }
+GtLlmMessageStyler >> executionResults: anObject [
+	executionResults := anObject
 ]
 
 { #category : #generated }
@@ -44,6 +61,23 @@ GtLlmMessageStyler >> fontSizeForHeadingLevel: aHeadingLevel [
 	anExtraFontSize := (aMaxAmountOfHeadingLevels - aHeadingLevel max: 0) * aFontSizeIncrement.
 
 	^ (1.0 + anExtraFontSize) fontEm
+]
+
+{ #category : #accessing }
+GtLlmMessageStyler >> initialize [
+	super initialize.
+	
+	executionResults := Dictionary new
+]
+
+{ #category : #accessing }
+GtLlmMessageStyler >> pipeline [
+	^ pipeline
+]
+
+{ #category : #accessing }
+GtLlmMessageStyler >> pipeline: anObject [
+	pipeline := anObject
 ]
 
 { #category : #accessing }
@@ -122,6 +156,18 @@ GtLlmMessageStyler >> styleHeader: aHeaderNode [
 ]
 
 { #category : #generated }
+GtLlmMessageStyler >> styleResult: result for: aCodeNode [
+	| evaluatedCodeAttribute |
+	evaluatedCodeAttribute := GtPlaygroundEvaluatedCodeButtonAttribute new
+			result: result value;
+			action: [ :aButton :anEvent | aButton phlow spawnObject: result value ].
+	(text
+		from: aCodeNode code startPosition + result position - 1
+		to: aCodeNode code startPosition + result position - 1)
+		attributes: {evaluatedCodeAttribute}
+]
+
+{ #category : #generated }
 GtLlmMessageStyler >> styleSmalltalkCodeBlock: aCodeNode [ 
 	| aStyler |
 	aStyler := BrRBTextStyler new.
@@ -138,6 +184,16 @@ GtLlmMessageStyler >> text [
 	^ text
 ]
 
+{ #category : #accessing }
+GtLlmMessageStyler >> threadMessageViewModel [
+	^ threadMessageViewModel
+]
+
+{ #category : #accessing }
+GtLlmMessageStyler >> threadMessageViewModel: anObject [
+	threadMessageViewModel := anObject
+]
+
 { #category : #generated }
 GtLlmMessageStyler >> variableBindings [
 	^ GtSharedVariablesBindings new
@@ -145,7 +201,7 @@ GtLlmMessageStyler >> variableBindings [
 
 { #category : #'as yet unclassified' }
 GtLlmMessageStyler >> visitClassAnnotation: aLeClassAnnotationNode [ 
-	self shouldBeImplemented.
+	"self shouldBeImplemented."
 ]
 
 { #category : #generated }
@@ -153,23 +209,21 @@ GtLlmMessageStyler >> visitCodeBlock: aCodeNode [
 	aCodeNode isForSmalltalk ifTrue: [ self styleSmalltalkCodeBlock: aCodeNode ].
 	(self text from: aCodeNode startPosition to: aCodeNode stopPosition)
 		glamorousCodeFont.
-"	self
-		styleAutoHiding: (aCodeNode startPosition to: aCodeNode code startPosition - 1)
-		and: (aCodeNode code stopPosition + 1 to: aCodeNode stopPosition)
-		whenOutside: aCodeNode sourceInterval."
 	aCodeNode isForSmalltalk
 		ifTrue: [ (text from: aCodeNode stopPosition to: aCodeNode stopPosition)
 				attributes: {GtButtonAttribute new
 							beAppend;
 							stencil: [ GtButtonStencil new
 									icon: BrGlamorousVectorIcons playinspect;
+									tooltip: 'Inspect';
 									action: [ :aWidget :aButtonModel | 
 										self
 											evaluateCodeBlock: aCodeNode
 											expanded: true
-											from: aWidget ] ]}	"self executionResults
+											from: aWidget ] ]}.
+			self executionResults
 				at: aCodeNode code
-				ifPresent: [ :result | self styleResult: result for: aCodeNode ]" ].
+				ifPresent: [ :result | self styleResult: result for: aCodeNode ] ].
 	^ self visitContent: aCodeNode
 ]
 

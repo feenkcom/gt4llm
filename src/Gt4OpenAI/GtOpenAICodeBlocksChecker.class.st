@@ -30,8 +30,12 @@ GtOpenAICodeBlocksChecker >> chat: anObject [
 
 { #category : #executing }
 GtOpenAICodeBlocksChecker >> check [
-	mergedCode := '.' join: self codeBlocks.
-	checkResult := pipeline check: mergedCode.
+	^ self check: ('.' join: self codeBlocks)
+]
+
+{ #category : #accessing }
+GtOpenAICodeBlocksChecker >> check: aString [
+	checkResult := pipeline check: aString.
 	output := checkResult asString.
 	output size > self maximumMessageSize
 		ifTrue: [ output := output first: self maximumMessageSize ].
