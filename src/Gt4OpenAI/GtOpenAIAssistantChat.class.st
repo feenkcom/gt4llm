@@ -99,7 +99,9 @@ GtOpenAIAssistantChat >> gtSummaryFor: aView [
 		updateWhen: GtOpenAIThreadRunAnnouncement in: self announcer;
 		actionButtonIcon: BrGlamorousVectorIcons refresh
 			tooltip: 'Update'
-			action: [ :aButton :aTab | self getRun ];
+			action: [ :aButton :aTab | 
+				self getRun.
+				aButton inUIProcessDo: [ aTab viewContentElement phlow update ] ];
 		send: [ self lastRun ]
 ]
 

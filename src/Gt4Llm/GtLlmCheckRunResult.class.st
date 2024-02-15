@@ -3,7 +3,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'checkers',
-		'results'
+		'results',
+		'threadMessage'
 	],
 	#category : #'Gt4Llm-Checker'
 }
@@ -104,6 +105,18 @@ GtLlmCheckRunResult >> gtResultsFor: aView [
 ]
 
 { #category : #accessing }
+GtLlmCheckRunResult >> gtSendFor: anAction [
+	<gtAction>
+	self threadMessage ifNil: [ ^ anAction noAction ].
+
+	^ anAction button
+		priority: 1;
+		icon: BrGlamorousVectorIcons play;
+		tooltip: 'Send to chat';
+		action: [ self sendToChat ]
+]
+
+{ #category : #accessing }
 GtLlmCheckRunResult >> hasErrors [
 	^ self results values anySatisfy: #isError
 ]
@@ -131,4 +144,19 @@ GtLlmCheckRunResult >> results [
 { #category : #accessing }
 GtLlmCheckRunResult >> results: anObject [
 	results := anObject
+]
+
+{ #category : #accessing }
+GtLlmCheckRunResult >> sendToChat [
+	self threadMessage chat sendMessage: self asString
+]
+
+{ #category : #accessing }
+GtLlmCheckRunResult >> threadMessage [
+	^ threadMessage
+]
+
+{ #category : #accessing }
+GtLlmCheckRunResult >> threadMessage: anObject [
+	threadMessage := anObject
 ]
