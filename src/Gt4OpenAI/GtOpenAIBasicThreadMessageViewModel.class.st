@@ -35,6 +35,16 @@ GtOpenAIBasicThreadMessageViewModel >> id [
 	^ threadMessage id
 ]
 
+{ #category : #'private - announcing' }
+GtOpenAIBasicThreadMessageViewModel >> notifyThreadMessageViewModelChanged [
+	self announce: GtOpenAIThreadMessageViewModelChanged new
+]
+
+{ #category : #'private - hooks' }
+GtOpenAIBasicThreadMessageViewModel >> onThreadMessageChanged [
+	self notifyThreadMessageViewModelChanged
+]
+
 { #category : #accessing }
 GtOpenAIBasicThreadMessageViewModel >> pipeline [
 	^ self threadMessage pipeline

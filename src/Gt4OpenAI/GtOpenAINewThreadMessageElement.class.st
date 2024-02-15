@@ -58,7 +58,7 @@ GtOpenAINewThreadMessageElement >> initializeContentsElement [
 				yourself)
 ]
 
-{ #category : #'private - hooks' }
+{ #category : #'private - announcement handling' }
 GtOpenAINewThreadMessageElement >> onThreadMessageContentsChanged: anAnnouncement [
 	anAnnouncement requester = self ifTrue: [ ^ self ].
 	self updateElement
@@ -66,6 +66,11 @@ GtOpenAINewThreadMessageElement >> onThreadMessageContentsChanged: anAnnouncemen
 
 { #category : #'private - hooks' }
 GtOpenAINewThreadMessageElement >> onThreadMessageViewModelChanged [
+	self updateElement
+]
+
+{ #category : #'private - announcement handling' }
+GtOpenAINewThreadMessageElement >> onThreadMessageViewModelChanged: anAnnouncement [
 	self updateElement
 ]
 
@@ -80,6 +85,11 @@ GtOpenAINewThreadMessageElement >> subscribeToThreadMessageViewModel [
 	self threadMessage
 		when: GtOpenAINewThreadMessageContentsChanged
 		send: #onThreadMessageContentsChanged:
+		to: self.
+
+	self threadMessageViewModel weak
+		when: GtOpenAIThreadMessageViewModelChanged
+		send: #onThreadMessageViewModelChanged:
 		to: self
 ]
 

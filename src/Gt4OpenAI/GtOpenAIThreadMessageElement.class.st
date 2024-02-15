@@ -82,13 +82,18 @@ GtOpenAIThreadMessageElement >> initializeSenderElement [
 			text: ''
 ]
 
-{ #category : #'private - updating' }
+{ #category : #'private - announcement handling' }
 GtOpenAIThreadMessageElement >> onRestyleRequested: anAnnouncement [
 	self inUIProcessDo: [ contentsElement editor styleText ]
 ]
 
 { #category : #'private - hooks' }
 GtOpenAIThreadMessageElement >> onThreadMessageViewModelChanged [
+	self updateElement
+]
+
+{ #category : #'private - announcement handling' }
+GtOpenAIThreadMessageElement >> onThreadMessageViewModelChanged: anAnnouncement [
 	self updateElement
 ]
 
@@ -102,8 +107,11 @@ GtOpenAIThreadMessageElement >> showProgressElement [
 GtOpenAIThreadMessageElement >> subscribeToThreadMessageViewModel [
 	self threadMessageViewModel weak
 		when: GtOpenAIThreadMessageRestyleRequested
-		send: #onRestyleRequested:
-		to: self
+			send: #onRestyleRequested:
+			to: self;
+		when: GtOpenAIThreadMessageViewModelChanged
+			send: #onThreadMessageViewModelChanged:
+			to: self
 ]
 
 { #category : #'private - updating' }
