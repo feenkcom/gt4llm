@@ -54,3 +54,8 @@ GtLlmCheckRun >> run: aString [
 GtLlmCheckRun >> stopOnError [
 	stopOnError := true
 ]
+
+{ #category : #accessing }
+GtLlmCheckRun >> stopOnError: aBoolean [
+	stopOnError := aBoolean
+]
