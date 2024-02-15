@@ -3,11 +3,7 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'codeBlocks',
-		'chat',
-		'output',
-		'mergedCode',
-		'pipeline',
-		'checkResult'
+		'pipeline'
 	],
 	#category : #'Gt4OpenAI-Executor'
 }
@@ -15,16 +11,6 @@ Class {
 { #category : #executing }
 GtOpenAICodeBlocksChecker >> await [
 	^ self future await: GtOpenAIUtilities executionConfiguration
-]
-
-{ #category : #accessing }
-GtOpenAICodeBlocksChecker >> chat [
-	^ chat
-]
-
-{ #category : #accessing }
-GtOpenAICodeBlocksChecker >> chat: anObject [
-	chat := anObject
 ]
 
 { #category : #executing }
