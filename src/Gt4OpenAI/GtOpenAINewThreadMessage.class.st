@@ -21,9 +21,7 @@ GtOpenAINewThreadMessage >> assistantChat: anAssistantChat [
 
 { #category : #accessing }
 GtOpenAINewThreadMessage >> codeBlockChecker [
-	^ GtOpenAICodeBlocksChecker new
-		chat: assistantChat;
-		maximumMessageSize: self maximumMessageSize
+	^ GtOpenAICodeBlocksChecker new chat: assistantChat
 ]
 
 { #category : #accessing }
@@ -57,11 +55,6 @@ GtOpenAINewThreadMessage >> initialize [
 	super initialize.
 	contents := ''.
 	announcer := Announcer new.
-]
-
-{ #category : #accessing }
-GtOpenAINewThreadMessage >> maximumMessageSize [
-	^ 30000
 ]
 
 { #category : #'private - notifying' }

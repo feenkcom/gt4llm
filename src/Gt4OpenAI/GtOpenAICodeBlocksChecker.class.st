@@ -6,7 +6,6 @@ Class {
 		'chat',
 		'output',
 		'mergedCode',
-		'maximumMessageSize',
 		'pipeline',
 		'checkResult'
 	],
@@ -35,12 +34,7 @@ GtOpenAICodeBlocksChecker >> check [
 
 { #category : #accessing }
 GtOpenAICodeBlocksChecker >> check: aString [
-	checkResult := pipeline check: aString.
-	output := checkResult asString.
-	output size > self maximumMessageSize
-		ifTrue: [ output := output first: self maximumMessageSize ].
-	self chat sendMessage: output.
-	^ checkResult
+	^ pipeline check: aString
 ]
 
 { #category : #accessing }
@@ -74,16 +68,6 @@ GtOpenAICodeBlocksChecker >> gtCodeBlocksFor: aView [
 							aSnippetElement padding: (BlInsets all: 10).
 							aSnippetElement snippetViewModel: aSnippetViewModel.
 							aSnippetElement ]) ]
-]
-
-{ #category : #accessing }
-GtOpenAICodeBlocksChecker >> maximumMessageSize [
-	^ maximumMessageSize
-]
-
-{ #category : #accessing }
-GtOpenAICodeBlocksChecker >> maximumMessageSize: anObject [
-	maximumMessageSize := anObject
 ]
 
 { #category : #accessing }
