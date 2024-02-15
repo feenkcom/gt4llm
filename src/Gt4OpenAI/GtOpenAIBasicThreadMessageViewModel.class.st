@@ -49,7 +49,6 @@ GtOpenAIBasicThreadMessageViewModel >> requestStyleSourceText [
 GtOpenAIBasicThreadMessageViewModel >> styler [
 	^ BlCompositeStyler new
 		stylers: {GtLlmMessageStyler new
-					pipeline: self codeBlockChecker;
 					threadMessageViewModel: self.
 				GtOpenAITraceStyler new.
 				GtOpenAIThreadMessageStyler new annotations: self annotations}

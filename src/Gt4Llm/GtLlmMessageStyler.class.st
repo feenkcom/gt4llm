@@ -5,7 +5,6 @@ Class {
 	#classTraits : 'TLeContentNodeVisitor classTrait',
 	#instVars : [
 		'executionResults',
-		'pipeline',
 		'threadMessageViewModel'
 	],
 	#category : #'Gt4Llm-Stylers'
@@ -16,7 +15,28 @@ GtLlmMessageStyler >> evaluateCodeBlock: aCodeBlock expanded: aBoolean from: aBu
 	| aResult position source |
 	source := aCodeBlock code source.
 
-	aResult := self pipeline check: source.
+	aResult := self threadMessageViewModel pipeline check: source.
+
+	position := source size.
+	[ position > 1 and: [ (source at: position) isLineBreak ] ]
+		whileTrue: [ position := position - 1 ].
+	self executionResults
+		at: aCodeBlock code
+		put: (LeEvaluationResult new
+				value: aResult;
+				expanded: aBoolean;
+				position: position).
+	self threadMessageViewModel requestStyleSourceText.
+	aBoolean ifTrue: [ aButton phlow spawnObject: aResult value ]
+]
+
+{ #category : #generated }
+GtLlmMessageStyler >> evaluateMethodBlock: aCodeBlock expanded: aBoolean from: aButton [ 
+	| aResult position source aMethod |
+	source := aCodeBlock code source.
+	aMethod := self methodCodeBlock: aCodeBlock.
+
+	aResult := aMethod addToSystem.
 
 	position := source size.
 	[ position > 1 and: [ (source at: position) isLineBreak ] ]
@@ -70,14 +90,13 @@ GtLlmMessageStyler >> initialize [
 	executionResults := Dictionary new
 ]
 
-{ #category : #accessing }
-GtLlmMessageStyler >> pipeline [
-	^ pipeline
-]
-
-{ #category : #accessing }
-GtLlmMessageStyler >> pipeline: anObject [
-	pipeline := anObject
+{ #category : #generated }
+GtLlmMessageStyler >> methodCodeBlock: aCodeBlock [
+	| source |
+	source := aCodeBlock code source trim.
+	^ GtLlmMessageMethod new
+		methodClass: source lines first asClass;
+		methodBody: (Character lf join: source lines allButFirst)
 ]
 
 { #category : #accessing }
@@ -206,7 +225,8 @@ GtLlmMessageStyler >> visitClassAnnotation: aLeClassAnnotationNode [
 
 { #category : #generated }
 GtLlmMessageStyler >> visitCodeBlock: aCodeNode [
-	aCodeNode isForSmalltalk ifTrue: [ self styleSmalltalkCodeBlock: aCodeNode ].
+	(aCodeNode isForSmalltalk or: [ aCodeNode isForLanguage: 'smalltalk-method' ])
+		ifTrue: [ self styleSmalltalkCodeBlock: aCodeNode ].
 	(self text from: aCodeNode startPosition to: aCodeNode stopPosition)
 		glamorousCodeFont.
 	aCodeNode isForSmalltalk
@@ -224,6 +244,26 @@ GtLlmMessageStyler >> visitCodeBlock: aCodeNode [
 			self executionResults
 				at: aCodeNode code
 				ifPresent: [ :result | self styleResult: result for: aCodeNode ] ].
+
+	(aCodeNode isForLanguage: 'smalltalk-method')
+		ifTrue: [ | methodCodeBlock |
+			methodCodeBlock := self methodCodeBlock: aCodeNode.
+			methodCodeBlock methodExists
+				ifFalse: [ (text from: aCodeNode stopPosition to: aCodeNode stopPosition)
+						attributes: {GtButtonAttribute new
+									beAppend;
+									stencil: [ GtButtonStencil new
+											icon: BrGlamorousVectorIcons playinspect;
+											tooltip: 'Add method';
+											action: [ :aWidget :aButtonModel | 
+												self
+													evaluateMethodBlock: aCodeNode
+													expanded: true
+													from: aWidget ] ]}.
+					self executionResults
+						at: aCodeNode code
+						ifPresent: [ :result | self styleResult: result for: aCodeNode ] ] ].
+
 	^ self visitContent: aCodeNode
 ]
 
