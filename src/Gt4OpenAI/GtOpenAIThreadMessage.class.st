@@ -116,11 +116,6 @@ GtOpenAIThreadMessage >> createdAt: anObject [
 	createdAt := DateAndTime fromUnixTime: anObject
 ]
 
-{ #category : #ui }
-GtOpenAIThreadMessage >> elementClass [
-	^ GtOpenAIThreadMessageElement
-]
-
 { #category : #accessing }
 GtOpenAIThreadMessage >> fileIds [
 	^ fileIds
