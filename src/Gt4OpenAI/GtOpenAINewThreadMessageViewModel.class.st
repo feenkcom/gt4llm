@@ -4,6 +4,11 @@ Class {
 	#category : #'Gt4OpenAI-Widgets'
 }
 
+{ #category : #'initialization ' }
+GtOpenAINewThreadMessageViewModel >> assistantChat: assistantChat [
+	threadMessage assistantChat: assistantChat
+]
+
 { #category : #accessing }
 GtOpenAINewThreadMessageViewModel >> contents [
 	^ self threadMessage contents
