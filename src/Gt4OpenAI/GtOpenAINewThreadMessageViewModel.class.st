@@ -18,3 +18,8 @@ GtOpenAINewThreadMessageViewModel >> contents: aString requester: aRequester [
 GtOpenAINewThreadMessageViewModel >> elementClass [
 	^ GtOpenAINewThreadMessageElement
 ]
+
+{ #category : #actions }
+GtOpenAINewThreadMessageViewModel >> sendMessage [
+	^ threadMessage sendMessage
+]
