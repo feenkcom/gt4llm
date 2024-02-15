@@ -94,7 +94,7 @@ GtOpenAIThreadMessageElement >> onThreadMessageViewModelChanged [
 
 { #category : #'private - announcement handling' }
 GtOpenAIThreadMessageElement >> onThreadMessageViewModelChanged: anAnnouncement [
-	self updateElement
+	self inUIProcessDo: [ self updateElement ]
 ]
 
 { #category : #'private - updating' }
