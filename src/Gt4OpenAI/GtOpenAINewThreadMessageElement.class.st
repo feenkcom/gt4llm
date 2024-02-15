@@ -43,7 +43,6 @@ GtOpenAINewThreadMessageElement >> initializeContentsElement [
 	contentsElement := BrEditor new
 			hMatchParent;
 			vFitContent;
-			styler: GtLlmMessageStyler new;
 			aptitude: BrGlamorousRegularEditorAptitude.
 
 	contentsElement editor
@@ -97,7 +96,9 @@ GtOpenAINewThreadMessageElement >> updateContents: aBlText [
 
 { #category : #'private - updating' }
 GtOpenAINewThreadMessageElement >> updateContentsElement [
-	contentsElement text: threadMessageViewModel contents
+	contentsElement
+		text: threadMessageViewModel contents;
+		styler: threadMessageViewModel styler
 ]
 
 { #category : #'private - updating' }

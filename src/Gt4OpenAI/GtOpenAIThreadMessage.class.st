@@ -51,6 +51,11 @@ GtOpenAIThreadMessage >> asChatMessage [
 ]
 
 { #category : #accessing }
+GtOpenAIThreadMessage >> asViewModel [
+	^ GtOpenAIThreadMessageViewModel new threadMessage: self
+]
+
+{ #category : #accessing }
 GtOpenAIThreadMessage >> assistantId [
 	^ assistantId
 ]
@@ -181,11 +186,12 @@ GtOpenAIThreadMessage >> gtCodeBlocksFor: aView [
 { #category : #accessing }
 GtOpenAIThreadMessage >> gtContentFor: aView [
 	<gtView>
-	^ aView textEditor
+	^ aView explicit
 		title: 'Content';
 		priority: 1;
-		text: [ self contentText ];
-		styler: self styler 
+		stencil: [
+			GtOpenAIThreadMessageElement new threadMessageViewModel: self asViewModel
+		]
 ]
 
 { #category : #accessing }
@@ -256,6 +262,11 @@ GtOpenAIThreadMessage >> parse [
 ]
 
 { #category : #accessing }
+GtOpenAIThreadMessage >> pipeline [
+	^ pipeline
+]
+
+{ #category : #accessing }
 GtOpenAIThreadMessage >> pipeline: aPipeline [
 	pipeline := aPipeline
 ]
@@ -278,14 +289,6 @@ GtOpenAIThreadMessage >> runId [
 { #category : #accessing }
 GtOpenAIThreadMessage >> runId: anObject [
 	runId := anObject
-]
-
-{ #category : #accessing }
-GtOpenAIThreadMessage >> styler [
-	^ BlCompositeStyler new
-		stylers: {GtLlmMessageStyler new.
-				GtOpenAITraceStyler new.
-				GtOpenAIThreadMessageStyler new annotations: self annotations}
 ]
 
 { #category : #accessing }

@@ -1,10 +1,29 @@
 Class {
 	#name : #GtOpenAIBasicThreadMessageViewModel,
 	#superclass : #Object,
-	#traits : 'TGtOpenAIWithThreadMessage',
-	#classTraits : 'TGtOpenAIWithThreadMessage classTrait',
+	#traits : 'TGtOpenAIWithThreadMessage + TGtAnnouncer',
+	#classTraits : 'TGtOpenAIWithThreadMessage classTrait + TGtAnnouncer classTrait',
+	#instVars : [
+		'announcer'
+	],
 	#category : #'Gt4OpenAI-Widgets'
 }
+
+{ #category : #accessing }
+GtOpenAIBasicThreadMessageViewModel >> annotations [
+	^ threadMessage annotations
+]
+
+{ #category : #announcer }
+GtOpenAIBasicThreadMessageViewModel >> announcer [
+	<return: #Announcer>
+	^ announcer ifNil: [ announcer := Announcer new ]
+]
+
+{ #category : #accessing }
+GtOpenAIBasicThreadMessageViewModel >> codeBlockChecker [
+	^ threadMessage codeBlockChecker
+]
 
 { #category : #accessing }
 GtOpenAIBasicThreadMessageViewModel >> elementClass [
@@ -14,4 +33,24 @@ GtOpenAIBasicThreadMessageViewModel >> elementClass [
 { #category : #accessing }
 GtOpenAIBasicThreadMessageViewModel >> id [
 	^ threadMessage id
+]
+
+{ #category : #accessing }
+GtOpenAIBasicThreadMessageViewModel >> pipeline [
+	^ self threadMessage pipeline
+]
+
+{ #category : #accessing }
+GtOpenAIBasicThreadMessageViewModel >> requestStyleSourceText [
+	self announce: GtOpenAIThreadMessageRestyleRequested new
+]
+
+{ #category : #accessing }
+GtOpenAIBasicThreadMessageViewModel >> styler [
+	^ BlCompositeStyler new
+		stylers: {GtLlmMessageStyler new
+					pipeline: self codeBlockChecker;
+					threadMessageViewModel: self.
+				GtOpenAITraceStyler new.
+				GtOpenAIThreadMessageStyler new annotations: self annotations}
 ]

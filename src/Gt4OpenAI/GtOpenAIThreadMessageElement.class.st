@@ -56,7 +56,6 @@ GtOpenAIThreadMessageElement >> initializeContentsElement [
 	contentsElement := BrEditor new
 			hMatchParent;
 			vFitContent;
-			styler: GtLlmMessageStyler new;
 			aptitude: BrGlamorousRegularEditorAptitude;
 			beReadOnlyWithSelection
 ]
@@ -83,6 +82,11 @@ GtOpenAIThreadMessageElement >> initializeSenderElement [
 			text: ''
 ]
 
+{ #category : #'private - updating' }
+GtOpenAIThreadMessageElement >> onRestyleRequested: anAnnouncement [
+	self inUIProcessDo: [ contentsElement editor styleText ]
+]
+
 { #category : #'private - hooks' }
 GtOpenAIThreadMessageElement >> onThreadMessageViewModelChanged [
 	self updateElement
@@ -94,9 +98,19 @@ GtOpenAIThreadMessageElement >> showProgressElement [
 	progressElement visibility: BlVisibility visible.
 ]
 
+{ #category : #'private - hooks' }
+GtOpenAIThreadMessageElement >> subscribeToThreadMessageViewModel [
+	self threadMessageViewModel weak
+		when: GtOpenAIThreadMessageRestyleRequested
+		send: #onRestyleRequested:
+		to: self
+]
+
 { #category : #'private - updating' }
 GtOpenAIThreadMessageElement >> updateContentsElement [
-	contentsElement text: self threadMessage contentText.
+	contentsElement
+		text: self threadMessage contentText;
+		styler: self threadMessageViewModel styler
 ]
 
 { #category : #'private - updating' }

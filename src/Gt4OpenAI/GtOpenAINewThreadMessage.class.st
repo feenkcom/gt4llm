@@ -10,8 +10,20 @@ Class {
 }
 
 { #category : #accessing }
+GtOpenAINewThreadMessage >> annotations [
+	^ {} asDictionary
+]
+
+{ #category : #accessing }
 GtOpenAINewThreadMessage >> assistantChat: anAssistantChat [
 	assistantChat := anAssistantChat
+]
+
+{ #category : #accessing }
+GtOpenAINewThreadMessage >> codeBlockChecker [
+	^ GtOpenAICodeBlocksChecker new
+		chat: assistantChat;
+		maximumMessageSize: self maximumMessageSize
 ]
 
 { #category : #accessing }
@@ -45,6 +57,11 @@ GtOpenAINewThreadMessage >> initialize [
 	super initialize.
 	contents := ''.
 	announcer := Announcer new.
+]
+
+{ #category : #accessing }
+GtOpenAINewThreadMessage >> maximumMessageSize [
+	^ 30000
 ]
 
 { #category : #'private - notifying' }
