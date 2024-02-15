@@ -26,6 +26,11 @@ GtOpenAIAssistantChatViewModel >> newThreadMessageViewModels [
 	^ existingMessages copyWith: newThreadMessageViewModel
 ]
 
+{ #category : #'private - hooks' }
+GtOpenAIAssistantChatViewModel >> onAssistantChatChanged [
+	newThreadMessageViewModel assistantChat: assistantChat
+]
+
 { #category : #accessing }
 GtOpenAIAssistantChatViewModel >> threadMessageViewModels [
 	^ threadMessageViewModels
