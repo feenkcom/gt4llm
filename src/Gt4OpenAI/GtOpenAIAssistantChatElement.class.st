@@ -44,7 +44,7 @@ GtOpenAIAssistantChatElement >> onAssistantChatViewModelChanged [
 
 { #category : #'private - event handling' }
 GtOpenAIAssistantChatElement >> onThreadRunAnnouncement: anAnnouncement [
-	self updateListElement
+	self inUIProcessDo: [ self updateListElement ]
 ]
 
 { #category : #'private - hooks' }
