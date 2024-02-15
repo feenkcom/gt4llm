@@ -22,7 +22,7 @@ Output of checks:
 		, (Character lf
 				join: (self checkers
 						collect: [ :aChecker | 
-							aChecker name
+							aChecker checkName
 								, ':
 ' , (self results at: aChecker) asString ]))
 ]
