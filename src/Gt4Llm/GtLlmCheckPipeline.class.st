@@ -2,7 +2,8 @@ Class {
 	#name : #GtLlmCheckPipeline,
 	#superclass : #Object,
 	#instVars : [
-		'checkers'
+		'checkers',
+		'stopOnError'
 	],
 	#category : #'Gt4Llm-Checker'
 }
@@ -27,7 +28,10 @@ GtLlmCheckPipeline >> addChecker: aCheck [
 
 { #category : #accessing }
 GtLlmCheckPipeline >> check: aString [
-	^ GtLlmCheckRun new checkers: self checkers; run: aString
+	^ GtLlmCheckRun new
+		checkers: self checkers;
+		stopOnError: stopOnError;
+		run: aString
 ]
 
 { #category : #accessing }
@@ -38,6 +42,11 @@ GtLlmCheckPipeline >> checkers [
 { #category : #accessing }
 GtLlmCheckPipeline >> checkers: anObject [
 	checkers := anObject
+]
+
+{ #category : #accessing }
+GtLlmCheckPipeline >> doNotStopOnError [
+	stopOnError := false
 ]
 
 { #category : #accessing }
@@ -74,10 +83,16 @@ GtLlmCheckPipeline >> gtCheckersFor: aView [
 GtLlmCheckPipeline >> initialize [
 	super initialize.
 	
-	checkers := GtLlmCheckerGroup new
+	checkers := GtLlmCheckerGroup new.
+	stopOnError := true
 ]
 
 { #category : #accessing }
 GtLlmCheckPipeline >> parsers [
 	^ self checkers parsers
+]
+
+{ #category : #accessing }
+GtLlmCheckPipeline >> stopOnError [
+	stopOnError := true
 ]
