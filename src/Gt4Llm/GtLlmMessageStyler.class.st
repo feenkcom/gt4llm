@@ -190,6 +190,25 @@ GtLlmMessageStyler >> styleResult: result for: aCodeNode [
 		attributes: {evaluatedCodeAttribute}
 ]
 
+{ #category : #private }
+GtLlmMessageStyler >> styleSmalltalkCode: aCodeNode [
+	aCodeNode isForSmalltalk ifFalse: [ ^ self ].
+	(text from: aCodeNode stopPosition to: aCodeNode stopPosition)
+		attributes: {GtButtonAttribute new
+					beAppend;
+					stencil: [ GtButtonStencil new
+							icon: BrGlamorousVectorIcons playinspect;
+							tooltip: 'Inspect';
+							action: [ :aWidget :aButtonModel | 
+								self
+									evaluateCodeBlock: aCodeNode
+									expanded: true
+									from: aWidget ] ]}.
+	self executionResults
+		at: aCodeNode code
+		ifPresent: [ :result | self styleResult: result for: aCodeNode ]
+]
+
 { #category : #generated }
 GtLlmMessageStyler >> styleSmalltalkCodeBlock: aCodeNode [ 
 	| aStyler |
@@ -200,6 +219,28 @@ GtLlmMessageStyler >> styleSmalltalkCodeBlock: aCodeNode [
 			(text
 				from: aCodeNode code startPosition
 				to: aCodeNode code stopPosition)
+]
+
+{ #category : #private }
+GtLlmMessageStyler >> styleSmalltalkMethod: aCodeNode [
+	| methodCodeBlock |
+	(aCodeNode isForLanguage: 'smalltalk-method') ifFalse: [ ^ self ].
+	methodCodeBlock := self methodCodeBlock: aCodeNode.
+	methodCodeBlock methodExists
+		ifFalse: [ (text from: aCodeNode stopPosition to: aCodeNode stopPosition)
+				attributes: {GtButtonAttribute new
+							beAppend;
+							stencil: [ GtButtonStencil new
+									icon: BrGlamorousVectorIcons playinspect;
+									tooltip: 'Add method';
+									action: [ :aWidget :aButtonModel | 
+										self
+											evaluateMethodBlock: aCodeNode
+											expanded: true
+											from: aWidget ] ]}.
+			self executionResults
+				at: aCodeNode code
+				ifPresent: [ :result | self styleResult: result for: aCodeNode ] ]
 ]
 
 { #category : #generated }
@@ -233,40 +274,8 @@ GtLlmMessageStyler >> visitCodeBlock: aCodeNode [
 		ifTrue: [ self styleSmalltalkCodeBlock: aCodeNode ].
 	(self text from: aCodeNode startPosition to: aCodeNode stopPosition)
 		glamorousCodeFont.
-	aCodeNode isForSmalltalk
-		ifTrue: [ (text from: aCodeNode stopPosition to: aCodeNode stopPosition)
-				attributes: {GtButtonAttribute new
-							beAppend;
-							stencil: [ GtButtonStencil new
-									icon: BrGlamorousVectorIcons playinspect;
-									tooltip: 'Inspect';
-									action: [ :aWidget :aButtonModel | 
-										self
-											evaluateCodeBlock: aCodeNode
-											expanded: true
-											from: aWidget ] ]}.
-			self executionResults
-				at: aCodeNode code
-				ifPresent: [ :result | self styleResult: result for: aCodeNode ] ].
-
-	(aCodeNode isForLanguage: 'smalltalk-method')
-		ifTrue: [ | methodCodeBlock |
-			methodCodeBlock := self methodCodeBlock: aCodeNode.
-			methodCodeBlock methodExists
-				ifFalse: [ (text from: aCodeNode stopPosition to: aCodeNode stopPosition)
-						attributes: {GtButtonAttribute new
-									beAppend;
-									stencil: [ GtButtonStencil new
-											icon: BrGlamorousVectorIcons playinspect;
-											tooltip: 'Add method';
-											action: [ :aWidget :aButtonModel | 
-												self
-													evaluateMethodBlock: aCodeNode
-													expanded: true
-													from: aWidget ] ]}.
-					self executionResults
-						at: aCodeNode code
-						ifPresent: [ :result | self styleResult: result for: aCodeNode ] ] ].
+	self styleSmalltalkCode: aCodeNode.
+	self styleSmalltalkMethod: aCodeNode.
 
 	^ self visitContent: aCodeNode
 ]
