@@ -1,8 +1,8 @@
 Class {
 	#name : #GtOpenAINewThreadMessageElement,
 	#superclass : #BlElement,
-	#traits : 'TBrLayoutResizable + TGtOpenAIWithThreadMessage',
-	#classTraits : 'TBrLayoutResizable classTrait + TGtOpenAIWithThreadMessage classTrait',
+	#traits : 'TBrLayoutResizable + TGtOpenAIWithThreadMessageViewModel',
+	#classTraits : 'TBrLayoutResizable classTrait + TGtOpenAIWithThreadMessageViewModel classTrait',
 	#instVars : [
 		'contentsElement'
 	],
@@ -60,44 +60,44 @@ GtOpenAINewThreadMessageElement >> initializeContentsElement [
 ]
 
 { #category : #'private - hooks' }
-GtOpenAINewThreadMessageElement >> onThreadMessageChanged [
-	self updateElement
-]
-
-{ #category : #'private - hooks' }
 GtOpenAINewThreadMessageElement >> onThreadMessageContentsChanged: anAnnouncement [
 	anAnnouncement requester = self ifTrue: [ ^ self ].
 	self updateElement
 ]
 
+{ #category : #'private - hooks' }
+GtOpenAINewThreadMessageElement >> onThreadMessageViewModelChanged [
+	self updateElement
+]
+
 { #category : #'private - actions' }
 GtOpenAINewThreadMessageElement >> sendMessage [
-	threadMessage ifNil: [ ^ self ].
-	threadMessage sendMessage
+	threadMessageViewModel ifNil: [ ^ self ].
+	threadMessageViewModel sendMessage
 ]
 
 { #category : #'private - hooks' }
-GtOpenAINewThreadMessageElement >> subscribeToThreadMessage [
-	threadMessage
+GtOpenAINewThreadMessageElement >> subscribeToThreadMessageViewModel [
+	self threadMessage
 		when: GtOpenAINewThreadMessageContentsChanged
 		send: #onThreadMessageContentsChanged:
 		to: self
 ]
 
 { #category : #'private - hooks' }
-GtOpenAINewThreadMessageElement >> unsubscribeFromThreadMessage [
-	threadMessage unsubscribe: self
+GtOpenAINewThreadMessageElement >> unsubscribeFromThreadMessageViewModel [
+	self threadMessage unsubscribe: self
 ]
 
 { #category : #'private - updating' }
 GtOpenAINewThreadMessageElement >> updateContents: aBlText [
-	threadMessage ifNil: [ ^ self ].
-	threadMessage contents: aBlText asString requester: self
+	threadMessageViewModel ifNil: [ ^ self ].
+	threadMessageViewModel contents: aBlText asString requester: self
 ]
 
 { #category : #'private - updating' }
 GtOpenAINewThreadMessageElement >> updateContentsElement [
-	contentsElement text: threadMessage contents
+	contentsElement text: threadMessageViewModel contents
 ]
 
 { #category : #'private - updating' }
