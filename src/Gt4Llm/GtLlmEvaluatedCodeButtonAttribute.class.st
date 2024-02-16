@@ -10,7 +10,7 @@ GtLlmEvaluatedCodeButtonAttribute >> playgroundElementIn: aContainer [
 	self result value hasErrors
 		ifFalse: [ ^ super playgroundElementIn: aContainer ].
 
-	anErrorElement := GtLlmCheckRunExecutionErrorElement new
+	anErrorElement := GtLlmCheckRunExecutionPreviewElement new
 			checkRunResult: self result value;
 			hExact: 400;
 			vFitContentLimited.
