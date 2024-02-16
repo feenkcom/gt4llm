@@ -13,7 +13,7 @@ GtLlmCheckerError class >> prefix [
 ]
 
 { #category : #accessing }
-GtLlmCheckerError >> color [
+GtLlmCheckerError >> backgroundColor [
 	^ BrGlamorousColors errorBackgroundColor
 ]
 
@@ -25,6 +25,11 @@ GtLlmCheckerError >> contentString [
 { #category : #accessing }
 GtLlmCheckerError >> contentString: anObject [
 	contentString := anObject
+]
+
+{ #category : #accessing }
+GtLlmCheckerError >> foregroundColor [
+	^ Color white
 ]
 
 { #category : #accessing }
