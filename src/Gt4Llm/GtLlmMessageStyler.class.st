@@ -184,9 +184,10 @@ GtLlmMessageStyler >> styleHeader: aHeaderNode [
 
 { #category : #private }
 GtLlmMessageStyler >> styleResult: evaluationResult for: aCodeNode [
-	| evaluatedCodeAttribute |
+	| evaluatedCodeAttribute aViewModel |
+	aViewModel := threadMessageViewModel checkRunResultViewModelFor: evaluationResult value.
 	evaluatedCodeAttribute := GtLlmEvaluatedCodePreviewAttribute new
-			result: evaluationResult.
+		checkRunResultViewModel: aViewModel.
 
 	(text from: aCodeNode stopPosition to: aCodeNode stopPosition)
 		attributes: {evaluatedCodeAttribute}

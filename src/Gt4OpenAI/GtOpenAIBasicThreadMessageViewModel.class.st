@@ -5,20 +5,29 @@ Class {
 	#classTraits : 'TGtOpenAIWithThreadMessage classTrait + TGtAnnouncer classTrait',
 	#instVars : [
 		'announcer',
-		'styler'
+		'styler',
+		'checkRunResultViewModels'
 	],
 	#category : #'Gt4OpenAI-Widgets'
 }
 
 { #category : #accessing }
 GtOpenAIBasicThreadMessageViewModel >> annotations [
-	^ threadMessage annotations
+	^ threadMessage ifNotNil: #annotations ifNil: [ #() ]
 ]
 
 { #category : #announcer }
 GtOpenAIBasicThreadMessageViewModel >> announcer [
 	<return: #Announcer>
 	^ announcer ifNil: [ announcer := Announcer new ]
+]
+
+{ #category : #accessing }
+GtOpenAIBasicThreadMessageViewModel >> checkRunResultViewModelFor: aCheckRunResult [
+	^ checkRunResultViewModels
+		at: aCheckRunResult
+		ifPresent: [ :aViewModel | aViewModel ]
+		ifAbsentPut: [ self newCheckRunResultViewModelFor: aCheckRunResult ]
 ]
 
 { #category : #accessing }
@@ -36,6 +45,24 @@ GtOpenAIBasicThreadMessageViewModel >> id [
 	^ threadMessage id
 ]
 
+{ #category : #initialization }
+GtOpenAIBasicThreadMessageViewModel >> initialize [
+	super initialize.
+	checkRunResultViewModels := WeakIdentityKeyDictionary new
+]
+
+{ #category : #private }
+GtOpenAIBasicThreadMessageViewModel >> newCheckRunResultViewModelFor: aCheckRunResult [
+	| aViewModel |
+	aViewModel := GtLlmCheckRunResultViewModel new checkRunResult: aCheckRunResult.
+	aViewModel weak
+		when: GtLlmAddMessageContentsRequest
+		send: #onAddMessageContents:
+		to: self.
+
+	^ aViewModel
+]
+
 { #category : #private }
 GtOpenAIBasicThreadMessageViewModel >> newStyler [
 	^ BlCompositeStyler new
@@ -47,6 +74,11 @@ GtOpenAIBasicThreadMessageViewModel >> newStyler [
 { #category : #'private - announcing' }
 GtOpenAIBasicThreadMessageViewModel >> notifyThreadMessageViewModelChanged [
 	self announce: GtOpenAIThreadMessageViewModelChanged new
+]
+
+{ #category : #'private - announcement handling' }
+GtOpenAIBasicThreadMessageViewModel >> onAddMessageContents: anAnnouncement [
+	self announce: anAnnouncement
 ]
 
 { #category : #'private - hooks' }

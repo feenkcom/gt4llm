@@ -18,6 +18,24 @@ GtOpenAIAssistantChatViewModel >> initialize [
 			threadMessage: GtOpenAINewThreadMessage new
 ]
 
+{ #category : #accessing }
+GtOpenAIAssistantChatViewModel >> newThreadMessageViewModelFor: aMessage [
+	| aViewModel |
+	aViewModel := GtOpenAIThreadMessageViewModel new threadMessage: aMessage.
+
+	aViewModel weak
+		when: GtLlmAddMessageContentsRequest
+		send: #onAddMessageContents:
+		to: self.
+
+	^ aViewModel
+]
+
+{ #category : #'private - announcement handling' }
+GtOpenAIAssistantChatViewModel >> onAddMessageContents: anAnnouncement [
+	newThreadMessageViewModel addMessageContents: anAnnouncement messageContents
+]
+
 { #category : #'private - hooks' }
 GtOpenAIAssistantChatViewModel >> onAssistantChatChanged [
 	newThreadMessageViewModel assistantChat: assistantChat
@@ -35,7 +53,7 @@ GtOpenAIAssistantChatViewModel >> threadMessageViewModels [
 					aViewModel := threadMessageViewModelsCache
 							at: aMessage id
 							ifPresent: [ :theViewModel | theViewModel threadMessage: aMessage ]
-							ifAbsentPut: [ GtOpenAIThreadMessageViewModel new threadMessage: aMessage ].
+							ifAbsentPut: [ self newThreadMessageViewModelFor: aMessage ].
 					aStream nextPut: aViewModel ].
 			aStream nextPut: newThreadMessageViewModel ]
 ]

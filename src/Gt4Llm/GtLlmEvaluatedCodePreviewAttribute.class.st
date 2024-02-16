@@ -2,7 +2,7 @@ Class {
 	#name : #GtLlmEvaluatedCodePreviewAttribute,
 	#superclass : #BrTextAdornmentAttribute,
 	#instVars : [
-		'result'
+		'checkRunResultViewModel'
 	],
 	#category : #'Gt4Llm-Widgets'
 }
@@ -23,7 +23,17 @@ GtLlmEvaluatedCodePreviewAttribute >> affect: aTBrTextEditorTextualPiece in: anE
 { #category : #accessing }
 GtLlmEvaluatedCodePreviewAttribute >> checkRunResult [
 	<return: #GtLlmCheckRunResult>
-	^ result value
+	^ checkRunResultViewModel checkRunResult
+]
+
+{ #category : #accessing }
+GtLlmEvaluatedCodePreviewAttribute >> checkRunResultViewModel [
+	^ checkRunResultViewModel
+]
+
+{ #category : #accessing }
+GtLlmEvaluatedCodePreviewAttribute >> checkRunResultViewModel: anObject [
+	checkRunResultViewModel := anObject
 ]
 
 { #category : #initialization }
@@ -82,8 +92,8 @@ GtLlmEvaluatedCodePreviewAttribute >> newDropdownAptitude: aButton [
 GtLlmEvaluatedCodePreviewAttribute >> newDropdownContentElement: aButton [
 	| anErrorElement |
 	anErrorElement := GtLlmCheckRunExecutionPreviewElement new
+			checkRunResultViewModel: self checkRunResultViewModel;
 			background: Color white;
-			checkRunResult: self checkRunResult;
 			padding: (BlInsets all: 5);
 			hExact: 400;
 			vFitContentLimited;
@@ -112,19 +122,6 @@ GtLlmEvaluatedCodePreviewAttribute >> newStyleAptitude [
 	^ BrLazyStyleCommonAptitude new
 		default: [ :aStyle | aStyle background: self lastCheckResult backgroundColor ];
 		hovered: [ :aStyle | aStyle background: self lastCheckResult backgroundColor darker ]
-]
-
-{ #category : #accessing }
-GtLlmEvaluatedCodePreviewAttribute >> result [
-	"Return {{gtClass:LeEvaluationResult}} with `#value` being {{gtClass:GtLlmCheckRunResult}}."
-
-	<return: #LeEvaluationResult>
-	^ result
-]
-
-{ #category : #accessing }
-GtLlmEvaluatedCodePreviewAttribute >> result: aResult [
-	result := aResult
 ]
 
 { #category : #initialization }

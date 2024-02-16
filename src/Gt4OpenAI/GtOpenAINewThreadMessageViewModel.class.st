@@ -4,6 +4,20 @@ Class {
 	#category : #'Gt4OpenAI-Widgets'
 }
 
+{ #category : #actions }
+GtOpenAINewThreadMessageViewModel >> addMessageContents: aString [
+	| aNewContents anExistingContents |
+	anExistingContents := self contents.
+	aNewContents := String
+			new: aString size + anExistingContents size + 1
+			streamContents: [ :aStream | 
+				aStream nextPutAll: anExistingContents.
+				aStream cr.
+				aStream nextPutAll: aString ].
+
+	self contents: aNewContents requester: nil
+]
+
 { #category : #'initialization ' }
 GtOpenAINewThreadMessageViewModel >> assistantChat: assistantChat [
 	threadMessage assistantChat: assistantChat
