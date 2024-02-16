@@ -136,7 +136,9 @@ GtOpenAIGtTutor >> createAssistant [
 			file := client uploadFile: aFile file withPurpose: 'assistants'.
 			client createAssistantFile: file id forAssistant: assistant id.
 			aFile remoteId: file id.
-			apiFiles add: file ]
+			apiFiles add: file ].
+
+	self class finalizationRegistry add: self
 ]
 
 { #category : #accessing }
