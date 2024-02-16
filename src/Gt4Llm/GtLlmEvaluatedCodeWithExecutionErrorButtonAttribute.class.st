@@ -11,8 +11,6 @@ Class {
 GtLlmEvaluatedCodeWithExecutionErrorButtonAttribute >> affect: aTBrTextEditorTextualPiece in: anEditorElement [
 	<return: #SequenceableCollection of: #BlElement>
 	| aButton |
-	self checkRunResult hasErrors ifFalse: [ ^ #() ].
-
 	aButton := self newBasicButton.
 
 	^ aButton
@@ -29,9 +27,23 @@ GtLlmEvaluatedCodeWithExecutionErrorButtonAttribute >> checkRunResult [
 ]
 
 { #category : #initialization }
+GtLlmEvaluatedCodeWithExecutionErrorButtonAttribute >> configureAnchoredAptitude: anAnchoredAptitude [
+	self lastCheckResult backgroundColor
+		ifNotNil: [ :aColor | 
+			anAnchoredAptitude border: aColor darker.
+			anAnchoredAptitude background: aColor darker ]
+]
+
+{ #category : #initialization }
 GtLlmEvaluatedCodeWithExecutionErrorButtonAttribute >> initialize [
 	super initialize.
 	self beAppend
+]
+
+{ #category : #accessing }
+GtLlmEvaluatedCodeWithExecutionErrorButtonAttribute >> lastCheckResult [
+	<return: #GtLlmCheckerResult>
+	^ self checkRunResult lastResult
 ]
 
 { #category : #testing }
@@ -47,9 +59,9 @@ GtLlmEvaluatedCodeWithExecutionErrorButtonAttribute >> newBasicButton [
 	^ aLabel
 		fitContent;
 		beSmallSize;
-		text: (self checkRunResult executionResultObject printStringLimitedTo: 20);
-		addAptitude: (BrGlamorousLabelAptitude new foreground: Color white);
-		background: BrGlamorousColors errorBackgroundColor;
+		text: self lastCheckResult summaryString;
+		addAptitude: (BrGlamorousLabelAptitude new foreground: self lastCheckResult foregroundColor);
+		background: self lastCheckResult backgroundColor;
 		geometry: (BlRoundedRectangleGeometry cornerRadius: 2);
 		yourself
 ]
@@ -59,22 +71,22 @@ GtLlmEvaluatedCodeWithExecutionErrorButtonAttribute >> newDropdownAptitude: aBut
 	| anAptitude |
 	anAptitude := BrGlamorousWithDropdownAptitude
 			handle: [ self newDropdownHandleButton ]
-			content: [ self newDropdownContentElement: aButton ].
+			content: [ self newDropdownContentElement: aButton ]
+			aptitudeDo: [ :anAnchoredAptitude | 
+				self configureAnchoredAptitude: anAnchoredAptitude ].
 
 	^ anAptitude
 ]
 
 { #category : #initialization }
 GtLlmEvaluatedCodeWithExecutionErrorButtonAttribute >> newDropdownContentElement: aButton [
-	| aContainer anErrorElement |
-	aContainer := BlElement new
-			layout: BlFrameLayout new;
+	| anErrorElement |
+	anErrorElement := GtLlmCheckRunExecutionPreviewElement new
+			background: Color white;
+			checkRunResult: self checkRunResult;
 			padding: (BlInsets all: 5);
-			border: (BlBorder paint: BrGlamorousColors errorBorderColor);
-			geometry: (BlRoundedRectangleGeometry cornerRadius: 2);
-			constraintsDo: [ :c | 
-				c horizontal fitContent.
-				c vertical fitContent ];
+			hExact: 400;
+			vFitContentLimited;
 			when: GtPhlowObjectToSpawn
 				do: [ :anEvent | 
 					aButton
@@ -84,28 +96,22 @@ GtLlmEvaluatedCodeWithExecutionErrorButtonAttribute >> newDropdownContentElement
 								sourceElement: aButton;
 								spawnDestination: self spawnDestination) ].
 
-	anErrorElement := GtLlmCheckRunExecutionErrorElement new
-			checkRunResult: self checkRunResult;
-			hExact: 400;
-			vFitContentLimited.
-	aContainer addChild: anErrorElement.
-
-	^ aContainer
+	^ anErrorElement
 ]
 
 { #category : #initialization }
 GtLlmEvaluatedCodeWithExecutionErrorButtonAttribute >> newDropdownHandleButton [
 	| aButton |
 	aButton := self newBasicButton.
-	aButton background: BrGlamorousColors errorBorderColor.
+	aButton background: self lastCheckResult backgroundColor darker.
 	^ aButton
 ]
 
 { #category : #initialization }
 GtLlmEvaluatedCodeWithExecutionErrorButtonAttribute >> newStyleAptitude [
 	^ BrLazyStyleCommonAptitude new
-		default: [ :aStyle | aStyle background: BrGlamorousColors errorBackgroundColor ];
-		hovered: [ :aStyle | aStyle background: BrGlamorousColors errorBorderColor ]
+		default: [ :aStyle | aStyle background: self lastCheckResult backgroundColor ];
+		hovered: [ :aStyle | aStyle background: self lastCheckResult backgroundColor darker ]
 ]
 
 { #category : #accessing }
@@ -119,4 +125,9 @@ GtLlmEvaluatedCodeWithExecutionErrorButtonAttribute >> result [
 { #category : #accessing }
 GtLlmEvaluatedCodeWithExecutionErrorButtonAttribute >> result: aResult [
 	result := aResult
+]
+
+{ #category : #initialization }
+GtLlmEvaluatedCodeWithExecutionErrorButtonAttribute >> spawnDestination [
+	^ GtPhlowSpawnDesiredDestination defaultDestination
 ]

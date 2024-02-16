@@ -138,11 +138,6 @@ GtLlmCheckRunResult >> lastResult [
 ]
 
 { #category : #accessing }
-GtLlmCheckRunResult >> lastResultObject [
-	^ self lastResult content
-]
-
-{ #category : #accessing }
 GtLlmCheckRunResult >> prefix [
 	^ self hasErrors
 		ifTrue: [ GtLlmCheckerError prefix ]

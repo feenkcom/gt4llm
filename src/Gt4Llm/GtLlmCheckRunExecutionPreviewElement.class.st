@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLlmCheckRunExecutionErrorElement,
+	#name : #GtLlmCheckRunExecutionPreviewElement,
 	#superclass : #BlElement,
 	#traits : 'TBrLayoutResizable + TGtLlmWithCheckRunResultViewModel',
 	#classTraits : 'TBrLayoutResizable classTrait + TGtLlmWithCheckRunResultViewModel classTrait',
@@ -11,18 +11,18 @@ Class {
 }
 
 { #category : #convenience }
-GtLlmCheckRunExecutionErrorElement >> checkRunResult: aResult [
+GtLlmCheckRunExecutionPreviewElement >> checkRunResult: aResult [
 	self
 		checkRunResultViewModel: (GtLlmCheckRunResultViewModel new checkRunResult: aResult)
 ]
 
 { #category : #'initialization ' }
-GtLlmCheckRunExecutionErrorElement >> defaultLayout [
+GtLlmCheckRunExecutionPreviewElement >> defaultLayout [
 	^ BlLinearLayout vertical
 ]
 
 { #category : #'initialization ' }
-GtLlmCheckRunExecutionErrorElement >> initialize [
+GtLlmCheckRunExecutionPreviewElement >> initialize [
 	super initialize.
 
 	self initializeContentsElement.
@@ -36,7 +36,7 @@ GtLlmCheckRunExecutionErrorElement >> initialize [
 ]
 
 { #category : #'initialization ' }
-GtLlmCheckRunExecutionErrorElement >> initializeContentsElement [
+GtLlmCheckRunExecutionPreviewElement >> initializeContentsElement [
 	contentsElement := BrEditor new
 			hMatchParent;
 			vFitContentLimited;
@@ -45,7 +45,7 @@ GtLlmCheckRunExecutionErrorElement >> initializeContentsElement [
 ]
 
 { #category : #'initialization ' }
-GtLlmCheckRunExecutionErrorElement >> initializeCreateMessageElement [
+GtLlmCheckRunExecutionPreviewElement >> initializeCreateMessageElement [
 	createMessageElement := BrButton new
 			fitContent;
 			addAptitude: BrGlamorousButtonWithLabelAptitude new;
@@ -55,21 +55,21 @@ GtLlmCheckRunExecutionErrorElement >> initializeCreateMessageElement [
 ]
 
 { #category : #'private - hooks' }
-GtLlmCheckRunExecutionErrorElement >> onCheckRunResultViewModelChanged [
+GtLlmCheckRunExecutionPreviewElement >> onCheckRunResultViewModelChanged [
 	self updateElement
 ]
 
 { #category : #'private - event handling' }
-GtLlmCheckRunExecutionErrorElement >> onCreateMessageEvent: anEvent [
-	checkRunResultViewModel sendToChat
+GtLlmCheckRunExecutionPreviewElement >> onCreateMessageEvent: anEvent [
+	checkRunResultViewModel addToNewMessage
 ]
 
 { #category : #'private - updating' }
-GtLlmCheckRunExecutionErrorElement >> updateContentsElement [
-	contentsElement text: checkRunResultViewModel executionResult asString
+GtLlmCheckRunExecutionPreviewElement >> updateContentsElement [
+	contentsElement text: checkRunResultViewModel messageContents
 ]
 
 { #category : #'private - updating' }
-GtLlmCheckRunExecutionErrorElement >> updateElement [
+GtLlmCheckRunExecutionPreviewElement >> updateElement [
 	self updateContentsElement
 ]
