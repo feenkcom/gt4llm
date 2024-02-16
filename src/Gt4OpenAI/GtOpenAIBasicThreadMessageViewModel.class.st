@@ -4,7 +4,8 @@ Class {
 	#traits : 'TGtOpenAIWithThreadMessage + TGtAnnouncer',
 	#classTraits : 'TGtOpenAIWithThreadMessage classTrait + TGtAnnouncer classTrait',
 	#instVars : [
-		'announcer'
+		'announcer',
+		'styler'
 	],
 	#category : #'Gt4OpenAI-Widgets'
 }
@@ -35,6 +36,14 @@ GtOpenAIBasicThreadMessageViewModel >> id [
 	^ threadMessage id
 ]
 
+{ #category : #private }
+GtOpenAIBasicThreadMessageViewModel >> newStyler [
+	^ BlCompositeStyler new
+		stylers: {GtLlmMessageStyler new threadMessageViewModel: self.
+				GtOpenAITraceStyler new.
+				GtOpenAIThreadMessageStyler new annotations: self annotations}
+]
+
 { #category : #'private - announcing' }
 GtOpenAIBasicThreadMessageViewModel >> notifyThreadMessageViewModelChanged [
 	self announce: GtOpenAIThreadMessageViewModelChanged new
@@ -57,9 +66,5 @@ GtOpenAIBasicThreadMessageViewModel >> requestStyleSourceText [
 
 { #category : #accessing }
 GtOpenAIBasicThreadMessageViewModel >> styler [
-	^ BlCompositeStyler new
-		stylers: {GtLlmMessageStyler new
-					threadMessageViewModel: self.
-				GtOpenAITraceStyler new.
-				GtOpenAIThreadMessageStyler new annotations: self annotations}
+	^ styler ifNil: [ styler := self newStyler ]
 ]

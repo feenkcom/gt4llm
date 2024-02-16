@@ -57,6 +57,10 @@ GtLlmMessageStyler >> evaluateMethodBlock: aCodeBlock expanded: aBoolean from: a
 
 { #category : #accessing }
 GtLlmMessageStyler >> executionResults [
+	"Keys are {{gtClass:SmaCCToken}} that defines a text that was evaluated.
+	Items are objects that describe the evaluation result."
+
+	<return: #Dictionary of: #LeEvaluationResult>
 	^ executionResults
 ]
 
@@ -179,14 +183,17 @@ GtLlmMessageStyler >> styleHeader: aHeaderNode [
 ]
 
 { #category : #private }
-GtLlmMessageStyler >> styleResult: result for: aCodeNode [
+GtLlmMessageStyler >> styleResult: evaluationResult for: aCodeNode [
 	| evaluatedCodeAttribute |
-	evaluatedCodeAttribute := GtLlmEvaluatedCodeButtonAttribute new
-			result: result value;
-			action: [ :aButton :anEvent | aButton phlow spawnObject: result value ].
+	evaluatedCodeAttribute := evaluationResult value hasErrors
+			ifTrue: [ GtLlmEvaluatedCodeWithExecutionErrorButtonAttribute new 
+					result: evaluationResult ]
+			ifFalse: [ GtLlmEvaluatedCodeButtonAttribute new
+					result: evaluationResult;
+					action: [ :aButton :anEvent | aButton phlow spawnObject: evaluationResult value ] ].
 	(text
-		from: aCodeNode code startPosition + result position - 1
-		to: aCodeNode code startPosition + result position - 1)
+		from: aCodeNode stopPosition 
+		to: aCodeNode stopPosition)
 		attributes: {evaluatedCodeAttribute}
 ]
 
