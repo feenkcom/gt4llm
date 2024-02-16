@@ -15,10 +15,14 @@ GtLlmCheckerResult class >> prefix [
 
 { #category : #accessing }
 GtLlmCheckerResult >> asElement [
-	^ BlElement new
-		size: 12 @ 12;
-		geometry: BlCircleGeometry new;
-		background: self color
+	^ BrLabel new
+		aptitude: (BrGlamorousLabelAptitude new
+				foreground: self foregroundColor);
+		background: self backgroundColor;
+		text: self summaryString;
+		fitContent;
+		beSmallSize;
+		geometry: (BlRoundedRectangleGeometry cornerRadius: 2)
 ]
 
 { #category : #accessing }
@@ -29,6 +33,11 @@ GtLlmCheckerResult >> asString [
 ]
 
 { #category : #accessing }
+GtLlmCheckerResult >> backgroundColor [
+	^ self subclassResponsibility
+]
+
+{ #category : #accessing }
 GtLlmCheckerResult >> checker [
 	^ checker
 ]
@@ -36,11 +45,6 @@ GtLlmCheckerResult >> checker [
 { #category : #accessing }
 GtLlmCheckerResult >> checker: anObject [
 	checker := anObject
-]
-
-{ #category : #accessing }
-GtLlmCheckerResult >> color [
-	^ self subclassResponsibility
 ]
 
 { #category : #accessing }
@@ -55,6 +59,11 @@ GtLlmCheckerResult >> content: aString [
 
 { #category : #accessing }
 GtLlmCheckerResult >> contentString [
+	^ self subclassResponsibility
+]
+
+{ #category : #accessing }
+GtLlmCheckerResult >> foregroundColor [
 	^ self subclassResponsibility
 ]
 
@@ -80,4 +89,16 @@ GtLlmCheckerResult >> gtResultFor: aView [
 { #category : #accessing }
 GtLlmCheckerResult >> isError [
 	^ false
+]
+
+{ #category : #accessing }
+GtLlmCheckerResult >> isExecuted [
+	^ true
+]
+
+{ #category : #accessing }
+GtLlmCheckerResult >> summaryString [
+	^ self content
+		ifNil: [ 'No value' ]
+		ifNotNil: [ :aContent | aContent printStringLimitedTo: 20 ]
 ]

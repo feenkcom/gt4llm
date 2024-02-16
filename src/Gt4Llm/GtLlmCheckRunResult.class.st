@@ -106,7 +106,7 @@ GtLlmCheckRunResult >> gtResultsFor: aView [
 				| state |
 				state := self results at: aChecker.
 				state asElement margin: (BlInsets left: 12) ]
-			width: 50;
+			weight: 0.5;
 		send: [ :aChecker | self results at: aChecker ]
 ]
 
@@ -125,6 +125,21 @@ GtLlmCheckRunResult >> gtSendFor: anAction [
 { #category : #accessing }
 GtLlmCheckRunResult >> hasErrors [
 	^ self results values anySatisfy: #isError
+]
+
+{ #category : #accessing }
+GtLlmCheckRunResult >> lastResult [
+	<return: #GtLlmCheckerResult>
+	| aChecker |
+	aChecker := self checkers reversed
+			detect: [ :anotherChecker | (self results at: anotherChecker) isExecuted ]
+			ifNone: [ self checkers first ].
+	^ self results at: aChecker
+]
+
+{ #category : #accessing }
+GtLlmCheckRunResult >> lastResultObject [
+	^ self lastResult content
 ]
 
 { #category : #accessing }

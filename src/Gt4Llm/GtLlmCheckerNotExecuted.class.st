@@ -10,6 +10,16 @@ GtLlmCheckerNotExecuted >> asString [
 ]
 
 { #category : #accessing }
-GtLlmCheckerNotExecuted >> color [
+GtLlmCheckerNotExecuted >> backgroundColor [
 	^ BrGlamorousColors disabledButtonTextColor
+]
+
+{ #category : #accessing }
+GtLlmCheckerNotExecuted >> foregroundColor [
+	^ Color black
+]
+
+{ #category : #accessing }
+GtLlmCheckerNotExecuted >> isExecuted [
+	^ false
 ]

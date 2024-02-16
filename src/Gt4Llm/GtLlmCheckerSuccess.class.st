@@ -10,13 +10,18 @@ GtLlmCheckerSuccess class >> prefix [
 ]
 
 { #category : #accessing }
-GtLlmCheckerSuccess >> color [
+GtLlmCheckerSuccess >> backgroundColor [
 	^ BrGlamorousColors successBackgroundColor
 ]
 
 { #category : #accessing }
 GtLlmCheckerSuccess >> contentString [
 	^ (GtLlmInspectorSummarizer new summarize: self content) summaryString
+]
+
+{ #category : #accessing }
+GtLlmCheckerSuccess >> foregroundColor [
+	^ Color black
 ]
 
 { #category : #accessing }
