@@ -81,10 +81,14 @@ GtOpenAIAssistantChat >> gtMessagesWidgetFor: aView [
 	"cannot be a forward because the update wouldn’t work"
 
 	<gtView>
+	| aViewModel |
 	^ aView explicit
 		title: 'Messages';
 		priority: 1;
-		stencil: [ GtOpenAIAssistantChatElement new assistantChat: self ]
+		stencil: [ aViewModel
+				ifNil: [ aViewModel := GtOpenAIAssistantChatViewModel new assistantChat: self ].
+			GtOpenAIAssistantChatElement new assistantChatViewModel: aViewModel ];
+		actionUpdateButton
 ]
 
 { #category : #accessing }
