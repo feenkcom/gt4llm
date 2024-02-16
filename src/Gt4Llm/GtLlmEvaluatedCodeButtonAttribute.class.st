@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLlmEvaluatedCodeButtonAttribute,
 	#superclass : #GtPlaygroundEvaluatedCodeButtonAttribute,
-	#category : #'Gt4Llm-Stylers'
+	#category : #'Gt4Llm-Widgets'
 }
 
 { #category : #accessing }
