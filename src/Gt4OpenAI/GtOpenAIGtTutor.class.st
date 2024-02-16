@@ -31,6 +31,9 @@ GtOpenAIGtTutor >> addChat [
 			assistant: self assistant;
 			pipeline: pipeline.
 	chats add: aChat.
+
+	aChat sendMessage: self files toFileDescriptions.
+
 	^ aChat
 ]
 
@@ -56,7 +59,9 @@ GtOpenAIGtTutor >> allViewsToFile [
 ' , aMethod sourceCode
 										, '
 ```' ])) ].
-	^ aFile
+	^ GtOpenAIResourceFile new
+		file: aFile;
+		description: 'This file lists all the views defined in the image at time of assistant creation in smalltalk-method format.'
 ]
 
 { #category : #accessing }
@@ -128,8 +133,9 @@ GtOpenAIGtTutor >> createAssistant [
 	files
 		do: [ :aFile | 
 			| file |
-			file := client uploadFile: aFile withPurpose: 'assistants'.
+			file := client uploadFile: aFile file withPurpose: 'assistants'.
 			client createAssistantFile: file id forAssistant: assistant id.
+			aFile remoteId: file id.
 			apiFiles add: file ]
 ]
 
@@ -145,9 +151,8 @@ GtOpenAIGtTutor >> defaultAssistantName [
 
 { #category : #accessing }
 GtOpenAIGtTutor >> defaultFiles [
-	^ (self
-		packageNamesToFiles: {#'GToolkit-Phlow'.
-				#'GToolkit-Phlow-Examples'}) , {self allViewsToFile}
+	^ (self packageNamesToFiles: {#'GToolkit-Phlow-Examples'})
+		, {self allViewsToFile}
 ]
 
 { #category : #accessing }
@@ -275,10 +280,11 @@ GtOpenAIGtTutor >> gtChatsFor: aView [
 { #category : #accessing }
 GtOpenAIGtTutor >> gtFilesFor: aView [
 	<gtView>
-	^ aView list
+	^ aView forward
 		title: 'Files';
 		priority: 7;
-		items: [ self files ]
+		object: [ self files ];
+		view: #gtFilesFor:
 ]
 
 { #category : #accessing }
@@ -313,7 +319,7 @@ GtOpenAIGtTutor >> initialize [
 	tools := self defaultTools.
 	chats := GtOpenAIAssistantChatGroup new.
 	pipeline :=  GtLlmCheckPipeline defaultPipeline.
-	files := OrderedCollection withAll: self defaultFiles.
+	files := GtOpenAIResourceFilesGroup withAll: self defaultFiles.
 	apiFiles := GtOpenAIFilesGroup new
 ]
 
@@ -347,7 +353,9 @@ GtOpenAIGtTutor >> packageNamesToFiles: aCollectionOfPackageNames [
 '
 								join: (classes
 										collect: [ :aClass | String streamContents: [ :s | aClass fileOutOn: s ] ])) ].
-			aFile ]
+			GtOpenAIResourceFile new
+				file: aFile;
+				description: 'A serialized Pharo package named ' , aPackageName ]
 ]
 
 { #category : #accessing }
