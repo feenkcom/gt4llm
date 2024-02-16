@@ -185,17 +185,10 @@ GtLlmMessageStyler >> styleHeader: aHeaderNode [
 { #category : #private }
 GtLlmMessageStyler >> styleResult: evaluationResult for: aCodeNode [
 	| evaluatedCodeAttribute |
-	evaluatedCodeAttribute :=  GtLlmEvaluatedCodeWithExecutionErrorButtonAttribute new 
-					result: evaluationResult.
-	"evaluatedCodeAttribute := evaluationResult value hasErrors
-			ifTrue: [ GtLlmEvaluatedCodeWithExecutionErrorButtonAttribute new 
-					result: evaluationResult ]
-			ifFalse: [ GtLlmEvaluatedCodeButtonAttribute new
-					result: evaluationResult;
-					action: [ :aButton :anEvent | aButton phlow spawnObject: evaluationResult value ] ]."
-	(text
-		from: aCodeNode stopPosition 
-		to: aCodeNode stopPosition)
+	evaluatedCodeAttribute := GtLlmEvaluatedCodePreviewAttribute new
+			result: evaluationResult.
+
+	(text from: aCodeNode stopPosition to: aCodeNode stopPosition)
 		attributes: {evaluatedCodeAttribute}
 ]
 

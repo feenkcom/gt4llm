@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLlmEvaluatedCodeWithExecutionErrorButtonAttribute,
+	#name : #GtLlmEvaluatedCodePreviewAttribute,
 	#superclass : #BrTextAdornmentAttribute,
 	#instVars : [
 		'result'
@@ -8,7 +8,7 @@ Class {
 }
 
 { #category : #initialization }
-GtLlmEvaluatedCodeWithExecutionErrorButtonAttribute >> affect: aTBrTextEditorTextualPiece in: anEditorElement [
+GtLlmEvaluatedCodePreviewAttribute >> affect: aTBrTextEditorTextualPiece in: anEditorElement [
 	<return: #SequenceableCollection of: #BlElement>
 	| aButton |
 	aButton := self newBasicButton.
@@ -21,13 +21,13 @@ GtLlmEvaluatedCodeWithExecutionErrorButtonAttribute >> affect: aTBrTextEditorTex
 ]
 
 { #category : #accessing }
-GtLlmEvaluatedCodeWithExecutionErrorButtonAttribute >> checkRunResult [
+GtLlmEvaluatedCodePreviewAttribute >> checkRunResult [
 	<return: #GtLlmCheckRunResult>
 	^ result value
 ]
 
 { #category : #initialization }
-GtLlmEvaluatedCodeWithExecutionErrorButtonAttribute >> configureAnchoredAptitude: anAnchoredAptitude [
+GtLlmEvaluatedCodePreviewAttribute >> configureAnchoredAptitude: anAnchoredAptitude [
 	self lastCheckResult backgroundColor
 		ifNotNil: [ :aColor | 
 			anAnchoredAptitude border: aColor darker.
@@ -35,24 +35,24 @@ GtLlmEvaluatedCodeWithExecutionErrorButtonAttribute >> configureAnchoredAptitude
 ]
 
 { #category : #initialization }
-GtLlmEvaluatedCodeWithExecutionErrorButtonAttribute >> initialize [
+GtLlmEvaluatedCodePreviewAttribute >> initialize [
 	super initialize.
 	self beAppend
 ]
 
 { #category : #accessing }
-GtLlmEvaluatedCodeWithExecutionErrorButtonAttribute >> lastCheckResult [
+GtLlmEvaluatedCodePreviewAttribute >> lastCheckResult [
 	<return: #GtLlmCheckerResult>
 	^ self checkRunResult lastResult
 ]
 
 { #category : #testing }
-GtLlmEvaluatedCodeWithExecutionErrorButtonAttribute >> mayHaveExternalReferences [
+GtLlmEvaluatedCodePreviewAttribute >> mayHaveExternalReferences [
 	^ true
 ]
 
 { #category : #initialization }
-GtLlmEvaluatedCodeWithExecutionErrorButtonAttribute >> newBasicButton [
+GtLlmEvaluatedCodePreviewAttribute >> newBasicButton [
 	| aLabel |
 	aLabel := BrLabel new.
 
@@ -67,7 +67,7 @@ GtLlmEvaluatedCodeWithExecutionErrorButtonAttribute >> newBasicButton [
 ]
 
 { #category : #initialization }
-GtLlmEvaluatedCodeWithExecutionErrorButtonAttribute >> newDropdownAptitude: aButton [
+GtLlmEvaluatedCodePreviewAttribute >> newDropdownAptitude: aButton [
 	| anAptitude |
 	anAptitude := BrGlamorousWithDropdownAptitude
 			handle: [ self newDropdownHandleButton ]
@@ -79,7 +79,7 @@ GtLlmEvaluatedCodeWithExecutionErrorButtonAttribute >> newDropdownAptitude: aBut
 ]
 
 { #category : #initialization }
-GtLlmEvaluatedCodeWithExecutionErrorButtonAttribute >> newDropdownContentElement: aButton [
+GtLlmEvaluatedCodePreviewAttribute >> newDropdownContentElement: aButton [
 	| anErrorElement |
 	anErrorElement := GtLlmCheckRunExecutionPreviewElement new
 			background: Color white;
@@ -100,7 +100,7 @@ GtLlmEvaluatedCodeWithExecutionErrorButtonAttribute >> newDropdownContentElement
 ]
 
 { #category : #initialization }
-GtLlmEvaluatedCodeWithExecutionErrorButtonAttribute >> newDropdownHandleButton [
+GtLlmEvaluatedCodePreviewAttribute >> newDropdownHandleButton [
 	| aButton |
 	aButton := self newBasicButton.
 	aButton background: self lastCheckResult backgroundColor darker.
@@ -108,14 +108,14 @@ GtLlmEvaluatedCodeWithExecutionErrorButtonAttribute >> newDropdownHandleButton [
 ]
 
 { #category : #initialization }
-GtLlmEvaluatedCodeWithExecutionErrorButtonAttribute >> newStyleAptitude [
+GtLlmEvaluatedCodePreviewAttribute >> newStyleAptitude [
 	^ BrLazyStyleCommonAptitude new
 		default: [ :aStyle | aStyle background: self lastCheckResult backgroundColor ];
 		hovered: [ :aStyle | aStyle background: self lastCheckResult backgroundColor darker ]
 ]
 
 { #category : #accessing }
-GtLlmEvaluatedCodeWithExecutionErrorButtonAttribute >> result [
+GtLlmEvaluatedCodePreviewAttribute >> result [
 	"Return {{gtClass:LeEvaluationResult}} with `#value` being {{gtClass:GtLlmCheckRunResult}}."
 
 	<return: #LeEvaluationResult>
@@ -123,11 +123,11 @@ GtLlmEvaluatedCodeWithExecutionErrorButtonAttribute >> result [
 ]
 
 { #category : #accessing }
-GtLlmEvaluatedCodeWithExecutionErrorButtonAttribute >> result: aResult [
+GtLlmEvaluatedCodePreviewAttribute >> result: aResult [
 	result := aResult
 ]
 
 { #category : #initialization }
-GtLlmEvaluatedCodeWithExecutionErrorButtonAttribute >> spawnDestination [
+GtLlmEvaluatedCodePreviewAttribute >> spawnDestination [
 	^ GtPhlowSpawnDesiredDestination defaultDestination
 ]
