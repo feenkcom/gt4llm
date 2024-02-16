@@ -1,14 +1,25 @@
 Class {
 	#name : #GtLlmCheckRunResultViewModel,
 	#superclass : #Object,
-	#traits : 'TGtLlmWithCheckRunResult',
-	#classTraits : 'TGtLlmWithCheckRunResult classTrait',
+	#traits : 'TGtLlmWithCheckRunResult + TGtAnnouncer',
+	#classTraits : 'TGtLlmWithCheckRunResult classTrait + TGtAnnouncer classTrait',
+	#instVars : [
+		'announcer'
+	],
 	#category : #'Gt4Llm-Widgets'
 }
 
 { #category : #actions }
 GtLlmCheckRunResultViewModel >> addToNewMessage [
-	self halt
+	self
+		announce: (GtLlmAddMessageContentsRequest new
+				messageContents: self messageContents)
+]
+
+{ #category : #announcer }
+GtLlmCheckRunResultViewModel >> announcer [
+	<return: #Announcer>
+	^ announcer ifNil: [ announcer := Announcer new ]
 ]
 
 { #category : #accessing }

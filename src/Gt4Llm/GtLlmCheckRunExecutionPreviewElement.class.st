@@ -10,12 +10,6 @@ Class {
 	#category : #'Gt4Llm-Widgets'
 }
 
-{ #category : #convenience }
-GtLlmCheckRunExecutionPreviewElement >> checkRunResult: aResult [
-	self
-		checkRunResultViewModel: (GtLlmCheckRunResultViewModel new checkRunResult: aResult)
-]
-
 { #category : #'initialization ' }
 GtLlmCheckRunExecutionPreviewElement >> defaultLayout [
 	^ BlLinearLayout vertical
@@ -50,7 +44,7 @@ GtLlmCheckRunExecutionPreviewElement >> initializeCreateMessageElement [
 			fitContent;
 			addAptitude: BrGlamorousButtonWithLabelAptitude new;
 			label: 'Create message';
-			action: [ :anEvent | self onCreateMessageEvent: anEvent ];
+			action: [ :aButton | self onCreateMessageFrom: aButton ];
 			beSmallSize
 ]
 
@@ -60,7 +54,8 @@ GtLlmCheckRunExecutionPreviewElement >> onCheckRunResultViewModelChanged [
 ]
 
 { #category : #'private - event handling' }
-GtLlmCheckRunExecutionPreviewElement >> onCreateMessageEvent: anEvent [
+GtLlmCheckRunExecutionPreviewElement >> onCreateMessageFrom: aButton [
+	aButton fireEvent: BrDropdownHideWish new.
 	checkRunResultViewModel addToNewMessage
 ]
 
