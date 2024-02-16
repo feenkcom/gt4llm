@@ -178,10 +178,10 @@ GtLlmMessageStyler >> styleHeader: aHeaderNode [
 						right: 0) ]
 ]
 
-{ #category : #generated }
+{ #category : #private }
 GtLlmMessageStyler >> styleResult: result for: aCodeNode [
 	| evaluatedCodeAttribute |
-	evaluatedCodeAttribute := GtPlaygroundEvaluatedCodeButtonAttribute new
+	evaluatedCodeAttribute := GtLlmEvaluatedCodeButtonAttribute new
 			result: result value;
 			action: [ :aButton :anEvent | aButton phlow spawnObject: result value ].
 	(text
@@ -206,7 +206,8 @@ GtLlmMessageStyler >> styleSmalltalkCode: aCodeNode [
 									from: aWidget ] ]}.
 	self executionResults
 		at: aCodeNode code
-		ifPresent: [ :result | self styleResult: result for: aCodeNode ]
+		ifPresent: [ :result | 
+			self styleResult: result for: aCodeNode. ]
 ]
 
 { #category : #generated }

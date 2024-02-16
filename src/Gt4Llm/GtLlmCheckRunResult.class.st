@@ -41,7 +41,13 @@ GtLlmCheckRunResult >> checkers: anObject [
 
 { #category : #accessing }
 GtLlmCheckRunResult >> executionResult [
-	^ (self results at: self checkers executor) content
+	<return: #GtLlmCheckerResult>
+	^ self results at: self checkers executor
+]
+
+{ #category : #accessing }
+GtLlmCheckRunResult >> executionResultObject [
+	^ self executionResult content
 ]
 
 { #category : #accessing }
@@ -80,11 +86,11 @@ GtLlmCheckRunResult >> gtExecutionResultFor: aView [
 	^ aView forward
 		title: 'Execution result';
 		priority: 1;
-		object: [ self executionResult ];
+		object: [ self executionResultObject ];
 		view: #gtLiveFor:;
 		actionButtonIcon: BrGlamorousVectorIcons inspect
 			tooltip: 'Inspect result'
-			action: [ :aButton | aButton phlow spawnObject: self executionResult ]
+			action: [ :aButton | aButton phlow spawnObject: self executionResultObject ]
 ]
 
 { #category : #accessing }

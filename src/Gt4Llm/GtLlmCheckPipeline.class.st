@@ -30,7 +30,7 @@ GtLlmCheckPipeline >> addChecker: aCheck [
 GtLlmCheckPipeline >> check: aString [
 	^ GtLlmCheckRun new
 		checkers: self checkers;
-		stopOnError: stopOnError;
+		stopOnError: (stopOnError ifNil: [ true ]);
 		run: aString
 ]
 
