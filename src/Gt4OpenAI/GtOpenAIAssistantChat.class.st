@@ -140,6 +140,7 @@ GtOpenAIAssistantChat >> initialize [
 
 { #category : #accessing }
 GtOpenAIAssistantChat >> lastRun [
+	<return: #GtOpenAIThreadRun or: nil>
 	^ lastRun
 ]
 
@@ -191,6 +192,11 @@ GtOpenAIAssistantChat >> sendMessage: aString [
 	future := (self runFuture
 			then: [ :aRun | self announcer announce: (GtOpenAIThreadRunIsDoneAnnouncement new run: aRun) ])
 			await: GtOpenAIUtilities executionConfiguration
+]
+
+{ #category : #accessing }
+GtOpenAIAssistantChat >> status [
+	^ GtOpenAIAssistantChatStatus forLastRun: self
 ]
 
 { #category : #accessing }
