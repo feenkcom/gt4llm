@@ -33,13 +33,15 @@ GtLlmMessageStyler >> evaluateCodeBlock: aCodeBlock expanded: aBoolean from: aBu
 ]
 
 { #category : #generated }
-GtLlmMessageStyler >> evaluateMethodBlock: aCodeBlock expanded: aBoolean from: aButton [ 
+GtLlmMessageStyler >> evaluateMethodBlock: aCodeBlock expanded: aBoolean from: aButton isReplace: aReplaceBoolean [
 	| aResult position source aMethod |
 	source := aCodeBlock code source.
 	aMethod := self methodCodeBlock: aCodeBlock.
 
-	aResult := aMethod addToSystem.
-	
+	aResult := aReplaceBoolean
+			ifTrue: [ aMethod replaceInSystem ]
+			ifFalse: [ aMethod addToSystem ].
+
 	aResult threadMessage: self threadMessageViewModel threadMessage.
 
 	position := source size.
@@ -227,24 +229,31 @@ GtLlmMessageStyler >> styleSmalltalkCodeBlock: aCodeNode [
 
 { #category : #private }
 GtLlmMessageStyler >> styleSmalltalkMethod: aCodeNode [
-	| methodCodeBlock |
+	| methodCodeBlock tooltip isReplace |
 	(aCodeNode isForLanguage: 'smalltalk-method') ifFalse: [ ^ self ].
+
 	methodCodeBlock := self methodCodeBlock: aCodeNode.
 	methodCodeBlock methodExists
-		ifFalse: [ (text from: aCodeNode stopPosition to: aCodeNode stopPosition)
-				attributes: {GtButtonAttribute new
-							beAppend;
-							stencil: [ GtButtonStencil new
-									icon: BrGlamorousVectorIcons playinspect;
-									tooltip: 'Add method';
-									action: [ :aWidget :aButtonModel | 
-										self
-											evaluateMethodBlock: aCodeNode
-											expanded: true
-											from: aWidget ] ]}.
-			self executionResults
-				at: aCodeNode code
-				ifPresent: [ :result | self styleResult: result for: aCodeNode ] ]
+		ifTrue: [ tooltip := 'Replace Method'.
+			isReplace := true ]
+		ifFalse: [ tooltip := 'Add Method'.
+			isReplace := false ].
+
+	(text from: aCodeNode stopPosition to: aCodeNode stopPosition)
+		attributes: {GtButtonAttribute new
+					beAppend;
+					stencil: [ GtButtonStencil new
+							icon: BrGlamorousVectorIcons playinspect;
+							tooltip: tooltip;
+							action: [ :aWidget :aButtonModel | 
+								self
+									evaluateMethodBlock: aCodeNode
+									expanded: true
+									from: aWidget
+									isReplace: isReplace ] ]}.
+	self executionResults
+		at: aCodeNode code
+		ifPresent: [ :result | self styleResult: result for: aCodeNode ]
 ]
 
 { #category : #generated }
@@ -288,4 +297,9 @@ GtLlmMessageStyler >> visitCodeBlock: aCodeNode [
 GtLlmMessageStyler >> visitHeader: aHeader [
 	self styleHeader: aHeader.
 	^ self visitContent: aHeader
+]
+
+{ #category : #accessing }
+GtLlmMessageStyler >> visitMethodAnnotation: aLeMethodAnnotationNode [ 
+	"self shouldBeImplemented."
 ]

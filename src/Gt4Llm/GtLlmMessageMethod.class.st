@@ -12,7 +12,7 @@ Class {
 GtLlmMessageMethod >> addToSystem [
 	^ GtLlmCheckRunResult new
 		checkers: (GtLlmCheckerGroup withAll: {self});
-		addResult: self doRefactoring for: self
+		addResult: self doAddRefactoring for: self
 ]
 
 { #category : #accessing }
@@ -27,13 +27,19 @@ GtLlmMessageMethod >> coder [
 ]
 
 { #category : #accessing }
-GtLlmMessageMethod >> doRefactoring [
-	[ | refactoring |
-	refactoring := RBAddMethodRefactoring
-			addMethod: methodBody
-			toClass: methodClass
-			inProtocols: {'generated - gpt'}.
-	refactoring execute ]
+GtLlmMessageMethod >> doAddRefactoring [
+	^ self
+		doRefactoring: [ | refactoring |
+			refactoring := RBAddMethodRefactoring
+					addMethod: methodBody
+					toClass: methodClass
+					inProtocols: {'generated - gpt'}.
+			refactoring execute ]
+]
+
+{ #category : #accessing }
+GtLlmMessageMethod >> doRefactoring: aBlock [
+	aBlock
 		on: Error
 		do: [ :anError | 
 			^ GtLlmCheckerError new
@@ -43,6 +49,20 @@ GtLlmMessageMethod >> doRefactoring [
 	^ GtLlmCheckerSuccess new
 		checker: self;
 		content: self methodClass >> self methodSelector
+]
+
+{ #category : #accessing }
+GtLlmMessageMethod >> doReplaceRefactoring [
+	^ self doRefactoring: [ | refactoring |
+	refactoring := RBRemoveMethodRefactoring
+			removeMethods: {self methodSelector}
+			from: methodClass.
+	refactoring execute.
+	refactoring := RBAddMethodRefactoring
+			addMethod: methodBody
+			toClass: methodClass
+			inProtocols: {'generated - gpt'}.
+	refactoring execute ]
 ]
 
 { #category : #accessing }
@@ -95,4 +115,11 @@ GtLlmMessageMethod >> methodSelector [
 	^ (''
 		join: ((' ' split: methodBody lines first)
 				withIndexSelect: [ :anElement :anIndex | anIndex \\ 2 = 1 ])) asSymbol
+]
+
+{ #category : #accessing }
+GtLlmMessageMethod >> replaceInSystem [
+	^ GtLlmCheckRunResult new
+		checkers: (GtLlmCheckerGroup withAll: {self});
+		addResult: self doReplaceRefactoring for: self
 ]
