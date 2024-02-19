@@ -244,13 +244,14 @@ GtOpenAIGtTutor >> defaultTools [
 { #category : #accessing }
 GtOpenAIGtTutor >> deleteAssistant [
 	assistant
-		ifNotNil: [ client deleteAssistant: assistant id.
-			assistant := nil ]
+		ifNotNil: [ [ client deleteAssistant: assistant id.
+			assistant := nil ] on: GtOpenAIError do: [  ] ]
 ]
 
 { #category : #accessing }
 GtOpenAIGtTutor >> deleteFiles [
-	apiFiles do: [ :aFile | client deleteFile: aFile id ].
+	apiFiles
+		do: [ :aFile | [ client deleteFile: aFile id ] on: GtOpenAIError do: [  ] ].
 	apiFiles := GtOpenAIFilesGroup new
 ]
 
@@ -294,8 +295,20 @@ GtOpenAIGtTutor >> gtCleanUpFor: anAction [
 	^ anAction button
 		icon: BrGlamorousVectorIcons cancel;
 		tooltip: 'Clean up assistant and files';
-		priority: 1;
+		priority: 5;
 		action: [ self cleanUp ]
+]
+
+{ #category : #accessing }
+GtOpenAIGtTutor >> gtCreateFor: anAction [
+	<gtAction>
+	self hasAssistant ifTrue: [ ^ anAction noAction ].
+
+	^ anAction button
+		icon: BrGlamorousVectorIcons accept;
+		tooltip: 'Create assistant and files';
+		priority: 5;
+		action: [ self createAssistant ]
 ]
 
 { #category : #accessing }
