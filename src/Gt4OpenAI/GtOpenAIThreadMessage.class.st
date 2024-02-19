@@ -159,7 +159,7 @@ GtOpenAIThreadMessage >> gtContentFor: aView [
 		title: 'Content';
 		priority: 1;
 		stencil: [
-			GtOpenAIThreadMessageElement new threadMessageViewModel: self asViewModel
+			(GtOpenAIThreadMessageElement new threadMessageViewModel: self asViewModel) asScrollableElement
 		]
 ]
 
