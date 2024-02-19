@@ -47,7 +47,8 @@ GtLlmInspectorViewSummary >> summaryString [
 	^ '{{gtMethod:' , self viewClass asString , '>>#' , self selector
 		, '}}: 
 ```smalltalk-method
-' , self code
+' , self viewClass asString, '
+', self code
 		, '
 ```'
 ]
