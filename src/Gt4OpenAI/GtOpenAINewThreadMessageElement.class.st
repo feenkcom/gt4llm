@@ -4,7 +4,8 @@ Class {
 	#traits : 'TBrLayoutResizable + TGtOpenAIWithThreadMessageViewModel',
 	#classTraits : 'TBrLayoutResizable classTrait + TGtOpenAIWithThreadMessageViewModel classTrait',
 	#instVars : [
-		'contentsElement'
+		'contentsElement',
+		'sendButton'
 	],
 	#category : #'Gt4OpenAI-Widgets'
 }
@@ -30,10 +31,12 @@ GtOpenAINewThreadMessageElement >> defaultLayout [
 { #category : #'initialization ' }
 GtOpenAINewThreadMessageElement >> initialize [
 	super initialize.
-	
+
 	self initializeContentsElement.
+	self initializeSendButton.
 	self addChild: contentsElement as: #contents.
-	
+	self addChild: sendButton as: #send.
+
 	self hMatchParent.
 	self vFitContent
 ]
@@ -58,6 +61,21 @@ GtOpenAINewThreadMessageElement >> initializeContentsElement [
 				yourself)
 ]
 
+{ #category : #'initialization ' }
+GtOpenAINewThreadMessageElement >> initializeSendButton [
+	sendButton := BrButton new
+			fitContent;
+			beSmallSize;
+			aptitude: BrGlamorousButtonWithIconAptitude;
+			label: 'Send';
+			icon: BrGlamorousVectorIcons accept;
+			action: [ :aButton | self sendMessageFrom: aButton ];
+			margin: (BlInsets all: 3);
+			constraintsDo: [ :c | 
+				c linear vertical alignBottom.
+				c linear horizontal alignLeft ]
+]
+
 { #category : #'private - announcement handling' }
 GtOpenAINewThreadMessageElement >> onThreadMessageContentsChanged: anAnnouncement [
 	anAnnouncement requester = self ifTrue: [ ^ self ].
@@ -78,6 +96,11 @@ GtOpenAINewThreadMessageElement >> onThreadMessageViewModelChanged: anAnnounceme
 GtOpenAINewThreadMessageElement >> sendMessage [
 	threadMessageViewModel ifNil: [ ^ self ].
 	threadMessageViewModel sendMessage
+]
+
+{ #category : #'private - event handling' }
+GtOpenAINewThreadMessageElement >> sendMessageFrom: aButton [
+	self sendMessage
 ]
 
 { #category : #'private - hooks' }
