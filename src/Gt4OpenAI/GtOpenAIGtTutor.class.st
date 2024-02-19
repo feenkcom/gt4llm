@@ -56,6 +56,8 @@ GtOpenAIGtTutor >> allViewsToFile [
 						join: (views contents
 								collect: [ :aMethod | 
 									'```smalltalk-method
+' , aMethod methodClass asString
+										, '
 ' , aMethod sourceCode
 										, '
 ```' ])) ].
