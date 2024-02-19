@@ -55,5 +55,12 @@ GtOpenAIAssistantChatViewModel >> threadMessageViewModels [
 							ifPresent: [ :theViewModel | theViewModel threadMessage: aMessage ]
 							ifAbsentPut: [ self newThreadMessageViewModelFor: aMessage ].
 					aStream nextPut: aViewModel ].
+
+			newMessages last isAssistantRole
+				ifFalse: [ | aViewModel |
+					aViewModel := self
+							newThreadMessageViewModelFor: GtOpenAIProvisionalThreadMessage new.
+					aStream nextPut: aViewModel ].
+
 			aStream nextPut: newThreadMessageViewModel ]
 ]
