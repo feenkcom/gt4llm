@@ -5,7 +5,8 @@ Class {
 	#classTraits : 'TLeContentNodeVisitor classTrait',
 	#instVars : [
 		'executionResults',
-		'threadMessageViewModel'
+		'threadMessageViewModel',
+		'lastId'
 	],
 	#category : #'Gt4Llm-Stylers'
 }
@@ -101,12 +102,22 @@ GtLlmMessageStyler >> initialize [
 ]
 
 { #category : #generated }
+GtLlmMessageStyler >> isCursorInside: nodeInterval [ 
+]
+
+{ #category : #generated }
 GtLlmMessageStyler >> methodCodeBlock: aCodeBlock [
 	| source |
 	source := aCodeBlock code source trim.
 	^ GtLlmMessageMethod new
 		methodClass: source lines first asClass;
 		methodBody: (Character lf join: source lines allButFirst)
+]
+
+{ #category : #accessing }
+GtLlmMessageStyler >> nextUniqueId [
+	lastId := lastId + 1.
+	^ lastId
 ]
 
 { #category : #accessing }
@@ -117,6 +128,62 @@ GtLlmMessageStyler >> privateStyle: aText [
 	ast := LeParser parse: aText asString.
 	self accept: ast.
 	^ aText
+]
+
+{ #category : #generated }
+GtLlmMessageStyler >> styleAutoHiding: leftRange and: rightRange whenOutside: nodeInterval [
+	| anAttribute marker1 marker2 cursorAttribute |
+	marker1 := BrTextInvisibleMarkerAttribute new.
+	marker2 := BrTextInvisibleMarkerAttribute new.
+	self text
+		attribute: marker1
+		from: leftRange first
+		to: leftRange last.
+	self text
+		attribute: marker2
+		from: rightRange first
+		to: rightRange last.
+	anAttribute := BrTextAdornmentDynamicAttribute new
+			beReplace;
+			stencil: [ :aTBrTextEditorTextualPiece :anEditorElement | #() ].
+	cursorAttribute := BrTextCursorAttribute new
+			enterAction: [ :aTextEditor | 
+				| left right |
+				aTextEditor text
+					findAttribute: marker1
+					indicesDo: [ :start :end | left := start ].
+				aTextEditor text
+					findAttribute: marker2
+					indicesDo: [ :start :end | right := end ].
+				(left notNil and: [ right notNil ])
+					ifTrue: [ | cursorIndex |
+						cursorIndex := aTextEditor cursors first position.
+						(cursorIndex between: left - 2 and: right)
+							ifTrue: [ aTextEditor text
+									clearAttributes: left
+									to: right
+									if: [ :eachAttribute | eachAttribute == anAttribute ] ] ] ];
+			leaveAction: [ :aTextEditor | 
+				| left right |
+				aTextEditor text
+					findAttribute: marker1
+					indicesDo: [ :start :end | left := start to: end ].
+				aTextEditor text
+					findAttribute: marker2
+					indicesDo: [ :start :end | right := start to: end ].
+				(left notNil and: [ right notNil ])
+					ifTrue: [ aTextEditor text
+							attributes: {anAttribute}
+							from: left first
+							to: left last.
+						aTextEditor text
+							attributes: {anAttribute}
+							from: right first
+							to: right last ] ].
+	self text
+		attribute: cursorAttribute
+		from: nodeInterval first - 1
+		to: nodeInterval last
 ]
 
 { #category : #generated }
@@ -162,6 +229,108 @@ GtLlmMessageStyler >> styleAutoHiding: anInterval text: aSubText [
 		to: anInterval last
 ]
 
+{ #category : #accessing }
+GtLlmMessageStyler >> styleButton: anAnnotation for: object defaultLabel: aLabelBlock withTool: aBlock [
+	"Style the buttons for gtClass and gtMethod annotations"
+
+	| attribute anId |
+	anAnnotation isDefined ifFalse: [ ^ self ].
+
+	anId := LeTextSnippetAttributeLabelElementId indexed: self nextUniqueId.
+
+	attribute := GtButtonAttribute new
+			beAppend;
+			stencil: [ | button label |
+				label := object
+						ifNil: [ anAnnotation nameNode
+								ifNil: [ '' ]
+								ifNotNil: [ :name | (name value ifNil: [ name ]) source ] ]
+						ifNotNil: [ :obj | 
+							anAnnotation labelNode
+								ifNil: [ aLabelBlock value: obj ]
+								ifNotNil: [ :node | node labelFor: obj ] ].
+				button := LeSnippetStylerVisitor
+						textLinkButtonPadding: (BlInsets top: 2)
+						margin: BlInsets empty.
+				button aptitude glamorousCodeFont.
+				button
+					id: anId;
+					beSmallSize;
+					label: label;
+					action: [ :aButton | aButton phlow spawnTool: (aBlock cull: aButton) ].
+
+				button viewModel
+					when: BlClickEvent
+					do: [ :anEvent | 
+						anEvent modifiers isPrimaryModifier
+							ifTrue: [ | aTool aSpace |
+								aTool := aBlock cull: button.
+								aSpace := BlSpace new.
+								aSpace title: self gtDisplayString.
+								aSpace icon: aTool icon.
+								aSpace extent: 1200 @ 600.
+								aSpace root background: Color transparent.
+								aSpace
+									addChild: (GtPager
+											createOn: (GtPagerWrapperElement new
+													tool: aTool;
+													embellisher: (GtPagerPageEmbellisher new extension: GtPagerPageEmbellisherExtension null))) maximized.
+								aSpace withHalos.
+								button showSpace: aSpace ] ].
+				button viewModel
+					when: BlMouseEnterEvent
+					do: [ :anEvent | 
+						anEvent consumed: true.
+						anEvent modifiers isPrimaryModifier
+							ifTrue: [ anEvent target mouseCursor: BlCopyCursor new ]
+							ifFalse: [ anEvent target mouseCursor: nil ].
+						anEvent target requestFocus ].
+				button ].
+
+	self text
+		attribute: attribute
+		from: anAnnotation parent startPosition
+		to: anAnnotation parent stopPosition
+]
+
+{ #category : #accessing }
+GtLlmMessageStyler >> styleButton: anAnnotation for: object withTool: aBlock [
+	self
+		styleButton: anAnnotation
+		for: object
+		defaultLabel: #printString
+		withTool: aBlock
+]
+
+{ #category : #accessing }
+GtLlmMessageStyler >> styleButton: anAnnotation withTool: aBlock [
+	self
+		styleButton: anAnnotation
+		for: anAnnotation imageObject
+		withTool: aBlock
+]
+
+{ #category : #accessing }
+GtLlmMessageStyler >> styleExpandingObject: aClassAnnotation withDefault: aSymbol [
+	| cacheKey attribute |
+	aClassAnnotation isDefined ifFalse: [ ^ self ].
+
+	cacheKey := aClassAnnotation source.
+
+	attribute := GtCachedTextExpandButtonAttribute new
+			isExpanded: aClassAnnotation expanded;
+			attributesCreatingBlock: [ GtResizablePreviewAttribute new
+					result: aClassAnnotation imageObject;
+					showSelector: (aClassAnnotation showSelector ifNil: [ aSymbol ]);
+					height: (aClassAnnotation height ifNil: [ LepiterConstants defaultPreviewHeight ]) ];
+			onCachingDo: [ :aBoolean :theAttribute |  ].
+
+	self text
+		attribute: attribute
+		from: aClassAnnotation parent startPosition
+		to: aClassAnnotation parent stopPosition
+]
+
 { #category : #generated }
 GtLlmMessageStyler >> styleHeader: aHeaderNode [
 	aHeaderNode parts isEmpty ifTrue: [ ^ self ].
@@ -182,6 +351,21 @@ GtLlmMessageStyler >> styleHeader: aHeaderNode [
 						left: 0
 						bottom: 5
 						right: 0) ]
+]
+
+{ #category : #accessing }
+GtLlmMessageStyler >> styleName: aClassAnnotation spawning: aBlock [
+	| nameNode aLinkColor |
+
+	(nameNode := aClassAnnotation nameNode)
+		ifNil: [ ^ self ].
+
+	aLinkColor := nameNode isDefined
+		ifTrue: [ BrGlamorousColors textMarkupColor ]
+		ifFalse: [ BrGlamorousColors linkWithErrorColor ].
+
+	(self text from: nameNode startPosition to: nameNode stopPosition)
+		foreground: aLinkColor
 ]
 
 { #category : #private }
@@ -276,9 +460,20 @@ GtLlmMessageStyler >> variableBindings [
 	^ GtSharedVariablesBindings new
 ]
 
-{ #category : #'as yet unclassified' }
-GtLlmMessageStyler >> visitClassAnnotation: aLeClassAnnotationNode [ 
-	"self shouldBeImplemented."
+{ #category : #accessing }
+GtLlmMessageStyler >> visitClassAnnotation: aClassAnnotation [
+	self visitAnnotation: aClassAnnotation.
+	self
+		styleName: aClassAnnotation
+		spawning: [ :anEvent | 
+			anEvent target phlow
+				spawnTool: (GtClassCoderTool observedClass: aClassAnnotation imageObject) ].
+	self
+		styleButton: aClassAnnotation
+		withTool: [ GtClassCoderTool forClass: aClassAnnotation imageObject ].
+	self
+		styleExpandingObject: aClassAnnotation
+		withDefault: LepiterConstants defaultClassShowSelector
 ]
 
 { #category : #generated }
@@ -299,7 +494,31 @@ GtLlmMessageStyler >> visitHeader: aHeader [
 	^ self visitContent: aHeader
 ]
 
+{ #category : #generated }
+GtLlmMessageStyler >> visitInlineCode: aCodeNode [
+	| size |
+	size := (aCodeNode code source at: 2) = $` ifTrue: [ 2 ] ifFalse: [ 1 ].
+	(self text from: aCodeNode startPosition to: aCodeNode stopPosition)
+		glamorousCodeFont.
+	self
+		styleAutoHiding: (aCodeNode startPosition
+				to: aCodeNode startPosition + size - 1)
+		and: (aCodeNode stopPosition - size + 1 to: aCodeNode stopPosition)
+		whenOutside: aCodeNode sourceInterval.
+	^ self visitContent: aCodeNode
+]
+
 { #category : #accessing }
-GtLlmMessageStyler >> visitMethodAnnotation: aLeMethodAnnotationNode [ 
-	"self shouldBeImplemented."
+GtLlmMessageStyler >> visitMethodAnnotation: aMethodAnnotation [ 
+	self visitAnnotation: aMethodAnnotation.
+	self
+		styleName: aMethodAnnotation
+		spawning:
+			[ :anEvent | anEvent target phlow spawnObject: aMethodAnnotation imageObject ].
+	self
+		styleButton: aMethodAnnotation
+		withTool: [ GtMethodCoderTool compiledMethod: aMethodAnnotation imageObject ].
+	self
+		styleExpandingObject: aMethodAnnotation
+		withDefault: LepiterConstants defaultMethodShowSelector
 ]
