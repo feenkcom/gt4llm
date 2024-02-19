@@ -123,6 +123,12 @@ GtOpenAIGtTutor >> check: aString [
 ]
 
 { #category : #accessing }
+GtOpenAIGtTutor >> cleanUp [
+	self deleteAssistant.
+	self deleteFiles
+]
+
+{ #category : #accessing }
 GtOpenAIGtTutor >> createAssistant [
 	assistant := client
 			createAssistant: (GtOpenAIAssistant new
@@ -260,8 +266,7 @@ GtOpenAIGtTutor >> files: aCollection [
 
 { #category : #accessing }
 GtOpenAIGtTutor >> finalize [
-	self deleteAssistant.
-	self deleteFiles.
+	self cleanUp.
 	
 	super finalize
 ]
@@ -279,6 +284,18 @@ GtOpenAIGtTutor >> gtChatsFor: aView [
 			action: [ :aButton :aTab | 
 				self addChat.
 				aTab viewContentElement phlow update ]
+]
+
+{ #category : #accessing }
+GtOpenAIGtTutor >> gtCleanUpFor: anAction [
+	<gtAction>
+	self hasAssistant ifFalse: [ ^ anAction noAction ].
+
+	^ anAction button
+		icon: BrGlamorousVectorIcons cancel;
+		tooltip: 'Clean up assistant and files';
+		priority: 1;
+		action: [ self cleanUp ]
 ]
 
 { #category : #accessing }
@@ -310,6 +327,11 @@ GtOpenAIGtTutor >> gtSummaryFor: aView [
 		column: 'Property' text: #key;
 		column: 'Value' text: #value;
 		send: #value
+]
+
+{ #category : #accessing }
+GtOpenAIGtTutor >> hasAssistant [
+	^ assistant isNotNil
 ]
 
 { #category : #accessing }
