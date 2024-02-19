@@ -1,15 +1,22 @@
 Class {
 	#name : #GtLlmMessageStyler,
 	#superclass : #BlTextStyler,
-	#traits : 'TLeContentNodeVisitor',
-	#classTraits : 'TLeContentNodeVisitor classTrait',
+	#traits : 'TLeAnnotationParseNodeVisitor + (TLeContentNodeVisitor - {#visitAnnotation:})',
+	#classTraits : 'TLeAnnotationParseNodeVisitor classTrait + TLeContentNodeVisitor classTrait',
 	#instVars : [
 		'executionResults',
 		'threadMessageViewModel',
-		'lastId'
+		'lastId',
+		'expanded',
+		'elements'
 	],
 	#category : #'Gt4Llm-Stylers'
 }
+
+{ #category : #accessing }
+GtLlmMessageStyler >> elements [
+	^ elements
+]
 
 { #category : #generated }
 GtLlmMessageStyler >> evaluateCodeBlock: aCodeBlock expanded: aBoolean from: aButton [
@@ -72,6 +79,11 @@ GtLlmMessageStyler >> executionResults: anObject [
 	executionResults := anObject
 ]
 
+{ #category : #accessing }
+GtLlmMessageStyler >> expanded [
+	^ expanded
+]
+
 { #category : #generated }
 GtLlmMessageStyler >> fontSizeForHeadingLevel: aHeadingLevel [
 	"Compute the relative (em) font size for a text with a given heading level (1-6)"
@@ -98,7 +110,10 @@ GtLlmMessageStyler >> fontSizeForHeadingLevel: aHeadingLevel [
 GtLlmMessageStyler >> initialize [
 	super initialize.
 	
-	executionResults := Dictionary new
+	executionResults := Dictionary new.
+	lastId := 0.
+	elements := Dictionary new.
+	expanded := Dictionary new
 ]
 
 { #category : #generated }
@@ -229,6 +244,49 @@ GtLlmMessageStyler >> styleAutoHiding: anInterval text: aSubText [
 		to: anInterval last
 ]
 
+{ #category : #generated }
+GtLlmMessageStyler >> styleAutoHidingAnnotation: anAnnotation [
+	| anAttribute aMarkerAttribute aStartPositionToHide aStopPositionToHide anAnnotationTextToHide aSurroundingTextToRespondToCursor aStartPositionToReactToCursor aStopPositionToReactToCursor |
+	anAnnotation isDefined ifFalse: [ ^ self ].
+
+	aStartPositionToHide := anAnnotation parent startPosition max: 1.
+	aStopPositionToHide := anAnnotation parent stopPosition min: self text size.
+	aStartPositionToReactToCursor := aStartPositionToHide - 2 max: 1.
+	aStopPositionToReactToCursor := aStopPositionToHide + 1 min: self text size.
+
+	anAnnotationTextToHide := self text
+			from: aStartPositionToHide
+			to: aStopPositionToHide.
+	aSurroundingTextToRespondToCursor := self text
+			from: aStartPositionToReactToCursor
+			to: aStopPositionToReactToCursor.
+
+	aMarkerAttribute := BrTextInvisibleMarkerAttribute new.	"so that we will be able to find where to add adornment attribute dynamically"
+	anAnnotationTextToHide attribute: aMarkerAttribute.
+
+	anAttribute := BrTextHideAttribute new.
+
+	anAnnotationTextToHide attribute: anAttribute.
+
+	aSurroundingTextToRespondToCursor
+		onCursorEnter: [  "we have a reference to the attribute instance. find its interval dynamically":aTextEditor | 
+			aTextEditor text
+				findAttribute: aMarkerAttribute
+				indicesDo: [ :aStart :anEnd | 
+					aTextEditor text
+						clearAttributes: aStart
+						to: anEnd
+						if: [ :eachAttribute | eachAttribute == anAttribute ] ] ]
+		leave: [ :aTextEditor | 
+			aTextEditor text
+				findAttribute: aMarkerAttribute
+				indicesDo: [ :aStart :anEnd | 
+					aTextEditor text
+						attribute: anAttribute
+						from: aStart
+						to: anEnd ] ]
+]
+
 { #category : #accessing }
 GtLlmMessageStyler >> styleButton: anAnnotation for: object defaultLabel: aLabelBlock withTool: aBlock [
 	"Style the buttons for gtClass and gtMethod annotations"
@@ -318,12 +376,13 @@ GtLlmMessageStyler >> styleExpandingObject: aClassAnnotation withDefault: aSymbo
 	cacheKey := aClassAnnotation source.
 
 	attribute := GtCachedTextExpandButtonAttribute new
-			isExpanded: aClassAnnotation expanded;
+			isExpanded: (self expanded at: cacheKey ifAbsentPut: [ aClassAnnotation expanded ]);
 			attributesCreatingBlock: [ GtResizablePreviewAttribute new
+					withCache: self elements key: cacheKey;
 					result: aClassAnnotation imageObject;
 					showSelector: (aClassAnnotation showSelector ifNil: [ aSymbol ]);
 					height: (aClassAnnotation height ifNil: [ LepiterConstants defaultPreviewHeight ]) ];
-			onCachingDo: [ :aBoolean :theAttribute |  ].
+			onCachingDo: [ :aBoolean :theAttribute | self expanded at: cacheKey put: aBoolean ].
 
 	self text
 		attribute: attribute
@@ -458,6 +517,12 @@ GtLlmMessageStyler >> threadMessageViewModel: anObject [
 { #category : #generated }
 GtLlmMessageStyler >> variableBindings [
 	^ GtSharedVariablesBindings new
+]
+
+{ #category : #generated }
+GtLlmMessageStyler >> visitAnnotation: anAnnotation [
+	self styleAutoHidingAnnotation: anAnnotation.
+	^ self visitAnnotationParse: anAnnotation
 ]
 
 { #category : #accessing }
