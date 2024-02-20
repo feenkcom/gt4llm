@@ -10,6 +10,14 @@ Class {
 }
 
 { #category : #accessing }
+GtLlmViewObject >> createErrorString: anError [
+	^ 'Encountered an error in the view: ' , anError messageText
+		, '
+Trace:
+' , (self createStackString: anError)
+]
+
+{ #category : #accessing }
 GtLlmViewObject >> createStackString: anError [
 	(anError isKindOf: SyntaxErrorNotification)
 		ifTrue: [ ^ 'Syntax Error: ' , anError messageText ].
@@ -39,7 +47,7 @@ GtLlmViewObject >> gtViewFor: aView [
 							sendMessage: (GtLlmCheckerError new
 									checker: self;
 									content: anError;
-									contentString: (self createStackString: anError)) asString ] ]
+									contentString: (self createErrorString: anError)) asString ] ]
 ]
 
 { #category : #accessing }

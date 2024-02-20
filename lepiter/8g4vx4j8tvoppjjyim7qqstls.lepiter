@@ -523,20 +523,20 @@
 				},
 				"editEmail" : {
 					"__type" : "email",
-					"emailString" : "veit.heller@feenk.com"
+					"emailString" : "<unknown>"
 				},
 				"editTime" : {
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-19T12:38:41.732893+01:00"
+						"dateAndTimeString" : "2024-02-20T15:40:44.358045+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "Tun/ZRrODQCsnhO4B1Szjg=="
 				},
-				"code" : "chat sendMessage: 'That looks great. Please provide me with a simple phlow view method on the resulting object''s class.'"
+				"code" : "chat sendMessage: 'That looks great. Please provide me with a simple phlow view method on the resulting object''s class. Use the view examples you have access to understand the API.'"
 			},
 			{
 				"__type" : "textSnippet",
