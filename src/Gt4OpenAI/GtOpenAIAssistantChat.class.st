@@ -155,6 +155,11 @@ GtOpenAIAssistantChat >> lastUpdate [
 ]
 
 { #category : #accessing }
+GtOpenAIAssistantChat >> maximumMessageSize [
+	^ 30000
+]
+
+{ #category : #accessing }
 GtOpenAIAssistantChat >> messages [
 	<return: #GtOpenAIThreadMessagesGroup>
 	| givenMessages |
@@ -184,15 +189,19 @@ GtOpenAIAssistantChat >> runFuture [
 
 { #category : #accessing }
 GtOpenAIAssistantChat >> sendMessage: aString [
-	| aMessage |
-	aMessage := GtOpenAIUserMessage new content: aString.
+	| aMessage output |
+	output := aString.
+	output size > self maximumMessageSize
+		ifTrue: [ output := output first: self maximumMessageSize ].
+	aMessage := GtOpenAIUserMessage new content: output.
 
 	assistant client addMessage: aMessage toThread: thread id.
 	lastRun := assistant client
 			createRunForThread: thread id
 			usingAssistant: assistant id.
 
-	self announcer announce: (GtOpenAIThreadRunStartedAnnouncement new run: lastRun).
+	self announcer
+		announce: (GtOpenAIThreadRunStartedAnnouncement new run: lastRun).
 
 	future := (self runFuture
 			then: [ :aRun | self announcer announce: (GtOpenAIThreadRunIsDoneAnnouncement new run: aRun) ])
