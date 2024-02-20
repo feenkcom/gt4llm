@@ -25,8 +25,6 @@ GtLlmMessageStyler >> evaluateCodeBlock: aCodeBlock expanded: aBoolean from: aBu
 
 	aResult := self threadMessageViewModel codeBlockChecker check: source.
 
-	aResult threadMessage: self threadMessageViewModel threadMessage.
-
 	position := source size.
 	[ position > 1 and: [ (source at: position) isLineBreak ] ]
 		whileTrue: [ position := position - 1 ].

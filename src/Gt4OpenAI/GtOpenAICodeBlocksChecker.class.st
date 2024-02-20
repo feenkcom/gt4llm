@@ -3,7 +3,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'codeBlocks',
-		'pipeline'
+		'pipeline',
+		'threadMessage'
 	],
 	#category : #'Gt4OpenAI-Executor'
 }
@@ -20,7 +21,7 @@ GtOpenAICodeBlocksChecker >> check [
 
 { #category : #accessing }
 GtOpenAICodeBlocksChecker >> check: aString [
-	^ pipeline check: aString
+	^ (pipeline check: aString) threadMessage: self threadMessage
 ]
 
 { #category : #accessing }
@@ -59,4 +60,14 @@ GtOpenAICodeBlocksChecker >> gtCodeBlocksFor: aView [
 { #category : #accessing }
 GtOpenAICodeBlocksChecker >> pipeline: aPipeline [
 	pipeline := aPipeline
+]
+
+{ #category : #accessing }
+GtOpenAICodeBlocksChecker >> threadMessage [
+	^ threadMessage
+]
+
+{ #category : #accessing }
+GtOpenAICodeBlocksChecker >> threadMessage: anObject [
+	threadMessage := anObject
 ]

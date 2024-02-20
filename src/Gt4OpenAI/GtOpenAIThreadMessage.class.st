@@ -79,7 +79,8 @@ GtOpenAIThreadMessage >> chat: anObject [
 GtOpenAIThreadMessage >> codeBlockChecker [
 	^ GtOpenAICodeBlocksChecker new
 		codeBlocks: self codeBlocks;
-		pipeline: pipeline
+		pipeline: pipeline;
+		threadMessage: self
 ]
 
 { #category : #accessing }
