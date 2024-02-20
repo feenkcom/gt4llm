@@ -13,6 +13,21 @@ GtOpenAIAssistantChatDynamicStatus >> gtDisplayOn: stream [
 ]
 
 { #category : #accessing }
+GtOpenAIAssistantChatDynamicStatus >> isDone [
+	^ threadRun isDone
+]
+
+{ #category : #accessing }
+GtOpenAIAssistantChatDynamicStatus >> isFailed [
+	^ threadRun isFailed
+]
+
+{ #category : #accessing }
+GtOpenAIAssistantChatDynamicStatus >> message [
+	^ threadRun failureMessage
+]
+
+{ #category : #accessing }
 GtOpenAIAssistantChatDynamicStatus >> threadRun [
 	^ threadRun
 ]

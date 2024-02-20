@@ -43,6 +43,11 @@ GtOpenAIAssistantChat >> assistant: anObject [
 	self onAssistantSet
 ]
 
+{ #category : #'as yet unclassified' }
+GtOpenAIAssistantChat >> checkerInstance [
+	^ pipeline instance
+]
+
 { #category : #accessing }
 GtOpenAIAssistantChat >> getRun [
 	lastRun := self assistant client getRun: lastRun id forThread: thread id.
@@ -196,7 +201,7 @@ GtOpenAIAssistantChat >> sendMessage: aString [
 
 { #category : #accessing }
 GtOpenAIAssistantChat >> status [
-	^ GtOpenAIAssistantChatStatus forLastRun: self
+	^ GtOpenAIAssistantChatStatus forLastRun: lastRun
 ]
 
 { #category : #accessing }

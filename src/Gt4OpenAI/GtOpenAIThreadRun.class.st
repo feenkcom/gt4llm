@@ -111,6 +111,11 @@ GtOpenAIThreadRun >> failedAt: anObject [
 ]
 
 { #category : #accessing }
+GtOpenAIThreadRun >> failureMessage [
+	^ self lastError at: 'message'
+]
+
+{ #category : #accessing }
 GtOpenAIThreadRun >> fileIds [
 	^ fileIds
 ]
@@ -145,7 +150,7 @@ GtOpenAIThreadRun >> gtErrorFor: aView [
 	^ aView textEditor
 		title: 'Failure';
 		priority: 1;
-		text: [ self lastError at: 'message' ]
+		text: [ self failureMessage ]
 ]
 
 { #category : #accessing }

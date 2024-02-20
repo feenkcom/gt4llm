@@ -117,7 +117,7 @@ GtOpenAIThreadMessageElement >> subscribeToThreadMessageViewModel [
 { #category : #'private - updating' }
 GtOpenAIThreadMessageElement >> updateContentsElement [
 	contentsElement
-		text: self threadMessage contentText;
+		text: self threadMessageViewModel contentText;
 		styler: self threadMessageViewModel styler
 ]
 

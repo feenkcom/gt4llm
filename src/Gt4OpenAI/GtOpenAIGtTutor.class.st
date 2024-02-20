@@ -357,7 +357,7 @@ GtOpenAIGtTutor >> initialize [
 	assistantDescription := self defaultAssistantDescription.
 	tools := self defaultTools.
 	chats := GtOpenAIAssistantChatGroup new.
-	pipeline :=  GtLlmCheckPipeline defaultPipeline.
+	pipeline :=  GtLlmContext defaultPipeline.
 	files := GtOpenAIResourceFilesGroup withAll: self defaultFiles.
 	apiFiles := GtOpenAIFilesGroup new
 ]

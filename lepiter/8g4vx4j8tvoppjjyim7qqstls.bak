@@ -671,14 +671,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-20T10:01:43.402052+01:00"
+						"dateAndTimeString" : "2024-02-20T10:31:17.580067+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "V7o9Li7ODQC7DiLJAJOAxA=="
 				},
-				"code" : "results := chat messages first methods first addToSystem\r\"in case the method already exists, we can call replaceInSystem instead\""
+				"code" : "result := chat messages first methods first addToSystem\r\"in case the method already exists, we can call replaceInSystem instead\""
 			},
 			{
 				"__type" : "textSnippet",
@@ -742,14 +742,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-20T10:16:14.122689+01:00"
+						"dateAndTimeString" : "2024-02-20T14:06:57.976331+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "oqFXShzODQCAedAsB1Szjg=="
 				},
-				"code" : "10 / 3"
+				"code" : ""
 			},
 			{
 				"__type" : "textSnippet",
@@ -787,6 +787,40 @@
 					"__type" : "textStyle"
 				},
 				"string" : "If desired, we can also remove the method again."
+			},
+			{
+				"__type" : "pharoSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-02-20T10:16:33.766384+01:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-02-20T10:31:19.626351+01:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "DAhHZy7ODQCGuPwTAJOAxA=="
+				},
+				"code" : "result := chat messages first methods first removeFromSystem"
 			},
 			{
 				"__type" : "textSnippet",
