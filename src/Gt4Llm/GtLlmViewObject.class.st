@@ -34,7 +34,29 @@ GtLlmViewObject >> createStackString: anError [
 { #category : #accessing }
 GtLlmViewObject >> gtViewFor: aView [
 	<gtView>
-	[ ^ self instance perform: self view selector withArguments: {aView} ]
+	| scripter |
+	[ | createdView |
+	createdView := self instance perform: self view selector withArguments: {aView}.
+	createdView
+		asElementDo: [ :anElement | 
+			scripter := BlScripter new.
+			scripter element: anElement.
+			scripter elementWithoutParent.
+			((anElement query // GtPhlowExceptionId) all
+				collect: [ :anErrorElement | anErrorElement userData at: #exception ])
+				ifNotEmpty: [ :aList | 
+					^ aView list
+						title: 'View errors';
+						priority: 1;
+						items: aList;
+						actionButtonIcon: BrGlamorousVectorIcons play
+							tooltip: 'Send to chat'
+							action: [ self threadMessage chat
+									sendMessage: (GtLlmCheckerError new
+											checker: self;
+											content: aList;
+											contentString: (self createErrorString: aList first)) asString ] ] ].
+	^ createdView ]
 		on: Error
 		do: [ :anError | 
 			^ aView textEditor

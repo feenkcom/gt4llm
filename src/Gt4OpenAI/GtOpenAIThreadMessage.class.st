@@ -267,3 +267,11 @@ GtOpenAIThreadMessage >> threadId [
 GtOpenAIThreadMessage >> threadId: anObject [
 	threadId := anObject
 ]
+
+{ #category : #'as yet unclassified' }
+GtOpenAIThreadMessage >> viewObjectFor: anObject [
+	^ GtLlmViewObject new
+		instance: self chat checkerInstance;
+		view: anObject;
+		threadMessage: self
+]
