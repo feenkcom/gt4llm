@@ -14,3 +14,8 @@ GtOpenAIAssistantChatStatus class >> forLastRun: aGtOpenAIThreadRun [
 	aGtOpenAIThreadRun ifNil: [ ^ GtOpenAIAssistantChatReadyStatus default ].
 	^ GtOpenAIAssistantChatDynamicStatus new threadRun: aGtOpenAIThreadRun
 ]
+
+{ #category : #accessing }
+GtOpenAIAssistantChatStatus >> isDone [
+	^ self subclassResponsibility
+]

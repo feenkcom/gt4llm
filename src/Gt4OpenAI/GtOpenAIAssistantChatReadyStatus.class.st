@@ -10,3 +10,8 @@ Class {
 GtOpenAIAssistantChatReadyStatus >> gtDisplayOn: stream [
 	stream nextPutAll: 'Ready'
 ]
+
+{ #category : #accessing }
+GtOpenAIAssistantChatReadyStatus >> isDone [
+	^ true
+]

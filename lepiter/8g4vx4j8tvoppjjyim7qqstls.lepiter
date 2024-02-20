@@ -671,14 +671,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-20T10:01:43.402052+01:00"
+						"dateAndTimeString" : "2024-02-20T10:31:17.580067+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "V7o9Li7ODQC7DiLJAJOAxA=="
 				},
-				"code" : "results := chat messages first methods first addToSystem\r\"in case the method already exists, we can call replaceInSystem instead\""
+				"code" : "result := chat messages first methods first addToSystem\r\"in case the method already exists, we can call replaceInSystem instead\""
 			},
 			{
 				"__type" : "textSnippet",
@@ -705,7 +705,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-20T10:01:19.486979+01:00"
+						"dateAndTimeString" : "2024-02-20T14:07:12.420946+01:00"
 					}
 				},
 				"uid" : {
@@ -715,7 +715,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : " Now we either take the fraction instance from the snippet above or, for convience, just create a new one ourselves."
+				"string" : " Now we inspect the fraction instance."
 			},
 			{
 				"__type" : "pharoSnippet",
@@ -742,14 +742,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-20T10:16:14.122689+01:00"
+						"dateAndTimeString" : "2024-02-20T14:07:20.612159+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "oqFXShzODQCAedAsB1Szjg=="
 				},
-				"code" : "10 / 3"
+				"code" : "chat checkerInstance"
 			},
 			{
 				"__type" : "textSnippet",
@@ -813,14 +813,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-20T10:16:41.72528+01:00"
+						"dateAndTimeString" : "2024-02-20T10:31:19.626351+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "DAhHZy7ODQCGuPwTAJOAxA=="
 				},
-				"code" : "results := chat messages first methods first removeFromSystem"
+				"code" : "result := chat messages first methods first removeFromSystem"
 			},
 			{
 				"__type" : "textSnippet",

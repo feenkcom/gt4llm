@@ -31,6 +31,11 @@ GtOpenAIBasicThreadMessageViewModel >> checkRunResultViewModelFor: aCheckRunResu
 ]
 
 { #category : #accessing }
+GtOpenAIBasicThreadMessageViewModel >> checkerInstance [
+	^ threadMessage chat checkerInstance
+]
+
+{ #category : #accessing }
 GtOpenAIBasicThreadMessageViewModel >> codeBlockChecker [
 	^ threadMessage codeBlockChecker
 ]
