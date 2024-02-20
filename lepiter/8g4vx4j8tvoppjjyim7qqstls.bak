@@ -705,7 +705,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-20T14:07:12.420946+01:00"
+						"dateAndTimeString" : "2024-02-20T19:16:39.366978+01:00"
 					}
 				},
 				"uid" : {
@@ -715,7 +715,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : " Now we inspect the fraction instance."
+				"string" : " We can also inspect the fraction instance to see it there."
 			},
 			{
 				"__type" : "pharoSnippet",
