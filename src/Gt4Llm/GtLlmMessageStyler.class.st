@@ -67,10 +67,7 @@ GtLlmMessageStyler >> evaluateMethodBlock: aCodeBlock expanded: aBoolean from: a
 					ifFalse: [ | potentialView |
 						potentialView := aResult lastResult content.
 						(potentialView hasPragmaNamed: #gtView)
-							ifTrue: [ GtLlmViewObject new
-									instance: self threadMessageViewModel checkerInstance;
-									view: potentialView;
-									threadMessage: self threadMessageViewModel threadMessage ]
+							ifTrue: [ self threadMessageViewModel viewObjectFor: potentialView ]
 							ifFalse: [ potentialView ] ].
 			aButton phlow spawnObject: toSpawn ]
 ]
