@@ -9,6 +9,14 @@ Class {
 }
 
 { #category : #accessing }
+GtLlmMessageMethod >> addRefactoring [
+	^ RBAddMethodRefactoring
+		addMethod: methodBody
+		toClass: methodClass
+		inProtocols: {'generated - gpt'}
+]
+
+{ #category : #accessing }
 GtLlmMessageMethod >> addToSystem [
 	^ GtLlmCheckRunResult new
 		checkers: (GtLlmCheckerGroup withAll: {self});
@@ -30,10 +38,7 @@ GtLlmMessageMethod >> coder [
 GtLlmMessageMethod >> doAddRefactoring [
 	^ self
 		doRefactoring: [ | refactoring |
-			refactoring := RBAddMethodRefactoring
-					addMethod: methodBody
-					toClass: methodClass
-					inProtocols: {'generated - gpt'}.
+			refactoring := self addRefactoring.
 			refactoring execute ]
 ]
 
@@ -48,21 +53,27 @@ GtLlmMessageMethod >> doRefactoring: aBlock [
 				contentString: anError messageText ].
 	^ GtLlmCheckerSuccess new
 		checker: self;
-		content: self methodClass >> self methodSelector
+		content: (self methodClass
+				compiledMethodAt: self methodSelector
+				ifAbsent: 'Removed method from system')
+]
+
+{ #category : #accessing }
+GtLlmMessageMethod >> doRemoveRefactoring [
+	^ self
+		doRefactoring: [ | refactoring |
+			refactoring := self removeRefactoring.
+			refactoring execute ]
 ]
 
 { #category : #accessing }
 GtLlmMessageMethod >> doReplaceRefactoring [
-	^ self doRefactoring: [ | refactoring |
-	refactoring := RBRemoveMethodRefactoring
-			removeMethods: {self methodSelector}
-			from: methodClass.
-	refactoring execute.
-	refactoring := RBAddMethodRefactoring
-			addMethod: methodBody
-			toClass: methodClass
-			inProtocols: {'generated - gpt'}.
-	refactoring execute ]
+	^ self
+		doRefactoring: [ | refactoring |
+			refactoring := self removeRefactoring.
+			refactoring execute.
+			refactoring := self addRefactoring.
+			refactoring execute ]
 ]
 
 { #category : #accessing }
@@ -115,6 +126,20 @@ GtLlmMessageMethod >> methodSelector [
 	^ (''
 		join: ((' ' split: methodBody lines first)
 				withIndexSelect: [ :anElement :anIndex | anIndex \\ 2 = 1 ])) asSymbol
+]
+
+{ #category : #accessing }
+GtLlmMessageMethod >> removeFromSystem [
+	^ GtLlmCheckRunResult new
+		checkers: (GtLlmCheckerGroup withAll: {self});
+		addResult: self doRemoveRefactoring for: self
+]
+
+{ #category : #accessing }
+GtLlmMessageMethod >> removeRefactoring [
+	^ RBRemoveMethodRefactoring
+		removeMethods: {self methodSelector}
+		from: methodClass
 ]
 
 { #category : #accessing }

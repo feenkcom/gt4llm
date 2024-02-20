@@ -736,20 +736,57 @@
 				},
 				"editEmail" : {
 					"__type" : "email",
-					"emailString" : "veit.heller@feenk.com"
+					"emailString" : "<unknown>"
 				},
 				"editTime" : {
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-19T12:47:26.059473+01:00"
+						"dateAndTimeString" : "2024-02-20T10:16:14.122689+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "oqFXShzODQCAedAsB1Szjg=="
 				},
-				"code" : "10 / 3\t"
+				"code" : "10 / 3"
+			},
+			{
+				"__type" : "textSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-02-20T10:16:16.8739+01:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-02-20T10:16:25.44858+01:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "LUdFZi7ODQCFxBpGAJOAxA=="
+				},
+				"paragraphStyle" : {
+					"__type" : "textStyle"
+				},
+				"string" : "If desired, we can also remove the method again."
 			},
 			{
 				"__type" : "textSnippet",
@@ -818,14 +855,14 @@
 								"__type" : "time",
 								"time" : {
 									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2024-02-20T10:13:56.225849+01:00"
+									"dateAndTimeString" : "2024-02-20T10:14:20.383227+01:00"
 								}
 							},
 							"uid" : {
 								"__type" : "uid",
 								"uidString" : "zAuAXC7ODQCCVV/7AJOAxA=="
 							},
-							"code" : "chat sendMessage: 'It looks like this view is a columned list, but doesn’t have any c'"
+							"code" : "chat sendMessage: 'It looks like this view is a columned list, but doesn’t have any columns defined. Add the columns and update the method definition.'"
 						}
 					]
 				},

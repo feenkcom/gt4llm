@@ -63,6 +63,29 @@ GtLlmMessageStyler >> evaluateMethodBlock: aCodeBlock expanded: aBoolean from: a
 	aBoolean ifTrue: [ aButton phlow spawnObject: aResult value ]
 ]
 
+{ #category : #generated }
+GtLlmMessageStyler >> evaluateMethodBlockRemoval: aCodeBlock expanded: aBoolean from: aButton [
+	| aResult position source aMethod |
+	source := aCodeBlock code source.
+	aMethod := self methodCodeBlock: aCodeBlock.
+
+	aResult := aMethod removeFromSystem.
+
+	aResult threadMessage: self threadMessageViewModel threadMessage.
+
+	position := source size.
+	[ position > 1 and: [ (source at: position) isLineBreak ] ]
+		whileTrue: [ position := position - 1 ].
+	self executionResults
+		at: aCodeBlock code
+		put: (LeEvaluationResult new
+				value: aResult;
+				expanded: aBoolean;
+				position: position).
+	self threadMessageViewModel requestStyleSourceText.
+	aBoolean ifTrue: [ aButton phlow spawnObject: aResult value ]
+]
+
 { #category : #accessing }
 GtLlmMessageStyler >> executionResults [
 	"Keys are {{gtClass:SmaCCToken}} that defines a text that was evaluated.
@@ -470,7 +493,7 @@ GtLlmMessageStyler >> styleSmalltalkCodeBlock: aCodeNode [
 
 { #category : #private }
 GtLlmMessageStyler >> styleSmalltalkMethod: aCodeNode [
-	| methodCodeBlock tooltip isReplace |
+	| methodCodeBlock tooltip isReplace attributes |
 	(aCodeNode isForLanguage: 'smalltalk-method') ifFalse: [ ^ self ].
 
 	methodCodeBlock := self methodCodeBlock: aCodeNode.
@@ -480,18 +503,33 @@ GtLlmMessageStyler >> styleSmalltalkMethod: aCodeNode [
 		ifFalse: [ tooltip := 'Add Method'.
 			isReplace := false ].
 
+	attributes := {GtButtonAttribute new
+				beAppend;
+				stencil: [ GtButtonStencil new
+						icon: BrGlamorousVectorIcons playinspect;
+						tooltip: tooltip;
+						action: [ :aWidget :aButtonModel | 
+							self
+								evaluateMethodBlock: aCodeNode
+								expanded: true
+								from: aWidget
+								isReplace: isReplace ] ]} asOrderedCollection.
+
+	isReplace
+		ifTrue: [ attributes
+				add: (GtButtonAttribute new
+						beAppend;
+						stencil: [ GtButtonStencil new
+								icon: BrGlamorousVectorIcons remove;
+								tooltip: 'Remove method';
+								action: [ :aWidget :aButtonModel | 
+									self
+										evaluateMethodBlockRemoval: aCodeNode
+										expanded: true
+										from: aWidget ] ]) ].
+
 	(text from: aCodeNode stopPosition to: aCodeNode stopPosition)
-		attributes: {GtButtonAttribute new
-					beAppend;
-					stencil: [ GtButtonStencil new
-							icon: BrGlamorousVectorIcons playinspect;
-							tooltip: tooltip;
-							action: [ :aWidget :aButtonModel | 
-								self
-									evaluateMethodBlock: aCodeNode
-									expanded: true
-									from: aWidget
-									isReplace: isReplace ] ]}.
+		attributes: attributes.
 	self executionResults
 		at: aCodeNode code
 		ifPresent: [ :result | self styleResult: result for: aCodeNode ]
