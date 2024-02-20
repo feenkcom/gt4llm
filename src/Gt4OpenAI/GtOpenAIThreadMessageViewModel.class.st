@@ -13,3 +13,8 @@ GtOpenAIThreadMessageViewModel >> contentText [
 GtOpenAIThreadMessageViewModel >> elementClass [
 	^ GtOpenAIThreadMessageElement
 ]
+
+{ #category : #testing }
+GtOpenAIThreadMessageViewModel >> isFailure [
+	^ threadMessage isFailure
+]
