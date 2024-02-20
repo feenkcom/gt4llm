@@ -523,20 +523,20 @@
 				},
 				"editEmail" : {
 					"__type" : "email",
-					"emailString" : "veit.heller@feenk.com"
+					"emailString" : "<unknown>"
 				},
 				"editTime" : {
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-19T12:38:41.732893+01:00"
+						"dateAndTimeString" : "2024-02-20T15:40:34.073881+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "Tun/ZRrODQCsnhO4B1Szjg=="
 				},
-				"code" : "chat sendMessage: 'That looks great. Please provide me with a simple phlow view method on the resulting object''s class.'"
+				"code" : "chat sendMessage: 'That looks great. Please provide me with a simple phlow view method on the resulting object''s class. Use the view examples you have access to ifnrom the '"
 			},
 			{
 				"__type" : "textSnippet",
@@ -705,7 +705,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-20T10:01:19.486979+01:00"
+						"dateAndTimeString" : "2024-02-20T14:07:12.420946+01:00"
 					}
 				},
 				"uid" : {
@@ -715,7 +715,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : " Now we either take the fraction instance from the snippet above or, for convience, just create a new one ourselves."
+				"string" : " Now we inspect the fraction instance."
 			},
 			{
 				"__type" : "pharoSnippet",
@@ -742,14 +742,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-20T14:06:57.976331+01:00"
+						"dateAndTimeString" : "2024-02-20T14:07:20.612159+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "oqFXShzODQCAedAsB1Szjg=="
 				},
-				"code" : ""
+				"code" : "chat checkerInstance"
 			},
 			{
 				"__type" : "textSnippet",
