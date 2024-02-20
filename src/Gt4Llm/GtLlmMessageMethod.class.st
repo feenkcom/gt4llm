@@ -55,7 +55,8 @@ GtLlmMessageMethod >> doRefactoring: aBlock [
 		checker: self;
 		content: (self methodClass
 				compiledMethodAt: self methodSelector
-				ifAbsent: 'Removed method from system')
+				ifAbsent: [ 'Removed method from system: ' , self methodClass asString , '>>'
+						, self methodSelector ])
 ]
 
 { #category : #accessing }
