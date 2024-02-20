@@ -9,7 +9,7 @@ Class {
 
 { #category : #accessing }
 GtLlmCheckerError class >> prefix [
-	^ 'LAST SCRIPT ERROR: '
+	^ 'The last script had a problem: '
 ]
 
 { #category : #accessing }

@@ -49,6 +49,11 @@ GtOpenAIAssistantChat >> checkerInstance [
 ]
 
 { #category : #accessing }
+GtOpenAIAssistantChat >> checkerInstance: anObject [
+	pipeline instance: anObject
+]
+
+{ #category : #accessing }
 GtOpenAIAssistantChat >> getRun [
 	lastRun := self assistant client getRun: lastRun id forThread: thread id.
 
@@ -89,7 +94,7 @@ GtOpenAIAssistantChat >> gtMessagesWidgetFor: aView [
 	| aViewModel |
 	^ aView explicit
 		title: 'Messages';
-		priority: 1;
+		priority: 0;
 		stencil: [ aViewModel
 				ifNil: [ aViewModel := GtOpenAIAssistantChatViewModel new assistantChat: self ].
 			GtOpenAIAssistantChatElement new assistantChatViewModel: aViewModel ];
@@ -101,7 +106,7 @@ GtOpenAIAssistantChat >> gtSummaryFor: aView [
 	<gtView>
 	^ aView columnedList
 		title: 'Summary';
-		priority: 0;
+		priority: 1;
 		items: [ self summary ];
 		column: 'Property' text: #key;
 		column: 'Value' text: #value;
