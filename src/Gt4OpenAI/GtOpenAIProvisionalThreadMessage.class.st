@@ -1,6 +1,8 @@
 Class {
 	#name : #GtOpenAIProvisionalThreadMessage,
 	#superclass : #Object,
+	#traits : 'TGtOpenAIThreadMessage',
+	#classTraits : 'TGtOpenAIThreadMessage classTrait',
 	#category : #'Gt4OpenAI-Widgets'
 }
 

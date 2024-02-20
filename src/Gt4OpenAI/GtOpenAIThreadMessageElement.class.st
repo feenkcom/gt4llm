@@ -126,6 +126,14 @@ GtOpenAIThreadMessageElement >> updateElement [
 	self updateSenderElement.
 	self updateContentsElement.
 	self updateProgressElement.
+	self updateFailureIndicator.
+]
+
+{ #category : #'private - updating' }
+GtOpenAIThreadMessageElement >> updateFailureIndicator [
+	self threadMessageViewModel isFailure
+		ifTrue: [ self border: BrGlamorousColors errorBackgroundColor ]
+		ifFalse: [ self border: BlBorder empty ]
 ]
 
 { #category : #'private - updating' }

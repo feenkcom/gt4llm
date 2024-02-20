@@ -1,6 +1,8 @@
 Class {
 	#name : #GtOpenAIFailureThreadMessage,
 	#superclass : #Object,
+	#traits : 'TGtOpenAIThreadMessage',
+	#classTraits : 'TGtOpenAIThreadMessage classTrait',
 	#instVars : [
 		'failureText'
 	],
@@ -14,7 +16,7 @@ GtOpenAIFailureThreadMessage >> annotations [
 
 { #category : #accessing }
 GtOpenAIFailureThreadMessage >> contentText [
-	^ self failureText
+	^ self failureText ifNil: [ '' ]
 ]
 
 { #category : #accessing }
@@ -44,6 +46,11 @@ GtOpenAIFailureThreadMessage >> id [
 
 { #category : #testing }
 GtOpenAIFailureThreadMessage >> isAssistantRole [
+	^ true
+]
+
+{ #category : #accessing }
+GtOpenAIFailureThreadMessage >> isFailure [
 	^ true
 ]
 
