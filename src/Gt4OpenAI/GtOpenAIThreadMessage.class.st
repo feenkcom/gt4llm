@@ -1,6 +1,8 @@
 Class {
 	#name : #GtOpenAIThreadMessage,
 	#superclass : #GtOpenAIEntity,
+	#traits : 'TGtOpenAIThreadMessage',
+	#classTraits : 'TGtOpenAIThreadMessage classTrait',
 	#instVars : [
 		'id',
 		'createdAt',
