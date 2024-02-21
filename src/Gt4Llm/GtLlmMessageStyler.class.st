@@ -23,7 +23,7 @@ GtLlmMessageStyler >> evaluateCodeBlock: aCodeBlock expanded: aBoolean from: aBu
 	| aResult position source |
 	source := aCodeBlock code source.
 
-	aResult := self threadMessageViewModel codeBlockChecker check: source.
+	aResult := self threadMessageViewModel codeBlocksExecutor check: source.
 
 	position := source size.
 	[ position > 1 and: [ (source at: position) isLineBreak ] ]
