@@ -23,3 +23,8 @@ GtOpenAIThreadMessageViewModel >> elementClass [
 GtOpenAIThreadMessageViewModel >> isFailure [
 	^ threadMessage isFailure
 ]
+
+{ #category : #'as yet unclassified' }
+GtOpenAIThreadMessageViewModel >> smalltalkMethodPipeline [
+	^ threadMessage smalltalkMethodPipeline
+]
