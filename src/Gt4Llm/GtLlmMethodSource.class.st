@@ -10,8 +10,8 @@ Class {
 }
 
 { #category : #'instace creation' }
-GtLlmMethodSource class >> fromSource: aString [
-	^ self new fromSource: aString
+GtLlmMethodSource class >> forSource: aString [
+	^ self new forSource: aString
 ]
 
 { #category : #accessing }
@@ -30,7 +30,7 @@ GtLlmMethodSource >> compiledMethod [
 ]
 
 { #category : #'initialization ' }
-GtLlmMethodSource >> fromSource: aString [
+GtLlmMethodSource >> forSource: aString [
 	| aClassName allLines aMethodSource aClass |
 	allLines := aString trimBoth lines.
 	aClassName := allLines first trimBoth.
@@ -77,6 +77,11 @@ GtLlmMethodSource >> methodClassName [
 { #category : #accessing }
 GtLlmMethodSource >> methodClassName: anObject [
 	methodClassName := anObject
+]
+
+{ #category : #testing }
+GtLlmMethodSource >> methodExists [
+	^ self compiledMethod isNotNil
 ]
 
 { #category : #accessing }
