@@ -36,8 +36,8 @@ GtOpenAIBasicThreadMessageViewModel >> checkerInstance [
 ]
 
 { #category : #accessing }
-GtOpenAIBasicThreadMessageViewModel >> codeBlockChecker [
-	^ threadMessage codeBlockChecker
+GtOpenAIBasicThreadMessageViewModel >> codeBlocksExecutor [
+	^ threadMessage codeBlocksExecutor
 ]
 
 { #category : #accessing }

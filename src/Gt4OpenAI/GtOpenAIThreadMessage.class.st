@@ -78,19 +78,19 @@ GtOpenAIThreadMessage >> chat: anObject [
 	chat := anObject
 ]
 
-{ #category : #actions }
-GtOpenAIThreadMessage >> codeBlockChecker [
-	^ GtOpenAICodeBlocksPipelineExecutor new
-		codeBlocks: self codeBlocks;
-		pipeline: pipeline;
-		threadMessage: self
-]
-
 { #category : #accessing }
 GtOpenAIThreadMessage >> codeBlocks [
 	^ self parse children
 		select: [ :aNode | (aNode isKindOf: LeCodeBlockNode) and: [ aNode isForSmalltalk ] ]
 		thenCollect: [ :aNode | aNode code value ]
+]
+
+{ #category : #actions }
+GtOpenAIThreadMessage >> codeBlocksExecutor [
+	^ GtOpenAICodeBlocksPipelineExecutor new
+		codeBlocks: self codeBlocks;
+		pipeline: pipeline;
+		threadMessage: self
 ]
 
 { #category : #accessing }
