@@ -6,22 +6,22 @@ Class {
 
 { #category : #accessing }
 GtLlmSmalltalkMethodParserChecker class >> language [
-	^ 'Smalltalk method'
-]
-
-{ #category : #chcking }
-GtLlmSmalltalkMethodParserChecker >> check: aString [
-	^ self parse: aString
+	^ 'Smalltalk-method'
 ]
 
 { #category : #parsing }
 GtLlmSmalltalkMethodParserChecker >> parse: aString [
+	| aMethod |
+	aMethod := GtLlmMethodSource fromSource: aString.
+
+	aMethod methodClass
+		ifNil: [ ^ GtLlmCheckerStringError new
+				checker: self;
+				contentString: ('{1} class does not exist' format: {aMethod methodClassName}) ].
+
 	[ ^ GtLlmCheckerStringSuccess new
 		checker: self;
-		content: (OpalCompiler new
-				source: aString;
-				receiver: self;
-				parseMethod);
+		content: (RBParser parseMethod: aMethod methodSource);
 		contentString: 'Successfully parsed.' ]
 		on: Exception
 		do: [ :anError | 

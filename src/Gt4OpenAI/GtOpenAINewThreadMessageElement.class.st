@@ -79,7 +79,7 @@ GtOpenAINewThreadMessageElement >> initializeSendButton [
 { #category : #'private - announcement handling' }
 GtOpenAINewThreadMessageElement >> onThreadMessageContentsChanged: anAnnouncement [
 	anAnnouncement requester = self ifTrue: [ ^ self ].
-	self inUIProcessDo: [ self updateElement ]
+	self enqueueTask: (BlTaskAction new action: [ self updateElement ])
 ]
 
 { #category : #'private - hooks' }

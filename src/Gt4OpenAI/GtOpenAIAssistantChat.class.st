@@ -10,7 +10,8 @@ Class {
 		'lastRun',
 		'announcer',
 		'future',
-		'pipeline'
+		'pipeline',
+		'smalltalkMethodPipeline'
 	],
 	#category : #'Gt4OpenAI-Chats'
 }
@@ -173,6 +174,7 @@ GtOpenAIAssistantChat >> messages [
 		do: [ :aMessage | 
 			aMessage
 				pipeline: pipeline;
+				smalltalkMethodPipeline: smalltalkMethodPipeline;
 				chat: self ].
 	^ givenMessages
 ]
@@ -211,6 +213,16 @@ GtOpenAIAssistantChat >> sendMessage: aString [
 	future := (self runFuture
 			then: [ :aRun | self announcer announce: (GtOpenAIThreadRunIsDoneAnnouncement new run: aRun) ])
 			await: GtOpenAIUtilities executionConfiguration
+]
+
+{ #category : #accessing }
+GtOpenAIAssistantChat >> smalltalkMethodPipeline [
+	^ smalltalkMethodPipeline
+]
+
+{ #category : #accessing }
+GtOpenAIAssistantChat >> smalltalkMethodPipeline: aPipeline [ 
+	smalltalkMethodPipeline := aPipeline
 ]
 
 { #category : #accessing }

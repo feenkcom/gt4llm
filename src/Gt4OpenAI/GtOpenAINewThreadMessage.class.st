@@ -21,7 +21,7 @@ GtOpenAINewThreadMessage >> assistantChat: anAssistantChat [
 
 { #category : #accessing }
 GtOpenAINewThreadMessage >> codeBlockChecker [
-	^ GtOpenAICodeBlocksChecker new
+	^ GtOpenAICodeBlocksPipelineExecutor new
 ]
 
 { #category : #accessing }
