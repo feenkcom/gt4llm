@@ -111,7 +111,8 @@ GtOpenAIThreadMessageElement >> initializeTimeElement [
 
 { #category : #'private - announcement handling' }
 GtOpenAIThreadMessageElement >> onRestyleRequested: anAnnouncement [
-	self inUIProcessDo: [ contentsElement editor styleText ]
+	self
+		enqueueTask: (BlTaskAction new action: [ contentsElement editor styleText ])
 ]
 
 { #category : #'private - hooks' }
@@ -121,7 +122,7 @@ GtOpenAIThreadMessageElement >> onThreadMessageViewModelChanged [
 
 { #category : #'private - announcement handling' }
 GtOpenAIThreadMessageElement >> onThreadMessageViewModelChanged: anAnnouncement [
-	self inUIProcessDo: [ self updateElement ]
+	self enqueueTask: (BlTaskAction new action: [ self updateElement ])
 ]
 
 { #category : #'private - updating' }
@@ -186,7 +187,7 @@ GtOpenAIThreadMessageElement >> updateTimeElement [
 	timeTask ifNotNil: [ :aTask | aTask stop ].
 	timeTask := GtLlmUpdatingDateAndTimeTask new
 			dateAndTime: threadMessageViewModel createdAt asLocal;
-			converter: [ :aDuration | aDuration gtHumanReadableString , ' ago' ].
+			converter: GtLlmDurationPrinter new.
 	timeElement enqueueTask: timeTask.
 
 	timeTooltip
