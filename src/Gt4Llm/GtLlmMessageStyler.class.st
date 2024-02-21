@@ -471,6 +471,7 @@ GtLlmMessageStyler >> styleResult: evaluationResult for: aCodeNode [
 { #category : #private }
 GtLlmMessageStyler >> styleSmalltalkCode: aCodeNode [
 	aCodeNode isForSmalltalk ifFalse: [ ^ self ].
+	self threadMessageViewModel isAssistantRole ifFalse: [ ^ self ].
 	(text from: aCodeNode stopPosition to: aCodeNode stopPosition)
 		attributes: {GtButtonAttribute new
 					beAppend;
@@ -504,6 +505,7 @@ GtLlmMessageStyler >> styleSmalltalkCodeBlock: aCodeNode [
 GtLlmMessageStyler >> styleSmalltalkMethod: aCodeNode [
 	| methodCodeBlock tooltip isReplace attributes |
 	(aCodeNode isForLanguage: 'smalltalk-method') ifFalse: [ ^ self ].
+	self threadMessageViewModel isAssistantRole ifFalse: [ ^ self ].
 
 	methodCodeBlock := self methodCodeBlock: aCodeNode.
 	methodCodeBlock methodExists

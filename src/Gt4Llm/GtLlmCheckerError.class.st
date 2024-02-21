@@ -13,6 +13,16 @@ GtLlmCheckerError class >> prefix [
 ]
 
 { #category : #accessing }
+GtLlmCheckerError >> asString [
+	^ self class prefix
+		, '
+```text
+' , self contentString
+		, '
+```'
+]
+
+{ #category : #accessing }
 GtLlmCheckerError >> backgroundColor [
 	^ BrGlamorousColors errorBackgroundColor
 ]

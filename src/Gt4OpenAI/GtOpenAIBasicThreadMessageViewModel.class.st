@@ -56,6 +56,11 @@ GtOpenAIBasicThreadMessageViewModel >> initialize [
 	checkRunResultViewModels := WeakIdentityKeyDictionary new
 ]
 
+{ #category : #accessing }
+GtOpenAIBasicThreadMessageViewModel >> isAssistantRole [
+	^ self threadMessage isAssistantRole
+]
+
 { #category : #private }
 GtOpenAIBasicThreadMessageViewModel >> newCheckRunResultViewModelFor: aCheckRunResult [
 	| aViewModel |
