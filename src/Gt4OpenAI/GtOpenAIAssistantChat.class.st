@@ -116,7 +116,8 @@ GtOpenAIAssistantChat >> gtSummaryFor: aView [
 			tooltip: 'Update'
 			action: [ :aButton :aTab | 
 				self getRun.
-				aButton inUIProcessDo: [ aTab viewContentElement phlow update ] ];
+				aButton
+					enqueueTask: (BlTaskAction new action: [ aTab viewContentElement phlow update ]) ];
 		send: [ self lastRun ]
 ]
 
