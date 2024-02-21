@@ -27,7 +27,8 @@ GtLlmCheckerResult >> asElement [
 
 { #category : #accessing }
 GtLlmCheckerResult >> asString [
-	^ self class prefix, '```text
+	^ self class prefix, '
+```text
 ', self contentString , '
 ```'
 ]
