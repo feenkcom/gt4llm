@@ -40,13 +40,9 @@ GtLlmMessageStyler >> evaluateCodeBlock: aCodeBlock expanded: aBoolean from: aBu
 
 { #category : #generated }
 GtLlmMessageStyler >> evaluateMethodBlock: aCodeBlock expanded: aBoolean from: aButton isReplace: aReplaceBoolean [
-	| aResult position source aMethod |
+	| aResult position source |
 	source := aCodeBlock code source.
-	aMethod := self methodCodeBlock: aCodeBlock.
-
-	aResult := aReplaceBoolean
-			ifTrue: [ aMethod replaceInSystem ]
-			ifFalse: [ aMethod addToSystem ].
+	aResult := self threadMessageViewModel smalltalkMethodPipeline check: source.
 
 	aResult threadMessage: self threadMessageViewModel threadMessage.
 
@@ -76,8 +72,7 @@ GtLlmMessageStyler >> evaluateMethodBlock: aCodeBlock expanded: aBoolean from: a
 GtLlmMessageStyler >> evaluateMethodBlockRemoval: aCodeBlock expanded: aBoolean from: aButton [
 	| aResult position source aMethod |
 	source := aCodeBlock code source.
-	aMethod := self methodCodeBlock: aCodeBlock.
-
+	aMethod := self methodSourceFrom: aCodeBlock.
 	aResult := aMethod removeFromSystem.
 
 	aResult threadMessage: self threadMessageViewModel threadMessage.
@@ -151,12 +146,10 @@ GtLlmMessageStyler >> isCursorInside: nodeInterval [
 ]
 
 { #category : #generated }
-GtLlmMessageStyler >> methodCodeBlock: aCodeBlock [
+GtLlmMessageStyler >> methodSourceFrom: aCodeBlock [
 	| source |
 	source := aCodeBlock code source trim.
-	^ GtLlmMessageMethod new
-		methodClass: source lines first asClass;
-		methodBody: (Character lf join: source lines allButFirst)
+	^ GtLlmMethodSource forSource: source
 ]
 
 { #category : #accessing }
@@ -503,12 +496,12 @@ GtLlmMessageStyler >> styleSmalltalkCodeBlock: aCodeNode [
 
 { #category : #private }
 GtLlmMessageStyler >> styleSmalltalkMethod: aCodeNode [
-	| methodCodeBlock tooltip isReplace attributes |
+	| methodSource tooltip isReplace attributes |
 	(aCodeNode isForLanguage: 'smalltalk-method') ifFalse: [ ^ self ].
 	self threadMessageViewModel isAssistantRole ifFalse: [ ^ self ].
 
-	methodCodeBlock := self methodCodeBlock: aCodeNode.
-	methodCodeBlock methodExists
+	methodSource := self methodSourceFrom: aCodeNode.
+	methodSource methodExists
 		ifTrue: [ tooltip := 'Replace Method'.
 			isReplace := true ]
 		ifFalse: [ tooltip := 'Add Method'.
@@ -526,7 +519,7 @@ GtLlmMessageStyler >> styleSmalltalkMethod: aCodeNode [
 								from: aWidget
 								isReplace: isReplace ] ]} asOrderedCollection.
 
-	isReplace
+	"isReplace" false
 		ifTrue: [ attributes
 				add: (GtButtonAttribute new
 						beAppend;

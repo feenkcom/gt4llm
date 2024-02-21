@@ -38,7 +38,7 @@ GtLlmSmalltalkMethodExecutorChecker >> errorToCatch [
 { #category : #execution }
 GtLlmSmalltalkMethodExecutorChecker >> execute: aString [
 	| aMethod anUpdater aResponse |
-	aMethod := GtLlmMethodSource fromSource: aString.
+	aMethod := GtLlmMethodSource forSource: aString.
 
 	aMethod methodClass
 		ifNil: [ ^ GtLlmCheckerStringError new

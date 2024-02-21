@@ -12,7 +12,7 @@ GtLlmSmalltalkMethodParserChecker class >> language [
 { #category : #parsing }
 GtLlmSmalltalkMethodParserChecker >> parse: aString [
 	| aMethod |
-	aMethod := GtLlmMethodSource fromSource: aString.
+	aMethod := GtLlmMethodSource forSource: aString.
 
 	aMethod methodClass
 		ifNil: [ ^ GtLlmCheckerStringError new
