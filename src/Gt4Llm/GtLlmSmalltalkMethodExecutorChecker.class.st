@@ -53,7 +53,7 @@ GtLlmSmalltalkMethodExecutorChecker >> execute: aString [
 ]
 
 { #category : #accessing }
-GtLlmSmalltalkMethodExecutorChecker >> handlError: anError [
+GtLlmSmalltalkMethodExecutorChecker >> handleError: anError [
 	^ GtLlmCheckerError new
 		checker: self;
 		content: anError;
