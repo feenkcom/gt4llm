@@ -20,7 +20,8 @@ GtLlmCheckRunResult >> asString [
 		, '
 Output of checks:
 '
-		, (Character lf
+		, ({Character lf.
+				Character lf}
 				join: (self checkers
 						collect: [ :aChecker | 
 							aChecker checkName

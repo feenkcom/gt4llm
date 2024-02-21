@@ -94,7 +94,7 @@ GtLlmSmalltalkMethodExecutorChecker >> removeFromSystem [
 
 { #category : #private }
 GtLlmSmalltalkMethodExecutorChecker >> removeRefactoring [
-	^ RBRemoveMethodRefactoring
+	^ GtLlmRemoveMethodRefactoring
 		removeMethods: {self methodSelector}
 		from: self methodClass
 ]

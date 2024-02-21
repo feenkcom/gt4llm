@@ -138,7 +138,7 @@ GtLlmMessageMethod >> removeFromSystem [
 
 { #category : #accessing }
 GtLlmMessageMethod >> removeRefactoring [
-	^ RBRemoveMethodRefactoring
+	^ GtLlmRemoveMethodRefactoring
 		removeMethods: {self methodSelector}
 		from: methodClass
 ]
