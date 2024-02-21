@@ -6,65 +6,28 @@ Class {
 
 { #category : #accessing }
 GtLlmSmalltalkMethodExecutorChecker class >> language [
-	^ 'Smalltalk method'
+	^ 'Smalltalk-method'
 ]
 
 { #category : #private }
-GtLlmSmalltalkMethodExecutorChecker >> addRefactoring [
-	^ RBAddMethodRefactoring
-		addMethod: self methodBody
-		toClass: self methodClass
-		inProtocols: {'generated - gpt'}
-]
+GtLlmSmalltalkMethodExecutorChecker >> createStackString: anError [
+	| errorStack thisStack |
+	(anError isKindOf: SyntaxErrorNotification) ifTrue: [
+		^ 'Syntax Error: ', anError messageText
+	].
+	errorStack := anError signalContext stack.
+	thisStack := thisContext stack allButFirst: 9.
+	errorStack := errorStack
+			copyFrom: 1
+			to: errorStack size - thisStack size.
 
-{ #category : #actions }
-GtLlmSmalltalkMethodExecutorChecker >> addToSystem [
-	^ GtLlmCheckRunResult new
-		checkers: (GtLlmCheckerGroup withAll: {self});
-		addResult: self doAddRefactoring for: self
-]
-
-{ #category : #private }
-GtLlmSmalltalkMethodExecutorChecker >> doAddRefactoring [
-	^ self
-		doRefactoring: [ | refactoring |
-			refactoring := self addRefactoring.
-			refactoring execute ]
-]
-
-{ #category : #private }
-GtLlmSmalltalkMethodExecutorChecker >> doRefactoring: aBlock [
-	aBlock
-		on: Error
-		do: [ :anError | 
-			^ GtLlmCheckerError new
-				checker: self;
-				content: anError;
-				contentString: anError messageText ].
-	^ GtLlmCheckerSuccess new
-		checker: self;
-		content: (self methodClass
-				compiledMethodAt: self methodSelector
-				ifAbsent: [ 'Removed method from system: ' , self methodClass asString , '>>'
-						, self methodSelector ])
-]
-
-{ #category : #private }
-GtLlmSmalltalkMethodExecutorChecker >> doRemoveRefactoring [
-	^ self
-		doRefactoring: [ | refactoring |
-			refactoring := self removeRefactoring.
-			refactoring execute ]
-]
-
-{ #category : #private }
-GtLlmSmalltalkMethodExecutorChecker >> doReplaceRefactoring [
-	^ self
-		doRefactoring: [ | refactoring |
-			refactoring := self removeRefactoring.
-			refactoring execute.
-			refactoring := self addRefactoring.
-			refactoring execute ]
+	^ String
+		streamContents: [ :stream | 
+			errorStack
+				do: [ :stackItem | 
+					stream
+						print: stackItem;
+						cr ] ]
 ]
 
 { #category : #accessing }
@@ -74,7 +37,19 @@ GtLlmSmalltalkMethodExecutorChecker >> errorToCatch [
 
 { #category : #execution }
 GtLlmSmalltalkMethodExecutorChecker >> execute: aString [
-	^ self addToSystem
+	| aMethod anUpdater aResponse |
+	aMethod := GtLlmMethodSource fromSource: aString.
+
+	aMethod methodClass
+		ifNil: [ ^ GtLlmCheckerStringError new
+				checker: self;
+				contentString: ('{1} class does not exist' format: {aMethod methodClassName}) ].
+
+	anUpdater := GtLlmMethodSourceUpdater new methodSource: aMethod.
+	aResponse := anUpdater update.
+	^ GtLlmCheckerSuccess new
+		checker: self;
+		content: aResponse messageText
 ]
 
 { #category : #accessing }
@@ -83,25 +58,4 @@ GtLlmSmalltalkMethodExecutorChecker >> handlError: anError [
 		checker: self;
 		content: anError;
 		contentString: (self createStackString: anError)
-]
-
-{ #category : #actions }
-GtLlmSmalltalkMethodExecutorChecker >> removeFromSystem [
-	^ GtLlmCheckRunResult new
-		checkers: (GtLlmCheckerGroup withAll: {self});
-		addResult: self doRemoveRefactoring for: self
-]
-
-{ #category : #private }
-GtLlmSmalltalkMethodExecutorChecker >> removeRefactoring [
-	^ GtLlmRemoveMethodRefactoring
-		removeMethods: {self methodSelector}
-		from: self methodClass
-]
-
-{ #category : #actions }
-GtLlmSmalltalkMethodExecutorChecker >> replaceInSystem [
-	^ GtLlmCheckRunResult new
-		checkers: (GtLlmCheckerGroup withAll: {self});
-		addResult: self doReplaceRefactoring for: self
 ]

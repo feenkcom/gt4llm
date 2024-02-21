@@ -13,7 +13,8 @@ Class {
 		'chats',
 		'files',
 		'apiFiles',
-		'pipeline'
+		'context',
+		'smalltalkMethodPipeline'
 	],
 	#category : #'Gt4OpenAI-Tutor'
 }
@@ -29,7 +30,8 @@ GtOpenAIGtTutor >> addChat [
 	| aChat |
 	aChat := GtOpenAIAssistantChat new
 			assistant: self assistant;
-			pipeline: pipeline.
+			pipeline: context;
+			smalltalkMethodPipeline: smalltalkMethodPipeline.
 	chats add: aChat.
 
 	aChat sendMessage: self files toFileDescriptions.
@@ -119,7 +121,7 @@ GtOpenAIGtTutor >> chats [
 { #category : #accessing }
 GtOpenAIGtTutor >> check: aString [
 	<return: #GtLlmCheckerResult>
-	^ pipeline check: aString
+	^ context check: aString
 ]
 
 { #category : #accessing }
@@ -356,7 +358,8 @@ GtOpenAIGtTutor >> initialize [
 	assistantDescription := self defaultAssistantDescription.
 	tools := self defaultTools.
 	chats := GtOpenAIAssistantChatGroup new.
-	pipeline :=  GtLlmContext defaultPipeline.
+	context :=  GtLlmContext defaultPipeline.
+	smalltalkMethodPipeline := GtLlmCheckPipeline forLanguage: 'smalltalk-method'.
 	files := GtOpenAIResourceFilesGroup withAll: self defaultFiles.
 	apiFiles := GtOpenAIFilesGroup new
 ]

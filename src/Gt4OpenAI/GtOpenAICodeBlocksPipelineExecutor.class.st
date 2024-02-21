@@ -1,5 +1,5 @@
 Class {
-	#name : #GtOpenAICodeBlocksChecker,
+	#name : #GtOpenAICodeBlocksPipelineExecutor,
 	#superclass : #Object,
 	#instVars : [
 		'codeBlocks',
@@ -10,37 +10,37 @@ Class {
 }
 
 { #category : #executing }
-GtOpenAICodeBlocksChecker >> await [
+GtOpenAICodeBlocksPipelineExecutor >> await [
 	^ self future await: GtOpenAIUtilities executionConfiguration
 ]
 
 { #category : #executing }
-GtOpenAICodeBlocksChecker >> check [
+GtOpenAICodeBlocksPipelineExecutor >> check [
 	^ self check: ('.' join: self codeBlocks)
 ]
 
 { #category : #accessing }
-GtOpenAICodeBlocksChecker >> check: aString [
+GtOpenAICodeBlocksPipelineExecutor >> check: aString [
 	^ (pipeline check: aString) threadMessage: self threadMessage
 ]
 
 { #category : #accessing }
-GtOpenAICodeBlocksChecker >> codeBlocks [
+GtOpenAICodeBlocksPipelineExecutor >> codeBlocks [
 	^ codeBlocks
 ]
 
 { #category : #accessing }
-GtOpenAICodeBlocksChecker >> codeBlocks: anObject [
+GtOpenAICodeBlocksPipelineExecutor >> codeBlocks: anObject [
 	codeBlocks := anObject
 ]
 
 { #category : #executing }
-GtOpenAICodeBlocksChecker >> future [
+GtOpenAICodeBlocksPipelineExecutor >> future [
 	^ [ self check ] asAsyncFuture
 ]
 
 { #category : #accessing }
-GtOpenAICodeBlocksChecker >> gtCodeBlocksFor: aView [
+GtOpenAICodeBlocksPipelineExecutor >> gtCodeBlocksFor: aView [
 	<gtView>
 	^ aView explicit
 		title: 'Code blocks';
@@ -58,16 +58,16 @@ GtOpenAICodeBlocksChecker >> gtCodeBlocksFor: aView [
 ]
 
 { #category : #accessing }
-GtOpenAICodeBlocksChecker >> pipeline: aPipeline [
+GtOpenAICodeBlocksPipelineExecutor >> pipeline: aPipeline [
 	pipeline := aPipeline
 ]
 
 { #category : #accessing }
-GtOpenAICodeBlocksChecker >> threadMessage [
+GtOpenAICodeBlocksPipelineExecutor >> threadMessage [
 	^ threadMessage
 ]
 
 { #category : #accessing }
-GtOpenAICodeBlocksChecker >> threadMessage: anObject [
+GtOpenAICodeBlocksPipelineExecutor >> threadMessage: anObject [
 	threadMessage := anObject
 ]

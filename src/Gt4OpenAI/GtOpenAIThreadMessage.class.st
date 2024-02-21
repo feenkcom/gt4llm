@@ -15,7 +15,8 @@ Class {
 		'role',
 		'annotations',
 		'pipeline',
-		'chat'
+		'chat',
+		'smalltalkMethodPipeline'
 	],
 	#category : #'Gt4OpenAI-Models'
 }
@@ -79,7 +80,7 @@ GtOpenAIThreadMessage >> chat: anObject [
 
 { #category : #actions }
 GtOpenAIThreadMessage >> codeBlockChecker [
-	^ GtOpenAICodeBlocksChecker new
+	^ GtOpenAICodeBlocksPipelineExecutor new
 		codeBlocks: self codeBlocks;
 		pipeline: pipeline;
 		threadMessage: self
@@ -217,7 +218,9 @@ GtOpenAIThreadMessage >> methods [
 		select: [ :aNode | 
 			(aNode isKindOf: LeCodeBlockNode)
 				and: [ aNode isForLanguage: 'smalltalk-method' ] ]
-		thenCollect: [ :aNode | |aString |aString := aNode code value trim.
+		thenCollect: [ :aNode | 
+			| aString |
+			aString := aNode code value trim.
 			GtLlmMessageMethod new
 				methodClass: aString lines first asClass;
 				methodBody: (Character lf join: aString lines allButFirst) ]
@@ -256,6 +259,16 @@ GtOpenAIThreadMessage >> runId [
 { #category : #accessing }
 GtOpenAIThreadMessage >> runId: anObject [
 	runId := anObject
+]
+
+{ #category : #accessing }
+GtOpenAIThreadMessage >> smalltalkMethodPipeline [
+	^ smalltalkMethodPipeline
+]
+
+{ #category : #accessing }
+GtOpenAIThreadMessage >> smalltalkMethodPipeline: aPipeline [
+	smalltalkMethodPipeline := aPipeline
 ]
 
 { #category : #accessing }
