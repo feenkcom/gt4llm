@@ -33,7 +33,7 @@ GtLlmExecutorChecker >> check: aString [
 		checker: self;
 		content: (self execute: aString) ]
 		on: self errorToCatch
-		do: [ :anError | ^ self handlError: anError ]
+		do: [ :anError | ^ self handleError: anError ]
 ]
 
 { #category : #accessing }
@@ -47,7 +47,7 @@ GtLlmExecutorChecker >> execute: aString [
 ]
 
 { #category : #accessing }
-GtLlmExecutorChecker >> handlError: anError [
+GtLlmExecutorChecker >> handleError: anError [
 	^ self subclassResponsibility
 ]
 

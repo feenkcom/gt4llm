@@ -25,7 +25,7 @@ GtLlmPythonExecutorChecker >> execute: aString [
 ]
 
 { #category : #accessing }
-GtLlmPythonExecutorChecker >> handlError: anError [
+GtLlmPythonExecutorChecker >> handleError: anError [
 	^ GtLlmCheckerError new
 		checker: self;
 		content: anError;
