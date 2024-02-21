@@ -3,6 +3,9 @@ Class {
 	#superclass : #Object,
 	#traits : 'TGtOpenAIThreadMessage',
 	#classTraits : 'TGtOpenAIThreadMessage classTrait',
+	#instVars : [
+		'createdAt'
+	],
 	#category : #'Gt4OpenAI-Widgets'
 }
 
@@ -14,6 +17,17 @@ GtOpenAIProvisionalThreadMessage >> annotations [
 { #category : #accessing }
 GtOpenAIProvisionalThreadMessage >> contentText [
 	^ ''
+]
+
+{ #category : #testing }
+GtOpenAIProvisionalThreadMessage >> createdAt [
+	<return: #DateAndTime>
+	^ createdAt
+]
+
+{ #category : #accessing }
+GtOpenAIProvisionalThreadMessage >> createdAt: anObject [
+	createdAt := anObject
 ]
 
 { #category : #accessing }

@@ -13,6 +13,12 @@ TGtOpenAIThreadMessage >> contentText [
 	^ self explicitRequirement
 ]
 
+{ #category : #testing }
+TGtOpenAIThreadMessage >> createdAt [
+	<return: #DateAndTime>
+	^ self explicitRequirement
+]
+
 { #category : #accessing }
 TGtOpenAIThreadMessage >> elementClass [
 	^ self explicitRequirement

@@ -10,6 +10,11 @@ GtOpenAIThreadMessageViewModel >> contentText [
 ]
 
 { #category : #accessing }
+GtOpenAIThreadMessageViewModel >> createdAt [
+	^ self threadMessage createdAt
+]
+
+{ #category : #accessing }
 GtOpenAIThreadMessageViewModel >> elementClass [
 	^ GtOpenAIThreadMessageElement
 ]

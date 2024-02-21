@@ -47,6 +47,7 @@ GtOpenAIAssistantChatViewModel >> threadMessageViewModels [
 	newMessages := assistantChat messages asArray reversed.
 	^ Array
 		streamContents: [ :aStream | 
+			| aStatus |
 			newMessages
 				do: [ :aMessage | 
 					| aViewModel |
@@ -55,18 +56,21 @@ GtOpenAIAssistantChatViewModel >> threadMessageViewModels [
 							ifPresent: [ :theViewModel | theViewModel threadMessage: aMessage ]
 							ifAbsentPut: [ self newThreadMessageViewModelFor: aMessage ].
 					aStream nextPut: aViewModel ].
+			aStatus := assistantChat status.
 
-			assistantChat status isFailed
+			aStatus isFailed
 				ifTrue: [ | aViewModel |
 					aViewModel := self
-							newThreadMessageViewModelFor: (GtOpenAIFailureThreadMessage new failureText: assistantChat status message).
+							newThreadMessageViewModelFor: (GtOpenAIFailureThreadMessage new
+									failureText: aStatus message;
+									createdAt: aStatus createdAt).
 					aStream nextPut: aViewModel ].
 
-			assistantChat status isDone
+			aStatus isDone
 				ifFalse: [ newMessages last isAssistantRole
 						ifFalse: [ | aViewModel |
 							aViewModel := self
-									newThreadMessageViewModelFor: GtOpenAIProvisionalThreadMessage new.
+									newThreadMessageViewModelFor: (GtOpenAIProvisionalThreadMessage new createdAt: aStatus createdAt).
 							aStream nextPut: aViewModel ] ].
 
 			aStream nextPut: newThreadMessageViewModel ]

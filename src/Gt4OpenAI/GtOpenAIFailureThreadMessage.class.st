@@ -4,7 +4,8 @@ Class {
 	#traits : 'TGtOpenAIThreadMessage',
 	#classTraits : 'TGtOpenAIThreadMessage classTrait',
 	#instVars : [
-		'failureText'
+		'failureText',
+		'createdAt'
 	],
 	#category : #'Gt4OpenAI-Widgets'
 }
@@ -17,6 +18,16 @@ GtOpenAIFailureThreadMessage >> annotations [
 { #category : #accessing }
 GtOpenAIFailureThreadMessage >> contentText [
 	^ self failureText ifNil: [ '' ]
+]
+
+{ #category : #accessing }
+GtOpenAIFailureThreadMessage >> createdAt [
+	^ createdAt
+]
+
+{ #category : #accessing }
+GtOpenAIFailureThreadMessage >> createdAt: anObject [
+	createdAt := anObject
 ]
 
 { #category : #accessing }
