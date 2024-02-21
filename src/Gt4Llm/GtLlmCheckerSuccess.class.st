@@ -6,7 +6,7 @@ Class {
 
 { #category : #accessing }
 GtLlmCheckerSuccess class >> prefix [
-	^ 'LAST SCRIPT OUTPUT: '
+	^ 'Output of the last script: '
 ]
 
 { #category : #accessing }

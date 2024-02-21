@@ -310,20 +310,20 @@
 				},
 				"editEmail" : {
 					"__type" : "email",
-					"emailString" : "veit.heller@feenk.com"
+					"emailString" : "<unknown>"
 				},
 				"editTime" : {
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-19T10:16:20.308676+01:00"
+						"dateAndTimeString" : "2024-02-20T20:23:17.157483+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "HzsCSBrODQCp1ZkdB1Szjg=="
 				},
-				"code" : "chat messages first"
+				"code" : "chat"
 			},
 			{
 				"__type" : "textSnippet",
@@ -594,20 +594,20 @@
 				},
 				"editEmail" : {
 					"__type" : "email",
-					"emailString" : "veit.heller@feenk.com"
+					"emailString" : "<unknown>"
 				},
 				"editTime" : {
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-19T12:34:58.686045+01:00"
+						"dateAndTimeString" : "2024-02-20T20:23:14.59854+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "ocMgZhrODQCsu073B1Szjg=="
 				},
-				"code" : "chat messages first"
+				"code" : "chat"
 			},
 			{
 				"__type" : "textSnippet",
