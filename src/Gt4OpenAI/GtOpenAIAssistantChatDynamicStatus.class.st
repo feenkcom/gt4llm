@@ -7,17 +7,27 @@ Class {
 	#category : #'Gt4OpenAI-Chats'
 }
 
+{ #category : #accessing }
+GtOpenAIAssistantChatDynamicStatus >> completedAt [
+	^ threadRun completedAt
+]
+
+{ #category : #accessing }
+GtOpenAIAssistantChatDynamicStatus >> createdAt [
+	^ threadRun createdAt
+]
+
 { #category : #printing }
 GtOpenAIAssistantChatDynamicStatus >> gtDisplayOn: stream [
 	stream nextPutAll: threadRun status
 ]
 
-{ #category : #accessing }
+{ #category : #testing }
 GtOpenAIAssistantChatDynamicStatus >> isDone [
 	^ threadRun isDone
 ]
 
-{ #category : #accessing }
+{ #category : #testing }
 GtOpenAIAssistantChatDynamicStatus >> isFailed [
 	^ threadRun isFailed
 ]

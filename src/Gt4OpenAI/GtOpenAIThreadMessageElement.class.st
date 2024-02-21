@@ -6,7 +6,11 @@ Class {
 	#instVars : [
 		'senderElement',
 		'contentsElement',
-		'progressElement'
+		'progressElement',
+		'timeElement',
+		'headerElement',
+		'timeTask',
+		'timeTooltip'
 	],
 	#category : #'Gt4OpenAI-Widgets'
 }
@@ -38,11 +42,15 @@ GtOpenAIThreadMessageElement >> hideProgressElement [
 { #category : #initialization }
 GtOpenAIThreadMessageElement >> initialize [
 	super initialize.
+	self initializeHeaderElement.
 	self initializeSenderElement.
+	self initializeTimeElement.
 	self initializeContentsElement.
 	self initializeProgressElement.
 
-	self addChild: senderElement as: #sender.
+	self addChild: headerElement as: #header.
+	headerElement addChild: senderElement as: #sender.
+	headerElement addChild: timeElement as: #time.
 	self addChild: contentsElement as: #contents.
 	self addChild: progressElement as: #progress.
 
@@ -58,6 +66,13 @@ GtOpenAIThreadMessageElement >> initializeContentsElement [
 			vFitContent;
 			aptitude: BrGlamorousRegularEditorAptitude;
 			beReadOnlyWithSelection
+]
+
+{ #category : #initialization }
+GtOpenAIThreadMessageElement >> initializeHeaderElement [
+	headerElement := BrHorizontalPane new
+			hFitContentLimited;
+			vFitContent
 ]
 
 { #category : #initialization }
@@ -79,6 +94,18 @@ GtOpenAIThreadMessageElement >> initializeSenderElement [
 			aptitude: (BrGlamorousLabelAptitude new
 					foreground: BrGlamorousColors disabledButtonTextColor);
 			beSmallSize;
+			text: ''
+]
+
+{ #category : #initialization }
+GtOpenAIThreadMessageElement >> initializeTimeElement [
+	timeTooltip := BrGlamorousWithLabelTooltipAptitude new text: 'unknown time'.
+	timeElement := BrLabel new
+			fitContent;
+			beSmallSize;
+			aptitude: (BrGlamorousLabelAptitude new
+					foreground: BrGlamorousColors disabledButtonTextColor);
+			addAptitude: timeTooltip;
 			text: ''
 ]
 
@@ -124,6 +151,7 @@ GtOpenAIThreadMessageElement >> updateContentsElement [
 { #category : #'private - updating' }
 GtOpenAIThreadMessageElement >> updateElement [
 	self updateSenderElement.
+	self updateTimeElement.
 	self updateContentsElement.
 	self updateProgressElement.
 	self updateFailureIndicator.
@@ -148,4 +176,20 @@ GtOpenAIThreadMessageElement >> updateSenderElement [
 	self threadMessage isAssistantRole
 		ifTrue: [ senderElement text: 'ChatGPT' ]
 		ifFalse: [ senderElement text: 'You' ]
+]
+
+{ #category : #'private - updating' }
+GtOpenAIThreadMessageElement >> updateTimeElement [
+	timeTask
+		ifNotNil: [ :aTask | aTask dateAndTime = threadMessageViewModel createdAt ifTrue: [ ^ self ] ].
+
+	timeTask ifNotNil: [ :aTask | aTask stop ].
+	timeTask := GtLlmUpdatingDateAndTimeTask new
+			dateAndTime: threadMessageViewModel createdAt asLocal;
+			converter: [ :aDuration | aDuration gtHumanReadableString , ' ago' ].
+	timeElement enqueueTask: timeTask.
+
+	timeTooltip
+		text: (String
+				streamContents: [ :s | threadMessageViewModel createdAt asLocal printSeparateDateAndTimeOn: s ])
 ]

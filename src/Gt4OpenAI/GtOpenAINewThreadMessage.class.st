@@ -1,8 +1,6 @@
 Class {
 	#name : #GtOpenAINewThreadMessage,
 	#superclass : #Object,
-	#traits : 'TGtOpenAIThreadMessage',
-	#classTraits : 'TGtOpenAIThreadMessage classTrait',
 	#instVars : [
 		'assistantChat',
 		'contents',
