@@ -4,7 +4,8 @@ Class {
 	#traits : 'TGtOpenAIWithThreadMessageViewModel',
 	#classTraits : 'TGtOpenAIWithThreadMessageViewModel classTrait',
 	#instVars : [
-		'threadMessageElement'
+		'threadMessageElement',
+		'moreContentElement'
 	],
 	#category : #'Gt4OpenAI-Widgets'
 }
@@ -27,11 +28,14 @@ GtOpenAIExpandableThreadMessageElement >> initialize [
 	super initialize.
 
 	self initializeThreadMessageElement.
+	self initializeMoreContentElement.
+	
+	self addChild: moreContentElement as: #more.
 
 	self
 		addAptitude: GtCoderExpanderAptitude new;
-		header: [ threadMessageElement removeFromParent ];
-		content: [ threadMessageElement removeFromParent ].
+		header: [ threadMessageElement ];
+		content: [ threadMessageElement ].
 
 	self states withExpansion.
 	self whenExpandedDo: [ self onExpanded ].
@@ -43,29 +47,50 @@ GtOpenAIExpandableThreadMessageElement >> initialize [
 ]
 
 { #category : #'initialization ' }
+GtOpenAIExpandableThreadMessageElement >> initializeMoreContentElement [
+	moreContentElement := BrButton new
+			fitContent;
+			beTinySize;
+			zIndex: 1;
+			background: Color white;
+			margin: (BlInsets top: 0 right: 0 bottom: 1 left: 9);
+			aptitude: (BrGlamorousButtonWithLabelAptitude new
+					foreground: BrGlamorousColors disabledButtonTextColor);
+			label: 'more';
+			action: [ self expand ];
+			constraintsDo: [ :c | 
+				c ignoreByLayout.
+				c ignored horizontal alignLeft.
+				c ignored vertical alignBottom ]
+]
+
+{ #category : #'initialization ' }
 GtOpenAIExpandableThreadMessageElement >> initializeThreadMessageElement [
 	threadMessageElement := GtOpenAIThreadMessageElement new
 ]
 
 { #category : #'initialization ' }
 GtOpenAIExpandableThreadMessageElement >> onCollapsed [
-	threadMessageElement
-		ifNotNil: [  :aViewModel | 
-			"aViewModel expanded: false."
-			threadMessageElement contentsElementDo: [ :anEditor | 
-				anEditor constraintsDo: [ :c | c maxHeight: 120.0 ] ] ]
+	moreContentElement visibility: BlVisibility visible.
+	threadMessageViewModel
+		ifNotNil: [ :aViewModel | 
+			aViewModel isExpanded: false.
+			threadMessageElement
+				contentsElementDo: [ :anEditor | anEditor constraintsDo: [ :c | c maxHeight: 120.0 ] ] ]
 ]
 
 { #category : #'private - event handling' }
 GtOpenAIExpandableThreadMessageElement >> onExpanded [
-	threadMessageElement
+	moreContentElement visibility: BlVisibility gone.
+	threadMessageViewModel
 		ifNotNil: [ :aViewModel | 
-			"aViewModel expanded: true."
+			aViewModel isExpanded: true.
 			threadMessageElement contentsElementDo: [ :anEditor | 
 				anEditor constraintsDo: [ :c | c maxHeight: Float infinity ] ] ]
 ]
 
 { #category : #'private - hooks' }
 GtOpenAIExpandableThreadMessageElement >> onThreadMessageViewModelChanged [
-	threadMessageElement threadMessageViewModel: threadMessageViewModel
+	threadMessageElement threadMessageViewModel: threadMessageViewModel.
+	self expanded: threadMessageViewModel isExpanded 
 ]

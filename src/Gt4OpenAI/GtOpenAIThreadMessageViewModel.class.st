@@ -3,7 +3,8 @@ Class {
 	#superclass : #GtOpenAIBasicThreadMessageViewModel,
 	#instVars : [
 		'contentText',
-		'contentString'
+		'contentString',
+		'isExpanded'
 	],
 	#category : #'Gt4OpenAI-Widgets'
 }
@@ -24,7 +25,17 @@ GtOpenAIThreadMessageViewModel >> createdAt [
 
 { #category : #accessing }
 GtOpenAIThreadMessageViewModel >> elementClass [
-	^ GtOpenAIThreadMessageElement
+	^ GtOpenAIExpandableThreadMessageElement
+]
+
+{ #category : #accessing }
+GtOpenAIThreadMessageViewModel >> isExpanded [
+	^ isExpanded ifNil: [ true ]
+]
+
+{ #category : #accessing }
+GtOpenAIThreadMessageViewModel >> isExpanded: aBoolean [
+	isExpanded := aBoolean
 ]
 
 { #category : #testing }
