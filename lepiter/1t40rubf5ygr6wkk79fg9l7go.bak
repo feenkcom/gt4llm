@@ -384,14 +384,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-14T12:27:20.403943+01:00"
+						"dateAndTimeString" : "2024-02-21T16:54:09.962917-03:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "y0jbLlXNDQCyVxnGDOiMHg=="
 				},
-				"code" : "(chat messages detect: #isAssistantRole) codeBlockChecker await"
+				"code" : "(chat messages detect: #isAssistantRole) codeBlocksExecutor await"
 			},
 			{
 				"__type" : "textSnippet",
@@ -463,6 +463,77 @@
 					"uidString" : "ZVqVKVXNDQCyBMqaDOiMHg=="
 				},
 				"code" : "question := 'Tell me about Phlow based on the files that you have access to.'.\rchat sendMessage: question."
+			},
+			{
+				"__type" : "textSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-02-22T10:06:21.111702-03:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-02-22T10:06:54.436481-03:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "Yfu/2FnODQCbKo85D5mAnA=="
+				},
+				"paragraphStyle" : {
+					"__type" : "textStyle"
+				},
+				"string" : "Ask for a smalltalk method definition of Phlow view that displays"
+			},
+			{
+				"__type" : "pharoSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-02-22T10:09:19.20011-03:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-02-22T10:09:41.15112-03:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "MVpd41nODQCdZHpdD5mAnA=="
+				},
+				"code" : "question := 'Create a Phlow view for Fraction that displays numerator and denominator.'.\rchat sendMessage: qu"
 			}
 		]
 	},

@@ -28,6 +28,11 @@ GtOpenAIThreadMessageElement class >> newForChatList [
 				right: 10)
 ]
 
+{ #category : #accessing }
+GtOpenAIThreadMessageElement >> contentsElementDo: aBlock [
+	aBlock value: contentsElement
+]
+
 { #category : #initialization }
 GtOpenAIThreadMessageElement >> defaultLayout [
 	^ BlLinearLayout vertical

@@ -29,26 +29,40 @@ GtOpenAIExpandableThreadMessageElement >> initialize [
 	self initializeThreadMessageElement.
 
 	self
-		addAptitude: BrGlamorousExpanderAptitude new;
-		header: [ threadMessageElement
-				removeFromParent;
-				constraintsDo: [ :c "c maxHeight: 100" |  ] ];
-		content: [ threadMessageElement
-				removeFromParent;
-				constraintsDo: [ :c "c maxHeight: Float infinity" |  ] ].
+		addAptitude: GtCoderExpanderAptitude new;
+		header: [ threadMessageElement removeFromParent ];
+		content: [ threadMessageElement removeFromParent ].
 
-	self whenExpandedDo: [ self constraintsDo: [ :c | c maxHeight: Float infinity ] ].
-	self
-		whenCollapsedDo: [ self constraintsDo: [ :c | c maxHeight: 120.0 ] ].
+	self states withExpansion.
+	self whenExpandedDo: [ self onExpanded ].
+	self whenCollapsedDo: [ self onCollapsed ].
+	self expand.
 
 	self hMatchParent.
-	self vFitContent.
-	self collapse
+	self vFitContent
 ]
 
 { #category : #'initialization ' }
 GtOpenAIExpandableThreadMessageElement >> initializeThreadMessageElement [
 	threadMessageElement := GtOpenAIThreadMessageElement new
+]
+
+{ #category : #'initialization ' }
+GtOpenAIExpandableThreadMessageElement >> onCollapsed [
+	threadMessageElement
+		ifNotNil: [  :aViewModel | 
+			"aViewModel expanded: false."
+			threadMessageElement contentsElementDo: [ :anEditor | 
+				anEditor constraintsDo: [ :c | c maxHeight: 120.0 ] ] ]
+]
+
+{ #category : #'private - event handling' }
+GtOpenAIExpandableThreadMessageElement >> onExpanded [
+	threadMessageElement
+		ifNotNil: [ :aViewModel | 
+			"aViewModel expanded: true."
+			threadMessageElement contentsElementDo: [ :anEditor | 
+				anEditor constraintsDo: [ :c | c maxHeight: Float infinity ] ] ]
 ]
 
 { #category : #'private - hooks' }
