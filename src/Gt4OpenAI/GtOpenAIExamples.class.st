@@ -299,6 +299,18 @@ GtOpenAIExamples >> phlowDescriptionMessageExpandableElementResponse [
 ]
 
 { #category : #'examples - messages' }
+GtOpenAIExamples >> phlowDescriptionMessageExpandableElementResponse_collapsed [
+	<gtExample>
+	| aViewModel anElement |
+	anElement := self basicExpandableThreadMessageElement.
+	aViewModel := self phlowDescriptionMessageViewModelResponse.
+	aViewModel isExpanded: false.
+	anElement threadMessageViewModel: aViewModel.
+
+	^ anElement
+]
+
+{ #category : #'examples - messages' }
 GtOpenAIExamples >> phlowDescriptionMessageQuestion [
 	<gtExample>
 	| aJson |
