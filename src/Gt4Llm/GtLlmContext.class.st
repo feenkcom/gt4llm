@@ -98,7 +98,7 @@ GtLlmContext >> instance: anObject [
 
 { #category : #accessing }
 GtLlmContext >> isImmutableInstance [
-	^ isImmutableInstance
+	^ isImmutableInstance ifNil: [ false ]
 ]
 
 { #category : #accessing }

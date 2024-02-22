@@ -29,6 +29,11 @@ GtOpenAIThreadMessageElement class >> newForChatList [
 ]
 
 { #category : #accessing }
+GtOpenAIThreadMessageElement >> contentsAptitudeDo: aBlock [
+	aBlock value: contentsElement aptitude
+]
+
+{ #category : #accessing }
 GtOpenAIThreadMessageElement >> contentsElementDo: aBlock [
 	aBlock value: contentsElement
 ]
@@ -67,6 +72,7 @@ GtOpenAIThreadMessageElement >> initialize [
 { #category : #initialization }
 GtOpenAIThreadMessageElement >> initializeContentsElement [
 	contentsElement := BrEditor new
+			padding: (BlInsets all: 1);
 			hMatchParent;
 			vFitContentLimited;
 			aptitude: BrGlamorousRegularEditorAptitude;

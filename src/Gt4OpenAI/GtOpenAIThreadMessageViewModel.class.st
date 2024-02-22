@@ -10,8 +10,13 @@ Class {
 }
 
 { #category : #accessing }
+GtOpenAIThreadMessageViewModel >> asOneLineViewModel [
+	^ GtOpenAIOneLineThreadMessageViewModel new threadMessageViewModel: self
+]
+
+{ #category : #accessing }
 GtOpenAIThreadMessageViewModel >> contentText [
-	<return: #BtText>
+	<return: #BlText>
 	^ contentText
 		ifNil: [ 
 			contentString := self threadMessage contentText.
