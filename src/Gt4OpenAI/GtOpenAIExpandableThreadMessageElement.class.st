@@ -72,8 +72,9 @@ GtOpenAIExpandableThreadMessageElement >> initializeThreadMessageElement [
 { #category : #'initialization ' }
 GtOpenAIExpandableThreadMessageElement >> onCollapsed [
 	moreContentElement visibility: BlVisibility visible.
-	threadMessageElement
-		ifNotNil: [  "aViewModel expanded: false.":aViewModel | 
+	threadMessageViewModel
+		ifNotNil: [ :aViewModel | 
+			aViewModel isExpanded: false.
 			threadMessageElement
 				contentsElementDo: [ :anEditor | anEditor constraintsDo: [ :c | c maxHeight: 120.0 ] ] ]
 ]
@@ -81,14 +82,15 @@ GtOpenAIExpandableThreadMessageElement >> onCollapsed [
 { #category : #'private - event handling' }
 GtOpenAIExpandableThreadMessageElement >> onExpanded [
 	moreContentElement visibility: BlVisibility gone.
-	threadMessageElement
+	threadMessageViewModel
 		ifNotNil: [ :aViewModel | 
-			"aViewModel expanded: true."
+			aViewModel isExpanded: true.
 			threadMessageElement contentsElementDo: [ :anEditor | 
 				anEditor constraintsDo: [ :c | c maxHeight: Float infinity ] ] ]
 ]
 
 { #category : #'private - hooks' }
 GtOpenAIExpandableThreadMessageElement >> onThreadMessageViewModelChanged [
-	threadMessageElement threadMessageViewModel: threadMessageViewModel
+	threadMessageElement threadMessageViewModel: threadMessageViewModel.
+	self expanded: threadMessageViewModel isExpanded 
 ]
