@@ -23,9 +23,11 @@ GtOpenAIOneLineThreadMessageViewModel >> announcer [
 GtOpenAIOneLineThreadMessageViewModel >> contentText [
 	<return: #BlText>
 	^ contentText
-		ifNil: [ contentString := self threadMessage contentText.
-			contentText := (contentString lines ifNotEmpty: #first ifEmpty: [ '' ])
-					asRopedText ]
+		ifNil: [ | oneLineString |
+			contentString := self threadMessage contentText.
+			oneLineString := (contentString lines reject: [ :eachLine | eachLine trimBoth isEmpty ]) 
+				ifNotEmpty: #first ifEmpty: [ '' ].
+			contentText := oneLineString asRopedText ]
 ]
 
 { #category : #'private - updating' }
