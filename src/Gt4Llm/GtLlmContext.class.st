@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'checker',
 		'instance',
-		'hasInstance'
+		'hasInstance',
+		'isImmutableInstance'
 	],
 	#category : #'Gt4Llm-Context'
 }
@@ -19,7 +20,8 @@ GtLlmContext >> check: aString [
 	| result |
 	result := self checker check: aString.
 
-	result hasErrors ifFalse: [ self instance: result lastResult content ].
+	(self isImmutableInstance not and: [ result hasErrors not ])
+		ifFalse: [ self instance: result lastResult content ].
 
 	^ result
 ]
@@ -70,10 +72,16 @@ GtLlmContext >> hasInstance [
 ]
 
 { #category : #accessing }
+GtLlmContext >> immutableInstance [
+	isImmutableInstance := true
+]
+
+{ #category : #accessing }
 GtLlmContext >> initialize [
 	super initialize.
 	
-	hasInstance := false
+	hasInstance := false.
+	isImmutableInstance := false.
 ]
 
 { #category : #accessing }
@@ -85,4 +93,19 @@ GtLlmContext >> instance [
 GtLlmContext >> instance: anObject [
 	instance := anObject.
 	hasInstance := true
+]
+
+{ #category : #accessing }
+GtLlmContext >> isImmutableInstance [
+	^ isImmutableInstance
+]
+
+{ #category : #accessing }
+GtLlmContext >> isImmutableInstance: anObject [
+	isImmutableInstance := anObject
+]
+
+{ #category : #accessing }
+GtLlmContext >> mutableInstance [
+	isImmutableInstance := false
 ]

@@ -32,18 +32,30 @@ GtLlmViewObject >> createStackString: anError [
 ]
 
 { #category : #accessing }
+GtLlmViewObject >> gtSourceFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Source';
+		priority: 1;
+		object: [ self view ];
+		view: #gtSourceCodeFor:
+]
+
+{ #category : #accessing }
 GtLlmViewObject >> gtViewFor: aView [
 	<gtView>
-	| scripter |
 	[ | createdView |
 	createdView := self instance perform: self view selector withArguments: {aView}.
 	createdView
 		asElementDo: [ :anElement | 
+			| scripter listOfErrors |
 			scripter := BlScripter new.
 			scripter element: anElement.
 			scripter elementWithoutParent.
-			((anElement query // GtPhlowExceptionId) all
-				collect: [ :anErrorElement | anErrorElement userData at: #exception ])
+			listOfErrors := (anElement query // GtPhlowExceptionId) all
+					, (anElement id = GtPhlowExceptionId asBlocElementId ifTrue: [ {anElement} ] ifFalse: [ {} ])
+					collect: [ :anErrorElement | anErrorElement userData at: #exception ].
+			listOfErrors
 				ifNotEmpty: [ :aList | 
 					^ aView list
 						title: 'View errors';
@@ -80,6 +92,16 @@ GtLlmViewObject >> instance [
 { #category : #accessing }
 GtLlmViewObject >> instance: anObject [
 	instance := anObject
+]
+
+{ #category : #accessing }
+GtLlmViewObject >> removeViewActionFor: anAction [
+	<gtAction>
+	^ anAction button
+		icon: BrGlamorousVectorIcons remove;
+		priority: 10;
+		tooltip: 'Remove view';
+		action: [ self instance class removeSelector: self view selector ]
 ]
 
 { #category : #accessing }
