@@ -29,7 +29,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-12T08:26:09.926627-03:00"
+						"dateAndTimeString" : "2024-02-22T21:02:44.503582+01:00"
 					}
 				},
 				"uid" : {
@@ -39,149 +39,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "This page describes an interaction with OpenAI [assistant](https://platform.openai.com/assistants) using chat, showing different kind of question and responses."
-			},
-			{
-				"__type" : "textSnippet",
-				"children" : {
-					"__type" : "snippets",
-					"items" : [ ]
-				},
-				"createEmail" : {
-					"__type" : "email",
-					"emailString" : "juraj.kubelka@icloud.com"
-				},
-				"createTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-09T12:29:58.565601-03:00"
-					}
-				},
-				"editEmail" : {
-					"__type" : "email",
-					"emailString" : "juraj.kubelka@icloud.com"
-				},
-				"editTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-09T12:30:06.729057-03:00"
-					}
-				},
-				"uid" : {
-					"__type" : "uid",
-					"uidString" : "1QR0VlbNDQCCjl+VDOiMHg=="
-				},
-				"paragraphStyle" : {
-					"__type" : "textStyle"
-				},
-				"string" : "Define OpenAI api key"
-			},
-			{
-				"__type" : "pharoSnippet",
-				"children" : {
-					"__type" : "snippets",
-					"items" : [ ]
-				},
-				"createEmail" : {
-					"__type" : "email",
-					"emailString" : "juraj.kubelka@icloud.com"
-				},
-				"createTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-09T12:30:09.125058-03:00"
-					}
-				},
-				"editEmail" : {
-					"__type" : "email",
-					"emailString" : "juraj.kubelka@icloud.com"
-				},
-				"editTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-09T12:30:24.422969-03:00"
-					}
-				},
-				"uid" : {
-					"__type" : "uid",
-					"uidString" : "EhwVV1bNDQCC+yraDOiMHg=="
-				},
-				"code" : "apiKey := (FileLocator home / '.secrets' / 'open-ai-api-key.txt') contents"
-			},
-			{
-				"__type" : "pharoSnippet",
-				"children" : {
-					"__type" : "snippets",
-					"items" : [ ]
-				},
-				"createEmail" : {
-					"__type" : "email",
-					"emailString" : "juraj.kubelka@icloud.com"
-				},
-				"createTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-09T12:30:32.864619-03:00"
-					}
-				},
-				"editEmail" : {
-					"__type" : "email",
-					"emailString" : "juraj.kubelka@icloud.com"
-				},
-				"editTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-09T12:30:52.850141-03:00"
-					}
-				},
-				"uid" : {
-					"__type" : "uid",
-					"uidString" : "Q19/WFbNDQCDWYj2DOiMHg=="
-				},
-				"code" : "apiKey := Clipboard clipboardText."
-			},
-			{
-				"__type" : "textSnippet",
-				"children" : {
-					"__type" : "snippets",
-					"items" : [ ]
-				},
-				"createEmail" : {
-					"__type" : "email",
-					"emailString" : "juraj.kubelka@icloud.com"
-				},
-				"createTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-09T10:28:28.742399-03:00"
-					}
-				},
-				"editEmail" : {
-					"__type" : "email",
-					"emailString" : "<unknown>"
-				},
-				"editTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-12T08:26:25.408845-03:00"
-					}
-				},
-				"uid" : {
-					"__type" : "uid",
-					"uidString" : "gSvyo1TNDQCqiHTXDOiMHg=="
-				},
-				"paragraphStyle" : {
-					"__type" : "textStyle"
-				},
-				"string" : "Create a tutor, an [assistant](https://platform.openai.com/assistants), and an assistant chat"
+				"string" : "This page describes an interaction with OpenAI [assistant](https://platform.openai.com/assistants) using chat, showing different kind of question and responses. [[Setup the tutor]] for more details."
 			},
 			{
 				"__type" : "pharoSnippet",
@@ -526,14 +384,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-22T10:09:41.15112-03:00"
+						"dateAndTimeString" : "2024-02-22T10:09:41.873704-03:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "MVpd41nODQCdZHpdD5mAnA=="
 				},
-				"code" : "question := 'Create a Phlow view for Fraction that displays numerator and denominator.'.\rchat sendMessage: qu"
+				"code" : "question := 'Create a Phlow view for Fraction that displays numerator and denominator.'.\rchat sendMessage: question"
 			}
 		]
 	},

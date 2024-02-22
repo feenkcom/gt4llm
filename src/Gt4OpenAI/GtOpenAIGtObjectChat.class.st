@@ -10,7 +10,7 @@ Class {
 { #category : #accessing }
 GtOpenAIGtObjectChat >> buildElement [
 	| chat tutor |
-	tutor := GtOpenAIGtTutor globalInstance.
+	tutor := GtOpenAIGtTutor instance.
 	tutor hasAssistant ifFalse: [ tutor createAssistant ].
 
 	chat := GtOpenAIAssistantChat new

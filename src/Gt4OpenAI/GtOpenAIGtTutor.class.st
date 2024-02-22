@@ -17,15 +17,20 @@ Class {
 		'smalltalkMethodPipeline'
 	],
 	#classInstVars : [
-		'globalInstance'
+		'instance'
 	],
 	#category : #'Gt4OpenAI-Tutor'
 }
 
 { #category : #accessing }
-GtOpenAIGtTutor class >> globalInstance [
-	^ globalInstance
-		ifNil: [ globalInstance := self withApiKeyFromClipboard createAssistant ]
+GtOpenAIGtTutor class >> instance [
+	^ instance
+		ifNil: [ instance := self withApiKeyFromClipboard createAssistant ]
+]
+
+{ #category : #accessing }
+GtOpenAIGtTutor class >> instance: aTutor [
+	^ instance := aTutor
 ]
 
 { #category : #accessing }
