@@ -28,6 +28,12 @@ GtLlmUpdatingDateAndTimeTask >> dateAndTime: anObject [
 	dateAndTime := anObject
 ]
 
+{ #category : #'private - event handling' }
+GtLlmUpdatingDateAndTimeTask >> elementRemovedFromSceneGraphEvent: anEvent [
+	delay := 0 milliSeconds.
+	super elementRemovedFromSceneGraphEvent: anEvent
+]
+
 { #category : #initialization }
 GtLlmUpdatingDateAndTimeTask >> initialize [
 	super initialize.
