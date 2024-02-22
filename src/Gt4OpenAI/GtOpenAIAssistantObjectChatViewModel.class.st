@@ -5,6 +5,11 @@ Class {
 }
 
 { #category : #accessing }
-GtOpenAIAssistantObjectChatViewModel >> threadMessageViewModels [
-	^ super threadMessageViewModels allButFirst
+GtOpenAIAssistantObjectChatViewModel >> threadMessageViewModel [
+	| newMessage |
+	newMessage := assistantChat messages asArray detect: #isAssistantRole.
+	^ threadMessageViewModelsCache
+			at: newMessage id
+			ifPresent: [ :theViewModel | theViewModel threadMessage: newMessage ]
+			ifAbsentPut: [ self newThreadMessageViewModelFor: newMessage ]
 ]

@@ -42,6 +42,11 @@ GtOpenAIAssistantChatViewModel >> onAssistantChatChanged [
 ]
 
 { #category : #accessing }
+GtOpenAIAssistantChatViewModel >> sendMessage: aString [
+	self assistantChat sendMessage: aString
+]
+
+{ #category : #accessing }
 GtOpenAIAssistantChatViewModel >> threadMessageViewModels [
 	| newMessages |
 	newMessages := assistantChat messages asArray reversed.
