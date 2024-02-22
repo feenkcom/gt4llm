@@ -38,14 +38,14 @@ GtOpenAINewThreadMessageElement >> initialize [
 	self addChild: sendButton as: #send.
 
 	self hMatchParent.
-	self vFitContent
+	self vFitContentLimited
 ]
 
 { #category : #'initialization ' }
 GtOpenAINewThreadMessageElement >> initializeContentsElement [
 	contentsElement := BrEditor new
 			hMatchParent;
-			vFitContent;
+			vFitContentLimited;
 			aptitude: BrGlamorousRegularEditorAptitude.
 
 	contentsElement editor
