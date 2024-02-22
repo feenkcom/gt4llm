@@ -20,8 +20,9 @@ GtLlmContext >> check: aString [
 	| result |
 	result := self checker check: aString.
 
-	(self isImmutableInstance not and: [ result hasErrors not ])
-		ifFalse: [ self instance: result lastResult content ].
+	(self hasInstance not
+		or: [ self isImmutableInstance not and: [ result hasErrors not ] ])
+		ifTrue: [ self instance: result lastResult content ].
 
 	^ result
 ]

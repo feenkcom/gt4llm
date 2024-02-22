@@ -31,7 +31,7 @@ GtOpenAIThreadMessage class >> serializationProperties [
 		#id -> #id.
 		#metadata -> #metadata.
 		#run_id -> #runId.
-		#thread_d -> #threadId.
+		#thread_id -> #threadId.
 		#role -> #role
 	}
 ]
