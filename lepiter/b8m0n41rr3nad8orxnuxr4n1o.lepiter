@@ -103,14 +103,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-14T12:27:01.323129+01:00"
+						"dateAndTimeString" : "2024-02-22T21:04:08.794501+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "vpQX8qHNDQCMVJlOBQLYvQ=="
 				},
-				"code" : "tutor := GtOpenAIGtTutor withApiKeyFromClipboard createAssistant"
+				"code" : "tutor := GtOpenAIGtTutor instance"
 			},
 			{
 				"__type" : "textSnippet",
@@ -559,12 +559,12 @@
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2024-02-13T10:41:15.119921+01:00"
+			"dateAndTimeString" : "2024-02-22T21:04:29.158926+01:00"
 		}
 	},
 	"pageType" : {
 		"__type" : "namedPage",
-		"title" : "Interacting with a Tutor"
+		"title" : "Interacting with a tutor"
 	},
 	"uid" : {
 		"__type" : "uuid",

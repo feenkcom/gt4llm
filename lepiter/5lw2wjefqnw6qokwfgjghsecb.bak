@@ -66,14 +66,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-06T11:01:09.920375+01:00"
+						"dateAndTimeString" : "2024-02-14T12:28:21.982064+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "UmMbkIrMDQCW0cHKATK6Xg=="
 				},
-				"code" : "apiKey := Clipboard clipboardText.\rclient := Gt4OpenAIClient new apiKey: apiKey.\r\r\"or, as a convenience function\"\r\rclient := Gt4OpenAIClient withApiKeyFromClipboard"
+				"code" : "apiKey := Clipboard clipboardText.\rclient := GtOpenAIClient new apiKey: apiKey.\r\r\"or, as a convenience function\"\r\rclient := GtOpenAIClient withApiKeyFromClipboard"
 			},
 			{
 				"__type" : "textSnippet",
@@ -208,14 +208,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-30T13:24:41.82332+01:00"
+						"dateAndTimeString" : "2024-02-14T12:28:40.413749+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "RfoZlYrMDQCaiB6QATK6Xg=="
 				},
-				"code" : "messages := {\r\tGt4OpenAISystemMessage new content: 'You are a helpful assistant.'.\r\tGt4OpenAIUserMessage new content: 'Hello ChatGPT! How are you today?'\r}.\r\rclient completeChatWithModel: 'gpt-3.5-turbo' andMessages: messages"
+				"code" : "messages := {\r\tGtOpenAISystemMessage new content: 'You are a helpful assistant.'.\r\tGtOpenAIUserMessage new content: 'Hello ChatGPT! How are you today?'\r}.\r\rclient completeChatWithModel: 'gpt-3.5-turbo' andMessages: messages"
 			}
 		]
 	},
@@ -238,12 +238,12 @@
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2024-01-30T13:21:14.538485+01:00"
+			"dateAndTimeString" : "2024-02-22T18:49:47.741561+01:00"
 		}
 	},
 	"pageType" : {
 		"__type" : "namedPage",
-		"title" : "Getting Started"
+		"title" : "Working with the API client"
 	},
 	"uid" : {
 		"__type" : "uuid",
