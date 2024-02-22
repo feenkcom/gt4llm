@@ -20,8 +20,23 @@ GtOpenAINewThreadMessage >> assistantChat: anAssistantChat [
 ]
 
 { #category : #accessing }
+GtOpenAINewThreadMessage >> codeBlocks [
+	^ self parse children
+		select: [ :aNode | (aNode isKindOf: LeCodeBlockNode) and: [ aNode isForSmalltalk ] ]
+		thenCollect: [ :aNode | aNode code value ]
+]
+
+{ #category : #accessing }
 GtOpenAINewThreadMessage >> codeBlocksExecutor [
 	^ GtOpenAICodeBlocksPipelineExecutor new
+		codeBlocks: self codeBlocks;
+		pipeline: assistantChat pipeline;
+		threadMessage: self
+]
+
+{ #category : #accessing }
+GtOpenAINewThreadMessage >> contentText [
+	^ self contents
 ]
 
 { #category : #accessing }
@@ -64,6 +79,11 @@ GtOpenAINewThreadMessage >> onContentsChangeByRequester: aRequester [
 				threadMessage: self;
 				contents: contents;
 				requester: aRequester)
+]
+
+{ #category : #accessing }
+GtOpenAINewThreadMessage >> parse [
+	^ LeParser parse: self contentText
 ]
 
 { #category : #actions }
