@@ -64,31 +64,6 @@ GtOpenAIAssistantChat >> getRun [
 	^ lastRun
 ]
 
-{ #category : #'generated - gpt' }
-GtOpenAIAssistantChat >> gtActionableMessagesAnalysisFor: aView [
-    <gtView>
-    "Analyzes messages to categorize and count those prompting actions or decisions"
-    
-    | userInitiatedActions assistantInitiatedActions totalMessages categorized|
-    totalMessages := self messages.
-    userInitiatedActions := totalMessages select: [:each | 
-        (each role = 'User') and: [self isActionableMessage: each contentText]].
-    assistantInitiatedActions := totalMessages select: [:each | 
-        (each role = 'Assistant') and: [self isActionableMessage: each contentText]].
-
-    categorized := Dictionary new.
-    categorized at: 'Total Messages' put: totalMessages size.
-    categorized at: 'User Initiated Actions' put: userInitiatedActions size.
-    categorized at: 'Assistant Initiated Actions' put: assistantInitiatedActions size.
-
-    ^ aView columnedList
-        title: 'Actionable Messages Analysis';
-        priority: 9;
-        items: categorized;
-        column: 'Category' text: #key;
-        column: 'Count' text: #value.
-]
-
 { #category : #accessing }
 GtOpenAIAssistantChat >> gtFilesFor: aView [
 	<gtView>

@@ -7,9 +7,11 @@ Class {
 { #category : #accessing }
 GtOpenAIAssistantObjectChatViewModel >> threadMessageViewModel [
 	| newMessage |
-	newMessage := assistantChat messages asArray detect: #isAssistantRole.
+	newMessage := assistantChat messages asArray
+			detect: #isAssistantRole
+			ifNone: [ ^ nil ].
 	^ threadMessageViewModelsCache
-			at: newMessage id
-			ifPresent: [ :theViewModel | theViewModel threadMessage: newMessage ]
-			ifAbsentPut: [ self newThreadMessageViewModelFor: newMessage ]
+		at: newMessage id
+		ifPresent: [ :theViewModel | theViewModel threadMessage: newMessage ]
+		ifAbsentPut: [ self newThreadMessageViewModelFor: newMessage ]
 ]

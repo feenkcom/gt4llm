@@ -32,6 +32,16 @@ GtLlmViewObject >> createStackString: anError [
 ]
 
 { #category : #accessing }
+GtLlmViewObject >> gtSourceFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Source';
+		priority: 1;
+		object: [ self view ];
+		view: #gtSourceCodeFor:
+]
+
+{ #category : #accessing }
 GtLlmViewObject >> gtViewFor: aView [
 	<gtView>
 	[ | createdView |
