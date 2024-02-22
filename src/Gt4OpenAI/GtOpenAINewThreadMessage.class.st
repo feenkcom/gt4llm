@@ -72,6 +72,11 @@ GtOpenAINewThreadMessage >> initialize [
 	announcer := Announcer new.
 ]
 
+{ #category : #accessing }
+GtOpenAINewThreadMessage >> isAssistantRole [
+	^ false
+]
+
 { #category : #'private - notifying' }
 GtOpenAINewThreadMessage >> onContentsChangeByRequester: aRequester [
 	announcer

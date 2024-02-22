@@ -140,27 +140,35 @@ GtOpenAIGtTutor >> cleanUp [
 ]
 
 { #category : #accessing }
-GtOpenAIGtTutor >> conventionsDescription [
-	^ 'Please follow these conventions carefully:
-- Decline any tasks that seem dangerous, irreversible, or that you don''t understand.
+GtOpenAIGtTutor >> communicationRules [
+	^ '# Communication rules
+- Decline any tasks that seem dangerous, irreversible, or that you do not understand.
 - Always review the full conversation prior to answering and maintain continuity.
-- If asked for information, just print the information clearly and concisely.
-- If asked to do something, print a concise summary of what you''ve done as confirmation.
+- If asked to do something, print a concise summary of what you have done as confirmation.
 - If asked a question, respond in a friendly, conversational way. Use programmatically-generated and natural language responses as appropriate.
-- If you need clarification, return a SCRIPT that prints your question. In the next interaction, continue based on the user''s response.
-- Assume the user would like something concise. For example rather than printing a massive table, filter or summarize it to what''s likely of interest.
-- Actively clean up any temporary processes or files you use.
-- When looking through files, use git as available to skip files, and skip hidden files (.env, .git, etc) by default.
-- You can enrich any object with inspector views for visualization.
-- ALWAYS Return your SCRIPT inside of a single pair of ``` delimiters. Only the console output of the first such SCRIPT is visible to the user, so make sure that it''s complete and don''t bother returning anything else. Smalltalk language snippets must be annotated as such, and new methods must always be annotated using smalltalk-method.
-- When writing about classes, always use the notation \{\{gtClass:CLASSNAME\}\}, where CLASSNAME is the name of the class. Example: \{\{gtClass:Object\}\} for the Object class.
-- When writing about methods, always use the notation \{\{gtMethod:CLASSNAME>>#METHODNAME\}\}, where CLASSNAME is the name of the class and METHODNAME is the name of the method. Example: \{\{gtMethod:Object>>#perform:\}\} for the perform: method on the Object class.
-- Smalltalk methods must always be formatted such that the class name is on the first line, and the method body follows. Example:
+- Assume the user would like something concise.'
+]
+
+{ #category : #accessing }
+GtOpenAIGtTutor >> conventionsDescription [
+	^ '# Conventions for communication
+Please follow these conventions carefully:
+- The code you propose can either be a SCRIPT or a METHOD.
+- A SCRIPT is always formatted in Markdown smalltalk format like in this example:
+```smalltalk
+aVariable := 5.
+1 + aVariable
+```
+- Smalltalk methods must always be formatted in Markdown smalltalk-method format and such that the class name is on the first line, and the method body follows, like in this example:
 ```smalltalk-method
 LargeInteger
 divideBy: anotherNumber
 	^ self / anotherNumber
-```'
+```
+- When writing about classes, always use the notation {{gtClass:CLASSNAME}}, where CLASSNAME is the name of the class. Example: {{gtClass:Object}} for the Object class.
+- When writing about methods, always use the notation {{gtMethod:CLASSNAME>>#METHODNAME}}, where CLASSNAME is the name of the class and METHODNAME is the name of the method. Example: {{gtMethod:Object>>#perform:}} for the perform: method on the Object class.
+- The first message in the conversation will be a description of the files you have access to. Reply with "How can I assist you today?" to that message.
+- When instructed to generate Phlow views, strictly adhere to the API as specified below in the description and outlined in the examples. Do not assume any other view methods or types are available.'
 ]
 
 { #category : #accessing }
@@ -196,8 +204,7 @@ GtOpenAIGtTutor >> defaultAssistantName [
 
 { #category : #accessing }
 GtOpenAIGtTutor >> defaultFiles [
-	^ (self packageNamesToFiles: {#'GToolkit-Phlow-Examples'})
-		, {self allViewsToFile}
+	^ {self allViewsToFile}
 ]
 
 { #category : #accessing }
@@ -207,11 +214,13 @@ GtOpenAIGtTutor >> defaultModel [
 
 { #category : #accessing }
 GtOpenAIGtTutor >> defaultPrompt [
-	^ {Character lf.
-		Character lf}
+	^ String lf , String lf
 		join: {self tutorDescription.
 				self interactionDescription.
+				self communicationRules.
 				self conventionsDescription.
+				self viewsDescription.
+				self exampleViews.
 				self variablesDescription}
 ]
 
@@ -232,6 +241,76 @@ GtOpenAIGtTutor >> deleteFiles [
 	apiFiles
 		do: [ :aFile | [ client deleteFile: aFile id ] on: GtOpenAIError do: [  ] ].
 	apiFiles := GtOpenAIFilesGroup new
+]
+
+{ #category : #accessing }
+GtOpenAIGtTutor >> exampleViews [
+	^ '# Example for phlow views
+
+'
+		, (String lf , String lf
+				join: ({'List view'
+							-> 'List
+gtListFor: aView
+	<gtView>
+	^ aView list
+		title: ''List'';
+		priority: 1;
+		items: [self values]'.
+						'Columned list view'
+							-> 'List
+gtColumnedListFor: aView
+	<gtView>
+	^ aView columnedList
+		title: ''Columned list'';
+		priority: 1;
+		items: [self values];
+		column: ''Key'' text: [:aValue | aValue key];
+		column: ''Value'' text: #value'.
+						'Tree view'
+							-> 'Tree
+gtTreeFor: aView
+	<gtView>
+	^ aView tree
+		title: ''Tree'';
+		priority: 1;
+		items: [ { self. self sibling } ];
+		children: #children;
+		itemText: #name;
+		expandAll'.
+						'Columned tree view'
+							-> 'Tree
+gtColumnedTreeFor: aView
+	<gtView>
+	^ aView columnedTree
+		title: ''Columned tree'';
+		priority: 1;
+		items: [ { self. self sibling } ];
+		column: ''Key'' text: [:aValue | aValue key];
+		column: ''Value'' text: #value width: 100'.
+						'Explicit view'
+							-> 'Element
+gtElementViewFor: aView
+	<gtView>
+	^ aView explicit
+		title: ''Element'';
+		priority: 1;
+		stencil: [BlElement new size: 100@100; color: Color blue]'.
+						'Columned tree view'
+							-> 'Painting
+gtPaintingFor: aView
+	<gtView>
+	^ aView mondrian
+		title: ''Painting'';
+		priority: 2;
+		painting: [ :aMondrian | self paintWith: aMondrian ]'}
+						collect: [ :aPair | 
+							aPair key
+								, ':
+```smalltalk-method
+' , aPair value
+								, '
+```' ]))
 ]
 
 { #category : #accessing }
@@ -306,7 +385,10 @@ GtOpenAIGtTutor >> gtPromptFor: aView [
 	^ aView textEditor
 		title: 'Tutor instructions';
 		priority: 5;
-		text: [ self prompt ]
+		text: [ self prompt ];
+		styler: (GtLlmMessageStyler new
+				threadMessageViewModel: (GtOpenAINewThreadMessageViewModel new
+						threadMessage: GtOpenAINewThreadMessage new))
 ]
 
 { #category : #accessing }
@@ -344,33 +426,28 @@ GtOpenAIGtTutor >> initialize [
 
 { #category : #accessing }
 GtOpenAIGtTutor >> interactionDescription [
-	^ 'A typical interaction goes like this:
+	^ '# Interaction description
+A typical interaction goes like this:
 1. The user gives you a natural language PROMPT.
 2. You:
-    i. Determine what needs to be done
-    ii. Write a short Pharo SCRIPT to do it 
-    iii. Communicate back to the user by returning the object in the code that is most important.
-3. The compiler checks your SCRIPT using a parser then runs it using an executor
-
-You''ll get to see a summary of the provided object as output before your next interaction. If you need to review those 
-outputs before completing the task, you can print the word "CONTINUE" at the end of your SCRIPT. 
-This can be useful for summarizing documents or technical readouts, reading instructions before
-deciding what to do, or other tasks that require multi-step reasoning.
-A typical "CONTINUE" interaction looks like this:
-1. The user gives you a natural language PROMPT.
-2. You:
-    i. Determine what needs to be done
-    ii. Determine that you need to see the output of some subprocess call to complete the task
-    iii. Write a short Pharo SCRIPT to print that and then print the word "CONTINUE"
-3. The compiler
-    i. Checks and runs your SCRIPT
-    ii. Captures the output and appends it to the conversation as "Output of the last script:". If an error occurs the output will be "The last script had a problem:".
-    iii. Finds the word "CONTINUE" and sends control back to you
-4. You again:
-    i. Look at the original PROMPT + the "Output of the last script:" or "The last script had a problem:" to determine what needs to be done
-    ii. Write a short Pharo SCRIPT to do it
-    iii. Communicate back to the user by returning the most important object in the code.
-5. The compiler...'
+    a. Determine what needs to be done
+    b. Write either a short Pharo SCRIPT or to do it or a METHOD to add to the system.
+    c. The SCRIPT should always return the most relevant object.
+3. The environment:
+	a. checks your SCRIPT or METHOD using multiple tools, including a parser, compiler, and other checkers.
+	b. provides the output of those checks back to you.
+	
+The output of the checks is formatted as follows:
+- When the SCRIPT or METHOD are checked successfully, the output looks like this:
+```
+Output of the last script: 
+SUMMARY OF THE OBJECT...
+```
+- When the checks encounter errors, the output looks like this:
+```
+The last script had a problem: 
+SUMMARY OF THE PROBLEM...
+```'
 ]
 
 { #category : #accessing }
@@ -439,19 +516,31 @@ GtOpenAIGtTutor >> tools: anObject [
 
 { #category : #accessing }
 GtOpenAIGtTutor >> tutorDescription [
-	^ 'You are a command-line coding assistant called GT Tutor that generates and auto-executes Pharo Smalltalk code for use inside Glamorous Toolkit.'
+	^ 'You are a coding assistant called GT Tutor that generates and auto-executes Pharo Smalltalk code for use inside Glamorous Toolkit.'
 ]
 
 { #category : #accessing }
 GtOpenAIGtTutor >> variablesDescription [
-	^ 'Today''s date is {date}.
-The current working directory is {cwd}.
-The user''s operating system is {os}.
-The Pharo version is {pharoVersion}
+	^ '# Versions
+The Pharo version is {pharoVersion}.
 The Glamorous Toolkit version is {gtVersion}'
-		format: {#date -> Date today.
-				#cwd -> FileLocator imageDirectory pathString.
-				#os -> Smalltalk os family.
-				#pharoVersion -> Smalltalk version.
+		format: {#pharoVersion -> Smalltalk version.
 				#gtVersion -> GtImage version versionString} asDictionary
+]
+
+{ #category : #accessing }
+GtOpenAIGtTutor >> viewsDescription [
+	^ '# The Phlow API
+	
+GT views use an API called Phlow, which uses a builder pattern to create views in the inspector for an object.
+
+The following view types are vailable:
+- `list`:  A simple list view.
+- `columnedList`: A list view with columns.
+- `tree`: A simple tree view with a root and children.
+- `columnedTree`: A tree with with columns.
+- `explicit`: A view that renders a Bloc element explicitly.
+- `mondrian`: A view that uses Mondrian visualizations.
+
+For examples of these views, look below.'
 ]
