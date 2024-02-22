@@ -72,7 +72,7 @@ GtOpenAIThreadMessageElement >> initialize [
 { #category : #initialization }
 GtOpenAIThreadMessageElement >> initializeContentsElement [
 	contentsElement := BrEditor new
-			padding: (BlInsets all: 1);
+			padding: (BlInsets all: 2);
 			hMatchParent;
 			vFitContentLimited;
 			aptitude: BrGlamorousRegularEditorAptitude;
