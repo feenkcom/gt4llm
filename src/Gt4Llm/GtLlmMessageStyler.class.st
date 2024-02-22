@@ -40,9 +40,14 @@ GtLlmMessageStyler >> evaluateCodeBlock: aCodeBlock expanded: aBoolean from: aBu
 
 { #category : #generated }
 GtLlmMessageStyler >> evaluateMethodBlock: aCodeBlock expanded: aBoolean from: aButton isReplace: aReplaceBoolean [
-	| aResult position source |
+	| aResult position source aMethod |
 	source := aCodeBlock code source.
-	aResult := self threadMessageViewModel smalltalkMethodPipeline check: source.
+	"aResult := self threadMessageViewModel smalltalkMethodPipeline check: source."
+	
+	aMethod := self methodSourceFrom: aCodeBlock.
+	aResult := aReplaceBoolean
+			ifTrue: [ aMethod replaceInSystem ]
+			ifFalse: [ aMethod addToSystem ].
 
 	aResult threadMessage: self threadMessageViewModel threadMessage.
 
@@ -149,7 +154,10 @@ GtLlmMessageStyler >> isCursorInside: nodeInterval [
 GtLlmMessageStyler >> methodSourceFrom: aCodeBlock [
 	| source |
 	source := aCodeBlock code source trim.
-	^ GtLlmMethodSource forSource: source
+	"^ GtLlmMethodSource forSource: source"
+	^ GtLlmMessageMethod new
+		methodClass: source lines first asClass;
+		methodBody: (Character lf join: source lines allButFirst)
 ]
 
 { #category : #accessing }
@@ -519,7 +527,7 @@ GtLlmMessageStyler >> styleSmalltalkMethod: aCodeNode [
 								from: aWidget
 								isReplace: isReplace ] ]} asOrderedCollection.
 
-	"isReplace" false
+	isReplace
 		ifTrue: [ attributes
 				add: (GtButtonAttribute new
 						beAppend;
