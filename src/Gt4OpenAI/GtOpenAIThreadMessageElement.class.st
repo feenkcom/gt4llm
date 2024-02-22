@@ -60,7 +60,7 @@ GtOpenAIThreadMessageElement >> initialize [
 	self addChild: progressElement as: #progress.
 
 	self hMatchParent.
-	self vFitContent.
+	self vFitContentLimited.
 	self padding: (BlInsets all: 3)
 ]
 
@@ -68,7 +68,7 @@ GtOpenAIThreadMessageElement >> initialize [
 GtOpenAIThreadMessageElement >> initializeContentsElement [
 	contentsElement := BrEditor new
 			hMatchParent;
-			vFitContent;
+			vFitContentLimited;
 			aptitude: BrGlamorousRegularEditorAptitude;
 			beReadOnlyWithSelection
 ]
