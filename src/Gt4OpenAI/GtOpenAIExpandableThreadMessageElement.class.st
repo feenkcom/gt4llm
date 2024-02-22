@@ -43,7 +43,7 @@ GtOpenAIExpandableThreadMessageElement >> initialize [
 	self expand.
 
 	self hMatchParent.
-	self vFitContent
+	self vFitContentLimited
 ]
 
 { #category : #'initialization ' }
