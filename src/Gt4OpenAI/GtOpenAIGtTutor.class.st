@@ -233,7 +233,7 @@ GtOpenAIGtTutor >> defaultTools [
 GtOpenAIGtTutor >> deleteAssistant [
 	assistant
 		ifNotNil: [ [ client deleteAssistant: assistant id.
-			assistant := nil ] on: GtOpenAIError do: [  ] ]
+			assistant := nil ] on: GtOpenAIError do: [ assistant := nil ] ]
 ]
 
 { #category : #accessing }
