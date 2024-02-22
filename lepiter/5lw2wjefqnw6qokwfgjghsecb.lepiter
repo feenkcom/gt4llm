@@ -238,12 +238,12 @@
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2024-01-30T13:21:14.538485+01:00"
+			"dateAndTimeString" : "2024-02-22T18:49:47.741561+01:00"
 		}
 	},
 	"pageType" : {
 		"__type" : "namedPage",
-		"title" : "Getting Started"
+		"title" : "Working with the API client"
 	},
 	"uid" : {
 		"__type" : "uuid",
