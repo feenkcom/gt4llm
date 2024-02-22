@@ -31,7 +31,7 @@ GtOpenAIThreadMessage class >> serializationProperties [
 		#id -> #id.
 		#metadata -> #metadata.
 		#run_id -> #runId.
-		#thread_d -> #threadId.
+		#thread_id -> #threadId.
 		#role -> #role
 	}
 ]
@@ -162,9 +162,7 @@ GtOpenAIThreadMessage >> gtContentFor: aView [
 	^ aView explicit
 		title: 'Content';
 		priority: 1;
-		stencil: [
-			(GtOpenAIThreadMessageElement new threadMessageViewModel: self asViewModel) asScrollableElement
-		]
+		stencil: [ GtOpenAIThreadMessageElement new threadMessageViewModel: self asViewModel ]
 ]
 
 { #category : #accessing }

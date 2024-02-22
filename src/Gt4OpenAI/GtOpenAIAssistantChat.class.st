@@ -75,6 +75,16 @@ GtOpenAIAssistantChat >> gtFilesFor: aView [
 ]
 
 { #category : #accessing }
+GtOpenAIAssistantChat >> gtInstanceFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Instance';
+		priority: 8;
+		object: [ pipeline ];
+		view: #gtInstanceFor:
+]
+
+{ #category : #accessing }
 GtOpenAIAssistantChat >> gtMessagesFor: aView [
 	<gtView>
 	"cannot be a forward because the update wouldn’t work"
