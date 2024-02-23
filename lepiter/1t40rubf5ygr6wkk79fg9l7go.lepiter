@@ -94,20 +94,20 @@
 				},
 				"editEmail" : {
 					"__type" : "email",
-					"emailString" : "juraj.kubelka@icloud.com"
+					"emailString" : "<unknown>"
 				},
 				"editTime" : {
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-09T11:03:41.743738-03:00"
+						"dateAndTimeString" : "2024-02-23T09:29:50.615832-03:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "LtBkFFXNDQCuF7CCDOiMHg=="
 				},
-				"code" : "chat := tutor chats ifNotEmpty: #last ifEmpty: [ tutor addChat ]"
+				"code" : "chat := tutor chat"
 			},
 			{
 				"__type" : "textSnippet",

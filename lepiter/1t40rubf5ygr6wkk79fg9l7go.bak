@@ -66,14 +66,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-14T12:27:07.461859+01:00"
+						"dateAndTimeString" : "2024-02-22T21:03:07.171808+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "7REkNI/NDQCHsFrIBtrTtQ=="
 				},
-				"code" : "tutor := GtOpenAIGtTutor new\r\t\tapiKey: apiKey;\r\t\tcreateAssistant"
+				"code" : "tutor := GtOpenAIGtTutor instance."
 			},
 			{
 				"__type" : "pharoSnippet",
@@ -113,7 +113,42 @@
 				"__type" : "textSnippet",
 				"children" : {
 					"__type" : "snippets",
-					"items" : [ ]
+					"items" : [
+						{
+							"__type" : "pharoSnippet",
+							"children" : {
+								"__type" : "snippets",
+								"items" : [ ]
+							},
+							"createEmail" : {
+								"__type" : "email",
+								"emailString" : "juraj.kubelka@icloud.com"
+							},
+							"createTime" : {
+								"__type" : "time",
+								"time" : {
+									"__type" : "dateAndTime",
+									"dateAndTimeString" : "2024-02-09T10:55:14.031965-03:00"
+								}
+							},
+							"editEmail" : {
+								"__type" : "email",
+								"emailString" : "juraj.kubelka@icloud.com"
+							},
+							"editTime" : {
+								"__type" : "time",
+								"time" : {
+									"__type" : "dateAndTime",
+									"dateAndTimeString" : "2024-02-09T11:05:32.610558-03:00"
+								}
+							},
+							"uid" : {
+								"__type" : "uid",
+								"uidString" : "zO2gA1XNDQCtel7uDOiMHg=="
+							},
+							"code" : "question := 'Write me a snippet that lists all currently defined classes in the image.'.\rchat sendMessage: question."
+						}
+					]
 				},
 				"createEmail" : {
 					"__type" : "email",
@@ -128,13 +163,13 @@
 				},
 				"editEmail" : {
 					"__type" : "email",
-					"emailString" : "juraj.kubelka@icloud.com"
+					"emailString" : "<unknown>"
 				},
 				"editTime" : {
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-09T12:20:54.352823-03:00"
+						"dateAndTimeString" : "2024-02-22T21:02:52.990909+01:00"
 					}
 				},
 				"uid" : {
@@ -144,47 +179,48 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "Ask for a code snippet"
-			},
-			{
-				"__type" : "pharoSnippet",
-				"children" : {
-					"__type" : "snippets",
-					"items" : [ ]
-				},
-				"createEmail" : {
-					"__type" : "email",
-					"emailString" : "juraj.kubelka@icloud.com"
-				},
-				"createTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-09T10:55:14.031965-03:00"
-					}
-				},
-				"editEmail" : {
-					"__type" : "email",
-					"emailString" : "juraj.kubelka@icloud.com"
-				},
-				"editTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-09T11:05:32.610558-03:00"
-					}
-				},
-				"uid" : {
-					"__type" : "uid",
-					"uidString" : "zO2gA1XNDQCtel7uDOiMHg=="
-				},
-				"code" : "question := 'Write me a snippet that lists all currently defined classes in the image.'.\rchat sendMessage: question."
+				"string" : "Ask for a code snippet:"
 			},
 			{
 				"__type" : "textSnippet",
 				"children" : {
 					"__type" : "snippets",
-					"items" : [ ]
+					"items" : [
+						{
+							"__type" : "pharoSnippet",
+							"children" : {
+								"__type" : "snippets",
+								"items" : [ ]
+							},
+							"createEmail" : {
+								"__type" : "email",
+								"emailString" : "juraj.kubelka@icloud.com"
+							},
+							"createTime" : {
+								"__type" : "time",
+								"time" : {
+									"__type" : "dateAndTime",
+									"dateAndTimeString" : "2024-02-09T11:07:19.280383-03:00"
+								}
+							},
+							"editEmail" : {
+								"__type" : "email",
+								"emailString" : "<unknown>"
+							},
+							"editTime" : {
+								"__type" : "time",
+								"time" : {
+									"__type" : "dateAndTime",
+									"dateAndTimeString" : "2024-02-21T16:54:09.962917-03:00"
+								}
+							},
+							"uid" : {
+								"__type" : "uid",
+								"uidString" : "y0jbLlXNDQCyVxnGDOiMHg=="
+							},
+							"code" : "(chat messages detect: #isAssistantRole) codeBlocksExecutor await"
+						}
+					]
 				},
 				"createEmail" : {
 					"__type" : "email",
@@ -218,44 +254,45 @@
 				"string" : "Execute the code. Ideally, the execution fails, reporting to the assistant about the failure."
 			},
 			{
-				"__type" : "pharoSnippet",
-				"children" : {
-					"__type" : "snippets",
-					"items" : [ ]
-				},
-				"createEmail" : {
-					"__type" : "email",
-					"emailString" : "juraj.kubelka@icloud.com"
-				},
-				"createTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-09T11:07:19.280383-03:00"
-					}
-				},
-				"editEmail" : {
-					"__type" : "email",
-					"emailString" : "<unknown>"
-				},
-				"editTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-21T16:54:09.962917-03:00"
-					}
-				},
-				"uid" : {
-					"__type" : "uid",
-					"uidString" : "y0jbLlXNDQCyVxnGDOiMHg=="
-				},
-				"code" : "(chat messages detect: #isAssistantRole) codeBlocksExecutor await"
-			},
-			{
 				"__type" : "textSnippet",
 				"children" : {
 					"__type" : "snippets",
-					"items" : [ ]
+					"items" : [
+						{
+							"__type" : "pharoSnippet",
+							"children" : {
+								"__type" : "snippets",
+								"items" : [ ]
+							},
+							"createEmail" : {
+								"__type" : "email",
+								"emailString" : "juraj.kubelka@icloud.com"
+							},
+							"createTime" : {
+								"__type" : "time",
+								"time" : {
+									"__type" : "dateAndTime",
+									"dateAndTimeString" : "2024-02-09T11:05:50.808719-03:00"
+								}
+							},
+							"editEmail" : {
+								"__type" : "email",
+								"emailString" : "juraj.kubelka@icloud.com"
+							},
+							"editTime" : {
+								"__type" : "time",
+								"time" : {
+									"__type" : "dateAndTime",
+									"dateAndTimeString" : "2024-02-09T11:06:05.470562-03:00"
+								}
+							},
+							"uid" : {
+								"__type" : "uid",
+								"uidString" : "ZVqVKVXNDQCyBMqaDOiMHg=="
+							},
+							"code" : "question := 'Tell me about Phlow based on the files that you have access to.'.\rchat sendMessage: question."
+						}
+					]
 				},
 				"createEmail" : {
 					"__type" : "email",
@@ -289,44 +326,45 @@
 				"string" : "Ask about Phlow project. Ideally, the response includes a file citations, indicating where the provided information comes from."
 			},
 			{
-				"__type" : "pharoSnippet",
-				"children" : {
-					"__type" : "snippets",
-					"items" : [ ]
-				},
-				"createEmail" : {
-					"__type" : "email",
-					"emailString" : "juraj.kubelka@icloud.com"
-				},
-				"createTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-09T11:05:50.808719-03:00"
-					}
-				},
-				"editEmail" : {
-					"__type" : "email",
-					"emailString" : "juraj.kubelka@icloud.com"
-				},
-				"editTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-09T11:06:05.470562-03:00"
-					}
-				},
-				"uid" : {
-					"__type" : "uid",
-					"uidString" : "ZVqVKVXNDQCyBMqaDOiMHg=="
-				},
-				"code" : "question := 'Tell me about Phlow based on the files that you have access to.'.\rchat sendMessage: question."
-			},
-			{
 				"__type" : "textSnippet",
 				"children" : {
 					"__type" : "snippets",
-					"items" : [ ]
+					"items" : [
+						{
+							"__type" : "pharoSnippet",
+							"children" : {
+								"__type" : "snippets",
+								"items" : [ ]
+							},
+							"createEmail" : {
+								"__type" : "email",
+								"emailString" : "<unknown>"
+							},
+							"createTime" : {
+								"__type" : "time",
+								"time" : {
+									"__type" : "dateAndTime",
+									"dateAndTimeString" : "2024-02-22T10:09:19.20011-03:00"
+								}
+							},
+							"editEmail" : {
+								"__type" : "email",
+								"emailString" : "<unknown>"
+							},
+							"editTime" : {
+								"__type" : "time",
+								"time" : {
+									"__type" : "dateAndTime",
+									"dateAndTimeString" : "2024-02-22T10:09:41.873704-03:00"
+								}
+							},
+							"uid" : {
+								"__type" : "uid",
+								"uidString" : "MVpd41nODQCdZHpdD5mAnA=="
+							},
+							"code" : "question := 'Create a Phlow view for Fraction that displays numerator and denominator.'.\rchat sendMessage: question"
+						}
+					]
 				},
 				"createEmail" : {
 					"__type" : "email",
@@ -358,40 +396,6 @@
 					"__type" : "textStyle"
 				},
 				"string" : "Ask for a smalltalk method definition of Phlow view that displays"
-			},
-			{
-				"__type" : "pharoSnippet",
-				"children" : {
-					"__type" : "snippets",
-					"items" : [ ]
-				},
-				"createEmail" : {
-					"__type" : "email",
-					"emailString" : "<unknown>"
-				},
-				"createTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-22T10:09:19.20011-03:00"
-					}
-				},
-				"editEmail" : {
-					"__type" : "email",
-					"emailString" : "<unknown>"
-				},
-				"editTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-22T10:09:41.873704-03:00"
-					}
-				},
-				"uid" : {
-					"__type" : "uid",
-					"uidString" : "MVpd41nODQCdZHpdD5mAnA=="
-				},
-				"code" : "question := 'Create a Phlow view for Fraction that displays numerator and denominator.'.\rchat sendMessage: question"
 			}
 		]
 	},
