@@ -25,9 +25,8 @@ GtOpenAIGtObjectChat >> buildElement [
 
 Please provide me with a potentially useful Phlow view method for the object instance. Strictly adhere to the Phlow API you know.'.
 
-	^ GtOpenAIAssistantObjectChatElement new
-		assistantChatViewModel: (GtOpenAIAssistantObjectChatViewModel new assistantChat: chat);
-		alternativeMessage: 'Give me an alternative view proposal.'
+	^ GtOpenAIAssistantChatElement new
+		assistantChatViewModel: (GtOpenAIAssistantChatViewModel new assistantChat: chat)
 ]
 
 { #category : #accessing }
