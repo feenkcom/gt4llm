@@ -10,6 +10,39 @@ Class {
 }
 
 { #category : #accessing }
+GtLlmViewObject >> checkViewFor: aView [
+	[ | createdView |
+	createdView := self instance perform: self view selector withArguments: {aView}.
+	createdView
+		asElementDo: [ :anElement | 
+			| scripter listOfErrors |
+			scripter := BlScripter new.
+			scripter element: anElement.
+			scripter elementWithoutParent.
+			listOfErrors := (anElement query // GtPhlowExceptionId) all
+					, (anElement id = GtPhlowExceptionId asBlocElementId
+							ifTrue: [ {anElement} ]
+							ifFalse: [ {} ])
+					collect: [ :anErrorElement | anErrorElement userData at: #exception ].
+			listOfErrors
+				ifNotEmpty: [ :aList | 
+					^ GtLlmCheckerError new
+						checker: self;
+						content: aList;
+						contentString: (self createErrorString: aList first) asString ] ].
+	^ GtLlmCheckerStringSuccess new
+		checker: self;
+		content: createdView;
+		contentString: 'View successfully created' ]
+		on: Error
+		do: [ :anError | 
+			^ GtLlmCheckerError new
+				checker: self;
+				content: anError;
+				contentString: (self createErrorString: anError) asString ]
+]
+
+{ #category : #accessing }
 GtLlmViewObject >> createErrorString: anError [
 	^ 'Encountered an error in the view: ' , anError messageText
 		, '
@@ -29,6 +62,11 @@ GtLlmViewObject >> createStackString: anError [
 					stream
 						print: stackItem;
 						cr ] ]
+]
+
+{ #category : #accessing }
+GtLlmViewObject >> executionResult [
+	^ self lastResult
 ]
 
 { #category : #accessing }
@@ -92,6 +130,11 @@ GtLlmViewObject >> instance [
 { #category : #accessing }
 GtLlmViewObject >> instance: anObject [
 	instance := anObject
+]
+
+{ #category : #accessing }
+GtLlmViewObject >> lastResult [
+	^ self checkViewFor: GtPhlowView empty
 ]
 
 { #category : #accessing }
