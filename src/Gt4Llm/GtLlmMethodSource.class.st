@@ -52,6 +52,11 @@ GtLlmMethodSource >> gtLiveFor: aView [
 ]
 
 { #category : #accessing }
+GtLlmMethodSource >> hasPragmaNamed: aPragma [
+	^ self methodAst hasPragmaNamed: aPragma
+]
+
+{ #category : #accessing }
 GtLlmMethodSource >> methodAst [
 	| anAst |
 	anAst := RBParser parseFaultyMethod: methodSource.

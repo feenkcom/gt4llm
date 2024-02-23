@@ -41,15 +41,21 @@ GtLlmMessageStyler >> evaluateCodeBlock: aCodeBlock expanded: aBoolean from: aBu
 { #category : #generated }
 GtLlmMessageStyler >> evaluateMethodBlock: aCodeBlock expanded: aBoolean from: aButton isReplace: aReplaceBoolean [
 	| aResult position source aMethod |
-	source := aCodeBlock code source.
-	"aResult := self threadMessageViewModel smalltalkMethodPipeline check: source."
-	
+	source := aCodeBlock code source.	"aResult := self threadMessageViewModel smalltalkMethodPipeline check: source."
+
 	aMethod := self methodSourceFrom: aCodeBlock.
 	aResult := aReplaceBoolean
 			ifTrue: [ aMethod replaceInSystem ]
 			ifFalse: [ aMethod addToSystem ].
 
 	aResult threadMessage: self threadMessageViewModel threadMessage.
+	aResult := aResult hasErrors
+			ifTrue: [ aResult ]
+			ifFalse: [ | potentialView |
+				potentialView := aResult lastResult content.
+				(potentialView hasPragmaNamed: #gtView)
+					ifTrue: [ self threadMessageViewModel viewObjectFor: potentialView ]
+					ifFalse: [ potentialView ] ].
 
 	position := source size.
 	[ position > 1 and: [ (source at: position) isLineBreak ] ]
@@ -61,16 +67,7 @@ GtLlmMessageStyler >> evaluateMethodBlock: aCodeBlock expanded: aBoolean from: a
 				expanded: aBoolean;
 				position: position).
 	self threadMessageViewModel requestStyleSourceText.
-	aBoolean
-		ifTrue: [ | toSpawn |
-			toSpawn := aResult hasErrors
-					ifTrue: [ aResult ]
-					ifFalse: [ | potentialView |
-						potentialView := aResult lastResult content.
-						(potentialView hasPragmaNamed: #gtView)
-							ifTrue: [ self threadMessageViewModel viewObjectFor: potentialView ]
-							ifFalse: [ potentialView ] ].
-			aButton phlow spawnObject: toSpawn ]
+	aBoolean ifTrue: [ aButton phlow spawnObject: aResult ]
 ]
 
 { #category : #generated }
