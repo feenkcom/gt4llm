@@ -128,6 +128,11 @@ GtOpenAIGtTutor >> assistantName: anObject [
 ]
 
 { #category : #accessing }
+GtOpenAIGtTutor >> chat [
+	^ chats ifNotEmpty: #last ifEmpty: [ self addChat ]
+]
+
+{ #category : #accessing }
 GtOpenAIGtTutor >> chats [
 	^ chats
 ]
