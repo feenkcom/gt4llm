@@ -112,6 +112,7 @@ GtOpenAIThreadMessageElement >> initializeSenderElement [
 GtOpenAIThreadMessageElement >> initializeTimeElement [
 	timeTooltip := BrGlamorousWithLabelTooltipAptitude new text: 'unknown time'.
 	timeElement := BrLabel new
+			updatingDateAndTimeModel;
 			fitContent;
 			beSmallSize;
 			aptitude: (BrGlamorousLabelAptitude new
@@ -192,14 +193,7 @@ GtOpenAIThreadMessageElement >> updateSenderElement [
 
 { #category : #'private - updating' }
 GtOpenAIThreadMessageElement >> updateTimeElement [
-	timeTask
-		ifNotNil: [ :aTask | aTask dateAndTime = threadMessageViewModel createdAt ifTrue: [ ^ self ] ].
-
-	timeTask ifNotNil: [ :aTask | aTask stop ].
-	timeTask := GtLlmUpdatingDateAndTimeTask new
-			dateAndTime: threadMessageViewModel createdAt asLocal;
-			converter: GtLlmDurationPrinter new.
-	timeElement enqueueTask: timeTask.
+	timeElement updatingDateAndTime: threadMessageViewModel createdAt.
 
 	timeTooltip
 		text: (String
