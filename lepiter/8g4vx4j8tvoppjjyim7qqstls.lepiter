@@ -97,20 +97,20 @@
 				},
 				"editEmail" : {
 					"__type" : "email",
-					"emailString" : "veit.heller@feenk.com"
+					"emailString" : "<unknown>"
 				},
 				"editTime" : {
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-19T10:01:54.781629+01:00"
+						"dateAndTimeString" : "2024-03-01T07:51:43.642319+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "QXoAFRrODQCm5/XrB1Szjg=="
 				},
-				"code" : "tutor := GtOpenAIGtTutor withApiKeyFromClipboard createAssistant"
+				"code" : "tutor := GtOpenAIGtTutor instance"
 			},
 			{
 				"__type" : "textSnippet",

@@ -64,7 +64,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-22T21:01:06.468946+01:00"
+						"dateAndTimeString" : "2024-03-01T07:52:07.999935+01:00"
 					}
 				},
 				"uid" : {
@@ -74,7 +74,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "First get the API key either from a local file:"
+				"string" : "First get the API key either from a local file like this:"
 			},
 			{
 				"__type" : "textSnippet",
@@ -136,7 +136,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-22T21:01:18.76735+01:00"
+						"dateAndTimeString" : "2024-03-01T07:52:21.251472+01:00"
 					}
 				},
 				"uid" : {
@@ -146,7 +146,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "Or from the clipboard:"
+				"string" : "Or from the clipboard after you have copied the token value:"
 			},
 			{
 				"__type" : "textSnippet",
@@ -208,7 +208,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-22T21:01:44.312749+01:00"
+						"dateAndTimeString" : "2024-03-01T07:52:42.614578+01:00"
 					}
 				},
 				"uid" : {
@@ -218,7 +218,44 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "With the key, instantiatio"
+				"string" : "With the key, instantiate a tutor with an assistant and set it globally."
+			},
+			{
+				"__type" : "textSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-03-01T07:52:44.344821+01:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-03-01T07:52:46.260742+01:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "0kRWj/XODQC/hb2KAIJxgg=="
+				},
+				"paragraphStyle" : {
+					"__type" : "textStyle"
+				},
+				"string" : "The global variable\\"
 			}
 		]
 	},
