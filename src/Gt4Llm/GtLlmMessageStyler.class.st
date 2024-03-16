@@ -474,6 +474,16 @@ GtLlmMessageStyler >> styleSmalltalkCode: aCodeNode [
 		attributes: {GtButtonAttribute new
 					beAppend;
 					stencil: [ GtButtonStencil new
+							icon: BrGlamorousVectorIcons play;
+							tooltip: 'Evaluate';
+							action: [ :aWidget :aButtonModel | 
+								self
+									evaluateCodeBlock: aCodeNode
+									expanded: false
+									from: aWidget ] ].
+				GtButtonAttribute new
+					beAppend;
+					stencil: [ GtButtonStencil new
 							icon: BrGlamorousVectorIcons playinspect;
 							tooltip: 'Inspect';
 							action: [ :aWidget :aButtonModel | 
@@ -483,8 +493,7 @@ GtLlmMessageStyler >> styleSmalltalkCode: aCodeNode [
 									from: aWidget ] ]}.
 	self executionResults
 		at: aCodeNode code
-		ifPresent: [ :result | 
-			self styleResult: result for: aCodeNode. ]
+		ifPresent: [ :result | self styleResult: result for: aCodeNode ]
 ]
 
 { #category : #generated }
