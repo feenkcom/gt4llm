@@ -15,7 +15,7 @@ GtOpenAIGtObjectChat >> buildElement [
 
 	chat := GtOpenAIAssistantChat new
 			assistant: tutor assistant;
-			pipeline: (GtLlmContext defaultPipeline immutableInstance instance: self instance).
+			pipeline: (GtLlmContext defaultSmalltalkChecker immutableInstance instance: self instance).
 
 	chat
 		sendMessage: 'The context of this conversation is the following object instance:

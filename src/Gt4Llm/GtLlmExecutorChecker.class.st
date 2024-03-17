@@ -29,11 +29,11 @@ GtLlmExecutorChecker class >> language [
 
 { #category : #accessing }
 GtLlmExecutorChecker >> check: aString [
-	[ ^ GtLlmCheckerSuccess new
+	^ [ GtLlmCheckerSuccess new
 		checker: self;
 		content: (self execute: aString) ]
 		on: self errorToCatch
-		do: [ :anError | ^ self handleError: anError ]
+		do: [ :anError | self handleError: anError ]
 ]
 
 { #category : #accessing }
