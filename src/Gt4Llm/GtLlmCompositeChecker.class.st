@@ -1,6 +1,6 @@
 Class {
-	#name : #GtLlmCheckPipeline,
-	#superclass : #Object,
+	#name : #GtLlmCompositeChecker,
+	#superclass : #GtLlmChecker,
 	#instVars : [
 		'checkers',
 		'stopOnError'
@@ -9,25 +9,25 @@ Class {
 }
 
 { #category : #accessing }
-GtLlmCheckPipeline class >> defaultPipeline [
+GtLlmCompositeChecker class >> defaultSmalltalkChecker [
 	<gtExample>
 	^ self forLanguage: 'Smalltalk'
 ]
 
 { #category : #accessing }
-GtLlmCheckPipeline class >> forLanguage: aString [
+GtLlmCompositeChecker class >> forLanguage: aString [
 	^ self new
 		addChecker: (GtLlmParserChecker forLanguage: aString);
 		addChecker: (GtLlmExecutorChecker forLanguage: aString)
 ]
 
 { #category : #accessing }
-GtLlmCheckPipeline >> addChecker: aCheck [
+GtLlmCompositeChecker >> addChecker: aCheck [
 	checkers add: aCheck
 ]
 
 { #category : #accessing }
-GtLlmCheckPipeline >> check: aString [
+GtLlmCompositeChecker >> check: aString [
 	^ GtLlmCheckRun new
 		checkers: self checkers;
 		stopOnError: (stopOnError ifNil: [ true ]);
@@ -35,27 +35,27 @@ GtLlmCheckPipeline >> check: aString [
 ]
 
 { #category : #accessing }
-GtLlmCheckPipeline >> checkers [
+GtLlmCompositeChecker >> checkers [
 	^ checkers
 ]
 
 { #category : #accessing }
-GtLlmCheckPipeline >> checkers: anObject [
+GtLlmCompositeChecker >> checkers: anObject [
 	checkers := anObject
 ]
 
 { #category : #accessing }
-GtLlmCheckPipeline >> doNotStopOnError [
+GtLlmCompositeChecker >> doNotStopOnError [
 	stopOnError := false
 ]
 
 { #category : #accessing }
-GtLlmCheckPipeline >> executor [
+GtLlmCompositeChecker >> executor [
 	^ self checkers executor
 ]
 
 { #category : #accessing }
-GtLlmCheckPipeline >> gtCheckFor: aView [
+GtLlmCompositeChecker >> gtCheckFor: aView [
 	<gtView>
 	^ aView textEditor
 		title: 'Check';
@@ -70,7 +70,7 @@ GtLlmCheckPipeline >> gtCheckFor: aView [
 ]
 
 { #category : #accessing }
-GtLlmCheckPipeline >> gtCheckersFor: aView [
+GtLlmCompositeChecker >> gtCheckersFor: aView [
 	<gtView>
 	^ aView forward
 		title: 'Checkers';
@@ -80,7 +80,7 @@ GtLlmCheckPipeline >> gtCheckersFor: aView [
 ]
 
 { #category : #accessing }
-GtLlmCheckPipeline >> initialize [
+GtLlmCompositeChecker >> initialize [
 	super initialize.
 	
 	checkers := GtLlmCheckerGroup new.
@@ -88,11 +88,11 @@ GtLlmCheckPipeline >> initialize [
 ]
 
 { #category : #accessing }
-GtLlmCheckPipeline >> parsers [
+GtLlmCompositeChecker >> parsers [
 	^ self checkers parsers
 ]
 
 { #category : #accessing }
-GtLlmCheckPipeline >> stopOnError [
+GtLlmCompositeChecker >> stopOnError [
 	stopOnError := true
 ]

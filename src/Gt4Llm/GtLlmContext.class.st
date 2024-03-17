@@ -11,8 +11,8 @@ Class {
 }
 
 { #category : #accessing }
-GtLlmContext class >> defaultPipeline [
-	^ self new checker: GtLlmCheckPipeline defaultPipeline
+GtLlmContext class >> defaultSmalltalkChecker [
+	^ self new checker: GtLlmCompositeChecker defaultSmalltalkChecker
 ]
 
 { #category : #accessing }

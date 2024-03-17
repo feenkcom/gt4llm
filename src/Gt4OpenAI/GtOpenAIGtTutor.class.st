@@ -428,8 +428,8 @@ GtOpenAIGtTutor >> initialize [
 	assistantDescription := self defaultAssistantDescription.
 	tools := self defaultTools.
 	chats := GtOpenAIAssistantChatGroup new.
-	context :=  GtLlmContext defaultPipeline.
-	smalltalkMethodPipeline := GtLlmCheckPipeline forLanguage: 'smalltalk-method'.
+	context :=  GtLlmContext defaultSmalltalkChecker.
+	smalltalkMethodPipeline := GtLlmCompositeChecker forLanguage: 'smalltalk-method'.
 	files := GtOpenAIResourceFilesGroup withAll: self defaultFiles.
 	apiFiles := GtOpenAIFilesGroup new
 ]
