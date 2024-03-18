@@ -106,7 +106,7 @@ GtLlmCheckRunResult >> gtResultsFor: aView [
 			stencil: [ :aChecker | 
 				| state |
 				state := self results at: aChecker.
-				state asElement margin: (BlInsets left: 12) ]
+				state asElement margin: (BlInsets left: 2) ]
 			weight: 0.5;
 		send: [ :aChecker | self results at: aChecker ]
 ]
