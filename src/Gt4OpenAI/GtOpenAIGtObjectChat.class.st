@@ -17,16 +17,16 @@ GtOpenAIGtObjectChat >> buildElement [
 			assistant: tutor assistant;
 			pipeline: (GtLlmContext defaultSmalltalkChecker immutableInstance instance: self instance).
 
-	chat
-		sendMessage: 'The context of this conversation is the following object instance:
-
-' , (GtLlmInspectorSummarizer new summarize: self instance) summaryString
-				, '
-
-Please provide me with a potentially useful Phlow view method for the object instance. Strictly adhere to the Phlow API you know.'.
+	chat sendMessage: self initialMessage.
 
 	^ GtOpenAIAssistantChatElement new
 		assistantChatViewModel: (GtOpenAIAssistantChatViewModel new assistantChat: chat)
+]
+
+{ #category : #accessing }
+GtOpenAIGtObjectChat >> initialMessage [
+	^ 'The context of this conversation is ' , (GtLlmInspectorSummarizer new summarize: self instance) summaryString
+		, String cr, String cr, 'Please provide me with a potentially useful Phlow view method for the object instance. Strictly adhere to the Phlow API you know.'
 ]
 
 { #category : #accessing }
