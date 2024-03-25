@@ -44,9 +44,7 @@ GtLlmInspectorViewSummary >> selector: anObject [
 
 { #category : #accessing }
 GtLlmInspectorViewSummary >> summaryString [
-	^ '{{gtMethod:' , self viewClass asString , '>>#' , self selector
-		, '}}: 
-```smalltalk-method
+	^ '```smalltalk-method
 ' , self viewClass asString, '
 ', self code
 		, '
