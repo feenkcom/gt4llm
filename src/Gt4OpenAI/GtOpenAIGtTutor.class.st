@@ -2,7 +2,6 @@ Class {
 	#name : #GtOpenAIGtTutor,
 	#superclass : #Object,
 	#instVars : [
-		'prompt',
 		'apiKey',
 		'client',
 		'assistant',
@@ -14,7 +13,8 @@ Class {
 		'files',
 		'apiFiles',
 		'context',
-		'smalltalkMethodPipeline'
+		'smalltalkMethodPipeline',
+		'instructions'
 	],
 	#classInstVars : [
 		'instance'
@@ -188,7 +188,7 @@ GtOpenAIGtTutor >> createAssistant [
 					model: self model;
 					name: self assistantName;
 					description: self assistantDescription;
-					instructions: self prompt;
+					instructions: instructions;
 					tools: self tools).
 
 	files
@@ -218,12 +218,7 @@ GtOpenAIGtTutor >> defaultFiles [
 ]
 
 { #category : #accessing }
-GtOpenAIGtTutor >> defaultModel [
-	^ 'gpt-4-turbo-preview'
-]
-
-{ #category : #accessing }
-GtOpenAIGtTutor >> defaultPrompt [
+GtOpenAIGtTutor >> defaultInstructions [
 	^ String lf , String lf
 		join: {self tutorDescription.
 				self interactionDescription.
@@ -232,6 +227,11 @@ GtOpenAIGtTutor >> defaultPrompt [
 				self viewsDescription.
 				self exampleViews.
 				self variablesDescription}
+]
+
+{ #category : #accessing }
+GtOpenAIGtTutor >> defaultModel [
+	^ 'gpt-4-turbo-preview'
 ]
 
 { #category : #accessing }
@@ -390,12 +390,12 @@ GtOpenAIGtTutor >> gtFilesFor: aView [
 ]
 
 { #category : #accessing }
-GtOpenAIGtTutor >> gtPromptFor: aView [
+GtOpenAIGtTutor >> gtInstructionsFor: aView [
 	<gtView>
 	^ aView textEditor
 		title: 'Tutor instructions';
 		priority: 5;
-		text: [ self prompt ];
+		text: [ instructions ];
 		styler: (GtLlmMessageStyler new
 				threadMessageViewModel: (GtOpenAINewThreadMessageViewModel new
 						threadMessage: GtOpenAINewThreadMessage new))
@@ -422,7 +422,7 @@ GtOpenAIGtTutor >> hasAssistant [
 GtOpenAIGtTutor >> initialize [
 	super initialize.
 	
-	prompt := self defaultPrompt.
+	instructions := self defaultInstructions.
 	model := self defaultModel.
 	assistantName := self defaultAssistantName.
 	assistantDescription := self defaultAssistantDescription.
@@ -496,22 +496,12 @@ GtOpenAIGtTutor >> packageNamesToFiles: aCollectionOfPackageNames [
 ]
 
 { #category : #accessing }
-GtOpenAIGtTutor >> prompt [
-	^ prompt
-]
-
-{ #category : #accessing }
-GtOpenAIGtTutor >> prompt: anObject [
-	prompt := anObject
-]
-
-{ #category : #accessing }
 GtOpenAIGtTutor >> summaryItems [
 	^ {'Name' -> self assistantName.
 		'Description' -> self assistantDescription.
 		'Model' -> self model.
 		'Tools' -> self tools.
-		'Prompt' -> self prompt}
+		'Prompt' -> instructions}
 ]
 
 { #category : #accessing }
