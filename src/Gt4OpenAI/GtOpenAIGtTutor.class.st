@@ -62,7 +62,7 @@ GtOpenAIGtTutor >> addFile: aFile [
 GtOpenAIGtTutor >> allViewsToFile [
 	| views aFile |
 	views := 'gtView' gtPragmas.
-	aFile := FileLocator temp / 'AllViews' , 'st'.
+	aFile := FileLocator temp / 'AllViews' , 'st.txt'.
 	aFile ensureDelete.
 	aFile
 		writeStreamDo: [ :aStream | 
