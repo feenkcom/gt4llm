@@ -26,17 +26,17 @@ GtLlmViewObject >> checkViewFor: aView [
 					collect: [ :anErrorElement | anErrorElement userData at: #exception ].
 			listOfErrors
 				ifNotEmpty: [ :aList | 
-					^ GtLlmCheckerError new
+					^ GtLlmStepError new
 						checker: self;
 						content: aList;
 						contentString: (self createErrorString: aList first) asString ] ].
-	^ GtLlmCheckerStringSuccess new
+	^ GtLlmStepStringSuccess new
 		checker: self;
 		content: createdView;
 		contentString: 'View successfully created' ]
 		on: Error
 		do: [ :anError | 
-			^ GtLlmCheckerError new
+			^ GtLlmStepError new
 				checker: self;
 				content: anError;
 				contentString: (self createErrorString: anError) asString ]
@@ -102,7 +102,7 @@ GtLlmViewObject >> gtViewFor: aView [
 						actionButtonIcon: BrGlamorousVectorIcons play
 							tooltip: 'Send to chat'
 							action: [ self threadMessage chat
-									sendMessage: (GtLlmCheckerError new
+									sendMessage: (GtLlmStepError new
 											checker: self;
 											content: aList;
 											contentString: (self createErrorString: aList first)) asString ] ] ].
@@ -116,7 +116,7 @@ GtLlmViewObject >> gtViewFor: aView [
 				actionButtonIcon: BrGlamorousVectorIcons play
 					tooltip: 'Send to chat'
 					action: [ self threadMessage chat
-							sendMessage: (GtLlmCheckerError new
+							sendMessage: (GtLlmStepError new
 									checker: self;
 									content: anError;
 									contentString: (self createErrorString: anError)) asString ] ]

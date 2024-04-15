@@ -11,18 +11,37 @@ Class {
 }
 
 { #category : #accessing }
-GtLlmContext class >> defaultSmalltalkChecker [
-	^ self new checker: GtLlmCompositeChecker defaultSmalltalkChecker
+GtLlmContext class >> defaultPipeline [
+	^ self new
+		checker: (GtLlmAlternativeCodeStep new
+				addAlternative: (GtLlmCompositeCodeStep new
+							addStep: GtLlmSmalltalkParserCodeStep new;
+							addStep: GtLlmSmalltalkExecutorCodeStep new)
+					matching: [ :aContext | aContext lastResult isForLanguage: 'smalltalk' ];
+				addAlternative: (GtLlmCompositeCodeStep new
+							addStep: GtLlmPythonParserCodeStep new;
+							addStep: GtLlmPythonExecutorCodeStep new)
+					matching: [ :aContext | aContext lastResult isForLanguage: 'python' ];
+				addAlternative: (GtLlmCompositeCodeStep new
+							addStep: GtLlmSmalltalkMethodParserCodeStep new;
+							addStep: (GtLlmAlternativeCodeStep new
+									addAlternative: GtLlmSmalltalkViewExecutorCodeStep new
+										matching: [ :aContext | aContext lastResult methodAst hasPragmaNamed: #gtView ];
+									addAlternative: GtLlmSmalltalkMethodExecutorCodeStep new
+										matching: [ :_ | true ]))
+					matching: [ :aContext | aContext lastResult isForLanguage: 'smalltalk-method' ])
 ]
 
 { #category : #accessing }
 GtLlmContext >> check: aString [
 	| result |
-	result := self checker check: aString.
+	result := self checker
+			instance: self instance;
+			runOn: aString.
 
 	(self hasInstance not
-		or: [ self isImmutableInstance not and: [ result hasErrors not ] ])
-		ifTrue: [ self instance: result lastResult content ].
+		or: [ self isImmutableInstance not and: [ result isError not ] ])
+		ifTrue: [ self instance: result lastResult ].
 
 	^ result
 ]

@@ -22,7 +22,6 @@ GtLlmEvaluatedCodePreviewAttribute >> affect: aTBrTextEditorTextualPiece in: anE
 
 { #category : #accessing }
 GtLlmEvaluatedCodePreviewAttribute >> checkRunResult [
-	<return: #GtLlmCheckRunResult>
 	^ checkRunResultViewModel checkRunResult
 ]
 
@@ -52,8 +51,8 @@ GtLlmEvaluatedCodePreviewAttribute >> initialize [
 
 { #category : #accessing }
 GtLlmEvaluatedCodePreviewAttribute >> lastCheckResult [
-	<return: #GtLlmCheckerResult>
-	^ self checkRunResult lastResult
+	<return: #GtLlmStepResult>
+	^ self checkRunResult
 ]
 
 { #category : #testing }

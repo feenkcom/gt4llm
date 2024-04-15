@@ -97,20 +97,20 @@
 				},
 				"editEmail" : {
 					"__type" : "email",
-					"emailString" : "veit.heller@feenk.com"
+					"emailString" : "<unknown>"
 				},
 				"editTime" : {
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-19T10:01:54.781629+01:00"
+						"dateAndTimeString" : "2024-03-01T07:51:43.642319+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "QXoAFRrODQCm5/XrB1Szjg=="
 				},
-				"code" : "tutor := GtOpenAIGtTutor withApiKeyFromClipboard createAssistant"
+				"code" : "tutor := GtOpenAIGtTutor instance"
 			},
 			{
 				"__type" : "textSnippet",
@@ -387,14 +387,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-21T17:25:05.105481-03:00"
+						"dateAndTimeString" : "2024-04-15T16:35:08.289305+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "eFIu/i3ODQC1xImgAJOAxA=="
 				},
-				"code" : "result := chat messages first codeBlocksExecutor check"
+				"code" : "results := chat messages first codeBlocksExecutor check"
 			},
 			{
 				"__type" : "textSnippet",
@@ -458,14 +458,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-20T09:54:35.106202+01:00"
+						"dateAndTimeString" : "2024-04-15T16:35:12.902337+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "udxJES7ODQC4dOQJAJOAxA=="
 				},
-				"code" : "result sendToChat"
+				"code" : "results first sendToChat"
 			},
 			{
 				"__type" : "textSnippet",
@@ -671,14 +671,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-20T19:16:03.884599+01:00"
+						"dateAndTimeString" : "2024-04-15T17:19:32.752459+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "V7o9Li7ODQC7DiLJAJOAxA=="
 				},
-				"code" : "aMessage := chat messages first.\raMessage viewObjectFor: aMessage methods first addToSystem lastResult content\r\"in case the method already exists, we can call replaceInSystem instead\""
+				"code" : "aMessage := chat messages first.\rresults := chat messages first codeBlocksExecutor check\r\"in case the method already exists, we can call replaceInSystem instead\""
 			},
 			{
 				"__type" : "textSnippet",

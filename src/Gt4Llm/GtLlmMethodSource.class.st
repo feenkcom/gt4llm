@@ -103,3 +103,8 @@ GtLlmMethodSource >> methodSource [
 GtLlmMethodSource >> methodSource: anObject [
 	methodSource := anObject
 ]
+
+{ #category : #accessing }
+GtLlmMethodSource >> parse [
+	RBParser parseMethod: self methodSource
+]

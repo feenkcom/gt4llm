@@ -13,7 +13,6 @@ Class {
 		'files',
 		'apiFiles',
 		'context',
-		'smalltalkMethodPipeline',
 		'instructions'
 	],
 	#classInstVars : [
@@ -44,8 +43,7 @@ GtOpenAIGtTutor >> addChat [
 	| aChat |
 	aChat := GtOpenAIAssistantChat new
 			assistant: self assistant;
-			pipeline: context;
-			smalltalkMethodPipeline: smalltalkMethodPipeline.
+			pipeline: context.
 	chats add: aChat.
 
 	aChat sendMessage: self files toFileDescriptions.
@@ -139,7 +137,7 @@ GtOpenAIGtTutor >> chats [
 
 { #category : #accessing }
 GtOpenAIGtTutor >> check: aString [
-	<return: #GtLlmCheckerResult>
+	<return: #GtLlmStepResult>
 	^ context check: aString
 ]
 
@@ -428,8 +426,7 @@ GtOpenAIGtTutor >> initialize [
 	assistantDescription := self defaultAssistantDescription.
 	tools := self defaultTools.
 	chats := GtOpenAIAssistantChatGroup new.
-	context :=  GtLlmContext defaultSmalltalkChecker.
-	smalltalkMethodPipeline := GtLlmCompositeChecker forLanguage: 'smalltalk-method'.
+	context :=  GtLlmContext defaultPipeline.
 	files := GtOpenAIResourceFilesGroup withAll: self defaultFiles.
 	apiFiles := GtOpenAIFilesGroup new
 ]

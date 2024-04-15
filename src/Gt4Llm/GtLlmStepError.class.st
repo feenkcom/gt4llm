@@ -1,19 +1,19 @@
 Class {
-	#name : #GtLlmCheckerError,
-	#superclass : #GtLlmCheckerResult,
+	#name : #GtLlmStepError,
+	#superclass : #GtLlmStepResult,
 	#instVars : [
 		'contentString'
 	],
-	#category : #'Gt4Llm-Checker'
+	#category : #'Gt4Llm-Code'
 }
 
 { #category : #accessing }
-GtLlmCheckerError class >> prefix [
+GtLlmStepError class >> prefix [
 	^ 'The last script had a problem: '
 ]
 
 { #category : #accessing }
-GtLlmCheckerError >> asString [
+GtLlmStepError >> asString [
 	^ self class prefix
 		, '
 ```text
@@ -23,26 +23,26 @@ GtLlmCheckerError >> asString [
 ]
 
 { #category : #accessing }
-GtLlmCheckerError >> backgroundColor [
+GtLlmStepError >> backgroundColor [
 	^ BrGlamorousColors errorBackgroundColor
 ]
 
 { #category : #accessing }
-GtLlmCheckerError >> contentString [
+GtLlmStepError >> contentString [
 	^ contentString
 ]
 
 { #category : #accessing }
-GtLlmCheckerError >> contentString: anObject [
+GtLlmStepError >> contentString: anObject [
 	contentString := anObject
 ]
 
 { #category : #accessing }
-GtLlmCheckerError >> foregroundColor [
+GtLlmStepError >> foregroundColor [
 	^ Color white
 ]
 
 { #category : #accessing }
-GtLlmCheckerError >> isError [
+GtLlmStepError >> isError [
 	^ true
 ]

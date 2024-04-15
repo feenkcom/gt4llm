@@ -110,8 +110,3 @@ GtOpenAIBasicThreadMessageViewModel >> requestStyleSourceText [
 GtOpenAIBasicThreadMessageViewModel >> styler [
 	^ styler ifNil: [ styler := self newStyler ]
 ]
-
-{ #category : #accessing }
-GtOpenAIBasicThreadMessageViewModel >> viewObjectFor: anObject [
-	^ self threadMessage viewObjectFor: anObject
-]
