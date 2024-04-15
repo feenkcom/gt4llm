@@ -1,35 +1,35 @@
 Class {
-	#name : #GtLlmCheckerSuccess,
-	#superclass : #GtLlmCheckerResult,
-	#category : #'Gt4Llm-Checker'
+	#name : #GtLlmStepSuccess,
+	#superclass : #GtLlmStepResult,
+	#category : #'Gt4Llm-Code'
 }
 
 { #category : #accessing }
-GtLlmCheckerSuccess class >> prefix [
+GtLlmStepSuccess class >> prefix [
 	^ 'Output of the last script: '
 ]
 
 { #category : #accessing }
-GtLlmCheckerSuccess >> backgroundColor [
+GtLlmStepSuccess >> backgroundColor [
 	^ BrGlamorousColors successBackgroundColor
 ]
 
 { #category : #accessing }
-GtLlmCheckerSuccess >> contentString [
+GtLlmStepSuccess >> contentString [
 	^ (GtLlmInspectorSummarizer new summarize: self content) summaryString
 ]
 
 { #category : #accessing }
-GtLlmCheckerSuccess >> foregroundColor [
+GtLlmStepSuccess >> foregroundColor [
 	^ Color black
 ]
 
 { #category : #accessing }
-GtLlmCheckerSuccess >> printOn: aStream [
+GtLlmStepSuccess >> printOn: aStream [
 	super printOn: aStream.
 
 	aStream
 		nextPut: $(;
-		nextPutAll: self checker checkName;
+		nextPutAll: self checker class stepName;
 		nextPut: $)
 ]

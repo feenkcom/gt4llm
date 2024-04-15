@@ -56,8 +56,3 @@ GtOpenAIThreadMessageViewModel >> onThreadMessageChanged [
 
 	super onThreadMessageChanged
 ]
-
-{ #category : #accessing }
-GtOpenAIThreadMessageViewModel >> smalltalkMethodPipeline [
-	^ threadMessage smalltalkMethodPipeline
-]

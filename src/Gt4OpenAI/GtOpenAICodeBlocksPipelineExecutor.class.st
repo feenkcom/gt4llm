@@ -16,7 +16,7 @@ GtOpenAICodeBlocksPipelineExecutor >> await [
 
 { #category : #executing }
 GtOpenAICodeBlocksPipelineExecutor >> check [
-	^ self check: ('.' join: self codeBlocks)
+	^ self codeBlocks collect: [ :aBlock | self check: aBlock ]
 ]
 
 { #category : #accessing }

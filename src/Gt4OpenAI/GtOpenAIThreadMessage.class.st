@@ -15,8 +15,7 @@ Class {
 		'role',
 		'annotations',
 		'pipeline',
-		'chat',
-		'smalltalkMethodPipeline'
+		'chat'
 	],
 	#category : #'Gt4OpenAI-Models'
 }
@@ -80,9 +79,7 @@ GtOpenAIThreadMessage >> chat: anObject [
 
 { #category : #accessing }
 GtOpenAIThreadMessage >> codeBlocks [
-	^ self parse children
-		select: [ :aNode | (aNode isKindOf: LeCodeBlockNode) and: [ aNode isForSmalltalk ] ]
-		thenCollect: [ :aNode | aNode code value ]
+	^ self parse children select: [ :aNode | aNode isKindOf: LeCodeBlockNode ]
 ]
 
 { #category : #actions }
@@ -146,9 +143,9 @@ GtOpenAIThreadMessage >> gtCodeBlocksFor: aView [
 		priority: 3;
 		stencil: [ BrVerticalPane new matchParent
 				addChildren: (self codeBlocks
-						collect: [ :aText | 
+						collect: [ :aBlock | 
 							| aSnippetElement aSnippetViewModel aSnippet |
-							aSnippet := LePharoSnippet code: aText.
+							aSnippet := LePharoSnippet code: aBlock code source.
 							aSnippetViewModel := aSnippet asSnippetViewModel.
 							aSnippetElement := aSnippetViewModel snippetView asElement.
 							aSnippetElement padding: (BlInsets all: 10).
@@ -211,20 +208,6 @@ GtOpenAIThreadMessage >> metadata: anObject [
 ]
 
 { #category : #accessing }
-GtOpenAIThreadMessage >> methods [
-	^ self parse children
-		select: [ :aNode | 
-			(aNode isKindOf: LeCodeBlockNode)
-				and: [ aNode isForLanguage: 'smalltalk-method' ] ]
-		thenCollect: [ :aNode | 
-			| aString |
-			aString := aNode code value trim.
-			GtLlmMessageMethod new
-				methodClass: aString lines first asClass;
-				methodBody: (Character lf join: aString lines allButFirst) ]
-]
-
-{ #category : #accessing }
 GtOpenAIThreadMessage >> parse [
 	^ LeParser parse: self contentText
 ]
@@ -257,16 +240,6 @@ GtOpenAIThreadMessage >> runId [
 { #category : #accessing }
 GtOpenAIThreadMessage >> runId: anObject [
 	runId := anObject
-]
-
-{ #category : #accessing }
-GtOpenAIThreadMessage >> smalltalkMethodPipeline [
-	^ smalltalkMethodPipeline
-]
-
-{ #category : #accessing }
-GtOpenAIThreadMessage >> smalltalkMethodPipeline: aPipeline [
-	smalltalkMethodPipeline := aPipeline
 ]
 
 { #category : #accessing }

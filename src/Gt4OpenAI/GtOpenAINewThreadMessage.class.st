@@ -21,9 +21,7 @@ GtOpenAINewThreadMessage >> assistantChat: anAssistantChat [
 
 { #category : #accessing }
 GtOpenAINewThreadMessage >> codeBlocks [
-	^ self parse children
-		select: [ :aNode | (aNode isKindOf: LeCodeBlockNode) and: [ aNode isForSmalltalk ] ]
-		thenCollect: [ :aNode | aNode code value ]
+	^ self parse children select: [ :aNode | aNode isKindOf: LeCodeBlockNode ]
 ]
 
 { #category : #accessing }

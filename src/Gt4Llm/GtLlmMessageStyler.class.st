@@ -23,61 +23,7 @@ GtLlmMessageStyler >> evaluateCodeBlock: aCodeBlock expanded: aBoolean from: aBu
 	| aResult position source |
 	source := aCodeBlock code source.
 
-	aResult := self threadMessageViewModel codeBlocksExecutor check: source.
-
-	position := source size.
-	[ position > 1 and: [ (source at: position) isLineBreak ] ]
-		whileTrue: [ position := position - 1 ].
-	self executionResults
-		at: aCodeBlock code
-		put: (LeEvaluationResult new
-				value: aResult;
-				expanded: aBoolean;
-				position: position).
-	self threadMessageViewModel requestStyleSourceText.
-	aBoolean ifTrue: [ aButton phlow spawnObject: aResult value ]
-]
-
-{ #category : #generated }
-GtLlmMessageStyler >> evaluateMethodBlock: aCodeBlock expanded: aBoolean from: aButton isReplace: aReplaceBoolean [
-	| aResult position source aMethod |
-	source := aCodeBlock code source.	"aResult := self threadMessageViewModel smalltalkMethodPipeline check: source."
-
-	aMethod := self methodSourceFrom: aCodeBlock.
-	aResult := aReplaceBoolean
-			ifTrue: [ aMethod replaceInSystem ]
-			ifFalse: [ aMethod addToSystem ].
-
-	aResult threadMessage: self threadMessageViewModel threadMessage.
-	aResult := aResult hasErrors
-			ifTrue: [ aResult ]
-			ifFalse: [ | potentialView |
-				potentialView := aResult lastResult content.
-				(potentialView hasPragmaNamed: #gtView)
-					ifTrue: [ self threadMessageViewModel viewObjectFor: potentialView ]
-					ifFalse: [ potentialView ] ].
-
-	position := source size.
-	[ position > 1 and: [ (source at: position) isLineBreak ] ]
-		whileTrue: [ position := position - 1 ].
-	self executionResults
-		at: aCodeBlock code
-		put: (LeEvaluationResult new
-				value: aResult;
-				expanded: aBoolean;
-				position: position).
-	self threadMessageViewModel requestStyleSourceText.
-	aBoolean ifTrue: [ aButton phlow spawnObject: aResult ]
-]
-
-{ #category : #generated }
-GtLlmMessageStyler >> evaluateMethodBlockRemoval: aCodeBlock expanded: aBoolean from: aButton [
-	| aResult position source aMethod |
-	source := aCodeBlock code source.
-	aMethod := self methodSourceFrom: aCodeBlock.
-	aResult := aMethod removeFromSystem.
-
-	aResult threadMessage: self threadMessageViewModel threadMessage.
+	aResult := self threadMessageViewModel codeBlocksExecutor check: aCodeBlock.
 
 	position := source size.
 	[ position > 1 and: [ (source at: position) isLineBreak ] ]
@@ -145,16 +91,6 @@ GtLlmMessageStyler >> initialize [
 
 { #category : #generated }
 GtLlmMessageStyler >> isCursorInside: nodeInterval [ 
-]
-
-{ #category : #generated }
-GtLlmMessageStyler >> methodSourceFrom: aCodeBlock [
-	| source |
-	source := aCodeBlock code source trim.
-	"^ GtLlmMethodSource forSource: source"
-	^ GtLlmMessageMethod new
-		methodClass: source lines first asClass;
-		methodBody: (Character lf join: source lines allButFirst)
 ]
 
 { #category : #accessing }
@@ -396,6 +332,35 @@ GtLlmMessageStyler >> styleButton: anAnnotation withTool: aBlock [
 		withTool: aBlock
 ]
 
+{ #category : #private }
+GtLlmMessageStyler >> styleCode: aCodeNode [
+	self threadMessageViewModel isAssistantRole ifFalse: [ ^ self ].
+	(text from: aCodeNode stopPosition to: aCodeNode stopPosition)
+		attributes: {GtButtonAttribute new
+					beAppend;
+					stencil: [ GtButtonStencil new
+							icon: BrGlamorousVectorIcons play;
+							tooltip: 'Evaluate';
+							action: [ :aWidget :aButtonModel | 
+								self
+									evaluateCodeBlock: aCodeNode
+									expanded: false
+									from: aWidget ] ].
+				GtButtonAttribute new
+					beAppend;
+					stencil: [ GtButtonStencil new
+							icon: BrGlamorousVectorIcons playinspect;
+							tooltip: 'Inspect';
+							action: [ :aWidget :aButtonModel | 
+								self
+									evaluateCodeBlock: aCodeNode
+									expanded: true
+									from: aWidget ] ]}.
+	self executionResults
+		at: aCodeNode code
+		ifPresent: [ :result | self styleResult: result for: aCodeNode ]
+]
+
 { #category : #accessing }
 GtLlmMessageStyler >> styleExpandingObject: aClassAnnotation withDefault: aSymbol [
 	| cacheKey attribute |
@@ -466,36 +431,6 @@ GtLlmMessageStyler >> styleResult: evaluationResult for: aCodeNode [
 		attributes: {evaluatedCodeAttribute}
 ]
 
-{ #category : #private }
-GtLlmMessageStyler >> styleSmalltalkCode: aCodeNode [
-	aCodeNode isForSmalltalk ifFalse: [ ^ self ].
-	self threadMessageViewModel isAssistantRole ifFalse: [ ^ self ].
-	(text from: aCodeNode stopPosition to: aCodeNode stopPosition)
-		attributes: {GtButtonAttribute new
-					beAppend;
-					stencil: [ GtButtonStencil new
-							icon: BrGlamorousVectorIcons play;
-							tooltip: 'Evaluate';
-							action: [ :aWidget :aButtonModel | 
-								self
-									evaluateCodeBlock: aCodeNode
-									expanded: false
-									from: aWidget ] ].
-				GtButtonAttribute new
-					beAppend;
-					stencil: [ GtButtonStencil new
-							icon: BrGlamorousVectorIcons playinspect;
-							tooltip: 'Inspect';
-							action: [ :aWidget :aButtonModel | 
-								self
-									evaluateCodeBlock: aCodeNode
-									expanded: true
-									from: aWidget ] ]}.
-	self executionResults
-		at: aCodeNode code
-		ifPresent: [ :result | self styleResult: result for: aCodeNode ]
-]
-
 { #category : #generated }
 GtLlmMessageStyler >> styleSmalltalkCodeBlock: aCodeNode [ 
 	| aStyler |
@@ -506,51 +441,6 @@ GtLlmMessageStyler >> styleSmalltalkCodeBlock: aCodeNode [
 			(text
 				from: aCodeNode code startPosition
 				to: aCodeNode code stopPosition)
-]
-
-{ #category : #private }
-GtLlmMessageStyler >> styleSmalltalkMethod: aCodeNode [
-	| methodSource tooltip isReplace attributes |
-	(aCodeNode isForLanguage: 'smalltalk-method') ifFalse: [ ^ self ].
-	self threadMessageViewModel isAssistantRole ifFalse: [ ^ self ].
-
-	methodSource := self methodSourceFrom: aCodeNode.
-	methodSource methodExists
-		ifTrue: [ tooltip := 'Replace Method'.
-			isReplace := true ]
-		ifFalse: [ tooltip := 'Add Method'.
-			isReplace := false ].
-
-	attributes := {GtButtonAttribute new
-				beAppend;
-				stencil: [ GtButtonStencil new
-						icon: BrGlamorousVectorIcons playinspect;
-						tooltip: tooltip;
-						action: [ :aWidget :aButtonModel | 
-							self
-								evaluateMethodBlock: aCodeNode
-								expanded: true
-								from: aWidget
-								isReplace: isReplace ] ]} asOrderedCollection.
-
-	isReplace
-		ifTrue: [ attributes
-				add: (GtButtonAttribute new
-						beAppend;
-						stencil: [ GtButtonStencil new
-								icon: BrGlamorousVectorIcons remove;
-								tooltip: 'Remove method';
-								action: [ :aWidget :aButtonModel | 
-									self
-										evaluateMethodBlockRemoval: aCodeNode
-										expanded: true
-										from: aWidget ] ]) ].
-
-	(text from: aCodeNode stopPosition to: aCodeNode stopPosition)
-		attributes: attributes.
-	self executionResults
-		at: aCodeNode code
-		ifPresent: [ :result | self styleResult: result for: aCodeNode ]
 ]
 
 { #category : #generated }
@@ -601,8 +491,7 @@ GtLlmMessageStyler >> visitCodeBlock: aCodeNode [
 		ifTrue: [ self styleSmalltalkCodeBlock: aCodeNode ].
 	(self text from: aCodeNode startPosition to: aCodeNode stopPosition)
 		glamorousCodeFont.
-	self styleSmalltalkCode: aCodeNode.
-	self styleSmalltalkMethod: aCodeNode.
+	self styleCode: aCodeNode.
 
 	^ self visitContent: aCodeNode
 ]

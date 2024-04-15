@@ -24,7 +24,7 @@ GtLlmCheckRunResultViewModel >> announcer [
 
 { #category : #accessing }
 GtLlmCheckRunResultViewModel >> executionResult [
-	^ checkRunResult executionResult
+	^ checkRunResult
 ]
 
 { #category : #accessing }
