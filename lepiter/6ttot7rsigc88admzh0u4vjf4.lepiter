@@ -212,7 +212,7 @@
 								"__type" : "time",
 								"time" : {
 									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2024-03-01T07:52:53.30067+01:00"
+									"dateAndTimeString" : "2024-04-16T23:36:02.220494+02:00"
 								}
 							},
 							"uid" : {
@@ -222,7 +222,7 @@
 							"paragraphStyle" : {
 								"__type" : "textStyle"
 							},
-							"string" : "The global variable is not mandatory for using the tutor,k "
+							"string" : "The global variable is not mandatory for using the tutor."
 						}
 					]
 				},

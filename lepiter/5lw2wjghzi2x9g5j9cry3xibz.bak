@@ -481,7 +481,7 @@
 								"__type" : "time",
 								"time" : {
 									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2024-04-13T18:36:55.965249+02:00"
+									"dateAndTimeString" : "2024-04-13T18:36:57.779701+02:00"
 								}
 							},
 							"uid" : {
@@ -491,7 +491,7 @@
 							"paragraphStyle" : {
 								"__type" : "textStyle"
 							},
-							"string" : "[[Nürnberg Data Science & AI Meetup – 17.04.20"
+							"string" : "[[Nürnberg Data Science & AI Meetup – 17.04.2024]]"
 						}
 					]
 				},
