@@ -72,18 +72,23 @@ GtLlmContext >> gtCheckFor: aView [
 ]
 
 { #category : #accessing }
+GtLlmContext >> gtCompositionFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Composition';
+		priority: 1;
+		object: [ self checker ];
+		view: #gtCompositionFor:
+]
+
+{ #category : #accessing }
 GtLlmContext >> gtInstanceFor: aView [
 	<gtView>
-	self hasInstance ifFalse: [ ^ aView empty ].
-
 	^ aView forward
 		title: 'Instance';
-		priority: 1;
+		priority: 3;
 		object: [ self instance ];
-		view: #gtLiveFor:;
-		actionButtonIcon: BrGlamorousVectorIcons inspect
-			tooltip: 'Inspect result'
-			action: [ :aButton | aButton phlow spawnObject: self instance ]
+		view: #gtLiveFor:
 ]
 
 { #category : #accessing }

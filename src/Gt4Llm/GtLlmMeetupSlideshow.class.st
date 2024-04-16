@@ -9,7 +9,25 @@ GtLlmMeetupSlideshow >> anActualUseCase: aSlide [
 	<gtSlide>
 	^ aSlide lepiterPage
 		setPriority;
-		startPage: (LeDatabase gtBook pageNamed: 'What is GT?')
+		startPage: (LeDatabase gtBook pageNamed: 'Case studies of Moldable Development')
+]
+
+{ #category : #accessing }
+GtLlmMeetupSlideshow >> gt4llm: aSlide [
+	<gtSlide>
+	^ aSlide title
+		setPriority;
+		titleBottomPadding: 30;
+		titleWithFormat: (self asSubtitle: 'gt4llm')
+]
+
+{ #category : #accessing }
+GtLlmMeetupSlideshow >> gt4openAiBooklet: aSlide [
+	<gtSlide>
+	^ aSlide lepiterPage
+		setPriority;
+		startPage: ((LeDatabase databaseNamed: 'feenkcom/gt4llm/lepiter')
+				pageNamed: 'gt4openai')
 ]
 
 { #category : #accessing }
@@ -19,11 +37,14 @@ GtLlmMeetupSlideshow >> gtPage [
 	<noTest>
 	^ (LePage named: 'What is GT?')
 		addSnippet: (LeTextSnippet new
-				string: 'Let’s start exploring! A part of GT is Lepiter, a notebook environment. We are in it now.';
-				yourself);
+				string: 'Let’s start exploring! A part of GT is Lepiter, a notebook environment. We are in it now.');
+		addSnippet: (LeTextSnippet new string: 'Here is a simple code snippet:');
+		addSnippet: (LePharoSnippet new code: '5 / 3');
+		addSnippet: (LeTextSnippet new string: 'And another:');
+		addSnippet: (LePharoSnippet new code: 'Color blue');
+		addSnippet: (LeTextSnippet new string: 'And a more complex one:');
 		addSnippet: (LePharoSnippet new
-				code: 'Color blue';
-				yourself);
+				code: 'GtGraphCircleNeighbourhoodExamples new emptyNeighborhoodWithThreeCirclesAndSpace');
 		yourself
 ]
 
@@ -34,7 +55,7 @@ GtLlmMeetupSlideshow >> orouborosPage: aSlide [
 	^ aSlide classCoder
 		setPriority;
 		class: self class;
-		expandMethodAt: (self class selectors
+		expandMethodAt: (self class selectors sorted
 				detectIndex: [ :aMethodName | aMethodName = #orouborosPage: ])
 ]
 
@@ -46,10 +67,26 @@ GtLlmMeetupSlideshow >> slidePriorities [
 	^ #(#title:
 		#whatIsGt:
 		#whatIsGtPage:
-		#orouborousPage:
+		#orouborosPage:
 		#whatIsItActually:
 		#anActualUseCase:
+		#gt4llm:
+		#whatIsGtPageAgain:
+		#gt4openAiBooklet:
+		#thankYou:
 		)
+]
+
+{ #category : #accessing }
+GtLlmMeetupSlideshow >> thankYou: aSlide [
+	<gtSlide>
+	^ aSlide titleWithFooter
+		setPriority;
+		titleBottomPadding: 30;
+		subtitleBottomPadding: 40;
+		titleWithFormat: (self asTitle: 'Thank you!');
+		subtitleWithFormat: (self asTitle: 'Questions?');
+		footerWithFormat: (self asBigText: 'https://github.com/feenkcom/gt4llm')
 ]
 
 { #category : #accessing }
@@ -75,6 +112,14 @@ GtLlmMeetupSlideshow >> whatIsGt: aSlide [
 
 { #category : #accessing }
 GtLlmMeetupSlideshow >> whatIsGtPage: aSlide [
+	<gtSlide>
+	^ aSlide lepiterPage
+		setPriority;
+		startPage: (self db pageNamed: 'What is GT?')
+]
+
+{ #category : #accessing }
+GtLlmMeetupSlideshow >> whatIsGtPageAgain: aSlide [
 	<gtSlide>
 	^ aSlide lepiterPage
 		setPriority;
