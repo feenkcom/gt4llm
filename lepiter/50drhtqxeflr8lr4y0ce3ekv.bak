@@ -29,7 +29,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-14T12:27:55.393193+01:00"
+						"dateAndTimeString" : "2024-02-22T18:49:47.75329+01:00"
 					}
 				},
 				"uid" : {
@@ -39,7 +39,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "As you might have noticed in [[Getting Started]], a chat is modelled as a series of messages. In order to keep these organized and in state, we may use {{gtClass:GtOpenAIChat}}."
+				"string" : "As you might have noticed in [[Working with the API client]], a chat is modelled as a series of messages. In order to keep these organized and in state, we may use {{gtClass:GtOpenAIChat}}."
 			},
 			{
 				"__type" : "pharoSnippet",

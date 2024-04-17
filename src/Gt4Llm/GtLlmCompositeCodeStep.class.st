@@ -31,6 +31,14 @@ GtLlmCompositeCodeStep >> children [
 ]
 
 { #category : #accessing }
+GtLlmCompositeCodeStep >> description [
+	^ super description asRopedText
+		append: ': ' asRopedText;
+		append: ((steps size printString, ' steps') asRopedText
+				foreground: BrGlamorousColors fadedTextColor)
+]
+
+{ #category : #accessing }
 GtLlmCompositeCodeStep >> initialize [
 	super initialize.
 	

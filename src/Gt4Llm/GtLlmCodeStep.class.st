@@ -23,14 +23,19 @@ GtLlmCodeStep >> children [
 ]
 
 { #category : #accessing }
+GtLlmCodeStep >> description [
+	^ self class stepName
+]
+
+{ #category : #accessing }
 GtLlmCodeStep >> gtCompositionFor: aView [
 	<gtView>
-	^ aView tree
+	^ aView tree expandAll
 		title: 'Composition';
 		priority: 1;
 		items: [ {self} ];
 		children: #children;
-		itemText: [ :anItem | anItem class stepName ]
+		itemText: #description
 ]
 
 { #category : #accessing }
