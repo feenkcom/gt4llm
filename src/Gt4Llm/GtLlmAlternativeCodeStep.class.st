@@ -14,7 +14,10 @@ GtLlmAlternativeCodeStep class >> stepName [
 
 { #category : #accessing }
 GtLlmAlternativeCodeStep >> addAlternative: aStep matching: aBlock [
-	alternatives add: aBlock -> aStep
+	alternatives
+		add: (GtLlmAlternativeChild new
+				predicate: aBlock;
+				step: aStep)
 ]
 
 { #category : #accessing }
@@ -27,7 +30,15 @@ GtLlmAlternativeCodeStep >> asNotExecuted [
 
 { #category : #accessing }
 GtLlmAlternativeCodeStep >> children [
-	^ alternatives collect: #value
+	^ alternatives
+]
+
+{ #category : #accessing }
+GtLlmAlternativeCodeStep >> description [
+	^ super description asRopedText
+		append: ': ' asRopedText;
+		append: ((alternatives size printString , ' alternatives') asRopedText
+				foreground: BrGlamorousColors fadedTextColor)
 ]
 
 { #category : #accessing }
@@ -48,11 +59,10 @@ GtLlmAlternativeCodeStep >> runStep: aContext [
 
 	alternatives
 		do: [ :aPair | 
-			(executed not and: [ aPair key value: alternativeContext ])
-				ifTrue: [ aPair value runStep: alternativeContext.
+			(executed not and: [ aPair predicate value: alternativeContext ])
+				ifTrue: [ aPair step runStep: alternativeContext.
 					executed := true ]
-				ifFalse: [ alternativeContext
-						addResult: aPair value asNotExecuted ] ].
+				ifFalse: [ alternativeContext addResult: aPair step asNotExecuted ] ].
 
 	executed
 		ifTrue: [ aContext addResult: alternativeContext ]

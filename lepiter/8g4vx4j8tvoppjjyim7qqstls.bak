@@ -671,14 +671,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-04-15T17:19:32.752459+02:00"
+						"dateAndTimeString" : "2024-04-15T17:19:56.079502+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "V7o9Li7ODQC7DiLJAJOAxA=="
 				},
-				"code" : "aMessage := chat messages first.\rresults := chat messages first codeBlocksExecutor check\r\"in case the method already exists, we can call replaceInSystem instead\""
+				"code" : "results := chat messages first codeBlocksExecutor check"
 			},
 			{
 				"__type" : "textSnippet",

@@ -45,6 +45,8 @@ GtLlmMeetupSlideshow >> gtPage [
 		addSnippet: (LeTextSnippet new string: 'And a more complex one:');
 		addSnippet: (LePharoSnippet new
 				code: 'GtGraphCircleNeighbourhoodExamples new emptyNeighborhoodWithThreeCirclesAndSpace');
+		addSnippet: (LeYoutubeReferenceSnippet new
+				urlString: 'https://www.youtube.com/watch?v=lqogvp1dGpk');
 		yourself
 ]
 
