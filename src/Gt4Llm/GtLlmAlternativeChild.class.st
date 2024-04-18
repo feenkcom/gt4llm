@@ -9,6 +9,11 @@ Class {
 }
 
 { #category : #accessing }
+GtLlmAlternativeChild >> asNotExecuted [
+	^ self step asNotExecuted
+]
+
+{ #category : #accessing }
 GtLlmAlternativeChild >> children [
 	^ self step children
 ]

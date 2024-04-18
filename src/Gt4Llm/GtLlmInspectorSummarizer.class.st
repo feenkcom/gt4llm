@@ -39,3 +39,12 @@ GtLlmInspectorSummarizer >> summarizeViews: anObject [
 						selector: aPragma methodSelector;
 						code: aPragma method sourceCode ])
 ]
+
+{ #category : #accessing }
+GtLlmInspectorSummarizer >> summarizeWithoutViews: anObject [
+	^ GtLlmInspectorSummary new
+		object: anObject;
+		objectClass: anObject class;
+		slots: (self summarizeSlots: anObject);
+		views: {}
+]
