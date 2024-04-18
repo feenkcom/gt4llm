@@ -432,6 +432,16 @@ GtOpenAIGtTutor >> initialize [
 ]
 
 { #category : #accessing }
+GtOpenAIGtTutor >> instructions [
+	^ instructions
+]
+
+{ #category : #accessing }
+GtOpenAIGtTutor >> instructions: anObject [
+	instructions := anObject
+]
+
+{ #category : #accessing }
 GtOpenAIGtTutor >> interactionDescription [
 	^ '# Interaction description
 A typical interaction goes like this:
