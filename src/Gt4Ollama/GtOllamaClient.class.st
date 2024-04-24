@@ -84,7 +84,7 @@ GtOllamaClient >> post: aString withEntity: anEntity [
 
 { #category : #accessing }
 GtOllamaClient >> postStreaming: aString withEntity: anEntity [
-	| aClient |
+	| aClient aResult |
 	aClient := self initializeClient
 			accept: 'application/x-ndjson';
 			contentReader: [ :entity | 
@@ -96,7 +96,11 @@ GtOllamaClient >> postStreaming: aString withEntity: anEntity [
 
 	aClient contents: anEntity.
 
-	^ aClient post
+	aResult := aClient post.
+
+	aResult size > 0 ifTrue: [ self checkForErrors: aResult first ].
+
+	^ aResult
 ]
 
 { #category : #accessing }
