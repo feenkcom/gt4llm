@@ -134,14 +134,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-22T21:00:32.568434+01:00"
+						"dateAndTimeString" : "2024-04-24T17:56:47.170842+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "UmMbkIrMDQCW0cHKATK6Xg=="
 				},
-				"code" : "client := GtOpenAIClient new apiKey: apiKey.\r\r\"or, as a convenience function\"\r\rclient := GtOpenAIClient withApiKeyFromClipboard"
+				"code" : "client := GtOpenAIClient new apiKey: apiKey.\r\r\"or, as a convenience method\"\r\rclient := GtOpenAIClient withApiKeyFromClipboard"
 			},
 			{
 				"__type" : "textSnippet",

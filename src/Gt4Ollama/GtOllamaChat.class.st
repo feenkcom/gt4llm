@@ -17,7 +17,7 @@ GtOllamaChat >> initializeMessages [
 { #category : #accessing }
 GtOllamaChat >> sendMessage: aMessage [
 	| result |
-	messages add: (GtOpenAIUserMessage new content: aMessage).
+	messages add: (GtLlmUserMessage new content: aMessage).
 
 	result := client completeChatWithModel: self model andMessages: messages.
 

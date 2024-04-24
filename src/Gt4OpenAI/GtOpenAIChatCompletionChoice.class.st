@@ -65,5 +65,5 @@ GtOpenAIChatCompletionChoice >> message [
 
 { #category : #accessing }
 GtOpenAIChatCompletionChoice >> message: anObject [
-	message := GtOpenAIChatMessage from: anObject
+	message := GtLlmChatMessage from: anObject
 ]

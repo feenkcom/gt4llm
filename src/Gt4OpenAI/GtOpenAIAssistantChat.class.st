@@ -209,7 +209,7 @@ GtOpenAIAssistantChat >> sendMessage: aString [
 	output := aString.
 	output size > self maximumMessageSize
 		ifTrue: [ output := output first: self maximumMessageSize ].
-	aMessage := GtOpenAIUserMessage new content: output.
+	aMessage := GtLlmUserMessage new content: output.
 
 	assistant client addMessage: aMessage toThread: thread id.
 	lastRun := assistant client
