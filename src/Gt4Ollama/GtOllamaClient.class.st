@@ -87,11 +87,7 @@ GtOllamaClient >> postStreaming: aString withEntity: anEntity [
 	| aClient aResult |
 	aClient := self initializeClient
 			accept: 'application/x-ndjson';
-			contentReader: [ :entity | 
-				| jsonStream |
-				jsonStream := NeoJSONReader on: entity readStream.
-				Array
-					streamContents: [ :out | [ jsonStream atEnd ] whileFalse: [ out nextPut: jsonStream next ] ] ].
+			contentReader: [ :entity | (NeoJSONReader on: entity readStream) upToEnd ].
 	aClient url: self baseUrl / aString.
 
 	aClient contents: anEntity.
