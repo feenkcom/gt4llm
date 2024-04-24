@@ -1,6 +1,6 @@
 Class {
 	#name : #GtOpenAIEmbedding,
-	#superclass : #GtOpenAIEntity,
+	#superclass : #GtLlmEntity,
 	#instVars : [
 		'embedding'
 	],

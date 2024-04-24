@@ -1,6 +1,6 @@
 Class {
 	#name : #GtOpenAICompleteChatAPIClient,
-	#superclass : #GtOpenAIEndpointClient,
+	#superclass : #GtLlmEndpointClient,
 	#instVars : [
 		'model',
 		'messages'

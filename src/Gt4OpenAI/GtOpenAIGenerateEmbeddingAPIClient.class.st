@@ -1,6 +1,6 @@
 Class {
 	#name : #GtOpenAIGenerateEmbeddingAPIClient,
-	#superclass : #GtOpenAIEndpointClient,
+	#superclass : #GtLlmEndpointClient,
 	#instVars : [
 		'input',
 		'model'
