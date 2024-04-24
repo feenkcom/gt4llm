@@ -13,7 +13,7 @@ BaselineOfGt4Ollama class >> loadLepiter [
 			| defaultDatabase currentProperties |
 			defaultDatabase := LeDatabasesRegistry defaultLogicalDatabase.
 			currentProperties := defaultDatabase properties.
-			currentProperties addRegisteredDirectory: aRepository repositoryDirectory / 'lepiter'.
+			currentProperties addRegisteredDirectory: aRepository repositoryDirectory / 'lepiter_ollama'.
 			defaultDatabase reload ]
 		ifNone: [
 			self inform: 'Repository not found.' ]
