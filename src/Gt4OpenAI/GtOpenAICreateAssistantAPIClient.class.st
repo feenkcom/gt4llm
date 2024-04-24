@@ -1,6 +1,6 @@
 Class {
 	#name : #GtOpenAICreateAssistantAPIClient,
-	#superclass : #GtOpenAIEndpointClient,
+	#superclass : #GtLlmEndpointClient,
 	#instVars : [
 		'assistant'
 	],

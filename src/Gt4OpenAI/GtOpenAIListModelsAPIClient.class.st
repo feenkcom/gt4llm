@@ -1,6 +1,6 @@
 Class {
 	#name : #GtOpenAIListModelsAPIClient,
-	#superclass : #GtOpenAIEndpointClient,
+	#superclass : #GtLlmEndpointClient,
 	#category : #'Gt4OpenAI-Client'
 }
 

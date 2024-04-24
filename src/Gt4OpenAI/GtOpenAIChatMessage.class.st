@@ -1,6 +1,6 @@
 Class {
 	#name : #GtOpenAIChatMessage,
-	#superclass : #GtOpenAIEntity,
+	#superclass : #GtLlmEntity,
 	#instVars : [
 		'content',
 		'role'

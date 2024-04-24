@@ -1,6 +1,6 @@
 Class {
 	#name : #GtOpenAICreateAssistantFileAPIClient,
-	#superclass : #GtOpenAIEndpointClient,
+	#superclass : #GtLlmEndpointClient,
 	#instVars : [
 		'file',
 		'assistant'

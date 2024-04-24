@@ -1,6 +1,6 @@
 Class {
 	#name : #GtOpenAIUsage,
-	#superclass : #GtOpenAIEntity,
+	#superclass : #GtLlmEntity,
 	#instVars : [
 		'promptTokens',
 		'completionTokens',

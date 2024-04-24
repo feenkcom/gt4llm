@@ -1,6 +1,6 @@
 Class {
 	#name : #GtOpenAIThread,
-	#superclass : #GtOpenAIEntity,
+	#superclass : #GtLlmEntity,
 	#instVars : [
 		'id',
 		'createdAt',

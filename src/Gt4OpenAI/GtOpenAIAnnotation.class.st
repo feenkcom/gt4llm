@@ -1,6 +1,6 @@
 Class {
 	#name : #GtOpenAIAnnotation,
-	#superclass : #GtOpenAIEntity,
+	#superclass : #GtLlmEntity,
 	#instVars : [
 		'type',
 		'text',

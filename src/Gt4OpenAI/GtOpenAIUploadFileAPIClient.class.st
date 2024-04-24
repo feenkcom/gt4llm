@@ -1,6 +1,6 @@
 Class {
 	#name : #GtOpenAIUploadFileAPIClient,
-	#superclass : #GtOpenAIEndpointClient,
+	#superclass : #GtLlmEndpointClient,
 	#instVars : [
 		'file',
 		'purpose'

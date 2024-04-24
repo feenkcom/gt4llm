@@ -1,6 +1,6 @@
 Class {
 	#name : #GtOpenAITool,
-	#superclass : #GtOpenAIEntity,
+	#superclass : #GtLlmEntity,
 	#instVars : [
 		'type'
 	],
