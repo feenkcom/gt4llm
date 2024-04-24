@@ -40,6 +40,15 @@ GtOllamaClient >> defaultBaseUrl [
 ]
 
 { #category : #accessing }
+GtOllamaClient >> get: aString [
+	| aClient |
+	aClient := self initializeClient beOneShot.
+	aClient url: self baseUrl / aString.
+
+	^ self checkForErrors: aClient get
+]
+
+{ #category : #accessing }
 GtOllamaClient >> initialize [
 	super initialize.
 	
@@ -53,6 +62,13 @@ GtOllamaClient >> initializeClient [
 	aClient forJsonREST.
 	aClient timeout: 60.
 	^ aClient
+]
+
+{ #category : #accessing }
+GtOllamaClient >> listModels [
+	^ GtOllamaListModelsClient new
+		client: self;
+		perform
 ]
 
 { #category : #accessing }
@@ -81,4 +97,12 @@ GtOllamaClient >> postStreaming: aString withEntity: anEntity [
 	aClient contents: anEntity.
 
 	^ aClient post
+]
+
+{ #category : #accessing }
+GtOllamaClient >> pullModel: aString [ 
+	^ GtOllamaPullModelClient new
+		client: self;
+		model: aString;
+		perform
 ]
