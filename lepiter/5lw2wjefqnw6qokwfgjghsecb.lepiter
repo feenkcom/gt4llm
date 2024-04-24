@@ -276,14 +276,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-14T12:28:40.413749+01:00"
+						"dateAndTimeString" : "2024-04-24T21:54:29.477478+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "RfoZlYrMDQCaiB6QATK6Xg=="
 				},
-				"code" : "messages := {\r\tGtOpenAISystemMessage new content: 'You are a helpful assistant.'.\r\tGtOpenAIUserMessage new content: 'Hello ChatGPT! How are you today?'\r}.\r\rclient completeChatWithModel: 'gpt-3.5-turbo' andMessages: messages"
+				"code" : "messages := {\r\tGtLlmSystemMessage new content: 'You are a helpful assistant.'.\r\tGtLlmUserMessage new content: 'Hello ChatGPT! How are you today?'\r}.\r\rclient completeChatWithModel: 'gpt-3.5-turbo' andMessages: messages"
 			}
 		]
 	},

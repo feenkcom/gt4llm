@@ -279,14 +279,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-04-24T18:16:08.329404+02:00"
+						"dateAndTimeString" : "2024-04-24T21:53:25.73591+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "NEc6lDvTDQCRyhd+Cwzy0g=="
 				},
-				"code" : "messages := {\r\tGtOpenAISystemMessage new content: 'You are a helpful assistant.'.\r\tGtOpenAIUserMessage new content: 'Hello Llama! How are you today?'\r}.\r\rclient completeChatWithModel: 'llama3' andMessages: messages"
+				"code" : "messages := {\r\tGtLlmSystemMessage new content: 'You are a helpful assistant.'.\r\tGtLlmUserMessage new content: 'Hello Llama! How are you today?'\r}.\r\rclient completeChatWithModel: 'llama3' andMessages: messages"
 			}
 		]
 	},
