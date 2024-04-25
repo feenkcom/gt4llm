@@ -1,20 +1,20 @@
 Class {
-	#name : #GtOpenAIChatMessage,
-	#superclass : #GtOpenAIEntity,
+	#name : #GtLlmChatMessage,
+	#superclass : #GtLlmEntity,
 	#instVars : [
 		'content',
 		'role'
 	],
-	#category : #'Gt4OpenAI-Models'
+	#category : #'Gt4Llm-Models'
 }
 
 { #category : #accessing }
-GtOpenAIChatMessage class >> defaultRole [
+GtLlmChatMessage class >> defaultRole [
 	^ self subclassResponsibility
 ]
 
 { #category : #'instance creation' }
-GtOpenAIChatMessage class >> from: aDictionary [
+GtLlmChatMessage class >> from: aDictionary [
 	| aRole aContent |
 	aRole := aDictionary at: 'role'.
 	aContent := aDictionary at: 'content'.
@@ -28,23 +28,23 @@ GtOpenAIChatMessage class >> from: aDictionary [
 ]
 
 { #category : #accessing }
-GtOpenAIChatMessage class >> serializationProperties [
+GtLlmChatMessage class >> serializationProperties [
 	^ {#role -> #role.
 		#content -> #content}
 ]
 
 { #category : #accessing }
-GtOpenAIChatMessage >> content [
+GtLlmChatMessage >> content [
 	^ content
 ]
 
 { #category : #accessing }
-GtOpenAIChatMessage >> content: anObject [
+GtLlmChatMessage >> content: anObject [
 	content := anObject
 ]
 
 { #category : #accessing }
-GtOpenAIChatMessage >> gtContentFor: aView [
+GtLlmChatMessage >> gtContentFor: aView [
 	<gtView>
 	^ aView textEditor
 		title: 'Content';
@@ -53,11 +53,11 @@ GtOpenAIChatMessage >> gtContentFor: aView [
 ]
 
 { #category : #accessing }
-GtOpenAIChatMessage >> role [
+GtLlmChatMessage >> role [
 	^ role ifNil: [ role := self class defaultRole ]
 ]
 
 { #category : #accessing }
-GtOpenAIChatMessage >> role: anObject [
+GtLlmChatMessage >> role: anObject [
 	role := anObject
 ]

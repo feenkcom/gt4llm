@@ -1,6 +1,6 @@
 Class {
 	#name : #GtOpenAIThreadMessage,
-	#superclass : #GtOpenAIEntity,
+	#superclass : #GtLlmEntity,
 	#traits : 'TGtOpenAIThreadMessage',
 	#classTraits : 'TGtOpenAIThreadMessage classTrait',
 	#instVars : [
@@ -47,7 +47,7 @@ GtOpenAIThreadMessage >> annotations [
 
 { #category : #accessing }
 GtOpenAIThreadMessage >> asChatMessage [
-	^ GtOpenAIChatMessage
+	^ GtLlmChatMessage
 		from: {'role' -> self role.
 				'content' -> self contentText} asDictionary
 ]

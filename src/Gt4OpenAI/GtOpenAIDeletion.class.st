@@ -1,6 +1,6 @@
 Class {
 	#name : #GtOpenAIDeletion,
-	#superclass : #GtOpenAIEntity,
+	#superclass : #GtLlmEntity,
 	#instVars : [
 		'id',
 		'object',

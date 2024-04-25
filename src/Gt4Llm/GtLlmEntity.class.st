@@ -1,15 +1,15 @@
 Class {
-	#name : #GtOpenAIEntity,
+	#name : #GtLlmEntity,
 	#superclass : #Object,
 	#instVars : [
 		'rawData',
 		'client'
 	],
-	#category : #'Gt4OpenAI-Models'
+	#category : #'Gt4Llm-Models'
 }
 
 { #category : #accessing }
-GtOpenAIEntity class >> from: aDictionary [
+GtLlmEntity class >> from: aDictionary [
 	| entity |
 	(aDictionary isKindOf: self) ifTrue: [ ^ aDictionary ].
 
@@ -24,22 +24,22 @@ GtOpenAIEntity class >> from: aDictionary [
 ]
 
 { #category : #accessing }
-GtOpenAIEntity class >> serializationProperties [
+GtLlmEntity class >> serializationProperties [
 	^ #()
 ]
 
 { #category : #accessing }
-GtOpenAIEntity >> client [
+GtLlmEntity >> client [
 	^ client
 ]
 
 { #category : #accessing }
-GtOpenAIEntity >> client: anObject [
+GtLlmEntity >> client: anObject [
 	client := anObject
 ]
 
 { #category : #accessing }
-GtOpenAIEntity >> gtViewRawDataFor: aView [
+GtLlmEntity >> gtViewRawDataFor: aView [
 	<gtView>
 	self rawData ifNil: [^ aView empty ].
 
@@ -51,17 +51,17 @@ GtOpenAIEntity >> gtViewRawDataFor: aView [
 ]
 
 { #category : #accessing }
-GtOpenAIEntity >> rawData [
+GtLlmEntity >> rawData [
 	^ rawData
 ]
 
 { #category : #accessing }
-GtOpenAIEntity >> rawData: anObject [
+GtLlmEntity >> rawData: anObject [
 	rawData := anObject
 ]
 
 { #category : #accessing }
-GtOpenAIEntity >> serialize [
+GtLlmEntity >> serialize [
 	^ (self class serializationProperties
 		collect: [ :aPair | aPair key -> (self perform: aPair value) ]) asDictionary
 		reject: #isNil

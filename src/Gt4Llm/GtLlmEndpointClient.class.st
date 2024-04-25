@@ -1,24 +1,24 @@
 Class {
-	#name : #GtOpenAIEndpointClient,
+	#name : #GtLlmEndpointClient,
 	#superclass : #Object,
 	#instVars : [
 		'client'
 	],
-	#category : #'Gt4OpenAI-Client'
+	#category : #'Gt4Llm-Client'
 }
 
 { #category : #accessing }
-GtOpenAIEndpointClient >> client [
+GtLlmEndpointClient >> client [
 	^ client
 ]
 
 { #category : #accessing }
-GtOpenAIEndpointClient >> client: anObject [
+GtLlmEndpointClient >> client: anObject [
 	client := anObject
 ]
 
 { #category : #accessing }
-GtOpenAIEndpointClient >> perform [
+GtLlmEndpointClient >> perform [
 	| aResult |
 	aResult := self request.
 
@@ -26,11 +26,11 @@ GtOpenAIEndpointClient >> perform [
 ]
 
 { #category : #accessing }
-GtOpenAIEndpointClient >> request [
+GtLlmEndpointClient >> request [
 	^ self subclassResponsibility
 ]
 
 { #category : #accessing }
-GtOpenAIEndpointClient >> serializationClass [
-	^ self subclassResponsibility
+GtLlmEndpointClient >> serializationClass [
+	^ GtOllamaModelsGroup
 ]

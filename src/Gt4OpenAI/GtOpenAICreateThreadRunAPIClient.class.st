@@ -1,6 +1,6 @@
 Class {
 	#name : #GtOpenAICreateThreadRunAPIClient,
-	#superclass : #GtOpenAIEndpointClient,
+	#superclass : #GtLlmEndpointClient,
 	#instVars : [
 		'assistant',
 		'thread'

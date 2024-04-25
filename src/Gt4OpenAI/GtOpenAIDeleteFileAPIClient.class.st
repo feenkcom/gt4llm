@@ -1,6 +1,6 @@
 Class {
 	#name : #GtOpenAIDeleteFileAPIClient,
-	#superclass : #GtOpenAIEndpointClient,
+	#superclass : #GtLlmEndpointClient,
 	#instVars : [
 		'file'
 	],

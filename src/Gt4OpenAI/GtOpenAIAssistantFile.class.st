@@ -1,6 +1,6 @@
 Class {
 	#name : #GtOpenAIAssistantFile,
-	#superclass : #GtOpenAIEntity,
+	#superclass : #GtLlmEntity,
 	#instVars : [
 		'id',
 		'createdAt',

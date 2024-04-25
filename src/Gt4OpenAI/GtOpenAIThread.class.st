@@ -1,6 +1,6 @@
 Class {
 	#name : #GtOpenAIThread,
-	#superclass : #GtOpenAIEntity,
+	#superclass : #GtLlmEntity,
 	#instVars : [
 		'id',
 		'createdAt',
@@ -87,7 +87,7 @@ GtOpenAIThread >> metadata: anObject [
 { #category : #accessing }
 GtOpenAIThread >> sendMessage: aString [
 	| aMessage |
-	aMessage := GtOpenAIUserMessage new content: aString.
+	aMessage := GtLlmUserMessage new content: aString.
 
 	self client addMessage: aMessage toThread: self id
 ]

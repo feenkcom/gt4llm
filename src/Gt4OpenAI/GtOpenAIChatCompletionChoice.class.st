@@ -1,6 +1,6 @@
 Class {
 	#name : #GtOpenAIChatCompletionChoice,
-	#superclass : #GtOpenAIEntity,
+	#superclass : #GtLlmEntity,
 	#instVars : [
 		'logProbs',
 		'finishReason',
@@ -65,5 +65,5 @@ GtOpenAIChatCompletionChoice >> message [
 
 { #category : #accessing }
 GtOpenAIChatCompletionChoice >> message: anObject [
-	message := GtOpenAIChatMessage from: anObject
+	message := GtLlmChatMessage from: anObject
 ]
