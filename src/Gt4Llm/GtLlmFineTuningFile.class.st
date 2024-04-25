@@ -65,6 +65,16 @@ GtLlmFineTuningFile >> gtConversationsFor: aView [
 ]
 
 { #category : #accessing }
+GtLlmFineTuningFile >> gtCostFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Cost';
+		priority: 3;
+		object: [ self costsPerEpoch ];
+		view: #gtDetailsFor:
+]
+
+{ #category : #accessing }
 GtLlmFineTuningFile >> gtJsonlFor: aView [
 	<gtView>
 	^ aView forward
