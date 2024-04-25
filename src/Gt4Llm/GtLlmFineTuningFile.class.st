@@ -19,6 +19,16 @@ GtLlmFineTuningFile >> asJson [
 ]
 
 { #category : #accessing }
+GtLlmFineTuningFile >> conversations [
+	^ conversations
+]
+
+{ #category : #accessing }
+GtLlmFineTuningFile >> conversations: anObject [
+	conversations := anObject
+]
+
+{ #category : #accessing }
 GtLlmFineTuningFile >> gtConversationsFor: aView [
 	<gtView>
 	^ aView columnedList
