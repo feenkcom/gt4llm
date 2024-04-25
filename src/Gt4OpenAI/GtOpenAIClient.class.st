@@ -41,7 +41,8 @@ GtOpenAIClient >> baseUrl: anObject [
 { #category : #accessing }
 GtOpenAIClient >> checkForErrors: aResponse [
 	((aResponse includesKey: 'error')
-		and: [ (aResponse at: 'error') isKindOf: String ])
+		and: [ ((aResponse at: 'error') isKindOf: NeoJSONObject)
+				and: [ (aResponse at: 'error') includesKey: 'message' ] ])
 		ifTrue: [ ^ (GtOpenAIError from: (aResponse at: 'error')) signal ].
 
 	^ aResponse
@@ -142,10 +143,16 @@ GtOpenAIClient >> generateEmbeddingWithModel: aString andInput: anInputString [
 
 { #category : #accessing }
 GtOpenAIClient >> get: aUrl [
+	^ self get: aUrl withParams: {}
+]
+
+{ #category : #accessing }
+GtOpenAIClient >> get: aUrl withParams: aListOfAssocs [
 	| aClient |
 	aClient := self initializeClient.
 	aClient url: self baseUrl / aUrl.
-	
+	aListOfAssocs do: [ :aPair | aClient queryAt: aPair key put: aPair value ].
+
 	aClient entity: nil.
 
 	^ self checkForErrors: aClient get
@@ -156,6 +163,30 @@ GtOpenAIClient >> getFile: aFileId [
 	^ GtOpenAIGetFileAPIClient new
 		client: self;
 		file: aFileId;
+		perform
+]
+
+{ #category : #accessing }
+GtOpenAIClient >> getFineTuningCheckpointsForJob: anId [
+	^ GtOpenAIGetFineTuningCheckpointsForJobAPIClient new
+		client: self;
+		job: anId;
+		perform
+]
+
+{ #category : #accessing }
+GtOpenAIClient >> getFineTuningEventsForJob: anId [
+	^ GtOpenAIGetFineTuningEventsForJobAPIClient new
+		client: self;
+		job: anId;
+		perform
+]
+
+{ #category : #accessing }
+GtOpenAIClient >> getFineTuningJob: anId [
+	^ GtOpenAIGetFineTuningJobAPIClient new
+		client: self;
+		job: anId;
 		perform
 ]
 

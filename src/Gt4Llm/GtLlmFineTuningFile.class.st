@@ -2,7 +2,8 @@ Class {
 	#name : #GtLlmFineTuningFile,
 	#superclass : #Object,
 	#instVars : [
-		'conversations'
+		'conversations',
+		'model'
 	],
 	#category : #'Gt4Llm-Fine Tuning'
 }
@@ -48,6 +49,11 @@ GtLlmFineTuningFile >> costsPerEpoch [
 ]
 
 { #category : #accessing }
+GtLlmFineTuningFile >> defaultModel [
+	^ 'gpt-3.5-turbo'
+]
+
+{ #category : #accessing }
 GtLlmFineTuningFile >> gtConversationsFor: aView [
 	<gtView>
 	^ aView columnedList
@@ -88,7 +94,18 @@ GtLlmFineTuningFile >> gtJsonlFor: aView [
 GtLlmFineTuningFile >> initialize [
 	super initialize.
 	
-	conversations := OrderedCollection new
+	conversations := OrderedCollection new.
+	model := self defaultModel
+]
+
+{ #category : #accessing }
+GtLlmFineTuningFile >> model [
+	^ model
+]
+
+{ #category : #accessing }
+GtLlmFineTuningFile >> model: anObject [
+	model := anObject
 ]
 
 { #category : #accessing }
@@ -112,15 +129,18 @@ GtLlmFineTuningFile >> numberOfTokens [
 			string := '' join: ((conversations flatCollect: #items) collect: #content).
 			anApplication newCommandStringFactory
 				bindingAt: #string put: string;
+				bindingAt: #model put: self model;
 				script: 'import tiktoken
-encoding = tiktoken.encoding_for_model("gpt-3.5-turbo")';
+encoding = tiktoken.encoding_for_model(model)';
 				resultExpression: 'len(encoding.encode(string))';
 				sendAndWait ]
 ]
 
 { #category : #accessing }
 GtLlmFineTuningFile >> pricePerToken [
-	^ 8 / 1000000
+	^ ({'gpt-3.5-turbo' -> 8.
+		'davinci-002' -> 6.
+		'babbage-002' -> 0.4} asDictionary at: self model) / 1000000
 ]
 
 { #category : #accessing }

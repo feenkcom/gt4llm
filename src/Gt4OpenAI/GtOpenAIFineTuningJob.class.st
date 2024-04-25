@@ -31,6 +31,11 @@ GtOpenAIFineTuningJob class >> serializationProperties [
 ]
 
 { #category : #accessing }
+GtOpenAIFineTuningJob >> checkpoints [
+	^ self client getFineTuningCheckpointsForJob: self id
+]
+
+{ #category : #accessing }
 GtOpenAIFineTuningJob >> createdAt [
 	^ createdAt
 ]
@@ -41,6 +46,11 @@ GtOpenAIFineTuningJob >> createdAt: anObject [
 ]
 
 { #category : #accessing }
+GtOpenAIFineTuningJob >> events [
+	^ self client getFineTuningEventsForJob: self id
+]
+
+{ #category : #accessing }
 GtOpenAIFineTuningJob >> fineTunedModel [
 	^ fineTunedModel
 ]
@@ -48,6 +58,38 @@ GtOpenAIFineTuningJob >> fineTunedModel [
 { #category : #accessing }
 GtOpenAIFineTuningJob >> fineTunedModel: anObject [
 	fineTunedModel := anObject
+]
+
+{ #category : #accessing }
+GtOpenAIFineTuningJob >> gtCheckpointsFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Checkpoints';
+		priority: 2;
+		object: [ self checkpoints ];
+		view: #gtCheckpointsFor:
+]
+
+{ #category : #accessing }
+GtOpenAIFineTuningJob >> gtEventsFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Events';
+		priority: 1;
+		object: [ self events ];
+		view: #gtEventsFor:
+]
+
+{ #category : #accessing }
+GtOpenAIFineTuningJob >> gtViewLossFor: aView [
+	<gtView>
+	^ aView explicit
+		title: 'Training loss';
+		priority: 3;
+		stencil: [ (GtHorizontalSparklineStencil new
+				values: ((self events reversed select: [ :anEvent | anEvent data isEmptyOrNil not ])
+						withIndexCollect: [ :aValue :i | (aValue data at: 'train_loss') -> i ]);
+				color: BrGlamorousColors hoveredButtonTextColor) asElement height: 100 ]
 ]
 
 { #category : #accessing }
