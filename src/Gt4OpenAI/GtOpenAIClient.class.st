@@ -40,7 +40,8 @@ GtOpenAIClient >> baseUrl: anObject [
 
 { #category : #accessing }
 GtOpenAIClient >> checkForErrors: aResponse [
-	(aResponse includesKey: 'error')
+	((aResponse includesKey: 'error')
+		and: [ (aResponse at: 'error') isKindOf: String ])
 		ifTrue: [ ^ (GtOpenAIError from: (aResponse at: 'error')) signal ].
 
 	^ aResponse
@@ -68,6 +69,15 @@ GtOpenAIClient >> createAssistantFile: aFileId forAssistant: anAssistantId [
 	^ GtOpenAICreateAssistantFileAPIClient new
 		client: self;
 		assistant: anAssistantId;
+		file: aFileId;
+		perform
+]
+
+{ #category : #accessing }
+GtOpenAIClient >> createFineTuningJobOnModel: aModelName withFile: aFileId [
+	^ GtOpenAICreateFineTuningJobAPIClient new
+		client: self;
+		model: aModelName;
 		file: aFileId;
 		perform
 ]
