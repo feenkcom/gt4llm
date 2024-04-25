@@ -2,7 +2,8 @@ Class {
 	#name : #GtLlmFineTuningFile,
 	#superclass : #Object,
 	#instVars : [
-		'conversations'
+		'conversations',
+		'name'
 	],
 	#category : #'Gt4Llm-Fine Tuning'
 }
@@ -14,8 +15,27 @@ GtLlmFineTuningFile >> addConversation: aConversation [
 
 { #category : #accessing }
 GtLlmFineTuningFile >> asJson [
-	^ Character enter
+	^ Character linefeed
 		join: (self serialize collect: [ :aDict | STONJSON toString: aDict ])
+]
+
+{ #category : #accessing }
+GtLlmFineTuningFile >> basename [
+	^ self name
+]
+
+{ #category : #accessing }
+GtLlmFineTuningFile >> contents [
+	^ self asJson
+]
+
+{ #category : #accessing }
+GtLlmFineTuningFile >> costsPerEpoch [
+	| tokens |
+	tokens := self numberOfTokens.
+	^ GtTCurrencyMoney new
+		amount: tokens * self pricePerToken;
+		currency: GtTCurrency usd
 ]
 
 { #category : #accessing }
@@ -50,6 +70,42 @@ GtLlmFineTuningFile >> initialize [
 	super initialize.
 	
 	conversations := OrderedCollection new
+]
+
+{ #category : #accessing }
+GtLlmFineTuningFile >> name [
+	^ name
+]
+
+{ #category : #accessing }
+GtLlmFineTuningFile >> name: anObject [
+	name := anObject
+]
+
+{ #category : #accessing }
+GtLlmFineTuningFile >> numberOfTokens [
+	PBApplication isRunning ifFalse: [ PBApplication start ].
+	PBApplication uniqueInstance installModule: 'tiktoken'.
+
+	^ PBApplication
+		do: [ :anApplication | 
+			| string |
+			string := '' join: ((conversations flatCollect: #items) collect: #content).
+			anApplication newCommandStringFactory
+				bindingAt: #string put: string;
+				script: 'import tiktoken
+encoding = tiktoken.encoding_for_model("gpt-3.5-turbo")';
+				resultExpression: 'len(encoding.encode(string))';
+				sendAndWait ]
+]
+
+{ #category : #accessing }
+GtLlmFineTuningFile >> pricePerThousandTokens [
+]
+
+{ #category : #accessing }
+GtLlmFineTuningFile >> pricePerToken [
+	^ 8 / 1000000
 ]
 
 { #category : #accessing }
