@@ -16,14 +16,6 @@ GtOpenAIChat >> apiKey: aString [
 ]
 
 { #category : #accessing }
-GtOpenAIChat >> initialize [
-	super initialize.
-	
-	self initializeClient.
-	self initializeMessages
-]
-
-{ #category : #accessing }
 GtOpenAIChat >> initializeClient [
 	client := GtOpenAIClient new
 ]
@@ -48,5 +40,5 @@ GtOpenAIChat >> sendMessage: aMessage [
 
 	result := client completeChatWithModel: self model andMessages: messages.
 
-	messages add: result choices first message
+	self addMessage: result choices first message
 ]
