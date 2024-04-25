@@ -1,6 +1,6 @@
 Class {
 	#name : #GtOpenAICreateFineTuningJobAPIClient,
-	#superclass : #GtOpenAIEndpointClient,
+	#superclass : #GtLlmEndpointClient,
 	#instVars : [
 		'model',
 		'file'
