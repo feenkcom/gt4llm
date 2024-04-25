@@ -55,6 +55,74 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-02-22T21:00:32.566821+01:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-02-22T21:00:32.566821+01:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "qBUDol/ODQCuQF53D0lXcw=="
+				},
+				"code" : "apiKey := Clipboard clipboardText."
+			},
+			{
+				"__type" : "pharoSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-02-22T21:00:41.81444+01:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-02-22T21:00:42.089835+01:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "xzaQol/ODQCuSebbD0lXcw=="
+				},
+				"code" : "apiKey := (FileLocator home / '.secrets' / 'open-ai-api-key.txt') contents."
+			},
+			{
+				"__type" : "pharoSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
 						"dateAndTimeString" : "2024-01-30T13:23:12.507046+01:00"
 					}
 				},
@@ -66,14 +134,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-14T12:28:21.982064+01:00"
+						"dateAndTimeString" : "2024-04-24T17:56:47.170842+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "UmMbkIrMDQCW0cHKATK6Xg=="
 				},
-				"code" : "apiKey := Clipboard clipboardText.\rclient := GtOpenAIClient new apiKey: apiKey.\r\r\"or, as a convenience function\"\r\rclient := GtOpenAIClient withApiKeyFromClipboard"
+				"code" : "client := GtOpenAIClient new apiKey: apiKey.\r\r\"or, as a convenience method\"\r\rclient := GtOpenAIClient withApiKeyFromClipboard"
 			},
 			{
 				"__type" : "textSnippet",

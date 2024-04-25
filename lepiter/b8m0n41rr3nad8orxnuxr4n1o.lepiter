@@ -350,7 +350,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-13T10:44:33.768657+01:00"
+						"dateAndTimeString" : "2024-04-24T21:54:06.957979+02:00"
 					}
 				},
 				"uid" : {
@@ -360,7 +360,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "If we want to explore the setup of the tutor, we can explore its properties. Here we inspect the prompt and the files, for instance."
+				"string" : "If we want to explore the setup of the tutor, we can explore its properties. Here we inspect the instructions and the files, for instance."
 			},
 			{
 				"__type" : "pharoSnippet",
@@ -387,14 +387,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-13T10:44:41.399858+01:00"
+						"dateAndTimeString" : "2024-04-24T21:54:02.159057+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "O4G9+qHNDQCUA1uLBQLYvQ=="
 				},
-				"code" : "tutor prompt"
+				"code" : "tutor instructions"
 			},
 			{
 				"__type" : "pharoSnippet",

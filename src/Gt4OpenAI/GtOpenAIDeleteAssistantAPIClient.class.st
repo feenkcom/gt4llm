@@ -1,6 +1,6 @@
 Class {
 	#name : #GtOpenAIDeleteAssistantAPIClient,
-	#superclass : #GtOpenAIEndpointClient,
+	#superclass : #GtLlmEndpointClient,
 	#instVars : [
 		'assistant'
 	],

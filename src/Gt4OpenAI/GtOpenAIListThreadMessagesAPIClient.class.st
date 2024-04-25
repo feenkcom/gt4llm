@@ -1,6 +1,6 @@
 Class {
 	#name : #GtOpenAIListThreadMessagesAPIClient,
-	#superclass : #GtOpenAIEndpointClient,
+	#superclass : #GtLlmEndpointClient,
 	#instVars : [
 		'thread'
 	],

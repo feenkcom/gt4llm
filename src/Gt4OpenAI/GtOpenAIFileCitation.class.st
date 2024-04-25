@@ -1,6 +1,6 @@
 Class {
 	#name : #GtOpenAIFileCitation,
-	#superclass : #GtOpenAIEntity,
+	#superclass : #GtLlmEntity,
 	#instVars : [
 		'fileId',
 		'quote'

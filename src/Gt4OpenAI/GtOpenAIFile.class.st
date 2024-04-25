@@ -1,6 +1,6 @@
 Class {
 	#name : #GtOpenAIFile,
-	#superclass : #GtOpenAIEntity,
+	#superclass : #GtLlmEntity,
 	#instVars : [
 		'id',
 		'purpose',
