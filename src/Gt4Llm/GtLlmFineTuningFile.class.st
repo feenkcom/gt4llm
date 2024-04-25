@@ -2,8 +2,7 @@ Class {
 	#name : #GtLlmFineTuningFile,
 	#superclass : #Object,
 	#instVars : [
-		'conversations',
-		'name'
+		'conversations'
 	],
 	#category : #'Gt4Llm-Fine Tuning'
 }
@@ -66,7 +65,7 @@ GtLlmFineTuningFile >> gtConversationsFor: aView [
 ]
 
 { #category : #accessing }
-GtLlmFineTuningFile >> gtasJsonlFor: aView [
+GtLlmFineTuningFile >> gtJsonlFor: aView [
 	<gtView>
 	^ aView forward
 		title: 'JSONL';
@@ -107,10 +106,6 @@ GtLlmFineTuningFile >> numberOfTokens [
 encoding = tiktoken.encoding_for_model("gpt-3.5-turbo")';
 				resultExpression: 'len(encoding.encode(string))';
 				sendAndWait ]
-]
-
-{ #category : #accessing }
-GtLlmFineTuningFile >> pricePerThousandTokens [
 ]
 
 { #category : #accessing }
