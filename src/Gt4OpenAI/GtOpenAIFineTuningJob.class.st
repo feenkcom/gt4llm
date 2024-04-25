@@ -1,6 +1,6 @@
 Class {
 	#name : #GtOpenAIFineTuningJob,
-	#superclass : #GtOpenAIEntity,
+	#superclass : #GtLlmEntity,
 	#instVars : [
 		'object',
 		'id',
