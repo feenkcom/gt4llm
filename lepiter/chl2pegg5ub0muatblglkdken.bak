@@ -174,14 +174,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-04-25T11:59:33.993303+02:00"
+						"dateAndTimeString" : "2024-04-25T12:12:22.351418+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "4EOnfkrTDQCwXi7JCwzy0g=="
 				},
-				"code" : "file := GtLlmFineTuningFile new conversations: conversations"
+				"code" : "file := GtLlmFineTuningFile new\r\t\tname: 'fine-tuning.jsonl';\r\t\tconversations: conversations"
 			},
 			{
 				"__type" : "textSnippet",
@@ -245,14 +245,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-04-25T12:02:54.340389+02:00"
+						"dateAndTimeString" : "2024-04-25T12:10:34.973574+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "W4rXn0rTDQCzoEdKCwzy0g=="
 				},
-				"code" : "file costPerEpoch"
+				"code" : "file costsPerEpoch"
 			},
 			{
 				"__type" : "textSnippet",
@@ -279,7 +279,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-04-25T12:07:13.24481+02:00"
+						"dateAndTimeString" : "2024-04-25T12:07:27.984632+02:00"
 					}
 				},
 				"uid" : {
@@ -289,7 +289,41 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "From there, we can actually start a fine-tuning (please not"
+				"string" : "From there, we can actually start a fine-tuning (please check the associated costs every time before doing so)."
+			},
+			{
+				"__type" : "pharoSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-04-25T12:13:39.168118+02:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-04-25T12:17:02.686884+02:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "J+Uhx0rTDQC4th+gCwzy0g=="
+				},
+				"code" : "client := GtOpenAIGtTutor instance client.\r\rclient createFineTuningJobOnModel: file model withFile: file id"
 			}
 		]
 	},
