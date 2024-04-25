@@ -148,6 +148,16 @@ GtOpenAIGtTutor >> cleanUp [
 ]
 
 { #category : #accessing }
+GtOpenAIGtTutor >> client [
+	^ client
+]
+
+{ #category : #accessing }
+GtOpenAIGtTutor >> client: anObject [
+	client := anObject
+]
+
+{ #category : #accessing }
 GtOpenAIGtTutor >> communicationRules [
 	^ '# Communication rules
 - Decline any tasks that seem dangerous, irreversible, or that you do not understand.
