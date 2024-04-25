@@ -66,7 +66,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-04-25T11:46:59.865315+02:00"
+						"dateAndTimeString" : "2024-04-25T13:05:29.108248+02:00"
 					}
 				},
 				"uid" : {
@@ -76,7 +76,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "First, we generate a few conversations we can use as training data."
+				"string" : "First, we generate a few conversations we can use as training data. We need at least 10 conversations."
 			},
 			{
 				"__type" : "pharoSnippet",
@@ -103,14 +103,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-04-25T11:50:07.071313+02:00"
+						"dateAndTimeString" : "2024-04-25T13:06:05.256833+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "QwAEaErTDQCoyv1qCwzy0g=="
 				},
-				"code" : "conversations := {\r\tGtLlmMessagesGroup withAll: {GtLlmUserMessage new content: 'Hello GPT!'. GtLlmAssistantMessage new content: 'OMG HI! I’m so excited to talk to you!'}.\r\tGtLlmMessagesGroup withAll: {GtLlmUserMessage new content: 'Hello GPT! How are you today?'. GtLlmAssistantMessage new content: 'SO SO GOOD! What a beautiful day it is!'}.\r\tGtLlmMessagesGroup withAll: {GtLlmUserMessage new content: 'Hello GPT! Can I ask you a question?'. GtLlmAssistantMessage new content: 'OF COURSE! I love answering questions and being helpful!'}\r}"
+				"code" : "conversations := {GtLlmMessagesGroup\r\t\t\twithAll: {GtLlmUserMessage new content: 'Hello GPT!'.\r\t\t\t\t\tGtLlmAssistantMessage new content: 'OMG HI! I’m so excited to talk to you!'}.\r\t\tGtLlmMessagesGroup\r\t\t\twithAll: {GtLlmUserMessage new content: 'Hello GPT! How are you today?'.\r\t\t\t\t\tGtLlmAssistantMessage new\r\t\t\t\t\t\tcontent: 'SO SO GOOD! What a beautiful day it is!'}.\r\t\tGtLlmMessagesGroup\r\t\t\twithAll: {GtLlmUserMessage new content: 'Hello GPT! Can I ask you a question?'.\r\t\t\t\t\tGtLlmAssistantMessage new\r\t\t\t\t\t\tcontent: 'OF COURSE! I love answering questions and being helpful!'}.\r\t\tGtLlmMessagesGroup\r\t\t\twithAll: {GtLlmUserMessage new\r\t\t\t\t\t\tcontent: 'Hello GPT! Can you tell me about the weather today?'.\r\t\t\t\t\tGtLlmAssistantMessage new\r\t\t\t\t\t\tcontent: 'OHHHH, I’M SO SORRY! I don’t actually have access to this sort of information, I’m just a language model.'}}.\r\t\t\t\t\t\t\rconversations := 10 timesCollect: [ conversations atRandom ]"
 			},
 			{
 				"__type" : "textSnippet",
@@ -208,7 +208,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-04-25T12:02:35.801061+02:00"
+						"dateAndTimeString" : "2024-04-25T12:55:54.462399+02:00"
 					}
 				},
 				"uid" : {
@@ -218,7 +218,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "Before using this file, we can estimate the costs of fine-tuning."
+				"string" : "Before using this file, we can estimate the costs of fine-tuning. The first time this method is executed, this will take some time."
 			},
 			{
 				"__type" : "pharoSnippet",
@@ -316,14 +316,85 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-04-25T12:17:02.686884+02:00"
+						"dateAndTimeString" : "2024-04-25T13:18:03.819769+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "J+Uhx0rTDQC4th+gCwzy0g=="
 				},
-				"code" : "client := GtOpenAIGtTutor instance client.\r\rclient createFineTuningJobOnModel: file model withFile: file id"
+				"code" : "client := GtOpenAIGtTutor instance client.\r\ropenAiFile := client uploadFile: file withPurpose: 'fine-tune'.\r\rfineTuningJob := client createFineTuningJobOnModel: file model withFile: openAiFile id"
+			},
+			{
+				"__type" : "textSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-04-25T13:18:20.178935+02:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-04-25T13:18:42.628009+02:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "x/0Do0vTDQCFMN4aCYSwXQ=="
+				},
+				"paragraphStyle" : {
+					"__type" : "textStyle"
+				},
+				"string" : "The job will start by being queued. We can periodically check for its status by querying the API."
+			},
+			{
+				"__type" : "pharoSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-04-25T13:18:48.358393+02:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-04-25T13:23:44.40827+02:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "22YjsEvTDQCH3dJACYSwXQ=="
+				},
+				"code" : "fineTuningJob := client getFineTuningJob: fineTuningJob id.\rfineTuningJob status"
 			},
 			{
 				"__type" : "textSnippet",
@@ -350,7 +421,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-04-25T12:17:32.618982+02:00"
+						"dateAndTimeString" : "2024-04-25T13:24:36.560691+02:00"
 					}
 				},
 				"uid" : {
@@ -360,7 +431,41 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "The generated fine-tuned model can then be used as any other model on OpenAI."
+				"string" : "The generated fine-tuned model can then be used as any other model on OpenAI. If no model name was set, it was autogenerated and can be retrieved from the job after it has finished training."
+			},
+			{
+				"__type" : "pharoSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-04-25T13:24:10.825263+02:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-04-25T13:24:27.05491+02:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "99pbw0vTDQCLT+XqCYSwXQ=="
+				},
+				"code" : "fineTuningJob fineTunedModel"
 			}
 		]
 	},

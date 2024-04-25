@@ -8,3 +8,8 @@ Class {
 GtOllamaListModelsClient >> request [
 	^ self client get: '/tags'
 ]
+
+{ #category : #accessing }
+GtOllamaListModelsClient >> serializationClass [
+	^ GtOllamaModelsGroup
+]
