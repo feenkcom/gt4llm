@@ -518,7 +518,7 @@
 								"__type" : "time",
 								"time" : {
 									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2024-04-25T11:27:18.485212+02:00"
+									"dateAndTimeString" : "2024-04-25T13:58:24.193792+02:00"
 								}
 							},
 							"uid" : {
@@ -528,7 +528,7 @@
 							"paragraphStyle" : {
 								"__type" : "textStyle"
 							},
-							"string" : "[[Creating a fine-tuning file]]"
+							"string" : "[[Creating a fine-tuning job]]"
 						}
 					]
 				},

@@ -4,13 +4,15 @@ Class {
 	#instVars : [
 		'client',
 		'messages',
-		'model'
+		'model',
+		'lastUpdated'
 	],
 	#category : #'Gt4Llm-Chats'
 }
 
 { #category : #accessing }
 GtLlmChat >> addMessage: aMessage [
+	self updateLastUpdated.
 	messages add: aMessage
 ]
 
@@ -56,7 +58,9 @@ GtLlmChat >> initialize [
 	super initialize.
 	
 	self initializeClient.
-	self initializeMessages
+	self initializeMessages.
+	
+	self updateLastUpdated
 ]
 
 { #category : #accessing }
@@ -67,6 +71,16 @@ GtLlmChat >> initializeClient [
 { #category : #accessing }
 GtLlmChat >> initializeMessages [
 	self subclassResponsibility
+]
+
+{ #category : #accessing }
+GtLlmChat >> lastUpdated [
+	^ lastUpdated
+]
+
+{ #category : #accessing }
+GtLlmChat >> lastUpdated: anObject [
+	lastUpdated := anObject
 ]
 
 { #category : #accessing }
@@ -92,4 +106,9 @@ GtLlmChat >> model: anObject [
 { #category : #accessing }
 GtLlmChat >> sendMessage: aMessage [
 	^ self subclassResponsibility
+]
+
+{ #category : #accessing }
+GtLlmChat >> updateLastUpdated [
+	lastUpdated := DateAndTime now
 ]

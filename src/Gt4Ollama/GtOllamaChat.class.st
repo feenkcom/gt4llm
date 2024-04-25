@@ -5,6 +5,11 @@ Class {
 }
 
 { #category : #accessing }
+GtOllamaChat >> ensureModel [
+	client pullModel: self model
+]
+
+{ #category : #accessing }
 GtOllamaChat >> initializeClient [
 	client := GtOllamaClient new
 ]
@@ -21,5 +26,5 @@ GtOllamaChat >> sendMessage: aMessage [
 
 	result := client completeChatWithModel: self model andMessages: messages.
 
-	messages add: result
+	self addMessage: result
 ]

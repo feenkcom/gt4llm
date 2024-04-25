@@ -37,7 +37,10 @@ GtOllamaAssistantMessage >> gtContentFor: aView [
 	^ aView textEditor
 		title: 'Content';
 		priority: 1;
-		text: [ self content ]
+		text: [ self content ];
+		styler: (GtLlmMessageStyler new
+				threadMessageViewModel: (GtOpenAINewThreadMessageViewModel new
+						threadMessage: GtOpenAINewThreadMessage new))
 ]
 
 { #category : #accessing }
