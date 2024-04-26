@@ -193,6 +193,11 @@ GtOpenAIThreadMessage >> isAssistantRole [
 ]
 
 { #category : #testing }
+GtOpenAIThreadMessage >> isSystemRole [
+	^ self role = #system
+]
+
+{ #category : #testing }
 GtOpenAIThreadMessage >> isUserRole [
 	^ self role = #user
 ]
