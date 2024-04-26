@@ -106,8 +106,8 @@ GtOpenAIAssistantChat >> gtMessagesWidgetFor: aView [
 		title: 'Messages';
 		priority: 0;
 		stencil: [ aViewModel
-				ifNil: [ aViewModel := GtOpenAIAssistantChatViewModel new assistantChat: self ].
-			GtOpenAIAssistantChatElement new assistantChatViewModel: aViewModel ];
+				ifNil: [ aViewModel := GtLlmChatViewModel new assistantChat: self ].
+			GtLlmChatElement new assistantChatViewModel: aViewModel ];
 		actionUpdateButton
 ]
 

@@ -1,18 +1,18 @@
 Class {
-	#name : #GtOpenAIExpandableThreadMessageElement,
+	#name : #GtLlmExpandableThreadMessageElement,
 	#superclass : #BrExpander,
-	#traits : 'TGtOpenAIWithThreadMessageViewModel',
-	#classTraits : 'TGtOpenAIWithThreadMessageViewModel classTrait',
+	#traits : 'TGtLlmWithThreadMessageViewModel',
+	#classTraits : 'TGtLlmWithThreadMessageViewModel classTrait',
 	#instVars : [
 		'threadMessageElement',
 		'moreContentElement',
 		'oneLineThreadMessageElement'
 	],
-	#category : #'Gt4OpenAI-Widgets'
+	#category : #'Gt4Llm-Widgets'
 }
 
 { #category : #factory }
-GtOpenAIExpandableThreadMessageElement class >> newForChatList [
+GtLlmExpandableThreadMessageElement class >> newForChatList [
 	^ self new
 		"geometry: (BlRoundedRectangleGeometry cornerRadius: 2);"
 		"background: Color white;"
@@ -25,7 +25,7 @@ GtOpenAIExpandableThreadMessageElement class >> newForChatList [
 ]
 
 { #category : #'initialization ' }
-GtOpenAIExpandableThreadMessageElement >> initialize [
+GtLlmExpandableThreadMessageElement >> initialize [
 	super initialize.
 
 	self initializeOneLineThreadMessageElement.
@@ -46,29 +46,29 @@ GtOpenAIExpandableThreadMessageElement >> initialize [
 ]
 
 { #category : #'initialization ' }
-GtOpenAIExpandableThreadMessageElement >> initializeOneLineThreadMessageElement [
-	oneLineThreadMessageElement := GtOpenAIThreadMessageElement new
+GtLlmExpandableThreadMessageElement >> initializeOneLineThreadMessageElement [
+	oneLineThreadMessageElement := GtLlmThreadMessageElement new
 			contentsAptitudeDo: [ :anAptitude | 
 				anAptitude foreground: BrGlamorousColors disabledButtonTextColor ]
 ]
 
 { #category : #'initialization ' }
-GtOpenAIExpandableThreadMessageElement >> initializeThreadMessageElement [
-	threadMessageElement := GtOpenAIThreadMessageElement new
+GtLlmExpandableThreadMessageElement >> initializeThreadMessageElement [
+	threadMessageElement := GtLlmThreadMessageElement new
 ]
 
 { #category : #'initialization ' }
-GtOpenAIExpandableThreadMessageElement >> onCollapsed [
+GtLlmExpandableThreadMessageElement >> onCollapsed [
 	threadMessageViewModel ifNotNil: [ :aViewModel | aViewModel isExpanded: false ]
 ]
 
 { #category : #'private - event handling' }
-GtOpenAIExpandableThreadMessageElement >> onExpanded [
+GtLlmExpandableThreadMessageElement >> onExpanded [
 	threadMessageViewModel ifNotNil: [ :aViewModel | aViewModel isExpanded: true ]
 ]
 
 { #category : #'private - hooks' }
-GtOpenAIExpandableThreadMessageElement >> onThreadMessageViewModelChanged [
+GtLlmExpandableThreadMessageElement >> onThreadMessageViewModelChanged [
 	oneLineThreadMessageElement threadMessageViewModel: threadMessageViewModel asOneLineViewModel.
 	threadMessageElement threadMessageViewModel: threadMessageViewModel.
 	self expanded: threadMessageViewModel isExpanded 

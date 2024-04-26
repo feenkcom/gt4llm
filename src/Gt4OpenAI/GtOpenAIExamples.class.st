@@ -8,7 +8,7 @@ Class {
 GtOpenAIExamples >> basicExpandableThreadMessageElement [
 	<gtExample>
 	| anElement |
-	anElement := GtOpenAIExpandableThreadMessageElement new.
+	anElement := GtLlmExpandableThreadMessageElement new.
 
 	self assert: anElement threadMessageViewModel isNil.
 
@@ -41,7 +41,7 @@ GtOpenAIExamples >> basicThreadMessage [
 GtOpenAIExamples >> basicThreadMessageViewModel [
 	<gtExample>
 	| aViewModel |
-	aViewModel := GtOpenAIThreadMessageViewModel new.
+	aViewModel := GtLlmThreadMessageViewModel new.
 
 	self assert: aViewModel threadMessage isNil.
 

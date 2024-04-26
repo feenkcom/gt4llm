@@ -1,8 +1,8 @@
 Class {
-	#name : #GtOpenAIThreadMessageElement,
+	#name : #GtLlmThreadMessageElement,
 	#superclass : #BlElement,
-	#traits : 'TGtOpenAIWithThreadMessageViewModel + TBrLayoutResizable',
-	#classTraits : 'TGtOpenAIWithThreadMessageViewModel classTrait + TBrLayoutResizable classTrait',
+	#traits : 'TGtLlmWithThreadMessageViewModel + TBrLayoutResizable',
+	#classTraits : 'TGtLlmWithThreadMessageViewModel classTrait + TBrLayoutResizable classTrait',
 	#instVars : [
 		'senderElement',
 		'contentsElement',
@@ -12,11 +12,11 @@ Class {
 		'timeTask',
 		'timeTooltip'
 	],
-	#category : #'Gt4OpenAI-Widgets'
+	#category : #'Gt4Llm-Widgets'
 }
 
 { #category : #factory }
-GtOpenAIThreadMessageElement class >> newForChatList [
+GtLlmThreadMessageElement class >> newForChatList [
 	^ self new
 		geometry: (BlRoundedRectangleGeometry cornerRadius: 2);
 		background: Color white;
@@ -29,28 +29,28 @@ GtOpenAIThreadMessageElement class >> newForChatList [
 ]
 
 { #category : #accessing }
-GtOpenAIThreadMessageElement >> contentsAptitudeDo: aBlock [
+GtLlmThreadMessageElement >> contentsAptitudeDo: aBlock [
 	aBlock value: contentsElement aptitude
 ]
 
 { #category : #accessing }
-GtOpenAIThreadMessageElement >> contentsElementDo: aBlock [
+GtLlmThreadMessageElement >> contentsElementDo: aBlock [
 	aBlock value: contentsElement
 ]
 
 { #category : #initialization }
-GtOpenAIThreadMessageElement >> defaultLayout [
+GtLlmThreadMessageElement >> defaultLayout [
 	^ BlLinearLayout vertical
 ]
 
 { #category : #'private - updating' }
-GtOpenAIThreadMessageElement >> hideProgressElement [
+GtLlmThreadMessageElement >> hideProgressElement [
 	contentsElement visibility: BlVisibility visible.
 	progressElement visibility: BlVisibility gone.
 ]
 
 { #category : #initialization }
-GtOpenAIThreadMessageElement >> initialize [
+GtLlmThreadMessageElement >> initialize [
 	super initialize.
 	self initializeHeaderElement.
 	self initializeSenderElement.
@@ -70,7 +70,7 @@ GtOpenAIThreadMessageElement >> initialize [
 ]
 
 { #category : #initialization }
-GtOpenAIThreadMessageElement >> initializeContentsElement [
+GtLlmThreadMessageElement >> initializeContentsElement [
 	contentsElement := BrEditor new
 			padding: (BlInsets all: 2);
 			hMatchParent;
@@ -80,14 +80,14 @@ GtOpenAIThreadMessageElement >> initializeContentsElement [
 ]
 
 { #category : #initialization }
-GtOpenAIThreadMessageElement >> initializeHeaderElement [
+GtLlmThreadMessageElement >> initializeHeaderElement [
 	headerElement := BrHorizontalPane new
 			hFitContentLimited;
 			vFitContent
 ]
 
 { #category : #initialization }
-GtOpenAIThreadMessageElement >> initializeProgressElement [
+GtLlmThreadMessageElement >> initializeProgressElement [
 	progressElement := BrLabel new
 			fitContent;
 			aptitude: (BrGlamorousLabelAptitude new
@@ -98,7 +98,7 @@ GtOpenAIThreadMessageElement >> initializeProgressElement [
 ]
 
 { #category : #initialization }
-GtOpenAIThreadMessageElement >> initializeSenderElement [
+GtLlmThreadMessageElement >> initializeSenderElement [
 	senderElement := BrLabel new
 			hFitContentLimited;
 			vFitContent;
@@ -109,7 +109,7 @@ GtOpenAIThreadMessageElement >> initializeSenderElement [
 ]
 
 { #category : #initialization }
-GtOpenAIThreadMessageElement >> initializeTimeElement [
+GtLlmThreadMessageElement >> initializeTimeElement [
 	timeTooltip := BrGlamorousWithLabelTooltipAptitude new text: 'unknown time'.
 	timeElement := BrLabel new
 			updatingDateAndTimeModel;
@@ -122,29 +122,29 @@ GtOpenAIThreadMessageElement >> initializeTimeElement [
 ]
 
 { #category : #'private - announcement handling' }
-GtOpenAIThreadMessageElement >> onRestyleRequested: anAnnouncement [
+GtLlmThreadMessageElement >> onRestyleRequested: anAnnouncement [
 	self
 		enqueueTask: (BlTaskAction new action: [ contentsElement editor styleText ])
 ]
 
 { #category : #'private - hooks' }
-GtOpenAIThreadMessageElement >> onThreadMessageViewModelChanged [
+GtLlmThreadMessageElement >> onThreadMessageViewModelChanged [
 	self updateElement
 ]
 
 { #category : #'private - announcement handling' }
-GtOpenAIThreadMessageElement >> onThreadMessageViewModelChanged: anAnnouncement [
+GtLlmThreadMessageElement >> onThreadMessageViewModelChanged: anAnnouncement [
 	self enqueueTask: (BlTaskAction new action: [ self updateElement ])
 ]
 
 { #category : #'private - updating' }
-GtOpenAIThreadMessageElement >> showProgressElement [
+GtLlmThreadMessageElement >> showProgressElement [
 	contentsElement visibility: BlVisibility gone.
 	progressElement visibility: BlVisibility visible.
 ]
 
 { #category : #'private - hooks' }
-GtOpenAIThreadMessageElement >> subscribeToThreadMessageViewModel [
+GtLlmThreadMessageElement >> subscribeToThreadMessageViewModel [
 	self threadMessageViewModel weak
 		when: GtOpenAIThreadMessageRestyleRequested
 			send: #onRestyleRequested:
@@ -155,14 +155,14 @@ GtOpenAIThreadMessageElement >> subscribeToThreadMessageViewModel [
 ]
 
 { #category : #'private - updating' }
-GtOpenAIThreadMessageElement >> updateContentsElement [
+GtLlmThreadMessageElement >> updateContentsElement [
 	contentsElement
 		text: self threadMessageViewModel contentText;
 		styler: self threadMessageViewModel styler
 ]
 
 { #category : #'private - updating' }
-GtOpenAIThreadMessageElement >> updateElement [
+GtLlmThreadMessageElement >> updateElement [
 	self updateSenderElement.
 	self updateTimeElement.
 	self updateContentsElement.
@@ -171,28 +171,30 @@ GtOpenAIThreadMessageElement >> updateElement [
 ]
 
 { #category : #'private - updating' }
-GtOpenAIThreadMessageElement >> updateFailureIndicator [
+GtLlmThreadMessageElement >> updateFailureIndicator [
 	self threadMessageViewModel isFailure
 		ifTrue: [ self border: BrGlamorousColors errorBackgroundColor ]
 		ifFalse: [ self border: BlBorder empty ]
 ]
 
 { #category : #'private - updating' }
-GtOpenAIThreadMessageElement >> updateProgressElement [
+GtLlmThreadMessageElement >> updateProgressElement [
 	self threadMessage hasResponse
 		ifTrue: [ self hideProgressElement ]
 		ifFalse: [ self showProgressElement ]
 ]
 
 { #category : #'private - updating' }
-GtOpenAIThreadMessageElement >> updateSenderElement [
+GtLlmThreadMessageElement >> updateSenderElement [
 	self threadMessage isAssistantRole
-		ifTrue: [ senderElement text: 'ChatGPT' ]
-		ifFalse: [ senderElement text: 'You' ]
+		ifTrue: [ senderElement text: 'Assistant' ]
+		ifFalse: [ self threadMessage isSystemRole
+				ifTrue: [ senderElement text: 'System' ]
+				ifFalse: [ senderElement text: 'You' ] ]
 ]
 
 { #category : #'private - updating' }
-GtOpenAIThreadMessageElement >> updateTimeElement [
+GtLlmThreadMessageElement >> updateTimeElement [
 	timeElement updatingDateAndTime: threadMessageViewModel createdAt.
 
 	timeTooltip

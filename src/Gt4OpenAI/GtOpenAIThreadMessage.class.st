@@ -54,7 +54,7 @@ GtOpenAIThreadMessage >> asChatMessage [
 
 { #category : #accessing }
 GtOpenAIThreadMessage >> asViewModel [
-	^ GtOpenAIThreadMessageViewModel new threadMessage: self
+	^ GtLlmThreadMessageViewModel new threadMessage: self
 ]
 
 { #category : #accessing }
@@ -159,7 +159,7 @@ GtOpenAIThreadMessage >> gtContentFor: aView [
 	^ aView explicit
 		title: 'Content';
 		priority: 1;
-		stencil: [ GtOpenAIThreadMessageElement new threadMessageViewModel: self asViewModel ]
+		stencil: [ GtLlmThreadMessageElement new threadMessageViewModel: self asViewModel ]
 ]
 
 { #category : #accessing }

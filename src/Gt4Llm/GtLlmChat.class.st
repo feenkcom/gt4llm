@@ -1,11 +1,15 @@
 Class {
 	#name : #GtLlmChat,
 	#superclass : #Object,
+	#traits : 'TGtAnnouncer',
+	#classTraits : 'TGtAnnouncer classTrait',
 	#instVars : [
 		'client',
 		'messages',
 		'model',
-		'lastUpdated'
+		'lastUpdated',
+		'announcer',
+		'context'
 	],
 	#category : #'Gt4Llm-Chats'
 }
@@ -13,7 +17,13 @@ Class {
 { #category : #accessing }
 GtLlmChat >> addMessage: aMessage [
 	self updateLastUpdated.
-	messages add: aMessage
+	self announcer announce: (GtOpenAIThreadRunIsDoneAnnouncement new run: self).
+	messages add: (aMessage chat: self)
+]
+
+{ #category : #accessing }
+GtLlmChat >> announcer [
+	^ announcer ifNil: [ announcer := Announcer new ]
 ]
 
 { #category : #accessing }
@@ -27,6 +37,16 @@ GtLlmChat >> client: anObject [
 ]
 
 { #category : #accessing }
+GtLlmChat >> context [
+	^ context
+]
+
+{ #category : #accessing }
+GtLlmChat >> context: anObject [
+	context := anObject
+]
+
+{ #category : #accessing }
 GtLlmChat >> gtMessagesFor: aView [
 	<gtView>
 	^ aView forward
@@ -34,6 +54,21 @@ GtLlmChat >> gtMessagesFor: aView [
 		priority: 1;
 		object: [ self messages ];
 		view: #gtMessagesFor:
+]
+
+{ #category : #accessing }
+GtLlmChat >> gtMessagesWidgetFor: aView [
+	"cannot be a forward because the update wouldn’t work"
+
+	<gtView>
+	| aViewModel |
+	^ aView explicit
+		title: 'Chat';
+		priority: 0;
+		stencil: [ aViewModel
+				ifNil: [ aViewModel := GtLlmChatViewModel new assistantChat: self ].
+			GtLlmChatElement new assistantChatViewModel: aViewModel ];
+		actionUpdateButton
 ]
 
 { #category : #accessing }

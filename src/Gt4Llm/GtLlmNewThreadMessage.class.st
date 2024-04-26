@@ -1,31 +1,31 @@
 Class {
-	#name : #GtOpenAINewThreadMessage,
+	#name : #GtLlmNewThreadMessage,
 	#superclass : #Object,
 	#instVars : [
 		'assistantChat',
 		'contents',
 		'announcer'
 	],
-	#category : #'Gt4OpenAI-Widgets'
+	#category : #'Gt4Llm-Widgets'
 }
 
 { #category : #accessing }
-GtOpenAINewThreadMessage >> annotations [
+GtLlmNewThreadMessage >> annotations [
 	^ {} asDictionary
 ]
 
 { #category : #accessing }
-GtOpenAINewThreadMessage >> assistantChat: anAssistantChat [
+GtLlmNewThreadMessage >> assistantChat: anAssistantChat [
 	assistantChat := anAssistantChat
 ]
 
 { #category : #accessing }
-GtOpenAINewThreadMessage >> codeBlocks [
+GtLlmNewThreadMessage >> codeBlocks [
 	^ self parse children select: [ :aNode | aNode isKindOf: LeCodeBlockNode ]
 ]
 
 { #category : #accessing }
-GtOpenAINewThreadMessage >> codeBlocksExecutor [
+GtLlmNewThreadMessage >> codeBlocksExecutor [
 	^ GtOpenAICodeBlocksPipelineExecutor new
 		codeBlocks: self codeBlocks;
 		pipeline: assistantChat pipeline;
@@ -33,50 +33,50 @@ GtOpenAINewThreadMessage >> codeBlocksExecutor [
 ]
 
 { #category : #accessing }
-GtOpenAINewThreadMessage >> contentText [
+GtLlmNewThreadMessage >> contentText [
 	^ self contents
 ]
 
 { #category : #accessing }
-GtOpenAINewThreadMessage >> contents [
+GtLlmNewThreadMessage >> contents [
 	^ contents
 ]
 
 { #category : #accessing }
-GtOpenAINewThreadMessage >> contents: anObject [
+GtLlmNewThreadMessage >> contents: anObject [
 	contents := anObject
 ]
 
 { #category : #accessing }
-GtOpenAINewThreadMessage >> contents: aString requester: aRequester [
+GtLlmNewThreadMessage >> contents: aString requester: aRequester [
 	contents := aString.
 	self onContentsChangeByRequester: aRequester
 ]
 
 { #category : #accessing }
-GtOpenAINewThreadMessage >> elementClass [
-	^ GtOpenAINewThreadMessageElement
+GtLlmNewThreadMessage >> elementClass [
+	^ GtLlmNewThreadMessageElement
 ]
 
 { #category : #accessing }
-GtOpenAINewThreadMessage >> id [
+GtLlmNewThreadMessage >> id [
 	^ '87fe83dd-90cd-0d00-9ada-2ba30d0bb652'
 ]
 
 { #category : #initialization }
-GtOpenAINewThreadMessage >> initialize [
+GtLlmNewThreadMessage >> initialize [
 	super initialize.
 	contents := ''.
 	announcer := Announcer new.
 ]
 
 { #category : #accessing }
-GtOpenAINewThreadMessage >> isAssistantRole [
+GtLlmNewThreadMessage >> isAssistantRole [
 	^ false
 ]
 
 { #category : #'private - notifying' }
-GtOpenAINewThreadMessage >> onContentsChangeByRequester: aRequester [
+GtLlmNewThreadMessage >> onContentsChangeByRequester: aRequester [
 	announcer
 		announce: (GtOpenAINewThreadMessageContentsChanged new
 				threadMessage: self;
@@ -85,12 +85,12 @@ GtOpenAINewThreadMessage >> onContentsChangeByRequester: aRequester [
 ]
 
 { #category : #accessing }
-GtOpenAINewThreadMessage >> parse [
+GtLlmNewThreadMessage >> parse [
 	^ LeParser parse: self contentText
 ]
 
 { #category : #actions }
-GtOpenAINewThreadMessage >> sendMessage [
+GtLlmNewThreadMessage >> sendMessage [
 	contents ifNil: [ ^ self ].
 	contents ifEmpty: [ ^ self ].
 	assistantChat sendMessage: contents.
@@ -98,12 +98,12 @@ GtOpenAINewThreadMessage >> sendMessage [
 ]
 
 { #category : #subscriptions }
-GtOpenAINewThreadMessage >> unsubscribe: anObject [
+GtLlmNewThreadMessage >> unsubscribe: anObject [
 	^ announcer unsubscribe: anObject
 ]
 
 { #category : #subscriptions }
-GtOpenAINewThreadMessage >> when: anEventSelector send: aMessageSelector to: anObject [
+GtLlmNewThreadMessage >> when: anEventSelector send: aMessageSelector to: anObject [
 	^ announcer weak
 		when: anEventSelector
 		send: aMessageSelector

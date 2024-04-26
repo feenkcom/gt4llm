@@ -1,21 +1,21 @@
 Class {
-	#name : #GtOpenAIThreadMessageViewModel,
-	#superclass : #GtOpenAIBasicThreadMessageViewModel,
+	#name : #GtLlmThreadMessageViewModel,
+	#superclass : #GtLlmBasicThreadMessageViewModel,
 	#instVars : [
 		'contentText',
 		'contentString',
 		'isExpanded'
 	],
-	#category : #'Gt4OpenAI-Widgets'
+	#category : #'Gt4Llm-Widgets'
 }
 
 { #category : #accessing }
-GtOpenAIThreadMessageViewModel >> asOneLineViewModel [
+GtLlmThreadMessageViewModel >> asOneLineViewModel [
 	^ GtOpenAIOneLineThreadMessageViewModel new threadMessageViewModel: self
 ]
 
 { #category : #accessing }
-GtOpenAIThreadMessageViewModel >> contentText [
+GtLlmThreadMessageViewModel >> contentText [
 	<return: #BlText>
 	^ contentText
 		ifNil: [ 
@@ -24,32 +24,32 @@ GtOpenAIThreadMessageViewModel >> contentText [
 ]
 
 { #category : #accessing }
-GtOpenAIThreadMessageViewModel >> createdAt [
+GtLlmThreadMessageViewModel >> createdAt [
 	^ self threadMessage createdAt
 ]
 
 { #category : #accessing }
-GtOpenAIThreadMessageViewModel >> elementClass [
-	^ GtOpenAIExpandableThreadMessageElement
+GtLlmThreadMessageViewModel >> elementClass [
+	^ GtLlmExpandableThreadMessageElement
 ]
 
 { #category : #accessing }
-GtOpenAIThreadMessageViewModel >> isExpanded [
+GtLlmThreadMessageViewModel >> isExpanded [
 	^ isExpanded ifNil: [ true ]
 ]
 
 { #category : #accessing }
-GtOpenAIThreadMessageViewModel >> isExpanded: aBoolean [
+GtLlmThreadMessageViewModel >> isExpanded: aBoolean [
 	isExpanded := aBoolean
 ]
 
 { #category : #testing }
-GtOpenAIThreadMessageViewModel >> isFailure [
+GtLlmThreadMessageViewModel >> isFailure [
 	^ threadMessage isFailure
 ]
 
 { #category : #'private - hooks' }
-GtOpenAIThreadMessageViewModel >> onThreadMessageChanged [
+GtLlmThreadMessageViewModel >> onThreadMessageChanged [
 	contentString = self threadMessage contentText
 		ifFalse: [ contentText := nil.
 			contentString := nil ].

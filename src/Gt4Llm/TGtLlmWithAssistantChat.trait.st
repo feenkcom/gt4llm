@@ -1,19 +1,19 @@
 Trait {
-	#name : #TGtOpenAIWithAssistantChat,
+	#name : #TGtLlmWithAssistantChat,
 	#instVars : [
 		'assistantChat'
 	],
-	#category : #'Gt4OpenAI-Widgets'
+	#category : #'Gt4Llm-Widgets'
 }
 
 { #category : #accessing }
-TGtOpenAIWithAssistantChat >> assistantChat [
-	<return: #TGtOpenAIWithAssistantChat>
+TGtLlmWithAssistantChat >> assistantChat [
+	<return: #TGtLlmWithAssistantChat>
 	^ assistantChat
 ]
 
 { #category : #accessing }
-TGtOpenAIWithAssistantChat >> assistantChat: anObject [
+TGtLlmWithAssistantChat >> assistantChat: anObject [
 	assistantChat = anObject ifTrue: [ ^ self ].
 	assistantChat ifNotNil: [ self unsubscribeFromAssistantChat ].
 	assistantChat := anObject.
@@ -22,13 +22,13 @@ TGtOpenAIWithAssistantChat >> assistantChat: anObject [
 ]
 
 { #category : #'private - hooks' }
-TGtOpenAIWithAssistantChat >> onAssistantChatChanged [
+TGtLlmWithAssistantChat >> onAssistantChatChanged [
 ]
 
 { #category : #'private - hooks' }
-TGtOpenAIWithAssistantChat >> subscribeToAssistantChat [
+TGtLlmWithAssistantChat >> subscribeToAssistantChat [
 ]
 
 { #category : #'private - hooks' }
-TGtOpenAIWithAssistantChat >> unsubscribeFromAssistantChat [
+TGtLlmWithAssistantChat >> unsubscribeFromAssistantChat [
 ]

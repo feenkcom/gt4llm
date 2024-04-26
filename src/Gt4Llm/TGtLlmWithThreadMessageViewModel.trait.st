@@ -1,31 +1,31 @@
 Trait {
-	#name : #TGtOpenAIWithThreadMessageViewModel,
+	#name : #TGtLlmWithThreadMessageViewModel,
 	#instVars : [
 		'threadMessageViewModel'
 	],
-	#category : #'Gt4OpenAI-Widgets'
+	#category : #'Gt4Llm-Widgets'
 }
 
 { #category : #'private - hooks' }
-TGtOpenAIWithThreadMessageViewModel >> onThreadMessageViewModelChanged [
+TGtLlmWithThreadMessageViewModel >> onThreadMessageViewModelChanged [
 ]
 
 { #category : #'private - hooks' }
-TGtOpenAIWithThreadMessageViewModel >> subscribeToThreadMessageViewModel [
+TGtLlmWithThreadMessageViewModel >> subscribeToThreadMessageViewModel [
 ]
 
 { #category : #accessing }
-TGtOpenAIWithThreadMessageViewModel >> threadMessage [
+TGtLlmWithThreadMessageViewModel >> threadMessage [
 	^ threadMessageViewModel threadMessage
 ]
 
 { #category : #accessing }
-TGtOpenAIWithThreadMessageViewModel >> threadMessageViewModel [
+TGtLlmWithThreadMessageViewModel >> threadMessageViewModel [
 	^ threadMessageViewModel
 ]
 
 { #category : #accessing }
-TGtOpenAIWithThreadMessageViewModel >> threadMessageViewModel: anObject [
+TGtLlmWithThreadMessageViewModel >> threadMessageViewModel: anObject [
 	threadMessageViewModel = anObject ifTrue: [ ^ self ].
 	threadMessageViewModel ifNotNil: [ :anOldMessage | 
 		self unsubscribeFromThreadMessageViewModel ].
@@ -35,5 +35,5 @@ TGtOpenAIWithThreadMessageViewModel >> threadMessageViewModel: anObject [
 ]
 
 { #category : #'private - hooks' }
-TGtOpenAIWithThreadMessageViewModel >> unsubscribeFromThreadMessageViewModel [
+TGtLlmWithThreadMessageViewModel >> unsubscribeFromThreadMessageViewModel [
 ]

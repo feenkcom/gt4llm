@@ -1,27 +1,27 @@
 Trait {
-	#name : #TGtOpenAIWithThreadMessage,
+	#name : #TGtLlmWithThreadMessage,
 	#instVars : [
 		'threadMessage'
 	],
-	#category : #'Gt4OpenAI-Widgets'
+	#category : #'Gt4Llm-Widgets'
 }
 
 { #category : #'private - hooks' }
-TGtOpenAIWithThreadMessage >> onThreadMessageChanged [
+TGtLlmWithThreadMessage >> onThreadMessageChanged [
 	
 ]
 
 { #category : #'private - hooks' }
-TGtOpenAIWithThreadMessage >> subscribeToThreadMessage [
+TGtLlmWithThreadMessage >> subscribeToThreadMessage [
 ]
 
 { #category : #accessing }
-TGtOpenAIWithThreadMessage >> threadMessage [
+TGtLlmWithThreadMessage >> threadMessage [
 	^ threadMessage
 ]
 
 { #category : #accessing }
-TGtOpenAIWithThreadMessage >> threadMessage: aMessage [
+TGtLlmWithThreadMessage >> threadMessage: aMessage [
 	threadMessage = aMessage ifTrue: [ ^ self ].
 	threadMessage ifNotNil: [ :anOldMessage | 
 		self unsubscribeFromThreadMessage ].
@@ -31,5 +31,5 @@ TGtOpenAIWithThreadMessage >> threadMessage: aMessage [
 ]
 
 { #category : #'private - hooks' }
-TGtOpenAIWithThreadMessage >> unsubscribeFromThreadMessage [
+TGtLlmWithThreadMessage >> unsubscribeFromThreadMessage [
 ]

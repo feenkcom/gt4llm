@@ -22,6 +22,11 @@ GtOllamaAssistantMessage class >> serializationProperties [
 ]
 
 { #category : #accessing }
+GtOllamaAssistantMessage >> asLlmMessage [
+	^ GtLlmAssistantMessage new content: self content
+]
+
+{ #category : #accessing }
 GtOllamaAssistantMessage >> content [
 	^ content
 ]
@@ -39,8 +44,8 @@ GtOllamaAssistantMessage >> gtContentFor: aView [
 		priority: 1;
 		text: [ self content ];
 		styler: (GtLlmMessageStyler new
-				threadMessageViewModel: (GtOpenAINewThreadMessageViewModel new
-						threadMessage: GtOpenAINewThreadMessage new))
+				threadMessageViewModel: (GtLlmNewThreadMessageViewModel new
+						threadMessage: GtLlmNewThreadMessage new))
 ]
 
 { #category : #accessing }
