@@ -1,8 +1,6 @@
 Class {
 	#name : #GtLlmProvisionalThreadMessage,
 	#superclass : #Object,
-	#traits : '',
-	#classTraits : '',
 	#instVars : [
 		'createdAt'
 	],
