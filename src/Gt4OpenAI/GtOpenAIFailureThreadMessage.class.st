@@ -1,8 +1,8 @@
 Class {
 	#name : #GtOpenAIFailureThreadMessage,
 	#superclass : #Object,
-	#traits : 'TGtOpenAIThreadMessage',
-	#classTraits : 'TGtOpenAIThreadMessage classTrait',
+	#traits : 'TGtLlmThreadMessage',
+	#classTraits : 'TGtLlmThreadMessage classTrait',
 	#instVars : [
 		'failureText',
 		'createdAt'
