@@ -1,11 +1,11 @@
 Class {
-	#name : #GtOpenAINewThreadMessageViewModel,
-	#superclass : #GtOpenAIBasicThreadMessageViewModel,
-	#category : #'Gt4OpenAI-Widgets'
+	#name : #GtLlmNewThreadMessageViewModel,
+	#superclass : #GtLlmBasicThreadMessageViewModel,
+	#category : #'Gt4Llm-Widgets'
 }
 
 { #category : #actions }
-GtOpenAINewThreadMessageViewModel >> addMessageContents: aString [
+GtLlmNewThreadMessageViewModel >> addMessageContents: aString [
 	| aNewContents anExistingContents |
 	anExistingContents := self contents.
 	aNewContents := String
@@ -19,26 +19,26 @@ GtOpenAINewThreadMessageViewModel >> addMessageContents: aString [
 ]
 
 { #category : #'initialization ' }
-GtOpenAINewThreadMessageViewModel >> assistantChat: assistantChat [
+GtLlmNewThreadMessageViewModel >> assistantChat: assistantChat [
 	threadMessage assistantChat: assistantChat
 ]
 
 { #category : #accessing }
-GtOpenAINewThreadMessageViewModel >> contents [
+GtLlmNewThreadMessageViewModel >> contents [
 	^ self threadMessage contents
 ]
 
 { #category : #accessing }
-GtOpenAINewThreadMessageViewModel >> contents: aString requester: aRequester [
+GtLlmNewThreadMessageViewModel >> contents: aString requester: aRequester [
 	self threadMessage contents: aString requester: aRequester
 ]
 
 { #category : #accessing }
-GtOpenAINewThreadMessageViewModel >> elementClass [
-	^ GtOpenAINewThreadMessageElement
+GtLlmNewThreadMessageViewModel >> elementClass [
+	^ GtLlmNewThreadMessageElement
 ]
 
 { #category : #actions }
-GtOpenAINewThreadMessageViewModel >> sendMessage [
+GtLlmNewThreadMessageViewModel >> sendMessage [
 	^ threadMessage sendMessage
 ]

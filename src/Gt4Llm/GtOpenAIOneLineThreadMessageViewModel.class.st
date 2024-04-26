@@ -1,8 +1,8 @@
 Class {
 	#name : #GtOpenAIOneLineThreadMessageViewModel,
 	#superclass : #Object,
-	#traits : 'TGtAnnouncer + TGtOpenAIWithThreadMessageViewModel',
-	#classTraits : 'TGtAnnouncer classTrait + TGtOpenAIWithThreadMessageViewModel classTrait',
+	#traits : 'TGtAnnouncer + TGtLlmWithThreadMessageViewModel',
+	#classTraits : 'TGtAnnouncer classTrait + TGtLlmWithThreadMessageViewModel classTrait',
 	#instVars : [
 		'threadMessageViewModel',
 		'announcer',
@@ -10,7 +10,7 @@ Class {
 		'contentString',
 		'styler'
 	],
-	#category : #'Gt4OpenAI-Widgets'
+	#category : #'Gt4Llm-Widgets'
 }
 
 { #category : #announcer }

@@ -7,7 +7,9 @@ Class {
 { #category : #accessing }
 GtOllamaGtTutor >> addChat [
 	| aChat |
-	aChat := GtOllamaChat new model: self model.
+	aChat := GtOllamaChat new
+			model: self model;
+			context: context.
 	aChat ensureModel.
 	chats add: aChat.
 

@@ -1,21 +1,21 @@
 Class {
-	#name : #GtOpenAIAssistantChatElement,
+	#name : #GtLlmChatElement,
 	#superclass : #BlElement,
-	#traits : 'TGtOpenAIWithAssistantChatViewModel + TBrLayoutResizable',
-	#classTraits : 'TGtOpenAIWithAssistantChatViewModel classTrait + TBrLayoutResizable classTrait',
+	#traits : 'TGtLlmWithChatViewModel + TBrLayoutResizable',
+	#classTraits : 'TGtLlmWithChatViewModel classTrait + TBrLayoutResizable classTrait',
 	#instVars : [
 		'listElement'
 	],
-	#category : #'Gt4OpenAI-Widgets'
+	#category : #'Gt4Llm-Widgets'
 }
 
 { #category : #'initialization ' }
-GtOpenAIAssistantChatElement >> defaultLayout [
+GtLlmChatElement >> defaultLayout [
 	^ BlLinearLayout vertical
 ]
 
 { #category : #initialization }
-GtOpenAIAssistantChatElement >> initialize [
+GtLlmChatElement >> initialize [
 	super initialize.
 
 	self initializeListElement.
@@ -25,7 +25,7 @@ GtOpenAIAssistantChatElement >> initialize [
 ]
 
 { #category : #initialization }
-GtOpenAIAssistantChatElement >> initializeListElement [
+GtLlmChatElement >> initializeListElement [
 	listElement := BrSimpleList vertical
 			hMatchParent;
 			vMatchParent;
@@ -38,17 +38,17 @@ GtOpenAIAssistantChatElement >> initializeListElement [
 ]
 
 { #category : #'private - hooks' }
-GtOpenAIAssistantChatElement >> onAssistantChatViewModelChanged [
+GtLlmChatElement >> onAssistantChatViewModelChanged [
 	self updateElement
 ]
 
 { #category : #'private - event handling' }
-GtOpenAIAssistantChatElement >> onThreadRunAnnouncement: anAnnouncement [
+GtLlmChatElement >> onThreadRunAnnouncement: anAnnouncement [
 	self enqueueTask: (BlTaskAction new action: [ self updateListElement ])
 ]
 
 { #category : #'private - hooks' }
-GtOpenAIAssistantChatElement >> subscribeToAssistantChatViewModel [
+GtLlmChatElement >> subscribeToAssistantChatViewModel [
 	self assistantChat weak
 		when: GtOpenAIThreadRunAnnouncement
 		send: #onThreadRunAnnouncement:
@@ -56,17 +56,17 @@ GtOpenAIAssistantChatElement >> subscribeToAssistantChatViewModel [
 ]
 
 { #category : #'private - hooks' }
-GtOpenAIAssistantChatElement >> unsubscribeFromAssistantChatViewModel [
+GtLlmChatElement >> unsubscribeFromAssistantChatViewModel [
 	self assistantChat unsubscribe: self
 ]
 
 { #category : #'private - updating' }
-GtOpenAIAssistantChatElement >> updateElement [
+GtLlmChatElement >> updateElement [
 	self updateListElement
 ]
 
 { #category : #'private - updating' }
-GtOpenAIAssistantChatElement >> updateListElement [
+GtLlmChatElement >> updateListElement [
 	| allItems |
 	allItems := assistantChatViewModel threadMessageViewModels.
 	listElement items: allItems.

@@ -1,27 +1,27 @@
 Class {
-	#name : #GtOpenAIAssistantChatViewModel,
+	#name : #GtLlmChatViewModel,
 	#superclass : #Object,
-	#traits : 'TGtOpenAIWithAssistantChat',
-	#classTraits : 'TGtOpenAIWithAssistantChat classTrait',
+	#traits : 'TGtLlmWithAssistantChat',
+	#classTraits : 'TGtLlmWithAssistantChat classTrait',
 	#instVars : [
 		'newThreadMessageViewModel',
 		'threadMessageViewModelsCache'
 	],
-	#category : #'Gt4OpenAI-Widgets'
+	#category : #'Gt4Llm-Widgets'
 }
 
 { #category : #initialization }
-GtOpenAIAssistantChatViewModel >> initialize [
+GtLlmChatViewModel >> initialize [
 	super initialize.
 	threadMessageViewModelsCache := Dictionary new.
-	newThreadMessageViewModel := GtOpenAINewThreadMessageViewModel new
-			threadMessage: GtOpenAINewThreadMessage new
+	newThreadMessageViewModel := GtLlmNewThreadMessageViewModel new
+			threadMessage: GtLlmNewThreadMessage new
 ]
 
 { #category : #accessing }
-GtOpenAIAssistantChatViewModel >> newThreadMessageViewModelFor: aMessage [
+GtLlmChatViewModel >> newThreadMessageViewModelFor: aMessage [
 	| aViewModel |
-	aViewModel := GtOpenAIThreadMessageViewModel new threadMessage: aMessage.
+	aViewModel := GtLlmThreadMessageViewModel new threadMessage: aMessage.
 
 	aViewModel weak
 		when: GtLlmAddMessageContentsRequest
@@ -32,22 +32,22 @@ GtOpenAIAssistantChatViewModel >> newThreadMessageViewModelFor: aMessage [
 ]
 
 { #category : #'private - announcement handling' }
-GtOpenAIAssistantChatViewModel >> onAddMessageContents: anAnnouncement [
+GtLlmChatViewModel >> onAddMessageContents: anAnnouncement [
 	newThreadMessageViewModel addMessageContents: anAnnouncement messageContents
 ]
 
 { #category : #'private - hooks' }
-GtOpenAIAssistantChatViewModel >> onAssistantChatChanged [
+GtLlmChatViewModel >> onAssistantChatChanged [
 	newThreadMessageViewModel assistantChat: assistantChat
 ]
 
 { #category : #accessing }
-GtOpenAIAssistantChatViewModel >> sendMessage: aString [
+GtLlmChatViewModel >> sendMessage: aString [
 	self assistantChat sendMessage: aString
 ]
 
 { #category : #accessing }
-GtOpenAIAssistantChatViewModel >> threadMessageViewModels [
+GtLlmChatViewModel >> threadMessageViewModels [
 	| newMessages |
 	newMessages := assistantChat messages asArray reversed.
 	^ Array
@@ -75,7 +75,7 @@ GtOpenAIAssistantChatViewModel >> threadMessageViewModels [
 				ifFalse: [ newMessages last isAssistantRole
 						ifFalse: [ | aViewModel |
 							aViewModel := self
-									newThreadMessageViewModelFor: (GtOpenAIProvisionalThreadMessage new createdAt: aStatus createdAt).
+									newThreadMessageViewModelFor: (GtLlmProvisionalThreadMessage new createdAt: aStatus createdAt).
 							aStream nextPut: aViewModel ] ].
 
 			aStream nextPut: newThreadMessageViewModel ]

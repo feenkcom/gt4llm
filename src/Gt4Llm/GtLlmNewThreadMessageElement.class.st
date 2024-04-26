@@ -1,17 +1,17 @@
 Class {
-	#name : #GtOpenAINewThreadMessageElement,
+	#name : #GtLlmNewThreadMessageElement,
 	#superclass : #BlElement,
-	#traits : 'TBrLayoutResizable + TGtOpenAIWithThreadMessageViewModel',
-	#classTraits : 'TBrLayoutResizable classTrait + TGtOpenAIWithThreadMessageViewModel classTrait',
+	#traits : 'TBrLayoutResizable + TGtLlmWithThreadMessageViewModel',
+	#classTraits : 'TBrLayoutResizable classTrait + TGtLlmWithThreadMessageViewModel classTrait',
 	#instVars : [
 		'contentsElement',
 		'sendButton'
 	],
-	#category : #'Gt4OpenAI-Widgets'
+	#category : #'Gt4Llm-Widgets'
 }
 
 { #category : #factory }
-GtOpenAINewThreadMessageElement class >> newForChatList [
+GtLlmNewThreadMessageElement class >> newForChatList [
 	^ self new
 		geometry: (BlRoundedRectangleGeometry cornerRadius: 2);
 		background: Color white;
@@ -24,12 +24,12 @@ GtOpenAINewThreadMessageElement class >> newForChatList [
 ]
 
 { #category : #initialization }
-GtOpenAINewThreadMessageElement >> defaultLayout [
+GtLlmNewThreadMessageElement >> defaultLayout [
 	^ BlLinearLayout vertical
 ]
 
 { #category : #'initialization ' }
-GtOpenAINewThreadMessageElement >> initialize [
+GtLlmNewThreadMessageElement >> initialize [
 	super initialize.
 
 	self initializeContentsElement.
@@ -42,7 +42,7 @@ GtOpenAINewThreadMessageElement >> initialize [
 ]
 
 { #category : #'initialization ' }
-GtOpenAINewThreadMessageElement >> initializeContentsElement [
+GtLlmNewThreadMessageElement >> initializeContentsElement [
 	contentsElement := BrEditor new
 			hMatchParent;
 			vFitContentLimited;
@@ -62,7 +62,7 @@ GtOpenAINewThreadMessageElement >> initializeContentsElement [
 ]
 
 { #category : #'initialization ' }
-GtOpenAINewThreadMessageElement >> initializeSendButton [
+GtLlmNewThreadMessageElement >> initializeSendButton [
 	sendButton := BrButton new
 			fitContent;
 			beSmallSize;
@@ -77,34 +77,34 @@ GtOpenAINewThreadMessageElement >> initializeSendButton [
 ]
 
 { #category : #'private - announcement handling' }
-GtOpenAINewThreadMessageElement >> onThreadMessageContentsChanged: anAnnouncement [
+GtLlmNewThreadMessageElement >> onThreadMessageContentsChanged: anAnnouncement [
 	anAnnouncement requester = self ifTrue: [ ^ self ].
 	self enqueueTask: (BlTaskAction new action: [ self updateElement ])
 ]
 
 { #category : #'private - hooks' }
-GtOpenAINewThreadMessageElement >> onThreadMessageViewModelChanged [
+GtLlmNewThreadMessageElement >> onThreadMessageViewModelChanged [
 	self updateElement
 ]
 
 { #category : #'private - announcement handling' }
-GtOpenAINewThreadMessageElement >> onThreadMessageViewModelChanged: anAnnouncement [
+GtLlmNewThreadMessageElement >> onThreadMessageViewModelChanged: anAnnouncement [
 	self enqueueTask: (BlTaskAction new action: [ self updateElement ])
 ]
 
 { #category : #'private - actions' }
-GtOpenAINewThreadMessageElement >> sendMessage [
+GtLlmNewThreadMessageElement >> sendMessage [
 	threadMessageViewModel ifNil: [ ^ self ].
 	threadMessageViewModel sendMessage
 ]
 
 { #category : #'private - event handling' }
-GtOpenAINewThreadMessageElement >> sendMessageFrom: aButton [
+GtLlmNewThreadMessageElement >> sendMessageFrom: aButton [
 	self sendMessage
 ]
 
 { #category : #'private - hooks' }
-GtOpenAINewThreadMessageElement >> subscribeToThreadMessageViewModel [
+GtLlmNewThreadMessageElement >> subscribeToThreadMessageViewModel [
 	self threadMessage
 		when: GtOpenAINewThreadMessageContentsChanged
 		send: #onThreadMessageContentsChanged:
@@ -117,24 +117,24 @@ GtOpenAINewThreadMessageElement >> subscribeToThreadMessageViewModel [
 ]
 
 { #category : #'private - hooks' }
-GtOpenAINewThreadMessageElement >> unsubscribeFromThreadMessageViewModel [
+GtLlmNewThreadMessageElement >> unsubscribeFromThreadMessageViewModel [
 	self threadMessage unsubscribe: self
 ]
 
 { #category : #'private - updating' }
-GtOpenAINewThreadMessageElement >> updateContents: aBlText [
+GtLlmNewThreadMessageElement >> updateContents: aBlText [
 	threadMessageViewModel ifNil: [ ^ self ].
 	threadMessageViewModel contents: aBlText asString requester: self
 ]
 
 { #category : #'private - updating' }
-GtOpenAINewThreadMessageElement >> updateContentsElement [
+GtLlmNewThreadMessageElement >> updateContentsElement [
 	contentsElement
 		text: threadMessageViewModel contents;
 		styler: threadMessageViewModel styler
 ]
 
 { #category : #'private - updating' }
-GtOpenAINewThreadMessageElement >> updateElement [
+GtLlmNewThreadMessageElement >> updateElement [
 	self updateContentsElement
 ]

@@ -32,7 +32,7 @@ GtOpenAIFailureThreadMessage >> createdAt: anObject [
 
 { #category : #accessing }
 GtOpenAIFailureThreadMessage >> elementClass [
-	^ GtOpenAIThreadMessageElement
+	^ GtLlmThreadMessageElement
 ]
 
 { #category : #accessing }

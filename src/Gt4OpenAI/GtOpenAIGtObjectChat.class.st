@@ -19,8 +19,8 @@ GtOpenAIGtObjectChat >> buildElement [
 
 	chat sendMessage: self initialMessage.
 
-	^ GtOpenAIAssistantChatElement new
-		assistantChatViewModel: (GtOpenAIAssistantChatViewModel new assistantChat: chat)
+	^ GtLlmChatElement new
+		assistantChatViewModel: (GtLlmChatViewModel new assistantChat: chat)
 ]
 
 { #category : #accessing }

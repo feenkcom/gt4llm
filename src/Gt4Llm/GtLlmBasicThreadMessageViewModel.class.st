@@ -1,29 +1,29 @@
 Class {
-	#name : #GtOpenAIBasicThreadMessageViewModel,
+	#name : #GtLlmBasicThreadMessageViewModel,
 	#superclass : #Object,
-	#traits : 'TGtOpenAIWithThreadMessage + TGtAnnouncer',
-	#classTraits : 'TGtOpenAIWithThreadMessage classTrait + TGtAnnouncer classTrait',
+	#traits : 'TGtLlmWithThreadMessage + TGtAnnouncer',
+	#classTraits : 'TGtLlmWithThreadMessage classTrait + TGtAnnouncer classTrait',
 	#instVars : [
 		'announcer',
 		'styler',
 		'checkRunResultViewModels'
 	],
-	#category : #'Gt4OpenAI-Widgets'
+	#category : #'Gt4Llm-Widgets'
 }
 
 { #category : #accessing }
-GtOpenAIBasicThreadMessageViewModel >> annotations [
+GtLlmBasicThreadMessageViewModel >> annotations [
 	^ threadMessage ifNotNil: #annotations ifNil: [ #() ]
 ]
 
 { #category : #announcer }
-GtOpenAIBasicThreadMessageViewModel >> announcer [
+GtLlmBasicThreadMessageViewModel >> announcer [
 	<return: #Announcer>
 	^ announcer ifNil: [ announcer := Announcer new ]
 ]
 
 { #category : #accessing }
-GtOpenAIBasicThreadMessageViewModel >> checkRunResultViewModelFor: aCheckRunResult [
+GtLlmBasicThreadMessageViewModel >> checkRunResultViewModelFor: aCheckRunResult [
 	^ checkRunResultViewModels
 		at: aCheckRunResult
 		ifPresent: [ :aViewModel | aViewModel ]
@@ -31,38 +31,38 @@ GtOpenAIBasicThreadMessageViewModel >> checkRunResultViewModelFor: aCheckRunResu
 ]
 
 { #category : #accessing }
-GtOpenAIBasicThreadMessageViewModel >> checkerInstance [
+GtLlmBasicThreadMessageViewModel >> checkerInstance [
 	^ threadMessage chat checkerInstance
 ]
 
 { #category : #accessing }
-GtOpenAIBasicThreadMessageViewModel >> codeBlocksExecutor [
+GtLlmBasicThreadMessageViewModel >> codeBlocksExecutor [
 	^ threadMessage codeBlocksExecutor
 ]
 
 { #category : #accessing }
-GtOpenAIBasicThreadMessageViewModel >> elementClass [
+GtLlmBasicThreadMessageViewModel >> elementClass [
 	^ self subclassResponsibility
 ]
 
 { #category : #accessing }
-GtOpenAIBasicThreadMessageViewModel >> id [
+GtLlmBasicThreadMessageViewModel >> id [
 	^ threadMessage id
 ]
 
 { #category : #initialization }
-GtOpenAIBasicThreadMessageViewModel >> initialize [
+GtLlmBasicThreadMessageViewModel >> initialize [
 	super initialize.
 	checkRunResultViewModels := WeakIdentityKeyDictionary new
 ]
 
 { #category : #accessing }
-GtOpenAIBasicThreadMessageViewModel >> isAssistantRole [
+GtLlmBasicThreadMessageViewModel >> isAssistantRole [
 	^ self threadMessage isAssistantRole
 ]
 
 { #category : #private }
-GtOpenAIBasicThreadMessageViewModel >> newCheckRunResultViewModelFor: aCheckRunResult [
+GtLlmBasicThreadMessageViewModel >> newCheckRunResultViewModelFor: aCheckRunResult [
 	| aViewModel |
 	aViewModel := GtLlmCheckRunResultViewModel new checkRunResult: aCheckRunResult.
 	aViewModel weak
@@ -74,7 +74,7 @@ GtOpenAIBasicThreadMessageViewModel >> newCheckRunResultViewModelFor: aCheckRunR
 ]
 
 { #category : #private }
-GtOpenAIBasicThreadMessageViewModel >> newStyler [
+GtLlmBasicThreadMessageViewModel >> newStyler [
 	^ BlCompositeStyler new
 		stylers: {GtLlmMessageStyler new threadMessageViewModel: self.
 				GtOpenAITraceStyler new.
@@ -82,31 +82,31 @@ GtOpenAIBasicThreadMessageViewModel >> newStyler [
 ]
 
 { #category : #'private - announcing' }
-GtOpenAIBasicThreadMessageViewModel >> notifyThreadMessageViewModelChanged [
+GtLlmBasicThreadMessageViewModel >> notifyThreadMessageViewModelChanged [
 	self announce: GtOpenAIThreadMessageViewModelChanged new
 ]
 
 { #category : #'private - announcement handling' }
-GtOpenAIBasicThreadMessageViewModel >> onAddMessageContents: anAnnouncement [
+GtLlmBasicThreadMessageViewModel >> onAddMessageContents: anAnnouncement [
 	self announce: anAnnouncement
 ]
 
 { #category : #'private - hooks' }
-GtOpenAIBasicThreadMessageViewModel >> onThreadMessageChanged [
+GtLlmBasicThreadMessageViewModel >> onThreadMessageChanged [
 	self notifyThreadMessageViewModelChanged
 ]
 
 { #category : #accessing }
-GtOpenAIBasicThreadMessageViewModel >> pipeline [
+GtLlmBasicThreadMessageViewModel >> pipeline [
 	^ self threadMessage pipeline
 ]
 
 { #category : #accessing }
-GtOpenAIBasicThreadMessageViewModel >> requestStyleSourceText [
+GtLlmBasicThreadMessageViewModel >> requestStyleSourceText [
 	self announce: GtOpenAIThreadMessageRestyleRequested new
 ]
 
 { #category : #accessing }
-GtOpenAIBasicThreadMessageViewModel >> styler [
+GtLlmBasicThreadMessageViewModel >> styler [
 	^ styler ifNil: [ styler := self newStyler ]
 ]

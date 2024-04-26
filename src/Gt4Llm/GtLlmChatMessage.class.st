@@ -3,7 +3,10 @@ Class {
 	#superclass : #GtLlmEntity,
 	#instVars : [
 		'content',
-		'role'
+		'role',
+		'id',
+		'createdAt',
+		'chat'
 	],
 	#category : #'Gt4Llm-Models'
 }
@@ -34,6 +37,26 @@ GtLlmChatMessage class >> serializationProperties [
 ]
 
 { #category : #accessing }
+GtLlmChatMessage >> annotations [
+	^ {}
+]
+
+{ #category : #accessing }
+GtLlmChatMessage >> chat [
+	^ chat
+]
+
+{ #category : #accessing }
+GtLlmChatMessage >> chat: anObject [
+	chat := anObject
+]
+
+{ #category : #accessing }
+GtLlmChatMessage >> codeBlocksExecutor [
+	^ chat context
+]
+
+{ #category : #accessing }
 GtLlmChatMessage >> content [
 	^ content
 ]
@@ -44,12 +67,63 @@ GtLlmChatMessage >> content: anObject [
 ]
 
 { #category : #accessing }
+GtLlmChatMessage >> contentText [
+	^ self content
+]
+
+{ #category : #accessing }
+GtLlmChatMessage >> createdAt [
+	^ createdAt
+]
+
+{ #category : #accessing }
+GtLlmChatMessage >> createdAt: anObject [
+	createdAt := anObject
+]
+
+{ #category : #accessing }
 GtLlmChatMessage >> gtContentFor: aView [
 	<gtView>
 	^ aView textEditor
 		title: 'Content';
 		priority: 1;
 		text: [ self content ]
+]
+
+{ #category : #accessing }
+GtLlmChatMessage >> hasResponse [
+	^ true
+]
+
+{ #category : #accessing }
+GtLlmChatMessage >> id [
+	^ id
+]
+
+{ #category : #accessing }
+GtLlmChatMessage >> initialize [
+	id := UUID new.
+	createdAt := DateAndTime now
+]
+
+{ #category : #accessing }
+GtLlmChatMessage >> isAssistantRole [
+	^ self role = 'assistant'
+]
+
+{ #category : #accessing }
+GtLlmChatMessage >> isFailure [
+	^ false
+]
+
+{ #category : #accessing }
+GtLlmChatMessage >> isSystemRole [
+	^ self role = 'system'
+]
+
+{ #category : #accessing }
+GtLlmChatMessage >> isUserRole [
+	^ self role = 'user'
 ]
 
 { #category : #accessing }
