@@ -1,50 +1,50 @@
 Trait {
-	#name : #TGtOpenAIThreadMessage,
-	#category : #'Gt4OpenAI-Models'
+	#name : #TGtLlmThreadMessage,
+	#category : #'Gt4Llm-Models'
 }
 
 { #category : #accessing }
-TGtOpenAIThreadMessage >> annotations [
+TGtLlmThreadMessage >> annotations [
 	^ self explicitRequirement
 ]
 
 { #category : #testing }
-TGtOpenAIThreadMessage >> contentText [
+TGtLlmThreadMessage >> contentText [
 	^ self explicitRequirement
 ]
 
 { #category : #testing }
-TGtOpenAIThreadMessage >> createdAt [
+TGtLlmThreadMessage >> createdAt [
 	<return: #DateAndTime>
 	^ self explicitRequirement
 ]
 
 { #category : #accessing }
-TGtOpenAIThreadMessage >> elementClass [
+TGtLlmThreadMessage >> elementClass [
 	^ self explicitRequirement
 ]
 
 { #category : #testing }
-TGtOpenAIThreadMessage >> hasResponse [
+TGtLlmThreadMessage >> hasResponse [
 	^ self explicitRequirement
 ]
 
 { #category : #accessing }
-TGtOpenAIThreadMessage >> id [
+TGtLlmThreadMessage >> id [
 	^ self explicitRequirement
 ]
 
 { #category : #testing }
-TGtOpenAIThreadMessage >> isAssistantRole [
+TGtLlmThreadMessage >> isAssistantRole [
 	^ self explicitRequirement
 ]
 
 { #category : #testing }
-TGtOpenAIThreadMessage >> isFailure [
+TGtLlmThreadMessage >> isFailure [
 	^ false
 ]
 
 { #category : #accessing }
-TGtOpenAIThreadMessage >> styler [
+TGtLlmThreadMessage >> styler [
 	^ self explicitRequirement
 ]
