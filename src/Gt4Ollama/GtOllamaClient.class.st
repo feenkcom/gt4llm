@@ -40,6 +40,23 @@ GtOllamaClient >> defaultBaseUrl [
 ]
 
 { #category : #accessing }
+GtOllamaClient >> generateEmbeddingFor: aString [ 
+		^ GtOllamaGenerateEmbeddingsAPIClient new
+		client: self;
+		input: aString;
+		perform
+]
+
+{ #category : #accessing }
+GtOllamaClient >> generateEmbeddingWithModel: aModelString andInput: anInputString [
+	^ GtOllamaGenerateEmbeddingsAPIClient new
+		client: self;
+		input: anInputString;
+		model: aModelString;
+		perform
+]
+
+{ #category : #accessing }
 GtOllamaClient >> get: aString [
 	| aClient |
 	aClient := self initializeClient beOneShot.

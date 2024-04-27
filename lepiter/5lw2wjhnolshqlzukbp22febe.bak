@@ -66,7 +66,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-30T13:48:24.565098+01:00"
+						"dateAndTimeString" : "2024-02-22T18:49:47.752678+01:00"
 					}
 				},
 				"uid" : {
@@ -76,7 +76,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "Using the client initialization code from [[Getting Started]]"
+				"string" : "Using the client initialization code from [[Working with the API client]]"
 			},
 			{
 				"__type" : "pharoSnippet",
@@ -137,7 +137,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-30T13:48:44.637341+01:00"
+						"dateAndTimeString" : "2024-04-27T21:08:38.15703+02:00"
 					}
 				},
 				"uid" : {
@@ -147,7 +147,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "we can now use this client to generate an embedding for text."
+				"string" : "We can now use this client to generate an embedding for text."
 			},
 			{
 				"__type" : "pharoSnippet",

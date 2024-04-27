@@ -18,7 +18,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-31T14:49:32.480253+01:00"
+						"dateAndTimeString" : "2024-04-27T21:03:19.038216+02:00"
 					}
 				},
 				"editEmail" : {
@@ -29,17 +29,17 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-04-27T21:05:08.119993+02:00"
+						"dateAndTimeString" : "2024-04-27T21:06:54.284538+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "Geey4p/MDQCZEfSSCm8XrA=="
+					"uidString" : "IgELaXrTDQCZ6uI2CmrOQg=="
 				},
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "[Embeddings](https://platform.openai.com/docs/guides/embeddings) are used for search and recommendations. See also {{gtPage:Embeddings|db=chl2pej9b64u5ozqy9ghd0t54|label=the embeddings section of the ollama booklet}}."
+				"string" : "Embeddings are used for search and recommendations. See also {{gtPage:Embeddings|db=5lw2wjg8hwdwpy1kq5i7lble1|label=the Embeddings section of the gt4openai booklet}}."
 			}
 		]
 	},
@@ -51,7 +51,7 @@
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2024-01-31T14:49:32.438022+01:00"
+			"dateAndTimeString" : "2024-04-27T21:03:18.73797+02:00"
 		}
 	},
 	"editEmail" : {
@@ -62,7 +62,7 @@
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2024-01-31T14:49:32.438022+01:00"
+			"dateAndTimeString" : "2024-04-27T21:03:18.73797+02:00"
 		}
 	},
 	"pageType" : {
@@ -71,6 +71,6 @@
 	},
 	"uid" : {
 		"__type" : "uuid",
-		"uuid" : "143db2e2-9fcc-0d00-9910-65b70a6f17ac"
+		"uuid" : "4a6b0669-7ad3-0d00-99e9-be700a6ace42"
 	}
 }
