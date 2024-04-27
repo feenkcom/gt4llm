@@ -11,7 +11,7 @@ Class {
 { #category : #accessing }
 GtLlmExampleViewConversationCollector >> conversations [
 	^ (Pragma allNamed: #gtView in: self instance class)
-		do: [ :aPragma | self toConversation: aPragma method ]
+		collect: [ :aPragma | self toConversation: aPragma method ]
 ]
 
 { #category : #accessing }

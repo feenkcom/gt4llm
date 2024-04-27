@@ -18,7 +18,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-30T13:45:42.913645+01:00"
+						"dateAndTimeString" : "2024-04-27T21:07:35.697746+02:00"
 					}
 				},
 				"editEmail" : {
@@ -29,17 +29,17 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-31T14:50:15.650499+01:00"
+						"dateAndTimeString" : "2024-04-27T21:07:44.080989+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "qXNl4IrMDQCc/EukATK6Xg=="
+					"uidString" : "bFFXeHrTDQCcfiIaCmrOQg=="
 				},
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "We can use the OpenAI client to generate embeddings."
+				"string" : "We can use the Ollama client to generate embeddings."
 			},
 			{
 				"__type" : "textSnippet",
@@ -55,7 +55,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-30T13:47:58.974983+01:00"
+						"dateAndTimeString" : "2024-04-27T21:07:45.686953+02:00"
 					}
 				},
 				"editEmail" : {
@@ -66,12 +66,12 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-04-27T21:08:39.918209+02:00"
+						"dateAndTimeString" : "2024-04-27T21:08:29.91954+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "0Q+16IrMDQCfxB7uATK6Xg=="
+					"uidString" : "T7jveHrTDQCcmucsCmrOQg=="
 				},
 				"paragraphStyle" : {
 					"__type" : "textStyle"
@@ -92,7 +92,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-30T13:48:16.487584+01:00"
+						"dateAndTimeString" : "2024-04-27T21:07:58.755307+02:00"
 					}
 				},
 				"editEmail" : {
@@ -103,14 +103,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-14T12:28:12.730372+01:00"
+						"dateAndTimeString" : "2024-04-27T21:08:09.10477+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "U0nA6YrMDQChAdPjATK6Xg=="
+					"uidString" : "bCG3eXrTDQCcpuCNCmrOQg=="
 				},
-				"code" : "client := GtOpenAIClient withApiKeyFromClipboard"
+				"code" : "client := GtOllamaClient new"
 			},
 			{
 				"__type" : "textSnippet",
@@ -126,7 +126,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-30T13:48:28.218122+01:00"
+						"dateAndTimeString" : "2024-04-27T21:08:12.059873+02:00"
 					}
 				},
 				"editEmail" : {
@@ -137,12 +137,12 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-04-27T21:08:38.15703+02:00"
+						"dateAndTimeString" : "2024-04-27T21:08:21.822404+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "2U5z6orMDQChjzkcATK6Xg=="
+					"uidString" : "RiSCenrTDQCczoxHCmrOQg=="
 				},
 				"paragraphStyle" : {
 					"__type" : "textStyle"
@@ -163,7 +163,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-30T13:45:49.43395+01:00"
+						"dateAndTimeString" : "2024-04-27T21:08:33.766994+02:00"
 					}
 				},
 				"editEmail" : {
@@ -174,14 +174,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-04-27T21:08:58.339907+02:00"
+						"dateAndTimeString" : "2024-04-27T21:17:15.559789+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "m3D84IrMDQCdmOF5ATK6Xg=="
+					"uidString" : "XFzNe3rTDQCc+PZcCmrOQg=="
 				},
-				"code" : "client\r\tgenerateEmbeddingWithModel: 'text-embedding-3-small'\r\tandInput: 'A text to embed'"
+				"code" : "client generateEmbeddingWithModel: 'llama3' andInput: 'A text to embed'"
 			},
 			{
 				"__type" : "textSnippet",
@@ -197,7 +197,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-31T11:18:54.214696+01:00"
+						"dateAndTimeString" : "2024-04-27T21:09:11.807467+02:00"
 					}
 				},
 				"editEmail" : {
@@ -208,12 +208,12 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-31T11:19:23.163057+01:00"
+						"dateAndTimeString" : "2024-04-27T21:09:12.536682+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "Uz9m8ZzMDQC7tUzqCm8XrA=="
+					"uidString" : "I9ERfnrTDQCdLW+jCmrOQg=="
 				},
 				"paragraphStyle" : {
 					"__type" : "textStyle"
@@ -234,7 +234,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-31T11:19:29.016213+01:00"
+						"dateAndTimeString" : "2024-04-27T21:09:16.27033+02:00"
 					}
 				},
 				"editEmail" : {
@@ -245,14 +245,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-04-27T21:09:02.330119+02:00"
+						"dateAndTimeString" : "2024-04-27T21:17:27.065352+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "xkN585zMDQC91kJBCm8XrA=="
+					"uidString" : "aedVfnrTDQCdOPAQCmrOQg=="
 				},
-				"code" : "input := 'A text to embed'.\r\rembedding := GtLlmEmbedding new\r\t\tinput: input;\r\t\tembedding: (client generateEmbeddingWithModel: 'text-embedding-3-small' andInput: input)\r\t\t\t\titems first embedding"
+				"code" : "input := 'A text to embed'.\r\rembedding := GtLlmEmbedding new\r\t\tinput: input;\r\t\tembedding: (client generateEmbeddingWithModel: 'llama3' andInput: 'A text to embed') embedding"
 			},
 			{
 				"__type" : "textSnippet",
@@ -268,7 +268,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-31T11:21:34.68269+01:00"
+						"dateAndTimeString" : "2024-04-27T21:09:41.896418+02:00"
 					}
 				},
 				"editEmail" : {
@@ -279,12 +279,12 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-31T11:29:37.858442+01:00"
+						"dateAndTimeString" : "2024-04-27T21:10:13.302153+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "UeZU+pzMDQCAAX6FCm8XrA=="
+					"uidString" : "fvDcf3rTDQCdUjbuCmrOQg=="
 				},
 				"paragraphStyle" : {
 					"__type" : "textStyle"
@@ -305,7 +305,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-31T11:29:41.871638+01:00"
+						"dateAndTimeString" : "2024-04-27T21:09:58.271663+02:00"
 					}
 				},
 				"editEmail" : {
@@ -316,12 +316,12 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-31T11:29:41.871638+01:00"
+						"dateAndTimeString" : "2024-04-27T21:09:58.271663+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "kbcAGJ3MDQCGoDlaCm8XrA=="
+					"uidString" : "083WgHrTDQCdXWPsCmrOQg=="
 				},
 				"exampleSelector" : "yourself",
 				"previewHeight" : 200,
@@ -341,7 +341,7 @@
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2024-01-30T13:45:39.495301+01:00"
+			"dateAndTimeString" : "2024-04-27T21:07:35.430112+02:00"
 		}
 	},
 	"editEmail" : {
@@ -352,15 +352,15 @@
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2024-01-30T13:45:39.495301+01:00"
+			"dateAndTimeString" : "2024-04-27T21:07:35.430112+02:00"
 		}
 	},
 	"pageType" : {
 		"__type" : "namedPage",
-		"title" : "Generating Embeddings"
+		"title" : "Generating embeddings"
 	},
 	"uid" : {
 		"__type" : "uuid",
-		"uuid" : "3ad064e0-8acc-0d00-9cfb-a5770132ba5e"
+		"uuid" : "a13a5378-7ad3-0d00-9c7d-ddca0a6ace42"
 	}
 }
