@@ -41,5 +41,6 @@ GtLlmInspectorSlotSummary >> slotValue: anObject [
 
 { #category : #accessing }
 GtLlmInspectorSlotSummary >> summaryString [
-	^ self name, ': ', self slotValue asString
+	^ self name , ': '
+		, ([ self slotValue asString ] on: Error do: [ '<unknown>' ])
 ]
