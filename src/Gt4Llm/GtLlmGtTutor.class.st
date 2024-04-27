@@ -174,8 +174,8 @@ GtLlmGtTutor >> gtInstructionsFor: aView [
 		priority: 5;
 		text: [ instructions ];
 		styler: (GtLlmMessageStyler new
-				threadMessageViewModel: (GtOpenAINewThreadMessageViewModel new
-						threadMessage: GtOpenAINewThreadMessage new))
+				threadMessageViewModel: (GtLlmNewThreadMessageViewModel new
+						threadMessage: GtLlmNewThreadMessage new))
 ]
 
 { #category : #accessing }

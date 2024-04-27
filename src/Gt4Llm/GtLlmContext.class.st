@@ -68,7 +68,9 @@ GtLlmContext >> gtCheckFor: aView [
 			tooltip: 'Check'
 			action: [ :aButton :aTab | 
 				aButton phlow
-					spawnObject: (self check: aTab viewContentElement children first text asString) ]
+					spawnObject: (self
+							check: (LeParser parse: aTab viewContentElement children first text asString) parts
+									first) ]
 ]
 
 { #category : #accessing }
