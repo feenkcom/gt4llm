@@ -182,7 +182,7 @@ GtLlmGtTutor >> gtInstructionsFor: aView [
 	^ aView textEditor
 		title: 'Tutor instructions';
 		priority: 5;
-		text: [ instructions ];
+		text: [ self instructions ];
 		styler: (GtLlmMessageStyler new
 				threadMessageViewModel: (GtLlmNewThreadMessageViewModel new
 						threadMessage: GtLlmNewThreadMessage new))
