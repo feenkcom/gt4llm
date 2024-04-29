@@ -52,6 +52,11 @@ GtLlmChatMessage >> chat: anObject [
 ]
 
 { #category : #accessing }
+GtLlmChatMessage >> codeBlocks [
+	^ self parse children select: [ :aNode | aNode isKindOf: LeCodeBlockNode ]
+]
+
+{ #category : #accessing }
 GtLlmChatMessage >> codeBlocksExecutor [
 	^ chat context
 ]
@@ -124,6 +129,11 @@ GtLlmChatMessage >> isSystemRole [
 { #category : #accessing }
 GtLlmChatMessage >> isUserRole [
 	^ self role = 'user'
+]
+
+{ #category : #accessing }
+GtLlmChatMessage >> parse [
+	^ LeParser parse: self contentText
 ]
 
 { #category : #accessing }
