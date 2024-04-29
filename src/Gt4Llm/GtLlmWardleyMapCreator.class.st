@@ -22,6 +22,7 @@ GtLlmWardleyMapCreator >> connectNode: aName to: anotherName [
 
 { #category : #accessing }
 GtLlmWardleyMapCreator >> gtLiveFor: aView [
+	<gtView>
 	^ aView explicit
 		title: 'Live';
 		priority: 2;
@@ -29,16 +30,6 @@ GtLlmWardleyMapCreator >> gtLiveFor: aView [
 			GtWardleyMapElement withDefaultSections
 				wardleyMapViewModel: (GtWardleyMapViewModel new wardleyMapModel: self model);
 				yourself ]
-]
-
-{ #category : #accessing }
-GtLlmWardleyMapCreator >> gtMapFor: aView [
-	<gtView>
-	^ aView forward
-		title: 'Map';
-		priority: 1;
-		object: [ self model ];
-		view: #gtLiveFor:
 ]
 
 { #category : #accessing }
