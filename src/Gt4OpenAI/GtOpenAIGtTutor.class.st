@@ -41,7 +41,7 @@ GtOpenAIGtTutor >> addChat [
 			pipeline: context.
 	chats add: aChat.
 
-	aChat sendMessage: self files toFileDescriptions.
+	self files ifNotEmpty: [ aChat sendMessage: self files toFileDescriptions ].
 
 	^ aChat
 ]
@@ -274,16 +274,6 @@ GtOpenAIGtTutor >> initialize [
 	chats := GtOpenAIAssistantChatGroup new.
 	files := GtOpenAIResourceFilesGroup withAll: self defaultFiles.
 	apiFiles := GtOpenAIFilesGroup new
-]
-
-{ #category : #accessing }
-GtOpenAIGtTutor >> instructions [
-	^ instructions
-]
-
-{ #category : #accessing }
-GtOpenAIGtTutor >> instructions: anObject [
-	instructions := anObject
 ]
 
 { #category : #accessing }

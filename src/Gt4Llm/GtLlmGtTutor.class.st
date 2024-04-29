@@ -43,6 +43,16 @@ GtLlmGtTutor >> communicationRules [
 ]
 
 { #category : #accessing }
+GtLlmGtTutor >> context [
+	^ context
+]
+
+{ #category : #accessing }
+GtLlmGtTutor >> context: anObject [
+	context := anObject
+]
+
+{ #category : #accessing }
 GtLlmGtTutor >> conventionsDescription [
 	^ '# Conventions for communication
 Please follow these conventions carefully:
@@ -186,6 +196,16 @@ GtLlmGtTutor >> initialize [
 	model := self defaultModel.
 	chats := GtLlmChatsGroup new.
 	context :=  GtLlmContext defaultPipeline
+]
+
+{ #category : #accessing }
+GtLlmGtTutor >> instructions [
+	^ instructions
+]
+
+{ #category : #accessing }
+GtLlmGtTutor >> instructions: anObject [
+	instructions := anObject
 ]
 
 { #category : #accessing }

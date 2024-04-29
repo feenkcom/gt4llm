@@ -74,6 +74,16 @@ GtOpenAIAssistantChat >> gtFilesFor: aView [
 ]
 
 { #category : #accessing }
+GtOpenAIAssistantChat >> gtInspectInstanceFor: anAction [
+	<gtAction>
+	^ anAction button
+		icon: BrGlamorousVectorIcons playinspect;
+		tooltip: 'Inspect instance';
+		priority: 1;
+		action: [ :aButton | aButton phlow spawnObject: pipeline instance ]
+]
+
+{ #category : #accessing }
 GtOpenAIAssistantChat >> gtInstanceFor: aView [
 	<gtView>
 	^ aView forward
