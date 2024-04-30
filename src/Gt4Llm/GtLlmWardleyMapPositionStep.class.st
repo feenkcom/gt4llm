@@ -22,6 +22,7 @@ GtLlmWardleyMapPositionStep >> runStep: aContext [
 
 	aContext
 		addResult: (GtLlmStepStringSuccess new
+				content: aContext instance;
 				contentString: 'Nodes successfully positioned';
 				checker: self)
 ]
