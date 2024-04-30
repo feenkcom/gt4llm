@@ -46,13 +46,14 @@ GtLlmWardleyMapCreator >> model [
 
 	nodes
 		do: [ :aNode | 
-			model
-				addNode: (createdNodes
-						at: (aNode at: 'name')
-						put: (GtWardleyMapNodeModel new
-								label: (aNode at: 'name');
-								x: (aNode at: 'x' ifAbsent: [ nil ]);
-								y: (aNode at: 'y' ifAbsent: [ nil ]))) ].
+			| modelNode |
+			modelNode := GtWardleyMapNodeModel new label: (aNode at: 'name').
+			aNode
+				at: 'x'
+				ifPresent: [ modelNode
+						x: (aNode at: 'x');
+						y: (aNode at: 'y') ].
+			model addNode: (createdNodes at: (aNode at: 'name') put: modelNode) ].
 
 	edges
 		do: [ :anEdge | 
