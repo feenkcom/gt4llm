@@ -66,7 +66,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-04-29T21:44:53.699064+02:00"
+						"dateAndTimeString" : "2024-04-30T13:44:41.324024+02:00"
 					}
 				},
 				"uid" : {
@@ -76,7 +76,44 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "Instead of using special code blocks to encode the "
+				"string" : "Instead of using special code blocks to encode the different types of commands, we can use special types of messages with custom pipelines. This idea levereages the fact that all messages have their own execution pipeline. By default, this is the shared pipeline that belongs to the chat, but they can just as well override it."
+			},
+			{
+				"__type" : "textSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-04-30T13:41:41.874175+02:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-04-30T13:50:33.413811+02:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "z3o2l7DTDQCAYkWBD1zIbQ=="
+				},
+				"paragraphStyle" : {
+					"__type" : "textStyle"
+				},
+				"string" : "While this is a bit more complex to do than creating a single custom pipeline, it allows for context-dependent selection of pipelines and ste."
 			}
 		]
 	},

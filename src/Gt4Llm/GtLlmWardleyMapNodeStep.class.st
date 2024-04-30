@@ -17,6 +17,7 @@ GtLlmWardleyMapNodeStep >> runStep: aContext [
 
 	aContext
 		addResult: (GtLlmStepStringSuccess new
+				content: aContext instance;
 				contentString: 'Nodes successfully added';
 				checker: self)
 ]
