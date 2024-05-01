@@ -24,6 +24,17 @@ GtOpenAITutorWithSteps >> defaultAssistantName [
 
 { #category : #accessing }
 GtOpenAITutorWithSteps >> defaultInstructions [
+	^ ''
+]
+
+{ #category : #accessing }
+GtOpenAITutorWithSteps >> gtStepsFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Steps';
+		priority: 8;
+		object: [ self steps ];
+		view: #gtStepsFor:
 ]
 
 { #category : #accessing }
@@ -32,6 +43,11 @@ GtOpenAITutorWithSteps >> initialize [
 	 
 	steps := GtOpenAIStepsGroup new.
 	files := GtOpenAIResourceFilesGroup new
+]
+
+{ #category : #accessing }
+GtOpenAITutorWithSteps >> steps [
+	^ steps
 ]
 
 { #category : #accessing }
