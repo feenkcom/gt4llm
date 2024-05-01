@@ -38,7 +38,7 @@ GtLlmSmalltalkViewExecutorCodeStep >> runStep: aContext [
 	instance := aContext instance.
 	ast := GtPharoParser parse: view methodSource.
 	return := (ast // GtPharoReturnNode) anyOne.
-	script := return source.
+	script := '.' join: (ast body statements collect: #source).
 	viewVariableName := view methodAst arguments first name.
 
 
