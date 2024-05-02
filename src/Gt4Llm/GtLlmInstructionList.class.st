@@ -1,0 +1,36 @@
+Class {
+	#name : #GtLlmInstructionList,
+	#superclass : #GtLlmInstruction,
+	#instVars : [
+		'items'
+	],
+	#category : #'Gt4Llm-Instructions'
+}
+
+{ #category : #accessing }
+GtLlmInstructionList >> addItem: anItem [
+	items add: anItem
+]
+
+{ #category : #accessing }
+GtLlmInstructionList >> initialize [
+	super initialize.
+	
+	items := OrderedCollection new
+]
+
+{ #category : #accessing }
+GtLlmInstructionList >> instructionString [
+	^ Character cr
+		join: (self items collect: [ :anItem | '- ' , anItem instructionString ])
+]
+
+{ #category : #accessing }
+GtLlmInstructionList >> items [
+	^ items
+]
+
+{ #category : #accessing }
+GtLlmInstructionList >> items: anObject [
+	items := anObject
+]
