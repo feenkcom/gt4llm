@@ -26,5 +26,6 @@ GtLlmCompositeInstruction >> initialize [
 
 { #category : #accessing }
 GtLlmCompositeInstruction >> instructionString [
-	^ Character cr join: (items collect: #instructionString)
+	^ {Character cr.
+		Character cr} join: (items collect: #instructionString)
 ]
