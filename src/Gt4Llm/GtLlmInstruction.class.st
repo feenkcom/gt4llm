@@ -35,6 +35,17 @@ GtLlmInstruction >> gtInstructionFor: aView [
 ]
 
 { #category : #accessing }
+GtLlmInstruction >> gtParentsFor: aView [
+	<gtView>
+	^ aView columnedList
+		title: 'Parents';
+		priority: 3;
+		items: [ self allParents withIndexCollect: [:aParent :i | i -> aParent] ];
+		column: 'Position' text: #key width: 60;
+		column: 'Parent' text: #value
+]
+
+{ #category : #accessing }
 GtLlmInstruction >> gtTreeFor: aView [
 	<gtView>
 	^ aView tree
