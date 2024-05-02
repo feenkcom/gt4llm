@@ -3,7 +3,8 @@ Class {
 	#superclass : #GtLlmInstruction,
 	#instVars : [
 		'title',
-		'body'
+		'body',
+		'headerLevel'
 	],
 	#category : #'Gt4Llm-Instructions'
 }
@@ -19,8 +20,26 @@ GtLlmInstructionSection >> body: anObject [
 ]
 
 { #category : #accessing }
+GtLlmInstructionSection >> headerLevel [
+	^ headerLevel
+]
+
+{ #category : #accessing }
+GtLlmInstructionSection >> headerLevel: anObject [
+	self assert: anObject > 0.
+	headerLevel := anObject
+]
+
+{ #category : #accessing }
+GtLlmInstructionSection >> initialize [
+	super initialize.
+	
+	headerLevel := 1
+]
+
+{ #category : #accessing }
 GtLlmInstructionSection >> instructionString [
-	^ '# ' , self title
+	^ ('#' repeat: self headerLevel) , ' ' , self title
 		, '
 	
 ' , self body instructionString
