@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'name',
 		'description',
-		'rules'
+		'rules',
+		'pipeline'
 	],
 	#category : #'Gt4Llm-Examples'
 }
@@ -25,6 +26,52 @@ GtLlmTutorStep >> description: anObject [
 ]
 
 { #category : #accessing }
+GtLlmTutorStep >> gtInstructionsFor: aView [
+	<gtView>
+	^ aView textEditor
+		title: 'Instructions';
+		priority: 3;
+		text: [ self instructions ]
+]
+
+{ #category : #accessing }
+GtLlmTutorStep >> gtPipelineFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Pipeline';
+		priority: 2;
+		object: [self pipeline];
+		view: #gtCompositionFor:
+]
+
+{ #category : #accessing }
+GtLlmTutorStep >> gtSummary [
+	^ {'Name' -> self name.
+		'Description' -> self description.
+		'Rules' -> self rules}
+]
+
+{ #category : #accessing }
+GtLlmTutorStep >> gtSummaryFor: aView [
+	<gtView>
+	^ aView columnedList
+		title: 'Summary';
+		priority: 1;
+		items: [ self gtSummary ];
+		column: 'Property'
+			text: #key
+			width: 120;
+		column: 'Value' text: #value;
+		send: #value;
+		actionUpdateButton
+]
+
+{ #category : #accessing }
+GtLlmTutorStep >> instructions [
+	^ self asRuleString
+]
+
+{ #category : #accessing }
 GtLlmTutorStep >> name [
 	^ name
 ]
@@ -32,6 +79,16 @@ GtLlmTutorStep >> name [
 { #category : #accessing }
 GtLlmTutorStep >> name: anObject [
 	name := anObject
+]
+
+{ #category : #accessing }
+GtLlmTutorStep >> pipeline [
+	^ pipeline
+]
+
+{ #category : #accessing }
+GtLlmTutorStep >> pipeline: anObject [
+	pipeline := anObject
 ]
 
 { #category : #accessing }
