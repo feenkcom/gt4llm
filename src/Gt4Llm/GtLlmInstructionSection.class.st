@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'title',
 		'body',
-		'headerLevel'
+		'headerLevel',
+		'autoHeaderLevel'
 	],
 	#category : #'Gt4Llm-Instructions'
 }
@@ -16,17 +17,39 @@ GtLlmInstructionSection >> body [
 
 { #category : #accessing }
 GtLlmInstructionSection >> body: anObject [
-	body := anObject
+	body := anObject parent: self
+]
+
+{ #category : #accessing }
+GtLlmInstructionSection >> children [
+	^ {body}
+]
+
+{ #category : #accessing }
+GtLlmInstructionSection >> computeHeaderLevelsAutomatically [
+	autoHeaderLevel := true
+]
+
+{ #category : #accessing }
+GtLlmInstructionSection >> doNotComputeHeaderLevelsAutomatically [
+	autoHeaderLevel := false
 ]
 
 { #category : #accessing }
 GtLlmInstructionSection >> headerLevel [
+	autoHeaderLevel
+		ifTrue: [ ^ (self allParents
+				select: [ :aParent | aParent isKindOf: GtLlmInstructionSection ]) size + 1 ].
 	^ headerLevel
 ]
 
 { #category : #accessing }
 GtLlmInstructionSection >> headerLevel: anObject [
+	self
+		assert: autoHeaderLevel not
+		description: 'Cannot set header level because it is automatically generated. Use #doNotComputeHeaderLevelsAutomatically to disable.'.
 	self assert: anObject > 0.
+
 	headerLevel := anObject
 ]
 
@@ -34,7 +57,8 @@ GtLlmInstructionSection >> headerLevel: anObject [
 GtLlmInstructionSection >> initialize [
 	super initialize.
 	
-	headerLevel := 1
+	headerLevel := 1.
+	autoHeaderLevel := true.
 ]
 
 { #category : #accessing }
@@ -43,6 +67,16 @@ GtLlmInstructionSection >> instructionString [
 		, '
 	
 ' , self body instructionString
+]
+
+{ #category : #accessing }
+GtLlmInstructionSection >> printOn: aStream [
+	super printOn: aStream.
+
+	aStream
+		nextPut: $(;
+		nextPutAll: self title;
+		nextPut: $)
 ]
 
 { #category : #accessing }

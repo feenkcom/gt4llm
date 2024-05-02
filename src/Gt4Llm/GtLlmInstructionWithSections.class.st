@@ -10,7 +10,12 @@ Class {
 
 { #category : #accessing }
 GtLlmInstructionWithSections >> addSection: aSection [
-	sections add: aSection
+	sections add: (aSection parent: self)
+]
+
+{ #category : #accessing }
+GtLlmInstructionWithSections >> children [
+	^ sections
 ]
 
 { #category : #accessing }
@@ -36,6 +41,16 @@ GtLlmInstructionWithSections >> introduction [
 { #category : #accessing }
 GtLlmInstructionWithSections >> introduction: anObject [
 	introduction := anObject
+]
+
+{ #category : #accessing }
+GtLlmInstructionWithSections >> printOn: aStream [
+	super printOn: aStream.
+
+	aStream
+		nextPut: $(;
+		nextPutAll: self introduction;
+		nextPut: $)
 ]
 
 { #category : #accessing }
