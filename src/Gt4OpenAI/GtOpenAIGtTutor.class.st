@@ -143,7 +143,7 @@ GtOpenAIGtTutor >> createAssistant [
 					model: self model;
 					name: self assistantName;
 					description: self assistantDescription;
-					instructions: self instructions;
+					instructions: self instructions instructionString;
 					tools: self tools).
 
 	files
