@@ -24,7 +24,7 @@ GtOpenAITutorWithSteps >> defaultAssistantName [
 
 { #category : #accessing }
 GtOpenAITutorWithSteps >> defaultInstructions [
-	^ ''
+	^ '' asInstruction
 ]
 
 { #category : #accessing }

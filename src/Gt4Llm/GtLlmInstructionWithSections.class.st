@@ -10,7 +10,7 @@ Class {
 
 { #category : #accessing }
 GtLlmInstructionWithSections >> addSection: aSection [
-	sections add: (aSection parent: self)
+	sections add: (aSection asInstruction parent: self)
 ]
 
 { #category : #accessing }
@@ -40,7 +40,7 @@ GtLlmInstructionWithSections >> introduction [
 
 { #category : #accessing }
 GtLlmInstructionWithSections >> introduction: anObject [
-	introduction := anObject
+	introduction := anObject asInstruction
 ]
 
 { #category : #accessing }
