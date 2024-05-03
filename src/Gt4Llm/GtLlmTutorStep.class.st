@@ -11,8 +11,13 @@ Class {
 }
 
 { #category : #accessing }
-GtLlmTutorStep >> asRuleString [
-	^ self name , ': ' , self description , ' [RULES: ' , self rules , ']'
+GtLlmTutorStep >> asInstruction [
+	^ GtLlmInstructionSection new
+		source: self;
+		title: self name;
+		body: (GtLlmCompositeInstruction new
+				addItem: self description;
+				addItem: (GtLlmInstructionList new items: self rules))
 ]
 
 { #category : #accessing }
@@ -31,7 +36,7 @@ GtLlmTutorStep >> gtInstructionsFor: aView [
 	^ aView textEditor
 		title: 'Instructions';
 		priority: 3;
-		text: [ self instructions ]
+		text: [ self asInstruction instructionString ]
 ]
 
 { #category : #accessing }
@@ -64,11 +69,6 @@ GtLlmTutorStep >> gtSummaryFor: aView [
 		column: 'Value' text: #value;
 		send: #value;
 		actionUpdateButton
-]
-
-{ #category : #accessing }
-GtLlmTutorStep >> instructions [
-	^ self asRuleString
 ]
 
 { #category : #accessing }
