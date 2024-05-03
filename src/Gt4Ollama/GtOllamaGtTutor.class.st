@@ -13,7 +13,7 @@ GtOllamaGtTutor >> addChat [
 	aChat ensureModel.
 	chats add: aChat.
 
-	aChat addMessage: (GtLlmSystemMessage new content: self instructions).
+	aChat addMessage: (GtLlmSystemMessage new content: self instructions instructionString).
 
 	^ aChat
 ]

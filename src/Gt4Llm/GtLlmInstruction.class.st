@@ -21,6 +21,11 @@ GtLlmInstruction >> allParents [
 ]
 
 { #category : #accessing }
+GtLlmInstruction >> asInstruction [
+	^ self
+]
+
+{ #category : #accessing }
 GtLlmInstruction >> children [
 	^ self subclassResponsibility
 ]
@@ -31,7 +36,9 @@ GtLlmInstruction >> gtInstructionFor: aView [
 	^ aView textEditor
 		title: 'Instruction';
 		priority: 1;
-		text: [ self instructionString ]
+		text: [ self instructionString ];
+		styler: (GtLlmMessageStyler new
+				threadMessageViewModel: (GtLlmNewThreadMessageViewModel new threadMessage: GtLlmNewThreadMessage new))
 ]
 
 { #category : #accessing }

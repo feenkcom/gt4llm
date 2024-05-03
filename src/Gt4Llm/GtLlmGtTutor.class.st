@@ -76,14 +76,14 @@ divideBy: anotherNumber
 
 { #category : #accessing }
 GtLlmGtTutor >> defaultInstructions [
-	^ String lf , String lf
+	^ (String lf , String lf
 		join: {self tutorDescription.
 				self interactionDescription.
 				self communicationRules.
 				self conventionsDescription.
 				self viewsDescription.
 				self exampleViews.
-				self variablesDescription}
+				self variablesDescription}) asInstruction
 ]
 
 { #category : #accessing }
@@ -182,7 +182,7 @@ GtLlmGtTutor >> gtInstructionsFor: aView [
 	^ aView textEditor
 		title: 'Tutor instructions';
 		priority: 5;
-		text: [ self instructions ];
+		text: [ self instructions instructionString ];
 		styler: (GtLlmMessageStyler new
 				threadMessageViewModel: (GtLlmNewThreadMessageViewModel new
 						threadMessage: GtLlmNewThreadMessage new))
@@ -205,7 +205,7 @@ GtLlmGtTutor >> instructions [
 
 { #category : #accessing }
 GtLlmGtTutor >> instructions: anObject [
-	instructions := anObject
+	instructions := anObject asInstruction
 ]
 
 { #category : #accessing }
