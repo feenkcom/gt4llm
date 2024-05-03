@@ -193,7 +193,7 @@ GtOpenAIAssistantChat >> messages [
 	givenMessages
 		do: [ :aMessage | 
 			aMessage
-				pipeline: pipeline;
+				pipeline: self pipeline;
 				chat: self ].
 	^ givenMessages
 ]
@@ -201,6 +201,11 @@ GtOpenAIAssistantChat >> messages [
 { #category : #accessing }
 GtOpenAIAssistantChat >> onAssistantSet [
 	thread := assistant client createThreadWithMessages: {}
+]
+
+{ #category : #accessing }
+GtOpenAIAssistantChat >> pipeline [
+	^ pipeline
 ]
 
 { #category : #accessing }
