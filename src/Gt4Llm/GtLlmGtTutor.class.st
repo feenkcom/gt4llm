@@ -82,6 +82,7 @@ divideBy: anotherNumber
 { #category : #accessing }
 GtLlmGtTutor >> defaultInstructions [
 	^ GtLlmInstructionWithSections new
+		source: self;
 		introduction: self tutorDescription;
 		addSection: self interactionDescription;
 		addSection: self communicationRules;

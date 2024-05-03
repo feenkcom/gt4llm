@@ -2,7 +2,8 @@ Class {
 	#name : #GtLlmInstruction,
 	#superclass : #Object,
 	#instVars : [
-		'parent'
+		'parent',
+		'source'
 	],
 	#category : #'Gt4Llm-Instructions'
 }
@@ -75,5 +76,17 @@ GtLlmInstruction >> parent [
 
 { #category : #accessing }
 GtLlmInstruction >> parent: anObject [
-	parent := anObject
+	parent := anObject.
+
+	self source ifNil: [ self source: parent source ]
+]
+
+{ #category : #accessing }
+GtLlmInstruction >> source [
+	^ source
+]
+
+{ #category : #accessing }
+GtLlmInstruction >> source: anObject [
+	source := anObject
 ]
