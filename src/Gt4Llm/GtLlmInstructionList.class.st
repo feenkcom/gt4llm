@@ -37,5 +37,5 @@ GtLlmInstructionList >> items [
 
 { #category : #accessing }
 GtLlmInstructionList >> items: anObject [
-	items := anObject
+	items := anObject collect: #asInstruction
 ]
