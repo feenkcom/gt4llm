@@ -9,7 +9,7 @@ Class {
 
 { #category : #accessing }
 GtLlmCompositeInstruction >> addItem: anItem [
-	items add: (anItem parent: self)
+	items add: (anItem asInstruction parent: self)
 ]
 
 { #category : #accessing }

@@ -17,7 +17,7 @@ GtLlmInstructionSection >> body [
 
 { #category : #accessing }
 GtLlmInstructionSection >> body: anObject [
-	body := anObject parent: self
+	body := anObject asInstruction parent: self
 ]
 
 { #category : #accessing }
