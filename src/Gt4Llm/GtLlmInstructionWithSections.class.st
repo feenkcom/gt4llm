@@ -15,7 +15,7 @@ GtLlmInstructionWithSections >> addSection: aSection [
 
 { #category : #accessing }
 GtLlmInstructionWithSections >> children [
-	^ sections
+	^ {introduction} , sections
 ]
 
 { #category : #accessing }
@@ -27,7 +27,7 @@ GtLlmInstructionWithSections >> initialize [
 
 { #category : #accessing }
 GtLlmInstructionWithSections >> instructionString [
-	^ self introduction
+	^ self introduction instructionString
 		, '
 	
 ' , (Character cr join: (self sections collect: #instructionString))
@@ -49,7 +49,7 @@ GtLlmInstructionWithSections >> printOn: aStream [
 
 	aStream
 		nextPut: $(;
-		nextPutAll: self introduction;
+		nextPutAll: self introduction instructionString;
 		nextPut: $)
 ]
 
