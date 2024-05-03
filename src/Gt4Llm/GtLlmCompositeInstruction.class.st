@@ -29,3 +29,8 @@ GtLlmCompositeInstruction >> instructionString [
 	^ {Character cr.
 		Character cr} join: (items collect: #instructionString)
 ]
+
+{ #category : #accessing }
+GtLlmCompositeInstruction >> items: anObject [
+	items := anObject
+]

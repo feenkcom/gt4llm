@@ -8,6 +8,20 @@ Class {
 }
 
 { #category : #accessing }
+GtOpenAITutorWithSteps >> addChat [
+	| aChat |
+	aChat := GtOpenAIAssistantStepChat new
+			assistant: self assistant;
+			pipeline: context;
+			steps: self steps.
+	chats add: aChat.
+
+	self files ifNotEmpty: [ aChat sendMessage: self files toFileDescriptions ].
+
+	^ aChat
+]
+
+{ #category : #accessing }
 GtOpenAITutorWithSteps >> addStep: aStep [
 	steps add: aStep
 ]
@@ -20,11 +34,6 @@ GtOpenAITutorWithSteps >> defaultAssistantDescription [
 { #category : #accessing }
 GtOpenAITutorWithSteps >> defaultAssistantName [
 	^ 'GT Step-wise Tutor - ' , FileLocator home basename
-]
-
-{ #category : #accessing }
-GtOpenAITutorWithSteps >> defaultInstructions [
-	^ '' asInstruction
 ]
 
 { #category : #accessing }
@@ -46,12 +55,64 @@ GtOpenAITutorWithSteps >> initialize [
 ]
 
 { #category : #accessing }
+GtOpenAITutorWithSteps >> instructions [
+	^ GtLlmInstructionWithSections new
+		source: self;
+		introduction: self tutorDescription;
+		addSection: self interactionDescription;
+		addSection: self stepsDescription;
+		addSection: self communicationRules;
+		addSection: self conventionsDescription;
+		addSection: self viewsDescription;
+		addSection: self exampleViews;
+		addSection: self variablesDescription
+]
+
+{ #category : #accessing }
+GtOpenAITutorWithSteps >> interactionDescription [
+	^ GtLlmInstructionSection new
+		title: 'Interaction description';
+		body: 'A typical interaction goes like this:
+1. The user gives you a natural language PROMPT.
+2. You:
+    a. Determine what step you are in
+    b. Determine what needs to be done
+    c. Write either a short Pharo SCRIPT or to do it or a METHOD to add to the system.
+    d. The SCRIPT should always return the most relevant object.
+3. The environment:
+	e. checks your SCRIPT or METHOD using multiple tools, including a parser, compiler, and other checkers.
+	f. provides the output of those checks back to you.
+	
+The output of the checks is formatted as follows:
+- When the SCRIPT or METHOD are checked successfully, the output looks like this:
+```
+Output of the last script: 
+SUMMARY OF THE OBJECT...
+```
+- When the checks encounter errors, the output looks like this:
+```
+The last script had a problem: 
+SUMMARY OF THE PROBLEM...
+```
+- The message that moves the conversation onto the next step is formatted as such:
+```
+Move on to the next step.
+```'
+]
+
+{ #category : #accessing }
 GtOpenAITutorWithSteps >> steps [
 	^ steps
 ]
 
 { #category : #accessing }
 GtOpenAITutorWithSteps >> stepsDescription [
-	^ '# Communication steps
-' , (Character cr join: (steps collect: [ :aStep | '- ' , aStep asRuleString ]))
+	^ GtLlmInstructionSection new
+		title: 'Communication steps';
+		body: (GtLlmCompositeInstruction new items: (self steps collect: #asInstruction))
+]
+
+{ #category : #accessing }
+GtOpenAITutorWithSteps >> tutorDescription [
+	^ 'You are a coding assistant called GT Tutor that generates and auto-executes Pharo Smalltalk code for use inside Glamorous Toolkit. You follow a step-based approach to solving problems.'
 ]
