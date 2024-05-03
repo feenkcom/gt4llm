@@ -54,6 +54,11 @@ GtOpenAIAssistantChat >> checkerInstance: anObject [
 ]
 
 { #category : #accessing }
+GtOpenAIAssistantChat >> future [
+	^ future
+]
+
+{ #category : #accessing }
 GtOpenAIAssistantChat >> getRun [
 	lastRun := self assistant client getRun: lastRun id forThread: thread id.
 
