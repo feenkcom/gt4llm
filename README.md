@@ -12,7 +12,7 @@ Currently it includes:
 ```stMetacello new	repository: 'github://feenkcom/gt4llm:main/src';	baseline: 'Gt4Llm';	load```
 
 #### Load Lepiter
-```st#BaselineOfGt4Llm asClass loadLepiter```
+```st#BaselineOfGt4Llm asClass loadAllLepiterDatabases```
 ### Custom installation
 
 ```stMetacello new	repository: 'github://feenkcom/gt4llm:main/src';	baseline: 'Gt4LlmCore';	load```

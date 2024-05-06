@@ -5,6 +5,13 @@ Class {
 }
 
 { #category : #accessing }
+BaselineOfGt4Llm class >> loadAllLepiterDatabases [
+	{#BaselineOfGt4Ollama.
+		#BaselineOfGt4OpenAI}
+		do: [ :aBaselineName | aBaselineName asClass loadLepiter ]
+]
+
+{ #category : #accessing }
 BaselineOfGt4Llm >> baseline: spec [
 	<baseline>
 	^ spec
@@ -20,11 +27,4 @@ BaselineOfGt4Llm >> baseline: spec [
 			spec
 				baseline: 'Gt4OpenAI'
 				with: [ spec repository: 'github://feenkcom/gt4llm:main/src' ] ]
-]
-
-{ #category : #accessing }
-BaselineOfGt4Llm >> loadAllLepiterDatabases [
-	{#BaselineOfGt4Ollama.
-		#BaselineOfGt4OpenAI}
-		do: [ :aBaselineName | aBaselineName asClass loadLepiter ]
 ]
