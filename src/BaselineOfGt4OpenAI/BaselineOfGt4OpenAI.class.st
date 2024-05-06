@@ -25,8 +25,8 @@ BaselineOfGt4OpenAI >> baseline: spec [
 	^ spec
 		for: #common
 		do: [ spec
-				baseline: 'Gt4Llm'
+				baseline: 'Gt4LlmCore'
 				with: [ spec repository: 'github://feenkcom/gt4llm:main/src' ].
 
-			spec package: 'Gt4OpenAI' with: [ spec requires: #('Gt4Llm') ] ]
+			spec package: 'Gt4OpenAI' with: [ spec requires: #('Gt4LlmCore') ] ]
 ]
