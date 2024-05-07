@@ -6,7 +6,14 @@ Class {
 		'model',
 		'instructions',
 		'chats',
-		'context'
+		'context',
+		'tutorDescription',
+		'interactionDescription',
+		'communicationRules',
+		'conventionsDescription',
+		'viewsDescription',
+		'exampleViews',
+		'variablesDescription'
 	],
 	#category : #'Gt4Llm-Tutor'
 }
@@ -34,14 +41,12 @@ GtLlmGtTutor >> check: aString [
 
 { #category : #accessing }
 GtLlmGtTutor >> communicationRules [
-	^ GtLlmInstructionSection new
-		title: 'Communication rules';
-		body: (GtLlmInstructionList new
-				addItem: 'Decline any tasks that seem dangerous, irreversible, or that you do not understand.';
-				addItem: 'Always review the full conversation prior to answering and maintain continuity.';
-				addItem: 'If asked to do something, print a concise summary of what you have done as confirmation.';
-				addItem: 'If asked a question, respond in a friendly, conversational way. Use programmatically-generated and natural language responses as appropriate.';
-				addItem: 'Assume the user would like something concise.')
+	^ communicationRules
+]
+
+{ #category : #accessing }
+GtLlmGtTutor >> communicationRules: anObject [
+	communicationRules := anObject
 ]
 
 { #category : #accessing }
@@ -56,6 +61,28 @@ GtLlmGtTutor >> context: anObject [
 
 { #category : #accessing }
 GtLlmGtTutor >> conventionsDescription [
+	^ conventionsDescription
+]
+
+{ #category : #accessing }
+GtLlmGtTutor >> conventionsDescription: anObject [
+	conventionsDescription := anObject
+]
+
+{ #category : #accessing }
+GtLlmGtTutor >> defaultCommunicationRules [
+	^ GtLlmInstructionSection new
+		title: 'Communication rules';
+		body: (GtLlmInstructionList new
+				addItem: 'Decline any tasks that seem dangerous, irreversible, or that you do not understand.';
+				addItem: 'Always review the full conversation prior to answering and maintain continuity.';
+				addItem: 'If asked to do something, print a concise summary of what you have done as confirmation.';
+				addItem: 'If asked a question, respond in a friendly, conversational way. Use programmatically-generated and natural language responses as appropriate.';
+				addItem: 'Assume the user would like something concise.')
+]
+
+{ #category : #accessing }
+GtLlmGtTutor >> defaultConventionsDescription [
 	^ GtLlmInstructionSection new
 		title: 'Conventions for communication';
 		body: (GtLlmCompositeInstruction new
@@ -80,25 +107,7 @@ divideBy: anotherNumber
 ]
 
 { #category : #accessing }
-GtLlmGtTutor >> defaultInstructions [
-	^ GtLlmInstructionWithSections new
-		source: self;
-		introduction: self tutorDescription;
-		addSection: self interactionDescription;
-		addSection: self communicationRules;
-		addSection: self conventionsDescription;
-		addSection: self viewsDescription;
-		addSection: self exampleViews;
-		addSection: self variablesDescription
-]
-
-{ #category : #accessing }
-GtLlmGtTutor >> defaultModel [
-	^ self subclassResponsibility
-]
-
-{ #category : #accessing }
-GtLlmGtTutor >> exampleViews [
+GtLlmGtTutor >> defaultExampleViews [
 	^ GtLlmInstructionSection new
 		title: 'Example for phlow views';
 		body: (String lf , String lf
@@ -167,6 +176,94 @@ gtPaintingFor: aView
 ]
 
 { #category : #accessing }
+GtLlmGtTutor >> defaultInstructions [
+	^ GtLlmInstructionWithSections new
+		source: self;
+		introduction: self tutorDescription;
+		addSection: self interactionDescription;
+		addSection: self communicationRules;
+		addSection: self conventionsDescription;
+		addSection: self viewsDescription;
+		addSection: self exampleViews;
+		addSection: self variablesDescription
+]
+
+{ #category : #accessing }
+GtLlmGtTutor >> defaultInteractionDescription [
+	^ GtLlmInstructionSection new
+		title: 'Interaction description';
+		body: 'A typical interaction goes like this:
+1. The user gives you a natural language PROMPT.
+2. You:
+    a. Determine what needs to be done
+    b. Write either a short Pharo SCRIPT or to do it or a METHOD to add to the system.
+    c. The SCRIPT should always return the most relevant object.
+3. The environment:
+	a. checks your SCRIPT or METHOD using multiple tools, including a parser, compiler, and other checkers.
+	b. provides the output of those checks back to you.
+	
+The output of the checks is formatted as follows:
+- When the SCRIPT or METHOD are checked successfully, the output looks like this:
+```
+Output of the last script: 
+SUMMARY OF THE OBJECT...
+```
+- When the checks encounter errors, the output looks like this:
+```
+The last script had a problem: 
+SUMMARY OF THE PROBLEM...
+```'
+]
+
+{ #category : #accessing }
+GtLlmGtTutor >> defaultModel [
+	^ self subclassResponsibility
+]
+
+{ #category : #accessing }
+GtLlmGtTutor >> defaultTutorDescription [
+	^ 'You are a coding assistant called GT Tutor that generates and auto-executes Pharo Smalltalk code for use inside Glamorous Toolkit.'
+]
+
+{ #category : #accessing }
+GtLlmGtTutor >> defaultVariablesDescription [
+	^ GtLlmInstructionSection new
+		title: 'Versions';
+		body: ('
+The Pharo version is {pharoVersion}.
+The Glamorous Toolkit version is {gtVersion}'
+				format: {#pharoVersion -> Smalltalk version.
+						#gtVersion -> GtImage version versionString} asDictionary)
+]
+
+{ #category : #accessing }
+GtLlmGtTutor >> defaultViewsDescription [
+	^ GtLlmInstructionSection new
+		title: 'The Phlow API';
+		body: (GtLlmCompositeInstruction new
+				addItem: 'GT views use an API called Phlow, which uses a builder pattern to create views in the inspector for an object.';
+				addItem: 'The following view types are available:';
+				addItem: (GtLlmInstructionList new
+						addItem: '`list`:  A simple list view.';
+						addItem: '`columnedList`: A list view with columns.';
+						addItem: '`tree`: A simple tree view with a root and children.';
+						addItem: '`columnedTree`: A tree with with columns.';
+						addItem: '`explicit`: A view that renders a Bloc element explicitly.';
+						addItem: '`mondrian`: A view that uses Mondrian visualizations.');
+				addItem: 'For examples of these views, look below.')
+]
+
+{ #category : #accessing }
+GtLlmGtTutor >> exampleViews [
+	^ exampleViews
+]
+
+{ #category : #accessing }
+GtLlmGtTutor >> exampleViews: anObject [
+	exampleViews := anObject
+]
+
+{ #category : #accessing }
 GtLlmGtTutor >> gtChatsFor: aView [
 	<gtView>
 	^ aView forward
@@ -196,11 +293,18 @@ GtLlmGtTutor >> gtInstructionsFor: aView [
 { #category : #accessing }
 GtLlmGtTutor >> initialize [
 	super initialize.
-	
+
+	tutorDescription := self defaultTutorDescription.
+	interactionDescription := self defaultInteractionDescription.
+	communicationRules := self defaultCommunicationRules.
+	conventionsDescription := self defaultConventionsDescription.
+	viewsDescription := self defaultViewsDescription.
+	exampleViews := self defaultExampleViews.
+	variablesDescription := self defaultVariablesDescription.
 	instructions := self defaultInstructions.
 	model := self defaultModel.
 	chats := GtLlmChatsGroup new.
-	context :=  GtLlmContext defaultPipeline
+	context := GtLlmContext defaultPipeline
 ]
 
 { #category : #accessing }
@@ -215,29 +319,12 @@ GtLlmGtTutor >> instructions: anObject [
 
 { #category : #accessing }
 GtLlmGtTutor >> interactionDescription [
-	^ GtLlmInstructionSection new
-		title: 'Interaction description';
-		body: 'A typical interaction goes like this:
-1. The user gives you a natural language PROMPT.
-2. You:
-    a. Determine what needs to be done
-    b. Write either a short Pharo SCRIPT or to do it or a METHOD to add to the system.
-    c. The SCRIPT should always return the most relevant object.
-3. The environment:
-	a. checks your SCRIPT or METHOD using multiple tools, including a parser, compiler, and other checkers.
-	b. provides the output of those checks back to you.
-	
-The output of the checks is formatted as follows:
-- When the SCRIPT or METHOD are checked successfully, the output looks like this:
-```
-Output of the last script: 
-SUMMARY OF THE OBJECT...
-```
-- When the checks encounter errors, the output looks like this:
-```
-The last script had a problem: 
-SUMMARY OF THE PROBLEM...
-```'
+	^ interactionDescription
+]
+
+{ #category : #accessing }
+GtLlmGtTutor >> interactionDescription: anObject [
+	interactionDescription := anObject
 ]
 
 { #category : #accessing }
@@ -252,33 +339,30 @@ GtLlmGtTutor >> model: anObject [
 
 { #category : #accessing }
 GtLlmGtTutor >> tutorDescription [
-	^ 'You are a coding assistant called GT Tutor that generates and auto-executes Pharo Smalltalk code for use inside Glamorous Toolkit.'
+	^ tutorDescription
+]
+
+{ #category : #accessing }
+GtLlmGtTutor >> tutorDescription: anObject [
+	tutorDescription := anObject
 ]
 
 { #category : #accessing }
 GtLlmGtTutor >> variablesDescription [
-	^ GtLlmInstructionSection new
-		title: 'Versions';
-		body: ('
-The Pharo version is {pharoVersion}.
-The Glamorous Toolkit version is {gtVersion}'
-				format: {#pharoVersion -> Smalltalk version.
-						#gtVersion -> GtImage version versionString} asDictionary)
+	^ variablesDescription
+]
+
+{ #category : #accessing }
+GtLlmGtTutor >> variablesDescription: anObject [
+	variablesDescription := anObject
 ]
 
 { #category : #accessing }
 GtLlmGtTutor >> viewsDescription [
-	^ GtLlmInstructionSection new
-		title: 'The Phlow API';
-		body: (GtLlmCompositeInstruction new
-				addItem: 'GT views use an API called Phlow, which uses a builder pattern to create views in the inspector for an object.';
-				addItem: 'The following view types are available:';
-				addItem: (GtLlmInstructionList new
-						addItem: '`list`:  A simple list view.';
-						addItem: '`columnedList`: A list view with columns.';
-						addItem: '`tree`: A simple tree view with a root and children.';
-						addItem: '`columnedTree`: A tree with with columns.';
-						addItem: '`explicit`: A view that renders a Bloc element explicitly.';
-						addItem: '`mondrian`: A view that uses Mondrian visualizations.');
-				addItem: 'For examples of these views, look below.')
+	^ viewsDescription
+]
+
+{ #category : #accessing }
+GtLlmGtTutor >> viewsDescription: anObject [
+	viewsDescription := anObject
 ]

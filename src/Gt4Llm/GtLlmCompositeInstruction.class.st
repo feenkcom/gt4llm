@@ -32,5 +32,5 @@ GtLlmCompositeInstruction >> instructionString [
 
 { #category : #accessing }
 GtLlmCompositeInstruction >> items: anObject [
-	items := anObject
+	items := anObject collect: [ :anInstruction | anInstruction parent: self ]
 ]

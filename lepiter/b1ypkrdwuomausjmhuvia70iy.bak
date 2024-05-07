@@ -66,7 +66,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-04-30T13:44:41.324024+02:00"
+						"dateAndTimeString" : "2024-05-07T10:06:37.587158+02:00"
 					}
 				},
 				"uid" : {
@@ -76,7 +76,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "Instead of using special code blocks to encode the different types of commands, we can use special types of messages with custom pipelines. This idea levereages the fact that all messages have their own execution pipeline. By default, this is the shared pipeline that belongs to the chat, but they can just as well override it."
+				"string" : "Instead of using special code blocks to encode the different types of commands, we can separate the steps and have each of them have separate rules. This idea levereages the fact that each steps can define its own execution pipeline."
 			},
 			{
 				"__type" : "textSnippet",
@@ -103,7 +103,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-04-30T13:50:33.413811+02:00"
+						"dateAndTimeString" : "2024-04-30T13:50:37.873718+02:00"
 					}
 				},
 				"uid" : {
@@ -113,7 +113,328 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "While this is a bit more complex to do than creating a single custom pipeline, it allows for context-dependent selection of pipelines and ste."
+				"string" : "While this is a bit more complex to do than creating a single custom pipeline, it allows for context-dependent selection of pipelines and steps."
+			},
+			{
+				"__type" : "textSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-04-30T13:50:42.025775+02:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-05-07T10:06:14.896993+02:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "A4Jot7DTDQCEmrk1D1zIbQ=="
+				},
+				"paragraphStyle" : {
+					"__type" : "textStyle"
+				},
+				"string" : "### Building a custom tutor"
+			},
+			{
+				"__type" : "textSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-04-30T13:50:54.588431+02:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-05-07T10:16:42.405828+02:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "xTgouLDTDQCFSZa7D1zIbQ=="
+				},
+				"paragraphStyle" : {
+					"__type" : "textStyle"
+				},
+				"string" : "Instead of a {{gtClass:GtOpenAIGtTutor}}, we will use a {{gtClass:GtOpenAITutorWithSteps}}. This tutor allows us to define individual steps instead of just one single workflow."
+			},
+			{
+				"__type" : "pharoSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-05-07T10:16:45.43576+02:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-05-07T10:17:11.006803+02:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "LlAtizrUDQCq62txBVA29Q=="
+				},
+				"code" : "tutor := GtOpenAITutorWithSteps withApiKeyFromClipboard"
+			},
+			{
+				"__type" : "textSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-05-07T15:42:06.880047+02:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-05-07T15:42:20.06482+02:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "nPC+Fj/UDQCwD5ZIBVA29Q=="
+				},
+				"paragraphStyle" : {
+					"__type" : "textStyle"
+				},
+				"string" : "First, we will need to again define custom instructions."
+			},
+			{
+				"__type" : "pharoSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-05-07T15:42:24.60428+02:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-05-07T18:51:33.772127+02:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "4FzNFz/UDQCxXe7LBVA29Q=="
+				},
+				"code" : "tutor\r\ttutorDescription: 'You are an assistant called Wardley Map Tutor that generates Wardley Maps by prompt in multiple steps.';\r\tinteractionDescription: (GtLlmInstructionSection new\r\t\t\ttitle: 'Interaction description';\r\t\t\tbody: 'A typical interaction goes like this:\r1. The user gives you a natural language PROMPT.\r2. You:\r    a. Determine what needs to be done\r    b. Write one or more instructions in the format specified below.\r3. The environment:\r\ta. checks and executes the instructions.\r\tb. provides the output of those checks back to you.\r\t\rThe output of the checks is formatted as follows:\r- When the instructions are executed successfully, the output looks like this:\r```\rOutput of the instructions: \rSUMMARY OF THE MAP...\r```\r- When the instructions encounter errors, the output looks like this:\r```\rThe instructions had a problem: \rSUMMARY OF THE PROBLEM...\r```\r- The message that moves the conversation onto the next step (sendable by either party) is formatted as such:\r```\rLet''s move on to the next step!\r```');\r\tcommunicationRules: (GtLlmInstructionSection new\r\t\t\ttitle: 'Communication rules';\r\t\t\tbody: (GtLlmInstructionList new\r\t\t\t\t\taddItem: 'Always review the full conversation prior to answering and maintain continuity.';\r\t\t\t\t\taddItem: 'If asked a question, respond in a friendly, conversational way.';\r\t\t\t\t\taddItem: 'Assume the user would like something concise.'));\r\tconventionsDescription: (GtLlmInstructionSection new\r\t\t\ttitle: 'Conventions for communication';\r\t\t\tbody: 'Please follow the conventions outlined in each step.');\r\tviewsDescription: '';\r\texampleViews: '';\r\tstepMessage: 'Let''s move on to the next step!'"
+			},
+			{
+				"__type" : "textSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-05-07T10:17:14.276868+02:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-05-07T10:18:16.610804+02:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "uGnljDrUDQCrgyPQBVA29Q=="
+				},
+				"paragraphStyle" : {
+					"__type" : "textStyle"
+				},
+				"string" : "We can define the steps individually or all at once."
+			},
+			{
+				"__type" : "pharoSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-05-07T10:18:20.619001+02:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-05-07T15:57:33.407481+02:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "oa/ZkDrUDQCvu2iiBVA29Q=="
+				},
+				"code" : "tutor\r\taddStep: (GtLlmTutorStep new\r\t\t\tname: 'Ask for a topic';\r\t\t\tdescription: 'Firstly, ask for the topic of the Wardley map to be generated.';\r\t\t\trules: {'Ask \"What should the topic of the Wardley map be?\"'.\r\t\t\t\t\t'After the user specifies the Wardley map topic, move on to the next step.'});\r\taddStep: (GtLlmTutorStep new\r\t\t\tname: 'Create a set of nodes';\r\t\t\tdescription: 'Create a set of nodes by writing a snippet that returns them.';\r\t\t\trules: {'A node has a name and is always formatted in Markdown format like in this example:\r```\r{\"name\": \"business decision\"}\r```'.\r\t\t\t\t\t'A snippet may contain multiple nodes, like in this example:\r```\r{\"name\" : \"business decision\"}\r{\"name\" : \"developer\"}\r```'};\r\t\t\tpipeline: GtLlmWardleyMapNodeStep new);\r\taddStep: (GtLlmTutorStep new\r\t\t\tname: 'Position the nodes';\r\t\t\tdescription: 'Position the nodes by writing a snippet.';\r\t\t\trules: {'A position has a node name, a X coordinate (in the range 0 to 1), and a Y coordinate (in the range 0 to 1), and is always formatted in Markdown format like in this example:\r```\r{\"node\": \"business decision\", \"x\": 0.3, \"y\": 0.5}\r```'.\r\t\t\t\t\t'A snippet may contain multiple nodes, like in this example:\r```\r{\"node\": \"business decision\", \"x\": 0.3, \"y\": 0.5}\r{\"node\": \"developer\", \"x\": 0.6, \"y\": 0.2}\r```'};\r\t\t\tpipeline: GtLlmWardleyMapPositionStep new);\r\taddStep: (GtLlmTutorStep new\r\t\t\tname: 'Connect the nodes';\r\t\t\tdescription: 'Connect the nodes by writing a snippet.';\r\t\t\trules: {'A connection has a from node name and a to node name, and is always formatted in Markdown format like in this example:\r```\r{\"from\": \"business decision\", \"to\": \"developer}\r```'.\r\t\t\t\t\t'A snippet may contain multiple nodes, as specified in the other steps above.'};\r\t\t\tpipeline: GtLlmWardleyMapConnectionStep new)"
+			},
+			{
+				"__type" : "textSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-05-07T15:57:58.258969+02:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-05-07T15:58:36.976529+02:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "B9RzTz/UDQCFNpB9BVA29Q=="
+				},
+				"paragraphStyle" : {
+					"__type" : "textStyle"
+				},
+				"string" : "After defining the steps, we can create an assistant and proceed as we did in [[Building a custom tutor to facilitate generating Wardley maps]]."
+			},
+			{
+				"__type" : "pharoSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-05-07T15:58:13.096006+02:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-05-07T15:58:19.675272+02:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "NDhWUD/UDQCGRH9kBVA29Q=="
+				},
+				"code" : "tutor createAssistant"
 			}
 		]
 	},
@@ -136,12 +457,12 @@
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2024-04-29T21:38:48.85997+02:00"
+			"dateAndTimeString" : "2024-05-07T10:04:44.736441+02:00"
 		}
 	},
 	"pageType" : {
 		"__type" : "namedPage",
-		"title" : "Expanding the Wardley maps tutor with custom messages"
+		"title" : "Expanding the Wardley maps tutor with a step-wise tutor"
 	},
 	"uid" : {
 		"__type" : "uuid",
