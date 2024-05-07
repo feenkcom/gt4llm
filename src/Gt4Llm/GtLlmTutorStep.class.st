@@ -36,7 +36,10 @@ GtLlmTutorStep >> gtInstructionsFor: aView [
 	^ aView textEditor
 		title: 'Instructions';
 		priority: 3;
-		text: [ self asInstruction instructionString ]
+		text: [ self asInstruction instructionString ];
+		styler: (GtLlmMessageStyler new
+				threadMessageViewModel: (GtLlmNewThreadMessageViewModel new
+						threadMessage: GtLlmNewThreadMessage new))
 ]
 
 { #category : #accessing }
