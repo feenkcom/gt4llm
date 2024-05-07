@@ -742,7 +742,7 @@
 								"__type" : "time",
 								"time" : {
 									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2024-04-29T21:38:46.406699+02:00"
+									"dateAndTimeString" : "2024-05-07T10:04:44.744537+02:00"
 								}
 							},
 							"uid" : {
@@ -752,7 +752,7 @@
 							"paragraphStyle" : {
 								"__type" : "textStyle"
 							},
-							"string" : "[[Expanding the Wardley maps tutor with custom messages]]"
+							"string" : "[[Expanding the Wardley maps tutor with a step-wise tutor]]"
 						}
 					]
 				},
