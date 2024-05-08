@@ -6,14 +6,14 @@ Class {
 		'model',
 		'instructions',
 		'chats',
-		'context',
 		'tutorDescription',
 		'interactionDescription',
 		'communicationRules',
 		'conventionsDescription',
 		'viewsDescription',
 		'exampleViews',
-		'variablesDescription'
+		'variablesDescription',
+		'pipelineBuilder'
 	],
 	#category : #'Gt4Llm-Tutor'
 }
@@ -36,7 +36,7 @@ GtLlmGtTutor >> chats [
 { #category : #accessing }
 GtLlmGtTutor >> check: aString [
 	<return: #GtLlmStepResult>
-	^ context check: aString
+	^ pipelineBuilder check: aString
 ]
 
 { #category : #accessing }
@@ -47,16 +47,6 @@ GtLlmGtTutor >> communicationRules [
 { #category : #accessing }
 GtLlmGtTutor >> communicationRules: anObject [
 	communicationRules := anObject
-]
-
-{ #category : #accessing }
-GtLlmGtTutor >> context [
-	^ context
-]
-
-{ #category : #accessing }
-GtLlmGtTutor >> context: anObject [
-	context := anObject
 ]
 
 { #category : #accessing }
@@ -304,7 +294,7 @@ GtLlmGtTutor >> initialize [
 	instructions := self defaultInstructions.
 	model := self defaultModel.
 	chats := GtLlmChatsGroup new.
-	context := GtLlmContext defaultPipeline
+	pipelineBuilder := [ GtLlmContext defaultPipeline ]
 ]
 
 { #category : #accessing }
@@ -335,6 +325,16 @@ GtLlmGtTutor >> model [
 { #category : #accessing }
 GtLlmGtTutor >> model: anObject [
 	model := anObject
+]
+
+{ #category : #accessing }
+GtLlmGtTutor >> pipelineBuilder [
+	^ pipelineBuilder
+]
+
+{ #category : #accessing }
+GtLlmGtTutor >> pipelineBuilder: anObject [
+	pipelineBuilder := anObject
 ]
 
 { #category : #accessing }

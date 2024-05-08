@@ -9,7 +9,7 @@ GtOllamaGtTutor >> addChat [
 	| aChat |
 	aChat := GtOllamaChat new
 			model: self model;
-			context: context.
+			context: pipelineBuilder value.
 	aChat ensureModel.
 	chats add: aChat.
 

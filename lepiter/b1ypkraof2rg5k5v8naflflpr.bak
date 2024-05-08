@@ -430,14 +430,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-04-29T18:01:16.359603+02:00"
+						"dateAndTimeString" : "2024-05-08T08:53:26.573287+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "VPqdGaDTDQCc11FlAo25ug=="
 				},
-				"code" : "context := GtLlmContext new\r\t\tinstance: GtLlmWardleyMapCreator new;\r\t\tisImmutableInstance: true;\r\t\tchecker: (GtLlmAlternativeCodeStep new\r\t\t\t\taddAlternative: GtLlmWardleyMapNodeStep new\r\t\t\t\t\tmatching: [ :aContext | aContext lastResult isForLanguage: 'node' ];\r\t\t\t\taddAlternative: GtLlmWardleyMapPositionStep new\r\t\t\t\t\tmatching: [ :aContext | aContext lastResult isForLanguage: 'position' ];\r\t\t\t\taddAlternative: GtLlmWardleyMapConnectionStep new\r\t\t\t\t\tmatching: [ :aContext | aContext lastResult isForLanguage: 'connection' ])"
+				"code" : "contextBuilder := [ GtLlmContext new\r\t\tinstance: GtLlmWardleyMapCreator new;\r\t\tisImmutableInstance: true;\r\t\tchecker: (GtLlmAlternativeCodeStep new\r\t\t\t\taddAlternative: GtLlmWardleyMapNodeStep new\r\t\t\t\t\tmatching: [ :aContext | aContext lastResult isForLanguage: 'node' ];\r\t\t\t\taddAlternative: GtLlmWardleyMapPositionStep new\r\t\t\t\t\tmatching: [ :aContext | aContext lastResult isForLanguage: 'position' ];\r\t\t\t\taddAlternative: GtLlmWardleyMapConnectionStep new\r\t\t\t\t\tmatching: [ :aContext | aContext lastResult isForLanguage: 'connection' ]) ]"
 			},
 			{
 				"__type" : "textSnippet",
@@ -612,14 +612,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-04-29T18:06:21.639254+02:00"
+						"dateAndTimeString" : "2024-05-08T08:54:10.970783+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "EceUJqDTDQCsOkAIAo25ug=="
 				},
-				"code" : "tutor := GtOpenAIGtTutor withApiKeyFromClipboard\r\t\tinstructions: instructions;\r\t\tcontext: context;\r\t\tfiles: (GtOpenAIResourceFilesGroup withAll: {});\r\t\tcreateAssistant"
+				"code" : "tutor := GtOpenAIGtTutor withApiKeyFromClipboard\r\t\tinstructions: instructions;\r\t\tpipelineBuilder: contextBuilder;\r\t\tfiles: (GtOpenAIResourceFilesGroup withAll: {});\r\t\tcreateAssistant"
 			},
 			{
 				"__type" : "textSnippet",
@@ -825,14 +825,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-04-29T18:10:04.878053+02:00"
+						"dateAndTimeString" : "2024-05-08T08:54:22.696131+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "TjG4L6DTDQCzBkc5Ao25ug=="
 				},
-				"code" : "chat messages first codeBlocks do: [ :aCodeBlock | pipeline check: aCodeBlock ]"
+				"code" : "chat messages first codeBlocks do: [ :aCodeBlock | chat pipeline check: aCodeBlock ].\rcontextBuilder instance"
 			}
 		]
 	},
