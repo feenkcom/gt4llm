@@ -13,7 +13,7 @@ GtOpenAITutorWithSteps >> addChat [
 	| aChat |
 	aChat := GtOpenAIAssistantStepChat new
 			assistant: self assistant;
-			pipeline: context;
+			pipeline: pipelineBuilder value;
 			stepMessage: self stepMessage;
 			steps: self steps.
 	chats add: aChat.

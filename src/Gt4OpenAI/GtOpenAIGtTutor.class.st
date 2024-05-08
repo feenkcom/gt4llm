@@ -38,7 +38,7 @@ GtOpenAIGtTutor >> addChat [
 	| aChat |
 	aChat := GtOpenAIAssistantChat new
 			assistant: self assistant;
-			pipeline: context.
+			pipeline: pipelineBuilder value.
 	chats add: aChat.
 
 	self files ifNotEmpty: [ aChat sendMessage: self files toFileDescriptions ].
