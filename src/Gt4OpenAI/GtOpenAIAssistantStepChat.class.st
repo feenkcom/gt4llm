@@ -43,7 +43,7 @@ GtOpenAIAssistantStepChat >> maybeStep: anAnnouncement [
 			| text |
 			text := aMessage contentText trim.
 			text = self stepMessage ifTrue: [ stepIndex := stepIndex + 1 ].
-			text = self backStepMessage ifTrue: [ stepIndex := stepIndex + 1 ].
+			text = self backStepMessage ifTrue: [ stepIndex := stepIndex - 1 ].
 			(self selectStepMessage matches: text)
 				ifTrue: [ | stepName |
 					stepName := self selectStepMessage subexpression: 2.
