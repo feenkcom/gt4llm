@@ -4,14 +4,26 @@ Class {
 	#instVars : [
 		'stepIndex',
 		'steps',
-		'stepMessage'
+		'stepMessage',
+		'backStepMessage',
+		'selectStepMessage'
 	],
 	#category : #'Gt4OpenAI-Examples'
 }
 
 { #category : #accessing }
+GtOpenAIAssistantStepChat >> backStepMessage [
+	^ backStepMessage
+]
+
+{ #category : #accessing }
+GtOpenAIAssistantStepChat >> backStepMessage: anObject [
+	backStepMessage := anObject
+]
+
+{ #category : #accessing }
 GtOpenAIAssistantStepChat >> currentStep [
-	^ steps at: stepIndex
+	^ (steps at: stepIndex) chat: self
 ]
 
 { #category : #accessing }
@@ -24,9 +36,20 @@ GtOpenAIAssistantStepChat >> initialize [
 
 { #category : #accessing }
 GtOpenAIAssistantStepChat >> maybeStep: anAnnouncement [
-	stepIndex := (self messages
-			select: [ :aMessage | aMessage contentText trim = self stepMessage ]) size
-			+ 1
+	stepIndex := 1.
+
+	self messages reversed
+		do: [ :aMessage | 
+			| text |
+			text := aMessage contentText trim.
+			text = self stepMessage ifTrue: [ stepIndex := stepIndex + 1 ].
+			text = self backStepMessage ifTrue: [ stepIndex := stepIndex + 1 ].
+			(self selectStepMessage matches: text)
+				ifTrue: [ | stepName |
+					stepName := self selectStepMessage subexpression: 2.
+					stepIndex := self steps detectIndex: [ :aStep | aStep name = stepName ] ] ].
+
+	^ stepIndex
 ]
 
 { #category : #accessing }
@@ -34,6 +57,16 @@ GtOpenAIAssistantStepChat >> pipeline [
 	^ GtLlmContext new
 		instance: pipeline instance;
 		checker: (self currentStep pipeline ifNil: [ pipeline checker ])
+]
+
+{ #category : #accessing }
+GtOpenAIAssistantStepChat >> selectStepMessage [
+	^ selectStepMessage
+]
+
+{ #category : #accessing }
+GtOpenAIAssistantStepChat >> selectStepMessage: anObject [
+	selectStepMessage := anObject
 ]
 
 { #category : #accessing }
@@ -54,4 +87,9 @@ GtOpenAIAssistantStepChat >> steps [
 { #category : #accessing }
 GtOpenAIAssistantStepChat >> steps: anObject [
 	steps := anObject
+]
+
+{ #category : #accessing }
+GtOpenAIAssistantStepChat >> threadActions [
+	^ self currentStep actions
 ]

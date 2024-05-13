@@ -5,10 +5,17 @@ Class {
 		'name',
 		'description',
 		'rules',
-		'pipeline'
+		'pipeline',
+		'chat'
 	],
 	#category : #'Gt4Llm-Examples'
 }
+
+{ #category : #accessing }
+GtLlmTutorStep >> actions [
+	^ {self buildPreviousStepButton.
+		self buildNextStepButton}
+]
 
 { #category : #accessing }
 GtLlmTutorStep >> asInstruction [
@@ -18,6 +25,48 @@ GtLlmTutorStep >> asInstruction [
 		body: (GtLlmCompositeInstruction new
 				addItem: self description;
 				addItem: (GtLlmInstructionList new items: self rules))
+]
+
+{ #category : #accessing }
+GtLlmTutorStep >> buildActionButtonLabelled: aString withAction: aBlock [
+	^ BrButton new
+		fitContent;
+		beSmallSize;
+		aptitude: BrGlamorousButtonWithLabelAptitude;
+		label: aString;
+		action: aBlock;
+		margin: (BlInsets all: 3);
+		constraintsDo: [ :c | 
+			c linear vertical alignBottom.
+			c linear horizontal alignLeft ]
+]
+
+{ #category : #accessing }
+GtLlmTutorStep >> buildNextStepButton [
+	^ self
+		buildActionButtonLabelled: 'Next Step'
+		withAction: [ :aButton | 
+			self chat sendMessage: self chat stepMessage.
+			aButton phlow fireToolUpdateWish ]
+]
+
+{ #category : #accessing }
+GtLlmTutorStep >> buildPreviousStepButton [
+	^ self
+		buildActionButtonLabelled: 'Previous Step'
+		withAction: [ :aButton | 
+			self chat sendMessage: self chat backStepMessage.
+			aButton phlow fireToolUpdateWish ]
+]
+
+{ #category : #accessing }
+GtLlmTutorStep >> chat [
+	^ chat
+]
+
+{ #category : #accessing }
+GtLlmTutorStep >> chat: anObject [
+	chat := anObject
 ]
 
 { #category : #accessing }
