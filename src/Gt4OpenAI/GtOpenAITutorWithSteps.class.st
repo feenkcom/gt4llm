@@ -3,7 +3,9 @@ Class {
 	#superclass : #GtOpenAIGtTutor,
 	#instVars : [
 		'steps',
-		'stepMessage'
+		'stepMessage',
+		'backStepMessage',
+		'selectStepMessage'
 	],
 	#category : #'Gt4OpenAI-Examples'
 }
@@ -15,6 +17,8 @@ GtOpenAITutorWithSteps >> addChat [
 			assistant: self assistant;
 			pipeline: pipelineBuilder value;
 			stepMessage: self stepMessage;
+			backStepMessage: self backStepMessage;
+			selectStepMessage: self selectStepMessage;
 			steps: self steps.
 	chats add: aChat.
 
@@ -26,6 +30,16 @@ GtOpenAITutorWithSteps >> addChat [
 { #category : #accessing }
 GtOpenAITutorWithSteps >> addStep: aStep [
 	steps add: aStep
+]
+
+{ #category : #accessing }
+GtOpenAITutorWithSteps >> backStepMessage [
+	^ backStepMessage
+]
+
+{ #category : #accessing }
+GtOpenAITutorWithSteps >> backStepMessage: anObject [
+	backStepMessage := anObject
 ]
 
 { #category : #accessing }
@@ -105,6 +119,16 @@ GtOpenAITutorWithSteps >> instructions [
 		addSection: self viewsDescription;
 		addSection: self exampleViews;
 		addSection: self variablesDescription
+]
+
+{ #category : #accessing }
+GtOpenAITutorWithSteps >> selectStepMessage [
+	^ selectStepMessage
+]
+
+{ #category : #accessing }
+GtOpenAITutorWithSteps >> selectStepMessage: anObject [
+	selectStepMessage := anObject
 ]
 
 { #category : #accessing }

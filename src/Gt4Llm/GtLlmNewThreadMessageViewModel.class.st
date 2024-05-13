@@ -38,6 +38,11 @@ GtLlmNewThreadMessageViewModel >> elementClass [
 	^ GtLlmNewThreadMessageElement
 ]
 
+{ #category : #accessing }
+GtLlmNewThreadMessageViewModel >> messageActions [
+	^ threadMessage messageActions
+]
+
 { #category : #actions }
 GtLlmNewThreadMessageViewModel >> sendMessage [
 	^ threadMessage sendMessage

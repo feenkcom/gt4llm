@@ -256,3 +256,8 @@ GtOpenAIAssistantChat >> summary [
 			-> (lastRun ifNil: [ '' ] ifNotNil: [ lastRun startedAt ]).
 		'Last run done at' -> (lastRun ifNil: [ '' ] ifNotNil: [ lastRun doneAt ])}
 ]
+
+{ #category : #accessing }
+GtOpenAIAssistantChat >> threadActions [
+	^ {}
+]

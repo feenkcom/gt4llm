@@ -5,7 +5,8 @@ Class {
 	#classTraits : 'TBrLayoutResizable classTrait + TGtLlmWithThreadMessageViewModel classTrait',
 	#instVars : [
 		'contentsElement',
-		'sendButton'
+		'sendButton',
+		'toolbar'
 	],
 	#category : #'Gt4Llm-Widgets'
 }
@@ -23,6 +24,21 @@ GtLlmNewThreadMessageElement class >> newForChatList [
 				right: 10)
 ]
 
+{ #category : #'initialization ' }
+GtLlmNewThreadMessageElement >> buildSendButton [
+	^ BrButton new
+			fitContent;
+			beSmallSize;
+			aptitude: BrGlamorousButtonWithIconAptitude;
+			label: 'Send';
+			icon: BrGlamorousVectorIcons accept;
+			action: [ :aButton | self sendMessageFrom: aButton ];
+			margin: (BlInsets all: 3);
+			constraintsDo: [ :c | 
+				c linear vertical alignBottom.
+				c linear horizontal alignLeft ]
+]
+
 { #category : #initialization }
 GtLlmNewThreadMessageElement >> defaultLayout [
 	^ BlLinearLayout vertical
@@ -33,9 +49,9 @@ GtLlmNewThreadMessageElement >> initialize [
 	super initialize.
 
 	self initializeContentsElement.
-	self initializeSendButton.
+	self initializeToolbar.
 	self addChild: contentsElement as: #contents.
-	self addChild: sendButton as: #send.
+	self addChild: toolbar as: #toolbar.
 
 	self hMatchParent.
 	self vFitContentLimited
@@ -62,18 +78,8 @@ GtLlmNewThreadMessageElement >> initializeContentsElement [
 ]
 
 { #category : #'initialization ' }
-GtLlmNewThreadMessageElement >> initializeSendButton [
-	sendButton := BrButton new
-			fitContent;
-			beSmallSize;
-			aptitude: BrGlamorousButtonWithIconAptitude;
-			label: 'Send';
-			icon: BrGlamorousVectorIcons accept;
-			action: [ :aButton | self sendMessageFrom: aButton ];
-			margin: (BlInsets all: 3);
-			constraintsDo: [ :c | 
-				c linear vertical alignBottom.
-				c linear horizontal alignLeft ]
+GtLlmNewThreadMessageElement >> initializeToolbar [
+	toolbar := BrToolbar new aptitude: BrGlamorousToolbarAptitude new
 ]
 
 { #category : #'private - announcement handling' }
@@ -136,5 +142,13 @@ GtLlmNewThreadMessageElement >> updateContentsElement [
 
 { #category : #'private - updating' }
 GtLlmNewThreadMessageElement >> updateElement [
-	self updateContentsElement
+	self updateContentsElement.
+	self updateToolbar
+]
+
+{ #category : #'private - updating' }
+GtLlmNewThreadMessageElement >> updateToolbar [
+	toolbar removeAllItems.
+	toolbar addItems: threadMessageViewModel messageActions.
+	toolbar addItem: self buildSendButton
 ]

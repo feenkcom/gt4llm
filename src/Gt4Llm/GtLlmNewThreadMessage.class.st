@@ -75,6 +75,11 @@ GtLlmNewThreadMessage >> isAssistantRole [
 	^ false
 ]
 
+{ #category : #accessing }
+GtLlmNewThreadMessage >> messageActions [
+	^ assistantChat threadActions
+]
+
 { #category : #'private - notifying' }
 GtLlmNewThreadMessage >> onContentsChangeByRequester: aRequester [
 	announcer
