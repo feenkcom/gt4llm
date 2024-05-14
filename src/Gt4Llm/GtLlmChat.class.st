@@ -144,6 +144,11 @@ GtLlmChat >> sendMessage: aMessage [
 ]
 
 { #category : #accessing }
+GtLlmChat >> threadActions [
+	^ {}
+]
+
+{ #category : #accessing }
 GtLlmChat >> updateLastUpdated [
 	lastUpdated := DateAndTime now
 ]

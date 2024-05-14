@@ -8,42 +8,7 @@
 				"__type" : "textSnippet",
 				"children" : {
 					"__type" : "snippets",
-					"items" : [
-						{
-							"__type" : "pharoSnippet",
-							"children" : {
-								"__type" : "snippets",
-								"items" : [ ]
-							},
-							"createEmail" : {
-								"__type" : "email",
-								"emailString" : "<unknown>"
-							},
-							"createTime" : {
-								"__type" : "time",
-								"time" : {
-									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2024-02-22T20:52:32.316142+01:00"
-								}
-							},
-							"editEmail" : {
-								"__type" : "email",
-								"emailString" : "<unknown>"
-							},
-							"editTime" : {
-								"__type" : "time",
-								"time" : {
-									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2024-02-22T21:01:09.611384+01:00"
-								}
-							},
-							"uid" : {
-								"__type" : "uid",
-								"uidString" : "9vVihV/ODQCtpz1xD0lXcw=="
-							},
-							"code" : "apiKey := (FileLocator home / '.secrets' / 'open-ai-api-key.txt') contents."
-						}
-					]
+					"items" : [ ]
 				},
 				"createEmail" : {
 					"__type" : "email",
@@ -53,7 +18,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-22T21:00:21.146684+01:00"
+						"dateAndTimeString" : "2024-05-14T12:59:21.558609+02:00"
 					}
 				},
 				"editEmail" : {
@@ -64,17 +29,17 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-03-01T07:52:07.999935+01:00"
+						"dateAndTimeString" : "2024-05-14T13:00:02.08094+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "yfKphF/ODQCtj5jxD0lXcw=="
+					"uidString" : "+1BpocnUDQCzhQv6B0Z8qA=="
 				},
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "First get the API key either from a local file like this:"
+				"string" : "The tutor instance may be set globally. This is not required for the functioning of the system, but simplifies the process of re-using a client and providing an API key."
 			},
 			{
 				"__type" : "textSnippet",
@@ -95,7 +60,7 @@
 								"__type" : "time",
 								"time" : {
 									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2024-02-22T20:58:32.159374+01:00"
+									"dateAndTimeString" : "2024-05-14T12:57:28.958351+02:00"
 								}
 							},
 							"editEmail" : {
@@ -106,14 +71,14 @@
 								"__type" : "time",
 								"time" : {
 									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2024-02-22T20:59:35.286005+01:00"
+									"dateAndTimeString" : "2024-05-14T12:58:13.85627+02:00"
 								}
 							},
 							"uid" : {
 								"__type" : "uid",
-								"uidString" : "YtbVml/ODQCtvX5TD0lXcw=="
+								"uidString" : "0W/dmsnUDQCwYhIRB0Z8qA=="
 							},
-							"code" : "apiKey := Clipboard clipboardText."
+							"code" : "tutor := GtOpenAIGtTutor withApiKeyFromClipboard"
 						}
 					]
 				},
@@ -125,7 +90,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-22T21:01:11.525427+01:00"
+						"dateAndTimeString" : "2024-05-14T12:57:49.770013+02:00"
 					}
 				},
 				"editEmail" : {
@@ -136,17 +101,89 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-03-01T07:52:21.251472+01:00"
+						"dateAndTimeString" : "2024-05-14T12:58:05.756961+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "o5BVpF/ODQCvNI2mD0lXcw=="
+					"uidString" : "yvVFpV/ODQCvy6LdD0lXcw=="
 				},
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "Or from the clipboard after you have copied the token value:"
+				"string" : "You can set up the tutor either through the clipboard"
+			},
+			{
+				"__type" : "textSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [
+						{
+							"__type" : "pharoSnippet",
+							"children" : {
+								"__type" : "snippets",
+								"items" : [ ]
+							},
+							"createEmail" : {
+								"__type" : "email",
+								"emailString" : "<unknown>"
+							},
+							"createTime" : {
+								"__type" : "time",
+								"time" : {
+									"__type" : "dateAndTime",
+									"dateAndTimeString" : "2024-05-14T12:57:44.118275+02:00"
+								}
+							},
+							"editEmail" : {
+								"__type" : "email",
+								"emailString" : "<unknown>"
+							},
+							"editTime" : {
+								"__type" : "time",
+								"time" : {
+									"__type" : "dateAndTime",
+									"dateAndTimeString" : "2024-05-14T12:57:47.643421+02:00"
+								}
+							},
+							"uid" : {
+								"__type" : "uid",
+								"uidString" : "rcLEm8nUDQCw4te6B0Z8qA=="
+							},
+							"code" : "tutor := GtOpenAIGtTutor withApiKeyFromFile"
+						}
+					]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-05-14T12:58:15.96025+02:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-05-14T12:58:17.819914+02:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "haKqncnUDQCyb2wUB0Z8qA=="
+				},
+				"paragraphStyle" : {
+					"__type" : "textStyle"
+				},
+				"string" : "or a file"
 			},
 			{
 				"__type" : "textSnippet",
@@ -178,51 +215,14 @@
 								"__type" : "time",
 								"time" : {
 									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2024-02-22T20:52:32.316705+01:00"
+									"dateAndTimeString" : "2024-05-14T12:57:39.400079+02:00"
 								}
 							},
 							"uid" : {
 								"__type" : "uid",
 								"uidString" : "i5vFhF/ODQCtksT+D0lXcw=="
 							},
-							"code" : "tutor := GtOpenAIGtTutor new\r\t\tapiKey: apiKey;\r\t\tcreateAssistant.\rGtOpenAIGtTutor instance: tutor"
-						},
-						{
-							"__type" : "textSnippet",
-							"children" : {
-								"__type" : "snippets",
-								"items" : [ ]
-							},
-							"createEmail" : {
-								"__type" : "email",
-								"emailString" : "<unknown>"
-							},
-							"createTime" : {
-								"__type" : "time",
-								"time" : {
-									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2024-03-01T07:52:44.344821+01:00"
-								}
-							},
-							"editEmail" : {
-								"__type" : "email",
-								"emailString" : "<unknown>"
-							},
-							"editTime" : {
-								"__type" : "time",
-								"time" : {
-									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2024-04-16T23:36:02.220494+02:00"
-								}
-							},
-							"uid" : {
-								"__type" : "uid",
-								"uidString" : "0kRWj/XODQC/hb2KAIJxgg=="
-							},
-							"paragraphStyle" : {
-								"__type" : "textStyle"
-							},
-							"string" : "The global variable is not mandatory for using the tutor."
+							"code" : "GtOpenAIGtTutor instance: tutor createAssistant"
 						}
 					]
 				},
@@ -234,7 +234,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-22T21:01:27.280102+01:00"
+						"dateAndTimeString" : "2024-05-14T12:59:07.325185+02:00"
 					}
 				},
 				"editEmail" : {
@@ -245,17 +245,17 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-03-01T07:52:42.614578+01:00"
+						"dateAndTimeString" : "2024-05-14T12:59:12.382536+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "yvVFpV/ODQCvy6LdD0lXcw=="
+					"uidString" : "QGxZoMnUDQCyy1jzB0Z8qA=="
 				},
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "With the key, instantiate a tutor with an assistant and set it globally."
+				"string" : "and then set the global instance"
 			}
 		]
 	},
@@ -278,12 +278,12 @@
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2024-02-22T20:52:20.150533+01:00"
+			"dateAndTimeString" : "2024-05-14T12:56:49.960485+02:00"
 		}
 	},
 	"pageType" : {
 		"__type" : "namedPage",
-		"title" : "Setup the tutor"
+		"title" : "Setting up the tutor"
 	},
 	"uid" : {
 		"__type" : "uuid",

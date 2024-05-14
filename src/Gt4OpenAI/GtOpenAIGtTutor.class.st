@@ -34,6 +34,12 @@ GtOpenAIGtTutor class >> withApiKeyFromClipboard [
 ]
 
 { #category : #accessing }
+GtOpenAIGtTutor class >> withApiKeyFromFile [
+	<gtExample>
+	^ self new apiKey: GtOpenAIClient apiKeyFileContents
+]
+
+{ #category : #accessing }
 GtOpenAIGtTutor >> addChat [
 	| aChat |
 	aChat := GtOpenAIAssistantChat new
@@ -174,7 +180,7 @@ GtOpenAIGtTutor >> defaultFiles [
 
 { #category : #accessing }
 GtOpenAIGtTutor >> defaultModel [
-	^ 'gpt-4-turbo-preview'
+	^ 'gpt-4o'
 ]
 
 { #category : #accessing }
