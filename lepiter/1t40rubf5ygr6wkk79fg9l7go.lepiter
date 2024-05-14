@@ -29,7 +29,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-22T21:02:44.503582+01:00"
+						"dateAndTimeString" : "2024-05-14T12:56:49.978382+02:00"
 					}
 				},
 				"uid" : {
@@ -39,7 +39,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "This page describes an interaction with OpenAI [assistant](https://platform.openai.com/assistants) using chat, showing different kind of question and responses. [[Setup the tutor]] for more details."
+				"string" : "This page describes an interaction with OpenAI [assistant](https://platform.openai.com/assistants) using chat, showing different kind of question and responses. [[Setting up the tutor]] for more details."
 			},
 			{
 				"__type" : "pharoSnippet",

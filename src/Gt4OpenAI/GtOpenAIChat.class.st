@@ -11,8 +11,26 @@ GtOpenAIChat class >> withApiKeyFromClipboard [
 ]
 
 { #category : #accessing }
+GtOpenAIChat class >> withApiKeyFromFile [
+	<gtExample>
+	^ self new apiKey: GtOpenAIClient apiKeyFileContents
+]
+
+{ #category : #accessing }
 GtOpenAIChat >> apiKey: aString [
 	client apiKey: aString
+]
+
+{ #category : #accessing }
+GtOpenAIChat >> defaultModel [
+	^ 'gpt-4o'
+]
+
+{ #category : #accessing }
+GtOpenAIChat >> initialize [
+	super initialize.
+	
+	model := self defaultModel
 ]
 
 { #category : #accessing }
@@ -41,4 +59,9 @@ GtOpenAIChat >> sendMessage: aMessage [
 	result := client completeChatWithModel: self model andMessages: messages.
 
 	self addMessage: result choices first message
+]
+
+{ #category : #accessing }
+GtOpenAIChat >> status [
+	^ GtOpenAIAssistantChatReadyStatus new
 ]

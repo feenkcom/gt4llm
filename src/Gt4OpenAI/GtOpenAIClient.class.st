@@ -5,13 +5,47 @@ Class {
 		'baseUrl',
 		'apiKey'
 	],
+	#classVars : [
+		'ApiKeyFile'
+	],
 	#category : #'Gt4OpenAI-Client'
 }
+
+{ #category : #accessing }
+GtOpenAIClient class >> apiKeyFile [
+	^ ApiKeyFile
+]
+
+{ #category : #accessing }
+GtOpenAIClient class >> apiKeyFile: aFile [
+	ApiKeyFile := aFile
+]
+
+{ #category : #accessing }
+GtOpenAIClient class >> apiKeyFileContents [
+	^ ApiKeyFile contents
+]
+
+{ #category : #accessing }
+GtOpenAIClient class >> defaultApiKeyFile [
+	^ FileLocator home / '.secrets' / 'open-ai-api-key.txt'
+]
+
+{ #category : #accessing }
+GtOpenAIClient class >> initialize [
+	ApiKeyFile := self defaultApiKeyFile
+]
 
 { #category : #accessing }
 GtOpenAIClient class >> withApiKeyFromClipboard [
 	<gtExample>
 	^ self new apiKey: Clipboard clipboardText
+]
+
+{ #category : #accessing }
+GtOpenAIClient class >> withApiKeyFromFile [
+	<gtExample>
+	^ self new apiKey: self apiKeyFileContents
 ]
 
 { #category : #accessing }

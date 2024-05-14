@@ -214,14 +214,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-05-07T10:17:11.006803+02:00"
+						"dateAndTimeString" : "2024-05-14T13:01:13.860483+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "LlAtizrUDQCq62txBVA29Q=="
 				},
-				"code" : "tutor := GtOpenAITutorWithSteps withApiKeyFromClipboard"
+				"code" : "tutor := GtOpenAITutorWithSteps instance"
 			},
 			{
 				"__type" : "textSnippet",
