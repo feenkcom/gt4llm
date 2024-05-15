@@ -36,7 +36,9 @@ GtOpenAIAssistantStepChat >> initialize [
 
 { #category : #accessing }
 GtOpenAIAssistantStepChat >> maybeStep: anAnnouncement [
+	| selectStepRegex |
 	stepIndex := 1.
+	selectStepRegex := (self selectStepMessage format: {'.+'}) asRegex.
 
 	self messages reversed
 		do: [ :aMessage | 
@@ -44,7 +46,7 @@ GtOpenAIAssistantStepChat >> maybeStep: anAnnouncement [
 			text := aMessage contentText trim.
 			text = self stepMessage ifTrue: [ stepIndex := stepIndex + 1 ].
 			text = self backStepMessage ifTrue: [ stepIndex := stepIndex - 1 ].
-			(self selectStepMessage matches: text)
+			(selectStepRegex matches: text)
 				ifTrue: [ | stepName |
 					stepName := self selectStepMessage subexpression: 2.
 					stepIndex := self steps detectIndex: [ :aStep | aStep name = stepName ] ] ].
@@ -67,6 +69,12 @@ GtOpenAIAssistantStepChat >> selectStepMessage [
 { #category : #accessing }
 GtOpenAIAssistantStepChat >> selectStepMessage: anObject [
 	selectStepMessage := anObject
+]
+
+{ #category : #accessing }
+GtOpenAIAssistantStepChat >> sendStepChange: aStepName [
+	self halt.
+	self sendMessage: (self selectStepMessage format: {aStepName})
 ]
 
 { #category : #accessing }

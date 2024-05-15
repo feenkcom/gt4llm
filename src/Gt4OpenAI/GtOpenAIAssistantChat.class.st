@@ -121,7 +121,7 @@ GtOpenAIAssistantChat >> gtMessagesWidgetFor: aView [
 		title: 'Messages';
 		priority: 0;
 		stencil: [ aViewModel
-				ifNil: [ aViewModel := GtLlmChatViewModel new assistantChat: self ].
+				ifNil: [ aViewModel := GtLlmStepChatViewModel new assistantChat: self ].
 			GtLlmChatElement new assistantChatViewModel: aViewModel ];
 		actionUpdateButton
 ]
@@ -260,4 +260,9 @@ GtOpenAIAssistantChat >> summary [
 { #category : #accessing }
 GtOpenAIAssistantChat >> threadActions [
 	^ {}
+]
+
+{ #category : #accessing }
+GtOpenAIAssistantChat >> whenReadyFuture [
+	^ GtOpenAIAssistantChatReadyFuture new chat: self
 ]

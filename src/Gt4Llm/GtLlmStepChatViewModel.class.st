@@ -9,6 +9,5 @@ GtLlmStepChatViewModel >> onAssistantChatChanged [
 	super onAssistantChatChanged.
 
 	newThreadMessageViewModel := GtLlmNewStepThreadMessageViewModel new
-			threadMessage: GtLlmNewThreadMessage new;
-			chat: self assistantChat
+			threadMessage: (GtLlmNewStepThreadMessage new assistantChat: self assistantChat)
 ]

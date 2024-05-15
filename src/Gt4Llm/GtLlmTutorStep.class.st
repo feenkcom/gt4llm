@@ -13,8 +13,7 @@ Class {
 
 { #category : #accessing }
 GtLlmTutorStep >> actions [
-	^ {self buildPreviousStepButton.
-		self buildNextStepButton}
+	^ {}
 ]
 
 { #category : #accessing }

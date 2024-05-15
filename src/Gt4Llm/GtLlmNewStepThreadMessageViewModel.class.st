@@ -1,18 +1,25 @@
 Class {
 	#name : #GtLlmNewStepThreadMessageViewModel,
 	#superclass : #GtLlmNewThreadMessageViewModel,
-	#instVars : [
-		'chat'
-	],
 	#category : #'Gt4Llm-Widgets'
 }
 
 { #category : #accessing }
-GtLlmNewStepThreadMessageViewModel >> chat [
-	^ chat
+GtLlmNewStepThreadMessageViewModel >> currentStep [
+	^ threadMessage assistantChat currentStep
 ]
 
 { #category : #accessing }
-GtLlmNewStepThreadMessageViewModel >> chat: anObject [
-	chat := anObject
+GtLlmNewStepThreadMessageViewModel >> elementClass [
+	^ GtLlmNewStepThreadMessageElement
+]
+
+{ #category : #accessing }
+GtLlmNewStepThreadMessageViewModel >> sendStepChange: aName [
+	^ threadMessage sendStepChange: aName
+]
+
+{ #category : #accessing }
+GtLlmNewStepThreadMessageViewModel >> steps [
+	^ threadMessage assistantChat steps
 ]
