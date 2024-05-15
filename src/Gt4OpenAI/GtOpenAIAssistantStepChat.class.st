@@ -12,6 +12,11 @@ Class {
 }
 
 { #category : #accessing }
+GtOpenAIAssistantStepChat >> asViewModel [
+	^ GtLlmStepChatViewModel new assistantChat: self
+]
+
+{ #category : #accessing }
 GtOpenAIAssistantStepChat >> backStepMessage [
 	^ backStepMessage
 ]

@@ -9,8 +9,7 @@ Class {
 		'model',
 		'instructions',
 		'tools',
-		'fileIds',
-		'metadata'
+		'toolResources'
 	],
 	#category : #'Gt4OpenAI-Models'
 }
@@ -24,8 +23,7 @@ GtOpenAIAssistant class >> serializationProperties [
 		#model -> #model.
 		#instructions -> #instructions.
 		#tools -> #tools.
-		#file_ids -> #fileIds.
-		#metadata -> #metadata}
+		#tool_resources -> #toolResources}
 ]
 
 { #category : #accessing }
@@ -46,16 +44,6 @@ GtOpenAIAssistant >> description [
 { #category : #accessing }
 GtOpenAIAssistant >> description: anObject [
 	description := anObject
-]
-
-{ #category : #accessing }
-GtOpenAIAssistant >> fileIds [
-	^ fileIds
-]
-
-{ #category : #accessing }
-GtOpenAIAssistant >> fileIds: anObject [
-	fileIds := anObject
 ]
 
 { #category : #accessing }
@@ -89,16 +77,6 @@ GtOpenAIAssistant >> instructions: anObject [
 ]
 
 { #category : #accessing }
-GtOpenAIAssistant >> metadata [
-	^ metadata
-]
-
-{ #category : #accessing }
-GtOpenAIAssistant >> metadata: anObject [
-	metadata := anObject
-]
-
-{ #category : #accessing }
 GtOpenAIAssistant >> model [
 	^ model
 ]
@@ -124,6 +102,16 @@ GtOpenAIAssistant >> serialize [
 	serialized := super serialize.
 	serialized at: #tools put: ((serialized at: #tools) collect: #serialize).
 	^ serialized
+]
+
+{ #category : #accessing }
+GtOpenAIAssistant >> toolResources [
+	^ toolResources
+]
+
+{ #category : #accessing }
+GtOpenAIAssistant >> toolResources: anObject [
+	toolResources := anObject
 ]
 
 { #category : #accessing }

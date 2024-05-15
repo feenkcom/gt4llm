@@ -5,7 +5,9 @@ Class {
 		'id',
 		'createdAt',
 		'metadata',
-		'messages'
+		'messages',
+		'tools',
+		'toolResources'
 	],
 	#category : #'Gt4OpenAI-Models'
 }
@@ -14,7 +16,9 @@ Class {
 GtOpenAIThread class >> serializationProperties [
 	^ {#id -> #id.
 		#created_at -> #createdAt.
-		#metadata -> #metadata}
+		#metadata -> #metadata.
+		#tools -> #tools.
+		#tool_resources -> #toolResources}
 ]
 
 { #category : #accessing }
@@ -90,6 +94,26 @@ GtOpenAIThread >> sendMessage: aString [
 	aMessage := GtLlmUserMessage new content: aString.
 
 	self client addMessage: aMessage toThread: self id
+]
+
+{ #category : #accessing }
+GtOpenAIThread >> toolResources [
+	^ toolResources
+]
+
+{ #category : #accessing }
+GtOpenAIThread >> toolResources: anObject [
+	toolResources := anObject
+]
+
+{ #category : #accessing }
+GtOpenAIThread >> tools [
+	^ tools
+]
+
+{ #category : #accessing }
+GtOpenAIThread >> tools: anObject [
+	tools := anObject
 ]
 
 { #category : #accessing }

@@ -8,14 +8,14 @@ Class {
 		'createdAt',
 		'threadId',
 		'content',
-		'fileIds',
 		'assistantId',
 		'runId',
 		'metadata',
 		'role',
 		'annotations',
 		'pipeline',
-		'chat'
+		'chat',
+		'attachments'
 	],
 	#category : #'Gt4OpenAI-Models'
 }
@@ -26,12 +26,12 @@ GtOpenAIThreadMessage class >> serializationProperties [
 		#assistant_id -> #assistantId.
 		#content -> #content.
 		#created_at -> #createdAt.
-		#file_ids -> #fileIds.
 		#id -> #id.
 		#metadata -> #metadata.
 		#run_id -> #runId.
 		#thread_id -> #threadId.
-		#role -> #role
+		#role -> #role.
+		#attachments -> #attachments
 	}
 ]
 
@@ -65,6 +65,16 @@ GtOpenAIThreadMessage >> assistantId [
 { #category : #accessing }
 GtOpenAIThreadMessage >> assistantId: anObject [
 	assistantId := anObject
+]
+
+{ #category : #accessing }
+GtOpenAIThreadMessage >> attachments [
+	^ attachments
+]
+
+{ #category : #accessing }
+GtOpenAIThreadMessage >> attachments: anObject [
+	attachments := anObject
 ]
 
 { #category : #accessing }
@@ -113,16 +123,6 @@ GtOpenAIThreadMessage >> createdAt [
 { #category : #accessing }
 GtOpenAIThreadMessage >> createdAt: anObject [
 	createdAt := DateAndTime fromUnixTime: anObject
-]
-
-{ #category : #accessing }
-GtOpenAIThreadMessage >> fileIds [
-	^ fileIds
-]
-
-{ #category : #accessing }
-GtOpenAIThreadMessage >> fileIds: anObject [
-	fileIds := anObject
 ]
 
 { #category : #accessing }
