@@ -98,8 +98,11 @@ GtLlmNewThreadMessage >> parse [
 GtLlmNewThreadMessage >> sendMessage [
 	contents ifNil: [ ^ self ].
 	contents ifEmpty: [ ^ self ].
-	assistantChat sendMessage: contents.
-	self contents: '' requester: nil
+
+	(assistantChat whenReadyFuture
+		then: [ assistantChat sendMessage: contents.
+
+			self contents: '' requester: nil ]) await
 ]
 
 { #category : #subscriptions }

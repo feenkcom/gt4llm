@@ -19,7 +19,7 @@ Class {
 { #category : #accessing }
 GtOpenAIGtTutor class >> instance [
 	^ instance
-		ifNil: [ instance := self withApiKeyFromClipboard createAssistant ]
+		ifNil: [ instance := self withApiKeyFromFile createAssistant ]
 ]
 
 { #category : #accessing }
@@ -180,12 +180,12 @@ GtOpenAIGtTutor >> defaultFiles [
 
 { #category : #accessing }
 GtOpenAIGtTutor >> defaultModel [
-	^ 'gpt-4o'
+	^ 'gpt-4-turbo-preview'
 ]
 
 { #category : #accessing }
 GtOpenAIGtTutor >> defaultTools [
-	^ {GtOpenAITool new type: 'retrieval'}
+	^ {GtOpenAITool new type: 'file_search'}
 ]
 
 { #category : #accessing }

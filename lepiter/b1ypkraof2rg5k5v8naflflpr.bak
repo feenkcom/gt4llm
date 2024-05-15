@@ -825,14 +825,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-05-08T08:54:22.696131+02:00"
+						"dateAndTimeString" : "2024-05-08T08:54:26.780019+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "TjG4L6DTDQCzBkc5Ao25ug=="
 				},
-				"code" : "chat messages first codeBlocks do: [ :aCodeBlock | chat pipeline check: aCodeBlock ].\rcontextBuilder instance"
+				"code" : "chat messages first codeBlocks do: [ :aCodeBlock | chat pipeline check: aCodeBlock ].\rchat pipeline instance"
 			}
 		]
 	},
