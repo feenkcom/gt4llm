@@ -78,6 +78,11 @@ GtOpenAIAssistantStepChat >> sendStepChange: aStepName [
 ]
 
 { #category : #accessing }
+GtOpenAIAssistantStepChat >> stepChangeMessageFor: aStepName [
+	^ self selectStepMessage format: {aStepName}
+]
+
+{ #category : #accessing }
 GtOpenAIAssistantStepChat >> stepMessage [
 	^ stepMessage
 ]

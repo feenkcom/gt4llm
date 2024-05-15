@@ -7,7 +7,8 @@ Class {
 		'contentsElement',
 		'sendButton',
 		'toolbar',
-		'toggleGroup'
+		'toggleGroup',
+		'stepPreviewElement'
 	],
 	#category : #'Gt4Llm-Widgets'
 }
@@ -50,9 +51,11 @@ GtLlmNewStepThreadMessageElement >> initialize [
 	super initialize.
 
 	self initializeToggleGroup.
+	self initializeStepPreviewElement.
 	self initializeContentsElement.
 	self initializeToolbar.
 	self addChild: toggleGroup as: #toggle.
+	self addChild: stepPreviewElement as: #stepPreview.
 	self addChild: contentsElement as: #contents.
 	self addChild: toolbar as: #toolbar.
 
@@ -81,12 +84,31 @@ GtLlmNewStepThreadMessageElement >> initializeContentsElement [
 ]
 
 { #category : #'initialization ' }
+GtLlmNewStepThreadMessageElement >> initializeStepPreviewElement [
+	stepPreviewElement := BrEditor new beReadOnlyWithSelection hFitContent
+			aptitude: BrGlamorousRegularEditorAptitude;
+			visibility: BlVisibility gone;
+			border: (BlBorder paint: BrGlamorousColors defaultButtonBorderColor width: 1);
+			geometry: (BlRoundedRectangleGeometry
+					cornerRadii: (BlCornerRadii new
+							topLeft: 0;
+							topRight: 0;
+							bottomLeft: 5;
+							bottomRight: 5));
+			margin: (BlInsets
+					top: -1
+					bottom: 3
+					left: 10
+					right: 8)
+]
+
+{ #category : #'initialization ' }
 GtLlmNewStepThreadMessageElement >> initializeToggleGroup [
 	toggleGroup := BrToggleGroup new
 			aptitude: BrGlamorousToggleGroupAptitude new;
 			margin: (BlInsets
 					top: 3
-					bottom: 3
+					bottom: 0
 					left: 8
 					right: 8)
 ]
@@ -118,6 +140,17 @@ GtLlmNewStepThreadMessageElement >> onThreadMessageViewModelChanged [
 { #category : #'private - announcement handling' }
 GtLlmNewStepThreadMessageElement >> onThreadMessageViewModelChanged: anAnnouncement [
 	self enqueueTask: (BlTaskAction new action: [ self updateElement ])
+]
+
+{ #category : #'private - updating' }
+GtLlmNewStepThreadMessageElement >> onToggleActivated: anEvent [
+	| stepName |
+	stepName := anEvent toggle widget label.
+	stepName = self threadMessageViewModel currentStep name
+		ifTrue: [ stepPreviewElement visibility: BlVisibility gone ]
+		ifFalse: [ stepPreviewElement
+				visibility: BlVisibility visible;
+				text: (self threadMessageViewModel stepChangeMessageFor: stepName) ]
 ]
 
 { #category : #'private - actions' }
@@ -180,7 +213,12 @@ GtLlmNewStepThreadMessageElement >> updateToggleGroup [
 					aptitude: BrGlamorousToggleWithLabelAptitude new;
 					label: aStep name.
 			aStep = self threadMessageViewModel currentStep
-				ifTrue: [ toggleElement activate ].
+				ifTrue: [ toggleElement activate
+						aptitude: BrGlamorousToggleWithIconAndLabelAptitude new;
+						icon: BrGlamorousVectorIcons accept ].
+			toggleElement
+				when: BrToggleActivatedEvent
+				do: [ :anEvent | self onToggleActivated: anEvent ].
 			toggleGroup addToggle: toggleElement ]
 ]
 

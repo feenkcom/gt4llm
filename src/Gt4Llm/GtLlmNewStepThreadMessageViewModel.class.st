@@ -20,6 +20,11 @@ GtLlmNewStepThreadMessageViewModel >> sendStepChange: aName [
 ]
 
 { #category : #accessing }
+GtLlmNewStepThreadMessageViewModel >> stepChangeMessageFor: aName [
+	^ threadMessage stepChangeMessageFor: aName
+]
+
+{ #category : #accessing }
 GtLlmNewStepThreadMessageViewModel >> steps [
 	^ threadMessage assistantChat steps
 ]
