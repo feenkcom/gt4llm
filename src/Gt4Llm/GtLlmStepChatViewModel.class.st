@@ -5,9 +5,7 @@ Class {
 }
 
 { #category : #accessing }
-GtLlmStepChatViewModel >> onAssistantChatChanged [
-	super onAssistantChatChanged.
-
-	newThreadMessageViewModel := GtLlmNewStepThreadMessageViewModel new
-			threadMessage: (GtLlmNewStepThreadMessage new assistantChat: self assistantChat)
+GtLlmStepChatViewModel >> newThreadMessageViewModel [
+	^ GtLlmNewStepThreadMessageViewModel new
+		threadMessage: (GtLlmNewStepThreadMessage new assistantChat: self assistantChat)
 ]
