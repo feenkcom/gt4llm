@@ -19,6 +19,11 @@ GtLlmChatViewModel >> initialize [
 ]
 
 { #category : #accessing }
+GtLlmChatViewModel >> newThreadMessageViewModel [
+	^ newThreadMessageViewModel
+]
+
+{ #category : #accessing }
 GtLlmChatViewModel >> newThreadMessageViewModelFor: aMessage [
 	| aViewModel |
 	aViewModel := GtLlmThreadMessageViewModel new threadMessage: aMessage.
@@ -78,5 +83,5 @@ GtLlmChatViewModel >> threadMessageViewModels [
 									newThreadMessageViewModelFor: (GtLlmProvisionalThreadMessage new createdAt: aStatus createdAt).
 							aStream nextPut: aViewModel ] ].
 
-			aStream nextPut: newThreadMessageViewModel ]
+			aStream nextPut: self newThreadMessageViewModel ]
 ]
