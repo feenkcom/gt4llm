@@ -48,7 +48,7 @@ GtOpenAIAssistantStepChat >> maybeStep: anAnnouncement [
 			text = self backStepMessage ifTrue: [ stepIndex := stepIndex - 1 ].
 			(selectStepRegex matches: text)
 				ifTrue: [ | stepName |
-					stepName := self selectStepMessage subexpression: 2.
+					stepName := selectStepRegex subexpression: 2.
 					stepIndex := self steps detectIndex: [ :aStep | aStep name = stepName ] ] ].
 
 	^ stepIndex

@@ -89,6 +89,23 @@ GtOpenAIAssistantChat >> gtInspectInstanceFor: anAction [
 ]
 
 { #category : #accessing }
+GtOpenAIAssistantChat >> gtInstanceChatWidgetFor: aView [
+	"cannot be a forward because the update wouldn’t work"
+
+	<gtView>
+	| aViewModel |
+	^ aView explicit
+		title: 'Instance chat';
+		priority: 0;
+		stencil: [ aViewModel
+				ifNil: [ aViewModel := GtLlmStepChatViewModel new assistantChat: self ].
+			BrVerticalPane new matchParent
+				addChild: (self gtInstanceFor: GtPhlowEmptyView new) asElement;
+				addChild: (GtLlmChatElement new assistantChatViewModel: aViewModel) ];
+		actionUpdateButton
+]
+
+{ #category : #accessing }
 GtOpenAIAssistantChat >> gtInstanceFor: aView [
 	<gtView>
 	^ aView forward
