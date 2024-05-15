@@ -145,7 +145,7 @@ GtLlmNewStepThreadMessageElement >> onThreadMessageViewModelChanged: anAnnouncem
 { #category : #'private - updating' }
 GtLlmNewStepThreadMessageElement >> onToggleActivated: anEvent [
 	| stepName |
-	stepName := anEvent toggle widget label.
+	stepName := anEvent toggle widget label asString.
 	stepName = self threadMessageViewModel currentStep name
 		ifTrue: [ stepPreviewElement visibility: BlVisibility gone ]
 		ifFalse: [ stepPreviewElement
