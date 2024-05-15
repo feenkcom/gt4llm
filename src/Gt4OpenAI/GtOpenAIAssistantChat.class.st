@@ -32,6 +32,11 @@ GtOpenAIAssistantChat >> announcer [
 ]
 
 { #category : #accessing }
+GtOpenAIAssistantChat >> asViewModel [
+	^ GtLlmChatViewModel new assistantChat: self
+]
+
+{ #category : #accessing }
 GtOpenAIAssistantChat >> assistant [
 	^ assistant
 ]
@@ -98,7 +103,7 @@ GtOpenAIAssistantChat >> gtInstanceChatWidgetFor: aView [
 		title: 'Instance chat';
 		priority: 0;
 		stencil: [ aViewModel
-				ifNil: [ aViewModel := GtLlmStepChatViewModel new assistantChat: self ].
+				ifNil: [ aViewModel := self asViewModel ].
 			BrVerticalPane new matchParent
 				addChild: (self gtInstanceFor: GtPhlowEmptyView new) asElement;
 				addChild: (GtLlmChatElement new assistantChatViewModel: aViewModel) ];
@@ -138,7 +143,7 @@ GtOpenAIAssistantChat >> gtMessagesWidgetFor: aView [
 		title: 'Messages';
 		priority: 0;
 		stencil: [ aViewModel
-				ifNil: [ aViewModel := GtLlmStepChatViewModel new assistantChat: self ].
+				ifNil: [ aViewModel := self asViewModel ].
 			GtLlmChatElement new assistantChatViewModel: aViewModel ];
 		actionUpdateButton
 ]
