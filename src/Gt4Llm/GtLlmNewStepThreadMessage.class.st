@@ -13,3 +13,8 @@ GtLlmNewStepThreadMessage >> assistantChat [
 GtLlmNewStepThreadMessage >> sendStepChange: aStepName [
 	assistantChat sendStepChange: aStepName
 ]
+
+{ #category : #accessing }
+GtLlmNewStepThreadMessage >> stepChangeMessageFor: aStepName [
+	^ assistantChat stepChangeMessageFor: aStepName
+]
