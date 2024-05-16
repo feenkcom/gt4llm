@@ -35,8 +35,15 @@ GtLlmInstanceChatElement >> initialize [
 	self initializeChatElement.
 	self initializeResizerElement.
 
+	self addChild: (self makeLabel: 'Instance') as: #'instance-label'.
 	self addChild: instanceElement as: #instance.
-	self addChild: (chatElement addChild: resizerElement as: #resizer) as: #chat
+	self
+		addChild: (chatElement
+				addChild: (self makeLabel: 'Chat')
+					at: 1
+					as: #'chat-label';
+				addChild: resizerElement as: #resizer)
+		as: #chat
 ]
 
 { #category : #accessing }
@@ -59,6 +66,16 @@ GtLlmInstanceChatElement >> initializeResizerElement [
 			constraintsDo: [ :c | c ignoreByLayout ];
 			beTop;
 			target: chatElement
+]
+
+{ #category : #accessing }
+GtLlmInstanceChatElement >> makeLabel: aString [
+	^ BrLabel new
+		aptitude: (BrGlamorousLabelAptitude new glamorousRegularFontAndSize
+				foreground: Color gray;
+				fontSize: 12);
+		text: aString;
+		padding: (BlInsets left: 5)
 ]
 
 { #category : #accessing }
