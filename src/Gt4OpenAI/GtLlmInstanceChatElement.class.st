@@ -35,7 +35,9 @@ GtLlmInstanceChatElement >> initialize [
 	self initializeChatElement.
 	self initializeResizerElement.
 
-	self addChild: (self makeLabel: 'Instance') as: #'instance-label'.
+	self
+		addChild: ((self makeLabel: 'Instance') padding: (BlInsets left: 5))
+		as: #'instance-label'.
 	self addChild: instanceElement as: #instance.
 	self
 		addChild: (chatElement
@@ -74,8 +76,7 @@ GtLlmInstanceChatElement >> makeLabel: aString [
 		aptitude: (BrGlamorousLabelAptitude new glamorousRegularFontAndSize
 				foreground: Color gray;
 				fontSize: 12);
-		text: aString;
-		padding: (BlInsets left: 5)
+		text: aString
 ]
 
 { #category : #accessing }
