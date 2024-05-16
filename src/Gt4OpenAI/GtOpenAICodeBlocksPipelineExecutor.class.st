@@ -21,7 +21,10 @@ GtOpenAICodeBlocksPipelineExecutor >> check [
 
 { #category : #accessing }
 GtOpenAICodeBlocksPipelineExecutor >> check: aString [
-	^ (pipeline check: aString) threadMessage: self threadMessage
+	| result |
+	result := (pipeline check: aString) threadMessage: self threadMessage.
+	self threadMessage announce: (GtLlmExecutionAnnouncement new result: result).
+	^ result
 ]
 
 { #category : #accessing }
