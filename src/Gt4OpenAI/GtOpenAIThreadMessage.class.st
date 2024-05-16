@@ -46,6 +46,11 @@ GtOpenAIThreadMessage >> annotations [
 ]
 
 { #category : #accessing }
+GtOpenAIThreadMessage >> announce: anAnnouncement [
+	chat announce: anAnnouncement
+]
+
+{ #category : #accessing }
 GtOpenAIThreadMessage >> asChatMessage [
 	^ GtLlmChatMessage
 		from: {'role' -> self role.

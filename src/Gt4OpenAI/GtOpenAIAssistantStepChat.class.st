@@ -43,7 +43,7 @@ GtOpenAIAssistantStepChat >> initialize [
 GtOpenAIAssistantStepChat >> maybeStep: anAnnouncement [
 	| selectStepRegex |
 	stepIndex := 1.
-	selectStepRegex := (self selectStepMessage format: {'.+'}) asRegex.
+	selectStepRegex := (self selectStepMessage format: {'(.+)'}) asRegex.
 
 	self messages reversed
 		do: [ :aMessage | 
@@ -78,8 +78,11 @@ GtOpenAIAssistantStepChat >> selectStepMessage: anObject [
 
 { #category : #accessing }
 GtOpenAIAssistantStepChat >> sendStepChange: aStepName [
-	self halt.
-	self sendMessage: (self selectStepMessage format: {aStepName})
+	| aMessage |
+	aMessage := GtLlmUserMessage new
+			content: (self selectStepMessage format: {aStepName}).
+
+	assistant client addMessage: aMessage toThread: thread id
 ]
 
 { #category : #accessing }
