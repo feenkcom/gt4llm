@@ -21,6 +21,22 @@ GtLlmWardleyMapCreator >> connectNode: aName to: anotherName [
 ]
 
 { #category : #accessing }
+GtLlmWardleyMapCreator >> gtListNodesFor: aView [
+	<gtView>
+	^ aView columnedList
+		title: 'Nodes list';
+		priority: 3;
+		items: [ nodes values ];
+		column: 'Name' text: [ :aDict | aDict at: 'name' ];
+		column: 'X'
+			text: [ :aDict | aDict at: 'x' ]
+			width: 50;
+		column: 'Y'
+			text: [ :aDict | aDict at: 'y' ]
+			width: 50
+]
+
+{ #category : #accessing }
 GtLlmWardleyMapCreator >> gtLiveFor: aView [
 	<gtView>
 	^ aView explicit
