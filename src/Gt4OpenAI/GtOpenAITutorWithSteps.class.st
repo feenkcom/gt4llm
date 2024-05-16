@@ -104,7 +104,10 @@ GtOpenAITutorWithSteps >> initialize [
 	super initialize.
 	 
 	steps := GtOpenAIStepsGroup new.
-	files := GtOpenAIResourceFilesGroup new
+	files := GtOpenAIResourceFilesGroup new.
+	stepMessage := 'Let''s move on to the next step!'.
+	backStepMessage := 'Let''s go back to the previous step!'.
+	selectStepMessage := 'Let''s go to step `{1}`.'.
 ]
 
 { #category : #accessing }

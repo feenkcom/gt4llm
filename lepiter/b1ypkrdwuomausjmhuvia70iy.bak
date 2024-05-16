@@ -566,7 +566,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-05-16T13:59:47.541861+02:00"
+						"dateAndTimeString" : "2024-05-16T14:11:29.523505+02:00"
 					}
 				},
 				"uid" : {
@@ -576,7 +576,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "This tutor is also available "
+				"string" : "This tutor is also available as a dedicated class in {{gtClass:GtOpenAIWardleyMapTutor}}."
 			}
 		]
 	},
