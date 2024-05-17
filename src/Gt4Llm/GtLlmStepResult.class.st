@@ -39,6 +39,11 @@ GtLlmStepResult >> backgroundColor [
 ]
 
 { #category : #accessing }
+GtLlmStepResult >> chat [
+	^ self checker chat
+]
+
+{ #category : #accessing }
 GtLlmStepResult >> checker [
 	^ checker
 ]

@@ -2,7 +2,8 @@ Class {
 	#name : #GtLlmCodeStep,
 	#superclass : #Object,
 	#instVars : [
-		'instance'
+		'instance',
+		'chat'
 	],
 	#category : #'Gt4Llm-Code'
 }
@@ -15,6 +16,16 @@ GtLlmCodeStep class >> stepName [
 { #category : #accessing }
 GtLlmCodeStep >> asNotExecuted [
 	^ (GtLlmStepNotExecuted new checker: self)
+]
+
+{ #category : #accessing }
+GtLlmCodeStep >> chat [
+	^ chat
+]
+
+{ #category : #accessing }
+GtLlmCodeStep >> chat: anObject [
+	chat := anObject
 ]
 
 { #category : #accessing }
