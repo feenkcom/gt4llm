@@ -11,7 +11,7 @@ Class {
 GtOpenAIEmbedding class >> from: anArray [
 	^ self new
 		rawData: anArray;
-		embedding: (anArray collect: [ :aNumber | aNumber ] as: FloatArray)
+		embedding: (anArray collect: [ :aNumber | aNumber ] as: Float64Array)
 ]
 
 { #category : #accessing }
