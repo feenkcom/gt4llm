@@ -232,7 +232,8 @@ GtOpenAIAssistantChat >> pipeline [
 
 { #category : #accessing }
 GtOpenAIAssistantChat >> pipeline: aPipeline [
-	pipeline := aPipeline
+	pipeline := aPipeline.
+	pipeline chat: self
 ]
 
 { #category : #accessing }

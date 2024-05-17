@@ -43,7 +43,8 @@ GtLlmChat >> context [
 
 { #category : #accessing }
 GtLlmChat >> context: anObject [
-	context := anObject
+	context := anObject.
+	context chat: self
 ]
 
 { #category : #accessing }

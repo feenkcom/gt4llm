@@ -5,7 +5,8 @@ Class {
 		'checker',
 		'instance',
 		'hasInstance',
-		'isImmutableInstance'
+		'isImmutableInstance',
+		'chat'
 	],
 	#category : #'Gt4Llm-Context'
 }
@@ -33,10 +34,21 @@ GtLlmContext class >> defaultPipeline [
 ]
 
 { #category : #accessing }
+GtLlmContext >> chat [
+	^ chat
+]
+
+{ #category : #accessing }
+GtLlmContext >> chat: anObject [
+	chat := anObject
+]
+
+{ #category : #accessing }
 GtLlmContext >> check: aString [
 	| result |
 	result := self checker
 			instance: self instance;
+			chat: self chat;
 			runOn: aString.
 
 	(self hasInstance not
