@@ -14,10 +14,9 @@ GtLlmSmalltalkParserCodeStep >> runStep: aContext [
 	[ aContext
 		addResult: (GtLlmStepSuccess new
 				checker: self;
-				content: (OpalCompiler new
-						source: aContext lastResult code source;
-						receiver: self;
-						parseDoIt)) ]
+				content: (GtPharoParser
+						parseWithErrors: aContext lastResult code source
+						startingAt: GtPharoParser startingStateForMethodSequence)) ]
 		on: Exception
 		do: [ :anError | 
 			aContext

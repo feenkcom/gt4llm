@@ -487,7 +487,8 @@ GtLlmMessageStyler >> visitClassAnnotation: aClassAnnotation [
 
 { #category : #generated }
 GtLlmMessageStyler >> visitCodeBlock: aCodeNode [
-	(aCodeNode isForSmalltalk or: [ aCodeNode isForLanguage: 'smalltalk-method' ])
+	(aCodeNode language isNotNil
+		and: [ aCodeNode isForSmalltalk or: [ aCodeNode isForLanguage: 'smalltalk-method' ] ])
 		ifTrue: [ self styleSmalltalkCodeBlock: aCodeNode ].
 	(self text from: aCodeNode startPosition to: aCodeNode stopPosition)
 		glamorousCodeFont.
