@@ -60,6 +60,12 @@ GtOpenAIAssistantStepChat >> maybeStep: anAnnouncement [
 ]
 
 { #category : #accessing }
+GtOpenAIAssistantStepChat >> messages [
+	^ super messages
+		collectWithIndex: [ :aMessage :anIndex | aMessage step: (self stepAtIndex: anIndex) ]
+]
+
+{ #category : #accessing }
 GtOpenAIAssistantStepChat >> pipeline [
 	^ GtLlmContext new
 		instance: pipeline instance;
@@ -83,6 +89,26 @@ GtOpenAIAssistantStepChat >> sendStepChange: aStepName [
 			content: (self selectStepMessage format: {aStepName}).
 
 	assistant client addMessage: aMessage toThread: thread id
+]
+
+{ #category : #accessing }
+GtOpenAIAssistantStepChat >> stepAtIndex: anIndex [
+	| selectStepRegex |
+	stepIndex := 1.
+	selectStepRegex := (self selectStepMessage format: {'(.+)'}) asRegex.
+
+	(self messages reversed first: anIndex)
+		do: [ :aMessage | 
+			| text |
+			text := aMessage contentText trim.
+			text = self stepMessage ifTrue: [ stepIndex := stepIndex + 1 ].
+			text = self backStepMessage ifTrue: [ stepIndex := stepIndex - 1 ].
+			(selectStepRegex matches: text)
+				ifTrue: [ | stepName |
+					stepName := selectStepRegex subexpression: 2.
+					stepIndex := self steps detectIndex: [ :aStep | aStep name = stepName ] ] ].
+
+	^ self steps at: stepIndex
 ]
 
 { #category : #accessing }

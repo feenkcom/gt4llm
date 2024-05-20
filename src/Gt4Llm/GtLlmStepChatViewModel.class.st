@@ -9,3 +9,16 @@ GtLlmStepChatViewModel >> newThreadMessageViewModel [
 	^ GtLlmNewStepThreadMessageViewModel new
 		threadMessage: (GtLlmNewStepThreadMessage new assistantChat: self assistantChat)
 ]
+
+{ #category : #accessing }
+GtLlmStepChatViewModel >> newThreadMessageViewModelFor: aMessage [
+	| aViewModel |
+	aViewModel := GtLlmStepThreadMessageViewModel new threadMessage: aMessage.
+
+	aViewModel weak
+		when: GtLlmAddMessageContentsRequest
+		send: #onAddMessageContents:
+		to: self.
+
+	^ aViewModel
+]

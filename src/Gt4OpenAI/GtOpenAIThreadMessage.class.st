@@ -15,7 +15,8 @@ Class {
 		'annotations',
 		'pipeline',
 		'chat',
-		'attachments'
+		'attachments',
+		'step'
 	],
 	#category : #'Gt4OpenAI-Models'
 }
@@ -250,6 +251,16 @@ GtOpenAIThreadMessage >> runId [
 { #category : #accessing }
 GtOpenAIThreadMessage >> runId: anObject [
 	runId := anObject
+]
+
+{ #category : #accessing }
+GtOpenAIThreadMessage >> step [
+	^ step
+]
+
+{ #category : #accessing }
+GtOpenAIThreadMessage >> step: anObject [
+	step := anObject
 ]
 
 { #category : #accessing }
