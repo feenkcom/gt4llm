@@ -6,7 +6,8 @@ Class {
 		'description',
 		'rules',
 		'pipeline',
-		'chat'
+		'chat',
+		'elementClass'
 	],
 	#category : #'Gt4Llm-Examples'
 }
@@ -69,6 +70,11 @@ GtLlmTutorStep >> chat: anObject [
 ]
 
 { #category : #accessing }
+GtLlmTutorStep >> defaultElementClass [
+	^ GtLlmExpandableThreadMessageElement
+]
+
+{ #category : #accessing }
 GtLlmTutorStep >> description [
 	^ description
 ]
@@ -76,6 +82,16 @@ GtLlmTutorStep >> description [
 { #category : #accessing }
 GtLlmTutorStep >> description: anObject [
 	description := anObject
+]
+
+{ #category : #accessing }
+GtLlmTutorStep >> elementClass [
+	^ elementClass
+]
+
+{ #category : #accessing }
+GtLlmTutorStep >> elementClass: anObject [
+	elementClass := anObject
 ]
 
 { #category : #accessing }
@@ -120,6 +136,13 @@ GtLlmTutorStep >> gtSummaryFor: aView [
 		column: 'Value' text: #value;
 		send: #value;
 		actionUpdateButton
+]
+
+{ #category : #accessing }
+GtLlmTutorStep >> initialize [
+	super initialize.
+	
+	elementClass := self defaultElementClass
 ]
 
 { #category : #accessing }
