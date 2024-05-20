@@ -18,7 +18,7 @@ Class {
 GtLlmChat >> addMessage: aMessage [
 	self updateLastUpdated.
 	self announcer announce: (GtOpenAIThreadRunIsDoneAnnouncement new run: self).
-	messages add: (aMessage chat: self)
+	messages addFirst: (aMessage chat: self)
 ]
 
 { #category : #accessing }
@@ -49,12 +49,19 @@ GtLlmChat >> context: anObject [
 
 { #category : #accessing }
 GtLlmChat >> gtMessagesFor: aView [
+	"cannot be a forward because the update wouldn’t work"
+
 	<gtView>
-	^ aView forward
+	^ aView columnedList
 		title: 'Messages';
 		priority: 1;
-		object: [ self messages ];
-		view: #gtMessagesFor:
+		items: [ self messages reversed ];
+		column: 'Role'
+			text: #role
+			width: 100;
+		column: 'Message' text: #content;
+		updateWhen: GtOpenAIThreadRunAnnouncement in: self announcer;
+		actionUpdateButton
 ]
 
 { #category : #accessing }
@@ -152,4 +159,9 @@ GtLlmChat >> threadActions [
 { #category : #accessing }
 GtLlmChat >> updateLastUpdated [
 	lastUpdated := DateAndTime now
+]
+
+{ #category : #accessing }
+GtLlmChat >> whenReadyFuture [
+	^ GtLlmChatReadyFuture new chat: self
 ]

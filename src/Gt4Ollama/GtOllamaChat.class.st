@@ -20,16 +20,11 @@ GtOllamaChat >> initializeMessages [
 ]
 
 { #category : #accessing }
-GtOllamaChat >> messages [
-	^ messages reversed
-]
-
-{ #category : #accessing }
 GtOllamaChat >> sendMessage: aMessage [
 	| result |
-	messages add: (GtLlmUserMessage new content: aMessage).
+	messages addFirst: (GtLlmUserMessage new content: aMessage).
 
-	result := client completeChatWithModel: self model andMessages: messages.
+	result := client completeChatWithModel: self model andMessages: messages reversed.
 
 	self addMessage: result asLlmMessage
 ]
