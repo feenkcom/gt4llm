@@ -252,6 +252,18 @@ GtLlmMessageStyler >> styleAutoHidingAnnotation: anAnnotation [
 ]
 
 { #category : #accessing }
+GtLlmMessageStyler >> styleBold: aBoldNode [
+	(self text from: aBoldNode startPosition to: aBoldNode stopPosition)
+		attributes: {BlFontWeightAttribute bold}.
+	self
+		styleAutoHiding:
+			(aBoldNode leftStars first startPosition to: aBoldNode leftStars last stopPosition)
+		and:
+			(aBoldNode rightStars first startPosition to: aBoldNode rightStars last stopPosition)
+		whenOutside: aBoldNode sourceInterval
+]
+
+{ #category : #accessing }
 GtLlmMessageStyler >> styleButton: anAnnotation for: object defaultLabel: aLabelBlock withTool: aBlock [
 	"Style the buttons for gtClass and gtMethod annotations"
 
@@ -406,6 +418,19 @@ GtLlmMessageStyler >> styleHeader: aHeaderNode [
 ]
 
 { #category : #accessing }
+GtLlmMessageStyler >> styleItalic: anItalicNode [
+	(self text
+		from: anItalicNode startPosition
+		to: anItalicNode stopPosition)
+			italic.
+
+	self
+		styleAutoHiding: anItalicNode leftStar sourceInterval
+		and: anItalicNode rightStar sourceInterval
+		whenOutside: anItalicNode sourceInterval
+]
+
+{ #category : #accessing }
 GtLlmMessageStyler >> styleName: aClassAnnotation spawning: aBlock [
 	| nameNode aLinkColor |
 
@@ -470,6 +495,12 @@ GtLlmMessageStyler >> visitAnnotation: anAnnotation [
 ]
 
 { #category : #accessing }
+GtLlmMessageStyler >> visitBold: aBoldNode [
+	self styleBold: aBoldNode.
+	^ self visitContent: aBoldNode
+]
+
+{ #category : #accessing }
 GtLlmMessageStyler >> visitClassAnnotation: aClassAnnotation [
 	self visitAnnotation: aClassAnnotation.
 	self
@@ -515,6 +546,12 @@ GtLlmMessageStyler >> visitInlineCode: aCodeNode [
 		and: (aCodeNode stopPosition - size + 1 to: aCodeNode stopPosition)
 		whenOutside: aCodeNode sourceInterval.
 	^ self visitContent: aCodeNode
+]
+
+{ #category : #accessing }
+GtLlmMessageStyler >> visitItalic: anItalicNode [
+	self styleItalic: anItalicNode.
+	^ self visitContent: anItalicNode
 ]
 
 { #category : #accessing }
