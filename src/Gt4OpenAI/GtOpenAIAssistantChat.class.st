@@ -282,5 +282,5 @@ GtOpenAIAssistantChat >> threadActions [
 
 { #category : #accessing }
 GtOpenAIAssistantChat >> whenReadyFuture [
-	^ GtOpenAIAssistantChatReadyFuture new chat: self
+	^ GtLlmChatReadyFuture new chat: self
 ]

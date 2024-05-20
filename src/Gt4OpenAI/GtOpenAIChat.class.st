@@ -54,7 +54,7 @@ GtOpenAIChat >> sendMessage: aMessage [
 	output := aMessage.
 	output size > self maximumMessageSize
 		ifTrue: [ output := output first: self maximumMessageSize ].
-	messages add: (GtLlmUserMessage new content: output).
+	messages addFirst: (GtLlmUserMessage new content: output).
 
 	result := client completeChatWithModel: self model andMessages: messages.
 

@@ -1,5 +1,5 @@
 Class {
-	#name : #GtOpenAIAssistantChatReadyFuture,
+	#name : #GtLlmChatReadyFuture,
 	#superclass : #Object,
 	#traits : 'TAsyncFuture',
 	#classTraits : 'TAsyncFuture classTrait',
@@ -7,43 +7,43 @@ Class {
 		'chat',
 		'delay'
 	],
-	#category : #'Gt4OpenAI-Futures'
+	#category : #'Gt4Llm-Futures'
 }
 
 { #category : #accessing }
-GtOpenAIAssistantChatReadyFuture >> chat [
+GtLlmChatReadyFuture >> chat [
 	^ chat
 ]
 
 { #category : #accessing }
-GtOpenAIAssistantChatReadyFuture >> chat: anObject [
+GtLlmChatReadyFuture >> chat: anObject [
 	chat := anObject
 ]
 
 { #category : #accessing }
-GtOpenAIAssistantChatReadyFuture >> defaultDelay [
+GtLlmChatReadyFuture >> defaultDelay [
 	^ 100 milliseconds
 ]
 
 { #category : #accessing }
-GtOpenAIAssistantChatReadyFuture >> delay [
+GtLlmChatReadyFuture >> delay [
 	^ delay
 ]
 
 { #category : #accessing }
-GtOpenAIAssistantChatReadyFuture >> delay: anObject [
+GtLlmChatReadyFuture >> delay: anObject [
 	delay := anObject
 ]
 
 { #category : #accessing }
-GtOpenAIAssistantChatReadyFuture >> initialize [
+GtLlmChatReadyFuture >> initialize [
 	super initialize.
 	
 	delay := self defaultDelay
 ]
 
 { #category : #accessing }
-GtOpenAIAssistantChatReadyFuture >> poll: aContext [
+GtLlmChatReadyFuture >> poll: aContext [
 	| status |
 	status := chat status.
 
