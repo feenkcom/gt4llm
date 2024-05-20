@@ -16,9 +16,9 @@ Class {
 
 { #category : #accessing }
 GtLlmChat >> addMessage: aMessage [
-	self updateLastUpdated.
-	self announcer announce: (GtOpenAIThreadRunIsDoneAnnouncement new run: self).
-	messages addFirst: (aMessage chat: self)
+	self updateLastUpdated..
+	messages addFirst: (aMessage chat: self).
+	self announcer announce: (GtOpenAIThreadRunIsDoneAnnouncement new run: self)
 ]
 
 { #category : #accessing }

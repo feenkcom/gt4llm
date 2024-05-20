@@ -22,11 +22,16 @@ GtOllamaChat >> initializeMessages [
 { #category : #accessing }
 GtOllamaChat >> sendMessage: aMessage [
 	| result |
-	messages addFirst: (GtLlmUserMessage new content: aMessage).
+	messages
+		addFirst: (GtLlmUserMessage new
+				content: aMessage;
+				chat: self).
 
-	result := client completeChatWithModel: self model andMessages: messages reversed.
+	result := client
+			completeChatWithModel: self model
+			andMessages: messages reversed.
 
-	self addMessage: result asLlmMessage
+	self addMessage: (result asLlmMessage chat: self)
 ]
 
 { #category : #accessing }
