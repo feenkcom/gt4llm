@@ -41,6 +41,11 @@ GtLlmProvisionalThreadMessage >> hasResponse [
 ]
 
 { #category : #accessing }
+GtLlmProvisionalThreadMessage >> hasStep [
+	^ false
+]
+
+{ #category : #accessing }
 GtLlmProvisionalThreadMessage >> id [
 	^ 'c0801abb-21ce-0d00-a535-33e802e477be'
 ]

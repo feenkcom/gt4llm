@@ -6,5 +6,12 @@ Class {
 
 { #category : #accessing }
 GtLlmStepThreadMessageViewModel >> elementClass [
-	^ self threadMessage step elementClass
+	^ self threadMessage hasStep
+		ifTrue: [ self threadMessage step elementClass ]
+		ifFalse: [ self threadMessage elementClass ]
+]
+
+{ #category : #accessing }
+GtLlmStepThreadMessageViewModel >> step [
+	^ self threadMessage step
 ]
