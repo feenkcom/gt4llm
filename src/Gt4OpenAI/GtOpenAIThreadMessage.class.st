@@ -184,6 +184,11 @@ GtOpenAIThreadMessage >> hasResponse [
 ]
 
 { #category : #accessing }
+GtOpenAIThreadMessage >> hasStep [
+	^ self step isNotNil
+]
+
+{ #category : #accessing }
 GtOpenAIThreadMessage >> id [
 	^ id
 ]

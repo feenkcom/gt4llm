@@ -61,8 +61,32 @@ GtOpenAIAssistantStepChat >> maybeStep: anAnnouncement [
 
 { #category : #accessing }
 GtOpenAIAssistantStepChat >> messages [
-	^ super messages
-		collectWithIndex: [ :aMessage :anIndex | aMessage step: (self stepAtIndex: anIndex) ]
+	<return: #GtOpenAIThreadMessagesGroup>
+	| givenMessages messageStepIndex selectStepRegex |
+	"in this step, we also need to calculate the current step of each message"
+	messageStepIndex := 1.
+	givenMessages := thread updateMessages.
+	selectStepRegex := (self selectStepMessage format: {'(.+)'}) asRegex.
+
+	givenMessages reversed
+		do: [ :aMessage | 
+			| text |
+			"first, calculate the index"
+			text := aMessage contentText trim.
+			text = self stepMessage ifTrue: [ messageStepIndex := messageStepIndex + 1 ].
+			text = self backStepMessage
+				ifTrue: [ messageStepIndex := messageStepIndex - 1 ].
+			(selectStepRegex matches: text)
+				ifTrue: [ | stepName |
+					stepName := selectStepRegex subexpression: 2.
+					messageStepIndex := self steps
+							detectIndex: [ :aStep | aStep name = stepName ] ].	"then build the message"
+			aMessage
+				pipeline: self pipeline;
+				chat: self;
+				step: (steps at: messageStepIndex) ].
+
+	^ givenMessages
 ]
 
 { #category : #accessing }
@@ -89,26 +113,6 @@ GtOpenAIAssistantStepChat >> sendStepChange: aStepName [
 			content: (self selectStepMessage format: {aStepName}).
 
 	assistant client addMessage: aMessage toThread: thread id
-]
-
-{ #category : #accessing }
-GtOpenAIAssistantStepChat >> stepAtIndex: anIndex [
-	| selectStepRegex |
-	stepIndex := 1.
-	selectStepRegex := (self selectStepMessage format: {'(.+)'}) asRegex.
-
-	(super messages reversed first: anIndex)
-		do: [ :aMessage | 
-			| text |
-			text := aMessage contentText trim.
-			text = self stepMessage ifTrue: [ stepIndex := stepIndex + 1 ].
-			text = self backStepMessage ifTrue: [ stepIndex := stepIndex - 1 ].
-			(selectStepRegex matches: text)
-				ifTrue: [ | stepName |
-					stepName := selectStepRegex subexpression: 2.
-					stepIndex := self steps detectIndex: [ :aStep | aStep name = stepName ] ] ].
-
-	^ self steps at: stepIndex
 ]
 
 { #category : #accessing }

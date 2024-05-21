@@ -219,7 +219,8 @@ GtLlmNewStepThreadMessageElement >> updateToggleGroup [
 			toggleElement
 				when: BrToggleActivatedEvent
 				do: [ :anEvent | self onToggleActivated: anEvent ].
-			toggleGroup addToggle: toggleElement ]
+			toggleGroup addToggle: toggleElement ].
+	stepPreviewElement visibility: BlVisibility gone
 ]
 
 { #category : #'private - updating' }
