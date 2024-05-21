@@ -97,7 +97,7 @@ GtOpenAIAssistantStepChat >> stepAtIndex: anIndex [
 	stepIndex := 1.
 	selectStepRegex := (self selectStepMessage format: {'(.+)'}) asRegex.
 
-	(self messages reversed first: anIndex)
+	(super messages reversed first: anIndex)
 		do: [ :aMessage | 
 			| text |
 			text := aMessage contentText trim.
