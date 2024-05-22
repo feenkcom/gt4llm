@@ -430,14 +430,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-05-08T08:53:26.573287+02:00"
+						"dateAndTimeString" : "2024-05-22T13:26:38.556546+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "VPqdGaDTDQCc11FlAo25ug=="
 				},
-				"code" : "contextBuilder := [ GtLlmContext new\r\t\tinstance: GtLlmWardleyMapCreator new;\r\t\tisImmutableInstance: true;\r\t\tchecker: (GtLlmAlternativeCodeStep new\r\t\t\t\taddAlternative: GtLlmWardleyMapNodeStep new\r\t\t\t\t\tmatching: [ :aContext | aContext lastResult isForLanguage: 'node' ];\r\t\t\t\taddAlternative: GtLlmWardleyMapPositionStep new\r\t\t\t\t\tmatching: [ :aContext | aContext lastResult isForLanguage: 'position' ];\r\t\t\t\taddAlternative: GtLlmWardleyMapConnectionStep new\r\t\t\t\t\tmatching: [ :aContext | aContext lastResult isForLanguage: 'connection' ]) ]"
+				"code" : "contextBuilder := [ GtLlmContext new\r\t\tinstance: GtLlmWardleyMapCreator new;\r\t\tisImmutableInstance: true;\r\t\tchecker: contextBuilder := [ GtLlmContext new\r\t\tinstance: GtLlmWardleyMapCreator new;\r\t\tisImmutableInstance: true;\r\t\tchecker: (GtLlmAlternativeCodeStep new\r\t\t\t\taddAlternative: GtLlmWardleyMapNodeStep new\r\t\t\t\t\tmatching: [ :aContext | aContext lastResult isForLanguage: 'node' ];\r\t\t\t\taddAlternative: GtLlmWardleyMapPositionStep new\r\t\t\t\t\tmatching: [ :aContext | aContext lastResult isForLanguage: 'position' ];\r\t\t\t\taddAlternative: GtLlmWardleyMapConnectionStep new\r\t\t\t\t\tmatching: [ :aContext | aContext lastResult isForLanguage: 'connection' ]) ]]"
 			},
 			{
 				"__type" : "textSnippet",
@@ -612,14 +612,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-05-08T08:54:10.970783+02:00"
+						"dateAndTimeString" : "2024-05-15T11:28:38.014774+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "EceUJqDTDQCsOkAIAo25ug=="
 				},
-				"code" : "tutor := GtOpenAIGtTutor withApiKeyFromClipboard\r\t\tinstructions: instructions;\r\t\tpipelineBuilder: contextBuilder;\r\t\tfiles: (GtOpenAIResourceFilesGroup withAll: {});\r\t\tcreateAssistant"
+				"code" : "tutor := GtOpenAIGtTutor withApiKeyFromFile\r\t\tinstructions: instructions;\r\t\tpipelineBuilder: contextBuilder;\r\t\tfiles: (GtOpenAIResourceFilesGroup withAll: {});\r\t\tcreateAssistant"
 			},
 			{
 				"__type" : "textSnippet",
