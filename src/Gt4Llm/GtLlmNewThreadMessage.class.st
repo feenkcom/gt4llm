@@ -10,6 +10,11 @@ Class {
 }
 
 { #category : #accessing }
+GtLlmNewThreadMessage >> actions [
+	^ assistantChat actions
+]
+
+{ #category : #accessing }
 GtLlmNewThreadMessage >> annotations [
 	^ {} asDictionary
 ]

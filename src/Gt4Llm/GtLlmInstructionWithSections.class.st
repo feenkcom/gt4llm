@@ -60,5 +60,6 @@ GtLlmInstructionWithSections >> sections [
 
 { #category : #accessing }
 GtLlmInstructionWithSections >> sections: anObject [
-	sections := anObject
+	sections := anObject asOrderedCollection
+			collect: [ :aSection | aSection asInstruction parent: self ]
 ]
