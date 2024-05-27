@@ -1,0 +1,548 @@
+{
+	"__schema" : "4.1",
+	"__type" : "page",
+	"children" : {
+		"__type" : "snippets",
+		"items" : [
+			{
+				"__type" : "textSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-05-27T20:26:22.101209+02:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-05-27T20:27:42.874933+02:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "FZoaY9XVDQCjOG3lA9Dzng=="
+				},
+				"paragraphStyle" : {
+					"__type" : "textStyle"
+				},
+				"string" : "Often, conversations with LLMs are not led with a human, but with another machine. For automated interactions, the formats need to be rigid and the state needs to be synchronized. For this, we may use a {{gtClass:GtOpenAIActionTutor}}."
+			},
+			{
+				"__type" : "textSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-05-27T20:27:47.977267+02:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-05-27T20:28:32.939407+02:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "4eAWadXVDQCp5O+uA9Dzng=="
+				},
+				"paragraphStyle" : {
+					"__type" : "textStyle"
+				},
+				"string" : "In this page, we will look at the same examples as in [[Building a custom tutor to facilitate generating Wardley maps]] and [[Expanding the Wardley maps tutor with a step-wise tutor]], the Wardley map, but we will look at it from the lens of actions."
+			},
+			{
+				"__type" : "textSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-05-27T20:28:33.667167+02:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-05-27T20:28:37.872531+02:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "ewD8a9XVDQCtd/H5A9Dzng=="
+				},
+				"paragraphStyle" : {
+					"__type" : "textStyle"
+				},
+				"string" : "## Defining the actions"
+			},
+			{
+				"__type" : "textSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-05-27T20:28:38.283476+02:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-05-27T20:29:37.48271+02:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "xHFCbNXVDQCt7z3SA9Dzng=="
+				},
+				"paragraphStyle" : {
+					"__type" : "textStyle"
+				},
+				"string" : "The first step for an action-based tutor is to define the actions it should perform. In this example, the first example is to generate a prototypical Wardley map. Below is the definition of that action as a model, complete with examples for how it should work."
+			},
+			{
+				"__type" : "pharoSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-05-27T20:29:40.901165+02:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-05-27T20:29:41.662011+02:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "BuT9b9XVDQC0B6ukA9Dzng=="
+				},
+				"code" : "initialAction := GtLlmTutorAction new\r\t\tname: 'Create an initial map';\r\t\tdescription: 'Creates an initial map, filling topic, nodes, and connections with sensible data.';\r\t\tformat: 'Create an initial map on ';\r\t\texamples: {GtLlmTutorActionExample new\r\t\t\t\t\tinstruction: 'Create an initial map on Key components for a drone delivery service';\r\t\t\t\t\tinput: '```topic\r```\r```node\r```\r```connection\r```';\r\t\t\t\t\toutput: '```topic\rKey components for a drone delivery service\r```\r```node\r{\"name\":\"Drone delivery platform\",\"x\":0.7,\"y\":0.7}\r{\"name\":\"Communication system\",\"x\":0.4,\"y\":0.6}\r{\"name\":\"Regulatory compliance\",\"x\":0.3,\"y\":0.8}\r{\"name\":\"Software development\",\"x\":0.3,\"y\":0.2}\r{\"name\":\"Computing resources\",\"x\":0.2,\"y\":0.3}\r{\"name\":\"Customer need\",\"x\":0.9,\"y\":0.8}\r{\"name\":\"Power supply and charging stations\",\"x\":0.2,\"y\":0.5}\r{\"name\":\"Weather monitoring system\",\"x\":0.4,\"y\":0.5}\r{\"name\":\"Navigation and GPS\",\"x\":0.3,\"y\":0.6}\r{\"name\":\"Data storage\",\"x\":0.2,\"y\":0.4}\r{\"name\":\"Cybersecurity measures\",\"x\":0.1,\"y\":0.6}\r{\"name\":\"Drones\",\"x\":0.6,\"y\":0.6}\r{\"name\":\"Maintenance service for drones\",\"x\":0.5,\"y\":0.4}\r{\"name\":\"Air traffic control system\",\"x\":0.2,\"y\":0.7}\r{\"name\":\"Automated package handling system\",\"x\":0.5,\"y\":0.6}\r```\r```connection\r{\"from\": \"Customer need\", \"to\": \"Drone delivery platform\"}\n{\"from\": \"Drone delivery platform\", \"to\": \"Drones\"}\n{\"from\": \"Drones\", \"to\": \"Maintenance service for drones\"}\n{\"from\": \"Drone delivery platform\", \"to\": \"Regulatory compliance\"}\n{\"from\": \"Drone delivery platform\", \"to\": \"Weather monitoring system\"}\n{\"from\": \"Drones\", \"to\": \"Navigation and GPS\"}\n{\"from\": \"Drones\", \"to\": \"Air traffic control system\"}\n{\"from\": \"Drone delivery platform\", \"to\": \"Automated package handling system\"}\n{\"from\": \"Drone delivery platform\", \"to\": \"Communication system\"}\n{\"from\": \"Drone delivery platform\", \"to\": \"Data storage\"}\n{\"from\": \"Drone delivery platform\", \"to\": \"Computing resources\"}\n{\"from\": \"Drones\", \"to\": \"Power supply and charging stations\"}\n{\"from\": \"Drone delivery platform\", \"to\": \"Software development\"}\n{\"from\": \"Drone delivery platform\", \"to\": \"Cybersecurity measures\"}\r```'.\r\t\t\t\tGtLlmTutorActionExample new\r\t\t\t\t\tinstruction: 'Create an initial map on Moldable development';\r\t\t\t\t\tinput: '```topic\r```\r```node\r```\r```connection\r```';\r\t\t\t\t\toutput: '```topic\rMoldable development\r```\r```node\r{\"name\":\"User Feedback\",\"x\":0.4,\"y\":0.85}\r{\"name\":\"Programming Languages\",\"x\":0.8,\"y\":0.3}\r{\"name\":\"Problem Domain\",\"x\":0.2,\"y\":0.9}\r{\"name\":\"Customization Frameworks\",\"x\":0.5,\"y\":0.7}\r{\"name\":\"Frameworks and Libraries\",\"x\":0.75,\"y\":0.2}\r{\"name\":\"Moldable Tools\",\"x\":0.4,\"y\":0.8}\r{\"name\":\"Developer Skills\",\"x\":0.3,\"y\":0.7}\r{\"name\":\"Development Practices\",\"x\":0.1,\"y\":0.1}\r```\r```connection\r{\"from\": \"Developer Skills\", \"to\": \"Moldable Tools\"}\n{\"from\": \"Developer Skills\", \"to\": \"Programming Languages\"}\n{\"from\": \"Developer Skills\", \"to\": \"Frameworks and Libraries\"}\n{\"from\": \"User Feedback\", \"to\": \"Moldable Tools\"}\n{\"from\": \"User Feedback\", \"to\": \"Customization Frameworks\"}\n{\"from\": \"Moldable Tools\", \"to\": \"Problem Domain\"}\n{\"from\": \"Customization Frameworks\", \"to\": \"Problem Domain\"}\n{\"from\": \"Development Practices\", \"to\": \"Moldable Tools\"}\n{\"from\": \"Development Practices\", \"to\": \"Customization Frameworks\"}\r```'};\r\t\tpipeline: (GtLlmAlternativeCodeStep new\r\t\t\t\taddAlternative: GtLlmWardleyMapPositionedNodeStep new\r\t\t\t\t\tmatching: [ :aContext | aContext lastResult isForLanguage: 'node' ];\r\t\t\t\taddAlternative: GtLlmWardleyMapResettingConnectionStep new\r\t\t\t\t\tmatching: [ :aContext | aContext lastResult isForLanguage: 'connection' ])"
+			},
+			{
+				"__type" : "textSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-05-27T20:29:52.351924+02:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-05-27T20:30:36.251004+02:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "PPCFcNXVDQC0EdGxA9Dzng=="
+				},
+				"paragraphStyle" : {
+					"__type" : "textStyle"
+				},
+				"string" : "This is enough to generate a map. But to show case how multiple actions could work together, we will also add another action, one that adds another connected node."
+			},
+			{
+				"__type" : "pharoSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-05-27T20:30:41.318291+02:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-05-27T20:30:47.598094+02:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "LMiXc9XVDQC3gZjOA9Dzng=="
+				},
+				"code" : "connectionAction := GtLlmTutorAction new\r\t\tname: 'Add a new connected node';\r\t\tdescription: 'Adds a new node that is connected to an already existing node. It MUST consider the context of the map topic. It MUST return the entirety of the state.';\r\t\tformat: 'Add a new connected node to ``';\r\t\texamples: {GtLlmTutorActionExample new\r\t\t\t\t\tinstruction: 'Add a new connected node to `Platform`';\r\t\t\t\t\tinput: '```topic\rCloud computing\r```\r```node\r{''name'': ''Platform'', ''x'': 0.3, ''y'': 0.4}\r```';\r\t\t\t\t\toutput: '```topic\rCloud computing\r```\r```node\r\t\t\t\t\r{''name'': ''Platform'', ''x'': 0.3, ''y'': 0.4}\r{''name'': ''Compute'', ''x'': 0.7, ''y'': 0.1}\r```\r```connection\r{''from'': ''Platform'', ''to'': ''Compute''}\r```'.\r\t\t\t\tGtLlmTutorActionExample new\r\t\t\t\t\tinstruction: 'Add a new connected node to `Regulator`';\r\t\t\t\t\tinput: '```topic\rCloud computing\r```\r```node\r{''name'': ''Regulator'', ''x'': 0.6, ''y'': 0.2}\r```';\r\t\t\t\t\toutput: '```node\r{''name'': ''Regulator'', ''x'': 0.6, ''y'': 0.2}\r{''name'': ''Audit'', ''x'': 0.7, ''y'': 0.1}\r```\r```connection\r{''from'': ''Audit'', ''to'': ''Regulator''}\r```'};\r\t\tpipeline: (GtLlmAlternativeCodeStep new\r\t\t\t\taddAlternative: GtLlmWardleyMapPositionedNodeStep new\r\t\t\t\t\tmatching: [ :aContext | aContext lastResult isForLanguage: 'node' ];\r\t\t\t\taddAlternative: GtLlmWardleyMapResettingConnectionStep new\r\t\t\t\t\tmatching: [ :aContext | aContext lastResult isForLanguage: 'connection' ])"
+			},
+			{
+				"__type" : "textSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-05-27T20:30:54.584968+02:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-05-27T20:31:13.382533+02:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "dzxidNXVDQC3i2wfA9Dzng=="
+				},
+				"paragraphStyle" : {
+					"__type" : "textStyle"
+				},
+				"string" : "From here, the next step is to define a data interchange format for the tutor."
+			},
+			{
+				"__type" : "textSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-05-27T20:31:18.998285+02:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-05-27T20:31:23.568276+02:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "WrjWddXVDQC5FhDLA9Dzng=="
+				},
+				"paragraphStyle" : {
+					"__type" : "textStyle"
+				},
+				"string" : "## Defining the data format"
+			},
+			{
+				"__type" : "textSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-05-27T20:31:28.084205+02:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-05-27T20:32:02.184593+02:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "bWJhdtXVDQC5omYsA9Dzng=="
+				},
+				"paragraphStyle" : {
+					"__type" : "textStyle"
+				},
+				"string" : "Below, we define a simple format comprised of `node`s and `connection`s as well as the `topic`."
+			},
+			{
+				"__type" : "pharoSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-05-27T20:32:06.49985+02:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-05-27T20:32:10.175287+02:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "FYmreNXVDQC7tDR/A9Dzng=="
+				},
+				"code" : "format := GtLlmTutorFormat new\r\t\tname: 'Wardley Map';\r\t\taddComponent: (GtLlmTutorComponent new\r\t\t\t\tname: 'Topic';\r\t\t\t\tformat: 'Text';\r\t\t\t\ttag: 'topic';\r\t\t\t\texample: '```topic\rCloud computing in regulated areas\r```');\r\t\taddComponent: (GtLlmTutorComponent new\r\t\t\t\tname: 'Node';\r\t\t\t\tformat: 'JSON';\r\t\t\t\ttag: 'node';\r\t\t\t\texample: '```node\r{''name'': ''example node'', ''x'': 0.1, ''y'': 0.3}\r```\r\ror, for multiple nodes:\r```node\r{''name'': ''example node'', ''x'': 0.1, ''y'': 0.3}\r{''name'': ''example node 2'', ''x'': 0.5, ''y'': 0.2}\r```\r\rAll connections must go into one node.');\r\t\taddComponent: (GtLlmTutorComponent new\r\t\t\t\tname: 'Connection';\r\t\t\t\tformat: 'JSON';\r\t\t\t\ttag: 'connection';\r\t\t\t\texample: '```connection\r{''from'': ''example node'', ''to'': ''example node 2''}\r```\r\ror, for multiple connections:\r```connection\r{''from'': ''example node'', ''to'': ''example node 2''}\r{''from'': ''example node 3'', ''to'': ''example node 2''}\r```\r\rAll connections must go into one snippet.')"
+			},
+			{
+				"__type" : "textSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-05-27T20:32:15.785022+02:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-05-27T20:32:28.384142+02:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "wz45edXVDQC7vgUiA9Dzng=="
+				},
+				"paragraphStyle" : {
+					"__type" : "textStyle"
+				},
+				"string" : "Finally, we can put these together and create a tutor."
+			},
+			{
+				"__type" : "textSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-05-27T20:32:34.671243+02:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-05-27T20:32:38.376623+02:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "nWxZetXVDQC80W/hA9Dzng=="
+				},
+				"paragraphStyle" : {
+					"__type" : "textStyle"
+				},
+				"string" : "## Creating a tutor"
+			},
+			{
+				"__type" : "textSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-05-27T20:32:50.301255+02:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-05-27T20:33:14.398932+02:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "vupHe9XVDQC9NX7zA9Dzng=="
+				},
+				"paragraphStyle" : {
+					"__type" : "textStyle"
+				},
+				"string" : "If you’ve followed the previous case studies, creating a tutor should now almost be second nature. This one has a fe"
+			}
+		]
+	},
+	"createEmail" : {
+		"__type" : "email",
+		"emailString" : "<unknown>"
+	},
+	"createTime" : {
+		"__type" : "time",
+		"time" : {
+			"__type" : "dateAndTime",
+			"dateAndTimeString" : "2024-05-27T20:26:04.608875+02:00"
+		}
+	},
+	"editEmail" : {
+		"__type" : "email",
+		"emailString" : "<unknown>"
+	},
+	"editTime" : {
+		"__type" : "time",
+		"time" : {
+			"__type" : "dateAndTime",
+			"dateAndTimeString" : "2024-05-27T20:26:04.608875+02:00"
+		}
+	},
+	"pageType" : {
+		"__type" : "namedPage",
+		"title" : "Expanding the Wardley maps tutor with an action-based tutor"
+	},
+	"uid" : {
+		"__type" : "uuid",
+		"uuid" : "84901963-d5d5-0d00-a337-8f2b03d0f39e"
+	}
+}
