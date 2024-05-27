@@ -3,7 +3,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'nodes',
-		'edges'
+		'edges',
+		'topic'
 	],
 	#category : #'Gt4Llm-Examples'
 }
@@ -11,6 +12,16 @@ Class {
 { #category : #accessing }
 GtLlmWardleyMapCreator >> addNode: aName [
 	nodes at: aName put: {'name' -> aName} asDictionary
+]
+
+{ #category : #accessing }
+GtLlmWardleyMapCreator >> clearEdges [
+	edges removeAll
+]
+
+{ #category : #accessing }
+GtLlmWardleyMapCreator >> clearNodes [
+	nodes removeAll
 ]
 
 { #category : #accessing }
@@ -51,7 +62,8 @@ GtLlmWardleyMapCreator >> gtLiveFor: aView [
 { #category : #accessing }
 GtLlmWardleyMapCreator >> initialize [
 	nodes := Dictionary new.
-	edges := OrderedCollection new
+	edges := OrderedCollection new.
+	topic := ''
 ]
 
 { #category : #accessing }
@@ -83,8 +95,37 @@ GtLlmWardleyMapCreator >> model [
 ]
 
 { #category : #accessing }
+GtLlmWardleyMapCreator >> serialize [
+	^ '```topic
+' , self topic
+		, '
+```
+```node
+'
+		, (Character linefeed join: (nodes collect: [ :aNode | STONJSON toString: aNode ]))
+		, '
+```
+```connection
+'
+		, (Character linefeed
+				join: (edges collect: [ :anEdge | STONJSON toString: anEdge ]))
+		, '
+```'
+]
+
+{ #category : #accessing }
 GtLlmWardleyMapCreator >> setNode: aName toX: aNumber andY: anotherNumber [
 	(nodes at: aName)
 		at: 'x' put: aNumber;
 		at: 'y' put: anotherNumber
+]
+
+{ #category : #accessing }
+GtLlmWardleyMapCreator >> topic [
+	^ topic
+]
+
+{ #category : #accessing }
+GtLlmWardleyMapCreator >> topic: anObject [
+	topic := anObject
 ]

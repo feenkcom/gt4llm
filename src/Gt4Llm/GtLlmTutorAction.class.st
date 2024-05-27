@@ -5,7 +5,8 @@ Class {
 		'name',
 		'examples',
 		'pipeline',
-		'description'
+		'description',
+		'format'
 	],
 	#category : #'Gt4Llm-Actions'
 }
@@ -20,12 +21,7 @@ GtLlmTutorAction >> asInstruction [
 				addItem: (GtLlmInstructionSection new
 						source: self;
 						title: 'Examples';
-						body: (GtLlmCompositeInstruction new
-								items: (self examples
-										flatCollect: [ :each | 
-											{'INSTRUCTION: ' , each key.
-												'OUTPUT:
-' , each value} ]))))
+						body: (GtLlmCompositeInstruction new items: self examples)))
 ]
 
 { #category : #accessing }
@@ -46,6 +42,16 @@ GtLlmTutorAction >> examples [
 { #category : #accessing }
 GtLlmTutorAction >> examples: anObject [
 	examples := anObject
+]
+
+{ #category : #accessing }
+GtLlmTutorAction >> format [
+	^ format
+]
+
+{ #category : #accessing }
+GtLlmTutorAction >> format: anObject [
+	format := anObject
 ]
 
 { #category : #accessing }
