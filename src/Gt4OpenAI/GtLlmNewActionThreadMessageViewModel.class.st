@@ -10,6 +10,11 @@ GtLlmNewActionThreadMessageViewModel >> actions [
 ]
 
 { #category : #accessing }
+GtLlmNewActionThreadMessageViewModel >> currentAction: anObject [
+	threadMessage currentAction: anObject
+]
+
+{ #category : #accessing }
 GtLlmNewActionThreadMessageViewModel >> elementClass [
 	^ GtLlmNewActionThreadMessageElement
 ]
