@@ -5,7 +5,8 @@ Class {
 		'assistantChatViewModel',
 		'instanceElement',
 		'chatElement',
-		'resizerElement'
+		'resizerElement',
+		'statusLabel'
 	],
 	#category : #'Gt4OpenAI-Chats'
 }
@@ -36,8 +37,10 @@ GtLlmInstanceChatElement >> initialize [
 	self initializeResizerElement.
 
 	self
-		addChild: ((self makeLabel: 'Instance') padding: (BlInsets left: 5))
-		as: #'instance-label'.
+		addChild: (BrHorizontalPane new vFitContent hMatchParent
+				addChild: ((self makeLabel: 'Instance') padding: (BlInsets left: 5))
+					as: #'instance-label';
+				addChild: self makeStatusLabel as: #'status-label').
 	self addChild: instanceElement as: #instance.
 	self
 		addChild: (chatElement
@@ -80,6 +83,11 @@ GtLlmInstanceChatElement >> makeLabel: aString [
 ]
 
 { #category : #accessing }
+GtLlmInstanceChatElement >> makeStatusLabel [
+	^ statusLabel := BrFrame new fitContent
+]
+
+{ #category : #accessing }
 GtLlmInstanceChatElement >> minimizeChat [
 	chatElement vExact: 5
 ]
@@ -95,10 +103,22 @@ GtLlmInstanceChatElement >> onLlmExecution: anObject [
 ]
 
 { #category : #accessing }
+GtLlmInstanceChatElement >> onStatusUpdate: anAnnouncement [
+	assistantChatViewModel assistantChat status isDone
+		ifTrue: [ statusLabel removeChildren ]
+		ifFalse: [ statusLabel addChild: BrGlamorousVectorIcons refresh asElement ]
+]
+
+{ #category : #accessing }
 GtLlmInstanceChatElement >> subscribeToAssistantChat [
 	assistantChatViewModel assistantChat weak
 		when: GtLlmExecutionAnnouncement
 		send: #onLlmExecution:
+		to: self.
+
+	assistantChatViewModel assistantChat weak
+		when: GtOpenAIThreadRunAnnouncement
+		send: #onStatusUpdate:
 		to: self
 ]
 
