@@ -23,12 +23,34 @@ GtOpenAIActionAssistantChat >> asViewModel [
 ]
 
 { #category : #accessing }
+GtOpenAIActionAssistantChat >> gtInstanceChatWidgetFor: aView [
+	"cannot be a forward because the update wouldn’t work"
+
+	<gtView>
+	^ aView explicit
+		title: 'Instance chat';
+		priority: -1;
+		stencil: [ GtLlmInstanceChatElement new
+				assistantChatViewModel: self asViewModel;
+				minimizeChat ];
+		actionUpdateButton
+]
+
+{ #category : #accessing }
 GtOpenAIActionAssistantChat >> onSendActionToChat: anAnnouncement [
 	| action |
 	action := self actions
 			detect: [ :anAction | anAction name = anAnnouncement action ].
 
-	self sendMessage: (action format format: anAnnouncement arguments)
+	self sendMessage: (action format format: anAnnouncement arguments).
+
+	(self whenReadyFuture
+		then: [ :_ | 
+			| aMessage blocks |
+			aMessage := self messages first.
+			blocks := aMessage codeBlocks
+					reject: [ :aNode | aNode isForLanguage: 'action' ].
+			blocks do: [ :aBlock | aMessage codeBlocksExecutor check: aBlock ] ]) await
 ]
 
 { #category : #accessing }

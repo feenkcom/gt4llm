@@ -80,6 +80,11 @@ GtLlmInstanceChatElement >> makeLabel: aString [
 ]
 
 { #category : #accessing }
+GtLlmInstanceChatElement >> minimizeChat [
+	chatElement vExact: 5
+]
+
+{ #category : #accessing }
 GtLlmInstanceChatElement >> onAssistantChatViewModelChanged [
 	self updateElement
 ]
