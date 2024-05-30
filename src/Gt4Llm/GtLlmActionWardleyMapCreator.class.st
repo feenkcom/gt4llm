@@ -21,14 +21,27 @@ GtLlmActionWardleyMapCreator >> createInitialMapSection [
 	^ BrHorizontalPane new hMatchParent vFitContent
 		addChild: (BrLabel new
 				aptitude: BrGlamorousLabelAptitude;
-				text: 'Create an initial map on: ');
+				text: 'Create an initial map with the topic:');
 		addChild: (editor := BrEditor new
-					aptitude: BrGlamorousRegularEditorAptitude new + BrGlamorousTextAreaSpacingAptitude new);
+					hExact: 200;
+					vFitContent;
+					geometry: (BlRoundedRectangleGeometry cornerRadius: 4);
+					margin: (BlInsets left: 5 right: 5);
+					aptitude: BrGlamorousRegularEditorAptitude new
+							+ (BrStyleCommonAptitude new
+									default: [ :aStyle | 
+										aStyle
+											border: (BlBorder paint: BrGlamorousColors disabledButtonBorderColor width: 1) ]));
 		addChild: (BrButton new
-				aptitude: BrGlamorousButtonWithIconAptitude new;
+				aptitude: BrGlamorousButtonWithIconAptitude;
 				icon: BrGlamorousVectorIcons accept;
 				action: [ self
-						announce: (GtLlmSendActionToChat action: 'Create an initial map' arguments: {editor text}) ])
+						announce: (GtLlmSendActionToChat action: 'Create an initial map' arguments: {editor text}) ]);
+		margin: (BlInsets
+				top: 2
+				bottom: 2
+				left: 5
+				right: 5)
 ]
 
 { #category : #accessing }
