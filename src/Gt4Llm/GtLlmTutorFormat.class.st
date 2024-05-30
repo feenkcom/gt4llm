@@ -9,6 +9,17 @@ Class {
 }
 
 { #category : #accessing }
+GtLlmTutorFormat >> actionComponent [
+	^ (GtLlmTutorComponent new
+				name: 'Action';
+				format: 'Text';
+				tag: 'action';
+				example: '```action
+Create a draft
+```')
+]
+
+{ #category : #accessing }
 GtLlmTutorFormat >> addComponent: aComponent [
 	components add: aComponent
 ]
@@ -55,7 +66,7 @@ GtLlmTutorFormat >> gtInstructionFor: aView [
 
 { #category : #accessing }
 GtLlmTutorFormat >> initialize [
-	components := OrderedCollection new
+	components := OrderedCollection with: self actionComponent
 ]
 
 { #category : #accessing }

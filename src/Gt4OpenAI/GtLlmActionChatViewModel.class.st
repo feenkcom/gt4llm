@@ -8,5 +8,18 @@ Class {
 GtLlmActionChatViewModel >> initialize [
 	super initialize.
 	newThreadMessageViewModel := GtLlmNewActionThreadMessageViewModel new
-			threadMessage: GtLlmNewThreadMessage new
+			threadMessage: GtLlmNewActionThreadMessage new
+]
+
+{ #category : #accessing }
+GtLlmActionChatViewModel >> newThreadMessageViewModelFor: aMessage [
+	| aViewModel |
+	aViewModel := GtLlmActionThreadMessageViewModel new threadMessage: aMessage.
+
+	aViewModel weak
+		when: GtLlmAddMessageContentsRequest
+		send: #onAddMessageContents:
+		to: self.
+
+	^ aViewModel
 ]
