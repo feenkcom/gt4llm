@@ -20,7 +20,7 @@ GtLlmActionWardleyMapCreator >> createInitialMapSection [
 	| editor |
 	^ BrHorizontalPane new hMatchParent vFitContent
 		addChild: (BrLabel new
-				aptitude: BrGlamorousLabelAptitude;
+				aptitude: (BrGlamorousLabelAptitude new foreground: Color darkGray);
 				text: 'Create an initial map with the topic:');
 		addChild: (editor := BrEditor new
 					hExact: 200;

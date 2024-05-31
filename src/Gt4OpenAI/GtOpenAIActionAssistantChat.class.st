@@ -78,7 +78,9 @@ GtOpenAIActionAssistantChat >> waitForActionResult [
 					reject: [ :aNode | aNode isForLanguage: 'action' ].
 			blocks
 				do: [ :aBlock | 
-					[ aMessage codeBlocksExecutor check: aBlock ]
+					[ | aResult |
+					aResult := aMessage codeBlocksExecutor check: aBlock.
+					aResult hasError ifTrue: [ self error: aResult lastResult ] ]
 						on: Error
 						do: [ :anError | 
 							self sendMessage: 'An error occurred: ' , anError asString.
