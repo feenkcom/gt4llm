@@ -39,7 +39,15 @@ GtLlmTutorFormat >> asInstruction [
 							introduction: 'Each component has a name, a data format (such as JSON, YAML, etc.), a Markdown code block annotation tag that encloses it, and some examples.
 							
 The components that make up the state are as follows:';
-							sections: components)}
+							sections: components).
+				self errorHandlingDescription}
+]
+
+{ #category : #accessing }
+GtLlmTutorFormat >> errorHandlingDescription [
+	^ GtLlmInstructionSection new
+		title: 'Error handling description';
+		body: 'If an error occurs during an action, a message will be sent that starts with `An error occured:` and the message below. You then correct the mistake by sending an action result that corrects the mistake.'
 ]
 
 { #category : #accessing }

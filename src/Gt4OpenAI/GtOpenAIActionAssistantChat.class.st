@@ -44,13 +44,7 @@ GtOpenAIActionAssistantChat >> onSendActionToChat: anAnnouncement [
 
 	self sendMessage: (action format format: anAnnouncement arguments).
 
-	(self whenReadyFuture
-		then: [ :_ | 
-			| aMessage blocks |
-			aMessage := self messages first.
-			blocks := aMessage codeBlocks
-					reject: [ :aNode | aNode isForLanguage: 'action' ].
-			blocks do: [ :aBlock | aMessage codeBlocksExecutor check: aBlock ] ]) await
+	self waitForActionResult
 ]
 
 { #category : #accessing }
@@ -72,4 +66,21 @@ GtOpenAIActionAssistantChat >> sendMessage: aString [
 	
 state:
 ' , pipeline instance serialize
+]
+
+{ #category : #accessing }
+GtOpenAIActionAssistantChat >> waitForActionResult [
+	(self whenReadyFuture
+		then: [ :_ | 
+			| aMessage blocks |
+			aMessage := self messages first.
+			blocks := aMessage codeBlocks
+					reject: [ :aNode | aNode isForLanguage: 'action' ].
+			blocks
+				do: [ :aBlock | 
+					[ aMessage codeBlocksExecutor check: aBlock ]
+						on: Error
+						do: [ :anError | 
+							self sendMessage: 'An error occurred: ' , anError asString.
+							self waitForActionResult ] ] ]) await
 ]
