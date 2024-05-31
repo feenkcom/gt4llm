@@ -31,6 +31,7 @@ GtLlmTutorFormat >> asInstruction [
 		introduction: 'You are a tutor that is used to interactively create ' , self name
 				, '. You trigger certain actions to generate a desired result.';
 		sections: {self interactionDescription.
+				self communicationConventionsDescription.
 				GtLlmInstructionSection new
 					source: self;
 					title: 'Components';
@@ -41,6 +42,16 @@ GtLlmTutorFormat >> asInstruction [
 The components that make up the state are as follows:';
 							sections: components).
 				self errorHandlingDescription}
+]
+
+{ #category : #accessing }
+GtLlmTutorFormat >> communicationConventionsDescription [
+	^ GtLlmInstructionSection new
+		title: 'Communication rules';
+		body: (GtLlmInstructionList new
+				addItem: 'Always review the full conversation prior to answering and maintain continuity.';
+				addItem: 'Any action mut be answered by an action result, no extraneous prose or explanations. Only non-action messages may be answered in prose.';
+				addItem: 'Assume the user would like something concise.')
 ]
 
 { #category : #accessing }

@@ -9,10 +9,8 @@ Class {
 
 { #category : #accessing }
 GtLlmWardleyMapNodeEditorElement >> createConnectedNodeButton [
-	^ BrButton new
-		aptitude: BrGlamorousButtonWithLabelAptitude;
-		beSmallSize;
-		label: 'Add connected node';
+	^ GtWardleyMapUtility newButtonElement
+		label: 'Add evolve node';
 		action: [ creator
 				announce: (GtLlmSendActionToChat
 						action: 'Add a new connected node'
