@@ -24,6 +24,16 @@ OUTPUT:
 ]
 
 { #category : #accessing }
+GtLlmTutorActionExample >> gtInstructionFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Instruction';
+		priority: 1;
+		object: [ self asInstruction ];
+		view: #gtInstructionFor:
+]
+
+{ #category : #accessing }
 GtLlmTutorActionExample >> input [
 	^ input
 ]
