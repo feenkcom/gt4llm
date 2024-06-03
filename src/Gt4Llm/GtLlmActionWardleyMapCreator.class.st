@@ -35,6 +35,7 @@ GtLlmActionWardleyMapCreator >> createInitialMapSection [
 		addChild: (BrButton new
 				aptitude: BrGlamorousButtonWithIconAptitude;
 				icon: BrGlamorousVectorIcons accept;
+				label: 'Create initial map';
 				action: [ self
 						announce: (GtLlmSendActionToChat action: 'Create an initial map' arguments: {editor text}) ]);
 		margin: (BlInsets
