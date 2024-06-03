@@ -10,7 +10,7 @@ Class {
 { #category : #accessing }
 GtLlmWardleyMapNodeEditorElement >> createConnectedNodeButton [
 	^ GtWardleyMapUtility newButtonElement
-		label: 'Add evolve node';
+		label: 'Add a new connected node';
 		action: [ creator
 				announce: (GtLlmSendActionToChat
 						action: 'Add a new connected node'
