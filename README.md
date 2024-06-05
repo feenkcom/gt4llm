@@ -1,6 +1,6 @@
 # gt4llm
 
-is a library for working with LLMs, designed for use with Glamorous Toolkit.
+is a library for working with LLMs, designed for use with [Glamorous Toolkit](https://gtoolkit.com).
 
 Currently it includes:
 - A client for [OpenAI](https://openai.com)
