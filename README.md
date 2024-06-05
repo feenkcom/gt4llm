@@ -3,9 +3,9 @@
 is a library for working with LLMs, designed for use with Glamorous Toolkit.
 
 Currently it includes:
-- A client for [OpenAI](https://openai.com),
+- A client for [OpenAI](https://openai.com)
 - A client for [Ollama](https://ollama.com)
-- General utilities for working with LLMs.
+- General utilities for working with LLMs
 - Examples of integrating LLMs in user interfaces
 
 ## Installation
