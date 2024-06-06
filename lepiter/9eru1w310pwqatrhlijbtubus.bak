@@ -538,14 +538,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-05-27T20:33:37.660579+02:00"
+						"dateAndTimeString" : "2024-05-30T15:47:17.350451+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "Arx6fdXVDQCAlsgjA9Dzng=="
 				},
-				"code" : "tutor := GtOpenAIActionTutor withApiKeyFromFile\r\tformat: format;\r\taddAction: initialAction;\r\taddAction: connectionAction;\r\tpipelineBuilder: [ GtLlmContext new\r\t\t\tinstance: GtLlmWardleyMapCreator new;\r\t\t\tisImmutableInstance: true;\r\t\t\tchecker: (GtLlmAlternativeCodeStep new\r\t\t\t\t\taddAlternative: GtLlmWardleyMapTopicStep new\r\t\t\t\t\t\tmatching: [ :aContext | aContext lastResult isForLanguage: 'topic' ];\r\t\t\t\t\taddAlternative: GtLlmWardleyMapPositionedNodeStep new\r\t\t\t\t\t\tmatching: [ :aContext | aContext lastResult isForLanguage: 'node' ];\r\t\t\t\t\taddAlternative: GtLlmWardleyMapResettingConnectionStep new\r\t\t\t\t\t\tmatching: [ :aContext | aContext lastResult isForLanguage: 'connection' ]) ];\r\tcreateAssistant.\r\t\rtutor addChat"
+				"code" : "tutor := GtOpenAIActionTutor withApiKeyFromFile\r\tformat: format;\r\taddAction: initialAction;\r\taddAction: connectionAction;\r\tpipelineBuilder: [ GtLlmContext new\r\t\t\tinstance: GtLlmActionWardleyMapCreator new;\r\t\t\tisImmutableInstance: true;\r\t\t\tchecker: (GtLlmAlternativeCodeStep new\r\t\t\t\t\taddAlternative: GtLlmWardleyMapTopicStep new\r\t\t\t\t\t\tmatching: [ :aContext | aContext lastResult isForLanguage: 'topic' ];\r\t\t\t\t\taddAlternative: GtLlmWardleyMapPositionedNodeStep new\r\t\t\t\t\t\tmatching: [ :aContext | aContext lastResult isForLanguage: 'node' ];\r\t\t\t\t\taddAlternative: GtLlmWardleyMapResettingConnectionStep new\r\t\t\t\t\t\tmatching: [ :aContext | aContext lastResult isForLanguage: 'connection' ]) ];\r\tcreateAssistant.\r\t\rtutor addChat"
 			}
 		]
 	},
