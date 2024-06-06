@@ -3,48 +3,48 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'nodes',
-		'edges',
-		'topic'
+		'topic',
+		'model'
 	],
 	#category : #'Gt4Llm-Examples'
 }
 
 { #category : #accessing }
 GtLlmWardleyMapCreator >> addNode: aName [
-	nodes at: aName put: {'name' -> aName} asDictionary
+	| aNode |
+	aNode := GtWardleyMapNodeModel new label: (aName).
+	nodes at: aName put: aNode.
+	model addNode: aNode
 ]
 
 { #category : #accessing }
 GtLlmWardleyMapCreator >> clearEdges [
-	edges removeAll
+	model edges: {}
 ]
 
 { #category : #accessing }
 GtLlmWardleyMapCreator >> clearNodes [
-	nodes removeAll
+	nodes removeAll.
+	model nodes: {}
 ]
 
 { #category : #accessing }
 GtLlmWardleyMapCreator >> connectNode: aName to: anotherName [
-	edges
-		add: {'from' -> aName.
-				'to' -> anotherName} asDictionary
+	model
+		addEdge: (GtWardleyMapEdgeModel new
+				fromNode: (nodes at: aName);
+				toNode: (nodes at: anotherName);
+				width: 2)
 ]
 
 { #category : #accessing }
 GtLlmWardleyMapCreator >> gtListNodesFor: aView [
 	<gtView>
-	^ aView columnedList
-		title: 'Nodes list';
+	^ aView forward
+		title: 'Nodes';
 		priority: 3;
-		items: [ nodes values ];
-		column: 'Name' text: [ :aDict | aDict at: 'name' ];
-		column: 'X'
-			text: [ :aDict | aDict at: 'x' ]
-			width: 50;
-		column: 'Y'
-			text: [ :aDict | aDict at: 'y' ]
-			width: 50
+		object: [ self model ];
+		view: #gtNodesFor:
 ]
 
 { #category : #accessing }
@@ -61,36 +61,13 @@ GtLlmWardleyMapCreator >> gtLiveFor: aView [
 
 { #category : #accessing }
 GtLlmWardleyMapCreator >> initialize [
+	model := GtWardleyMapModel new.
 	nodes := Dictionary new.
-	edges := OrderedCollection new.
 	topic := ''
 ]
 
 { #category : #accessing }
 GtLlmWardleyMapCreator >> model [
-	| model createdNodes |
-	model := GtWardleyMapModel new.
-	createdNodes := Dictionary new.
-
-	nodes
-		do: [ :aNode | 
-			| modelNode |
-			modelNode := GtWardleyMapNodeModel new label: (aNode at: 'name').
-			aNode
-				at: 'x'
-				ifPresent: [ modelNode
-						x: (aNode at: 'x');
-						y: (aNode at: 'y') ].
-			model addNode: (createdNodes at: (aNode at: 'name') put: modelNode) ].
-
-	edges
-		do: [ :anEdge | 
-			model
-				addEdge: (GtWardleyMapEdgeModel new
-						fromNode: (createdNodes at: (anEdge at: 'from'));
-						toNode: (createdNodes at: (anEdge at: 'to'));
-						width: 2) ].
-
 	^ model
 ]
 
@@ -102,13 +79,23 @@ GtLlmWardleyMapCreator >> serialize [
 ```
 ```node
 '
-		, (Character linefeed join: (nodes collect: [ :aNode | STONJSON toString: aNode ]))
+		, (Character linefeed
+				join: (self model nodes
+						collect: [ :aNode | 
+							STONJSON
+								toString: {'name' -> aNode label.
+										'x' -> aNode x.
+										'y' -> aNode y} asDictionary ]))
 		, '
 ```
 ```connection
 '
 		, (Character linefeed
-				join: (edges collect: [ :anEdge | STONJSON toString: anEdge ]))
+				join: (self model edges
+						collect: [ :anEdge | 
+							STONJSON
+								toString: {'from' -> anEdge fromNode label.
+										'to' -> anEdge toNode label} asDictionary ]))
 		, '
 ```'
 ]
@@ -116,8 +103,8 @@ GtLlmWardleyMapCreator >> serialize [
 { #category : #accessing }
 GtLlmWardleyMapCreator >> setNode: aName toX: aNumber andY: anotherNumber [
 	(nodes at: aName)
-		at: 'x' put: aNumber;
-		at: 'y' put: anotherNumber
+		x: aNumber;
+		y: anotherNumber
 ]
 
 { #category : #accessing }
