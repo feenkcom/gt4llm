@@ -523,6 +523,16 @@ GtLlmMessageStyler >> visitCodeBlock: aCodeNode [
 		ifTrue: [ self styleSmalltalkCodeBlock: aCodeNode ].
 	(self text from: aCodeNode startPosition to: aCodeNode stopPosition)
 		glamorousCodeFont.
+	(self text
+		from: aCodeNode begin startPosition
+		to: aCodeNode beginWithLanguageStopPosition)
+		attributes: {BlTextForegroundAttribute paint: Color lightGray}.
+	(self text from: aCodeNode end startPosition to: aCodeNode end stopPosition)
+		attributes: {BlTextForegroundAttribute paint: Color lightGray}.
+	(self text
+		from: aCodeNode beginWithLanguageStopPosition + 1
+		to: aCodeNode end startPosition - 1)
+		attributes: {BlTextHighlightAttribute paint: BrGlamorousColors neutralBackgroundColor}.
 	self styleCode: aCodeNode.
 
 	^ self visitContent: aCodeNode
