@@ -16,6 +16,16 @@ GtLlmActionWardleyMapCreator >> announcer [
 ]
 
 { #category : #accessing }
+GtLlmActionWardleyMapCreator >> gtInspectModelFor: anAction [
+	<gtAction>
+	^ anAction button
+		icon: BrGlamorousVectorIcons playinspect;
+		tooltip: 'Inspect instance';
+		priority: 1;
+		action: [ :aButton | aButton phlow spawnObject: self model ]
+]
+
+{ #category : #accessing }
 GtLlmActionWardleyMapCreator >> gtLiveFor: aView [
 	<gtView>
 	^ aView explicit
