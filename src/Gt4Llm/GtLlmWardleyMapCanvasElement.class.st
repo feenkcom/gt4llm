@@ -24,3 +24,16 @@ GtLlmWardleyMapCanvasElement >> creator [
 GtLlmWardleyMapCanvasElement >> creator: anObject [
 	creator := anObject
 ]
+
+{ #category : #accessing }
+GtLlmWardleyMapCanvasElement >> installContextMenu [
+	self
+		addAptitude: ((BrGlamorousWithContextMenuAptitude
+				handle: [ BlElement new
+						size: 5 @ 5;
+						geometry: BlEllipseGeometry new ]
+				content: [ GtLlmWardleyMapEditorElement new
+						canvas: self;
+						creator: self creator;
+						requestFocus ]) preferredExtent: 120 @ 150)
+]
