@@ -11,7 +11,21 @@ Class {
 
 { #category : #accessing }
 GtLlmTutorActionExample >> asInstruction [
-	^ ('PROMPT:
+	^ GtLlmCompositeInstruction new
+		addItem: (GtLlmInstructionSection new
+				source: self;
+				title: 'Prompt';
+				body: (GtLlmCompositeInstruction new
+						items: {self instruction asInstruction.
+								(String cr
+									, 'State:', String cr, self input ) asInstruction}));
+		addItem: (GtLlmInstructionSection new
+				source: self;
+				title: 'Output';
+				body: (self output asInstruction))	
+				
+				
+"('PROMPT:
 ' , self instruction
 		, '
 
@@ -20,7 +34,7 @@ state:
 		, '
 
 OUTPUT:
-' , self output) asInstruction
+' , self output) asInstruction"
 ]
 
 { #category : #accessing }

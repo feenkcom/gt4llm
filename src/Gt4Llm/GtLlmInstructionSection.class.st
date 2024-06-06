@@ -64,9 +64,7 @@ GtLlmInstructionSection >> initialize [
 { #category : #accessing }
 GtLlmInstructionSection >> instructionString [
 	^ ('#' repeat: self headerLevel) , ' ' , self title
-		, '
-	
-' , self body instructionString
+		, String cr , self body instructionString
 ]
 
 { #category : #accessing }
