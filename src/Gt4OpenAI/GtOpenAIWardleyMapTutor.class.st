@@ -1,7 +1,7 @@
 Class {
 	#name : #GtOpenAIWardleyMapTutor,
 	#superclass : #GtOpenAITutorWithSteps,
-	#category : #'Gt4OpenAI-Examples'
+	#category : #'Gt4OpenAI-Examples - Wardley Map'
 }
 
 { #category : #accessing }

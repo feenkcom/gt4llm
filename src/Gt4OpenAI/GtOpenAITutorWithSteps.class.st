@@ -7,7 +7,7 @@ Class {
 		'backStepMessage',
 		'selectStepMessage'
 	],
-	#category : #'Gt4OpenAI-Examples'
+	#category : #'Gt4OpenAI-Tutor'
 }
 
 { #category : #accessing }

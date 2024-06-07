@@ -5,7 +5,7 @@ Class {
 		'creator',
 		'topicSection'
 	],
-	#category : #'Gt4Llm-Examples'
+	#category : #'Gt4Llm-Examples - Wardley Map'
 }
 
 { #category : #accessing }

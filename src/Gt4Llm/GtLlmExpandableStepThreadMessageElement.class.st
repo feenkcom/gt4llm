@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLlmExpandableStepThreadMessageElement,
 	#superclass : #GtLlmExpandableThreadMessageElement,
-	#category : #'Gt4Llm-Examples'
+	#category : #'Gt4Llm-Widgets'
 }
 
 { #category : #accessing }

@@ -6,7 +6,7 @@ Class {
 		'topic',
 		'model'
 	],
-	#category : #'Gt4Llm-Examples'
+	#category : #'Gt4Llm-Examples - Wardley Map'
 }
 
 { #category : #accessing }

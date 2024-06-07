@@ -9,7 +9,7 @@ Class {
 		'chat',
 		'elementClass'
 	],
-	#category : #'Gt4Llm-Examples'
+	#category : #'Gt4Llm-Tutor'
 }
 
 { #category : #accessing }

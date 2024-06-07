@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'creator'
 	],
-	#category : #'Gt4Llm-Examples'
+	#category : #'Gt4Llm-Examples - Wardley Map'
 }
 
 { #category : #accessing }

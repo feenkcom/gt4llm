@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'stepElement'
 	],
-	#category : #'Gt4Llm-Examples'
+	#category : #'Gt4Llm-Widgets'
 }
 
 { #category : #accessing }
