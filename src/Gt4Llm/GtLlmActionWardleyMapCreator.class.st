@@ -45,11 +45,14 @@ GtLlmActionWardleyMapCreator >> setNodes: aListOfNodes [
 
 	aListOfNodes
 		do: [ :aNode | 
-			| aName |
+			| aName foundNode |
 			aName := aNode at: 'name'.
+			foundNode := nil.
 			unsetNodes
 				detect: [ :anUnsetNode | aName = anUnsetNode label ]
-				ifFound: [ :anUnsetNode | unsetNodes remove: anUnsetNode ]
+				ifFound: [ :anUnsetNode | 
+					unsetNodes remove: anUnsetNode.
+					foundNode := anUnsetNode ]
 				ifNone: [ | aNodeModel |
 					aNodeModel := GtWardleyMapNodeModel new
 							label: aName;
@@ -57,7 +60,11 @@ GtLlmActionWardleyMapCreator >> setNodes: aListOfNodes [
 							y: (aNode at: 'y');
 							addWardleyMapDecoratorModel: GtWardleyMapAddProposition new.
 					self model addNode: aNodeModel.
-					nodes at: aName put: aNodeModel ] ].
+					nodes at: aName put: aNodeModel.
+					foundNode := aNodeModel ].
+			(aNode includesKey: 'alternative_names')
+				ifTrue: [ foundNode
+						addWardleyMapDecoratorModel: (GtWardleyMapRenameProposition new options: (aNode at: 'alternative_names')) ] ].
 
 	unsetNodes
 		do: [ :aNode | aNode addWardleyMapDecoratorModel: GtWardleyMapRemoveProposition new ]
