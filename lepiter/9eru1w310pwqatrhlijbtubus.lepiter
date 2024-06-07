@@ -271,6 +271,77 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-06-07T12:12:54.519589+02:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-06-07T12:13:30.082077+02:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "Or6lx6vWDQCi75PkCdkXqw=="
+				},
+				"paragraphStyle" : {
+					"__type" : "textStyle"
+				},
+				"string" : "And to show how to add a different kind of action altogether, let’s also add one that explains why a node is on the map and what it means."
+			},
+			{
+				"__type" : "pharoSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-06-07T12:13:35.155739+02:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-06-07T12:20:03.38862+02:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "KMsRyqvWDQClr8jBCdkXqw=="
+				},
+				"code" : "explanationAction := GtLlmTutorAction new\r\t\tname: 'Explain a node';\r\t\tdescription: 'Explains what a node means and why it is on the map using human language.';\r\t\tformat: 'Explain the node `{1}`';\r\t\texamples: {GtLlmTutorActionExample new\r\t\t\t\t\tinstruction: 'Explain `Compute`';\r\t\t\t\t\tinput: '```action\rExplain a node\r```\r```topic\rCloud computing\r```\r```node\r{''name'': ''Compute'', ''x'': 0.3, ''y'': 0.4}\r```';\r\t\t\t\t\toutput: '```topic\rCloud computing\r```\r```node\r{''name'': ''Compute'', ''x'': 0.3, ''y'': 0.4}\r```\r```explanation\rIn the context of this Wardley Map on Cloud Computing, the node `Compute` refers to the computing resources and capabilities provided as part of cloud services. This encompasses the virtualized processing power (CPUs, GPUs) that can be scaled up or down on demand to meet the needs of applications or services running in the cloud. The `Compute` node is fundamental to cloud computing, as it allows for flexible, efficient, and scalable computing solutions that can be tailored to the specific requirements of businesses and developers.\n\nThe presence of `Compute` in a cloud computing map highlights its role as a core component of the cloud value chain, directly supporting various higher-level services and applications that depend on reliable and scalable computing resources. It could be connected to nodes representing services that leverage these computing resources, such as web hosting, data analytics platforms, or any software-as-a-service (SaaS) applications, indicating a dependency relationship where these services rely on the underlying compute capabilities to function effectively.\n\nIn summary, `Compute` signifies the provisioning of raw processing power in the cloud, which is pivotal to the delivery of a wide range of cloud-based services and applications, illustrating the utility and flexibility offered by cloud computing paradigms.\r```'};\r\t\tpipeline: (GtLlmAlternativeCodeStep new\r\t\t\t\taddAlternative: GtLlmWardleyMapPositionedNodeStep new\r\t\t\t\t\tmatching: [ :aContext | aContext lastResult isForLanguage: 'node' ];\r\t\t\t\taddAlternative: GtLlmWardleyMapResettingConnectionStep new\r\t\t\t\t\tmatching: [ :aContext | aContext lastResult isForLanguage: 'connection' ])"
+			},
+			{
+				"__type" : "textSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
 						"dateAndTimeString" : "2024-05-27T20:30:54.584968+02:00"
 					}
 				},
@@ -393,14 +464,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-05-27T20:32:10.175287+02:00"
+						"dateAndTimeString" : "2024-06-07T12:20:47.111477+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "FYmreNXVDQC7tDR/A9Dzng=="
 				},
-				"code" : "format := GtLlmTutorFormat new\r\t\tname: 'Wardley Map';\r\t\taddComponent: (GtLlmTutorComponent new\r\t\t\t\tname: 'Topic';\r\t\t\t\tformat: 'Text';\r\t\t\t\ttag: 'topic';\r\t\t\t\texample: '```topic\rCloud computing in regulated areas\r```');\r\t\taddComponent: (GtLlmTutorComponent new\r\t\t\t\tname: 'Node';\r\t\t\t\tformat: 'JSON';\r\t\t\t\ttag: 'node';\r\t\t\t\texample: '```node\r{''name'': ''example node'', ''x'': 0.1, ''y'': 0.3}\r```\r\ror, for multiple nodes:\r```node\r{''name'': ''example node'', ''x'': 0.1, ''y'': 0.3}\r{''name'': ''example node 2'', ''x'': 0.5, ''y'': 0.2}\r```\r\rAll connections must go into one node.');\r\t\taddComponent: (GtLlmTutorComponent new\r\t\t\t\tname: 'Connection';\r\t\t\t\tformat: 'JSON';\r\t\t\t\ttag: 'connection';\r\t\t\t\texample: '```connection\r{''from'': ''example node'', ''to'': ''example node 2''}\r```\r\ror, for multiple connections:\r```connection\r{''from'': ''example node'', ''to'': ''example node 2''}\r{''from'': ''example node 3'', ''to'': ''example node 2''}\r```\r\rAll connections must go into one snippet.')"
+				"code" : "format := GtLlmTutorFormat new\r\t\tname: 'Wardley Map';\r\t\taddComponent: (GtLlmTutorComponent new\r\t\t\t\tname: 'Topic';\r\t\t\t\tformat: 'Text';\r\t\t\t\ttag: 'topic';\r\t\t\t\texample: '```topic\rCloud computing in regulated areas\r```');\r\t\taddComponent: (GtLlmTutorComponent new\r\t\t\t\tname: 'Node';\r\t\t\t\tformat: 'JSON';\r\t\t\t\ttag: 'node';\r\t\t\t\texample: '```node\r{''name'': ''example node'', ''x'': 0.1, ''y'': 0.3}\r```\r\ror, for multiple nodes:\r```node\r{''name'': ''example node'', ''x'': 0.1, ''y'': 0.3}\r{''name'': ''example node 2'', ''x'': 0.5, ''y'': 0.2}\r```\r\rAll connections must go into one node.');\r\t\taddComponent: (GtLlmTutorComponent new\r\t\t\t\tname: 'Connection';\r\t\t\t\tformat: 'JSON';\r\t\t\t\ttag: 'connection';\r\t\t\t\texample: '```connection\r{''from'': ''example node'', ''to'': ''example node 2''}\r```\r\ror, for multiple connections:\r```connection\r{''from'': ''example node'', ''to'': ''example node 2''}\r{''from'': ''example node 3'', ''to'': ''example node 2''}\r```\r\rAll connections must go into one snippet.');\r\t\taddComponent: (GtLlmTutorComponent new\r\t\t\t\tname: 'Explanation';\r\t\t\t\tformat: 'Text';\r\t\t\t\ttag: 'explanation';\r\t\t\t\texample: '```explanation\rHuman readable text goes here\r```')"
 			},
 			{
 				"__type" : "textSnippet",
@@ -538,14 +609,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-05-30T15:47:17.350451+02:00"
+						"dateAndTimeString" : "2024-06-07T12:21:14.045246+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "Arx6fdXVDQCAlsgjA9Dzng=="
 				},
-				"code" : "tutor := GtOpenAIActionTutor withApiKeyFromFile\r\tformat: format;\r\taddAction: initialAction;\r\taddAction: connectionAction;\r\tpipelineBuilder: [ GtLlmContext new\r\t\t\tinstance: GtLlmActionWardleyMapCreator new;\r\t\t\tisImmutableInstance: true;\r\t\t\tchecker: (GtLlmAlternativeCodeStep new\r\t\t\t\t\taddAlternative: GtLlmWardleyMapTopicStep new\r\t\t\t\t\t\tmatching: [ :aContext | aContext lastResult isForLanguage: 'topic' ];\r\t\t\t\t\taddAlternative: GtLlmWardleyMapPositionedNodeStep new\r\t\t\t\t\t\tmatching: [ :aContext | aContext lastResult isForLanguage: 'node' ];\r\t\t\t\t\taddAlternative: GtLlmWardleyMapResettingConnectionStep new\r\t\t\t\t\t\tmatching: [ :aContext | aContext lastResult isForLanguage: 'connection' ]) ];\r\tcreateAssistant.\r\t\rtutor addChat"
+				"code" : "tutor := GtOpenAIActionTutor withApiKeyFromFile\r\tformat: format;\r\taddAction: initialAction;\r\taddAction: connectionAction;\r\taddAction: explanationAction;\r\tpipelineBuilder: [ GtLlmContext new\r\t\t\tinstance: GtLlmActionWardleyMapCreator new;\r\t\t\tisImmutableInstance: true;\r\t\t\tchecker: (GtLlmAlternativeCodeStep new\r\t\t\t\t\taddAlternative: GtLlmWardleyMapTopicStep new\r\t\t\t\t\t\tmatching: [ :aContext | aContext lastResult isForLanguage: 'topic' ];\r\t\t\t\t\taddAlternative: GtLlmWardleyMapPositionedNodeStep new\r\t\t\t\t\t\tmatching: [ :aContext | aContext lastResult isForLanguage: 'node' ];\r\t\t\t\t\taddAlternative: GtLlmWardleyMapResettingConnectionStep new\r\t\t\t\t\t\tmatching: [ :aContext | aContext lastResult isForLanguage: 'connection' ];\r\t\t\t\t\taddAlternative: GtLlmWardleyMapExplanationStep new\r\t\t\t\t\t\tmatching: [ :aContext | aContext lastResult isForLanguage: 'explanation' ])  ];\r\tcreateAssistant.\r\t\rtutor addChat"
 			}
 		]
 	},

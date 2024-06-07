@@ -37,3 +37,28 @@ GtLlmActionWardleyMapCreator >> gtLiveFor: aView [
 						wardleyMapViewModel: (GtWardleyMapViewModel new wardleyMapModel: self model);
 						yourself) ]
 ]
+
+{ #category : #accessing }
+GtLlmActionWardleyMapCreator >> setNodes: aListOfNodes [
+	| unsetNodes |
+	unsetNodes := self model nodes copy.
+
+	aListOfNodes
+		do: [ :aNode | 
+			| aName |
+			aName := aNode at: 'name'.
+			unsetNodes
+				detect: [ :anUnsetNode | aName = anUnsetNode label ]
+				ifFound: [ :anUnsetNode | unsetNodes remove: anUnsetNode ]
+				ifNone: [ | aNodeModel |
+					aNodeModel := GtWardleyMapNodeModel new
+							label: aName;
+							x: (aNode at: 'x');
+							y: (aNode at: 'y');
+							addWardleyMapDecoratorModel: GtWardleyMapAddProposition new.
+					self model addNode: aNodeModel.
+					nodes at: aName put: aNodeModel ] ].
+
+	unsetNodes
+		do: [ :aNode | aNode addWardleyMapDecoratorModel: GtWardleyMapRemoveProposition new ]
+]
