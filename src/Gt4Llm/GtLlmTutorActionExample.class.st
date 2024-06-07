@@ -22,19 +22,7 @@ GtLlmTutorActionExample >> asInstruction [
 		addItem: (GtLlmInstructionSection new
 				source: self;
 				title: 'Output';
-				body: (self output asInstruction))	
-				
-				
-"('PROMPT:
-' , self instruction
-		, '
-
-state:
-' , self input
-		, '
-
-OUTPUT:
-' , self output) asInstruction"
+				body: (self output asInstruction))
 ]
 
 { #category : #accessing }
