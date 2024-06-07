@@ -22,7 +22,8 @@ GtLlmWardleyMapNodeEditorElement >> createConnectedNodeButton [
 GtLlmWardleyMapNodeEditorElement >> createPropertyEditorElements [
 	^ super createPropertyEditorElements
 		, {self createConnectedNodeButton.
-				self explainNodeButton}
+				self explainNodeButton.
+				self renameNodeButton}
 ]
 
 { #category : #accessing }
@@ -42,6 +43,17 @@ GtLlmWardleyMapNodeEditorElement >> explainNodeButton [
 		action: [ creator
 				announce: (GtLlmSendActionToChat
 						action: 'Explain a node'
+						arguments: {self wardleyMapNodeViewModel label}).
+			self fireEvent: BrContextMenuHideWish new ]
+]
+
+{ #category : #accessing }
+GtLlmWardleyMapNodeEditorElement >> renameNodeButton [
+	^ GtWardleyMapUtility newButtonElement
+		label: 'Propose alternative names';
+		action: [ creator
+				announce: (GtLlmSendActionToChat
+						action: 'Rename a node'
 						arguments: {self wardleyMapNodeViewModel label}).
 			self fireEvent: BrContextMenuHideWish new ]
 ]
