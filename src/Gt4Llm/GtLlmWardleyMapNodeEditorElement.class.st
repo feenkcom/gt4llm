@@ -20,7 +20,9 @@ GtLlmWardleyMapNodeEditorElement >> createConnectedNodeButton [
 
 { #category : #accessing }
 GtLlmWardleyMapNodeEditorElement >> createPropertyEditorElements [
-	^ super createPropertyEditorElements , {self createConnectedNodeButton}
+	^ super createPropertyEditorElements
+		, {self createConnectedNodeButton.
+				self explainNodeButton}
 ]
 
 { #category : #accessing }
@@ -31,4 +33,15 @@ GtLlmWardleyMapNodeEditorElement >> creator [
 { #category : #accessing }
 GtLlmWardleyMapNodeEditorElement >> creator: anObject [
 	creator := anObject
+]
+
+{ #category : #accessing }
+GtLlmWardleyMapNodeEditorElement >> explainNodeButton [
+	^ GtWardleyMapUtility newButtonElement
+		label: 'Explain this node';
+		action: [ creator
+				announce: (GtLlmSendActionToChat
+						action: 'Explain a node'
+						arguments: {self wardleyMapNodeViewModel label}).
+			self fireEvent: BrContextMenuHideWish new ]
 ]
