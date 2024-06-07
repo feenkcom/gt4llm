@@ -103,6 +103,11 @@ GtLlmInstanceChatElement >> onLlmExecution: anObject [
 ]
 
 { #category : #accessing }
+GtLlmInstanceChatElement >> onSpawnRequest: anAnnouncement [
+	self phlow spawnObject: anAnnouncement object
+]
+
+{ #category : #accessing }
 GtLlmInstanceChatElement >> onStatusUpdate: anAnnouncement [
 	assistantChatViewModel assistantChat status isDone
 		ifTrue: [ statusLabel removeChildren ]
@@ -119,6 +124,12 @@ GtLlmInstanceChatElement >> subscribeToAssistantChat [
 	assistantChatViewModel assistantChat weak
 		when: GtOpenAIThreadRunAnnouncement
 		send: #onStatusUpdate:
+		to: self.
+		
+	
+	assistantChatViewModel assistantChat weak
+		when: GtLlmSpawnRequestAnnouncement
+		send: #onSpawnRequest:
 		to: self
 ]
 
