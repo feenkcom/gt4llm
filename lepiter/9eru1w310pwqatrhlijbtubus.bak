@@ -393,14 +393,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-07T12:20:47.111477+02:00"
+						"dateAndTimeString" : "2024-06-07T17:26:04.272072+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "FYmreNXVDQC7tDR/A9Dzng=="
 				},
-				"code" : "format := GtLlmTutorFormat new\r\t\tname: 'Wardley Map';\r\t\taddComponent: (GtLlmTutorComponent new\r\t\t\t\tname: 'Topic';\r\t\t\t\tformat: 'Text';\r\t\t\t\ttag: 'topic';\r\t\t\t\texample: '```topic\rCloud computing in regulated areas\r```');\r\t\taddComponent: (GtLlmTutorComponent new\r\t\t\t\tname: 'Node';\r\t\t\t\tformat: 'JSON';\r\t\t\t\ttag: 'node';\r\t\t\t\texample: '```node\r{''name'': ''example node'', ''x'': 0.1, ''y'': 0.3}\r```\r\ror, for multiple nodes:\r```node\r{''name'': ''example node'', ''x'': 0.1, ''y'': 0.3}\r{''name'': ''example node 2'', ''x'': 0.5, ''y'': 0.2}\r```\r\rAll connections must go into one node.');\r\t\taddComponent: (GtLlmTutorComponent new\r\t\t\t\tname: 'Connection';\r\t\t\t\tformat: 'JSON';\r\t\t\t\ttag: 'connection';\r\t\t\t\texample: '```connection\r{''from'': ''example node'', ''to'': ''example node 2''}\r```\r\ror, for multiple connections:\r```connection\r{''from'': ''example node'', ''to'': ''example node 2''}\r{''from'': ''example node 3'', ''to'': ''example node 2''}\r```\r\rAll connections must go into one snippet.');\r\t\taddComponent: (GtLlmTutorComponent new\r\t\t\t\tname: 'Explanation';\r\t\t\t\tformat: 'Text';\r\t\t\t\ttag: 'explanation';\r\t\t\t\texample: '```explanation\rHuman readable text goes here\r```')"
+				"code" : "format := GtLlmTutorFormat new\r\t\tname: 'Wardley Map';\r\t\taddComponent: (GtLlmTutorComponent new\r\t\t\t\tname: 'Topic';\r\t\t\t\tformat: 'Text';\r\t\t\t\ttag: 'topic';\r\t\t\t\texample: '```topic\rCloud computing in regulated areas\r```');\r\t\taddComponent: (GtLlmTutorComponent new\r\t\t\t\tname: 'Node';\r\t\t\t\tformat: 'JSON';\r\t\t\t\ttag: 'node';\r\t\t\t\texample: '```node\r{''name'': ''example node'', ''x'': 0.1, ''y'': 0.3}\r```\r\ror, for multiple nodes:\r```node\r{''name'': ''example node'', ''x'': 0.1, ''y'': 0.3}\r{''name'': ''example node 2'', ''x'': 0.5, ''y'': 0.2}\r```\r\rAll connections must go into one node.');\r\t\taddComponent: (GtLlmTutorComponent new\r\t\t\t\tname: 'Connection';\r\t\t\t\tformat: 'JSON';\r\t\t\t\ttag: 'connection';\r\t\t\t\texample: '```connection\r{''from'': ''example node'', ''to'': ''example node 2''}\r```\r\ror, for multiple connections:\r```connection\r{''from'': ''example node'', ''to'': ''example node 2''}\r{''from'': ''example node 3'', ''to'': ''example node 2''}\r```\r\rAll connections must go into one snippet.')"
 			},
 			{
 				"__type" : "textSnippet",
@@ -609,7 +609,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-07T17:22:18.699444+02:00"
+						"dateAndTimeString" : "2024-06-07T22:25:05.629547+02:00"
 					}
 				},
 				"uid" : {
