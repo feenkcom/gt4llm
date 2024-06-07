@@ -11,9 +11,11 @@ GtLlmWardleyMapExplanationStep class >> stepName [
 
 { #category : #accessing }
 GtLlmWardleyMapExplanationStep >> runStep: aContext [
-	| data |
-	data := aContext lastResult code source.
-	aContext chat announce: (GtLlmSpawnRequestAnnouncement new object: data).
+	| explanation |
+	explanation := aContext lastResult code source.
+	aContext chat
+		announce: (GtLlmSpawnRequestAnnouncement new
+				object: (GtLlmWardleyMapExplanation new explanation: explanation)).
 
 	aContext
 		addResult: (GtLlmStepStringSuccess new
