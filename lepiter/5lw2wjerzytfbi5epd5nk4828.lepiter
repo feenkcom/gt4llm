@@ -29,7 +29,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-31T10:01:44.840173+01:00"
+						"dateAndTimeString" : "2024-06-09T21:11:20.347342+02:00"
 					}
 				},
 				"uid" : {
@@ -39,7 +39,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "`gt4openai` is a software package to interact with [OpenAI](https://openai.com) from within Glamorous Toolkit. It is part of the broader [gt4llm](https://github.com/feenkcom/gt4llm) package."
+				"string" : "`gt4llm` is a set of projects that work with various large language models inside Glamorous Toolkit. The most advanced integration works with `OpenAI` and is found in [[gt4openai]]."
 			},
 			{
 				"__type" : "textSnippet",
@@ -136,12 +136,12 @@
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2024-01-30T13:18:59.9626+01:00"
+			"dateAndTimeString" : "2024-06-09T21:13:09.700242+02:00"
 		}
 	},
 	"pageType" : {
 		"__type" : "namedPage",
-		"title" : "What is gt4openai?"
+		"title" : "Glamorous Toolkit for LLMs"
 	},
 	"uid" : {
 		"__type" : "uuid",

@@ -15,7 +15,7 @@ GtOpenAIModelsGroup >> gtViewModelsFor: aView [
 	^ aView columnedList
 		title: 'Models';
 		priority: 1;
-		items: [ self items ];
+		items: [ self items sorted: [:a :b | a created > b created ] ];
 		column: 'ID' text: #id;
 		column: 'Owned by' text: #ownedBy;
 		column: 'Created on' text: #created
