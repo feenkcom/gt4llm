@@ -29,7 +29,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-04-25T17:28:49.530021+02:00"
+						"dateAndTimeString" : "2024-06-09T21:06:35.416583+02:00"
 					}
 				},
 				"uid" : {
@@ -39,7 +39,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "The tutor in {{gtPage:gt4openai|db=5lw2wjg8hwdwpy1kq5i7lble1}} is based on assistants. We can simulate a similar, albeit more restrained tutor in Ollama by setting up a chat with a model meant for code generation and starting each chat with the instructions. This approach is inherently limited by the context window, but can simulate single exchanges."
+				"string" : "The tutor in {{gtPage:gt4llm|db=5lw2wjg8hwdwpy1kq5i7lble1}} is based on assistants. We can simulate a similar, albeit more restrained tutor in Ollama by setting up a chat with a model meant for code generation and starting each chat with the instructions. This approach is inherently limited by the context window, but can simulate single exchanges."
 			},
 			{
 				"__type" : "pharoSnippet",

@@ -234,6 +234,16 @@ GtOpenAIClient >> getRun: aRunId forThread: aThreadId [
 ]
 
 { #category : #accessing }
+GtOpenAIClient >> gtModelsFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Models';
+		priority: 1;
+		object: [ self listModels ];
+		view: #gtViewModelsFor:
+]
+
+{ #category : #accessing }
 GtOpenAIClient >> initialize [
 	super initialize.
 
