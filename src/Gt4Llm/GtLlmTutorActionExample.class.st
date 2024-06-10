@@ -11,18 +11,20 @@ Class {
 
 { #category : #accessing }
 GtLlmTutorActionExample >> asInstruction [
-	^ GtLlmCompositeInstruction new
-		addItem: (GtLlmInstructionSection new
-				source: self;
-				title: 'Prompt';
-				body: (GtLlmCompositeInstruction new
-						items: {self instruction asInstruction.
-								(String cr
-									, 'State:', String cr, self input ) asInstruction}));
-		addItem: (GtLlmInstructionSection new
-				source: self;
-				title: 'Output';
-				body: (self output asInstruction))
+	^ GtLlmInstructionSection new
+		source: self;
+		title: 'Example';
+		body: (GtLlmCompositeInstruction new
+				addItem: (GtLlmInstructionSection new
+						source: self;
+						title: 'Prompt';
+						body: (GtLlmCompositeInstruction new
+								items: {self instruction asInstruction.
+										(String cr , 'State:' , String cr , self input) asInstruction}));
+				addItem: (GtLlmInstructionSection new
+						source: self;
+						title: 'Output';
+						body: self output asInstruction))
 ]
 
 { #category : #accessing }
