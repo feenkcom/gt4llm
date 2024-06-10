@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'apiKeyButton',
 		'testingButton',
-		'testingLabel'
+		'testingLabel',
+		'fileError'
 	],
 	#category : #'Gt4OpenAI-Widgets'
 }
@@ -27,12 +28,26 @@ GtOpenAICardElement >> initialize [
 	self fitContent.
 
 	self
-		addChild: (BrHorizontalPane new fitContent
+		addChild: (BrHorizontalPane new vFitContent hMatchParent
 				addChild: self makeApiKeyDropdown;
-				addChild: self makeTestingButton).
-	self addChild: self makeTestingLabel.
+				addChild: self makeFileError).
+	self
+		addChild: (BrHorizontalPane new vFitContent hMatchParent
+				margin: (BlInsets top: 5);
+				addChild: self makeTestingButton;
+				addChild: self makeTestingLabel).
 
 	self onApiKeySet
+]
+
+{ #category : #accessing }
+GtOpenAICardElement >> keyFilePathString [
+	| pathString |
+	pathString := self apiKeyFile pathString.
+
+	^ pathString size > 60
+		ifTrue: [ (pathString truncate: 28) , (pathString last: 28) ]
+		ifFalse: [ pathString ]
 ]
 
 { #category : #accessing }
@@ -43,7 +58,7 @@ GtOpenAICardElement >> makeApiKeyDropdown [
 					+ (BrGlamorousWithDropdownAptitude
 							handle: [ BrButton new
 									aptitude: BrGlamorousButtonWithLabelAptitude - BrGlamorousButtonExteriorAptitude;
-									label: self apiKeyFile pathString ]
+									label: self keyFilePathString ]
 							content: [ self makeDropdownContent ])
 ]
 
@@ -73,9 +88,17 @@ GtOpenAICardElement >> makeDropdownContent [
 ]
 
 { #category : #accessing }
+GtOpenAICardElement >> makeFileError [
+	^ fileError := BrLabel new hFitContent
+		margin: (BlInsets left: 5);
+		aptitude: (BrGlamorousLabelAptitude new
+				foreground: BrGlamorousColors errorBackgroundColor);
+		text: ''
+]
+
+{ #category : #accessing }
 GtOpenAICardElement >> makeTestingButton [
 	testingButton := BrButton new
-			margin: (BlInsets left: 5);
 			aptitude: BrGlamorousButtonWithIconAndLabelAptitude;
 			icon: BrGlamorousVectorIcons play;
 			label: 'Test key';
@@ -91,15 +114,18 @@ GtOpenAICardElement >> makeTestingButton [
 
 { #category : #accessing }
 GtOpenAICardElement >> makeTestingLabel [
-	^ testingLabel := BrLabel new
-			margin: (BlInsets top: 5);
+	^ testingLabel := BrLabel new hFitContent
+			margin: (BlInsets left: 5);
 			aptitude: BrGlamorousLabelAptitude;
 			text: ''
 ]
 
 { #category : #accessing }
 GtOpenAICardElement >> onApiKeySet [
-	apiKeyButton label: self apiKeyFile pathString.
+	apiKeyButton label: self keyFilePathString.
 
-	testingLabel text: ''
+	testingLabel text: ''.
+	self apiKeyFile exists
+		ifTrue: [ fileError text: '' ]
+		ifFalse: [ fileError text: 'File does not exist' ]
 ]
