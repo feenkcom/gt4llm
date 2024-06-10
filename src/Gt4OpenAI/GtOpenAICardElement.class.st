@@ -25,13 +25,8 @@ GtOpenAICardElement >> initialize [
 
 	self fitContent.
 
-	self
-		addChild: (BrLabel new alignBottomLeft
-				aptitude: (BrGlamorousLabelAptitude new foreground: Color darkGray);
-				text: 'OpenAI API key file:').
 	self addChild: self makeApiKeyDropdown.
 	self addChild: self makeTestingButton.
-
 
 	self onApiKeySet
 ]
@@ -39,7 +34,7 @@ GtOpenAICardElement >> initialize [
 { #category : #accessing }
 GtOpenAICardElement >> makeApiKeyDropdown [
 	^ apiKeyButton := BrButton new
-			margin: (BlInsets left: 5 right: 5);
+			margin: (BlInsets left: 0 right: 5);
 			aptitude: BrGlamorousButtonWithLabelAptitude
 					+ (BrGlamorousWithDropdownAptitude
 							handle: [ BrButton new
@@ -79,7 +74,7 @@ GtOpenAICardElement >> makeTestingButton [
 			margin: (BlInsets left: 5);
 			aptitude: BrGlamorousButtonWithIconAndLabelAptitude;
 			icon: BrGlamorousVectorIcons play;
-			label: 'Test API key';
+			label: 'Test key';
 			action: [ [ GtOpenAIClient withApiKeyFromFile listModels.
 				testingButton
 					icon: BrGlamorousVectorIcons accept;

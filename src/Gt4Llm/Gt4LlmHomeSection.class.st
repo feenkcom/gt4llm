@@ -12,7 +12,8 @@ Gt4LlmHomeSection >> apiKeyCard [
 		description: 'Install an OpenAI API Key';
 		priority: 10;
 		stencil: [ BrVerticalPane new
-				exact: 600 @ 250;
+				hFitContent;
+				exact: 400@250;
 				background: Color white;
 				aptitude: BrShadowAptitude new beLarge;
 				cellSpacing: 5;
@@ -30,7 +31,12 @@ Gt4LlmHomeSection >> apiKeyCard [
 								bottom: 10
 								right: 20);
 						aptitude: BrGlamorousLabelAptitude new bold;
-						text: 'Install an OpenAI API Key');
+						text: 'Set an OpenAI API key');
+				addChild: (BrEditor new
+						padding: (BlInsets left: 6 right: 5);
+						preventMeAndChildrenMouseEvents;
+						aptitude: (BrGlamorousRegularEditorAptitude new foreground: Color black);
+						text: 'For working with OpenAI you need an API key. Please point to a text file that has as contents the key for the OpenAI API.');
 				addChild: (GtOpenAICardElement new margin: (BlInsets all: 5)) ]
 ]
 
