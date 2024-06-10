@@ -12,7 +12,7 @@ Gt4LlmHomeSection >> apiKeyCard [
 		description: 'Install an OpenAI API Key';
 		priority: 10;
 		stencil: [ BrVerticalPane new
-				exact: 500 @ 250;
+				exact: 600 @ 250;
 				background: Color white;
 				aptitude: BrShadowAptitude new beLarge;
 				cellSpacing: 5;
@@ -31,7 +31,7 @@ Gt4LlmHomeSection >> apiKeyCard [
 								right: 20);
 						aptitude: BrGlamorousLabelAptitude new bold;
 						text: 'Install an OpenAI API Key');
-				addChild: (GtOpenAICard new asGtMagritteViewModel asElement margin: (BlInsets all: 5)) ]
+				addChild: (GtOpenAICardElement new margin: (BlInsets all: 5)) ]
 ]
 
 { #category : #accessing }
