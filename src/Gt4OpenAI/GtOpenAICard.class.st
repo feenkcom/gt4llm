@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : #accessing }
-GtOpenAICard >> codeDirectoryDescription [
+GtOpenAICard >> keyFileDescription [
 	<magritteDescription>
 	^ MAFileDescription new
 		label: 'OpenAI API key file';
