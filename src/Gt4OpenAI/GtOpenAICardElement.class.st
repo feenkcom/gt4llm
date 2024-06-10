@@ -1,9 +1,10 @@
 Class {
 	#name : #GtOpenAICardElement,
-	#superclass : #BrHorizontalPane,
+	#superclass : #BrVerticalPane,
 	#instVars : [
 		'apiKeyButton',
-		'testingButton'
+		'testingButton',
+		'testingLabel'
 	],
 	#category : #'Gt4OpenAI-Widgets'
 }
@@ -25,8 +26,11 @@ GtOpenAICardElement >> initialize [
 
 	self fitContent.
 
-	self addChild: self makeApiKeyDropdown.
-	self addChild: self makeTestingButton.
+	self
+		addChild: (BrHorizontalPane new fitContent
+				addChild: self makeApiKeyDropdown;
+				addChild: self makeTestingButton).
+	self addChild: self makeTestingLabel.
 
 	self onApiKeySet
 ]
@@ -76,22 +80,26 @@ GtOpenAICardElement >> makeTestingButton [
 			icon: BrGlamorousVectorIcons play;
 			label: 'Test key';
 			action: [ [ GtOpenAIClient withApiKeyFromFile listModels.
-				testingButton
-					icon: BrGlamorousVectorIcons accept;
-					label: 'Success!' ]
+				testingLabel
+					text: ('Success!' asRopedText foreground: BrGlamorousColors successBackgroundColor) ]
 					on: Error
-					do: [ testingButton
-							icon: BrGlamorousVectorIcons cancel;
-							label: 'Authentication error' ].
-				testingButton disable ].
+					do: [ testingLabel
+							text: ('Authentication error' asRopedText
+									foreground: BrGlamorousColors errorBackgroundColor) ] ].
 	^ testingButton
+]
+
+{ #category : #accessing }
+GtOpenAICardElement >> makeTestingLabel [
+	^ testingLabel := BrLabel new
+			margin: (BlInsets top: 5);
+			aptitude: BrGlamorousLabelAptitude;
+			text: ''
 ]
 
 { #category : #accessing }
 GtOpenAICardElement >> onApiKeySet [
 	apiKeyButton label: self apiKeyFile pathString.
 
-	testingButton enable
-		icon: BrGlamorousVectorIcons play;
-		label: 'Test API key'
+	testingLabel text: ''
 ]
