@@ -12,8 +12,7 @@ Gt4LlmHomeSection >> apiKeyCard [
 		description: 'Install an OpenAI API Key';
 		priority: 10;
 		stencil: [ BrVerticalPane new
-				hFitContent;
-				exact: 400@250;
+				exact: 500@250;
 				background: Color white;
 				aptitude: BrShadowAptitude new beLarge;
 				cellSpacing: 5;
