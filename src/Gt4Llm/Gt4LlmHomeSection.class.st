@@ -5,6 +5,36 @@ Class {
 }
 
 { #category : #accessing }
+Gt4LlmHomeSection >> apiKeyCard [
+	<gtSectionCard>
+	^ GtHomeCard explicit
+		title: 'OpenAI API Key';
+		description: 'Install an OpenAI API Key';
+		priority: 10;
+		stencil: [ BrVerticalPane new
+				exact: 500 @ 250;
+				background: Color white;
+				aptitude: BrShadowAptitude new beLarge;
+				cellSpacing: 5;
+				padding: (BlInsets all: 10);
+				margin: (BlInsets
+						top: self spaceGap
+						left: 2 * self spaceGap
+						bottom: 2 * self spaceGap
+						right: 2 * self spaceGap);
+				addChild: (BrLabel new
+						beLargeSize;
+						padding: (BlInsets
+								top: 10
+								left: 5
+								bottom: 10
+								right: 20);
+						aptitude: BrGlamorousLabelAptitude new bold;
+						text: 'Install an OpenAI API Key');
+				addChild: (GtOpenAICard new asGtMagritteViewModel asElement margin: (BlInsets all: 5)) ]
+]
+
+{ #category : #accessing }
 Gt4LlmHomeSection >> lepiterCard [
 	<gtSectionCard>
 	^ GtHomeCard lepiterBaseWithTableOfContents
