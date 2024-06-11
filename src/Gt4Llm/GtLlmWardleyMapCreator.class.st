@@ -3,7 +3,6 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'nodes',
-		'topic',
 		'model'
 	],
 	#category : #'Gt4Llm-Examples - Wardley Map'
@@ -62,8 +61,7 @@ GtLlmWardleyMapCreator >> gtLiveFor: aView [
 { #category : #accessing }
 GtLlmWardleyMapCreator >> initialize [
 	model := GtWardleyMapModel new.
-	nodes := Dictionary new.
-	topic := ''
+	nodes := Dictionary new
 ]
 
 { #category : #accessing }
@@ -109,10 +107,10 @@ GtLlmWardleyMapCreator >> setNode: aName toX: aNumber andY: anotherNumber [
 
 { #category : #accessing }
 GtLlmWardleyMapCreator >> topic [
-	^ topic
+	^ self model title
 ]
 
 { #category : #accessing }
 GtLlmWardleyMapCreator >> topic: anObject [
-	topic := anObject
+	self model title: anObject
 ]

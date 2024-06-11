@@ -15,9 +15,7 @@ GtLlmWardleyMapEditorElement >> createTopicSectionElement [
 		margin: (BlInsets top: 10);
 		addChild: (BrLabel new
 				aptitude: (BrGlamorousLabelAptitude new foreground: Color darkGray);
-				text: (self creator topic isEmptyOrNil
-						ifTrue: [ 'Create with topic:' ]
-						ifFalse: [ 'Update topic' ]));
+				text: 'Create nodes on topic:');
 		addChild: (BrHorizontalPane new fitContent
 				margin: (BlInsets top: 3);
 				addChild: (editor := BrEditor new
@@ -35,7 +33,7 @@ GtLlmWardleyMapEditorElement >> createTopicSectionElement [
 						icon: BrGlamorousVectorIcons accept;
 						label: 'Set topic';
 						action: [ self creator
-								announce: (GtLlmSendActionToChat action: 'Create an initial map' arguments: {editor text}).
+								announce: (GtLlmSendActionToChat action: 'Create a set of nodes' arguments: {editor text}).
 							self fireEvent: BrContextMenuHideWish new ]))
 ]
 

@@ -33,6 +33,7 @@ GtLlmWardleyMapCanvasElement >> installContextMenu [
 						size: 5 @ 5;
 						geometry: BlEllipseGeometry new ]
 				content: [ GtLlmWardleyMapEditorElement new
+						wardleyMapViewModel: self wardleyMapViewModel;
 						canvas: self;
 						creator: self creator;
 						requestFocus ]) preferredExtent: 120 @ 150)
