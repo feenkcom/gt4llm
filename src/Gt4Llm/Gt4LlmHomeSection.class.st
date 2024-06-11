@@ -10,7 +10,7 @@ Gt4LlmHomeSection >> apiKeyCard [
 	^ GtHomeCard explicit
 		title: 'OpenAI API Key';
 		description: 'Install an OpenAI API Key';
-		priority: 10;
+		priority: 11;
 		stencil: [ BrVerticalPane new
 				exact: 500 @ 250;
 				background: Color white;
