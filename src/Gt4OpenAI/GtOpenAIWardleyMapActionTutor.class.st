@@ -86,11 +86,11 @@ In summary, `Compute` signifies the provisioning of raw processing power in the 
 { #category : #accessing }
 GtOpenAIWardleyMapActionTutor >> initialAction [
 	^ GtLlmTutorAction new
-		name: 'Create an initial map';
-		description: 'Creates an initial map, filling topic, nodes, and connections with sensible data. If a map topic was already set, it is overridden completely.';
-		format: 'Create an initial map on {1}';
+		name: 'Create a set of nodes';
+		description: 'Creates a set of nodes based on a given topic, filling topic, nodes, and connections with sensible data. If a map topic was already set, it is overridden. The rest of the map is extended.';
+		format: 'Create a set of nodes on {1}';
 		examples: {GtLlmTutorActionExample new
-					instruction: 'Create an initial map on Key components for a drone delivery service';
+					instruction: 'Create a set of nodes on Key components for a drone delivery service';
 					input: '```topic
 ```
 ```node
@@ -98,7 +98,7 @@ GtOpenAIWardleyMapActionTutor >> initialAction [
 ```connection
 ```';
 					output: '```action
-Create an initial map
+Create a set of nodes
 ```
 ```topic
 Key components for a drone delivery service
@@ -137,7 +137,7 @@ Key components for a drone delivery service
 {"from": "Drone delivery platform", "to": "Cybersecurity measures"}
 ```'.
 				GtLlmTutorActionExample new
-					instruction: 'Create an initial map on Moldable development';
+					instruction: 'Create a set of nodes on Moldable development';
 					input: '```topic
 ```
 ```node
@@ -145,7 +145,7 @@ Key components for a drone delivery service
 ```connection
 ```';
 					output: '```action
-Create an initial map
+Create a set of nodes
 ```
 ```topic
 Moldable development
