@@ -148,7 +148,7 @@ gtElementViewFor: aView
 		title: ''Element'';
 		priority: 1;
 		stencil: [BlElement new size: 100@100; color: Color blue]'.
-						'Columned tree view'
+						'Mondrian view'
 							-> 'Painting
 gtPaintingFor: aView
 	<gtView>
