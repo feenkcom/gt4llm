@@ -41,6 +41,32 @@ GtLlmInspectorSummarizer >> summarizeViews: anObject [
 ]
 
 { #category : #accessing }
+GtLlmInspectorSummarizer >> summarizeViewsWithoutMarkup: anObject [
+	| pragmas |
+	pragmas := GtPhlowViewsCollector new
+			fromObject: anObject;
+			context: GtPhlowContext new;
+			collectPragmas.
+	^ GtLlmInspectorViewSummaryGroup
+		withAll: (pragmas
+				collect: [ :aPragma | 
+					GtLlmInspectorViewSummary new
+						withoutMarkup: true;
+						viewClass: aPragma methodClass;
+						selector: aPragma methodSelector;
+						code: aPragma method sourceCode ])
+]
+
+{ #category : #accessing }
+GtLlmInspectorSummarizer >> summarizeWithoutMarkup: anObject [
+	^ GtLlmInspectorSummary new
+		object: anObject;
+		objectClass: anObject class;
+		slots: (self summarizeSlots: anObject);
+		views: (self summarizeViewsWithoutMarkup: anObject)
+]
+
+{ #category : #accessing }
 GtLlmInspectorSummarizer >> summarizeWithoutViews: anObject [
 	^ GtLlmInspectorSummary new
 		object: anObject;

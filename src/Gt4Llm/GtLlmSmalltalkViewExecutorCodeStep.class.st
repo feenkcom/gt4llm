@@ -32,10 +32,15 @@ GtLlmSmalltalkViewExecutorCodeStep >> createStackString: anError [
 ]
 
 { #category : #accessing }
+GtLlmSmalltalkViewExecutorCodeStep >> extractInstance: aContext [
+	^ aContext instance
+]
+
+{ #category : #accessing }
 GtLlmSmalltalkViewExecutorCodeStep >> runStep: aContext [
 	| view ast return script viewVariableName |
 	view := aContext lastResult.
-	instance := aContext instance.
+	instance := self extractInstance: aContext.
 	ast := GtPharoParser parse: view methodSource.
 	return := (ast // GtPharoReturnNode) anyOne.
 	script := '.' join: (ast body statements collect: #source).

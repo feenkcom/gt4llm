@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'selector',
 		'code',
-		'viewClass'
+		'viewClass',
+		'withoutMarkup'
 	],
 	#category : #'Gt4Llm-Summarizer'
 }
@@ -33,6 +34,11 @@ GtLlmInspectorViewSummary >> gtCodeFor: aView [
 ]
 
 { #category : #accessing }
+GtLlmInspectorViewSummary >> initialize [
+	withoutMarkup := false
+]
+
+{ #category : #accessing }
 GtLlmInspectorViewSummary >> selector [
 	^ selector
 ]
@@ -44,9 +50,12 @@ GtLlmInspectorViewSummary >> selector: anObject [
 
 { #category : #accessing }
 GtLlmInspectorViewSummary >> summaryString [
+	withoutMarkup ifTrue: [ ^ self code ].
+
 	^ '```smalltalk-method
-' , self viewClass asString, '
-', self code
+' , self viewClass asString
+		, '
+' , self code
 		, '
 ```'
 ]
@@ -59,4 +68,14 @@ GtLlmInspectorViewSummary >> viewClass [
 { #category : #accessing }
 GtLlmInspectorViewSummary >> viewClass: anObject [
 	viewClass := anObject
+]
+
+{ #category : #accessing }
+GtLlmInspectorViewSummary >> withoutMarkup [
+	^ withoutMarkup
+]
+
+{ #category : #accessing }
+GtLlmInspectorViewSummary >> withoutMarkup: anObject [
+	withoutMarkup := anObject
 ]

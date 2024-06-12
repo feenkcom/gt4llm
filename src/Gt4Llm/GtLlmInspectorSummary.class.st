@@ -80,14 +80,23 @@ GtLlmInspectorSummary >> slots: anObject [
 
 { #category : #accessing }
 GtLlmInspectorSummary >> summaryString [
-	| className article |
+	| className article slotSummary viewSummary |
 	className := self objectClass asString.
 	article := className first isVowel ifTrue: [ 'an ' ] ifFalse: [ 'a ' ].
-	^ 'an instance of ', className , String cr, String cr, 'With print string: ' , self object printString 
-		, String cr, String cr, 'With slots:' , String cr, String cr
-		, (String cr join: (self slots collect: [ :aSlot | aSlot summaryString ]))
-		, String cr , String cr, 'With defined views:' , String cr
-		, (String cr join: (self views collect: [ :aView | String cr , aView summaryString ]))
+
+	slotSummary := self slots
+			ifEmpty: [ '' ]
+			ifNotEmpty: [ 'With slots:' , String cr , String cr
+					, (String cr join: (self slots collect: [ :aSlot | aSlot summaryString ])) ].
+	viewSummary := self views
+			ifEmpty: [ '' ]
+			ifNotEmpty: [ 'With defined views:' , String cr
+					, (String cr
+							join: (self views collect: [ :aView | String cr , aView summaryString ])) ].
+
+	^ 'an instance of ' , className , String cr , String cr , 'With print string: '
+		, self object printString , String cr , String cr , slotSummary , String cr
+		, String cr , viewSummary
 ]
 
 { #category : #accessing }
