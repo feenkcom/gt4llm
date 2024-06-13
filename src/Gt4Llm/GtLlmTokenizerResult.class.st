@@ -23,14 +23,19 @@ GtLlmTokenizerResult >> gtResultFor: aView [
 						collect: [ :aToken | 
 							| aLabel |
 							aLabel := BrLabel new
-									aptitude: BrGlamorousLabelAptitude new + BrGlamorousListItemAptitude new;
+									aptitude: BrGlamorousLabelAptitude new
+											+ (BrLazyStyleCommonAptitude new
+													default: [ :aStyle | 
+														(tokenLabels at: aToken num ifAbsent: [ {} ])
+															do: [ :anotherLabel | anotherLabel background: BrGlamorousColors hoveredListItemColor ] ];
+													hovered: [ :aStyle | 
+														allLabels
+															do: [ :anotherLabel | anotherLabel background: BrGlamorousColors hoveredListItemColor ].
+														(tokenLabels at: aToken num ifAbsent: [ {} ])
+															do: [ :anotherLabel | anotherLabel background: BrGlamorousColors newsBackgroundColor ] ]);
 									geometry: (BlRoundedRectangleGeometry cornerRadius: 5);
 									padding: (BlInsets all: 1);
-									text: aToken name;
-									when: BlElementHoveredEvent
-										do: [ allLabels do: [ :anotherLabel | anotherLabel background: Color transparent ].
-											(tokenLabels at: aToken num ifAbsent: [ {} ])
-												do: [ :anotherLabel | anotherLabel background: BrGlamorousColors hoveredListItemColor ] ].
+									text: aToken name.
 							(tokenLabels at: aToken num ifAbsentPut: [ OrderedCollection new ])
 								add: aLabel.
 							allLabels add: aLabel ]) ]
