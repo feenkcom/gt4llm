@@ -55,6 +55,22 @@ GtLlmTutorAction >> format: anObject [
 ]
 
 { #category : #accessing }
+GtLlmTutorAction >> gtDescriptionFor: aView [
+	<gtView>
+	^ aView textEditor
+		title: 'Description';
+		text: [ self description ]
+]
+
+{ #category : #accessing }
+GtLlmTutorAction >> gtExamplesFor: aView [
+	<gtView>
+	^ aView list
+		title: 'Examples';
+		items: [ self examples ]
+]
+
+{ #category : #accessing }
 GtLlmTutorAction >> gtInstructionFor: aView [
 	<gtView>
 	^ aView forward
