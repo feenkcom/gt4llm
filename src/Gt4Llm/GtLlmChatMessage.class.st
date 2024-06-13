@@ -42,6 +42,11 @@ GtLlmChatMessage >> annotations [
 ]
 
 { #category : #accessing }
+GtLlmChatMessage >> asTokenizableString [
+	^ '<|im_start|>' , self role , '<|im_sep|>' , self content , '<|im_end|>'
+]
+
+{ #category : #accessing }
 GtLlmChatMessage >> chat [
 	^ chat
 ]
