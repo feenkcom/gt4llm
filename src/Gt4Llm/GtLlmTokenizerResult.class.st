@@ -23,6 +23,7 @@ GtLlmTokenizerResult >> gtResultFor: aView [
 						collect: [ :aToken | 
 							| aLabel |
 							aLabel := BrLabel new
+									margin: (BlInsets all: 3);
 									aptitude: BrGlamorousLabelAptitude new
 											+ (BrLazyStyleCommonAptitude new
 													default: [ :aStyle | 
