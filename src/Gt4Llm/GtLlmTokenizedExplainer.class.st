@@ -88,8 +88,11 @@ GtLlmTokenizedExplainer >> updateBytesList [
 				addChild: (BrLabel new
 						aptitude: BrGlamorousLabelAptitude new
 								+ (GtExplainerExplanationAptitude new explanationModel: aTokenNumber)
-								+ (BrStyleCommonAptitude new
-										hovered: [ :aStyle | aStyle background: BrGlamorousColors textHighlightColor ]);
+								+ (BrLazyStyleCommonAptitude new
+										default: [ :aStyle | self editor unhighlightGroupFor: aTokenNumber ];
+										hovered: [ :aStyle | 
+											self editor highlightGroupFor: aTokenNumber.
+											aStyle background: BrGlamorousColors newsBackgroundColor ]);
 						geometry: (BlRoundedRectangleGeometry cornerRadius: 4);
 						text: aTokenNumber asString;
 						padding: (BlInsets all: 5)) ]
