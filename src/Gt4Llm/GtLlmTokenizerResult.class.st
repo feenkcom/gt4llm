@@ -1,13 +1,17 @@
 Class {
 	#name : #GtLlmTokenizerResult,
-	#superclass : #Object,
+	#superclass : #PBProxyObject,
 	#instVars : [
-		'result',
 		'input',
 		'model'
 	],
 	#category : #'Gt4Llm-Tokenizer'
 }
+
+{ #category : #accessing }
+GtLlmTokenizerResult class >> pythonClass [
+	^ 'gtoolkit_tiktokenize.tokenize.TokenizerResult'
+]
 
 { #category : #accessing }
 GtLlmTokenizerResult >> gtResultFor: aView [
@@ -19,7 +23,7 @@ GtLlmTokenizerResult >> gtResultFor: aView [
 			tokenLabels := Dictionary new.
 			allLabels := OrderedCollection new.
 			BrHorizontalFlow new matchParent
-				addChildren: (self result tokens
+				addChildren: (self tokens
 						collect: [ :aToken | 
 							| aLabel |
 							aLabel := BrLabel new
@@ -60,16 +64,6 @@ GtLlmTokenizerResult >> model [
 { #category : #accessing }
 GtLlmTokenizerResult >> model: anObject [
 	model := anObject
-]
-
-{ #category : #accessing }
-GtLlmTokenizerResult >> result [
-	^ result
-]
-
-{ #category : #accessing }
-GtLlmTokenizerResult >> result: anObject [
-	result := anObject
 ]
 
 { #category : #accessing }
