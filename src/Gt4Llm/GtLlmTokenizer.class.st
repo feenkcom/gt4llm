@@ -8,15 +8,15 @@ Class {
 GtLlmTokenizer >> tokenize: aString usingModel: aModel [
 	| aTokenizerResult |
 	PBApplication isRunning ifFalse: [ PBApplication start ].
-	PBApplication uniqueInstance installModule: 'tiktoken'.
+	PBApplication uniqueInstance installModule: 'gtoolkit_tiktokenize'.
 
 	aTokenizerResult := PBApplication
 			do: [ :anApplication | 
 				anApplication newCommandStringFactory
 					bindingAt: #string put: aString;
 					bindingAt: #model put: aModel;
-					script: '';
-					resultExpression: 'tokenize(string, model)';
+					script: 'import gtoolkit_tiktokenize';
+					resultExpression: 'gtoolkit_tiktokenize.tokenize(string, model)';
 					sendAndWait ].
 
 	^ GtLlmTokenizerResult new
