@@ -80,6 +80,7 @@ GtLlmTokenizedExplainer >> updateBytesList [
 	self bytesList removeChildren.
 
 	tokenSet := self result tokens collect: #num as: Set.
+	tokenSet := tokenSet asSortedCollection.
 
 	tokenSet
 		do: [ :aTokenNumber | 
