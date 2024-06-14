@@ -120,20 +120,9 @@ GtLlmFineTuningFile >> name: anObject [
 
 { #category : #accessing }
 GtLlmFineTuningFile >> numberOfTokens [
-	PBApplication isRunning ifFalse: [ PBApplication start ].
-	PBApplication uniqueInstance installModule: 'tiktoken'.
-
-	^ PBApplication
-		do: [ :anApplication | 
-			| string |
-			string := '' join: ((conversations flatCollect: #items) collect: #content).
-			anApplication newCommandStringFactory
-				bindingAt: #string put: string;
-				bindingAt: #model put: self model;
-				script: 'import tiktoken
-encoding = tiktoken.encoding_for_model(model)';
-				resultExpression: 'len(encoding.encode(string))';
-				sendAndWait ]
+	^ (GtLlmTokenizer new
+		tokenizeMessages: (conversations flatCollect: #items)
+		usingModel: self model) tokenCount
 ]
 
 { #category : #accessing }
