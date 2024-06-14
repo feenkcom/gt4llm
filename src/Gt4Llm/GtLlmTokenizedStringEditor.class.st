@@ -2,10 +2,21 @@ Class {
 	#name : #GtLlmTokenizedStringEditor,
 	#superclass : #BrHorizontalFlow,
 	#instVars : [
-		'result'
+		'result',
+		'tokenLabels',
+		'allLabels'
 	],
 	#category : #'Gt4Llm-Tokenizer'
 }
+
+{ #category : #accessing }
+GtLlmTokenizedStringEditor >> highlightGroupFor: aByte [
+	self
+		schedule: [ allLabels
+				do: [ :anotherLabel | anotherLabel background: BrGlamorousColors hoveredListItemColor ].
+			(tokenLabels at: aByte ifAbsent: [ {} ])
+				do: [ :anotherLabel | anotherLabel background: BrGlamorousColors newsBackgroundColor ] ]
+]
 
 { #category : #accessing }
 GtLlmTokenizedStringEditor >> initialize [
@@ -16,7 +27,6 @@ GtLlmTokenizedStringEditor >> initialize [
 
 { #category : #accessing }
 GtLlmTokenizedStringEditor >> onResultAdded [
-	| tokenLabels allLabels |
 	self removeChildren.
 
 	tokenLabels := Dictionary new.
@@ -29,14 +39,8 @@ GtLlmTokenizedStringEditor >> onResultAdded [
 							margin: (BlInsets all: 3);
 							aptitude: BrGlamorousLabelAptitude new
 									+ (BrLazyStyleCommonAptitude new
-											default: [ :aStyle | 
-												(tokenLabels at: aToken num ifAbsent: [ {} ])
-													do: [ :anotherLabel | anotherLabel background: BrGlamorousColors hoveredListItemColor ] ];
-											hovered: [ :aStyle | 
-												allLabels
-													do: [ :anotherLabel | anotherLabel background: BrGlamorousColors hoveredListItemColor ].
-												(tokenLabels at: aToken num ifAbsent: [ {} ])
-													do: [ :anotherLabel | anotherLabel background: BrGlamorousColors newsBackgroundColor ] ]);
+											default: [ :aStyle | self unhighlightGroupFor: aToken num ];
+											hovered: [ :aStyle | self highlightGroupFor: aToken num ]);
 							geometry: (BlRoundedRectangleGeometry cornerRadius: 5);
 							padding: (BlInsets all: 1);
 							text: aToken name.
@@ -58,4 +62,23 @@ GtLlmTokenizedStringEditor >> result: anObject [
 	result := anObject.
 
 	self onResultAdded
+]
+
+{ #category : #accessing }
+GtLlmTokenizedStringEditor >> schedule: aTask [
+	self enqueueTask: (BlTaskAction new action: aTask)
+]
+
+{ #category : #accessing }
+GtLlmTokenizedStringEditor >> unhighlight [
+	self
+		schedule: [ allLabels
+				do: [ :anotherLabel | anotherLabel background: BrGlamorousColors hoveredListItemColor ] ]
+]
+
+{ #category : #accessing }
+GtLlmTokenizedStringEditor >> unhighlightGroupFor: aByte [
+	self
+		schedule: [ (tokenLabels at: aByte ifAbsent: [ {} ])
+				do: [ :anotherLabel | anotherLabel background: BrGlamorousColors hoveredListItemColor ] ]
 ]
