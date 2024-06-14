@@ -19,10 +19,9 @@ GtLlmTokenizer >> tokenize: aString usingModel: aModel [
 					resultExpression: 'gtoolkit_tiktokenize.tokenize(string, model)';
 					sendAndWait ].
 
-	^ GtLlmTokenizerResult new
+	^ aTokenizerResult
 		input: aString;
-		model: aModel;
-		result: aTokenizerResult
+		model: aModel
 ]
 
 { #category : #accessing }
