@@ -7,14 +7,16 @@ Class {
 { #category : #accessing }
 Gt4LlmHomeSection >> apiKeyCard [
 	<gtSectionCard>
-	^ GtHomeCard explicit
+	| card |
+	card := GtHomeCard explicit.
+	^ card
 		title: 'OpenAI API Key';
 		description: 'Install an OpenAI API Key';
 		priority: 11;
 		stencil: [ BrVerticalPane new
-				exact: 500 @ 250;
+				exact: 300 @ 250;
 				background: Color white;
-				aptitude: BrShadowAptitude new beLarge;
+				aptitude: BrShadowAptitude new beLarge + (GtPhlowBrowseDefinitionAptitude new definition: [ card definingMethod ]);
 				cellSpacing: 5;
 				padding: (BlInsets all: 10);
 				margin: (BlInsets
