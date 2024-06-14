@@ -5,106 +5,78 @@
 		"__type" : "snippets",
 		"items" : [
 			{
-				"__type" : "pharoSnippet",
+				"__type" : "textSnippet",
 				"children" : {
 					"__type" : "snippets",
 					"items" : [ ]
 				},
 				"createEmail" : {
 					"__type" : "email",
-					"emailString" : "veit.heller@feenk.com"
+					"emailString" : "<unknown>"
 				},
 				"createTime" : {
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-13T12:23:04.787171+02:00"
+						"dateAndTimeString" : "2024-06-14T16:41:14.683272+02:00"
 					}
 				},
 				"editEmail" : {
 					"__type" : "email",
-					"emailString" : "veit.heller@feenk.com"
+					"emailString" : "<unknown>"
 				},
 				"editTime" : {
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-13T16:09:44.684718+02:00"
+						"dateAndTimeString" : "2024-06-14T17:24:49.518023+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "rukRnyTXDQCDujOsBqzWPg=="
+					"uidString" : "wmMuWDzXDQCd9ji3CVHTcA=="
 				},
-				"code" : "PBApplication isRunning ifFalse: [ PBApplication start ].\rPBApplication uniqueInstance installModule: 'tiktoken'."
+				"paragraphStyle" : {
+					"__type" : "textStyle"
+				},
+				"string" : "OpenAI publishes [an open-source Python library](https://github.com/openai/tiktoken) that tokenizes input strings as it is done internally for their product. This is useful for estimating costs as well as ensuring inputs stay within certain limits (context windows etc.)."
 			},
 			{
-				"__type" : "pythonSnippet",
+				"__type" : "textSnippet",
 				"children" : {
 					"__type" : "snippets",
 					"items" : [ ]
 				},
 				"createEmail" : {
 					"__type" : "email",
-					"emailString" : "veit.heller@feenk.com"
+					"emailString" : "<unknown>"
 				},
 				"createTime" : {
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-13T16:07:43.060297+02:00"
+						"dateAndTimeString" : "2024-06-14T16:43:04.407554+02:00"
 					}
 				},
 				"editEmail" : {
 					"__type" : "email",
-					"emailString" : "veit.heller@feenk.com"
+					"emailString" : "<unknown>"
 				},
 				"editTime" : {
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-13T16:21:37.218994+02:00"
+						"dateAndTimeString" : "2024-06-14T16:44:43.939355+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "cxJwwifXDQCfo/0TBs9aqQ=="
+					"uidString" : "6Xw2XTzXDQCixoWeCVHTcA=="
 				},
-				"code" : "from dataclasses import dataclass\rfrom gtoolkit_bridge import gtView\r\r@dataclass\rclass Token:\r\tname: str\r\tnum: int\r\tstart: int\r\tend: int\r\t\rclass TokenizerResult:\r\tdef __init__(self, tokens):\r\t\tself.tokens = tokens\r\t\t\r\t@gtView\r\tdef gtViewTokens(self, view):\r\t\tclist = view.columnedList()\n\t\tclist.title(\"Tokens\")\n\t\tclist.priority(2)\n\t\tclist.items(lambda: self.tokens)\n\t\tclist.column(\"Name\", lambda each: each.name)\n\t\tclist.column(\"Byte\", lambda each: each.num)\n\t\tclist.column(\"Start\", lambda each: each.start)\r\t\tclist.column(\"End\", lambda each: each.end)\n\t\treturn clist"
-			},
-			{
-				"__type" : "pythonSnippet",
-				"children" : {
-					"__type" : "snippets",
-					"items" : [ ]
+				"paragraphStyle" : {
+					"__type" : "textStyle"
 				},
-				"createEmail" : {
-					"__type" : "email",
-					"emailString" : "veit.heller@feenk.com"
-				},
-				"createTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-13T12:36:56.635196+02:00"
-					}
-				},
-				"editEmail" : {
-					"__type" : "email",
-					"emailString" : "veit.heller@feenk.com"
-				},
-				"editTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-13T18:29:03.467101+02:00"
-					}
-				},
-				"uid" : {
-					"__type" : "uid",
-					"uidString" : "u+mm0CTXDQCLnTReBqzWPg=="
-				},
-				"code" : "import tiktoken\r\rdef tokenize(string, model):\r\tencoding = tiktoken.encoding_for_model(model)\r\tencoding = tiktoken.Encoding(\n    name=\"gt_extended\",\n    pat_str=encoding._pat_str,\n    mergeable_ranks=encoding._mergeable_ranks,\n    special_tokens={\n        **encoding._special_tokens,\n        \"<|im_start|>\": 100264,\n        \"<|im_end|>\": 100265,\n        \"<|im_sep|>\": 100266,\n    }\n\t)\r\t\r\tencoded = encoding.encode(string, allowed_special='all')\r\tstart_range = 0\r\ttokens = []\r\tfor b in encoded:\r\t\tdecoded = str(encoding.decode_single_token_bytes(b), encoding='utf-8')\r\t\tend_range = start_range + len(decoded)\r\t\ttokens.append(Token(decoded, b, start_range+1, end_range))\r\t\tstart_range = end_range\r\treturn TokenizerResult(tokens)"
+				"string" : "`gt4openai` utilizes this library internally, for instance to estimate the cost of {{gtPage:Creating a fine-tuned model|db=5lw2wjg8hwdwpy1kq5i7lble1|label=a fine-tuning job}}. As such, we need views for the intermediary model, and decided to build a visualizer. It can be accessed directly by using the tokenizer."
 			},
 			{
 				"__type" : "pharoSnippet",
@@ -125,20 +97,57 @@
 				},
 				"editEmail" : {
 					"__type" : "email",
-					"emailString" : "veit.heller@feenk.com"
+					"emailString" : "<unknown>"
 				},
 				"editTime" : {
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-13T18:30:46.901079+02:00"
+						"dateAndTimeString" : "2024-06-14T16:44:50.888365+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "Q/JS2yfXDQCqMIACBs9aqQ=="
 				},
-				"code" : "GtLlmTokenizer new\r\ttokenize: '<|im_start|>system<|im_sep|>You are a helpful assistant<|im_end|><|im_start|>assistant<|im_sep|>Hello! How can I help you?<|im_end|>'\r\tusingModel: 'gpt-4'"
+				"code" : "GtLlmTokenizer new\r\ttokenize: 'You are a helpful assistant'\r\tusingModel: 'gpt-4'"
+			},
+			{
+				"__type" : "textSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-06-14T16:44:55.735504+02:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-06-14T16:45:43.82646+02:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "4VpbZTzXDQCqhbNDCVHTcA=="
+				},
+				"paragraphStyle" : {
+					"__type" : "textStyle"
+				},
+				"string" : "Oftentimes, the tokenizer doesn’t operate on input strings, but rather a list of messages. This, too, can be tokenized by {{gtClass:GtLlmTokenizer}}."
 			},
 			{
 				"__type" : "pharoSnippet",
@@ -159,13 +168,13 @@
 				},
 				"editEmail" : {
 					"__type" : "email",
-					"emailString" : "veit.heller@feenk.com"
+					"emailString" : "<unknown>"
 				},
 				"editTime" : {
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-13T18:26:35.479819+02:00"
+						"dateAndTimeString" : "2024-06-14T16:29:12.674034+02:00"
 					}
 				},
 				"uid" : {
@@ -178,29 +187,29 @@
 	},
 	"createEmail" : {
 		"__type" : "email",
-		"emailString" : "veit.heller@feenk.com"
+		"emailString" : "<unknown>"
 	},
 	"createTime" : {
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2024-06-13T12:22:38.896962+02:00"
+			"dateAndTimeString" : "2024-06-14T16:41:11.602232+02:00"
 		}
 	},
 	"editEmail" : {
 		"__type" : "email",
-		"emailString" : "veit.heller@feenk.com"
+		"emailString" : "<unknown>"
 	},
 	"editTime" : {
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2024-06-13T12:22:38.896962+02:00"
+			"dateAndTimeString" : "2024-06-14T16:41:11.602232+02:00"
 		}
 	},
 	"pageType" : {
-		"__type" : "unnamedPage",
-		"defaultTitle" : "Playground"
+		"__type" : "namedPage",
+		"title" : "Visualizing tokenization"
 	},
 	"uid" : {
 		"__type" : "uuid",
