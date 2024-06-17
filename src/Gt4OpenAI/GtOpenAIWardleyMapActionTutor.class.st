@@ -16,7 +16,7 @@ GtOpenAIWardleyMapActionTutor >> connectionAction [
 Cloud computing
 ```
 ```node
-{''name'': ''Platform'', ''x'': 0.3, ''y'': 0.4}
+{''name'': ''Platform'', ''evolution'': 0.3, ''visibility'': 0.4}
 ```';
 					output: '```action
 Add a new connected node
@@ -25,8 +25,8 @@ Add a new connected node
 Cloud computing
 ```
 ```node
-{''name'': ''Platform'', ''x'': 0.3, ''y'': 0.4}
-{''name'': ''Compute'', ''x'': 0.7, ''y'': 0.1}
+{''name'': ''Platform'', ''evolution'': 0.3, ''visibility'': 0.4}
+{''name'': ''Compute'', ''evolution'': 0.7, ''visibility'': 0.1}
 ```
 ```connection
 {''from'': ''Platform'', ''to'': ''Compute''}
@@ -40,11 +40,11 @@ Add a new connected node
 Cloud computing
 ```
 ```node
-{''name'': ''Regulator'', ''x'': 0.6, ''y'': 0.2}
+{''name'': ''Regulator'', ''evolution'': 0.6, ''visibility'': 0.2}
 ```';
 					output: '```node
-{''name'': ''Regulator'', ''x'': 0.6, ''y'': 0.2}
-{''name'': ''Audit'', ''x'': 0.7, ''y'': 0.1}
+{''name'': ''Regulator'', ''evolution'': 0.6, ''visibility'': 0.2}
+{''name'': ''Audit'', ''evolution'': 0.7, ''visibility'': 0.1}
 ```
 ```connection
 {''from'': ''Audit'', ''to'': ''Regulator''}
@@ -63,7 +63,7 @@ GtOpenAIWardleyMapActionTutor >> explanationAction [
 Cloud computing
 ```
 ```node
-{''name'': ''Compute'', ''x'': 0.3, ''y'': 0.4}
+{''name'': ''Compute'', ''evolution'': 0.3, ''visibility'': 0.4}
 ```';
 					output: '```action
 Explain a node
@@ -72,7 +72,7 @@ Explain a node
 Cloud computing
 ```
 ```node
-{''name'': ''Compute'', ''x'': 0.3, ''y'': 0.4}
+{''name'': ''Compute'', ''evolution'': 0.3, ''visibility'': 0.4}
 ```
 ```explanation
 In the context of this Wardley Map on Cloud Computing, the node `Compute` refers to the computing resources and capabilities provided as part of cloud services. This encompasses the virtualized processing power (CPUs, GPUs) that can be scaled up or down on demand to meet the needs of applications or services running in the cloud. The `Compute` node is fundamental to cloud computing, as it allows for flexible, efficient, and scalable computing solutions that can be tailored to the specific requirements of businesses and developers.
@@ -104,21 +104,21 @@ Create a set of nodes
 Key components for a drone delivery service
 ```
 ```node
-{"name":"Drone delivery platform","x":0.7,"y":0.7}
-{"name":"Communication system","x":0.4,"y":0.6}
-{"name":"Regulatory compliance","x":0.3,"y":0.8}
-{"name":"Software development","x":0.3,"y":0.2}
-{"name":"Computing resources","x":0.2,"y":0.3}
-{"name":"Customer need","x":0.9,"y":0.8}
-{"name":"Power supply and charging stations","x":0.2,"y":0.5}
-{"name":"Weather monitoring system","x":0.4,"y":0.5}
-{"name":"Navigation and GPS","x":0.3,"y":0.6}
-{"name":"Data storage","x":0.2,"y":0.4}
-{"name":"Cybersecurity measures","x":0.1,"y":0.6}
-{"name":"Drones","x":0.6,"y":0.6}
-{"name":"Maintenance service for drones","x":0.5,"y":0.4}
-{"name":"Air traffic control system","x":0.2,"y":0.7}
-{"name":"Automated package handling system","x":0.5,"y":0.6}
+{"name":"Drone delivery platform","evolution":0.7,"visibility":0.7}
+{"name":"Communication system","evolution":0.4,"visibility":0.6}
+{"name":"Regulatory compliance","evolution":0.3,"visibility":0.8}
+{"name":"Software development","evolution":0.3,"visibility":0.2}
+{"name":"Computing resources","evolution":0.2,"visibility":0.3}
+{"name":"Customer need","evolution":0.9,"visibility":0.8}
+{"name":"Power supply and charging stations","evolution":0.2,"visibility":0.5}
+{"name":"Weather monitoring system","evolution":0.4,"visibility":0.5}
+{"name":"Navigation and GPS","evolution":0.3,"visibility":0.6}
+{"name":"Data storage","evolution":0.2,"visibility":0.4}
+{"name":"Cybersecurity measures","evolution":0.1,"visibility":0.6}
+{"name":"Drones","evolution":0.6,"visibility":0.6}
+{"name":"Maintenance service for drones","evolution":0.5,"visibility":0.4}
+{"name":"Air traffic control system","evolution":0.2,"visibility":0.7}
+{"name":"Automated package handling system","evolution":0.5,"visibility":0.6}
 ```
 ```connection
 {"from": "Customer need", "to": "Drone delivery platform"}
@@ -151,14 +151,14 @@ Create a set of nodes
 Moldable development
 ```
 ```node
-{"name":"User Feedback","x":0.4,"y":0.85}
-{"name":"Programming Languages","x":0.8,"y":0.3}
-{"name":"Problem Domain","x":0.2,"y":0.9}
-{"name":"Customization Frameworks","x":0.5,"y":0.7}
-{"name":"Frameworks and Libraries","x":0.75,"y":0.2}
-{"name":"Moldable Tools","x":0.4,"y":0.8}
-{"name":"Developer Skills","x":0.3,"y":0.7}
-{"name":"Development Practices","x":0.1,"y":0.1}
+{"name":"User Feedback","evolution":0.4,"visibility":0.85}
+{"name":"Programming Languages","evolution":0.8,"visibility":0.3}
+{"name":"Problem Domain","evolution":0.2,"visibility":0.9}
+{"name":"Customization Frameworks","evolution":0.5,"visibility":0.7}
+{"name":"Frameworks and Libraries","evolution":0.75,"visibility":0.2}
+{"name":"Moldable Tools","evolution":0.4,"visibility":0.8}
+{"name":"Developer Skills","evolution":0.3,"visibility":0.7}
+{"name":"Development Practices","evolution":0.1,"visibility":0.1}
 ```
 ```connection
 {"from": "Developer Skills", "to": "Moldable Tools"}
@@ -208,13 +208,13 @@ Cloud computing in regulated areas
 					format: 'JSON';
 					tag: 'node';
 					example: '```node
-{''name'': ''example node'', ''x'': 0.1, ''y'': 0.3}
+{''name'': ''example node'', ''evolution'': 0.1, ''visibility'': 0.3}
 ```
 
 or, for multiple nodes:
 ```node
-{''name'': ''example node'', ''x'': 0.1, ''y'': 0.3}
-{''name'': ''example node 2'', ''x'': 0.5, ''y'': 0.2}
+{''name'': ''example node'', ''evolution'': 0.1, ''visibility'': 0.3}
+{''name'': ''example node 2'', ''evolution'': 0.5, ''visibility'': 0.2}
 ```
 
 All connections must go into one node.');

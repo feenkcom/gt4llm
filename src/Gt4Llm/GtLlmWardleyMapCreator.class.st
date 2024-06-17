@@ -11,7 +11,7 @@ Class {
 { #category : #accessing }
 GtLlmWardleyMapCreator >> addNode: aName [
 	| aNode |
-	aNode := GtWardleyMapNodeModel new label: (aName).
+	aNode := GtWardleyMapNodeModel new label: aName.
 	nodes at: aName put: aNode.
 	model addNode: aNode
 ]
@@ -29,11 +29,28 @@ GtLlmWardleyMapCreator >> clearNodes [
 
 { #category : #accessing }
 GtLlmWardleyMapCreator >> connectNode: aName to: anotherName [
+	
 	model
 		addEdge: (GtWardleyMapEdgeModel new
-				fromNode: (nodes at: aName);
-				toNode: (nodes at: anotherName);
+				fromNode: (self ensurePropositionNodeNamed:  aName);
+				toNode: (self ensurePropositionNodeNamed:  anotherName);
 				width: 2)
+]
+
+{ #category : #accessing }
+GtLlmWardleyMapCreator >> ensurePropositionNodeNamed: aName [
+	| newNodeModel |
+	
+	nodes at: aName ifPresent: [:aNode | ^ aNode ].
+	
+	newNodeModel := GtWardleyMapNodeModel new
+		label: aName;
+		addWardleyMapDecoratorModel: GtWardleyMapAddProposition new.
+		
+	self model addNode: newNodeModel.
+	nodes at: aName put: newNodeModel.
+	
+	^ newNodeModel
 ]
 
 { #category : #accessing }
