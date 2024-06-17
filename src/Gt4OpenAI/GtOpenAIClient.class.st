@@ -23,7 +23,7 @@ GtOpenAIClient class >> apiKeyFile: aFile [
 
 { #category : #accessing }
 GtOpenAIClient class >> apiKeyFileContents [
-	^ ApiKeyFile contents
+	^ ApiKeyFile contents trimBoth
 ]
 
 { #category : #accessing }
