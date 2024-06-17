@@ -53,10 +53,13 @@ GtOpenAICardElement >> keyFilePathString [
 { #category : #accessing }
 GtOpenAICardElement >> makeApiKeyDropdown [
 	^ apiKeyButton := BrButton new
-			margin: (BlInsets left: 0 right: 5);
+			hFitContentLimited;
+			vFitContent;
+			margin: (BlInsets left: 0 right: 0);
 			aptitude: BrGlamorousButtonWithLabelAptitude
 					+ (BrGlamorousWithDropdownAptitude
 							handle: [ BrButton new
+									fitContent;
 									aptitude: BrGlamorousButtonWithLabelAptitude - BrGlamorousButtonExteriorAptitude;
 									label: self keyFilePathString ]
 							content: [ self makeDropdownContent ])

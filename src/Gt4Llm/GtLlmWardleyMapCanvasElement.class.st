@@ -8,14 +8,6 @@ Class {
 }
 
 { #category : #accessing }
-GtLlmWardleyMapCanvasElement >> createNodeEditorFor: aNodeViewModel [
-	^ GtLlmWardleyMapNodeEditorElement new
-		creator: self creator;
-		wardleyMapViewModel: self wardleyMapViewModel;
-		wardleyMapNodeViewModel: aNodeViewModel
-]
-
-{ #category : #accessing }
 GtLlmWardleyMapCanvasElement >> creator [
 	^ creator
 ]

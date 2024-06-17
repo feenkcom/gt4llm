@@ -24,7 +24,13 @@ GtOpenAIGtTutor class >> instance [
 
 { #category : #accessing }
 GtOpenAIGtTutor class >> instance: aTutor [
-	^ instance := aTutor
+	instance := aTutor
+]
+
+{ #category : #accessing }
+GtOpenAIGtTutor class >> isTutorAvailable [
+	instance ifNotNil: [ ^ true ].
+	^ false
 ]
 
 { #category : #accessing }

@@ -34,7 +34,9 @@ GtLlmActionWardleyMapCreator >> gtLiveFor: aView [
 		stencil: [ BrVerticalPane new matchParent
 				addChild: (GtLlmWardleyMapElement withDefaultSections
 						creator: self;
-						wardleyMapViewModel: (GtWardleyMapViewModel new wardleyMapModel: self model);
+						wardleyMapViewModel: (GtWardleyMapViewModel new 
+							wardleyMapModel: self model;
+							llmCreator: self);
 						yourself) ]
 ]
 
