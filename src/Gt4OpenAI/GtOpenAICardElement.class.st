@@ -99,32 +99,56 @@ GtOpenAICardElement >> makeFileError [
 { #category : #accessing }
 GtOpenAICardElement >> makeTestingButton [
 	testingButton := BrButton new
+			fitContent;
 			aptitude: BrGlamorousButtonWithIconAndLabelAptitude;
 			icon: BrGlamorousVectorIcons play;
 			label: 'Test key';
 			action: [ [ GtOpenAIClient withApiKeyFromFile listModels.
 				testingLabel
-					text: ('Success!' asRopedText foreground: BrGlamorousColors successBackgroundColor) ]
+					label: ('Success!' asRopedText foreground: BrGlamorousColors successBackgroundColor) ]
 					on: Error
-					do: [ testingLabel
-							text: ('Authentication error' asRopedText
-									foreground: BrGlamorousColors errorBackgroundColor) ] ].
+					do: [ :anError | 
+						| aFrozenError |
+						aFrozenError := GtMagritteActionUtility freeze: anError.
+						testingLabel
+							model: aFrozenError;
+							label: ('Authentication error' asRopedText
+									foreground: BrGlamorousColors errorBackgroundColor).
+						testingLabel aptitude - BrGlamorousWithDropdownAptitude.
+						testingLabel
+							addAptitude: (BrGlamorousWithTooltipAptitude
+									content: [ 
+										| aContainer |
+										aContainer := BlElement new 
+											size: 400@400; 
+											background: self theme default contentBackgroundColor.
+										(aFrozenError gtViewsFor: GtPhlowView empty) 
+											asElementDo: [ :anElement | 
+												anElement size: 800@800.
+												aContainer addChild: anElement asScalableElement ].
+										aContainer ]) ] ];
+			constraintsDo: [ :c | c linear vertical alignCenter ].
 	^ testingButton
 ]
 
 { #category : #accessing }
 GtOpenAICardElement >> makeTestingLabel [
-	^ testingLabel := BrLabel new hFitContent
+	^ testingLabel := BrButton new
+			hFitContentLimited;
+			vFitContent;
 			margin: (BlInsets left: 5);
 			aptitude: BrGlamorousLabelAptitude;
-			text: ''
+			label: '';
+			action: [ :theButton | 
+				theButton model ifNotNil: [ :anObject | 
+					anObject inspect ] ]
 ]
 
 { #category : #accessing }
 GtOpenAICardElement >> onApiKeySet [
 	apiKeyButton label: self keyFilePathString.
 
-	testingLabel text: ''.
+	testingLabel label: ''.
 	self apiKeyFile exists
 		ifTrue: [ fileError text: '' ]
 		ifFalse: [ fileError text: 'File does not exist' ]
