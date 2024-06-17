@@ -13,5 +13,5 @@ GtWardleyMapViewModel >> llmCreator [
 
 { #category : #'*Gt4Llm' }
 GtWardleyMapViewModel >> llmCreator: aCreator [
-	^ self wardleyMapModel openAIWardleyMapCreator: aCreator
+	self wardleyMapModel openAIWardleyMapCreator: aCreator
 ]
