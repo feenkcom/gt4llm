@@ -1,12 +1,12 @@
-Extension { #name : #GtWardleyMapNodeEditorContext }
+Extension { #name : #GtWardleyMapEditorContext }
 
 { #category : #'*Gt4Llm' }
-GtWardleyMapNodeEditorContext >> isLlmConnected [
+GtWardleyMapEditorContext >> isLlmConnected [
 	^ self llmCreator isNotNil
 ]
 
 { #category : #'*Gt4Llm' }
-GtWardleyMapNodeEditorContext >> llmCreator [
+GtWardleyMapEditorContext >> llmCreator [
 	<return: #GtLlmActionWardleyMapCreator or: nil>
 	^ self wardleyMapViewModel llmCreator
 ]
