@@ -25,8 +25,14 @@ GtLlmWardleyMapCanvasElement >> installContextMenu [
 						size: 5 @ 5;
 						geometry: BlEllipseGeometry new ]
 				content: [ GtLlmWardleyMapEditorElement new
-						wardleyMapViewModel: self wardleyMapViewModel;
 						canvas: self;
 						creator: self creator;
+						wardleyMapViewModel: self wardleyMapViewModel;
+						when: GtPhlowObjectToSpawn
+						do: [ :anEvent | 
+							self fireEvent: (GtPhlowObjectToSpawn new
+										previousSpawnEvent: anEvent;
+										tool: anEvent tool;
+										sourceElement: anEvent target) ];
 						requestFocus ]) preferredExtent: 120 @ 150)
 ]
