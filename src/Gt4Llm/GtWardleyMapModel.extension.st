@@ -7,7 +7,8 @@ GtWardleyMapModel >> gtMessagesWidgetFor: aView [
 	<gtView>
 	^ self isAITutorChatAvailable
 		ifTrue: [ (self openAITutorChat gtMessagesWidgetFor: aView)
-			title: 'Open AI Chat' ]
+			title: 'Open AI Chat';
+			priority: 5 ]
 		ifFalse: [ aView empty ]
 ]
 
@@ -29,7 +30,14 @@ GtWardleyMapModel >> openAITutorChat [
 { #category : #'*Gt4Llm' }
 GtWardleyMapModel >> openAIWardleyMapCreator [
 	<return: #GtLlmActionWardleyMapCreator or: nil>
-	^ self isAITutorChatAvailable
-		ifFalse: [ nil ]
-		ifTrue: [ self openAITutorChat pipeline instance ]
+	^ self
+		optionAt: #openAIWardleyMapCreator
+		ifAbsent: [ self isAITutorChatAvailable
+				ifTrue: [ self openAITutorChat pipeline instance ]
+				ifFalse: [ nil ] ]
+]
+
+{ #category : #'*Gt4Llm' }
+GtWardleyMapModel >> openAIWardleyMapCreator: aCreator [
+	^ self optionAt: #openAIWardleyMapCreator put: aCreator
 ]
