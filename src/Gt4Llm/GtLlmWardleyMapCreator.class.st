@@ -53,8 +53,11 @@ GtLlmWardleyMapCreator >> gtLiveFor: aView [
 		title: 'Live';
 		priority: 2;
 		stencil: [
-			GtWardleyMapElement withDefaultSections
-				wardleyMapViewModel: (GtWardleyMapViewModel new wardleyMapModel: self model);
+			GtLlmWardleyMapElement withDefaultSections
+				creator: self;
+				wardleyMapViewModel: (GtWardleyMapViewModel new 
+					wardleyMapModel: self model;
+					llmCreator: self);
 				yourself ]
 ]
 
