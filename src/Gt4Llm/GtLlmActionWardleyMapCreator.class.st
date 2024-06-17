@@ -41,6 +41,17 @@ GtLlmActionWardleyMapCreator >> gtLiveFor: aView [
 ]
 
 { #category : #accessing }
+GtLlmActionWardleyMapCreator >> gtWardleyScriptFor: aView [
+	<gtView>
+	
+	^ aView forward 
+		title: 'Script';
+		priority: 5;
+		object: [ self model ];
+		view: #gtWardleyScriptFor:
+]
+
+{ #category : #accessing }
 GtLlmActionWardleyMapCreator >> setNodes: aListOfNodes [
 	| unsetNodes |
 	unsetNodes := self model nodes copy.
@@ -58,8 +69,8 @@ GtLlmActionWardleyMapCreator >> setNodes: aListOfNodes [
 				ifNone: [ | aNodeModel |
 					aNodeModel := GtWardleyMapNodeModel new
 							label: aName;
-							x: (aNode at: 'x');
-							y: (aNode at: 'y');
+							x: (aNode at: 'evolution');
+							y: 1-(aNode at: 'visibility');
 							addWardleyMapDecoratorModel: GtWardleyMapAddProposition new.
 					self model addNode: aNodeModel.
 					nodes at: aName put: aNodeModel.
