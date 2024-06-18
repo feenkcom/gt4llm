@@ -53,7 +53,9 @@ GtLlmActionWardleyMapCreator >> gtWardleyScriptFor: aView [
 
 { #category : #initialization }
 GtLlmActionWardleyMapCreator >> initializeWardleyMapModel: aGtWardleyMapModel [
-	model := aGtWardleyMapModel
+	model := aGtWardleyMapModel.
+	nodes := (aGtWardleyMapModel nodes collect: [ :aNode | aNode name -> aNode ])
+			asDictionary
 ]
 
 { #category : #accessing }

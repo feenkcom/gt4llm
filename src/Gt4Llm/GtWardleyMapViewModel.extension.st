@@ -2,19 +2,22 @@ Extension { #name : #GtWardleyMapViewModel }
 
 { #category : #'*Gt4Llm' }
 GtWardleyMapViewModel >> isAITutorChatAvailable [
-	^ self wardleyMapModel isAITutorChatAvailable
+	^ self
+		optionAt: #openAITutorChat
+		ifPresent: [ true ]
+		ifAbsent: [ GtOpenAIGtTutor isTutorAvailable  ]
 ]
 
 { #category : #'*Gt4Llm' }
 GtWardleyMapViewModel >> llmCreator [
 	<return: #GtLlmActionWardleyMapCreator or: nil>
-	self subscribeToLlm.
-	^ self wardleyMapModel openAIWardleyMapCreator
+	^ self
+		optionAt: #openAIWardleyMapCreator
+		ifAbsent: [ self openAITutorChat pipeline instance ]
 ]
 
 { #category : #'*Gt4Llm' }
 GtWardleyMapViewModel >> llmCreator: aCreator [
-	self subscribeToLlm.
 	self wardleyMapModel openAIWardleyMapCreator: aCreator
 ]
 
@@ -24,10 +27,16 @@ GtWardleyMapViewModel >> onSpawnRequest: anObject [
 ]
 
 { #category : #'*Gt4Llm' }
-GtWardleyMapViewModel >> subscribeToLlm [
-	self wardleyMapModel openAITutorChat unsubscribe: self.
-	self wardleyMapModel openAITutorChat weak
-		when: GtLlmSpawnRequestAnnouncement
-		send: #onSpawnRequest:
-		to: self
+GtWardleyMapViewModel >> openAITutorChat [
+	^ self
+		optionAt: #openAITutorChat
+		ifAbsentPut: [ | aChat |
+			aChat := GtOpenAIWardleyMapActionTutor instance addChat
+					initializeWardleyMapModel: self wardleyMapModel;
+					yourself.
+			aChat weak
+				when: GtLlmSpawnRequestAnnouncement
+				send: #onSpawnRequest:
+				to: self.
+			aChat ]
 ]
