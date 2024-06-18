@@ -20,7 +20,10 @@ GtLlmTutorActionExample >> asInstruction [
 						title: 'Prompt';
 						body: (GtLlmCompositeInstruction new
 								items: {self instruction asInstruction.
-										(String cr , 'State:' , String cr , self input) asInstruction}));
+										GtLlmInstructionSection new
+											source: self;
+											title: 'Current Wardley Map state';
+											body: self input}));
 				addItem: (GtLlmInstructionSection new
 						source: self;
 						title: 'Output';

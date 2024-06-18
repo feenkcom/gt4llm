@@ -271,7 +271,7 @@ GtOpenAIWardleyMapActionTutor >> renameAction [
 Cloud computing
 ```
 ```node
-{''name'': ''Compute'', ''x'': 0.3, ''y'': 0.4}
+{''name'': ''Compute'', ''evolution'': 0.3, ''vibility'': 0.4}
 ```';
 					output: '```action
 Rename a node
@@ -280,6 +280,6 @@ Rename a node
 Cloud computing
 ```
 ```node
-{''name'': ''Compute'', ''x'': 0.3, ''y'': 0.4, ''alternative_names'': [''Computational Resources'', ''Resources'']}
+{''name'': ''Compute'', ''evolution'': 0.3, ''visibility'': 0.4, ''alternative_names'': [''Computational Resources'', ''Resources'']}
 ```'}
 ]
