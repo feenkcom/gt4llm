@@ -77,12 +77,13 @@ GtLlmActionWardleyMapCreator >> setNodes: aListOfNodes [
 					aNodeModel := GtWardleyMapNodeModel new
 							label: aName;
 							x: (aNode at: 'evolution');
-							y: 1-(aNode at: 'visibility');
+							y: 1 - (aNode at: 'visibility');
 							addWardleyMapDecoratorModel: GtWardleyMapAddProposition new.
 					self model addNode: aNodeModel.
 					nodes at: aName put: aNodeModel.
 					foundNode := aNodeModel ].
-			(aNode includesKey: 'alternative_names')
+			((aNode includesKey: 'alternative_names')
+				and: [ (aNode at: 'alternative_names') isEmptyOrNil not ])
 				ifTrue: [ foundNode
 						addWardleyMapDecoratorModel: (GtWardleyMapRenameProposition new options: (aNode at: 'alternative_names')) ] ].
 
