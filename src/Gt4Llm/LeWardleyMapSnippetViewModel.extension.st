@@ -1,7 +1,7 @@
 Extension { #name : #LeWardleyMapSnippetViewModel }
 
 { #category : #'*Gt4Llm' }
-LeWardleyMapSnippetViewModel >> gtActionInspectViewModelFor: anAction [
+LeWardleyMapSnippetViewModel >> gtActionInspectChatFor: anAction [
 	<gtAction>
 	^ anAction button
 		tooltip: 'Inspect OpenAI chat';
