@@ -5,6 +5,18 @@ Class {
 }
 
 { #category : #accessing }
+GtOpenAIWardleyMapActionTutor >> addChat [
+	| aChat |
+	aChat := GtOpenAIWardleyMapActionAssistantChat new
+			assistant: self assistant;
+			actions: actions;
+			pipeline: pipelineBuilder value.
+	chats add: aChat.
+
+	^ aChat
+]
+
+{ #category : #accessing }
 GtOpenAIWardleyMapActionTutor >> connectionAction [
 	^ GtLlmTutorAction new
 		name: 'Add a new connected node';
