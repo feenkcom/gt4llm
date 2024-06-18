@@ -98,7 +98,7 @@ GtOpenAIActionAssistantChat >> waitForActionResult [
 					aResult := aMessage codeBlocksExecutor check: aBlock.
 					aResult hasError ifTrue: [ self error: aResult lastResult ] ]
 						on: Error
-						do: [ :anError | anError inspect.
+						do: [ :anError | anError asNotification registerNotifications.
 							self sendMessage: 'An error occurred: ' , anError asString.
 							self waitForActionResult ] ] ]) await
 ]
