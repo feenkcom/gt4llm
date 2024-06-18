@@ -14,5 +14,6 @@ GtWardleyMapEditorContext >> isLlmConnected [
 { #category : #'*Gt4Llm' }
 GtWardleyMapEditorContext >> llmCreator [
 	<return: #GtLlmActionWardleyMapCreator or: nil>
+	self canvasElement subscribeToLlm.
 	^ self wardleyMapViewModel llmCreator
 ]
