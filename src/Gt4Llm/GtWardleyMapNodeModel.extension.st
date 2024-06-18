@@ -4,7 +4,6 @@ Extension { #name : #GtWardleyMapNodeModel }
 GtWardleyMapNodeModel >> menuItemNodeLlmAddNewConnectedNodeButton [
 	<wardleyContextMenuItem: 41>
 	^ GtWardleyMapNodeButtonWithLabelMenuItem new
-		condition: [ :aContextMenuItem | aContextMenuItem isLlmConnected ];
 		label: 'Add a new connected node';
 		action: [ :aContextMenuItem :aBrButton :aBrButtonModel :anEvent | 
 			aContextMenuItem llmCreator
@@ -18,7 +17,6 @@ GtWardleyMapNodeModel >> menuItemNodeLlmAddNewConnectedNodeButton [
 GtWardleyMapNodeModel >> menuItemNodeLlmExplainItButton [
 	<wardleyContextMenuItem: 42>
 	^ GtWardleyMapNodeButtonWithLabelMenuItem new
-		condition: [ :aContextMenuItem | aContextMenuItem isLlmConnected ];
 		label: 'Explain this node';
 		action: [ :aContextMenuItem :aBrButton :aBrButtonModel :anEvent | 
 			aContextMenuItem llmCreator
@@ -32,15 +30,13 @@ GtWardleyMapNodeModel >> menuItemNodeLlmExplainItButton [
 GtWardleyMapNodeModel >> menuItemNodeLlmLabel [
 	<wardleyContextMenuItem: 40>
 	^ GtWardleyMapLabelMenuItem new
-		text: 'OpenAI:';
-		condition: [ :aContextMenuItem | aContextMenuItem isLlmConnected ]
+		text: 'OpenAI:'
 ]
 
 { #category : #'*Gt4Llm' }
 GtWardleyMapNodeModel >> menuItemNodeLlmProposeAlternativeNamesButton [
 	<wardleyContextMenuItem: 43>
 	^ GtWardleyMapNodeButtonWithLabelMenuItem new
-		condition: [ :aContextMenuItem | aContextMenuItem isLlmConnected ];
 		label: 'Propose alternative names';
 		action: [ :aContextMenuItem :aBrButton :aBrButtonModel :anEvent | 
 			aContextMenuItem llmCreator

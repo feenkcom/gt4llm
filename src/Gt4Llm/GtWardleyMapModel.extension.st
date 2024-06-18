@@ -22,23 +22,25 @@ GtWardleyMapModel >> isAITutorChatAvailable [
 
 { #category : #'*Gt4Llm' }
 GtWardleyMapModel >> menuItemCreateTopicSection [
-	<wardleyContextMenuItem: 20>
+	<wardleyContextMenuItem: 41>
 	^ GtWardleyMapStencilMenuItem new
 		name: 'Create nodes on topic using OpenAI';
-		condition: [ :aContextMenuItem | aContextMenuItem isLlmConnected ];
 		block: [ :aContextMenuItem | 
 			| editor |
 			BrVerticalPane new
 				fitContent;
-				margin: (BlInsets top: 10);
+				margin: (GtWardleyMapUtility menuItemLabelMarginInsets);
 				addChild: (BrLabel new
-						aptitude: (BrGlamorousLabelAptitude new foreground: Color darkGray);
-						text: 'Create nodes on topic:');
-				addChild: (BrHorizontalPane new fitContent
+						fitContent;
+						aptitude: (BrGlamorousLabelAptitude new 
+							foreground: Color darkGray);
+						text: 'Create nodes on topic using OpenAI:');
+				addChild: (BrHorizontalPane new 
+						fitContent;
 						margin: (BlInsets top: 3);
 						addChild: (editor := BrEditor new
 									margin: (BlInsets right: 5);
-									hExact: 150;
+									hExact: 180;
 									vFitContent;
 									geometry: (BlRoundedRectangleGeometry cornerRadius: 4);
 									aptitude: BrGlamorousRegularEditorAptitude new
@@ -67,9 +69,7 @@ GtWardleyMapModel >> openAIWardleyMapCreator [
 	<return: #GtLlmActionWardleyMapCreator or: nil>
 	^ self
 		optionAt: #openAIWardleyMapCreator
-		ifAbsent: [ self isAITutorChatAvailable
-				ifTrue: [ self openAITutorChat pipeline instance ]
-				ifFalse: [ nil ] ]
+		ifAbsent: [ self openAITutorChat pipeline instance ]
 ]
 
 { #category : #'*Gt4Llm' }
