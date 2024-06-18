@@ -21,6 +21,40 @@ GtWardleyMapModel >> isAITutorChatAvailable [
 ]
 
 { #category : #'*Gt4Llm' }
+GtWardleyMapModel >> menuItemCreateTopicSection [
+	<wardleyContextMenuItem: 20>
+	^ GtWardleyMapStencilMenuItem new
+		condition: [ :aContextMenuItem | aContextMenuItem isLlmConnected ];
+		block: [ :aContextMenuItem | 
+			| editor |
+			BrVerticalPane new
+				fitContent;
+				margin: (BlInsets top: 10);
+				addChild: (BrLabel new
+						aptitude: (BrGlamorousLabelAptitude new foreground: Color darkGray);
+						text: 'Create nodes on topic:');
+				addChild: (BrHorizontalPane new fitContent
+						margin: (BlInsets top: 3);
+						addChild: (editor := BrEditor new
+									margin: (BlInsets right: 5);
+									hExact: 150;
+									vFitContent;
+									geometry: (BlRoundedRectangleGeometry cornerRadius: 4);
+									aptitude: BrGlamorousRegularEditorAptitude new
+											+ (BrStyleCommonAptitude new
+													default: [ :aStyle | 
+														aStyle
+															border: (BlBorder paint: BrGlamorousColors disabledButtonBorderColor width: 1) ]));
+						addChild: (BrButton new
+								aptitude: BrGlamorousButtonWithIconAptitude;
+								icon: BrGlamorousVectorIcons accept;
+								label: 'Set topic';
+								action: [ aContextMenuItem llmCreator
+										announce: (GtLlmSendActionToChat action: 'Create a set of nodes' arguments: {editor text}).
+									aContextMenuItem editorElement fireEvent: BrContextMenuHideWish new ])) ]
+]
+
+{ #category : #'*Gt4Llm' }
 GtWardleyMapModel >> openAITutorChat [
 	^ self
 		optionAt: #openAITutorChat
