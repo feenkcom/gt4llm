@@ -47,6 +47,11 @@ GtOpenAIActionAssistantChat >> gtWardleyScriptFor: aView [
 		view: #gtWardleyScriptFor:
 ]
 
+{ #category : #initialization }
+GtOpenAIActionAssistantChat >> initializeWardleyMapModel: aGtWardleyMapModel [
+	self pipeline instance initializeWardleyMapModel: aGtWardleyMapModel
+]
+
 { #category : #accessing }
 GtOpenAIActionAssistantChat >> onSendActionToChat: anAnnouncement [
 	| action |

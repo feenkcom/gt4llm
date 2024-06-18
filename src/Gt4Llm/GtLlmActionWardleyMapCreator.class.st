@@ -51,6 +51,11 @@ GtLlmActionWardleyMapCreator >> gtWardleyScriptFor: aView [
 		view: #gtWardleyScriptFor:
 ]
 
+{ #category : #initialization }
+GtLlmActionWardleyMapCreator >> initializeWardleyMapModel: aGtWardleyMapModel [
+	model := aGtWardleyMapModel
+]
+
 { #category : #accessing }
 GtLlmActionWardleyMapCreator >> setNodes: aListOfNodes [
 	| unsetNodes |

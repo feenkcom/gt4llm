@@ -61,7 +61,9 @@ GtWardleyMapModel >> menuItemCreateTopicSection [
 GtWardleyMapModel >> openAITutorChat [
 	^ self
 		optionAt: #openAITutorChat
-		ifAbsentPut: [ GtOpenAIWardleyMapActionTutor instance addChat ]
+		ifAbsentPut: [ GtOpenAIWardleyMapActionTutor instance addChat
+				initializeWardleyMapModel: self;
+				yourself ]
 ]
 
 { #category : #'*Gt4Llm' }
