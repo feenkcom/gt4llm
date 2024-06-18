@@ -24,6 +24,7 @@ GtWardleyMapModel >> isAITutorChatAvailable [
 GtWardleyMapModel >> menuItemCreateTopicSection [
 	<wardleyContextMenuItem: 20>
 	^ GtWardleyMapStencilMenuItem new
+		name: 'Create nodes on topic using OpenAI';
 		condition: [ :aContextMenuItem | aContextMenuItem isLlmConnected ];
 		block: [ :aContextMenuItem | 
 			| editor |
