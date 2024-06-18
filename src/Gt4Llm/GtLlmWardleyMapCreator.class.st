@@ -102,8 +102,8 @@ GtLlmWardleyMapCreator >> serialize [
 						collect: [ :aNode | 
 							STONJSON
 								toString: {'name' -> aNode label.
-										'x' -> aNode x.
-										'y' -> aNode y} asDictionary ]))
+										'evolution' -> aNode maturity.
+										'visibility' -> aNode visibility} asDictionary ]))
 		, '
 ```
 ```connection
