@@ -16,7 +16,8 @@ BaselineOfGt4Llm >> baseline: spec [
 	<baseline>
 	^ spec
 		for: #common
-		do: [ spec
+		do: [ spec postLoadDoIt: #loadAllLepiterDatabases.
+			spec
 				baseline: 'Gt4LlmCore'
 				with: [ spec repository: 'github://feenkcom/gt4llm:main/src' ].
 
@@ -27,4 +28,10 @@ BaselineOfGt4Llm >> baseline: spec [
 			spec
 				baseline: 'Gt4OpenAI'
 				with: [ spec repository: 'github://feenkcom/gt4llm:main/src' ] ]
+]
+
+{ #category : #accessing }
+BaselineOfGt4Llm >> loadAllLepiterDatabases [
+
+	self class loadAllLepiterDatabases
 ]
