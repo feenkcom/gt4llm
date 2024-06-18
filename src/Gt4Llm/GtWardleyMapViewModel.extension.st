@@ -22,8 +22,8 @@ GtWardleyMapViewModel >> llmCreator: aCreator [
 ]
 
 { #category : #'*Gt4Llm' }
-GtWardleyMapViewModel >> onSpawnRequest: anObject [
-	self announce: anObject
+GtWardleyMapViewModel >> onSpawnRequest: anAnnouncement [
+	self announce: (GtWardleyMapSpawnRequest new object: anAnnouncement object)
 ]
 
 { #category : #'*Gt4Llm' }
