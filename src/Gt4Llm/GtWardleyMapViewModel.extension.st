@@ -22,6 +22,20 @@ GtWardleyMapViewModel >> llmCreator: aCreator [
 ]
 
 { #category : #'*Gt4Llm' }
+GtWardleyMapViewModel >> onActionFinished [
+	self wardleyMapModel
+		removeWardleyMapDecoratorModel: (self wardleyMapModel wardleyMapDecoratorModels
+				detect: [ :aDecorator | aDecorator isKindOf: GtLlmWardleyMapInProgressDecorator ]
+				ifNone: [ nil ])
+]
+
+{ #category : #'*Gt4Llm' }
+GtWardleyMapViewModel >> onActionStarted [
+	self wardleyMapModel
+		addWardleyMapDecoratorModel: GtLlmWardleyMapInProgressDecorator new
+]
+
+{ #category : #'*Gt4Llm' }
 GtWardleyMapViewModel >> onSpawnRequest: anAnnouncement [
 	self announce: (GtWardleyMapSpawnRequest new object: anAnnouncement object)
 ]
@@ -37,6 +51,14 @@ GtWardleyMapViewModel >> openAITutorChat [
 			aChat weak
 				when: GtLlmSpawnRequestAnnouncement
 				send: #onSpawnRequest:
+				to: self.
+			aChat weak
+				when: GtLlmActionStarted
+				send: #onActionStarted
+				to: self.
+			aChat weak
+				when: GtLlmActionFinished
+				send: #onActionFinished
 				to: self.
 			aChat ]
 ]

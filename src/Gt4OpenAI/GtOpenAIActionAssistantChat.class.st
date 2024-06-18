@@ -42,6 +42,8 @@ GtOpenAIActionAssistantChat >> onSendActionToChat: anAnnouncement [
 	action := self actions
 			detect: [ :anAction | anAction name = anAnnouncement action ].
 
+	self announce: GtLlmActionStarted new.
+
 	self sendMessage: (action format format: anAnnouncement arguments).
 
 	self waitForActionResult
@@ -80,9 +82,11 @@ GtOpenAIActionAssistantChat >> waitForActionResult [
 				do: [ :aBlock | 
 					[ | aResult |
 					aResult := aMessage codeBlocksExecutor check: aBlock.
-					aResult hasError ifTrue: [ self error: aResult lastResult ] ]
+					aResult hasError ifTrue: [ self error: aResult lastResult ].
+					self announce: GtLlmActionFinished new ]
 						on: Error
-						do: [ :anError | anError asNotification registerNotifications.
+						do: [ :anError | 
+							anError asNotification registerNotifications.
 							self sendMessage: 'An error occurred: ' , anError asString.
 							self waitForActionResult ] ] ]) await
 ]
