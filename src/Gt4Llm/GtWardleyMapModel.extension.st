@@ -40,7 +40,7 @@ GtWardleyMapModel >> menuItemCreateTopicSection [
 						margin: (BlInsets top: 3);
 						addChild: (editor := BrEditor new
 									margin: (BlInsets right: 5);
-									hExact: 180;
+									hExact: GtWardleyMapConstants menuItemEditorWidth;
 									vFitContent;
 									geometry: (BlRoundedRectangleGeometry cornerRadius: 4);
 									aptitude: BrGlamorousRegularEditorAptitude new
