@@ -29,3 +29,9 @@ BaselineOfGt4Llm >> baseline: spec [
 				baseline: 'Gt4OpenAI'
 				with: [ spec repository: 'github://feenkcom/gt4llm:main/src' ] ]
 ]
+
+{ #category : #accessing }
+BaselineOfGt4Llm >> loadAllLepiterDatabases [
+
+	self class loadAllLepiterDatabases
+]
