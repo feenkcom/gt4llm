@@ -10,9 +10,6 @@ Class {
 		'files',
 		'apiFiles'
 	],
-	#classInstVars : [
-		'instance'
-	],
 	#category : #'Gt4OpenAI-Tutor'
 }
 
@@ -139,16 +136,6 @@ GtOpenAIGtTutor >> cleanUp [
 ]
 
 { #category : #accessing }
-GtOpenAIGtTutor >> client [
-	^ client
-]
-
-{ #category : #accessing }
-GtOpenAIGtTutor >> client: anObject [
-	client := anObject
-]
-
-{ #category : #accessing }
 GtOpenAIGtTutor >> createAssistant [
 	assistant := client
 			createAssistant: (GtOpenAIAssistant new
@@ -206,6 +193,11 @@ GtOpenAIGtTutor >> deleteFiles [
 	apiFiles
 		do: [ :aFile | [ client deleteFile: aFile id ] on: GtOpenAIError do: [  ] ].
 	apiFiles := GtOpenAIFilesGroup new
+]
+
+{ #category : #accessing }
+GtOpenAIGtTutor >> ensureAssistant [
+	assistant ifNil: [ self createAssistant ]
 ]
 
 { #category : #accessing }
@@ -283,7 +275,6 @@ GtOpenAIGtTutor >> initialize [
 	assistantName := self defaultAssistantName.
 	assistantDescription := self defaultAssistantDescription.
 	tools := self defaultTools.
-	chats := GtOpenAIAssistantChatGroup new.
 	files := GtOpenAIResourceFilesGroup withAll: self defaultFiles.
 	apiFiles := GtOpenAIFilesGroup new
 ]

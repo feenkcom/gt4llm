@@ -1,11 +1,12 @@
 Class {
 	#name : #GtOpenAITutorWithSteps,
-	#superclass : #GtOpenAIGtTutor,
+	#superclass : #GtOpenAITutor,
 	#instVars : [
 		'steps',
 		'stepMessage',
 		'backStepMessage',
-		'selectStepMessage'
+		'selectStepMessage',
+		'instructions'
 	],
 	#category : #'Gt4OpenAI-Tutor'
 }
@@ -21,8 +22,6 @@ GtOpenAITutorWithSteps >> addChat [
 			selectStepMessage: self selectStepMessage;
 			steps: self steps.
 	chats add: aChat.
-
-	self files ifNotEmpty: [ aChat sendMessage: self files toFileDescriptions ].
 
 	^ aChat
 ]
@@ -112,16 +111,12 @@ GtOpenAITutorWithSteps >> initialize [
 
 { #category : #accessing }
 GtOpenAITutorWithSteps >> instructions [
-	^ GtLlmInstructionWithSections new
-		source: self;
-		introduction: self tutorDescription;
-		addSection: self interactionDescription;
-		addSection: self stepsDescription;
-		addSection: self communicationRules;
-		addSection: self conventionsDescription;
-		addSection: self viewsDescription;
-		addSection: self exampleViews;
-		addSection: self variablesDescription
+	^ instructions
+]
+
+{ #category : #accessing }
+GtOpenAITutorWithSteps >> instructions: anObject [
+	instructions := anObject
 ]
 
 { #category : #accessing }

@@ -1,6 +1,6 @@
 Class {
 	#name : #GtOpenAIToolTutor,
-	#superclass : #GtOpenAIGtTutor,
+	#superclass : #GtLlmTutor,
 	#instVars : [
 		'tutorTools'
 	],

@@ -1,43 +1,18 @@
 Class {
 	#name : #GtLlmGtTutor,
-	#superclass : #Object,
+	#superclass : #GtLlmTutor,
 	#instVars : [
-		'client',
-		'model',
 		'instructions',
-		'chats',
 		'tutorDescription',
 		'interactionDescription',
 		'communicationRules',
 		'conventionsDescription',
 		'viewsDescription',
 		'exampleViews',
-		'variablesDescription',
-		'pipelineBuilder'
+		'variablesDescription'
 	],
 	#category : #'Gt4Llm-Tutor'
 }
-
-{ #category : #accessing }
-GtLlmGtTutor >> addChat [
-	^ self subclassResponsibility
-]
-
-{ #category : #accessing }
-GtLlmGtTutor >> chat [
-	^ chats ifNotEmpty: #last ifEmpty: [ self addChat ]
-]
-
-{ #category : #accessing }
-GtLlmGtTutor >> chats [
-	^ chats
-]
-
-{ #category : #accessing }
-GtLlmGtTutor >> check: aString [
-	<return: #GtLlmStepResult>
-	^ pipelineBuilder check: aString
-]
 
 { #category : #accessing }
 GtLlmGtTutor >> communicationRules [
@@ -206,11 +181,6 @@ SUMMARY OF THE PROBLEM...
 ]
 
 { #category : #accessing }
-GtLlmGtTutor >> defaultModel [
-	^ self subclassResponsibility
-]
-
-{ #category : #accessing }
 GtLlmGtTutor >> defaultTutorDescription [
 	^ 'You are a coding assistant called GT Tutor that generates and auto-executes Pharo Smalltalk code for use inside Glamorous Toolkit.'
 ]
@@ -254,33 +224,6 @@ GtLlmGtTutor >> exampleViews: anObject [
 ]
 
 { #category : #accessing }
-GtLlmGtTutor >> gtChatsFor: aView [
-	<gtView>
-	^ aView forward
-		title: 'Chats';
-		priority: 2;
-		object: [ chats ];
-		view: #gtChatsFor:;
-		actionButtonIcon: BrGlamorousVectorIcons add
-			tooltip: 'New Chat'
-			action: [ :aButton :aTab | 
-				self addChat.
-				aTab viewContentElement phlow update ]
-]
-
-{ #category : #accessing }
-GtLlmGtTutor >> gtInstructionsFor: aView [
-	<gtView>
-	^ aView textEditor
-		title: 'Tutor instructions';
-		priority: 5;
-		text: [ self instructions instructionString ];
-		styler: (GtLlmMessageStyler new
-				threadMessageViewModel: (GtLlmNewThreadMessageViewModel new
-						threadMessage: GtLlmNewThreadMessage new))
-]
-
-{ #category : #accessing }
 GtLlmGtTutor >> initialize [
 	super initialize.
 
@@ -291,10 +234,7 @@ GtLlmGtTutor >> initialize [
 	viewsDescription := self defaultViewsDescription.
 	exampleViews := self defaultExampleViews.
 	variablesDescription := self defaultVariablesDescription.
-	instructions := self defaultInstructions.
-	model := self defaultModel.
-	chats := GtLlmChatsGroup new.
-	pipelineBuilder := [ GtLlmContext defaultPipeline ]
+	instructions := self defaultInstructions
 ]
 
 { #category : #accessing }
@@ -315,26 +255,6 @@ GtLlmGtTutor >> interactionDescription [
 { #category : #accessing }
 GtLlmGtTutor >> interactionDescription: anObject [
 	interactionDescription := anObject
-]
-
-{ #category : #accessing }
-GtLlmGtTutor >> model [
-	^ model
-]
-
-{ #category : #accessing }
-GtLlmGtTutor >> model: anObject [
-	model := anObject
-]
-
-{ #category : #accessing }
-GtLlmGtTutor >> pipelineBuilder [
-	^ pipelineBuilder
-]
-
-{ #category : #accessing }
-GtLlmGtTutor >> pipelineBuilder: anObject [
-	pipelineBuilder := anObject
 ]
 
 { #category : #accessing }
