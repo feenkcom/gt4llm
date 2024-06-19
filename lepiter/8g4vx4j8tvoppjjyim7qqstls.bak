@@ -103,14 +103,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-03-01T07:51:43.642319+01:00"
+						"dateAndTimeString" : "2024-06-19T14:06:43.074956+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "QXoAFRrODQCm5/XrB1Szjg=="
 				},
-				"code" : "tutor := GtOpenAIGtTutor instance"
+				"code" : "tutor := GtOpenAIGtTutor instance ensureAssistant"
 			},
 			{
 				"__type" : "textSnippet",
@@ -245,14 +245,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-19T15:57:23.758318+01:00"
+						"dateAndTimeString" : "2024-04-17T14:14:23.637418+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "POzHRxrODQCpwpOiB1Szjg=="
 				},
-				"code" : "chat sendMessage: 'Write that a snippet that divides 5 by 3.'"
+				"code" : "chat sendMessage: 'Write a snippet that divides 5 by 3.'"
 			},
 			{
 				"__type" : "textSnippet",

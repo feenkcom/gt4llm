@@ -538,14 +538,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-11T10:16:58.262487+02:00"
+						"dateAndTimeString" : "2024-06-19T14:24:54.260237+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "Arx6fdXVDQCAlsgjA9Dzng=="
 				},
-				"code" : "tutor := GtOpenAIActionTutor withApiKeyFromFile\r\tformat: format;\r\taddAction: createWithTopicAction;\r\taddAction: connectionAction;\r\taddAction: explanationAction;\r\tpipelineBuilder: [ GtLlmContext new\r\t\t\tinstance: GtLlmActionWardleyMapCreator new;\r\t\t\tisImmutableInstance: true;\r\t\t\tchecker: (GtLlmAlternativeCodeStep new\r\t\t\t\t\taddAlternative: GtLlmWardleyMapTopicStep new\r\t\t\t\t\t\tmatching: [ :aContext | aContext lastResult isForLanguage: 'topic' ];\r\t\t\t\t\taddAlternative: GtLlmWardleyMapPositionedNodeStep new\r\t\t\t\t\t\tmatching: [ :aContext | aContext lastResult isForLanguage: 'node' ];\r\t\t\t\t\taddAlternative: GtLlmWardleyMapResettingConnectionStep new\r\t\t\t\t\t\tmatching: [ :aContext | aContext lastResult isForLanguage: 'connection' ];\r\t\t\t\t\taddAlternative: GtLlmWardleyMapExplanationStep new\r\t\t\t\t\t\tmatching: [ :aContext | aContext lastResult isForLanguage: 'explanation' ])  ];\r\tcreateAssistant.\r\t\rtutor addChat"
+				"code" : "tutor := GtOpenAIActionTutor withApiKeyFromFile\r\tformat: format;\r\taddAction: createWithTopicAction;\r\taddAction: connectionAction;\r\tpipelineBuilder: [ GtLlmContext new\r\t\t\tinstance: GtLlmActionWardleyMapCreator new;\r\t\t\tisImmutableInstance: true;\r\t\t\tchecker: (GtLlmAlternativeCodeStep new\r\t\t\t\t\taddAlternative: GtLlmWardleyMapTopicStep new\r\t\t\t\t\t\tmatching: [ :aContext | aContext lastResult isForLanguage: 'topic' ];\r\t\t\t\t\taddAlternative: GtLlmWardleyMapPositionedNodeStep new\r\t\t\t\t\t\tmatching: [ :aContext | aContext lastResult isForLanguage: 'node' ];\r\t\t\t\t\taddAlternative: GtLlmWardleyMapResettingConnectionStep new\r\t\t\t\t\t\tmatching: [ :aContext | aContext lastResult isForLanguage: 'connection' ];\r\t\t\t\t\taddAlternative: GtLlmWardleyMapExplanationStep new\r\t\t\t\t\t\tmatching: [ :aContext | aContext lastResult isForLanguage: 'explanation' ])  ];\r\tcreateAssistant.\r\t\rtutor addChat"
 			},
 			{
 				"__type" : "textSnippet",

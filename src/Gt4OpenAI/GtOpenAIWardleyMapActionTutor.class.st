@@ -275,7 +275,7 @@ GtOpenAIWardleyMapActionTutor >> initializePipeline [
 GtOpenAIWardleyMapActionTutor >> renameAction [
 	^ GtLlmTutorAction new
 		name: 'Rename a node';
-		description: 'Proposes alternative names for nodes.';
+		description: 'Proposes a sensible number of alternative names for nodes (less than ten, but more than one).';
 		format: 'Rename the node `{1}`';
 		examples: {GtLlmTutorActionExample new
 					instruction: 'Rename the node `Compute`';
@@ -283,7 +283,7 @@ GtOpenAIWardleyMapActionTutor >> renameAction [
 Cloud computing
 ```
 ```node
-{''name'': ''Compute'', ''evolution'': 0.3, ''vibility'': 0.4}
+{''name'': ''Compute'', ''evolution'': 0.3, ''visibility'': 0.4}
 ```';
 					output: '```action
 Rename a node
@@ -293,5 +293,22 @@ Cloud computing
 ```
 ```node
 {''name'': ''Compute'', ''evolution'': 0.3, ''visibility'': 0.4, ''alternative_names'': [''Computational Resources'', ''Resources'']}
+```'.
+				GtLlmTutorActionExample new
+					instruction: 'Rename the node `Furnace`';
+					input: '```topic
+Appliances
+```
+```node
+{''name'': ''Furnace'', ''evolution'': 0.9, ''visibility'': 0.9}
+```';
+					output: '```action
+Rename a node
+```
+```topic
+Appliances
+```
+```node
+{''name'': ''Furnace'', ''evolution'': 0.9, ''visibility'': 0.9, ''alternative_names'': [''Boiler'', ''Heater'', ''Incinerator'', ''Kiln'', ''Stove'']}
 ```'}
 ]

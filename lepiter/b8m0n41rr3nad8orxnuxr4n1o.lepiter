@@ -279,7 +279,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-14T12:30:35.839912+01:00"
+						"dateAndTimeString" : "2024-06-19T14:05:48.725941+02:00"
 					}
 				},
 				"uid" : {
@@ -289,7 +289,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "The answer is computed asynchronously. You can either subscribe to the {{gtClass:GtOpenAIThreadRunIsDoneAnnouncement}} class on the chat announcer ({{gtMethod:GtOpenAIAssistantChat>>#announcer}}) or periodically check whether an answer has arrived yet by looking at the last message (the firast method is recommended)."
+				"string" : "The answer is computed asynchronously. You can either subscribe to the {{gtClass:GtOpenAIThreadRunIsDoneAnnouncement}} class on the chat announcer ({{gtMethod:GtOpenAIAssistantChat>>#announcer}}) or periodically check whether an answer has arrived yet by looking at the last message (the first method is recommended)."
 			},
 			{
 				"__type" : "pharoSnippet",

@@ -1,6 +1,6 @@
 Class {
 	#name : #GtOpenAIActionTutor,
-	#superclass : #GtOpenAIGtTutor,
+	#superclass : #GtOpenAITutor,
 	#instVars : [
 		'format',
 		'actions'
@@ -23,6 +23,11 @@ GtOpenAIActionTutor >> addChat [
 	chats add: aChat.
 
 	^ aChat
+]
+
+{ #category : #accessing }
+GtOpenAIActionTutor >> defaultAssistantDescription [
+	^ 'Is an action-based tutor (more information in the prompt instructions).'
 ]
 
 { #category : #accessing }
