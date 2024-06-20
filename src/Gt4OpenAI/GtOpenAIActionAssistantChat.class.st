@@ -2,7 +2,8 @@ Class {
 	#name : #GtOpenAIActionAssistantChat,
 	#superclass : #GtOpenAIAssistantChat,
 	#instVars : [
-		'actions'
+		'actions',
+		'withRetry'
 	],
 	#category : #'Gt4OpenAI-Chats'
 }
@@ -34,6 +35,13 @@ GtOpenAIActionAssistantChat >> gtInstanceChatWidgetFor: aView [
 				assistantChatViewModel: self asViewModel;
 				minimizeChat ];
 		actionUpdateButton
+]
+
+{ #category : #accessing }
+GtOpenAIActionAssistantChat >> initialize [
+	super initialize.
+	
+	withRetry := true
 ]
 
 { #category : #accessing }
@@ -87,6 +95,17 @@ GtOpenAIActionAssistantChat >> waitForActionResult [
 						on: Error
 						do: [ :anError | 
 							anError asNotification registerNotifications.
-							self sendMessage: 'An error occurred: ' , anError asString.
-							self waitForActionResult ] ] ]) await
+							withRetry
+								ifTrue: [ self sendMessage: 'An error occurred: ' , anError asString.
+									self waitForActionResult ] ] ] ]) await
+]
+
+{ #category : #accessing }
+GtOpenAIActionAssistantChat >> withRetry [
+	withRetry := true
+]
+
+{ #category : #accessing }
+GtOpenAIActionAssistantChat >> withoutRetry [
+	withRetry := false
 ]
