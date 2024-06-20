@@ -109,16 +109,6 @@ component Compute [0.4, 0.4] label [-22, 29]
 					output: '```action
 Explain a node
 ```
-```topic
-Cloud computing
-```
-```wardley-map
-style wardley
-
-evolution genesis -> custom built -> product (+rental) -> commodity
-
-component Compute [0.45, 0.34] label [-22, 29]
-```
 ```explanation
 In the context of this Wardley Map on Cloud Computing, the node `Compute` refers to the computing resources and capabilities provided as part of cloud services. This encompasses the virtualized processing power (CPUs, GPUs) that can be scaled up or down on demand to meet the needs of applications or services running in the cloud. The `Compute` node is fundamental to cloud computing, as it allows for flexible, efficient, and scalable computing solutions that can be tailored to the specific requirements of businesses and developers.
 
@@ -317,21 +307,6 @@ component Compute [0.45, 0.34] label [-22, 29]
 					output: '```action
 Propose renames for node
 ```
-```wardley-map
-Cloud computing
-```
-```node
-style wardley
-
-evolution genesis -> custom built -> product (+rental) -> commodity
-
-component Compute [0.45, 0.34] label [-22, 29]
-
-component Platform [0.73, 0.71] label [-26, 29]
-
-
-Compute->Platform
-```
 ```rename
 {''Compute'': [''Computational resources'', ''Resources'']}
 ```'.
@@ -349,16 +324,6 @@ component Furance [0.9, 0.9] label [-9, 9]
 ```';
 					output: '```action
 Propose renames for node
-```
-```topic
-Appliances
-```
-```wardley-map
-style wardley
-
-evolution genesis -> custom built -> product (+rental) -> commodity
-
-component Furnace [0.9, 0.9] label [-9, 9]
 ```
 ```rename
 {''Furnace'': [''Boiler'', ''Heater'', ''Incinerator'', ''Kiln'', ''Stove'']}

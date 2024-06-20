@@ -94,7 +94,7 @@ GtLlmActionWardleyMapCreator >> proposeModel: aModel [
 		do: [ :anEdge | 
 			| aKey |
 			aKey := anEdge fromNode label -> anEdge toNode label.
-			unsetNodes
+			unsetEdges
 				detect: [ :anUnsetEdge | aKey = (anUnsetEdge fromNode label -> anUnsetEdge toNode label) ]
 				ifFound: [ :anUnsetEdge | unsetEdges remove: anUnsetEdge ]
 				ifNone: [ anEdge removeParent
