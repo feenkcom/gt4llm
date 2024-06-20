@@ -23,12 +23,17 @@ GtOpenAIWardleyMapActionTutor >> connectionAction [
 		description: 'Adds a new node that is connected to an already existing node. It MUST consider the context of the map topic. It MUST return the entirety of the state.';
 		format: 'Add a new connected node to `{1}`';
 		examples: {GtLlmTutorActionExample new
-					instruction: 'Add a new connected node to `Platform`';
+					instruction: 'Add a new connected node to `Compute`';
 					input: '```topic
 Cloud computing
 ```
-```node
-{''name'': ''Platform'', ''evolution'': 0.3, ''visibility'': 0.4}
+```wardley-map
+style wardley
+
+evolution genesis -> custom built -> product (+rental) -> commodity
+
+component Compute [0.45, 0.34] label [-22, 29]
+
 ```';
 					output: '```action
 Add a new connected node
@@ -36,12 +41,17 @@ Add a new connected node
 ```topic
 Cloud computing
 ```
-```node
-{''name'': ''Platform'', ''evolution'': 0.3, ''visibility'': 0.4}
-{''name'': ''Compute'', ''evolution'': 0.7, ''visibility'': 0.1}
-```
-```connection
-{''from'': ''Platform'', ''to'': ''Compute''}
+```wardley-map
+style wardley
+
+evolution genesis -> custom built -> product (+rental) -> commodity
+
+component Compute [0.45, 0.34] label [-22, 29]
+
+component Platform [0.73, 0.71] label [-26, 29]
+
+
+Compute->Platform
 ```'.
 				GtLlmTutorActionExample new
 					instruction: 'Add a new connected node to `Regulator`';
@@ -49,17 +59,32 @@ Cloud computing
 Add a new connected node
 ```
 ```topic
-Cloud computing
+Regulation
 ```
-```node
-{''name'': ''Regulator'', ''evolution'': 0.6, ''visibility'': 0.2}
+```wardley-map
+style wardley
+
+evolution genesis -> custom built -> product (+rental) -> commodity
+
+component Regulator [0.6, 0.2] label [-22, 29]
 ```';
-					output: '```node
-{''name'': ''Regulator'', ''evolution'': 0.6, ''visibility'': 0.2}
-{''name'': ''Audit'', ''evolution'': 0.7, ''visibility'': 0.1}
+					output: '```action
+Add a new connected node
 ```
-```connection
-{''from'': ''Audit'', ''to'': ''Regulator''}
+```topic
+Regulation
+```
+```wardley-map
+style wardley
+
+evolution genesis -> custom built -> product (+rental) -> commodity
+
+component Regulator [0.6, 0.2] label [-22, 29]
+
+component Audit [0.8, 0.8] label [-26, 29]
+
+
+Compute->Platform
 ```'}
 ]
 
@@ -74,8 +99,12 @@ GtOpenAIWardleyMapActionTutor >> explanationAction [
 					input: '```topic
 Cloud computing
 ```
-```node
-{''name'': ''Compute'', ''evolution'': 0.3, ''visibility'': 0.4}
+```wardley-map
+style wardley
+
+evolution genesis -> custom built -> product (+rental) -> commodity
+
+component Compute [0.4, 0.4] label [-22, 29]
 ```';
 					output: '```action
 Explain a node
@@ -83,8 +112,12 @@ Explain a node
 ```topic
 Cloud computing
 ```
-```node
-{''name'': ''Compute'', ''evolution'': 0.3, ''visibility'': 0.4}
+```wardley-map
+style wardley
+
+evolution genesis -> custom built -> product (+rental) -> commodity
+
+component Compute [0.45, 0.34] label [-22, 29]
 ```
 ```explanation
 In the context of this Wardley Map on Cloud Computing, the node `Compute` refers to the computing resources and capabilities provided as part of cloud services. This encompasses the virtualized processing power (CPUs, GPUs) that can be scaled up or down on demand to meet the needs of applications or services running in the cloud. The `Compute` node is fundamental to cloud computing, as it allows for flexible, efficient, and scalable computing solutions that can be tailored to the specific requirements of businesses and developers.
@@ -105,9 +138,7 @@ GtOpenAIWardleyMapActionTutor >> initialAction [
 					instruction: 'Create a set of nodes on Key components for a drone delivery service';
 					input: '```topic
 ```
-```node
-```
-```connection
+```wardley-map
 ```';
 					output: '```action
 Create a set of nodes
@@ -115,46 +146,48 @@ Create a set of nodes
 ```topic
 Key components for a drone delivery service
 ```
-```node
-{"name":"Drone delivery platform","evolution":0.7,"visibility":0.7}
-{"name":"Communication system","evolution":0.4,"visibility":0.6}
-{"name":"Regulatory compliance","evolution":0.3,"visibility":0.8}
-{"name":"Software development","evolution":0.3,"visibility":0.2}
-{"name":"Computing resources","evolution":0.2,"visibility":0.3}
-{"name":"Customer need","evolution":0.9,"visibility":0.8}
-{"name":"Power supply and charging stations","evolution":0.2,"visibility":0.5}
-{"name":"Weather monitoring system","evolution":0.4,"visibility":0.5}
-{"name":"Navigation and GPS","evolution":0.3,"visibility":0.6}
-{"name":"Data storage","evolution":0.2,"visibility":0.4}
-{"name":"Cybersecurity measures","evolution":0.1,"visibility":0.6}
-{"name":"Drones","evolution":0.6,"visibility":0.6}
-{"name":"Maintenance service for drones","evolution":0.5,"visibility":0.4}
-{"name":"Air traffic control system","evolution":0.2,"visibility":0.7}
-{"name":"Automated package handling system","evolution":0.5,"visibility":0.6}
-```
-```connection
-{"from": "Customer need", "to": "Drone delivery platform"}
-{"from": "Drone delivery platform", "to": "Drones"}
-{"from": "Drones", "to": "Maintenance service for drones"}
-{"from": "Drone delivery platform", "to": "Regulatory compliance"}
-{"from": "Drone delivery platform", "to": "Weather monitoring system"}
-{"from": "Drones", "to": "Navigation and GPS"}
-{"from": "Drones", "to": "Air traffic control system"}
-{"from": "Drone delivery platform", "to": "Automated package handling system"}
-{"from": "Drone delivery platform", "to": "Communication system"}
-{"from": "Drone delivery platform", "to": "Data storage"}
-{"from": "Drone delivery platform", "to": "Computing resources"}
-{"from": "Drones", "to": "Power supply and charging stations"}
-{"from": "Drone delivery platform", "to": "Software development"}
-{"from": "Drone delivery platform", "to": "Cybersecurity measures"}
+```wardley-map
+style wardley
+
+evolution genesis -> custom built -> product (+rental) -> commodity
+
+component Customer need [0.90, 0.95] label [4, -4]
+
+component Drone delivery platform [0.70, 0.80] label [-12, -3]
+component Drones [0.60, 0.60] label [-12, 3]
+component Maintenance service for drones [0.50, 0.50] label [-22, 35]
+component Regulatory compliance [0.30, 0.80] label [-22, 25]
+component Weather monitoring system [0.40, 0.50] label [2, 15]
+component Navigation and GPS [0.30, 0.60] label [2, 25]
+component Air traffic control system [0.20, 0.70] label [-12, 15]
+component Automated package handling system [0.50, 0.60] label [-2, -15]
+component Communication system [0.40, 0.60] label [12, -15]
+component Computing resources [0.20, 0.30] label [-42, -5]
+component Data storage [0.20, 0.40] label [-52, -5]
+component Cybersecurity measures [0.10, 0.60] label [-52, 15]
+component Software development [0.30, 0.20] label [-52, 25]
+component Power supply and charging stations [0.20, 0.50] label [22, -5]
+
+Customer need->Drone delivery platform
+Drone delivery platform->Drones
+Drones->Maintenance service for drones
+Drone delivery platform->Regulatory compliance
+Drone delivery platform->Weather monitoring system
+Drones->Navigation and GPS
+Drones->Air traffic control system
+Drone delivery platform->Automated package handling system
+Drone delivery platform->Communication system
+Drone delivery platform->Computing resources
+Drones->Power supply and charging stations
+Drone delivery platform->Data storage
+Drone delivery platform->Software development
+Drone delivery platform->Cybersecurity measures
 ```'.
 				GtLlmTutorActionExample new
 					instruction: 'Create a set of nodes on Moldable development';
 					input: '```topic
 ```
-```node
-```
-```connection
+```wardley-map
 ```';
 					output: '```action
 Create a set of nodes
@@ -162,26 +195,29 @@ Create a set of nodes
 ```topic
 Moldable development
 ```
-```node
-{"name":"User Feedback","evolution":0.4,"visibility":0.85}
-{"name":"Programming Languages","evolution":0.8,"visibility":0.3}
-{"name":"Problem Domain","evolution":0.2,"visibility":0.9}
-{"name":"Customization Frameworks","evolution":0.5,"visibility":0.7}
-{"name":"Frameworks and Libraries","evolution":0.75,"visibility":0.2}
-{"name":"Moldable Tools","evolution":0.4,"visibility":0.8}
-{"name":"Developer Skills","evolution":0.3,"visibility":0.7}
-{"name":"Development Practices","evolution":0.1,"visibility":0.1}
-```
-```connection
-{"from": "Developer Skills", "to": "Moldable Tools"}
-{"from": "Developer Skills", "to": "Programming Languages"}
-{"from": "Developer Skills", "to": "Frameworks and Libraries"}
-{"from": "User Feedback", "to": "Moldable Tools"}
-{"from": "User Feedback", "to": "Customization Frameworks"}
-{"from": "Moldable Tools", "to": "Problem Domain"}
-{"from": "Customization Frameworks", "to": "Problem Domain"}
-{"from": "Development Practices", "to": "Moldable Tools"}
-{"from": "Development Practices", "to": "Customization Frameworks"}
+```wardley-map
+style wardley
+
+evolution genesis -> custom built -> product (+rental) -> commodity
+
+component User Feedback [0.4, 0.85] label [-22, 29]
+component Programming Languages [0.8, 0.3] label [-42, 29]
+component Problem Domain [0.2, 0.9] label [14, 29]
+component Customization Frameworks [0.5, 0.7] label [-62, 29]
+component Frameworks and Libraries [0.75, 0.2] label [-82, 29]
+component Moldable Tools [0.4, 0.8] label [-102, 29]
+component Developer Skills [0.3, 0.7] label [34, 29]
+component Development Practices [0.1, 0.1] label [54, 29]
+
+User Feedback->Moldable Tools
+User Feedback->Customization Frameworks
+Developer Skills->Moldable Tools
+Developer Skills->Programming Languages
+Developer Skills->Frameworks and Libraries
+Moldable Tools->Problem Domain
+Customization Frameworks->Problem Domain
+Development Practices->Moldable Tools
+Development Practices->Customization Frameworks
 ```'}
 ]
 
@@ -216,35 +252,24 @@ GtOpenAIWardleyMapActionTutor >> initializeFormat [
 Cloud computing in regulated areas
 ```');
 			addComponent: (GtLlmTutorComponent new
-					name: 'Node';
-					format: 'JSON';
-					tag: 'node';
-					example: '```node
-{''name'': ''example node'', ''evolution'': 0.1, ''visibility'': 0.3}
-```
+					name: 'Wardley Map';
+					format: 'Wardley Map script language';
+					tag: 'wardley-map';
+					example: '```wardley-map
+style wardley
 
-or, for multiple nodes:
-```node
-{''name'': ''example node'', ''evolution'': 0.1, ''visibility'': 0.3}
-{''name'': ''example node 2'', ''evolution'': 0.5, ''visibility'': 0.2}
-```
+evolution genesis -> custom built -> product (+rental) -> commodity
 
-All connections must go into one node.');
-			addComponent: (GtLlmTutorComponent new
-					name: 'Connection';
-					format: 'JSON';
-					tag: 'connection';
-					example: '```connection
-{''from'': ''example node'', ''to'': ''example node 2''}
-```
+component Hello [0.80, 0.20] label [-14, 29]
 
-or, for multiple connections:
-```connection
-{''from'': ''example node'', ''to'': ''example node 2''}
-{''from'': ''example node 3'', ''to'': ''example node 2''}
-```
+component Goodbye [0.40, 0.60] label [-22, 29]
 
-All connections must go into one snippet.');
+component Hello again! [0.60, 0.80] label [-42, 29]
+
+
+Hello->Goodbye
+Goodbye->Hello again!
+```');
 			addComponent: (GtLlmTutorComponent new
 					name: 'Explanation';
 					format: 'Text';
@@ -263,10 +288,10 @@ GtOpenAIWardleyMapActionTutor >> initializePipeline [
 				checker: (GtLlmAlternativeCodeStep new
 						addAlternative: GtLlmWardleyMapTopicStep new
 							matching: [ :aContext | aContext lastResult isForLanguage: 'topic' ];
-						addAlternative: GtLlmWardleyMapPositionedNodeStep new
-							matching: [ :aContext | aContext lastResult isForLanguage: 'node' ];
-						addAlternative: GtLlmWardleyMapResettingConnectionStep new
-							matching: [ :aContext | aContext lastResult isForLanguage: 'connection' ];
+						addAlternative: GtLlmWardleyMapMapStep new
+							matching: [ :aContext | aContext lastResult isForLanguage: 'wardley-map' ];
+						addAlternative: GtLlmWardleyMapRenameStep new
+							matching: [ :aContext | aContext lastResult isForLanguage: 'rename' ];
 						addAlternative: GtLlmWardleyMapExplanationStep new
 							matching: [ :aContext | aContext lastResult isForLanguage: 'explanation' ]) ]
 ]
@@ -274,41 +299,68 @@ GtOpenAIWardleyMapActionTutor >> initializePipeline [
 { #category : #accessing }
 GtOpenAIWardleyMapActionTutor >> renameAction [
 	^ GtLlmTutorAction new
-		name: 'Rename a node';
+		name: 'Propose renames for node';
 		description: 'Proposes a sensible number of alternative names for nodes (less than ten, but more than one).';
-		format: 'Rename the node `{1}`';
+		format: 'Propose renames for node `{1}`';
 		examples: {GtLlmTutorActionExample new
-					instruction: 'Rename the node `Compute`';
+					instruction: 'Propose renames for node `Compute`';
 					input: '```topic
 Cloud computing
 ```
-```node
-{''name'': ''Compute'', ''evolution'': 0.3, ''visibility'': 0.4}
+```wardley-map
+style wardley
+
+evolution genesis -> custom built -> product (+rental) -> commodity
+
+component Compute [0.45, 0.34] label [-22, 29]
 ```';
 					output: '```action
-Rename a node
+Propose renames for node
 ```
-```topic
+```wardley-map
 Cloud computing
 ```
 ```node
-{''name'': ''Compute'', ''evolution'': 0.3, ''visibility'': 0.4, ''alternative_names'': [''Computational Resources'', ''Resources'']}
+style wardley
+
+evolution genesis -> custom built -> product (+rental) -> commodity
+
+component Compute [0.45, 0.34] label [-22, 29]
+
+component Platform [0.73, 0.71] label [-26, 29]
+
+
+Compute->Platform
+```
+```rename
+{''Compute'': [''Computational resources'', ''Resources'']}
 ```'.
 				GtLlmTutorActionExample new
-					instruction: 'Rename the node `Furnace`';
+					instruction: 'Propose renames for node `Furnace`';
 					input: '```topic
 Appliances
 ```
-```node
-{''name'': ''Furnace'', ''evolution'': 0.9, ''visibility'': 0.9}
+```wardley-map
+style wardley
+
+evolution genesis -> custom built -> product (+rental) -> commodity
+
+component Furance [0.9, 0.9] label [-9, 9]
 ```';
 					output: '```action
-Rename a node
+Propose renames for node
 ```
 ```topic
 Appliances
 ```
-```node
-{''name'': ''Furnace'', ''evolution'': 0.9, ''visibility'': 0.9, ''alternative_names'': [''Boiler'', ''Heater'', ''Incinerator'', ''Kiln'', ''Stove'']}
+```wardley-map
+style wardley
+
+evolution genesis -> custom built -> product (+rental) -> commodity
+
+component Furnace [0.9, 0.9] label [-9, 9]
+```
+```rename
+{''Furnace'': [''Boiler'', ''Heater'', ''Incinerator'', ''Kiln'', ''Stove'']}
 ```'}
 ]

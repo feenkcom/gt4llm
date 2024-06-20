@@ -18,7 +18,7 @@ GtWardleyMapViewModel >> llmCreator [
 
 { #category : #'*Gt4Llm' }
 GtWardleyMapViewModel >> llmCreator: aCreator [
-	self wardleyMapModel openAIWardleyMapCreator: aCreator
+	self optionAt: #openAIWardleyMapCreator put: aCreator
 ]
 
 { #category : #'*Gt4Llm' }

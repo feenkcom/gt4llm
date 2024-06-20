@@ -41,7 +41,7 @@ GtWardleyMapNodeModel >> menuItemNodeLlmProposeAlternativeNamesButton [
 		action: [ :aContextMenuItem :aBrButton :aBrButtonModel :anEvent | 
 			aContextMenuItem llmCreator
 				announce: (GtLlmSendActionToChat
-						action: 'Rename a node'
+						action: 'Propose renames for node'
 						arguments: {aContextMenuItem wardleyMapNodeViewModel label}).
 			aContextMenuItem editorElement fireEvent: BrContextMenuHideWish new ]
 ]
