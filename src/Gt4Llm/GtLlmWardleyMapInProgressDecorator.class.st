@@ -10,13 +10,13 @@ Class {
 }
 
 { #category : #accessing }
-GtLlmWardleyMapInProgressDecorator >> decorateMapElement: aMapElement decoratorViewModel: aDecoratorViewModel [
-	BlTaskAction
-		enqueueElement: aMapElement
-		action: [ GtLlmWardleyMapInProgressManager new
-				element: aMapElement;
-				viewModel: aDecoratorViewModel;
-				attach ]
+GtLlmWardleyMapInProgressDecorator >> decorateMapElementInContext: aMapDecoratorContext [
+	| anElement anActionContainer |
+	anActionContainer := GtWardleyMapUtility
+			ensureTopLeftInnerDecoratorContainerFor: aMapDecoratorContext canvasElement.
+	anElement := GtLlmWardleyMapInProgressElement new
+			wardleyMapDecoratorViewModel: aMapDecoratorContext decoratorViewModel.
+	anActionContainer addChild: anElement
 ]
 
 { #category : #accessing }
