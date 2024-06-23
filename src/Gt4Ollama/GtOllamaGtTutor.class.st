@@ -1,6 +1,6 @@
 Class {
 	#name : #GtOllamaGtTutor,
-	#superclass : #GtLlmGtTutor,
+	#superclass : #GtLlmGtSpecificTutor,
 	#category : #'Gt4Ollama-Tutor'
 }
 

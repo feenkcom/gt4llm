@@ -71,14 +71,14 @@
 								"__type" : "time",
 								"time" : {
 									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2024-05-14T12:58:13.85627+02:00"
+									"dateAndTimeString" : "2024-06-23T13:56:24.687046+02:00"
 								}
 							},
 							"uid" : {
 								"__type" : "uid",
 								"uidString" : "0W/dmsnUDQCwYhIRB0Z8qA=="
 							},
-							"code" : "tutor := GtOpenAIGtTutor withApiKeyFromClipboard"
+							"code" : "tutor := GtOpenAIGtSpecificTutor withApiKeyFromClipboard"
 						}
 					]
 				},
@@ -143,14 +143,14 @@
 								"__type" : "time",
 								"time" : {
 									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2024-05-14T12:57:47.643421+02:00"
+									"dateAndTimeString" : "2024-06-23T13:56:26.293338+02:00"
 								}
 							},
 							"uid" : {
 								"__type" : "uid",
 								"uidString" : "rcLEm8nUDQCw4te6B0Z8qA=="
 							},
-							"code" : "tutor := GtOpenAIGtTutor withApiKeyFromFile"
+							"code" : "tutor := GtOpenAIGtSpecificTutor withApiKeyFromFile"
 						}
 					]
 				},
@@ -215,14 +215,14 @@
 								"__type" : "time",
 								"time" : {
 									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2024-05-14T12:57:39.400079+02:00"
+									"dateAndTimeString" : "2024-06-23T13:56:28.41129+02:00"
 								}
 							},
 							"uid" : {
 								"__type" : "uid",
 								"uidString" : "i5vFhF/ODQCtksT+D0lXcw=="
 							},
-							"code" : "GtOpenAIGtTutor instance: tutor createAssistant"
+							"code" : "GtOpenAIGtSpecificTutor instance: tutor createAssistant"
 						}
 					]
 				},
@@ -278,12 +278,12 @@
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2024-05-14T12:56:49.960485+02:00"
+			"dateAndTimeString" : "2024-06-23T13:50:12.344351+02:00"
 		}
 	},
 	"pageType" : {
 		"__type" : "namedPage",
-		"title" : "Setting up the tutor"
+		"title" : "Setting up a tutor"
 	},
 	"uid" : {
 		"__type" : "uuid",

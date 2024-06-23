@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLlmGtTutor,
+	#name : #GtLlmGtSpecificTutor,
 	#superclass : #GtLlmTutor,
 	#instVars : [
 		'instructions',
@@ -15,27 +15,27 @@ Class {
 }
 
 { #category : #accessing }
-GtLlmGtTutor >> communicationRules [
+GtLlmGtSpecificTutor >> communicationRules [
 	^ communicationRules
 ]
 
 { #category : #accessing }
-GtLlmGtTutor >> communicationRules: anObject [
+GtLlmGtSpecificTutor >> communicationRules: anObject [
 	communicationRules := anObject
 ]
 
 { #category : #accessing }
-GtLlmGtTutor >> conventionsDescription [
+GtLlmGtSpecificTutor >> conventionsDescription [
 	^ conventionsDescription
 ]
 
 { #category : #accessing }
-GtLlmGtTutor >> conventionsDescription: anObject [
+GtLlmGtSpecificTutor >> conventionsDescription: anObject [
 	conventionsDescription := anObject
 ]
 
 { #category : #accessing }
-GtLlmGtTutor >> defaultCommunicationRules [
+GtLlmGtSpecificTutor >> defaultCommunicationRules [
 	^ GtLlmInstructionSection new
 		title: 'Communication rules';
 		body: (GtLlmInstructionList new
@@ -47,7 +47,7 @@ GtLlmGtTutor >> defaultCommunicationRules [
 ]
 
 { #category : #accessing }
-GtLlmGtTutor >> defaultConventionsDescription [
+GtLlmGtSpecificTutor >> defaultConventionsDescription [
 	^ GtLlmInstructionSection new
 		title: 'Conventions for communication';
 		body: (GtLlmCompositeInstruction new
@@ -72,7 +72,7 @@ divideBy: anotherNumber
 ]
 
 { #category : #accessing }
-GtLlmGtTutor >> defaultExampleViews [
+GtLlmGtSpecificTutor >> defaultExampleViews [
 	^ GtLlmInstructionSection new
 		title: 'Example for phlow views';
 		body: (String lf , String lf
@@ -141,7 +141,7 @@ gtPaintingFor: aView
 ]
 
 { #category : #accessing }
-GtLlmGtTutor >> defaultInstructions [
+GtLlmGtSpecificTutor >> defaultInstructions [
 	^ GtLlmInstructionWithSections new
 		source: self;
 		introduction: self tutorDescription;
@@ -154,7 +154,7 @@ GtLlmGtTutor >> defaultInstructions [
 ]
 
 { #category : #accessing }
-GtLlmGtTutor >> defaultInteractionDescription [
+GtLlmGtSpecificTutor >> defaultInteractionDescription [
 	^ GtLlmInstructionSection new
 		title: 'Interaction description';
 		body: 'A typical interaction goes like this:
@@ -181,12 +181,12 @@ SUMMARY OF THE PROBLEM...
 ]
 
 { #category : #accessing }
-GtLlmGtTutor >> defaultTutorDescription [
+GtLlmGtSpecificTutor >> defaultTutorDescription [
 	^ 'You are a coding assistant called GT Tutor that generates and auto-executes Pharo Smalltalk code for use inside Glamorous Toolkit.'
 ]
 
 { #category : #accessing }
-GtLlmGtTutor >> defaultVariablesDescription [
+GtLlmGtSpecificTutor >> defaultVariablesDescription [
 	^ GtLlmInstructionSection new
 		title: 'Versions';
 		body: ('
@@ -197,7 +197,7 @@ The Glamorous Toolkit version is {gtVersion}'
 ]
 
 { #category : #accessing }
-GtLlmGtTutor >> defaultViewsDescription [
+GtLlmGtSpecificTutor >> defaultViewsDescription [
 	^ GtLlmInstructionSection new
 		title: 'The Phlow API';
 		body: (GtLlmCompositeInstruction new
@@ -214,17 +214,17 @@ GtLlmGtTutor >> defaultViewsDescription [
 ]
 
 { #category : #accessing }
-GtLlmGtTutor >> exampleViews [
+GtLlmGtSpecificTutor >> exampleViews [
 	^ exampleViews
 ]
 
 { #category : #accessing }
-GtLlmGtTutor >> exampleViews: anObject [
+GtLlmGtSpecificTutor >> exampleViews: anObject [
 	exampleViews := anObject
 ]
 
 { #category : #accessing }
-GtLlmGtTutor >> initialize [
+GtLlmGtSpecificTutor >> initialize [
 	super initialize.
 
 	tutorDescription := self defaultTutorDescription.
@@ -238,51 +238,51 @@ GtLlmGtTutor >> initialize [
 ]
 
 { #category : #accessing }
-GtLlmGtTutor >> instructions [
+GtLlmGtSpecificTutor >> instructions [
 	^ instructions
 ]
 
 { #category : #accessing }
-GtLlmGtTutor >> instructions: anObject [
+GtLlmGtSpecificTutor >> instructions: anObject [
 	instructions := anObject asInstruction
 ]
 
 { #category : #accessing }
-GtLlmGtTutor >> interactionDescription [
+GtLlmGtSpecificTutor >> interactionDescription [
 	^ interactionDescription
 ]
 
 { #category : #accessing }
-GtLlmGtTutor >> interactionDescription: anObject [
+GtLlmGtSpecificTutor >> interactionDescription: anObject [
 	interactionDescription := anObject
 ]
 
 { #category : #accessing }
-GtLlmGtTutor >> tutorDescription [
+GtLlmGtSpecificTutor >> tutorDescription [
 	^ tutorDescription
 ]
 
 { #category : #accessing }
-GtLlmGtTutor >> tutorDescription: anObject [
+GtLlmGtSpecificTutor >> tutorDescription: anObject [
 	tutorDescription := anObject
 ]
 
 { #category : #accessing }
-GtLlmGtTutor >> variablesDescription [
+GtLlmGtSpecificTutor >> variablesDescription [
 	^ variablesDescription
 ]
 
 { #category : #accessing }
-GtLlmGtTutor >> variablesDescription: anObject [
+GtLlmGtSpecificTutor >> variablesDescription: anObject [
 	variablesDescription := anObject
 ]
 
 { #category : #accessing }
-GtLlmGtTutor >> viewsDescription [
+GtLlmGtSpecificTutor >> viewsDescription [
 	^ viewsDescription
 ]
 
 { #category : #accessing }
-GtLlmGtTutor >> viewsDescription: anObject [
+GtLlmGtSpecificTutor >> viewsDescription: anObject [
 	viewsDescription := anObject
 ]

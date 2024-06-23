@@ -225,7 +225,7 @@
 											"__type" : "time",
 											"time" : {
 												"__type" : "dateAndTime",
-												"dateAndTimeString" : "2024-05-14T12:56:49.983246+02:00"
+												"dateAndTimeString" : "2024-06-23T13:50:12.358625+02:00"
 											}
 										},
 										"uid" : {
@@ -235,7 +235,7 @@
 										"paragraphStyle" : {
 											"__type" : "textStyle"
 										},
-										"string" : "[[Setting up the tutor]]"
+										"string" : "[[Setting up a tutor]]"
 									},
 									{
 										"__type" : "textSnippet",
@@ -262,7 +262,7 @@
 											"__type" : "time",
 											"time" : {
 												"__type" : "dateAndTime",
-												"dateAndTimeString" : "2024-02-09T12:36:15.127669-03:00"
+												"dateAndTimeString" : "2024-06-23T13:54:58.50338+02:00"
 											}
 										},
 										"uid" : {
@@ -272,44 +272,7 @@
 										"paragraphStyle" : {
 											"__type" : "textStyle"
 										},
-										"string" : "[[OpenAI conversation using assistants]] "
-									},
-									{
-										"__type" : "textSnippet",
-										"children" : {
-											"__type" : "snippets",
-											"items" : [ ]
-										},
-										"createEmail" : {
-											"__type" : "email",
-											"emailString" : "<unknown>"
-										},
-										"createTime" : {
-											"__type" : "time",
-											"time" : {
-												"__type" : "dateAndTime",
-												"dateAndTimeString" : "2024-02-13T10:40:54.28544+01:00"
-											}
-										},
-										"editEmail" : {
-											"__type" : "email",
-											"emailString" : "<unknown>"
-										},
-										"editTime" : {
-											"__type" : "time",
-											"time" : {
-												"__type" : "dateAndTime",
-												"dateAndTimeString" : "2024-02-22T21:04:29.177025+01:00"
-											}
-										},
-										"uid" : {
-											"__type" : "uid",
-											"uidString" : "gitx7aHNDQCIJ8kLBQLYvQ=="
-										},
-										"paragraphStyle" : {
-											"__type" : "textStyle"
-										},
-										"string" : "[[Interacting with a tutor]]"
+										"string" : "[[Working with a tutor based on a simple OpenAI assistant for GT]] "
 									},
 									{
 										"__type" : "textSnippet",
@@ -406,7 +369,7 @@
 								"__type" : "time",
 								"time" : {
 									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2024-02-13T10:39:06.034986+01:00"
+									"dateAndTimeString" : "2024-06-23T13:59:01.765665+02:00"
 								}
 							},
 							"uid" : {
@@ -416,7 +379,7 @@
 							"paragraphStyle" : {
 								"__type" : "textStyle"
 							},
-							"string" : "[[Assistants]]"
+							"string" : "[[OpenAI assistants]]"
 						},
 						{
 							"__type" : "textSnippet",
@@ -443,7 +406,7 @@
 								"__type" : "time",
 								"time" : {
 									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2024-06-23T13:27:04.396611+02:00"
+									"dateAndTimeString" : "2024-06-23T13:48:39.929675+02:00"
 								}
 							},
 							"uid" : {
@@ -453,7 +416,7 @@
 							"paragraphStyle" : {
 								"__type" : "textStyle"
 							},
-							"string" : "[[Working with ChatGPT]]"
+							"string" : "[[Working with a basic chat]]"
 						},
 						{
 							"__type" : "textSnippet",
@@ -774,7 +737,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-23T13:36:18.208409+02:00"
+						"dateAndTimeString" : "2024-06-23T13:36:33.00149+02:00"
 					}
 				},
 				"uid" : {
@@ -784,7 +747,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "[[Working with OpenAI]]"
+				"string" : "[[gt4openai: working with OpenAI]]"
 			},
 			{
 				"__type" : "textSnippet",
