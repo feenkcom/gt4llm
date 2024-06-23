@@ -173,12 +173,12 @@
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2024-06-09T21:13:09.700242+02:00"
+			"dateAndTimeString" : "2024-06-23T13:36:07.297221+02:00"
 		}
 	},
 	"pageType" : {
 		"__type" : "namedPage",
-		"title" : "Glamorous Toolkit for LLMs"
+		"title" : "Glamorous Toolkit for large language models (LLMs)"
 	},
 	"uid" : {
 		"__type" : "uuid",

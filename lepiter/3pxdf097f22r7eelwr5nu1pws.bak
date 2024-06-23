@@ -143,14 +143,14 @@
 								"__type" : "time",
 								"time" : {
 									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2024-06-23T12:50:06.778079+02:00"
+									"dateAndTimeString" : "2024-06-23T13:04:58.782108+02:00"
 								}
 							},
 							"uid" : {
 								"__type" : "uid",
 								"uidString" : "PUPl5+rXDQCS9cS2C8IszQ=="
 							},
-							"code" : "string = \"<|im_start|>system<|im_sep|>You are a helpful assistant<|im_end|><|im_start|>assistant<|im_sep|>How can I help you?<|im_end|><|im_start|>user<|im_sep|>Can you add two and two for me?<|im_end|>\"\rmodel = \"gpt-4\"\rgtoolkit_tiktokenize.tokenize(string, model)"
+							"code" : "model = \"gpt-4\"\rstring = \"<|im_start|>system<|im_sep|>You are a helpful assistant<|im_end|><|im_start|>assistant<|im_sep|>How can I help you?<|im_end|><|im_start|>user<|im_sep|>Can you add two and two for me?<|im_end|>\"\rgtoolkit_tiktokenize.tokenize(string, model)"
 						}
 					]
 				},

@@ -350,12 +350,12 @@
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2024-02-22T18:49:47.741561+01:00"
+			"dateAndTimeString" : "2024-06-23T13:26:40.206751+02:00"
 		}
 	},
 	"pageType" : {
 		"__type" : "namedPage",
-		"title" : "Working with the API client"
+		"title" : "Working with the OpenAI API client"
 	},
 	"uid" : {
 		"__type" : "uuid",

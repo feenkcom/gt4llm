@@ -1,11 +1,11 @@
 Class {
-	#name : #GtLlmObjectSummarizer,
+	#name : #GtLlmPharoObjectSummarizer,
 	#superclass : #Object,
 	#category : #'Gt4Llm-Summarizer'
 }
 
 { #category : #accessing }
-GtLlmObjectSummarizer >> guessPackagePrefixes: aPackage [
+GtLlmPharoObjectSummarizer >> guessPackagePrefixes: aPackage [
 	| definedClasses possiblePrefixes amountOfClasses |
 	definedClasses := aPackage definedClasses.
 	amountOfClasses := definedClasses size.
@@ -30,7 +30,7 @@ GtLlmObjectSummarizer >> guessPackagePrefixes: aPackage [
 ]
 
 { #category : #accessing }
-GtLlmObjectSummarizer >> shortCollectionName: aCollection on: aStream [
+GtLlmPharoObjectSummarizer >> shortCollectionName: aCollection on: aStream [
 	| aClassName theNamePieces anArticle |
 	
 	aClassName := aCollection class name.
@@ -49,7 +49,7 @@ GtLlmObjectSummarizer >> shortCollectionName: aCollection on: aStream [
 ]
 
 { #category : #accessing }
-GtLlmObjectSummarizer >> shortPluralClassName: aClass on: aStream [
+GtLlmPharoObjectSummarizer >> shortPluralClassName: aClass on: aStream [
 	| aClassName theNamePieces |
 	
 	aClassName := aClass name.
@@ -62,12 +62,12 @@ GtLlmObjectSummarizer >> shortPluralClassName: aClass on: aStream [
 ]
 
 { #category : #accessing }
-GtLlmObjectSummarizer >> summarize: anObject [
+GtLlmPharoObjectSummarizer >> summarize: anObject [
 	^ String streamContents: [ :aStream | self summarize: anObject on: aStream ]
 ]
 
 { #category : #accessing }
-GtLlmObjectSummarizer >> summarize: anObject on: aStream [
+GtLlmPharoObjectSummarizer >> summarize: anObject on: aStream [
 	self
 		summarize: anObject
 		on: aStream
@@ -76,7 +76,7 @@ GtLlmObjectSummarizer >> summarize: anObject on: aStream [
 ]
 
 { #category : #accessing }
-GtLlmObjectSummarizer >> summarize: anObject on: aStream includingSlots: shouldIncludeSlots includingInstanceOf: shouldIncludeAnInstanceOf [
+GtLlmPharoObjectSummarizer >> summarize: anObject on: aStream includingSlots: shouldIncludeSlots includingInstanceOf: shouldIncludeAnInstanceOf [
 	anObject isCollection
 		ifTrue: [ ^ self summarizeCollection: anObject on: aStream ].
 
@@ -88,7 +88,7 @@ GtLlmObjectSummarizer >> summarize: anObject on: aStream includingSlots: shouldI
 ]
 
 { #category : #accessing }
-GtLlmObjectSummarizer >> summarizeCollection: aCollection on: aStream [
+GtLlmPharoObjectSummarizer >> summarizeCollection: aCollection on: aStream [
 	| theItemTypes maxItemTypes |
 	self shortCollectionName: aCollection on: aStream.
 
@@ -127,7 +127,7 @@ GtLlmObjectSummarizer >> summarizeCollection: aCollection on: aStream [
 ]
 
 { #category : #accessing }
-GtLlmObjectSummarizer >> summarizeObject: anObject on: aStream includingSlots: shouldIncludeSlots includingInstanceOf: shouldIncludeAnInstanceOf [
+GtLlmPharoObjectSummarizer >> summarizeObject: anObject on: aStream includingSlots: shouldIncludeSlots includingInstanceOf: shouldIncludeAnInstanceOf [
 	| aClassName theNamePieces anArticle theSlots |
 
 	aClassName := anObject class name.
