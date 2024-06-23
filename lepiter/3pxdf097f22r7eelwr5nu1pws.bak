@@ -143,14 +143,14 @@
 								"__type" : "time",
 								"time" : {
 									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2024-06-23T08:57:22.478684+02:00"
+									"dateAndTimeString" : "2024-06-23T12:27:23.88486+02:00"
 								}
 							},
 							"uid" : {
 								"__type" : "uid",
 								"uidString" : "PUPl5+rXDQCS9cS2C8IszQ=="
 							},
-							"code" : "string = \"<|im_start|>system<|im_sep|>You are a helpful assistant<|im_end|><|im_start|>assistant<|im_sep|>How can I help you?<|im_end|><|im_start|>user<|im_sep|>Can you add two and two for me?<|im_end|>\"\rmodel = \"gpt-4\"\rgtoolkit_tiktokenize.tokenize(string, model)"
+							"code" : "string = \"<|im_start|>system<|im_sep|>You are a helpful assistant<|im_end|><|im_start|>assistant<|im_sep|>How can I help you?<|im_end|><|im_start|>user<|im_sep|>Can you add two and two for me?<|im_end|>\"\rmodel = \"gpt-2\"\rgtoolkit_tiktokenize.tokenize(string, model)"
 						}
 					]
 				},
@@ -245,7 +245,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-23T09:13:50.894283+02:00"
+						"dateAndTimeString" : "2024-06-23T09:13:54.281586+02:00"
 					}
 				},
 				"uid" : {
@@ -255,7 +255,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "The equivalent in Pharo code is as follows (it relies on the:"
+				"string" : "The equivalent in Pharo code is as follows:"
 			}
 		]
 	},
