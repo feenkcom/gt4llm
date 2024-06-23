@@ -86,7 +86,8 @@ GtLlmTokenizedExplainer >> updateBytesList [
 		do: [ :aTokenNumber | 
 			self bytesList
 				addChild: (BrLabel new
-						aptitude: BrGlamorousLabelAptitude new
+						
+						aptitude: (BrGlamorousLabelAptitude new)
 								+ (GtExplainerExplanationAptitude new explanationModel: aTokenNumber)
 								+ (BrLazyStyleCommonAptitude new
 										default: [ :aStyle | self editor unhighlightGroupFor: aTokenNumber ];

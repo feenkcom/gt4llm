@@ -66,7 +66,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-31T09:51:04.910034+01:00"
+						"dateAndTimeString" : "2024-06-23T08:47:22.760691+02:00"
 					}
 				},
 				"uid" : {
@@ -76,7 +76,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "First, we set up the chat as seen in [[Modelling a chat]]."
+				"string" : "First, we set up the chat as seen in [[Working with a basic chat]]."
 			},
 			{
 				"__type" : "pharoSnippet",
@@ -103,14 +103,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-06T11:02:28.764051+01:00"
+						"dateAndTimeString" : "2024-02-14T12:27:47.36699+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "SuSmt5vMDQCZ8bEDCm8XrA=="
 				},
-				"code" : "chat := Gt4OpenAIChat withApiKeyFromClipboard model: 'gpt-3.5-turbo'"
+				"code" : "chat := GtOpenAIChat withApiKeyFromClipboard model: 'gpt-3.5-turbo'"
 			},
 			{
 				"__type" : "textSnippet",

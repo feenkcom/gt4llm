@@ -36,13 +36,13 @@ GtLlmTokenizedStringEditor >> onResultAdded [
 				collect: [ :aToken | 
 					| aLabel |
 					aLabel := BrLabel new
-							margin: (BlInsets all: 3);
-							aptitude: BrGlamorousLabelAptitude new
+							margin: (BlInsets all: 1);
+							aptitude: (BrGlamorousLabelAptitude new fontSize: 24)
 									+ (BrLazyStyleCommonAptitude new
 											default: [ :aStyle | self unhighlightGroupFor: aToken num ];
 											hovered: [ :aStyle | self highlightGroupFor: aToken num ]);
-							geometry: (BlRoundedRectangleGeometry cornerRadius: 5);
-							padding: (BlInsets all: 1);
+							geometry: (BlRoundedRectangleGeometry cornerRadius: 4);
+							padding: (BlInsets all: 2);
 							text: aToken name.
 					aLabel explainer
 						model: aToken num;
