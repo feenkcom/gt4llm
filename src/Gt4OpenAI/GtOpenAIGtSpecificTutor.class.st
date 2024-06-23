@@ -1,6 +1,6 @@
 Class {
-	#name : #GtOpenAIGtTutor,
-	#superclass : #GtLlmGtTutor,
+	#name : #GtOpenAIGtSpecificTutor,
+	#superclass : #GtLlmGtSpecificTutor,
 	#instVars : [
 		'apiKey',
 		'assistant',
@@ -14,36 +14,36 @@ Class {
 }
 
 { #category : #accessing }
-GtOpenAIGtTutor class >> instance [
+GtOpenAIGtSpecificTutor class >> instance [
 	^ instance
 		ifNil: [ instance := self withApiKeyFromFile createAssistant ]
 ]
 
 { #category : #accessing }
-GtOpenAIGtTutor class >> instance: aTutor [
+GtOpenAIGtSpecificTutor class >> instance: aTutor [
 	instance := aTutor
 ]
 
 { #category : #accessing }
-GtOpenAIGtTutor class >> isTutorAvailable [
+GtOpenAIGtSpecificTutor class >> isTutorAvailable [
 	instance ifNotNil: [ ^ true ].
 	^ false
 ]
 
 { #category : #accessing }
-GtOpenAIGtTutor class >> withApiKeyFromClipboard [
+GtOpenAIGtSpecificTutor class >> withApiKeyFromClipboard [
 	<gtExample>
 	^ self new apiKey: Clipboard clipboardText
 ]
 
 { #category : #accessing }
-GtOpenAIGtTutor class >> withApiKeyFromFile [
+GtOpenAIGtSpecificTutor class >> withApiKeyFromFile [
 	<gtExample>
 	^ self new apiKey: GtOpenAIClient apiKeyFileContents
 ]
 
 { #category : #accessing }
-GtOpenAIGtTutor >> addChat [
+GtOpenAIGtSpecificTutor >> addChat [
 	| aChat |
 	aChat := GtOpenAIAssistantChat new
 			assistant: self assistant;
@@ -56,12 +56,12 @@ GtOpenAIGtTutor >> addChat [
 ]
 
 { #category : #accessing }
-GtOpenAIGtTutor >> addFile: aFile [
+GtOpenAIGtSpecificTutor >> addFile: aFile [
 	files add: aFile
 ]
 
 { #category : #accessing }
-GtOpenAIGtTutor >> allViewsToFile [
+GtOpenAIGtSpecificTutor >> allViewsToFile [
 	| views aFile |
 	views := 'gtView' gtPragmas.
 	aFile := FileLocator temp / 'AllViews' , 'st.txt'.
@@ -85,19 +85,19 @@ GtOpenAIGtTutor >> allViewsToFile [
 ]
 
 { #category : #accessing }
-GtOpenAIGtTutor >> apiKey [
+GtOpenAIGtSpecificTutor >> apiKey [
 	^ apiKey
 ]
 
 { #category : #accessing }
-GtOpenAIGtTutor >> apiKey: anObject [
+GtOpenAIGtSpecificTutor >> apiKey: anObject [
 	apiKey := anObject.
 	
 	self onApiKeyChanged
 ]
 
 { #category : #accessing }
-GtOpenAIGtTutor >> assistant [
+GtOpenAIGtSpecificTutor >> assistant [
 	self
 		assert: [ assistant isNotNil ]
 		description: [ 'Assistant must be created explicitly, e.g., by calling #createAssistant' ].
@@ -105,38 +105,38 @@ GtOpenAIGtTutor >> assistant [
 ]
 
 { #category : #accessing }
-GtOpenAIGtTutor >> assistant: anObject [
+GtOpenAIGtSpecificTutor >> assistant: anObject [
 	assistant := anObject
 ]
 
 { #category : #accessing }
-GtOpenAIGtTutor >> assistantDescription [
+GtOpenAIGtSpecificTutor >> assistantDescription [
 	^ assistantDescription
 ]
 
 { #category : #accessing }
-GtOpenAIGtTutor >> assistantDescription: anObject [
+GtOpenAIGtSpecificTutor >> assistantDescription: anObject [
 	assistantDescription := anObject
 ]
 
 { #category : #accessing }
-GtOpenAIGtTutor >> assistantName [
+GtOpenAIGtSpecificTutor >> assistantName [
 	^ assistantName
 ]
 
 { #category : #accessing }
-GtOpenAIGtTutor >> assistantName: anObject [
+GtOpenAIGtSpecificTutor >> assistantName: anObject [
 	assistantName := anObject
 ]
 
 { #category : #accessing }
-GtOpenAIGtTutor >> cleanUp [
+GtOpenAIGtSpecificTutor >> cleanUp [
 	self deleteAssistant.
 	self deleteFiles
 ]
 
 { #category : #accessing }
-GtOpenAIGtTutor >> createAssistant [
+GtOpenAIGtSpecificTutor >> createAssistant [
 	assistant := client
 			createAssistant: (GtOpenAIAssistant new
 					model: self model;
@@ -157,68 +157,68 @@ GtOpenAIGtTutor >> createAssistant [
 ]
 
 { #category : #accessing }
-GtOpenAIGtTutor >> defaultAssistantDescription [
+GtOpenAIGtSpecificTutor >> defaultAssistantDescription [
 	^ 'Teaches you about GT.'
 ]
 
 { #category : #accessing }
-GtOpenAIGtTutor >> defaultAssistantName [
+GtOpenAIGtSpecificTutor >> defaultAssistantName [
 	^ 'GT Tutor - ' , FileLocator home basename
 ]
 
 { #category : #accessing }
-GtOpenAIGtTutor >> defaultFiles [
+GtOpenAIGtSpecificTutor >> defaultFiles [
 	^ {self allViewsToFile}
 ]
 
 { #category : #accessing }
-GtOpenAIGtTutor >> defaultModel [
+GtOpenAIGtSpecificTutor >> defaultModel [
 	^ 'gpt-4-turbo-preview'
 ]
 
 { #category : #accessing }
-GtOpenAIGtTutor >> defaultTools [
+GtOpenAIGtSpecificTutor >> defaultTools [
 	^ {GtOpenAITool new type: 'file_search'}
 ]
 
 { #category : #accessing }
-GtOpenAIGtTutor >> deleteAssistant [
+GtOpenAIGtSpecificTutor >> deleteAssistant [
 	assistant
 		ifNotNil: [ [ client deleteAssistant: assistant id.
 			assistant := nil ] on: GtOpenAIError do: [ assistant := nil ] ]
 ]
 
 { #category : #accessing }
-GtOpenAIGtTutor >> deleteFiles [
+GtOpenAIGtSpecificTutor >> deleteFiles [
 	apiFiles
 		do: [ :aFile | [ client deleteFile: aFile id ] on: GtOpenAIError do: [  ] ].
 	apiFiles := GtOpenAIFilesGroup new
 ]
 
 { #category : #accessing }
-GtOpenAIGtTutor >> ensureAssistant [
+GtOpenAIGtSpecificTutor >> ensureAssistant [
 	assistant ifNil: [ self createAssistant ]
 ]
 
 { #category : #accessing }
-GtOpenAIGtTutor >> files [
+GtOpenAIGtSpecificTutor >> files [
 	^ files
 ]
 
 { #category : #accessing }
-GtOpenAIGtTutor >> files: aCollection [
+GtOpenAIGtSpecificTutor >> files: aCollection [
 	files := aCollection
 ]
 
 { #category : #accessing }
-GtOpenAIGtTutor >> finalize [
+GtOpenAIGtSpecificTutor >> finalize [
 	self cleanUp.
 	
 	super finalize
 ]
 
 { #category : #accessing }
-GtOpenAIGtTutor >> gtCleanUpFor: anAction [
+GtOpenAIGtSpecificTutor >> gtCleanUpFor: anAction [
 	<gtAction>
 	self hasAssistant ifFalse: [ ^ anAction noAction ].
 
@@ -230,7 +230,7 @@ GtOpenAIGtTutor >> gtCleanUpFor: anAction [
 ]
 
 { #category : #accessing }
-GtOpenAIGtTutor >> gtCreateFor: anAction [
+GtOpenAIGtSpecificTutor >> gtCreateFor: anAction [
 	<gtAction>
 	self hasAssistant ifTrue: [ ^ anAction noAction ].
 
@@ -242,7 +242,7 @@ GtOpenAIGtTutor >> gtCreateFor: anAction [
 ]
 
 { #category : #accessing }
-GtOpenAIGtTutor >> gtFilesFor: aView [
+GtOpenAIGtSpecificTutor >> gtFilesFor: aView [
 	<gtView>
 	^ aView forward
 		title: 'Files';
@@ -252,7 +252,7 @@ GtOpenAIGtTutor >> gtFilesFor: aView [
 ]
 
 { #category : #accessing }
-GtOpenAIGtTutor >> gtSummaryFor: aView [
+GtOpenAIGtSpecificTutor >> gtSummaryFor: aView [
 	<gtView>
 	^ aView columnedList
 		title: 'Summary';
@@ -264,12 +264,12 @@ GtOpenAIGtTutor >> gtSummaryFor: aView [
 ]
 
 { #category : #accessing }
-GtOpenAIGtTutor >> hasAssistant [
+GtOpenAIGtSpecificTutor >> hasAssistant [
 	^ assistant isNotNil
 ]
 
 { #category : #accessing }
-GtOpenAIGtTutor >> initialize [
+GtOpenAIGtSpecificTutor >> initialize [
 	super initialize.
 	
 	assistantName := self defaultAssistantName.
@@ -280,12 +280,12 @@ GtOpenAIGtTutor >> initialize [
 ]
 
 { #category : #accessing }
-GtOpenAIGtTutor >> onApiKeyChanged [
+GtOpenAIGtSpecificTutor >> onApiKeyChanged [
 	client := GtOpenAIClient new apiKey: self apiKey
 ]
 
 { #category : #accessing }
-GtOpenAIGtTutor >> packageNamesToFiles: aCollectionOfPackageNames [
+GtOpenAIGtSpecificTutor >> packageNamesToFiles: aCollectionOfPackageNames [
 	^ aCollectionOfPackageNames
 		collect: [ :aPackageName | 
 			| classes aFile |
@@ -305,7 +305,7 @@ GtOpenAIGtTutor >> packageNamesToFiles: aCollectionOfPackageNames [
 ]
 
 { #category : #accessing }
-GtOpenAIGtTutor >> summaryItems [
+GtOpenAIGtSpecificTutor >> summaryItems [
 	^ {'Name' -> self assistantName.
 		'Description' -> self assistantDescription.
 		'Model' -> self model.
@@ -314,11 +314,11 @@ GtOpenAIGtTutor >> summaryItems [
 ]
 
 { #category : #accessing }
-GtOpenAIGtTutor >> tools [
+GtOpenAIGtSpecificTutor >> tools [
 	^ tools
 ]
 
 { #category : #accessing }
-GtOpenAIGtTutor >> tools: anObject [
+GtOpenAIGtSpecificTutor >> tools: anObject [
 	tools := anObject
 ]

@@ -62,12 +62,12 @@
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2024-02-13T10:39:32.022675+01:00"
+			"dateAndTimeString" : "2024-06-23T13:59:01.757379+02:00"
 		}
 	},
 	"pageType" : {
 		"__type" : "namedPage",
-		"title" : "Assistants"
+		"title" : "OpenAI assistants"
 	},
 	"uid" : {
 		"__type" : "uuid",
