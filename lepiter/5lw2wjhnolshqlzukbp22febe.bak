@@ -66,7 +66,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-04-27T21:08:39.918209+02:00"
+						"dateAndTimeString" : "2024-06-23T13:38:01.634994+02:00"
 					}
 				},
 				"uid" : {
@@ -76,7 +76,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "Using the client initialization code from [[Working with the API client]]:"
+				"string" : "First we [[Working with the OpenAI API client]]:"
 			},
 			{
 				"__type" : "pharoSnippet",
@@ -103,14 +103,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-14T12:28:12.730372+01:00"
+						"dateAndTimeString" : "2024-05-17T14:34:39.068612+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "U0nA6YrMDQChAdPjATK6Xg=="
 				},
-				"code" : "client := GtOpenAIClient withApiKeyFromClipboard"
+				"code" : "client := GtOpenAIClient withApiKeyFromFile"
 			},
 			{
 				"__type" : "textSnippet",
@@ -352,12 +352,12 @@
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2024-01-30T13:45:39.495301+01:00"
+			"dateAndTimeString" : "2024-06-23T13:34:55.697279+02:00"
 		}
 	},
 	"pageType" : {
 		"__type" : "namedPage",
-		"title" : "Generating Embeddings"
+		"title" : "Generating embeddings"
 	},
 	"uid" : {
 		"__type" : "uuid",

@@ -140,7 +140,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-23T08:40:25.938191+02:00"
+						"dateAndTimeString" : "2024-06-23T08:51:41.049084+02:00"
 					}
 				},
 				"uid" : {
@@ -150,7 +150,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "Before you work with it, please set up the API key first."
+				"string" : "Before you work with it, please set up the API key first: [[Setting up the OpenAI API key]]"
 			}
 		]
 	},
