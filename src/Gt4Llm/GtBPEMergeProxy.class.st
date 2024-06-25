@@ -19,7 +19,8 @@ GtBPEMergeProxy >> gtBeforeAndAfterFor: aView [
 				addChild: (GtLlmTokenizedStringEditor new
 						decorationBlock: [ :aNameLabel :aNumberLabel :aToken :anIndex | 
 							(self replacedIndices includes: anIndex)
-								ifTrue: [ aNumberLabel background: BrGlamorousColors newsBackgroundColor ] ];
+								ifTrue: [ aNameLabel background: BrGlamorousColors newsBackgroundColor.
+									aNumberLabel background: BrGlamorousColors newsBackgroundColor ] ];
 						result: self before_text;
 						background: Color white;
 						addAptitude: BrShadowAptitude;
@@ -27,7 +28,8 @@ GtBPEMergeProxy >> gtBeforeAndAfterFor: aView [
 				addChild: (GtLlmTokenizedStringEditor new
 						decorationBlock: [ :aNameLabel :aNumberLabel :aToken :anIndex | 
 							aToken number = self number
-								ifTrue: [ aNumberLabel background: BrGlamorousColors newsBackgroundColor ] ];
+								ifTrue: [ aNameLabel background: BrGlamorousColors newsBackgroundColor.
+									aNumberLabel background: BrGlamorousColors newsBackgroundColor ] ];
 						result: self after_text;
 						padding: (BlInsets all: 5)) ]
 ]
