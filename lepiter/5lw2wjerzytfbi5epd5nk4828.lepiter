@@ -29,7 +29,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-09T21:19:43.626197+02:00"
+						"dateAndTimeString" : "2024-06-25T08:08:35.786219+02:00"
 					}
 				},
 				"uid" : {
@@ -39,7 +39,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "This is a set of projects that work with various large language models inside {{gtPage:Glamorous Toolkit|db=2j9m7db2i4oz116bexd7wbdxo}}."
+				"string" : "This is a set of projects that work with various large language models (LLMs) inside {{gtPage:Glamorous Toolkit|db=2j9m7db2i4oz116bexd7wbdxo}}."
 			},
 			{
 				"__type" : "textSnippet",
