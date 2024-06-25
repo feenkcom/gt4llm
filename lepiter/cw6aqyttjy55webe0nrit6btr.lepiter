@@ -617,6 +617,43 @@
 				"code" : "import tiktoken\n\n# GPT-2 (does not merge spaces)\nenc = tiktoken.get_encoding(\"gpt2\")\nprint(enc.encode(\"    hello world!!!\"))\n\n# GPT-4 (merges spaces)\nenc = tiktoken.get_encoding(\"cl100k_base\")\nprint(enc.encode(\"    hello world!!!\"))"
 			},
 			{
+				"__type" : "textSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-06-25T16:49:06.529515+02:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-06-25T16:49:09.696922+02:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "mLn0uxnYDQCBijyRDTHLAQ=="
+				},
+				"paragraphStyle" : {
+					"__type" : "textStyle"
+				},
+				"string" : "With Moldability:"
+			},
+			{
 				"__type" : "pythonSnippet",
 				"children" : {
 					"__type" : "snippets",
@@ -669,20 +706,20 @@
 				},
 				"editEmail" : {
 					"__type" : "email",
-					"emailString" : "veit.heller@feenk.com"
+					"emailString" : "<unknown>"
 				},
 				"editTime" : {
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-25T11:34:39.380919+02:00"
+						"dateAndTimeString" : "2024-06-25T19:27:23.247337+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "MrDrthTYDQCk7RjVDEwQCQ=="
 				},
-				"code" : "from gtoolkit_bridge import gtView\r\rclass EncodingResult:\r\tdef __init__(self, input, ids, merges, vocab):\r\t\tself.input = input\r\t\tself.ids = ids\r\t\tself.merges = merges\r\t\tself.vocab = vocab\r\t\t\r\t@gtView\r\tdef gtViewInput(self, builder):\r\t\ttext = builder.textEditor()\n\t\ttext.title(\"Input\")\r\t\ttext.priority(2)\r\t\ttext.setString(self.input)\r\t\treturn text\r\r\t@gtView\r\tdef gtViewOutput(self, builder):\r\t\tclist = builder.columnedList()\r\t\tclist.title(\"Output\")\r\t\tclist.priority(1)\r\t\tclist.items(lambda: self.ids)\n\t\tclist.column('Byte', lambda each: chr(each.byte) if each.byte < 256 else each.byte)\r\t\treturn clist\r\t\t\r\t@gtView\r\tdef gtViewMerges(self, builder):\r\t\tclist = builder.columnedList()\r\t\tclist.title(\"Merges\")\r\t\tclist.priority(3)\r\t\tclist.items(lambda: self.merges)\n\t\tclist.column('Byte', lambda each: each.byte)\n\t\tclist.column('Pair', lambda each: [chr(char) if char < 256 else char for char in each.pair])\r\t\treturn clist"
+				"code" : "from gtoolkit_bridge import gtView\rimport difflib\r\rclass EncodingResult:\r\tdef __init__(self, input, ids, merges, vocab):\r\t\tself.input = input\r\t\tself.ids = ids\r\t\tself.merges = merges\r\t\tself.vocab = vocab\r\t\t\r\t@gtView\r\tdef gtViewInput(self, builder):\r\t\ttext = builder.textEditor()\n\t\ttext.title(\"Input\")\r\t\ttext.priority(2)\r\t\ttext.setString(self.input)\r\t\treturn text\r\r\t@gtView\r\tdef gtViewOutput(self, builder):\r\t\tclist = builder.columnedList()\r\t\tclist.title(\"Output\")\r\t\tclist.priority(1)\r\t\tclist.items(lambda: self.ids)\n\t\tclist.column('Byte', lambda each: chr(each.byte) if each.byte < 256 else each.byte)\r\t\treturn clist\r\t\t\r\t@gtView\r\tdef gtViewMerges(self, builder):\r\t\tclist = builder.columnedList()\r\t\tclist.title(\"Merges\")\r\t\tclist.priority(3)\r\t\tclist.items(lambda: self.merges)\n\t\tclist.column('Byte', lambda each: each.byte, columnWidth=100)\n\t\tclist.column('Pair', lambda each: [chr(char) if char < 256 else char for char in each.pair])\r\t\treturn clist"
 			},
 			{
 				"__type" : "pythonSnippet",
