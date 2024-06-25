@@ -29,14 +29,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-25T23:15:12.421794+02:00"
+						"dateAndTimeString" : "2024-06-25T23:15:17.882379+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "Y8g+6AnYDQCYs4ObBXAlOQ=="
 				},
-				"code" : "PBApplication isRunning ifFalse: [ PBApplication stopstart ].\rPBApplication uniqueInstance installModule: 'tiktoken'"
+				"code" : "PBApplication isRunning ifFalse: [ PBApplication start ].\rPBApplication uniqueInstance installModule: 'tiktoken'"
 			},
 			{
 				"__type" : "pythonSnippet",
