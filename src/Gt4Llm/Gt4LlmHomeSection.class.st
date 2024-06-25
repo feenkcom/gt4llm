@@ -45,7 +45,7 @@ Gt4LlmHomeSection >> apiKeyCard [
 Gt4LlmHomeSection >> lepiterCard [
 	<gtSectionCard>
 	^ GtHomeCard lepiterBaseWithTableOfContents
-		title: 'Glamorous Toolkit for LLMs';
+		title: 'Glamorous Toolkit for large language models (LLMs)';
 		description: 'Read the docs';
 		priority: 10;
 		pageName: 'Glamorous Toolkit for LLMs';
