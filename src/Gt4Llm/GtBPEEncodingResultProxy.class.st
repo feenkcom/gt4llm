@@ -10,17 +10,15 @@ GtBPEEncodingResultProxy class >> pythonClass [
 ]
 
 { #category : #accessing }
-GtBPEEncodingResultProxy >> gtHistoryFor: aView [
+GtBPEEncodingResultProxy >> gtTokenizedFor: aView [
 	<gtView>
-	^ aView columnedList
-		priority: 1;
-		title: 'History';
-		items: [ self merges ];
-		column: 'From pair' text: [ :aMerge | ', ' join: aMerge pair ];
-		column: 'To byte' text: #byte;
-		send: [ :aMerge | 
-			GtDiffBuilder
-				computeDifferencesFrom: (' ' join: (aMerge before_text collect: #byte))
-				to: (' ' join: (aMerge after_text collect: #byte))
-				using: GtCharacterGroupDiffSplitter words ]
+	^ aView explicit
+		title: 'Tokenized';
+		priority: 1.5;
+		stencil: [ GtLlmTokenizedStringEditor new result: self ]
+]
+
+{ #category : #accessing }
+GtBPEEncodingResultProxy >> tokens [
+	^ self ids
 ]

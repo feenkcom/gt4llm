@@ -4,10 +4,21 @@ Class {
 	#instVars : [
 		'result',
 		'tokenLabels',
-		'allLabels'
+		'allLabels',
+		'decorationBlock'
 	],
 	#category : #'Gt4Llm-Tokenizer'
 }
+
+{ #category : #accessing }
+GtLlmTokenizedStringEditor >> decorationBlock [
+	^ decorationBlock
+]
+
+{ #category : #accessing }
+GtLlmTokenizedStringEditor >> decorationBlock: anObject [
+	decorationBlock := anObject
+]
 
 { #category : #accessing }
 GtLlmTokenizedStringEditor >> highlightGroupFor: aByte [
@@ -32,7 +43,7 @@ GtLlmTokenizedStringEditor >> onResultAdded [
 	allLabels := OrderedCollection new.
 	self
 		addChildren: (self result tokens
-				collect: [ :aToken | 
+				collectWithIndex: [ :aToken :anIndex | 
 					| nameLabel container numberLabel |
 					container := BrVerticalPane new fitContent
 							margin: (BlInsets
@@ -43,7 +54,8 @@ GtLlmTokenizedStringEditor >> onResultAdded [
 					nameLabel := BrLabel new
 							aptitude: (BrGlamorousLabelAptitude new
 									fontSize: 24;
-									glamorousCodeFont);
+									glamorousCodeFont;
+									editorMeasurement);
 							geometry: (BlRoundedRectangleGeometry cornerRadius: 4);
 							padding: (BlInsets all: 2);
 							background: BrGlamorousColors hoveredListItemColor;
@@ -52,17 +64,25 @@ GtLlmTokenizedStringEditor >> onResultAdded [
 							margin: (BlInsets all: 1);
 							aptitude: (BrGlamorousLabelAptitude new foreground: Color gray);
 							beSmallSize;
-							text: aToken num.
+							text: aToken number.
+
+					self decorationBlock
+						ifNotNil: [ self decorationBlock
+								cull: nameLabel
+								cull: numberLabel
+								cull: aToken
+								cull: anIndex ].
 					nameLabel explainer
-						model: aToken num;
+						model: aToken number;
 						isTarget: true.
-					(tokenLabels at: aToken num ifAbsentPut: [ OrderedCollection new ])
+					(tokenLabels at: aToken number ifAbsentPut: [ OrderedCollection new ])
 						add: nameLabel.
 					allLabels add: nameLabel.
 					container
-						when: BlClickEvent do: [:e | e target phlow spawnObject: aToken ];
-						when: BlMouseOverEvent do: [ :e | self highlightGroupFor: aToken num ];
-						when: BlMouseOutEvent do: [ :e | self unhighlightGroupFor: aToken num ].
+						when: BlClickEvent do: [ :e | e target phlow spawnObject: aToken ];
+						when: BlMouseOverEvent do: [ :e | self highlightGroupFor: aToken number ];
+						when: BlMouseOutEvent
+							do: [ :e | self unhighlightGroupFor: aToken number ].
 					container
 						addChild: nameLabel;
 						addChild: numberLabel.
