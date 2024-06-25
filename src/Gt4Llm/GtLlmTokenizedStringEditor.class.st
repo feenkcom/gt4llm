@@ -5,7 +5,8 @@ Class {
 		'result',
 		'tokenLabels',
 		'allLabels',
-		'decorationBlock'
+		'decorationBlock',
+		'tokenColors'
 	],
 	#category : #'Gt4Llm-Tokenizer'
 }
@@ -40,6 +41,7 @@ GtLlmTokenizedStringEditor >> onResultAdded [
 	self removeChildren.
 
 	tokenLabels := Dictionary new.
+	tokenColors := Dictionary new.
 	allLabels := OrderedCollection new.
 	self
 		addChildren: (self result tokens
@@ -78,6 +80,7 @@ GtLlmTokenizedStringEditor >> onResultAdded [
 					(tokenLabels at: aToken number ifAbsentPut: [ OrderedCollection new ])
 						add: nameLabel.
 					allLabels add: nameLabel.
+					tokenColors at: nameLabel put: nameLabel background.
 					container
 						when: BlClickEvent do: [ :e | e target phlow spawnObject: aToken ];
 						when: BlMouseOverEvent do: [ :e | self highlightGroupFor: aToken number ];
@@ -108,14 +111,7 @@ GtLlmTokenizedStringEditor >> schedule: aTask [
 ]
 
 { #category : #accessing }
-GtLlmTokenizedStringEditor >> unhighlight [
-	self
-		schedule: [ allLabels
-				do: [ :anotherLabel | anotherLabel background: BrGlamorousColors hoveredListItemColor ] ]
-]
-
-{ #category : #accessing }
 GtLlmTokenizedStringEditor >> unhighlightGroupFor: aByte [
 	(tokenLabels at: aByte ifAbsent: [ {} ])
-		do: [ :anotherLabel | anotherLabel background: BrGlamorousColors hoveredListItemColor ]
+		do: [ :anotherLabel | anotherLabel background: (tokenColors at: anotherLabel) ]
 ]

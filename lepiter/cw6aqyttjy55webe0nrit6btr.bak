@@ -23,20 +23,20 @@
 				},
 				"editEmail" : {
 					"__type" : "email",
-					"emailString" : "veit.heller@feenk.com"
+					"emailString" : "<unknown>"
 				},
 				"editTime" : {
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-25T11:12:31.539398+02:00"
+						"dateAndTimeString" : "2024-06-25T23:15:12.421794+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "Y8g+6AnYDQCYs4ObBXAlOQ=="
 				},
-				"code" : "PBApplication isRunning ifFalse: [ PBApplication start ].\rPBApplication uniqueInstance installModule: 'tiktoken'"
+				"code" : "PBApplication isRunning ifFalse: [ PBApplication stopstart ].\rPBApplication uniqueInstance installModule: 'tiktoken'"
 			},
 			{
 				"__type" : "pythonSnippet",
@@ -780,14 +780,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-25T20:35:33.034283+02:00"
+						"dateAndTimeString" : "2024-06-25T20:35:42.560737+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "QOSI5RzYDQCYf1KrDTHLAQ=="
 				},
-				"code" : "class BPEText:\r\tdef "
+				"code" : "class BPEText:\r\tdef __init__(self, tokens):\r\t\tself.tokens = tokens"
 			},
 			{
 				"__type" : "pythonSnippet",
