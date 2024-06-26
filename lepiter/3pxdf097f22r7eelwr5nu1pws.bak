@@ -5,202 +5,285 @@
 		"__type" : "snippets",
 		"items" : [
 			{
-				"__type" : "pharoSnippet",
+				"__type" : "textSnippet",
 				"children" : {
 					"__type" : "snippets",
 					"items" : [ ]
 				},
 				"createEmail" : {
 					"__type" : "email",
-					"emailString" : "veit.heller@feenk.com"
+					"emailString" : "<unknown>"
 				},
 				"createTime" : {
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-13T12:23:04.787171+02:00"
+						"dateAndTimeString" : "2024-06-14T16:41:14.683272+02:00"
 					}
 				},
 				"editEmail" : {
 					"__type" : "email",
-					"emailString" : "veit.heller@feenk.com"
+					"emailString" : "<unknown>"
 				},
 				"editTime" : {
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-13T16:09:44.684718+02:00"
+						"dateAndTimeString" : "2024-06-23T09:01:08.653692+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "rukRnyTXDQCDujOsBqzWPg=="
+					"uidString" : "wmMuWDzXDQCd9ji3CVHTcA=="
 				},
-				"code" : "PBApplication isRunning ifFalse: [ PBApplication start ].\rPBApplication uniqueInstance installModule: 'tiktoken'."
+				"paragraphStyle" : {
+					"__type" : "textStyle"
+				},
+				"string" : "OpenAI publishes [tiktoken](https://github.com/openai/tiktoken), an open-source Python library that tokenizes input strings as it is done internally for their product. This is useful for estimating costs as well as ensuring inputs stay within certain limits (context windows etc.). `gt4openai` also relies on this library internally, for instance to estimate the cost of {{gtPage:Creating a fine-tuned model|db=5lw2wjg8hwdwpy1kq5i7lble1|label=a fine-tuning job}}."
 			},
 			{
-				"__type" : "pythonSnippet",
+				"__type" : "textSnippet",
 				"children" : {
 					"__type" : "snippets",
-					"items" : [ ]
+					"items" : [
+						{
+							"__type" : "pharoSnippet",
+							"children" : {
+								"__type" : "snippets",
+								"items" : [ ]
+							},
+							"createEmail" : {
+								"__type" : "email",
+								"emailString" : "<unknown>"
+							},
+							"createTime" : {
+								"__type" : "time",
+								"time" : {
+									"__type" : "dateAndTime",
+									"dateAndTimeString" : "2024-06-23T09:03:11.872925+02:00"
+								}
+							},
+							"editEmail" : {
+								"__type" : "email",
+								"emailString" : "<unknown>"
+							},
+							"editTime" : {
+								"__type" : "time",
+								"time" : {
+									"__type" : "dateAndTime",
+									"dateAndTimeString" : "2024-06-23T09:03:13.497675+02:00"
+								}
+							},
+							"uid" : {
+								"__type" : "uid",
+								"uidString" : "BVKm/urXDQCfd9XPC8IszQ=="
+							},
+							"code" : "PBApplication isRunning ifFalse: [ PBApplication start ].\rPBApplication uniqueInstance installModule: 'gtoolkit_tiktokenize'"
+						}
+					]
 				},
 				"createEmail" : {
 					"__type" : "email",
-					"emailString" : "veit.heller@feenk.com"
+					"emailString" : "<unknown>"
 				},
 				"createTime" : {
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-13T16:07:43.060297+02:00"
+						"dateAndTimeString" : "2024-06-23T09:01:13.907477+02:00"
 					}
 				},
 				"editEmail" : {
 					"__type" : "email",
-					"emailString" : "veit.heller@feenk.com"
+					"emailString" : "<unknown>"
 				},
 				"editTime" : {
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-13T16:21:37.218994+02:00"
+						"dateAndTimeString" : "2024-06-23T09:04:12.891642+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "cxJwwifXDQCfo/0TBs9aqQ=="
+					"uidString" : "4FOe9+rXDQCaGm2UC8IszQ=="
 				},
-				"code" : "from dataclasses import dataclass\rfrom gtoolkit_bridge import gtView\r\r@dataclass\rclass Token:\r\tname: str\r\tnum: int\r\tstart: int\r\tend: int\r\t\rclass TokenizerResult:\r\tdef __init__(self, tokens):\r\t\tself.tokens = tokens\r\t\t\r\t@gtView\r\tdef gtViewTokens(self, view):\r\t\tclist = view.columnedList()\n\t\tclist.title(\"Tokens\")\n\t\tclist.priority(2)\n\t\tclist.items(lambda: self.tokens)\n\t\tclist.column(\"Name\", lambda each: each.name)\n\t\tclist.column(\"Byte\", lambda each: each.num)\n\t\tclist.column(\"Start\", lambda each: each.start)\r\t\tclist.column(\"End\", lambda each: each.end)\n\t\treturn clist"
+				"paragraphStyle" : {
+					"__type" : "textStyle"
+				},
+				"string" : "To evaluate the result of tokenizing with various models, you can work directly with the tiktoken library. But you can also work with a small wrapper we created that helps us visualize the results. To this end, first install the `gtoolkit_tiktokenize` module:"
 			},
 			{
-				"__type" : "pythonSnippet",
+				"__type" : "textSnippet",
 				"children" : {
 					"__type" : "snippets",
-					"items" : [ ]
+					"items" : [
+						{
+							"__type" : "pythonSnippet",
+							"children" : {
+								"__type" : "snippets",
+								"items" : [ ]
+							},
+							"createEmail" : {
+								"__type" : "email",
+								"emailString" : "<unknown>"
+							},
+							"createTime" : {
+								"__type" : "time",
+								"time" : {
+									"__type" : "dateAndTime",
+									"dateAndTimeString" : "2024-06-23T08:56:50.121966+02:00"
+								}
+							},
+							"editEmail" : {
+								"__type" : "email",
+								"emailString" : "<unknown>"
+							},
+							"editTime" : {
+								"__type" : "time",
+								"time" : {
+									"__type" : "dateAndTime",
+									"dateAndTimeString" : "2024-06-23T13:06:28.219587+02:00"
+								}
+							},
+							"uid" : {
+								"__type" : "uid",
+								"uidString" : "PUPl5+rXDQCS9cS2C8IszQ=="
+							},
+							"code" : "model = \"gpt-4\"\rstring = \"<|im_start|>system<|im_sep|>You are a helpful assistant<|im_end|><|im_start|>assistant<|im_sep|>How can I help you?<|im_end|><|im_start|>user<|im_sep|>Can you add two and two for me?<|im_end|>\"\rgtoolkit_tiktokenize.tokenize(string, model)"
+						}
+					]
 				},
 				"createEmail" : {
 					"__type" : "email",
-					"emailString" : "veit.heller@feenk.com"
+					"emailString" : "<unknown>"
 				},
 				"createTime" : {
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-13T12:36:56.635196+02:00"
+						"dateAndTimeString" : "2024-06-23T09:04:16.249409+02:00"
 					}
 				},
 				"editEmail" : {
 					"__type" : "email",
-					"emailString" : "veit.heller@feenk.com"
+					"emailString" : "<unknown>"
 				},
 				"editTime" : {
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-13T18:29:03.467101+02:00"
+						"dateAndTimeString" : "2024-06-23T09:04:27.772509+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "u+mm0CTXDQCLnTReBqzWPg=="
+					"uidString" : "aqd8AuvXDQCjHQm1C8IszQ=="
 				},
-				"code" : "import tiktoken\r\rdef tokenize(string, model):\r\tencoding = tiktoken.encoding_for_model(model)\r\tencoding = tiktoken.Encoding(\n    name=\"gt_extended\",\n    pat_str=encoding._pat_str,\n    mergeable_ranks=encoding._mergeable_ranks,\n    special_tokens={\n        **encoding._special_tokens,\n        \"<|im_start|>\": 100264,\n        \"<|im_end|>\": 100265,\n        \"<|im_sep|>\": 100266,\n    }\n\t)\r\t\r\tencoded = encoding.encode(string, allowed_special='all')\r\tstart_range = 0\r\ttokens = []\r\tfor b in encoded:\r\t\tdecoded = str(encoding.decode_single_token_bytes(b), encoding='utf-8')\r\t\tend_range = start_range + len(decoded)\r\t\ttokens.append(Token(decoded, b, start_range+1, end_range))\r\t\tstart_range = end_range\r\treturn TokenizerResult(tokens)"
+				"paragraphStyle" : {
+					"__type" : "textStyle"
+				},
+				"string" : "And then just execute the Python script:"
 			},
 			{
-				"__type" : "pharoSnippet",
+				"__type" : "textSnippet",
 				"children" : {
 					"__type" : "snippets",
-					"items" : [ ]
+					"items" : [
+						{
+							"__type" : "pharoSnippet",
+							"children" : {
+								"__type" : "snippets",
+								"items" : [ ]
+							},
+							"createEmail" : {
+								"__type" : "email",
+								"emailString" : "veit.heller@feenk.com"
+							},
+							"createTime" : {
+								"__type" : "time",
+								"time" : {
+									"__type" : "dateAndTime",
+									"dateAndTimeString" : "2024-06-13T18:25:27.322525+02:00"
+								}
+							},
+							"editEmail" : {
+								"__type" : "email",
+								"emailString" : "<unknown>"
+							},
+							"editTime" : {
+								"__type" : "time",
+								"time" : {
+									"__type" : "dateAndTime",
+									"dateAndTimeString" : "2024-06-23T12:50:08.308142+02:00"
+								}
+							},
+							"uid" : {
+								"__type" : "uid",
+								"uidString" : "Qa4GrynXDQCAx6iDBs9aqQ=="
+							},
+							"code" : "GtLlmTokenizer new\r\ttokenizeMessages: {GtLlmSystemMessage new content: 'You are a helpful assistant'.\r\t\t\tGtLlmAssistantMessage new content: 'How can I help you?'.\r\t\t\tGtLlmUserMessage new content: 'Can you add two and two for me?'}\r\tusingModel: 'gpt-4'"
+						}
+					]
 				},
 				"createEmail" : {
 					"__type" : "email",
-					"emailString" : "veit.heller@feenk.com"
+					"emailString" : "<unknown>"
 				},
 				"createTime" : {
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-13T16:14:40.584206+02:00"
+						"dateAndTimeString" : "2024-06-23T08:59:31.372609+02:00"
 					}
 				},
 				"editEmail" : {
 					"__type" : "email",
-					"emailString" : "veit.heller@feenk.com"
+					"emailString" : "<unknown>"
 				},
 				"editTime" : {
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-13T18:30:46.901079+02:00"
+						"dateAndTimeString" : "2024-06-23T09:13:54.281586+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "Q/JS2yfXDQCqMIACBs9aqQ=="
+					"uidString" : "KMSB8erXDQCYmJU/C8IszQ=="
 				},
-				"code" : "GtLlmTokenizer new\r\ttokenize: '<|im_start|>system<|im_sep|>You are a helpful assistant<|im_end|><|im_start|>assistant<|im_sep|>Hello! How can I help you?<|im_end|>'\r\tusingModel: 'gpt-4'"
-			},
-			{
-				"__type" : "pharoSnippet",
-				"children" : {
-					"__type" : "snippets",
-					"items" : [ ]
+				"paragraphStyle" : {
+					"__type" : "textStyle"
 				},
-				"createEmail" : {
-					"__type" : "email",
-					"emailString" : "veit.heller@feenk.com"
-				},
-				"createTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-13T18:25:27.322525+02:00"
-					}
-				},
-				"editEmail" : {
-					"__type" : "email",
-					"emailString" : "veit.heller@feenk.com"
-				},
-				"editTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-13T18:26:35.479819+02:00"
-					}
-				},
-				"uid" : {
-					"__type" : "uid",
-					"uidString" : "Qa4GrynXDQCAx6iDBs9aqQ=="
-				},
-				"code" : "GtLlmTokenizer new\r\ttokenizeMessages: {GtLlmSystemMessage new content: 'You are a helpful assistant'.\r\t\t\tGtLlmAssistantMessage new content: 'How can I help you?'.\r\t\t\tGtLlmUserMessage new content: 'Can you add two and two for me?'}\r\tusingModel: 'gpt-4'"
+				"string" : "The equivalent in Pharo code is as follows:"
 			}
 		]
 	},
 	"createEmail" : {
 		"__type" : "email",
-		"emailString" : "veit.heller@feenk.com"
+		"emailString" : "<unknown>"
 	},
 	"createTime" : {
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2024-06-13T12:22:38.896962+02:00"
+			"dateAndTimeString" : "2024-06-14T16:41:11.602232+02:00"
 		}
 	},
 	"editEmail" : {
 		"__type" : "email",
-		"emailString" : "veit.heller@feenk.com"
+		"emailString" : "<unknown>"
 	},
 	"editTime" : {
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2024-06-13T12:22:38.896962+02:00"
+			"dateAndTimeString" : "2024-06-14T16:41:11.602232+02:00"
 		}
 	},
 	"pageType" : {
-		"__type" : "unnamedPage",
-		"defaultTitle" : "Playground"
+		"__type" : "namedPage",
+		"title" : "Visualizing tokenization"
 	},
 	"uid" : {
 		"__type" : "uuid",

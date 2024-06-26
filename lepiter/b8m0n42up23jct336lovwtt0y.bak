@@ -29,7 +29,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-13T10:40:06.161857+01:00"
+						"dateAndTimeString" : "2024-02-13T10:40:39.495081+01:00"
 					}
 				},
 				"uid" : {
@@ -39,7 +39,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "[Assistants](https://platform.openai.com/assistants) are more capable chat models on OpenAI, using "
+				"string" : "[Assistants](https://platform.openai.com/assistants) are more capable chat models on OpenAI with access to files and programming capabilities."
 			}
 		]
 	},

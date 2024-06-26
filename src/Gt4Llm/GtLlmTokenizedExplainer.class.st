@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLlmTokenizedExplainer,
-	#superclass : #BrHorizontalPane,
+	#superclass : #BrVerticalPane,
 	#instVars : [
 		'result',
 		'bytesList',
@@ -35,17 +35,17 @@ GtLlmTokenizedExplainer >> initialize [
 
 	self matchParent.
 
-	self initializeBytesList.
 	self initializeEditor.
+	self initializeBytesList.
 
+	self addChild: self editor as: #editor.
 	self addChild: self bytesList as: #'bytes-list'.
-	self addChild: self editor as: #editor
 ]
 
 { #category : #accessing }
 GtLlmTokenizedExplainer >> initializeBytesList [
 	self
-		bytesList: (BrVerticalPane new hFitContent vMatchParent
+		bytesList: (BrHorizontalFlow new matchParent
 				padding: (BlInsets all: 5);
 				background: Color white;
 				aptitude: BrShadowAptitude new)
@@ -86,7 +86,8 @@ GtLlmTokenizedExplainer >> updateBytesList [
 		do: [ :aTokenNumber | 
 			self bytesList
 				addChild: (BrLabel new
-						aptitude: BrGlamorousLabelAptitude new
+						
+						aptitude: (BrGlamorousLabelAptitude new)
 								+ (GtExplainerExplanationAptitude new explanationModel: aTokenNumber)
 								+ (BrLazyStyleCommonAptitude new
 										default: [ :aStyle | self editor unhighlightGroupFor: aTokenNumber ];

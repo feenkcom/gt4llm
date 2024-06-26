@@ -4,18 +4,29 @@ Class {
 	#instVars : [
 		'result',
 		'tokenLabels',
-		'allLabels'
+		'allLabels',
+		'decorationBlock',
+		'tokenColors'
 	],
 	#category : #'Gt4Llm-Tokenizer'
 }
 
 { #category : #accessing }
+GtLlmTokenizedStringEditor >> decorationBlock [
+	^ decorationBlock
+]
+
+{ #category : #accessing }
+GtLlmTokenizedStringEditor >> decorationBlock: anObject [
+	decorationBlock := anObject
+]
+
+{ #category : #accessing }
 GtLlmTokenizedStringEditor >> highlightGroupFor: aByte [
-	self
-		schedule: [ allLabels
-				do: [ :anotherLabel | anotherLabel background: BrGlamorousColors hoveredListItemColor ].
-			(tokenLabels at: aByte ifAbsent: [ {} ])
-				do: [ :anotherLabel | anotherLabel background: BrGlamorousColors newsBackgroundColor ] ]
+	"allLabels
+		do: [ :anotherLabel | anotherLabel background: BrGlamorousColors hoveredListItemColor ]."
+	(tokenLabels at: aByte ifAbsent: [ {} ])
+		do: [ :anotherLabel | anotherLabel background: (Color blue alpha: 0.3) ]
 ]
 
 { #category : #accessing }
@@ -30,26 +41,55 @@ GtLlmTokenizedStringEditor >> onResultAdded [
 	self removeChildren.
 
 	tokenLabels := Dictionary new.
+	tokenColors := Dictionary new.
 	allLabels := OrderedCollection new.
 	self
 		addChildren: (self result tokens
-				collect: [ :aToken | 
-					| aLabel |
-					aLabel := BrLabel new
-							margin: (BlInsets all: 3);
-							aptitude: BrGlamorousLabelAptitude new
-									+ (BrLazyStyleCommonAptitude new
-											default: [ :aStyle | self unhighlightGroupFor: aToken num ];
-											hovered: [ :aStyle | self highlightGroupFor: aToken num ]);
-							geometry: (BlRoundedRectangleGeometry cornerRadius: 5);
-							padding: (BlInsets all: 1);
+				collectWithIndex: [ :aToken :anIndex | 
+					| nameLabel container numberLabel |
+					container := BrVerticalPane new fitContent
+							margin: (BlInsets
+									top: 2
+									left: 2
+									bottom: 5
+									right: 2).
+					nameLabel := BrLabel new
+							aptitude: (BrGlamorousLabelAptitude new
+									fontSize: 24;
+									glamorousCodeFont;
+									editorMeasurement);
+							geometry: (BlRoundedRectangleGeometry cornerRadius: 4);
+							padding: (BlInsets all: 2);
+							background: BrGlamorousColors hoveredListItemColor;
 							text: aToken name.
-					aLabel explainer
-						model: aToken num;
+					numberLabel := BrLabel new
+							margin: (BlInsets all: 1);
+							aptitude: (BrGlamorousLabelAptitude new foreground: Color gray);
+							beSmallSize;
+							text: aToken number.
+
+					self decorationBlock
+						ifNotNil: [ self decorationBlock
+								cull: nameLabel
+								cull: numberLabel
+								cull: aToken
+								cull: anIndex ].
+					nameLabel explainer
+						model: aToken number;
 						isTarget: true.
-					(tokenLabels at: aToken num ifAbsentPut: [ OrderedCollection new ])
-						add: aLabel.
-					allLabels add: aLabel ])
+					(tokenLabels at: aToken number ifAbsentPut: [ OrderedCollection new ])
+						add: nameLabel.
+					allLabels add: nameLabel.
+					tokenColors at: nameLabel put: nameLabel background.
+					container
+						when: BlClickEvent do: [ :e | e target phlow spawnObject: aToken ];
+						when: BlMouseOverEvent do: [ :e | self highlightGroupFor: aToken number ];
+						when: BlMouseOutEvent
+							do: [ :e | self unhighlightGroupFor: aToken number ].
+					container
+						addChild: nameLabel;
+						addChild: numberLabel.
+					container ])
 ]
 
 { #category : #accessing }
@@ -66,19 +106,12 @@ GtLlmTokenizedStringEditor >> result: anObject [
 
 { #category : #accessing }
 GtLlmTokenizedStringEditor >> schedule: aTask [
-	self enqueueTask: (BlTaskAction new action: aTask)
-]
-
-{ #category : #accessing }
-GtLlmTokenizedStringEditor >> unhighlight [
-	self
-		schedule: [ allLabels
-				do: [ :anotherLabel | anotherLabel background: BrGlamorousColors hoveredListItemColor ] ]
+	aTask value.
+"	self enqueueTask: (BlTaskAction new action: aTask)"
 ]
 
 { #category : #accessing }
 GtLlmTokenizedStringEditor >> unhighlightGroupFor: aByte [
-	self
-		schedule: [ (tokenLabels at: aByte ifAbsent: [ {} ])
-				do: [ :anotherLabel | anotherLabel background: BrGlamorousColors hoveredListItemColor ] ]
+	(tokenLabels at: aByte ifAbsent: [ {} ])
+		do: [ :anotherLabel | anotherLabel background: (tokenColors at: anotherLabel) ]
 ]

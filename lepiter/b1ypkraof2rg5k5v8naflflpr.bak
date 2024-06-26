@@ -29,7 +29,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-04-29T17:53:57.231751+02:00"
+						"dateAndTimeString" : "2024-06-24T21:49:09.528945+02:00"
 					}
 				},
 				"uid" : {
@@ -39,7 +39,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "By default, {{gtClass:GtOpenAIGtTutor}} is meant to generate code and views (see also [[Getting a tutor to create a view]]). The same mechanism can be leveraged for other use cases, however."
+				"string" : "By default, {{gtClass:GtOpenAIGtSpecificTutor}} is meant to generate code and views (see also [[Getting a tutor to create a view]]). The same mechanism can be leveraged for other use cases, however."
 			},
 			{
 				"__type" : "textSnippet",
