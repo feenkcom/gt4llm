@@ -18,7 +18,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-09T21:09:56.110238+02:00"
+						"dateAndTimeString" : "2024-06-23T08:18:37.71101+02:00"
 					}
 				},
 				"editEmail" : {
@@ -29,17 +29,17 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-09T21:10:09.397679+02:00"
+						"dateAndTimeString" : "2024-06-23T08:18:45.855113+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "uffig9vWDQC/3H3MCQyQpQ=="
+					"uidString" : "u4jfXOrXDQClNVDvC8IszQ=="
 				},
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "`gt4openai` is a project to interact with [OpenAI](https://openai.com) from within Glamorous Toolkit."
+				"string" : "Various utilities for working with LLMs."
 			}
 		]
 	},
@@ -51,7 +51,7 @@
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2024-06-09T21:09:56.072777+02:00"
+			"dateAndTimeString" : "2024-06-23T08:17:57.672195+02:00"
 		}
 	},
 	"editEmail" : {
@@ -62,15 +62,15 @@
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2024-06-23T13:36:18.20119+02:00"
+			"dateAndTimeString" : "2024-06-23T08:18:32.606078+02:00"
 		}
 	},
 	"pageType" : {
 		"__type" : "namedPage",
-		"title" : "Working with OpenAI"
+		"title" : "Utilities"
 	},
 	"uid" : {
 		"__type" : "uuid",
-		"uuid" : "2064e283-dbd6-0d00-bfdb-8c85090c90a5"
+		"uuid" : "3ceede5c-ead7-0d00-a534-a79d0bc22ccd"
 	}
 }

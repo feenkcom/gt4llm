@@ -29,7 +29,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-09T21:18:39.826814+02:00"
+						"dateAndTimeString" : "2024-06-25T08:08:30.728068+02:00"
 					}
 				},
 				"uid" : {
@@ -39,7 +39,44 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "`gt4llm` is a set of projects that work with various large language models inside {{gtPage:Glamorous Toolkit|db=2j9m7db2i4oz116bexd7wbdxo}}."
+				"string" : "This is a set of projects that work with various large language models (LLM) inside {{gtPage:Glamorous Toolkit|db=2j9m7db2i4oz116bexd7wbdxo}}."
+			},
+			{
+				"__type" : "textSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-06-23T08:39:41.310416+02:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-06-23T08:39:50.891507+02:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "vduSqurXDQC9dXknC8IszQ=="
+				},
+				"paragraphStyle" : {
+					"__type" : "textStyle"
+				},
+				"string" : "#Working with OpenAI"
 			},
 			{
 				"__type" : "textSnippet",
@@ -66,7 +103,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-09T21:18:50.912462+02:00"
+						"dateAndTimeString" : "2024-06-23T08:40:01.514656+02:00"
 					}
 				},
 				"uid" : {
@@ -76,7 +113,44 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "An advanced integration example can be found in [[Expanding the Wardley maps tutor with an action-based tutor]]"
+				"string" : "The most advanced integration is with OpenAI. An example can be found in [[Expanding the Wardley maps tutor with an action-based tutor]]."
+			},
+			{
+				"__type" : "textSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-06-23T08:40:02.034308+02:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-06-23T08:51:41.049084+02:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "shfPq+rXDQC+ZDrsC8IszQ=="
+				},
+				"paragraphStyle" : {
+					"__type" : "textStyle"
+				},
+				"string" : "Before you work with it, please set up the API key first: [[Setting up the OpenAI API key]]"
 			}
 		]
 	},
@@ -99,12 +173,12 @@
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2024-06-09T21:13:09.700242+02:00"
+			"dateAndTimeString" : "2024-06-23T13:36:07.297221+02:00"
 		}
 	},
 	"pageType" : {
 		"__type" : "namedPage",
-		"title" : "Glamorous Toolkit for LLMs"
+		"title" : "Glamorous Toolkit for large language models (LLMs)"
 	},
 	"uid" : {
 		"__type" : "uuid",

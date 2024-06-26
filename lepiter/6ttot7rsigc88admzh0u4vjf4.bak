@@ -29,7 +29,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-05-14T12:59:53.313719+02:00"
+						"dateAndTimeString" : "2024-05-14T13:00:02.08094+02:00"
 					}
 				},
 				"uid" : {
@@ -39,7 +39,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "The tutor instance may be set globally. This is not required for the functioning of the system, but simplifies the proc"
+				"string" : "The tutor instance may be set globally. This is not required for the functioning of the system, but simplifies the process of re-using a client and providing an API key."
 			},
 			{
 				"__type" : "textSnippet",
@@ -71,14 +71,14 @@
 								"__type" : "time",
 								"time" : {
 									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2024-05-14T12:58:13.85627+02:00"
+									"dateAndTimeString" : "2024-06-23T13:55:28.163114+02:00"
 								}
 							},
 							"uid" : {
 								"__type" : "uid",
 								"uidString" : "0W/dmsnUDQCwYhIRB0Z8qA=="
 							},
-							"code" : "tutor := GtOpenAIGtTutor withApiKeyFromClipboard"
+							"code" : "tutor := GtOpenAIGtViewsTutor withApiKeyFromClipboard"
 						}
 					]
 				},
@@ -143,14 +143,14 @@
 								"__type" : "time",
 								"time" : {
 									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2024-05-14T12:57:47.643421+02:00"
+									"dateAndTimeString" : "2024-06-23T13:55:30.074671+02:00"
 								}
 							},
 							"uid" : {
 								"__type" : "uid",
 								"uidString" : "rcLEm8nUDQCw4te6B0Z8qA=="
 							},
-							"code" : "tutor := GtOpenAIGtTutor withApiKeyFromFile"
+							"code" : "tutor := GtOpenAIGtViewsTutor withApiKeyFromFile"
 						}
 					]
 				},
@@ -215,14 +215,14 @@
 								"__type" : "time",
 								"time" : {
 									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2024-05-14T12:57:39.400079+02:00"
+									"dateAndTimeString" : "2024-06-23T13:55:31.667737+02:00"
 								}
 							},
 							"uid" : {
 								"__type" : "uid",
 								"uidString" : "i5vFhF/ODQCtksT+D0lXcw=="
 							},
-							"code" : "GtOpenAIGtTutor instance: tutor createAssistant"
+							"code" : "GtOpenAIGtViewsTutor instance: tutor createAssistant"
 						}
 					]
 				},
@@ -278,12 +278,12 @@
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2024-05-14T12:56:49.960485+02:00"
+			"dateAndTimeString" : "2024-06-23T13:50:12.344351+02:00"
 		}
 	},
 	"pageType" : {
 		"__type" : "namedPage",
-		"title" : "Setting up the tutor"
+		"title" : "Setting up a tutor"
 	},
 	"uid" : {
 		"__type" : "uuid",

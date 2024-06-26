@@ -18,7 +18,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-04-13T18:34:36.302642+02:00"
+						"dateAndTimeString" : "2024-06-23T08:18:37.71101+02:00"
 					}
 				},
 				"editEmail" : {
@@ -29,17 +29,17 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-04-13T18:35:17.716473+02:00"
+						"dateAndTimeString" : "2024-06-23T08:18:51.322056+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "S51ts17SDQCefCUICNS7/A=="
+					"uidString" : "u4jfXOrXDQClNVDvC8IszQ=="
 				},
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "This section contains presentations given about `gt4llm` and `gt4openai`."
+				"string" : "Various utilities for working with large language models."
 			}
 		]
 	},
@@ -51,7 +51,7 @@
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2024-04-13T18:34:36.271585+02:00"
+			"dateAndTimeString" : "2024-06-23T08:17:57.672195+02:00"
 		}
 	},
 	"editEmail" : {
@@ -62,15 +62,15 @@
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2024-04-13T18:34:36.271585+02:00"
+			"dateAndTimeString" : "2024-06-23T08:18:32.606078+02:00"
 		}
 	},
 	"pageType" : {
 		"__type" : "namedPage",
-		"title" : "Presentations"
+		"title" : "Utilities"
 	},
 	"uid" : {
 		"__type" : "uuid",
-		"uuid" : "e1226db3-5ed2-0d00-9e7b-d01d08d4bbfc"
+		"uuid" : "3ceede5c-ead7-0d00-a534-a79d0bc22ccd"
 	}
 }

@@ -14,15 +14,6 @@ GtLlmTokenizerResult class >> pythonClass [
 ]
 
 { #category : #accessing }
-GtLlmTokenizerResult >> gtBytesFor: aView [
-	<gtView>
-	^ aView explicit
-		title: 'Bytes';
-		priority: 1;
-		stencil: [ GtLlmTokenizedExplainer new result: self ]
-]
-
-{ #category : #accessing }
 GtLlmTokenizerResult >> gtTokenizedFor: aView [
 	<gtView>
 	^ aView explicit

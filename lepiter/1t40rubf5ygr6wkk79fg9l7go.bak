@@ -29,7 +29,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-22T21:02:44.503582+01:00"
+						"dateAndTimeString" : "2024-06-23T13:50:12.353126+02:00"
 					}
 				},
 				"uid" : {
@@ -39,7 +39,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "This page describes an interaction with OpenAI [assistant](https://platform.openai.com/assistants) using chat, showing different kind of question and responses. [[Setup the tutor]] for more details."
+				"string" : "This page describes an interaction with OpenAI [assistant](https://platform.openai.com/assistants) using chat, showing different kind of question and responses. [[Setting up a tutor]] for more details."
 			},
 			{
 				"__type" : "pharoSnippet",
@@ -66,14 +66,51 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-22T21:03:07.171808+01:00"
+						"dateAndTimeString" : "2024-06-23T13:57:21.459719+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "7REkNI/NDQCHsFrIBtrTtQ=="
 				},
-				"code" : "tutor := GtOpenAIGtTutor instance."
+				"code" : "tutor := GtOpenAIGtSpecificTutor instance."
+			},
+			{
+				"__type" : "textSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-06-23T13:57:22.54482+02:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-06-23T13:57:30.180279+02:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "qTi2Gu/XDQC+SentC8IszQ=="
+				},
+				"paragraphStyle" : {
+					"__type" : "textStyle"
+				},
+				"string" : "A tutor can have multiple chat. Let's create one:"
 			},
 			{
 				"__type" : "pharoSnippet",
@@ -133,20 +170,20 @@
 							},
 							"editEmail" : {
 								"__type" : "email",
-								"emailString" : "juraj.kubelka@icloud.com"
+								"emailString" : "<unknown>"
 							},
 							"editTime" : {
 								"__type" : "time",
 								"time" : {
 									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2024-02-09T11:05:32.610558-03:00"
+									"dateAndTimeString" : "2024-06-23T13:57:06.100602+02:00"
 								}
 							},
 							"uid" : {
 								"__type" : "uid",
 								"uidString" : "zO2gA1XNDQCtel7uDOiMHg=="
 							},
-							"code" : "question := 'Write me a snippet that lists all currently defined classes in the image.'.\rchat sendMessage: question."
+							"code" : "chat sendMessage: 'Write me a snippet that lists all currently defined classes in the image.'"
 						}
 					]
 				},
@@ -418,12 +455,12 @@
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2024-02-09T12:32:58.261324-03:00"
+			"dateAndTimeString" : "2024-06-23T13:54:58.495248+02:00"
 		}
 	},
 	"pageType" : {
 		"__type" : "namedPage",
-		"title" : "OpenAI conversation using assistants"
+		"title" : "Working with a tutor based on a simple OpenAI assistant for GT"
 	},
 	"uid" : {
 		"__type" : "uuid",
