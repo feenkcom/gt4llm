@@ -99,7 +99,7 @@ GtLlmInstanceChatElement >> onAssistantChatViewModelChanged [
 
 { #category : #accessing }
 GtLlmInstanceChatElement >> onLlmExecution: anObject [
-	self updateInstanceElement
+	self enqueueTask: (BlTaskAction new action: [ self updateInstanceElement ])
 ]
 
 { #category : #accessing }
