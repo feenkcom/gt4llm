@@ -20,21 +20,32 @@ GtOllamaChat >> initializeMessages [
 ]
 
 { #category : #accessing }
+GtOllamaChat >> model: aModelName [
+	super model: aModelName.
+	
+	self ensureModel
+]
+
+{ #category : #accessing }
 GtOllamaChat >> sendMessage: aMessage [
-	| result |
 	messages
 		addFirst: (GtLlmUserMessage new
 				content: aMessage;
 				chat: self).
-
-	result := client
-			completeChatWithModel: self model
-			andMessages: messages reversed.
-
-	self addMessage: (result asLlmMessage chat: self)
+	self triggerAssistant
 ]
 
 { #category : #accessing }
 GtOllamaChat >> status [
 	^ GtOpenAIAssistantChatReadyStatus new
+]
+
+{ #category : #accessing }
+GtOllamaChat >> triggerAssistant [
+	| result |
+	result := client
+			completeChatWithModel: self model
+			andMessages: messages reversed.
+
+	self addMessage: (result asLlmMessage chat: self)
 ]

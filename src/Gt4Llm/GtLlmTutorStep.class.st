@@ -71,7 +71,7 @@ GtLlmTutorStep >> chat: anObject [
 
 { #category : #accessing }
 GtLlmTutorStep >> defaultElementClass [
-	^ GtLlmExpandableStepThreadMessageElement
+	^ GtLlmExpandableThreadMessageElement
 ]
 
 { #category : #accessing }

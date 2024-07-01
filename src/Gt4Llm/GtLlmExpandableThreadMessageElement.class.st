@@ -4,9 +4,9 @@ Class {
 	#traits : 'TGtLlmWithThreadMessageViewModel',
 	#classTraits : 'TGtLlmWithThreadMessageViewModel classTrait',
 	#instVars : [
-		'threadMessageElement',
 		'moreContentElement',
-		'oneLineThreadMessageElement'
+		'oneLineThreadMessageElement',
+		'threadMessageElement'
 	],
 	#category : #'Gt4Llm-Widgets'
 }
@@ -30,7 +30,7 @@ GtLlmExpandableThreadMessageElement >> initialize [
 
 	self initializeOneLineThreadMessageElement.
 	self initializeThreadMessageElement.
-	
+
 	self
 		addAptitude: GtCoderExpanderAptitude new;
 		header: [ oneLineThreadMessageElement ];
@@ -54,7 +54,7 @@ GtLlmExpandableThreadMessageElement >> initializeOneLineThreadMessageElement [
 
 { #category : #'initialization ' }
 GtLlmExpandableThreadMessageElement >> initializeThreadMessageElement [
-	threadMessageElement := GtLlmThreadMessageElement new
+	threadMessageElement := BrLlmThreadMessageContentHolder new
 ]
 
 { #category : #'initialization ' }
@@ -69,7 +69,13 @@ GtLlmExpandableThreadMessageElement >> onExpanded [
 
 { #category : #'private - hooks' }
 GtLlmExpandableThreadMessageElement >> onThreadMessageViewModelChanged [
-	oneLineThreadMessageElement threadMessageViewModel: threadMessageViewModel asOneLineViewModel.
-	threadMessageElement threadMessageViewModel: threadMessageViewModel.
-	self expanded: threadMessageViewModel isExpanded 
+	oneLineThreadMessageElement
+		threadMessageViewModel: threadMessageViewModel asOneLineViewModel.
+	threadMessageElement views: threadMessageViewModel messageViews.
+	self expanded: threadMessageViewModel isExpanded
+]
+
+{ #category : #accessing }
+GtLlmExpandableThreadMessageElement >> threadMessageElement [
+	^ threadMessageElement asElement
 ]

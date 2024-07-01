@@ -38,5 +38,6 @@ GtLlmStepThreadMessageElement >> updateElement [
 
 { #category : #accessing }
 GtLlmStepThreadMessageElement >> updateStepElement [
-	stepElement text: self threadMessageViewModel step name
+	stepElement
+		text: (self threadMessageViewModel step ifNil: [ '' ] ifNotNil: #name)
 ]

@@ -61,6 +61,14 @@ GtLlmBasicThreadMessageViewModel >> isAssistantRole [
 	^ self threadMessage isAssistantRole
 ]
 
+{ #category : #accessing }
+GtLlmBasicThreadMessageViewModel >> messageViews [
+	^ GtPhlowViewsCollector new
+		fromObject: self threadMessage;
+		pragmaNames: #(#gtLlmMessageView);
+		collect
+]
+
 { #category : #private }
 GtLlmBasicThreadMessageViewModel >> newCheckRunResultViewModelFor: aCheckRunResult [
 	| aViewModel |

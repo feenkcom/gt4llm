@@ -18,7 +18,10 @@ GtLlmEntity class >> from: aDictionary [
 	entity rawData: aDictionary.
 
 	self serializationProperties
-		do: [ :aPair | entity perform: aPair value , ':' withArguments: {aDictionary at: aPair key} ].
+		do: [ :aPair | 
+			entity
+				perform: aPair value , ':'
+				withArguments: {aDictionary at: aPair key ifAbsent: [ nil ]} ].
 
 	^ entity
 ]

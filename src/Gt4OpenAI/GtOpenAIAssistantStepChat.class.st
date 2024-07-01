@@ -62,31 +62,14 @@ GtOpenAIAssistantStepChat >> maybeStep: anAnnouncement [
 { #category : #accessing }
 GtOpenAIAssistantStepChat >> messages [
 	<return: #GtOpenAIThreadMessagesGroup>
-	| givenMessages messageStepIndex selectStepRegex |
-	"in this step, we also need to calculate the current step of each message"
-	messageStepIndex := 1.
+	| givenMessages |
 	givenMessages := thread updateMessages.
-	selectStepRegex := (self selectStepMessage format: {'(.+)'}) asRegex.
-
-	givenMessages reversed
-		do: [ :aMessage | 
-			| text |
-			"first, calculate the index"
-			text := aMessage contentText trim.
-			text = self stepMessage ifTrue: [ messageStepIndex := messageStepIndex + 1 ].
-			text = self backStepMessage
-				ifTrue: [ messageStepIndex := messageStepIndex - 1 ].
-			(selectStepRegex matches: text)
-				ifTrue: [ | stepName |
-					stepName := selectStepRegex subexpression: 2.
-					messageStepIndex := self steps
-							detectIndex: [ :aStep | aStep name = stepName ] ].	"then build the message"
-			aMessage
-				pipeline: self pipeline;
-				chat: self;
-				step: (steps at: messageStepIndex) ].
-
-	^ givenMessages
+	^ GtOpenAIThreadMessagesGroup
+		withAll: (givenMessages
+				collect: [ :aMessage | 
+					(GtOpenAIStepThreadMessage from: aMessage serialize)
+						pipeline: self pipeline;
+						chat: self ])
 ]
 
 { #category : #accessing }
