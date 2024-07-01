@@ -19,7 +19,7 @@ GtLlmActionThreadMessageViewModel >> action: anObject [
 
 { #category : #accessing }
 GtLlmActionThreadMessageViewModel >> elementClass [
-	^ GtLlmExpandableActionThreadMessageElement
+	^ GtLlmExpandableThreadMessageElement
 ]
 
 { #category : #accessing }

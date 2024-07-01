@@ -128,7 +128,9 @@ GtOpenAIThreadMessage >> createdAt [
 
 { #category : #accessing }
 GtOpenAIThreadMessage >> createdAt: anObject [
-	createdAt := DateAndTime fromUnixTime: anObject
+	(anObject isKindOf: DateAndTime)
+		ifTrue: [ createdAt := anObject ]
+		ifFalse: [ createdAt := DateAndTime fromUnixTime: anObject ]
 ]
 
 { #category : #accessing }
@@ -162,6 +164,7 @@ GtOpenAIThreadMessage >> gtCodeBlocksFor: aView [
 { #category : #accessing }
 GtOpenAIThreadMessage >> gtContentFor: aView [
 	<gtView>
+	<gtLlmMessageView>
 	^ aView explicit
 		title: 'Content';
 		priority: 1;

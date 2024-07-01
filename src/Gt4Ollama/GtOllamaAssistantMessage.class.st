@@ -39,6 +39,7 @@ GtOllamaAssistantMessage >> content: anObject [
 { #category : #accessing }
 GtOllamaAssistantMessage >> gtContentFor: aView [
 	<gtView>
+	<gtLlmMessageView>
 	^ aView textEditor
 		title: 'Content';
 		priority: 1;

@@ -94,6 +94,7 @@ GtLlmChatMessage >> createdAt: anObject [
 { #category : #accessing }
 GtLlmChatMessage >> gtContentFor: aView [
 	<gtView>
+	<gtLlmMessageView>
 	^ aView textEditor
 		title: 'Content';
 		priority: 1;
