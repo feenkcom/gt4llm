@@ -38,6 +38,17 @@ GtWardleyMapModel >> menuItemCreateTopicSection [
 ]
 
 { #category : #'*Gt4Llm' }
+GtWardleyMapModel >> menuItemReviewMapButton [
+	<wardleyContextMenuItem: 45>
+	^ GtWardleyMapNodeButtonWithLabelMenuItem new
+		label: 'Review the current state';
+		action: [ :aContextMenuItem :aBrButton :aBrButtonModel :anEvent | 
+			aContextMenuItem llmCreator
+				announce: (GtLlmSendActionToChat action: 'Review the current state' arguments: {}).
+			aContextMenuItem editorElement fireEvent: BrContextMenuHideWish new ]
+]
+
+{ #category : #'*Gt4Llm' }
 GtWardleyMapModel >> openAIWardleyMapCreator: aCreator [
 	^ self optionAt: #openAIWardleyMapCreator put: aCreator
 ]

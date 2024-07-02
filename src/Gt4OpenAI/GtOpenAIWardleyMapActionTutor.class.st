@@ -226,7 +226,8 @@ GtOpenAIWardleyMapActionTutor >> initializeActions [
 		self initialAction.
 		self connectionAction.
 		self explanationAction.
-		self renameAction
+		self renameAction.
+		self reviewAction
 	}
 ]
 
@@ -327,5 +328,28 @@ Propose renames for node
 ```
 ```rename
 {''Furnace'': [''Boiler'', ''Heater'', ''Incinerator'', ''Kiln'', ''Stove'']}
+```'}
+]
+
+{ #category : #accessing }
+GtOpenAIWardleyMapActionTutor >> reviewAction [
+	^ GtLlmTutorAction new
+		name: 'Review the current state';
+		description: 'Reviews and criticizes the current state of the map.';
+		examples: {GtLlmTutorActionExample new
+					instruction: 'Review the current state';
+					input: '```topic
+Cloud computing
+```
+```wardley-map
+style wardley
+
+evolution genesis -> custom built -> product (+rental) -> commodity
+
+component Compute [0.45, 0.34] label [-22, 29]
+
+```';
+					output: '```explanation
+The map is incomplete. Currently, only one node is defined. A complete map should have multiple nodes and connections. The current node `Compute` is correct, but misplaced.
 ```'}
 ]
