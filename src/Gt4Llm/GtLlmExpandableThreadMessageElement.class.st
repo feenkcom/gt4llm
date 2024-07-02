@@ -54,7 +54,7 @@ GtLlmExpandableThreadMessageElement >> initializeOneLineThreadMessageElement [
 
 { #category : #'initialization ' }
 GtLlmExpandableThreadMessageElement >> initializeThreadMessageElement [
-	threadMessageElement := BrLlmThreadMessageContentHolder new
+	threadMessageElement := GtLlmThreadMessageContentHolder new
 ]
 
 { #category : #'initialization ' }

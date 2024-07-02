@@ -1,18 +1,18 @@
 Class {
-	#name : #BrLlmThreadMessageContentHolder,
+	#name : #GtLlmThreadMessageContentHolder,
 	#superclass : #BrFrame,
 	#category : #'Gt4Llm-Widgets'
 }
 
 { #category : #accessing }
-BrLlmThreadMessageContentHolder >> initialize [
+GtLlmThreadMessageContentHolder >> initialize [
 	super initialize.
 
 	self hMatchParent vFitContentLimited
 ]
 
 { #category : #accessing }
-BrLlmThreadMessageContentHolder >> views: aCollectionOfViews [
+GtLlmThreadMessageContentHolder >> views: aCollectionOfViews [
 	| views |
 	self removeChildren.
 	views := aCollectionOfViews
@@ -26,7 +26,7 @@ BrLlmThreadMessageContentHolder >> views: aCollectionOfViews [
 ]
 
 { #category : #accessing }
-BrLlmThreadMessageContentHolder >> viewsToTabGroup: aCollectionOfViews [
+GtLlmThreadMessageContentHolder >> viewsToTabGroup: aCollectionOfViews [
 	| tabs |
 	tabs := OrderedCollection new.
 	aCollectionOfViews
@@ -44,7 +44,7 @@ BrLlmThreadMessageContentHolder >> viewsToTabGroup: aCollectionOfViews [
 						stencil: [ view
 								asElementDo: [ :anElement | 
 									anElement phlow beViewContent.
-									anElement vFitContent ] ];
+									anElement ] ];
 						toolbarStencil: [ view actionsToolbarForElement: aTab ].
 					view attachTooltipFor: aTab.
 					tabs add: aTab ] ].
