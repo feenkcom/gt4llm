@@ -10,6 +10,13 @@ GtOpenAIWardleyMapActionThreadMessage >> asViewModel [
 ]
 
 { #category : #accessing }
+GtOpenAIWardleyMapActionThreadMessage >> explanationCodeBlock [
+	^ self codeBlocks
+		detect: [ :aCodeBlock | aCodeBlock isForLanguage: 'explanation' ]
+		ifNone: [ nil ]
+]
+
+{ #category : #accessing }
 GtOpenAIWardleyMapActionThreadMessage >> gtContentFor: aView [
 	<gtView>
 	<gtLlmMessageView>
@@ -17,6 +24,19 @@ GtOpenAIWardleyMapActionThreadMessage >> gtContentFor: aView [
 		title: 'Content';
 		priority: 1;
 		stencil: [ GtLlmActionThreadMessageElement new threadMessageViewModel: self asViewModel ]
+]
+
+{ #category : #accessing }
+GtOpenAIWardleyMapActionThreadMessage >> gtExplanationFor: aView [
+	<gtView>
+	<gtLlmMessageView>
+	self explanationCodeBlock ifNil: [ ^ aView empty ].
+
+	^ aView textEditor
+		title: 'Explanation';
+		priority: 2;
+		text: [ self explanationCodeBlock code value ];
+		styler: (GtLlmMessageStyler new threadMessageViewModel: self)
 ]
 
 { #category : #accessing }
