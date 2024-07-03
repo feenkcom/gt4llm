@@ -1,28 +1,81 @@
 Class {
 	#name : #GtLlmThreadMessageContentHolder,
-	#superclass : #BrFrame,
+	#superclass : #BrVerticalPane,
+	#instVars : [
+		'threadMessageViewModel',
+		'header'
+	],
 	#category : #'Gt4Llm-Widgets'
 }
 
 { #category : #accessing }
+GtLlmThreadMessageContentHolder >> header [
+	^ header
+]
+
+{ #category : #accessing }
+GtLlmThreadMessageContentHolder >> header: anObject [
+	header := anObject
+]
+
+{ #category : #accessing }
 GtLlmThreadMessageContentHolder >> initialize [
 	super initialize.
+	
+	self initializeHeader.
 
-	self hMatchParent vFitContentLimited
+	self hMatchParent vFitContentLimited.
+	
+	self addChild: self header as: #'message-header'
+]
+
+{ #category : #accessing }
+GtLlmThreadMessageContentHolder >> initializeActionElement [
+]
+
+{ #category : #accessing }
+GtLlmThreadMessageContentHolder >> initializeHeader [
+	header := BrHorizontalPane new
+			hMatchParent;
+			vFitContent
+]
+
+{ #category : #accessing }
+GtLlmThreadMessageContentHolder >> onThreadMessageViewModelChanged [
+	self updateHeader.
+
+	self views: self threadMessageViewModel messageViews
+]
+
+{ #category : #accessing }
+GtLlmThreadMessageContentHolder >> threadMessageViewModel [
+	^ threadMessageViewModel
+]
+
+{ #category : #accessing }
+GtLlmThreadMessageContentHolder >> threadMessageViewModel: anObject [
+	threadMessageViewModel := anObject.
+	
+	self onThreadMessageViewModelChanged
+]
+
+{ #category : #accessing }
+GtLlmThreadMessageContentHolder >> updateHeader [
+	self header addChildren: self threadMessageViewModel messageHeaderItems
 ]
 
 { #category : #accessing }
 GtLlmThreadMessageContentHolder >> views: aCollectionOfViews [
 	| views |
-	self removeChildren.
+	self removeChildNamed: #'message-tabs'.
 	views := aCollectionOfViews
 			reject: [ :aView | aView isKindOf: GtPhlowEmptyView ].
 
 	views ifEmpty: [ ^ self ].
 
 	views size > 1
-		ifTrue: [ self addChild: (self viewsToTabGroup: aCollectionOfViews) ]
-		ifFalse: [ self addChild: views first asElement ]
+		ifTrue: [ self addChild: (self viewsToTabGroup: aCollectionOfViews) as: #'message-tabs' ]
+		ifFalse: [ self addChild: views first asElement as: #'message-tabs' ]
 ]
 
 { #category : #accessing }

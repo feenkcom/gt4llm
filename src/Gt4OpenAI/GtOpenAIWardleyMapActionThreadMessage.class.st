@@ -5,6 +5,32 @@ Class {
 }
 
 { #category : #accessing }
+GtOpenAIWardleyMapActionThreadMessage >> action [
+	| parsed |
+	self isAssistantRole ifFalse: [ ^ '' ].
+
+	parsed := LeParser parse: self contentText.
+
+	parsed children
+		do: [ :aNode | 
+			((aNode isKindOf: LeCodeBlockNode) and: [ aNode isForLanguage: 'action' ])
+				ifTrue: [ ^ aNode code source ] ].
+	^ ''
+]
+
+{ #category : #accessing }
+GtOpenAIWardleyMapActionThreadMessage >> actionHeaderItem [
+	<gtLlmHeaderItem: 4>
+	^ BrLabel new
+			hFitContentLimited;
+			vFitContent;
+			aptitude: (BrGlamorousLabelAptitude new
+					foreground: BrGlamorousColors disabledButtonTextColor);
+			beSmallSize;
+			text: self action
+]
+
+{ #category : #accessing }
 GtOpenAIWardleyMapActionThreadMessage >> asViewModel [
 	^ GtLlmActionThreadMessageViewModel new threadMessage: self
 ]
@@ -22,7 +48,7 @@ GtOpenAIWardleyMapActionThreadMessage >> gtContentFor: aView [
 	<gtLlmMessageView>
 	^ aView explicit
 		title: 'Content';
-		priority: 1;
+		priority: 5;
 		stencil: [ GtLlmActionThreadMessageElement new threadMessageViewModel: self asViewModel ]
 ]
 
@@ -47,7 +73,7 @@ GtOpenAIWardleyMapActionThreadMessage >> gtWardleyMapFor: aView [
 
 	^ aView explicit
 		title: 'Map';
-		priority: 2;
+		priority: 1;
 		stencil: [ GtWardleyMapElement new
 				wardleyMapViewModel: (GtWardleyMapViewModel new
 						wardleyMapModel: (GtWardleyMapParser parse: self mapCodeBlock code value) asWardleyMapModel);
@@ -59,4 +85,10 @@ GtOpenAIWardleyMapActionThreadMessage >> mapCodeBlock [
 	^ self codeBlocks
 		detect: [ :aCodeBlock | aCodeBlock isForLanguage: 'wardley-map' ]
 		ifNone: [ nil ]
+]
+
+{ #category : #accessing }
+GtOpenAIWardleyMapActionThreadMessage >> spacerHeaderItem [
+	<gtLlmHeaderItem: 3>
+	^ BrFrame new matchParent
 ]

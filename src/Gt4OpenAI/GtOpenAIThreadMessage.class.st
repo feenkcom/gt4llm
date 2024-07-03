@@ -262,6 +262,25 @@ GtOpenAIThreadMessage >> runId: anObject [
 ]
 
 { #category : #accessing }
+GtOpenAIThreadMessage >> senderHeaderItem [
+	<gtLlmHeaderItem: 1>
+	^ BrLabel new
+		hFitContentLimited;
+		vFitContent;
+		aptitude: (BrGlamorousLabelAptitude new
+				foreground: BrGlamorousColors disabledButtonTextColor);
+		beSmallSize;
+		text: self senderText
+]
+
+{ #category : #accessing }
+GtOpenAIThreadMessage >> senderText [
+	self isAssistantRole ifTrue: [ ^ 'Assistant' ].
+	self isSystemRole ifTrue: [ ^ 'System' ].
+	^ 'You'
+]
+
+{ #category : #accessing }
 GtOpenAIThreadMessage >> step [
 	^ step
 ]
@@ -279,6 +298,24 @@ GtOpenAIThreadMessage >> threadId [
 { #category : #accessing }
 GtOpenAIThreadMessage >> threadId: anObject [
 	threadId := anObject
+]
+
+{ #category : #accessing }
+GtOpenAIThreadMessage >> timeHeaderItem [
+	<gtLlmHeaderItem: 2>
+	| timeTooltip |
+	timeTooltip := BrGlamorousWithLabelTooltipAptitude new
+			text: (String
+					streamContents: [ :s | self createdAt asLocal printSeparateDateAndTimeOn: s ]).
+	^ BrLabel new
+		updatingDateAndTimeModel;
+		fitContent;
+		beSmallSize;
+		aptitude: (BrGlamorousLabelAptitude new
+				foreground: BrGlamorousColors disabledButtonTextColor);
+		addAptitude: timeTooltip;
+		updatingDateAndTime: self createdAt;
+		yourself
 ]
 
 { #category : #'as yet unclassified' }
