@@ -4,6 +4,19 @@ Class {
 	#category : #'Gt4OpenAI-Examples - Wardley Map'
 }
 
+{ #category : #'as yet unclassified' }
+GtOpenAIWardleyMapActionAssistantChat >> ancestorOf: aMessage [
+	| messages |
+	messages := self messages.
+
+	messages
+		withIndexDo: [ :possibleAncestor :index | 
+			possibleAncestor id = aMessage id
+				ifTrue: [ index = messages size ifTrue: [ ^ nil ] ifFalse: [ ^ messages at: index + 1 ] ] ].
+
+	self error: 'Message not found'
+]
+
 { #category : #accessing }
 GtOpenAIWardleyMapActionAssistantChat >> gtWardleyScriptFor: aView [
 	<gtView>
