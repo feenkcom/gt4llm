@@ -62,6 +62,13 @@ GtLlmBasicThreadMessageViewModel >> isAssistantRole [
 ]
 
 { #category : #accessing }
+GtLlmBasicThreadMessageViewModel >> messageHeaderItems [
+	^ ((Pragma allNamed: #gtLlmHeaderItem: from: self threadMessage class to: Object)
+		sorted: [ :a :b | (a argumentAt: 1) < (b argumentAt: 1) ])
+		collect: [ :aPragma | self threadMessage perform: aPragma methodSelector ]
+]
+
+{ #category : #accessing }
 GtLlmBasicThreadMessageViewModel >> messageViews [
 	^ GtPhlowViewsCollector new
 		fromObject: self threadMessage;

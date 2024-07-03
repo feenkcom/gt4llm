@@ -71,7 +71,7 @@ GtLlmExpandableThreadMessageElement >> onExpanded [
 GtLlmExpandableThreadMessageElement >> onThreadMessageViewModelChanged [
 	oneLineThreadMessageElement
 		threadMessageViewModel: threadMessageViewModel asOneLineViewModel.
-	threadMessageElement views: threadMessageViewModel messageViews.
+	threadMessageElement threadMessageViewModel: threadMessageViewModel.
 	self expanded: threadMessageViewModel isExpanded
 ]
 
