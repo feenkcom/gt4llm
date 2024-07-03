@@ -46,6 +46,7 @@ GtOpenAIWardleyMapActionThreadMessage >> diffedMapModel [
 	ownModel := self mapModel.
 
 	self ancestor ifNil: [ ^ ownModel ].
+	self ancestor mapModel ifNil: [ ^ ownModel ].
 
 	differ := GtWardleyMapDiffer diffFrom: self ancestor mapModel to: ownModel.
 
@@ -129,6 +130,7 @@ GtOpenAIWardleyMapActionThreadMessage >> mapCodeBlock [
 
 { #category : #accessing }
 GtOpenAIWardleyMapActionThreadMessage >> mapModel [
+	self mapCodeBlock ifNil: [ ^ nil ].
 	^ (GtWardleyMapParser parse: self mapCodeBlock code value) asWardleyMapModel
 ]
 
