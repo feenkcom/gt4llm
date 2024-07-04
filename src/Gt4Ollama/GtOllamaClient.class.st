@@ -35,6 +35,15 @@ GtOllamaClient >> completeChatWithModel: aString andMessages: aCollection [
 ]
 
 { #category : #accessing }
+GtOllamaClient >> createModel: aString withModelFile: aModelFileString [
+	^ GtOllamaCreateModelClient new
+		client: self;
+		model: aString;
+		modelFileString: aModelFileString;
+		perform
+]
+
+{ #category : #accessing }
 GtOllamaClient >> defaultBaseUrl [
 	^ 'http://localhost:11434/api' asZnUrl
 ]
