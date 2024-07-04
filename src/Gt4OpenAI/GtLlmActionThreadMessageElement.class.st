@@ -39,5 +39,7 @@ GtLlmActionThreadMessageElement >> updateActionElement [
 GtLlmActionThreadMessageElement >> updateElement [
 	super updateElement.
 	
+	"threadMessageViewModel halt."
+	
 	self updateActionElement
 ]

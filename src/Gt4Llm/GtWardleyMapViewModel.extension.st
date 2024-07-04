@@ -62,3 +62,8 @@ GtWardleyMapViewModel >> openAITutorChat [
 				to: self.
 			aChat ]
 ]
+
+{ #category : #'*Gt4Llm' }
+GtWardleyMapViewModel >> openAITutorChat: aChat [
+	^ self optionAt: #openAITutorChat put: aChat
+]

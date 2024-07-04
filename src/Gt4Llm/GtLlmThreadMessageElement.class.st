@@ -44,6 +44,11 @@ GtLlmThreadMessageElement >> defaultLayout [
 ]
 
 { #category : #'private - updating' }
+GtLlmThreadMessageElement >> hideHeaderElement [
+	headerElement visibility: BlVisibility gone.
+]
+
+{ #category : #'private - updating' }
 GtLlmThreadMessageElement >> hideProgressElement [
 	contentsElement visibility: BlVisibility visible.
 	progressElement visibility: BlVisibility gone.
