@@ -95,13 +95,11 @@ GtLlmChatMessage >> createdAt: anObject [
 GtLlmChatMessage >> gtContentFor: aView [
 	<gtView>
 	<gtLlmMessageView>
-	^ aView textEditor
+	^ aView explicit
 		title: 'Content';
 		priority: 1;
-		text: [ self content ];
-		styler: (GtLlmMessageStyler new
-				threadMessageViewModel: (GtLlmNewThreadMessageViewModel new
-						threadMessage: GtLlmNewThreadMessage new))
+		stencil: [ GtLlmThreadMessageElement new
+				threadMessageViewModel: (GtLlmThreadMessageViewModel new threadMessage: self) ]
 ]
 
 { #category : #accessing }
@@ -153,4 +151,41 @@ GtLlmChatMessage >> role [
 { #category : #accessing }
 GtLlmChatMessage >> role: anObject [
 	role := anObject
+]
+
+{ #category : #accessing }
+GtLlmChatMessage >> senderHeaderItem [
+	<gtLlmHeaderItem: 1>
+	^ BrLabel new
+		hFitContentLimited;
+		vFitContent;
+		aptitude: (BrGlamorousLabelAptitude new
+				foreground: BrGlamorousColors disabledButtonTextColor);
+		beSmallSize;
+		text: self senderText
+]
+
+{ #category : #accessing }
+GtLlmChatMessage >> senderText [
+	self isAssistantRole ifTrue: [ ^ 'Assistant' ].
+	self isSystemRole ifTrue: [ ^ 'System' ].
+	^ 'You'
+]
+
+{ #category : #accessing }
+GtLlmChatMessage >> timeHeaderItem [
+	<gtLlmHeaderItem: 2>
+	| timeTooltip |
+	timeTooltip := BrGlamorousWithLabelTooltipAptitude new
+			text: (String
+					streamContents: [ :s | self createdAt asLocal printSeparateDateAndTimeOn: s ]).
+	^ BrLabel new
+		updatingDateAndTimeModel;
+		fitContent;
+		beSmallSize;
+		aptitude: (BrGlamorousLabelAptitude new
+				foreground: BrGlamorousColors disabledButtonTextColor);
+		addAptitude: timeTooltip;
+		updatingDateAndTime: self createdAt;
+		yourself
 ]
