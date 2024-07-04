@@ -61,3 +61,9 @@ GtOllamaGtTutor >> model: aModel [
 	
 	self ensureModel
 ]
+
+{ #category : #accessing }
+GtOllamaGtTutor >> summaryItems [
+	^ {'Base model' -> self model.
+		'Prompt' -> self instructions}
+]
