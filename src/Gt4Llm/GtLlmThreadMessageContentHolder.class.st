@@ -76,7 +76,7 @@ GtLlmThreadMessageContentHolder >> views: aCollectionOfViews [
 
 	views size > 1
 		ifTrue: [ self addChild: (self viewsToTabGroup: aCollectionOfViews) as: #'message-tabs' ]
-		ifFalse: [ self addChild: views first asElement as: #'message-tabs' ]
+		ifFalse: [ self addChild: views first asElement hideHeaderElement as: #'message-tabs' ]
 ]
 
 { #category : #accessing }

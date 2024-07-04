@@ -85,6 +85,18 @@ GtOpenAIWardleyMapActionThreadMessage >> explanationCodeBlock [
 ]
 
 { #category : #accessing }
+GtOpenAIWardleyMapActionThreadMessage >> gtActionFor: aView [
+	<gtView>
+	<gtLlmMessageView>
+	self action ifEmpty: [ ^ aView empty ].
+
+	^ aView textEditor
+		title: 'Action';
+		priority: 3;
+		text: [ self action ]
+]
+
+{ #category : #accessing }
 GtOpenAIWardleyMapActionThreadMessage >> gtContentFor: aView [
 	<gtView>
 	<gtLlmMessageView>
@@ -117,7 +129,9 @@ GtOpenAIWardleyMapActionThreadMessage >> gtWardleyMapFor: aView [
 		title: 'Map';
 		priority: 1;
 		stencil: [ GtWardleyMapElement new
-				wardleyMapViewModel: (GtWardleyMapViewModel new wardleyMapModel: self diffedMapModel);
+				wardleyMapViewModel: (GtWardleyMapViewModel new
+						wardleyMapModel: self diffedMapModel;
+						openAITutorChat: self chat);
 				vExact: 500 ]
 ]
 
