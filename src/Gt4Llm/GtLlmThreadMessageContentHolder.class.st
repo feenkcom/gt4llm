@@ -61,6 +61,7 @@ GtLlmThreadMessageContentHolder >> threadMessageViewModel: anObject [
 
 { #category : #accessing }
 GtLlmThreadMessageContentHolder >> updateHeader [
+	self header removeChildren.
 	self header addChildren: self threadMessageViewModel messageHeaderItems
 ]
 
