@@ -6,7 +6,7 @@ Class {
 
 { #category : #accessing }
 GtOllamaChat >> ensureModel [
-	client pullModel: self model
+	"client pullModel: self model"
 ]
 
 { #category : #accessing }
