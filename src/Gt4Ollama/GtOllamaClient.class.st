@@ -86,7 +86,7 @@ GtOllamaClient >> initializeClient [
 	| aClient |
 	aClient := ZnClient new.
 	aClient forJsonREST.
-	aClient timeout: 60.
+	aClient timeout: 600.
 	^ aClient
 ]
 
