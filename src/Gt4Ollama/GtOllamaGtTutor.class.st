@@ -29,7 +29,7 @@ GtOllamaGtTutor >> ensureModel [
 	internalModelName := 'gt-tutor-' , self model , '-' , UUID new asString.
 	modelfileString := 'FROM ' , self model
 			, '
-SYSTEM ' , self instructions asString.
+SYSTEM """' , self instructions instructionString,'"""'.
 
 	GtOllamaClient new
 		createModel: internalModelName
@@ -42,6 +42,13 @@ SYSTEM ' , self instructions asString.
 GtOllamaGtTutor >> initialize [
 	super initialize.
 	
+	self ensureModel
+]
+
+{ #category : #accessing }
+GtOllamaGtTutor >> instructions: anObject [
+	super instructions: anObject.
+
 	self ensureModel
 ]
 

@@ -1,12 +1,22 @@
 Class {
 	#name : #GtOllamaChat,
 	#superclass : #GtLlmChat,
+	#instVars : [
+		'assistantWorking'
+	],
 	#category : #'Gt4Ollama-Chat'
 }
 
 { #category : #accessing }
 GtOllamaChat >> ensureModel [
 	"client pullModel: self model"
+]
+
+{ #category : #accessing }
+GtOllamaChat >> initialize [
+	super initialize.
+
+	assistantWorking := false
 ]
 
 { #category : #accessing }
@@ -37,15 +47,23 @@ GtOllamaChat >> sendMessage: aMessage [
 
 { #category : #accessing }
 GtOllamaChat >> status [
-	^ GtOpenAIAssistantChatReadyStatus new
+	^ assistantWorking
+		ifTrue: [ GtOpenAIAssistantChatWorkingStatus new ]
+		ifFalse: [ GtOpenAIAssistantChatReadyStatus new ]
 ]
 
 { #category : #accessing }
 GtOllamaChat >> triggerAssistant [
 	| result |
+	assistantWorking := true.
+
+	self announcer announce: (GtOpenAIThreadRunStartedAnnouncement new run: self).
+
 	result := client
 			completeChatWithModel: self model
 			andMessages: messages reversed.
 
-	self addMessage: (result asLlmMessage chat: self)
+	self addMessage: (result asLlmMessage chat: self).
+
+	assistantWorking := false
 ]

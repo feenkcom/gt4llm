@@ -35,6 +35,17 @@ GtLlmProvisionalThreadMessage >> elementClass [
 	^ GtLlmThreadMessageElement
 ]
 
+{ #category : #accessing }
+GtLlmProvisionalThreadMessage >> gtContentFor: aView [
+	<gtView>
+	<gtLlmMessageView>
+	^ aView explicit
+		title: 'Content';
+		priority: 1;
+		stencil: [ GtLlmThreadMessageElement new
+				threadMessageViewModel: (GtLlmThreadMessageViewModel new threadMessage: self) ]
+]
+
 { #category : #testing }
 GtLlmProvisionalThreadMessage >> hasResponse [
 	^ false
@@ -56,8 +67,38 @@ GtLlmProvisionalThreadMessage >> isAssistantRole [
 ]
 
 { #category : #accessing }
+GtLlmProvisionalThreadMessage >> senderHeaderItem [
+	<gtLlmHeaderItem: 1>
+	^ BrLabel new
+		hFitContentLimited;
+		vFitContent;
+		aptitude: (BrGlamorousLabelAptitude new
+				foreground: BrGlamorousColors disabledButtonTextColor);
+		beSmallSize;
+		text: 'Assistant'
+]
+
+{ #category : #accessing }
 GtLlmProvisionalThreadMessage >> styler [
 	^ nil
+]
+
+{ #category : #accessing }
+GtLlmProvisionalThreadMessage >> timeHeaderItem [
+	<gtLlmHeaderItem: 2>
+	| timeTooltip |
+	timeTooltip := BrGlamorousWithLabelTooltipAptitude new
+			text: (String
+					streamContents: [ :s | self createdAt asLocal printSeparateDateAndTimeOn: s ]).
+	^ BrLabel new
+		updatingDateAndTimeModel;
+		fitContent;
+		beSmallSize;
+		aptitude: (BrGlamorousLabelAptitude new
+				foreground: BrGlamorousColors disabledButtonTextColor);
+		addAptitude: timeTooltip;
+		updatingDateAndTime: self createdAt;
+		yourself
 ]
 
 { #category : #subscriptions }

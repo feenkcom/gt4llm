@@ -81,8 +81,18 @@ GtLlmTutor >> gtInstructionsFor: aView [
 		priority: 5;
 		text: [ self instructions instructionString ];
 		styler: (GtLlmMessageStyler new
-				threadMessageViewModel: (GtLlmNewThreadMessageViewModel new
-						threadMessage: GtLlmNewThreadMessage new))
+				threadMessageViewModel: (GtLlmNewThreadMessageViewModel new threadMessage: GtLlmNewThreadMessage new));
+		actionButtonIcon: BrGlamorousVectorIcons accept
+			tooltip: 'Save'
+			action: [ :aButton :aTab | 
+				| tabGroup |
+				tabGroup := aTab
+						withAllParentsDetect: [ :aParent | aParent isKindOf: BrTabGroup ]
+						ifFound: #yourself
+						ifNone: [ nil ].
+				tabGroup
+					allChildrenBreadthFirstDetect: [ :anElement | anElement isKindOf: BrEditor ]
+					ifFound: [ :anEditor | self instructions: anEditor text asString ] ]
 ]
 
 { #category : #accessing }
