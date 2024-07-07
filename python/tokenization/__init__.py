@@ -70,6 +70,12 @@ class BPEMerge:
 	def name(self):
 		return self.pair[0].name() + self.pair[1].name()
 
+	def __eq__(self, other):
+		return self.byte == other.byte
+		
+	def __hash__(self):
+		return hash(self.byte)
+
 
 class BPEText:
 	def __init__(self, tokens):
