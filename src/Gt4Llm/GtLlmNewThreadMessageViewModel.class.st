@@ -20,7 +20,12 @@ GtLlmNewThreadMessageViewModel >> addMessageContents: aString [
 
 { #category : #'initialization ' }
 GtLlmNewThreadMessageViewModel >> assistantChat: assistantChat [
-	threadMessage assistantChat: assistantChat
+	threadMessage assistantChat: assistantChat.
+
+	assistantChat weak
+		when: GtLlmAddMessageContentsRequest
+		send: #onAddMessageContentsRequest:
+		to: self
 ]
 
 { #category : #accessing }
@@ -41,6 +46,11 @@ GtLlmNewThreadMessageViewModel >> elementClass [
 { #category : #accessing }
 GtLlmNewThreadMessageViewModel >> messageActions [
 	^ threadMessage messageActions
+]
+
+{ #category : #accessing }
+GtLlmNewThreadMessageViewModel >> onAddMessageContentsRequest: anAnnouncement [
+	self contents: anAnnouncement messageContents requester: nil
 ]
 
 { #category : #actions }

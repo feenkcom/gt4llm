@@ -70,7 +70,7 @@ GtLlmSmalltalkViewExecutorCodeStep >> runStep: aContext [
 							aContext
 								addResult: (GtLlmStepError new
 										checker: self;
-										content: aList;
+										content: createdView;
 										contentString: (self createErrorString: aList first) asString).
 							^ self ] ].
 			GtLlmStepSuccess new

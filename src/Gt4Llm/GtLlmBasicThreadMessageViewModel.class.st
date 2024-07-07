@@ -103,7 +103,7 @@ GtLlmBasicThreadMessageViewModel >> notifyThreadMessageViewModelChanged [
 
 { #category : #'private - announcement handling' }
 GtLlmBasicThreadMessageViewModel >> onAddMessageContents: anAnnouncement [
-	self announce: anAnnouncement
+	self threadMessage chat announce: anAnnouncement
 ]
 
 { #category : #'private - hooks' }
