@@ -29,7 +29,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-07-07T12:16:12.826893+02:00"
+						"dateAndTimeString" : "2024-07-07T14:01:22.729967+02:00"
 					}
 				},
 				"uid" : {
@@ -39,41 +39,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "The code defined in [[Build your own tokenizer demo]] also exists as an external Python package."
-			},
-			{
-				"__type" : "pharoSnippet",
-				"children" : {
-					"__type" : "snippets",
-					"items" : [ ]
-				},
-				"createEmail" : {
-					"__type" : "email",
-					"emailString" : "veit.heller@feenk.com"
-				},
-				"createTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-07-05T18:40:07.266405+02:00"
-					}
-				},
-				"editEmail" : {
-					"__type" : "email",
-					"emailString" : "veit.heller@feenk.com"
-				},
-				"editTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-07-05T18:55:05.366231+02:00"
-					}
-				},
-				"uid" : {
-					"__type" : "uid",
-					"uidString" : "t9j7c+TYDQC4hgMWDufbRg=="
-				},
-				"code" : "filePath := (FileLocator imageDirectory / 'pharo-local/iceberg/feenkcom/gt4llm/python') fullName"
+				"string" : "The code defined in [[Build your own tokenizer demo]] also exists as an external Python package. We can use it to tokenize text defined in Pharo."
 			},
 			{
 				"__type" : "pharoSnippet",
@@ -110,6 +76,114 @@
 				"code" : "text := String loremIpsum"
 			},
 			{
+				"__type" : "textSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-07-07T14:01:39.528307+02:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-07-07T14:02:03.898743+02:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "6bfOywjZDQCfRE60Bed3sA=="
+				},
+				"paragraphStyle" : {
+					"__type" : "textStyle"
+				},
+				"string" : "The tokenizer itself is in a local directory of the repository. We access it by path."
+			},
+			{
+				"__type" : "pharoSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-07-07T14:01:33.950951+02:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-07-07T14:01:34.492635+02:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "3p95ywjZDQCfOsWMBed3sA=="
+				},
+				"code" : "filePath := (FileLocator imageDirectory / 'pharo-local/iceberg/feenkcom/gt4llm/python') fullName"
+			},
+			{
+				"__type" : "textSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-07-07T14:02:07.750956+02:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-07-07T14:02:41.354454+02:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "Q1Z9zQjZDQChQhnmBed3sA=="
+				},
+				"paragraphStyle" : {
+					"__type" : "textStyle"
+				},
+				"string" : "Because that path is not on the Python load paths by default, we add it and import the module for the sake of this demo."
+			},
+			{
 				"__type" : "pythonSnippet",
 				"children" : {
 					"__type" : "snippets",
@@ -144,6 +218,43 @@
 				"code" : "import sys\rsys.path.append(filePath)\r\rimport tokenization"
 			},
 			{
+				"__type" : "textSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-07-07T14:02:44.214481+02:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-07-07T14:03:01.806659+02:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "MbupzwjZDQCjx2k2Bed3sA=="
+				},
+				"paragraphStyle" : {
+					"__type" : "textStyle"
+				},
+				"string" : "From here, we can create and manage encoders, and use it to train and tokenize texts."
+			},
+			{
 				"__type" : "pythonSnippet",
 				"children" : {
 					"__type" : "snippets",
@@ -162,20 +273,20 @@
 				},
 				"editEmail" : {
 					"__type" : "email",
-					"emailString" : "veit.heller@feenk.com"
+					"emailString" : "<unknown>"
 				},
 				"editTime" : {
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-07-05T18:56:24.262223+02:00"
+						"dateAndTimeString" : "2024-07-07T14:03:52.026025+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "7tbAquTYDQCCv8c2DufbRg=="
 				},
-				"code" : "encoder = tokenization.BPEEncoder()\rencoder.train(text, 276)\rencoder"
+				"code" : "encoder = tokenization.BPEEncoder()\rencoder.train(text, 286)\rencoder"
 			},
 			{
 				"__type" : "pythonSnippet",
@@ -202,14 +313,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-07-07T11:55:45.290763+02:00"
+						"dateAndTimeString" : "2024-07-07T14:03:06.462896+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "kUkbr+TYDQCD6TzkDufbRg=="
 				},
-				"code" : "encoder.encode(\"hello, you happy or cruel world!\")"
+				"code" : "encoder.encode(text)"
 			}
 		]
 	},
