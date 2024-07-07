@@ -1,16 +1,16 @@
 Class {
-	#name : #GtBPEEncodingResultProxy,
+	#name : #GtBPEDemoEncodingResultProxy,
 	#superclass : #PBProxyObject,
 	#category : #'Gt4Llm-Tokenizer'
 }
 
 { #category : #accessing }
-GtBPEEncodingResultProxy class >> pythonClass [
-	^ 'tokenization.EncodingResult'
+GtBPEDemoEncodingResultProxy class >> pythonClass [
+	^ 'gtoolkit_bridge.PythonBridge.python_bridge.EncodingResult'
 ]
 
 { #category : #accessing }
-GtBPEEncodingResultProxy >> gtTokenizedFor: aView [
+GtBPEDemoEncodingResultProxy >> gtTokenizedFor: aView [
 	<gtView>
 	^ aView explicit
 		title: 'Tokenized';
@@ -19,6 +19,6 @@ GtBPEEncodingResultProxy >> gtTokenizedFor: aView [
 ]
 
 { #category : #accessing }
-GtBPEEncodingResultProxy >> tokens [
+GtBPEDemoEncodingResultProxy >> tokens [
 	^ self ids
 ]

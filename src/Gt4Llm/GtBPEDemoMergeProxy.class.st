@@ -1,16 +1,16 @@
 Class {
-	#name : #GtBPEMergeProxy,
+	#name : #GtBPEDemoMergeProxy,
 	#superclass : #PBProxyObject,
 	#category : #'Gt4Llm-Tokenizer'
 }
 
 { #category : #accessing }
-GtBPEMergeProxy class >> pythonClass [
-	^ 'tokenization.BPEMerge'
+GtBPEDemoMergeProxy class >> pythonClass [
+	^ 'gtoolkit_bridge.PythonBridge.python_bridge.BPEMerge'
 ]
 
 { #category : #accessing }
-GtBPEMergeProxy >> gtBeforeAndAfterFor: aView [
+GtBPEDemoMergeProxy >> gtBeforeAndAfterFor: aView [
 	<gtView>
 	^ aView explicit
 		title: 'Before and after';
@@ -35,7 +35,7 @@ GtBPEMergeProxy >> gtBeforeAndAfterFor: aView [
 ]
 
 { #category : #accessing }
-GtBPEMergeProxy >> replacedIndices [
+GtBPEDemoMergeProxy >> replacedIndices [
 	"we return the indices of both parts of the replaced pair. Python is 0-indexed, Pharo 1-indexed, so we need to increment the numbers"
 	^ self performed_merges
 		flatCollect: [ :aTuple | 
