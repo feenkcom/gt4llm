@@ -75,6 +75,26 @@ GtOllamaClient >> get: aString [
 ]
 
 { #category : #accessing }
+GtOllamaClient >> gtModelsFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Models';
+		priority: 1;
+		object: [self listModels];
+		view: #gtModelsFor:
+]
+
+{ #category : #accessing }
+GtOllamaClient >> gtRunningModelsFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Running models';
+		priority: 2;
+		object: [self listRunningModels];
+		view: #gtModelsFor:
+]
+
+{ #category : #accessing }
 GtOllamaClient >> initialize [
 	super initialize.
 	
@@ -93,6 +113,13 @@ GtOllamaClient >> initializeClient [
 { #category : #accessing }
 GtOllamaClient >> listModels [
 	^ GtOllamaListModelsClient new
+		client: self;
+		perform
+]
+
+{ #category : #accessing }
+GtOllamaClient >> listRunningModels [
+	^ GtOllamaListRunningModelsClient new
 		client: self;
 		perform
 ]
@@ -128,6 +155,14 @@ GtOllamaClient >> postStreaming: aString withEntity: anEntity [
 { #category : #accessing }
 GtOllamaClient >> pullModel: aString [ 
 	^ GtOllamaPullModelClient new
+		client: self;
+		model: aString;
+		perform
+]
+
+{ #category : #'as yet unclassified' }
+GtOllamaClient >> pushModel: aString [ 
+	^ GtOllamaPushModelClient new
 		client: self;
 		model: aString;
 		perform

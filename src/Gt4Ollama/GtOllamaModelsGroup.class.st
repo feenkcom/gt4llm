@@ -20,7 +20,9 @@ GtOllamaModelsGroup >> client [
 
 { #category : #accessing }
 GtOllamaModelsGroup >> client: anObject [
-	client := anObject
+	client := anObject.
+	
+	self do: [ :anItem | anItem client: client ]
 ]
 
 { #category : #accessing }
