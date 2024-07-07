@@ -1,38 +1,38 @@
 Class {
-	#name : #GtOpenAIAssistantChatStatus,
+	#name : #GtLlmAssistantChatStatus,
 	#superclass : #Object,
-	#category : #'Gt4OpenAI-Chats'
+	#category : #'Gt4Llm-Chats'
 }
 
 { #category : #factory }
-GtOpenAIAssistantChatStatus class >> forAssistantChat: anAssistantChat [
+GtLlmAssistantChatStatus class >> forAssistantChat: anAssistantChat [
 	 
 ]
 
 { #category : #factory }
-GtOpenAIAssistantChatStatus class >> forLastRun: aGtOpenAIThreadRun [
+GtLlmAssistantChatStatus class >> forLastRun: aGtOpenAIThreadRun [
 	aGtOpenAIThreadRun ifNil: [ ^ GtOpenAIAssistantChatReadyStatus default ].
 	^ GtOpenAIAssistantChatDynamicStatus new threadRun: aGtOpenAIThreadRun
 ]
 
 { #category : #accessing }
-GtOpenAIAssistantChatStatus >> completedAt [
+GtLlmAssistantChatStatus >> completedAt [
 	<return: #DateAndTime or: nil>
 	^ self subclassResponsibility
 ]
 
 { #category : #accessing }
-GtOpenAIAssistantChatStatus >> createdAt [
+GtLlmAssistantChatStatus >> createdAt [
 	<return: #DateAndTime>
 	^ self subclassResponsibility
 ]
 
 { #category : #testing }
-GtOpenAIAssistantChatStatus >> isDone [
+GtLlmAssistantChatStatus >> isDone [
 	^ self subclassResponsibility
 ]
 
 { #category : #testing }
-GtOpenAIAssistantChatStatus >> isFailed [
+GtLlmAssistantChatStatus >> isFailed [
 	^ self subclassResponsibility
 ]

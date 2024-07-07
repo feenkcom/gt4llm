@@ -1,9 +1,12 @@
 Class {
 	#name : #GtOpenAIAssistantChatReadyStatus,
-	#superclass : #GtOpenAIAssistantChatStatus,
+	#superclass : #GtLlmAssistantChatStatus,
 	#traits : 'TGtUniqueInstance',
 	#classTraits : 'TGtUniqueInstance classTrait',
-	#category : #'Gt4OpenAI-Chats'
+	#classInstVars : [
+		'uniqueInstance'
+	],
+	#category : #'Gt4Llm-Chats'
 }
 
 { #category : #accessing }
