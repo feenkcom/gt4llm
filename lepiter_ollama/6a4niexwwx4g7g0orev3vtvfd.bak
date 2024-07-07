@@ -18,7 +18,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-04-24T17:54:43.376435+02:00"
+						"dateAndTimeString" : "2024-07-07T12:41:53.463082+02:00"
 					}
 				},
 				"editEmail" : {
@@ -29,17 +29,17 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-04-24T17:55:18.181849+02:00"
+						"dateAndTimeString" : "2024-07-07T12:43:22.150364+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "RZUNbTvTDQCH834aCwzy0g=="
+					"uidString" : "UC+JrgfZDQCHyQrQBJAZag=="
 				},
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "[[What is gt4ollama?]]"
+				"string" : "[Modelfiles](https://github.com/ollama/ollama/blob/main/docs/modelfile.md) are an Ollama concept akin to Dockerfiles that allow you to build custom models by adjusting parameters, prompts, system messages, and other meta-information."
 			},
 			{
 				"__type" : "textSnippet",
@@ -55,7 +55,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-04-24T17:57:00.338718+02:00"
+						"dateAndTimeString" : "2024-07-07T12:43:26.176313+02:00"
 					}
 				},
 				"editEmail" : {
@@ -66,17 +66,51 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-04-24T17:57:00.347048+02:00"
+						"dateAndTimeString" : "2024-07-07T12:43:43.749668+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "ucwRdTvTDQCJHsSXCwzy0g=="
+					"uidString" : "sN0PtAfZDQCbthjTBJAZag=="
 				},
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "[[Working with the API client]]"
+				"string" : "The `gt4llm` package ships with a simple model for these files."
+			},
+			{
+				"__type" : "pharoSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-07-07T12:43:50.688516+02:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-07-07T12:48:08.770726+02:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "KeOFtQfZDQChWbAkBJAZag=="
+				},
+				"code" : "modelfile := GtLlmModelFile new\r\tfrom: 'llama3';\r\tsystem: 'You are Super Mario';\r\tparameter: 'temperature' at: 0.7;\r\ttemplate: '{{ if .System }}<|im_start|>system\n{{ .System }}<|im_end|>\n{{ end }}{{ if .Prompt }}<|im_start|>user\n{{ .Prompt }}<|im_end|>\n{{ end }}<|im_start|>assistant';\r\t\"adapter: './ollama-lora.bin';\"\r\tlicense: 'Do what you want with it';\r\tmessageFrom: 'user' withText: 'Who are you?';\r\tmessageFrom: 'assistant' withText: 'I am a helpful assistant. What do you need today?'"
 			},
 			{
 				"__type" : "textSnippet",
@@ -92,7 +126,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-04-24T17:55:19.792334+02:00"
+						"dateAndTimeString" : "2024-07-07T12:44:16.440474+02:00"
 					}
 				},
 				"editEmail" : {
@@ -103,17 +137,51 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-04-24T17:55:26.195665+02:00"
+						"dateAndTimeString" : "2024-07-07T12:44:45.734592+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "rjk5bzvTDQCIOacWCwzy0g=="
+					"uidString" : "9NUOtwfZDQCjrZhTBJAZag=="
 				},
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "[[Modelling a chat]]"
+				"string" : "These modelfiles can then be used to create custom models."
+			},
+			{
+				"__type" : "pharoSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-07-07T12:44:47.891251+02:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-07-07T12:45:17.458316+02:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "irvuuAfZDQCqXXKCBJAZag=="
+				},
+				"code" : "GtOllamaClient new createModel: 'myCustoMmodel' withModelFile: modelfile content"
 			},
 			{
 				"__type" : "textSnippet",
@@ -129,7 +197,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-04-25T17:26:50.00576+02:00"
+						"dateAndTimeString" : "2024-07-07T12:46:18.102877+02:00"
 					}
 				},
 				"editEmail" : {
@@ -140,95 +208,20 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-04-25T17:26:57.40218+02:00"
+						"dateAndTimeString" : "2024-07-07T12:46:32.542233+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "HFYnJ0/TDQCOsLggCYSwXQ=="
+					"uidString" : "qEFPvgfZDQC1lloIBJAZag=="
 				},
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "[[Working with a tutor]]"
+				"string" : "Once created, the custom models can be used as any normal model."
 			},
 			{
-				"__type" : "textSnippet",
-				"children" : {
-					"__type" : "snippets",
-					"items" : [
-						{
-							"__type" : "textSnippet",
-							"children" : {
-								"__type" : "snippets",
-								"items" : [ ]
-							},
-							"createEmail" : {
-								"__type" : "email",
-								"emailString" : "<unknown>"
-							},
-							"createTime" : {
-								"__type" : "time",
-								"time" : {
-									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2024-04-27T21:07:01.271871+02:00"
-								}
-							},
-							"editEmail" : {
-								"__type" : "email",
-								"emailString" : "<unknown>"
-							},
-							"editTime" : {
-								"__type" : "time",
-								"time" : {
-									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2024-04-27T21:07:33.826496+02:00"
-								}
-							},
-							"uid" : {
-								"__type" : "uid",
-								"uidString" : "7P9JdnrTDQCcGI+YCmrOQg=="
-							},
-							"paragraphStyle" : {
-								"__type" : "textStyle"
-							},
-							"string" : "[[Generating embeddings]]"
-						}
-					]
-				},
-				"createEmail" : {
-					"__type" : "email",
-					"emailString" : "<unknown>"
-				},
-				"createTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-04-27T21:03:12.297498+02:00"
-					}
-				},
-				"editEmail" : {
-					"__type" : "email",
-					"emailString" : "<unknown>"
-				},
-				"editTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-04-27T21:03:17.070747+02:00"
-					}
-				},
-				"uid" : {
-					"__type" : "uid",
-					"uidString" : "iCCkaHrTDQCZssvzCmrOQg=="
-				},
-				"paragraphStyle" : {
-					"__type" : "textStyle"
-				},
-				"string" : "[[Embeddings]]"
-			},
-			{
-				"__type" : "textSnippet",
+				"__type" : "pharoSnippet",
 				"children" : {
 					"__type" : "snippets",
 					"items" : [ ]
@@ -241,7 +234,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-07-07T12:41:40.650941+02:00"
+						"dateAndTimeString" : "2024-07-07T12:46:35.199515+02:00"
 					}
 				},
 				"editEmail" : {
@@ -252,17 +245,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-07-07T12:41:49.353013+02:00"
+						"dateAndTimeString" : "2024-07-07T12:46:46.019859+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "R6rFrQfZDQCGwhcSBJAZag=="
+					"uidString" : "ER1UvwfZDQC8i7q0BJAZag=="
 				},
-				"paragraphStyle" : {
-					"__type" : "textStyle"
-				},
-				"string" : "[[Using"
+				"code" : "GtOllamaChat new model: 'myCustomModel'"
 			}
 		]
 	},
@@ -274,7 +264,7 @@
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2024-04-24T17:54:43.349529+02:00"
+			"dateAndTimeString" : "2024-07-07T12:41:53.197053+02:00"
 		}
 	},
 	"editEmail" : {
@@ -285,15 +275,15 @@
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2024-04-24T17:55:03.493033+02:00"
+			"dateAndTimeString" : "2024-07-07T12:41:53.197053+02:00"
 		}
 	},
 	"pageType" : {
 		"__type" : "namedPage",
-		"title" : "gt4ollama"
+		"title" : "Using modelfiles"
 	},
 	"uid" : {
 		"__type" : "uuid",
-		"uuid" : "0d2b0d6d-3bd3-0d00-87f2-2fe90b0cf2d2"
+		"uuid" : "591f85ae-07d9-0d00-87aa-e3fb0490196a"
 	}
 }
