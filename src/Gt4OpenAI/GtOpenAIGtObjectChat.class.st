@@ -2,14 +2,15 @@ Class {
 	#name : #GtOpenAIGtObjectChat,
 	#superclass : #Object,
 	#instVars : [
-		'instance'
+		'instance',
+		'chat'
 	],
 	#category : #'Gt4OpenAI-Tutor'
 }
 
 { #category : #accessing }
 GtOpenAIGtObjectChat >> buildElement [
-	| chat tutor |
+	| tutor |
 	tutor := GtOpenAIGtSpecificTutor instance.
 	tutor hasAssistant ifFalse: [ tutor createAssistant ].
 
@@ -21,6 +22,11 @@ GtOpenAIGtObjectChat >> buildElement [
 
 	^ GtLlmChatElement new
 		assistantChatViewModel: (GtLlmChatViewModel new assistantChat: chat)
+]
+
+{ #category : #accessing }
+GtOpenAIGtObjectChat >> chat [
+	^ chat
 ]
 
 { #category : #accessing }
