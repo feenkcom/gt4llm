@@ -29,7 +29,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-07-07T12:07:14.107508+02:00"
+						"dateAndTimeString" : "2024-07-07T12:13:01.005992+02:00"
 					}
 				},
 				"uid" : {
@@ -39,7 +39,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "The code defined in [[Build your own tokenizer demo]] also exists as an external Python package. "
+				"string" : "The code defined in [[Build your own tokenizer demo]] also exists as an external Python package."
 			},
 			{
 				"__type" : "pharoSnippet",
