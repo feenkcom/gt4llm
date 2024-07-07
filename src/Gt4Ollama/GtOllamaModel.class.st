@@ -43,6 +43,14 @@ GtOllamaModel >> digest: anObject [
 ]
 
 { #category : #accessing }
+GtOllamaModel >> gtPushModelActionFor: anAction [
+	<gtAction>
+	^ anAction button
+		label: 'Publish';
+		action: [ :aButton | aButton phlow spawnObject: (self client pushModel: self name) ]
+]
+
+{ #category : #accessing }
 GtOllamaModel >> model [
 	^ model
 ]
@@ -73,7 +81,7 @@ GtOllamaModel >> name: anObject [
 ]
 
 { #category : #accessing }
-GtOllamaModel >> size1 [
+GtOllamaModel >> size [
 	^ size
 ]
 
