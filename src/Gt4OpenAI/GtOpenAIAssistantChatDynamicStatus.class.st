@@ -1,6 +1,6 @@
 Class {
 	#name : #GtOpenAIAssistantChatDynamicStatus,
-	#superclass : #GtOpenAIAssistantChatStatus,
+	#superclass : #GtLlmAssistantChatStatus,
 	#instVars : [
 		'threadRun'
 	],

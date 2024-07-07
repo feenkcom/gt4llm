@@ -264,7 +264,7 @@ GtOpenAIAssistantChat >> sendMessage: aString [
 
 { #category : #accessing }
 GtOpenAIAssistantChat >> status [
-	^ GtOpenAIAssistantChatStatus forLastRun: lastRun
+	^ GtLlmAssistantChatStatus forLastRun: lastRun
 ]
 
 { #category : #accessing }

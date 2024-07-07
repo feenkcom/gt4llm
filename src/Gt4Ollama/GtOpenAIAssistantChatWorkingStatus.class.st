@@ -1,6 +1,6 @@
 Class {
 	#name : #GtOpenAIAssistantChatWorkingStatus,
-	#superclass : #GtOpenAIAssistantChatStatus,
+	#superclass : #GtLlmAssistantChatStatus,
 	#category : #'Gt4Ollama-Chat'
 }
 
