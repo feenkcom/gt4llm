@@ -27,14 +27,15 @@ GtOllamaGtTutor >> defaultModel [
 GtOllamaGtTutor >> ensureModel [
 	| internalModelName modelfileString |
 	internalModelName := 'gt-tutor-' , self model , '-' , UUID new asString.
-	modelfileString := 'FROM ' , self model
-			, '
-SYSTEM """' , self instructions instructionString,'"""'.
+	modelfileString := GtLlmModelFile new
+			from: self model;
+			system: self instructions instructionString;
+			content.
 
 	GtOllamaClient new
 		createModel: internalModelName
 		withModelFile: modelfileString.
-		
+
 	self internalModel: internalModelName
 ]
 
