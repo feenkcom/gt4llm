@@ -9,7 +9,7 @@ Class {
 
 { #category : #accessing }
 GtBPEEncoder >> defaultVocabularySize [
-	^ 276
+	^ 286
 ]
 
 { #category : #accessing }
