@@ -57,6 +57,19 @@ GtOpenAIAssistant >> gtToolsFor: aView [
 ]
 
 { #category : #accessing }
+GtOpenAIAssistant >> gtViewInstructionsFor: aView [
+	<gtView>
+	
+	instructions ifNil: [ ^ aView empty ].
+	
+	^ aView forward
+		title: 'Instructions';
+		priority: 20;
+		object: [ instructions ];
+		view: #gtStringFor:
+]
+
+{ #category : #accessing }
 GtOpenAIAssistant >> id [
 	^ id
 ]

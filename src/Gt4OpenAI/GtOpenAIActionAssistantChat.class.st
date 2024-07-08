@@ -38,6 +38,19 @@ GtOpenAIActionAssistantChat >> gtInstanceChatWidgetFor: aView [
 ]
 
 { #category : #accessing }
+GtOpenAIActionAssistantChat >> gtViewInstructionsFor: aView [
+	<gtView>
+	
+	assistant ifNil: [ ^ aView empty ].
+	
+	^ aView forward
+		title: 'Instructions';
+		priority: 20;
+		object: [ assistant ];
+		view: #gtViewInstructionsFor:
+]
+
+{ #category : #accessing }
 GtOpenAIActionAssistantChat >> initialize [
 	super initialize.
 	
