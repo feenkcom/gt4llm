@@ -8,17 +8,55 @@
 				"__type" : "textSnippet",
 				"children" : {
 					"__type" : "snippets",
-					"items" : [ ]
+					"items" : [
+						{
+							"__type" : "textSnippet",
+							"children" : {
+								"__type" : "snippets",
+								"items" : [ ]
+							},
+							"createEmail" : {
+								"__type" : "email",
+								"emailString" : "veit.heller@feenk.com"
+							},
+							"createTime" : {
+								"__type" : "time",
+								"time" : {
+									"__type" : "dateAndTime",
+									"dateAndTimeString" : "2024-07-07T11:50:36.10808+02:00"
+								}
+							},
+							"editEmail" : {
+								"__type" : "email",
+								"emailString" : "<unknown>"
+							},
+							"editTime" : {
+								"__type" : "time",
+								"time" : {
+									"__type" : "dateAndTime",
+									"dateAndTimeString" : "2024-07-07T14:01:22.729967+02:00"
+								}
+							},
+							"uid" : {
+								"__type" : "uid",
+								"uidString" : "c3kc9wbZDQCIjL/cDufbRg=="
+							},
+							"paragraphStyle" : {
+								"__type" : "textStyle"
+							},
+							"string" : "The code defined in [[Build your own tokenizer demo]] also exists as an external Python package. We can use it to tokenize text defined in Pharo."
+						}
+					]
 				},
 				"createEmail" : {
 					"__type" : "email",
-					"emailString" : "veit.heller@feenk.com"
+					"emailString" : "<unknown>"
 				},
 				"createTime" : {
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-07-07T11:50:36.10808+02:00"
+						"dateAndTimeString" : "2024-07-08T16:13:21.785741+02:00"
 					}
 				},
 				"editEmail" : {
@@ -29,17 +67,17 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-07-07T14:01:22.729967+02:00"
+						"dateAndTimeString" : "2024-07-08T16:13:41.315043+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "c3kc9wbZDQCIjL/cDufbRg=="
+					"uidString" : "gPaowB7ZDQCiKuZZCIVj4g=="
 				},
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "The code defined in [[Build your own tokenizer demo]] also exists as an external Python package. We can use it to tokenize text defined in Pharo."
+				"string" : "This page   [Tokenization :(](https://colab.research.google.com/drive/1y0KnCFZvGVf_odSfcNAws6kcDD7HsI0L?usp=sharing) by Andrej Karpathy."
 			},
 			{
 				"__type" : "pharoSnippet",
@@ -273,20 +311,20 @@
 				},
 				"editEmail" : {
 					"__type" : "email",
-					"emailString" : "veit.heller@feenk.com"
+					"emailString" : "<unknown>"
 				},
 				"editTime" : {
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-07-05T18:56:24.262223+02:00"
+						"dateAndTimeString" : "2024-07-07T14:03:52.026025+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "7tbAquTYDQCCv8c2DufbRg=="
 				},
-				"code" : "encoder = tokenization.BPEEncoder()\rencoder.train(text, 276)\rencoder"
+				"code" : "encoder = tokenization.BPEEncoder()\rencoder.train(text, 286)\rencoder"
 			},
 			{
 				"__type" : "pythonSnippet",
