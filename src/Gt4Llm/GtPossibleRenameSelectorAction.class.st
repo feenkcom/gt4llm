@@ -5,7 +5,8 @@ Class {
 		'newSelector',
 		'styler',
 		'hasArguments',
-		'possibilities'
+		'possibilities',
+		'focusedIndex'
 	],
 	#category : #'Gt4Llm-Coder'
 }
@@ -45,13 +46,43 @@ GtPossibleRenameSelectorAction class >> variable: aGtPharoVariableNode textualCo
 
 { #category : #accessing }
 GtPossibleRenameSelectorAction >> addRenameAttributes [
-	| text original |
+	| text original index |
 	text := self pharoSourceCoderViewModel styledText
 			ifNil: [ self pharoSourceCoderViewModel sourceText ].
 
 	original := ''
 			join: (originalLocations
 					collect: [ :aLocation | (text from: aLocation first to: aLocation last) asString ]).
+
+	index := 1.
+	coderAttributes := originalLocations
+			collect: [ :each | 
+				| attribute |
+				attribute := GtRenameSelectorEditorAttribute new
+						action: self;
+						selectAll: selectAll;
+						filter: filter;
+						text: (text from: each first to: each last);
+						requestInitialFocus: index = focusedIndex;
+						focusedIndex: index;
+						coordinateFocus: true;
+						styler: styler.
+				index := index + 1.
+
+				self pharoSourceCoderViewModel
+					addTextAttribute: attribute
+					from: each first
+					to: each last ].
+
+	renameAttributes := coderAttributes
+			flatCollect: [ :eachCoderAttribute | eachCoderAttribute textAttributes ].
+
+	newSelector
+		ifNotNil: [ newSelector keywords
+				with: renameAttributes
+				do: [ :each :attr | 
+					attr
+						text: (each last = $: ifTrue: [ each allButLast ] ifFalse: [ each ]) asRopedText ] ].
 
 	self pharoSourceCoderViewModel
 		addTextAttribute: (GtProposeRenamesAttribute new
@@ -60,6 +91,16 @@ GtPossibleRenameSelectorAction >> addRenameAttributes [
 				possibilities: self possibilities)
 		from: originalLocations last last + 1
 		to: originalLocations last last + 1
+]
+
+{ #category : #accessing }
+GtPossibleRenameSelectorAction >> focusedIndex [
+	^ focusedIndex
+]
+
+{ #category : #accessing }
+GtPossibleRenameSelectorAction >> focusedIndex: anObject [
+	focusedIndex := anObject
 ]
 
 { #category : #accessing }
@@ -156,13 +197,15 @@ GtPossibleRenameSelectorAction >> tabAccept: forward [
 ]
 
 { #category : #accessing }
-GtPossibleRenameSelectorAction >> updateName: aString [
-	| text |
-	text := self pharoSourceCoderViewModel styledText
-			ifNil: [ self pharoSourceCoderViewModel sourceText ].
-
+GtPossibleRenameSelectorAction >> updateCompleteName: aString [
+	aString keywords
+		withIndexDo: [ :aKeyword :anIndex | (renameAttributes at: anIndex) resetText: aKeyword ].
 	newSelector := aString asSymbol.
+	self updateName: aString
+]
 
+{ #category : #accessing }
+GtPossibleRenameSelectorAction >> updateName: aString [
 	self announceEvent: #textUpdated
 ]
 
