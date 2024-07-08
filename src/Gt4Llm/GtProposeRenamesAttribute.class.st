@@ -28,8 +28,7 @@ GtProposeRenamesAttribute >> newListItemElement [
 		aptitude: BrGlamorousLabelAptitude + BrGlamorousListItemAptitude;
 		when: BlClickEvent
 			do: [ :anEvent | 
-				renameAction updateName: anEvent currentTarget text asString.
-				renameAction tabAccept: false.
+				renameAction updateCompleteName: anEvent currentTarget text asString.
 				anEvent currentTarget fireEvent: BrDropdownHideWish new ]
 ]
 
