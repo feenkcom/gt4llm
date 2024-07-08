@@ -11,6 +11,6 @@ GtLlmChatsGroup >> gtChatsFor: aView [
 		title: 'Chats';
 		priority: 1;
 		items: [ self items ];
-		column: 'Last updated' text: [ :aChat | aChat lastUpdated ];
+		column: 'Last updated' text: [ :aChat | aChat lastUpdate ];
 		column: 'Messages' text: [ :aChat | aChat messages size ] weight: 0.5
 ]
