@@ -81,6 +81,7 @@ GtLlmWardleyMapCreator >> gtLiveFor: aView [
 { #category : #accessing }
 GtLlmWardleyMapCreator >> initialize [
 	model := GtWardleyMapModel new.
+	model ensureAllProposition.
 	nodes := Dictionary new
 ]
 
