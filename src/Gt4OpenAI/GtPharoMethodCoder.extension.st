@@ -12,8 +12,8 @@ GtPharoMethodCoder >> addRenameSuggestionsMenuAddOnsAst: anAst to: coderAddOns f
 						addContextMenuItem: (self
 								createLabel: 'Suggest renames (OpenAI)'
 								description: node selector)
-						hover: (self highlightNodeBlock: highlightNode)
-						leave: self removeHighlightBlock
+						hover: nil
+						leave: nil
 						action: [ :aTextualViewModel :anElement | 
 							| aChat |
 							aChat := GtOpenAIGtSpecificTutor instance addChat.
@@ -30,13 +30,15 @@ Source code to consider:
 												, '
 ```
 
-Only return the suggested method names, one per line, without any markup, and without the argument names (example: `aMethod:withArguments:`). Keep the number of arguments the same. No additional context is desired.'.
+ONLY return the suggested method names, one per line, without any markup, and without the argument names (example: `aMethod:withArguments:`). ALWAYS Keep the number of arguments the same. NO additional context is desired.'.
 									(aChat whenReadyFuture
 										then: [ | choices |
-											choices := aChat messages first contentText lines reject: #isEmpty.
-											self
-												renameNodeProposals: node
-												in: aTextualViewModel
-												for: anElement
-												withPossibilities: choices ]) await ]) await ] ] ]
+											aChat messages first isAssistantRole
+												ifTrue: [ choices := aChat messages first contentText lines reject: #isEmpty.
+													self
+														renameNodeProposals: node
+														in: aTextualViewModel
+														for: anElement
+														withPossibilities: choices ]
+												ifFalse: [ self error: 'No answer received!' ] ]) await ]) await ] ] ]
 ]
