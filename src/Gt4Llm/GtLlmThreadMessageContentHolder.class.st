@@ -9,6 +9,12 @@ Class {
 }
 
 { #category : #accessing }
+GtLlmThreadMessageContentHolder >> enqueueUpdate [
+	self
+		enqueueTask: (BlTaskAction new action: [ self onThreadMessageViewModelChanged ])
+]
+
+{ #category : #accessing }
 GtLlmThreadMessageContentHolder >> header [
 	^ header
 ]
@@ -48,15 +54,29 @@ GtLlmThreadMessageContentHolder >> onThreadMessageViewModelChanged [
 ]
 
 { #category : #accessing }
+GtLlmThreadMessageContentHolder >> onThreadMessageViewModelChanged: anAnnouncement [
+	self enqueueUpdate
+]
+
+{ #category : #accessing }
 GtLlmThreadMessageContentHolder >> threadMessageViewModel [
 	^ threadMessageViewModel
 ]
 
 { #category : #accessing }
 GtLlmThreadMessageContentHolder >> threadMessageViewModel: anObject [
+	threadMessageViewModel = anObject ifTrue: [ ^ self ].
+
+	threadMessageViewModel ifNotNil: [ threadMessageViewModel unsubscribe: self ].
+
 	threadMessageViewModel := anObject.
-	
-	self onThreadMessageViewModelChanged
+
+	threadMessageViewModel
+		when: GtOpenAIThreadMessageViewModelChanged
+		send: #onThreadMessageViewModelChanged:
+		to: self.
+
+	self enqueueUpdate
 ]
 
 { #category : #accessing }
