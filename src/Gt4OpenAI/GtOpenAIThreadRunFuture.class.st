@@ -39,11 +39,10 @@ GtOpenAIThreadRunFuture >> poll: anAsynchronousContext [
 
 	aValue := chat getRun.
 
-	aValue isDone
+	(aValue isDone and: [ chat messages first hasResponse ])
 		ifTrue: [ ^ AsyncPoll ready: aValue ]
 		ifFalse: [ TaskAtQueue default
-				schedule: [
-					anAsynchronousContext waker wakeUp ]
+				schedule: [ anAsynchronousContext waker wakeUp ]
 				at: DateAndTime now + delay
 				entryIdentifier: self.
 			^ AsyncPoll pending ]

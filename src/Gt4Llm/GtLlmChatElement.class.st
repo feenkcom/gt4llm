@@ -50,7 +50,11 @@ GtLlmChatElement >> onThreadRunAnnouncement: anAnnouncement [
 { #category : #'private - hooks' }
 GtLlmChatElement >> subscribeToAssistantChatViewModel [
 	self assistantChat weak
-		when: GtOpenAIThreadRunAnnouncement
+		when: GtOpenAIThreadRunStartedAnnouncement
+		send: #onThreadRunAnnouncement:
+		to: self.
+	self assistantChat weak
+		when: GtOpenAIThreadRunIsDoneAnnouncement
 		send: #onThreadRunAnnouncement:
 		to: self
 ]
