@@ -8,11 +8,6 @@ Class {
 }
 
 { #category : #accessing }
-GtOllamaChat >> ensureModel [
-	"client pullModel: self model"
-]
-
-{ #category : #accessing }
 GtOllamaChat >> initialize [
 	super initialize.
 
@@ -27,13 +22,6 @@ GtOllamaChat >> initializeClient [
 { #category : #accessing }
 GtOllamaChat >> initializeMessages [
 	messages := GtLlmMessagesGroup new
-]
-
-{ #category : #accessing }
-GtOllamaChat >> model: aModelName [
-	super model: aModelName.
-	
-	self ensureModel
 ]
 
 { #category : #accessing }

@@ -7,16 +7,16 @@ Class {
 		'client',
 		'messages',
 		'model',
-		'lastUpdated',
 		'announcer',
-		'context'
+		'context',
+		'lastUpdate'
 	],
 	#category : #'Gt4Llm-Chats'
 }
 
 { #category : #accessing }
 GtLlmChat >> addMessage: aMessage [
-	self updateLastUpdated.
+	self updateLastUpdate.
 	messages addFirst: (aMessage chat: self).
 	self announcer announce: (GtOpenAIThreadRunIsDoneAnnouncement new run: self)
 ]
@@ -103,7 +103,7 @@ GtLlmChat >> initialize [
 	self initializeClient.
 	self initializeMessages.
 	
-	self updateLastUpdated
+	self updateLastUpdate
 ]
 
 { #category : #accessing }
@@ -117,13 +117,13 @@ GtLlmChat >> initializeMessages [
 ]
 
 { #category : #accessing }
-GtLlmChat >> lastUpdated [
-	^ lastUpdated
+GtLlmChat >> lastUpdate [
+	^ lastUpdate
 ]
 
 { #category : #accessing }
-GtLlmChat >> lastUpdated: anObject [
-	lastUpdated := anObject
+GtLlmChat >> lastUpdate: anObject [
+	lastUpdate := anObject
 ]
 
 { #category : #accessing }
@@ -157,8 +157,8 @@ GtLlmChat >> threadActions [
 ]
 
 { #category : #accessing }
-GtLlmChat >> updateLastUpdated [
-	lastUpdated := DateAndTime now
+GtLlmChat >> updateLastUpdate [
+	lastUpdate := DateAndTime now
 ]
 
 { #category : #accessing }
