@@ -26,6 +26,24 @@ GtOpenAIActionTutor >> addChat [
 ]
 
 { #category : #accessing }
+GtOpenAIActionTutor >> collectActions [
+	^ ((Pragma
+		allNamed: #gtLlmTutorAction
+		from: self class
+		to: Object) collect: [ :aPragma | self perform: aPragma methodSelector ])
+		sorted: [ :a :b | a priority < b priority ]
+]
+
+{ #category : #accessing }
+GtOpenAIActionTutor >> collectFormatComponents [
+	^ ((Pragma
+		allNamed: #gtLlmFormatComponent
+		from: self class
+		to: Object) collect: [ :aPragma | self perform: aPragma methodSelector ])
+		sorted: [ :a :b | a priority < b priority ]
+]
+
+{ #category : #accessing }
 GtOpenAIActionTutor >> defaultAssistantDescription [
 	^ 'Is an action-based tutor (more information in the prompt instructions).'
 ]
@@ -38,6 +56,11 @@ GtOpenAIActionTutor >> format [
 { #category : #accessing }
 GtOpenAIActionTutor >> format: anObject [
 	format := anObject
+]
+
+{ #category : #accessing }
+GtOpenAIActionTutor >> formatName [
+	^ self subclassResponsibility
 ]
 
 { #category : #accessing }
@@ -63,7 +86,15 @@ GtOpenAIActionTutor >> gtFilesFor: aView [
 GtOpenAIActionTutor >> initialize [
 	super initialize.
 	
-	actions := OrderedCollection new
+	actions := self collectActions.
+	self initializeFormat
+]
+
+{ #category : #accessing }
+GtOpenAIActionTutor >> initializeFormat [
+	format := GtLlmTutorFormat new
+			name: self formatName;
+			addComponents: self collectFormatComponents
 ]
 
 { #category : #accessing }

@@ -5,7 +5,8 @@ Class {
 		'name',
 		'format',
 		'tag',
-		'example'
+		'example',
+		'priority'
 	],
 	#category : #'Gt4Llm-Tutor'
 }
@@ -20,6 +21,11 @@ GtLlmTutorComponent >> asInstruction [
 				addItem: 'Markdown code tag: ' , self tag;
 				addItem: 'Examples:
 ' , self example)
+]
+
+{ #category : #accessing }
+GtLlmTutorComponent >> defaultPriority [
+	^ 10
 ]
 
 { #category : #accessing }
@@ -43,6 +49,13 @@ GtLlmTutorComponent >> format: anObject [
 ]
 
 { #category : #accessing }
+GtLlmTutorComponent >> initialize [
+	super initialize.
+	
+	priority := self defaultPriority
+]
+
+{ #category : #accessing }
 GtLlmTutorComponent >> name [
 	^ name
 ]
@@ -50,6 +63,16 @@ GtLlmTutorComponent >> name [
 { #category : #accessing }
 GtLlmTutorComponent >> name: anObject [
 	name := anObject
+]
+
+{ #category : #accessing }
+GtLlmTutorComponent >> priority [
+	^ priority
+]
+
+{ #category : #accessing }
+GtLlmTutorComponent >> priority: anObject [
+	priority := anObject
 ]
 
 { #category : #accessing }
