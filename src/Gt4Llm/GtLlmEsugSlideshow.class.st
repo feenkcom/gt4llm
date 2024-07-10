@@ -18,12 +18,27 @@ GtLlmEsugSlideshow >> agenda: aSlide [
 ]
 
 { #category : #accessing }
+GtLlmEsugSlideshow >> caseStudy: aSlide [
+	<gtSlide>
+	^ aSlide lepiterPage
+		setPriority;
+		pageNamed: 'Case studies' from: 'gt4llm-lepiter'
+]
+
+{ #category : #accessing }
+GtLlmEsugSlideshow >> gt4ollamaBooklet: aSlide [
+	<gtSlide>
+	^ aSlide lepiterPage
+		setPriority;
+		pageNamed: 'gt4ollama' from: 'feenkcom/gt4llm/lepiter_ollama'
+]
+
+{ #category : #accessing }
 GtLlmEsugSlideshow >> gt4openAiBooklet: aSlide [
 	<gtSlide>
 	^ aSlide lepiterPage
 		setPriority;
-		startPage: ((LeDatabase databaseNamed: 'gt4llm-lepiter')
-				pageNamed: 'gt4openai: working with OpenAI')
+		pageNamed: 'gt4openai: working with OpenAI' from: 'gt4llm-lepiter'
 ]
 
 { #category : #accessing }
@@ -34,6 +49,8 @@ GtLlmEsugSlideshow >> slidePriorities [
 	^ #(#title:
 		#agenda:
 		#gt4openAiBooklet:
+		#gt4ollamaBooklet:
+		#caseStudy:
 		#thankYou:
 		)
 ]
