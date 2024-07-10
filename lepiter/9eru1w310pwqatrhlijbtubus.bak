@@ -66,7 +66,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-25T08:07:01.995927+02:00"
+						"dateAndTimeString" : "2024-06-25T08:07:33.773911+02:00"
 					}
 				},
 				"uid" : {
@@ -76,7 +76,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "As an example, here we look at working with an LLM to help build a Wardley Map. as in [[Building a custom tutor to facilitate generating Wardley maps]] and [[Expanding the Wardley maps tutor with a step-wise tutor]], the Wardley map, but we will look at it from the lens of actions."
+				"string" : "As an example, here we look at working with an LLM to help build a Wardley Map (the same use case found in [[Building a custom tutor to facilitate generating Wardley maps]] and [[Expanding the Wardley maps tutor with a step-wise tutor]]). The tutor can be found in {{gtClass:GtOpenAIWardleyMapActionTutor}}."
 			},
 			{
 				"__type" : "textSnippet",
@@ -211,7 +211,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-25T08:04:57.846182+02:00"
+						"dateAndTimeString" : "2024-07-10T11:40:03.891632+02:00"
 					}
 				},
 				"uid" : {
@@ -221,7 +221,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "The first step for an action-based tutor is to define the actions it should perform: {{gtMethod:GtOpenAIWardleyMapActionTutor>>#initializeActions}}"
+				"string" : "The first step for an action-based tutor is to define the actions it should perform. They are annotated using the `gtLlmTutorAction` pragma. An example can be found here: {{gtMethod:GtOpenAIWardleyMapActionTutor>>#explanationAction}}"
 			},
 			{
 				"__type" : "textSnippet",
@@ -248,7 +248,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-25T08:05:11.065287+02:00"
+						"dateAndTimeString" : "2024-07-10T11:50:04.356283+02:00"
 					}
 				},
 				"uid" : {
@@ -258,7 +258,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "Then we define a data interchange format for the tutor: {{gtMethod:GtOpenAIWardleyMapActionTutor>>#initializeFormat}}."
+				"string" : "Then we define a data interchange format for the tutor. This works in a similar fashion as the actions, using the `gtLlmFormatComponent`. An example can be found here: {{gtM"
 			},
 			{
 				"__type" : "textSnippet",

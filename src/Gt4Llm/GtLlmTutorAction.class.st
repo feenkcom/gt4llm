@@ -6,7 +6,8 @@ Class {
 		'examples',
 		'pipeline',
 		'description',
-		'format'
+		'format',
+		'priority'
 	],
 	#category : #'Gt4Llm-Actions'
 }
@@ -22,6 +23,11 @@ GtLlmTutorAction >> asInstruction [
 						source: self;
 						title: 'Examples';
 						body: (GtLlmCompositeInstruction new items: self examples)))
+]
+
+{ #category : #accessing }
+GtLlmTutorAction >> defaultPriority [
+	^ 10
 ]
 
 { #category : #accessing }
@@ -81,6 +87,13 @@ GtLlmTutorAction >> gtInstructionFor: aView [
 ]
 
 { #category : #accessing }
+GtLlmTutorAction >> initialize [
+	super initialize.
+	
+	self priority: self defaultPriority
+]
+
+{ #category : #accessing }
 GtLlmTutorAction >> name [
 	^ name
 ]
@@ -99,4 +112,14 @@ GtLlmTutorAction >> pipeline [
 { #category : #accessing }
 GtLlmTutorAction >> pipeline: anObject [
 	pipeline := anObject
+]
+
+{ #category : #accessing }
+GtLlmTutorAction >> priority [
+	^ priority
+]
+
+{ #category : #accessing }
+GtLlmTutorAction >> priority: anObject [
+	priority := anObject
 ]

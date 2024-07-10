@@ -18,8 +18,10 @@ GtOpenAIWardleyMapActionTutor >> addChat [
 
 { #category : #accessing }
 GtOpenAIWardleyMapActionTutor >> connectionAction [
+	<gtLlmTutorAction>
 	^ GtLlmTutorAction new
 		name: 'Add a new connected node';
+		priority: 2;
 		description: 'Adds a new node that is connected to an already existing node. It MUST consider the context of the map topic. It MUST return the entirety of the state.';
 		format: 'Add a new connected node to `{1}`';
 		examples: {GtLlmTutorActionExample new
@@ -90,8 +92,10 @@ Compute->Platform
 
 { #category : #accessing }
 GtOpenAIWardleyMapActionTutor >> explanationAction [
+	<gtLlmTutorAction>
 	^ GtLlmTutorAction new
 		name: 'Explain a node';
+		priority: 3;
 		description: 'Explains what a node means and why it is on the map using human language.';
 		format: 'Explain the node `{1}`';
 		examples: {GtLlmTutorActionExample new
@@ -119,9 +123,29 @@ In summary, `Compute` signifies the provisioning of raw processing power in the 
 ]
 
 { #category : #accessing }
+GtOpenAIWardleyMapActionTutor >> explanationFormatComponent [
+	<gtLlmFormatComponent>
+	^ GtLlmTutorComponent new
+		name: 'Explanation';
+		priority: 3;
+		format: 'Text';
+		tag: 'explanation';
+		example: '```explanation
+Human readable text goes here
+```'
+]
+
+{ #category : #accessing }
+GtOpenAIWardleyMapActionTutor >> formatName [
+	^ 'Wardley Map'
+]
+
+{ #category : #accessing }
 GtOpenAIWardleyMapActionTutor >> initialAction [
+	<gtLlmTutorAction>
 	^ GtLlmTutorAction new
 		name: 'Create a set of nodes';
+		priority: 1;
 		description: 'Creates a set of nodes based on a given topic, filling topic, nodes, and connections with sensible data. If a map topic was already set, it is overridden. The rest of the map is extended.';
 		format: 'Create a set of nodes on {1}';
 		examples: {GtLlmTutorActionExample new
@@ -216,58 +240,7 @@ GtOpenAIWardleyMapActionTutor >> initialize [
 	super initialize.
 
 	self initializeFormat.
-	self initializeActions.
 	self initializePipeline
-]
-
-{ #category : #accessing }
-GtOpenAIWardleyMapActionTutor >> initializeActions [
-	actions addAll: {
-		self initialAction.
-		self connectionAction.
-		self explanationAction.
-		self renameAction.
-		self reviewAction
-	}
-]
-
-{ #category : #accessing }
-GtOpenAIWardleyMapActionTutor >> initializeFormat [
-	format := GtLlmTutorFormat new
-			name: 'Wardley Map';
-			addComponent: (GtLlmTutorComponent new
-					name: 'Topic';
-					format: 'Text';
-					tag: 'topic';
-					example: '```topic
-Cloud computing in regulated areas
-```');
-			addComponent: (GtLlmTutorComponent new
-					name: 'Wardley Map';
-					format: 'Wardley Map script language';
-					tag: 'wardley-map';
-					example: '```wardley-map
-style wardley
-
-evolution genesis -> custom built -> product (+rental) -> commodity
-
-component Hello [0.80, 0.20] label [-14, 29]
-
-component Goodbye [0.40, 0.60] label [-22, 29]
-
-component Hello again! [0.60, 0.80] label [-42, 29]
-
-
-Hello->Goodbye
-Goodbye->Hello again!
-```');
-			addComponent: (GtLlmTutorComponent new
-					name: 'Explanation';
-					format: 'Text';
-					tag: 'explanation';
-					example: '```explanation
-Human readable text goes here
-```')
 ]
 
 { #category : #accessing }
@@ -288,9 +261,36 @@ GtOpenAIWardleyMapActionTutor >> initializePipeline [
 ]
 
 { #category : #accessing }
+GtOpenAIWardleyMapActionTutor >> mapFormatComponent [
+	<gtLlmFormatComponent>
+	^ GtLlmTutorComponent new
+		name: 'Wardley Map';
+		priority: 2;
+		format: 'Wardley Map script language';
+		tag: 'wardley-map';
+		example: '```wardley-map
+style wardley
+
+evolution genesis -> custom built -> product (+rental) -> commodity
+
+component Hello [0.80, 0.20] label [-14, 29]
+
+component Goodbye [0.40, 0.60] label [-22, 29]
+
+component Hello again! [0.60, 0.80] label [-42, 29]
+
+
+Hello->Goodbye
+Goodbye->Hello again!
+```'
+]
+
+{ #category : #accessing }
 GtOpenAIWardleyMapActionTutor >> renameAction [
+	<gtLlmTutorAction>
 	^ GtLlmTutorAction new
 		name: 'Propose renames for node';
+		priority: 4;
 		description: 'Proposes a sensible number of alternative names for nodes (less than ten, but more than one).';
 		format: 'Propose renames for node `{1}`';
 		examples: {GtLlmTutorActionExample new
@@ -333,8 +333,10 @@ Propose renames for node
 
 { #category : #accessing }
 GtOpenAIWardleyMapActionTutor >> reviewAction [
+	<gtLlmTutorAction>
 	^ GtLlmTutorAction new
 		name: 'Review the current state';
+		priority: 5;
 		description: 'Reviews and criticizes the current state of the map.';
 		examples: {GtLlmTutorActionExample new
 					instruction: 'Review the current state';
@@ -352,4 +354,17 @@ component Compute [0.45, 0.34] label [-22, 29]
 					output: '```explanation
 The map is incomplete. Currently, only one node is defined. A complete map should have multiple nodes and connections. The current node `Compute` is correct, but misplaced.
 ```'}
+]
+
+{ #category : #accessing }
+GtOpenAIWardleyMapActionTutor >> topicFormatComponent [
+	<gtLlmFormatComponent>
+	^ GtLlmTutorComponent new
+		name: 'Topic';
+		priority: 1;
+		format: 'Text';
+		tag: 'topic';
+		example: '```topic
+Cloud computing in regulated areas
+```'
 ]

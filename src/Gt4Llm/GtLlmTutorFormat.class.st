@@ -25,6 +25,11 @@ GtLlmTutorFormat >> addComponent: aComponent [
 ]
 
 { #category : #accessing }
+GtLlmTutorFormat >> addComponents: aListOfComponents [
+	components addAll: aListOfComponents
+]
+
+{ #category : #accessing }
 GtLlmTutorFormat >> asInstruction [
 	^ GtLlmInstructionWithSections new
 		source: self;
