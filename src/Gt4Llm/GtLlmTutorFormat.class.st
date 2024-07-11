@@ -10,7 +10,7 @@ Class {
 
 { #category : #accessing }
 GtLlmTutorFormat >> actionComponent [
-	^ (GtLlmTutorComponent new
+	^ (GtLlmTutorFormatComponent new
 				name: 'Action';
 				format: 'Text';
 				tag: 'action';

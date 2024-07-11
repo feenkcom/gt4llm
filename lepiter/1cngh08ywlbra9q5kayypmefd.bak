@@ -245,14 +245,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-04-17T14:19:48.921279+02:00"
+						"dateAndTimeString" : "2024-07-11T08:33:39.736597+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "+RuFe5/SDQCrBt5ACczTFg=="
 				},
-				"code" : "pipeline\r\tcheck: (LeParser\r\t\t\tparse: '```python\r1 + 3\r```') parts first"
+				"code" : "pipeline\r\tcheck: (LeParser\r\t\t\tparse: '```python\rimport datetime\rdatetime.datetime.now()\r```') parts first"
 			}
 		]
 	},
