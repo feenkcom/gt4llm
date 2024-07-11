@@ -125,7 +125,7 @@ In summary, `Compute` signifies the provisioning of raw processing power in the 
 { #category : #accessing }
 GtOpenAIWardleyMapActionTutor >> explanationFormatComponent [
 	<gtLlmFormatComponent>
-	^ GtLlmTutorComponent new
+	^ GtLlmTutorFormatComponent new
 		name: 'Explanation';
 		priority: 3;
 		format: 'Text';
@@ -263,7 +263,7 @@ GtOpenAIWardleyMapActionTutor >> initializePipeline [
 { #category : #accessing }
 GtOpenAIWardleyMapActionTutor >> mapFormatComponent [
 	<gtLlmFormatComponent>
-	^ GtLlmTutorComponent new
+	^ GtLlmTutorFormatComponent new
 		name: 'Wardley Map';
 		priority: 2;
 		format: 'Wardley Map script language';
@@ -359,7 +359,7 @@ The map is incomplete. Currently, only one node is defined. A complete map shoul
 { #category : #accessing }
 GtOpenAIWardleyMapActionTutor >> topicFormatComponent [
 	<gtLlmFormatComponent>
-	^ GtLlmTutorComponent new
+	^ GtLlmTutorFormatComponent new
 		name: 'Topic';
 		priority: 1;
 		format: 'Text';

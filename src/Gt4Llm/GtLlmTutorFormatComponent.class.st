@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLlmTutorComponent,
+	#name : #GtLlmTutorFormatComponent,
 	#superclass : #Object,
 	#instVars : [
 		'name',
@@ -12,7 +12,7 @@ Class {
 }
 
 { #category : #accessing }
-GtLlmTutorComponent >> asInstruction [
+GtLlmTutorFormatComponent >> asInstruction [
 	^ GtLlmInstructionSection new
 		title: self name;
 		body: (GtLlmInstructionList new
@@ -24,63 +24,63 @@ GtLlmTutorComponent >> asInstruction [
 ]
 
 { #category : #accessing }
-GtLlmTutorComponent >> defaultPriority [
+GtLlmTutorFormatComponent >> defaultPriority [
 	^ 10
 ]
 
 { #category : #accessing }
-GtLlmTutorComponent >> example [
+GtLlmTutorFormatComponent >> example [
 	^ example
 ]
 
 { #category : #accessing }
-GtLlmTutorComponent >> example: anObject [
+GtLlmTutorFormatComponent >> example: anObject [
 	example := anObject
 ]
 
 { #category : #accessing }
-GtLlmTutorComponent >> format [
+GtLlmTutorFormatComponent >> format [
 	^ format
 ]
 
 { #category : #accessing }
-GtLlmTutorComponent >> format: anObject [
+GtLlmTutorFormatComponent >> format: anObject [
 	format := anObject
 ]
 
 { #category : #accessing }
-GtLlmTutorComponent >> initialize [
+GtLlmTutorFormatComponent >> initialize [
 	super initialize.
 	
 	priority := self defaultPriority
 ]
 
 { #category : #accessing }
-GtLlmTutorComponent >> name [
+GtLlmTutorFormatComponent >> name [
 	^ name
 ]
 
 { #category : #accessing }
-GtLlmTutorComponent >> name: anObject [
+GtLlmTutorFormatComponent >> name: anObject [
 	name := anObject
 ]
 
 { #category : #accessing }
-GtLlmTutorComponent >> priority [
+GtLlmTutorFormatComponent >> priority [
 	^ priority
 ]
 
 { #category : #accessing }
-GtLlmTutorComponent >> priority: anObject [
+GtLlmTutorFormatComponent >> priority: anObject [
 	priority := anObject
 ]
 
 { #category : #accessing }
-GtLlmTutorComponent >> tag [
+GtLlmTutorFormatComponent >> tag [
 	^ tag
 ]
 
 { #category : #accessing }
-GtLlmTutorComponent >> tag: anObject [
+GtLlmTutorFormatComponent >> tag: anObject [
 	tag := anObject
 ]
