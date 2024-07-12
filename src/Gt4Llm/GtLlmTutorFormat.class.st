@@ -33,8 +33,8 @@ GtLlmTutorFormat >> addComponents: aListOfComponents [
 GtLlmTutorFormat >> asInstruction [
 	^ GtLlmInstructionWithSections new
 		source: self;
-		introduction: 'You are a tutor that is used to interactively create ' , self name
-				, '. You trigger certain actions to generate a desired result.';
+		introduction: 'You are a tutor that is used to interactively work on ' , self name
+				, 's. You trigger certain actions to generate a desired result.';
 		sections: {self interactionDescription.
 				self communicationConventionsDescription.
 				GtLlmInstructionSection new

@@ -239,7 +239,6 @@ Development Practices->Customization Frameworks
 GtOpenAIWardleyMapActionTutor >> initialize [
 	super initialize.
 
-	self initializeFormat.
 	self initializePipeline
 ]
 
