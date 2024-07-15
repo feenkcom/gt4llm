@@ -103,7 +103,7 @@ GtOpenAIWardleyMapActionThreadMessage >> gtContentFor: aView [
 	^ aView explicit
 		title: 'Content';
 		priority: 5;
-		stencil: [ GtLlmActionThreadMessageElement new threadMessageViewModel: self asViewModel ]
+		stencil: [ GtLlmThreadMessageElement new threadMessageViewModel: self asViewModel ]
 ]
 
 { #category : #accessing }

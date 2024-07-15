@@ -5,6 +5,18 @@ Class {
 }
 
 { #category : #accessing }
+GtOpenAICoderActionTutor >> addChat [
+	| aChat |
+	aChat := GtOpenAICoderActionAssistantChat new
+			assistant: self assistant;
+			actions: actions;
+			pipeline: pipelineBuilder value.
+	chats add: aChat.
+
+	^ aChat
+]
+
+{ #category : #accessing }
 GtOpenAICoderActionTutor >> formatName [
 	^ 'Smalltalk method'
 ]
@@ -33,6 +45,7 @@ GtOpenAICoderActionTutor >> methodFormatComponent [
 		format: 'Smalltalk language';
 		tag: 'smalltalk-method';
 		example: '```smalltalk-method
+AClass
 aMethodWithArguments: anArgument and: anotherArgument
 	^ anArgument + anotherArgument
 ```'
@@ -49,6 +62,7 @@ GtOpenAICoderActionTutor >> renameAction [
 		examples: {GtLlmTutorActionExample new
 					instruction: 'Propose renames for method `addAction:`';
 					input: '```smalltalk-method
+ActionClass
 addAction: anAction
 	actions add: anAction
 ```';
@@ -63,6 +77,7 @@ includeAction:
 GtLlmTutorActionExample new
 					instruction: 'Propose renames for method `increment`';
 					input: '```smalltalk-method
+ClassWithNumber
 increment
 	self number: self number + 1
 ```';
@@ -77,6 +92,7 @@ incNum
 GtLlmTutorActionExample new
 					instruction: 'Propose renames for method `do:to:`';
 					input: '```smalltalk-method
+Object
 do: aMessage to: anObject
 	^ anObject perform: aMessage
 ```';
@@ -119,14 +135,18 @@ GtOpenAICoderActionTutor >> reviewAction [
 		description: 'Reviews and criticizes the current state of the method, including code style, like a regular polite yet firm code reviewer would.';
 		examples: {GtLlmTutorActionExample new
 					instruction: 'Review the method';
-					input: '```foobar: anAction
+					input: '```ActionObject
+foobar: anAction
 	actions add: anAction.
 	
 	anAction isSpecial ifTrue: [
 		self notifier exists ifTrue: [
 			self notify: (AnActionAdded new action: anAction)]]
 ```';
-					output: '```text
+					output: '```action
+Review the method
+```
+```text
 The method name does not reflect the behavior inside the method. Consider using a name such as `addAction:`.
 
 Furthermore, the two `ifTrue:` calls can be chained together. I suggest rewriting it as follows:
