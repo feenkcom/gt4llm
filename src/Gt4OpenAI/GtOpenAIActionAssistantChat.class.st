@@ -47,7 +47,7 @@ GtOpenAIActionAssistantChat >> gtViewInstructionsFor: aView [
 		title: 'Instructions';
 		priority: 20;
 		object: [ assistant ];
-		view: #gtViewInstructionsFor:
+		view: #gtInstructionsFor:
 ]
 
 { #category : #accessing }

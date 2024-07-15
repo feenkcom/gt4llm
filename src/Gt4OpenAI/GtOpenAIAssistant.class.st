@@ -47,6 +47,17 @@ GtOpenAIAssistant >> description: anObject [
 ]
 
 { #category : #accessing }
+GtOpenAIAssistant >> gtInstructionsFor: aView [
+	<gtView>
+	^ aView textEditor
+		title: 'Tutor instructions';
+		priority: 5;
+		text: [ self instructions ];
+		styler: (GtLlmMessageStyler new
+				threadMessageViewModel: (GtLlmNewThreadMessageViewModel new threadMessage: GtLlmNewThreadMessage new))
+]
+
+{ #category : #accessing }
 GtOpenAIAssistant >> gtToolsFor: aView [
 	<gtView>
 	^ aView list
@@ -54,19 +65,6 @@ GtOpenAIAssistant >> gtToolsFor: aView [
 		priority: 2;
 		items: [ self tools ];
 		itemText: #type
-]
-
-{ #category : #accessing }
-GtOpenAIAssistant >> gtViewInstructionsFor: aView [
-	<gtView>
-	
-	instructions ifNil: [ ^ aView empty ].
-	
-	^ aView forward
-		title: 'Instructions';
-		priority: 20;
-		object: [ instructions ];
-		view: #gtStringFor:
 ]
 
 { #category : #accessing }
