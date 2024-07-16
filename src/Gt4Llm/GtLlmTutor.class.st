@@ -19,11 +19,6 @@ GtLlmTutor class >> instance [
 ]
 
 { #category : #accessing }
-GtLlmTutor class >> instance1: anObject [
-	instance := anObject
-]
-
-{ #category : #accessing }
 GtLlmTutor >> addChat [
 	^ self subclassResponsibility
 ]

@@ -49,6 +49,15 @@ GtLlmTutorFormatComponent >> format: anObject [
 ]
 
 { #category : #accessing }
+GtLlmTutorFormatComponent >> gtInstructionFor: aView [
+	<gtView>
+	^ aView forward 
+		title: 'Instruction';
+		object: [ self asInstruction ];
+		view: #gtInstructionFor:
+]
+
+{ #category : #accessing }
 GtLlmTutorFormatComponent >> initialize [
 	super initialize.
 	

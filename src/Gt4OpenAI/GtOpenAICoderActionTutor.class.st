@@ -1,6 +1,6 @@
 Class {
 	#name : #GtOpenAICoderActionTutor,
-	#superclass : #GtOpenAIActionTutor,
+	#superclass : #GtOpenAIAnnotatedActionTutor,
 	#category : #'Gt4OpenAI-Tutor'
 }
 
