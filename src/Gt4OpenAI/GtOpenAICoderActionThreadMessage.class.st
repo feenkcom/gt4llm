@@ -68,6 +68,47 @@ GtOpenAICoderActionThreadMessage >> gtContentFor: aView [
 ]
 
 { #category : #accessing }
+GtOpenAICoderActionThreadMessage >> gtRenamesFor: aView [
+	<gtView>
+	<gtLlmMessageView>
+	self renamesCodeBlock ifNil: [ ^ aView empty ].
+	self proposedRenamesForMethod ifEmpty: [ ^ aView empty ].
+
+	^ aView explicit
+		title: 'Renames';
+		priority: 1;
+		stencil: [ | methodSource coder renames coderViewModel coderElement |
+			methodSource := self smalltalkMethodSource.
+			renames := self proposedRenamesForMethod at: 'proposals'.
+			coder := GtPharoMethodCoder forMethod: methodSource compiledMethod.
+			coderViewModel := coder asCoderViewModel.
+			coderElement := coderViewModel asElement.
+			coderElement
+				enqueueTask: (BlTaskAction new
+						action: [ coder
+								renameNodeProposals: (coder nodeAt: 2)
+								in: coderViewModel
+								for: coderElement
+								withPossibilities: renames ]).
+			coderElement ]
+]
+
+{ #category : #accessing }
+GtOpenAICoderActionThreadMessage >> gtRenamesListFor: aView [
+	<gtView>
+	<gtLlmMessageView>
+	self renamesCodeBlock ifNil: [ ^ aView empty ].
+
+	^ aView columnedList
+		title: 'Rename list';
+		priority: 2;
+		items: [ self renames ];
+		column: 'Type' text: [:aJson | aJson at: 'type'];
+		column: 'Original' text: [:aJson | aJson at: 'original'];
+		column: 'Proposals' text: [:aJson | ', ' join: (aJson at: 'proposals') ] weight: 2
+]
+
+{ #category : #accessing }
 GtOpenAICoderActionThreadMessage >> gtTextFor: aView [
 	<gtView>
 	<gtLlmMessageView>
@@ -81,6 +122,34 @@ GtOpenAICoderActionThreadMessage >> gtTextFor: aView [
 ]
 
 { #category : #accessing }
+GtOpenAICoderActionThreadMessage >> proposedRenamesForMethod [
+	^ self renames
+		detect: [ :aJson | (aJson at: 'type') = 'method' ]
+		ifNone: [ {} ]
+]
+
+{ #category : #accessing }
+GtOpenAICoderActionThreadMessage >> proposedRenamesForVariable: aName [
+	^ self renames
+		detect: [ :aJson | (aJson at: 'type') = 'variable' and: [ (aJson at: 'original') = aName ] ]
+		ifNone: [ nil ]
+]
+
+{ #category : #accessing }
+GtOpenAICoderActionThreadMessage >> renames [
+	^ self renamesCodeBlock code value lines
+		select: #isNotEmpty
+		thenCollect: [ :aLine | STONJSON fromString: aLine ]
+]
+
+{ #category : #accessing }
+GtOpenAICoderActionThreadMessage >> renamesCodeBlock [
+	^ self codeBlocks
+		detect: [ :aCodeBlock | aCodeBlock isForLanguage: 'renames' ]
+		ifNone: [ nil ]
+]
+
+{ #category : #accessing }
 GtOpenAICoderActionThreadMessage >> smalltalkMethodCodeBlock [
 	^ self codeBlocks
 		detect: [ :aCodeBlock | aCodeBlock isForLanguage: 'smalltalk-method' ]
@@ -89,7 +158,9 @@ GtOpenAICoderActionThreadMessage >> smalltalkMethodCodeBlock [
 
 { #category : #accessing }
 GtOpenAICoderActionThreadMessage >> smalltalkMethodSource [
-	^ GtLlmMethodSource forSource: self smalltalkMethodCodeBlock code value
+	^ self smalltalkMethodCodeBlock
+		ifNil: [ self ancestor smalltalkMethodSource ]
+		ifNotNil: [ :aBlock | GtLlmMethodSource forSource: aBlock code value ]
 ]
 
 { #category : #accessing }
