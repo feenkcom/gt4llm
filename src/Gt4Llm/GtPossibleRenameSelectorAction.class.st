@@ -84,13 +84,14 @@ GtPossibleRenameSelectorAction >> addRenameAttributes [
 					attr
 						text: (each last = $: ifTrue: [ each allButLast ] ifFalse: [ each ]) asRopedText ] ].
 
-	self pharoSourceCoderViewModel
-		addTextAttribute: (GtProposeRenamesAttribute new
-				renameAction: self;
-				original: original;
-				possibilities: self possibilities)
-		from: originalLocations last last + 1
-		to: originalLocations last last + 1
+	coderAttributes
+		add: (self pharoSourceCoderViewModel
+				addTextAttribute: (GtProposeRenamesAttribute new
+						renameAction: self;
+						original: original;
+						possibilities: self possibilities)
+				from: originalLocations last last + 1
+				to: originalLocations last last + 1)
 ]
 
 { #category : #accessing }

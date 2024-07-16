@@ -13,13 +13,25 @@ Class {
 GtProposeRenamesAttribute >> doAffect: aTBrTextEditorTextualPiece in: anEditorElement [
 	^ BrButton new beTinySize
 		aptitude: BrGlamorousButtonWithIconAptitude;
+		label: 'Renames';
 		addAptitude: (BrGlamorousWithDropdownAptitude
 				handle: [ BrButton new
-						aptitude: BrGlamorousButtonWithIconAptitude;
+						aptitude: BrGlamorousButtonWithIconAptitude - BrGlamorousButtonExteriorAptitude;
 						icon: BrGlamorousVectorIcons downwards;
 						beTinySize ]
 				content: [ self newProposalList ]);
 		icon: BrGlamorousVectorIcons downwards
+]
+
+{ #category : #accessing }
+GtProposeRenamesAttribute >> initialize [
+	super initialize.
+
+	self beNotOverwritableByStyler.
+	self beReplace.
+
+
+	self cache: self newPooledCache
 ]
 
 { #category : #accessing }

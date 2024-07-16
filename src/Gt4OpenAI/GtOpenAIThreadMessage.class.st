@@ -37,6 +37,11 @@ GtOpenAIThreadMessage class >> serializationProperties [
 ]
 
 { #category : #accessing }
+GtOpenAIThreadMessage >> ancestor [
+	^ self chat ancestorOf: self
+]
+
+{ #category : #accessing }
 GtOpenAIThreadMessage >> annotations [
 	^ annotations
 		ifNil: [ annotations := GtOpenAIAnnotationsGroup
@@ -169,16 +174,6 @@ GtOpenAIThreadMessage >> gtContentFor: aView [
 		title: 'Content';
 		priority: 1;
 		stencil: [ GtLlmThreadMessageElement new threadMessageViewModel: self asViewModel ]
-]
-
-{ #category : #accessing }
-GtOpenAIThreadMessage >> gtMethodsFor: aView [
-	<gtView>
-	^ aView explicit
-		title: 'Methods';
-		priority: 4;
-		stencil: [ BrVerticalPane new matchParent
-				addChildren: (self methods collect: [ :aMethod | aMethod coder asElement ]) ]
 ]
 
 { #category : #testing }

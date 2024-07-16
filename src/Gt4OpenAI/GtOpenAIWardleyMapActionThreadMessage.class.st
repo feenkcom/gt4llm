@@ -31,11 +31,6 @@ GtOpenAIWardleyMapActionThreadMessage >> actionHeaderItem [
 ]
 
 { #category : #accessing }
-GtOpenAIWardleyMapActionThreadMessage >> ancestor [
-	^ self chat ancestorOf: self
-]
-
-{ #category : #accessing }
 GtOpenAIWardleyMapActionThreadMessage >> asViewModel [
 	^ GtLlmActionThreadMessageViewModel new threadMessage: self
 ]

@@ -25,6 +25,19 @@ GtOpenAIAssistantChat >> addFile: aFile [
 ]
 
 { #category : #accessing }
+GtOpenAIAssistantChat >> ancestorOf: aMessage [
+	| messages |
+	messages := self messages.
+
+	messages
+		withIndexDo: [ :possibleAncestor :index | 
+			possibleAncestor id = aMessage id
+				ifTrue: [ index = messages size ifTrue: [ ^ nil ] ifFalse: [ ^ messages at: index + 1 ] ] ].
+
+	self error: 'Message not found'
+]
+
+{ #category : #accessing }
 GtOpenAIAssistantChat >> announcer [
 
 	<return: #Announcer>

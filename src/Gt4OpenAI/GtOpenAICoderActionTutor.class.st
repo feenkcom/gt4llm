@@ -57,10 +57,10 @@ GtOpenAICoderActionTutor >> renameAction [
 	^ GtLlmTutorAction new
 		name: 'Propose renames for method';
 		priority: 4;
-		description: 'Proposes a sensible number of alternative names for the method (less than ten, but more than one).';
-		format: 'Propose renames for method `{1}`';
+		description: 'Proposes a sensible number of alternative names for the method (less than ten, but more than one). The number of method parameters should stay the same across renames, and method that do not take arguments should not have a trailing semicolon (e.g. `helloWorld` instead of `helloWorld:`). Always return the action name, renames, and method.';
+		format: 'Propose renames for method';
 		examples: {GtLlmTutorActionExample new
-					instruction: 'Propose renames for method `addAction:`';
+					instruction: 'Propose renames for method';
 					input: '```smalltalk-method
 ActionClass
 addAction: anAction
@@ -70,12 +70,15 @@ addAction: anAction
 Propose renames for method
 ```
 ```renames
-extendActions:
-appendAction:
-includeAction:
+{"type": "method", "original": "increment", "proposals": ["extendActions:", "appendAction:", "includeAction:"]}
+```
+```smalltalk-method
+ActionClass
+addAction: anAction
+	actions add: anAction
 ```'.
 GtLlmTutorActionExample new
-					instruction: 'Propose renames for method `increment`';
+					instruction: 'Propose renames for method';
 					input: '```smalltalk-method
 ClassWithNumber
 increment
@@ -85,12 +88,15 @@ increment
 Propose renames for method
 ```
 ```renames
-incrementNumber
-inc
-incNum
+{"type": "method", "original": "increment", "proposals": ["incrementNumber", "inc", "incNum"]}
+```
+```smalltalk-method
+ClassWithNumber
+increment
+	self number: self number + 1
 ```'.
 GtLlmTutorActionExample new
-					instruction: 'Propose renames for method `do:to:`';
+					instruction: 'Propose renames for method';
 					input: '```smalltalk-method
 Object
 do: aMessage to: anObject
@@ -100,11 +106,12 @@ do: aMessage to: anObject
 Propose renames for method
 ```
 ```renames
-perform:on:
-send:to:
-execute:on:
-exec:on:
-ask:of:
+{"type": "method", "original": "do:to:", "proposals": ["perform:on:", "send:to:", "execute:on:", "exec:on:", "ask:of:"]}
+```
+```smalltalk-method
+Object
+do: aMessage to: anObject
+	^ anObject perform: aMessage
 ```'}
 ]
 
@@ -112,18 +119,69 @@ ask:of:
 GtOpenAICoderActionTutor >> renameFormatComponent [
 	<gtLlmFormatComponent>
 	^ GtLlmTutorFormatComponent new
-		name: 'Text';
+		name: 'Renames';
 		priority: 2;
-		format: 'Text';
-		tag: 'text';
-		example: '```text
-This node contains plain text.
-Multiple lines, multiple paragraphs are allowed.
+		format: 'json';
+		tag: 'renames';
+		example: 'For methods:
+```renames
+{"type": "method", "original": "do:to:", "proposals": ["perform:on:", "send:to:", "execute:on:", "exec:on:", "ask:of:"]}
+```
 
-*markup* may also **be used**. `Code` can be highlighted.
-
-# Headings exist as well
+For variables:
+```renames
+{"type": "variable", "original": "aNumber", "proposals": ["number", "num", "int", "integer"]}
 ```'
+]
+
+{ #category : #accessing }
+GtOpenAICoderActionTutor >> renameVariableAction [
+	<gtLlmTutorAction>
+	^ GtLlmTutorAction new
+		name: 'Propose renames for variable';
+		priority: 4;
+		description: 'Proposes a sensible number of alternative names for a given variable (less than ten, but more than one). Always return the action name, renames, and method.';
+		format: 'Propose renames for variable ``';
+		examples: {GtLlmTutorActionExample new
+					instruction: 'Propose renames for variable `aNumber`';
+					input: '```smalltalk-method
+ClassWithNumber
+add: aNumber
+	self number: self number + aNumber
+```';
+					output: '```action
+Propose renames for variable
+```
+```renames
+{"type": "variable", "original": "aNumber", "proposals": ["number", "num", "toBeAdded"]}
+```
+```smalltalk-method
+ClassWithNumber
+add: aNumber
+	self number: self number + aNumber
+```'.
+GtLlmTutorActionExample new
+					instruction: 'Propose renames for variable `temp`';
+					input: '```smalltalk-method
+ClassWithNumber
+add: aNumber
+	| temp |
+	temp := self number + aNumber
+	self number: temp
+```';
+					output: '```action
+Propose renames for variable
+```
+```renames
+{"type": "variable", "original": "temp", "proposals": ["additionResult", "res", "result"]}
+```
+```smalltalk-method
+ClassWithNumber
+add: aNumber
+	| temp |
+	temp := self number + aNumber
+	self number: temp
+```'}
 ]
 
 { #category : #accessing }
@@ -154,4 +212,22 @@ Furthermore, the two `ifTrue:` calls can be chained together. I suggest rewritin
 	(anAction isSpecial and: [ self notifier exists ]) ifTrue: [
 		self notify: (AnActionAdded new action: anAction)]]
 ```'}
+]
+
+{ #category : #accessing }
+GtOpenAICoderActionTutor >> textFormatComponent [
+	<gtLlmFormatComponent>
+	^ GtLlmTutorFormatComponent new
+		name: 'Text';
+		priority: 2;
+		format: 'Text';
+		tag: 'text';
+		example: '```text
+This node contains plain text.
+Multiple lines, multiple paragraphs are allowed.
+
+*markup* may also **be used**. `Code` can be highlighted.
+
+# Headings exist as well
+```'
 ]
