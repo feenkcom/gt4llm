@@ -16,29 +16,17 @@ GtPharoMethodCoder >> addRenameSuggestionsMenuAddOnsAst: anAst to: coderAddOns f
 						leave: nil
 						action: [ :aTextualViewModel :anElement | 
 							| aChat |
-							aChat := GtOpenAIGtSpecificTutor instance addChat.
+							aChat := GtOpenAICoderActionTutor instance addChat.
+							aChat method: aCoderViewModel coderModel compiledMethod.
+							aChat sendMessage: 'Propose renames for method'.
 							(aChat whenReadyFuture
-								then: [ aChat
-										sendMessage: 'Please suggest alternative names for the method `'
-												, aCoderViewModel coderModel behavior name , '>>#' , node source
-												, '`.
-								
-Source code to consider:
-
-```smalltalk
-' , aCoderViewModel coderModel compiledMethod sourceCode
-												, '
-```
-
-ONLY return the suggested method names, one per line, without any markup, and without the argument names (example: `aMethod:withArguments:`). ALWAYS Keep the number of arguments the same. NO additional context is desired.'.
-									(aChat whenReadyFuture
 										then: [ | choices |
 											aChat messages first isAssistantRole
-												ifTrue: [ choices := aChat messages first contentText lines reject: #isEmpty.
+												ifTrue: [ choices := aChat messages first proposedRenamesForMethod at: 'proposals'.
 													self
 														renameNodeProposals: node
 														in: aTextualViewModel
 														for: anElement
 														withPossibilities: choices ]
-												ifFalse: [ self error: 'No answer received!' ] ]) await ]) await ] ] ]
+												ifFalse: [ self error: 'No answer received!' ] ]) await ] ] ]
 ]
