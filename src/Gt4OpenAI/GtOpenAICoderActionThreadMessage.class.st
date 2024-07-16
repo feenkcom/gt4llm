@@ -79,7 +79,7 @@ GtOpenAICoderActionThreadMessage >> gtRenamesFor: aView [
 		priority: 1;
 		stencil: [ | methodSource coder renames coderViewModel coderElement |
 			methodSource := self smalltalkMethodSource.
-			renames := self proposedRenamesForMethod.
+			renames := self proposedRenamesForMethod at: 'proposals'.
 			coder := GtPharoMethodCoder forMethod: methodSource compiledMethod.
 			coderViewModel := coder asCoderViewModel.
 			coderElement := coderViewModel asElement.
