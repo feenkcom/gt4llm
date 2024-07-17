@@ -16,8 +16,7 @@ GtPharoMethodCoder >> addRenameSuggestionsMenuAddOnsAst: anAst to: coderAddOns f
 						leave: nil
 						action: [ :aTextualViewModel :anElement | 
 							| aChat |
-							aChat := GtOpenAICoderActionTutor instance addChat.
-							aChat method: aCoderViewModel coderModel compiledMethod.
+							aChat := self openAITutorChat.
 							aChat sendMessage: 'Propose renames for method'.
 							(aChat whenReadyFuture
 										then: [ | choices |

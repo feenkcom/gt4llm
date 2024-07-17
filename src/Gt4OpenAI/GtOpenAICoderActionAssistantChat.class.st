@@ -21,3 +21,9 @@ GtOpenAICoderActionAssistantChat >> messages [
 GtOpenAICoderActionAssistantChat >> method: aMethod [
 	self pipeline instance method: aMethod
 ]
+
+{ #category : #accessing }
+GtOpenAICoderActionAssistantChat >> pipeline: aPipeline [
+	super pipeline: aPipeline.
+	aPipeline instance chat: self.
+]
