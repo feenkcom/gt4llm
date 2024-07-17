@@ -1,8 +1,16 @@
 Class {
 	#name : #GtOpenAIAnnotatedActionTutor,
 	#superclass : #GtOpenAIActionTutor,
+	#instVars : [
+		'instructionSections'
+	],
 	#category : #'Gt4OpenAI-Tutor'
 }
+
+{ #category : #accessing }
+GtOpenAIAnnotatedActionTutor >> addInstructionSection: anInstructionSection [
+	instructionSections add: anInstructionSection
+]
 
 { #category : #accessing }
 GtOpenAIAnnotatedActionTutor >> collectActions [
@@ -43,7 +51,8 @@ GtOpenAIAnnotatedActionTutor >> initialize [
 	super initialize.
 	
 	actions := self collectActions.
-	self initializeFormat
+	self initializeFormat.
+	self initializeInstructionSections
 ]
 
 { #category : #accessing }
@@ -54,11 +63,26 @@ GtOpenAIAnnotatedActionTutor >> initializeFormat [
 ]
 
 { #category : #accessing }
+GtOpenAIAnnotatedActionTutor >> initializeInstructionSections [
+	instructionSections := OrderedCollection
+			with: (GtLlmInstructionSection new
+					title: 'Actions';
+					body: (GtLlmInstructionWithSections new
+							introduction: 'All actions are listed below.';
+							sections: (actions collect: #asInstruction)))
+]
+
+{ #category : #accessing }
+GtOpenAIAnnotatedActionTutor >> instructionSections [
+	^ instructionSections
+]
+
+{ #category : #accessing }
+GtOpenAIAnnotatedActionTutor >> instructionSections: anObject [
+	instructionSections := anObject
+]
+
+{ #category : #accessing }
 GtOpenAIAnnotatedActionTutor >> instructions [
-	^ self format asInstruction
-		addSection: (GtLlmInstructionSection new
-				title: 'Actions';
-				body: (GtLlmInstructionWithSections new
-						introduction: 'All actions are listed below.';
-						sections: (actions collect: #asInstruction)))
+	^ self format asInstruction addSections: self instructionSections
 ]

@@ -14,6 +14,12 @@ GtLlmInstructionWithSections >> addSection: aSection [
 ]
 
 { #category : #accessing }
+GtLlmInstructionWithSections >> addSections: aListOfSections [
+	sections
+		addAll: (aListOfSections collect: [ :aSection | aSection asInstruction parent: self ])
+]
+
+{ #category : #accessing }
 GtLlmInstructionWithSections >> children [
 	^ {introduction} , sections
 ]
