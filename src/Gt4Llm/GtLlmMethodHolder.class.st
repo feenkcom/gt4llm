@@ -5,7 +5,8 @@ Class {
 	#classTraits : 'TGtAnnouncer classTrait',
 	#instVars : [
 		'method',
-		'announcer'
+		'announcer',
+		'chat'
 	],
 	#category : #'Gt4Llm-Models'
 }
@@ -17,13 +18,26 @@ GtLlmMethodHolder >> announcer [
 ]
 
 { #category : #accessing }
+GtLlmMethodHolder >> chat [
+	^ chat
+]
+
+{ #category : #accessing }
+GtLlmMethodHolder >> chat: anObject [
+	chat := anObject
+]
+
+{ #category : #accessing }
 GtLlmMethodHolder >> gtLiveFor: aView [
 	<gtView>
-	^ aView forward
+	^ aView explicit
 		title: 'Live';
 		priority: 1;
-		object: [ self method ];
-		view: #gtSourceCodeFor:
+		actionButtonIcon: BrGlamorousVectorIcons browse
+			tooltip: 'Browse method'
+			action: [ (GtCoderElement forMethod: self method) openInPager maximized ];
+		stencil: [ ((GtPharoMethodCoder forMethod: self method) openAITutorChat: self chat)
+				asExpandedOnlyElement vFitContentLimited ]
 ]
 
 { #category : #accessing }
