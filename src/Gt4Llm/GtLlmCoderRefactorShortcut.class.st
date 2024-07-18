@@ -10,6 +10,13 @@ GtLlmCoderRefactorShortcut >> description [
 ]
 
 { #category : #accessing }
+GtLlmCoderRefactorShortcut >> initialize [
+	super initialize.
+	
+	combination := BlKeyCombination primaryShiftR
+]
+
+{ #category : #accessing }
 GtLlmCoderRefactorShortcut >> name [
 	^ 'Refactor (OpenAI)'
 ]
