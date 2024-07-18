@@ -36,6 +36,14 @@ GtOpenAICoderActionThreadMessage >> codeReview [
 ]
 
 { #category : #accessing }
+GtOpenAICoderActionThreadMessage >> compareSourceFrom: expected to: actual [
+	^ (GtDiffBuilder
+		computeDifferencesFrom: expected
+		to: actual
+		using: GtCharacterGroupDiffSplitter words ignoreWhitespace) changes isEmpty
+]
+
+{ #category : #accessing }
 GtOpenAICoderActionThreadMessage >> gtActionFor: aView [
 	<gtView>
 	<gtLlmMessageView>
@@ -59,6 +67,10 @@ GtOpenAICoderActionThreadMessage >> gtCodeFor: aView [
 		stencil: [ | methodSource coder |
 			methodSource := self smalltalkMethodSource.
 			coder := GtPharoMethodCoder forMethod: methodSource compiledMethod.
+			(self
+				compareSourceFrom: methodSource methodSource
+				to: coder currentSourceString)
+				ifFalse: [ coder currentSourceString: methodSource methodSource ].
 			coder asElement ]
 ]
 

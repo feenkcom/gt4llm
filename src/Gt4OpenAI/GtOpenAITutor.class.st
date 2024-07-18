@@ -13,7 +13,12 @@ Class {
 
 { #category : #accessing }
 GtOpenAITutor class >> instance [
-	^ instance ifNil: [ instance := self withApiKeyFromFile createAssistant ]
+	^ instance ifNil: [ self refreshInstance ]
+]
+
+{ #category : #accessing }
+GtOpenAITutor class >> refreshInstance [
+	^ instance := self withApiKeyFromFile createAssistant
 ]
 
 { #category : #accessing }
