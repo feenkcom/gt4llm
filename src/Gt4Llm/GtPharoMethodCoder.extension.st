@@ -14,7 +14,7 @@ GtPharoMethodCoder >> addReviewAddonsTo: anAst to: coderAddOns viewModel: aCoder
 			aChat sendMessage: 'Review the method'.
 			(aChat whenReadyFuture
 				then: [ aChat messages first isAssistantRole
-						ifTrue: [ button phlow spawnObject: aChat messages first textCodeBlock code value ]
+						ifTrue: [ button phlow spawnObject: aChat messages first codeReview ]
 						ifFalse: [ self error: 'No answer received!' ] ]) await ]
 		id: GtLlmMethodCoderReviewActionId
 ]
