@@ -31,6 +31,11 @@ GtOpenAICoderActionThreadMessage >> actionHeaderItem [
 ]
 
 { #category : #accessing }
+GtOpenAICoderActionThreadMessage >> codeReview [
+	^ GtLlmCodeReview new review: self textCodeBlock code value
+]
+
+{ #category : #accessing }
 GtOpenAICoderActionThreadMessage >> gtActionFor: aView [
 	<gtView>
 	<gtLlmMessageView>
