@@ -26,6 +26,13 @@ GtOpenAIActionTutor >> addChat [
 ]
 
 { #category : #accessing }
+GtOpenAIActionTutor >> findIndexOfAction: anAction [
+	^ ((actions
+		collectWithIndex: [ :anInnerAction :anIndex | anInnerAction -> anIndex ])
+		detect: [ :aPair | aPair key = anAction ]) value
+]
+
+{ #category : #accessing }
 GtOpenAIActionTutor >> format [
 	^ format
 ]

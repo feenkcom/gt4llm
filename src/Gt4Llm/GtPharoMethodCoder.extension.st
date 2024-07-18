@@ -1,6 +1,15 @@
 Extension { #name : #GtPharoMethodCoder }
 
 { #category : #'*Gt4Llm' }
+GtPharoMethodCoder >> addRefactorMethodAst: anAst to: coderAddOns [
+	<gtCoderContextMenuAddOns: 250>
+	self
+		addContextMenuItemFrom: GtLlmCoderRefactorShortcut new
+		withId: nil
+		to: coderAddOns
+]
+
+{ #category : #'*Gt4Llm' }
 GtPharoMethodCoder >> addReviewAddonsTo: anAst to: coderAddOns viewModel: aCoderViewModel [
 	<gtAstCoderAddOns: 10>
 	self compiledMethod ifNil: [ ^ self ].

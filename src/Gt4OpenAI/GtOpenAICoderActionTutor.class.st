@@ -52,6 +52,33 @@ aMethodWithArguments: anArgument and: anotherArgument
 ]
 
 { #category : #accessing }
+GtOpenAICoderActionTutor >> refactoringAction [
+	<gtLlmTutorAction>
+	^ GtLlmTutorAction new
+		name: 'Propose refactoring for method';
+		priority: 4;
+		description: 'Proposes a refactoring for the method. The method should be rewritten appropriately where necessary while preserving functionality.';
+		format: 'Propose refactoring for method';
+		examples: {GtLlmTutorActionExample new
+					instruction: 'Propose refactoring for method';
+					input: '```smalltalk-method
+ActionClass
+findIndexOfAction: anAction
+	^ ((actions
+		collectWithIndex: [ :anInnerAction :anIndex | anInnerAction -> anIndex ])
+		detect: [ :aPair | aPair key = anAction ]) value
+```';
+					output: '```action
+Propose refactoring for method
+```
+```smalltalk-method
+ActionClass
+addAction: anAction
+	^ actions indexOf: anAction ifAbsent: [ self error: ''Action not found'' ]
+```'}
+]
+
+{ #category : #accessing }
 GtOpenAICoderActionTutor >> renameAction [
 	<gtLlmTutorAction>
 	^ GtLlmTutorAction new

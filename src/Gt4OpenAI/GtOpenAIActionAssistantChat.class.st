@@ -87,7 +87,7 @@ GtOpenAIActionAssistantChat >> sendMessage: aString [
 		sendMessage: aString
 				, '
 	
-state:
+# Current state:
 ' , pipeline instance serialize
 ]
 

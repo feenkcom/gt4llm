@@ -22,7 +22,7 @@ GtLlmTutorActionExample >> asInstruction [
 								items: {self instruction asInstruction.
 										GtLlmInstructionSection new
 											source: self;
-											title: 'Current Wardley Map state';
+											title: 'Current state';
 											body: self input}));
 				addItem: (GtLlmInstructionSection new
 						source: self;
