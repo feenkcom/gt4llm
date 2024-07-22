@@ -66,7 +66,11 @@ GtOpenAICoderActionThreadMessage >> gtCodeFor: aView [
 		priority: 1;
 		stencil: [ | methodSource coder |
 			methodSource := self smalltalkMethodSource.
-			coder := GtPharoMethodCoder forMethod: methodSource compiledMethod.
+			coder := methodSource compiledMethod
+					ifNil: [ GtPharoMethodCoder
+							forClass: methodSource methodClass
+							source: methodSource methodSource ]
+					ifNotNil: [ :aCompiledMethod | GtPharoMethodCoder forMethod: aCompiledMethod ].
 			(self
 				compareSourceFrom: methodSource methodSource
 				to: coder currentSourceString)
