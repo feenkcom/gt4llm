@@ -217,10 +217,11 @@ GtOpenAICoderActionTutor >> reviewAction [
 	^ GtLlmTutorAction new
 		name: 'Review the method';
 		priority: 5;
-		description: 'Reviews and criticizes the current state of the method, including code style, like a regular polite yet firm code reviewer would.';
+		description: 'Reviews and criticizes the current state of the method, including code style, like a regular polite yet firm code reviewer would. Code fragments may be returned, but fenced code blocks using three backticks MAY NOT be used. Instead, if a rewrite is proposed, it will be proposed in the method.';
 		examples: {GtLlmTutorActionExample new
 					instruction: 'Review the method';
-					input: '```ActionObject
+					input: '```smalltalk-method
+ActionObject
 foobar: anAction
 	actions add: anAction.
 	
@@ -231,13 +232,42 @@ foobar: anAction
 					output: '```action
 Review the method
 ```
+
 ```text
 The method name does not reflect the behavior inside the method. Consider using a name such as `addAction:`.
 
-Furthermore, the two `ifTrue:` calls can be chained together. I suggest rewriting it as follows:
+Furthermore, the two `ifTrue:` calls can be chained together to
+`(anAction isSpecial and: [ self notifier exists ]) ifTrue: [ "..." ]`. I took the liberty of adding a rewrite proposal to this review.
+```
 
-	(anAction isSpecial and: [ self notifier exists ]) ifTrue: [
-		self notify: (AnActionAdded new action: anAction)]]
+```smalltalk-method
+ActionObject
+foobar: anAction
+	actions add: anAction.
+	
+	(anAction isSpecial and: [ self notifier exists ]) ifTrue:
+		[ self notify: (AnActionAdded new action: anAction)]
+```'. GtLlmTutorActionExample new
+					instruction: 'Review the method';
+					input: '```smalltalk-method
+Integer
+isPowerOfTwo
+	"Return true if the receiver is an integral power of two."
+	^ self ~= 0 and: [(self bitAnd: self-1) = 0]
+```';
+					output: '```action
+Review the method
+```
+
+```text
+The method name is clear, the method is documented, and the code is concise and well written. No further changes are required.
+```
+
+```smalltalk-method
+Integer
+isPowerOfTwo
+	"Return true if the receiver is an integral power of two."
+	^ self ~= 0 and: [(self bitAnd: self-1) = 0]
 ```'}
 ]
 
@@ -253,7 +283,7 @@ GtOpenAICoderActionTutor >> textFormatComponent [
 This node contains plain text.
 Multiple lines, multiple paragraphs are allowed.
 
-*markup* may also **be used**. `Code` can be highlighted.
+*markup* may also **be used**. `Code` can be highlighted, but code blocks with three tick marks MAY NOT be used.
 
 # Headings exist as well
 ```'

@@ -109,7 +109,7 @@ GtOpenAITutor >> defaultAssistantName [
 
 { #category : #accessing }
 GtOpenAITutor >> defaultModel [
-	^ 'gpt-4-turbo-preview'
+	^ 'gpt-4o'
 ]
 
 { #category : #accessing }
