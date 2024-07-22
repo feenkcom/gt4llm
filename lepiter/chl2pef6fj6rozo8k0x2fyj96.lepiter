@@ -18,7 +18,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-30T13:45:42.913645+01:00"
+						"dateAndTimeString" : "2024-04-24T17:56:54.866237+02:00"
 					}
 				},
 				"editEmail" : {
@@ -29,54 +29,17 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-31T14:50:15.650499+01:00"
+						"dateAndTimeString" : "2024-04-24T17:57:57.556682+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "qXNl4IrMDQCc/EukATK6Xg=="
+					"uidString" : "XfXjdDvTDQCJG9wcCwzy0g=="
 				},
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "We can use the OpenAI client to generate embeddings."
-			},
-			{
-				"__type" : "textSnippet",
-				"children" : {
-					"__type" : "snippets",
-					"items" : [ ]
-				},
-				"createEmail" : {
-					"__type" : "email",
-					"emailString" : "<unknown>"
-				},
-				"createTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-30T13:47:58.974983+01:00"
-					}
-				},
-				"editEmail" : {
-					"__type" : "email",
-					"emailString" : "<unknown>"
-				},
-				"editTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-23T13:38:09.891206+02:00"
-					}
-				},
-				"uid" : {
-					"__type" : "uid",
-					"uidString" : "0Q+16IrMDQCfxB7uATK6Xg=="
-				},
-				"paragraphStyle" : {
-					"__type" : "textStyle"
-				},
-				"string" : "First we get a client (see [[Working with the OpenAI API client]]):"
+				"string" : "Once Ollama is set up and running on your machine, you will be able to run code immediately."
 			},
 			{
 				"__type" : "pharoSnippet",
@@ -92,7 +55,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-30T13:48:16.487584+01:00"
+						"dateAndTimeString" : "2024-04-24T17:58:00.697231+02:00"
 					}
 				},
 				"editEmail" : {
@@ -103,14 +66,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-05-17T14:34:39.068612+02:00"
+						"dateAndTimeString" : "2024-04-24T17:59:00.617683+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "U0nA6YrMDQChAdPjATK6Xg=="
+					"uidString" : "mW7QeDvTDQCLnyUICwzy0g=="
 				},
-				"code" : "client := GtOpenAIClient withApiKeyFromFile"
+				"code" : "client := GtOllamaClient new"
 			},
 			{
 				"__type" : "textSnippet",
@@ -126,7 +89,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-30T13:48:28.218122+01:00"
+						"dateAndTimeString" : "2024-04-24T17:58:15.734173+02:00"
 					}
 				},
 				"editEmail" : {
@@ -137,17 +100,17 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-04-27T21:08:38.15703+02:00"
+						"dateAndTimeString" : "2024-04-24T18:05:27.242835+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "2U5z6orMDQChjzkcATK6Xg=="
+					"uidString" : "oOK1eTvTDQCLs/ofCwzy0g=="
 				},
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "We can now use this client to generate an embedding for text."
+				"string" : "This client is your entrypoint for interacting with Ollama. Next, you can download a new model. This step is optional if you’ve already downloaded all the models you want."
 			},
 			{
 				"__type" : "pharoSnippet",
@@ -163,7 +126,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-30T13:45:49.43395+01:00"
+						"dateAndTimeString" : "2024-04-24T17:59:05.28427+02:00"
 					}
 				},
 				"editEmail" : {
@@ -174,14 +137,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-04-27T21:08:58.339907+02:00"
+						"dateAndTimeString" : "2024-04-24T18:31:36.167157+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "m3D84IrMDQCdmOF5ATK6Xg=="
+					"uidString" : "q/OpfDvTDQCNJWP0Cwzy0g=="
 				},
-				"code" : "client\r\tgenerateEmbeddingWithModel: 'text-embedding-3-small'\r\tandInput: 'A text to embed'"
+				"code" : "client pullModel: 'llama3'"
 			},
 			{
 				"__type" : "textSnippet",
@@ -197,7 +160,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-31T11:18:54.214696+01:00"
+						"dateAndTimeString" : "2024-04-24T18:05:55.612438+02:00"
 					}
 				},
 				"editEmail" : {
@@ -208,17 +171,17 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-31T11:19:23.163057+01:00"
+						"dateAndTimeString" : "2024-04-24T18:06:08.613049+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "Uz9m8ZzMDQC7tUzqCm8XrA=="
+					"uidString" : "kBIflTvTDQCR1I/9Cwzy0g=="
 				},
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "If we want to preserve the input, we can also use the {{gtClass:GtLlmEmbedding}} utility class for that."
+				"string" : "To find out which models are available, you can query the list of clients."
 			},
 			{
 				"__type" : "pharoSnippet",
@@ -234,7 +197,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-31T11:19:29.016213+01:00"
+						"dateAndTimeString" : "2024-04-24T18:06:11.726463+02:00"
 					}
 				},
 				"editEmail" : {
@@ -245,14 +208,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-04-27T21:09:02.330119+02:00"
+						"dateAndTimeString" : "2024-04-24T18:06:12.697484+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "xkN585zMDQC91kJBCm8XrA=="
+					"uidString" : "/eoUljvTDQCTaQO0Cwzy0g=="
 				},
-				"code" : "input := 'A text to embed'.\r\rembedding := GtLlmEmbedding new\r\t\tinput: input;\r\t\tembedding: (client generateEmbeddingWithModel: 'text-embedding-3-small' andInput: input)\r\t\t\t\titems first embedding"
+				"code" : "client listModels"
 			},
 			{
 				"__type" : "textSnippet",
@@ -268,7 +231,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-31T11:21:34.68269+01:00"
+						"dateAndTimeString" : "2024-04-24T18:05:29.93329+02:00"
 					}
 				},
 				"editEmail" : {
@@ -279,20 +242,20 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-31T11:29:37.858442+01:00"
+						"dateAndTimeString" : "2024-04-24T18:05:37.382021+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "UeZU+pzMDQCAAX6FCm8XrA=="
+					"uidString" : "GD2XkzvTDQCQ2o7hCwzy0g=="
 				},
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "We can then for instance apply distance functions on them using {{gtMethod:GtLlmEmbeddingsUtilities class>>distancesFromEmbeddings:to:}}. The default distance metric is `cosine`. To explore them, you can look at the distance metrics view on the {{gtClass:GtLlmEmbeddingsUtilities}} class."
+				"string" : "Then, we can start interacting with the client!"
 			},
 			{
-				"__type" : "exampleSnippet",
+				"__type" : "pharoSnippet",
 				"children" : {
 					"__type" : "snippets",
 					"items" : [ ]
@@ -305,7 +268,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-31T11:29:41.871638+01:00"
+						"dateAndTimeString" : "2024-04-24T18:05:40.621019+02:00"
 					}
 				},
 				"editEmail" : {
@@ -316,57 +279,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-31T11:29:41.871638+01:00"
+						"dateAndTimeString" : "2024-04-24T21:53:25.73591+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "kbcAGJ3MDQCGoDlaCm8XrA=="
+					"uidString" : "NEc6lDvTDQCRyhd+Cwzy0g=="
 				},
-				"exampleSelector" : "yourself",
-				"previewHeight" : 200,
-				"previewShowSelector" : "gtDistanceMetricsFor:",
-				"exampleBehaviorName" : "GtLlmEmbeddingsUtilities class",
-				"codeExpanded" : true,
-				"previewExpanded" : true,
-				"noCode" : true
-			},
-			{
-				"__type" : "textSnippet",
-				"children" : {
-					"__type" : "snippets",
-					"items" : [ ]
-				},
-				"createEmail" : {
-					"__type" : "email",
-					"emailString" : "<unknown>"
-				},
-				"createTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-07-22T12:22:48.260615+02:00"
-					}
-				},
-				"editEmail" : {
-					"__type" : "email",
-					"emailString" : "<unknown>"
-				},
-				"editTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-07-22T12:26:58.834601+02:00"
-					}
-				},
-				"uid" : {
-					"__type" : "uid",
-					"uidString" : "ZGTlKTXaDQCTRS6hAp3RMg=="
-				},
-				"paragraphStyle" : {
-					"__type" : "textStyle"
-				},
-				"string" : "For a local and free option for generating embeddings, see [[Embeddings in Ollama]] and [[Generating embeddings using Ollama models]]."
+				"code" : "messages := {\r\tGtLlmSystemMessage new content: 'You are a helpful assistant.'.\r\tGtLlmUserMessage new content: 'Hello Llama! How are you today?'\r}.\r\rclient completeChatWithModel: 'llama3' andMessages: messages"
 			}
 		]
 	},
@@ -378,7 +298,7 @@
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2024-01-30T13:45:39.495301+01:00"
+			"dateAndTimeString" : "2024-04-24T17:56:54.827581+02:00"
 		}
 	},
 	"editEmail" : {
@@ -389,15 +309,15 @@
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2024-06-23T13:34:55.697279+02:00"
+			"dateAndTimeString" : "2024-07-22T11:32:54.671925+02:00"
 		}
 	},
 	"pageType" : {
 		"__type" : "namedPage",
-		"title" : "Generating embeddings"
+		"title" : "Working with the Ollama API client"
 	},
 	"uid" : {
 		"__type" : "uuid",
-		"uuid" : "3ad064e0-8acc-0d00-9cfb-a5770132ba5e"
+		"uuid" : "fa5ce374-3bd3-0d00-891a-54710b0cf2d2"
 	}
 }

@@ -29,7 +29,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-04-27T21:05:02.472452+02:00"
+						"dateAndTimeString" : "2024-07-22T12:15:20.307562+02:00"
 					}
 				},
 				"uid" : {
@@ -39,7 +39,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "[Embeddings](https://platform.openai.com/docs/guides/embeddings) are used for search and recommendations. See also {{gtPage:Embeddings|db=chl2pej9b64u5ozqy9ghd0t54|label=the embeddings section of the ollama booklet.}}"
+				"string" : "[Embeddings](https://platform.openai.com/docs/guides/embeddings) are used for search and recommendations. See also {{gtPage:Embeddings in Ollama|db=chl2pej9b64u5ozqy9ghd0t54|label=the embeddings section of the ollama booklet}}."
 			}
 		]
 	},
