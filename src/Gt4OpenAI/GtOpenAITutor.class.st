@@ -99,7 +99,7 @@ GtOpenAITutor >> createAssistant [
 
 { #category : #accessing }
 GtOpenAITutor >> defaultAssistantDescription [
-	^ self subclassResponsibility
+	^ 'Helps you write Smalltalk code and methods in the context of GT.'
 ]
 
 { #category : #accessing }

@@ -33,7 +33,7 @@ GtPharoMethodCoder >> openAITutorChat [
 	^ self
 		attributeNamed: #openAITutorChat
 		ifAbsent: [ | aChat |
-			aChat := GtOpenAIActionTutor instance addChat method: self.
+			aChat := GtOpenAICoderActionTutor instance addChat method: self compiledMethod.
 			self openAITutorChat: aChat.
 			aChat ]
 ]
