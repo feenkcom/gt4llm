@@ -18,7 +18,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-30T13:45:42.913645+01:00"
+						"dateAndTimeString" : "2024-07-22T12:26:13.605444+02:00"
 					}
 				},
 				"editEmail" : {
@@ -29,17 +29,17 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-31T14:50:15.650499+01:00"
+						"dateAndTimeString" : "2024-07-22T12:26:13.605444+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "qXNl4IrMDQCc/EukATK6Xg=="
+					"uidString" : "XLgiNjXaDQCWGlA0Ap3RMg=="
 				},
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "We can use the OpenAI client to generate embeddings."
+				"string" : "We can use the Ollama client to generate embeddings."
 			},
 			{
 				"__type" : "textSnippet",
@@ -55,7 +55,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-30T13:47:58.974983+01:00"
+						"dateAndTimeString" : "2024-07-22T12:26:13.605535+02:00"
 					}
 				},
 				"editEmail" : {
@@ -66,17 +66,17 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-23T13:38:09.891206+02:00"
+						"dateAndTimeString" : "2024-07-22T12:26:13.605535+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "0Q+16IrMDQCfxB7uATK6Xg=="
+					"uidString" : "TLsiNjXaDQCWG7RHAp3RMg=="
 				},
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "First we get a client (see [[Working with the OpenAI API client]]):"
+				"string" : "Using the client initialization code from [[Working with the API client]]:"
 			},
 			{
 				"__type" : "pharoSnippet",
@@ -92,7 +92,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-30T13:48:16.487584+01:00"
+						"dateAndTimeString" : "2024-07-22T12:26:13.606331+02:00"
 					}
 				},
 				"editEmail" : {
@@ -103,14 +103,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-05-17T14:34:39.068612+02:00"
+						"dateAndTimeString" : "2024-07-22T12:26:13.606331+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "U0nA6YrMDQChAdPjATK6Xg=="
+					"uidString" : "37siNjXaDQCWHNj3Ap3RMg=="
 				},
-				"code" : "client := GtOpenAIClient withApiKeyFromFile"
+				"code" : "client := GtOllamaClient new"
 			},
 			{
 				"__type" : "textSnippet",
@@ -126,7 +126,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-30T13:48:28.218122+01:00"
+						"dateAndTimeString" : "2024-07-22T12:26:13.606398+02:00"
 					}
 				},
 				"editEmail" : {
@@ -137,12 +137,12 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-04-27T21:08:38.15703+02:00"
+						"dateAndTimeString" : "2024-07-22T12:26:13.606398+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "2U5z6orMDQChjzkcATK6Xg=="
+					"uidString" : "f7wiNjXaDQCWHVrXAp3RMg=="
 				},
 				"paragraphStyle" : {
 					"__type" : "textStyle"
@@ -163,7 +163,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-30T13:45:49.43395+01:00"
+						"dateAndTimeString" : "2024-07-22T12:26:13.606533+02:00"
 					}
 				},
 				"editEmail" : {
@@ -174,14 +174,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-04-27T21:08:58.339907+02:00"
+						"dateAndTimeString" : "2024-07-22T12:26:13.606533+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "m3D84IrMDQCdmOF5ATK6Xg=="
+					"uidString" : "iLwiNjXaDQCWHvx8Ap3RMg=="
 				},
-				"code" : "client\r\tgenerateEmbeddingWithModel: 'text-embedding-3-small'\r\tandInput: 'A text to embed'"
+				"code" : "client generateEmbeddingWithModel: 'llama3' andInput: 'A text to embed'"
 			},
 			{
 				"__type" : "textSnippet",
@@ -197,7 +197,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-31T11:18:54.214696+01:00"
+						"dateAndTimeString" : "2024-07-22T12:26:13.606547+02:00"
 					}
 				},
 				"editEmail" : {
@@ -208,12 +208,12 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-31T11:19:23.163057+01:00"
+						"dateAndTimeString" : "2024-07-22T12:26:13.606547+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "Uz9m8ZzMDQC7tUzqCm8XrA=="
+					"uidString" : "lLwiNjXaDQCWHzw7Ap3RMg=="
 				},
 				"paragraphStyle" : {
 					"__type" : "textStyle"
@@ -234,7 +234,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-31T11:19:29.016213+01:00"
+						"dateAndTimeString" : "2024-07-22T12:26:13.606558+02:00"
 					}
 				},
 				"editEmail" : {
@@ -245,14 +245,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-04-27T21:09:02.330119+02:00"
+						"dateAndTimeString" : "2024-07-22T12:26:13.606558+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "xkN585zMDQC91kJBCm8XrA=="
+					"uidString" : "oLwiNjXaDQCWIElDAp3RMg=="
 				},
-				"code" : "input := 'A text to embed'.\r\rembedding := GtLlmEmbedding new\r\t\tinput: input;\r\t\tembedding: (client generateEmbeddingWithModel: 'text-embedding-3-small' andInput: input)\r\t\t\t\titems first embedding"
+				"code" : "input := 'A text to embed'.\r\rembedding := GtLlmEmbedding new\r\t\tinput: input;\r\t\tembedding: (client generateEmbeddingWithModel: 'llama3' andInput: 'A text to embed') embedding"
 			},
 			{
 				"__type" : "textSnippet",
@@ -268,7 +268,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-31T11:21:34.68269+01:00"
+						"dateAndTimeString" : "2024-07-22T12:26:13.606564+02:00"
 					}
 				},
 				"editEmail" : {
@@ -279,12 +279,12 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-31T11:29:37.858442+01:00"
+						"dateAndTimeString" : "2024-07-22T12:26:13.606564+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "UeZU+pzMDQCAAX6FCm8XrA=="
+					"uidString" : "pbwiNjXaDQCWIQxXAp3RMg=="
 				},
 				"paragraphStyle" : {
 					"__type" : "textStyle"
@@ -305,7 +305,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-31T11:29:41.871638+01:00"
+						"dateAndTimeString" : "2024-07-22T12:26:13.60657+02:00"
 					}
 				},
 				"editEmail" : {
@@ -316,12 +316,12 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-31T11:29:41.871638+01:00"
+						"dateAndTimeString" : "2024-07-22T12:26:13.60657+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "kbcAGJ3MDQCGoDlaCm8XrA=="
+					"uidString" : "rbwiNjXaDQCWIjBtAp3RMg=="
 				},
 				"exampleSelector" : "yourself",
 				"previewHeight" : 200,
@@ -330,43 +330,6 @@
 				"codeExpanded" : true,
 				"previewExpanded" : true,
 				"noCode" : true
-			},
-			{
-				"__type" : "textSnippet",
-				"children" : {
-					"__type" : "snippets",
-					"items" : [ ]
-				},
-				"createEmail" : {
-					"__type" : "email",
-					"emailString" : "<unknown>"
-				},
-				"createTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-07-22T12:22:48.260615+02:00"
-					}
-				},
-				"editEmail" : {
-					"__type" : "email",
-					"emailString" : "<unknown>"
-				},
-				"editTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-07-22T12:26:58.834601+02:00"
-					}
-				},
-				"uid" : {
-					"__type" : "uid",
-					"uidString" : "ZGTlKTXaDQCTRS6hAp3RMg=="
-				},
-				"paragraphStyle" : {
-					"__type" : "textStyle"
-				},
-				"string" : "For a local and free option for generating embeddings, see [[Embeddings in Ollama]] and [[Generating embeddings using Ollama models]]."
 			}
 		]
 	},
@@ -378,7 +341,7 @@
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2024-01-30T13:45:39.495301+01:00"
+			"dateAndTimeString" : "2024-07-22T12:26:13.60542+02:00"
 		}
 	},
 	"editEmail" : {
@@ -389,15 +352,15 @@
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2024-06-23T13:34:55.697279+02:00"
+			"dateAndTimeString" : "2024-07-22T12:26:13.60542+02:00"
 		}
 	},
 	"pageType" : {
 		"__type" : "namedPage",
-		"title" : "Generating embeddings"
+		"title" : "Generating embeddings using Ollama models"
 	},
 	"uid" : {
 		"__type" : "uuid",
-		"uuid" : "3ad064e0-8acc-0d00-9cfb-a5770132ba5e"
+		"uuid" : "afa52236-35da-0d00-9619-e4c1029dd132"
 	}
 }

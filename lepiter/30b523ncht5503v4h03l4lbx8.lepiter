@@ -18,7 +18,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-31T14:49:32.480253+01:00"
+						"dateAndTimeString" : "2024-07-22T11:31:05.505547+02:00"
 					}
 				},
 				"editEmail" : {
@@ -29,17 +29,17 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-07-22T12:16:17.973449+02:00"
+						"dateAndTimeString" : "2024-07-22T11:31:32.169319+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "Geey4p/MDQCZEfSSCm8XrA=="
+					"uidString" : "JR/1cDTaDQCQw39hAp3RMg=="
 				},
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "[Embeddings](https://platform.openai.com/docs/guides/embeddings) are used for search and recommendations. See also [[Embeddings in Ollama]]."
+				"string" : "`gt4ollama` is a software package to interact with [Ollama](https://ollama.com) from within Glamorous Toolkit. It is part of the broader [[gt4llm]] package."
 			}
 		]
 	},
@@ -51,7 +51,7 @@
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2024-01-31T14:49:32.438022+01:00"
+			"dateAndTimeString" : "2024-07-22T11:31:05.389273+02:00"
 		}
 	},
 	"editEmail" : {
@@ -62,15 +62,15 @@
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2024-07-22T12:16:07.934477+02:00"
+			"dateAndTimeString" : "2024-07-22T11:31:05.389273+02:00"
 		}
 	},
 	"pageType" : {
 		"__type" : "namedPage",
-		"title" : "Embeddings in OpenAI"
+		"title" : "gt4ollama: working with Ollama"
 	},
 	"uid" : {
 		"__type" : "uuid",
-		"uuid" : "143db2e2-9fcc-0d00-9910-65b70a6f17ac"
+		"uuid" : "9c57f370-34da-0d00-90c2-606c029dd132"
 	}
 }
