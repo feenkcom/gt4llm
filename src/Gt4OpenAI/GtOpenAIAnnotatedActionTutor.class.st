@@ -50,7 +50,7 @@ GtOpenAIAnnotatedActionTutor >> gtFilesFor: aView [
 GtOpenAIAnnotatedActionTutor >> initialize [
 	super initialize.
 	
-	actions := self collectActions.
+	actions addAll: self collectActions.
 	self initializeFormat.
 	self initializeInstructionSections
 ]

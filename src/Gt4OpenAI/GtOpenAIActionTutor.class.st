@@ -9,6 +9,11 @@ Class {
 }
 
 { #category : #accessing }
+GtOpenAIActionTutor >> actions [
+	^ actions
+]
+
+{ #category : #accessing }
 GtOpenAIActionTutor >> addAction: anAction [
 	actions add: anAction
 ]
@@ -46,19 +51,16 @@ GtOpenAIActionTutor >> format: anObject [
 { #category : #accessing }
 GtOpenAIActionTutor >> gtActionsFor: aView [
 	<gtView>
-	^ aView columnedList
+	^ aView forward
 		title: 'Actions';
 		priority: 5;
-		items: [ actions ];
-		column: 'Name'
-			text: #name
-			weight: 0.5;
-		column: 'Description' text: #description
+		object: [ actions ];
+		view: #gtActionsFor:
 ]
 
 { #category : #accessing }
 GtOpenAIActionTutor >> initialize [
 	super initialize.
-	actions := OrderedCollection new.
+	actions := GtLlmActionsGroup new.
 	format := GtLlmTutorFormat new
 ]
