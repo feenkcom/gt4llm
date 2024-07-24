@@ -43,13 +43,13 @@ GtLlmFineTuningFile >> conversations: anObject [
 GtLlmFineTuningFile >> costsPerEpoch [
 	| tokens |
 	"this model is free until september 23rd 2024"
-	(self model = 'gpt-4o-mini'
+	((self model beginsWith: 'gpt-4o-mini')
 		and: [ Date today
 				< (Date
 						year: 2024
 						month: 9
 						day: 23) ])
-		ifTrue: [ GtTCurrencyMoney new
+		ifTrue: [ ^ GtTCurrencyMoney new
 				amount: 0;
 				currency: GtTCurrency usd ].
 
