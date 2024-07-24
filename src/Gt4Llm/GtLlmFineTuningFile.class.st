@@ -42,6 +42,17 @@ GtLlmFineTuningFile >> conversations: anObject [
 { #category : #accessing }
 GtLlmFineTuningFile >> costsPerEpoch [
 	| tokens |
+	"this model is free until september 23rd 2024"
+	(self model = 'gpt-4o-mini'
+		and: [ Date today
+				< (Date
+						year: 2024
+						month: 9
+						day: 23) ])
+		ifTrue: [ GtTCurrencyMoney new
+				amount: 0;
+				currency: GtTCurrency usd ].
+
 	tokens := self numberOfTokens.
 	^ GtTCurrencyMoney new
 		amount: tokens * self pricePerToken;
@@ -128,6 +139,7 @@ GtLlmFineTuningFile >> numberOfTokens [
 { #category : #accessing }
 GtLlmFineTuningFile >> pricePerToken [
 	^ ({'gpt-3.5-turbo' -> 8.
+		'gpt-4o-mini' -> 3.
 		'davinci-002' -> 6.
 		'babbage-002' -> 0.4} asDictionary at: self model) / 1000000
 ]

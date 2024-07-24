@@ -211,14 +211,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-04-27T21:01:51.415427+02:00"
+						"dateAndTimeString" : "2024-07-24T09:39:28.706138+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "G025RnrTDQCbT03vCmrOQg=="
 				},
-				"code" : "numberOfExamples := 1000.\raGroup := aGroup first: numberOfExamples."
+				"code" : "numberOfExamples := 1000.\raGroup := aGroup first: numberOfExamples"
 			},
 			{
 				"__type" : "textSnippet",
@@ -353,14 +353,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-04-27T20:54:21.433265+02:00"
+						"dateAndTimeString" : "2024-07-24T09:40:00.750531+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "E9hfp17TDQCH4OBkA0w3Xw=="
 				},
-				"code" : "tutor := GtOpenAIGtTutor instance.\r\rconversations := (aGroup select: [ :anExample | anExample result isNotNil ])\r\t\tflatCollect: [ :anExample | \r\t\t\t(GtLlmExampleViewConversationCollector new\r\t\t\t\texample: anExample;\r\t\t\t\tinstructions: tutor instructions) conversations ]"
+				"code" : "tutor := GtOpenAIGtSpecificTutor instance.\r\rconversations := (aGroup select: [ :anExample | anExample result isNotNil ])\r\t\tflatCollect: [ :anExample | \r\t\t\t(GtLlmExampleViewConversationCollector new\r\t\t\t\texample: anExample;\r\t\t\t\tinstructions: tutor instructions) conversations ]"
 			},
 			{
 				"__type" : "textSnippet",
@@ -424,14 +424,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-04-27T20:55:34.477908+02:00"
+						"dateAndTimeString" : "2024-07-24T09:46:00.572336+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "jPPYTHrTDQCXGi7YCmrOQg=="
 				},
-				"code" : "file := GtLlmFineTuningFile new\r\t\tname: 'fine-tuning.jsonl';\r\t\tconversations: conversations.\rfile costsPerEpoch"
+				"code" : "file := GtLlmFineTuningFile new\r\t\tname: 'fine-tuning.jsonl';\r\t\tmodel: 'gpt-4o-mini-2024-07-18';\r\t\tconversations: conversations.\rfile costsPerEpoch"
 			},
 			{
 				"__type" : "textSnippet",
@@ -495,14 +495,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-04-27T20:56:40.007958+02:00"
+						"dateAndTimeString" : "2024-07-24T09:45:06.51185+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "VuHmUHrTDQCYqNvPCmrOQg=="
 				},
-				"code" : "client := GtOpenAIGtTutor instance client.\r\ropenAiFile := client uploadFile: file withPurpose: 'fine-tune'.\r\rfineTuningJob := client createFineTuningJobOnModel: file model withFile: openAiFile id"
+				"code" : "client := GtOpenAIGtSpecificTutor instance client.\r\ropenAiFile := client uploadFile: file withPurpose: 'fine-tune'.\r\rfineTuningJob := client createFineTuningJobOnModel: file model withFile: openAiFile id"
 			}
 		]
 	},

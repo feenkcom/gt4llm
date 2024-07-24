@@ -9,6 +9,7 @@ GtOpenAIWardleyMapActionTutor >> addChat [
 	| aChat |
 	aChat := GtOpenAIWardleyMapActionAssistantChat new
 			assistant: self assistant;
+			tutor: self;
 			actions: actions;
 			pipeline: pipelineBuilder value.
 	chats add: aChat.

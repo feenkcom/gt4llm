@@ -9,7 +9,8 @@ Class {
 		'model',
 		'announcer',
 		'context',
-		'lastUpdate'
+		'lastUpdate',
+		'tutor'
 	],
 	#category : #'Gt4Llm-Chats'
 }
@@ -154,6 +155,16 @@ GtLlmChat >> sendMessage: aMessage [
 { #category : #accessing }
 GtLlmChat >> threadActions [
 	^ {}
+]
+
+{ #category : #accessing }
+GtLlmChat >> tutor [
+	^ tutor
+]
+
+{ #category : #accessing }
+GtLlmChat >> tutor: anObject [
+	tutor := anObject
 ]
 
 { #category : #accessing }

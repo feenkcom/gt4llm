@@ -67,7 +67,8 @@ GtOpenAIFineTuningJob >> gtCheckpointsFor: aView [
 		title: 'Checkpoints';
 		priority: 2;
 		object: [ self checkpoints ];
-		view: #gtCheckpointsFor:
+		view: #gtCheckpointsFor:;
+		actionUpdateButton
 ]
 
 { #category : #accessing }
@@ -77,7 +78,20 @@ GtOpenAIFineTuningJob >> gtEventsFor: aView [
 		title: 'Events';
 		priority: 1;
 		object: [ self events ];
-		view: #gtEventsFor:
+		view: #gtEventsFor:;
+		actionUpdateButton
+]
+
+{ #category : #accessing }
+GtOpenAIFineTuningJob >> gtUpdateActionFor: anAction [
+	<gtAction>
+	self client ifNil: [ ^ anAction noAction ].
+
+	^ anAction button
+		priority: 1;
+		tooltip: 'Update job';
+		icon: BrGlamorousVectorIcons refresh;
+		action: [ :aButton | aButton phlow spawnObject: (self client getFineTuningJob: self id) ]
 ]
 
 { #category : #accessing }
@@ -89,7 +103,8 @@ GtOpenAIFineTuningJob >> gtViewLossFor: aView [
 		stencil: [ (GtHorizontalSparklineStencil new
 				values: ((self events reversed select: [ :anEvent | anEvent data isEmptyOrNil not ])
 						withIndexCollect: [ :aValue :i | (aValue data at: 'train_loss') -> i ]);
-				color: BrGlamorousColors hoveredButtonTextColor) asElement height: 100 ]
+				color: BrGlamorousColors hoveredButtonTextColor) asElement height: 100 ];
+		actionUpdateButton
 ]
 
 { #category : #accessing }

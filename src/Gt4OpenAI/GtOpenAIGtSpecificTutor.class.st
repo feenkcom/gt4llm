@@ -47,6 +47,7 @@ GtOpenAIGtSpecificTutor >> addChat [
 	| aChat |
 	aChat := GtOpenAIAssistantChat new
 			assistant: self assistant;
+			tutor: self;
 			pipeline: pipelineBuilder value.
 	chats add: aChat.
 

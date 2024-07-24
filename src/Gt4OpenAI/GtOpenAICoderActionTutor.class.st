@@ -10,6 +10,7 @@ GtOpenAICoderActionTutor >> addChat [
 	aChat := GtOpenAICoderActionAssistantChat new
 			assistant: self assistant;
 			actions: actions;
+			tutor: self;
 			pipeline: pipelineBuilder value.
 	chats add: aChat.
 

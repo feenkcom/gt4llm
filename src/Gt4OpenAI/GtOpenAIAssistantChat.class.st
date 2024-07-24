@@ -10,7 +10,8 @@ Class {
 		'lastRun',
 		'announcer',
 		'future',
-		'pipeline'
+		'pipeline',
+		'tutor'
 	],
 	#category : #'Gt4OpenAI-Chats'
 }
@@ -291,6 +292,16 @@ GtOpenAIAssistantChat >> summary [
 { #category : #accessing }
 GtOpenAIAssistantChat >> threadActions [
 	^ {}
+]
+
+{ #category : #accessing }
+GtOpenAIAssistantChat >> tutor [
+	^ tutor
+]
+
+{ #category : #accessing }
+GtOpenAIAssistantChat >> tutor: anObject [
+	tutor := anObject
 ]
 
 { #category : #accessing }
