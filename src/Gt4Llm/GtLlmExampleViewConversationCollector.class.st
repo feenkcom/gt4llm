@@ -42,7 +42,7 @@ GtLlmExampleViewConversationCollector >> instructions: anObject [
 { #category : #accessing }
 GtLlmExampleViewConversationCollector >> toConversation: aView [
 	^ GtLlmMessagesGroup
-		withAll: {GtLlmSystemMessage new content: self instructions.
+		withAll: {GtLlmSystemMessage new content: self instructions instructionString.
 				GtLlmUserMessage new
 					content: 'The context of this conversation is '
 							, (GtLlmInspectorSummarizer new summarizeWithoutViews: self instance)
