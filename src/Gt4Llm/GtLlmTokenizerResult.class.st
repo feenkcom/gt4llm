@@ -44,5 +44,5 @@ GtLlmTokenizerResult >> model: anObject [
 
 { #category : #accessing }
 GtLlmTokenizerResult >> tokenCount [
-	^ self tokens size
+	^ self token_size
 ]
