@@ -91,6 +91,17 @@ GtOpenAIFineTuningJob >> finishedAt: anObject [
 ]
 
 { #category : #accessing }
+GtOpenAIFineTuningJob >> gtActionChatFor: anAction [
+	<gtAction>
+	self fineTunedModel ifNil: [ ^ anAction noAction ].
+
+	^ anAction button
+		label: 'Chat';
+		priority: 1;
+		action: [ :aButton | aButton phlow spawnObject: (GtOpenAIChat new model: self fineTunedModel) ]
+]
+
+{ #category : #accessing }
 GtOpenAIFineTuningJob >> gtCheckpointsFor: aView [
 	<gtView>
 	^ aView forward
