@@ -4,11 +4,11 @@ Extension { #name : #GtWardleyMapNodeModel }
 GtWardleyMapNodeModel >> menuItemNodeLlmAddNewConnectedNodeButton [
 	<wardleyContextMenuItem: 41>
 	^ GtWardleyMapNodeButtonWithLabelMenuItem new
-		label: 'Add a new connected node';
+		label: 'Add new connected nodes';
 		action: [ :aContextMenuItem :aBrButton :aBrButtonModel :anEvent | 
 			aContextMenuItem llmCreator
 				announce: (GtLlmSendActionToChat
-						action: 'Add a new connected node'
+						action: 'Add new connected nodes'
 						arguments: {aContextMenuItem wardleyMapNodeViewModel label}).
 			aContextMenuItem editorElement fireEvent: BrContextMenuHideWish new ]
 ]
