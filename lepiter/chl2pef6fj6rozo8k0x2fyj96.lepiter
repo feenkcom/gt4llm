@@ -137,14 +137,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-04-24T18:31:36.167157+02:00"
+						"dateAndTimeString" : "2024-07-29T19:24:15.299653+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "q/OpfDvTDQCNJWP0Cwzy0g=="
 				},
-				"code" : "client pullModel: 'llama3'"
+				"code" : "client pullModel: 'llama3.1'"
 			},
 			{
 				"__type" : "textSnippet",

@@ -80,7 +80,9 @@ GtLlmChatViewModel >> threadMessageViewModels [
 				ifFalse: [ newMessages last isAssistantRole
 						ifFalse: [ | aViewModel |
 							aViewModel := self
-									newThreadMessageViewModelFor: (GtLlmProvisionalThreadMessage new createdAt: aStatus createdAt).
+									newThreadMessageViewModelFor: (GtLlmProvisionalThreadMessage new
+											createdAt: aStatus createdAt;
+											chat: self assistantChat).
 							aStream nextPut: aViewModel ] ].
 
 			aStream nextPut: self newThreadMessageViewModel ]

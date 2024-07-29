@@ -137,14 +137,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-04-24T18:31:36.167157+02:00"
+						"dateAndTimeString" : "2024-07-29T18:40:39.798463+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "q/OpfDvTDQCNJWP0Cwzy0g=="
 				},
-				"code" : "client pullModel: 'llama3'"
+				"code" : "client pullModel: 'mistral-nemo'"
 			},
 			{
 				"__type" : "textSnippet",
@@ -309,12 +309,12 @@
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2024-04-24T17:56:54.827581+02:00"
+			"dateAndTimeString" : "2024-07-22T11:32:54.671925+02:00"
 		}
 	},
 	"pageType" : {
 		"__type" : "namedPage",
-		"title" : "Working with the API client"
+		"title" : "Working with the Ollama API client"
 	},
 	"uid" : {
 		"__type" : "uuid",
