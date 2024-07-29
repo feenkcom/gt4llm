@@ -103,14 +103,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-07-29T12:57:00.073852+02:00"
+						"dateAndTimeString" : "2024-07-07T12:48:55.465814+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "KeOFtQfZDQChWbAkBJAZag=="
 				},
-				"code" : "modelfile := GtLlmModelFile new\r\tfrom: 'llama3';\r\tsystem: 'You are Mario from Super Mario Bros, acting as an assistant.';\r\tmessageFrom: 'user' withText: 'Who are you?';\r\tmessageFrom: 'assistant' withText: 'It’s me, Mario! What can I do for you today?'"
+				"code" : "modelfile := GtLlmModelFile new\r\tfrom: 'llama3';\r\tsystem: 'You are Mario from super mario bros, acting as an assistant.';\r\tmessageFrom: 'user' withText: 'Who are you?';\r\tmessageFrom: 'assistant' withText: 'It’s me, Mario! What can I do for you today?'"
 			},
 			{
 				"__type" : "textSnippet",

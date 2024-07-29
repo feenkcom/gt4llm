@@ -57,7 +57,7 @@ GtOllamaClient >> generateEmbeddingFor: aString [
 ]
 
 { #category : #accessing }
-GtOllamaClient >> generateEmbeddingWithModel: aModelString andInput: anInputString [
+GtOllamaClient >> generateEmbeddingsWithModel: aModelString andInput: anInputString [
 	^ GtOllamaGenerateEmbeddingsAPIClient new
 		client: self;
 		input: anInputString;

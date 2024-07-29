@@ -21,3 +21,8 @@ GtOllamaEmbedding >> embedding [
 GtOllamaEmbedding >> embedding: anObject [
 	embedding := anObject
 ]
+
+{ #category : #accessing }
+GtOllamaEmbedding >> size [
+	^ self embedding size
+]

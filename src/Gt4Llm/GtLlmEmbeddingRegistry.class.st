@@ -46,9 +46,13 @@ GtLlmEmbeddingRegistry >> findNearest: aNumber for: anEmbedding usingMetric: aSt
 			to: anEmbedding
 			usingMetric: aString.
 
-	sortedByDistance := (embeddingsWithDistances sorted: [ :a :b | a distance < b distance ]).
+	sortedByDistance := embeddingsWithDistances
+			sorted: [ :a :b | a distance < b distance ].
 
-	^ GtLlmNearestEmbeddingsGroup withAll: (sortedByDistance first: aNumber)
+	sortedByDistance size > aNumber
+		ifTrue: [ sortedByDistance := sortedByDistance first: aNumber ].
+
+	^ GtLlmNearestEmbeddingsGroup withAll: sortedByDistance
 ]
 
 { #category : #accessing }
