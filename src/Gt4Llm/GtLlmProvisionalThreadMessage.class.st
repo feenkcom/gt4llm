@@ -4,7 +4,8 @@ Class {
 	#traits : 'TGtLlmThreadMessage',
 	#classTraits : 'TGtLlmThreadMessage classTrait',
 	#instVars : [
-		'createdAt'
+		'createdAt',
+		'chat'
 	],
 	#category : #'Gt4Llm-Widgets'
 }
@@ -12,6 +13,16 @@ Class {
 { #category : #accessing }
 GtLlmProvisionalThreadMessage >> annotations [
 	^ #()
+]
+
+{ #category : #accessing }
+GtLlmProvisionalThreadMessage >> chat [
+	^ chat
+]
+
+{ #category : #accessing }
+GtLlmProvisionalThreadMessage >> chat: anObject [
+	chat := anObject
 ]
 
 { #category : #accessing }
