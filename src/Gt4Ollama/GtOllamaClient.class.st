@@ -49,6 +49,25 @@ GtOllamaClient >> defaultBaseUrl [
 ]
 
 { #category : #accessing }
+GtOllamaClient >> delete: aString withEntity: anEntity [
+	ZnClient new
+		timeout: 600;
+		beOneShot;
+		url: self baseUrl / aString;
+		method: #DELETE;
+		entity: (ZnEntity json: (STONJSON toString: anEntity));
+		execute
+]
+
+{ #category : #accessing }
+GtOllamaClient >> deleteModel: aString [
+	^ GtOllamaDeleteModelClient new
+		client: self;
+		model: aString;
+		perform
+]
+
+{ #category : #accessing }
 GtOllamaClient >> generateEmbeddingFor: aString [ 
 		^ GtOllamaGenerateEmbeddingsAPIClient new
 		client: self;
@@ -89,8 +108,7 @@ GtOllamaClient >> gtModelsFor: aView [
 		title: 'Models';
 		priority: 1;
 		object: [ self listModels ];
-		view: #gtModelsFor:;
-		send: [ :aModel | self getModelInformationFor: aModel name ]
+		view: #gtModelsFor:
 ]
 
 { #category : #accessing }
