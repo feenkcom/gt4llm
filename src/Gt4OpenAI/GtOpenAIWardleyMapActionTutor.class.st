@@ -21,12 +21,12 @@ GtOpenAIWardleyMapActionTutor >> addChat [
 GtOpenAIWardleyMapActionTutor >> connectionAction [
 	<gtLlmTutorAction>
 	^ GtLlmTutorAction new
-		name: 'Add a new connected node';
+		name: 'Add new connected nodes';
 		priority: 2;
-		description: 'Adds a new node that is connected to an already existing node. It MUST consider the context of the map topic. It MUST return the entirety of the state.';
-		format: 'Add a new connected node to `{1}`';
+		description: 'Adds new nodes that are connected to an already existing node. It MUST consider the context of the map topic. It MUST return the entirety of the state.';
+		format: 'Add new connected nodes to `{1}`';
 		examples: {GtLlmTutorActionExample new
-					instruction: 'Add a new connected node to `Compute`';
+					instruction: 'Add new connected nodes to `Compute`';
 					input: '```topic
 Cloud computing
 ```
@@ -39,7 +39,7 @@ component Compute [0.45, 0.34] label [-22, 29]
 
 ```';
 					output: '```action
-Add a new connected node
+Add new connected nodes
 ```
 ```topic
 Cloud computing
@@ -50,16 +50,16 @@ style wardley
 evolution genesis -> custom built -> product (+rental) -> commodity
 
 component Compute [0.45, 0.34] label [-22, 29]
-
 component Platform [0.73, 0.71] label [-26, 29]
-
+component Cloud [0.9, 0.81] label [-26, 29]
 
 Compute->Platform
+Compute->Cloud
 ```'.
 				GtLlmTutorActionExample new
-					instruction: 'Add a new connected node to `Regulator`';
+					instruction: 'Add new connected nodes to `Regulator`';
 					input: '```action
-Add a new connected node
+Add new connected nodes
 ```
 ```topic
 Regulation
@@ -72,7 +72,7 @@ evolution genesis -> custom built -> product (+rental) -> commodity
 component Regulator [0.6, 0.2] label [-22, 29]
 ```';
 					output: '```action
-Add a new connected node
+Add new connected nodes
 ```
 ```topic
 Regulation
@@ -83,11 +83,9 @@ style wardley
 evolution genesis -> custom built -> product (+rental) -> commodity
 
 component Regulator [0.6, 0.2] label [-22, 29]
-
 component Audit [0.8, 0.8] label [-26, 29]
 
-
-Compute->Platform
+Regulator->Audit
 ```'}
 ]
 
