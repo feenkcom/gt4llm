@@ -3,15 +3,35 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'example',
-		'instructions'
+		'instructions',
+		'viewsBlacklist'
 	],
 	#category : #'Gt4Llm-Fine Tuning'
 }
 
 { #category : #accessing }
+GtLlmExampleViewConversationCollector >> blacklistedMethod: aMethod [
+	self viewsBlacklist
+		do: [ :aViewType | 
+			| expr |
+			expr := RBParser parseRewriteExpression: 'aView ' , aViewType.
+			aMethod ast
+				nodesDo: [ :each | (expr match: each inContext: Dictionary new) ifTrue: [ ^ true ] ] ].
+	^ false
+]
+
+{ #category : #accessing }
 GtLlmExampleViewConversationCollector >> conversations [
 	^ (Pragma allNamed: #gtView in: self instance class)
-		collect: [ :aPragma | self toConversation: aPragma method ]
+		reject: [ :aPragma | self blacklistedMethod: aPragma method ]
+		thenCollect: [ :aPragma | self toConversation: aPragma method ]
+]
+
+{ #category : #accessing }
+GtLlmExampleViewConversationCollector >> defaultViewsBlacklist [
+	^ {'mondrian'.
+		'explicit'.
+		'forward'}
 ]
 
 { #category : #accessing }
@@ -22,6 +42,13 @@ GtLlmExampleViewConversationCollector >> example [
 { #category : #accessing }
 GtLlmExampleViewConversationCollector >> example: anObject [
 	example := anObject
+]
+
+{ #category : #accessing }
+GtLlmExampleViewConversationCollector >> initialize [
+	super initialize.
+	
+	self viewsBlacklist: self defaultViewsBlacklist
 ]
 
 { #category : #accessing }
@@ -49,10 +76,20 @@ GtLlmExampleViewConversationCollector >> toConversation: aView [
 									summaryString , String cr , String cr
 							, 'Please provide me with a potentially useful Phlow view method for the object instance. Strictly adhere to the Phlow API you know.'.
 				GtLlmAssistantMessage new
-					content: '```smalltaslk-method
+					content: '```smalltalk-method
 ' , self instance class asString
 							, '
 ' , aView sourceCode
 							, '
 ```'}
+]
+
+{ #category : #accessing }
+GtLlmExampleViewConversationCollector >> viewsBlacklist [
+	^ viewsBlacklist
+]
+
+{ #category : #accessing }
+GtLlmExampleViewConversationCollector >> viewsBlacklist: anObject [
+	viewsBlacklist := anObject
 ]

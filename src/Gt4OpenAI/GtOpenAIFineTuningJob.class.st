@@ -11,7 +11,9 @@ Class {
 		'resultFiles',
 		'status',
 		'validationFile',
-		'trainingFile'
+		'trainingFile',
+		'finishedAt',
+		'estimatedFinish'
 	],
 	#category : #'Gt4OpenAI-Models'
 }
@@ -22,12 +24,14 @@ GtOpenAIFineTuningJob class >> serializationProperties [
 		#id -> #id.
 		#model -> #model.
 		#created_at -> #createdAt.
+		#finished_at -> #finishedAt.
 		#fine_tuned_model -> #fineTunedModel.
 		#organization_id -> #organizationId.
 		#result_files -> #resultFiles.
 		#status -> #status.
 		#validation_file -> #validationFile.
-		#training_file -> #trainingFile}
+		#training_file -> #trainingFile.
+		#estimated_finish -> #estimatedFinish}
 ]
 
 { #category : #accessing }
@@ -42,7 +46,23 @@ GtOpenAIFineTuningJob >> createdAt [
 
 { #category : #accessing }
 GtOpenAIFineTuningJob >> createdAt: anObject [
-	createdAt := anObject
+	createdAt := anObject ifNotNil: [ DateAndTime fromUnixTime: anObject ]
+]
+
+{ #category : #accessing }
+GtOpenAIFineTuningJob >> currentTrainingTime [
+	^ self totalTrainingTime
+		ifNil: [ ^ DateAndTime now - (DateAndTime fromUnixTime: self createdAt) ]
+]
+
+{ #category : #accessing }
+GtOpenAIFineTuningJob >> estimatedFinish [
+	^ estimatedFinish
+]
+
+{ #category : #accessing }
+GtOpenAIFineTuningJob >> estimatedFinish: anObject [
+	estimatedFinish := anObject ifNotNil: [ DateAndTime fromUnixTime: anObject ]
 ]
 
 { #category : #accessing }
@@ -61,24 +81,36 @@ GtOpenAIFineTuningJob >> fineTunedModel: anObject [
 ]
 
 { #category : #accessing }
+GtOpenAIFineTuningJob >> finishedAt [
+	^ finishedAt
+]
+
+{ #category : #accessing }
+GtOpenAIFineTuningJob >> finishedAt: anObject [
+	finishedAt := anObject ifNotNil: [ DateAndTime fromUnixTime: anObject ]
+]
+
+{ #category : #accessing }
 GtOpenAIFineTuningJob >> gtCheckpointsFor: aView [
 	<gtView>
 	^ aView forward
 		title: 'Checkpoints';
 		priority: 2;
 		object: [ self checkpoints ];
-		view: #gtCheckpointsFor:;
-		actionUpdateButton
+		view: #gtCheckpointsFor:
 ]
 
 { #category : #accessing }
 GtOpenAIFineTuningJob >> gtEventsFor: aView [
 	<gtView>
-	^ aView forward
+	"cannot be forward due to update button"
+	^ aView columnedList
 		title: 'Events';
 		priority: 1;
-		object: [ self events ];
-		view: #gtEventsFor:;
+		items: [ self events ];
+		column: 'Level' text: #level weight: 0.5;
+		column: 'Message' text: #message weight: 2;
+		column: 'Time' text: #createdAt weight: 0.5;
 		actionUpdateButton
 ]
 
@@ -165,6 +197,14 @@ GtOpenAIFineTuningJob >> status [
 { #category : #accessing }
 GtOpenAIFineTuningJob >> status: anObject [
 	status := anObject
+]
+
+{ #category : #accessing }
+GtOpenAIFineTuningJob >> totalTrainingTime [
+	^ self finishedAt
+		ifNil: [ nil ]
+		ifNotNil: [ (DateAndTime fromUnixTime: self finishedAt)
+				- (DateAndTime fromUnixTime: self createdAt) ]
 ]
 
 { #category : #accessing }
