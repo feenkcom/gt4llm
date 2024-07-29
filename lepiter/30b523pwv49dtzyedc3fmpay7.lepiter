@@ -66,7 +66,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-07-22T12:26:13.605535+02:00"
+						"dateAndTimeString" : "2024-07-29T12:58:49.858676+02:00"
 					}
 				},
 				"uid" : {
@@ -76,7 +76,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "Using the client initialization code from [[Working with the API client]]:"
+				"string" : "Using the client initialization code from [[Working with the Ollama API client]]:"
 			},
 			{
 				"__type" : "pharoSnippet",
@@ -174,14 +174,85 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-07-22T12:26:13.606533+02:00"
+						"dateAndTimeString" : "2024-07-29T13:05:25.632527+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "iLwiNjXaDQCWHvx8Ap3RMg=="
 				},
-				"code" : "client generateEmbeddingWithModel: 'llama3' andInput: 'A text to embed'"
+				"code" : "client generateEmbeddingsWithModel: 'llama3.1' andInput: 'A text to embed'"
+			},
+			{
+				"__type" : "textSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-07-29T13:16:20.168692+02:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-07-29T13:16:20.658269+02:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "4tU6usLaDQCxA8bVBBdUnw=="
+				},
+				"paragraphStyle" : {
+					"__type" : "textStyle"
+				},
+				"string" : "We may also generate multiple embeddings at once."
+			},
+			{
+				"__type" : "pharoSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-07-29T13:16:05.77126+02:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-07-29T13:16:29.480926+02:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "fihfucLaDQCw/5kFBBdUnw=="
+				},
+				"code" : "client\r\tgenerateEmbeddingsWithModel: 'llama3.1'\r\tandInput: {'A text to embed'. 'Another text to embed'}"
 			},
 			{
 				"__type" : "textSnippet",
@@ -245,14 +316,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-07-22T12:26:13.606558+02:00"
+						"dateAndTimeString" : "2024-07-29T13:16:43.934191+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "oLwiNjXaDQCWIElDAp3RMg=="
 				},
-				"code" : "input := 'A text to embed'.\r\rembedding := GtLlmEmbedding new\r\t\tinput: input;\r\t\tembedding: (client generateEmbeddingWithModel: 'llama3' andInput: 'A text to embed') embedding"
+				"code" : "input := 'A text to embed'.\r\rembedding := GtLlmEmbedding new\r\t\tinput: input;\r\t\tembedding: (client generateEmbeddingsWithModel: 'llama3.1' andInput: 'A text to embed')\r\t\t\t\titems first embedding"
 			},
 			{
 				"__type" : "textSnippet",
@@ -330,6 +401,43 @@
 				"codeExpanded" : true,
 				"previewExpanded" : true,
 				"noCode" : true
+			},
+			{
+				"__type" : "textSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-07-29T13:17:05.647237+02:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-07-29T13:18:14.188858+02:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "Z8PwvMLaDQCxfMTPBBdUnw=="
+				},
+				"paragraphStyle" : {
+					"__type" : "textStyle"
+				},
+				"string" : "For a OpenAI-compliant option for generating embeddings, see [[Embeddings in OpenAI]] and [[Generating embeddings]]. For an in-image embedding registry that can act as an ad-hoc vector database, see [[Using the embedding registry]]."
 			}
 		]
 	},

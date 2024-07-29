@@ -55,7 +55,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-31T14:51:14.565554+01:00"
+						"dateAndTimeString" : "2024-06-23T13:39:07.788836+02:00"
 					}
 				},
 				"editEmail" : {
@@ -66,7 +66,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-31T14:51:31.448846+01:00"
+						"dateAndTimeString" : "2024-06-23T13:39:07.795523+02:00"
 					}
 				},
 				"uid" : {
@@ -76,7 +76,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "To generate embeddings if necessary, we may create a client."
+				"string" : "First we get a client (see [[Working with the OpenAI API client]]):"
 			},
 			{
 				"__type" : "pharoSnippet",
@@ -103,14 +103,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-14T12:28:07.566116+01:00"
+						"dateAndTimeString" : "2024-07-29T13:20:50.432125+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "gtM96J/MDQCddD9eCm8XrA=="
 				},
-				"code" : "client := GtOpenAIClient withApiKeyFromClipboard"
+				"code" : "client := GtOpenAIClient withApiKeyFromFile"
 			},
 			{
 				"__type" : "textSnippet",
@@ -245,14 +245,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-01-31T14:54:09.871842+01:00"
+						"dateAndTimeString" : "2024-07-29T13:21:06.562378+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "eiRa7Z/MDQCiAuMXCm8XrA=="
 				},
-				"code" : "embedding := GtLlmEmbeddingRegistry\r\tuniqueInstance\r\t\tat: input\r\t\tifAbsentCreateEmbedding: [ (client generateEmbeddingWithModel: 'text-embedding-ada-002' andInput: input)\r\t\t\t\titems first embedding ]"
+				"code" : "embedding := GtLlmEmbeddingRegistry\r\tuniqueInstance\r\t\tat: input\r\t\tifAbsentCreateEmbedding: [ (client generateEmbeddingsWithModel: 'text-embedding-ada-002' andInput: input)\r\t\t\t\titems first embedding ]"
 			},
 			{
 				"__type" : "textSnippet",

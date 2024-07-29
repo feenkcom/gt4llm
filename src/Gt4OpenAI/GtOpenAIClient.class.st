@@ -167,7 +167,7 @@ GtOpenAIClient >> deleteFile: aFileId [
 ]
 
 { #category : #accessing }
-GtOpenAIClient >> generateEmbeddingWithModel: aString andInput: anInputString [
+GtOpenAIClient >> generateEmbeddingsWithModel: aString andInput: anInputString [
 	^ GtOpenAIGenerateEmbeddingAPIClient new
 		client: self;
 		model: aString;

@@ -31,12 +31,12 @@ GtOllamaGenerateEmbeddingsAPIClient >> model: anObject [
 { #category : #accessing }
 GtOllamaGenerateEmbeddingsAPIClient >> request [
 	^ self client
-		post: '/embeddings'
+		post: '/embed'
 		withEntity: {'model' -> self model.
-				'prompt' -> self input} asDictionary
+				'input' -> self input} asDictionary
 ]
 
 { #category : #accessing }
 GtOllamaGenerateEmbeddingsAPIClient >> serializationClass [
-	^ GtOllamaEmbedding
+	^ GtOllamaEmbeddingsGroup
 ]
