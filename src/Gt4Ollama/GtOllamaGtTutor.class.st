@@ -21,7 +21,7 @@ GtOllamaGtTutor >> addChat [
 
 { #category : #accessing }
 GtOllamaGtTutor >> defaultModel [
-	^ 'qwen2'
+	^ 'llama3.1'
 ]
 
 { #category : #accessing }
