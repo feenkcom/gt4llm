@@ -75,13 +75,22 @@ GtOllamaClient >> get: aString [
 ]
 
 { #category : #accessing }
+GtOllamaClient >> getModelInformationFor: aName [
+	^ GtOllamaGetModelInformationAPIClient new
+		client: self;
+		model: aName;
+		perform
+]
+
+{ #category : #accessing }
 GtOllamaClient >> gtModelsFor: aView [
 	<gtView>
 	^ aView forward
 		title: 'Models';
 		priority: 1;
-		object: [self listModels];
-		view: #gtModelsFor:
+		object: [ self listModels ];
+		view: #gtModelsFor:;
+		send: [ :aModel | self getModelInformationFor: aModel name ]
 ]
 
 { #category : #accessing }
