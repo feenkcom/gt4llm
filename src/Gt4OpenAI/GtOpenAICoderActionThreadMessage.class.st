@@ -185,12 +185,6 @@ GtOpenAICoderActionThreadMessage >> smalltalkMethodSource [
 ]
 
 { #category : #accessing }
-GtOpenAICoderActionThreadMessage >> spacerHeaderItem [
-	<gtLlmHeaderItem: 3>
-	^ BrFrame new matchParent
-]
-
-{ #category : #accessing }
 GtOpenAICoderActionThreadMessage >> textCodeBlock [
 	^ self codeBlocks
 		detect: [ :aCodeBlock | aCodeBlock isForLanguage: 'text' ]

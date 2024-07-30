@@ -47,6 +47,20 @@ GtLlmThreadMessageContentHolder >> initializeHeader [
 ]
 
 { #category : #accessing }
+GtLlmThreadMessageContentHolder >> makeActionToolbar [
+	| actionToolbar |
+	actionToolbar := BrToolbar new aptitude: BrGlamorousToolbarAptitude new.
+
+	self threadMessageViewModel messageToolbarActions
+		do: [ :each | 
+			each
+				asElement: [ :actionElement | actionToolbar addItem: actionElement beTinySize ]
+				withHostElement: self ].
+
+	^ actionToolbar
+]
+
+{ #category : #accessing }
 GtLlmThreadMessageContentHolder >> onThreadMessageViewModelChanged [
 	self updateHeader.
 
@@ -82,7 +96,8 @@ GtLlmThreadMessageContentHolder >> threadMessageViewModel: anObject [
 { #category : #accessing }
 GtLlmThreadMessageContentHolder >> updateHeader [
 	self header removeChildren.
-	self header addChildren: self threadMessageViewModel messageHeaderItems
+	self header addChildren: self threadMessageViewModel messageHeaderItems.
+	self header addChild: self makeActionToolbar
 ]
 
 { #category : #accessing }
