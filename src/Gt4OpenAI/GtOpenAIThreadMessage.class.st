@@ -139,6 +139,12 @@ GtOpenAIThreadMessage >> createdAt: anObject [
 ]
 
 { #category : #accessing }
+GtOpenAIThreadMessage >> gtActionInspectFor: anAction [
+	<gtLlmAction>
+	^ super gtActionInspectFor: anAction
+]
+
+{ #category : #accessing }
 GtOpenAIThreadMessage >> gtAnnotationsFor: aView [
 	<gtView>
 	^ aView forward
@@ -273,6 +279,12 @@ GtOpenAIThreadMessage >> senderText [
 	self isAssistantRole ifTrue: [ ^ 'Assistant' ].
 	self isSystemRole ifTrue: [ ^ 'System' ].
 	^ 'You'
+]
+
+{ #category : #accessing }
+GtOpenAIThreadMessage >> spacerHeaderItem [
+	<gtLlmHeaderItem: 3>
+	^ BrFrame new matchParent
 ]
 
 { #category : #accessing }

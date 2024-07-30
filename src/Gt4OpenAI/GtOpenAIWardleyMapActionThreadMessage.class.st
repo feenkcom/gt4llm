@@ -142,9 +142,3 @@ GtOpenAIWardleyMapActionThreadMessage >> mapModel [
 	self mapCodeBlock ifNil: [ ^ nil ].
 	^ (GtWardleyMapParser parse: self mapCodeBlock code value) asWardleyMapModel
 ]
-
-{ #category : #accessing }
-GtOpenAIWardleyMapActionThreadMessage >> spacerHeaderItem [
-	<gtLlmHeaderItem: 3>
-	^ BrFrame new matchParent
-]

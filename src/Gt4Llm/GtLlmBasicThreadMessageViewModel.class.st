@@ -72,6 +72,14 @@ GtLlmBasicThreadMessageViewModel >> messageHeaderItems [
 ]
 
 { #category : #accessing }
+GtLlmBasicThreadMessageViewModel >> messageToolbarActions [
+	^ GtPhlowActionsCollector new
+		pragmaName: #gtLlmAction;
+		fromObject: self threadMessage;
+		collect
+]
+
+{ #category : #accessing }
 GtLlmBasicThreadMessageViewModel >> messageViews [
 	^ GtPhlowViewsCollector new
 		fromObject: self threadMessage;
