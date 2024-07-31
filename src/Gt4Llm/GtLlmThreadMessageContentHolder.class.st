@@ -36,10 +36,6 @@ GtLlmThreadMessageContentHolder >> initialize [
 ]
 
 { #category : #accessing }
-GtLlmThreadMessageContentHolder >> initializeActionElement [
-]
-
-{ #category : #accessing }
 GtLlmThreadMessageContentHolder >> initializeHeader [
 	header := BrHorizontalPane new
 			hMatchParent;
