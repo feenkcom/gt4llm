@@ -202,6 +202,22 @@ GtOpenAIThreadMessage >> id: anObject [
 	id := anObject
 ]
 
+{ #category : #accessing }
+GtOpenAIThreadMessage >> instructionsHeaderItem [
+	<gtLlmHeaderItem: 3>
+	^ BrFrame new matchParent
+		padding: (BlInsets left: 15 right: 15);
+		addChild: (BrLabel new
+				hFitContentLimited;
+				vFitContent;
+				aptitude: (BrGlamorousLabelAptitude new
+						foreground: BrGlamorousColors disabledButtonTextColor);
+				beSmallSize;
+				text: self chat instructions lines first;
+				when: BlClickEvent
+					do: [ :anEvent | anEvent target phlow spawnObject: self chat instructions ])
+]
+
 { #category : #testing }
 GtOpenAIThreadMessage >> isAssistantRole [
 	^ self role = #assistant
@@ -279,12 +295,6 @@ GtOpenAIThreadMessage >> senderText [
 	self isAssistantRole ifTrue: [ ^ 'Assistant' ].
 	self isSystemRole ifTrue: [ ^ 'System' ].
 	^ 'You'
-]
-
-{ #category : #accessing }
-GtOpenAIThreadMessage >> spacerHeaderItem [
-	<gtLlmHeaderItem: 3>
-	^ BrFrame new matchParent
 ]
 
 { #category : #accessing }
