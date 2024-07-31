@@ -5,6 +5,11 @@ Class {
 }
 
 { #category : #accessing }
+GtOpenAICoderActionAssistantChat >> instructions [
+	^ self assistant instructions
+]
+
+{ #category : #accessing }
 GtOpenAICoderActionAssistantChat >> messages [
 	<return: #GtOpenAIThreadMessagesGroup>
 	| givenMessages |
