@@ -20,11 +20,6 @@ GtOpenAIWardleyMapActionAssistantChat >> initializeWardleyMapModel: aGtWardleyMa
 	self pipeline instance initializeWardleyMapModel: aGtWardleyMapModel
 ]
 
-{ #category : #'as yet unclassified' }
-GtOpenAIWardleyMapActionAssistantChat >> instructions [
-	^ assistant instructions
-]
-
 { #category : #accessing }
 GtOpenAIWardleyMapActionAssistantChat >> messages [
 	<return: #GtOpenAIThreadMessagesGroup>

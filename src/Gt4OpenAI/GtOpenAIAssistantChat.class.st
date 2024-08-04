@@ -205,6 +205,11 @@ GtOpenAIAssistantChat >> initialize [
 	files := GtOpenAIFilesGroup new
 ]
 
+{ #category : #'as yet unclassified' }
+GtOpenAIAssistantChat >> instructions [
+	^ assistant instructions
+]
+
 { #category : #accessing }
 GtOpenAIAssistantChat >> lastRun [
 	<return: #GtOpenAIThreadRun or: nil>
