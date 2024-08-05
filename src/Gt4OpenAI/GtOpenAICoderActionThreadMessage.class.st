@@ -63,6 +63,18 @@ GtOpenAICoderActionThreadMessage >> gtContentFor: aView [
 ]
 
 { #category : #accessing }
+GtOpenAICoderActionThreadMessage >> gtOpenInCoderActionFor: anAction [
+	<gtLlmAction>
+	^ anAction button
+		priority: 1;
+		icon: BrGlamorousVectorIcons emphasizedBrowse;
+		tooltip: 'Open method in coder';
+		action: [ :aButton | 
+			aButton phlow
+				spawnTool: (GtMethodCoderTool compiledMethod: self smalltalkMethodSource compiledMethod) ]
+]
+
+{ #category : #accessing }
 GtOpenAICoderActionThreadMessage >> gtRenamesFor: aView [
 	<gtView>
 	<gtLlmMessageView>
