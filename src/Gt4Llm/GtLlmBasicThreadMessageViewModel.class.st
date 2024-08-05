@@ -69,6 +69,7 @@ GtLlmBasicThreadMessageViewModel >> messageHeaderItems [
 		to: Object
 		sortedByArgument: 1)
 		collect: [ :aPragma | self threadMessage perform: aPragma methodSelector ]
+		thenSelect: [ :aPotentialElement | aPotentialElement isKindOf: BlElement ]
 ]
 
 { #category : #accessing }
