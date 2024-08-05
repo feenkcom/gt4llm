@@ -17,6 +17,11 @@ GtLlmActionThreadMessageViewModel >> action: anObject [
 	action := anObject
 ]
 
+{ #category : #'as yet unclassified' }
+GtLlmActionThreadMessageViewModel >> ancestor [
+	^ self threadMessage ancestor
+]
+
 { #category : #accessing }
 GtLlmActionThreadMessageViewModel >> elementClass [
 	^ GtLlmExpandableThreadMessageElement
@@ -34,10 +39,20 @@ GtLlmActionThreadMessageViewModel >> findActionTag [
 ]
 
 { #category : #accessing }
+GtLlmActionThreadMessageViewModel >> messageHeaderElement [
+	^ GtLlmActionThreadMessageHeaderElement new threadMessageViewModel: self
+]
+
+{ #category : #accessing }
 GtLlmActionThreadMessageViewModel >> onThreadMessageChanged [
 	super onThreadMessageChanged.
 	
 	self threadMessage isAssistantRole ifTrue: [
 		self findActionTag
 	]
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmActionThreadMessageViewModel >> senderText [
+	^ self threadMessage senderText
 ]

@@ -92,7 +92,7 @@ GtLlmThreadMessageContentHolder >> threadMessageViewModel: anObject [
 { #category : #accessing }
 GtLlmThreadMessageContentHolder >> updateHeader [
 	self header removeChildren.
-	self header addChildren: self threadMessageViewModel messageHeaderItems.
+	self header addChild: self threadMessageViewModel messageHeaderElement.
 	self header addChild: self makeActionToolbar
 ]
 
