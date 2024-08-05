@@ -62,14 +62,8 @@ GtLlmBasicThreadMessageViewModel >> isAssistantRole [
 ]
 
 { #category : #accessing }
-GtLlmBasicThreadMessageViewModel >> messageHeaderItems [
-	^ (Pragma
-		allNamed: #gtLlmHeaderItem:
-		from: self threadMessage class
-		to: Object
-		sortedByArgument: 1)
-		collect: [ :aPragma | self threadMessage perform: aPragma methodSelector ]
-		thenSelect: [ :aPotentialElement | aPotentialElement isKindOf: BlElement ]
+GtLlmBasicThreadMessageViewModel >> messageHeaderElement [
+	^ GtLlmThreadMessageHeaderElement new threadMessageViewModel: self
 ]
 
 { #category : #accessing }

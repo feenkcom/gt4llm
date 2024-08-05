@@ -10,6 +10,11 @@ Class {
 	#category : #'Gt4Llm-Widgets'
 }
 
+{ #category : #'as yet unclassified' }
+GtLlmProvisionalThreadMessage >> ancestor [
+	^ self chat messages last
+]
+
 { #category : #accessing }
 GtLlmProvisionalThreadMessage >> annotations [
 	^ #()
@@ -77,39 +82,14 @@ GtLlmProvisionalThreadMessage >> isAssistantRole [
 	^ true
 ]
 
-{ #category : #accessing }
-GtLlmProvisionalThreadMessage >> senderHeaderItem [
-	<gtLlmHeaderItem: 1>
-	^ BrLabel new
-		hFitContentLimited;
-		vFitContent;
-		aptitude: (BrGlamorousLabelAptitude new
-				foreground: BrGlamorousColors disabledButtonTextColor);
-		beSmallSize;
-		text: 'Assistant'
+{ #category : #'as yet unclassified' }
+GtLlmProvisionalThreadMessage >> senderText [
+	^ 'Assistant'
 ]
 
 { #category : #accessing }
 GtLlmProvisionalThreadMessage >> styler [
 	^ nil
-]
-
-{ #category : #accessing }
-GtLlmProvisionalThreadMessage >> timeHeaderItem [
-	<gtLlmHeaderItem: 2>
-	| timeTooltip |
-	timeTooltip := BrGlamorousWithLabelTooltipAptitude new
-			text: (String
-					streamContents: [ :s | self createdAt asLocal printSeparateDateAndTimeOn: s ]).
-	^ BrLabel new
-		updatingDateAndTimeModel;
-		fitContent;
-		beSmallSize;
-		aptitude: (BrGlamorousLabelAptitude new
-				foreground: BrGlamorousColors disabledButtonTextColor);
-		addAptitude: timeTooltip;
-		updatingDateAndTime: self createdAt;
-		yourself
 ]
 
 { #category : #subscriptions }
