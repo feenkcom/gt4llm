@@ -68,15 +68,27 @@ GtLlmExampleViewConversationCollector >> instructions: anObject [
 
 { #category : #accessing }
 GtLlmExampleViewConversationCollector >> toConversation: aView [
+	| objectString |
+	objectString := '```object
+'
+			, (GtLlmInspectorSummarizer new summarizeWithoutViews: self instance)
+					summaryString
+			, '
+```'.
 	^ GtLlmMessagesGroup
-		withAll: {GtLlmSystemMessage new content: self instructions instructionString.
-				GtLlmUserMessage new
-					content: 'The context of this conversation is '
-							, (GtLlmInspectorSummarizer new summarizeWithoutViews: self instance)
-									summaryString , String cr , String cr
-							, 'Please provide me with a potentially useful Phlow view method for the object instance. Strictly adhere to the Phlow API you know.'.
+		withAll: {GtLlmUserMessage new
+					content: 'Generate a Phlow view
+					
+# Current state:
+
+' , objectString.
 				GtLlmAssistantMessage new
-					content: '```smalltalk-method
+					content: '```action
+Generate a Phlow view
+```
+' , objectString
+							, '
+```smalltalk-method
 ' , self instance class asString
 							, '
 ' , aView sourceCode

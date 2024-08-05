@@ -51,8 +51,3 @@ GtLlmActionThreadMessageViewModel >> onThreadMessageChanged [
 		self findActionTag
 	]
 ]
-
-{ #category : #'as yet unclassified' }
-GtLlmActionThreadMessageViewModel >> senderText [
-	^ self threadMessage senderText
-]

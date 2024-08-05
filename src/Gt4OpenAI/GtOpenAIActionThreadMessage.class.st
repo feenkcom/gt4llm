@@ -19,5 +19,13 @@ GtOpenAIActionThreadMessage >> action [
 ]
 
 { #category : #accessing }
-GtOpenAIActionThreadMessage >> spacerHeaderItem [
+GtOpenAIActionThreadMessage >> gtActionFor: aView [
+	<gtView>
+	<gtLlmMessageView>
+	self action ifEmpty: [ ^ aView empty ].
+
+	^ aView textEditor
+		title: 'Action';
+		priority: 3;
+		text: [ self action ]
 ]
