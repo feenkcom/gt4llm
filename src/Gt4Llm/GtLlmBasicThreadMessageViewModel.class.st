@@ -127,6 +127,11 @@ GtLlmBasicThreadMessageViewModel >> requestStyleSourceText [
 	self announce: GtOpenAIThreadMessageRestyleRequested new
 ]
 
+{ #category : #'as yet unclassified' }
+GtLlmBasicThreadMessageViewModel >> senderText [
+	^ self threadMessage senderText
+]
+
 { #category : #accessing }
 GtLlmBasicThreadMessageViewModel >> styler [
 	^ styler ifNil: [ styler := self newStyler ]
