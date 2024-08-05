@@ -10,7 +10,17 @@ GtLlmInspectorSummarizer >> summarize: anObject [
 		object: anObject;
 		objectClass: anObject class;
 		slots: (self summarizeSlots: anObject);
+		methods: (self summarizeMethods: anObject);
 		views: (self summarizeViews: anObject)
+]
+
+{ #category : #accessing }
+GtLlmInspectorSummarizer >> summarizeMethods: anObject [
+	^ GtLlmInspectorMethodSummaryGroup
+		withAll: (anObject class methods
+				collect: [ :aMethod | 
+					GtLlmInspectorMethodSummary new
+						name: aMethod selector ])
 ]
 
 { #category : #accessing }
@@ -63,6 +73,7 @@ GtLlmInspectorSummarizer >> summarizeWithoutMarkup: anObject [
 		object: anObject;
 		objectClass: anObject class;
 		slots: (self summarizeSlots: anObject);
+		methods: (self summarizeMethods: anObject);
 		views: (self summarizeViewsWithoutMarkup: anObject)
 ]
 
@@ -72,5 +83,6 @@ GtLlmInspectorSummarizer >> summarizeWithoutViews: anObject [
 		object: anObject;
 		objectClass: anObject class;
 		slots: (self summarizeSlots: anObject);
+		methods: (self summarizeMethods: anObject);
 		views: {}
 ]
