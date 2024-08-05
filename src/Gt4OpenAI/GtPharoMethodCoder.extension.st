@@ -19,13 +19,13 @@ GtPharoMethodCoder >> addRenameSuggestionsMenuAddOnsAst: anAst to: coderAddOns f
 							aChat := self openAITutorChat.
 							aChat sendMessage: 'Propose renames for method'.
 							(aChat whenReadyFuture
-										then: [ | choices |
-											aChat messages first isAssistantRole
-												ifTrue: [ choices := aChat messages first proposedRenamesForMethod at: 'proposals'.
-													self
-														renameNodeProposals: node
-														in: aTextualViewModel
-														for: anElement
-														withPossibilities: choices ]
-												ifFalse: [ self error: 'No answer received!' ] ]) await ] ] ]
+								then: [ | choices |
+									aChat messages first isAssistantRole
+										ifTrue: [ choices := aChat messages first proposedRenamesForMethod proposals.
+											self
+												renameNodeProposals: node
+												in: aTextualViewModel
+												for: anElement
+												withPossibilities: choices ]
+										ifFalse: [ self error: 'No answer received!' ] ]) await ] ] ]
 ]
