@@ -18,18 +18,6 @@ GtOpenAICoderActionThreadMessage >> compareSourceFrom: expected to: actual [
 ]
 
 { #category : #accessing }
-GtOpenAICoderActionThreadMessage >> gtActionFor: aView [
-	<gtView>
-	<gtLlmMessageView>
-	self action ifEmpty: [ ^ aView empty ].
-
-	^ aView textEditor
-		title: 'Action';
-		priority: 3;
-		text: [ self action ]
-]
-
-{ #category : #accessing }
 GtOpenAICoderActionThreadMessage >> gtCodeFor: aView [
 	<gtView>
 	<gtLlmMessageView>
