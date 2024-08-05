@@ -98,9 +98,11 @@ GtOpenAICoderActionThreadMessage >> gtRenamesListFor: aView [
 		title: 'Rename list';
 		priority: 2;
 		items: [ self renames ];
-		column: 'Type' text: [:aJson | aJson at: 'type'];
-		column: 'Original' text: [:aJson | aJson at: 'original'];
-		column: 'Proposals' text: [:aJson | ', ' join: (aJson at: 'proposals') ] weight: 2
+		column: 'Type' text: #type;
+		column: 'Original' text: #original;
+		column: 'Proposals'
+			text: [ :aRename | ', ' join: aRename proposals ]
+			weight: 2
 ]
 
 { #category : #accessing }
@@ -118,15 +120,13 @@ GtOpenAICoderActionThreadMessage >> gtTextFor: aView [
 
 { #category : #accessing }
 GtOpenAICoderActionThreadMessage >> proposedRenamesForMethod [
-	^ self renames
-		detect: [ :aJson | (aJson at: 'type') = 'method' ]
-		ifNone: [ {} ]
+	^ self renames detect: [ :aJson | aJson isForMethod ] ifNone: [ {} ]
 ]
 
 { #category : #accessing }
 GtOpenAICoderActionThreadMessage >> proposedRenamesForVariable: aName [
 	^ self renames
-		detect: [ :aJson | (aJson at: 'type') = 'variable' and: [ (aJson at: 'original') = aName ] ]
+		detect: [ :aJson | aJson isForVariable and: [ aJson original = aName ] ]
 		ifNone: [ nil ]
 ]
 
@@ -134,7 +134,13 @@ GtOpenAICoderActionThreadMessage >> proposedRenamesForVariable: aName [
 GtOpenAICoderActionThreadMessage >> renames [
 	^ self renamesCodeBlock code value lines
 		select: #isNotEmpty
-		thenCollect: [ :aLine | STONJSON fromString: aLine ]
+		thenCollect: [ :aLine | 
+			| renameJson |
+			renameJson := STONJSON fromString: aLine.
+			GtOpenAICoderRename new
+				type: (renameJson at: 'type');
+				original: (renameJson at: 'original');
+				proposals: (renameJson at: 'proposals') ]
 ]
 
 { #category : #accessing }

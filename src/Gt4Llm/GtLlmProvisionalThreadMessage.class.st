@@ -12,7 +12,7 @@ Class {
 
 { #category : #'as yet unclassified' }
 GtLlmProvisionalThreadMessage >> ancestor [
-	^ self chat messages last
+	^ self chat messages first
 ]
 
 { #category : #accessing }
