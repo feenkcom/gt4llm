@@ -18,7 +18,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-05-27T20:26:22.101209+02:00"
+						"dateAndTimeString" : "2024-08-06T10:45:15.080712+02:00"
 					}
 				},
 				"editEmail" : {
@@ -29,12 +29,12 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-25T08:00:39.868151+02:00"
+						"dateAndTimeString" : "2024-08-06T10:45:32.890367+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "FZoaY9XVDQCjOG3lA9Dzng=="
+					"uidString" : "JJijjGHbDQCdvpMeDjAh1Q=="
 				},
 				"paragraphStyle" : {
 					"__type" : "textStyle"
@@ -55,7 +55,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-25T08:06:59.977367+02:00"
+						"dateAndTimeString" : "2024-08-06T10:45:43.512837+02:00"
 					}
 				},
 				"editEmail" : {
@@ -66,17 +66,17 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-25T08:07:33.773911+02:00"
+						"dateAndTimeString" : "2024-08-06T10:46:15.6819+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "OA5acRLYDQCf+6wuDT0UXA=="
+					"uidString" : "aWlVjmHbDQCdyVK3DjAh1Q=="
 				},
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "As an example, here we look at working with an LLM to help build a Wardley Map (the same use case found in [[Building a custom tutor to facilitate generating Wardley maps]] and [[Expanding the Wardley maps tutor with a step-wise tutor]]). The tutor can be found in {{gtClass:GtOpenAIWardleyMapActionTutor}}."
+				"string" : "As an example, here we look at working with an LLM to help generate Phlow views (the same use case found in [[Getting a tutor to create a view]]). The tutor can be found in {{gtClass:GtOpenAIViewActionTutor}}."
 			},
 			{
 				"__type" : "textSnippet",
@@ -92,7 +92,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-08-06T10:46:44.690501+02:00"
+						"dateAndTimeString" : "2024-08-06T10:46:17.890233+02:00"
 					}
 				},
 				"editEmail" : {
@@ -103,17 +103,17 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-08-06T10:46:57.928687+02:00"
+						"dateAndTimeString" : "2024-08-06T10:46:37.805469+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "GOj6kWHbDQCgOoYXDjAh1Q=="
+					"uidString" : "BfZhkGHbDQCesjyKDjAh1Q=="
 				},
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "For a different use case using the same technology, look at [[Making the view tutor action-based]]."
+				"string" : "For a different use case using the same technology, look at [[Expanding the Wardley maps tutor with an action-based tutor]]."
 			},
 			{
 				"__type" : "textSnippet",
@@ -129,7 +129,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-25T08:00:59.351136+02:00"
+						"dateAndTimeString" : "2024-08-06T10:47:06.084935+02:00"
 					}
 				},
 				"editEmail" : {
@@ -140,12 +140,12 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-25T08:01:00.362389+02:00"
+						"dateAndTimeString" : "2024-08-06T10:47:06.44273+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "PfRJWxLYDQCXETtEDT0UXA=="
+					"uidString" : "f1pBk2HbDQCgi+mKDjAh1Q=="
 				},
 				"paragraphStyle" : {
 					"__type" : "textStyle"
@@ -166,7 +166,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-07T17:21:56.658971+02:00"
+						"dateAndTimeString" : "2024-08-06T10:47:13.296696+02:00"
 					}
 				},
 				"editEmail" : {
@@ -177,14 +177,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-25T08:00:48.880528+02:00"
+						"dateAndTimeString" : "2024-08-06T10:47:22.111996+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "NlTYGLDWDQC5XV4MBM5T/g=="
+					"uidString" : "IDuvk2HbDQCglRlADjAh1Q=="
 				},
-				"code" : "tutor := GtOpenAIWardleyMapActionTutor withApiKeyFromFile createAssistant.\rtutor addChat"
+				"code" : "tutor := GtOpenAIViewActionTutor withApiKeyFromFile createAssistant.\rtutor addChat"
 			},
 			{
 				"__type" : "textSnippet",
@@ -200,7 +200,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-05-27T20:28:33.667167+02:00"
+						"dateAndTimeString" : "2024-08-06T10:47:34.831683+02:00"
 					}
 				},
 				"editEmail" : {
@@ -211,12 +211,12 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-25T08:02:27.115937+02:00"
+						"dateAndTimeString" : "2024-08-06T10:47:35.309689+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "ewD8a9XVDQCtd/H5A9Dzng=="
+					"uidString" : "u/b3lGHbDQCguCbdDjAh1Q=="
 				},
 				"paragraphStyle" : {
 					"__type" : "textStyle"
@@ -237,7 +237,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-05-27T20:28:38.283476+02:00"
+						"dateAndTimeString" : "2024-08-06T10:47:36.286186+02:00"
 					}
 				},
 				"editEmail" : {
@@ -248,17 +248,17 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-07-10T11:40:03.891632+02:00"
+						"dateAndTimeString" : "2024-08-06T10:47:55.325815+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "xHFCbNXVDQCt7z3SA9Dzng=="
+					"uidString" : "QjMOlWHbDQCgwuV9DjAh1Q=="
 				},
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "The first step for an action-based tutor is to define the actions it should perform. They are annotated using the `gtLlmTutorAction` pragma. An example can be found here: {{gtMethod:GtOpenAIWardleyMapActionTutor>>#explanationAction}}"
+				"string" : "The first step for an action-based tutor is to define the actions it should perform. They are annotated using the `gtLlmTutorAction` pragma. An example can be found here: {{gtMethod:GtOpenAIViewActionTutor>>#generateViewAction}}"
 			},
 			{
 				"__type" : "textSnippet",
@@ -274,7 +274,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-05-27T20:30:54.584968+02:00"
+						"dateAndTimeString" : "2024-08-06T10:48:07.864902+02:00"
 					}
 				},
 				"editEmail" : {
@@ -285,17 +285,17 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-07-10T11:50:05.691029+02:00"
+						"dateAndTimeString" : "2024-08-06T10:48:27.762776+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "dzxidNXVDQC3i2wfA9Dzng=="
+					"uidString" : "7gvwlmHbDQChKLwfDjAh1Q=="
 				},
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "Then we define a data interchange format for the tutor. This works in a similar fashion as the actions, using the `gtLlmFormatComponent`. An example can be found here: {{gtMethod:GtOpenAIWardleyMapActionTutor>>#explanationFormatComponent}}"
+				"string" : "Then we define a data interchange format for the tutor. This works in a similar fashion as the actions, using the `gtLlmFormatComponent`. An example can be found here: {{gtMethod:GtOpenAIViewActionTutor>>#textFormatComponent}}"
 			},
 			{
 				"__type" : "textSnippet",
@@ -311,7 +311,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-25T08:04:40.063654+02:00"
+						"dateAndTimeString" : "2024-08-06T10:49:20.853039+02:00"
 					}
 				},
 				"editEmail" : {
@@ -322,17 +322,91 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-25T08:06:08.875018+02:00"
+						"dateAndTimeString" : "2024-08-06T10:51:03.174425+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "wSEDaRLYDQCaZMZIDT0UXA=="
+					"uidString" : "S8NJm2HbDQChluXrDjAh1Q=="
 				},
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "Finally, a tutor needs a pipeline of checkers that automatically check the results coming from LLMs: {{gtMethod:GtOpenAIWardleyMapActionTutor>>#initializePipeline}}"
+				"string" : "Contrary to the action tutor in [[Expanding the Wardley maps tutor with an action-based tutor]], this tutor does not define an elaborate pipeline. Instead, it relies on enriching the messages with views that will be displayed in the chat, such as in {{gtMethod:GtOpenAIViewActionThreadMessage>>gtCodeFor:}}"
+			},
+			{
+				"__type" : "textSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-08-06T10:51:21.337989+02:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-08-06T10:51:36.249234+02:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "HjZ4omHbDQCn2RvWDjAh1Q=="
+				},
+				"paragraphStyle" : {
+					"__type" : "textStyle"
+				},
+				"string" : "## Interactions with fine-tuning"
+			},
+			{
+				"__type" : "textSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-08-06T10:51:37.895826+02:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-08-06T10:52:17.231238+02:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "Wd10o2HbDQCoks+XDjAh1Q=="
+				},
+				"paragraphStyle" : {
+					"__type" : "textStyle"
+				},
+				"string" : "This tutor works well with fine-tuned models as described in [[Creating a dataset for fine-tuning]]. The format in that training set corresponds to the tutor used here."
 			}
 		]
 	},
@@ -344,7 +418,7 @@
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2024-05-27T20:26:04.608875+02:00"
+			"dateAndTimeString" : "2024-08-06T10:45:15.010313+02:00"
 		}
 	},
 	"editEmail" : {
@@ -355,15 +429,15 @@
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2024-05-27T20:26:04.608875+02:00"
+			"dateAndTimeString" : "2024-08-06T10:45:15.010313+02:00"
 		}
 	},
 	"pageType" : {
 		"__type" : "namedPage",
-		"title" : "Expanding the Wardley maps tutor with an action-based tutor"
+		"title" : "Making the view tutor action-based"
 	},
 	"uid" : {
 		"__type" : "uuid",
-		"uuid" : "84901963-d5d5-0d00-a337-8f2b03d0f39e"
+		"uuid" : "fe83a28c-61db-0d00-9dbd-2f650e3021d5"
 	}
 }
