@@ -138,6 +138,29 @@ GtOpenAIFineTuningJob >> gtUpdateActionFor: anAction [
 ]
 
 { #category : #accessing }
+GtOpenAIFineTuningJob >> gtViewLoss2For: aView [
+	<gtView>
+	^ aView explicit
+		title: 'Training loss 2';
+		priority: 4;
+		stencil: [ | aData aChart |
+			aData := GtPlotterDataGroup new
+					values: ((self events reversed select: [ :anEvent | anEvent data isEmptyOrNil not ])
+							collectWithIndex: [ :anEvent :anIndex | anIndex -> (anEvent data at: 'train_loss') ]);
+					background: BrGlamorousColors primaryBorderColor.
+			aChart := GtPlotterLineChart new.
+			aChart with: aData.
+			aChart valueX: #key.
+			aChart scaleX: GtPlotterLinearScale new.
+			aChart labelFormatX: [ :x | x asString ].
+			aChart valueY: #value.
+			aChart scaleY: GtPlotterLinearScale new.
+			aChart labelFormatY: [ :x | x printShowingDecimalPlaces: 2 ].
+			aChart ];
+		actionUpdateButton
+]
+
+{ #category : #accessing }
 GtOpenAIFineTuningJob >> gtViewLossFor: aView [
 	<gtView>
 	^ aView explicit
