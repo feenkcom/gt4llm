@@ -16,11 +16,14 @@ GtLlmInspectorSummarizer >> summarize: anObject [
 
 { #category : #accessing }
 GtLlmInspectorSummarizer >> summarizeMethods: anObject [
+	| methods |
+	methods := (anObject class
+			allSelectorsWithout: {ProtoObject.
+					Object}) asArray collect: [ :s | anObject class lookupSelector: s ].
+	methods sorted: [ :a :b | a selector < b selector ].
 	^ GtLlmInspectorMethodSummaryGroup
 		withAll: (anObject class methods
-				collect: [ :aMethod | 
-					GtLlmInspectorMethodSummary new
-						name: aMethod selector ])
+				collect: [ :aMethod | GtLlmInspectorMethodSummary new name: aMethod selector ])
 ]
 
 { #category : #accessing }
