@@ -28,7 +28,7 @@ GtOpenAIViewActionTutor >> generateViewAction [
 	^ GtLlmTutorAction new
 		name: 'Generate a Phlow view';
 		priority: 4;
-		description: 'Proposes a sensible Phlow view to the object provided. It should be as minimal as possible, yet still be useful.';
+		description: 'Proposes a sensible Phlow view to the object provided. It should be as minimal as possible, yet still be useful. The view MUST respect the context of the object, and MUST NOT exist yet on the object. The view MUST be of type `textEditor`, `list`, `columnedList`, `tree`, or `columnedTree`.';
 		format: 'Generate a Phlow view';
 		examples: {GtLlmTutorActionExample new
 					instruction: 'Generate a Phlow view';
@@ -36,7 +36,8 @@ GtOpenAIViewActionTutor >> generateViewAction [
 '
 							, (GtLlmInspectorSummarizer new
 									summarizeWithoutMarkup: (Bag
-											withAll: {1.2.
+											withAll: {1.
+													2.
 													3})) summaryString
 							, '
 ```';
@@ -47,7 +48,8 @@ Generate a Phlow view
 '
 							, (GtLlmInspectorSummarizer new
 									summarizeWithoutMarkup: (Bag
-											withAll: {1.2.
+											withAll: {1.
+													2.
 													3})) summaryString
 							, '
 ```
@@ -61,6 +63,36 @@ gtUniqueItemsFor: aView
 		items: [ self asSet ];
 		column: ''Item'' text: [ :eachItem | eachItem gtDisplayText ];
 		actionUpdateButtonTooltip: ''Update item list''
+```'.
+				GtLlmTutorActionExample new
+					instruction: 'Generate a Phlow view';
+					input: '```object
+'
+							, (GtLlmInspectorSummarizer new
+									summarizeWithoutMarkup: (GtABAddress new
+											city: 'Boston';
+											country: 'USA')) summaryString
+							, '
+```';
+					output: '```action
+Generate a Phlow view
+```
+```object
+'
+							, (GtLlmInspectorSummarizer new
+									summarizeWithoutMarkup: (GtABAddress new
+											city: 'Boston';
+											country: 'USA')) summaryString
+							, '
+```
+```smalltalk-method
+GtABAddress
+gtAddressStringFor: aView
+	<gtView>
+	^ aView textEditor
+		title: ''Address string'' translated;
+		priority: 100;
+		text: [ self asString ]
 ```'}
 ]
 

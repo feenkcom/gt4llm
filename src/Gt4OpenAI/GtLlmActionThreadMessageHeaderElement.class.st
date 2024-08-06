@@ -20,7 +20,9 @@ GtLlmActionThreadMessageHeaderElement >> addActionElement [
 						aptitude: (BrGlamorousLabelAptitude new
 								foreground: BrGlamorousColors disabledButtonTextColor);
 						beSmallSize;
-						text: self threadMessageViewModel ancestor contentText lines first))
+						text: (self threadMessageViewModel ancestor contentText lines
+								ifEmpty: [ '' ]
+								ifNotEmpty: #first)))
 ]
 
 { #category : #accessing }

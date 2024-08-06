@@ -34,7 +34,9 @@ GtLlmObjectHolder >> gtLiveFor: aView [
 		title: 'Live';
 		priority: 1;
 		object: [ self object ];
-		view: #gtLiveFor:
+		view: ((self object class includesSelector: #gtPreviewFor:)
+				ifTrue: [ #gtPreviewFor: ]
+				ifFalse: [ #gtLiveFor: ])
 ]
 
 { #category : #accessing }
