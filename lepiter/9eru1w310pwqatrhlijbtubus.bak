@@ -248,7 +248,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-07-10T11:50:04.356283+02:00"
+						"dateAndTimeString" : "2024-07-10T11:50:05.691029+02:00"
 					}
 				},
 				"uid" : {
@@ -258,7 +258,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "Then we define a data interchange format for the tutor. This works in a similar fashion as the actions, using the `gtLlmFormatComponent`. An example can be found here: {{gtM"
+				"string" : "Then we define a data interchange format for the tutor. This works in a similar fashion as the actions, using the `gtLlmFormatComponent`. An example can be found here: {{gtMethod:GtOpenAIWardleyMapActionTutor>>#explanationFormatComponent}}"
 			},
 			{
 				"__type" : "textSnippet",
