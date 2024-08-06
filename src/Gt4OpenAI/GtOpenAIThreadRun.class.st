@@ -184,6 +184,13 @@ GtOpenAIThreadRun >> id: anObject [
 ]
 
 { #category : #accessing }
+GtOpenAIThreadRun >> initialize [
+	super initialize.
+	
+	fileIds := OrderedCollection new
+]
+
+{ #category : #accessing }
 GtOpenAIThreadRun >> instructions [
 	^ instructions
 ]

@@ -5,14 +5,30 @@ Class {
 	#classTraits : 'TGtLlmThreadMessage classTrait',
 	#instVars : [
 		'failureText',
-		'createdAt'
+		'createdAt',
+		'chat'
 	],
 	#category : #'Gt4OpenAI-Widgets'
 }
 
 { #category : #accessing }
+GtOpenAIFailureThreadMessage >> ancestor [
+	^ self chat messages first
+]
+
+{ #category : #accessing }
 GtOpenAIFailureThreadMessage >> annotations [
 	^ #()
+]
+
+{ #category : #accessing }
+GtOpenAIFailureThreadMessage >> chat [
+	^ chat
+]
+
+{ #category : #accessing }
+GtOpenAIFailureThreadMessage >> chat: anObject [
+	chat := anObject
 ]
 
 { #category : #accessing }
@@ -74,6 +90,11 @@ GtOpenAIFailureThreadMessage >> isAssistantRole [
 { #category : #accessing }
 GtOpenAIFailureThreadMessage >> isFailure [
 	^ true
+]
+
+{ #category : #accessing }
+GtOpenAIFailureThreadMessage >> senderText [
+	^  'Assistant'
 ]
 
 { #category : #accessing }

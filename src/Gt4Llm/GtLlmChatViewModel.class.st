@@ -73,7 +73,8 @@ GtLlmChatViewModel >> threadMessageViewModels [
 					aViewModel := self
 							newThreadMessageViewModelFor: (GtOpenAIFailureThreadMessage new
 									failureText: aStatus message;
-									createdAt: aStatus createdAt).
+									createdAt: aStatus createdAt;
+									chat: self assistantChat).
 					aStream nextPut: aViewModel ].
 
 			aStatus isDone
