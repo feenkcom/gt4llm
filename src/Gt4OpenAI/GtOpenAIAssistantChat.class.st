@@ -11,7 +11,8 @@ Class {
 		'announcer',
 		'future',
 		'pipeline',
-		'tutor'
+		'tutor',
+		'responseFormat'
 	],
 	#category : #'Gt4OpenAI-Chats'
 }
@@ -256,6 +257,16 @@ GtOpenAIAssistantChat >> pipeline: aPipeline [
 ]
 
 { #category : #accessing }
+GtOpenAIAssistantChat >> responseFormat [
+	^ responseFormat
+]
+
+{ #category : #accessing }
+GtOpenAIAssistantChat >> responseFormat: anObject [
+	responseFormat := anObject
+]
+
+{ #category : #accessing }
 GtOpenAIAssistantChat >> runFuture [
 	^ GtOpenAIThreadRunFuture new chat: self
 ]
@@ -271,7 +282,8 @@ GtOpenAIAssistantChat >> sendMessage: aString [
 	assistant client addMessage: aMessage toThread: thread id.
 	lastRun := assistant client
 			createRunForThread: thread id
-			usingAssistant: assistant id.
+			usingAssistant: assistant id
+			andResponseFormat: self responseFormat.
 
 	self announcer
 		announce: (GtOpenAIThreadRunStartedAnnouncement new run: lastRun).

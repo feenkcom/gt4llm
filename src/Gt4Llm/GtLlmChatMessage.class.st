@@ -92,6 +92,17 @@ GtLlmChatMessage >> createdAt: anObject [
 ]
 
 { #category : #accessing }
+GtLlmChatMessage >> descendant [
+	^ self chat descendantOf: self
+]
+
+{ #category : #accessing }
+GtLlmChatMessage >> gtActionInspectFor: anAction [
+	<gtLlmAction>
+	^ super gtActionInspectFor: anAction
+]
+
+{ #category : #accessing }
 GtLlmChatMessage >> gtContentFor: aView [
 	<gtView>
 	<gtLlmMessageView>
@@ -100,6 +111,15 @@ GtLlmChatMessage >> gtContentFor: aView [
 		priority: 1;
 		stencil: [ GtLlmThreadMessageElement new
 				threadMessageViewModel: (GtLlmThreadMessageViewModel new threadMessage: self) ]
+]
+
+{ #category : #accessing }
+GtLlmChatMessage >> gtToLlmActionFor: anAction [
+	<gtLlmAction>
+	^ anAction button
+		label: 'To LLM action';
+		priority: 1;
+		action: [ :aButton | aButton phlow spawnObject: (GtLlmTutorAction new format: self contentText) ]
 ]
 
 { #category : #accessing }

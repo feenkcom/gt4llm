@@ -3,7 +3,8 @@ Class {
 	#superclass : #GtLlmEndpointClient,
 	#instVars : [
 		'assistant',
-		'thread'
+		'thread',
+		'responseFormat'
 	],
 	#category : #'Gt4OpenAI-Client'
 }
@@ -22,7 +23,18 @@ GtOpenAICreateThreadRunAPIClient >> assistant: anObject [
 GtOpenAICreateThreadRunAPIClient >> request [
 	^ self client
 		post: 'threads/' , self thread , '/runs'
-		withEntity: {'assistant_id' -> self assistant} asDictionary
+		withEntity: {'assistant_id' -> self assistant.
+				'response_format' -> self responseFormat} asDictionary
+]
+
+{ #category : #accessing }
+GtOpenAICreateThreadRunAPIClient >> responseFormat [
+	^ responseFormat
+]
+
+{ #category : #accessing }
+GtOpenAICreateThreadRunAPIClient >> responseFormat: anObject [
+	responseFormat := anObject
 ]
 
 { #category : #accessing }

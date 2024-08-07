@@ -41,6 +41,16 @@ GtLlmTutorAction >> description: anObject [
 ]
 
 { #category : #accessing }
+GtLlmTutorAction >> descriptionDescription [
+	<magritteDescription>
+	^ MAStringDescription new
+		label: 'Description';
+		beRequired;
+		priority: 3;
+		accessor: #description
+]
+
+{ #category : #accessing }
 GtLlmTutorAction >> examples [
 	^ examples
 ]
@@ -51,6 +61,29 @@ GtLlmTutorAction >> examples: anObject [
 ]
 
 { #category : #accessing }
+GtLlmTutorAction >> examplesDescription [
+	<magritteDescription>
+	^ MAToManyRelationDescription new
+		label: 'Examples';
+		priority: 5;
+		accessor: #examples;
+		classes: {GtLlmTutorActionExample};
+		beModifiable;
+		blocItemStencil: [ :anItemViewModel :anItemIndex | 
+			anItemViewModel asElement
+				fitContent;
+				border: (BlBorder paint: BrGlamorousColors disabledButtonBorderColor width: 1);
+				margin: (BlInsets
+						top: 0
+						right: 5
+						bottom: 5
+						left: 0);
+				padding: (BlInsets all: 5);
+				background: Color white ];
+		  newItemStencil: [ GtLlmTutorActionExample new ]
+]
+
+{ #category : #accessing }
 GtLlmTutorAction >> format [
 	^ format
 ]
@@ -58,6 +91,16 @@ GtLlmTutorAction >> format [
 { #category : #accessing }
 GtLlmTutorAction >> format: anObject [
 	format := anObject
+]
+
+{ #category : #accessing }
+GtLlmTutorAction >> formatDescription [
+	<magritteDescription>
+	^ MAStringDescription new
+		label: 'Format';
+		beRequired;
+		priority: 5;
+		accessor: #format
 ]
 
 { #category : #accessing }
@@ -90,7 +133,8 @@ GtLlmTutorAction >> gtInstructionFor: aView [
 GtLlmTutorAction >> initialize [
 	super initialize.
 	
-	self priority: self defaultPriority
+	self priority: self defaultPriority.
+	self examples: OrderedCollection new
 ]
 
 { #category : #accessing }
@@ -102,6 +146,16 @@ GtLlmTutorAction >> name [
 GtLlmTutorAction >> name: anObject [
 	name := anObject.
 	self format ifNil: [ self format: name ]
+]
+
+{ #category : #accessing }
+GtLlmTutorAction >> nameDescription [
+	<magritteDescription>
+	^ MAStringDescription new
+		label: 'Name';
+		beRequired;
+		priority: 1;
+		accessor: #name
 ]
 
 { #category : #accessing }
@@ -122,4 +176,13 @@ GtLlmTutorAction >> priority [
 { #category : #accessing }
 GtLlmTutorAction >> priority: anObject [
 	priority := anObject
+]
+
+{ #category : #accessing }
+GtLlmTutorAction >> priorityDescription [
+	<magritteDescription>
+	^ MANumberDescription new
+		label: 'Priority';
+		priority: 2;
+		accessor: #priority
 ]
