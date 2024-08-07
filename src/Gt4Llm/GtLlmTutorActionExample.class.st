@@ -51,6 +51,16 @@ GtLlmTutorActionExample >> input: anObject [
 ]
 
 { #category : #accessing }
+GtLlmTutorActionExample >> inputDescription [
+	<magritteDescription>
+	^ MAStringDescription new
+		label: 'Input';
+		beRequired;
+		priority: 2;
+		accessor: #input
+]
+
+{ #category : #accessing }
 GtLlmTutorActionExample >> instruction [
 	^ instruction
 ]
@@ -61,6 +71,16 @@ GtLlmTutorActionExample >> instruction: anObject [
 ]
 
 { #category : #accessing }
+GtLlmTutorActionExample >> instructionDescription [
+	<magritteDescription>
+	^ MAStringDescription new
+		label: 'Instruction';
+		beRequired;
+		priority: 1;
+		accessor: #instruction
+]
+
+{ #category : #accessing }
 GtLlmTutorActionExample >> output [
 	^ output
 ]
@@ -68,4 +88,14 @@ GtLlmTutorActionExample >> output [
 { #category : #accessing }
 GtLlmTutorActionExample >> output: anObject [
 	output := anObject
+]
+
+{ #category : #accessing }
+GtLlmTutorActionExample >> outputDescription [
+	<magritteDescription>
+	^ MAStringDescription new
+		label: 'Output';
+		beRequired;
+		priority: 2;
+		accessor: #output
 ]

@@ -127,6 +127,16 @@ GtOpenAIClient >> createRunForThread: aThreadId usingAssistant: anAssistantId [
 ]
 
 { #category : #accessing }
+GtOpenAIClient >> createRunForThread: aThreadId usingAssistant: anAssistantId andResponseFormat: aFormat [
+	^ GtOpenAICreateThreadRunAPIClient new
+		client: self;
+		assistant: anAssistantId;
+		thread: aThreadId;
+		responseFormat: aFormat;
+		perform
+]
+
+{ #category : #accessing }
 GtOpenAIClient >> createThreadWithMessages: aListOfMessages [ 
 	^ GtOpenAICreateThreadAPIClient new
 		client: self;

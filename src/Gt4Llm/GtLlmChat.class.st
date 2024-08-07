@@ -23,6 +23,16 @@ GtLlmChat >> addMessage: aMessage [
 ]
 
 { #category : #accessing }
+GtLlmChat >> ancestorOf: aMessage [
+	messages
+		withIndexDo: [ :possibleAncestor :index | 
+			possibleAncestor id = aMessage id
+				ifTrue: [ index = messages size ifTrue: [ ^ nil ] ifFalse: [ ^ messages at: index + 1 ] ] ].
+
+	self error: 'Message not found'
+]
+
+{ #category : #accessing }
 GtLlmChat >> announcer [
 	^ announcer ifNil: [ announcer := Announcer new ]
 ]
@@ -46,6 +56,16 @@ GtLlmChat >> context [
 GtLlmChat >> context: anObject [
 	context := anObject.
 	context chat: self
+]
+
+{ #category : #accessing }
+GtLlmChat >> descendantOf: aMessage [
+	messages
+		withIndexDo: [ :possibleAncestor :index | 
+			possibleAncestor id = aMessage id
+				ifTrue: [ index = 1 ifTrue: [ ^ nil ] ifFalse: [ ^ messages at: index - 1 ] ] ].
+
+	self error: 'Message not found'
 ]
 
 { #category : #accessing }
