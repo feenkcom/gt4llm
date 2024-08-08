@@ -182,6 +182,21 @@ GtOpenAIThreadMessage >> gtContentFor: aView [
 		stencil: [ GtLlmThreadMessageElement new threadMessageViewModel: self asViewModel ]
 ]
 
+{ #category : #accessing }
+GtOpenAIThreadMessage >> gtJsonFor: aView [
+	<gtView>
+	<gtLlmMessageView>
+	self chat responseFormat ifNil: [ ^ aView empty ].
+	self isAssistantRole ifFalse: [ ^ aView empty ].
+
+	^ aView textEditor
+		title: 'JSON';
+		priority: 1;
+		text: [ self contentText ];
+		styler: JSONParser gtStyler;
+		aptitude: BrGlamorousCodeEditorAptitude
+]
+
 { #category : #testing }
 GtOpenAIThreadMessage >> hasResponse [
 	^ content anySatisfy: [ :aValue | (aValue at: #text at: #value) isNotEmpty ]
