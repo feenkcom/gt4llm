@@ -17,11 +17,6 @@ GtLlmActionThreadMessageViewModel >> action: anObject [
 	action := anObject
 ]
 
-{ #category : #'as yet unclassified' }
-GtLlmActionThreadMessageViewModel >> ancestor [
-	^ self threadMessage ancestor
-]
-
 { #category : #accessing }
 GtLlmActionThreadMessageViewModel >> elementClass [
 	^ GtLlmExpandableThreadMessageElement
@@ -36,11 +31,6 @@ GtLlmActionThreadMessageViewModel >> findActionTag [
 		do: [ :aNode | 
 			((aNode isKindOf: LeCodeBlockNode) and: [ aNode isForLanguage: 'action' ])
 				ifTrue: [ action := aNode code source ] ]
-]
-
-{ #category : #accessing }
-GtLlmActionThreadMessageViewModel >> messageHeaderElement [
-	^ GtLlmActionThreadMessageHeaderElement new threadMessageViewModel: self
 ]
 
 { #category : #accessing }
