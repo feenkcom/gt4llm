@@ -51,8 +51,6 @@ GtLlmObjectHolder >> object: anObject [
 
 { #category : #accessing }
 GtLlmObjectHolder >> serialize [
-	^ '```object
-' , (GtLlmInspectorSummarizer new summarizeWithoutMarkup: self object) summaryString
-		, '
-```'
+	^ 'Object'
+		-> (GtLlmInspectorSummarizer new summarizeWithoutMarkup: self object) summaryString
 ]

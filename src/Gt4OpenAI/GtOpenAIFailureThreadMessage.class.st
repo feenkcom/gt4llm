@@ -32,6 +32,11 @@ GtOpenAIFailureThreadMessage >> chat: anObject [
 ]
 
 { #category : #accessing }
+GtOpenAIFailureThreadMessage >> contentSummary [
+	^ self contentText lines ifEmpty: [ '' ] ifNotEmpty: #first
+]
+
+{ #category : #accessing }
 GtOpenAIFailureThreadMessage >> contentText [
 	^ self failureText ifNil: [ '' ]
 ]

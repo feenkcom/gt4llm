@@ -48,9 +48,7 @@ GtOpenAIWardleyMapActionThreadMessage >> diffedMapModel [
 
 { #category : #accessing }
 GtOpenAIWardleyMapActionThreadMessage >> explanationCodeBlock [
-	^ self codeBlocks
-		detect: [ :aCodeBlock | aCodeBlock isForLanguage: 'explanation' ]
-		ifNone: [ nil ]
+	^ self contentJson at: 'Explanation' ifAbsent: [ '' ]
 ]
 
 { #category : #accessing }
@@ -79,7 +77,7 @@ GtOpenAIWardleyMapActionThreadMessage >> gtContentFor: aView [
 GtOpenAIWardleyMapActionThreadMessage >> gtExplanationFor: aView [
 	<gtView>
 	<gtLlmMessageView>
-	self explanationCodeBlock ifNil: [ ^ aView empty ].
+	self explanationCodeBlock ifEmpty: [ ^ aView empty ].
 
 	^ aView textEditor
 		title: 'Explanation';
@@ -92,7 +90,7 @@ GtOpenAIWardleyMapActionThreadMessage >> gtExplanationFor: aView [
 GtOpenAIWardleyMapActionThreadMessage >> gtWardleyMapFor: aView [
 	<gtView>
 	<gtLlmMessageView>
-	self mapCodeBlock ifNil: [ ^ aView empty ].
+	self mapCodeBlock ifEmpty: [ ^ aView empty ].
 
 	^ aView explicit
 		title: 'Map';
@@ -106,13 +104,21 @@ GtOpenAIWardleyMapActionThreadMessage >> gtWardleyMapFor: aView [
 
 { #category : #accessing }
 GtOpenAIWardleyMapActionThreadMessage >> mapCodeBlock [
-	^ self codeBlocks
-		detect: [ :aCodeBlock | aCodeBlock isForLanguage: 'wardley-map' ]
-		ifNone: [ nil ]
+	^ self contentJson at: 'Wardley Map' ifAbsent: [ '' ]
 ]
 
 { #category : #accessing }
 GtOpenAIWardleyMapActionThreadMessage >> mapModel [
-	self mapCodeBlock ifNil: [ ^ nil ].
-	^ (GtWardleyMapParser parse: self mapCodeBlock code value) asWardleyMapModel
+	self mapCodeBlock ifEmpty: [ ^ nil ].
+	^ (GtWardleyMapParser parse: self mapCodeBlock) asWardleyMapModel
+]
+
+{ #category : #accessing }
+GtOpenAIWardleyMapActionThreadMessage >> renamesCodeBlock [
+	^ self contentJson at: 'Rename' ifAbsent: [ '' ]
+]
+
+{ #category : #accessing }
+GtOpenAIWardleyMapActionThreadMessage >> topicCodeBlock [
+	^ self contentJson at: 'Topic' ifAbsent: [ '' ]
 ]

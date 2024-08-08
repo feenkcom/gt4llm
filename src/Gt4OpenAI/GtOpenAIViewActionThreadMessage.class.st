@@ -8,7 +8,7 @@ Class {
 GtOpenAIViewActionThreadMessage >> gtCodeFor: aView [
 	<gtView>
 	<gtLlmMessageView>
-	self smalltalkMethodCodeBlock ifNil: [ ^ aView empty ].
+	self smalltalkMethodCodeBlock ifEmpty: [ ^ aView empty ].
 
 	^ aView explicit
 		title: 'Coder';
@@ -37,12 +37,12 @@ GtOpenAIViewActionThreadMessage >> gtContentFor: aView [
 GtOpenAIViewActionThreadMessage >> gtTextFor: aView [
 	<gtView>
 	<gtLlmMessageView>
-	self textCodeBlock ifNil: [ ^ aView empty ].
+	self textCodeBlock ifEmpty: [ ^ aView empty ].
 
 	^ aView textEditor
 		title: 'Text';
 		priority: 2;
-		text: [ self textCodeBlock code value ];
+		text: [ self textCodeBlock ];
 		styler: (GtLlmMessageStyler new threadMessageViewModel: self)
 ]
 
@@ -51,7 +51,7 @@ GtOpenAIViewActionThreadMessage >> gtViewFor: aView [
 	<gtView>
 	<gtLlmMessageView>
 	| view ast return script viewVariableName instance generatedView |
-	self smalltalkMethodCodeBlock ifNil: [ ^ aView empty ].
+	self smalltalkMethodCodeBlock ifEmpty: [ ^ aView empty ].
 
 	view := self smalltalkMethodSource.
 	instance := self chat pipeline instance object.
@@ -74,21 +74,17 @@ GtOpenAIViewActionThreadMessage >> gtViewFor: aView [
 
 { #category : #accessing }
 GtOpenAIViewActionThreadMessage >> smalltalkMethodCodeBlock [
-	^ self codeBlocks
-		detect: [ :aCodeBlock | aCodeBlock isForLanguage: 'smalltalk-method' ]
-		ifNone: [ nil ]
+	^ self contentJson at: 'Smalltalk method' ifAbsent: [ '' ]
 ]
 
 { #category : #accessing }
 GtOpenAIViewActionThreadMessage >> smalltalkMethodSource [
 	^ self smalltalkMethodCodeBlock
 		ifNil: [ self ancestor smalltalkMethodSource ]
-		ifNotNil: [ :aBlock | GtLlmMethodSource forSource: aBlock code value ]
+		ifNotNil: [ :aBlock | GtLlmMethodSource forSource: aBlock ]
 ]
 
 { #category : #accessing }
 GtOpenAIViewActionThreadMessage >> textCodeBlock [
-	^ self codeBlocks
-		detect: [ :aCodeBlock | aCodeBlock isForLanguage: 'text' ]
-		ifNone: [ nil ]
+	^ self contentJson at: 'Text' ifAbsent: [ '' ]
 ]

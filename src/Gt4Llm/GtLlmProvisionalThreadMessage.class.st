@@ -10,6 +10,11 @@ Class {
 	#category : #'Gt4Llm-Widgets'
 }
 
+{ #category : #accessing }
+GtLlmProvisionalThreadMessage >> action [
+	^ ''
+]
+
 { #category : #'as yet unclassified' }
 GtLlmProvisionalThreadMessage >> ancestor [
 	^ self chat messages first
@@ -28,6 +33,11 @@ GtLlmProvisionalThreadMessage >> chat [
 { #category : #accessing }
 GtLlmProvisionalThreadMessage >> chat: anObject [
 	chat := anObject
+]
+
+{ #category : #accessing }
+GtLlmProvisionalThreadMessage >> contentSummary [
+	^ ''
 ]
 
 { #category : #accessing }

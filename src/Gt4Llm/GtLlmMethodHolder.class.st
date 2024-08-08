@@ -52,10 +52,8 @@ GtLlmMethodHolder >> method: anObject [
 
 { #category : #accessing }
 GtLlmMethodHolder >> serialize [
-	^ '```smalltalk-method
-' , self method methodClass asString
-		, '
-' , self method sourceCode
-		, '
-```'
+	^ 'Smalltalk method'
+		-> (self method methodClass asString
+				, '
+' , self method sourceCode)
 ]

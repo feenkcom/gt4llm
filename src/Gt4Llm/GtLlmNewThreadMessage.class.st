@@ -38,6 +38,11 @@ GtLlmNewThreadMessage >> codeBlocksExecutor [
 ]
 
 { #category : #accessing }
+GtLlmNewThreadMessage >> contentSummary [
+	^ self contentText lines ifEmpty: [ '' ] ifNotEmpty: #first
+]
+
+{ #category : #accessing }
 GtLlmNewThreadMessage >> contentText [
 	^ self contents
 ]

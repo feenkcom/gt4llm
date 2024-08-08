@@ -24,13 +24,7 @@ GtLlmActionThreadMessageViewModel >> elementClass [
 
 { #category : #accessing }
 GtLlmActionThreadMessageViewModel >> findActionTag [
-	| parsed |
-	parsed := LeParser parse: self threadMessage contentText.
-
-	parsed children
-		do: [ :aNode | 
-			((aNode isKindOf: LeCodeBlockNode) and: [ aNode isForLanguage: 'action' ])
-				ifTrue: [ action := aNode code source ] ]
+	action := self threadMessage action
 ]
 
 { #category : #accessing }
