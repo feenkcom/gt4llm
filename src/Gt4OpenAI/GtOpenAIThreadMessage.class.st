@@ -178,8 +178,22 @@ GtOpenAIThreadMessage >> gtContentFor: aView [
 	<gtLlmMessageView>
 	^ aView explicit
 		title: 'Content';
-		priority: 1;
+		priority: 5;
 		stencil: [ GtLlmThreadMessageElement new threadMessageViewModel: self asViewModel ]
+]
+
+{ #category : #accessing }
+GtOpenAIThreadMessage >> gtJsonDataFor: aView [
+	<gtView>
+	<gtLlmMessageView>
+	self chat responseFormat ifNil: [ ^ aView empty ].
+	self isAssistantRole ifFalse: [ ^ aView empty ].
+
+	^ aView forward
+		title: 'JSON data';
+		priority: 2;
+		object: [ STONJSON fromString: self contentText ];
+		view:  #gtTreeFor:context:
 ]
 
 { #category : #accessing }
