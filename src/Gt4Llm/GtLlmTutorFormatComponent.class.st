@@ -24,6 +24,16 @@ GtLlmTutorFormatComponent >> asInstruction [
 ]
 
 { #category : #accessing }
+GtLlmTutorFormatComponent >> asJsonSchema [
+	^ {'type' -> 'string'.
+		'description'
+			-> (GtLlmInstructionList new
+					addItem: 'Format: ' , self format;
+					addItem: 'Examples:
+' , self example) instructionString}
+]
+
+{ #category : #accessing }
 GtLlmTutorFormatComponent >> defaultPriority [
 	^ 10
 ]

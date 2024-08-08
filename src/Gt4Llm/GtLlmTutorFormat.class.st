@@ -50,6 +50,22 @@ The components that make up the state are as follows:';
 ]
 
 { #category : #accessing }
+GtLlmTutorFormat >> asJsonSchema [
+	^ {'type' -> 'json_schema'.
+		'json_schema'
+			-> {'name' -> self name.
+					'schema'
+						-> {'type' -> 'object'.
+								'properties'
+									-> (components
+											collect: [ :aComponent | aComponent name -> aComponent asJsonSchema ])
+											asDictionary.
+								'required' -> (components collect: #name).
+								'additionalProperties' -> false} asDictionary.
+					'strict' -> true} asDictionary} asDictionary
+]
+
+{ #category : #accessing }
 GtLlmTutorFormat >> communicationConventionsDescription [
 	^ GtLlmInstructionSection new
 		title: 'Communication rules';
