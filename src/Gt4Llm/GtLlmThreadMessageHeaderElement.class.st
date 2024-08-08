@@ -7,6 +7,27 @@ Class {
 }
 
 { #category : #accessing }
+GtLlmThreadMessageHeaderElement >> addActionElement [
+	| aFrame |
+	aFrame := BrFrame new matchParent.
+
+	self threadMessageViewModel isAssistantRole
+		ifTrue: [ aFrame
+				padding: (BlInsets left: 15 right: 15);
+				addChild: (BrLabel new
+						hFitContentLimited;
+						vFitContent;
+						aptitude: (BrGlamorousLabelAptitude new
+								foreground: BrGlamorousColors disabledButtonTextColor);
+						beSmallSize;
+						text: (self threadMessageViewModel ancestor contentText lines
+								ifEmpty: [ '' ]
+								ifNotEmpty: #first)) ].
+
+	self addChild: aFrame
+]
+
+{ #category : #accessing }
 GtLlmThreadMessageHeaderElement >> addSenderElement [
 	self
 		addChild: (BrLabel new
@@ -16,11 +37,6 @@ GtLlmThreadMessageHeaderElement >> addSenderElement [
 						foreground: BrGlamorousColors disabledButtonTextColor);
 				beSmallSize;
 				text: self threadMessageViewModel senderText)
-]
-
-{ #category : #accessing }
-GtLlmThreadMessageHeaderElement >> addSpacerElement [
-	self addChild: BrFrame new matchParent
 ]
 
 { #category : #accessing }
@@ -61,5 +77,5 @@ GtLlmThreadMessageHeaderElement >> updateElement [
 	
 	self addSenderElement.
 	self addTimeElement.
-	self addSpacerElement
+	self addActionElement
 ]

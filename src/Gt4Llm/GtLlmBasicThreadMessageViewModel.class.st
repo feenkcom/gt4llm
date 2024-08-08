@@ -11,6 +11,11 @@ Class {
 	#category : #'Gt4Llm-Widgets'
 }
 
+{ #category : #'as yet unclassified' }
+GtLlmBasicThreadMessageViewModel >> ancestor [
+	^ self threadMessage ancestor
+]
+
 { #category : #accessing }
 GtLlmBasicThreadMessageViewModel >> annotations [
 	^ threadMessage ifNotNil: #annotations ifNil: [ #() ]
