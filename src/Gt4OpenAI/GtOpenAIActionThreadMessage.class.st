@@ -6,16 +6,18 @@ Class {
 
 { #category : #accessing }
 GtOpenAIActionThreadMessage >> action [
-	| parsed |
-	self isAssistantRole ifFalse: [ ^ '' ].
+	^ self contentJson at: 'Action' ifAbsent: [ '' ]
+]
 
-	parsed := LeParser parse: self contentText.
+{ #category : #accessing }
+GtOpenAIActionThreadMessage >> contentJson [
+	self contentText ifEmpty: [ ^ {} asDictionary ].
+	^ STONJSON fromString: self contentText
+]
 
-	parsed children
-		do: [ :aNode | 
-			((aNode isKindOf: LeCodeBlockNode) and: [ aNode isForLanguage: 'action' ])
-				ifTrue: [ ^ aNode code source ] ].
-	^ ''
+{ #category : #accessing }
+GtOpenAIActionThreadMessage >> contentSummary [
+	^ self action
 ]
 
 { #category : #accessing }

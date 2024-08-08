@@ -67,14 +67,14 @@ GtOpenAICoderActionThreadMessage >> gtRenamesFor: aView [
 	<gtView>
 	<gtLlmMessageView>
 	self renamesCodeBlock ifNil: [ ^ aView empty ].
-	self proposedRenamesForMethod ifEmpty: [ ^ aView empty ].
+	self proposedRenamesForMethod ifNil: [ ^ aView empty ].
 
 	^ aView explicit
 		title: 'Renames';
 		priority: 1;
 		stencil: [ | methodSource coder renames coderViewModel coderElement |
 			methodSource := self smalltalkMethodSource.
-			renames := self proposedRenamesForMethod at: 'proposals'.
+			renames := self proposedRenamesForMethod proposals.
 			coder := GtPharoMethodCoder forMethod: methodSource compiledMethod.
 			coderViewModel := coder asCoderViewModel.
 			coderElement := coderViewModel asElement.
@@ -92,7 +92,7 @@ GtOpenAICoderActionThreadMessage >> gtRenamesFor: aView [
 GtOpenAICoderActionThreadMessage >> gtRenamesListFor: aView [
 	<gtView>
 	<gtLlmMessageView>
-	self renamesCodeBlock ifNil: [ ^ aView empty ].
+	self renamesCodeBlock ifEmpty: [ ^ aView empty ].
 
 	^ aView columnedList
 		title: 'Rename list';
@@ -109,18 +109,18 @@ GtOpenAICoderActionThreadMessage >> gtRenamesListFor: aView [
 GtOpenAICoderActionThreadMessage >> gtTextFor: aView [
 	<gtView>
 	<gtLlmMessageView>
-	self textCodeBlock ifNil: [ ^ aView empty ].
+	self textCodeBlock ifEmpty: [ ^ aView empty ].
 
 	^ aView textEditor
 		title: 'Text';
 		priority: 2;
-		text: [ self textCodeBlock code value ];
+		text: [ self textCodeBlock ];
 		styler: (GtLlmMessageStyler new threadMessageViewModel: self)
 ]
 
 { #category : #accessing }
 GtOpenAICoderActionThreadMessage >> proposedRenamesForMethod [
-	^ self renames detect: [ :aJson | aJson isForMethod ] ifNone: [ {} ]
+	^ self renames detect: [ :aJson | aJson isForMethod ] ifNone: [ nil ]
 ]
 
 { #category : #accessing }
@@ -132,7 +132,7 @@ GtOpenAICoderActionThreadMessage >> proposedRenamesForVariable: aName [
 
 { #category : #accessing }
 GtOpenAICoderActionThreadMessage >> renames [
-	^ self renamesCodeBlock code value lines
+	^ self renamesCodeBlock lines
 		select: #isNotEmpty
 		thenCollect: [ :aLine | 
 			| renameJson |
@@ -145,28 +145,22 @@ GtOpenAICoderActionThreadMessage >> renames [
 
 { #category : #accessing }
 GtOpenAICoderActionThreadMessage >> renamesCodeBlock [
-	^ self codeBlocks
-		detect: [ :aCodeBlock | aCodeBlock isForLanguage: 'renames' ]
-		ifNone: [ nil ]
+	^ self contentJson at: 'Renames' ifAbsent: [ '' ]
 ]
 
 { #category : #accessing }
 GtOpenAICoderActionThreadMessage >> smalltalkMethodCodeBlock [
-	^ self codeBlocks
-		detect: [ :aCodeBlock | aCodeBlock isForLanguage: 'smalltalk-method' ]
-		ifNone: [ nil ]
+	^ self contentJson at: 'Smalltalk method' ifAbsent: [ '' ]
 ]
 
 { #category : #accessing }
 GtOpenAICoderActionThreadMessage >> smalltalkMethodSource [
 	^ self smalltalkMethodCodeBlock
 		ifNil: [ self ancestor smalltalkMethodSource ]
-		ifNotNil: [ :aBlock | GtLlmMethodSource forSource: aBlock code value ]
+		ifNotNil: [ :aString | GtLlmMethodSource forSource: aString ]
 ]
 
 { #category : #accessing }
 GtOpenAICoderActionThreadMessage >> textCodeBlock [
-	^ self codeBlocks
-		detect: [ :aCodeBlock | aCodeBlock isForLanguage: 'text' ]
-		ifNone: [ nil ]
+	^ self contentJson at: 'Text' ifAbsent: [ '' ]
 ]

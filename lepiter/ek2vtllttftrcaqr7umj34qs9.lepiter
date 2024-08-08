@@ -103,14 +103,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-07-24T10:13:45.439038+02:00"
+						"dateAndTimeString" : "2024-08-08T13:46:52.302882+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "yW7Zd1vaDQCoLEmdARM8CA=="
 				},
-				"code" : "tutor := GtOpenAICoderActionTutor instance"
+				"code" : "tutor := GtOpenAICoderActionTutor withApiKeyFromFile createAssistant"
 			},
 			{
 				"__type" : "textSnippet",
@@ -174,7 +174,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-07-24T10:05:47.23655+02:00"
+						"dateAndTimeString" : "2024-08-08T13:46:56.972509+02:00"
 					}
 				},
 				"uid" : {

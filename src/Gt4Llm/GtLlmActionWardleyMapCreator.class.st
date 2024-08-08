@@ -110,10 +110,7 @@ GtLlmActionWardleyMapCreator >> proposeModel: aModel [
 
 { #category : #accessing }
 GtLlmActionWardleyMapCreator >> serialize [
-	^ '```wardley-map
-' , self model asWardleyMapScript
-		, '
-```'
+	^ 'Wardley Map' -> self model asWardleyMapScript
 ]
 
 { #category : #accessing }

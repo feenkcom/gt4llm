@@ -77,6 +77,11 @@ GtLlmChatMessage >> content: anObject [
 ]
 
 { #category : #accessing }
+GtLlmChatMessage >> contentSummary [
+	^ self contentText lines ifEmpty: [ '' ] ifNotEmpty: #first
+]
+
+{ #category : #accessing }
 GtLlmChatMessage >> contentText [
 	^ self content
 ]

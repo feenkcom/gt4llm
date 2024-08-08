@@ -58,6 +58,10 @@ GtOpenAIActionAssistantChat >> initialize [
 ]
 
 { #category : #accessing }
+GtOpenAIActionAssistantChat >> onActionResult: aMessage [ 
+]
+
+{ #category : #accessing }
 GtOpenAIActionAssistantChat >> onSendActionToChat: anAnnouncement [
 	| action |
 	action := self actions
@@ -84,11 +88,9 @@ GtOpenAIActionAssistantChat >> pipeline: aPipeline [
 { #category : #accessing }
 GtOpenAIActionAssistantChat >> sendMessage: aString [
 	^ super
-		sendMessage: aString
-				, '
-	
-# Current state:
-' , pipeline instance serialize
+		sendMessage: (STONJSON
+				toString: {'Action' -> aString.
+						pipeline instance serialize} asDictionary)
 ]
 
 { #category : #accessing }
@@ -103,14 +105,15 @@ GtOpenAIActionAssistantChat >> waitForActionResult [
 				do: [ :aBlock | 
 					[ | aResult |
 					aResult := aMessage codeBlocksExecutor check: aBlock.
-					aResult hasError ifTrue: [ self error: aResult lastResult ].
-					self announce: GtLlmActionFinished new ]
+					aResult hasError ifTrue: [ self error: aResult lastResult ] ]
 						on: Error
 						do: [ :anError | 
 							anError asNotification registerNotifications.
 							withRetry
 								ifTrue: [ self sendMessage: 'An error occurred: ' , anError asString.
-									self waitForActionResult ] ] ] ]) await
+									self waitForActionResult ] ] ].
+			self onActionResult: aMessage.
+			self announce: GtLlmActionFinished new ]) await
 ]
 
 { #category : #accessing }

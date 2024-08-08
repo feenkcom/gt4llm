@@ -110,7 +110,7 @@ GtOpenAITutor >> defaultAssistantName [
 
 { #category : #accessing }
 GtOpenAITutor >> defaultModel [
-	^ 'gpt-4o'
+	^ 'gpt-4o-2024-08-06'
 ]
 
 { #category : #accessing }

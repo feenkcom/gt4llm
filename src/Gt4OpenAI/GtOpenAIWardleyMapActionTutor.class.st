@@ -11,6 +11,7 @@ GtOpenAIWardleyMapActionTutor >> addChat [
 			assistant: self assistant;
 			tutor: self;
 			actions: actions;
+			responseFormat: self format asJsonSchema;
 			pipeline: pipelineBuilder value.
 	chats add: aChat.
 
@@ -26,26 +27,20 @@ GtOpenAIWardleyMapActionTutor >> connectionAction [
 		description: 'Adds new nodes that are connected to an already existing node. It MUST consider the context of the map topic. It MUST return the entirety of the state.';
 		format: 'Add new connected nodes to `{1}`';
 		examples: {GtLlmTutorActionExample new
-					instruction: 'Add new connected nodes to `Compute`';
-					input: '```topic
-Cloud computing
-```
-```wardley-map
-style wardley
+					input: {'Action' -> 'Add new connected nodes to `Compute`'.
+							'Topic' -> 'Cloud computing'.
+							'Wardley Map'
+								-> 'style wardley
 
 evolution genesis -> custom built -> product (+rental) -> commodity
 
 component Compute [0.45, 0.34] label [-22, 29]
 
-```';
-					output: '```action
-Add new connected nodes
-```
-```topic
-Cloud computing
-```
-```wardley-map
-style wardley
+'} asDictionary;
+					output: {'Action' -> 'Add new connected nodes'.
+							'Topic' -> 'Cloud computing'.
+							'Wardley Map'
+								-> 'style wardley
 
 evolution genesis -> custom built -> product (+rental) -> commodity
 
@@ -54,31 +49,21 @@ component Platform [0.73, 0.71] label [-26, 29]
 component Cloud [0.9, 0.81] label [-26, 29]
 
 Compute->Platform
-Compute->Cloud
-```'.
+Compute->Cloud'} asDictionary.
 				GtLlmTutorActionExample new
-					instruction: 'Add new connected nodes to `Regulator`';
-					input: '```action
-Add new connected nodes
-```
-```topic
-Regulation
-```
-```wardley-map
-style wardley
+					input: {'Action' -> 'Add new connected nodes to `Regulator`'.
+							'Topic' -> 'Regulation'.
+							'Wardley Map'
+								-> 'style wardley
 
 evolution genesis -> custom built -> product (+rental) -> commodity
 
 component Regulator [0.6, 0.2] label [-22, 29]
-```';
-					output: '```action
-Add new connected nodes
-```
-```topic
-Regulation
-```
-```wardley-map
-style wardley
+'} asDictionary;
+					output: {'Action' -> 'Add new connected nodes'.
+							'Topic' -> 'Regulation'.
+							'Wardley map'
+								-> 'style wardley
 
 evolution genesis -> custom built -> product (+rental) -> commodity
 
@@ -86,7 +71,7 @@ component Regulator [0.6, 0.2] label [-22, 29]
 component Audit [0.8, 0.8] label [-26, 29]
 
 Regulator->Audit
-```'}
+'} asDictionary}
 ]
 
 { #category : #accessing }
@@ -98,27 +83,22 @@ GtOpenAIWardleyMapActionTutor >> explanationAction [
 		description: 'Explains what a node means and why it is on the map using human language.';
 		format: 'Explain the node `{1}`';
 		examples: {GtLlmTutorActionExample new
-					instruction: 'Explain `Compute`';
-					input: '```topic
-Cloud computing
-```
-```wardley-map
-style wardley
+					input: {'Action' -> 'Explain `Compute`'.
+							'Topic' -> 'Cloud computing'.
+							'Wardley Map'
+								-> 'style wardley
 
 evolution genesis -> custom built -> product (+rental) -> commodity
 
-component Compute [0.4, 0.4] label [-22, 29]
-```';
-					output: '```action
-Explain a node
-```
-```explanation
-In the context of this Wardley Map on Cloud Computing, the node `Compute` refers to the computing resources and capabilities provided as part of cloud services. This encompasses the virtualized processing power (CPUs, GPUs) that can be scaled up or down on demand to meet the needs of applications or services running in the cloud. The `Compute` node is fundamental to cloud computing, as it allows for flexible, efficient, and scalable computing solutions that can be tailored to the specific requirements of businesses and developers.
+component Compute [0.4, 0.4] label [-22, 29]'} asDictionary;
+					output: {'Action' -> 'Explain a node'.
+							'Explanation'
+								-> 'In the context of this Wardley Map on Cloud Computing, the node `Compute` refers to the computing resources and capabilities provided as part of cloud services. This encompasses the virtualized processing power (CPUs, GPUs) that can be scaled up or down on demand to meet the needs of applications or services running in the cloud. The `Compute` node is fundamental to cloud computing, as it allows for flexible, efficient, and scalable computing solutions that can be tailored to the specific requirements of businesses and developers.
 
 The presence of `Compute` in a cloud computing map highlights its role as a core component of the cloud value chain, directly supporting various higher-level services and applications that depend on reliable and scalable computing resources. It could be connected to nodes representing services that leverage these computing resources, such as web hosting, data analytics platforms, or any software-as-a-service (SaaS) applications, indicating a dependency relationship where these services rely on the underlying compute capabilities to function effectively.
 
 In summary, `Compute` signifies the provisioning of raw processing power in the cloud, which is pivotal to the delivery of a wide range of cloud-based services and applications, illustrating the utility and flexibility offered by cloud computing paradigms.
-```'}
+```'} asDictionary}
 ]
 
 { #category : #accessing }
@@ -128,8 +108,7 @@ GtOpenAIWardleyMapActionTutor >> explanationFormatComponent [
 		name: 'Explanation';
 		priority: 3;
 		format: 'Text';
-		tag: 'explanation';
-		example: '```explanation
+		example: '```
 Human readable text goes here
 ```'
 ]
@@ -148,19 +127,14 @@ GtOpenAIWardleyMapActionTutor >> initialAction [
 		description: 'Creates a set of nodes based on a given topic, filling topic, nodes, and connections with sensible data. If a map topic was already set, it is overridden. The rest of the map is extended.';
 		format: 'Create a set of nodes on {1}';
 		examples: {GtLlmTutorActionExample new
-					instruction: 'Create a set of nodes on Key components for a drone delivery service';
-					input: '```topic
-```
-```wardley-map
-```';
-					output: '```action
-Create a set of nodes
-```
-```topic
-Key components for a drone delivery service
-```
-```wardley-map
-style wardley
+					input: {'Action'
+								-> 'Create a set of nodes on Key components for a drone delivery service'.
+							'Topic' -> ''.
+							'Wardley Map' -> ''} asDictionary;
+					output: {'Action' -> 'Create a set of nodes'.
+							'Topic' -> 'Key components for a drone delivery service'.
+							'Wardley Map'
+								-> 'style wardley
 
 evolution genesis -> custom built -> product (+rental) -> commodity
 
@@ -194,22 +168,15 @@ Drone delivery platform->Computing resources
 Drones->Power supply and charging stations
 Drone delivery platform->Data storage
 Drone delivery platform->Software development
-Drone delivery platform->Cybersecurity measures
-```'.
+Drone delivery platform->Cybersecurity measures'} asDictionary.
 				GtLlmTutorActionExample new
-					instruction: 'Create a set of nodes on Moldable development';
-					input: '```topic
-```
-```wardley-map
-```';
-					output: '```action
-Create a set of nodes
-```
-```topic
-Moldable development
-```
-```wardley-map
-style wardley
+					input: {'Action' -> 'Create a set of nodes on Moldable development'.
+							'Topic' -> ''.
+							'Wardley Map' -> ''} asDictionary;
+					output: {'Action' -> 'Create a set of nodes'.
+							'Topic' -> 'Moldable development'.
+							'Wardley Map'
+								-> 'style wardley
 
 evolution genesis -> custom built -> product (+rental) -> commodity
 
@@ -230,8 +197,7 @@ Developer Skills->Frameworks and Libraries
 Moldable Tools->Problem Domain
 Customization Frameworks->Problem Domain
 Development Practices->Moldable Tools
-Development Practices->Customization Frameworks
-```'}
+Development Practices->Customization Frameworks'} asDictionary}
 ]
 
 { #category : #accessing }
@@ -265,8 +231,7 @@ GtOpenAIWardleyMapActionTutor >> mapFormatComponent [
 		name: 'Wardley Map';
 		priority: 2;
 		format: 'Wardley Map script language';
-		tag: 'wardley-map';
-		example: '```wardley-map
+		example: '```
 style wardley
 
 evolution genesis -> custom built -> product (+rental) -> commodity
@@ -292,41 +257,42 @@ GtOpenAIWardleyMapActionTutor >> renameAction [
 		description: 'Proposes a sensible number of alternative names for nodes (less than ten, but more than one).';
 		format: 'Propose renames for node `{1}`';
 		examples: {GtLlmTutorActionExample new
-					instruction: 'Propose renames for node `Compute`';
-					input: '```topic
-Cloud computing
-```
-```wardley-map
-style wardley
+					input: {'Action' -> 'Propose renames for node `Compute`'.
+							'Topic' -> 'Cloud computing'.
+							'Wardley Map'
+								-> 'style wardley
 
 evolution genesis -> custom built -> product (+rental) -> commodity
 
-component Compute [0.45, 0.34] label [-22, 29]
-```';
-					output: '```action
-Propose renames for node
-```
-```rename
-{''Compute'': [''Computational resources'', ''Resources'']}
-```'.
+component Compute [0.45, 0.34] label [-22, 29]'} asDictionary;
+					output: {'Action' -> 'Propose renames for node'.
+							'Rename' -> '{''Compute'': [''Computational resources'', ''Resources'']}'}
+							asDictionary.
 				GtLlmTutorActionExample new
-					instruction: 'Propose renames for node `Furnace`';
-					input: '```topic
-Appliances
-```
-```wardley-map
-style wardley
+					input: {'Action' -> 'Propose renames for node `Furnace`'.
+							'Topic' -> 'Appliances'.
+							'Wardley Map'
+								-> 'style wardley
 
 evolution genesis -> custom built -> product (+rental) -> commodity
 
-component Furance [0.9, 0.9] label [-9, 9]
-```';
-					output: '```action
-Propose renames for node
-```
-```rename
-{''Furnace'': [''Boiler'', ''Heater'', ''Incinerator'', ''Kiln'', ''Stove'']}
-```'}
+component Furance [0.9, 0.9] label [-9, 9]'} asDictionary;
+					output: {'Action' -> 'Propose renames for node'.
+							'Rename'
+								-> '{''Furnace'': [''Boiler'', ''Heater'', ''Incinerator'', ''Kiln'', ''Stove'']}'}
+							asDictionary}
+]
+
+{ #category : #accessing }
+GtOpenAIWardleyMapActionTutor >> renameFormatComponent [
+	<gtLlmFormatComponent>
+	^ GtLlmTutorFormatComponent new
+		name: 'Rename';
+		priority: 2;
+		format: 'Text';
+		example: '```
+{''Node name'': [''Proposal A'', ''Proposal B'']}
+```'
 ]
 
 { #category : #accessing }
@@ -337,21 +303,17 @@ GtOpenAIWardleyMapActionTutor >> reviewAction [
 		priority: 5;
 		description: 'Reviews and criticizes the current state of the map.';
 		examples: {GtLlmTutorActionExample new
-					instruction: 'Review the current state';
-					input: '```topic
-Cloud computing
-```
-```wardley-map
-style wardley
+					input: {'Action' -> 'Review the current state'.
+							'Topic' -> 'Cloud computing'.
+							'Wardley Map'
+								-> 'style wardley
 
 evolution genesis -> custom built -> product (+rental) -> commodity
 
-component Compute [0.45, 0.34] label [-22, 29]
-
-```';
-					output: '```explanation
-The map is incomplete. Currently, only one node is defined. A complete map should have multiple nodes and connections. The current node `Compute` is correct, but misplaced.
-```'}
+component Compute [0.45, 0.34] label [-22, 29]'} asDictionary;
+					output: {'Explanation'
+								-> 'The map is incomplete. Currently, only one node is defined. A complete map should have multiple nodes and connections. The current node `Compute` is correct, but misplaced.'}
+							asDictionary}
 ]
 
 { #category : #accessing }
@@ -361,7 +323,6 @@ GtOpenAIWardleyMapActionTutor >> topicFormatComponent [
 		name: 'Topic';
 		priority: 1;
 		format: 'Text';
-		tag: 'topic';
 		example: '```topic
 Cloud computing in regulated areas
 ```'

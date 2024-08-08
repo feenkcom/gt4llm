@@ -122,6 +122,11 @@ GtOpenAIThreadMessage >> content: anObject [
 ]
 
 { #category : #accessing }
+GtOpenAIThreadMessage >> contentSummary [
+	^ self contentText lines ifEmpty: [ '' ] ifNotEmpty: #first
+]
+
+{ #category : #accessing }
 GtOpenAIThreadMessage >> contentText [
 	^ '' join: (content collect: [ :aValue | aValue at: #text at: #value ])
 ]
@@ -191,7 +196,7 @@ GtOpenAIThreadMessage >> gtJsonDataFor: aView [
 
 	^ aView forward
 		title: 'JSON data';
-		priority: 2;
+		priority: 4.5;
 		object: [ STONJSON fromString: self contentText ];
 		view:  #gtTreeFor:context:
 ]
@@ -205,7 +210,7 @@ GtOpenAIThreadMessage >> gtJsonFor: aView [
 
 	^ aView textEditor
 		title: 'JSON';
-		priority: 1;
+		priority: 4;
 		text: [ self contentText ];
 		styler: JSONParser gtStyler;
 		aptitude: BrGlamorousCodeEditorAptitude

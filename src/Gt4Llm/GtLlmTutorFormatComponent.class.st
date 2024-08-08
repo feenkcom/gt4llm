@@ -18,7 +18,6 @@ GtLlmTutorFormatComponent >> asInstruction [
 		body: (GtLlmInstructionList new
 				addItem: 'Name: ' , self name;
 				addItem: 'Format: ' , self format;
-				addItem: 'Markdown code tag: ' , self tag;
 				addItem: 'Examples:
 ' , self example)
 ]
@@ -30,7 +29,7 @@ GtLlmTutorFormatComponent >> asJsonSchema [
 			-> (GtLlmInstructionList new
 					addItem: 'Format: ' , self format;
 					addItem: 'Examples:
-' , self example) instructionString}
+' , self example) instructionString} asDictionary
 ]
 
 { #category : #accessing }
@@ -92,14 +91,4 @@ GtLlmTutorFormatComponent >> priority [
 { #category : #accessing }
 GtLlmTutorFormatComponent >> priority: anObject [
 	priority := anObject
-]
-
-{ #category : #accessing }
-GtLlmTutorFormatComponent >> tag [
-	^ tag
-]
-
-{ #category : #accessing }
-GtLlmTutorFormatComponent >> tag: anObject [
-	tag := anObject
 ]

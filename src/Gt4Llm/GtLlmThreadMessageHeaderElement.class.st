@@ -20,9 +20,7 @@ GtLlmThreadMessageHeaderElement >> addActionElement [
 						aptitude: (BrGlamorousLabelAptitude new
 								foreground: BrGlamorousColors disabledButtonTextColor);
 						beSmallSize;
-						text: (self threadMessageViewModel ancestor contentText lines
-								ifEmpty: [ '' ]
-								ifNotEmpty: #first)) ].
+						text: (self threadMessageViewModel ancestor contentSummary)) ].
 
 	self addChild: aFrame
 ]

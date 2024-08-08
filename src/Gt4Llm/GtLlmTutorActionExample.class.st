@@ -2,7 +2,6 @@ Class {
 	#name : #GtLlmTutorActionExample,
 	#superclass : #Object,
 	#instVars : [
-		'instruction',
 		'input',
 		'output'
 	],
@@ -18,16 +17,17 @@ GtLlmTutorActionExample >> asInstruction [
 				addItem: (GtLlmInstructionSection new
 						source: self;
 						title: 'Prompt';
-						body: (GtLlmCompositeInstruction new
-								items: {self instruction asInstruction.
-										GtLlmInstructionSection new
-											source: self;
-											title: 'Current state';
-											body: self input}));
+						body: ('```
+' , (STONJSON toString: self input)
+								, '
+```') asInstruction);
 				addItem: (GtLlmInstructionSection new
 						source: self;
 						title: 'Output';
-						body: self output asInstruction))
+						body: ('```
+' , (STONJSON toString: self output)
+								, '
+```') asInstruction))
 ]
 
 { #category : #accessing }
@@ -58,26 +58,6 @@ GtLlmTutorActionExample >> inputDescription [
 		beRequired;
 		priority: 2;
 		accessor: #input
-]
-
-{ #category : #accessing }
-GtLlmTutorActionExample >> instruction [
-	^ instruction
-]
-
-{ #category : #accessing }
-GtLlmTutorActionExample >> instruction: anObject [
-	instruction := anObject
-]
-
-{ #category : #accessing }
-GtLlmTutorActionExample >> instructionDescription [
-	<magritteDescription>
-	^ MAStringDescription new
-		label: 'Instruction';
-		beRequired;
-		priority: 1;
-		accessor: #instruction
 ]
 
 { #category : #accessing }

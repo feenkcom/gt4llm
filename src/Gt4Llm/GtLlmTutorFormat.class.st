@@ -13,8 +13,7 @@ GtLlmTutorFormat >> actionComponent [
 	^ (GtLlmTutorFormatComponent new
 				name: 'Action';
 				format: 'Text';
-				tag: 'action';
-				example: '```action
+				example: '```
 Create a draft
 ```')
 ]
@@ -53,7 +52,7 @@ The components that make up the state are as follows:';
 GtLlmTutorFormat >> asJsonSchema [
 	^ {'type' -> 'json_schema'.
 		'json_schema'
-			-> {'name' -> self name.
+			-> {'name' -> self name asCamelCase.
 					'schema'
 						-> {'type' -> 'object'.
 								'properties'
