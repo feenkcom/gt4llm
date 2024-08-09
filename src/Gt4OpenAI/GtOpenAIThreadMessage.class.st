@@ -105,8 +105,7 @@ GtOpenAIThreadMessage >> codeBlocks [
 
 { #category : #actions }
 GtOpenAIThreadMessage >> codeBlocksExecutor [
-	^ GtOpenAICodeBlocksPipelineExecutor new
-		codeBlocks: self codeBlocks;
+	^ GtOpenAIPipelineExecutor new
 		pipeline: pipeline;
 		threadMessage: self
 ]

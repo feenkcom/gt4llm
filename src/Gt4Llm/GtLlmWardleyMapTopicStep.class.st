@@ -12,7 +12,7 @@ GtLlmWardleyMapTopicStep class >> stepName [
 { #category : #accessing }
 GtLlmWardleyMapTopicStep >> runStep: aContext [
 	| data |
-	data := aContext lastResult code source.
+	data := aContext lastResult.
 
 	aContext instance topic: data.
 

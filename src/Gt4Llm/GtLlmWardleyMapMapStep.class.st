@@ -12,8 +12,7 @@ GtLlmWardleyMapMapStep class >> stepName [
 { #category : #accessing }
 GtLlmWardleyMapMapStep >> runStep: aContext [
 	| aModel |
-	aModel := (GtWardleyMapParser parse: aContext lastResult code source)
-			asWardleyMapModel.
+	aModel := (GtWardleyMapParser parse: aContext lastResult) asWardleyMapModel.
 	aContext instance proposeModel: aModel.
 
 	aContext
