@@ -97,14 +97,14 @@ GtOpenAIActionAssistantChat >> sendMessage: aString [
 GtOpenAIActionAssistantChat >> waitForActionResult [
 	(self whenReadyFuture
 		then: [ :_ | 
-			| aMessage blocks |
+			| aMessage pairs |
 			aMessage := self messages first.
-			blocks := aMessage codeBlocks
-					reject: [ :aNode | aNode isForLanguage: 'action' ].
-			blocks
-				do: [ :aBlock | 
+			pairs := aMessage contentJson associations
+					reject: [ :anAssociation | anAssociation key = 'Action' ].
+			pairs
+				do: [ :aPair | 
 					[ | aResult |
-					aResult := aMessage codeBlocksExecutor check: aBlock.
+					aResult := aMessage codeBlocksExecutor check: aPair.
 					aResult hasError ifTrue: [ self error: aResult lastResult ] ]
 						on: Error
 						do: [ :anError | 

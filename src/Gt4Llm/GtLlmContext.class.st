@@ -12,7 +12,7 @@ Class {
 }
 
 { #category : #accessing }
-GtLlmContext class >> defaultPipeline [
+GtLlmContext class >> defaultCodeblockPipeline [
 	^ self new
 		checker: (GtLlmAlternativeCodeStep new
 				addAlternative: (GtLlmCompositeCodeStep new
@@ -31,6 +31,31 @@ GtLlmContext class >> defaultPipeline [
 									addAlternative: GtLlmSmalltalkMethodExecutorCodeStep new
 										matching: [ :_ | true ]))
 					matching: [ :aContext | aContext lastResult isForLanguage: 'smalltalk-method' ])
+]
+
+{ #category : #accessing }
+GtLlmContext class >> defaultJsonPipeline [
+	^ self new
+		checker: (GtLlmAlternativeCodeStep new
+				addAlternative: (GtLlmCompositeCodeStep new
+							addStep: GtLlmValueExtractorCodeStep new;
+							addStep: GtLlmSmalltalkParserCodeStep new;
+							addStep: GtLlmSmalltalkExecutorCodeStep new)
+					matching: [ :aContext | aContext lastResult key = 'Smalltalk' ];
+				addAlternative: (GtLlmCompositeCodeStep new
+							addStep: GtLlmValueExtractorCodeStep new;
+							addStep: GtLlmPythonParserCodeStep new;
+							addStep: GtLlmPythonExecutorCodeStep new)
+					matching: [ :aContext | aContext lastResult key = 'Python' ];
+				addAlternative: (GtLlmCompositeCodeStep new
+							addStep: GtLlmValueExtractorCodeStep new;
+							addStep: GtLlmSmalltalkMethodParserCodeStep new;
+							addStep: (GtLlmAlternativeCodeStep new
+									addAlternative: GtLlmSmalltalkViewExecutorCodeStep new
+										matching: [ :aContext | aContext lastResult methodAst hasPragmaNamed: #gtView ];
+									addAlternative: GtLlmSmalltalkMethodExecutorCodeStep new
+										matching: [ :_ | true ]))
+					matching: [ :aContext | aContext lastResult key = 'Smalltalk method' ])
 ]
 
 { #category : #accessing }
