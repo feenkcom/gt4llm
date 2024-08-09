@@ -133,6 +133,11 @@ GtOpenAITutor >> finalize [
 ]
 
 { #category : #accessing }
+GtOpenAITutor >> hasAssistant [
+	^ assistant isNotNil
+]
+
+{ #category : #accessing }
 GtOpenAITutor >> initialize [
 	super initialize.
 
