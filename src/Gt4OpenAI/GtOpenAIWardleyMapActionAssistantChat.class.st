@@ -32,23 +32,3 @@ GtOpenAIWardleyMapActionAssistantChat >> messages [
 						pipeline: self pipeline;
 						chat: self ])
 ]
-
-{ #category : #accessing }
-GtOpenAIWardleyMapActionAssistantChat >> onActionResult: aMessage [
-	| data |
-	self pipeline instance topic: aMessage topicCodeBlock.
-
-	self pipeline instance proposeModel: aMessage mapModel.
-
-	aMessage renamesCodeBlock
-		ifNotEmpty: [ :aRename | 
-			data := STONJSON fromString: aRename.
-			data
-				keysAndValuesDo: [ :name :options | self pipeline instance addRenameFor: name withOptions: options ] ].
-
-	aMessage explanationCodeBlock
-		ifNotEmpty: [ :anExplanation | 
-			self
-				announce: (GtLlmSpawnRequestAnnouncement new
-						object: (GtLlmWardleyMapExplanation new explanation: anExplanation)) ]
-]

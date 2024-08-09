@@ -13,7 +13,7 @@ GtLlmContextExamples >> blockFromString: aString [
 GtLlmContextExamples >> defaultChecker [
 	<gtExample>
 	| composite |
-	composite := GtLlmContext defaultPipeline.
+	composite := GtLlmContext defaultCodeblockPipeline.
 	self assert: composite checker children size equals: 3.
 	^ composite
 ]

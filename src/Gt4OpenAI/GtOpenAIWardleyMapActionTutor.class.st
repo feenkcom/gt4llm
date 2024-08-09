@@ -214,14 +214,22 @@ GtOpenAIWardleyMapActionTutor >> initializePipeline [
 				instance: GtLlmActionWardleyMapCreator new;
 				isImmutableInstance: true;
 				checker: (GtLlmAlternativeCodeStep new
-						addAlternative: GtLlmWardleyMapTopicStep new
-							matching: [ :aContext | aContext lastResult isForLanguage: 'topic' ];
-						addAlternative: GtLlmWardleyMapMapStep new
-							matching: [ :aContext | aContext lastResult isForLanguage: 'wardley-map' ];
-						addAlternative: GtLlmWardleyMapRenameStep new
-							matching: [ :aContext | aContext lastResult isForLanguage: 'rename' ];
-						addAlternative: GtLlmWardleyMapExplanationStep new
-							matching: [ :aContext | aContext lastResult isForLanguage: 'explanation' ]) ]
+						addAlternative: (GtLlmCompositeCodeStep new
+									addStep: GtLlmValueExtractorCodeStep new;
+									addStep: GtLlmWardleyMapTopicStep new)
+							matching: [ :aContext | aContext lastResult key = 'Topic' ];
+						addAlternative: (GtLlmCompositeCodeStep new
+									addStep: GtLlmValueExtractorCodeStep new;
+									addStep: GtLlmWardleyMapMapStep new)
+							matching: [ :aContext | aContext lastResult key = 'Wardley Map' ];
+						addAlternative: (GtLlmCompositeCodeStep new
+									addStep: GtLlmValueExtractorCodeStep new;
+									addStep: GtLlmWardleyMapRenameStep new)
+							matching: [ :aContext | aContext lastResult key = 'Rename' ];
+						addAlternative: (GtLlmCompositeCodeStep new
+									addStep: GtLlmValueExtractorCodeStep new;
+									addStep: GtLlmWardleyMapExplanationStep new)
+							matching: [ :aContext | aContext lastResult key = 'Explanation' ]) ]
 ]
 
 { #category : #accessing }

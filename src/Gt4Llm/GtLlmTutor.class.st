@@ -108,7 +108,7 @@ GtLlmTutor >> initialize [
 
 	model := self defaultModel.
 	chats := GtLlmChatsGroup new.
-	pipelineBuilder := [ GtLlmContext defaultPipeline ]
+	pipelineBuilder := [ GtLlmContext defaultCodeblockPipeline ]
 ]
 
 { #category : #accessing }

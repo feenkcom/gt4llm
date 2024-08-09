@@ -103,14 +103,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-04-16T23:47:25.67379+02:00"
+						"dateAndTimeString" : "2024-08-09T19:12:23.310589+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "XzzKap/SDQCm5l7wCczTFg=="
 				},
-				"code" : "pipeline := GtLlmContext defaultPipeline"
+				"code" : "pipeline := GtLlmContext defaultCodeblockPipeline"
 			},
 			{
 				"__type" : "textSnippet",
