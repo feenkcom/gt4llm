@@ -11,12 +11,12 @@ Class {
 { #category : #accessing }
 GtOpenAIGtObjectChat >> buildElement [
 	| tutor |
-	tutor := GtOpenAIGtSpecificTutor instance.
+	tutor := GtOpenAIViewActionTutor instance.
 	tutor hasAssistant ifFalse: [ tutor createAssistant ].
 
-	chat := GtOpenAIAssistantChat new
-			assistant: tutor assistant;
-			pipeline: (GtLlmContext defaultPipeline immutableInstance instance: self instance).
+	chat := tutor addChat.
+	
+	chat object: self instance.
 
 	chat sendMessage: self initialMessage.
 
@@ -31,8 +31,7 @@ GtOpenAIGtObjectChat >> chat [
 
 { #category : #accessing }
 GtOpenAIGtObjectChat >> initialMessage [
-	^ 'The context of this conversation is ' , (GtLlmInspectorSummarizer new summarize: self instance) summaryString
-		, String cr, String cr, 'Please provide me with a potentially useful Phlow view method for the object instance. Strictly adhere to the Phlow API you know.'
+	^ 'Generate a Phlow view'
 ]
 
 { #category : #accessing }
