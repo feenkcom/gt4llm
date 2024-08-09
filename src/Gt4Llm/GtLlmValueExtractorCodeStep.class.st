@@ -14,5 +14,5 @@ GtLlmValueExtractorCodeStep >> runStep: aContext [
 	aContext
 		addResult: (GtLlmStepSuccess new
 				checker: self;
-				content: aContext lastResult code value)
+				content: aContext lastResult value)
 ]
