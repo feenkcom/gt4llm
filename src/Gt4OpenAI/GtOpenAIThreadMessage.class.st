@@ -198,7 +198,7 @@ GtOpenAIThreadMessage >> gtJsonDataFor: aView [
 		title: 'JSON data';
 		priority: 4.5;
 		object: [ STONJSON fromString: self contentText ];
-		view:  #gtTreeFor:context:
+		view:  #gtTreeFor:
 ]
 
 { #category : #accessing }
