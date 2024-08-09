@@ -31,7 +31,7 @@ GtLlmNewThreadMessage >> codeBlocks [
 
 { #category : #accessing }
 GtLlmNewThreadMessage >> codeBlocksExecutor [
-	^ GtOpenAICodeBlocksPipelineExecutor new
+	^ GtOpenAIPipelineExecutor new
 		codeBlocks: self codeBlocks;
 		pipeline: assistantChat pipeline;
 		threadMessage: self

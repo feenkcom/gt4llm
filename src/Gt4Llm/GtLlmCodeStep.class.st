@@ -25,7 +25,8 @@ GtLlmCodeStep >> chat [
 
 { #category : #accessing }
 GtLlmCodeStep >> chat: anObject [
-	chat := anObject
+	chat := anObject.
+	self children do: [ :aChild | aChild chat: chat ]
 ]
 
 { #category : #accessing }

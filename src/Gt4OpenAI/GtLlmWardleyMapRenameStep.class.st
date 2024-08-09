@@ -11,12 +11,14 @@ GtLlmWardleyMapRenameStep class >> stepName [
 
 { #category : #accessing }
 GtLlmWardleyMapRenameStep >> parseJsonFor: aContext [
-	^ STONJSON fromString: aContext lastResult code source
+	^ STONJSON fromString: aContext lastResult
 ]
 
 { #category : #accessing }
 GtLlmWardleyMapRenameStep >> runStep: aContext [
 	| data |
+	aContext lastResult ifEmpty: [ ^ self ].
+
 	data := self parseJsonFor: aContext.
 	data
 		keysAndValuesDo: [ :name :options | aContext instance addRenameFor: name withOptions: options ].
@@ -24,6 +26,6 @@ GtLlmWardleyMapRenameStep >> runStep: aContext [
 	aContext
 		addResult: (GtLlmStepStringSuccess new
 				content: aContext instance;
-				contentString: 'Nodes successfully connected';
+				contentString: 'Rename successfully applied.';
 				checker: self)
 ]

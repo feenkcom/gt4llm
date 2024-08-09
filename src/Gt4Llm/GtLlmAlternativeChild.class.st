@@ -14,6 +14,11 @@ GtLlmAlternativeChild >> asNotExecuted [
 ]
 
 { #category : #accessing }
+GtLlmAlternativeChild >> chat: anObject [
+	step chat: anObject
+]
+
+{ #category : #accessing }
 GtLlmAlternativeChild >> children [
 	^ self step children
 ]

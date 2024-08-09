@@ -124,7 +124,7 @@ GtOpenAIWardleyMapActionTutor >> initialAction [
 	^ GtLlmTutorAction new
 		name: 'Create a set of nodes';
 		priority: 1;
-		description: 'Creates a set of nodes based on a given topic, filling topic, nodes, and connections with sensible data. If a map topic was already set, it is overridden. The rest of the map is extended.';
+		description: 'Creates a set of nodes based on a given topic, filling topic, nodes, and connections with sensible data. If a map topic was already set, it is overridden. The rest of the map is extended. Since the idea is brainstorming, keep the map minimal while still being accurate.';
 		format: 'Create a set of nodes on {1}';
 		examples: {GtLlmTutorActionExample new
 					input: {'Action'
