@@ -192,7 +192,7 @@ GtOpenAICoderActionTutor >> reviewAction [
 	^ GtLlmTutorAction new
 		name: 'Review the method';
 		priority: 5;
-		description: 'Reviews and criticizes the current state of the method, including code style, like a regular polite yet firm code reviewer would. Code fragments may be returned, but fenced code blocks using three backticks MAY NOT be used. Instead, if a rewrite is proposed, it will be proposed in the method.';
+		description: 'Reviews and criticizes the current state of the method, including code style, like a regular polite yet firm code reviewer would. Code fragments may be returned, and fenced code blocks using three backticks may be used. But if a rewrite is proposed, it will be proposed in the method, not just in the text.';
 		examples: {GtLlmTutorActionExample new
 					input: {'Action' -> 'Review the method'.
 							'Smalltalk method'
@@ -244,7 +244,7 @@ GtOpenAICoderActionTutor >> textFormatComponent [
 This node contains plain text.
 Multiple lines, multiple paragraphs are allowed.
 
-*markup* may also **be used**. `Code` can be highlighted, but code blocks with three tick marks MAY NOT be used.
+*markup* may also **be used**. `Code` can be highlighted, and code blocks may be used.
 
 # Headings exist as well
 ```'
