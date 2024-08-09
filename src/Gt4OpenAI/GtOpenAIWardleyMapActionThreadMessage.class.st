@@ -82,7 +82,7 @@ GtOpenAIWardleyMapActionThreadMessage >> gtExplanationFor: aView [
 	^ aView textEditor
 		title: 'Explanation';
 		priority: 2;
-		text: [ self explanationCodeBlock code value ];
+		text: [ self explanationCodeBlock ];
 		styler: (GtLlmMessageStyler new threadMessageViewModel: self)
 ]
 
