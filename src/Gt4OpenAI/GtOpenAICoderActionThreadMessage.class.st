@@ -6,7 +6,7 @@ Class {
 
 { #category : #accessing }
 GtOpenAICoderActionThreadMessage >> codeReview [
-	^ GtLlmCodeReview new review: self textCodeBlock code value
+	^ GtLlmCodeReview new review: self textCodeBlock
 ]
 
 { #category : #accessing }
