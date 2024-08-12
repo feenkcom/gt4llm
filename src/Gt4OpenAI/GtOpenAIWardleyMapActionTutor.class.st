@@ -97,8 +97,7 @@ component Compute [0.4, 0.4] label [-22, 29]'} asDictionary;
 
 The presence of `Compute` in a cloud computing map highlights its role as a core component of the cloud value chain, directly supporting various higher-level services and applications that depend on reliable and scalable computing resources. It could be connected to nodes representing services that leverage these computing resources, such as web hosting, data analytics platforms, or any software-as-a-service (SaaS) applications, indicating a dependency relationship where these services rely on the underlying compute capabilities to function effectively.
 
-In summary, `Compute` signifies the provisioning of raw processing power in the cloud, which is pivotal to the delivery of a wide range of cloud-based services and applications, illustrating the utility and flexibility offered by cloud computing paradigms.
-```'} asDictionary}
+In summary, `Compute` signifies the provisioning of raw processing power in the cloud, which is pivotal to the delivery of a wide range of cloud-based services and applications, illustrating the utility and flexibility offered by cloud computing paradigms.'} asDictionary}
 ]
 
 { #category : #accessing }
@@ -284,7 +283,7 @@ component Compute [0.45, 0.34] label [-22, 29]'} asDictionary;
 
 evolution genesis -> custom built -> product (+rental) -> commodity
 
-component Furance [0.9, 0.9] label [-9, 9]'} asDictionary;
+component Furnace [0.9, 0.9] label [-9, 9]'} asDictionary;
 					output: {'Action' -> 'Propose renames for node'.
 							'Rename'
 								-> '{''Furnace'': [''Boiler'', ''Heater'', ''Incinerator'', ''Kiln'', ''Stove'']}'}
