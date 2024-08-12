@@ -237,7 +237,7 @@ GtOpenAIWardleyMapActionTutor >> mapFormatComponent [
 	^ GtLlmTutorFormatComponent new
 		name: 'Wardley Map';
 		priority: 2;
-		format: 'Wardley Map script language';
+		format: 'Wardley Map language';
 		example: '```
 style wardley
 
