@@ -114,9 +114,11 @@ GtLlmTutorAction >> gtDescriptionFor: aView [
 { #category : #accessing }
 GtLlmTutorAction >> gtExamplesFor: aView [
 	<gtView>
-	^ aView list
+	^ aView columnedList
 		title: 'Examples';
-		items: [ self examples ]
+		items: [ self examples ];
+		column: 'Input' text: #inputJson;
+		column: 'Output' text: #outputJson
 ]
 
 { #category : #accessing }

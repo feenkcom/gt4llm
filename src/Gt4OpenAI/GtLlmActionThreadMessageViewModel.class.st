@@ -31,7 +31,5 @@ GtLlmActionThreadMessageViewModel >> findActionTag [
 GtLlmActionThreadMessageViewModel >> onThreadMessageChanged [
 	super onThreadMessageChanged.
 	
-	self threadMessage isAssistantRole ifTrue: [
-		self findActionTag
-	]
+	self findActionTag
 ]

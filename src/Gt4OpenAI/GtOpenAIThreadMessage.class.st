@@ -191,7 +191,6 @@ GtOpenAIThreadMessage >> gtJsonDataFor: aView [
 	<gtView>
 	<gtLlmMessageView>
 	self chat responseFormat ifNil: [ ^ aView empty ].
-	self isAssistantRole ifFalse: [ ^ aView empty ].
 
 	^ aView forward
 		title: 'JSON data';
