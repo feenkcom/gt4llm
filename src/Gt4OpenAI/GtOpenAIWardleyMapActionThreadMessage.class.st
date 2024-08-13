@@ -66,7 +66,6 @@ GtOpenAIWardleyMapActionThreadMessage >> gtActionFor: aView [
 { #category : #accessing }
 GtOpenAIWardleyMapActionThreadMessage >> gtContentFor: aView [
 	<gtView>
-	<gtLlmMessageView>
 	^ aView explicit
 		title: 'Content';
 		priority: 5;
@@ -84,6 +83,16 @@ GtOpenAIWardleyMapActionThreadMessage >> gtExplanationFor: aView [
 		priority: 2;
 		text: [ self explanationCodeBlock ];
 		styler: (GtLlmMessageStyler new threadMessageViewModel: self)
+]
+
+{ #category : #accessing }
+GtOpenAIWardleyMapActionThreadMessage >> gtRawMessageFor: aView [
+	<gtLlmView>
+	<gtView>
+	^ aView textEditor
+		title: 'Raw message';
+		priority: 5;
+		stencil: [ self contentText ]
 ]
 
 { #category : #accessing }

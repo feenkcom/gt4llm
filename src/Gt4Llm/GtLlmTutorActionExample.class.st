@@ -18,14 +18,14 @@ GtLlmTutorActionExample >> asInstruction [
 						source: self;
 						title: 'Prompt';
 						body: ('```
-' , (STONJSON toString: self input)
+' , self inputJson
 								, '
 ```') asInstruction);
 				addItem: (GtLlmInstructionSection new
 						source: self;
 						title: 'Output';
 						body: ('```
-' , (STONJSON toString: self output)
+' , self outputJson
 								, '
 ```') asInstruction))
 ]
@@ -61,6 +61,11 @@ GtLlmTutorActionExample >> inputDescription [
 ]
 
 { #category : #accessing }
+GtLlmTutorActionExample >> inputJson [
+	^ STONJSON toString: self input
+]
+
+{ #category : #accessing }
 GtLlmTutorActionExample >> output [
 	^ output
 ]
@@ -78,4 +83,9 @@ GtLlmTutorActionExample >> outputDescription [
 		beRequired;
 		priority: 2;
 		accessor: #output
+]
+
+{ #category : #accessing }
+GtLlmTutorActionExample >> outputJson [
+	^ STONJSON toString: self output
 ]

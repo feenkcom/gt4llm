@@ -123,80 +123,80 @@ GtOpenAIWardleyMapActionTutor >> initialAction [
 	^ GtLlmTutorAction new
 		name: 'Create a set of nodes';
 		priority: 1;
-		description: 'Creates a set of nodes based on a given topic, filling topic, nodes, and connections with sensible data. If a map topic was already set, it is overridden. The rest of the map is extended. Since the idea is brainstorming, keep the map minimal while still being accurate.';
+		description: 'Creates a set of at least 20 nodes based on a given topic, filling topic, nodes, and connections with sensible data. If a map topic was already set, it is overridden. The rest of the map is extended.';
 		format: 'Create a set of nodes on {1}';
 		examples: {GtLlmTutorActionExample new
+					input: {'Action' -> 'Create a set of nodes on Moldable development'.
+							'Wardley Map'
+								-> 'style wardley\n\nevolution genesis -> custom built -> product (+rental) -> commodity\n\n\n'}
+							asDictionary;
+					output: {'Action' -> 'Create a set of nodes on Moldable development'.
+							'Topic' -> 'Moldable development'.
+							'Rename' -> ''.
+							'Explanation' -> ''.
+							'Wardley Map'
+								-> 'style wardley
+
+evolution genesis -> custom built -> product (+rental) -> commodity
+
+component Moldable Development [0.3, 0.3]
+component Prototyping Tools [0.2, 0.4]
+component Customization Layer [0.4, 0.5]
+component User Interface [0.5, 0.6]
+component Integration APIs [0.5, 0.7]
+component Domain-Specific Languages [0.3, 0.4]
+component Agile Methodologies [0.6, 0.2]
+component Continuous Integration [0.8, 0.2]
+component Testing Frameworks [0.7, 0.3]
+component Cloud Deployment [0.9, 0.6]
+component Data Storage [0.8, 0.8]
+component Security Layers [0.6, 0.8]
+component Automated Testing [0.7, 0.5]
+component Feedback Systems [0.5, 0.9]
+component End-User Programming [0.4, 0.4]
+component Component Libraries [0.6, 0.4]
+component Visual Programming [0.2, 0.6]
+component Adaptive User Experience [0.3, 0.7]
+component Domain Modeling [0.5, 0.5]
+component User-Centric Design [0.4, 0.8]
+
+Moldable Development->Prototyping Tools
+Moldable Development->Customization Layer
+Moldable Development->Integration APIs
+User Interface->Customization Layer
+Integration APIs->Cloud Deployment
+Cloud Deployment->Data Storage
+Agile Methodologies->Continuous Integration
+Continuous Integration->Testing Frameworks
+Testing Frameworks->Automated Testing
+Automated Testing->Feedback Systems
+Domain-Specific Languages->Domain Modeling
+Domain Modeling->User-Centric Design
+Component Libraries->Visual Programming
+Visual Programming->Adaptive User Experience
+End-User Programming->Domain-Specific Languages
+Security Layers->Data Storage
+Security Layers->Cloud Deployment
+Adaptive User Experience->User-Centric Design
+Feedback Systems->User Interface
+Data Storage->Custom Layer
+Continuous Integration->Cloud Deployment
+
+'}
+							asDictionary.
+				GtLlmTutorActionExample new
 					input: {'Action'
 								-> 'Create a set of nodes on Key components for a drone delivery service'.
-							'Topic' -> ''.
-							'Wardley Map' -> ''} asDictionary;
-					output: {'Action' -> 'Create a set of nodes'.
+							'Wardley Map'
+								-> 'style wardley\n\nevolution genesis -> custom built -> product (+rental) -> commodity\n\n\n'}
+							asDictionary;
+					output: {'Rename' -> ''.
+							'Action'
+								-> 'Create a set of nodes on Key components for a drone delivery service'.
 							'Topic' -> 'Key components for a drone delivery service'.
 							'Wardley Map'
-								-> 'style wardley
-
-evolution genesis -> custom built -> product (+rental) -> commodity
-
-component Customer need [0.90, 0.95] label [4, -4]
-
-component Drone delivery platform [0.70, 0.80] label [-12, -3]
-component Drones [0.60, 0.60] label [-12, 3]
-component Maintenance service for drones [0.50, 0.50] label [-22, 35]
-component Regulatory compliance [0.30, 0.80] label [-22, 25]
-component Weather monitoring system [0.40, 0.50] label [2, 15]
-component Navigation and GPS [0.30, 0.60] label [2, 25]
-component Air traffic control system [0.20, 0.70] label [-12, 15]
-component Automated package handling system [0.50, 0.60] label [-2, -15]
-component Communication system [0.40, 0.60] label [12, -15]
-component Computing resources [0.20, 0.30] label [-42, -5]
-component Data storage [0.20, 0.40] label [-52, -5]
-component Cybersecurity measures [0.10, 0.60] label [-52, 15]
-component Software development [0.30, 0.20] label [-52, 25]
-component Power supply and charging stations [0.20, 0.50] label [22, -5]
-
-Customer need->Drone delivery platform
-Drone delivery platform->Drones
-Drones->Maintenance service for drones
-Drone delivery platform->Regulatory compliance
-Drone delivery platform->Weather monitoring system
-Drones->Navigation and GPS
-Drones->Air traffic control system
-Drone delivery platform->Automated package handling system
-Drone delivery platform->Communication system
-Drone delivery platform->Computing resources
-Drones->Power supply and charging stations
-Drone delivery platform->Data storage
-Drone delivery platform->Software development
-Drone delivery platform->Cybersecurity measures'} asDictionary.
-				GtLlmTutorActionExample new
-					input: {'Action' -> 'Create a set of nodes on Moldable development'.
-							'Topic' -> ''.
-							'Wardley Map' -> ''} asDictionary;
-					output: {'Action' -> 'Create a set of nodes'.
-							'Topic' -> 'Moldable development'.
-							'Wardley Map'
-								-> 'style wardley
-
-evolution genesis -> custom built -> product (+rental) -> commodity
-
-component User Feedback [0.4, 0.85] label [-22, 29]
-component Programming Languages [0.8, 0.3] label [-42, 29]
-component Problem Domain [0.2, 0.9] label [14, 29]
-component Customization Frameworks [0.5, 0.7] label [-62, 29]
-component Frameworks and Libraries [0.75, 0.2] label [-82, 29]
-component Moldable Tools [0.4, 0.8] label [-102, 29]
-component Developer Skills [0.3, 0.7] label [34, 29]
-component Development Practices [0.1, 0.1] label [54, 29]
-
-User Feedback->Moldable Tools
-User Feedback->Customization Frameworks
-Developer Skills->Moldable Tools
-Developer Skills->Programming Languages
-Developer Skills->Frameworks and Libraries
-Moldable Tools->Problem Domain
-Customization Frameworks->Problem Domain
-Development Practices->Moldable Tools
-Development Practices->Customization Frameworks'} asDictionary}
+								-> 'style wardley\n\nevolution genesis -> custom built -> product (+rental) -> commodity\n\ncomponent Drone Fleet [0.4, 0.3]\ncomponent Navigation System [0.5, 0.6]\ncomponent Ground Control [0.3, 0.5]\ncomponent Delivery Software [0.6, 0.7]\ncomponent Customer Interface [0.7, 0.8]\ncomponent Package Handling [0.4, 0.7]\ncomponent Battery Management [0.5, 0.4]\ncomponent Weather Monitoring [0.6, 0.5]\ncomponent Traffic Management [0.5, 0.8]\ncomponent Regulatory Compliance [0.7, 0.3]\ncomponent Communication Network [0.6, 0.6]\ncomponent Data Analytics [0.8, 0.7]\ncomponent Maintenance Services [0.3, 0.4]\ncomponent Drone Manufacturing [0.2, 0.3]\ncomponent Emergency Response System [0.6, 0.4]\ncomponent Fleet Management Software [0.8, 0.5]\ncomponent Mapping Services [0.7, 0.6]\ncomponent Security Protocols [0.5, 0.3]\ncomponent Automated Scheduling [0.6, 0.9]\ncomponent User Feedback System [0.7, 0.9]\n\nDrone Fleet->Navigation System\nDrone Fleet->Battery Management\nNavigation System->Ground Control\nGround Control->Traffic Management\nDelivery Software->Customer Interface\nCustomer Interface->User Feedback System\nPackage Handling->Drone Fleet\nBattery Management->Emergency Response System\nWeather Monitoring->Navigation System\nTraffic Management->Regulatory Compliance\nRegulatory Compliance->Security Protocols\nCommunication Network->Data Analytics\nData Analytics->Automated Scheduling\nMaintenance Services->Drone Manufacturing\nDrone Manufacturing->Fleet Management Software\nEmergency Response System->Fleet Management Software\nFleet Management Software->Mapping Services\nMapping Services->Security Protocols\nAutomated Scheduling->Delivery Software\nUser Feedback System->Delivery Software\n\n'.
+							'Explanation' -> ''} asDictionary}
 ]
 
 { #category : #accessing }
