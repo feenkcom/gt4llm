@@ -40,6 +40,18 @@ GtOpenAIActionThreadMessage >> gtContentFor: aView [
 ]
 
 { #category : #accessing }
+GtOpenAIActionThreadMessage >> gtInspectActionFor: anAction [
+	<gtLlmAction>
+	(self chat tutor actionNamed: self action) ifNil: [ ^ anAction noAction ].
+
+	^ anAction button
+		priority: 1;
+		icon: BrGlamorousVectorIcons inspect;
+		label: 'Action';
+		action: [ :aButton | aButton phlow spawnObject: (self chat tutor actionNamed: self action) ]
+]
+
+{ #category : #accessing }
 GtOpenAIActionThreadMessage >> gtInspectorContentFor: aView [
 	<gtView>
 	^ aView explicit
