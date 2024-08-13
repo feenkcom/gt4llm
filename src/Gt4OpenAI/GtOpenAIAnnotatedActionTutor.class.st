@@ -17,7 +17,8 @@ GtOpenAIAnnotatedActionTutor >> collectActions [
 	^ ((Pragma
 		allNamed: #gtLlmTutorAction
 		from: self class
-		to: Object) collect: [ :aPragma | self perform: aPragma methodSelector ])
+		to: Object)
+		collect: [ :aPragma | (self perform: aPragma methodSelector) tutor: self ])
 		sorted: [ :a :b | a priority < b priority ]
 ]
 
@@ -26,13 +27,18 @@ GtOpenAIAnnotatedActionTutor >> collectFormatComponents [
 	^ ((Pragma
 		allNamed: #gtLlmFormatComponent
 		from: self class
-		to: Object) collect: [ :aPragma | self perform: aPragma methodSelector ])
+		to: Object) collect: [ :aPragma | (self perform: aPragma methodSelector) tutor: self ])
 		sorted: [ :a :b | a priority < b priority ]
 ]
 
 { #category : #accessing }
 GtOpenAIAnnotatedActionTutor >> defaultAssistantDescription [
 	^ 'Is an action-based tutor (more information in the prompt instructions).'
+]
+
+{ #category : #accessing }
+GtOpenAIAnnotatedActionTutor >> formatComponentNamed: aName [
+	^ format componentNamed: aName
 ]
 
 { #category : #accessing }
@@ -50,8 +56,8 @@ GtOpenAIAnnotatedActionTutor >> gtFilesFor: aView [
 GtOpenAIAnnotatedActionTutor >> initialize [
 	super initialize.
 	
-	actions addAll: self collectActions.
 	self initializeFormat.
+	actions addAll: self collectActions.
 	self initializeInstructionSections
 ]
 
