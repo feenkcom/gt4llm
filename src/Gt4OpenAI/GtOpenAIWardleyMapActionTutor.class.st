@@ -62,7 +62,7 @@ component Regulator [0.6, 0.2] label [-22, 29]
 '} asDictionary;
 					output: {'Action' -> 'Add new connected nodes'.
 							'Topic' -> 'Regulation'.
-							'Wardley map'
+							'Wardley Map'
 								-> 'style wardley
 
 evolution genesis -> custom built -> product (+rental) -> commodity

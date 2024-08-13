@@ -69,6 +69,16 @@ GtLlmTutor >> gtChatsFor: aView [
 ]
 
 { #category : #accessing }
+GtLlmTutor >> gtInstructionTreeFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Instruction tree';
+		priority: 6;
+		object: [ self instructions ];
+		view: #gtTreeFor:
+]
+
+{ #category : #accessing }
 GtLlmTutor >> gtInstructionsFor: aView [
 	<gtView>
 	^ aView textEditor

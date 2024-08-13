@@ -15,7 +15,7 @@ GtOpenAIActionTutor >> actions [
 
 { #category : #accessing }
 GtOpenAIActionTutor >> addAction: anAction [
-	actions add: anAction
+	actions add: (anAction tutor: self)
 ]
 
 { #category : #accessing }
@@ -54,9 +54,19 @@ GtOpenAIActionTutor >> gtActionsFor: aView [
 	<gtView>
 	^ aView forward
 		title: 'Actions';
-		priority: 5;
+		priority: 10;
 		object: [ actions ];
 		view: #gtActionsFor:
+]
+
+{ #category : #accessing }
+GtOpenAIActionTutor >> gtFormatComponentsFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Format components';
+		priority: 11;
+		object: [ self format ];
+		view: #gtComponentsFor:
 ]
 
 { #category : #accessing }

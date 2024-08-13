@@ -3,10 +3,22 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'input',
-		'output'
+		'output',
+		'formatReferences',
+		'action'
 	],
 	#category : #'Gt4Llm-Tutor'
 }
+
+{ #category : #accessing }
+GtLlmTutorActionExample >> action [
+	^ action
+]
+
+{ #category : #accessing }
+GtLlmTutorActionExample >> action: anObject [
+	action := anObject
+]
 
 { #category : #accessing }
 GtLlmTutorActionExample >> asInstruction [
@@ -31,6 +43,23 @@ GtLlmTutorActionExample >> asInstruction [
 ]
 
 { #category : #accessing }
+GtLlmTutorActionExample >> formatReferences [
+	^ formatReferences
+]
+
+{ #category : #accessing }
+GtLlmTutorActionExample >> gtFormatReferencesFor: aView [
+	<gtView>
+	^ aView columnedList
+		title: 'Format references';
+		priority: 5;
+		items: [ self formatReferences ];
+		column: 'Name' text: #name;
+		column: 'Format' text: #format;
+		column: 'Priority' text: #priority
+]
+
+{ #category : #accessing }
 GtLlmTutorActionExample >> gtInstructionFor: aView [
 	<gtView>
 	^ aView forward
@@ -38,6 +67,13 @@ GtLlmTutorActionExample >> gtInstructionFor: aView [
 		priority: 1;
 		object: [ self asInstruction ];
 		view: #gtInstructionFor:
+]
+
+{ #category : #accessing }
+GtLlmTutorActionExample >> initialize [
+	super initialize.
+	
+	formatReferences := OrderedCollection new
 ]
 
 { #category : #accessing }
@@ -88,4 +124,10 @@ GtLlmTutorActionExample >> outputDescription [
 { #category : #accessing }
 GtLlmTutorActionExample >> outputJson [
 	^ STONJSON toString: self output
+]
+
+{ #category : #accessing }
+GtLlmTutorActionExample >> resolveReferences [
+	formatReferences := input keys , output keys
+			collect: [ :aName | (self action tutor formatComponentNamed: aName) addReference: self action ]
 ]

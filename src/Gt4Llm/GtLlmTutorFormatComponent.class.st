@@ -6,10 +6,27 @@ Class {
 		'format',
 		'tag',
 		'example',
-		'priority'
+		'priority',
+		'actions',
+		'tutor'
 	],
 	#category : #'Gt4Llm-Tutor'
 }
+
+{ #category : #accessing }
+GtLlmTutorFormatComponent >> actions [
+	^ actions
+]
+
+{ #category : #accessing }
+GtLlmTutorFormatComponent >> actions: anObject [
+	actions := anObject
+]
+
+{ #category : #accessing }
+GtLlmTutorFormatComponent >> addReference: aReference [
+	(actions includes: aReference) ifFalse: [ actions add: aReference ]
+]
 
 { #category : #accessing }
 GtLlmTutorFormatComponent >> asInstruction [
@@ -58,10 +75,21 @@ GtLlmTutorFormatComponent >> format: anObject [
 ]
 
 { #category : #accessing }
+GtLlmTutorFormatComponent >> gtActionsFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Referencing actions';
+		priority: 5;
+		object: [ actions ];
+		view: #gtActionsFor:
+]
+
+{ #category : #accessing }
 GtLlmTutorFormatComponent >> gtInstructionFor: aView [
 	<gtView>
 	^ aView forward 
 		title: 'Instruction';
+		priority: 1;
 		object: [ self asInstruction ];
 		view: #gtInstructionFor:
 ]
@@ -70,7 +98,9 @@ GtLlmTutorFormatComponent >> gtInstructionFor: aView [
 GtLlmTutorFormatComponent >> initialize [
 	super initialize.
 	
-	priority := self defaultPriority
+	priority := self defaultPriority.
+	
+	actions := GtLlmActionsGroup new
 ]
 
 { #category : #accessing }
@@ -91,4 +121,14 @@ GtLlmTutorFormatComponent >> priority [
 { #category : #accessing }
 GtLlmTutorFormatComponent >> priority: anObject [
 	priority := anObject
+]
+
+{ #category : #accessing }
+GtLlmTutorFormatComponent >> tutor [
+	^ tutor
+]
+
+{ #category : #accessing }
+GtLlmTutorFormatComponent >> tutor: anObject [
+	tutor := anObject
 ]

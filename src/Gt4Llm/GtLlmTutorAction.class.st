@@ -7,7 +7,8 @@ Class {
 		'pipeline',
 		'description',
 		'format',
-		'priority'
+		'priority',
+		'tutor'
 	],
 	#category : #'Gt4Llm-Actions'
 }
@@ -57,7 +58,9 @@ GtLlmTutorAction >> examples [
 
 { #category : #accessing }
 GtLlmTutorAction >> examples: anObject [
-	examples := anObject
+	examples := anObject.
+
+	examples do: [ :anExample | anExample action: self ]
 ]
 
 { #category : #accessing }
@@ -104,6 +107,12 @@ GtLlmTutorAction >> formatDescription [
 ]
 
 { #category : #accessing }
+GtLlmTutorAction >> formatReferences [
+	^ (self examples flatCollect: #formatReferences as: Set)
+		sorted: [ :a :b | a priority < b priority ]
+]
+
+{ #category : #accessing }
 GtLlmTutorAction >> gtDescriptionFor: aView [
 	<gtView>
 	^ aView textEditor
@@ -119,6 +128,18 @@ GtLlmTutorAction >> gtExamplesFor: aView [
 		items: [ self examples ];
 		column: 'Input' text: #inputJson;
 		column: 'Output' text: #outputJson
+]
+
+{ #category : #accessing }
+GtLlmTutorAction >> gtFormatReferencesFor: aView [
+	<gtView>
+	^ aView columnedList
+		title: 'Format references';
+		priority: 5;
+		items: [ self formatReferences ];
+		column: 'Name' text: #name;
+		column: 'Format' text: #format;
+		column: 'Priority' text: #priority
 ]
 
 { #category : #accessing }
@@ -161,6 +182,11 @@ GtLlmTutorAction >> nameDescription [
 ]
 
 { #category : #accessing }
+GtLlmTutorAction >> onTutorChanged [
+	self examples do: #resolveReferences
+]
+
+{ #category : #accessing }
 GtLlmTutorAction >> pipeline [
 	^ pipeline
 ]
@@ -187,4 +213,16 @@ GtLlmTutorAction >> priorityDescription [
 		label: 'Priority';
 		priority: 2;
 		accessor: #priority
+]
+
+{ #category : #accessing }
+GtLlmTutorAction >> tutor [
+	^ tutor
+]
+
+{ #category : #accessing }
+GtLlmTutorAction >> tutor: anObject [
+	tutor := anObject.
+	
+	self onTutorChanged
 ]

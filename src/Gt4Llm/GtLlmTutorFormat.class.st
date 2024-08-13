@@ -75,6 +75,11 @@ GtLlmTutorFormat >> communicationConventionsDescription [
 ]
 
 { #category : #accessing }
+GtLlmTutorFormat >> componentNamed: aName [
+	^ components detect: [ :aComponent | aComponent name = aName ]
+]
+
+{ #category : #accessing }
 GtLlmTutorFormat >> errorHandlingDescription [
 	^ GtLlmInstructionSection new
 		title: 'Error handling description';
@@ -87,10 +92,10 @@ GtLlmTutorFormat >> gtComponentsFor: aView [
 	^ aView columnedList
 		title: 'Components';
 		priority: 2;
-		items: [ components ];
+		items: [ components sorted: [ :a :b | a priority < b priority ] ];
 		column: 'Name' text: #name;
 		column: 'Format' text: #format;
-		column: 'Tag' text: #tag
+		column: 'Priority' text: #priority
 ]
 
 { #category : #accessing }
