@@ -7,25 +7,28 @@ Class {
 		'tag',
 		'example',
 		'priority',
-		'actions',
-		'tutor'
+		'tutor',
+		'referencingActions'
 	],
 	#category : #'Gt4Llm-Tutor'
 }
 
 { #category : #accessing }
-GtLlmTutorFormatComponent >> actions [
-	^ actions
+GtLlmTutorFormatComponent >> addInputReference: anAction [
+	referencingActions
+		detect: [ :aReference | aReference action = anAction ]
+		ifFound: [ :aReference | aReference markInput ]
+		ifNone: [ referencingActions
+				add: (GtLlmActionReference new markInput action: anAction) ]
 ]
 
 { #category : #accessing }
-GtLlmTutorFormatComponent >> actions: anObject [
-	actions := anObject
-]
-
-{ #category : #accessing }
-GtLlmTutorFormatComponent >> addReference: aReference [
-	(actions includes: aReference) ifFalse: [ actions add: aReference ]
+GtLlmTutorFormatComponent >> addOutputReference: anAction [
+	referencingActions
+		detect: [ :aReference | aReference action = anAction ]
+		ifFound: [ :aReference | aReference markOutput ]
+		ifNone: [ referencingActions
+				add: (GtLlmActionReference new markOutput action: anAction) ]
 ]
 
 { #category : #accessing }
@@ -41,7 +44,9 @@ GtLlmTutorFormatComponent >> asInstruction [
 
 { #category : #accessing }
 GtLlmTutorFormatComponent >> asJsonSchema [
-	^ {'type' -> 'string'.
+	^ {'type'
+			-> {'string'.
+					'null'}.
 		'description'
 			-> (GtLlmInstructionList new
 					addItem: 'Format: ' , self format;
@@ -77,11 +82,15 @@ GtLlmTutorFormatComponent >> format: anObject [
 { #category : #accessing }
 GtLlmTutorFormatComponent >> gtActionsFor: aView [
 	<gtView>
-	^ aView forward
+	^ aView columnedList
 		title: 'Referencing actions';
 		priority: 5;
-		object: [ actions ];
-		view: #gtActionsFor:
+		items: [ referencingActions ];
+		column: 'Action' text: [ :aReference | aReference action name ];
+		column: 'Input'
+			text: [ :aReference | aReference isInput ifTrue: [ 'true' ] ifFalse: [ '' ] ];
+		column: 'Output'
+			text: [ :aReference | aReference isOutput ifTrue: [ 'true' ] ifFalse: [ '' ] ]
 ]
 
 { #category : #accessing }
@@ -100,7 +109,7 @@ GtLlmTutorFormatComponent >> initialize [
 	
 	priority := self defaultPriority.
 	
-	actions := GtLlmActionsGroup new
+	referencingActions := OrderedCollection new
 ]
 
 { #category : #accessing }
@@ -111,6 +120,16 @@ GtLlmTutorFormatComponent >> name [
 { #category : #accessing }
 GtLlmTutorFormatComponent >> name: anObject [
 	name := anObject
+]
+
+{ #category : #accessing }
+GtLlmTutorFormatComponent >> printOn: aStream [
+	super printOn: aStream.
+
+	aStream
+		nextPut: $(;
+		nextPutAll: self name;
+		nextPut: $)
 ]
 
 { #category : #accessing }

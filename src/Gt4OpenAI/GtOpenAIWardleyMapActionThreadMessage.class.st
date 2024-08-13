@@ -64,19 +64,10 @@ GtOpenAIWardleyMapActionThreadMessage >> gtActionFor: aView [
 ]
 
 { #category : #accessing }
-GtOpenAIWardleyMapActionThreadMessage >> gtContentFor: aView [
-	<gtView>
-	^ aView explicit
-		title: 'Content';
-		priority: 5;
-		stencil: [ GtLlmThreadMessageElement new threadMessageViewModel: self asViewModel ]
-]
-
-{ #category : #accessing }
 GtOpenAIWardleyMapActionThreadMessage >> gtExplanationFor: aView [
 	<gtView>
 	<gtLlmMessageView>
-	self explanationCodeBlock ifEmpty: [ ^ aView empty ].
+	self explanationCodeBlock isEmptyOrNil ifTrue: [ ^ aView empty ].
 
 	^ aView textEditor
 		title: 'Explanation';
@@ -87,12 +78,12 @@ GtOpenAIWardleyMapActionThreadMessage >> gtExplanationFor: aView [
 
 { #category : #accessing }
 GtOpenAIWardleyMapActionThreadMessage >> gtRawMessageFor: aView [
-	<gtLlmView>
+	<gtLlmMessageView>
 	<gtView>
 	^ aView textEditor
 		title: 'Raw message';
 		priority: 5;
-		stencil: [ self contentText ]
+		text: [ self contentText ]
 ]
 
 { #category : #accessing }

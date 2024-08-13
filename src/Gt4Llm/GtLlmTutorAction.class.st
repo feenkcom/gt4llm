@@ -131,15 +131,14 @@ GtLlmTutorAction >> gtExamplesFor: aView [
 ]
 
 { #category : #accessing }
-GtLlmTutorAction >> gtFormatReferencesFor: aView [
+GtLlmTutorAction >> gtInputFormatReferencesFor: aView [
 	<gtView>
 	^ aView columnedList
-		title: 'Format references';
+		title: 'Input format references';
 		priority: 5;
-		items: [ self formatReferences ];
+		items: [ self inputReferences ];
 		column: 'Name' text: #name;
-		column: 'Format' text: #format;
-		column: 'Priority' text: #priority
+		column: 'Format' text: #format
 ]
 
 { #category : #accessing }
@@ -153,11 +152,28 @@ GtLlmTutorAction >> gtInstructionFor: aView [
 ]
 
 { #category : #accessing }
+GtLlmTutorAction >> gtOutputFormatReferencesFor: aView [
+	<gtView>
+	^ aView columnedList
+		title: 'Output format references';
+		priority: 6;
+		items: [ self outputReferences ];
+		column: 'Name' text: #name;
+		column: 'Format' text: #format
+]
+
+{ #category : #accessing }
 GtLlmTutorAction >> initialize [
 	super initialize.
 	
 	self priority: self defaultPriority.
 	self examples: OrderedCollection new
+]
+
+{ #category : #accessing }
+GtLlmTutorAction >> inputReferences [
+	^ (self examples flatCollect: #inputReferences as: Set)
+		sorted: [ :a :b | a priority < b priority ]
 ]
 
 { #category : #accessing }
@@ -183,7 +199,13 @@ GtLlmTutorAction >> nameDescription [
 
 { #category : #accessing }
 GtLlmTutorAction >> onTutorChanged [
-	self examples do: #resolveReferences
+	self examples do: [ :anExample | anExample verify resolveReferences ]
+]
+
+{ #category : #accessing }
+GtLlmTutorAction >> outputReferences [
+	^ (self examples flatCollect: #outputReferences as: Set)
+		sorted: [ :a :b | a priority < b priority ]
 ]
 
 { #category : #accessing }
@@ -194,6 +216,16 @@ GtLlmTutorAction >> pipeline [
 { #category : #accessing }
 GtLlmTutorAction >> pipeline: anObject [
 	pipeline := anObject
+]
+
+{ #category : #accessing }
+GtLlmTutorAction >> printOn: aStream [
+	super printOn: aStream.
+
+	aStream
+		nextPut: $(;
+		nextPutAll: self name;
+		nextPut: $)
 ]
 
 { #category : #accessing }

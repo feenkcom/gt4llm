@@ -69,6 +69,8 @@ findIndexOfAction: anAction
 		collectWithIndex: [ :anInnerAction :anIndex | anInnerAction -> anIndex ])
 		detect: [ :aPair | aPair key = anAction ]) value'} asDictionary;
 					output: {'Action' -> 'Propose refactoring for method'.
+							'Renames' -> nil.
+							'Text' -> nil.
 							'Smalltalk method'
 								-> 'ActionClass
 addAction: anAction
@@ -92,6 +94,7 @@ addAction: anAction
 	actions add: anAction
 '} asDictionary;
 					output: {'Action' -> 'Propose renames for method'.
+							'Text' -> nil.
 							'Renames'
 								-> '{"type": "method", "original": "increment", "proposals": ["extendActions:", "appendAction:", "includeAction:"]}'.
 							'Smalltalk method'
@@ -106,6 +109,7 @@ addAction: anAction
 increment
 	self number: self number + 1'} asDictionary;
 					output: {'Action' -> 'Propose renames for method'.
+							'Text' -> nil.
 							'Renames'
 								-> '{"type": "method", "original": "increment", "proposals": ["incrementNumber", "inc", "incNum"]}'.
 							'Smalltalk method'
@@ -119,6 +123,7 @@ increment
 do: aMessage to: anObject
 	^ anObject perform: aMessage'} asDictionary;
 					output: {'Action' -> 'Propose renames for method'.
+							'Text' -> nil.
 							'Renames'
 								-> '{"type": "method", "original": "do:to:", "proposals": ["perform:on:", "send:to:", "execute:on:", "exec:on:", "ask:of:"]}'.
 							'Smalltalk method'
@@ -161,6 +166,7 @@ GtOpenAICoderActionTutor >> renameVariableAction [
 add: aNumber
 	self number: self number + aNumber'} asDictionary;
 					output: {'Action' -> 'Propose renames for variable'.
+							'Text' -> nil.
 							'Renames'
 								-> '{"type": "variable", "original": "aNumber", "proposals": ["number", "num", "toBeAdded"]}'.
 							'Smalltalk method'
@@ -176,6 +182,7 @@ add: aNumber
 	temp := self number + aNumber
 	self number: temp'} asDictionary;
 					output: {'Action' -> 'Propose renames for variable'.
+							'Text' -> nil.
 							'Renames'
 								-> '{"type": "variable", "original": "temp", "proposals": ["additionResult", "res", "result"]}'.
 							'Smalltalk method'
@@ -204,6 +211,7 @@ foobar: anAction
 		self notifier exists ifTrue: [
 			self notify: (AnActionAdded new action: anAction)]]'} asDictionary;
 					output: {'Action' -> 'Review the method'.
+							'Renames' -> nil.
 							'Text'
 								-> 'The method name does not reflect the behavior inside the method. Consider using a name such as `addAction:`.
 
@@ -224,6 +232,7 @@ isPowerOfTwo
 	"Return true if the receiver is an integral power of two."
 	^ self ~= 0 and: [(self bitAnd: self-1) = 0]'} asDictionary;
 					output: {'Action' -> 'Review the method'.
+							'Renames' -> nil.
 							'Text'
 								-> 'The method name is clear, the method is documented, and the code is concise and well written. No further changes are required.'.
 							'Smalltalk method'

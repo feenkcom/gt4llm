@@ -37,7 +37,7 @@ GtOpenAIViewActionThreadMessage >> gtContentFor: aView [
 GtOpenAIViewActionThreadMessage >> gtTextFor: aView [
 	<gtView>
 	<gtLlmMessageView>
-	self textCodeBlock ifEmpty: [ ^ aView empty ].
+	self textCodeBlock isEmptyOrNil ifTrue: [ ^ aView empty ].
 
 	^ aView textEditor
 		title: 'Text';

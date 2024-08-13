@@ -92,7 +92,7 @@ GtOpenAICoderActionThreadMessage >> gtRenamesFor: aView [
 GtOpenAICoderActionThreadMessage >> gtRenamesListFor: aView [
 	<gtView>
 	<gtLlmMessageView>
-	self renamesCodeBlock ifEmpty: [ ^ aView empty ].
+	self renamesCodeBlock isEmptyOrNil ifTrue: [ ^ aView empty ].
 
 	^ aView columnedList
 		title: 'Rename list';
@@ -109,7 +109,7 @@ GtOpenAICoderActionThreadMessage >> gtRenamesListFor: aView [
 GtOpenAICoderActionThreadMessage >> gtTextFor: aView [
 	<gtView>
 	<gtLlmMessageView>
-	self textCodeBlock ifEmpty: [ ^ aView empty ].
+	self textCodeBlock isEmptyOrNil ifTrue: [ ^ aView empty ].
 
 	^ aView textEditor
 		title: 'Text';

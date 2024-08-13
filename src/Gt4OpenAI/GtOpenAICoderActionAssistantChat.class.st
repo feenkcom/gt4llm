@@ -23,6 +23,11 @@ GtOpenAICoderActionAssistantChat >> messages [
 ]
 
 { #category : #accessing }
+GtOpenAICoderActionAssistantChat >> method [
+	^ self pipeline instance method
+]
+
+{ #category : #accessing }
 GtOpenAICoderActionAssistantChat >> method: aMethod [
 	self pipeline instance method: aMethod
 ]
@@ -31,4 +36,13 @@ GtOpenAICoderActionAssistantChat >> method: aMethod [
 GtOpenAICoderActionAssistantChat >> pipeline: aPipeline [
 	super pipeline: aPipeline.
 	aPipeline instance chat: self.
+]
+
+{ #category : #accessing }
+GtOpenAICoderActionAssistantChat >> printOn: aStream [
+	super printOn: aStream.
+
+	aStream nextPut: $(.
+	self method printOn: aStream.
+	aStream nextPut: $)
 ]
