@@ -138,10 +138,10 @@ GtOpenAIFineTuningJob >> gtUpdateActionFor: anAction [
 ]
 
 { #category : #accessing }
-GtOpenAIFineTuningJob >> gtViewLoss2For: aView [
+GtOpenAIFineTuningJob >> gtViewLossFor: aView [
 	<gtView>
 	^ aView explicit
-		title: 'Training loss 2';
+		title: 'Training loss';
 		priority: 4;
 		stencil: [ | aData aChart |
 			aData := GtPlotterDataGroup new
@@ -155,21 +155,9 @@ GtOpenAIFineTuningJob >> gtViewLoss2For: aView [
 			aChart labelFormatX: [ :x | x asString ].
 			aChart valueY: #value.
 			aChart scaleY: GtPlotterLinearScale new.
-			aChart labelFormatY: [ :x | x printShowingDecimalPlaces: 2 ].
-			aChart ];
-		actionUpdateButton
-]
-
-{ #category : #accessing }
-GtOpenAIFineTuningJob >> gtViewLossFor: aView [
-	<gtView>
-	^ aView explicit
-		title: 'Training loss';
-		priority: 3;
-		stencil: [ (GtHorizontalSparklineStencil new
-				values: ((self events reversed select: [ :anEvent | anEvent data isEmptyOrNil not ])
-						withIndexCollect: [ :aValue :i | (aValue data at: 'train_loss') -> i ]);
-				color: BrGlamorousColors hoveredButtonTextColor) asElement height: 100 ];
+			aChart labelFormatY: [ :x | x printShowingDecimalPlaces: 1 ].
+			aChart ticksY: 4.
+			aChart asElement height: 300 ];
 		actionUpdateButton
 ]
 
