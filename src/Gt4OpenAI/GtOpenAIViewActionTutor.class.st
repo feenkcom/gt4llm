@@ -46,6 +46,7 @@ GtOpenAIViewActionTutor >> generateViewAction [
 												withAll: {1.
 														2.
 														3})) summaryString.
+							'Text' -> nil.
 							'Smalltalk method'
 								-> 'Bag
 gtUniqueItemsFor: aView
@@ -69,6 +70,7 @@ gtUniqueItemsFor: aView
 										summarizeWithoutMarkup: (GtABAddress new
 												city: 'Boston';
 												country: 'USA')) summaryString.
+							'Text' -> nil.
 							'Smalltalk method'
 								-> 'GtABAddress
 gtAddressStringFor: aView
@@ -113,7 +115,7 @@ aMethodWithArguments: anArgument and: anotherArgument
 GtOpenAIViewActionTutor >> objectFormatComponent [
 	<gtLlmFormatComponent>
 	^ GtLlmTutorFormatComponent new
-		name: 'Smalltalk object';
+		name: 'Object';
 		priority: 2;
 		format: 'Text';
 		example: '```

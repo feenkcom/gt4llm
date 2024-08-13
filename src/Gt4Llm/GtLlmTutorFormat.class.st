@@ -80,6 +80,11 @@ GtLlmTutorFormat >> componentNamed: aName [
 ]
 
 { #category : #accessing }
+GtLlmTutorFormat >> components [
+	^ components
+]
+
+{ #category : #accessing }
 GtLlmTutorFormat >> errorHandlingDescription [
 	^ GtLlmInstructionSection new
 		title: 'Error handling description';

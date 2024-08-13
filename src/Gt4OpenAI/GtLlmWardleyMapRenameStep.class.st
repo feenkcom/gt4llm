@@ -17,7 +17,7 @@ GtLlmWardleyMapRenameStep >> parseJsonFor: aContext [
 { #category : #accessing }
 GtLlmWardleyMapRenameStep >> runStep: aContext [
 	| data |
-	aContext lastResult ifEmpty: [ ^ self ].
+	aContext lastResult isEmptyOrNil ifTrue: [ ^ self ].
 
 	data := self parseJsonFor: aContext.
 	data

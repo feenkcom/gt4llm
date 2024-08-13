@@ -4,8 +4,9 @@ Class {
 	#instVars : [
 		'input',
 		'output',
-		'formatReferences',
-		'action'
+		'inputReferences',
+		'action',
+		'outputReferences'
 	],
 	#category : #'Gt4Llm-Tutor'
 }
@@ -44,19 +45,18 @@ GtLlmTutorActionExample >> asInstruction [
 
 { #category : #accessing }
 GtLlmTutorActionExample >> formatReferences [
-	^ formatReferences
+	^ inputReferences, outputReferences
 ]
 
 { #category : #accessing }
-GtLlmTutorActionExample >> gtFormatReferencesFor: aView [
+GtLlmTutorActionExample >> gtInputFormatReferencesFor: aView [
 	<gtView>
 	^ aView columnedList
-		title: 'Format references';
+		title: 'Input format references';
 		priority: 5;
-		items: [ self formatReferences ];
+		items: [ self inputReferences ];
 		column: 'Name' text: #name;
-		column: 'Format' text: #format;
-		column: 'Priority' text: #priority
+		column: 'Format' text: #format
 ]
 
 { #category : #accessing }
@@ -70,10 +70,22 @@ GtLlmTutorActionExample >> gtInstructionFor: aView [
 ]
 
 { #category : #accessing }
+GtLlmTutorActionExample >> gtOutputFormatReferencesFor: aView [
+	<gtView>
+	^ aView columnedList
+		title: 'Output format references';
+		priority: 6;
+		items: [ self outputReferences ];
+		column: 'Name' text: #name;
+		column: 'Format' text: #format
+]
+
+{ #category : #accessing }
 GtLlmTutorActionExample >> initialize [
 	super initialize.
 	
-	formatReferences := OrderedCollection new
+	inputReferences := OrderedCollection new.
+	outputReferences := OrderedCollection new
 ]
 
 { #category : #accessing }
@@ -102,6 +114,16 @@ GtLlmTutorActionExample >> inputJson [
 ]
 
 { #category : #accessing }
+GtLlmTutorActionExample >> inputReferences [
+	^ inputReferences
+]
+
+{ #category : #accessing }
+GtLlmTutorActionExample >> inputReferences: anObject [
+	inputReferences := anObject
+]
+
+{ #category : #accessing }
 GtLlmTutorActionExample >> output [
 	^ output
 ]
@@ -127,7 +149,33 @@ GtLlmTutorActionExample >> outputJson [
 ]
 
 { #category : #accessing }
+GtLlmTutorActionExample >> outputReferences [
+	^ outputReferences
+]
+
+{ #category : #accessing }
+GtLlmTutorActionExample >> outputReferences: anObject [
+	outputReferences := anObject
+]
+
+{ #category : #accessing }
 GtLlmTutorActionExample >> resolveReferences [
-	formatReferences := input keys , output keys
-			collect: [ :aName | (self action tutor formatComponentNamed: aName) addReference: self action ]
+	inputReferences := input associations
+			select: [ :anAssociation | anAssociation value isNotNil ]
+			thenCollect: [ :anAssociation | 
+				(self action tutor formatComponentNamed: anAssociation key)
+					addInputReference: self action ].
+	outputReferences := output associations
+			select: [ :anAssociation | anAssociation value isNotNil ]
+			thenCollect: [ :anAssociation | 
+				(self action tutor formatComponentNamed: anAssociation key)
+					addOutputReference: self action ]
+]
+
+{ #category : #accessing }
+GtLlmTutorActionExample >> verify [
+	self
+		assert: self output keys asSet
+				= (self action tutor formatComponents collect: #name) asSet
+		description: 'Keys in the example output must correspond to the action format'
 ]

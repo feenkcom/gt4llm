@@ -31,3 +31,19 @@ GtOpenAIActionThreadMessage >> gtActionFor: aView [
 		priority: 3;
 		text: [ self action ]
 ]
+
+{ #category : #accessing }
+GtOpenAIActionThreadMessage >> gtContentFor: aView [
+	<gtView>
+	<gtLlmMessageView>
+	^ aView empty
+]
+
+{ #category : #accessing }
+GtOpenAIActionThreadMessage >> gtInspectorContentFor: aView [
+	<gtView>
+	^ aView explicit
+		title: 'Content';
+		priority: 5;
+		stencil: [ GtLlmThreadMessageElement new threadMessageViewModel: self asViewModel ]
+]

@@ -42,6 +42,11 @@ GtOpenAIAnnotatedActionTutor >> formatComponentNamed: aName [
 ]
 
 { #category : #accessing }
+GtOpenAIAnnotatedActionTutor >> formatComponents [
+	^ self format components
+]
+
+{ #category : #accessing }
 GtOpenAIAnnotatedActionTutor >> formatName [
 	^ self subclassResponsibility
 ]

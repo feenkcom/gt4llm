@@ -14,7 +14,7 @@ GtLlmWardleyMapExplanationStep >> runStep: aContext [
 	| explanation |
 	explanation := aContext lastResult.
 
-	explanation ifEmpty: [ ^ self ].
+	explanation isEmptyOrNil ifTrue: [ ^ self ].
 
 	aContext chat
 		announce: (GtLlmSpawnRequestAnnouncement new

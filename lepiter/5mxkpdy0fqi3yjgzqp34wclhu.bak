@@ -248,14 +248,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-08-06T11:45:29.688493+02:00"
+						"dateAndTimeString" : "2024-08-13T10:29:04.988309+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "G025RnrTDQCbT03vCmrOQg=="
 				},
-				"code" : "numberOfExamples := 1000.\raGroup := aGroup first: numberOfExamples"
+				"code" : "numberOfExamples := 260.\raGroup := aGroup first: numberOfExamples"
 			},
 			{
 				"__type" : "textSnippet",
