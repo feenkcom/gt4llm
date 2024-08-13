@@ -98,7 +98,7 @@ GtLlmTutorActionExample >> inputDescription [
 
 { #category : #accessing }
 GtLlmTutorActionExample >> inputJson [
-	^ STONJSON toString: self input
+	^ STONJSON toStringPretty: self input
 ]
 
 { #category : #accessing }
@@ -123,7 +123,7 @@ GtLlmTutorActionExample >> outputDescription [
 
 { #category : #accessing }
 GtLlmTutorActionExample >> outputJson [
-	^ STONJSON toString: self output
+	^ STONJSON toStringPretty: self output
 ]
 
 { #category : #accessing }
