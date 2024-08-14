@@ -29,7 +29,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-25T08:00:39.868151+02:00"
+						"dateAndTimeString" : "2024-08-14T11:12:39.705617+02:00"
 					}
 				},
 				"uid" : {
@@ -39,7 +39,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "To use a conversation with LLMs in automated interactions, the formats need to be well defined and the state on both sides of the conversation needs to be synchronized. For this, we can use a {{gtClass:GtOpenAIActionTutor}}."
+				"string" : "To use a conversation with LLMs in automated interactions, the formats need to be well defined and the states on both sides of the conversation need to be synchronized. For this, we can use a {{gtClass:GtOpenAIActionTutor}}."
 			},
 			{
 				"__type" : "textSnippet",

@@ -29,7 +29,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-25T08:00:39.868151+02:00"
+						"dateAndTimeString" : "2024-08-14T11:11:34.762984+02:00"
 					}
 				},
 				"uid" : {
@@ -39,7 +39,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "To use a conversation with LLMs in automated interactions, the formats need to be well defined and the state on both sides of the conversation needs to be synchronized. For this, we can use a {{gtClass:GtOpenAIActionTutor}}."
+				"string" : "To use a conversation with LLMs in automated interactions, the formats need to be well defined and the state on both sides of the conversation need to be synchronized. For this, we can use a {{gtClass:GtOpenAIActionTutor}}."
 			},
 			{
 				"__type" : "textSnippet",
@@ -77,6 +77,43 @@
 					"__type" : "textStyle"
 				},
 				"string" : "As an example, here we look at working with an LLM to help build a Wardley Map (the same use case found in [[Building a custom tutor to facilitate generating Wardley maps]] and [[Expanding the Wardley maps tutor with a step-wise tutor]]). The tutor can be found in {{gtClass:GtOpenAIWardleyMapActionTutor}}."
+			},
+			{
+				"__type" : "textSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-08-06T10:46:44.690501+02:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-08-06T10:46:57.928687+02:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "GOj6kWHbDQCgOoYXDjAh1Q=="
+				},
+				"paragraphStyle" : {
+					"__type" : "textStyle"
+				},
+				"string" : "For a different use case using the same technology, look at [[Making the view tutor action-based]]."
 			},
 			{
 				"__type" : "textSnippet",
