@@ -607,12 +607,12 @@
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2024-05-14T12:30:50.838528+02:00"
+			"dateAndTimeString" : "2024-06-23T08:51:41.034368+02:00"
 		}
 	},
 	"pageType" : {
 		"__type" : "namedPage",
-		"title" : "Setting up the API key"
+		"title" : "Setting up the OpenAI API key"
 	},
 	"uid" : {
 		"__type" : "uuid",

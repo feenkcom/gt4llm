@@ -29,7 +29,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-23T08:41:47.682422+02:00"
+						"dateAndTimeString" : "2024-08-14T11:11:53.585289+02:00"
 					}
 				},
 				"uid" : {
@@ -39,7 +39,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "The first thing to do is txo create an account with OpenAI and to generate [an API token for it](https://platform.openai.com/api-keys). Once you obtain the API key, you need to pass it in some way to the code. There are two ways to use an API key for the OpenAI connection: in a file or in the clipboard."
+				"string" : "The first thing to do is to create an account with OpenAI and to generate [an API token for it](https://platform.openai.com/api-keys). Once you obtain the API key, you need to pass it in some way to the code. There are two ways to use an API key for the OpenAI connection: in a file or in the clipboard."
 			},
 			{
 				"__type" : "textSnippet",
