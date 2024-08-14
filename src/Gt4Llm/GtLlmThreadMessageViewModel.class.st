@@ -10,6 +10,11 @@ Class {
 }
 
 { #category : #accessing }
+GtLlmThreadMessageViewModel >> action [
+	^ ''
+]
+
+{ #category : #accessing }
 GtLlmThreadMessageViewModel >> asOneLineViewModel [
 	^ GtOpenAIOneLineThreadMessageViewModel new threadMessageViewModel: self
 ]
