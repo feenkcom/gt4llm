@@ -273,13 +273,13 @@
 				},
 				"editEmail" : {
 					"__type" : "email",
-					"emailString" : "veit.heller@feenk.com"
+					"emailString" : "<unknown>"
 				},
 				"editTime" : {
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-19T12:37:44.304324+01:00"
+						"dateAndTimeString" : "2024-08-15T15:11:19.66209+02:00"
 					}
 				},
 				"uid" : {
@@ -289,41 +289,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "We can either wait for the status in the summary to display `completed` or periodically check the latest message in the list."
-			},
-			{
-				"__type" : "pharoSnippet",
-				"children" : {
-					"__type" : "snippets",
-					"items" : [ ]
-				},
-				"createEmail" : {
-					"__type" : "email",
-					"emailString" : "veit.heller@feenk.com"
-				},
-				"createTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-19T10:16:09.817013+01:00"
-					}
-				},
-				"editEmail" : {
-					"__type" : "email",
-					"emailString" : "<unknown>"
-				},
-				"editTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-20T20:23:17.157483+01:00"
-					}
-				},
-				"uid" : {
-					"__type" : "uid",
-					"uidString" : "HzsCSBrODQCp1ZkdB1Szjg=="
-				},
-				"code" : "chat"
+				"string" : "We can either wait for the message to appear in the chat or the status in the summary to display `completed`."
 			},
 			{
 				"__type" : "textSnippet",
@@ -563,7 +529,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-08-15T15:03:14.990367+02:00"
+						"dateAndTimeString" : "2024-08-15T15:11:51.871061+02:00"
 					}
 				},
 				"uid" : {
@@ -573,7 +539,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "Again we wait for an answer. We can then add the view to the class if it looks reasonable and check it."
+				"string" : "Again we wait for an answer. We can then add the view to the class if it looks reasonable and check it. The `Live?`"
 			},
 			{
 				"__type" : "pharoSnippet",
@@ -608,77 +574,6 @@
 					"uidString" : "V7o9Li7ODQC7DiLJAJOAxA=="
 				},
 				"code" : "chatMessage := chat messages first.\rresults := chatMessage codeBlocks\r\t\tcollect: [ :aBlock | chatMessage codeBlocksExecutor check: aBlock ].\rresults first"
-			},
-			{
-				"__type" : "textSnippet",
-				"children" : {
-					"__type" : "snippets",
-					"items" : [ ]
-				},
-				"createEmail" : {
-					"__type" : "email",
-					"emailString" : "<unknown>"
-				},
-				"createTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-20T10:16:16.8739+01:00"
-					}
-				},
-				"editEmail" : {
-					"__type" : "email",
-					"emailString" : "<unknown>"
-				},
-				"editTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-20T10:16:25.44858+01:00"
-					}
-				},
-				"uid" : {
-					"__type" : "uid",
-					"uidString" : "LUdFZi7ODQCFxBpGAJOAxA=="
-				},
-				"paragraphStyle" : {
-					"__type" : "textStyle"
-				},
-				"string" : "If desired, we can also remove the method again."
-			},
-			{
-				"__type" : "pharoSnippet",
-				"children" : {
-					"__type" : "snippets",
-					"items" : [ ]
-				},
-				"createEmail" : {
-					"__type" : "email",
-					"emailString" : "<unknown>"
-				},
-				"createTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-20T10:16:33.766384+01:00"
-					}
-				},
-				"editEmail" : {
-					"__type" : "email",
-					"emailString" : "<unknown>"
-				},
-				"editTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-20T10:31:19.626351+01:00"
-					}
-				},
-				"uid" : {
-					"__type" : "uid",
-					"uidString" : "DAhHZy7ODQCGuPwTAJOAxA=="
-				},
-				"code" : "result := chat messages first methods first removeFromSystem"
 			},
 			{
 				"__type" : "textSnippet",

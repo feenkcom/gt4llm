@@ -427,7 +427,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-07-29T13:18:13.311079+02:00"
+						"dateAndTimeString" : "2024-07-29T13:18:14.188858+02:00"
 					}
 				},
 				"uid" : {
@@ -437,7 +437,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "For a OpenAI-compliant option for generating embeddings, see [[Embeddings in OpenAI]] and [[Generating embeddings]]. For an in-image embedding registry that can act as an ad-hoc vector database, see [[Using the embedding registry]]"
+				"string" : "For a OpenAI-compliant option for generating embeddings, see [[Embeddings in OpenAI]] and [[Generating embeddings]]. For an in-image embedding registry that can act as an ad-hoc vector database, see [[Using the embedding registry]]."
 			}
 		]
 	},

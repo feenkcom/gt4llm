@@ -273,13 +273,13 @@
 				},
 				"editEmail" : {
 					"__type" : "email",
-					"emailString" : "veit.heller@feenk.com"
+					"emailString" : "<unknown>"
 				},
 				"editTime" : {
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-19T12:37:44.304324+01:00"
+						"dateAndTimeString" : "2024-08-15T15:11:19.66209+02:00"
 					}
 				},
 				"uid" : {
@@ -289,41 +289,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "We can either wait for the status in the summary to display `completed` or periodically check the latest message in the list."
-			},
-			{
-				"__type" : "pharoSnippet",
-				"children" : {
-					"__type" : "snippets",
-					"items" : [ ]
-				},
-				"createEmail" : {
-					"__type" : "email",
-					"emailString" : "veit.heller@feenk.com"
-				},
-				"createTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-19T10:16:09.817013+01:00"
-					}
-				},
-				"editEmail" : {
-					"__type" : "email",
-					"emailString" : "<unknown>"
-				},
-				"editTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-20T20:23:17.157483+01:00"
-					}
-				},
-				"uid" : {
-					"__type" : "uid",
-					"uidString" : "HzsCSBrODQCp1ZkdB1Szjg=="
-				},
-				"code" : "chat"
+				"string" : "We can either wait for the message to appear in the chat or the status in the summary to display `completed`."
 			},
 			{
 				"__type" : "textSnippet",
@@ -563,7 +529,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-08-15T15:03:14.990367+02:00"
+						"dateAndTimeString" : "2024-08-15T15:12:15.812256+02:00"
 					}
 				},
 				"uid" : {
@@ -573,7 +539,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "Again we wait for an answer. We can then add the view to the class if it looks reasonable and check it."
+				"string" : "Again we wait for an answer. We can then add the view to the class if it looks reasonable and check it. The `Live` tab displays a preview of the view."
 			},
 			{
 				"__type" : "pharoSnippet",
