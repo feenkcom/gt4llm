@@ -18,43 +18,6 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-08-15T15:42:10.162344+02:00"
-					}
-				},
-				"editEmail" : {
-					"__type" : "email",
-					"emailString" : "<unknown>"
-				},
-				"editTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-08-15T15:42:10.162344+02:00"
-					}
-				},
-				"uid" : {
-					"__type" : "uid",
-					"uidString" : "1IoSvxrcDQCIsHq+D3R7jQ=="
-				},
-				"paragraphStyle" : {
-					"__type" : "textStyle"
-				},
-				"string" : ""
-			},
-			{
-				"__type" : "textSnippet",
-				"children" : {
-					"__type" : "snippets",
-					"items" : [ ]
-				},
-				"createEmail" : {
-					"__type" : "email",
-					"emailString" : "<unknown>"
-				},
-				"createTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
 						"dateAndTimeString" : "2024-08-15T15:42:25.618129+02:00"
 					}
 				},
@@ -77,43 +40,6 @@
 					"__type" : "textStyle"
 				},
 				"string" : "Working through the pages first."
-			},
-			{
-				"__type" : "textSnippet",
-				"children" : {
-					"__type" : "snippets",
-					"items" : [ ]
-				},
-				"createEmail" : {
-					"__type" : "email",
-					"emailString" : "<unknown>"
-				},
-				"createTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-08-15T15:42:25.619486+02:00"
-					}
-				},
-				"editEmail" : {
-					"__type" : "email",
-					"emailString" : "<unknown>"
-				},
-				"editTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-08-15T15:42:25.619486+02:00"
-					}
-				},
-				"uid" : {
-					"__type" : "uid",
-					"uidString" : "PWb+vxrcDQCI13yxD3R7jQ=="
-				},
-				"paragraphStyle" : {
-					"__type" : "textStyle"
-				},
-				"string" : ""
 			},
 			{
 				"__type" : "textSnippet",
@@ -209,43 +135,6 @@
 								"__type" : "time",
 								"time" : {
 									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2024-08-15T15:42:25.627565+02:00"
-								}
-							},
-							"editEmail" : {
-								"__type" : "email",
-								"emailString" : "<unknown>"
-							},
-							"editTime" : {
-								"__type" : "time",
-								"time" : {
-									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2024-08-15T15:42:25.627565+02:00"
-								}
-							},
-							"uid" : {
-								"__type" : "uid",
-								"uidString" : "sIX+vxrcDQCI3NMnD3R7jQ=="
-							},
-							"paragraphStyle" : {
-								"__type" : "textStyle"
-							},
-							"string" : "Checking the generated snippet produces a `check not understood` error."
-						},
-						{
-							"__type" : "textSnippet",
-							"children" : {
-								"__type" : "snippets",
-								"items" : [ ]
-							},
-							"createEmail" : {
-								"__type" : "email",
-								"emailString" : "<unknown>"
-							},
-							"createTime" : {
-								"__type" : "time",
-								"time" : {
-									"__type" : "dateAndTime",
 									"dateAndTimeString" : "2024-08-15T15:42:25.627571+02:00"
 								}
 							},
@@ -305,43 +194,6 @@
 								"__type" : "textStyle"
 							},
 							"string" : "There seem to be different ways to extract generated code and check it. What's the simplest  and most reliable way?"
-						},
-						{
-							"__type" : "textSnippet",
-							"children" : {
-								"__type" : "snippets",
-								"items" : [ ]
-							},
-							"createEmail" : {
-								"__type" : "email",
-								"emailString" : "<unknown>"
-							},
-							"createTime" : {
-								"__type" : "time",
-								"time" : {
-									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2024-08-15T15:42:25.627584+02:00"
-								}
-							},
-							"editEmail" : {
-								"__type" : "email",
-								"emailString" : "<unknown>"
-							},
-							"editTime" : {
-								"__type" : "time",
-								"time" : {
-									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2024-08-15T15:42:25.627584+02:00"
-								}
-							},
-							"uid" : {
-								"__type" : "uid",
-								"uidString" : "woX+vxrcDQCI37GgD3R7jQ=="
-							},
-							"paragraphStyle" : {
-								"__type" : "textStyle"
-							},
-							"string" : ""
 						}
 					]
 				},
@@ -375,6 +227,43 @@
 					"__type" : "textStyle"
 				},
 				"string" : "{{gtPage:Working with a tutor based on a simple OpenAI assistant for GT|db=5lw2wjg8hwdwpy1kq5i7lble1}}"
+			},
+			{
+				"__type" : "textSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-08-15T15:42:25.627584+02:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-08-15T15:49:34.608194+02:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "woX+vxrcDQCI37GgD3R7jQ=="
+				},
+				"paragraphStyle" : {
+					"__type" : "textStyle"
+				},
+				"string" : "{{gtPage:Working with a basic chat|db=5lw2wjg8hwdwpy1kq5i7lble1}}"
 			},
 			{
 				"__type" : "textSnippet",
