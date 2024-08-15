@@ -387,14 +387,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-08-15T12:43:55.774244+02:00"
+						"dateAndTimeString" : "2024-08-15T12:44:11.767114+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "eFIu/i3ODQC1xImgAJOAxA=="
 				},
-				"code" : "chatMessage := chat messages first.\rresults := chatMessage  codeBlocks do: [codeBlocksExecutor check"
+				"code" : "chatMessage := chat messages first.\rresults := chatMessage codeBlocks\r\t\tdo: [ :aBlock | chatMessage codeBlocksExecutor check: aBlock ]"
 			},
 			{
 				"__type" : "textSnippet",

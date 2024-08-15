@@ -387,14 +387,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-08-15T12:44:11.767114+02:00"
+						"dateAndTimeString" : "2024-08-15T14:58:51.614254+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "eFIu/i3ODQC1xImgAJOAxA=="
 				},
-				"code" : "chatMessage := chat messages first.\rresults := chatMessage codeBlocks\r\t\tdo: [ :aBlock | chatMessage codeBlocksExecutor check: aBlock ]"
+				"code" : "chatMessage := chat messages first.\rresults := chatMessage codeBlocks\r\t\tcollect: [ :aBlock | chatMessage codeBlocksExecutor check: aBlock ]"
 			},
 			{
 				"__type" : "textSnippet",
@@ -458,7 +458,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-04-15T16:35:12.902337+02:00"
+						"dateAndTimeString" : "2024-08-15T14:58:55.134237+02:00"
 					}
 				},
 				"uid" : {
