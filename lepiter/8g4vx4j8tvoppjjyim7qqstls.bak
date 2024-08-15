@@ -103,14 +103,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-19T14:06:43.074956+02:00"
+						"dateAndTimeString" : "2024-06-23T14:00:25.27926+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "QXoAFRrODQCm5/XrB1Szjg=="
 				},
-				"code" : "tutor := GtOpenAIGtTutor instance ensureAssistant"
+				"code" : "tutor := GtOpenAIGtSpecificTutor instance"
 			},
 			{
 				"__type" : "textSnippet",
@@ -387,14 +387,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-04-15T16:35:08.289305+02:00"
+						"dateAndTimeString" : "2024-08-15T12:43:55.774244+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "eFIu/i3ODQC1xImgAJOAxA=="
 				},
-				"code" : "results := chat messages first codeBlocksExecutor check"
+				"code" : "chatMessage := chat messages first.\rresults := chatMessage  codeBlocks do: [codeBlocksExecutor check"
 			},
 			{
 				"__type" : "textSnippet",
