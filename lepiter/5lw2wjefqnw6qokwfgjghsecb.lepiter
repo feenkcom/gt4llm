@@ -173,7 +173,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-23T08:46:26.718646+02:00"
+						"dateAndTimeString" : "2024-08-15T15:19:45.701504+02:00"
 					}
 				},
 				"uid" : {
@@ -183,7 +183,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "If you have the API in the clipboard, you can just do this:"
+				"string" : "If you have the API in the clipboard, you can instead do this:"
 			},
 			{
 				"__type" : "textSnippet",

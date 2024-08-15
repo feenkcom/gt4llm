@@ -66,14 +66,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-07-09T13:38:52.793712+02:00"
+						"dateAndTimeString" : "2024-08-15T15:25:40.916168+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "Y/IbcTvTDQCIcTuFCwzy0g=="
 				},
-				"code" : "chat := GtOllamaChat new model: 'llama3'.\r\rchat sendMessage: 'Hello Llama! Can you help me find my lost key?'.\r\rchat messages first"
+				"code" : "chat := GtOllamaChat new model: 'llama3.1'.\r\rchat sendMessage: 'Hello Llama! Can you help me find my lost key?'.\r\rchat messages first"
 			}
 		]
 	},

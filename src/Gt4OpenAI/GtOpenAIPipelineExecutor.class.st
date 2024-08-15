@@ -14,6 +14,11 @@ GtOpenAIPipelineExecutor >> await [
 ]
 
 { #category : #accessing }
+GtOpenAIPipelineExecutor >> check [
+	^ self threadMessage codeBlocks collect: [ :aBlock | self check: aBlock ]
+]
+
+{ #category : #accessing }
 GtOpenAIPipelineExecutor >> check: aString [
 	| result |
 	result := (pipeline check: aString) threadMessage: self threadMessage.

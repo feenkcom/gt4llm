@@ -100,7 +100,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-04-24T18:05:27.242835+02:00"
+						"dateAndTimeString" : "2024-08-15T15:25:23.166572+02:00"
 					}
 				},
 				"uid" : {
@@ -110,7 +110,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "This client is your entrypoint for interacting with Ollama. Next, you can download a new model. This step is optional if you’ve already downloaded all the models you want."
+				"string" : "This client is your entrypoint for interacting with Ollama. Next, you can download a new model. This step is optional if you’ve already downloaded all the models you want. Please note that this can take quite some time, depending on the size of the model a"
 			},
 			{
 				"__type" : "pharoSnippet",
@@ -137,14 +137,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-07-29T18:40:39.798463+02:00"
+						"dateAndTimeString" : "2024-07-29T19:24:15.299653+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "q/OpfDvTDQCNJWP0Cwzy0g=="
 				},
-				"code" : "client pullModel: 'mistral-nemo'"
+				"code" : "client pullModel: 'llama3.1'"
 			},
 			{
 				"__type" : "textSnippet",
