@@ -529,7 +529,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-08-15T15:11:51.871061+02:00"
+						"dateAndTimeString" : "2024-08-15T15:12:15.812256+02:00"
 					}
 				},
 				"uid" : {
@@ -539,7 +539,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "Again we wait for an answer. We can then add the view to the class if it looks reasonable and check it. The `Live?`"
+				"string" : "Again we wait for an answer. We can then add the view to the class if it looks reasonable and check it. The `Live` tab displays a preview of the view."
 			},
 			{
 				"__type" : "pharoSnippet",
