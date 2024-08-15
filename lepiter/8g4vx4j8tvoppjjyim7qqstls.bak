@@ -563,7 +563,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-08-15T15:01:43.844767+02:00"
+						"dateAndTimeString" : "2024-08-15T15:03:14.990367+02:00"
 					}
 				},
 				"uid" : {
@@ -573,7 +573,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "Again we wait for an answer. We can then add the view to the class if it looks reasonable and look at it in the context of our chat."
+				"string" : "Again we wait for an answer. We can then add the view to the class if it looks reasonable and check it."
 			},
 			{
 				"__type" : "pharoSnippet",
@@ -608,77 +608,6 @@
 					"uidString" : "V7o9Li7ODQC7DiLJAJOAxA=="
 				},
 				"code" : "chatMessage := chat messages first.\rresults := chatMessage codeBlocks\r\t\tcollect: [ :aBlock | chatMessage codeBlocksExecutor check: aBlock ].\rresults first"
-			},
-			{
-				"__type" : "textSnippet",
-				"children" : {
-					"__type" : "snippets",
-					"items" : [ ]
-				},
-				"createEmail" : {
-					"__type" : "email",
-					"emailString" : "veit.heller@feenk.com"
-				},
-				"createTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-19T12:39:03.663752+01:00"
-					}
-				},
-				"editEmail" : {
-					"__type" : "email",
-					"emailString" : "<unknown>"
-				},
-				"editTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-20T19:16:39.366978+01:00"
-					}
-				},
-				"uid" : {
-					"__type" : "uid",
-					"uidString" : "NL4MRxzODQC8tWZ3B1Szjg=="
-				},
-				"paragraphStyle" : {
-					"__type" : "textStyle"
-				},
-				"string" : " We can also inspect the fraction instance to see it there."
-			},
-			{
-				"__type" : "pharoSnippet",
-				"children" : {
-					"__type" : "snippets",
-					"items" : [ ]
-				},
-				"createEmail" : {
-					"__type" : "email",
-					"emailString" : "veit.heller@feenk.com"
-				},
-				"createTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-19T12:39:58.903876+01:00"
-					}
-				},
-				"editEmail" : {
-					"__type" : "email",
-					"emailString" : "<unknown>"
-				},
-				"editTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-20T14:07:20.612159+01:00"
-					}
-				},
-				"uid" : {
-					"__type" : "uid",
-					"uidString" : "oqFXShzODQCAedAsB1Szjg=="
-				},
-				"code" : "chat checkerInstance"
 			},
 			{
 				"__type" : "textSnippet",
