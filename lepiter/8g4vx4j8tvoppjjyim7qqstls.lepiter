@@ -557,13 +557,13 @@
 				},
 				"editEmail" : {
 					"__type" : "email",
-					"emailString" : "veit.heller@feenk.com"
+					"emailString" : "<unknown>"
 				},
 				"editTime" : {
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-19T12:39:01.53235+01:00"
+						"dateAndTimeString" : "2024-08-15T15:03:14.990367+02:00"
 					}
 				},
 				"uid" : {
@@ -573,78 +573,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "Again we wait for an answer."
-			},
-			{
-				"__type" : "pharoSnippet",
-				"children" : {
-					"__type" : "snippets",
-					"items" : [ ]
-				},
-				"createEmail" : {
-					"__type" : "email",
-					"emailString" : "veit.heller@feenk.com"
-				},
-				"createTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-19T10:24:35.134023+01:00"
-					}
-				},
-				"editEmail" : {
-					"__type" : "email",
-					"emailString" : "<unknown>"
-				},
-				"editTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-20T20:23:14.59854+01:00"
-					}
-				},
-				"uid" : {
-					"__type" : "uid",
-					"uidString" : "ocMgZhrODQCsu073B1Szjg=="
-				},
-				"code" : "chat"
-			},
-			{
-				"__type" : "textSnippet",
-				"children" : {
-					"__type" : "snippets",
-					"items" : [ ]
-				},
-				"createEmail" : {
-					"__type" : "email",
-					"emailString" : "<unknown>"
-				},
-				"createTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-20T10:00:32.321753+01:00"
-					}
-				},
-				"editEmail" : {
-					"__type" : "email",
-					"emailString" : "<unknown>"
-				},
-				"editTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-20T19:11:50.112719+01:00"
-					}
-				},
-				"uid" : {
-					"__type" : "uid",
-					"uidString" : "BpD4LS7ODQC7CAH6AJOAxA=="
-				},
-				"paragraphStyle" : {
-					"__type" : "textStyle"
-				},
-				"string" : "We can then add the view to the class if it looks reasonable and look at it in the context of our chat."
+				"string" : "Again we wait for an answer. We can then add the view to the class if it looks reasonable and check it."
 			},
 			{
 				"__type" : "pharoSnippet",
@@ -671,85 +600,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-04-15T17:19:56.079502+02:00"
+						"dateAndTimeString" : "2024-08-15T15:02:56.700464+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "V7o9Li7ODQC7DiLJAJOAxA=="
 				},
-				"code" : "results := chat messages first codeBlocksExecutor check"
-			},
-			{
-				"__type" : "textSnippet",
-				"children" : {
-					"__type" : "snippets",
-					"items" : [ ]
-				},
-				"createEmail" : {
-					"__type" : "email",
-					"emailString" : "veit.heller@feenk.com"
-				},
-				"createTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-19T12:39:03.663752+01:00"
-					}
-				},
-				"editEmail" : {
-					"__type" : "email",
-					"emailString" : "<unknown>"
-				},
-				"editTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-20T19:16:39.366978+01:00"
-					}
-				},
-				"uid" : {
-					"__type" : "uid",
-					"uidString" : "NL4MRxzODQC8tWZ3B1Szjg=="
-				},
-				"paragraphStyle" : {
-					"__type" : "textStyle"
-				},
-				"string" : " We can also inspect the fraction instance to see it there."
-			},
-			{
-				"__type" : "pharoSnippet",
-				"children" : {
-					"__type" : "snippets",
-					"items" : [ ]
-				},
-				"createEmail" : {
-					"__type" : "email",
-					"emailString" : "veit.heller@feenk.com"
-				},
-				"createTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-19T12:39:58.903876+01:00"
-					}
-				},
-				"editEmail" : {
-					"__type" : "email",
-					"emailString" : "<unknown>"
-				},
-				"editTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-20T14:07:20.612159+01:00"
-					}
-				},
-				"uid" : {
-					"__type" : "uid",
-					"uidString" : "oqFXShzODQCAedAsB1Szjg=="
-				},
-				"code" : "chat checkerInstance"
+				"code" : "chatMessage := chat messages first.\rresults := chatMessage codeBlocks\r\t\tcollect: [ :aBlock | chatMessage codeBlocksExecutor check: aBlock ].\rresults first"
 			},
 			{
 				"__type" : "textSnippet",
