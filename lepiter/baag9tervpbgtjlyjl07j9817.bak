@@ -23,7 +23,7 @@
 								"__type" : "time",
 								"time" : {
 									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2024-08-16T16:44:56.225022+02:00"
+									"dateAndTimeString" : "2024-08-16T18:25:20.876993+02:00"
 								}
 							},
 							"editEmail" : {
@@ -34,17 +34,17 @@
 								"__type" : "time",
 								"time" : {
 									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2024-08-16T16:45:05.642289+02:00"
+									"dateAndTimeString" : "2024-08-16T18:29:14.209059+02:00"
 								}
 							},
 							"uid" : {
 								"__type" : "uid",
-								"uidString" : "rHdjvS/cDQCx9IKcCqahvg=="
+								"uidString" : "X1x8JDHcDQCVwKtVCqahvg=="
 							},
 							"paragraphStyle" : {
 								"__type" : "textStyle"
 							},
-							"string" : "[[OpenAI FAQ]] "
+							"string" : "See [[GT OpenAI domain concepts (todo)]]"
 						}
 					]
 				},
@@ -56,7 +56,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-08-16T16:44:53.176673+02:00"
+						"dateAndTimeString" : "2024-08-16T18:24:55.328494+02:00"
 					}
 				},
 				"editEmail" : {
@@ -67,54 +67,17 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-08-16T16:44:55.922425+02:00"
+						"dateAndTimeString" : "2024-08-16T18:25:19.416633+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "XO80vS/cDQCxw3bYCqahvg=="
+					"uidString" : "04D2IjHcDQCUgPThCqahvg=="
 				},
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "See also:"
-			},
-			{
-				"__type" : "textSnippet",
-				"children" : {
-					"__type" : "snippets",
-					"items" : [ ]
-				},
-				"createEmail" : {
-					"__type" : "email",
-					"emailString" : "<unknown>"
-				},
-				"createTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-08-15T15:42:25.618129+02:00"
-					}
-				},
-				"editEmail" : {
-					"__type" : "email",
-					"emailString" : "<unknown>"
-				},
-				"editTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-08-15T15:42:25.618129+02:00"
-					}
-				},
-				"uid" : {
-					"__type" : "uid",
-					"uidString" : "AGH+vxrcDQCI1uXaD3R7jQ=="
-				},
-				"paragraphStyle" : {
-					"__type" : "textStyle"
-				},
-				"string" : "Working through the pages first."
+				"string" : "*Q* What are the key domain concepts of the gt4llm framework?"
 			},
 			{
 				"__type" : "textSnippet",
@@ -135,7 +98,7 @@
 								"__type" : "time",
 								"time" : {
 									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2024-08-15T15:42:25.62236+02:00"
+									"dateAndTimeString" : "2024-08-16T18:19:34.430216+02:00"
 								}
 							},
 							"editEmail" : {
@@ -146,17 +109,17 @@
 								"__type" : "time",
 								"time" : {
 									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2024-08-15T15:42:25.62236+02:00"
+									"dateAndTimeString" : "2024-08-16T18:19:45.186356+02:00"
 								}
 							},
 							"uid" : {
 								"__type" : "uid",
-								"uidString" : "i3H+vxrcDQCI2WlMD3R7jQ=="
+								"uidString" : "bwDWDzHcDQCT7DfpCqahvg=="
 							},
 							"paragraphStyle" : {
 								"__type" : "textStyle"
 							},
-							"string" : "The generated explicit view sends an invalid message. How to fix this? `BlElement >> #addChildren:spaced:` is not understood."
+							"string" : "See [[Working with a basic chat]]"
 						}
 					]
 				},
@@ -168,7 +131,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-08-15T15:42:25.622268+02:00"
+						"dateAndTimeString" : "2024-08-16T18:19:23.574534+02:00"
 					}
 				},
 				"editEmail" : {
@@ -179,17 +142,17 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-08-15T15:42:25.622268+02:00"
+						"dateAndTimeString" : "2024-08-16T18:19:33.71727+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "I3H+vxrcDQCI2FmCD3R7jQ=="
+					"uidString" : "MVowDzHcDQCTJDQ1Cqahvg=="
 				},
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "{{gtPage:Getting a tutor to create a view|db=5lw2wjg8hwdwpy1kq5i7lble1}}"
+				"string" : "*Q* How do I start a really basic chat?"
 			},
 			{
 				"__type" : "textSnippet",
@@ -210,7 +173,7 @@
 								"__type" : "time",
 								"time" : {
 									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2024-08-15T15:42:25.627571+02:00"
+									"dateAndTimeString" : "2024-08-16T18:15:06.069889+02:00"
 								}
 							},
 							"editEmail" : {
@@ -221,17 +184,17 @@
 								"__type" : "time",
 								"time" : {
 									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2024-08-15T15:42:25.627571+02:00"
+									"dateAndTimeString" : "2024-08-16T18:15:43.318522+02:00"
 								}
 							},
 							"uid" : {
 								"__type" : "uid",
-								"uidString" : "tYX+vxrcDQCI3bcYD3R7jQ=="
+								"uidString" : "WyHX/zDcDQCNrbQTCqahvg=="
 							},
 							"paragraphStyle" : {
 								"__type" : "textStyle"
 							},
-							"string" : "The fraction phlow view seems better than the explicit view generated earlier."
+							"string" : "It's not clear if such data can be uploaded just like additional instructions, or as part of fine-tuning."
 						},
 						{
 							"__type" : "textSnippet",
@@ -247,7 +210,7 @@
 								"__type" : "time",
 								"time" : {
 									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2024-08-15T15:42:25.627576+02:00"
+									"dateAndTimeString" : "2024-08-16T18:16:47.384581+02:00"
 								}
 							},
 							"editEmail" : {
@@ -258,17 +221,54 @@
 								"__type" : "time",
 								"time" : {
 									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2024-08-15T15:42:25.627576+02:00"
+									"dateAndTimeString" : "2024-08-16T18:17:16.218514+02:00"
 								}
 							},
 							"uid" : {
 								"__type" : "uid",
-								"uidString" : "uYX+vxrcDQCI3pKOD3R7jQ=="
+								"uidString" : "hBXhBTHcDQCQbBzICqahvg=="
 							},
 							"paragraphStyle" : {
 								"__type" : "textStyle"
 							},
-							"string" : "There seem to be different ways to extract generated code and check it. What's the simplest  and most reliable way?"
+							"string" : "A basic example for a single class is in: [[Working with a basic chat]] "
+						},
+						{
+							"__type" : "textSnippet",
+							"children" : {
+								"__type" : "snippets",
+								"items" : [ ]
+							},
+							"createEmail" : {
+								"__type" : "email",
+								"emailString" : "<unknown>"
+							},
+							"createTime" : {
+								"__type" : "time",
+								"time" : {
+									"__type" : "dateAndTime",
+									"dateAndTimeString" : "2024-08-16T18:17:31.559828+02:00"
+								}
+							},
+							"editEmail" : {
+								"__type" : "email",
+								"emailString" : "<unknown>"
+							},
+							"editTime" : {
+								"__type" : "time",
+								"time" : {
+									"__type" : "dateAndTime",
+									"dateAndTimeString" : "2024-08-16T18:17:47.819075+02:00"
+								}
+							},
+							"uid" : {
+								"__type" : "uid",
+								"uidString" : "ICWDCDHcDQCReYUqCqahvg=="
+							},
+							"paragraphStyle" : {
+								"__type" : "textStyle"
+							},
+							"string" : "In this case you just send the code as part of a chat message."
 						}
 					]
 				},
@@ -280,7 +280,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-08-15T15:42:25.627548+02:00"
+						"dateAndTimeString" : "2024-08-16T16:45:07.451454+02:00"
 					}
 				},
 				"editEmail" : {
@@ -291,17 +291,54 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-08-15T15:42:25.627548+02:00"
+						"dateAndTimeString" : "2024-08-16T18:29:55.828582+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "pIX+vxrcDQCI20FnD3R7jQ=="
+					"uidString" : "VcYOvi/cDQCySG3WCqahvg=="
 				},
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "{{gtPage:Working with a tutor based on a simple OpenAI assistant for GT|db=5lw2wjg8hwdwpy1kq5i7lble1}}"
+				"string" : "*Q* ***How do I upload classes and packages to the tutor?"
+			},
+			{
+				"__type" : "textSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-08-16T18:15:01.276762+02:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-08-16T18:18:36.551912+02:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "iwGO/zDcDQCNlbxkCqahvg=="
+				},
+				"paragraphStyle" : {
+					"__type" : "textStyle"
+				},
+				"string" : "See also [[Fine-tuning]] , [[Creating a fine-tuned model]], [[Using modelfiles]], ..."
 			},
 			{
 				"__type" : "textSnippet",
@@ -322,7 +359,7 @@
 								"__type" : "time",
 								"time" : {
 									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2024-08-15T15:49:35.085162+02:00"
+									"dateAndTimeString" : "2024-08-16T17:35:27.103504+02:00"
 								}
 							},
 							"editEmail" : {
@@ -333,17 +370,54 @@
 								"__type" : "time",
 								"time" : {
 									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2024-08-15T15:52:55.489778+02:00"
+									"dateAndTimeString" : "2024-08-16T18:29:20.915497+02:00"
 								}
 							},
 							"uid" : {
 								"__type" : "uid",
-								"uidString" : "2oSX2RrcDQC4ddjbD3gFwA=="
+								"uidString" : "H/8KcjDcDQC1xgz6Cqahvg=="
 							},
 							"paragraphStyle" : {
 								"__type" : "textStyle"
 							},
-							"string" : "NB: the two questions are not connected. They should be asked in separate chats."
+							"string" : "See [[Overview of Tutors (todo)]]"
+						},
+						{
+							"__type" : "textSnippet",
+							"children" : {
+								"__type" : "snippets",
+								"items" : [ ]
+							},
+							"createEmail" : {
+								"__type" : "email",
+								"emailString" : "<unknown>"
+							},
+							"createTime" : {
+								"__type" : "time",
+								"time" : {
+									"__type" : "dateAndTime",
+									"dateAndTimeString" : "2024-08-16T16:47:17.498511+02:00"
+								}
+							},
+							"editEmail" : {
+								"__type" : "email",
+								"emailString" : "<unknown>"
+							},
+							"editTime" : {
+								"__type" : "time",
+								"time" : {
+									"__type" : "dateAndTime",
+									"dateAndTimeString" : "2024-08-16T16:47:17.498511+02:00"
+								}
+							},
+							"uid" : {
+								"__type" : "uid",
+								"uidString" : "ZCDPxS/cDQC1jx19Cqahvg=="
+							},
+							"paragraphStyle" : {
+								"__type" : "textStyle"
+							},
+							"string" : ""
 						}
 					]
 				},
@@ -355,7 +429,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-08-15T15:42:25.627584+02:00"
+						"dateAndTimeString" : "2024-08-16T16:45:38.10731+02:00"
 					}
 				},
 				"editEmail" : {
@@ -366,54 +440,17 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-08-15T15:49:34.608194+02:00"
+						"dateAndTimeString" : "2024-08-16T16:46:45.723885+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "woX+vxrcDQCI37GgD3R7jQ=="
+					"uidString" : "Lorivy/cDQCzY/atCqahvg=="
 				},
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "{{gtPage:Working with a basic chat|db=5lw2wjg8hwdwpy1kq5i7lble1}}"
-			},
-			{
-				"__type" : "textSnippet",
-				"children" : {
-					"__type" : "snippets",
-					"items" : [ ]
-				},
-				"createEmail" : {
-					"__type" : "email",
-					"emailString" : "<unknown>"
-				},
-				"createTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-08-15T15:42:25.628357+02:00"
-					}
-				},
-				"editEmail" : {
-					"__type" : "email",
-					"emailString" : "<unknown>"
-				},
-				"editTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-08-15T15:42:25.628357+02:00"
-					}
-				},
-				"uid" : {
-					"__type" : "uid",
-					"uidString" : "zIj+vxrcDQCI4Tk3D3R7jQ=="
-				},
-				"paragraphStyle" : {
-					"__type" : "textStyle"
-				},
-				"string" : ""
+				"string" : "*Q* What are all the different tutors for?"
 			}
 		]
 	},
@@ -425,7 +462,7 @@
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2024-08-15T10:58:08.552248+02:00"
+			"dateAndTimeString" : "2024-08-16T16:45:07.417163+02:00"
 		}
 	},
 	"editEmail" : {
@@ -436,15 +473,15 @@
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2024-08-15T10:58:08.552248+02:00"
+			"dateAndTimeString" : "2024-08-16T16:45:07.417163+02:00"
 		}
 	},
 	"pageType" : {
 		"__type" : "namedPage",
-		"title" : "Experiments"
+		"title" : "OpenAI FAQ"
 	},
 	"uid" : {
 		"__type" : "uuid",
-		"uuid" : "d69367c6-16dc-0d00-86b5-1e6c093f9b9c"
+		"uuid" : "eb3f0ebe-2fdc-0d00-b247-ce040aa6a1be"
 	}
 }
