@@ -47,7 +47,7 @@ GtLlmEntity >> gtViewRawDataFor: aView [
 	self rawData ifNil: [^ aView empty ].
 
 	^ aView forward
-		title: 'Raw Data';
+		title: 'Raw data';
 		priority: 10;
 		object: [ self rawData ];
 		view: #gtItemsFor:
