@@ -38,6 +38,19 @@ GtOpenAIActionAssistantChat >> gtInstanceChatWidgetFor: aView [
 ]
 
 { #category : #accessing }
+GtOpenAIActionAssistantChat >> gtViewInstructionTreeFor: aView [
+	<gtView>
+	
+	assistant ifNil: [ ^ aView empty ].
+	
+	^ aView forward
+		title: 'Instruction tree';
+		priority: 20;
+		object: [ tutor ];
+		view: #gtInstructionTreeFor:
+]
+
+{ #category : #accessing }
 GtOpenAIActionAssistantChat >> gtViewInstructionsFor: aView [
 	<gtView>
 	

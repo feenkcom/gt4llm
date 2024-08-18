@@ -72,7 +72,7 @@ GtLlmTutor >> gtChatsFor: aView [
 GtLlmTutor >> gtInstructionTreeFor: aView [
 	<gtView>
 	^ aView forward
-		title: 'Instruction tree';
+		title: 'Tutor instruction tree';
 		priority: 6;
 		object: [ self instructions ];
 		view: #gtTreeFor:
