@@ -10,6 +10,11 @@ GtOpenAIActionThreadMessage >> action [
 ]
 
 { #category : #accessing }
+GtOpenAIActionThreadMessage >> actionName [
+	^ self contentJson at: 'Action' ifAbsent: [ '' ]
+]
+
+{ #category : #accessing }
 GtOpenAIActionThreadMessage >> contentJson [
 	self contentText ifEmpty: [ ^ {} asDictionary ].
 	^ STONJSON fromString: self contentText
@@ -42,7 +47,7 @@ GtOpenAIActionThreadMessage >> gtContentFor: aView [
 { #category : #accessing }
 GtOpenAIActionThreadMessage >> gtInspectActionFor: anAction [
 	<gtLlmAction>
-	(self chat tutor actionNamed: self action) ifNil: [ ^ anAction noAction ].
+	(self chat tutor actionNamed: self actionName) ifNil: [ ^ anAction noAction ].
 
 	^ anAction button
 		priority: 1;

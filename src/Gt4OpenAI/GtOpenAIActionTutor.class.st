@@ -8,6 +8,11 @@ Class {
 	#category : #'Gt4OpenAI-Tutor'
 }
 
+{ #category : #'as yet unclassified' }
+GtOpenAIActionTutor >> actionNamed: aString [
+	^ actions detect: [ :anAction | anAction name = aString ] ifNone: [ nil ]
+]
+
 { #category : #accessing }
 GtOpenAIActionTutor >> actions [
 	^ actions
