@@ -112,6 +112,8 @@ GtLlmThreadMessageContentHolder >> views: aCollectionOfViews [
 
 { #category : #accessing }
 GtLlmThreadMessageContentHolder >> viewsToTabGroup: aCollectionOfViews [
+	"(GtPhlowCompositeView new views: aCollectionOfViews)
+		asElementDo: [ :e | e vFitContentLimited ]  "	
 	| tabs |
 	tabs := OrderedCollection new.
 	aCollectionOfViews

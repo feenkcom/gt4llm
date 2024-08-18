@@ -125,7 +125,7 @@ GtOpenAIAssistantChat >> gtInstanceFor: aView [
 	<gtView>
 	^ aView forward
 		title: 'Instance';
-		priority: 8;
+		priority: 1;
 		object: [ pipeline ];
 		view: #gtInstanceFor:
 ]
