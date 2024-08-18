@@ -18,6 +18,11 @@ GtLlmCompositeInstruction >> children [
 ]
 
 { #category : #accessing }
+GtLlmCompositeInstruction >> gtDisplayOn: stream [
+	stream nextPutAll: '--Composite--'
+]
+
+{ #category : #accessing }
 GtLlmCompositeInstruction >> initialize [
 	super initialize.
 	

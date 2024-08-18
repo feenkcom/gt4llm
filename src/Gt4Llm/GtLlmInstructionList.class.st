@@ -18,6 +18,11 @@ GtLlmInstructionList >> children [
 ]
 
 { #category : #accessing }
+GtLlmInstructionList >> gtDisplayOn: stream [
+	stream nextPutAll: '--List--'
+]
+
+{ #category : #accessing }
 GtLlmInstructionList >> initialize [
 	super initialize.
 	
