@@ -4,11 +4,6 @@ Class {
 	#category : #'Gt4OpenAI-Tutor'
 }
 
-{ #category : #'as yet unclassified' }
-GtOpenAICoderActionTutor >> actionNamed: aString [
-	^ actions detect: [ :anAction | anAction name = aString ] ifNone: [ nil ]
-]
-
 { #category : #accessing }
 GtOpenAICoderActionTutor >> addChat [
 	| aChat |
