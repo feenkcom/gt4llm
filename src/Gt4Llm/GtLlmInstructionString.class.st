@@ -13,6 +13,12 @@ GtLlmInstructionString >> children [
 ]
 
 { #category : #accessing }
+GtLlmInstructionString >> gtDisplayOn: aStream [
+	aStream
+		nextPutAll: string
+]
+
+{ #category : #accessing }
 GtLlmInstructionString >> instructionString [
 	^ string
 ]

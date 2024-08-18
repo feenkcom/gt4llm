@@ -9,7 +9,7 @@ GtOpenAIWardleyMapActionAssistantChat >> gtWardleyScriptFor: aView [
 	<gtView>
 	
 	^ aView forward 
-		title: 'Script';
+		title: 'Wardley map script';
 		priority: 5;
 		object: [ self pipeline instance ];
 		view: #gtWardleyScriptFor:

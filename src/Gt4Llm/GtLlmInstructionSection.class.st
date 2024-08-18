@@ -36,6 +36,12 @@ GtLlmInstructionSection >> doNotComputeHeaderLevelsAutomatically [
 ]
 
 { #category : #accessing }
+GtLlmInstructionSection >> gtDisplayOn: aStream [
+	aStream
+		nextPutAll: self title
+]
+
+{ #category : #accessing }
 GtLlmInstructionSection >> headerLevel [
 	autoHeaderLevel
 		ifTrue: [ ^ (self allParents

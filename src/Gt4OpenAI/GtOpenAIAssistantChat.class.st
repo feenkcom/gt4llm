@@ -135,7 +135,7 @@ GtOpenAIAssistantChat >> gtMessagesFor: aView [
 	<gtView>
 	"cannot be a forward because the update wouldn’t work"
 	^ aView columnedList
-		title: 'Messages list';
+		title: 'Messages';
 		priority: 1.1;
 		items: [ self messages ];
 		column: 'Role' text: #role width: 60;
@@ -150,7 +150,7 @@ GtOpenAIAssistantChat >> gtMessagesWidgetFor: aView [
 	<gtView>
 	| aViewModel |
 	^ aView explicit
-		title: 'Messages';
+		title: 'Chat';
 		priority: 0;
 		stencil: [ aViewModel
 				ifNil: [ aViewModel := self asViewModel ].
@@ -163,7 +163,7 @@ GtOpenAIAssistantChat >> gtSummaryFor: aView [
 	<gtView>
 	^ aView columnedList
 		title: 'Summary';
-		priority: 1;
+		priority: 2;
 		items: [ self summary ];
 		column: 'Property' text: #key;
 		column: 'Value' text: #value;
@@ -175,30 +175,6 @@ GtOpenAIAssistantChat >> gtSummaryFor: aView [
 				aButton
 					enqueueTask: (BlTaskAction new action: [ aTab viewContentElement phlow update ]) ];
 		send: [ self lastRun ]
-]
-
-{ #category : #accessing }
-GtOpenAIAssistantChat >> gtWriteFor: aView [
-	<gtView>
-	^ aView textEditor
-		title: 'Write';
-		priority: 2;
-		aptitude: [ | aptitude |
-			aptitude := BrGlamorousRegularEditorAptitude new.
-			aptitude attributesBuilder
-				attribute: (BrGhostTextAttribute
-						for: ('Write a message here' asRopedText glamorousRegularFontAndSize
-								foreground: Color lightGray)).
-			aptitude ];
-		text: [ '' ];
-		actionButtonIcon: BrGlamorousVectorIcons play
-			tooltip: 'Send'
-			action: [ :aButton | 
-				aButton parent parent parent parent
-					allChildrenBreadthFirstDetect: [ :anElement | anElement isKindOf: BrEditor ]
-					ifFound: [ :anEditor | 
-						self sendMessage: anEditor text asString.
-						anEditor text: '' ] ]
 ]
 
 { #category : #accessing }

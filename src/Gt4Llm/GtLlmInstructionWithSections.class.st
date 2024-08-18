@@ -25,6 +25,12 @@ GtLlmInstructionWithSections >> children [
 ]
 
 { #category : #accessing }
+GtLlmInstructionWithSections >> gtDisplayOn: aStream [
+	aStream
+		nextPutAll: self introduction instructionString
+]
+
+{ #category : #accessing }
 GtLlmInstructionWithSections >> initialize [
 	super initialize.
 	
