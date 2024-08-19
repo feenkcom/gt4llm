@@ -187,16 +187,14 @@ GtOpenAIThreadMessage >> gtContentFor: aView [
 ]
 
 { #category : #accessing }
-GtOpenAIThreadMessage >> gtJsonDataFor: aView [
+GtOpenAIThreadMessage >> gtJsonDataFor: aView context: aContext [
 	<gtView>
 	<gtLlmMessageView>
 	self chat responseFormat ifNil: [ ^ aView empty ].
 
-	^ aView forward
+	^ ((STONJSON fromString: self contentText) gtTreeFor: aView context: aContext)
 		title: 'JSON data';
-		priority: 4.5;
-		object: [ self contentText];
-		view:  #gtJSONDataFor:context:
+		priority: 4.5
 ]
 
 { #category : #accessing }
