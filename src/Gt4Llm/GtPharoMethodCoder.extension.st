@@ -10,25 +10,6 @@ GtPharoMethodCoder >> addRefactorMethodAst: anAst to: coderAddOns [
 ]
 
 { #category : #'*Gt4Llm' }
-GtPharoMethodCoder >> addReviewAddonsTo: anAst to: coderAddOns viewModel: aCoderViewModel [
-	<gtAstCoderAddOns: 10>
-	self compiledMethod ifNil: [ ^ self ].
-
-	coderAddOns
-		addContextAction: 'Use OpenAI to review the method.' translated
-		icon: BrGlamorousVectorIcons openAi
-		action: [ :aCoderUIModel :button | 
-			| aChat |
-			aChat := self openAITutorChat.
-			aChat sendMessage: 'Review the method'.
-			(aChat whenReadyFuture
-				then: [ aChat messages first isAssistantRole
-						ifTrue: [ button phlow spawnObject: aChat messages first codeReview ]
-						ifFalse: [ self error: 'No answer received!' ] ]) await ]
-		id: GtLlmMethodCoderReviewActionId
-]
-
-{ #category : #'*Gt4Llm' }
 GtPharoMethodCoder >> openAITutorChat [
 	^ self
 		attributeNamed: #openAITutorChat
