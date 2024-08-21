@@ -90,8 +90,8 @@ GtPossibleRenameSelectorAction >> addRenameAttributes [
 						renameAction: self;
 						original: original;
 						possibilities: self possibilities)
-				from: originalLocations last last + 1
-				to: originalLocations last last + 1)
+				from: originalLocations last last
+				to: originalLocations last last)
 ]
 
 { #category : #accessing }

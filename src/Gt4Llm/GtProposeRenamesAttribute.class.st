@@ -28,7 +28,7 @@ GtProposeRenamesAttribute >> initialize [
 	super initialize.
 
 	self beNotOverwritableByStyler.
-	self beReplace.
+	self beAppend.
 
 
 	self cache: self newPooledCache
