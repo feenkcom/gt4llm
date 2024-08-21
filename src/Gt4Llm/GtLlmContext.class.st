@@ -96,6 +96,8 @@ GtLlmContext >> checker: anObject [
 { #category : #accessing }
 GtLlmContext >> gtCheckFor: aView [
 	<gtView>
+	self checker ifNil: [ ^ aView empty ].
+
 	^ aView textEditor
 		title: 'Check';
 		priority: 2;
@@ -113,6 +115,8 @@ GtLlmContext >> gtCheckFor: aView [
 { #category : #accessing }
 GtLlmContext >> gtCompositionFor: aView [
 	<gtView>
+	self checker ifNil: [ ^ aView empty ].
+
 	^ aView forward
 		title: 'Composition';
 		priority: 1;
