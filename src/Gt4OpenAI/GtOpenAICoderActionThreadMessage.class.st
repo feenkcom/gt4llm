@@ -11,10 +11,15 @@ GtOpenAICoderActionThreadMessage >> codeReview [
 
 { #category : #accessing }
 GtOpenAICoderActionThreadMessage >> compareSourceFrom: expected to: actual [
-	^ (GtDiffBuilder
+	^ (self diffSourceFrom: expected to: actual) changes isEmpty
+]
+
+{ #category : #accessing }
+GtOpenAICoderActionThreadMessage >> diffSourceFrom: expected to: actual [
+	^ GtDiffBuilder
 		computeDifferencesFrom: expected
 		to: actual
-		using: GtCharacterGroupDiffSplitter words ignoreWhitespace) changes isEmpty
+		using: GtSmaCCDiffSplitter forPharo
 ]
 
 { #category : #accessing }
@@ -48,6 +53,29 @@ GtOpenAICoderActionThreadMessage >> gtContentFor: aView [
 		title: 'Content';
 		priority: 5;
 		stencil: [ GtLlmThreadMessageElement new threadMessageViewModel: self asViewModel ]
+]
+
+{ #category : #accessing }
+GtOpenAICoderActionThreadMessage >> gtDiffFor: aView [
+	<gtView>
+	<gtLlmMessageView>
+	| methodSource expected actual diff |
+	self smalltalkMethodCodeBlock ifNil: [ ^ aView empty ].
+
+	methodSource := self smalltalkMethodSource.
+	expected := methodSource compiledMethod sourceCode.
+	actual := methodSource methodSource.
+	diff := self diffSourceFrom: expected to: actual.
+	diff changes ifEmpty: [ ^ aView empty ].
+
+	^ aView explicit
+		title: 'Diff';
+		priority: 2;
+		stencil: [ GtDiffElementWithLabelStencil new
+				fromLabelText: 'Current:';
+				toLabelText: 'Change:';
+				change: diff;
+				styler: GtCodeDiffRBTextStyler new ]
 ]
 
 { #category : #accessing }

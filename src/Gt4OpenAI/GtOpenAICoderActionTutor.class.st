@@ -58,7 +58,7 @@ GtOpenAICoderActionTutor >> refactoringAction [
 	^ GtLlmTutorAction new
 		name: 'Propose refactoring for method';
 		priority: 4;
-		description: 'Proposes a refactoring for the method. The method should be rewritten appropriately where necessary while preserving functionality.';
+		description: 'Proposes a refactoring for the method. The method should be rewritten appropriately where necessary while preserving functionality. A textual description of the changes may also be added if deemed necessary.';
 		format: 'Propose refactoring for method';
 		examples: {GtLlmTutorActionExample new
 					input: {'Action' -> 'Propose refactoring for method'.
@@ -73,9 +73,23 @@ findIndexOfAction: anAction
 							'Text' -> nil.
 							'Smalltalk method'
 								-> 'ActionClass
-addAction: anAction
+findIndexOfAction: anAction
 	^ actions indexOf: anAction ifAbsent: [ self error: ''Action not found'' ]'}
-							asDictionary}
+							asDictionary.
+				GtLlmTutorActionExample new
+					input: {'Action' -> 'Propose refactoring for method'.
+							'Smalltalk method'
+								-> 'ActionClass
+firstAction
+	^ actions at: 1'} asDictionary;
+					output: {'Action' -> 'Propose refactoring for method'.
+							'Renames' -> nil.
+							'Text'
+								-> 'While the method functions properly as-is, it is usually better to use the explicit collection actions such as `first`, `second`, and `last` instead of relying on indices.'.
+							'Smalltalk method'
+								-> 'ActionClass
+firstAction
+	^ actions first'} asDictionary}
 ]
 
 { #category : #accessing }
