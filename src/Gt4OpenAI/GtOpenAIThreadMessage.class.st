@@ -191,6 +191,7 @@ GtOpenAIThreadMessage >> gtJsonDataFor: aView context: aContext [
 	<gtView>
 	<gtLlmMessageView>
 	self chat responseFormat ifNil: [ ^ aView empty ].
+	self contentText ifEmpty: [ ^ aView empty ].
 
 	^ ((STONJSON fromString: self contentText) gtTreeFor: aView context: aContext)
 		title: 'JSON data';
