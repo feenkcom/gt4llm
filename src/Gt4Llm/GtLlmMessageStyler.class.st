@@ -93,6 +93,16 @@ GtLlmMessageStyler >> initialize [
 GtLlmMessageStyler >> isCursorInside: nodeInterval [ 
 ]
 
+{ #category : #generated }
+GtLlmMessageStyler >> isValidLink: urlString [
+	"Answer a boolean indicating whether the supplied string is valid.
+	There's no restriction on what schemes are supported as we don't know what schemes the OS supports, so any scheme other than file:// will answer true.
+	If the scheme is file:// or no scheme is provided, answer a boolean based on the files existence."
+	<return: #Boolean>
+
+	^ (self resolveUrl: urlString) isValid
+]
+
 { #category : #accessing }
 GtLlmMessageStyler >> nextUniqueId [
 	lastId := lastId + 1.
@@ -107,6 +117,18 @@ GtLlmMessageStyler >> privateStyle: aText [
 	ast := LeParser parse: aText asString.
 	self accept: ast.
 	^ aText
+]
+
+{ #category : #generated }
+GtLlmMessageStyler >> resolveUrl: aUrlString [
+	"For file urls, resolve against the database directory or root directory, and allow file urls of the form 'file://path/to/image.png' (the host is missing), with the same resolution"
+	<return: #GtUrlStringUtility>
+	| rootDir |
+	
+	rootDir :=  FileLocator workingDirectory resolve.
+	^ GtUrlStringUtility new
+		rootDirectory: rootDir;
+		urlString: aUrlString.
 ]
 
 { #category : #generated }
@@ -396,6 +418,25 @@ GtLlmMessageStyler >> styleExpandingObject: aClassAnnotation withDefault: aSymbo
 ]
 
 { #category : #generated }
+GtLlmMessageStyler >> styleFileSelection: aLink text: aSubText [
+	"Append a button to the supplied link text that opens the link"
+
+	aSubText appendingAdornment: [ :aTBrTextEditorTextualPiece :anEditorElement | 
+		| selectStencil selectDropdown |
+
+		selectStencil := LeFileSelectStencil new 
+			label: aLink label;
+			tooltip: 'Import file from disk';
+			extent: 600@400;
+			textEditorPiece: aTBrTextEditorTextualPiece;
+			visitor: self;
+			subText: aSubText.
+		selectDropdown := selectStencil asElement.
+		selectDropdown aptitude - BrGlamorousButtonExteriorAptitude.
+		selectDropdown ]
+]
+
+{ #category : #generated }
 GtLlmMessageStyler >> styleHeader: aHeaderNode [
 	aHeaderNode parts isEmpty ifTrue: [ ^ self ].
 
@@ -430,6 +471,17 @@ GtLlmMessageStyler >> styleItalic: anItalicNode [
 		whenOutside: anItalicNode sourceInterval
 ]
 
+{ #category : #generated }
+GtLlmMessageStyler >> styleLinkText: aSubText valid: hasValidTarget [
+	"Set the colour of the source markup text"
+	| aColor |
+	aColor := hasValidTarget
+		ifTrue: [ BrGlamorousColors textMarkupColor ]
+		ifFalse: [ BrGlamorousColors linkWithErrorColor ].
+	
+	aSubText foreground: aColor.
+]
+
 { #category : #accessing }
 GtLlmMessageStyler >> styleName: aClassAnnotation spawning: aBlock [
 	| nameNode aLinkColor |
@@ -443,6 +495,45 @@ GtLlmMessageStyler >> styleName: aClassAnnotation spawning: aBlock [
 
 	(self text from: nameNode startPosition to: nameNode stopPosition)
 		foreground: aLinkColor
+]
+
+{ #category : #generated }
+GtLlmMessageStyler >> styleOpenExternalImage: aLink text: aSubText [
+	| anImageURL attribute pictureContainer widget |
+	anImageURL := (self resolveUrl: aLink url) url asString.
+
+	attribute := BrTextAdornmentDynamicAttribute new
+			beAppend;
+			withCache: self elements key: anImageURL;
+			stencil: [ pictureContainer := BlElement new
+						constraintsDo: [ :c | 
+							c horizontal matchParent.
+							c vertical fitContent ];
+						layout: BlLinearLayout vertical;
+						padding: (BlInsets
+								top: 5
+								left: 7
+								bottom: 5
+								right: 5);
+						yourself.
+
+				widget := (BrAsyncFileWidget new url: anImageURL)
+						constraintsDo: [ :c | 
+							c horizontal matchParent.
+							c vertical exact: 300 ].
+				pictureContainer addChild: widget as: #imageElement.
+				pictureContainer
+					addAptitude: (BrGlamorousWithVerticalResizerAptitude new beBottom
+							resizerDo: [ :theResizer | 
+								theResizer
+									when: BlResizerResizedEvent
+									do: [ :anEvent | 
+										pictureContainer
+											childWithId: #imageElement
+											ifFound: [ :anImageElement | (BrResizerElementLength exact: anEvent extent y) adjustHeightFor: anImageElement ]
+											ifNone: [  ] ] ]) ].
+
+	aSubText attribute: attribute
 ]
 
 { #category : #private }
@@ -536,6 +627,24 @@ GtLlmMessageStyler >> visitCodeBlock: aCodeNode [
 	self styleCode: aCodeNode.
 
 	^ self visitContent: aCodeNode
+]
+
+{ #category : #generated }
+GtLlmMessageStyler >> visitExternalImageLink: anExternalLink [ 
+	| linkText url validLink |
+
+	linkText := self text
+		from: anExternalLink startPosition
+		to: anExternalLink stopPosition.
+	url := anExternalLink url.
+	validLink := self isValidLink: url.
+	self styleLinkText: linkText valid: validLink.
+	super visitExternalImageLink: anExternalLink.
+	self styleAutoHiding: anExternalLink sourceInterval text: linkText.
+	anExternalLink url
+		ifEmpty: [ self styleFileSelection: anExternalLink text: linkText ]
+		ifNotEmpty: [ self styleOpenExternalImage: anExternalLink text: linkText ].
+
 ]
 
 { #category : #generated }
