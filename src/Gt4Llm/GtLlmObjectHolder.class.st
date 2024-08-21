@@ -30,13 +30,10 @@ GtLlmObjectHolder >> chat: anObject [
 { #category : #accessing }
 GtLlmObjectHolder >> gtLiveFor: aView [
 	<gtView>
-	^ aView forward
-		title: 'Live';
+	^ aView explicit
+		title: 'Views';
 		priority: 1;
-		object: [ self object ];
-		view: ((self object class includesSelector: #gtPreviewFor:)
-				ifTrue: [ #gtPreviewFor: ]
-				ifFalse: [ #gtLiveFor: ])
+		stencil: [ GtInspector new removePlayground object: self object ]
 ]
 
 { #category : #accessing }
