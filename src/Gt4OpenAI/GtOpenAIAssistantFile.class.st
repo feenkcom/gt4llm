@@ -33,7 +33,7 @@ GtOpenAIAssistantFile >> createdAt [
 
 { #category : #accessing }
 GtOpenAIAssistantFile >> createdAt: anObject [
-	createdAt := (DateAndTime fromUnixTime: anObject)
+	createdAt := self deserializeTime: anObject
 ]
 
 { #category : #accessing }

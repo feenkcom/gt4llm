@@ -15,13 +15,7 @@ GtLlmEntity class >> from: aDictionary [
 
 	entity := self new.
 
-	entity rawData: aDictionary.
-
-	self serializationProperties
-		do: [ :aPair | 
-			entity
-				perform: aPair value , ':'
-				withArguments: {aDictionary at: aPair key ifAbsent: [ nil ]} ].
+	entity from: aDictionary.
 
 	^ entity
 ]
@@ -39,6 +33,24 @@ GtLlmEntity >> client [
 { #category : #accessing }
 GtLlmEntity >> client: anObject [
 	client := anObject
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmEntity >> deserializeTime: anObject [
+	^ (anObject isNil or: [ anObject isKindOf: DateAndTime ])
+		ifTrue: [ anObject ]
+		ifFalse: [ DateAndTime fromUnixTime: anObject ]
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmEntity >> from: aDictionary [
+	self rawData: aDictionary.
+
+	self class serializationProperties
+		do: [ :aPair | 
+			self
+				perform: aPair value , ':'
+				withArguments: {aDictionary at: aPair key ifAbsent: [ nil ]} ]
 ]
 
 { #category : #accessing }
