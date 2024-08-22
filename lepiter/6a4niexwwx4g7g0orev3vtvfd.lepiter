@@ -137,7 +137,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-07-07T12:44:45.734592+02:00"
+						"dateAndTimeString" : "2024-08-22T10:07:19.937004+02:00"
 					}
 				},
 				"uid" : {
@@ -147,7 +147,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "These modelfiles can then be used to create custom models."
+				"string" : "These modelfiles can then be used to create custom models. Please note that the name has to be unique."
 			},
 			{
 				"__type" : "pharoSnippet",
@@ -174,14 +174,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-07-07T12:45:17.458316+02:00"
+						"dateAndTimeString" : "2024-08-22T10:06:32.009591+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "irvuuAfZDQCqXXKCBJAZag=="
 				},
-				"code" : "GtOllamaClient new createModel: 'myCustoMmodel' withModelFile: modelfile content"
+				"code" : "GtOllamaClient new createModel: 'myCustomModel' withModelFile: modelfile content"
 			},
 			{
 				"__type" : "textSnippet",
