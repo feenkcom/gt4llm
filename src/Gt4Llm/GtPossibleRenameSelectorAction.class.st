@@ -200,7 +200,10 @@ GtPossibleRenameSelectorAction >> tabAccept: forward [
 { #category : #accessing }
 GtPossibleRenameSelectorAction >> updateCompleteName: aString [
 	aString keywords
-		withIndexDo: [ :aKeyword :anIndex | (renameAttributes at: anIndex) resetText: aKeyword ].
+		withIndexDo: [ :aKeyword :anIndex | 
+			(renameAttributes at: anIndex)
+				resetText: (aKeyword asRopedText bold
+						attribute: (BlFontFamilyAttribute named: 'Source Code Pro')) ].
 	newSelector := aString asSymbol.
 	self updateName: aString
 ]
