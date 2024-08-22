@@ -137,9 +137,7 @@ GtOpenAIThreadMessage >> createdAt [
 
 { #category : #accessing }
 GtOpenAIThreadMessage >> createdAt: anObject [
-	(anObject isKindOf: DateAndTime)
-		ifTrue: [ createdAt := anObject ]
-		ifFalse: [ createdAt := DateAndTime fromUnixTime: anObject ]
+	createdAt := self deserializeTime: anObject
 ]
 
 { #category : #accessing }

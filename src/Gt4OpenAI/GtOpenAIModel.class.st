@@ -25,7 +25,7 @@ GtOpenAIModel >> created [
 
 { #category : #accessing }
 GtOpenAIModel >> created: anObject [
-	created := DateAndTime fromUnixTime: anObject
+	created := self deserializeTime: anObject
 ]
 
 { #category : #accessing }

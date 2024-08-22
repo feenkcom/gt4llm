@@ -29,7 +29,7 @@ GtOpenAIFineTuningEvent >> createdAt [
 
 { #category : #accessing }
 GtOpenAIFineTuningEvent >> createdAt: anObject [
-	createdAt := DateAndTime fromUnixTime: anObject
+	createdAt := self deserializeTime: anObject
 ]
 
 { #category : #accessing }

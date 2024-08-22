@@ -40,7 +40,7 @@ GtOpenAIChatCompletion >> created [
 
 { #category : #accessing }
 GtOpenAIChatCompletion >> created: anObject [
-	created := DateAndTime fromUnixTime: anObject
+	created := self deserializeTime: anObject
 ]
 
 { #category : #accessing }

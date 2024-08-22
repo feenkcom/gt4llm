@@ -62,7 +62,7 @@ GtOpenAIThreadRun >> cancelledAt [
 
 { #category : #accessing }
 GtOpenAIThreadRun >> cancelledAt: anObject [
-	cancelledAt := anObject ifNotNil: [ DateAndTime fromUnixTime: anObject ]
+	cancelledAt := self deserializeTime: anObject
 ]
 
 { #category : #accessing }
@@ -72,7 +72,7 @@ GtOpenAIThreadRun >> completedAt [
 
 { #category : #accessing }
 GtOpenAIThreadRun >> completedAt: anObject [
-	completedAt := anObject ifNotNil: [ DateAndTime fromUnixTime: anObject ]
+	completedAt := self deserializeTime: anObject
 ]
 
 { #category : #accessing }
@@ -82,7 +82,7 @@ GtOpenAIThreadRun >> createdAt [
 
 { #category : #accessing }
 GtOpenAIThreadRun >> createdAt: anObject [
-	createdAt := anObject ifNotNil: [ DateAndTime fromUnixTime: anObject ]
+	createdAt := self deserializeTime: anObject
 ]
 
 { #category : #accessing }
@@ -97,7 +97,7 @@ GtOpenAIThreadRun >> expiresAt [
 
 { #category : #accessing }
 GtOpenAIThreadRun >> expiresAt: anObject [
-	expiresAt := anObject ifNotNil: [ DateAndTime fromUnixTime: anObject ]
+	expiresAt := self deserializeTime: anObject
 ]
 
 { #category : #accessing }
@@ -107,7 +107,7 @@ GtOpenAIThreadRun >> failedAt [
 
 { #category : #accessing }
 GtOpenAIThreadRun >> failedAt: anObject [
-	failedAt := anObject ifNotNil: [ DateAndTime fromUnixTime: anObject ]
+	failedAt := self deserializeTime: anObject
 ]
 
 { #category : #accessing }
@@ -283,7 +283,7 @@ GtOpenAIThreadRun >> startedAt [
 
 { #category : #accessing }
 GtOpenAIThreadRun >> startedAt: anObject [
-	startedAt := anObject ifNotNil: [ DateAndTime fromUnixTime: anObject ]
+	startedAt := self deserializeTime: anObject
 ]
 
 { #category : #accessing }

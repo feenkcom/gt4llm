@@ -46,7 +46,7 @@ GtOpenAIFineTuningJob >> createdAt [
 
 { #category : #accessing }
 GtOpenAIFineTuningJob >> createdAt: anObject [
-	createdAt := anObject ifNotNil: [ DateAndTime fromUnixTime: anObject ]
+	createdAt := self deserializeTime: anObject
 ]
 
 { #category : #accessing }
@@ -62,7 +62,7 @@ GtOpenAIFineTuningJob >> estimatedFinish [
 
 { #category : #accessing }
 GtOpenAIFineTuningJob >> estimatedFinish: anObject [
-	estimatedFinish := anObject ifNotNil: [ DateAndTime fromUnixTime: anObject ]
+	estimatedFinish := self deserializeTime: anObject
 ]
 
 { #category : #accessing }
@@ -87,7 +87,7 @@ GtOpenAIFineTuningJob >> finishedAt [
 
 { #category : #accessing }
 GtOpenAIFineTuningJob >> finishedAt: anObject [
-	finishedAt := anObject ifNotNil: [ DateAndTime fromUnixTime: anObject ]
+	finishedAt := self deserializeTime: anObject
 ]
 
 { #category : #accessing }
@@ -134,7 +134,7 @@ GtOpenAIFineTuningJob >> gtUpdateActionFor: anAction [
 		priority: 1;
 		tooltip: 'Update job';
 		icon: BrGlamorousVectorIcons refresh;
-		action: [ :aButton | aButton phlow spawnObject: (self client getFineTuningJob: self id) ]
+		action: [ :aButton | aButton phlow spawnObject: (self refresh) ]
 ]
 
 { #category : #accessing }
@@ -199,6 +199,11 @@ GtOpenAIFineTuningJob >> organizationId [
 { #category : #accessing }
 GtOpenAIFineTuningJob >> organizationId: anObject [
 	organizationId := anObject
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAIFineTuningJob >> refresh [
+	self from: (client getFineTuningJob: self id) serialize
 ]
 
 { #category : #accessing }

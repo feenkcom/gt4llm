@@ -29,7 +29,7 @@ GtOpenAIFineTuningCheckpoint >> createdAt [
 
 { #category : #accessing }
 GtOpenAIFineTuningCheckpoint >> createdAt: anObject [
-	createdAt := DateAndTime fromUnixTime: anObject
+	createdAt := self deserializeTime: anObject
 ]
 
 { #category : #accessing }
