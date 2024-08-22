@@ -25,9 +25,7 @@ GtLlmChatMessage class >> from: aDictionary [
 	self
 		subclassesDo: [ :aSubclass | aSubclass defaultRole = aRole ifTrue: [ ^ aSubclass new content: aContent ] ].
 
-	^ self new
-		role: aRole;
-		content: aContent
+	^ self new from: aDictionary
 ]
 
 { #category : #accessing }
@@ -93,7 +91,7 @@ GtLlmChatMessage >> createdAt [
 
 { #category : #accessing }
 GtLlmChatMessage >> createdAt: anObject [
-	createdAt := anObject
+	createdAt := self deserializeTime: anObject
 ]
 
 { #category : #accessing }
