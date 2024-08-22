@@ -111,23 +111,24 @@ GtOpenAICardElement >> makeTestingButton [
 					label: ('Success!' asRopedText foreground: BrGlamorousColors successBackgroundColor) ]
 					on: Error
 					do: [ :anError | 
-						| aFrozenError |
+						| aFrozenError errorText |
 						aFrozenError := GtMagritteActionUtility freeze: anError.
+						errorText := (aFrozenError isKindOf: NetworkError)
+								ifTrue: [ 'Network error' ]
+								ifFalse: [ 'Authentication error' ].
 						testingLabel
 							model: aFrozenError;
-							label: ('Authentication error' asRopedText
-									foreground: BrGlamorousColors errorBackgroundColor).
+							label: (errorText asRopedText foreground: BrGlamorousColors errorBackgroundColor).
 						testingLabel aptitude - BrGlamorousWithDropdownAptitude.
 						testingLabel
 							addAptitude: (BrGlamorousWithTooltipAptitude
-									content: [ 
-										| aContainer |
-										aContainer := BlElement new 
-											size: 400@400; 
-											background: self theme default contentBackgroundColor.
-										(aFrozenError gtViewsFor: GtPhlowView empty) 
+									content: [ | aContainer |
+										aContainer := BlElement new
+												size: 400 @ 400;
+												background: self theme default contentBackgroundColor.
+										(aFrozenError gtViewsFor: GtPhlowView empty)
 											asElementDo: [ :anElement | 
-												anElement size: 800@800.
+												anElement size: 800 @ 800.
 												aContainer addChild: anElement asScalableElement ].
 										aContainer ]) ] ];
 			constraintsDo: [ :c | c linear vertical alignCenter ].
