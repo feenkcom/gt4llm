@@ -13,6 +13,43 @@ Class {
 	#category : #'Gt4Llm-Stylers'
 }
 
+{ #category : #generated }
+GtLlmMessageStyler class >> textLinkButtonPadding: additionalPadding margin: additionalMargin [
+	"Answer a button used for in-text links in Lepiter.
+	This sets a common font, size, color and style for the button"
+
+	^ self textLinkButtonPadding: additionalPadding margin: additionalMargin valid: true
+]
+
+{ #category : #generated }
+GtLlmMessageStyler class >> textLinkButtonPadding: additionalPadding margin: additionalMargin valid: isValid [
+	"Answer a button used for in-text links in Lepiter.
+	This sets a common font, size, color and style for the button"
+	| color button |
+
+	button := BrButton new.
+	button connector beVisualSource.
+
+	color := isValid 
+		ifTrue: [ BrGlamorousColors linkColor ]
+		ifFalse: [ BrGlamorousColors linkWithErrorColor ].
+
+	button 
+		addAptitude: (BrGlamorousButtonLabelAptitude new 
+			defaultColor: color;
+			hoveredColor: color muchDarker);
+		placeholderAlignment: #alignBottom;
+		padding: (BlInsets top: 0 left: 0 bottom: -1 right: 0) + additionalPadding;
+		margin: (BlInsets top: 0 left: 0 bottom: 0 right: 0) + additionalMargin;
+		icon: BrGlamorousVectorIcons inspect;
+		beNoneSize;
+		layout: BlLinearLayout horizontal;
+		constraintsDo: [ :c |
+			c horizontal fitContent.
+			c vertical fitContent. ].
+	^ button
+]
+
 { #category : #accessing }
 GtLlmMessageStyler >> elements [
 	^ elements
@@ -418,6 +455,29 @@ GtLlmMessageStyler >> styleExpandingObject: aClassAnnotation withDefault: aSymbo
 ]
 
 { #category : #generated }
+GtLlmMessageStyler >> styleExternalLink: anExternalLink [
+	| linkText |
+
+	linkText := self text
+		from: anExternalLink startPosition
+		to: anExternalLink stopPosition.
+	self styleLinkText: linkText valid: (self isValidLink: anExternalLink url).
+	self styleAutoHiding: anExternalLink sourceInterval text: linkText.
+	self styleExternalLinkButton: anExternalLink text: linkText.
+]
+
+{ #category : #generated }
+GtLlmMessageStyler >> styleExternalLinkButton: aLink text: aSubText [
+	"Append a button to the supplied link text.
+	If the link is defined (not empty), the button opens the link.
+	If the link is empty, open a dialog allowing the user to select a file"
+
+	aLink url
+		ifEmpty: [ self styleFileSelection: aLink text: aSubText ]
+		ifNotEmpty: [ self styleOpenExternalLinkButton: aLink text: aSubText ]
+]
+
+{ #category : #generated }
 GtLlmMessageStyler >> styleFileSelection: aLink text: aSubText [
 	"Append a button to the supplied link text that opens the link"
 
@@ -536,6 +596,32 @@ GtLlmMessageStyler >> styleOpenExternalImage: aLink text: aSubText [
 	aSubText attribute: attribute
 ]
 
+{ #category : #generated }
+GtLlmMessageStyler >> styleOpenExternalLinkButton: aLink text: aSubText [
+	"Append a button to the supplied link text that opens the link"
+
+	aSubText
+		appendingAdornment: [ :aTBrTextEditorTextualPiece :anEditorElement | 
+			| button oldLook |
+			button := self class textLinkButtonPadding: aTBrTextEditorTextualPiece wordPadding 
+										margin: aTBrTextEditorTextualPiece wordMargin.
+			oldLook := button aptitude.
+			button
+				removeAptitude: oldLook;
+				addAptitude: (BrGlamorousButtonLabelAndIconAptitude new
+							defaultColor: oldLook defaultColor);
+				addAptitude: (BrGlamorousWithLabelTooltipAptitude new
+							text: aLink url asString asRopedText);
+				icon: BrGlamorousVectorIcons link;
+				label: aLink displayLabel;
+				action: [ :aButton | | urlUtility |
+					urlUtility := self resolveUrl: aLink url.
+					urlUtility isFile
+						ifTrue: [ aButton phlow spawnObject: urlUtility asFileReference ]
+						ifFalse: [ WebBrowser openOn: urlUtility asString ] ].
+			button ]
+]
+
 { #category : #private }
 GtLlmMessageStyler >> styleResult: evaluationResult for: aCodeNode [
 	| evaluatedCodeAttribute aViewModel |
@@ -639,12 +725,24 @@ GtLlmMessageStyler >> visitExternalImageLink: anExternalLink [
 	url := anExternalLink url.
 	validLink := self isValidLink: url.
 	self styleLinkText: linkText valid: validLink.
-	super visitExternalImageLink: anExternalLink.
+	self visitExternalLink: anExternalLink.
 	self styleAutoHiding: anExternalLink sourceInterval text: linkText.
 	anExternalLink url
 		ifEmpty: [ self styleFileSelection: anExternalLink text: linkText ]
 		ifNotEmpty: [ self styleOpenExternalImage: anExternalLink text: linkText ].
 
+]
+
+{ #category : #generated }
+GtLlmMessageStyler >> visitExternalLabelUrlLink: anExternalLabelUrlLink [
+	self visitExternalLink: anExternalLabelUrlLink.
+	self styleExternalLink: anExternalLabelUrlLink
+]
+
+{ #category : #generated }
+GtLlmMessageStyler >> visitExternalUrlLink: anExternalUrlLink [
+	self visitExternalLink: anExternalUrlLink.
+	self styleExternalLink: anExternalUrlLink
 ]
 
 { #category : #generated }
