@@ -14,7 +14,7 @@ GtBPEDemoEncodingResultProxy >> gtTokenizedFor: aView [
 	<gtView>
 	^ aView explicit
 		title: 'Tokenized';
-		priority: 1.5;
+		priority: 0;
 		stencil: [ GtLlmTokenizedStringEditor new result: self ]
 ]
 
