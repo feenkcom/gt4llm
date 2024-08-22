@@ -40,8 +40,12 @@ GtProposeRenamesAttribute >> newListItemElement [
 		aptitude: BrGlamorousLabelAptitude + BrGlamorousListItemAptitude;
 		when: BlClickEvent
 			do: [ :anEvent | 
+				| oldHasRefactoringPreview |
+				oldHasRefactoringPreview := renameAction hasRefactoringPreview.
+				renameAction hasRefactoringPreview: false.
 				renameAction updateCompleteName: anEvent currentTarget text asString.
-				anEvent currentTarget fireEvent: BrDropdownHideWish new ]
+				anEvent currentTarget fireEvent: BrDropdownHideWish new.
+				renameAction hasRefactoringPreview: oldHasRefactoringPreview ]
 ]
 
 { #category : #accessing }

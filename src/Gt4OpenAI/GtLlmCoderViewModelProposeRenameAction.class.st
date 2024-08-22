@@ -24,21 +24,22 @@ GtLlmCoderViewModelProposeRenameAction >> addRenameAttributes [
 				originalCursors
 					anySatisfy: [ :eachCursor | eachCursor position between: each first - 1 and: each last ] ].
 
-	coderAttributes := originalLocations
-			do: [ :each | 
-				| attribute |
-				(cursorInLocation not
-					or: [ originalCursors
-							anySatisfy: [ :eachCursor | eachCursor position between: each first - 1 and: each last ] ])
-					ifTrue: [ attribute := GtProposeRenamesAttribute new
-								renameAction: self;
-								original: original;
-								possibilities: self choices.
-						self pharoSourceCoderViewModel
-							addTextAttribute: attribute
-							from: each first
-							to: each last ].
-				cursorInLocation := true ]
+	originalLocations
+		do: [ :each | 
+			| attribute |
+			(cursorInLocation not
+				or: [ originalCursors
+						anySatisfy: [ :eachCursor | eachCursor position between: each first - 1 and: each last ] ])
+				ifTrue: [ attribute := GtProposeRenamesAttribute new
+							renameAction: self;
+							original: original;
+							possibilities: self choices.
+					coderAttributes
+						add: (self pharoSourceCoderViewModel
+								addTextAttribute: attribute
+								from: each first
+								to: each last) ].
+			cursorInLocation := true ]
 ]
 
 { #category : #accessing }
