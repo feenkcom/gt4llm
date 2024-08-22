@@ -14,6 +14,11 @@ GtLlmTokenizerResult class >> pythonClass [
 ]
 
 { #category : #accessing }
+GtLlmTokenizerResult >> bytes [
+	^ self as_bytes
+]
+
+{ #category : #accessing }
 GtLlmTokenizerResult >> gtTokenizedFor: aView [
 	<gtView>
 	^ aView explicit
