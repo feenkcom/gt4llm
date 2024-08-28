@@ -125,6 +125,53 @@ GtOpenAIViewActionTutor >> objectFormatComponent [
 ```'
 ]
 
+{ #category : #'as yet unclassified' }
+GtOpenAIViewActionTutor >> performCommandAction [
+	<gtLlmTutorAction>
+	^ GtLlmTutorAction new
+		name: 'Perform command';
+		priority: 4;
+		description: 'Performs a command provided by the user. May use any properties (object, text, or method itself) to achieve its goal.';
+		format: 'Perform the following command: ';
+		examples: {GtLlmTutorActionExample new
+					input: {'Action' -> 'Perform the following command: Add a column to the view'.
+							'Object'
+								-> (GtLlmInspectorSummarizer new
+										summarizeWithoutMarkup: (Bag
+												withAll: {1.
+														2.
+														3})) summaryString.
+							'Smalltalk method'
+								-> 'Bag
+gtUniqueItemsFor: aView
+	<gtView>
+	^ aView columnedList
+		title: ''Unique items'' translated;
+		priority: 100;
+		items: [ self asSet ];
+		column: ''Item'' text: [ :eachItem | eachItem gtDisplayText ];
+		actionUpdateButtonTooltip: ''Update item list'''} asDictionary;
+					output: {'Action' -> 'Perform command'.
+							'Text' -> nil.
+							'Object'
+								-> (GtLlmInspectorSummarizer new
+										summarizeWithoutMarkup: (Bag
+												withAll: {1.
+														2.
+														3})) summaryString.
+							'Smalltalk method'
+								-> 'Bag
+gtUniqueItemsFor: aView
+	<gtView>
+	^ aView columnedList
+		title: ''Unique items'' translated;
+		priority: 100;
+		items: [ self asSet ];
+		column: ''Item'' text: [ :eachItem | eachItem gtDisplayText ];
+		column: ''Item occurrence'' text: [ :eachItem | self occurrencesOf: eachItem ];
+		actionUpdateButtonTooltip: ''Update item list'''} asDictionary}
+]
+
 { #category : #accessing }
 GtOpenAIViewActionTutor >> textFormatComponent [
 	<gtLlmFormatComponent>
