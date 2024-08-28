@@ -53,6 +53,46 @@ aMethodWithArguments: anArgument and: anotherArgument
 ]
 
 { #category : #accessing }
+GtOpenAICoderActionTutor >> performCommandAction [
+	<gtLlmTutorAction>
+	^ GtLlmTutorAction new
+		name: 'Perform command';
+		priority: 4;
+		description: 'Proposes a sensible number of alternative names for the method (less than ten, but more than one). The number of method parameters should stay the same across renames, and method that do not take arguments should not have a trailing semicolon (e.g. `helloWorld` instead of `helloWorld:`). Always return the action name, renames, and method.';
+		format: 'Perform the following command: ';
+		examples: {GtLlmTutorActionExample new
+					input: {'Action' -> 'Perform the following command: Reorder the method arguments'.
+							'Smalltalk method'
+								-> 'ActionClass
+findActionIndex: anAction upToIndex: aNumber
+	^ (actions first: aNumber) indexOf: anAction
+'} asDictionary;
+					output: {'Action' -> 'Perform command'.
+							'Text' -> nil.
+							'Renames' -> nil.
+							'Smalltalk method'
+								-> 'ActionClass
+findUpToIndex: aNumber indexOf: anAction
+	^ (actions first: aNumber) indexOf: anAction
+'} asDictionary.
+				GtLlmTutorActionExample new
+					input: {'Action'
+								-> 'Perform the following command: Write an explanation comment for the method'.
+							'Smalltalk method'
+								-> 'ClassWithNumber
+increment
+	self number: self number + 1'} asDictionary;
+					output: {'Action' -> 'Perform command'.
+							'Text' -> nil.
+							'Renames' -> nil.
+							'Smalltalk method'
+								-> 'ClassWithNumber
+increment
+	"increments the `number` property of the class"
+	self number: self number + 1'} asDictionary}
+]
+
+{ #category : #accessing }
 GtOpenAICoderActionTutor >> refactoringAction [
 	<gtLlmTutorAction>
 	^ GtLlmTutorAction new
