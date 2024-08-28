@@ -58,7 +58,7 @@ GtOpenAICoderActionTutor >> performCommandAction [
 	^ GtLlmTutorAction new
 		name: 'Perform command';
 		priority: 4;
-		description: 'Proposes a sensible number of alternative names for the method (less than ten, but more than one). The number of method parameters should stay the same across renames, and method that do not take arguments should not have a trailing semicolon (e.g. `helloWorld` instead of `helloWorld:`). Always return the action name, renames, and method.';
+		description: 'Performs a command provided by the user. May use any properties (text, renames, or method itself) to achieve its goal.';
 		format: 'Perform the following command: ';
 		examples: {GtLlmTutorActionExample new
 					input: {'Action' -> 'Perform the following command: Reorder the method arguments'.
