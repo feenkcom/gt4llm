@@ -2,10 +2,35 @@ Class {
 	#name : #GtOpenAIAnnotatedActionTutor,
 	#superclass : #GtOpenAIActionTutor,
 	#instVars : [
-		'instructionSections'
+		'instructionSections',
+		'formatName'
 	],
 	#category : #'Gt4OpenAI-Tutor'
 }
+
+{ #category : #accessing }
+GtOpenAIAnnotatedActionTutor >> addAction: anAction [
+	actions add: anAction
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAIAnnotatedActionTutor >> addChat [
+	| aChat |
+	aChat := GtOpenAIActionAssistantChat new
+			assistant: self assistant;
+			actions: actions;
+			tutor: self;
+			responseFormat: self format asJsonSchema;
+			pipeline: pipelineBuilder value.
+	chats add: aChat.
+
+	^ aChat
+]
+
+{ #category : #accessing }
+GtOpenAIAnnotatedActionTutor >> addFormatComponent: aComponent [
+	format addComponent: aComponent
+]
 
 { #category : #accessing }
 GtOpenAIAnnotatedActionTutor >> addInstructionSection: anInstructionSection [
@@ -48,7 +73,13 @@ GtOpenAIAnnotatedActionTutor >> formatComponents [
 
 { #category : #accessing }
 GtOpenAIAnnotatedActionTutor >> formatName [
-	^ self subclassResponsibility
+	^ formatName
+]
+
+{ #category : #accessing }
+GtOpenAIAnnotatedActionTutor >> formatName: aName [
+	formatName := aName.
+	format name: formatName
 ]
 
 { #category : #accessing }
