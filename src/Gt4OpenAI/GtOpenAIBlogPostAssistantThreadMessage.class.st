@@ -36,6 +36,7 @@ GtOpenAIBlogPostAssistantThreadMessage >> gtBlogPostFor: aView [
 		title: 'Blog post';
 		priority: 1;
 		text: [ self blogPost ];
+		styler: (GtLlmMessageStyler new threadMessageViewModel: self asViewModel);
 		actionButtonIcon: BrGlamorousVectorIcons accept
 			tooltip: 'Update blog post'
 			action: [ :aButton | aButton parent parent parent parent
@@ -53,7 +54,8 @@ GtOpenAIBlogPostAssistantThreadMessage >> gtReviewFor: aView [
 	^ aView textEditor
 		title: 'Review';
 		priority: 2;
-		text: [ self review ]
+		text: [ self review ];
+		styler: (GtLlmMessageStyler new threadMessageViewModel: self asViewModel)
 ]
 
 { #category : #'as yet unclassified' }
