@@ -10,6 +10,23 @@ GtOpenAIBlogPostAssistantThreadMessage >> blogPost [
 ]
 
 { #category : #'as yet unclassified' }
+GtOpenAIBlogPostAssistantThreadMessage >> diff [
+	^ TextDiffBuilder from: self chat pipeline instance content to: self blogPost
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAIBlogPostAssistantThreadMessage >> gtBlogPostDiffFor: aView [
+	<gtView>
+	<gtLlmMessageView>
+	self blogPost ifEmpty: [ ^ aView empty ].
+
+	^ aView explicit
+		title: 'Blog post diff';
+		priority: 1;
+		stencil: [ (GtDiffElement onDiff: self diff) ]
+]
+
+{ #category : #'as yet unclassified' }
 GtOpenAIBlogPostAssistantThreadMessage >> gtBlogPostFor: aView [
 	<gtView>
 	<gtLlmMessageView>
