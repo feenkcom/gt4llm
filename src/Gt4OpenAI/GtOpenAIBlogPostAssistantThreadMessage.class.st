@@ -43,3 +43,20 @@ GtOpenAIBlogPostAssistantThreadMessage >> gtBlogPostFor: aView [
 					ifFound: [ :anEditor | 
 						self chat pipeline instance content: anEditor text asString ] ]
 ]
+
+{ #category : #'as yet unclassified' }
+GtOpenAIBlogPostAssistantThreadMessage >> gtReviewFor: aView [
+	<gtView>
+	<gtLlmMessageView>
+	self review ifEmpty: [ ^ aView empty ].
+
+	^ aView textEditor
+		title: 'Review';
+		priority: 2;
+		text: [ self review ]
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAIBlogPostAssistantThreadMessage >> review [
+	^ self contentJson at: 'Review' ifAbsent: [ '' ]
+]
