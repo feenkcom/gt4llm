@@ -49,7 +49,7 @@ GtOpenAIBlogPostAssistantThreadMessage >> gtBlogPostFor: aView [
 GtOpenAIBlogPostAssistantThreadMessage >> gtReviewFor: aView [
 	<gtView>
 	<gtLlmMessageView>
-	self review ifEmpty: [ ^ aView empty ].
+	self review isEmptyOrNil ifTrue: [ ^ aView empty ].
 
 	^ aView textEditor
 		title: 'Review';
