@@ -29,7 +29,7 @@ GtOpenAIActionThreadMessage >> contentSummary [
 GtOpenAIActionThreadMessage >> gtActionFor: aView [
 	<gtView>
 	<gtLlmMessageView>
-	self action ifEmpty: [ ^ aView empty ].
+	self action isEmptyOrNil ifTrue: [ ^ aView empty ].
 
 	^ aView textEditor
 		title: 'Action';
