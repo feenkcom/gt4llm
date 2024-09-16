@@ -10,7 +10,7 @@ Class {
 
 { #category : #accessing }
 GtOpenAIAnnotatedActionTutor >> addAction: anAction [
-	actions add: anAction
+	actions add: (anAction tutor: self)
 ]
 
 { #category : #'as yet unclassified' }
@@ -126,5 +126,7 @@ GtOpenAIAnnotatedActionTutor >> instructionSections: anObject [
 
 { #category : #accessing }
 GtOpenAIAnnotatedActionTutor >> instructions [
+	self formatName ifNil: [ ^ '' asInstruction ].
+
 	^ self format asInstruction addSections: self instructionSections
 ]
