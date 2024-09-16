@@ -34,7 +34,8 @@ GtOpenAIActionThreadMessage >> gtActionFor: aView [
 	^ aView textEditor
 		title: 'Action';
 		priority: 3;
-		text: [ self action ]
+		text: [ self action ];
+		actionButtonLabel: 'Action' action: [ :aButton | aButton phlow spawnObject: (self chat tutor actionNamed: self action) ]
 ]
 
 { #category : #accessing }
