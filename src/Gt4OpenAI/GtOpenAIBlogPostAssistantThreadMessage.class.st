@@ -19,7 +19,8 @@ GtOpenAIBlogPostAssistantThreadMessage >> gtBlogPostDiffFor: aView [
 	<gtView>
 	<gtLlmMessageView>
 	self blogPost ifEmpty: [ ^ aView empty ].
-
+	self isUserRole ifTrue: [ ^ aView empty ].
+	
 	^ aView explicit
 		title: 'Blog post diff';
 		priority: 1;
