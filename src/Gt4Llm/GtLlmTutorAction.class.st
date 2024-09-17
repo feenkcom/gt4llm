@@ -162,6 +162,11 @@ GtLlmTutorAction >> gtOutputFormatReferencesFor: aView [
 		column: 'Format' text: #format
 ]
 
+{ #category : #'as yet unclassified' }
+GtLlmTutorAction >> hasArgument [
+	^ format formatCount > 0
+]
+
 { #category : #accessing }
 GtLlmTutorAction >> initialize [
 	super initialize.
