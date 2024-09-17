@@ -172,10 +172,7 @@ GtLlmNewActionThreadMessageElement >> updateToggleGroup [
 					label: anAction name.
 			toggleElement
 				when: BrToggleActivatedEvent
-				do: [ :anEvent | 
-					contentsElement text: (anAction format format: {''}).
-					self updateContents: (anAction format format: {''}).
-					self threadMessageViewModel currentAction: anAction ].
+				do: [ :anEvent | self threadMessageViewModel currentAction: anAction ].
 			toggleGroup addToggle: toggleElement ]
 ]
 

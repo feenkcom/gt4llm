@@ -16,3 +16,16 @@ GtLlmNewActionThreadMessage >> currentAction [
 GtLlmNewActionThreadMessage >> currentAction: anObject [
 	currentAction := anObject
 ]
+
+{ #category : #'as yet unclassified' }
+GtLlmNewActionThreadMessage >> sendMessage [
+	| aMessage |
+	currentAction ifNil: [ ^ self ].
+
+	aMessage := currentAction format format: {contents}.
+
+	self contents: '' requester: nil.
+
+	(assistantChat whenReadyFuture then: [ assistantChat sendMessage: aMessage ])
+		await
+]
