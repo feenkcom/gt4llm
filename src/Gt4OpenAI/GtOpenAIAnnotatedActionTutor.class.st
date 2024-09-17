@@ -37,6 +37,16 @@ GtOpenAIAnnotatedActionTutor >> addInstructionSection: anInstructionSection [
 	instructionSections add: anInstructionSection
 ]
 
+{ #category : #'as yet unclassified' }
+GtOpenAIAnnotatedActionTutor >> chatAction [
+	<gtLlmTutorAction>
+	^ GtLlmTutorAction new
+		name: 'Answer a chat request';
+		priority: 1;
+		description: 'Answers a chat request using the text field.';
+		format: 'Chat request: '
+]
+
 { #category : #accessing }
 GtOpenAIAnnotatedActionTutor >> collectActions [
 	^ ((Pragma
@@ -129,4 +139,21 @@ GtOpenAIAnnotatedActionTutor >> instructions [
 	self formatName ifNil: [ ^ '' asInstruction ].
 
 	^ self format asInstruction addSections: self instructionSections
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAIAnnotatedActionTutor >> textFormatComponent [
+	<gtLlmFormatComponent>
+	^ GtLlmTutorFormatComponent new
+		name: 'Text';
+		priority: 2;
+		format: 'Text';
+		example: '```
+This node contains plain text.
+Multiple lines, multiple paragraphs are allowed.
+
+*markup* may also **be used**. `Code` can be highlighted, but code blocks with three tick marks MAY NOT be used.
+
+# Headings exist as well
+```'
 ]

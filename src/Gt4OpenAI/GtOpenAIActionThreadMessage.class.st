@@ -65,3 +65,20 @@ GtOpenAIActionThreadMessage >> gtInspectorContentFor: aView [
 		priority: 5;
 		stencil: [ GtLlmThreadMessageElement new threadMessageViewModel: self asViewModel ]
 ]
+
+{ #category : #accessing }
+GtOpenAIActionThreadMessage >> gtTextFor: aView [
+	<gtView>
+	<gtLlmMessageView>
+	self textBlock isEmptyOrNil ifTrue: [ ^ aView empty ].
+
+	^ aView textEditor
+		title: 'Text';
+		priority: 2;
+		text: [ self textBlock ]
+]
+
+{ #category : #accessing }
+GtOpenAIActionThreadMessage >> textBlock [
+	^ self contentJson at: 'Text' ifAbsent: [ '' ]
+]

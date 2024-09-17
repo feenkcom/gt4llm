@@ -295,20 +295,3 @@ isPowerOfTwo
 	"Return true if the receiver is an integral power of two."
 	^ self ~= 0 and: [(self bitAnd: self-1) = 0]'} asDictionary}
 ]
-
-{ #category : #accessing }
-GtOpenAICoderActionTutor >> textFormatComponent [
-	<gtLlmFormatComponent>
-	^ GtLlmTutorFormatComponent new
-		name: 'Text';
-		priority: 2;
-		format: 'Text';
-		example: '```
-This node contains plain text.
-Multiple lines, multiple paragraphs are allowed.
-
-*markup* may also **be used**. `Code` can be highlighted, and code blocks may be used.
-
-# Headings exist as well
-```'
-]
