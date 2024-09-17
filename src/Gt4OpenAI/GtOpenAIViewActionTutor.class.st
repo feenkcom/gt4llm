@@ -171,20 +171,3 @@ gtUniqueItemsFor: aView
 		column: ''Item occurrence'' text: [ :eachItem | self occurrencesOf: eachItem ];
 		actionUpdateButtonTooltip: ''Update item list'''} asDictionary}
 ]
-
-{ #category : #accessing }
-GtOpenAIViewActionTutor >> textFormatComponent [
-	<gtLlmFormatComponent>
-	^ GtLlmTutorFormatComponent new
-		name: 'Text';
-		priority: 2;
-		format: 'Text';
-		example: '```
-This node contains plain text.
-Multiple lines, multiple paragraphs are allowed.
-
-*markup* may also **be used**. `Code` can be highlighted, but code blocks with three tick marks MAY NOT be used.
-
-# Headings exist as well
-```'
-]

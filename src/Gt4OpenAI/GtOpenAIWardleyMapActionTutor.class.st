@@ -50,7 +50,7 @@ component Cloud [0.9, 0.81] label [-26, 29]
 
 Compute->Platform
 Compute->Cloud'.
-							'Explanation' -> nil.
+							'Text' -> nil.
 							'Rename' -> nil} asDictionary.
 				GtLlmTutorActionExample new
 					input: {'Action' -> 'Add new connected nodes to `Regulator`'.
@@ -74,7 +74,7 @@ component Audit [0.8, 0.8] label [-26, 29]
 
 Regulator->Audit
 '.
-							'Explanation' -> nil.
+							'Text' -> nil.
 							'Rename' -> nil} asDictionary}
 ]
 
@@ -96,7 +96,7 @@ evolution genesis -> custom built -> product (+rental) -> commodity
 
 component Compute [0.4, 0.4] label [-22, 29]'} asDictionary;
 					output: {'Action' -> 'Explain a node'.
-							'Explanation'
+							'Text'
 								-> 'In the context of this Wardley Map on Cloud Computing, the node `Compute` refers to the computing resources and capabilities provided as part of cloud services. This encompasses the virtualized processing power (CPUs, GPUs) that can be scaled up or down on demand to meet the needs of applications or services running in the cloud. The `Compute` node is fundamental to cloud computing, as it allows for flexible, efficient, and scalable computing solutions that can be tailored to the specific requirements of businesses and developers.
 
 The presence of `Compute` in a cloud computing map highlights its role as a core component of the cloud value chain, directly supporting various higher-level services and applications that depend on reliable and scalable computing resources. It could be connected to nodes representing services that leverage these computing resources, such as web hosting, data analytics platforms, or any software-as-a-service (SaaS) applications, indicating a dependency relationship where these services rely on the underlying compute capabilities to function effectively.
@@ -110,18 +110,6 @@ evolution genesis -> custom built -> product (+rental) -> commodity
 
 component Compute [0.4, 0.4] label [-22, 29]'.
 							'Rename' -> nil} asDictionary}
-]
-
-{ #category : #accessing }
-GtOpenAIWardleyMapActionTutor >> explanationFormatComponent [
-	<gtLlmFormatComponent>
-	^ GtLlmTutorFormatComponent new
-		name: 'Explanation';
-		priority: 3;
-		format: 'Text';
-		example: '```
-Human readable text goes here
-```'
 ]
 
 { #category : #accessing }
@@ -145,7 +133,7 @@ GtOpenAIWardleyMapActionTutor >> initialAction [
 					output: {'Action' -> 'Create a set of nodes on Moldable development'.
 							'Topic' -> 'Moldable development'.
 							'Rename' -> nil.
-							'Explanation' -> nil.
+							'Text' -> nil.
 							'Wardley Map'
 								-> 'style wardley
 
@@ -208,7 +196,7 @@ Continuous Integration->Cloud Deployment
 							'Topic' -> 'Key components for a drone delivery service'.
 							'Wardley Map'
 								-> 'style wardley\n\nevolution genesis -> custom built -> product (+rental) -> commodity\n\ncomponent Drone Fleet [0.4, 0.3]\ncomponent Navigation System [0.5, 0.6]\ncomponent Ground Control [0.3, 0.5]\ncomponent Delivery Software [0.6, 0.7]\ncomponent Customer Interface [0.7, 0.8]\ncomponent Package Handling [0.4, 0.7]\ncomponent Battery Management [0.5, 0.4]\ncomponent Weather Monitoring [0.6, 0.5]\ncomponent Traffic Management [0.5, 0.8]\ncomponent Regulatory Compliance [0.7, 0.3]\ncomponent Communication Network [0.6, 0.6]\ncomponent Data Analytics [0.8, 0.7]\ncomponent Maintenance Services [0.3, 0.4]\ncomponent Drone Manufacturing [0.2, 0.3]\ncomponent Emergency Response System [0.6, 0.4]\ncomponent Fleet Management Software [0.8, 0.5]\ncomponent Mapping Services [0.7, 0.6]\ncomponent Security Protocols [0.5, 0.3]\ncomponent Automated Scheduling [0.6, 0.9]\ncomponent User Feedback System [0.7, 0.9]\n\nDrone Fleet->Navigation System\nDrone Fleet->Battery Management\nNavigation System->Ground Control\nGround Control->Traffic Management\nDelivery Software->Customer Interface\nCustomer Interface->User Feedback System\nPackage Handling->Drone Fleet\nBattery Management->Emergency Response System\nWeather Monitoring->Navigation System\nTraffic Management->Regulatory Compliance\nRegulatory Compliance->Security Protocols\nCommunication Network->Data Analytics\nData Analytics->Automated Scheduling\nMaintenance Services->Drone Manufacturing\nDrone Manufacturing->Fleet Management Software\nEmergency Response System->Fleet Management Software\nFleet Management Software->Mapping Services\nMapping Services->Security Protocols\nAutomated Scheduling->Delivery Software\nUser Feedback System->Delivery Software\n\n'.
-							'Explanation' -> nil} asDictionary}
+							'Text' -> nil} asDictionary}
 ]
 
 { #category : #accessing }
@@ -286,13 +274,13 @@ evolution genesis -> custom built -> product (+rental) -> commodity
 component Compute [0.45, 0.34] label [-22, 29]'} asDictionary;
 					output: {'Action' -> 'Propose renames for node'.
 							'Topic' -> 'Cloud computing'.
+							'Text' -> nil.
 							'Wardley Map'
 								-> 'style wardley
 
 evolution genesis -> custom built -> product (+rental) -> commodity
 
 component Compute [0.45, 0.34] label [-22, 29]'.
-							'Explanation' -> nil.
 							'Rename' -> '{''Compute'': [''Computational resources'', ''Resources'']}'}
 							asDictionary.
 				GtLlmTutorActionExample new
@@ -314,7 +302,7 @@ component Furnace [0.9, 0.9] label [-9, 9]'} asDictionary;
 evolution genesis -> custom built -> product (+rental) -> commodity
 
 component Furnace [0.9, 0.9] label [-9, 9]'.
-							'Explanation' -> nil} asDictionary}
+							'Text' -> nil} asDictionary}
 ]
 
 { #category : #accessing }
@@ -345,7 +333,7 @@ GtOpenAIWardleyMapActionTutor >> reviewAction [
 evolution genesis -> custom built -> product (+rental) -> commodity
 
 component Compute [0.45, 0.34] label [-22, 29]'} asDictionary;
-					output: {'Explanation'
+					output: {'Text'
 								-> 'The map is incomplete. Currently, only one node is defined. A complete map should have multiple nodes and connections. The current node `Compute` is correct, but misplaced.'.
 							'Action' -> 'Review the current state'.
 							'Topic' -> 'Cloud computing'.

@@ -64,19 +64,6 @@ GtOpenAIWardleyMapActionThreadMessage >> gtActionFor: aView [
 ]
 
 { #category : #accessing }
-GtOpenAIWardleyMapActionThreadMessage >> gtExplanationFor: aView [
-	<gtView>
-	<gtLlmMessageView>
-	self explanationCodeBlock isEmptyOrNil ifTrue: [ ^ aView empty ].
-
-	^ aView textEditor
-		title: 'Explanation';
-		priority: 2;
-		text: [ self explanationCodeBlock ];
-		styler: (GtLlmMessageStyler new threadMessageViewModel: self)
-]
-
-{ #category : #accessing }
 GtOpenAIWardleyMapActionThreadMessage >> gtRawMessageFor: aView [
 	<gtLlmMessageView>
 	<gtView>
