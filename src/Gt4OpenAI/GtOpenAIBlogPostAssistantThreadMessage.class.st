@@ -20,6 +20,7 @@ GtOpenAIBlogPostAssistantThreadMessage >> gtBlogPostDiffFor: aView [
 	<gtLlmMessageView>
 	self blogPost ifEmpty: [ ^ aView empty ].
 	self isUserRole ifTrue: [ ^ aView empty ].
+	self action = 'Review the blog post' ifFalse: [ ^ aView empty ].
 	
 	^ aView explicit
 		title: 'Blog post diff';
@@ -32,7 +33,8 @@ GtOpenAIBlogPostAssistantThreadMessage >> gtBlogPostFor: aView [
 	<gtView>
 	<gtLlmMessageView>
 	self blogPost ifEmpty: [ ^ aView empty ].
-
+	self action = 'Review the blog post' ifFalse: [ ^ aView empty ].
+	
 	^ aView textEditor
 		title: 'Blog post';
 		priority: 1;
