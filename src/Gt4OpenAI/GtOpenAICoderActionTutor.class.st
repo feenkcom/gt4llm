@@ -59,7 +59,7 @@ GtOpenAICoderActionTutor >> performCommandAction [
 		name: 'Perform command';
 		priority: 4;
 		description: 'Performs a command provided by the user. May use any properties (text, renames, or method itself) to achieve its goal.';
-		format: 'Perform the following command: ';
+		format: 'Perform the following command: {1}';
 		examples: {GtLlmTutorActionExample new
 					input: {'Action' -> 'Perform the following command: Reorder the method arguments'.
 							'Smalltalk method'
@@ -99,7 +99,6 @@ GtOpenAICoderActionTutor >> refactoringAction [
 		name: 'Propose refactoring for method';
 		priority: 4;
 		description: 'Proposes a refactoring for the method. The method should be rewritten appropriately where necessary while preserving functionality. A textual description of the changes may also be added if deemed necessary.';
-		format: 'Propose refactoring for method';
 		examples: {GtLlmTutorActionExample new
 					input: {'Action' -> 'Propose refactoring for method'.
 							'Smalltalk method'
@@ -139,7 +138,6 @@ GtOpenAICoderActionTutor >> renameAction [
 		name: 'Propose renames for method';
 		priority: 4;
 		description: 'Proposes a sensible number of alternative names for the method (less than ten, but more than one). The number of method parameters should stay the same across renames, and method that do not take arguments should not have a trailing semicolon (e.g. `helloWorld` instead of `helloWorld:`). Always return the action name, renames, and method.';
-		format: 'Propose renames for method';
 		examples: {GtLlmTutorActionExample new
 					input: {'Action' -> 'Propose renames for method'.
 							'Smalltalk method'
@@ -212,7 +210,7 @@ GtOpenAICoderActionTutor >> renameVariableAction [
 		name: 'Propose renames for variable';
 		priority: 4;
 		description: 'Proposes a sensible number of alternative names for a given variable (less than ten, but more than one). Always return the action name, renames, and method.';
-		format: 'Propose renames for variable ``';
+		format: 'Propose renames for variable `{1}`';
 		examples: {GtLlmTutorActionExample new
 					input: {'Action' -> 'Propose renames for variable `aNumber`'.
 							'Smalltalk method'

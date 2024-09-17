@@ -44,7 +44,7 @@ GtOpenAIAnnotatedActionTutor >> chatAction [
 		name: 'Answer a chat request';
 		priority: 1;
 		description: 'Answers a chat request using the text field.';
-		format: 'Chat request: '
+		format: 'Chat request: {1}'
 ]
 
 { #category : #accessing }
