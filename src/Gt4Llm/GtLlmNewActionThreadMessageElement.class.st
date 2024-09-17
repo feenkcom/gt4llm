@@ -172,8 +172,17 @@ GtLlmNewActionThreadMessageElement >> updateToggleGroup [
 					label: anAction name.
 			toggleElement
 				when: BrToggleActivatedEvent
-				do: [ :anEvent | self threadMessageViewModel currentAction: anAction ].
-			toggleGroup addToggle: toggleElement ]
+				do: [ :anEvent | 
+					contentsElement beEditable text: ''.
+					self threadMessageViewModel currentAction: anAction.
+					anAction hasArgument
+						ifFalse: [ contentsElement beReadOnlyWithSelection
+								text: ('' asRopedText
+										attribute: (BrGhostTextAttribute
+												for: (anAction format asRopedText foreground: Color lightGray))) ] ].
+			toggleGroup addToggle: toggleElement ].
+	toggleGroup viewModel toggles
+		ifNotEmpty: [ :aGroupOfToggles | aGroupOfToggles first activate ]
 ]
 
 { #category : #'private - updating' }
