@@ -23,6 +23,16 @@ GtOpenAICoderActionTutor >> formatName [
 	^ 'Smalltalk method'
 ]
 
+{ #category : #'as yet unclassified' }
+GtOpenAICoderActionTutor >> gtNewAction [
+ 	<gtLlmAction>
+ 	^ GtLlmTutorAction new
+ 		name: 'New';
+ 		priority: 1;
+ 		description: 'Foo';
+ 		examples: {}
+]
+
 { #category : #accessing }
 GtOpenAICoderActionTutor >> initialize [
 	super initialize.

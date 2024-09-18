@@ -92,6 +92,31 @@ GtOpenAIAnnotatedActionTutor >> formatName: aName [
 	format name: formatName
 ]
 
+{ #category : #'as yet unclassified' }
+GtOpenAIAnnotatedActionTutor >> gtActionsFor: aView [
+	<gtView>
+	| valueHolder |
+	valueHolder := ValueHolder new.
+
+	^ (super gtActionsFor: aView)
+		actionDropdownButtonIcon: BrGlamorousVectorIcons add
+		tooltip: 'Add action'
+		content: [ :anElement | 
+			GtPharoNewMethodCoderElement new
+				behavior: self class;
+				methodCoderViewModelValueHolder: valueHolder;
+				onMethodCoderSaved: [ self recomputeActions.
+					anElement phlow fireUpdateWish ];
+				ensureMethodCoderViewModel;
+				sourceCode: 'gtACTIONNAME
+ 	<gtLlmTutorAction>
+ 	^ GtLlmTutorAction new
+ 		name: '''';
+ 		priority: 1;
+ 		description: '''';
+ 		examples: {}' ]
+]
+
 { #category : #accessing }
 GtOpenAIAnnotatedActionTutor >> gtFilesFor: aView [
 	<gtView>
@@ -139,6 +164,11 @@ GtOpenAIAnnotatedActionTutor >> instructions [
 	self formatName ifNil: [ ^ '' asInstruction ].
 
 	^ self format asInstruction addSections: self instructionSections
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAIAnnotatedActionTutor >> recomputeActions [
+	actions removeAll addAll: self collectActions
 ]
 
 { #category : #'as yet unclassified' }
