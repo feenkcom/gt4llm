@@ -170,9 +170,11 @@ GtLlmTutorAction >> hasArgument [
 { #category : #accessing }
 GtLlmTutorAction >> initialize [
 	super initialize.
-	
+
 	self priority: self defaultPriority.
-	self examples: OrderedCollection new
+	self examples: OrderedCollection new.
+	self name: ''.
+	self description: ''
 ]
 
 { #category : #accessing }
