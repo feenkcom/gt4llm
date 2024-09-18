@@ -61,13 +61,7 @@ GtOpenAIActionTutor >> gtActionsFor: aView [
 		title: 'Actions';
 		priority: 10;
 		object: [ actions ];
-		view: #gtActionsFor:;
-		actionDropdownButtonIcon: BrGlamorousVectorIcons add
-			tooltip: 'Add action'
-			content: [ BrFrame new
-					padding: (BlInsets all: 5);
-					size: 300 @ 300;
-					addChild: GtLlmTutorAction new asGtMagritteViewModel asElement ]
+		view: #gtActionsFor:
 ]
 
 { #category : #accessing }
