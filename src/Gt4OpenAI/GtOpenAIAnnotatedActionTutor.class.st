@@ -106,7 +106,8 @@ GtOpenAIAnnotatedActionTutor >> gtActionsFor: aView [
 				behavior: self class;
 				methodCoderViewModelValueHolder: valueHolder;
 				onMethodCoderSaved: [ self recomputeActions.
-					anElement phlow fireUpdateWish ];
+					anElement phlow fireToolUpdateWish.
+					anElement fireEvent: BrDropdownHideWish new ];
 				ensureMethodCoderViewModel;
 				sourceCode: 'gtACTIONNAME
  	<gtLlmTutorAction>
@@ -137,7 +138,8 @@ GtOpenAIAnnotatedActionTutor >> gtFormatComponentsFor: aView [
 				behavior: self class;
 				methodCoderViewModelValueHolder: valueHolder;
 				onMethodCoderSaved: [ self initializeFormat.
-					anElement phlow fireToolUpdateWish ];
+					anElement phlow fireToolUpdateWish.
+					anElement fireEvent: BrDropdownHideWish new ];
 				ensureMethodCoderViewModel;
 				sourceCode: 'gtFORMATCOMPONENTNAME
 	<gtLlmFormatComponent>
