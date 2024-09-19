@@ -8,7 +8,8 @@ Class {
 		'description',
 		'format',
 		'priority',
-		'tutor'
+		'tutor',
+		'definingMethod'
 	],
 	#category : #'Gt4Llm-Actions'
 }
@@ -112,6 +113,16 @@ GtLlmTutorAction >> formatReferences [
 		sorted: [ :a :b | a priority < b priority ]
 ]
 
+{ #category : #'as yet unclassified' }
+GtLlmTutorAction >> gtDefinitionFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Definition';
+		priority: 1;
+		object: [ definingMethod ];
+		view: #gtSourceFor:
+]
+
 { #category : #accessing }
 GtLlmTutorAction >> gtDescriptionFor: aView [
 	<gtView>
@@ -146,7 +157,7 @@ GtLlmTutorAction >> gtInstructionFor: aView [
 	<gtView>
 	^ aView forward
 		title: 'Instruction';
-		priority: 1;
+		priority: 2;
 		object: [self asInstruction ];
 		view: #gtInstructionFor:
 ]
@@ -174,7 +185,9 @@ GtLlmTutorAction >> initialize [
 	self priority: self defaultPriority.
 	self examples: OrderedCollection new.
 	self name: ''.
-	self description: ''
+	self description: ''.
+	
+	definingMethod := (thisContext stack at: 3) blocDefiningMethod
 ]
 
 { #category : #accessing }

@@ -123,6 +123,31 @@ GtOpenAIAnnotatedActionTutor >> gtFilesFor: aView [
 	^ aView empty
 ]
 
+{ #category : #'as yet unclassified' }
+GtOpenAIAnnotatedActionTutor >> gtFormatComponentsFor: aView [
+	<gtView>
+	| valueHolder |
+	valueHolder := ValueHolder new.
+
+	^ (super gtFormatComponentsFor: aView)
+		actionDropdownButtonIcon: BrGlamorousVectorIcons add
+		tooltip: 'Add action'
+		content: [ :anElement | 
+			GtPharoNewMethodCoderElement new
+				behavior: self class;
+				methodCoderViewModelValueHolder: valueHolder;
+				onMethodCoderSaved: [ self initializeFormat.
+					anElement phlow fireToolUpdateWish ];
+				ensureMethodCoderViewModel;
+				sourceCode: 'gtFORMATCOMPONENTNAME
+	<gtLlmFormatComponent>
+	^ GtLlmTutorFormatComponent new
+		name: '''';
+		priority: 1;
+		format: '''';
+		example: ''''' ]
+]
+
 { #category : #accessing }
 GtOpenAIAnnotatedActionTutor >> initialize [
 	super initialize.
