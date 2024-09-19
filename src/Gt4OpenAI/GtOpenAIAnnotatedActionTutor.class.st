@@ -98,18 +98,36 @@ GtOpenAIAnnotatedActionTutor >> gtActionsFor: aView [
 	| valueHolder |
 	valueHolder := ValueHolder new.
 
-	^ (super gtActionsFor: aView)
+	^ aView columnedList
+		title: 'Actions';
+		priority: 10;
+		items: [ self actions ];
+		column: 'Name'
+			text: #name
+			weight: 0.5;
+		column: 'Description' text: #description;
+		column: 'Actions'
+			stencil: [ :anItem | 
+				BrButton new
+					aptitude: BrGlamorousButtonWithIconAptitude;
+					icon: BrGlamorousVectorIcons cancel;
+					label: 'Remove';
+					action: [ :aButton | 
+						actions remove: anItem.
+						anItem definingMethod removeFromSystem.
+						aButton phlow fireToolUpdateWish ] ]
+			width: 70;
 		actionDropdownButtonIcon: BrGlamorousVectorIcons add
-		tooltip: 'Add action'
-		content: [ :anElement | 
-			GtPharoNewMethodCoderElement new
-				behavior: self class;
-				methodCoderViewModelValueHolder: valueHolder;
-				onMethodCoderSaved: [ self recomputeActions.
-					anElement phlow fireToolUpdateWish.
-					anElement fireEvent: BrDropdownHideWish new ];
-				ensureMethodCoderViewModel;
-				sourceCode: 'gtACTIONNAME
+			tooltip: 'Add action'
+			content: [ :anElement | 
+				GtPharoNewMethodCoderElement new
+					behavior: self class;
+					methodCoderViewModelValueHolder: valueHolder;
+					onMethodCoderSaved: [ self recomputeActions.
+						anElement phlow fireToolUpdateWish.
+						anElement fireEvent: BrDropdownHideWish new ];
+					ensureMethodCoderViewModel;
+					sourceCode: 'gtACTIONNAME
  	<gtLlmTutorAction>
  	^ GtLlmTutorAction new
  		name: '''';
@@ -129,19 +147,37 @@ GtOpenAIAnnotatedActionTutor >> gtFormatComponentsFor: aView [
 	<gtView>
 	| valueHolder |
 	valueHolder := ValueHolder new.
-
-	^ (super gtFormatComponentsFor: aView)
+	^ aView columnedList
+		title: 'Components';
+		priority: 11;
+		items: [ self format components sorted: [ :a :b | a priority < b priority ] ];
+		column: 'Name' text: #name;
+		column: 'Format' text: #format;
+		column: 'Priority'
+			text: #priority
+			width: 70;
+		column: 'Actions'
+			stencil: [ :anItem | 
+				BrButton new
+					aptitude: BrGlamorousButtonWithIconAptitude;
+					icon: BrGlamorousVectorIcons cancel;
+					label: 'Remove';
+					action: [ :aButton | 
+						self format components remove: anItem.
+						anItem definingMethod removeFromSystem.
+						aButton phlow fireToolUpdateWish ] ]
+			width: 70;
 		actionDropdownButtonIcon: BrGlamorousVectorIcons add
-		tooltip: 'Add action'
-		content: [ :anElement | 
-			GtPharoNewMethodCoderElement new
-				behavior: self class;
-				methodCoderViewModelValueHolder: valueHolder;
-				onMethodCoderSaved: [ self initializeFormat.
-					anElement phlow fireToolUpdateWish.
-					anElement fireEvent: BrDropdownHideWish new ];
-				ensureMethodCoderViewModel;
-				sourceCode: 'gtFORMATCOMPONENTNAME
+			tooltip: 'Add action'
+			content: [ :anElement | 
+				GtPharoNewMethodCoderElement new
+					behavior: self class;
+					methodCoderViewModelValueHolder: valueHolder;
+					onMethodCoderSaved: [ self initializeFormat.
+						anElement phlow fireToolUpdateWish.
+						anElement fireEvent: BrDropdownHideWish new ];
+					ensureMethodCoderViewModel;
+					sourceCode: 'gtFORMATCOMPONENTNAME
 	<gtLlmFormatComponent>
 	^ GtLlmTutorFormatComponent new
 		name: '''';

@@ -32,6 +32,11 @@ GtLlmTutorAction >> defaultPriority [
 	^ 10
 ]
 
+{ #category : #'as yet unclassified' }
+GtLlmTutorAction >> definingMethod [
+	^ definingMethod
+]
+
 { #category : #accessing }
 GtLlmTutorAction >> description [
 	^ description

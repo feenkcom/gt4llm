@@ -60,6 +60,11 @@ GtLlmTutorFormatComponent >> defaultPriority [
 	^ 10
 ]
 
+{ #category : #'as yet unclassified' }
+GtLlmTutorFormatComponent >> definingMethod [
+	^ definingMethod
+]
+
 { #category : #accessing }
 GtLlmTutorFormatComponent >> example [
 	^ example
