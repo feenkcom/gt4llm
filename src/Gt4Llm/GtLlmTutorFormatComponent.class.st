@@ -8,7 +8,8 @@ Class {
 		'example',
 		'priority',
 		'tutor',
-		'referencingActions'
+		'referencingActions',
+		'definingMethod'
 	],
 	#category : #'Gt4Llm-Tutor'
 }
@@ -93,12 +94,22 @@ GtLlmTutorFormatComponent >> gtActionsFor: aView [
 			text: [ :aReference | aReference isOutput ifTrue: [ 'true' ] ifFalse: [ '' ] ]
 ]
 
+{ #category : #'as yet unclassified' }
+GtLlmTutorFormatComponent >> gtDefinitionFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Definition';
+		priority: 1;
+		object: [ definingMethod ];
+		view: #gtSourceFor:
+]
+
 { #category : #accessing }
 GtLlmTutorFormatComponent >> gtInstructionFor: aView [
 	<gtView>
 	^ aView forward 
 		title: 'Instruction';
-		priority: 1;
+		priority: 2;
 		object: [ self asInstruction ];
 		view: #gtInstructionFor:
 ]
@@ -109,7 +120,9 @@ GtLlmTutorFormatComponent >> initialize [
 	
 	priority := self defaultPriority.
 	
-	referencingActions := OrderedCollection new
+	referencingActions := OrderedCollection new.
+	
+	definingMethod := (thisContext stack at: 3) blocDefiningMethod
 ]
 
 { #category : #accessing }
