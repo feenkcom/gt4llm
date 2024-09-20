@@ -52,18 +52,6 @@ GtOpenAIWardleyMapActionThreadMessage >> explanationCodeBlock [
 ]
 
 { #category : #accessing }
-GtOpenAIWardleyMapActionThreadMessage >> gtActionFor: aView [
-	<gtView>
-	<gtLlmMessageView>
-	self action ifEmpty: [ ^ aView empty ].
-
-	^ aView textEditor
-		title: 'Action';
-		priority: 3;
-		text: [ self action ]
-]
-
-{ #category : #accessing }
 GtOpenAIWardleyMapActionThreadMessage >> gtRawMessageFor: aView [
 	<gtLlmMessageView>
 	<gtView>
