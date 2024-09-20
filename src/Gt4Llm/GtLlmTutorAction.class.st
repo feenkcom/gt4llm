@@ -258,7 +258,9 @@ GtLlmTutorAction >> persist [
 		compile: self definingMethod selector asString
 				, '
 	<gtLlmAction>
-	^ ' , self asExpression
+	^ ' , self asExpression.
+	definingMethod := self definingMethod methodClass
+			>> self definingMethod selector
 ]
 
 { #category : #accessing }
