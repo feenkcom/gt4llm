@@ -14,6 +14,25 @@ Class {
 	#category : #'Gt4Llm-Actions'
 }
 
+{ #category : #'as yet unclassified' }
+GtLlmTutorAction >> addExample: anExample [
+	examples add: (anExample action: self)
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmTutorAction >> asExpression [
+	^ self class name asString
+		, ' new
+	name: ''' , self name
+		, ''';
+	priority: ' , self priority asString
+		, ';
+		description: ''' , self description
+		, ''';
+		examples: {' , ('.
+			' join: (self examples collect: #asExpression)) , '}'
+]
+
 { #category : #accessing }
 GtLlmTutorAction >> asInstruction [
 	^ GtLlmInstructionSection new
@@ -64,7 +83,7 @@ GtLlmTutorAction >> examples [
 
 { #category : #accessing }
 GtLlmTutorAction >> examples: anObject [
-	examples := anObject.
+	examples := anObject asOrderedCollection.
 
 	examples do: [ :anExample | anExample action: self ]
 ]
@@ -231,6 +250,15 @@ GtLlmTutorAction >> onTutorChanged [
 GtLlmTutorAction >> outputReferences [
 	^ (self examples flatCollect: #outputReferences as: Set)
 		sorted: [ :a :b | a priority < b priority ]
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmTutorAction >> persist [
+	self definingMethod methodClass
+		compile: self definingMethod selector asString
+				, '
+	<gtLlmAction>
+	^ ' , self asExpression
 ]
 
 { #category : #accessing }

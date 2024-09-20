@@ -37,6 +37,11 @@ GtOpenAIActionTutor >> addChat [
 	^ aChat
 ]
 
+{ #category : #'as yet unclassified' }
+GtOpenAIActionTutor >> addFormatComponent: aComponent [
+	format addComponent: aComponent
+]
+
 { #category : #accessing }
 GtOpenAIActionTutor >> findIndexOfAction: anAction [
 	^ ((actions
