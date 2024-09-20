@@ -143,55 +143,56 @@ firstAction
 
 { #category : #accessing }
 GtOpenAICoderActionTutor >> renameAction [
-	<gtLlmAction>
+	<gtLlmTutorAction>
 	^ GtLlmTutorAction new
 		name: 'Propose renames for method';
 		priority: 4;
 		description: 'Proposes a sensible number of alternative names for the method (less than ten, but more than one). The number of method parameters should stay the same across renames, and method that do not take arguments should not have a trailing semicolon (e.g. `helloWorld` instead of `helloWorld:`). Always return the action name, renames, and method.';
 		examples: {GtLlmTutorActionExample new
-					inputJson: '{
-	"Action" : "Propose renames for method",
-	"Smalltalk method" : "ActionClass\raddAction: anAction\r\tactions add: anAction\r"
-}';
-					outputJson: '{
-	"Smalltalk method" : "ActionClass\raddAction: anAction\r\tactions add: anAction\r",
-	"Renames" : "{\"type\": \"method\", \"original\": \"increment\", \"proposals\": [\"extendActions:\", \"appendAction:\", \"includeAction:\"]}",
-	"Text" : null,
-	"Action" : "Propose renames for method"
-}'.
+					input: {'Action' -> 'Propose renames for method'.
+							'Smalltalk method'
+								-> 'ActionClass
+addAction: anAction
+	actions add: anAction
+'} asDictionary;
+					output: {'Action' -> 'Propose renames for method'.
+							'Text' -> nil.
+							'Renames'
+								-> '{"type": "method", "original": "increment", "proposals": ["extendActions:", "appendAction:", "includeAction:"]}'.
+							'Smalltalk method'
+								-> 'ActionClass
+addAction: anAction
+	actions add: anAction
+'} asDictionary.
 				GtLlmTutorActionExample new
-					inputJson: '{
-	"Action" : "Propose renames for method",
-	"Smalltalk method" : "ClassWithNumber\rincrement\r\tself number: self number + 1"
-}';
-					outputJson: '{
-	"Smalltalk method" : "ClassWithNumber\rincrement\r\tself number: self number + 1",
-	"Renames" : "{\"type\": \"method\", \"original\": \"increment\", \"proposals\": [\"incrementNumber\", \"inc\", \"incNum\"]}",
-	"Text" : null,
-	"Action" : "Propose renames for method"
-}'.
+					input: {'Action' -> 'Propose renames for method'.
+							'Smalltalk method'
+								-> 'ClassWithNumber
+increment
+	self number: self number + 1'} asDictionary;
+					output: {'Action' -> 'Propose renames for method'.
+							'Text' -> nil.
+							'Renames'
+								-> '{"type": "method", "original": "increment", "proposals": ["incrementNumber", "inc", "incNum"]}'.
+							'Smalltalk method'
+								-> 'ClassWithNumber
+increment
+	self number: self number + 1'} asDictionary.
 				GtLlmTutorActionExample new
-					inputJson: '{
-	"Action" : "Propose renames for method",
-	"Smalltalk method" : "Object\rdo: aMessage to: anObject\r\t^ anObject perform: aMessage"
-}';
-					outputJson: '{
-	"Smalltalk method" : "Object\rdo: aMessage to: anObject\r\t^ anObject perform: aMessage\r",
-	"Renames" : "{\"type\": \"method\", \"original\": \"do:to:\", \"proposals\": [\"perform:on:\", \"send:to:\", \"execute:on:\", \"exec:on:\", \"ask:of:\"]}",
-	"Text" : null,
-	"Action" : "Propose renames for method"
-}'.
-				GtLlmTutorActionExample new
-					inputJson: '{
-	"Action" : "Propose renames for method",
-	"Smalltalk method" : "BlSingleLineTextParagraphExamples\rindexAtLeftHalfOfThirdCharacterInHaba\r\t<gtExample>\r\t| aParagraph anIndex |\r\r\taParagraph := self measuredHaba.\r\tanIndex := aParagraph indexAtPosition: ((self glyphWidth * 2) + (self glyphWidth / 3.0)) @ self ascent.\r\t\r\tself assert: anIndex equals: 2.\r\r\t^ anIndex"
-}';
-					outputJson: '{
-	"Renames" : "{\"type\": \"method\", \"original\": \"indexAtLeftHalfOfThirdCharacterInHaba\", \"proposals\": [\"indexNearThirdCharInHaba\", \"positionNearThirdInHaba\", \"leftMidThirdCharIndex\"]}",
-	"Action" : "Propose renames for method",
-	"Text" : null,
-	"Smalltalk method" : "BlSingleLineTextParagraphExamples\rindexAtLeftHalfOfThirdCharacterInHaba\r\t<gtExample>\r\t| aParagraph anIndex |\r\r\taParagraph := self measuredHaba.\r\tanIndex := aParagraph indexAtPosition: ((self glyphWidth * 2) + (self glyphWidth / 3.0)) @ self ascent.\r\t\r\tself assert: anIndex equals: 2.\r\r\t^ anIndex"
-}'}
+					input: {'Action' -> 'Propose renames for method'.
+							'Smalltalk method'
+								-> 'Object
+do: aMessage to: anObject
+	^ anObject perform: aMessage'} asDictionary;
+					output: {'Action' -> 'Propose renames for method'.
+							'Text' -> nil.
+							'Renames'
+								-> '{"type": "method", "original": "do:to:", "proposals": ["perform:on:", "send:to:", "execute:on:", "exec:on:", "ask:of:"]}'.
+							'Smalltalk method'
+								-> 'Object
+do: aMessage to: anObject
+	^ anObject perform: aMessage
+'} asDictionary}
 ]
 
 { #category : #accessing }
