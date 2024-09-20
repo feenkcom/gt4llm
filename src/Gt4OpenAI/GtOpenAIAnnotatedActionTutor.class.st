@@ -8,11 +8,6 @@ Class {
 	#category : #'Gt4OpenAI-Tutor'
 }
 
-{ #category : #accessing }
-GtOpenAIAnnotatedActionTutor >> addAction: anAction [
-	actions add: (anAction tutor: self)
-]
-
 { #category : #'as yet unclassified' }
 GtOpenAIAnnotatedActionTutor >> addChat [
 	| aChat |
@@ -25,11 +20,6 @@ GtOpenAIAnnotatedActionTutor >> addChat [
 	chats add: aChat.
 
 	^ aChat
-]
-
-{ #category : #accessing }
-GtOpenAIAnnotatedActionTutor >> addFormatComponent: aComponent [
-	format addComponent: aComponent
 ]
 
 { #category : #accessing }
