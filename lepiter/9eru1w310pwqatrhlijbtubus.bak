@@ -29,7 +29,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-08-14T11:11:34.762984+02:00"
+						"dateAndTimeString" : "2024-08-14T11:12:39.705617+02:00"
 					}
 				},
 				"uid" : {
@@ -39,7 +39,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "To use a conversation with LLMs in automated interactions, the formats need to be well defined and the state on both sides of the conversation need to be synchronized. For this, we can use a {{gtClass:GtOpenAIActionTutor}}."
+				"string" : "To use a conversation with LLMs in automated interactions, the formats need to be well defined and the states on both sides of the conversation need to be synchronized. For this, we can use a {{gtClass:GtOpenAIActionTutor}}."
 			},
 			{
 				"__type" : "textSnippet",
@@ -285,7 +285,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-07-10T11:50:05.691029+02:00"
+						"dateAndTimeString" : "2024-09-20T08:17:40.893349+02:00"
 					}
 				},
 				"uid" : {
@@ -295,7 +295,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "Then we define a data interchange format for the tutor. This works in a similar fashion as the actions, using the `gtLlmFormatComponent`. An example can be found here: {{gtMethod:GtOpenAIWardleyMapActionTutor>>#explanationFormatComponent}}"
+				"string" : "Then we define a data interchange format for the tutor. This works in a similar fashion as the actions, using the `gtLlmFormatComponent` pragma. An example can be found here: {{gtMethod:GtOpenAIWardleyMapActionTutor>>explanationAction}}"
 			},
 			{
 				"__type" : "textSnippet",
