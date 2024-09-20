@@ -21,6 +21,15 @@ GtLlmTutorActionExample >> action: anObject [
 	action := anObject
 ]
 
+{ #category : #'as yet unclassified' }
+GtLlmTutorActionExample >> asExpression [
+	^ self class name asString
+		, ' new
+	inputJson: ''' , self inputJson
+		, ''';
+	outputJson: ''' , self outputJson , ''''
+]
+
 { #category : #accessing }
 GtLlmTutorActionExample >> asInstruction [
 	^ GtLlmInstructionSection new
@@ -105,12 +114,17 @@ GtLlmTutorActionExample >> inputDescription [
 		label: 'Input';
 		beRequired;
 		priority: 2;
-		accessor: #input
+		accessor: #inputJson
 ]
 
 { #category : #accessing }
 GtLlmTutorActionExample >> inputJson [
 	^ STONJSON toStringPretty: self input
+]
+
+{ #category : #accessing }
+GtLlmTutorActionExample >> inputJson: aJson [
+	^ self input: (STONJSON fromString: aJson)
 ]
 
 { #category : #accessing }
@@ -140,12 +154,17 @@ GtLlmTutorActionExample >> outputDescription [
 		label: 'Output';
 		beRequired;
 		priority: 2;
-		accessor: #output
+		accessor: #outputJson
 ]
 
 { #category : #accessing }
 GtLlmTutorActionExample >> outputJson [
 	^ STONJSON toStringPretty: self output
+]
+
+{ #category : #accessing }
+GtLlmTutorActionExample >> outputJson: aJson [
+	^ self output: (STONJSON fromString: aJson)
 ]
 
 { #category : #accessing }

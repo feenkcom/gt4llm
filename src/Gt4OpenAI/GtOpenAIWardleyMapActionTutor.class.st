@@ -228,7 +228,7 @@ GtOpenAIWardleyMapActionTutor >> initializePipeline [
 						addAlternative: (GtLlmCompositeCodeStep new
 									addStep: GtLlmValueExtractorCodeStep new;
 									addStep: GtLlmWardleyMapExplanationStep new)
-							matching: [ :aContext | aContext lastResult key = 'Explanation' ]) ]
+							matching: [ :aContext | aContext lastResult key = 'Text' ]) ]
 ]
 
 { #category : #accessing }

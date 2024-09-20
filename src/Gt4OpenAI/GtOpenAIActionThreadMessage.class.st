@@ -67,6 +67,25 @@ GtOpenAIActionThreadMessage >> gtInspectorContentFor: aView [
 ]
 
 { #category : #accessing }
+GtOpenAIActionThreadMessage >> gtPromoteToExampleActionFor: anAction [
+	<gtLlmAction>
+	self isAssistantRole ifFalse: [ ^ anAction noAction ].
+
+	^ anAction dropdown
+		priority: 5;
+		label: 'Promote example';
+		content: [ :aButton | 
+			| action example |
+			action := self chat tutor actionNamed: self action.
+			example := GtLlmTutorActionExample new
+					input: self ancestor contentJson;
+					output: self contentJson.
+			action addExample: example.
+			action persist.
+			example asGtMagritteViewModel asElement ]
+]
+
+{ #category : #accessing }
 GtOpenAIActionThreadMessage >> gtTextFor: aView [
 	<gtView>
 	<gtLlmMessageView>
