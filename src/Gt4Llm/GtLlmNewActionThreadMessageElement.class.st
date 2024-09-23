@@ -52,7 +52,11 @@ GtLlmNewActionThreadMessageElement >> initialize [
 	self initializeToggleGroup.
 	self initializeContentsElement.
 	self initializeToolbar.
-	self addChild: toggleGroup as: #toggle.
+	self
+		addChild: (BrScrollPane new
+				aptitude: BrScrollPaneAptitude;
+				content: toggleGroup)
+		as: #toggle.
 	self addChild: contentsElement as: #contents.
 	self addChild: toolbar as: #toolbar.
 
