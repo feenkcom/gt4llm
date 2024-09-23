@@ -9,7 +9,8 @@ Class {
 		'priority',
 		'tutor',
 		'referencingActions',
-		'definingMethod'
+		'definingMethod',
+		'type'
 	],
 	#category : #'Gt4Llm-Tutor'
 }
@@ -45,9 +46,7 @@ GtLlmTutorFormatComponent >> asInstruction [
 
 { #category : #accessing }
 GtLlmTutorFormatComponent >> asJsonSchema [
-	^ {'type'
-			-> {'string'.
-					'null'}.
+	^ {'type' -> self type.
 		'description'
 			-> (GtLlmInstructionList new
 					addItem: 'Format: ' , self format;
@@ -55,9 +54,20 @@ GtLlmTutorFormatComponent >> asJsonSchema [
 ' , self example) instructionString} asDictionary
 ]
 
+{ #category : #'as yet unclassified' }
+GtLlmTutorFormatComponent >> beRequired [
+	self type remove: 'null' ifAbsent: [  ]
+]
+
 { #category : #accessing }
 GtLlmTutorFormatComponent >> defaultPriority [
 	^ 10
+]
+
+{ #category : #accessing }
+GtLlmTutorFormatComponent >> defaultType [
+	^ {'string'.
+		'null'}
 ]
 
 { #category : #'as yet unclassified' }
@@ -125,6 +135,8 @@ GtLlmTutorFormatComponent >> initialize [
 	
 	priority := self defaultPriority.
 	
+	type := self defaultType asOrderedCollection.
+	
 	referencingActions := OrderedCollection new.
 	
 	definingMethod := (thisContext stack at: 3) blocDefiningMethod
@@ -168,4 +180,14 @@ GtLlmTutorFormatComponent >> tutor [
 { #category : #accessing }
 GtLlmTutorFormatComponent >> tutor: anObject [
 	tutor := anObject
+]
+
+{ #category : #accessing }
+GtLlmTutorFormatComponent >> type [
+	^ type
+]
+
+{ #category : #accessing }
+GtLlmTutorFormatComponent >> type: anObject [
+	type := anObject
 ]

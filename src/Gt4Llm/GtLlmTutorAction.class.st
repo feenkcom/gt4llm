@@ -255,10 +255,12 @@ GtLlmTutorAction >> outputReferences [
 { #category : #'as yet unclassified' }
 GtLlmTutorAction >> persist [
 	self definingMethod methodClass
-		compile: self definingMethod selector asString
-				, '
-	<gtLlmAction>
-	^ ' , self asExpression.
+		compile: (RBConfigurableFormatter
+				format: (RBParser
+						parseMethod: self definingMethod selector asString
+								, '
+	<gtLlmTutorAction>
+	^ ' , self asExpression)).
 	definingMethod := self definingMethod methodClass
 			>> self definingMethod selector
 ]

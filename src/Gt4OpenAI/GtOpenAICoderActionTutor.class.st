@@ -155,44 +155,44 @@ GtOpenAICoderActionTutor >> renameAction [
 addAction: anAction
 	actions add: anAction
 '} asDictionary;
-					output: {'Action' -> 'Propose renames for method'.
-							'Text' -> nil.
-							'Renames'
-								-> '{"type": "method", "original": "increment", "proposals": ["extendActions:", "appendAction:", "includeAction:"]}'.
-							'Smalltalk method'
+					output: {'Smalltalk method'
 								-> 'ActionClass
 addAction: anAction
 	actions add: anAction
-'} asDictionary.
+'.
+							'Renames'
+								-> '{"type": "method", "original": "increment", "proposals": ["extendActions:", "appendAction:", "includeAction:"]}'.
+							'Text' -> nil.
+							'Action' -> 'Propose renames for method'} asDictionary.
 				GtLlmTutorActionExample new
 					input: {'Action' -> 'Propose renames for method'.
 							'Smalltalk method'
 								-> 'ClassWithNumber
 increment
 	self number: self number + 1'} asDictionary;
-					output: {'Action' -> 'Propose renames for method'.
-							'Text' -> nil.
-							'Renames'
-								-> '{"type": "method", "original": "increment", "proposals": ["incrementNumber", "inc", "incNum"]}'.
-							'Smalltalk method'
+					output: {'Smalltalk method'
 								-> 'ClassWithNumber
 increment
-	self number: self number + 1'} asDictionary.
+	self number: self number + 1'.
+							'Renames'
+								-> '{"type": "method", "original": "increment", "proposals": ["incrementNumber", "inc", "incNum"]}'.
+							'Text' -> nil.
+							'Action' -> 'Propose renames for method'} asDictionary.
 				GtLlmTutorActionExample new
 					input: {'Action' -> 'Propose renames for method'.
 							'Smalltalk method'
 								-> 'Object
 do: aMessage to: anObject
 	^ anObject perform: aMessage'} asDictionary;
-					output: {'Action' -> 'Propose renames for method'.
-							'Text' -> nil.
-							'Renames'
-								-> '{"type": "method", "original": "do:to:", "proposals": ["perform:on:", "send:to:", "execute:on:", "exec:on:", "ask:of:"]}'.
-							'Smalltalk method'
+					output: {'Smalltalk method'
 								-> 'Object
 do: aMessage to: anObject
 	^ anObject perform: aMessage
-'} asDictionary}
+'.
+							'Renames'
+								-> '{"type": "method", "original": "do:to:", "proposals": ["perform:on:", "send:to:", "execute:on:", "exec:on:", "ask:of:"]}'.
+							'Text' -> nil.
+							'Action' -> 'Propose renames for method'} asDictionary}
 ]
 
 { #category : #accessing }
