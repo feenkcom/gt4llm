@@ -92,9 +92,10 @@ GtOpenAIActionThreadMessage >> gtReifyMessageActionFor: anAction [
 		priority: 1;
 		label: 'Reify';
 		content: [ :aButton | 
-			GtLlmReificationForm new
+			(GtLlmReificationForm new
 				message: self;
-				onAccept: [ :aValue | aButton phlow spawnObject: self chat ] ]
+				onAccept: [ :aValue | aButton phlow spawnObject: self chat ]) asElement
+				margin: (BlInsets all: 5) ]
 ]
 
 { #category : #accessing }
