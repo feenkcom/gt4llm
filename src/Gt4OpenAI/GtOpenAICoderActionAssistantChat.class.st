@@ -9,17 +9,9 @@ GtOpenAICoderActionAssistantChat >> instructions [
 	^ self assistant instructions
 ]
 
-{ #category : #accessing }
-GtOpenAICoderActionAssistantChat >> messages [
-	<return: #GtOpenAIThreadMessagesGroup>
-	| givenMessages |
-	givenMessages := thread updateMessages.
-	^ GtOpenAIThreadMessagesGroup
-		withAll: (givenMessages
-				collect: [ :aMessage | 
-					(GtOpenAICoderActionThreadMessage from: aMessage serialize)
-						pipeline: self pipeline;
-						chat: self ])
+{ #category : #'as yet unclassified' }
+GtOpenAICoderActionAssistantChat >> messageClass [
+	^ GtOpenAICoderActionThreadMessage
 ]
 
 { #category : #accessing }

@@ -86,6 +86,32 @@ GtOpenAIActionThreadMessage >> gtPromoteToExampleActionFor: anAction [
 ]
 
 { #category : #accessing }
+GtOpenAIActionThreadMessage >> gtReifyMessageActionFor: anAction [
+	<gtLlmAction>
+	^ anAction button
+		priority: 1;
+		label: 'Reify';
+		action: [ :aButton | 
+			| newTutor newChat newMessages |
+			newTutor := self chat tutor class newSubclass.
+			newChat := self chat class newSubclass.
+			newMessages := self class newSubclass.
+			newTutor
+				compile: 'chatClass
+	^ ' , newChat name.
+	
+			newChat
+				compile: 'messageClass
+	^ ' , newMessages name.
+
+			newTutor adoptInstance: self chat tutor.
+			newChat adoptInstance: self chat.
+
+
+			aButton phlow spawnObject: self chat ]
+]
+
+{ #category : #accessing }
 GtOpenAIActionThreadMessage >> gtTextFor: aView [
 	<gtView>
 	<gtLlmMessageView>

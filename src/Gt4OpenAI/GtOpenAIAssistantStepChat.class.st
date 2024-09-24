@@ -59,17 +59,9 @@ GtOpenAIAssistantStepChat >> maybeStep: anAnnouncement [
 	^ stepIndex
 ]
 
-{ #category : #accessing }
-GtOpenAIAssistantStepChat >> messages [
-	<return: #GtOpenAIThreadMessagesGroup>
-	| givenMessages |
-	givenMessages := thread updateMessages.
-	^ GtOpenAIThreadMessagesGroup
-		withAll: (givenMessages
-				collect: [ :aMessage | 
-					(GtOpenAIStepThreadMessage from: aMessage serialize)
-						pipeline: self pipeline;
-						chat: self ])
+{ #category : #'as yet unclassified' }
+GtOpenAIAssistantStepChat >> messageClass [
+	^ GtOpenAIStepThreadMessage
 ]
 
 { #category : #accessing }
