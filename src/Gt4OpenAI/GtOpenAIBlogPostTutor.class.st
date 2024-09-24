@@ -57,6 +57,11 @@ GtOpenAIBlogPostTutor >> formatName [
 ]
 
 { #category : #'as yet unclassified' }
+GtOpenAIBlogPostTutor >> messageClass [
+	^ GtOpenAIStepThreadMessage
+]
+
+{ #category : #'as yet unclassified' }
 GtOpenAIBlogPostTutor >> reviewAction [
 	<gtLlmTutorAction>
 	^ GtLlmTutorAction new

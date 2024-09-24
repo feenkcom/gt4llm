@@ -246,6 +246,11 @@ Goodbye->Hello again!
 ```'
 ]
 
+{ #category : #'as yet unclassified' }
+GtOpenAIWardleyMapActionTutor >> messageClass [
+	^ GtOpenAIWardleyMapActionThreadMessage
+]
+
 { #category : #accessing }
 GtOpenAIWardleyMapActionTutor >> renameAction [
 	<gtLlmTutorAction>

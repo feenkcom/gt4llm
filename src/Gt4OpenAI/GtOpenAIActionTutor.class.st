@@ -90,3 +90,8 @@ GtOpenAIActionTutor >> initialize [
 	actions := GtLlmActionsGroup new.
 	format := GtLlmTutorFormat new
 ]
+
+{ #category : #'as yet unclassified' }
+GtOpenAIActionTutor >> messageClass [
+	^ GtOpenAIActionThreadMessage
+]

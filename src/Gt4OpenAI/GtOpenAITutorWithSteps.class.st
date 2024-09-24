@@ -120,6 +120,11 @@ GtOpenAITutorWithSteps >> instructions: anObject [
 	instructions := anObject
 ]
 
+{ #category : #'as yet unclassified' }
+GtOpenAITutorWithSteps >> messageClass [
+	^ GtOpenAIStepThreadMessage
+]
+
 { #category : #accessing }
 GtOpenAITutorWithSteps >> selectStepMessage [
 	^ selectStepMessage

@@ -203,11 +203,6 @@ GtOpenAIAssistantChat >> maximumMessageSize [
 	^ 30000
 ]
 
-{ #category : #'as yet unclassified' }
-GtOpenAIAssistantChat >> messageClass [
-	^ GtOpenAIThreadMessage
-]
-
 { #category : #accessing }
 GtOpenAIAssistantChat >> messages [
 	<return: #GtOpenAIThreadMessagesGroup>
@@ -215,7 +210,7 @@ GtOpenAIAssistantChat >> messages [
 	givenMessages := thread updateMessages.
 	^ givenMessages
 		collect: [ :aMessage | 
-			(self messageClass from: aMessage serialize)
+			(self tutor messageClass from: aMessage serialize)
 				pipeline: self pipeline;
 				chat: self ]
 ]

@@ -59,11 +59,6 @@ GtOpenAIAssistantStepChat >> maybeStep: anAnnouncement [
 	^ stepIndex
 ]
 
-{ #category : #'as yet unclassified' }
-GtOpenAIAssistantStepChat >> messageClass [
-	^ GtOpenAIStepThreadMessage
-]
-
 { #category : #accessing }
 GtOpenAIAssistantStepChat >> pipeline [
 	^ GtLlmContext new
