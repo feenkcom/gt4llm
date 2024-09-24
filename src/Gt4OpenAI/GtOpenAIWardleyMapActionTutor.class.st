@@ -4,18 +4,9 @@ Class {
 	#category : #'Gt4OpenAI-Examples - Wardley Map'
 }
 
-{ #category : #accessing }
-GtOpenAIWardleyMapActionTutor >> addChat [
-	| aChat |
-	aChat := GtOpenAIWardleyMapActionAssistantChat new
-			assistant: self assistant;
-			tutor: self;
-			actions: actions;
-			responseFormat: self format asJsonSchema;
-			pipeline: pipelineBuilder value.
-	chats add: aChat.
-
-	^ aChat
+{ #category : #'as yet unclassified' }
+GtOpenAIWardleyMapActionTutor >> chatClass [
+	^ GtOpenAIWardleyMapActionAssistantChat
 ]
 
 { #category : #accessing }

@@ -4,18 +4,9 @@ Class {
 	#category : #'Gt4OpenAI-Tutor'
 }
 
-{ #category : #accessing }
-GtOpenAIViewActionTutor >> addChat [
-	| aChat |
-	aChat := GtOpenAIViewActionAssistantChat new
-			assistant: self assistant;
-			actions: actions;
-			tutor: self;
-			responseFormat: self format asJsonSchema;
-			pipeline: pipelineBuilder value.
-	chats add: aChat.
-
-	^ aChat
+{ #category : #'as yet unclassified' }
+GtOpenAIViewActionTutor >> chatClass [
+	^ GtOpenAIViewActionAssistantChat
 ]
 
 { #category : #accessing }

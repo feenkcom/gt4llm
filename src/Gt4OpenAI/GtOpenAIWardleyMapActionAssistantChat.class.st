@@ -20,15 +20,7 @@ GtOpenAIWardleyMapActionAssistantChat >> initializeWardleyMapModel: aGtWardleyMa
 	self pipeline instance initializeWardleyMapModel: aGtWardleyMapModel
 ]
 
-{ #category : #accessing }
-GtOpenAIWardleyMapActionAssistantChat >> messages [
-	<return: #GtOpenAIThreadMessagesGroup>
-	| givenMessages |
-	givenMessages := thread updateMessages.
-	^ GtOpenAIThreadMessagesGroup
-		withAll: (givenMessages
-				collect: [ :aMessage | 
-					(GtOpenAIWardleyMapActionThreadMessage from: aMessage serialize)
-						pipeline: self pipeline;
-						chat: self ])
+{ #category : #'as yet unclassified' }
+GtOpenAIWardleyMapActionAssistantChat >> messageClass [
+	^ GtOpenAIWardleyMapActionThreadMessage
 ]

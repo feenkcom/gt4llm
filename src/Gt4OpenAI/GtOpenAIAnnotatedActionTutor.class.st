@@ -8,20 +8,6 @@ Class {
 	#category : #'Gt4OpenAI-Tutor'
 }
 
-{ #category : #'as yet unclassified' }
-GtOpenAIAnnotatedActionTutor >> addChat [
-	| aChat |
-	aChat := GtOpenAIActionAssistantChat new
-			assistant: self assistant;
-			actions: actions;
-			tutor: self;
-			responseFormat: self format asJsonSchema;
-			pipeline: pipelineBuilder value.
-	chats add: aChat.
-
-	^ aChat
-]
-
 { #category : #accessing }
 GtOpenAIAnnotatedActionTutor >> addInstructionSection: anInstructionSection [
 	instructionSections add: anInstructionSection
@@ -35,6 +21,11 @@ GtOpenAIAnnotatedActionTutor >> chatAction [
 		priority: 1;
 		description: 'Answers a chat request using the text field.';
 		format: 'Chat request: {1}'
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAIAnnotatedActionTutor >> chatClass [
+	^ GtOpenAIActionAssistantChat
 ]
 
 { #category : #accessing }
