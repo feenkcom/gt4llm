@@ -9,11 +9,6 @@ GtOpenAIViewActionAssistantChat >> instructions [
 	^ self assistant instructions
 ]
 
-{ #category : #'as yet unclassified' }
-GtOpenAIViewActionAssistantChat >> messageClass [
-	^ GtOpenAIViewActionThreadMessage
-]
-
 { #category : #accessing }
 GtOpenAIViewActionAssistantChat >> object: aMethod [
 	self pipeline instance object: aMethod

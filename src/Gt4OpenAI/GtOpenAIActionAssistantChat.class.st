@@ -70,11 +70,6 @@ GtOpenAIActionAssistantChat >> initialize [
 	withRetry := true
 ]
 
-{ #category : #'as yet unclassified' }
-GtOpenAIActionAssistantChat >> messageClass [
-	^ GtOpenAIActionThreadMessage
-]
-
 { #category : #accessing }
 GtOpenAIActionAssistantChat >> onActionResult: aMessage [ 
 ]

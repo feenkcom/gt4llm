@@ -87,6 +87,11 @@ GtOpenAIViewActionTutor >> initializePipeline [
 				isImmutableInstance: true ]
 ]
 
+{ #category : #'as yet unclassified' }
+GtOpenAIViewActionTutor >> messageClass [
+	^ GtOpenAIViewActionThreadMessage
+]
+
 { #category : #accessing }
 GtOpenAIViewActionTutor >> methodFormatComponent [
 	<gtLlmFormatComponent>

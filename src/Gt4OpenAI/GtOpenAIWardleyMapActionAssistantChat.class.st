@@ -19,8 +19,3 @@ GtOpenAIWardleyMapActionAssistantChat >> gtWardleyScriptFor: aView [
 GtOpenAIWardleyMapActionAssistantChat >> initializeWardleyMapModel: aGtWardleyMapModel [
 	self pipeline instance initializeWardleyMapModel: aGtWardleyMapModel
 ]
-
-{ #category : #'as yet unclassified' }
-GtOpenAIWardleyMapActionAssistantChat >> messageClass [
-	^ GtOpenAIWardleyMapActionThreadMessage
-]
