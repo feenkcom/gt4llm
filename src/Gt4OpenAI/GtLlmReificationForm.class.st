@@ -18,19 +18,20 @@ GtLlmReificationForm class >> isAdditionForm [
 
 { #category : #'as yet unclassified' }
 GtLlmReificationForm >> commit [
-	| newTutor newMessages |
+	| newTutor newMessages package |
+	package := self commitPackage.
 	newTutor := self tutorSuperclass asClass
 			subclass: self tutorClassName
 			instanceVariableNames: ''
 			classVariableNames: ''
 			poolDictionaries: ''
-			package: 'Unclassified'.
+			package: package categoryName asString.
 	newMessages := self messageSuperclass asClass
 			subclass: self messageClassName
 			instanceVariableNames: ''
 			classVariableNames: ''
 			poolDictionaries: ''
-			package: 'Unclassified'.
+			package: package categoryName asString.
 
 	newTutor
 		compile: 'messageClass
