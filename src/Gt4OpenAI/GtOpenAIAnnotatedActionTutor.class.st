@@ -101,20 +101,23 @@ GtOpenAIAnnotatedActionTutor >> gtActionsFor: aView [
 		actionDropdownButtonIcon: BrGlamorousVectorIcons add
 			tooltip: 'Add action'
 			content: [ :anElement | 
-				GtPharoNewMethodCoderElement new
-					behavior: self class;
-					methodCoderViewModelValueHolder: valueHolder;
-					onMethodCoderSaved: [ self recomputeActions.
-						anElement phlow fireToolUpdateWish.
-						anElement fireEvent: BrDropdownHideWish new ];
-					ensureMethodCoderViewModel;
-					sourceCode: 'gtACTIONNAME
+				| methodCoder |
+				methodCoder := GtPharoNewMethodCoderElement new
+						behavior: self class;
+						methodCoderViewModelValueHolder: valueHolder;
+						onMethodCoderSaved: [ self recomputeActions.
+							anElement phlow fireToolUpdateWish.
+							anElement fireEvent: BrDropdownHideWish new ];
+						ensureMethodCoderViewModel.
+				methodCoder pharoMethodCoderViewModel coderModel
+					currentSourceString: 'gtACTIONNAME
  	<gtLlmTutorAction>
  	^ GtLlmTutorAction new
  		name: '''';
  		priority: 1;
  		description: '''';
- 		examples: {}' ]
+ 		examples: {}'.
+				methodCoder ]
 ]
 
 { #category : #accessing }
@@ -151,20 +154,23 @@ GtOpenAIAnnotatedActionTutor >> gtFormatComponentsFor: aView [
 		actionDropdownButtonIcon: BrGlamorousVectorIcons add
 			tooltip: 'Add action'
 			content: [ :anElement | 
-				GtPharoNewMethodCoderElement new
-					behavior: self class;
-					methodCoderViewModelValueHolder: valueHolder;
-					onMethodCoderSaved: [ self initializeFormat.
-						anElement phlow fireToolUpdateWish.
-						anElement fireEvent: BrDropdownHideWish new ];
-					ensureMethodCoderViewModel;
-					sourceCode: 'gtFORMATCOMPONENTNAME
+				| methodCoder |
+				methodCoder := GtPharoNewMethodCoderElement new
+						behavior: self class;
+						methodCoderViewModelValueHolder: valueHolder;
+						onMethodCoderSaved: [ self initializeFormat.
+							anElement phlow fireToolUpdateWish.
+							anElement fireEvent: BrDropdownHideWish new ];
+						ensureMethodCoderViewModel.
+				methodCoder pharoMethodCoderViewModel coderModel
+					currentSourceString: 'gtFORMATCOMPONENTNAME
 	<gtLlmFormatComponent>
 	^ GtLlmTutorFormatComponent new
 		name: '''';
 		priority: 1;
 		format: '''';
-		example: ''''' ]
+		example: '''''.
+				methodCoder ]
 ]
 
 { #category : #accessing }
