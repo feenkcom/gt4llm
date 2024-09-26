@@ -151,6 +151,11 @@ GtOpenAITutor >> messageClass [
 	^ GtOpenAIThreadMessage
 ]
 
+{ #category : #'as yet unclassified' }
+GtOpenAITutor >> messageClassFor: aMessage [
+	^ self messageClass
+]
+
 { #category : #accessing }
 GtOpenAITutor >> onApiKeyChanged [
 	client := GtOpenAIClient new apiKey: self apiKey
