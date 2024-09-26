@@ -5,20 +5,6 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-GtOpenAIBlogPostTutor >> addChat [
-	| aChat |
-	aChat := GtOpenAIBlogpostAssistantChat new
-			assistant: self assistant;
-			actions: actions;
-			tutor: self;
-			responseFormat: self format asJsonSchema;
-			pipeline: pipelineBuilder value.
-	chats add: aChat.
-
-	^ aChat
-]
-
-{ #category : #'as yet unclassified' }
 GtOpenAIBlogPostTutor >> blogPostFormatComponent [
 	<gtLlmFormatComponent>
 	^ GtLlmTutorFormatComponent new
@@ -33,6 +19,11 @@ Multiple lines, multiple paragraphs are allowed.
 
 # Headings exist as well
 ```'
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAIBlogPostTutor >> chatClass [
+	^ GtOpenAIBlogpostAssistantChat
 ]
 
 { #category : #'as yet unclassified' }
@@ -63,6 +54,11 @@ Glamorous Toolkit is primarily implemented in Pharo and offers a complete develo
 { #category : #'as yet unclassified' }
 GtOpenAIBlogPostTutor >> formatName [
 	^ 'writing blog post'
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAIBlogPostTutor >> messageClass [
+	^ GtOpenAIStepThreadMessage
 ]
 
 { #category : #'as yet unclassified' }

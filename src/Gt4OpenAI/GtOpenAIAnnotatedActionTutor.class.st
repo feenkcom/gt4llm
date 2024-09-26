@@ -8,20 +8,6 @@ Class {
 	#category : #'Gt4OpenAI-Tutor'
 }
 
-{ #category : #'as yet unclassified' }
-GtOpenAIAnnotatedActionTutor >> addChat [
-	| aChat |
-	aChat := GtOpenAIActionAssistantChat new
-			assistant: self assistant;
-			actions: actions;
-			tutor: self;
-			responseFormat: self format asJsonSchema;
-			pipeline: pipelineBuilder value.
-	chats add: aChat.
-
-	^ aChat
-]
-
 { #category : #accessing }
 GtOpenAIAnnotatedActionTutor >> addInstructionSection: anInstructionSection [
 	instructionSections add: anInstructionSection
@@ -35,6 +21,11 @@ GtOpenAIAnnotatedActionTutor >> chatAction [
 		priority: 1;
 		description: 'Answers a chat request using the text field.';
 		format: 'Chat request: {1}'
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAIAnnotatedActionTutor >> chatClass [
+	^ GtOpenAIActionAssistantChat
 ]
 
 { #category : #accessing }
@@ -110,20 +101,23 @@ GtOpenAIAnnotatedActionTutor >> gtActionsFor: aView [
 		actionDropdownButtonIcon: BrGlamorousVectorIcons add
 			tooltip: 'Add action'
 			content: [ :anElement | 
-				GtPharoNewMethodCoderElement new
-					behavior: self class;
-					methodCoderViewModelValueHolder: valueHolder;
-					onMethodCoderSaved: [ self recomputeActions.
-						anElement phlow fireToolUpdateWish.
-						anElement fireEvent: BrDropdownHideWish new ];
-					ensureMethodCoderViewModel;
-					sourceCode: 'gtACTIONNAME
+				| methodCoder |
+				methodCoder := GtPharoNewMethodCoderElement new
+						behavior: self class;
+						methodCoderViewModelValueHolder: valueHolder;
+						onMethodCoderSaved: [ self recomputeActions.
+							anElement phlow fireToolUpdateWish.
+							anElement fireEvent: BrDropdownHideWish new ];
+						ensureMethodCoderViewModel.
+				methodCoder pharoMethodCoderViewModel coderModel
+					currentSourceString: 'gtACTIONNAME
  	<gtLlmTutorAction>
  	^ GtLlmTutorAction new
  		name: '''';
  		priority: 1;
  		description: '''';
- 		examples: {}' ]
+ 		examples: {}'.
+				methodCoder ]
 ]
 
 { #category : #accessing }
@@ -160,20 +154,23 @@ GtOpenAIAnnotatedActionTutor >> gtFormatComponentsFor: aView [
 		actionDropdownButtonIcon: BrGlamorousVectorIcons add
 			tooltip: 'Add action'
 			content: [ :anElement | 
-				GtPharoNewMethodCoderElement new
-					behavior: self class;
-					methodCoderViewModelValueHolder: valueHolder;
-					onMethodCoderSaved: [ self initializeFormat.
-						anElement phlow fireToolUpdateWish.
-						anElement fireEvent: BrDropdownHideWish new ];
-					ensureMethodCoderViewModel;
-					sourceCode: 'gtFORMATCOMPONENTNAME
+				| methodCoder |
+				methodCoder := GtPharoNewMethodCoderElement new
+						behavior: self class;
+						methodCoderViewModelValueHolder: valueHolder;
+						onMethodCoderSaved: [ self initializeFormat.
+							anElement phlow fireToolUpdateWish.
+							anElement fireEvent: BrDropdownHideWish new ];
+						ensureMethodCoderViewModel.
+				methodCoder pharoMethodCoderViewModel coderModel
+					currentSourceString: 'gtFORMATCOMPONENTNAME
 	<gtLlmFormatComponent>
 	^ GtLlmTutorFormatComponent new
 		name: '''';
 		priority: 1;
 		format: '''';
-		example: ''''' ]
+		example: '''''.
+				methodCoder ]
 ]
 
 { #category : #accessing }
@@ -221,7 +218,9 @@ GtOpenAIAnnotatedActionTutor >> instructions [
 
 { #category : #'as yet unclassified' }
 GtOpenAIAnnotatedActionTutor >> recomputeActions [
-	actions removeAll addAll: self collectActions
+	actions removeAll addAll: self collectActions.
+	
+	self initializeInstructionSections
 ]
 
 { #category : #'as yet unclassified' }

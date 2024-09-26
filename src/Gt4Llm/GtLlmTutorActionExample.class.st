@@ -25,9 +25,18 @@ GtLlmTutorActionExample >> action: anObject [
 GtLlmTutorActionExample >> asExpression [
 	^ self class name asString
 		, ' new
-	inputJson: ''' , self inputJson
-		, ''';
-	outputJson: ''' , self outputJson , ''''
+	input: { '
+		, ('. '
+				join: (self input associations
+						collect: [ :aPair | '''' , aPair key , ''' -> ''' , aPair value , '''' ]))
+		, ' } asDictionary;
+	output: { '
+		, ('. '
+				join: (self output associations
+						collect: [ :aPair | 
+							'''' , aPair key , ''' -> '
+								, (aPair value ifNil: [ 'nil' ] ifNotNil: #surroundedBySingleQuotes) ]))
+		, ' } asDictionary'
 ]
 
 { #category : #accessing }

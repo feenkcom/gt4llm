@@ -26,7 +26,7 @@ GtOpenAIActionTutor >> addAction: anAction [
 { #category : #accessing }
 GtOpenAIActionTutor >> addChat [
 	| aChat |
-	aChat := GtOpenAIActionAssistantChat new
+	aChat := self chatClass new
 			assistant: self assistant;
 			actions: actions;
 			tutor: self;
@@ -40,6 +40,11 @@ GtOpenAIActionTutor >> addChat [
 { #category : #'as yet unclassified' }
 GtOpenAIActionTutor >> addFormatComponent: aComponent [
 	format addComponent: aComponent
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAIActionTutor >> chatClass [
+	^ GtOpenAIActionAssistantChat
 ]
 
 { #category : #accessing }
@@ -84,4 +89,9 @@ GtOpenAIActionTutor >> initialize [
 	super initialize.
 	actions := GtLlmActionsGroup new.
 	format := GtLlmTutorFormat new
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAIActionTutor >> messageClass [
+	^ GtOpenAIActionThreadMessage
 ]

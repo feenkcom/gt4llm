@@ -10,19 +10,6 @@ GtOpenAIViewActionAssistantChat >> instructions [
 ]
 
 { #category : #accessing }
-GtOpenAIViewActionAssistantChat >> messages [
-	<return: #GtOpenAIThreadMessagesGroup>
-	| givenMessages |
-	givenMessages := thread updateMessages.
-	^ GtOpenAIThreadMessagesGroup
-		withAll: (givenMessages
-				collect: [ :aMessage | 
-					(GtOpenAIViewActionThreadMessage from: aMessage serialize)
-						pipeline: self pipeline;
-						chat: self ])
-]
-
-{ #category : #accessing }
 GtOpenAIViewActionAssistantChat >> object: aMethod [
 	self pipeline instance object: aMethod
 ]
