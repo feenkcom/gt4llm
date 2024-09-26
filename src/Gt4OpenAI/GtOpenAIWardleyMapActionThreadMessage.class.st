@@ -69,7 +69,7 @@ GtOpenAIWardleyMapActionThreadMessage >> gtWardleyMapFor: aView [
 
 	^ aView explicit
 		title: 'Map';
-		priority: 1;
+		priority: 2;
 		stencil: [ GtWardleyMapElement new
 				wardleyMapViewModel: (GtWardleyMapViewModel new
 						wardleyMapModel: self diffedMapModel;

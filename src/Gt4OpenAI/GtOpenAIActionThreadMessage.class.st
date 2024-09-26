@@ -93,7 +93,9 @@ GtOpenAIActionThreadMessage >> gtTextFor: aView [
 
 	^ aView textEditor
 		title: 'Text';
-		priority: 2;
+		priority: 1;
+		styler: (GtLlmMessageStyler new
+				threadMessageViewModel: (GtLlmNewThreadMessageViewModel new threadMessage: GtLlmNewThreadMessage new));
 		text: [ self textBlock ]
 ]
 
