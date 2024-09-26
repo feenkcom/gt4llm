@@ -208,12 +208,11 @@ GtOpenAIAssistantChat >> messages [
 	<return: #GtOpenAIThreadMessagesGroup>
 	| givenMessages |
 	givenMessages := thread updateMessages.
-	givenMessages
-		do: [ :aMessage | 
-			aMessage
-				pipeline: self pipeline;
-				chat: self ].
 	^ givenMessages
+		collect: [ :aMessage | 
+			((self tutor messageClassFor: aMessage) from: aMessage serialize)
+				pipeline: self pipeline;
+				chat: self ]
 ]
 
 { #category : #accessing }

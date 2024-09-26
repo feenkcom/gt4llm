@@ -10,12 +10,12 @@ Class {
 
 { #category : #accessing }
 GtLlmTutorFormat >> actionComponent [
-	^ (GtLlmTutorFormatComponent new
-				name: 'Action';
-				format: 'Text';
-				example: '```
+	^ GtLlmTutorFormatComponent new beRequired
+		name: 'Action';
+		format: 'Text';
+		example: '```
 Create a draft
-```')
+```'
 ]
 
 { #category : #accessing }

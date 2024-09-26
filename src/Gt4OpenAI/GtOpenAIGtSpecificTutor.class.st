@@ -280,6 +280,11 @@ GtOpenAIGtSpecificTutor >> initialize [
 	apiFiles := GtOpenAIFilesGroup new
 ]
 
+{ #category : #'as yet unclassified' }
+GtOpenAIGtSpecificTutor >> messageClass [
+	^ GtOpenAIThreadMessage
+]
+
 { #category : #accessing }
 GtOpenAIGtSpecificTutor >> onApiKeyChanged [
 	client := GtOpenAIClient new apiKey: self apiKey

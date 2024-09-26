@@ -70,19 +70,6 @@ GtOpenAIActionAssistantChat >> initialize [
 	withRetry := true
 ]
 
-{ #category : #'as yet unclassified' }
-GtOpenAIActionAssistantChat >> messages [
-	<return: #GtOpenAIThreadMessagesGroup>
-	| givenMessages |
-	givenMessages := thread updateMessages.
-	^ GtOpenAIThreadMessagesGroup
-		withAll: (givenMessages
-				collect: [ :aMessage | 
-					(GtOpenAIActionThreadMessage from: aMessage serialize)
-						pipeline: self pipeline;
-						chat: self ])
-]
-
 { #category : #accessing }
 GtOpenAIActionAssistantChat >> onActionResult: aMessage [ 
 ]
