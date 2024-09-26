@@ -86,6 +86,24 @@ GtOpenAIActionThreadMessage >> gtPromoteToExampleActionFor: anAction [
 ]
 
 { #category : #accessing }
+GtOpenAIActionThreadMessage >> gtReifyActionFor: anAction [
+	<gtLlmAction>
+	(self isAssistantRole and: [ self action = 'Answer a chat request' ])
+		ifFalse: [ ^ anAction noAction ].
+
+	^ anAction dropdown
+		priority: 5;
+		label: 'Reify action';
+		content: [ :aButton | 
+			| action |
+			action := GtLlmTutorAction new
+					addExample: (GtLlmTutorActionExample new
+							input: self ancestor contentJson;
+							output: self contentJson).
+			action asGtMagritteViewModel asElement margin: (BlInsets all: 5) ]
+]
+
+{ #category : #accessing }
 GtOpenAIActionThreadMessage >> gtReifyMessageActionFor: anAction [
 	<gtLlmAction>
 	^ anAction dropdown

@@ -29,6 +29,8 @@ GtLlmTutorAction >> asExpression [
 		, ';
 		description: ''' , self description
 		, ''';
+		format: ''' , self format
+		, ''';
 		examples: {' , ('.
 			' join: (self examples collect: #asExpression)) , '}'
 ]
