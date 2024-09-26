@@ -218,7 +218,9 @@ GtOpenAIAnnotatedActionTutor >> instructions [
 
 { #category : #'as yet unclassified' }
 GtOpenAIAnnotatedActionTutor >> recomputeActions [
-	actions removeAll addAll: self collectActions
+	actions removeAll addAll: self collectActions.
+	
+	self initializeInstructionSections
 ]
 
 { #category : #'as yet unclassified' }
