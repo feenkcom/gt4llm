@@ -88,9 +88,6 @@ GtOpenAIActionThreadMessage >> gtPromoteToExampleActionFor: anAction [
 { #category : #accessing }
 GtOpenAIActionThreadMessage >> gtReifyActionFor: anAction [
 	<gtLlmAction>
-	| valueHolder |
-	valueHolder := ValueHolder new.
-
 	(self isAssistantRole and: [ self action = 'Answer a chat request' ])
 		ifFalse: [ ^ anAction noAction ].
 
@@ -98,23 +95,16 @@ GtOpenAIActionThreadMessage >> gtReifyActionFor: anAction [
 		priority: 5;
 		label: 'Reify action';
 		content: [ :anElement | 
-			| action methodCoder |
-			action := GtLlmTutorAction new
-					addExample: (GtLlmTutorActionExample new
-							input: self ancestor contentJson;
-							output: self contentJson).
-			methodCoder := GtPharoNewMethodCoderElement new
-					behavior: self chat tutor class;
-					methodCoderViewModelValueHolder: valueHolder;
-					onMethodCoderSaved: [ self chat tutor recomputeActions.
-						anElement phlow fireToolUpdateWish.
-						anElement fireEvent: BrDropdownHideWish new ];
-					ensureMethodCoderViewModel.
-			methodCoder pharoMethodCoderViewModel coderModel
-				currentSourceString: 'gtACTIONNAME
- 	<gtLlmTutorAction>
- 	^ ' , action asExpression.
-			methodCoder ]
+			GtLlmActionTemplateElement new
+				example: (GtLlmTutorActionExample new
+						input: self ancestor contentJson;
+						output: self contentJson);
+				onActionCreated: [ :action | 
+					self chat tutor class compile: action.
+					self chat tutor recomputeActions.
+					anElement phlow fireToolUpdateWish.
+					anElement fireEvent: BrDropdownHideWish new ];
+				padding: (BlInsets all: 5) ]
 ]
 
 { #category : #accessing }
