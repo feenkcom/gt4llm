@@ -7,7 +7,8 @@ Class {
 		'contentsElement',
 		'sendButton',
 		'toolbar',
-		'toggleGroup'
+		'toggleGroup',
+		'argument'
 	],
 	#category : #'Gt4Llm-Widgets'
 }
@@ -66,14 +67,11 @@ GtLlmNewActionThreadMessageElement >> initialize [
 
 { #category : #'initialization ' }
 GtLlmNewActionThreadMessageElement >> initializeContentsElement [
-	contentsElement := BrEditor new
+	contentsElement := BrEditor new beReadOnlyWithoutSelection
 			hMatchParent;
 			vFitContentLimited;
-			aptitude: BrGlamorousRegularEditorAptitude.
-
-	contentsElement editor
-		when: BrTextEditorModifiedEvent
-		do: [ :anEvent | self updateContents: anEvent text ].
+			aptitude: (BrGlamorousRegularEditorAptitude new
+					foreground: BrGlamorousColors disabledButtonTextColor).
 
 	contentsElement
 		addShortcut: (BrEditorShortcut new
@@ -119,6 +117,8 @@ GtLlmNewActionThreadMessageElement >> onThreadMessageViewModelChanged: anAnnounc
 { #category : #'private - actions' }
 GtLlmNewActionThreadMessageElement >> sendMessage [
 	threadMessageViewModel ifNil: [ ^ self ].
+	threadMessageViewModel currentAction hasArgument
+		ifTrue: [ threadMessageViewModel contents: argument string requester: self ].
 	threadMessageViewModel sendMessage
 ]
 
@@ -177,13 +177,16 @@ GtLlmNewActionThreadMessageElement >> updateToggleGroup [
 			toggleElement
 				when: BrToggleActivatedEvent
 				do: [ :anEvent | 
-					contentsElement beEditable text: ''.
-					self threadMessageViewModel currentAction: anAction.
+					| contentText |
+					contentText := anAction format asRopedText.
 					anAction hasArgument
-						ifFalse: [ contentsElement beReadOnlyWithSelection
-								text: ('' asRopedText
-										attribute: (BrGhostTextAttribute
-												for: (anAction format asRopedText foreground: Color lightGray))) ] ].
+						ifTrue: [ | index |
+							index := anAction format findString: '{1}'.
+							argument := GtSharedStringAttributeBuilder new string: 'argument'.
+							(contentText from: index to: index + 2)
+								attribute: argument editorAttribute ].
+					contentsElement text: contentText.
+					self threadMessageViewModel currentAction: anAction ].
 			toggleGroup addToggle: toggleElement ].
 	toggleGroup viewModel toggles
 		ifNotEmpty: [ :aGroupOfToggles | aGroupOfToggles first activate ]
