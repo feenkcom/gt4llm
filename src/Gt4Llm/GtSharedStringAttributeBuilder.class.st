@@ -22,8 +22,12 @@ GtSharedStringAttributeBuilder >> announcer [
 
 { #category : #'as yet unclassified' }
 GtSharedStringAttributeBuilder >> codeEditor [
-	^ self string asRopedText
-		attribute: (GtSharedStringAttribute new builder: self)
+	^ self string asRopedText attribute: self editorAttribute
+]
+
+{ #category : #'as yet unclassified' }
+GtSharedStringAttributeBuilder >> editorAttribute [
+	^ GtSharedStringAttribute new builder: self
 ]
 
 { #category : #accessing }
