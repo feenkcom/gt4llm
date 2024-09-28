@@ -153,9 +153,7 @@ GtLlmNewActionThreadMessageElement >> updateContents: aBlText [
 
 { #category : #'private - updating' }
 GtLlmNewActionThreadMessageElement >> updateContentsElement [
-	contentsElement
-		text: threadMessageViewModel contents;
-		styler: threadMessageViewModel styler
+	contentsElement styler: threadMessageViewModel styler
 ]
 
 { #category : #'private - updating' }
