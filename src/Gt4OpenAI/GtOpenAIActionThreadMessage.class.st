@@ -88,7 +88,9 @@ GtOpenAIActionThreadMessage >> gtPromoteToExampleActionFor: anAction [
 { #category : #accessing }
 GtOpenAIActionThreadMessage >> gtReifyActionFor: anAction [
 	<gtLlmAction>
-	(self isAssistantRole and: [ self action = 'Answer a chat request' ])
+	(self isAssistantRole
+		and: [ self action = 'Answer a chat request'
+				or: [ self action beginsWith: 'Chat request: ' ] ])
 		ifFalse: [ ^ anAction noAction ].
 
 	^ anAction dropdown
