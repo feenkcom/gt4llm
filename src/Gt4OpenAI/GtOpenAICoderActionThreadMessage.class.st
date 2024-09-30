@@ -29,7 +29,7 @@ GtOpenAICoderActionThreadMessage >> gtCodeFor: aView [
 	self smalltalkMethodCodeBlock ifNil: [ ^ aView empty ].
 
 	^ aView explicit
-		title: 'Coder';
+		title: 'Method';
 		priority: 1;
 		stencil: [ | methodSource coder |
 			methodSource := self smalltalkMethodSource.
@@ -42,7 +42,7 @@ GtOpenAICoderActionThreadMessage >> gtCodeFor: aView [
 				compareSourceFrom: methodSource methodSource
 				to: coder currentSourceString)
 				ifFalse: [ coder currentSourceString: methodSource methodSource ].
-			coder asElement ]
+			coder asExpandedOnlyElement vFitContentLimited]
 ]
 
 { #category : #accessing }
