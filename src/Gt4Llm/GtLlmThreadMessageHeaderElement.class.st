@@ -19,7 +19,9 @@ GtLlmThreadMessageHeaderElement >> addActionElement [
 				aptitude: (BrGlamorousLabelAptitude new
 						foreground: BrGlamorousColors disabledButtonTextColor);
 				beSmallSize;
-				text: self threadMessageViewModel action).
+				text: self threadMessageViewModel action;
+				when: BlClickEvent
+					do: [ :anEvent | anEvent target phlow spawnObject: self threadMessageViewModel actionModel ]).
 
 	self addChild: aFrame
 ]

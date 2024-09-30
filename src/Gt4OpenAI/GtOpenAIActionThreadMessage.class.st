@@ -9,6 +9,11 @@ GtOpenAIActionThreadMessage >> action [
 	^ self contentJson at: 'Action' ifAbsent: [ '' ]
 ]
 
+{ #category : #'as yet unclassified' }
+GtOpenAIActionThreadMessage >> actionModel [
+	^ self chat tutor actionNamed: self actionName
+]
+
 { #category : #accessing }
 GtOpenAIActionThreadMessage >> actionName [
 	^ self contentJson at: 'Action' ifAbsent: [ '' ]
@@ -48,7 +53,7 @@ GtOpenAIActionThreadMessage >> gtContentFor: aView [
 { #category : #accessing }
 GtOpenAIActionThreadMessage >> gtInspectActionFor: anAction [
 	<gtLlmAction>
-	(self chat tutor actionNamed: self actionName) ifNil: [ ^ anAction noAction ].
+	self actionModel ifNil: [ ^ anAction noAction ].
 
 	^ anAction button
 		priority: 1;
