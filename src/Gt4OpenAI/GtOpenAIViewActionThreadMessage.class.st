@@ -69,7 +69,10 @@ GtOpenAIViewActionThreadMessage >> gtViewFor: aView [
 
 	^ generatedView
 		title: 'Generated: ' , generatedView title;
-		priority: -10
+		priority: -10;
+		actionButtonIcon: BrGlamorousVectorIcons accept
+			tooltip: 'Save method'
+			action: [ instance compile: view ]
 ]
 
 { #category : #accessing }
