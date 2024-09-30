@@ -141,7 +141,7 @@ GtOpenAICoderActionThreadMessage >> gtTextFor: aView [
 
 	^ aView textEditor
 		title: 'Text';
-		priority: 2;
+		priority: 0;
 		text: [ self textCodeBlock ];
 		styler: (GtLlmMessageStyler new threadMessageViewModel: self)
 ]
