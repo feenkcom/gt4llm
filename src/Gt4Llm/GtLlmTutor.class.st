@@ -151,3 +151,11 @@ GtLlmTutor >> summaryItems [
 	^ {'Model' -> self model.
 		'Prompt' -> self instructions}
 ]
+
+{ #category : #accessing }
+GtLlmTutor >> valuePipelineFor: aValueHolder [
+	self
+		pipelineBuilder: [ GtLlmContext new
+				instance: aValueHolder;
+				isImmutableInstance: true ]
+]

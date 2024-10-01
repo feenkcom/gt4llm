@@ -6,7 +6,8 @@ Class {
 		'output',
 		'inputReferences',
 		'action',
-		'outputReferences'
+		'outputReferences',
+		'unverified'
 	],
 	#category : #'Gt4Llm-Tutor'
 }
@@ -103,7 +104,8 @@ GtLlmTutorActionExample >> initialize [
 	super initialize.
 	
 	inputReferences := OrderedCollection new.
-	outputReferences := OrderedCollection new
+	outputReferences := OrderedCollection new.
+	self markVerified
 ]
 
 { #category : #accessing }
@@ -144,6 +146,16 @@ GtLlmTutorActionExample >> inputReferences [
 { #category : #accessing }
 GtLlmTutorActionExample >> inputReferences: anObject [
 	inputReferences := anObject
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmTutorActionExample >> markUnverified [
+	unverified := true
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmTutorActionExample >> markVerified [
+	unverified := false
 ]
 
 { #category : #accessing }
@@ -201,7 +213,18 @@ GtLlmTutorActionExample >> resolveReferences [
 ]
 
 { #category : #accessing }
+GtLlmTutorActionExample >> unverified [
+	^ unverified
+]
+
+{ #category : #accessing }
+GtLlmTutorActionExample >> unverified: anObject [
+	unverified := anObject
+]
+
+{ #category : #accessing }
 GtLlmTutorActionExample >> verify [
+	unverified ifTrue: [ ^ self ].
 	self
 		assert: self output keys asSet
 				= (self action tutor formatComponents collect: #name) asSet

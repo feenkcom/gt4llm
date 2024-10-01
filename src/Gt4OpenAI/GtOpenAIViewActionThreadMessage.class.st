@@ -8,7 +8,7 @@ Class {
 GtOpenAIViewActionThreadMessage >> gtCodeFor: aView [
 	<gtView>
 	<gtLlmMessageView>
-	self smalltalkMethodCodeBlock ifEmpty: [ ^ aView empty ].
+	self smalltalkMethodCodeBlock isEmptyOrNil ifTrue: [ ^ aView empty ].
 
 	^ aView explicit
 		title: 'Coder';
@@ -51,7 +51,7 @@ GtOpenAIViewActionThreadMessage >> gtViewFor: aView [
 	<gtView>
 	<gtLlmMessageView>
 	| view ast return script viewVariableName instance generatedView |
-	self smalltalkMethodCodeBlock ifEmpty: [ ^ aView empty ].
+	self smalltalkMethodCodeBlock isEmptyOrNil ifTrue: [ ^ aView empty ].
 
 	view := self smalltalkMethodSource.
 	instance := self chat pipeline instance object.
