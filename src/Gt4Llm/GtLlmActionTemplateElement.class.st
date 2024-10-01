@@ -38,10 +38,10 @@ GtLlmActionTemplateElement >> createAction [
 		description: ''' , descriptionAttribute string
 			, ''';
 		examples: {GtLlmTutorActionExample new
-	input: { ''Action'' -> ''' , tutorNameAttribute string
-			, '''. ''Smalltalk method'' -> '''' } asDictionary;
-	output: { ''Renames'' -> nil. ''Action'' -> ''' , tutorNameAttribute string
-			, '''. ''Text'' -> ''The tutor is designed to interactively assist and guide on tasks related to Smalltalk methods and operations. It can propose refactoring for methods, offer renames for variables or methods, review methods for improvements, and explain or perform specified commands efficiently. Each interaction involves determining the action''''s requirements, executing it, and outputting the new state as per rules and examples given.''. ''Smalltalk method'' -> '''' } asDictionary}'.
+	input: { ' , (self finalExampleStringFor: self example input)
+			, ' } asDictionary;
+	output: { ' , (self finalExampleStringFor: self example output)
+			, ' } asDictionary}'.
 	self onActionCreated value: action
 ]
 
@@ -63,6 +63,25 @@ GtLlmActionTemplateElement >> exampleStringFor: anObject [
 			collect: [ :aPair | 
 				aPair key = 'Action'
 					ifTrue: [ '''Action'' -> ''' asRopedText , tutorNameAttribute codeEditor
+							, '''' asRopedText ]
+					ifFalse: [ (aPair key storeString , ' -> '
+							, (aPair value ifNil: [ 'nil' ] ifNotNil: #storeString)) asRopedText ] ]
+			separatedBy: '. ' asRopedText.
+
+	finalRope := '' asRopedText.
+
+	all do: [ :aRope | finalRope := finalRope , aRope ].
+
+	^ finalRope
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmActionTemplateElement >> finalExampleStringFor: anObject [
+	| all finalRope |
+	all := anObject associations
+			collect: [ :aPair | 
+				aPair key = 'Action'
+					ifTrue: [ '''Action'' -> ''' asRopedText , tutorNameAttribute string
 							, '''' asRopedText ]
 					ifFalse: [ (aPair key storeString , ' -> '
 							, (aPair value ifNil: [ 'nil' ] ifNotNil: #storeString)) asRopedText ] ]

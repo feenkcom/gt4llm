@@ -20,7 +20,13 @@ GtOpenAIAnnotatedActionTutor >> chatAction [
 		name: 'Answer a chat request';
 		priority: 1;
 		description: 'Answers a chat request using the text field.';
-		format: 'Chat request: {1}'
+		format: 'Chat request: {1}';
+		examples: {GtLlmTutorActionExample new markUnverified
+					input: {'Action' -> 'Chat request: How are you?'} asDictionary;
+					output: {'Action' -> 'Answer a chat request'.
+							'Text'
+								-> 'As an AI model, I do not have feelings. How can I assist you today?'}
+							asDictionary}
 ]
 
 { #category : #'as yet unclassified' }
