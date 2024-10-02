@@ -68,14 +68,11 @@ GtOpenAICoderActionThreadMessage >> gtDiffFor: aView [
 	diff := self diffSourceFrom: expected to: actual.
 	diff changes ifEmpty: [ ^ aView empty ].
 
-	^ aView explicit
+	^ aView diff
 		title: 'Diff';
 		priority: 2;
-		stencil: [ GtDiffElementWithLabelStencil new
-				fromLabelText: 'Current:';
-				toLabelText: 'Change:';
-				change: diff;
-				styler: GtCodeDiffRBTextStyler new ]
+		from: [ expected ];
+		to: [ actual ]
 ]
 
 { #category : #accessing }

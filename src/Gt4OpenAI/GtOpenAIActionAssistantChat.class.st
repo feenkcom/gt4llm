@@ -2,21 +2,10 @@ Class {
 	#name : #GtOpenAIActionAssistantChat,
 	#superclass : #GtOpenAIAssistantChat,
 	#instVars : [
-		'actions',
 		'withRetry'
 	],
 	#category : #'Gt4OpenAI-Chats'
 }
-
-{ #category : #accessing }
-GtOpenAIActionAssistantChat >> actions [
-	^ actions
-]
-
-{ #category : #accessing }
-GtOpenAIActionAssistantChat >> actions: anObject [
-	actions := anObject
-]
 
 { #category : #accessing }
 GtOpenAIActionAssistantChat >> asViewModel [
@@ -35,6 +24,19 @@ GtOpenAIActionAssistantChat >> gtInstanceChatWidgetFor: aView [
 				assistantChatViewModel: self asViewModel;
 				minimizeChat ];
 		actionUpdateButton
+]
+
+{ #category : #accessing }
+GtOpenAIActionAssistantChat >> gtViewActionsFor: aView [
+	<gtView>
+	
+	tutor ifNil: [ ^ aView empty ].
+	
+	^ aView forward
+		title: 'Actions';
+		priority: 25;
+		object: [ tutor ];
+		view: #gtActionsFor:
 ]
 
 { #category : #accessing }

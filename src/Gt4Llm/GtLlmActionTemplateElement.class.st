@@ -45,6 +45,11 @@ GtLlmActionTemplateElement >> createAction [
 	self onActionCreated value: action
 ]
 
+{ #category : #'as yet unclassified' }
+GtLlmActionTemplateElement >> descriptionString [
+	^ (self example input at: 'Action') copyReplaceAll: 'Chat request: ' with: ''
+]
+
 { #category : #accessing }
 GtLlmActionTemplateElement >> example [
 	^ example
@@ -146,7 +151,8 @@ GtLlmActionTemplateElement >> templatedText [
 	tutorNameAttribute := GtSharedStringAttributeBuilder new string: 'Action name'.
 
 	priorityAttribute := GtSharedStringAttributeBuilder new string: '10'.
-	descriptionAttribute := GtSharedStringAttributeBuilder new string: 'Description'.
+	descriptionAttribute := GtSharedStringAttributeBuilder new
+			string: self descriptionString.
 	actionNameAttribute := GtSharedStringAttributeBuilder new string: 'ACTIONNAME'.
 
 	template := 'gt' asRopedText , actionNameAttribute codeEditor
@@ -160,11 +166,10 @@ GtLlmActionTemplateElement >> templatedText [
 		description: ''' asRopedText , descriptionAttribute codeEditor
 			, ''';
 		examples: {GtLlmTutorActionExample new
-	input: { ' asRopedText
-			, (self exampleStringFor: self example input)
+	input: { ' asRopedText , (self exampleStringFor: self example input)
 			, ' } asDictionary;
-	output: { ' asRopedText
-			, (self exampleStringFor: self example output) , ' } asDictionary}' asRopedText.
+	output: { ' asRopedText , (self exampleStringFor: self example output)
+			, ' } asDictionary}' asRopedText.
 
 	^ ((GtCompositeSmaCCASTStyler forParser: GtPharoParser)
 		stylers: {GtSmaCCPharoStyler new.

@@ -11,7 +11,7 @@ Class {
 
 { #category : #accessing }
 GtLlmNewThreadMessage >> actions [
-	^ assistantChat actions
+	^ assistantChat tutor actions
 ]
 
 { #category : #accessing }
