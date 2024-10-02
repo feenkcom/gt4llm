@@ -123,7 +123,8 @@ GtOpenAIAnnotatedActionTutor >> gtActionsFor: aView [
  		priority: 1;
  		description: '''';
  		examples: {}'.
-				methodCoder ]
+				methodCoder ];
+		actionUpdateButton
 ]
 
 { #category : #accessing }
@@ -176,7 +177,8 @@ GtOpenAIAnnotatedActionTutor >> gtFormatComponentsFor: aView [
 		priority: 1;
 		format: '''';
 		example: '''''.
-				methodCoder ]
+				methodCoder ];
+		actionUpdateButton
 ]
 
 { #category : #accessing }

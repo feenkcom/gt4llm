@@ -31,7 +31,14 @@ GtLlmValueHolder >> content: anObject [
 { #category : #'as yet unclassified' }
 GtLlmValueHolder >> gtLiveFor: aView [
 	<gtView>
-	^ content gtLiveFor: aView
+	^ aView explicit
+		title: 'Content';
+		stencil: [ (content gtViewsFor: GtPhlowEmptyView new)
+				asElementDo: [ :e | 
+					e
+						margin: (BlInsets all: 15);
+						background: Color white;
+						addAptitude: BrShadowAptitude ] ]
 ]
 
 { #category : #accessing }
