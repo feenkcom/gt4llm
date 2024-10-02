@@ -28,7 +28,6 @@ GtOpenAIActionTutor >> addChat [
 	| aChat |
 	aChat := self chatClass new
 			assistant: self assistant;
-			actions: actions;
 			tutor: self;
 			responseFormat: self format asJsonSchema;
 			pipeline: pipelineBuilder value.

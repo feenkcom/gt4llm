@@ -29,11 +29,6 @@ GtOpenAIAnnotatedActionTutor >> chatAction [
 							asDictionary}
 ]
 
-{ #category : #'as yet unclassified' }
-GtOpenAIAnnotatedActionTutor >> chatClass [
-	^ GtOpenAIActionAssistantChat
-]
-
 { #category : #accessing }
 GtOpenAIAnnotatedActionTutor >> collectActions [
 	^ ((Pragma
