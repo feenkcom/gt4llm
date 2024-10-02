@@ -23,6 +23,15 @@ GtOpenAIActionAssistantChat >> asViewModel [
 	^ GtLlmActionChatViewModel new assistantChat: self
 ]
 
+{ #category : #'as yet unclassified' }
+GtOpenAIActionAssistantChat >> gtActionsFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Actions';
+		object: [ self tutor ];
+		view: #gtActionsFor:
+]
+
 { #category : #accessing }
 GtOpenAIActionAssistantChat >> gtInstanceChatWidgetFor: aView [
 	"cannot be a forward because the update wouldn’t work"
