@@ -10,6 +10,7 @@ Class {
 
 { #category : #accessing }
 GtLlmTutorFormat >> actionComponent [
+	<gtLlmFormatComponent>
 	^ GtLlmTutorFormatComponent new beRequired
 		name: 'Action';
 		format: 'Text';

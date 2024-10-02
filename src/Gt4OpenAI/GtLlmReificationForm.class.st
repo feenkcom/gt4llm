@@ -37,6 +37,24 @@ GtLlmReificationForm >> commit [
 		compile: 'messageClass
 	^ ' , newMessages name.
 
+	self message chat tutor actions
+		do: [ :action | 
+			(action definingMethod hasPragmaNamed: #gtLlmTutorAction)
+				ifFalse: [ newTutor
+						compile: 'gt' , (action name asCamelCase select: #isAlphaNumeric)
+								, 'Action
+	<gtLlmFormatComponent>
+	^ ' , action asExpression ] ].
+
+	self message chat tutor formatComponents
+		do: [ :formatComponent | 
+			(formatComponent definingMethod hasPragmaNamed: #gtLlmFormatComponent)
+				ifFalse: [ newTutor
+						compile: 'gt' , formatComponent name asCamelCase
+								, 'FormatComponent
+	<gtLlmFormatComponent>
+	^ ' , formatComponent asExpression ] ].
+
 	newTutor adoptInstance: self message chat tutor
 ]
 

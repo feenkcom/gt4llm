@@ -123,7 +123,11 @@ GtOpenAIActionThreadMessage >> gtReifyMessageActionFor: anAction [
 		content: [ :aButton | 
 			(GtLlmReificationForm new
 				message: self;
-				onAccept: [ :aValue | aButton phlow spawnObject: self chat ]) asElement
+				onAccept: [ :aValue | 
+					aButton
+						enqueueTask: (BlTaskAction new
+								action: [ aButton phlow fireToolUpdateWish.
+									aButton fireEvent: BrDropdownHideWish new ]) ]) asElement
 				margin: (BlInsets all: 5) ]
 ]
 
