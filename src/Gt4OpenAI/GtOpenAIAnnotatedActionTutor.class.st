@@ -247,3 +247,21 @@ Multiple lines, multiple paragraphs are allowed.
 # Headings exist as well
 ```'
 ]
+
+{ #category : #'as yet unclassified' }
+GtOpenAIAnnotatedActionTutor >> textValuePipelineFor: post withName: aString [
+	self
+		addFormatComponent: (GtLlmTutorFormatComponent new
+				name: aString;
+				format: 'Text';
+				example: '').
+	self valuePipelineFor: post withName: aString
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAIAnnotatedActionTutor >> valuePipelineFor: post withName: aString [
+	self
+		valuePipelineFor: (GtLlmValueHolder new
+				name: aString;
+				content: post)
+]

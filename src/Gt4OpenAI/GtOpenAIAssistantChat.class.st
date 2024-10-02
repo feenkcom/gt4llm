@@ -151,7 +151,7 @@ GtOpenAIAssistantChat >> gtMessagesWidgetFor: aView [
 	| aViewModel |
 	^ aView explicit
 		title: 'Chat';
-		priority: 0;
+		priority: -1;
 		stencil: [ aViewModel
 				ifNil: [ aViewModel := self asViewModel ].
 			GtLlmChatElement new assistantChatViewModel: aViewModel ];

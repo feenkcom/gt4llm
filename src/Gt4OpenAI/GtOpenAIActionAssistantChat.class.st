@@ -39,7 +39,7 @@ GtOpenAIActionAssistantChat >> gtInstanceChatWidgetFor: aView [
 	<gtView>
 	^ aView explicit
 		title: 'Instance + chat';
-		priority: -1;
+		priority: 0;
 		stencil: [ GtLlmInstanceChatElement new
 				assistantChatViewModel: self asViewModel;
 				minimizeChat ];
