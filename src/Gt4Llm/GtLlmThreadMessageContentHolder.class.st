@@ -117,8 +117,9 @@ GtLlmThreadMessageContentHolder >> views: aCollectionOfViews [
 { #category : #accessing }
 GtLlmThreadMessageContentHolder >> viewsToTabGroup: aCollectionOfViews [
 	"(GtPhlowCompositeView new views: aCollectionOfViews)
-		asElementDo: [ :e | e vFitContentLimited ]  "	
-	| tabs |
+		asElementDo: [ :e | e vFitContentLimited ]  "
+
+	| tabs aTabGroup aListener aBuildContext |
 	tabs := OrderedCollection new.
 	aCollectionOfViews
 		do: [ :view | 
@@ -139,7 +140,29 @@ GtLlmThreadMessageContentHolder >> viewsToTabGroup: aCollectionOfViews [
 						toolbarStencil: [ view actionsToolbarForElement: aTab ].
 					view attachTooltipFor: aTab.
 					tabs add: aTab ] ].
-	^ BrTabGroup new vFitContentLimited
-		aptitude: BrGlamorousTabGroupAptitude;
-		addTabs: tabs
+	aTabGroup := BrTabGroup new
+			vFitContentLimited;
+			aptitude: BrGlamorousTabGroupAptitude;
+			addTabs: tabs.
+	aTabGroup phlow entity: (GtPhlowCompositeView new views: aCollectionOfViews).
+	aBuildContext := GtPhlowBuildContext new 
+					object: self threadMessageViewModel threadMessage.
+			
+	aListener := GtPhlowClassPragmaChangeListener new
+		interestingPragmas: GtLlmBasicThreadMessageViewModel messageViewPragmas;
+		interestingClass: GtOpenAIThreadMessage;
+		onMethodAddedAction: (GtPhlowChangeTabGroupAddTabAction new
+			tabGroup: aTabGroup;
+			buildContext: aBuildContext;
+			contentsBuilder: [ :aPhlowView | [ 
+				aPhlowView asElementDo: [ :anElement | 
+					anElement phlow beViewContent.
+					anElement ] ] ]);
+		onMethodRemovedAction: (GtPhlowChangeTabGroupRemoveTabAction new
+			tabGroup: aTabGroup);
+		subscribeToSystem.
+			
+	aTabGroup userData at: GtPhlowClassPragmaChangeListener put: aListener.
+			
+	^ aTabGroup
 ]
