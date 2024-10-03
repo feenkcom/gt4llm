@@ -142,11 +142,16 @@ GtLlmTutorAction >> formatReferences [
 { #category : #'as yet unclassified' }
 GtLlmTutorAction >> gtDefinitionFor: aView [
 	<gtView>
-	^ aView forward
+	^ aView explicit
 		title: 'Definition';
 		priority: 1;
-		object: [ definingMethod ];
-		view: #gtSourceFor:
+		actionButtonIcon: BrGlamorousVectorIcons browse
+			tooltip: 'Browse method'
+			action: [ self definingMethod gtBrowse ];
+		stencil: [ | coder |
+			coder := GtPharoMethodCoder forMethod: self definingMethod.
+			coder addOns addStyler: (GtLlmTutorFormatStyler new tutor: self tutor).
+			coder asExpandedOnlyElement vFitContentLimited ]
 ]
 
 { #category : #accessing }
