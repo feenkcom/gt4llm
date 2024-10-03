@@ -35,19 +35,25 @@ GtLlmActionTemplateElement >> createAction [
 			, ''';
 	    priority: ' , priorityAttribute string
 			, ';
-		description: ''' , descriptionAttribute string
-			, ''';
+		description: ''' , descriptionAttribute string , '''' asRopedText.
+
+	self example
+		ifNotNil: [ action := action
+					, ';
 		examples: {GtLlmTutorActionExample new
 	input: { ' , (self finalExampleStringFor: self example input)
-			, ' } asDictionary;
+					, ' } asDictionary;
 	output: { ' , (self finalExampleStringFor: self example output)
-			, ' } asDictionary}'.
+					, ' } asDictionary}' ].
+
 	self onActionCreated value: action
 ]
 
 { #category : #'as yet unclassified' }
 GtLlmActionTemplateElement >> descriptionString [
-	^ (self example input at: 'Action') copyReplaceAll: 'Chat request: ' with: ''
+	^ self example
+		ifNil: [ 'Description' ]
+		ifNotNil: [ (self example input at: 'Action') copyReplaceAll: 'Chat request: ' with: '' ]
 ]
 
 { #category : #accessing }
@@ -115,8 +121,9 @@ GtLlmActionTemplateElement >> initialize [
 { #category : #'as yet unclassified' }
 GtLlmActionTemplateElement >> initializeCodeEditor [
 	codeEditor := BrEditor new beReadOnlyWithSelection
-			size: 400@400;
-			aptitude: BrGlamorousCodeEditorAptitude
+			size: 400 @ 400;
+			aptitude: BrGlamorousCodeEditorAptitude;
+			text: self templatedText
 ]
 
 { #category : #'as yet unclassified' }
@@ -164,12 +171,16 @@ GtLlmActionTemplateElement >> templatedText [
 	    priority: ' asRopedText , priorityAttribute codeEditor
 			, ';
 		description: ''' asRopedText , descriptionAttribute codeEditor
-			, ''';
+			, '''' asRopedText.
+
+	self example
+		ifNotNil: [ template := template
+					, ';
 		examples: {GtLlmTutorActionExample new
 	input: { ' asRopedText , (self exampleStringFor: self example input)
-			, ' } asDictionary;
+					, ' } asDictionary;
 	output: { ' asRopedText , (self exampleStringFor: self example output)
-			, ' } asDictionary}' asRopedText.
+					, ' } asDictionary}' asRopedText ].
 
 	^ ((GtCompositeSmaCCASTStyler forParser: GtPharoParser)
 		stylers: {GtSmaCCPharoStyler new.
