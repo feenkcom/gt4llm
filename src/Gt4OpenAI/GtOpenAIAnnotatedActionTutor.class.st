@@ -54,11 +54,6 @@ GtOpenAIAnnotatedActionTutor >> defaultAssistantDescription [
 ]
 
 { #category : #accessing }
-GtOpenAIAnnotatedActionTutor >> formatComponentNamed: aName [
-	^ format componentNamed: aName
-]
-
-{ #category : #accessing }
 GtOpenAIAnnotatedActionTutor >> formatComponents [
 	^ self format components
 ]

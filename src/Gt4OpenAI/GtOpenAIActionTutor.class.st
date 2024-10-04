@@ -63,6 +63,11 @@ GtOpenAIActionTutor >> format: anObject [
 	format := anObject
 ]
 
+{ #category : #'as yet unclassified' }
+GtOpenAIActionTutor >> formatComponentNamed: aName [
+	^ format componentNamed: aName
+]
+
 { #category : #accessing }
 GtOpenAIActionTutor >> gtActionsFor: aView [
 	<gtView>
