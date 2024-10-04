@@ -150,7 +150,7 @@ GtLlmThreadMessageContentHolder >> viewsToTabGroup: aCollectionOfViews [
 			
 	aListener := GtPhlowClassPragmaChangeListener new
 		interestingPragmas: GtLlmBasicThreadMessageViewModel messageViewPragmas;
-		interestingClass: GtOpenAIThreadMessage;
+		interestingClass: GtLlmEntity;
 		onMethodAddedAction: (GtPhlowChangeTabGroupAddTabAction new
 			tabGroup: aTabGroup;
 			buildContext: aBuildContext;
