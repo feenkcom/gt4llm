@@ -47,9 +47,10 @@ GtLlmExpandableThreadMessageElement >> initialize [
 
 { #category : #'initialization ' }
 GtLlmExpandableThreadMessageElement >> initializeOneLineThreadMessageElement [
-	oneLineThreadMessageElement := GtLlmThreadMessageElement new
+	"oneLineThreadMessageElement := GtLlmThreadMessageElement new
 			contentsAptitudeDo: [ :anAptitude | 
-				anAptitude foreground: BrGlamorousColors disabledButtonTextColor ]
+				anAptitude foreground: BrGlamorousColors disabledButtonTextColor ]"
+	oneLineThreadMessageElement := GtLlmThreadMessageHeaderElement new.
 ]
 
 { #category : #'initialization ' }
@@ -70,7 +71,7 @@ GtLlmExpandableThreadMessageElement >> onExpanded [
 { #category : #'private - hooks' }
 GtLlmExpandableThreadMessageElement >> onThreadMessageViewModelChanged [
 	oneLineThreadMessageElement
-		threadMessageViewModel: threadMessageViewModel asOneLineViewModel.
+		threadMessageViewModel: threadMessageViewModel.
 	threadMessageElement threadMessageViewModel: threadMessageViewModel.
 	self expanded: threadMessageViewModel isExpanded
 ]
