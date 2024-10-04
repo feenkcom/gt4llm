@@ -11,6 +11,11 @@ Class {
 	#category : #'Gt4Llm-Widgets'
 }
 
+{ #category : #accessing }
+GtLlmBasicThreadMessageViewModel class >> messageViewPragmas [
+	^ #(#gtLlmMessageView)
+]
+
 { #category : #'as yet unclassified' }
 GtLlmBasicThreadMessageViewModel >> ancestor [
 	^ self threadMessage ancestor
@@ -50,6 +55,18 @@ GtLlmBasicThreadMessageViewModel >> elementClass [
 	^ self subclassResponsibility
 ]
 
+{ #category : #'gt - extensions' }
+GtLlmBasicThreadMessageViewModel >> gtMessageViewsFor: aView [
+	<gtView>
+	^ aView columnedList
+		title: 'Message views';
+		items: [ self messageViews ];
+		column: 'Index'
+			text: [ :_ :anIndex | anIndex ]
+			width: 40;
+		column: 'Viw' text: #yourself
+]
+
 { #category : #accessing }
 GtLlmBasicThreadMessageViewModel >> id [
 	^ threadMessage id
@@ -80,10 +97,15 @@ GtLlmBasicThreadMessageViewModel >> messageToolbarActions [
 ]
 
 { #category : #accessing }
+GtLlmBasicThreadMessageViewModel >> messageViewPragmas [
+	^ self class messageViewPragmas
+]
+
+{ #category : #accessing }
 GtLlmBasicThreadMessageViewModel >> messageViews [
 	^ GtPhlowViewsCollector new
 		fromObject: self threadMessage;
-		pragmaNames: #(#gtLlmMessageView);
+		pragmaNames: self messageViewPragmas;
 		collect
 ]
 

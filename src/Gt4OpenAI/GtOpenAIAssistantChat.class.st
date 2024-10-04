@@ -183,6 +183,11 @@ GtOpenAIAssistantChat >> initialize [
 ]
 
 { #category : #'as yet unclassified' }
+GtOpenAIAssistantChat >> instanceContent [
+	^ self pipeline instance content
+]
+
+{ #category : #'as yet unclassified' }
 GtOpenAIAssistantChat >> instructions [
 	^ assistant instructions
 ]
