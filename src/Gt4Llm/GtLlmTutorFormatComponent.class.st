@@ -35,11 +35,17 @@ GtLlmTutorFormatComponent >> addOutputReference: anAction [
 
 { #category : #'as yet unclassified' }
 GtLlmTutorFormatComponent >> asExpression [
-	^ self class name, ' new
-	type: ', self type storeString, ';
-	name: ', self name storeString, ';
-	priority: ', self priority asString, ';
-	example: ', self example storeString
+	^ self class name
+		, ' new
+	type: ' , self type storeString
+		, ';
+	format: ' , self format storeString
+		, ';
+	name: ' , self name storeString
+		, ';
+	priority: ' , self priority asString
+		, ';
+	example: ' , self example storeString
 ]
 
 { #category : #accessing }

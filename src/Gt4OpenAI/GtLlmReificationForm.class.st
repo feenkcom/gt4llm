@@ -37,6 +37,10 @@ GtLlmReificationForm >> commit [
 		compile: 'messageClass
 	^ ' , newMessages name.
 
+	newTutor
+		compile: 'formatName
+	^ ' , self message chat tutor formatName storeString.
+
 	self message chat tutor actions
 		do: [ :action | 
 			(action definingMethod hasPragmaNamed: #gtLlmTutorAction)
