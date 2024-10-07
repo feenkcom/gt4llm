@@ -33,32 +33,9 @@ GtLlmReificationForm >> commit [
 			poolDictionaries: ''
 			package: package categoryName asString.
 
-	newTutor
-		compile: 'messageClass
-	^ ' , newMessages name.
-
-	newTutor
-		compile: 'formatName
-	^ ' , self message chat tutor formatName storeString.
-
-	self message chat tutor actions
-		do: [ :action | 
-			(action definingMethod hasPragmaNamed: #gtLlmTutorAction)
-				ifFalse: [ newTutor
-						compile: 'gt' , (action name asCamelCase select: #isAlphaNumeric)
-								, 'Action
-	<gtLlmFormatComponent>
-	^ ' , action asExpression ] ].
-
-	self message chat tutor formatComponents
-		do: [ :formatComponent | 
-			(formatComponent definingMethod hasPragmaNamed: #gtLlmFormatComponent)
-				ifFalse: [ newTutor
-						compile: 'gt' , formatComponent name asCamelCase
-								, 'FormatComponent
-	<gtLlmFormatComponent>
-	^ ' , formatComponent asExpression ] ].
-
+	self installMethodsOnMessages: newMessages andTutor: newTutor.
+	self installActionsOn: newTutor.
+	self installFormatComponentsOn: newTutor.
 	newTutor adoptInstance: self message chat tutor
 ]
 
@@ -84,6 +61,48 @@ GtLlmReificationForm >> initialize [
 	
 	self messageClassName: ''.
 	self tutorClassName: ''
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmReificationForm >> installActionsOn: newTutor [
+	self message chat tutor actions
+		do: [ :action | 
+			(action definingMethod hasPragmaNamed: #gtLlmTutorAction)
+				ifFalse: [ newTutor
+						compile: 'gt' , (action name asCamelCase select: #isAlphaNumeric)
+								, 'Action
+	<gtLlmFormatComponent>
+	^ ' , action asExpression ] ]
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmReificationForm >> installFormatComponentsOn: newTutor [
+	self message chat tutor formatComponents
+		do: [ :formatComponent | 
+			(formatComponent definingMethod hasPragmaNamed: #gtLlmFormatComponent)
+				ifFalse: [ newTutor
+						compile: 'gt' , formatComponent name asCamelCase
+								, 'FormatComponent
+	<gtLlmFormatComponent>
+	^ ' , formatComponent asExpression ] ]
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmReificationForm >> installMethodsOnMessages: newMessages andTutor: newTutor [
+	newTutor
+		compile: 'messageClass
+	^ ' , newMessages name.
+
+	newTutor
+		compile: 'formatName
+	^ ' , self message chat tutor formatName storeString.
+
+
+	(self message chat pipeline instance isKindOf: GtLlmValueHolder)
+		ifTrue: [ newTutor
+				compile: 'forObject: anObject
+	^ self valuePipelineFor: anObject withName: '
+						, self message chat pipeline instance name storeString ]
 ]
 
 { #category : #accessing }
