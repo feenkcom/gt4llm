@@ -126,8 +126,8 @@ GtOpenAIAssistantChat >> gtInstanceFor: aView [
 	^ aView forward
 		title: 'Instance';
 		priority: 1;
-		object: [ pipeline ];
-		view: #gtInstanceFor:
+		object: [ self instance ];
+		view: #gtLiveFor:
 ]
 
 { #category : #accessing }
@@ -180,6 +180,11 @@ GtOpenAIAssistantChat >> gtSummaryFor: aView [
 { #category : #accessing }
 GtOpenAIAssistantChat >> initialize [
 	files := GtOpenAIFilesGroup new
+]
+
+{ #category : #accessing }
+GtOpenAIAssistantChat >> instance [
+	^ pipeline instance
 ]
 
 { #category : #'as yet unclassified' }
