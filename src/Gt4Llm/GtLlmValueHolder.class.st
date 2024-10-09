@@ -29,6 +29,11 @@ GtLlmValueHolder >> content: anObject [
 ]
 
 { #category : #'as yet unclassified' }
+GtLlmValueHolder >> contentValue [
+	^ self content
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmValueHolder >> gtLiveFor: aView [
 	<gtView>
 	^ aView explicit
@@ -53,5 +58,10 @@ GtLlmValueHolder >> name: anObject [
 
 { #category : #'as yet unclassified' }
 GtLlmValueHolder >> serialize [
-	^ name -> content
+	^ name -> self contentValue
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmValueHolder >> updateContent: aValue [
+	content := aValue
 ]
