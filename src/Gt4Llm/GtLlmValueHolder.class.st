@@ -55,3 +55,8 @@ GtLlmValueHolder >> name: anObject [
 GtLlmValueHolder >> serialize [
 	^ name -> content
 ]
+
+{ #category : #'as yet unclassified' }
+GtLlmValueHolder >> value [
+	^ self content
+]

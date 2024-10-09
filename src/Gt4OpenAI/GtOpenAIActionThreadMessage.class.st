@@ -20,12 +20,6 @@ GtOpenAIActionThreadMessage >> actionName [
 ]
 
 { #category : #accessing }
-GtOpenAIActionThreadMessage >> contentJson [
-	self contentText ifEmpty: [ ^ {} asDictionary ].
-	^ STONJSON fromString: self contentText
-]
-
-{ #category : #accessing }
 GtOpenAIActionThreadMessage >> contentSummary [
 	^ self action
 ]

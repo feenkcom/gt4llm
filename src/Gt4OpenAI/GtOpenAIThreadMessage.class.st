@@ -121,6 +121,12 @@ GtOpenAIThreadMessage >> content: anObject [
 ]
 
 { #category : #accessing }
+GtOpenAIThreadMessage >> contentJson [
+	self contentText ifEmpty: [ ^ {} asDictionary ].
+	^ STONJSON fromString: self contentText
+]
+
+{ #category : #accessing }
 GtOpenAIThreadMessage >> contentSummary [
 	^ self contentText lines ifEmpty: [ '' ] ifNotEmpty: #first
 ]
@@ -191,7 +197,7 @@ GtOpenAIThreadMessage >> gtJsonDataFor: aView context: aContext [
 	self chat responseFormat ifNil: [ ^ aView empty ].
 	self contentText ifEmpty: [ ^ aView empty ].
 
-	^ ((STONJSON fromString: self contentText) gtTreeFor: aView context: aContext)
+	^ (self contentJson gtTreeFor: aView context: aContext)
 		title: 'JSON data';
 		priority: 4.5
 ]
