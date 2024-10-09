@@ -58,7 +58,7 @@ GtOpenAIBlogPostTutor >> formatName [
 
 { #category : #'as yet unclassified' }
 GtOpenAIBlogPostTutor >> messageClass [
-	^ GtOpenAIStepThreadMessage
+	^ GtOpenAIBlogPostAssistantThreadMessage
 ]
 
 { #category : #'as yet unclassified' }
