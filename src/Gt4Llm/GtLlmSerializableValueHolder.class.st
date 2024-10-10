@@ -14,6 +14,20 @@ GtLlmSerializableValueHolder >> contentValue [
 ]
 
 { #category : #'as yet unclassified' }
+GtLlmSerializableValueHolder >> gtSerializedFor: aView [
+	<gtView>
+	^ aView explicit
+		title: 'Serialized';
+		priority: 2;
+		stencil: [ (self contentValue gtViewsFor: GtPhlowEmptyView new)
+				asElementDo: [ :e | 
+					e
+						margin: (BlInsets all: 15);
+						background: Color white;
+						addAptitude: BrShadowAptitude ] ]
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmSerializableValueHolder >> initialize [
 	super initialize.
 

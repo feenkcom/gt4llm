@@ -38,6 +38,7 @@ GtLlmValueHolder >> gtLiveFor: aView [
 	<gtView>
 	^ aView explicit
 		title: 'Content';
+		priority: 1;
 		stencil: [ (content gtViewsFor: GtPhlowEmptyView new)
 				asElementDo: [ :e | 
 					e
