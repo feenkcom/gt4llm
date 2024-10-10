@@ -40,7 +40,8 @@ BaselineOfGt4Llm >> baseline: spec [
 
 			spec
 				baseline: 'Gt4OpenAI'
-				with: [ spec repository: 'github://feenkcom/gt4llm:main/src' ] ]
+				with: [ spec repository: 'github://feenkcom/gt4llm:main/src' ].
+			spec package: 'Gt4Llm-Demo' ]
 ]
 
 { #category : #accessing }
