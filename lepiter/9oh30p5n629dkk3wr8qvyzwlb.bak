@@ -215,14 +215,48 @@
 								"__type" : "time",
 								"time" : {
 									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2024-10-12T23:49:18.387814+02:00"
+									"dateAndTimeString" : "2024-10-10T22:26:32.002574+02:00"
 								}
 							},
 							"uid" : {
 								"__type" : "uid",
 								"uidString" : "1WPFbYbgDQCJc8fKBRiBow=="
 							},
-							"code" : "demoTutor := GtDPostTutor withApiKeyFromFile\r\t\tvaluePipelineFor: (GtLlmSerializableValueHolder new\r\t\t\t\tname: 'Post';\r\t\t\t\tcontent: thisSnippet page children first children first;\r\t\t\t\tserializer: [ :aSnippet | aSnippet text asString ];\r\t\t\t\tupdater: [ :aSnippet :aText | \r\t\t\t\t\t(aSnippet commandBuilder editTextualSnippetCommand\r\t\t\t\t\t\tstring: aText\r\t\t\t\t\t\twithSource: demoTutor -> true) execute ]).\rdemoChat := demoTutor createAssistant addChat"
+							"code" : "demoTutor := GtDPostTutor withApiKeyFromFile\r\t\tforObject: (GtLlmSerializableValueHolder new\r\t\t\t\tname: 'Post';\r\t\t\t\tcontent: thisSnippet page children first children first;\r\t\t\t\tserializer: [ :aSnippet | aSnippet text asString ];\r\t\t\t\tupdater: [ :aSnippet :aText | \r\t\t\t\t\t(aSnippet commandBuilder editTextualSnippetCommand\r\t\t\t\t\t\tstring: aText\r\t\t\t\t\t\twithSource: demoTutor -> true) execute ]).\rdemoChat := demoTutor createAssistant addChat"
+						},
+						{
+							"__type" : "pharoSnippet",
+							"children" : {
+								"__type" : "snippets",
+								"items" : [ ]
+							},
+							"createEmail" : {
+								"__type" : "email",
+								"emailString" : "<unknown>"
+							},
+							"createTime" : {
+								"__type" : "time",
+								"time" : {
+									"__type" : "dateAndTime",
+									"dateAndTimeString" : "2024-10-12T23:48:44.675342+02:00"
+								}
+							},
+							"editEmail" : {
+								"__type" : "email",
+								"emailString" : "<unknown>"
+							},
+							"editTime" : {
+								"__type" : "time",
+								"time" : {
+									"__type" : "dateAndTime",
+									"dateAndTimeString" : "2024-10-12T23:48:45.625825+02:00"
+								}
+							},
+							"uid" : {
+								"__type" : "uid",
+								"uidString" : "iTL/TbDgDQCptHqMD+XoGg=="
+							},
+							"code" : "demoTutor := GtDPostTutor withApiKeyFromFile\r\t\tforObject: (GtLlmSerializableValueHolder new\r\t\t\t\tname: 'Post';\r\t\t\t\tcontent: thisSnippet page children first children first;\r\t\t\t\tserializer: [ :aSnippet | aSnippet text asString ];\r\t\t\t\tupdater: [ :aSnippet :aText | \r\t\t\t\t\t(aSnippet commandBuilder editTextualSnippetCommand\r\t\t\t\t\t\tstring: aText\r\t\t\t\t\t\twithSource: demoTutor -> true) execute ]).\rdemoChat := demoTutor createAssistant addChat"
 						}
 					]
 				},
