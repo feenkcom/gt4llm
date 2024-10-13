@@ -20,19 +20,19 @@ GtLlmTutorAction >> addExample: anExample [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmTutorAction >> asExpression [
+GtLlmTutorAction >> asExpressionSource [
 	^ self class name asString
 		, ' new
-	name: ''' , self name
-		, ''';
+	name: ' , self name storeString
+		, ';
 	priority: ' , self priority asString
 		, ';
-		description: ''' , self description
-		, ''';
-		format: ''' , self format
-		, ''';
+		description: ' , self description storeString
+		, ';
+		format: ' , self format storeString
+		, ';
 		examples: {' , ('.
-			' join: (self examples collect: #asExpression)) , '}'
+			' join: (self examples collect: #asExpressionSource)) , '}'
 ]
 
 { #category : #accessing }
@@ -46,6 +46,16 @@ GtLlmTutorAction >> asInstruction [
 						source: self;
 						title: 'Examples';
 						body: (GtLlmCompositeInstruction new items: self examples)))
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmTutorAction >> asMethodSource [
+	| methodSource |
+	methodSource := self definingMethod selector asString
+			, '
+	<gtLlmTutorAction>
+	^ ' , self asExpressionSource.
+	^ methodSource
 ]
 
 { #category : #accessing }
@@ -261,13 +271,12 @@ GtLlmTutorAction >> outputReferences [
 
 { #category : #'as yet unclassified' }
 GtLlmTutorAction >> persist [
-	self definingMethod methodClass
-		compile: (RBConfigurableFormatter
-				format: (RBParser
-						parseMethod: self definingMethod selector asString
-								, '
-	<gtLlmTutorAction>
-	^ ' , self asExpression)).
+	| methodSource |
+	methodSource := self asMethodSource.
+
+	GtPharoParser
+		parse: methodSource self definingMethod methodClass
+		compile: (RBConfigurableFormatter format: (RBParser parseMethod: methodSource)).
 	definingMethod := self definingMethod methodClass
 			>> self definingMethod selector
 ]

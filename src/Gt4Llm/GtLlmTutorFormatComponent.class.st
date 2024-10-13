@@ -34,7 +34,7 @@ GtLlmTutorFormatComponent >> addOutputReference: anAction [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmTutorFormatComponent >> asExpression [
+GtLlmTutorFormatComponent >> asExpressionSource [
 	^ self class name
 		, ' new
 	type: ' , self type storeString

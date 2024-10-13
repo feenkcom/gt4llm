@@ -72,7 +72,7 @@ GtLlmReificationForm >> installActionsOn: newTutor [
 						compile: 'gt' , (action name asCamelCase select: #isAlphaNumeric)
 								, 'Action
 	<gtLlmFormatComponent>
-	^ ' , action asExpression ] ]
+	^ ' , action asExpressionSource ] ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -84,7 +84,7 @@ GtLlmReificationForm >> installFormatComponentsOn: newTutor [
 						compile: 'gt' , formatComponent name asCamelCase
 								, 'FormatComponent
 	<gtLlmFormatComponent>
-	^ ' , formatComponent asExpression ] ]
+	^ ' , formatComponent asExpressionSource ] ]
 ]
 
 { #category : #'as yet unclassified' }
