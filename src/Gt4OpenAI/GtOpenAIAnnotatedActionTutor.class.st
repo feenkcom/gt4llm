@@ -73,6 +73,25 @@ GtOpenAIAnnotatedActionTutor >> ensureComponentIsReferenced: aFormatComponent [
 					anAction persist ] ]
 ]
 
+{ #category : #'as yet unclassified' }
+GtOpenAIAnnotatedActionTutor >> formatComponentMethodCoderForSource: aString [
+	| methodCoder |
+	methodCoder := GtPharoNewMethodCoderElement new
+			behavior: self class;
+			onMethodCoderSaved: [ :anAnnouncement | 
+				| method formatComponent |
+				method := anAnnouncement method.
+				formatComponent := self perform: method selector.
+				self ensureComponentIsReferenced: formatComponent.
+				self initializeFormat.
+				self recomputeActions.
+				methodCoder phlow fireToolUpdateWish.
+				methodCoder fireEvent: BrDropdownHideWish new ];
+			ensureMethodCoderViewModel.
+	methodCoder pharoMethodCoderViewModel coderModel currentSourceString: aString.
+	^ methodCoder
+]
+
 { #category : #accessing }
 GtOpenAIAnnotatedActionTutor >> formatComponents [
 	^ self format components
@@ -173,29 +192,14 @@ GtOpenAIAnnotatedActionTutor >> gtFormatComponentsFor: aView [
 		actionDropdownButtonIcon: BrGlamorousVectorIcons add
 			tooltip: 'Add action'
 			content: [ :anElement | 
-				| methodCoder |
-				methodCoder := GtPharoNewMethodCoderElement new
-						behavior: self class;
-						methodCoderViewModelValueHolder: valueHolder;
-						onMethodCoderSaved: [ :anAnnouncement | 
-							| method formatComponent |
-							method := anAnnouncement method.
-							formatComponent := self perform: method selector.
-							self ensureComponentIsReferenced: formatComponent.
-							self initializeFormat.
-							self recomputeActions.
-							anElement phlow fireToolUpdateWish.
-							anElement fireEvent: BrDropdownHideWish new ];
-						ensureMethodCoderViewModel.
-				methodCoder pharoMethodCoderViewModel coderModel
-					currentSourceString: 'gtFORMATCOMPONENTNAME
+				(self
+					formatComponentMethodCoderForSource: 'gtFORMATCOMPONENTNAME
 	<gtLlmFormatComponent>
 	^ GtLlmTutorFormatComponent new
 		name: '''';
 		priority: 1;
 		format: '''';
-		example: '''''.
-				methodCoder ];
+		example: ''''') methodCoderViewModelValueHolder: valueHolder ];
 		actionUpdateButton
 ]
 
