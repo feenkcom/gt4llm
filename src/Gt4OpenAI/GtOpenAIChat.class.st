@@ -49,16 +49,26 @@ GtOpenAIChat >> maximumMessageSize [
 ]
 
 { #category : #accessing }
-GtOpenAIChat >> sendMessage: aMessage [
-	| result output |
-	output := aMessage.
-	output size > self maximumMessageSize
-		ifTrue: [ output := output first: self maximumMessageSize ].
-	messages addFirst: (GtLlmUserMessage new content: output; chat: self).
+GtOpenAIChat >> sendAssistantMessage: aMessage [
+	| result |
+	aMessage serializeInline.
+	messages addFirst: aMessage.
 
 	result := client completeChatWithModel: self model andMessages: messages.
 
 	self addMessage: result choices first message
+]
+
+{ #category : #accessing }
+GtOpenAIChat >> sendMessage: aMessage [
+	| output |
+	output := aMessage.
+	output size > self maximumMessageSize
+		ifTrue: [ output := output first: self maximumMessageSize ].
+	self
+		sendAssistantMessage: (GtLlmUserMessage new
+				content: output;
+				chat: self)
 ]
 
 { #category : #accessing }

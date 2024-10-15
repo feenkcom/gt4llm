@@ -82,6 +82,13 @@ GtOpenAIActionAssistantChat >> initialize [
 ]
 
 { #category : #accessing }
+GtOpenAIActionAssistantChat >> messageFromString: aString [
+	^ STONJSON
+		toString: {'Action' -> aString.
+				pipeline instance serialize} asDictionary
+]
+
+{ #category : #accessing }
 GtOpenAIActionAssistantChat >> onActionResult: aMessage [ 
 ]
 
@@ -111,10 +118,7 @@ GtOpenAIActionAssistantChat >> pipeline: aPipeline [
 
 { #category : #accessing }
 GtOpenAIActionAssistantChat >> sendMessage: aString [
-	^ super
-		sendMessage: (STONJSON
-				toString: {'Action' -> aString.
-						pipeline instance serialize} asDictionary)
+	^ super sendMessage: (self messageFromString: aString)
 ]
 
 { #category : #accessing }

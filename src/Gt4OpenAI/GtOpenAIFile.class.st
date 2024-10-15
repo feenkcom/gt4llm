@@ -34,6 +34,11 @@ GtOpenAIFile >> bytes: anObject [
 	bytes := anObject
 ]
 
+{ #category : #'as yet unclassified' }
+GtOpenAIFile >> contents [
+	self shouldBeImplemented
+]
+
 { #category : #accessing }
 GtOpenAIFile >> createdAt [
 	^ createdAt

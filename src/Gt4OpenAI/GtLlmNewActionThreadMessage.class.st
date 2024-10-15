@@ -22,10 +22,15 @@ GtLlmNewActionThreadMessage >> sendMessage [
 	| aMessage |
 	currentAction ifNil: [ ^ self ].
 
-	aMessage := currentAction format format: {contents}.
+	aMessage := GtLlmCompositeMessage new
+			chat: assistantChat;
+			addString: (assistantChat messageFromString: (currentAction format format: {contents})).
+
+
+	files do: [ :aFile | aMessage addFile: aFile ].
 
 	self contents: '' requester: nil.
 
-	(assistantChat whenReadyFuture then: [ assistantChat sendMessage: aMessage ])
-		await
+	(assistantChat whenReadyFuture
+		then: [ assistantChat sendAssistantMessage: aMessage ]) await
 ]

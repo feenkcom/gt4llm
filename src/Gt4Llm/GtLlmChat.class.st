@@ -147,6 +147,11 @@ GtLlmChat >> lastUpdate: anObject [
 	lastUpdate := anObject
 ]
 
+{ #category : #'as yet unclassified' }
+GtLlmChat >> messageFromString: aString [
+	^ aString
+]
+
 { #category : #accessing }
 GtLlmChat >> messages [
 	^ messages
