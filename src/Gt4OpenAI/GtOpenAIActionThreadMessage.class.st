@@ -34,7 +34,13 @@ GtOpenAIActionThreadMessage >> gtActionFor: aView [
 		title: 'Action';
 		priority: 3;
 		text: [ self action ];
-		actionButtonLabel: 'Action' action: [ :aButton | aButton phlow spawnObject: (self chat tutor actionNamed: self action) ]
+		actionButtonLabel: 'Action'
+			action: [ :aButton | aButton phlow spawnObject: (self chat tutor actionNamed: self action) ];
+		styler: [ BlCompositeStyler new
+				stylers: {GtLlmMessageStyler new threadMessageViewModel: self asViewModel.
+						GtOpenAITraceStyler new.
+						GtOpenAIThreadMessageStyler new annotations: self annotations.
+						GtLlmTutorFormatTextStyler new tutor: self chat tutor} ]
 ]
 
 { #category : #accessing }
