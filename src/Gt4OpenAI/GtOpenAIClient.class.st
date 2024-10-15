@@ -57,6 +57,11 @@ GtOpenAIClient >> addMessage: aMessage toThread: aThreadId [
 		perform
 ]
 
+{ #category : #'as yet unclassified' }
+GtOpenAIClient >> apiKey [
+	^ apiKey
+]
+
 { #category : #accessing }
 GtOpenAIClient >> apiKey: anApiKey [
 	apiKey := anApiKey
@@ -205,6 +210,14 @@ GtOpenAIClient >> get: aUrl withParams: aListOfAssocs [
 { #category : #accessing }
 GtOpenAIClient >> getFile: aFileId [
 	^ GtOpenAIGetFileAPIClient new
+		client: self;
+		file: aFileId;
+		perform
+]
+
+{ #category : #accessing }
+GtOpenAIClient >> getFileContents: aFileId [
+	^ GtOpenAIGetFileContentsAPIClient new
 		client: self;
 		file: aFileId;
 		perform
