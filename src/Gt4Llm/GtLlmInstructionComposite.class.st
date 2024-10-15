@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLlmCompositeInstruction,
+	#name : #GtLlmInstructionComposite,
 	#superclass : #GtLlmInstruction,
 	#instVars : [
 		'items'
@@ -8,34 +8,34 @@ Class {
 }
 
 { #category : #accessing }
-GtLlmCompositeInstruction >> addItem: anItem [
+GtLlmInstructionComposite >> addItem: anItem [
 	items add: (anItem asInstruction parent: self)
 ]
 
 { #category : #accessing }
-GtLlmCompositeInstruction >> children [
+GtLlmInstructionComposite >> children [
 	^ items
 ]
 
 { #category : #accessing }
-GtLlmCompositeInstruction >> gtDisplayOn: stream [
+GtLlmInstructionComposite >> gtDisplayOn: stream [
 	stream nextPutAll: '--Composite--'
 ]
 
 { #category : #accessing }
-GtLlmCompositeInstruction >> initialize [
+GtLlmInstructionComposite >> initialize [
 	super initialize.
 	
 	items := OrderedCollection new
 ]
 
 { #category : #accessing }
-GtLlmCompositeInstruction >> instructionString [
+GtLlmInstructionComposite >> instructionString [
 	^ (String cr, String cr) join: (items collect: #instructionString)
 ]
 
 { #category : #accessing }
-GtLlmCompositeInstruction >> items: anObject [
+GtLlmInstructionComposite >> items: anObject [
 	items := anObject
 			collect: [ :anInstruction | anInstruction asInstruction parent: self ]
 ]

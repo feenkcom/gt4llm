@@ -22,7 +22,7 @@ GtLlmTutorStep >> asInstruction [
 	^ GtLlmInstructionSection new
 		source: self;
 		title: self name;
-		body: (GtLlmCompositeInstruction new
+		body: (GtLlmInstructionComposite new
 				addItem: self description;
 				addItem: (GtLlmInstructionList new items: self rules))
 ]

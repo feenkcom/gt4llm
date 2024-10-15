@@ -45,7 +45,7 @@ GtLlmTutorActionExample >> asInstruction [
 	^ GtLlmInstructionSection new
 		source: self;
 		title: 'Example';
-		body: (GtLlmCompositeInstruction new
+		body: (GtLlmInstructionComposite new
 				addItem: (GtLlmInstructionSection new
 						source: self;
 						title: 'Prompt';

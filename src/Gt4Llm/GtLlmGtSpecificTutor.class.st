@@ -50,7 +50,7 @@ GtLlmGtSpecificTutor >> defaultCommunicationRules [
 GtLlmGtSpecificTutor >> defaultConventionsDescription [
 	^ GtLlmInstructionSection new
 		title: 'Conventions for communication';
-		body: (GtLlmCompositeInstruction new
+		body: (GtLlmInstructionComposite new
 				addItem: 'Please follow these conventions carefully:';
 				addItem: (GtLlmInstructionList new
 						addItem: 'The code you propose can either be a SCRIPT or a METHOD.';
@@ -200,7 +200,7 @@ The Glamorous Toolkit version is {gtVersion}'
 GtLlmGtSpecificTutor >> defaultViewsDescription [
 	^ GtLlmInstructionSection new
 		title: 'The Phlow API';
-		body: (GtLlmCompositeInstruction new
+		body: (GtLlmInstructionComposite new
 				addItem: 'GT views use an API called Phlow, which uses a builder pattern to create views in the inspector for an object.';
 				addItem: 'The following view types are available:';
 				addItem: (GtLlmInstructionList new

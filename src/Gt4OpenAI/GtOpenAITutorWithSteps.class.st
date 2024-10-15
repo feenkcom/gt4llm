@@ -154,5 +154,5 @@ GtOpenAITutorWithSteps >> steps [
 GtOpenAITutorWithSteps >> stepsDescription [
 	^ GtLlmInstructionSection new
 		title: 'Communication steps';
-		body: (GtLlmCompositeInstruction new items: (self steps collect: #asInstruction))
+		body: (GtLlmInstructionComposite new items: (self steps collect: #asInstruction))
 ]
