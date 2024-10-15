@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'assistantChat',
 		'contents',
-		'announcer'
+		'announcer',
+		'files'
 	],
 	#category : #'Gt4Llm-Widgets'
 }
@@ -12,6 +13,11 @@ Class {
 { #category : #accessing }
 GtLlmNewThreadMessage >> actions [
 	^ assistantChat tutor actions
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmNewThreadMessage >> addFile: aFileReference [
+	files add: aFileReference
 ]
 
 { #category : #accessing }
@@ -78,6 +84,7 @@ GtLlmNewThreadMessage >> initialize [
 	super initialize.
 	contents := ''.
 	announcer := Announcer new.
+	files := OrderedCollection new
 ]
 
 { #category : #accessing }
@@ -110,12 +117,16 @@ GtLlmNewThreadMessage >> sendMessage [
 	contents ifNil: [ ^ self ].
 	contents ifEmpty: [ ^ self ].
 
-	aMessage := contents.
+	aMessage := GtLlmCompositeMessage new
+			chat: assistantChat;
+			addString: (assistantChat messageFromString: contents).
+
+	files do: [ :aFile | aMessage addFile: aFile ].
 
 	self contents: '' requester: nil.
 
-	(assistantChat whenReadyFuture then: [ assistantChat sendMessage: aMessage ])
-		await
+	(assistantChat whenReadyFuture
+		then: [ assistantChat sendAssistantMessage: aMessage ]) await
 ]
 
 { #category : #subscriptions }

@@ -37,7 +37,7 @@ GtOpenAIUploadFileAPIClient >> request [
 				addPart: (ZnMimePart
 						fieldName: 'file'
 						fileName: self file basename
-						entity: (ZnEntity text: self file contents));
+						entity: (ZnEntity bytes: self file binaryContents));
 				yourself)
 ]
 

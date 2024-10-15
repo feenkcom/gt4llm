@@ -25,6 +25,35 @@ GtLlmNewThreadMessageElement class >> newForChatList [
 ]
 
 { #category : #'initialization ' }
+GtLlmNewThreadMessageElement >> buildAttachButton [
+	^ BrButton new
+		fitContent;
+		beSmallSize;
+		aptitude: BrGlamorousButtonWithIconAptitude new
+				+ (BrGlamorousWithDropdownAptitude
+						handle: [ BrButton new
+								aptitude: BrGlamorousButtonWithIconAptitude - BrGlamorousButtonWithLabelTooltipAptitude
+										- BrGlamorousButtonExteriorAptitude;
+								icon: BrGlamorousVectorIcons changes ]
+						content: [ :aDropdown | 
+							BrFileSelector new
+								folder: FileLocator home;
+								padding: (BlInsets all: 8);
+								fileFilterBlock: [ :aFileReference | 
+									aFileReference isFile
+										and: [ (FileSystemDirectoryEntry reference: aFileReference) isHidden not ] ];
+								okAction: [ :aFile | 
+									self threadMessageViewModel attachFile: aFile.
+									aDropdown fireEvent: BrDropdownHideWish new ] ]);
+		label: 'Attach';
+		icon: BrGlamorousVectorIcons changes;
+		margin: (BlInsets all: 3);
+		constraintsDo: [ :c | 
+			c linear vertical alignBottom.
+			c linear horizontal alignLeft ]
+]
+
+{ #category : #'initialization ' }
 GtLlmNewThreadMessageElement >> buildSendButton [
 	^ BrButton new
 			fitContent;
@@ -150,5 +179,6 @@ GtLlmNewThreadMessageElement >> updateElement [
 GtLlmNewThreadMessageElement >> updateToolbar [
 	toolbar removeAllItems.
 	toolbar addItems: threadMessageViewModel messageActions.
-	toolbar addItem: self buildSendButton
+	toolbar addItem: self buildSendButton.
+	toolbar addItem: self buildAttachButton
 ]

@@ -45,7 +45,7 @@ GtOpenAIThreadMessage >> ancestor [
 GtOpenAIThreadMessage >> annotations [
 	^ annotations
 		ifNil: [ annotations := GtOpenAIAnnotationsGroup
-					withAll: (content
+					withAll: ((content select: [ :aValue | (aValue at: 'type') = 'text' ])
 							flatCollect: [ :aValue | 
 								(aValue at: #text at: #annotations)
 									collect: [ :anAnnotation | (GtOpenAIAnnotation from: anAnnotation) client: self client ] ]) ]
@@ -133,7 +133,8 @@ GtOpenAIThreadMessage >> contentSummary [
 
 { #category : #accessing }
 GtOpenAIThreadMessage >> contentText [
-	^ '' join: (content collect: [ :aValue | aValue at: #text at: #value ])
+	^ ''
+		join: (content collect: [ :aValue | (aValue at: #text at: #value) ifNil: [ '' ] ])
 ]
 
 { #category : #accessing }
@@ -216,6 +217,21 @@ GtOpenAIThreadMessage >> gtJsonFor: aView [
 		aptitude: BrGlamorousCodeEditorAptitude
 ]
 
+{ #category : #'as yet unclassified' }
+GtOpenAIThreadMessage >> gtMessageFilesFor: aView [
+	<gtView>
+	<gtLlmMessageView>
+	| messageFiles |
+	messageFiles := self messageFiles.
+
+	messageFiles ifEmpty: [ ^ aView empty ].
+
+	"for some reason we need this instead of a forward for the layout in the message to work"
+	^ (messageFiles gtFilesFor: aView) 
+		title: 'Message files';
+		priority: 10
+]
+
 { #category : #testing }
 GtOpenAIThreadMessage >> hasResponse [
 	^ content anySatisfy: [ :aValue | (aValue at: #text at: #value) isNotEmpty ]
@@ -249,6 +265,14 @@ GtOpenAIThreadMessage >> isSystemRole [
 { #category : #testing }
 GtOpenAIThreadMessage >> isUserRole [
 	^ self role = #user
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAIThreadMessage >> messageFiles [
+	^ GtOpenAIFilesGroup
+		withAll: (self content
+				select: [ :aValue | aValue type = 'image_file' ]
+				thenCollect: [ :aValue | self chat assistant client getFile: (aValue at: 'image_file' at: 'file_id') ])
 ]
 
 { #category : #accessing }

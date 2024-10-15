@@ -182,3 +182,7 @@ GtLlmChatMessage >> senderText [
 	self isSystemRole ifTrue: [ ^ 'System' ].
 	^ 'You'
 ]
+
+{ #category : #'as yet unclassified' }
+GtLlmChatMessage >> serializeInline [
+]

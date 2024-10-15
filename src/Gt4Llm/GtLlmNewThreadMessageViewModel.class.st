@@ -28,6 +28,11 @@ GtLlmNewThreadMessageViewModel >> assistantChat: assistantChat [
 		to: self
 ]
 
+{ #category : #'as yet unclassified' }
+GtLlmNewThreadMessageViewModel >> attachFile: aFileReference [
+	self threadMessage addFile: aFileReference
+]
+
 { #category : #accessing }
 GtLlmNewThreadMessageViewModel >> contents [
 	^ self threadMessage contents
