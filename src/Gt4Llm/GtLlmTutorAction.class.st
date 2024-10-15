@@ -274,8 +274,7 @@ GtLlmTutorAction >> persist [
 	| methodSource |
 	methodSource := self asMethodSource.
 
-	GtPharoParser
-		parse: methodSource self definingMethod methodClass
+	self definingMethod methodClass
 		compile: (RBConfigurableFormatter format: (RBParser parseMethod: methodSource)).
 	definingMethod := self definingMethod methodClass
 			>> self definingMethod selector

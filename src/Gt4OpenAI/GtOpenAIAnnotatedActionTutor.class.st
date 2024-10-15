@@ -53,6 +53,26 @@ GtOpenAIAnnotatedActionTutor >> defaultAssistantDescription [
 	^ 'Is an action-based tutor (more information in the prompt instructions).'
 ]
 
+{ #category : #'as yet unclassified' }
+GtOpenAIAnnotatedActionTutor >> ensureComponentIsNotReferenced: aFormatComponent [
+	self actions
+		do: [ :anAction | 
+			anAction definingMethod methodClass = self class
+				ifTrue: [ anAction examples
+						do: [ :anExample | anExample output removeKey: aFormatComponent name ifAbsent: [  ] ].
+					anAction persist ] ]
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAIAnnotatedActionTutor >> ensureComponentIsReferenced: aFormatComponent [
+	self actions
+		do: [ :anAction | 
+			anAction definingMethod methodClass = self class
+				ifTrue: [ anAction examples
+						do: [ :anExample | anExample output at: aFormatComponent name put: nil ].
+					anAction persist ] ]
+]
+
 { #category : #accessing }
 GtOpenAIAnnotatedActionTutor >> formatComponents [
 	^ self format components
@@ -146,6 +166,8 @@ GtOpenAIAnnotatedActionTutor >> gtFormatComponentsFor: aView [
 					action: [ :aButton | 
 						self format components remove: anItem.
 						anItem definingMethod removeFromSystem.
+						self ensureComponentIsNotReferenced: anItem.
+						self recomputeActions.
 						aButton phlow fireToolUpdateWish ] ]
 			width: 70;
 		actionDropdownButtonIcon: BrGlamorousVectorIcons add
@@ -155,7 +177,13 @@ GtOpenAIAnnotatedActionTutor >> gtFormatComponentsFor: aView [
 				methodCoder := GtPharoNewMethodCoderElement new
 						behavior: self class;
 						methodCoderViewModelValueHolder: valueHolder;
-						onMethodCoderSaved: [ self initializeFormat.
+						onMethodCoderSaved: [ :anAnnouncement | 
+							| method formatComponent |
+							method := anAnnouncement method.
+							formatComponent := self perform: method selector.
+							self ensureComponentIsReferenced: formatComponent.
+							self initializeFormat.
+							self recomputeActions.
 							anElement phlow fireToolUpdateWish.
 							anElement fireEvent: BrDropdownHideWish new ];
 						ensureMethodCoderViewModel.
