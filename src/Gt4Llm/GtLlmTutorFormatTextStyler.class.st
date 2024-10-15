@@ -35,7 +35,16 @@ GtLlmTutorFormatTextStyler >> styleUnknownFormatComponent: aCodeNode [
 											aptitude: BrGlamorousButtonWithIconAptitude;
 											icon: BrGlamorousVectorIcons repair;
 											beTinySize ]
-									content: [ self tutorFormatCoderFor: aCodeNode ]);
+									content: [ self tutor
+											formatComponentMethodCoderForSource: 'gt' , aCodeNode code value allButFirst allButLast
+													, 'FormatComponent
+	<gtLlmFormatComponent>
+	^ GtLlmTutorFormatComponent new
+		name: ''' , aCodeNode code value allButFirst allButLast
+													, ''';
+		priority: 1;
+		format: '''';
+		example: ''''' ]);
 					label: 'Create format component';
 					beTinySize;
 					margin: (BlInsets left: 5);
@@ -71,34 +80,6 @@ GtLlmTutorFormatTextStyler >> tutor [
 { #category : #accessing }
 GtLlmTutorFormatTextStyler >> tutor: anObject [
 	tutor := anObject
-]
-
-{ #category : #'as yet unclassified' }
-GtLlmTutorFormatTextStyler >> tutorFormatCoderFor: aCodeNode [
-	| methodCoder |
-	methodCoder := GtPharoNewMethodCoderElement new
-			behavior: self tutor class;
-			onMethodCoderSaved: [ :anAnnouncement | 
-				| method formatComponent |
-				method := anAnnouncement method.
-				formatComponent := self tutor perform: method selector.
-				self tutor ensureComponentIsReferenced: formatComponent.
-				self tutor initializeFormat.
-				self tutor recomputeActions.
-				methodCoder phlow fireToolUpdateWish.
-				methodCoder fireEvent: BrDropdownHideWish new ];
-			ensureMethodCoderViewModel.
-	methodCoder pharoMethodCoderViewModel coderModel
-		currentSourceString: 'gt' , aCodeNode code value allButFirst allButLast
-				, 'FormatComponent
-	<gtLlmFormatComponent>
-	^ GtLlmTutorFormatComponent new
-		name: ''' , aCodeNode code value allButFirst allButLast
-				, ''';
-		priority: 1;
-		format: '''';
-		example: '''''.
-	^ methodCoder
 ]
 
 { #category : #'as yet unclassified' }
