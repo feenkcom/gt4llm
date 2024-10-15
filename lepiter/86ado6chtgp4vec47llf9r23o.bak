@@ -412,20 +412,20 @@
 				},
 				"editEmail" : {
 					"__type" : "email",
-					"emailString" : "<unknown>"
+					"emailString" : "veit.heller@feenk.com"
 				},
 				"editTime" : {
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-10-15T17:36:26.208165+02:00"
+						"dateAndTimeString" : "2024-07-05T10:15:11.771503+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "WhAt6rXYDQCH8qiQCYEUig=="
 				},
-				"code" : "exampleSection := GtLlmInstructionSection new\r\ttitle: 'Examples';\r\tbody: (GtLlmInstructionComposite new\r\t\t\titems: (maps\r\t\t\t\t\tcollect: [ :aMap | \r\t\t\t\t\t\tGtLlmInstructionSection new\r\t\t\t\t\t\t\ttitle: aMap key basename;\r\t\t\t\t\t\t\tbody: '\r\r```wardley-map\r' , aMap value asWardleyMapScript\r\t\t\t\t\t\t\t\t\t, '\r```' ]))"
+				"code" : "exampleSection := GtLlmInstructionSection new\r\ttitle: 'Examples';\r\tbody: (GtLlmCompositeInstruction new\r\t\t\titems: (maps\r\t\t\t\t\tcollect: [ :aMap | \r\t\t\t\t\t\tGtLlmInstructionSection new\r\t\t\t\t\t\t\ttitle: aMap key basename;\r\t\t\t\t\t\t\tbody: '\r\r```wardley-map\r' , aMap value asWardleyMapScript\r\t\t\t\t\t\t\t\t\t, '\r```' ]))"
 			},
 			{
 				"__type" : "pharoSnippet",

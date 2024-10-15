@@ -40,12 +40,12 @@ GtLlmTutorAction >> asInstruction [
 	^ GtLlmInstructionSection new
 		source: self;
 		title: self name;
-		body: (GtLlmCompositeInstruction new
+		body: (GtLlmInstructionComposite new
 				addItem: self description;
 				addItem: (GtLlmInstructionSection new
 						source: self;
 						title: 'Examples';
-						body: (GtLlmCompositeInstruction new items: self examples)))
+						body: (GtLlmInstructionComposite new items: self examples)))
 ]
 
 { #category : #'as yet unclassified' }
