@@ -160,6 +160,13 @@ GtLlmThreadMessageContentHolder >> viewsToTabGroup: aCollectionOfViews [
 					anElement ] ] ]);
 		onMethodRemovedAction: (GtPhlowChangeTabGroupRemoveTabAction new
 			tabGroup: aTabGroup);
+		onMethodModifiedAction: (GtPhlowChangeTabGroupModifyTabAction new
+			tabGroup: aTabGroup;
+			buildContext: aBuildContext;
+			contentsBuilder: [ :aPhlowView | [ 
+				aPhlowView asElementDo: [ :anElement | 
+					anElement phlow beViewContent.
+					anElement ] ] ]);
 		subscribeToSystem.
 			
 	aTabGroup userData at: GtPhlowClassPragmaChangeListener put: aListener.
