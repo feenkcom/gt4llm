@@ -162,6 +162,15 @@ GtOpenAITutor >> onApiKeyChanged [
 ]
 
 { #category : #accessing }
+GtOpenAITutor >> recreateAssistant [
+	self deleteAssistant.
+
+	self createAssistant.
+
+	self chats do: [ :aChat | aChat updateAssistant: assistant ]
+]
+
+{ #category : #accessing }
 GtOpenAITutor >> summaryItems [
 	^ {'Name' -> self assistantName.
 		'Description' -> self assistantDescription.
