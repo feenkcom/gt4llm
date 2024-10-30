@@ -227,8 +227,12 @@ GtLlmTutorAction >> initialize [
 	self examples: OrderedCollection new.
 	self name: ''.
 	self description: ''.
-	
-	definingMethod := (thisContext stack at: 3) blocDefiningMethod
+
+	definingMethod := (thisContext stack at: 3) blocDefiningMethod.
+	SystemAnnouncer uniqueInstance weak
+		when: MethodModified
+		send: #onMethodModified:
+		to: self
 ]
 
 { #category : #accessing }
@@ -256,6 +260,13 @@ GtLlmTutorAction >> nameDescription [
 		beRequired;
 		priority: 1;
 		accessor: #name
+]
+
+{ #category : #accessing }
+GtLlmTutorAction >> onMethodModified: aMethodModified [
+	definingMethod = aMethodModified ifFalse: [ ^ self ].
+
+	self become: aMethodModified value
 ]
 
 { #category : #accessing }

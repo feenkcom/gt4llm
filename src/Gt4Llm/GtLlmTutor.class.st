@@ -126,6 +126,16 @@ GtLlmTutor >> instructions [
 	^ self subclassResponsibility
 ]
 
+{ #category : #'as yet unclassified' }
+GtLlmTutor >> messageClass [
+	^ GtLlmChatMessage
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmTutor >> messageClassFor: aMessage [
+	^ self messageClass
+]
+
 { #category : #accessing }
 GtLlmTutor >> model [
 	^ model
