@@ -177,14 +177,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-08-06T10:47:22.111996+02:00"
+						"dateAndTimeString" : "2024-10-30T13:43:20.449984+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "IDuvk2HbDQCglRlADjAh1Q=="
 				},
-				"code" : "tutor := GtOpenAIViewActionTutor withApiKeyFromFile createAssistant.\rtutor addChat"
+				"code" : "tutor := GtOpenAIViewActionTutor withApiKeyFromFile.\rchat := tutor createAssistant addChat.\rchat pipeline instance object: (GtDPriceExamples new concretePriceDiscountedByPercentage).\rchat"
 			},
 			{
 				"__type" : "textSnippet",
@@ -285,7 +285,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-08-06T10:48:27.762776+02:00"
+						"dateAndTimeString" : "2024-10-30T13:34:14.098562+01:00"
 					}
 				},
 				"uid" : {
@@ -295,7 +295,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "Then we define a data interchange format for the tutor. This works in a similar fashion as the actions, using the `gtLlmFormatComponent`. An example can be found here: {{gtMethod:GtOpenAIViewActionTutor>>#textFormatComponent}}"
+				"string" : "Then we define a data interchange format for the tutor. This works in a similar fashion as the actions, using the `gtLlmFormatComponent`. An example can be found here: {{gtMethod:GtOpenAIViewActionTutor>>#methodFormatComponent}}"
 			},
 			{
 				"__type" : "textSnippet",

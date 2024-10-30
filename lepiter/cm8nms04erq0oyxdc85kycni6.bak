@@ -177,14 +177,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-08-06T10:47:22.111996+02:00"
+						"dateAndTimeString" : "2024-10-30T13:43:11.350104+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "IDuvk2HbDQCglRlADjAh1Q=="
 				},
-				"code" : "tutor := GtOpenAIViewActionTutor withApiKeyFromFile createAssistant.\rtutor addChat"
+				"code" : "tutor := GtOpenAIViewActionTutor withApiKeyFromFile.\rchat := tutor createAssistant addChat.\rchat pipeline instance object: (GtDPriceExamples new price)"
 			},
 			{
 				"__type" : "textSnippet",
@@ -285,7 +285,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-08-06T10:48:27.762776+02:00"
+						"dateAndTimeString" : "2024-10-30T13:34:14.098562+01:00"
 					}
 				},
 				"uid" : {
@@ -295,7 +295,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "Then we define a data interchange format for the tutor. This works in a similar fashion as the actions, using the `gtLlmFormatComponent`. An example can be found here: {{gtMethod:GtOpenAIViewActionTutor>>#textFormatComponent}}"
+				"string" : "Then we define a data interchange format for the tutor. This works in a similar fashion as the actions, using the `gtLlmFormatComponent`. An example can be found here: {{gtMethod:GtOpenAIViewActionTutor>>#methodFormatComponent}}"
 			},
 			{
 				"__type" : "textSnippet",
@@ -396,7 +396,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-08-06T10:52:11.171042+02:00"
+						"dateAndTimeString" : "2024-08-06T10:52:17.231238+02:00"
 					}
 				},
 				"uid" : {
@@ -406,7 +406,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "This tutor works well with fine-tuned models as described in [[Creating a dataset for fine-tuning]]. The format in that training set corresponds to"
+				"string" : "This tutor works well with fine-tuned models as described in [[Creating a dataset for fine-tuning]]. The format in that training set corresponds to the tutor used here."
 			}
 		]
 	},

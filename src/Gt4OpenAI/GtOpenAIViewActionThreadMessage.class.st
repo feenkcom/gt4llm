@@ -20,7 +20,7 @@ GtOpenAIViewActionThreadMessage >> gtCodeFor: aView [
 							forClass: methodSource methodClass
 							source: methodSource methodSource ]
 					ifNotNil: [ :aCompiledMethod | GtPharoMethodCoder forMethod: aCompiledMethod ].
-			coder asElement ]
+			coder asExpandedOnlyElement ]
 ]
 
 { #category : #accessing }
