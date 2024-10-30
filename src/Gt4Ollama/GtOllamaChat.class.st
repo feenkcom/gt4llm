@@ -34,13 +34,22 @@ GtOllamaChat >> initializeMessages [
 	messages := GtLlmMessagesGroup new
 ]
 
-{ #category : #accessing }
-GtOllamaChat >> sendMessage: aMessage [
+{ #category : #'as yet unclassified' }
+GtOllamaChat >> sendAssistantMessage: aMessage [
 	messages
 		addFirst: (GtLlmUserMessage new
-				content: aMessage;
+				content: aMessage contentText;
 				chat: self).
+
 	self triggerAssistant
+]
+
+{ #category : #accessing }
+GtOllamaChat >> sendMessage: aMessage [
+	self
+		sendAssistantMessage: (GtLlmUserMessage new
+				content: aMessage;
+				chat: self)
 ]
 
 { #category : #accessing }

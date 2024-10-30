@@ -56,16 +56,16 @@ GtLlmNewThreadMessageElement >> buildAttachButton [
 { #category : #'initialization ' }
 GtLlmNewThreadMessageElement >> buildSendButton [
 	^ BrButton new
-			fitContent;
-			beSmallSize;
-			aptitude: BrGlamorousButtonWithIconAptitude;
-			label: 'Send';
-			icon: BrGlamorousVectorIcons accept;
-			action: [ :aButton | self sendMessageFrom: aButton ];
-			margin: (BlInsets all: 3);
-			constraintsDo: [ :c | 
-				c linear vertical alignBottom.
-				c linear horizontal alignLeft ]
+		fitContent;
+		beSmallSize;
+		aptitude: BrGlamorousButtonWithIconAptitude;
+		label: 'Send';
+		icon: BrGlamorousVectorIcons accept;
+		action: [ :aButton | self sendMessageFrom: aButton ];
+		margin: (BlInsets all: 3);
+		constraintsDo: [ :c | 
+			c linear vertical alignBottom.
+			c linear horizontal alignLeft ]
 ]
 
 { #category : #initialization }
