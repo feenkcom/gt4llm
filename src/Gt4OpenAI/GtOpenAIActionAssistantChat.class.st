@@ -95,7 +95,7 @@ GtOpenAIActionAssistantChat >> onActionResult: aMessage [
 { #category : #accessing }
 GtOpenAIActionAssistantChat >> onSendActionToChat: anAnnouncement [
 	| action |
-	action := self actions
+	action := self tutor actions
 			detect: [ :anAction | anAction name = anAnnouncement action ].
 
 	self announce: GtLlmActionStarted new.
