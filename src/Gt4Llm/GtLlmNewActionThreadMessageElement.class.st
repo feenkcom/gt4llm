@@ -214,6 +214,9 @@ GtLlmNewActionThreadMessageElement >> updateToggleGroup [
 								attribute: argument editorAttribute ].
 					contentsElement text: contentText.
 					self threadMessageViewModel currentAction: anAction ].
+			toggleElement
+				when: BlClickEvent
+				do: [ :anEvent | anEvent modifiers isAlt ifTrue: [ toggleElement phlow spawnObject: anAction ] ].
 			toggleGroup addToggle: toggleElement ].
 	toggleGroup viewModel toggles
 		ifNotEmpty: [ :aGroupOfToggles | aGroupOfToggles first activate ]
