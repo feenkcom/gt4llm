@@ -322,6 +322,12 @@ GtOpenAIAssistantChat >> tutor: anObject [
 ]
 
 { #category : #accessing }
+GtOpenAIAssistantChat >> updateAssistant: anObject [
+	"same as #assistant:, but no hook"
+	assistant := anObject
+]
+
+{ #category : #accessing }
 GtOpenAIAssistantChat >> whenReadyFuture [
 	^ GtLlmChatReadyFuture new chat: self
 ]
