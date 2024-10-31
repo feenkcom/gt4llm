@@ -32,12 +32,7 @@ GtLlmRenameFormatComponentRefactoring >> renameComponentFrom: anOldName to: aNew
 { #category : #'as yet unclassified' }
 GtLlmRenameFormatComponentRefactoring >> renameComponentReferences [
 	| rewriter |
-	self halt.
-	rewriter := RBParseTreeRewriter new.
-	rewriter
-		replace: oldName asString storeString
-		with: newName asString storeString
-		when: [ :node | node gtIsFormatComponentIn: tutorClass ].
+	rewriter := RBParseTreeRewriter replaceLiteral: oldName with: newName.
 	(self model classNamed: tutorClass name) withAllSubclasses
 		do: [ :each | 
 			each selectors
@@ -50,9 +45,5 @@ GtLlmRenameFormatComponentRefactoring >> renameComponentReferences [
 
 { #category : #'as yet unclassified' }
 GtLlmRenameFormatComponentRefactoring >> transform [
-	self renameComponentReferences.
-	(self model classNamed: tutorClass name)
-		compile: ((tutorClass new formatComponentNamed: oldName) definingMethod sourceCode
-				copyReplaceAll: 'name: ' , oldName storeString
-				with: 'name: ' , newName storeString)
+	self renameComponentReferences
 ]
