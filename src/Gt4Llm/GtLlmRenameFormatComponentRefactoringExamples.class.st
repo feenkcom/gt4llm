@@ -17,6 +17,25 @@ GtLlmRenameFormatComponentRefactoringExamples >> actionSource [
 ]
 
 { #category : #'as yet unclassified' }
+GtLlmRenameFormatComponentRefactoringExamples >> coderOnExampleClass [
+	<after: #destroyClass>
+	<gtExample>
+	| change class |
+	class := self exampleClass.
+	change := class model changes.
+	change execute.
+
+	^ GtCoder forClass: class name asClass
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmRenameFormatComponentRefactoringExamples >> destroyClass [
+	| class |
+	class := self exampleClass.
+	Smalltalk removeClassNamed: class name
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmRenameFormatComponentRefactoringExamples >> exampleClass [
 	<gtExample>
 	| model class |
@@ -29,6 +48,21 @@ GtLlmRenameFormatComponentRefactoringExamples >> exampleClass [
 	class compile: self actionSource classified: #('format-components').
 	class compile: self formatSource classified: #('actions').
 	^ class
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmRenameFormatComponentRefactoringExamples >> exampleClassCoderActionExpanded [
+	<gtExample>
+	| scripter |
+	scripter := self scripterOnExampleClassCoder.
+
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Expand method in coder';
+				id: (GtSourceCoderId indexed: 1) ].
+
+	^ scripter
 ]
 
 { #category : #'as yet unclassified' }
@@ -87,4 +121,12 @@ GtLlmRenameFormatComponentRefactoringExamples >> renamedFormatSource [
 	name: ''Renamed'';
 	priority: 10;
 	example: '''''
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmRenameFormatComponentRefactoringExamples >> scripterOnExampleClassCoder [
+	<gtExample>
+	| scripter |
+	scripter := BlScripter new element: self coderOnExampleClass asElement.
+	^ scripter
 ]
