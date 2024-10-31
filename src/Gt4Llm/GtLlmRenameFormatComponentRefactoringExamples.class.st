@@ -66,6 +66,61 @@ GtLlmRenameFormatComponentRefactoringExamples >> exampleClassCoderActionExpanded
 ]
 
 { #category : #'as yet unclassified' }
+GtLlmRenameFormatComponentRefactoringExamples >> exampleClassCoderActionExpandedWithRenameDone [
+	<gtExample>
+	| scripter |
+	scripter := self exampleClassCoderActionExpandedWithRenameOpen.
+
+	scripter
+		typeStep: [ :s | 
+			s
+				label: 'Type a new format componant name';
+				text: 'Renamed' ].
+
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Open refactoring dialog';
+				// (GtSourceCoderId indexed: 1);
+				// GtSourceCoderEditorId;
+				// #previewCheckButton ].
+
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Expand the refactoring preview dropdown';
+				onSpaceRoot;
+				// BrAnchoredOuterContainer;
+				// GtChangesElement;
+				// BrTriangle ].
+
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Setup dropdown overview';
+				block: [ :aButton :aUserData | 
+					aUserData
+						at: BrAnchoredVisualAnalysis
+						put: (BrAnchoredVisualAnalysis new elementWithDropdown: aButton) ];
+				// (GtSourceCoderId indexed: 1);
+				// GtSourceCoderEditorId;
+				// #previewCheckButton ].
+
+	scripter
+		assertStep: [ :s | 
+			s
+				label: 'Assert dropdown bounds';
+				satisfies: [ :anAsyncWidget | anAsyncWidget space root boundsInSpace containsRect: anAsyncWidget boundsInSpace ]
+					description: [ 'Refactoring preview bounds is out of space' ];
+				onSpaceRoot;
+				// BrAnchoredOuterContainer;
+				// BrAnchoredElement;
+				/ #content;
+				/ BrAsyncWidget ].
+	^ scripter
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmRenameFormatComponentRefactoringExamples >> exampleClassCoderActionExpandedWithRenameOpen [
 	<gtExample>
 	| scripter |
@@ -92,7 +147,7 @@ GtLlmRenameFormatComponentRefactoringExamples >> exampleClassCoderActionExpanded
 				// GtSourceCoderEditorId ].
 
 	scripter shortcut
-		label: 'Switch to the method name refactoring mode';
+		label: 'Switch to tutor format refactoring mode';
 		combination: BlKeyCombination primaryR;
 		// (GtSourceCoderId indexed: 1);
 		// GtSourceCoderEditorId;
