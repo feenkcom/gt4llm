@@ -11,9 +11,9 @@ GtLlmRenameFormatComponentRefactoringExamples >> actionSource [
 	^ GtLlmTutorAction new
 	    name: ''Example Action'';
 	    priority: 10;
-		description: ''Example'';
+		description: ''Example Action'';
 		examples: {GtLlmTutorActionExample new
-	input: {''Action'' -> ''Example Action''. ''Text'' -> nil. ''Example'' -> ''Input''}; output:{''Action'' -> ''Example Action''. ''Text'' -> nil. ''Example'' -> ''Output''}}'
+	input: {''Action'' -> ''Example Action''. ''Text'' -> nil. ''Example'' -> ''Input''} asDictionary; output:{''Action'' -> ''Example Action''. ''Text'' -> nil. ''Example'' -> ''Output''} asDictionary}'
 ]
 
 { #category : #'as yet unclassified' }
@@ -66,6 +66,42 @@ GtLlmRenameFormatComponentRefactoringExamples >> exampleClassCoderActionExpanded
 ]
 
 { #category : #'as yet unclassified' }
+GtLlmRenameFormatComponentRefactoringExamples >> exampleClassCoderActionExpandedWithRenameOpen [
+	<gtExample>
+	| scripter |
+	scripter := self exampleClassCoderActionExpanded.
+
+	scripter
+		doStep: [ :s | 
+			s
+				label: 'Move cursor to example';
+				block: [ :anEditorElement | 
+					| aMethod aPosition |
+					aMethod := anEditorElement textualCoderViewModel compiledMethod.
+
+					aPosition := aMethod sourceCode
+							findString: '''Example'''
+							startingAt: 1
+							caseSensitive: true.
+
+					anEditorElement editor deselecter
+						all;
+						deselect.
+					anEditorElement editor moveCursorTo: aPosition + 1 ];
+				// (GtSourceCoderId indexed: 1);
+				// GtSourceCoderEditorId ].
+
+	scripter shortcut
+		label: 'Switch to the method name refactoring mode';
+		combination: BlKeyCombination primaryR;
+		// (GtSourceCoderId indexed: 1);
+		// GtSourceCoderEditorId;
+		play.
+
+	^ scripter
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmRenameFormatComponentRefactoringExamples >> exampleClassRefactored [
 	<gtExample>
 	| class refactoring exampleAction exampleFormat |
@@ -107,9 +143,9 @@ GtLlmRenameFormatComponentRefactoringExamples >> renamedActionSource [
 	^ GtLlmTutorAction new
 	    name: ''Example Action'';
 	    priority: 10;
-		description: ''Renamed'';
+		description: ''Example Action'';
 		examples: {GtLlmTutorActionExample new
-	input: {''Action'' -> ''Example Action''. ''Text'' -> nil. ''Renamed'' -> ''Input''}; output:{''Action'' -> ''Example Action''. ''Text'' -> nil. ''Renamed'' -> ''Output''}}'
+	input: {''Action'' -> ''Example Action''. ''Text'' -> nil. ''Renamed'' -> ''Input''} asDictionary; output:{''Action'' -> ''Example Action''. ''Text'' -> nil. ''Renamed'' -> ''Output''} asDictionary}'
 ]
 
 { #category : #'as yet unclassified' }
