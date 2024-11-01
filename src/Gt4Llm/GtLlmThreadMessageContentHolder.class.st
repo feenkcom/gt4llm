@@ -149,8 +149,8 @@ GtLlmThreadMessageContentHolder >> viewsToTabGroup: aCollectionOfViews [
 					object: self threadMessageViewModel threadMessage.
 			
 	aListener := GtPhlowClassPragmaChangeListener new
-		interestingPragmas: GtLlmBasicThreadMessageViewModel messageViewPragmas;
-		interestingClass: GtLlmEntity;
+		interestingPragmas: GtLlmBasicThreadMessageViewModel messageViewPragmas 
+			andObject: aBuildContext object;
 		onMethodAddedAction: (GtPhlowChangeTabGroupAddTabAction new
 			tabGroup: aTabGroup;
 			buildContext: aBuildContext;
