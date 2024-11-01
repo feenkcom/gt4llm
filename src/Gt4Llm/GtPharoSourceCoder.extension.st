@@ -1,6 +1,13 @@
 Extension { #name : #GtPharoSourceCoder }
 
 { #category : #'*Gt4Llm' }
+GtPharoSourceCoder >> addPackageRenameShortcutFor: anAST into: coderAddOns [
+	<gtAstCoderAddOns: 3>
+	(self behavior inheritsFrom: BaselineOf) ifFalse: [ ^ self ].
+	coderAddOns addShortcut: GtRenameInBaselineShortcut new
+]
+
+{ #category : #'*Gt4Llm' }
 GtPharoSourceCoder >> addTutorFormatMenuItemsFor: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns: 5>
 	(aCoderViewModel behavior includesBehavior: GtOpenAIAnnotatedActionTutor)
@@ -20,8 +27,16 @@ GtPharoSourceCoder >> addTutorFormatMenuItemsFor: anAst to: coderAddOns from: aC
 								renameFormatComponent: node
 								in: aTextualViewModel
 								for: element ]
-						shortcutKey: GtRenameInBaselineShortcut new combinationForPlatform
+						shortcutKey: GtLlmRenameTutorFormatComponentShortcut new combinationForPlatform
 								gtDisplayString ] ]
+]
+
+{ #category : #'*Gt4Llm' }
+GtPharoSourceCoder >> addTutorFormatRenameShortcutFor: anAST into: coderAddOns [
+	<gtAstCoderAddOns: 10>
+	(self behavior includesBehavior: GtOpenAIAnnotatedActionTutor)
+		ifFalse: [ ^ self ].
+	coderAddOns addShortcut: GtLlmRenameTutorFormatComponentShortcut new
 ]
 
 { #category : #'*Gt4Llm' }
