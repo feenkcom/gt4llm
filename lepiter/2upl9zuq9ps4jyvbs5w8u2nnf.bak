@@ -242,14 +242,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-11-04T16:18:16.350947+01:00"
+						"dateAndTimeString" : "2024-11-04T16:29:42.948441+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "4COsoiTiDQCvPFLCAiMxMA=="
 				},
-				"code" : "tutor := GtDWardleyMapTutor withApiKeyFromFile\r\t\tvaluePipelineFor: (GtLlmSerializableValueHolder new\r\t\t\t\tcontent: thisSnippet page children last;\r\t\t\t\tname: 'Wardley map';\r\t\t\t\tserializer: [ :aSnippet | aSnippet wardleyMap asWardleyMapScript ];\r\t\t\t\tupdater: [ :aSnippet :aScript | \r\t\t\t\t\taSnippet\r\t\t\t\t\t\twardleyMap: (GtWardleyMapUtility\r\t\t\t\t\t\t\t\taddModelAsPropositionsFrom: aSnippet wardleyMap\r\t\t\t\t\t\t\t\tto: (GtWardleyMapParser parse: aScript) asWardleyMapModel) ])"
+				"code" : "tutor := GtDWardleyMapTutor withApiKeyFromFile\r\t\tvaluePipelineFor: (GtLlmSerializableValueHolder new\r\t\t\t\tcontent: thisSnippet page children last;\r\t\t\t\tname: 'Wardley map';\r\t\t\t\tserializer: [ :aSnippet | aSnippet wardleyMap asWardleyMapScript ];\r\t\t\t\tupdater: [ :aSnippet :aScript | \r\t\t\t\t\taSnippet wardleyMap ensureAllProposition.\r\t\t\t\t\tGtWardleyMapUtility\r\t\t\t\t\t\taddModelAsPropositionsFrom: aSnippet wardleyMap\r\t\t\t\t\t\tto: (GtWardleyMapParser parse: aScript) asWardleyMapModel ])"
 			},
 			{
 				"__type" : "wardleyMap",
@@ -265,7 +265,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-11-04T16:18:31.234333+01:00"
+						"dateAndTimeString" : "2024-11-04T16:27:24.256538+01:00"
 					}
 				},
 				"editEmail" : {
@@ -276,12 +276,12 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-11-04T16:18:31.234333+01:00"
+						"dateAndTimeString" : "2024-11-04T16:27:24.256538+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "VQ7MiHniDQC/b6xtC7o8lA=="
+					"uidString" : "vFSRqHniDQCAND2DC7o8lA=="
 				},
 				"wardleyMapDictionary" : {
 					"edges" : [
@@ -295,7 +295,7 @@
 							},
 							"from" : {
 								"__type" : "uuid",
-								"uuid" : "f38b5f8e-79e2-0d00-bf85-cfad0bba3c94"
+								"uuid" : "4a526fb2-79e2-0d00-807f-cfcb0bba3c94"
 							},
 							"label" : {
 								"is_visible" : false,
@@ -305,7 +305,7 @@
 							},
 							"to" : {
 								"__type" : "uuid",
-								"uuid" : "678c5f8e-79e2-0d00-bf87-01890bba3c94"
+								"uuid" : "c6516fb2-79e2-0d00-807e-edd30bba3c94"
 							},
 							"width" : 1.0
 						},
@@ -319,7 +319,7 @@
 							},
 							"from" : {
 								"__type" : "uuid",
-								"uuid" : "678c5f8e-79e2-0d00-bf87-01890bba3c94"
+								"uuid" : "c6516fb2-79e2-0d00-807e-edd30bba3c94"
 							},
 							"label" : {
 								"is_visible" : false,
@@ -329,7 +329,7 @@
 							},
 							"to" : {
 								"__type" : "uuid",
-								"uuid" : "738b5f8e-79e2-0d00-bf84-46140bba3c94"
+								"uuid" : "49516fb2-79e2-0d00-807d-8d5d0bba3c94"
 							},
 							"width" : 1.0
 						},
@@ -343,7 +343,7 @@
 							},
 							"from" : {
 								"__type" : "uuid",
-								"uuid" : "738b5f8e-79e2-0d00-bf84-46140bba3c94"
+								"uuid" : "49516fb2-79e2-0d00-807d-8d5d0bba3c94"
 							},
 							"label" : {
 								"is_visible" : false,
@@ -353,7 +353,7 @@
 							},
 							"to" : {
 								"__type" : "uuid",
-								"uuid" : "6b8c5f8e-79e2-0d00-bf88-f5970bba3c94"
+								"uuid" : "56526fb2-79e2-0d00-8080-1c090bba3c94"
 							},
 							"width" : 1.0
 						},
@@ -367,7 +367,7 @@
 							},
 							"from" : {
 								"__type" : "uuid",
-								"uuid" : "6b8c5f8e-79e2-0d00-bf88-f5970bba3c94"
+								"uuid" : "56526fb2-79e2-0d00-8080-1c090bba3c94"
 							},
 							"label" : {
 								"is_visible" : false,
@@ -377,31 +377,7 @@
 							},
 							"to" : {
 								"__type" : "uuid",
-								"uuid" : "618c5f8e-79e2-0d00-bf86-a7940bba3c94"
-							},
-							"width" : 1.0
-						},
-						{
-							"arrow" : false,
-							"color" : {
-								"alpha" : 1.0,
-								"blue" : 0.5004887585532747,
-								"green" : 0.5004887585532747,
-								"red" : 0.5004887585532747
-							},
-							"from" : {
-								"__type" : "uuid",
-								"uuid" : "618c5f8e-79e2-0d00-bf86-a7940bba3c94"
-							},
-							"label" : {
-								"is_visible" : false,
-								"text" : "Edge label",
-								"x" : 0.5,
-								"y" : 0.5
-							},
-							"to" : {
-								"__type" : "uuid",
-								"uuid" : "738b5f8e-79e2-0d00-bf84-46140bba3c94"
+								"uuid" : "59526fb2-79e2-0d00-8081-9db90bba3c94"
 							},
 							"width" : 1.0
 						}
@@ -420,91 +396,10 @@
 							"height" : 12,
 							"id" : {
 								"__type" : "uuid",
-								"uuid" : "738b5f8e-79e2-0d00-bf84-46140bba3c94"
+								"uuid" : "49516fb2-79e2-0d00-807d-8d5d0bba3c94"
 							},
 							"label" : {
-								"text" : "Tests",
-								"x" : 0.5,
-								"y" : 2.0
-							},
-							"pipeline" : {
-								"is_visible" : false
-							},
-							"width" : 12,
-							"x" : 0.7,
-							"y" : 0.7
-						},
-						{
-							"color" : {
-								"alpha" : 1.0,
-								"blue" : 0.0,
-								"green" : 0.0,
-								"red" : 0.0
-							},
-							"evolve" : {
-								"is_visible" : false
-							},
-							"height" : 12,
-							"id" : {
-								"__type" : "uuid",
-								"uuid" : "f38b5f8e-79e2-0d00-bf85-cfad0bba3c94"
-							},
-							"label" : {
-								"text" : "Requirements",
-								"x" : 0.5,
-								"y" : 2.0
-							},
-							"pipeline" : {
-								"is_visible" : false
-							},
-							"width" : 12,
-							"x" : 0.8,
-							"y" : 0.8
-						},
-						{
-							"color" : {
-								"alpha" : 1.0,
-								"blue" : 0.0,
-								"green" : 0.0,
-								"red" : 0.0
-							},
-							"evolve" : {
-								"is_visible" : false
-							},
-							"height" : 12,
-							"id" : {
-								"__type" : "uuid",
-								"uuid" : "618c5f8e-79e2-0d00-bf86-a7940bba3c94"
-							},
-							"label" : {
-								"text" : "Refactoring",
-								"x" : 0.5,
-								"y" : 2.0
-							},
-							"pipeline" : {
-								"is_visible" : false
-							},
-							"width" : 12,
-							"x" : 0.6,
-							"y" : 0.6
-						},
-						{
-							"color" : {
-								"alpha" : 1.0,
-								"blue" : 0.0,
-								"green" : 0.0,
-								"red" : 0.0
-							},
-							"evolve" : {
-								"is_visible" : false
-							},
-							"height" : 12,
-							"id" : {
-								"__type" : "uuid",
-								"uuid" : "678c5f8e-79e2-0d00-bf87-01890bba3c94"
-							},
-							"label" : {
-								"text" : "Code",
+								"text" : "Community Engagement",
 								"x" : 0.5,
 								"y" : 2.0
 							},
@@ -528,10 +423,10 @@
 							"height" : 12,
 							"id" : {
 								"__type" : "uuid",
-								"uuid" : "6b8c5f8e-79e2-0d00-bf88-f5970bba3c94"
+								"uuid" : "c6516fb2-79e2-0d00-807e-edd30bba3c94"
 							},
 							"label" : {
-								"text" : "Continuous Integration",
+								"text" : "Fan Creation",
 								"x" : 0.5,
 								"y" : 2.0
 							},
@@ -539,8 +434,89 @@
 								"is_visible" : false
 							},
 							"width" : 12,
-							"x" : 0.4,
+							"x" : 0.7,
+							"y" : 0.7
+						},
+						{
+							"color" : {
+								"alpha" : 1.0,
+								"blue" : 0.0,
+								"green" : 0.0,
+								"red" : 0.0
+							},
+							"evolve" : {
+								"is_visible" : false
+							},
+							"height" : 12,
+							"id" : {
+								"__type" : "uuid",
+								"uuid" : "4a526fb2-79e2-0d00-807f-cfcb0bba3c94"
+							},
+							"label" : {
+								"text" : "Original Work",
+								"x" : 0.5,
+								"y" : 2.0
+							},
+							"pipeline" : {
+								"is_visible" : false
+							},
+							"width" : 12,
+							"x" : 0.9,
+							"y" : 0.9
+						},
+						{
+							"color" : {
+								"alpha" : 1.0,
+								"blue" : 0.0,
+								"green" : 0.0,
+								"red" : 0.0
+							},
+							"evolve" : {
+								"is_visible" : false
+							},
+							"height" : 12,
+							"id" : {
+								"__type" : "uuid",
+								"uuid" : "56526fb2-79e2-0d00-8080-1c090bba3c94"
+							},
+							"label" : {
+								"text" : "Dissemination Platforms",
+								"x" : 0.5,
+								"y" : 2.0
+							},
+							"pipeline" : {
+								"is_visible" : false
+							},
+							"width" : 12,
+							"x" : 0.3,
 							"y" : 0.30000000000000004
+						},
+						{
+							"color" : {
+								"alpha" : 1.0,
+								"blue" : 0.0,
+								"green" : 0.0,
+								"red" : 0.0
+							},
+							"evolve" : {
+								"is_visible" : false
+							},
+							"height" : 12,
+							"id" : {
+								"__type" : "uuid",
+								"uuid" : "59526fb2-79e2-0d00-8081-9db90bba3c94"
+							},
+							"label" : {
+								"text" : "Monetization Methods",
+								"x" : 0.5,
+								"y" : 2.0
+							},
+							"pipeline" : {
+								"is_visible" : false
+							},
+							"width" : 12,
+							"x" : 0.11830065359477124,
+							"y" : 0.09999999999999998
 						}
 					]
 				},
