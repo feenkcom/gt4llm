@@ -71,41 +71,7 @@ GtLlmActionWardleyMapCreator >> initializeWardleyMapModel: aGtWardleyMapModel [
 
 { #category : #accessing }
 GtLlmActionWardleyMapCreator >> proposeModel: aModel [
-	| unsetNodes unsetEdges |
-	unsetNodes := self model nodes copy.
-
-	aModel nodes
-		do: [ :aNode | 
-			| aName |
-			aName := aNode label.
-			unsetNodes
-				detect: [ :anUnsetNode | aName = anUnsetNode label ]
-				ifFound: [ :anUnsetNode | unsetNodes remove: anUnsetNode ]
-				ifNone: [ aNode removeParent
-						addWardleyMapDecoratorModel: GtWardleyMapAddProposition new.
-					self model addNode: aNode.
-					nodes at: aName put: aNode ] ].
-
-	unsetNodes
-		do: [ :aNode | aNode addWardleyMapDecoratorModel: GtWardleyMapRemoveProposition new ].
-
-	unsetEdges := self model edges copy.
-
-	aModel edges
-		do: [ :anEdge | 
-			| aKey |
-			aKey := anEdge fromNode label -> anEdge toNode label.
-			unsetEdges
-				detect: [ :anUnsetEdge | aKey = (anUnsetEdge fromNode label -> anUnsetEdge toNode label) ]
-				ifFound: [ :anUnsetEdge | unsetEdges remove: anUnsetEdge ]
-				ifNone: [ anEdge removeParent
-						addWardleyMapDecoratorModel: GtWardleyMapAddProposition new;
-						fromNode: (nodes at: aKey key);
-						toNode: (nodes at: aKey value).
-					self model addEdge: anEdge ] ].
-
-	unsetEdges
-		do: [ :anEdge | anEdge addWardleyMapDecoratorModel: GtWardleyMapRemoveProposition new ]
+	GtWardleyMapUtility addModelAsPropositionsFrom: self model to: aModel
 ]
 
 { #category : #accessing }
