@@ -6,46 +6,11 @@ Class {
 
 { #category : #'as yet unclassified' }
 GtDWardleyMapMessage >> diffedModel [
-	| oldModel newModel unsetNodes unsetEdges nodes |
+	| oldModel newModel |
 	oldModel := (GtWardleyMapParser parse: self pipeline instance contentValue)
 			asWardleyMapModel.
 	newModel := (GtWardleyMapParser parse: self wardleyMap) asWardleyMapModel.
-	unsetNodes := oldModel nodes copy.
-	nodes := Dictionary new.
-
-	newModel nodes
-		do: [ :aNode | 
-			| aName |
-			aName := aNode label.
-			unsetNodes
-				detect: [ :anUnsetNode | aName = anUnsetNode label ]
-				ifFound: [ :anUnsetNode | unsetNodes remove: anUnsetNode ]
-				ifNone: [ aNode removeParent
-						addWardleyMapDecoratorModel: GtWardleyMapAddProposition new.
-					oldModel addNode: aNode.
-					nodes at: aName put: aNode ] ].
-
-	unsetNodes
-		do: [ :aNode | aNode addWardleyMapDecoratorModel: GtWardleyMapRemoveProposition new ].
-
-	unsetEdges := oldModel edges copy.
-
-	newModel edges
-		do: [ :anEdge | 
-			| aKey |
-			aKey := anEdge fromNode label -> anEdge toNode label.
-			unsetEdges
-				detect: [ :anUnsetEdge | aKey = (anUnsetEdge fromNode label -> anUnsetEdge toNode label) ]
-				ifFound: [ :anUnsetEdge | unsetEdges remove: anUnsetEdge ]
-				ifNone: [ anEdge removeParent
-						addWardleyMapDecoratorModel: GtWardleyMapAddProposition new;
-						fromNode: (nodes at: aKey key);
-						toNode: (nodes at: aKey value).
-					oldModel addEdge: anEdge ] ].
-
-	unsetEdges
-		do: [ :anEdge | anEdge addWardleyMapDecoratorModel: GtWardleyMapRemoveProposition new ].
-	^ oldModel
+	^ GtWardleyMapUtility addModelAsPropositionsFrom: oldModel to: newModel withPropositionBlock: #beReadOnly
 ]
 
 { #category : #'as yet unclassified' }

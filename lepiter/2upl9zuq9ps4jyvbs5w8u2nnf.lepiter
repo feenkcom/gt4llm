@@ -242,14 +242,52 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-10-31T11:04:04.135266+01:00"
+						"dateAndTimeString" : "2024-11-04T16:18:16.350947+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "4COsoiTiDQCvPFLCAiMxMA=="
 				},
-				"code" : "tutor := GtDWardleyMapTutor withApiKeyFromFile\r\t\tvaluePipelineFor: (GtLlmSerializableValueHolder new\r\t\t\t\tcontent: thisSnippet page children last;\r\t\t\t\tname: 'Wardley map';\r\t\t\t\tserializer: [ :aSnippet | aSnippet wardleyMap asWardleyMapScript ];\r\t\t\t\tupdater: [ :aSnippet :aScript | aSnippet wardleyMap: (GtWardleyMapParser parse: aScript) asWardleyMapModel ])"
+				"code" : "tutor := GtDWardleyMapTutor withApiKeyFromFile\r\t\tvaluePipelineFor: (GtLlmSerializableValueHolder new\r\t\t\t\tcontent: thisSnippet page children last;\r\t\t\t\tname: 'Wardley map';\r\t\t\t\tserializer: [ :aSnippet | aSnippet wardleyMap asWardleyMapScript ];\r\t\t\t\tupdater: [ :aSnippet :aScript | \r\t\t\t\t\taSnippet\r\t\t\t\t\t\twardleyMap: (GtWardleyMapUtility\r\t\t\t\t\t\t\t\taddModelAsPropositionsFrom: aSnippet wardleyMap\r\t\t\t\t\t\t\t\tto: (GtWardleyMapParser parse: aScript) asWardleyMapModel) ])"
+			},
+			{
+				"__type" : "wardleyMap",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-11-04T16:20:41.595712+01:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-11-04T16:20:41.595712+01:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "vTaRkHniDQC/jz7kC7o8lA=="
+				},
+				"wardleyMapDictionary" : {
+					"edges" : [ ],
+					"nodes" : [ ]
+				},
+				"snippetHeight" : 300
 			}
 		]
 	},
