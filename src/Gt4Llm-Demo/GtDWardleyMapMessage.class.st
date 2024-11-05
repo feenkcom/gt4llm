@@ -47,7 +47,7 @@ GtDWardleyMapMessage >> gtWardleyMapFor: aView [
 		ifTrue: [ view
 				actionButtonIcon: BrGlamorousVectorIcons accept
 				tooltip: 'Save model'
-				action: [ self chat pipeline instance updateContent: self wardleyMap ] ].
+				action: [ self chat pipeline instance updateContent: self wardleyMapWithRenames ] ].
 	^ view
 ]
 
@@ -72,4 +72,25 @@ GtDWardleyMapMessage >> renameCodeBlock [
 { #category : #'as yet unclassified' }
 GtDWardleyMapMessage >> wardleyMap [
 	^ self contentJson at: 'Wardley map'
+]
+
+{ #category : #'as yet unclassified' }
+GtDWardleyMapMessage >> wardleyMapWithRenames [
+	| wardleyMap |
+	wardleyMap := (GtWardleyMapParser parse: self wardleyMap) asWardleyMapModel.
+
+
+	self renameCodeBlock isEmptyOrNil
+		ifFalse: [ | aJson |
+			aJson := STONJSON fromString: self renameCodeBlock.
+			aJson
+				associationsDo: [ :aPair | 
+					wardleyMap
+						nodeWithName: aPair key
+						ifFound: [ :aNode | 
+							aNode
+								addWardleyMapDecoratorModel: (GtWardleyMapRenameProposition new options: aPair value) ]
+						ifNone: [  ] ] ].
+
+	^ wardleyMap
 ]
