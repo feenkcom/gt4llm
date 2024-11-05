@@ -6,11 +6,28 @@ Class {
 
 { #category : #'as yet unclassified' }
 GtDWardleyMapMessage >> diffedModel [
-	| oldModel newModel |
+	| oldModel newModel diffedModel |
 	oldModel := (GtWardleyMapParser parse: self pipeline instance contentValue)
 			asWardleyMapModel.
 	newModel := (GtWardleyMapParser parse: self wardleyMap) asWardleyMapModel.
-	^ GtWardleyMapUtility addModelAsPropositionsFrom: oldModel to: newModel withPropositionBlock: #beReadOnly
+	diffedModel := GtWardleyMapUtility
+			addModelAsPropositionsFrom: oldModel
+			to: newModel
+			withPropositionBlock: #beReadOnly.
+
+	self renameCodeBlock isEmptyOrNil
+		ifFalse: [ | aJson |
+			aJson := STONJSON fromString: self renameCodeBlock.
+			aJson
+				associationsDo: [ :aPair | 
+					diffedModel
+						nodeWithName: aPair key
+						ifFound: [ :aNode | 
+							aNode
+								addWardleyMapDecoratorModel: (GtWardleyMapRenameProposition new options: aPair value) ]
+						ifNone: [  ] ] ].
+
+	^ diffedModel
 ]
 
 { #category : #'as yet unclassified' }
@@ -45,6 +62,11 @@ GtDWardleyMapMessage >> gtWardleyMapScriptFor: aView [
 		priority: 2;
 		text: [ self wardleyMap ];
 		styler: GtWardleyMapParser gtStyler
+]
+
+{ #category : #'as yet unclassified' }
+GtDWardleyMapMessage >> renameCodeBlock [
+	^ self contentJson at: 'Rename' ifAbsent: [ '' ]
 ]
 
 { #category : #'as yet unclassified' }
