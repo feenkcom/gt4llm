@@ -1,7 +1,7 @@
 Class {
 	#name : #GtOpenAILepiterSnippetThreadMessage,
 	#superclass : #GtOpenAIActionThreadMessage,
-	#category : #'Gt4Llm-Tutor'
+	#category : #'Gt4OpenAI-Tutor'
 }
 
 { #category : #'as yet unclassified' }
