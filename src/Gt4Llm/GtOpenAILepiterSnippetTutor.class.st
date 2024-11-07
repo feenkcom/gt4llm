@@ -60,7 +60,7 @@ GtOpenAILepiterSnippetTutor >> gtSnippetFormatComponent [
 		"__type" : "uid",
 		"uidString" : "rY1Nep3iDQCA1/mhBoyAsw=="
 	},
-	"code" : "import datetime\rdatetime.datetime.now()5"
+	"code" : "import datetime\rdatetime.datetime.now()"
 }'
 ]
 
