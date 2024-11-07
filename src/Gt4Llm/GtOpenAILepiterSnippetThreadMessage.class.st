@@ -5,16 +5,28 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
+GtOpenAILepiterSnippetThreadMessage >> gtAcceptSnippetActionFor: anAction [
+	<gtLlmAction>
+	self isAssistantRole ifFalse: [ ^ anAction noAction ].
+	self snippet isEmptyOrNil ifTrue: [ ^ anAction noAction ].
+
+	^ anAction button
+		icon: BrGlamorousVectorIcons accept;
+		tooltip: 'Accept snippet';
+		action: [ self pipeline instance updateContent: self snippet ]
+]
+
+{ #category : #'as yet unclassified' }
 GtOpenAILepiterSnippetThreadMessage >> gtContentDiffFor: aView [
 	<gtView>
 	<gtLlmMessageView>
 	self snippet isEmptyOrNil ifTrue: [ ^ aView empty ].
-	self chat pipeline instance content isTextualSnippet ifFalse: [ ^ aView empty ].
+	self pipeline instance content isTextualSnippet ifFalse: [ ^ aView empty ].
 
 	^ aView diff
 		title: 'Content diff';
 		priority: 4;
-		from: [ self chat pipeline instance content text asString ];
+		from: [ self pipeline instance content text asString ];
 		to: [ self snippetObject text asString ]
 ]
 
@@ -25,9 +37,9 @@ GtOpenAILepiterSnippetThreadMessage >> gtDiffFor: aView [
 	self snippet isEmptyOrNil ifTrue: [ ^ aView empty ].
 
 	^ aView diff
-		title: 'Diff';
+		title: 'Snippet diff';
 		priority: 5;
-		from: [ self chat pipeline instance contentValue ];
+		from: [ self pipeline instance contentValue ];
 		to: [ self snippet ]
 ]
 
