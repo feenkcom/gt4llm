@@ -11,7 +11,14 @@ GtOpenAILepiterSnippetTutor >> forSnippet: snippet [
 				content: snippet;
 				name: 'Snippet';
 				serializer: [ :aSnippet | LeJsonV4 uniqueInstance serialize: aSnippet ];
-				updater: [ :aSnippet :aText | aSnippet become: (LeJsonV4 uniqueInstance deserialize: aText readStream) ])
+				updater: [ :aSnippet :aText | 
+					| parent db |
+					parent := aSnippet parent.
+					db := aSnippet database.
+					aSnippet
+						become: ((LeJsonV4 uniqueInstance deserialize: aText readStream)
+								parent: parent;
+								database: db) ])
 ]
 
 { #category : #'as yet unclassified' }

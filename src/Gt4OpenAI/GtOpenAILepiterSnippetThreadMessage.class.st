@@ -47,11 +47,17 @@ GtOpenAILepiterSnippetThreadMessage >> gtDiffFor: aView [
 GtOpenAILepiterSnippetThreadMessage >> gtSnippetFor: aView [
 	<gtView>
 	<gtLlmMessageView>
-	self snippet isEmptyOrNil ifTrue: [ ^ aView empty ].
+	(self snippet isEmptyOrNil and: [ self renameCodeBlock isEmptyOrNil ])
+		ifTrue: [ ^ aView empty ].
 
 	^ (self snippetObject asSnippetViewModel gtLiveFor: aView)
 		title: 'Snippet';
 		priority: 1
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAILepiterSnippetThreadMessage >> renameCodeBlock [
+	^ self contentJson at: 'Rename' ifAbsent: [ '' ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -61,5 +67,22 @@ GtOpenAILepiterSnippetThreadMessage >> snippet [
 
 { #category : #'as yet unclassified' }
 GtOpenAILepiterSnippetThreadMessage >> snippetObject [
-	^ LeJsonV4 uniqueInstance deserialize: self snippet readStream
+	| wardleyMapSnippet wardleyMap |
+	wardleyMapSnippet := self snippet isEmptyOrNil
+			ifTrue: [ self pipeline instance content ]
+			ifFalse: [ LeJsonV4 uniqueInstance deserialize: self snippet readStream ].
+	wardleyMap := wardleyMapSnippet wardleyMap.
+
+	self renameCodeBlock isEmptyOrNil
+		ifFalse: [ | aJson |
+			aJson := STONJSON fromString: self renameCodeBlock.
+			aJson
+				associationsDo: [ :aPair | 
+					wardleyMap
+						nodeWithName: aPair key
+						ifFound: [ :aNode | 
+							aNode
+								addWardleyMapDecoratorModel: (GtWardleyMapRenameProposition new options: aPair value) ]
+						ifNone: [  ] ] ].
+	^ wardleyMapSnippet
 ]

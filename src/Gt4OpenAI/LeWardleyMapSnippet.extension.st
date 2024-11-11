@@ -1,6 +1,6 @@
 Extension { #name : #LeWardleyMapSnippet }
 
-{ #category : #'*Gt4Llm' }
+{ #category : #'*Gt4OpenAI' }
 LeWardleyMapSnippet >> tutor [
 	^ GtOpenAILepiterWardleyMapSnippetTutor withApiKeyFromFile
 		forSnippet: self;
