@@ -10,7 +10,7 @@ GtOpenAILepiterSnippetTutor >> forSnippet: snippet [
 		valuePipelineFor: (GtLlmSerializableValueHolder new
 				content: snippet;
 				name: 'Snippet';
-				serializer: [ :aSnippet | LeJsonV4 uniqueInstance serializePretty: aSnippet ];
+				serializer: [ :aSnippet | LeJsonV4 uniqueInstance serialize: aSnippet ];
 				updater: [ :aSnippet :aText | aSnippet become: (LeJsonV4 uniqueInstance deserialize: aText readStream) ])
 ]
 
