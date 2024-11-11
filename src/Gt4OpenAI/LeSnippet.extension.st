@@ -1,6 +1,6 @@
 Extension { #name : #LeSnippet }
 
-{ #category : #'*Gt4Llm' }
+{ #category : #'*Gt4OpenAI' }
 LeSnippet >> tutor [
 	^ GtOpenAILepiterSnippetTutor withApiKeyFromFile
 		forSnippet: self;
