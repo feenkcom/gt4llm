@@ -132,8 +132,9 @@ GtOpenAIActionAssistantChat >> waitForActionResult [
 			pairs
 				do: [ :aPair | 
 					[ | aResult |
-					aResult := aMessage codeBlocksExecutor check: aPair.
-					aResult hasError ifTrue: [ self error: aResult lastResult ] ]
+					aMessage codeBlocksExecutor
+						ifNotNil: [ aResult := aMessage codeBlocksExecutor check: aPair.
+							aResult hasError ifTrue: [ self error: aResult lastResult ] ] ]
 						on: Error
 						do: [ :anError | 
 							anError asNotification registerNotifications.
