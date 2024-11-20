@@ -127,7 +127,7 @@ GtLlmThreadMessageContentHolder >> viewsToTabGroup: aCollectionOfViews [
 				ifItHasContent: [ | aTab |
 					aTab := BrTab new.
 					aTab phlow
-						beView;
+						beViewTitle;
 						entity: view.
 					aTab
 						aptitude: BrGlamorousTabAptitude
@@ -145,31 +145,32 @@ GtLlmThreadMessageContentHolder >> viewsToTabGroup: aCollectionOfViews [
 			aptitude: BrGlamorousTabGroupAptitude;
 			addTabs: tabs.
 	aTabGroup phlow entity: (GtPhlowCompositeView new views: aCollectionOfViews).
-	aBuildContext := GtPhlowBuildContext new 
-					object: self threadMessageViewModel threadMessage.
-			
+	aBuildContext := GtPhlowBuildContext new
+			object: self threadMessageViewModel threadMessage.
+
 	aListener := GtPhlowClassPragmaChangeListener new
-		interestingPragmas: GtLlmBasicThreadMessageViewModel messageViewPragmas 
-			andObject: aBuildContext object;
-		onMethodAddedAction: (GtPhlowChangeTabGroupAddTabAction new
-			tabGroup: aTabGroup;
-			buildContext: aBuildContext;
-			contentsBuilder: [ :aPhlowView | [ 
-				aPhlowView asElementDo: [ :anElement | 
-					anElement phlow beViewContent.
-					anElement ] ] ]);
-		onMethodRemovedAction: (GtPhlowChangeTabGroupRemoveTabAction new
-			tabGroup: aTabGroup);
-		onMethodModifiedAction: (GtPhlowChangeTabGroupModifyTabAction new
-			tabGroup: aTabGroup;
-			buildContext: aBuildContext;
-			contentsBuilder: [ :aPhlowView | [ 
-				aPhlowView asElementDo: [ :anElement | 
-					anElement phlow beViewContent.
-					anElement ] ] ]);
-		subscribeToSystem.
-			
+			interestingPragmas: GtLlmBasicThreadMessageViewModel messageViewPragmas
+				andObject: aBuildContext object;
+			onMethodAddedAction: (GtPhlowChangeTabGroupAddTabAction new
+					tabGroup: aTabGroup;
+					buildContext: aBuildContext;
+					contentsBuilder: [ :aPhlowView | 
+						[ aPhlowView
+							asElementDo: [ :anElement | 
+								anElement phlow beViewContent.
+								anElement ] ] ]);
+			onMethodRemovedAction: (GtPhlowChangeTabGroupRemoveTabAction new tabGroup: aTabGroup);
+			onMethodModifiedAction: (GtPhlowChangeTabGroupModifyTabAction new
+					tabGroup: aTabGroup;
+					buildContext: aBuildContext;
+					contentsBuilder: [ :aPhlowView | 
+						[ aPhlowView
+							asElementDo: [ :anElement | 
+								anElement phlow beViewContent.
+								anElement ] ] ]);
+			subscribeToSystem.
+
 	aTabGroup userData at: GtPhlowClassPragmaChangeListener put: aListener.
-			
+
 	^ aTabGroup
 ]
