@@ -4,6 +4,22 @@ Class {
 	#category : #'Gt4Llm-Demo'
 }
 
+{ #category : #'instance creation' }
+GtDPostTutor class >> forSnippet: aTextSnippet [
+	| tutor |
+	tutor := self withApiKeyFromFile.
+	tutor
+		valuePipelineFor: (GtLlmSerializableValueHolder new
+				name: 'Post';
+				content: aTextSnippet;
+				serializer: [ :aSnippet | aSnippet text asString ];
+				updater: [ :aSnippet :aText | 
+					(aSnippet commandBuilder editTextualSnippetCommand
+						string: aText
+						withSource: tutor -> true) execute ]).
+	^ tutor
+]
+
 { #category : #'as yet unclassified' }
 GtDPostTutor >> forObject: anObject [
 	^ self valuePipelineFor: anObject withName: 'Post'
