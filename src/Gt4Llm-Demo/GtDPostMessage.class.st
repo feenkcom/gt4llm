@@ -4,7 +4,7 @@ Class {
 	#category : #'Gt4Llm-Demo'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #view }
 GtDPostMessage >> gtDiffFor: aView [
 	<gtView>
 	<gtLlmMessageView>
