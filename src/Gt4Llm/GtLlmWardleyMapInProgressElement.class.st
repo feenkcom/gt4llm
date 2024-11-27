@@ -3,7 +3,7 @@ Class {
 	#superclass : #BlElement,
 	#traits : 'TGtWithWardleyMapDecoratorViewModel + TBrLayoutResizable',
 	#classTraits : 'TGtWithWardleyMapDecoratorViewModel classTrait + TBrLayoutResizable classTrait',
-	#category : #'Gt4Llm-Examples - Wardley Map'
+	#category : #'Gt4Llm-Domain - Wardley Map'
 }
 
 { #category : #initialization }

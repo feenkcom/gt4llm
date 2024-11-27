@@ -1,7 +1,7 @@
 Class {
 	#name : #Gt4LlmHomeSection,
 	#superclass : #GtHomeMultiCardSection,
-	#category : #Gt4Llm
+	#category : #'Gt4Llm-World'
 }
 
 { #category : #accessing }
