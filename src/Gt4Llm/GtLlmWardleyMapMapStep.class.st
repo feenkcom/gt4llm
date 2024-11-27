@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLlmWardleyMapMapStep,
 	#superclass : #GtLlmWardleyMapStep,
-	#category : #'Gt4Llm-Examples - Wardley Map'
+	#category : #'Gt4Llm-Domain - Wardley Map'
 }
 
 { #category : #accessing }
