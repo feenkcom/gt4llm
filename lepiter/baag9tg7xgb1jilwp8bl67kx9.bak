@@ -29,7 +29,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-08-16T18:28:55.014103+02:00"
+						"dateAndTimeString" : "2024-08-16T18:29:03.835411+02:00"
 					}
 				},
 				"uid" : {
@@ -39,7 +39,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : ""
+				"string" : "{{gtTodo:label=Expand this}}"
 			},
 			{
 				"__type" : "textSnippet",
@@ -140,7 +140,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-08-16T18:26:32.516441+02:00"
+						"dateAndTimeString" : "2024-11-27T09:58:19.3958+01:00"
 					}
 				},
 				"uid" : {
@@ -150,7 +150,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "**Tutor** —"
+				"string" : "**Tutor** — "
 			},
 			{
 				"__type" : "textSnippet",
@@ -432,12 +432,12 @@
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2024-08-16T18:25:48.33326+02:00"
+			"dateAndTimeString" : "2024-08-16T18:29:14.195536+02:00"
 		}
 	},
 	"pageType" : {
 		"__type" : "namedPage",
-		"title" : "GT OpenAI domain concepts"
+		"title" : "GT OpenAI domain concepts (todo)"
 	},
 	"uid" : {
 		"__type" : "uuid",
