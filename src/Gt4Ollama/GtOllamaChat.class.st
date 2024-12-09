@@ -2,10 +2,21 @@ Class {
 	#name : #GtOllamaChat,
 	#superclass : #GtLlmChat,
 	#instVars : [
-		'assistantWorking'
+		'assistantWorking',
+		'format'
 	],
 	#category : #'Gt4Ollama-Chat'
 }
+
+{ #category : #accessing }
+GtOllamaChat >> format [
+	^ format
+]
+
+{ #category : #accessing }
+GtOllamaChat >> format: anObject [
+	format := anObject
+]
 
 { #category : #accessing }
 GtOllamaChat >> gtTriggerAssistantActionFor: anAction [
@@ -68,7 +79,8 @@ GtOllamaChat >> triggerAssistant [
 
 	result := client
 			completeChatWithModel: self model
-			andMessages: messages reversed.
+			andMessages: messages reversed
+			andFormat: self format.
 
 	self addMessage: (result asLlmMessage chat: self).
 
