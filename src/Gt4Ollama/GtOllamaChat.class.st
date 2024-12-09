@@ -46,6 +46,12 @@ GtOllamaChat >> initializeMessages [
 ]
 
 { #category : #'as yet unclassified' }
+GtOllamaChat >> model: aModel [
+	super model: aModel.
+	self client pullModel: aModel
+]
+
+{ #category : #'as yet unclassified' }
 GtOllamaChat >> sendAssistantMessage: aMessage [
 	messages
 		addFirst: (GtLlmUserMessage new
