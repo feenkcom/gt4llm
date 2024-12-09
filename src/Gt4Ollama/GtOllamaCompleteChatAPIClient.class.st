@@ -3,10 +3,32 @@ Class {
 	#superclass : #GtLlmEndpointClient,
 	#instVars : [
 		'messages',
-		'model'
+		'model',
+		'format'
 	],
 	#category : #'Gt4Ollama-Chat'
 }
+
+{ #category : #accessing }
+GtOllamaCompleteChatAPIClient >> entity [
+	| entity |
+	entity := {'model' -> self model.
+			'messages' -> (self messages collect: #serialize)} asDictionary.
+
+	self format ifNotNil: [ entity at: 'format' put: self format ].
+
+	^ entity
+]
+
+{ #category : #accessing }
+GtOllamaCompleteChatAPIClient >> format [
+	^ format
+]
+
+{ #category : #accessing }
+GtOllamaCompleteChatAPIClient >> format: anObject [
+	format := anObject
+]
 
 { #category : #accessing }
 GtOllamaCompleteChatAPIClient >> messages [
@@ -30,10 +52,7 @@ GtOllamaCompleteChatAPIClient >> model: anObject [
 
 { #category : #accessing }
 GtOllamaCompleteChatAPIClient >> request [
-	^ self client
-		postStreaming: '/chat'
-		withEntity: {'model' -> self model.
-				'messages' -> (self messages collect: #serialize)} asDictionary
+	^ self client postStreaming: '/chat' withEntity: self entity
 ]
 
 { #category : #accessing }

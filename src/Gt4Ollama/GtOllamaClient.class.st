@@ -35,6 +35,16 @@ GtOllamaClient >> completeChatWithModel: aString andMessages: aCollection [
 ]
 
 { #category : #accessing }
+GtOllamaClient >> completeChatWithModel: aString andMessages: aCollection andFormat: aFormat [
+	^ GtOllamaCompleteChatAPIClient new
+		client: self;
+		model: aString;
+		messages: aCollection;
+		format: aFormat;
+		perform
+]
+
+{ #category : #accessing }
 GtOllamaClient >> createModel: aString withModelFile: aModelFileString [
 	^ GtOllamaCreateModelClient new
 		client: self;
