@@ -116,6 +116,23 @@ GtLlmChatMessage >> gtContentFor: aView [
 				threadMessageViewModel: (GtLlmThreadMessageViewModel new threadMessage: self) ]
 ]
 
+{ #category : #'as yet unclassified' }
+GtLlmChatMessage >> gtJsonFor: aView [
+	<gtView>
+	<gtLlmMessageView>
+	[ STONJSON fromString: self content ] on: Error do: [ ^ aView empty ].
+
+	^ aView textEditor
+		title: 'JSON';
+		priority: 1;
+		actionButtonIcon: BrGlamorousVectorIcons playinspect
+			tooltip: 'Inspect parsed JSON'
+			action: [ :aButton | aButton phlow spawnObject: (STONJSON fromString: self content) ];
+		aptitude: [ BrGlamorousCodeEditorAptitude ];
+		styler: [ JSONParser gtStyler ];
+		text: [ STONJSON toStringPretty: (STONJSON fromString: self content) ]
+]
+
 { #category : #accessing }
 GtLlmChatMessage >> gtToLlmActionFor: anAction [
 	<gtLlmAction>
