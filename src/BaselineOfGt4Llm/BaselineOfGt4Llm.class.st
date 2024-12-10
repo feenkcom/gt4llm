@@ -29,7 +29,7 @@ BaselineOfGt4Llm >> baseline: spec [
 	<baseline>
 	^ spec
 		for: #common
-		do: [ spec postLoadDoIt: #loadLepiter.
+		do: [ 
 			spec
 				baseline: 'Gt4Ollama'
 				with: [ spec repository: 'github://feenkcom/gt4llm:main/src' ].
