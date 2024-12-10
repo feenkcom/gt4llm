@@ -39,3 +39,15 @@ GtPharoSourceCoder >> renameFormatComponent: node in: aTextualViewModel for: anE
 		tutorClass: aTextualViewModel behavior;
 		originalNode: node) executeIn: anElement
 ]
+
+{ #category : #'*Gt4Llm' }
+GtPharoSourceCoder >> renameFormatComponentAt: anIndex in: aCoderViewModel from: anElement [
+	(self nodeAt: anIndex)
+		ifNotNil: [ :node | 
+			self
+				renameFormatComponent: node
+				in: aCoderViewModel
+				for: anElement.
+			^ true ].
+	^ false
+]
