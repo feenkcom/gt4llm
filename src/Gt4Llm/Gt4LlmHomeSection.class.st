@@ -1,8 +1,21 @@
 Class {
 	#name : #Gt4LlmHomeSection,
 	#superclass : #GtHomeMultiCardSection,
+	#classVars : [
+		'ShouldShowSection'
+	],
 	#category : #'Gt4Llm-World'
 }
+
+{ #category : #settings }
+Gt4LlmHomeSection class >> shouldShowSection [
+	^ ShouldShowSection ifNil: [ false ]
+]
+
+{ #category : #settings }
+Gt4LlmHomeSection class >> shouldShowSection: aBoolean [
+	ShouldShowSection := aBoolean
+]
 
 { #category : #accessing }
 Gt4LlmHomeSection >> apiKeyCard [
