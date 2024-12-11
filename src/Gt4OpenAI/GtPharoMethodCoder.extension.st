@@ -22,6 +22,8 @@ GtPharoMethodCoder >> addRenameLlmMenuAddOnsAst: anAst to: coderAddOns from: aCo
 { #category : #'*Gt4OpenAI' }
 GtPharoMethodCoder >> addRenameSuggestionsMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns: 10000>
+	GtOpenAICoderActionTutor isConfigured ifFalse: [  ^ self ].
+	
 	(self nodeFrom: aCoderViewModel)
 		ifNotNil: [ :node | 
 			| highlightNode |
@@ -52,6 +54,8 @@ GtPharoMethodCoder >> addRenameSuggestionsMenuAddOnsAst: anAst to: coderAddOns f
 { #category : #'*Gt4OpenAI' }
 GtPharoMethodCoder >> addRenameTemporarySuggestionRefactoringFor: aNode to: coderAddOns [
 	(aNode isVariable and: [ self isLocalVariable: aNode ]) ifFalse: [ ^ self ].
+	GtOpenAICoderActionTutor isConfigured ifFalse: [  ^ self ].
+	
 	coderAddOns
 		addContextMenuItem: (self
 				createLabel: 'Propose renames for local (OpenAI)'
