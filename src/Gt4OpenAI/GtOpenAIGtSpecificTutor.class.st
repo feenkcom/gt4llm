@@ -32,13 +32,11 @@ GtOpenAIGtSpecificTutor class >> isTutorAvailable [
 
 { #category : #accessing }
 GtOpenAIGtSpecificTutor class >> withApiKeyFromClipboard [
-	<gtExample>
 	^ self new apiKey: Clipboard clipboardText
 ]
 
 { #category : #accessing }
 GtOpenAIGtSpecificTutor class >> withApiKeyFromFile [
-	<gtExample>
 	^ self new apiKey: GtOpenAIClient apiKeyFileContents
 ]
 

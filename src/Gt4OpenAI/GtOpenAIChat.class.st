@@ -6,13 +6,11 @@ Class {
 
 { #category : #accessing }
 GtOpenAIChat class >> withApiKeyFromClipboard [
-	<gtExample>
 	^ self new apiKey: Clipboard clipboardText
 ]
 
 { #category : #accessing }
 GtOpenAIChat class >> withApiKeyFromFile [
-	<gtExample>
 	^ self new apiKey: GtOpenAIClient apiKeyFileContents
 ]
 

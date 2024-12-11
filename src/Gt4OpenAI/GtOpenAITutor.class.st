@@ -28,13 +28,11 @@ GtOpenAITutor class >> refreshInstance [
 
 { #category : #accessing }
 GtOpenAITutor class >> withApiKeyFromClipboard [
-	<gtExample>
 	^ self new apiKey: Clipboard clipboardText
 ]
 
 { #category : #accessing }
 GtOpenAITutor class >> withApiKeyFromFile [
-	<gtExample>
 	^ self new apiKey: GtOpenAIClient apiKeyFileContents
 ]
 
