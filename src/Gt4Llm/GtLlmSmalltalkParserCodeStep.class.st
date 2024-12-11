@@ -15,7 +15,7 @@ GtLlmSmalltalkParserCodeStep >> runStep: aContext [
 		addResult: (GtLlmStepSuccess new
 				checker: self;
 				content: (GtPharoParser
-						parseWithErrors: aContext lastResult code source
+						parse: aContext lastResult code source
 						startingAt: GtPharoParser startingStateForMethodSequence)) ]
 		on: Exception
 		do: [ :anError | 
