@@ -38,13 +38,11 @@ GtOpenAIClient class >> initialize [
 
 { #category : #accessing }
 GtOpenAIClient class >> withApiKeyFromClipboard [
-	<gtExample>
 	^ self new apiKey: Clipboard clipboardText
 ]
 
 { #category : #accessing }
 GtOpenAIClient class >> withApiKeyFromFile [
-	<gtExample>
 	^ self new apiKey: self apiKeyFileContents
 ]
 
