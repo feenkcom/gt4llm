@@ -35,6 +35,7 @@ GtLlmContextExamples >> defaultCheckerForPythonOnCorrectCode [
 { #category : #accessing }
 GtLlmContextExamples >> defaultCheckerForSmalltalkOnCodeWithSyntaxError [
 	<gtExample>
+	<noTest>
 	| checker string result |
 	checker := self defaultChecker.
 	string := self blockFromString: '```smalltalk
