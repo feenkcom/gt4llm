@@ -16,6 +16,11 @@ GtOpenAITutor class >> instance [
 	^ instance ifNil: [ self refreshInstance ]
 ]
 
+{ #category : #'as yet unclassified' }
+GtOpenAITutor class >> isConfigured [
+	^ GtOpenAIClient apiKeyFile exists
+]
+
 { #category : #accessing }
 GtOpenAITutor class >> refreshInstance [
 	^ instance := self withApiKeyFromFile createAssistant

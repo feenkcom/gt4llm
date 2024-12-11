@@ -80,6 +80,7 @@ GtPharoMethodCoder >> addRenameTemporarySuggestionRefactoringFor: aNode to: code
 GtPharoMethodCoder >> addReviewAddonsTo: anAst to: coderAddOns viewModel: aCoderViewModel [
 	<gtAstCoderAddOns: 10>
 	self compiledMethod ifNil: [ ^ self ].
+	GtOpenAICoderActionTutor isConfigured ifFalse: [  ^ self ].
 
 	coderAddOns
 		addContextAction: 'Use OpenAI to review the method.' translated
