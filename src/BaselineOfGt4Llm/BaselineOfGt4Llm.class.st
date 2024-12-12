@@ -24,19 +24,20 @@ BaselineOfGt4Llm class >> loadLepiter [
 			self inform: 'Repository not found.' ]
 ]
 
-{ #category : #accessing }
+{ #category : #baseline }
 BaselineOfGt4Llm >> baseline: spec [
 	<baseline>
-	^ spec
-		for: #common
-		do: [ 
-			spec
-				baseline: 'Gt4Ollama'
-				with: [ spec repository: 'github://feenkcom/gt4llm:main/src' ].
-			spec
-				baseline: 'Gt4OpenAI'
-				with: [ spec repository: 'github://feenkcom/gt4llm:main/src' ].
-			spec package: 'Gt4Llm-Demo' with: [ spec requires: #('Gt4OpenAI') ] ]
+	spec for: #'common' do: [
+		spec
+			baseline: 'Gt4Ollama' with: [
+				spec repository: 'github://feenkcom/gt4llm:v0.6.0/src' ].
+		spec
+			baseline: 'Gt4OpenAI' with: [
+				spec repository: 'github://feenkcom/gt4llm:v0.6.0/src' ].
+
+		spec package: 'Gt4Llm-Demo' with: [
+			spec requires: #(#Gt4OpenAI) ].
+	]
 ]
 
 { #category : #accessing }
