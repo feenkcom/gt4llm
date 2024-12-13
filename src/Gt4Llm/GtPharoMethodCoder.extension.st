@@ -1,15 +1,6 @@
 Extension { #name : #GtPharoMethodCoder }
 
 { #category : #'*Gt4Llm' }
-GtPharoMethodCoder >> addRefactorMethodAst: anAst to: coderAddOns [
-	<gtCoderContextMenuAddOns: 250>
-	self
-		addContextMenuItemFrom: GtLlmCoderRefactorShortcut new
-		withId: nil
-		to: coderAddOns
-]
-
-{ #category : #'*Gt4Llm' }
 GtPharoMethodCoder >> openAITutorChat [
 	^ self
 		attributeNamed: #openAITutorChat
