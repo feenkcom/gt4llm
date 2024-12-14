@@ -31,8 +31,9 @@ GtPharoMethodCoder >> addRenameSuggestionsMenuAddOnsAst: anAst to: coderAddOns f
 				ifTrue: [ highlightNode := node isMessageSend ifTrue: [ node message ] ifFalse: [ node ].
 					coderAddOns
 						addContextMenuItem: (self
-								createLabel: 'Suggest renames (OpenAI)'
+								createLabel: 'Suggest renames'
 								description: node selector)
+						group: BrMenuItemGroupConfiguration llm
 						hover: nil
 						leave: nil
 						action: [ :aTextualViewModel :anElement | 
@@ -58,8 +59,9 @@ GtPharoMethodCoder >> addRenameTemporarySuggestionRefactoringFor: aNode to: code
 	
 	coderAddOns
 		addContextMenuItem: (self
-				createLabel: 'Propose renames for local (OpenAI)'
+				createLabel: 'Propose renames for local'
 				description: aNode variableName)
+		group: BrMenuItemGroupConfiguration llm
 		hover: (self highlightNodesBlock: (self allReferencesTo: aNode))
 		leave: self removeHighlightBlock
 		action: [ :aCoderViewModel | 

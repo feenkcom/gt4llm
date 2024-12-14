@@ -13,6 +13,7 @@ GtPharoSourceCoder >> addTutorFormatMenuItemsFor: anAst to: coderAddOns from: aC
 						addContextMenuItem: (self
 								createLabel: 'Rename Format Component'
 								description: node literalValue)
+						group: BrMenuItemGroupConfiguration llm
 						hover: (self highlightNodeBlock: node)
 						leave: self removeHighlightBlock
 						action: [ :aTextualViewModel :element | 
