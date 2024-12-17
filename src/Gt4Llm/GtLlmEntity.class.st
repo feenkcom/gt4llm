@@ -49,7 +49,7 @@ GtLlmEntity >> from: aDictionary [
 	self class serializationProperties
 		do: [ :aPair | 
 			self
-				perform: aPair value , ':'
+				perform: (aPair value , ':') asSymbol
 				withArguments: {aDictionary at: aPair key ifAbsent: [ nil ]} ]
 ]
 
