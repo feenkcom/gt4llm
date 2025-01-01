@@ -18,6 +18,13 @@ GtLlmModelFile >> addDirective: aDirective [
 ]
 
 { #category : #accessing }
+GtLlmModelFile >> addMessage: aMessage [
+	self
+		addDirective: ((GtLlmMessageDirective withText: aMessage role)
+				messageText: aMessage content)
+]
+
+{ #category : #accessing }
 GtLlmModelFile >> content [
 	^ '
 
