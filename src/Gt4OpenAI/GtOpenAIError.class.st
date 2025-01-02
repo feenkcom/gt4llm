@@ -1,6 +1,6 @@
 Class {
 	#name : #GtOpenAIError,
-	#superclass : #Error,
+	#superclass : #GtLlmError,
 	#instVars : [
 		'type',
 		'param',
@@ -26,12 +26,6 @@ GtOpenAIError >> code [
 { #category : #accessing }
 GtOpenAIError >> code: anObject [
 	code := anObject
-]
-
-{ #category : #'gt - extensions' }
-GtOpenAIError >> gtMessageTextFor: aView [
-	<gtExceptionDebuggingView>
-	^ super gtMessageTextFor: aView
 ]
 
 { #category : #accessing }
