@@ -95,6 +95,16 @@ GtOllamaClient >> generateEmbeddingsWithModel: aModelString andInput: anInputStr
 ]
 
 { #category : #accessing }
+GtOllamaClient >> generateResponseWithModel: modelString andPrompt: promptString [
+
+	^ GtOllamaGenerateResponseClient new
+		client: self;
+		model: modelString;
+		prompt: promptString;
+		perform
+]
+
+{ #category : #accessing }
 GtOllamaClient >> get: aString [
 	| aClient |
 	aClient := self initializeClient beOneShot.
