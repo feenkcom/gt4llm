@@ -48,7 +48,9 @@ GtOllamaChat >> initializeMessages [
 { #category : #'as yet unclassified' }
 GtOllamaChat >> model: aModel [
 	super model: aModel.
-	self client pullModel: aModel
+	
+	"ignore pulling errors that occur on local models. worst case is we’ll get an issue later when trying to chat"
+	[ self client pullModel: aModel ] on: Error do: [  ]
 ]
 
 { #category : #'as yet unclassified' }
