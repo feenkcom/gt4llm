@@ -100,7 +100,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-08-15T15:25:23.166572+02:00"
+						"dateAndTimeString" : "2024-08-15T15:25:27.951929+02:00"
 					}
 				},
 				"uid" : {
@@ -110,7 +110,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "This client is your entrypoint for interacting with Ollama. Next, you can download a new model. This step is optional if you’ve already downloaded all the models you want. Please note that this can take quite some time, depending on the size of the model a"
+				"string" : "This client is your entrypoint for interacting with Ollama. Next, you can download a new model. This step is optional if you’ve already downloaded all the models you want. Please note that this can take quite some time, depending on the size of the model."
 			},
 			{
 				"__type" : "pharoSnippet",

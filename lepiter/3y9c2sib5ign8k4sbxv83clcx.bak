@@ -137,7 +137,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-12-09T08:58:16.158829+01:00"
+						"dateAndTimeString" : "2024-12-09T11:04:42.639993+01:00"
 					}
 				},
 				"uid" : {
@@ -147,7 +147,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "We can then provided it to a chat and interact with it."
+				"string" : "We can then provide it to a chat and interact with it."
 			},
 			{
 				"__type" : "pharoSnippet",
@@ -174,14 +174,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-12-09T10:56:41.358287+01:00"
+						"dateAndTimeString" : "2025-01-09T10:12:23.843683+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "oCh0cjPlDQCj3RQgB4K/Qg=="
 				},
-				"code" : "chat := GtOllamaChat new\r\t\tmodel: 'llama3.1';\r\t\tformat: format.\r\rchat\r\tsendMessage: 'Hello Llama! What is the normal temperature range of the human body?'"
+				"code" : "chat := GtOllamaChat new\r\t\tmodel: 'phi4';\r\t\tformat: format.\r\rchat\r\tsendMessage: 'Hello Phi! What is the normal temperature range of the human body?'"
 			}
 		]
 	},
