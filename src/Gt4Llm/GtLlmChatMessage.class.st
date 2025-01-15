@@ -74,6 +74,11 @@ GtLlmChatMessage >> content: anObject [
 	content := anObject
 ]
 
+{ #category : #'as yet unclassified' }
+GtLlmChatMessage >> contentJson [
+	^ STONJSON fromString: self content
+]
+
 { #category : #accessing }
 GtLlmChatMessage >> contentSummary [
 	^ self contentText lines ifEmpty: [ '' ] ifNotEmpty: #first
@@ -127,7 +132,7 @@ GtLlmChatMessage >> gtJsonFor: aView [
 		priority: 1;
 		actionButtonIcon: BrGlamorousVectorIcons playinspect
 			tooltip: 'Inspect parsed JSON'
-			action: [ :aButton | aButton phlow spawnObject: (STONJSON fromString: self content) ];
+			action: [ :aButton | aButton phlow spawnObject: self contentJson ];
 		aptitude: [ BrGlamorousCodeEditorAptitude ];
 		styler: [ JSONParser gtStyler ];
 		text: [ STONJSON toStringPretty: (STONJSON fromString: self content) ]
