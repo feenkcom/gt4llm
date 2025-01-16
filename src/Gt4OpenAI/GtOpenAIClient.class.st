@@ -103,15 +103,6 @@ GtOpenAIClient >> createAssistant: anAssistant [
 ]
 
 { #category : #accessing }
-GtOpenAIClient >> createAssistantFile: aFileId forAssistant: anAssistantId [ 
-	^ GtOpenAICreateAssistantFileAPIClient new
-		client: self;
-		assistant: anAssistantId;
-		file: aFileId;
-		perform
-]
-
-{ #category : #accessing }
 GtOpenAIClient >> createFineTuningJobOnModel: aModelName withFile: aFileId [
 	^ GtOpenAICreateFineTuningJobAPIClient new
 		client: self;

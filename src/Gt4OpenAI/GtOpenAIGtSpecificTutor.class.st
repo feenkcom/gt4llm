@@ -49,7 +49,9 @@ GtOpenAIGtSpecificTutor >> addChat [
 			pipeline: pipelineBuilder value.
 	chats add: aChat.
 
-	self files ifNotEmpty: [ aChat sendMessage: self files toFileDescriptions ].
+	self files
+		ifNotEmpty: [ aChat
+				addFiles: self files ].
 
 	^ aChat
 ]
@@ -148,7 +150,6 @@ GtOpenAIGtSpecificTutor >> createAssistant [
 		do: [ :aFile | 
 			| file |
 			file := client uploadFile: aFile file withPurpose: 'assistants'.
-			client createAssistantFile: file id forAssistant: assistant id.
 			aFile remoteId: file id.
 			apiFiles add: file ].
 
