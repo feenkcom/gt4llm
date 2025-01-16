@@ -81,7 +81,7 @@ GtLlmThreadMessageContentHolder >> threadMessageViewModel: anObject [
 
 	threadMessageViewModel := anObject.
 
-	threadMessageViewModel
+	threadMessageViewModel weak
 		when: GtOpenAIThreadMessageViewModelChanged
 		send: #onThreadMessageViewModelChanged:
 		to: self.
@@ -148,7 +148,7 @@ GtLlmThreadMessageContentHolder >> viewsToTabGroup: aCollectionOfViews [
 	aBuildContext := GtPhlowBuildContext new
 			object: self threadMessageViewModel threadMessage.
 
-	aListener := GtPhlowClassPragmaChangeListener new
+	aListener := GtPhlowChangeMethodSystemAnnouncerListener new
 			interestingPragmas: GtLlmBasicThreadMessageViewModel messageViewPragmas
 				andObject: aBuildContext object;
 			onMethodAddedAction: (GtPhlowChangeTabGroupAddTabAction new
@@ -170,7 +170,7 @@ GtLlmThreadMessageContentHolder >> viewsToTabGroup: aCollectionOfViews [
 								anElement ] ] ]);
 			subscribeToSystem.
 
-	aTabGroup userData at: GtPhlowClassPragmaChangeListener put: aListener.
+	aTabGroup userData at: GtPhlowChangeMethodSystemAnnouncerListener put: aListener.
 
 	^ aTabGroup
 ]
