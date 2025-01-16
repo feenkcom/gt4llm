@@ -3,7 +3,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'conversations',
-		'model'
+		'model',
+		'name'
 	],
 	#category : #'Gt4Llm-Fine Tuning'
 }
@@ -22,6 +23,11 @@ GtLlmFineTuningFile >> asJson [
 { #category : #accessing }
 GtLlmFineTuningFile >> basename [
 	^ self name
+]
+
+{ #category : #accessing }
+GtLlmFineTuningFile >> binaryContents [
+	^ self asJson asByteString
 ]
 
 { #category : #accessing }

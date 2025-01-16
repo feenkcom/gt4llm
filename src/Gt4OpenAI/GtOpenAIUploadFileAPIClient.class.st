@@ -19,6 +19,15 @@ GtOpenAIUploadFileAPIClient >> file: anObject [
 ]
 
 { #category : #accessing }
+GtOpenAIUploadFileAPIClient >> fileToEntity [
+	"todo: what would be better here?"
+
+	(self file isKindOf: GtLlmFineTuningFile)
+		ifTrue: [ ^ ZnEntity with: self file contents type: 'application/jsonl' ].
+	^ ZnEntity bytes: self file binaryContents
+]
+
+{ #category : #accessing }
 GtOpenAIUploadFileAPIClient >> purpose [
 	^ purpose
 ]
@@ -37,7 +46,7 @@ GtOpenAIUploadFileAPIClient >> request [
 				addPart: (ZnMimePart
 						fieldName: 'file'
 						fileName: self file basename
-						entity: (ZnEntity bytes: self file binaryContents));
+						entity: self fileToEntity);
 				yourself)
 ]
 
