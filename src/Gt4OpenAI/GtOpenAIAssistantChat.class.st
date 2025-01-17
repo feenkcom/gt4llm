@@ -18,12 +18,13 @@ Class {
 }
 
 { #category : #accessing }
-GtOpenAIAssistantChat >> addFile: aFile [
-	files add: aFile.
+GtOpenAIAssistantChat >> addFiles: aCollectionOfFiles [
+	files addAll: aCollectionOfFiles.
 
-	self assistant client
-		createAssistantFile: aFile id
-		forAssistant: self assistant id
+	self
+		sendAssistantMessage: (GtLlmUserMessage new
+				content: aCollectionOfFiles toFileDescriptions;
+				attachments: aCollectionOfFiles)
 ]
 
 { #category : #accessing }

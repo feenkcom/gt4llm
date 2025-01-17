@@ -6,7 +6,8 @@ Class {
 		'role',
 		'id',
 		'createdAt',
-		'chat'
+		'chat',
+		'attachments'
 	],
 	#category : #'Gt4Llm-Models'
 }
@@ -42,6 +43,16 @@ GtLlmChatMessage >> annotations [
 { #category : #accessing }
 GtLlmChatMessage >> asTokenizableString [
 	^ '<|im_start|>' , self role , '<|im_sep|>' , self content , '<|im_end|>'
+]
+
+{ #category : #accessing }
+GtLlmChatMessage >> attachments [
+	^ attachments
+]
+
+{ #category : #accessing }
+GtLlmChatMessage >> attachments: anObject [
+	attachments := anObject
 ]
 
 { #category : #accessing }
@@ -203,6 +214,22 @@ GtLlmChatMessage >> senderText [
 	self isAssistantRole ifTrue: [ ^ 'Assistant' ].
 	self isSystemRole ifTrue: [ ^ 'System' ].
 	^ 'You'
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmChatMessage >> serialize [
+	| serialized |
+	serialized := super serialize.
+
+	self attachments
+		ifNotNil: [ serialized
+				at: 'attachments'
+				put: (self attachments
+						collect: [ :aFile | 
+							{'file_id' -> aFile remoteId.
+								'tools' -> {{'type' -> 'file_search'} asDictionary}} asDictionary ]) ].
+
+	^ serialized
 ]
 
 { #category : #'as yet unclassified' }
