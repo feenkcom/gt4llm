@@ -90,7 +90,7 @@ GtLlmRenameFormatComponentRefactoringExamples >> exampleClassCoderActionExpanded
 			s
 				label: 'Expand the refactoring preview dropdown';
 				onSpaceRoot;
-				// BrAnchoredOuterContainer;
+				onDropdown: true;
 				// GtChangesElement;
 				// BrTriangle ].
 
@@ -113,9 +113,7 @@ GtLlmRenameFormatComponentRefactoringExamples >> exampleClassCoderActionExpanded
 				satisfies: [ :anAsyncWidget | anAsyncWidget space root boundsInSpace containsRect: anAsyncWidget boundsInSpace ]
 					description: [ 'Refactoring preview bounds is out of space' ];
 				onSpaceRoot;
-				// BrAnchoredOuterContainer;
-				// BrAnchoredElement;
-				/ #content;
+				onDropdown: true;
 				/ BrAsyncWidget ].
 	^ scripter
 ]
