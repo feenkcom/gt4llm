@@ -25,7 +25,7 @@ GtOpenAIAnnotation class >> serializationProperties [
 { #category : #accessing }
 GtOpenAIAnnotation >> client: aClient [
 	super client: aClient.
-	
+
 	fileCitation client: self client
 ]
 
@@ -60,7 +60,14 @@ GtOpenAIAnnotation >> gtQuoteFor: aView [
 	^ aView textEditor
 		title: 'Quote';
 		priority: 1;
-		text: [ self fileCitation quote ]
+		text: [ self quote ]
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAIAnnotation >> quote [
+	self fileCitation quote ifNotNil: [ :aQuote | ^ aQuote].
+	
+	^ self file contents contents copyFrom: self startIndex to: self endIndex
 ]
 
 { #category : #accessing }

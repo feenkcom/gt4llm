@@ -8,7 +8,8 @@ Class {
 		'assistantDescription',
 		'tools',
 		'files',
-		'apiFiles'
+		'apiFiles',
+		'vectorStore'
 	],
 	#category : #'Gt4OpenAI-Tutor'
 }
@@ -138,20 +139,27 @@ GtOpenAIGtSpecificTutor >> cleanUp [
 
 { #category : #accessing }
 GtOpenAIGtSpecificTutor >> createAssistant [
-	assistant := client
-			createAssistant: (GtOpenAIAssistant new
-					model: self model;
-					name: self assistantName;
-					description: self assistantDescription;
-					instructions: self instructions instructionString;
-					tools: self tools).
-
 	files
 		do: [ :aFile | 
 			| file |
 			file := client uploadFile: aFile file withPurpose: 'assistants'.
 			aFile remoteId: file id.
 			apiFiles add: file ].
+
+	vectorStore := client
+			createVectorStoreNamed: 'Resources'
+			withFiles: (apiFiles collect: #id).
+
+	assistant := client
+			createAssistant: (GtOpenAIAssistant new
+					model: self model;
+					name: self assistantName;
+					description: self assistantDescription;
+					instructions: self instructions instructionString;
+					tools: self tools;
+					toolResources: {'file_search'
+								-> {'vector_stores' -> {{'file_ids' -> (apiFiles collect: #id)} asDictionary}}
+										asDictionary} asDictionary).
 
 	self class finalizationRegistry add: self
 ]

@@ -138,6 +138,15 @@ GtOpenAIClient >> createThreadWithMessages: aListOfMessages [
 		perform
 ]
 
+{ #category : #accessing }
+GtOpenAIClient >> createVectorStoreNamed: aName withFiles: aCollectionOfFileIds [
+	^ GtOpenAICreateVectorStoreAPIClient new
+		client: self;
+		name: aName;
+		files: aCollectionOfFileIds;
+		perform
+]
+
 { #category : #default }
 GtOpenAIClient >> defaultBaseUrl [
 	^ 'https://api.openai.com/v1' asZnUrl

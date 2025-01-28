@@ -22,9 +22,7 @@ GtOpenAIAssistantChat >> addFiles: aCollectionOfFiles [
 	files addAll: aCollectionOfFiles.
 
 	self
-		sendAssistantMessage: (GtLlmUserMessage new
-				content: aCollectionOfFiles toFileDescriptions;
-				attachments: aCollectionOfFiles)
+		sendAssistantMessage: (GtLlmUserMessage new content: aCollectionOfFiles toFileDescriptions)
 ]
 
 { #category : #accessing }
@@ -185,7 +183,7 @@ GtOpenAIAssistantChat >> gtSummaryFor: aView [
 
 { #category : #accessing }
 GtOpenAIAssistantChat >> initialize [
-	files := GtOpenAIFilesGroup new
+	files := GtOpenAIResourceFilesGroup new
 ]
 
 { #category : #accessing }
@@ -233,7 +231,8 @@ GtOpenAIAssistantChat >> messages [
 		collect: [ :aMessage | 
 			((self tutor messageClassFor: aMessage) from: aMessage serialize)
 				pipeline: self pipeline;
-				chat: self ]
+				chat: self;
+				client: self client ]
 ]
 
 { #category : #accessing }
