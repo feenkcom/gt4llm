@@ -3,7 +3,7 @@ Class {
 	#superclass : #GtLlmEndpointClient,
 	#instVars : [
 		'model',
-		'modelFileString'
+		'modelFile'
 	],
 	#category : #'Gt4Ollama-Chat'
 }
@@ -19,21 +19,20 @@ GtOllamaCreateModelClient >> model: anObject [
 ]
 
 { #category : #accessing }
-GtOllamaCreateModelClient >> modelFileString [
-	^ modelFileString
+GtOllamaCreateModelClient >> modelFile [
+	^ modelFile
 ]
 
 { #category : #accessing }
-GtOllamaCreateModelClient >> modelFileString: anObject [
-	modelFileString := anObject
+GtOllamaCreateModelClient >> modelFile: anObject [
+	modelFile := anObject
 ]
 
 { #category : #accessing }
 GtOllamaCreateModelClient >> request [
 	^ self client
 		postStreaming: '/create'
-		withEntity: {'model' -> self model.
-				'modelfile' -> self modelFileString} asDictionary
+		withEntity: {'model' -> self model} asDictionary , self modelFile contentDictionary
 ]
 
 { #category : #accessing }

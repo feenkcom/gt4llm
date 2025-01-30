@@ -45,11 +45,11 @@ GtOllamaClient >> completeChatWithModel: aString andMessages: aCollection andFor
 ]
 
 { #category : #accessing }
-GtOllamaClient >> createModel: aString withModelFile: aModelFileString [
+GtOllamaClient >> createModel: aString withModelFile: aModelFile [
 	^ GtOllamaCreateModelClient new
 		client: self;
 		model: aString;
-		modelFileString: aModelFileString;
+		modelFile: aModelFile;
 		perform
 ]
 

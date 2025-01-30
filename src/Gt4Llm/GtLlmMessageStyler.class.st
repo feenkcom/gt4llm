@@ -457,13 +457,18 @@ GtLlmMessageStyler >> styleExpandingObject: aClassAnnotation withDefault: aSymbo
 { #category : #generated }
 GtLlmMessageStyler >> styleExternalLink: anExternalLink [
 	| linkText |
-
 	linkText := self text
-		from: anExternalLink startPosition
-		to: anExternalLink stopPosition.
+			from: anExternalLink startPosition
+			to: anExternalLink stopPosition.
+
+	(anExternalLink isKindOf: LeExternalUrlLinkNode) ifTrue: [
+			linkText italic foreground: BrGlamorousColors textMarkupColor.
+			^ self
+	].
+
 	self styleLinkText: linkText valid: (self isValidLink: anExternalLink url).
 	self styleAutoHiding: anExternalLink sourceInterval text: linkText.
-	self styleExternalLinkButton: anExternalLink text: linkText.
+	self styleExternalLinkButton: anExternalLink text: linkText
 ]
 
 { #category : #generated }
