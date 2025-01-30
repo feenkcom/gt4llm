@@ -32,6 +32,11 @@ GtLlmModelFile >> content [
 ]
 
 { #category : #accessing }
+GtLlmModelFile >> contentDictionary [
+	^ (self directives collect: #directiveAssociation) asDictionary
+]
+
+{ #category : #accessing }
 GtLlmModelFile >> directives [
 	^ directives
 ]

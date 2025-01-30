@@ -12,6 +12,11 @@ GtLlmModelfileDirective class >> withText: aString [
 	^ self new text: aString
 ]
 
+{ #category : #'as yet unclassified' }
+GtLlmModelfileDirective >> directiveAssociation [
+	^ self directiveKind asLowercase -> self directiveText
+]
+
 { #category : #accessing }
 GtLlmModelfileDirective >> directiveKind [
 	^ self subclassResponsibility
