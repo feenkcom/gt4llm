@@ -11,7 +11,7 @@ GtLlmAssistantChatStatus class >> forAssistantChat: anAssistantChat [
 
 { #category : #factory }
 GtLlmAssistantChatStatus class >> forLastRun: aGtOpenAIThreadRun [
-	aGtOpenAIThreadRun ifNil: [ ^ GtOpenAIAssistantChatReadyStatus default ].
+	aGtOpenAIThreadRun ifNil: [ ^ GtLlmAssistantChatReadyStatus default ].
 	^ GtOpenAIAssistantChatDynamicStatus new threadRun: aGtOpenAIThreadRun
 ]
 

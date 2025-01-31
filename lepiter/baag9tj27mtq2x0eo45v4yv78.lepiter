@@ -802,43 +802,6 @@
 														"__type" : "textStyle"
 													},
 													"string" : "{{gtClass:name=GtOpenAIAnnotatedActionTutor}} — abstract. Subclasses should define `formatName`"
-												},
-												{
-													"__type" : "textSnippet",
-													"children" : {
-														"__type" : "snippets",
-														"items" : [ ]
-													},
-													"createEmail" : {
-														"__type" : "email",
-														"emailString" : "<unknown>"
-													},
-													"createTime" : {
-														"__type" : "time",
-														"time" : {
-															"__type" : "dateAndTime",
-															"dateAndTimeString" : "2024-08-16T17:54:54.767059+02:00"
-														}
-													},
-													"editEmail" : {
-														"__type" : "email",
-														"emailString" : "<unknown>"
-													},
-													"editTime" : {
-														"__type" : "time",
-														"time" : {
-															"__type" : "dateAndTime",
-															"dateAndTimeString" : "2024-08-16T17:55:26.469534+02:00"
-														}
-													},
-													"uid" : {
-														"__type" : "uid",
-														"uidString" : "sR2ktzDcDQCEfsxmCqahvg=="
-													},
-													"paragraphStyle" : {
-														"__type" : "textStyle"
-													},
-													"string" : "{{gtClass:name=GtOpenAIScriptableActionTutor}} — ???"
 												}
 											]
 										},
@@ -872,81 +835,6 @@
 											"__type" : "textStyle"
 										},
 										"string" : "{{gtClass:name=GtOpenAIActionTutor}} — abstract? Defines formats and state on both sides of a chat. See: [[Making the view tutor action-based]]"
-									},
-									{
-										"__type" : "textSnippet",
-										"children" : {
-											"__type" : "snippets",
-											"items" : [
-												{
-													"__type" : "textSnippet",
-													"children" : {
-														"__type" : "snippets",
-														"items" : [ ]
-													},
-													"createEmail" : {
-														"__type" : "email",
-														"emailString" : "<unknown>"
-													},
-													"createTime" : {
-														"__type" : "time",
-														"time" : {
-															"__type" : "dateAndTime",
-															"dateAndTimeString" : "2024-08-16T17:53:49.193616+02:00"
-														}
-													},
-													"editEmail" : {
-														"__type" : "email",
-														"emailString" : "<unknown>"
-													},
-													"editTime" : {
-														"__type" : "time",
-														"time" : {
-															"__type" : "dateAndTime",
-															"dateAndTimeString" : "2024-08-16T17:56:32.776022+02:00"
-														}
-													},
-													"uid" : {
-														"__type" : "uid",
-														"uidString" : "3o+7szDcDQCEYbniCqahvg=="
-													},
-													"paragraphStyle" : {
-														"__type" : "textStyle"
-													},
-													"string" : "{{gtClass:name=GtOpenAIWardleyMapTutor}} — see [[Expanding the Wardley maps tutor with a step-wise tutor]]"
-												}
-											]
-										},
-										"createEmail" : {
-											"__type" : "email",
-											"emailString" : "<unknown>"
-										},
-										"createTime" : {
-											"__type" : "time",
-											"time" : {
-												"__type" : "dateAndTime",
-												"dateAndTimeString" : "2024-08-16T17:53:23.476643+02:00"
-											}
-										},
-										"editEmail" : {
-											"__type" : "email",
-											"emailString" : "<unknown>"
-										},
-										"editTime" : {
-											"__type" : "time",
-											"time" : {
-												"__type" : "dateAndTime",
-												"dateAndTimeString" : "2024-08-16T17:55:53.155031+02:00"
-											}
-										},
-										"uid" : {
-											"__type" : "uid",
-											"uidString" : "DalSrTDcDQCDR2apCqahvg=="
-										},
-										"paragraphStyle" : {
-											"__type" : "textStyle"
-										},
-										"string" : "{{gtClass:name=GtOpenAITutorWithSteps}} — see [[Expanding the Wardley maps tutor with a step-wise tutor]]"
 									}
 								]
 							},

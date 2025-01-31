@@ -100,7 +100,7 @@ GtOllamaProvider >> sendMessage: aMessage [
 GtOllamaProvider >> status [
 	^ assistantWorking
 		ifTrue: [ GtOpenAIAssistantChatWorkingStatus new ]
-		ifFalse: [ GtOpenAIAssistantChatReadyStatus new ]
+		ifFalse: [ GtLlmAssistantChatReadyStatus new ]
 ]
 
 { #category : #'as yet unclassified' }

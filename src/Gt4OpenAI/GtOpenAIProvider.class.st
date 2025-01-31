@@ -99,5 +99,5 @@ GtOpenAIProvider >> sendMessage: aMessage [
 
 { #category : #'as yet unclassified' }
 GtOpenAIProvider >> status [
-	^ GtOpenAIAssistantChatReadyStatus new
+	^ GtLlmAssistantChatReadyStatus new
 ]
