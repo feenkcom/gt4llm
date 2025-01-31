@@ -80,11 +80,12 @@ GtLlmChat >> gtMessagesWidgetFor: aView [
 
 	<gtView>
 	| aViewModel |
+	self provider ifNil: [ ^ aView empty ].
+
 	^ aView explicit
 		title: 'Chat';
 		priority: 0;
-		stencil: [ aViewModel
-				ifNil: [ aViewModel := GtLlmChatViewModel new assistantChat: self ].
+		stencil: [ aViewModel ifNil: [ aViewModel := GtLlmChatViewModel new assistantChat: self ].
 			GtLlmChatElement new assistantChatViewModel: aViewModel ];
 		actionUpdateButton
 ]
@@ -188,6 +189,8 @@ GtLlmChat >> signalRunIsDone [
 
 { #category : #'as yet unclassified' }
 GtLlmChat >> status [
+	self provider ifNil: [ ^ GtLlmAssistantChatNotReadyStatus new ].
+
 	^ self provider status
 ]
 

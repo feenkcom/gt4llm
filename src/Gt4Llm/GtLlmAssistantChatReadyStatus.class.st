@@ -1,5 +1,5 @@
 Class {
-	#name : #GtOpenAIAssistantChatReadyStatus,
+	#name : #GtLlmAssistantChatReadyStatus,
 	#superclass : #GtLlmAssistantChatStatus,
 	#traits : 'TGtUniqueInstance',
 	#classTraits : 'TGtUniqueInstance classTrait',
@@ -10,28 +10,28 @@ Class {
 }
 
 { #category : #accessing }
-GtOpenAIAssistantChatReadyStatus >> completedAt [
+GtLlmAssistantChatReadyStatus >> completedAt [
 	<return: #DateAndTime or: nil>
 	^ DateAndTime now
 ]
 
 { #category : #accessing }
-GtOpenAIAssistantChatReadyStatus >> createdAt [
+GtLlmAssistantChatReadyStatus >> createdAt [
 	<return: #DateAndTime>
 	^ DateAndTime now
 ]
 
 { #category : #printing }
-GtOpenAIAssistantChatReadyStatus >> gtDisplayOn: stream [
+GtLlmAssistantChatReadyStatus >> gtDisplayOn: stream [
 	stream nextPutAll: 'Ready'
 ]
 
 { #category : #testing }
-GtOpenAIAssistantChatReadyStatus >> isDone [
+GtLlmAssistantChatReadyStatus >> isDone [
 	^ true
 ]
 
 { #category : #testing }
-GtOpenAIAssistantChatReadyStatus >> isFailed [
+GtLlmAssistantChatReadyStatus >> isFailed [
 	^ false
 ]

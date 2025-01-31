@@ -144,43 +144,6 @@
 														"__type" : "time",
 														"time" : {
 															"__type" : "dateAndTime",
-															"dateAndTimeString" : "2024-04-29T21:36:49.306145+02:00"
-														}
-													},
-													"editEmail" : {
-														"__type" : "email",
-														"emailString" : "<unknown>"
-													},
-													"editTime" : {
-														"__type" : "time",
-														"time" : {
-															"__type" : "dateAndTime",
-															"dateAndTimeString" : "2024-05-07T10:04:44.744537+02:00"
-														}
-													},
-													"uid" : {
-														"__type" : "uid",
-														"uidString" : "zfyLHKPTDQC8HuovAo25ug=="
-													},
-													"paragraphStyle" : {
-														"__type" : "textStyle"
-													},
-													"string" : "[[Expanding the Wardley maps tutor with a step-wise tutor]]"
-												},
-												{
-													"__type" : "textSnippet",
-													"children" : {
-														"__type" : "snippets",
-														"items" : [ ]
-													},
-													"createEmail" : {
-														"__type" : "email",
-														"emailString" : "<unknown>"
-													},
-													"createTime" : {
-														"__type" : "time",
-														"time" : {
-															"__type" : "dateAndTime",
 															"dateAndTimeString" : "2024-07-17T10:23:45.013304+02:00"
 														}
 													},
@@ -229,7 +192,7 @@
 														"__type" : "time",
 														"time" : {
 															"__type" : "dateAndTime",
-															"dateAndTimeString" : "2024-10-31T10:58:40.025063+01:00"
+															"dateAndTimeString" : "2025-01-31T12:34:17.83389+01:00"
 														}
 													},
 													"uid" : {
@@ -239,7 +202,7 @@
 													"paragraphStyle" : {
 														"__type" : "textStyle"
 													},
-													"string" : "[[Creating a Wardley map action tutor interactively]]]"
+													"string" : "[[Creating a Wardley map action tutor interactively]]"
 												}
 											]
 										},
@@ -485,7 +448,7 @@
 											"__type" : "time",
 											"time" : {
 												"__type" : "dateAndTime",
-												"dateAndTimeString" : "2025-01-28T14:28:09.424756+01:00"
+												"dateAndTimeString" : "2025-01-31T12:34:20.059084+01:00"
 											}
 										},
 										"uid" : {
@@ -495,7 +458,7 @@
 										"paragraphStyle" : {
 											"__type" : "textStyle"
 										},
-										"string" : "[[Adding the GT book to a tutor to answer questions about GT]]]"
+										"string" : "[[Adding the GT book to a tutor to answer questions about GT]]"
 									}
 								]
 							},
