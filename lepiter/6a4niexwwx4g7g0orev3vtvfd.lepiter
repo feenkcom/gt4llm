@@ -245,14 +245,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2025-01-30T13:34:19.341416+01:00"
+						"dateAndTimeString" : "2025-01-31T12:29:57.309399+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "ER1UvwfZDQC8i7q0BJAZag=="
 				},
-				"code" : "GtOllamaChat new model: 'mario'"
+				"code" : "GtLlmChat new provider: (GtOllamaProvider new model: 'mario')"
 			}
 		]
 	},

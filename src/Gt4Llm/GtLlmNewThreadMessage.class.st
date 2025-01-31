@@ -92,11 +92,6 @@ GtLlmNewThreadMessage >> isAssistantRole [
 	^ false
 ]
 
-{ #category : #accessing }
-GtLlmNewThreadMessage >> messageActions [
-	^ assistantChat threadActions
-]
-
 { #category : #'private - notifying' }
 GtLlmNewThreadMessage >> onContentsChangeByRequester: aRequester [
 	announcer
@@ -117,11 +112,15 @@ GtLlmNewThreadMessage >> sendMessage [
 	contents ifNil: [ ^ self ].
 	contents ifEmpty: [ ^ self ].
 
-	aMessage := GtLlmCompositeMessage new
-			chat: assistantChat;
-			addString: (assistantChat messageFromString: contents).
+	files
+		ifEmpty: [ aMessage := GtLlmUserMessage new
+					chat: assistantChat;
+					content: (assistantChat messageFromString: contents) ]
+		ifNotEmpty: [ aMessage := GtLlmCompositeMessage new
+					chat: assistantChat;
+					addString: (assistantChat messageFromString: contents).
 
-	files do: [ :aFile | aMessage addFile: aFile ].
+			files do: [ :aFile | aMessage addFile: aFile ] ].
 
 	self contents: '' requester: nil.
 

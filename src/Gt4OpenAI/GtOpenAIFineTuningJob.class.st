@@ -98,7 +98,10 @@ GtOpenAIFineTuningJob >> gtActionChatFor: anAction [
 	^ anAction button
 		label: 'Chat';
 		priority: 1;
-		action: [ :aButton | aButton phlow spawnObject: (GtOpenAIChat new model: self fineTunedModel) ]
+		action: [ :aButton | 
+			aButton phlow
+				spawnObject: (GtLlmChat new
+						provider: (GtOpenAIProvider withApiKeyFromFile model: self fineTunedModel)) ]
 ]
 
 { #category : #accessing }
