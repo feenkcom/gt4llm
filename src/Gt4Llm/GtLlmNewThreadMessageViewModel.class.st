@@ -49,11 +49,6 @@ GtLlmNewThreadMessageViewModel >> elementClass [
 ]
 
 { #category : #accessing }
-GtLlmNewThreadMessageViewModel >> messageActions [
-	^ threadMessage messageActions
-]
-
-{ #category : #accessing }
 GtLlmNewThreadMessageViewModel >> onAddMessageContentsRequest: anAnnouncement [
 	self contents: anAnnouncement messageContents requester: nil
 ]

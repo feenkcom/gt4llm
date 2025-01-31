@@ -182,14 +182,14 @@
 								"__type" : "time",
 								"time" : {
 									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2024-11-22T15:20:52.190171+01:00"
+									"dateAndTimeString" : "2025-01-31T12:29:57.295116+01:00"
 								}
 							},
 							"uid" : {
 								"__type" : "uid",
 								"uidString" : "c0W+0+LjDQCkct19Dt5jxA=="
 							},
-							"code" : "chat := GtOpenAIChat withApiKeyFromFile."
+							"code" : "chat := GtLlmChat new provider: GtOpenAIProvider withApiKeyFromFile"
 						}
 					]
 				},

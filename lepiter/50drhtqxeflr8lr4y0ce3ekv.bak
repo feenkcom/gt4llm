@@ -29,7 +29,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-23T13:26:40.220028+02:00"
+						"dateAndTimeString" : "2025-01-31T10:56:24.343707+01:00"
 					}
 				},
 				"uid" : {
@@ -39,7 +39,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "As you might have noticed in [[Working with the OpenAI API client]], a chat is modelled as a series of messages. In order to keep these organized and in state, we may use {{gtClass:GtOpenAIChat}}."
+				"string" : "As you might have noticed in [[Working with the OpenAI API client]], a chat is modelled as a series of messages. In order to keep these organized and in state, we may use {{gtClass:LlmChat}} with {{gtClass:GtOpenAIProvider}}."
 			},
 			{
 				"__type" : "textSnippet",
@@ -103,14 +103,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-23T13:24:41.792152+02:00"
+						"dateAndTimeString" : "2025-01-31T10:54:13.478155+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "DIHXpe7XDQC16b5BC8IszQ=="
 				},
-				"code" : "chat := GtOpenAIChat withApiKeyFromFile."
+				"code" : "chat := LlmChat new provider: GtOpenAIProvider withApiKeyFromFile"
 			},
 			{
 				"__type" : "pharoSnippet",
@@ -238,12 +238,12 @@
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2024-06-23T13:27:04.388673+02:00"
+			"dateAndTimeString" : "2024-06-23T13:48:39.923106+02:00"
 		}
 	},
 	"pageType" : {
 		"__type" : "namedPage",
-		"title" : "Working with ChatGPT"
+		"title" : "Working with a basic chat"
 	},
 	"uid" : {
 		"__type" : "uuid",

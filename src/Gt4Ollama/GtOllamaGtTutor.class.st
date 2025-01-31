@@ -10,10 +10,9 @@ Class {
 { #category : #accessing }
 GtOllamaGtTutor >> addChat [
 	| aChat |
-	aChat := GtOllamaChat new
-			model: self internalModel;
-			tutor: self;
-			context: pipelineBuilder value.
+	aChat := GtLlmChat new
+			context: pipelineBuilder value;
+			provider: (GtOllamaProvider new model: self internalModel).
 	chats add: aChat.
 
 	^ aChat
@@ -26,16 +25,15 @@ GtOllamaGtTutor >> defaultModel [
 
 { #category : #accessing }
 GtOllamaGtTutor >> ensureModel [
-	| internalModelName modelfileString |
+	| internalModelName modelFile |
 	internalModelName := 'gt-tutor-' , self model , '-' , UUID new asString.
-	modelfileString := GtLlmModelFile new
+	modelFile := GtLlmModelFile new
 			from: self model;
-			system: self instructions instructionString;
-			content.
+			system: self instructions instructionString.
 
 	GtOllamaClient new
 		createModel: internalModelName
-		withModelFile: modelfileString.
+		withModelFile: modelFile.
 
 	self internalModel: internalModelName
 ]

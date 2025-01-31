@@ -29,7 +29,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-12-09T08:57:35.82178+01:00"
+						"dateAndTimeString" : "2025-01-30T17:59:23.243056+01:00"
 					}
 				},
 				"uid" : {
@@ -39,7 +39,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "[Structured Outputs]() allow for providing a JSON schema for the outputs that the model has to adhere to in its responses."
+				"string" : "[Structured Outputs](https://github.com/ollama/ollama/blob/main/docs/api.md#structured-outputs) allow for providing a JSON schema for the outputs that the model has to adhere to in its responses."
 			},
 			{
 				"__type" : "textSnippet",
@@ -163,7 +163,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-12-09T08:57:03.549585+01:00"
+						"dateAndTimeString" : "2025-01-31T10:49:11.992209+01:00"
 					}
 				},
 				"editEmail" : {
@@ -174,14 +174,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2025-01-09T10:54:48.520452+01:00"
+						"dateAndTimeString" : "2025-01-31T12:29:57.191213+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "oCh0cjPlDQCj3RQgB4K/Qg=="
+					"uidString" : "C+YWMV/pDQC9xNvOCWrCrQ=="
 				},
-				"code" : "chat := GtOllamaChat new\r\t\tmodel: 'llama3.1';\r\t\tformat: format.\r\rchat\r\tsendMessage: 'Hello Llama! What is the normal temperature range of the human body?'"
+				"code" : "chat := GtLlmChat new\r\t\tprovider: (GtOllamaProvider new\r\t\t\t\tmodel: 'llama3.1';\r\t\t\t\tformat: format).\r\rchat\r\tsendMessage: 'Hello Llama! What is the normal temperature range of the human body?'"
 			}
 		]
 	},

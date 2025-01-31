@@ -174,14 +174,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-08-22T10:06:32.009591+02:00"
+						"dateAndTimeString" : "2025-01-30T13:36:36.892204+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "irvuuAfZDQCqXXKCBJAZag=="
 				},
-				"code" : "GtOllamaClient new createModel: 'myCustomModel' withModelFile: modelfile content"
+				"code" : "GtOllamaClient new createModel: 'mario' withModelFile: modelfile"
 			},
 			{
 				"__type" : "textSnippet",
@@ -245,14 +245,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-07-07T12:46:46.019859+02:00"
+						"dateAndTimeString" : "2025-01-31T12:29:57.309399+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "ER1UvwfZDQC8i7q0BJAZag=="
 				},
-				"code" : "GtOllamaChat new model: 'myCustomModel'"
+				"code" : "GtLlmChat new provider: (GtOllamaProvider new model: 'mario')"
 			}
 		]
 	},
