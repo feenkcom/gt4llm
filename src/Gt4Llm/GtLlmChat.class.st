@@ -4,13 +4,13 @@ Class {
 	#traits : 'TGtAnnouncer',
 	#classTraits : 'TGtAnnouncer classTrait',
 	#instVars : [
-		'client',
-		'messages',
 		'model',
 		'announcer',
 		'context',
 		'lastUpdate',
-		'tutor'
+		'tutor',
+		'provider',
+		'messages'
 	],
 	#category : #'Gt4Llm-Chats'
 }
@@ -18,8 +18,7 @@ Class {
 { #category : #accessing }
 GtLlmChat >> addMessage: aMessage [
 	self updateLastUpdate.
-	messages addFirst: (aMessage chat: self).
-	self announcer announce: (GtOpenAIThreadRunIsDoneAnnouncement new run: self)
+	messages add: (aMessage chat: self)
 ]
 
 { #category : #accessing }
@@ -35,16 +34,6 @@ GtLlmChat >> ancestorOf: aMessage [
 { #category : #accessing }
 GtLlmChat >> announcer [
 	^ announcer ifNil: [ announcer := Announcer new ]
-]
-
-{ #category : #accessing }
-GtLlmChat >> client [
-	^ client
-]
-
-{ #category : #accessing }
-GtLlmChat >> client: anObject [
-	client := anObject
 ]
 
 { #category : #accessing }
@@ -76,7 +65,7 @@ GtLlmChat >> gtMessagesFor: aView [
 	^ aView columnedList
 		title: 'Messages';
 		priority: 1;
-		items: [ self messages reversed ];
+		items: [ self messages ];
 		column: 'Role'
 			text: #role
 			width: 100;
@@ -121,20 +110,14 @@ GtLlmChat >> gtWriteFor: aView [
 GtLlmChat >> initialize [
 	super initialize.
 	
-	self initializeClient.
 	self initializeMessages.
 	
 	self updateLastUpdate
 ]
 
 { #category : #accessing }
-GtLlmChat >> initializeClient [
-	self subclassResponsibility
-]
-
-{ #category : #accessing }
 GtLlmChat >> initializeMessages [
-	self subclassResponsibility
+	messages := GtLlmMessagesGroup new
 ]
 
 { #category : #accessing }
@@ -173,23 +156,39 @@ GtLlmChat >> model: anObject [
 ]
 
 { #category : #accessing }
+GtLlmChat >> provider [
+	^ provider
+]
+
+{ #category : #accessing }
+GtLlmChat >> provider: anObject [
+	provider := anObject.
+	provider chat: self
+]
+
+{ #category : #accessing }
+GtLlmChat >> sendAssistantMessage: aMessage [
+	^ self provider sendAssistantMessage: aMessage
+]
+
+{ #category : #accessing }
 GtLlmChat >> sendMessage: aMessage [
-	^ self subclassResponsibility
+	self provider sendMessage: aMessage
 ]
 
-{ #category : #accessing }
-GtLlmChat >> threadActions [
-	^ {}
+{ #category : #'as yet unclassified' }
+GtLlmChat >> signalRunHasStarted [
+	self announcer announce: (GtOpenAIThreadRunStartedAnnouncement new run: self)
 ]
 
-{ #category : #accessing }
-GtLlmChat >> tutor [
-	^ tutor
+{ #category : #'as yet unclassified' }
+GtLlmChat >> signalRunIsDone [
+	self announcer announce: (GtOpenAIThreadRunIsDoneAnnouncement new run: self)
 ]
 
-{ #category : #accessing }
-GtLlmChat >> tutor: anObject [
-	tutor := anObject
+{ #category : #'as yet unclassified' }
+GtLlmChat >> status [
+	^ self provider status
 ]
 
 { #category : #accessing }

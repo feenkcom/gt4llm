@@ -54,7 +54,7 @@ GtLlmChatViewModel >> sendMessage: aString [
 { #category : #accessing }
 GtLlmChatViewModel >> threadMessageViewModels [
 	| newMessages |
-	newMessages := assistantChat messages asArray reversed.
+	newMessages := assistantChat messages.
 	^ Array
 		streamContents: [ :aStream | 
 			| aStatus |

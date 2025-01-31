@@ -178,7 +178,6 @@ GtLlmNewThreadMessageElement >> updateElement [
 { #category : #'private - updating' }
 GtLlmNewThreadMessageElement >> updateToolbar [
 	toolbar removeAllItems.
-	toolbar addItems: threadMessageViewModel messageActions.
 	toolbar addItem: self buildSendButton.
 	toolbar addItem: self buildAttachButton
 ]

@@ -226,6 +226,5 @@ GtLlmNewStepThreadMessageElement >> updateToggleGroup [
 { #category : #'private - updating' }
 GtLlmNewStepThreadMessageElement >> updateToolbar [
 	toolbar removeAllItems.
-	toolbar addItems: threadMessageViewModel messageActions.
 	toolbar addItem: self buildSendButton
 ]

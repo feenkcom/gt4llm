@@ -29,7 +29,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-23T08:41:47.682422+02:00"
+						"dateAndTimeString" : "2024-08-14T11:11:53.585289+02:00"
 					}
 				},
 				"uid" : {
@@ -39,7 +39,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "The first thing to do is txo create an account with OpenAI and to generate [an API token for it](https://platform.openai.com/api-keys). Once you obtain the API key, you need to pass it in some way to the code. There are two ways to use an API key for the OpenAI connection: in a file or in the clipboard."
+				"string" : "The first thing to do is to create an account with OpenAI and to generate [an API token for it](https://platform.openai.com/api-keys). Once you obtain the API key, you need to pass it in some way to the code. There are two ways to use an API key for the OpenAI connection: in a file or in the clipboard."
 			},
 			{
 				"__type" : "textSnippet",
@@ -402,14 +402,14 @@
 											"__type" : "time",
 											"time" : {
 												"__type" : "dateAndTime",
-												"dateAndTimeString" : "2024-05-14T12:49:49.513183+02:00"
+												"dateAndTimeString" : "2025-01-31T10:57:14.707902+01:00"
 											}
 										},
 										"uid" : {
 											"__type" : "uid",
 											"uidString" : "OCg+ecnUDQCpictQB0Z8qA=="
 										},
-										"code" : "GtOpenAIChat withApiKeyFromFile sendMessage: 'Hello GPT!'"
+										"code" : "LlmChat new\r\tprovider: GtOpenAIProvider withApiKeyFromFile;\r\tsendMessage: 'Hello GPT!'"
 									}
 								]
 							},
@@ -544,14 +544,14 @@
 								"__type" : "time",
 								"time" : {
 									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2024-05-14T12:43:16.411929+02:00"
+									"dateAndTimeString" : "2025-01-31T10:53:42.156762+01:00"
 								}
 							},
 							"uid" : {
 								"__type" : "uid",
 								"uidString" : "WEiIZ8nUDQCcg+3SB0Z8qA=="
 							},
-							"code" : "GtOpenAIChat withApiKeyFromClipboard"
+							"code" : "LlmChat new provider: GtOpenAIProvider withApiKeyFromClipboard"
 						}
 					]
 				},
