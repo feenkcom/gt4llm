@@ -143,7 +143,9 @@ GtLlmChat >> messages [
 
 { #category : #accessing }
 GtLlmChat >> messages: anObject [
-	messages := anObject
+	messages := anObject.
+
+	messages do: [ :aMessage | aMessage chat: self ]
 ]
 
 { #category : #accessing }
@@ -202,6 +204,16 @@ GtLlmChat >> status [
 	self provider ifNil: [ ^ GtLlmAssistantChatNotReadyStatus new ].
 
 	^ self provider status
+]
+
+{ #category : #accessing }
+GtLlmChat >> tutor [
+	^ tutor
+]
+
+{ #category : #accessing }
+GtLlmChat >> tutor: anObject [
+	tutor := anObject
 ]
 
 { #category : #accessing }

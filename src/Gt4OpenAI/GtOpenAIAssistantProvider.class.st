@@ -90,14 +90,12 @@ GtOpenAIAssistantProvider >> finalize [
 ]
 
 { #category : #accessing }
-GtOpenAIAssistantProvider >> format [
-	^ format
-]
-
-{ #category : #accessing }
 GtOpenAIAssistantProvider >> format: anObject [
 	format := {'type' -> 'json_schema'.
-			'json_schema' -> anObject} asDictionary
+			'json_schema'
+				-> {'name' -> 'ResponseFormat'.
+						'strict' -> true.
+						'schema' -> anObject} asDictionary} asDictionary
 ]
 
 { #category : #'as yet unclassified' }
@@ -145,13 +143,15 @@ GtOpenAIAssistantProvider >> sendAssistantMessage: aMessage [
 			createRunForThread: thread id
 			usingAssistant: assistant id
 			andResponseFormat: self format.
+			
+	self updateMessages.
 
 	chat signalRunHasStarted.
 
 	future := (self runFuture
 			then: [ :aRun | 
 				chat signalRunIsDone: aRun.
-				chat addMessage: thread updateMessages last ])
+				self updateMessages ])
 			await: GtOpenAIUtilities executionConfiguration
 ]
 
@@ -168,4 +168,11 @@ GtOpenAIAssistantProvider >> tools [
 { #category : #accessing }
 GtOpenAIAssistantProvider >> tools: anObject [
 	tools := anObject
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAIAssistantProvider >> updateMessages [
+	chat
+		messages: (thread updateMessages
+				collect: [ :aThreadMessage | self assistantMessageClass new from: aThreadMessage serialize ])
 ]

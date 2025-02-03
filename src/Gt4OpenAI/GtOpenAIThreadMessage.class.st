@@ -133,8 +133,10 @@ GtOpenAIThreadMessage >> contentSummary [
 
 { #category : #accessing }
 GtOpenAIThreadMessage >> contentText [
-	^ ''
-		join: (content collect: [ :aValue | (aValue at: #text at: #value) ifNil: [ '' ] ])
+	^ (content isKindOf: String)
+		ifTrue: [ content ]
+		ifFalse: [ ''
+				join: (content collect: [ :aValue | (aValue at: #text at: #value) ifNil: [ '' ] ]) ]
 ]
 
 { #category : #accessing }

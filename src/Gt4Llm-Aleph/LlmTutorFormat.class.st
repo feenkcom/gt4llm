@@ -22,6 +22,11 @@ Create a draft
 ]
 
 { #category : #'as yet unclassified' }
+LlmTutorFormat >> actionNamed: aString [
+	^ actions detect: [ :anAction | anAction name = aString ] ifNone: [ nil ]
+]
+
+{ #category : #'as yet unclassified' }
 LlmTutorFormat >> addAction: anAction [
 	actions add: anAction
 ]
@@ -52,6 +57,12 @@ LlmTutorFormat >> asInstruction [
 							
 The components that make up the state are as follows:';
 							sections: components).
+				GtLlmInstructionSection new
+					source: self;
+					title: 'Actions';
+					body: (GtLlmInstructionWithSections new
+							introduction: 'All actions are listed below.';
+							sections: (actions collect: #asInstruction)).
 				self errorHandlingDescription}
 ]
 
