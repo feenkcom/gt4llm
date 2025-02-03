@@ -22,11 +22,6 @@ GtOllamaAssistantMessage class >> serializationProperties [
 ]
 
 { #category : #accessing }
-GtOllamaAssistantMessage >> asLlmMessage [
-	^ GtLlmAssistantMessage new content: self content
-]
-
-{ #category : #accessing }
 GtOllamaAssistantMessage >> content [
 	^ content
 ]
