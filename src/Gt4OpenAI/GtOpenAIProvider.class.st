@@ -1,10 +1,9 @@
 Class {
 	#name : #GtOpenAIProvider,
-	#superclass : #Object,
+	#superclass : #GtLlmProvider,
 	#instVars : [
 		'model',
-		'client',
-		'chat'
+		'client'
 	],
 	#category : #'Gt4OpenAI-Providers'
 }
@@ -22,11 +21,6 @@ GtOpenAIProvider class >> withApiKeyFromFile [
 { #category : #accessing }
 GtOpenAIProvider >> apiKey: aString [
 	client apiKey: aString
-]
-
-{ #category : #accessing }
-GtOpenAIProvider >> chat [
-	^ chat
 ]
 
 { #category : #accessing }
@@ -80,7 +74,8 @@ GtOpenAIProvider >> sendAssistantMessage: aMessage [
 			completeChatWithModel: self model
 			andMessages: self chat messages.
 
-	self chat addMessage: result choices first message.
+	self chat
+		addMessage: (self assistantMessageClass new content: result choices first message content).
 
 	self chat signalRunIsDone
 ]
@@ -91,10 +86,7 @@ GtOpenAIProvider >> sendMessage: aMessage [
 	output := aMessage.
 	output size > self maximumMessageSize
 		ifTrue: [ output := output first: self maximumMessageSize ].
-	self
-		sendAssistantMessage: (GtLlmUserMessage new
-				content: output;
-				chat: self)
+	super sendMessage: output
 ]
 
 { #category : #'as yet unclassified' }
