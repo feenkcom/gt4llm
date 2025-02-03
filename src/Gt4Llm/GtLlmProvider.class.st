@@ -88,6 +88,7 @@ GtLlmProvider >> sendMessage: aMessage [
 	self
 		sendAssistantMessage: (userMessageClass new
 				content: (self messageFromString: aMessage);
+				role: 'user';
 				chat: self)
 ]
 

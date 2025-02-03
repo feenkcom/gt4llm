@@ -8,6 +8,11 @@ Class {
 	#category : #'Gt4Llm-Aleph'
 }
 
+{ #category : #'as yet unclassified' }
+LlmTutor >> actionNamed: anActionName [
+	^ self format actionNamed: anActionName
+]
+
 { #category : #accessing }
 LlmTutor >> actions [
 	^ actions
@@ -41,7 +46,8 @@ LlmTutor >> collectFormatComponents [
 { #category : #'as yet unclassified' }
 LlmTutor >> createChat [
 	^ GtLlmChat new
-		provider: (self providerStencil value: self format) beActionBased
+		provider: (self providerStencil value: self format) beActionBased;
+		tutor: self
 ]
 
 { #category : #accessing }
