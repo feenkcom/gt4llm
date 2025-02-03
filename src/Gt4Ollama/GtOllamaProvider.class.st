@@ -6,10 +6,22 @@ Class {
 		'chat',
 		'model',
 		'client',
-		'format'
+		'format',
+		'userMessageClass',
+		'assistantMessageClass'
 	],
 	#category : #'Gt4Ollama-Providers'
 }
+
+{ #category : #accessing }
+GtOllamaProvider >> assistantMessageClass [
+	^ assistantMessageClass
+]
+
+{ #category : #accessing }
+GtOllamaProvider >> assistantMessageClass: anObject [
+	assistantMessageClass := anObject
+]
 
 { #category : #accessing }
 GtOllamaProvider >> chat [
@@ -29,6 +41,16 @@ GtOllamaProvider >> client [
 { #category : #accessing }
 GtOllamaProvider >> client: anObject [
 	client := anObject
+]
+
+{ #category : #'as yet unclassified' }
+GtOllamaProvider >> defaultAssistantMessageClass [
+	^ GtLlmAssistantMessage
+]
+
+{ #category : #'as yet unclassified' }
+GtOllamaProvider >> defaultUserMessageClass [
+	^ GtLlmUserMessage
 ]
 
 { #category : #accessing }
@@ -56,6 +78,8 @@ GtOllamaProvider >> initialize [
 	super initialize.
 
 	assistantWorking := false.
+	userMessageClass := self defaultUserMessageClass.
+	assistantMessageClass := self defaultAssistantMessageClass.
 	
 	self initializeClient
 ]
@@ -63,6 +87,19 @@ GtOllamaProvider >> initialize [
 { #category : #'as yet unclassified' }
 GtOllamaProvider >> initializeClient [
 	client := GtOllamaClient new
+]
+
+{ #category : #'as yet unclassified' }
+GtOllamaProvider >> instructions: aString [
+	| internalModelName modelFile |
+	internalModelName := 'gt-tutor-' , self model , '-' , UUID new asString.
+	modelFile := GtLlmModelFile new
+			from: self model;
+			system: aString.
+
+	self client createModel: internalModelName withModelFile: modelFile.
+
+	self model: internalModelName
 ]
 
 { #category : #accessing }
@@ -81,9 +118,7 @@ GtOllamaProvider >> model: anObject [
 { #category : #'as yet unclassified' }
 GtOllamaProvider >> sendAssistantMessage: aMessage [
 	self chat
-		addMessage: (GtLlmUserMessage new
-				content: aMessage contentText;
-				chat: self).
+		addMessage: aMessage.
 
 	self triggerAssistant
 ]
@@ -91,7 +126,7 @@ GtOllamaProvider >> sendAssistantMessage: aMessage [
 { #category : #'as yet unclassified' }
 GtOllamaProvider >> sendMessage: aMessage [
 	self
-		sendAssistantMessage: (GtLlmUserMessage new
+		sendAssistantMessage: (userMessageClass new
 				content: aMessage;
 				chat: self)
 ]
@@ -114,9 +149,22 @@ GtOllamaProvider >> triggerAssistant [
 			andMessages: self chat messages
 			andFormat: self format.
 
-	self chat addMessage: (result asLlmMessage chat: self).
+	self chat
+		addMessage: (assistantMessageClass new
+				content: result content;
+				chat: self).
 
 	self chat signalRunIsDone.
 
 	assistantWorking := false
+]
+
+{ #category : #accessing }
+GtOllamaProvider >> userMessageClass [
+	^ userMessageClass
+]
+
+{ #category : #accessing }
+GtOllamaProvider >> userMessageClass: anObject [
+	userMessageClass := anObject
 ]

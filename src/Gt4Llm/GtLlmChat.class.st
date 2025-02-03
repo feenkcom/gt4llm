@@ -167,6 +167,11 @@ GtLlmChat >> provider: anObject [
 	provider chat: self
 ]
 
+{ #category : #'as yet unclassified' }
+GtLlmChat >> responseFormat [
+	^ self provider format
+]
+
 { #category : #accessing }
 GtLlmChat >> sendAssistantMessage: aMessage [
 	^ self provider sendAssistantMessage: aMessage
@@ -185,6 +190,11 @@ GtLlmChat >> signalRunHasStarted [
 { #category : #'as yet unclassified' }
 GtLlmChat >> signalRunIsDone [
 	self announcer announce: (GtOpenAIThreadRunIsDoneAnnouncement new run: self)
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmChat >> signalRunIsDone: aRun [
+	self announcer announce: (GtOpenAIThreadRunIsDoneAnnouncement new run: aRun)
 ]
 
 { #category : #'as yet unclassified' }
