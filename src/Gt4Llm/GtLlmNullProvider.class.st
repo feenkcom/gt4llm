@@ -18,6 +18,10 @@ GtLlmNullProvider >> chat: anObject [
 ]
 
 { #category : #'as yet unclassified' }
+GtLlmNullProvider >> instructions: aString [
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmNullProvider >> sendMessage: aMessage [
 	self chat addMessage: (GtLlmUserMessage new content: aMessage)
 ]
