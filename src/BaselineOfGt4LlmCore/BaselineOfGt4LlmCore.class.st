@@ -8,6 +8,7 @@ Class {
 BaselineOfGt4LlmCore >> baseline: spec [
 	<baseline>
 		^ spec for: #common do: [
-			spec package: 'Gt4Llm'
+			spec package: 'Gt4Llm'.
+			spec package: 'Gt4Llm-Tutor'
 		]
 ]
