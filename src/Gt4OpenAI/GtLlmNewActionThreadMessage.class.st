@@ -18,19 +18,6 @@ GtLlmNewActionThreadMessage >> currentAction: anObject [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmNewActionThreadMessage >> sendMessage [
-	| aMessage |
-	currentAction ifNil: [ ^ self ].
-
-	aMessage := GtLlmCompositeMessage new
-			chat: assistantChat;
-			addString: (assistantChat messageFromString: (currentAction format format: {contents})).
-
-
-	files do: [ :aFile | aMessage addFile: aFile ].
-
-	self contents: '' requester: nil.
-
-	(assistantChat whenReadyFuture
-		then: [ assistantChat sendAssistantMessage: aMessage ]) await
+GtLlmNewActionThreadMessage >> treatString [
+	^ assistantChat messageFromString: (currentAction format format: {contents})
 ]

@@ -91,7 +91,7 @@ GtLlmChat >> gtMessagesWidgetFor: aView [
 		title: 'Chat';
 		priority: 0;
 		stencil: [ aViewModel ifNil: [ aViewModel := self asViewModel ].
-			GtLlmChatElement new assistantChatViewModel: aViewModel ];
+			LlmChatElement new chatViewModel: aViewModel ];
 		actionUpdateButton
 ]
 
@@ -138,7 +138,7 @@ GtLlmChat >> lastUpdate: anObject [
 
 { #category : #'as yet unclassified' }
 GtLlmChat >> messageFromString: aString [
-	^ aString
+	^ provider messageFromString: aString
 ]
 
 { #category : #accessing }
