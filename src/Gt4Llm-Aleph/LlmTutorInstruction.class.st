@@ -27,8 +27,18 @@ LlmTutorInstruction >> actionNamed: aString [
 ]
 
 { #category : #'as yet unclassified' }
+LlmTutorInstruction >> actions [
+	^ actions
+]
+
+{ #category : #'as yet unclassified' }
 LlmTutorInstruction >> addAction: anAction [
 	actions add: anAction
+]
+
+{ #category : #'as yet unclassified' }
+LlmTutorInstruction >> addActions: aListOfActions [
+	actions addAll: aListOfActions
 ]
 
 { #category : #accessing }

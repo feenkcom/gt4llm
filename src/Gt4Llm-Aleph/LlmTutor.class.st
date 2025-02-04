@@ -15,12 +15,7 @@ LlmTutor >> actionNamed: anActionName [
 
 { #category : #accessing }
 LlmTutor >> actions [
-	^ actions
-]
-
-{ #category : #accessing }
-LlmTutor >> actions: anObject [
-	actions := anObject
+	^ format actions
 ]
 
 { #category : #'as yet unclassified' }
@@ -31,6 +26,32 @@ LlmTutor >> addAction: anAction [
 { #category : #'as yet unclassified' }
 LlmTutor >> addFormatComponent: aComponent [
 	format addComponent: aComponent
+]
+
+{ #category : #'as yet unclassified' }
+LlmTutor >> chatAction [
+	<gtLlmTutorAction>
+	^ GtLlmTutorAction new
+		name: 'Answer a chat request';
+		priority: 1;
+		description: 'Answers a chat request using the text field.';
+		format: 'Chat request: {1}';
+		examples: {GtLlmTutorActionExample new markUnverified
+					input: {'Action' -> 'Chat request: How are you?'} asDictionary;
+					output: {'Action' -> 'Answer a chat request'.
+							'Text'
+								-> 'As an AI model, I do not have feelings. How can I assist you today?'}
+							asDictionary}
+]
+
+{ #category : #'as yet unclassified' }
+LlmTutor >> collectActions [
+	^ ((Pragma
+		allNamed: #gtLlmTutorAction
+		from: self class
+		to: Object)
+		collect: [ :aPragma | (self perform: aPragma methodSelector) tutor: self ])
+		sorted: [ :a :b | a priority < b priority ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -45,7 +66,7 @@ LlmTutor >> collectFormatComponents [
 
 { #category : #'as yet unclassified' }
 LlmTutor >> createChat [
-	^ GtLlmChat new
+	^ GtLlmActionChat new
 		provider: (self providerStencil value: self format) beActionBased;
 		tutor: self
 ]
@@ -126,8 +147,16 @@ LlmTutor >> gtInstructionsFor: aView [
 { #category : #'as yet unclassified' }
 LlmTutor >> initialize [
 	super initialize.
-	
-	format := LlmTutorInstruction new addComponents: self collectFormatComponents
+
+	self initializeFormat
+]
+
+{ #category : #'as yet unclassified' }
+LlmTutor >> initializeFormat [
+	format := LlmTutorInstruction new.
+	format
+		addComponents: self collectFormatComponents;
+		addActions: self collectActions
 ]
 
 { #category : #accessing }
@@ -138,11 +167,6 @@ LlmTutor >> instructions [
 { #category : #accessing }
 LlmTutor >> instructions: anObject [
 	self format instructions: anObject
-]
-
-{ #category : #'as yet unclassified' }
-LlmTutor >> providerFormat [
-	^ format actions: actions
 ]
 
 { #category : #accessing }
