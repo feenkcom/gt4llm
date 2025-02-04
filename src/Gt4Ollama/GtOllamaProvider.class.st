@@ -1,37 +1,14 @@
 Class {
 	#name : #GtOllamaProvider,
-	#superclass : #Object,
+	#superclass : #GtLlmProvider,
 	#instVars : [
 		'assistantWorking',
-		'chat',
 		'model',
 		'client',
-		'format',
-		'userMessageClass',
-		'assistantMessageClass'
+		'modelfile'
 	],
 	#category : #'Gt4Ollama-Providers'
 }
-
-{ #category : #accessing }
-GtOllamaProvider >> assistantMessageClass [
-	^ assistantMessageClass
-]
-
-{ #category : #accessing }
-GtOllamaProvider >> assistantMessageClass: anObject [
-	assistantMessageClass := anObject
-]
-
-{ #category : #accessing }
-GtOllamaProvider >> chat [
-	^ chat
-]
-
-{ #category : #accessing }
-GtOllamaProvider >> chat: anObject [
-	chat := anObject
-]
 
 { #category : #accessing }
 GtOllamaProvider >> client [
@@ -44,23 +21,18 @@ GtOllamaProvider >> client: anObject [
 ]
 
 { #category : #'as yet unclassified' }
-GtOllamaProvider >> defaultAssistantMessageClass [
-	^ GtLlmAssistantMessage
-]
+GtOllamaProvider >> gtModelFileFor: aView [
+	<gtView>
+	modelfile ifNil: [ ^ aView empty ].
 
-{ #category : #'as yet unclassified' }
-GtOllamaProvider >> defaultUserMessageClass [
-	^ GtLlmUserMessage
-]
-
-{ #category : #accessing }
-GtOllamaProvider >> format [
-	^ format
-]
-
-{ #category : #accessing }
-GtOllamaProvider >> format: anObject [
-	format := anObject
+	^ aView forward
+		title: 'Modelfile';
+		priority: 1;
+		object: [ modelfile ];
+		view: #gtContentFor:;
+		actionButtonIcon: BrGlamorousVectorIcons playinspect
+			tooltip: 'Inspect modelfile'
+			action: [ :aButton | aButton phlow spawnObject: modelfile ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -78,8 +50,6 @@ GtOllamaProvider >> initialize [
 	super initialize.
 
 	assistantWorking := false.
-	userMessageClass := self defaultUserMessageClass.
-	assistantMessageClass := self defaultAssistantMessageClass.
 	
 	self initializeClient
 ]
@@ -98,6 +68,8 @@ GtOllamaProvider >> instructions: aString [
 			system: aString.
 
 	self client createModel: internalModelName withModelFile: modelFile.
+	
+	self modelfile: modelFile.
 
 	self model: internalModelName
 ]
@@ -115,20 +87,22 @@ GtOllamaProvider >> model: anObject [
 	[ self client pullModel: model ] on: Error do: [  ]
 ]
 
+{ #category : #accessing }
+GtOllamaProvider >> modelfile [
+	^ modelfile
+]
+
+{ #category : #accessing }
+GtOllamaProvider >> modelfile: anObject [
+	modelfile := anObject
+]
+
 { #category : #'as yet unclassified' }
 GtOllamaProvider >> sendAssistantMessage: aMessage [
 	self chat
 		addMessage: aMessage.
 
 	self triggerAssistant
-]
-
-{ #category : #'as yet unclassified' }
-GtOllamaProvider >> sendMessage: aMessage [
-	self
-		sendAssistantMessage: (userMessageClass new
-				content: aMessage;
-				chat: self)
 ]
 
 { #category : #'as yet unclassified' }
@@ -157,14 +131,4 @@ GtOllamaProvider >> triggerAssistant [
 	self chat signalRunIsDone.
 
 	assistantWorking := false
-]
-
-{ #category : #accessing }
-GtOllamaProvider >> userMessageClass [
-	^ userMessageClass
-]
-
-{ #category : #accessing }
-GtOllamaProvider >> userMessageClass: anObject [
-	userMessageClass := anObject
 ]

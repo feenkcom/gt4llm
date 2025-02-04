@@ -2,12 +2,16 @@ Class {
 	#name : #LlmTutor,
 	#superclass : #Object,
 	#instVars : [
-		'instructions',
 		'providerStencil',
-		'actions'
+		'format'
 	],
 	#category : #'Gt4Llm-Aleph'
 }
+
+{ #category : #'as yet unclassified' }
+LlmTutor >> actionNamed: anActionName [
+	^ self format actionNamed: anActionName
+]
 
 { #category : #accessing }
 LlmTutor >> actions [
@@ -21,25 +25,49 @@ LlmTutor >> actions: anObject [
 
 { #category : #'as yet unclassified' }
 LlmTutor >> addAction: anAction [
-	actions add: (anAction tutor: self)
+	format addAction: (anAction tutor: self)
+]
+
+{ #category : #'as yet unclassified' }
+LlmTutor >> addFormatComponent: aComponent [
+	format addComponent: aComponent
+]
+
+{ #category : #'as yet unclassified' }
+LlmTutor >> collectFormatComponents [
+	^ ((Pragma
+		allNamed: #gtLlmFormatComponent
+		from: self class
+		to: Object)
+		collect: [ :aPragma | (self perform: aPragma methodSelector) tutor: self ])
+		sorted: [ :a :b | a priority < b priority ]
 ]
 
 { #category : #'as yet unclassified' }
 LlmTutor >> createChat [
-	^ GtLlmChat new provider: (self providerStencil value: self createProviderInstructions)
+	^ GtLlmChat new
+		provider: (self providerStencil value: self format) beActionBased;
+		tutor: self
+]
+
+{ #category : #accessing }
+LlmTutor >> format [
+	^ format
+]
+
+{ #category : #accessing }
+LlmTutor >> format: anObject [
+	format := anObject
 ]
 
 { #category : #'as yet unclassified' }
-LlmTutor >> createProviderInstructions [
-	^ self instructions
-		, '
+LlmTutor >> formatComponentNamed: aString [
+	^ self format componentNamed: aString
+]
 
-'
-		, (GtLlmInstructionSection new
-				title: 'Actions';
-				body: (GtLlmInstructionWithSections new
-						introduction: 'All actions are listed below.';
-						sections: (actions collect: #asInstruction))) instructionString
+{ #category : #'as yet unclassified' }
+LlmTutor >> formatComponents [
+	^ self format formatComponents
 ]
 
 { #category : #'as yet unclassified' }
@@ -48,8 +76,28 @@ LlmTutor >> gtActionsFor: aView [
 	^ aView forward
 		title: 'Actions';
 		priority: 10;
-		object: [ actions ];
+		object: [ self format ];
 		view: #gtActionsFor:
+]
+
+{ #category : #'as yet unclassified' }
+LlmTutor >> gtFormatComponentsFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Format components';
+		priority: 11;
+		object: [ self format ];
+		view: #gtComponentsFor:
+]
+
+{ #category : #'as yet unclassified' }
+LlmTutor >> gtInstructionFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Instruction';
+		priority: 10;
+		object: [ self format asInstruction ];
+		view: #gtInstructionFor:
 ]
 
 { #category : #views }
@@ -59,7 +107,7 @@ LlmTutor >> gtInstructionsFor: aView [
 	^ aView textEditor
 		priority: 1;
 		title: 'Instructions';
-		text: [ instructions ];
+		text: [ self instructions ];
 		styler: (GtLlmMessageStyler new
 				threadMessageViewModel: (GtLlmNewThreadMessageViewModel new threadMessage: GtLlmNewThreadMessage new));
 		actionButtonIcon: BrGlamorousVectorIcons accept
@@ -78,18 +126,23 @@ LlmTutor >> gtInstructionsFor: aView [
 { #category : #'as yet unclassified' }
 LlmTutor >> initialize [
 	super initialize.
-
-	actions := GtLlmActionsGroup new
+	
+	format := LlmTutorFormat new addComponents: self collectFormatComponents
 ]
 
 { #category : #accessing }
 LlmTutor >> instructions [
-	^ instructions
+	^ self format instructions
 ]
 
 { #category : #accessing }
 LlmTutor >> instructions: anObject [
-	instructions := anObject
+	self format instructions: anObject
+]
+
+{ #category : #'as yet unclassified' }
+LlmTutor >> providerFormat [
+	^ format actions: actions
 ]
 
 { #category : #accessing }
@@ -100,4 +153,21 @@ LlmTutor >> providerStencil [
 { #category : #accessing }
 LlmTutor >> providerStencil: anObject [
 	providerStencil := anObject
+]
+
+{ #category : #'as yet unclassified' }
+LlmTutor >> textFormatComponent [
+	<gtLlmFormatComponent>
+	^ GtLlmTutorFormatComponent new
+		name: 'Text';
+		priority: 2;
+		format: 'Text';
+		example: '```
+This node contains plain text.
+Multiple lines, multiple paragraphs are allowed.
+
+*markup* may also **be used**. `Code` can be highlighted, but code blocks with three tick marks MAY NOT be used.
+
+# Headings exist as well
+```'
 ]

@@ -1,0 +1,314 @@
+{
+	"__schema" : "4.1",
+	"__type" : "page",
+	"children" : {
+		"__type" : "snippets",
+		"items" : [
+			{
+				"__type" : "textSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "veit.heller@feenk.com"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2025-02-03T18:15:41.176513+01:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "veit.heller@feenk.com"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2025-02-03T18:16:10.086037+01:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "+Zpfx6HpDQCGSJOMBcFXNg=="
+				},
+				"paragraphStyle" : {
+					"__type" : "textStyle"
+				},
+				"string" : "Load the package `Gt4Llm-Aleph` from Git, then execute these snippets"
+			},
+			{
+				"__type" : "pharoSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "veit.heller@feenk.com"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2025-01-31T15:33:16.812205+01:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "veit.heller@feenk.com"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2025-02-03T11:05:20.069163+01:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "60MKKWPpDQCp2lKqChlaPA=="
+				},
+				"code" : "instructions := 'You roleplay as Mario from Super Mario Bros and you really love Smalltalk, the programming language.'"
+			},
+			{
+				"__type" : "pharoSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "veit.heller@feenk.com"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2025-01-31T15:25:01.715624+01:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2025-02-04T07:08:42.674777+01:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "67SHC2PpDQCn9dgYChlaPA=="
+				},
+				"code" : "tutor := LlmTutor new\r\t\tinstructions: instructions;\r\t\tproviderStencil: [ :anInstructionFormat | \r\t\t\tGtOpenAIAssistantProvider withApiKeyFromFile\r\t\t\t\tinstructions: anInstructionFormat asInstruction instructionString;\r\t\t\t\tformat: anInstructionFormat asJsonSchema;\r\t\t\t\tassistantMessageClass: GtOpenAIActionThreadMessage;\r\t\t\t\tuserMessageClass: GtOpenAIActionThreadMessage ]"
+			},
+			{
+				"__type" : "pharoSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "veit.heller@feenk.com"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2025-02-03T18:16:13.197618+01:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2025-02-04T07:08:44.364729+01:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "6jJIyaHpDQCIDLgxBcFXNg=="
+				},
+				"code" : "\"alternative using Ollama\"\rtutor := LlmTutor new\r\t\tinstructions: instructions;\r\t\tproviderStencil: [ :anInstructionFormat | \r\t\t\tGtOllamaProvider new\r\t\t\t\tmodel: 'deepseek-r1';\r\t\t\t\tinstructions: anInstructionFormat asInstruction instructionString;\r\t\t\t\tformat: anInstructionFormat asJsonSchema ]"
+			},
+			{
+				"__type" : "pharoSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "veit.heller@feenk.com"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2025-02-03T13:32:50.120123+01:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "veit.heller@feenk.com"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2025-02-03T13:32:50.431173+01:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "vtLR053pDQCgdtmxDT5fkg=="
+				},
+				"code" : "tutor addFormatComponent: (GtLlmTutorFormatComponent new beRequired\r\t\tname: 'Game';\r\t\tformat: 'Text';\r\t\texample: '```\rSuper Mario Bros.\r```')"
+			},
+			{
+				"__type" : "pharoSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "veit.heller@feenk.com"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2025-02-03T09:00:12.575881+01:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "veit.heller@feenk.com"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2025-02-03T16:13:45.624652+01:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "PoLVBJrpDQCREnI+D6UiDA=="
+				},
+				"code" : "tutor\r\taddAction: (GtLlmTutorAction new\r\t\t\tname: 'Recount a Super Mario game';\r\t\t\tpriority: 10;\r\t\t\tdescription: 'Recount a Super Mario game as if it was a recent adventure of yours. ';\r\t\t\tformat: 'Recount the game `{1}`';\r\t\t\taddExample: (GtLlmTutorActionExample new\r\t\t\t\t\tinput: {'Action' -> 'Recount the game `Super Mario Bros.`'} asDictionary;\r\t\t\t\t\toutput: {'Action' -> 'Recount the game `Super Mario Bros.`'.\r\t\t\t\t\t\t\t'Game' -> 'Super Mario Bros.'.\r\t\t\t\t\t\t\t'Text'\r\t\t\t\t\t\t\t\t-> 'I was recently in the Mushroom Kingdom to save Princess Peach from the Koopa Troopas, Mamma Mia! I just kept hearing \"Thank you Mario! But our princess is in another castle!\" the entire time.'}\r\t\t\t\t\t\t\tasDictionary))"
+			},
+			{
+				"__type" : "pharoSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "veit.heller@feenk.com"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2025-01-31T15:41:03.390299+01:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "veit.heller@feenk.com"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2025-02-03T16:16:25.147164+01:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "Oa7ZRGPpDQCuURzVChlaPA=="
+				},
+				"code" : "chat := tutor createChat"
+			},
+			{
+				"__type" : "pharoSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "veit.heller@feenk.com"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2025-02-03T10:00:45.93135+01:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "veit.heller@feenk.com"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2025-02-03T16:38:31.515494+01:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "KBtm3ZrpDQCYB/HdD6UiDA=="
+				},
+				"code" : "chat sendMessage: 'Recount the game `Super Mario 64`'"
+			}
+		]
+	},
+	"createEmail" : {
+		"__type" : "email",
+		"emailString" : "veit.heller@feenk.com"
+	},
+	"createTime" : {
+		"__type" : "time",
+		"time" : {
+			"__type" : "dateAndTime",
+			"dateAndTimeString" : "2025-02-03T18:15:36.213665+01:00"
+		}
+	},
+	"editEmail" : {
+		"__type" : "email",
+		"emailString" : "veit.heller@feenk.com"
+	},
+	"editTime" : {
+		"__type" : "time",
+		"time" : {
+			"__type" : "dateAndTime",
+			"dateAndTimeString" : "2025-02-03T18:15:36.213665+01:00"
+		}
+	},
+	"pageType" : {
+		"__type" : "namedPage",
+		"title" : "LLM rewrite play"
+	},
+	"uid" : {
+		"__type" : "uuid",
+		"uuid" : "24b3870b-63e9-0d00-a7f4-66e70a195a3c"
+	}
+}
