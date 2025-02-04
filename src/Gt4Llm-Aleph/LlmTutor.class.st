@@ -3,7 +3,7 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'providerStencil',
-		'format'
+		'instruction'
 	],
 	#category : #'Gt4Llm-Aleph'
 }
@@ -15,17 +15,17 @@ LlmTutor >> actionNamed: anActionName [
 
 { #category : #accessing }
 LlmTutor >> actions [
-	^ format actions
+	^ instruction actions
 ]
 
 { #category : #'as yet unclassified' }
 LlmTutor >> addAction: anAction [
-	format addAction: (anAction tutor: self)
+	instruction addAction: (anAction tutor: self)
 ]
 
 { #category : #'as yet unclassified' }
 LlmTutor >> addFormatComponent: aComponent [
-	format addComponent: aComponent
+	instruction addComponent: aComponent
 ]
 
 { #category : #'as yet unclassified' }
@@ -71,16 +71,6 @@ LlmTutor >> createChat [
 		tutor: self
 ]
 
-{ #category : #accessing }
-LlmTutor >> format [
-	^ format
-]
-
-{ #category : #accessing }
-LlmTutor >> format: anObject [
-	format := anObject
-]
-
 { #category : #'as yet unclassified' }
 LlmTutor >> formatComponentNamed: aString [
 	^ self format componentNamed: aString
@@ -97,7 +87,7 @@ LlmTutor >> gtActionsFor: aView [
 	^ aView forward
 		title: 'Actions';
 		priority: 10;
-		object: [ self format ];
+		object: [ self instruction ];
 		view: #gtActionsFor:
 ]
 
@@ -148,15 +138,25 @@ LlmTutor >> gtInstructionsFor: aView [
 LlmTutor >> initialize [
 	super initialize.
 
-	self initializeFormat
+	self initializeInstruction
 ]
 
 { #category : #'as yet unclassified' }
-LlmTutor >> initializeFormat [
-	format := LlmTutorInstruction new.
-	format
+LlmTutor >> initializeInstruction [
+	instruction := LlmTutorInstruction new.
+	instruction
 		addComponents: self collectFormatComponents;
 		addActions: self collectActions
+]
+
+{ #category : #accessing }
+LlmTutor >> instruction [
+	^ instruction
+]
+
+{ #category : #accessing }
+LlmTutor >> instruction: anObject [
+	instruction := anObject
 ]
 
 { #category : #accessing }
