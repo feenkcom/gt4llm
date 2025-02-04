@@ -1,0 +1,18 @@
+RwLoadSpecificationV2 {
+	#specName : 'gt4llm',
+	#projectName : 'gt4llm',
+	#gitUrl : 'git@github.com:feenkcom/gt4llm.git',
+	#revision : 'main',
+	#projectSpecFile : 'rowan/project.ston',
+	#componentNames : [
+		'Core'
+	],
+	#platformProperties : {
+		'gemstone' : {
+			'SystemUser' : {
+				#defaultSymbolDictName : 'Globals'
+			}
+		}
+	},
+	#comment : ''
+}
