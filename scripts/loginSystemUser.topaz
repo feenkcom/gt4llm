@@ -1,0 +1,5 @@
+## Edit this for your stone name and authentication.
+## The installation and bootstrap scripts in this directory must use the SystemUser login.
+set gemstone $STONE
+set user SystemUser pass swordfish
+login
