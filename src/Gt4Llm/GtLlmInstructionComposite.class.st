@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLlmInstructionComposite,
-	#superclass : #GtLlmInstruction,
+	#superclass : #GtLlmInstructionComponent,
 	#instVars : [
 		'items'
 	],
