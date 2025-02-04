@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLlmChatsGroup,
 	#superclass : #GtLlmGroup,
-	#category : #'Gt4Llm-Tutor'
+	#category : #'Gt4Llm-OldTutor'
 }
 
 { #category : #accessing }
