@@ -115,10 +115,10 @@ GtLlmNewThreadMessage >> sendMessage [
 	files
 		ifEmpty: [ aMessage := GtLlmUserMessage new
 					chat: assistantChat;
-					content: (assistantChat messageFromString: contents) ]
+					content: self treatString ]
 		ifNotEmpty: [ aMessage := GtLlmCompositeMessage new
 					chat: assistantChat;
-					addString: (assistantChat messageFromString: contents).
+					addString: self treatString.
 
 			files do: [ :aFile | aMessage addFile: aFile ] ].
 
@@ -126,6 +126,11 @@ GtLlmNewThreadMessage >> sendMessage [
 
 	(assistantChat whenReadyFuture
 		then: [ assistantChat sendAssistantMessage: aMessage ]) await
+]
+
+{ #category : #actions }
+GtLlmNewThreadMessage >> treatString [
+	^ assistantChat messageFromString: contents
 ]
 
 { #category : #subscriptions }
