@@ -1,0 +1,14 @@
+RwSimpleProjectLoadComponentV2 {
+	#name : 'Core',
+	#condition : 'common',
+	#projectNames : [ ],
+	#componentNames : [
+		'gemstone/Core'
+	],
+	#packageNames : [
+		'Gt4Llm',
+		'Gt4OpenAI',
+		'Gt4Ollama',
+	],
+	#comment : ''
+}

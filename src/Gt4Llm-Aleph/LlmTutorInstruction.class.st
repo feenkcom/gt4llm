@@ -1,5 +1,5 @@
 Class {
-	#name : #LlmTutorFormat,
+	#name : #LlmTutorInstruction,
 	#superclass : #Object,
 	#instVars : [
 		'name',
@@ -11,7 +11,7 @@ Class {
 }
 
 { #category : #accessing }
-LlmTutorFormat >> actionComponent [
+LlmTutorInstruction >> actionComponent [
 	<gtLlmFormatComponent>
 	^ GtLlmTutorFormatComponent new beRequired
 		name: 'Action';
@@ -22,27 +22,27 @@ Create a draft
 ]
 
 { #category : #'as yet unclassified' }
-LlmTutorFormat >> actionNamed: aString [
+LlmTutorInstruction >> actionNamed: aString [
 	^ actions detect: [ :anAction | anAction name = aString ] ifNone: [ nil ]
 ]
 
 { #category : #'as yet unclassified' }
-LlmTutorFormat >> addAction: anAction [
+LlmTutorInstruction >> addAction: anAction [
 	actions add: anAction
 ]
 
 { #category : #accessing }
-LlmTutorFormat >> addComponent: aComponent [
+LlmTutorInstruction >> addComponent: aComponent [
 	components add: aComponent
 ]
 
 { #category : #accessing }
-LlmTutorFormat >> addComponents: aListOfComponents [
+LlmTutorInstruction >> addComponents: aListOfComponents [
 	components addAll: aListOfComponents
 ]
 
 { #category : #accessing }
-LlmTutorFormat >> asInstruction [
+LlmTutorInstruction >> asInstruction [
 	^ GtLlmInstructionWithSections new
 		source: self;
 		introduction: self instructions;
@@ -67,7 +67,7 @@ The components that make up the state are as follows:';
 ]
 
 { #category : #accessing }
-LlmTutorFormat >> asJsonSchema [
+LlmTutorInstruction >> asJsonSchema [
 	^ {'type' -> 'object'.
 		'properties'
 			-> (components
@@ -78,7 +78,7 @@ LlmTutorFormat >> asJsonSchema [
 ]
 
 { #category : #accessing }
-LlmTutorFormat >> communicationConventionsDescription [
+LlmTutorInstruction >> communicationConventionsDescription [
 	^ GtLlmInstructionSection new
 		title: 'Communication rules';
 		body: (GtLlmInstructionList new
@@ -88,29 +88,29 @@ LlmTutorFormat >> communicationConventionsDescription [
 ]
 
 { #category : #accessing }
-LlmTutorFormat >> componentNamed: aName [
+LlmTutorInstruction >> componentNamed: aName [
 	^ components detect: [ :aComponent | aComponent name = aName ] ifNone: [ nil ]
 ]
 
 { #category : #accessing }
-LlmTutorFormat >> components [
+LlmTutorInstruction >> components [
 	^ components
 ]
 
 { #category : #accessing }
-LlmTutorFormat >> errorHandlingDescription [
+LlmTutorInstruction >> errorHandlingDescription [
 	^ GtLlmInstructionSection new
 		title: 'Error handling description';
 		body: 'If an error occurs during an action, a message will be sent that starts with `An error occured:` and the message below. You then correct the mistake by sending an action result that corrects the mistake.'
 ]
 
 { #category : #'as yet unclassified' }
-LlmTutorFormat >> formatComponents [
+LlmTutorInstruction >> formatComponents [
 	^ components
 ]
 
 { #category : #'as yet unclassified' }
-LlmTutorFormat >> gtActionsFor: aView [
+LlmTutorInstruction >> gtActionsFor: aView [
 	<gtView>
 	^ aView forward
 		title: 'Actions';
@@ -120,7 +120,7 @@ LlmTutorFormat >> gtActionsFor: aView [
 ]
 
 { #category : #accessing }
-LlmTutorFormat >> gtComponentsFor: aView [
+LlmTutorInstruction >> gtComponentsFor: aView [
 	<gtView>
 	^ aView columnedList
 		title: 'Components';
@@ -142,7 +142,7 @@ LlmTutorFormat >> gtComponentsFor: aView [
 ]
 
 { #category : #accessing }
-LlmTutorFormat >> gtInstructionFor: aView [
+LlmTutorInstruction >> gtInstructionFor: aView [
 	<gtView>
 	^ aView forward
 		title: 'Instruction';
@@ -152,24 +152,24 @@ LlmTutorFormat >> gtInstructionFor: aView [
 ]
 
 { #category : #accessing }
-LlmTutorFormat >> initialize [
+LlmTutorInstruction >> initialize [
 	components := OrderedCollection with: self actionComponent.
 	actions := GtLlmActionsGroup new.
 	instructions := ''
 ]
 
 { #category : #accessing }
-LlmTutorFormat >> instructions [
+LlmTutorInstruction >> instructions [
 	^ instructions
 ]
 
 { #category : #accessing }
-LlmTutorFormat >> instructions: anObject [
+LlmTutorInstruction >> instructions: anObject [
 	instructions := anObject
 ]
 
 { #category : #accessing }
-LlmTutorFormat >> interactionDescription [
+LlmTutorInstruction >> interactionDescription [
 	^ GtLlmInstructionSection new
 		title: 'Interaction description';
 		body: 'A typical interaction goes like this:
@@ -186,11 +186,11 @@ The state is an aggregate of the components listed below.'
 ]
 
 { #category : #accessing }
-LlmTutorFormat >> name [
+LlmTutorInstruction >> name [
 	^ name
 ]
 
 { #category : #accessing }
-LlmTutorFormat >> name: anObject [
+LlmTutorInstruction >> name: anObject [
 	name := anObject
 ]

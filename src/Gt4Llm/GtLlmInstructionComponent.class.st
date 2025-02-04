@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLlmInstruction,
+	#name : #GtLlmInstructionComponent,
 	#superclass : #Object,
 	#instVars : [
 		'parent',
@@ -9,7 +9,7 @@ Class {
 }
 
 { #category : #accessing }
-GtLlmInstruction >> allParents [
+GtLlmInstructionComponent >> allParents [
 	| parents following |
 	parents := OrderedCollection new.
 	following := self.
@@ -22,17 +22,17 @@ GtLlmInstruction >> allParents [
 ]
 
 { #category : #accessing }
-GtLlmInstruction >> asInstruction [
+GtLlmInstructionComponent >> asInstruction [
 	^ self
 ]
 
 { #category : #accessing }
-GtLlmInstruction >> children [
+GtLlmInstructionComponent >> children [
 	^ self subclassResponsibility
 ]
 
 { #category : #accessing }
-GtLlmInstruction >> gtInstructionFor: aView [
+GtLlmInstructionComponent >> gtInstructionFor: aView [
 	<gtView>
 	^ aView textEditor
 		title: 'Instruction';
@@ -43,7 +43,7 @@ GtLlmInstruction >> gtInstructionFor: aView [
 ]
 
 { #category : #accessing }
-GtLlmInstruction >> gtParentsFor: aView [
+GtLlmInstructionComponent >> gtParentsFor: aView [
 	<gtView>
 	^ aView columnedList
 		title: 'Parents';
@@ -54,7 +54,7 @@ GtLlmInstruction >> gtParentsFor: aView [
 ]
 
 { #category : #accessing }
-GtLlmInstruction >> gtTreeFor: aView [
+GtLlmInstructionComponent >> gtTreeFor: aView [
 	<gtView>
 	^ aView columnedTree
 		title: 'Tree';
@@ -67,28 +67,28 @@ GtLlmInstruction >> gtTreeFor: aView [
 ]
 
 { #category : #accessing }
-GtLlmInstruction >> instructionString [
+GtLlmInstructionComponent >> instructionString [
 	^ self subclassResponsibility
 ]
 
 { #category : #accessing }
-GtLlmInstruction >> parent [
+GtLlmInstructionComponent >> parent [
 	^ parent
 ]
 
 { #category : #accessing }
-GtLlmInstruction >> parent: anObject [
+GtLlmInstructionComponent >> parent: anObject [
 	parent := anObject.
 
 	self source ifNil: [ self source: parent source ]
 ]
 
 { #category : #accessing }
-GtLlmInstruction >> source [
+GtLlmInstructionComponent >> source [
 	^ source
 ]
 
 { #category : #accessing }
-GtLlmInstruction >> source: anObject [
+GtLlmInstructionComponent >> source: anObject [
 	source := anObject
 ]
