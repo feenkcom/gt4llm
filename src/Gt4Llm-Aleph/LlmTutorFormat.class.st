@@ -50,10 +50,10 @@ LlmTutorFormat >> asInstruction [
 				self communicationConventionsDescription.
 				GtLlmInstructionSection new
 					source: self;
-					title: 'Components';
+					title: 'Format components';
 					body: (GtLlmInstructionWithSections new
 							source: self;
-							introduction: 'Each component has a name, a data format (such as JSON, YAML, etc.), a Markdown code block annotation tag that encloses it, and some examples.
+							introduction: 'Each format component has a name, a data format (such as JSON, YAML, etc.), a Markdown code block annotation tag that encloses it, and some examples.
 							
 The components that make up the state are as follows:';
 							sections: components).

@@ -90,6 +90,16 @@ LlmTutor >> gtFormatComponentsFor: aView [
 		view: #gtComponentsFor:
 ]
 
+{ #category : #'as yet unclassified' }
+LlmTutor >> gtInstructionFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Instruction';
+		priority: 10;
+		object: [ self format asInstruction ];
+		view: #gtInstructionFor:
+]
+
 { #category : #views }
 LlmTutor >> gtInstructionsFor: aView [
 	<gtView>
@@ -111,16 +121,6 @@ LlmTutor >> gtInstructionsFor: aView [
 				tabGroup
 					allChildrenBreadthFirstDetect: [ :anElement | anElement isKindOf: BrEditor ]
 					ifFound: [ :anEditor | self instructions: anEditor text asString ] ]
-]
-
-{ #category : #'as yet unclassified' }
-LlmTutor >> gtPromptFor: aView [
-	<gtView>
-	^ aView forward
-		title: 'Prompt';
-		priority: 10;
-		object: [ self format asInstruction ];
-		view: #gtInstructionFor:
 ]
 
 { #category : #'as yet unclassified' }
