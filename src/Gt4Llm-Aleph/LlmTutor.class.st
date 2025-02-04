@@ -127,7 +127,7 @@ LlmTutor >> gtInstructionsFor: aView [
 LlmTutor >> initialize [
 	super initialize.
 	
-	format := LlmTutorFormat new addComponents: self collectFormatComponents
+	format := LlmTutorInstruction new addComponents: self collectFormatComponents
 ]
 
 { #category : #accessing }

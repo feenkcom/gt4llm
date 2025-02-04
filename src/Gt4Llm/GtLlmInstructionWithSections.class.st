@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLlmInstructionWithSections,
-	#superclass : #GtLlmInstruction,
+	#superclass : #GtLlmInstructionComponent,
 	#instVars : [
 		'introduction',
 		'sections'
