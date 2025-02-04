@@ -100,14 +100,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2025-02-04T07:08:42.674777+01:00"
+						"dateAndTimeString" : "2025-02-04T07:07:51.183363+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "67SHC2PpDQCn9dgYChlaPA=="
 				},
-				"code" : "tutor := LlmTutor new\r\t\tinstructions: instructions;\r\t\tproviderStencil: [ :anInstructionFormat | \r\t\t\tGtOpenAIAssistantProvider withApiKeyFromFile\r\t\t\t\tinstructions: anInstructionFormat asInstruction instructionString;\r\t\t\t\tformat: anInstructionFormat asJsonSchema;\r\t\t\t\tassistantMessageClass: GtOpenAIActionThreadMessage;\r\t\t\t\tuserMessageClass: GtOpenAIActionThreadMessage ]"
+				"code" : "tutor := GtLlmTutor new\r\t\tinstructions: instructions;\r\t\tproviderStencil: [ :anInstructionFormat | \r\t\t\tGtOpenAIAssistantProvider withApiKeyFromFile\r\t\t\t\tinstructions: anInstructionFormat asInstruction instructionString;\r\t\t\t\tformat: anInstructionFormat asJsonSchema;\r\t\t\t\tassistantMessageClass: GtOpenAIActionThreadMessage;\r\t\t\t\tuserMessageClass: GtOpenAIActionThreadMessage ]"
 			},
 			{
 				"__type" : "pharoSnippet",
@@ -134,14 +134,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2025-02-04T07:08:44.364729+01:00"
+						"dateAndTimeString" : "2025-02-04T07:07:53.134406+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "6jJIyaHpDQCIDLgxBcFXNg=="
 				},
-				"code" : "\"alternative using Ollama\"\rtutor := LlmTutor new\r\t\tinstructions: instructions;\r\t\tproviderStencil: [ :anInstructionFormat | \r\t\t\tGtOllamaProvider new\r\t\t\t\tmodel: 'deepseek-r1';\r\t\t\t\tinstructions: anInstructionFormat asInstruction instructionString;\r\t\t\t\tformat: anInstructionFormat asJsonSchema ]"
+				"code" : "\"alternative using Ollama\"\rtutor := GtLlmTutor new\r\t\tinstructions: instructions;\r\t\tproviderStencil: [ :anInstructionFormat | \r\t\t\tGtOllamaProvider new\r\t\t\t\tmodel: 'deepseek-r1';\r\t\t\t\tinstructions: anInstructionFormat asInstruction instructionString;\r\t\t\t\tformat: anInstructionFormat asJsonSchema ]"
 			},
 			{
 				"__type" : "pharoSnippet",
