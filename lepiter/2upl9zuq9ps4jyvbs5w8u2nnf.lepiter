@@ -137,14 +137,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-10-31T11:03:34.092397+01:00"
+						"dateAndTimeString" : "2025-02-04T18:19:07.330016+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "cs1jnSTiDQCsYOHyAiMxMA=="
 				},
-				"code" : "tutor\r\taddFormatComponent: (GtLlmTutorFormatComponent new\r\t\t\tname: 'Wardley map';\r\t\t\tformat: 'Text';\r\t\t\texample: '');\r\tvaluePipelineFor: (GtLlmSerializableValueHolder new\r\t\t\tcontent: thisSnippet page children last;\r\t\t\tname: 'Wardley map';\r\t\t\tserializer: [ :aSnippet | aSnippet wardleyMap asWardleyMapScript ];\r\t\t\tupdater: [ :aSnippet :aScript | aSnippet wardleyMap: (GtWardleyMapParser parse: aScript) asWardleyMapModel ])"
+				"code" : "tutor\r\taddFormatComponent: (GtLlmTutorFormatDescription new\r\t\t\tname: 'Wardley map';\r\t\t\tformat: 'Text';\r\t\t\texample: '');\r\tvaluePipelineFor: (GtLlmSerializableValueHolder new\r\t\t\tcontent: thisSnippet page children last;\r\t\t\tname: 'Wardley map';\r\t\t\tserializer: [ :aSnippet | aSnippet wardleyMap asWardleyMapScript ];\r\t\t\tupdater: [ :aSnippet :aScript | aSnippet wardleyMap: (GtWardleyMapParser parse: aScript) asWardleyMapModel ])"
 			},
 			{
 				"__type" : "pharoSnippet",

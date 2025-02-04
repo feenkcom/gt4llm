@@ -24,7 +24,7 @@ LlmTutor >> addAction: anAction [
 ]
 
 { #category : #'as yet unclassified' }
-LlmTutor >> addFormatComponent: aComponent [
+LlmTutor >> addFormat: aComponent [
 	instruction addComponent: aComponent
 ]
 
@@ -55,9 +55,9 @@ LlmTutor >> collectActions [
 ]
 
 { #category : #'as yet unclassified' }
-LlmTutor >> collectFormatComponents [
+LlmTutor >> collectFormats [
 	^ ((Pragma
-		allNamed: #gtLlmFormatComponent
+		allNamed: #gtLlmTutorFormat
 		from: self class
 		to: Object)
 		collect: [ :aPragma | (self perform: aPragma methodSelector) tutor: self ])
@@ -67,18 +67,23 @@ LlmTutor >> collectFormatComponents [
 { #category : #'as yet unclassified' }
 LlmTutor >> createChat [
 	^ GtLlmActionChat new
-		provider: (self providerStencil value: self format) beActionBased;
+		provider: (self providerStencil value: instruction) beActionBased;
 		tutor: self
 ]
 
-{ #category : #'as yet unclassified' }
-LlmTutor >> formatComponentNamed: aString [
-	^ self format componentNamed: aString
+{ #category : #accessing }
+LlmTutor >> description: anObject [
+	instruction description: anObject
 ]
 
 { #category : #'as yet unclassified' }
 LlmTutor >> formatComponents [
-	^ self format formatComponents
+	^ instruction formats
+]
+
+{ #category : #'as yet unclassified' }
+LlmTutor >> formatNamed: aString [
+	^ instruction componentNamed: aString
 ]
 
 { #category : #'as yet unclassified' }
@@ -97,8 +102,8 @@ LlmTutor >> gtFormatComponentsFor: aView [
 	^ aView forward
 		title: 'Format components';
 		priority: 11;
-		object: [ self format ];
-		view: #gtComponentsFor:
+		object: [ instruction ];
+		view: #gtFormatsFor:
 ]
 
 { #category : #'as yet unclassified' }
@@ -107,31 +112,8 @@ LlmTutor >> gtInstructionFor: aView [
 	^ aView forward
 		title: 'Instruction';
 		priority: 10;
-		object: [ self format asInstruction ];
+		object: [ instruction asInstructionPiece ];
 		view: #gtInstructionFor:
-]
-
-{ #category : #views }
-LlmTutor >> gtInstructionsFor: aView [
-	<gtView>
-	instructions ifNil: [ ^ aView empty ].
-	^ aView textEditor
-		priority: 1;
-		title: 'Instructions';
-		text: [ self instructions ];
-		styler: (GtLlmMessageStyler new
-				threadMessageViewModel: (GtLlmNewThreadMessageViewModel new threadMessage: GtLlmNewThreadMessage new));
-		actionButtonIcon: BrGlamorousVectorIcons accept
-			tooltip: 'Save'
-			action: [ :aButton :aTab | 
-				| tabGroup |
-				tabGroup := aTab
-						withAllParentsDetect: [ :aParent | aParent isKindOf: BrTabGroup ]
-						ifFound: #yourself
-						ifNone: [ nil ].
-				tabGroup
-					allChildrenBreadthFirstDetect: [ :anElement | anElement isKindOf: BrEditor ]
-					ifFound: [ :anEditor | self instructions: anEditor text asString ] ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -145,28 +127,13 @@ LlmTutor >> initialize [
 LlmTutor >> initializeInstruction [
 	instruction := LlmTutorInstruction new.
 	instruction
-		addComponents: self collectFormatComponents;
+		addComponents: self collectFormats;
 		addActions: self collectActions
 ]
 
 { #category : #accessing }
 LlmTutor >> instruction [
 	^ instruction
-]
-
-{ #category : #accessing }
-LlmTutor >> instruction: anObject [
-	instruction := anObject
-]
-
-{ #category : #accessing }
-LlmTutor >> instructions [
-	^ self format instructions
-]
-
-{ #category : #accessing }
-LlmTutor >> instructions: anObject [
-	self format instructions: anObject
 ]
 
 { #category : #accessing }
@@ -180,9 +147,9 @@ LlmTutor >> providerStencil: anObject [
 ]
 
 { #category : #'as yet unclassified' }
-LlmTutor >> textFormatComponent [
-	<gtLlmFormatComponent>
-	^ GtLlmTutorFormatComponent new
+LlmTutor >> textFormatDescription [
+	<gtLlmTutorFormat>
+	^ GtLlmTutorFormatDescription new
 		name: 'Text';
 		priority: 2;
 		format: 'Text';

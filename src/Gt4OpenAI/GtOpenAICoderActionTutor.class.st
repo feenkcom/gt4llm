@@ -47,7 +47,7 @@ GtOpenAICoderActionTutor >> messageClass [
 { #category : #accessing }
 GtOpenAICoderActionTutor >> methodFormatComponent [
 	<gtLlmFormatComponent>
-	^ GtLlmTutorFormatComponent new
+	^ GtLlmTutorFormatDescription new
 		name: 'Smalltalk method';
 		priority: 2;
 		format: 'Smalltalk language';
@@ -194,7 +194,7 @@ do: aMessage to: anObject
 { #category : #accessing }
 GtOpenAICoderActionTutor >> renameFormatComponent [
 	<gtLlmFormatComponent>
-	^ GtLlmTutorFormatComponent new
+	^ GtLlmTutorFormatDescription new
 		name: 'Renames';
 		priority: 2;
 		format: 'json';

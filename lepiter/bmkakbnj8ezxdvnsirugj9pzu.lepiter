@@ -616,14 +616,14 @@
 								"__type" : "time",
 								"time" : {
 									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2024-11-22T16:11:23.34176+01:00"
+									"dateAndTimeString" : "2025-02-04T18:19:07.256768+01:00"
 								}
 							},
 							"uid" : {
 								"__type" : "uid",
 								"uidString" : "C4UYiOPjDQC7ne59Dt5jxA=="
 							},
-							"code" : "tutor\r\taddFormatComponent: (GtLlmTutorFormatComponent new\r\t\t\tname: 'Post';\r\t\t\tformat: 'Text';\r\t\t\texample: '');\r\tvaluePipelineFor: (GtLlmSerializableValueHolder new\r\t\t\tname: 'Post';\r\t\t\tcontent: snippetForAnalysis;\r\t\t\tserializer: [ :aSnippet | aSnippet text asString ];\r\t\t\tupdater: [ :aSnippet :aText | \r\t\t\t\t(aSnippet commandBuilder editTextualSnippetCommand\r\t\t\t\t\tstring: aText\r\t\t\t\t\twithSource: tutor -> true) execute ]).\rchat := tutor createAssistant addChat"
+							"code" : "tutor\r\taddFormatComponent: (GtLlmTutorFormatDescription new\r\t\t\tname: 'Post';\r\t\t\tformat: 'Text';\r\t\t\texample: '');\r\tvaluePipelineFor: (GtLlmSerializableValueHolder new\r\t\t\tname: 'Post';\r\t\t\tcontent: snippetForAnalysis;\r\t\t\tserializer: [ :aSnippet | aSnippet text asString ];\r\t\t\tupdater: [ :aSnippet :aText | \r\t\t\t\t(aSnippet commandBuilder editTextualSnippetCommand\r\t\t\t\t\tstring: aText\r\t\t\t\t\twithSource: tutor -> true) execute ]).\rchat := tutor createAssistant addChat"
 						},
 						{
 							"__type" : "textSnippet",

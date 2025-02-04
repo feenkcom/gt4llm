@@ -24,7 +24,7 @@ GtOpenAIToolTutor >> defaultAssistantName [
 
 { #category : #accessing }
 GtOpenAIToolTutor >> defaultInstructions [
-	^ '' asInstruction
+	^ '' asInstructionPiece
 ]
 
 { #category : #accessing }
@@ -60,5 +60,5 @@ When you are done, or when you don’t need to use a tool to finish the task, yo
 ```
 
 Do NOT output in any other format.
-' format: {tutorTools serialize}) asInstruction
+' format: {tutorTools serialize}) asInstructionPiece
 ]
