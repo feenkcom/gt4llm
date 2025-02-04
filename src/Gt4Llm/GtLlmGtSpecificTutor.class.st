@@ -11,7 +11,7 @@ Class {
 		'exampleViews',
 		'variablesDescription'
 	],
-	#category : #'Gt4Llm-Tutor'
+	#category : #'Gt4Llm-OldTutor'
 }
 
 { #category : #accessing }
