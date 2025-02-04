@@ -156,7 +156,7 @@ GtOpenAIViewActionTutor >> messageClass [
 { #category : #accessing }
 GtOpenAIViewActionTutor >> methodFormatComponent [
 	<gtLlmFormatComponent>
-	^ GtLlmTutorFormatComponent new
+	^ GtLlmTutorFormatDescription new
 		name: 'Smalltalk method';
 		priority: 2;
 		format: 'Smalltalk language';
@@ -170,7 +170,7 @@ aMethodWithArguments: anArgument and: anotherArgument
 { #category : #accessing }
 GtOpenAIViewActionTutor >> objectFormatComponent [
 	<gtLlmFormatComponent>
-	^ GtLlmTutorFormatComponent new
+	^ GtLlmTutorFormatDescription new
 		name: 'Object';
 		priority: 2;
 		format: 'Text';

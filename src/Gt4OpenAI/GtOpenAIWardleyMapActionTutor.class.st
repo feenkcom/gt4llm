@@ -225,7 +225,7 @@ GtOpenAIWardleyMapActionTutor >> initializePipeline [
 { #category : #accessing }
 GtOpenAIWardleyMapActionTutor >> mapFormatComponent [
 	<gtLlmFormatComponent>
-	^ GtLlmTutorFormatComponent new
+	^ GtLlmTutorFormatDescription new
 		name: 'Wardley Map';
 		priority: 2;
 		format: 'Wardley Map language';
@@ -304,7 +304,7 @@ component Furnace [0.9, 0.9] label [-9, 9]'.
 { #category : #accessing }
 GtOpenAIWardleyMapActionTutor >> renameFormatComponent [
 	<gtLlmFormatComponent>
-	^ GtLlmTutorFormatComponent new
+	^ GtLlmTutorFormatDescription new
 		name: 'Rename';
 		priority: 2;
 		format: 'Text';
@@ -345,7 +345,7 @@ component Compute [0.45, 0.34] label [-22, 29]'.
 { #category : #accessing }
 GtOpenAIWardleyMapActionTutor >> topicFormatComponent [
 	<gtLlmFormatComponent>
-	^ GtLlmTutorFormatComponent new
+	^ GtLlmTutorFormatDescription new
 		name: 'Topic';
 		priority: 1;
 		format: 'Text';

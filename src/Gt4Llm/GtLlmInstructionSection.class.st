@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLlmInstructionSection,
-	#superclass : #GtLlmInstructionComponent,
+	#superclass : #GtLlmInstructionPiece,
 	#instVars : [
 		'title',
 		'body',
@@ -17,7 +17,7 @@ GtLlmInstructionSection >> body [
 
 { #category : #accessing }
 GtLlmInstructionSection >> body: anObject [
-	body := anObject asInstruction parent: self
+	body := anObject asInstructionPiece parent: self
 ]
 
 { #category : #accessing }

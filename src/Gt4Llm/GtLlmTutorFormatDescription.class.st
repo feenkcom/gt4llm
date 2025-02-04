@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLlmTutorFormatComponent,
+	#name : #GtLlmTutorFormatDescription,
 	#superclass : #Object,
 	#instVars : [
 		'name',
@@ -16,7 +16,7 @@ Class {
 }
 
 { #category : #accessing }
-GtLlmTutorFormatComponent >> addInputReference: anAction [
+GtLlmTutorFormatDescription >> addInputReference: anAction [
 	referencingActions
 		detect: [ :aReference | aReference action = anAction ]
 		ifFound: [ :aReference | aReference markInput ]
@@ -25,7 +25,7 @@ GtLlmTutorFormatComponent >> addInputReference: anAction [
 ]
 
 { #category : #accessing }
-GtLlmTutorFormatComponent >> addOutputReference: anAction [
+GtLlmTutorFormatDescription >> addOutputReference: anAction [
 	referencingActions
 		detect: [ :aReference | aReference action = anAction ]
 		ifFound: [ :aReference | aReference markOutput ]
@@ -34,7 +34,7 @@ GtLlmTutorFormatComponent >> addOutputReference: anAction [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmTutorFormatComponent >> asExpressionSource [
+GtLlmTutorFormatDescription >> asExpressionSource [
 	^ self class name
 		, ' new
 	type: ' , self type storeString
@@ -49,7 +49,7 @@ GtLlmTutorFormatComponent >> asExpressionSource [
 ]
 
 { #category : #accessing }
-GtLlmTutorFormatComponent >> asInstruction [
+GtLlmTutorFormatDescription >> asInstructionPiece [
 	^ GtLlmInstructionSection new
 		title: self name;
 		body: (GtLlmInstructionList new
@@ -60,7 +60,7 @@ GtLlmTutorFormatComponent >> asInstruction [
 ]
 
 { #category : #accessing }
-GtLlmTutorFormatComponent >> asJsonSchema [
+GtLlmTutorFormatDescription >> asJsonSchema [
 	^ {'type' -> self type.
 		'description'
 			-> (GtLlmInstructionList new
@@ -70,48 +70,48 @@ GtLlmTutorFormatComponent >> asJsonSchema [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmTutorFormatComponent >> beRequired [
+GtLlmTutorFormatDescription >> beRequired [
 	self type remove: 'null' ifAbsent: [  ]
 ]
 
 { #category : #accessing }
-GtLlmTutorFormatComponent >> defaultPriority [
+GtLlmTutorFormatDescription >> defaultPriority [
 	^ 10
 ]
 
 { #category : #accessing }
-GtLlmTutorFormatComponent >> defaultType [
+GtLlmTutorFormatDescription >> defaultType [
 	^ {'string'.
 		'null'}
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmTutorFormatComponent >> definingMethod [
+GtLlmTutorFormatDescription >> definingMethod [
 	^ definingMethod
 ]
 
 { #category : #accessing }
-GtLlmTutorFormatComponent >> example [
+GtLlmTutorFormatDescription >> example [
 	^ example
 ]
 
 { #category : #accessing }
-GtLlmTutorFormatComponent >> example: anObject [
+GtLlmTutorFormatDescription >> example: anObject [
 	example := anObject
 ]
 
 { #category : #accessing }
-GtLlmTutorFormatComponent >> format [
+GtLlmTutorFormatDescription >> format [
 	^ format
 ]
 
 { #category : #accessing }
-GtLlmTutorFormatComponent >> format: anObject [
+GtLlmTutorFormatDescription >> format: anObject [
 	format := anObject
 ]
 
 { #category : #accessing }
-GtLlmTutorFormatComponent >> gtActionsFor: aView [
+GtLlmTutorFormatDescription >> gtActionsFor: aView [
 	<gtView>
 	^ aView columnedList
 		title: 'Referencing actions';
@@ -125,7 +125,7 @@ GtLlmTutorFormatComponent >> gtActionsFor: aView [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmTutorFormatComponent >> gtDefinitionFor: aView [
+GtLlmTutorFormatDescription >> gtDefinitionFor: aView [
 	<gtView>
 	^ aView forward
 		title: 'Definition';
@@ -135,17 +135,17 @@ GtLlmTutorFormatComponent >> gtDefinitionFor: aView [
 ]
 
 { #category : #accessing }
-GtLlmTutorFormatComponent >> gtInstructionFor: aView [
+GtLlmTutorFormatDescription >> gtInstructionFor: aView [
 	<gtView>
 	^ aView forward 
 		title: 'Instruction';
 		priority: 2;
-		object: [ self asInstruction ];
+		object: [ self asInstructionPiece ];
 		view: #gtInstructionFor:
 ]
 
 { #category : #accessing }
-GtLlmTutorFormatComponent >> initialize [
+GtLlmTutorFormatDescription >> initialize [
 	super initialize.
 	
 	priority := self defaultPriority.
@@ -158,17 +158,17 @@ GtLlmTutorFormatComponent >> initialize [
 ]
 
 { #category : #accessing }
-GtLlmTutorFormatComponent >> name [
+GtLlmTutorFormatDescription >> name [
 	^ name
 ]
 
 { #category : #accessing }
-GtLlmTutorFormatComponent >> name: anObject [
+GtLlmTutorFormatDescription >> name: anObject [
 	name := anObject
 ]
 
 { #category : #accessing }
-GtLlmTutorFormatComponent >> printOn: aStream [
+GtLlmTutorFormatDescription >> printOn: aStream [
 	super printOn: aStream.
 
 	aStream
@@ -178,31 +178,31 @@ GtLlmTutorFormatComponent >> printOn: aStream [
 ]
 
 { #category : #accessing }
-GtLlmTutorFormatComponent >> priority [
+GtLlmTutorFormatDescription >> priority [
 	^ priority
 ]
 
 { #category : #accessing }
-GtLlmTutorFormatComponent >> priority: anObject [
+GtLlmTutorFormatDescription >> priority: anObject [
 	priority := anObject
 ]
 
 { #category : #accessing }
-GtLlmTutorFormatComponent >> tutor [
+GtLlmTutorFormatDescription >> tutor [
 	^ tutor
 ]
 
 { #category : #accessing }
-GtLlmTutorFormatComponent >> tutor: anObject [
+GtLlmTutorFormatDescription >> tutor: anObject [
 	tutor := anObject
 ]
 
 { #category : #accessing }
-GtLlmTutorFormatComponent >> type [
+GtLlmTutorFormatDescription >> type [
 	^ type
 ]
 
 { #category : #accessing }
-GtLlmTutorFormatComponent >> type: anObject [
+GtLlmTutorFormatDescription >> type: anObject [
 	type := anObject
 ]

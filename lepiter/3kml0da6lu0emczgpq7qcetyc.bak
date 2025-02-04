@@ -60,20 +60,20 @@
 				},
 				"editEmail" : {
 					"__type" : "email",
-					"emailString" : "veit.heller@feenk.com"
+					"emailString" : "<unknown>"
 				},
 				"editTime" : {
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2025-02-03T11:05:20.069163+01:00"
+						"dateAndTimeString" : "2025-02-04T18:02:52.273018+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "60MKKWPpDQCp2lKqChlaPA=="
 				},
-				"code" : "instructions := 'You roleplay as Mario from Super Mario Bros and you really love Smalltalk, the programming language.'"
+				"code" : "descriptionString := 'You roleplay as Mario from Super Mario Bros and you really love Smalltalk, the programming language.'"
 			},
 			{
 				"__type" : "pharoSnippet",
@@ -100,14 +100,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2025-02-04T07:07:51.183363+01:00"
+						"dateAndTimeString" : "2025-02-04T18:11:16.310919+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "67SHC2PpDQCn9dgYChlaPA=="
 				},
-				"code" : "tutor := GtLlmTutor new\r\t\tinstructions: instructions;\r\t\tproviderStencil: [ :anInstructionFormat | \r\t\t\tGtOpenAIAssistantProvider withApiKeyFromFile\r\t\t\t\tinstructions: anInstructionFormat asInstruction instructionString;\r\t\t\t\tformat: anInstructionFormat asJsonSchema;\r\t\t\t\tassistantMessageClass: GtOpenAIActionThreadMessage;\r\t\t\t\tuserMessageClass: GtOpenAIActionThreadMessage ]"
+				"code" : "tutor := LlmTutor new\r\t\tdescription: descriptionString;\r\t\tproviderStencil: [ :anInstructionFormat | \r\t\t\tGtOpenAIAssistantProvider withApiKeyFromFile\r\t\t\t\tinstructions: anInstructionFormat asInstructionPiece instructionString;\r\t\t\t\tformat: anInstructionFormat asJsonSchema;\r\t\t\t\tassistantMessageClass: GtOpenAIActionThreadMessage;\r\t\t\t\tuserMessageClass: GtOpenAIActionThreadMessage ]"
 			},
 			{
 				"__type" : "pharoSnippet",
@@ -134,14 +134,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2025-02-04T07:07:53.134406+01:00"
+						"dateAndTimeString" : "2025-02-04T18:11:16.303676+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "6jJIyaHpDQCIDLgxBcFXNg=="
 				},
-				"code" : "\"alternative using Ollama\"\rtutor := GtLlmTutor new\r\t\tinstructions: instructions;\r\t\tproviderStencil: [ :anInstructionFormat | \r\t\t\tGtOllamaProvider new\r\t\t\t\tmodel: 'deepseek-r1';\r\t\t\t\tinstructions: anInstructionFormat asInstruction instructionString;\r\t\t\t\tformat: anInstructionFormat asJsonSchema ]"
+				"code" : "\"alternative using Ollama\"\rtutor := LlmTutor new\r\t\tdescription: instructionString;\r\t\tproviderStencil: [ :anInstructionFormat | \r\t\t\tGtOllamaProvider new\r\t\t\t\tmodel: 'deepseek-r1';\r\t\t\t\tinstructions: anInstructionFormat asInstructionPiece instructionString;\r\t\t\t\tformat: anInstructionFormat asJsonSchema ]"
 			},
 			{
 				"__type" : "pharoSnippet",
@@ -162,20 +162,20 @@
 				},
 				"editEmail" : {
 					"__type" : "email",
-					"emailString" : "veit.heller@feenk.com"
+					"emailString" : "<unknown>"
 				},
 				"editTime" : {
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2025-02-03T13:32:50.431173+01:00"
+						"dateAndTimeString" : "2025-02-04T18:12:59.011705+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "vtLR053pDQCgdtmxDT5fkg=="
 				},
-				"code" : "tutor addFormatComponent: (GtLlmTutorFormatComponent new beRequired\r\t\tname: 'Game';\r\t\tformat: 'Text';\r\t\texample: '```\rSuper Mario Bros.\r```')"
+				"code" : "tutor addFormat: (GtLlmTutorFormatComponent new beRequired\r\t\tname: 'Game';\r\t\tformat: 'Text';\r\t\texample: '```\rSuper Mario Bros.\r```')"
 			},
 			{
 				"__type" : "pharoSnippet",

@@ -11,7 +11,7 @@ Class {
 { #category : #accessing }
 GtLlmTutorFormat >> actionComponent [
 	<gtLlmFormatComponent>
-	^ GtLlmTutorFormatComponent new beRequired
+	^ GtLlmTutorFormatDescription new beRequired
 		name: 'Action';
 		format: 'Text';
 		example: '```
@@ -30,7 +30,7 @@ GtLlmTutorFormat >> addComponents: aListOfComponents [
 ]
 
 { #category : #accessing }
-GtLlmTutorFormat >> asInstruction [
+GtLlmTutorFormat >> asInstructionPiece [
 	^ GtLlmInstructionWithSections new
 		source: self;
 		introduction: 'You are a tutor that is used to interactively work on ' , self name
@@ -93,7 +93,7 @@ GtLlmTutorFormat >> errorHandlingDescription [
 ]
 
 { #category : #accessing }
-GtLlmTutorFormat >> gtComponentsFor: aView [
+GtLlmTutorFormat >> gtFormatsFor: aView [
 	<gtView>
 	^ aView columnedList
 		title: 'Components';
@@ -120,7 +120,7 @@ GtLlmTutorFormat >> gtInstructionFor: aView [
 	^ aView forward
 		title: 'Instruction';
 		priority: 1;
-		object: [self asInstruction ];
+		object: [self asInstructionPiece ];
 		view: #gtInstructionFor:
 ]
 

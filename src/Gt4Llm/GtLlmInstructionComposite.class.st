@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLlmInstructionComposite,
-	#superclass : #GtLlmInstructionComponent,
+	#superclass : #GtLlmInstructionPiece,
 	#instVars : [
 		'items'
 	],
@@ -9,7 +9,7 @@ Class {
 
 { #category : #accessing }
 GtLlmInstructionComposite >> addItem: anItem [
-	items add: (anItem asInstruction parent: self)
+	items add: (anItem asInstructionPiece parent: self)
 ]
 
 { #category : #accessing }
@@ -37,5 +37,5 @@ GtLlmInstructionComposite >> instructionString [
 { #category : #accessing }
 GtLlmInstructionComposite >> items: anObject [
 	items := anObject
-			collect: [ :anInstruction | anInstruction asInstruction parent: self ]
+			collect: [ :anInstruction | anInstruction asInstructionPiece parent: self ]
 ]

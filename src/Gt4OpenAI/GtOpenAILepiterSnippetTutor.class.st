@@ -29,7 +29,7 @@ GtOpenAILepiterSnippetTutor >> formatName [
 { #category : #'as yet unclassified' }
 GtOpenAILepiterSnippetTutor >> gtSnippetFormatComponent [
 	<gtLlmFormatComponent>
-	^ GtLlmTutorFormatComponent new
+	^ GtLlmTutorFormatDescription new
 	type: ((OrderedCollection new) add: 'string'; add: 'null'; yourself);
 	format: 'JSON';
 	name: 'Snippet';

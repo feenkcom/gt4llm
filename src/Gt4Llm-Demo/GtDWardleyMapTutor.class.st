@@ -181,7 +181,7 @@ component Furnace [0.9, 0.9] label [-9, 9]'.
 { #category : #'as yet unclassified' }
 GtDWardleyMapTutor >> gtRenameFormatComponent [
 	<gtLlmFormatComponent>
-	^ GtLlmTutorFormatComponent new
+	^ GtLlmTutorFormatDescription new
 		name: 'Rename';
 		priority: 2;
 		format: 'JSON';
@@ -235,7 +235,7 @@ Overall, while the map covers key components, expanding it with more detailed la
 { #category : #'as yet unclassified' }
 GtDWardleyMapTutor >> gtWardleyMapFormatComponent [
 	<gtLlmFormatComponent>
-	^ GtLlmTutorFormatComponent new
+	^ GtLlmTutorFormatDescription new
 	type: ((OrderedCollection new) add: 'string'; add: 'null'; yourself);
 	format: 'Wardley Map language';
 	name: 'Wardley map';

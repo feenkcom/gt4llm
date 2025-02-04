@@ -912,7 +912,7 @@ GtOpenAILepiterWardleyMapSnippetTutor >> renameAction [
 { #category : #'as yet unclassified' }
 GtOpenAILepiterWardleyMapSnippetTutor >> renameFormatComponent [
 	<gtLlmFormatComponent>
-	^ GtLlmTutorFormatComponent new
+	^ GtLlmTutorFormatDescription new
 		name: 'Rename';
 		priority: 2;
 		format: 'Text';

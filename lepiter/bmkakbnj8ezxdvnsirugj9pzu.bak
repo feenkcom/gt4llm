@@ -97,7 +97,7 @@
 								"__type" : "time",
 								"time" : {
 									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2024-11-22T16:02:04.430379+01:00"
+									"dateAndTimeString" : "2024-11-27T10:30:12.380642+01:00"
 								}
 							},
 							"editEmail" : {
@@ -108,7 +108,7 @@
 								"__type" : "time",
 								"time" : {
 									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2024-11-22T16:02:46.053836+01:00"
+									"dateAndTimeString" : "2024-11-27T10:30:29.034805+01:00"
 								}
 							},
 							"uid" : {
@@ -118,7 +118,7 @@
 							"paragraphStyle" : {
 								"__type" : "textStyle"
 							},
-							"string" : "This comes mainly from {{gtPage:Creating a read-write post tutor|db=5lw2wjg8hwdwpy1kq5i7lble1}} in the gt4llm database."
+							"string" : "It's essentially the same as [[Creating a read-write post tutor]] but provides more details."
 						}
 					]
 				},

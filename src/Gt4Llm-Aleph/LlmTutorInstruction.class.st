@@ -3,9 +3,9 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'name',
-		'components',
 		'actions',
-		'instructions'
+		'description',
+		'formats'
 	],
 	#category : #'Gt4Llm-Aleph-Tutor'
 }
@@ -13,7 +13,7 @@ Class {
 { #category : #accessing }
 LlmTutorInstruction >> actionComponent [
 	<gtLlmFormatComponent>
-	^ GtLlmTutorFormatComponent new beRequired
+	^ GtLlmTutorFormatDescription new beRequired
 		name: 'Action';
 		format: 'Text';
 		example: '```
@@ -43,19 +43,19 @@ LlmTutorInstruction >> addActions: aListOfActions [
 
 { #category : #accessing }
 LlmTutorInstruction >> addComponent: aComponent [
-	components add: aComponent
+	formats add: aComponent
 ]
 
 { #category : #accessing }
 LlmTutorInstruction >> addComponents: aListOfComponents [
-	components addAll: aListOfComponents
+	formats addAll: aListOfComponents
 ]
 
 { #category : #accessing }
-LlmTutorInstruction >> asInstruction [
+LlmTutorInstruction >> asInstructionPiece [
 	^ GtLlmInstructionWithSections new
 		source: self;
-		introduction: self instructions;
+		introduction: self description;
 		sections: {self interactionDescription.
 				self communicationConventionsDescription.
 				GtLlmInstructionSection new
@@ -66,13 +66,13 @@ LlmTutorInstruction >> asInstruction [
 							introduction: 'Each format component has a name, a data format (such as JSON, YAML, etc.), a Markdown code block annotation tag that encloses it, and some examples.
 							
 The components that make up the state are as follows:';
-							sections: components).
+							sections: formats).
 				GtLlmInstructionSection new
 					source: self;
 					title: 'Actions';
 					body: (GtLlmInstructionWithSections new
 							introduction: 'All actions are listed below.';
-							sections: (actions collect: #asInstruction)).
+							sections: (actions collect: #asInstructionPiece)).
 				self errorHandlingDescription}
 ]
 
@@ -80,10 +80,10 @@ The components that make up the state are as follows:';
 LlmTutorInstruction >> asJsonSchema [
 	^ {'type' -> 'object'.
 		'properties'
-			-> (components
+			-> (formats
 					collect: [ :aComponent | aComponent name -> aComponent asJsonSchema ])
 					asDictionary.
-		'required' -> (components collect: #name).
+		'required' -> (formats collect: #name).
 		'additionalProperties' -> false} asDictionary
 ]
 
@@ -99,12 +99,17 @@ LlmTutorInstruction >> communicationConventionsDescription [
 
 { #category : #accessing }
 LlmTutorInstruction >> componentNamed: aName [
-	^ components detect: [ :aComponent | aComponent name = aName ] ifNone: [ nil ]
+	^ formats detect: [ :aComponent | aComponent name = aName ] ifNone: [ nil ]
 ]
 
 { #category : #accessing }
-LlmTutorInstruction >> components [
-	^ components
+LlmTutorInstruction >> description [
+	^ description
+]
+
+{ #category : #accessing }
+LlmTutorInstruction >> description: anObject [
+	description := anObject
 ]
 
 { #category : #accessing }
@@ -114,9 +119,14 @@ LlmTutorInstruction >> errorHandlingDescription [
 		body: 'If an error occurs during an action, a message will be sent that starts with `An error occured:` and the message below. You then correct the mistake by sending an action result that corrects the mistake.'
 ]
 
-{ #category : #'as yet unclassified' }
-LlmTutorInstruction >> formatComponents [
-	^ components
+{ #category : #accessing }
+LlmTutorInstruction >> formatNamed: aName [
+	^ formats detect: [ :aComponent | aComponent name = aName ] ifNone: [ nil ]
+]
+
+{ #category : #accessing }
+LlmTutorInstruction >> formats [
+	^ formats
 ]
 
 { #category : #'as yet unclassified' }
@@ -130,12 +140,12 @@ LlmTutorInstruction >> gtActionsFor: aView [
 ]
 
 { #category : #accessing }
-LlmTutorInstruction >> gtComponentsFor: aView [
+LlmTutorInstruction >> gtFormatsFor: aView [
 	<gtView>
 	^ aView columnedList
-		title: 'Components';
+		title: 'Formats';
 		priority: 2;
-		items: [ components sorted: [ :a :b | a priority < b priority ] ];
+		items: [ formats sorted: [ :a :b | a priority < b priority ] ];
 		column: 'Name' text: #name;
 		column: 'Format' text: #format;
 		column: 'Priority' text: #priority width: 70;
@@ -146,7 +156,7 @@ LlmTutorInstruction >> gtComponentsFor: aView [
 					icon: BrGlamorousVectorIcons cancel;
 					label: 'Remove';
 					action: [ :aButton | 
-						components remove: anItem.
+						formats remove: anItem.
 						aButton phlow fireUpdateWish ] ]
 		width: 70
 ]
@@ -157,25 +167,15 @@ LlmTutorInstruction >> gtInstructionFor: aView [
 	^ aView forward
 		title: 'Instruction';
 		priority: 1;
-		object: [self asInstruction ];
+		object: [self asInstructionPiece ];
 		view: #gtInstructionFor:
 ]
 
 { #category : #accessing }
 LlmTutorInstruction >> initialize [
-	components := OrderedCollection with: self actionComponent.
+	formats := OrderedCollection with: self actionComponent.
 	actions := GtLlmActionsGroup new.
-	instructions := ''
-]
-
-{ #category : #accessing }
-LlmTutorInstruction >> instructions [
-	^ instructions
-]
-
-{ #category : #accessing }
-LlmTutorInstruction >> instructions: anObject [
-	instructions := anObject
+	description := ''
 ]
 
 { #category : #accessing }

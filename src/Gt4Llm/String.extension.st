@@ -1,7 +1,7 @@
 Extension { #name : #String }
 
 { #category : #'*Gt4Llm' }
-String >> asInstruction [
+String >> asInstructionPiece [
 	^ GtLlmInstructionString new string: self
 ]
 

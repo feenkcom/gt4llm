@@ -85,7 +85,7 @@ GtOpenAIActionTutor >> gtFormatComponentsFor: aView [
 		title: 'Format components';
 		priority: 11;
 		object: [ self format ];
-		view: #gtComponentsFor:
+		view: #gtFormatsFor:
 ]
 
 { #category : #accessing }
