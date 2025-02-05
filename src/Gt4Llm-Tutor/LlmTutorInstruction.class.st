@@ -7,7 +7,7 @@ Class {
 		'description',
 		'formats'
 	],
-	#category : #'Gt4Llm-Aleph-Tutor'
+	#category : #'Gt4Llm-Tutor-Tutor'
 }
 
 { #category : #accessing }

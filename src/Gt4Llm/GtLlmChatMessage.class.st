@@ -35,6 +35,11 @@ GtLlmChatMessage class >> serializationProperties [
 		#content -> #content}
 ]
 
+{ #category : #'as yet unclassified' }
+GtLlmChatMessage >> action [
+	^ self contentJson at: 'Action'
+]
+
 { #category : #accessing }
 GtLlmChatMessage >> annotations [
 	^ {}
@@ -87,7 +92,7 @@ GtLlmChatMessage >> content: anObject [
 
 { #category : #'as yet unclassified' }
 GtLlmChatMessage >> contentJson [
-	^ STONJSON fromString: self content
+	^ STONJSON fromString: self contentText
 ]
 
 { #category : #accessing }

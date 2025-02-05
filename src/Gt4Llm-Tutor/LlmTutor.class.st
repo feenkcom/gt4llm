@@ -5,7 +5,7 @@ Class {
 		'providerStencil',
 		'instruction'
 	],
-	#category : #'Gt4Llm-Aleph'
+	#category : #'Gt4Llm-Tutor-Tutor'
 }
 
 { #category : #'as yet unclassified' }

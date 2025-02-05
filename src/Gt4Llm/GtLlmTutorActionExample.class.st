@@ -9,7 +9,7 @@ Class {
 		'outputReferences',
 		'unverified'
 	],
-	#category : #'Gt4Llm-Tutor'
+	#category : #'Gt4Llm-OldTutor'
 }
 
 { #category : #accessing }
@@ -41,7 +41,7 @@ GtLlmTutorActionExample >> asExpressionSource [
 ]
 
 { #category : #accessing }
-GtLlmTutorActionExample >> asInstruction [
+GtLlmTutorActionExample >> asInstructionPiece [
 	^ GtLlmInstructionSection new
 		source: self;
 		title: 'Example';
@@ -52,14 +52,14 @@ GtLlmTutorActionExample >> asInstruction [
 						body: ('```
 ' , self inputJson
 								, '
-```') asInstruction);
+```') asInstructionPiece);
 				addItem: (GtLlmInstructionSection new
 						source: self;
 						title: 'Output';
 						body: ('```
 ' , self outputJson
 								, '
-```') asInstruction))
+```') asInstructionPiece))
 ]
 
 { #category : #accessing }
@@ -84,7 +84,7 @@ GtLlmTutorActionExample >> gtInstructionFor: aView [
 	^ aView forward
 		title: 'Instruction';
 		priority: 1;
-		object: [ self asInstruction ];
+		object: [ self asInstructionPiece ];
 		view: #gtInstructionFor:
 ]
 
@@ -203,12 +203,12 @@ GtLlmTutorActionExample >> resolveReferences [
 	inputReferences := input associations
 			select: [ :anAssociation | anAssociation value isNotNil ]
 			thenCollect: [ :anAssociation | 
-				(self action tutor formatComponentNamed: anAssociation key)
+				(self action tutor formatNamed: anAssociation key)
 					addInputReference: self action ].
 	outputReferences := output associations
 			select: [ :anAssociation | anAssociation value isNotNil ]
 			thenCollect: [ :anAssociation | 
-				(self action tutor formatComponentNamed: anAssociation key)
+				(self action tutor formatNamed: anAssociation key)
 					addOutputReference: self action ]
 ]
 

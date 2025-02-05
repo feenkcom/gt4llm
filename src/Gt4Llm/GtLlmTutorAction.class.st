@@ -11,7 +11,7 @@ Class {
 		'tutor',
 		'definingMethod'
 	],
-	#category : #'Gt4Llm-Tutor'
+	#category : #'Gt4Llm-OldTutor'
 }
 
 { #category : #'as yet unclassified' }
@@ -36,7 +36,7 @@ GtLlmTutorAction >> asExpressionSource [
 ]
 
 { #category : #accessing }
-GtLlmTutorAction >> asInstruction [
+GtLlmTutorAction >> asInstructionPiece [
 	^ GtLlmInstructionSection new
 		source: self;
 		title: self name;
@@ -199,7 +199,7 @@ GtLlmTutorAction >> gtInstructionFor: aView [
 	^ aView forward
 		title: 'Instruction';
 		priority: 2;
-		object: [self asInstruction ];
+		object: [self asInstructionPiece ];
 		view: #gtInstructionFor:
 ]
 

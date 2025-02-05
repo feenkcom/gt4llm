@@ -11,7 +11,7 @@ Class {
 		'exampleViews',
 		'variablesDescription'
 	],
-	#category : #'Gt4Llm-Tutor'
+	#category : #'Gt4Llm-OldTutor'
 }
 
 { #category : #accessing }
@@ -244,7 +244,7 @@ GtLlmGtSpecificTutor >> instructions [
 
 { #category : #accessing }
 GtLlmGtSpecificTutor >> instructions: anObject [
-	instructions := anObject asInstruction
+	instructions := anObject asInstructionPiece
 ]
 
 { #category : #accessing }

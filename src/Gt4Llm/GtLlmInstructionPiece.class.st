@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLlmInstructionComponent,
+	#name : #GtLlmInstructionPiece,
 	#superclass : #Object,
 	#instVars : [
 		'parent',
@@ -9,7 +9,7 @@ Class {
 }
 
 { #category : #accessing }
-GtLlmInstructionComponent >> allParents [
+GtLlmInstructionPiece >> allParents [
 	| parents following |
 	parents := OrderedCollection new.
 	following := self.
@@ -22,17 +22,17 @@ GtLlmInstructionComponent >> allParents [
 ]
 
 { #category : #accessing }
-GtLlmInstructionComponent >> asInstruction [
+GtLlmInstructionPiece >> asInstructionPiece [
 	^ self
 ]
 
 { #category : #accessing }
-GtLlmInstructionComponent >> children [
+GtLlmInstructionPiece >> children [
 	^ self subclassResponsibility
 ]
 
 { #category : #accessing }
-GtLlmInstructionComponent >> gtInstructionFor: aView [
+GtLlmInstructionPiece >> gtInstructionFor: aView [
 	<gtView>
 	^ aView textEditor
 		title: 'Instruction';
@@ -43,7 +43,7 @@ GtLlmInstructionComponent >> gtInstructionFor: aView [
 ]
 
 { #category : #accessing }
-GtLlmInstructionComponent >> gtParentsFor: aView [
+GtLlmInstructionPiece >> gtParentsFor: aView [
 	<gtView>
 	^ aView columnedList
 		title: 'Parents';
@@ -54,7 +54,7 @@ GtLlmInstructionComponent >> gtParentsFor: aView [
 ]
 
 { #category : #accessing }
-GtLlmInstructionComponent >> gtTreeFor: aView [
+GtLlmInstructionPiece >> gtTreeFor: aView [
 	<gtView>
 	^ aView columnedTree
 		title: 'Tree';
@@ -67,28 +67,28 @@ GtLlmInstructionComponent >> gtTreeFor: aView [
 ]
 
 { #category : #accessing }
-GtLlmInstructionComponent >> instructionString [
+GtLlmInstructionPiece >> instructionString [
 	^ self subclassResponsibility
 ]
 
 { #category : #accessing }
-GtLlmInstructionComponent >> parent [
+GtLlmInstructionPiece >> parent [
 	^ parent
 ]
 
 { #category : #accessing }
-GtLlmInstructionComponent >> parent: anObject [
+GtLlmInstructionPiece >> parent: anObject [
 	parent := anObject.
 
 	self source ifNil: [ self source: parent source ]
 ]
 
 { #category : #accessing }
-GtLlmInstructionComponent >> source [
+GtLlmInstructionPiece >> source [
 	^ source
 ]
 
 { #category : #accessing }
-GtLlmInstructionComponent >> source: anObject [
+GtLlmInstructionPiece >> source: anObject [
 	source := anObject
 ]

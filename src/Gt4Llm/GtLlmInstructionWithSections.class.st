@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLlmInstructionWithSections,
-	#superclass : #GtLlmInstructionComponent,
+	#superclass : #GtLlmInstructionPiece,
 	#instVars : [
 		'introduction',
 		'sections'
@@ -10,13 +10,13 @@ Class {
 
 { #category : #accessing }
 GtLlmInstructionWithSections >> addSection: aSection [
-	sections add: (aSection asInstruction parent: self)
+	sections add: (aSection asInstructionPiece parent: self)
 ]
 
 { #category : #accessing }
 GtLlmInstructionWithSections >> addSections: aListOfSections [
 	sections
-		addAll: (aListOfSections collect: [ :aSection | aSection asInstruction parent: self ])
+		addAll: (aListOfSections collect: [ :aSection | aSection asInstructionPiece parent: self ])
 ]
 
 { #category : #accessing }
@@ -52,7 +52,7 @@ GtLlmInstructionWithSections >> introduction [
 
 { #category : #accessing }
 GtLlmInstructionWithSections >> introduction: anObject [
-	introduction := anObject asInstruction
+	introduction := anObject asInstructionPiece
 ]
 
 { #category : #accessing }
@@ -73,5 +73,5 @@ GtLlmInstructionWithSections >> sections [
 { #category : #accessing }
 GtLlmInstructionWithSections >> sections: anObject [
 	sections := anObject asOrderedCollection
-			collect: [ :aSection | aSection asInstruction parent: self ]
+			collect: [ :aSection | aSection asInstructionPiece parent: self ]
 ]

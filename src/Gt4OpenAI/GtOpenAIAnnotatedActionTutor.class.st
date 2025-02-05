@@ -40,7 +40,7 @@ GtOpenAIAnnotatedActionTutor >> collectActions [
 ]
 
 { #category : #accessing }
-GtOpenAIAnnotatedActionTutor >> collectFormatComponents [
+GtOpenAIAnnotatedActionTutor >> collectFormats [
 	^ ((Pragma
 		allNamed: #gtLlmFormatComponent
 		from: self class
@@ -216,7 +216,7 @@ GtOpenAIAnnotatedActionTutor >> initialize [
 GtOpenAIAnnotatedActionTutor >> initializeFormat [
 	format := GtLlmTutorFormat new
 			name: self formatName;
-			addComponents: self collectFormatComponents
+			addComponents: self collectFormats
 ]
 
 { #category : #accessing }
@@ -226,7 +226,7 @@ GtOpenAIAnnotatedActionTutor >> initializeInstructionSections [
 					title: 'Actions';
 					body: (GtLlmInstructionWithSections new
 							introduction: 'All actions are listed below.';
-							sections: (actions collect: #asInstruction)))
+							sections: (actions collect: #asInstructionPiece)))
 ]
 
 { #category : #accessing }
@@ -241,9 +241,9 @@ GtOpenAIAnnotatedActionTutor >> instructionSections: anObject [
 
 { #category : #accessing }
 GtOpenAIAnnotatedActionTutor >> instructions [
-	self formatName ifNil: [ ^ '' asInstruction ].
+	self formatName ifNil: [ ^ '' asInstructionPiece ].
 
-	^ self format asInstruction addSections: self instructionSections
+	^ self format asInstructionPiece addSections: self instructionSections
 ]
 
 { #category : #'as yet unclassified' }
@@ -256,9 +256,9 @@ GtOpenAIAnnotatedActionTutor >> recomputeActions [
 ]
 
 { #category : #'as yet unclassified' }
-GtOpenAIAnnotatedActionTutor >> textFormatComponent [
+GtOpenAIAnnotatedActionTutor >> textFormatDescription [
 	<gtLlmFormatComponent>
-	^ GtLlmTutorFormatComponent new
+	^ GtLlmTutorFormatDescription new
 		name: 'Text';
 		priority: 2;
 		format: 'Text';
@@ -275,7 +275,7 @@ Multiple lines, multiple paragraphs are allowed.
 { #category : #'as yet unclassified' }
 GtOpenAIAnnotatedActionTutor >> textValuePipelineFor: post withName: aString [
 	self
-		addFormatComponent: (GtLlmTutorFormatComponent new
+		addFormatComponent: (GtLlmTutorFormatDescription new
 				name: aString;
 				format: 'Text';
 				example: '').

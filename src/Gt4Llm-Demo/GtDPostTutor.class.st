@@ -105,7 +105,7 @@ Oh yes, I know agents can add and include feedback when generating solutions. Bu
 { #category : #'as yet unclassified' }
 GtDPostTutor >> gtPostFormatComponent [
 	<gtLlmFormatComponent>
-	^ GtLlmTutorFormatComponent new
+	^ GtLlmTutorFormatDescription new
 	type: ((OrderedCollection new) add: 'string'; add: 'null'; yourself);
 	format: 'Text';
 	name: 'Post';

@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLlmInstructionList,
-	#superclass : #GtLlmInstructionComponent,
+	#superclass : #GtLlmInstructionPiece,
 	#instVars : [
 		'items'
 	],
@@ -9,7 +9,7 @@ Class {
 
 { #category : #accessing }
 GtLlmInstructionList >> addItem: anItem [
-	items add: (anItem asInstruction parent: self)
+	items add: (anItem asInstructionPiece parent: self)
 ]
 
 { #category : #accessing }
@@ -42,5 +42,5 @@ GtLlmInstructionList >> items [
 
 { #category : #accessing }
 GtLlmInstructionList >> items: anObject [
-	items := anObject collect: #asInstruction
+	items := anObject collect: #asInstructionPiece
 ]

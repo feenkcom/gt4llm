@@ -36,6 +36,11 @@ GtLlmChat >> announcer [
 	^ announcer ifNil: [ announcer := Announcer new ]
 ]
 
+{ #category : #'as yet unclassified' }
+GtLlmChat >> asViewModel [
+	^ GtLlmChatViewModel new assistantChat: self
+]
+
 { #category : #accessing }
 GtLlmChat >> context [
 	^ context
@@ -85,8 +90,8 @@ GtLlmChat >> gtMessagesWidgetFor: aView [
 	^ aView explicit
 		title: 'Chat';
 		priority: 0;
-		stencil: [ aViewModel ifNil: [ aViewModel := GtLlmChatViewModel new assistantChat: self ].
-			GtLlmChatElement new assistantChatViewModel: aViewModel ];
+		stencil: [ aViewModel ifNil: [ aViewModel := self asViewModel ].
+			LlmChatElement new chatViewModel: aViewModel ];
 		actionUpdateButton
 ]
 
@@ -133,7 +138,7 @@ GtLlmChat >> lastUpdate: anObject [
 
 { #category : #'as yet unclassified' }
 GtLlmChat >> messageFromString: aString [
-	^ aString
+	^ provider messageFromString: aString
 ]
 
 { #category : #accessing }
