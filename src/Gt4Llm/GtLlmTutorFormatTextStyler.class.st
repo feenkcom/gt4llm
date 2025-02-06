@@ -37,15 +37,15 @@ GtLlmTutorFormatTextStyler >> styleUnknownFormatComponent: aCodeNode [
 											beTinySize ]
 									content: [ self tutor
 											formatComponentMethodCoderForSource: 'gt' , aCodeNode code value allButFirst allButLast
-													, 'FormatComponent
-	<gtLlmFormatComponent>
-	^ GtLlmTutorFormatComponent new
+													, 'FormatDescription
+	<gtLlmTutorFormat>
+	^ GtLlmTutorFormatDescription new
 		name: ''' , aCodeNode code value allButFirst allButLast
 													, ''';
 		priority: 1;
 		format: '''';
 		example: ''''' ]);
-					label: 'Create format component';
+					label: 'Create tutor format';
 					beTinySize;
 					margin: (BlInsets left: 5);
 					icon: BrGlamorousVectorIcons repair;
@@ -84,6 +84,6 @@ GtLlmTutorFormatTextStyler >> tutor: anObject [
 
 { #category : #'as yet unclassified' }
 GtLlmTutorFormatTextStyler >> visitInlineCode: aCodeNode [
-	(tutor formatComponentNamed: aCodeNode code value allButFirst allButLast)
+	(tutor formatNamed: aCodeNode code value allButFirst allButLast)
 		ifNil: [ self styleUnknownFormatComponent: aCodeNode ]
 ]

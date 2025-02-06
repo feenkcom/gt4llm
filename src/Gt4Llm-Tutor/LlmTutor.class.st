@@ -10,7 +10,7 @@ Class {
 
 { #category : #'as yet unclassified' }
 LlmTutor >> actionNamed: anActionName [
-	^ self format actionNamed: anActionName
+	^ self instruction actionNamed: anActionName
 ]
 
 { #category : #accessing }
