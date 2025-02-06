@@ -2,7 +2,7 @@ Class {
 	#name : #GtLlmProvider,
 	#superclass : #Object,
 	#instVars : [
-		'isActionBased',
+		'serializer',
 		'chat',
 		'userMessageClass',
 		'assistantMessageClass',
@@ -23,7 +23,7 @@ GtLlmProvider >> assistantMessageClass: anObject [
 
 { #category : #'as yet unclassified' }
 GtLlmProvider >> beActionBased [
-	isActionBased := true
+	serializer := GtLlmActionMessageSerializer new
 ]
 
 { #category : #accessing }
@@ -60,22 +60,15 @@ GtLlmProvider >> format: anObject [
 GtLlmProvider >> initialize [
 	super initialize.
 
-	isActionBased := false.
+	serializer := GtLlmMessageSerializer new.
 
 	userMessageClass := self defaultUserMessageClass.
 	assistantMessageClass := self defaultAssistantMessageClass
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmProvider >> isActionBased [
-	^ isActionBased
-]
-
-{ #category : #'as yet unclassified' }
 GtLlmProvider >> messageFromString: aString [
-	self isActionBased ifFalse: [ ^ aString ].
-
-	^ STONJSON toString: {'Action' -> aString} asDictionary
+	^ serializer serialize: aString
 ]
 
 { #category : #'as yet unclassified' }
@@ -105,4 +98,9 @@ GtLlmProvider >> userMessageClass [
 { #category : #accessing }
 GtLlmProvider >> userMessageClass: anObject [
 	userMessageClass := anObject
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmProvider >> withInstance: aValueHolder [
+	serializer := GtLlmActionMessageWithInstanceSerializer new instance: aValueHolder
 ]

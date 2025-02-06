@@ -67,7 +67,7 @@ LlmTutor >> collectFormats [
 { #category : #'as yet unclassified' }
 LlmTutor >> createChat [
 	^ GtLlmActionChat new
-		provider: (self providerStencil value: instruction) beActionBased;
+		provider: (self providerStencil value: instruction);
 		tutor: self
 ]
 

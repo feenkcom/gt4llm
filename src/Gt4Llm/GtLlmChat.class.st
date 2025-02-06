@@ -26,7 +26,7 @@ GtLlmChat >> ancestorOf: aMessage [
 	messages
 		withIndexDo: [ :possibleAncestor :index | 
 			possibleAncestor id = aMessage id
-				ifTrue: [ index = messages size ifTrue: [ ^ nil ] ifFalse: [ ^ messages at: index + 1 ] ] ].
+				ifTrue: [ index = 1 ifTrue: [ ^ nil ] ifFalse: [ ^ messages at: index - 1 ] ] ].
 
 	self error: 'Message not found'
 ]
@@ -57,7 +57,7 @@ GtLlmChat >> descendantOf: aMessage [
 	messages
 		withIndexDo: [ :possibleAncestor :index | 
 			possibleAncestor id = aMessage id
-				ifTrue: [ index = 1 ifTrue: [ ^ nil ] ifFalse: [ ^ messages at: index - 1 ] ] ].
+				ifTrue: [ index = messages size ifTrue: [ ^ nil ] ifFalse: [ ^ messages at: index + 1 ] ] ].
 
 	self error: 'Message not found'
 ]

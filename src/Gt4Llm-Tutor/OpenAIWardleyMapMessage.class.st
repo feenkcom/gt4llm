@@ -20,14 +20,14 @@ OpenAIWardleyMapMessage >> diffedMapModel [
 	differ := GtWardleyMapDiffer diffFrom: self ancestor mapModel to: ownModel.
 
 	differ addedEdges
-		do: [ :anEdge | anEdge addWardleyMapDecoratorModel: GtWardleyMapAddProposition new ].
+		do: [ :anEdge | anEdge addWardleyMapDecoratorModel: GtWardleyMapAddProposition new beReadOnly ].
 	differ addedNodes
-		do: [ :aNode | aNode addWardleyMapDecoratorModel: GtWardleyMapAddProposition new ].
+		do: [ :aNode | aNode addWardleyMapDecoratorModel: GtWardleyMapAddProposition new beReadOnly ].
 	differ removedNodes
 		do: [ :aNode | 
 			ownModel
 				addNode: (aNode removeParent
-						addWardleyMapDecoratorModel: GtWardleyMapRemoveProposition new) ].
+						addWardleyMapDecoratorModel: GtWardleyMapRemoveProposition new beReadOnly) ].
 	differ removedEdges
 		do: [ :anEdge | 
 			| newEdge |
@@ -40,7 +40,7 @@ OpenAIWardleyMapMessage >> diffedMapModel [
 							nodeWithName: anEdge toNode label
 							ifFound: #yourself
 							ifNone: [ self error: 'Node not found' ]);
-					addWardleyMapDecoratorModel: GtWardleyMapRemoveProposition new.
+					addWardleyMapDecoratorModel: GtWardleyMapRemoveProposition new beReadOnly.
 			ownModel addEdge: newEdge ].
 
 	^ ownModel
