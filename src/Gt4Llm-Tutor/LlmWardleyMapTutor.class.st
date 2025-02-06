@@ -78,11 +78,16 @@ LlmWardleyMapTutor >> defaultDescription [
 { #category : #'as yet unclassified' }
 LlmWardleyMapTutor >> defaultProviderStencil [
 	^ [ :anInstructionFormat | 
-			GtOpenAIAssistantProvider withApiKeyFromFile beActionBased
-				instructions: anInstructionFormat asInstructionPiece instructionString;
-				format: anInstructionFormat asJsonSchema;
-				assistantMessageClass: OpenAIWardleyMapMessage;
-				userMessageClass: OpenAIWardleyMapMessage ]
+	GtOpenAIAssistantProvider withApiKeyFromFile
+		instructions: anInstructionFormat asInstructionPiece instructionString;
+		format: anInstructionFormat asJsonSchema;
+		assistantMessageClass: OpenAIWardleyMapMessage;
+		userMessageClass: OpenAIWardleyMapMessage;
+		withInstance: (GtLlmSerializableValueHolder new
+				name: 'Wardley Map';
+				content: GtWardleyMapModel new;
+				serializer: #asWardleyMapScript;
+				updater: [ :aModel :aText | (GtWardleyMapParser parse: aText) asWardleyMapModel ]) ]
 ]
 
 { #category : #'as yet unclassified' }
