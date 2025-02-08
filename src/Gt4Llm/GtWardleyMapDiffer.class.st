@@ -41,6 +41,15 @@ GtWardleyMapDiffer >> from: anObject [
 	from := anObject
 ]
 
+{ #category : #'as yet unclassified' }
+GtWardleyMapDiffer >> merge [
+	self addedNodes do: [ :aNode | from addNode: aNode removeParent ].
+	self addedEdges do: [ :anEdge | from addEdge: anEdge removeParent ].
+
+	self removedEdges do: [ :anEdge | from removeEdge: anEdge ].
+	self removedNodes do: [ :aNode | from removeNode: aNode ]
+]
+
 { #category : #accessing }
 GtWardleyMapDiffer >> removedEdges [
 	| toEdgePairs |

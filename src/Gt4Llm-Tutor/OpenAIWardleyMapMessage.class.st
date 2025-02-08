@@ -74,7 +74,10 @@ OpenAIWardleyMapMessage >> gtWardleyMapFor: aView [
 				wardleyMapViewModel: (GtWardleyMapViewModel new
 						wardleyMapModel: self diffedMapModel;
 						openAITutorChat: self chat);
-				vExact: 500 ]
+				vExact: 500 ];
+		actionButtonIcon: BrGlamorousVectorIcons accept
+			tooltip: 'Accept this map'
+			action: [ :aButton | self chat provider updateInstance: self mapCodeBlock ]
 ]
 
 { #category : #accessing }
