@@ -23,3 +23,8 @@ GtLlmActionMessageWithInstanceSerializer >> serialize: aString [
 		toString: {'Action' -> aString.
 				self instance serialize} asDictionary
 ]
+
+{ #category : #'as yet unclassified' }
+GtLlmActionMessageWithInstanceSerializer >> update: aValue [
+	self instance updateContent: aValue
+]

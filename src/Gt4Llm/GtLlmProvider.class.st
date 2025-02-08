@@ -90,6 +90,11 @@ GtLlmProvider >> status [
 	^ self subclassResponsibility
 ]
 
+{ #category : #'as yet unclassified' }
+GtLlmProvider >> updateInstance: aValue [
+	serializer update: aValue
+]
+
 { #category : #accessing }
 GtLlmProvider >> userMessageClass [
 	^ userMessageClass

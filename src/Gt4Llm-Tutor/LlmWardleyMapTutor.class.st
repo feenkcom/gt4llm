@@ -71,6 +71,14 @@ LlmWardleyMapTutor >> createAction [
 ]
 
 { #category : #'as yet unclassified' }
+LlmWardleyMapTutor >> createChatOn: aGtWardleyMapModel [
+	| chat |
+	chat := self createChat.
+	chat provider withInstance: (self valueHolderFor: aGtWardleyMapModel).
+	^ chat
+]
+
+{ #category : #'as yet unclassified' }
 LlmWardleyMapTutor >> defaultDescription [
 	^ 'You are an assistant that is used to interactively work on Wardley Maps. You trigger certain actions to generate a desired result.'
 ]
@@ -83,11 +91,7 @@ LlmWardleyMapTutor >> defaultProviderStencil [
 		format: anInstructionFormat asJsonSchema;
 		assistantMessageClass: OpenAIWardleyMapMessage;
 		userMessageClass: OpenAIWardleyMapMessage;
-		withInstance: (GtLlmSerializableValueHolder new
-				name: 'Wardley Map';
-				content: GtWardleyMapModel new;
-				serializer: #asWardleyMapScript;
-				updater: [ :aModel :aText | (GtWardleyMapParser parse: aText) asWardleyMapModel ]) ]
+		withInstance: (self valueHolderFor: GtWardleyMapModel new) ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -214,6 +218,18 @@ evolution genesis -> custom built -> product (+rental) -> commodity
 
 component Compute [0.45, 0.34] label [-22, 29]'.
 							'Rename' -> nil} asDictionary}
+]
+
+{ #category : #'as yet unclassified' }
+LlmWardleyMapTutor >> valueHolderFor: anObject [
+	^ GtLlmSerializableValueHolder new
+		name: 'Wardley Map';
+		content: anObject;
+		serializer: #asWardleyMapScript;
+		updater: [ :aModel :aText | 
+			(GtWardleyMapDiffer
+				diffFrom: aModel
+				to: (GtWardleyMapParser parse: aText) asWardleyMapModel) merge ]
 ]
 
 { #category : #'as yet unclassified' }
