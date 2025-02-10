@@ -17,31 +17,7 @@ GtOpenAIWardleyMapActionThreadMessage >> diffedMapModel [
 	self ancestor ifNil: [ ^ ownModel ].
 	self ancestor mapModel ifNil: [ ^ ownModel ].
 
-	differ := GtWardleyMapDiffer diffFrom: self ancestor mapModel to: ownModel.
-
-	differ addedEdges
-		do: [ :anEdge | anEdge addWardleyMapDecoratorModel: GtWardleyMapAddProposition new ].
-	differ addedNodes
-		do: [ :aNode | aNode addWardleyMapDecoratorModel: GtWardleyMapAddProposition new ].
-	differ removedNodes
-		do: [ :aNode | 
-			ownModel
-				addNode: (aNode removeParent
-						addWardleyMapDecoratorModel: GtWardleyMapRemoveProposition new) ].
-	differ removedEdges
-		do: [ :anEdge | 
-			| newEdge |
-			newEdge := GtWardleyMapEdgeModel new
-					fromNode: (ownModel
-							nodeWithName: anEdge fromNode label
-							ifFound: #yourself
-							ifNone: [ self error: 'Node not found' ]);
-					toNode: (ownModel
-							nodeWithName: anEdge toNode label
-							ifFound: #yourself
-							ifNone: [ self error: 'Node not found' ]);
-					addWardleyMapDecoratorModel: GtWardleyMapRemoveProposition new.
-			ownModel addEdge: newEdge ].
+	differ := (GtWardleyMapDiffer diffFrom: self ancestor mapModel to: ownModel) merge.
 
 	^ ownModel
 ]

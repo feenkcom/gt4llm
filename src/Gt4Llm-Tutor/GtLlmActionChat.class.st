@@ -8,3 +8,19 @@ Class {
 GtLlmActionChat >> asViewModel [
 	^ GtLlmActionChatViewModel new assistantChat: self
 ]
+
+{ #category : #'as yet unclassified' }
+GtLlmActionChat >> defaultSerializer [
+	^ GtLlmActionMessageSerializer new
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmActionChat >> onInstance: anInstance [
+	self
+		serializer: (GtLlmActionMessageWithInstanceSerializer new instance: anInstance)
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmActionChat >> updateInstance: aValue [
+	self serializer update: aValue
+]
