@@ -74,7 +74,7 @@ LlmWardleyMapTutor >> createAction [
 LlmWardleyMapTutor >> createChatOn: aGtWardleyMapModel [
 	| chat |
 	chat := self createChat.
-	chat provider withInstance: (self valueHolderFor: aGtWardleyMapModel).
+	chat onInstance: (self valueHolderFor: aGtWardleyMapModel).
 	^ chat
 ]
 
@@ -90,8 +90,7 @@ LlmWardleyMapTutor >> defaultProviderStencil [
 		instructions: anInstructionFormat asInstructionPiece instructionString;
 		format: anInstructionFormat asJsonSchema;
 		assistantMessageClass: OpenAIWardleyMapMessage;
-		userMessageClass: OpenAIWardleyMapMessage;
-		withInstance: (self valueHolderFor: GtWardleyMapModel new) ]
+		userMessageClass: OpenAIWardleyMapMessage ]
 ]
 
 { #category : #'as yet unclassified' }

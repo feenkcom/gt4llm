@@ -110,7 +110,7 @@ GtOpenAIAssistantProvider >> format: anObject [
 
 { #category : #'as yet unclassified' }
 GtOpenAIAssistantProvider >> getRun [
-	^ client getRun: lastRun id forThread: thread id
+	^ lastRun := client getRun: lastRun id forThread: thread id
 ]
 
 { #category : #'as yet unclassified' }
@@ -153,15 +153,15 @@ GtOpenAIAssistantProvider >> sendAssistantMessage: aMessage [
 			createRunForThread: thread id
 			usingAssistant: assistant id
 			andResponseFormat: self format.
-			
+
 	self updateMessages.
 
 	chat signalRunHasStarted.
 
 	future := (self runFuture
 			then: [ :aRun | 
-				chat signalRunIsDone: aRun.
-				self updateMessages ])
+				self updateMessages.
+				chat signalRunIsDone: aRun ])
 			await: GtOpenAIUtilities executionConfiguration
 ]
 

@@ -43,11 +43,21 @@ GtWardleyMapDiffer >> from: anObject [
 
 { #category : #'as yet unclassified' }
 GtWardleyMapDiffer >> merge [
-	self addedNodes do: [ :aNode | from addNode: aNode removeParent ].
-	self addedEdges do: [ :anEdge | from addEdge: anEdge removeParent ].
+	self addedNodes
+		do: [ :aNode | 
+			from
+				addNode: (aNode removeParent addWardleyMapDecoratorModel: GtWardleyMapAddProposition new) ].
+	self addedEdges
+		do: [ :anEdge | 
+			from
+				addEdge: (anEdge removeParent addWardleyMapDecoratorModel: GtWardleyMapAddProposition new) ].
 
-	self removedEdges do: [ :anEdge | from removeEdge: anEdge ].
-	self removedNodes do: [ :aNode | from removeNode: aNode ]
+	self removedEdges
+		do: [ :anEdge | anEdge addWardleyMapDecoratorModel: GtWardleyMapRemoveProposition new ].
+	self removedNodes
+		do: [ :aNode | aNode addWardleyMapDecoratorModel: GtWardleyMapRemoveProposition new ].
+		
+	from ensureAllProposition
 ]
 
 { #category : #accessing }

@@ -2,7 +2,6 @@ Class {
 	#name : #GtLlmProvider,
 	#superclass : #Object,
 	#instVars : [
-		'serializer',
 		'chat',
 		'userMessageClass',
 		'assistantMessageClass',
@@ -19,11 +18,6 @@ GtLlmProvider >> assistantMessageClass [
 { #category : #accessing }
 GtLlmProvider >> assistantMessageClass: anObject [
 	assistantMessageClass := anObject
-]
-
-{ #category : #'as yet unclassified' }
-GtLlmProvider >> beActionBased [
-	serializer := GtLlmActionMessageSerializer new
 ]
 
 { #category : #accessing }
@@ -90,11 +84,6 @@ GtLlmProvider >> status [
 	^ self subclassResponsibility
 ]
 
-{ #category : #'as yet unclassified' }
-GtLlmProvider >> updateInstance: aValue [
-	serializer update: aValue
-]
-
 { #category : #accessing }
 GtLlmProvider >> userMessageClass [
 	^ userMessageClass
@@ -103,9 +92,4 @@ GtLlmProvider >> userMessageClass [
 { #category : #accessing }
 GtLlmProvider >> userMessageClass: anObject [
 	userMessageClass := anObject
-]
-
-{ #category : #'as yet unclassified' }
-GtLlmProvider >> withInstance: aValueHolder [
-	serializer := GtLlmActionMessageWithInstanceSerializer new instance: aValueHolder
 ]
