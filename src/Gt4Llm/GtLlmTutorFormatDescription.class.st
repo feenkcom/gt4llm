@@ -187,6 +187,11 @@ GtLlmTutorFormatDescription >> priority: anObject [
 	priority := anObject
 ]
 
+{ #category : #'as yet unclassified' }
+GtLlmTutorFormatDescription >> removeFromSystem [
+	self definingMethod ifNotNil: #removeFromSystem
+]
+
 { #category : #accessing }
 GtLlmTutorFormatDescription >> tutor [
 	^ tutor

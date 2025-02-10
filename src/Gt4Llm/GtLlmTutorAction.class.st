@@ -330,6 +330,11 @@ GtLlmTutorAction >> priorityDescription [
 		accessor: #priority
 ]
 
+{ #category : #'as yet unclassified' }
+GtLlmTutorAction >> removeFromSystem [
+	self definingMethod ifNotNil: #removeFromSystem
+]
+
 { #category : #accessing }
 GtLlmTutorAction >> tutor [
 	^ tutor

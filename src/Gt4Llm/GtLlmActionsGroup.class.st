@@ -23,6 +23,7 @@ GtLlmActionsGroup >> gtActionsFor: aView [
 					label: 'Remove';
 					action: [ :aButton | 
 						self remove: anItem.
+						anItem removeFromSystem.
 						aButton phlow fireToolUpdateWish ] ]
 			width: 70
 ]
