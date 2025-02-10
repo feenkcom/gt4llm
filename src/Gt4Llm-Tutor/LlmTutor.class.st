@@ -47,7 +47,7 @@ LlmTutor >> chatAction [
 		priority: 1;
 		description: 'Answers a chat request using the text field.';
 		format: 'Chat request: {1}';
-		examples: {GtLlmTutorActionExample new markUnverified
+		examples: {GtLlmTutorActionExample new
 					input: {'Action' -> 'Chat request: How are you?'} asDictionary;
 					output: {'Action' -> 'Answer a chat request'.
 							'Text'

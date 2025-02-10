@@ -116,7 +116,7 @@ OpenAIActionMessage >> gtReifyMessageActionFor: anAction [
 		priority: 1;
 		label: 'Reify';
 		content: [ :aButton | 
-			(GtLlmReificationForm new
+			(LlmReificationForm new
 				message: self;
 				onAccept: [ :aValue | 
 					aButton
