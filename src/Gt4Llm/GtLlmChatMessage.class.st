@@ -155,15 +155,6 @@ GtLlmChatMessage >> gtJsonFor: aView [
 ]
 
 { #category : #accessing }
-GtLlmChatMessage >> gtToLlmActionFor: anAction [
-	<gtLlmAction>
-	^ anAction button
-		label: 'To LLM action';
-		priority: 1;
-		action: [ :aButton | aButton phlow spawnObject: (GtLlmTutorAction new format: self contentText) ]
-]
-
-{ #category : #accessing }
 GtLlmChatMessage >> hasResponse [
 	^ true
 ]
