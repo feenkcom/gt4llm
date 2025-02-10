@@ -5,6 +5,11 @@ Class {
 }
 
 { #category : #accessing }
+GtOpenAIFilesGroup class >> itemClass [
+	^ GtOpenAIFile
+]
+
+{ #category : #accessing }
 GtOpenAIFilesGroup >> gtFilesFor: aView [
 	<gtView>
 	^ aView columnedList
