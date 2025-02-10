@@ -10,17 +10,6 @@ Class {
 	#category : #'Gt4Llm-Tutor-Tutor'
 }
 
-{ #category : #accessing }
-LlmTutorInstruction >> actionComponent [
-	<gtLlmFormatComponent>
-	^ GtLlmTutorFormatDescription new beRequired
-		name: 'Action';
-		format: 'Text';
-		example: '```
-Create a draft
-```'
-]
-
 { #category : #'as yet unclassified' }
 LlmTutorInstruction >> actionNamed: aString [
 	^ actions detect: [ :anAction | anAction name = aString ] ifNone: [ nil ]
@@ -148,7 +137,9 @@ LlmTutorInstruction >> gtFormatsFor: aView [
 		items: [ formats sorted: [ :a :b | a priority < b priority ] ];
 		column: 'Name' text: #name;
 		column: 'Format' text: #format;
-		column: 'Priority' text: #priority width: 70;
+		column: 'Priority'
+			text: #priority
+			width: 70;
 		column: 'Actions'
 			stencil: [ :anItem | 
 				BrButton new
@@ -157,8 +148,9 @@ LlmTutorInstruction >> gtFormatsFor: aView [
 					label: 'Remove';
 					action: [ :aButton | 
 						formats remove: anItem.
-						aButton phlow fireUpdateWish ] ]
-		width: 70
+						anItem removeFromSystem.
+						aButton phlow fireToolUpdateWish ] ]
+			width: 70
 ]
 
 { #category : #accessing }
@@ -173,7 +165,7 @@ LlmTutorInstruction >> gtInstructionFor: aView [
 
 { #category : #accessing }
 LlmTutorInstruction >> initialize [
-	formats := OrderedCollection with: self actionComponent.
+	formats := OrderedCollection new.
 	actions := GtLlmActionsGroup new.
 	description := ''
 ]
@@ -203,4 +195,14 @@ LlmTutorInstruction >> name [
 { #category : #accessing }
 LlmTutorInstruction >> name: anObject [
 	name := anObject
+]
+
+{ #category : #'as yet unclassified' }
+LlmTutorInstruction >> replaceActions: aListOfActions [
+	actions removeAll addAll: aListOfActions
+]
+
+{ #category : #accessing }
+LlmTutorInstruction >> replaceComponents: aListOfComponents [
+	formats removeAll addAll: aListOfComponents
 ]
