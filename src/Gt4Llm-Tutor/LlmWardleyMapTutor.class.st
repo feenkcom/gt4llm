@@ -126,14 +126,6 @@ component Compute [0.4, 0.4] label [-22, 29]'.
 ]
 
 { #category : #'as yet unclassified' }
-LlmWardleyMapTutor >> initialize [
-	super initialize.
-	
-	self description: self defaultDescription.
-	self providerStencil: self defaultProviderStencil
-]
-
-{ #category : #'as yet unclassified' }
 LlmWardleyMapTutor >> renameAction [
 	<gtLlmTutorAction>
 	^ GtLlmTutorAction new
