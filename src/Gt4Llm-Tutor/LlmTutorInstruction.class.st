@@ -5,7 +5,8 @@ Class {
 		'name',
 		'actions',
 		'description',
-		'formats'
+		'formats',
+		'sections'
 	],
 	#category : #'Gt4Llm-Tutor-Tutor'
 }
@@ -40,13 +41,17 @@ LlmTutorInstruction >> addComponents: aListOfComponents [
 	formats addAll: aListOfComponents
 ]
 
+{ #category : #'as yet unclassified' }
+LlmTutorInstruction >> addSection: aSection [
+	sections add: aSection
+]
+
 { #category : #accessing }
 LlmTutorInstruction >> asInstructionPiece [
 	^ GtLlmInstructionWithSections new
 		source: self;
 		introduction: self description;
-		sections: {self interactionDescription.
-				self communicationConventionsDescription.
+		sections: self sections, {
 				GtLlmInstructionSection new
 					source: self;
 					title: 'Format components';
@@ -89,6 +94,12 @@ LlmTutorInstruction >> communicationConventionsDescription [
 { #category : #accessing }
 LlmTutorInstruction >> componentNamed: aName [
 	^ formats detect: [ :aComponent | aComponent name = aName ] ifNone: [ nil ]
+]
+
+{ #category : #'as yet unclassified' }
+LlmTutorInstruction >> defaultSections [
+	^ {self interactionDescription.
+		self communicationConventionsDescription} asOrderedCollection
 ]
 
 { #category : #accessing }
@@ -167,7 +178,8 @@ LlmTutorInstruction >> gtInstructionFor: aView [
 LlmTutorInstruction >> initialize [
 	formats := OrderedCollection new.
 	actions := GtLlmActionsGroup new.
-	description := ''
+	description := ''.
+	sections := self defaultSections
 ]
 
 { #category : #accessing }
@@ -205,4 +217,14 @@ LlmTutorInstruction >> replaceActions: aListOfActions [
 { #category : #accessing }
 LlmTutorInstruction >> replaceComponents: aListOfComponents [
 	formats removeAll addAll: aListOfComponents
+]
+
+{ #category : #accessing }
+LlmTutorInstruction >> sections [
+	^ sections
+]
+
+{ #category : #accessing }
+LlmTutorInstruction >> sections: anObject [
+	sections := anObject
 ]

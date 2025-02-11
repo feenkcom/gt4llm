@@ -66,7 +66,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-25T08:07:33.773911+02:00"
+						"dateAndTimeString" : "2025-02-11T12:20:18.974686+01:00"
 					}
 				},
 				"uid" : {
@@ -76,7 +76,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "As an example, here we look at working with an LLM to help build a Wardley Map (the same use case found in [[Building a custom tutor to facilitate generating Wardley maps]] and [[Expanding the Wardley maps tutor with a step-wise tutor]]). The tutor can be found in {{gtClass:GtOpenAIWardleyMapActionTutor}}."
+				"string" : "As an example, here we look at working with an LLM to help build a Wardley Map (the same use case found in [[Building a custom tutor to facilitate generating Wardley maps]]). The tutor can be found in {{gtClass:LlmWardleyMapTutor}}."
 			},
 			{
 				"__type" : "textSnippet",
@@ -177,14 +177,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-25T08:00:48.880528+02:00"
+						"dateAndTimeString" : "2025-02-11T12:19:20.189141+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "NlTYGLDWDQC5XV4MBM5T/g=="
 				},
-				"code" : "tutor := GtOpenAIWardleyMapActionTutor withApiKeyFromFile createAssistant.\rtutor addChat"
+				"code" : "tutor := LlmWardleyMapTutor new.\rtutor createChatOn: GtWardleyMapModel new"
 			},
 			{
 				"__type" : "textSnippet",
@@ -248,7 +248,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-07-10T11:40:03.891632+02:00"
+						"dateAndTimeString" : "2025-02-11T12:20:52.535146+01:00"
 					}
 				},
 				"uid" : {
@@ -258,7 +258,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "The first step for an action-based tutor is to define the actions it should perform. They are annotated using the `gtLlmTutorAction` pragma. An example can be found here: {{gtMethod:GtOpenAIWardleyMapActionTutor>>#explanationAction}}"
+				"string" : "The first step for an action-based tutor is to define the actions it should perform. They are annotated using the `gtLlmTutorAction` pragma. An example can be found here: {{gtMethod:LlmWardleyMapTutor>>#explanationAction}}"
 			},
 			{
 				"__type" : "textSnippet",
@@ -285,7 +285,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-09-20T08:18:22.445367+02:00"
+						"dateAndTimeString" : "2025-02-11T12:21:36.479271+01:00"
 					}
 				},
 				"uid" : {
@@ -295,7 +295,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "Then we define a data interchange format for the tutor. This works in a similar fashion as the actions, using the `gtLlmFormatComponent` pragma. An example can be found here: {{gtMethod:GtOpenAIAnnotatedActionTutor>>#textFormatComponent}}"
+				"string" : "Then we define a data interchange format for the tutor. This works in a similar fashion as the actions, using the `gtLlmTutorFormat` pragma. An example can be found here: {{gtMethod:LlmTutor>>#textFormatDescription}}"
 			},
 			{
 				"__type" : "textSnippet",
@@ -322,7 +322,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-25T08:06:08.875018+02:00"
+						"dateAndTimeString" : "2025-02-11T12:24:45.950777+01:00"
 					}
 				},
 				"uid" : {
@@ -332,7 +332,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "Finally, a tutor needs a pipeline of checkers that automatically check the results coming from LLMs: {{gtMethod:GtOpenAIWardleyMapActionTutor>>#initializePipeline}}"
+				"string" : "Finally, a tutor needs a provider stencil. This is where message types and backends get set: {{gtMethod:LlmWardleyMapTutor>>#defaultProviderStencil}}"
 			}
 		]
 	},

@@ -103,14 +103,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-10-31T10:59:44.115674+01:00"
+						"dateAndTimeString" : "2025-02-11T12:31:08.675446+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "84cinSTiDQCsQmwQAiMxMA=="
 				},
-				"code" : "tutor := GtOpenAIAnnotatedActionTutor withApiKeyFromFile\r\t\tformatName: 'Wardley map'"
+				"code" : "tutor := LlmTutor new\r\t\tdescription: 'You are an assistant for buildin Wardley maps interactively.'"
 			},
 			{
 				"__type" : "pharoSnippet",
@@ -137,14 +137,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2025-02-04T18:19:07.330016+01:00"
+						"dateAndTimeString" : "2025-02-11T12:31:48.553683+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "cs1jnSTiDQCsYOHyAiMxMA=="
 				},
-				"code" : "tutor\r\taddFormatComponent: (GtLlmTutorFormatDescription new\r\t\t\tname: 'Wardley map';\r\t\t\tformat: 'Text';\r\t\t\texample: '');\r\tvaluePipelineFor: (GtLlmSerializableValueHolder new\r\t\t\tcontent: thisSnippet page children last;\r\t\t\tname: 'Wardley map';\r\t\t\tserializer: [ :aSnippet | aSnippet wardleyMap asWardleyMapScript ];\r\t\t\tupdater: [ :aSnippet :aScript | aSnippet wardleyMap: (GtWardleyMapParser parse: aScript) asWardleyMapModel ])"
+				"code" : "tutor\r\taddFormat: (GtLlmTutorFormatDescription new\r\t\t\tname: 'Wardley map';\r\t\t\tformat: 'Text';\r\t\t\texample: '')"
 			},
 			{
 				"__type" : "pharoSnippet",
@@ -171,14 +171,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-10-31T11:00:04.065588+01:00"
+						"dateAndTimeString" : "2025-02-11T12:34:44.892179+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "b/6KniTiDQCsatALAiMxMA=="
 				},
-				"code" : "tutor createAssistant addChat"
+				"code" : "chat := tutor createChat.\r\rchat onInstance: (GtLlmSerializableValueHolder new\r\t\tname: 'Wardley Map';\r\t\tcontent: GtWardleyMapModel new;\r\t\tserializer: #asWardleyMapScript;\r\t\tupdater: [ :aModel :aText | \r\t\t\t(GtWardleyMapDiffer\r\t\t\t\tdiffFrom: aModel\r\t\t\t\tto: (GtWardleyMapParser parse: aText) asWardleyMapModel) merge ])"
 			},
 			{
 				"__type" : "textSnippet",
@@ -242,14 +242,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-11-05T13:38:03.775359+01:00"
+						"dateAndTimeString" : "2025-02-11T12:36:40.998373+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "4COsoiTiDQCvPFLCAiMxMA=="
 				},
-				"code" : "tutor := GtDWardleyMapTutor withApiKeyFromFile\r\t\tvaluePipelineFor: (GtLlmSerializableValueHolder new\r\t\t\t\tcontent: thisSnippet page children last;\r\t\t\t\tname: 'Wardley map';\r\t\t\t\tserializer: [ :aSnippet | aSnippet wardleyMap asWardleyMapScript ];\r\t\t\t\tupdater: [ :aSnippet :aMap | \r\t\t\t\t\taSnippet wardleyMap ensureAllProposition.\r\t\t\t\t\tGtWardleyMapUtility\r\t\t\t\t\t\taddModelAsPropositionsFrom: aSnippet wardleyMap\r\t\t\t\t\t\tto: aMap ])"
+				"code" : "chat := LlmWardleyMapTutor new\r\t\tcreateChatOn: thisSnippet page children last wardleyMap"
 			},
 			{
 				"__type" : "wardleyMap",

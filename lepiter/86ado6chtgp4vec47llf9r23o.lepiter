@@ -446,20 +446,20 @@
 				},
 				"editEmail" : {
 					"__type" : "email",
-					"emailString" : "veit.heller@feenk.com"
+					"emailString" : "<unknown>"
 				},
 				"editTime" : {
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-07-17T10:10:37.064145+02:00"
+						"dateAndTimeString" : "2025-02-11T12:28:34.273359+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "DmOnZd3YDQCxtzOJDufbRg=="
 				},
-				"code" : "tutor := (GtOpenAIWardleyMapActionTutor withApiKeyFromFile\r\t\taddInstructionSection: exampleSection) createAssistant"
+				"code" : "tutor := (LlmWardleyMapTutor new\r\t\taddInstructionSection: exampleSection)"
 			}
 		]
 	},
