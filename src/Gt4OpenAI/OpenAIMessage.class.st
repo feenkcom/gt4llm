@@ -12,7 +12,7 @@ Class {
 		'pipeline',
 		'step'
 	],
-	#category : #'Gt4Llm-Tutor-Models'
+	#category : #'Gt4OpenAI-Models'
 }
 
 { #category : #accessing }
