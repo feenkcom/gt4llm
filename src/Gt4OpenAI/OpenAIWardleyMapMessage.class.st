@@ -1,7 +1,7 @@
 Class {
 	#name : #OpenAIWardleyMapMessage,
 	#superclass : #OpenAIActionMessage,
-	#category : #'Gt4Llm-Tutor-Models'
+	#category : #'Gt4OpenAI-Models'
 }
 
 { #category : #accessing }
