@@ -40,14 +40,19 @@ LlmTutor >> addFormat: aComponent [
 ]
 
 { #category : #'as yet unclassified' }
+LlmTutor >> addInstructionSection: aSection [
+	instruction addSection: aSection
+]
+
+{ #category : #'as yet unclassified' }
 LlmTutor >> chatAction [
 	<gtLlmTutorAction>
-	^ GtLlmTutorAction new
+	^ GtLlmTutorAction new 
 		name: 'Answer a chat request';
 		priority: 1;
 		description: 'Answers a chat request using the text field.';
 		format: 'Chat request: {1}';
-		examples: {GtLlmTutorActionExample new
+		examples: {GtLlmTutorActionExample new markUnverified
 					input: {'Action' -> 'Chat request: How are you?'} asDictionary;
 					output: {'Action' -> 'Answer a chat request'.
 							'Text'
@@ -80,6 +85,19 @@ LlmTutor >> createChat [
 	^ GtLlmActionChat new
 		provider: (self providerStencil value: instruction);
 		tutor: self
+]
+
+{ #category : #'as yet unclassified' }
+LlmTutor >> defaultDescription [
+	^ 'You are an assistant.'
+]
+
+{ #category : #'as yet unclassified' }
+LlmTutor >> defaultProviderStencil [
+	^ [ :anInstructionFormat | 
+	GtOpenAIAssistantProvider withApiKeyFromFile
+		instructions: anInstructionFormat asInstructionPiece instructionString;
+		format: anInstructionFormat asJsonSchema ]
 ]
 
 { #category : #accessing }
@@ -178,8 +196,12 @@ LlmTutor >> gtInstructionFor: aView [
 { #category : #'as yet unclassified' }
 LlmTutor >> initialize [
 	super initialize.
-
-	self initializeInstruction
+	self providerStencil: self defaultProviderStencil.
+	
+	
+	self initializeInstruction.
+	
+	self description: self defaultDescription
 ]
 
 { #category : #'as yet unclassified' }
