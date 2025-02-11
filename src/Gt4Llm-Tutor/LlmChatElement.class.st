@@ -18,7 +18,8 @@ LlmChatElement >> chatViewModel [
 { #category : #accessing }
 LlmChatElement >> chatViewModel: anObject [
 	chatViewModel := anObject.
-	
+
+	self subscribeToAssistantChatViewModel.
 	self updateElement
 ]
 
@@ -52,7 +53,7 @@ LlmChatElement >> onThreadRunAnnouncement: anAnnouncement [
 
 { #category : #'as yet unclassified' }
 LlmChatElement >> subscribeToAssistantChatViewModel [
-	self chat weak
+	self chatViewModel assistantChat weak
 		when: GtOpenAIThreadRunAnnouncement
 		send: #onThreadRunAnnouncement:
 		to: self

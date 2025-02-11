@@ -9,8 +9,19 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
+LlmTutor >> actionFormatDescription [
+	<gtLlmTutorFormat>
+	^ GtLlmTutorFormatDescription new beRequired
+		name: 'Action';
+		format: 'Text';
+		example: '```
+Create a draft
+```'
+]
+
+{ #category : #'as yet unclassified' }
 LlmTutor >> actionNamed: anActionName [
-	^ self format actionNamed: anActionName
+	^ self instruction actionNamed: anActionName
 ]
 
 { #category : #accessing }
@@ -29,9 +40,14 @@ LlmTutor >> addFormat: aComponent [
 ]
 
 { #category : #'as yet unclassified' }
+LlmTutor >> addInstructionSection: aSection [
+	instruction addSection: aSection
+]
+
+{ #category : #'as yet unclassified' }
 LlmTutor >> chatAction [
 	<gtLlmTutorAction>
-	^ GtLlmTutorAction new
+	^ GtLlmTutorAction new 
 		name: 'Answer a chat request';
 		priority: 1;
 		description: 'Answers a chat request using the text field.';
@@ -67,8 +83,21 @@ LlmTutor >> collectFormats [
 { #category : #'as yet unclassified' }
 LlmTutor >> createChat [
 	^ GtLlmActionChat new
-		provider: (self providerStencil value: instruction) beActionBased;
+		provider: (self providerStencil value: instruction);
 		tutor: self
+]
+
+{ #category : #'as yet unclassified' }
+LlmTutor >> defaultDescription [
+	^ 'You are an assistant.'
+]
+
+{ #category : #'as yet unclassified' }
+LlmTutor >> defaultProviderStencil [
+	^ [ :anInstructionFormat | 
+	GtOpenAIAssistantProvider withApiKeyFromFile
+		instructions: anInstructionFormat asInstructionPiece instructionString;
+		format: anInstructionFormat asJsonSchema ]
 ]
 
 { #category : #accessing }
@@ -89,21 +118,69 @@ LlmTutor >> formatNamed: aString [
 { #category : #'as yet unclassified' }
 LlmTutor >> gtActionsFor: aView [
 	<gtView>
+	| valueHolder |
+	valueHolder := ValueHolder new.
+
 	^ aView forward
 		title: 'Actions';
 		priority: 10;
 		object: [ self instruction ];
-		view: #gtActionsFor:
+		view: #gtActionsFor:;
+		actionDropdownButtonIcon: BrGlamorousVectorIcons add
+			tooltip: 'Add action'
+			content: [ :anElement | 
+				| methodCoder |
+				methodCoder := GtPharoNewMethodCoderElement new
+						behavior: self class;
+						methodCoderViewModelValueHolder: valueHolder;
+						onMethodCoderSaved: [ self recomputeActions.
+							anElement phlow fireToolUpdateWish.
+							anElement fireEvent: BrDropdownHideWish new ];
+						ensureMethodCoderViewModel.
+				methodCoder pharoMethodCoderViewModel coderModel
+					currentSourceString: 'gtACTIONNAME
+ 	<gtLlmTutorAction>
+ 	^ GtLlmTutorAction new
+ 		name: '''';
+ 		priority: 1;
+ 		description: '''';
+ 		examples: {}'.
+				methodCoder ]
 ]
 
 { #category : #'as yet unclassified' }
 LlmTutor >> gtFormatComponentsFor: aView [
 	<gtView>
+	| valueHolder |
+	valueHolder := ValueHolder new.
 	^ aView forward
-		title: 'Format components';
+		title: 'Formats';
 		priority: 11;
 		object: [ instruction ];
-		view: #gtFormatsFor:
+		view: #gtFormatsFor:;
+		actionDropdownButtonIcon: BrGlamorousVectorIcons add
+			tooltip: 'Add action'
+			content: [ :anElement | 
+				| methodCoder |
+				methodCoder := GtPharoNewMethodCoderElement new
+						behavior: self class;
+						onMethodCoderSaved: [ :anAnnouncement | 
+							| method |
+							method := anAnnouncement method.
+							self recomputeFormats.
+							methodCoder phlow fireToolUpdateWish.
+							methodCoder
+								enqueueTask: (BlTaskAction new action: [ methodCoder fireEvent: BrDropdownHideWish new ]) ];
+						ensureMethodCoderViewModel.
+				methodCoder pharoMethodCoderViewModel coderModel
+					currentSourceString: 'gtFORMATNAMEDescription
+	<gtLlmTutorFormat>
+	^ GtLlmTutorFormatDescription new
+		name: '''';
+		priority: 1;
+		format: '''';
+		example: '''''.
+				methodCoder methodCoderViewModelValueHolder: valueHolder ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -119,8 +196,12 @@ LlmTutor >> gtInstructionFor: aView [
 { #category : #'as yet unclassified' }
 LlmTutor >> initialize [
 	super initialize.
-
-	self initializeInstruction
+	self providerStencil: self defaultProviderStencil.
+	
+	
+	self initializeInstruction.
+	
+	self description: self defaultDescription
 ]
 
 { #category : #'as yet unclassified' }
@@ -144,6 +225,16 @@ LlmTutor >> providerStencil [
 { #category : #accessing }
 LlmTutor >> providerStencil: anObject [
 	providerStencil := anObject
+]
+
+{ #category : #'as yet unclassified' }
+LlmTutor >> recomputeActions [
+	instruction replaceActions: self collectActions
+]
+
+{ #category : #'as yet unclassified' }
+LlmTutor >> recomputeFormats [
+	instruction replaceComponents: self collectFormats
 ]
 
 { #category : #'as yet unclassified' }

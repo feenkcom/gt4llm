@@ -180,6 +180,14 @@ GtOpenAIClient >> deleteFile: aFileId [
 ]
 
 { #category : #accessing }
+GtOpenAIClient >> deleteVectorStore: anId [
+	^ GtOpenAIDeleteVectorStoreAPIClient new
+		client: self;
+		vectorStore: anId;
+		perform
+]
+
+{ #category : #accessing }
 GtOpenAIClient >> generateEmbeddingsWithModel: aString andInput: anInputString [
 	^ GtOpenAIGenerateEmbeddingAPIClient new
 		client: self;
@@ -284,6 +292,20 @@ GtOpenAIClient >> initializeClient [
 ]
 
 { #category : #accessing }
+GtOpenAIClient >> listAssistants [
+	^ GtOpenAIListAssistantsAPIClient new
+		client: self;
+		perform
+]
+
+{ #category : #accessing }
+GtOpenAIClient >> listFiles [
+	^ GtOpenAIListFilesAPIClient new
+		client: self;
+		perform
+]
+
+{ #category : #accessing }
 GtOpenAIClient >> listMessagesForThread: aThreadId [ 
 	^ GtOpenAIListThreadMessagesAPIClient new
 		client: self;
@@ -294,6 +316,13 @@ GtOpenAIClient >> listMessagesForThread: aThreadId [
 { #category : #accessing }
 GtOpenAIClient >> listModels [
 	^ GtOpenAIListModelsAPIClient new
+		client: self;
+		perform
+]
+
+{ #category : #accessing }
+GtOpenAIClient >> listVectorStores [
+	^ GtOpenAIListVectorStoresAPIClient new
 		client: self;
 		perform
 ]

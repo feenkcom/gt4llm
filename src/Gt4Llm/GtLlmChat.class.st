@@ -10,7 +10,8 @@ Class {
 		'lastUpdate',
 		'tutor',
 		'provider',
-		'messages'
+		'messages',
+		'serializer'
 	],
 	#category : #'Gt4Llm-Chats'
 }
@@ -26,7 +27,7 @@ GtLlmChat >> ancestorOf: aMessage [
 	messages
 		withIndexDo: [ :possibleAncestor :index | 
 			possibleAncestor id = aMessage id
-				ifTrue: [ index = messages size ifTrue: [ ^ nil ] ifFalse: [ ^ messages at: index + 1 ] ] ].
+				ifTrue: [ index = 1 ifTrue: [ ^ nil ] ifFalse: [ ^ messages at: index - 1 ] ] ].
 
 	self error: 'Message not found'
 ]
@@ -53,11 +54,16 @@ GtLlmChat >> context: anObject [
 ]
 
 { #category : #accessing }
+GtLlmChat >> defaultSerializer [
+	^ GtLlmMessageSerializer new
+]
+
+{ #category : #accessing }
 GtLlmChat >> descendantOf: aMessage [
 	messages
 		withIndexDo: [ :possibleAncestor :index | 
 			possibleAncestor id = aMessage id
-				ifTrue: [ index = 1 ifTrue: [ ^ nil ] ifFalse: [ ^ messages at: index - 1 ] ] ].
+				ifTrue: [ index = messages size ifTrue: [ ^ nil ] ifFalse: [ ^ messages at: index + 1 ] ] ].
 
 	self error: 'Message not found'
 ]
@@ -116,6 +122,8 @@ GtLlmChat >> gtWriteFor: aView [
 GtLlmChat >> initialize [
 	super initialize.
 	
+	self serializer: self defaultSerializer.
+	
 	self initializeMessages.
 	
 	self updateLastUpdate
@@ -138,7 +146,7 @@ GtLlmChat >> lastUpdate: anObject [
 
 { #category : #'as yet unclassified' }
 GtLlmChat >> messageFromString: aString [
-	^ provider messageFromString: aString
+	^  serializer serialize: aString
 ]
 
 { #category : #accessing }
@@ -187,6 +195,16 @@ GtLlmChat >> sendAssistantMessage: aMessage [
 { #category : #accessing }
 GtLlmChat >> sendMessage: aMessage [
 	self provider sendMessage: aMessage
+]
+
+{ #category : #accessing }
+GtLlmChat >> serializer [
+	^ serializer
+]
+
+{ #category : #accessing }
+GtLlmChat >> serializer: anObject [
+	serializer := anObject
 ]
 
 { #category : #'as yet unclassified' }

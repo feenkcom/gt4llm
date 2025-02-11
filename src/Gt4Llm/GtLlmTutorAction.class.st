@@ -23,9 +23,9 @@ GtLlmTutorAction >> addExample: anExample [
 GtLlmTutorAction >> asExpressionSource [
 	^ self class name asString
 		, ' new
-	name: ' , self name storeString
+	    name: ' , self name storeString
 		, ';
-	priority: ' , self priority asString
+	    priority: ' , self priority asString
 		, ';
 		description: ' , self description storeString
 		, ';
@@ -51,7 +51,9 @@ GtLlmTutorAction >> asInstructionPiece [
 { #category : #'as yet unclassified' }
 GtLlmTutorAction >> asMethodSource [
 	| methodSource |
-	methodSource := self definingMethod selector asString
+	methodSource := (self definingMethod
+			ifNil: [ 'gtNAMEAction' ]
+			ifNotNil: [ :aMethod | aMethod selector asString ])
 			, '
 	<gtLlmTutorAction>
 	^ ' , self asExpressionSource.
@@ -66,6 +68,11 @@ GtLlmTutorAction >> defaultPriority [
 { #category : #'as yet unclassified' }
 GtLlmTutorAction >> definingMethod [
 	^ definingMethod
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmTutorAction >> definingMethod: aMethod [
+	definingMethod := nil
 ]
 
 { #category : #accessing }
@@ -328,6 +335,11 @@ GtLlmTutorAction >> priorityDescription [
 		label: 'Priority';
 		priority: 2;
 		accessor: #priority
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmTutorAction >> removeFromSystem [
+	self definingMethod ifNotNil: #removeFromSystem
 ]
 
 { #category : #accessing }

@@ -2,7 +2,6 @@ Class {
 	#name : #GtLlmProvider,
 	#superclass : #Object,
 	#instVars : [
-		'isActionBased',
 		'chat',
 		'userMessageClass',
 		'assistantMessageClass',
@@ -19,11 +18,6 @@ GtLlmProvider >> assistantMessageClass [
 { #category : #accessing }
 GtLlmProvider >> assistantMessageClass: anObject [
 	assistantMessageClass := anObject
-]
-
-{ #category : #'as yet unclassified' }
-GtLlmProvider >> beActionBased [
-	isActionBased := true
 ]
 
 { #category : #accessing }
@@ -60,22 +54,15 @@ GtLlmProvider >> format: anObject [
 GtLlmProvider >> initialize [
 	super initialize.
 
-	isActionBased := false.
+	serializer := GtLlmMessageSerializer new.
 
 	userMessageClass := self defaultUserMessageClass.
 	assistantMessageClass := self defaultAssistantMessageClass
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmProvider >> isActionBased [
-	^ isActionBased
-]
-
-{ #category : #'as yet unclassified' }
 GtLlmProvider >> messageFromString: aString [
-	self isActionBased ifFalse: [ ^ aString ].
-
-	^ STONJSON toString: {'Action' -> aString} asDictionary
+	^ serializer serialize: aString
 ]
 
 { #category : #'as yet unclassified' }

@@ -92,7 +92,7 @@ GtLlmRenameFormatComponentRefactoringExamples >> exampleClassCoderActionExpanded
 				onSpaceRoot;
 				onDropdown: true;
 				// GtChangesElement;
-				// BrTriangle ].
+				// BrInlineExpanderElement ].
 
 	scripter
 		doStep: [ :s | 
