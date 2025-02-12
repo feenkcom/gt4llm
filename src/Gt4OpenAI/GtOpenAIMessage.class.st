@@ -15,6 +15,11 @@ Class {
 	#category : #'Gt4OpenAI-Models'
 }
 
+{ #category : #'as yet unclassified' }
+GtOpenAIMessage class >> from: aDict [
+	^ self new from: aDict
+]
+
 { #category : #accessing }
 GtOpenAIMessage class >> serializationProperties [
 	^ {

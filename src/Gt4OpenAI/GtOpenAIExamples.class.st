@@ -32,7 +32,7 @@ GtOpenAIExamples >> basicFailureThreadMessage [
 GtOpenAIExamples >> basicThreadMessage [
 	<gtExample>
 	| aMessage |
-	aMessage := GtOpenAIThreadMessage new.
+	aMessage := GtOpenAIMessage new.
 
 	^ aMessage
 ]
@@ -103,7 +103,7 @@ GtOpenAIExamples >> definedClassesMessageQuestion [
 	<gtExample>
 	| aJson |
 	aJson := self definedClassesJsonQuestion.
-	^ GtOpenAIThreadMessage from: aJson
+	^ GtOpenAIMessage from: aJson
 ]
 
 { #category : #'examples - messages' }
@@ -111,7 +111,7 @@ GtOpenAIExamples >> definedClassesMessageResponse [
 	<gtExample>
 	| aJson |
 	aJson := self definedClassesJsonResponse.
-	^ GtOpenAIThreadMessage from: aJson
+	^ GtOpenAIMessage from: aJson
 ]
 
 { #category : #'examples - failure message' }
@@ -215,7 +215,7 @@ GtOpenAIExamples >> fractionPhlowViewMessageQuestion [
 	<gtExample>
 	| aJson |
 	aJson := self fractionPhlowViewJsonQuestion.
-	^ GtOpenAIThreadMessage from: aJson
+	^ GtOpenAIMessage from: aJson
 ]
 
 { #category : #'examples - messages' }
@@ -223,7 +223,7 @@ GtOpenAIExamples >> fractionPhlowViewMessageResponse [
 	<gtExample>
 	| aJson |
 	aJson := self fractionPhlowViewJsonResponse.
-	^ GtOpenAIThreadMessage from: aJson
+	^ GtOpenAIMessage from: aJson
 ]
 
 { #category : #'examples - json' }
@@ -315,7 +315,7 @@ GtOpenAIExamples >> phlowDescriptionMessageQuestion [
 	<gtExample>
 	| aJson |
 	aJson := self phlowDescriptionJsonQuestion.
-	^ GtOpenAIThreadMessage from: aJson
+	^ GtOpenAIMessage from: aJson
 ]
 
 { #category : #'examples - messages' }
@@ -323,7 +323,7 @@ GtOpenAIExamples >> phlowDescriptionMessageResponse [
 	<gtExample>
 	| aJson |
 	aJson := self phlowDescriptionJsonResponse.
-	^ GtOpenAIThreadMessage from: aJson
+	^ GtOpenAIMessage from: aJson
 ]
 
 { #category : #'examples - messages' }
@@ -370,7 +370,7 @@ GtOpenAIExamples >> veryLongMessageQuestion [
 	<gtExample>
 	| aJson |
 	aJson := self veryLongJsonQuestion.
-	^ GtOpenAIThreadMessage from: aJson
+	^ GtOpenAIMessage from: aJson
 ]
 
 { #category : #'examples - messages' }
