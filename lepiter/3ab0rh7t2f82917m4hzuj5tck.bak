@@ -66,7 +66,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-11-27T10:25:36.530504+01:00"
+						"dateAndTimeString" : "2024-11-27T10:25:38.059216+01:00"
 					}
 				},
 				"uid" : {
@@ -76,7 +76,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "{{gtTodo:label=Correct typos etc alo}}"
+				"string" : "{{gtTodo:label=Correct typos etc along the way}}"
 			},
 			{
 				"__type" : "textSnippet",

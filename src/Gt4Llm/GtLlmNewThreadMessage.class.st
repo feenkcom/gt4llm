@@ -95,7 +95,7 @@ GtLlmNewThreadMessage >> isAssistantRole [
 { #category : #'private - notifying' }
 GtLlmNewThreadMessage >> onContentsChangeByRequester: aRequester [
 	announcer
-		announce: (GtOpenAINewThreadMessageContentsChanged new
+		announce: (GtLlmNewThreadMessageContentsChanged new
 				threadMessage: self;
 				contents: contents;
 				requester: aRequester)
@@ -110,7 +110,6 @@ GtLlmNewThreadMessage >> parse [
 GtLlmNewThreadMessage >> sendMessage [
 	| aMessage |
 	contents ifNil: [ ^ self ].
-	contents ifEmpty: [ ^ self ].
 
 	files
 		ifEmpty: [ aMessage := GtLlmUserMessage new

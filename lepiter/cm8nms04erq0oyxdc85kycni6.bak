@@ -177,14 +177,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-10-30T13:43:11.350104+01:00"
+						"dateAndTimeString" : "2024-10-30T13:43:20.449984+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "IDuvk2HbDQCglRlADjAh1Q=="
 				},
-				"code" : "tutor := GtOpenAIViewActionTutor withApiKeyFromFile.\rchat := tutor createAssistant addChat.\rchat pipeline instance object: (GtDPriceExamples new price)"
+				"code" : "tutor := GtOpenAIViewActionTutor withApiKeyFromFile.\rchat := tutor createAssistant addChat.\rchat pipeline instance object: (GtDPriceExamples new concretePriceDiscountedByPercentage).\rchat"
 			},
 			{
 				"__type" : "textSnippet",

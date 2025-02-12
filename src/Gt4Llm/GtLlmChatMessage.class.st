@@ -37,7 +37,7 @@ GtLlmChatMessage class >> serializationProperties [
 
 { #category : #'as yet unclassified' }
 GtLlmChatMessage >> action [
-	^ self contentJson at: 'Action'
+	^ [ self contentJson at: 'Action' ] on: STONReaderError do: [ nil ]
 ]
 
 { #category : #accessing }
@@ -48,6 +48,11 @@ GtLlmChatMessage >> annotations [
 { #category : #accessing }
 GtLlmChatMessage >> asTokenizableString [
 	^ '<|im_start|>' , self role , '<|im_sep|>' , self content , '<|im_end|>'
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmChatMessage >> asViewModel [
+	^ GtLlmThreadMessageViewModel new threadMessage: self
 ]
 
 { #category : #accessing }
@@ -68,16 +73,6 @@ GtLlmChatMessage >> chat [
 { #category : #accessing }
 GtLlmChatMessage >> chat: anObject [
 	chat := anObject
-]
-
-{ #category : #accessing }
-GtLlmChatMessage >> codeBlocks [
-	^ self parse children select: [ :aNode | aNode isKindOf: LeCodeBlockNode ]
-]
-
-{ #category : #accessing }
-GtLlmChatMessage >> codeBlocksExecutor [
-	^ chat context
 ]
 
 { #category : #accessing }
@@ -120,8 +115,9 @@ GtLlmChatMessage >> descendant [
 	^ self chat descendantOf: self
 ]
 
-{ #category : #accessing }
+{ #category : #'as yet unclassified' }
 GtLlmChatMessage >> gtActionInspectFor: anAction [
+	<gtAction>
 	<gtLlmAction>
 	^ super gtActionInspectFor: anAction
 ]
@@ -132,26 +128,36 @@ GtLlmChatMessage >> gtContentFor: aView [
 	<gtLlmMessageView>
 	^ aView explicit
 		title: 'Content';
-		priority: 1;
+		priority: 5;
 		stencil: [ GtLlmThreadMessageElement new
-				threadMessageViewModel: (GtLlmThreadMessageViewModel new threadMessage: self) ]
+				threadMessageViewModel: self asViewModel ]
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmChatMessage >> gtJsonFor: aView [
+GtLlmChatMessage >> gtJsonFor: aView context: aContext [
 	<gtView>
 	<gtLlmMessageView>
-	[ STONJSON fromString: self content ] on: Error do: [ ^ aView empty ].
+	[ self contentJson ] on: Error do: [ ^ aView empty ].
+
+	^ (self contentJson gtTreeFor: aView context: aContext)
+		title: 'JSON data';
+		priority: 4.5
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmChatMessage >> gtTextFor: aView [
+	<gtView>
+	<gtLlmMessageView>
+	| json |
+	[ json := self contentJson ] on: Error do: [ ^ aView empty ].
+
+	json at: 'Text' ifAbsent: [ ^ aView empty ].
 
 	^ aView textEditor
-		title: 'JSON';
+		title: 'Text';
 		priority: 1;
-		actionButtonIcon: BrGlamorousVectorIcons playinspect
-			tooltip: 'Inspect parsed JSON'
-			action: [ :aButton | aButton phlow spawnObject: self contentJson ];
-		aptitude: [ BrGlamorousCodeEditorAptitude ];
-		styler: [ JSONParser gtStyler ];
-		text: [ STONJSON toStringPretty: (STONJSON fromString: self content) ]
+		text: [ json at: 'Text' ];
+		styler: [ GtLlmMessageStyler new threadMessageViewModel: self asViewModel ]
 ]
 
 { #category : #accessing }

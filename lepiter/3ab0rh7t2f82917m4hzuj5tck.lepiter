@@ -364,7 +364,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-09-04T11:16:34.437498+02:00"
+						"dateAndTimeString" : "2025-02-12T15:38:06.815585+01:00"
 					}
 				},
 				"uid" : {
@@ -374,7 +374,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "[[Working with a tutor based on a simple OpenAI assistant for GT]]"
+				"string" : "[[Working with tutors]]"
 			},
 			{
 				"__type" : "textSnippet",

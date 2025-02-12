@@ -61,11 +61,6 @@ GtLlmProvider >> initialize [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmProvider >> messageFromString: aString [
-	^ serializer serialize: aString
-]
-
-{ #category : #'as yet unclassified' }
 GtLlmProvider >> sendAssistantMessage: anObject [ 
 	^ self subclassResponsibility
 ]
@@ -74,7 +69,7 @@ GtLlmProvider >> sendAssistantMessage: anObject [
 GtLlmProvider >> sendMessage: aMessage [
 	self
 		sendAssistantMessage: (userMessageClass new
-				content: (self messageFromString: aMessage);
+				content: aMessage;
 				role: 'user';
 				chat: self)
 ]

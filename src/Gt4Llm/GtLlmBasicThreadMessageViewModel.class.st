@@ -151,7 +151,7 @@ GtLlmBasicThreadMessageViewModel >> pipeline [
 
 { #category : #accessing }
 GtLlmBasicThreadMessageViewModel >> requestStyleSourceText [
-	self announce: GtOpenAIThreadMessageRestyleRequested new
+	self announce: GtLlmThreadMessageRestyleRequested new
 ]
 
 { #category : #'as yet unclassified' }

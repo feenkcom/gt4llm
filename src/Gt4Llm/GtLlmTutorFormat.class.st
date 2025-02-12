@@ -5,7 +5,7 @@ Class {
 		'name',
 		'components'
 	],
-	#category : #'Gt4Llm-OldTutor'
+	#category : #'Gt4Llm-Tutor'
 }
 
 { #category : #accessing }

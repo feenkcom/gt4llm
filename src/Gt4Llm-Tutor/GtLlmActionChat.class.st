@@ -20,6 +20,13 @@ GtLlmActionChat >> onInstance: anInstance [
 		serializer: (GtLlmActionMessageWithInstanceSerializer new instance: anInstance)
 ]
 
+{ #category : #accessing }
+GtLlmActionChat >> sendChatRequest: aString [
+	^ self
+		sendAssistantMessage: (GtLlmUserMessage new
+				content: (self messageFromString: 'Chat request: ' , aString))
+]
+
 { #category : #'as yet unclassified' }
 GtLlmActionChat >> updateInstance: aValue [
 	self serializer update: aValue

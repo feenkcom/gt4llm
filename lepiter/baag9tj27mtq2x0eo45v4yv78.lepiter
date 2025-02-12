@@ -305,7 +305,7 @@
 														"__type" : "time",
 														"time" : {
 															"__type" : "dateAndTime",
-															"dateAndTimeString" : "2024-08-16T18:00:39.988328+02:00"
+															"dateAndTimeString" : "2025-02-12T15:38:06.814393+01:00"
 														}
 													},
 													"uid" : {
@@ -315,7 +315,7 @@
 													"paragraphStyle" : {
 														"__type" : "textStyle"
 													},
-													"string" : "[[Working with a tutor based on a simple OpenAI assistant for GT]]"
+													"string" : "[[Working with tutors]]"
 												},
 												{
 													"__type" : "textSnippet",
@@ -725,7 +725,7 @@
 																				"__type" : "time",
 																				"time" : {
 																					"__type" : "dateAndTime",
-																					"dateAndTimeString" : "2024-08-16T17:58:12.054208+02:00"
+																					"dateAndTimeString" : "2025-02-12T12:22:12.135927+01:00"
 																				}
 																			},
 																			"uid" : {
@@ -735,7 +735,7 @@
 																			"paragraphStyle" : {
 																				"__type" : "textStyle"
 																			},
-																			"string" : "[[Expanding the Wardley maps tutor with an action-based tutor]]"
+																			"string" : "[[Building a Wardley maps tutor based on actions]]"
 																		}
 																	]
 																},

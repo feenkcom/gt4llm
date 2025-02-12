@@ -159,7 +159,7 @@ GtLlmNewActionThreadMessageElement >> sendMessageFrom: aButton [
 { #category : #'private - hooks' }
 GtLlmNewActionThreadMessageElement >> subscribeToThreadMessageViewModel [
 	self threadMessage
-		when: GtOpenAINewThreadMessageContentsChanged
+		when: GtLlmNewThreadMessageContentsChanged
 		send: #onThreadMessageContentsChanged:
 		to: self.
 

@@ -1,6 +1,6 @@
 Class {
 	#name : #GtDPostMessage,
-	#superclass : #GtOpenAIActionThreadMessage,
+	#superclass : #AnObsoleteGtOpenAIActionThreadMessage,
 	#category : #'Gt4Llm-Demo'
 }
 

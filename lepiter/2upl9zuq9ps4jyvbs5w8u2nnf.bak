@@ -242,14 +242,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2025-02-11T12:32:43.172367+01:00"
+						"dateAndTimeString" : "2025-02-11T12:36:40.998373+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "4COsoiTiDQCvPFLCAiMxMA=="
 				},
-				"code" : "tutor := LlmWardleyMapTutor new\r\t\tcreateChatOn: thisSnippet page children last wardleyMap"
+				"code" : "chat := LlmWardleyMapTutor new\r\t\tcreateChatOn: thisSnippet page children last wardleyMap"
 			},
 			{
 				"__type" : "wardleyMap",

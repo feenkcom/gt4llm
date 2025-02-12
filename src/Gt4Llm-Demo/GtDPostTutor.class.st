@@ -1,6 +1,6 @@
 Class {
 	#name : #GtDPostTutor,
-	#superclass : #GtOpenAIAnnotatedActionTutor,
+	#superclass : #AnObsoleteGtOpenAIAnnotatedActionTutor,
 	#category : #'Gt4Llm-Demo'
 }
 

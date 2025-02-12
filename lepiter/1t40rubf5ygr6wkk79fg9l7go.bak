@@ -12,6 +12,43 @@
 				},
 				"createEmail" : {
 					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2025-02-12T15:36:36.774101+01:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2025-02-12T15:36:36.774101+01:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "4e4Nm1TqDQC+DqU5CHxWqA=="
+				},
+				"paragraphStyle" : {
+					"__type" : "textStyle"
+				},
+				"string" : "This page describes an interaction with OpenAI [assistant](https://platform.openai.com/assistants) using the GT abstraction called `LlmTutor`, which holds the assistant instructions and metainformation."
+			},
+			{
+				"__type" : "textSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
 					"emailString" : "juraj.kubelka@icloud.com"
 				},
 				"createTime" : {
@@ -29,7 +66,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-23T13:50:12.353126+02:00"
+						"dateAndTimeString" : "2025-02-12T15:36:49.165561+01:00"
 					}
 				},
 				"uid" : {
@@ -39,7 +76,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "This page describes an interaction with OpenAI [assistant](https://platform.openai.com/assistants) using chat, showing different kind of question and responses. [[Setting up a tutor]] for more details."
+				"string" : "The default tutor uses an API key from the standard file (see [[Setting up the OpenAI API key]]) and it is expected to be set up for these examples to work."
 			},
 			{
 				"__type" : "pharoSnippet",
@@ -66,14 +103,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-23T13:57:21.459719+02:00"
+						"dateAndTimeString" : "2025-02-12T15:35:03.720706+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "7REkNI/NDQCHsFrIBtrTtQ=="
 				},
-				"code" : "tutor := GtOpenAIGtSpecificTutor instance."
+				"code" : "tutor := LlmTutor new"
 			},
 			{
 				"__type" : "textSnippet",
@@ -100,7 +137,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-23T13:57:30.180279+02:00"
+						"dateAndTimeString" : "2025-02-12T15:35:51.17517+01:00"
 					}
 				},
 				"uid" : {
@@ -110,7 +147,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "A tutor can have multiple chat. Let's create one:"
+				"string" : "A tutor can have multiple chats. Let's create one:"
 			},
 			{
 				"__type" : "pharoSnippet",
@@ -137,14 +174,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-06-23T13:58:48.270919+02:00"
+						"dateAndTimeString" : "2025-02-12T15:35:49.014529+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "LtBkFFXNDQCuF7CCDOiMHg=="
 				},
-				"code" : "chat := tutor addChat"
+				"code" : "chat := tutor createChat"
 			},
 			{
 				"__type" : "textSnippet",
@@ -176,14 +213,14 @@
 								"__type" : "time",
 								"time" : {
 									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2024-06-23T13:57:06.100602+02:00"
+									"dateAndTimeString" : "2025-02-12T15:37:08.115615+01:00"
 								}
 							},
 							"uid" : {
 								"__type" : "uid",
 								"uidString" : "zO2gA1XNDQCtel7uDOiMHg=="
 							},
-							"code" : "chat sendMessage: 'Write me a snippet that lists all currently defined classes in the image.'"
+							"code" : "chat sendChatRequest: 'Write me a Pharo code snippet that lists all currently defined classes in the image.'"
 						}
 					]
 				},
@@ -248,37 +285,37 @@
 								"__type" : "time",
 								"time" : {
 									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2024-08-15T15:16:53.717107+02:00"
+									"dateAndTimeString" : "2025-02-12T15:39:42.672198+01:00"
 								}
 							},
 							"uid" : {
 								"__type" : "uid",
 								"uidString" : "y0jbLlXNDQCyVxnGDOiMHg=="
 							},
-							"code" : "(chat messages detect: #isAssistantRole) codeBlocksExecutor check"
+							"code" : "tutor addAction: (GtLlmTutorAction new\r\t    name: 'Calculate';\r\t    priority: 10;\r\t\tdescription: 'Calculate the given expression.';\r\t\tformat: 'Calulate: {}')"
 						}
 					]
 				},
 				"createEmail" : {
 					"__type" : "email",
-					"emailString" : "juraj.kubelka@icloud.com"
+					"emailString" : "<unknown>"
 				},
 				"createTime" : {
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-09T11:07:13.14021-03:00"
+						"dateAndTimeString" : "2025-02-12T15:38:19.06344+01:00"
 					}
 				},
 				"editEmail" : {
 					"__type" : "email",
-					"emailString" : "juraj.kubelka@icloud.com"
+					"emailString" : "<unknown>"
 				},
 				"editTime" : {
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-09T12:24:06.351722-03:00"
+						"dateAndTimeString" : "2025-02-12T15:38:24.379749+01:00"
 					}
 				},
 				"uid" : {
@@ -288,7 +325,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "Execute the code. Ideally, the execution fails, reporting to the assistant about the failure."
+				"string" : "Add a new action to the tutor."
 			},
 			{
 				"__type" : "textSnippet",
@@ -314,43 +351,43 @@
 							},
 							"editEmail" : {
 								"__type" : "email",
-								"emailString" : "juraj.kubelka@icloud.com"
+								"emailString" : "<unknown>"
 							},
 							"editTime" : {
 								"__type" : "time",
 								"time" : {
 									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2024-02-09T11:06:05.470562-03:00"
+									"dateAndTimeString" : "2025-02-12T15:41:30.785658+01:00"
 								}
 							},
 							"uid" : {
 								"__type" : "uid",
 								"uidString" : "ZVqVKVXNDQCyBMqaDOiMHg=="
 							},
-							"code" : "question := 'Tell me about Phlow based on the files that you have access to.'.\rchat sendMessage: question."
+							"code" : "chat sendMessage: 'Calculate: 10 + 5'"
 						}
 					]
 				},
 				"createEmail" : {
 					"__type" : "email",
-					"emailString" : "juraj.kubelka@icloud.com"
+					"emailString" : "<unknown>"
 				},
 				"createTime" : {
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-09T12:21:55.906749-03:00"
+						"dateAndTimeString" : "2025-02-12T15:39:50.236987+01:00"
 					}
 				},
 				"editEmail" : {
 					"__type" : "email",
-					"emailString" : "juraj.kubelka@icloud.com"
+					"emailString" : "<unknown>"
 				},
 				"editTime" : {
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-09T12:23:27.358707-03:00"
+						"dateAndTimeString" : "2025-02-12T15:39:52.959481+01:00"
 					}
 				},
 				"uid" : {
@@ -360,79 +397,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "Ask about Phlow project. Ideally, the response includes a file citations, indicating where the provided information comes from."
-			},
-			{
-				"__type" : "textSnippet",
-				"children" : {
-					"__type" : "snippets",
-					"items" : [
-						{
-							"__type" : "pharoSnippet",
-							"children" : {
-								"__type" : "snippets",
-								"items" : [ ]
-							},
-							"createEmail" : {
-								"__type" : "email",
-								"emailString" : "<unknown>"
-							},
-							"createTime" : {
-								"__type" : "time",
-								"time" : {
-									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2024-02-22T10:09:19.20011-03:00"
-								}
-							},
-							"editEmail" : {
-								"__type" : "email",
-								"emailString" : "<unknown>"
-							},
-							"editTime" : {
-								"__type" : "time",
-								"time" : {
-									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2024-02-22T10:09:41.873704-03:00"
-								}
-							},
-							"uid" : {
-								"__type" : "uid",
-								"uidString" : "MVpd41nODQCdZHpdD5mAnA=="
-							},
-							"code" : "question := 'Create a Phlow view for Fraction that displays numerator and denominator.'.\rchat sendMessage: question"
-						}
-					]
-				},
-				"createEmail" : {
-					"__type" : "email",
-					"emailString" : "<unknown>"
-				},
-				"createTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-22T10:06:21.111702-03:00"
-					}
-				},
-				"editEmail" : {
-					"__type" : "email",
-					"emailString" : "<unknown>"
-				},
-				"editTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-02-22T10:06:54.436481-03:00"
-					}
-				},
-				"uid" : {
-					"__type" : "uid",
-					"uidString" : "Yfu/2FnODQCbKo85D5mAnA=="
-				},
-				"paragraphStyle" : {
-					"__type" : "textStyle"
-				},
-				"string" : "Ask for a smalltalk method definition of Phlow view that displays"
+				"string" : "Call the new action"
 			}
 		]
 	},
@@ -455,12 +420,12 @@
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2024-06-23T13:54:58.495248+02:00"
+			"dateAndTimeString" : "2025-02-12T15:38:06.787736+01:00"
 		}
 	},
 	"pageType" : {
 		"__type" : "namedPage",
-		"title" : "Working with a tutor based on a simple OpenAI assistant for GT"
+		"title" : "Working with tutors"
 	},
 	"uid" : {
 		"__type" : "uuid",

@@ -194,7 +194,7 @@ GtLlmChat >> sendAssistantMessage: aMessage [
 
 { #category : #accessing }
 GtLlmChat >> sendMessage: aMessage [
-	self provider sendMessage: aMessage
+	self provider sendMessage: (self messageFromString: aMessage)
 ]
 
 { #category : #accessing }

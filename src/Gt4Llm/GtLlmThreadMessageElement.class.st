@@ -151,7 +151,7 @@ GtLlmThreadMessageElement >> showProgressElement [
 { #category : #'private - hooks' }
 GtLlmThreadMessageElement >> subscribeToThreadMessageViewModel [
 	self threadMessageViewModel weak
-		when: GtOpenAIThreadMessageRestyleRequested
+		when: GtLlmThreadMessageRestyleRequested
 			send: #onRestyleRequested:
 			to: self;
 		when: GtOpenAIThreadMessageViewModelChanged
