@@ -322,7 +322,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2025-02-11T12:24:15.922398+01:00"
+						"dateAndTimeString" : "2025-02-11T12:24:45.950777+01:00"
 					}
 				},
 				"uid" : {
@@ -332,7 +332,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "Finally, a tutor needs a provider stencil. This is where message types ge: {{gtMethod:LlmWardleyMapTutor>>#defaultProviderStencil}}"
+				"string" : "Finally, a tutor needs a provider stencil. This is where message types and backends get set: {{gtMethod:LlmWardleyMapTutor>>#defaultProviderStencil}}"
 			}
 		]
 	},
@@ -355,12 +355,12 @@
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2024-05-27T20:26:04.608875+02:00"
+			"dateAndTimeString" : "2025-02-12T12:22:12.10916+01:00"
 		}
 	},
 	"pageType" : {
 		"__type" : "namedPage",
-		"title" : "Expanding the Wardley maps tutor with an action-based tutor"
+		"title" : "Building a Wardley maps tutor based on actions"
 	},
 	"uid" : {
 		"__type" : "uuid",

@@ -40,6 +40,43 @@
 					"__type" : "textStyle"
 				},
 				"string" : "[Assistants](https://platform.openai.com/assistants) are more capable chat models on OpenAI with access to files and programming capabilities."
+			},
+			{
+				"__type" : "textSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2025-02-12T15:47:04.886701+01:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2025-02-12T15:47:32.373781+01:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "yix+wFTqDQCE59zhCHxWqA=="
+				},
+				"paragraphStyle" : {
+					"__type" : "textStyle"
+				},
+				"string" : "In `gt4llm`, the corresponding abstraction is called a `Tutor` (see [[Working with"
 			}
 		]
 	},
@@ -62,12 +99,12 @@
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2024-02-13T10:39:32.022675+01:00"
+			"dateAndTimeString" : "2024-06-23T13:59:01.757379+02:00"
 		}
 	},
 	"pageType" : {
 		"__type" : "namedPage",
-		"title" : "Assistants"
+		"title" : "OpenAI assistants"
 	},
 	"uid" : {
 		"__type" : "uuid",

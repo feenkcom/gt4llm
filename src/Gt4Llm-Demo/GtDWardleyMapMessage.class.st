@@ -1,6 +1,6 @@
 Class {
 	#name : #GtDWardleyMapMessage,
-	#superclass : #GtOpenAIActionThreadMessage,
+	#superclass : #AnObsoleteGtOpenAIActionThreadMessage,
 	#category : #'Gt4Llm-Demo'
 }
 

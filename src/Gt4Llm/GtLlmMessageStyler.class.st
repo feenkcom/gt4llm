@@ -55,26 +55,6 @@ GtLlmMessageStyler >> elements [
 	^ elements
 ]
 
-{ #category : #generated }
-GtLlmMessageStyler >> evaluateCodeBlock: aCodeBlock expanded: aBoolean from: aButton [
-	| aResult position source |
-	source := aCodeBlock code source.
-
-	aResult := self threadMessageViewModel codeBlocksExecutor check: aCodeBlock.
-
-	position := source size.
-	[ position > 1 and: [ (source at: position) isLineBreak ] ]
-		whileTrue: [ position := position - 1 ].
-	self executionResults
-		at: aCodeBlock code
-		put: (LeEvaluationResult new
-				value: aResult;
-				expanded: aBoolean;
-				position: position).
-	self threadMessageViewModel requestStyleSourceText.
-	aBoolean ifTrue: [ aButton phlow spawnObject: aResult value ]
-]
-
 { #category : #accessing }
 GtLlmMessageStyler >> executionResults [
 	"Keys are {{gtClass:SmaCCToken}} that defines a text that was evaluated.
@@ -406,27 +386,6 @@ GtLlmMessageStyler >> styleButton: anAnnotation withTool: aBlock [
 { #category : #private }
 GtLlmMessageStyler >> styleCode: aCodeNode [
 	self threadMessageViewModel isAssistantRole ifFalse: [ ^ self ].
-	(text from: aCodeNode stopPosition to: aCodeNode stopPosition)
-		attributes: {GtButtonAttribute new
-					beAppend;
-					stencil: [ GtButtonStencil new
-							icon: BrGlamorousVectorIcons play;
-							tooltip: 'Evaluate';
-							action: [ :aWidget :aButtonModel | 
-								self
-									evaluateCodeBlock: aCodeNode
-									expanded: false
-									from: aWidget ] ].
-				GtButtonAttribute new
-					beAppend;
-					stencil: [ GtButtonStencil new
-							icon: BrGlamorousVectorIcons playinspect;
-							tooltip: 'Inspect';
-							action: [ :aWidget :aButtonModel | 
-								self
-									evaluateCodeBlock: aCodeNode
-									expanded: true
-									from: aWidget ] ]}.
 	self executionResults
 		at: aCodeNode code
 		ifPresent: [ :result | self styleResult: result for: aCodeNode ]

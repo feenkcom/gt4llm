@@ -71,14 +71,14 @@
 								"__type" : "time",
 								"time" : {
 									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2024-06-23T13:55:28.163114+02:00"
+									"dateAndTimeString" : "2024-06-23T13:56:24.687046+02:00"
 								}
 							},
 							"uid" : {
 								"__type" : "uid",
 								"uidString" : "0W/dmsnUDQCwYhIRB0Z8qA=="
 							},
-							"code" : "tutor := GtOpenAIGtViewsTutor withApiKeyFromClipboard"
+							"code" : "tutor := GtOpenAIGtSpecificTutor withApiKeyFromClipboard"
 						}
 					]
 				},
@@ -143,14 +143,14 @@
 								"__type" : "time",
 								"time" : {
 									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2024-06-23T13:55:30.074671+02:00"
+									"dateAndTimeString" : "2024-06-23T13:56:26.293338+02:00"
 								}
 							},
 							"uid" : {
 								"__type" : "uid",
 								"uidString" : "rcLEm8nUDQCw4te6B0Z8qA=="
 							},
-							"code" : "tutor := GtOpenAIGtViewsTutor withApiKeyFromFile"
+							"code" : "tutor := GtOpenAIGtSpecificTutor withApiKeyFromFile"
 						}
 					]
 				},
@@ -215,14 +215,14 @@
 								"__type" : "time",
 								"time" : {
 									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2024-06-23T13:55:31.667737+02:00"
+									"dateAndTimeString" : "2024-06-23T13:56:28.41129+02:00"
 								}
 							},
 							"uid" : {
 								"__type" : "uid",
 								"uidString" : "i5vFhF/ODQCtksT+D0lXcw=="
 							},
-							"code" : "GtOpenAIGtViewsTutor instance: tutor createAssistant"
+							"code" : "GtOpenAIGtSpecificTutor instance: tutor createAssistant"
 						}
 					]
 				},

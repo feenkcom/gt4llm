@@ -89,8 +89,8 @@ LlmWardleyMapTutor >> defaultProviderStencil [
 	GtOpenAIAssistantProvider withApiKeyFromFile
 		instructions: anInstructionFormat asInstructionPiece instructionString;
 		format: anInstructionFormat asJsonSchema;
-		assistantMessageClass: OpenAIWardleyMapMessage;
-		userMessageClass: OpenAIWardleyMapMessage ]
+		assistantMessageClass: GtOpenAIWardleyMapMessage;
+		userMessageClass: GtOpenAIWardleyMapMessage ]
 ]
 
 { #category : #'as yet unclassified' }

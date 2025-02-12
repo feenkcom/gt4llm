@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLlmWardleyMapTopicStep,
-	#superclass : #GtLlmCodeStep,
+	#superclass : #AnObsoleteGtLlmCodeStep,
 	#category : #'Gt4Llm-Domain - Wardley Map'
 }
 

@@ -68,7 +68,7 @@ GtOpenAIAssistantProvider >> defaultAssistantDescription [
 
 { #category : #'as yet unclassified' }
 GtOpenAIAssistantProvider >> defaultAssistantMessageClass [
-	^ OpenAIMessage
+	^ GtOpenAIMessage
 ]
 
 { #category : #'as yet unclassified' }
@@ -83,7 +83,7 @@ GtOpenAIAssistantProvider >> defaultTools [
 
 { #category : #'as yet unclassified' }
 GtOpenAIAssistantProvider >> defaultUserMessageClass [
-	^ OpenAIMessage
+	^ GtOpenAIMessage
 ]
 
 { #category : #'as yet unclassified' }
