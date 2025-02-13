@@ -40,7 +40,7 @@ GtOpenAIListThreadMessagesAPIClient >> request [
 
 { #category : #accessing }
 GtOpenAIListThreadMessagesAPIClient >> serializationClass [
-	^ GtOpenAIThreadMessagesGroup
+	^ GtOpenAIMessagesGroup
 ]
 
 { #category : #accessing }

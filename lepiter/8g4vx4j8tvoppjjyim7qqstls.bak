@@ -353,14 +353,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-08-15T14:58:51.614254+02:00"
+						"dateAndTimeString" : "2025-02-12T12:39:07.90719+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "eFIu/i3ODQC1xImgAJOAxA=="
 				},
-				"code" : "chatMessage := chat messages first.\rresults := chatMessage codeBlocks\r\t\tcollect: [ :aBlock | chatMessage codeBlocksExecutor check: aBlock ]"
+				"code" : "chatMessage := chat messages last.\rresults := chatMessage codeBlocks\r\t\tcollect: [ :aBlock | chatMessage codeBlocksExecutor check: aBlock ]"
 			},
 			{
 				"__type" : "textSnippet",

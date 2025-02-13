@@ -109,14 +109,14 @@
 								"__type" : "time",
 								"time" : {
 									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2025-02-12T12:51:27.681995+01:00"
+									"dateAndTimeString" : "2025-02-13T08:31:49.729931+01:00"
 								}
 							},
 							"uid" : {
 								"__type" : "uid",
 								"uidString" : "ym4fkHPgDQCxY5ehBRiBow=="
 							},
-							"code" : "tutor := LlmTutor new description: 'You edit blog posts.'."
+							"code" : "tutor := GtLlmTutor new description: 'You edit blog posts.'."
 						},
 						{
 							"__type" : "pharoSnippet",

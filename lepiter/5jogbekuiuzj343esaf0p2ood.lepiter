@@ -66,14 +66,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-08-05T16:52:52.941542+02:00"
+						"dateAndTimeString" : "2025-02-13T09:02:16.260694+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "boSXLk/TDQCXg5bqCYSwXQ=="
 				},
-				"code" : "GtOllamaGtTutor new"
+				"code" : "GtLlmTutor new\r\tdescription: 'You are an assistant that teaches people about Ollama.';\r\tonOllamaWithModel: 'llama3.1'"
 			}
 		]
 	},

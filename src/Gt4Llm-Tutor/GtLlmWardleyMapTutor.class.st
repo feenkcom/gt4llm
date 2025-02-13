@@ -1,11 +1,11 @@
 Class {
-	#name : #LlmWardleyMapTutor,
-	#superclass : #LlmTutor,
+	#name : #GtLlmWardleyMapTutor,
+	#superclass : #GtLlmTutor,
 	#category : #'Gt4Llm-Tutor'
 }
 
 { #category : #'as yet unclassified' }
-LlmWardleyMapTutor >> connectionAction [
+GtLlmWardleyMapTutor >> connectionAction [
 	<gtLlmTutorAction>
 	^ GtLlmTutorAction new
 		name: 'Add new connected nodes';
@@ -61,7 +61,7 @@ Regulator->Audit
 ]
 
 { #category : #'as yet unclassified' }
-LlmWardleyMapTutor >> createAction [
+GtLlmWardleyMapTutor >> createAction [
 	<gtLlmTutorAction>
 	^ GtLlmTutorAction new
 		name: 'Create a set of nodes';
@@ -71,7 +71,7 @@ LlmWardleyMapTutor >> createAction [
 ]
 
 { #category : #'as yet unclassified' }
-LlmWardleyMapTutor >> createChatOn: aGtWardleyMapModel [
+GtLlmWardleyMapTutor >> createChatOn: aGtWardleyMapModel [
 	| chat |
 	chat := self createChat.
 	chat onInstance: (self valueHolderFor: aGtWardleyMapModel).
@@ -79,12 +79,12 @@ LlmWardleyMapTutor >> createChatOn: aGtWardleyMapModel [
 ]
 
 { #category : #'as yet unclassified' }
-LlmWardleyMapTutor >> defaultDescription [
+GtLlmWardleyMapTutor >> defaultDescription [
 	^ 'You are an assistant that is used to interactively work on Wardley Maps. You trigger certain actions to generate a desired result.'
 ]
 
 { #category : #'as yet unclassified' }
-LlmWardleyMapTutor >> defaultProviderStencil [
+GtLlmWardleyMapTutor >> defaultProviderStencil [
 	^ [ :anInstructionFormat | 
 	GtOpenAIAssistantProvider withApiKeyFromFile
 		instructions: anInstructionFormat asInstructionPiece instructionString;
@@ -94,7 +94,7 @@ LlmWardleyMapTutor >> defaultProviderStencil [
 ]
 
 { #category : #'as yet unclassified' }
-LlmWardleyMapTutor >> explanationAction [
+GtLlmWardleyMapTutor >> explanationAction [
 	<gtLlmTutorAction>
 	^ GtLlmTutorAction new
 		name: 'Explain a node';
@@ -126,7 +126,7 @@ component Compute [0.4, 0.4] label [-22, 29]'.
 ]
 
 { #category : #'as yet unclassified' }
-LlmWardleyMapTutor >> renameAction [
+GtLlmWardleyMapTutor >> renameAction [
 	<gtLlmTutorAction>
 	^ GtLlmTutorAction new
 		name: 'Propose renames for node';
@@ -173,7 +173,7 @@ component Furnace [0.9, 0.9] label [-9, 9]'.
 ]
 
 { #category : #'as yet unclassified' }
-LlmWardleyMapTutor >> renameFormatComponent [
+GtLlmWardleyMapTutor >> renameFormatComponent [
 	<gtLlmTutorFormat>
 	^ GtLlmTutorFormatDescription new
 		name: 'Rename';
@@ -185,7 +185,7 @@ LlmWardleyMapTutor >> renameFormatComponent [
 ]
 
 { #category : #'as yet unclassified' }
-LlmWardleyMapTutor >> reviewAction [
+GtLlmWardleyMapTutor >> reviewAction [
 	<gtLlmTutorAction>
 	^ GtLlmTutorAction new
 		name: 'Review the current state';
@@ -212,7 +212,7 @@ component Compute [0.45, 0.34] label [-22, 29]'.
 ]
 
 { #category : #'as yet unclassified' }
-LlmWardleyMapTutor >> valueHolderFor: anObject [
+GtLlmWardleyMapTutor >> valueHolderFor: anObject [
 	^ GtLlmSerializableValueHolder new
 		name: 'Wardley Map';
 		content: anObject;
@@ -224,7 +224,7 @@ LlmWardleyMapTutor >> valueHolderFor: anObject [
 ]
 
 { #category : #'as yet unclassified' }
-LlmWardleyMapTutor >> wardleyMapFormatDescription [
+GtLlmWardleyMapTutor >> wardleyMapFormatDescription [
 	<gtLlmTutorFormat>
 	^ GtLlmTutorFormatDescription new
 		name: 'Wardley Map';
