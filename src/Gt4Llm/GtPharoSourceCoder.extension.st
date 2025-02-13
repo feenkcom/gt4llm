@@ -27,7 +27,7 @@ GtPharoSourceCoder >> addTutorFormatMenuItemsFor: anAst to: coderAddOns from: aC
 { #category : #'*Gt4Llm' }
 GtPharoSourceCoder >> addTutorFormatRenameShortcutFor: anAST into: coderAddOns [
 	<gtAstCoderAddOns: 10>
-	(self behavior includesBehavior: GtOpenAIAnnotatedActionTutor)
+	(self behavior includesBehavior: GtLlmTutor)
 		ifFalse: [ ^ self ].
 	coderAddOns addShortcut: GtLlmRenameTutorFormatComponentShortcut new
 ]
