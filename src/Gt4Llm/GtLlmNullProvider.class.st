@@ -18,6 +18,10 @@ GtLlmNullProvider >> chat: anObject [
 ]
 
 { #category : #'as yet unclassified' }
+GtLlmNullProvider >> format: aFormat [
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmNullProvider >> instructions: aString [
 ]
 

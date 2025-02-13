@@ -56,7 +56,7 @@ GtLlmTutorFormatDescription >> asInstructionPiece [
 				addItem: 'Name: ' , self name;
 				addItem: 'Format: ' , self format;
 				addItem: 'Examples:
-' , self example)
+' , (self example ifNil: [ 'none' ]))
 ]
 
 { #category : #accessing }
@@ -66,7 +66,7 @@ GtLlmTutorFormatDescription >> asJsonSchema [
 			-> (GtLlmInstructionList new
 					addItem: 'Format: ' , self format;
 					addItem: 'Examples:
-' , self example) instructionString} asDictionary
+' , (self example ifNil: [ 'none' ])) instructionString} asDictionary
 ]
 
 { #category : #'as yet unclassified' }
