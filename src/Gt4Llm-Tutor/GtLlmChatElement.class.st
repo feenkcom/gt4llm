@@ -1,5 +1,5 @@
 Class {
-	#name : #LlmChatElement,
+	#name : #GtLlmChatElement,
 	#superclass : #BlElement,
 	#traits : 'TBrLayoutResizable',
 	#classTraits : 'TBrLayoutResizable classTrait',
@@ -11,12 +11,12 @@ Class {
 }
 
 { #category : #accessing }
-LlmChatElement >> chatViewModel [
+GtLlmChatElement >> chatViewModel [
 	^ chatViewModel
 ]
 
 { #category : #accessing }
-LlmChatElement >> chatViewModel: anObject [
+GtLlmChatElement >> chatViewModel: anObject [
 	chatViewModel := anObject.
 
 	self subscribeToAssistantChatViewModel.
@@ -24,7 +24,7 @@ LlmChatElement >> chatViewModel: anObject [
 ]
 
 { #category : #'as yet unclassified' }
-LlmChatElement >> initialize [
+GtLlmChatElement >> initialize [
 	super initialize.
 
 	self initializeListElement.
@@ -34,7 +34,7 @@ LlmChatElement >> initialize [
 ]
 
 { #category : #'as yet unclassified' }
-LlmChatElement >> initializeListElement [
+GtLlmChatElement >> initializeListElement [
 	listElement := BrSimpleList vertical
 			hMatchParent;
 			vMatchParent;
@@ -47,12 +47,12 @@ LlmChatElement >> initializeListElement [
 ]
 
 { #category : #'as yet unclassified' }
-LlmChatElement >> onThreadRunAnnouncement: anAnnouncement [
+GtLlmChatElement >> onThreadRunAnnouncement: anAnnouncement [
 	self enqueueTask: (BlTaskAction new action: [ self updateElement ])
 ]
 
 { #category : #'as yet unclassified' }
-LlmChatElement >> subscribeToAssistantChatViewModel [
+GtLlmChatElement >> subscribeToAssistantChatViewModel [
 	self chatViewModel assistantChat weak
 		when: GtOpenAIThreadRunAnnouncement
 		send: #onThreadRunAnnouncement:
@@ -60,7 +60,7 @@ LlmChatElement >> subscribeToAssistantChatViewModel [
 ]
 
 { #category : #'as yet unclassified' }
-LlmChatElement >> updateElement [
+GtLlmChatElement >> updateElement [
 	| allItems |
 	allItems := chatViewModel threadMessageViewModels.
 	listElement items: allItems.

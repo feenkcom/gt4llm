@@ -29,7 +29,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-08-15T15:26:18.565493+02:00"
+						"dateAndTimeString" : "2025-02-12T15:38:06.802109+01:00"
 					}
 				},
 				"uid" : {
@@ -39,7 +39,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "The tutor in [[Working with a tutor based on a simple OpenAI assistant for GT]] is based on assistants. We can simulate a similar, albeit more restrained tutor in Ollama by setting up a chat with a model meant for code generation and [[Using modelfiles]] to embed the instructions. This approach is inherently limited by the context window, but can handle shorter exchanges."
+				"string" : "The tutor in [[Working with tutors]] is based on assistants. We can simulate a similar, albeit more restrained tutor in Ollama by setting up a chat with a model meant for code generation and [[Using modelfiles]] to embed the instructions. This approach is inherently limited by the context window, but can handle shorter exchanges."
 			},
 			{
 				"__type" : "pharoSnippet",
@@ -66,14 +66,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-08-05T16:52:52.941542+02:00"
+						"dateAndTimeString" : "2025-02-13T08:37:58.002461+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "boSXLk/TDQCXg5bqCYSwXQ=="
 				},
-				"code" : "GtOllamaGtTutor new"
+				"code" : "GtLlmTutor new onOllamaWithModel: 'llama3.1'"
 			}
 		]
 	},

@@ -125,7 +125,6 @@ GtLlmBasicThreadMessageViewModel >> newCheckRunResultViewModelFor: aCheckRunResu
 GtLlmBasicThreadMessageViewModel >> newStyler [
 	^ BlCompositeStyler new
 		stylers: {GtLlmMessageStyler new threadMessageViewModel: self.
-				GtOpenAITraceStyler new.
 				GtOpenAIThreadMessageStyler new annotations: self annotations}
 ]
 

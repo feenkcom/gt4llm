@@ -1,11 +1,11 @@
 Class {
-	#name : #BPEEncoderExamples,
+	#name : #GtBPEEncoderExamples,
 	#superclass : #Object,
 	#category : #'Gt4Llm-Tokenizer - Examples'
 }
 
 { #category : #accessing }
-BPEEncoderExamples >> encodedLorem [
+GtBPEEncoderExamples >> encodedLorem [
 	<gtExample>
 	| encoder encoded |
 	encoder := GtBPEEncoder new.
@@ -18,7 +18,7 @@ BPEEncoderExamples >> encodedLorem [
 ]
 
 { #category : #accessing }
-BPEEncoderExamples >> preTrainedEncoderLorem [
+GtBPEEncoderExamples >> preTrainedEncoderLorem [
 	<gtExample>
 	| encoder encoded |
 	encoder := GtPretrainedEncoder new merges: self encodedLorem merges.

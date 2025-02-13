@@ -22,7 +22,7 @@ GtLlmActionChat >> onInstance: anInstance [
 
 { #category : #accessing }
 GtLlmActionChat >> sendChatRequest: aString [
-	^ self
+	self
 		sendAssistantMessage: (GtLlmUserMessage new
 				content: (self messageFromString: 'Chat request: ' , aString))
 ]

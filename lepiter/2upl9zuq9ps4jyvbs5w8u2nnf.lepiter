@@ -103,14 +103,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2025-02-11T12:31:08.675446+01:00"
+						"dateAndTimeString" : "2025-02-13T08:31:49.740739+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "84cinSTiDQCsQmwQAiMxMA=="
 				},
-				"code" : "tutor := LlmTutor new\r\t\tdescription: 'You are an assistant for buildin Wardley maps interactively.'"
+				"code" : "tutor := GtLlmTutor new\r\t\tdescription: 'You are an assistant for buildin Wardley maps interactively.'"
 			},
 			{
 				"__type" : "pharoSnippet",
@@ -242,14 +242,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2025-02-11T12:36:40.998373+01:00"
+						"dateAndTimeString" : "2025-02-13T08:31:55.594309+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "4COsoiTiDQCvPFLCAiMxMA=="
 				},
-				"code" : "chat := LlmWardleyMapTutor new\r\t\tcreateChatOn: thisSnippet page children last wardleyMap"
+				"code" : "chat := GtLlmWardleyMapTutor new\r\t\tcreateChatOn: thisSnippet page children last wardleyMap"
 			},
 			{
 				"__type" : "wardleyMap",

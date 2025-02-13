@@ -168,14 +168,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2025-02-04T18:12:59.011705+01:00"
+						"dateAndTimeString" : "2025-02-04T18:19:07.317713+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "vtLR053pDQCgdtmxDT5fkg=="
 				},
-				"code" : "tutor addFormat: (GtLlmTutorFormatComponent new beRequired\r\t\tname: 'Game';\r\t\tformat: 'Text';\r\t\texample: '```\rSuper Mario Bros.\r```')"
+				"code" : "tutor addFormat: (GtLlmTutorFormatDescription new beRequired\r\t\tname: 'Game';\r\t\tformat: 'Text';\r\t\texample: '```\rSuper Mario Bros.\r```')"
 			},
 			{
 				"__type" : "pharoSnippet",

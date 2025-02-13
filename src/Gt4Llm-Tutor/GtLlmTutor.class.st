@@ -1,5 +1,5 @@
 Class {
-	#name : #LlmTutor,
+	#name : #GtLlmTutor,
 	#superclass : #Object,
 	#instVars : [
 		'providerStencil',
@@ -9,7 +9,7 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-LlmTutor >> actionFormatDescription [
+GtLlmTutor >> actionFormatDescription [
 	<gtLlmTutorFormat>
 	^ GtLlmTutorFormatDescription new beRequired
 		name: 'Action';
@@ -20,32 +20,32 @@ Create a draft
 ]
 
 { #category : #'as yet unclassified' }
-LlmTutor >> actionNamed: anActionName [
+GtLlmTutor >> actionNamed: anActionName [
 	^ self instruction actionNamed: anActionName
 ]
 
 { #category : #accessing }
-LlmTutor >> actions [
+GtLlmTutor >> actions [
 	^ instruction actions
 ]
 
 { #category : #'as yet unclassified' }
-LlmTutor >> addAction: anAction [
+GtLlmTutor >> addAction: anAction [
 	instruction addAction: (anAction tutor: self)
 ]
 
 { #category : #'as yet unclassified' }
-LlmTutor >> addFormat: aComponent [
+GtLlmTutor >> addFormat: aComponent [
 	instruction addComponent: aComponent
 ]
 
 { #category : #'as yet unclassified' }
-LlmTutor >> addInstructionSection: aSection [
+GtLlmTutor >> addInstructionSection: aSection [
 	instruction addSection: aSection
 ]
 
 { #category : #'as yet unclassified' }
-LlmTutor >> chatAction [
+GtLlmTutor >> chatAction [
 	<gtLlmTutorAction>
 	^ GtLlmTutorAction new 
 		name: 'Answer a chat request';
@@ -61,7 +61,7 @@ LlmTutor >> chatAction [
 ]
 
 { #category : #'as yet unclassified' }
-LlmTutor >> collectActions [
+GtLlmTutor >> collectActions [
 	^ ((Pragma
 		allNamed: #gtLlmTutorAction
 		from: self class
@@ -71,7 +71,7 @@ LlmTutor >> collectActions [
 ]
 
 { #category : #'as yet unclassified' }
-LlmTutor >> collectFormats [
+GtLlmTutor >> collectFormats [
 	^ ((Pragma
 		allNamed: #gtLlmTutorFormat
 		from: self class
@@ -81,19 +81,28 @@ LlmTutor >> collectFormats [
 ]
 
 { #category : #'as yet unclassified' }
-LlmTutor >> createChat [
+GtLlmTutor >> createChat [
 	^ GtLlmActionChat new
 		provider: (self providerStencil value: instruction);
 		tutor: self
 ]
 
 { #category : #'as yet unclassified' }
-LlmTutor >> defaultDescription [
+GtLlmTutor >> defaultDescription [
 	^ 'You are an assistant.'
 ]
 
 { #category : #'as yet unclassified' }
-LlmTutor >> defaultProviderStencil [
+GtLlmTutor >> defaultOllamaProviderStencilWithModel: aModel [
+	^ [ :anInstructionFormat | 
+	GtOllamaProvider new
+		model: aModel;
+		instructions: anInstructionFormat asInstructionPiece instructionString;
+		format: anInstructionFormat asJsonSchema ]
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmTutor >> defaultProviderStencil [
 	^ [ :anInstructionFormat | 
 	GtOpenAIAssistantProvider withApiKeyFromFile
 		instructions: anInstructionFormat asInstructionPiece instructionString;
@@ -101,22 +110,22 @@ LlmTutor >> defaultProviderStencil [
 ]
 
 { #category : #accessing }
-LlmTutor >> description: anObject [
+GtLlmTutor >> description: anObject [
 	instruction description: anObject
 ]
 
 { #category : #'as yet unclassified' }
-LlmTutor >> formatComponents [
+GtLlmTutor >> formatComponents [
 	^ instruction formats
 ]
 
 { #category : #'as yet unclassified' }
-LlmTutor >> formatNamed: aString [
+GtLlmTutor >> formatNamed: aString [
 	^ instruction componentNamed: aString
 ]
 
 { #category : #'as yet unclassified' }
-LlmTutor >> gtActionsFor: aView [
+GtLlmTutor >> gtActionsFor: aView [
 	<gtView>
 	| valueHolder |
 	valueHolder := ValueHolder new.
@@ -149,7 +158,7 @@ LlmTutor >> gtActionsFor: aView [
 ]
 
 { #category : #'as yet unclassified' }
-LlmTutor >> gtFormatComponentsFor: aView [
+GtLlmTutor >> gtFormatComponentsFor: aView [
 	<gtView>
 	| valueHolder |
 	valueHolder := ValueHolder new.
@@ -184,7 +193,7 @@ LlmTutor >> gtFormatComponentsFor: aView [
 ]
 
 { #category : #'as yet unclassified' }
-LlmTutor >> gtInstructionFor: aView [
+GtLlmTutor >> gtInstructionFor: aView [
 	<gtView>
 	^ aView forward
 		title: 'Instruction';
@@ -194,7 +203,7 @@ LlmTutor >> gtInstructionFor: aView [
 ]
 
 { #category : #'as yet unclassified' }
-LlmTutor >> initialize [
+GtLlmTutor >> initialize [
 	super initialize.
 	self providerStencil: self defaultProviderStencil.
 	
@@ -205,40 +214,45 @@ LlmTutor >> initialize [
 ]
 
 { #category : #'as yet unclassified' }
-LlmTutor >> initializeInstruction [
-	instruction := LlmTutorInstruction new.
+GtLlmTutor >> initializeInstruction [
+	instruction := GtLlmTutorInstruction new.
 	instruction
 		addComponents: self collectFormats;
 		addActions: self collectActions
 ]
 
 { #category : #accessing }
-LlmTutor >> instruction [
+GtLlmTutor >> instruction [
 	^ instruction
 ]
 
+{ #category : #'as yet unclassified' }
+GtLlmTutor >> onOllamaWithModel: aModel [
+	self providerStencil: (self defaultOllamaProviderStencilWithModel: aModel)
+]
+
 { #category : #accessing }
-LlmTutor >> providerStencil [
+GtLlmTutor >> providerStencil [
 	^ providerStencil
 ]
 
 { #category : #accessing }
-LlmTutor >> providerStencil: anObject [
+GtLlmTutor >> providerStencil: anObject [
 	providerStencil := anObject
 ]
 
 { #category : #'as yet unclassified' }
-LlmTutor >> recomputeActions [
+GtLlmTutor >> recomputeActions [
 	instruction replaceActions: self collectActions
 ]
 
 { #category : #'as yet unclassified' }
-LlmTutor >> recomputeFormats [
+GtLlmTutor >> recomputeFormats [
 	instruction replaceComponents: self collectFormats
 ]
 
 { #category : #'as yet unclassified' }
-LlmTutor >> textFormatDescription [
+GtLlmTutor >> textFormatDescription [
 	<gtLlmTutorFormat>
 	^ GtLlmTutorFormatDescription new
 		name: 'Text';

@@ -109,6 +109,14 @@ GtOpenAIAssistantProvider >> format: anObject [
 ]
 
 { #category : #'as yet unclassified' }
+GtOpenAIAssistantProvider >> getMessages [
+	^ thread updateMessages
+		collect: [ :aThreadMessage | 
+			self assistantMessageClass adoptInstance: aThreadMessage.
+			aThreadMessage ]
+]
+
+{ #category : #'as yet unclassified' }
 GtOpenAIAssistantProvider >> getRun [
 	^ lastRun := client getRun: lastRun id forThread: thread id
 ]
@@ -182,7 +190,5 @@ GtOpenAIAssistantProvider >> tools: anObject [
 
 { #category : #'as yet unclassified' }
 GtOpenAIAssistantProvider >> updateMessages [
-	chat
-		messages: (thread updateMessages
-				collect: [ :aThreadMessage | self assistantMessageClass new from: aThreadMessage serialize ])
+	chat messages: self getMessages
 ]

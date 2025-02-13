@@ -100,14 +100,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2025-02-04T18:11:16.310919+01:00"
+						"dateAndTimeString" : "2025-02-13T08:31:49.753293+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "67SHC2PpDQCn9dgYChlaPA=="
 				},
-				"code" : "tutor := LlmTutor new\r\t\tdescription: descriptionString;\r\t\tproviderStencil: [ :anInstructionFormat | \r\t\t\tGtOpenAIAssistantProvider withApiKeyFromFile\r\t\t\t\tinstructions: anInstructionFormat asInstructionPiece instructionString;\r\t\t\t\tformat: anInstructionFormat asJsonSchema;\r\t\t\t\tassistantMessageClass: GtOpenAIActionThreadMessage;\r\t\t\t\tuserMessageClass: GtOpenAIActionThreadMessage ]"
+				"code" : "tutor := GtLlmTutor new\r\t\tdescription: descriptionString;\r\t\tproviderStencil: [ :anInstructionFormat | \r\t\t\tGtOpenAIAssistantProvider withApiKeyFromFile\r\t\t\t\tinstructions: anInstructionFormat asInstructionPiece instructionString;\r\t\t\t\tformat: anInstructionFormat asJsonSchema;\r\t\t\t\tassistantMessageClass: GtOpenAIActionThreadMessage;\r\t\t\t\tuserMessageClass: GtOpenAIActionThreadMessage ]"
 			},
 			{
 				"__type" : "pharoSnippet",
@@ -134,14 +134,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2025-02-04T18:11:16.303676+01:00"
+						"dateAndTimeString" : "2025-02-13T08:31:49.732477+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "6jJIyaHpDQCIDLgxBcFXNg=="
 				},
-				"code" : "\"alternative using Ollama\"\rtutor := LlmTutor new\r\t\tdescription: instructionString;\r\t\tproviderStencil: [ :anInstructionFormat | \r\t\t\tGtOllamaProvider new\r\t\t\t\tmodel: 'deepseek-r1';\r\t\t\t\tinstructions: anInstructionFormat asInstructionPiece instructionString;\r\t\t\t\tformat: anInstructionFormat asJsonSchema ]"
+				"code" : "\"alternative using Ollama\"\rtutor := GtLlmTutor new\r\t\tdescription: instructionString;\r\t\tproviderStencil: [ :anInstructionFormat | \r\t\t\tGtOllamaProvider new\r\t\t\t\tmodel: 'deepseek-r1';\r\t\t\t\tinstructions: anInstructionFormat asInstructionPiece instructionString;\r\t\t\t\tformat: anInstructionFormat asJsonSchema ]"
 			},
 			{
 				"__type" : "pharoSnippet",

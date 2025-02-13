@@ -103,14 +103,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2025-02-12T15:35:03.720706+01:00"
+						"dateAndTimeString" : "2025-02-13T08:31:49.743184+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "7REkNI/NDQCHsFrIBtrTtQ=="
 				},
-				"code" : "tutor := LlmTutor new"
+				"code" : "tutor := GtLlmTutor new"
 			},
 			{
 				"__type" : "textSnippet",

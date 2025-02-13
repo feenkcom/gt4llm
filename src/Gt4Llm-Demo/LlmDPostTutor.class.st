@@ -1,6 +1,6 @@
 Class {
 	#name : #LlmDPostTutor,
-	#superclass : #LlmTutor,
+	#superclass : #GtLlmTutor,
 	#category : #'Gt4Llm-Demo'
 }
 
