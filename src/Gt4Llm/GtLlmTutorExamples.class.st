@@ -49,13 +49,14 @@ GtLlmTutorExamples >> tutorWithActionAndFormatAdded [
 	<gtExample>
 	| tutor exampleFormat |
 	tutor := self tutorWithActionAdded.
-	exampleFormat := GtLlmTutorFormatDescription new name: 'example'; format: 'Text'.
-
+	exampleFormat := GtLlmTutorFormatDescription new
+			name: 'example';
+			format: 'Text'.
 	tutor addFormat: exampleFormat.
 
 	self assert: tutor instruction formats size equals: 3.
 	self assert: (tutor formatNamed: 'example') equals: exampleFormat.
-	
+
 	^ tutor
 ]
 
