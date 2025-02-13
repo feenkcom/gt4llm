@@ -68,7 +68,6 @@ GtLlmRenameFormatComponentRefactoringExamples >> exampleClassCoderActionExpanded
 { #category : #'as yet unclassified' }
 GtLlmRenameFormatComponentRefactoringExamples >> exampleClassCoderActionExpandedWithRenameDone [
 	<gtExample>
-	<noTest>
 	| scripter |
 	scripter := self exampleClassCoderActionExpandedWithRenameOpen.
 
