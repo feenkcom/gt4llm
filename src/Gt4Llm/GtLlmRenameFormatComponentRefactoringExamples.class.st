@@ -42,7 +42,7 @@ GtLlmRenameFormatComponentRefactoringExamples >> exampleClass [
 	model := GtRBNamespace new.
 
 	model
-		defineClass: 'GtOpenAIAnnotatedActionTutor subclass: #ExampleTutor instanceVariableNames: '''' classVariableNames: '''' poolDictionaries: '''' category: ''Demo'''.
+		defineClass: 'GtLlmTutor subclass: #ExampleTutor instanceVariableNames: '''' classVariableNames: '''' poolDictionaries: '''' category: ''Demo'''.
 	class := model classNamed: #ExampleTutor.
 
 	class compile: self actionSource classified: #('format-components').
@@ -68,6 +68,7 @@ GtLlmRenameFormatComponentRefactoringExamples >> exampleClassCoderActionExpanded
 { #category : #'as yet unclassified' }
 GtLlmRenameFormatComponentRefactoringExamples >> exampleClassCoderActionExpandedWithRenameDone [
 	<gtExample>
+	<noTest>
 	| scripter |
 	scripter := self exampleClassCoderActionExpandedWithRenameOpen.
 
@@ -171,7 +172,7 @@ GtLlmRenameFormatComponentRefactoringExamples >> exampleClassRefactored [
 
 	self assert: exampleAction source equals: self renamedActionSource.
 	
-	exampleFormat := class methodFor: #gtExampleFormatComponent.
+	exampleFormat := class methodFor: #gtExampleFormat.
 
 	self assert:  exampleFormat source equals: self renamedFormatSource.
 
@@ -180,9 +181,9 @@ GtLlmRenameFormatComponentRefactoringExamples >> exampleClassRefactored [
 
 { #category : #'as yet unclassified' }
 GtLlmRenameFormatComponentRefactoringExamples >> formatSource [
-	^ 'gtExampleFormatComponent
-	<gtLlmFormatComponent>
-	^ GtLlmTutorFormatComponent new
+	^ 'gtExampleFormat
+	<gtLlmTutorFormat>
+	^ GtLlmTutorFormatDescription new
 	format: ''Text'';
 	name: ''Example'';
 	priority: 10;
@@ -203,9 +204,9 @@ GtLlmRenameFormatComponentRefactoringExamples >> renamedActionSource [
 
 { #category : #'as yet unclassified' }
 GtLlmRenameFormatComponentRefactoringExamples >> renamedFormatSource [
-	^ 'gtExampleFormatComponent
-	<gtLlmFormatComponent>
-	^ GtLlmTutorFormatComponent new
+	^ 'gtExampleFormat
+	<gtLlmTutorFormat>
+	^ GtLlmTutorFormatDescription new
 	format: ''Text'';
 	name: ''Renamed'';
 	priority: 10;
