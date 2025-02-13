@@ -9,7 +9,7 @@ Class {
 		'outputReferences',
 		'unverified'
 	],
-	#category : #'Gt4Llm-Tutor2'
+	#category : #'Gt4Llm-Tutor'
 }
 
 { #category : #accessing }
