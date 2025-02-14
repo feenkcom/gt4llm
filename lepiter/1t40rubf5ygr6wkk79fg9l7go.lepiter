@@ -285,14 +285,14 @@
 								"__type" : "time",
 								"time" : {
 									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2025-02-12T15:39:42.672198+01:00"
+									"dateAndTimeString" : "2025-02-14T12:00:03.511111+01:00"
 								}
 							},
 							"uid" : {
 								"__type" : "uid",
 								"uidString" : "y0jbLlXNDQCyVxnGDOiMHg=="
 							},
-							"code" : "tutor addAction: (GtLlmTutorAction new\r\t    name: 'Calculate';\r\t    priority: 10;\r\t\tdescription: 'Calculate the given expression.';\r\t\tformat: 'Calulate: {}')"
+							"code" : "tutor addAction: (GtLlmTutorAction new\r\t    name: 'Calculate';\r\t    priority: 10;\r\t\tdescription: 'Calculate the given expression.';\r\t\tformat: 'Calulate: {1}')"
 						}
 					]
 				},
