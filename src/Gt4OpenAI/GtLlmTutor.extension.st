@@ -5,5 +5,7 @@ GtLlmTutor >> defaultProviderStencil [
 	^ [ :anInstructionFormat | 
 	GtOpenAIAssistantProvider withApiKeyFromFile
 		instructions: anInstructionFormat asInstructionPiece instructionString;
-		format: anInstructionFormat asJsonSchema ]
+		format: anInstructionFormat asJsonSchema;
+		assistantMessageClass: GtOpenAIActionMessage;
+		userMessageClass: GtOpenAIActionMessage ]
 ]
