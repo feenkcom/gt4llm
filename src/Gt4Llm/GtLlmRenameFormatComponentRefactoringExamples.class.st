@@ -146,7 +146,7 @@ GtLlmRenameFormatComponentRefactoringExamples >> exampleClassCoderActionExpanded
 
 	scripter shortcut
 		label: 'Switch to tutor format refactoring mode';
-		combination: BlKeyCombination primaryR;
+		combination: BlKeyCombination primaryShiftR;
 		// (GtSourceCoderId indexed: 1);
 		// GtSourceCoderEditorId;
 		play.

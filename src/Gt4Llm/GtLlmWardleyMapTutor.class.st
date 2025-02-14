@@ -78,6 +78,11 @@ GtLlmWardleyMapTutor >> createChatOn: aGtWardleyMapModel [
 	^ chat
 ]
 
+{ #category : #accessing }
+GtLlmWardleyMapTutor >> createChatOnSnippet: aGtWardleyMapSnippet [
+	^ self createChatOn: aGtWardleyMapSnippet wardleyMap
+]
+
 { #category : #'as yet unclassified' }
 GtLlmWardleyMapTutor >> defaultDescription [
 	^ 'You are an assistant that is used to interactively work on Wardley Maps. You trigger certain actions to generate a desired result.'
