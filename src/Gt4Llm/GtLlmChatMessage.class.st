@@ -37,7 +37,7 @@ GtLlmChatMessage class >> serializationProperties [
 
 { #category : #'as yet unclassified' }
 GtLlmChatMessage >> action [
-	^ [ self contentJson at: 'Action' ] on: STONReaderError do: [ nil ]
+	^ [ self contentJson at: 'Action' ] on: Error do: [ nil ]
 ]
 
 { #category : #accessing }

@@ -29,7 +29,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2025-02-12T15:38:06.802109+01:00"
+						"dateAndTimeString" : "2025-02-14T13:16:19.540468+01:00"
 					}
 				},
 				"uid" : {
@@ -39,7 +39,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "The tutor in [[Working with tutors]] is based on assistants. We can simulate a similar, albeit more restrained tutor in Ollama by setting up a chat with a model meant for code generation and [[Using modelfiles]] to embed the instructions. This approach is inherently limited by the context window, but can handle shorter exchanges."
+				"string" : "The tutor in [[Working with tutors]] is based on assistants. We can simulate a similar tutor in Ollama by setting up a chat [[Using structured outputs]] and [[Using modelfiles]] to embed the instructions."
 			},
 			{
 				"__type" : "pharoSnippet",

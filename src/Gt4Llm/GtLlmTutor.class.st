@@ -92,6 +92,11 @@ GtLlmTutor >> defaultDescription [
 	^ 'You are an assistant.'
 ]
 
+{ #category : #'as yet unclassified' }
+GtLlmTutor >> description [
+	^ self instruction description
+]
+
 { #category : #accessing }
 GtLlmTutor >> description: anObject [
 	instruction description: anObject
