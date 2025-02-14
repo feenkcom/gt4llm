@@ -97,20 +97,20 @@
 				},
 				"editEmail" : {
 					"__type" : "email",
-					"emailString" : "veit.heller@feenk.com"
+					"emailString" : "<unknown>"
 				},
 				"editTime" : {
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2025-01-28T12:24:21.922547+01:00"
+						"dateAndTimeString" : "2025-02-12T14:28:58.26625+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "R2QrdiLpDQChPVbOBOD//Q=="
 				},
-				"code" : "tutor := GtOpenAIGtSpecificTutor withApiKeyFromFile\r\t\tfiles: GtOpenAIResourceFilesGroup new"
+				"code" : "tutor := LlmTutor new\r\t\tfiles: GtOpenAIResourceFilesGroup new"
 			},
 			{
 				"__type" : "textSnippet",
@@ -242,7 +242,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2025-01-28T14:26:47.975916+01:00"
+						"dateAndTimeString" : "2025-01-28T14:26:59.804834+01:00"
 					}
 				},
 				"uid" : {
@@ -252,7 +252,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "inally, we create an assistant and start a chat, asking it questions about GT "
+				"string" : "inally, we create an assistant and start a chat, asking it questions about GT or topics found in its RAG database."
 			},
 			{
 				"__type" : "pharoSnippet",

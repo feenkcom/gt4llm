@@ -11,7 +11,7 @@ Class {
 		'tutor',
 		'definingMethod'
 	],
-	#category : #'Gt4Llm-OldTutor'
+	#category : #'Gt4Llm-Tutor'
 }
 
 { #category : #'as yet unclassified' }

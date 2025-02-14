@@ -68,7 +68,7 @@ GtOpenAIAssistantProvider >> defaultAssistantDescription [
 
 { #category : #'as yet unclassified' }
 GtOpenAIAssistantProvider >> defaultAssistantMessageClass [
-	^ OpenAIMessage
+	^ GtOpenAIMessage
 ]
 
 { #category : #'as yet unclassified' }
@@ -83,7 +83,7 @@ GtOpenAIAssistantProvider >> defaultTools [
 
 { #category : #'as yet unclassified' }
 GtOpenAIAssistantProvider >> defaultUserMessageClass [
-	^ OpenAIMessage
+	^ GtOpenAIMessage
 ]
 
 { #category : #'as yet unclassified' }
@@ -106,6 +106,14 @@ GtOpenAIAssistantProvider >> format: anObject [
 				-> {'name' -> 'ResponseFormat'.
 						'strict' -> true.
 						'schema' -> anObject} asDictionary} asDictionary
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAIAssistantProvider >> getMessages [
+	^ thread updateMessages
+		collect: [ :aThreadMessage | 
+			self assistantMessageClass adoptInstance: aThreadMessage.
+			aThreadMessage ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -182,7 +190,5 @@ GtOpenAIAssistantProvider >> tools: anObject [
 
 { #category : #'as yet unclassified' }
 GtOpenAIAssistantProvider >> updateMessages [
-	chat
-		messages: (thread updateMessages
-				collect: [ :aThreadMessage | self assistantMessageClass new from: aThreadMessage serialize ])
+	chat messages: self getMessages
 ]

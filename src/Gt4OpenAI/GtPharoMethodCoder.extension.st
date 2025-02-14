@@ -3,7 +3,7 @@ Extension { #name : #GtPharoMethodCoder }
 { #category : #'*Gt4OpenAI' }
 GtPharoMethodCoder >> actionFormatAddOnFor: anAST into: coderAddOns [
 	<gtAstCoderAddOns: 10>
-	(self behavior includesBehavior: GtOpenAIAnnotatedActionTutor) ifFalse: [ ^ self ].
+	(self behavior includesBehavior: GtLlmTutor) ifFalse: [ ^ self ].
 
 	coderAddOns addStyler: (GtLlmTutorFormatStyler new tutor: self behavior new)
 ]
@@ -17,89 +17,6 @@ GtPharoMethodCoder >> addRenameLlmMenuAddOnsAst: anAst to: coderAddOns from: aCo
 			aNode := theNodes first.
 
 			self addRenameTemporarySuggestionRefactoringFor: aNode to: coderAddOns ]
-]
-
-{ #category : #'*Gt4OpenAI' }
-GtPharoMethodCoder >> addRenameSuggestionsMenuAddOnsAst: anAst to: coderAddOns from: aCoderViewModel [
-	<gtCoderContextMenuAddOns: 10000>
-	GtOpenAICoderActionTutor isConfigured ifFalse: [  ^ self ].
-	
-	(self nodeFrom: aCoderViewModel)
-		ifNotNil: [ :node | 
-			| highlightNode |
-			(node isMessage or: [ node isMessageSend or: [ node isMethodPattern ] ])
-				ifTrue: [ highlightNode := node isMessageSend ifTrue: [ node message ] ifFalse: [ node ].
-					coderAddOns
-						addContextMenuItem: (self
-								createLabel: 'Suggest renames'
-								description: node selector)
-						group: BrMenuItemGroupConfiguration llm
-						hover: nil
-						leave: nil
-						action: [ :aTextualViewModel :anElement | 
-							| aChat |
-							aChat := self openAITutorChat.
-							aChat sendMessage: 'Propose renames for method'.
-							(aChat whenReadyFuture
-								then: [ | choices |
-									aChat messages first isAssistantRole
-										ifTrue: [ choices := aChat messages first proposedRenamesForMethod proposals.
-											self
-												renameNodeProposals: node
-												in: aTextualViewModel
-												for: anElement
-												withPossibilities: choices ]
-										ifFalse: [ self error: 'No answer received!' ] ]) await ] ] ]
-]
-
-{ #category : #'*Gt4OpenAI' }
-GtPharoMethodCoder >> addRenameTemporarySuggestionRefactoringFor: aNode to: coderAddOns [
-	(aNode isVariable and: [ self isLocalVariable: aNode ]) ifFalse: [ ^ self ].
-	GtOpenAICoderActionTutor isConfigured ifFalse: [  ^ self ].
-	
-	coderAddOns
-		addContextMenuItem: (self
-				createLabel: 'Propose renames for local'
-				description: aNode variableName)
-		group: BrMenuItemGroupConfiguration llm
-		hover: (self highlightNodesBlock: (self allReferencesTo: aNode))
-		leave: self removeHighlightBlock
-		action: [ :aCoderViewModel | 
-			| variableName chat |
-			variableName := aNode name value.
-			chat := self openAITutorChat.
-			chat sendMessage: 'Propose renames for variable `' , variableName , '`'.
-			(chat whenReadyFuture
-				then: [ | choices |
-					chat messages first isAssistantRole
-						ifTrue: [ choices := chat messages first proposedRenamesForVariable: variableName.
-							self
-								proposeTemporaryRenameIn: aCoderViewModel
-								node: aNode
-								usingChoices: choices proposals ]
-						ifFalse: [ self error: 'No answer received!' ] ]) await ]
-		id: #'context-menu---propose-rename-temp'
-		shortcutKey: nil
-]
-
-{ #category : #'*Gt4OpenAI' }
-GtPharoMethodCoder >> addReviewAddonsTo: anAst to: coderAddOns viewModel: aCoderViewModel [
-	<gtAstCoderAddOns: 10>
-	self compiledMethod ifNil: [ ^ self ].
-	GtOpenAICoderActionTutor isConfigured ifFalse: [  ^ self ].
-
-	coderAddOns
-		addContextAction: 'Use OpenAI to review the method.' translated
-		icon: BrGlamorousVectorIcons openAi
-		action: [ :aCoderUIModel :button | 
-			| aChat |
-			aChat := self openAITutorChat.
-			aChat sendMessage: 'Review the method'.
-			(aChat whenReadyFuture
-				then: [ aChat messages first isAssistantRole
-						ifTrue: [ button phlow spawnObject: aChat messages first codeReview ]
-						ifFalse: [ self error: 'No answer received!' ] ]) await ]
-		id: GtLlmMethodCoderReviewActionId
 ]
 
 { #category : #'*Gt4OpenAI' }

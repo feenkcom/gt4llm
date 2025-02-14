@@ -27,7 +27,7 @@ GtOpenAIAddMessageToThreadAPIClient >> request [
 
 { #category : #accessing }
 GtOpenAIAddMessageToThreadAPIClient >> serializationClass [
-	^ GtOpenAIThreadMessage
+	^ GtOpenAIMessage
 ]
 
 { #category : #accessing }

@@ -103,7 +103,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-08-06T10:46:37.805469+02:00"
+						"dateAndTimeString" : "2025-02-12T12:22:12.136872+01:00"
 					}
 				},
 				"uid" : {
@@ -113,7 +113,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "For a different use case using the same technology, look at [[Expanding the Wardley maps tutor with an action-based tutor]]."
+				"string" : "For a different use case using the same technology, look at [[Building a Wardley maps tutor based on actions]]."
 			},
 			{
 				"__type" : "textSnippet",
@@ -322,7 +322,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-08-06T10:51:03.174425+02:00"
+						"dateAndTimeString" : "2025-02-12T12:22:12.13781+01:00"
 					}
 				},
 				"uid" : {
@@ -332,7 +332,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "Contrary to the action tutor in [[Expanding the Wardley maps tutor with an action-based tutor]], this tutor does not define an elaborate pipeline. Instead, it relies on enriching the messages with views that will be displayed in the chat, such as in {{gtMethod:GtOpenAIViewActionThreadMessage>>gtCodeFor:}}"
+				"string" : "Contrary to the action tutor in [[Building a Wardley maps tutor based on actions]], this tutor does not define an elaborate pipeline. Instead, it relies on enriching the messages with views that will be displayed in the chat, such as in {{gtMethod:GtOpenAIViewActionThreadMessage>>gtCodeFor:}}"
 			},
 			{
 				"__type" : "textSnippet",

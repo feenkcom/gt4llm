@@ -125,7 +125,6 @@ GtLlmBasicThreadMessageViewModel >> newCheckRunResultViewModelFor: aCheckRunResu
 GtLlmBasicThreadMessageViewModel >> newStyler [
 	^ BlCompositeStyler new
 		stylers: {GtLlmMessageStyler new threadMessageViewModel: self.
-				GtOpenAITraceStyler new.
 				GtOpenAIThreadMessageStyler new annotations: self annotations}
 ]
 
@@ -151,7 +150,7 @@ GtLlmBasicThreadMessageViewModel >> pipeline [
 
 { #category : #accessing }
 GtLlmBasicThreadMessageViewModel >> requestStyleSourceText [
-	self announce: GtOpenAIThreadMessageRestyleRequested new
+	self announce: GtLlmThreadMessageRestyleRequested new
 ]
 
 { #category : #'as yet unclassified' }

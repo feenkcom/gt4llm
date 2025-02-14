@@ -97,7 +97,7 @@ GtLlmChat >> gtMessagesWidgetFor: aView [
 		title: 'Chat';
 		priority: 0;
 		stencil: [ aViewModel ifNil: [ aViewModel := self asViewModel ].
-			LlmChatElement new chatViewModel: aViewModel ];
+			GtLlmChatElement new chatViewModel: aViewModel ];
 		actionUpdateButton
 ]
 
@@ -194,7 +194,7 @@ GtLlmChat >> sendAssistantMessage: aMessage [
 
 { #category : #accessing }
 GtLlmChat >> sendMessage: aMessage [
-	self provider sendMessage: aMessage
+	self provider sendMessage: (self messageFromString: aMessage)
 ]
 
 { #category : #accessing }

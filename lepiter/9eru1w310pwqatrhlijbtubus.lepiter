@@ -66,7 +66,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2025-02-11T12:20:18.974686+01:00"
+						"dateAndTimeString" : "2025-02-13T08:31:55.634587+01:00"
 					}
 				},
 				"uid" : {
@@ -76,7 +76,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "As an example, here we look at working with an LLM to help build a Wardley Map (the same use case found in [[Building a custom tutor to facilitate generating Wardley maps]]). The tutor can be found in {{gtClass:LlmWardleyMapTutor}}."
+				"string" : "As an example, here we look at working with an LLM to help build a Wardley Map. The tutor can be found in {{gtClass:GtLlmWardleyMapTutor}}."
 			},
 			{
 				"__type" : "textSnippet",
@@ -177,14 +177,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2025-02-11T12:19:20.189141+01:00"
+						"dateAndTimeString" : "2025-02-13T08:31:55.614598+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "NlTYGLDWDQC5XV4MBM5T/g=="
 				},
-				"code" : "tutor := LlmWardleyMapTutor new.\rtutor createChatOn: GtWardleyMapModel new"
+				"code" : "tutor := GtLlmWardleyMapTutor new.\rtutor createChatOn: GtWardleyMapModel new"
 			},
 			{
 				"__type" : "textSnippet",
@@ -248,7 +248,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2025-02-11T12:20:52.535146+01:00"
+						"dateAndTimeString" : "2025-02-13T08:31:55.596413+01:00"
 					}
 				},
 				"uid" : {
@@ -258,7 +258,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "The first step for an action-based tutor is to define the actions it should perform. They are annotated using the `gtLlmTutorAction` pragma. An example can be found here: {{gtMethod:LlmWardleyMapTutor>>#explanationAction}}"
+				"string" : "The first step for an action-based tutor is to define the actions it should perform. They are annotated using the `gtLlmTutorAction` pragma. An example can be found here: {{gtMethod:GtLlmWardleyMapTutor>>#explanationAction}}"
 			},
 			{
 				"__type" : "textSnippet",
@@ -285,7 +285,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2025-02-11T12:21:36.479271+01:00"
+						"dateAndTimeString" : "2025-02-13T08:31:49.764891+01:00"
 					}
 				},
 				"uid" : {
@@ -295,7 +295,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "Then we define a data interchange format for the tutor. This works in a similar fashion as the actions, using the `gtLlmTutorFormat` pragma. An example can be found here: {{gtMethod:LlmTutor>>#textFormatDescription}}"
+				"string" : "Then we define a data interchange format for the tutor. This works in a similar fashion as the actions, using the `gtLlmTutorFormat` pragma. An example can be found here: {{gtMethod:GtLlmTutor>>#textFormatDescription}}"
 			},
 			{
 				"__type" : "textSnippet",
@@ -322,7 +322,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2025-02-11T12:24:45.950777+01:00"
+						"dateAndTimeString" : "2025-02-13T08:31:55.650067+01:00"
 					}
 				},
 				"uid" : {
@@ -332,7 +332,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "Finally, a tutor needs a provider stencil. This is where message types and backends get set: {{gtMethod:LlmWardleyMapTutor>>#defaultProviderStencil}}"
+				"string" : "Finally, a tutor needs a provider stencil. This is where message types and backends get set: {{gtMethod:GtLlmWardleyMapTutor>>#defaultProviderStencil}}"
 			}
 		]
 	},
@@ -355,12 +355,12 @@
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2024-05-27T20:26:04.608875+02:00"
+			"dateAndTimeString" : "2025-02-12T12:22:12.10916+01:00"
 		}
 	},
 	"pageType" : {
 		"__type" : "namedPage",
-		"title" : "Expanding the Wardley maps tutor with an action-based tutor"
+		"title" : "Building a Wardley maps tutor based on actions"
 	},
 	"uid" : {
 		"__type" : "uuid",

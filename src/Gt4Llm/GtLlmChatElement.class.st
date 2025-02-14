@@ -1,20 +1,29 @@
 Class {
 	#name : #GtLlmChatElement,
 	#superclass : #BlElement,
-	#traits : 'TGtLlmWithChatViewModel + TBrLayoutResizable',
-	#classTraits : 'TGtLlmWithChatViewModel classTrait + TBrLayoutResizable classTrait',
+	#traits : 'TBrLayoutResizable',
+	#classTraits : 'TBrLayoutResizable classTrait',
 	#instVars : [
+		'chatViewModel',
 		'listElement'
 	],
-	#category : #'Gt4Llm-Widgets'
+	#category : #Gt4Llm
 }
 
-{ #category : #'initialization ' }
-GtLlmChatElement >> defaultLayout [
-	^ BlLinearLayout vertical
+{ #category : #accessing }
+GtLlmChatElement >> chatViewModel [
+	^ chatViewModel
 ]
 
-{ #category : #initialization }
+{ #category : #accessing }
+GtLlmChatElement >> chatViewModel: anObject [
+	chatViewModel := anObject.
+
+	self subscribeToAssistantChatViewModel.
+	self updateElement
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmChatElement >> initialize [
 	super initialize.
 
@@ -24,7 +33,7 @@ GtLlmChatElement >> initialize [
 	self matchParent
 ]
 
-{ #category : #initialization }
+{ #category : #'as yet unclassified' }
 GtLlmChatElement >> initializeListElement [
 	listElement := BrSimpleList vertical
 			hMatchParent;
@@ -37,42 +46,23 @@ GtLlmChatElement >> initializeListElement [
 			itemDataBinder: [ :anItemElement :anItem | anItemElement threadMessageViewModel: anItem ]
 ]
 
-{ #category : #'private - hooks' }
-GtLlmChatElement >> onAssistantChatViewModelChanged [
-	self updateElement
-]
-
-{ #category : #'private - event handling' }
+{ #category : #'as yet unclassified' }
 GtLlmChatElement >> onThreadRunAnnouncement: anAnnouncement [
-	self enqueueTask: (BlTaskAction new action: [ self updateListElement ])
+	self enqueueTask: (BlTaskAction new action: [ self updateElement ])
 ]
 
-{ #category : #'private - hooks' }
+{ #category : #'as yet unclassified' }
 GtLlmChatElement >> subscribeToAssistantChatViewModel [
-	self assistantChat weak
-		when: GtOpenAIThreadRunStartedAnnouncement
-		send: #onThreadRunAnnouncement:
-		to: self.
-	self assistantChat weak
-		when: GtOpenAIThreadRunIsDoneAnnouncement
+	self chatViewModel assistantChat weak
+		when: GtOpenAIThreadRunAnnouncement
 		send: #onThreadRunAnnouncement:
 		to: self
 ]
 
-{ #category : #'private - hooks' }
-GtLlmChatElement >> unsubscribeFromAssistantChatViewModel [
-	self assistantChat unsubscribe: self
-]
-
-{ #category : #'private - updating' }
+{ #category : #'as yet unclassified' }
 GtLlmChatElement >> updateElement [
-	self updateListElement
-]
-
-{ #category : #'private - updating' }
-GtLlmChatElement >> updateListElement [
 	| allItems |
-	allItems := assistantChatViewModel threadMessageViewModels.
+	allItems := chatViewModel threadMessageViewModels.
 	listElement items: allItems.
 	listElement scrollToItem: allItems last
 ]

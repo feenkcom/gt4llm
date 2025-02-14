@@ -71,7 +71,7 @@
 								"__type" : "time",
 								"time" : {
 									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2024-06-23T08:40:01.514656+02:00"
+									"dateAndTimeString" : "2025-02-12T12:22:12.134337+01:00"
 								}
 							},
 							"uid" : {
@@ -81,7 +81,7 @@
 							"paragraphStyle" : {
 								"__type" : "textStyle"
 							},
-							"string" : "The most advanced integration is with OpenAI. An example can be found in [[Expanding the Wardley maps tutor with an action-based tutor]]."
+							"string" : "The most advanced integration is with OpenAI. An example can be found in [[Building a Wardley maps tutor based on actions]]."
 						},
 						{
 							"__type" : "textSnippet",

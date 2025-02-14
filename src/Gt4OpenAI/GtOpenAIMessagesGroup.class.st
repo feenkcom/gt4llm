@@ -6,7 +6,7 @@ Class {
 
 { #category : #accessing }
 GtOpenAIMessagesGroup class >> itemClass [
-	^ GtLlmChatMessage
+	^ GtOpenAIMessage
 ]
 
 { #category : #accessing }

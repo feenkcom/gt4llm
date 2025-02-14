@@ -109,14 +109,14 @@
 								"__type" : "time",
 								"time" : {
 									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2024-10-09T23:22:08.016461+02:00"
+									"dateAndTimeString" : "2025-02-12T12:51:27.681995+01:00"
 								}
 							},
 							"uid" : {
 								"__type" : "uid",
 								"uidString" : "ym4fkHPgDQCxY5ehBRiBow=="
 							},
-							"code" : "tutor := GtOpenAIAnnotatedActionTutor withApiKeyFromFile formatName: 'post editor'."
+							"code" : "tutor := LlmTutor new description: 'You edit blog posts.'."
 						},
 						{
 							"__type" : "pharoSnippet",
@@ -143,14 +143,48 @@
 								"__type" : "time",
 								"time" : {
 									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2024-10-10T22:26:19.713321+02:00"
+									"dateAndTimeString" : "2025-02-12T12:52:06.232469+01:00"
 								}
 							},
 							"uid" : {
 								"__type" : "uid",
 								"uidString" : "3f3kkHPgDQCxdMDVBRiBow=="
 							},
-							"code" : "tutor\r\taddFormatComponent: (GtLlmTutorFormatComponent new\r\t\t\tname: 'Post';\r\t\t\tformat: 'Text';\r\t\t\texample: '');\r\tvaluePipelineFor: (GtLlmSerializableValueHolder new\r\t\t\tname: 'Post';\r\t\t\tcontent: thisSnippet page children first children first;\r\t\t\tserializer: [ :aSnippet | aSnippet text asString ];\r\t\t\tupdater: [ :aSnippet :aText | \r\t\t\t\t(aSnippet commandBuilder editTextualSnippetCommand\r\t\t\t\t\tstring: aText\r\t\t\t\t\twithSource: tutor -> true) execute ]).\rchat := tutor createAssistant addChat"
+							"code" : "tutor\r\taddFormat: (GtLlmTutorFormatDescription new\r\t\t\tname: 'Post';\r\t\t\tformat: 'Text';\r\t\t\texample: '')."
+						},
+						{
+							"__type" : "pharoSnippet",
+							"children" : {
+								"__type" : "snippets",
+								"items" : [ ]
+							},
+							"createEmail" : {
+								"__type" : "email",
+								"emailString" : "<unknown>"
+							},
+							"createTime" : {
+								"__type" : "time",
+								"time" : {
+									"__type" : "dateAndTime",
+									"dateAndTimeString" : "2025-02-12T12:52:11.102821+01:00"
+								}
+							},
+							"editEmail" : {
+								"__type" : "email",
+								"emailString" : "<unknown>"
+							},
+							"editTime" : {
+								"__type" : "time",
+								"time" : {
+									"__type" : "dateAndTime",
+									"dateAndTimeString" : "2025-02-12T12:52:25.096848+01:00"
+								}
+							},
+							"uid" : {
+								"__type" : "uid",
+								"uidString" : "T78DT1LqDQCXtlkQCHxWqA=="
+							},
+							"code" : "chat := tutor createChat.\r\rchat onInstance: (GtLlmSerializableValueHolder new\r\t\t\tname: 'Post';\r\t\t\tcontent: thisSnippet page children first children first;\r\t\t\tserializer: [ :aSnippet | aSnippet text asString ];\r\t\t\tupdater: [ :aSnippet :aText | \r\t\t\t\t(aSnippet commandBuilder editTextualSnippetCommand\r\t\t\t\t\tstring: aText\r\t\t\t\t\twithSource: tutor -> true) execute ])"
 						}
 					]
 				},
@@ -215,14 +249,14 @@
 								"__type" : "time",
 								"time" : {
 									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2024-10-15T17:20:15.018223+02:00"
+									"dateAndTimeString" : "2025-02-12T14:24:10.83718+01:00"
 								}
 							},
 							"uid" : {
 								"__type" : "uid",
 								"uidString" : "1WPFbYbgDQCJc8fKBRiBow=="
 							},
-							"code" : "demoTutor := GtDPostTutor withApiKeyFromFile\r\t\tvaluePipelineFor: (GtLlmSerializableValueHolder new\r\t\t\t\tname: 'Post';\r\t\t\t\tcontent: thisSnippet page children first children first;\r\t\t\t\tserializer: [ :aSnippet | aSnippet text asString ];\r\t\t\t\tupdater: [ :aSnippet :aText | \r\t\t\t\t\t(aSnippet commandBuilder editTextualSnippetCommand\r\t\t\t\t\t\tstring: aText\r\t\t\t\t\t\twithSource: demoTutor -> true) execute ]).\rdemoChat := demoTutor createAssistant addChat"
+							"code" : "chat := LlmDPostTutor new createChat.\r\rchat\r\tonInstance: (GtLlmSerializableValueHolder new\r\t\t\tname: 'Post';\r\t\t\tcontent: thisSnippet page children first children first;\r\t\t\tserializer: [ :aSnippet | aSnippet text asString ];\r\t\t\tupdater: [ :aSnippet :aText | \r\t\t\t\t(aSnippet commandBuilder editTextualSnippetCommand\r\t\t\t\t\tstring: aText\r\t\t\t\t\twithSource: demoTutor -> true) execute ])"
 						}
 					]
 				},

@@ -3,15 +3,14 @@ Extension { #name : #GtPharoSourceCoder }
 { #category : #'*Gt4Llm' }
 GtPharoSourceCoder >> addTutorFormatMenuItemsFor: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns: 5>
-	(aCoderViewModel behavior includesBehavior: GtOpenAIAnnotatedActionTutor)
-		ifFalse: [ ^ self ].
+	(aCoderViewModel behavior includesBehavior: GtLlmTutor) ifFalse: [ ^ self ].
 	(self nodeFrom: aCoderViewModel)
 		ifNotNil: [ :node | 
 			node isLiteral ifFalse: [ ^ self ].
 			(node gtIsFormatComponentIn: aCoderViewModel behavior)
 				ifTrue: [ coderAddOns
 						addContextMenuItem: (self
-								createLabel: 'Rename Format Component'
+								createLabel: 'Rename Format'
 								description: node literalValue)
 						group: BrMenuItemGroupConfiguration llm
 						hover: (self highlightNodeBlock: node)
@@ -21,14 +20,14 @@ GtPharoSourceCoder >> addTutorFormatMenuItemsFor: anAst to: coderAddOns from: aC
 								renameFormatComponent: node
 								in: aTextualViewModel
 								for: element ]
-						shortcutKey: GtLlmRenameTutorFormatComponentShortcut new combinationForPlatform
-								gtDisplayString ] ]
+						shortcutKey: GtLlmRenameTutorFormatComponentShortcut new
+								combinationForPlatform gtDisplayString ] ]
 ]
 
 { #category : #'*Gt4Llm' }
 GtPharoSourceCoder >> addTutorFormatRenameShortcutFor: anAST into: coderAddOns [
 	<gtAstCoderAddOns: 10>
-	(self behavior includesBehavior: GtOpenAIAnnotatedActionTutor)
+	(self behavior includesBehavior: GtLlmTutor)
 		ifFalse: [ ^ self ].
 	coderAddOns addShortcut: GtLlmRenameTutorFormatComponentShortcut new
 ]
