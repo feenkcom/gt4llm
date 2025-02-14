@@ -5,6 +5,13 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
+GtLlmRenameTutorFormatComponentShortcut >> initialize [
+	super initialize.
+	
+	combination := BlKeyCombination primaryShiftR
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmRenameTutorFormatComponentShortcut >> performOnEditor: aBrTextEditor element: aBrEditorElement coderViewModel: aSourceCoderViewModel dueTo: aShortcutEvent [
 	| position |
 	self

@@ -52,8 +52,7 @@ GtOpenAIWardleyMapMessage >> gtChangesFor: aView [
 		priority: 2;
 		stencil: [ GtWardleyMapElement new
 				wardleyMapViewModel: (GtWardleyMapViewModel new
-						wardleyMapModel: self diffedMapModel;
-						openAITutorChat: self chat);
+						wardleyMapModel: self diffedMapModel);
 				vExact: 500 ]
 ]
 
@@ -67,8 +66,7 @@ GtOpenAIWardleyMapMessage >> gtWardleyMapFor: aView [
 		priority: 1;
 		stencil: [ GtWardleyMapElement new
 				wardleyMapViewModel: (GtWardleyMapViewModel new
-						wardleyMapModel: self mapModel;
-						openAITutorChat: self chat);
+						wardleyMapModel: self mapModel);
 				vExact: 500 ];
 		actionButtonIcon: BrGlamorousVectorIcons accept
 			tooltip: 'Apply propositions'

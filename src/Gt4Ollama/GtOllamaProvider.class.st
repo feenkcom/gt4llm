@@ -99,6 +99,8 @@ GtOllamaProvider >> modelfile: anObject [
 
 { #category : #'as yet unclassified' }
 GtOllamaProvider >> sendAssistantMessage: aMessage [
+	userMessageClass adoptInstance: aMessage.
+	aMessage role: 'user'.
 	self chat
 		addMessage: aMessage.
 
@@ -126,6 +128,7 @@ GtOllamaProvider >> triggerAssistant [
 	self chat
 		addMessage: (assistantMessageClass new
 				content: result content;
+				role: 'assistant';
 				chat: self).
 
 	self chat signalRunIsDone.

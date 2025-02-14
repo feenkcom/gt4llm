@@ -94,7 +94,10 @@ GtLlmReificationForm >> installMethodsOnMessages: newMessages andTutor: newTutor
 	newTutor
 		compile: 'defaultProviderStencil
 	^ [:aValue | (super defaultProviderStencil value: aValue) assistantMessageClass: '
-				, newMessages name , '; userMessageClass: ' , newMessages name , ' ]'
+				, newMessages name , '; userMessageClass: ' , newMessages name , ' ]'.
+				
+	newTutor compile: 'defaultDescription
+	^ ''', self message chat tutor description, ''''
 ]
 
 { #category : #accessing }
