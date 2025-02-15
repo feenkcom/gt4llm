@@ -57,7 +57,8 @@ GtLlmChatViewModel >> threadMessageViewModels [
 	newMessages := assistantChat messages.
 	^ Array
 		streamContents: [ :aStream | 
-			| aStatus |
+			| aStatus lastMessage |
+			lastMessage := newMessages size > 0 ifTrue: [newMessages last ] ifFalse: [nil]. 
 			newMessages
 				do: [ :aMessage | 
 					| aViewModel |
@@ -65,6 +66,7 @@ GtLlmChatViewModel >> threadMessageViewModels [
 							at: aMessage id
 							ifPresent: [ :theViewModel | theViewModel threadMessage: aMessage ]
 							ifAbsentPut: [ self newThreadMessageViewModelFor: aMessage ].
+					aViewModel isExpanded: (lastMessage = aMessage).
 					aStream nextPut: aViewModel ].
 			aStatus := assistantChat status.
 

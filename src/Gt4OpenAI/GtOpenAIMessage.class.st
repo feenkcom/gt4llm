@@ -10,7 +10,9 @@ Class {
 		'metadata',
 		'annotations',
 		'pipeline',
-		'step'
+		'step',
+		'completedAt',
+		'incompleteAt'
 	],
 	#category : #'Gt4OpenAI-Models'
 }
@@ -26,6 +28,8 @@ GtOpenAIMessage class >> serializationProperties [
 		#assistant_id -> #assistantId.
 		#content -> #content.
 		#created_at -> #createdAtString.
+		#incomplete_at -> #incompleteAtString.
+		#completed_at -> #completedAtString.
 		#id -> #idString.
 		#metadata -> #metadata.
 		#run_id -> #runId.
@@ -85,6 +89,26 @@ GtOpenAIMessage >> chat [
 { #category : #accessing }
 GtOpenAIMessage >> chat: anObject [
 	chat := anObject
+]
+
+{ #category : #accessing }
+GtOpenAIMessage >> completedAt [
+	^ completedAt
+]
+
+{ #category : #accessing }
+GtOpenAIMessage >> completedAt: anObject [
+	completedAt := anObject
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAIMessage >> completedAtString [
+	^ nil
+]
+
+{ #category : #accessing }
+GtOpenAIMessage >> completedAtString: anObject [
+	completedAt := self deserializeTime: anObject
 ]
 
 { #category : #accessing }
@@ -191,9 +215,34 @@ GtOpenAIMessage >> idString: anObject [
 	id := anObject
 ]
 
+{ #category : #accessing }
+GtOpenAIMessage >> incompleteAt [
+	^ incompleteAt
+]
+
+{ #category : #accessing }
+GtOpenAIMessage >> incompleteAt: anObject [
+	incompleteAt := anObject
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAIMessage >> incompleteAtString [
+	^ nil
+]
+
+{ #category : #accessing }
+GtOpenAIMessage >> incompleteAtString: anObject [
+	incompleteAt := self deserializeTime: anObject
+]
+
 { #category : #testing }
 GtOpenAIMessage >> isAssistantRole [
 	^ self role = #assistant
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAIMessage >> isReady [
+	^ self incompleteAt isNil or: [ self completedAt ]
 ]
 
 { #category : #testing }

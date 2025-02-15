@@ -169,7 +169,7 @@ GtOpenAIAssistantProvider >> sendAssistantMessage: aMessage [
 	future := (self runFuture
 			then: [ :aRun | 
 				self updateMessages.
-				chat signalRunIsDone: aRun ])
+				chat signalRunIsDone ])
 			await: GtOpenAIUtilities executionConfiguration
 ]
 

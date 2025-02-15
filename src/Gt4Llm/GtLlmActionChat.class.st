@@ -27,6 +27,15 @@ GtLlmActionChat >> sendAction: anActionCall [
 				format: anActionCall arguments)
 ]
 
+{ #category : #'as yet unclassified' }
+GtLlmActionChat >> sendAction: anActionCall onAnswer: aBlock [
+	self
+		sendMessage: ((self tutor actionNamed: anActionCall action) format
+				format: anActionCall arguments).
+
+	(self whenReadyFuture then: [ :_ | aBlock value: self messages last ]) await
+]
+
 { #category : #accessing }
 GtLlmActionChat >> sendChatRequest: aString [
 	self

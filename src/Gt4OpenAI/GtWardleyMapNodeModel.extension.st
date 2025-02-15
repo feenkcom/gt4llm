@@ -22,7 +22,8 @@ GtWardleyMapNodeModel >> menuItemNodeLlmExplainItButton [
 			aContextMenuItem llm
 				sendAction: (GtLlmActionCall
 						action: 'Explain a node'
-						arguments: {aContextMenuItem wardleyMapNodeViewModel label}).
+						arguments: {aContextMenuItem wardleyMapNodeViewModel label})
+				onAnswer: [ :aMessage | aContextMenuItem editorElement phlow spawnObject: aMessage textBlock ].
 			aContextMenuItem editorElement fireEvent: BrContextMenuHideWish new ]
 ]
 
