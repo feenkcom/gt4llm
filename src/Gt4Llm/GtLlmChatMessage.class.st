@@ -186,6 +186,11 @@ GtLlmChatMessage >> isFailure [
 	^ false
 ]
 
+{ #category : #'as yet unclassified' }
+GtLlmChatMessage >> isReady [
+	^ true
+]
+
 { #category : #accessing }
 GtLlmChatMessage >> isSystemRole [
 	^ self role = 'system'

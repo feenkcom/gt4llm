@@ -14,14 +14,12 @@ Class {
 { #category : #factory }
 GtLlmExpandableThreadMessageElement class >> newForChatList [
 	^ self new
-		"geometry: (BlRoundedRectangleGeometry cornerRadius: 2);"
-		"background: Color white;"
-		"addAptitude: BrGlamorousFocusableShadowAptitude new;"
 		margin: (BlInsets
 				top: 3
 				bottom: 12
 				left: 5
-				right: 10)
+				right: 10);
+		collapse
 ]
 
 { #category : #'initialization ' }

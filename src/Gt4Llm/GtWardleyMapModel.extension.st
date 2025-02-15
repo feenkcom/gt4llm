@@ -43,8 +43,9 @@ GtWardleyMapModel >> menuItemReviewMapButton [
 	^ GtWardleyMapNodeButtonWithLabelMenuItem new
 		label: 'Review the current state';
 		action: [ :aContextMenuItem :aBrButton :aBrButtonModel :anEvent | 
-			aContextMenuItem llmCreator
-				announce: (GtLlmActionCall action: 'Review the current state' arguments: {}).
+			aContextMenuItem llm
+				sendAction: (GtLlmActionCall action: 'Review the current state' arguments: {})
+				onAnswer: [ :aMessage | aContextMenuItem editorElement phlow spawnObject: aMessage textBlock ].
 			aContextMenuItem editorElement fireEvent: BrContextMenuHideWish new ]
 ]
 

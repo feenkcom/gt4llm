@@ -47,7 +47,8 @@ GtLlmChatReadyFuture >> poll: aContext [
 	| status |
 	status := chat status.
 
-	status isDone
+	(status isDone
+		and: [ chat messages last isAssistantRole and: [ chat messages last isReady ] ])
 		ifTrue: [ ^ AsyncPoll ready: true ]
 		ifFalse: [ TaskAtQueue default
 				schedule: [ aContext waker wakeUp ]
