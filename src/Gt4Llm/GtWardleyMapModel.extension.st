@@ -32,8 +32,8 @@ GtWardleyMapModel >> menuItemCreateTopicSection [
 								aptitude: BrGlamorousButtonWithIconAptitude;
 								icon: BrGlamorousVectorIcons accept;
 								label: 'Set topic';
-								action: [ aContextMenuItem llmCreator
-										announce: (GtLlmSendActionToChat action: 'Create a set of nodes' arguments: {editor text}).
+								action: [ aContextMenuItem llm
+										sendAction: (GtLlmActionCall action: 'Create a set of nodes' arguments: {editor text}).
 									aContextMenuItem editorElement fireEvent: BrContextMenuHideWish new ])) ]
 ]
 
@@ -44,7 +44,7 @@ GtWardleyMapModel >> menuItemReviewMapButton [
 		label: 'Review the current state';
 		action: [ :aContextMenuItem :aBrButton :aBrButtonModel :anEvent | 
 			aContextMenuItem llmCreator
-				announce: (GtLlmSendActionToChat action: 'Review the current state' arguments: {}).
+				announce: (GtLlmActionCall action: 'Review the current state' arguments: {}).
 			aContextMenuItem editorElement fireEvent: BrContextMenuHideWish new ]
 ]
 
