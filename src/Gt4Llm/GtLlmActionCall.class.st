@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLlmSendActionToChat,
+	#name : #GtLlmActionCall,
 	#superclass : #Announcement,
 	#instVars : [
 		'action',
@@ -9,28 +9,28 @@ Class {
 }
 
 { #category : #accessing }
-GtLlmSendActionToChat class >> action: aString arguments: aListOfStrings [
+GtLlmActionCall class >> action: aString arguments: aListOfStrings [
 	^ self new
 		action: aString;
 		arguments: aListOfStrings
 ]
 
 { #category : #accessing }
-GtLlmSendActionToChat >> action [
+GtLlmActionCall >> action [
 	^ action
 ]
 
 { #category : #accessing }
-GtLlmSendActionToChat >> action: anObject [
+GtLlmActionCall >> action: anObject [
 	action := anObject
 ]
 
 { #category : #accessing }
-GtLlmSendActionToChat >> arguments [
+GtLlmActionCall >> arguments [
 	^ arguments
 ]
 
 { #category : #accessing }
-GtLlmSendActionToChat >> arguments: anObject [
+GtLlmActionCall >> arguments: anObject [
 	arguments := anObject
 ]
