@@ -85,6 +85,11 @@ GtOpenAIWardleyMapMessage >> mapModel [
 ]
 
 { #category : #'as yet unclassified' }
+GtOpenAIWardleyMapMessage >> renames [
+	^ STONJSON fromString: self renamesCodeBlock
+]
+
+{ #category : #'as yet unclassified' }
 GtOpenAIWardleyMapMessage >> renamesCodeBlock [
 	^ self contentJson at: 'Rename' ifAbsent: [ '' ]
 ]

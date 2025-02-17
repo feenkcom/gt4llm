@@ -9,13 +9,12 @@ GtWardleyMapModel >> menuItemCreateTopicSection [
 			| editor |
 			BrVerticalPane new
 				fitContent;
-				margin: (GtWardleyMapUtility menuItemLabelMarginInsets);
+				margin: GtWardleyMapUtility menuItemLabelMarginInsets;
 				addChild: (BrLabel new
 						fitContent;
-						aptitude: (BrGlamorousLabelAptitude new 
-							foreground: Color darkGray);
+						aptitude: (BrGlamorousLabelAptitude new foreground: Color darkGray);
 						text: 'Create nodes on topic using OpenAI:');
-				addChild: (BrHorizontalPane new 
+				addChild: (BrHorizontalPane new
 						fitContent;
 						margin: (BlInsets top: 3);
 						addChild: (editor := BrEditor new
@@ -33,7 +32,13 @@ GtWardleyMapModel >> menuItemCreateTopicSection [
 								icon: BrGlamorousVectorIcons accept;
 								label: 'Set topic';
 								action: [ aContextMenuItem llm
-										sendAction: (GtLlmActionCall action: 'Create a set of nodes' arguments: {editor text}).
+										sendAction: (GtLlmActionCall action: 'Create a set of nodes' arguments: {editor text})
+										onAnswer: [ :aMessage | 
+											aContextMenuItem wardleyMapViewModel onActionFinished.
+											GtWardleyMapUtility
+												addModelAsPropositionsFrom: aContextMenuItem wardleyMapViewModel wardleyMapModel
+												to: aMessage mapModel ].
+									aContextMenuItem wardleyMapViewModel onActionStarted.
 									aContextMenuItem editorElement fireEvent: BrContextMenuHideWish new ])) ]
 ]
 
@@ -45,7 +50,10 @@ GtWardleyMapModel >> menuItemReviewMapButton [
 		action: [ :aContextMenuItem :aBrButton :aBrButtonModel :anEvent | 
 			aContextMenuItem llm
 				sendAction: (GtLlmActionCall action: 'Review the current state' arguments: {})
-				onAnswer: [ :aMessage | aContextMenuItem editorElement phlow spawnObject: aMessage textBlock ].
+				onAnswer: [ :aMessage | 
+					aContextMenuItem wardleyMapViewModel onActionFinished.
+					aContextMenuItem editorElement phlow spawnObject: aMessage textBlock ].
+			aContextMenuItem wardleyMapViewModel onActionStarted.
 			aContextMenuItem editorElement fireEvent: BrContextMenuHideWish new ]
 ]
 
