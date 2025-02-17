@@ -70,7 +70,7 @@ GtOpenAIWardleyMapMessage >> gtInstanceFor: aView [
 GtOpenAIWardleyMapMessage >> gtRenamesFor: aView [
 	<gtView>
 	<gtLlmMessageView>
-	self renamesCodeBlock ifEmpty: [ ^ aView empty ].
+	self renamesCodeBlock isEmptyOrNil ifTrue: [ ^ aView empty ].
 
 	^ aView columnedList
 		title: 'Renames';
