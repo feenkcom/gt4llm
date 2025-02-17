@@ -9,7 +9,13 @@ GtWardleyMapNodeModel >> menuItemNodeLlmAddNewConnectedNodeButton [
 			aContextMenuItem llm
 				sendAction: (GtLlmActionCall
 						action: 'Add new connected nodes'
-						arguments: {aContextMenuItem wardleyMapNodeViewModel label}).
+						arguments: {aContextMenuItem wardleyMapNodeViewModel label})
+				onAnswer: [ :aMessage | 
+					aContextMenuItem wardleyMapViewModel onActionFinished.
+					GtWardleyMapUtility
+						addModelAsPropositionsFrom: aContextMenuItem wardleyMapViewModel wardleyMapModel
+						to: aMessage mapModel ].
+			aContextMenuItem wardleyMapViewModel onActionStarted.
 			aContextMenuItem editorElement fireEvent: BrContextMenuHideWish new ]
 ]
 
@@ -23,7 +29,10 @@ GtWardleyMapNodeModel >> menuItemNodeLlmExplainItButton [
 				sendAction: (GtLlmActionCall
 						action: 'Explain a node'
 						arguments: {aContextMenuItem wardleyMapNodeViewModel label})
-				onAnswer: [ :aMessage | aContextMenuItem editorElement phlow spawnObject: aMessage textBlock ].
+				onAnswer: [ :aMessage | 
+					aContextMenuItem wardleyMapViewModel onActionFinished.
+					aContextMenuItem editorElement phlow spawnObject: aMessage textBlock ].
+			aContextMenuItem wardleyMapViewModel onActionStarted.
 			aContextMenuItem editorElement fireEvent: BrContextMenuHideWish new ]
 ]
 
@@ -43,6 +52,12 @@ GtWardleyMapNodeModel >> menuItemNodeLlmProposeAlternativeNamesButton [
 			aContextMenuItem llm
 				sendAction: (GtLlmActionCall
 						action: 'Propose renames for node'
-						arguments: {aContextMenuItem wardleyMapNodeViewModel label}).
+						arguments: {aContextMenuItem wardleyMapNodeViewModel label})
+				onAnswer: [ :aMessage | 
+					aContextMenuItem wardleyMapViewModel onActionFinished.
+					aContextMenuItem wardleyMapNodeViewModel wardleyMapNodeModel
+						addWardleyMapDecoratorModel: (GtWardleyMapRenameProposition new
+								options: (aMessage renames at: aContextMenuItem wardleyMapNodeViewModel label)) ].
+			aContextMenuItem wardleyMapViewModel onActionStarted.
 			aContextMenuItem editorElement fireEvent: BrContextMenuHideWish new ]
 ]
