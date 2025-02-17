@@ -75,7 +75,7 @@ GtLlmChat >> gtMessagesFor: aView [
 	<gtView>
 	^ aView columnedList
 		title: 'Messages';
-		priority: 1;
+		priority: 3;
 		items: [ self messages ];
 		column: 'Role'
 			text: #role
@@ -106,7 +106,7 @@ GtLlmChat >> gtWriteFor: aView [
 	<gtView>
 	^ aView textEditor
 		title: 'Write';
-		priority: 2;
+		priority: 4;
 		text: [ 'Write a message here' ];
 		actionButtonIcon: BrGlamorousVectorIcons play
 			tooltip: 'Send'

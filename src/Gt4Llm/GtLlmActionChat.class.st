@@ -15,16 +15,19 @@ GtLlmActionChat >> defaultSerializer [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmActionChat >> onInstance: anInstance [
-	self
-		serializer: (GtLlmActionMessageWithInstanceSerializer new instance: anInstance)
+GtLlmActionChat >> gtInstanceFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Instance';
+		priority: 2;
+		object: [ self serializer ];
+		view: #gtInstanceFor:
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmActionChat >> sendAction: anActionCall [
+GtLlmActionChat >> onInstance: anInstance [
 	self
-		sendMessage: ((self tutor actionNamed: anActionCall action) format
-				format: anActionCall arguments)
+		serializer: (GtLlmActionMessageWithInstanceSerializer new instance: anInstance)
 ]
 
 { #category : #'as yet unclassified' }

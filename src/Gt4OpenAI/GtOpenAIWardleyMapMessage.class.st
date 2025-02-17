@@ -57,6 +57,31 @@ GtOpenAIWardleyMapMessage >> gtChangesFor: aView [
 ]
 
 { #category : #'as yet unclassified' }
+GtOpenAIWardleyMapMessage >> gtInstanceFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Chat instance';
+		priority: 15;
+		object: [ self chat ];
+		view: #gtInstanceFor:
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAIWardleyMapMessage >> gtRenamesFor: aView [
+	<gtView>
+	<gtLlmMessageView>
+	self renamesCodeBlock ifEmpty: [ ^ aView empty ].
+
+	^ aView columnedList
+		title: 'Renames';
+		priority: 10;
+		items: [ self renames associations ];
+		column: 'Name' text: #key;
+		column: 'Proposals' text: [:aPair | ',' join: aPair value] weight: 2;
+		send: #value
+]
+
+{ #category : #'as yet unclassified' }
 GtOpenAIWardleyMapMessage >> gtWardleyMapFor: aView [
 	<gtView>
 	<gtLlmMessageView>
