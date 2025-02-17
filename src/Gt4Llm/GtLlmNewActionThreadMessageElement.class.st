@@ -8,7 +8,8 @@ Class {
 		'sendButton',
 		'toolbar',
 		'toggleGroup',
-		'argument'
+		'argument',
+		'descriptionElement'
 	],
 	#category : #'Gt4Llm-Widgets'
 }
@@ -80,6 +81,7 @@ GtLlmNewActionThreadMessageElement >> initialize [
 	super initialize.
 
 	self initializeToggleGroup.
+	self initializeDescriptionElement.
 	self initializeContentsElement.
 	self initializeToolbar.
 	self
@@ -87,6 +89,7 @@ GtLlmNewActionThreadMessageElement >> initialize [
 				aptitude: BrScrollPaneAptitude;
 				content: toggleGroup)
 		as: #toggle.
+	self addChild: descriptionElement as: #description.
 	self addChild: contentsElement as: #contents.
 	self addChild: toolbar as: #toolbar.
 
@@ -96,11 +99,11 @@ GtLlmNewActionThreadMessageElement >> initialize [
 
 { #category : #'initialization ' }
 GtLlmNewActionThreadMessageElement >> initializeContentsElement [
-	contentsElement := BrEditor new beReadOnlyWithoutSelection
+	contentsElement := BrEditor new
 			hMatchParent;
 			vFitContentLimited;
-			aptitude: (BrGlamorousRegularEditorAptitude new
-					foreground: BrGlamorousColors disabledButtonTextColor).
+			aptitude: BrGlamorousRegularEditorAptitude new;
+			visibility: BlVisibility gone.
 
 	contentsElement
 		addShortcut: (BrEditorShortcut new
@@ -109,6 +112,15 @@ GtLlmNewActionThreadMessageElement >> initializeContentsElement [
 				combination: BlKeyCombination primaryReturn;
 				performBlock: [ :aBrTextEditor | self sendMessage ];
 				yourself)
+]
+
+{ #category : #'initialization ' }
+GtLlmNewActionThreadMessageElement >> initializeDescriptionElement [
+	descriptionElement := BrEditor new beReadOnlyWithoutSelection
+			hMatchParent;
+			vFitContentLimited;
+			aptitude: (BrGlamorousRegularEditorAptitude new
+					foreground: BrGlamorousColors disabledButtonTextColor)
 ]
 
 { #category : #'initialization ' }
@@ -147,7 +159,7 @@ GtLlmNewActionThreadMessageElement >> onThreadMessageViewModelChanged: anAnnounc
 GtLlmNewActionThreadMessageElement >> sendMessage [
 	threadMessageViewModel ifNil: [ ^ self ].
 	threadMessageViewModel currentAction hasArgument
-		ifTrue: [ threadMessageViewModel contents: argument string requester: self ].
+		ifTrue: [ threadMessageViewModel contents: contentsElement text requester: self ].
 	threadMessageViewModel sendMessage
 ]
 
@@ -204,15 +216,12 @@ GtLlmNewActionThreadMessageElement >> updateToggleGroup [
 			toggleElement
 				when: BrToggleActivatedEvent
 				do: [ :anEvent | 
-					| contentText |
-					contentText := anAction format asRopedText.
-					anAction hasArgument
-						ifTrue: [ | index |
-							index := anAction format findString: '{1}'.
-							argument := GtSharedStringAttributeBuilder new string: 'argument'.
-							(contentText from: index to: index + 2)
-								attribute: argument editorAttribute ].
-					contentsElement text: contentText.
+					descriptionElement text: anAction description.
+					contentsElement
+						text: '';
+						visibility: (anAction hasArgument
+								ifTrue: [ BlVisibility visible ]
+								ifFalse: [ BlVisibility gone ]).
 					self threadMessageViewModel currentAction: anAction ].
 			toggleElement
 				when: BlClickEvent
