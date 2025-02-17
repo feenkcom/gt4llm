@@ -7,6 +7,18 @@ Class {
 	#category : #Gt4Llm
 }
 
+{ #category : #'as yet unclassified' }
+GtLlmActionMessageWithInstanceSerializer >> gtInstanceFor: aView [
+	<gtView>
+	self instance ifNil: [ ^ aView empty ].
+
+	^ aView forward
+		title: 'Instance';
+		priority: 1;
+		object: [ self instance ];
+		view: #gtLiveFor:
+]
+
 { #category : #accessing }
 GtLlmActionMessageWithInstanceSerializer >> instance [
 	^ instance
