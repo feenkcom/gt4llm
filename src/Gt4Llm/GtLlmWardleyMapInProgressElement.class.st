@@ -20,7 +20,7 @@ GtLlmWardleyMapInProgressElement >> initialize [
 		addChild: BrGlamorousVectorIcons refresh asElement;
 		addChild: (BrLabel new
 				aptitude: BrGlamorousLabelAptitude new glamorousCodeFontAndSmallSize;
-				text: 'LLM action in progress...')
+				text: 'Waiting for LLM...')
 ]
 
 { #category : #'api - wardley map decorator model' }

@@ -5,7 +5,10 @@ Trait {
 
 { #category : #'as yet unclassified' }
 TGtActionMessage >> actionModel [
-	^ self chat tutor actionNamed: self action
+	^ (self chat tutor actionNamed: self action)
+		ifNil: [ self isUserRole
+				ifTrue: [ (self chat descendantOf: self) ifNotNil: #actionModel ]
+				ifFalse: [ nil ] ]
 ]
 
 { #category : #'as yet unclassified' }
