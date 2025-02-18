@@ -17,6 +17,23 @@ GtLlmChatExamples >> basicChat [
 ]
 
 { #category : #'as yet unclassified' }
+GtLlmChatExamples >> chatFuture [
+	<gtExample>
+	| chat ran |
+	chat := self basicChat.
+
+	chat provider: GtLlmNullProvider new.
+	
+	ran := false.
+	
+	(chat whenReadyFuture then: [ran := true]) wait.
+	
+	self assert: ran.
+	
+	^ chat
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmChatExamples >> chatWithMessages [
 	<gtExample>
 	| chat |
