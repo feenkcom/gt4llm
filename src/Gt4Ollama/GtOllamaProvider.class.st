@@ -101,10 +101,9 @@ GtOllamaProvider >> modelfile: anObject [
 GtOllamaProvider >> sendAssistantMessage: aMessage [
 	userMessageClass adoptInstance: aMessage.
 	aMessage role: 'user'.
-	self chat
-		addMessage: aMessage.
+	self chat addMessage: aMessage.
 
-	self triggerAssistant
+	[ self triggerAssistant ] asAsyncPromise
 ]
 
 { #category : #'as yet unclassified' }
