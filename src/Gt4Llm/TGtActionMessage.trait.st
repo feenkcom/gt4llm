@@ -20,18 +20,22 @@ TGtActionMessage >> contentSummary [
 TGtActionMessage >> gtActionFor: aView [
 	<gtView>
 	<gtLlmMessageView>
+	| view |
 	self action isEmptyOrNil ifTrue: [ ^ aView empty ].
 
-	^ aView textEditor
-		title: 'Action';
-		priority: 3;
-		text: [ self action ];
-		actionButtonLabel: 'Action'
-			action: [ :aButton | aButton phlow spawnObject: (self chat tutor actionNamed: self action) ];
-		styler: [ BlCompositeStyler new
-				stylers: {GtLlmMessageStyler new threadMessageViewModel: self asViewModel.
-						GtOpenAIThreadMessageStyler new annotations: self annotations.
-						GtLlmTutorFormatTextStyler new tutor: self chat tutor} ]
+	view := aView textEditor
+			title: 'Action';
+			priority: 3;
+			text: [ self action ].
+	self chat
+		ifNotNil: [ view
+				actionButtonLabel: 'Action'
+					action: [ :aButton | aButton phlow spawnObject: (self chat tutor actionNamed: self action) ];
+				styler: [ BlCompositeStyler new
+						stylers: {GtLlmMessageStyler new threadMessageViewModel: self asViewModel.
+								GtOpenAIThreadMessageStyler new annotations: self annotations.
+								GtLlmTutorFormatTextStyler new tutor: self chat tutor} ] ].
+	^ view
 ]
 
 { #category : #'as yet unclassified' }
@@ -51,15 +55,6 @@ TGtActionMessage >> gtInspectActionFor: anAction [
 		icon: BrGlamorousVectorIcons inspect;
 		label: 'Action';
 		action: [ :aButton | aButton phlow spawnObject: (self chat tutor actionNamed: self action) ]
-]
-
-{ #category : #'as yet unclassified' }
-TGtActionMessage >> gtInspectorContentFor: aView [
-	<gtView>
-	^ aView explicit
-		title: 'Content';
-		priority: 5;
-		stencil: [ GtLlmThreadMessageElement new threadMessageViewModel: self asViewModel ]
 ]
 
 { #category : #'as yet unclassified' }
