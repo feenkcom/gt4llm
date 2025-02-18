@@ -202,13 +202,13 @@
 				},
 				"editEmail" : {
 					"__type" : "email",
-					"emailString" : "veit.heller@feenk.com"
+					"emailString" : "<unknown>"
 				},
 				"editTime" : {
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-07-03T10:39:23.500855+02:00"
+						"dateAndTimeString" : "2025-02-18T13:55:40.709698+01:00"
 					}
 				},
 				"uid" : {
@@ -216,40 +216,6 @@
 					"uidString" : "FF9AZ7XYDQCpAq7BCYEUig=="
 				},
 				"code" : "pairs := mapFiles\r\t\tcollect: [ :aFile | \r\t\t\taFile\r\t\t\t\t-> ([ (GtWardleyMapParser parse: aFile contents) asWardleyMapModel ]\r\t\t\t\t\t\ton: Error\r\t\t\t\t\t\tdo: [ nil ]) ]"
-			},
-			{
-				"__type" : "pharoSnippet",
-				"children" : {
-					"__type" : "snippets",
-					"items" : [ ]
-				},
-				"createEmail" : {
-					"__type" : "email",
-					"emailString" : "veit.heller@feenk.com"
-				},
-				"createTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-07-03T10:38:05.69502+02:00"
-					}
-				},
-				"editEmail" : {
-					"__type" : "email",
-					"emailString" : "veit.heller@feenk.com"
-				},
-				"editTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-07-03T10:38:17.492491+02:00"
-					}
-				},
-				"uid" : {
-					"__type" : "uid",
-					"uidString" : "s+xwfLXYDQCsMILhCYEUig=="
-				},
-				"code" : "pairs select: [ :aPair | aPair value isNil ]"
 			},
 			{
 				"__type" : "pharoSnippet",
