@@ -155,6 +155,9 @@ GtOpenAIAssistantProvider >> runFuture [
 { #category : #'as yet unclassified' }
 GtOpenAIAssistantProvider >> sendAssistantMessage: aMessage [
 	chat addMessage: aMessage.
+
+	chat signalRunHasStarted.
+	
 	client addMessage: aMessage toThread: thread id.
 
 	lastRun := client
@@ -163,8 +166,6 @@ GtOpenAIAssistantProvider >> sendAssistantMessage: aMessage [
 			andResponseFormat: self format.
 
 	self updateMessages.
-
-	chat signalRunHasStarted.
 
 	future := (self runFuture
 			then: [ :aRun | 
