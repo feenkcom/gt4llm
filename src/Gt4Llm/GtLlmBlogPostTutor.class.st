@@ -23,8 +23,8 @@ GtLlmBlogPostTutor >> defaultProviderStencil [
 	GtOpenAIAssistantProvider withApiKeyFromFile
 		instructions: anInstructionFormat asInstructionPiece instructionString;
 		format: anInstructionFormat asJsonSchema;
-		assistantMessageClass: LlmDPostMessage;
-		userMessageClass: LlmDPostMessage ]
+		assistantMessageClass: GtLlmBlogPostMessage;
+		userMessageClass: GtLlmBlogPostMessage ]
 ]
 
 { #category : #'as yet unclassified' }

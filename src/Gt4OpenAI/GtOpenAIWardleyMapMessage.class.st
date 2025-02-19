@@ -1,7 +1,7 @@
 Class {
 	#name : #GtOpenAIWardleyMapMessage,
 	#superclass : #GtOpenAIActionMessage,
-	#category : #'Gt4OpenAI-Model'
+	#category : #'Gt4OpenAI-Models'
 }
 
 { #category : #'as yet unclassified' }

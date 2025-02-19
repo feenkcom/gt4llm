@@ -81,7 +81,7 @@ GtLlmChat >> gtMessagesFor: aView [
 			text: #role
 			width: 100;
 		column: 'Message' text: #content;
-		updateWhen: GtOpenAIThreadRunAnnouncement in: self announcer;
+		updateWhen: GtLlmThreadRunAnnouncement in: self announcer;
 		actionUpdateButton
 ]
 
@@ -209,7 +209,7 @@ GtLlmChat >> serializer: anObject [
 
 { #category : #'as yet unclassified' }
 GtLlmChat >> signalRunHasStarted [
-	self announcer announce: GtOpenAIThreadRunStartedAnnouncement new
+	self announcer announce: GtLlmThreadRunStartedAnnouncement new
 ]
 
 { #category : #'as yet unclassified' }
@@ -219,7 +219,7 @@ GtLlmChat >> signalRunHasUpdated [
 
 { #category : #'as yet unclassified' }
 GtLlmChat >> signalRunIsDone [
-	self announcer announce: GtOpenAIThreadRunIsDoneAnnouncement new
+	self announcer announce: GtLlmThreadRunIsDoneAnnouncement new
 ]
 
 { #category : #'as yet unclassified' }
