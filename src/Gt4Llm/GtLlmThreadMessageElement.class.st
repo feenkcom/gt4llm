@@ -9,7 +9,6 @@ Class {
 		'progressElement',
 		'timeElement',
 		'headerElement',
-		'timeTask',
 		'timeTooltip'
 	],
 	#category : #'Gt4Llm-Widgets'

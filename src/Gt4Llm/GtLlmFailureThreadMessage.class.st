@@ -1,5 +1,5 @@
 Class {
-	#name : #GtOpenAIFailureThreadMessage,
+	#name : #GtLlmFailureThreadMessage,
 	#superclass : #Object,
 	#traits : 'TGtLlmThreadMessage',
 	#classTraits : 'TGtLlmThreadMessage classTrait',
@@ -8,66 +8,66 @@ Class {
 		'createdAt',
 		'chat'
 	],
-	#category : #'Gt4OpenAI-Widgets'
+	#category : #'Gt4Llm-Widgets'
 }
 
 { #category : #accessing }
-GtOpenAIFailureThreadMessage >> ancestor [
+GtLlmFailureThreadMessage >> ancestor [
 	^ self chat messages first
 ]
 
 { #category : #accessing }
-GtOpenAIFailureThreadMessage >> annotations [
+GtLlmFailureThreadMessage >> annotations [
 	^ #()
 ]
 
 { #category : #accessing }
-GtOpenAIFailureThreadMessage >> chat [
+GtLlmFailureThreadMessage >> chat [
 	^ chat
 ]
 
 { #category : #accessing }
-GtOpenAIFailureThreadMessage >> chat: anObject [
+GtLlmFailureThreadMessage >> chat: anObject [
 	chat := anObject
 ]
 
 { #category : #accessing }
-GtOpenAIFailureThreadMessage >> contentSummary [
+GtLlmFailureThreadMessage >> contentSummary [
 	^ self contentText lines ifEmpty: [ '' ] ifNotEmpty: #first
 ]
 
 { #category : #accessing }
-GtOpenAIFailureThreadMessage >> contentText [
+GtLlmFailureThreadMessage >> contentText [
 	^ self failureText ifNil: [ '' ]
 ]
 
 { #category : #accessing }
-GtOpenAIFailureThreadMessage >> createdAt [
+GtLlmFailureThreadMessage >> createdAt [
 	^ createdAt
 ]
 
 { #category : #accessing }
-GtOpenAIFailureThreadMessage >> createdAt: anObject [
+GtLlmFailureThreadMessage >> createdAt: anObject [
 	createdAt := anObject
 ]
 
 { #category : #accessing }
-GtOpenAIFailureThreadMessage >> elementClass [
+GtLlmFailureThreadMessage >> elementClass [
 	^ GtLlmThreadMessageElement
 ]
 
 { #category : #accessing }
-GtOpenAIFailureThreadMessage >> failureText [
+GtLlmFailureThreadMessage >> failureText [
 	^ failureText
 ]
 
 { #category : #accessing }
-GtOpenAIFailureThreadMessage >> failureText: anObject [
+GtLlmFailureThreadMessage >> failureText: anObject [
 	failureText := anObject
 ]
 
 { #category : #accessing }
-GtOpenAIFailureThreadMessage >> gtContentFor: aView [
+GtLlmFailureThreadMessage >> gtContentFor: aView [
 	<gtView>
 	<gtLlmMessageView>
 	^ aView explicit
@@ -78,44 +78,44 @@ GtOpenAIFailureThreadMessage >> gtContentFor: aView [
 ]
 
 { #category : #testing }
-GtOpenAIFailureThreadMessage >> hasResponse [
+GtLlmFailureThreadMessage >> hasResponse [
 	^ true
 ]
 
 { #category : #accessing }
-GtOpenAIFailureThreadMessage >> id [
+GtLlmFailureThreadMessage >> id [
 	^ '3a876ca3-32ce-0d00-b7b2-b9390ae84159'
 ]
 
 { #category : #testing }
-GtOpenAIFailureThreadMessage >> isAssistantRole [
+GtLlmFailureThreadMessage >> isAssistantRole [
 	^ true
 ]
 
 { #category : #accessing }
-GtOpenAIFailureThreadMessage >> isFailure [
+GtLlmFailureThreadMessage >> isFailure [
 	^ true
 ]
 
 { #category : #accessing }
-GtOpenAIFailureThreadMessage >> senderText [
+GtLlmFailureThreadMessage >> senderText [
 	^  'Assistant'
 ]
 
 { #category : #accessing }
-GtOpenAIFailureThreadMessage >> styler [
+GtLlmFailureThreadMessage >> styler [
 	^ nil
 ]
 
 { #category : #subscriptions }
-GtOpenAIFailureThreadMessage >> unsubscribe: anObject [
+GtLlmFailureThreadMessage >> unsubscribe: anObject [
 	"do nothing"
 
 	
 ]
 
 { #category : #subscriptions }
-GtOpenAIFailureThreadMessage >> when: anEventSelector send: aMessageSelector to: anObject [
+GtLlmFailureThreadMessage >> when: anEventSelector send: aMessageSelector to: anObject [
 	"do nothing"
 
 	

@@ -4,7 +4,6 @@ Class {
 	#traits : 'TGtLlmWithThreadMessageViewModel',
 	#classTraits : 'TGtLlmWithThreadMessageViewModel classTrait',
 	#instVars : [
-		'moreContentElement',
 		'oneLineThreadMessageElement',
 		'threadMessageElement'
 	],
