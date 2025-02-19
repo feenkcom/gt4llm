@@ -33,14 +33,6 @@ GtLlmBasicThreadMessageViewModel >> announcer [
 ]
 
 { #category : #accessing }
-GtLlmBasicThreadMessageViewModel >> checkRunResultViewModelFor: aCheckRunResult [
-	^ checkRunResultViewModels
-		at: aCheckRunResult
-		ifPresent: [ :aViewModel | aViewModel ]
-		ifAbsentPut: [ self newCheckRunResultViewModelFor: aCheckRunResult ]
-]
-
-{ #category : #accessing }
 GtLlmBasicThreadMessageViewModel >> checkerInstance [
 	^ threadMessage chat checkerInstance
 ]
@@ -107,18 +99,6 @@ GtLlmBasicThreadMessageViewModel >> messageViews [
 		fromObject: self threadMessage;
 		pragmaNames: self messageViewPragmas;
 		collect
-]
-
-{ #category : #private }
-GtLlmBasicThreadMessageViewModel >> newCheckRunResultViewModelFor: aCheckRunResult [
-	| aViewModel |
-	aViewModel := GtLlmCheckRunResultViewModel new checkRunResult: aCheckRunResult.
-	aViewModel weak
-		when: GtLlmAddMessageContentsRequest
-		send: #onAddMessageContents:
-		to: self.
-
-	^ aViewModel
 ]
 
 { #category : #private }

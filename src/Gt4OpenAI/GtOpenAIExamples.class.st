@@ -19,7 +19,7 @@ GtOpenAIExamples >> basicExpandableThreadMessageElement [
 GtOpenAIExamples >> basicFailureThreadMessage [
 	<gtExample>
 	| aMessage |
-	aMessage := GtOpenAIFailureThreadMessage new createdAt: DateAndTime now.
+	aMessage := GtLlmFailureThreadMessage new createdAt: DateAndTime now.
 
 	self assert: aMessage failureText isNil.
 	self assert: aMessage contentText isNotNil.

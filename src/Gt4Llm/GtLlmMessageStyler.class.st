@@ -383,14 +383,6 @@ GtLlmMessageStyler >> styleButton: anAnnotation withTool: aBlock [
 		withTool: aBlock
 ]
 
-{ #category : #private }
-GtLlmMessageStyler >> styleCode: aCodeNode [
-	self threadMessageViewModel isAssistantRole ifFalse: [ ^ self ].
-	self executionResults
-		at: aCodeNode code
-		ifPresent: [ :result | self styleResult: result for: aCodeNode ]
-]
-
 { #category : #accessing }
 GtLlmMessageStyler >> styleExpandingObject: aClassAnnotation withDefault: aSymbol [
 	| cacheKey attribute |
@@ -584,17 +576,6 @@ GtLlmMessageStyler >> styleOpenExternalLinkButton: aLink text: aSubText [
 						ifTrue: [ aButton phlow spawnObject: urlUtility asFileReference ]
 						ifFalse: [ WebBrowser openOn: urlUtility asString ] ].
 			button ]
-]
-
-{ #category : #private }
-GtLlmMessageStyler >> styleResult: evaluationResult for: aCodeNode [
-	| evaluatedCodeAttribute aViewModel |
-	aViewModel := threadMessageViewModel checkRunResultViewModelFor: evaluationResult value.
-	evaluatedCodeAttribute := GtLlmEvaluatedCodePreviewAttribute new
-		checkRunResultViewModel: aViewModel.
-
-	(text from: aCodeNode stopPosition to: aCodeNode stopPosition)
-		attributes: {evaluatedCodeAttribute}
 ]
 
 { #category : #generated }

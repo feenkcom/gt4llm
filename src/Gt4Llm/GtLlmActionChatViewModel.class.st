@@ -13,13 +13,5 @@ GtLlmActionChatViewModel >> initialize [
 
 { #category : #accessing }
 GtLlmActionChatViewModel >> newThreadMessageViewModelFor: aMessage [
-	| aViewModel |
-	aViewModel := GtLlmActionThreadMessageViewModel new threadMessage: aMessage.
-
-	aViewModel weak
-		when: GtLlmAddMessageContentsRequest
-		send: #onAddMessageContents:
-		to: self.
-
-	^ aViewModel
+	^ GtLlmActionThreadMessageViewModel new threadMessage: aMessage.
 ]
