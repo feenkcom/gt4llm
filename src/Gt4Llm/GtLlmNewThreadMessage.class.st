@@ -122,12 +122,12 @@ GtLlmNewThreadMessage >> sendMessage [
 
 	self contents: '' requester: nil.
 
-	assistantChat sendMessage: aMessageContent
+	[assistantChat sendMessage: aMessageContent] asAsyncPromise
 ]
 
 { #category : #actions }
 GtLlmNewThreadMessage >> treatString [
-	^ assistantChat messageFromString: contents
+	^ contents
 ]
 
 { #category : #subscriptions }

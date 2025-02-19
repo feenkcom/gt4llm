@@ -640,8 +640,7 @@ GtLlmMessageStyler >> visitClassAnnotation: aClassAnnotation [
 
 { #category : #generated }
 GtLlmMessageStyler >> visitCodeBlock: aCodeNode [
-	(aCodeNode language isNotNil
-		and: [ aCodeNode isForSmalltalk or: [ aCodeNode isForLanguage: 'smalltalk-method' ] ])
+	(aCodeNode language isNotNil and: [ aCodeNode isForSmalltalk ])
 		ifTrue: [ self styleSmalltalkCodeBlock: aCodeNode ].
 	(self text from: aCodeNode startPosition to: aCodeNode stopPosition)
 		glamorousCodeFont.
@@ -655,7 +654,6 @@ GtLlmMessageStyler >> visitCodeBlock: aCodeNode [
 		from: aCodeNode beginWithLanguageStopPosition + 1
 		to: aCodeNode end startPosition - 1)
 		attributes: {BlTextHighlightAttribute paint: BrGlamorousColors neutralBackgroundColor}.
-	self styleCode: aCodeNode.
 
 	^ self visitContent: aCodeNode
 ]

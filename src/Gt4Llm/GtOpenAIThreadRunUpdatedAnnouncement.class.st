@@ -1,5 +1,5 @@
 Class {
 	#name : #GtOpenAIThreadRunUpdatedAnnouncement,
-	#superclass : #GtOpenAIThreadRunAnnouncement,
+	#superclass : #GtLlmThreadRunAnnouncement,
 	#category : #'Gt4Llm-Announcements'
 }
