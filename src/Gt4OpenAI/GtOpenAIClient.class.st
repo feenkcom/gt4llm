@@ -179,6 +179,14 @@ GtOpenAIClient >> deleteFile: aFileId [
 		perform
 ]
 
+{ #category : #'as yet unclassified' }
+GtOpenAIClient >> deleteModel: aModel [ 
+	^ GtOpenAIDeleteModelAPIClient new
+		client: self;
+		model: aModel;
+		perform
+]
+
 { #category : #accessing }
 GtOpenAIClient >> deleteVectorStore: anId [
 	^ GtOpenAIDeleteVectorStoreAPIClient new

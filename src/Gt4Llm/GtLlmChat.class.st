@@ -213,6 +213,11 @@ GtLlmChat >> signalRunHasStarted [
 ]
 
 { #category : #'as yet unclassified' }
+GtLlmChat >> signalRunHasUpdated [
+	self announcer announce: GtOpenAIThreadRunUpdatedAnnouncement new
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmChat >> signalRunIsDone [
 	self announcer announce: GtOpenAIThreadRunIsDoneAnnouncement new
 ]

@@ -26,6 +26,11 @@ GtLlmNewThreadMessage >> annotations [
 ]
 
 { #category : #accessing }
+GtLlmNewThreadMessage >> assistantChat [
+	^ assistantChat
+]
+
+{ #category : #accessing }
 GtLlmNewThreadMessage >> assistantChat: anAssistantChat [
 	assistantChat := anAssistantChat
 ]
@@ -108,23 +113,16 @@ GtLlmNewThreadMessage >> parse [
 
 { #category : #actions }
 GtLlmNewThreadMessage >> sendMessage [
-	| aMessage |
+	| aMessageContent |
 	contents ifNil: [ ^ self ].
+	
+	"todo: add files"
 
-	files
-		ifEmpty: [ aMessage := GtLlmUserMessage new
-					chat: assistantChat;
-					content: self treatString ]
-		ifNotEmpty: [ aMessage := GtLlmCompositeMessage new
-					chat: assistantChat;
-					addString: self treatString.
-
-			files do: [ :aFile | aMessage addFile: aFile ] ].
+	aMessageContent := self treatString.
 
 	self contents: '' requester: nil.
 
-	(assistantChat whenReadyFuture
-		then: [ assistantChat sendAssistantMessage: aMessage ]) await
+	assistantChat sendMessage: aMessageContent
 ]
 
 { #category : #actions }

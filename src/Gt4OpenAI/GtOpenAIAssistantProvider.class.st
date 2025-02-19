@@ -9,7 +9,8 @@ Class {
 		'tools',
 		'thread',
 		'lastRun',
-		'future'
+		'future',
+		'messages'
 	],
 	#category : #'Gt4OpenAI-Providers'
 }
@@ -157,7 +158,7 @@ GtOpenAIAssistantProvider >> sendAssistantMessage: aMessage [
 	chat addMessage: aMessage.
 
 	chat signalRunHasStarted.
-	
+
 	client addMessage: aMessage toThread: thread id.
 
 	lastRun := client
@@ -167,11 +168,12 @@ GtOpenAIAssistantProvider >> sendAssistantMessage: aMessage [
 
 	self updateMessages.
 
+	chat signalRunHasUpdated.
+
 	future := (self runFuture
 			then: [ :aRun | 
 				self updateMessages.
-				chat signalRunIsDone ])
-			await: GtOpenAIUtilities executionConfiguration
+				chat signalRunIsDone ]) await: GtOpenAIUtilities executionConfiguration
 ]
 
 { #category : #'as yet unclassified' }
