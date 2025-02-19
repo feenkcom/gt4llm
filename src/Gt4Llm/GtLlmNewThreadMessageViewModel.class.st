@@ -4,28 +4,9 @@ Class {
 	#category : #'Gt4Llm-Widgets'
 }
 
-{ #category : #actions }
-GtLlmNewThreadMessageViewModel >> addMessageContents: aString [
-	| aNewContents anExistingContents |
-	anExistingContents := self contents.
-	aNewContents := String
-			new: aString size + anExistingContents size + 1
-			streamContents: [ :aStream | 
-				aStream nextPutAll: anExistingContents.
-				aStream cr.
-				aStream nextPutAll: aString ].
-
-	self contents: aNewContents requester: nil
-]
-
 { #category : #'initialization ' }
 GtLlmNewThreadMessageViewModel >> assistantChat: assistantChat [
-	threadMessage assistantChat: assistantChat.
-
-	assistantChat weak
-		when: GtLlmAddMessageContentsRequest
-		send: #onAddMessageContentsRequest:
-		to: self
+	threadMessage assistantChat: assistantChat
 ]
 
 { #category : #'as yet unclassified' }

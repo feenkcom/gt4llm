@@ -5,7 +5,6 @@ Class {
 	#classTraits : 'TBrLayoutResizable classTrait + TGtLlmWithThreadMessageViewModel classTrait',
 	#instVars : [
 		'contentsElement',
-		'sendButton',
 		'toolbar'
 	],
 	#category : #'Gt4Llm-Widgets'

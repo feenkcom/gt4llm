@@ -15,11 +15,6 @@ GtLlmThreadMessageViewModel >> action [
 ]
 
 { #category : #accessing }
-GtLlmThreadMessageViewModel >> asOneLineViewModel [
-	^ GtOpenAIOneLineThreadMessageViewModel new threadMessageViewModel: self
-]
-
-{ #category : #accessing }
 GtLlmThreadMessageViewModel >> contentText [
 	<return: #BlText>
 	^ contentText
