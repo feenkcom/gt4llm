@@ -9,8 +9,7 @@ Class {
 		'tools',
 		'thread',
 		'lastRun',
-		'future',
-		'messages'
+		'future'
 	],
 	#category : #'Gt4OpenAI-Providers'
 }
