@@ -223,9 +223,9 @@ GtLlmWardleyMapTutor >> valueHolderFor: anObject [
 		content: anObject;
 		serializer: #asWardleyMapScript;
 		updater: [ :aModel :aText | 
-			(GtWardleyMapDiffer
-				diffFrom: aModel
-				to: (GtWardleyMapParser parse: aText) asWardleyMapModel) merge ]
+			GtWardleyMapUtility
+				addModelAsPropositionsFrom: aModel
+				to: (GtWardleyMapParser parse: aText) asWardleyMapModel ]
 ]
 
 { #category : #'as yet unclassified' }
