@@ -257,6 +257,8 @@ GtOpenAIMessage >> isUserRole [
 
 { #category : #'as yet unclassified' }
 GtOpenAIMessage >> messageFiles [
+	self contentText = self content ifTrue: [ ^ GtOpenAIFilesGroup new ].
+
 	^ GtOpenAIFilesGroup
 		withAll: (self content
 				select: [ :aValue | aValue type = 'image_file' ]
