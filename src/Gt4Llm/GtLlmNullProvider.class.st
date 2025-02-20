@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'chat'
 	],
-	#category : #'Gt4Llm-Chats'
+	#category : #'Gt4Llm-Providers'
 }
 
 { #category : #accessing }

@@ -57,5 +57,5 @@ GtOllamaCompleteChatAPIClient >> request [
 
 { #category : #accessing }
 GtOllamaCompleteChatAPIClient >> serializationClass [
-	^ GtOllamaAssistantMessage
+	^ GtOllamaThreadMessage
 ]

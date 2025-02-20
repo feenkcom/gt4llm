@@ -1,35 +1,11 @@
 Class {
-	#name : #GtOpenAIExamples,
-	#superclass : #Object,
+	#name : #GtOpenAIThreadMessageExamples,
+	#superclass : #GtLlmThreadMessageExamples,
 	#category : #'Gt4OpenAI-Examples'
 }
 
 { #category : #'examples - messages' }
-GtOpenAIExamples >> basicExpandableThreadMessageElement [
-	<gtExample>
-	| anElement |
-	anElement := GtLlmExpandableThreadMessageElement new.
-
-	self assert: anElement threadMessageViewModel isNil.
-
-	^ anElement
-]
-
-{ #category : #'examples - failure message' }
-GtOpenAIExamples >> basicFailureThreadMessage [
-	<gtExample>
-	| aMessage |
-	aMessage := GtLlmFailureThreadMessage new createdAt: DateAndTime now.
-
-	self assert: aMessage failureText isNil.
-	self assert: aMessage contentText isNotNil.
-	self assert: aMessage contentText isEmpty.
-
-	^ aMessage
-]
-
-{ #category : #'examples - messages' }
-GtOpenAIExamples >> basicThreadMessage [
+GtOpenAIThreadMessageExamples >> basicThreadMessage [
 	<gtExample>
 	| aMessage |
 	aMessage := GtOpenAIMessage new.
@@ -37,19 +13,8 @@ GtOpenAIExamples >> basicThreadMessage [
 	^ aMessage
 ]
 
-{ #category : #'examples - messages' }
-GtOpenAIExamples >> basicThreadMessageViewModel [
-	<gtExample>
-	| aViewModel |
-	aViewModel := GtLlmThreadMessageViewModel new.
-
-	self assert: aViewModel threadMessage isNil.
-
-	^ aViewModel
-]
-
 { #category : #'examples - json' }
-GtOpenAIExamples >> definedClassesJsonQuestion [
+GtOpenAIThreadMessageExamples >> definedClassesJsonQuestion [
 	^ NeoJSONObject
 		fromString: '{
 	"id" : "msg_Xf7FnGmqdgpZslLXMmYBcZ9k",
@@ -74,7 +39,7 @@ GtOpenAIExamples >> definedClassesJsonQuestion [
 ]
 
 { #category : #'examples - json' }
-GtOpenAIExamples >> definedClassesJsonResponse [
+GtOpenAIThreadMessageExamples >> definedClassesJsonResponse [
 	^ NeoJSONObject
 		fromString: '{
 	"id" : "msg_8ZGngDenmtdcnGCKxBbjh7DH",
@@ -99,7 +64,7 @@ GtOpenAIExamples >> definedClassesJsonResponse [
 ]
 
 { #category : #'examples - messages' }
-GtOpenAIExamples >> definedClassesMessageQuestion [
+GtOpenAIThreadMessageExamples >> definedClassesMessageQuestion [
 	<gtExample>
 	| aJson |
 	aJson := self definedClassesJsonQuestion.
@@ -107,61 +72,15 @@ GtOpenAIExamples >> definedClassesMessageQuestion [
 ]
 
 { #category : #'examples - messages' }
-GtOpenAIExamples >> definedClassesMessageResponse [
+GtOpenAIThreadMessageExamples >> definedClassesMessageResponse [
 	<gtExample>
 	| aJson |
 	aJson := self definedClassesJsonResponse.
 	^ GtOpenAIMessage from: aJson
 ]
 
-{ #category : #'examples - failure message' }
-GtOpenAIExamples >> failureThreadMessage [
-	<gtExample>
-	| aMessage aDescription |
-	aMessage := self basicFailureThreadMessage.
-	aDescription := 'Sorry, something went wrong'.
-	aMessage failureText: aDescription.
-	
-	self assert: aMessage failureText isNotNil.
-	self assert: aMessage contentText isNotNil.
-	self assert: aMessage contentText equals: aDescription.
-
-	^ aMessage
-]
-
-{ #category : #'examples - failure message' }
-GtOpenAIExamples >> failureThreadMessageElement [
-	<gtExample>
-	| aViewModel anElement |
-	
-	aViewModel := self failureThreadMessageViewModel.
-	anElement := aViewModel elementClass newForChatList.
-	anElement threadMessageViewModel: aViewModel.
-
-	self assert: anElement threadMessageViewModel equals: aViewModel.
-
-	^ anElement
-]
-
-{ #category : #'examples - failure message' }
-GtOpenAIExamples >> failureThreadMessageViewModel [
-	<gtExample>
-	| aMessage aViewModel |
-	
-	aViewModel := self basicThreadMessageViewModel.
-	aMessage := self failureThreadMessage.
-	aViewModel threadMessage: aMessage.
-
-	self assert: aViewModel threadMessage equals: aMessage.	
-	self assert: aViewModel contentText isNotNil.
-	self assert: aMessage contentText equals: aMessage contentText.
-	self assert: aViewModel isFailure.
-
-	^ aViewModel
-]
-
 { #category : #'examples - json' }
-GtOpenAIExamples >> fractionPhlowViewJsonQuestion [
+GtOpenAIThreadMessageExamples >> fractionPhlowViewJsonQuestion [
 	^ NeoJSONObject
 		fromString: '{
 	"id" : "msg_SsimeoEvc6Tyn3KqmBnKUfOQ",
@@ -186,7 +105,7 @@ GtOpenAIExamples >> fractionPhlowViewJsonQuestion [
 ]
 
 { #category : #'examples - json' }
-GtOpenAIExamples >> fractionPhlowViewJsonResponse [
+GtOpenAIThreadMessageExamples >> fractionPhlowViewJsonResponse [
 	^ NeoJSONObject
 		fromString: '{
 	"id" : "msg_ChUGxGcg07FvyzaigUA5kLJa",
@@ -211,7 +130,7 @@ GtOpenAIExamples >> fractionPhlowViewJsonResponse [
 ]
 
 { #category : #'examples - messages' }
-GtOpenAIExamples >> fractionPhlowViewMessageQuestion [
+GtOpenAIThreadMessageExamples >> fractionPhlowViewMessageQuestion [
 	<gtExample>
 	| aJson |
 	aJson := self fractionPhlowViewJsonQuestion.
@@ -219,7 +138,7 @@ GtOpenAIExamples >> fractionPhlowViewMessageQuestion [
 ]
 
 { #category : #'examples - messages' }
-GtOpenAIExamples >> fractionPhlowViewMessageResponse [
+GtOpenAIThreadMessageExamples >> fractionPhlowViewMessageResponse [
 	<gtExample>
 	| aJson |
 	aJson := self fractionPhlowViewJsonResponse.
@@ -227,7 +146,7 @@ GtOpenAIExamples >> fractionPhlowViewMessageResponse [
 ]
 
 { #category : #'examples - json' }
-GtOpenAIExamples >> phlowDescriptionJsonQuestion [
+GtOpenAIThreadMessageExamples >> phlowDescriptionJsonQuestion [
 	^ NeoJSONObject
 		fromString: '{
 	"id" : "msg_mAd5dtIrxIiEtP8FKgSy3cuN",
@@ -252,7 +171,7 @@ GtOpenAIExamples >> phlowDescriptionJsonQuestion [
 ]
 
 { #category : #'examples - json' }
-GtOpenAIExamples >> phlowDescriptionJsonResponse [
+GtOpenAIThreadMessageExamples >> phlowDescriptionJsonResponse [
 	^ NeoJSONObject
 		fromString: '{
 	"id" : "msg_7QRL9CfPUDj1aIaFWr9rursK",
@@ -277,7 +196,7 @@ GtOpenAIExamples >> phlowDescriptionJsonResponse [
 ]
 
 { #category : #'examples - messages' }
-GtOpenAIExamples >> phlowDescriptionMessageExpandableElementQuestion [
+GtOpenAIThreadMessageExamples >> phlowDescriptionMessageExpandableElementQuestion [
 	<gtExample>
 	| aViewModel anElement |
 	anElement := self basicExpandableThreadMessageElement.
@@ -288,7 +207,7 @@ GtOpenAIExamples >> phlowDescriptionMessageExpandableElementQuestion [
 ]
 
 { #category : #'examples - messages' }
-GtOpenAIExamples >> phlowDescriptionMessageExpandableElementResponse [
+GtOpenAIThreadMessageExamples >> phlowDescriptionMessageExpandableElementResponse [
 	<gtExample>
 	| aViewModel anElement |
 	anElement := self basicExpandableThreadMessageElement.
@@ -299,7 +218,7 @@ GtOpenAIExamples >> phlowDescriptionMessageExpandableElementResponse [
 ]
 
 { #category : #'examples - messages' }
-GtOpenAIExamples >> phlowDescriptionMessageExpandableElementResponse_collapsed [
+GtOpenAIThreadMessageExamples >> phlowDescriptionMessageExpandableElementResponse_collapsed [
 	<gtExample>
 	| aViewModel anElement |
 	anElement := self basicExpandableThreadMessageElement.
@@ -311,7 +230,7 @@ GtOpenAIExamples >> phlowDescriptionMessageExpandableElementResponse_collapsed [
 ]
 
 { #category : #'examples - messages' }
-GtOpenAIExamples >> phlowDescriptionMessageQuestion [
+GtOpenAIThreadMessageExamples >> phlowDescriptionMessageQuestion [
 	<gtExample>
 	| aJson |
 	aJson := self phlowDescriptionJsonQuestion.
@@ -319,7 +238,7 @@ GtOpenAIExamples >> phlowDescriptionMessageQuestion [
 ]
 
 { #category : #'examples - messages' }
-GtOpenAIExamples >> phlowDescriptionMessageResponse [
+GtOpenAIThreadMessageExamples >> phlowDescriptionMessageResponse [
 	<gtExample>
 	| aJson |
 	aJson := self phlowDescriptionJsonResponse.
@@ -327,7 +246,7 @@ GtOpenAIExamples >> phlowDescriptionMessageResponse [
 ]
 
 { #category : #'examples - messages' }
-GtOpenAIExamples >> phlowDescriptionMessageViewModelQuestion [
+GtOpenAIThreadMessageExamples >> phlowDescriptionMessageViewModelQuestion [
 	<gtExample>
 	| aViewModel aMessage |
 	aViewModel := self basicThreadMessageViewModel.
@@ -338,7 +257,7 @@ GtOpenAIExamples >> phlowDescriptionMessageViewModelQuestion [
 ]
 
 { #category : #'examples - messages' }
-GtOpenAIExamples >> phlowDescriptionMessageViewModelResponse [
+GtOpenAIThreadMessageExamples >> phlowDescriptionMessageViewModelResponse [
 	<gtExample>
 	| aViewModel aMessage |
 	aViewModel := self basicThreadMessageViewModel.
@@ -349,13 +268,13 @@ GtOpenAIExamples >> phlowDescriptionMessageViewModelResponse [
 ]
 
 { #category : #'examples - json' }
-GtOpenAIExamples >> veryLongJsonQuestion [
+GtOpenAIThreadMessageExamples >> veryLongJsonQuestion [
 	^ NeoJSONObject
 		fromString: '{"id":"msg_ARdhrrOJeadhJz47MukYbugP","object":"thread.message","created_at":1708619318,"assistant_id":null,"thread_id":"thread_C9gW2spaxcCx8uxo4paGRXD0","run_id":null,"role":"user","content":[{"type":"text","text":{"value":"The last script had a problem: \r```text\rEncountered an error in the view: Message not understood: BlFont class >> #family:size:\rTrace:\rMessageNotUnderstood(Exception)>>signal\rBlFont class(Object)>>doesNotUnderstand: #family:size:\r[ \n            | fractionRepresentation |\n            fractionRepresentation := BrLabel new\n                text: self numerator printString, '' / '', self denominator printString.\n            fractionRepresentation\n                font: (BlFont family: ''Arial'' size: 16);\n                background: Color lightBlue;\n                borderColor: Color gray;\n                borderWidth: 1;\n                padding: (BlInsets all: 5).\n            BlElement new\n                addChild: fractionRepresentation ] in Fraction>>gtSimpleViewFor:\rFullBlockClosure(BlockClosure)>>gtValueWithArgs:\rBrStencilValuableExecutor>>execute\rBrStencilBuilder>>build\rBrStencilBuilder>>asElement\r[ stencilBuilder asElement ] in GtPhlowExplicitView>>asElementDo:\rFullBlockClosure(BlockClosure)>>on:do:\rGtPhlowExplicitView(GtPhlowView)>>performBlock:onException:\rGtPhlowExplicitView(GtPhlowView)>>performBlock:onExceptionErrorElement:\rGtPhlowExplicitView>>asElementDo:\r[ | createdView |\r\tcreatedView := self instance perform: self view selector withArguments: {aView}.\r\tcreatedView\r\t\tasElementDo: [ :anElement | \r\t\t\t| scripter listOfErrors |\r\t\t\tscripter := BlScripter new.\r\t\t\tscripter element: anElement.\r\t\t\tscripter elementWithoutParent.\r\t\t\tlistOfErrors := (anElement query // GtPhlowExceptionId) all\r\t\t\t\t\t, (anElement id = GtPhlowExceptionId asBlocElementId ifTrue: [ {anElement} ] ifFalse: [ {} ])\r\t\t\t\t\tcollect: [ :anErrorElement | anErrorElement userData at: #exception ].\r\t\t\tlistOfErrors\r\t\t\t\tifNotEmpty: [ :aList | \r\t\t\t\t\t^ aView list\r\t\t\t\t\t\ttitle: ''View errors'';\r\t\t\t\t\t\tpriority: 1;\r\t\t\t\t\t\titems: aList;\r\t\t\t\t\t\tactionButtonIcon: BrGlamorousVectorIcons play\r\t\t\t\t\t\t\ttooltip: ''Send to chat''\r\t\t\t\t\t\t\taction: [ self threadMessage chat\r\t\t\t\t\t\t\t\t\tsendMessage: (GtLlmCheckerError new\r\t\t\t\t\t\t\t\t\t\t\tchecker: self;\r\t\t\t\t\t\t\t\t\t\t\tcontent: aList;\r\t\t\t\t\t\t\t\t\t\t\tcontentString: (self createErrorString: aList first)) asString ] ] ].\r\t^ createdView ] in GtLlmViewObject>>gtViewFor:\rFullBlockClosure(BlockClosure)>>on:do:\rGtLlmViewObject>>gtViewFor:\rGtPhlowEmptyView(GtPhlowView)>>basicOn:perform:withArguments:\r[ \r\t\t\tself basicOn: anObject perform: aMessageSymbol withArguments: aCollectionOfArguments\r\t] in GtPhlowEmptyView(GtPhlowView)>>on:perform:withArguments:\rFullBlockClosure(BlockClosure)>>on:do:\rGtPhlowEmptyView(GtPhlowView)>>on:perform:withArguments:\rGtPhlowEmptyView(GtPhlowView)>>on:perform:withSomeArguments:\rGtPhlowEmptyView(GtPhlowView)>>on:perform:withContext:\r[ :eachPragma | \r\t\t\t| aView |\r\t\t\taView := GtPhlowView empty \r\t\t\t\ton: self object \r\t\t\t\tperform: eachPragma methodSelector\r\t\t\t\twithContext: self context.\r\t\t\tself object gtActions do: [ :eachAction | \r\t\t\t\t(eachAction target isForViewDefinedIn: eachPragma methodSelector) ifTrue: [ \r\t\t\t\t\taView addPhlowAction: eachAction ] ].\r\t\t\taView ] in GtPhlowViewsCollector>>collect\rOrderedCollection>>collect:\rGtPhlowViewsCollector>>collect\rGtLlmViewObject(ProtoObject)>>gtViewsInContext:\rGtPhlowLabelledViewBuilder(GtPhlowCompositeViewBuilder)>>views\rGtPhlowLabelledViewBuilder(GtPhlowCompositeViewBuilder)>>buildView\rGtPhlowLabelledViewBuilder>>buildView\rGtPhlowLabelledViewBuilder(GtPhlowViewBuilder)>>build\rGtLlmViewObject(ProtoObject)>>gtViewsFor:inContext:\rGtLlmViewObject(ProtoObject)>>gtViewsFor:\rGtPhlowEmptyView(GtPhlowView)>>basicOn:perform:withArguments:\r[ \r\t\t\tself basicOn: anObject perform: aMessageSymbol withArguments: aCollectionOfArguments\r\t] in GtPhlowEmptyView(GtPhlowView)>>on:perform:withArguments:\rFullBlockClosure(BlockClosure)>>on:do:\rGtPhlowEmptyView(GtPhlowView)>>on:perform:withArguments:\rGtPhlowEmptyView(GtPhlowView)>>on:perform:withSomeArguments:\rGtPhlowEmptyView(GtPhlowView)>>on:perform:\rGtInspectorObject>>view\rGtInspectorObject>>asElementDo:\rGtInspectorContentElement>>updateView\rGtInspectorContentElement>>onObjectHolderChanged\rGtInspectorContentElement(GtInspectorObjectElement)>>objectHolder:\rGtInspector>>onObjectHolderChanged\rGtInspector(GtInspectorObjectElement)>>objectHolder:\rGtInspectorTool>>asElementDo:\rGtInspectorTool(GtPhlowTool)>>asToolElementDo:\rGtPagerPageSelectionContext>>asElementDo:\rGtPager>>spawn:\rGtPagerHolder>>spawn:\r[ :anEvent | \r\t\t\tanEvent consumed: true.\r\t\t\taTriangleElement visibility: BlVisibility visible.\r\t\t\tself pagerHolder spawn: (self createSelectionContextFromEvent: anEvent).] in GtPagerPageEmbellisher>>createNextPageButtonOnContentWrapper:\rFullBlockClosure(BlockClosure)>>cull:\rBlEventHandler>>handleEvent:\rBlHandlerAnnouncementSubscription>>deliver:\r[ subscription deliver: anAnnouncement ] in SubscriptionRegistry>>deliver:to:startingAt:\rFullBlockClosure(BlockClosure)>>ifCurtailed:\rSubscriptionRegistry>>deliver:to:startingAt:\rSubscriptionRegistry>>deliver:to:\rSubscriptionRegistry>>deliver:\rAnnouncer>>announce:\rBlHandlerAnnouncerRegistry>>dispatchEvent:\rBlElementEventDispatcher(BlBubblingEventDispatcher)>>dispatchBubblingEvent:\rBlElementEventDispatcher(BlBubblingEventDispatcher)>>dispatchEvent:next:\rBlEventDispatcherChain>>dispatchEvent:\rBlElementEventDispatcher(BlBubblingEventDispatcher)>>dispatchEvent:next:\rBlEventDispatcherChain>>dispatchEvent:\rBlElementEventDispatcher(BlBubblingEventDispatcher)>>dispatchEvent:next:\rBlEventDispatcherChain>>dispatchEvent:\rBlElementEventDispatcher(BlBubblingEventDispatcher)>>dispatchEvent:next:\rBlEventDispatcherChain>>dispatchEvent:\rBlElementEventDispatcher(BlBubblingEventDispatcher)>>dispatchEvent:next:\rBlEventDispatcherChain>>dispatchEvent:\rBlElementEventDispatcher(BlBubblingEventDispatcher)>>dispatchEvent:next:\rBlEventDispatcherChain>>dispatchEvent:\rBlElementEventDispatcher(BlBubblingEventDispatcher)>>dispatchEvent:next:\rBlEventDispatcherChain>>dispatchEvent:\rBlElementEventDispatcher(BlBubblingEventDispatcher)>>dispatchEvent:next:\rBlEventDispatcherChain>>dispatchEvent:\rBlElementEventDispatcher(BlBubblingEventDispatcher)>>dispatchEvent:next:\rBlEventDispatcherChain>>dispatchEvent:\rBrButton(BlElement)>>fireEvent:\rGtPhlowElementContext>>spawnTool:withDestination:\rGtPhlowElementContext>>spawnTool:\rGtPhlowElementContext>>spawnObject:\rGtLlmMessageStyler>>evaluateMethodBlock:expanded:from:isReplace:\r[ :aWidget :aButtonModel | \r\t\t\t\t\t\t\tself\r\t\t\t\t\t\t\t\tevaluateMethodBlock: aCodeNode\r\t\t\t\t\t\t\t\texpanded: true\r\t\t\t\t\t\t\t\tfrom: aWidget\r\t\t\t\t\t\t\t\tisReplace: isReplace ] in [ GtButtonStencil new\r\t\t\t\t\t\ticon: BrGlamorousVectorIcons playinspect;\r\t\t\t\t\t\ttooltip: tooltip;\r\t\t\t\t\t\taction: [ :aWidget :aButtonModel | \r\t\t\t\t\t\t\tself\r\t\t\t\t\t\t\t\tevaluateMethodBlock: aCodeNode\r\t\t\t\t\t\t\t\texpanded: true\r\t\t\t\t\t\t\t\tfrom: aWidget\r\t\t\t\t\t\t\t\tisReplace: isReplace ] ] in GtLlmMessageStyler>>styleSmalltalkMethod:\rFullBlockClosure(BlockClosure)>>gtValueWithArgs:\rBrButtonModel>>clickEvent:\r[ :anEvent | (self hasModifiers: anEvent) ifFalse: [ self clickEvent: anEvent ] ] in BrButtonModel>>initializeListeners\rFullBlockClosure(BlockClosure)>>cull:\rBlEventHandler>>handleEvent:\r[\r\t\tanEvent forwardingTarget: self eventTarget.\r\t\tself eventHandler handleEvent: anEvent ] in BlEventForwarder>>handleEvent:\rFullBlockClosure(BlockClosure)>>ensure:\rBlEventForwarder>>handleEvent:\rBlHandlerAnnouncementSubscription>>deliver:\r[ subscription deliver: anAnnouncement ] in SubscriptionRegistry>>deliver:to:startingAt:\rFullBlockClosure(BlockClosure)>>ifCurtailed:\rSubscriptionRegistry>>deliver:to:startingAt:\rSubscriptionRegistry>>deliver:to:\rSubscriptionRegistry>>deliver:\rAnnouncer>>announce:\rBlHandlerAnnouncerRegistry>>dispatchEvent:\rBlElementEventDispatcher(BlBubblingEventDispatcher)>>dispatchArrivedEvent:\rBlElementEventDispatcher(BlBubblingEventDispatcher)>>dispatchEvent:next:\rBlEventDispatcherChain>>dispatchEvent:\rBlElementEventDispatcher(BlBubblingEventDispatcher)>>dispatchEvent:next:\rBlEventDispatcherChain>>dispatchEvent:\rBlElementEventDispatcher(BlBubblingEventDispatcher)>>dispatchEvent:next:\rBlEventDispatcherChain>>dispatchEvent:\rBlElementEventDispatcher(BlBubblingEventDispatcher)>>dispatchEvent:next:\rBlEventDispatcherChain>>dispatchEvent:\rBlElementEventDispatcher(BlBubblingEventDispatcher)>>dispatchEvent:next:\rBlEventDispatcherChain>>dispatchEvent:\rBlElementEventDispatcher(BlBubblingEventDispatcher)>>dispatchEvent:next:\rBlEventDispatcherChain>>dispatchEvent:\rBlElementEventDispatcher(BlBubblingEventDispatcher)>>dispatchEvent:next:\rBlEventDispatcherChain>>dispatchEvent:\rBlElementEventDispatcher(BlBubblingEventDispatcher)>>dispatchEvent:next:\rBlEventDispatcherChain>>dispatchEvent:\rBlElementEventDispatcher(BlBubblingEventDispatcher)>>dispatchEvent:next:\rBlEventDispatcherChain>>dispatchEvent:\rBlElementEventDispatcher(BlBubblingEventDispatcher)>>dispatchEvent:next:\rBlEventDispatcherChain>>dispatchEvent:\rBlElementEventDispatcher(BlBubblingEventDispatcher)>>dispatchEvent:next:\rBlEventDispatcherChain>>dispatchEvent:\rBlElementEventDispatcher(BlBubblingEventDispatcher)>>dispatchEvent:next:\rBlEventDispatcherChain>>dispatchEvent:\rBlElementEventDispatcher(BlBubblingEventDispatcher)>>dispatchEvent:next:\rBlEventDispatcherChain>>dispatchEvent:\rBlElementEventDispatcher(BlBubblingEventDispatcher)>>dispatchEvent:next:\rBlEventDispatcherChain>>dispatchEvent:\rBlElementEventDispatcher(BlBubblingEventDispatcher)>>dispatchEvent:next:\rBlEventDispatcherChain>>dispatchEvent:\rBlElementEventDispatcher(BlBubblingEventDispatcher)>>dispatchEvent:next:\rBlEventDispatcherChain>>dispatchEvent:\rBlElementEventDispatcher(BlBubblingEventDispatcher)>>dispatchEvent:next:\rBlEventDispatcherChain>>dispatchEvent:\rBlElementEventDispatcher(BlBubblingEventDispatcher)>>dispatchEvent:next:\rBlEventDispatcherChain>>dispatchEvent:\rBlElementEventDispatcher(BlBubblingEventDispatcher)>>dispatchEvent:next:\rBlEventDispatcherChain>>dispatchEvent:\rBlElementEventDispatcher(BlBubblingEventDispatcher)>>dispatchEvent:next:\rBlEventDispatcherChain>>dispatchEvent:\rBlElementEventDispatcher(BlBubblingEventDispatcher)>>dispatchEvent:next:\rBlEventDispatcherChain>>dispatchEvent:\rBlElementEventDispatcher(BlBubblingEventDispatcher)>>dispatchEvent:next:\rBlEventDispatcherChain>>dispatchEvent:\rBlElementEventDispatcher(BlBubblingEventDispatcher)>>dispatchEvent:next:\rBlEventDispatcherChain>>dispatchEvent:\rBlElementEventDispatcher(BlBubblingEventDispatcher)>>dispatchEvent:next:\rBlEventDispatcherChain>>dispatchEvent:\rBlElementEventDispatcher(BlBubblingEventDispatcher)>>dispatchEvent:next:\rBlEventDispatcherChain>>dispatchEvent:\rBlElementEventDispatcher(BlBubblingEventDispatcher)>>dispatchEvent:next:\rBlEventDispatcherChain>>dispatchEvent:\rBlElementEventDispatcher(BlBubblingEventDispatcher)>>dispatchEvent:next:\rBlEventDispatcherChain>>dispatchEvent:\rBlEvent class>>fireEvent:target:\rBlEvent class>>fireEvent:\rBlMouseProcessor(BlBaseEventProcessor)>>fireEvent:\rBlMouseProcessor>>processMouseUp:\rBlMouseProcessor>>handleMouseUp:\rBlSpaceEventListener>>mouseUpEvent:\rBlMouseUpEvent>>sendTo:\rBlSpaceEventListener(BlEventListener)>>handleEvent:\rBlSpaceEventListener>>handleEvent:\rBlHandlerAnnouncementSubscription>>deliver:\r[ subscription deliver: anAnnouncement ] in SubscriptionRegistry>>deliver:to:startingAt:\rFullBlockClosure(BlockClosure)>>ifCurtailed:\rSubscriptionRegistry>>deliver:to:startingAt:\rSubscriptionRegistry>>deliver:to:\rSubscriptionRegistry>>deliver:\rAnnouncer>>announce:\rBlHandlerAnnouncerRegistry>>dispatchEvent:\rBlDirectEventDispatcher>>dispatchEvent:next:\rBlDirectEventDispatcher(BlEventDispatcher)>>dispatchEvent:\r[\r\t\t\t\t\t\t\t\ttheSpace eventRecorder record: anEvent.\r\t\t\t\t\t\t\t\ttheSpace eventDispatcher dispatchEvent: anEvent ] in [\r\t\t\t\t\t\t\ttheSpace hostSpaceDo: [\r\t\t\t\t\t\t\t\ttheSpace eventRecorder record: anEvent.\r\t\t\t\t\t\t\t\ttheSpace eventDispatcher dispatchEvent: anEvent ] ] in [ :anEvent |\r\t\t\t\t\t\"we have to test for existance of the host space before handling each event because\r\t\t\t\t\tit is possible that a space is closed due to an event\"\r\t\t\t\t\t\r\t\t\t\t\tBlFrameTelemetry\r\t\t\t\t\t\ttime: [ ''Process event {1}'' format: { anEvent } ]\r\t\t\t\t\t\tduring: [\r\t\t\t\t\t\t\ttheSpace hostSpaceDo: [\r\t\t\t\t\t\t\t\ttheSpace eventRecorder record: anEvent.\r\t\t\t\t\t\t\t\ttheSpace eventDispatcher dispatchEvent: anEvent ] ]  ] in [ :aHostSpace |\r\t\t\t\t\taHostSpace fetchedEventsDo: [ :anEvent |\r\t\t\t\t\t\"we have to test for existance of the host space before handling each event because\r\t\t\t\t\tit is possible that a space is closed due to an event\"\r\t\t\t\t\t\r\t\t\t\t\tBlFrameTelemetry\r\t\t\t\t\t\ttime: [ ''Process event {1}'' format: { anEvent } ]\r\t\t\t\t\t\tduring: [\r\t\t\t\t\t\t\ttheSpace hostSpaceDo: [\r\t\t\t\t\t\t\t\ttheSpace eventRecorder record: anEvent.\r\t\t\t\t\t\t\t\ttheSpace eventDispatcher dispatchEvent: anEvent ] ]  ] ] in [ \r\t\t\t\t\"Process events enqueued by host space and dispatch them to the scene graph\"\r\r\t\t\t\ttheSpace eventRecorder onPulse.\r\r\t\t\t\ttheSpace hostSpaceDo: [ :aHostSpace |\r\t\t\t\t\taHostSpace fetchedEventsDo: [ :anEvent |\r\t\t\t\t\t\"we have to test for existance of the host space before handling each event because\r\t\t\t\t\tit is possible that a space is closed due to an event\"\r\t\t\t\t\t\r\t\t\t\t\tBlFrameTelemetry\r\t\t\t\t\t\ttime: [ ''Process event {1}'' format: { anEvent } ]\r\t\t\t\t\t\tduring: [\r\t\t\t\t\t\t\ttheSpace hostSpaceDo: [\r\t\t\t\t\t\t\t\ttheSpace eventRecorder record: anEvent.\r\t\t\t\t\t\t\t\ttheSpace eventDispatcher dispatchEvent: anEvent ] ]  ] ].\r\t\t\t\t\r\t\t\t\ttheSpace hostSpaceDo: [ :aHostSpace | aHostSpace generateEvents ] ] in [ :theSpace |\r\t\t\t\"We must update focused element before processing events, otherwise keyboard events,\r\t\t\tfor example, will be handled by the wrong element\"\r\t\t\taSpace doUpdateFocus.\r\r\t\t\ttheSpace hostSpaceDo: [ \r\t\t\t\t\"Process events enqueued by host space and dispatch them to the scene graph\"\r\r\t\t\t\ttheSpace eventRecorder onPulse.\r\r\t\t\t\ttheSpace hostSpaceDo: [ :aHostSpace |\r\t\t\t\t\taHostSpace fetchedEventsDo: [ :anEvent |\r\t\t\t\t\t\"we have to test for existance of the host space before handling each event because\r\t\t\t\t\tit is possible that a space is closed due to an event\"\r\t\t\t\t\t\r\t\t\t\t\tBlFrameTelemetry\r\t\t\t\t\t\ttime: [ ''Process event {1}'' format: { anEvent } ]\r\t\t\t\t\t\tduring: [\r\t\t\t\t\t\t\ttheSpace hostSpaceDo: [\r\t\t\t\t\t\t\t\ttheSpace eventRecorder record: anEvent.\r\t\t\t\t\t\t\t\ttheSpace eventDispatcher dispatchEvent: anEvent ] ]  ] ].\r\t\t\t\t\r\t\t\t\ttheSpace hostSpaceDo: [ :aHostSpace | aHostSpace generateEvents ] ].\r\t\t\ttheSpace mouseProcessor generateEvents ] in BlSpaceFrameEventPhase>>runOn:\rFullBlockClosure(BlockClosure)>>cull:\rGtWorld(BlSpace)>>hostSpaceDo:ifAbsent:\rGtWorld(BlSpace)>>hostSpaceDo:\r[\r\t\t\t\t\t\t\ttheSpace hostSpaceDo: [\r\t\t\t\t\t\t\t\ttheSpace eventRecorder record: anEvent.\r\t\t\t\t\t\t\t\ttheSpace eventDispatcher dispatchEvent: anEvent ] ] in [ :anEvent |\r\t\t\t\t\t\"we have to test for existance of the host space before handling each event because\r\t\t\t\t\tit is possible that a space is closed due to an event\"\r\t\t\t\t\t\r\t\t\t\t\tBlFrameTelemetry\r\t\t\t\t\t\ttime: [ ''Process event {1}'' format: { anEvent } ]\r\t\t\t\t\t\tduring: [\r\t\t\t\t\t\t\ttheSpace hostSpaceDo: [\r\t\t\t\t\t\t\t\ttheSpace eventRecorder record: anEvent.\r\t\t\t\t\t\t\t\ttheSpace eventDispatcher dispatchEvent: anEvent ] ]  ] in [ :aHostSpace |\r\t\t\t\t\taHostSpace fetchedEventsDo: [ :anEvent |\r\t\t\t\t\t\"we have to test for existance of the host space before handling each event because\r\t\t\t\t\tit is possible that a space is closed due to an event\"\r\t\t\t\t\t\r\t\t\t\t\tBlFrameTelemetry\r\t\t\t\t\t\ttime: [ ''Process event {1}'' format: { anEvent } ]\r\t\t\t\t\t\tduring: [\r\t\t\t\t\t\t\ttheSpace hostSpaceDo: [\r\t\t\t\t\t\t\t\ttheSpace eventRecorder record: anEvent.\r\t\t\t\t\t\t\t\ttheSpace eventDispatcher dispatchEvent: anEvent ] ]  ] ] in [ \r\t\t\t\t\"Process events enqueued by host space and dispatch them to the scene graph\"\r\r\t\t\t\ttheSpace eventRecorder onPulse.\r\r\t\t\t\ttheSpace hostSpaceDo: [ :aHostSpace |\r\t\t\t\t\taHostSpace fetchedEventsDo: [ :anEvent |\r\t\t\t\t\t\"we have to test for existance of the host space before handling each event because\r\t\t\t\t\tit is possible that a space is closed due to an event\"\r\t\t\t\t\t\r\t\t\t\t\tBlFrameTelemetry\r\t\t\t\t\t\ttime: [ ''Process event {1}'' format: { anEvent } ]\r\t\t\t\t\t\tduring: [\r\t\t\t\t\t\t\ttheSpace hostSpaceDo: [\r\t\t\t\t\t\t\t\ttheSpace eventRecorder record: anEvent.\r\t\t\t\t\t\t\t\ttheSpace eventDispatcher dispatchEvent: anEvent ] ]  ] ].\r\t\t\t\t\r\t\t\t\ttheSpace hostSpaceDo: [ :aHostSpace | aHostSpace generateEvents ] ] in [ :theSpace |\r\t\t\t\"We must update focused element before processing events, otherwise keyboard events,\r\t\t\tfor example, will be handled by the wrong element\"\r\t\t\taSpace doUpdateFocus.\r\r\t\t\ttheSpace hostSpaceDo: [ \r\t\t\t\t\"Process events enqueued by host space and dispatch them to the scene graph\"\r\r\t\t\t\ttheSpace eventRecorder onPulse.\r\r\t\t\t\ttheSpace hostSpaceDo: [ :aHostSpace |\r\t\t\t\t\taHostSpace fetchedEventsDo: [ :anEvent |\r\t\t\t\t\t\"we have to test for existance of the host space before handling each event because\r\t\t\t\t\tit is possible that a space is closed due to an event\"\r\t\t\t\t\t\r\t\t\t\t\tBlFrameTelemetry\r\t\t\t\t\t\ttime: [ ''Process event {1}'' format: { anEvent } ]\r\t\t\t\t\t\tduring: [\r\t\t\t\t\t\t\ttheSpace hostSpaceDo: [\r\t\t\t\t\t\t\t\ttheSpace eventRecorder record: anEvent.\r\t\t\t\t\t\t\t\ttheSpace eventDispatcher dispatchEvent: anEvent ] ]  ] ].\r\t\t\t\t\r\t\t\t\ttheSpace hostSpaceDo: [ :aHostSpace | aHostSpace generateEvents ] ].\r\t\t\ttheSpace mouseProcessor generateEvents ] in BlSpaceFrameEventPhase>>runOn:\rNullTelemetry>>time:during:\rBlSpaceTelemetry>>time:during:\rBlFrameTelemetry(BaseProcessTelemetry)>>time:during:\rBlFrameTelemetry class(BaseProcessTelemetry class)>>time:during:\r[ :anEvent |\r\t\t\t\t\t\"we have to test for existance of the host space before handling each event because\r\t\t\t\t\tit is possible that a space is closed due to an event\"\r\t\t\t\t\t\r\t\t\t\t\tBlFrameTelemetry\r\t\t\t\t\t\ttime: [ ''Process event {1}'' format: { anEvent } ]\r\t\t\t\t\t\tduring: [\r\t\t\t\t\t\t\ttheSpace hostSpaceDo: [\r\t\t\t\t\t\t\t\ttheSpace eventRecorder record: anEvent.\r\t\t\t\t\t\t\t\ttheSpace eventDispatcher dispatchEvent: anEvent ] ]  ] in [ :aHostSpace |\r\t\t\t\t\taHostSpace fetchedEventsDo: [ :anEvent |\r\t\t\t\t\t\"we have to test for existance of the host space before handling each event because\r\t\t\t\t\tit is possible that a space is closed due to an event\"\r\t\t\t\t\t\r\t\t\t\t\tBlFrameTelemetry\r\t\t\t\t\t\ttime: [ ''Process event {1}'' format: { anEvent } ]\r\t\t\t\t\t\tduring: [\r\t\t\t\t\t\t\ttheSpace hostSpaceDo: [\r\t\t\t\t\t\t\t\ttheSpace eventRecorder record: anEvent.\r\t\t\t\t\t\t\t\ttheSpace eventDispatcher dispatchEvent: anEvent ] ]  ] ] in [ \r\t\t\t\t\"Process events enqueued by host space and dispatch them to the scene graph\"\r\r\t\t\t\ttheSpace eventRecorder onPulse.\r\r\t\t\t\ttheSpace hostSpaceDo: [ :aHostSpace |\r\t\t\t\t\taHostSpace fetchedEventsDo: [ :anEvent |\r\t\t\t\t\t\"we have to test for existance of the host space before handling each event because\r\t\t\t\t\tit is possible that a space is closed due to an event\"\r\t\t\t\t\t\r\t\t\t\t\tBlFrameTelemetry\r\t\t\t\t\t\ttime: [ ''Process event {1}'' format: { anEvent } ]\r\t\t\t\t\t\tduring: [\r\t\t\t\t\t\t\ttheSpace hostSpaceDo: [\r\t\t\t\t\t\t\t\ttheSpace eventRecorder record: anEvent.\r\t\t\t\t\t\t\t\ttheSpace eventDispatcher dispatchEvent: anEvent ] ]  ] ].\r\t\t\t\t\r\t\t\t\ttheSpace hostSpaceDo: [ :aHostSpace | aHostSpace generateEvents ] ] in [ :theSpace |\r\t\t\t\"We must update focused element before processing events, otherwise keyboard events,\r\t\t\tfor example, will be handled by the wrong element\"\r\t\t\taSpace doUpdateFocus.\r\r\t\t\ttheSpace hostSpaceDo: [ \r\t\t\t\t\"Process events enqueued by host space and dispatch them to the scene graph\"\r\r\t\t\t\ttheSpace eventRecorder onPulse.\r\r\t\t\t\ttheSpace hostSpaceDo: [ :aHostSpace |\r\t\t\t\t\taHostSpace fetchedEventsDo: [ :anEvent |\r\t\t\t\t\t\"we have to test for existance of the host space before handling each event because\r\t\t\t\t\tit is possible that a space is closed due to an event\"\r\t\t\t\t\t\r\t\t\t\t\tBlFrameTelemetry\r\t\t\t\t\t\ttime: [ ''Process event {1}'' format: { anEvent } ]\r\t\t\t\t\t\tduring: [\r\t\t\t\t\t\t\ttheSpace hostSpaceDo: [\r\t\t\t\t\t\t\t\ttheSpace eventRecorder record: anEvent.\r\t\t\t\t\t\t\t\ttheSpace eventDispatcher dispatchEvent: anEvent ] ]  ] ].\r\t\t\t\t\r\t\t\t\ttheSpace hostSpaceDo: [ :aHostSpace | aHostSpace generateEvents ] ].\r\t\t\ttheSpace mouseProcessor generateEvents ] in BlSpaceFrameEventPhase>>runOn:\rLinkedList>>do:\rBlHostEventFetcher>>fetchedEventsDo:\rBlGlutinHostSpace>>fetchedEventsDo:\r[ :aHostSpace |\r\t\t\t\t\taHostSpace fetchedEventsDo: [ :anEvent |\r\t\t\t\t\t\"we have to test for existance of the host space before handling each event because\r\t\t\t\t\tit is possible that a space is closed due to an event\"\r\t\t\t\t\t\r\t\t\t\t\tBlFrameTelemetry\r\t\t\t\t\t\ttime: [ ''Process event {1}'' format: { anEvent } ]\r\t\t\t\t\t\tduring: [\r\t\t\t\t\t\t\ttheSpace hostSpaceDo: [\r\t\t\t\t\t\t\t\ttheSpace eventRecorder record: anEvent.\r\t\t\t\t\t\t\t\ttheSpace eventDispatcher dispatchEvent: anEvent ] ]  ] ] in [ \r\t\t\t\t\"Process events enqueued by host space and dispatch them to the scene graph\"\r\r\t\t\t\ttheSpace eventRecorder onPulse.\r\r\t\t\t\ttheSpace hostSpaceDo: [ :aHostSpace |\r\t\t\t\t\taHostSpace fetchedEventsDo: [ :anEvent |\r\t\t\t\t\t\"we have to test for existance of the host space before handling each event because\r\t\t\t\t\tit is possible that a space is closed due to an event\"\r\t\t\t\t\t\r\t\t\t\t\tBlFrameTelemetry\r\t\t\t\t\t\ttime: [ ''Process event {1}'' format: { anEvent } ]\r\t\t\t\t\t\tduring: [\r\t\t\t\t\t\t\ttheSpace hostSpaceDo: [\r\t\t\t\t\t\t\t\ttheSpace eventRecorder record: anEvent.\r\t\t\t\t\t\t\t\ttheSpace eventDispatcher dispatchEvent: anEvent ] ]  ] ].\r\t\t\t\t\r\t\t\t\ttheSpace hostSpaceDo: [ :aHostSpace | aHostSpace generateEvents ] ] in [ :theSpace |\r\t\t\t\"We must update focused element before processing events, otherwise keyboard events,\r\t\t\tfor example, will be handled by the wrong element\"\r\t\t\taSpace doUpdateFocus.\r\r\t\t\ttheSpace hostSpaceDo: [ \r\t\t\t\t\"Process events enqueued by host space and dispatch them to the scene graph\"\r\r\t\t\t\ttheSpace eventRecorder onPulse.\r\r\t\t\t\ttheSpace hostSpaceDo: [ :aHostSpace |\r\t\t\t\t\taHostSpace fetchedEventsDo: [ :anEvent |\r\t\t\t\t\t\"we have to test for existance of the host space before handling each event because\r\t\t\t\t\tit is possible that a space is closed due to an event\"\r\t\t\t\t\t\r\t\t\t\t\tBlFrameTelemetry\r\t\t\t\t\t\ttime: [ ''Process event {1}'' format: { anEvent } ]\r\t\t\t\t\t\tduring: [\r\t\t\t\t\t\t\ttheSpace hostSpaceDo: [\r\t\t\t\t\t\t\t\ttheSpace eventRecorder record: anEvent.\r\t\t\t\t\t\t\t\ttheSpace eventDispatcher dispatchEvent: anEvent ] ]  ] ].\r\t\t\t\t\r\t\t\t\ttheSpace hostSpaceDo: [ :aHostSpace | aHostSpace generateEvents ] ].\r\t\t\ttheSpace mouseProcessor generateEvents ] in BlSpaceFrameEventPhase>>runOn:\rFullBlockClosure(BlockClosure)>>cull:\rGtWorld(BlSpace)>>hostSpaceDo:ifAbsent:\rGtWorld(BlSpace)>>hostSpaceDo:\r[ \r\t\t\t\t\"Process events enqueued by host space and dispatch them to the scene graph\"\r\r\t\t\t\ttheSpace eventRecorder onPulse.\r\r\t\t\t\ttheSpace hostSpaceDo: [ :aHostSpace |\r\t\t\t\t\taHostSpace fetchedEventsDo: [ :anEvent |\r\t\t\t\t\t\"we have to test for existance of the host space before handling each event because\r\t\t\t\t\tit is possible that a space is closed due to an event\"\r\t\t\t\t\t\r\t\t\t\t\tBlFrameTelemetry\r\t\t\t\t\t\ttime: [ ''Process event {1}'' format: { anEvent } ]\r\t\t\t\t\t\tduring: [\r\t\t\t\t\t\t\ttheSpace hostSpaceDo: [\r\t\t\t\t\t\t\t\ttheSpace eventRecorder record: anEvent.\r\t\t\t\t\t\t\t\ttheSpace eventDispatcher dispatchEvent: anEvent ] ]  ] ].\r\t\t\t\t\r\t\t\t\ttheSpace hostSpaceDo: [ :aHostSpace | aHostSpace generateEvents ] ] in [ :theSpace |\r\t\t\t\"We must update focused element before processing events, otherwise keyboard events,\r\t\t\tfor example, will be handled by the wrong element\"\r\t\t\taSpace doUpdateFocus.\r\r\t\t\ttheSpace hostSpaceDo: [ \r\t\t\t\t\"Process events enqueued by host space and dispatch them to the scene graph\"\r\r\t\t\t\ttheSpace eventRecorder onPulse.\r\r\t\t\t\ttheSpace hostSpaceDo: [ :aHostSpace |\r\t\t\t\t\taHostSpace fetchedEventsDo: [ :anEvent |\r\t\t\t\t\t\"we have to test for existance of the host space before handling each event because\r\t\t\t\t\tit is possible that a space is closed due to an event\"\r\t\t\t\t\t\r\t\t\t\t\tBlFrameTelemetry\r\t\t\t\t\t\ttime: [ ''Process event {1}'' format: { anEvent } ]\r\t\t\t\t\t\tduring: [\r\t\t\t\t\t\t\ttheSpace hostSpaceDo: [\r\t\t\t\t\t\t\t\ttheSpace eventRecorder record: anEvent.\r\t\t\t\t\t\t\t\ttheSpace eventDispatcher dispatchEvent: anEvent ] ]  ] ].\r\t\t\t\t\r\t\t\t\ttheSpace hostSpaceDo: [ :aHostSpace | aHostSpace generateEvents ] ].\r\t\t\ttheSpace mouseProcessor generateEvents ] in BlSpaceFrameEventPhase>>runOn:\rFullBlockClosure(BlockClosure)>>cull:\rGtWorld(BlSpace)>>hostSpaceDo:ifAbsent:\rGtWorld(BlSpace)>>hostSpaceDo:\r[ :theSpace |\r\t\t\t\"We must update focused element before processing events, otherwise keyboard events,\r\t\t\tfor example, will be handled by the wrong element\"\r\t\t\taSpace doUpdateFocus.\r\r\t\t\ttheSpace hostSpaceDo: [ \r\t\t\t\t\"Process events enqueued by host space and dispatch them to the scene graph\"\r\r\t\t\t\ttheSpace eventRecorder onPulse.\r\r\t\t\t\ttheSpace hostSpaceDo: [ :aHostSpace |\r\t\t\t\t\taHostSpace fetchedEventsDo: [ :anEvent |\r\t\t\t\t\t\"we have to test for existance of the host space before handling each event because\r\t\t\t\t\tit is possible that a space is closed due to an event\"\r\t\t\t\t\t\r\t\t\t\t\tBlFrameTelemetry\r\t\t\t\t\t\ttime: [ ''Process event {1}'' format: { anEvent } ]\r\t\t\t\t\t\tduring: [\r\t\t\t\t\t\t\ttheSpace hostSpaceDo: [\r\t\t\t\t\t\t\t\ttheSpace eventRecorder record: anEvent.\r\t\t\t\t\t\t\t\ttheSpace eventDispatcher dispatchEvent: anEvent ] ]  ] ].\r\t\t\t\t\r\t\t\t\ttheSpace hostSpaceDo: [ :aHostSpace | aHostSpace generateEvents ] ].\r\t\t\ttheSpace mouseProcessor generateEvents ] in BlSpaceFrameEventPhase>>runOn:\rFullBlockClosure(BlockClosure)>>cull:\rGtWorld(BlSpace)>>dispatchTimeEvent:during:\rBlSpaceFrameEventPhase>>runOn:\r[ self currentPhase runOn: aSpace ] in BlSpaceFrame>>runCurrentPhaseOn:\rNullTelemetry>>time:during:\rBlSpaceTelemetry>>time:during:\rBlFrameTelemetry(BaseProcessTelemetry)>>time:during:\rBlFrameTelemetry class(BaseProcessTelemetry class)>>time:during:\rBlSpaceFrame>>runCurrentPhaseOn:\rBlSpaceFrame>>runOn:\r[ self frame runOn: self ] in [ BlFrameTelemetry soleInstance\r\t\t\t\t\t\t\tmessageTallyOn:  [ self frame runOn: self ] ] in BlSpace>>processPulse\rNullTelemetry>>profile:executing:as:\rBlSpaceTelemetry>>profile:executing:as:\rBlFrameTelemetry(BaseProcessTelemetry)>>profile:executing:as:\rBlFrameTelemetry(BaseProcessTelemetry)>>messageTallyOn:\r[ BlFrameTelemetry soleInstance\r\t\t\t\t\t\t\tmessageTallyOn:  [ self frame runOn: self ] ] in BlSpace>>processPulse\rNullTelemetry>>profile:executing:as:\rBlSpaceTelemetry>>profile:executing:as:\rBlFrameTelemetry(BaseProcessTelemetry)>>profile:executing:as:\rBlFrameTelemetry(BaseProcessTelemetry)>>beacon:as:on:\rBlFrameTelemetry(BaseProcessTelemetry)>>beacon:on:\r[\r\t\t\t\t\tBlFrameTelemetry soleInstance\r\t\t\t\t\t\tbeacon: BlRequestLayoutSignal, BlMarkElementNeedsPaintSignal, BlLostFocusSignal, BlGotFocusSignal, BlTextStylerRequestedSignal\r\t\t\t\t\t\ton: [ BlFrameTelemetry soleInstance\r\t\t\t\t\t\t\tmessageTallyOn:  [ self frame runOn: self ] ] ] in BlSpace>>processPulse\rNullTelemetry>>time:during:\rBlSpaceTelemetry>>time:during:\rBlFrameTelemetry(BaseProcessTelemetry)>>time:during:\rBlFrameTelemetry class(BaseProcessTelemetry class)>>time:during:\r[\r\t\t\tBlFrameTelemetry\r\t\t\t\treset;\r\t\t\t\ttime: [ ''Frame'' ]\r\t\t\t\tduring: [\r\t\t\t\t\tBlFrameTelemetry soleInstance\r\t\t\t\t\t\tbeacon: BlRequestLayoutSignal, BlMarkElementNeedsPaintSignal, BlLostFocusSignal, BlGotFocusSignal, BlTextStylerRequestedSignal\r\t\t\t\t\t\ton: [ BlFrameTelemetry soleInstance\r\t\t\t\t\t\t\tmessageTallyOn:  [ self frame runOn: self ] ] ];\r\t\t\t\tin: [ :t | t soleInstance snapshotSpace: self ];\r\t\t\t\temit ] in BlSpace>>processPulse\rFullBlockClosure(BlockClosure)>>ensure:\rBlFrameTelemetry class>>withSpace:andTelemetry:do:\rGtWorld(BlSpace)>>processPulse\rGtWorld(BlSpace)>>pulse\r[ :eachSpace | eachSpace pulse ] in BlParallelUniverse>>pulseSynchronously\rArray(SequenceableCollection)>>do:\rBlSpaceManager>>do:\r[\r\t\tself tryToRunDeferredActions.\r\t\tspaceManager do: [ :eachSpace | eachSpace pulse ]\r\t] in BlParallelUniverse>>pulseSynchronously\rFullBlockClosure(BlockClosure)>>ensure:\rBlParallelUniverse>>pulseSynchronously\r[\r\t\tself pulseSynchronously\r\t] in BlParallelUniverse>>pulse\rFullBlockClosure(BlockClosure)>>ensure:\rBlParallelUniverse>>pulse\rBlHostPulseLoop>>firePulse\r[\r\t\t[ self firePulse. loopProcess == Processor activeProcess. ] whileTrue\r\t] in BlHostPulseLoop>>createLoopTask\r[self value.\r\t\t\t\"IMPORTANT: Do not step over next line of code. See method comments for details\"\r\t\t\tProcessor terminateRealActive] in FullBlockClosure(BlockClosure)>>newProcess\r\r```","annotations":[]}}],"file_ids":[],"metadata":{}}'
 ]
 
 { #category : #'examples - messages' }
-GtOpenAIExamples >> veryLongMessageExpandableElementQuestion [
+GtOpenAIThreadMessageExamples >> veryLongMessageExpandableElementQuestion [
 	<gtExample>
 	| aViewModel anElement |
 	anElement := self basicExpandableThreadMessageElement.
@@ -366,7 +285,7 @@ GtOpenAIExamples >> veryLongMessageExpandableElementQuestion [
 ]
 
 { #category : #'examples - messages' }
-GtOpenAIExamples >> veryLongMessageQuestion [
+GtOpenAIThreadMessageExamples >> veryLongMessageQuestion [
 	<gtExample>
 	| aJson |
 	aJson := self veryLongJsonQuestion.
@@ -374,7 +293,7 @@ GtOpenAIExamples >> veryLongMessageQuestion [
 ]
 
 { #category : #'examples - messages' }
-GtOpenAIExamples >> veryLongMessageViewModelQuestion [
+GtOpenAIThreadMessageExamples >> veryLongMessageViewModelQuestion [
 	<gtExample>
 	| aViewModel aMessage |
 	aViewModel := self basicThreadMessageViewModel.
