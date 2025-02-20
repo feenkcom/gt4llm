@@ -3,7 +3,8 @@ Class {
 	#superclass : #GtLlmEntity,
 	#instVars : [
 		'fileId',
-		'quote'
+		'quote',
+		'annotation'
 	],
 	#category : #'Gt4OpenAI-Models'
 }
@@ -15,8 +16,20 @@ GtOpenAIFileCitation class >> serializationProperties [
 ]
 
 { #category : #accessing }
+GtOpenAIFileCitation >> annotation [
+	^ annotation
+]
+
+{ #category : #accessing }
+GtOpenAIFileCitation >> annotation: anObject [
+	annotation := anObject
+]
+
+{ #category : #accessing }
 GtOpenAIFileCitation >> file [
-	^ self fileId ifEmpty: [ nil ] ifNotEmpty: [ self client getFile: self fileId ]
+	^ self fileId
+		ifEmpty: [ nil ]
+		ifNotEmpty: [ self annotation message chat provider getApiFile: self fileId ]
 ]
 
 { #category : #accessing }

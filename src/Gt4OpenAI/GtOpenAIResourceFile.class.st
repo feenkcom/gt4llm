@@ -9,6 +9,11 @@ Class {
 	#category : #'Gt4OpenAI-Models'
 }
 
+{ #category : #'as yet unclassified' }
+GtOpenAIResourceFile >> contents [
+	^ file contents
+]
+
 { #category : #accessing }
 GtOpenAIResourceFile >> description [
 	^ description
@@ -27,6 +32,21 @@ GtOpenAIResourceFile >> file [
 { #category : #accessing }
 GtOpenAIResourceFile >> file: anObject [
 	file := anObject
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAIResourceFile >> filename [
+	^ file filename
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAIResourceFile >> gtContentsFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Contents';
+		priority: 5;
+		object: [ file ];
+		view: #gtContentsFor:
 ]
 
 { #category : #accessing }

@@ -34,7 +34,7 @@ GtOpenAIThreadMessageStyler >> privateStyle: aText [
 							ifNotNil: [ BrGlamorousColors newsBackgroundColor ]).
 				annotation
 					ifNotNil: [ (aText from: tokens second start - 1 to: tokens second stop + 1)
-							attribute: (GtPlaygroundEvaluatedCodeButtonAttribute new result: annotation) ] ].
+							attribute: (GtPlaygroundEvaluatedCodeButtonAttribute new result: annotation file) ] ].
 	aParser sea star optimize parse: aString.
 	^ aText
 ]

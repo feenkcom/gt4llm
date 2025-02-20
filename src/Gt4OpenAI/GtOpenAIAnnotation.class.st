@@ -6,7 +6,8 @@ Class {
 		'text',
 		'startIndex',
 		'endIndex',
-		'fileCitation'
+		'fileCitation',
+		'message'
 	],
 	#category : #'Gt4OpenAI-Models'
 }
@@ -51,16 +52,19 @@ GtOpenAIAnnotation >> fileCitation [
 
 { #category : #accessing }
 GtOpenAIAnnotation >> fileCitation: anObject [
-	fileCitation := (GtOpenAIFileCitation from: anObject) client: self client
+	fileCitation := (GtOpenAIFileCitation from: anObject)
+			client: self client;
+			annotation: self
 ]
 
 { #category : #accessing }
-GtOpenAIAnnotation >> gtQuoteFor: aView [
-	<gtView>
-	^ aView textEditor
-		title: 'Quote';
-		priority: 1;
-		text: [ self quote ]
+GtOpenAIAnnotation >> message [
+	^ message
+]
+
+{ #category : #accessing }
+GtOpenAIAnnotation >> message: anObject [
+	message := anObject
 ]
 
 { #category : #'as yet unclassified' }
