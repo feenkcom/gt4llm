@@ -50,16 +50,6 @@ GtLlmInspectorSummary >> methods: anObject [
 ]
 
 { #category : #accessing }
-GtLlmInspectorSummary >> object [
-	^ object
-]
-
-{ #category : #accessing }
-GtLlmInspectorSummary >> object: anObject [
-	object := anObject
-]
-
-{ #category : #accessing }
 GtLlmInspectorSummary >> objectClass [
 	^ objectClass
 ]

@@ -41,14 +41,6 @@ GtLlmNewThreadMessage >> codeBlocks [
 ]
 
 { #category : #accessing }
-GtLlmNewThreadMessage >> codeBlocksExecutor [
-	^ GtOpenAIPipelineExecutor new
-		codeBlocks: self codeBlocks;
-		pipeline: assistantChat pipeline;
-		threadMessage: self
-]
-
-{ #category : #accessing }
 GtLlmNewThreadMessage >> contentSummary [
 	^ self contentText lines ifEmpty: [ '' ] ifNotEmpty: #first
 ]
