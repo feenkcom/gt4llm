@@ -123,6 +123,9 @@ GtOllamaProvider >> triggerAssistant [
 			completeChatWithModel: self model
 			andMessages: self chat messages
 			andFormat: self format.
+			
+	
+	self halt.
 
 	self chat
 		addMessage: (assistantMessageClass new
