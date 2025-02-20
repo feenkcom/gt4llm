@@ -65,6 +65,22 @@ GtLlmEntity >> gtViewRawDataFor: aView [
 		view: #gtItemsFor:
 ]
 
+{ #category : #'as yet unclassified' }
+GtLlmEntity >> merge: anotherEntity [
+	self
+		assert: anotherEntity class = self class
+		description: [ 'Only like entities can be merged' ].
+
+	self rawData: anotherEntity rawData.
+
+	self class serializationProperties
+		do: [ :aPair | 
+			| aValue |
+			aValue := anotherEntity perform: aPair value.
+			aValue
+				ifNotNil: [ self perform: (aPair value , ':') asSymbol withArguments: {aValue} ] ]
+]
+
 { #category : #accessing }
 GtLlmEntity >> rawData [
 	^ rawData

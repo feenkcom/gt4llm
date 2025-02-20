@@ -8,7 +8,6 @@ Class {
 		'sendButton',
 		'toolbar',
 		'toggleGroup',
-		'argument',
 		'descriptionElement'
 	],
 	#category : #'Gt4Llm-Widgets'
@@ -186,12 +185,12 @@ GtLlmNewActionThreadMessageElement >> subscribeToThreadMessageViewModel [
 		to: self.
 		
 	self threadMessage assistantChat
-		when: GtOpenAIThreadRunStartedAnnouncement
+		when: GtLlmThreadRunStartedAnnouncement
 		send: #disableSend
 		to: self.
 		
 	self threadMessage assistantChat
-		when: GtOpenAIThreadRunIsDoneAnnouncement
+		when: GtLlmThreadRunIsDoneAnnouncement
 		send: #enableSend
 		to: self.
 

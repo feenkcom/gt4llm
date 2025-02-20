@@ -192,5 +192,12 @@ GtOpenAIAssistantProvider >> tools: anObject [
 
 { #category : #'as yet unclassified' }
 GtOpenAIAssistantProvider >> updateMessages [
-	chat messages: self getMessages
+	| newMessages |
+	newMessages := self getMessages.
+
+	newMessages
+		doWithIndex: [ :aMessage :anIndex | 
+			anIndex > chat messages size
+				ifTrue: [ chat addMessage: aMessage ]
+				ifFalse: [ (chat messages at: anIndex) merge: aMessage ] ]
 ]
