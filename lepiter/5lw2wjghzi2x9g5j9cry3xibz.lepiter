@@ -87,43 +87,6 @@
 											"__type" : "textStyle"
 										},
 										"string" : "[[Working with tutors]] "
-									},
-									{
-										"__type" : "textSnippet",
-										"children" : {
-											"__type" : "snippets",
-											"items" : [ ]
-										},
-										"createEmail" : {
-											"__type" : "email",
-											"emailString" : "<unknown>"
-										},
-										"createTime" : {
-											"__type" : "time",
-											"time" : {
-												"__type" : "dateAndTime",
-												"dateAndTimeString" : "2025-02-20T13:47:38.361874+01:00"
-											}
-										},
-										"editEmail" : {
-											"__type" : "email",
-											"emailString" : "<unknown>"
-										},
-										"editTime" : {
-											"__type" : "time",
-											"time" : {
-												"__type" : "dateAndTime",
-												"dateAndTimeString" : "2025-02-20T13:47:39.537254+01:00"
-											}
-										},
-										"uid" : {
-											"__type" : "uid",
-											"uidString" : "K54lA/TqDQCD6J01AN8K3w=="
-										},
-										"paragraphStyle" : {
-											"__type" : "textStyle"
-										},
-										"string" : "[[Adding the GT book to a tutor to answer questions about GT]]"
 									}
 								]
 							},
