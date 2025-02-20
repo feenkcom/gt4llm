@@ -1,11 +1,11 @@
 Class {
-	#name : #GtLlmBlogPostTutor,
+	#name : #GtOpenAIBlogPostTutor,
 	#superclass : #GtLlmTutor,
-	#category : #'Gt4Llm-Tutor'
+	#category : #'Gt4OpenAI-Tutor'
 }
 
 { #category : #'as yet unclassified' }
-GtLlmBlogPostTutor >> createChatOn: aText [
+GtOpenAIBlogPostTutor >> createChatOn: aText [
 	| chat |
 	chat := self createChat.
 	chat onInstance: (self valueHolderFor: aText).
@@ -13,22 +13,22 @@ GtLlmBlogPostTutor >> createChatOn: aText [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmBlogPostTutor >> defaultDescription [
+GtOpenAIBlogPostTutor >> defaultDescription [
 	^ 'You are an assistant that is used to interactively work on blog posts. You trigger certain actions to generate a desired result.'
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmBlogPostTutor >> defaultProviderStencil [
+GtOpenAIBlogPostTutor >> defaultProviderStencil [
 	^ [ :anInstructionFormat | 
 	GtOpenAIAssistantProvider withApiKeyFromFile
 		instructions: anInstructionFormat asInstructionPiece instructionString;
 		format: anInstructionFormat asJsonSchema;
-		assistantMessageClass: GtLlmBlogPostMessage;
-		userMessageClass: GtLlmBlogPostMessage ]
+		assistantMessageClass: GtOpenAIBlogPostMessage;
+		userMessageClass: GtOpenAIBlogPostMessage ]
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmBlogPostTutor >> gtCorrectGrammar [
+GtOpenAIBlogPostTutor >> gtCorrectGrammar [
  	<gtLlmTutorAction>
  	^ GtLlmTutorAction new
 	    name: 'Correct grammar';
@@ -64,7 +64,7 @@ Oh yes, I know, agents can include feedback when generating solutions. But even 
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmBlogPostTutor >> gtCreateTitle [
+GtOpenAIBlogPostTutor >> gtCreateTitle [
  	<gtLlmTutorAction>
  	^ GtLlmTutorAction new
 	    name: 'Create title';
@@ -88,7 +88,7 @@ Oh yes, I know, agents can add include feedback when generating solutions. But e
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmBlogPostTutor >> gtPostFormatDescription [
+GtOpenAIBlogPostTutor >> gtPostFormatDescription [
 	<gtLlmTutorFormat>
 	^ GtLlmTutorFormatDescription new
 	type: ((OrderedCollection new) add: 'string'; add: 'null'; yourself);
@@ -99,7 +99,7 @@ GtLlmBlogPostTutor >> gtPostFormatDescription [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmBlogPostTutor >> valueHolderFor: anObject [
+GtOpenAIBlogPostTutor >> valueHolderFor: anObject [
 	^ GtLlmSerializableValueHolder new
 		name: 'Post';
 		content: anObject;

@@ -1,11 +1,11 @@
 Class {
-	#name : #GtLlmBlogPostMessage,
+	#name : #GtOpenAIBlogPostMessage,
 	#superclass : #GtOpenAIActionMessage,
-	#category : #'Gt4Llm-Models'
+	#category : #'Gt4OpenAI-Models'
 }
 
 { #category : #'as yet unclassified' }
-GtLlmBlogPostMessage >> gtDiffFor: aView [
+GtOpenAIBlogPostMessage >> gtDiffFor: aView [
 	<gtView>
 	<gtLlmMessageView>
 	(self contentJson includesKey: 'Post') ifFalse: [ ^ aView empty ].
