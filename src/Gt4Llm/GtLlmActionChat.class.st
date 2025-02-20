@@ -31,6 +31,11 @@ GtLlmActionChat >> onInstance: anInstance [
 ]
 
 { #category : #'as yet unclassified' }
+GtLlmActionChat >> sendAction: anActionCall [
+	^ self sendAction: anActionCall onAnswer: []
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmActionChat >> sendAction: anActionCall onAnswer: aBlock [
 	self
 		sendMessage: ((self tutor actionNamed: anActionCall action) format
