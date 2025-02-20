@@ -109,14 +109,14 @@
 								"__type" : "time",
 								"time" : {
 									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2025-02-12T12:51:27.681995+01:00"
+									"dateAndTimeString" : "2025-02-13T08:31:49.729931+01:00"
 								}
 							},
 							"uid" : {
 								"__type" : "uid",
 								"uidString" : "ym4fkHPgDQCxY5ehBRiBow=="
 							},
-							"code" : "tutor := LlmTutor new description: 'You edit blog posts.'."
+							"code" : "tutor := GtLlmTutor new description: 'You edit blog posts.'."
 						},
 						{
 							"__type" : "pharoSnippet",
@@ -249,14 +249,14 @@
 								"__type" : "time",
 								"time" : {
 									"__type" : "dateAndTime",
-									"dateAndTimeString" : "2025-02-12T14:24:10.83718+01:00"
+									"dateAndTimeString" : "2025-02-19T08:36:25.892734+01:00"
 								}
 							},
 							"uid" : {
 								"__type" : "uid",
 								"uidString" : "1WPFbYbgDQCJc8fKBRiBow=="
 							},
-							"code" : "chat := LlmDPostTutor new createChat.\r\rchat\r\tonInstance: (GtLlmSerializableValueHolder new\r\t\t\tname: 'Post';\r\t\t\tcontent: thisSnippet page children first children first;\r\t\t\tserializer: [ :aSnippet | aSnippet text asString ];\r\t\t\tupdater: [ :aSnippet :aText | \r\t\t\t\t(aSnippet commandBuilder editTextualSnippetCommand\r\t\t\t\t\tstring: aText\r\t\t\t\t\twithSource: demoTutor -> true) execute ])"
+							"code" : "chat := GtLlmBlogPostTutor new createChat.\r\rchat\r\tonInstance: (GtLlmSerializableValueHolder new\r\t\t\tname: 'Post';\r\t\t\tcontent: thisSnippet page children first children first;\r\t\t\tserializer: [ :aSnippet | aSnippet text asString ];\r\t\t\tupdater: [ :aSnippet :aText | \r\t\t\t\t(aSnippet commandBuilder editTextualSnippetCommand\r\t\t\t\t\tstring: aText\r\t\t\t\t\twithSource: demoTutor -> true) execute ])"
 						}
 					]
 				},

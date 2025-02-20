@@ -25,20 +25,7 @@ GtLlmChatViewModel >> newThreadMessageViewModel [
 
 { #category : #accessing }
 GtLlmChatViewModel >> newThreadMessageViewModelFor: aMessage [
-	| aViewModel |
-	aViewModel := GtLlmThreadMessageViewModel new threadMessage: aMessage.
-
-	aViewModel weak
-		when: GtLlmAddMessageContentsRequest
-		send: #onAddMessageContents:
-		to: self.
-
-	^ aViewModel
-]
-
-{ #category : #'private - announcement handling' }
-GtLlmChatViewModel >> onAddMessageContents: anAnnouncement [
-	newThreadMessageViewModel addMessageContents: anAnnouncement messageContents
+	^ GtLlmThreadMessageViewModel new threadMessage: aMessage
 ]
 
 { #category : #'private - hooks' }
@@ -73,7 +60,7 @@ GtLlmChatViewModel >> threadMessageViewModels [
 			aStatus isFailed
 				ifTrue: [ | aViewModel |
 					aViewModel := self
-							newThreadMessageViewModelFor: (GtOpenAIFailureThreadMessage new
+							newThreadMessageViewModelFor: (GtLlmFailureThreadMessage new
 									failureText: aStatus message;
 									createdAt: aStatus createdAt;
 									chat: self assistantChat).

@@ -55,77 +55,6 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2025-01-28T14:20:18.732341+01:00"
-					}
-				},
-				"editEmail" : {
-					"__type" : "email",
-					"emailString" : "<unknown>"
-				},
-				"editTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2025-01-28T14:20:39.977351+01:00"
-					}
-				},
-				"uid" : {
-					"__type" : "uid",
-					"uidString" : "3OiPyiXpDQCwRjlVBOD//Q=="
-				},
-				"paragraphStyle" : {
-					"__type" : "textStyle"
-				},
-				"string" : "irst we need to construct a tutor. We use a tutor that is already prompted to answer questions about GT."
-			},
-			{
-				"__type" : "pharoSnippet",
-				"children" : {
-					"__type" : "snippets",
-					"items" : [ ]
-				},
-				"createEmail" : {
-					"__type" : "email",
-					"emailString" : "veit.heller@feenk.com"
-				},
-				"createTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2025-01-28T10:21:57.955226+01:00"
-					}
-				},
-				"editEmail" : {
-					"__type" : "email",
-					"emailString" : "veit.heller@feenk.com"
-				},
-				"editTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2025-01-28T12:24:21.922547+01:00"
-					}
-				},
-				"uid" : {
-					"__type" : "uid",
-					"uidString" : "R2QrdiLpDQChPVbOBOD//Q=="
-				},
-				"code" : "tutor := GtOpenAIGtSpecificTutor withApiKeyFromFile\r\t\tfiles: GtOpenAIResourceFilesGroup new"
-			},
-			{
-				"__type" : "textSnippet",
-				"children" : {
-					"__type" : "snippets",
-					"items" : [ ]
-				},
-				"createEmail" : {
-					"__type" : "email",
-					"emailString" : "<unknown>"
-				},
-				"createTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
 						"dateAndTimeString" : "2025-01-28T14:24:55.878676+01:00"
 					}
 				},
@@ -137,7 +66,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2025-01-28T14:25:44.291633+01:00"
+						"dateAndTimeString" : "2025-02-20T13:41:40.017007+01:00"
 					}
 				},
 				"uid" : {
@@ -147,7 +76,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "We then take all the pages from GT book, and create a file we can upload to OpenAI and add to the assistant."
+				"string" : "We begin by taking all the pages from GT book, and creating a file we can upload to OpenAI and provide to the tutor."
 			},
 			{
 				"__type" : "pharoSnippet",
@@ -202,20 +131,20 @@
 				},
 				"editEmail" : {
 					"__type" : "email",
-					"emailString" : "veit.heller@feenk.com"
+					"emailString" : "<unknown>"
 				},
 				"editTime" : {
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2025-01-28T12:24:24.124589+01:00"
+						"dateAndTimeString" : "2025-02-20T13:41:51.649509+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "93PfYCLpDQCaQ3YiBOD//Q=="
 				},
-				"code" : "aFile := FileLocator temp / 'GToolkitBook.txt'.\raFile ensureDelete.\raFile\r\twriteStreamDo: [ :aStream | pages do: [ :aPage | aStream nextPutAll: aPage asMarkdownPage ] ].\r\rtutor\r\taddFile: (GtOpenAIResourceFile new\r\t\t\tfile: aFile;\r\t\t\tdescription: 'Lepiter booklet: GToolkit book').\r\rtutor"
+				"code" : "aFile := FileLocator temp / 'GToolkitBook.txt'.\raFile ensureDelete.\raFile\r\twriteStreamDo: [ :aStream | pages do: [ :aPage | aStream nextPutAll: aPage asMarkdownPage ] ]."
 			},
 			{
 				"__type" : "textSnippet",
@@ -242,7 +171,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2025-01-28T14:26:59.804834+01:00"
+						"dateAndTimeString" : "2025-02-20T13:44:37.587722+01:00"
 					}
 				},
 				"uid" : {
@@ -252,7 +181,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "inally, we create an assistant and start a chat, asking it questions about GT or topics found in its RAG database."
+				"string" : "Then, we create a tutor and give it a description as well as overriding the provider to give it access to the files and file search capabilities. This is currently only available for the OpenAI assistant provider."
 			},
 			{
 				"__type" : "pharoSnippet",
@@ -273,20 +202,57 @@
 				},
 				"editEmail" : {
 					"__type" : "email",
-					"emailString" : "veit.heller@feenk.com"
+					"emailString" : "<unknown>"
 				},
 				"editTime" : {
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2025-01-28T12:24:24.958321+01:00"
+						"dateAndTimeString" : "2025-02-20T13:42:18.48849+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "VRvDjCLpDQClNSbsBOD//Q=="
 				},
-				"code" : "tutor createAssistant"
+				"code" : "tutor := GtLlmTutor new\r\t\tdescription: 'You are an assistant that answers questions about Glamorous Toolkit (also: GToolkit or GT) by referring to the GToolkit book provided to you.';\r\t\tproviderStencil: [ :anInstructionFormat | \r\t\t\tGtOpenAIAssistantProvider withApiKeyFromFile\r\t\t\t\tformat: anInstructionFormat asJsonSchema;\r\t\t\t\tassistantMessageClass: GtOpenAIActionMessage;\r\t\t\t\tuserMessageClass: GtOpenAIActionMessage;\r\t\t\t\taddFile: (GtOpenAIResourceFile new\r\t\t\t\t\t\tfile: aFile;\r\t\t\t\t\t\tdescription: 'Lepiter booklet: GToolkit book');\r\t\t\t\taddTool: (GtOpenAITool new type: 'file_search');\r\t\t\t\tinstructions: anInstructionFormat asInstructionPiece instructionString ].\r\rtutor"
+			},
+			{
+				"__type" : "textSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2025-02-20T13:42:28.30553+01:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2025-02-20T13:43:10.977166+01:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "GpmV8fPqDQCyZw0ZAN8K3w=="
+				},
+				"paragraphStyle" : {
+					"__type" : "textStyle"
+				},
+				"string" : "Finally, we start a chat, asking it questions about GT or topics found in its RAG database."
 			},
 			{
 				"__type" : "pharoSnippet",
@@ -313,14 +279,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2025-01-28T14:14:26.697468+01:00"
+						"dateAndTimeString" : "2025-02-20T13:43:18.486121+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "NseIAyPpDQCm3gqWBOD//Q=="
 				},
-				"code" : "chat := tutor addChat"
+				"code" : "chat := tutor createChat"
 			},
 			{
 				"__type" : "pharoSnippet",

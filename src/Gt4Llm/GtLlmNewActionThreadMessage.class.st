@@ -19,5 +19,5 @@ GtLlmNewActionThreadMessage >> currentAction: anObject [
 
 { #category : #'as yet unclassified' }
 GtLlmNewActionThreadMessage >> treatString [
-	^ assistantChat messageFromString: (currentAction format format: {contents})
+	^ currentAction format format: {contents}
 ]

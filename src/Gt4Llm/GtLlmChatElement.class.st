@@ -54,7 +54,7 @@ GtLlmChatElement >> onThreadRunAnnouncement: anAnnouncement [
 { #category : #'as yet unclassified' }
 GtLlmChatElement >> subscribeToAssistantChatViewModel [
 	self chatViewModel assistantChat weak
-		when: GtOpenAIThreadRunAnnouncement
+		when: GtLlmThreadRunAnnouncement
 		send: #onThreadRunAnnouncement:
 		to: self
 ]

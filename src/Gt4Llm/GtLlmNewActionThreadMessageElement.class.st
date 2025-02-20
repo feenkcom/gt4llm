@@ -8,7 +8,6 @@ Class {
 		'sendButton',
 		'toolbar',
 		'toggleGroup',
-		'argument',
 		'descriptionElement'
 	],
 	#category : #'Gt4Llm-Widgets'
@@ -58,7 +57,7 @@ GtLlmNewActionThreadMessageElement >> buildAttachButton [
 
 { #category : #'initialization ' }
 GtLlmNewActionThreadMessageElement >> buildSendButton [
-	^ BrButton new
+	^ sendButton := BrButton new
 			fitContent;
 			beSmallSize;
 			aptitude: BrGlamorousButtonWithIconAptitude;
@@ -74,6 +73,16 @@ GtLlmNewActionThreadMessageElement >> buildSendButton [
 { #category : #initialization }
 GtLlmNewActionThreadMessageElement >> defaultLayout [
 	^ BlLinearLayout vertical
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmNewActionThreadMessageElement >> disableSend [
+	sendButton disable
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmNewActionThreadMessageElement >> enableSend [
+	sendButton enable
 ]
 
 { #category : #'initialization ' }
@@ -173,6 +182,16 @@ GtLlmNewActionThreadMessageElement >> subscribeToThreadMessageViewModel [
 	self threadMessage
 		when: GtLlmNewThreadMessageContentsChanged
 		send: #onThreadMessageContentsChanged:
+		to: self.
+		
+	self threadMessage assistantChat
+		when: GtLlmThreadRunStartedAnnouncement
+		send: #disableSend
+		to: self.
+		
+	self threadMessage assistantChat
+		when: GtLlmThreadRunIsDoneAnnouncement
+		send: #enableSend
 		to: self.
 
 	self threadMessageViewModel weak

@@ -30,6 +30,21 @@ GtLlmTutorExamples >> tutorChat [
 ]
 
 { #category : #'as yet unclassified' }
+GtLlmTutorExamples >> tutorChatWithMessage [
+	<gtExample>
+	| chat |
+	chat := self tutorChat.
+
+	chat sendAction: (GtLlmActionCall action: 'example' arguments: {}).
+
+	self assert: chat status isDone.
+	self assert: chat messages size equals: 1.
+	self assert: chat messages last action equals: 'example'.
+
+	^ chat
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmTutorExamples >> tutorWithActionAdded [
 	<gtExample>
 	| tutor exampleAction |

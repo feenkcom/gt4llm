@@ -26,6 +26,11 @@ GtLlmNewThreadMessage >> annotations [
 ]
 
 { #category : #accessing }
+GtLlmNewThreadMessage >> assistantChat [
+	^ assistantChat
+]
+
+{ #category : #accessing }
 GtLlmNewThreadMessage >> assistantChat: anAssistantChat [
 	assistantChat := anAssistantChat
 ]
@@ -33,14 +38,6 @@ GtLlmNewThreadMessage >> assistantChat: anAssistantChat [
 { #category : #accessing }
 GtLlmNewThreadMessage >> codeBlocks [
 	^ self parse children select: [ :aNode | aNode isKindOf: LeCodeBlockNode ]
-]
-
-{ #category : #accessing }
-GtLlmNewThreadMessage >> codeBlocksExecutor [
-	^ GtOpenAIPipelineExecutor new
-		codeBlocks: self codeBlocks;
-		pipeline: assistantChat pipeline;
-		threadMessage: self
 ]
 
 { #category : #accessing }
@@ -108,28 +105,21 @@ GtLlmNewThreadMessage >> parse [
 
 { #category : #actions }
 GtLlmNewThreadMessage >> sendMessage [
-	| aMessage |
+	| aMessageContent |
 	contents ifNil: [ ^ self ].
+	
+	"todo: add files"
 
-	files
-		ifEmpty: [ aMessage := GtLlmUserMessage new
-					chat: assistantChat;
-					content: self treatString ]
-		ifNotEmpty: [ aMessage := GtLlmCompositeMessage new
-					chat: assistantChat;
-					addString: self treatString.
-
-			files do: [ :aFile | aMessage addFile: aFile ] ].
+	aMessageContent := self treatString.
 
 	self contents: '' requester: nil.
 
-	(assistantChat whenReadyFuture
-		then: [ assistantChat sendAssistantMessage: aMessage ]) await
+	[assistantChat sendMessage: aMessageContent] asAsyncPromise
 ]
 
 { #category : #actions }
 GtLlmNewThreadMessage >> treatString [
-	^ assistantChat messageFromString: contents
+	^ contents
 ]
 
 { #category : #subscriptions }

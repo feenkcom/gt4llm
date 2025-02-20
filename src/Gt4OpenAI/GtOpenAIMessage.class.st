@@ -46,14 +46,17 @@ GtOpenAIMessage >> ancestor [
 
 { #category : #accessing }
 GtOpenAIMessage >> annotations [
-	(content isKindOf: Dictionary) ifFalse: [ ^ GtOpenAIAnnotationsGroup new ].
+	(content isKindOf: String) ifTrue: [ ^ GtOpenAIAnnotationsGroup new ].
 
 	^ annotations
 		ifNil: [ annotations := GtOpenAIAnnotationsGroup
 					withAll: ((content select: [ :aValue | (aValue at: 'type') = 'text' ])
 							flatCollect: [ :aValue | 
 								(aValue at: #text at: #annotations)
-									collect: [ :anAnnotation | (GtOpenAIAnnotation from: anAnnotation) client: self client ] ]) ]
+									collect: [ :anAnnotation | 
+										(GtOpenAIAnnotation from: anAnnotation)
+											client: self client;
+											message: self ] ]) ]
 ]
 
 { #category : #accessing }
@@ -257,6 +260,8 @@ GtOpenAIMessage >> isUserRole [
 
 { #category : #'as yet unclassified' }
 GtOpenAIMessage >> messageFiles [
+	self contentText = self content ifTrue: [ ^ GtOpenAIFilesGroup new ].
+
 	^ GtOpenAIFilesGroup
 		withAll: (self content
 				select: [ :aValue | aValue type = 'image_file' ]

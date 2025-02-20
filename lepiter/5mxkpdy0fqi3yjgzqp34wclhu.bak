@@ -248,14 +248,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-08-22T09:26:05.162305+02:00"
+						"dateAndTimeString" : "2024-08-22T09:42:40.216272+02:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "G025RnrTDQCbT03vCmrOQg=="
 				},
-				"code" : "numberOfExamples := 262.\raGroup := aGroup first: numberOfExamples"
+				"code" : "numberOfExamples := 1000.\raGroup := aGroup first: numberOfExamples"
 			},
 			{
 				"__type" : "textSnippet",
@@ -390,14 +390,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-07-24T09:40:00.750531+02:00"
+						"dateAndTimeString" : "2025-02-18T20:49:41.230497+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "E9hfp17TDQCH4OBkA0w3Xw=="
 				},
-				"code" : "tutor := GtOpenAIGtSpecificTutor instance.\r\rconversations := (aGroup select: [ :anExample | anExample result isNotNil ])\r\t\tflatCollect: [ :anExample | \r\t\t\t(GtLlmExampleViewConversationCollector new\r\t\t\t\texample: anExample;\r\t\t\t\tinstructions: tutor instructions) conversations ]"
+				"code" : "tutor := GtLlmTutor new.\r\rconversations := (aGroup select: [ :anExample | anExample result isNotNil ])\r\t\tflatCollect: [ :anExample | \r\t\t\t(GtLlmExampleViewConversationCollector new\r\t\t\t\texample: anExample;\r\t\t\t\tinstructions: tutor instruction) conversations ]"
 			},
 			{
 				"__type" : "textSnippet",
@@ -640,14 +640,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-07-24T09:45:06.51185+02:00"
+						"dateAndTimeString" : "2025-02-18T20:51:45.814148+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "VuHmUHrTDQCYqNvPCmrOQg=="
 				},
-				"code" : "client := GtOpenAIGtSpecificTutor instance client.\r\ropenAiFile := client uploadFile: file withPurpose: 'fine-tune'.\r\rfineTuningJob := client createFineTuningJobOnModel: file model withFile: openAiFile id"
+				"code" : "client := GtOpeClient withApiKeyFromFile.\r\ropenAiFile := client uploadFile: file withPurpose: 'fine-tune'.\r\rfineTuningJob := client createFineTuningJobOnModel: file model withFile: openAiFile id"
 			}
 		]
 	},

@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLlmAssistantChatWorkingStatus,
 	#superclass : #GtLlmAssistantChatStatus,
-	#category : #'Gt4Llm-Chat'
+	#category : #'Gt4Llm-Chats'
 }
 
 { #category : #accessing }

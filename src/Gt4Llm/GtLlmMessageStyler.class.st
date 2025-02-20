@@ -383,14 +383,6 @@ GtLlmMessageStyler >> styleButton: anAnnotation withTool: aBlock [
 		withTool: aBlock
 ]
 
-{ #category : #private }
-GtLlmMessageStyler >> styleCode: aCodeNode [
-	self threadMessageViewModel isAssistantRole ifFalse: [ ^ self ].
-	self executionResults
-		at: aCodeNode code
-		ifPresent: [ :result | self styleResult: result for: aCodeNode ]
-]
-
 { #category : #accessing }
 GtLlmMessageStyler >> styleExpandingObject: aClassAnnotation withDefault: aSymbol [
 	| cacheKey attribute |
@@ -586,17 +578,6 @@ GtLlmMessageStyler >> styleOpenExternalLinkButton: aLink text: aSubText [
 			button ]
 ]
 
-{ #category : #private }
-GtLlmMessageStyler >> styleResult: evaluationResult for: aCodeNode [
-	| evaluatedCodeAttribute aViewModel |
-	aViewModel := threadMessageViewModel checkRunResultViewModelFor: evaluationResult value.
-	evaluatedCodeAttribute := GtLlmEvaluatedCodePreviewAttribute new
-		checkRunResultViewModel: aViewModel.
-
-	(text from: aCodeNode stopPosition to: aCodeNode stopPosition)
-		attributes: {evaluatedCodeAttribute}
-]
-
 { #category : #generated }
 GtLlmMessageStyler >> styleSmalltalkCodeBlock: aCodeNode [ 
 	| aStyler |
@@ -659,8 +640,7 @@ GtLlmMessageStyler >> visitClassAnnotation: aClassAnnotation [
 
 { #category : #generated }
 GtLlmMessageStyler >> visitCodeBlock: aCodeNode [
-	(aCodeNode language isNotNil
-		and: [ aCodeNode isForSmalltalk or: [ aCodeNode isForLanguage: 'smalltalk-method' ] ])
+	(aCodeNode language isNotNil and: [ aCodeNode isForSmalltalk ])
 		ifTrue: [ self styleSmalltalkCodeBlock: aCodeNode ].
 	(self text from: aCodeNode startPosition to: aCodeNode stopPosition)
 		glamorousCodeFont.
@@ -674,7 +654,6 @@ GtLlmMessageStyler >> visitCodeBlock: aCodeNode [
 		from: aCodeNode beginWithLanguageStopPosition + 1
 		to: aCodeNode end startPosition - 1)
 		attributes: {BlTextHighlightAttribute paint: BrGlamorousColors neutralBackgroundColor}.
-	self styleCode: aCodeNode.
 
 	^ self visitContent: aCodeNode
 ]
