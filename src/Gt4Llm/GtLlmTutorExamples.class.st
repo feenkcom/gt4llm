@@ -36,9 +36,11 @@ GtLlmTutorExamples >> tutorChatWithMessage [
 	chat := self tutorChat.
 
 	chat sendAction: (GtLlmActionCall action: 'example' arguments: {}).
-	
+
+	self assert: chat status isDone.
+	self assert: chat messages size equals: 1.
 	self assert: chat messages last action equals: 'example'.
-	
+
 	^ chat
 ]
 
