@@ -9,10 +9,22 @@ Class {
 		'tools',
 		'thread',
 		'lastRun',
-		'future'
+		'future',
+		'files',
+		'apiFiles'
 	],
 	#category : #'Gt4OpenAI-Providers'
 }
+
+{ #category : #'as yet unclassified' }
+GtOpenAIAssistantProvider >> addFile: aFile [
+	files add: aFile
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAIAssistantProvider >> addTool: aTool [
+	tools add: aTool
+]
 
 { #category : #accessing }
 GtOpenAIAssistantProvider >> assistant [
@@ -48,15 +60,29 @@ GtOpenAIAssistantProvider >> assistantName: anObject [
 GtOpenAIAssistantProvider >> createAssistant [
 	self assistant ifNotNil: [ self deleteAssistant ].
 
-	assistant := client
-			createAssistant: (GtOpenAIAssistant new
-					model: self model;
-					name: self assistantName;
-					description: self assistantDescription;
-					instructions: self instructions;
-					tools: self tools).
-					
+	files
+		do: [ :aFile | 
+			apiFiles
+				at: (client uploadFile: aFile file withPurpose: 'assistants') id
+				put: aFile ].
+
+	assistant := GtOpenAIAssistant new
+			model: self model;
+			name: self assistantName;
+			description: self assistantDescription;
+			instructions: self instructions;
+			tools: self tools.
+
+	files
+		ifNotEmpty: [ assistant
+				toolResources: {'file_search'
+							-> {'vector_stores' -> {{'file_ids' -> apiFiles keys} asDictionary}} asDictionary}
+						asDictionary ].
+
+	assistant := client createAssistant: assistant.
+
 	thread := client createThreadWithMessages: {}.
+
 
 	self class finalizationRegistry add: self
 ]
@@ -78,7 +104,7 @@ GtOpenAIAssistantProvider >> defaultAssistantName [
 
 { #category : #'as yet unclassified' }
 GtOpenAIAssistantProvider >> defaultTools [
-	^ {}
+	^ GtOpenAIToolsGroup new
 ]
 
 { #category : #'as yet unclassified' }
@@ -109,6 +135,11 @@ GtOpenAIAssistantProvider >> format: anObject [
 ]
 
 { #category : #'as yet unclassified' }
+GtOpenAIAssistantProvider >> getApiFile: anId [
+	^ apiFiles at: anId
+]
+
+{ #category : #'as yet unclassified' }
 GtOpenAIAssistantProvider >> getMessages [
 	^ thread updateMessages
 		collect: [ :aThreadMessage | 
@@ -122,12 +153,36 @@ GtOpenAIAssistantProvider >> getRun [
 ]
 
 { #category : #'as yet unclassified' }
+GtOpenAIAssistantProvider >> gtFilesFor: aView [
+	<gtView>
+	files ifEmpty: [ ^ aView empty ].
+
+	^ aView forward
+		title: 'Files';
+		priority: 5;
+		object: [ files ];
+		view: #gtFilesFor:
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAIAssistantProvider >> gtInstructionsFor: aView [
+	<gtView>
+	^ aView textEditor
+		title: 'Instructions';
+		priority: 1;
+		text: [ self instructions ];
+		styler: GtLlmMessageStyler new
+]
+
+{ #category : #'as yet unclassified' }
 GtOpenAIAssistantProvider >> initialize [
 	super initialize.
 
 	assistantName := self defaultAssistantName.
 	assistantDescription := self defaultAssistantDescription.
-	tools := self defaultTools
+	tools := self defaultTools.
+	files := GtOpenAIResourceFilesGroup new.
+	apiFiles := Dictionary new
 ]
 
 { #category : #accessing }

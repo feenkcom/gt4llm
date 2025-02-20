@@ -11,6 +11,11 @@ Class {
 	#category : #'Gt4Llm-Widgets'
 }
 
+{ #category : #'as yet unclassified' }
+GtLlmFailureThreadMessage >> action [
+	^ ''
+]
+
 { #category : #accessing }
 GtLlmFailureThreadMessage >> ancestor [
 	^ self chat messages first
