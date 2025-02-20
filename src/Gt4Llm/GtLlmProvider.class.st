@@ -69,8 +69,6 @@ GtLlmProvider >> gtFormatFor: aView [
 GtLlmProvider >> initialize [
 	super initialize.
 
-	serializer := GtLlmMessageSerializer new.
-
 	userMessageClass := self defaultUserMessageClass.
 	assistantMessageClass := self defaultAssistantMessageClass
 ]
