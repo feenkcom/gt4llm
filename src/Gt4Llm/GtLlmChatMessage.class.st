@@ -225,6 +225,7 @@ GtLlmChatMessage >> role: anObject [
 GtLlmChatMessage >> senderText [
 	self isAssistantRole ifTrue: [ ^ 'Assistant' ].
 	self isSystemRole ifTrue: [ ^ 'System' ].
+	self isToolRole ifTrue: [ ^ 'Tool' ].
 	^ 'You'
 ]
 
