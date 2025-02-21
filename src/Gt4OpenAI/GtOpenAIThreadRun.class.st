@@ -306,6 +306,12 @@ GtOpenAIThreadRun >> threadId: anObject [
 	threadId := anObject
 ]
 
+{ #category : #'as yet unclassified' }
+GtOpenAIThreadRun >> toolCalls [
+	^ ((self rawData at: 'required_action' at: 'submit_tool_outputs')
+		at: 'tool_calls') collect: [ :aDict | GtLlmFunctionToolCall from: aDict ]
+]
+
 { #category : #accessing }
 GtOpenAIThreadRun >> tools [
 	^ tools
@@ -313,7 +319,7 @@ GtOpenAIThreadRun >> tools [
 
 { #category : #accessing }
 GtOpenAIThreadRun >> tools: anObject [
-	tools := anObject collect: [ :aValue | GtOpenAITool from: aValue ]
+	tools := anObject collect: [ :aValue | GtLlmTool from: aValue ]
 ]
 
 { #category : #accessing }
