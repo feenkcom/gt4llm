@@ -357,6 +357,16 @@ GtOpenAIClient >> postFile: aString withEntity: anEntity [
 	^ self checkForErrors: aClient post
 ]
 
+{ #category : #'as yet unclassified' }
+GtOpenAIClient >> submitToolOutputs: output toThread: aThreadId anRun: aRunId [ 
+	^ GtOpenAISubmitToolOutputsAPIClient new
+		client: self;
+		thread: aThreadId;
+		run: aRunId;
+		outputs: output;
+		perform
+]
+
 { #category : #accessing }
 GtOpenAIClient >> uploadFile: aFileReference withPurpose: aString [ 
 	^ GtOpenAIUploadFileAPIClient new

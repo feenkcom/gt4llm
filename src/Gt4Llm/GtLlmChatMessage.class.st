@@ -197,6 +197,11 @@ GtLlmChatMessage >> isSystemRole [
 ]
 
 { #category : #accessing }
+GtLlmChatMessage >> isToolRole [
+	^ self role = 'tool'
+]
+
+{ #category : #accessing }
 GtLlmChatMessage >> isUserRole [
 	^ self role = 'user'
 ]

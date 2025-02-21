@@ -104,7 +104,7 @@ GtOpenAIAssistantProvider >> defaultAssistantName [
 
 { #category : #'as yet unclassified' }
 GtOpenAIAssistantProvider >> defaultTools [
-	^ GtOpenAIToolsGroup new
+	^ GtLlmToolsGroup new
 ]
 
 { #category : #'as yet unclassified' }
@@ -149,7 +149,11 @@ GtOpenAIAssistantProvider >> getMessages [
 
 { #category : #'as yet unclassified' }
 GtOpenAIAssistantProvider >> getRun [
-	^ lastRun := client getRun: lastRun id forThread: thread id
+	lastRun := client getRun: lastRun id forThread: thread id.
+
+	lastRun isRequiringAction ifTrue: [ lastRun := self performToolCalls ].
+
+	^ lastRun
 ]
 
 { #category : #'as yet unclassified' }
@@ -203,6 +207,26 @@ GtOpenAIAssistantProvider >> lastRun [
 ]
 
 { #category : #'as yet unclassified' }
+GtOpenAIAssistantProvider >> performToolCalls [
+	| toolOutputs |
+	toolOutputs := lastRun toolCalls
+			collect: [ :aToolCall | 
+				| toolOutput |
+				toolOutput := tools performToolCall: aToolCall.
+				chat
+					addMessage: (GtLlmToolMessage new
+							toolCall: aToolCall;
+							output: toolOutput).
+				{'tool_call_id' -> aToolCall id.
+					'output' -> toolOutput} asDictionary ].
+
+	^ client
+		submitToolOutputs: toolOutputs
+		toThread: thread id
+		anRun: lastRun id
+]
+
+{ #category : #'as yet unclassified' }
 GtOpenAIAssistantProvider >> runFuture [
 	^ GtLlmThreadRunFuture new chat: self
 ]
@@ -247,12 +271,13 @@ GtOpenAIAssistantProvider >> tools: anObject [
 
 { #category : #'as yet unclassified' }
 GtOpenAIAssistantProvider >> updateMessages [
-	| newMessages |
+	| newMessages nonToolMessages |
 	newMessages := self getMessages.
+	nonToolMessages := chat messages reject: #isToolRole.
 
 	newMessages
 		doWithIndex: [ :aMessage :anIndex | 
-			anIndex > chat messages size
+			anIndex > nonToolMessages size
 				ifTrue: [ chat addMessage: aMessage ]
-				ifFalse: [ (chat messages at: anIndex) merge: aMessage ] ]
+				ifFalse: [ (nonToolMessages at: anIndex) merge: aMessage ] ]
 ]
