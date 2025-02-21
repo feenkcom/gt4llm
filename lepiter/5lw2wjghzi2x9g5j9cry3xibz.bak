@@ -102,7 +102,7 @@
 											"__type" : "time",
 											"time" : {
 												"__type" : "dateAndTime",
-												"dateAndTimeString" : "2025-02-20T13:47:38.361874+01:00"
+												"dateAndTimeString" : "2025-02-21T19:59:38.761108+01:00"
 											}
 										},
 										"editEmail" : {
@@ -113,17 +113,17 @@
 											"__type" : "time",
 											"time" : {
 												"__type" : "dateAndTime",
-												"dateAndTimeString" : "2025-02-20T13:47:39.537254+01:00"
+												"dateAndTimeString" : "2025-02-21T20:00:02.721569+01:00"
 											}
 										},
 										"uid" : {
 											"__type" : "uid",
-											"uidString" : "K54lA/TqDQCD6J01AN8K3w=="
+											"uidString" : "wFROVA3rDQCC9691CJTPmg=="
 										},
 										"paragraphStyle" : {
 											"__type" : "textStyle"
 										},
-										"string" : "[[Adding the GT book to a tutor to answer questions about GT]]"
+										"string" : "[[Adding function call tools to tutors]]"
 									}
 								]
 							},
@@ -790,6 +790,43 @@
 								"__type" : "textStyle"
 							},
 							"string" : "[[Using structured outputs]]"
+						},
+						{
+							"__type" : "textSnippet",
+							"children" : {
+								"__type" : "snippets",
+								"items" : [ ]
+							},
+							"createEmail" : {
+								"__type" : "email",
+								"emailString" : "<unknown>"
+							},
+							"createTime" : {
+								"__type" : "time",
+								"time" : {
+									"__type" : "dateAndTime",
+									"dateAndTimeString" : "2025-02-21T20:03:52.154311+01:00"
+								}
+							},
+							"editEmail" : {
+								"__type" : "email",
+								"emailString" : "<unknown>"
+							},
+							"editTime" : {
+								"__type" : "time",
+								"time" : {
+									"__type" : "dateAndTime",
+									"dateAndTimeString" : "2025-02-21T20:03:57.4279+01:00"
+								}
+							},
+							"uid" : {
+								"__type" : "uid",
+								"uidString" : "Kc5oYw3rDQCKeeiFCJTPmg=="
+							},
+							"paragraphStyle" : {
+								"__type" : "textStyle"
+							},
+							"string" : "[[Using function tools]]"
 						}
 					]
 				},
