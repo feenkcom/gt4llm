@@ -24,6 +24,11 @@ GtLlmToolMessage >> actionModel [
 ]
 
 { #category : #'as yet unclassified' }
+GtLlmToolMessage >> content [
+	^ self output
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmToolMessage >> contentText [
 	^ ''
 ]

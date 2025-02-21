@@ -5,10 +5,16 @@ Class {
 		'assistantWorking',
 		'model',
 		'client',
-		'modelfile'
+		'modelfile',
+		'tools'
 	],
 	#category : #'Gt4Ollama-Providers'
 }
+
+{ #category : #'as yet unclassified' }
+GtOllamaProvider >> addTool: aTool [
+	tools add: aTool
+]
 
 { #category : #accessing }
 GtOllamaProvider >> client [
@@ -51,7 +57,9 @@ GtOllamaProvider >> initialize [
 
 	assistantWorking := false.
 	
-	self initializeClient
+	self initializeClient.
+	
+	tools := GtLlmToolsGroup new
 ]
 
 { #category : #'as yet unclassified' }
@@ -98,6 +106,18 @@ GtOllamaProvider >> modelfile: anObject [
 ]
 
 { #category : #'as yet unclassified' }
+GtOllamaProvider >> performToolCallsFor: aResult [
+	aResult toolCalls
+		do: [ :aToolCall | 
+			| toolOutput |
+			toolOutput := tools performToolCall: aToolCall.
+			chat
+				addMessage: (GtLlmToolMessage new
+						toolCall: aToolCall;
+						output: toolOutput) ]
+]
+
+{ #category : #'as yet unclassified' }
 GtOllamaProvider >> sendAssistantMessage: aMessage [
 	userMessageClass adoptInstance: aMessage.
 	aMessage role: 'user'.
@@ -119,19 +139,21 @@ GtOllamaProvider >> triggerAssistant [
 	assistantWorking := true.
 
 	self chat signalRunHasStarted.
-	result := self client
+	[ result := self client
 			completeChatWithModel: self model
 			andMessages: self chat messages
-			andFormat: self format.
-			
-	
-	self halt.
+			andFormat: self format
+			andTools: tools.
+
+	self performToolCallsFor: result ]
+		doWhileTrue: [ result toolCalls isNotEmpty ].
 
 	self chat
 		addMessage: (assistantMessageClass new
 				content: result content;
 				role: 'assistant';
-				chat: self).
+				chat: self;
+				rawData: result rawData).
 
 	self chat signalRunIsDone.
 

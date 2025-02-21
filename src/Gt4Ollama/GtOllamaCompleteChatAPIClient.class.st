@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'messages',
 		'model',
-		'format'
+		'format',
+		'tools'
 	],
 	#category : #'Gt4Ollama-Chat'
 }
@@ -12,10 +13,13 @@ Class {
 { #category : #accessing }
 GtOllamaCompleteChatAPIClient >> entity [
 	| entity |
-	entity := {'model' -> self model.
+	entity := {'stream' -> false.
+			'model' -> self model.
 			'messages' -> (self messages collect: #serialize)} asDictionary.
 
 	self format ifNotNil: [ entity at: 'format' put: self format ].
+	self tools
+		ifNotNil: [ entity at: 'tools' put: (self tools collect: #serialize) ].
 
 	^ entity
 ]
@@ -52,10 +56,20 @@ GtOllamaCompleteChatAPIClient >> model: anObject [
 
 { #category : #accessing }
 GtOllamaCompleteChatAPIClient >> request [
-	^ self client postStreaming: '/chat' withEntity: self entity
+	^ self client post: '/chat' withEntity: self entity
 ]
 
 { #category : #accessing }
 GtOllamaCompleteChatAPIClient >> serializationClass [
 	^ GtOllamaThreadMessage
+]
+
+{ #category : #accessing }
+GtOllamaCompleteChatAPIClient >> tools [
+	^ tools
+]
+
+{ #category : #accessing }
+GtOllamaCompleteChatAPIClient >> tools: anObject [
+	tools := anObject
 ]

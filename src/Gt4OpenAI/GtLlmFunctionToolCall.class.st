@@ -34,7 +34,10 @@ GtLlmFunctionToolCall >> function [
 { #category : #'as yet unclassified' }
 GtLlmFunctionToolCall >> function: aDict [
 	name := aDict at: 'name'.
-	arguments := STONJSON fromString: (aDict at: 'arguments')
+	arguments := aDict at: 'arguments'.
+
+	(arguments isKindOf: String)
+		ifTrue: [ arguments := STONJSON fromString: arguments ]
 ]
 
 { #category : #'as yet unclassified' }
