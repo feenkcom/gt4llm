@@ -132,5 +132,5 @@ GtOpenAIAssistant >> tools [
 
 { #category : #accessing }
 GtOpenAIAssistant >> tools: anObject [
-	tools := anObject collect: [ :aValue | GtOpenAITool from: aValue ]
+	tools := anObject collect: [ :aValue | GtLlmTool from: aValue ]
 ]
