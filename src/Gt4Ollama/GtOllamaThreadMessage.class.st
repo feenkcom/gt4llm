@@ -2,7 +2,6 @@ Class {
 	#name : #GtOllamaThreadMessage,
 	#superclass : #GtLlmEntity,
 	#instVars : [
-		'content',
 		'promptEvalDuration',
 		'model',
 		'createdAt',
@@ -11,23 +10,17 @@ Class {
 		'loadDuration',
 		'doneReason',
 		'promptEvalCount',
-		'evalCount'
+		'evalCount',
+		'message'
 	],
 	#category : #'Gt4Ollama-Models'
 }
 
 { #category : #accessing }
-GtOllamaThreadMessage class >> from: anArray [
-	^ self new
-		from: anArray last;
-		rawData: anArray;
-		content: ('' join: (anArray collect: [ :aDict | aDict at: #message at: #content ]))
-]
-
-{ #category : #accessing }
 GtOllamaThreadMessage class >> serializationProperties [
 	^ {
 		#content -> #content.
+		#message -> #message.
 		#role -> #role.
 		#eval_count -> #evalCount.
 		#prompt_eval_duration->#promptEvalDuration.
@@ -43,12 +36,11 @@ GtOllamaThreadMessage class >> serializationProperties [
 
 { #category : #accessing }
 GtOllamaThreadMessage >> content [
-	^ content
+	^ self message at: 'content'
 ]
 
-{ #category : #accessing }
-GtOllamaThreadMessage >> content: anObject [
-	content := anObject
+{ #category : #'as yet unclassified' }
+GtOllamaThreadMessage >> content: aString [
 ]
 
 { #category : #accessing }
@@ -115,6 +107,16 @@ GtOllamaThreadMessage >> loadDuration: anObject [
 ]
 
 { #category : #accessing }
+GtOllamaThreadMessage >> message [
+	^ message
+]
+
+{ #category : #accessing }
+GtOllamaThreadMessage >> message: anObject [
+	message := anObject
+]
+
+{ #category : #accessing }
 GtOllamaThreadMessage >> model [
 	^ model
 ]
@@ -152,6 +154,12 @@ GtOllamaThreadMessage >> role [
 { #category : #'as yet unclassified' }
 GtOllamaThreadMessage >> role: anArgument [
 	"we ignore the role"
+]
+
+{ #category : #'as yet unclassified' }
+GtOllamaThreadMessage >> toolCalls [
+	^ (self message at: 'tool_calls' ifAbsent: [ {} ])
+		collect: [ :aDict | GtLlmFunctionToolCall from: aDict ]
 ]
 
 { #category : #accessing }
