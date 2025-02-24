@@ -10,9 +10,9 @@ BaselineOfGt4Llm >> baseline: spec [
 	spec for: #'common' do: [
 		spec
 			baseline: 'Gt4Ollama' with: [
-				spec repository: 'github://feenkcom/gt4llm:v0.6.31/src' ].
+				spec repository: 'github://feenkcom/gt4llm:v0.6.32/src' ].
 		spec
 			baseline: 'Gt4OpenAI' with: [
-				spec repository: 'github://feenkcom/gt4llm:v0.6.31/src' ].
+				spec repository: 'github://feenkcom/gt4llm:v0.6.32/src' ].
 	]
 ]
