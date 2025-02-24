@@ -10,6 +10,8 @@ Currently it includes:
 
 ## Installation
 
+`gt4llm` should already be available in any regular Glamorous Toolkit build.
+
 To install the `gt4llm` package in a [Glamorous Toolkit image](https://gtoolkit.com) simply execute the following Pharo snippet in the environment:
 
 ```st
