@@ -67,10 +67,6 @@ GtLlmEntity >> gtViewRawDataFor: aView [
 
 { #category : #'as yet unclassified' }
 GtLlmEntity >> merge: anotherEntity [
-	self
-		assert: anotherEntity class = self class
-		description: [ 'Only like entities can be merged' ].
-
 	self rawData: anotherEntity rawData.
 
 	self class serializationProperties
