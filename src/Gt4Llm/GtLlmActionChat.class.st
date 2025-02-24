@@ -46,9 +46,7 @@ GtLlmActionChat >> sendAction: anActionCall onAnswer: aBlock [
 
 { #category : #accessing }
 GtLlmActionChat >> sendChatRequest: aString [
-	self
-		sendAssistantMessage: (GtLlmUserMessage new
-				content: (self messageFromString: 'Chat request: ' , aString))
+	self sendMessage: 'Chat request: ' , aString
 ]
 
 { #category : #'as yet unclassified' }

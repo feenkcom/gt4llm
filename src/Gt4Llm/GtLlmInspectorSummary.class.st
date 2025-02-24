@@ -5,7 +5,8 @@ Class {
 		'objectClass',
 		'slots',
 		'views',
-		'methods'
+		'methods',
+		'object'
 	],
 	#category : #'Gt4Llm-Summarizer'
 }
@@ -47,6 +48,16 @@ GtLlmInspectorSummary >> methods [
 { #category : #accessing }
 GtLlmInspectorSummary >> methods: anObject [
 	methods := anObject
+]
+
+{ #category : #accessing }
+GtLlmInspectorSummary >> object [
+	^ object
+]
+
+{ #category : #accessing }
+GtLlmInspectorSummary >> object: anObject [
+	object := anObject
 ]
 
 { #category : #accessing }
