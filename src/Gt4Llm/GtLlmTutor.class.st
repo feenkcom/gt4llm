@@ -87,6 +87,16 @@ GtLlmTutor >> createChat [
 		tutor: self
 ]
 
+{ #category : #accessing }
+GtLlmTutor >> defaultAnthropicProviderStencilWithModel: aModel [
+	^ [ :anInstructionFormat | 
+	GtAnthropicProvider withApiKeyFromFile
+		model: aModel;
+		instructions: anInstructionFormat asInstructionPiece instructionString;
+		assistantMessageClass: GtLlmActionMessage;
+		userMessageClass: GtLlmActionMessage ]
+]
+
 { #category : #'as yet unclassified' }
 GtLlmTutor >> defaultDescription [
 	^ 'You are an assistant.'
@@ -212,6 +222,11 @@ GtLlmTutor >> initializeInstruction [
 { #category : #accessing }
 GtLlmTutor >> instruction [
 	^ instruction
+]
+
+{ #category : #accessing }
+GtLlmTutor >> onAnthropicWithModel: aModel [
+	self providerStencil: (self defaultAnthropicProviderStencilWithModel: aModel)
 ]
 
 { #category : #accessing }

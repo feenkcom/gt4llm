@@ -47,3 +47,8 @@ GtAnthropicToolMessage >> gtTextFor: aView [
 	<gtLlmMessageView>
 	^ aView empty
 ]
+
+{ #category : #'as yet unclassified' }
+GtAnthropicToolMessage >> senderText [
+	^ 'Tool'
+]
