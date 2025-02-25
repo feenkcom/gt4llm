@@ -13,6 +13,11 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
+GtAnthropicClient class >> apiKeyFile [
+	^ ApiKeyFile
+]
+
+{ #category : #'as yet unclassified' }
 GtAnthropicClient class >> apiKeyFileContents [
 	^ ApiKeyFile contents trimBoth
 ]
@@ -65,6 +70,16 @@ GtAnthropicClient >> checkForErrors: aResponse [
 		ifTrue: [ ^ (GtAnthropicError from: (aResponse at: 'error')) signal ].
 
 	^ aResponse
+]
+
+{ #category : #'as yet unclassified' }
+GtAnthropicClient >> completeChatWithModel: aString messages: aCollection andMaxTokens: anInteger [
+	^ self
+		completeChatWithModel: aString
+		messages: aCollection
+		maxTokens: anInteger
+		system: nil
+		andTools: nil
 ]
 
 { #category : #'as yet unclassified' }
