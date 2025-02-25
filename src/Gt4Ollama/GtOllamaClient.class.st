@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'baseUrl'
 	],
-	#category : #'Gt4Ollama-Chat'
+	#category : #'Gt4Ollama-Client'
 }
 
 { #category : #accessing }

@@ -170,6 +170,11 @@ GtLlmChatMessage >> id [
 	^ id
 ]
 
+{ #category : #'as yet unclassified' }
+GtLlmChatMessage >> id: anId [
+	id := anId
+]
+
 { #category : #accessing }
 GtLlmChatMessage >> initialize [
 	id := UUID new.

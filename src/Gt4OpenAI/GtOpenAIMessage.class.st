@@ -198,16 +198,6 @@ GtOpenAIMessage >> hasStep [
 	^ self step isNotNil
 ]
 
-{ #category : #accessing }
-GtOpenAIMessage >> id [
-	^ id
-]
-
-{ #category : #accessing }
-GtOpenAIMessage >> id: anObject [
-	id := anObject
-]
-
 { #category : #'as yet unclassified' }
 GtOpenAIMessage >> idString [
 	^ nil
