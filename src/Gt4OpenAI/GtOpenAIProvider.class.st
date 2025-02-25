@@ -64,20 +64,9 @@ GtOpenAIProvider >> model: anObject [
 
 { #category : #'as yet unclassified' }
 GtOpenAIProvider >> sendAssistantMessage: aMessage [
-	| result |
 	aMessage serializeInline.
 	self chat addMessage: aMessage.
-
-	self chat signalRunHasStarted.
-
-	result := client
-			completeChatWithModel: self model
-			andMessages: self chat messages.
-
-	self chat
-		addMessage: (self assistantMessageClass new content: result choices first message content).
-
-	self chat signalRunIsDone
+	self triggerAssistant
 ]
 
 { #category : #'as yet unclassified' }
@@ -92,4 +81,19 @@ GtOpenAIProvider >> sendMessage: aMessage [
 { #category : #'as yet unclassified' }
 GtOpenAIProvider >> status [
 	^ GtLlmAssistantChatReadyStatus new
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAIProvider >> triggerAssistant [
+	| result |
+	self chat signalRunHasStarted.
+
+	result := client
+			completeChatWithModel: self model
+			andMessages: self chat messages.
+
+	self chat
+		addMessage: (self assistantMessageClass new content: result choices first message content).
+
+	self chat signalRunIsDone
 ]
