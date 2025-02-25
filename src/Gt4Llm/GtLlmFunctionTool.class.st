@@ -40,7 +40,7 @@ GtLlmFunctionTool >> description: anObject [
 	description := anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLlmFunctionTool >> function [
 	^ {'name' -> name.
 		'description' -> description.
