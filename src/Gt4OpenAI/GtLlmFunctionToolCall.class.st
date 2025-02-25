@@ -52,6 +52,14 @@ GtLlmFunctionToolCall >> gtArgumentsFor: aView [
 		column: 'Value' text: #value
 ]
 
+{ #category : #'as yet unclassified' }
+GtLlmFunctionToolCall >> humanReadable [
+	^ self name , ' '
+		, (','
+				join: (self arguments associations
+						collect: [ :anArgument | anArgument key , ': ' , anArgument value ]))
+]
+
 { #category : #accessing }
 GtLlmFunctionToolCall >> id [
 	^ id
