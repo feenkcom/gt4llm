@@ -1,28 +1,40 @@
 Class {
-	#name : #GtOpenAICardElement,
+	#name : #GtLlmApiKeyCardElement,
 	#superclass : #BrVerticalPane,
 	#instVars : [
 		'apiKeyButton',
 		'testingButton',
 		'testingLabel',
-		'fileError'
+		'fileError',
+		'clientClass'
 	],
 	#category : #'Gt4OpenAI-Widgets'
 }
 
 { #category : #accessing }
-GtOpenAICardElement >> apiKeyFile [
-	^ GtOpenAIClient apiKeyFile
+GtLlmApiKeyCardElement >> apiKeyFile [
+	^ clientClass apiKeyFile
 ]
 
 { #category : #accessing }
-GtOpenAICardElement >> apiKeyFile: aFile [
-	GtOpenAIClient apiKeyFile: aFile.
+GtLlmApiKeyCardElement >> apiKeyFile: aFile [
+	clientClass apiKeyFile: aFile.
 	self onApiKeySet
 ]
 
 { #category : #accessing }
-GtOpenAICardElement >> initialize [
+GtLlmApiKeyCardElement >> clientClass [
+	^ clientClass
+]
+
+{ #category : #accessing }
+GtLlmApiKeyCardElement >> clientClass: anObject [
+	clientClass := anObject.
+	self onApiKeySet
+]
+
+{ #category : #accessing }
+GtLlmApiKeyCardElement >> initialize [
 	super initialize.
 
 	self fitContent.
@@ -35,13 +47,11 @@ GtOpenAICardElement >> initialize [
 		addChild: (BrHorizontalPane new vFitContent hMatchParent
 				margin: (BlInsets top: 5);
 				addChild: self makeTestingButton;
-				addChild: self makeTestingLabel).
-
-	self onApiKeySet
+				addChild: self makeTestingLabel)
 ]
 
 { #category : #accessing }
-GtOpenAICardElement >> keyFilePathString [
+GtLlmApiKeyCardElement >> keyFilePathString [
 	| pathString |
 	pathString := self apiKeyFile pathString.
 
@@ -51,7 +61,7 @@ GtOpenAICardElement >> keyFilePathString [
 ]
 
 { #category : #accessing }
-GtOpenAICardElement >> makeApiKeyDropdown [
+GtLlmApiKeyCardElement >> makeApiKeyDropdown [
 	^ apiKeyButton := BrButton new
 			hFitContentLimited;
 			vFitContent;
@@ -66,7 +76,7 @@ GtOpenAICardElement >> makeApiKeyDropdown [
 ]
 
 { #category : #accessing }
-GtOpenAICardElement >> makeDropdownContent [
+GtLlmApiKeyCardElement >> makeDropdownContent [
 	| aFileBrowser |
 	aFileBrowser := BrFileSelector new.
 	aFileBrowser
@@ -91,7 +101,7 @@ GtOpenAICardElement >> makeDropdownContent [
 ]
 
 { #category : #accessing }
-GtOpenAICardElement >> makeFileError [
+GtLlmApiKeyCardElement >> makeFileError [
 	^ fileError := BrLabel new hFitContent
 		margin: (BlInsets left: 5);
 		aptitude: (BrGlamorousLabelAptitude new
@@ -100,13 +110,13 @@ GtOpenAICardElement >> makeFileError [
 ]
 
 { #category : #accessing }
-GtOpenAICardElement >> makeTestingButton [
+GtLlmApiKeyCardElement >> makeTestingButton [
 	testingButton := BrButton new
 			fitContent;
 			aptitude: BrGlamorousButtonWithIconAndLabelAptitude;
 			icon: BrGlamorousVectorIcons play;
 			label: 'Test key';
-			action: [ [ GtOpenAIClient withApiKeyFromFile listModels.
+			action: [ [ clientClass withApiKeyFromFile listModels.
 				testingLabel
 					label: ('Success!' asRopedText foreground: BrGlamorousColors successBackgroundColor) ]
 					on: Error
@@ -136,7 +146,7 @@ GtOpenAICardElement >> makeTestingButton [
 ]
 
 { #category : #accessing }
-GtOpenAICardElement >> makeTestingLabel [
+GtLlmApiKeyCardElement >> makeTestingLabel [
 	^ testingLabel := BrButton new
 			hFitContentLimited;
 			vFitContent;
@@ -149,11 +159,21 @@ GtOpenAICardElement >> makeTestingLabel [
 ]
 
 { #category : #accessing }
-GtOpenAICardElement >> onApiKeySet [
+GtLlmApiKeyCardElement >> onApiKeySet [
 	apiKeyButton label: self keyFilePathString.
 
 	testingLabel label: ''.
 	self apiKeyFile exists
 		ifTrue: [ fileError text: '' ]
 		ifFalse: [ fileError text: 'File does not exist' ]
+]
+
+{ #category : #accessing }
+GtLlmApiKeyCardElement >> testAction [
+	^ testAction
+]
+
+{ #category : #accessing }
+GtLlmApiKeyCardElement >> testAction: anObject [
+	testAction := anObject
 ]
