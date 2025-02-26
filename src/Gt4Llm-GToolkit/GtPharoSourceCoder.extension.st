@@ -1,6 +1,6 @@
 Extension { #name : #GtPharoSourceCoder }
 
-{ #category : #'*Gt4Llm' }
+{ #category : #'*Gt4Llm-GToolkit' }
 GtPharoSourceCoder >> addTutorFormatMenuItemsFor: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns: 5>
 	(aCoderViewModel behavior includesBehavior: GtLlmTutor) ifFalse: [ ^ self ].
@@ -24,7 +24,7 @@ GtPharoSourceCoder >> addTutorFormatMenuItemsFor: anAst to: coderAddOns from: aC
 								combinationForPlatform gtDisplayString ] ]
 ]
 
-{ #category : #'*Gt4Llm' }
+{ #category : #'*Gt4Llm-GToolkit' }
 GtPharoSourceCoder >> addTutorFormatRenameShortcutFor: anAST into: coderAddOns [
 	<gtAstCoderAddOns: 10>
 	(self behavior includesBehavior: GtLlmTutor)
@@ -32,7 +32,7 @@ GtPharoSourceCoder >> addTutorFormatRenameShortcutFor: anAST into: coderAddOns [
 	coderAddOns addShortcut: GtLlmRenameTutorFormatComponentShortcut new
 ]
 
-{ #category : #'*Gt4Llm' }
+{ #category : #'*Gt4Llm-GToolkit' }
 GtPharoSourceCoder >> renameFormatComponent: node in: aTextualViewModel for: anElement [
 	(GtLlmRenameFormatComponentInMethodController new
 		sourceCoderViewModel: aTextualViewModel;
@@ -40,7 +40,7 @@ GtPharoSourceCoder >> renameFormatComponent: node in: aTextualViewModel for: anE
 		originalNode: node) executeIn: anElement
 ]
 
-{ #category : #'*Gt4Llm' }
+{ #category : #'*Gt4Llm-GToolkit' }
 GtPharoSourceCoder >> renameFormatComponentAt: anIndex in: aCoderViewModel from: anElement [
 	(self nodeAt: anIndex)
 		ifNotNil: [ :node | 

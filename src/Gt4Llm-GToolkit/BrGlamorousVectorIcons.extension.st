@@ -1,6 +1,6 @@
 Extension { #name : #BrGlamorousVectorIcons }
 
-{ #category : #'*Gt4Llm' }
+{ #category : #'*Gt4Llm-GToolkit' }
 BrGlamorousVectorIcons class >> largeOpenAi [
 	<script: 'self openAi inspect'>
 	^ [ BlElement new
@@ -11,7 +11,7 @@ BrGlamorousVectorIcons class >> largeOpenAi [
 		background: Color black ] asStencil
 ]
 
-{ #category : #'*Gt4Llm' }
+{ #category : #'*Gt4Llm-GToolkit' }
 BrGlamorousVectorIcons class >> openAi [
 	^ [ self largeOpenAi asElement asScalableElement size: 16 @ 16 ] asStencil
 ]

@@ -1,6 +1,6 @@
 Extension { #name : #GtWardleyMapModel }
 
-{ #category : #'*Gt4Llm' }
+{ #category : #'*Gt4Llm-GToolkit' }
 GtWardleyMapModel >> menuItemCreateTopicSection [
 	<wardleyContextMenuItem: 41>
 	^ GtWardleyMapStencilMenuItem new
@@ -42,7 +42,7 @@ GtWardleyMapModel >> menuItemCreateTopicSection [
 									aContextMenuItem editorElement fireEvent: BrContextMenuHideWish new ])) ]
 ]
 
-{ #category : #'*Gt4Llm' }
+{ #category : #'*Gt4Llm-GToolkit' }
 GtWardleyMapModel >> menuItemReviewMapButton [
 	<wardleyContextMenuItem: 45>
 	^ GtWardleyMapNodeButtonWithLabelMenuItem new
@@ -57,7 +57,7 @@ GtWardleyMapModel >> menuItemReviewMapButton [
 			aContextMenuItem editorElement fireEvent: BrContextMenuHideWish new ]
 ]
 
-{ #category : #'*Gt4Llm' }
+{ #category : #'*Gt4Llm-GToolkit' }
 GtWardleyMapModel >> openAIWardleyMapCreator: aCreator [
 	^ self optionAt: #openAIWardleyMapCreator put: aCreator
 ]
