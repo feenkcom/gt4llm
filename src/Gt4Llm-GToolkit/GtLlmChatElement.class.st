@@ -7,7 +7,7 @@ Class {
 		'chatViewModel',
 		'listElement'
 	],
-	#category : #Gt4Llm
+	#category : #'Gt4Llm-GToolkit'
 }
 
 { #category : #accessing }

@@ -7,7 +7,7 @@ Class {
 		'oneLineThreadMessageElement',
 		'threadMessageElement'
 	],
-	#category : #Gt4Llm
+	#category : #'Gt4Llm-GToolkit'
 }
 
 { #category : #factory }

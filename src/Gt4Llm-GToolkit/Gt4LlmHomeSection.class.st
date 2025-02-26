@@ -4,7 +4,7 @@ Class {
 	#classVars : [
 		'ShouldShowSection'
 	],
-	#category : #Gt4Llm
+	#category : #'Gt4Llm-GToolkit'
 }
 
 { #category : #settings }

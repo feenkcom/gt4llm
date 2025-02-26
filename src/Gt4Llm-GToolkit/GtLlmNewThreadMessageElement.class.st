@@ -7,7 +7,7 @@ Class {
 		'contentsElement',
 		'toolbar'
 	],
-	#category : #Gt4Llm
+	#category : #'Gt4Llm-GToolkit'
 }
 
 { #category : #factory }
