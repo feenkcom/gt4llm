@@ -9,7 +9,7 @@ Class {
 		'digest',
 		'details'
 	],
-	#category : #'Gt4Ollama-Models'
+	#category : #Gt4Ollama
 }
 
 { #category : #accessing }

@@ -8,7 +8,7 @@ Class {
 		'possibilities',
 		'focusedIndex'
 	],
-	#category : #'Gt4Llm-Coder'
+	#category : #Gt4Llm
 }
 
 { #category : #accessing }

@@ -6,7 +6,7 @@ Class {
 		'original',
 		'renameAction'
 	],
-	#category : #'Gt4Llm-Coder'
+	#category : #Gt4Llm
 }
 
 { #category : #accessing }

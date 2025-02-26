@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'messageText'
 	],
-	#category : #'Gt4Llm-Modelfiles'
+	#category : #Gt4Llm
 }
 
 { #category : #accessing }

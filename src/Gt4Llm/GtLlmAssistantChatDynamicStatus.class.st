@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'threadRun'
 	],
-	#category : #'Gt4Llm-Chats'
+	#category : #Gt4Llm
 }
 
 { #category : #accessing }

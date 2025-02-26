@@ -5,7 +5,7 @@ Class {
 		'serializer',
 		'updater'
 	],
-	#category : #'Gt4Llm-Models'
+	#category : #Gt4Llm
 }
 
 { #category : #'as yet unclassified' }

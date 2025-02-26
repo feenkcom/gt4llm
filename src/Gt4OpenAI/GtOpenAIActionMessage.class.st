@@ -3,7 +3,7 @@ Class {
 	#superclass : #GtOpenAIMessage,
 	#traits : 'TGtActionMessage',
 	#classTraits : 'TGtActionMessage classTrait',
-	#category : #'Gt4OpenAI-Models'
+	#category : #Gt4OpenAI
 }
 
 { #category : #'as yet unclassified' }

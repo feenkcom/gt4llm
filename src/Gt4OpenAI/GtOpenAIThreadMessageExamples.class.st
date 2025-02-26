@@ -1,7 +1,7 @@
 Class {
 	#name : #GtOpenAIThreadMessageExamples,
 	#superclass : #GtLlmThreadMessageExamples,
-	#category : #'Gt4OpenAI-Examples'
+	#category : #Gt4OpenAI
 }
 
 { #category : #'examples - messages' }

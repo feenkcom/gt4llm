@@ -7,7 +7,7 @@ Class {
 		'viewClass',
 		'withoutMarkup'
 	],
-	#category : #'Gt4Llm-Summarizer'
+	#category : #Gt4Llm
 }
 
 { #category : #accessing }

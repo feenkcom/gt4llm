@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLlmChatExamples,
 	#superclass : #Object,
-	#category : #'Gt4Llm-Examples'
+	#category : #Gt4Llm
 }
 
 { #category : #'as yet unclassified' }

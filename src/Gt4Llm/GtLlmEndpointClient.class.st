@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'client'
 	],
-	#category : #'Gt4Llm-Client'
+	#category : #Gt4Llm
 }
 
 { #category : #accessing }

@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLlmChebyshevDistanceMetric,
 	#superclass : #GtLlmDistanceMetric,
-	#category : #'Gt4Llm-Embeddings'
+	#category : #Gt4Llm
 }
 
 { #category : #accessing }

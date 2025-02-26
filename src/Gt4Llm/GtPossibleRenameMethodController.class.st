@@ -10,7 +10,7 @@ Class {
 		'permutations',
 		'possibilities'
 	],
-	#category : #'Gt4Llm-Coder'
+	#category : #Gt4Llm
 }
 
 { #category : #accessing }

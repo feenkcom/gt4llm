@@ -6,7 +6,7 @@ Class {
 		'description',
 		'remoteId'
 	],
-	#category : #'Gt4OpenAI-Models'
+	#category : #Gt4OpenAI
 }
 
 { #category : #'as yet unclassified' }

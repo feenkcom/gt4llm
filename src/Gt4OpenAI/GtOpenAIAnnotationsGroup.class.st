@@ -1,7 +1,7 @@
 Class {
 	#name : #GtOpenAIAnnotationsGroup,
 	#superclass : #GtOpenAIGroup,
-	#category : #'Gt4OpenAI-Models'
+	#category : #Gt4OpenAI
 }
 
 { #category : #accessing }

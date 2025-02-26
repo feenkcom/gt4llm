@@ -7,7 +7,7 @@ Class {
 		'createdAt',
 		'chat'
 	],
-	#category : #'Gt4Llm-Widgets'
+	#category : #Gt4Llm
 }
 
 { #category : #accessing }

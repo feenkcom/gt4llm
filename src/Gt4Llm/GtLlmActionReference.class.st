@@ -6,7 +6,7 @@ Class {
 		'isInput',
 		'isOutput'
 	],
-	#category : #'Gt4Llm-Tutor'
+	#category : #Gt4Llm
 }
 
 { #category : #accessing }

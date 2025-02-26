@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'string'
 	],
-	#category : #'Gt4Llm-Instructions'
+	#category : #Gt4Llm
 }
 
 { #category : #accessing }

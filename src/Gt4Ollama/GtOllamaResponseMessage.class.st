@@ -1,7 +1,7 @@
 Class {
 	#name : #GtOllamaResponseMessage,
 	#superclass : #GtLlmEntity,
-	#category : #'Gt4Ollama-Models'
+	#category : #Gt4Ollama
 }
 
 { #category : #accessing }

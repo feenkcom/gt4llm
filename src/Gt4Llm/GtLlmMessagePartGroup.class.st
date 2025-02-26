@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLlmMessagePartGroup,
 	#superclass : #GtLlmGroup,
-	#category : #'Gt4Llm-Groups'
+	#category : #Gt4Llm
 }
 
 { #category : #'as yet unclassified' }

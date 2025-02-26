@@ -7,7 +7,7 @@ Class {
 		'chat',
 		'delay'
 	],
-	#category : #'Gt4Llm-Futures'
+	#category : #Gt4Llm
 }
 
 { #category : #accessing }

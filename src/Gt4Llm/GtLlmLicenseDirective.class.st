@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLlmLicenseDirective,
 	#superclass : #GtLlmModelfileDirective,
-	#category : #'Gt4Llm-Modelfiles'
+	#category : #Gt4Llm
 }
 
 { #category : #accessing }

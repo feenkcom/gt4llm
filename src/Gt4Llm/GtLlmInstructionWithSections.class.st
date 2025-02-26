@@ -5,7 +5,7 @@ Class {
 		'introduction',
 		'sections'
 	],
-	#category : #'Gt4Llm-Instructions'
+	#category : #Gt4Llm
 }
 
 { #category : #accessing }

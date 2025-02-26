@@ -7,7 +7,7 @@ Class {
 		'newThreadMessageViewModel',
 		'threadMessageViewModelsCache'
 	],
-	#category : #'Gt4Llm-Widgets'
+	#category : #Gt4Llm
 }
 
 { #category : #initialization }

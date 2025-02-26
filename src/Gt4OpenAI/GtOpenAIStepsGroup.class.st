@@ -1,7 +1,7 @@
 Class {
 	#name : #GtOpenAIStepsGroup,
 	#superclass : #GtOpenAIGroup,
-	#category : #'Gt4OpenAI-Groups'
+	#category : #Gt4OpenAI
 }
 
 { #category : #accessing }

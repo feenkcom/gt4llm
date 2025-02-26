@@ -6,7 +6,7 @@ Class {
 		'name',
 		'slotValue'
 	],
-	#category : #'Gt4Llm-Summarizer'
+	#category : #Gt4Llm
 }
 
 { #category : #accessing }

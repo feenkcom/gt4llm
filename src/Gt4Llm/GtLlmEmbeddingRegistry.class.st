@@ -6,7 +6,7 @@ Class {
 	#instVars : [
 		'embeddings'
 	],
-	#category : #'Gt4Llm-Embeddings'
+	#category : #Gt4Llm
 }
 
 { #category : #accessing }

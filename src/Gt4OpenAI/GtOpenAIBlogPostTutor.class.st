@@ -1,7 +1,7 @@
 Class {
 	#name : #GtOpenAIBlogPostTutor,
 	#superclass : #GtLlmTutor,
-	#category : #'Gt4OpenAI-Tutor'
+	#category : #Gt4OpenAI
 }
 
 { #category : #'as yet unclassified' }

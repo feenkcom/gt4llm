@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLlmNearestEmbeddingsGroup,
 	#superclass : #GtLlmGroup,
-	#category : #'Gt4Llm-Embeddings'
+	#category : #Gt4Llm
 }
 
 { #category : #accessing }

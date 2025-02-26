@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLlmNewThreadMessageViewModel,
 	#superclass : #GtLlmBasicThreadMessageViewModel,
-	#category : #'Gt4Llm-Widgets'
+	#category : #Gt4Llm
 }
 
 { #category : #'initialization ' }

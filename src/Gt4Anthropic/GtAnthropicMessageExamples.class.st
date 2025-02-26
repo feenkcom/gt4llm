@@ -1,7 +1,7 @@
 Class {
 	#name : #GtAnthropicMessageExamples,
 	#superclass : #GtLlmThreadMessageExamples,
-	#category : #'Gt4Anthropic-Examples'
+	#category : #Gt4Anthropic
 }
 
 { #category : #'as yet unclassified' }

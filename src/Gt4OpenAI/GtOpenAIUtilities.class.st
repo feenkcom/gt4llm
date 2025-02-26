@@ -1,7 +1,7 @@
 Class {
 	#name : #GtOpenAIUtilities,
 	#superclass : #Object,
-	#category : #'Gt4OpenAI-Utilities'
+	#category : #Gt4OpenAI
 }
 
 { #category : #executing }

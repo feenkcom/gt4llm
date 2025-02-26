@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'choices'
 	],
-	#category : #'Gt4Llm-Coder'
+	#category : #Gt4Llm
 }
 
 { #category : #'as yet unclassified' }

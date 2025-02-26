@@ -6,7 +6,7 @@ Class {
 		'displayName',
 		'createdAt'
 	],
-	#category : #'Gt4Anthropic-Models'
+	#category : #Gt4Anthropic
 }
 
 { #category : #'as yet unclassified' }

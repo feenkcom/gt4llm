@@ -1,7 +1,7 @@
 Class {
 	#name : #GtOpenAIFineTuningCheckpointsGroup,
 	#superclass : #GtOpenAIGroup,
-	#category : #'Gt4OpenAI-Client'
+	#category : #Gt4OpenAI
 }
 
 { #category : #accessing }

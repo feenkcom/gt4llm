@@ -21,7 +21,7 @@ Class {
 		'usage',
 		'files'
 	],
-	#category : #'Gt4OpenAI-Models'
+	#category : #Gt4OpenAI
 }
 
 { #category : #accessing }

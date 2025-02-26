@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'client'
 	],
-	#category : #'Gt4Anthropic-Models'
+	#category : #Gt4Anthropic
 }
 
 { #category : #'as yet unclassified' }

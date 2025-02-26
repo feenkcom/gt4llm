@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'annotations'
 	],
-	#category : #'Gt4OpenAI-Stylers'
+	#category : #Gt4OpenAI
 }
 
 { #category : #accessing }

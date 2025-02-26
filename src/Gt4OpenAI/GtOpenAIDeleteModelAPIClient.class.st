@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'model'
 	],
-	#category : #'Gt4OpenAI-Client'
+	#category : #Gt4OpenAI
 }
 
 { #category : #accessing }

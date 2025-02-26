@@ -9,7 +9,7 @@ Class {
 		'maxTokens',
 		'instructions'
 	],
-	#category : #'Gt4Anthropic-Providers'
+	#category : #Gt4Anthropic
 }
 
 { #category : #'as yet unclassified' }

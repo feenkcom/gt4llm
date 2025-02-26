@@ -17,7 +17,7 @@ Class {
 		'raw',
 		'keep_alive'
 	],
-	#category : #'Gt4Ollama-Client'
+	#category : #Gt4Ollama
 }
 
 { #category : #'as yet unclassified' }

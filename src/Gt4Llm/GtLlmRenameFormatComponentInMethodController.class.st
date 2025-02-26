@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'tutorClass'
 	],
-	#category : #'Gt4Llm-Refactorings'
+	#category : #Gt4Llm
 }
 
 { #category : #'as yet unclassified' }

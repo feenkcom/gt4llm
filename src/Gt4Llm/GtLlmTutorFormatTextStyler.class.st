@@ -6,7 +6,7 @@ Class {
 	#instVars : [
 		'tutor'
 	],
-	#category : #'Gt4Llm-Stylers'
+	#category : #Gt4Llm
 }
 
 { #category : #'as yet unclassified' }
