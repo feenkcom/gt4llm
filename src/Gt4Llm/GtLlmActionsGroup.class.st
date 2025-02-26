@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLlmActionsGroup,
 	#superclass : #GtLlmGroup,
-	#category : #'Gt4Llm-Groups'
+	#category : #Gt4Llm
 }
 
 { #category : #accessing }

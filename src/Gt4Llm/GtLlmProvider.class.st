@@ -7,7 +7,7 @@ Class {
 		'assistantMessageClass',
 		'format'
 	],
-	#category : #'Gt4Llm-Providers'
+	#category : #Gt4Llm
 }
 
 { #category : #accessing }

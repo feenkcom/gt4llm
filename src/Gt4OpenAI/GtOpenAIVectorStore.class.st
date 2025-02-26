@@ -9,7 +9,7 @@ Class {
 		'usageBytes',
 		'fileCounts'
 	],
-	#category : #'Gt4OpenAI-Models'
+	#category : #Gt4OpenAI
 }
 
 { #category : #'as yet unclassified' }

@@ -3,7 +3,7 @@ Class {
 	#superclass : #GtLlmChatMessage,
 	#traits : 'TGtActionMessage',
 	#classTraits : 'TGtActionMessage classTrait',
-	#category : #'Gt4Llm-Models'
+	#category : #Gt4Llm
 }
 
 { #category : #'as yet unclassified' }

@@ -5,7 +5,7 @@ Class {
 		'input',
 		'embedding'
 	],
-	#category : #'Gt4Llm-Embeddings'
+	#category : #Gt4Llm
 }
 
 { #category : #accessing }

@@ -6,7 +6,7 @@ Class {
 	#instVars : [
 		'parent'
 	],
-	#category : #'Gt4Llm-Domain - Wardley Map'
+	#category : #Gt4Llm
 }
 
 { #category : #accessing }

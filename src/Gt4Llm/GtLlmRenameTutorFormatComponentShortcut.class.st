@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLlmRenameTutorFormatComponentShortcut,
 	#superclass : #GtSourceCoderInlineRenameShortcut,
-	#category : #'Gt4Llm-Refactorings'
+	#category : #Gt4Llm
 }
 
 { #category : #'as yet unclassified' }

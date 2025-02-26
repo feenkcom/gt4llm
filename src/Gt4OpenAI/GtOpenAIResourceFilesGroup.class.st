@@ -1,7 +1,7 @@
 Class {
 	#name : #GtOpenAIResourceFilesGroup,
 	#superclass : #GtLlmGroup,
-	#category : #'Gt4OpenAI-Groups'
+	#category : #Gt4OpenAI
 }
 
 { #category : #accessing }

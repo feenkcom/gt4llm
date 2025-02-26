@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLlmAssistantChatStatus,
 	#superclass : #Object,
-	#category : #'Gt4Llm-Chats'
+	#category : #Gt4Llm
 }
 
 { #category : #factory }

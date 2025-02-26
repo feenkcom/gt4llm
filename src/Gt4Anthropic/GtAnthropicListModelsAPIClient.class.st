@@ -1,7 +1,7 @@
 Class {
 	#name : #GtAnthropicListModelsAPIClient,
 	#superclass : #GtLlmEndpointClient,
-	#category : #'Gt4Anthropic-Client'
+	#category : #Gt4Anthropic
 }
 
 { #category : #'as yet unclassified' }

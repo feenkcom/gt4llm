@@ -1,6 +1,6 @@
 Trait {
 	#name : #TGtLlmThreadMessage,
-	#category : #'Gt4Llm-Models'
+	#category : #Gt4Llm
 }
 
 { #category : #accessing }

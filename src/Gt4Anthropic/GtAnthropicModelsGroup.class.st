@@ -1,7 +1,7 @@
 Class {
 	#name : #GtAnthropicModelsGroup,
 	#superclass : #GtAnthropicGroup,
-	#category : #'Gt4Anthropic-Models'
+	#category : #Gt4Anthropic
 }
 
 { #category : #'as yet unclassified' }

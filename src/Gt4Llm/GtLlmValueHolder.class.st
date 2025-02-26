@@ -9,7 +9,7 @@ Class {
 		'chat',
 		'content'
 	],
-	#category : #'Gt4Llm-Models'
+	#category : #Gt4Llm
 }
 
 { #category : #announcer }

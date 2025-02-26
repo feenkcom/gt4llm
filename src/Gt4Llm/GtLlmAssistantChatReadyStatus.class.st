@@ -6,7 +6,7 @@ Class {
 	#classInstVars : [
 		'uniqueInstance'
 	],
-	#category : #'Gt4Llm-Chats'
+	#category : #Gt4Llm
 }
 
 { #category : #accessing }

@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'model'
 	],
-	#category : #'Gt4Ollama-Chat'
+	#category : #Gt4Ollama
 }
 
 { #category : #accessing }

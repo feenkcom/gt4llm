@@ -6,7 +6,7 @@ Class {
 		'object',
 		'isDeleted'
 	],
-	#category : #'Gt4OpenAI-Models'
+	#category : #Gt4OpenAI
 }
 
 { #category : #accessing }

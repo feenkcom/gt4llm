@@ -1,5 +1,5 @@
 Class {
 	#name : #GtLlmThreadRunIsDoneAnnouncement,
 	#superclass : #GtLlmThreadRunAnnouncement,
-	#category : #'Gt4Llm-Announcements'
+	#category : #Gt4Llm
 }

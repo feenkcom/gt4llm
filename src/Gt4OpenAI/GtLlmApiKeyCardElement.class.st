@@ -8,7 +8,7 @@ Class {
 		'fileError',
 		'clientClass'
 	],
-	#category : #'Gt4OpenAI-Widgets'
+	#category : #Gt4OpenAI
 }
 
 { #category : #accessing }

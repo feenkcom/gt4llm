@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLlmError,
 	#superclass : #Error,
-	#category : #'Gt4Llm-Errors'
+	#category : #Gt4Llm
 }
 
 { #category : #'instance creation' }

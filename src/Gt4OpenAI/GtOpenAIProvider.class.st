@@ -5,7 +5,7 @@ Class {
 		'model',
 		'client'
 	],
-	#category : #'Gt4OpenAI-Providers'
+	#category : #Gt4OpenAI
 }
 
 { #category : #'as yet unclassified' }

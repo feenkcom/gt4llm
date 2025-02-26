@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'steps'
 	],
-	#category : #'Gt4Ollama-Models'
+	#category : #Gt4Ollama
 }
 
 { #category : #accessing }
