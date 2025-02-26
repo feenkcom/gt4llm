@@ -167,13 +167,3 @@ GtLlmApiKeyCardElement >> onApiKeySet [
 		ifTrue: [ fileError text: '' ]
 		ifFalse: [ fileError text: 'File does not exist' ]
 ]
-
-{ #category : #accessing }
-GtLlmApiKeyCardElement >> testAction [
-	^ testAction
-]
-
-{ #category : #accessing }
-GtLlmApiKeyCardElement >> testAction: anObject [
-	testAction := anObject
-]
