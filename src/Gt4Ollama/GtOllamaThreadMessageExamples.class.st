@@ -1,7 +1,7 @@
 Class {
 	#name : #GtOllamaThreadMessageExamples,
 	#superclass : #GtLlmThreadMessageExamples,
-	#category : #'Gt4Ollama-Examples'
+	#category : #Gt4Ollama
 }
 
 { #category : #'as yet unclassified' }

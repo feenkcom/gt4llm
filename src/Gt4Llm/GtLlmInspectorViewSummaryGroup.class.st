@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLlmInspectorViewSummaryGroup,
 	#superclass : #GtLlmGroup,
-	#category : #'Gt4Llm-Summarizer'
+	#category : #Gt4Llm
 }
 
 { #category : #accessing }

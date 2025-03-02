@@ -7,7 +7,7 @@ Class {
 		'ownedBy',
 		'id'
 	],
-	#category : #'Gt4OpenAI-Models'
+	#category : #Gt4OpenAI
 }
 
 { #category : #accessing }

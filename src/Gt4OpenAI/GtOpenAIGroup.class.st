@@ -6,7 +6,7 @@ Class {
 	#instVars : [
 		'client'
 	],
-	#category : #'Gt4OpenAI-Models'
+	#category : #Gt4OpenAI
 }
 
 { #category : #'instance creation' }

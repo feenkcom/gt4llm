@@ -3,7 +3,7 @@ Class {
 	#superclass : #BrHorizontalPane,
 	#traits : 'TGtLlmWithThreadMessageViewModel',
 	#classTraits : 'TGtLlmWithThreadMessageViewModel classTrait',
-	#category : #'Gt4Llm-Widgets'
+	#category : #Gt4Llm
 }
 
 { #category : #accessing }

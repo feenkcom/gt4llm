@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'formatReferences'
 	],
-	#category : #'Gt4Llm-Stylers'
+	#category : #Gt4Llm
 }
 
 { #category : #accessing }

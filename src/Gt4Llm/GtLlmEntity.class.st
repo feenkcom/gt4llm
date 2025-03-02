@@ -5,7 +5,7 @@ Class {
 		'rawData',
 		'client'
 	],
-	#category : #'Gt4Llm-Models'
+	#category : #Gt4Llm
 }
 
 { #category : #accessing }

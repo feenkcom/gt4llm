@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLlmRenameFormatComponentRefactoringExamples,
 	#superclass : #Object,
-	#category : #'Gt4Llm-Refactorings - Examples'
+	#category : #Gt4Llm
 }
 
 { #category : #'as yet unclassified' }

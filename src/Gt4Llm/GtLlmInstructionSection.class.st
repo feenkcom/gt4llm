@@ -7,7 +7,7 @@ Class {
 		'headerLevel',
 		'autoHeaderLevel'
 	],
-	#category : #'Gt4Llm-Instructions'
+	#category : #Gt4Llm
 }
 
 { #category : #accessing }

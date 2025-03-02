@@ -10,7 +10,7 @@ Class {
 		'toggleGroup',
 		'descriptionElement'
 	],
-	#category : #'Gt4Llm-Widgets'
+	#category : #Gt4Llm
 }
 
 { #category : #factory }

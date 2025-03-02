@@ -5,7 +5,7 @@ Class {
 		'run',
 		'thread'
 	],
-	#category : #'Gt4OpenAI-Client'
+	#category : #Gt4OpenAI
 }
 
 { #category : #accessing }

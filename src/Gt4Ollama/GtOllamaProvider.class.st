@@ -8,7 +8,7 @@ Class {
 		'modelfile',
 		'tools'
 	],
-	#category : #'Gt4Ollama-Providers'
+	#category : #Gt4Ollama
 }
 
 { #category : #'as yet unclassified' }

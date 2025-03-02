@@ -1,6 +1,6 @@
 Trait {
 	#name : #TGtActionMessage,
-	#category : #'Gt4Llm-Models'
+	#category : #Gt4Llm
 }
 
 { #category : #'as yet unclassified' }

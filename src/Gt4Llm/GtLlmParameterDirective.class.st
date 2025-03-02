@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'value'
 	],
-	#category : #'Gt4Llm-Modelfiles'
+	#category : #Gt4Llm
 }
 
 { #category : #accessing }

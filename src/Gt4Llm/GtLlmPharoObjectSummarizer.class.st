@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLlmPharoObjectSummarizer,
 	#superclass : #Object,
-	#category : #'Gt4Llm-Summarizer'
+	#category : #Gt4Llm
 }
 
 { #category : #accessing }

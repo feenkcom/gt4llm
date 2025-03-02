@@ -5,7 +5,7 @@ Class {
 		'file',
 		'assistant'
 	],
-	#category : #'Gt4OpenAI-Client'
+	#category : #Gt4OpenAI
 }
 
 { #category : #accessing }

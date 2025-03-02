@@ -1,7 +1,7 @@
 Class {
 	#name : #GtBPEEncoderExamples,
 	#superclass : #Object,
-	#category : #'Gt4Llm-Tokenizer - Examples'
+	#category : #Gt4Llm
 }
 
 { #category : #accessing }

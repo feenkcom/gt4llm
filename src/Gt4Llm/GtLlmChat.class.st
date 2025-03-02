@@ -13,7 +13,7 @@ Class {
 		'messages',
 		'serializer'
 	],
-	#category : #'Gt4Llm-Chats'
+	#category : #Gt4Llm
 }
 
 { #category : #accessing }

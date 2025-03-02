@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLlmEmbeddingsUtilities,
 	#superclass : #Object,
-	#category : #'Gt4Llm-Embeddings'
+	#category : #Gt4Llm
 }
 
 { #category : #accessing }

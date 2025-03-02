@@ -5,7 +5,7 @@ Class {
 		'action',
 		'arguments'
 	],
-	#category : #'Gt4Llm-Announcements'
+	#category : #Gt4Llm
 }
 
 { #category : #accessing }

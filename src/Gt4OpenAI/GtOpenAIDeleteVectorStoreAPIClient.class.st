@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'vectorStore'
 	],
-	#category : #'Gt4OpenAI-Client'
+	#category : #Gt4OpenAI
 }
 
 { #category : #'as yet unclassified' }

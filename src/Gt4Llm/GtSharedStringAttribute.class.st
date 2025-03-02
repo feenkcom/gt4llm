@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'builder'
 	],
-	#category : #'Gt4Llm-Attributes'
+	#category : #Gt4Llm
 }
 
 { #category : #accessing }
