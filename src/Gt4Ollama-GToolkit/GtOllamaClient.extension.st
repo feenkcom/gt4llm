@@ -1,6 +1,17 @@
 Extension { #name : #GtOllamaClient }
 
 { #category : #'*Gt4Ollama-GToolkit' }
+GtOllamaClient >> delete: aString withEntity: anEntity [
+	ZnClient new
+		timeout: 600;
+		beOneShot;
+		url: self baseUrl / aString;
+		method: #DELETE;
+		entity: (ZnEntity json: (STONJSON toString: anEntity));
+		execute
+]
+
+{ #category : #'*Gt4Ollama-GToolkit' }
 GtOllamaClient >> initializeClient [
 	| aClient |
 	aClient := ZnClient new.

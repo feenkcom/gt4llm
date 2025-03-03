@@ -70,17 +70,6 @@ GtOllamaClient >> defaultBaseUrl [
 ]
 
 { #category : #accessing }
-GtOllamaClient >> delete: aString withEntity: anEntity [
-	ZnClient new
-		timeout: 600;
-		beOneShot;
-		url: self baseUrl / aString;
-		method: #DELETE;
-		entity: (ZnEntity json: (STONJSON toString: anEntity));
-		execute
-]
-
-{ #category : #accessing }
 GtOllamaClient >> deleteModel: aString [
 	^ GtOllamaDeleteModelClient new
 		client: self;
