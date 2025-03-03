@@ -36,11 +36,6 @@ GtLlmNewThreadMessage >> assistantChat: anAssistantChat [
 ]
 
 { #category : #accessing }
-GtLlmNewThreadMessage >> codeBlocks [
-	^ self parse children select: [ :aNode | aNode isKindOf: LeCodeBlockNode ]
-]
-
-{ #category : #accessing }
 GtLlmNewThreadMessage >> contentSummary [
 	^ self contentText lines ifEmpty: [ '' ] ifNotEmpty: #first
 ]
@@ -64,11 +59,6 @@ GtLlmNewThreadMessage >> contents: anObject [
 GtLlmNewThreadMessage >> contents: aString requester: aRequester [
 	contents := aString.
 	self onContentsChangeByRequester: aRequester
-]
-
-{ #category : #accessing }
-GtLlmNewThreadMessage >> elementClass [
-	^ GtLlmNewThreadMessageElement
 ]
 
 { #category : #accessing }
@@ -96,11 +86,6 @@ GtLlmNewThreadMessage >> onContentsChangeByRequester: aRequester [
 				threadMessage: self;
 				contents: contents;
 				requester: aRequester)
-]
-
-{ #category : #accessing }
-GtLlmNewThreadMessage >> parse [
-	^ LeParser parse: self contentText
 ]
 
 { #category : #actions }

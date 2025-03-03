@@ -50,11 +50,6 @@ GtLlmChatMessage >> asTokenizableString [
 	^ '<|im_start|>' , self role , '<|im_sep|>' , self content , '<|im_end|>'
 ]
 
-{ #category : #'as yet unclassified' }
-GtLlmChatMessage >> asViewModel [
-	^ GtLlmThreadMessageViewModel new threadMessage: self
-]
-
 { #category : #accessing }
 GtLlmChatMessage >> attachments [
 	^ attachments
@@ -122,17 +117,6 @@ GtLlmChatMessage >> gtActionInspectFor: anAction [
 	^ super gtActionInspectFor: anAction
 ]
 
-{ #category : #accessing }
-GtLlmChatMessage >> gtContentFor: aView [
-	<gtView>
-	<gtLlmMessageView>
-	^ aView explicit
-		title: 'Content';
-		priority: 5;
-		stencil: [ GtLlmThreadMessageElement new
-				threadMessageViewModel: self asViewModel ]
-]
-
 { #category : #'as yet unclassified' }
 GtLlmChatMessage >> gtJsonFor: aView context: aContext [
 	<gtView>
@@ -142,22 +126,6 @@ GtLlmChatMessage >> gtJsonFor: aView context: aContext [
 	^ (self contentJson gtTreeFor: aView context: aContext)
 		title: 'JSON data';
 		priority: 4.5
-]
-
-{ #category : #'as yet unclassified' }
-GtLlmChatMessage >> gtTextFor: aView [
-	<gtView>
-	<gtLlmMessageView>
-	| json |
-	[ json := self contentJson ] on: Error do: [ ^ aView empty ].
-
-	json at: 'Text' ifAbsent: [ ^ aView empty ].
-
-	^ aView textEditor
-		title: 'Text';
-		priority: 1;
-		text: [ json at: 'Text' ];
-		styler: [ GtLlmMessageStyler new threadMessageViewModel: self asViewModel ]
 ]
 
 { #category : #accessing }
@@ -209,11 +177,6 @@ GtLlmChatMessage >> isToolRole [
 { #category : #accessing }
 GtLlmChatMessage >> isUserRole [
 	^ self role = 'user'
-]
-
-{ #category : #accessing }
-GtLlmChatMessage >> parse [
-	^ LeParser parse: self contentText
 ]
 
 { #category : #accessing }

@@ -46,48 +46,6 @@ GtLlmFineTuningFile >> conversations: anObject [
 ]
 
 { #category : #accessing }
-GtLlmFineTuningFile >> costsForEpochs: anInteger [ 
-	| numberOfTokens |
-	numberOfTokens := self numberOfTokens * anInteger.
-	
-	"this model is free until september 23rd 2024 for under 2M tokens"
-	((self model beginsWith: 'gpt-4o-mini')
-		and: [ Date today
-				< (Date
-						year: 2024
-						month: 9
-						day: 23) and: [ numberOfTokens < 2000000 ] ])
-		ifTrue: [ ^ GtTCurrencyMoney new
-				amount: 0;
-				currency: GtTCurrency usd ].
-
-	^ GtTCurrencyMoney new
-		amount: numberOfTokens * self pricePerToken;
-		currency: GtTCurrency usd
-]
-
-{ #category : #accessing }
-GtLlmFineTuningFile >> costsPerEpoch [
-	| numberOfTokens |
-	numberOfTokens := self numberOfTokens.
-	
-	"this model is free until september 23rd 2024 for under 2M tokens"
-	((self model beginsWith: 'gpt-4o-mini')
-		and: [ Date today
-				< (Date
-						year: 2024
-						month: 9
-						day: 23) and: [ numberOfTokens < 2000000 ] ])
-		ifTrue: [ ^ GtTCurrencyMoney new
-				amount: 0;
-				currency: GtTCurrency usd ].
-
-	^ GtTCurrencyMoney new
-		amount: numberOfTokens * self pricePerToken;
-		currency: GtTCurrency usd
-]
-
-{ #category : #accessing }
 GtLlmFineTuningFile >> defaultModel [
 	^ 'gpt-3.5-turbo'
 ]
@@ -107,16 +65,6 @@ GtLlmFineTuningFile >> gtConversationsFor: aView [
 				Character enter
 					join: (aConversation items
 							collect: [ :aMessage | aMessage role , ': ' , aMessage content ]) ]
-]
-
-{ #category : #accessing }
-GtLlmFineTuningFile >> gtCostFor: aView [
-	<gtView>
-	^ aView forward
-		title: 'Cost';
-		priority: 3;
-		object: [ self costsPerEpoch ];
-		view: #gtDetailsFor:
 ]
 
 { #category : #accessing }
@@ -155,13 +103,6 @@ GtLlmFineTuningFile >> name [
 { #category : #accessing }
 GtLlmFineTuningFile >> name: anObject [
 	name := anObject
-]
-
-{ #category : #accessing }
-GtLlmFineTuningFile >> numberOfTokens [
-	^ (GtLlmTokenizer new
-		tokenizeMessages: (conversations flatCollect: #items)
-		usingModel: self model) tokenCount
 ]
 
 { #category : #accessing }

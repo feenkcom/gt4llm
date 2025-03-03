@@ -1,6 +1,6 @@
 Class {
 	#name : #GtOpenAIThreadMessageExamples,
-	#superclass : #Object,
+	#superclass : #GtLlmThreadMessageExamples,
 	#category : #'Gt4OpenAI-GToolkit'
 }
 

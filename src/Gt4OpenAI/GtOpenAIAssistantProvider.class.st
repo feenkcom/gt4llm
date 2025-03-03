@@ -169,16 +169,6 @@ GtOpenAIAssistantProvider >> gtFilesFor: aView [
 ]
 
 { #category : #'as yet unclassified' }
-GtOpenAIAssistantProvider >> gtInstructionsFor: aView [
-	<gtView>
-	^ aView textEditor
-		title: 'Instructions';
-		priority: 1;
-		text: [ self instructions ];
-		styler: GtLlmMessageStyler new
-]
-
-{ #category : #'as yet unclassified' }
 GtOpenAIAssistantProvider >> initialize [
 	super initialize.
 
@@ -224,11 +214,6 @@ GtOpenAIAssistantProvider >> performToolCalls [
 		submitToolOutputs: toolOutputs
 		toThread: thread id
 		anRun: lastRun id
-]
-
-{ #category : #'as yet unclassified' }
-GtOpenAIAssistantProvider >> runFuture [
-	^ GtLlmThreadRunFuture new chat: self
 ]
 
 { #category : #'as yet unclassified' }

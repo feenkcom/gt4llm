@@ -37,11 +37,6 @@ GtLlmChat >> announcer [
 	^ announcer ifNil: [ announcer := Announcer new ]
 ]
 
-{ #category : #'as yet unclassified' }
-GtLlmChat >> asViewModel [
-	^ GtLlmChatViewModel new assistantChat: self
-]
-
 { #category : #accessing }
 GtLlmChat >> context [
 	^ context
@@ -83,39 +78,6 @@ GtLlmChat >> gtMessagesFor: aView [
 		column: 'Message' text: #content;
 		updateWhen: GtLlmThreadRunAnnouncement in: self announcer;
 		actionUpdateButton
-]
-
-{ #category : #accessing }
-GtLlmChat >> gtMessagesWidgetFor: aView [
-	"cannot be a forward because the update wouldn’t work"
-
-	<gtView>
-	| aViewModel |
-	self provider ifNil: [ ^ aView empty ].
-
-	^ aView explicit
-		title: 'Chat';
-		priority: 0;
-		stencil: [ aViewModel ifNil: [ aViewModel := self asViewModel ].
-			GtLlmChatElement new chatViewModel: aViewModel ];
-		actionUpdateButton
-]
-
-{ #category : #accessing }
-GtLlmChat >> gtWriteFor: aView [
-	<gtView>
-	^ aView textEditor
-		title: 'Write';
-		priority: 4;
-		text: [ 'Write a message here' ];
-		actionButtonIcon: BrGlamorousVectorIcons play
-			tooltip: 'Send'
-			action: [ :aButton | 
-				aButton parent parent parent parent
-					allChildrenBreadthFirstDetect: [ :anElement | anElement isKindOf: BrEditor ]
-					ifFound: [ :anEditor | 
-						self sendMessage: anEditor text asString.
-						anEditor text: '' ] ]
 ]
 
 { #category : #accessing }
@@ -242,9 +204,4 @@ GtLlmChat >> tutor: anObject [
 { #category : #accessing }
 GtLlmChat >> updateLastUpdate [
 	lastUpdate := DateAndTime now
-]
-
-{ #category : #accessing }
-GtLlmChat >> whenReadyFuture [
-	^ GtLlmChatReadyFuture new chat: self
 ]
