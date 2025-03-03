@@ -92,7 +92,7 @@ GtLlmFunctionTool >> method [
 	split := '_' split: name.
 	class := split first asClassIfAbsent: [ ^ nil ].
 	methodName := ':' join: split allButFirst.
-	^ [ class >> methodName asSymbol ] on: KeyNotFound do: [ nil ]
+	^ [ class >> methodName asSymbol ] on: Error do: [ nil ]
 ]
 
 { #category : #accessing }
