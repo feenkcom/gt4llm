@@ -76,18 +76,8 @@ GtOpenAIGroup >> asArray [
 ]
 
 { #category : #accessing }
-GtOpenAIGroup >> asAsyncStream [
-	^ AsyncSequenceStream forCollection: self
-]
-
-{ #category : #accessing }
 GtOpenAIGroup >> asBag [
 	^ self items asBag
-]
-
-{ #category : #accessing }
-GtOpenAIGroup >> asBrItemsProvider [
-	^ BrSequenceableCollectionItemsProvider forCollection: self
 ]
 
 { #category : #accessing }

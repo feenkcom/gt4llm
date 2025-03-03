@@ -64,18 +64,8 @@ GtLlmGroup >> asArray [
 ]
 
 { #category : #accessing }
-GtLlmGroup >> asAsyncStream [
-	^ AsyncSequenceStream forCollection: self
-]
-
-{ #category : #accessing }
 GtLlmGroup >> asBag [
 	^ self items asBag
-]
-
-{ #category : #accessing }
-GtLlmGroup >> asBrItemsProvider [
-	^ BrSequenceableCollectionItemsProvider forCollection: self
 ]
 
 { #category : #accessing }
