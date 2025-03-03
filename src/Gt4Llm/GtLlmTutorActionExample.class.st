@@ -29,14 +29,16 @@ GtLlmTutorActionExample >> asExpressionSource [
 	input: { '
 		, ('. '
 				join: (self input associations
-						collect: [ :aPair | '''' , aPair key , ''' -> ' , (aPair value ifNil: [ 'nil' ] ifNotNil: #storeString) ]))
+						collect: [ :aPair | 
+							'''' , aPair key , ''' -> '
+								, (aPair value ifNil: [ 'nil' ] ifNotNil: [ :aValue | aValue storeString ]) ]))
 		, ' } asDictionary;
 	output: { '
 		, ('. '
 				join: (self output associations
 						collect: [ :aPair | 
 							'''' , aPair key , ''' -> '
-								, (aPair value ifNil: [ 'nil' ] ifNotNil: #storeString) ]))
+								, (aPair value ifNil: [ 'nil' ] ifNotNil:[ :aValue | aValue storeString ]) ]))
 		, ' } asDictionary'
 ]
 
