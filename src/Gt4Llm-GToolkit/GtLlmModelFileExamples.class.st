@@ -1,29 +1,18 @@
 Class {
-	#name : #GtLlmTutorActionExamples,
+	#name : #GtLlmModelFileExamples,
 	#superclass : #Object,
-	#category : #Gt4Llm
+	#category : #'Gt4Llm-GToolkit'
 }
 
-{ #category : #'as yet unclassified' }
-GtLlmTutorActionExamples >> actionWithExampleWithJsonContainingQuote [
-	<gtExample>
-	| action |
-	action := GtLlmTutorAction new
-			name: 'Some action';
-			description: 'Some description.';
-			addExample: self exampleWithJsonContainingQuote.
-	self shouldnt: [ RBParser parseMethod: action asMethodSource ] raise: Error.
-]
-
 { #category : #asserting }
-GtLlmTutorActionExamples >> assert: aBoolean [
+GtLlmModelFileExamples >> assert: aBoolean [
 	"We check for true explicitly to make the assertion fail for non booleans"
 	aBoolean == true ifFalse: [self signalFailure: 'Assertion failed']
 			
 ]
 
 { #category : #asserting }
-GtLlmTutorActionExamples >> assert: aBooleanOrBlock description: aStringOrBlock [
+GtLlmModelFileExamples >> assert: aBooleanOrBlock description: aStringOrBlock [
 	aBooleanOrBlock value ifFalse: [
 		| message |
 		message := aStringOrBlock value.
@@ -32,14 +21,14 @@ GtLlmTutorActionExamples >> assert: aBooleanOrBlock description: aStringOrBlock 
 ]
 
 { #category : #asserting }
-GtLlmTutorActionExamples >> assert: actual equals: expected [
+GtLlmModelFileExamples >> assert: actual equals: expected [
 	^ self
 		assert: expected = actual
 		description: [self comparingStringBetween: actual and: expected]
 ]
 
 { #category : #asserting }
-GtLlmTutorActionExamples >> assertCollection: actual hasSameElements: expected [
+GtLlmModelFileExamples >> assertCollection: actual hasSameElements: expected [
 	"Assert that a collection contains the same elements as the given collection. Order is not checked, only the presence/absence of elements."
 	| missingElements additionalElements |
 	
@@ -56,13 +45,13 @@ GtLlmTutorActionExamples >> assertCollection: actual hasSameElements: expected [
 ]
 
 { #category : #asserting }
-GtLlmTutorActionExamples >> classForTestResult [
+GtLlmModelFileExamples >> classForTestResult [
 	"Returns the class of the test result"
 	^ GtExampleResult
 ]
 
 { #category : #private }
-GtLlmTutorActionExamples >> comparingStringBetween: actual and: expected [
+GtLlmModelFileExamples >> comparingStringBetween: actual and: expected [
 
 	^ String streamContents: [:stream |
 			stream
@@ -73,49 +62,73 @@ GtLlmTutorActionExamples >> comparingStringBetween: actual and: expected [
 				nextPutAll: '.']
 ]
 
-{ #category : #'as yet unclassified' }
-GtLlmTutorActionExamples >> exampleWithJsonContainingQuote [
-	<gtExample>
-	| jsonString json example |
-	jsonString := '{"Action":"Some action","Text":"Some text","Post":"String with '' inside."}'.
-	json := STONJSON fromString: jsonString.
-	example := GtLlmTutorActionExample new
-			input: json;
-			output: json.
-	self
-		shouldnt: [ RBParser parseExpression: example asExpressionSource ]
-		raise: Error.
-	^ example
-]
-
 { #category : #asserting }
-GtLlmTutorActionExamples >> executeShould: aBlock inScopeOf: anExceptionalEvent [ 
+GtLlmModelFileExamples >> executeShould: aBlock inScopeOf: anExceptionalEvent [ 
 	^[aBlock value.
  	false] on: anExceptionalEvent
 		do: [:ex | ex return: true]
 ]
 
+{ #category : #'as yet unclassified' }
+GtLlmModelFileExamples >> modelfile [
+	<gtExample>
+	| modelfile |
+	modelfile := GtLlmModelFile new.
+
+	self assert: modelfile content equals: ''.
+	self assert: modelfile directives isEmpty.
+
+	^ modelfile
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmModelFileExamples >> modelfileWithMessages [
+	<gtExample>
+	| modelfile |
+	modelfile := self modelfile.
+
+	modelfile addMessage: GtLlmMessageExamples new userMessage.
+	modelfile addMessage: GtLlmMessageExamples new assistantMessage.
+
+	self assert: modelfile directives size equals: 2.
+
+	^ modelfile
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmModelFileExamples >> modelfileWithSystem [
+	<gtExample>
+	| modelfile |
+	modelfile := self modelfile.
+
+	modelfile system: 'You are a helpfule assistant'.
+
+	self assert: modelfile directives size equals: 1.
+
+	^ modelfile
+]
+
 { #category : #asserting }
-GtLlmTutorActionExamples >> should: aBlock raise: anExceptionalEvent [ 
+GtLlmModelFileExamples >> should: aBlock raise: anExceptionalEvent [ 
 	^self assert: (self executeShould: aBlock inScopeOf: anExceptionalEvent)
 ]
 
 { #category : #asserting }
-GtLlmTutorActionExamples >> should: aBlock raise: anExceptionalEvent description: aString [ 
+GtLlmModelFileExamples >> should: aBlock raise: anExceptionalEvent description: aString [ 
 	^self assert: (self executeShould: aBlock inScopeOf: anExceptionalEvent)
 		description: aString
 			
 ]
 
 { #category : #asserting }
-GtLlmTutorActionExamples >> shouldnt: aBlock raise: anExceptionalEvent [  
+GtLlmModelFileExamples >> shouldnt: aBlock raise: anExceptionalEvent [  
 	 
 	^self assert: (self executeShould: aBlock inScopeOf: anExceptionalEvent) not
 			
 ]
 
 { #category : #asserting }
-GtLlmTutorActionExamples >> shouldnt: aBlock raise: anExceptionalEvent description: aString [  
+GtLlmModelFileExamples >> shouldnt: aBlock raise: anExceptionalEvent description: aString [  
  
 	^self
 		assert: (self executeShould: aBlock inScopeOf: anExceptionalEvent) not
@@ -123,6 +136,6 @@ GtLlmTutorActionExamples >> shouldnt: aBlock raise: anExceptionalEvent descripti
 ]
 
 { #category : #signalling }
-GtLlmTutorActionExamples >> signalFailure: aString [
+GtLlmModelFileExamples >> signalFailure: aString [
 	self classForTestResult failure signal: aString
 ]
