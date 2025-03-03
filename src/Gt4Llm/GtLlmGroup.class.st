@@ -7,6 +7,12 @@ Class {
 	#category : #Gt4Llm
 }
 
+{ #category : #'as yet unclassified' }
+GtLlmGroup class >> withAll: aCollection [
+	^ self new 
+		initializeWith: aCollection
+]
+
 { #category : #accessing }
 GtLlmGroup >> add: anItem [
 	self items add: anItem
