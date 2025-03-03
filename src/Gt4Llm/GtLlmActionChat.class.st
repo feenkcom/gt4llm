@@ -5,11 +5,6 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-GtLlmActionChat >> asViewModel [
-	^ GtLlmActionChatViewModel new assistantChat: self
-]
-
-{ #category : #'as yet unclassified' }
 GtLlmActionChat >> defaultSerializer [
 	^ GtLlmActionMessageSerializer new
 ]
@@ -41,7 +36,7 @@ GtLlmActionChat >> sendAction: anActionCall onAnswer: aBlock [
 		sendMessage: ((self tutor actionNamed: anActionCall action) format
 				format: anActionCall arguments).
 
-	(self whenReadyFuture then: [ :_ | aBlock value: self messages last ]) await
+	self executeWait: aBlock
 ]
 
 { #category : #accessing }

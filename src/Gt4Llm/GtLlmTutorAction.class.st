@@ -86,16 +86,6 @@ GtLlmTutorAction >> description: anObject [
 ]
 
 { #category : #accessing }
-GtLlmTutorAction >> descriptionDescription [
-	<magritteDescription>
-	^ MAStringDescription new
-		label: 'Description';
-		beRequired;
-		priority: 3;
-		accessor: #description
-]
-
-{ #category : #accessing }
 GtLlmTutorAction >> examples [
 	^ examples
 ]
@@ -105,29 +95,6 @@ GtLlmTutorAction >> examples: anObject [
 	examples := anObject asOrderedCollection.
 
 	examples do: [ :anExample | anExample action: self ]
-]
-
-{ #category : #accessing }
-GtLlmTutorAction >> examplesDescription [
-	<magritteDescription>
-	^ MAToManyRelationDescription new
-		label: 'Examples';
-		priority: 5;
-		accessor: #examples;
-		classes: {GtLlmTutorActionExample};
-		beModifiable;
-		blocItemStencil: [ :anItemViewModel :anItemIndex | 
-			anItemViewModel asElement
-				fitContent;
-				border: (BlBorder paint: BrGlamorousColors disabledButtonBorderColor width: 1);
-				margin: (BlInsets
-						top: 0
-						right: 5
-						bottom: 5
-						left: 0);
-				padding: (BlInsets all: 5);
-				background: Color white ];
-		  newItemStencil: [ GtLlmTutorActionExample new ]
 ]
 
 { #category : #accessing }
@@ -141,34 +108,9 @@ GtLlmTutorAction >> format: anObject [
 ]
 
 { #category : #accessing }
-GtLlmTutorAction >> formatDescription [
-	<magritteDescription>
-	^ MAStringDescription new
-		label: 'Format';
-		beRequired;
-		priority: 5;
-		accessor: #format
-]
-
-{ #category : #accessing }
 GtLlmTutorAction >> formatReferences [
 	^ (self examples flatCollect: #formatReferences as: Set)
 		sorted: [ :a :b | a priority < b priority ]
-]
-
-{ #category : #'as yet unclassified' }
-GtLlmTutorAction >> gtDefinitionFor: aView [
-	<gtView>
-	^ aView explicit
-		title: 'Definition';
-		priority: 1;
-		actionButtonIcon: BrGlamorousVectorIcons browse
-			tooltip: 'Browse method'
-			action: [ self definingMethod gtBrowse ];
-		stencil: [ | coder |
-			coder := GtPharoMethodCoder forMethod: self definingMethod.
-			coder addOns addStyler: (GtLlmTutorFormatStyler new tutor: self tutor).
-			coder asExpandedOnlyElement vFitContentLimited ]
 ]
 
 { #category : #accessing }
@@ -260,16 +202,6 @@ GtLlmTutorAction >> name: anObject [
 ]
 
 { #category : #accessing }
-GtLlmTutorAction >> nameDescription [
-	<magritteDescription>
-	^ MAStringDescription new
-		label: 'Name';
-		beRequired;
-		priority: 1;
-		accessor: #name
-]
-
-{ #category : #accessing }
 GtLlmTutorAction >> onMethodModified: aMethodModified [
 	definingMethod = aMethodModified ifFalse: [ ^ self ].
 
@@ -326,15 +258,6 @@ GtLlmTutorAction >> priority [
 { #category : #accessing }
 GtLlmTutorAction >> priority: anObject [
 	priority := anObject
-]
-
-{ #category : #accessing }
-GtLlmTutorAction >> priorityDescription [
-	<magritteDescription>
-	^ MANumberDescription new
-		label: 'Priority';
-		priority: 2;
-		accessor: #priority
 ]
 
 { #category : #'as yet unclassified' }
