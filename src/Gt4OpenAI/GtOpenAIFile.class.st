@@ -61,20 +61,6 @@ GtOpenAIFile >> filename: anObject [
 	filename := anObject
 ]
 
-{ #category : #'as yet unclassified' }
-GtOpenAIFile >> gtFileFor: aView [
-	<gtView>
-	^ aView explicit
-		title: 'File';
-		priority: 1;
-		stencil: [ (self contents gtViewsFor: GtPhlowEmptyView new)
-				asElementDo: [ :e | 
-					e
-						margin: (BlInsets all: 15);
-						background: Color white;
-						addAptitude: BrShadowAptitude ] ]
-]
-
 { #category : #accessing }
 GtOpenAIFile >> id [
 	^ id

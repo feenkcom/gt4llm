@@ -1,6 +1,6 @@
 Extension { #name : #GtWardleyMapViewModel }
 
-{ #category : #'*Gt4OpenAI' }
+{ #category : #'*Gt4OpenAI-GToolkit' }
 GtWardleyMapViewModel >> llm [
 	^ self
 		optionAt: #llm

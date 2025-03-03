@@ -1,6 +1,6 @@
 Extension { #name : #LeWardleyMapSnippetViewModel }
 
-{ #category : #'*Gt4OpenAI' }
+{ #category : #'*Gt4OpenAI-GToolkit' }
 LeWardleyMapSnippetViewModel >> gtActionInspectChatFor: anAction [
 	<gtAction>
 	^ anAction button

@@ -1,6 +1,6 @@
 Extension { #name : #GtWardleyMapNodeModel }
 
-{ #category : #'*Gt4OpenAI' }
+{ #category : #'*Gt4OpenAI-GToolkit' }
 GtWardleyMapNodeModel >> menuItemNodeLlmAddNewConnectedNodeButton [
 	<wardleyContextMenuItem: 41>
 	^ GtWardleyMapNodeButtonWithLabelMenuItem new
@@ -19,7 +19,7 @@ GtWardleyMapNodeModel >> menuItemNodeLlmAddNewConnectedNodeButton [
 			aContextMenuItem editorElement fireEvent: BrContextMenuHideWish new ]
 ]
 
-{ #category : #'*Gt4OpenAI' }
+{ #category : #'*Gt4OpenAI-GToolkit' }
 GtWardleyMapNodeModel >> menuItemNodeLlmExplainItButton [
 	<wardleyContextMenuItem: 42>
 	^ GtWardleyMapNodeButtonWithLabelMenuItem new
@@ -36,14 +36,14 @@ GtWardleyMapNodeModel >> menuItemNodeLlmExplainItButton [
 			aContextMenuItem editorElement fireEvent: BrContextMenuHideWish new ]
 ]
 
-{ #category : #'*Gt4OpenAI' }
+{ #category : #'*Gt4OpenAI-GToolkit' }
 GtWardleyMapNodeModel >> menuItemNodeLlmLabel [
 	<wardleyContextMenuItem: 40>
 	^ GtWardleyMapLabelMenuItem new
 		text: 'OpenAI:'
 ]
 
-{ #category : #'*Gt4OpenAI' }
+{ #category : #'*Gt4OpenAI-GToolkit' }
 GtWardleyMapNodeModel >> menuItemNodeLlmProposeAlternativeNamesButton [
 	<wardleyContextMenuItem: 43>
 	^ GtWardleyMapNodeButtonWithLabelMenuItem new

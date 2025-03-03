@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLlmWardleyMapTutor,
 	#superclass : #GtLlmTutor,
-	#category : #Gt4OpenAI
+	#category : #'Gt4OpenAI-GToolkit'
 }
 
 { #category : #'as yet unclassified' }

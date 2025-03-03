@@ -43,15 +43,6 @@ GtOllamaModel >> digest: anObject [
 ]
 
 { #category : #accessing }
-GtOllamaModel >> gtDeleteModelActionFor: anAction [
-	<gtAction>
-	^ anAction button
-		label: 'Delete';
-		icon: BrGlamorousVectorIcons cancel;
-		action: [ :aButton | self client deleteModel: self name ]
-]
-
-{ #category : #accessing }
 GtOllamaModel >> gtPushModelActionFor: anAction [
 	<gtAction>
 	^ anAction button

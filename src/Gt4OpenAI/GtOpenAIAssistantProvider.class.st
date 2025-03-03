@@ -248,10 +248,7 @@ GtOpenAIAssistantProvider >> sendAssistantMessage: aMessage [
 
 	chat signalRunHasUpdated.
 
-	future := (self runFuture
-			then: [ :aRun | 
-				self updateMessages.
-				chat signalRunIsDone ]) await: GtOpenAIUtilities executionConfiguration
+	self executeWait
 ]
 
 { #category : #'as yet unclassified' }

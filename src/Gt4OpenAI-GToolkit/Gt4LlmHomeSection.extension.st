@@ -1,6 +1,6 @@
 Extension { #name : #Gt4LlmHomeSection }
 
-{ #category : #'*Gt4OpenAI' }
+{ #category : #'*Gt4OpenAI-GToolkit' }
 Gt4LlmHomeSection >> apiKeyCard [
 	<gtSectionCard>
 	| card |
