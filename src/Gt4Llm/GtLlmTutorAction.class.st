@@ -181,11 +181,6 @@ GtLlmTutorAction >> initialize [
 ]
 
 { #category : #accessing }
-GtLlmTutorAction >> initializeMethod [
-	^ (thisContext stack at: 3) blocDefiningMethod
-]
-
-{ #category : #accessing }
 GtLlmTutorAction >> inputReferences [
 	^ (self examples flatCollect: #inputReferences as: Set)
 		sorted: [ :a :b | a priority < b priority ]

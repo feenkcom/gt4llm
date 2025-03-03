@@ -158,11 +158,6 @@ GtLlmTutorFormatDescription >> initialize [
 ]
 
 { #category : #accessing }
-GtLlmTutorFormatDescription >> initializeMethod [
-	^ (thisContext stack at: 4) blocDefiningMethod
-]
-
-{ #category : #accessing }
 GtLlmTutorFormatDescription >> name [
 	^ name
 ]
