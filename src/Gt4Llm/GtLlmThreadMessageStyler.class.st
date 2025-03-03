@@ -1,25 +1,25 @@
 Class {
-	#name : #GtOpenAIThreadMessageStyler,
+	#name : #GtLlmThreadMessageStyler,
 	#superclass : #BlTextStyler,
 	#instVars : [
 		'annotations'
 	],
-	#category : #Gt4OpenAI
+	#category : #Gt4Llm
 }
 
 { #category : #accessing }
-GtOpenAIThreadMessageStyler >> annotations [
+GtLlmThreadMessageStyler >> annotations [
 	^ annotations
 ]
 
 { #category : #accessing }
-GtOpenAIThreadMessageStyler >> annotations: aListOfAnnotations [
+GtLlmThreadMessageStyler >> annotations: aListOfAnnotations [
 	annotations := (aListOfAnnotations
 			collect: [ :anAnnotation | anAnnotation text -> anAnnotation ]) asDictionary
 ]
 
 { #category : #accessing }
-GtOpenAIThreadMessageStyler >> privateStyle: aText [
+GtLlmThreadMessageStyler >> privateStyle: aText [
 	| aString aParser |
 	aString := aText asString.
 	aParser := ('【' asPParser , '】' asPParser negate plus token , '】' asPParser)
@@ -40,7 +40,7 @@ GtOpenAIThreadMessageStyler >> privateStyle: aText [
 ]
 
 { #category : #accessing }
-GtOpenAIThreadMessageStyler >> style: aBlText [
+GtLlmThreadMessageStyler >> style: aBlText [
 	<return: #BlText>
 	^ BlTextStylerTelemetry
 		rootTimeSync: [ Processor activeProcess name , '  ' , self class name , ': '
