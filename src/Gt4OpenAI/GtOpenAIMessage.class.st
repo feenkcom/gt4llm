@@ -201,11 +201,6 @@ GtOpenAIMessage >> hasStep [
 	^ self step isNotNil
 ]
 
-{ #category : #accessing }
-GtOpenAIMessage >> id [
-	^ self explicitRequirement
-]
-
 { #category : #'as yet unclassified' }
 GtOpenAIMessage >> idString [
 	^ nil

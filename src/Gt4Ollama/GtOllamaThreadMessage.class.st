@@ -80,7 +80,7 @@ GtOllamaThreadMessage >> evalDuration [
 
 { #category : #accessing }
 GtOllamaThreadMessage >> evalDuration: anObject [
-	evalDuration := anObject ifNotNil: [ :aValue | aValue nanoseconds ]
+	evalDuration := anObject ifNotNil: [ :aValue | aValue nanoSeconds ]
 ]
 
 { #category : #accessing }
