@@ -1,8 +1,6 @@
 Class {
 	#name : #GtLlmProvisionalThreadMessage,
 	#superclass : #Object,
-	#traits : 'TGtLlmThreadMessage',
-	#classTraits : 'TGtLlmThreadMessage classTrait',
 	#instVars : [
 		'createdAt',
 		'chat'
@@ -74,6 +72,11 @@ GtLlmProvisionalThreadMessage >> id [
 { #category : #testing }
 GtLlmProvisionalThreadMessage >> isAssistantRole [
 	^ true
+]
+
+{ #category : #testing }
+GtLlmProvisionalThreadMessage >> isFailure [
+	^ false
 ]
 
 { #category : #'as yet unclassified' }
