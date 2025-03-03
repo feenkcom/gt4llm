@@ -1,8 +1,6 @@
 Class {
 	#name : #GtLlmAssistantChatReadyStatus,
 	#superclass : #GtLlmAssistantChatStatus,
-	#traits : 'TGtUniqueInstance',
-	#classTraits : 'TGtUniqueInstance classTrait',
 	#classInstVars : [
 		'uniqueInstance'
 	],

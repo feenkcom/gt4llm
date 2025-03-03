@@ -1,8 +1,6 @@
 Class {
 	#name : #GtLlmFailureThreadMessage,
 	#superclass : #Object,
-	#traits : 'TGtLlmThreadMessage',
-	#classTraits : 'TGtLlmThreadMessage classTrait',
 	#instVars : [
 		'failureText',
 		'createdAt',

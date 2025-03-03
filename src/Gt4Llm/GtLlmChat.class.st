@@ -1,8 +1,6 @@
 Class {
 	#name : #GtLlmChat,
 	#superclass : #Object,
-	#traits : 'TGtAnnouncer',
-	#classTraits : 'TGtAnnouncer classTrait',
 	#instVars : [
 		'model',
 		'announcer',
@@ -30,6 +28,11 @@ GtLlmChat >> ancestorOf: aMessage [
 				ifTrue: [ index = 1 ifTrue: [ ^ nil ] ifFalse: [ ^ messages at: index - 1 ] ] ].
 
 	self error: 'Message not found'
+]
+
+{ #category : #announcer }
+GtLlmChat >> announce: anAnnouncement [
+	^ self announcer announce: anAnnouncement
 ]
 
 { #category : #accessing }
@@ -78,6 +81,11 @@ GtLlmChat >> gtMessagesFor: aView [
 		column: 'Message' text: #content;
 		updateWhen: GtLlmThreadRunAnnouncement in: self announcer;
 		actionUpdateButton
+]
+
+{ #category : #announcer }
+GtLlmChat >> hasSubscriber: anObject [
+	^ self announcer hasSubscriber: anObject
 ]
 
 { #category : #accessing }
@@ -144,6 +152,12 @@ GtLlmChat >> provider: anObject [
 	provider chat: self
 ]
 
+{ #category : #'announcer - subscription' }
+GtLlmChat >> removeSubscription: subscription [
+	"Remove the given subscription from the receiver"
+	^ self announcer removeSubscription: subscription
+]
+
 { #category : #'as yet unclassified' }
 GtLlmChat >> responseFormat [
 	^ self provider format
@@ -191,6 +205,51 @@ GtLlmChat >> status [
 	^ self provider status
 ]
 
+{ #category : #'announcer - subscription' }
+GtLlmChat >> subscribe: anAnnouncementClass do: aValuable [
+	"Declare that when anAnnouncementClass is raised, aValuable is executed."
+	
+	self
+		deprecated: 'Please use #when:do: instead'
+		transformWith: '`@receiver subscribe: `@statements1 do: `@statements2' 
+						-> '`@receiver when: `@statements1 do: `@statements2'.
+
+	^ self when: anAnnouncementClass do: aValuable
+]
+
+{ #category : #'announcer - subscription' }
+GtLlmChat >> subscribe: anAnnouncementClass do: aValuable for: aSubscriber [
+	"Declare that when anAnnouncementClass is raised, aValuable is executed."
+	
+	self
+		deprecated: 'Please use #when:do:for: instead'
+		transformWith: '`@receiver subscribe: `@statements1 do: `@aValuable for: `@aSubscriber' 
+						-> '`@receiver when: `@statements1 do: `@aValuable for: `@aSubscriber'.
+	
+	^ self when: anAnnouncementClass do: aValuable for: aSubscriber
+]
+
+{ #category : #'announcer - subscription' }
+GtLlmChat >> subscribe: anAnnouncementClass send: aSelector to: anObject [
+	"Declare that when anAnnouncementClass is raised, anObject should receive the message aSelector."
+	self
+		deprecated: 'Please use #when:send:to: instead'
+		transformWith: '`@receiver subscribe: `@statements1 send: `@statements2 to: `@anObject' 
+						-> '`@receiver when: `@statements1 send: `@statements2 to: `@anObject'.
+	^ self when: anAnnouncementClass do: (MessageSend receiver: anObject selector: aSelector)
+]
+
+{ #category : #'announcer - subscription' }
+GtLlmChat >> subscribe: anAnnouncementClass send: aSelector to: anObject for: aSubscriber [
+	"Declare that when anAnnouncementClass is raised, anObject should receive the message aSelector."
+	self
+		deprecated: 'Please use #when:send:to:for: instead'
+		transformWith: '`@receiver subscribe: `@statements1 send: `@statements2 to: `@anObject for: `@aSubscriber' 
+						-> '`@receiver when: `@statements1 send: `@statements2 to: `@anObject for: `@aSubscriber'.
+
+	^ self when: anAnnouncementClass send: aSelector to: anObject for: aSubscriber
+]
+
 { #category : #accessing }
 GtLlmChat >> tutor [
 	^ tutor
@@ -201,7 +260,60 @@ GtLlmChat >> tutor: anObject [
 	tutor := anObject
 ]
 
+{ #category : #'announcer - subscription' }
+GtLlmChat >> unsubscribe: anObject [
+	"Unsubscribe all subscriptions of anObject from the receiver"
+	^ self announcer unsubscribe: anObject
+]
+
 { #category : #accessing }
 GtLlmChat >> updateLastUpdate [
 	lastUpdate := DateAndTime now
+]
+
+{ #category : #'announcer - subscription' }
+GtLlmChat >> weak [
+	"announcer weak subscribe: foo"
+	^ self announcer weak
+]
+
+{ #category : #'announcer - subscription' }
+GtLlmChat >> when: anAnnouncementClass do: aValuable [
+	"Declare that when anAnnouncementClass is raised, aValuable is executed.  Pay attention that ushc method as well as when:do: should not be used on weak announcer since the block holds the receiver and more strongly."
+		^ self announcer when: anAnnouncementClass do: aValuable
+]
+
+{ #category : #'announcer - subscription' }
+GtLlmChat >> when: anAnnouncementClass do: aValuable for: aSubscriber [
+	"Declare that when anAnnouncementClass is raised, aValuable is executed and define the subscriber."
+
+	^ (self when: anAnnouncementClass do: aValuable) subscriber: aSubscriber; yourself
+]
+
+{ #category : #'announcer - subscription' }
+GtLlmChat >> when: anAnnouncementClass doOnce: aValuable for: aSubscriber [
+	"Declare that when anAnnouncementClass is raised, aValuable is executed and define the subscriber.
+	A valuable is executed ONCE, and then a subscriber gets unsubscribed"
+	^ self
+		when: anAnnouncementClass
+		do: [ :anAnnouncement |
+			self unsubscribe: aSubscriber.
+			aValuable cull: anAnnouncement ]
+		for: aSubscriber
+]
+
+{ #category : #'announcer - subscription' }
+GtLlmChat >> when: anAnnouncementClass send: aSelector to: anObject [
+	"Declare that when anAnnouncementClass is raised, anObject should receive the message aSelector.
+    When the message expects one argument (eg #fooAnnouncement:) the announcement is passed as argument.
+    When the message expects two arguments (eg #fooAnnouncement:announcer:) both the announcement and the announcer 
+    are passed as argument"
+		^ self announcer when: anAnnouncementClass send: aSelector to: anObject
+]
+
+{ #category : #'announcer - subscription' }
+GtLlmChat >> when: anAnnouncementClass send: aSelector to: anObject for: aSubscriber [
+	"Declare that when anAnnouncementClass is raised, anObject should receive the message aSelector."
+
+	^ (self when: anAnnouncementClass send: aSelector to: anObject) subscriber: aSubscriber
 ]

@@ -1,8 +1,6 @@
 Class {
 	#name : #GtLlmEmbeddingRegistry,
 	#superclass : #Object,
-	#traits : 'TGtUniqueInstance',
-	#classTraits : 'TGtUniqueInstance classTrait',
 	#instVars : [
 		'embeddings'
 	],
