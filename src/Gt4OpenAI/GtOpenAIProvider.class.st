@@ -9,11 +9,6 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-GtOpenAIProvider class >> withApiKeyFromClipboard [
-	^ self new apiKey: Clipboard clipboardText
-]
-
-{ #category : #'as yet unclassified' }
 GtOpenAIProvider class >> withApiKeyFromFile [
 	^ self new apiKey: GtOpenAIClient apiKeyFileContents
 ]
