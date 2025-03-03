@@ -8,7 +8,7 @@ RwSimpleProjectLoadComponentV2 {
 	#packageNames : [
 		'Gt4Llm',
 		'Gt4OpenAI',
-		'Gt4Ollama',
+		'Gt4Ollama'
 	],
 	#comment : ''
 }

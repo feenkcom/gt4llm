@@ -6,6 +6,6 @@ RwProjectSpecificationV2 {
 	#projectsPath : 'rowan/projects',
 	#specsPath : 'rowan/specs',
 	#packageFormat : 'tonel',
-	#packageConvention : 'Monticello',
+	#packageConvention : 'RowanHybrid',
 	#comment : ''
 }
