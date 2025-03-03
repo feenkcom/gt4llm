@@ -70,7 +70,7 @@ GtOpenAIResourceFile >> remoteId: anObject [
 
 { #category : #accessing }
 GtOpenAIResourceFile >> toFileDescription [
-	^ (self remoteId ifNil: '<unknown ID>')
+	^ (self remoteId ifNil: [ '<unknown ID>' ])
 		, ':
 - Name: ' , self file basename
 		, '
