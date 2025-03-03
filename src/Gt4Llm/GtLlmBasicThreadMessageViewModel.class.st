@@ -105,12 +105,12 @@ GtLlmBasicThreadMessageViewModel >> messageViews [
 GtLlmBasicThreadMessageViewModel >> newStyler [
 	^ BlCompositeStyler new
 		stylers: {GtLlmMessageStyler new threadMessageViewModel: self.
-				GtOpenAIThreadMessageStyler new annotations: self annotations}
+				GtLlmThreadMessageStyler new annotations: self annotations}
 ]
 
 { #category : #'private - announcing' }
 GtLlmBasicThreadMessageViewModel >> notifyThreadMessageViewModelChanged [
-	self announce: GtOpenAIThreadMessageViewModelChanged new
+	self announce: GtLlmThreadMessageViewModelChanged new
 ]
 
 { #category : #'private - announcement handling' }

@@ -153,7 +153,7 @@ GtLlmThreadMessageElement >> subscribeToThreadMessageViewModel [
 		when: GtLlmThreadMessageRestyleRequested
 			send: #onRestyleRequested:
 			to: self;
-		when: GtOpenAIThreadMessageViewModelChanged
+		when: GtLlmThreadMessageViewModelChanged
 			send: #onThreadMessageViewModelChanged:
 			to: self
 ]

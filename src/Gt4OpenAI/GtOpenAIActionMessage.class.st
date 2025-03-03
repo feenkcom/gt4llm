@@ -18,6 +18,6 @@ GtOpenAIActionMessage >> gtTextFor: aView [
 		styler: (BlCompositeStyler new
 				stylers: {GtLlmMessageStyler new
 							threadMessageViewModel: (GtLlmNewThreadMessageViewModel new threadMessage: GtLlmNewThreadMessage new).
-						GtOpenAIThreadMessageStyler new annotations: self annotations});
+						GtLlmThreadMessageStyler new annotations: self annotations});
 		text: [ self textBlock ]
 ]

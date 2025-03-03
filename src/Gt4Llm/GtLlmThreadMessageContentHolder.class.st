@@ -82,7 +82,7 @@ GtLlmThreadMessageContentHolder >> threadMessageViewModel: anObject [
 	threadMessageViewModel := anObject.
 
 	threadMessageViewModel weak
-		when: GtOpenAIThreadMessageViewModelChanged
+		when: GtLlmThreadMessageViewModelChanged
 		send: #onThreadMessageViewModelChanged:
 		to: self.
 

@@ -195,7 +195,7 @@ GtLlmNewActionThreadMessageElement >> subscribeToThreadMessageViewModel [
 		to: self.
 
 	self threadMessageViewModel weak
-		when: GtOpenAIThreadMessageViewModelChanged
+		when: GtLlmThreadMessageViewModelChanged
 		send: #onThreadMessageViewModelChanged:
 		to: self
 ]

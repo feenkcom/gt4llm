@@ -269,11 +269,6 @@ GtOpenAIMessage >> metadata: anObject [
 ]
 
 { #category : #accessing }
-GtOpenAIMessage >> parse [
-	^ LeParser parse: self contentText
-]
-
-{ #category : #accessing }
 GtOpenAIMessage >> role [
 	^ role
 ]
