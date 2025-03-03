@@ -76,7 +76,7 @@ GtLlmActionTemplateElement >> exampleStringFor: anObject [
 					ifTrue: [ '''Action'' -> ''' asRopedText , tutorNameAttribute codeEditor
 							, '''' asRopedText ]
 					ifFalse: [ (aPair key storeString , ' -> '
-							, (aPair value ifNil: [ 'nil' ] ifNotNil: #storeString)) asRopedText ] ]
+							, (aPair value ifNil: [ 'nil' ] ifNotNil: [ :aValue | aValue storeString ])) asRopedText ] ]
 			separatedBy: '. ' asRopedText.
 
 	finalRope := '' asRopedText.
@@ -95,7 +95,7 @@ GtLlmActionTemplateElement >> finalExampleStringFor: anObject [
 					ifTrue: [ '''Action'' -> ''' asRopedText , tutorNameAttribute string
 							, '''' asRopedText ]
 					ifFalse: [ (aPair key storeString , ' -> '
-							, (aPair value ifNil: [ 'nil' ] ifNotNil: #storeString)) asRopedText ] ]
+							, (aPair value ifNil: [ 'nil' ] ifNotNil: [ :aValue | aValue storeString ])) asRopedText ] ]
 			separatedBy: '. ' asRopedText.
 
 	finalRope := '' asRopedText.

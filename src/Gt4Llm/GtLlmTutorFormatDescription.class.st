@@ -154,7 +154,12 @@ GtLlmTutorFormatDescription >> initialize [
 	
 	referencingActions := OrderedCollection new.
 	
-	definingMethod := (thisContext stack at: 3) blocDefiningMethod
+	definingMethod := self initializeMethod
+]
+
+{ #category : #accessing }
+GtLlmTutorFormatDescription >> initializeMethod [
+	^ (thisContext stack at: 4) blocDefiningMethod
 ]
 
 { #category : #accessing }
@@ -189,7 +194,7 @@ GtLlmTutorFormatDescription >> priority: anObject [
 
 { #category : #'as yet unclassified' }
 GtLlmTutorFormatDescription >> removeFromSystem [
-	self definingMethod ifNotNil: #removeFromSystem
+	self definingMethod ifNotNil: [ :aMethod | aMethod removeFromSystem ]
 ]
 
 { #category : #accessing }

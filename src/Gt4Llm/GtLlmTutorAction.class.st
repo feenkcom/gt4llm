@@ -177,11 +177,12 @@ GtLlmTutorAction >> initialize [
 	self name: ''.
 	self description: ''.
 
-	definingMethod := (thisContext stack at: 3) blocDefiningMethod.
-	SystemAnnouncer uniqueInstance weak
-		when: MethodModified
-		send: #onMethodModified:
-		to: self
+	definingMethod := self initializeMethod
+]
+
+{ #category : #accessing }
+GtLlmTutorAction >> initializeMethod [
+	^ (thisContext stack at: 3) blocDefiningMethod
 ]
 
 { #category : #accessing }
@@ -199,13 +200,6 @@ GtLlmTutorAction >> name [
 GtLlmTutorAction >> name: anObject [
 	name := anObject.
 	self format isEmptyOrNil ifTrue: [ self format: name ]
-]
-
-{ #category : #accessing }
-GtLlmTutorAction >> onMethodModified: aMethodModified [
-	definingMethod = aMethodModified ifFalse: [ ^ self ].
-
-	self become: aMethodModified value
 ]
 
 { #category : #accessing }
@@ -262,7 +256,7 @@ GtLlmTutorAction >> priority: anObject [
 
 { #category : #'as yet unclassified' }
 GtLlmTutorAction >> removeFromSystem [
-	self definingMethod ifNotNil: #removeFromSystem
+	self definingMethod ifNotNil: [ :aMethod | aMethod removeFromSystem ]
 ]
 
 { #category : #accessing }

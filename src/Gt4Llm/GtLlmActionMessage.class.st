@@ -13,7 +13,8 @@ GtLlmActionMessage class >> defaultRole [
 GtLlmActionMessage >> actionModel [
 	^ (self chat tutor actionNamed: self action)
 		ifNil: [ self isUserRole
-				ifTrue: [ (self chat descendantOf: self) ifNotNil: #actionModel ]
+				ifTrue: [ (self chat descendantOf: self)
+						ifNotNil: [ :aDescendant | aDescendant actionModel ] ]
 				ifFalse: [ nil ] ]
 ]
 
