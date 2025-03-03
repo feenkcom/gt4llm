@@ -15,3 +15,8 @@ GtLlmChatMessage >> gtContentFor: aView [
 		stencil: [ GtLlmThreadMessageElement new
 				threadMessageViewModel: self asViewModel ]
 ]
+
+{ #category : #'*Gt4Llm-GToolkit' }
+GtLlmChatMessage >> uuidClass [
+	^ UUID
+]

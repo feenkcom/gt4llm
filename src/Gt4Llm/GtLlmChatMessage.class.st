@@ -145,7 +145,7 @@ GtLlmChatMessage >> id: anId [
 
 { #category : #accessing }
 GtLlmChatMessage >> initialize [
-	id := UUID new.
+	id := self uuidClass new.
 	createdAt := DateAndTime now
 ]
 
