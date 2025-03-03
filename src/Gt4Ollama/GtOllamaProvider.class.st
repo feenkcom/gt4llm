@@ -45,7 +45,7 @@ GtOllamaProvider >> initializeClient [
 { #category : #'as yet unclassified' }
 GtOllamaProvider >> instructions: aString [
 	| internalModelName modelFile |
-	internalModelName := 'gt-tutor-' , self model , '-' , UUID new asString.
+	internalModelName := 'gt-tutor-' , self model , '-' , self uuidClass new asString.
 	modelFile := GtLlmModelFile new
 			from: self model;
 			system: aString.
