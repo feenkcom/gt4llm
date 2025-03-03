@@ -6,7 +6,7 @@ Class {
 		'arguments',
 		'name'
 	],
-	#category : #Gt4OpenAI
+	#category : #Gt4Llm
 }
 
 { #category : #'as yet unclassified' }
