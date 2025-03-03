@@ -59,6 +59,11 @@ GtLlmTutorAction >> gtDefinitionFor: aView [
 ]
 
 { #category : #'*Gt4Llm-GToolkit' }
+GtLlmTutorAction >> initializeMethod [
+	^ (thisContext stack at: 4) blocDefiningMethod
+]
+
+{ #category : #'*Gt4Llm-GToolkit' }
 GtLlmTutorAction >> nameDescription [
 	<magritteDescription>
 	^ MAStringDescription new
