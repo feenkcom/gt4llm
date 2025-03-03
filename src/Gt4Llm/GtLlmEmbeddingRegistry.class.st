@@ -4,8 +4,53 @@ Class {
 	#instVars : [
 		'embeddings'
 	],
+	#classInstVars : [
+		'uniqueInstance'
+	],
 	#category : #Gt4Llm
 }
+
+{ #category : #'as yet unclassified' }
+GtLlmEmbeddingRegistry class >> cleanUniqueInstance [
+	uniqueInstance := nil.
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmEmbeddingRegistry class >> cleanUp [
+	self cleanUniqueInstance
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmEmbeddingRegistry class >> default [
+	^ self uniqueInstance
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmEmbeddingRegistry class >> gtInstanceButtonFor: anAction [
+	<gtClassAction>
+	^ anAction button
+		tooltip: 'Inspect unique instance';
+		priority: 10;
+		icon: BrGlamorousVectorIcons playinspect;
+		action: [ :aButton | aButton phlow spawnObject: self uniqueInstance]
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmEmbeddingRegistry class >> hasUniqueInstance [
+
+	^ uniqueInstance isNotNil
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmEmbeddingRegistry class >> instance [
+	<gtExample>
+	^ self uniqueInstance
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmEmbeddingRegistry class >> uniqueInstance [
+	^ uniqueInstance ifNil: [ uniqueInstance := self new ]
+]
 
 { #category : #accessing }
 GtLlmEmbeddingRegistry >> at: anInput [
