@@ -15,5 +15,5 @@ BaselineOfGt4Ollama >> baseline: spec [
 
 			spec package: 'Gt4Ollama' with: [ spec requires: #('Gt4LlmCore') ].
 
-			spec package: 'Gt4Ollama-GToolkit' with: [ spec requires: #('Gt4LlmCore'. 'Gt4Ollama') ] ]
+			spec package: 'Gt4Ollama-GToolkit' with: [ spec requires: #('Gt4LlmCore' 'Gt4Ollama') ] ]
 ]
