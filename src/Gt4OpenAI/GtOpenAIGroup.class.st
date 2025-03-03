@@ -19,6 +19,12 @@ GtOpenAIGroup class >> itemClass [
 	^ self subclassResponsibility
 ]
 
+{ #category : #'as yet unclassified' }
+GtOpenAIGroup class >> withAll: aCollection [
+	^ self new 
+		initializeWith: aCollection
+]
+
 { #category : #accessing }
 GtOpenAIGroup >> add: anItem [
 	self items add: anItem
