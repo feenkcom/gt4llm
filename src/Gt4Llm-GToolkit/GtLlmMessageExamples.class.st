@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLlmMessageExamples,
 	#superclass : #Object,
-	#category : #Gt4Llm
+	#category : #'Gt4Llm-GToolkit'
 }
 
 { #category : #'as yet unclassified' }
