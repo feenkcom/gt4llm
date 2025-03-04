@@ -4,7 +4,8 @@ RwPlatformNestedProjectLoadComponentV2 {
 		'gemstone'
 	],
 	#packageNames : [
-		'Gt4Llm-Gemstone'
+		'Gt4Llm-Gemstone',
+		'Gt4Ollama-Gemstone'
 	],
 	#comment : ''
 }
