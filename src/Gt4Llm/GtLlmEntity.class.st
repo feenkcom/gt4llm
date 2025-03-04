@@ -1,14 +1,14 @@
 Class {
-	#name : #GtLlmEntity,
-	#superclass : #Object,
+	#name : 'GtLlmEntity',
+	#superclass : 'Object',
 	#instVars : [
 		'rawData',
 		'client'
 	],
-	#category : #Gt4Llm
+	#category : 'Gt4Llm'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmEntity class >> from: aDictionary [
 	| entity |
 	(aDictionary isKindOf: self) ifTrue: [ ^ aDictionary ].
@@ -20,29 +20,29 @@ GtLlmEntity class >> from: aDictionary [
 	^ entity
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmEntity class >> serializationProperties [
 	^ #()
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmEntity >> client [
 	^ client
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmEntity >> client: anObject [
 	client := anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 GtLlmEntity >> deserializeTime: anObject [
 	^ (anObject isNil or: [ anObject isKindOf: DateAndTime ])
 		ifTrue: [ anObject ]
 		ifFalse: [ DateAndTime fromUnixTime: anObject ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 GtLlmEntity >> from: aDictionary [
 	self rawData: aDictionary.
 
@@ -53,7 +53,7 @@ GtLlmEntity >> from: aDictionary [
 				withArguments: {aDictionary at: aPair key ifAbsent: [ nil ]} ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmEntity >> gtViewRawDataFor: aView [
 	<gtView>
 	self rawData ifNil: [^ aView empty ].
@@ -65,7 +65,7 @@ GtLlmEntity >> gtViewRawDataFor: aView [
 		view: #gtItemsFor:
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 GtLlmEntity >> merge: anotherEntity [
 	self rawData: anotherEntity rawData.
 
@@ -77,19 +77,19 @@ GtLlmEntity >> merge: anotherEntity [
 				ifNotNil: [ self perform: (aPair value , ':') asSymbol withArguments: {aValue} ] ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmEntity >> rawData [
 	^ rawData
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmEntity >> rawData: anObject [
 	rawData := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmEntity >> serialize [
 	^ (self class serializationProperties
 		collect: [ :aPair | aPair key -> (self perform: aPair value) ]) asDictionary
-		reject: #isNil
+		reject: [ :aValue | aValue isNil ]
 ]
