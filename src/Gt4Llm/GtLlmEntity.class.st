@@ -5,7 +5,7 @@ Class {
 		'rawData',
 		'client'
 	],
-	#category : #Gt4Llm
+	#category : 'Gt4Llm'
 }
 
 { #category : #accessing }
@@ -91,5 +91,5 @@ GtLlmEntity >> rawData: anObject [
 GtLlmEntity >> serialize [
 	^ (self class serializationProperties
 		collect: [ :aPair | aPair key -> (self perform: aPair value) ]) asDictionary
-		reject: #isNil
+		reject: [ :aValue | aValue isNil ]
 ]

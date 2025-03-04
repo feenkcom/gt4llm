@@ -94,11 +94,12 @@ GtOllamaProvider >> performToolCallsFor: aResult [
 
 { #category : #'as yet unclassified' }
 GtOllamaProvider >> sendAssistantMessage: aMessage [
-	userMessageClass adoptInstance: aMessage.
-	aMessage role: 'user'.
-	self chat addMessage: aMessage.
+    | userMessage |
+	userMessage := userMessageClass new merge: aMessage.
+	userMessage role: 'user'.
+	self chat addMessage: userMessage.
 
-	[ self triggerAssistant ] asAsyncPromise
+	self asyncWait
 ]
 
 { #category : #'as yet unclassified' }
