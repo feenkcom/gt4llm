@@ -1,8 +1,6 @@
 Class {
 	#name : #GtOpenAIMessage,
 	#superclass : #GtLlmChatMessage,
-	#traits : 'TGtLlmThreadMessage',
-	#classTraits : 'TGtLlmThreadMessage classTrait',
 	#instVars : [
 		'threadId',
 		'assistantId',
@@ -164,6 +162,11 @@ GtOpenAIMessage >> createdAtString: anObject [
 ]
 
 { #category : #accessing }
+GtOpenAIMessage >> elementClass [
+	^ self explicitRequirement
+]
+
+{ #category : #accessing }
 GtOpenAIMessage >> gtAnnotationsFor: aView [
 	<gtView>
 	^ aView forward
@@ -233,6 +236,11 @@ GtOpenAIMessage >> isAssistantRole [
 	^ self role = #assistant
 ]
 
+{ #category : #testing }
+GtOpenAIMessage >> isFailure [
+	^ false
+]
+
 { #category : #'as yet unclassified' }
 GtOpenAIMessage >> isReady [
 	^ self incompleteAt isNil or: [ self completedAt ]
@@ -266,11 +274,6 @@ GtOpenAIMessage >> metadata [
 { #category : #accessing }
 GtOpenAIMessage >> metadata: anObject [
 	metadata := anObject
-]
-
-{ #category : #accessing }
-GtOpenAIMessage >> parse [
-	^ LeParser parse: self contentText
 ]
 
 { #category : #accessing }
@@ -308,6 +311,11 @@ GtOpenAIMessage >> step [
 { #category : #accessing }
 GtOpenAIMessage >> step: anObject [
 	step := anObject
+]
+
+{ #category : #accessing }
+GtOpenAIMessage >> styler [
+	^ self explicitRequirement
 ]
 
 { #category : #accessing }

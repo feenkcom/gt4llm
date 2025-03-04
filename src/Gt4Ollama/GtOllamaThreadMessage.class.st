@@ -80,20 +80,7 @@ GtOllamaThreadMessage >> evalDuration [
 
 { #category : #accessing }
 GtOllamaThreadMessage >> evalDuration: anObject [
-	evalDuration := anObject ifNotNil: #nanoSeconds
-]
-
-{ #category : #accessing }
-GtOllamaThreadMessage >> gtContentFor: aView [
-	<gtView>
-	<gtLlmMessageView>
-	^ aView textEditor
-		title: 'Content';
-		priority: 1;
-		text: [ self content ];
-		styler: (GtLlmMessageStyler new
-				threadMessageViewModel: (GtLlmNewThreadMessageViewModel new
-						threadMessage: GtLlmNewThreadMessage new))
+	evalDuration := anObject ifNotNil: [ :aValue | aValue nanoSeconds ]
 ]
 
 { #category : #accessing }

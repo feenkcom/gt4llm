@@ -1,13 +1,56 @@
 Class {
 	#name : #GtLlmEmbeddingRegistry,
 	#superclass : #Object,
-	#traits : 'TGtUniqueInstance',
-	#classTraits : 'TGtUniqueInstance classTrait',
 	#instVars : [
 		'embeddings'
 	],
+	#classInstVars : [
+		'uniqueInstance'
+	],
 	#category : #Gt4Llm
 }
+
+{ #category : #'as yet unclassified' }
+GtLlmEmbeddingRegistry class >> cleanUniqueInstance [
+	uniqueInstance := nil.
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmEmbeddingRegistry class >> cleanUp [
+	self cleanUniqueInstance
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmEmbeddingRegistry class >> default [
+	^ self uniqueInstance
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmEmbeddingRegistry class >> gtInstanceButtonFor: anAction [
+	<gtClassAction>
+	^ anAction button
+		tooltip: 'Inspect unique instance';
+		priority: 10;
+		icon: BrGlamorousVectorIcons playinspect;
+		action: [ :aButton | aButton phlow spawnObject: self uniqueInstance]
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmEmbeddingRegistry class >> hasUniqueInstance [
+
+	^ uniqueInstance isNotNil
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmEmbeddingRegistry class >> instance [
+	<gtExample>
+	^ self uniqueInstance
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmEmbeddingRegistry class >> uniqueInstance [
+	^ uniqueInstance ifNil: [ uniqueInstance := self new ]
+]
 
 { #category : #accessing }
 GtLlmEmbeddingRegistry >> at: anInput [
@@ -53,27 +96,6 @@ GtLlmEmbeddingRegistry >> findNearest: aNumber for: anEmbedding usingMetric: aSt
 		ifTrue: [ sortedByDistance := sortedByDistance first: aNumber ].
 
 	^ GtLlmNearestEmbeddingsGroup withAll: sortedByDistance
-]
-
-{ #category : #accessing }
-GtLlmEmbeddingRegistry >> gtEmbeddingsFor: aView [
-	<gtView>
-	^ aView columnedList
-		title: 'Embeddings';
-		priority: 1;
-		items: [ embeddings associations ];
-		column: 'Input' text: [ :aPair | aPair value input ];
-		column: 'Actions'
-			stencil: [ :aPair | 
-				BrButton new
-					aptitude: BrGlamorousButtonWithIconAptitude;
-					label: 'Remove';
-					icon: BrGlamorousVectorIcons remove;
-					action: [ :aButton | 
-						embeddings removeKey: aPair key.
-						aButton phlow fireUpdateWish ] ]
-			width: 80;
-		send: #value
 ]
 
 { #category : #accessing }

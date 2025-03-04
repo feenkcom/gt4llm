@@ -1,8 +1,6 @@
 Class {
 	#name : #GtLlmProvisionalThreadMessage,
 	#superclass : #Object,
-	#traits : 'TGtLlmThreadMessage',
-	#classTraits : 'TGtLlmThreadMessage classTrait',
 	#instVars : [
 		'createdAt',
 		'chat'
@@ -56,22 +54,6 @@ GtLlmProvisionalThreadMessage >> createdAt: anObject [
 	createdAt := anObject
 ]
 
-{ #category : #accessing }
-GtLlmProvisionalThreadMessage >> elementClass [
-	^ GtLlmThreadMessageElement
-]
-
-{ #category : #accessing }
-GtLlmProvisionalThreadMessage >> gtContentFor: aView [
-	<gtView>
-	<gtLlmMessageView>
-	^ aView explicit
-		title: 'Content';
-		priority: 1;
-		stencil: [ GtLlmThreadMessageElement new
-				threadMessageViewModel: (GtLlmThreadMessageViewModel new threadMessage: self) ]
-]
-
 { #category : #testing }
 GtLlmProvisionalThreadMessage >> hasResponse [
 	^ false
@@ -90,6 +72,11 @@ GtLlmProvisionalThreadMessage >> id [
 { #category : #testing }
 GtLlmProvisionalThreadMessage >> isAssistantRole [
 	^ true
+]
+
+{ #category : #testing }
+GtLlmProvisionalThreadMessage >> isFailure [
+	^ false
 ]
 
 { #category : #'as yet unclassified' }

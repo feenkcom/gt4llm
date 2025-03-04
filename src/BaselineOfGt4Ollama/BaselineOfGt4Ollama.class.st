@@ -12,7 +12,7 @@ BaselineOfGt4Ollama >> baseline: spec [
 			baseline: 'Gt4LlmCore' with: [
 				spec repository: 'github://feenkcom/gt4llm:v0.6.37/src' ].
 
-		spec package: 'Gt4Ollama' with: [
-			spec requires: #(#Gt4LlmCore) ].
-	]
+			spec package: 'Gt4Ollama' with: [ spec requires: #('Gt4LlmCore') ].
+
+			spec package: 'Gt4Ollama-GToolkit' with: [ spec requires: #('Gt4LlmCore' 'Gt4Ollama') ] ]
 ]

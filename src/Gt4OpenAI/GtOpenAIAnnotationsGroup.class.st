@@ -14,5 +14,5 @@ GtOpenAIAnnotationsGroup >> gtAnnotationsFor: aView [
 		column: 'Text' text: #text;
 		column: 'Type' text: #type;
 		column: 'File'
-			text: [ :anAnnotation | anAnnotation file ifNil: [ '' ] ifNotNil: #filename ]
+			text: [ :anAnnotation | anAnnotation file ifNil: [ '' ] ifNotNil: [ :aFile | aFile filename ] ]
 ]

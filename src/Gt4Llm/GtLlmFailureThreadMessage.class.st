@@ -1,8 +1,6 @@
 Class {
 	#name : #GtLlmFailureThreadMessage,
 	#superclass : #Object,
-	#traits : 'TGtLlmThreadMessage',
-	#classTraits : 'TGtLlmThreadMessage classTrait',
 	#instVars : [
 		'failureText',
 		'createdAt',
@@ -57,11 +55,6 @@ GtLlmFailureThreadMessage >> createdAt: anObject [
 ]
 
 { #category : #accessing }
-GtLlmFailureThreadMessage >> elementClass [
-	^ GtLlmThreadMessageElement
-]
-
-{ #category : #accessing }
 GtLlmFailureThreadMessage >> failureText [
 	^ failureText
 ]
@@ -69,17 +62,6 @@ GtLlmFailureThreadMessage >> failureText [
 { #category : #accessing }
 GtLlmFailureThreadMessage >> failureText: anObject [
 	failureText := anObject
-]
-
-{ #category : #accessing }
-GtLlmFailureThreadMessage >> gtContentFor: aView [
-	<gtView>
-	<gtLlmMessageView>
-	^ aView explicit
-		title: 'Content';
-		priority: 1;
-		stencil: [ GtLlmThreadMessageElement new
-				threadMessageViewModel: (GtLlmThreadMessageViewModel new threadMessage: self) ]
 ]
 
 { #category : #testing }

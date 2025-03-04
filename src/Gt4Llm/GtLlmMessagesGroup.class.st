@@ -10,16 +10,6 @@ GtLlmMessagesGroup >> asJson [
 ]
 
 { #category : #accessing }
-GtLlmMessagesGroup >> gtJsonFor: aView [
-	<gtView>
-	^ aView textEditor
-		title: 'JSON';
-		priority: 1;
-		text: [ self asJson ];
-		styler: JSONParser gtStyler
-]
-
-{ #category : #accessing }
 GtLlmMessagesGroup >> gtMessagesFor: aView [
 	<gtView>
 	^ aView columnedList

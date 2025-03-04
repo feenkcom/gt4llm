@@ -16,11 +16,3 @@ GtOpenAIGetFileContentsAPIClient >> file [
 GtOpenAIGetFileContentsAPIClient >> file: anObject [
 	file := anObject
 ]
-
-{ #category : #'as yet unclassified' }
-GtOpenAIGetFileContentsAPIClient >> perform [
-	^ ZnClient new
-		url: self client baseUrl / 'files' / self file / 'content';
-		setBearerAuthentication: self client apiKey;
-		get
-]

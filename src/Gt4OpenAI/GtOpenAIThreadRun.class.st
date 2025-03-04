@@ -133,16 +133,6 @@ GtOpenAIThreadRun >> files [
 ]
 
 { #category : #accessing }
-GtOpenAIThreadRun >> gtActionReloadFor: anAction [
-	<gtAction>
-	^ anAction button
-		icon: BrGlamorousVectorIcons refresh;
-		tooltip: 'Reload';
-		priority: 5;
-		action: [ :aButton | aButton phlow spawnObject: (self client getRun: self id forThread: self threadId) ]
-]
-
-{ #category : #accessing }
 GtOpenAIThreadRun >> gtErrorFor: aView [
 	<gtView>
 	self isFailed ifFalse: [ ^ aView empty ].

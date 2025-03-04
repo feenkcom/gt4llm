@@ -70,17 +70,6 @@ GtOllamaClient >> defaultBaseUrl [
 ]
 
 { #category : #accessing }
-GtOllamaClient >> delete: aString withEntity: anEntity [
-	ZnClient new
-		timeout: 600;
-		beOneShot;
-		url: self baseUrl / aString;
-		method: #DELETE;
-		entity: (ZnEntity json: (STONJSON toString: anEntity));
-		execute
-]
-
-{ #category : #accessing }
 GtOllamaClient >> deleteModel: aString [
 	^ GtOllamaDeleteModelClient new
 		client: self;
@@ -160,15 +149,6 @@ GtOllamaClient >> initialize [
 ]
 
 { #category : #accessing }
-GtOllamaClient >> initializeClient [
-	| aClient |
-	aClient := ZnClient new.
-	aClient forJsonREST.
-	aClient timeout: 600.
-	^ aClient
-]
-
-{ #category : #accessing }
 GtOllamaClient >> listModels [
 	^ GtOllamaListModelsClient new
 		client: self;
@@ -191,23 +171,6 @@ GtOllamaClient >> post: aString withEntity: anEntity [
 	aClient contents: anEntity.
 
 	^ self checkForErrors: aClient post
-]
-
-{ #category : #accessing }
-GtOllamaClient >> postStreaming: aString withEntity: anEntity [
-	| aClient aResult |
-	aClient := self initializeClient
-			accept: 'application/jsonl,application/x-ndjson';
-			contentReader: [ :entity | (NeoJSONReader on: entity readStream) upToEnd ].
-	aClient url: self baseUrl / aString.
-
-	aClient contents: anEntity.
-
-	aResult := aClient post.
-
-	aResult size > 0 ifTrue: [ self checkForErrors: aResult first ].
-
-	^ aResult
 ]
 
 { #category : #accessing }

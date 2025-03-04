@@ -37,11 +37,6 @@ GtOpenAIClient class >> initialize [
 ]
 
 { #category : #accessing }
-GtOpenAIClient class >> withApiKeyFromClipboard [
-	^ self new apiKey: Clipboard clipboardText
-]
-
-{ #category : #accessing }
 GtOpenAIClient class >> withApiKeyFromFile [
 	^ self new apiKey: self apiKeyFileContents
 ]
@@ -78,7 +73,7 @@ GtOpenAIClient >> baseUrl: anObject [
 { #category : #accessing }
 GtOpenAIClient >> checkForErrors: aResponse [
 	((aResponse includesKey: 'error')
-		and: [ ((aResponse at: 'error') isKindOf: NeoJSONObject)
+		and: [ ((aResponse at: 'error') isKindOf: Collection)
 				and: [ (aResponse at: 'error') includesKey: 'message' ] ])
 		ifTrue: [ ^ (GtOpenAIError from: (aResponse at: 'error')) signal ].
 
@@ -285,18 +280,6 @@ GtOpenAIClient >> initialize [
 	super initialize.
 
 	self baseUrl: self defaultBaseUrl
-]
-
-{ #category : #accessing }
-GtOpenAIClient >> initializeClient [
-	| aClient |
-	aClient := ZnClient new.
-	aClient forJsonREST.
-	aClient headerAt: 'OpenAI-Beta' put: 'assistants=v2'.
-	aClient timeout: 60.
-	aClient setBearerAuthentication: apiKey.
-	aClient beOneShot.
-	^ aClient
 ]
 
 { #category : #accessing }

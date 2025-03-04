@@ -29,14 +29,16 @@ GtLlmTutorActionExample >> asExpressionSource [
 	input: { '
 		, ('. '
 				join: (self input associations
-						collect: [ :aPair | '''' , aPair key , ''' -> ' , (aPair value ifNil: [ 'nil' ] ifNotNil: #storeString) ]))
+						collect: [ :aPair | 
+							'''' , aPair key , ''' -> '
+								, (aPair value ifNil: [ 'nil' ] ifNotNil: [ :aValue | aValue storeString ]) ]))
 		, ' } asDictionary;
 	output: { '
 		, ('. '
 				join: (self output associations
 						collect: [ :aPair | 
 							'''' , aPair key , ''' -> '
-								, (aPair value ifNil: [ 'nil' ] ifNotNil: #storeString) ]))
+								, (aPair value ifNil: [ 'nil' ] ifNotNil:[ :aValue | aValue storeString ]) ]))
 		, ' } asDictionary'
 ]
 
@@ -119,16 +121,6 @@ GtLlmTutorActionExample >> input: anObject [
 ]
 
 { #category : #accessing }
-GtLlmTutorActionExample >> inputDescription [
-	<magritteDescription>
-	^ MAStringDescription new
-		label: 'Input';
-		beRequired;
-		priority: 2;
-		accessor: #inputJson
-]
-
-{ #category : #accessing }
 GtLlmTutorActionExample >> inputJson [
 	^ STONJSON toStringPretty: self input
 ]
@@ -166,16 +158,6 @@ GtLlmTutorActionExample >> output [
 { #category : #accessing }
 GtLlmTutorActionExample >> output: anObject [
 	output := anObject
-]
-
-{ #category : #accessing }
-GtLlmTutorActionExample >> outputDescription [
-	<magritteDescription>
-	^ MAStringDescription new
-		label: 'Output';
-		beRequired;
-		priority: 2;
-		accessor: #outputJson
 ]
 
 { #category : #accessing }
