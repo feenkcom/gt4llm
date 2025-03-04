@@ -20,3 +20,13 @@ GtLlmEmbeddingRegistry >> gtEmbeddingsFor: aView [
 			width: 80;
 		send: #value
 ]
+
+{ #category : #'*Gt4Llm-GToolkit' }
+GtLlmEmbeddingRegistry class >> gtInstanceButtonFor: anAction [
+	<gtClassAction>
+	^ anAction button
+		tooltip: 'Inspect unique instance';
+		priority: 10;
+		icon: BrGlamorousVectorIcons playinspect;
+		action: [ :aButton | aButton phlow spawnObject: self uniqueInstance]
+]
