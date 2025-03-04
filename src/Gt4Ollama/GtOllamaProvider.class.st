@@ -1,6 +1,6 @@
 Class {
-	#name : 'GtOllamaProvider',
-	#superclass : 'GtLlmProvider',
+	#name : #GtOllamaProvider,
+	#superclass : #GtLlmProvider,
 	#instVars : [
 		'assistantWorking',
 		'model',
@@ -8,30 +8,25 @@ Class {
 		'modelfile',
 		'tools'
 	],
-	#category : 'Gt4Ollama'
+	#category : #Gt4Ollama
 }
 
-{ #category : 'as yet unclassified' }
+{ #category : #'as yet unclassified' }
 GtOllamaProvider >> addTool: aTool [
 	tools add: aTool
 ]
 
-{ #category : 'as yet unclassified' }
-GtOllamaProvider >> asyncWait [
-	self triggerAssistant
-]
-
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtOllamaProvider >> client [
 	^ client
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtOllamaProvider >> client: anObject [
 	client := anObject
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : #'as yet unclassified' }
 GtOllamaProvider >> initialize [
 	super initialize.
 
@@ -42,12 +37,12 @@ GtOllamaProvider >> initialize [
 	tools := GtLlmToolsGroup new
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : #'as yet unclassified' }
 GtOllamaProvider >> initializeClient [
 	client := GtOllamaClient new
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : #'as yet unclassified' }
 GtOllamaProvider >> instructions: aString [
 	| internalModelName modelFile |
 	internalModelName := 'gt-tutor-' , self model , '-' , self uuidClass new asString.
@@ -62,12 +57,12 @@ GtOllamaProvider >> instructions: aString [
 	self model: internalModelName
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtOllamaProvider >> model [
 	^ model
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtOllamaProvider >> model: anObject [
 	model := anObject.
 	
@@ -75,17 +70,17 @@ GtOllamaProvider >> model: anObject [
 	[ self client pullModel: model ] on: Error do: [  ]
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtOllamaProvider >> modelfile [
 	^ modelfile
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtOllamaProvider >> modelfile: anObject [
 	modelfile := anObject
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : #'as yet unclassified' }
 GtOllamaProvider >> performToolCallsFor: aResult [
 	aResult toolCalls
 		do: [ :aToolCall | 
@@ -97,7 +92,7 @@ GtOllamaProvider >> performToolCallsFor: aResult [
 						output: toolOutput) ]
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : #'as yet unclassified' }
 GtOllamaProvider >> sendAssistantMessage: aMessage [
     | userMessage |
 	userMessage := userMessageClass new merge: aMessage.
@@ -107,14 +102,14 @@ GtOllamaProvider >> sendAssistantMessage: aMessage [
 	self asyncWait
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : #'as yet unclassified' }
 GtOllamaProvider >> status [
 	^ assistantWorking
 		ifTrue: [ GtLlmAssistantChatWorkingStatus new ]
 		ifFalse: [ GtLlmAssistantChatReadyStatus new ]
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : #'as yet unclassified' }
 GtOllamaProvider >> triggerAssistant [
 	| result |
 	assistantWorking := true.
