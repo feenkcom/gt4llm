@@ -14,6 +14,11 @@ Class {
 	#category : #Gt4Llm
 }
 
+{ #category : #'as yet unclassified' }
+GtLlmChat class >> new [
+	^ self basicNew initialize
+]
+
 { #category : #accessing }
 GtLlmChat >> addMessage: aMessage [
 	self updateLastUpdate.

@@ -1,21 +1,8 @@
 Class {
 	#name : #GtLlmNullProvider,
-	#superclass : #Object,
-	#instVars : [
-		'chat'
-	],
+	#superclass : #GtLlmProvider,
 	#category : #Gt4Llm
 }
-
-{ #category : #accessing }
-GtLlmNullProvider >> chat [
-	^ chat
-]
-
-{ #category : #accessing }
-GtLlmNullProvider >> chat: anObject [
-	chat := anObject
-]
 
 { #category : #'as yet unclassified' }
 GtLlmNullProvider >> format: aFormat [
