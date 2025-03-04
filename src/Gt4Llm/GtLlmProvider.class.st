@@ -10,6 +10,11 @@ Class {
 	#category : #Gt4Llm
 }
 
+{ #category : #'as yet unclassified' }
+GtLlmProvider class >> new [
+	^ self basicNew initialize
+]
+
 { #category : #accessing }
 GtLlmProvider >> assistantMessageClass [
 	^ assistantMessageClass
