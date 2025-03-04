@@ -1,6 +1,6 @@
 Class {
-	#name : 'GtOllamaCompleteChatAPIClient',
-	#superclass : 'GtLlmEndpointClient',
+	#name : #GtOllamaCompleteChatAPIClient,
+	#superclass : #GtLlmEndpointClient,
 	#instVars : [
 		'messages',
 		'model',
@@ -10,7 +10,7 @@ Class {
 	#category : 'Gt4Ollama'
 }
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtOllamaCompleteChatAPIClient >> entity [
 	| entity |
 	entity := {('stream' -> false).
@@ -25,52 +25,52 @@ GtOllamaCompleteChatAPIClient >> entity [
 	^ entity
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtOllamaCompleteChatAPIClient >> format [
 	^ format
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtOllamaCompleteChatAPIClient >> format: anObject [
 	format := anObject
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtOllamaCompleteChatAPIClient >> messages [
 	^ messages
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtOllamaCompleteChatAPIClient >> messages: anObject [
 	messages := anObject
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtOllamaCompleteChatAPIClient >> model [
 	^ model
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtOllamaCompleteChatAPIClient >> model: anObject [
 	model := anObject
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtOllamaCompleteChatAPIClient >> request [
 	^ self client post: '/chat' withEntity: self entity
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtOllamaCompleteChatAPIClient >> serializationClass [
 	^ GtOllamaThreadMessage
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtOllamaCompleteChatAPIClient >> tools [
 	^ tools
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtOllamaCompleteChatAPIClient >> tools: anObject [
 	tools := anObject
 ]
