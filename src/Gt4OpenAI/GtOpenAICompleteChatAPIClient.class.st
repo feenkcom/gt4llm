@@ -1,42 +1,42 @@
 Class {
-	#name : #GtOpenAICompleteChatAPIClient,
-	#superclass : #GtLlmEndpointClient,
+	#name : 'GtOpenAICompleteChatAPIClient',
+	#superclass : 'GtLlmEndpointClient',
 	#instVars : [
 		'model',
 		'messages'
 	],
-	#category : #Gt4OpenAI
+	#category : 'Gt4OpenAI'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtOpenAICompleteChatAPIClient >> messages [
 	^ messages
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtOpenAICompleteChatAPIClient >> messages: anObject [
 	messages := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtOpenAICompleteChatAPIClient >> model [
 	^ model
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtOpenAICompleteChatAPIClient >> model: anObject [
 	model := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtOpenAICompleteChatAPIClient >> request [
 	^ self client
 		post: '/chat/completions'
 		withEntity: {'model' -> self model.
-				'messages' -> (self messages collect: #serialize)} asDictionary
+				'messages' -> (self messages collect: [:aMessage | aMessage serialize ])} asDictionary
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtOpenAICompleteChatAPIClient >> serializationClass [
 	^ GtOpenAIChatCompletion
 ]
