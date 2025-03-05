@@ -1,54 +1,59 @@
 Class {
-	#name : #GtOpenAIListThreadMessagesAPIClient,
-	#superclass : #GtLlmEndpointClient,
+	#name : 'GtOpenAIListThreadMessagesAPIClient',
+	#superclass : 'GtLlmEndpointClient',
 	#instVars : [
 		'thread',
 		'params'
 	],
-	#category : #Gt4OpenAI
+	#category : 'Gt4OpenAI'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : 'other' }
+GtOpenAIListThreadMessagesAPIClient class >> new [
+	^ self basicNew initialize
+]
+
+{ #category : 'as yet unclassified' }
 GtOpenAIListThreadMessagesAPIClient >> defaultParams [
 	^ {'limit' -> 100.
 		'order' -> 'asc'}
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 GtOpenAIListThreadMessagesAPIClient >> initialize [
 	super initialize.
 
 	params := self defaultParams
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtOpenAIListThreadMessagesAPIClient >> params [
 	^ params
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtOpenAIListThreadMessagesAPIClient >> params: anObject [
 	params := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtOpenAIListThreadMessagesAPIClient >> request [
 	^ self client
 		get: 'threads/' , self thread , '/messages'
 		withParams: self params
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtOpenAIListThreadMessagesAPIClient >> serializationClass [
 	^ GtOpenAIMessagesGroup
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtOpenAIListThreadMessagesAPIClient >> thread [
 	^ thread
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtOpenAIListThreadMessagesAPIClient >> thread: anObject [
 	thread := anObject
 ]
