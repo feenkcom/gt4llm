@@ -5,7 +5,7 @@ Class {
 		'model',
 		'messages'
 	],
-	#category : #Gt4OpenAI
+	#category : 'Gt4OpenAI'
 }
 
 { #category : #accessing }
@@ -33,7 +33,7 @@ GtOpenAICompleteChatAPIClient >> request [
 	^ self client
 		post: '/chat/completions'
 		withEntity: {'model' -> self model.
-				'messages' -> (self messages collect: #serialize)} asDictionary
+				'messages' -> (self messages collect: [:aMessage | aMessage serialize ])} asDictionary
 ]
 
 { #category : #accessing }

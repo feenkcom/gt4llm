@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'baseUrl'
 	],
-	#category : #Gt4Ollama
+	#category : 'Gt4Ollama'
 }
 
 { #category : #accessing }
@@ -19,7 +19,7 @@ GtOllamaClient >> baseUrl: anObject [
 
 { #category : #accessing }
 GtOllamaClient >> checkForErrors: aResponse [
-	(aResponse includesKey: 'error')
+	(aResponse isDictionary and: [aResponse includesKey: 'error'])
 		ifTrue: [ ^ (GtOllamaError from: (aResponse at: 'error')) signal ].
 
 	^ aResponse
