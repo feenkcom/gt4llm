@@ -1,61 +1,65 @@
 Class {
-	#name : #GtLlmInstructionWithSections,
-	#superclass : #GtLlmInstructionPiece,
+	#name : 'GtLlmInstructionWithSections',
+	#superclass : 'GtLlmInstructionPiece',
 	#instVars : [
 		'introduction',
 		'sections'
 	],
-	#category : #Gt4Llm
+	#category : 'Gt4Llm'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmInstructionWithSections >> addSection: aSection [
 	sections add: (aSection asInstructionPiece parent: self)
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmInstructionWithSections >> addSections: aListOfSections [
 	sections
 		addAll: (aListOfSections collect: [ :aSection | aSection asInstructionPiece parent: self ])
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmInstructionWithSections >> children [
 	^ {introduction} , sections
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmInstructionWithSections >> gtDisplayOn: aStream [
 	aStream
 		nextPutAll: self introduction instructionString
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmInstructionWithSections >> initialize [
 	super initialize.
 	
 	sections := OrderedCollection new
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmInstructionWithSections >> instructionString [
 	^ self introduction instructionString
-		, '
+		,
+			'
 	
-' , (Character cr join: (self sections collect: #instructionString))
+'
+		,
+			(Character cr
+				join: (self sections collect: [ :aSection | aSection instructionString ]))
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmInstructionWithSections >> introduction [
 	^ introduction
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmInstructionWithSections >> introduction: anObject [
 	introduction := anObject asInstructionPiece
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmInstructionWithSections >> printOn: aStream [
 	super printOn: aStream.
 
@@ -65,12 +69,12 @@ GtLlmInstructionWithSections >> printOn: aStream [
 		nextPut: $)
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmInstructionWithSections >> sections [
 	^ sections
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmInstructionWithSections >> sections: anObject [
 	sections := anObject asOrderedCollection
 			collect: [ :aSection | aSection asInstructionPiece parent: self ]

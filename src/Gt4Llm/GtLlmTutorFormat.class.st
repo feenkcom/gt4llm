@@ -1,14 +1,19 @@
 Class {
-	#name : #GtLlmTutorFormat,
-	#superclass : #Object,
+	#name : 'GtLlmTutorFormat',
+	#superclass : 'Object',
 	#instVars : [
 		'name',
 		'components'
 	],
-	#category : #Gt4Llm
+	#category : 'Gt4Llm'
 }
 
-{ #category : #accessing }
+{ #category : 'other' }
+GtLlmTutorFormat class >> new [
+	^ self basicNew initialize
+]
+
+{ #category : 'accessing' }
 GtLlmTutorFormat >> actionComponent [
 	<gtLlmFormatComponent>
 	^ GtLlmTutorFormatDescription new beRequired
@@ -19,17 +24,17 @@ Create a draft
 ```'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutorFormat >> addComponent: aComponent [
 	components add: aComponent
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutorFormat >> addComponents: aListOfComponents [
 	components addAll: aListOfComponents
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutorFormat >> asInstructionPiece [
 	^ GtLlmInstructionWithSections new
 		source: self;
@@ -48,7 +53,7 @@ The components that make up the state are as follows:';
 							sections: components)}
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutorFormat >> asJsonSchema [
 	^ {'type' -> 'json_schema'.
 		'json_schema'
@@ -64,7 +69,7 @@ GtLlmTutorFormat >> asJsonSchema [
 					'strict' -> true} asDictionary} asDictionary
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutorFormat >> communicationConventionsDescription [
 	^ GtLlmInstructionSection new
 		title: 'Communication rules';
@@ -74,17 +79,17 @@ GtLlmTutorFormat >> communicationConventionsDescription [
 				addItem: 'Assume the user would like something concise.')
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutorFormat >> componentNamed: aName [
 	^ components detect: [ :aComponent | aComponent name = aName ] ifNone: [ nil ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutorFormat >> components [
 	^ components
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutorFormat >> gtInstructionFor: aView [
 	<gtView>
 	^ aView forward
@@ -94,12 +99,12 @@ GtLlmTutorFormat >> gtInstructionFor: aView [
 		view: #gtInstructionFor:
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutorFormat >> initialize [
 	components := OrderedCollection with: self actionComponent
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutorFormat >> interactionDescription [
 	^ GtLlmInstructionSection new
 		title: 'Interaction description';
@@ -116,12 +121,12 @@ GtLlmTutorFormat >> interactionDescription [
 The state is an aggregate of the components listed below.'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutorFormat >> name [
 	^ name
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutorFormat >> name: anObject [
 	name := anObject
 ]

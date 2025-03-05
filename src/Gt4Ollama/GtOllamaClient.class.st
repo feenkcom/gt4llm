@@ -1,31 +1,31 @@
 Class {
-	#name : #GtOllamaClient,
-	#superclass : #Object,
+	#name : 'GtOllamaClient',
+	#superclass : 'Object',
 	#instVars : [
 		'baseUrl'
 	],
-	#category : #Gt4Ollama
+	#category : 'Gt4Ollama'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtOllamaClient >> baseUrl [
 	^ baseUrl
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtOllamaClient >> baseUrl: anObject [
 	baseUrl := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtOllamaClient >> checkForErrors: aResponse [
-	(aResponse includesKey: 'error')
+	(aResponse isDictionary and: [aResponse includesKey: 'error'])
 		ifTrue: [ ^ (GtOllamaError from: (aResponse at: 'error')) signal ].
 
 	^ aResponse
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtOllamaClient >> completeChatWithModel: aString andMessages: aCollection [
 	^ GtOllamaCompleteChatAPIClient new
 		client: self;
@@ -34,7 +34,7 @@ GtOllamaClient >> completeChatWithModel: aString andMessages: aCollection [
 		perform
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtOllamaClient >> completeChatWithModel: aString andMessages: aCollection andFormat: aFormat [
 	^ GtOllamaCompleteChatAPIClient new
 		client: self;
@@ -44,7 +44,7 @@ GtOllamaClient >> completeChatWithModel: aString andMessages: aCollection andFor
 		perform
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtOllamaClient >> completeChatWithModel: aString andMessages: aCollection andFormat: aFormat andTools: tools [
 	^ GtOllamaCompleteChatAPIClient new
 		client: self;
@@ -55,7 +55,7 @@ GtOllamaClient >> completeChatWithModel: aString andMessages: aCollection andFor
 		perform
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtOllamaClient >> createModel: aString withModelFile: aModelFile [
 	^ GtOllamaCreateModelClient new
 		client: self;
@@ -64,12 +64,12 @@ GtOllamaClient >> createModel: aString withModelFile: aModelFile [
 		perform
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtOllamaClient >> defaultBaseUrl [
 	^ 'http://localhost:11434/api' asZnUrl
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtOllamaClient >> deleteModel: aString [
 	^ GtOllamaDeleteModelClient new
 		client: self;
@@ -77,7 +77,7 @@ GtOllamaClient >> deleteModel: aString [
 		perform
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtOllamaClient >> generateEmbeddingFor: aString [ 
 		^ GtOllamaGenerateEmbeddingsAPIClient new
 		client: self;
@@ -85,7 +85,7 @@ GtOllamaClient >> generateEmbeddingFor: aString [
 		perform
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtOllamaClient >> generateEmbeddingsWithModel: aModelString andInput: anInputString [
 	^ GtOllamaGenerateEmbeddingsAPIClient new
 		client: self;
@@ -94,7 +94,7 @@ GtOllamaClient >> generateEmbeddingsWithModel: aModelString andInput: anInputStr
 		perform
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtOllamaClient >> generateResponseWithModel: modelString andPrompt: promptString [
 
 	^ GtOllamaGenerateResponseClient new
@@ -104,7 +104,7 @@ GtOllamaClient >> generateResponseWithModel: modelString andPrompt: promptString
 		perform
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtOllamaClient >> get: aString [
 	| aClient |
 	aClient := self initializeClient beOneShot.
@@ -113,7 +113,7 @@ GtOllamaClient >> get: aString [
 	^ self checkForErrors: aClient get
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtOllamaClient >> getModelInformationFor: aName [
 	^ GtOllamaGetModelInformationAPIClient new
 		client: self;
@@ -121,7 +121,7 @@ GtOllamaClient >> getModelInformationFor: aName [
 		perform
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtOllamaClient >> gtModelsFor: aView [
 	<gtView>
 	^ aView forward
@@ -131,7 +131,7 @@ GtOllamaClient >> gtModelsFor: aView [
 		view: #gtModelsFor:
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtOllamaClient >> gtRunningModelsFor: aView [
 	<gtView>
 	^ aView forward
@@ -141,28 +141,28 @@ GtOllamaClient >> gtRunningModelsFor: aView [
 		view: #gtModelsFor:
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtOllamaClient >> initialize [
 	super initialize.
 	
 	self baseUrl: self defaultBaseUrl
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtOllamaClient >> listModels [
 	^ GtOllamaListModelsClient new
 		client: self;
 		perform
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtOllamaClient >> listRunningModels [
 	^ GtOllamaListRunningModelsClient new
 		client: self;
 		perform
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtOllamaClient >> post: aString withEntity: anEntity [
 	| aClient |
 	aClient := self initializeClient beOneShot.
@@ -173,7 +173,7 @@ GtOllamaClient >> post: aString withEntity: anEntity [
 	^ self checkForErrors: aClient post
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtOllamaClient >> pullModel: aString [ 
 	^ GtOllamaPullModelClient new
 		client: self;
@@ -181,7 +181,7 @@ GtOllamaClient >> pullModel: aString [
 		perform
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 GtOllamaClient >> pushModel: aString [ 
 	^ GtOllamaPushModelClient new
 		client: self;

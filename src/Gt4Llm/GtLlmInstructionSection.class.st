@@ -1,47 +1,52 @@
 Class {
-	#name : #GtLlmInstructionSection,
-	#superclass : #GtLlmInstructionPiece,
+	#name : 'GtLlmInstructionSection',
+	#superclass : 'GtLlmInstructionPiece',
 	#instVars : [
 		'title',
 		'body',
 		'headerLevel',
 		'autoHeaderLevel'
 	],
-	#category : #Gt4Llm
+	#category : 'Gt4Llm'
 }
 
-{ #category : #accessing }
+{ #category : 'other' }
+GtLlmInstructionSection class >> new [
+	^ self basicNew initialize
+]
+
+{ #category : 'accessing' }
 GtLlmInstructionSection >> body [
 	^ body
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmInstructionSection >> body: anObject [
 	body := anObject asInstructionPiece parent: self
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmInstructionSection >> children [
 	^ {body}
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmInstructionSection >> computeHeaderLevelsAutomatically [
 	autoHeaderLevel := true
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmInstructionSection >> doNotComputeHeaderLevelsAutomatically [
 	autoHeaderLevel := false
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmInstructionSection >> gtDisplayOn: aStream [
 	aStream
 		nextPutAll: self title
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmInstructionSection >> headerLevel [
 	autoHeaderLevel
 		ifTrue: [ ^ (self allParents
@@ -49,7 +54,7 @@ GtLlmInstructionSection >> headerLevel [
 	^ headerLevel
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmInstructionSection >> headerLevel: anObject [
 	self
 		assert: autoHeaderLevel not
@@ -59,7 +64,7 @@ GtLlmInstructionSection >> headerLevel: anObject [
 	headerLevel := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmInstructionSection >> initialize [
 	super initialize.
 	
@@ -67,13 +72,13 @@ GtLlmInstructionSection >> initialize [
 	autoHeaderLevel := true.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmInstructionSection >> instructionString [
 	^ ('#' repeat: self headerLevel) , ' ' , self title
 		, String cr , self body instructionString
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmInstructionSection >> printOn: aStream [
 	super printOn: aStream.
 
@@ -83,12 +88,12 @@ GtLlmInstructionSection >> printOn: aStream [
 		nextPut: $)
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmInstructionSection >> title [
 	^ title
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmInstructionSection >> title: anObject [
 	title := anObject
 ]
