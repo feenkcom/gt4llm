@@ -1,6 +1,6 @@
 Class {
-	#name : #GtOpenAIAssistantProvider,
-	#superclass : #GtOpenAIProvider,
+	#name : 'GtOpenAIAssistantProvider',
+	#superclass : 'GtOpenAIProvider',
 	#instVars : [
 		'assistant',
 		'instructions',
@@ -13,50 +13,50 @@ Class {
 		'files',
 		'apiFiles'
 	],
-	#category : #Gt4OpenAI
+	#category : 'Gt4OpenAI'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 GtOpenAIAssistantProvider >> addFile: aFile [
 	files add: aFile
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 GtOpenAIAssistantProvider >> addTool: aTool [
 	tools add: aTool
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtOpenAIAssistantProvider >> assistant [
 	^ assistant
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtOpenAIAssistantProvider >> assistant: anObject [
 	assistant := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtOpenAIAssistantProvider >> assistantDescription [
 	^ assistantDescription
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtOpenAIAssistantProvider >> assistantDescription: anObject [
 	assistantDescription := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtOpenAIAssistantProvider >> assistantName [
 	^ assistantName
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtOpenAIAssistantProvider >> assistantName: anObject [
 	assistantName := anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 GtOpenAIAssistantProvider >> createAssistant [
 	self assistant ifNotNil: [ self deleteAssistant ].
 
@@ -83,49 +83,48 @@ GtOpenAIAssistantProvider >> createAssistant [
 
 	thread := client createThreadWithMessages: {}.
 
-
-	self class finalizationRegistry add: self
+	self registerForFinalization
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 GtOpenAIAssistantProvider >> defaultAssistantDescription [
 	^ 'An assistant in Glamorous Toolkit.'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 GtOpenAIAssistantProvider >> defaultAssistantMessageClass [
 	^ GtOpenAIMessage
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 GtOpenAIAssistantProvider >> defaultAssistantName [
 	^ 'Tutor - ' , FileLocator home basename
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 GtOpenAIAssistantProvider >> defaultTools [
 	^ GtLlmToolsGroup new
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 GtOpenAIAssistantProvider >> defaultUserMessageClass [
 	^ GtOpenAIMessage
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 GtOpenAIAssistantProvider >> deleteAssistant [
 	[ client deleteAssistant: assistant id.
 	assistant := nil ] on: GtOpenAIError do: [ assistant := nil ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 GtOpenAIAssistantProvider >> finalize [
 	self assistant ifNotNil: [ self deleteAssistant ].
 
 	super finalize
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtOpenAIAssistantProvider >> format: anObject [
 	format := {'type' -> 'json_schema'.
 			'json_schema'
@@ -134,20 +133,20 @@ GtOpenAIAssistantProvider >> format: anObject [
 						'schema' -> anObject} asDictionary} asDictionary
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 GtOpenAIAssistantProvider >> getApiFile: anId [
 	^ apiFiles at: anId
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 GtOpenAIAssistantProvider >> getMessages [
 	^ thread updateMessages
 		collect: [ :aThreadMessage | 
-			self assistantMessageClass adoptInstance: aThreadMessage.
+			self assistantMessageClass new merge: aThreadMessage.
 			aThreadMessage ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 GtOpenAIAssistantProvider >> getRun [
 	lastRun := client getRun: lastRun id forThread: thread id.
 
@@ -156,7 +155,7 @@ GtOpenAIAssistantProvider >> getRun [
 	^ lastRun
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 GtOpenAIAssistantProvider >> gtFilesFor: aView [
 	<gtView>
 	files ifEmpty: [ ^ aView empty ].
@@ -168,7 +167,7 @@ GtOpenAIAssistantProvider >> gtFilesFor: aView [
 		view: #gtFilesFor:
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 GtOpenAIAssistantProvider >> initialize [
 	super initialize.
 
@@ -179,24 +178,24 @@ GtOpenAIAssistantProvider >> initialize [
 	apiFiles := Dictionary new
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtOpenAIAssistantProvider >> instructions [
 	^ instructions
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtOpenAIAssistantProvider >> instructions: anObject [
 	instructions := anObject.
 	
 	self createAssistant
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 GtOpenAIAssistantProvider >> lastRun [
 	^ lastRun
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 GtOpenAIAssistantProvider >> performToolCalls [
 	| toolOutputs |
 	toolOutputs := lastRun toolCalls
@@ -216,7 +215,7 @@ GtOpenAIAssistantProvider >> performToolCalls [
 		anRun: lastRun id
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 GtOpenAIAssistantProvider >> sendAssistantMessage: aMessage [
 	chat addMessage: aMessage.
 
@@ -236,26 +235,26 @@ GtOpenAIAssistantProvider >> sendAssistantMessage: aMessage [
 	self executeWait
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 GtOpenAIAssistantProvider >> status [
 	^ GtLlmAssistantChatStatus forLastRun: lastRun
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtOpenAIAssistantProvider >> tools [
 	^ tools
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtOpenAIAssistantProvider >> tools: anObject [
 	tools := anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 GtOpenAIAssistantProvider >> updateMessages [
 	| newMessages nonToolMessages |
 	newMessages := self getMessages.
-	nonToolMessages := chat messages reject: #isToolRole.
+	nonToolMessages := chat messages reject: [:aMessage  | aMessage isToolRole].
 
 	newMessages
 		doWithIndex: [ :aMessage :anIndex | 
