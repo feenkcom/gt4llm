@@ -50,7 +50,7 @@ GtLlmEntity >> from: aDictionary [
 		do: [ :aPair | 
 			self
 				perform: (aPair value , ':') asSymbol
-				withArguments: {aDictionary at: aPair key ifAbsent: [ nil ]} ]
+				withArguments: {aDictionary at: aPair key asString ifAbsent: [ nil ]} ]
 ]
 
 { #category : 'accessing' }

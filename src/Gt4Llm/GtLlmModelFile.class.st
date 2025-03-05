@@ -1,52 +1,57 @@
 Class {
-	#name : #GtLlmModelFile,
-	#superclass : #Object,
+	#name : 'GtLlmModelFile',
+	#superclass : 'Object',
 	#instVars : [
 		'directives'
 	],
-	#category : #Gt4Llm
+	#category : 'Gt4Llm'
 }
 
-{ #category : #accessing }
+{ #category : 'other' }
+GtLlmModelFile class >> new [
+	^ self basicNew initialize
+]
+
+{ #category : 'accessing' }
 GtLlmModelFile >> adapter: aString [ 
 	self addDirective: (GtLlmAdapterDirective withText: aString)
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmModelFile >> addDirective: aDirective [
 	directives add: aDirective
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmModelFile >> addMessage: aMessage [
 	self
 		addDirective: ((GtLlmMessageDirective withText: aMessage role)
 				messageText: aMessage content)
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmModelFile >> content [
 	^ '
 
 ' join: (self directives collect: #directiveString)
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmModelFile >> contentDictionary [
-	^ (self directives collect: #directiveAssociation) asDictionary
+	^ (self directives collect: [:aDirective | aDirective directiveAssociation ]) asDictionary
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmModelFile >> directives [
 	^ directives
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmModelFile >> from: aModel [
 	self addDirective: (GtLlmFromDirective withText: aModel)
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmModelFile >> gtContentFor: aView [
 	<gtView>
 	^ aView textEditor
@@ -55,7 +60,7 @@ GtLlmModelFile >> gtContentFor: aView [
 		text: [ self content ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmModelFile >> gtDirectivesFor: aView [
 	<gtView>
 	^ aView columnedList
@@ -66,34 +71,34 @@ GtLlmModelFile >> gtDirectivesFor: aView [
 		column: 'Text' text: #directiveText
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmModelFile >> initialize [
 	directives := OrderedCollection new
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmModelFile >> license: aString [
 	self addDirective: (GtLlmLicenseDirective withText: aString)
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmModelFile >> messageFrom: aString withText: aText [
 	self
 		addDirective: ((GtLlmMessageDirective withText: aString) messageText: aText)
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmModelFile >> parameter: aString at: anObject [
 	self
 		addDirective: ((GtLlmParameterDirective withText: aString) value: anObject)
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmModelFile >> system: aModel [
 	self addDirective: (GtLlmSystemDirective withText: aModel)
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmModelFile >> template: aString [ 
 	self addDirective: (GtLlmTemplateDirective withText: aString)
 ]

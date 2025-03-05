@@ -1,40 +1,45 @@
 Class {
-	#name : #GtLlmInstructionComposite,
-	#superclass : #GtLlmInstructionPiece,
+	#name : 'GtLlmInstructionComposite',
+	#superclass : 'GtLlmInstructionPiece',
 	#instVars : [
 		'items'
 	],
-	#category : #Gt4Llm
+	#category : 'Gt4Llm'
 }
 
-{ #category : #accessing }
+{ #category : 'other' }
+GtLlmInstructionComposite class >> new [
+	^ self basicNew initialize
+]
+
+{ #category : 'accessing' }
 GtLlmInstructionComposite >> addItem: anItem [
 	items add: (anItem asInstructionPiece parent: self)
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmInstructionComposite >> children [
 	^ items
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmInstructionComposite >> gtDisplayOn: stream [
 	stream nextPutAll: '--Composite--'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmInstructionComposite >> initialize [
 	super initialize.
 	
 	items := OrderedCollection new
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmInstructionComposite >> instructionString [
-	^ (String cr, String cr) join: (items collect: #instructionString)
+	^ (String cr, String cr) join: (items collect: [:anItem | anItem instructionString])
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmInstructionComposite >> items: anObject [
 	items := anObject
 			collect: [ :anInstruction | anInstruction asInstructionPiece parent: self ]
