@@ -19,6 +19,11 @@ GtOpenAIAssistantProvider >> gtInstructionsFor: aView [
 ]
 
 { #category : #'*Gt4OpenAI-GToolkit' }
+GtOpenAIAssistantProvider >> registerForFinalization [
+	self class finalizationRegistry add: self
+]
+
+{ #category : #'*Gt4OpenAI-GToolkit' }
 GtOpenAIAssistantProvider >> runFuture [
 	^ GtLlmThreadRunFuture new chat: self
 ]
