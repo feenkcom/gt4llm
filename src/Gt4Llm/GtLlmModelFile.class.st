@@ -4,8 +4,13 @@ Class {
 	#instVars : [
 		'directives'
 	],
-	#category : #Gt4Llm
+	#category : 'Gt4Llm'
 }
+
+{ #category : #other }
+GtLlmModelFile class >> new [
+	^ self basicNew initialize
+]
 
 { #category : #accessing }
 GtLlmModelFile >> adapter: aString [ 
@@ -33,7 +38,7 @@ GtLlmModelFile >> content [
 
 { #category : #accessing }
 GtLlmModelFile >> contentDictionary [
-	^ (self directives collect: #directiveAssociation) asDictionary
+	^ (self directives collect: [:aDirective | aDirective directiveAssociation ]) asDictionary
 ]
 
 { #category : #accessing }

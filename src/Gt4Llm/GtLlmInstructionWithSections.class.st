@@ -5,7 +5,7 @@ Class {
 		'introduction',
 		'sections'
 	],
-	#category : #Gt4Llm
+	#category : 'Gt4Llm'
 }
 
 { #category : #accessing }
@@ -40,9 +40,13 @@ GtLlmInstructionWithSections >> initialize [
 { #category : #accessing }
 GtLlmInstructionWithSections >> instructionString [
 	^ self introduction instructionString
-		, '
+		,
+			'
 	
-' , (Character cr join: (self sections collect: #instructionString))
+'
+		,
+			(Character cr
+				join: (self sections collect: [ :aSection | aSection instructionString ]))
 ]
 
 { #category : #accessing }

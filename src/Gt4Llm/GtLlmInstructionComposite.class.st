@@ -4,8 +4,13 @@ Class {
 	#instVars : [
 		'items'
 	],
-	#category : #Gt4Llm
+	#category : 'Gt4Llm'
 }
+
+{ #category : #other }
+GtLlmInstructionComposite class >> new [
+	^ self basicNew initialize
+]
 
 { #category : #accessing }
 GtLlmInstructionComposite >> addItem: anItem [
@@ -31,7 +36,7 @@ GtLlmInstructionComposite >> initialize [
 
 { #category : #accessing }
 GtLlmInstructionComposite >> instructionString [
-	^ (String cr, String cr) join: (items collect: #instructionString)
+	^ (String cr, String cr) join: (items collect: [:anItem | anItem instructionString])
 ]
 
 { #category : #accessing }

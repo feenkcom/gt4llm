@@ -5,8 +5,13 @@ Class {
 		'providerStencil',
 		'instruction'
 	],
-	#category : #Gt4Llm
+	#category : 'Gt4Llm'
 }
+
+{ #category : #other }
+GtLlmTutor class >> new [
+	^ self basicNew initialize
+]
 
 { #category : #'as yet unclassified' }
 GtLlmTutor >> actionFormatDescription [

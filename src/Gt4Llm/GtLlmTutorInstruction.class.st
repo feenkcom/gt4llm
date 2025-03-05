@@ -8,8 +8,13 @@ Class {
 		'formats',
 		'sections'
 	],
-	#category : #Gt4Llm
+	#category : 'Gt4Llm'
 }
+
+{ #category : #other }
+GtLlmTutorInstruction class >> new [
+	^ self basicNew initialize
+]
 
 { #category : #'as yet unclassified' }
 GtLlmTutorInstruction >> actionNamed: aString [
@@ -51,23 +56,29 @@ GtLlmTutorInstruction >> asInstructionPiece [
 	^ GtLlmInstructionWithSections new
 		source: self;
 		introduction: self description;
-		sections: self sections, {
-				GtLlmInstructionSection new
-					source: self;
-					title: 'Format components';
-					body: (GtLlmInstructionWithSections new
-							source: self;
-							introduction: 'Each format component has a name, a data format (such as JSON, YAML, etc.), a Markdown code block annotation tag that encloses it, and some examples.
+		sections:
+				self sections
+						,
+							{(GtLlmInstructionSection new
+								source: self;
+								title: 'Format components';
+								body:
+										(GtLlmInstructionWithSections new
+												source: self;
+												introduction:
+														'Each format component has a name, a data format (such as JSON, YAML, etc.), a Markdown code block annotation tag that encloses it, and some examples.
 							
 The components that make up the state are as follows:';
-							sections: formats).
-				GtLlmInstructionSection new
-					source: self;
-					title: 'Actions';
-					body: (GtLlmInstructionWithSections new
-							introduction: 'All actions are listed below.';
-							sections: (actions collect: #asInstructionPiece)).
-				self errorHandlingDescription}
+												sections: formats)).
+							(GtLlmInstructionSection new
+								source: self;
+								title: 'Actions';
+								body:
+										(GtLlmInstructionWithSections new
+												introduction: 'All actions are listed below.';
+												sections:
+														(actions collect: [ :anAction | anAction asInstructionPiece ]))).
+							(self errorHandlingDescription)}
 ]
 
 { #category : #accessing }
@@ -77,7 +88,7 @@ GtLlmTutorInstruction >> asJsonSchema [
 			-> (formats
 					collect: [ :aComponent | aComponent name -> aComponent asJsonSchema ])
 					asDictionary.
-		'required' -> (formats collect: #name).
+		'required' -> (formats collect: [:aFormat | aFormat name ]).
 		'additionalProperties' -> false} asDictionary
 ]
 
