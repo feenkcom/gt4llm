@@ -14,7 +14,7 @@ GtProposeRenamesAttribute >> doAffect: aTBrTextEditorTextualPiece in: anEditorEl
 	^ BrButton new beTinySize
 		aptitude: BrGlamorousButtonWithIconAptitude;
 		label: 'Renames';
-		addAptitude: (BrGlamorousWithDropdownAptitude
+		addAptitude: (BrGlamorousWithExplicitDropdownAptitude
 				handle: [ BrButton new
 						aptitude: BrGlamorousButtonWithIconAptitude - BrGlamorousButtonExteriorAptitude;
 						icon: BrGlamorousVectorIcons downwards;

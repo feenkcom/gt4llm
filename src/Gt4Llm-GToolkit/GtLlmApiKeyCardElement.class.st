@@ -67,7 +67,7 @@ GtLlmApiKeyCardElement >> makeApiKeyDropdown [
 			vFitContent;
 			margin: (BlInsets left: 0 right: 0);
 			aptitude: BrGlamorousButtonWithLabelAptitude
-					+ (BrGlamorousWithDropdownAptitude
+					+ (BrGlamorousWithExplicitDropdownAptitude
 							handle: [ BrButton new
 									fitContent;
 									aptitude: BrGlamorousButtonWithLabelAptitude - BrGlamorousButtonExteriorAptitude;
@@ -129,7 +129,7 @@ GtLlmApiKeyCardElement >> makeTestingButton [
 						testingLabel
 							model: aFrozenError;
 							label: (errorText asRopedText foreground: BrGlamorousColors errorBackgroundColor).
-						testingLabel aptitude - BrGlamorousWithDropdownAptitude.
+						testingLabel aptitude - BrGlamorousWithExplicitDropdownAptitude.
 						testingLabel
 							addAptitude: (BrGlamorousWithTooltipAptitude
 									content: [ | aContainer |

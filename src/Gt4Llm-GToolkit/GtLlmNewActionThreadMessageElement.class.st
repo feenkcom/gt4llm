@@ -32,7 +32,7 @@ GtLlmNewActionThreadMessageElement >> buildAttachButton [
 		fitContent;
 		beSmallSize;
 		aptitude: BrGlamorousButtonWithIconAptitude new
-				+ (BrGlamorousWithDropdownAptitude
+				+ (BrGlamorousWithExplicitDropdownAptitude
 						handle: [ BrButton new
 								aptitude: BrGlamorousButtonWithIconAptitude - BrGlamorousButtonWithLabelTooltipAptitude
 										- BrGlamorousButtonExteriorAptitude;
