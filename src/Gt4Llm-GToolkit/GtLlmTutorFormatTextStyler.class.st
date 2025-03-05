@@ -30,7 +30,7 @@ GtLlmTutorFormatTextStyler >> styleUnknownFormatComponent: aCodeNode [
 			beAppend;
 			stencil: [ BrButton new
 					aptitude: BrGlamorousButtonWithIconAptitude - BrGlamorousButtonExteriorAptitude
-							+ (BrGlamorousWithDropdownAptitude
+							+ (BrGlamorousWithExplicitDropdownAptitude
 									handle: [ BrButton new
 											aptitude: BrGlamorousButtonWithIconAptitude;
 											icon: BrGlamorousVectorIcons repair;
