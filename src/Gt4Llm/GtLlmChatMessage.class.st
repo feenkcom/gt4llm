@@ -1,6 +1,6 @@
 Class {
-	#name : 'GtLlmChatMessage',
-	#superclass : 'GtLlmEntity',
+	#name : #GtLlmChatMessage,
+	#superclass : #GtLlmEntity,
 	#instVars : [
 		'content',
 		'role',
@@ -9,26 +9,28 @@ Class {
 		'chat',
 		'attachments'
 	],
-	#category : 'Gt4Llm'
+	#category : #Gt4Llm
 }
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtLlmChatMessage class >> defaultRole [
 	^ self subclassResponsibility
 ]
 
-{ #category : 'instance creation' }
+{ #category : #'instance creation' }
 GtLlmChatMessage class >> from: aDictionary [
 	| aRole aContent roleClass |
+	self isAbstract ifFalse: [ ^ self new from: aDictionary ].
+
 	aRole := aDictionary at: 'role'.
 	aContent := aDictionary at: 'content'.
 
-	roleClass := self rolesToClasses at: aRole ifAbsent: [self].
+	roleClass := self rolesToClasses at: aRole ifAbsent: [ self ].
 
 	^ roleClass new from: aDictionary
 ]
 
-{ #category : 'instance creation' }
+{ #category : #'instance creation' }
 GtLlmChatMessage class >> rolesToClasses [
 	^ {('tool' -> GtLlmToolMessage).
 	('assistant' -> GtLlmAssistantMessage).
@@ -36,95 +38,95 @@ GtLlmChatMessage class >> rolesToClasses [
 	('system' -> GtLlmSystemMessage)} asDictionary
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtLlmChatMessage class >> serializationProperties [
 	^ {#role -> #role.
 		#content -> #content}
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : #'as yet unclassified' }
 GtLlmChatMessage >> action [
 	^ [ self contentJson at: 'Action' ] on: Error do: [ nil ]
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtLlmChatMessage >> annotations [
 	^ {}
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtLlmChatMessage >> asTokenizableString [
 	^ '<|im_start|>' , self role , '<|im_sep|>' , self content , '<|im_end|>'
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtLlmChatMessage >> attachments [
 	^ attachments
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtLlmChatMessage >> attachments: anObject [
 	attachments := anObject
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtLlmChatMessage >> chat [
 	^ chat
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtLlmChatMessage >> chat: anObject [
 	chat := anObject
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtLlmChatMessage >> content [
 	^ content
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtLlmChatMessage >> content: anObject [
 	content := anObject
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : #'as yet unclassified' }
 GtLlmChatMessage >> contentJson [
 	^ STONJSON fromString: self contentText
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtLlmChatMessage >> contentSummary [
 	^ self contentText lines ifEmpty: [ '' ] ifNotEmpty: #first
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtLlmChatMessage >> contentText [
 	^ self content
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtLlmChatMessage >> createdAt [
 	^ createdAt
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtLlmChatMessage >> createdAt: anObject [
 	createdAt := self deserializeTime: anObject
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtLlmChatMessage >> descendant [
 	^ self chat descendantOf: self
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : #'as yet unclassified' }
 GtLlmChatMessage >> gtActionInspectFor: anAction [
 	<gtAction>
 	<gtLlmAction>
 	^ super gtActionInspectFor: anAction
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : #'as yet unclassified' }
 GtLlmChatMessage >> gtJsonFor: aView context: aContext [
 	<gtView>
 	<gtLlmMessageView>
@@ -135,68 +137,68 @@ GtLlmChatMessage >> gtJsonFor: aView context: aContext [
 		priority: 4.5
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtLlmChatMessage >> hasResponse [
 	^ true
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtLlmChatMessage >> id [
 	^ id
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : #'as yet unclassified' }
 GtLlmChatMessage >> id: anId [
 	id := anId
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtLlmChatMessage >> initialize [
 	id := self uuidClass new.
 	createdAt := DateAndTime now
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtLlmChatMessage >> isAssistantRole [
 	^ self role = 'assistant'
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtLlmChatMessage >> isFailure [
 	^ false
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : #'as yet unclassified' }
 GtLlmChatMessage >> isReady [
 	^ true
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtLlmChatMessage >> isSystemRole [
 	^ self role = 'system'
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtLlmChatMessage >> isToolRole [
 	^ self role = 'tool'
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtLlmChatMessage >> isUserRole [
 	^ self role = 'user'
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtLlmChatMessage >> role [
 	^ role ifNil: [ role := self class defaultRole ]
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtLlmChatMessage >> role: anObject [
 	role := anObject
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtLlmChatMessage >> senderText [
 	self isAssistantRole ifTrue: [ ^ 'Assistant' ].
 	self isSystemRole ifTrue: [ ^ 'System' ].
@@ -204,7 +206,7 @@ GtLlmChatMessage >> senderText [
 	^ 'You'
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : #'as yet unclassified' }
 GtLlmChatMessage >> serialize [
 	| serialized |
 	serialized := super serialize.
@@ -220,6 +222,6 @@ GtLlmChatMessage >> serialize [
 	^ serialized
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : #'as yet unclassified' }
 GtLlmChatMessage >> serializeInline [
 ]

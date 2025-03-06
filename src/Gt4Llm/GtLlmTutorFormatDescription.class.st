@@ -163,11 +163,6 @@ GtLlmTutorFormatDescription >> initialize [
 ]
 
 { #category : #accessing }
-GtLlmTutorFormatDescription >> initializeMethod [
-	^ nil
-]
-
-{ #category : #accessing }
 GtLlmTutorFormatDescription >> name [
 	^ name
 ]
