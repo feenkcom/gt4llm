@@ -13,7 +13,7 @@ Class {
 		'files',
 		'apiFiles'
 	],
-	#category : #Gt4OpenAI
+	#category : 'Gt4OpenAI'
 }
 
 { #category : #'as yet unclassified' }
@@ -83,8 +83,7 @@ GtOpenAIAssistantProvider >> createAssistant [
 
 	thread := client createThreadWithMessages: {}.
 
-
-	self class finalizationRegistry add: self
+	self registerForFinalization
 ]
 
 { #category : #'as yet unclassified' }
@@ -143,7 +142,7 @@ GtOpenAIAssistantProvider >> getApiFile: anId [
 GtOpenAIAssistantProvider >> getMessages [
 	^ thread updateMessages
 		collect: [ :aThreadMessage | 
-			self assistantMessageClass adoptInstance: aThreadMessage.
+			self assistantMessageClass new merge: aThreadMessage.
 			aThreadMessage ]
 ]
 
@@ -255,7 +254,7 @@ GtOpenAIAssistantProvider >> tools: anObject [
 GtOpenAIAssistantProvider >> updateMessages [
 	| newMessages nonToolMessages |
 	newMessages := self getMessages.
-	nonToolMessages := chat messages reject: #isToolRole.
+	nonToolMessages := chat messages reject: [:aMessage  | aMessage isToolRole].
 
 	newMessages
 		doWithIndex: [ :aMessage :anIndex | 

@@ -11,8 +11,13 @@ Class {
 		'tutor',
 		'definingMethod'
 	],
-	#category : #Gt4Llm
+	#category : 'Gt4Llm'
 }
+
+{ #category : #other }
+GtLlmTutorAction class >> new [
+	^ self basicNew initialize
+]
 
 { #category : #'as yet unclassified' }
 GtLlmTutorAction >> addExample: anExample [

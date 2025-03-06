@@ -5,7 +5,8 @@ RwPlatformNestedProjectLoadComponentV2 {
 	],
 	#packageNames : [
 		'Gt4Llm-Gemstone',
-		'Gt4Ollama-Gemstone'
+		'Gt4Ollama-Gemstone',
+		'Gt4OpenAI-Gemstone'
 	],
 	#comment : ''
 }

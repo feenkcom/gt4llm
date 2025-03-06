@@ -4,3 +4,8 @@ Extension { #name : #GtOllamaProvider }
 GtOllamaProvider >> asyncWait [
 	^ self triggerAssistant
 ]
+
+{ #category : #'*Gt4Ollama-Gemstone' }
+GtOllamaProvider >> uuidClass [
+	^ GsUuidV4
+]

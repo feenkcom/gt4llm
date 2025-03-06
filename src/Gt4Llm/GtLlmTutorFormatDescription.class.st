@@ -12,8 +12,13 @@ Class {
 		'definingMethod',
 		'type'
 	],
-	#category : #Gt4Llm
+	#category : 'Gt4Llm'
 }
+
+{ #category : #other }
+GtLlmTutorFormatDescription class >> new [
+	^ self basicNew initialize
+]
 
 { #category : #accessing }
 GtLlmTutorFormatDescription >> addInputReference: anAction [

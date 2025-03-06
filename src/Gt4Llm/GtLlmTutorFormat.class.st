@@ -5,8 +5,13 @@ Class {
 		'name',
 		'components'
 	],
-	#category : #Gt4Llm
+	#category : 'Gt4Llm'
 }
+
+{ #category : #other }
+GtLlmTutorFormat class >> new [
+	^ self basicNew initialize
+]
 
 { #category : #accessing }
 GtLlmTutorFormat >> actionComponent [

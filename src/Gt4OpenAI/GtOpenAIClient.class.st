@@ -8,7 +8,7 @@ Class {
 	#classVars : [
 		'ApiKeyFile'
 	],
-	#category : #Gt4OpenAI
+	#category : 'Gt4OpenAI'
 }
 
 { #category : #accessing }
@@ -34,6 +34,11 @@ GtOpenAIClient class >> defaultApiKeyFile [
 { #category : #accessing }
 GtOpenAIClient class >> initialize [
 	ApiKeyFile := self defaultApiKeyFile
+]
+
+{ #category : #accessing }
+GtOpenAIClient class >> new [
+	^ self basicNew initialize
 ]
 
 { #category : #accessing }

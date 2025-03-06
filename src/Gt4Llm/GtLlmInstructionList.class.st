@@ -4,8 +4,13 @@ Class {
 	#instVars : [
 		'items'
 	],
-	#category : #Gt4Llm
+	#category : 'Gt4Llm'
 }
+
+{ #category : #other }
+GtLlmInstructionList class >> new [
+	^ self basicNew initialize
+]
 
 { #category : #accessing }
 GtLlmInstructionList >> addItem: anItem [

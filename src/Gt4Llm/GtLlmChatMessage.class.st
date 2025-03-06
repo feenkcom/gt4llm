@@ -19,14 +19,23 @@ GtLlmChatMessage class >> defaultRole [
 
 { #category : #'instance creation' }
 GtLlmChatMessage class >> from: aDictionary [
-	| aRole aContent |
+	| aRole aContent roleClass |
+	self isAbstract ifFalse: [ ^ self new from: aDictionary ].
+
 	aRole := aDictionary at: 'role'.
 	aContent := aDictionary at: 'content'.
 
-	self
-		subclassesDo: [ :aSubclass | aSubclass defaultRole = aRole ifTrue: [ ^ aSubclass new content: aContent ] ].
+	roleClass := self rolesToClasses at: aRole ifAbsent: [ self ].
 
-	^ self new from: aDictionary
+	^ roleClass new from: aDictionary
+]
+
+{ #category : #'instance creation' }
+GtLlmChatMessage class >> rolesToClasses [
+	^ {('tool' -> GtLlmToolMessage).
+	('assistant' -> GtLlmAssistantMessage).
+	('user' -> GtLlmUserMessage).
+	('system' -> GtLlmSystemMessage)} asDictionary
 ]
 
 { #category : #accessing }

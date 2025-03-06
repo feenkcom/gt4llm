@@ -5,8 +5,13 @@ Class {
 		'thread',
 		'params'
 	],
-	#category : #Gt4OpenAI
+	#category : 'Gt4OpenAI'
 }
+
+{ #category : #other }
+GtOpenAIListThreadMessagesAPIClient class >> new [
+	^ self basicNew initialize
+]
 
 { #category : #'as yet unclassified' }
 GtOpenAIListThreadMessagesAPIClient >> defaultParams [
