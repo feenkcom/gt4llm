@@ -1,6 +1,6 @@
 Class {
-	#name : 'GtLlmTutorFormatDescription',
-	#superclass : 'Object',
+	#name : #GtLlmTutorFormatDescription,
+	#superclass : #Object,
 	#instVars : [
 		'name',
 		'format',
@@ -15,12 +15,12 @@ Class {
 	#category : 'Gt4Llm'
 }
 
-{ #category : 'other' }
+{ #category : #other }
 GtLlmTutorFormatDescription class >> new [
 	^ self basicNew initialize
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtLlmTutorFormatDescription >> addInputReference: anAction [
 	referencingActions
 		detect: [ :aReference | aReference action = anAction ]
@@ -29,7 +29,7 @@ GtLlmTutorFormatDescription >> addInputReference: anAction [
 				add: (GtLlmActionReference new markInput action: anAction) ]
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtLlmTutorFormatDescription >> addOutputReference: anAction [
 	referencingActions
 		detect: [ :aReference | aReference action = anAction ]
@@ -38,7 +38,7 @@ GtLlmTutorFormatDescription >> addOutputReference: anAction [
 				add: (GtLlmActionReference new markOutput action: anAction) ]
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : #'as yet unclassified' }
 GtLlmTutorFormatDescription >> asExpressionSource [
 	^ self class name
 		, ' new
@@ -53,7 +53,7 @@ GtLlmTutorFormatDescription >> asExpressionSource [
 	example: ' , self example storeString
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtLlmTutorFormatDescription >> asInstructionPiece [
 	^ GtLlmInstructionSection new
 		title: self name;
@@ -64,7 +64,7 @@ GtLlmTutorFormatDescription >> asInstructionPiece [
 ' , (self example ifNil: [ 'none' ]))
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtLlmTutorFormatDescription >> asJsonSchema [
 	^ {'type' -> self type.
 		'description'
@@ -74,48 +74,48 @@ GtLlmTutorFormatDescription >> asJsonSchema [
 ' , (self example ifNil: [ 'none' ])) instructionString} asDictionary
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : #'as yet unclassified' }
 GtLlmTutorFormatDescription >> beRequired [
 	self type remove: 'null' ifAbsent: [  ]
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtLlmTutorFormatDescription >> defaultPriority [
 	^ 10
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtLlmTutorFormatDescription >> defaultType [
 	^ {'string'.
 		'null'}
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : #'as yet unclassified' }
 GtLlmTutorFormatDescription >> definingMethod [
 	^ definingMethod
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtLlmTutorFormatDescription >> example [
 	^ example
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtLlmTutorFormatDescription >> example: anObject [
 	example := anObject
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtLlmTutorFormatDescription >> format [
 	^ format
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtLlmTutorFormatDescription >> format: anObject [
 	format := anObject
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtLlmTutorFormatDescription >> gtActionsFor: aView [
 	<gtView>
 	^ aView columnedList
@@ -129,7 +129,7 @@ GtLlmTutorFormatDescription >> gtActionsFor: aView [
 			text: [ :aReference | aReference isOutput ifTrue: [ 'true' ] ifFalse: [ '' ] ]
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : #'as yet unclassified' }
 GtLlmTutorFormatDescription >> gtDefinitionFor: aView [
 	<gtView>
 	^ aView forward
@@ -139,7 +139,7 @@ GtLlmTutorFormatDescription >> gtDefinitionFor: aView [
 		view: #gtSourceFor:
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtLlmTutorFormatDescription >> gtInstructionFor: aView [
 	<gtView>
 	^ aView forward 
@@ -149,7 +149,7 @@ GtLlmTutorFormatDescription >> gtInstructionFor: aView [
 		view: #gtInstructionFor:
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtLlmTutorFormatDescription >> initialize [
 	super initialize.
 	
@@ -162,17 +162,17 @@ GtLlmTutorFormatDescription >> initialize [
 	definingMethod := self initializeMethod
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtLlmTutorFormatDescription >> name [
 	^ name
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtLlmTutorFormatDescription >> name: anObject [
 	name := anObject
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtLlmTutorFormatDescription >> printOn: aStream [
 	super printOn: aStream.
 
@@ -182,37 +182,37 @@ GtLlmTutorFormatDescription >> printOn: aStream [
 		nextPut: $)
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtLlmTutorFormatDescription >> priority [
 	^ priority
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtLlmTutorFormatDescription >> priority: anObject [
 	priority := anObject
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : #'as yet unclassified' }
 GtLlmTutorFormatDescription >> removeFromSystem [
 	self definingMethod ifNotNil: [ :aMethod | aMethod removeFromSystem ]
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtLlmTutorFormatDescription >> tutor [
 	^ tutor
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtLlmTutorFormatDescription >> tutor: anObject [
 	tutor := anObject
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtLlmTutorFormatDescription >> type [
 	^ type
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtLlmTutorFormatDescription >> type: anObject [
 	type := anObject
 ]
