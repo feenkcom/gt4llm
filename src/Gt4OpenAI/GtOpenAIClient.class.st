@@ -1,6 +1,6 @@
 Class {
-	#name : 'GtOpenAIClient',
-	#superclass : 'Object',
+	#name : #GtOpenAIClient,
+	#superclass : #Object,
 	#instVars : [
 		'baseUrl',
 		'apiKey'
@@ -11,42 +11,42 @@ Class {
 	#category : 'Gt4OpenAI'
 }
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtOpenAIClient class >> apiKeyFile [
 	^ ApiKeyFile
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtOpenAIClient class >> apiKeyFile: aFile [
 	ApiKeyFile := aFile
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtOpenAIClient class >> apiKeyFileContents [
 	^ ApiKeyFile contents trimBoth
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtOpenAIClient class >> defaultApiKeyFile [
 	^ FileLocator home / '.secrets' / 'open-ai-api-key.txt'
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtOpenAIClient class >> initialize [
 	ApiKeyFile := self defaultApiKeyFile
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtOpenAIClient class >> new [
 	^ self basicNew initialize
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtOpenAIClient class >> withApiKeyFromFile [
 	^ self new apiKey: self apiKeyFileContents
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtOpenAIClient >> addMessage: aMessage toThread: aThreadId [
 	^ GtOpenAIAddMessageToThreadAPIClient new
 		client: self;
@@ -55,27 +55,27 @@ GtOpenAIClient >> addMessage: aMessage toThread: aThreadId [
 		perform
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : #'as yet unclassified' }
 GtOpenAIClient >> apiKey [
 	^ apiKey
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtOpenAIClient >> apiKey: anApiKey [
 	apiKey := anApiKey
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtOpenAIClient >> baseUrl [
 	^ baseUrl
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtOpenAIClient >> baseUrl: anObject [
 	baseUrl := anObject asZnUrl
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtOpenAIClient >> checkForErrors: aResponse [
 	((aResponse includesKey: 'error')
 		and: [ ((aResponse at: 'error') isKindOf: Collection)
@@ -85,7 +85,7 @@ GtOpenAIClient >> checkForErrors: aResponse [
 	^ aResponse
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : #'as yet unclassified' }
 GtOpenAIClient >> completeChatWithModel: aString andMessages: aCollection [
 	^ GtOpenAICompleteChatAPIClient new
 		client: self;
@@ -94,7 +94,7 @@ GtOpenAIClient >> completeChatWithModel: aString andMessages: aCollection [
 		perform
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtOpenAIClient >> createAssistant: anAssistant [ 
 	^ GtOpenAICreateAssistantAPIClient new
 		client: self;
@@ -102,7 +102,7 @@ GtOpenAIClient >> createAssistant: anAssistant [
 		perform
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtOpenAIClient >> createFineTuningJobOnModel: aModelName withFile: aFileId [
 	^ GtOpenAICreateFineTuningJobAPIClient new
 		client: self;
@@ -111,7 +111,7 @@ GtOpenAIClient >> createFineTuningJobOnModel: aModelName withFile: aFileId [
 		perform
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtOpenAIClient >> createRunForThread: aThreadId usingAssistant: anAssistantId [
 	^ GtOpenAICreateThreadRunAPIClient new
 		client: self;
@@ -120,7 +120,7 @@ GtOpenAIClient >> createRunForThread: aThreadId usingAssistant: anAssistantId [
 		perform
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtOpenAIClient >> createRunForThread: aThreadId usingAssistant: anAssistantId andResponseFormat: aFormat [
 	^ GtOpenAICreateThreadRunAPIClient new
 		client: self;
@@ -130,7 +130,7 @@ GtOpenAIClient >> createRunForThread: aThreadId usingAssistant: anAssistantId an
 		perform
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtOpenAIClient >> createThreadWithMessages: aListOfMessages [ 
 	^ GtOpenAICreateThreadAPIClient new
 		client: self;
@@ -138,7 +138,7 @@ GtOpenAIClient >> createThreadWithMessages: aListOfMessages [
 		perform
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtOpenAIClient >> createVectorStoreNamed: aName withFiles: aCollectionOfFileIds [
 	^ GtOpenAICreateVectorStoreAPIClient new
 		client: self;
@@ -147,12 +147,12 @@ GtOpenAIClient >> createVectorStoreNamed: aName withFiles: aCollectionOfFileIds 
 		perform
 ]
 
-{ #category : 'default' }
+{ #category : #default }
 GtOpenAIClient >> defaultBaseUrl [
 	^ 'https://api.openai.com/v1' asZnUrl
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtOpenAIClient >> delete: aUrl [
 	| aClient |
 	aClient := self initializeClient.
@@ -163,7 +163,7 @@ GtOpenAIClient >> delete: aUrl [
 	^ self checkForErrors: aClient delete
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtOpenAIClient >> deleteAssistant: anAssistantId [
 	^ GtOpenAIDeleteAssistantAPIClient new
 		client: self;
@@ -171,7 +171,7 @@ GtOpenAIClient >> deleteAssistant: anAssistantId [
 		perform
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtOpenAIClient >> deleteFile: aFileId [
 	^ GtOpenAIDeleteFileAPIClient new
 		client: self;
@@ -179,7 +179,7 @@ GtOpenAIClient >> deleteFile: aFileId [
 		perform
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : #'as yet unclassified' }
 GtOpenAIClient >> deleteModel: aModel [ 
 	^ GtOpenAIDeleteModelAPIClient new
 		client: self;
@@ -187,7 +187,7 @@ GtOpenAIClient >> deleteModel: aModel [
 		perform
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtOpenAIClient >> deleteVectorStore: anId [
 	^ GtOpenAIDeleteVectorStoreAPIClient new
 		client: self;
@@ -195,7 +195,7 @@ GtOpenAIClient >> deleteVectorStore: anId [
 		perform
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtOpenAIClient >> generateEmbeddingsWithModel: aString andInput: anInputString [
 	^ GtOpenAIGenerateEmbeddingAPIClient new
 		client: self;
@@ -204,12 +204,12 @@ GtOpenAIClient >> generateEmbeddingsWithModel: aString andInput: anInputString [
 		perform
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtOpenAIClient >> get: aUrl [
 	^ self get: aUrl withParams: {}
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtOpenAIClient >> get: aUrl withParams: aListOfAssocs [
 	| aClient |
 	aClient := self initializeClient.
@@ -221,7 +221,7 @@ GtOpenAIClient >> get: aUrl withParams: aListOfAssocs [
 	^ self checkForErrors: aClient get
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtOpenAIClient >> getFile: aFileId [
 	^ GtOpenAIGetFileAPIClient new
 		client: self;
@@ -229,7 +229,7 @@ GtOpenAIClient >> getFile: aFileId [
 		perform
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtOpenAIClient >> getFileContents: aFileId [
 	^ GtOpenAIGetFileContentsAPIClient new
 		client: self;
@@ -237,7 +237,7 @@ GtOpenAIClient >> getFileContents: aFileId [
 		perform
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtOpenAIClient >> getFineTuningCheckpointsForJob: anId [
 	^ GtOpenAIGetFineTuningCheckpointsForJobAPIClient new
 		client: self;
@@ -245,7 +245,7 @@ GtOpenAIClient >> getFineTuningCheckpointsForJob: anId [
 		perform
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtOpenAIClient >> getFineTuningEventsForJob: anId [
 	^ GtOpenAIGetFineTuningEventsForJobAPIClient new
 		client: self;
@@ -253,7 +253,7 @@ GtOpenAIClient >> getFineTuningEventsForJob: anId [
 		perform
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtOpenAIClient >> getFineTuningJob: anId [
 	^ GtOpenAIGetFineTuningJobAPIClient new
 		client: self;
@@ -261,7 +261,7 @@ GtOpenAIClient >> getFineTuningJob: anId [
 		perform
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtOpenAIClient >> getRun: aRunId forThread: aThreadId [
 	^ GtOpenAIGetThreadRunAPIClient new
 		client: self;
@@ -270,7 +270,7 @@ GtOpenAIClient >> getRun: aRunId forThread: aThreadId [
 		perform
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtOpenAIClient >> gtModelsFor: aView [
 	<gtView>
 	^ aView forward
@@ -280,28 +280,28 @@ GtOpenAIClient >> gtModelsFor: aView [
 		view: #gtViewModelsFor:
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtOpenAIClient >> initialize [
 	super initialize.
 
 	self baseUrl: self defaultBaseUrl
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtOpenAIClient >> listAssistants [
 	^ GtOpenAIListAssistantsAPIClient new
 		client: self;
 		perform
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtOpenAIClient >> listFiles [
 	^ GtOpenAIListFilesAPIClient new
 		client: self;
 		perform
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtOpenAIClient >> listMessagesForThread: aThreadId [ 
 	^ GtOpenAIListThreadMessagesAPIClient new
 		client: self;
@@ -309,21 +309,21 @@ GtOpenAIClient >> listMessagesForThread: aThreadId [
 		perform
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtOpenAIClient >> listModels [
 	^ GtOpenAIListModelsAPIClient new
 		client: self;
 		perform
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtOpenAIClient >> listVectorStores [
 	^ GtOpenAIListVectorStoresAPIClient new
 		client: self;
 		perform
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtOpenAIClient >> post: aString withEntity: anEntity [
 	| aClient |
 	aClient := self initializeClient.
@@ -334,7 +334,7 @@ GtOpenAIClient >> post: aString withEntity: anEntity [
 	^ self checkForErrors: aClient post
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtOpenAIClient >> postFile: aString withEntity: anEntity [
 	| aClient |
 	aClient := self initializeClient.
@@ -345,7 +345,7 @@ GtOpenAIClient >> postFile: aString withEntity: anEntity [
 	^ self checkForErrors: aClient post
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : #'as yet unclassified' }
 GtOpenAIClient >> submitToolOutputs: output toThread: aThreadId anRun: aRunId [ 
 	^ GtOpenAISubmitToolOutputsAPIClient new
 		client: self;
@@ -355,7 +355,7 @@ GtOpenAIClient >> submitToolOutputs: output toThread: aThreadId anRun: aRunId [
 		perform
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtOpenAIClient >> uploadFile: aFileReference withPurpose: aString [ 
 	^ GtOpenAIUploadFileAPIClient new
 		client: self;

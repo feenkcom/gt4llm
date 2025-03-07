@@ -263,7 +263,7 @@ GtOpenAIMessage >> messageFiles [
 	^ GtOpenAIFilesGroup
 		withAll: (self content
 				select: [ :aValue | aValue type = 'image_file' ]
-				thenCollect: [ :aValue | self chat assistant client getFile: (aValue at: 'image_file' at: 'file_id') ])
+				thenCollect: [ :aValue | self chat assistant client getFile: ((aValue at: 'image_file') at: 'file_id') ])
 ]
 
 { #category : #accessing }
