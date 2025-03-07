@@ -17,6 +17,17 @@ GtLlmChatMessage >> gtContentFor: aView [
 ]
 
 { #category : #'*Gt4Llm-GToolkit' }
+GtLlmChatMessage >> gtJsonFor: aView [
+	<gtView>
+	<gtLlmMessageView>
+	[ self contentJson ] on: Error do: [ ^ aView empty ].
+
+	^ (self contentJson gtTreeFor: aView)
+		title: 'JSON data';
+		priority: 4.5
+]
+
+{ #category : #'*Gt4Llm-GToolkit' }
 GtLlmChatMessage >> uuidClass [
 	^ UUID
 ]

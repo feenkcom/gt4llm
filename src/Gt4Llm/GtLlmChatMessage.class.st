@@ -126,17 +126,6 @@ GtLlmChatMessage >> gtActionInspectFor: anAction [
 	^ super gtActionInspectFor: anAction
 ]
 
-{ #category : #'as yet unclassified' }
-GtLlmChatMessage >> gtJsonFor: aView [
-	<gtView>
-	<gtLlmMessageView>
-	[ self contentJson ] on: Error do: [ ^ aView empty ].
-
-	^ (self contentJson gtTreeFor: aView)
-		title: 'JSON data';
-		priority: 4.5
-]
-
 { #category : #accessing }
 GtLlmChatMessage >> hasResponse [
 	^ true
