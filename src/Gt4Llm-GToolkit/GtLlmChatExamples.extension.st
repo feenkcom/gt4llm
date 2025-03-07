@@ -1,8 +1,4 @@
-Class {
-	#name : #GtLlmChatExamples,
-	#superclass : #Object,
-	#category : #'Gt4Llm-GToolkit'
-}
+Extension { #name : #GtLlmChatExamples }
 
 { #category : #'*Gt4Llm-GToolkit' }
 GtLlmChatExamples >> chatFuture [
