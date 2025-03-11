@@ -11,7 +11,7 @@ Class {
 		'messages',
 		'serializer'
 	],
-	#category : #Gt4Llm
+	#category : 'Gt4Llm'
 }
 
 { #category : #'as yet unclassified' }
@@ -71,7 +71,7 @@ GtLlmChat >> descendantOf: aMessage [
 	self error: 'Message not found'
 ]
 
-{ #category : #accessing }
+{ #category : #ui }
 GtLlmChat >> gtMessagesFor: aView [
 	"cannot be a forward because the update wouldn’t work"
 
@@ -81,9 +81,9 @@ GtLlmChat >> gtMessagesFor: aView [
 		priority: 3;
 		items: [ self messages ];
 		column: 'Role'
-			text: #role
+			text: [ :item | item role ]
 			width: 100;
-		column: 'Message' text: #content;
+		column: 'Message' text: [ :item | item content ];
 		updateWhen: GtLlmThreadRunAnnouncement in: self announcer;
 		actionUpdateButton
 ]
@@ -203,7 +203,7 @@ GtLlmChat >> signalRunIsDone [
 	self announcer announce: GtLlmThreadRunIsDoneAnnouncement new
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLlmChat >> status [
 	self provider ifNil: [ ^ GtLlmAssistantChatNotReadyStatus new ].
 

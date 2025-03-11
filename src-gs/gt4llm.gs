@@ -3872,7 +3872,7 @@ forAssistantChat: anAssistantChat
 category: 'factory'
 classmethod: GtLlmAssistantChatStatus
 forLastRun: aGtOpenAIThreadRun
-	aGtOpenAIThreadRun ifNil: [ ^ GtLlmAssistantChatReadyStatus default ].
+	aGtOpenAIThreadRun ifNil: [ ^ GtLlmAssistantChatReadyStatus new ].
 	^ GtLlmAssistantChatDynamicStatus new threadRun: aGtOpenAIThreadRun
 %
 
@@ -4128,7 +4128,7 @@ descendantOf: aMessage
 	self error: 'Message not found'
 %
 
-category: 'accessing'
+category: 'ui'
 method: GtLlmChat
 gtMessagesFor: aView
 	"cannot be a forward because the update wouldn’t work"
@@ -4139,9 +4139,9 @@ gtMessagesFor: aView
 		priority: 3;
 		items: [ self messages ];
 		column: 'Role'
-			text: #role
+			text: [ :item | item role ]
 			width: 100;
-		column: 'Message' text: #content;
+		column: 'Message' text: [ :item | item content ];
 		updateWhen: GtLlmThreadRunAnnouncement in: self announcer;
 		actionUpdateButton
 %
@@ -4282,7 +4282,7 @@ signalRunIsDone
 	self announcer announce: GtLlmThreadRunIsDoneAnnouncement new
 %
 
-category: 'as yet unclassified'
+category: 'accessing'
 method: GtLlmChat
 status
 	self provider ifNil: [ ^ GtLlmAssistantChatNotReadyStatus new ].
@@ -7205,6 +7205,24 @@ category: 'as yet unclassified'
 method: GtOpenAIActionMessage
 textBlock
 	^ self contentJson at: 'Text' ifAbsent: [ '' ]
+%
+
+! Class implementation for 'GtOpenAIBlogPostMessage'
+
+!		Instance methods for 'GtOpenAIBlogPostMessage'
+
+category: 'views'
+method: GtOpenAIBlogPostMessage
+gtPostFor: aView
+	<gtView>
+	<gtLlmMessageView>
+	| json |
+	[ json := self contentJson ] on: Error do: [ ^ aView empty ].
+	json at: 'Post' ifAbsent: [ ^ aView empty ].
+	^ aView textEditor
+		title: 'Post';
+		priority: 1;
+		text: [ json at: 'Post' ]
 %
 
 ! Class implementation for 'GtLlmFunctionToolCall'
@@ -10714,6 +10732,12 @@ serializeInline
 
 !		Instance methods for 'GtLlmMessagesGroup'
 
+category: 'converting'
+method: GtLlmMessagesGroup
+asGPhlowItemsIterator
+	^ GtRemotePhlowGenericCollectionIterator forCollection: self
+%
+
 category: 'accessing'
 method: GtLlmMessagesGroup
 asJson
@@ -10729,9 +10753,9 @@ gtMessagesFor: aView
 		priority: 1;
 		items: [ self items ];
 		column: 'Role'
-			text: #role
+			text: [ :item | item role ]
 			width: 100;
-		column: 'Message' text: #content
+		column: 'Message' text: [ :item | item content ]
 %
 
 category: 'accessing'
@@ -13893,8 +13917,10 @@ persist
 	| methodSource |
 	methodSource := self asMethodSource.
 
+	"TODO: RBConfigurableFormatter is defined as part of Rowan.
+	It needs to be exported to .gs to be usable in GemStone"
 	self definingMethod methodClass
-		compile: (RBConfigurableFormatter format: (RBParser parseMethod: methodSource)).
+		compile: (#RBConfigurableFormatter asClass format: (RBParser parseMethod: methodSource)).
 	definingMethod := self definingMethod methodClass
 			>> self definingMethod selector
 %
@@ -16622,6 +16648,38 @@ method: ExecBlock
 doWhileTrue: aBlock
 	self value.
 	^ aBlock whileTrue: self
+%
+
+! Class extensions for 'GtLlmChatExamples'
+
+!		Instance methods for 'GtLlmChatExamples'
+
+category: '*Gt4Llm-Gemstone'
+method: GtLlmChatExamples
+assert: aBoolean
+	self
+		assert: aBoolean
+		description: 'assert is not true'
+%
+
+category: '*Gt4Llm-Gemstone'
+method: GtLlmChatExamples
+assert: aBoolean description: aString
+  | str | 
+  aBoolean == true  ifFalse: [
+    str := aString .
+    str _isExecBlock ifTrue:[ str := aString value ].
+    self logFailure: str.
+    ^ GtGemStoneAssertionFailure signal: str
+  ]
+%
+
+category: '*Gt4Llm-Gemstone'
+method: GtLlmChatExamples
+assert: actual equals: expected
+	self
+		assert: actual = expected
+		description: actual printString , ' is not equal to ' , expected printString
 %
 
 ! Class extensions for 'GtLlmChatMessage'

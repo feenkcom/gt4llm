@@ -218,8 +218,10 @@ GtLlmTutorAction >> persist [
 	| methodSource |
 	methodSource := self asMethodSource.
 
+	"TODO: RBConfigurableFormatter and RBParser are defined as part of Rowan.
+	It needs to be exported to .gs to be usable in GemStone"
 	self definingMethod methodClass
-		compile: (RBConfigurableFormatter format: (RBParser parseMethod: methodSource)).
+		compile: (#RBConfigurableFormatter asClass format: (#RBParser asClass parseMethod: methodSource)).
 	definingMethod := self definingMethod methodClass
 			>> self definingMethod selector
 ]

@@ -1,8 +1,13 @@
 Class {
 	#name : #GtLlmMessagesGroup,
 	#superclass : #GtLlmGroup,
-	#category : #Gt4Llm
+	#category : 'Gt4Llm'
 }
+
+{ #category : #converting }
+GtLlmMessagesGroup >> asGPhlowItemsIterator [
+	^ GtRemotePhlowGenericCollectionIterator forCollection: self
+]
 
 { #category : #accessing }
 GtLlmMessagesGroup >> asJson [
@@ -17,9 +22,9 @@ GtLlmMessagesGroup >> gtMessagesFor: aView [
 		priority: 1;
 		items: [ self items ];
 		column: 'Role'
-			text: #role
+			text: [ :item | item role ]
 			width: 100;
-		column: 'Message' text: #content
+		column: 'Message' text: [ :item | item content ]
 ]
 
 { #category : #accessing }
