@@ -13,7 +13,7 @@ Class {
 		'files',
 		'apiFiles'
 	],
-	#category : 'Gt4OpenAI'
+	#category : #Gt4OpenAI
 }
 
 { #category : #'as yet unclassified' }
@@ -141,9 +141,8 @@ GtOpenAIAssistantProvider >> getApiFile: anId [
 { #category : #'as yet unclassified' }
 GtOpenAIAssistantProvider >> getMessages [
 	^ thread updateMessages
-		collect: [ :aThreadMessage | 
-			self assistantMessageClass new merge: aThreadMessage.
-			aThreadMessage ]
+		collect: [ :aThreadMessage |
+			self assistantMessageClass new merge: aThreadMessage ]
 ]
 
 { #category : #'as yet unclassified' }
