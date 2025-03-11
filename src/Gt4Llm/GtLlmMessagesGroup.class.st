@@ -1,15 +1,20 @@
 Class {
-	#name : #GtLlmMessagesGroup,
-	#superclass : #GtLlmGroup,
-	#category : #Gt4Llm
+	#name : 'GtLlmMessagesGroup',
+	#superclass : 'GtLlmGroup',
+	#category : 'Gt4Llm'
 }
 
-{ #category : #accessing }
+{ #category : 'converting' }
+GtLlmMessagesGroup >> asGPhlowItemsIterator [
+	^ GtRemotePhlowGenericCollectionIterator forCollection: self
+]
+
+{ #category : 'accessing' }
 GtLlmMessagesGroup >> asJson [
 	^ STONJSON toString: self serialize
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmMessagesGroup >> gtMessagesFor: aView [
 	<gtView>
 	^ aView columnedList
@@ -17,12 +22,12 @@ GtLlmMessagesGroup >> gtMessagesFor: aView [
 		priority: 1;
 		items: [ self items ];
 		column: 'Role'
-			text: #role
+			text: [ :item | item role ]
 			width: 100;
-		column: 'Message' text: #content
+		column: 'Message' text: [ :item | item content ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmMessagesGroup >> serialize [
 	^ {'messages' -> (self items collect: #serialize)} asDictionary
 ]
