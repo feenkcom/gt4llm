@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLlmActionChat,
 	#superclass : #GtLlmChat,
-	#category : #Gt4Llm
+	#category : 'Gt4Llm'
 }
 
 { #category : #'as yet unclassified' }
@@ -12,6 +12,9 @@ GtLlmActionChat >> defaultSerializer [
 { #category : #'as yet unclassified' }
 GtLlmActionChat >> gtInstanceFor: aView [
 	<gtView>
+	
+	self gtDo: [] gemstoneDo: [ ^ aView empty ].
+
 	^ aView forward
 		title: 'Instance';
 		priority: 2;

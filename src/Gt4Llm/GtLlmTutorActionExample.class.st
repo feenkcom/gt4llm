@@ -9,8 +9,16 @@ Class {
 		'outputReferences',
 		'unverified'
 	],
-	#category : #Gt4Llm
+	#category : 'Gt4Llm'
 }
+
+{ #category : #'instance creation' }
+GtLlmTutorActionExample class >> new [
+	"Answer an initalised instance of the receiver.
+	For GemStone compatibility."
+
+	^ self basicNew initialize.
+]
 
 { #category : #accessing }
 GtLlmTutorActionExample >> action [
@@ -62,6 +70,17 @@ GtLlmTutorActionExample >> asInstructionPiece [
 ' , self outputJson
 								, '
 ```') asInstructionPiece))
+]
+
+{ #category : #asserting }
+GtLlmTutorActionExample >> assert: aBoolean description: aString [
+  | str | 
+  aBoolean == true  ifFalse: [
+    str := aString .
+    str _isExecBlock ifTrue:[ str := aString value ].
+    self logFailure: str.
+    ^ GtGemStoneAssertionFailure signal: str
+  ]
 ]
 
 { #category : #accessing }

@@ -4,13 +4,14 @@ Class {
 	#instVars : [
 		'instance'
 	],
-	#category : #Gt4Llm
+	#category : 'Gt4Llm'
 }
 
 { #category : #'as yet unclassified' }
 GtLlmActionMessageWithInstanceSerializer >> gtInstanceFor: aView [
 	<gtView>
 	self instance ifNil: [ ^ aView empty ].
+	self gtDo: [] gemstoneDo: [ ^ aView empty ].
 
 	^ aView forward
 		title: 'Instance';

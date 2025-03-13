@@ -12,7 +12,7 @@ Class {
 		'completedAt',
 		'incompleteAt'
 	],
-	#category : #Gt4OpenAI
+	#category : 'Gt4OpenAI'
 }
 
 { #category : #'as yet unclassified' }
@@ -50,7 +50,7 @@ GtOpenAIMessage >> annotations [
 		ifNil: [ annotations := GtOpenAIAnnotationsGroup
 					withAll: ((content select: [ :aValue | (aValue at: 'type') = 'text' ])
 							flatCollect: [ :aValue | 
-								(aValue at: #text at: #annotations)
+								((aValue at: 'text') at: 'annotations')
 									collect: [ :anAnnotation | 
 										(GtOpenAIAnnotation from: anAnnotation)
 											client: self client;
@@ -138,7 +138,7 @@ GtOpenAIMessage >> contentText [
 	^ (content isKindOf: String)
 		ifTrue: [ content ]
 		ifFalse: [ ''
-				join: (content collect: [ :aValue | (aValue at: #text at: #value) ifNil: [ '' ] ]) ]
+				join: (content collect: [ :aValue | ((aValue at: 'text') at: 'value') ifNil: [ '' ] ]) ]
 ]
 
 { #category : #accessing }
