@@ -4431,6 +4431,9 @@ category: 'as yet unclassified'
 method: GtLlmActionChat
 gtInstanceFor: aView
 	<gtView>
+	
+	self gtDo: [] gemstoneDo: [ ^ aView empty ].
+
 	^ aView forward
 		title: 'Instance';
 		priority: 2;
@@ -6870,7 +6873,7 @@ annotations
 		ifNil: [ annotations := GtOpenAIAnnotationsGroup
 					withAll: ((content select: [ :aValue | (aValue at: 'type') = 'text' ])
 							flatCollect: [ :aValue | 
-								(aValue at: #text at: #annotations)
+								((aValue at: 'text') at: 'annotations')
 									collect: [ :anAnnotation | 
 										(GtOpenAIAnnotation from: anAnnotation)
 											client: self client;
@@ -6974,7 +6977,7 @@ contentText
 	^ (content isKindOf: String)
 		ifTrue: [ content ]
 		ifFalse: [ ''
-				join: (content collect: [ :aValue | (aValue at: #text at: #value) ifNil: [ '' ] ]) ]
+				join: (content collect: [ :aValue | ((aValue at: 'text') at: 'value') ifNil: [ '' ] ]) ]
 %
 
 category: 'accessing'
@@ -7211,6 +7214,30 @@ textBlock
 
 !		Instance methods for 'GtOpenAIBlogPostMessage'
 
+category: 'trait-TGtActionMessage'
+method: GtOpenAIBlogPostMessage
+actionModel
+	^ (self chat tutor actionNamed: self action)
+		ifNil: [ self isUserRole
+				ifTrue: [ (self chat descendantOf: self)
+						ifNotNil: [ :aDescendant | aDescendant actionModel ] ]
+				ifFalse: [ nil ] ]
+%
+
+category: 'trait-TGtActionMessage'
+method: GtOpenAIBlogPostMessage
+contentSummary
+	^ self action
+%
+
+category: 'trait-TGtActionMessage'
+method: GtOpenAIBlogPostMessage
+gtContentFor: aView
+	<gtView>
+	<gtLlmMessageView>
+	^ aView empty
+%
+
 category: 'views'
 method: GtOpenAIBlogPostMessage
 gtPostFor: aView
@@ -7223,6 +7250,32 @@ gtPostFor: aView
 		title: 'Post';
 		priority: 1;
 		text: [ json at: 'Post' ]
+%
+
+category: 'trait-TGtActionMessage'
+method: GtOpenAIBlogPostMessage
+gtPromoteToExampleActionFor: anAction
+	<gtLlmAction>
+	self isAssistantRole ifFalse: [ ^ anAction noAction ].
+
+	^ anAction dropdown
+		priority: 5;
+		label: 'Promote example';
+		content: [ :aButton | 
+			| action example |
+			action := self chat tutor actionNamed: self action.
+			example := GtLlmTutorActionExample new
+					input: self ancestor contentJson;
+					output: self contentJson.
+			action addExample: example.
+			action persist.
+			example asGtMagritteViewModel asElement ]
+%
+
+category: 'trait-TGtActionMessage'
+method: GtOpenAIBlogPostMessage
+textBlock
+	^ self contentJson at: 'Text' ifAbsent: [ '' ]
 %
 
 ! Class implementation for 'GtLlmFunctionToolCall'
@@ -11749,6 +11802,7 @@ method: GtLlmActionMessageWithInstanceSerializer
 gtInstanceFor: aView
 	<gtView>
 	self instance ifNil: [ ^ aView empty ].
+	self gtDo: [] gemstoneDo: [ ^ aView empty ].
 
 	^ aView forward
 		title: 'Instance';
@@ -13007,9 +13061,8 @@ category: 'as yet unclassified'
 method: GtOpenAIAssistantProvider
 getMessages
 	^ thread updateMessages
-		collect: [ :aThreadMessage | 
-			self assistantMessageClass new merge: aThreadMessage.
-			aThreadMessage ]
+		collect: [ :aThreadMessage |
+			self assistantMessageClass new merge: aThreadMessage ]
 %
 
 category: 'as yet unclassified'
@@ -13917,10 +13970,10 @@ persist
 	| methodSource |
 	methodSource := self asMethodSource.
 
-	"TODO: RBConfigurableFormatter is defined as part of Rowan.
+	"TODO: RBConfigurableFormatter and RBParser are defined as part of Rowan.
 	It needs to be exported to .gs to be usable in GemStone"
 	self definingMethod methodClass
-		compile: (#RBConfigurableFormatter asClass format: (RBParser parseMethod: methodSource)).
+		compile: (#RBConfigurableFormatter asClass format: (#RBParser asClass parseMethod: methodSource)).
 	definingMethod := self definingMethod methodClass
 			>> self definingMethod selector
 %
@@ -13982,6 +14035,17 @@ tutor: anObject
 
 ! Class implementation for 'GtLlmTutorActionExample'
 
+!		Class methods for 'GtLlmTutorActionExample'
+
+category: 'instance creation'
+classmethod: GtLlmTutorActionExample
+new
+	"Answer an initalised instance of the receiver.
+	For GemStone compatibility."
+
+	^ self basicNew initialize.
+%
+
 !		Instance methods for 'GtLlmTutorActionExample'
 
 category: 'accessing'
@@ -14038,6 +14102,18 @@ asInstructionPiece
 ' , self outputJson
 								, '
 ```') asInstructionPiece))
+%
+
+category: 'asserting'
+method: GtLlmTutorActionExample
+assert: aBoolean description: aString
+  | str | 
+  aBoolean == true  ifFalse: [
+    str := aString .
+    str _isExecBlock ifTrue:[ str := aString value ].
+    self logFailure: str.
+    ^ GtGemStoneAssertionFailure signal: str
+  ]
 %
 
 category: 'accessing'
