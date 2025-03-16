@@ -10,8 +10,9 @@ GtOpenAIActionMessage >> gtTextFor: aView [
 		title: 'Text';
 		priority: 1;
 		styler: (BlCompositeStyler new
-				stylers: {GtLlmMessageStyler new
+				stylers: {
+					GtLlmMessageStyler new
 							threadMessageViewModel: (GtLlmNewThreadMessageViewModel new threadMessage: GtLlmNewThreadMessage new).
-						GtLlmThreadMessageStyler new annotations: self annotations});
+					GtLlmThreadMessageStyler new annotations: self annotations});
 		text: [ self textBlock ]
 ]

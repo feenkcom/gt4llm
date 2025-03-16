@@ -3,7 +3,6 @@ Extension { #name : #GtOpenAIBlogPostMessage }
 { #category : #'*Gt4OpenAI-GToolkit' }
 GtOpenAIBlogPostMessage >> gtActionFor: aView [
 	<gtView>
-	<gtLlmMessageView>
 	| view |
 	self action isEmptyOrNil ifTrue: [ ^ aView empty ].
 
@@ -26,6 +25,7 @@ GtOpenAIBlogPostMessage >> gtActionFor: aView [
 GtOpenAIBlogPostMessage >> gtDiffFor: aView [
 	<gtView>
 	<gtLlmMessageView>
+	self isUserRole ifTrue: [ ^ aView empty ].
 	(self contentJson includesKey: 'Post') ifFalse: [ ^ aView empty ].
 	^ aView diff
 		title: 'Diff';
