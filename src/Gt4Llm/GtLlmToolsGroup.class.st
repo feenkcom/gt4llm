@@ -12,7 +12,7 @@ GtLlmToolsGroup >> gtItemsFor: aView [
 		title: 'Items';
 		items: [ items ];
 		column: 'Index'
-			text: [ :each :index | index asRopedText foreground: Color gray ]
+			text: [ :each :index | index asRopedText foreground: (GtPhlowColor named: #gray) asColor ]
 			width: 45;
 		column: 'Value' text: [ :each | each gtDisplayString ]
 ]
