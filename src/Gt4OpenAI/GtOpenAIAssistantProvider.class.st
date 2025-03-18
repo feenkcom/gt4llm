@@ -166,6 +166,15 @@ GtOpenAIAssistantProvider >> gtFilesFor: aView [
 		view: #gtFilesFor:
 ]
 
+{ #category : #views }
+GtOpenAIAssistantProvider >> gtToolsFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Tools';
+		object: [ tools ];
+		view: #gtItemsFor:
+]
+
 { #category : #'as yet unclassified' }
 GtOpenAIAssistantProvider >> initialize [
 	super initialize.
