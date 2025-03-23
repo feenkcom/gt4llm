@@ -131,7 +131,7 @@ GtLlmApiKeyCardElement >> makeTestingButton [
 							label: (errorText asRopedText foreground: BrGlamorousColors errorBackgroundColor).
 						testingLabel aptitude - BrGlamorousWithExplicitDropdownAptitude.
 						testingLabel
-							addAptitude: (BrGlamorousWithTooltipAptitude
+							addAptitude: (BrGlamorousWithExplicitTooltipAptitude
 									content: [ | aContainer |
 										aContainer := BlElement new
 												size: 400 @ 400;

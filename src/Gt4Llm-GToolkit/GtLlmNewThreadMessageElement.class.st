@@ -31,11 +31,10 @@ GtLlmNewThreadMessageElement >> buildAttachButton [
 		aptitude: BrGlamorousButtonWithIconAptitude new
 				+ (BrGlamorousWithExplicitDropdownAptitude
 						handle: [ BrButton new
-								aptitude: BrGlamorousButtonWithIconAptitude - BrGlamorousButtonWithLabelTooltipAptitude
+								aptitude: BrGlamorousButtonWithIconAptitude - BrGlamorousButtonWithLabelTooltipAptitude2
 										- BrGlamorousButtonExteriorAptitude;
 								icon: BrGlamorousVectorIcons changes ]
-						content: [ 
-							BrFileSelector new
+						content: [ BrFileSelector new
 								folder: FileLocator home;
 								padding: (BlInsets all: 8);
 								fileFilterBlock: [ :aFileReference | 

@@ -41,7 +41,7 @@ GtLlmThreadMessageHeaderElement >> addSenderElement [
 { #category : #accessing }
 GtLlmThreadMessageHeaderElement >> addTimeElement [
 	| timeTooltip |
-	timeTooltip := BrGlamorousWithLabelTooltipAptitude new
+	timeTooltip := BrGlamorousWithExplicitTooltipAptitude
 			text: (String
 					streamContents: [ :s | self threadMessageViewModel createdAt asLocal printSeparateDateAndTimeOn: s ]).
 

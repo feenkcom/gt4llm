@@ -114,7 +114,7 @@ GtLlmThreadMessageElement >> initializeSenderElement [
 
 { #category : #initialization }
 GtLlmThreadMessageElement >> initializeTimeElement [
-	timeTooltip := BrGlamorousWithLabelTooltipAptitude new text: 'unknown time'.
+	timeTooltip := BrGlamorousWithExplicitTooltipAptitude text: 'unknown time'.
 	timeElement := BrLabel new
 			updatingDateAndTimeModel;
 			fitContent;
