@@ -12,7 +12,7 @@ Class {
 		'completedAt',
 		'incompleteAt'
 	],
-	#category : 'Gt4OpenAI'
+	#category : #Gt4OpenAI
 }
 
 { #category : #'as yet unclassified' }
@@ -138,7 +138,14 @@ GtOpenAIMessage >> contentText [
 	^ (content isKindOf: String)
 		ifTrue: [ content ]
 		ifFalse: [ ''
-				join: (content collect: [ :aValue | ((aValue at: 'text') at: 'value') ifNil: [ '' ] ]) ]
+				join: (content
+						collect: [ :aValue | 
+							(aValue at: 'text')
+								ifNil: [ '' ]
+								ifNotNil: [ :aTextObject | 
+									(aTextObject isKindOf: String)
+										ifTrue: [ aTextObject ]
+										ifFalse: [ (aTextObject at: 'value') ifNil: [ '' ] ] ] ]) ]
 ]
 
 { #category : #accessing }
@@ -193,7 +200,7 @@ GtOpenAIMessage >> gtMessageFilesFor: aView [
 
 { #category : #testing }
 GtOpenAIMessage >> hasResponse [
-	^ content anySatisfy: [ :aValue | (aValue at: #text at: #value) isNotEmpty ]
+	^ self contentText isNotEmpty
 ]
 
 { #category : #accessing }
