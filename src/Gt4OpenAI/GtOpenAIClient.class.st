@@ -8,7 +8,7 @@ Class {
 	#classVars : [
 		'ApiKeyFile'
 	],
-	#category : 'Gt4OpenAI'
+	#category : #Gt4OpenAI
 }
 
 { #category : #accessing }
@@ -202,6 +202,15 @@ GtOpenAIClient >> generateEmbeddingsWithModel: aString andInput: anInputString [
 		model: aString;
 		input: anInputString;
 		perform
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAIClient >> generateResponseWithModel: aString andMessages: aCollection [
+	^ GtOpenAIGenerateResponseAPIClient new
+		client: self;
+		model: aString;
+		messages: aCollection;
+		perform 
 ]
 
 { #category : #accessing }

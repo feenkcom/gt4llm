@@ -34,7 +34,7 @@ GtLlmNewActionThreadMessageElement >> buildAttachButton [
 		aptitude: BrGlamorousButtonWithIconAptitude new
 				+ (BrGlamorousWithExplicitDropdownAptitude
 						handle: [ BrButton new
-								aptitude: BrGlamorousButtonWithIconAptitude - BrGlamorousButtonWithLabelTooltipAptitude
+								aptitude: BrGlamorousButtonWithIconAptitude - BrGlamorousButtonWithLabelTooltipAptitude2
 										- BrGlamorousButtonExteriorAptitude;
 								icon: BrGlamorousVectorIcons changes ]
 						content: [ :aDropdown | 
