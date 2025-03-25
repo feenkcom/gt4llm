@@ -85,7 +85,6 @@ GtOpenAIResponseProvider >> tools: anObject [
 
 { #category : #'as yet unclassified' }
 GtOpenAIResponseProvider >> triggerAssistant [
-	| result |
 	self chat signalRunHasStarted.
 
 	self executeWait.
