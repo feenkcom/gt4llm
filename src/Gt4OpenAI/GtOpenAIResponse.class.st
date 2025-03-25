@@ -74,6 +74,11 @@ GtOpenAIResponse >> error: anObject [
 	error := anObject
 ]
 
+{ #category : #'as yet unclassified' }
+GtOpenAIResponse >> hasToolCalls [
+	^ self toolCalls isNotEmpty
+]
+
 { #category : #accessing }
 GtOpenAIResponse >> id [
 	^ id
@@ -212,6 +217,18 @@ GtOpenAIResponse >> text [
 { #category : #accessing }
 GtOpenAIResponse >> text: anObject [
 	text := anObject
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAIResponse >> toolCalls [
+	^ self output
+		select: [ :aMessage | (aMessage rawData at: 'type') = 'function_call' ]
+		thenCollect: [ :aMessage | 
+			GtLlmFunctionToolCall new
+				rawData: aMessage rawData;
+				id: (aMessage rawData at: 'call_id');
+				name: (aMessage rawData at: 'name');
+				arguments: (STONJSON fromString: (aMessage rawData at: 'arguments')) ]
 ]
 
 { #category : #accessing }
