@@ -54,6 +54,20 @@ GtLlmFunctionTool >> function [
 		'strict' -> true} asDictionary
 ]
 
+{ #category : #accessing }
+GtLlmFunctionTool >> functionResponse [
+	^ {'name' -> name.
+		'type' -> type.
+		'description' -> description.
+		'parameters'
+			-> {'type' -> 'object'.
+					'properties'
+						-> (parameters collect: [ :aName | aName -> {'type' -> 'string'} asDictionary ])
+								asDictionary.
+					'required' -> parameters.
+					'additionalProperties' -> false} asDictionary} asDictionary
+]
+
 { #category : #'as yet unclassified' }
 GtLlmFunctionTool >> gtFunctionFor: aView [
 	<gtView>

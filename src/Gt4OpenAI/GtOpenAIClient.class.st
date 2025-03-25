@@ -214,6 +214,18 @@ GtOpenAIClient >> generateResponseWithModel: aString andMessages: aCollection [
 		perform 
 ]
 
+{ #category : #'as yet unclassified' }
+GtOpenAIClient >> generateResponseWithModel: aString messages: aCollection instructions: anInstruction tools: aCollectionOfTools andFormat: aFormat [
+	^ GtOpenAIGenerateResponseAPIClient new
+		client: self;
+		model: aString;
+		messages: aCollection;
+		instructions: anInstruction;
+		tools: aCollectionOfTools;
+		format: aFormat;
+		perform 
+]
+
 { #category : #accessing }
 GtOpenAIClient >> get: aUrl [
 	^ self get: aUrl withParams: {}
