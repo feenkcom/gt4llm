@@ -71,6 +71,13 @@ GtLlmToolMessage >> output: anObject [
 	output := anObject
 ]
 
+{ #category : #'as yet unclassified' }
+GtLlmToolMessage >> serializeResponse [
+	^ {'type' -> 'function_call_output'.
+		'call_id' -> toolCall id.
+		'output' -> self output} asDictionary
+]
+
 { #category : #accessing }
 GtLlmToolMessage >> toolCall [
 	^ toolCall
