@@ -28,6 +28,7 @@ GtOpenAIClient class >> apiKeyFileContents [
 
 { #category : #accessing }
 GtOpenAIClient class >> defaultApiKeyFile [
+	<gtExample>
 	^ FileLocator home / '.secrets' / 'open-ai-api-key.txt'
 ]
 
