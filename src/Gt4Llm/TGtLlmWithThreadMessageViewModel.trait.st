@@ -6,6 +6,10 @@ Trait {
 	#category : #Gt4Llm
 }
 
+{ #category : #accessing }
+TGtLlmWithThreadMessageViewModel >> beforeThreadMessageViewModelReset [
+]
+
 { #category : #'private - hooks' }
 TGtLlmWithThreadMessageViewModel >> onThreadMessageViewModelChanged [
 ]
@@ -28,6 +32,7 @@ TGtLlmWithThreadMessageViewModel >> threadMessageViewModel [
 TGtLlmWithThreadMessageViewModel >> threadMessageViewModel: anObject [
 	threadMessageViewModel = anObject ifTrue: [ ^ self ].
 	threadMessageViewModel ifNotNil: [ :anOldMessage | 
+		self beforeThreadMessageViewModelReset.
 		self unsubscribeFromThreadMessageViewModel ].
 	threadMessageViewModel := anObject.
 	self onThreadMessageViewModelChanged.
