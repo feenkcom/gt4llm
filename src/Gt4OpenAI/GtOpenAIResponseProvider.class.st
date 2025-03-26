@@ -3,8 +3,7 @@ Class {
 	#superclass : #GtOpenAIProvider,
 	#instVars : [
 		'tools',
-		'instructions',
-		'assistantWorking'
+		'instructions'
 	],
 	#category : #Gt4OpenAI
 }
@@ -42,8 +41,7 @@ GtOpenAIResponseProvider >> gtToolsFor: aView [
 GtOpenAIResponseProvider >> initialize [
 	super initialize.
 
-	tools := self defaultTools.
-	assistantWorking := false
+	tools := self defaultTools
 ]
 
 { #category : #accessing }
@@ -75,13 +73,6 @@ GtOpenAIResponseProvider >> performToolCallsIn: result [
 	self chat signalRunHasUpdated.
 
 	^ self executeWait
-]
-
-{ #category : #'as yet unclassified' }
-GtOpenAIResponseProvider >> status [
-	^ assistantWorking
-		ifTrue: [ GtLlmAssistantChatWorkingStatus new ]
-		ifFalse: [ GtLlmAssistantChatReadyStatus new ]
 ]
 
 { #category : #accessing }

@@ -3,7 +3,8 @@ Class {
 	#superclass : #GtLlmProvider,
 	#instVars : [
 		'model',
-		'client'
+		'client',
+		'assistantWorking'
 	],
 	#category : #Gt4OpenAI
 }
@@ -33,6 +34,7 @@ GtOpenAIProvider >> initialize [
 	super initialize.
 	
 	model := self defaultModel.
+	assistantWorking := false.
 	
 	self initializeClient
 ]
@@ -75,13 +77,16 @@ GtOpenAIProvider >> sendMessage: aMessage [
 
 { #category : #'as yet unclassified' }
 GtOpenAIProvider >> status [
-	^ GtLlmAssistantChatReadyStatus new
+	^ assistantWorking
+		ifTrue: [ GtLlmAssistantChatWorkingStatus new ]
+		ifFalse: [ GtLlmAssistantChatReadyStatus new ]
 ]
 
 { #category : #'as yet unclassified' }
 GtOpenAIProvider >> triggerAssistant [
 	| result |
 	self chat signalRunHasStarted.
+	assistantWorking := true.
 
 	result := client
 			completeChatWithModel: self model
@@ -90,5 +95,6 @@ GtOpenAIProvider >> triggerAssistant [
 	self chat
 		addMessage: (self assistantMessageClass new content: result choices first message content).
 
+	assistantWorking := false.
 	self chat signalRunIsDone
 ]
