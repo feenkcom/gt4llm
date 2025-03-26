@@ -123,9 +123,10 @@ GtLlmBasicThreadMessageViewModel >> onThreadMessageChanged [
 	self notifyThreadMessageViewModelChanged
 ]
 
-{ #category : #accessing }
-GtLlmBasicThreadMessageViewModel >> pipeline [
-	^ self threadMessage pipeline
+{ #category : #'as yet unclassified' }
+GtLlmBasicThreadMessageViewModel >> padding [
+	self senderText = 'Assistant' ifTrue: [ ^ BlInsets right: 50 ].
+	^ BlInsets left: 50
 ]
 
 { #category : #accessing }
