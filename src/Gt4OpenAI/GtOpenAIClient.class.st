@@ -28,6 +28,7 @@ GtOpenAIClient class >> apiKeyFileContents [
 
 { #category : #accessing }
 GtOpenAIClient class >> defaultApiKeyFile [
+	<gtExample>
 	^ FileLocator home / '.secrets' / 'open-ai-api-key.txt'
 ]
 
@@ -210,6 +211,18 @@ GtOpenAIClient >> generateResponseWithModel: aString andMessages: aCollection [
 		client: self;
 		model: aString;
 		messages: aCollection;
+		perform 
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAIClient >> generateResponseWithModel: aString messages: aCollection instructions: anInstruction tools: aCollectionOfTools andFormat: aFormat [
+	^ GtOpenAIGenerateResponseAPIClient new
+		client: self;
+		model: aString;
+		messages: aCollection;
+		instructions: anInstruction;
+		tools: aCollectionOfTools;
+		format: aFormat;
 		perform 
 ]
 
