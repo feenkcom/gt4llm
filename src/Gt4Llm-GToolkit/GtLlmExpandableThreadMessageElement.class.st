@@ -21,6 +21,11 @@ GtLlmExpandableThreadMessageElement class >> newForChatList [
 		collapse
 ]
 
+{ #category : #accessing }
+GtLlmExpandableThreadMessageElement >> beforeThreadMessageViewModelReset [
+	self margin: self margin - threadMessageViewModel padding
+]
+
 { #category : #'initialization ' }
 GtLlmExpandableThreadMessageElement >> initialize [
 	super initialize.
@@ -67,10 +72,10 @@ GtLlmExpandableThreadMessageElement >> onExpanded [
 
 { #category : #'private - hooks' }
 GtLlmExpandableThreadMessageElement >> onThreadMessageViewModelChanged [
-	oneLineThreadMessageElement
-		threadMessageViewModel: threadMessageViewModel.
+	oneLineThreadMessageElement threadMessageViewModel: threadMessageViewModel.
 	threadMessageElement threadMessageViewModel: threadMessageViewModel.
-	self expanded: threadMessageViewModel isExpanded
+	self expanded: threadMessageViewModel isExpanded.
+	self margin: self margin + threadMessageViewModel padding
 ]
 
 { #category : #accessing }

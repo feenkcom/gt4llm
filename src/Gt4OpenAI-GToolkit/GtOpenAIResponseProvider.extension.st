@@ -10,11 +10,12 @@ GtOpenAIResponseProvider >> executeWait [
 			tools: tools
 			andFormat: format.
 
-	result hasToolCalls
-		ifTrue: [ self chat signalRunHasUpdated.
-			^ self performToolCallsIn: result ].
+	result hasToolCalls ifTrue: [ ^ self performToolCallsIn: result ].
 
 	self chat
-		addMessage: (self assistantMessageClass new merge: result output first) ]
+		addMessage: (self assistantMessageClass new merge: result output first).
+		
+	self chat signalRunIsDone.
+	assistantWorking := false ]
 		asAsyncPromise
 ]

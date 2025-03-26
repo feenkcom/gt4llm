@@ -69,6 +69,8 @@ GtOpenAIResponseProvider >> performToolCallsIn: result [
 					addMessage: (GtLlmToolMessage new
 							toolCall: aToolCall;
 							output: toolOutput) ].
+	
+	self chat signalRunHasUpdated.
 
 	^ self executeWait
 ]
@@ -86,8 +88,7 @@ GtOpenAIResponseProvider >> tools: anObject [
 { #category : #'as yet unclassified' }
 GtOpenAIResponseProvider >> triggerAssistant [
 	self chat signalRunHasStarted.
+	assistantWorking := true.
 
-	self executeWait.
-
-	self chat signalRunIsDone
+	self executeWait
 ]
