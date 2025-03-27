@@ -4,6 +4,11 @@ Class {
 	#category : #'Gt4Llm-GToolkit'
 }
 
+{ #category : #'as yet unclassified' }
+GtLlmActionChatViewModel >> asElement [
+	^ GtLlmChatElement new chatViewModel: self
+]
+
 { #category : #accessing }
 GtLlmActionChatViewModel >> initialize [
 	super initialize.
