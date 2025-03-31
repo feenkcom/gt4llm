@@ -15,6 +15,16 @@ GtCodeSnippetTutor >> chatOnSnippet: aSnippet [
 ]
 
 { #category : #'as yet unclassified' }
+GtCodeSnippetTutor >> codeSnippetFormatDescription [
+	<gtLlmTutorFormat>
+	^ GtLlmTutorFormatDescription new
+		name: 'Code Snippet';
+		priority: 2;
+		format: 'Smalltalk code';
+		example: 'Point x: 1 y: 10'
+]
+
+{ #category : #'as yet unclassified' }
 GtCodeSnippetTutor >> defaultDescription [
 	^ 'You are an assistant for code snippets.'
 ]
@@ -27,7 +37,24 @@ GtCodeSnippetTutor >> defaultProviderStencil [
 		assistantMessageClass: GtOpenAIActionMessage;
 		userMessageClass: GtOpenAIActionMessage;
 		addTool: self lookupClassTool;
+		addTool: self lookupPageTool;
 		instructions: anInstructionFormat asInstructionPiece instructionString ]
+]
+
+{ #category : #'as yet unclassified' }
+GtCodeSnippetTutor >> explanationAction [
+	<gtLlmTutorAction>
+	^ GtLlmTutorAction new
+		name: 'Explain the code';
+		priority: 1;
+		description: 'Explains the code snippet using the text field. Look up classes and documentation as needed to generate an answer.';
+		examples: {GtLlmTutorActionExample new
+					input: {'Action' -> 'Explain the code'.
+							'Code Snippet' -> '15 * 30'} asDictionary;
+					output: {'Action' -> 'Explain the code'.
+							'Text'
+								-> 'The snippet performs integer multiplication on the two numbers `15` and `30`. The result should be `450`.'.
+							'Code Snippet' -> '15 * 30'} asDictionary}
 ]
 
 { #category : #'as yet unclassified' }
