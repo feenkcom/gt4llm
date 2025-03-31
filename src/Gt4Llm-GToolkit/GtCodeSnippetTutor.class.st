@@ -27,6 +27,7 @@ GtCodeSnippetTutor >> defaultProviderStencil [
 		assistantMessageClass: GtOpenAIActionMessage;
 		userMessageClass: GtOpenAIActionMessage;
 		addTool: self lookupClassTool;
+		addTool: self lookupPageTool;
 		instructions: anInstructionFormat asInstructionPiece instructionString ]
 ]
 
