@@ -8,5 +8,14 @@ GtPharoSnippetCoder >> initializeLlmAddOnsFor: anAst into: addOns [
 		icon: BrGlamorousVectorIcons openAi
 		stencil: [ :aCoderUIModel :anElement | 
 			GtLlmEmbeddedChatElement new
-				chatViewModel: (GtCodeSnippetTutor new chatOnSnippet: self) asViewModel ]
+				chatViewModel: self llmChat asViewModel ]
+]
+
+{ #category : #'*Gt4OpenAI-GToolkit' }
+GtPharoSnippetCoder >> llmChat [
+	^ self
+		attributeNamed: #llmChat
+		ifAbsent: [ self
+				attributeNamed: #llmChat
+				put: (GtCodeSnippetTutor new chatOnSnippet: self) ]
 ]
