@@ -1,0 +1,55 @@
+Class {
+	#name : #GtCodeSnippetTutor,
+	#superclass : #GtLlmTutor,
+	#category : #'Gt4Llm-GToolkit'
+}
+
+{ #category : #'as yet unclassified' }
+GtCodeSnippetTutor >> chatOnSnippet: aSnippet [
+	^ self createChat
+		onInstance: (GtLlmSerializableValueHolder new
+				name: 'Code Snippet';
+				content: aSnippet;
+				serializer: [ :aModel | aModel sourceCode currentSourceText text asString ];
+				updater: [ :aModel :aText | aModel text: aText ])
+]
+
+{ #category : #'as yet unclassified' }
+GtCodeSnippetTutor >> defaultDescription [
+	^ 'You are an assistant for code snippets.'
+]
+
+{ #category : #'as yet unclassified' }
+GtCodeSnippetTutor >> defaultProviderStencil [
+	^ [ :anInstructionFormat | 
+	GtOpenAIAssistantProvider withApiKeyFromFile
+		format: anInstructionFormat asJsonSchema;
+		assistantMessageClass: GtOpenAIActionMessage;
+		userMessageClass: GtOpenAIActionMessage;
+		addTool: self lookupClassTool;
+		instructions: anInstructionFormat asInstructionPiece instructionString ]
+]
+
+{ #category : #'as yet unclassified' }
+GtCodeSnippetTutor >> lookupClassTool [
+	^ GtLlmFunctionTool new
+		name: 'lookupClass';
+		parameters: {'className'};
+		description: 'Looks up documentation for a class by name and returns its content in Markdown format.';
+		block: [ :arguments | 
+			(arguments first asClassIfAbsent: [ nil ])
+				ifNil: [ 'Class not found' ]
+				ifNotNil: [ :aClass | aClass instanceSide organization classComment ] ]
+]
+
+{ #category : #'as yet unclassified' }
+GtCodeSnippetTutor >> lookupPageTool [
+	^ GtLlmFunctionTool new
+		name: 'lookupDocumentationPage';
+		parameters: {'pageName'};
+		description: 'Looks up a documentation page by name and returns its content in Markdown format. `pageName` may be a substring. If multiple pages are found, only the first one will be returned.';
+		block: [ :arguments | 
+			(LeDatabase gtBook asyncPagesForWord: arguments first) toArray wait
+				ifEmpty: [ 'No page found' ]
+				ifNotEmpty: [ :pages | pages first asMarkdownPage ] ]
+]

@@ -21,5 +21,5 @@ GtLlmNewActionThreadMessageViewModel >> currentAction: anObject [
 
 { #category : #accessing }
 GtLlmNewActionThreadMessageViewModel >> elementClass [
-	^ GtLlmNewActionThreadMessageElement
+	^ GtLlmEmbeddedNewActionThreadMessageElement
 ]
