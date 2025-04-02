@@ -1,7 +1,7 @@
 Class {
 	#name : #GtOpenAICoderActionMessage,
 	#superclass : #GtOpenAIActionMessage,
-	#category : #Gt4OpenAI
+	#category : #'Gt4OpenAI-GToolkit'
 }
 
 { #category : #'as yet unclassified' }
