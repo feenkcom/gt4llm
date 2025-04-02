@@ -1,11 +1,6 @@
-Extension { #name : 'GtLlmChatMessage' }
+Extension { #name : #GtLlmChatMessage }
 
-{ #category : '*Gt4Llm-Gemstone' }
-GtLlmChatMessage class >> isAbstract [
-	^ self name = #GtLlmChatMessage
-]
-
-{ #category : '*Gt4Llm-Gemstone' }
+{ #category : #'*Gt4Llm-Gemstone' }
 GtLlmChatMessage >> gtContentFor: aView [
 	<gtView>
 	<gtLlmMessageView>
@@ -15,7 +10,7 @@ GtLlmChatMessage >> gtContentFor: aView [
 		text: [ self contentText ]
 ]
 
-{ #category : '*Gt4Llm-Gemstone' }
+{ #category : #'*Gt4Llm-Gemstone' }
 GtLlmChatMessage >> gtJsonFor: aView [
 	<gtView>
 	<gtLlmMessageView>
@@ -24,4 +19,9 @@ GtLlmChatMessage >> gtJsonFor: aView [
 	^ (self contentJson gtItemsFor: aView)
 		title: 'JSON data';
 		priority: 4.5
+]
+
+{ #category : #'*Gt4Llm-Gemstone' }
+GtLlmChatMessage class >> isAbstract [
+	^ self name = #GtLlmChatMessage
 ]

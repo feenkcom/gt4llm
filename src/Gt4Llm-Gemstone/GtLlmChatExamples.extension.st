@@ -1,13 +1,13 @@
-Extension { #name : 'GtLlmChatExamples' }
+Extension { #name : #GtLlmChatExamples }
 
-{ #category : '*Gt4Llm-Gemstone' }
+{ #category : #'*Gt4Llm-Gemstone' }
 GtLlmChatExamples >> assert: aBoolean [
 	self
 		assert: aBoolean
 		description: 'assert is not true'
 ]
 
-{ #category : '*Gt4Llm-Gemstone' }
+{ #category : #'*Gt4Llm-Gemstone' }
 GtLlmChatExamples >> assert: aBoolean description: aString [
   | str | 
   aBoolean == true  ifFalse: [
@@ -18,7 +18,7 @@ GtLlmChatExamples >> assert: aBoolean description: aString [
   ]
 ]
 
-{ #category : '*Gt4Llm-Gemstone' }
+{ #category : #'*Gt4Llm-Gemstone' }
 GtLlmChatExamples >> assert: actual equals: expected [
 	self
 		assert: actual = expected

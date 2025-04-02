@@ -72,17 +72,6 @@ GtLlmTutorActionExample >> asInstructionPiece [
 ```') asInstructionPiece))
 ]
 
-{ #category : #asserting }
-GtLlmTutorActionExample >> assert: aBoolean description: aString [
-  | str | 
-  aBoolean == true  ifFalse: [
-    str := aString .
-    str _isExecBlock ifTrue:[ str := aString value ].
-    self logFailure: str.
-    ^ GtGemStoneAssertionFailure signal: str
-  ]
-]
-
 { #category : #accessing }
 GtLlmTutorActionExample >> formatReferences [
 	^ inputReferences, outputReferences
