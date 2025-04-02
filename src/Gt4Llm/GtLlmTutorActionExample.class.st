@@ -1,6 +1,6 @@
 Class {
-	#name : #GtLlmTutorActionExample,
-	#superclass : #Object,
+	#name : 'GtLlmTutorActionExample',
+	#superclass : 'Object',
 	#instVars : [
 		'input',
 		'output',
@@ -12,7 +12,7 @@ Class {
 	#category : 'Gt4Llm'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 GtLlmTutorActionExample class >> new [
 	"Answer an initalised instance of the receiver.
 	For GemStone compatibility."
@@ -20,17 +20,17 @@ GtLlmTutorActionExample class >> new [
 	^ self basicNew initialize.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutorActionExample >> action [
 	^ action
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutorActionExample >> action: anObject [
 	action := anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 GtLlmTutorActionExample >> asExpressionSource [
 	^ self class name asString
 		, ' new
@@ -50,7 +50,7 @@ GtLlmTutorActionExample >> asExpressionSource [
 		, ' } asDictionary'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutorActionExample >> asInstructionPiece [
 	^ GtLlmInstructionSection new
 		source: self;
@@ -72,23 +72,12 @@ GtLlmTutorActionExample >> asInstructionPiece [
 ```') asInstructionPiece))
 ]
 
-{ #category : #asserting }
-GtLlmTutorActionExample >> assert: aBoolean description: aString [
-  | str | 
-  aBoolean == true  ifFalse: [
-    str := aString .
-    str _isExecBlock ifTrue:[ str := aString value ].
-    self logFailure: str.
-    ^ GtGemStoneAssertionFailure signal: str
-  ]
-]
-
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutorActionExample >> formatReferences [
 	^ inputReferences, outputReferences
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutorActionExample >> gtInputFormatReferencesFor: aView [
 	<gtView>
 	^ aView columnedList
@@ -99,7 +88,7 @@ GtLlmTutorActionExample >> gtInputFormatReferencesFor: aView [
 		column: 'Format' text: #format
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutorActionExample >> gtInstructionFor: aView [
 	<gtView>
 	^ aView forward
@@ -109,7 +98,7 @@ GtLlmTutorActionExample >> gtInstructionFor: aView [
 		view: #gtInstructionFor:
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutorActionExample >> gtOutputFormatReferencesFor: aView [
 	<gtView>
 	^ aView columnedList
@@ -120,7 +109,7 @@ GtLlmTutorActionExample >> gtOutputFormatReferencesFor: aView [
 		column: 'Format' text: #format
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutorActionExample >> initialize [
 	super initialize.
 	
@@ -129,77 +118,77 @@ GtLlmTutorActionExample >> initialize [
 	self markVerified
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutorActionExample >> input [
 	^ input
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutorActionExample >> input: anObject [
 	input := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutorActionExample >> inputJson [
 	^ STONJSON toStringPretty: self input
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutorActionExample >> inputJson: aJson [
 	^ self input: (STONJSON fromString: aJson)
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutorActionExample >> inputReferences [
 	^ inputReferences
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutorActionExample >> inputReferences: anObject [
 	inputReferences := anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 GtLlmTutorActionExample >> markUnverified [
 	unverified := true
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 GtLlmTutorActionExample >> markVerified [
 	unverified := false
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutorActionExample >> output [
 	^ output
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutorActionExample >> output: anObject [
 	output := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutorActionExample >> outputJson [
 	^ STONJSON toStringPretty: self output
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutorActionExample >> outputJson: aJson [
 	^ self output: (STONJSON fromString: aJson)
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutorActionExample >> outputReferences [
 	^ outputReferences
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutorActionExample >> outputReferences: anObject [
 	outputReferences := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutorActionExample >> resolveReferences [
 	inputReferences := input associations
 			select: [ :anAssociation | anAssociation value isNotNil ]
@@ -213,17 +202,17 @@ GtLlmTutorActionExample >> resolveReferences [
 					addOutputReference: self action ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutorActionExample >> unverified [
 	^ unverified
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutorActionExample >> unverified: anObject [
 	unverified := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutorActionExample >> verify [
 	unverified ifTrue: [ ^ self ].
 	self
