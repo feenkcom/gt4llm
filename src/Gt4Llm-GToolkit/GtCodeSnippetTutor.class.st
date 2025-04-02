@@ -34,8 +34,8 @@ GtCodeSnippetTutor >> defaultProviderStencil [
 	^ [ :anInstructionFormat | 
 	GtOpenAIAssistantProvider withApiKeyFromFile
 		format: anInstructionFormat asJsonSchema;
-		assistantMessageClass: GtOpenAIActionMessage;
-		userMessageClass: GtOpenAIActionMessage;
+		assistantMessageClass: GtOpenAICoderActionMessage;
+		userMessageClass: GtOpenAICoderActionMessage;
 		addTool: self lookupClassTool;
 		addTool: self lookupPageTool;
 		instructions: anInstructionFormat asInstructionPiece instructionString ]
@@ -79,4 +79,19 @@ GtCodeSnippetTutor >> lookupPageTool [
 			(LeDatabase gtBook asyncPagesForWord: arguments first) toArray wait
 				ifEmpty: [ 'No page found' ]
 				ifNotEmpty: [ :pages | pages first asMarkdownPage ] ]
+]
+
+{ #category : #'as yet unclassified' }
+GtCodeSnippetTutor >> proposalAction [
+	<gtLlmTutorAction>
+	^ GtLlmTutorAction new
+		name: 'Propose code';
+		priority: 3;
+		description: 'Proposes code using the `Code Snippet` field. Look up classes and documentation as needed to generate an answer.';
+		examples: {GtLlmTutorActionExample new
+					input: {'Action' -> 'Propose code'.
+							'Code Snippet' -> '15 * 30 "TODO: subtract 5"'} asDictionary;
+					output: {'Action' -> 'Propose code'.
+							'Text' -> nil.
+							'Code Snippet' -> '(15 * 30) - 5'} asDictionary}
 ]

@@ -13,9 +13,9 @@ GtPharoSnippetCoder >> initializeLlmAddOnsFor: anAst into: addOns [
 
 { #category : #'*Gt4OpenAI-GToolkit' }
 GtPharoSnippetCoder >> llmChat [
-	^ self
+	^" self
 		attributeNamed: #llmChat
 		ifAbsent: [ self
 				attributeNamed: #llmChat
-				put: (GtCodeSnippetTutor new chatOnSnippet: self) ]
+				put: "(GtCodeSnippetTutor new chatOnSnippet: self) "]"
 ]
