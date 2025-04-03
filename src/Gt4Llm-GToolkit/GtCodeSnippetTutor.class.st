@@ -11,7 +11,7 @@ GtCodeSnippetTutor >> chatOnSnippet: aSnippet [
 				name: 'Code Snippet';
 				content: aSnippet;
 				serializer: [ :aModel | aModel sourceCode currentSourceText text asString ];
-				updater: [ :aModel :aText | aModel text: aText ])
+				updater: [ :aModel :aText | aModel forSource: aText ])
 ]
 
 { #category : #'as yet unclassified' }
