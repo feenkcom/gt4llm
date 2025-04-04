@@ -9,6 +9,15 @@ GtLlmActionChatViewModel >> asElement [
 	^ GtLlmChatElement new chatViewModel: self
 ]
 
+{ #category : #views }
+GtLlmActionChatViewModel >> gtAssistantChatFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Chat';
+		object: [ assistantChat ];
+		view: #gtMessagesWidgetFor:
+]
+
 { #category : #accessing }
 GtLlmActionChatViewModel >> initialize [
 	super initialize.
