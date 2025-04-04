@@ -22,17 +22,23 @@ GtOpenAICoderActionMessage >> codeSnippetBlock [
 ]
 
 { #category : #'as yet unclassified' }
+GtOpenAICoderActionMessage >> diffedCode [
+	^ GtDiffBuilder
+		computeDifferencesFrom: self chat serializer instance contentValue
+		to: self codeSnippetBlock
+		using: GtSmaCCDiffSplitter forPharo
+]
+
+{ #category : #'as yet unclassified' }
 GtOpenAICoderActionMessage >> diffedCodeText [
-	| diff text pushIdx |
-	diff := GtDiffBuilder
-			computeDifferencesFrom: self chat serializer instance contentValue
-			to: self codeSnippetBlock
-			using: GtSmaCCDiffSplitter forPharo.
+	| diff text lastIdx codeSnippetText |
+	diff := self diffedCode.
 
 	diff changes ifEmpty: [ ^ nil ].
 
-	text := diff to asRopedText.
-	pushIdx := 0.
+	text := '' asRopedText.
+	lastIdx := 1.
+	codeSnippetText := self codeSnippetBlock asRopedText.
 	(diff changes
 		flatCollect: [ :aChange | 
 			aChange isReplacement
@@ -41,25 +47,22 @@ GtOpenAICoderActionMessage >> diffedCodeText [
 				ifFalse: [ {aChange} ] ])
 		do: [ :aChange | 
 			aChange isInsertion
-				ifTrue: [ (text from: aChange startIndex to: aChange stopIndex)
-						attributes: {BlTextHighlightAttribute paint: BrGlamorousColors successBackgroundColor}.
-					pushIdx := pushIdx + (aChange stopIndex - aChange startIndex) ].
+				ifTrue: [ text := text
+							, (aChange insertedObjects asRopedText
+									attributes: {BlTextHighlightAttribute paint: BrGlamorousColors successBackgroundColor}).
+					lastIdx := aChange stopIndex + 1 ].
 			aChange isDeletion
-				ifTrue: [ (text from: aChange startIndex + pushIdx to: aChange stopIndex + pushIdx)
-						attributes: {GtButtonAttribute new
-									beAppend;
-									stencil: [ | button |
-										button := BrLabel new
-												vMatchParent;
-												aptitude: BrGlamorousShrinkingLabelAptitude;
-												text: (aChange deletedObjects asRopedText glamorousCodeFontAndSize
-														attributes: {BlTextHighlightAttribute paint: BrGlamorousColors errorBackgroundColor});
-												when: BlClickEvent
-													do: [ :anEvent | 
-														anEvent consumed: true.
-														button aptitude: BrGlamorousLabelAptitude ] ]} ] ].
+				ifTrue: [ aChange startIndex > lastIdx
+						ifTrue: [ text := text
+									, (codeSnippetText
+											from: lastIdx
+											to: (aChange startIndex min: codeSnippetText size)) asRopedText.
+							lastIdx := aChange startIndex ].
+					text := text
+							, (aChange deletedObjects asRopedText
+									attributes: {BlTextHighlightAttribute paint: BrGlamorousColors errorBackgroundColor}) ] ].
 
-	(text from: text size - 1 to: text size) attributes: {self acceptCodeAttribute}.
+	(text from: text size to: text size) attributes: {self acceptCodeAttribute}.
 
 	^ text
 ]
@@ -88,4 +91,17 @@ GtOpenAICoderActionMessage >> gtDiffedCodeFor: aView [
 		priority: 2;
 		aptitude: BrGlamorousCodeEditorAptitude;
 		text: [ self diffedCodeText ]
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAICoderActionMessage >> gtDiffedFor: aView [
+	<gtView>
+	<gtLlmMessageView>
+	self codeSnippetBlock isEmptyOrNil ifTrue: [ ^ aView empty ].
+
+	^ aView diff
+		title: 'Diff';
+		priority: 3;
+		from: self chat serializer instance contentValue;
+		to: self codeSnippetBlock
 ]
