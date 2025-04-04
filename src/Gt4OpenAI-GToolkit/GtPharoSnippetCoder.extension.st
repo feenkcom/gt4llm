@@ -6,7 +6,7 @@ GtPharoSnippetCoder >> initializeLlmAddOnsFor: anAst into: addOns [
 	GtLlmFeatures useCoder ifFalse: [ ^ self ].
 
 	addOns
-		addDropDownAction: 'Open Chat' translated
+		addDropDownAction: 'Open chat' translated
 		icon: BrGlamorousVectorIcons openAi
 		stencil: [ :aCoderUIModel :anElement | 
 			BrFrame new fitContent
