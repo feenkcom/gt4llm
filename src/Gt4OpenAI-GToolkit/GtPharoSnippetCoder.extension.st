@@ -4,7 +4,7 @@ Extension { #name : #GtPharoSnippetCoder }
 GtPharoSnippetCoder >> initializeLlmAddOnsFor: anAst into: addOns [
 	<gtAstCoderAddOns: 10>
 	GtLlmFeatures useCoder ifFalse: [ ^ self ].
-
+	addOns addStyler: (GtLlmInstructionInPharoCommentStyler new).
 	addOns
 		addDropDownAction: 'Open chat' translated
 		icon: BrGlamorousVectorIcons openAi
