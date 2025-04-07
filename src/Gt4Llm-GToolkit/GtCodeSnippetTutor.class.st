@@ -11,7 +11,7 @@ GtCodeSnippetTutor >> chatOnSnippet: aSnippet [
 				name: 'Code Snippet';
 				content: aSnippet;
 				serializer: [ :aModel | aModel sourceCode currentSourceText text asString ];
-				updater: [ :aModel :aText | aModel text: aText ])
+				updater: [ :aModel :aText | aModel forSource: aText ])
 ]
 
 { #category : #'as yet unclassified' }
@@ -87,10 +87,10 @@ GtCodeSnippetTutor >> proposalAction [
 	^ GtLlmTutorAction new
 		name: 'Propose code';
 		priority: 3;
-		description: 'Proposes code using the `Code Snippet` field. Look up classes and documentation as needed to generate an answer.';
+		description: 'Interpret the comments and proposes code using the `Code Snippet` field. The typical comment command is formatted as `": some command"`. Look up classes and documentation as needed to generate an answer.';
 		examples: {GtLlmTutorActionExample new
 					input: {'Action' -> 'Propose code'.
-							'Code Snippet' -> '15 * 30 "TODO: subtract 5"'} asDictionary;
+							'Code Snippet' -> '15 * 30 ": subtract 5"'} asDictionary;
 					output: {'Action' -> 'Propose code'.
 							'Text' -> nil.
 							'Code Snippet' -> '(15 * 30) - 5'} asDictionary}

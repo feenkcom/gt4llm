@@ -9,6 +9,7 @@ GtLlmEmbeddedChatElement >> initialize [
 	super initialize.
 
 	self fitContent.
+	self background: Color white.
 	self layout: BlLinearLayout vertical.
 
 	self addChildFirst: self toolbar
