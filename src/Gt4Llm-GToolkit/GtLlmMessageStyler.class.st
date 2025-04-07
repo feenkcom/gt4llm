@@ -499,7 +499,7 @@ GtLlmMessageStyler >> styleLinkText: aSubText valid: hasValidTarget [
 ]
 
 { #category : #accessing }
-GtLlmMessageStyler >> styleName: aClassAnnotation spawning: aBlock [
+GtLlmMessageStyler >> styleName: aClassAnnotation [
 	| nameNode aLinkColor |
 
 	(nameNode := aClassAnnotation nameNode)
@@ -625,11 +625,7 @@ GtLlmMessageStyler >> visitBold: aBoldNode [
 { #category : #accessing }
 GtLlmMessageStyler >> visitClassAnnotation: aClassAnnotation [
 	self visitAnnotation: aClassAnnotation.
-	self
-		styleName: aClassAnnotation
-		spawning: [ :anEvent | 
-			anEvent target phlow
-				spawnTool: (GtClassCoderTool observedClass: aClassAnnotation imageObject) ].
+	self styleName: aClassAnnotation.
 	self
 		styleButton: aClassAnnotation
 		withTool: [ GtClassCoderTool forClass: aClassAnnotation imageObject ].
@@ -715,12 +711,9 @@ GtLlmMessageStyler >> visitItalic: anItalicNode [
 ]
 
 { #category : #accessing }
-GtLlmMessageStyler >> visitMethodAnnotation: aMethodAnnotation [ 
+GtLlmMessageStyler >> visitMethodAnnotation: aMethodAnnotation [
 	self visitAnnotation: aMethodAnnotation.
-	self
-		styleName: aMethodAnnotation
-		spawning:
-			[ :anEvent | anEvent target phlow spawnObject: aMethodAnnotation imageObject ].
+	self styleName: aMethodAnnotation.
 	self
 		styleButton: aMethodAnnotation
 		withTool: [ GtMethodCoderTool compiledMethod: aMethodAnnotation imageObject ].
