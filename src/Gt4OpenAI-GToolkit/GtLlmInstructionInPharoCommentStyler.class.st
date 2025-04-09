@@ -1,16 +1,8 @@
 Class {
 	#name : #GtLlmInstructionInPharoCommentStyler,
 	#superclass : #GtGenericPharoStyler,
-	#instVars : [
-		'llmChat'
-	],
 	#category : #'Gt4OpenAI-GToolkit'
 }
-
-{ #category : #'*Gt4OpenAI-GToolkit' }
-GtLlmInstructionInPharoCommentStyler >> llmChat: anObject [ 
-	llmChat := anObject
-]
 
 { #category : #'as yet unclassified' }
 GtLlmInstructionInPharoCommentStyler >> visitSmaCCParseNode: aSmaCCParseNode [
@@ -34,7 +26,13 @@ GtLlmInstructionInPharoCommentStyler >> visitSmaCCParseNode: aSmaCCParseNode [
 																		icon: BrGlamorousIcons empty;
 																		beTinySize;
 																		aptitude: BrGlamorousButtonRectangularAptitude new + BrGlamorousButtonIconAptitude new ]
-																content: [ GtLlmEmbeddedChatElement new chatViewModel: coderViewModel coderModel llmChat asViewModel ]);
+																content: [ | llmChat |
+																	llmChat := coderViewModel coderModel llmChat.
+																	llmChat
+																		sendChatRequest: (aSmaCCParseNode completeSource asString
+																				copyFrom: each first + 2
+																				to: each second - 1).
+																	GtLlmEmbeddedChatElement new chatViewModel: llmChat asViewModel ]);
 												icon: BrGlamorousVectorIcons openAi;
 												label: 'Propose change';
 												beTinySize;
