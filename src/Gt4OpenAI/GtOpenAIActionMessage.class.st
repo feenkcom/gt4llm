@@ -6,6 +6,15 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
+GtOpenAIActionMessage >> actionModel [
+	^ (self chat tutor actionNamed: self action)
+		ifNil: [ self isUserRole
+				ifTrue: [ (self chat descendantOf: self)
+						ifNotNil: [ :aDescendant | aDescendant actionModel ] ]
+				ifFalse: [ nil ] ]
+]
+
+{ #category : #'as yet unclassified' }
 GtOpenAIActionMessage >> textBlock [
 	^ self contentJson at: 'Text' ifAbsent: [ '' ]
 ]
