@@ -40,6 +40,8 @@ GtCodeSnippetTutor >> defaultProviderStencil [
 		addTool: self lookupPageTool;
 		addTool: self getMethodTool;
 		addTool: self getMethodsTool;
+		addTool: self getImplementorsTool;
+		addTool: self getReferencesTool;
 		instructions: anInstructionFormat asInstructionPiece instructionString ]
 ]
 
@@ -57,6 +59,17 @@ GtCodeSnippetTutor >> explanationAction [
 							'Text'
 								-> 'The snippet performs integer multiplication on the two numbers `15` and `30`. The result should be `450`.'.
 							'Code Snippet' -> '15 * 30'} asDictionary}
+]
+
+{ #category : #'as yet unclassified' }
+GtCodeSnippetTutor >> getImplementorsTool [
+	^ GtLlmFunctionTool new
+		name: 'getImplementors';
+		parameters: {'methodName'};
+		description: 'Gets a method by name and returns a list of methods that implement it.';
+		block: [ :arguments | 
+			Character cr
+				join: (arguments first asSymbol gtImplementors result toArray wait collect: #name) ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -86,6 +99,17 @@ GtCodeSnippetTutor >> getMethodsTool [
 			(arguments first asClassIfAbsent: [ nil ])
 				ifNil: [ 'Class not found' ]
 				ifNotNil: [ :aClass | Character cr join: (aClass allMethods collect: #selector) ] ]
+]
+
+{ #category : #'as yet unclassified' }
+GtCodeSnippetTutor >> getReferencesTool [
+	^ GtLlmFunctionTool new
+		name: 'getReferences';
+		parameters: {'methodName'};
+		description: 'Gets a method by name and returns a list of methods that reference it.';
+		block: [ :arguments | 
+			Character cr
+				join: (arguments first asSymbol gtReferences result toArray wait collect: #name) ]
 ]
 
 { #category : #'as yet unclassified' }
