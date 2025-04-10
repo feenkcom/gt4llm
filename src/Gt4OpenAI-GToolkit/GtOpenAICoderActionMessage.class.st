@@ -93,6 +93,13 @@ GtOpenAICoderActionMessage >> gtCodeSnippetFor: aView [
 ]
 
 { #category : #'as yet unclassified' }
+GtOpenAICoderActionMessage >> gtContentFor: aView [
+	<gtView>
+	<gtLlmMessageView>
+	^ aView empty
+]
+
+{ #category : #'as yet unclassified' }
 GtOpenAICoderActionMessage >> gtDiffedCodeFor: aView [
 	<gtView>
 	<gtLlmMessageView>

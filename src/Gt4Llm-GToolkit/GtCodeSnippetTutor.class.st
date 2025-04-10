@@ -38,6 +38,10 @@ GtCodeSnippetTutor >> defaultProviderStencil [
 		userMessageClass: GtOpenAICoderActionMessage;
 		addTool: self lookupClassTool;
 		addTool: self lookupPageTool;
+		addTool: self getMethodTool;
+		addTool: self getMethodsTool;
+		addTool: self getImplementorsTool;
+		addTool: self getReferencesTool;
 		instructions: anInstructionFormat asInstructionPiece instructionString ]
 ]
 
@@ -55,6 +59,57 @@ GtCodeSnippetTutor >> explanationAction [
 							'Text'
 								-> 'The snippet performs integer multiplication on the two numbers `15` and `30`. The result should be `450`.'.
 							'Code Snippet' -> '15 * 30'} asDictionary}
+]
+
+{ #category : #'as yet unclassified' }
+GtCodeSnippetTutor >> getImplementorsTool [
+	^ GtLlmFunctionTool new
+		name: 'getImplementors';
+		parameters: {'methodName'};
+		description: 'Gets a method by name and returns a list of methods that implement it.';
+		block: [ :arguments | 
+			Character cr
+				join: (arguments first asSymbol gtImplementors result toArray wait collect: #name) ]
+]
+
+{ #category : #'as yet unclassified' }
+GtCodeSnippetTutor >> getMethodTool [
+	^ GtLlmFunctionTool new
+		name: 'getClassMethod';
+		parameters: {'className'.
+				'methodName'};
+		description: 'Gets a method by name and returns its source code.';
+		block: [ :arguments | 
+			(arguments first asClassIfAbsent: [ nil ])
+				ifNil: [ 'Class not found' ]
+				ifNotNil: [ :aClass | 
+					aClass allMethods
+						detect: [ :aMethod | aMethod selector = #browse ]
+						ifFound: #sourceCode
+						ifNone: [ 'Method not found' ] ] ]
+]
+
+{ #category : #'as yet unclassified' }
+GtCodeSnippetTutor >> getMethodsTool [
+	^ GtLlmFunctionTool new
+		name: 'getClassMethods';
+		parameters: {'className'};
+		description: 'Gets a class by name and returns a list of its methods.';
+		block: [ :arguments | 
+			(arguments first asClassIfAbsent: [ nil ])
+				ifNil: [ 'Class not found' ]
+				ifNotNil: [ :aClass | Character cr join: (aClass allMethods collect: #selector) ] ]
+]
+
+{ #category : #'as yet unclassified' }
+GtCodeSnippetTutor >> getReferencesTool [
+	^ GtLlmFunctionTool new
+		name: 'getReferences';
+		parameters: {'methodName'};
+		description: 'Gets a method by name and returns a list of methods that reference it.';
+		block: [ :arguments | 
+			Character cr
+				join: (arguments first asSymbol gtReferences result toArray wait collect: #name) ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -87,7 +142,7 @@ GtCodeSnippetTutor >> proposalAction [
 	^ GtLlmTutorAction new
 		name: 'Propose code';
 		priority: 3;
-		description: 'Interpret the comments and proposes code using the `Code Snippet` field. The typical comment command is formatted as `": some command"`. Look up classes and documentation as needed to generate an answer.';
+		description: 'Interpret the comments and propose code using the `Code Snippet` field. The typical comment command is formatted as `": some command"`. Only propose Pharo code unless otherwise asked. Look up classes and documentation in the current Glamorous Toolkit image as needed to generate an answer.';
 		examples: {GtLlmTutorActionExample new
 					input: {'Action' -> 'Propose code'.
 							'Code Snippet' -> '15 * 30 ": subtract 5"'} asDictionary;
