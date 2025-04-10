@@ -68,6 +68,15 @@ GtLlmFunctionTool >> functionResponse [
 					'additionalProperties' -> false} asDictionary} asDictionary
 ]
 
+{ #category : #views }
+GtLlmFunctionTool >> gtBlockSourceCodeFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Source code';
+		object: [ block ];
+		view: #gtSourceCodeFor:
+]
+
 { #category : #'as yet unclassified' }
 GtLlmFunctionTool >> gtFunctionFor: aView [
 	<gtView>
