@@ -21,7 +21,7 @@ GtLlmAssistantChatNotReadyStatus >> createdAt [
 
 { #category : #printing }
 GtLlmAssistantChatNotReadyStatus >> gtDisplayOn: stream [
-	stream nextPutAll: 'Ready'
+	stream nextPutAll: 'Not ready'
 ]
 
 { #category : #testing }
