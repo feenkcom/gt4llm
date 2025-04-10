@@ -38,6 +38,8 @@ GtCodeSnippetTutor >> defaultProviderStencil [
 		userMessageClass: GtOpenAICoderActionMessage;
 		addTool: self lookupClassTool;
 		addTool: self lookupPageTool;
+		addTool: self getMethodTool;
+		addTool: self getMethodsTool;
 		instructions: anInstructionFormat asInstructionPiece instructionString ]
 ]
 
@@ -55,6 +57,35 @@ GtCodeSnippetTutor >> explanationAction [
 							'Text'
 								-> 'The snippet performs integer multiplication on the two numbers `15` and `30`. The result should be `450`.'.
 							'Code Snippet' -> '15 * 30'} asDictionary}
+]
+
+{ #category : #'as yet unclassified' }
+GtCodeSnippetTutor >> getMethodTool [
+	^ GtLlmFunctionTool new
+		name: 'getClassMethod';
+		parameters: {'className'.
+				'methodName'};
+		description: 'Gets a method by name and returns its source code.';
+		block: [ :arguments | 
+			(arguments first asClassIfAbsent: [ nil ])
+				ifNil: [ 'Class not found' ]
+				ifNotNil: [ :aClass | 
+					aClass allMethods
+						detect: [ :aMethod | aMethod selector = #browse ]
+						ifFound: #sourceCode
+						ifNone: [ 'Method not found' ] ] ]
+]
+
+{ #category : #'as yet unclassified' }
+GtCodeSnippetTutor >> getMethodsTool [
+	^ GtLlmFunctionTool new
+		name: 'getClassMethods';
+		parameters: {'className'};
+		description: 'Gets a class by name and returns a list of its methods.';
+		block: [ :arguments | 
+			(arguments first asClassIfAbsent: [ nil ])
+				ifNil: [ 'Class not found' ]
+				ifNotNil: [ :aClass | Character cr join: (aClass allMethods collect: #selector) ] ]
 ]
 
 { #category : #'as yet unclassified' }
