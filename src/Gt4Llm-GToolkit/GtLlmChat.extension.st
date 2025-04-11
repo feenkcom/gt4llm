@@ -10,13 +10,13 @@ GtLlmChat >> gtMessagesWidgetFor: aView [
 	"cannot be a forward because the update wouldn’t work"
 
 	<gtView>
-	| aViewModel |
 	self provider ifNil: [ ^ aView empty ].
 
 	^ aView explicit
 		title: 'Chat';
 		priority: 0;
-		stencil: [ aViewModel ifNil: [ aViewModel := self asViewModel ].
+		stencil: [ | aViewModel |
+			aViewModel ifNil: [ aViewModel := self asViewModel ].
 			GtLlmChatElement new chatViewModel: aViewModel ];
 		actionUpdateButton
 ]
