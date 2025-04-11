@@ -663,7 +663,11 @@ GtLlmMessageStyler >> visitCodeBlock: aCodeNode [
 		attributes: {foldingAttribute}.
 	foldingAttribute
 		isExpanded: false;
-		applyExpandedOrCollapsedAttributesOnText: text.
+		applyExpandedOrCollapsedAttributesOnText: text."
+	self text
+		attributes: {BrTextHideAttribute new}
+		from: aCodeNode begin startPosition
+		to: aCodeNode end stopPosition.
 	(text from: aCodeNode end stopPosition + 1 to: aCodeNode end stopPosition + 1)
 		attributes: {BrTextAdornmentDynamicAttribute new
 					beAppend;
@@ -672,7 +676,7 @@ GtLlmMessageStyler >> visitCodeBlock: aCodeNode [
 									from: aCodeNode beginWithLanguageStopPosition + 1
 									to: aCodeNode end startPosition - 1) asString;
 							subscribeToSystem;
-							asExpandedOnlyElement ]}."
+							asExpandedOnlyElement ]}.
 	^ self visitContent: aCodeNode
 ]
 
