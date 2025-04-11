@@ -20,8 +20,8 @@ GtLlmNewActionThreadMessageElement class >> newForChatList [
 		background: Color white;
 		addAptitude: BrGlamorousFocusableShadowAptitude new;
 		margin: (BlInsets
-				top: 3
-				bottom: 12
+				top: 5
+				bottom: 10
 				left: 5
 				right: 5)
 ]
