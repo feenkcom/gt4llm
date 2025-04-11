@@ -123,12 +123,6 @@ GtLlmBasicThreadMessageViewModel >> onThreadMessageChanged [
 	self notifyThreadMessageViewModelChanged
 ]
 
-{ #category : #'as yet unclassified' }
-GtLlmBasicThreadMessageViewModel >> padding [
-	self senderText = 'Assistant' ifTrue: [ ^ BlInsets right: 50 ].
-	^ BlInsets left: 50
-]
-
 { #category : #accessing }
 GtLlmBasicThreadMessageViewModel >> requestStyleSourceText [
 	self announce: GtLlmThreadMessageRestyleRequested new
@@ -142,4 +136,10 @@ GtLlmBasicThreadMessageViewModel >> senderText [
 { #category : #accessing }
 GtLlmBasicThreadMessageViewModel >> styler [
 	^ styler ifNil: [ styler := self newStyler ]
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmBasicThreadMessageViewModel >> uiInsets [
+	self threadMessage isAssistantRole ifTrue: [ ^ BlInsets right: 50 ].
+	^ BlInsets left: 50
 ]
