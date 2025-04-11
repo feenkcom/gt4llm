@@ -636,6 +636,7 @@ GtLlmMessageStyler >> visitClassAnnotation: aClassAnnotation [
 
 { #category : #generated }
 GtLlmMessageStyler >> visitCodeBlock: aCodeNode [
+	"| messageMarker foldingAttribute |"
 	(aCodeNode language isNotNil and: [ aCodeNode isForSmalltalk ])
 		ifTrue: [ self styleSmalltalkCodeBlock: aCodeNode ].
 	(self text from: aCodeNode startPosition to: aCodeNode stopPosition)
@@ -650,7 +651,32 @@ GtLlmMessageStyler >> visitCodeBlock: aCodeNode [
 		from: aCodeNode beginWithLanguageStopPosition + 1
 		to: aCodeNode end startPosition - 1)
 		attributes: {BlTextHighlightAttribute paint: BrGlamorousColors neutralBackgroundColor}.
-
+	"messageMarker := BrTextInvisibleMarkerAttribute new.
+	self text
+		attributes: {messageMarker}
+		from: aCodeNode begin startPosition
+		to: aCodeNode end stopPosition.
+	foldingAttribute := GtTextFolderAttribute new
+			attribute: messageMarker;
+			hoverText: 'Code'.
+	(text from: aCodeNode begin startPosition - 1 to: aCodeNode begin startPosition - 1)
+		attributes: {foldingAttribute}.
+	foldingAttribute
+		isExpanded: false;
+		applyExpandedOrCollapsedAttributesOnText: text."
+	self text
+		attributes: {BrTextHideAttribute new}
+		from: aCodeNode begin startPosition
+		to: aCodeNode end stopPosition.
+	(text from: aCodeNode end stopPosition + 1 to: aCodeNode end stopPosition + 1)
+		attributes: {BrTextAdornmentDynamicAttribute new
+					beAppend;
+					stencil: [ GtPharoSnippetCoder new
+							forSource: (self text
+									from: aCodeNode beginWithLanguageStopPosition + 1
+									to: aCodeNode end startPosition - 1) asString;
+							subscribeToSystem;
+							asExpandedOnlyElement ]}.
 	^ self visitContent: aCodeNode
 ]
 
