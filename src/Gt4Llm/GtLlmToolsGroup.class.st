@@ -9,12 +9,11 @@ GtLlmToolsGroup >> gtItemsFor: aView [
 	<gtView>
 	items ifNil: [ ^ aView empty ].
 	^ aView columnedList
-		title: 'Items';
+		title: 'Tools';
 		items: [ items ];
-		column: 'Index'
-			text: [ :each :index | index asRopedText foreground: (GtPhlowColor named: #gray) asColor ]
-			width: 45;
-		column: 'Value' text: [ :each | each gtDisplayString ]
+		column: 'Name' text: [ :each | each name ];
+		column: 'Parameters' text: [ :each | ', ' join: each parameters ];
+		column: 'Description' text: [ :each | each description ]
 ]
 
 { #category : #'as yet unclassified' }
