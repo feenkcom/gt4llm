@@ -142,7 +142,12 @@ GtCodeSnippetTutor >> proposalAction [
 	^ GtLlmTutorAction new
 		name: 'Propose code';
 		priority: 3;
-		description: 'Interpret the comments and propose code using the `Code Snippet` field. The typical comment command is formatted as `": some command"`. Only propose Pharo code unless otherwise asked. Look up classes and documentation in the current Glamorous Toolkit image as needed to generate an answer.';
+		description: 'Interpret the comments and propose code using the `Code Snippet` field. The typical comment command is formatted as `": some command"`. Only propose Pharo code unless otherwise asked. 
+If you want to add explanations, place them in the `Text` field. If the explanation contains code, always place code in a code block using Markdown and explicitly denoting it with smalltalk. Like this:
+```smalltalk
+"Smalltalk code here"
+```
+Look up classes, methods and documentation in the current Glamorous Toolkit image as needed to generate an answer.';
 		examples: {GtLlmTutorActionExample new
 					input: {'Action' -> 'Propose code'.
 							'Code Snippet' -> '15 * 30 ": subtract 5"'} asDictionary;
