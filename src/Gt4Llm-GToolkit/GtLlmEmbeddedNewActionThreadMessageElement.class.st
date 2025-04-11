@@ -23,7 +23,7 @@ GtLlmEmbeddedNewActionThreadMessageElement class >> newForChatList [
 				top: 3
 				bottom: 12
 				left: 5
-				right: 10)
+				right: 5)
 ]
 
 { #category : #'as yet unclassified' }
