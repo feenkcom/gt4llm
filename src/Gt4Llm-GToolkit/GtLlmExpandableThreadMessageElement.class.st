@@ -14,8 +14,8 @@ Class {
 GtLlmExpandableThreadMessageElement class >> newForChatList [
 	^ self new
 		margin: (BlInsets
-				top: 3
-				bottom: 12
+				top: 5
+				bottom: 10
 				left: 5
 				right: 5);
 		collapse
@@ -23,7 +23,7 @@ GtLlmExpandableThreadMessageElement class >> newForChatList [
 
 { #category : #accessing }
 GtLlmExpandableThreadMessageElement >> beforeThreadMessageViewModelReset [
-	self margin: self margin - threadMessageViewModel padding
+	self margin: self margin - threadMessageViewModel uiInsets
 ]
 
 { #category : #'initialization ' }
