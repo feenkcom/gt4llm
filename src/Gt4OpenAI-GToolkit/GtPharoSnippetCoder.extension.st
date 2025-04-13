@@ -6,6 +6,12 @@ GtPharoSnippetCoder >> initializeLlmAddOnsFor: anAst into: addOns [
 	GtLlmFeatures useCoder ifFalse: [ ^ self ].
 	addOns addStyler: (GtLlmInstructionInPharoCommentStyler new).
 	addOns
+		addMainAction: 'Open chat' translated
+		icon: BrGlamorousVectorIcons openAi
+		action: [ :aCoderUIModel :anElement | 
+			anElement phlow spawnObject: self llmChat ]
+"		id: GtSourceCoderProfileActionId".
+	"addOns
 		addDropDownAction: 'Open chat' translated
 		icon: BrGlamorousVectorIcons openAi
 		stencil: [ :aCoderUIModel :anElement | 
@@ -14,14 +20,14 @@ GtPharoSnippetCoder >> initializeLlmAddOnsFor: anAst into: addOns [
 				addAptitude: (BrGlamorousMenuPinnableAptitude new
 						withAllPinActions;
 						withResizers;
-						menuModel: BrMenuExplicit new) ]
+						menuModel: BrMenuExplicit new) ]"
 ]
 
 { #category : #'*Gt4OpenAI-GToolkit' }
 GtPharoSnippetCoder >> llmChat [
-	^ "self
+	^ self
 		attributeNamed: #llmChat
-		ifAbsent: [" self
+		ifAbsent: [ self
 				attributeNamed: #llmChat
-				put: (GtCodeSnippetTutor new chatOnSnippet: self) "]"
+				put: (GtCodeSnippetTutor new chatOnSnippet: self) ]
 ]
