@@ -9,7 +9,7 @@ Class {
 		'outputReferences',
 		'unverified'
 	],
-	#category : 'Gt4Llm'
+	#category : #Gt4Llm
 }
 
 { #category : #'instance creation' }
@@ -59,14 +59,14 @@ GtLlmTutorActionExample >> asInstructionPiece [
 				addItem: (GtLlmInstructionSection new
 						source: self;
 						title: 'Prompt';
-						body: ('```
+						body: ('```json
 ' , self inputJson
 								, '
 ```') asInstructionPiece);
 				addItem: (GtLlmInstructionSection new
 						source: self;
 						title: 'Output';
-						body: ('```
+						body: ('```json
 ' , self outputJson
 								, '
 ```') asInstructionPiece))

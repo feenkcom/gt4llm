@@ -5,7 +5,7 @@ Class {
 		'providerStencil',
 		'instruction'
 	],
-	#category : 'Gt4Llm'
+	#category : #Gt4Llm
 }
 
 { #category : #other }
@@ -19,7 +19,7 @@ GtLlmTutor >> actionFormatDescription [
 	^ GtLlmTutorFormatDescription new beRequired
 		name: 'Action';
 		format: 'Text';
-		example: '```
+		example: '```text
 Create a draft
 ```'
 ]
@@ -53,13 +53,13 @@ GtLlmTutor >> addInstructionSection: aSection [
 GtLlmTutor >> chatAction [
 	<gtLlmTutorAction>
 	^ GtLlmTutorAction new 
-		name: 'Answer a chat request';
+		name: 'Chat';
 		priority: 1;
-		description: 'Answers a chat request using the text field.';
-		format: 'Chat request: {1}';
+		description: 'Chat using the text field.';
+		format: 'Chat: {1}';
 		examples: {GtLlmTutorActionExample new markUnverified
-					input: {'Action' -> 'Chat request: How are you?'} asDictionary;
-					output: {'Action' -> 'Answer a chat request'.
+					input: {'Action' -> 'Chat: How are you?'} asDictionary;
+					output: {'Action' -> 'Chat'.
 							'Text'
 								-> 'As an AI model, I do not have feelings. How can I assist you today?'}
 							asDictionary}
@@ -183,7 +183,7 @@ GtLlmTutor >> textFormatDescription [
 		name: 'Text';
 		priority: 2;
 		format: 'Text';
-		example: '```
+		example: '```text
 This node contains plain text.
 Multiple lines, multiple paragraphs are allowed.
 

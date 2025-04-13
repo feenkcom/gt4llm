@@ -18,12 +18,12 @@ GtOpenAIActionMessage >> actionModel [
 GtOpenAIActionMessage >> gtChatRequestFor: aView [
 	<gtView>
 	<gtLlmMessageView>
-	(self action beginsWith: 'Chat request:') ifFalse: [ ^ aView empty ].
+	(self action beginsWith: 'Chat:') ifFalse: [ ^ aView empty ].
 
 	^ aView textEditor
-		title: 'Chat request';
+		title: 'Message';
 		priority: 1;
-		text: [ self action removePrefix: 'Chat request: ' ]
+		text: [ self action removePrefix: 'Chat: ' ]
 ]
 
 { #category : #'as yet unclassified' }
