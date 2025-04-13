@@ -14,8 +14,7 @@ GtLlmToolExamples >> calledTool [
 
 	self
 		assert: (tool performToolCall: call)
-		equals: {1.
-				2}.
+		equals: call.
 
 	^ tool
 ]
@@ -29,7 +28,7 @@ GtLlmToolExamples >> functionTool [
 			description: 'Takes two arguments and passes them back unharmed.';
 			parameters: {'first'.
 					'second'};
-			block: #yourself.
+			block: [:functionCall | functionCall ].
 
 	^ tool
 ]
