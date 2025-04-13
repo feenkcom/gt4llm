@@ -144,13 +144,15 @@ GtLlmFunctionTool >> performToolCall: aGtLlmFunctionToolCall [
 	self
 		assert: block isNotNil
 		description: [ 'Trying to call a function without a block' ].
+	"Commented due to Gemstone:
 	(GtLlmFunctionCallAboutToBePerformedSignal new
 		tool: self;
-		functionCall: aGtLlmFunctionToolCall) emit.
+		functionCall: aGtLlmFunctionToolCall) emit."
 	result := block value: aGtLlmFunctionToolCall.
 	aGtLlmFunctionToolCall performedByTool: self.
+	"Commented due to Gemstone:
 	(GtLlmFunctionCallPerformedSignal new
 		tool: self;
-		functionCall: aGtLlmFunctionToolCall) emit.
+		functionCall: aGtLlmFunctionToolCall) emit."
 	^ result
 ]
