@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'id',
 		'arguments',
-		'name'
+		'name',
+		'tool'
 	],
 	#category : #Gt4Llm
 }
@@ -13,6 +14,11 @@ Class {
 GtLlmFunctionToolCall class >> serializationProperties [
 	^ {#id -> #id.
 		#function -> #function}
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmFunctionToolCall >> anyArgument [
+	^ arguments anyOne
 ]
 
 { #category : #accessing }
@@ -52,6 +58,16 @@ GtLlmFunctionToolCall >> gtArgumentsFor: aView [
 		column: 'Value' text: #value
 ]
 
+{ #category : #views }
+GtLlmFunctionToolCall >> gtToolSourceCodeFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Tool source code';
+		priority: 5;
+		object: [ tool ];
+		view: #gtBlockSourceCodeFor:
+]
+
 { #category : #'as yet unclassified' }
 GtLlmFunctionToolCall >> humanReadable [
 	^ self name , ' '
@@ -81,6 +97,11 @@ GtLlmFunctionToolCall >> name: anObject [
 ]
 
 { #category : #'as yet unclassified' }
+GtLlmFunctionToolCall >> performedByTool: aTool [
+	tool := aTool
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmFunctionToolCall >> printOn: aStream [
 	super printOn: aStream.
 
@@ -90,4 +111,9 @@ GtLlmFunctionToolCall >> printOn: aStream [
 		nextPut: $(;
 		nextPutAll: self name;
 		nextPut: $)
+]
+
+{ #category : #accessing }
+GtLlmFunctionToolCall >> tool [
+	^ tool
 ]
