@@ -51,7 +51,7 @@ GtCodeSnippetTutor >> explanationAction [
 	^ GtLlmTutorAction new
 		name: 'Explain code';
 		priority: 1;
-		description: 'Explains the code snippet using the text field. Look up classes and documentation as needed to generate an answer.';
+		description: 'Explain the code snippet using the text field. Look up classes and documentation as needed to generate an answer.';
 		examples: {GtLlmTutorActionExample new
 					input: {'Action' -> 'Explain code'.
 							'Code Snippet' -> '15 * 30'} asDictionary;

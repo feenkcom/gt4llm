@@ -19,7 +19,7 @@ GtLlmTutor >> actionFormatDescription [
 	^ GtLlmTutorFormatDescription new beRequired
 		name: 'Action';
 		format: 'Text';
-		example: '```
+		example: '```text
 Create a draft
 ```'
 ]
@@ -183,7 +183,7 @@ GtLlmTutor >> textFormatDescription [
 		name: 'Text';
 		priority: 2;
 		format: 'Text';
-		example: '```
+		example: '```text
 This node contains plain text.
 Multiple lines, multiple paragraphs are allowed.
 
