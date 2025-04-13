@@ -140,10 +140,17 @@ GtLlmFunctionTool >> parameters: anObject [
 
 { #category : #'as yet unclassified' }
 GtLlmFunctionTool >> performToolCall: aGtLlmFunctionToolCall [
+	| result |
 	self
 		assert: block isNotNil
 		description: [ 'Trying to call a function without a block' ].
-
-	^ block
-		value: (parameters collect: [ :aName | aGtLlmFunctionToolCall arguments at: aName ])
+	(GtLlmFunctionCallAboutToBePerformedSignal new
+		tool: self;
+		functionCall: aGtLlmFunctionToolCall) emit.
+	result := block value: aGtLlmFunctionToolCall.
+	aGtLlmFunctionToolCall performedByTool: self.
+	(GtLlmFunctionCallPerformedSignal new
+		tool: self;
+		functionCall: aGtLlmFunctionToolCall) emit.
+	^ result
 ]
