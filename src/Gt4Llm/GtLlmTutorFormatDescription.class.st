@@ -10,9 +10,10 @@ Class {
 		'tutor',
 		'referencingActions',
 		'definingMethod',
-		'type'
+		'type',
+		'items'
 	],
-	#category : 'Gt4Llm'
+	#category : #Gt4Llm
 }
 
 { #category : #other }
@@ -66,12 +67,16 @@ GtLlmTutorFormatDescription >> asInstructionPiece [
 
 { #category : #accessing }
 GtLlmTutorFormatDescription >> asJsonSchema [
-	^ {'type' -> self type.
-		'description'
-			-> (GtLlmInstructionList new
-					addItem: 'Format: ' , self format;
-					addItem: 'Examples:
-' , (self example ifNil: [ 'none' ])) instructionString} asDictionary
+	| aDict |
+	aDict := {'type' -> self type.
+			'description'
+				-> (GtLlmInstructionList new
+						addItem: 'Format: ' , self format;
+						addItem: 'Examples:
+' , (self example ifNil: [ 'none' ])) instructionString} asDictionary.	"only relevant for arrays"
+	self items ifNotNil: [ aDict at: 'items' put: self items ].
+
+	^ aDict
 ]
 
 { #category : #'as yet unclassified' }
@@ -160,6 +165,16 @@ GtLlmTutorFormatDescription >> initialize [
 	referencingActions := OrderedCollection new.
 	
 	definingMethod := self initializeMethod
+]
+
+{ #category : #accessing }
+GtLlmTutorFormatDescription >> items [
+	^ items
+]
+
+{ #category : #accessing }
+GtLlmTutorFormatDescription >> items: anObject [
+	items := anObject
 ]
 
 { #category : #accessing }

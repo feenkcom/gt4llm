@@ -5,13 +5,22 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-GtCodeSnippetTutor >> chatOnSnippet: aSnippet [
-	^ self createChat
-		onInstance: (GtLlmSerializableValueHolder new
-				name: 'Code Snippet';
-				content: aSnippet;
-				serializer: [ :aModel | aModel sourceCode currentSourceText text asString ];
-				updater: [ :aModel :aText | aModel forSource: aText ])
+GtCodeSnippetTutor >> chatOnCoderViewModel: aCoderViewModel [
+	| chat |
+	chat := (self createChatOn: aCoderViewModel)
+			onInstance: (GtLlmCustomSerializationValueHolder new
+					name: 'Code Snippet';
+					content: aCoderViewModel;
+					serializer: [ :aModel | 
+						{'Code Snippet' -> aModel coderModel sourceCode currentSourceText text asString.
+							'Variables'
+								-> (aModel sharedBindings bindings associations
+										collect: [ :aPair | 
+											{'name' -> aPair key.
+												'value' -> aPair value value asString} asDictionary ])} ];
+					updater: [ :aModel :aText | aModel coderModel forSource: aText ]).
+
+	^ chat
 ]
 
 { #category : #'as yet unclassified' }
@@ -25,13 +34,20 @@ GtCodeSnippetTutor >> codeSnippetFormatDescription [
 ]
 
 { #category : #'as yet unclassified' }
+GtCodeSnippetTutor >> createChatOn: aCoderViewModel [
+	^ GtLlmActionChat new
+		provider: (self providerStencil cull: instruction cull: aCoderViewModel);
+		tutor: self
+]
+
+{ #category : #'as yet unclassified' }
 GtCodeSnippetTutor >> defaultDescription [
 	^ 'You are an assistant for code snippets.'
 ]
 
 { #category : #'as yet unclassified' }
 GtCodeSnippetTutor >> defaultProviderStencil [
-	^ [ :anInstructionFormat | 
+	^ [ :anInstructionFormat :aCoderViewModel | 
 	GtOpenAIAssistantProvider withApiKeyFromFile
 		format: anInstructionFormat asJsonSchema;
 		assistantMessageClass: GtOpenAICoderActionMessage;
@@ -42,6 +58,7 @@ GtCodeSnippetTutor >> defaultProviderStencil [
 		addTool: self getMethodsTool;
 		addTool: self getImplementorsTool;
 		addTool: self getReferencesTool;
+		addTool: (self lookupBindingToolFor: aCoderViewModel);
 		instructions: anInstructionFormat asInstructionPiece instructionString ]
 ]
 
@@ -54,11 +71,13 @@ GtCodeSnippetTutor >> explanationAction [
 		description: 'Explain the code snippet using the text field. Look up classes and documentation as needed to generate an answer.';
 		examples: {GtLlmTutorActionExample new
 					input: {'Action' -> 'Explain code'.
-							'Code Snippet' -> '15 * 30'} asDictionary;
+							'Code Snippet' -> '15 * 30'.
+							'Variables' -> {}} asDictionary;
 					output: {'Action' -> 'Explain code'.
 							'Text'
 								-> 'The snippet performs integer multiplication on the two numbers `15` and `30`. The result should be `450`.'.
-							'Code Snippet' -> '15 * 30'} asDictionary}
+							'Code Snippet' -> '15 * 30'.
+							'Variables' -> nil} asDictionary}
 ]
 
 { #category : #'as yet unclassified' }
@@ -121,6 +140,32 @@ GtCodeSnippetTutor >> getReferencesTool [
 ]
 
 { #category : #'as yet unclassified' }
+GtCodeSnippetTutor >> lookupBindingToolFor: aCoderViewModel [
+	^ GtLlmFunctionTool new
+		name: 'lookupVariableBinding';
+		parameters: {'variableName'};
+		description: 'Looks up a variable binding by name and returns detailed information about the binding, such as type/class information, variable type, and values of slots. This should only be used if a detailed view of the variable value or metainformation is necessary. Otherwise refer to the `Variables` key in the request.';
+		block: [ :functionCall | 
+			(aCoderViewModel sharedBindings bindingOf: functionCall anyArgument)
+				ifNil: [ 'Variable not found' ]
+				ifNotNil: [ :aBinding | 
+					| bindingValue |
+					bindingValue := aBinding value.
+					STONJSON
+						toStringPretty: {'name' -> aBinding name.
+								'bindingClass' -> aBinding class name asString.
+								'value'
+									-> {'class' -> bindingValue class name asString.
+											'string' -> bindingValue asString.
+											'instanceSlots'
+												-> (bindingValue class slots
+														collect: [ :aSlot | 
+															{'name' -> aSlot name.
+																'value' -> (bindingValue readSlotNamed: aSlot name) asString}
+																asDictionary ])} asDictionary} asDictionary ] ]
+]
+
+{ #category : #'as yet unclassified' }
 GtCodeSnippetTutor >> lookupClassTool [
 	^ GtLlmFunctionTool new
 		name: 'lookupClass';
@@ -158,8 +203,35 @@ If you want to add explanations, place them in the `Text` field. If the explanat
 You can look up classes, methods and documentation in the current Glamorous Toolkit image. Only rely on such look up when absolutely needed.';
 		examples: {GtLlmTutorActionExample new
 					input: {'Action' -> 'Propose code'.
-							'Code Snippet' -> '15 * 30 ": subtract 5"'} asDictionary;
+							'Code Snippet' -> '15 * 30 ": subtract 5"'.
+							'Variables'
+								-> {{'name' -> 'x'.
+											'value' -> '12'} asDictionary}} asDictionary;
 					output: {'Action' -> 'Propose code'.
 							'Text' -> nil.
-							'Code Snippet' -> '(15 * 30) ": subtract 5" - 5'} asDictionary}
+							'Code Snippet' -> '(15 * 30) ": subtract 5" - 5'.
+							'Variables' -> nil} asDictionary}
+]
+
+{ #category : #'as yet unclassified' }
+GtCodeSnippetTutor >> variablesFormatDescription [
+	<gtLlmTutorFormat>
+	^ GtLlmTutorFormatDescription new
+		name: 'Variables';
+		type: 'array';
+		items: {'type' -> 'object'.
+				'properties'
+					-> {'name'
+								-> {'type' -> 'string'.
+										'description' -> 'Variable name'} asDictionary.
+							'value'
+								-> {'type' -> 'string'.
+										'description' -> 'Variable value'} asDictionary} asDictionary.
+				'required'
+					-> {'name'.
+							'value'}.
+				'additionalProperties' -> false} asDictionary;
+		priority: 2;
+		format: 'Dictionary';
+		example: '{"aVariable": "aValue"; "anotherVariable": "15"}'
 ]
