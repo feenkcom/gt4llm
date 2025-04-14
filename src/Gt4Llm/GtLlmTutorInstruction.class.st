@@ -8,7 +8,7 @@ Class {
 		'formats',
 		'sections'
 	],
-	#category : 'Gt4Llm'
+	#category : #Gt4Llm
 }
 
 { #category : #other }
@@ -110,7 +110,8 @@ GtLlmTutorInstruction >> componentNamed: aName [
 { #category : #'as yet unclassified' }
 GtLlmTutorInstruction >> defaultSections [
 	^ {self interactionDescription.
-		self communicationConventionsDescription} asOrderedCollection
+		self communicationConventionsDescription.
+		self toolUseDescription} asOrderedCollection
 ]
 
 { #category : #accessing }
@@ -127,7 +128,7 @@ GtLlmTutorInstruction >> description: anObject [
 GtLlmTutorInstruction >> errorHandlingDescription [
 	^ GtLlmInstructionSection new
 		title: 'Error handling description';
-		body: 'If an error occurs during an action, a message will be sent that starts with `An error occured:` and the message below. You then correct the mistake by sending an action result that corrects the mistake.'
+		body: 'If an error occurs during an action, a message will be sent that starts with `An error occured:` and the error message below that. You then correct the mistake by sending an action result that corrects the mistake.'
 ]
 
 { #category : #accessing }
@@ -213,4 +214,14 @@ GtLlmTutorInstruction >> sections [
 { #category : #accessing }
 GtLlmTutorInstruction >> sections: anObject [
 	sections := anObject
+]
+
+{ #category : #accessing }
+GtLlmTutorInstruction >> toolUseDescription [
+	^ GtLlmInstructionSection new
+		title: 'Tool use description';
+		body: 'You have access to various tools. Tool use is governed by the following rules:
+
+- Only use tools if you cannot answer the user’s question or request without it.
+- Do not use more than 3 tool calls in a row to generate an answer.'
 ]

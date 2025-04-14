@@ -24,10 +24,24 @@ GtPharoSnippetCoder >> initializeLlmAddOnsFor: anAst into: addOns [
 ]
 
 { #category : #'*Gt4OpenAI-GToolkit' }
-GtPharoSnippetCoder >> llmChat [
-	^ self
-		attributeNamed: #llmChat
-		ifAbsent: [ self
-				attributeNamed: #llmChat
-				put: (GtCodeSnippetTutor new chatOnSnippet: self) ]
+GtPharoSnippetCoder >> initializeLlmAddOnsFor: anAst into: addOns viewModel: aGtPharoSourceCoderViewModel [
+	<gtAstCoderAddOns: 10>
+	GtLlmFeatures useCoder ifFalse: [ ^ self ].
+	addOns addStyler: (GtLlmInstructionInPharoCommentStyler new).
+	addOns
+		addMainAction: 'Open chat' translated
+		icon: BrGlamorousVectorIcons openAi
+		action: [ :aCoderUIModel :anElement | 
+			anElement phlow spawnObject: aGtPharoSourceCoderViewModel llmChat ]
+"		id: GtSourceCoderProfileActionId".
+	"addOns
+		addDropDownAction: 'Open chat' translated
+		icon: BrGlamorousVectorIcons openAi
+		stencil: [ :aCoderUIModel :anElement | 
+			BrFrame new fitContent
+				addChild: (GtLlmEmbeddedChatElement new chatViewModel: self llmChat asViewModel);
+				addAptitude: (BrGlamorousMenuPinnableAptitude new
+						withAllPinActions;
+						withResizers;
+						menuModel: BrMenuExplicit new) ]"
 ]
