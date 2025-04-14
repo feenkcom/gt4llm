@@ -62,7 +62,7 @@ GtLlmActionChat >> sendAction: anActionCall onAnswer: aBlock [
 
 { #category : #accessing }
 GtLlmActionChat >> sendChatRequest: aString [
-	self sendMessage: 'Chat request: ' , aString
+	self sendMessage: 'Chat: ' , aString
 ]
 
 { #category : #'as yet unclassified' }

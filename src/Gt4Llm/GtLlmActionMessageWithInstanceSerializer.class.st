@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'instance'
 	],
-	#category : 'Gt4Llm'
+	#category : #Gt4Llm
 }
 
 { #category : #'as yet unclassified' }
@@ -33,8 +33,8 @@ GtLlmActionMessageWithInstanceSerializer >> instance: anObject [
 { #category : #'as yet unclassified' }
 GtLlmActionMessageWithInstanceSerializer >> serialize: aString [
 	^ STONJSON
-		toString: {'Action' -> aString.
-				self instance serialize} asDictionary
+		toString: ({'Action' -> aString} , self instance serialize asOrderedCollection)
+				asDictionary
 ]
 
 { #category : #'as yet unclassified' }

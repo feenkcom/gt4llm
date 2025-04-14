@@ -24,7 +24,8 @@ GtOpenAICoderActionMessage >> codeSnippetBlock [
 { #category : #'as yet unclassified' }
 GtOpenAICoderActionMessage >> diffedCode [
 	^ GtDiffBuilder
-		computeDifferencesFrom: self chat serializer instance contentValue
+		computeDifferencesFrom: (self chat serializer instance contentValue asDictionary
+				at: 'Code Snippet')
 		to: self codeSnippetBlock
 		using: GtSmaCCDiffSplitter forPharo
 ]
@@ -122,6 +123,25 @@ GtOpenAICoderActionMessage >> gtDiffedFor: aView [
 	^ aView diff
 		title: 'Diff';
 		priority: 3;
-		from: self chat serializer instance contentValue;
+		from: (self chat serializer instance contentValue asDictionary at: 'Code Snippet');
 		to: self codeSnippetBlock
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAICoderActionMessage >> gtVariablesFor: aView [
+	<gtView>
+	<gtLlmMessageView>
+	self variablesBlock isNil ifTrue: [ ^ aView empty ].
+
+	^ aView columnedList
+		title: 'Variables';
+		priority: 2;
+		items: [ self variablesBlock ];
+		column: 'Name' text: [ :aDict | aDict at: 'name' ];
+		column: 'Binding' text: [ :aDict | aDict at: 'value' ]
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAICoderActionMessage >> variablesBlock [
+	^ self contentJson at: 'Variables' ifAbsent: [ nil ]
 ]
