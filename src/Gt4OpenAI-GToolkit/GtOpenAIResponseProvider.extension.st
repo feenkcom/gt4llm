@@ -2,7 +2,7 @@ Extension { #name : #GtOpenAIResponseProvider }
 
 { #category : #'*Gt4OpenAI-GToolkit' }
 GtOpenAIResponseProvider >> executeWait [
-	[ | result |
+	"[" | result |
 	result := client
 			generateResponseWithModel: self model
 			messages: self chat messages
@@ -16,6 +16,6 @@ GtOpenAIResponseProvider >> executeWait [
 		addMessage: (self assistantMessageClass new merge: result output first).
 		
 	self chat signalRunIsDone.
-	assistantWorking := false ]
-		asAsyncPromise
+	assistantWorking := false "]
+		asAsyncPromise"
 ]

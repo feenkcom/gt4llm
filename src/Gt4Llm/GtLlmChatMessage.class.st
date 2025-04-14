@@ -158,6 +158,11 @@ GtLlmChatMessage >> isFailure [
 ]
 
 { #category : #'as yet unclassified' }
+GtLlmChatMessage >> isRawMessage [
+	^ false
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmChatMessage >> isReady [
 	^ true
 ]
