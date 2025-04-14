@@ -1,6 +1,6 @@
 Extension { #name : #GtPharoSnippetCoderViewModel }
 
-{ #category : #'*Gt4OpenAI' }
+{ #category : #'*Gt4Ollama-GToolkit' }
 GtPharoSnippetCoderViewModel >> llmChat [
 	^ self coderModel
 		attributeNamed: #llmChat
