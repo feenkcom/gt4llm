@@ -144,25 +144,12 @@ GtCodeSnippetTutor >> lookupBindingToolFor: aCoderViewModel [
 	^ GtLlmFunctionTool new
 		name: 'lookupVariableBinding';
 		parameters: {'variableName'};
-		description: 'Looks up a variable binding by name and returns detailed information about the binding, such as type/class information, variable type, and values of slots. This should only be used if a detailed view of the variable value or metainformation is necessary. Otherwise refer to the `Variables` key in the request.';
+		description: 'Looks up a variable binding by name and returns detailed information about the binding, such as type/class information, variable type, and values of slots. This should only be used if a detailed view of the variable value or metainformation is necessary, or if the variable is not found elsewhere (might be the case for `self`, `super` and other special variables). Otherwise refer to the `Variables` key in the request.';
 		block: [ :functionCall | 
-			(aCoderViewModel sharedBindings bindingOf: functionCall anyArgument)
+			(aCoderViewModel compositeVariableBindings bindingOf: functionCall anyArgument)
 				ifNil: [ 'Variable not found' ]
 				ifNotNil: [ :aBinding | 
-					| bindingValue |
-					bindingValue := aBinding value.
-					STONJSON
-						toStringPretty: {'name' -> aBinding name.
-								'bindingClass' -> aBinding class name asString.
-								'value'
-									-> {'class' -> bindingValue class name asString.
-											'string' -> bindingValue asString.
-											'instanceSlots'
-												-> (bindingValue class slots
-														collect: [ :aSlot | 
-															{'name' -> aSlot name.
-																'value' -> (bindingValue readSlotNamed: aSlot name) asString}
-																asDictionary ])} asDictionary} asDictionary ] ]
+					self treatBinding: aBinding in: aCoderViewModel ] ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -211,6 +198,34 @@ You can look up classes, methods and documentation in the current Glamorous Tool
 							'Text' -> nil.
 							'Code Snippet' -> '(15 * 30) ": subtract 5" - 5'.
 							'Variables' -> nil} asDictionary}
+]
+
+{ #category : #'as yet unclassified' }
+GtCodeSnippetTutor >> treatBinding: aBinding in: aSnippetCoderViewModel [
+	| bindingValue |
+	bindingValue := aBinding value.
+	aBinding isSelfVariable
+		ifTrue: [ bindingValue := aSnippetCoderViewModel selfObject ].
+	aBinding isSuperVariable
+		ifTrue: [ bindingValue := aSnippetCoderViewModel selfObject ].
+	aBinding isThisContextVariable
+		ifTrue: [ bindingValue := aSnippetCoderViewModel context ].
+
+	^ STONJSON
+		toStringPretty: {'name' -> aBinding name.
+				'bindingClass' -> aBinding class name asString.
+				'value'
+					-> {'class' -> bindingValue class name asString.
+							'string' -> bindingValue asString.
+							'instanceSlots'
+								-> (bindingValue class slots
+										collect: [ :aSlot | 
+											| slotValue |
+											slotValue := bindingValue readSlotNamed: aSlot name.
+											{'name' -> aSlot name.
+												'class' -> slotValue class asString.
+												'value' -> slotValue asString} asDictionary ])} asDictionary}
+				asDictionary
 ]
 
 { #category : #'as yet unclassified' }

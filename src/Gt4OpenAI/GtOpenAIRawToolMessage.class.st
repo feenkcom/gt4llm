@@ -75,6 +75,16 @@ GtOpenAIRawToolMessage >> initialize [
 	createdAt := DateAndTime now
 ]
 
+{ #category : #'as yet unclassified' }
+GtOpenAIRawToolMessage >> isAssistantRole [
+	^ false
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAIRawToolMessage >> isRawMessage [
+	^ true
+]
+
 { #category : #accessing }
 GtOpenAIRawToolMessage >> rawData [
 	^ rawData
