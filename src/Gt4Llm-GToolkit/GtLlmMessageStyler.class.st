@@ -655,7 +655,7 @@ GtLlmMessageStyler >> visitCodeBlock: aCodeNode [
 				attributes: {BrTextHideAttribute new}
 				from: aCodeNode begin startPosition
 				to: aCodeNode end stopPosition.
-			(text from: aCodeNode end stopPosition + 1 to: aCodeNode end stopPosition + 1)
+			(text from: aCodeNode end stopPosition to: aCodeNode end stopPosition)
 				attributes: {BrTextAdornmentDynamicAttribute new
 							beAppend;
 							stencil: [ GtPharoSnippetCoder new

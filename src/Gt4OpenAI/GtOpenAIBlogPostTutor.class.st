@@ -20,7 +20,7 @@ GtOpenAIBlogPostTutor >> defaultDescription [
 { #category : #'as yet unclassified' }
 GtOpenAIBlogPostTutor >> defaultProviderStencil [
 	^ [ :anInstructionFormat | 
-	GtOpenAIAssistantProvider withApiKeyFromFile
+	GtOpenAIResponseProvider withApiKeyFromFile
 		instructions: anInstructionFormat asInstructionPiece instructionString;
 		format: anInstructionFormat asJsonSchema;
 		assistantMessageClass: GtOpenAIBlogPostMessage;

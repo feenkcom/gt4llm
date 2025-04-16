@@ -23,6 +23,16 @@ GtLlmActionChat >> gtInstanceFor: aView [
 ]
 
 { #category : #views }
+GtLlmActionChat >> gtToolsFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Tools';
+		priority: 10;
+		object: [ provider ];
+		view: #gtToolsFor:
+]
+
+{ #category : #views }
 GtLlmActionChat >> gtTutorActionsFor: aView [
 	<gtView>
 	^ aView forward
