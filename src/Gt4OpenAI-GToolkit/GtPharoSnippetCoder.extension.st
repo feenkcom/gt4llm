@@ -3,7 +3,7 @@ Extension { #name : #GtPharoSnippetCoder }
 { #category : #'*Gt4OpenAI-GToolkit' }
 GtPharoSnippetCoder >> initializeLlmAddOnsFor: anAst into: addOns [
 	<gtAstCoderAddOns: 10>
-	GtLlmFeatures useCoder ifFalse: [ ^ self ].
+	GtLlmFeatures usesCoder ifFalse: [ ^ self ].
 	addOns addStyler: (GtLlmInstructionInPharoCommentStyler new).
 	addOns
 		addMainAction: 'Open chat' translated
@@ -26,7 +26,7 @@ GtPharoSnippetCoder >> initializeLlmAddOnsFor: anAst into: addOns [
 { #category : #'*Gt4OpenAI-GToolkit' }
 GtPharoSnippetCoder >> initializeLlmAddOnsFor: anAst into: addOns viewModel: aGtPharoSourceCoderViewModel [
 	<gtAstCoderAddOns: 10>
-	GtLlmFeatures useCoder ifFalse: [ ^ self ].
+	GtLlmFeatures usesCoder ifFalse: [ ^ self ].
 	addOns addStyler: (GtLlmInstructionInPharoCommentStyler new).
 	addOns
 		addMainAction: 'Open chat' translated

@@ -3,7 +3,7 @@ Extension { #name : #GtLlmTutor }
 { #category : #'*Gt4OpenAI' }
 GtLlmTutor >> defaultProviderStencil [
 	^ [ :anInstructionFormat | 
-	GtOpenAIAssistantProvider withApiKeyFromFile
+	GtOpenAIResponseProvider withApiKeyFromFile
 		instructions: anInstructionFormat asInstructionPiece instructionString;
 		format: anInstructionFormat asJsonSchema;
 		assistantMessageClass: GtOpenAIActionMessage;
