@@ -19,5 +19,10 @@ GtLlmFeatures class >> setUseCoder: aBool [
 
 { #category : #'as yet unclassified' }
 GtLlmFeatures class >> useCoder [
+	UseCoder := true
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmFeatures class >> usesCoder [
 	^ UseCoder ifNil: [ false ]
 ]

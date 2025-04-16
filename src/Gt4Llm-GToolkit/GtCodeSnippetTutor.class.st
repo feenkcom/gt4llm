@@ -48,7 +48,7 @@ GtCodeSnippetTutor >> defaultDescription [
 { #category : #'as yet unclassified' }
 GtCodeSnippetTutor >> defaultProviderStencil [
 	^ [ :anInstructionFormat :aCoderViewModel | 
-	GtOpenAIAssistantProvider withApiKeyFromFile
+	GtOpenAIResponseProvider withApiKeyFromFile
 		format: anInstructionFormat asJsonSchema;
 		assistantMessageClass: GtOpenAICoderActionMessage;
 		userMessageClass: GtOpenAICoderActionMessage;
@@ -140,6 +140,13 @@ GtCodeSnippetTutor >> getReferencesTool [
 ]
 
 { #category : #'as yet unclassified' }
+GtCodeSnippetTutor >> initialize [
+	super initialize.
+	
+	instruction addSection: self responseFormatSection
+]
+
+{ #category : #'as yet unclassified' }
 GtCodeSnippetTutor >> lookupBindingToolFor: aCoderViewModel [
 	^ GtLlmFunctionTool new
 		name: 'lookupVariableBinding';
@@ -198,6 +205,18 @@ You can look up classes, methods and documentation in the current Glamorous Tool
 							'Text' -> nil.
 							'Code Snippet' -> '(15 * 30) ": subtract 5" - 5'.
 							'Variables' -> nil} asDictionary}
+]
+
+{ #category : #'as yet unclassified' }
+GtCodeSnippetTutor >> responseFormatSection [
+	^ GtLlmInstructionSection new
+		source: self;
+		title: 'Response Format Concerns';
+		body: 'The response format in textual responses should be Markdown. Apart from regular Markdown, it also supports annotations for classes and methods.
+		
+Classes may be annotated using `{{gtClass:ClassName}}`, where `ClassName` is the name of the class to be referenced.
+
+Likewise, methods may be annotated using `{{gtMethod:ClassName>>#methodName}}`, where `ClassName` is the name of the class and `methodName` is the name of the method.'
 ]
 
 { #category : #'as yet unclassified' }
