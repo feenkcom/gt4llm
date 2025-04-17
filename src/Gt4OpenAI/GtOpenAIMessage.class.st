@@ -58,11 +58,6 @@ GtOpenAIMessage >> annotations [
 ]
 
 { #category : #accessing }
-GtOpenAIMessage >> announce: anAnnouncement [
-	chat announce: anAnnouncement
-]
-
-{ #category : #accessing }
 GtOpenAIMessage >> assistantId [
 	^ assistantId
 ]
@@ -115,11 +110,6 @@ GtOpenAIMessage >> completedAtString: anObject [
 { #category : #accessing }
 GtOpenAIMessage >> content [
 	^ content
-]
-
-{ #category : #accessing }
-GtOpenAIMessage >> content: anObject [
-	content := anObject
 ]
 
 { #category : #accessing }

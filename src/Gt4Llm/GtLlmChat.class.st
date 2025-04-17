@@ -2,16 +2,14 @@ Class {
 	#name : #GtLlmChat,
 	#superclass : #Object,
 	#instVars : [
-		'model',
 		'announcer',
-		'context',
 		'lastUpdate',
 		'tutor',
 		'provider',
 		'messages',
 		'serializer'
 	],
-	#category : 'Gt4Llm'
+	#category : #Gt4Llm
 }
 
 { #category : #'as yet unclassified' }
@@ -43,17 +41,6 @@ GtLlmChat >> announce: anAnnouncement [
 { #category : #accessing }
 GtLlmChat >> announcer [
 	^ announcer ifNil: [ announcer := Announcer new ]
-]
-
-{ #category : #accessing }
-GtLlmChat >> context [
-	^ context
-]
-
-{ #category : #accessing }
-GtLlmChat >> context: anObject [
-	context := anObject.
-	context chat: self
 ]
 
 { #category : #accessing }
@@ -137,16 +124,6 @@ GtLlmChat >> messages: anObject [
 ]
 
 { #category : #accessing }
-GtLlmChat >> model [
-	^ model
-]
-
-{ #category : #accessing }
-GtLlmChat >> model: anObject [
-	model := anObject
-]
-
-{ #category : #accessing }
 GtLlmChat >> provider [
 	^ provider
 ]
@@ -155,6 +132,12 @@ GtLlmChat >> provider [
 GtLlmChat >> provider: anObject [
 	provider := anObject.
 	provider chat: self
+]
+
+{ #category : #accessing }
+GtLlmChat >> removeLastMessage [
+	self updateLastUpdate.
+	messages removeLast
 ]
 
 { #category : #'announcer - subscription' }

@@ -1,11 +1,11 @@
 Class {
-	#name : #GtCodeSnippetTutor,
+	#name : #GtLlmCodeSnippetTutor,
 	#superclass : #GtLlmTutor,
 	#category : #'Gt4Llm-GToolkit'
 }
 
 { #category : #'as yet unclassified' }
-GtCodeSnippetTutor >> chatOnCoderViewModel: aCoderViewModel [
+GtLlmCodeSnippetTutor >> chatOnCoderViewModel: aCoderViewModel [
 	| chat |
 	chat := (self createChatOn: aCoderViewModel)
 			onInstance: (GtLlmCustomSerializationValueHolder new
@@ -14,17 +14,21 @@ GtCodeSnippetTutor >> chatOnCoderViewModel: aCoderViewModel [
 					serializer: [ :aModel | 
 						{'Code Snippet' -> aModel coderModel sourceCode currentSourceText text asString.
 							'Variables'
-								-> (aModel sharedBindings bindings associations
+								-> ((aModel sharedBindings bindings associations
 										collect: [ :aPair | 
 											{'name' -> aPair key.
-												'value' -> aPair value value asString} asDictionary ])} ];
+												'value' -> aPair value value asString} asDictionary ])
+										asOrderedCollection
+										add: {'name' -> 'self'.
+												'value' -> aModel selfObject asString} asDictionary;
+										asArray)} ];
 					updater: [ :aModel :aText | aModel coderModel forSource: aText ]).
 
 	^ chat
 ]
 
 { #category : #'as yet unclassified' }
-GtCodeSnippetTutor >> codeSnippetFormatDescription [
+GtLlmCodeSnippetTutor >> codeSnippetFormatDescription [
 	<gtLlmTutorFormat>
 	^ GtLlmTutorFormatDescription new
 		name: 'Code Snippet';
@@ -34,19 +38,19 @@ GtCodeSnippetTutor >> codeSnippetFormatDescription [
 ]
 
 { #category : #'as yet unclassified' }
-GtCodeSnippetTutor >> createChatOn: aCoderViewModel [
+GtLlmCodeSnippetTutor >> createChatOn: aCoderViewModel [
 	^ GtLlmActionChat new
 		provider: (self providerStencil cull: instruction cull: aCoderViewModel);
 		tutor: self
 ]
 
 { #category : #'as yet unclassified' }
-GtCodeSnippetTutor >> defaultDescription [
+GtLlmCodeSnippetTutor >> defaultDescription [
 	^ 'You are an assistant for code snippets.'
 ]
 
 { #category : #'as yet unclassified' }
-GtCodeSnippetTutor >> defaultProviderStencil [
+GtLlmCodeSnippetTutor >> defaultProviderStencil [
 	^ [ :anInstructionFormat :aCoderViewModel | 
 	GtOpenAIResponseProvider withApiKeyFromFile
 		format: anInstructionFormat asJsonSchema;
@@ -63,7 +67,7 @@ GtCodeSnippetTutor >> defaultProviderStencil [
 ]
 
 { #category : #'as yet unclassified' }
-GtCodeSnippetTutor >> explanationAction [
+GtLlmCodeSnippetTutor >> explanationAction [
 	<gtLlmTutorAction>
 	^ GtLlmTutorAction new
 		name: 'Explain code';
@@ -81,7 +85,7 @@ GtCodeSnippetTutor >> explanationAction [
 ]
 
 { #category : #'as yet unclassified' }
-GtCodeSnippetTutor >> getImplementorsTool [
+GtLlmCodeSnippetTutor >> getImplementorsTool [
 	^ GtLlmFunctionTool new
 		name: 'getImplementors';
 		parameters: {'methodName'};
@@ -92,7 +96,7 @@ GtCodeSnippetTutor >> getImplementorsTool [
 ]
 
 { #category : #'as yet unclassified' }
-GtCodeSnippetTutor >> getMethodTool [
+GtLlmCodeSnippetTutor >> getMethodTool [
 	^ GtLlmFunctionTool new
 		name: 'getClassMethod';
 		parameters: {'className'. 'methodName'};
@@ -117,7 +121,7 @@ GtCodeSnippetTutor >> getMethodTool [
 ]
 
 { #category : #'as yet unclassified' }
-GtCodeSnippetTutor >> getMethodsTool [
+GtLlmCodeSnippetTutor >> getMethodsTool [
 	^ GtLlmFunctionTool new
 		name: 'getClassMethods';
 		parameters: {'className'};
@@ -129,7 +133,7 @@ GtCodeSnippetTutor >> getMethodsTool [
 ]
 
 { #category : #'as yet unclassified' }
-GtCodeSnippetTutor >> getReferencesTool [
+GtLlmCodeSnippetTutor >> getReferencesTool [
 	^ GtLlmFunctionTool new
 		name: 'getReferences';
 		parameters: {'methodName'};
@@ -140,14 +144,7 @@ GtCodeSnippetTutor >> getReferencesTool [
 ]
 
 { #category : #'as yet unclassified' }
-GtCodeSnippetTutor >> initialize [
-	super initialize.
-	
-	instruction addSection: self responseFormatSection
-]
-
-{ #category : #'as yet unclassified' }
-GtCodeSnippetTutor >> lookupBindingToolFor: aCoderViewModel [
+GtLlmCodeSnippetTutor >> lookupBindingToolFor: aCoderViewModel [
 	^ GtLlmFunctionTool new
 		name: 'lookupVariableBinding';
 		parameters: {'variableName'};
@@ -160,7 +157,7 @@ GtCodeSnippetTutor >> lookupBindingToolFor: aCoderViewModel [
 ]
 
 { #category : #'as yet unclassified' }
-GtCodeSnippetTutor >> lookupClassTool [
+GtLlmCodeSnippetTutor >> lookupClassTool [
 	^ GtLlmFunctionTool new
 		name: 'lookupClass';
 		parameters: {'className'};
@@ -172,7 +169,7 @@ GtCodeSnippetTutor >> lookupClassTool [
 ]
 
 { #category : #'as yet unclassified' }
-GtCodeSnippetTutor >> lookupPageTool [
+GtLlmCodeSnippetTutor >> lookupPageTool [
 	^ GtLlmFunctionTool new
 		name: 'lookupDocumentationPage';
 		parameters: {'pageName'};
@@ -184,7 +181,7 @@ GtCodeSnippetTutor >> lookupPageTool [
 ]
 
 { #category : #'as yet unclassified' }
-GtCodeSnippetTutor >> proposalAction [
+GtLlmCodeSnippetTutor >> proposalAction [
 	<gtLlmTutorAction>
 	^ GtLlmTutorAction new
 		name: 'Propose code';
@@ -208,7 +205,8 @@ You can look up classes, methods and documentation in the current Glamorous Tool
 ]
 
 { #category : #'as yet unclassified' }
-GtCodeSnippetTutor >> responseFormatSection [
+GtLlmCodeSnippetTutor >> responseFormatSection [
+	<gtLlmInstructionSection>
 	^ GtLlmInstructionSection new
 		source: self;
 		title: 'Response Format Concerns';
@@ -220,7 +218,7 @@ Likewise, methods may be annotated using `{{gtMethod:ClassName>>#methodName}}`, 
 ]
 
 { #category : #'as yet unclassified' }
-GtCodeSnippetTutor >> treatBinding: aBinding in: aSnippetCoderViewModel [
+GtLlmCodeSnippetTutor >> treatBinding: aBinding in: aSnippetCoderViewModel [
 	| bindingValue |
 	bindingValue := aBinding value.
 	aBinding isSelfVariable
@@ -231,24 +229,11 @@ GtCodeSnippetTutor >> treatBinding: aBinding in: aSnippetCoderViewModel [
 		ifTrue: [ bindingValue := aSnippetCoderViewModel context ].
 
 	^ STONJSON
-		toStringPretty: {'name' -> aBinding name.
-				'bindingClass' -> aBinding class name asString.
-				'value'
-					-> {'class' -> bindingValue class name asString.
-							'string' -> bindingValue asString.
-							'instanceSlots'
-								-> (bindingValue class slots
-										collect: [ :aSlot | 
-											| slotValue |
-											slotValue := bindingValue readSlotNamed: aSlot name.
-											{'name' -> aSlot name.
-												'class' -> slotValue class asString.
-												'value' -> slotValue asString} asDictionary ])} asDictionary}
-				asDictionary
+		toStringPretty: (GtLlmValueSerializer new serializeBinding: aBinding withValue: bindingValue)
 ]
 
 { #category : #'as yet unclassified' }
-GtCodeSnippetTutor >> variablesFormatDescription [
+GtLlmCodeSnippetTutor >> variablesFormatDescription [
 	<gtLlmTutorFormat>
 	^ GtLlmTutorFormatDescription new
 		name: 'Variables';

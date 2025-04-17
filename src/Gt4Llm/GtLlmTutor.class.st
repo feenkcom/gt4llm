@@ -86,6 +86,14 @@ GtLlmTutor >> collectFormats [
 ]
 
 { #category : #'as yet unclassified' }
+GtLlmTutor >> collectSections [
+	^ (Pragma
+		allNamed: #gtLlmInstructionSection
+		from: self class
+		to: Object) collect: [ :aPragma | self perform: aPragma methodSelector ]
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmTutor >> createChat [
 	^ GtLlmActionChat new
 		provider: (self providerStencil value: instruction);
@@ -143,7 +151,8 @@ GtLlmTutor >> initializeInstruction [
 	instruction := GtLlmTutorInstruction new.
 	instruction
 		addComponents: self collectFormats;
-		addActions: self collectActions
+		addActions: self collectActions;
+		addSections: self collectSections
 ]
 
 { #category : #accessing }

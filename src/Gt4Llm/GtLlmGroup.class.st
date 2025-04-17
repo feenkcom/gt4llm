@@ -338,6 +338,11 @@ GtLlmGroup >> removeAll [
 	self items removeAll
 ]
 
+{ #category : #accessing }
+GtLlmGroup >> removeLast [
+	self items removeLast
+]
+
 { #category : #enumerating }
 GtLlmGroup >> reversed [
 	^ self species 

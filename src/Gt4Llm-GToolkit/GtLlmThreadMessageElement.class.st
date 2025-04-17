@@ -126,6 +126,11 @@ GtLlmThreadMessageElement >> initializeTimeElement [
 ]
 
 { #category : #'private - announcement handling' }
+GtLlmThreadMessageElement >> onMessageContentsChanged: anAnnouncement [
+	self enqueueTask: (BlTaskAction new action: [ self updateContentsElement ])
+]
+
+{ #category : #'private - announcement handling' }
 GtLlmThreadMessageElement >> onRestyleRequested: anAnnouncement [
 	self
 		enqueueTask: (BlTaskAction new action: [ contentsElement editor styleText ])
@@ -155,6 +160,9 @@ GtLlmThreadMessageElement >> subscribeToThreadMessageViewModel [
 			to: self;
 		when: GtLlmThreadMessageViewModelChanged
 			send: #onThreadMessageViewModelChanged:
+			to: self;
+		when: GtLlmMessageContentsUpdated
+			send: #onMessageContentsChanged:
 			to: self
 ]
 

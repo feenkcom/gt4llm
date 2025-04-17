@@ -51,6 +51,11 @@ GtLlmTutorInstruction >> addSection: aSection [
 	sections add: aSection
 ]
 
+{ #category : #'as yet unclassified' }
+GtLlmTutorInstruction >> addSections: aSection [
+	sections addAll: aSection
+]
+
 { #category : #accessing }
 GtLlmTutorInstruction >> asInstructionPiece [
 	^ GtLlmInstructionWithSections new
