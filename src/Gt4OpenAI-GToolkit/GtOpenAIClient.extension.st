@@ -8,7 +8,6 @@ GtOpenAIClient >> initializeClient [
 	aClient headerAt: 'OpenAI-Beta' put: 'assistants=v2'.
 	aClient timeout: 60.
 	aClient setBearerAuthentication: apiKey.
-	aClient beOneShot.
 	^ aClient
 ]
 

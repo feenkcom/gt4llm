@@ -26,7 +26,7 @@ GtOpenAIProvider >> chat: anObject [
 
 { #category : #'as yet unclassified' }
 GtOpenAIProvider >> defaultModel [
-	^ 'gpt-4o'
+	^ 'gpt-4.1'
 ]
 
 { #category : #'as yet unclassified' }

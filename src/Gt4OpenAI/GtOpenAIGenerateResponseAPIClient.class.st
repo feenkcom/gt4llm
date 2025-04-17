@@ -15,6 +15,7 @@ Class {
 GtOpenAIGenerateResponseAPIClient >> buildEntity [
 	| entity |
 	entity := {'model' -> self model.
+			'stream' -> format isNil.
 			'input'
 				-> (self messages
 						collect: [ :aMessage | 
@@ -82,14 +83,14 @@ GtOpenAIGenerateResponseAPIClient >> model: anObject [
 
 { #category : #accessing }
 GtOpenAIGenerateResponseAPIClient >> request [
-	^ self client
-		post: '/responses'
-		withEntity: self buildEntity
+	^ format
+		ifNil: [ self client postStreaming: '/responses' withEntity: self buildEntity ]
+		ifNotNil: [ self client post: '/responses' withEntity: self buildEntity ]
 ]
 
 { #category : #accessing }
 GtOpenAIGenerateResponseAPIClient >> serializationClass [
-	^ GtOpenAIResponse
+	^ format ifNil: [ GtOpenAIStreamedResponse ] ifNotNil: [ GtOpenAIResponse ]
 ]
 
 { #category : #accessing }

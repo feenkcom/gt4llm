@@ -1,13 +1,16 @@
 Class {
 	#name : #GtLlmChatMessage,
 	#superclass : #GtLlmEntity,
+	#traits : 'TGtAnnouncer',
+	#classTraits : 'TGtAnnouncer classTrait',
 	#instVars : [
 		'content',
 		'role',
 		'id',
 		'createdAt',
 		'chat',
-		'attachments'
+		'attachments',
+		'announcer'
 	],
 	#category : #Gt4Llm
 }
@@ -54,6 +57,12 @@ GtLlmChatMessage >> annotations [
 	^ {}
 ]
 
+{ #category : #announcer }
+GtLlmChatMessage >> announcer [
+	<return: #Announcer>
+	^ announcer ifNil: [announcer := Announcer new]
+]
+
 { #category : #accessing }
 GtLlmChatMessage >> asTokenizableString [
 	^ '<|im_start|>' , self role , '<|im_sep|>' , self content , '<|im_end|>'
@@ -86,7 +95,9 @@ GtLlmChatMessage >> content [
 
 { #category : #accessing }
 GtLlmChatMessage >> content: anObject [
-	content := anObject
+	content := anObject.
+	
+	self announce: GtLlmMessageContentsUpdated new
 ]
 
 { #category : #'as yet unclassified' }

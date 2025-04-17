@@ -47,6 +47,11 @@ GtLlmBasicThreadMessageViewModel >> elementClass [
 	^ self subclassResponsibility
 ]
 
+{ #category : #'private - hooks' }
+GtLlmBasicThreadMessageViewModel >> forwardAnnouncement: anAnnouncement [
+		self announce: anAnnouncement
+]
+
 { #category : #'gt - extensions' }
 GtLlmBasicThreadMessageViewModel >> gtMessageViewsFor: aView [
 	<gtView>
@@ -136,6 +141,14 @@ GtLlmBasicThreadMessageViewModel >> senderText [
 { #category : #accessing }
 GtLlmBasicThreadMessageViewModel >> styler [
 	^ styler ifNil: [ styler := self newStyler ]
+]
+
+{ #category : #'private - hooks' }
+GtLlmBasicThreadMessageViewModel >> subscribeToThreadMessage [
+	self threadMessage
+		when: GtLlmMessageContentsUpdated
+		send: #forwardAnnouncement:
+		to: self
 ]
 
 { #category : #'as yet unclassified' }

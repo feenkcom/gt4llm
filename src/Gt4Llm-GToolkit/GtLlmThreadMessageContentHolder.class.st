@@ -3,7 +3,8 @@ Class {
 	#superclass : #BrVerticalPane,
 	#instVars : [
 		'threadMessageViewModel',
-		'header'
+		'header',
+		'updater'
 	],
 	#category : #'Gt4Llm-GToolkit'
 }
@@ -57,10 +58,14 @@ GtLlmThreadMessageContentHolder >> makeActionToolbar [
 ]
 
 { #category : #accessing }
+GtLlmThreadMessageContentHolder >> onMessageContentsUpdated: anAnnouncement [
+	self viewUpdater requestUpdate
+]
+
+{ #category : #accessing }
 GtLlmThreadMessageContentHolder >> onThreadMessageViewModelChanged [
 	self updateHeader.
-
-	self views: self threadMessageViewModel messageViews
+	self updateViews
 ]
 
 { #category : #accessing }
@@ -83,8 +88,11 @@ GtLlmThreadMessageContentHolder >> threadMessageViewModel: anObject [
 
 	threadMessageViewModel weak
 		when: GtLlmThreadMessageViewModelChanged
-		send: #onThreadMessageViewModelChanged:
-		to: self.
+			send: #onThreadMessageViewModelChanged:
+			to: self;
+		when: GtLlmMessageContentsUpdated
+			send: #onMessageContentsUpdated:
+			to: self.
 
 	self enqueueUpdate
 ]
@@ -94,6 +102,19 @@ GtLlmThreadMessageContentHolder >> updateHeader [
 	self header removeChildren.
 	self header addChild: self threadMessageViewModel messageHeaderElement.
 	self header addChild: self makeActionToolbar
+]
+
+{ #category : #accessing }
+GtLlmThreadMessageContentHolder >> updateViews [
+	self views: self threadMessageViewModel messageViews
+]
+
+{ #category : #accessing }
+GtLlmThreadMessageContentHolder >> viewUpdater [
+	^ updater
+		ifNil: [ updater := BrElementUpdater new.
+			updater element: self selector: #updateViews.
+			updater postponedDuration: 300 milliseconds ]
 ]
 
 { #category : #accessing }
