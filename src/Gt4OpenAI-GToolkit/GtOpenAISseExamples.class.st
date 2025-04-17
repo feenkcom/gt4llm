@@ -504,7 +504,7 @@ GtOpenAISseExamples >> onComplexStream [
 		assert: (''
 				join: ((stream eventsOfType: 'response.output_text.delta')
 						collect: [ :anEvent | anEvent data at: 'delta' ]))
-		equals: '`gt4llm` is a framework that enables interaction with Large Language Models (LLMs) within Glamorous Toolkit. It supports functionalities like chatting with LLMs, managing models, fine-tuning, and creating custom prompts and assistants.
+		equals: ('`gt4llm` is a framework that enables interaction with Large Language Models (LLMs) within Glamorous Toolkit. It supports functionalities like chatting with LLMs, managing models, fine-tuning, and creating custom prompts and assistants.
 
 ### Key Integrations:
 
@@ -512,7 +512,7 @@ GtOpenAISseExamples >> onComplexStream [
 - **Ollama**: Includes basic API access and more advanced concepts like structured outputs and modelfiles.
 - **Anthropic**: Offers simple integration, supporting chat use cases and tool calls.
 
-For more detailed studies and examples, refer to case studies on building LLM assistants for editing blog posts and creating Wardley Maps.'.
+For more detailed studies and examples, refer to case studies on building LLM assistants for editing blog posts and creating Wardley Maps.' copyReplaceAll: String cr with: String lf).
 
 	^ stream
 ]
