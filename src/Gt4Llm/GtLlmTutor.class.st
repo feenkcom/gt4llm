@@ -67,11 +67,11 @@ GtLlmTutor >> chatAction [
 
 { #category : #'as yet unclassified' }
 GtLlmTutor >> collectActions [
-	^ ((Pragma
+	^ (((Pragma
 		allNamed: #gtLlmTutorAction
 		from: self class
-		to: Object)
-		collect: [ :aPragma | (self perform: aPragma methodSelector) tutor: self ])
+		to: Object) collect: #methodSelector as: Set)
+		collect: [ :aSelector | (self perform: aSelector) tutor: self ])
 		sorted: [ :a :b | a priority < b priority ]
 ]
 

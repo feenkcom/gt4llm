@@ -19,7 +19,7 @@ GtOpenAIObjectMessage >> gtCodeFor: aView [
 		title: 'Code';
 		priority: 1;
 		stencil: [ (GtPharoMethodCoder
-				forClass: self chat serializer instance content class
+				forClass: self chat serializer instance content selfObject class
 				source: self codeBlock) asExpandedOnlyElement ]
 ]
 
