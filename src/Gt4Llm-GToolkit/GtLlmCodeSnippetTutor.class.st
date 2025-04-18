@@ -107,7 +107,7 @@ GtLlmCodeSnippetTutor >> snippetExplanationAction [
 	<gtLlmTutorAction>
 	^ GtLlmTutorAction new
 		name: 'Explain snippet';
-		priority: 1;
+		priority: 2;
 		description: 'Explain the code snippet using the text field. Look up classes and documentation as needed to generate an answer.';
 		examples: {GtLlmTutorActionExample new
 					input: {'Action' -> 'Explain code'.
@@ -162,4 +162,32 @@ GtLlmCodeSnippetTutor >> variablesFormatDescription [
 		priority: 2;
 		format: 'Dictionary';
 		example: '{"aVariable": "aValue"; "anotherVariable": "15"}'
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmCodeSnippetTutor >> viewProposalAction [
+	<gtLlmTutorAction>
+	^ GtLlmTutorAction new
+		name: 'Propose a view';
+		priority: 5;
+		description: 'Propose a useful Phlow view for the object bound by `self`, on the code in the snippet. Only reply with the Smalltalk code for the view. Look up existing views and their code for reference if needed.';
+		examples: {GtLlmTutorActionExample new
+					input: {'Action' -> 'Propose a view'.
+							'Code Snippet' -> 'self monies'.
+							'Object'
+								-> '{"string":"a GtTMoneyBag","instanceSlots":[{"name":"monies","class":"OrderedCollection","value":"an OrderedCollection(a GtTCurrencyMoney a GtTCurrencyMoney)"}],"class":"GtTMoneyBag"}'.
+							'Variables' -> {}} asDictionary;
+					output: {'Action' -> 'Propose a view'.
+							'Object'
+								-> '{"string":"a GtTMoneyBag","instanceSlots":[{"name":"monies","class":"OrderedCollection","value":"an OrderedCollection(a GtTCurrencyMoney a GtTCurrencyMoney)"}],"class":"GtTMoneyBag"}'.
+							'Method'
+								-> 'gtMoniesFor: aView
+	<gtView>
+	^ aView list
+		title: ''Monies'';
+		priority: 10;
+		items: [ self monies ]'.
+							'Code Snippet' -> 'self monies'.
+							'Variables' -> nil.
+							'Text' -> ''} asDictionary}
 ]

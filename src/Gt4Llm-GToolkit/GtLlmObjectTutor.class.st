@@ -41,7 +41,7 @@ GtLlmObjectTutor >> explanationAction [
 	<gtLlmTutorAction>
 	^ GtLlmTutorAction new
 		name: 'Explain the object';
-		priority: 1;
+		priority: 2;
 		description: 'Explain the object, including its layout, its purpose, and other interesting facts. Use tools if necessary. Stick to the facts you can verify and avoid speculation.';
 		examples: {GtLlmTutorActionExample new markUnverified
 					input: {'Action' -> 'Explain the object'.
@@ -214,7 +214,7 @@ gtColumnedListFor: aView
 		priority: 1;
 		items: [ {1. 2. 3} ];
 		column: ''Number'' text: #yourself;
-		column: ''Double'' text: [:aNumber | aNumber * 2 ]
+		column: ''Double'' text: [ :aNumber | aNumber * 2 ]
 ```
 
 Text editors:
@@ -226,7 +226,54 @@ gtTextEditorFor: aView
 		priority: 1;
 		text: [ ''hi'' ]
 ```
-'
+
+Diffs:
+```
+gtDiffFor: aView
+	<gtView>
+	^ aView diff
+		title: ''My diff view'';
+		priority: 1;
+		from: [ ''from text'' ];
+		to: [ ''to text'' ]
+```
+
+Trees:
+```
+gtTreeFor: aView
+	<gtView>
+	^ aView tree
+		title: ''My tree view'';
+		priority: 1;
+		items: [ { self } ];
+		children: #children;
+		itemText: #name;
+		expandUpTo: 2
+```
+
+Columned Trees:
+```
+gtColumnedTreeFor: aView
+	<gtView>
+	^ aView columnedTree
+		  title: ''My columnedTree view'';
+		  priority: 1;
+		  items: [ { self } ];
+		  children: #childrenExpressionOrBlock;
+		  expandAll;
+		  column: ''A column'' text: [ :each | each columnText ]
+```
+
+Forward:
+```
+gtForwardFor: aView
+	<gtView>
+	^ aView forward
+		title: ''My forward view'';
+		priority: 1;
+		object: [ self object ];
+		view: #gtViewNameFor:
+```'
 ]
 
 { #category : #'as yet unclassified' }
