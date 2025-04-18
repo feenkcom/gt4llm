@@ -15,9 +15,7 @@ GtLlmChat >> gtMessagesWidgetFor: aView [
 	^ aView explicit
 		title: 'Chat';
 		priority: 0;
-		stencil: [ | aViewModel |
-			aViewModel ifNil: [ aViewModel := self asViewModel ].
-			GtLlmChatElement new chatViewModel: aViewModel ];
+		stencil: [ self asElement ];
 		actionUpdateButton
 ]
 
