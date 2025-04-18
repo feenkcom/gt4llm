@@ -110,18 +110,9 @@ GtLlmObjectTutor >> getPropertyToolOn: anObject [
 	^ GtLlmFunctionTool new
 		name: 'getObjectProperty';
 		parameters: {'propertyName'};
-		description: 'Returns the property value by name. This can be an arbitrarily deeply nested accessor separated by spaces, including numbers to access a collection’s value by index (example: `property 2 collectionChildProperty`).';
+		description: 'Returns the property value by name. This can be an arbitrarily deeply nested accessor separated by spaces, including numbers to access a collection’s value by index (example: `property 2 collectionChildProperty`). Indices start at 1, not 0.';
 		block: [ :functionCall | 
-			| value |
-			value := anObject.
-			(' ' split: functionCall anyArgument)
-				do: [ :aKey | 
-					(value isKindOf: Dictionary)
-						ifTrue: [ value := value at: aKey ]
-						ifFalse: [ (value isKindOf: SequenceableCollection)
-								ifTrue: [ value := value at: aKey asInteger ]
-								ifFalse: [ value := value readSlotNamed: aKey asSymbol ] ] ].
-			STONJSON toStringPretty: (GtLlmValueSerializer new serializeValue: value) ]
+			self traverse: anObject using: (' ' split: functionCall anyArgument) ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -298,6 +289,28 @@ GtLlmObjectTutor >> serializerFor: anObject [
 		updater: [ :object :aString |
 			"not actually a good idea"
 			object readFromString: aString ]
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmObjectTutor >> traverse: anObject using: aChain [
+	| value traversed |
+	value := anObject.
+	traversed := OrderedCollection new.
+	aChain
+		do: [ :aKey | 
+			traversed add: aKey.
+			(value isKindOf: Dictionary)
+				ifTrue: [ value := value at: aKey ifAbsent: [ ^ 'Not found: ' , (' ' join: traversed) ] ]
+				ifFalse: [ (value isKindOf: SequenceableCollection)
+						ifTrue: [ value := value
+									at: aKey asInteger
+									ifAbsent: [ ^ 'Not found: ' , (' ' join: traversed) ] ]
+						ifFalse: [ value := (value class
+									slotNamed: aKey asSymbol
+									ifFound: #yourself
+									ifNone: [ ^ 'Not found: ' , (' ' join: traversed) ]) read: value ] ] ].
+
+	^ STONJSON toStringPretty: (GtLlmValueSerializer new serializeValue: value)
 ]
 
 { #category : #'as yet unclassified' }

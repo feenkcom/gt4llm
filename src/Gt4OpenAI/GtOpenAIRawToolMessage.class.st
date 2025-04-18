@@ -12,7 +12,7 @@ Class {
 
 { #category : #'as yet unclassified' }
 GtOpenAIRawToolMessage >> action [
-	^ 'Tool call: ' , self toolCall name
+	^ 'Tool call(' , self toolCall humanReadable , ')'
 ]
 
 { #category : #'as yet unclassified' }
