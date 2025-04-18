@@ -1,6 +1,6 @@
 Class {
 	#name : #GtOpenAICoderActionMessage,
-	#superclass : #GtOpenAIActionMessage,
+	#superclass : #GtOpenAIObjectMessage,
 	#category : #'Gt4OpenAI-GToolkit'
 }
 

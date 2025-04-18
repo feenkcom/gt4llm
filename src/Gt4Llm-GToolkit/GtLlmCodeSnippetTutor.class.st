@@ -1,28 +1,36 @@
 Class {
 	#name : #GtLlmCodeSnippetTutor,
-	#superclass : #GtLlmTutor,
+	#superclass : #GtLlmObjectTutor,
 	#category : #'Gt4Llm-GToolkit'
 }
 
 { #category : #'as yet unclassified' }
-GtLlmCodeSnippetTutor >> chatOnCoderViewModel: aCoderViewModel [
+GtLlmCodeSnippetTutor >> chatOn: aCoderViewModel [
 	| chat |
-	chat := (self createChatOn: aCoderViewModel)
-			onInstance: (GtLlmCustomSerializationValueHolder new
-					name: 'Code Snippet';
-					content: aCoderViewModel;
-					serializer: [ :aModel | 
-						{'Code Snippet' -> aModel coderModel sourceCode currentSourceText text asString.
-							'Variables'
-								-> ((aModel sharedBindings bindings associations
-										collect: [ :aPair | 
-											{'name' -> aPair key.
-												'value' -> aPair value value asString} asDictionary ])
-										asOrderedCollection
-										add: {'name' -> 'self'.
-												'value' -> aModel selfObject asString} asDictionary;
-										asArray)} ];
-					updater: [ :aModel :aText | aModel coderModel forSource: aText ]).
+	chat := self createChat.
+
+	chat
+		onInstance: (GtLlmCustomSerializationValueHolder new
+				name: 'Code Snippet';
+				content: aCoderViewModel;
+				serializer: [ :aModel | 
+					{'Code Snippet' -> aModel coderModel sourceCode currentSourceText text asString.
+						'Object' -> (GtLlmValueSerializer new serializeValue: aModel selfObject).
+						'Variables'
+							-> (aModel sharedBindings bindings associations
+									collect: [ :aPair | 
+										{'name' -> aPair key.
+											'value' -> aPair value value asString} asDictionary ])} ];
+				updater: [ :aModel :aText | aModel coderModel forSource: aText ]).
+
+	chat provider addTool: (self lookupBindingToolFor: aCoderViewModel).
+	chat provider addTool: (self getPropertyToolOn: aCoderViewModel selfObject).
+	chat provider addTool: self lookupClassTool.
+	chat provider addTool: self lookupPageTool.
+	chat provider addTool: self getImplementorsTool.
+	chat provider addTool: self getReferencesTool.
+	chat provider addTool: self getMethodTool.
+	chat provider addTool: self getMethodsTool.
 
 	^ chat
 ]
@@ -34,14 +42,9 @@ GtLlmCodeSnippetTutor >> codeSnippetFormatDescription [
 		name: 'Code Snippet';
 		priority: 2;
 		format: 'Smalltalk code';
-		example: 'Point x: 1 y: 10'
-]
-
-{ #category : #'as yet unclassified' }
-GtLlmCodeSnippetTutor >> createChatOn: aCoderViewModel [
-	^ GtLlmActionChat new
-		provider: (self providerStencil cull: instruction cull: aCoderViewModel);
-		tutor: self
+		example: '```
+Point x: 1 y: 10
+```'
 ]
 
 { #category : #'as yet unclassified' }
@@ -51,96 +54,12 @@ GtLlmCodeSnippetTutor >> defaultDescription [
 
 { #category : #'as yet unclassified' }
 GtLlmCodeSnippetTutor >> defaultProviderStencil [
-	^ [ :anInstructionFormat :aCoderViewModel | 
+	^ [ :anInstructionFormat| 
 	GtOpenAIResponseProvider withApiKeyFromFile
 		format: anInstructionFormat asJsonSchema;
 		assistantMessageClass: GtOpenAICoderActionMessage;
 		userMessageClass: GtOpenAICoderActionMessage;
-		addTool: self lookupClassTool;
-		addTool: self lookupPageTool;
-		addTool: self getMethodTool;
-		addTool: self getMethodsTool;
-		addTool: self getImplementorsTool;
-		addTool: self getReferencesTool;
-		addTool: (self lookupBindingToolFor: aCoderViewModel);
 		instructions: anInstructionFormat asInstructionPiece instructionString ]
-]
-
-{ #category : #'as yet unclassified' }
-GtLlmCodeSnippetTutor >> explanationAction [
-	<gtLlmTutorAction>
-	^ GtLlmTutorAction new
-		name: 'Explain code';
-		priority: 1;
-		description: 'Explain the code snippet using the text field. Look up classes and documentation as needed to generate an answer.';
-		examples: {GtLlmTutorActionExample new
-					input: {'Action' -> 'Explain code'.
-							'Code Snippet' -> '15 * 30'.
-							'Variables' -> {}} asDictionary;
-					output: {'Action' -> 'Explain code'.
-							'Text'
-								-> 'The snippet performs integer multiplication on the two numbers `15` and `30`. The result should be `450`.'.
-							'Code Snippet' -> '15 * 30'.
-							'Variables' -> nil} asDictionary}
-]
-
-{ #category : #'as yet unclassified' }
-GtLlmCodeSnippetTutor >> getImplementorsTool [
-	^ GtLlmFunctionTool new
-		name: 'getImplementors';
-		parameters: {'methodName'};
-		description: 'Gets a method by name and returns a list of methods that implement it.';
-		block: [ :functionCall | 
-			Character cr
-				join: (functionCall anyArgument asSymbol gtImplementors result toArray wait collect: #name) ]
-]
-
-{ #category : #'as yet unclassified' }
-GtLlmCodeSnippetTutor >> getMethodTool [
-	^ GtLlmFunctionTool new
-		name: 'getClassMethod';
-		parameters: {'className'. 'methodName'};
-		description: 'Gets a method by name and returns its source code.';
-		block: [ :functionCall | 
-			functionCall arguments
-				at: 'className'
-				ifPresent: [ :className | 
-					| class |
-					class := className asClassIfAbsent: [ nil ].
-					class
-						ifNil: [ 'Class not found' ]
-						ifNotNil: [ :aClass | 
-							functionCall arguments
-								at: 'methodName'
-								ifPresent: [ :methodName | 
-									aClass allMethods
-										detect: [ :aMethod | aMethod selector = methodName ]
-										ifFound: #sourceCode
-										ifNone: [ 'Method not found' ] ]
-								ifAbsent: [ 'Method not found' ] ] ] ]
-]
-
-{ #category : #'as yet unclassified' }
-GtLlmCodeSnippetTutor >> getMethodsTool [
-	^ GtLlmFunctionTool new
-		name: 'getClassMethods';
-		parameters: {'className'};
-		description: 'Gets a class by name and returns a list of its methods.';
-		block: [ :functionCall | 
-			(functionCall anyArgument asClassIfAbsent: [ nil ])
-				ifNil: [ 'Class not found' ]
-				ifNotNil: [ :aClass | Character cr join: (aClass allMethods collect: #selector) ] ]
-]
-
-{ #category : #'as yet unclassified' }
-GtLlmCodeSnippetTutor >> getReferencesTool [
-	^ GtLlmFunctionTool new
-		name: 'getReferences';
-		parameters: {'methodName'};
-		description: 'Gets a method by name and returns a list of methods that reference it.';
-		block: [ :functionCall | 
-			Character cr
-				join: (functionCall anyArgument asSymbol gtReferences result toArray wait collect: #name) ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -154,30 +73,6 @@ GtLlmCodeSnippetTutor >> lookupBindingToolFor: aCoderViewModel [
 				ifNil: [ 'Variable not found' ]
 				ifNotNil: [ :aBinding | 
 					self treatBinding: aBinding in: aCoderViewModel ] ]
-]
-
-{ #category : #'as yet unclassified' }
-GtLlmCodeSnippetTutor >> lookupClassTool [
-	^ GtLlmFunctionTool new
-		name: 'lookupClass';
-		parameters: {'className'};
-		description: 'Looks up documentation for a class by name and returns its content in Markdown format.';
-		block: [ :functionCall | 
-			((functionCall anyArgument) asClassIfAbsent: [ nil ])
-				ifNil: [ 'Class not found' ]
-				ifNotNil: [ :aClass | aClass instanceSide organization classComment ] ]
-]
-
-{ #category : #'as yet unclassified' }
-GtLlmCodeSnippetTutor >> lookupPageTool [
-	^ GtLlmFunctionTool new
-		name: 'lookupDocumentationPage';
-		parameters: {'pageName'};
-		description: 'Looks up a documentation page by name and returns its content in Markdown format. `pageName` may be a substring. If multiple pages are found, only the first one will be returned.';
-		block: [ :functionCall |
-			(LeDatabase gtBook asyncPagesForWord: functionCall anyArgument) toArray wait
-				ifEmpty: [ 'No page found' ]
-				ifNotEmpty: [ :pages | pages first asMarkdownPage ] ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -195,26 +90,40 @@ You can look up classes, methods and documentation in the current Glamorous Tool
 		examples: {GtLlmTutorActionExample new
 					input: {'Action' -> 'Propose code'.
 							'Code Snippet' -> '15 * 30 ": subtract 5"'.
+							'Object' -> '{"string":"nil","instanceSlots":[],"class":"UndefinedObject"}'.
 							'Variables'
 								-> {{'name' -> 'x'.
 											'value' -> '12'} asDictionary}} asDictionary;
 					output: {'Action' -> 'Propose code'.
 							'Text' -> nil.
+							'Object' -> '{"string":"nil","instanceSlots":[],"class":"UndefinedObject"}'.
 							'Code Snippet' -> '(15 * 30) ": subtract 5" - 5'.
-							'Variables' -> nil} asDictionary}
+							'Variables' -> nil.
+							'Method' -> nil} asDictionary}
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmCodeSnippetTutor >> responseFormatSection [
-	<gtLlmInstructionSection>
-	^ GtLlmInstructionSection new
-		source: self;
-		title: 'Response Format Concerns';
-		body: 'The response format in textual responses should be Markdown. Apart from regular Markdown, it also supports annotations for classes and methods.
-		
-Classes may be annotated using `{{gtClass:ClassName}}`, where `ClassName` is the name of the class to be referenced.
-
-Likewise, methods may be annotated using `{{gtMethod:ClassName>>#methodName}}`, where `ClassName` is the name of the class and `methodName` is the name of the method.'
+GtLlmCodeSnippetTutor >> snippetExplanationAction [
+	<gtLlmTutorAction>
+	^ GtLlmTutorAction new
+		name: 'Explain snippet';
+		priority: 1;
+		description: 'Explain the code snippet using the text field. Look up classes and documentation as needed to generate an answer.';
+		examples: {GtLlmTutorActionExample new
+					input: {'Action' -> 'Explain code'.
+							'Code Snippet' -> '15 * 30'.
+							'Variables' -> {}.
+							'Object'
+								-> '{"string":"nil","instanceSlots":[],"class":"UndefinedObject"}'}
+							asDictionary;
+					output: {'Action' -> 'Explain code'.
+							'Text'
+								-> 'The snippet performs integer multiplication on the two numbers `15` and `30`. The result should be `450`.'.
+							'Code Snippet' -> '15 * 30'.
+							'Object'
+								-> '{"string":"nil","instanceSlots":[],"class":"UndefinedObject"}'.
+							'Variables' -> nil.
+							'Method' -> nil} asDictionary}
 ]
 
 { #category : #'as yet unclassified' }

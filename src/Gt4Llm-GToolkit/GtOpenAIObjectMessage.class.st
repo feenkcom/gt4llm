@@ -6,7 +6,7 @@ Class {
 
 { #category : #'as yet unclassified' }
 GtOpenAIObjectMessage >> codeBlock [
-	^ self contentJson at: 'Code' ifAbsent: [ '' ]
+	^ self contentJson at: 'Method' ifAbsent: [ '' ]
 ]
 
 { #category : #'as yet unclassified' }
