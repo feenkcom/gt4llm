@@ -56,6 +56,7 @@ GtLlmNewThreadMessageElement >> buildSendButton [
 	^ BrButton new
 		fitContent;
 		beSmallSize;
+		id: #send;
 		aptitude: BrGlamorousButtonWithIconAptitude;
 		label: 'Send';
 		icon: BrGlamorousVectorIcons accept;

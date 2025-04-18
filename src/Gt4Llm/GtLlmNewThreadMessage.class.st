@@ -5,7 +5,8 @@ Class {
 		'assistantChat',
 		'contents',
 		'announcer',
-		'files'
+		'files',
+		'future'
 	],
 	#category : #Gt4Llm
 }
@@ -61,6 +62,11 @@ GtLlmNewThreadMessage >> contents: aString requester: aRequester [
 	self onContentsChangeByRequester: aRequester
 ]
 
+{ #category : #'as yet unclassified' }
+GtLlmNewThreadMessage >> future [
+	^ future
+]
+
 { #category : #accessing }
 GtLlmNewThreadMessage >> id [
 	^ '87fe83dd-90cd-0d00-9ada-2ba30d0bb652'
@@ -99,7 +105,7 @@ GtLlmNewThreadMessage >> sendMessage [
 
 	self contents: '' requester: nil.
 
-	[assistantChat sendMessage: aMessageContent] asAsyncPromise
+	future := [assistantChat sendMessage: aMessageContent] asAsyncPromise
 ]
 
 { #category : #actions }
