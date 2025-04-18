@@ -18,11 +18,11 @@ GtLlmValueSerializer >> serializeValue: aValue [
 	^ {'class' -> aValue class name asString.
 		'string' -> aValue asString.
 		'instanceSlots'
-			-> (aValue class slots
+			-> (aValue class allSlots
 					collect: [ :aSlot | 
 						| slotValue |
 						slotValue := aValue readSlotNamed: aSlot name.
 						{'name' -> aSlot name.
 							'class' -> slotValue class asString.
-							'value' -> slotValue asString} asDictionary ])} asDictionary
+							'value' -> slotValue asString} asDictionary ]) asArray} asDictionary
 ]

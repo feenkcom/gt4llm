@@ -228,5 +228,5 @@ GtLlmTutorInstruction >> toolUseDescription [
 		body: 'You have access to various tools. Tool use is governed by the following rules:
 
 - Only use tools if you cannot answer the user’s question or request without it.
-- Do not use more than 3 tool calls in a row to generate an answer.'
+- Prefer checking with tools over assumptions. Verify your statements using tools unless you are absolutely certain.'
 ]

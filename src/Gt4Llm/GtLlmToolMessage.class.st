@@ -15,7 +15,7 @@ GtLlmToolMessage class >> defaultRole [
 
 { #category : #'as yet unclassified' }
 GtLlmToolMessage >> action [
-	^ 'Tool call: ' , self toolCall name
+	^ 'Tool call(' , self toolCall humanReadable , ')'
 ]
 
 { #category : #'as yet unclassified' }
