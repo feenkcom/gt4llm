@@ -10,27 +10,15 @@ GtLlmObjectTutor >> chatOn: anObject [
 	chat := self createChat onInstance: (self serializerFor: anObject).
 
 
-	chat provider addTool: (self methodsToolOn: anObject).
-	chat provider addTool: (self methodToolOn: anObject).
-	chat provider addTool: (self slotToolOn: anObject).
+	chat provider addTool: self getMethodsTool.
+	chat provider addTool: self getMethodTool.
+	chat provider addTool: self getImplementorsTool.
+	chat provider addTool: self getReferencesTool.
+	chat provider addTool: self lookupClassTool.
+	chat provider addTool: self lookupPageTool.
+	chat provider addTool: (self getPropertyToolOn: anObject).
 
 	^ chat
-]
-
-{ #category : #'as yet unclassified' }
-GtLlmObjectTutor >> codeFormatDescription [
-	<gtLlmTutorFormat>
-	^ GtLlmTutorFormatDescription new
-		name: 'Code';
-		priority: 2;
-		format: 'Smalltalk code';
-		example: '```
-15 * 5 @ 3
-```
-```
-add: val
-	^ self + val
-```'
 ]
 
 { #category : #'as yet unclassified' }
@@ -49,34 +37,142 @@ GtLlmObjectTutor >> defaultProviderStencil [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmObjectTutor >> methodToolOn: anObject [
-	^ GtLlmFunctionTool new
-		name: 'getObjectMethod';
-		parameters: {'methodName'};
-		description: 'Gets a method by name from the object and returns its source code.';
-		block: [ :functionCall | 
-			functionCall arguments
-				at: 'methodName'
-				ifPresent: [ :methodName | 
-					anObject class allMethods
-						detect: [ :aMethod | aMethod selector = methodName ]
-						ifFound: #sourceCode
-						ifNone: [ 'Method not found' ] ]
-				ifAbsent: [ 'Method not found' ] ]
+GtLlmObjectTutor >> explanationAction [
+	<gtLlmTutorAction>
+	^ GtLlmTutorAction new
+		name: 'Explain the object';
+		priority: 1;
+		description: 'Explain the object, including its layout, its purpose, and other interesting facts. Use tools if necessary. Stick to the facts you can verify and avoid speculation.';
+		examples: {GtLlmTutorActionExample new markUnverified
+					input: {'Action' -> 'Explain the object'.
+							'Object'
+								-> '{"string":"(100@30)","instanceSlots":[{"name":"x","class":"SmallInteger","value":"100"},{"name":"y","class":"SmallInteger","value":"30"}],"class":"Point"}'}
+							asDictionary;
+					output: {'Action' -> 'Propose a view'.
+							'Object'
+								-> '{"string":"(100@30)","instanceSlots":[{"name":"x","class":"SmallInteger","value":"100"},{"name":"y","class":"SmallInteger","value":"300"}],"class":"Point"}'.
+							'Method' -> ''.
+							'Text'
+								-> 'This object reprents a two-dimensional point at the coordinates `100` and `30`.'}
+							asDictionary}
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmObjectTutor >> methodsToolOn: anObject [
+GtLlmObjectTutor >> getImplementorsTool [
 	^ GtLlmFunctionTool new
-		name: 'getObjectViews';
-		parameters: {};
-		description: 'Gets a list of the object’s views.';
+		name: 'getImplementors';
+		parameters: {'methodName'};
+		description: 'Gets a method by name and returns a list of methods that implement it.';
 		block: [ :functionCall | 
 			Character cr
-				join: ((Pragma
-						allNamed: #gtView
-						from: anObject class
-						to: Object) collect: #methodSelector) ]
+				join: (functionCall anyArgument asSymbol gtImplementors result toArray wait collect: #name) ]
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmObjectTutor >> getMethodTool [
+	^ GtLlmFunctionTool new
+		name: 'getClassMethod';
+		parameters: {'className'. 'methodName'};
+		description: 'Gets a method by name and returns its source code.';
+		block: [ :functionCall | 
+			functionCall arguments
+				at: 'className'
+				ifPresent: [ :className | 
+					| class |
+					class := className asClassIfAbsent: [ nil ].
+					class
+						ifNil: [ 'Class not found' ]
+						ifNotNil: [ :aClass | 
+							functionCall arguments
+								at: 'methodName'
+								ifPresent: [ :methodName | 
+									aClass allMethods
+										detect: [ :aMethod | aMethod selector = methodName ]
+										ifFound: #sourceCode
+										ifNone: [ 'Method not found' ] ]
+								ifAbsent: [ 'Method not found' ] ] ] ]
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmObjectTutor >> getMethodsTool [
+	^ GtLlmFunctionTool new
+		name: 'getClassMethods';
+		parameters: {'className'};
+		description: 'Gets a class by name and returns a list of its methods.';
+		block: [ :functionCall | 
+			(functionCall anyArgument asClassIfAbsent: [ nil ])
+				ifNil: [ 'Class not found' ]
+				ifNotNil: [ :aClass | Character cr join: (aClass allMethods collect: #selector) ] ]
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmObjectTutor >> getPropertyToolOn: anObject [
+	^ GtLlmFunctionTool new
+		name: 'getObjectProperty';
+		parameters: {'propertyName'};
+		description: 'Returns the property value by name. This can be an arbitrarily deeply nested accessor separated by spaces, including numbers to access a collection’s value by index (example: `property 2 collectionChildProperty`).';
+		block: [ :functionCall | 
+			| value |
+			value := anObject.
+			(' ' split: functionCall anyArgument)
+				do: [ :aKey | 
+					(value isKindOf: Dictionary)
+						ifTrue: [ value := value at: aKey ]
+						ifFalse: [ (value isKindOf: SequenceableCollection)
+								ifTrue: [ value := value at: aKey asInteger ]
+								ifFalse: [ value := value readSlotNamed: aKey asSymbol ] ] ].
+			STONJSON toStringPretty: (GtLlmValueSerializer new serializeValue: value) ]
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmObjectTutor >> getReferencesTool [
+	^ GtLlmFunctionTool new
+		name: 'getReferences';
+		parameters: {'methodName'};
+		description: 'Gets a method by name and returns a list of methods that reference it.';
+		block: [ :functionCall | 
+			Character cr
+				join: (functionCall anyArgument asSymbol gtReferences result toArray wait collect: #name) ]
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmObjectTutor >> lookupClassTool [
+	^ GtLlmFunctionTool new
+		name: 'lookupClass';
+		parameters: {'className'};
+		description: 'Looks up documentation for a class by name and returns its comment in Markdown format.';
+		block: [ :functionCall | 
+			((functionCall anyArgument) asClassIfAbsent: [ nil ])
+				ifNil: [ 'Class not found' ]
+				ifNotNil: [ :aClass | aClass instanceSide organization classComment ] ]
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmObjectTutor >> lookupPageTool [
+	^ GtLlmFunctionTool new
+		name: 'lookupDocumentationPage';
+		parameters: {'pageName'};
+		description: 'Looks up a documentation page by name and returns its content in Markdown format. `pageName` may be a substring. If multiple pages are found, only the first one will be returned.';
+		block: [ :functionCall |
+			(LeDatabase gtBook asyncPagesForWord: functionCall anyArgument) toArray wait
+				ifEmpty: [ 'No page found' ]
+				ifNotEmpty: [ :pages | pages first asMarkdownPage ] ]
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmObjectTutor >> methodFormatDescription [
+	<gtLlmTutorFormat>
+	^ GtLlmTutorFormatDescription new
+		name: 'Method';
+		priority: 2;
+		format: 'Smalltalk code';
+		example: '```
+15 * 5 @ 3
+```
+```
+add: val
+	^ self + val
+```'
 ]
 
 { #category : #'as yet unclassified' }
@@ -120,7 +216,30 @@ gtColumnedListFor: aView
 		column: ''Number'' text: #yourself;
 		column: ''Double'' text: [:aNumber | aNumber * 2 ]
 ```
+
+Text editors:
+```
+gtTextEditorFor: aView
+	<gtView>
+	^ aView textEditor
+		title: ''My editor view'';
+		priority: 1;
+		text: [ ''hi'' ]
+```
 '
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmObjectTutor >> responseFormatSection [
+	<gtLlmInstructionSection>
+	^ GtLlmInstructionSection new
+		source: self;
+		title: 'Response Format Concerns';
+		body: 'The response format in textual responses should be Markdown. Apart from regular Markdown, it also supports annotations for classes and methods.
+		
+Classes may be annotated using `{{gtClass:ClassName}}`, where `ClassName` is the name of the class to be referenced.
+
+Likewise, methods may be annotated using `{{gtMethod:ClassName>>#methodName}}`, where `ClassName` is the name of the class and `methodName` is the name of the method.'
 ]
 
 { #category : #'as yet unclassified' }
@@ -132,25 +251,6 @@ GtLlmObjectTutor >> serializerFor: anObject [
 		updater: [ :object :aString |
 			"not actually a good idea"
 			object readFromString: aString ]
-]
-
-{ #category : #'as yet unclassified' }
-GtLlmObjectTutor >> slotToolOn: anObject [
-	^ GtLlmFunctionTool new
-		name: 'getObjectProperty';
-		parameters: {'propertyName'};
-		description: 'Returns the property value by name. This can be an arbitrarily deeply nested accessor separated by spaces, including numbers to access a collection’s value by index (example: `property 2 collectionChildProperty`).';
-		block: [ :functionCall | 
-			| value |
-			value := anObject.
-			(' ' split: functionCall anyArgument)
-				do: [ :aKey | 
-					(value isKindOf: Dictionary)
-						ifTrue: [ value := value at: aKey ]
-						ifFalse: [ (value isKindOf: SequenceableCollection)
-								ifTrue: [ value := value at: aKey asInteger ]
-								ifFalse: [ value := value readSlotNamed: aKey asSymbol ] ] ].
-			STONJSON toStringPretty: (GtLlmValueSerializer new serializeValue: value) ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -168,7 +268,7 @@ GtLlmObjectTutor >> viewProposalAction [
 					output: {'Action' -> 'Propose a view'.
 							'Object'
 								-> '{"string":"(1@5)","instanceSlots":[{"name":"x","class":"SmallInteger","value":"1"},{"name":"y","class":"SmallInteger","value":"5"}],"class":"Point"}'.
-							'Code'
+							'Method'
 								-> 'gtCoordinatesFor: aView
 	<gtView>
 	^ aView columnedList
