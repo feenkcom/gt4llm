@@ -80,6 +80,20 @@ GtOpenAICoderActionMessage >> gtActionAcceptFor: anAction [
 ]
 
 { #category : #'as yet unclassified' }
+GtOpenAICoderActionMessage >> gtCodeFor: aView [
+	<gtView>
+	<gtLlmMessageView>
+	self codeBlock isEmptyOrNil ifTrue: [ ^ aView empty ].
+
+	^ aView explicit
+		title: 'Code';
+		priority: 1;
+		stencil: [ (GtPharoMethodCoder
+				forClass: self chat serializer instance content selfObject class
+				source: self codeBlock) asExpandedOnlyElement ]
+]
+
+{ #category : #'as yet unclassified' }
 GtOpenAICoderActionMessage >> gtCodeSnippetFor: aView [
 	<gtView>
 	<gtLlmMessageView>
