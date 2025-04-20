@@ -6,7 +6,7 @@ Class {
 		'notificationMessage',
 		'provider'
 	],
-	#category : #Gt4OpenAI
+	#category : #'Gt4OpenAI-GToolkit-Sse'
 }
 
 { #category : #'as yet unclassified' }

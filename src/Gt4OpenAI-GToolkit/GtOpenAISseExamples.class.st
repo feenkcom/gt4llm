@@ -1,7 +1,7 @@
 Class {
 	#name : #GtOpenAISseExamples,
 	#superclass : #Object,
-	#category : #'Gt4OpenAI-GToolkit'
+	#category : #'Gt4OpenAI-GToolkit-Sse'
 }
 
 { #category : #'as yet unclassified' }
