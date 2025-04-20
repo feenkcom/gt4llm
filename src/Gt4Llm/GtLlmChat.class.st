@@ -43,11 +43,6 @@ GtLlmChat >> announcer [
 	^ announcer ifNil: [ announcer := Announcer new ]
 ]
 
-{ #category : #'as yet unclassified' }
-GtLlmChat >> asElement [
-	^ GtLlmChatElement new chatViewModel: self asViewModel
-]
-
 { #category : #accessing }
 GtLlmChat >> defaultSerializer [
 	^ GtLlmMessageSerializer new

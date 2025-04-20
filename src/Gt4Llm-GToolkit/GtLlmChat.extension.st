@@ -1,6 +1,11 @@
 Extension { #name : #GtLlmChat }
 
 { #category : #'*Gt4Llm-GToolkit' }
+GtLlmChat >> asElement [
+	^ GtLlmChatElement new chatViewModel: self asViewModel
+]
+
+{ #category : #'*Gt4Llm-GToolkit' }
 GtLlmChat >> asViewModel [
 	^ GtLlmChatViewModel new assistantChat: self
 ]
