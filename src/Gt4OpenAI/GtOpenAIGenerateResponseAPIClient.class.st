@@ -90,7 +90,7 @@ GtOpenAIGenerateResponseAPIClient >> request [
 
 { #category : #accessing }
 GtOpenAIGenerateResponseAPIClient >> serializationClass [
-	^ format ifNil: [ GtOpenAIStreamedResponse ] ifNotNil: [ GtOpenAIResponse ]
+	^ format ifNil: [ #GtOpenAIStreamedResponse asClass ] ifNotNil: [ GtOpenAIResponse ]
 ]
 
 { #category : #accessing }
