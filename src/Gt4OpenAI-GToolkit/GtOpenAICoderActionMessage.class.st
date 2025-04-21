@@ -1,6 +1,6 @@
 Class {
 	#name : #GtOpenAICoderActionMessage,
-	#superclass : #GtOpenAIActionMessage,
+	#superclass : #GtOpenAIObjectMessage,
 	#category : #'Gt4OpenAI-GToolkit'
 }
 
@@ -77,6 +77,20 @@ GtOpenAICoderActionMessage >> gtActionAcceptFor: anAction [
 		icon: BrGlamorousVectorIcons accept;
 		tooltip: 'Accept code';
 		action: [ :aButton | self chat serializer update: self codeSnippetBlock ]
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAICoderActionMessage >> gtCodeFor: aView [
+	<gtView>
+	<gtLlmMessageView>
+	self codeBlock isEmptyOrNil ifTrue: [ ^ aView empty ].
+
+	^ aView explicit
+		title: 'Code';
+		priority: 1;
+		stencil: [ (GtPharoMethodCoder
+				forClass: self chat serializer instance content selfObject class
+				source: self codeBlock) asExpandedOnlyElement ]
 ]
 
 { #category : #'as yet unclassified' }

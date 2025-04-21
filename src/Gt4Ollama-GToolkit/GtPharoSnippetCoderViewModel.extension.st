@@ -6,5 +6,5 @@ GtPharoSnippetCoderViewModel >> llmChat [
 		attributeNamed: #llmChat
 		ifAbsent: [ self coderModel
 				attributeNamed: #llmChat
-				put: (GtCodeSnippetTutor new chatOnCoderViewModel: self) ]
+				put: (GtLlmCodeSnippetTutor new chatOn: self) ]
 ]

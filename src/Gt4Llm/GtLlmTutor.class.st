@@ -5,7 +5,7 @@ Class {
 		'providerStencil',
 		'instruction'
 	],
-	#category : #Gt4Llm
+	#category : 'Gt4Llm'
 }
 
 { #category : #other }
@@ -67,11 +67,11 @@ GtLlmTutor >> chatAction [
 
 { #category : #'as yet unclassified' }
 GtLlmTutor >> collectActions [
-	^ ((Pragma
+	^ ((Set withAll: ((Pragma
 		allNamed: #gtLlmTutorAction
 		from: self class
-		to: Object)
-		collect: [ :aPragma | (self perform: aPragma methodSelector) tutor: self ])
+		to: Object) collect: [:aPragma | aPragma methodSelector]))
+		collect: [ :aSelector | (self perform: aSelector) tutor: self ])
 		sorted: [ :a :b | a priority < b priority ]
 ]
 
@@ -83,6 +83,14 @@ GtLlmTutor >> collectFormats [
 		to: Object)
 		collect: [ :aPragma | (self perform: aPragma methodSelector) tutor: self ])
 		sorted: [ :a :b | a priority < b priority ]
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmTutor >> collectSections [
+	^ (Pragma
+		allNamed: #gtLlmInstructionSection
+		from: self class
+		to: Object) collect: [ :aPragma | self perform: aPragma methodSelector ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -143,7 +151,8 @@ GtLlmTutor >> initializeInstruction [
 	instruction := GtLlmTutorInstruction new.
 	instruction
 		addComponents: self collectFormats;
-		addActions: self collectActions
+		addActions: self collectActions;
+		addSections: self collectSections
 ]
 
 { #category : #accessing }

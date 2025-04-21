@@ -1,6 +1,11 @@
 Extension { #name : #GtLlmChat }
 
 { #category : #'*Gt4Llm-GToolkit' }
+GtLlmChat >> asElement [
+	^ GtLlmChatElement new chatViewModel: self asViewModel
+]
+
+{ #category : #'*Gt4Llm-GToolkit' }
 GtLlmChat >> asViewModel [
 	^ GtLlmChatViewModel new assistantChat: self
 ]
@@ -15,9 +20,7 @@ GtLlmChat >> gtMessagesWidgetFor: aView [
 	^ aView explicit
 		title: 'Chat';
 		priority: 0;
-		stencil: [ | aViewModel |
-			aViewModel ifNil: [ aViewModel := self asViewModel ].
-			GtLlmChatElement new chatViewModel: aViewModel ];
+		stencil: [ self asElement ];
 		actionUpdateButton
 ]
 

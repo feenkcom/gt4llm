@@ -2,16 +2,14 @@ Class {
 	#name : #GtLlmChat,
 	#superclass : #Object,
 	#instVars : [
-		'model',
 		'announcer',
-		'context',
 		'lastUpdate',
 		'tutor',
 		'provider',
 		'messages',
 		'serializer'
 	],
-	#category : 'Gt4Llm'
+	#category : #Gt4Llm
 }
 
 { #category : #'as yet unclassified' }
@@ -46,17 +44,6 @@ GtLlmChat >> announcer [
 ]
 
 { #category : #accessing }
-GtLlmChat >> context [
-	^ context
-]
-
-{ #category : #accessing }
-GtLlmChat >> context: anObject [
-	context := anObject.
-	context chat: self
-]
-
-{ #category : #accessing }
 GtLlmChat >> defaultSerializer [
 	^ GtLlmMessageSerializer new
 ]
@@ -86,11 +73,6 @@ GtLlmChat >> gtMessagesFor: aView [
 		column: 'Message' text: [ :item | item content ];
 		updateWhen: GtLlmThreadRunAnnouncement in: self announcer;
 		actionUpdateButton
-]
-
-{ #category : #announcer }
-GtLlmChat >> hasSubscriber: anObject [
-	^ self announcer hasSubscriber: anObject
 ]
 
 { #category : #accessing }
@@ -137,16 +119,6 @@ GtLlmChat >> messages: anObject [
 ]
 
 { #category : #accessing }
-GtLlmChat >> model [
-	^ model
-]
-
-{ #category : #accessing }
-GtLlmChat >> model: anObject [
-	model := anObject
-]
-
-{ #category : #accessing }
 GtLlmChat >> provider [
 	^ provider
 ]
@@ -155,6 +127,12 @@ GtLlmChat >> provider [
 GtLlmChat >> provider: anObject [
 	provider := anObject.
 	provider chat: self
+]
+
+{ #category : #accessing }
+GtLlmChat >> removeLastMessage [
+	self updateLastUpdate.
+	messages removeLast
 ]
 
 { #category : #'announcer - subscription' }

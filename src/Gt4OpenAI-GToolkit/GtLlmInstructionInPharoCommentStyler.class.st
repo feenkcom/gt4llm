@@ -27,7 +27,7 @@ GtLlmInstructionInPharoCommentStyler >> visitSmaCCParseNode: aSmaCCParseNode [
 																		beTinySize;
 																		aptitude: BrGlamorousButtonRectangularAptitude new + BrGlamorousButtonIconAptitude new ]
 																content: [ | llmChat |
-																	llmChat := coderViewModel coderModel llmChat.
+																	llmChat := coderViewModel  llmChat.
 																	llmChat
 																		sendChatRequest: (aSmaCCParseNode completeSource asString
 																				copyFrom: each first + 2
