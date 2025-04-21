@@ -1,7 +1,7 @@
 Class {
 	#name : #GtOpenAIObjectMessage,
 	#superclass : #GtOpenAIActionMessage,
-	#category : #'Gt4Llm-GToolkit'
+	#category : #'Gt4OpenAI-GToolkit'
 }
 
 { #category : #'as yet unclassified' }
