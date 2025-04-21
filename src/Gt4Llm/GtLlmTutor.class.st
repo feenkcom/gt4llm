@@ -1,19 +1,19 @@
 Class {
-	#name : #GtLlmTutor,
-	#superclass : #Object,
+	#name : 'GtLlmTutor',
+	#superclass : 'Object',
 	#instVars : [
 		'providerStencil',
 		'instruction'
 	],
-	#category : #Gt4Llm
+	#category : 'Gt4Llm'
 }
 
-{ #category : #other }
+{ #category : 'other' }
 GtLlmTutor class >> new [
 	^ self basicNew initialize
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 GtLlmTutor >> actionFormatDescription [
 	<gtLlmTutorFormat>
 	^ GtLlmTutorFormatDescription new beRequired
@@ -24,32 +24,32 @@ Create a draft
 ```'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 GtLlmTutor >> actionNamed: anActionName [
 	^ self instruction actionNamed: anActionName
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutor >> actions [
 	^ instruction actions
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 GtLlmTutor >> addAction: anAction [
 	instruction addAction: (anAction tutor: self)
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 GtLlmTutor >> addFormat: aComponent [
 	instruction addComponent: aComponent
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 GtLlmTutor >> addInstructionSection: aSection [
 	instruction addSection: aSection
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 GtLlmTutor >> chatAction [
 	<gtLlmTutorAction>
 	^ GtLlmTutorAction new 
@@ -65,17 +65,17 @@ GtLlmTutor >> chatAction [
 							asDictionary}
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 GtLlmTutor >> collectActions [
-	^ (((Pragma
+	^ ((Set withAll: ((Pragma
 		allNamed: #gtLlmTutorAction
 		from: self class
-		to: Object) collect: #methodSelector as: Set)
+		to: Object) collect: [:aPragma | aPragma methodSelector]))
 		collect: [ :aSelector | (self perform: aSelector) tutor: self ])
 		sorted: [ :a :b | a priority < b priority ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 GtLlmTutor >> collectFormats [
 	^ ((Pragma
 		allNamed: #gtLlmTutorFormat
@@ -85,7 +85,7 @@ GtLlmTutor >> collectFormats [
 		sorted: [ :a :b | a priority < b priority ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 GtLlmTutor >> collectSections [
 	^ (Pragma
 		allNamed: #gtLlmInstructionSection
@@ -93,39 +93,39 @@ GtLlmTutor >> collectSections [
 		to: Object) collect: [ :aPragma | self perform: aPragma methodSelector ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 GtLlmTutor >> createChat [
 	^ GtLlmActionChat new
 		provider: (self providerStencil value: instruction);
 		tutor: self
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 GtLlmTutor >> defaultDescription [
 	^ 'You are an assistant.'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 GtLlmTutor >> description [
 	^ self instruction description
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutor >> description: anObject [
 	instruction description: anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 GtLlmTutor >> formatComponents [
 	^ instruction formats
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 GtLlmTutor >> formatNamed: aString [
 	^ instruction componentNamed: aString
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 GtLlmTutor >> gtInstructionFor: aView [
 	<gtView>
 	^ aView forward
@@ -135,7 +135,7 @@ GtLlmTutor >> gtInstructionFor: aView [
 		view: #gtInstructionFor:
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 GtLlmTutor >> initialize [
 	super initialize.
 	self providerStencil: self defaultProviderStencil.
@@ -146,7 +146,7 @@ GtLlmTutor >> initialize [
 	self description: self defaultDescription
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 GtLlmTutor >> initializeInstruction [
 	instruction := GtLlmTutorInstruction new.
 	instruction
@@ -155,37 +155,37 @@ GtLlmTutor >> initializeInstruction [
 		addSections: self collectSections
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutor >> instruction [
 	^ instruction
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutor >> onAnthropicWithModel: aModel [
 	self providerStencil: (self defaultAnthropicProviderStencilWithModel: aModel)
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutor >> providerStencil [
 	^ providerStencil
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutor >> providerStencil: anObject [
 	providerStencil := anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 GtLlmTutor >> recomputeActions [
 	instruction replaceActions: self collectActions
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 GtLlmTutor >> recomputeFormats [
 	instruction replaceComponents: self collectFormats
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 GtLlmTutor >> textFormatDescription [
 	<gtLlmTutorFormat>
 	^ GtLlmTutorFormatDescription new
