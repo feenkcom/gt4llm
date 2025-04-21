@@ -5,7 +5,7 @@ Class {
 		'providerStencil',
 		'instruction'
 	],
-	#category : #Gt4Llm
+	#category : 'Gt4Llm'
 }
 
 { #category : #other }
@@ -67,10 +67,10 @@ GtLlmTutor >> chatAction [
 
 { #category : #'as yet unclassified' }
 GtLlmTutor >> collectActions [
-	^ (((Pragma
+	^ ((Set withAll: ((Pragma
 		allNamed: #gtLlmTutorAction
 		from: self class
-		to: Object) collect: #methodSelector as: Set)
+		to: Object) collect: [:aPragma | aPragma methodSelector]))
 		collect: [ :aSelector | (self perform: aSelector) tutor: self ])
 		sorted: [ :a :b | a priority < b priority ]
 ]

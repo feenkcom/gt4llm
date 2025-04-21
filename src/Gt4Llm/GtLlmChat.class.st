@@ -75,11 +75,6 @@ GtLlmChat >> gtMessagesFor: aView [
 		actionUpdateButton
 ]
 
-{ #category : #announcer }
-GtLlmChat >> hasSubscriber: anObject [
-	^ self announcer hasSubscriber: anObject
-]
-
 { #category : #accessing }
 GtLlmChat >> initialize [
 	super initialize.
