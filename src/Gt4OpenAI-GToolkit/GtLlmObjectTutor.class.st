@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLlmObjectTutor,
 	#superclass : #GtLlmTutor,
-	#category : #'Gt4Llm-GToolkit'
+	#category : #'Gt4OpenAI-GToolkit'
 }
 
 { #category : #'as yet unclassified' }
