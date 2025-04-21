@@ -8,7 +8,7 @@ Class {
 		'formats',
 		'sections'
 	],
-	#category : #Gt4Llm
+	#category : 'Gt4Llm'
 }
 
 { #category : #other }
@@ -227,6 +227,6 @@ GtLlmTutorInstruction >> toolUseDescription [
 		title: 'Tool use description';
 		body: 'You have access to various tools. Tool use is governed by the following rules:
 
-- Only use tools if you cannot answer the user’s question or request without it.
+- Only use tools if you cannot answer the user''s question or request without it.
 - Prefer checking with tools over assumptions. Verify your statements using tools unless you are absolutely certain.'
 ]
