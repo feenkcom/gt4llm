@@ -1,6 +1,6 @@
 Class {
-	#name : #GtLlmTutorInstruction,
-	#superclass : #Object,
+	#name : 'GtLlmTutorInstruction',
+	#superclass : 'Object',
 	#instVars : [
 		'name',
 		'actions',
@@ -8,55 +8,55 @@ Class {
 		'formats',
 		'sections'
 	],
-	#category : #Gt4Llm
+	#category : 'Gt4Llm'
 }
 
-{ #category : #other }
+{ #category : 'other' }
 GtLlmTutorInstruction class >> new [
 	^ self basicNew initialize
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 GtLlmTutorInstruction >> actionNamed: aString [
 	^ actions detect: [ :anAction | anAction name = aString ] ifNone: [ nil ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 GtLlmTutorInstruction >> actions [
 	^ actions
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 GtLlmTutorInstruction >> addAction: anAction [
 	actions add: anAction
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 GtLlmTutorInstruction >> addActions: aListOfActions [
 	actions addAll: aListOfActions
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutorInstruction >> addComponent: aComponent [
 	formats add: aComponent
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutorInstruction >> addComponents: aListOfComponents [
 	formats addAll: aListOfComponents
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 GtLlmTutorInstruction >> addSection: aSection [
 	sections add: aSection
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 GtLlmTutorInstruction >> addSections: aSection [
 	sections addAll: aSection
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutorInstruction >> asInstructionPiece [
 	^ GtLlmInstructionWithSections new
 		source: self;
@@ -86,7 +86,7 @@ The components that make up the state are as follows:';
 							(self errorHandlingDescription)}
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutorInstruction >> asJsonSchema [
 	^ {'type' -> 'object'.
 		'properties'
@@ -97,7 +97,7 @@ GtLlmTutorInstruction >> asJsonSchema [
 		'additionalProperties' -> false} asDictionary
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutorInstruction >> communicationConventionsDescription [
 	^ GtLlmInstructionSection new
 		title: 'Communication rules';
@@ -107,46 +107,46 @@ GtLlmTutorInstruction >> communicationConventionsDescription [
 				addItem: 'Assume the user would like something concise.')
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutorInstruction >> componentNamed: aName [
 	^ formats detect: [ :aComponent | aComponent name = aName ] ifNone: [ nil ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 GtLlmTutorInstruction >> defaultSections [
 	^ {self interactionDescription.
 		self communicationConventionsDescription.
 		self toolUseDescription} asOrderedCollection
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutorInstruction >> description [
 	^ description
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutorInstruction >> description: anObject [
 	description := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutorInstruction >> errorHandlingDescription [
 	^ GtLlmInstructionSection new
 		title: 'Error handling description';
 		body: 'If an error occurs during an action, a message will be sent that starts with `An error occured:` and the error message below that. You then correct the mistake by sending an action result that corrects the mistake.'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutorInstruction >> formatNamed: aName [
 	^ formats detect: [ :aComponent | aComponent name = aName ] ifNone: [ nil ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutorInstruction >> formats [
 	^ formats
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 GtLlmTutorInstruction >> gtActionsFor: aView [
 	<gtView>
 	^ aView forward
@@ -156,7 +156,7 @@ GtLlmTutorInstruction >> gtActionsFor: aView [
 		view: #gtActionsFor:
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutorInstruction >> gtInstructionFor: aView [
 	<gtView>
 	^ aView forward
@@ -166,7 +166,7 @@ GtLlmTutorInstruction >> gtInstructionFor: aView [
 		view: #gtInstructionFor:
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutorInstruction >> initialize [
 	formats := OrderedCollection new.
 	actions := GtLlmActionsGroup new.
@@ -174,7 +174,7 @@ GtLlmTutorInstruction >> initialize [
 	sections := self defaultSections
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutorInstruction >> interactionDescription [
 	^ GtLlmInstructionSection new
 		title: 'Interaction description';
@@ -191,42 +191,42 @@ GtLlmTutorInstruction >> interactionDescription [
 The state is an aggregate of the components listed below.'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutorInstruction >> name [
 	^ name
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutorInstruction >> name: anObject [
 	name := anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 GtLlmTutorInstruction >> replaceActions: aListOfActions [
 	actions removeAll addAll: aListOfActions
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutorInstruction >> replaceComponents: aListOfComponents [
 	formats removeAll addAll: aListOfComponents
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutorInstruction >> sections [
 	^ sections
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutorInstruction >> sections: anObject [
 	sections := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtLlmTutorInstruction >> toolUseDescription [
 	^ GtLlmInstructionSection new
 		title: 'Tool use description';
 		body: 'You have access to various tools. Tool use is governed by the following rules:
 
-- Only use tools if you cannot answer the user’s question or request without it.
+- Only use tools if you cannot answer the user''s question or request without it.
 - Prefer checking with tools over assumptions. Verify your statements using tools unless you are absolutely certain.'
 ]
