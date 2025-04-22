@@ -16,7 +16,7 @@ GtLlmValueSerializer >> serializeBinding: aBinding withValue: aBindingValue [
 { #category : #'as yet unclassified' }
 GtLlmValueSerializer >> serializeValue: aValue [
 	^ {'class' -> aValue class name asString.
-		'string' -> aValue asString.
+		'string' -> (aValue asString escapeCharacter: '''').
 		'instanceSlots'
 			-> (aValue class allSlots
 					collect: [ :aSlot | 
@@ -24,5 +24,6 @@ GtLlmValueSerializer >> serializeValue: aValue [
 						slotValue := aValue readSlotNamed: aSlot name.
 						{'name' -> aSlot name.
 							'class' -> slotValue class asString.
-							'value' -> slotValue asString} asDictionary ]) asArray} asDictionary
+							'value' -> (slotValue asString escapeCharacter: '''')} asDictionary ])
+					asArray} asDictionary
 ]
