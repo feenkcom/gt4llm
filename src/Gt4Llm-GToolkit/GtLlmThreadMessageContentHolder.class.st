@@ -132,6 +132,9 @@ GtLlmThreadMessageContentHolder >> views: aCollectionOfViews [
 			element := views first asElement.
 			(element respondsTo: #hideHeaderElement)
 				ifTrue: [ element hideHeaderElement ].
+			(element respondsTo: #vFitContentLimited)
+				ifTrue: [ element vFitContentLimited ]
+				ifFalse: [ element constraintsDo: [ :c | c vertical fitContentLimited ] ].
 			self addChild: element as: #'message-tabs' ]
 ]
 
@@ -157,6 +160,9 @@ GtLlmThreadMessageContentHolder >> viewsToTabGroup: aCollectionOfViews [
 						stencil: [ view
 								asElementDo: [ :anElement | 
 									anElement phlow beViewContent.
+									(anElement respondsTo: #vFitContentLimited)
+										ifTrue: [ anElement vFitContentLimited ]
+										ifFalse: [ anElement constraintsDo: [ :c | c vertical fitContentLimited ] ].
 									anElement ] ];
 						toolbarStencil: [ view actionsToolbarForElement: aTab ].
 					view attachTooltipFor: aTab.
