@@ -42,6 +42,15 @@ GtLlmActionChat >> gtTutorActionsFor: aView [
 ]
 
 { #category : #views }
+GtLlmActionChat >> gtTutorFormatsFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Tutor formats';
+		object: [ tutor ];
+		view: #gtFormatComponentsFor:
+]
+
+{ #category : #views }
 GtLlmActionChat >> gtTutorInstructionFor: aView [
 	<gtView>
 	^ aView forward

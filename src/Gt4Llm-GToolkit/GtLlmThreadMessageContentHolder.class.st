@@ -126,16 +126,7 @@ GtLlmThreadMessageContentHolder >> views: aCollectionOfViews [
 
 	views ifEmpty: [ ^ self ].
 
-	views size > 1
-		ifTrue: [ self addChild: (self viewsToTabGroup: aCollectionOfViews) as: #'message-tabs' ]
-		ifFalse: [ | element |
-			element := views first asElement.
-			(element respondsTo: #hideHeaderElement)
-				ifTrue: [ element hideHeaderElement ].
-			(element respondsTo: #vFitContentLimited)
-				ifTrue: [ element vFitContentLimited ]
-				ifFalse: [ element constraintsDo: [ :c | c vertical fitContentLimited ] ].
-			self addChild: element as: #'message-tabs' ]
+	self addChild: (self viewsToTabGroup: aCollectionOfViews) as: #'message-tabs'
 ]
 
 { #category : #accessing }
