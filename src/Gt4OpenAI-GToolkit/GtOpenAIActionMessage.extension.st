@@ -1,6 +1,13 @@
 Extension { #name : #GtOpenAIActionMessage }
 
 { #category : #'*Gt4OpenAI-GToolkit' }
+GtOpenAIActionMessage >> gtContentFor: aView [
+	<gtView>
+	<gtLlmMessageView>
+	^ aView empty
+]
+
+{ #category : #'*Gt4OpenAI-GToolkit' }
 GtOpenAIActionMessage >> gtTextFor: aView [
 	<gtView>
 	<gtLlmMessageView>
