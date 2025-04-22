@@ -67,15 +67,6 @@ GtOpenAIProvider >> sendAssistantMessage: aMessage [
 ]
 
 { #category : #'as yet unclassified' }
-GtOpenAIProvider >> sendMessage: aMessage [
-	| output |
-	output := aMessage.
-	output size > self maximumMessageSize
-		ifTrue: [ output := output first: self maximumMessageSize ].
-	super sendMessage: output
-]
-
-{ #category : #'as yet unclassified' }
 GtOpenAIProvider >> status [
 	^ assistantWorking
 		ifTrue: [ GtLlmAssistantChatWorkingStatus new ]
