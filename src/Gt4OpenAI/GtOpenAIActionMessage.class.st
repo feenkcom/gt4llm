@@ -26,6 +26,25 @@ GtOpenAIActionMessage >> gtChatRequestFor: aView [
 		text: [ self action removePrefix: 'Chat: ' ]
 ]
 
+{ #category : #'trait-TGtActionMessage' }
+GtOpenAIActionMessage >> gtPromoteToExampleActionFor: anAction [
+	<gtLlmAction>
+	self isAssistantRole ifFalse: [ ^ anAction noAction ].
+
+	^ anAction dropdown
+		priority: 5;
+		label: 'Promote example';
+		content: [ :aButton | 
+			| action example |
+			action := self chat tutor actionNamed: self action.
+			example := GtLlmTutorActionExample new
+					input: self ancestor contentJson;
+					output: self contentJson.
+			action addExample: example.
+			action persist.
+			example asGtMagritteViewModel asElement ]
+]
+
 { #category : #'as yet unclassified' }
 GtOpenAIActionMessage >> gtReifyActionFor: anAction [
 	<gtLlmAction>
