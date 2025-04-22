@@ -32,6 +32,7 @@ GtOpenAIBlogPostMessage >> gtPostFor: aView [
 	| json |
 	[ json := self contentJson ] on: Error do: [ ^ aView empty ].
 	json at: 'Post' ifAbsent: [ ^ aView empty ].
+	(json at: 'Post') ifNil: [ ^ aView empty ].
 	^ aView textEditor
 		title: 'Post';
 		priority: 1;

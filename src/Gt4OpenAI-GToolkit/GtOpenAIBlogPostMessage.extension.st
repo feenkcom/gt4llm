@@ -27,6 +27,7 @@ GtOpenAIBlogPostMessage >> gtDiffFor: aView [
 	<gtLlmMessageView>
 	self isUserRole ifTrue: [ ^ aView empty ].
 	(self contentJson includesKey: 'Post') ifFalse: [ ^ aView empty ].
+	(self contentJson at: 'Post') ifNil: [ ^ aView empty ].
 	^ aView diff
 		title: 'Diff';
 		priority: 2;
