@@ -14,16 +14,23 @@ GtOpenAIActionMessage >> actionModel [
 				ifFalse: [ nil ] ]
 ]
 
-{ #category : #'as yet unclassified' }
-GtOpenAIActionMessage >> gtChatRequestFor: aView [
-	<gtView>
-	<gtLlmMessageView>
-	(self action beginsWith: 'Chat:') ifFalse: [ ^ aView empty ].
+{ #category : #'trait-TGtActionMessage' }
+GtOpenAIActionMessage >> gtPromoteToExampleActionFor: anAction [
+	<gtLlmAction>
+	self isAssistantRole ifFalse: [ ^ anAction noAction ].
 
-	^ aView textEditor
-		title: 'Message';
-		priority: 1;
-		text: [ self action removePrefix: 'Chat: ' ]
+	^ anAction dropdown
+		priority: 5;
+		label: 'Promote example';
+		content: [ :aButton | 
+			| action example |
+			action := self chat tutor actionNamed: self action.
+			example := GtLlmTutorActionExample new
+					input: self ancestor contentJson;
+					output: self contentJson.
+			action addExample: example.
+			action persist.
+			example asGtMagritteViewModel asElement ]
 ]
 
 { #category : #'as yet unclassified' }
