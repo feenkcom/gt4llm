@@ -19,7 +19,7 @@ GtLlmTutorByScripterExamples >> basicTutor [
 { #category : #'as yet unclassified' }
 GtLlmTutorByScripterExamples >> chatElement [
 	<gtExample>
-	^ self tutorChat asElement
+	^ self tutorChat asElement beSync
 ]
 
 { #category : #'as yet unclassified' }
