@@ -19,7 +19,7 @@ GtLlmTutorByScripterExamples >> basicTutor [
 { #category : #'as yet unclassified' }
 GtLlmTutorByScripterExamples >> chatElement [
 	<gtExample>
-	^ self tutorChat asElement
+	^ self tutorChat asElement beSync
 ]
 
 { #category : #'as yet unclassified' }
@@ -28,11 +28,14 @@ GtLlmTutorByScripterExamples >> chatElementWithMessageSent [
 	| scripter |
 	scripter := self chatElementWithMessageTyped.
 
-	scripter
-		clickStep: [ :s | 
-			s
-				label: 'Click on Send';
-				id: #send ].
+	scripter click
+		label: 'Click on Send';
+		id: #send;
+		playNoPulse.
+
+	5
+		timesRepeat: [ scripter space pulse.
+			5 milliseconds wait ].
 
 	self
 		assert: scripter element chatViewModel assistantChat messages size
@@ -42,7 +45,7 @@ GtLlmTutorByScripterExamples >> chatElementWithMessageSent [
 		equals: '{"Action":"Chat: Hi!"}'.
 	self
 		assert: (scripter element chatViewModel assistantChat messages at: 2) content
-		equals: 'Hello! I am your AI assistant, what can I do for you?'.
+		equals: '{"Action": "Chat", "Text": "Hello! I am your AI assistant, what can I do for you?"}'.
 
 	^ scripter
 ]
@@ -99,7 +102,9 @@ GtLlmTutorByScripterExamples >> tutorWithStaticProviderStencil [
 			GtLlmStaticProvider new
 				instructions: instruction asInstructionPiece instructionString;
 				format: instruction asJsonSchema;
-				messages: {'Hello! I am your AI assistant, what can I do for you?'} ].
+				messages: {'{"Action": "Chat", "Text": "Hello! I am your AI assistant, what can I do for you?"}'};
+				userMessageClass: GtLlmActionMessage;
+				assistantMessageClass: GtLlmActionMessage ].
 
 	^ tutor
 ]
