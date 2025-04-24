@@ -69,17 +69,6 @@ GtOpenAICoderActionMessage >> diffedCodeText [
 ]
 
 { #category : #'as yet unclassified' }
-GtOpenAICoderActionMessage >> gtActionAcceptFor: anAction [
-	<gtAction>
-	<gtLlmAction>
-	^ anAction button
-		priority: 10;
-		icon: BrGlamorousVectorIcons accept;
-		tooltip: 'Accept code';
-		action: [ :aButton | self chat serializer update: self codeSnippetBlock ]
-]
-
-{ #category : #'as yet unclassified' }
 GtOpenAICoderActionMessage >> gtCodeFor: aView [
 	<gtView>
 	<gtLlmMessageView>
@@ -97,6 +86,7 @@ GtOpenAICoderActionMessage >> gtCodeFor: aView [
 GtOpenAICoderActionMessage >> gtCodeSnippetFor: aView [
 	<gtView>
 	<gtLlmMessageView>
+	| currentSourceCode |
 	self codeSnippetBlock isEmptyOrNil ifTrue: [ ^ aView empty ].
 
 	^ aView explicit
@@ -104,7 +94,13 @@ GtOpenAICoderActionMessage >> gtCodeSnippetFor: aView [
 		priority: 1;
 		stencil: [ GtPharoSnippetCoder new
 				forSource: self codeSnippetBlock;
-				asExpandedOnlyElement ]
+				asExpandedOnlyElement ];
+		actionButtonIcon: BrGlamorousVectorIcons accept
+			tooltip: 'Accept'
+			action: [ :b | 
+				currentSourceCode := b phlow viewContent children first coderViewModel
+						sourceText asString.
+				self chat serializer update: currentSourceCode ]
 ]
 
 { #category : #'as yet unclassified' }
