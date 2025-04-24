@@ -10,6 +10,11 @@ Class {
 	#category : #'Gt4Llm-GToolkit'
 }
 
+{ #category : #'as yet unclassified' }
+GtLlmChatElement >> beSync [
+	self chatViewModel beSync
+]
+
 { #category : #accessing }
 GtLlmChatElement >> chatViewModel [
 	^ chatViewModel

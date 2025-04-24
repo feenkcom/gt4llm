@@ -10,6 +10,11 @@ Class {
 	#category : #'Gt4Llm-GToolkit'
 }
 
+{ #category : #'as yet unclassified' }
+GtLlmChatViewModel >> beSync [
+	newThreadMessageViewModel beSync
+]
+
 { #category : #initialization }
 GtLlmChatViewModel >> initialize [
 	super initialize.

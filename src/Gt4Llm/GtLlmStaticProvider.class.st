@@ -40,7 +40,15 @@ GtLlmStaticProvider >> nextMessage [
 
 { #category : #'as yet unclassified' }
 GtLlmStaticProvider >> sendMessage: aMessage [
-	self chat addMessage: (GtLlmUserMessage new content: aMessage).
+	self chat
+		addMessage: (self userMessageClass new
+				role: 'user';
+				content: aMessage).
 
-	self chat addMessage: (GtLlmAssistantMessage new content: self nextMessage)
+	self chat
+		addMessage: (self assistantMessageClass new
+				role: 'assistant';
+				content: self nextMessage).
+				
+	self chat signalRunIsDone
 ]
