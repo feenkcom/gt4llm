@@ -14,6 +14,11 @@ GtLlmNewThreadMessageViewModel >> attachFile: aFileReference [
 	self threadMessage addFile: aFileReference
 ]
 
+{ #category : #'as yet unclassified' }
+GtLlmNewThreadMessageViewModel >> beSync [
+	threadMessage beSync
+]
+
 { #category : #accessing }
 GtLlmNewThreadMessageViewModel >> contents [
 	^ self threadMessage contents

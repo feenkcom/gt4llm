@@ -38,8 +38,8 @@ GtLlmActionMessage >> gtInspectActionFor: anAction [
 GtLlmActionMessage >> gtReifyActionFor: anAction [
 	<gtLlmAction>
 	(self isAssistantRole
-		and: [ self action = 'Answer a chat request'
-				or: [ (self action beginsWith: 'Chat request: ') or: [ self actionModel isNil ] ] ])
+		and: [ self action = 'Chat'
+				or: [ (self action beginsWith: 'Chat: ') or: [ self actionModel isNil ] ] ])
 		ifFalse: [ ^ anAction noAction ].
 
 	^ anAction dropdown
