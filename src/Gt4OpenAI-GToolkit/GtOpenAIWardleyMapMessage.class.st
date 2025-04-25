@@ -89,10 +89,22 @@ GtOpenAIWardleyMapMessage >> gtWardleyMapFor: aView [
 	^ aView explicit
 		title: 'Map';
 		priority: 1;
-		stencil: [ GtWardleyMapElement new
-				wardleyMapViewModel: (GtWardleyMapViewModel new
-						wardleyMapModel: self mapModel);
-				vExact: 500 ];
+		stencil: [
+			"We need the container to ensure that Wardley Map remains of the given height."
+			BrFrame new 
+				id: #'wardley-container';
+				addChild: (
+					GtWardleyMapElement new
+						wardleyMapViewModel: (GtWardleyMapViewModel new
+								wardleyMapModel: self mapModel);
+						matchParent);
+				in: [ :theFrame | 
+					theFrame
+						addAptitude: (BrLayoutResizerAptitude new
+								vMatchParentToMatchParent: [ :aResizerBlock | aResizerBlock cull: (theFrame childAt: 1) ];
+								vFitContent: [ :aResizerBlock | aResizerBlock cull: (theFrame childAt: 1) ] toExact: 300;
+								vFitContentLimited: [ :aResizerBlock | aResizerBlock cull: (theFrame childAt: 1) ] toExact: 300) ];
+				matchParent ];
 		actionButtonIcon: BrGlamorousVectorIcons accept
 			tooltip: 'Apply propositions'
 			action: [ :aButton | self chat updateInstance: self mapCodeBlock ]
