@@ -69,6 +69,17 @@ GtOpenAICoderActionMessage >> diffedCodeText [
 ]
 
 { #category : #'as yet unclassified' }
+GtOpenAICoderActionMessage >> gtActionAcceptFor: anAction [
+	<gtAction>
+	<gtLlmAction>
+	^ anAction button
+		priority: 10;
+		icon: BrGlamorousVectorIcons accept;
+		tooltip: 'Accept code';
+		action: [ :aButton | self chat serializer update: self codeSnippetBlock ]
+]
+
+{ #category : #'as yet unclassified' }
 GtOpenAICoderActionMessage >> gtCodeFor: aView [
 	<gtView>
 	<gtLlmMessageView>
