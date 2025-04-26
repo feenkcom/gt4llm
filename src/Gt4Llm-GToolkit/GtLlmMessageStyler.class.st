@@ -661,7 +661,7 @@ GtLlmMessageStyler >> visitCodeBlock: aCodeNode [
 							stencil: [ GtPharoSnippetCoder new
 									forSource: (self text
 											from: aCodeNode beginWithLanguageStopPosition + 1
-											to: aCodeNode end startPosition - 1) asString;
+											to: aCodeNode end startPosition - 1) asString trim;
 									subscribeToSystem;
 									asExpandedOnlyElement ]} ].
 	^ self visitContent: aCodeNode
