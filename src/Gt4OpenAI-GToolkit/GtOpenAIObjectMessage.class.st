@@ -18,9 +18,12 @@ GtOpenAIObjectMessage >> gtCodeFor: aView [
 	^ aView explicit
 		title: 'Code';
 		priority: 1;
-		stencil: [ (GtPharoMethodCoder
-				forClass: self chat serializer instance content class
-				source: self codeBlock) asExpandedOnlyElement ]
+		stencil: [ GtExpandedOnlyCoderElement new
+				coderViewModel: ((GtPharoMethodCoder
+						forClass: self chat serializer instance content class
+						source: self codeBlock) asCoderViewModel
+						selfObject: self chat serializer instance content);
+				yourself ]
 ]
 
 { #category : #'as yet unclassified' }
