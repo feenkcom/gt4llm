@@ -319,9 +319,10 @@ GtLlmObjectTutor >> viewProposalAction [
 	^ GtLlmTutorAction new
 		name: 'Propose a view';
 		priority: 1;
-		description: 'Propose a useful Phlow view for this object. Only reply with the Smalltalk code for the view. Look up existing views and their code for reference if needed.';
+		description: 'Propose a useful Phlow view for this object. Only reply with the Smalltalk code for the view. Look up existing views and their code for reference if needed. Take into account optional user directions if applicable.';
+		format: 'Propose a view (user direction: `{1}`)';
 		examples: {GtLlmTutorActionExample new markUnverified
-					input: {'Action' -> 'Propose a view'.
+					input: {'Action' -> 'Propose a view (user direction: ``)'.
 							'Object'
 								-> '{"string":"(1@5)","instanceSlots":[{"name":"x","class":"SmallInteger","value":"1"},{"name":"y","class":"SmallInteger","value":"5"}],"class":"Point"}'}
 							asDictionary;
