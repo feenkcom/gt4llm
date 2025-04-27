@@ -90,9 +90,9 @@ GtOpenAIWardleyMapMessage >> gtWardleyMapFor: aView [
 		title: 'Map';
 		priority: 1;
 		stencil: [ GtWardleyMapElement new
-				wardleyMapViewModel: (GtWardleyMapViewModel new
-						wardleyMapModel: self mapModel);
-				vExact: 500 ];
+				wardleyMapViewModel: (GtWardleyMapViewModel new wardleyMapModel: self mapModel);
+				constraintsDo: [ :c | c minHeight: 300 ];
+				matchParent ];
 		actionButtonIcon: BrGlamorousVectorIcons accept
 			tooltip: 'Apply propositions'
 			action: [ :aButton | self chat updateInstance: self mapCodeBlock ]
