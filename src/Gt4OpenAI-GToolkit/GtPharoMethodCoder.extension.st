@@ -3,9 +3,9 @@ Extension { #name : #GtPharoMethodCoder }
 { #category : #'*Gt4OpenAI-GToolkit' }
 GtPharoMethodCoder >> actionFormatAddOnFor: anAST into: coderAddOns [
 	<gtAstCoderAddOns: 10>
-	(self behavior includesBehavior: GtLlmTutor) ifFalse: [ ^ self ].
+	(self behavior includesBehavior: GtLlmAssistant) ifFalse: [ ^ self ].
 
-	coderAddOns addStyler: (GtLlmTutorFormatStyler new tutor: self behavior new)
+	coderAddOns addStyler: (GtLlmAssistantFormatStyler new assistant: self behavior new)
 ]
 
 { #category : #'*Gt4OpenAI-GToolkit' }

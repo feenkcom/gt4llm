@@ -1,7 +1,7 @@
-Extension { #name : #GtLlmTutor }
+Extension { #name : #GtLlmAssistant }
 
 { #category : #'*Gt4OpenAI' }
-GtLlmTutor >> defaultProviderStencil [
+GtLlmAssistant >> defaultProviderStencil [
 	^ [ :anInstructionFormat | 
 	GtOpenAIResponseProvider withApiKeyFromFile
 		instructions: anInstructionFormat asInstructionPiece instructionString;

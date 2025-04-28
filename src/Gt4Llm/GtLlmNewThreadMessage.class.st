@@ -14,7 +14,7 @@ Class {
 
 { #category : #accessing }
 GtLlmNewThreadMessage >> actions [
-	^ assistantChat tutor actions
+	^ assistantChat assistant actions
 ]
 
 { #category : #'as yet unclassified' }

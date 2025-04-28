@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLlmObjectTutor,
-	#superclass : #GtLlmTutor,
+	#superclass : #GtLlmAssistant,
 	#category : #'Gt4OpenAI-GToolkit'
 }
 
@@ -38,12 +38,12 @@ GtLlmObjectTutor >> defaultProviderStencil [
 
 { #category : #'as yet unclassified' }
 GtLlmObjectTutor >> explanationAction [
-	<gtLlmTutorAction>
-	^ GtLlmTutorAction new
+	<gtLlmAssistantAction>
+	^ GtLlmAssistantAction new
 		name: 'Explain the object';
 		priority: 2;
 		description: 'Explain the object, including its layout, its purpose, and other interesting facts. Use tools if necessary. Stick to the facts you can verify and avoid speculation.';
-		examples: {GtLlmTutorActionExample new markUnverified
+		examples: {GtLlmAssistantActionExample new markUnverified
 					input: {'Action' -> 'Explain the object'.
 							'Object'
 								-> '{"string":"(100@30)","instanceSlots":[{"name":"x","class":"SmallInteger","value":"100"},{"name":"y","class":"SmallInteger","value":"30"}],"class":"Point"}'}
@@ -152,8 +152,8 @@ GtLlmObjectTutor >> lookupPageTool [
 
 { #category : #'as yet unclassified' }
 GtLlmObjectTutor >> methodFormatDescription [
-	<gtLlmTutorFormat>
-	^ GtLlmTutorFormatDescription new
+	<gtLlmAssistantFormat>
+	^ GtLlmAssistantFormatDescription new
 		name: 'Method';
 		priority: 2;
 		format: 'Smalltalk code';
@@ -168,8 +168,8 @@ add: val
 
 { #category : #'as yet unclassified' }
 GtLlmObjectTutor >> objectFormatDescription [
-	<gtLlmTutorFormat>
-	^ GtLlmTutorFormatDescription new
+	<gtLlmAssistantFormat>
+	^ GtLlmAssistantFormatDescription new
 		name: 'Object';
 		priority: 2;
 		format: 'JSON';
@@ -315,13 +315,13 @@ GtLlmObjectTutor >> traverse: anObject using: aChain [
 
 { #category : #'as yet unclassified' }
 GtLlmObjectTutor >> viewProposalAction [
-	<gtLlmTutorAction>
-	^ GtLlmTutorAction new
+	<gtLlmAssistantAction>
+	^ GtLlmAssistantAction new
 		name: 'Propose a view';
 		priority: 1;
 		description: 'Propose a useful Phlow view for this object. Only reply with the Smalltalk code for the view. Look up existing views and their code for reference if needed. Take into account optional user directions if applicable.';
 		format: 'Propose a view (user direction: `{1}`)';
-		examples: {GtLlmTutorActionExample new markUnverified
+		examples: {GtLlmAssistantActionExample new markUnverified
 					input: {'Action' -> 'Propose a view (user direction: ``)'.
 							'Object'
 								-> '{"string":"(1@5)","instanceSlots":[{"name":"x","class":"SmallInteger","value":"1"},{"name":"y","class":"SmallInteger","value":"5"}],"class":"Point"}'}

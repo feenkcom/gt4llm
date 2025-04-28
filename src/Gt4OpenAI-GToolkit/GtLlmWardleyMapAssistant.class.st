@@ -1,18 +1,18 @@
 Class {
-	#name : #GtLlmWardleyMapTutor,
-	#superclass : #GtLlmTutor,
+	#name : #GtLlmWardleyMapAssistant,
+	#superclass : #GtLlmAssistant,
 	#category : #'Gt4OpenAI-GToolkit'
 }
 
 { #category : #'as yet unclassified' }
-GtLlmWardleyMapTutor >> connectionAction [
-	<gtLlmTutorAction>
-	^ GtLlmTutorAction new
+GtLlmWardleyMapAssistant >> connectionAction [
+	<gtLlmAssistantAction>
+	^ GtLlmAssistantAction new
 		name: 'Add new connected nodes';
 		priority: 2;
 		description: 'Adds new nodes that are connected to an already existing node. It MUST consider the context of the map topic. It MUST return the entirety of the state.';
 		format: 'Add new connected nodes to `{1}`';
-		examples: {GtLlmTutorActionExample new
+		examples: {GtLlmAssistantActionExample new
 					input: {'Action' -> 'Add new connected nodes to `Compute`'.
 							'Wardley Map'
 								-> 'style wardley
@@ -36,7 +36,7 @@ Compute->Platform
 Compute->Cloud'.
 							'Text' -> nil.
 							'Rename' -> nil} asDictionary.
-				GtLlmTutorActionExample new
+				GtLlmAssistantActionExample new
 					input: {'Action' -> 'Add new connected nodes to `Regulator`'.
 							'Wardley Map'
 								-> 'style wardley
@@ -61,9 +61,9 @@ Regulator->Audit
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmWardleyMapTutor >> createAction [
-	<gtLlmTutorAction>
-	^ GtLlmTutorAction new
+GtLlmWardleyMapAssistant >> createAction [
+	<gtLlmAssistantAction>
+	^ GtLlmAssistantAction new
 		name: 'Create a set of nodes';
 		priority: 1;
 		description: 'Creates a set of at least 20 nodes based on a given topic, filling topic, nodes, and connections with sensible data. If a map topic was already set, it is overridden. The rest of the map is extended.';
@@ -71,7 +71,7 @@ GtLlmWardleyMapTutor >> createAction [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmWardleyMapTutor >> createChatOn: aGtWardleyMapModel [
+GtLlmWardleyMapAssistant >> createChatOn: aGtWardleyMapModel [
 	| chat |
 	chat := self createChat.
 	chat onInstance: (self valueHolderFor: aGtWardleyMapModel).
@@ -79,17 +79,17 @@ GtLlmWardleyMapTutor >> createChatOn: aGtWardleyMapModel [
 ]
 
 { #category : #accessing }
-GtLlmWardleyMapTutor >> createChatOnSnippet: aGtWardleyMapSnippet [
+GtLlmWardleyMapAssistant >> createChatOnSnippet: aGtWardleyMapSnippet [
 	^ self createChatOn: aGtWardleyMapSnippet wardleyMap
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmWardleyMapTutor >> defaultDescription [
+GtLlmWardleyMapAssistant >> defaultDescription [
 	^ 'You are an assistant that is used to interactively work on Wardley Maps. You trigger certain actions to generate a desired result.'
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmWardleyMapTutor >> defaultProviderStencil [
+GtLlmWardleyMapAssistant >> defaultProviderStencil [
 	^ [ :anInstructionFormat | 
 	GtOpenAIResponseProvider withApiKeyFromFile
 		instructions: anInstructionFormat asInstructionPiece instructionString;
@@ -99,14 +99,14 @@ GtLlmWardleyMapTutor >> defaultProviderStencil [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmWardleyMapTutor >> explanationAction [
-	<gtLlmTutorAction>
-	^ GtLlmTutorAction new
+GtLlmWardleyMapAssistant >> explanationAction [
+	<gtLlmAssistantAction>
+	^ GtLlmAssistantAction new
 		name: 'Explain a node';
 		priority: 3;
 		description: 'Explains what a node means and why it is on the map using human language.';
 		format: 'Explain the node `{1}`';
-		examples: {GtLlmTutorActionExample new
+		examples: {GtLlmAssistantActionExample new
 					input: {'Action' -> 'Explain `Compute`'.
 							'Wardley Map'
 								-> 'style wardley
@@ -131,14 +131,14 @@ component Compute [0.4, 0.4] label [-22, 29]'.
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmWardleyMapTutor >> renameAction [
-	<gtLlmTutorAction>
-	^ GtLlmTutorAction new
+GtLlmWardleyMapAssistant >> renameAction [
+	<gtLlmAssistantAction>
+	^ GtLlmAssistantAction new
 		name: 'Propose renames for node';
 		priority: 4;
 		description: 'Proposes a sensible number of alternative names for nodes (less than ten, but more than one).';
 		format: 'Propose renames for node `{1}`';
-		examples: {GtLlmTutorActionExample new
+		examples: {GtLlmAssistantActionExample new
 					input: {'Action' -> 'Propose renames for node `Compute`'.
 							'Wardley Map'
 								-> 'style wardley
@@ -157,7 +157,7 @@ evolution genesis -> custom built -> product (+rental) -> commodity
 component Compute [0.45, 0.34] label [-22, 29]'.
 							'Rename' -> '{''Compute'': [''Computational resources'', ''Resources'']}'}
 							asDictionary.
-				GtLlmTutorActionExample new
+				GtLlmAssistantActionExample new
 					input: {'Action' -> 'Propose renames for node `Furnace`'.
 							'Wardley Map'
 								-> 'style wardley
@@ -178,9 +178,9 @@ component Furnace [0.9, 0.9] label [-9, 9]'.
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmWardleyMapTutor >> renameFormatComponent [
-	<gtLlmTutorFormat>
-	^ GtLlmTutorFormatDescription new
+GtLlmWardleyMapAssistant >> renameFormatComponent [
+	<gtLlmAssistantFormat>
+	^ GtLlmAssistantFormatDescription new
 		name: 'Rename';
 		priority: 2;
 		format: 'Text';
@@ -190,13 +190,13 @@ GtLlmWardleyMapTutor >> renameFormatComponent [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmWardleyMapTutor >> reviewAction [
-	<gtLlmTutorAction>
-	^ GtLlmTutorAction new
+GtLlmWardleyMapAssistant >> reviewAction [
+	<gtLlmAssistantAction>
+	^ GtLlmAssistantAction new
 		name: 'Review the current state';
 		priority: 5;
 		description: 'Reviews and criticizes the current state of the map.';
-		examples: {GtLlmTutorActionExample new
+		examples: {GtLlmAssistantActionExample new
 					input: {'Action' -> 'Review the current state'.
 							'Wardley Map'
 								-> 'style wardley
@@ -217,7 +217,7 @@ component Compute [0.45, 0.34] label [-22, 29]'.
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmWardleyMapTutor >> valueHolderFor: anObject [
+GtLlmWardleyMapAssistant >> valueHolderFor: anObject [
 	^ GtLlmSerializableValueHolder new
 		name: 'Wardley Map';
 		content: anObject;
@@ -229,9 +229,9 @@ GtLlmWardleyMapTutor >> valueHolderFor: anObject [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmWardleyMapTutor >> wardleyMapFormatDescription [
-	<gtLlmTutorFormat>
-	^ GtLlmTutorFormatDescription new
+GtLlmWardleyMapAssistant >> wardleyMapFormatDescription [
+	<gtLlmAssistantFormat>
+	^ GtLlmAssistantFormatDescription new
 		name: 'Wardley Map';
 		priority: 2;
 		format: 'Wardley Map language';

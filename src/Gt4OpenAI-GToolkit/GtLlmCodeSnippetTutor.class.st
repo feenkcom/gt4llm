@@ -37,8 +37,8 @@ GtLlmCodeSnippetTutor >> chatOn: aCoderViewModel [
 
 { #category : #'as yet unclassified' }
 GtLlmCodeSnippetTutor >> codeSnippetFormatDescription [
-	<gtLlmTutorFormat>
-	^ GtLlmTutorFormatDescription new
+	<gtLlmAssistantFormat>
+	^ GtLlmAssistantFormatDescription new
 		name: 'Code Snippet';
 		priority: 2;
 		format: 'Smalltalk code';
@@ -77,8 +77,8 @@ GtLlmCodeSnippetTutor >> lookupBindingToolFor: aCoderViewModel [
 
 { #category : #'as yet unclassified' }
 GtLlmCodeSnippetTutor >> proposalAction [
-	<gtLlmTutorAction>
-	^ GtLlmTutorAction new
+	<gtLlmAssistantAction>
+	^ GtLlmAssistantAction new
 		name: 'Propose code';
 		priority: 3;
 		description: 'Interpret the comments and propose code using the `Code Snippet` field. The typical comment command is formatted as `": some command"`. Only propose Pharo code unless otherwise asked. The proposed code should leave the comments untouched.
@@ -87,7 +87,7 @@ If you want to add explanations, place them in the `Text` field. If the explanat
 "Smalltalk code here"
 ```
 You can look up classes, methods and documentation in the current Glamorous Toolkit image. Only rely on such look up when absolutely needed.';
-		examples: {GtLlmTutorActionExample new
+		examples: {GtLlmAssistantActionExample new
 					input: {'Action' -> 'Propose code'.
 							'Code Snippet' -> '15 * 30 ": subtract 5"'.
 							'Object' -> '{"string":"nil","instanceSlots":[],"class":"UndefinedObject"}'.
@@ -104,12 +104,12 @@ You can look up classes, methods and documentation in the current Glamorous Tool
 
 { #category : #'as yet unclassified' }
 GtLlmCodeSnippetTutor >> snippetExplanationAction [
-	<gtLlmTutorAction>
-	^ GtLlmTutorAction new
+	<gtLlmAssistantAction>
+	^ GtLlmAssistantAction new
 		name: 'Explain snippet';
 		priority: 2;
 		description: 'Explain the code snippet using the text field. Look up classes and documentation as needed to generate an answer.';
-		examples: {GtLlmTutorActionExample new
+		examples: {GtLlmAssistantActionExample new
 					input: {'Action' -> 'Explain code'.
 							'Code Snippet' -> '15 * 30'.
 							'Variables' -> {}.
@@ -143,8 +143,8 @@ GtLlmCodeSnippetTutor >> treatBinding: aBinding in: aSnippetCoderViewModel [
 
 { #category : #'as yet unclassified' }
 GtLlmCodeSnippetTutor >> variablesFormatDescription [
-	<gtLlmTutorFormat>
-	^ GtLlmTutorFormatDescription new
+	<gtLlmAssistantFormat>
+	^ GtLlmAssistantFormatDescription new
 		name: 'Variables';
 		type: 'array';
 		items: {'type' -> 'object'.
@@ -166,12 +166,12 @@ GtLlmCodeSnippetTutor >> variablesFormatDescription [
 
 { #category : #'as yet unclassified' }
 GtLlmCodeSnippetTutor >> viewProposalAction [
-	<gtLlmTutorAction>
-	^ GtLlmTutorAction new
+	<gtLlmAssistantAction>
+	^ GtLlmAssistantAction new
 		name: 'Propose a view';
 		priority: 5;
 		description: 'Propose a useful Phlow view for the object bound by `self`, on the code in the snippet. Only reply with the Smalltalk code for the view. Look up existing views and their code for reference if needed.';
-		examples: {GtLlmTutorActionExample new
+		examples: {GtLlmAssistantActionExample new
 					input: {'Action' -> 'Propose a view'.
 							'Code Snippet' -> 'self monies'.
 							'Object'

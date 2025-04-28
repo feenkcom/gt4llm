@@ -32,12 +32,12 @@ GtOpenAIActionMessage >> gtReifyActionFor: anAction [
 		label: 'Reify action';
 		content: [ :anElement | 
 			GtLlmActionTemplateElement new
-				example: (GtLlmTutorActionExample new
+				example: (GtLlmAssistantActionExample new
 						input: self ancestor contentJson;
 						output: self contentJson);
 				onActionCreated: [ :action | 
-					self chat tutor class compile: action.
-					self chat tutor recomputeActions.
+					self chat assistant class compile: action.
+					self chat assistant recomputeActions.
 					anElement phlow fireToolUpdateWish.
 					anElement fireEvent: BrDropdownHideWish new ];
 				padding: (BlInsets all: 5) ]

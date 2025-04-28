@@ -1,24 +1,24 @@
 Class {
-	#name : #GtLlmTutorActionExamplesGroup,
+	#name : #GtLlmAssistantActionExamplesGroup,
 	#superclass : #GtLlmGroup,
 	#category : #Gt4Llm
 }
 
 { #category : #accessing }
-GtLlmTutorActionExamplesGroup class >> fromThreadMessages: aMessageGroup [
+GtLlmAssistantActionExamplesGroup class >> fromThreadMessages: aMessageGroup [
 	^ self
 		withAll: ((aMessageGroup items groupsOf: 2)
 				collect: [ :aPair | 
 					| split |
 					split := aPair first contentText lines.
-					GtLlmTutorActionExample new
+					GtLlmAssistantActionExample new
 						instruction: split first;
 						input: (Character linefeed join: (split allButFirst: 3));
 						output: aPair second contentText ])
 ]
 
 { #category : #accessing }
-GtLlmTutorActionExamplesGroup >> gtExamplesFor: aView [
+GtLlmAssistantActionExamplesGroup >> gtExamplesFor: aView [
 	<gtView>
 	^ aView columnedList
 		title: 'Examples';

@@ -5,7 +5,7 @@ Trait {
 
 { #category : #'as yet unclassified' }
 TGtActionMessage >> actionModel [
-	^ (self chat tutor actionNamed: self action)
+	^ (self chat assistant actionNamed: self action)
 		ifNil: [ self isUserRole
 				ifTrue: [ (self chat descendantOf: self)
 						ifNotNil: [ :aDescendant | aDescendant actionModel ] ]
@@ -34,8 +34,8 @@ TGtActionMessage >> gtPromoteToExampleActionFor: anAction [
 		label: 'Promote example';
 		content: [ :aButton | 
 			| action example |
-			action := self chat tutor actionNamed: self action.
-			example := GtLlmTutorActionExample new
+			action := self chat assistant actionNamed: self action.
+			example := GtLlmAssistantActionExample new
 					input: self ancestor contentJson;
 					output: self contentJson.
 			action addExample: example.

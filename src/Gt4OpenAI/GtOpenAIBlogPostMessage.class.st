@@ -6,7 +6,7 @@ Class {
 
 { #category : #'trait-TGtActionMessage' }
 GtOpenAIBlogPostMessage >> actionModel [
-	^ (self chat tutor actionNamed: self action)
+	^ (self chat assistant actionNamed: self action)
 		ifNil: [ self isUserRole
 				ifTrue: [ (self chat descendantOf: self)
 						ifNotNil: [ :aDescendant | aDescendant actionModel ] ]

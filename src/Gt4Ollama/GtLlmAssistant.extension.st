@@ -1,7 +1,7 @@
-Extension { #name : #GtLlmTutor }
+Extension { #name : #GtLlmAssistant }
 
 { #category : #'*Gt4Ollama' }
-GtLlmTutor >> defaultOllamaProviderStencilWithModel: aModel [
+GtLlmAssistant >> defaultOllamaProviderStencilWithModel: aModel [
 	^ [ :anInstructionFormat | 
 	GtOllamaProvider new
 		model: aModel;
@@ -12,6 +12,6 @@ GtLlmTutor >> defaultOllamaProviderStencilWithModel: aModel [
 ]
 
 { #category : #'*Gt4Ollama' }
-GtLlmTutor >> onOllamaWithModel: aModel [
+GtLlmAssistant >> onOllamaWithModel: aModel [
 	self providerStencil: (self defaultOllamaProviderStencilWithModel: aModel)
 ]
