@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'announcer',
 		'lastUpdate',
-		'tutor',
+		'assistant',
 		'provider',
 		'messages',
 		'serializer'
@@ -41,6 +41,16 @@ GtLlmChat >> announce: anAnnouncement [
 { #category : #accessing }
 GtLlmChat >> announcer [
 	^ announcer ifNil: [ announcer := Announcer new ]
+]
+
+{ #category : #accessing }
+GtLlmChat >> assistant [
+	^ assistant
+]
+
+{ #category : #accessing }
+GtLlmChat >> assistant: anObject [
+	assistant := anObject
 ]
 
 { #category : #accessing }
@@ -231,16 +241,6 @@ GtLlmChat >> subscribe: anAnnouncementClass send: aSelector to: anObject for: aS
 						-> '`@receiver when: `@statements1 send: `@statements2 to: `@anObject for: `@aSubscriber'.
 
 	^ self when: anAnnouncementClass send: aSelector to: anObject for: aSubscriber
-]
-
-{ #category : #accessing }
-GtLlmChat >> tutor [
-	^ tutor
-]
-
-{ #category : #accessing }
-GtLlmChat >> tutor: anObject [
-	tutor := anObject
 ]
 
 { #category : #'announcer - subscription' }

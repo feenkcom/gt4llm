@@ -1,7 +1,7 @@
-Extension { #name : #GtLlmTutor }
+Extension { #name : #GtLlmAssistant }
 
 { #category : #'*Gt4Llm-GToolkit' }
-GtLlmTutor >> gtActionsFor: aView [
+GtLlmAssistant >> gtActionsFor: aView [
 	<gtView>
 	| valueHolder |
 	valueHolder := ValueHolder new.
@@ -34,7 +34,7 @@ GtLlmTutor >> gtActionsFor: aView [
 ]
 
 { #category : #'*Gt4Llm-GToolkit' }
-GtLlmTutor >> gtFormatComponentsFor: aView [
+GtLlmAssistant >> gtFormatComponentsFor: aView [
 	<gtView>
 	| valueHolder |
 	valueHolder := ValueHolder new.

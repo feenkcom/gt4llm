@@ -4,5 +4,5 @@ Extension { #name : #GtWardleyMapViewModel }
 GtWardleyMapViewModel >> llm [
 	^ self
 		optionAt: #llm
-		ifAbsentPut: [ GtLlmWardleyMapTutor new createChatOn: self wardleyMapModel ]
+		ifAbsentPut: [ GtLlmWardleyMapAssistant new createChatOn: self wardleyMapModel ]
 ]

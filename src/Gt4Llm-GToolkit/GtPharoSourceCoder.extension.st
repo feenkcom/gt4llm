@@ -1,9 +1,9 @@
 Extension { #name : #GtPharoSourceCoder }
 
 { #category : #'*Gt4Llm-GToolkit' }
-GtPharoSourceCoder >> addTutorFormatMenuItemsFor: anAst to: coderAddOns from: aCoderViewModel [
+GtPharoSourceCoder >> addAssistantFormatMenuItemsFor: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns: 5>
-	(aCoderViewModel behavior includesBehavior: GtLlmTutor) ifFalse: [ ^ self ].
+	(aCoderViewModel behavior includesBehavior: GtLlmAssistant) ifFalse: [ ^ self ].
 	(self nodeFrom: aCoderViewModel)
 		ifNotNil: [ :node | 
 			node isLiteral ifFalse: [ ^ self ].
@@ -20,23 +20,23 @@ GtPharoSourceCoder >> addTutorFormatMenuItemsFor: anAst to: coderAddOns from: aC
 								renameFormatComponent: node
 								in: aTextualViewModel
 								for: element ]
-						shortcutKey: GtLlmRenameTutorFormatComponentShortcut new
+						shortcutKey: GtLlmRenameAssistantFormatComponentShortcut new
 								combinationForPlatform gtDisplayString ] ]
 ]
 
 { #category : #'*Gt4Llm-GToolkit' }
-GtPharoSourceCoder >> addTutorFormatRenameShortcutFor: anAST into: coderAddOns [
+GtPharoSourceCoder >> addAssistantFormatRenameShortcutFor: anAST into: coderAddOns [
 	<gtAstCoderAddOns: 10>
-	(self behavior includesBehavior: GtLlmTutor)
+	(self behavior includesBehavior: GtLlmAssistant)
 		ifFalse: [ ^ self ].
-	coderAddOns addShortcut: GtLlmRenameTutorFormatComponentShortcut new
+	coderAddOns addShortcut: GtLlmRenameAssistantFormatComponentShortcut new
 ]
 
 { #category : #'*Gt4Llm-GToolkit' }
 GtPharoSourceCoder >> renameFormatComponent: node in: aTextualViewModel for: anElement [
 	(GtLlmRenameFormatComponentInMethodController new
 		sourceCoderViewModel: aTextualViewModel;
-		tutorClass: aTextualViewModel behavior;
+		assistantClass: aTextualViewModel behavior;
 		originalNode: node) executeIn: anElement
 ]
 

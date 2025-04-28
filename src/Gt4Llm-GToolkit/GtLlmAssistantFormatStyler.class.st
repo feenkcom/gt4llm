@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLlmTutorFormatStyler,
+	#name : #GtLlmAssistantFormatStyler,
 	#superclass : #GtGenericPharoStyler,
 	#instVars : [
 		'formatReferences'
@@ -7,24 +7,24 @@ Class {
 	#category : #'Gt4Llm-GToolkit'
 }
 
+{ #category : #'as yet unclassified' }
+GtLlmAssistantFormatStyler >> assistant: anAssistant [
+	self formatReferences: anAssistant formatComponents
+]
+
 { #category : #accessing }
-GtLlmTutorFormatStyler >> formatReferences [
+GtLlmAssistantFormatStyler >> formatReferences [
 	^ formatReferences
 ]
 
 { #category : #accessing }
-GtLlmTutorFormatStyler >> formatReferences: anObject [
+GtLlmAssistantFormatStyler >> formatReferences: anObject [
 	formatReferences := (anObject
 			collect: [ :aReference | aReference name -> aReference ]) asDictionary
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmTutorFormatStyler >> tutor: aTutor [
-	self formatReferences: aTutor formatComponents
-]
-
-{ #category : #'as yet unclassified' }
-GtLlmTutorFormatStyler >> visitStringLiteral: aStringLiteralNode [
+GtLlmAssistantFormatStyler >> visitStringLiteral: aStringLiteralNode [
 	super visitStringLiteral: aStringLiteralNode.
 
 	(self formatReferences includesKey: aStringLiteralNode string)

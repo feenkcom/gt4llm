@@ -1,7 +1,7 @@
-Extension { #name : #GtLlmTutorActionExample }
+Extension { #name : #GtLlmAssistantActionExample }
 
 { #category : #'*Gt4Llm-GToolkit' }
-GtLlmTutorActionExample >> inputDescription [
+GtLlmAssistantActionExample >> inputDescription [
 	<magritteDescription>
 	^ MAStringDescription new
 		label: 'Input';
@@ -11,7 +11,7 @@ GtLlmTutorActionExample >> inputDescription [
 ]
 
 { #category : #'*Gt4Llm-GToolkit' }
-GtLlmTutorActionExample >> outputDescription [
+GtLlmAssistantActionExample >> outputDescription [
 	<magritteDescription>
 	^ MAStringDescription new
 		label: 'Output';

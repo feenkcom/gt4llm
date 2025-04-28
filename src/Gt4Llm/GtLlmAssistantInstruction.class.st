@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLlmTutorInstruction,
+	#name : #GtLlmAssistantInstruction,
 	#superclass : #Object,
 	#instVars : [
 		'name',
@@ -8,56 +8,56 @@ Class {
 		'formats',
 		'sections'
 	],
-	#category : 'Gt4Llm'
+	#category : #Gt4Llm
 }
 
 { #category : #other }
-GtLlmTutorInstruction class >> new [
+GtLlmAssistantInstruction class >> new [
 	^ self basicNew initialize
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmTutorInstruction >> actionNamed: aString [
+GtLlmAssistantInstruction >> actionNamed: aString [
 	^ actions detect: [ :anAction | anAction name = aString ] ifNone: [ nil ]
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmTutorInstruction >> actions [
+GtLlmAssistantInstruction >> actions [
 	^ actions
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmTutorInstruction >> addAction: anAction [
+GtLlmAssistantInstruction >> addAction: anAction [
 	actions add: anAction
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmTutorInstruction >> addActions: aListOfActions [
+GtLlmAssistantInstruction >> addActions: aListOfActions [
 	actions addAll: aListOfActions
 ]
 
 { #category : #accessing }
-GtLlmTutorInstruction >> addComponent: aComponent [
+GtLlmAssistantInstruction >> addComponent: aComponent [
 	formats add: aComponent
 ]
 
 { #category : #accessing }
-GtLlmTutorInstruction >> addComponents: aListOfComponents [
+GtLlmAssistantInstruction >> addComponents: aListOfComponents [
 	formats addAll: aListOfComponents
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmTutorInstruction >> addSection: aSection [
+GtLlmAssistantInstruction >> addSection: aSection [
 	sections add: aSection
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmTutorInstruction >> addSections: aSection [
+GtLlmAssistantInstruction >> addSections: aSection [
 	sections addAll: aSection
 ]
 
 { #category : #accessing }
-GtLlmTutorInstruction >> asInstructionPiece [
+GtLlmAssistantInstruction >> asInstructionPiece [
 	^ GtLlmInstructionWithSections new
 		source: self;
 		introduction: self description;
@@ -87,7 +87,7 @@ The components that make up the state are as follows:';
 ]
 
 { #category : #accessing }
-GtLlmTutorInstruction >> asJsonSchema [
+GtLlmAssistantInstruction >> asJsonSchema [
 	^ {'type' -> 'object'.
 		'properties'
 			-> (formats
@@ -98,7 +98,7 @@ GtLlmTutorInstruction >> asJsonSchema [
 ]
 
 { #category : #accessing }
-GtLlmTutorInstruction >> communicationConventionsDescription [
+GtLlmAssistantInstruction >> communicationConventionsDescription [
 	^ GtLlmInstructionSection new
 		title: 'Communication rules';
 		body: (GtLlmInstructionList new
@@ -108,46 +108,46 @@ GtLlmTutorInstruction >> communicationConventionsDescription [
 ]
 
 { #category : #accessing }
-GtLlmTutorInstruction >> componentNamed: aName [
+GtLlmAssistantInstruction >> componentNamed: aName [
 	^ formats detect: [ :aComponent | aComponent name = aName ] ifNone: [ nil ]
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmTutorInstruction >> defaultSections [
+GtLlmAssistantInstruction >> defaultSections [
 	^ {self interactionDescription.
 		self communicationConventionsDescription.
 		self toolUseDescription} asOrderedCollection
 ]
 
 { #category : #accessing }
-GtLlmTutorInstruction >> description [
+GtLlmAssistantInstruction >> description [
 	^ description
 ]
 
 { #category : #accessing }
-GtLlmTutorInstruction >> description: anObject [
+GtLlmAssistantInstruction >> description: anObject [
 	description := anObject
 ]
 
 { #category : #accessing }
-GtLlmTutorInstruction >> errorHandlingDescription [
+GtLlmAssistantInstruction >> errorHandlingDescription [
 	^ GtLlmInstructionSection new
 		title: 'Error handling description';
 		body: 'If an error occurs during an action, a message will be sent that starts with `An error occured:` and the error message below that. You then correct the mistake by sending an action result that corrects the mistake.'
 ]
 
 { #category : #accessing }
-GtLlmTutorInstruction >> formatNamed: aName [
+GtLlmAssistantInstruction >> formatNamed: aName [
 	^ formats detect: [ :aComponent | aComponent name = aName ] ifNone: [ nil ]
 ]
 
 { #category : #accessing }
-GtLlmTutorInstruction >> formats [
+GtLlmAssistantInstruction >> formats [
 	^ formats
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmTutorInstruction >> gtActionsFor: aView [
+GtLlmAssistantInstruction >> gtActionsFor: aView [
 	<gtView>
 	^ aView forward
 		title: 'Actions';
@@ -157,7 +157,7 @@ GtLlmTutorInstruction >> gtActionsFor: aView [
 ]
 
 { #category : #accessing }
-GtLlmTutorInstruction >> gtInstructionFor: aView [
+GtLlmAssistantInstruction >> gtInstructionFor: aView [
 	<gtView>
 	^ aView forward
 		title: 'Instruction';
@@ -167,7 +167,7 @@ GtLlmTutorInstruction >> gtInstructionFor: aView [
 ]
 
 { #category : #accessing }
-GtLlmTutorInstruction >> initialize [
+GtLlmAssistantInstruction >> initialize [
 	formats := OrderedCollection new.
 	actions := GtLlmActionsGroup new.
 	description := ''.
@@ -175,7 +175,7 @@ GtLlmTutorInstruction >> initialize [
 ]
 
 { #category : #accessing }
-GtLlmTutorInstruction >> interactionDescription [
+GtLlmAssistantInstruction >> interactionDescription [
 	^ GtLlmInstructionSection new
 		title: 'Interaction description';
 		body: 'A typical interaction goes like this:
@@ -192,37 +192,37 @@ The state is an aggregate of the components listed below.'
 ]
 
 { #category : #accessing }
-GtLlmTutorInstruction >> name [
+GtLlmAssistantInstruction >> name [
 	^ name
 ]
 
 { #category : #accessing }
-GtLlmTutorInstruction >> name: anObject [
+GtLlmAssistantInstruction >> name: anObject [
 	name := anObject
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmTutorInstruction >> replaceActions: aListOfActions [
+GtLlmAssistantInstruction >> replaceActions: aListOfActions [
 	actions removeAll addAll: aListOfActions
 ]
 
 { #category : #accessing }
-GtLlmTutorInstruction >> replaceComponents: aListOfComponents [
+GtLlmAssistantInstruction >> replaceComponents: aListOfComponents [
 	formats removeAll addAll: aListOfComponents
 ]
 
 { #category : #accessing }
-GtLlmTutorInstruction >> sections [
+GtLlmAssistantInstruction >> sections [
 	^ sections
 ]
 
 { #category : #accessing }
-GtLlmTutorInstruction >> sections: anObject [
+GtLlmAssistantInstruction >> sections: anObject [
 	sections := anObject
 ]
 
 { #category : #accessing }
-GtLlmTutorInstruction >> toolUseDescription [
+GtLlmAssistantInstruction >> toolUseDescription [
 	^ GtLlmInstructionSection new
 		title: 'Tool use description';
 		body: 'You have access to various tools. Tool use is governed by the following rules:

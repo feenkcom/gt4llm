@@ -1,14 +1,14 @@
 Class {
-	#name : #GtLlmTutorActionExamples,
+	#name : #GtLlmAssistantActionExamples,
 	#superclass : #Object,
 	#category : #'Gt4Llm-GToolkit'
 }
 
 { #category : #'as yet unclassified' }
-GtLlmTutorActionExamples >> actionWithExampleWithJsonContainingQuote [
+GtLlmAssistantActionExamples >> actionWithExampleWithJsonContainingQuote [
 	<gtExample>
 	| action |
-	action := GtLlmTutorAction new
+	action := GtLlmAssistantAction new
 			name: 'Some action';
 			description: 'Some description.';
 			addExample: self exampleWithJsonContainingQuote.
@@ -16,14 +16,14 @@ GtLlmTutorActionExamples >> actionWithExampleWithJsonContainingQuote [
 ]
 
 { #category : #asserting }
-GtLlmTutorActionExamples >> assert: aBoolean [
+GtLlmAssistantActionExamples >> assert: aBoolean [
 	"We check for true explicitly to make the assertion fail for non booleans"
 	aBoolean == true ifFalse: [self signalFailure: 'Assertion failed']
 			
 ]
 
 { #category : #asserting }
-GtLlmTutorActionExamples >> assert: aBooleanOrBlock description: aStringOrBlock [
+GtLlmAssistantActionExamples >> assert: aBooleanOrBlock description: aStringOrBlock [
 	aBooleanOrBlock value ifFalse: [
 		| message |
 		message := aStringOrBlock value.
@@ -32,14 +32,14 @@ GtLlmTutorActionExamples >> assert: aBooleanOrBlock description: aStringOrBlock 
 ]
 
 { #category : #asserting }
-GtLlmTutorActionExamples >> assert: actual equals: expected [
+GtLlmAssistantActionExamples >> assert: actual equals: expected [
 	^ self
 		assert: expected = actual
 		description: [self comparingStringBetween: actual and: expected]
 ]
 
 { #category : #asserting }
-GtLlmTutorActionExamples >> assertCollection: actual hasSameElements: expected [
+GtLlmAssistantActionExamples >> assertCollection: actual hasSameElements: expected [
 	"Assert that a collection contains the same elements as the given collection. Order is not checked, only the presence/absence of elements."
 	| missingElements additionalElements |
 	
@@ -56,13 +56,13 @@ GtLlmTutorActionExamples >> assertCollection: actual hasSameElements: expected [
 ]
 
 { #category : #asserting }
-GtLlmTutorActionExamples >> classForTestResult [
+GtLlmAssistantActionExamples >> classForTestResult [
 	"Returns the class of the test result"
 	^ GtExampleResult
 ]
 
 { #category : #private }
-GtLlmTutorActionExamples >> comparingStringBetween: actual and: expected [
+GtLlmAssistantActionExamples >> comparingStringBetween: actual and: expected [
 
 	^ String streamContents: [:stream |
 			stream
@@ -74,12 +74,12 @@ GtLlmTutorActionExamples >> comparingStringBetween: actual and: expected [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmTutorActionExamples >> exampleWithJsonContainingQuote [
+GtLlmAssistantActionExamples >> exampleWithJsonContainingQuote [
 	<gtExample>
 	| jsonString json example |
 	jsonString := '{"Action":"Some action","Text":"Some text","Post":"String with '' inside."}'.
 	json := STONJSON fromString: jsonString.
-	example := GtLlmTutorActionExample new
+	example := GtLlmAssistantActionExample new
 			input: json;
 			output: json.
 	self
@@ -89,33 +89,33 @@ GtLlmTutorActionExamples >> exampleWithJsonContainingQuote [
 ]
 
 { #category : #asserting }
-GtLlmTutorActionExamples >> executeShould: aBlock inScopeOf: anExceptionalEvent [ 
+GtLlmAssistantActionExamples >> executeShould: aBlock inScopeOf: anExceptionalEvent [ 
 	^[aBlock value.
  	false] on: anExceptionalEvent
 		do: [:ex | ex return: true]
 ]
 
 { #category : #asserting }
-GtLlmTutorActionExamples >> should: aBlock raise: anExceptionalEvent [ 
+GtLlmAssistantActionExamples >> should: aBlock raise: anExceptionalEvent [ 
 	^self assert: (self executeShould: aBlock inScopeOf: anExceptionalEvent)
 ]
 
 { #category : #asserting }
-GtLlmTutorActionExamples >> should: aBlock raise: anExceptionalEvent description: aString [ 
+GtLlmAssistantActionExamples >> should: aBlock raise: anExceptionalEvent description: aString [ 
 	^self assert: (self executeShould: aBlock inScopeOf: anExceptionalEvent)
 		description: aString
 			
 ]
 
 { #category : #asserting }
-GtLlmTutorActionExamples >> shouldnt: aBlock raise: anExceptionalEvent [  
+GtLlmAssistantActionExamples >> shouldnt: aBlock raise: anExceptionalEvent [  
 	 
 	^self assert: (self executeShould: aBlock inScopeOf: anExceptionalEvent) not
 			
 ]
 
 { #category : #asserting }
-GtLlmTutorActionExamples >> shouldnt: aBlock raise: anExceptionalEvent description: aString [  
+GtLlmAssistantActionExamples >> shouldnt: aBlock raise: anExceptionalEvent description: aString [  
  
 	^self
 		assert: (self executeShould: aBlock inScopeOf: anExceptionalEvent) not
@@ -123,6 +123,6 @@ GtLlmTutorActionExamples >> shouldnt: aBlock raise: anExceptionalEvent descripti
 ]
 
 { #category : #signalling }
-GtLlmTutorActionExamples >> signalFailure: aString [
+GtLlmAssistantActionExamples >> signalFailure: aString [
 	self classForTestResult failure signal: aString
 ]

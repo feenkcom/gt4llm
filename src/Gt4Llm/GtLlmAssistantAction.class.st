@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLlmTutorAction,
+	#name : #GtLlmAssistantAction,
 	#superclass : #Object,
 	#instVars : [
 		'name',
@@ -8,24 +8,24 @@ Class {
 		'description',
 		'format',
 		'priority',
-		'tutor',
-		'definingMethod'
+		'definingMethod',
+		'assistant'
 	],
-	#category : 'Gt4Llm'
+	#category : #Gt4Llm
 }
 
 { #category : #other }
-GtLlmTutorAction class >> new [
+GtLlmAssistantAction class >> new [
 	^ self basicNew initialize
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmTutorAction >> addExample: anExample [
+GtLlmAssistantAction >> addExample: anExample [
 	examples add: (anExample action: self)
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmTutorAction >> asExpressionSource [
+GtLlmAssistantAction >> asExpressionSource [
 	^ self class name asString
 		, ' new
 	    name: ' , self name storeString
@@ -41,7 +41,7 @@ GtLlmTutorAction >> asExpressionSource [
 ]
 
 { #category : #accessing }
-GtLlmTutorAction >> asInstructionPiece [
+GtLlmAssistantAction >> asInstructionPiece [
 	^ GtLlmInstructionSection new
 		source: self;
 		title: self name;
@@ -54,7 +54,7 @@ GtLlmTutorAction >> asInstructionPiece [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmTutorAction >> asMethodSource [
+GtLlmAssistantAction >> asMethodSource [
 	| methodSource |
 	methodSource := (self definingMethod
 			ifNil: [ 'gtNAMEAction' ]
@@ -66,60 +66,72 @@ GtLlmTutorAction >> asMethodSource [
 ]
 
 { #category : #accessing }
-GtLlmTutorAction >> defaultPriority [
+GtLlmAssistantAction >> assistant [
+	^ assistant
+]
+
+{ #category : #accessing }
+GtLlmAssistantAction >> assistant: anObject [
+	assistant := anObject.
+	
+	self onAssistantChanged
+]
+
+{ #category : #accessing }
+GtLlmAssistantAction >> defaultPriority [
 	^ 10
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmTutorAction >> definingMethod [
+GtLlmAssistantAction >> definingMethod [
 	^ definingMethod
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmTutorAction >> definingMethod: aMethod [
+GtLlmAssistantAction >> definingMethod: aMethod [
 	definingMethod := nil
 ]
 
 { #category : #accessing }
-GtLlmTutorAction >> description [
+GtLlmAssistantAction >> description [
 	^ description
 ]
 
 { #category : #accessing }
-GtLlmTutorAction >> description: anObject [
+GtLlmAssistantAction >> description: anObject [
 	description := anObject
 ]
 
 { #category : #accessing }
-GtLlmTutorAction >> examples [
+GtLlmAssistantAction >> examples [
 	^ examples
 ]
 
 { #category : #accessing }
-GtLlmTutorAction >> examples: anObject [
+GtLlmAssistantAction >> examples: anObject [
 	examples := anObject asOrderedCollection.
 
 	examples do: [ :anExample | anExample action: self ]
 ]
 
 { #category : #accessing }
-GtLlmTutorAction >> format [
+GtLlmAssistantAction >> format [
 	^ format
 ]
 
 { #category : #accessing }
-GtLlmTutorAction >> format: anObject [
+GtLlmAssistantAction >> format: anObject [
 	format := anObject
 ]
 
 { #category : #accessing }
-GtLlmTutorAction >> formatReferences [
+GtLlmAssistantAction >> formatReferences [
 	^ (self examples flatCollect: #formatReferences as: Set)
 		sorted: [ :a :b | a priority < b priority ]
 ]
 
 { #category : #accessing }
-GtLlmTutorAction >> gtDescriptionFor: aView [
+GtLlmAssistantAction >> gtDescriptionFor: aView [
 	<gtView>
 	^ aView textEditor
 		title: 'Description';
@@ -127,7 +139,7 @@ GtLlmTutorAction >> gtDescriptionFor: aView [
 ]
 
 { #category : #accessing }
-GtLlmTutorAction >> gtExamplesFor: aView [
+GtLlmAssistantAction >> gtExamplesFor: aView [
 	<gtView>
 	^ aView columnedList
 		title: 'Examples';
@@ -137,7 +149,7 @@ GtLlmTutorAction >> gtExamplesFor: aView [
 ]
 
 { #category : #accessing }
-GtLlmTutorAction >> gtInputFormatReferencesFor: aView [
+GtLlmAssistantAction >> gtInputFormatReferencesFor: aView [
 	<gtView>
 	^ aView columnedList
 		title: 'Input format references';
@@ -148,7 +160,7 @@ GtLlmTutorAction >> gtInputFormatReferencesFor: aView [
 ]
 
 { #category : #accessing }
-GtLlmTutorAction >> gtInstructionFor: aView [
+GtLlmAssistantAction >> gtInstructionFor: aView [
 	<gtView>
 	^ aView forward
 		title: 'Instruction';
@@ -158,7 +170,7 @@ GtLlmTutorAction >> gtInstructionFor: aView [
 ]
 
 { #category : #accessing }
-GtLlmTutorAction >> gtOutputFormatReferencesFor: aView [
+GtLlmAssistantAction >> gtOutputFormatReferencesFor: aView [
 	<gtView>
 	^ aView columnedList
 		title: 'Output format references';
@@ -169,12 +181,12 @@ GtLlmTutorAction >> gtOutputFormatReferencesFor: aView [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmTutorAction >> hasArgument [
+GtLlmAssistantAction >> hasArgument [
 	^ format formatCount > 0
 ]
 
 { #category : #accessing }
-GtLlmTutorAction >> initialize [
+GtLlmAssistantAction >> initialize [
 	super initialize.
 
 	self priority: self defaultPriority.
@@ -186,35 +198,35 @@ GtLlmTutorAction >> initialize [
 ]
 
 { #category : #accessing }
-GtLlmTutorAction >> inputReferences [
+GtLlmAssistantAction >> inputReferences [
 	^ (self examples flatCollect: #inputReferences as: Set)
 		sorted: [ :a :b | a priority < b priority ]
 ]
 
 { #category : #accessing }
-GtLlmTutorAction >> name [
+GtLlmAssistantAction >> name [
 	^ name
 ]
 
 { #category : #accessing }
-GtLlmTutorAction >> name: anObject [
+GtLlmAssistantAction >> name: anObject [
 	name := anObject.
 	self format isEmptyOrNil ifTrue: [ self format: name ]
 ]
 
 { #category : #accessing }
-GtLlmTutorAction >> onTutorChanged [
+GtLlmAssistantAction >> onAssistantChanged [
 	self examples do: [ :anExample | anExample verify resolveReferences ]
 ]
 
 { #category : #accessing }
-GtLlmTutorAction >> outputReferences [
+GtLlmAssistantAction >> outputReferences [
 	^ (self examples flatCollect: #outputReferences as: Set)
 		sorted: [ :a :b | a priority < b priority ]
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmTutorAction >> persist [
+GtLlmAssistantAction >> persist [
 	| methodSource |
 	methodSource := self asMethodSource.
 
@@ -227,17 +239,17 @@ GtLlmTutorAction >> persist [
 ]
 
 { #category : #accessing }
-GtLlmTutorAction >> pipeline [
+GtLlmAssistantAction >> pipeline [
 	^ pipeline
 ]
 
 { #category : #accessing }
-GtLlmTutorAction >> pipeline: anObject [
+GtLlmAssistantAction >> pipeline: anObject [
 	pipeline := anObject
 ]
 
 { #category : #accessing }
-GtLlmTutorAction >> printOn: aStream [
+GtLlmAssistantAction >> printOn: aStream [
 	super printOn: aStream.
 
 	aStream
@@ -247,28 +259,16 @@ GtLlmTutorAction >> printOn: aStream [
 ]
 
 { #category : #accessing }
-GtLlmTutorAction >> priority [
+GtLlmAssistantAction >> priority [
 	^ priority
 ]
 
 { #category : #accessing }
-GtLlmTutorAction >> priority: anObject [
+GtLlmAssistantAction >> priority: anObject [
 	priority := anObject
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmTutorAction >> removeFromSystem [
+GtLlmAssistantAction >> removeFromSystem [
 	self definingMethod ifNotNil: [ :aMethod | aMethod removeFromSystem ]
-]
-
-{ #category : #accessing }
-GtLlmTutorAction >> tutor [
-	^ tutor
-]
-
-{ #category : #accessing }
-GtLlmTutorAction >> tutor: anObject [
-	tutor := anObject.
-	
-	self onTutorChanged
 ]

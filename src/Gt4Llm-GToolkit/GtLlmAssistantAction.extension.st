@@ -1,7 +1,7 @@
-Extension { #name : #GtLlmTutorAction }
+Extension { #name : #GtLlmAssistantAction }
 
 { #category : #'*Gt4Llm-GToolkit' }
-GtLlmTutorAction >> descriptionDescription [
+GtLlmAssistantAction >> descriptionDescription [
 	<magritteDescription>
 	^ MAStringDescription new
 		label: 'Description';
@@ -11,13 +11,13 @@ GtLlmTutorAction >> descriptionDescription [
 ]
 
 { #category : #'*Gt4Llm-GToolkit' }
-GtLlmTutorAction >> examplesDescription [
+GtLlmAssistantAction >> examplesDescription [
 	<magritteDescription>
 	^ MAToManyRelationDescription new
 		label: 'Examples';
 		priority: 5;
 		accessor: #examples;
-		classes: {GtLlmTutorActionExample};
+		classes: {GtLlmAssistantActionExample};
 		beModifiable;
 		blocItemStencil: [ :anItemViewModel :anItemIndex | 
 			anItemViewModel asElement
@@ -30,11 +30,11 @@ GtLlmTutorAction >> examplesDescription [
 						left: 0);
 				padding: (BlInsets all: 5);
 				background: Color white ];
-		  newItemStencil: [ GtLlmTutorActionExample new ]
+		  newItemStencil: [ GtLlmAssistantActionExample new ]
 ]
 
 { #category : #'*Gt4Llm-GToolkit' }
-GtLlmTutorAction >> formatDescription [
+GtLlmAssistantAction >> formatDescription [
 	<magritteDescription>
 	^ MAStringDescription new
 		label: 'Format';
@@ -44,7 +44,7 @@ GtLlmTutorAction >> formatDescription [
 ]
 
 { #category : #'*Gt4Llm-GToolkit' }
-GtLlmTutorAction >> gtDefinitionFor: aView [
+GtLlmAssistantAction >> gtDefinitionFor: aView [
 	<gtView>
 	^ aView explicit
 		title: 'Definition';
@@ -54,17 +54,17 @@ GtLlmTutorAction >> gtDefinitionFor: aView [
 			action: [ self definingMethod gtBrowse ];
 		stencil: [ | coder |
 			coder := GtPharoMethodCoder forMethod: self definingMethod.
-			coder addOns addStyler: (GtLlmTutorFormatStyler new tutor: self tutor).
+			coder addOns addStyler: (GtLlmAssistantFormatStyler new assistant: self assistant).
 			coder asExpandedOnlyElement vFitContentLimited ]
 ]
 
 { #category : #'*Gt4Llm-GToolkit' }
-GtLlmTutorAction >> initializeMethod [
+GtLlmAssistantAction >> initializeMethod [
 	^ (thisContext stack at: 4) blocDefiningMethod
 ]
 
 { #category : #'*Gt4Llm-GToolkit' }
-GtLlmTutorAction >> nameDescription [
+GtLlmAssistantAction >> nameDescription [
 	<magritteDescription>
 	^ MAStringDescription new
 		label: 'Name';
@@ -74,7 +74,7 @@ GtLlmTutorAction >> nameDescription [
 ]
 
 { #category : #'*Gt4Llm-GToolkit' }
-GtLlmTutorAction >> priorityDescription [
+GtLlmAssistantAction >> priorityDescription [
 	<magritteDescription>
 	^ MANumberDescription new
 		label: 'Priority';
