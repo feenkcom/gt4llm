@@ -7,12 +7,12 @@ Class {
 { #category : #'as yet unclassified' }
 GtLlmRenameFormatComponentRefactoringExamples >> actionSource [
 	^ 'gtExampleAction
-	<gtLlmTutorAction>
-	^ GtLlmTutorAction new
+	<gtLlmAssistantAction>
+	^ GtLlmAssistantAction new
 	    name: ''Example Action'';
 	    priority: 10;
 		description: ''Example Action'';
-		examples: {GtLlmTutorActionExample new
+		examples: {GtLlmAssistantActionExample new
 	input: {''Action'' -> ''Example Action''. ''Text'' -> nil. ''Example'' -> ''Input''} asDictionary; output:{''Action'' -> ''Example Action''. ''Text'' -> nil. ''Example'' -> ''Output''} asDictionary}'
 ]
 
@@ -42,8 +42,8 @@ GtLlmRenameFormatComponentRefactoringExamples >> exampleClass [
 	model := GtRBNamespace new.
 
 	model
-		defineClass: 'GtLlmTutor subclass: #ExampleTutor instanceVariableNames: '''' classVariableNames: '''' poolDictionaries: '''' category: ''Demo'''.
-	class := model classNamed: #ExampleTutor.
+		defineClass: 'GtLlmAssistant subclass: #ExampleAssistant instanceVariableNames: '''' classVariableNames: '''' poolDictionaries: '''' category: ''Demo'''.
+	class := model classNamed: #ExampleAssistant.
 
 	class compile: self actionSource classified: #('format-components').
 	class compile: self formatSource classified: #('actions').
@@ -181,8 +181,8 @@ GtLlmRenameFormatComponentRefactoringExamples >> exampleClassRefactored [
 { #category : #'as yet unclassified' }
 GtLlmRenameFormatComponentRefactoringExamples >> formatSource [
 	^ 'gtExampleFormat
-	<gtLlmTutorFormat>
-	^ GtLlmTutorFormatDescription new
+	<gtLlmAssistantFormat>
+	^ GtLlmAssistantFormatDescription new
 	format: ''Text'';
 	name: ''Example'';
 	priority: 10;
@@ -192,20 +192,20 @@ GtLlmRenameFormatComponentRefactoringExamples >> formatSource [
 { #category : #'as yet unclassified' }
 GtLlmRenameFormatComponentRefactoringExamples >> renamedActionSource [
 	^ 'gtExampleAction
-	<gtLlmTutorAction>
-	^ GtLlmTutorAction new
+	<gtLlmAssistantAction>
+	^ GtLlmAssistantAction new
 	    name: ''Example Action'';
 	    priority: 10;
 		description: ''Example Action'';
-		examples: {GtLlmTutorActionExample new
+		examples: {GtLlmAssistantActionExample new
 	input: {''Action'' -> ''Example Action''. ''Text'' -> nil. ''Renamed'' -> ''Input''} asDictionary; output:{''Action'' -> ''Example Action''. ''Text'' -> nil. ''Renamed'' -> ''Output''} asDictionary}'
 ]
 
 { #category : #'as yet unclassified' }
 GtLlmRenameFormatComponentRefactoringExamples >> renamedFormatSource [
 	^ 'gtExampleFormat
-	<gtLlmTutorFormat>
-	^ GtLlmTutorFormatDescription new
+	<gtLlmAssistantFormat>
+	^ GtLlmAssistantFormatDescription new
 	format: ''Text'';
 	name: ''Renamed'';
 	priority: 10;
