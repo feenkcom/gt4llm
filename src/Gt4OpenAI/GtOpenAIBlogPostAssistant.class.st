@@ -1,11 +1,11 @@
 Class {
-	#name : #GtOpenAIBlogPostTutor,
-	#superclass : #GtLlmTutor,
+	#name : #GtOpenAIBlogPostAssistant,
+	#superclass : #GtLlmAssistant,
 	#category : #Gt4OpenAI
 }
 
 { #category : #'as yet unclassified' }
-GtOpenAIBlogPostTutor >> createChatOn: aText [
+GtOpenAIBlogPostAssistant >> createChatOn: aText [
 	| chat |
 	chat := self createChat.
 	chat onInstance: (self valueHolderFor: aText).
@@ -13,12 +13,12 @@ GtOpenAIBlogPostTutor >> createChatOn: aText [
 ]
 
 { #category : #'as yet unclassified' }
-GtOpenAIBlogPostTutor >> defaultDescription [
+GtOpenAIBlogPostAssistant >> defaultDescription [
 	^ 'You are an assistant that is used to interactively work on blog posts. You trigger certain actions to generate a desired result.'
 ]
 
 { #category : #'as yet unclassified' }
-GtOpenAIBlogPostTutor >> defaultProviderStencil [
+GtOpenAIBlogPostAssistant >> defaultProviderStencil [
 	^ [ :anInstructionFormat | 
 	GtOpenAIResponseProvider withApiKeyFromFile
 		instructions: anInstructionFormat asInstructionPiece instructionString;
@@ -28,13 +28,13 @@ GtOpenAIBlogPostTutor >> defaultProviderStencil [
 ]
 
 { #category : #'as yet unclassified' }
-GtOpenAIBlogPostTutor >> gtCorrectGrammar [
- 	<gtLlmTutorAction>
- 	^ GtLlmTutorAction new
+GtOpenAIBlogPostAssistant >> gtCorrectGrammar [
+ 	<gtLlmAssistantAction>
+ 	^ GtLlmAssistantAction new
 	    name: 'Correct grammar';
 	    priority: 10;
 		description: 'Correct grammar. Place the result in the `Post` property.';
-		examples: {GtLlmTutorActionExample new
+		examples: {GtLlmAssistantActionExample new
 	input: { 'Action' -> 'Correct grammar'. 'Post' -> 'There are at least two ways to use LLMs for supporting understanding of software systems:
 (A) use LLMs to generate summaries
 (B) use LLMs to generate tools with which you generate summaries
@@ -64,13 +64,13 @@ Oh yes, I know, agents can include feedback when generating solutions. But even 
 ]
 
 { #category : #'as yet unclassified' }
-GtOpenAIBlogPostTutor >> gtCreateTitle [
- 	<gtLlmTutorAction>
- 	^ GtLlmTutorAction new
+GtOpenAIBlogPostAssistant >> gtCreateTitle [
+ 	<gtLlmAssistantAction>
+ 	^ GtLlmAssistantAction new
 	    name: 'Create title';
 	    priority: 10;
 		description: 'Create title. Put result in the `Text` property. Do not use quotes of any kind. Be crisp.';
-		examples: {GtLlmTutorActionExample new
+		examples: {GtLlmAssistantActionExample new
 	input: { 'Action' -> 'Create Title'. 'Post' -> 'There are at least two ways to use LLMs for supporting understanding of software systems:
 (A) use LLMs to generate summaries
 (B) use LLMs to generate tools with which you generate summaries
@@ -88,9 +88,9 @@ Oh yes, I know, agents can add include feedback when generating solutions. But e
 ]
 
 { #category : #'as yet unclassified' }
-GtOpenAIBlogPostTutor >> gtPostFormatDescription [
-	<gtLlmTutorFormat>
-	^ GtLlmTutorFormatDescription new
+GtOpenAIBlogPostAssistant >> gtPostFormatDescription [
+	<gtLlmAssistantFormat>
+	^ GtLlmAssistantFormatDescription new
 	type: ((OrderedCollection new) add: 'string'; add: 'null'; yourself);
 	format: 'Text';
 	name: 'Post';
@@ -99,7 +99,7 @@ GtOpenAIBlogPostTutor >> gtPostFormatDescription [
 ]
 
 { #category : #'as yet unclassified' }
-GtOpenAIBlogPostTutor >> valueHolderFor: anObject [
+GtOpenAIBlogPostAssistant >> valueHolderFor: anObject [
 	^ GtLlmSerializableValueHolder new
 		name: 'Post';
 		content: anObject;

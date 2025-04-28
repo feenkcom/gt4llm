@@ -4,9 +4,9 @@ Class {
 	#instVars : [
 		'message',
 		'messageSuperclass',
-		'tutorSuperclass',
 		'messageClassName',
-		'tutorClassName'
+		'assistantClassName',
+		'assistantSuperClass'
 	],
 	#category : #'Gt4Llm-GToolkit'
 }
@@ -16,12 +16,114 @@ GtLlmReificationForm class >> isAdditionForm [
 	^ false
 ]
 
+{ #category : #accessing }
+GtLlmReificationForm >> assistantClassName [
+	^ assistantClassName
+]
+
+{ #category : #accessing }
+GtLlmReificationForm >> assistantClassName: anObject [
+	assistantClassName := anObject
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmReificationForm >> assistantClassNameRope [
+	^ self assistantClassName
+		ifEmpty: [ self assistantClassName asRopedText
+				attribute: (self ghostTextFor: self defaultAssistantClassName) ]
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmReificationForm >> assistantClassNameRope: aRope [
+	self assistantClassName: aRope asString
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmReificationForm >> assistantNameDescription [
+	<magritteDescription>
+	^ GtMATextDescription new
+		label: 'Tutor name';
+		beRequired;
+		priority: 4;
+		accessor: #assistantClassNameRope;
+		kind: Object;
+		editorAptitude: [ BrGlamorousRegularEditorAptitude new glamorousFormEditorCodeFontAndSize ];
+		labelAptitude: [ BrGlamorousLabelAptitude new glamorousFormLabelStyle ];
+		addCondition: [ :aValue | aValue asString trim isNotEmpty ]
+			labelled: 'Name cannot be empty';
+		addCondition: [ :aValue | (Smalltalk classNamed: aValue asString trim) isNil ]
+			labelled: 'Name is already taken';
+		addCondition: [ :aValue | aValue size > 0 ifTrue: [ aValue first isUppercase ] ifFalse: [ true ] ]
+			labelled: 'First character must be uppercase';
+		addCondition: [ :aValue | aValue asString allSatisfy: [ :c | c isAlphaNumeric or: [ c = $_ ] ] ]
+			labelled: 'Name must be alphanumeric';
+		addCondition: [ :aValue | (aValue = 'TNameOfTrait') not and: [ (aValue = 'NameOfSubclass') not ] ]
+			labelled: 'Name cannot be example value'
+]
+
+{ #category : #accessing }
+GtLlmReificationForm >> assistantSuperClass: anObject [
+	assistantSuperClass := anObject
+]
+
+{ #category : #accessing }
+GtLlmReificationForm >> assistantSuperclass [
+	^ assistantSuperClass
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmReificationForm >> assistantSuperclassDescription [
+	<magritteDescription>
+	^ MAStringDescription new
+		label: 'Assistant superclass';
+		priority: 3;
+		accessor: #assistantSuperclass;
+		blocCompletion: [ GtStringsCompletionStrategy new
+				completions: (GtPharoIndex current classNameTree) ];
+		blocShortcuts: [ {BlShortcutWithAction new
+					name: 'Browse class';
+					description: 'Browses the class indicated by the editor';
+					combination: BlKeyCombination primaryB;
+					action: [ :anEvent | 
+						anEvent target phlow
+							spawnTool: (GtClassCoderTool forClass: anEvent target text asString asClass) ].
+				BlShortcutWithAction new
+					name: 'Inspect class';
+					description: 'Inspects the class indicated by the editor';
+					combination: BlKeyCombination primaryG;
+					action: [ :anEvent | 
+						anEvent target phlow
+							spawnObject: anEvent target text asString asClass ].
+				BlShortcutWithAction new
+					name: 'Browse class references';
+					description: 'Browses references to the class indicated by the editor';
+					combination: BlKeyCombination primaryN;
+					action: [ :anEvent | 
+						anEvent target phlow
+							spawnObject: anEvent target text asString asClass gtReferences ]} ];
+		editorAptitude: [ BrGlamorousRegularEditorAptitude new glamorousFormEditorCodeFontAndSize+ (BrGlamorousWithExplicitContextMenuAptitude itemsWithAnchorActions: [ self contextMenuItemsForSuperclass ]) ];
+		labelAptitude: [ BrGlamorousLabelAptitude new glamorousFormLabelStyle ];
+		addCondition: [ :aValue | (Smalltalk classNamed: aValue trim) isNotNil ]
+			labelled: 'Unknown class';
+		addCondition: [ :aValue | 
+			| aClass |
+			aClass := Smalltalk classNamed: aValue trim.
+			aClass isNil or: [ aClass isClass ] ]
+			labelled: 'Must be a class';
+		addCondition: [ :aValue | 
+			| aClass |
+			aClass := Smalltalk classNamed: aValue trim.
+			aClass isNil or: [ aClass isInstanceSide ] ]
+			labelled: 'Must be an instance-side class';
+		beRequired
+]
+
 { #category : #'as yet unclassified' }
 GtLlmReificationForm >> commit [
-	| newTutor newMessages package |
+	| newAssistant newMessages package |
 	package := self commitPackage.
-	newTutor := self tutorSuperclass asClass
-			subclass: self tutorClassName
+	newAssistant := self assistantSuperclass asClass
+			subclass: self assistantClassName
 			instanceVariableNames: ''
 			classVariableNames: ''
 			poolDictionaries: ''
@@ -33,10 +135,10 @@ GtLlmReificationForm >> commit [
 			poolDictionaries: ''
 			package: package categoryName asString.
 
-	self installMethodsOnMessages: newMessages andTutor: newTutor.
-	self installActionsOn: newTutor.
-	self installFormatComponentsOn: newTutor.
-	newTutor adoptInstance: self message chat tutor.
+	self installMethodsOnMessages: newMessages andAssistant: newAssistant.
+	self installActionsOn: newAssistant.
+	self installFormatComponentsOn: newAssistant.
+	newAssistant adoptInstance: self message chat assistant.
 	self message chat messages
 		do: [ :aMessage | newMessages adoptInstance: aMessage ]
 ]
@@ -48,13 +150,13 @@ GtLlmReificationForm >> contextMenuItemsForSuperclass [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmReificationForm >> defaultMessageClassName [
-	^ 'MessageClass'
+GtLlmReificationForm >> defaultAssistantClassName [
+	^ 'AssistantClass'
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmReificationForm >> defaultTutorClassName [
-	^ 'TutorClass'
+GtLlmReificationForm >> defaultMessageClassName [
+	^ 'MessageClass'
 ]
 
 { #category : #'as yet unclassified' }
@@ -62,12 +164,12 @@ GtLlmReificationForm >> initialize [
 	super initialize.
 	
 	self messageClassName: ''.
-	self tutorClassName: ''
+	self assistantClassName: ''
 ]
 
 { #category : #'as yet unclassified' }
 GtLlmReificationForm >> installActionsOn: newTutor [
-	self message chat tutor actions
+	self message chat assistant actions
 		do: [ :action | 
 			(action definingMethod hasPragmaNamed: #gtLlmTutorAction)
 				ifFalse: [ newTutor
@@ -79,7 +181,7 @@ GtLlmReificationForm >> installActionsOn: newTutor [
 
 { #category : #'as yet unclassified' }
 GtLlmReificationForm >> installFormatComponentsOn: newTutor [
-	self message chat tutor formatComponents
+	self message chat assistant formatComponents
 		do: [ :formatComponent | 
 			(formatComponent definingMethod hasPragmaNamed: #gtLlmTutorFormat)
 				ifFalse: [ newTutor
@@ -90,14 +192,14 @@ GtLlmReificationForm >> installFormatComponentsOn: newTutor [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmReificationForm >> installMethodsOnMessages: newMessages andTutor: newTutor [
-	newTutor
+GtLlmReificationForm >> installMethodsOnMessages: newMessages andAssistant: newAssistant [
+	newAssistant
 		compile: 'defaultProviderStencil
 	^ [:aValue | (super defaultProviderStencil value: aValue) assistantMessageClass: '
 				, newMessages name , '; userMessageClass: ' , newMessages name , ' ]'.
 				
-	newTutor compile: 'defaultDescription
-	^ ''', self message chat tutor description, ''''
+	newAssistant compile: 'defaultDescription
+	^ ''', self message chat assistant description, ''''
 ]
 
 { #category : #accessing }
@@ -109,7 +211,7 @@ GtLlmReificationForm >> message [
 GtLlmReificationForm >> message: anObject [
 	message := anObject.
 	messageSuperclass := message class name.
-	tutorSuperclass := message chat tutor class name
+	assistantSuperClass := message chat assistant class name
 ]
 
 { #category : #accessing }
@@ -218,106 +320,4 @@ GtLlmReificationForm >> messageSuperclassDescription [
 GtLlmReificationForm >> packageAndTagDescription [
 	<magritteDescription>
 	^ super packageAndTagDescription priority: 5
-]
-
-{ #category : #accessing }
-GtLlmReificationForm >> tutorClassName [
-	^ tutorClassName
-]
-
-{ #category : #accessing }
-GtLlmReificationForm >> tutorClassName: anObject [
-	tutorClassName := anObject
-]
-
-{ #category : #'as yet unclassified' }
-GtLlmReificationForm >> tutorClassNameRope [
-	^ self tutorClassName
-		ifEmpty: [ self tutorClassName asRopedText
-				attribute: (self ghostTextFor: self defaultTutorClassName) ]
-]
-
-{ #category : #'as yet unclassified' }
-GtLlmReificationForm >> tutorClassNameRope: aRope [
-	self tutorClassName: aRope asString
-]
-
-{ #category : #'as yet unclassified' }
-GtLlmReificationForm >> tutorNameDescription [
-	<magritteDescription>
-	^ GtMATextDescription new
-		label: 'Tutor name';
-		beRequired;
-		priority: 4;
-		accessor: #tutorClassNameRope;
-		kind: Object;
-		editorAptitude: [ BrGlamorousRegularEditorAptitude new glamorousFormEditorCodeFontAndSize ];
-		labelAptitude: [ BrGlamorousLabelAptitude new glamorousFormLabelStyle ];
-		addCondition: [ :aValue | aValue asString trim isNotEmpty ]
-			labelled: 'Name cannot be empty';
-		addCondition: [ :aValue | (Smalltalk classNamed: aValue asString trim) isNil ]
-			labelled: 'Name is already taken';
-		addCondition: [ :aValue | aValue size > 0 ifTrue: [ aValue first isUppercase ] ifFalse: [ true ] ]
-			labelled: 'First character must be uppercase';
-		addCondition: [ :aValue | aValue asString allSatisfy: [ :c | c isAlphaNumeric or: [ c = $_ ] ] ]
-			labelled: 'Name must be alphanumeric';
-		addCondition: [ :aValue | (aValue = 'TNameOfTrait') not and: [ (aValue = 'NameOfSubclass') not ] ]
-			labelled: 'Name cannot be example value'
-]
-
-{ #category : #accessing }
-GtLlmReificationForm >> tutorSuperclass [
-	^ tutorSuperclass
-]
-
-{ #category : #accessing }
-GtLlmReificationForm >> tutorSuperclass: anObject [
-	tutorSuperclass := anObject
-]
-
-{ #category : #'as yet unclassified' }
-GtLlmReificationForm >> tutorSuperclassDescription [
-	<magritteDescription>
-	^ MAStringDescription new
-		label: 'Tutor superclass';
-		priority: 3;
-		accessor: #tutorSuperclass;
-		blocCompletion: [ GtStringsCompletionStrategy new
-				completions: (GtPharoIndex current classNameTree) ];
-		blocShortcuts: [ {BlShortcutWithAction new
-					name: 'Browse class';
-					description: 'Browses the class indicated by the editor';
-					combination: BlKeyCombination primaryB;
-					action: [ :anEvent | 
-						anEvent target phlow
-							spawnTool: (GtClassCoderTool forClass: anEvent target text asString asClass) ].
-				BlShortcutWithAction new
-					name: 'Inspect class';
-					description: 'Inspects the class indicated by the editor';
-					combination: BlKeyCombination primaryG;
-					action: [ :anEvent | 
-						anEvent target phlow
-							spawnObject: anEvent target text asString asClass ].
-				BlShortcutWithAction new
-					name: 'Browse class references';
-					description: 'Browses references to the class indicated by the editor';
-					combination: BlKeyCombination primaryN;
-					action: [ :anEvent | 
-						anEvent target phlow
-							spawnObject: anEvent target text asString asClass gtReferences ]} ];
-		editorAptitude: [ BrGlamorousRegularEditorAptitude new glamorousFormEditorCodeFontAndSize+ (BrGlamorousWithExplicitContextMenuAptitude itemsWithAnchorActions: [ self contextMenuItemsForSuperclass ]) ];
-		labelAptitude: [ BrGlamorousLabelAptitude new glamorousFormLabelStyle ];
-		addCondition: [ :aValue | (Smalltalk classNamed: aValue trim) isNotNil ]
-			labelled: 'Unknown class';
-		addCondition: [ :aValue | 
-			| aClass |
-			aClass := Smalltalk classNamed: aValue trim.
-			aClass isNil or: [ aClass isClass ] ]
-			labelled: 'Must be a class';
-		addCondition: [ :aValue | 
-			| aClass |
-			aClass := Smalltalk classNamed: aValue trim.
-			aClass isNil or: [ aClass isInstanceSide ] ]
-			labelled: 'Must be an instance-side class';
-		beRequired
 ]

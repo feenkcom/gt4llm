@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLlmTutorActionExample,
+	#name : #GtLlmAssistantActionExample,
 	#superclass : #Object,
 	#instVars : [
 		'input',
@@ -13,7 +13,7 @@ Class {
 }
 
 { #category : #'instance creation' }
-GtLlmTutorActionExample class >> new [
+GtLlmAssistantActionExample class >> new [
 	"Answer an initalised instance of the receiver.
 	For GemStone compatibility."
 
@@ -21,17 +21,17 @@ GtLlmTutorActionExample class >> new [
 ]
 
 { #category : #accessing }
-GtLlmTutorActionExample >> action [
+GtLlmAssistantActionExample >> action [
 	^ action
 ]
 
 { #category : #accessing }
-GtLlmTutorActionExample >> action: anObject [
+GtLlmAssistantActionExample >> action: anObject [
 	action := anObject
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmTutorActionExample >> asExpressionSource [
+GtLlmAssistantActionExample >> asExpressionSource [
 	^ self class name asString
 		, ' new
 	input: { '
@@ -51,7 +51,7 @@ GtLlmTutorActionExample >> asExpressionSource [
 ]
 
 { #category : #accessing }
-GtLlmTutorActionExample >> asInstructionPiece [
+GtLlmAssistantActionExample >> asInstructionPiece [
 	^ GtLlmInstructionSection new
 		source: self;
 		title: 'Example';
@@ -73,12 +73,12 @@ GtLlmTutorActionExample >> asInstructionPiece [
 ]
 
 { #category : #accessing }
-GtLlmTutorActionExample >> formatReferences [
+GtLlmAssistantActionExample >> formatReferences [
 	^ inputReferences, outputReferences
 ]
 
 { #category : #accessing }
-GtLlmTutorActionExample >> gtInputFormatReferencesFor: aView [
+GtLlmAssistantActionExample >> gtInputFormatReferencesFor: aView [
 	<gtView>
 	^ aView columnedList
 		title: 'Input format references';
@@ -89,7 +89,7 @@ GtLlmTutorActionExample >> gtInputFormatReferencesFor: aView [
 ]
 
 { #category : #accessing }
-GtLlmTutorActionExample >> gtInstructionFor: aView [
+GtLlmAssistantActionExample >> gtInstructionFor: aView [
 	<gtView>
 	^ aView forward
 		title: 'Instruction';
@@ -99,7 +99,7 @@ GtLlmTutorActionExample >> gtInstructionFor: aView [
 ]
 
 { #category : #accessing }
-GtLlmTutorActionExample >> gtOutputFormatReferencesFor: aView [
+GtLlmAssistantActionExample >> gtOutputFormatReferencesFor: aView [
 	<gtView>
 	^ aView columnedList
 		title: 'Output format references';
@@ -110,7 +110,7 @@ GtLlmTutorActionExample >> gtOutputFormatReferencesFor: aView [
 ]
 
 { #category : #accessing }
-GtLlmTutorActionExample >> initialize [
+GtLlmAssistantActionExample >> initialize [
 	super initialize.
 	
 	inputReferences := OrderedCollection new.
@@ -119,104 +119,104 @@ GtLlmTutorActionExample >> initialize [
 ]
 
 { #category : #accessing }
-GtLlmTutorActionExample >> input [
+GtLlmAssistantActionExample >> input [
 	^ input
 ]
 
 { #category : #accessing }
-GtLlmTutorActionExample >> input: anObject [
+GtLlmAssistantActionExample >> input: anObject [
 	input := anObject
 ]
 
 { #category : #accessing }
-GtLlmTutorActionExample >> inputJson [
+GtLlmAssistantActionExample >> inputJson [
 	^ STONJSON toStringPretty: self input
 ]
 
 { #category : #accessing }
-GtLlmTutorActionExample >> inputJson: aJson [
+GtLlmAssistantActionExample >> inputJson: aJson [
 	^ self input: (STONJSON fromString: aJson)
 ]
 
 { #category : #accessing }
-GtLlmTutorActionExample >> inputReferences [
+GtLlmAssistantActionExample >> inputReferences [
 	^ inputReferences
 ]
 
 { #category : #accessing }
-GtLlmTutorActionExample >> inputReferences: anObject [
+GtLlmAssistantActionExample >> inputReferences: anObject [
 	inputReferences := anObject
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmTutorActionExample >> markUnverified [
+GtLlmAssistantActionExample >> markUnverified [
 	unverified := true
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmTutorActionExample >> markVerified [
+GtLlmAssistantActionExample >> markVerified [
 	unverified := false
 ]
 
 { #category : #accessing }
-GtLlmTutorActionExample >> output [
+GtLlmAssistantActionExample >> output [
 	^ output
 ]
 
 { #category : #accessing }
-GtLlmTutorActionExample >> output: anObject [
+GtLlmAssistantActionExample >> output: anObject [
 	output := anObject
 ]
 
 { #category : #accessing }
-GtLlmTutorActionExample >> outputJson [
+GtLlmAssistantActionExample >> outputJson [
 	^ STONJSON toStringPretty: self output
 ]
 
 { #category : #accessing }
-GtLlmTutorActionExample >> outputJson: aJson [
+GtLlmAssistantActionExample >> outputJson: aJson [
 	^ self output: (STONJSON fromString: aJson)
 ]
 
 { #category : #accessing }
-GtLlmTutorActionExample >> outputReferences [
+GtLlmAssistantActionExample >> outputReferences [
 	^ outputReferences
 ]
 
 { #category : #accessing }
-GtLlmTutorActionExample >> outputReferences: anObject [
+GtLlmAssistantActionExample >> outputReferences: anObject [
 	outputReferences := anObject
 ]
 
 { #category : #accessing }
-GtLlmTutorActionExample >> resolveReferences [
+GtLlmAssistantActionExample >> resolveReferences [
 	inputReferences := input associations
 			select: [ :anAssociation | anAssociation value isNotNil ]
 			thenCollect: [ :anAssociation | 
-				(self action tutor formatNamed: anAssociation key)
+				(self action assistant formatNamed: anAssociation key)
 					addInputReference: self action ].
 	outputReferences := output associations
 			select: [ :anAssociation | anAssociation value isNotNil ]
 			thenCollect: [ :anAssociation | 
-				(self action tutor formatNamed: anAssociation key)
+				(self action assistant formatNamed: anAssociation key)
 					addOutputReference: self action ]
 ]
 
 { #category : #accessing }
-GtLlmTutorActionExample >> unverified [
+GtLlmAssistantActionExample >> unverified [
 	^ unverified
 ]
 
 { #category : #accessing }
-GtLlmTutorActionExample >> unverified: anObject [
+GtLlmAssistantActionExample >> unverified: anObject [
 	unverified := anObject
 ]
 
 { #category : #accessing }
-GtLlmTutorActionExample >> verify [
+GtLlmAssistantActionExample >> verify [
 	unverified ifTrue: [ ^ self ].
 	self
 		assert: self output keys asSet
-				= (self action tutor formatComponents collect: #name) asSet
+				= (self action assistant formatComponents collect: #name) asSet
 		description: 'Keys in the example output must correspond to the action format'
 ]

@@ -1,22 +1,22 @@
 Class {
-	#name : #GtLlmTutor,
+	#name : #GtLlmAssistant,
 	#superclass : #Object,
 	#instVars : [
 		'providerStencil',
 		'instruction'
 	],
-	#category : 'Gt4Llm'
+	#category : #Gt4Llm
 }
 
 { #category : #other }
-GtLlmTutor class >> new [
+GtLlmAssistant class >> new [
 	^ self basicNew initialize
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmTutor >> actionFormatDescription [
-	<gtLlmTutorFormat>
-	^ GtLlmTutorFormatDescription new beRequired
+GtLlmAssistant >> actionFormatDescription [
+	<gtLlmAssistantFormat>
+	^ GtLlmAssistantFormatDescription new beRequired
 		name: 'Action';
 		format: 'Text';
 		example: '```text
@@ -25,39 +25,39 @@ Create a draft
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmTutor >> actionNamed: anActionName [
+GtLlmAssistant >> actionNamed: anActionName [
 	^ self instruction actionNamed: anActionName
 ]
 
 { #category : #accessing }
-GtLlmTutor >> actions [
+GtLlmAssistant >> actions [
 	^ instruction actions
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmTutor >> addAction: anAction [
-	instruction addAction: (anAction tutor: self)
+GtLlmAssistant >> addAction: anAction [
+	instruction addAction: (anAction assistant: self)
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmTutor >> addFormat: aComponent [
+GtLlmAssistant >> addFormat: aComponent [
 	instruction addComponent: aComponent
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmTutor >> addInstructionSection: aSection [
+GtLlmAssistant >> addInstructionSection: aSection [
 	instruction addSection: aSection
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmTutor >> chatAction [
-	<gtLlmTutorAction>
-	^ GtLlmTutorAction new 
+GtLlmAssistant >> chatAction [
+	<gtLlmAssistantAction>
+	^ GtLlmAssistantAction new 
 		name: 'Chat';
 		priority: 1;
 		description: 'Chat using the text field.';
 		format: 'Chat: {1}';
-		examples: {GtLlmTutorActionExample new markUnverified
+		examples: {GtLlmAssistantActionExample new markUnverified
 					input: {'Action' -> 'Chat: How are you?'} asDictionary;
 					output: {'Action' -> 'Chat'.
 							'Text'
@@ -66,27 +66,27 @@ GtLlmTutor >> chatAction [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmTutor >> collectActions [
+GtLlmAssistant >> collectActions [
 	^ ((Set withAll: ((Pragma
-		allNamed: #gtLlmTutorAction
+		allNamed: #gtLlmAssistantAction
 		from: self class
 		to: Object) collect: [:aPragma | aPragma methodSelector]))
-		collect: [ :aSelector | (self perform: aSelector) tutor: self ])
+		collect: [ :aSelector | (self perform: aSelector) assistant: self ])
 		sorted: [ :a :b | a priority < b priority ]
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmTutor >> collectFormats [
+GtLlmAssistant >> collectFormats [
 	^ ((Pragma
-		allNamed: #gtLlmTutorFormat
+		allNamed: #gtLlmAssistantFormat
 		from: self class
 		to: Object)
-		collect: [ :aPragma | (self perform: aPragma methodSelector) tutor: self ])
+		collect: [ :aPragma | (self perform: aPragma methodSelector) assistant: self ])
 		sorted: [ :a :b | a priority < b priority ]
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmTutor >> collectSections [
+GtLlmAssistant >> collectSections [
 	^ (Pragma
 		allNamed: #gtLlmInstructionSection
 		from: self class
@@ -94,39 +94,39 @@ GtLlmTutor >> collectSections [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmTutor >> createChat [
+GtLlmAssistant >> createChat [
 	^ GtLlmActionChat new
 		provider: (self providerStencil value: instruction);
-		tutor: self
+		assistant: self
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmTutor >> defaultDescription [
+GtLlmAssistant >> defaultDescription [
 	^ 'You are an assistant.'
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmTutor >> description [
+GtLlmAssistant >> description [
 	^ self instruction description
 ]
 
 { #category : #accessing }
-GtLlmTutor >> description: anObject [
+GtLlmAssistant >> description: anObject [
 	instruction description: anObject
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmTutor >> formatComponents [
+GtLlmAssistant >> formatComponents [
 	^ instruction formats
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmTutor >> formatNamed: aString [
+GtLlmAssistant >> formatNamed: aString [
 	^ instruction componentNamed: aString
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmTutor >> gtInstructionFor: aView [
+GtLlmAssistant >> gtInstructionFor: aView [
 	<gtView>
 	^ aView forward
 		title: 'Instruction';
@@ -136,7 +136,7 @@ GtLlmTutor >> gtInstructionFor: aView [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmTutor >> initialize [
+GtLlmAssistant >> initialize [
 	super initialize.
 	self providerStencil: self defaultProviderStencil.
 	
@@ -147,8 +147,8 @@ GtLlmTutor >> initialize [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmTutor >> initializeInstruction [
-	instruction := GtLlmTutorInstruction new.
+GtLlmAssistant >> initializeInstruction [
+	instruction := GtLlmAssistantInstruction new.
 	instruction
 		addComponents: self collectFormats;
 		addActions: self collectActions;
@@ -156,39 +156,39 @@ GtLlmTutor >> initializeInstruction [
 ]
 
 { #category : #accessing }
-GtLlmTutor >> instruction [
+GtLlmAssistant >> instruction [
 	^ instruction
 ]
 
 { #category : #accessing }
-GtLlmTutor >> onAnthropicWithModel: aModel [
+GtLlmAssistant >> onAnthropicWithModel: aModel [
 	self providerStencil: (self defaultAnthropicProviderStencilWithModel: aModel)
 ]
 
 { #category : #accessing }
-GtLlmTutor >> providerStencil [
+GtLlmAssistant >> providerStencil [
 	^ providerStencil
 ]
 
 { #category : #accessing }
-GtLlmTutor >> providerStencil: anObject [
+GtLlmAssistant >> providerStencil: anObject [
 	providerStencil := anObject
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmTutor >> recomputeActions [
+GtLlmAssistant >> recomputeActions [
 	instruction replaceActions: self collectActions
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmTutor >> recomputeFormats [
+GtLlmAssistant >> recomputeFormats [
 	instruction replaceComponents: self collectFormats
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmTutor >> textFormatDescription [
-	<gtLlmTutorFormat>
-	^ GtLlmTutorFormatDescription new
+GtLlmAssistant >> textFormatDescription [
+	<gtLlmAssistantFormat>
+	^ GtLlmAssistantFormatDescription new
 		name: 'Text';
 		priority: 2;
 		format: 'Text';

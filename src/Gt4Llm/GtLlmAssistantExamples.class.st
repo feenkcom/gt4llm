@@ -1,26 +1,14 @@
 Class {
-	#name : #GtLlmTutorExamples,
+	#name : #GtLlmAssistantExamples,
 	#superclass : #Object,
 	#category : #Gt4Llm
 }
 
 { #category : #'as yet unclassified' }
-GtLlmTutorExamples >> basicTutor [
-	<gtExample>
-	| tutor |
-	tutor :=  GtLlmTutor new.
-	
-	self assert: tutor actions size equals: 1.
-	self assert: tutor instruction formats size equals: 2.
-	
-	^ tutor
-]
-
-{ #category : #'as yet unclassified' }
-GtLlmTutorExamples >> tutorChat [
+GtLlmAssistantExamples >> assistantChat [
 	<gtExample>
 	| tutor chat |
-	tutor := self tutorWithActionAndFormatAdded.
+	tutor := self assistantWithActionAndFormatAdded.
 	chat := tutor createChat.
 
 	self assert: (chat provider isKindOf: GtLlmNullProvider).
@@ -30,10 +18,10 @@ GtLlmTutorExamples >> tutorChat [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmTutorExamples >> tutorChatWithMessage [
+GtLlmAssistantExamples >> assistantChatWithMessage [
 	<gtExample>
 	| chat |
-	chat := self tutorChat.
+	chat := self assistantChat.
 
 	chat sendAction: (GtLlmActionCall action: 'example' arguments: {}).
 
@@ -45,11 +33,11 @@ GtLlmTutorExamples >> tutorChatWithMessage [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmTutorExamples >> tutorWithActionAdded [
+GtLlmAssistantExamples >> assistantWithActionAdded [
 	<gtExample>
 	| tutor exampleAction |
-	tutor := self tutorWithNullProviderStencil.
-	exampleAction := GtLlmTutorAction new name: 'example'.
+	tutor := self assistantWithNullProviderStencil.
+	exampleAction := GtLlmAssistantAction new name: 'example'.
 
 	tutor addAction: exampleAction.
 
@@ -60,11 +48,11 @@ GtLlmTutorExamples >> tutorWithActionAdded [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmTutorExamples >> tutorWithActionAndFormatAdded [
+GtLlmAssistantExamples >> assistantWithActionAndFormatAdded [
 	<gtExample>
 	| tutor exampleFormat |
-	tutor := self tutorWithActionAdded.
-	exampleFormat := GtLlmTutorFormatDescription new
+	tutor := self assistantWithActionAdded.
+	exampleFormat := GtLlmAssistantFormatDescription new
 			name: 'example';
 			format: 'Text'.
 	tutor addFormat: exampleFormat.
@@ -76,10 +64,10 @@ GtLlmTutorExamples >> tutorWithActionAndFormatAdded [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmTutorExamples >> tutorWithNullProviderStencil [
+GtLlmAssistantExamples >> assistantWithNullProviderStencil [
 	<gtExample>
 	| tutor |
-	tutor := self basicTutor.
+	tutor := self basicAssistant.
 
 	tutor
 		providerStencil: [ :instruction | 
@@ -87,5 +75,17 @@ GtLlmTutorExamples >> tutorWithNullProviderStencil [
 				instructions: instruction asInstructionPiece instructionString;
 				format: instruction asJsonSchema ].
 
+	^ tutor
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmAssistantExamples >> basicAssistant [
+	<gtExample>
+	| tutor |
+	tutor :=  GtLlmAssistant new.
+	
+	self assert: tutor actions size equals: 1.
+	self assert: tutor instruction formats size equals: 2.
+	
 	^ tutor
 ]

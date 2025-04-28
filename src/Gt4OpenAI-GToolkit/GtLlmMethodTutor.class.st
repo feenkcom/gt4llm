@@ -46,8 +46,8 @@ GtLlmMethodTutor >> defaultProviderStencil [
 
 { #category : #'as yet unclassified' }
 GtLlmMethodTutor >> proposalAction [
-	<gtLlmTutorAction>
-	^ GtLlmTutorAction new
+	<gtLlmAssistantAction>
+	^ GtLlmAssistantAction new
 		name: 'Propose code';
 		priority: 3;
 		description: 'Interpret the comments and propose code using the `Code Snippet` field. The typical comment command is formatted as `": some command"`. Only propose Pharo code unless otherwise asked. The proposed code should leave the comments untouched.
@@ -56,7 +56,7 @@ If you want to add explanations, place them in the `Text` field. If the explanat
 "Smalltalk code here"
 ```
 You can look up classes, methods and documentation in the current Glamorous Toolkit image. Only rely on such look up when absolutely needed.';
-		examples: {GtLlmTutorActionExample new
+		examples: {GtLlmAssistantActionExample new
 					input: {'Action' -> 'Propose code'.
 							'Method' -> 'width
 	^ 15 * 30 ": subtract 5"'.
