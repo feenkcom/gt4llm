@@ -1,11 +1,11 @@
 Class {
-	#name : #GtLlmObjectTutor,
+	#name : #GtLlmObjectAssistant,
 	#superclass : #GtLlmAssistant,
 	#category : #'Gt4OpenAI-GToolkit'
 }
 
 { #category : #'as yet unclassified' }
-GtLlmObjectTutor >> chatOn: anObject [
+GtLlmObjectAssistant >> chatOn: anObject [
 	| chat |
 	chat := self createChat onInstance: (self serializerFor: anObject).
 
@@ -22,12 +22,12 @@ GtLlmObjectTutor >> chatOn: anObject [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmObjectTutor >> defaultDescription [
+GtLlmObjectAssistant >> defaultDescription [
 	^ 'You are an assistant for objects in Glamorous Toolkit.'
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmObjectTutor >> defaultProviderStencil [
+GtLlmObjectAssistant >> defaultProviderStencil [
 	^ [ :anInstructionFormat | 
 	GtOpenAIResponseProvider withApiKeyFromFile
 		instructions: anInstructionFormat asInstructionPiece instructionString;
@@ -37,7 +37,7 @@ GtLlmObjectTutor >> defaultProviderStencil [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmObjectTutor >> explanationAction [
+GtLlmObjectAssistant >> explanationAction [
 	<gtLlmAssistantAction>
 	^ GtLlmAssistantAction new
 		name: 'Explain the object';
@@ -58,7 +58,7 @@ GtLlmObjectTutor >> explanationAction [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmObjectTutor >> getImplementorsTool [
+GtLlmObjectAssistant >> getImplementorsTool [
 	^ GtLlmFunctionTool new
 		name: 'getImplementors';
 		parameters: {'methodName'};
@@ -69,7 +69,7 @@ GtLlmObjectTutor >> getImplementorsTool [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmObjectTutor >> getMethodTool [
+GtLlmObjectAssistant >> getMethodTool [
 	^ GtLlmFunctionTool new
 		name: 'getClassMethod';
 		parameters: {'className'. 'methodName'};
@@ -94,7 +94,7 @@ GtLlmObjectTutor >> getMethodTool [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmObjectTutor >> getMethodsTool [
+GtLlmObjectAssistant >> getMethodsTool [
 	^ GtLlmFunctionTool new
 		name: 'getClassMethods';
 		parameters: {'className'};
@@ -106,7 +106,7 @@ GtLlmObjectTutor >> getMethodsTool [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmObjectTutor >> getPropertyToolOn: anObject [
+GtLlmObjectAssistant >> getPropertyToolOn: anObject [
 	^ GtLlmFunctionTool new
 		name: 'getObjectProperty';
 		parameters: {'propertyName'};
@@ -116,7 +116,7 @@ GtLlmObjectTutor >> getPropertyToolOn: anObject [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmObjectTutor >> getReferencesTool [
+GtLlmObjectAssistant >> getReferencesTool [
 	^ GtLlmFunctionTool new
 		name: 'getReferences';
 		parameters: {'methodName'};
@@ -127,7 +127,7 @@ GtLlmObjectTutor >> getReferencesTool [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmObjectTutor >> lookupClassTool [
+GtLlmObjectAssistant >> lookupClassTool [
 	^ GtLlmFunctionTool new
 		name: 'lookupClass';
 		parameters: {'className'};
@@ -139,7 +139,7 @@ GtLlmObjectTutor >> lookupClassTool [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmObjectTutor >> lookupPageTool [
+GtLlmObjectAssistant >> lookupPageTool [
 	^ GtLlmFunctionTool new
 		name: 'lookupDocumentationPage';
 		parameters: {'pageName'};
@@ -151,7 +151,7 @@ GtLlmObjectTutor >> lookupPageTool [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmObjectTutor >> methodFormatDescription [
+GtLlmObjectAssistant >> methodFormatDescription [
 	<gtLlmAssistantFormat>
 	^ GtLlmAssistantFormatDescription new
 		name: 'Method';
@@ -167,7 +167,7 @@ add: val
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmObjectTutor >> objectFormatDescription [
+GtLlmObjectAssistant >> objectFormatDescription [
 	<gtLlmAssistantFormat>
 	^ GtLlmAssistantFormatDescription new
 		name: 'Object';
@@ -179,7 +179,7 @@ GtLlmObjectTutor >> objectFormatDescription [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmObjectTutor >> phlowInstructionSection [
+GtLlmObjectAssistant >> phlowInstructionSection [
 	<gtLlmInstructionSection>
 	^ GtLlmInstructionSection new
 		title: 'Phlow views';
@@ -268,7 +268,7 @@ gtForwardFor: aView
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmObjectTutor >> responseFormatSection [
+GtLlmObjectAssistant >> responseFormatSection [
 	<gtLlmInstructionSection>
 	^ GtLlmInstructionSection new
 		source: self;
@@ -281,7 +281,7 @@ Likewise, methods may be annotated using `{{gtMethod:ClassName>>#methodName}}`, 
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmObjectTutor >> serializerFor: anObject [
+GtLlmObjectAssistant >> serializerFor: anObject [
 	^ GtLlmSerializableValueHolder new
 		name: 'Object';
 		content: anObject;
@@ -292,7 +292,7 @@ GtLlmObjectTutor >> serializerFor: anObject [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmObjectTutor >> traverse: anObject using: aChain [
+GtLlmObjectAssistant >> traverse: anObject using: aChain [
 	| value traversed |
 	value := anObject.
 	traversed := OrderedCollection new.
@@ -314,7 +314,7 @@ GtLlmObjectTutor >> traverse: anObject using: aChain [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmObjectTutor >> viewProposalAction [
+GtLlmObjectAssistant >> viewProposalAction [
 	<gtLlmAssistantAction>
 	^ GtLlmAssistantAction new
 		name: 'Propose a view';
