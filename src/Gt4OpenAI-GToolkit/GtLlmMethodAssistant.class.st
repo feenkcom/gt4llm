@@ -70,7 +70,7 @@ GtLlmMethodAssistant >> gtProposeCheckExample [
  		examples: {}
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #proposals }
 GtLlmMethodAssistant >> proposalAction [
 	<gtLlmAssistantAction>
 	^ GtLlmAssistantAction new
