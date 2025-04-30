@@ -24,8 +24,8 @@ GtLlmAssistant >> gtActionsFor: aView [
 						ensureMethodCoderViewModel.
 				methodCoder pharoMethodCoderViewModel coderModel
 					currentSourceString: 'gtACTIONNAME
- 	<gtLlmTutorAction>
- 	^ GtLlmTutorAction new
+ 	<gtLlmAssistantAction>
+ 	^ GtLlmAssistantAction new
  		name: '''';
  		priority: 1;
  		description: '''';
@@ -59,8 +59,8 @@ GtLlmAssistant >> gtFormatComponentsFor: aView [
 						ensureMethodCoderViewModel.
 				methodCoder pharoMethodCoderViewModel coderModel
 					currentSourceString: 'gtFORMATNAMEDescription
-	<gtLlmTutorFormat>
-	^ GtLlmTutorFormatDescription new
+	<gtLlmAssistantFormat>
+	^ GtLlmAsssistantFormatDescription new
 		name: '''';
 		priority: 1;
 		format: '''';

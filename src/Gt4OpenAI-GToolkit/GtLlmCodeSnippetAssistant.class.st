@@ -1,11 +1,11 @@
 Class {
-	#name : #GtLlmCodeSnippetTutor,
-	#superclass : #GtLlmObjectTutor,
+	#name : #GtLlmCodeSnippetAssistant,
+	#superclass : #GtLlmObjectAssistant,
 	#category : #'Gt4OpenAI-GToolkit'
 }
 
 { #category : #'as yet unclassified' }
-GtLlmCodeSnippetTutor >> chatOn: aCoderViewModel [
+GtLlmCodeSnippetAssistant >> chatOn: aCoderViewModel [
 	| chat |
 	chat := self createChat.
 
@@ -36,7 +36,7 @@ GtLlmCodeSnippetTutor >> chatOn: aCoderViewModel [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmCodeSnippetTutor >> codeSnippetFormatDescription [
+GtLlmCodeSnippetAssistant >> codeSnippetFormatDescription [
 	<gtLlmAssistantFormat>
 	^ GtLlmAssistantFormatDescription new
 		name: 'Code Snippet';
@@ -48,12 +48,12 @@ Point x: 1 y: 10
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmCodeSnippetTutor >> defaultDescription [
+GtLlmCodeSnippetAssistant >> defaultDescription [
 	^ 'You are an assistant for code snippets.'
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmCodeSnippetTutor >> defaultProviderStencil [
+GtLlmCodeSnippetAssistant >> defaultProviderStencil [
 	^ [ :anInstructionFormat| 
 	GtOpenAIResponseProvider withApiKeyFromFile
 		format: anInstructionFormat asJsonSchema;
@@ -63,7 +63,7 @@ GtLlmCodeSnippetTutor >> defaultProviderStencil [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmCodeSnippetTutor >> lookupBindingToolFor: aCoderViewModel [
+GtLlmCodeSnippetAssistant >> lookupBindingToolFor: aCoderViewModel [
 	^ GtLlmFunctionTool new
 		name: 'lookupVariableBinding';
 		parameters: {'variableName'};
@@ -76,7 +76,7 @@ GtLlmCodeSnippetTutor >> lookupBindingToolFor: aCoderViewModel [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmCodeSnippetTutor >> proposalAction [
+GtLlmCodeSnippetAssistant >> proposalAction [
 	<gtLlmAssistantAction>
 	^ GtLlmAssistantAction new
 		name: 'Propose code';
@@ -103,7 +103,7 @@ You can look up classes, methods and documentation in the current Glamorous Tool
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmCodeSnippetTutor >> snippetExplanationAction [
+GtLlmCodeSnippetAssistant >> snippetExplanationAction [
 	<gtLlmAssistantAction>
 	^ GtLlmAssistantAction new
 		name: 'Explain snippet';
@@ -127,7 +127,7 @@ GtLlmCodeSnippetTutor >> snippetExplanationAction [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmCodeSnippetTutor >> treatBinding: aBinding in: aSnippetCoderViewModel [
+GtLlmCodeSnippetAssistant >> treatBinding: aBinding in: aSnippetCoderViewModel [
 	| bindingValue |
 	bindingValue := aBinding value.
 	aBinding isSelfVariable
@@ -142,7 +142,7 @@ GtLlmCodeSnippetTutor >> treatBinding: aBinding in: aSnippetCoderViewModel [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmCodeSnippetTutor >> variablesFormatDescription [
+GtLlmCodeSnippetAssistant >> variablesFormatDescription [
 	<gtLlmAssistantFormat>
 	^ GtLlmAssistantFormatDescription new
 		name: 'Variables';
@@ -165,7 +165,7 @@ GtLlmCodeSnippetTutor >> variablesFormatDescription [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmCodeSnippetTutor >> viewProposalAction [
+GtLlmCodeSnippetAssistant >> viewProposalAction [
 	<gtLlmAssistantAction>
 	^ GtLlmAssistantAction new
 		name: 'Propose a view';

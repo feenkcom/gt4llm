@@ -8,7 +8,7 @@ ProtoObject >> gtActionChatFor: anAction [
 		priority: 100;
 		icon: BrGlamorousVectorIcons openAi;
 		tooltip: 'Chat about object';
-		action: [ :aButton | aButton phlow spawnObject: (GtLlmObjectTutor new chatOn: self) ];
-		primaryModifierAction: [ :aButton | aButton phlow showObject: (GtLlmObjectTutor new chatOn: self) ]
+		action: [ :aButton | aButton phlow spawnObject: (GtLlmObjectAssistant new chatOn: self) ];
+		primaryModifierAction: [ :aButton | aButton phlow showObject: (GtLlmObjectAssistant new chatOn: self) ]
 			mouseCursor: BlCopyCursor new
 ]
