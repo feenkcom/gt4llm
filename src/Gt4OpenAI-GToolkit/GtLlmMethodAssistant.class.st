@@ -1,11 +1,11 @@
 Class {
-	#name : #GtLlmMethodAsssistant,
+	#name : #GtLlmMethodAssistant,
 	#superclass : #GtLlmObjectAssistant,
 	#category : #'Gt4OpenAI-GToolkit'
 }
 
 { #category : #'as yet unclassified' }
-GtLlmMethodAsssistant >> chatOn: aCoderViewModel [
+GtLlmMethodAssistant >> chatOn: aCoderViewModel [
 	| chat |
 	chat := self createChat.
 
@@ -30,12 +30,12 @@ GtLlmMethodAsssistant >> chatOn: aCoderViewModel [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmMethodAsssistant >> defaultDescription [
+GtLlmMethodAssistant >> defaultDescription [
 	^ 'You are an assistant for code snippets.'
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmMethodAsssistant >> defaultProviderStencil [
+GtLlmMethodAssistant >> defaultProviderStencil [
 	^ [ :anInstructionFormat| 
 	GtOpenAIResponseProvider withApiKeyFromFile
 		format: anInstructionFormat asJsonSchema;
@@ -45,7 +45,7 @@ GtLlmMethodAsssistant >> defaultProviderStencil [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmMethodAsssistant >> proposalAction [
+GtLlmMethodAssistant >> proposalAction [
 	<gtLlmAssistantAction>
 	^ GtLlmAssistantAction new
 		name: 'Propose code';
@@ -69,7 +69,7 @@ You can look up classes, methods and documentation in the current Glamorous Tool
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmMethodAsssistant >> treatBinding: aBinding in: aSnippetCoderViewModel [
+GtLlmMethodAssistant >> treatBinding: aBinding in: aSnippetCoderViewModel [
 	| bindingValue |
 	bindingValue := aBinding value.
 	aBinding isSelfVariable
