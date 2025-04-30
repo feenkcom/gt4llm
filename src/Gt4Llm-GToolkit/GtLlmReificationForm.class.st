@@ -42,7 +42,7 @@ GtLlmReificationForm >> assistantClassNameRope: aRope [
 GtLlmReificationForm >> assistantNameDescription [
 	<magritteDescription>
 	^ GtMATextDescription new
-		label: 'Tutor name';
+		label: 'Assistant name';
 		beRequired;
 		priority: 4;
 		accessor: #assistantClassNameRope;
@@ -171,11 +171,11 @@ GtLlmReificationForm >> initialize [
 GtLlmReificationForm >> installActionsOn: newTutor [
 	self message chat assistant actions
 		do: [ :action | 
-			(action definingMethod hasPragmaNamed: #gtLlmTutorAction)
+			(action definingMethod hasPragmaNamed: #gtLlmAssistantAction)
 				ifFalse: [ newTutor
 						compile: 'gt' , (action name asCamelCase select: #isAlphaNumeric)
 								, 'Action
-	<gtLlmFormatComponent>
+	<gtLlmAssistantAction>
 	^ ' , action asExpressionSource ] ]
 ]
 
@@ -183,11 +183,11 @@ GtLlmReificationForm >> installActionsOn: newTutor [
 GtLlmReificationForm >> installFormatComponentsOn: newTutor [
 	self message chat assistant formatComponents
 		do: [ :formatComponent | 
-			(formatComponent definingMethod hasPragmaNamed: #gtLlmTutorFormat)
+			(formatComponent definingMethod hasPragmaNamed: #gtLlmAssistantFormat)
 				ifFalse: [ newTutor
 						compile: 'gt' , formatComponent name asCamelCase
 								, 'FormatDescription
-	<gtLlmTutorFormat>
+	<gtLlmAssistantFormat>
 	^ ' , formatComponent asExpressionSource ] ]
 ]
 
