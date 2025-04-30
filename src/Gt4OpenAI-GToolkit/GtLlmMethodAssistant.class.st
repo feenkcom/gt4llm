@@ -44,7 +44,20 @@ GtLlmMethodAssistant >> defaultProviderStencil [
 		instructions: anInstructionFormat asInstructionPiece instructionString ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #proposals }
+GtLlmMethodAssistant >> gtProposeCheckExample [
+ 	<gtLlmAssistantAction>
+ 	^ GtLlmAssistantAction new
+ 		name: 'Propose an example';
+ 		priority: 1;
+ 		description: 'I want to check the functionality of the attached method.  Can you propose a GlamorousToolkit example method that tests it.  The method should:
+- be annotated with the ''<gtExample>'' pragma,
+- create an instance of the attached method''s class,
+- and should return the object being tested.';
+ 		examples: {}
+]
+
+{ #category : #proposals }
 GtLlmMethodAssistant >> proposalAction [
 	<gtLlmAssistantAction>
 	^ GtLlmAssistantAction new
