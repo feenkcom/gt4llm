@@ -158,9 +158,6 @@ GtLlmObjectAssistant >> methodFormatDescription [
 		priority: 2;
 		format: 'Smalltalk code';
 		example: '```
-15 * 5 @ 3
-```
-```
 add: val
 	^ self + val
 ```'
