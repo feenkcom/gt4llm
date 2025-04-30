@@ -15,6 +15,7 @@ GtLlmMethodAssistant >> chatOn: aCoderViewModel [
 				content: aCoderViewModel;
 				serializer: [ :aModel | 
 					{'Method' -> aModel coderModel sourceCode currentSourceText text asString.
+					  'Class' -> aModel coderModel methodBehavior asString.
 						'Object' -> (GtLlmValueSerializer new serializeValue: aModel selfObject)} ];
 				updater: [ :aModel :aText | aModel coderModel forSource: aText ]).
 
@@ -27,6 +28,18 @@ GtLlmMethodAssistant >> chatOn: aCoderViewModel [
 	chat provider addTool: self getMethodsTool.
 
 	^ chat
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmMethodAssistant >> classFormatDescription [
+	<gtLlmAssistantFormat>
+	^ GtLlmAssistantFormatDescription new
+		name: 'Class';
+		priority: 2;
+		format: 'Text';
+		example: '```
+Object
+```'
 ]
 
 { #category : #'as yet unclassified' }
@@ -58,13 +71,20 @@ If you want to add explanations, place them in the `Text` field. If the explanat
 You can look up classes, methods and documentation in the current Glamorous Toolkit image. Only rely on such look up when absolutely needed.';
 		examples: {GtLlmAssistantActionExample new
 					input: {'Action' -> 'Propose code'.
-							'Method' -> 'width
+							'Method'
+								-> 'width
 	^ 15 * 30 ": subtract 5"'.
-							'Object' -> '{"string":"nil","instanceSlots":[],"class":"UndefinedObject"}'} asDictionary;
+							'Class' -> 'FixedWidthRectangle'.
+							'Object'
+								-> '{"string":"nil","instanceSlots":[],"class":"UndefinedObject"}'}
+							asDictionary;
 					output: {'Action' -> 'Propose code'.
 							'Text' -> nil.
-							'Object' -> '{"string":"nil","instanceSlots":[],"class":"UndefinedObject"}'.
-							'Method' -> 'width
+							'Object'
+								-> '{"string":"nil","instanceSlots":[],"class":"UndefinedObject"}'.
+							'Class' -> 'FixedWidthRectangle'.
+							'Method'
+								-> 'width
 	^ (15 * 30) ": subtract 5" - 5'} asDictionary}
 ]
 
