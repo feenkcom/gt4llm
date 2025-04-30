@@ -1,11 +1,11 @@
 Class {
-	#name : #GtLlmMethodTutor,
-	#superclass : #GtLlmObjectTutor,
+	#name : #GtLlmMethodAssistant,
+	#superclass : #GtLlmObjectAssistant,
 	#category : #'Gt4OpenAI-GToolkit'
 }
 
 { #category : #'as yet unclassified' }
-GtLlmMethodTutor >> chatOn: aCoderViewModel [
+GtLlmMethodAssistant >> chatOn: aCoderViewModel [
 	| chat |
 	chat := self createChat.
 
@@ -15,6 +15,7 @@ GtLlmMethodTutor >> chatOn: aCoderViewModel [
 				content: aCoderViewModel;
 				serializer: [ :aModel | 
 					{'Method' -> aModel coderModel sourceCode currentSourceText text asString.
+					  'Class' -> aModel coderModel methodBehavior asString.
 						'Object' -> (GtLlmValueSerializer new serializeValue: aModel selfObject)} ];
 				updater: [ :aModel :aText | aModel coderModel forSource: aText ]).
 
@@ -30,12 +31,24 @@ GtLlmMethodTutor >> chatOn: aCoderViewModel [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmMethodTutor >> defaultDescription [
+GtLlmMethodAssistant >> classFormatDescription [
+	<gtLlmAssistantFormat>
+	^ GtLlmAssistantFormatDescription new
+		name: 'Class';
+		priority: 2;
+		format: 'Text';
+		example: '```
+Object
+```'
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmMethodAssistant >> defaultDescription [
 	^ 'You are an assistant for code snippets.'
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmMethodTutor >> defaultProviderStencil [
+GtLlmMethodAssistant >> defaultProviderStencil [
 	^ [ :anInstructionFormat| 
 	GtOpenAIResponseProvider withApiKeyFromFile
 		format: anInstructionFormat asJsonSchema;
@@ -44,8 +57,22 @@ GtLlmMethodTutor >> defaultProviderStencil [
 		instructions: anInstructionFormat asInstructionPiece instructionString ]
 ]
 
-{ #category : #'as yet unclassified' }
-GtLlmMethodTutor >> proposalAction [
+{ #category : #proposals }
+GtLlmMethodAssistant >> gtProposeCheckExample [
+ 	<gtLlmAssistantAction>
+ 	^ GtLlmAssistantAction new
+ 		name: 'Propose an example';
+ 		priority: 1;
+ 		description: 'I want to check the functionality of the attached method.  Can you propose a GlamorousToolkit example method that tests it.  The method should:
+- be annotated with the ''<gtExample>'' pragma,
+- create an instance of the attached method''s class,
+- and should return the object being tested,
+- assertions of the form ''self assert: a = b'' should be written ''self assert: a equals: b''.';
+ 		examples: {}
+]
+
+{ #category : #proposals }
+GtLlmMethodAssistant >> proposalAction [
 	<gtLlmAssistantAction>
 	^ GtLlmAssistantAction new
 		name: 'Propose code';
@@ -58,18 +85,25 @@ If you want to add explanations, place them in the `Text` field. If the explanat
 You can look up classes, methods and documentation in the current Glamorous Toolkit image. Only rely on such look up when absolutely needed.';
 		examples: {GtLlmAssistantActionExample new
 					input: {'Action' -> 'Propose code'.
-							'Method' -> 'width
+							'Method'
+								-> 'width
 	^ 15 * 30 ": subtract 5"'.
-							'Object' -> '{"string":"nil","instanceSlots":[],"class":"UndefinedObject"}'} asDictionary;
+							'Class' -> 'FixedWidthRectangle'.
+							'Object'
+								-> '{"string":"nil","instanceSlots":[],"class":"UndefinedObject"}'}
+							asDictionary;
 					output: {'Action' -> 'Propose code'.
 							'Text' -> nil.
-							'Object' -> '{"string":"nil","instanceSlots":[],"class":"UndefinedObject"}'.
-							'Method' -> 'width
+							'Object'
+								-> '{"string":"nil","instanceSlots":[],"class":"UndefinedObject"}'.
+							'Class' -> 'FixedWidthRectangle'.
+							'Method'
+								-> 'width
 	^ (15 * 30) ": subtract 5" - 5'} asDictionary}
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmMethodTutor >> treatBinding: aBinding in: aSnippetCoderViewModel [
+GtLlmMethodAssistant >> treatBinding: aBinding in: aSnippetCoderViewModel [
 	| bindingValue |
 	bindingValue := aBinding value.
 	aBinding isSelfVariable
