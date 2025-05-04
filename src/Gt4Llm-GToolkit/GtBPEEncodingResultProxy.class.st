@@ -15,7 +15,7 @@ GtBPEEncodingResultProxy >> gtTokenizedFor: aView [
 	^ aView explicit
 		title: 'Tokenized';
 		priority: 0;
-		stencil: [ GtLlmTokenizedStringEditor new result: self ]
+		stencil: [ (GtLlmTokenizedStringEditor new result: self) margin: (BlInsets all: 10) ]
 ]
 
 { #category : #accessing }
