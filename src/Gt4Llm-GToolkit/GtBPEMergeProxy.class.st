@@ -16,22 +16,35 @@ GtBPEMergeProxy >> gtBeforeAndAfterFor: aView [
 		title: 'Before and after';
 		priority: 1;
 		stencil: [ BrHorizontalPane new matchParent
-				addChild: (GtLlmTokenizedStringEditor new
-						decorationBlock: [ :aNameLabel :aNumberLabel :aToken :anIndex | 
-							(self replacedIndices includes: anIndex)
-								ifTrue: [ aNameLabel background: BrGlamorousColors newsBackgroundColor.
-									aNumberLabel background: BrGlamorousColors newsBackgroundColor ] ];
-						result: self before_text;
-						background: Color white;
-						addAptitude: BrShadowAptitude;
-						padding: (BlInsets all: 5));
-				addChild: (GtLlmTokenizedStringEditor new
-						decorationBlock: [ :aNameLabel :aNumberLabel :aToken :anIndex | 
-							aToken number = self number
-								ifTrue: [ aNameLabel background: BrGlamorousColors newsBackgroundColor.
-									aNumberLabel background: BrGlamorousColors newsBackgroundColor ] ];
-						result: self after_text;
-						padding: (BlInsets all: 5)) ]
+				margin: (BlInsets all: 10);
+				addChild: (BrVerticalPane new matchParent
+						addChild: (BrLabel new
+								text: 'Before';
+								margin: (BlInsets left: 10);
+								aptitude: (BrGlamorousLabelAptitude new foreground: Color gray));
+						addChild: (GtLlmTokenizedStringEditor new
+								decorationBlock: [ :aNameLabel :aNumberLabel :aToken :anIndex | 
+									(self replacedIndices includes: anIndex)
+										ifTrue: [ aNameLabel background: BrGlamorousColors newsBackgroundColor.
+											aNumberLabel background: BrGlamorousColors newsBackgroundColor ] ];
+								result: self before_text;
+								background: Color white;
+								addAptitude: BrShadowAptitude;
+								margin: (BlInsets top: 5 left: 10 bottom: 10 right: 10)));
+				addChild: (BrVerticalPane new matchParent
+						addChild: (BrLabel new
+								text: 'After';
+								margin: (BlInsets left: 10);
+								aptitude: (BrGlamorousLabelAptitude new foreground: Color gray));
+						addChild: (GtLlmTokenizedStringEditor new
+								decorationBlock: [ :aNameLabel :aNumberLabel :aToken :anIndex | 
+									aToken number = self number
+										ifTrue: [ aNameLabel background: BrGlamorousColors newsBackgroundColor.
+											aNumberLabel background: BrGlamorousColors newsBackgroundColor ] ];
+								result: self after_text;
+								background: Color white;
+								addAptitude: BrShadowAptitude;
+								margin: (BlInsets top: 5 left: 10 bottom: 10 right: 10))) ]
 ]
 
 { #category : #accessing }
