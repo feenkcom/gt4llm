@@ -29,6 +29,7 @@ GtBPEMergeProxy >> gtBeforeAndAfterFor: aView [
 											aNumberLabel background: BrGlamorousColors newsBackgroundColor ] ];
 								result: self before_text;
 								background: Color white;
+								fitContentLimited;
 								addAptitude: BrShadowAptitude;
 								margin: (BlInsets top: 5 left: 10 bottom: 10 right: 10)));
 				addChild: (BrVerticalPane new matchParent
@@ -43,6 +44,7 @@ GtBPEMergeProxy >> gtBeforeAndAfterFor: aView [
 											aNumberLabel background: BrGlamorousColors newsBackgroundColor ] ];
 								result: self after_text;
 								background: Color white;
+								fitContentLimited;
 								addAptitude: BrShadowAptitude;
 								margin: (BlInsets top: 5 left: 10 bottom: 10 right: 10))) ]
 ]
