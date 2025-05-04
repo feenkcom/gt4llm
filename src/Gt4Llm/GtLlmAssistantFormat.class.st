@@ -75,7 +75,7 @@ GtLlmAssistantFormat >> communicationConventionsDescription [
 		title: 'Communication rules';
 		body: (GtLlmInstructionList new
 				addItem: 'Always review the full conversation prior to answering and maintain continuity.';
-				addItem: 'Any action mut be answered by an action result, no extraneous prose or explanations. Only non-action messages may be answered in prose.';
+				addItem: 'Any action must be answered by an action result, no extraneous prose or explanations. Only non-action messages may be answered in prose.';
 				addItem: 'Assume the user would like something concise.')
 ]
 
