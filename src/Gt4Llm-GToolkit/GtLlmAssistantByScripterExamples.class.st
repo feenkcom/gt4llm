@@ -62,11 +62,7 @@ GtLlmAssistantByScripterExamples >> chatElementWithMessageSent [
 	scripter click
 		label: 'Click on Send';
 		id: #send;
-		playNoPulse.
-
-	5
-		timesRepeat: [ scripter space pulse.
-			5 milliseconds wait ].
+		play.
 
 	self
 		assert: scripter element chatViewModel assistantChat messages size

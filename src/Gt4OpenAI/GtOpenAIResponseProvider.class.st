@@ -9,6 +9,11 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
+GtOpenAIResponseProvider class >> providerName [
+	^ 'OpenAI Responses'
+]
+
+{ #category : #'as yet unclassified' }
 GtOpenAIResponseProvider >> addTool: aTool [
 	tools add: aTool
 ]

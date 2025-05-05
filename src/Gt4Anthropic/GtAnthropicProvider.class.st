@@ -13,6 +13,16 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
+GtAnthropicProvider class >> default [
+	^ [ self withApiKeyFromFile ]
+]
+
+{ #category : #'as yet unclassified' }
+GtAnthropicProvider class >> providerName [
+	^ 'Anthropic'
+]
+
+{ #category : #'as yet unclassified' }
 GtAnthropicProvider class >> withApiKeyFromClipboard [
 	^ self new apiKey: Clipboard clipboardText
 ]

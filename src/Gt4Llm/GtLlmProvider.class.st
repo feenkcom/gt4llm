@@ -11,6 +11,12 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
+GtLlmProvider class >> defaultProviders [
+	^ self allSubclasses
+		select: [ :aSubclass | aSubclass class canUnderstand: #default ]
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmProvider class >> new [
 	^ self basicNew initialize
 ]
