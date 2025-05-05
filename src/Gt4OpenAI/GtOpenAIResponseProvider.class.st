@@ -9,6 +9,11 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
+GtOpenAIResponseProvider class >> providerName [
+	^ 'OpenAI Responses'
+]
+
+{ #category : #'as yet unclassified' }
 GtOpenAIResponseProvider >> addTool: aTool [
 	tools add: aTool
 ]
@@ -38,6 +43,25 @@ GtOpenAIResponseProvider >> gtToolsFor: aView [
 ]
 
 { #category : #'as yet unclassified' }
+GtOpenAIResponseProvider >> handleToolCall: aToolCall [
+	| toolOutput |
+	chat removeLastMessage.
+	chat
+		addMessage: (GtOpenAIRawToolMessage new
+				toolCall: aToolCall;
+				rawData: aToolCall rawData).
+	toolOutput := tools performToolCall: aToolCall.
+	chat
+		addMessage: (GtLlmToolMessage new
+				toolCall: aToolCall;
+				output: toolOutput).
+
+	self chat signalRunHasUpdated.
+
+	^ self executeWait
+]
+
+{ #category : #'as yet unclassified' }
 GtOpenAIResponseProvider >> initialize [
 	super initialize.
 
@@ -54,7 +78,7 @@ GtOpenAIResponseProvider >> instructions: anObject [
 	instructions := anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtOpenAIResponseProvider >> performToolCallsIn: result [
 	| toolOutputs |
 	toolOutputs := result toolCalls

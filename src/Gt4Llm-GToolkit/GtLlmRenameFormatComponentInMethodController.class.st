@@ -2,10 +2,20 @@ Class {
 	#name : #GtLlmRenameFormatComponentInMethodController,
 	#superclass : #GtRenameLiteralItemController,
 	#instVars : [
-		'tutorClass'
+		'assistantClass'
 	],
 	#category : #'Gt4Llm-GToolkit'
 }
+
+{ #category : #accessing }
+GtLlmRenameFormatComponentInMethodController >> assistantClass [
+	^ assistantClass
+]
+
+{ #category : #accessing }
+GtLlmRenameFormatComponentInMethodController >> assistantClass: anObject [
+	assistantClass := anObject
+]
 
 { #category : #'as yet unclassified' }
 GtLlmRenameFormatComponentInMethodController >> installValidation [
@@ -25,15 +35,5 @@ GtLlmRenameFormatComponentInMethodController >> rename: anOldName to: aNewName [
 		model: aModel
 		rename: anOldName
 		to: aNewName
-		in: tutorClass
-]
-
-{ #category : #accessing }
-GtLlmRenameFormatComponentInMethodController >> tutorClass [
-	^ tutorClass
-]
-
-{ #category : #accessing }
-GtLlmRenameFormatComponentInMethodController >> tutorClass: anObject [
-	tutorClass := anObject
+		in: assistantClass
 ]

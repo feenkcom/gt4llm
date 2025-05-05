@@ -3,7 +3,8 @@ Class {
 	#superclass : #BrVerticalPane,
 	#instVars : [
 		'threadMessageViewModel',
-		'header'
+		'header',
+		'updater'
 	],
 	#category : #'Gt4Llm-GToolkit'
 }
@@ -57,10 +58,14 @@ GtLlmThreadMessageContentHolder >> makeActionToolbar [
 ]
 
 { #category : #accessing }
+GtLlmThreadMessageContentHolder >> onMessageContentsUpdated: anAnnouncement [
+	self viewUpdater requestUpdate
+]
+
+{ #category : #accessing }
 GtLlmThreadMessageContentHolder >> onThreadMessageViewModelChanged [
 	self updateHeader.
-
-	self views: self threadMessageViewModel messageViews
+	self updateViews
 ]
 
 { #category : #accessing }
@@ -83,8 +88,11 @@ GtLlmThreadMessageContentHolder >> threadMessageViewModel: anObject [
 
 	threadMessageViewModel weak
 		when: GtLlmThreadMessageViewModelChanged
-		send: #onThreadMessageViewModelChanged:
-		to: self.
+			send: #onThreadMessageViewModelChanged:
+			to: self;
+		when: GtLlmMessageContentsUpdated
+			send: #onMessageContentsUpdated:
+			to: self.
 
 	self enqueueUpdate
 ]
@@ -97,6 +105,19 @@ GtLlmThreadMessageContentHolder >> updateHeader [
 ]
 
 { #category : #accessing }
+GtLlmThreadMessageContentHolder >> updateViews [
+	self views: self threadMessageViewModel messageViews
+]
+
+{ #category : #accessing }
+GtLlmThreadMessageContentHolder >> viewUpdater [
+	^ updater
+		ifNil: [ updater := BrElementUpdater new.
+			updater element: self selector: #updateViews.
+			updater postponedDuration: 300 milliseconds ]
+]
+
+{ #category : #accessing }
 GtLlmThreadMessageContentHolder >> views: aCollectionOfViews [
 	| views |
 	self removeChildNamed: #'message-tabs'.
@@ -105,13 +126,7 @@ GtLlmThreadMessageContentHolder >> views: aCollectionOfViews [
 
 	views ifEmpty: [ ^ self ].
 
-	views size > 1
-		ifTrue: [ self addChild: (self viewsToTabGroup: aCollectionOfViews) as: #'message-tabs' ]
-		ifFalse: [ | element |
-			element := views first asElement.
-			(element respondsTo: #hideHeaderElement)
-				ifTrue: [ element hideHeaderElement ].
-			self addChild: element as: #'message-tabs' ]
+	self addChild: (self viewsToTabGroup: aCollectionOfViews) as: #'message-tabs'
 ]
 
 { #category : #accessing }
@@ -136,6 +151,9 @@ GtLlmThreadMessageContentHolder >> viewsToTabGroup: aCollectionOfViews [
 						stencil: [ view
 								asElementDo: [ :anElement | 
 									anElement phlow beViewContent.
+									(anElement respondsTo: #vFitContentLimited)
+										ifTrue: [ anElement vFitContentLimited ]
+										ifFalse: [ anElement constraintsDo: [ :c | c vertical fitContentLimited ] ].
 									anElement ] ];
 						toolbarStencil: [ view actionsToolbarForElement: aTab ].
 					view attachTooltipFor: aTab.

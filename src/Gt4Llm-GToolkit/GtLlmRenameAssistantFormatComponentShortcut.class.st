@@ -1,18 +1,18 @@
 Class {
-	#name : #GtLlmRenameTutorFormatComponentShortcut,
+	#name : #GtLlmRenameAssistantFormatComponentShortcut,
 	#superclass : #GtSourceCoderInlineRenameShortcut,
 	#category : #'Gt4Llm-GToolkit'
 }
 
 { #category : #'as yet unclassified' }
-GtLlmRenameTutorFormatComponentShortcut >> initialize [
+GtLlmRenameAssistantFormatComponentShortcut >> initialize [
 	super initialize.
 	
 	combination := BlKeyCombination primaryShiftR
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmRenameTutorFormatComponentShortcut >> performOnEditor: aBrTextEditor element: aBrEditorElement coderViewModel: aSourceCoderViewModel dueTo: aShortcutEvent [
+GtLlmRenameAssistantFormatComponentShortcut >> performOnEditor: aBrTextEditor element: aBrEditorElement coderViewModel: aSourceCoderViewModel dueTo: aShortcutEvent [
 	| position |
 	self
 		forEditor: aBrTextEditor

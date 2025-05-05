@@ -1,6 +1,11 @@
 Extension { #name : #GtLlmChat }
 
 { #category : #'*Gt4Llm-GToolkit' }
+GtLlmChat >> asElement [
+	^ GtLlmChatElement new chatViewModel: self asViewModel
+]
+
+{ #category : #'*Gt4Llm-GToolkit' }
 GtLlmChat >> asViewModel [
 	^ GtLlmChatViewModel new assistantChat: self
 ]
@@ -10,14 +15,12 @@ GtLlmChat >> gtMessagesWidgetFor: aView [
 	"cannot be a forward because the update wouldn’t work"
 
 	<gtView>
-	| aViewModel |
 	self provider ifNil: [ ^ aView empty ].
 
 	^ aView explicit
 		title: 'Chat';
 		priority: 0;
-		stencil: [ aViewModel ifNil: [ aViewModel := self asViewModel ].
-			GtLlmChatElement new chatViewModel: aViewModel ];
+		stencil: [ self asElement ];
 		actionUpdateButton
 ]
 

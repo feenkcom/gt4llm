@@ -47,6 +47,11 @@ GtLlmBasicThreadMessageViewModel >> elementClass [
 	^ self subclassResponsibility
 ]
 
+{ #category : #'private - hooks' }
+GtLlmBasicThreadMessageViewModel >> forwardAnnouncement: anAnnouncement [
+		self announce: anAnnouncement
+]
+
 { #category : #'gt - extensions' }
 GtLlmBasicThreadMessageViewModel >> gtMessageViewsFor: aView [
 	<gtView>
@@ -123,12 +128,6 @@ GtLlmBasicThreadMessageViewModel >> onThreadMessageChanged [
 	self notifyThreadMessageViewModelChanged
 ]
 
-{ #category : #'as yet unclassified' }
-GtLlmBasicThreadMessageViewModel >> padding [
-	self senderText = 'Assistant' ifTrue: [ ^ BlInsets right: 50 ].
-	^ BlInsets left: 50
-]
-
 { #category : #accessing }
 GtLlmBasicThreadMessageViewModel >> requestStyleSourceText [
 	self announce: GtLlmThreadMessageRestyleRequested new
@@ -142,4 +141,18 @@ GtLlmBasicThreadMessageViewModel >> senderText [
 { #category : #accessing }
 GtLlmBasicThreadMessageViewModel >> styler [
 	^ styler ifNil: [ styler := self newStyler ]
+]
+
+{ #category : #'private - hooks' }
+GtLlmBasicThreadMessageViewModel >> subscribeToThreadMessage [
+	self threadMessage
+		when: GtLlmMessageContentsUpdated
+		send: #forwardAnnouncement:
+		to: self
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmBasicThreadMessageViewModel >> uiInsets [
+	self threadMessage isAssistantRole ifTrue: [ ^ BlInsets right: 50 ].
+	^ BlInsets left: 50
 ]

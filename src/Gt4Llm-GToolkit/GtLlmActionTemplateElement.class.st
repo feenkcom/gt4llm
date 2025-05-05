@@ -29,8 +29,8 @@ GtLlmActionTemplateElement >> createAction [
 	| action |
 	action := 'gt' , actionNameAttribute string
 			, '
- 	<gtLlmTutorAction>
- 	^ GtLlmTutorAction new
+ 	<gtLlmAssistantAction>
+ 	^ GtLlmAssistantAction new
 	    name: ''' , tutorNameAttribute string
 			, ''';
 	    priority: ' , priorityAttribute string
@@ -40,7 +40,7 @@ GtLlmActionTemplateElement >> createAction [
 	self example
 		ifNotNil: [ action := action
 					, ';
-		examples: {GtLlmTutorActionExample new
+		examples: {GtLlmAssistantActionExample new
 	input: { ' , (self finalExampleStringFor: self example input)
 					, ' } asDictionary;
 	output: { ' , (self finalExampleStringFor: self example output)

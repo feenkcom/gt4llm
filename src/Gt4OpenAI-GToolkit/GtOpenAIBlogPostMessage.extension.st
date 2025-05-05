@@ -13,11 +13,11 @@ GtOpenAIBlogPostMessage >> gtActionFor: aView [
 	self chat
 		ifNotNil: [ view
 				actionButtonLabel: 'Action'
-					action: [ :aButton | aButton phlow spawnObject: (self chat tutor actionNamed: self action) ];
+					action: [ :aButton | aButton phlow spawnObject: (self chat assistant actionNamed: self action) ];
 				styler: [ BlCompositeStyler new
 						stylers: {GtLlmMessageStyler new threadMessageViewModel: self asViewModel.
 								GtLlmThreadMessageStyler new annotations: self annotations.
-								GtLlmTutorFormatTextStyler new tutor: self chat tutor} ] ].
+								GtLlmAssistantFormatTextStyler new assistant: self chat assistant} ] ].
 	^ view
 ]
 
@@ -27,6 +27,7 @@ GtOpenAIBlogPostMessage >> gtDiffFor: aView [
 	<gtLlmMessageView>
 	self isUserRole ifTrue: [ ^ aView empty ].
 	(self contentJson includesKey: 'Post') ifFalse: [ ^ aView empty ].
+	(self contentJson at: 'Post') ifNil: [ ^ aView empty ].
 	^ aView diff
 		title: 'Diff';
 		priority: 2;
@@ -45,48 +46,7 @@ GtOpenAIBlogPostMessage >> gtInspectActionFor: anAction [
 		priority: 1;
 		icon: BrGlamorousVectorIcons inspect;
 		label: 'Action';
-		action: [ :aButton | aButton phlow spawnObject: (self chat tutor actionNamed: self action) ]
-]
-
-{ #category : #'*Gt4OpenAI-GToolkit' }
-GtOpenAIBlogPostMessage >> gtReifyActionFor: anAction [
-	<gtLlmAction>
-	(self isAssistantRole
-		and: [ self action = 'Answer a chat request'
-				or: [ (self action beginsWith: 'Chat request: ') or: [ self actionModel isNil ] ] ])
-		ifFalse: [ ^ anAction noAction ].
-
-	^ anAction dropdown
-		priority: 5;
-		label: 'Reify action';
-		content: [ :anElement | 
-			GtLlmActionTemplateElement new
-				example: (GtLlmTutorActionExample new
-						input: self ancestor contentJson;
-						output: self contentJson);
-				onActionCreated: [ :action | 
-					self chat tutor class compile: action.
-					self chat tutor recomputeActions.
-					anElement phlow fireToolUpdateWish.
-					anElement fireEvent: BrDropdownHideWish new ];
-				padding: (BlInsets all: 5) ]
-]
-
-{ #category : #'*Gt4OpenAI-GToolkit' }
-GtOpenAIBlogPostMessage >> gtReifyMessageActionFor: anAction [
-	<gtLlmAction>
-	^ anAction dropdown
-		priority: 1;
-		label: 'Reify';
-		content: [ :aButton | 
-			(GtLlmReificationForm new
-				message: self;
-				onAccept: [ :aValue | 
-					aButton
-						enqueueTask: (BlTaskAction new
-								action: [ aButton phlow fireToolUpdateWish.
-									aButton fireEvent: BrDropdownHideWish new ]) ]) asElement
-				margin: (BlInsets all: 5) ]
+		action: [ :aButton | aButton phlow spawnObject: (self chat assistant actionNamed: self action) ]
 ]
 
 { #category : #'*Gt4OpenAI-GToolkit' }

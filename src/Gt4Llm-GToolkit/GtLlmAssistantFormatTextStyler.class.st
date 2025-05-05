@@ -1,16 +1,26 @@
 Class {
-	#name : #GtLlmTutorFormatTextStyler,
+	#name : #GtLlmAssistantFormatTextStyler,
 	#superclass : #BlTextStyler,
 	#traits : 'TLeAnnotationParseNodeVisitor + (TLeContentNodeVisitor - {#visitAnnotation:})',
 	#classTraits : 'TLeAnnotationParseNodeVisitor classTrait + TLeContentNodeVisitor classTrait',
 	#instVars : [
-		'tutor'
+		'assistant'
 	],
 	#category : #'Gt4Llm-GToolkit'
 }
 
+{ #category : #accessing }
+GtLlmAssistantFormatTextStyler >> assistant [
+	^ assistant
+]
+
+{ #category : #accessing }
+GtLlmAssistantFormatTextStyler >> assistant: anObject [
+	assistant := anObject
+]
+
 { #category : #'as yet unclassified' }
-GtLlmTutorFormatTextStyler >> privateStyle: aText [ 
+GtLlmAssistantFormatTextStyler >> privateStyle: aText [ 
 	<return: #BlText>
 	| ast |
 	text := aText.
@@ -20,7 +30,7 @@ GtLlmTutorFormatTextStyler >> privateStyle: aText [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmTutorFormatTextStyler >> styleUnknownFormatComponent: aCodeNode [
+GtLlmAssistantFormatTextStyler >> styleUnknownFormatComponent: aCodeNode [
 	| location hoverMarker hoverAttribute buttonAttribute |
 	location := aCodeNode stopPosition.
 	hoverMarker := GtFixItMarkerAttribute new.
@@ -35,7 +45,7 @@ GtLlmTutorFormatTextStyler >> styleUnknownFormatComponent: aCodeNode [
 											aptitude: BrGlamorousButtonWithIconAptitude;
 											icon: BrGlamorousVectorIcons repair;
 											beTinySize ]
-									content: [ self tutor
+									content: [ self assistant
 											formatComponentMethodCoderForSource: 'gt' , aCodeNode code value allButFirst allButLast
 													, 'FormatDescription
 	<gtLlmTutorFormat>
@@ -72,18 +82,8 @@ GtLlmTutorFormatTextStyler >> styleUnknownFormatComponent: aCodeNode [
 			leave: [ :aTextEditor :anEvent :aFromIndex :aToIndex | aTextEditor text clearAttributes: [ :e | e == hoverAttribute ] ]
 ]
 
-{ #category : #accessing }
-GtLlmTutorFormatTextStyler >> tutor [
-	^ tutor
-]
-
-{ #category : #accessing }
-GtLlmTutorFormatTextStyler >> tutor: anObject [
-	tutor := anObject
-]
-
 { #category : #'as yet unclassified' }
-GtLlmTutorFormatTextStyler >> visitInlineCode: aCodeNode [
-	(tutor formatNamed: aCodeNode code value allButFirst allButLast)
+GtLlmAssistantFormatTextStyler >> visitInlineCode: aCodeNode [
+	(assistant formatNamed: aCodeNode code value allButFirst allButLast)
 		ifNil: [ self styleUnknownFormatComponent: aCodeNode ]
 ]

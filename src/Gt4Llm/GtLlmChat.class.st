@@ -2,16 +2,14 @@ Class {
 	#name : #GtLlmChat,
 	#superclass : #Object,
 	#instVars : [
-		'model',
 		'announcer',
-		'context',
 		'lastUpdate',
-		'tutor',
+		'assistant',
 		'provider',
 		'messages',
 		'serializer'
 	],
-	#category : 'Gt4Llm'
+	#category : #Gt4Llm
 }
 
 { #category : #'as yet unclassified' }
@@ -46,14 +44,13 @@ GtLlmChat >> announcer [
 ]
 
 { #category : #accessing }
-GtLlmChat >> context [
-	^ context
+GtLlmChat >> assistant [
+	^ assistant
 ]
 
 { #category : #accessing }
-GtLlmChat >> context: anObject [
-	context := anObject.
-	context chat: self
+GtLlmChat >> assistant: anObject [
+	assistant := anObject
 ]
 
 { #category : #accessing }
@@ -86,11 +83,6 @@ GtLlmChat >> gtMessagesFor: aView [
 		column: 'Message' text: [ :item | item content ];
 		updateWhen: GtLlmThreadRunAnnouncement in: self announcer;
 		actionUpdateButton
-]
-
-{ #category : #announcer }
-GtLlmChat >> hasSubscriber: anObject [
-	^ self announcer hasSubscriber: anObject
 ]
 
 { #category : #accessing }
@@ -137,16 +129,6 @@ GtLlmChat >> messages: anObject [
 ]
 
 { #category : #accessing }
-GtLlmChat >> model [
-	^ model
-]
-
-{ #category : #accessing }
-GtLlmChat >> model: anObject [
-	model := anObject
-]
-
-{ #category : #accessing }
 GtLlmChat >> provider [
 	^ provider
 ]
@@ -155,6 +137,12 @@ GtLlmChat >> provider [
 GtLlmChat >> provider: anObject [
 	provider := anObject.
 	provider chat: self
+]
+
+{ #category : #accessing }
+GtLlmChat >> removeLastMessage [
+	self updateLastUpdate.
+	messages removeLast
 ]
 
 { #category : #'announcer - subscription' }
@@ -253,16 +241,6 @@ GtLlmChat >> subscribe: anAnnouncementClass send: aSelector to: anObject for: aS
 						-> '`@receiver when: `@statements1 send: `@statements2 to: `@anObject for: `@aSubscriber'.
 
 	^ self when: anAnnouncementClass send: aSelector to: anObject for: aSubscriber
-]
-
-{ #category : #accessing }
-GtLlmChat >> tutor [
-	^ tutor
-]
-
-{ #category : #accessing }
-GtLlmChat >> tutor: anObject [
-	tutor := anObject
 ]
 
 { #category : #'announcer - subscription' }

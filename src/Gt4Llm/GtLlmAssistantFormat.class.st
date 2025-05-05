@@ -1,22 +1,22 @@
 Class {
-	#name : #GtLlmTutorFormat,
+	#name : #GtLlmAssistantFormat,
 	#superclass : #Object,
 	#instVars : [
 		'name',
 		'components'
 	],
-	#category : 'Gt4Llm'
+	#category : #Gt4Llm
 }
 
 { #category : #other }
-GtLlmTutorFormat class >> new [
+GtLlmAssistantFormat class >> new [
 	^ self basicNew initialize
 ]
 
 { #category : #accessing }
-GtLlmTutorFormat >> actionComponent [
+GtLlmAssistantFormat >> actionComponent [
 	<gtLlmFormatComponent>
-	^ GtLlmTutorFormatDescription new beRequired
+	^ GtLlmAssistantFormatDescription new beRequired
 		name: 'Action';
 		format: 'Text';
 		example: '```
@@ -25,17 +25,17 @@ Create a draft
 ]
 
 { #category : #accessing }
-GtLlmTutorFormat >> addComponent: aComponent [
+GtLlmAssistantFormat >> addComponent: aComponent [
 	components add: aComponent
 ]
 
 { #category : #accessing }
-GtLlmTutorFormat >> addComponents: aListOfComponents [
+GtLlmAssistantFormat >> addComponents: aListOfComponents [
 	components addAll: aListOfComponents
 ]
 
 { #category : #accessing }
-GtLlmTutorFormat >> asInstructionPiece [
+GtLlmAssistantFormat >> asInstructionPiece [
 	^ GtLlmInstructionWithSections new
 		source: self;
 		introduction: 'You are a tutor that is used to interactively work on ' , self name
@@ -54,7 +54,7 @@ The components that make up the state are as follows:';
 ]
 
 { #category : #accessing }
-GtLlmTutorFormat >> asJsonSchema [
+GtLlmAssistantFormat >> asJsonSchema [
 	^ {'type' -> 'json_schema'.
 		'json_schema'
 			-> {'name' -> self name asCamelCase.
@@ -70,27 +70,27 @@ GtLlmTutorFormat >> asJsonSchema [
 ]
 
 { #category : #accessing }
-GtLlmTutorFormat >> communicationConventionsDescription [
+GtLlmAssistantFormat >> communicationConventionsDescription [
 	^ GtLlmInstructionSection new
 		title: 'Communication rules';
 		body: (GtLlmInstructionList new
 				addItem: 'Always review the full conversation prior to answering and maintain continuity.';
-				addItem: 'Any action mut be answered by an action result, no extraneous prose or explanations. Only non-action messages may be answered in prose.';
+				addItem: 'Any action must be answered by an action result, no extraneous prose or explanations. Only non-action messages may be answered in prose.';
 				addItem: 'Assume the user would like something concise.')
 ]
 
 { #category : #accessing }
-GtLlmTutorFormat >> componentNamed: aName [
+GtLlmAssistantFormat >> componentNamed: aName [
 	^ components detect: [ :aComponent | aComponent name = aName ] ifNone: [ nil ]
 ]
 
 { #category : #accessing }
-GtLlmTutorFormat >> components [
+GtLlmAssistantFormat >> components [
 	^ components
 ]
 
 { #category : #accessing }
-GtLlmTutorFormat >> gtInstructionFor: aView [
+GtLlmAssistantFormat >> gtInstructionFor: aView [
 	<gtView>
 	^ aView forward
 		title: 'Instruction';
@@ -100,12 +100,12 @@ GtLlmTutorFormat >> gtInstructionFor: aView [
 ]
 
 { #category : #accessing }
-GtLlmTutorFormat >> initialize [
+GtLlmAssistantFormat >> initialize [
 	components := OrderedCollection with: self actionComponent
 ]
 
 { #category : #accessing }
-GtLlmTutorFormat >> interactionDescription [
+GtLlmAssistantFormat >> interactionDescription [
 	^ GtLlmInstructionSection new
 		title: 'Interaction description';
 		body: 'A typical interaction goes like this:
@@ -122,11 +122,11 @@ The state is an aggregate of the components listed below.'
 ]
 
 { #category : #accessing }
-GtLlmTutorFormat >> name [
+GtLlmAssistantFormat >> name [
 	^ name
 ]
 
 { #category : #accessing }
-GtLlmTutorFormat >> name: anObject [
+GtLlmAssistantFormat >> name: anObject [
 	name := anObject
 ]

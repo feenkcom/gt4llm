@@ -27,12 +27,12 @@ GtLlmInstructionInPharoCommentStyler >> visitSmaCCParseNode: aSmaCCParseNode [
 																		beTinySize;
 																		aptitude: BrGlamorousButtonRectangularAptitude new + BrGlamorousButtonIconAptitude new ]
 																content: [ | llmChat |
-																	llmChat := coderViewModel coderModel llmChat.
+																	llmChat := coderViewModel  llmChat.
 																	llmChat
 																		sendChatRequest: (aSmaCCParseNode completeSource asString
 																				copyFrom: each first + 2
 																				to: each second - 1).
-																	GtLlmEmbeddedChatElement new chatViewModel: llmChat asViewModel ]);
+																	GtLlmEmbeddedChatElement new chatViewModel: llmChat asViewModel; vFitContentLimited ]);
 												icon: BrGlamorousVectorIcons openAi;
 												label: 'Propose change';
 												beTinySize;

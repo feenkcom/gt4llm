@@ -53,7 +53,8 @@ GtOpenAIWardleyMapMessage >> gtChangesFor: aView [
 		stencil: [ GtWardleyMapElement new
 				wardleyMapViewModel: (GtWardleyMapViewModel new
 						wardleyMapModel: self diffedMapModel);
-				vExact: 500 ]
+				constraintsDo: [ :c | c minHeight: 300 ];
+				matchParent]
 ]
 
 { #category : #'as yet unclassified' }
@@ -90,9 +91,9 @@ GtOpenAIWardleyMapMessage >> gtWardleyMapFor: aView [
 		title: 'Map';
 		priority: 1;
 		stencil: [ GtWardleyMapElement new
-				wardleyMapViewModel: (GtWardleyMapViewModel new
-						wardleyMapModel: self mapModel);
-				vExact: 500 ];
+				wardleyMapViewModel: (GtWardleyMapViewModel new wardleyMapModel: self mapModel);
+				constraintsDo: [ :c | c minHeight: 300 ];
+				matchParent ];
 		actionButtonIcon: BrGlamorousVectorIcons accept
 			tooltip: 'Apply propositions'
 			action: [ :aButton | self chat updateInstance: self mapCodeBlock ]

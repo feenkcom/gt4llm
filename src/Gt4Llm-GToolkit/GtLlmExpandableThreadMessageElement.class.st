@@ -14,16 +14,16 @@ Class {
 GtLlmExpandableThreadMessageElement class >> newForChatList [
 	^ self new
 		margin: (BlInsets
-				top: 3
-				bottom: 12
+				top: 5
+				bottom: 10
 				left: 5
-				right: 10);
+				right: 5);
 		collapse
 ]
 
 { #category : #accessing }
 GtLlmExpandableThreadMessageElement >> beforeThreadMessageViewModelReset [
-	self margin: self margin - threadMessageViewModel padding
+	self margin: self margin - threadMessageViewModel uiInsets
 ]
 
 { #category : #'initialization ' }
@@ -49,9 +49,6 @@ GtLlmExpandableThreadMessageElement >> initialize [
 
 { #category : #'initialization ' }
 GtLlmExpandableThreadMessageElement >> initializeOneLineThreadMessageElement [
-	"oneLineThreadMessageElement := GtLlmThreadMessageElement new
-			contentsAptitudeDo: [ :anAptitude | 
-				anAptitude foreground: BrGlamorousColors disabledButtonTextColor ]"
 	oneLineThreadMessageElement := GtLlmThreadMessageHeaderElement new.
 ]
 
@@ -75,7 +72,7 @@ GtLlmExpandableThreadMessageElement >> onThreadMessageViewModelChanged [
 	oneLineThreadMessageElement threadMessageViewModel: threadMessageViewModel.
 	threadMessageElement threadMessageViewModel: threadMessageViewModel.
 	self expanded: threadMessageViewModel isExpanded.
-	self margin: self margin + threadMessageViewModel padding
+	self margin: self margin + threadMessageViewModel uiInsets
 ]
 
 { #category : #accessing }

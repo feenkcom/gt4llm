@@ -650,7 +650,20 @@ GtLlmMessageStyler >> visitCodeBlock: aCodeNode [
 		from: aCodeNode beginWithLanguageStopPosition + 1
 		to: aCodeNode end startPosition - 1)
 		attributes: {BlTextHighlightAttribute paint: BrGlamorousColors neutralBackgroundColor}.
-
+	aCodeNode isForSmalltalk
+		ifTrue: [ self text
+				attributes: {BrTextHideAttribute new}
+				from: aCodeNode begin startPosition
+				to: aCodeNode end stopPosition.
+			(text from: aCodeNode end stopPosition to: aCodeNode end stopPosition)
+				attributes: {BrTextAdornmentDynamicAttribute new
+							beAppend;
+							stencil: [ GtPharoSnippetCoder new
+									forSource: (self text
+											from: aCodeNode beginWithLanguageStopPosition + 1
+											to: aCodeNode end startPosition - 1) asString trim;
+									subscribeToSystem;
+									asExpandedOnlyElement ]} ].
 	^ self visitContent: aCodeNode
 ]
 

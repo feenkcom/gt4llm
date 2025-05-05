@@ -5,14 +5,16 @@ Class {
 		'assistantChat',
 		'contents',
 		'announcer',
-		'files'
+		'files',
+		'future',
+		'isSync'
 	],
 	#category : #Gt4Llm
 }
 
 { #category : #accessing }
 GtLlmNewThreadMessage >> actions [
-	^ assistantChat tutor actions
+	^ assistantChat assistant actions
 ]
 
 { #category : #'as yet unclassified' }
@@ -33,6 +35,11 @@ GtLlmNewThreadMessage >> assistantChat [
 { #category : #accessing }
 GtLlmNewThreadMessage >> assistantChat: anAssistantChat [
 	assistantChat := anAssistantChat
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmNewThreadMessage >> beSync [
+	isSync := true
 ]
 
 { #category : #accessing }
@@ -61,6 +68,11 @@ GtLlmNewThreadMessage >> contents: aString requester: aRequester [
 	self onContentsChangeByRequester: aRequester
 ]
 
+{ #category : #'as yet unclassified' }
+GtLlmNewThreadMessage >> future [
+	^ future
+]
+
 { #category : #accessing }
 GtLlmNewThreadMessage >> id [
 	^ '87fe83dd-90cd-0d00-9ada-2ba30d0bb652'
@@ -71,7 +83,8 @@ GtLlmNewThreadMessage >> initialize [
 	super initialize.
 	contents := ''.
 	announcer := Announcer new.
-	files := OrderedCollection new
+	files := OrderedCollection new.
+	isSync := false.
 ]
 
 { #category : #accessing }
@@ -91,15 +104,15 @@ GtLlmNewThreadMessage >> onContentsChangeByRequester: aRequester [
 { #category : #actions }
 GtLlmNewThreadMessage >> sendMessage [
 	| aMessageContent |
-	contents ifNil: [ ^ self ].
-	
-	"todo: add files"
+	contents ifNil: [ ^ self ].	"todo: add files"
 
 	aMessageContent := self treatString.
 
 	self contents: '' requester: nil.
 
-	[assistantChat sendMessage: aMessageContent] asAsyncPromise
+	isSync
+		ifTrue: [ assistantChat sendMessage: aMessageContent ]
+		ifFalse: [ future := [ assistantChat sendMessage: aMessageContent ] asAsyncPromise ]
 ]
 
 { #category : #actions }

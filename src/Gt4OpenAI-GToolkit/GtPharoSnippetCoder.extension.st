@@ -3,9 +3,15 @@ Extension { #name : #GtPharoSnippetCoder }
 { #category : #'*Gt4OpenAI-GToolkit' }
 GtPharoSnippetCoder >> initializeLlmAddOnsFor: anAst into: addOns [
 	<gtAstCoderAddOns: 10>
-	GtLlmFeatures useCoder ifFalse: [ ^ self ].
+	GtLlmFeatures usesCoder ifFalse: [ ^ self ].
 	addOns addStyler: (GtLlmInstructionInPharoCommentStyler new).
 	addOns
+		addMainAction: 'Open chat' translated
+		icon: BrGlamorousVectorIcons openAi
+		action: [ :aCoderUIModel :anElement | 
+			anElement phlow spawnObject: self llmChat ]
+"		id: GtSourceCoderProfileActionId".
+	"addOns
 		addDropDownAction: 'Open chat' translated
 		icon: BrGlamorousVectorIcons openAi
 		stencil: [ :aCoderUIModel :anElement | 
@@ -14,14 +20,28 @@ GtPharoSnippetCoder >> initializeLlmAddOnsFor: anAst into: addOns [
 				addAptitude: (BrGlamorousMenuPinnableAptitude new
 						withAllPinActions;
 						withResizers;
-						menuModel: BrMenuExplicit new) ]
+						menuModel: BrMenuExplicit new) ]"
 ]
 
 { #category : #'*Gt4OpenAI-GToolkit' }
-GtPharoSnippetCoder >> llmChat [
-	^ self
-		attributeNamed: #llmChat
-		ifAbsent: [ self
-				attributeNamed: #llmChat
-				put: (GtCodeSnippetTutor new chatOnSnippet: self) ]
+GtPharoSnippetCoder >> initializeLlmAddOnsFor: anAst into: addOns viewModel: aGtPharoSourceCoderViewModel [
+	<gtAstCoderAddOns: 10>
+	GtLlmFeatures usesCoder ifFalse: [ ^ self ].
+	addOns addStyler: (GtLlmInstructionInPharoCommentStyler new).
+	addOns
+		addMainAction: 'Open chat' translated
+		icon: BrGlamorousVectorIcons openAi
+		action: [ :aCoderUIModel :anElement | 
+			anElement phlow spawnObject: aGtPharoSourceCoderViewModel llmChat ]
+"		id: GtSourceCoderProfileActionId".
+	"addOns
+		addDropDownAction: 'Open chat' translated
+		icon: BrGlamorousVectorIcons openAi
+		stencil: [ :aCoderUIModel :anElement | 
+			BrFrame new fitContent
+				addChild: (GtLlmEmbeddedChatElement new chatViewModel: self llmChat asViewModel);
+				addAptitude: (BrGlamorousMenuPinnableAptitude new
+						withAllPinActions;
+						withResizers;
+						menuModel: BrMenuExplicit new) ]"
 ]

@@ -1,7 +1,7 @@
-Extension { #name : #GtLlmTutor }
+Extension { #name : #GtLlmAssistant }
 
 { #category : #'*Gt4Llm-GToolkit' }
-GtLlmTutor >> gtActionsFor: aView [
+GtLlmAssistant >> gtActionsFor: aView [
 	<gtView>
 	| valueHolder |
 	valueHolder := ValueHolder new.
@@ -24,8 +24,8 @@ GtLlmTutor >> gtActionsFor: aView [
 						ensureMethodCoderViewModel.
 				methodCoder pharoMethodCoderViewModel coderModel
 					currentSourceString: 'gtACTIONNAME
- 	<gtLlmTutorAction>
- 	^ GtLlmTutorAction new
+ 	<gtLlmAssistantAction>
+ 	^ GtLlmAssistantAction new
  		name: '''';
  		priority: 1;
  		description: '''';
@@ -34,7 +34,7 @@ GtLlmTutor >> gtActionsFor: aView [
 ]
 
 { #category : #'*Gt4Llm-GToolkit' }
-GtLlmTutor >> gtFormatComponentsFor: aView [
+GtLlmAssistant >> gtFormatComponentsFor: aView [
 	<gtView>
 	| valueHolder |
 	valueHolder := ValueHolder new.
@@ -59,8 +59,8 @@ GtLlmTutor >> gtFormatComponentsFor: aView [
 						ensureMethodCoderViewModel.
 				methodCoder pharoMethodCoderViewModel coderModel
 					currentSourceString: 'gtFORMATNAMEDescription
-	<gtLlmTutorFormat>
-	^ GtLlmTutorFormatDescription new
+	<gtLlmAssistantFormat>
+	^ GtLlmAsssistantFormatDescription new
 		name: '''';
 		priority: 1;
 		format: '''';

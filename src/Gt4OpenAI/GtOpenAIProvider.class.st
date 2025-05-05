@@ -10,6 +10,16 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
+GtOpenAIProvider class >> default [
+	^ [ self withApiKeyFromFile ]
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAIProvider class >> providerName [
+	^ 'OpenAI Chat'
+]
+
+{ #category : #'as yet unclassified' }
 GtOpenAIProvider class >> withApiKeyFromFile [
 	^ self new apiKey: GtOpenAIClient apiKeyFileContents
 ]
@@ -26,7 +36,7 @@ GtOpenAIProvider >> chat: anObject [
 
 { #category : #'as yet unclassified' }
 GtOpenAIProvider >> defaultModel [
-	^ 'gpt-4o'
+	^ 'gpt-4.1'
 ]
 
 { #category : #'as yet unclassified' }
@@ -64,15 +74,6 @@ GtOpenAIProvider >> sendAssistantMessage: aMessage [
 	aMessage serializeInline.
 	self chat addMessage: aMessage.
 	self triggerAssistant
-]
-
-{ #category : #'as yet unclassified' }
-GtOpenAIProvider >> sendMessage: aMessage [
-	| output |
-	output := aMessage.
-	output size > self maximumMessageSize
-		ifTrue: [ output := output first: self maximumMessageSize ].
-	super sendMessage: output
 ]
 
 { #category : #'as yet unclassified' }

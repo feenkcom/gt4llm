@@ -367,6 +367,19 @@ GtOpenAIClient >> postFile: aString withEntity: anEntity [
 	^ self checkForErrors: aClient post
 ]
 
+{ #category : #accessing }
+GtOpenAIClient >> postStreaming: aString withEntity: anEntity [
+	| aClient |
+	aClient := self initializeClient
+			streaming: true;
+			contentReader: nil.
+	aClient url: self baseUrl / aString.
+
+	aClient contents: anEntity.
+
+	^ aClient post
+]
+
 { #category : #'as yet unclassified' }
 GtOpenAIClient >> submitToolOutputs: output toThread: aThreadId anRun: aRunId [ 
 	^ GtOpenAISubmitToolOutputsAPIClient new

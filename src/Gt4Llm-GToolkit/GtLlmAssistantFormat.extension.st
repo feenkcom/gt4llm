@@ -1,7 +1,7 @@
-Extension { #name : #GtLlmTutorFormat }
+Extension { #name : #GtLlmAssistantFormat }
 
 { #category : #'*Gt4Llm-GToolkit' }
-GtLlmTutorFormat >> gtFormatsFor: aView [
+GtLlmAssistantFormat >> gtFormatsFor: aView [
 	<gtView>
 	^ aView columnedList
 		title: 'Components';

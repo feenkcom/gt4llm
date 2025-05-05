@@ -9,6 +9,33 @@ GtLlmActionChat >> defaultSerializer [
 	^ GtLlmActionMessageSerializer new
 ]
 
+{ #category : #views }
+GtLlmActionChat >> gtAssistantActionsFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Assistant actions';
+		object: [ assistant ];
+		view: #gtActionsFor:
+]
+
+{ #category : #views }
+GtLlmActionChat >> gtAssistantFormatsFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Assistant formats';
+		object: [ assistant ];
+		view: #gtFormatComponentsFor:
+]
+
+{ #category : #views }
+GtLlmActionChat >> gtAssistantInstructionFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Assistant instruction';
+		object: [ assistant ];
+		view: #gtInstructionFor:
+]
+
 { #category : #'as yet unclassified' }
 GtLlmActionChat >> gtInstanceFor: aView [
 	<gtView>
@@ -23,21 +50,13 @@ GtLlmActionChat >> gtInstanceFor: aView [
 ]
 
 { #category : #views }
-GtLlmActionChat >> gtTutorActionsFor: aView [
+GtLlmActionChat >> gtToolsFor: aView [
 	<gtView>
 	^ aView forward
-		title: 'Tutor actions';
-		object: [ tutor ];
-		view: #gtActionsFor:
-]
-
-{ #category : #views }
-GtLlmActionChat >> gtTutorInstructionFor: aView [
-	<gtView>
-	^ aView forward
-		title: 'Tutor instruction';
-		object: [ tutor ];
-		view: #gtInstructionFor:
+		title: 'Tools';
+		priority: 10;
+		object: [ provider ];
+		view: #gtToolsFor:
 ]
 
 { #category : #'as yet unclassified' }
@@ -54,7 +73,7 @@ GtLlmActionChat >> sendAction: anActionCall [
 { #category : #'as yet unclassified' }
 GtLlmActionChat >> sendAction: anActionCall onAnswer: aBlock [
 	self
-		sendMessage: ((self tutor actionNamed: anActionCall action) format
+		sendMessage: ((self assistant actionNamed: anActionCall action) format
 				format: anActionCall arguments).
 
 	self executeWait: aBlock
@@ -62,7 +81,7 @@ GtLlmActionChat >> sendAction: anActionCall onAnswer: aBlock [
 
 { #category : #accessing }
 GtLlmActionChat >> sendChatRequest: aString [
-	self sendMessage: 'Chat request: ' , aString
+	self sendMessage: 'Chat: ' , aString
 ]
 
 { #category : #'as yet unclassified' }

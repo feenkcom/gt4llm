@@ -6,7 +6,7 @@ Class {
 
 { #category : #'trait-TGtActionMessage' }
 GtOpenAIBlogPostMessage >> actionModel [
-	^ (self chat tutor actionNamed: self action)
+	^ (self chat assistant actionNamed: self action)
 		ifNil: [ self isUserRole
 				ifTrue: [ (self chat descendantOf: self)
 						ifNotNil: [ :aDescendant | aDescendant actionModel ] ]
@@ -32,29 +32,11 @@ GtOpenAIBlogPostMessage >> gtPostFor: aView [
 	| json |
 	[ json := self contentJson ] on: Error do: [ ^ aView empty ].
 	json at: 'Post' ifAbsent: [ ^ aView empty ].
+	(json at: 'Post') ifNil: [ ^ aView empty ].
 	^ aView textEditor
 		title: 'Post';
 		priority: 1;
 		text: [ json at: 'Post' ]
-]
-
-{ #category : #'trait-TGtActionMessage' }
-GtOpenAIBlogPostMessage >> gtPromoteToExampleActionFor: anAction [
-	<gtLlmAction>
-	self isAssistantRole ifFalse: [ ^ anAction noAction ].
-
-	^ anAction dropdown
-		priority: 5;
-		label: 'Promote example';
-		content: [ :aButton | 
-			| action example |
-			action := self chat tutor actionNamed: self action.
-			example := GtLlmTutorActionExample new
-					input: self ancestor contentJson;
-					output: self contentJson.
-			action addExample: example.
-			action persist.
-			example asGtMagritteViewModel asElement ]
 ]
 
 { #category : #'trait-TGtActionMessage' }

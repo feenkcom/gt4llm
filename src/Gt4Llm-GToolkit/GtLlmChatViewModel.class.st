@@ -10,6 +10,11 @@ Class {
 	#category : #'Gt4Llm-GToolkit'
 }
 
+{ #category : #'as yet unclassified' }
+GtLlmChatViewModel >> beSync [
+	newThreadMessageViewModel beSync
+]
+
 { #category : #initialization }
 GtLlmChatViewModel >> initialize [
 	super initialize.
@@ -41,7 +46,7 @@ GtLlmChatViewModel >> sendMessage: aString [
 { #category : #accessing }
 GtLlmChatViewModel >> threadMessageViewModels [
 	| newMessages |
-	newMessages := assistantChat messages.
+	newMessages := assistantChat messages reject: #isRawMessage.
 	^ Array
 		streamContents: [ :aStream | 
 			| aStatus lastMessage |

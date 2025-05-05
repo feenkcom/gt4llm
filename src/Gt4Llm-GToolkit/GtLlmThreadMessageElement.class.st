@@ -21,10 +21,10 @@ GtLlmThreadMessageElement class >> newForChatList [
 		background: Color white;
 		addAptitude: BrGlamorousFocusableShadowAptitude new;
 		margin: (BlInsets
-				top: 3
-				bottom: 12
+				top: 5
+				bottom: 10
 				left: 5
-				right: 10)
+				right: 5)
 ]
 
 { #category : #accessing }
@@ -126,6 +126,11 @@ GtLlmThreadMessageElement >> initializeTimeElement [
 ]
 
 { #category : #'private - announcement handling' }
+GtLlmThreadMessageElement >> onMessageContentsChanged: anAnnouncement [
+	self enqueueTask: (BlTaskAction new action: [ self updateContentsElement ])
+]
+
+{ #category : #'private - announcement handling' }
 GtLlmThreadMessageElement >> onRestyleRequested: anAnnouncement [
 	self
 		enqueueTask: (BlTaskAction new action: [ contentsElement editor styleText ])
@@ -155,6 +160,9 @@ GtLlmThreadMessageElement >> subscribeToThreadMessageViewModel [
 			to: self;
 		when: GtLlmThreadMessageViewModelChanged
 			send: #onThreadMessageViewModelChanged:
+			to: self;
+		when: GtLlmMessageContentsUpdated
+			send: #onMessageContentsChanged:
 			to: self
 ]
 

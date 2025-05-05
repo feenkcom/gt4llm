@@ -23,7 +23,7 @@ GtLlmEmbeddedNewActionThreadMessageElement class >> newForChatList [
 				top: 3
 				bottom: 12
 				left: 5
-				right: 10)
+				right: 5)
 ]
 
 { #category : #'as yet unclassified' }
@@ -60,6 +60,7 @@ GtLlmEmbeddedNewActionThreadMessageElement >> buildSendButton [
 	^ sendButton := BrButton new
 			fitContent;
 			beSmallSize;
+			id: #send;
 			aptitude: BrGlamorousButtonWithIconAptitude;
 			label: 'Send';
 			icon: BrGlamorousVectorIcons accept;

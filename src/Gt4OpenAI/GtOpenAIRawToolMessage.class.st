@@ -12,7 +12,7 @@ Class {
 
 { #category : #'as yet unclassified' }
 GtOpenAIRawToolMessage >> action [
-	^ 'Tool call: ' , self toolCall name
+	^ 'Tool call(' , self toolCall humanReadable , ')'
 ]
 
 { #category : #'as yet unclassified' }
@@ -73,6 +73,16 @@ GtOpenAIRawToolMessage >> initialize [
 	super initialize.
 
 	createdAt := DateAndTime now
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAIRawToolMessage >> isAssistantRole [
+	^ false
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAIRawToolMessage >> isRawMessage [
+	^ true
 ]
 
 { #category : #accessing }

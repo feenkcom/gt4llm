@@ -17,10 +17,10 @@ GtLlmNewThreadMessageElement class >> newForChatList [
 		background: Color white;
 		addAptitude: BrGlamorousFocusableShadowAptitude new;
 		margin: (BlInsets
-				top: 3
-				bottom: 12
+				top: 5
+				bottom: 10
 				left: 5
-				right: 10)
+				right: 5)
 ]
 
 { #category : #'initialization ' }
@@ -56,6 +56,7 @@ GtLlmNewThreadMessageElement >> buildSendButton [
 	^ BrButton new
 		fitContent;
 		beSmallSize;
+		id: #send;
 		aptitude: BrGlamorousButtonWithIconAptitude;
 		label: 'Send';
 		icon: BrGlamorousVectorIcons accept;

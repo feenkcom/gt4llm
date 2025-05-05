@@ -1,7 +1,7 @@
-Extension { #name : #GtLlmTutor }
+Extension { #name : #GtLlmAssistant }
 
 { #category : #'*Gt4Anthropic' }
-GtLlmTutor >> defaultAnthropicProviderStencilWithModel: aModel [
+GtLlmAssistant >> defaultAnthropicProviderStencilWithModel: aModel [
 	^ [ :anInstructionFormat | 
 	GtAnthropicProvider withApiKeyFromFile
 		model: aModel;
