@@ -10,6 +10,16 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
+GtOpenAIProvider class >> default [
+	^ [ self withApiKeyFromFile ]
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAIProvider class >> providerName [
+	^ 'OpenAI Chat'
+]
+
+{ #category : #'as yet unclassified' }
 GtOpenAIProvider class >> withApiKeyFromFile [
 	^ self new apiKey: GtOpenAIClient apiKeyFileContents
 ]

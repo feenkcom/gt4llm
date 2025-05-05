@@ -8,8 +8,26 @@ Class {
 		'modelfile',
 		'tools'
 	],
+	#classVars : [
+		'DefaultModel'
+	],
 	#category : #Gt4Ollama
 }
+
+{ #category : #'as yet unclassified' }
+GtOllamaProvider class >> default [
+	^ [ self new model: self defaultModel ]
+]
+
+{ #category : #'as yet unclassified' }
+GtOllamaProvider class >> defaultModel [
+	^ DefaultModel ifNil: [ DefaultModel := 'llama3.1' ]
+]
+
+{ #category : #'as yet unclassified' }
+GtOllamaProvider class >> providerName [
+	^ 'Ollama'
+]
 
 { #category : #'as yet unclassified' }
 GtOllamaProvider >> addTool: aTool [

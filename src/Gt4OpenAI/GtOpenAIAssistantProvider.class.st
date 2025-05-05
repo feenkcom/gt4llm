@@ -17,6 +17,11 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
+GtOpenAIAssistantProvider class >> providerName [
+	^ 'OpenAI Assistants'
+]
+
+{ #category : #'as yet unclassified' }
 GtOpenAIAssistantProvider >> addFile: aFile [
 	files add: aFile
 ]
