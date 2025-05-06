@@ -157,7 +157,7 @@ GtLlmObjectAssistant >> methodFormatDescription [
 		name: 'Method';
 		priority: 2;
 		format: 'Smalltalk code';
-		example: '```
+		example: '```smalltalk-method
 add: val
 	^ self + val
 ```'
@@ -183,7 +183,7 @@ GtLlmObjectAssistant >> phlowInstructionSection [
 		body: 'Phlow is a framework for creating various views on the object inspector in Glamorous Toolkit. What follows are some examples for views that can be created using Phlow.
 
 Lists:
-```
+```smalltalk-method
 gtListFor: aView
 	<gtView>
 	^ aView list
@@ -194,7 +194,7 @@ gtListFor: aView
 ```
 
 Columned lists:
-```
+```smalltalk-method
 gtColumnedListFor: aView
 	<gtView>
 	^ aView columnedList
@@ -206,7 +206,7 @@ gtColumnedListFor: aView
 ```
 
 Text editors:
-```
+```smalltalk-method
 gtTextEditorFor: aView
 	<gtView>
 	^ aView textEditor
@@ -216,7 +216,7 @@ gtTextEditorFor: aView
 ```
 
 Diffs:
-```
+```smalltalk-method
 gtDiffFor: aView
 	<gtView>
 	^ aView diff
@@ -227,7 +227,7 @@ gtDiffFor: aView
 ```
 
 Trees:
-```
+```smalltalk-method
 gtTreeFor: aView
 	<gtView>
 	^ aView tree
@@ -240,7 +240,7 @@ gtTreeFor: aView
 ```
 
 Columned Trees:
-```
+```smalltalk-method
 gtColumnedTreeFor: aView
 	<gtView>
 	^ aView columnedTree
@@ -253,7 +253,7 @@ gtColumnedTreeFor: aView
 ```
 
 Forward:
-```
+```smalltalk-method
 gtForwardFor: aView
 	<gtView>
 	^ aView forward
@@ -271,10 +271,33 @@ GtLlmObjectAssistant >> responseFormatSection [
 		source: self;
 		title: 'Response Format Concerns';
 		body: 'The response format in textual responses should be Markdown. Apart from regular Markdown, it also supports annotations for classes and methods.
-		
-Classes may be annotated using `{{gtClass:ClassName}}`, where `ClassName` is the name of the class to be referenced.
+- Classes may be annotated using `{{gtClass:ClassName}}`, where `ClassName` is the name of the class to be referenced.
+- Methods may be annotated using `{{gtMethod:ClassName>>#methodName}}`, where `ClassName` is the name of the class and `methodName` is the name of the method.
 
-Likewise, methods may be annotated using `{{gtMethod:ClassName>>#methodName}}`, where `ClassName` is the name of the class and `methodName` is the name of the method.'
+The code from the textual responses should be formatted as follows:
+- a Smalltalk method appears as:
+
+```smalltalk-method
+add: val
+	^ self + val
+```
+
+- a Smalltalk snippet appears as:
+
+```smalltalk
+Point x: 1 y: 10
+```
+
+- the definition of a new class should be provided in the form of a script like:
+
+```smalltalk
+Object subclass: #SomeClass
+	instanceVariableNames: ''someSlotA someSlotB''
+	classVariableNames: ''
+	package: ''SomePackage''
+```
+
+'
 ]
 
 { #category : #'as yet unclassified' }
