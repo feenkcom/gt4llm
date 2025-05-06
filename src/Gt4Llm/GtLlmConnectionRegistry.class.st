@@ -69,12 +69,12 @@ GtLlmConnectionRegistry >> gtConnectionsFor: aView [
 			icon: [ :aConnection | 
 				aConnection = self defaultConnection
 					ifTrue: [ BrGlamorousVectorIcons accept ]
-					ifFalse: [ BrGlamorousVectorIcons noIcon ] ] width: 50;
+					ifFalse: [ BrGlamorousVectorIcons noIcon ] ] width: 60;
 		column: 'Connectable'
 			icon: [ :aConnection | 
 				aConnection isConnectable
 					ifTrue: [ BrGlamorousVectorIcons accept ]
-					ifFalse: [ BrGlamorousVectorIcons noIcon ] ] width: 50
+					ifFalse: [ BrGlamorousVectorIcons noIcon ] ] width: 90
 ]
 
 { #category : #'as yet unclassified' }

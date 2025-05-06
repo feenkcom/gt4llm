@@ -163,11 +163,6 @@ GtLlmAssistant >> instruction [
 	^ instruction
 ]
 
-{ #category : #accessing }
-GtLlmAssistant >> onAnthropicWithModel: aModel [
-	self providerStencil: (self defaultAnthropicProviderStencilWithModel: aModel)
-]
-
 { #category : #'as yet unclassified' }
 GtLlmAssistant >> recomputeActions [
 	instruction replaceActions: self collectActions
