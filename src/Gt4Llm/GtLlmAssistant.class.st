@@ -2,7 +2,6 @@ Class {
 	#name : #GtLlmAssistant,
 	#superclass : #Object,
 	#instVars : [
-		'providerStencil',
 		'instruction'
 	],
 	#category : #Gt4Llm
@@ -100,9 +99,14 @@ GtLlmAssistant >> collectSections [
 
 { #category : #'as yet unclassified' }
 GtLlmAssistant >> createChat [
+	^ self createChatWithProvider: self buildProvider
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmAssistant >> createChatWithProvider: provider [
 	^ GtLlmActionChat new
 		assistant: self;
-		provider: self buildProvider
+		provider: provider
 ]
 
 { #category : #'as yet unclassified' }
@@ -135,7 +139,7 @@ GtLlmAssistant >> gtInstructionFor: aView [
 	<gtView>
 	^ aView forward
 		title: 'Instruction';
-		priority: 10;
+		priority: 9;
 		object: [ instruction asInstructionPiece ];
 		view: #gtInstructionFor:
 ]
