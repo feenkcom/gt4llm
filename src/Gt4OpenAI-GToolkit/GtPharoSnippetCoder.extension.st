@@ -36,14 +36,4 @@ GtPharoSnippetCoder >> initializeLlmAddOnsFor: anAst into: addOns viewModel: aGt
 		action: [ :aCoderUIModel :anElement | 
 			anElement phlow spawnObject: aGtPharoSourceCoderViewModel llmChat ]
 "		id: GtSourceCoderProfileActionId".
-	"addOns
-		addDropDownAction: 'Open chat' translated
-		icon: BrGlamorousVectorIcons openAi
-		stencil: [ :aCoderUIModel :anElement | 
-			BrFrame new fitContent
-				addChild: (GtLlmEmbeddedChatElement new chatViewModel: self llmChat asViewModel);
-				addAptitude: (BrGlamorousMenuPinnableAptitude new
-						withAllPinActions;
-						withResizers;
-						menuModel: BrMenuExplicit new) ]"
 ]
