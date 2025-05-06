@@ -8,31 +8,16 @@ Class {
 GtLlmAssistantByScripterExamples >> assistantChat [
 	<gtExample>
 	| tutor chat |
-	tutor := self assistantWithStaticProviderStencil.
-	chat := tutor createChat.
+	tutor := self basicAssistant.
+	chat := tutor createChatWithProvider: (GtLlmStaticProvider new
+				messages: {'{"Action": "Chat", "Text": "Hello! I am your AI assistant, what can I do for you?"}'};
+				userMessageClass: GtLlmActionMessage;
+				assistantMessageClass: GtLlmActionMessage).
 
 	self assert: (chat provider isKindOf: GtLlmStaticProvider).
 	self assert: chat provider chat equals: chat.
 	
 	^ chat
-]
-
-{ #category : #'as yet unclassified' }
-GtLlmAssistantByScripterExamples >> assistantWithStaticProviderStencil [
-	<gtExample>
-	| tutor |
-	tutor := self basicAssistant.
-
-	tutor
-		providerStencil: [ :instruction | 
-			GtLlmStaticProvider new
-				instructions: instruction asInstructionPiece instructionString;
-				format: instruction asJsonSchema;
-				messages: {'{"Action": "Chat", "Text": "Hello! I am your AI assistant, what can I do for you?"}'};
-				userMessageClass: GtLlmActionMessage;
-				assistantMessageClass: GtLlmActionMessage ].
-
-	^ tutor
 ]
 
 { #category : #'as yet unclassified' }
