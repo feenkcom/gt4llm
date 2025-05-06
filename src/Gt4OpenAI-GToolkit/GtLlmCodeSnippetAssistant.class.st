@@ -33,7 +33,7 @@ GtLlmCodeSnippetAssistant >> codeSnippetFormatDescription [
 		name: 'Code Snippet';
 		priority: 2;
 		format: 'Smalltalk code';
-		example: '```
+		example: '```smalltalk
 Point x: 1 y: 10
 ```'
 ]
