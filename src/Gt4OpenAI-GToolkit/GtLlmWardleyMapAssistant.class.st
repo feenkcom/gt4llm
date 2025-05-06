@@ -89,16 +89,6 @@ GtLlmWardleyMapAssistant >> defaultDescription [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmWardleyMapAssistant >> defaultProviderStencil [
-	^ [ :anInstructionFormat | 
-	GtOpenAIResponseProvider withApiKeyFromFile
-		instructions: anInstructionFormat asInstructionPiece instructionString;
-		format: anInstructionFormat asJsonSchema;
-		assistantMessageClass: GtOpenAIWardleyMapMessage;
-		userMessageClass: GtOpenAIWardleyMapMessage ]
-]
-
-{ #category : #'as yet unclassified' }
 GtLlmWardleyMapAssistant >> explanationAction [
 	<gtLlmAssistantAction>
 	^ GtLlmAssistantAction new
@@ -214,6 +204,15 @@ evolution genesis -> custom built -> product (+rental) -> commodity
 
 component Compute [0.45, 0.34] label [-22, 29]'.
 							'Rename' -> nil} asDictionary}
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmWardleyMapAssistant >> treatProvider: aProvider [
+	super treatProvider: aProvider.
+	
+	aProvider
+		assistantMessageClass: GtOpenAIWardleyMapMessage;
+		userMessageClass: GtOpenAIWardleyMapMessage
 ]
 
 { #category : #'as yet unclassified' }

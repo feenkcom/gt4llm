@@ -50,7 +50,11 @@ GtLlmChat >> assistant [
 
 { #category : #accessing }
 GtLlmChat >> assistant: anObject [
-	assistant := anObject
+	assistant := anObject.
+
+	provider
+		ifNil: [ self
+				provider: GtLlmConnectionRegistry uniqueInstance defaultConnection buildProvider ]
 ]
 
 { #category : #accessing }

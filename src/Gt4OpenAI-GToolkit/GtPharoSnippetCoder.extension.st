@@ -4,6 +4,7 @@ Extension { #name : #GtPharoSnippetCoder }
 GtPharoSnippetCoder >> initializeLlmAddOnsFor: anAst into: addOns [
 	<gtAstCoderAddOns: 10>
 	GtLlmFeatures usesCoder ifFalse: [ ^ self ].
+	GtLlmConnectionRegistry instance hasConnectableConnection ifFalse: [ ^ self ].
 	addOns addStyler: (GtLlmInstructionInPharoCommentStyler new).
 	addOns
 		addMainAction: 'Open chat' translated
@@ -27,6 +28,7 @@ GtPharoSnippetCoder >> initializeLlmAddOnsFor: anAst into: addOns [
 GtPharoSnippetCoder >> initializeLlmAddOnsFor: anAst into: addOns viewModel: aGtPharoSourceCoderViewModel [
 	<gtAstCoderAddOns: 10>
 	GtLlmFeatures usesCoder ifFalse: [ ^ self ].
+	GtLlmConnectionRegistry instance hasConnectableConnection ifFalse: [ ^ self ].
 	addOns addStyler: (GtLlmInstructionInPharoCommentStyler new).
 	addOns
 		addMainAction: 'Open chat' translated

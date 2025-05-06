@@ -7,15 +7,11 @@ Class {
 { #category : #'as yet unclassified' }
 GtLlmObjectAssistant >> chatOn: anObject [
 	| chat |
-	chat := self createChat onInstance: (self serializerFor: anObject).
+	chat := GtLlmActionChat new
+			assistant: self;
+			onInstance: (self serializerFor: anObject);
+			provider: self buildProvider.
 
-
-	chat provider addTool: self getMethodsTool.
-	chat provider addTool: self getMethodTool.
-	chat provider addTool: self getImplementorsTool.
-	chat provider addTool: self getReferencesTool.
-	chat provider addTool: self lookupClassTool.
-	chat provider addTool: self lookupPageTool.
 	chat provider addTool: (self getPropertyToolOn: anObject).
 
 	^ chat
@@ -24,16 +20,6 @@ GtLlmObjectAssistant >> chatOn: anObject [
 { #category : #'as yet unclassified' }
 GtLlmObjectAssistant >> defaultDescription [
 	^ 'You are an assistant for objects in Glamorous Toolkit.'
-]
-
-{ #category : #'as yet unclassified' }
-GtLlmObjectAssistant >> defaultProviderStencil [
-	^ [ :anInstructionFormat | 
-	GtOpenAIResponseProvider withApiKeyFromFile
-		instructions: anInstructionFormat asInstructionPiece instructionString;
-		format: anInstructionFormat asJsonSchema;
-		assistantMessageClass: GtOpenAIObjectMessage;
-		userMessageClass: GtOpenAIObjectMessage ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -308,6 +294,27 @@ GtLlmObjectAssistant >> traverse: anObject using: aChain [
 									ifNone: [ ^ 'Not found: ' , (' ' join: traversed) ]) read: value ] ] ].
 
 	^ STONJSON toStringPretty: (GtLlmValueSerializer new serializeValue: value)
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmObjectAssistant >> treatProvider: aProvider [
+	| anInstance |
+	super treatProvider: aProvider.
+
+	anInstance := aProvider chat serializer instance.
+	anInstance
+		ifNotNil: [ aProvider addTool: (self getPropertyToolOn: anInstance) ].
+
+	aProvider addTool: self getMethodsTool.
+	aProvider addTool: self getMethodTool.
+	aProvider addTool: self getImplementorsTool.
+	aProvider addTool: self getReferencesTool.
+	aProvider addTool: self lookupClassTool.
+	aProvider addTool: self lookupPageTool.
+
+	aProvider
+		assistantMessageClass: GtOpenAIObjectMessage;
+		userMessageClass: GtOpenAIObjectMessage
 ]
 
 { #category : #'as yet unclassified' }
