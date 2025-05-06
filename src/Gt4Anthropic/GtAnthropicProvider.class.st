@@ -18,6 +18,11 @@ GtAnthropicProvider class >> default [
 ]
 
 { #category : #'as yet unclassified' }
+GtAnthropicProvider class >> isConnectable [
+	^ GtAnthropicClient apiKeyFile exists
+]
+
+{ #category : #'as yet unclassified' }
 GtAnthropicProvider class >> providerName [
 	^ 'Anthropic'
 ]
@@ -114,6 +119,11 @@ GtAnthropicProvider >> model: anObject [
 	model := anObject
 ]
 
+{ #category : #accessing }
+GtAnthropicProvider >> modelName [
+	^ model
+]
+
 { #category : #'as yet unclassified' }
 GtAnthropicProvider >> performToolCallsFor: aResult [
 	aResult toolCalls
@@ -124,6 +134,15 @@ GtAnthropicProvider >> performToolCallsFor: aResult [
 				addMessage: (GtAnthropicToolMessage new
 						id: aToolCall id;
 						contentText: toolOutput) ]
+]
+
+{ #category : #'as yet unclassified' }
+GtAnthropicProvider >> printOn: aStream [
+	aStream
+		nextPutAll: self class providerName;
+		nextPut: $(;
+		nextPutAll: self model;
+		nextPut: $)
 ]
 
 { #category : #'as yet unclassified' }
@@ -140,6 +159,16 @@ GtAnthropicProvider >> status [
 	^ assistantWorking
 		ifTrue: [ GtLlmAssistantChatWorkingStatus new ]
 		ifFalse: [ GtLlmAssistantChatReadyStatus new ]
+]
+
+{ #category : #accessing }
+GtAnthropicProvider >> tools [
+	^ tools
+]
+
+{ #category : #accessing }
+GtAnthropicProvider >> tools: anObject [
+	tools := anObject
 ]
 
 { #category : #'as yet unclassified' }

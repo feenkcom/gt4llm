@@ -18,16 +18,6 @@ GtOpenAIBlogPostAssistant >> defaultDescription [
 ]
 
 { #category : #'as yet unclassified' }
-GtOpenAIBlogPostAssistant >> defaultProviderStencil [
-	^ [ :anInstructionFormat | 
-	GtOpenAIResponseProvider withApiKeyFromFile
-		instructions: anInstructionFormat asInstructionPiece instructionString;
-		format: anInstructionFormat asJsonSchema;
-		assistantMessageClass: GtOpenAIBlogPostMessage;
-		userMessageClass: GtOpenAIBlogPostMessage ]
-]
-
-{ #category : #'as yet unclassified' }
 GtOpenAIBlogPostAssistant >> gtCorrectGrammar [
  	<gtLlmAssistantAction>
  	^ GtLlmAssistantAction new
@@ -96,6 +86,15 @@ GtOpenAIBlogPostAssistant >> gtPostFormatDescription [
 	name: 'Post';
 	priority: 10;
 	example: ''
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAIBlogPostAssistant >> treatProvider: aProvider [
+	super treatProvider: aProvider.
+
+	aProvider
+		assistantMessageClass: GtOpenAIBlogPostMessage;
+		userMessageClass: GtOpenAIBlogPostMessage
 ]
 
 { #category : #'as yet unclassified' }

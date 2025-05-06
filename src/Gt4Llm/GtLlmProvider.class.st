@@ -17,6 +17,11 @@ GtLlmProvider class >> defaultProviders [
 ]
 
 { #category : #'as yet unclassified' }
+GtLlmProvider class >> isConnectable [
+	^ false
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmProvider class >> new [
 	^ self basicNew initialize
 ]

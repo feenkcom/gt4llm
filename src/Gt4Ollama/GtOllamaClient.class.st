@@ -4,8 +4,13 @@ Class {
 	#instVars : [
 		'baseUrl'
 	],
-	#category : 'Gt4Ollama'
+	#category : #Gt4Ollama
 }
+
+{ #category : #accessing }
+GtOllamaClient class >> defaultBaseUrl [
+	^ 'http://localhost:11434/api' asZnUrl
+]
 
 { #category : #accessing }
 GtOllamaClient >> baseUrl [
@@ -66,7 +71,7 @@ GtOllamaClient >> createModel: aString withModelFile: aModelFile [
 
 { #category : #accessing }
 GtOllamaClient >> defaultBaseUrl [
-	^ 'http://localhost:11434/api' asZnUrl
+	^ self class defaultBaseUrl
 ]
 
 { #category : #accessing }

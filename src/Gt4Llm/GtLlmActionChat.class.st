@@ -66,6 +66,13 @@ GtLlmActionChat >> onInstance: anInstance [
 ]
 
 { #category : #'as yet unclassified' }
+GtLlmActionChat >> provider: anObject [
+	provider := anObject.
+	anObject chat: self.
+	assistant treatProvider: anObject.
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmActionChat >> sendAction: anActionCall [
 	^ self sendAction: anActionCall onAnswer: []
 ]

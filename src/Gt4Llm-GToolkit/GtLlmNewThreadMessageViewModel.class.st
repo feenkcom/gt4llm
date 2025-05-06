@@ -39,6 +39,16 @@ GtLlmNewThreadMessageViewModel >> onAddMessageContentsRequest: anAnnouncement [
 	self contents: anAnnouncement messageContents requester: nil
 ]
 
+{ #category : #'as yet unclassified' }
+GtLlmNewThreadMessageViewModel >> provider [
+	^ threadMessage assistantChat provider
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmNewThreadMessageViewModel >> provider: aProvider [
+	self threadMessage assistantChat provider: aProvider
+]
+
 { #category : #actions }
 GtLlmNewThreadMessageViewModel >> sendMessage [
 	^ threadMessage sendMessage
