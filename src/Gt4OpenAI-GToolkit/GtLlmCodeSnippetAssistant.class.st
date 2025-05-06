@@ -8,7 +8,6 @@ Class {
 GtLlmCodeSnippetAssistant >> chatOn: aCoderViewModel [
 	| chat |
 	chat := GtLlmActionChat new
-			assistant: self;
 			onInstance: (GtLlmCustomSerializationValueHolder new
 					name: 'Code Snippet';
 					content: aCoderViewModel;
@@ -21,6 +20,7 @@ GtLlmCodeSnippetAssistant >> chatOn: aCoderViewModel [
 											{'name' -> aPair key.
 												'value' -> aPair value value asString} asDictionary ])} ];
 					updater: [ :aModel :aText | aModel coderModel forSource: aText ]);
+			assistant: self;
 			provider: self buildProvider.
 
 	^ chat
