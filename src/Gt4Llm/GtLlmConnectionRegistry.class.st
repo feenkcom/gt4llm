@@ -70,18 +70,6 @@ GtLlmConnectionRegistry >> initialize [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmConnectionRegistry >> knownConnectors [
-	^ {GtLlmConnection new
-			provider: GtOllamaProvider;
-			label: 'Llama 3.1';
-			model: 'llama3.1'.
-		GtLlmConnection new
-			provider: GtAnthropicProvider;
-			label: 'Claude 3.7';
-			model: 'claude-3-7-sonnet-20250219'}
-]
-
-{ #category : #'as yet unclassified' }
 GtLlmConnectionRegistry >> standardDefaultConnection [
 	^ GtLlmConnection new
 		provider: GtOpenAIResponseProvider;
