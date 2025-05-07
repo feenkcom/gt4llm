@@ -85,8 +85,10 @@ GtLlmEmbeddedNewActionThreadMessageElement >> buildProviderButton [
 															connectionFor: self threadMessageViewModel provider)
 															connectionString.
 												aList fireEvent: BrDropdownHideWish new ] ]);
-			label: (GtLlmConnectionRegistry uniqueInstance
-					connectionFor: self threadMessageViewModel provider) connectionString.
+			label: ((GtLlmConnectionRegistry uniqueInstance
+					connectionFor: self threadMessageViewModel provider)
+					ifNil: [ self threadMessageViewModel provider asString ]
+					ifNotNil: #connectionString).
 	^ aButton
 ]
 
