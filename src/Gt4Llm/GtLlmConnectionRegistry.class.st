@@ -30,6 +30,7 @@ GtLlmConnectionRegistry >> connectionFor: aProvider [
 		detect: [ :aConnection | 
 			aConnection provider = aProvider class
 				and: [ aConnection model = aProvider model ] ]
+		ifNone: [ nil ]
 ]
 
 { #category : #'as yet unclassified' }
