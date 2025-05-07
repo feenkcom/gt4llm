@@ -25,12 +25,6 @@ GtOllamaProvider class >> defaultModel [
 ]
 
 { #category : #'as yet unclassified' }
-GtOllamaProvider class >> isConnectable [
-	^ [ ZnClient new get: GtOllamaClient defaultBaseUrl.
-	true ] on: ConnectionTimedOut do: [ false ]
-]
-
-{ #category : #'as yet unclassified' }
 GtOllamaProvider class >> providerName [
 	^ 'Ollama'
 ]

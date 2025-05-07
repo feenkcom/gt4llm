@@ -6,6 +6,12 @@ GtOllamaProvider >> asyncWait [
 ]
 
 { #category : #'*Gt4Ollama-GToolkit' }
+GtOllamaProvider class >> isConnectable [
+	^ [ ZnClient new get: GtOllamaClient defaultBaseUrl.
+	true ] on: ConnectionTimedOut do: [ false ]
+]
+
+{ #category : #'*Gt4Ollama-GToolkit' }
 GtOllamaProvider >> uuidClass [
 	^ UUID
 ]
