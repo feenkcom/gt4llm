@@ -63,6 +63,8 @@ GtOllamaProvider >> initializeClient [
 { #category : #'as yet unclassified' }
 GtOllamaProvider >> instructions: aString [
 	| internalModelName modelFile |
+	aString isEmptyOrNil ifTrue: [^ self].
+
 	internalModelName := 'gt-tutor-' , self model , '-' , self uuidClass new asString.
 	modelFile := GtLlmModelFile new
 			from: self model;
@@ -88,6 +90,11 @@ GtOllamaProvider >> model: anObject [
 	[ self client pullModel: model ] on: Error do: [  ]
 ]
 
+{ #category : #'as yet unclassified' }
+GtOllamaProvider >> modelName [
+	^ self modelfile directives first text
+]
+
 { #category : #accessing }
 GtOllamaProvider >> modelfile [
 	^ modelfile
@@ -111,6 +118,15 @@ GtOllamaProvider >> performToolCallsFor: aResult [
 ]
 
 { #category : #'as yet unclassified' }
+GtOllamaProvider >> printOn: aStream [
+	aStream
+		nextPutAll: self class providerName;
+		nextPut: $(;
+		nextPutAll: self modelfile directives first text;
+		nextPut: $)
+]
+
+{ #category : #'as yet unclassified' }
 GtOllamaProvider >> sendAssistantMessage: aMessage [
     | userMessage |
 	userMessage := userMessageClass new merge: aMessage.
@@ -125,6 +141,16 @@ GtOllamaProvider >> status [
 	^ assistantWorking
 		ifTrue: [ GtLlmAssistantChatWorkingStatus new ]
 		ifFalse: [ GtLlmAssistantChatReadyStatus new ]
+]
+
+{ #category : #accessing }
+GtOllamaProvider >> tools [
+	^ tools
+]
+
+{ #category : #accessing }
+GtOllamaProvider >> tools: anObject [
+	tools := anObject
 ]
 
 { #category : #'as yet unclassified' }

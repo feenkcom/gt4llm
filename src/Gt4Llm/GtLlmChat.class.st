@@ -49,8 +49,8 @@ GtLlmChat >> assistant [
 ]
 
 { #category : #accessing }
-GtLlmChat >> assistant: anObject [
-	assistant := anObject
+GtLlmChat >> assistant: anAssistant [
+	assistant := anAssistant
 ]
 
 { #category : #accessing }

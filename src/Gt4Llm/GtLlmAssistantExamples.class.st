@@ -7,13 +7,13 @@ Class {
 { #category : #'as yet unclassified' }
 GtLlmAssistantExamples >> assistantChat [
 	<gtExample>
-	| tutor chat |
-	tutor := self assistantWithActionAndFormatAdded.
-	chat := tutor createChat.
+	| assistant chat |
+	assistant := self assistantWithActionAndFormatAdded.
+	chat := assistant createChatWithProvider: GtLlmNullProvider new.
 
 	self assert: (chat provider isKindOf: GtLlmNullProvider).
 	self assert: chat provider chat equals: chat.
-	
+
 	^ chat
 ]
 
@@ -36,7 +36,7 @@ GtLlmAssistantExamples >> assistantChatWithMessage [
 GtLlmAssistantExamples >> assistantWithActionAdded [
 	<gtExample>
 	| tutor exampleAction |
-	tutor := self assistantWithNullProviderStencil.
+	tutor := self basicAssistant.
 	exampleAction := GtLlmAssistantAction new name: 'example'.
 
 	tutor addAction: exampleAction.
@@ -59,21 +59,6 @@ GtLlmAssistantExamples >> assistantWithActionAndFormatAdded [
 
 	self assert: tutor instruction formats size equals: 3.
 	self assert: (tutor formatNamed: 'example') equals: exampleFormat.
-
-	^ tutor
-]
-
-{ #category : #'as yet unclassified' }
-GtLlmAssistantExamples >> assistantWithNullProviderStencil [
-	<gtExample>
-	| tutor |
-	tutor := self basicAssistant.
-
-	tutor
-		providerStencil: [ :instruction | 
-			GtLlmNullProvider new
-				instructions: instruction asInstructionPiece instructionString;
-				format: instruction asJsonSchema ].
 
 	^ tutor
 ]

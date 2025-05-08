@@ -38,6 +38,6 @@ GtLlmInstructionInPharoCommentStyler >> visitSmaCCParseNode: aSmaCCParseNode [
 												beTinySize;
 												margin: (BlInsets left: 2 right: 2);
 												yourself ])
-								from: each first
+								from: each second
 								to: each second ] ] ]
 ]

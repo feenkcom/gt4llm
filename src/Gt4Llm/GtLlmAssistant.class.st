@@ -2,7 +2,6 @@ Class {
 	#name : #GtLlmAssistant,
 	#superclass : #Object,
 	#instVars : [
-		'providerStencil',
 		'instruction'
 	],
 	#category : #Gt4Llm
@@ -47,6 +46,11 @@ GtLlmAssistant >> addFormat: aComponent [
 { #category : #'as yet unclassified' }
 GtLlmAssistant >> addInstructionSection: aSection [
 	instruction addSection: aSection
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmAssistant >> buildProvider [
+	^ GtLlmConnectionRegistry uniqueInstance defaultConnection buildProvider
 ]
 
 { #category : #'as yet unclassified' }
@@ -95,9 +99,14 @@ GtLlmAssistant >> collectSections [
 
 { #category : #'as yet unclassified' }
 GtLlmAssistant >> createChat [
+	^ self createChatWithProvider: self buildProvider
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmAssistant >> createChatWithProvider: provider [
 	^ GtLlmActionChat new
-		provider: (self providerStencil value: instruction);
-		assistant: self
+		assistant: self;
+		provider: provider
 ]
 
 { #category : #'as yet unclassified' }
@@ -130,7 +139,7 @@ GtLlmAssistant >> gtInstructionFor: aView [
 	<gtView>
 	^ aView forward
 		title: 'Instruction';
-		priority: 10;
+		priority: 9;
 		object: [ instruction asInstructionPiece ];
 		view: #gtInstructionFor:
 ]
@@ -138,8 +147,6 @@ GtLlmAssistant >> gtInstructionFor: aView [
 { #category : #'as yet unclassified' }
 GtLlmAssistant >> initialize [
 	super initialize.
-	self providerStencil: self defaultProviderStencil.
-	
 	
 	self initializeInstruction.
 	
@@ -158,21 +165,6 @@ GtLlmAssistant >> initializeInstruction [
 { #category : #accessing }
 GtLlmAssistant >> instruction [
 	^ instruction
-]
-
-{ #category : #accessing }
-GtLlmAssistant >> onAnthropicWithModel: aModel [
-	self providerStencil: (self defaultAnthropicProviderStencilWithModel: aModel)
-]
-
-{ #category : #accessing }
-GtLlmAssistant >> providerStencil [
-	^ providerStencil
-]
-
-{ #category : #accessing }
-GtLlmAssistant >> providerStencil: anObject [
-	providerStencil := anObject
 ]
 
 { #category : #'as yet unclassified' }
@@ -200,4 +192,13 @@ Multiple lines, multiple paragraphs are allowed.
 
 # Headings exist as well
 ```'
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmAssistant >> treatProvider: aProvider [
+	aProvider 
+		instructions: instruction asInstructionPiece instructionString;
+		format: instruction asJsonSchema;
+		assistantMessageClass: GtLlmActionMessage;
+		userMessageClass: GtLlmActionMessage
 ]

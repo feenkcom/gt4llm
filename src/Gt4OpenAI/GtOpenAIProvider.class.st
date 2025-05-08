@@ -15,6 +15,11 @@ GtOpenAIProvider class >> default [
 ]
 
 { #category : #'as yet unclassified' }
+GtOpenAIProvider class >> isConnectable [
+	^ GtOpenAIClient apiKeyFile exists
+]
+
+{ #category : #'as yet unclassified' }
 GtOpenAIProvider class >> providerName [
 	^ 'OpenAI Chat'
 ]
@@ -67,6 +72,20 @@ GtOpenAIProvider >> model [
 { #category : #accessing }
 GtOpenAIProvider >> model: anObject [
 	model := anObject
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAIProvider >> modelName [
+	^ model
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAIProvider >> printOn: aStream [
+	aStream
+		nextPutAll: self class providerName;
+		nextPut: $(;
+		nextPutAll: self model;
+		nextPut: $)
 ]
 
 { #category : #'as yet unclassified' }

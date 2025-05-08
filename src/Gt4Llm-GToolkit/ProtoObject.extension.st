@@ -3,12 +3,17 @@ Extension { #name : #ProtoObject }
 { #category : #'*Gt4Llm-GToolkit' }
 ProtoObject >> gtActionChatFor: anAction [
 	<gtAction>
+	| chat |
 	GtLlmFeatures usesCoder ifFalse: [ ^ anAction empty ].
+	GtLlmConnectionRegistry instance hasConnectableConnection ifFalse: [ ^ self ].
+
+	chat := GtLlmObjectAssistant new chatOn: self.
+
 	^ anAction button
 		priority: 100;
 		icon: BrGlamorousVectorIcons openAi;
 		tooltip: 'Chat about object';
-		action: [ :aButton | aButton phlow spawnObject: (GtLlmObjectAssistant new chatOn: self) ];
-		primaryModifierAction: [ :aButton | aButton phlow showObject: (GtLlmObjectAssistant new chatOn: self) ]
+		action: [ :aButton | aButton phlow spawnObject: chat ];
+		primaryModifierAction: [ :aButton | aButton phlow showObject: chat ]
 			mouseCursor: BlCopyCursor new
 ]

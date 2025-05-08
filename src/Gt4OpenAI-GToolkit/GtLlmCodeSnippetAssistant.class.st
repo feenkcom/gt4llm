@@ -7,30 +7,21 @@ Class {
 { #category : #'as yet unclassified' }
 GtLlmCodeSnippetAssistant >> chatOn: aCoderViewModel [
 	| chat |
-	chat := self createChat.
-
-	chat
-		onInstance: (GtLlmCustomSerializationValueHolder new
-				name: 'Code Snippet';
-				content: aCoderViewModel;
-				serializer: [ :aModel | 
-					{'Code Snippet' -> aModel coderModel sourceCode currentSourceText text asString.
-						'Object' -> (GtLlmValueSerializer new serializeValue: aModel selfObject).
-						'Variables'
-							-> (aModel sharedBindings bindings associations
-									collect: [ :aPair | 
-										{'name' -> aPair key.
-											'value' -> aPair value value asString} asDictionary ])} ];
-				updater: [ :aModel :aText | aModel coderModel forSource: aText ]).
-
-	chat provider addTool: (self lookupBindingToolFor: aCoderViewModel).
-	chat provider addTool: (self getPropertyToolOn: aCoderViewModel selfObject).
-	chat provider addTool: self lookupClassTool.
-	chat provider addTool: self lookupPageTool.
-	chat provider addTool: self getImplementorsTool.
-	chat provider addTool: self getReferencesTool.
-	chat provider addTool: self getMethodTool.
-	chat provider addTool: self getMethodsTool.
+	chat := GtLlmActionChat new
+			onInstance: (GtLlmCustomSerializationValueHolder new
+					name: 'Code Snippet';
+					content: aCoderViewModel;
+					serializer: [ :aModel | 
+						{'Code Snippet' -> aModel coderModel sourceCode currentSourceText text asString.
+							'Object' -> (GtLlmValueSerializer new serializeValue: aModel selfObject).
+							'Variables'
+								-> (aModel sharedBindings bindings associations
+										collect: [ :aPair | 
+											{'name' -> aPair key.
+												'value' -> aPair value value asString} asDictionary ])} ];
+					updater: [ :aModel :aText | aModel coderModel forSource: aText ]);
+			assistant: self;
+			provider: self buildProvider.
 
 	^ chat
 ]
@@ -50,16 +41,6 @@ Point x: 1 y: 10
 { #category : #'as yet unclassified' }
 GtLlmCodeSnippetAssistant >> defaultDescription [
 	^ 'You are an assistant for code snippets.'
-]
-
-{ #category : #'as yet unclassified' }
-GtLlmCodeSnippetAssistant >> defaultProviderStencil [
-	^ [ :anInstructionFormat| 
-	GtOpenAIResponseProvider withApiKeyFromFile
-		format: anInstructionFormat asJsonSchema;
-		assistantMessageClass: GtOpenAICoderActionMessage;
-		userMessageClass: GtOpenAICoderActionMessage;
-		instructions: anInstructionFormat asInstructionPiece instructionString ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -139,6 +120,27 @@ GtLlmCodeSnippetAssistant >> treatBinding: aBinding in: aSnippetCoderViewModel [
 
 	^ STONJSON
 		toStringPretty: (GtLlmValueSerializer new serializeBinding: aBinding withValue: bindingValue)
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmCodeSnippetAssistant >> treatProvider: aProvider [
+	| aCoderViewModel |
+	super treatProvider: aProvider.
+
+	aCoderViewModel := aProvider chat serializer instance content.
+	
+	aProvider addTool: (self lookupBindingToolFor: aCoderViewModel).
+	aProvider addTool: (self getPropertyToolOn: aCoderViewModel selfObject).
+	aProvider addTool: self lookupClassTool.
+	aProvider addTool: self lookupPageTool.
+	aProvider addTool: self getImplementorsTool.
+	aProvider addTool: self getReferencesTool.
+	aProvider addTool: self getMethodTool.
+	aProvider addTool: self getMethodsTool.
+
+	aProvider
+		assistantMessageClass: GtOpenAICoderActionMessage;
+		userMessageClass: GtOpenAICoderActionMessage
 ]
 
 { #category : #'as yet unclassified' }

@@ -12,7 +12,7 @@ GtLlmChatMessage >> gtContentFor: aView [
 	^ aView explicit
 		title: 'Content';
 		priority: 5;
-		stencil: [ GtLlmThreadMessageElement new
+		stencil: [ GtLlmThreadMessageElement new hideHeaderElement
 				threadMessageViewModel: self asViewModel ]
 ]
 

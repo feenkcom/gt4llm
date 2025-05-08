@@ -51,6 +51,35 @@ GtLlmNewThreadMessageElement >> buildAttachButton [
 			c linear horizontal alignLeft ]
 ]
 
+{ #category : #'as yet unclassified' }
+GtLlmNewThreadMessageElement >> buildProviderButton [
+	| aButton |
+	^ aButton := BrButton new beSmallSize
+			aptitude: BrGlamorousButtonWithLabelAptitude new
+					+ (BrGlamorousWithExplicitDropdownAptitude
+							handle: [ BrButton new beSmallSize
+									aptitude: BrGlamorousButtonWithLabelAptitude - BrGlamorousButtonExteriorAptitude;
+									label: (GtLlmConnectionRegistry uniqueInstance connectionFor: self threadMessageViewModel provider) connectionString ]
+							content: [ | aList |
+								aList := BrSimpleList new fitContent
+										items: GtLlmConnectionRegistry uniqueInstance connectableConnections;
+										itemStencil: [ BrLabel new
+												aptitude: BrGlamorousLabelAptitude new
+														+ (BrStyleCommonAptitude new
+																selected: [ :aStyle | aStyle background: BrGlamorousColors selectedListItemColor ];
+																hovered: [ :aStyle | aStyle background: BrGlamorousColors hoveredListItemColor ]);
+												padding: (BlInsets all: 5) ];
+										itemDataBinder: [ :aLabel :anItem | aLabel text: anItem connectionString ];
+										when: BrSelectionChanged
+											do: [ :anEvent | 
+												self threadMessageViewModel
+													provider: (GtLlmConnectionRegistry uniqueInstance connections at: anEvent indices first)
+															buildProvider.
+												aButton label: (GtLlmConnectionRegistry uniqueInstance connectionFor: self threadMessageViewModel provider) connectionString.
+												aList fireEvent: BrDropdownHideWish new ] ]);
+			label: (GtLlmConnectionRegistry uniqueInstance connectionFor: self threadMessageViewModel provider) connectionString
+]
+
 { #category : #'initialization ' }
 GtLlmNewThreadMessageElement >> buildSendButton [
 	^ BrButton new
@@ -178,5 +207,6 @@ GtLlmNewThreadMessageElement >> updateElement [
 GtLlmNewThreadMessageElement >> updateToolbar [
 	toolbar removeAllItems.
 	toolbar addItem: self buildSendButton.
-	toolbar addItem: self buildAttachButton
+	toolbar addItem: self buildAttachButton.
+	toolbar addItem: self buildProviderButton
 ]
