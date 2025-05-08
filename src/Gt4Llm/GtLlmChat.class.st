@@ -91,6 +91,8 @@ GtLlmChat >> initialize [
 	
 	self serializer: self defaultSerializer.
 	
+	self provider: GtLlmConnectionRegistry uniqueInstance defaultConnection buildProvider.
+	
 	self initializeMessages.
 	
 	self updateLastUpdate
