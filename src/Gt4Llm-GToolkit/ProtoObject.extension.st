@@ -5,8 +5,8 @@ ProtoObject >> gtActionChatFor: anAction [
 	<gtAction>
 	| chat |
 	GtLlmFeatures usesCoder ifFalse: [ ^ anAction empty ].
-	GtLlmConnectionRegistry instance hasConnectableConnection ifFalse: [ ^ self ].
-
+	GtLlmConnectionRegistry instance hasConnectableDefaultConnection ifFalse: [ ^ anAction empty  ].
+	
 	chat := GtLlmObjectAssistant new chatOn: self.
 
 	^ anAction button
