@@ -23,6 +23,16 @@ GtLlmConnectionRegistry >> gtConnectionsFor: aView [
 ]
 
 { #category : #'*Gt4Llm-GToolkit' }
+GtLlmConnectionRegistry class >> gtInstanceButtonFor: anAction [
+	<gtClassAction>
+	^ anAction button
+		tooltip: 'Inspect unique instance';
+		priority: 10;
+		icon: BrGlamorousVectorIcons playinspect;
+		action: [ :aButton | aButton phlow spawnObject: self uniqueInstance]
+]
+
+{ #category : #'*Gt4Llm-GToolkit' }
 GtLlmConnectionRegistry >> knownConnectors [
 	^ {GtLlmConnection new
 			provider: GtOllamaProvider;
