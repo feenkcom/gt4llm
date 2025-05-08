@@ -91,8 +91,6 @@ GtLlmChat >> initialize [
 	
 	self serializer: self defaultSerializer.
 	
-	self provider: GtLlmConnectionRegistry uniqueInstance defaultConnection buildProvider.
-	
 	self initializeMessages.
 	
 	self updateLastUpdate
@@ -133,6 +131,8 @@ GtLlmChat >> messages: anObject [
 { #category : #accessing }
 GtLlmChat >> provider [
 	^ provider
+		ifNil: [ provider := GtLlmConnectionRegistry uniqueInstance defaultConnection
+					buildProvider ]
 ]
 
 { #category : #accessing }

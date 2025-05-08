@@ -104,6 +104,11 @@ GtLlmConnectionRegistry >> hasConnectableConnection [
 ]
 
 { #category : #'as yet unclassified' }
+GtLlmConnectionRegistry >> hasConnectableDefaultConnection [
+	^ self defaultConnection isConnectable
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmConnectionRegistry >> initialize [
 	super initialize.
 	

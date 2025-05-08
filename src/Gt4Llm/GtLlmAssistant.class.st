@@ -2,7 +2,8 @@ Class {
 	#name : #GtLlmAssistant,
 	#superclass : #Object,
 	#instVars : [
-		'instruction'
+		'instruction',
+		'connection'
 	],
 	#category : #Gt4Llm
 }
@@ -50,7 +51,7 @@ GtLlmAssistant >> addInstructionSection: aSection [
 
 { #category : #'as yet unclassified' }
 GtLlmAssistant >> buildProvider [
-	^ GtLlmConnectionRegistry uniqueInstance defaultConnection buildProvider
+	^ connection buildProvider
 ]
 
 { #category : #'as yet unclassified' }
@@ -95,6 +96,16 @@ GtLlmAssistant >> collectSections [
 		allNamed: #gtLlmInstructionSection
 		from: self class
 		to: Object) collect: [ :aPragma | self perform: aPragma methodSelector ]
+]
+
+{ #category : #accessing }
+GtLlmAssistant >> connection [
+	^ connection
+]
+
+{ #category : #accessing }
+GtLlmAssistant >> connection: anObject [
+	connection := anObject
 ]
 
 { #category : #'as yet unclassified' }
@@ -147,9 +158,11 @@ GtLlmAssistant >> gtInstructionFor: aView [
 { #category : #'as yet unclassified' }
 GtLlmAssistant >> initialize [
 	super initialize.
-	
+
 	self initializeInstruction.
-	
+
+	self connection: GtLlmConnectionRegistry uniqueInstance defaultConnection.
+
 	self description: self defaultDescription
 ]
 
