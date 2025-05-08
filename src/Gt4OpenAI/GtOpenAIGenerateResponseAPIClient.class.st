@@ -1,6 +1,6 @@
 Class {
-	#name : #GtOpenAIGenerateResponseAPIClient,
-	#superclass : #GtLlmEndpointClient,
+	#name : 'GtOpenAIGenerateResponseAPIClient',
+	#superclass : 'GtLlmEndpointClient',
 	#instVars : [
 		'model',
 		'messages',
@@ -8,10 +8,10 @@ Class {
 		'format',
 		'instructions'
 	],
-	#category : #Gt4OpenAI
+	#category : 'Gt4OpenAI'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtOpenAIGenerateResponseAPIClient >> buildEntity [
 	| entity |
 	entity := {'model' -> self model.
@@ -41,64 +41,52 @@ GtOpenAIGenerateResponseAPIClient >> buildEntity [
 	^ entity
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtOpenAIGenerateResponseAPIClient >> format [
 	^ format
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtOpenAIGenerateResponseAPIClient >> format: anObject [
 	format := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtOpenAIGenerateResponseAPIClient >> instructions [
 	^ instructions
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtOpenAIGenerateResponseAPIClient >> instructions: anObject [
 	instructions := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtOpenAIGenerateResponseAPIClient >> messages [
 	^ messages
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtOpenAIGenerateResponseAPIClient >> messages: anObject [
 	messages := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtOpenAIGenerateResponseAPIClient >> model [
 	^ model
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtOpenAIGenerateResponseAPIClient >> model: anObject [
 	model := anObject
 ]
 
-{ #category : #accessing }
-GtOpenAIGenerateResponseAPIClient >> request [
-	^ format
-		ifNil: [ self client postStreaming: '/responses' withEntity: self buildEntity ]
-		ifNotNil: [ self client post: '/responses' withEntity: self buildEntity ]
-]
-
-{ #category : #accessing }
-GtOpenAIGenerateResponseAPIClient >> serializationClass [
-	^ format ifNil: [ #GtOpenAIStreamedResponse asClass ] ifNotNil: [ GtOpenAIResponse ]
-]
-
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtOpenAIGenerateResponseAPIClient >> tools [
 	^ tools
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtOpenAIGenerateResponseAPIClient >> tools: anObject [
 	tools := anObject
 ]
