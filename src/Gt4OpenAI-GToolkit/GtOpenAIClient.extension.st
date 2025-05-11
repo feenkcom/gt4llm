@@ -12,6 +12,19 @@ GtOpenAIClient >> initializeClient [
 ]
 
 { #category : #'*Gt4OpenAI-GToolkit' }
+GtOpenAIClient >> postStreaming: aString withEntity: anEntity [
+	| aClient |
+	aClient := self initializeClient
+			streaming: true;
+			contentReader: nil.
+	aClient url: self baseUrl / aString.
+
+	aClient contents: anEntity.
+
+	^ aClient post
+]
+
+{ #category : #'*Gt4OpenAI-GToolkit' }
 GtOpenAIClient class >> withApiKeyFromClipboard [
 	^ self new apiKey: Clipboard clipboardText
 ]

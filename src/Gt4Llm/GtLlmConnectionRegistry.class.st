@@ -1,8 +1,6 @@
 Class {
 	#name : #GtLlmConnectionRegistry,
 	#superclass : #Object,
-	#traits : 'TGtUniqueInstance',
-	#classTraits : 'TGtUniqueInstance classTrait',
 	#instVars : [
 		'connections',
 		'defaultConnection'
@@ -12,6 +10,50 @@ Class {
 	],
 	#category : #Gt4Llm
 }
+
+{ #category : #'as yet unclassified' }
+GtLlmConnectionRegistry class >> cleanUniqueInstance [
+	uniqueInstance ifNotNil: [ :anInstance | 
+		self onRemoveUniqueInstance: anInstance ].
+	uniqueInstance := nil.
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmConnectionRegistry class >> cleanUp [
+	self cleanUniqueInstance
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmConnectionRegistry class >> default [
+	^ self uniqueInstance
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmConnectionRegistry class >> hasUniqueInstance [
+
+	^ uniqueInstance isNotNil
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmConnectionRegistry class >> instance [
+	<gtExample>
+	^ self uniqueInstance
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmConnectionRegistry class >> new [
+	^ self basicNew initialize
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmConnectionRegistry class >> onRemoveUniqueInstance: anInstance [
+	"Classes may perform some activities on a singleton that is about to be released"
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmConnectionRegistry class >> uniqueInstance [
+	^ uniqueInstance ifNil: [ uniqueInstance := self new ]
+]
 
 { #category : #'as yet unclassified' }
 GtLlmConnectionRegistry >> addConnection: aConnection [
@@ -59,6 +101,11 @@ GtLlmConnectionRegistry >> defaultConnection: aConnection [
 { #category : #'as yet unclassified' }
 GtLlmConnectionRegistry >> hasConnectableConnection [
 	^ self connectableConnections isNotEmpty
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmConnectionRegistry >> hasConnectableDefaultConnection [
+	^ self defaultConnection isConnectable
 ]
 
 { #category : #'as yet unclassified' }

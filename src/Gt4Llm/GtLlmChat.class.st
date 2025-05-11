@@ -86,6 +86,11 @@ GtLlmChat >> gtMessagesFor: aView [
 ]
 
 { #category : #accessing }
+GtLlmChat >> hasProvider [
+	^ provider isNotNil
+]
+
+{ #category : #accessing }
 GtLlmChat >> initialize [
 	super initialize.
 	
@@ -131,6 +136,8 @@ GtLlmChat >> messages: anObject [
 { #category : #accessing }
 GtLlmChat >> provider [
 	^ provider
+		ifNil: [ provider := GtLlmConnectionRegistry uniqueInstance defaultConnection
+					buildProvider ]
 ]
 
 { #category : #accessing }
@@ -193,7 +200,7 @@ GtLlmChat >> signalRunIsDone [
 
 { #category : #accessing }
 GtLlmChat >> status [
-	self provider ifNil: [ ^ GtLlmAssistantChatNotReadyStatus new ].
+	self hasProvider ifFalse: [ ^ GtLlmAssistantChatNotReadyStatus new ].
 
 	^ self provider status
 ]

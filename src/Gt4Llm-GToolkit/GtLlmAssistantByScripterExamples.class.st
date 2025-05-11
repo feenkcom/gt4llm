@@ -24,7 +24,7 @@ GtLlmAssistantByScripterExamples >> assistantChat [
 GtLlmAssistantByScripterExamples >> basicAssistant [
 	<gtExample>
 	| tutor |
-	tutor :=  GtLlmAssistant new.
+	tutor :=  GtLlmAssistant new connection: GtLlmNullConnection new.
 	
 	self assert: tutor actions size equals: 1.
 	self assert: tutor instruction formats size equals: 2.
