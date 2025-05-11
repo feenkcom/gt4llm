@@ -5,7 +5,7 @@ Class {
 		'rawData',
 		'client'
 	],
-	#category : 'Gt4Llm'
+	#category : #Gt4Llm
 }
 
 { #category : #accessing }
@@ -49,7 +49,7 @@ GtLlmEntity >> from: aDictionary [
 	self class serializationProperties
 		do: [ :aPair | 
 			self
-				perform: (aPair value , ':') asSymbol
+				perform: aPair value asSymbol asMutator
 				withArguments: {aDictionary at: aPair key asString ifAbsent: [ nil ]} ]
 ]
 
