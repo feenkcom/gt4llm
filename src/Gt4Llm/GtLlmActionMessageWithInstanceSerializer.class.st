@@ -31,10 +31,11 @@ GtLlmActionMessageWithInstanceSerializer >> instance: anObject [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmActionMessageWithInstanceSerializer >> serialize: aString [
+GtLlmActionMessageWithInstanceSerializer >> serialize: aMessage [
 	^ STONJSON
-		toString: ({'Action' -> aString} , self instance serialize asOrderedCollection)
-				asDictionary
+		toString: ({'Action' -> aMessage action.
+				'Arguments' -> (aMessage arguments collect: #asString)}
+				, self instance serialize asOrderedCollection) asDictionary
 ]
 
 { #category : #'as yet unclassified' }

@@ -50,6 +50,17 @@ GtLlmAssistant >> addInstructionSection: aSection [
 ]
 
 { #category : #'as yet unclassified' }
+GtLlmAssistant >> argumentsFormatDescription [
+	<gtLlmAssistantFormat>
+	^ GtLlmAssistantFormatDescription new
+		name: 'Arguments';
+		format: 'Array of text';
+		type: {'array'. 'null'};
+		items: {'type' -> 'string'} asDictionary;
+		example: '{"Argument 1", "Argument 2"}'
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmAssistant >> buildProvider [
 	^ connection buildProvider
 ]
@@ -57,14 +68,16 @@ GtLlmAssistant >> buildProvider [
 { #category : #'as yet unclassified' }
 GtLlmAssistant >> chatAction [
 	<gtLlmAssistantAction>
-	^ GtLlmAssistantAction new 
+	^ GtLlmAssistantAction new
 		name: 'Chat';
 		priority: 1;
 		description: 'Chat using the text field.';
-		format: 'Chat: {1}';
+		addArgument: 'Message';
 		examples: {GtLlmAssistantActionExample new markUnverified
-					input: {'Action' -> 'Chat: How are you?'} asDictionary;
+					input: {'Action' -> 'Chat'.
+							'Arguments' -> {'Hi! How are you?'}} asDictionary;
 					output: {'Action' -> 'Chat'.
+							'Arguments' -> {'Hi! How are you?'}.
 							'Text'
 								-> 'As an AI model, I do not have feelings. How can I assist you today?'}
 							asDictionary}
@@ -211,7 +224,5 @@ Multiple lines, multiple paragraphs are allowed.
 GtLlmAssistant >> treatProvider: aProvider [
 	aProvider 
 		instructions: instruction asInstructionPiece instructionString;
-		format: instruction asJsonSchema;
-		assistantMessageClass: GtLlmActionMessage;
-		userMessageClass: GtLlmActionMessage
+		format: instruction asJsonSchema
 ]

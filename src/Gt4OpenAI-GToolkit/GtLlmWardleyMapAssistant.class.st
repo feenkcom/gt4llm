@@ -11,9 +11,10 @@ GtLlmWardleyMapAssistant >> connectionAction [
 		name: 'Add new connected nodes';
 		priority: 2;
 		description: 'Adds new nodes that are connected to an already existing node. It MUST consider the context of the map topic. It MUST return the entirety of the state.';
-		format: 'Add new connected nodes to `{1}`';
+		addArgument: 'NodeName';
 		examples: {GtLlmAssistantActionExample new
-					input: {'Action' -> 'Add new connected nodes to `Compute`'.
+					input: {'Action' -> 'Add new connected nodes'.
+							'Arguments' -> {'Compute'}.
 							'Wardley Map'
 								-> 'style wardley
 
@@ -23,6 +24,7 @@ component Compute [0.45, 0.34] label [-22, 29]
 
 '} asDictionary;
 					output: {'Action' -> 'Add new connected nodes'.
+							'Arguments' -> {'Compute'}.
 							'Wardley Map'
 								-> 'style wardley
 
@@ -37,7 +39,8 @@ Compute->Cloud'.
 							'Text' -> nil.
 							'Rename' -> nil} asDictionary.
 				GtLlmAssistantActionExample new
-					input: {'Action' -> 'Add new connected nodes to `Regulator`'.
+					input: {'Action' -> 'Add new connected nodes'.
+							'Arguments' -> {'Regulator'}.
 							'Wardley Map'
 								-> 'style wardley
 
@@ -46,6 +49,7 @@ evolution genesis -> custom built -> product (+rental) -> commodity
 component Regulator [0.6, 0.2] label [-22, 29]
 '} asDictionary;
 					output: {'Action' -> 'Add new connected nodes'.
+							'Arguments' -> {'Compute'}.
 							'Wardley Map'
 								-> 'style wardley
 
@@ -67,7 +71,7 @@ GtLlmWardleyMapAssistant >> createAction [
 		name: 'Create a set of nodes';
 		priority: 1;
 		description: 'Creates a set of at least 20 nodes based on a given topic, filling topic, nodes, and connections with sensible data. If a map topic was already set, it is overridden. The rest of the map is extended.';
-		format: 'Create a set of nodes on {1}'
+		addArgument: 'NodeName'
 ]
 
 { #category : #'as yet unclassified' }
@@ -95,9 +99,10 @@ GtLlmWardleyMapAssistant >> explanationAction [
 		name: 'Explain a node';
 		priority: 3;
 		description: 'Explains what a node means and why it is on the map using human language.';
-		format: 'Explain the node `{1}`';
+		addArgument: 'NodeName';
 		examples: {GtLlmAssistantActionExample new
-					input: {'Action' -> 'Explain `Compute`'.
+					input: {'Action' -> 'Explain a node'.
+							'Arguments' -> {'Compute'}.
 							'Wardley Map'
 								-> 'style wardley
 
@@ -105,6 +110,7 @@ evolution genesis -> custom built -> product (+rental) -> commodity
 
 component Compute [0.4, 0.4] label [-22, 29]'} asDictionary;
 					output: {'Action' -> 'Explain a node'.
+							'Arguments' -> {'Compute'}.
 							'Text'
 								-> 'In the context of this Wardley Map on Cloud Computing, the node `Compute` refers to the computing resources and capabilities provided as part of cloud services. This encompasses the virtualized processing power (CPUs, GPUs) that can be scaled up or down on demand to meet the needs of applications or services running in the cloud. The `Compute` node is fundamental to cloud computing, as it allows for flexible, efficient, and scalable computing solutions that can be tailored to the specific requirements of businesses and developers.
 
@@ -127,9 +133,10 @@ GtLlmWardleyMapAssistant >> renameAction [
 		name: 'Propose renames for node';
 		priority: 4;
 		description: 'Proposes a sensible number of alternative names for nodes (less than ten, but more than one).';
-		format: 'Propose renames for node `{1}`';
+		addArgument: 'NodeName';
 		examples: {GtLlmAssistantActionExample new
-					input: {'Action' -> 'Propose renames for node `Compute`'.
+					input: {'Action' -> 'Propose renames for node'.
+							'Arguments' -> {'Compute'}.
 							'Wardley Map'
 								-> 'style wardley
 
@@ -137,6 +144,7 @@ evolution genesis -> custom built -> product (+rental) -> commodity
 
 component Compute [0.45, 0.34] label [-22, 29]'} asDictionary;
 					output: {'Action' -> 'Propose renames for node'.
+							'Arguments' -> {'Compute'}.
 							'Rename' -> nil.
 							'Text' -> nil.
 							'Wardley Map'
@@ -148,7 +156,8 @@ component Compute [0.45, 0.34] label [-22, 29]'.
 							'Rename' -> '{''Compute'': [''Computational resources'', ''Resources'']}'}
 							asDictionary.
 				GtLlmAssistantActionExample new
-					input: {'Action' -> 'Propose renames for node `Furnace`'.
+					input: {'Action' -> 'Propose renames for node'.
+							'Arguments' -> {'Furnace'}.
 							'Wardley Map'
 								-> 'style wardley
 
@@ -156,6 +165,7 @@ evolution genesis -> custom built -> product (+rental) -> commodity
 
 component Furnace [0.9, 0.9] label [-9, 9]'} asDictionary;
 					output: {'Action' -> 'Propose renames for node'.
+							'Arguments' -> {'Furnace'}.
 							'Rename'
 								-> '{''Furnace'': [''Boiler'', ''Heater'', ''Incinerator'', ''Kiln'', ''Stove'']}'.
 							'Wardley Map'
@@ -196,6 +206,7 @@ evolution genesis -> custom built -> product (+rental) -> commodity
 component Compute [0.45, 0.34] label [-22, 29]'} asDictionary;
 					output: {'Text'
 								-> 'The map is incomplete. Currently, only one node is defined. A complete map should have multiple nodes and connections. The current node `Compute` is correct, but misplaced.'.
+							'Arguments' -> nil.
 							'Action' -> 'Review the current state'.
 							'Wardley Map'
 								-> 'style wardley

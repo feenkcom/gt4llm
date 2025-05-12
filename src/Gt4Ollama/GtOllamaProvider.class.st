@@ -45,6 +45,16 @@ GtOllamaProvider >> client: anObject [
 ]
 
 { #category : #'as yet unclassified' }
+GtOllamaProvider >> defaultAssistantMessageClass [
+	^ self chat messageClassForOllama
+]
+
+{ #category : #'as yet unclassified' }
+GtOllamaProvider >> defaultUserMessageClass [
+	^ self chat messageClassForOllama
+]
+
+{ #category : #'as yet unclassified' }
 GtOllamaProvider >> initialize [
 	super initialize.
 
@@ -122,14 +132,16 @@ GtOllamaProvider >> printOn: aStream [
 	aStream
 		nextPutAll: self class providerName;
 		nextPut: $(;
-		nextPutAll: self modelfile directives first text;
+		nextPutAll: (self modelfile
+				ifNil: [ self model ]
+				ifNotNil: [ self modelName ]);
 		nextPut: $)
 ]
 
 { #category : #'as yet unclassified' }
 GtOllamaProvider >> sendAssistantMessage: aMessage [
     | userMessage |
-	userMessage := userMessageClass new merge: aMessage.
+	userMessage := self userMessageClass new merge: aMessage.
 	userMessage role: 'user'.
 	self chat addMessage: userMessage.
 
@@ -169,7 +181,7 @@ GtOllamaProvider >> triggerAssistant [
 		doWhileTrue: [ result toolCalls isNotEmpty ].
 
 	self chat
-		addMessage: (assistantMessageClass new
+		addMessage: (self assistantMessageClass new
 				content: result content;
 				role: 'assistant';
 				chat: self;

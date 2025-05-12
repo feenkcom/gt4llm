@@ -80,16 +80,17 @@ GtLlmActionChat >> sendAction: anActionCall [
 
 { #category : #'as yet unclassified' }
 GtLlmActionChat >> sendAction: anActionCall onAnswer: aBlock [
-	self
-		sendMessage: ((self assistant actionNamed: anActionCall action) format
-				format: anActionCall arguments).
+	self sendMessage: anActionCall.
 
 	self executeWait: aBlock
 ]
 
 { #category : #accessing }
 GtLlmActionChat >> sendChatRequest: aString [
-	self sendMessage: 'Chat: ' , aString
+	self
+		sendMessage: (GtLlmActionCall new
+				action: 'Chat';
+				arguments: {aString})
 ]
 
 { #category : #'as yet unclassified' }

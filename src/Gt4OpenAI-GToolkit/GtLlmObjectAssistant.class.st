@@ -35,6 +35,7 @@ GtLlmObjectAssistant >> explanationAction [
 								-> '{"string":"(100@30)","instanceSlots":[{"name":"x","class":"SmallInteger","value":"100"},{"name":"y","class":"SmallInteger","value":"30"}],"class":"Point"}'}
 							asDictionary;
 					output: {'Action' -> 'Propose a view'.
+							'Arguments' -> nil.
 							'Object'
 								-> '{"string":"(100@30)","instanceSlots":[{"name":"x","class":"SmallInteger","value":"100"},{"name":"y","class":"SmallInteger","value":"300"}],"class":"Point"}'.
 							'Method' -> ''.
@@ -347,13 +348,15 @@ GtLlmObjectAssistant >> viewProposalAction [
 		name: 'Propose a view';
 		priority: 1;
 		description: 'Propose a useful Phlow view for this object. Only reply with the Smalltalk code for the view. Look up existing views and their code for reference if needed. Take into account optional user directions if applicable.';
-		format: 'Propose a view (user direction: `{1}`)';
+		addArgument: 'User Instruction';
 		examples: {GtLlmAssistantActionExample new markUnverified
-					input: {'Action' -> 'Propose a view (user direction: ``)'.
+					input: {'Action' -> 'Propose a view'.
+							'Arguments' -> {''}.
 							'Object'
 								-> '{"string":"(1@5)","instanceSlots":[{"name":"x","class":"SmallInteger","value":"1"},{"name":"y","class":"SmallInteger","value":"5"}],"class":"Point"}'}
 							asDictionary;
 					output: {'Action' -> 'Propose a view'.
+							'Arguments' -> {''}.
 							'Object'
 								-> '{"string":"(1@5)","instanceSlots":[{"name":"x","class":"SmallInteger","value":"1"},{"name":"y","class":"SmallInteger","value":"5"}],"class":"Point"}'.
 							'Method'
@@ -364,6 +367,5 @@ GtLlmObjectAssistant >> viewProposalAction [
 		priority: 10;
 		items: [ { ''x'' -> self x. ''y'' -> self y } ];
 		column: ''Axis'' text: #key;
-		column: ''Value'' text: #value'}
-							asDictionary}
+		column: ''Value'' text: #value'} asDictionary}
 ]
