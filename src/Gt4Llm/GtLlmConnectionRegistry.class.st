@@ -62,6 +62,11 @@ GtLlmConnectionRegistry >> addConnection: aConnection [
 ]
 
 { #category : #'as yet unclassified' }
+GtLlmConnectionRegistry >> clearConnections [
+	connections removeAll
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmConnectionRegistry >> connectableConnections [
 	^ self connections select: [ :aConnection | aConnection isConnectable ]
 ]

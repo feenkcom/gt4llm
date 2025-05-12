@@ -85,6 +85,49 @@ GtLlmAssistantByScripterExamples >> chatElementWithMessageTyped [
 ]
 
 { #category : #'as yet unclassified' }
+GtLlmAssistantByScripterExamples >> chatElementWithProviderSelected [
+	<gtExample>
+	| scripter element |
+	scripter := self chatElementWithProviderSelectionOpened.
+	element := scripter element.
+
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Click on Null Provider';
+						onSpaceRoot;
+				id: #'provider-list' ].
+				
+	self assert: (element chatViewModel assistantChat provider isKindOf: GtLlmNullProvider).
+
+
+	^ scripter
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmAssistantByScripterExamples >> chatElementWithProviderSelectionOpened [
+	<gtExample>
+	| scripter element |
+	scripter := self scripterOnAssistantChat.
+	element := scripter element.
+	element chatViewModel newThreadMessageViewModel
+		connectionRegistry: (GtLlmConnectionRegistry new clearConnections
+				addConnection: (GtLlmConnection new
+						label: 'Null';
+						provider: GtLlmNullProvider)).
+
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Click on Dropdown';
+				id: #toolbar;
+				onChildAt: 3 ].
+
+
+	^ scripter
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmAssistantByScripterExamples >> scripterOnAssistantChat [
 	<gtExample>
 	^ BlScripter new element: self assistantChat asElement
