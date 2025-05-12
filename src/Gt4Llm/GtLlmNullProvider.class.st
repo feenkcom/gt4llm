@@ -5,11 +5,36 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
+GtLlmNullProvider class >> default [
+	^ self new
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmNullProvider class >> isConnectable [
+	^ true
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmNullProvider >> format: aFormat [
 ]
 
 { #category : #'as yet unclassified' }
 GtLlmNullProvider >> instructions: aString [
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmNullProvider >> model [
+	^ nil
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmNullProvider >> model: aModelName [
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmNullProvider >> printOn: aStream [
+	aStream
+		nextPutAll: 'Null'
 ]
 
 { #category : #'as yet unclassified' }

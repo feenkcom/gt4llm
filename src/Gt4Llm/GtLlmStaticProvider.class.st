@@ -39,6 +39,12 @@ GtLlmStaticProvider >> nextMessage [
 ]
 
 { #category : #'as yet unclassified' }
+GtLlmStaticProvider >> printOn: aStream [
+	aStream
+		nextPutAll: 'Static'
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmStaticProvider >> sendMessage: aMessage [
 	self chat
 		addMessage: (self userMessageClass new

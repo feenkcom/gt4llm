@@ -1,6 +1,9 @@
 Class {
 	#name : #GtLlmNewThreadMessageViewModel,
 	#superclass : #GtLlmBasicThreadMessageViewModel,
+	#instVars : [
+		'connectionRegistry'
+	],
 	#category : #'Gt4Llm-GToolkit'
 }
 
@@ -17,6 +20,24 @@ GtLlmNewThreadMessageViewModel >> attachFile: aFileReference [
 { #category : #'as yet unclassified' }
 GtLlmNewThreadMessageViewModel >> beSync [
 	threadMessage beSync
+]
+
+{ #category : #accessing }
+GtLlmNewThreadMessageViewModel >> connectionRegistry [
+	^ connectionRegistry
+		ifNil: [ connectionRegistry := GtLlmConnectionRegistry uniqueInstance ]
+]
+
+{ #category : #accessing }
+GtLlmNewThreadMessageViewModel >> connectionRegistry: anObject [
+	connectionRegistry := anObject
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmNewThreadMessageViewModel >> connectionString [
+	^ (self connectionRegistry connectionFor: self provider)
+		ifNil: [ self provider asString ]
+		ifNotNil: #connectionString
 ]
 
 { #category : #accessing }
