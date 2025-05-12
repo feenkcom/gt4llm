@@ -59,10 +59,11 @@ GtLlmNewThreadMessageElement >> buildProviderButton [
 					+ (BrGlamorousWithExplicitDropdownAptitude
 							handle: [ BrButton new beSmallSize
 									aptitude: BrGlamorousButtonWithLabelAptitude - BrGlamorousButtonExteriorAptitude;
-									label: (GtLlmConnectionRegistry uniqueInstance connectionFor: self threadMessageViewModel provider) connectionString ]
+									label: self threadMessageViewModel connectionString ]
 							content: [ | aList |
 								aList := BrSimpleList new fitContent
-										items: GtLlmConnectionRegistry uniqueInstance connectableConnections;
+										id: #'provider-list';
+										items: self threadMessageViewModel connectionRegistry connectableConnections;
 										itemStencil: [ BrLabel new
 												aptitude: BrGlamorousLabelAptitude new
 														+ (BrStyleCommonAptitude new
@@ -73,11 +74,11 @@ GtLlmNewThreadMessageElement >> buildProviderButton [
 										when: BrSelectionChanged
 											do: [ :anEvent | 
 												self threadMessageViewModel
-													provider: (GtLlmConnectionRegistry uniqueInstance connections at: anEvent indices first)
-															buildProvider.
-												aButton label: (GtLlmConnectionRegistry uniqueInstance connectionFor: self threadMessageViewModel provider) connectionString.
+													provider: (self threadMessageViewModel connectionRegistry connections
+															at: anEvent indices first) buildProvider.
+												aButton label: self threadMessageViewModel connectionString.
 												aList fireEvent: BrDropdownHideWish new ] ]);
-			label: (GtLlmConnectionRegistry uniqueInstance connectionFor: self threadMessageViewModel provider) connectionString
+			label: self threadMessageViewModel connectionString
 ]
 
 { #category : #'initialization ' }
