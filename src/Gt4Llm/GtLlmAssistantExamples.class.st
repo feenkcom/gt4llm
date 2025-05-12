@@ -57,7 +57,7 @@ GtLlmAssistantExamples >> assistantWithActionAndFormatAdded [
 			format: 'Text'.
 	tutor addFormat: exampleFormat.
 
-	self assert: tutor instruction formats size equals: 3.
+	self assert: tutor instruction formats size equals: 4.
 	self assert: (tutor formatNamed: 'example') equals: exampleFormat.
 
 	^ tutor
@@ -70,7 +70,7 @@ GtLlmAssistantExamples >> basicAssistant [
 	tutor :=  GtLlmAssistant new.
 	
 	self assert: tutor actions size equals: 1.
-	self assert: tutor instruction formats size equals: 2.
+	self assert: tutor instruction formats size equals: 3.
 	
 	^ tutor
 ]
