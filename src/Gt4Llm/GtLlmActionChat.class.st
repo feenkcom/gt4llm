@@ -60,21 +60,6 @@ GtLlmActionChat >> gtToolsFor: aView [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmActionChat >> messageClassForAnthropic [
-	^ GtLlmActionMessage
-]
-
-{ #category : #'as yet unclassified' }
-GtLlmActionChat >> messageClassForOllama [
-	^ GtLlmActionMessage
-]
-
-{ #category : #'as yet unclassified' }
-GtLlmActionChat >> messageClassForOpenAI [
-	^ GtOpenAIActionMessage
-]
-
-{ #category : #'as yet unclassified' }
 GtLlmActionChat >> onInstance: anInstance [
 	self
 		serializer: (GtLlmActionMessageWithInstanceSerializer new instance: anInstance)
