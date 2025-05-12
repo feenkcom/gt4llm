@@ -11,6 +11,8 @@ GtLlmActionMessageSerializer >> gtInstanceFor: aView [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmActionMessageSerializer >> serialize: aString [
-	^ STONJSON toString: {'Action' -> aString} asDictionary
+GtLlmActionMessageSerializer >> serialize: aCall [
+	^ STONJSON
+		toString: {'Action' -> aCall action.
+				'Arguments' -> aCall arguments} asDictionary
 ]

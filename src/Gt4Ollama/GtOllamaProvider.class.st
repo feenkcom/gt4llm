@@ -45,6 +45,16 @@ GtOllamaProvider >> client: anObject [
 ]
 
 { #category : #'as yet unclassified' }
+GtOllamaProvider >> defaultAssistantMessageClass [
+	^ self chat messageClassForOllama
+]
+
+{ #category : #'as yet unclassified' }
+GtOllamaProvider >> defaultUserMessageClass [
+	^ self chat messageClassForOllama
+]
+
+{ #category : #'as yet unclassified' }
 GtOllamaProvider >> initialize [
 	super initialize.
 
@@ -122,7 +132,9 @@ GtOllamaProvider >> printOn: aStream [
 	aStream
 		nextPutAll: self class providerName;
 		nextPut: $(;
-		nextPutAll: self modelfile directives first text;
+		nextPutAll: (self modelfile
+				ifNil: [ self model ]
+				ifNotNil: [ self modelfile directives first text ]);
 		nextPut: $)
 ]
 

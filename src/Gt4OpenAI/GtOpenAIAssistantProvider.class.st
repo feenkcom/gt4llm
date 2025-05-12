@@ -97,11 +97,6 @@ GtOpenAIAssistantProvider >> defaultAssistantDescription [
 ]
 
 { #category : #'as yet unclassified' }
-GtOpenAIAssistantProvider >> defaultAssistantMessageClass [
-	^ GtOpenAIMessage
-]
-
-{ #category : #'as yet unclassified' }
 GtOpenAIAssistantProvider >> defaultAssistantName [
 	^ 'Tutor - ' , FileLocator home basename
 ]
@@ -109,11 +104,6 @@ GtOpenAIAssistantProvider >> defaultAssistantName [
 { #category : #'as yet unclassified' }
 GtOpenAIAssistantProvider >> defaultTools [
 	^ GtLlmToolsGroup new
-]
-
-{ #category : #'as yet unclassified' }
-GtOpenAIAssistantProvider >> defaultUserMessageClass [
-	^ GtOpenAIMessage
 ]
 
 { #category : #'as yet unclassified' }

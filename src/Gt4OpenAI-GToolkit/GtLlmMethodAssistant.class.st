@@ -75,6 +75,7 @@ You can look up classes, methods and documentation in the current Glamorous Tool
 								-> '{"string":"nil","instanceSlots":[],"class":"UndefinedObject"}'}
 							asDictionary;
 					output: {'Action' -> 'Propose code'.
+							'Arguments' -> nil.
 							'Text' -> nil.
 							'Object'
 								-> '{"string":"nil","instanceSlots":[],"class":"UndefinedObject"}'.

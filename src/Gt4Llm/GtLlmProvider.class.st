@@ -29,6 +29,7 @@ GtLlmProvider class >> new [
 { #category : #accessing }
 GtLlmProvider >> assistantMessageClass [
 	^ assistantMessageClass
+		ifNil: [ assistantMessageClass := self defaultAssistantMessageClass ]
 ]
 
 { #category : #accessing }
@@ -67,14 +68,6 @@ GtLlmProvider >> format: anObject [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmProvider >> initialize [
-	super initialize.
-
-	userMessageClass := self defaultUserMessageClass.
-	assistantMessageClass := self defaultAssistantMessageClass
-]
-
-{ #category : #'as yet unclassified' }
 GtLlmProvider >> sendAssistantMessage: anObject [ 
 	^ self subclassResponsibility
 ]
@@ -82,7 +75,7 @@ GtLlmProvider >> sendAssistantMessage: anObject [
 { #category : #'as yet unclassified' }
 GtLlmProvider >> sendMessage: aMessage [
 	self
-		sendAssistantMessage: (userMessageClass new
+		sendAssistantMessage: (self userMessageClass new
 				content: aMessage;
 				role: 'user';
 				chat: self)
@@ -95,7 +88,7 @@ GtLlmProvider >> status [
 
 { #category : #accessing }
 GtLlmProvider >> userMessageClass [
-	^ userMessageClass
+	^ userMessageClass ifNil: [ userMessageClass := self defaultUserMessageClass ]
 ]
 
 { #category : #accessing }
