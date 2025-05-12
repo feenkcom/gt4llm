@@ -117,21 +117,6 @@ GtLlmChat >> lastUpdate: anObject [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmChat >> messageClassForAnthropic [
-	^ GtAnthropicChatMessage
-]
-
-{ #category : #'as yet unclassified' }
-GtLlmChat >> messageClassForOllama [
-	^ GtLlmChatMessage
-]
-
-{ #category : #'as yet unclassified' }
-GtLlmChat >> messageClassForOpenAI [
-	^ GtOpenAIMessage
-]
-
-{ #category : #'as yet unclassified' }
 GtLlmChat >> messageFromString: aString [
 	^  serializer serialize: aString
 ]
