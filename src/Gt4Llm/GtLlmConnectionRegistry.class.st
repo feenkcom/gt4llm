@@ -76,7 +76,7 @@ GtLlmConnectionRegistry >> connectionFor: aProvider [
 	^ connections
 		detect: [ :aConnection | 
 			aConnection provider = aProvider class
-				and: [ aConnection model = aProvider model ] ]
+				and: [ aConnection model = aProvider modelName ] ]
 		ifNone: [ nil ]
 ]
 
