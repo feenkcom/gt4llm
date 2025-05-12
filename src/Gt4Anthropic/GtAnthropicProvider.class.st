@@ -58,8 +58,18 @@ GtAnthropicProvider >> client: anObject [
 ]
 
 { #category : #'as yet unclassified' }
+GtAnthropicProvider >> defaultAsssistantMessageClass [
+	^ self chat messageClassForAnthropic
+]
+
+{ #category : #'as yet unclassified' }
 GtAnthropicProvider >> defaultMaxTokens [
 	^ 4096
+]
+
+{ #category : #'as yet unclassified' }
+GtAnthropicProvider >> defaultUserMessageClass [
+	^ self chat messageClassForAnthropic
 ]
 
 { #category : #'as yet unclassified' }

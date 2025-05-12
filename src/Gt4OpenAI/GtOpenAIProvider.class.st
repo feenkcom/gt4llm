@@ -40,8 +40,18 @@ GtOpenAIProvider >> chat: anObject [
 ]
 
 { #category : #'as yet unclassified' }
+GtOpenAIProvider >> defaultAssistantMessageClass [
+	^ self chat messageClassForOpenAI
+]
+
+{ #category : #'as yet unclassified' }
 GtOpenAIProvider >> defaultModel [
 	^ 'gpt-4.1'
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAIProvider >> defaultUserMessageClass [
+	^ self chat messageClassForOpenAI
 ]
 
 { #category : #'as yet unclassified' }

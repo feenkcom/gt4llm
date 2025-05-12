@@ -19,18 +19,8 @@ GtOpenAIResponseProvider >> addTool: aTool [
 ]
 
 { #category : #'as yet unclassified' }
-GtOpenAIResponseProvider >> defaultAssistantMessageClass [
-	^ GtOpenAIMessage
-]
-
-{ #category : #'as yet unclassified' }
 GtOpenAIResponseProvider >> defaultTools [
 	^ GtLlmToolsGroup new
-]
-
-{ #category : #'as yet unclassified' }
-GtOpenAIResponseProvider >> defaultUserMessageClass [
-	^ GtOpenAIMessage
 ]
 
 { #category : #'as yet unclassified' }

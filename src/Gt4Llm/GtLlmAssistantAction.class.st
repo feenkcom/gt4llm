@@ -9,7 +9,8 @@ Class {
 		'format',
 		'priority',
 		'definingMethod',
-		'assistant'
+		'assistant',
+		'arguments'
 	],
 	#category : #Gt4Llm
 }
@@ -20,8 +21,23 @@ GtLlmAssistantAction class >> new [
 ]
 
 { #category : #'as yet unclassified' }
+GtLlmAssistantAction >> addArgument: anArgument [
+	arguments add: anArgument
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmAssistantAction >> addExample: anExample [
 	examples add: (anExample action: self)
+]
+
+{ #category : #accessing }
+GtLlmAssistantAction >> arguments [
+	^ arguments
+]
+
+{ #category : #accessing }
+GtLlmAssistantAction >> arguments: anObject [
+	arguments := anObject
 ]
 
 { #category : #'as yet unclassified' }
@@ -33,8 +49,6 @@ GtLlmAssistantAction >> asExpressionSource [
 	    priority: ' , self priority asString
 		, ';
 		description: ' , self description storeString
-		, ';
-		format: ' , self format storeString
 		, ';
 		examples: {' , ('.
 			' join: (self examples collect: #asExpressionSource)) , '}'
@@ -115,16 +129,6 @@ GtLlmAssistantAction >> examples: anObject [
 ]
 
 { #category : #accessing }
-GtLlmAssistantAction >> format [
-	^ format
-]
-
-{ #category : #accessing }
-GtLlmAssistantAction >> format: anObject [
-	format := anObject
-]
-
-{ #category : #accessing }
 GtLlmAssistantAction >> formatReferences [
 	^ (self examples flatCollect: #formatReferences as: Set)
 		sorted: [ :a :b | a priority < b priority ]
@@ -182,7 +186,7 @@ GtLlmAssistantAction >> gtOutputFormatReferencesFor: aView [
 
 { #category : #'as yet unclassified' }
 GtLlmAssistantAction >> hasArgument [
-	^ format formatCount > 0
+	^ arguments isNotEmpty
 ]
 
 { #category : #accessing }
@@ -191,6 +195,7 @@ GtLlmAssistantAction >> initialize [
 
 	self priority: self defaultPriority.
 	self examples: OrderedCollection new.
+	self arguments: OrderedCollection new.
 	self name: ''.
 	self description: ''.
 
@@ -210,8 +215,7 @@ GtLlmAssistantAction >> name [
 
 { #category : #accessing }
 GtLlmAssistantAction >> name: anObject [
-	name := anObject.
-	self format isEmptyOrNil ifTrue: [ self format: name ]
+	name := anObject
 ]
 
 { #category : #accessing }

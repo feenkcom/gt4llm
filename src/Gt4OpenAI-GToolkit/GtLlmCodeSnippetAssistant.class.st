@@ -71,13 +71,16 @@ You can look up classes, methods and documentation in the current Glamorous Tool
 		examples: {GtLlmAssistantActionExample new
 					input: {'Action' -> 'Propose code'.
 							'Code Snippet' -> '15 * 30 ": subtract 5"'.
-							'Object' -> '{"string":"nil","instanceSlots":[],"class":"UndefinedObject"}'.
+							'Object'
+								-> '{"string":"nil","instanceSlots":[],"class":"UndefinedObject"}'.
 							'Variables'
 								-> {{'name' -> 'x'.
 											'value' -> '12'} asDictionary}} asDictionary;
 					output: {'Action' -> 'Propose code'.
+							'Arguments' -> nil.
 							'Text' -> nil.
-							'Object' -> '{"string":"nil","instanceSlots":[],"class":"UndefinedObject"}'.
+							'Object'
+								-> '{"string":"nil","instanceSlots":[],"class":"UndefinedObject"}'.
 							'Code Snippet' -> '(15 * 30) ": subtract 5" - 5'.
 							'Variables' -> nil.
 							'Method' -> nil} asDictionary}
@@ -98,6 +101,7 @@ GtLlmCodeSnippetAssistant >> snippetExplanationAction [
 								-> '{"string":"nil","instanceSlots":[],"class":"UndefinedObject"}'}
 							asDictionary;
 					output: {'Action' -> 'Explain code'.
+							'Arguments' -> nil.
 							'Text'
 								-> 'The snippet performs integer multiplication on the two numbers `15` and `30`. The result should be `450`.'.
 							'Code Snippet' -> '15 * 30'.
@@ -180,6 +184,7 @@ GtLlmCodeSnippetAssistant >> viewProposalAction [
 								-> '{"string":"a GtTMoneyBag","instanceSlots":[{"name":"monies","class":"OrderedCollection","value":"an OrderedCollection(a GtTCurrencyMoney a GtTCurrencyMoney)"}],"class":"GtTMoneyBag"}'.
 							'Variables' -> {}} asDictionary;
 					output: {'Action' -> 'Propose a view'.
+							'Arguments' -> nil.
 							'Object'
 								-> '{"string":"a GtTMoneyBag","instanceSlots":[{"name":"monies","class":"OrderedCollection","value":"an OrderedCollection(a GtTCurrencyMoney a GtTCurrencyMoney)"}],"class":"GtTMoneyBag"}'.
 							'Method'

@@ -34,16 +34,6 @@ GtLlmAssistantAction >> examplesDescription [
 ]
 
 { #category : #'*Gt4Llm-GToolkit' }
-GtLlmAssistantAction >> formatDescription [
-	<magritteDescription>
-	^ MAStringDescription new
-		label: 'Format';
-		beRequired;
-		priority: 5;
-		accessor: #format
-]
-
-{ #category : #'*Gt4Llm-GToolkit' }
 GtLlmAssistantAction >> gtDefinitionFor: aView [
 	<gtView>
 	^ aView explicit
