@@ -32,6 +32,11 @@ GtLlmNullProvider >> model: aModelName [
 ]
 
 { #category : #'as yet unclassified' }
+GtLlmNullProvider >> modelName [
+	^ 'Null'
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmNullProvider >> printOn: aStream [
 	aStream
 		nextPutAll: 'Null'
