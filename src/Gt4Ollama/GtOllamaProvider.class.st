@@ -134,14 +134,14 @@ GtOllamaProvider >> printOn: aStream [
 		nextPut: $(;
 		nextPutAll: (self modelfile
 				ifNil: [ self model ]
-				ifNotNil: [ self modelfile directives first text ]);
+				ifNotNil: [ self modelName ]);
 		nextPut: $)
 ]
 
 { #category : #'as yet unclassified' }
 GtOllamaProvider >> sendAssistantMessage: aMessage [
     | userMessage |
-	userMessage := userMessageClass new merge: aMessage.
+	userMessage := self userMessageClass new merge: aMessage.
 	userMessage role: 'user'.
 	self chat addMessage: userMessage.
 
@@ -181,7 +181,7 @@ GtOllamaProvider >> triggerAssistant [
 		doWhileTrue: [ result toolCalls isNotEmpty ].
 
 	self chat
-		addMessage: (assistantMessageClass new
+		addMessage: (self assistantMessageClass new
 				content: result content;
 				role: 'assistant';
 				chat: self;
