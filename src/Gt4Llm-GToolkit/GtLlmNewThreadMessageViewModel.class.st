@@ -36,7 +36,7 @@ GtLlmNewThreadMessageViewModel >> connectionRegistry: anObject [
 { #category : #'as yet unclassified' }
 GtLlmNewThreadMessageViewModel >> connectionString [
 	^ (self connectionRegistry connectionFor: self provider)
-		ifNil: [ self provider asString ]
+		ifNil: [ self provider modelName ]
 		ifNotNil: #connectionString
 ]
 

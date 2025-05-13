@@ -81,12 +81,6 @@ GtLlmConnectionRegistry >> connectionFor: aProvider [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmConnectionRegistry >> connectionFor: aProviderName andModel: aModelName [
-	^ connections
-		detect: [ :aConnection | aConnection providerName = aProviderName and: [ aConnection model = aModelName ] ]
-]
-
-{ #category : #'as yet unclassified' }
 GtLlmConnectionRegistry >> connections [
 	^ connections
 ]

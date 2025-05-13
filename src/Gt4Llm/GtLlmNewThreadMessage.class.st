@@ -103,16 +103,18 @@ GtLlmNewThreadMessage >> onContentsChangeByRequester: aRequester [
 
 { #category : #actions }
 GtLlmNewThreadMessage >> sendMessage [
-	| aMessageContent |
-	contents ifNil: [ ^ self ].	"todo: add files"
+	| aMessageContent aBlock |
+	contents ifNil: [ ^ self ].
 
 	aMessageContent := self treatString.
 
 	self contents: '' requester: nil.
 
-	isSync
-		ifTrue: [ assistantChat sendMessage: aMessageContent ]
-		ifFalse: [ future := [ assistantChat sendMessage: aMessageContent ] asAsyncPromise ]
+	files
+		ifEmpty: [ aBlock := [ assistantChat sendMessage: aMessageContent ] ]
+		ifNotEmpty: [ assistantChat sendFiles: files withMessage: aMessageContent ].
+
+	isSync ifTrue: [ aBlock value ] ifFalse: [ future := aBlock asAsyncPromise ]
 ]
 
 { #category : #actions }

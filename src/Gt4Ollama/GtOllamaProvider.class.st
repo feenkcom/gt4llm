@@ -6,7 +6,8 @@ Class {
 		'model',
 		'client',
 		'modelfile',
-		'tools'
+		'tools',
+		'files'
 	],
 	#classVars : [
 		'DefaultModel'
@@ -52,6 +53,16 @@ GtOllamaProvider >> defaultAssistantMessageClass [
 { #category : #'as yet unclassified' }
 GtOllamaProvider >> defaultUserMessageClass [
 	^ self chat messageClassForOllama
+]
+
+{ #category : #accessing }
+GtOllamaProvider >> files [
+	^ files
+]
+
+{ #category : #accessing }
+GtOllamaProvider >> files: anObject [
+	files := anObject
 ]
 
 { #category : #'as yet unclassified' }
@@ -102,7 +113,9 @@ GtOllamaProvider >> model: anObject [
 
 { #category : #'as yet unclassified' }
 GtOllamaProvider >> modelName [
-	^ self modelfile directives first text
+	^ self modelfile
+		ifNil: [ self model ]
+		ifNotNil: [ :aFile | aFile directives first text ]
 ]
 
 { #category : #accessing }
@@ -143,6 +156,20 @@ GtOllamaProvider >> sendAssistantMessage: aMessage [
     | userMessage |
 	userMessage := self userMessageClass new merge: aMessage.
 	userMessage role: 'user'.
+	self chat addMessage: userMessage.
+
+	self asyncWait
+]
+
+{ #category : #'as yet unclassified' }
+GtOllamaProvider >> sendFiles: aCollection withMessage: aString [
+	| userMessage |
+	userMessage := self userMessageClass new
+			content: aString;
+			images: (aCollection collect: [ :aFile | aFile binaryContents base64Encoded ]);
+			role: 'user';
+			chat: self.
+
 	self chat addMessage: userMessage.
 
 	self asyncWait
