@@ -110,6 +110,16 @@ GtOllamaClient >> generateResponseWithModel: modelString andPrompt: promptString
 ]
 
 { #category : #accessing }
+GtOllamaClient >> generateResponseWithModel: modelString prompt: promptString andImages: anArrayOfStrings [
+	^ GtOllamaGenerateResponseClient new
+		client: self;
+		model: modelString;
+		prompt: promptString;
+		images: anArrayOfStrings;
+		perform
+]
+
+{ #category : #accessing }
 GtOllamaClient >> get: aString [
 	| aClient |
 	aClient := self initializeClient beOneShot.
