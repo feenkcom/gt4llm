@@ -69,6 +69,11 @@ GtLlmNewThreadMessage >> contents: aString requester: aRequester [
 ]
 
 { #category : #'as yet unclassified' }
+GtLlmNewThreadMessage >> files [
+	^ files
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmNewThreadMessage >> future [
 	^ future
 ]
@@ -110,9 +115,11 @@ GtLlmNewThreadMessage >> sendMessage [
 
 	self contents: '' requester: nil.
 
-	files
+	self files
 		ifEmpty: [ aBlock := [ assistantChat sendMessage: aMessageContent ] ]
 		ifNotEmpty: [ assistantChat sendFiles: files withMessage: aMessageContent ].
+		
+	files := OrderedCollection new.
 
 	isSync ifTrue: [ aBlock value ] ifFalse: [ future := aBlock asAsyncPromise ]
 ]

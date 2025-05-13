@@ -55,6 +55,11 @@ GtLlmNewThreadMessageViewModel >> elementClass [
 	^ GtLlmNewThreadMessageElement
 ]
 
+{ #category : #'as yet unclassified' }
+GtLlmNewThreadMessageViewModel >> files [
+	^ self threadMessage files
+]
+
 { #category : #accessing }
 GtLlmNewThreadMessageViewModel >> onAddMessageContentsRequest: anAnnouncement [
 	self contents: anAnnouncement messageContents requester: nil
