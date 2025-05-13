@@ -43,9 +43,12 @@ GtOpenAIObjectMessage >> gtObjectFor: aView [
 GtOpenAIObjectMessage >> gtViewFor: aView [
 	<gtView>
 	<gtLlmMessageView>
+	| viewObject |
 	self codeBlock isEmptyOrNil ifTrue: [ ^ aView empty ].
+	viewObject := self viewObjectFor: aView.
+	viewObject ifNil: [ ^ aView empty ].
 
-	^ self viewObject
+	^ viewObject
 		title: 'Generated View';
 		priority: 2
 ]
@@ -66,7 +69,7 @@ GtOpenAIObjectMessage >> objectBlock [
 ]
 
 { #category : #'as yet unclassified' }
-GtOpenAIObjectMessage >> viewObject [
+GtOpenAIObjectMessage >> viewObjectFor: aView [
 	| parsed script viewVariableName |
 	parsed := OpalCompiler new
 			source: self codeBlock;
@@ -74,6 +77,9 @@ GtOpenAIObjectMessage >> viewObject [
 			options: #(+ optionParseErrors + optionSkipSemanticWarnings);
 			requestor: nil;
 			parse.
+
+	parsed pragmaNamed: #gtView ifAbsent: [ ^ nil ].
+
 	script := '.'
 			join: (parsed body statements
 					collect: [ :aStatement | 
@@ -84,6 +90,6 @@ GtOpenAIObjectMessage >> viewObject [
 
 	^ OpalCompiler new
 		receiver: self chat serializer instance content;
-		bindings: {viewVariableName -> GtPhlowEmptyView new} asDictionary;
+		bindings: {viewVariableName -> aView} asDictionary;
 		evaluate: script
 ]
