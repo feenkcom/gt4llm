@@ -37,16 +37,15 @@ GtLlmNewActionThreadMessageElement >> buildAttachButton [
 								aptitude: BrGlamorousButtonWithIconAptitude - BrGlamorousButtonWithLabelTooltipAptitude2
 										- BrGlamorousButtonExteriorAptitude;
 								icon: BrGlamorousVectorIcons changes ]
-						content: [ :aDropdown | 
-							BrFileSelector new
+						content: [ BrFileSelector new
 								folder: FileLocator home;
 								padding: (BlInsets all: 8);
 								fileFilterBlock: [ :aFileReference | 
 									aFileReference isFile
 										and: [ (FileSystemDirectoryEntry reference: aFileReference) isHidden not ] ];
-								okAction: [ :aFile | 
+								okAction: [ :aFile :anOkButton | 
 									self threadMessageViewModel attachFile: aFile.
-									aDropdown fireEvent: BrDropdownHideWish new ] ]);
+									anOkButton fireEvent: BrDropdownHideWish new ] ]);
 		label: 'Attach';
 		icon: BrGlamorousVectorIcons changes;
 		margin: (BlInsets all: 3);

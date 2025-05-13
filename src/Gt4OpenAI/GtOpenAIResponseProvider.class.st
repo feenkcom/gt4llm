@@ -89,6 +89,22 @@ GtOpenAIResponseProvider >> performToolCallsIn: result [
 	^ self executeWait
 ]
 
+{ #category : #'as yet unclassified' }
+GtOpenAIResponseProvider >> sendFiles: aListOfFileReferences withMessage: aString [
+	self
+		sendAssistantMessage: (self userMessageClass new
+				content: {{'type' -> 'input_text'.
+							'text' -> aString} asDictionary}
+						, (aListOfFileReferences
+								collect: [ :aFileReference | 
+									{'type' -> 'input_image'.
+										'image_url'
+											-> ('data:image/jpeg;base64,' , aFileReference binaryContents base64Encoded)}
+										asDictionary ]);
+				role: 'user';
+				chat: self)
+]
+
 { #category : #accessing }
 GtOpenAIResponseProvider >> tools [
 	^ tools

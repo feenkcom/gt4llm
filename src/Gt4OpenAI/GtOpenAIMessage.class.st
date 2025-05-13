@@ -130,7 +130,7 @@ GtOpenAIMessage >> contentText [
 		ifFalse: [ ''
 				join: (content
 						collect: [ :aValue | 
-							(aValue at: 'text')
+							(aValue at: 'text' ifAbsent: [ nil ])
 								ifNil: [ '' ]
 								ifNotNil: [ :aTextObject | 
 									(aTextObject isKindOf: String)
@@ -171,21 +171,6 @@ GtOpenAIMessage >> gtAnnotationsFor: aView [
 		priority: 2;
 		object: [ self annotations ];
 		view: #gtAnnotationsFor:
-]
-
-{ #category : #'as yet unclassified' }
-GtOpenAIMessage >> gtMessageFilesFor: aView [
-	<gtView>
-	<gtLlmMessageView>
-	| messageFiles |
-	messageFiles := self messageFiles.
-
-	messageFiles ifEmpty: [ ^ aView empty ].
-
-	"for some reason we need this instead of a forward for the layout in the message to work"
-	^ (messageFiles gtFilesFor: aView) 
-		title: 'Message files';
-		priority: 10
 ]
 
 { #category : #testing }
@@ -257,10 +242,16 @@ GtOpenAIMessage >> isUserRole [
 GtOpenAIMessage >> messageFiles [
 	self contentText = self content ifTrue: [ ^ GtOpenAIFilesGroup new ].
 
-	^ GtOpenAIFilesGroup
-		withAll: (self content
-				select: [ :aValue | aValue type = 'image_file' ]
-				thenCollect: [ :aValue | self chat assistant client getFile: ((aValue at: 'image_file') at: 'file_id') ])
+	^ self content
+		select: [ :aValue | (aValue at: 'type') = 'input_image' ]
+		thenCollect: [ :aValue | 
+			| byteArray |
+			byteArray := ((aValue at: 'image_url')
+					removePrefix: 'data:image/jpeg;base64,') base64Decoded.
+			SkiaImage
+				fromBuffer: byteArray
+				start: 0
+				end: byteArray size - 1 ]
 ]
 
 { #category : #accessing }

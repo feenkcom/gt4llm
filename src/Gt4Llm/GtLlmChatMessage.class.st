@@ -8,7 +8,8 @@ Class {
 		'createdAt',
 		'chat',
 		'attachments',
-		'announcer'
+		'announcer',
+		'images'
 	],
 	#category : #Gt4Llm
 }
@@ -103,6 +104,19 @@ GtLlmChatMessage >> content: anObject [
 	self announce: GtLlmMessageContentsUpdated new
 ]
 
+{ #category : #accessing }
+GtLlmChatMessage >> contentFiles [
+	^ (self content isKindOf: String)
+		ifTrue: [ {} ]
+		ifFalse: [ content
+				select: [ :aValue | (aValue at: #type) = 'image' ]
+				thenCollect: [ :aValue | 
+					aValue
+						at: #source
+						at: #data
+						ifAbsent: [ '' ] ] ]
+]
+
 { #category : #'as yet unclassified' }
 GtLlmChatMessage >> contentJson [
 	^ STONJSON fromString: self contentText
@@ -115,7 +129,12 @@ GtLlmChatMessage >> contentSummary [
 
 { #category : #accessing }
 GtLlmChatMessage >> contentText [
-	^ self content
+	^ (self content isKindOf: String)
+		ifTrue: [ content ]
+		ifFalse: [ ''
+				join: (content
+						select: [ :aValue | (aValue at: #type) = 'text' ]
+						thenCollect: [ :aValue | (aValue at: #text) ifNil: [ '' ] ]) ]
 ]
 
 { #category : #accessing }
@@ -140,6 +159,22 @@ GtLlmChatMessage >> gtActionInspectFor: anAction [
 	^ super gtActionInspectFor: anAction
 ]
 
+{ #category : #'as yet unclassified' }
+GtLlmChatMessage >> gtMessageFilesFor: aView [
+	<gtView>
+	<gtLlmMessageView>
+	| messageFiles |
+	messageFiles := self messageFiles.
+
+	messageFiles ifEmpty: [ ^ aView empty ].
+
+	^ aView columnedList
+		title: 'Files';
+		items: [ messageFiles ];
+		column: 'Extent' text: #extent;
+		column: 'Size' text: [ :aFile | aFile imageInfo byteSize  ]
+]
+
 { #category : #accessing }
 GtLlmChatMessage >> hasResponse [
 	^ true
@@ -158,6 +193,16 @@ GtLlmChatMessage >> id [
 { #category : #'as yet unclassified' }
 GtLlmChatMessage >> id: anId [
 	id := anId
+]
+
+{ #category : #accessing }
+GtLlmChatMessage >> images [
+	^ images
+]
+
+{ #category : #accessing }
+GtLlmChatMessage >> images: anObject [
+	images := anObject
 ]
 
 { #category : #accessing }
@@ -201,6 +246,32 @@ GtLlmChatMessage >> isUserRole [
 	^ self role = 'user'
 ]
 
+{ #category : #'as yet unclassified' }
+GtLlmChatMessage >> messageFiles [
+	self images
+		ifNotNil: [ ^ self images
+				collect: [ :aBase64Image | 
+					| aByteArray |
+					aByteArray := aBase64Image base64Decoded.
+					SkiaImage
+						fromBuffer: aByteArray
+						start: 0
+						end: aByteArray size - 1 ] ].
+
+	self contentFiles
+		ifNotEmpty: [ :contentFiles | 
+			^ contentFiles
+				collect: [ :aBase64Image | 
+					| aByteArray |
+					aByteArray := aBase64Image base64Decoded.
+					SkiaImage
+						fromBuffer: aByteArray
+						start: 0
+						end: aByteArray size - 1 ] ].
+
+	^ {}
+]
+
 { #category : #'announcer - subscription' }
 GtLlmChatMessage >> removeSubscription: subscription [
 	"Remove the given subscription from the receiver"
@@ -237,6 +308,10 @@ GtLlmChatMessage >> serialize [
 						collect: [ :aFile | 
 							{'file_id' -> aFile remoteId.
 								'tools' -> {{'type' -> 'file_search'} asDictionary}} asDictionary ]) ].
+								
+	self images ifNotNil: [
+		serialized at: 'images' put: self images.
+	].
 
 	^ serialized
 ]
