@@ -165,6 +165,24 @@ GtAnthropicProvider >> sendAssistantMessage: aMessage [
 ]
 
 { #category : #'as yet unclassified' }
+GtAnthropicProvider >> sendFiles: aListOfFileReferences withMessage: aString [
+	self
+		sendAssistantMessage: (self userMessageClass new
+				content: {{'type' -> 'text'.
+							'text' -> aString} asDictionary}
+						, (aListOfFileReferences
+								collect: [ :aFileReference | 
+									{'type' -> 'image'.
+										'source'
+											-> {'type' -> 'base64'.
+													'media_type' -> 'image/jpeg'.
+													'data' -> aFileReference binaryContents base64Encoded} asDictionary}
+										asDictionary ]);
+				role: 'user';
+				chat: self)
+]
+
+{ #category : #'as yet unclassified' }
 GtAnthropicProvider >> status [
 	^ assistantWorking
 		ifTrue: [ GtLlmAssistantChatWorkingStatus new ]

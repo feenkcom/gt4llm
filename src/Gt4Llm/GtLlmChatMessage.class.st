@@ -8,7 +8,8 @@ Class {
 		'createdAt',
 		'chat',
 		'attachments',
-		'announcer'
+		'announcer',
+		'images'
 	],
 	#category : #Gt4Llm
 }
@@ -103,6 +104,19 @@ GtLlmChatMessage >> content: anObject [
 	self announce: GtLlmMessageContentsUpdated new
 ]
 
+{ #category : #accessing }
+GtLlmChatMessage >> contentFiles [
+	^ (self content isKindOf: String)
+		ifTrue: [ {} ]
+		ifFalse: [ content
+				select: [ :aValue | (aValue at: #type) = 'image' ]
+				thenCollect: [ :aValue | 
+					aValue
+						at: #source
+						at: #data
+						ifAbsent: [ '' ] ] ]
+]
+
 { #category : #'as yet unclassified' }
 GtLlmChatMessage >> contentJson [
 	^ STONJSON fromString: self contentText
@@ -115,7 +129,12 @@ GtLlmChatMessage >> contentSummary [
 
 { #category : #accessing }
 GtLlmChatMessage >> contentText [
-	^ self content
+	^ (self content isKindOf: String)
+		ifTrue: [ content ]
+		ifFalse: [ ''
+				join: (content
+						select: [ :aValue | (aValue at: #type) = 'text' ]
+						thenCollect: [ :aValue | (aValue at: #text) ifNil: [ '' ] ]) ]
 ]
 
 { #category : #accessing }
@@ -158,6 +177,16 @@ GtLlmChatMessage >> id [
 { #category : #'as yet unclassified' }
 GtLlmChatMessage >> id: anId [
 	id := anId
+]
+
+{ #category : #accessing }
+GtLlmChatMessage >> images [
+	^ images
+]
+
+{ #category : #accessing }
+GtLlmChatMessage >> images: anObject [
+	images := anObject
 ]
 
 { #category : #accessing }
@@ -237,6 +266,10 @@ GtLlmChatMessage >> serialize [
 						collect: [ :aFile | 
 							{'file_id' -> aFile remoteId.
 								'tools' -> {{'type' -> 'file_search'} asDictionary}} asDictionary ]) ].
+								
+	self images ifNotNil: [
+		serialized at: 'images' put: self images.
+	].
 
 	^ serialized
 ]

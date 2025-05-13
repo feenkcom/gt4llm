@@ -36,7 +36,7 @@ GtLlmNewThreadMessageViewModel >> connectionRegistry: anObject [
 { #category : #'as yet unclassified' }
 GtLlmNewThreadMessageViewModel >> connectionString [
 	^ (self connectionRegistry connectionFor: self provider)
-		ifNil: [ self provider asString ]
+		ifNil: [ self provider modelName ]
 		ifNotNil: #connectionString
 ]
 
@@ -53,6 +53,11 @@ GtLlmNewThreadMessageViewModel >> contents: aString requester: aRequester [
 { #category : #accessing }
 GtLlmNewThreadMessageViewModel >> elementClass [
 	^ GtLlmNewThreadMessageElement
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmNewThreadMessageViewModel >> files [
+	^ self threadMessage files
 ]
 
 { #category : #accessing }

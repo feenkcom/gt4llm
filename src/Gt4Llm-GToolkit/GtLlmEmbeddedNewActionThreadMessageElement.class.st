@@ -8,7 +8,8 @@ Class {
 		'sendButton',
 		'toolbar',
 		'toggleGroup',
-		'descriptionElement'
+		'descriptionElement',
+		'imagesElement'
 	],
 	#category : #'Gt4Llm-GToolkit'
 }
@@ -37,16 +38,16 @@ GtLlmEmbeddedNewActionThreadMessageElement >> buildAttachButton [
 								aptitude: BrGlamorousButtonWithIconAptitude - BrGlamorousButtonWithLabelTooltipAptitude2
 										- BrGlamorousButtonExteriorAptitude;
 								icon: BrGlamorousVectorIcons changes ]
-						content: [ :aDropdown | 
-							BrFileSelector new
+						content: [ BrFileSelector new
 								folder: FileLocator home;
 								padding: (BlInsets all: 8);
 								fileFilterBlock: [ :aFileReference | 
 									aFileReference isFile
 										and: [ (FileSystemDirectoryEntry reference: aFileReference) isHidden not ] ];
-								okAction: [ :aFile | 
+								okAction: [ :aFile :anOkButton | 
 									self threadMessageViewModel attachFile: aFile.
-									aDropdown fireEvent: BrDropdownHideWish new ] ]);
+									self updateImagesElement.
+									anOkButton fireEvent: BrDropdownHideWish new ] ]);
 		label: 'Attach';
 		icon: BrGlamorousVectorIcons changes;
 		margin: (BlInsets all: 3);
@@ -124,6 +125,7 @@ GtLlmEmbeddedNewActionThreadMessageElement >> initialize [
 	self initializeDescriptionElement.
 	self initializeContentsElement.
 	self initializeToolbar.
+	self initializeImagesElement.
 	self
 		addChild: (BrScrollPane new vFitContent
 				aptitude: BrScrollPaneAptitude;
@@ -131,6 +133,7 @@ GtLlmEmbeddedNewActionThreadMessageElement >> initialize [
 		as: #toggle.
 	self addChild: descriptionElement as: #description.
 	self addChild: contentsElement as: #contents.
+	self addChild: imagesElement as: #images.
 	self addChild: toolbar as: #toolbar.
 
 	self hMatchParent.
@@ -161,6 +164,11 @@ GtLlmEmbeddedNewActionThreadMessageElement >> initializeDescriptionElement [
 			vFitContentLimited;
 			aptitude: (BrGlamorousRegularEditorAptitude new
 					foreground: BrGlamorousColors disabledButtonTextColor)
+]
+
+{ #category : #'initialization ' }
+GtLlmEmbeddedNewActionThreadMessageElement >> initializeImagesElement [
+	imagesElement := BrHorizontalPane new fitContent clipChildren: false
 ]
 
 { #category : #'initialization ' }
@@ -251,7 +259,25 @@ GtLlmEmbeddedNewActionThreadMessageElement >> updateContentsElement [
 GtLlmEmbeddedNewActionThreadMessageElement >> updateElement [
 	self updateToggleGroup.
 	self updateContentsElement.
-	self updateToolbar
+	self updateToolbar.
+	self updateImagesElement
+]
+
+{ #category : #'private - updating' }
+GtLlmEmbeddedNewActionThreadMessageElement >> updateImagesElement [
+	imagesElement removeChildren.
+
+	self threadMessageViewModel files
+		do: [ :aFile | 
+			imagesElement
+				addChild: (BrDeletableFileWidget new
+						vExact: 100;
+						hExact: 100;
+						isDeletable: true;
+						file: aFile;
+						onDeletion: [ :aFileForDeletion | 
+							self threadMessageViewModel files remove: aFileForDeletion.
+							self updateImagesElement ]) ]
 ]
 
 { #category : #'private - updating' }

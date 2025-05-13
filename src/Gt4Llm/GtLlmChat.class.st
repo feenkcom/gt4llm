@@ -137,7 +137,7 @@ GtLlmChat >> messages: anObject [
 GtLlmChat >> provider [
 	^ provider
 		ifNil: [ provider := GtLlmConnectionRegistry uniqueInstance defaultConnection
-					buildProvider ]
+					buildProvider chat: self ]
 ]
 
 { #category : #accessing }
@@ -166,6 +166,13 @@ GtLlmChat >> responseFormat [
 { #category : #accessing }
 GtLlmChat >> sendAssistantMessage: aMessage [
 	^ self provider sendAssistantMessage: aMessage
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmChat >> sendFiles: aListOfFileReferences withMessage: aString [
+	self provider
+		sendFiles: aListOfFileReferences
+		withMessage: (self messageFromString: aString)
 ]
 
 { #category : #accessing }
