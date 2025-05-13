@@ -8,7 +8,8 @@ Class {
 		'sendButton',
 		'toolbar',
 		'toggleGroup',
-		'descriptionElement'
+		'descriptionElement',
+		'imagesElement'
 	],
 	#category : #'Gt4Llm-GToolkit'
 }
@@ -45,6 +46,7 @@ GtLlmNewActionThreadMessageElement >> buildAttachButton [
 										and: [ (FileSystemDirectoryEntry reference: aFileReference) isHidden not ] ];
 								okAction: [ :aFile :anOkButton | 
 									self threadMessageViewModel attachFile: aFile.
+									self updateImagesElement.
 									anOkButton fireEvent: BrDropdownHideWish new ] ]);
 		label: 'Attach';
 		icon: BrGlamorousVectorIcons changes;
@@ -123,6 +125,7 @@ GtLlmNewActionThreadMessageElement >> initialize [
 	self initializeDescriptionElement.
 	self initializeContentsElement.
 	self initializeToolbar.
+	self initializeImagesElement.
 	self
 		addChild: (BrScrollPane new
 				aptitude: BrScrollPaneAptitude;
@@ -130,6 +133,7 @@ GtLlmNewActionThreadMessageElement >> initialize [
 		as: #toggle.
 	self addChild: descriptionElement as: #description.
 	self addChild: contentsElement as: #contents.
+	self addChild: imagesElement as: #images.
 	self addChild: toolbar as: #toolbar.
 
 	self hMatchParent.
@@ -160,6 +164,11 @@ GtLlmNewActionThreadMessageElement >> initializeDescriptionElement [
 			vFitContentLimited;
 			aptitude: (BrGlamorousRegularEditorAptitude new
 					foreground: BrGlamorousColors disabledButtonTextColor)
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmNewActionThreadMessageElement >> initializeImagesElement [
+	imagesElement := BrHorizontalPane new fitContent clipChildren: false
 ]
 
 { #category : #'initialization ' }
@@ -250,7 +259,25 @@ GtLlmNewActionThreadMessageElement >> updateContentsElement [
 GtLlmNewActionThreadMessageElement >> updateElement [
 	self updateToggleGroup.
 	self updateContentsElement.
-	self updateToolbar
+	self updateToolbar.
+	self updateImagesElement
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmNewActionThreadMessageElement >> updateImagesElement [
+	imagesElement removeChildren.
+
+	self threadMessageViewModel files
+		do: [ :aFile | 
+			imagesElement
+				addChild: (BrDeletableFileWidget new
+						vExact: 100;
+						hExact: 100;
+						isDeletable: true;
+						file: aFile;
+						onDeletion: [ :aFileForDeletion | 
+							self threadMessageViewModel files remove: aFileForDeletion.
+							self updateImagesElement ]) ]
 ]
 
 { #category : #'private - updating' }

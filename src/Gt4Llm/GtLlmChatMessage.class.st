@@ -159,22 +159,6 @@ GtLlmChatMessage >> gtActionInspectFor: anAction [
 	^ super gtActionInspectFor: anAction
 ]
 
-{ #category : #'as yet unclassified' }
-GtLlmChatMessage >> gtMessageFilesFor: aView [
-	<gtView>
-	<gtLlmMessageView>
-	| messageFiles |
-	messageFiles := self messageFiles.
-
-	messageFiles ifEmpty: [ ^ aView empty ].
-
-	^ aView columnedList
-		title: 'Files';
-		items: [ messageFiles ];
-		column: 'Extent' text: #extent;
-		column: 'Size' text: [ :aFile | aFile imageInfo byteSize  ]
-]
-
 { #category : #accessing }
 GtLlmChatMessage >> hasResponse [
 	^ true
@@ -244,32 +228,6 @@ GtLlmChatMessage >> isToolRole [
 { #category : #accessing }
 GtLlmChatMessage >> isUserRole [
 	^ self role = 'user'
-]
-
-{ #category : #'as yet unclassified' }
-GtLlmChatMessage >> messageFiles [
-	self images
-		ifNotNil: [ ^ self images
-				collect: [ :aBase64Image | 
-					| aByteArray |
-					aByteArray := aBase64Image base64Decoded.
-					SkiaImage
-						fromBuffer: aByteArray
-						start: 0
-						end: aByteArray size - 1 ] ].
-
-	self contentFiles
-		ifNotEmpty: [ :contentFiles | 
-			^ contentFiles
-				collect: [ :aBase64Image | 
-					| aByteArray |
-					aByteArray := aBase64Image base64Decoded.
-					SkiaImage
-						fromBuffer: aByteArray
-						start: 0
-						end: aByteArray size - 1 ] ].
-
-	^ {}
 ]
 
 { #category : #'announcer - subscription' }
