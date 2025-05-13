@@ -139,6 +139,8 @@ GtLlmReificationForm >> commit [
 	self installActionsOn: newAssistant.
 	self installFormatComponentsOn: newAssistant.
 	newAssistant adoptInstance: self message chat assistant.
+	self message chat provider assistantMessageClass: newMessages.
+	self message chat provider userMessageClass: newMessages.
 	self message chat messages
 		do: [ :aMessage | newMessages adoptInstance: aMessage ]
 ]
