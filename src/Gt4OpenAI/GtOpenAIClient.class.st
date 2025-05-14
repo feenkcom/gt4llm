@@ -156,13 +156,17 @@ GtOpenAIClient >> defaultBaseUrl [
 
 { #category : #accessing }
 GtOpenAIClient >> delete: aUrl [
-	| aClient |
+	| aClient response |
 	aClient := self initializeClient.
 	aClient url: self baseUrl / aUrl.
 	
 	aClient entity: nil.
 
-	^ self checkForErrors: aClient delete
+	response := aClient delete.
+	
+	history add: (aClient request -> aClient response).
+	
+	^ response
 ]
 
 { #category : #accessing }
@@ -300,13 +304,11 @@ GtOpenAIClient >> getRun: aRunId forThread: aThreadId [
 { #category : #'as yet unclassified' }
 GtOpenAIClient >> gtCallsFor: aView [
 	<gtView>
-	^ aView columnedList
+	^ aView forward
 		title: 'Calls';
 		priority: 5;
-		items: [ history ];
-		column: 'URL' text: [ :aPair | aPair key url ];
-		column: 'Method' text: [ :aPair | aPair key method ];
-		send: #value
+		object: [ history ];
+		view: #gtCallsFor:
 ]
 
 { #category : #accessing }

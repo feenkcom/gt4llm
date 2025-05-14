@@ -48,6 +48,11 @@ GtLlmProvider >> chat: anObject [
 ]
 
 { #category : #'as yet unclassified' }
+GtLlmProvider >> client [
+	^ self subclassResponsibility
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmProvider >> defaultAssistantMessageClass [
 	^ GtLlmAssistantMessage
 ]
@@ -65,6 +70,16 @@ GtLlmProvider >> format [
 { #category : #accessing }
 GtLlmProvider >> format: anObject [
 	format := anObject
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmProvider >> gtCallsFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Calls';
+		priority: 1;
+		object: [ self client ];
+		view: #gtCallsFor:
 ]
 
 { #category : #'as yet unclassified' }

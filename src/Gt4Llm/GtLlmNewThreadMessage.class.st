@@ -27,6 +27,11 @@ GtLlmNewThreadMessage >> annotations [
 	^ {} asDictionary
 ]
 
+{ #category : #'as yet unclassified' }
+GtLlmNewThreadMessage >> asViewModel [
+	^ GtLlmNewThreadMessageViewModel new threadMessage: self
+]
+
 { #category : #accessing }
 GtLlmNewThreadMessage >> assistantChat [
 	^ assistantChat
@@ -76,6 +81,18 @@ GtLlmNewThreadMessage >> files [
 { #category : #'as yet unclassified' }
 GtLlmNewThreadMessage >> future [
 	^ future
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmNewThreadMessage >> gtLiveFor: aView [
+	<gtView>
+	^ aView explicit
+		title: 'Live';
+		priority: 1;
+		stencil: [ self asViewModel asElement
+				margin: (BlInsets all: 10);
+				background: Color white;
+				addAptitude: BrShadowAptitude new ]
 ]
 
 { #category : #accessing }

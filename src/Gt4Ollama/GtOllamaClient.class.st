@@ -2,7 +2,8 @@ Class {
 	#name : #GtOllamaClient,
 	#superclass : #Object,
 	#instVars : [
-		'baseUrl'
+		'baseUrl',
+		'history'
 	],
 	#category : #Gt4Ollama
 }
@@ -121,11 +122,16 @@ GtOllamaClient >> generateResponseWithModel: modelString prompt: promptString an
 
 { #category : #accessing }
 GtOllamaClient >> get: aString [
-	| aClient |
+	| aClient response |
 	aClient := self initializeClient beOneShot.
 	aClient url: self baseUrl / aString.
 
-	^ self checkForErrors: aClient get
+
+	response := aClient get.
+	
+	history add: (aClient request -> aClient response).
+	
+	^ response
 ]
 
 { #category : #accessing }
@@ -134,6 +140,16 @@ GtOllamaClient >> getModelInformationFor: aName [
 		client: self;
 		model: aName;
 		perform
+]
+
+{ #category : #'as yet unclassified' }
+GtOllamaClient >> gtCallsFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Calls';
+		priority: 5;
+		object: [ history ];
+		view: #gtCallsFor:
 ]
 
 { #category : #accessing }
@@ -160,7 +176,9 @@ GtOllamaClient >> gtRunningModelsFor: aView [
 GtOllamaClient >> initialize [
 	super initialize.
 	
-	self baseUrl: self defaultBaseUrl
+	self baseUrl: self defaultBaseUrl.
+	
+	history := GtLlmRequestHistory new
 ]
 
 { #category : #accessing }
@@ -179,13 +197,17 @@ GtOllamaClient >> listRunningModels [
 
 { #category : #accessing }
 GtOllamaClient >> post: aString withEntity: anEntity [
-	| aClient |
+	| aClient response |
 	aClient := self initializeClient beOneShot.
 	aClient url: self baseUrl / aString.
 
 	aClient contents: anEntity.
 
-	^ self checkForErrors: aClient post
+	response := aClient post.
+	
+	history add: (aClient request -> aClient response).
+	
+	^ response
 ]
 
 { #category : #accessing }
