@@ -32,8 +32,7 @@ GtOpenAIMessage class >> serializationProperties [
 		#metadata -> #metadata.
 		#run_id -> #runId.
 		#thread_id -> #threadId.
-		#role -> #role.
-		#attachments -> #attachments
+		#role -> #role
 	}
 ]
 
