@@ -1,5 +1,5 @@
 Class {
-	#name : #GTLlmRequestHistory,
+	#name : #GtLlmRequestHistory,
 	#superclass : #OrderedCollection,
 	#category : #Gt4Llm
 }
