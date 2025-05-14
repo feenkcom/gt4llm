@@ -68,26 +68,6 @@ GtOpenAIMessage >> assistantId: anObject [
 ]
 
 { #category : #accessing }
-GtOpenAIMessage >> attachments [
-	^ attachments
-]
-
-{ #category : #accessing }
-GtOpenAIMessage >> attachments: anObject [
-	attachments := anObject
-]
-
-{ #category : #accessing }
-GtOpenAIMessage >> chat [
-	^ chat
-]
-
-{ #category : #accessing }
-GtOpenAIMessage >> chat: anObject [
-	chat := anObject
-]
-
-{ #category : #accessing }
 GtOpenAIMessage >> completedAt [
 	^ completedAt
 ]
