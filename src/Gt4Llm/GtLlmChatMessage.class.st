@@ -247,14 +247,6 @@ GtLlmChatMessage >> senderText [
 GtLlmChatMessage >> serialize [
 	| serialized |
 	serialized := super serialize.
-
-	self attachments
-		ifNotNil: [ serialized
-				at: 'attachments'
-				put: (self attachments
-						collect: [ :aFile | 
-							{'file_id' -> aFile remoteId.
-								'tools' -> {{'type' -> 'file_search'} asDictionary}} asDictionary ]) ].
 								
 	self images ifNotNil: [
 		serialized at: 'images' put: self images.
