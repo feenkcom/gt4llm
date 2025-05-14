@@ -7,7 +7,6 @@ Class {
 		'id',
 		'createdAt',
 		'chat',
-		'attachments',
 		'announcer',
 		'images'
 	],
@@ -70,16 +69,6 @@ GtLlmChatMessage >> announcer [
 { #category : #accessing }
 GtLlmChatMessage >> asTokenizableString [
 	^ '<|im_start|>' , self role , '<|im_sep|>' , self content , '<|im_end|>'
-]
-
-{ #category : #accessing }
-GtLlmChatMessage >> attachments [
-	^ attachments
-]
-
-{ #category : #accessing }
-GtLlmChatMessage >> attachments: anObject [
-	attachments := anObject
 ]
 
 { #category : #accessing }
@@ -258,14 +247,6 @@ GtLlmChatMessage >> senderText [
 GtLlmChatMessage >> serialize [
 	| serialized |
 	serialized := super serialize.
-
-	self attachments
-		ifNotNil: [ serialized
-				at: 'attachments'
-				put: (self attachments
-						collect: [ :aFile | 
-							{'file_id' -> aFile remoteId.
-								'tools' -> {{'type' -> 'file_search'} asDictionary}} asDictionary ]) ].
 								
 	self images ifNotNil: [
 		serialized at: 'images' put: self images.

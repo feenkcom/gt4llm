@@ -163,11 +163,6 @@ GtLlmChat >> responseFormat [
 	^ self provider format
 ]
 
-{ #category : #accessing }
-GtLlmChat >> sendAssistantMessage: aMessage [
-	^ self provider sendAssistantMessage: aMessage
-]
-
 { #category : #'as yet unclassified' }
 GtLlmChat >> sendFiles: aListOfFileReferences withMessage: aString [
 	self provider

@@ -32,8 +32,7 @@ GtOpenAIMessage class >> serializationProperties [
 		#metadata -> #metadata.
 		#run_id -> #runId.
 		#thread_id -> #threadId.
-		#role -> #role.
-		#attachments -> #attachments
+		#role -> #role
 	}
 ]
 
@@ -65,26 +64,6 @@ GtOpenAIMessage >> assistantId [
 { #category : #accessing }
 GtOpenAIMessage >> assistantId: anObject [
 	assistantId := anObject
-]
-
-{ #category : #accessing }
-GtOpenAIMessage >> attachments [
-	^ attachments
-]
-
-{ #category : #accessing }
-GtOpenAIMessage >> attachments: anObject [
-	attachments := anObject
-]
-
-{ #category : #accessing }
-GtOpenAIMessage >> chat [
-	^ chat
-]
-
-{ #category : #accessing }
-GtOpenAIMessage >> chat: anObject [
-	chat := anObject
 ]
 
 { #category : #accessing }
