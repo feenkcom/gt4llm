@@ -323,7 +323,7 @@ GtOpenAIClient >> gtModelsFor: aView [
 GtOpenAIClient >> initialize [
 	super initialize.
 	
-	history := GTLlmRequestHistory new.
+	history := GtLlmRequestHistory new.
 
 	self baseUrl: self defaultBaseUrl
 ]
