@@ -32,6 +32,11 @@ GtLlmBasicThreadMessageViewModel >> announcer [
 	^ announcer ifNil: [ announcer := Announcer new ]
 ]
 
+{ #category : #'as yet unclassified' }
+GtLlmBasicThreadMessageViewModel >> asElement [
+	^ self elementClass new threadMessageViewModel: self
+]
+
 { #category : #accessing }
 GtLlmBasicThreadMessageViewModel >> checkerInstance [
 	^ threadMessage chat checkerInstance

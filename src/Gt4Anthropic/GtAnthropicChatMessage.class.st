@@ -44,7 +44,10 @@ GtAnthropicChatMessage >> actionModel [
 GtAnthropicChatMessage >> contentText [
 	^ (content isKindOf: String)
 		ifTrue: [ content ]
-		ifFalse: [ '' join: (content collect: [ :aValue | (aValue at: #text) ifNil: [ '' ] ]) ]
+		ifFalse: [ ''
+				join: (content
+						select: [ :aValue | (aValue at: #type) = 'text' ]
+						thenCollect: [ :aValue | (aValue at: #text) ifNil: [ '' ] ]) ]
 ]
 
 { #category : #accessing }

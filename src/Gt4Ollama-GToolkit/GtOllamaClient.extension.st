@@ -2,13 +2,18 @@ Extension { #name : #GtOllamaClient }
 
 { #category : #'*Gt4Ollama-GToolkit' }
 GtOllamaClient >> delete: aString withEntity: anEntity [
-	ZnClient new
+	| aClient |
+	aClient := ZnClient new.
+	
+	aClient
 		timeout: 600;
 		beOneShot;
 		url: self baseUrl / aString;
 		method: #DELETE;
 		entity: (ZnEntity json: (STONJSON toString: anEntity));
-		execute
+		execute.
+
+	history add: (aClient request -> aClient response).
 ]
 
 { #category : #'*Gt4Ollama-GToolkit' }
@@ -34,5 +39,7 @@ GtOllamaClient >> postStreaming: aString withEntity: anEntity [
 
 	aResult size > 0 ifTrue: [ self checkForErrors: aResult first ].
 
+	history add: (aClient request -> aClient response).
+	
 	^ aResult
 ]

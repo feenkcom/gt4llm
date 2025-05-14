@@ -21,8 +21,7 @@ GtLlmActionChatViewModel >> gtAssistantChatFor: aView [
 { #category : #accessing }
 GtLlmActionChatViewModel >> initialize [
 	super initialize.
-	newThreadMessageViewModel := GtLlmNewActionThreadMessageViewModel new
-			threadMessage: GtLlmNewActionThreadMessage new
+	newThreadMessageViewModel := GtLlmNewActionThreadMessage new asViewModel
 ]
 
 { #category : #accessing }
