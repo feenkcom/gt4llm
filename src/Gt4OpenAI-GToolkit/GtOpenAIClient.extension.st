@@ -13,15 +13,19 @@ GtOpenAIClient >> initializeClient [
 
 { #category : #'*Gt4OpenAI-GToolkit' }
 GtOpenAIClient >> postStreaming: aString withEntity: anEntity [
-	| aClient |
+	| aClient response |
 	aClient := self initializeClient
 			streaming: true;
 			contentReader: nil.
 	aClient url: self baseUrl / aString.
 
 	aClient contents: anEntity.
+.
+	response := aClient post.
+	
+	history add: (aClient request -> aClient response).
 
-	^ aClient post
+	^ self checkForErrors: response
 ]
 
 { #category : #'*Gt4OpenAI-GToolkit' }

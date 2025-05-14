@@ -3,7 +3,8 @@ Class {
 	#superclass : #GtOpenAIProvider,
 	#instVars : [
 		'tools',
-		'instructions'
+		'instructions',
+		'executions'
 	],
 	#category : #Gt4OpenAI
 }
@@ -24,10 +25,20 @@ GtOpenAIResponseProvider >> defaultTools [
 ]
 
 { #category : #'as yet unclassified' }
+GtOpenAIResponseProvider >> gtExecutionsFor: aView [
+	<gtView>
+	^ aView list
+		title: 'Executions';
+		items: [ executions ];
+		priority: 10
+]
+
+{ #category : #'as yet unclassified' }
 GtOpenAIResponseProvider >> gtToolsFor: aView [
 	<gtView>
 	^ aView forward
 		title: 'Tools';
+		priority: 5;
 		object: [ tools ];
 		view: #gtItemsFor:
 ]
@@ -55,7 +66,9 @@ GtOpenAIResponseProvider >> handleToolCall: aToolCall [
 GtOpenAIResponseProvider >> initialize [
 	super initialize.
 
-	tools := self defaultTools
+	tools := self defaultTools.
+	
+	executions := OrderedCollection new.
 ]
 
 { #category : #accessing }
