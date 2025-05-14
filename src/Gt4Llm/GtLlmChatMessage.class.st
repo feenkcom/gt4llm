@@ -7,7 +7,6 @@ Class {
 		'id',
 		'createdAt',
 		'chat',
-		'attachments',
 		'announcer',
 		'images'
 	],
@@ -70,16 +69,6 @@ GtLlmChatMessage >> announcer [
 { #category : #accessing }
 GtLlmChatMessage >> asTokenizableString [
 	^ '<|im_start|>' , self role , '<|im_sep|>' , self content , '<|im_end|>'
-]
-
-{ #category : #accessing }
-GtLlmChatMessage >> attachments [
-	^ attachments
-]
-
-{ #category : #accessing }
-GtLlmChatMessage >> attachments: anObject [
-	attachments := anObject
 ]
 
 { #category : #accessing }
