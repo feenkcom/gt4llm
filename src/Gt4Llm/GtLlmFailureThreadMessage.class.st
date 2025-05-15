@@ -24,6 +24,11 @@ GtLlmFailureThreadMessage >> annotations [
 	^ #()
 ]
 
+{ #category : #'as yet unclassified' }
+GtLlmFailureThreadMessage >> arguments [
+	^ {}
+]
+
 { #category : #accessing }
 GtLlmFailureThreadMessage >> chat [
 	^ chat

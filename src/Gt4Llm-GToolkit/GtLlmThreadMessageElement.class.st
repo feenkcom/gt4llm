@@ -4,11 +4,8 @@ Class {
 	#traits : 'TGtLlmWithThreadMessageViewModel + TBrLayoutResizable',
 	#classTraits : 'TGtLlmWithThreadMessageViewModel classTrait + TBrLayoutResizable classTrait',
 	#instVars : [
-		'senderElement',
 		'contentsElement',
 		'progressElement',
-		'timeElement',
-		'headerElement',
 		'timeTooltip'
 	],
 	#category : #'Gt4Llm-GToolkit'
@@ -43,11 +40,6 @@ GtLlmThreadMessageElement >> defaultLayout [
 ]
 
 { #category : #'private - updating' }
-GtLlmThreadMessageElement >> hideHeaderElement [
-	headerElement visibility: BlVisibility gone.
-]
-
-{ #category : #'private - updating' }
 GtLlmThreadMessageElement >> hideProgressElement [
 	contentsElement visibility: BlVisibility visible.
 	progressElement visibility: BlVisibility gone.
@@ -56,15 +48,9 @@ GtLlmThreadMessageElement >> hideProgressElement [
 { #category : #initialization }
 GtLlmThreadMessageElement >> initialize [
 	super initialize.
-	self initializeHeaderElement.
-	self initializeSenderElement.
-	self initializeTimeElement.
 	self initializeContentsElement.
 	self initializeProgressElement.
 
-	self addChild: headerElement as: #header.
-	headerElement addChild: senderElement as: #sender.
-	headerElement addChild: timeElement as: #time.
 	self addChild: contentsElement as: #contents.
 	self addChild: progressElement as: #progress.
 
@@ -84,13 +70,6 @@ GtLlmThreadMessageElement >> initializeContentsElement [
 ]
 
 { #category : #initialization }
-GtLlmThreadMessageElement >> initializeHeaderElement [
-	headerElement := BrHorizontalPane new
-			hFitContentLimited;
-			vFitContent
-]
-
-{ #category : #initialization }
 GtLlmThreadMessageElement >> initializeProgressElement [
 	progressElement := BrLabel new
 			fitContent;
@@ -99,30 +78,6 @@ GtLlmThreadMessageElement >> initializeProgressElement [
 			beSmallSize;
 			text: 'Typing...';
 			visibility: BlVisibility gone
-]
-
-{ #category : #initialization }
-GtLlmThreadMessageElement >> initializeSenderElement [
-	senderElement := BrLabel new
-			hFitContentLimited;
-			vFitContent;
-			aptitude: (BrGlamorousLabelAptitude new
-					foreground: BrGlamorousColors disabledButtonTextColor);
-			beSmallSize;
-			text: ''
-]
-
-{ #category : #initialization }
-GtLlmThreadMessageElement >> initializeTimeElement [
-	timeTooltip := BrGlamorousWithExplicitTooltipAptitude text: 'unknown time'.
-	timeElement := BrLabel new
-			updatingDateAndTimeModel;
-			fitContent;
-			beSmallSize;
-			aptitude: (BrGlamorousLabelAptitude new
-					foreground: BrGlamorousColors disabledButtonTextColor);
-			addAptitude: timeTooltip;
-			text: ''
 ]
 
 { #category : #'private - announcement handling' }
@@ -175,8 +130,6 @@ GtLlmThreadMessageElement >> updateContentsElement [
 
 { #category : #'private - updating' }
 GtLlmThreadMessageElement >> updateElement [
-	self updateSenderElement.
-	self updateTimeElement.
 	self updateContentsElement.
 	self updateProgressElement.
 	self updateFailureIndicator.
@@ -194,22 +147,4 @@ GtLlmThreadMessageElement >> updateProgressElement [
 	self threadMessage hasResponse
 		ifTrue: [ self hideProgressElement ]
 		ifFalse: [ self showProgressElement ]
-]
-
-{ #category : #'private - updating' }
-GtLlmThreadMessageElement >> updateSenderElement [
-	self threadMessage isAssistantRole
-		ifTrue: [ senderElement text: 'Assistant' ]
-		ifFalse: [ self threadMessage isSystemRole
-				ifTrue: [ senderElement text: 'System' ]
-				ifFalse: [ senderElement text: 'You' ] ]
-]
-
-{ #category : #'private - updating' }
-GtLlmThreadMessageElement >> updateTimeElement [
-	timeElement updatingDateAndTime: threadMessageViewModel createdAt.
-
-	timeTooltip
-		text: (String
-				streamContents: [ :s | threadMessageViewModel createdAt asLocal printSeparateDateAndTimeOn: s ])
 ]
