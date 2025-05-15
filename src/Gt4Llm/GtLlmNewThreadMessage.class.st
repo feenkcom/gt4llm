@@ -78,18 +78,6 @@ GtLlmNewThreadMessage >> future [
 	^ future
 ]
 
-{ #category : #'as yet unclassified' }
-GtLlmNewThreadMessage >> gtLiveFor: aView [
-	<gtView>
-	^ aView explicit
-		title: 'Live';
-		priority: 1;
-		stencil: [ self asViewModel asElement
-				margin: (BlInsets all: 10);
-				background: Color white;
-				addAptitude: BrShadowAptitude new ]
-]
-
 { #category : #accessing }
 GtLlmNewThreadMessage >> id [
 	^ '87fe83dd-90cd-0d00-9ada-2ba30d0bb652'
