@@ -13,6 +13,5 @@ GtLlmProvisionalThreadMessage >> gtContentFor: aView [
 		title: 'Content';
 		priority: 1;
 		stencil: [ GtLlmThreadMessageElement new
-				threadMessageViewModel: (GtLlmThreadMessageViewModel new threadMessage: self);
-				hideHeaderElement ]
+				threadMessageViewModel: (GtLlmThreadMessageViewModel new threadMessage: self) ]
 ]
