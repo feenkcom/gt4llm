@@ -33,16 +33,6 @@ GtLlmConnection >> details [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmConnection >> gtActionSpawnProviderFor: anAction [
-	<gtAction>
-	^ anAction button
-		icon: BrGlamorousVectorIcons playinspect;
-		label: 'Provider';
-		priority: 10;
-		action: [ :aButton | aButton phlow spawnObject: self buildProvider ]
-]
-
-{ #category : #'as yet unclassified' }
 GtLlmConnection >> gtDetailsFor: aView [
 	<gtView>
 	^ aView columnedList
