@@ -1,6 +1,9 @@
 Class {
 	#name : #GtLlmFileSearchTool,
 	#superclass : #GtLlmTool,
+	#instVars : [
+		'vectorStoreIds'
+	],
 	#category : #Gt4Llm
 }
 
@@ -15,6 +18,19 @@ GtLlmFileSearchTool >> description [
 ]
 
 { #category : #'as yet unclassified' }
+GtLlmFileSearchTool >> functionResponse [
+	^ {'type' -> type.
+		'vector_store_ids' -> self vectorStoreIds} asDictionary
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmFileSearchTool >> initialize [
+	super initialize.
+	
+	vectorStoreIds := {}
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmFileSearchTool >> name [
 	^ 'File search'
 ]
@@ -22,4 +38,14 @@ GtLlmFileSearchTool >> name [
 { #category : #'as yet unclassified' }
 GtLlmFileSearchTool >> parameters [
 	^ #()
+]
+
+{ #category : #accessing }
+GtLlmFileSearchTool >> vectorStoreIds [
+	^ vectorStoreIds
+]
+
+{ #category : #accessing }
+GtLlmFileSearchTool >> vectorStoreIds: anObject [
+	vectorStoreIds := anObject
 ]

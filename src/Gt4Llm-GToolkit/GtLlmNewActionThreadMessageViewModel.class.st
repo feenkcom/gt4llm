@@ -23,3 +23,15 @@ GtLlmNewActionThreadMessageViewModel >> currentAction: anObject [
 GtLlmNewActionThreadMessageViewModel >> elementClass [
 	^ GtLlmEmbeddedNewActionThreadMessageElement
 ]
+
+{ #category : #'as yet unclassified' }
+GtLlmNewActionThreadMessageViewModel >> gtLiveFor: aView [
+	<gtView>
+	^ aView explicit
+		title: 'Live';
+		priority: 1;
+		stencil: [ self asElement
+				margin: (BlInsets all: 10);
+				background: Color white;
+				addAptitude: BrShadowAptitude new ]
+]

@@ -40,6 +40,11 @@ GtOpenAIProvider >> chat: anObject [
 ]
 
 { #category : #'as yet unclassified' }
+GtOpenAIProvider >> client [
+	^ client
+]
+
+{ #category : #'as yet unclassified' }
 GtOpenAIProvider >> defaultAssistantMessageClass [
 	^ self chat messageClassForOpenAI
 ]
@@ -123,7 +128,9 @@ GtOpenAIProvider >> triggerAssistant [
 			andMessages: self chat messages.
 
 	self chat
-		addMessage: (self assistantMessageClass new content: result choices first message content).
+		addMessage: (self assistantMessageClass new
+				content: result choices first message content;
+				role: 'assistant').
 
 	assistantWorking := false.
 	self chat signalRunIsDone

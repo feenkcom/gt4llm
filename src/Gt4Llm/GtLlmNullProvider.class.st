@@ -15,6 +15,11 @@ GtLlmNullProvider class >> isConnectable [
 ]
 
 { #category : #'as yet unclassified' }
+GtLlmNullProvider >> client [
+	^ nil
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmNullProvider >> format: aFormat [
 ]
 

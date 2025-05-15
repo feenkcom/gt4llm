@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'baseUrl',
 		'apiKey',
-		'version'
+		'version',
+		'history'
 	],
 	#classVars : [
 		'ApiKeyFile'
@@ -111,14 +112,28 @@ GtAnthropicClient >> get: aUrl [
 
 { #category : #'as yet unclassified' }
 GtAnthropicClient >> get: aUrl withParams: aListOfAssocs [
-	| aClient |
+	| aClient response |
 	aClient := self initializeClient.
 	aClient url: self baseUrl / aUrl.
 	aListOfAssocs do: [ :aPair | aClient queryAt: aPair key put: aPair value ].
 
 	aClient entity: nil.
 
-	^ self checkForErrors: aClient get
+	response := aClient get.
+	
+	history add: (aClient request -> aClient response).
+	
+	^ response
+]
+
+{ #category : #'as yet unclassified' }
+GtAnthropicClient >> gtCallsFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Calls';
+		priority: 5;
+		object: [ history ];
+		view: #gtCallsFor:
 ]
 
 { #category : #'as yet unclassified' }
@@ -136,7 +151,9 @@ GtAnthropicClient >> initialize [
 	super initialize.
 	
 	self baseUrl: self defaultBaseUrl.
-	self version: self defaultVersion
+	self version: self defaultVersion.
+	
+	history := GtLlmRequestHistory new
 ]
 
 { #category : #'as yet unclassified' }
@@ -159,13 +176,17 @@ GtAnthropicClient >> listModels [
 
 { #category : #'as yet unclassified' }
 GtAnthropicClient >> post: aUrl withEntity: anEntity [
-	| aClient |
+	| aClient response |
 	aClient := self initializeClient.
 	aClient url: self baseUrl / aUrl.
 
 	aClient contents: anEntity.
 
-	^ self checkForErrors: aClient post
+	response := aClient post.
+	
+	history add: (aClient request -> aClient response).
+	
+	^ response
 ]
 
 { #category : #accessing }

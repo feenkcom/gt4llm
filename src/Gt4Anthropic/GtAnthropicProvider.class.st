@@ -68,6 +68,11 @@ GtAnthropicProvider >> defaultMaxTokens [
 ]
 
 { #category : #'as yet unclassified' }
+GtAnthropicProvider >> defaultModel [
+	^ 'claude-3-7-sonnet-20250219'
+]
+
+{ #category : #'as yet unclassified' }
 GtAnthropicProvider >> defaultUserMessageClass [
 	^ self chat messageClassForAnthropic
 ]
@@ -91,7 +96,8 @@ GtAnthropicProvider >> initialize [
 	self initializeClient.
 	
 	tools := GtLlmToolsGroup new.
-	maxTokens := self defaultMaxTokens
+	maxTokens := self defaultMaxTokens.
+	model := self defaultModel
 ]
 
 { #category : #'as yet unclassified' }
