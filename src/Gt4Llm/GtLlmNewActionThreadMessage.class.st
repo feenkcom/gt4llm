@@ -7,11 +7,6 @@ Class {
 	#category : #Gt4Llm
 }
 
-{ #category : #'as yet unclassified' }
-GtLlmNewActionThreadMessage >> asViewModel [
-	^ GtLlmNewActionThreadMessageViewModel new threadMessage: self
-]
-
 { #category : #accessing }
 GtLlmNewActionThreadMessage >> currentAction [
 	^ currentAction

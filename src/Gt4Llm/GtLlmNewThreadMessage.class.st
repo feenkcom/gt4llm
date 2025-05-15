@@ -27,11 +27,6 @@ GtLlmNewThreadMessage >> annotations [
 	^ {} asDictionary
 ]
 
-{ #category : #'as yet unclassified' }
-GtLlmNewThreadMessage >> asViewModel [
-	^ GtLlmNewThreadMessageViewModel new threadMessage: self
-]
-
 { #category : #accessing }
 GtLlmNewThreadMessage >> assistantChat [
 	^ assistantChat
