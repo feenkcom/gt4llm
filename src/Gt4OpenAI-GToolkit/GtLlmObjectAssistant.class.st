@@ -5,6 +5,34 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
+GtLlmObjectAssistant >> actionProposalAction [
+	<gtLlmAssistantAction>
+	^ GtLlmAssistantAction new
+		name: 'Propose an action';
+		priority: 5;
+		description: 'Propose a useful Phlow action for this object. Only reply with the Smalltalk code for the action. Look up existing actions and their code for reference if needed. Take into account optional user directions if applicable.';
+		addArgument: 'User Instruction';
+		examples: {GtLlmAssistantActionExample new markUnverified
+					input: {'Action' -> 'Propose an action'.
+							'Arguments' -> {''}.
+							'Object'
+								-> '{"string":"(1@5)","instanceSlots":[{"name":"x","class":"SmallInteger","value":"1"},{"name":"y","class":"SmallInteger","value":"5"}],"class":"Point"}'}
+							asDictionary;
+					output: {'Action' -> 'Propose an action'.
+							'Arguments' -> {''}.
+							'Object'
+								-> '{"string":"(1@5)","instanceSlots":[{"name":"x","class":"SmallInteger","value":"1"},{"name":"y","class":"SmallInteger","value":"5"}],"class":"Point"}'.
+							'Method'
+								-> 'gtGotoXActionFor: anAction
+	<gtAction>
+	^ anAction button
+		icon: BrGlamorousVectorIcons inspect;
+		label: ''Go to X'';
+		priority: 10;
+		action: [:aButton | aButton phlow spawnObject: self x]'} asDictionary}
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmObjectAssistant >> chatOn: anObject [
 	| chat |
 	chat := GtLlmActionChat new
@@ -27,7 +55,7 @@ GtLlmObjectAssistant >> explanationAction [
 	<gtLlmAssistantAction>
 	^ GtLlmAssistantAction new
 		name: 'Explain the object';
-		priority: 2;
+		priority: 10;
 		description: 'Explain the object, including its layout, its purpose, and other interesting facts. Use tools if necessary. Stick to the facts you can verify and avoid speculation.';
 		examples: {GtLlmAssistantActionExample new markUnverified
 					input: {'Action' -> 'Explain the object'.
@@ -346,7 +374,7 @@ GtLlmObjectAssistant >> viewProposalAction [
 	<gtLlmAssistantAction>
 	^ GtLlmAssistantAction new
 		name: 'Propose a view';
-		priority: 1;
+		priority: 5;
 		description: 'Propose a useful Phlow view for this object. Only reply with the Smalltalk code for the view. Look up existing views and their code for reference if needed. Take into account optional user directions if applicable.';
 		addArgument: 'User Instruction';
 		examples: {GtLlmAssistantActionExample new markUnverified

@@ -10,6 +10,40 @@ GtOpenAIObjectMessage >> codeBlock [
 ]
 
 { #category : #'as yet unclassified' }
+GtOpenAIObjectMessage >> gtActionFor: aView [
+	<gtView>
+	<gtLlmMessageView>
+	| view |
+	self action isEmptyOrNil ifTrue: [ ^ aView empty ].
+
+	view := aView textEditor
+			title: 'Action';
+			priority: 3;
+			text: [ self action ].
+	self chat
+		ifNotNil: [ view
+				actionButtonLabel: 'Action'
+					action: [ :aButton | aButton phlow spawnObject: (self chat assistant actionNamed: self action) ];
+				styler: [ BlCompositeStyler new
+						stylers: {GtLlmMessageStyler new threadMessageViewModel: self asViewModel.
+								GtLlmThreadMessageStyler new annotations: self annotations.
+								GtLlmAssistantFormatTextStyler new assistant: self chat assistant} ] ].
+	^ view
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAIObjectMessage >> gtArgumentsFor: aView [
+	<gtView>
+	<gtLlmMessageView>
+	self action isEmptyOrNil ifTrue: [ ^ aView empty ].
+
+	^ aView list
+			title: 'Arguments';
+			priority: 4;
+			items: [ self arguments ]
+]
+
+{ #category : #'as yet unclassified' }
 GtOpenAIObjectMessage >> gtCodeFor: aView [
 	<gtView>
 	<gtLlmMessageView>

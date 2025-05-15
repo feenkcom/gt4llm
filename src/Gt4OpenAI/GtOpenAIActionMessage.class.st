@@ -14,6 +14,11 @@ GtOpenAIActionMessage >> actionModel [
 				ifFalse: [ nil ] ]
 ]
 
+{ #category : #'as yet unclassified' }
+GtOpenAIActionMessage >> arguments [
+	^ self contentJson at: 'Arguments'
+]
+
 { #category : #'trait-TGtActionMessage' }
 GtOpenAIActionMessage >> gtPromoteToExampleActionFor: anAction [
 	<gtLlmAction>

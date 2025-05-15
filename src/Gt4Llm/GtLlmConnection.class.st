@@ -26,6 +26,34 @@ GtLlmConnection >> connectionString [
 ]
 
 { #category : #'as yet unclassified' }
+GtLlmConnection >> details [
+	^ {'Provider' -> self provider providerName.
+		'Model' -> self model.
+		'Label' -> self label}
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmConnection >> gtActionSpawnProviderFor: anAction [
+	<gtAction>
+	^ anAction button
+		icon: BrGlamorousVectorIcons playinspect;
+		label: 'Provider';
+		priority: 10;
+		action: [ :aButton | aButton phlow spawnObject: self buildProvider ]
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmConnection >> gtDetailsFor: aView [
+	<gtView>
+	^ aView columnedList
+		title: 'Details';
+		priority: 10;
+		items: [ self details ];
+		column: 'Property' text: #key;
+		column: 'Value' text: #value
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmConnection >> hash [
 	^ self model hash xor: self provider hash
 ]
