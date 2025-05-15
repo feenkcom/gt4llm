@@ -21,5 +21,5 @@ GtLlmNewActionThreadMessage >> currentAction: anObject [
 GtLlmNewActionThreadMessage >> treatString [
 	^ GtLlmActionCall new
 		action: currentAction name;
-		arguments: {contents asString}
+		arguments: (currentAction hasArgument ifTrue: [ {contents asString} ] ifFalse: [ {} ])
 ]

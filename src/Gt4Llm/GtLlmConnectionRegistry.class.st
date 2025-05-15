@@ -116,6 +116,14 @@ GtLlmConnectionRegistry >> initialize [
 ]
 
 { #category : #'as yet unclassified' }
+GtLlmConnectionRegistry >> labelForModel: aModel [
+	^ connections
+		detect: [ :aConnection | aConnection model = aModel ]
+		ifFound: [ :aConnection | aConnection label ]
+		ifNone: [ aModel ]
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmConnectionRegistry >> standardDefaultConnection [
 	^ GtLlmConnection new
 		provider: GtOpenAIResponseProvider;

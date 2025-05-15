@@ -12,14 +12,13 @@ GtLlmThreadMessageHeaderElement >> addActionElement [
 	aFrame := BrFrame new matchParent.
 
 	aFrame
-		padding: (BlInsets left: 15 right: 15);
+		padding: (BlInsets left: 0 right: 15);
 		addChild: (BrLabel new
 				hFitContentLimited;
 				vFitContent;
-				aptitude: (BrGlamorousLabelAptitude new
-						foreground: BrGlamorousColors disabledButtonTextColor);
+				aptitude: BrGlamorousLabelAptitude new;
 				beSmallSize;
-				text: self threadMessageViewModel action;
+				text: self threadMessageViewModel actionString;
 				when: BlClickEvent
 					do: [ :anEvent | anEvent target phlow spawnObject: self threadMessageViewModel actionModel ]).
 
@@ -35,26 +34,11 @@ GtLlmThreadMessageHeaderElement >> addSenderElement [
 				aptitude: (BrGlamorousLabelAptitude new
 						foreground: BrGlamorousColors disabledButtonTextColor);
 				beSmallSize;
-				text: self threadMessageViewModel senderText)
-]
-
-{ #category : #accessing }
-GtLlmThreadMessageHeaderElement >> addTimeElement [
-	| timeTooltip |
-	timeTooltip := BrGlamorousWithExplicitTooltipAptitude
-			text: (String
-					streamContents: [ :s | self threadMessageViewModel createdAt asLocal printSeparateDateAndTimeOn: s ]).
-
-	self
-		addChild: (BrLabel new
-				updatingDateAndTimeModel;
-				fitContent;
-				beSmallSize;
-				aptitude: (BrGlamorousLabelAptitude new
-						foreground: BrGlamorousColors disabledButtonTextColor);
-				addAptitude: timeTooltip;
-				updatingDateAndTime: self threadMessageViewModel createdAt;
-				yourself)
+				text: self threadMessageViewModel senderText
+						, (self threadMessageViewModel hasAction ifTrue: [ ':' ] ifFalse: [ '' ]);
+				addAptitude: (BrGlamorousWithExplicitTooltipAptitude
+						text: (String
+								streamContents: [ :s | self threadMessageViewModel createdAt asLocal printSeparateDateAndTimeOn: s ])))
 ]
 
 { #category : #accessing }
@@ -75,6 +59,5 @@ GtLlmThreadMessageHeaderElement >> updateElement [
 	self removeChildren.
 	
 	self addSenderElement.
-	self addTimeElement.
 	self addActionElement
 ]

@@ -248,13 +248,6 @@ GtOpenAIMessage >> runId: anObject [
 ]
 
 { #category : #accessing }
-GtOpenAIMessage >> senderText [
-	self isAssistantRole ifTrue: [ ^ 'Assistant' ].
-	self isSystemRole ifTrue: [ ^ 'System' ].
-	^ 'You'
-]
-
-{ #category : #accessing }
 GtOpenAIMessage >> step [
 	^ step
 ]
