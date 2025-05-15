@@ -11,18 +11,18 @@ GtOpenAIResponseProvider >> executeWait [
 					tools: tools
 					andFormat: format.
 
-			aMessage := format
-					ifNil: [ self streamingMessageFrom: result ]
-					ifNotNil: [ result hasToolCalls ifTrue: [ ^ self performToolCallsIn: result ].
-						self assistantMessageClass new
-							model: self model;
-							merge: (result output detect: [ :anOutput | (anOutput rawData at: 'type') = 'message' ]) ].
+			result hasToolCalls
+				ifTrue: [ self performToolCallsIn: result ]
+				ifFalse: [ aMessage := format
+							ifNil: [ self streamingMessageFrom: result ]
+							ifNotNil: [ self assistantMessageClass new
+									model: self model;
+									merge: (result output detect: [ :anOutput | (anOutput rawData at: 'type') = 'message' ]) ].
 
 
-			self chat addMessage: aMessage.
-
-			self chat signalRunIsDone.
-			assistantWorking := false ] asAsyncFuture
+					self chat addMessage: aMessage.
+					self chat signalRunIsDone.
+					assistantWorking := false ] ] asAsyncFuture
 				await: GtOpenAIUtilities executionConfiguration)
 ]
 
