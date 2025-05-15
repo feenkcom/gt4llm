@@ -40,6 +40,11 @@ GtOpenAIProvider >> chat: anObject [
 ]
 
 { #category : #'as yet unclassified' }
+GtOpenAIProvider >> client [
+	^ client
+]
+
+{ #category : #'as yet unclassified' }
 GtOpenAIProvider >> defaultAssistantMessageClass [
 	^ self chat messageClassForOpenAI
 ]
