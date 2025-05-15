@@ -58,7 +58,8 @@ GtLlmChatViewModel >> threadMessageViewModels [
 					aViewModel := threadMessageViewModelsCache
 							at: aMessage id
 							ifPresent: [ :theViewModel | theViewModel threadMessage: aMessage ]
-							ifAbsentPut: [ aMessage asViewModel isExpanded: lastMessage = aMessage ].
+							ifAbsentPut: [ aMessage asViewModel
+									isExpanded: (lastMessage = aMessage and: [ aMessage isToolRole not ]) ].
 					aStream nextPut: aViewModel ].
 			aStatus := assistantChat status.
 

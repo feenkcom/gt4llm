@@ -15,6 +15,7 @@ GtOpenAIResponseProvider >> executeWait [
 					ifNil: [ self streamingMessageFrom: result ]
 					ifNotNil: [ result hasToolCalls ifTrue: [ ^ self performToolCallsIn: result ].
 						self assistantMessageClass new
+							model: self model;
 							merge: (result output detect: [ :anOutput | (anOutput rawData at: 'type') = 'message' ]) ].
 
 
@@ -32,6 +33,7 @@ GtOpenAIResponseProvider >> streamingMessageFrom: aResult [
 
 	aMessage := self assistantMessageClass new
 			role: 'assistant';
+			model: self model;
 			content: ''.
 	aResult notifyOnOutput: aMessage.
 

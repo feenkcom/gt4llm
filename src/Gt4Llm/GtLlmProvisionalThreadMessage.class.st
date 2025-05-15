@@ -10,7 +10,7 @@ Class {
 
 { #category : #accessing }
 GtLlmProvisionalThreadMessage >> action [
-	^ ''
+	^ nil
 ]
 
 { #category : #'as yet unclassified' }
@@ -21,6 +21,11 @@ GtLlmProvisionalThreadMessage >> ancestor [
 { #category : #accessing }
 GtLlmProvisionalThreadMessage >> annotations [
 	^ #()
+]
+
+{ #category : #accessing }
+GtLlmProvisionalThreadMessage >> arguments [
+	^ {}
 ]
 
 { #category : #accessing }

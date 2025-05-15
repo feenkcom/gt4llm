@@ -8,7 +8,8 @@ Class {
 		'createdAt',
 		'chat',
 		'announcer',
-		'images'
+		'images',
+		'model'
 	],
 	#category : #Gt4Llm
 }
@@ -64,6 +65,11 @@ GtLlmChatMessage >> announce: anAnnouncement [
 GtLlmChatMessage >> announcer [
 	<return: #Announcer>
 	^ announcer ifNil: [announcer := Announcer new]
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmChatMessage >> arguments [
+	^ [ self contentJson at: 'Arguments' ] on: Error do: [ nil ]
 ]
 
 { #category : #accessing }
@@ -219,6 +225,16 @@ GtLlmChatMessage >> isUserRole [
 	^ self role = 'user'
 ]
 
+{ #category : #accessing }
+GtLlmChatMessage >> model [
+	^ model
+]
+
+{ #category : #accessing }
+GtLlmChatMessage >> model: anObject [
+	model := anObject
+]
+
 { #category : #'announcer - subscription' }
 GtLlmChatMessage >> removeSubscription: subscription [
 	"Remove the given subscription from the receiver"
@@ -237,7 +253,10 @@ GtLlmChatMessage >> role: anObject [
 
 { #category : #accessing }
 GtLlmChatMessage >> senderText [
-	self isAssistantRole ifTrue: [ ^ 'Assistant' ].
+	self isAssistantRole
+		ifTrue: [ ^ self model
+				ifNil: [ 'Assistant' ]
+				ifNotNil: [ :aModel | GtLlmConnectionRegistry uniqueInstance labelForModel: aModel ] ].
 	self isSystemRole ifTrue: [ ^ 'System' ].
 	self isToolRole ifTrue: [ ^ 'Tool' ].
 	^ 'You'

@@ -130,6 +130,7 @@ GtOpenAIProvider >> triggerAssistant [
 	self chat
 		addMessage: (self assistantMessageClass new
 				content: result choices first message content;
+				model: self model;
 				role: 'assistant').
 
 	assistantWorking := false.

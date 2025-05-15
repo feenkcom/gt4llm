@@ -159,5 +159,6 @@ GtLlmBasicThreadMessageViewModel >> subscribeToThreadMessage [
 { #category : #'as yet unclassified' }
 GtLlmBasicThreadMessageViewModel >> uiInsets [
 	self threadMessage isAssistantRole ifTrue: [ ^ BlInsets right: 50 ].
+	self threadMessage isToolRole ifTrue: [ ^ BlInsets left: 25 right: 25 ].
 	^ BlInsets left: 50
 ]

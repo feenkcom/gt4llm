@@ -17,11 +17,6 @@ GtLlmActionThreadMessageViewModel >> action: anObject [
 	action := anObject
 ]
 
-{ #category : #'as yet unclassified' }
-GtLlmActionThreadMessageViewModel >> actionModel [
-	^ self threadMessage actionModel
-]
-
 { #category : #accessing }
 GtLlmActionThreadMessageViewModel >> elementClass [
 	^ GtLlmExpandableThreadMessageElement

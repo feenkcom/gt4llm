@@ -2,7 +2,6 @@ Class {
 	#name : #GtAnthropicChatMessage,
 	#superclass : #GtLlmChatMessage,
 	#instVars : [
-		'model',
 		'stopReason',
 		'stopSequence',
 		'type',
@@ -48,16 +47,6 @@ GtAnthropicChatMessage >> contentText [
 				join: (content
 						select: [ :aValue | (aValue at: #type) = 'text' ]
 						thenCollect: [ :aValue | (aValue at: #text) ifNil: [ '' ] ]) ]
-]
-
-{ #category : #accessing }
-GtAnthropicChatMessage >> model [
-	^ model
-]
-
-{ #category : #accessing }
-GtAnthropicChatMessage >> model: anObject [
-	model := anObject
 ]
 
 { #category : #'as yet unclassified' }

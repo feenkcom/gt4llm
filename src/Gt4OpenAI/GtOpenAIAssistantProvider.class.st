@@ -136,8 +136,10 @@ GtOpenAIAssistantProvider >> getApiFile: anId [
 { #category : #'as yet unclassified' }
 GtOpenAIAssistantProvider >> getMessages [
 	^ thread updateMessages
-		collect: [ :aThreadMessage |
-			self assistantMessageClass new merge: aThreadMessage ]
+		collect: [ :aThreadMessage | 
+			self assistantMessageClass new
+				model: self model;
+				merge: aThreadMessage ]
 ]
 
 { #category : #'as yet unclassified' }
