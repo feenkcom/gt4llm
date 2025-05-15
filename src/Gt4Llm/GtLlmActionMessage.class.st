@@ -19,11 +19,6 @@ GtLlmActionMessage >> actionModel [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmActionMessage >> arguments [
-	^ self contentJson at: 'Arguments'
-]
-
-{ #category : #'as yet unclassified' }
 GtLlmActionMessage >> contentSummary [
 	^ self action
 ]

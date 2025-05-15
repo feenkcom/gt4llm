@@ -211,6 +211,7 @@ GtOllamaProvider >> triggerAssistant [
 		addMessage: (self assistantMessageClass new
 				content: result content;
 				role: 'assistant';
+				model: self model;
 				chat: self;
 				rawData: result rawData).
 
