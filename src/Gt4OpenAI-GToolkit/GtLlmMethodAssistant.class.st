@@ -13,25 +13,18 @@ GtLlmMethodAssistant >> chatOn: aCoderViewModel [
 					name: 'Code Snippet';
 					content: aCoderViewModel;
 					serializer: [ :aModel | 
-						{'Method' -> aModel coderModel sourceCode currentSourceText text asString.
-							'Class' -> aModel coderModel methodBehavior asString.
+						{'Code'
+								-> (STONJSON
+										toString: {{'type' -> 'method'.
+													'class' -> aModel coderModel methodBehavior behavior asString.
+													'code'
+														-> aModel coderModel sourceCode currentSourceText text asString}
+													asDictionary}).
 							'Object' -> (GtLlmValueSerializer new serializeValue: aModel selfObject)} ];
 					updater: [ :aModel :aText | aModel coderModel forSource: aText ]);
 			provider: self buildProvider.
 
 	^ chat
-]
-
-{ #category : #'as yet unclassified' }
-GtLlmMethodAssistant >> classFormatDescription [
-	<gtLlmAssistantFormat>
-	^ GtLlmAssistantFormatDescription new
-		name: 'Class';
-		priority: 2;
-		format: 'Text';
-		example: '```
-Object
-```'
 ]
 
 { #category : #'as yet unclassified' }
@@ -44,10 +37,11 @@ GtLlmMethodAssistant >> gtProposeCheckExample [
  	<gtLlmAssistantAction>
  	^ GtLlmAssistantAction new
  		name: 'Propose an example';
- 		priority: 1;
+ 		priority: 20;
  		description: 'I want to check the functionality of the attached method.  Can you propose a GlamorousToolkit example method that tests it.  The method should:
+- be put into a new appropriately named example class,
 - be annotated with the ''<gtExample>'' pragma,
-- create an instance of the attached method''s class (from the `Class` property),
+- create an instance of the attached method''s class (from the `class` property),
 - add appropriate assertions,
 - and should return the object being tested.';
  		examples: {}
@@ -67,10 +61,9 @@ If you want to add explanations, place them in the `Text` field. If the explanat
 You can look up classes, methods and documentation in the current Glamorous Toolkit image. Only rely on such look up when absolutely needed.';
 		examples: {GtLlmAssistantActionExample new
 					input: {'Action' -> 'Propose code'.
-							'Method'
-								-> 'width
-	^ 15 * 30 ": subtract 5"'.
-							'Class' -> 'FixedWidthRectangle'.
+							'Code'
+								-> '[{"type": "method", "class": "FixedWidthRectangle", "code": "width
+	^ 15 * 30 \": subtract 5\""}]'.
 							'Object'
 								-> '{"string":"nil","instanceSlots":[],"class":"UndefinedObject"}'}
 							asDictionary;
@@ -79,10 +72,36 @@ You can look up classes, methods and documentation in the current Glamorous Tool
 							'Text' -> nil.
 							'Object'
 								-> '{"string":"nil","instanceSlots":[],"class":"UndefinedObject"}'.
-							'Class' -> 'FixedWidthRectangle'.
-							'Method'
-								-> 'width
-	^ (15 * 30) ": subtract 5" - 5'} asDictionary}
+							'Code'
+								-> '[{"type": "method", "class": "FixedWidthRectangle", "code": "width
+	^ 15 * 30 \": subtract 5\" - 5"}]'} asDictionary}
+]
+
+{ #category : #proposals }
+GtLlmMethodAssistant >> reviewAction [
+	<gtLlmAssistantAction>
+	^ GtLlmAssistantAction new
+		name: 'Review method';
+		priority: 3;
+		description: 'Review the code as if you were a senior developer doing a code review.';
+		examples: {GtLlmAssistantActionExample new
+					input: {'Action' -> 'Review method'.
+							'Arguments' -> {}.
+							'Code'
+								-> '[{"type": "method", "class": "FixedWidthRectangle", "code": "width
+	^ 15 * 30"}]'.
+							'Object'
+								-> '{"string":"a FixedWidthRectangle","instanceSlots":[],"class":"FixedWidthRectangle"}'}
+							asDictionary;
+					output: {'Action' -> 'Review method'.
+							'Arguments' -> {}.
+							'Text' -> 'The method should inline the calculation. To avoid having just a magic number there, we should use a method comment explaining how the number was derived.'.
+							'Object'
+								-> '{"string":"a FixedWidthRectangle","instanceSlots":[],"class":"FixedWidthRectangle"}'.
+							'Code'
+								-> '[{"type": "method", "class": "FixedWidthRectangle", "code": "width
+	\"fixed with is always 15 * 30=450\"
+	^ 450"}]'} asDictionary}
 ]
 
 { #category : #'as yet unclassified' }
