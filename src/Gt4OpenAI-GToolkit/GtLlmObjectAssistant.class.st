@@ -22,14 +22,14 @@ GtLlmObjectAssistant >> actionProposalAction [
 							'Arguments' -> {''}.
 							'Object'
 								-> '{"string":"(1@5)","instanceSlots":[{"name":"x","class":"SmallInteger","value":"1"},{"name":"y","class":"SmallInteger","value":"5"}],"class":"Point"}'.
-							'Method'
-								-> 'gtGotoXActionFor: anAction
+							'Code'
+								-> '[{"type": "method", "class": "Point", "code": "gtGotoXActionFor: anAction
 	<gtAction>
 	^ anAction button
 		icon: BrGlamorousVectorIcons inspect;
 		label: ''Go to X'';
 		priority: 10;
-		action: [:aButton | aButton phlow spawnObject: self x]'} asDictionary}
+		action: [:aButton | aButton phlow spawnObject: self x]"}]'} asDictionary}
 ]
 
 { #category : #'as yet unclassified' }
@@ -43,6 +43,33 @@ GtLlmObjectAssistant >> chatOn: anObject [
 	chat provider addTool: (self getPropertyToolOn: anObject).
 
 	^ chat
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmObjectAssistant >> codeFormatDescription [
+	<gtLlmAssistantFormat>
+	^ GtLlmAssistantFormatDescription new
+		name: 'Code';
+		priority: 2;
+		format: 'Smalltalk code wrapped in an array JSON objects';
+		example: 'Snippets and methods should be given here. There are two types to the objects returned here: `snippet` and `method`. Method objects also have a class they refer to. It should always be an array, even if only one item is needed. Multiple items may be returned. If the method is to be installed on the class side rather than the instance side, set the optional `classSide` property to `true`.
+		
+Example:
+```json
+[
+	{"type": "snippet",
+	 "code": "55 @ (13 * (5 negatedArcTan)"},
+	{"type": "method",
+	 "class": "Number",
+	 "code": "invertedArcTan
+	 ^ self arcTan negated"},
+	{"type": "method",
+	 "class": "Number",
+	 "classSide": true,
+	 "code": "classSideMethod
+	 ^ self new instanceSideMethod"}
+]
+```'
 ]
 
 { #category : #'as yet unclassified' }
@@ -66,7 +93,7 @@ GtLlmObjectAssistant >> explanationAction [
 							'Arguments' -> nil.
 							'Object'
 								-> '{"string":"(100@30)","instanceSlots":[{"name":"x","class":"SmallInteger","value":"100"},{"name":"y","class":"SmallInteger","value":"300"}],"class":"Point"}'.
-							'Method' -> ''.
+							'Code' -> '[]'.
 							'Text'
 								-> 'This object reprents a two-dimensional point at the coordinates `100` and `30`.'}
 							asDictionary}
@@ -163,19 +190,6 @@ GtLlmObjectAssistant >> lookupPageTool [
 			(LeDatabase gtBook asyncPagesForWord: functionCall anyArgument) toArray wait
 				ifEmpty: [ 'No page found' ]
 				ifNotEmpty: [ :pages | pages first asMarkdownPage ] ]
-]
-
-{ #category : #'as yet unclassified' }
-GtLlmObjectAssistant >> methodFormatDescription [
-	<gtLlmAssistantFormat>
-	^ GtLlmAssistantFormatDescription new
-		name: 'Method';
-		priority: 2;
-		format: 'Smalltalk code';
-		example: '```smalltalk-method
-add: val
-	^ self + val
-```'
 ]
 
 { #category : #'as yet unclassified' }
@@ -387,13 +401,13 @@ GtLlmObjectAssistant >> viewProposalAction [
 							'Arguments' -> {''}.
 							'Object'
 								-> '{"string":"(1@5)","instanceSlots":[{"name":"x","class":"SmallInteger","value":"1"},{"name":"y","class":"SmallInteger","value":"5"}],"class":"Point"}'.
-							'Method'
-								-> 'gtCoordinatesFor: aView
+							'Code'
+								-> '[{"type": "method", "class": "Point", "code": "gtCoordinatesFor: aView
 	<gtView>
 	^ aView columnedList
 		title: ''Coordinates'';
 		priority: 10;
 		items: [ { ''x'' -> self x. ''y'' -> self y } ];
 		column: ''Axis'' text: #key;
-		column: ''Value'' text: #value'} asDictionary}
+		column: ''Value'' text: #value"}]'} asDictionary}
 ]
