@@ -39,8 +39,9 @@ GtLlmMethodAssistant >> gtProposeCheckExample [
  		name: 'Propose an example';
  		priority: 20;
  		description: 'I want to check the functionality of the attached method.  Can you propose a GlamorousToolkit example method that tests it.  The method should:
+- be put into a new appropriately named example class,
 - be annotated with the ''<gtExample>'' pragma,
-- create an instance of the attached method''s class (from the `Class` property),
+- create an instance of the attached method''s class (from the `class` property),
 - add appropriate assertions,
 - and should return the object being tested.';
  		examples: {}
