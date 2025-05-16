@@ -12,7 +12,11 @@ GtLlmCodeSnippetAssistant >> chatOn: aCoderViewModel [
 					name: 'Code Snippet';
 					content: aCoderViewModel;
 					serializer: [ :aModel | 
-						{'Code Snippet' -> aModel coderModel sourceCode currentSourceText text asString.
+						{'Code'
+								-> {{'type' -> 'snippet'.
+											'code'
+												-> aModel coderModel sourceCode currentSourceText text asString}
+											asDictionary}.
 							'Object' -> (GtLlmValueSerializer new serializeValue: aModel selfObject).
 							'Variables'
 								-> (aModel sharedBindings bindings associations
@@ -24,18 +28,6 @@ GtLlmCodeSnippetAssistant >> chatOn: aCoderViewModel [
 			provider: self buildProvider.
 
 	^ chat
-]
-
-{ #category : #'as yet unclassified' }
-GtLlmCodeSnippetAssistant >> codeSnippetFormatDescription [
-	<gtLlmAssistantFormat>
-	^ GtLlmAssistantFormatDescription new
-		name: 'Code Snippet';
-		priority: 2;
-		format: 'Smalltalk code';
-		example: '```smalltalk
-Point x: 1 y: 10
-```'
 ]
 
 { #category : #'as yet unclassified' }
@@ -62,7 +54,7 @@ GtLlmCodeSnippetAssistant >> proposalAction [
 	^ GtLlmAssistantAction new
 		name: 'Propose code';
 		priority: 3;
-		description: 'Interpret the comments and propose code using the `Code Snippet` field. The typical comment command is formatted as `": some command"`. Only propose Pharo code unless otherwise asked. The proposed code should leave the comments untouched.
+		description: 'Interpret the comments and propose code using the `Code` field. The typical comment command is formatted as `": some command"`. Only propose Pharo code unless otherwise asked. The proposed code should leave the comments untouched.
 If you want to add explanations, place them in the `Text` field. If the explanation contains code, always place code in a code block using Markdown and explicitly denoting it with smalltalk. Like this:
 ```smalltalk
 "Smalltalk code here"
@@ -70,7 +62,7 @@ If you want to add explanations, place them in the `Text` field. If the explanat
 You can look up classes, methods and documentation in the current Glamorous Toolkit image. Only rely on such look up when absolutely needed.';
 		examples: {GtLlmAssistantActionExample new
 					input: {'Action' -> 'Propose code'.
-							'Code Snippet' -> '15 * 30 ": subtract 5"'.
+							'Code' -> '[{"type": "snippet"; "code": "15 * 30 \": subtract 5\""}]'.
 							'Object'
 								-> '{"string":"nil","instanceSlots":[],"class":"UndefinedObject"}'.
 							'Variables'
@@ -81,9 +73,8 @@ You can look up classes, methods and documentation in the current Glamorous Tool
 							'Text' -> nil.
 							'Object'
 								-> '{"string":"nil","instanceSlots":[],"class":"UndefinedObject"}'.
-							'Code Snippet' -> '(15 * 30) ": subtract 5" - 5'.
-							'Variables' -> nil.
-							'Method' -> nil} asDictionary}
+							'Code' -> '[{"type": "snippet"; "code": "15 * 30 \": subtract 5\" - 5"}]'.
+							'Variables' -> nil} asDictionary}
 ]
 
 { #category : #'as yet unclassified' }
@@ -95,7 +86,7 @@ GtLlmCodeSnippetAssistant >> snippetExplanationAction [
 		description: 'Explain the code snippet using the text field. Look up classes and documentation as needed to generate an answer.';
 		examples: {GtLlmAssistantActionExample new
 					input: {'Action' -> 'Explain code'.
-							'Code Snippet' -> '15 * 30'.
+							'Code' -> '[{"type": "snippet"; "code": "15 * 30"}]'.
 							'Variables' -> {}.
 							'Object'
 								-> '{"string":"nil","instanceSlots":[],"class":"UndefinedObject"}'}
@@ -104,11 +95,10 @@ GtLlmCodeSnippetAssistant >> snippetExplanationAction [
 							'Arguments' -> nil.
 							'Text'
 								-> 'The snippet performs integer multiplication on the two numbers `15` and `30`. The result should be `450`.'.
-							'Code Snippet' -> '15 * 30'.
+							'Code' -> '[{"type": "snippet"; "code": "15 * 30"}]'.
 							'Object'
 								-> '{"string":"nil","instanceSlots":[],"class":"UndefinedObject"}'.
-							'Variables' -> nil.
-							'Method' -> nil} asDictionary}
+							'Variables' -> nil} asDictionary}
 ]
 
 { #category : #'as yet unclassified' }
@@ -168,33 +158,4 @@ GtLlmCodeSnippetAssistant >> variablesFormatDescription [
 		priority: 2;
 		format: 'Dictionary';
 		example: '{"aVariable": "aValue"; "anotherVariable": "15"}'
-]
-
-{ #category : #'as yet unclassified' }
-GtLlmCodeSnippetAssistant >> viewProposalAction [
-	<gtLlmAssistantAction>
-	^ GtLlmAssistantAction new
-		name: 'Propose a view';
-		priority: 5;
-		description: 'Propose a useful Phlow view for the object bound by `self`, on the code in the snippet. Only reply with the Smalltalk code for the view. Look up existing views and their code for reference if needed.';
-		examples: {GtLlmAssistantActionExample new
-					input: {'Action' -> 'Propose a view'.
-							'Code Snippet' -> 'self monies'.
-							'Object'
-								-> '{"string":"a GtTMoneyBag","instanceSlots":[{"name":"monies","class":"OrderedCollection","value":"an OrderedCollection(a GtTCurrencyMoney a GtTCurrencyMoney)"}],"class":"GtTMoneyBag"}'.
-							'Variables' -> {}} asDictionary;
-					output: {'Action' -> 'Propose a view'.
-							'Arguments' -> nil.
-							'Object'
-								-> '{"string":"a GtTMoneyBag","instanceSlots":[{"name":"monies","class":"OrderedCollection","value":"an OrderedCollection(a GtTCurrencyMoney a GtTCurrencyMoney)"}],"class":"GtTMoneyBag"}'.
-							'Method'
-								-> 'gtMoniesFor: aView
-	<gtView>
-	^ aView list
-		title: ''Monies'';
-		priority: 10;
-		items: [ self monies ]'.
-							'Code Snippet' -> 'self monies'.
-							'Variables' -> nil.
-							'Text' -> ''} asDictionary}
 ]

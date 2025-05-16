@@ -6,7 +6,7 @@ Class {
 
 { #category : #'as yet unclassified' }
 GtOpenAIObjectMessage >> codeBlock [
-	^ self contentJson at: 'Method' ifAbsent: [ '' ]
+	^ STON fromString: (self contentJson at: 'Code' ifAbsent: [ '[]' ])
 ]
 
 { #category : #'as yet unclassified' }
@@ -47,17 +47,36 @@ GtOpenAIObjectMessage >> gtArgumentsFor: aView [
 GtOpenAIObjectMessage >> gtCodeFor: aView [
 	<gtView>
 	<gtLlmMessageView>
-	self codeBlock isEmptyOrNil ifTrue: [ ^ aView empty ].
+	| codeBlock |
+	codeBlock := self codeBlock.
+	codeBlock isEmptyOrNil ifTrue: [ ^ aView empty ].
 
 	^ aView explicit
 		title: 'Code';
 		priority: 1;
-		stencil: [ GtExpandedOnlyCoderElement new
-				coderViewModel: ((GtPharoMethodCoder
-						forClass: self chat serializer instance content class
-						source: self codeBlock) asCoderViewModel
-						selfObject: self chat serializer instance content);
-				yourself ]
+		stencil: [ | container aViewModel instance aClass |
+			container := BrVerticalPane new vFitContent hMatchParent.
+			instance := self chat serializer instance content.
+			codeBlock
+				do: [ :aCodeBlock | 
+					aViewModel := (aCodeBlock at: 'type') = 'method'
+							ifTrue: [ aClass := (aCodeBlock at: 'class') asClassIfAbsent: nil.
+								(GtPharoMethodCoder
+									forClass: ((aCodeBlock at: 'classSide' ifAbsent: [ false ])
+											ifTrue: [ aClass class ]
+											ifFalse: [ aClass ])
+									source: (aCodeBlock at: 'code')) asCoderViewModel
+									selfObject: (aClass = instance coderModel methodBehavior behavior
+											ifTrue: [ instance selfObject ]
+											ifFalse: [ nil ]) ]
+							ifFalse: [ (GtPharoSnippetCoder forSource: (aCodeBlock at: 'code'))
+									asCoderViewModel selfObject: instance selfObject ].
+					container
+						addChild: (GtExpandableSourceCoderElement new
+								coderViewModel: aViewModel;
+								expanded: false;
+								yourself) ].
+			container ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -76,7 +95,7 @@ GtOpenAIObjectMessage >> gtObjectFor: aView [
 { #category : #'as yet unclassified' }
 GtOpenAIObjectMessage >> gtViewFor: aView [
 	<gtView>
-	<gtLlmMessageView>
+	"<gtLlmMessageView>"
 	| viewObject |
 	self codeBlock isEmptyOrNil ifTrue: [ ^ aView empty ].
 	viewObject := self viewObjectFor: aView.
