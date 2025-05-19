@@ -22,3 +22,15 @@ GtLlmRequestHistory >> gtCallsFor: aView [
 		column: 'URL' text: [ :aRequestResponse | aRequestResponse request url ];
 		column: 'Method' text: [ :aRequestResponse | aRequestResponse request method ] width: 100
 ]
+
+{ #category : #'as yet unclassified' }
+GtLlmRequestHistory >> gtClearHistoryActionFor: anAction [
+	<gtAction>
+	^ anAction button
+		icon: BrGlamorousIcons trash;
+		tooltip: 'Clear';
+		priority: 80;
+		action: [ :aButton :aTab | 
+			self removeAll.
+			aTab viewContentElement phlow update ]
+]
