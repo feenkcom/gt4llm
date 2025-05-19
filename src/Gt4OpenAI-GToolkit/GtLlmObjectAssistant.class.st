@@ -10,7 +10,7 @@ GtLlmObjectAssistant >> actionProposalAction [
 	^ GtLlmAssistantAction new
 		name: 'Propose an action';
 		priority: 5;
-		description: 'Propose a useful Phlow action for this object. Only reply with the Smalltalk code for the action. Look up existing actions and their code for reference if needed. Take into account optional user directions if applicable.';
+		description: 'Propose a useful Phlow action for this object. Only reply with the Smalltalk code for the action. Look up existing actions and their code for reference, especially to check what new action would be useful before proposing any code. Take into account optional user directions if applicable.';
 		addArgument: 'User Instruction';
 		examples: {GtLlmAssistantActionExample new markUnverified
 					input: {'Action' -> 'Propose an action'.
@@ -95,8 +95,25 @@ GtLlmObjectAssistant >> explanationAction [
 								-> '{"string":"(100@30)","instanceSlots":[{"name":"x","class":"SmallInteger","value":"100"},{"name":"y","class":"SmallInteger","value":"300"}],"class":"Point"}'.
 							'Code' -> '[]'.
 							'Text'
-								-> 'This object reprents a two-dimensional point at the coordinates `100` and `30`.'}
+								-> 'This object represents a two-dimensional point at the coordinates `100` and `30`.'}
 							asDictionary}
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmObjectAssistant >> getActionsTool [
+	^ GtLlmFunctionTool new
+		name: 'getClassActions';
+		parameters: {'className'};
+		description: 'Gets a class by name and returns a list of its actions.';
+		block: [ :functionCall | 
+			(functionCall anyArgument asClassIfAbsent: [ nil ])
+				ifNil: [ 'Class not found' ]
+				ifNotNil: [ :aClass | 
+					Character cr
+						join: ((Pragma
+								allNamed: #gtAction
+								from: aClass
+								to: Object) collect: #methodSelector) ] ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -166,6 +183,23 @@ GtLlmObjectAssistant >> getReferencesTool [
 		block: [ :functionCall | 
 			Character cr
 				join: (functionCall anyArgument asSymbol gtReferences result toArray wait collect: #name) ]
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmObjectAssistant >> getViewsTool [
+	^ GtLlmFunctionTool new
+		name: 'getClassViews';
+		parameters: {'className'};
+		description: 'Gets a class by name and returns a list of its views.';
+		block: [ :functionCall | 
+			(functionCall anyArgument asClassIfAbsent: [ nil ])
+				ifNil: [ 'Class not found' ]
+				ifNotNil: [ :aClass | 
+					Character cr
+						join: ((Pragma
+								allNamed: #gtView
+								from: aClass
+								to: Object) collect: #methodSelector) ] ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -298,35 +332,33 @@ GtLlmObjectAssistant >> responseFormatSection [
 	<gtLlmInstructionSection>
 	^ GtLlmInstructionSection new
 		source: self;
-		title: 'Response Format Concerns';
-		body: 'The response format in textual responses should be Markdown. Apart from regular Markdown, it also supports annotations for classes and methods.
+		title: 'Response Format';
+		body: 'The response format in all text should be Markdown. Apart from regular Markdown, it also supports annotations for classes and methods.
 - Classes may be annotated using `{{gtClass:ClassName}}`, where `ClassName` is the name of the class to be referenced.
 - Methods may be annotated using `{{gtMethod:ClassName>>#methodName}}`, where `ClassName` is the name of the class and `methodName` is the name of the method.
 
-The code from the textual responses should be formatted as follows:
-- a Smalltalk method appears as:
+Code in text should be formatted as follows:
+- Smalltalk methods appear as:
 
 ```smalltalk-method
 add: val
 	^ self + val
 ```
 
-- a Smalltalk snippet appears as:
+- Smalltalk snippets appear as:
 
 ```smalltalk
 Point x: 1 y: 10
 ```
 
-- the definition of a new class should be provided in the form of a script like:
+- the definition of a new class should be provided in the form of a script:
 
 ```smalltalk
 Object subclass: #SomeClass
 	instanceVariableNames: ''someSlotA someSlotB''
 	classVariableNames: ''
 	package: ''SomePackage''
-```
-
-'
+```'
 ]
 
 { #category : #'as yet unclassified' }
@@ -372,6 +404,8 @@ GtLlmObjectAssistant >> treatProvider: aProvider [
 		ifNotNil: [ aProvider addTool: (self getPropertyToolOn: anInstance) ].
 
 	aProvider addTool: self getMethodsTool.
+	aProvider addTool: self getActionsTool.
+	aProvider addTool: self getViewsTool.
 	aProvider addTool: self getMethodTool.
 	aProvider addTool: self getImplementorsTool.
 	aProvider addTool: self getReferencesTool.
@@ -389,7 +423,7 @@ GtLlmObjectAssistant >> viewProposalAction [
 	^ GtLlmAssistantAction new
 		name: 'Propose a view';
 		priority: 5;
-		description: 'Propose a useful Phlow view for this object. Only reply with the Smalltalk code for the view. Look up existing views and their code for reference if needed. Take into account optional user directions if applicable.';
+		description: 'Propose a useful Phlow view for this object. Only reply with the Smalltalk code for the view. Look up existing views and their code for reference, especially to check what new view would be useful before proposing any code. Take into account optional user directions if applicable.';
 		addArgument: 'User Instruction';
 		examples: {GtLlmAssistantActionExample new markUnverified
 					input: {'Action' -> 'Propose a view'.

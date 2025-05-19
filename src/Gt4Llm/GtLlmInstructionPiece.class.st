@@ -68,3 +68,8 @@ GtLlmInstructionPiece >> source [
 GtLlmInstructionPiece >> source: anObject [
 	source := anObject
 ]
+
+{ #category : #'as yet unclassified' }
+GtLlmInstructionPiece >> title [
+	^ ''
+]
