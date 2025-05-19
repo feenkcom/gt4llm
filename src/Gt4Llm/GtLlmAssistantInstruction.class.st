@@ -170,7 +170,7 @@ GtLlmAssistantInstruction >> interactionDescription [
 		body: 'Interactions are structured like this:
 1. The assistant (you) is given the current state and an action to perform.
 2. The assistant;
-    a. Determines what needs to be done.
+    a. Determines what needs to be done. It consults tools as necessary and asks follow-up questions if the action is unclear.
     b. Performs the action on the state.
     c. Outputs the new state.
 3. The user:
@@ -216,6 +216,7 @@ GtLlmAssistantInstruction >> toolUseDescription [
 		title: 'Tool use policy';
 		body: 'You have access to various tools. Tool use is governed by the following rules:
 
-- Only use tools if you cannot answer the user''s question or request with certainty otherwise.
+- Only use tools if you cannot answer the user''s question or request with certainty otherwise, except when writing code.
+- When writing code, ALWAYS use tools extensively to check the environment before suggesting anything or writing code. You MUST use tools before writing any code. Failure to do so is a violation of protocol.
 - Prefer checking with tools over assumptions. Verify your statements using tools unless you are absolutely certain.'
 ]
