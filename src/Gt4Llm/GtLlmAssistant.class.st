@@ -214,7 +214,7 @@ GtLlmAssistant >> textFormatDescription [
 This node contains plain text.
 Multiple lines, multiple paragraphs are allowed.
 
-*markup* may also **be used**. `Code` can be highlighted, but code blocks with three tick marks MAY NOT be used.
+*markup* may also **be used**. `Code` can be highlighted,  and code sections using three backticks may be used.
 
 # Headings exist as well
 ```'

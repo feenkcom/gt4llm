@@ -6,7 +6,8 @@ Class {
 
 { #category : #'as yet unclassified' }
 GtOpenAIObjectMessage >> codeBlock [
-	^ STON fromString: (self contentJson at: 'Code' ifAbsent: [ '[]' ])
+	^ STON
+		fromString: ((self contentJson at: 'Code' ifAbsent: [ nil ]) ifNil: [ '[]' ])
 ]
 
 { #category : #'as yet unclassified' }
