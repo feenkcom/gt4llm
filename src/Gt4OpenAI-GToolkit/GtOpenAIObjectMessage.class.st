@@ -36,6 +36,7 @@ GtOpenAIObjectMessage >> gtArgumentsFor: aView [
 	<gtView>
 	<gtLlmMessageView>
 	self action isEmptyOrNil ifTrue: [ ^ aView empty ].
+	self arguments isEmptyOrNil ifTrue: [ ^ aView empty ].
 
 	^ aView list
 			title: 'Arguments';
@@ -54,9 +55,10 @@ GtOpenAIObjectMessage >> gtCodeFor: aView [
 	^ aView explicit
 		title: 'Code';
 		priority: 1;
-		stencil: [ | container aViewModel instance aClass |
+		stencil: [ | container aViewModel instance aClass instanceClass |
 			container := BrVerticalPane new vFitContent hMatchParent.
-			instance := self chat serializer instance content.
+			instance := self selfObject.
+			instanceClass := self instanceClass.
 			codeBlock
 				do: [ :aCodeBlock | 
 					aViewModel := (aCodeBlock at: 'type') = 'method'
@@ -66,11 +68,9 @@ GtOpenAIObjectMessage >> gtCodeFor: aView [
 											ifTrue: [ aClass class ]
 											ifFalse: [ aClass ])
 									source: (aCodeBlock at: 'code')) asCoderViewModel
-									selfObject: (aClass = instance coderModel methodBehavior behavior
-											ifTrue: [ instance selfObject ]
-											ifFalse: [ nil ]) ]
+									selfObject: (aClass = instanceClass ifTrue: [ instance ] ifFalse: [ nil ]) ]
 							ifFalse: [ (GtPharoSnippetCoder forSource: (aCodeBlock at: 'code'))
-									asCoderViewModel selfObject: instance selfObject ].
+									asCoderViewModel selfObject: instance ].
 					container
 						addChild: (GtExpandableSourceCoderElement new
 								coderViewModel: aViewModel;
@@ -107,6 +107,11 @@ GtOpenAIObjectMessage >> gtViewFor: aView [
 ]
 
 { #category : #'as yet unclassified' }
+GtOpenAIObjectMessage >> instanceClass [
+	^ self selfObject class
+]
+
+{ #category : #'as yet unclassified' }
 GtOpenAIObjectMessage >> object [
 	^ self objectBlock
 		ifEmpty: [ nil ]
@@ -119,6 +124,11 @@ GtOpenAIObjectMessage >> object [
 { #category : #'as yet unclassified' }
 GtOpenAIObjectMessage >> objectBlock [
 	^ self contentJson at: 'Object' ifAbsent: [ '' ]
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAIObjectMessage >> selfObject [
+	^ self chat serializer instance content
 ]
 
 { #category : #'as yet unclassified' }
