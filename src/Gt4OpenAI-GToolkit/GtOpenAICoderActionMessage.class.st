@@ -149,6 +149,16 @@ GtOpenAICoderActionMessage >> gtVariablesFor: aView [
 ]
 
 { #category : #'as yet unclassified' }
+GtOpenAICoderActionMessage >> instanceClass [
+	^ self chat serializer instance content behavior
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAICoderActionMessage >> selfObject [
+	^ self chat serializer instance content selfObject
+]
+
+{ #category : #'as yet unclassified' }
 GtOpenAICoderActionMessage >> variablesBlock [
 	^ self contentJson at: 'Variables' ifAbsent: [ nil ]
 ]
