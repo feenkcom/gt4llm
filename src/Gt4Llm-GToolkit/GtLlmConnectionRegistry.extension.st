@@ -36,8 +36,8 @@ GtLlmConnectionRegistry class >> gtInstanceButtonFor: anAction [
 GtLlmConnectionRegistry >> knownConnectors [
 	^ {GtLlmConnection new
 			provider: GtOllamaProvider;
-			label: 'Llama 3.1';
-			model: 'llama3.1'.
+			label: 'Llama 3.2';
+			model: 'llama3.2'.
 		GtLlmConnection new
 			provider: GtAnthropicProvider;
 			label: 'Claude 3.7';

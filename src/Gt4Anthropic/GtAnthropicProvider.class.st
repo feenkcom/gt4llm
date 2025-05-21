@@ -7,7 +7,8 @@ Class {
 		'client',
 		'tools',
 		'maxTokens',
-		'instructions'
+		'instructions',
+		'executions'
 	],
 	#category : #Gt4Anthropic
 }
@@ -78,6 +79,15 @@ GtAnthropicProvider >> defaultUserMessageClass [
 ]
 
 { #category : #'as yet unclassified' }
+GtAnthropicProvider >> gtExecutionsFor: aView [
+	<gtView>
+	^ aView list
+		title: 'Executions';
+		items: [ executions ];
+		priority: 10
+]
+
+{ #category : #'as yet unclassified' }
 GtAnthropicProvider >> gtTriggerAssistantActionFor: anAction [
 	<gtAction>
 	^ anAction button
@@ -92,6 +102,7 @@ GtAnthropicProvider >> initialize [
 	super initialize.
 
 	assistantWorking := false.
+	executions := OrderedCollection new.
 	
 	self initializeClient.
 	
@@ -167,7 +178,7 @@ GtAnthropicProvider >> sendAssistantMessage: aMessage [
 	aMessage role: 'user'.
 	self chat addMessage: aMessage.
 
-	[ self triggerAssistant ] asAsyncPromise
+	executions add: [ self triggerAssistant ] asAsyncPromise
 ]
 
 { #category : #'as yet unclassified' }

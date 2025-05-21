@@ -85,11 +85,14 @@ GtLlmAssistant >> chatAction [
 
 { #category : #'as yet unclassified' }
 GtLlmAssistant >> collectActions [
-	^ ((Set withAll: ((Pragma
-		allNamed: #gtLlmAssistantAction
-		from: self class
-		to: Object) collect: [:aPragma | aPragma methodSelector]))
-		collect: [ :aSelector | (self perform: aSelector) assistant: self ])
+	^ (((Set
+		withAll: ((Pragma
+				allNamed: #gtLlmAssistantAction
+				from: self class
+				to: Object) collect: [ :aPragma | aPragma methodSelector ]))
+		collect: [ :aSelector | self perform: aSelector ]
+		thenSelect: [ :anAction | anAction isNotNil ])
+		collect: [ :anAction | anAction assistant: self ])
 		sorted: [ :a :b | a priority < b priority ]
 ]
 
