@@ -92,15 +92,21 @@ GtLlmAssistantInstruction >> asJsonSchema [
 
 { #category : #accessing }
 GtLlmAssistantInstruction >> communicationConventionsDescription [
+	| instructions |
+	instructions := GtLlmInstructionList new
+			addItem: 'Always review the full conversation prior to answering and maintain continuity.';
+			addItem: 'Assume the user would like something concise when producing text.';
+			addItem: 'Prefer asking clarifying follow-up questions or using tools (see  the section "Tool use policy") over assumptions, especially when in doubt.';
+			addItem: 'Refuse actions that cannot be performed using your capabilities. When an action is refused, return a textual explanation of why it isn’t possible to fulfill the request.';
+			addItem: 'Similarly, give a concise description of any error you encounter on tool use or other system errors.'.
+
+	GtLlmFeatures multiStep
+		ifTrue: [ instructions
+				addItem: 'Multi-step actions (i.e. those involving tools) should be answered by a summary of the intended steps to take. If the user confirms this course of action, take it.' ].
+
 	^ GtLlmInstructionSection new
 		title: 'Communication rules';
-		body: (GtLlmInstructionList new
-				addItem: 'Always review the full conversation prior to answering and maintain continuity.';
-				addItem: 'Multi-step actions (i.e. those involving tools) should be answered by a summary of the intended steps to take. If the user confirms this course of action, take it.';
-				addItem: 'Assume the user would like something concise when producing text.';
-				addItem: 'Prefer asking clarifying follow-up questions or using tools (see  the section "Tool use policy") over assumptions, especially when in doubt.';
-				addItem: 'Refuse actions that cannot be performed using your capabilities. When an action is refused, return a textual explanation of why it isn’t possible to fulfill the request.';
-				addItem: 'Similarly, give a concise description of any error you encounter on tool use or other system errors.')
+		body: instructions
 ]
 
 { #category : #accessing }
@@ -165,9 +171,9 @@ GtLlmAssistantInstruction >> initialize [
 
 { #category : #accessing }
 GtLlmAssistantInstruction >> interactionDescription [
-	^ GtLlmInstructionSection new
-		title: 'Interaction description';
-		body: 'Interactions are structured like this:
+	| body |
+	body := GtLlmFeatures multiStep
+			ifTrue: [ 'Interactions are structured like this:
 1. The assistant (you) is given the current state and an action to perform.
 2. The assistant;
     a. Determines what needs to be done. It consults tools as necessary and asks follow-up questions if the action is unclear. Multi-step actions require a summary of necessary steps beforehand and a user confirmation (see "Communication rules").
@@ -177,7 +183,22 @@ GtLlmAssistantInstruction >> interactionDescription [
 	a. checks the output state.
 	b. provides the current state and next action to you (returning back to step 1.).
 	
-The state is an aggregate of the components listed below, sent to you as a JSON object.'
+The state is an aggregate of the components listed below, sent to you as a JSON object.' ]
+			ifFalse: [ 'Interactions are structured like this:
+1. The assistant (you) is given the current state and an action to perform.
+2. The assistant;
+    a. Determines what needs to be done. It consults tools as necessary and asks follow-up questions if the action is unclear.
+    b. Performs the action on the state.
+    c. Outputs the new state.
+3. The user:
+	a. checks the output state.
+	b. provides the current state and next action to you (returning back to step 1.).
+	
+The state is an aggregate of the components listed below, sent to you as a JSON object.' ].
+
+	^ GtLlmInstructionSection new
+		title: 'Interaction description';
+		body: body
 ]
 
 { #category : #accessing }
