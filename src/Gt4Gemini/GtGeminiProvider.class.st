@@ -64,7 +64,7 @@ GtGeminiProvider >> defaultAsssistantMessageClass [
 
 { #category : #'as yet unclassified' }
 GtGeminiProvider >> defaultModel [
-	^ 'gemini-2.0-flash'
+	^ 'gemini-2.5-flash-preview-05-20'
 ]
 
 { #category : #'as yet unclassified' }
