@@ -249,7 +249,7 @@ GtOpenAIClient >> get: aUrl withParams: aListOfAssocs [
 	
 	history add: (aClient request -> aClient response).
 	
-	^ response
+	^ self checkForErrors: response
 ]
 
 { #category : #accessing }

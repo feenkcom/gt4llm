@@ -20,6 +20,18 @@ GtOpenAIActionMessage >> gtContentFor: aView [
 ]
 
 { #category : #'*Gt4OpenAI-GToolkit' }
+GtOpenAIActionMessage >> gtReifyAcceptActionFor: anAction [
+	<gtLlmAction>
+	self action = 'Confirmation' ifFalse: [ ^ anAction noAction ].
+
+	^ anAction button
+		priority: 1;
+		icon: BrGlamorousVectorIcons accept;
+		tooltip: 'Confirm';
+		action: [ :aButton | self chat sendChatRequest: 'Confirmed.' ]
+]
+
+{ #category : #'*Gt4OpenAI-GToolkit' }
 GtOpenAIActionMessage >> gtReifyActionFor: anAction [
 	<gtLlmAction>
 	(self isAssistantRole
