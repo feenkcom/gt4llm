@@ -119,7 +119,7 @@ GtLlmConnectionRegistry >> initialize [
 GtLlmConnectionRegistry >> labelForModel: aModel [
 	^ connections
 		detect: [ :aConnection | aConnection model = aModel ]
-		ifFound: [ :aConnection | aConnection label ]
+		ifFound: [ :aConnection | aConnection label ifNil: [ aModel ] ]
 		ifNone: [ aModel ]
 ]
 
