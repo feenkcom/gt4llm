@@ -76,7 +76,8 @@ The components that make up the state are as follows:';
 							title: 'Actions';
 							body: (GtLlmInstructionWithSections new
 									introduction: 'All actions are listed below.';
-									sections: (actions collect: [ :anAction | anAction asInstructionPiece ]))}
+									sections: (actions collect: [ :anAction | anAction asInstructionPiece ])
+											, (GtLlmFeatures multiStep ifTrue: [ {self confirmationAction} ] ifFalse: [ {} ]))}
 ]
 
 { #category : #accessing }
@@ -112,6 +113,23 @@ GtLlmAssistantInstruction >> communicationConventionsDescription [
 { #category : #accessing }
 GtLlmAssistantInstruction >> componentNamed: aName [
 	^ formats detect: [ :aComponent | aComponent name = aName ] ifNone: [ nil ]
+]
+
+{ #category : #accessing }
+GtLlmAssistantInstruction >> confirmationAction [
+	"this is a special assistant-only action, thus it is defined here."
+	^ GtLlmAssistantAction new
+		name: 'Confirmation';
+		priority: 1;
+		description: 'Presents an action plan to the user and asks for their confirmation to perform it. It is a special action returned by the assistant if an action requires confirmation by the user.';
+		examples: {GtLlmAssistantActionExample new markUnverified
+					input: {'Action' -> 'Chat'.
+							'Arguments' -> #('Please delete all files using your tools.')}
+							asDictionary;
+					output: {'Action' -> 'Confirmation'.
+							'Text'
+								-> 'I will delete all files using the `removeFile` tool. Do you accept?'}
+							asDictionary}
 ]
 
 { #category : #'as yet unclassified' }

@@ -7,7 +7,8 @@ Class {
 		'client',
 		'modelfile',
 		'tools',
-		'files'
+		'files',
+		'executions'
 	],
 	#classVars : [
 		'DefaultModel'
@@ -66,10 +67,21 @@ GtOllamaProvider >> files: anObject [
 ]
 
 { #category : #'as yet unclassified' }
+GtOllamaProvider >> gtToolsFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Tools';
+		priority: 5;
+		object: [ tools ];
+		view: #gtItemsFor:
+]
+
+{ #category : #'as yet unclassified' }
 GtOllamaProvider >> initialize [
 	super initialize.
 
 	assistantWorking := false.
+	executions := OrderedCollection new.
 	
 	self initializeClient.
 	
@@ -211,7 +223,7 @@ GtOllamaProvider >> triggerAssistant [
 		addMessage: (self assistantMessageClass new
 				content: result content;
 				role: 'assistant';
-				model: self model;
+				model: self modelName;
 				chat: self;
 				rawData: result rawData).
 

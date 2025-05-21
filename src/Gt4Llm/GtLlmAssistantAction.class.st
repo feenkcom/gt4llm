@@ -49,8 +49,13 @@ GtLlmAssistantAction >> asExpressionSource [
 	    priority: ' , self priority asString
 		, ';
 		description: ' , self description storeString
+		, (self arguments
+				collect: [ :anArgument | 
+					';
+		addArgument: ''' , anArgument , '''' ])
 		, ';
-		examples: {' , ('.
+		examples: {'
+		, ('.
 			' join: (self examples collect: #asExpressionSource)) , '}'
 ]
 
@@ -74,7 +79,7 @@ GtLlmAssistantAction >> asMethodSource [
 			ifNil: [ 'gtNAMEAction' ]
 			ifNotNil: [ :aMethod | aMethod selector asString ])
 			, '
-	<gtLlmTutorAction>
+	<gtLlmAssistantAction>
 	^ ' , self asExpressionSource.
 	^ methodSource
 ]

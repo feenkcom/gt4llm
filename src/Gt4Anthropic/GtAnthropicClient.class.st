@@ -120,10 +120,10 @@ GtAnthropicClient >> get: aUrl withParams: aListOfAssocs [
 	aClient entity: nil.
 
 	response := aClient get.
-	
-	history add: (aClient request -> aClient response).
-	
-	^ response
+
+	history add: aClient request -> aClient response.
+
+	^ self checkForErrors: response
 ]
 
 { #category : #'as yet unclassified' }
@@ -183,10 +183,10 @@ GtAnthropicClient >> post: aUrl withEntity: anEntity [
 	aClient contents: anEntity.
 
 	response := aClient post.
-	
-	history add: (aClient request -> aClient response).
-	
-	^ response
+
+	history add: aClient request -> aClient response.
+
+	^ self checkForErrors: response
 ]
 
 { #category : #accessing }
