@@ -32,5 +32,5 @@ GtLlmEndpointClient >> request [
 
 { #category : #accessing }
 GtLlmEndpointClient >> serializationClass [
-	^ self subclassResponsibility
+	^ GtGeminiGenerationResult
 ]

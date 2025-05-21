@@ -17,5 +17,8 @@ BaselineOfGt4Llm >> baseline: spec [
 				with: [ spec repository: 'github://feenkcom/gt4llm:main/src' ].
 			spec
 				baseline: 'Gt4Anthropic'
+				with: [ spec repository: 'github://feenkcom/gt4llm:main/src' ].
+			spec
+				baseline: 'Gt4Gemini'
 				with: [ spec repository: 'github://feenkcom/gt4llm:main/src' ] ]
 ]
