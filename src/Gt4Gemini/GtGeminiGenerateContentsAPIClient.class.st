@@ -42,10 +42,12 @@ GtGeminiGenerateContentsAPIClient >> buildMessageEntities [
 		collect: [ :aMessage | 
 			{'role' -> aMessage role.
 				'parts'
-					-> ((aMessage content isKindOf: Dictionary)
-							ifTrue: [ aMessage content ]
-							ifFalse: [ {{'text' -> aMessage contentText} asDictionary} ])}
-				asDictionary ]
+					-> ({{'text' -> aMessage contentText} asDictionary}
+							, (aMessage images
+									collect: [ :aFile | 
+										{'inline_data'
+												-> {'mime_type' -> 'image/jpeg'.
+														'data' -> aFile} asDictionary} asDictionary ]))} asDictionary ]
 ]
 
 { #category : #accessing }
