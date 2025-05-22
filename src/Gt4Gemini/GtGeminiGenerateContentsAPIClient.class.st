@@ -98,6 +98,11 @@ GtGeminiGenerateContentsAPIClient >> request [
 		withEntity: self buildEntity
 ]
 
+{ #category : #'as yet unclassified' }
+GtGeminiGenerateContentsAPIClient >> serializationClass [
+	^ GtGeminiGenerationResult
+]
+
 { #category : #accessing }
 GtGeminiGenerateContentsAPIClient >> tools [
 	^ tools
