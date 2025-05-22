@@ -213,7 +213,8 @@ GtGeminiProvider >> triggerAssistant [
 	message := result candidates first content.
 
 	message
-		content: ((message content removePrefix: '```json') removeSuffix: '```').
+		content: ((message content removePrefix: '```json') removeSuffix: '```');
+		model: self modelName.
 
 
 	self chat addMessage: (message role: 'assistant').

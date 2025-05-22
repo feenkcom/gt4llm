@@ -187,7 +187,8 @@ GtLlmChatMessage >> images: anObject [
 { #category : #accessing }
 GtLlmChatMessage >> initialize [
 	id := self uuidClass new.
-	createdAt := DateAndTime now
+	createdAt := DateAndTime now.
+	images := OrderedCollection new
 ]
 
 { #category : #accessing }
@@ -266,10 +267,8 @@ GtLlmChatMessage >> senderText [
 GtLlmChatMessage >> serialize [
 	| serialized |
 	serialized := super serialize.
-								
-	self images ifNotNil: [
-		serialized at: 'images' put: self images.
-	].
+
+	self images isEmptyOrNil ifFalse: [ serialized at: 'images' put: self images ].
 
 	^ serialized
 ]

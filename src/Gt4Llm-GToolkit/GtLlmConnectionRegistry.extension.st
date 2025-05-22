@@ -41,5 +41,9 @@ GtLlmConnectionRegistry >> knownConnectors [
 		GtLlmConnection new
 			provider: GtAnthropicProvider;
 			label: 'Claude 3.7';
-			model: 'claude-3-7-sonnet-20250219'}
+			model: 'claude-3-7-sonnet-20250219'.
+		GtLlmConnection new
+			provider: GtGeminiProvider;
+			label: 'Gemini 2.5 Flash Preview';
+			model: 'gemini-2.5-flash-preview-05-20'}
 ]
