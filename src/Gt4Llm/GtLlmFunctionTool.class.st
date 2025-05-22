@@ -78,16 +78,6 @@ GtLlmFunctionTool >> gtBlockSourceCodeFor: aView [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmFunctionTool >> gtFunctionFor: aView [
-	<gtView>
-	^ aView forward
-		title: 'Function';
-		priority: 1;
-		object: [ STONJSON toStringPretty: self function ];
-		view: #gtJSONFor:
-]
-
-{ #category : #'as yet unclassified' }
 GtLlmFunctionTool >> gtMethodFor: aView [
 	<gtView>
 	self method ifNil: [ ^ aView empty ].
