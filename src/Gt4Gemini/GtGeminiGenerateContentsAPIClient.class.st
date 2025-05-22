@@ -40,7 +40,8 @@ GtGeminiGenerateContentsAPIClient >> buildEntity [
 GtGeminiGenerateContentsAPIClient >> buildMessageEntities [
 	^ self messages
 		collect: [ :aMessage | 
-			{'role' -> aMessage role.
+			{'role'
+					-> (aMessage role = 'assistant' ifTrue: [ 'model' ] ifFalse: [ aMessage role ]).
 				'parts'
 					-> ({{'text' -> aMessage contentText} asDictionary}
 							, (aMessage images
