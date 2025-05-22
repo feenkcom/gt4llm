@@ -55,18 +55,6 @@ GtLlmFunctionTool >> function [
 ]
 
 { #category : #accessing }
-GtLlmFunctionTool >> functionGemini [
-	^ {'name' -> name.
-		'description' -> description.
-		'parameters'
-			-> {'type' -> 'object'.
-					'properties'
-						-> (parameters collect: [ :aName | aName -> {'type' -> 'string'} asDictionary ])
-								asDictionary.
-					'required' -> parameters} asDictionary} asDictionary
-]
-
-{ #category : #accessing }
 GtLlmFunctionTool >> functionResponse [
 	^ {'name' -> name.
 		'type' -> type.
