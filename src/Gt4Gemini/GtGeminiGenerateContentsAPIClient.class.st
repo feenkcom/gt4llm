@@ -27,12 +27,11 @@ GtGeminiGenerateContentsAPIClient >> buildEntity [
 				put: {{'functionDeclarations' -> (tools collect: [ :aTool | aTool functionGemini ])}
 							asDictionary} ].
 
-	"format
-		ifNotNil: [ entity
+	(format isNotNil and: [ tools isEmptyOrNil ])
+		ifTrue: [ entity
 				at: 'generationConfig'
 				put: {'responseMimeType' -> 'application/json'.
-						'responseSchema'
-							-> format} asDictionary ]."
+						'responseSchema' -> format} asDictionary ].
 
 	^ entity
 ]
