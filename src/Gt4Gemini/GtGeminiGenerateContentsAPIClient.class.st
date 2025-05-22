@@ -3,17 +3,70 @@ Class {
 	#superclass : #GtLlmEndpointClient,
 	#instVars : [
 		'messages',
-		'model'
+		'model',
+		'instructions',
+		'tools',
+		'format'
 	],
 	#category : #Gt4Gemini
 }
+
+{ #category : #'as yet unclassified' }
+GtGeminiGenerateContentsAPIClient >> buildEntity [
+	| entity |
+	entity := {'contents' -> self buildMessageEntities} asDictionary.
+
+	instructions
+		ifNotNil: [ entity
+				at: 'system_instruction'
+				put: {'parts' -> {{'text' -> self instructions} asDictionary}} asDictionary ].
+
+	tools isEmptyOrNil
+		ifFalse: [ entity
+				at: 'tools'
+				put: {{'functionDeclarations' -> (tools collect: [ :aTool | aTool functionGemini ])}
+							asDictionary} ].
+
+	"format
+		ifNotNil: [ entity
+				at: 'generationConfig'
+				put: {'responseMimeType' -> 'application/json'.
+						'responseSchema'
+							-> format} asDictionary ]."
+
+	^ entity
+]
 
 { #category : #'as yet unclassified' }
 GtGeminiGenerateContentsAPIClient >> buildMessageEntities [
 	^ self messages
 		collect: [ :aMessage | 
 			{'role' -> aMessage role.
-				'parts' -> {{'text' -> aMessage contentText} asDictionary}} asDictionary ]
+				'parts'
+					-> ((aMessage content isKindOf: Dictionary)
+							ifTrue: [ aMessage content ]
+							ifFalse: [ {{'text' -> aMessage contentText} asDictionary} ])}
+				asDictionary ]
+]
+
+{ #category : #accessing }
+GtGeminiGenerateContentsAPIClient >> format [
+	^ format
+]
+
+{ #category : #accessing }
+GtGeminiGenerateContentsAPIClient >> format: anObject [
+	format := anObject
+]
+
+{ #category : #accessing }
+GtGeminiGenerateContentsAPIClient >> instructions [
+	^ instructions
+]
+
+{ #category : #accessing }
+GtGeminiGenerateContentsAPIClient >> instructions: anObject [
+	instructions := anObject
 ]
 
 { #category : #accessing }
@@ -38,7 +91,17 @@ GtGeminiGenerateContentsAPIClient >> model: anObject [
 
 { #category : #'as yet unclassified' }
 GtGeminiGenerateContentsAPIClient >> request [
-	^ self client post: '/models/' , self model , ':generateContent' withEntity: {
-		'contents' -> self buildMessageEntities
-	} asDictionary
+	^ self client
+		post: '/models/' , self model , ':generateContent'
+		withEntity: self buildEntity
+]
+
+{ #category : #accessing }
+GtGeminiGenerateContentsAPIClient >> tools [
+	^ tools
+]
+
+{ #category : #accessing }
+GtGeminiGenerateContentsAPIClient >> tools: anObject [
+	tools := anObject
 ]
