@@ -73,6 +73,11 @@ GtGeminiProvider >> defaultUserMessageClass [
 ]
 
 { #category : #'as yet unclassified' }
+GtGeminiProvider >> format: anObject [
+	super format: (self treatFormat: anObject)
+]
+
+{ #category : #'as yet unclassified' }
 GtGeminiProvider >> gtExecutionsFor: aView [
 	<gtView>
 	^ aView list
@@ -153,6 +158,21 @@ GtGeminiProvider >> sendAssistantMessage: aMessage [
 ]
 
 { #category : #'as yet unclassified' }
+GtGeminiProvider >> sendFiles: aListOfFileReferences withMessage: aString [
+	self
+		sendAssistantMessage: (self userMessageClass new
+				content: {'parts' -> {{'text' -> aString} asDictionary}
+							, (aListOfFileReferences
+									collect: [ :aFileReference | 
+										{'inline_data'
+												-> {'mime_type' -> 'image/jpeg'.
+														'data' -> aFileReference binaryContents base64Encoded}
+														asDictionary} asDictionary ])};
+				role: 'user';
+				chat: self)
+]
+
+{ #category : #'as yet unclassified' }
 GtGeminiProvider >> status [
 	^ assistantWorking
 		ifTrue: [ GtLlmAssistantChatWorkingStatus new ]
@@ -170,18 +190,38 @@ GtGeminiProvider >> tools: anObject [
 ]
 
 { #category : #'as yet unclassified' }
+GtGeminiProvider >> treatFormat: anObject [
+	^ anObject
+		removeKey: 'additionalProperties';
+		at: 'properties'
+			put: ((anObject at: 'properties')
+					collect: [ :aValue | 
+						aValue
+							at: 'type' put: (aValue at: 'type') first;
+							yourself ]);
+		yourself
+]
+
+{ #category : #'as yet unclassified' }
 GtGeminiProvider >> triggerAssistant [
-	| result |
+	| result message |
 	assistantWorking := true.
 
 	self chat signalRunHasStarted.
 
 	result := self client
 			generateContents: self chat messages
-			withModel: self model.
+			withModel: self model
+			systemInstructions: self instructions
+			tools: self tools
+			andFormat: self format.
+	message := result candidates first content.
+
+	message
+		content: ((message content removePrefix: '```json') removeSuffix: '```').
 
 
-	self chat addMessage: (result candidates first content role: 'assistant').
+	self chat addMessage: (message role: 'assistant').
 
 	assistantWorking := false.
 	self chat signalRunIsDone

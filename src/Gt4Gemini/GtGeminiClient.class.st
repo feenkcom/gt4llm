@@ -86,6 +86,18 @@ GtGeminiClient >> generateContents: aListOfMessages withModel: aModelName [
 		perform
 ]
 
+{ #category : #accessing }
+GtGeminiClient >> generateContents: aListOfMessages withModel: aModelName systemInstructions: instructions tools: aListOfTools andFormat: aFormat [
+	^ GtGeminiGenerateContentsAPIClient new
+		client: self;
+		messages: aListOfMessages;
+		model: aModelName;
+		instructions: instructions;
+		tools: aListOfTools;
+		format: aFormat;
+		perform
+]
+
 { #category : #'as yet unclassified' }
 GtGeminiClient >> get: aUrl [
 	^ self get: aUrl withParams: {}
