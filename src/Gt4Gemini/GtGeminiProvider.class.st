@@ -161,13 +161,8 @@ GtGeminiProvider >> sendAssistantMessage: aMessage [
 GtGeminiProvider >> sendFiles: aListOfFileReferences withMessage: aString [
 	self
 		sendAssistantMessage: (self userMessageClass new
-				content: {'parts' -> {{'text' -> aString} asDictionary}
-							, (aListOfFileReferences
-									collect: [ :aFileReference | 
-										{'inline_data'
-												-> {'mime_type' -> 'image/jpeg'.
-														'data' -> aFileReference binaryContents base64Encoded}
-														asDictionary} asDictionary ])};
+				content: aString;
+				images: (aListOfFileReferences collect: [ :aFile | aFile binaryContents base64Encoded ]);
 				role: 'user';
 				chat: self)
 ]
