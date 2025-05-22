@@ -4,8 +4,3 @@ Extension { #name : #GtLlmChat }
 GtLlmChat >> messageClassForAnthropic [
 	^ GtAnthropicChatMessage
 ]
-
-{ #category : #'*Gt4Anthropic' }
-GtLlmChat >> messageClassForGemini [
-	^ GtLlmChatMessage
-]
