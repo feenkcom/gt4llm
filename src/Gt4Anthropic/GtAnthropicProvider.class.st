@@ -230,6 +230,10 @@ GtAnthropicProvider >> triggerAssistant [
 			system: instructions
 			andTools: tools.
 
+	result
+		content: ((result contentText removePrefix: '```json') removeSuffix: '```');
+		model: self modelName.
+
 
 	self chat addMessage: result.
 
