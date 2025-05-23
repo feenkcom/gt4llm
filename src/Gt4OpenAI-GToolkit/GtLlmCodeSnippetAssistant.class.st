@@ -122,7 +122,8 @@ GtLlmCodeSnippetAssistant >> treatProvider: aProvider [
 	super treatProvider: aProvider.
 
 	aCoderViewModel := aProvider chat serializer instance content.
-	
+
+	aProvider tools: GtLlmToolsGroup new.
 	aProvider addTool: (self lookupBindingToolFor: aCoderViewModel).
 	aProvider addTool: (self getPropertyToolOn: aCoderViewModel selfObject).
 	aProvider addTool: self lookupClassTool.
