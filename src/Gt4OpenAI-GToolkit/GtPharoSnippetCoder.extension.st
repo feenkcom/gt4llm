@@ -3,7 +3,7 @@ Extension { #name : #GtPharoSnippetCoder }
 { #category : #'*Gt4OpenAI-GToolkit' }
 GtPharoSnippetCoder >> initializeLlmAddOnsFor: anAst into: addOns [
 	<gtAstCoderAddOns: 10>
-	GtLlmFeatures usesCoder ifFalse: [ ^ self ].
+	GtLlmFeatures isEnabledInCoder ifFalse: [ ^ self ].
 	GtLlmConnectionRegistry instance hasConnectableConnection ifFalse: [ ^ self ].
 	addOns addStyler: (GtLlmInstructionInPharoCommentStyler new).
 	addOns
@@ -27,7 +27,7 @@ GtPharoSnippetCoder >> initializeLlmAddOnsFor: anAst into: addOns [
 { #category : #'*Gt4OpenAI-GToolkit' }
 GtPharoSnippetCoder >> initializeLlmAddOnsFor: anAst into: addOns viewModel: aGtPharoSourceCoderViewModel [
 	<gtAstCoderAddOns: 10>
-	GtLlmFeatures usesCoder ifFalse: [ ^ self ].
+	GtLlmFeatures isEnabledInCoder ifFalse: [ ^ self ].
 	GtLlmConnectionRegistry instance hasConnectableConnection ifFalse: [ ^ self ].
 	addOns addStyler: (GtLlmInstructionInPharoCommentStyler new).
 	addOns
