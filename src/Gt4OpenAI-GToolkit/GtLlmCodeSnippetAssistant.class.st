@@ -22,7 +22,7 @@ GtLlmCodeSnippetAssistant >> chatOn: aCoderViewModel [
 								-> (aModel sharedBindings bindings associations
 										collect: [ :aPair | 
 											{'name' -> aPair key.
-												'value' -> aPair value value asString} asDictionary ])} ];
+												'value' -> (GtLlmValueSerializer new serializeValue: aPair value value)} asDictionary ])} ];
 					updater: [ :aModel :aText | aModel coderModel forSource: aText ]);
 			assistant: self;
 			provider: self buildProvider.
