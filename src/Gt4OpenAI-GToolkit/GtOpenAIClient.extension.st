@@ -25,7 +25,7 @@ GtOpenAIClient >> postStreaming: aString withEntity: anEntity [
 	
 	history add: (aClient request -> aClient response).
 
-	^ self checkForErrors: response
+	^ response
 ]
 
 { #category : #'*Gt4OpenAI-GToolkit' }
