@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'content',
 		'finishReason',
-		'avgLogprobs'
+		'avgLogprobs',
+		'toolCalls'
 	],
 	#category : #Gt4Gemini
 }
@@ -37,7 +38,13 @@ GtGtGeminiMessageCandidate >> content [
 GtGtGeminiMessageCandidate >> content: anObject [
 	content := GtLlmChatMessage new
 			role: 'model';
-			content: ((anObject at: 'parts') first at: 'text')
+			content: ((anObject at: 'parts')
+					select: [ :aPart | aPart includesKey: 'text' ]
+					thenCollect: [ :aPart | aPart at: 'text' ]).
+
+	toolCalls := (anObject at: 'parts')
+			select: [ :aPart | aPart includesKey: 'functionCall' ]
+			thenCollect: [ :aPart | aPart at: 'functionCall' ]
 ]
 
 { #category : #accessing }
