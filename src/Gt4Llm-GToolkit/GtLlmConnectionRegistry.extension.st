@@ -25,7 +25,7 @@ GtLlmConnectionRegistry >> gtConnectionsFor: aView [
 		contextItemLabel: 'Make default'
 			action: [ :anItem :aConnection | 
 				self defaultConnection: aConnection.
-				anItem halt phlow update ]
+				anItem phlow update ]
 ]
 
 { #category : #'*Gt4Llm-GToolkit' }
