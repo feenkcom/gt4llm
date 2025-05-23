@@ -4,7 +4,7 @@ Extension { #name : #ProtoObject }
 ProtoObject >> gtActionChatFor: anAction [
 	<gtAction>
 	| chat |
-	GtLlmFeatures usesCoder ifFalse: [ ^ anAction empty ].
+	GtLlmFeatures isEnabledInCoder ifFalse: [ ^ anAction empty ].
 	GtLlmConnectionRegistry instance hasConnectableDefaultConnection ifFalse: [ ^ anAction empty  ].
 	
 	chat := GtLlmObjectAssistant new chatOn: self.
