@@ -14,18 +14,24 @@ GtLlmFeatures class >> beExperimental [
 ]
 
 { #category : #'as yet unclassified' }
+GtLlmFeatures class >> disableInCoder [
+	UseCoder := false
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmFeatures class >> enableInCoder [
 	UseCoder := true
 ]
 
 { #category : #'as yet unclassified' }
 GtLlmFeatures class >> initialize [
-	UseCoder := false
+	UseCoder := true.
+	MultiStep := false
 ]
 
 { #category : #'as yet unclassified' }
 GtLlmFeatures class >> isEnabledInCoder [
-	^ UseCoder ifNil: [ false ]
+	^ UseCoder ifNil: [ UseCoder := true ]
 ]
 
 { #category : #'as yet unclassified' }
