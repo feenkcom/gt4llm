@@ -14,12 +14,18 @@ GtLlmConnectionRegistry >> gtConnectionsFor: aView [
 			icon: [ :aConnection | 
 				aConnection = self defaultConnection
 					ifTrue: [ BrGlamorousVectorIcons accept ]
-					ifFalse: [ BrGlamorousVectorIcons noIcon ] ] width: 60;
+					ifFalse: [ BrGlamorousVectorIcons noIcon ] ]
+			width: 60;
 		column: 'Connectable'
 			icon: [ :aConnection | 
 				aConnection isConnectable
 					ifTrue: [ BrGlamorousVectorIcons accept ]
-					ifFalse: [ BrGlamorousVectorIcons noIcon ] ] width: 90
+					ifFalse: [ BrGlamorousVectorIcons noIcon ] ]
+			width: 90;
+		contextItemLabel: 'Make default'
+			action: [ :anItem :aConnection | 
+				self defaultConnection: aConnection.
+				anItem halt phlow update ]
 ]
 
 { #category : #'*Gt4Llm-GToolkit' }
