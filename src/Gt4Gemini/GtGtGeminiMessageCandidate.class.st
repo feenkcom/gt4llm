@@ -38,9 +38,10 @@ GtGtGeminiMessageCandidate >> content [
 GtGtGeminiMessageCandidate >> content: anObject [
 	content := GtLlmChatMessage new
 			role: 'model';
-			content: ((anObject at: 'parts')
-					select: [ :aPart | aPart includesKey: 'text' ]
-					thenCollect: [ :aPart | aPart at: 'text' ]).
+			content: (''
+					join: ((anObject at: 'parts')
+							select: [ :aPart | aPart includesKey: 'text' ]
+							thenCollect: [ :aPart | aPart at: 'text' ])).
 
 	toolCalls := (anObject at: 'parts')
 			select: [ :aPart | aPart includesKey: 'functionCall' ]
@@ -66,4 +67,9 @@ GtGtGeminiMessageCandidate >> gtContentFor: aView [
 		priority: 5;
 		object: [ self content ];
 		view: #gtContentFor:
+]
+
+{ #category : #'as yet unclassified' }
+GtGtGeminiMessageCandidate >> toolCalls [
+	^ toolCalls
 ]
