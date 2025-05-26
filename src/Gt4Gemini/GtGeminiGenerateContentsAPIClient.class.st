@@ -6,7 +6,8 @@ Class {
 		'model',
 		'instructions',
 		'tools',
-		'format'
+		'format',
+		'entities'
 	],
 	#category : #Gt4Gemini
 }
@@ -38,17 +39,34 @@ GtGeminiGenerateContentsAPIClient >> buildEntity [
 
 { #category : #'as yet unclassified' }
 GtGeminiGenerateContentsAPIClient >> buildMessageEntities [
-	^ self messages
-		collect: [ :aMessage | 
-			{'role'
-					-> (aMessage role = 'assistant' ifTrue: [ 'model' ] ifFalse: [ aMessage role ]).
-				'parts'
-					-> ({{'text' -> aMessage contentText} asDictionary}
-							, (aMessage images
-									collect: [ :aFile | 
-										{'inline_data'
-												-> {'mime_type' -> 'image/jpeg'.
-														'data' -> aFile} asDictionary} asDictionary ]))} asDictionary ]
+	entities := OrderedCollection new.
+	self messages
+		do: [ :aMessage | 
+			aMessage isToolRole
+				ifTrue: [ entities
+						add: {'role' -> 'assistant'.
+								'parts'
+									-> {'functionCall'
+												-> {'name' -> aMessage toolCall name.
+														'args' -> aMessage toolCall arguments} asDictionary} asDictionary}
+								asDictionary;
+						add: {'role' -> 'user'.
+								'parts'
+									-> {'functionResponse'
+												-> {'name' -> aMessage toolCall name.
+														'response' -> {'output' -> aMessage output} asDictionary}
+														asDictionary} asDictionary} asDictionary ]
+				ifFalse: [ entities
+						add: {'role'
+									-> (aMessage role = 'assistant' ifTrue: [ 'model' ] ifFalse: [ aMessage role ]).
+								'parts'
+									-> ({{'text' -> aMessage contentText} asDictionary}
+											, (aMessage images
+													collect: [ :aFile | 
+														{'inline_data'
+																-> {'mime_type' -> 'image/jpeg'.
+																		'data' -> aFile} asDictionary} asDictionary ]))} asDictionary ] ].
+	^ entities
 ]
 
 { #category : #accessing }
