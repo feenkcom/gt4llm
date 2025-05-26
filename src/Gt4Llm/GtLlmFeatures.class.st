@@ -25,13 +25,13 @@ GtLlmFeatures class >> enableInCoder [
 
 { #category : #'as yet unclassified' }
 GtLlmFeatures class >> initialize [
-	UseCoder := true.
+	UseCoder := false.
 	MultiStep := false
 ]
 
 { #category : #'as yet unclassified' }
 GtLlmFeatures class >> isEnabledInCoder [
-	^ UseCoder ifNil: [ UseCoder := true ]
+	^ UseCoder ifNil: [ UseCoder := false ]
 ]
 
 { #category : #'as yet unclassified' }
