@@ -97,6 +97,24 @@ GtGeminiProvider >> gtTriggerAssistantActionFor: anAction [
 ]
 
 { #category : #'as yet unclassified' }
+GtGeminiProvider >> handleToolCallsIn: toolCalls [
+	toolCalls
+		do: [ :aToolCall | 
+			| call toolOutput |
+			call := GtLlmFunctionToolCall new
+					name: (aToolCall at: 'name');
+					arguments: (aToolCall at: 'args').
+			toolOutput := tools performToolCall: call.
+			chat
+				addMessage: (GtLlmToolMessage new
+						toolCall: call;
+						output: toolOutput) ].
+	self chat signalRunHasUpdated.
+
+	^ self triggerAssistant
+]
+
+{ #category : #'as yet unclassified' }
 GtGeminiProvider >> initialize [
 	super initialize.
 
@@ -212,12 +230,17 @@ GtGeminiProvider >> triggerAssistant [
 			andFormat: self format.
 	message := result candidates first content.
 
-	message
-		content: ((message content removePrefix: '```json') removeSuffix: '```');
-		model: self modelName.
+	message content
+		ifNotEmpty: [ message
+				content: ((message content removePrefix: '```json') removeSuffix: '```');
+				model: self modelName;
+				role: 'assistant'.
 
 
-	self chat addMessage: (message role: 'assistant').
+			self chat addMessage: message ].
+
+	result candidates first toolCalls
+		ifNotEmpty: [ ^ self handleToolCallsIn: result candidates first toolCalls ].
 
 	assistantWorking := false.
 	self chat signalRunIsDone
