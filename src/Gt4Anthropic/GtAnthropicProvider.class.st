@@ -88,6 +88,16 @@ GtAnthropicProvider >> gtExecutionsFor: aView [
 ]
 
 { #category : #'as yet unclassified' }
+GtAnthropicProvider >> gtToolsFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Tools';
+		priority: 5;
+		object: [ tools ];
+		view: #gtItemsFor:
+]
+
+{ #category : #'as yet unclassified' }
 GtAnthropicProvider >> gtTriggerAssistantActionFor: anAction [
 	<gtAction>
 	^ anAction button
@@ -233,7 +243,17 @@ GtAnthropicProvider >> triggerAssistant [
 
 	self chat addMessage: result.
 
-	self performToolCallsFor: result ] doWhileTrue: [ result toolCalls isNotEmpty ].
+	self performToolCallsFor: result.
+
+	result
+		content: (result content
+				collect: [ :aValue | 
+					(aValue at: #type) = 'text'
+						ifTrue: [ aValue
+								at: 'text'
+									put: (((aValue at: 'text') removePrefix: '```json') removeSuffix: '```');
+								yourself ]
+						ifFalse: [ aValue ] ]) ] doWhileTrue: [ result toolCalls isNotEmpty ].
 
 	self chat signalRunIsDone.
 

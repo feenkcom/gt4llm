@@ -13,16 +13,19 @@ GtLlmCodeSnippetAssistant >> chatOn: aCoderViewModel [
 					content: aCoderViewModel;
 					serializer: [ :aModel | 
 						{'Code'
-								-> {{'type' -> 'snippet'.
-											'code'
-												-> aModel coderModel sourceCode currentSourceText text asString}
-											asDictionary}.
+								-> (STONJSON
+										toString: {{'type' -> 'snippet'.
+													'code'
+														-> aModel coderModel sourceCode currentSourceText text asString}
+													asDictionary}).
 							'Object' -> (GtLlmValueSerializer new serializeValue: aModel selfObject).
 							'Variables'
 								-> (aModel sharedBindings bindings associations
 										collect: [ :aPair | 
 											{'name' -> aPair key.
-												'value' -> aPair value value asString} asDictionary ])} ];
+												'value'
+													-> (GtLlmValueSerializer new serializeValue: aPair value value)}
+												asDictionary ])} ];
 					updater: [ :aModel :aText | aModel coderModel forSource: aText ]);
 			assistant: self;
 			provider: self buildProvider.
@@ -122,7 +125,8 @@ GtLlmCodeSnippetAssistant >> treatProvider: aProvider [
 	super treatProvider: aProvider.
 
 	aCoderViewModel := aProvider chat serializer instance content.
-	
+
+	aProvider tools: GtLlmToolsGroup new.
 	aProvider addTool: (self lookupBindingToolFor: aCoderViewModel).
 	aProvider addTool: (self getPropertyToolOn: aCoderViewModel selfObject).
 	aProvider addTool: self lookupClassTool.

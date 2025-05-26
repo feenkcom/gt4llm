@@ -4,16 +4,19 @@ Extension { #name : #ProtoObject }
 ProtoObject >> gtActionChatFor: anAction [
 	<gtAction>
 	| chat |
-	GtLlmFeatures usesCoder ifFalse: [ ^ anAction empty ].
-	GtLlmConnectionRegistry instance hasConnectableDefaultConnection ifFalse: [ ^ anAction empty  ].
-	
-	chat := GtLlmObjectAssistant new chatOn: self.
+	GtLlmFeatures isEnabledInCoder ifFalse: [ ^ anAction empty ].
+	GtLlmConnectionRegistry instance hasConnectableDefaultConnection
+		ifFalse: [ ^ anAction empty ].
+
+
 
 	^ anAction button
 		priority: 100;
 		icon: BrGlamorousVectorIcons openAi;
 		tooltip: 'Chat about object';
-		action: [ :aButton | aButton phlow spawnObject: chat ];
+		action: [ :aButton | 
+			aButton phlow
+				spawnObject: (chat ifNil: [ chat := GtLlmObjectAssistant new chatOn: self ]) ];
 		primaryModifierAction: [ :aButton | aButton phlow showObject: chat ]
 			mouseCursor: BlCopyCursor new
 ]

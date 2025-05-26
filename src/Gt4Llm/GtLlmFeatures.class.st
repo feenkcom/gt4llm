@@ -10,12 +10,28 @@ Class {
 
 { #category : #'as yet unclassified' }
 GtLlmFeatures class >> beExperimental [
-	self useCoder useMultiStep
+	self enableInCoder useMultiStep
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmFeatures class >> disableInCoder [
+	UseCoder := false
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmFeatures class >> enableInCoder [
+	UseCoder := true
 ]
 
 { #category : #'as yet unclassified' }
 GtLlmFeatures class >> initialize [
-	UseCoder := false
+	UseCoder := false.
+	MultiStep := false
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmFeatures class >> isEnabledInCoder [
+	^ UseCoder ifNil: [ UseCoder := false ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -24,21 +40,11 @@ GtLlmFeatures class >> multiStep [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmFeatures class >> setUseCoder: aBool [
+GtLlmFeatures class >> setEnableInCoder: aBool [
 	UseCoder := aBool
-]
-
-{ #category : #'as yet unclassified' }
-GtLlmFeatures class >> useCoder [
-	UseCoder := true
 ]
 
 { #category : #'as yet unclassified' }
 GtLlmFeatures class >> useMultiStep [
 	MultiStep := true
-]
-
-{ #category : #'as yet unclassified' }
-GtLlmFeatures class >> usesCoder [
-	^ UseCoder ifNil: [ false ]
 ]
