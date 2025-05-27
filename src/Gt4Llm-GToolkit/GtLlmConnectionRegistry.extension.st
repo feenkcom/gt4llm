@@ -25,7 +25,7 @@ GtLlmConnectionRegistry >> gtConnectionsFor: aView [
 		contextItemLabel: 'Make default'
 			action: [ :anItem :aConnection | 
 				self defaultConnection: aConnection.
-				anItem anchor phlow firstParentWithViewContent phlow update ]
+				anItem anchor phlow fireViewUpdateWish ]
 ]
 
 { #category : #'*Gt4Llm-GToolkit' }

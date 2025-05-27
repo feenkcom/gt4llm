@@ -15,9 +15,17 @@ GtOllamaProvider >> gtExecutionsFor: aView [
 ]
 
 { #category : #'*Gt4Ollama-GToolkit' }
+GtOllamaProvider class >> gtToggleEnabledActionFor: anAction [
+	<gtClassAction>
+	^ anAction button
+		tooltip: (IsConnectable ifTrue: [ 'Disable' ] ifFalse: [ 'Enable' ]);
+		icon: BrGlamorousVectorIcons shutdown;
+		action: [ :aButton | IsConnectable := IsConnectable not ]
+]
+
+{ #category : #'*Gt4Ollama-GToolkit' }
 GtOllamaProvider class >> isConnectable [
-	^ true"[ ZnClient new get: GtOllamaClient defaultBaseUrl.
-	true ] on: ConnectionTimedOut do: [ false ]"
+	^ IsConnectable
 ]
 
 { #category : #'*Gt4Ollama-GToolkit' }

@@ -11,7 +11,8 @@ Class {
 		'executions'
 	],
 	#classVars : [
-		'DefaultModel'
+		'DefaultModel',
+		'IsConnectable'
 	],
 	#category : #Gt4Ollama
 }
@@ -24,6 +25,21 @@ GtOllamaProvider class >> default [
 { #category : #'as yet unclassified' }
 GtOllamaProvider class >> defaultModel [
 	^ DefaultModel ifNil: [ DefaultModel := 'llama3.1' ]
+]
+
+{ #category : #'as yet unclassified' }
+GtOllamaProvider class >> initialize [
+	IsConnectable := false
+]
+
+{ #category : #'as yet unclassified' }
+GtOllamaProvider class >> markConnectable [
+	IsConnectable := true
+]
+
+{ #category : #'as yet unclassified' }
+GtOllamaProvider class >> markNonconnectable [
+	IsConnectable := false
 ]
 
 { #category : #'as yet unclassified' }
@@ -149,7 +165,8 @@ GtOllamaProvider >> performToolCallsFor: aResult [
 			chat
 				addMessage: (GtLlmToolMessage new
 						toolCall: aToolCall;
-						output: toolOutput) ]
+						output: toolOutput) ].
+	self chat signalRunHasUpdated
 ]
 
 { #category : #'as yet unclassified' }

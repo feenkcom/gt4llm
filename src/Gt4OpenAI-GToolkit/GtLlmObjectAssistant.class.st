@@ -153,18 +153,6 @@ GtLlmObjectAssistant >> getMethodTool [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmObjectAssistant >> getMethodsTool [
-	^ GtLlmFunctionTool new
-		name: 'getClassMethods';
-		parameters: {'className'};
-		description: 'Gets a class by name and returns a list of its methods.';
-		block: [ :functionCall | 
-			(functionCall anyArgument asClassIfAbsent: [ nil ])
-				ifNil: [ 'Class not found' ]
-				ifNotNil: [ :aClass | Character cr join: (aClass allMethods collect: #selector) ] ]
-]
-
-{ #category : #'as yet unclassified' }
 GtLlmObjectAssistant >> getPropertyToolOn: anObject [
 	^ GtLlmFunctionTool new
 		name: 'getObjectProperty';
@@ -209,9 +197,15 @@ GtLlmObjectAssistant >> lookupClassTool [
 		parameters: {'className'};
 		description: 'Looks up documentation for a class by name and returns its comment in Markdown format.';
 		block: [ :functionCall | 
-			((functionCall anyArgument) asClassIfAbsent: [ nil ])
+			(functionCall anyArgument asClassIfAbsent: [ nil ])
 				ifNil: [ 'Class not found' ]
-				ifNotNil: [ :aClass | aClass instanceSide organization classComment ] ]
+				ifNotNil: [ :aClass | 
+					STONJSON
+						toString: {'name' -> aClass name.
+								'superclass' -> aClass superclass name.
+								'slots' -> aClass slotNames.
+								'comment' -> aClass instanceSide organization classComment.
+								'methods' -> (aClass allMethods collect: #selector)} asDictionary ] ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -403,7 +397,6 @@ GtLlmObjectAssistant >> treatProvider: aProvider [
 	anInstance
 		ifNotNil: [ aProvider addTool: (self getPropertyToolOn: anInstance) ].
 
-	aProvider addTool: self getMethodsTool.
 	aProvider addTool: self getActionsTool.
 	aProvider addTool: self getViewsTool.
 	aProvider addTool: self getMethodTool.
