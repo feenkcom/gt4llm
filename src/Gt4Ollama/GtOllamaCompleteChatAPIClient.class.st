@@ -7,20 +7,20 @@ Class {
 		'format',
 		'tools'
 	],
-	#category : 'Gt4Ollama'
+	#category : #Gt4Ollama
 }
 
 { #category : #accessing }
 GtOllamaCompleteChatAPIClient >> entity [
 	| entity |
-	entity := {('stream' -> false).
-	('model' -> self model).
-	('messages' -> (self messages collect: [ :aMessage | aMessage serialize ]))}
-		asDictionary.
+	entity := {'stream' -> false.
+			'model' -> self model.
+			'messages' -> (self messages collect: [ :aMessage | aMessage serialize ])}
+			asDictionary.
 
 	self format ifNotNil: [ entity at: 'format' put: self format ].
 	self tools
-		ifNotNil: [ entity at: 'tools' put: (self tools collect: #'serialize') ].
+		ifNotNil: [ entity at: 'tools' put: (self tools collect: [ :aTool | aTool serialize ]) ].
 
 	^ entity
 ]
