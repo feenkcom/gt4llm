@@ -174,7 +174,8 @@ GtOllamaProvider >> performToolCallsFor: aResult [
 			chat
 				addMessage: (GtLlmToolMessage new
 						toolCall: aToolCall;
-						output: toolOutput) ]
+						output: toolOutput) ].
+	self chat signalRunHasUpdated
 ]
 
 { #category : #'as yet unclassified' }
