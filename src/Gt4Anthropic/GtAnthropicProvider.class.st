@@ -253,7 +253,9 @@ GtAnthropicProvider >> triggerAssistant [
 								at: 'text'
 									put: (((aValue at: 'text') removePrefix: '```json') removeSuffix: '```');
 								yourself ]
-						ifFalse: [ aValue ] ]) ] doWhileTrue: [ result toolCalls isNotEmpty ].
+						ifFalse: [ aValue ] ]).
+
+	self chat signalRunHasUpdated ] doWhileTrue: [ result toolCalls isNotEmpty ].
 
 	self chat signalRunIsDone.
 
