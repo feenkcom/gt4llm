@@ -209,9 +209,14 @@ GtLlmObjectAssistant >> lookupClassTool [
 		parameters: {'className'};
 		description: 'Looks up documentation for a class by name and returns its comment in Markdown format.';
 		block: [ :functionCall | 
-			((functionCall anyArgument) asClassIfAbsent: [ nil ])
+			(functionCall anyArgument asClassIfAbsent: [ nil ])
 				ifNil: [ 'Class not found' ]
-				ifNotNil: [ :aClass | aClass instanceSide organization classComment ] ]
+				ifNotNil: [ :aClass | 
+					STONJSON
+						toString: {'name' -> aClass name.
+								'superclass' -> aClass superclass name.
+								'slots' -> aClass slotNames.
+								'comment' -> aClass instanceSide organization classComment} asDictionary ] ]
 ]
 
 { #category : #'as yet unclassified' }
