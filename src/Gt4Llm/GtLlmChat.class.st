@@ -136,8 +136,10 @@ GtLlmChat >> messages: anObject [
 { #category : #accessing }
 GtLlmChat >> provider [
 	^ provider
-		ifNil: [ provider := GtLlmConnectionRegistry uniqueInstance defaultConnection
-					buildProvider chat: self ]
+		ifNil: [ GtLlmConnectionRegistry uniqueInstance hasConnectableDefaultConnection
+				ifTrue: [ provider := GtLlmConnectionRegistry uniqueInstance defaultConnection
+							buildProvider chat: self ]
+				ifFalse: [ nil ] ]
 ]
 
 { #category : #accessing }
