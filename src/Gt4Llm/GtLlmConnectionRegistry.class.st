@@ -88,7 +88,9 @@ GtLlmConnectionRegistry >> connections [
 { #category : #'as yet unclassified' }
 GtLlmConnectionRegistry >> defaultConnection [
 	^ (defaultConnection isNil or: [ defaultConnection isConnectable not ])
-		ifTrue: [ self connectableConnections first ]
+		ifTrue: [ self connectableConnections
+				ifEmpty: [ nil ]
+				ifNotEmpty: [ :aConnectionsList | aConnectionsList first ] ]
 		ifFalse: [ defaultConnection ]
 ]
 
@@ -106,7 +108,7 @@ GtLlmConnectionRegistry >> hasConnectableConnection [
 
 { #category : #'as yet unclassified' }
 GtLlmConnectionRegistry >> hasConnectableDefaultConnection [
-	^ self defaultConnection isConnectable
+	^ self defaultConnection isNotNil and: [ self defaultConnection isConnectable ]
 ]
 
 { #category : #'as yet unclassified' }
