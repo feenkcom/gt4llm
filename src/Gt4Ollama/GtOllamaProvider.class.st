@@ -28,15 +28,6 @@ GtOllamaProvider class >> defaultModel [
 ]
 
 { #category : #'as yet unclassified' }
-GtOllamaProvider class >> gtToggleEnabledActionFor: anAction [
-	<gtClassAction>
-	^ anAction button
-		tooltip: (IsConnectable ifTrue: [ 'Disable' ] ifFalse: [ 'Enable' ]);
-		icon: BrGlamorousVectorIcons shutdown;
-		action: [ :aButton | IsConnectable := IsConnectable not ]
-]
-
-{ #category : #'as yet unclassified' }
 GtOllamaProvider class >> initialize [
 	IsConnectable := false
 ]

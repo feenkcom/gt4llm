@@ -15,6 +15,15 @@ GtOllamaProvider >> gtExecutionsFor: aView [
 ]
 
 { #category : #'*Gt4Ollama-GToolkit' }
+GtOllamaProvider class >> gtToggleEnabledActionFor: anAction [
+	<gtClassAction>
+	^ anAction button
+		tooltip: (IsConnectable ifTrue: [ 'Disable' ] ifFalse: [ 'Enable' ]);
+		icon: BrGlamorousVectorIcons shutdown;
+		action: [ :aButton | IsConnectable := IsConnectable not ]
+]
+
+{ #category : #'*Gt4Ollama-GToolkit' }
 GtOllamaProvider class >> isConnectable [
 	^ IsConnectable
 ]
