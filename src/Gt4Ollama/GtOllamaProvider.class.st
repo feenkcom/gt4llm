@@ -11,7 +11,8 @@ Class {
 		'executions'
 	],
 	#classVars : [
-		'DefaultModel'
+		'DefaultModel',
+		'IsConnectable'
 	],
 	#category : #Gt4Ollama
 }
@@ -24,6 +25,30 @@ GtOllamaProvider class >> default [
 { #category : #'as yet unclassified' }
 GtOllamaProvider class >> defaultModel [
 	^ DefaultModel ifNil: [ DefaultModel := 'llama3.1' ]
+]
+
+{ #category : #'as yet unclassified' }
+GtOllamaProvider class >> gtToggleEnabledActionFor: anAction [
+	<gtClassAction>
+	^ anAction button
+		tooltip: (IsConnectable ifTrue: [ 'Disable' ] ifFalse: [ 'Enable' ]);
+		icon: BrGlamorousVectorIcons shutdown;
+		action: [ :aButton | IsConnectable := IsConnectable not ]
+]
+
+{ #category : #'as yet unclassified' }
+GtOllamaProvider class >> initialize [
+	IsConnectable := false
+]
+
+{ #category : #'as yet unclassified' }
+GtOllamaProvider class >> markConnectable [
+	IsConnectable := true
+]
+
+{ #category : #'as yet unclassified' }
+GtOllamaProvider class >> markNonconnectable [
+	IsConnectable := false
 ]
 
 { #category : #'as yet unclassified' }

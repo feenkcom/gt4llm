@@ -16,8 +16,7 @@ GtOllamaProvider >> gtExecutionsFor: aView [
 
 { #category : #'*Gt4Ollama-GToolkit' }
 GtOllamaProvider class >> isConnectable [
-	^ true"[ ZnClient new get: GtOllamaClient defaultBaseUrl.
-	true ] on: ConnectionTimedOut do: [ false ]"
+	^ IsConnectable
 ]
 
 { #category : #'*Gt4Ollama-GToolkit' }
