@@ -135,7 +135,7 @@ GtLlmApiKeyCardElement >> makeTestingButton [
 									content: [ | aContainer |
 										aContainer := BlElement new
 												size: 400 @ 400;
-												background: self theme default contentBackgroundColor.
+												background: self theme default contentBackground.
 										(aFrozenError gtViewsFor: GtPhlowView empty)
 											asElementDo: [ :anElement | 
 												anElement size: 800 @ 800.
