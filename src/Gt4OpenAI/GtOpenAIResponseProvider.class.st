@@ -25,6 +25,11 @@ GtOpenAIResponseProvider >> defaultTools [
 ]
 
 { #category : #'as yet unclassified' }
+GtOpenAIResponseProvider >> executions [
+	^ executions
+]
+
+{ #category : #'as yet unclassified' }
 GtOpenAIResponseProvider >> gtExecutionsFor: aView [
 	<gtView>
 	^ aView list
