@@ -79,6 +79,11 @@ GtAnthropicProvider >> defaultUserMessageClass [
 ]
 
 { #category : #'as yet unclassified' }
+GtAnthropicProvider >> executions [
+	^ executions
+]
+
+{ #category : #'as yet unclassified' }
 GtAnthropicProvider >> gtExecutionsFor: aView [
 	<gtView>
 	^ aView list

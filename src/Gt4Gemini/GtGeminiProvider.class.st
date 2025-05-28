@@ -73,6 +73,11 @@ GtGeminiProvider >> defaultUserMessageClass [
 ]
 
 { #category : #'as yet unclassified' }
+GtGeminiProvider >> executions [
+	^ executions
+]
+
+{ #category : #'as yet unclassified' }
 GtGeminiProvider >> format: anObject [
 	super format: (self treatFormat: anObject)
 ]

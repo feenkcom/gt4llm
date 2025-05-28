@@ -72,6 +72,11 @@ GtOllamaProvider >> defaultUserMessageClass [
 	^ self chat messageClassForOllama
 ]
 
+{ #category : #'as yet unclassified' }
+GtOllamaProvider >> executions [
+	^ executions
+]
+
 { #category : #accessing }
 GtOllamaProvider >> files [
 	^ files
