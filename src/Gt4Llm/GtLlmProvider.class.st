@@ -17,6 +17,11 @@ GtLlmProvider class >> defaultProviders [
 ]
 
 { #category : #'as yet unclassified' }
+GtLlmProvider class >> isConnectable [
+	^ false
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmProvider class >> new [
 	^ self basicNew initialize
 ]
@@ -24,6 +29,7 @@ GtLlmProvider class >> new [
 { #category : #accessing }
 GtLlmProvider >> assistantMessageClass [
 	^ assistantMessageClass
+		ifNil: [ assistantMessageClass := self defaultAssistantMessageClass ]
 ]
 
 { #category : #accessing }
@@ -39,6 +45,11 @@ GtLlmProvider >> chat [
 { #category : #accessing }
 GtLlmProvider >> chat: anObject [
 	chat := anObject
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmProvider >> client [
+	^ self subclassResponsibility
 ]
 
 { #category : #'as yet unclassified' }
@@ -62,11 +73,13 @@ GtLlmProvider >> format: anObject [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmProvider >> initialize [
-	super initialize.
-
-	userMessageClass := self defaultUserMessageClass.
-	assistantMessageClass := self defaultAssistantMessageClass
+GtLlmProvider >> gtCallsFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Calls';
+		priority: 1;
+		object: [ self client ];
+		view: #gtCallsFor:
 ]
 
 { #category : #'as yet unclassified' }
@@ -77,7 +90,7 @@ GtLlmProvider >> sendAssistantMessage: anObject [
 { #category : #'as yet unclassified' }
 GtLlmProvider >> sendMessage: aMessage [
 	self
-		sendAssistantMessage: (userMessageClass new
+		sendAssistantMessage: (self userMessageClass new
 				content: aMessage;
 				role: 'user';
 				chat: self)
@@ -90,7 +103,7 @@ GtLlmProvider >> status [
 
 { #category : #accessing }
 GtLlmProvider >> userMessageClass [
-	^ userMessageClass
+	^ userMessageClass ifNil: [ userMessageClass := self defaultUserMessageClass ]
 ]
 
 { #category : #accessing }

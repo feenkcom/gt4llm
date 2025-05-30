@@ -23,6 +23,18 @@ GtLlmActionMessage >> gtActionFor: aView [
 ]
 
 { #category : #'*Gt4Llm-GToolkit' }
+GtLlmActionMessage >> gtArgumentsFor: aView [
+	<gtView>
+	<gtLlmMessageView>
+	self action isEmptyOrNil ifTrue: [ ^ aView empty ].
+
+	^ aView list
+			title: 'Arguments';
+			priority: 4;
+			items: [ self arguments ]
+]
+
+{ #category : #'*Gt4Llm-GToolkit' }
 GtLlmActionMessage >> gtInspectActionFor: anAction [
 	<gtLlmAction>
 	self actionModel ifNil: [ ^ anAction noAction ].

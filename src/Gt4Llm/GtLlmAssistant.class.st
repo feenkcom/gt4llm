@@ -2,8 +2,8 @@ Class {
 	#name : #GtLlmAssistant,
 	#superclass : #Object,
 	#instVars : [
-		'providerStencil',
-		'instruction'
+		'instruction',
+		'connection'
 	],
 	#category : #Gt4Llm
 }
@@ -50,16 +50,34 @@ GtLlmAssistant >> addInstructionSection: aSection [
 ]
 
 { #category : #'as yet unclassified' }
+GtLlmAssistant >> argumentsFormatDescription [
+	<gtLlmAssistantFormat>
+	^ GtLlmAssistantFormatDescription new
+		name: 'Arguments';
+		format: 'Array of text';
+		type: {'array'. 'null'};
+		items: {'type' -> 'string'} asDictionary;
+		example: '{"Argument 1", "Argument 2"}'
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmAssistant >> buildProvider [
+	^ connection buildProvider
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmAssistant >> chatAction [
 	<gtLlmAssistantAction>
-	^ GtLlmAssistantAction new 
+	^ GtLlmAssistantAction new
 		name: 'Chat';
 		priority: 1;
 		description: 'Chat using the text field.';
-		format: 'Chat: {1}';
+		addArgument: 'Message';
 		examples: {GtLlmAssistantActionExample new markUnverified
-					input: {'Action' -> 'Chat: How are you?'} asDictionary;
+					input: {'Action' -> 'Chat'.
+							'Arguments' -> {'Hi! How are you?'}} asDictionary;
 					output: {'Action' -> 'Chat'.
+							'Arguments' -> {'Hi! How are you?'}.
 							'Text'
 								-> 'As an AI model, I do not have feelings. How can I assist you today?'}
 							asDictionary}
@@ -67,11 +85,14 @@ GtLlmAssistant >> chatAction [
 
 { #category : #'as yet unclassified' }
 GtLlmAssistant >> collectActions [
-	^ ((Set withAll: ((Pragma
-		allNamed: #gtLlmAssistantAction
-		from: self class
-		to: Object) collect: [:aPragma | aPragma methodSelector]))
-		collect: [ :aSelector | (self perform: aSelector) assistant: self ])
+	^ (((Set
+		withAll: ((Pragma
+				allNamed: #gtLlmAssistantAction
+				from: self class
+				to: Object) collect: [ :aPragma | aPragma methodSelector ]))
+		collect: [ :aSelector | self perform: aSelector ]
+		thenSelect: [ :anAction | anAction isNotNil ])
+		collect: [ :anAction | anAction assistant: self ])
 		sorted: [ :a :b | a priority < b priority ]
 ]
 
@@ -93,11 +114,26 @@ GtLlmAssistant >> collectSections [
 		to: Object) collect: [ :aPragma | self perform: aPragma methodSelector ]
 ]
 
+{ #category : #accessing }
+GtLlmAssistant >> connection [
+	^ connection
+]
+
+{ #category : #accessing }
+GtLlmAssistant >> connection: anObject [
+	connection := anObject
+]
+
 { #category : #'as yet unclassified' }
 GtLlmAssistant >> createChat [
+	^ self createChatWithProvider: self buildProvider
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmAssistant >> createChatWithProvider: provider [
 	^ GtLlmActionChat new
-		provider: (self providerStencil value: instruction);
-		assistant: self
+		assistant: self;
+		provider: provider
 ]
 
 { #category : #'as yet unclassified' }
@@ -130,7 +166,7 @@ GtLlmAssistant >> gtInstructionFor: aView [
 	<gtView>
 	^ aView forward
 		title: 'Instruction';
-		priority: 10;
+		priority: 9;
 		object: [ instruction asInstructionPiece ];
 		view: #gtInstructionFor:
 ]
@@ -138,11 +174,11 @@ GtLlmAssistant >> gtInstructionFor: aView [
 { #category : #'as yet unclassified' }
 GtLlmAssistant >> initialize [
 	super initialize.
-	self providerStencil: self defaultProviderStencil.
-	
-	
+
 	self initializeInstruction.
-	
+
+	self connection: GtLlmConnectionRegistry uniqueInstance defaultConnection.
+
 	self description: self defaultDescription
 ]
 
@@ -158,21 +194,6 @@ GtLlmAssistant >> initializeInstruction [
 { #category : #accessing }
 GtLlmAssistant >> instruction [
 	^ instruction
-]
-
-{ #category : #accessing }
-GtLlmAssistant >> onAnthropicWithModel: aModel [
-	self providerStencil: (self defaultAnthropicProviderStencilWithModel: aModel)
-]
-
-{ #category : #accessing }
-GtLlmAssistant >> providerStencil [
-	^ providerStencil
-]
-
-{ #category : #accessing }
-GtLlmAssistant >> providerStencil: anObject [
-	providerStencil := anObject
 ]
 
 { #category : #'as yet unclassified' }
@@ -196,8 +217,15 @@ GtLlmAssistant >> textFormatDescription [
 This node contains plain text.
 Multiple lines, multiple paragraphs are allowed.
 
-*markup* may also **be used**. `Code` can be highlighted, but code blocks with three tick marks MAY NOT be used.
+*markup* may also **be used**. `Code` can be highlighted,  and code sections using three backticks may be used.
 
 # Headings exist as well
 ```'
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmAssistant >> treatProvider: aProvider [
+	aProvider 
+		instructions: instruction asInstructionPiece instructionString;
+		format: instruction asJsonSchema
 ]

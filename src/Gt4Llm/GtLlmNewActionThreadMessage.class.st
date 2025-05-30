@@ -19,5 +19,7 @@ GtLlmNewActionThreadMessage >> currentAction: anObject [
 
 { #category : #'as yet unclassified' }
 GtLlmNewActionThreadMessage >> treatString [
-	^ currentAction format format: {contents}
+	^ GtLlmActionCall new
+		action: currentAction name;
+		arguments: (currentAction hasArgument ifTrue: [ {contents asString} ] ifFalse: [ {} ])
 ]

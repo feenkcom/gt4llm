@@ -3,7 +3,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'baseUrl',
-		'apiKey'
+		'apiKey',
+		'history'
 	],
 	#classVars : [
 		'ApiKeyFile'
@@ -155,13 +156,17 @@ GtOpenAIClient >> defaultBaseUrl [
 
 { #category : #accessing }
 GtOpenAIClient >> delete: aUrl [
-	| aClient |
+	| aClient response |
 	aClient := self initializeClient.
 	aClient url: self baseUrl / aUrl.
 	
 	aClient entity: nil.
 
-	^ self checkForErrors: aClient delete
+	response := aClient delete.
+	
+	history add: (aClient request -> aClient response).
+	
+	^ response
 ]
 
 { #category : #accessing }
@@ -233,14 +238,18 @@ GtOpenAIClient >> get: aUrl [
 
 { #category : #accessing }
 GtOpenAIClient >> get: aUrl withParams: aListOfAssocs [
-	| aClient |
+	| aClient response |
 	aClient := self initializeClient.
 	aClient url: self baseUrl / aUrl.
 	aListOfAssocs do: [ :aPair | aClient queryAt: aPair key put: aPair value ].
 
 	aClient entity: nil.
 
-	^ self checkForErrors: aClient get
+	response := aClient get.
+	
+	history add: (aClient request -> aClient response).
+	
+	^ self checkForErrors: response
 ]
 
 { #category : #accessing }
@@ -292,6 +301,16 @@ GtOpenAIClient >> getRun: aRunId forThread: aThreadId [
 		perform
 ]
 
+{ #category : #'as yet unclassified' }
+GtOpenAIClient >> gtCallsFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Calls';
+		priority: 5;
+		object: [ history ];
+		view: #gtCallsFor:
+]
+
 { #category : #accessing }
 GtOpenAIClient >> gtModelsFor: aView [
 	<gtView>
@@ -305,6 +324,8 @@ GtOpenAIClient >> gtModelsFor: aView [
 { #category : #accessing }
 GtOpenAIClient >> initialize [
 	super initialize.
+	
+	history := GtLlmRequestHistory new.
 
 	self baseUrl: self defaultBaseUrl
 ]
@@ -347,37 +368,32 @@ GtOpenAIClient >> listVectorStores [
 
 { #category : #accessing }
 GtOpenAIClient >> post: aString withEntity: anEntity [
-	| aClient |
+	| aClient response |
 	aClient := self initializeClient.
 	aClient url: self baseUrl / aString.
 
 	aClient contents: anEntity.
+	
+	response := aClient post.
+	
+	history add: (aClient request -> aClient response).
 
-	^ self checkForErrors: aClient post
+	^ self checkForErrors: response
 ]
 
 { #category : #accessing }
 GtOpenAIClient >> postFile: aString withEntity: anEntity [
-	| aClient |
+	| aClient response |
 	aClient := self initializeClient.
 	aClient url: self baseUrl / aString.
 
 	aClient entity: anEntity.
+	
+	response := aClient post.
+	
+	history add: (aClient request -> aClient response).
 
-	^ self checkForErrors: aClient post
-]
-
-{ #category : #accessing }
-GtOpenAIClient >> postStreaming: aString withEntity: anEntity [
-	| aClient |
-	aClient := self initializeClient
-			streaming: true;
-			contentReader: nil.
-	aClient url: self baseUrl / aString.
-
-	aClient contents: anEntity.
-
-	^ aClient post
+	^ self checkForErrors: response
 ]
 
 { #category : #'as yet unclassified' }

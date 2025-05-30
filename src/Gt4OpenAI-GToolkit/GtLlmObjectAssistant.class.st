@@ -5,20 +5,71 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
+GtLlmObjectAssistant >> actionProposalAction [
+	<gtLlmAssistantAction>
+	^ GtLlmAssistantAction new
+		name: 'Propose an action';
+		priority: 5;
+		description: 'Propose a useful Phlow action for this object. Only reply with the Smalltalk code for the action. Look up existing actions and their code for reference, especially to check what new action would be useful before proposing any code. Take into account optional user directions if applicable.';
+		addArgument: 'User Instruction';
+		examples: {GtLlmAssistantActionExample new markUnverified
+					input: {'Action' -> 'Propose an action'.
+							'Arguments' -> {''}.
+							'Object'
+								-> '{"string":"(1@5)","instanceSlots":[{"name":"x","class":"SmallInteger","value":"1"},{"name":"y","class":"SmallInteger","value":"5"}],"class":"Point"}'}
+							asDictionary;
+					output: {'Action' -> 'Propose an action'.
+							'Arguments' -> {''}.
+							'Object'
+								-> '{"string":"(1@5)","instanceSlots":[{"name":"x","class":"SmallInteger","value":"1"},{"name":"y","class":"SmallInteger","value":"5"}],"class":"Point"}'.
+							'Code'
+								-> '[{"type": "method", "class": "Point", "code": "gtGotoXActionFor: anAction
+	<gtAction>
+	^ anAction button
+		icon: BrGlamorousVectorIcons inspect;
+		label: ''Go to X'';
+		priority: 10;
+		action: [:aButton | aButton phlow spawnObject: self x]"}]'} asDictionary}
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmObjectAssistant >> chatOn: anObject [
 	| chat |
-	chat := self createChat onInstance: (self serializerFor: anObject).
+	chat := GtLlmActionChat new
+			assistant: self;
+			onInstance: (self serializerFor: anObject);
+			provider: self buildProvider.
 
-
-	chat provider addTool: self getMethodsTool.
-	chat provider addTool: self getMethodTool.
-	chat provider addTool: self getImplementorsTool.
-	chat provider addTool: self getReferencesTool.
-	chat provider addTool: self lookupClassTool.
-	chat provider addTool: self lookupPageTool.
 	chat provider addTool: (self getPropertyToolOn: anObject).
 
 	^ chat
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmObjectAssistant >> codeFormatDescription [
+	<gtLlmAssistantFormat>
+	^ GtLlmAssistantFormatDescription new
+		name: 'Code';
+		priority: 2;
+		format: 'Smalltalk code wrapped in an array JSON objects';
+		example: 'Snippets and methods should be given here. There are two types to the objects returned here: `snippet` and `method`. Method objects also have a class they refer to. It should always be an array, even if only one item is needed. Multiple items may be returned. If the method is to be installed on the class side rather than the instance side, set the optional `classSide` property to `true`.
+		
+Example:
+```json
+[
+	{"type": "snippet",
+	 "code": "55 @ (13 * (5 negatedArcTan)"},
+	{"type": "method",
+	 "class": "Number",
+	 "code": "invertedArcTan
+	 ^ self arcTan negated"},
+	{"type": "method",
+	 "class": "Number",
+	 "classSide": true,
+	 "code": "classSideMethod
+	 ^ self new instanceSideMethod"}
+]
+```'
 ]
 
 { #category : #'as yet unclassified' }
@@ -27,21 +78,11 @@ GtLlmObjectAssistant >> defaultDescription [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmObjectAssistant >> defaultProviderStencil [
-	^ [ :anInstructionFormat | 
-	GtOpenAIResponseProvider withApiKeyFromFile
-		instructions: anInstructionFormat asInstructionPiece instructionString;
-		format: anInstructionFormat asJsonSchema;
-		assistantMessageClass: GtOpenAIObjectMessage;
-		userMessageClass: GtOpenAIObjectMessage ]
-]
-
-{ #category : #'as yet unclassified' }
 GtLlmObjectAssistant >> explanationAction [
 	<gtLlmAssistantAction>
 	^ GtLlmAssistantAction new
 		name: 'Explain the object';
-		priority: 2;
+		priority: 10;
 		description: 'Explain the object, including its layout, its purpose, and other interesting facts. Use tools if necessary. Stick to the facts you can verify and avoid speculation.';
 		examples: {GtLlmAssistantActionExample new markUnverified
 					input: {'Action' -> 'Explain the object'.
@@ -49,12 +90,30 @@ GtLlmObjectAssistant >> explanationAction [
 								-> '{"string":"(100@30)","instanceSlots":[{"name":"x","class":"SmallInteger","value":"100"},{"name":"y","class":"SmallInteger","value":"30"}],"class":"Point"}'}
 							asDictionary;
 					output: {'Action' -> 'Propose a view'.
+							'Arguments' -> nil.
 							'Object'
 								-> '{"string":"(100@30)","instanceSlots":[{"name":"x","class":"SmallInteger","value":"100"},{"name":"y","class":"SmallInteger","value":"300"}],"class":"Point"}'.
-							'Method' -> ''.
+							'Code' -> '[]'.
 							'Text'
-								-> 'This object reprents a two-dimensional point at the coordinates `100` and `30`.'}
+								-> 'This object represents a two-dimensional point at the coordinates `100` and `30`.'}
 							asDictionary}
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmObjectAssistant >> getActionsTool [
+	^ GtLlmFunctionTool new
+		name: 'getClassActions';
+		parameters: {'className'};
+		description: 'Gets a class by name and returns a list of its actions.';
+		block: [ :functionCall | 
+			(functionCall anyArgument asClassIfAbsent: [ nil ])
+				ifNil: [ 'Class not found' ]
+				ifNotNil: [ :aClass | 
+					Character cr
+						join: ((Pragma
+								allNamed: #gtAction
+								from: aClass
+								to: Object) collect: #methodSelector) ] ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -94,18 +153,6 @@ GtLlmObjectAssistant >> getMethodTool [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmObjectAssistant >> getMethodsTool [
-	^ GtLlmFunctionTool new
-		name: 'getClassMethods';
-		parameters: {'className'};
-		description: 'Gets a class by name and returns a list of its methods.';
-		block: [ :functionCall | 
-			(functionCall anyArgument asClassIfAbsent: [ nil ])
-				ifNil: [ 'Class not found' ]
-				ifNotNil: [ :aClass | Character cr join: (aClass allMethods collect: #selector) ] ]
-]
-
-{ #category : #'as yet unclassified' }
 GtLlmObjectAssistant >> getPropertyToolOn: anObject [
 	^ GtLlmFunctionTool new
 		name: 'getObjectProperty';
@@ -127,15 +174,38 @@ GtLlmObjectAssistant >> getReferencesTool [
 ]
 
 { #category : #'as yet unclassified' }
+GtLlmObjectAssistant >> getViewsTool [
+	^ GtLlmFunctionTool new
+		name: 'getClassViews';
+		parameters: {'className'};
+		description: 'Gets a class by name and returns a list of its views.';
+		block: [ :functionCall | 
+			(functionCall anyArgument asClassIfAbsent: [ nil ])
+				ifNil: [ 'Class not found' ]
+				ifNotNil: [ :aClass | 
+					Character cr
+						join: ((Pragma
+								allNamed: #gtView
+								from: aClass
+								to: Object) collect: #methodSelector) ] ]
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmObjectAssistant >> lookupClassTool [
 	^ GtLlmFunctionTool new
 		name: 'lookupClass';
 		parameters: {'className'};
 		description: 'Looks up documentation for a class by name and returns its comment in Markdown format.';
 		block: [ :functionCall | 
-			((functionCall anyArgument) asClassIfAbsent: [ nil ])
+			(functionCall anyArgument asClassIfAbsent: [ nil ])
 				ifNil: [ 'Class not found' ]
-				ifNotNil: [ :aClass | aClass instanceSide organization classComment ] ]
+				ifNotNil: [ :aClass | 
+					STONJSON
+						toString: {'name' -> aClass name.
+								'superclass' -> aClass superclass name.
+								'slots' -> aClass slotNames.
+								'comment' -> aClass instanceSide organization classComment.
+								'methods' -> (aClass allMethods collect: #selector)} asDictionary ] ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -148,19 +218,6 @@ GtLlmObjectAssistant >> lookupPageTool [
 			(LeDatabase gtBook asyncPagesForWord: functionCall anyArgument) toArray wait
 				ifEmpty: [ 'No page found' ]
 				ifNotEmpty: [ :pages | pages first asMarkdownPage ] ]
-]
-
-{ #category : #'as yet unclassified' }
-GtLlmObjectAssistant >> methodFormatDescription [
-	<gtLlmAssistantFormat>
-	^ GtLlmAssistantFormatDescription new
-		name: 'Method';
-		priority: 2;
-		format: 'Smalltalk code';
-		example: '```
-add: val
-	^ self + val
-```'
 ]
 
 { #category : #'as yet unclassified' }
@@ -183,7 +240,7 @@ GtLlmObjectAssistant >> phlowInstructionSection [
 		body: 'Phlow is a framework for creating various views on the object inspector in Glamorous Toolkit. What follows are some examples for views that can be created using Phlow.
 
 Lists:
-```
+```smalltalk-method
 gtListFor: aView
 	<gtView>
 	^ aView list
@@ -194,7 +251,7 @@ gtListFor: aView
 ```
 
 Columned lists:
-```
+```smalltalk-method
 gtColumnedListFor: aView
 	<gtView>
 	^ aView columnedList
@@ -206,7 +263,7 @@ gtColumnedListFor: aView
 ```
 
 Text editors:
-```
+```smalltalk-method
 gtTextEditorFor: aView
 	<gtView>
 	^ aView textEditor
@@ -216,7 +273,7 @@ gtTextEditorFor: aView
 ```
 
 Diffs:
-```
+```smalltalk-method
 gtDiffFor: aView
 	<gtView>
 	^ aView diff
@@ -227,7 +284,7 @@ gtDiffFor: aView
 ```
 
 Trees:
-```
+```smalltalk-method
 gtTreeFor: aView
 	<gtView>
 	^ aView tree
@@ -240,7 +297,7 @@ gtTreeFor: aView
 ```
 
 Columned Trees:
-```
+```smalltalk-method
 gtColumnedTreeFor: aView
 	<gtView>
 	^ aView columnedTree
@@ -253,7 +310,7 @@ gtColumnedTreeFor: aView
 ```
 
 Forward:
-```
+```smalltalk-method
 gtForwardFor: aView
 	<gtView>
 	^ aView forward
@@ -269,12 +326,33 @@ GtLlmObjectAssistant >> responseFormatSection [
 	<gtLlmInstructionSection>
 	^ GtLlmInstructionSection new
 		source: self;
-		title: 'Response Format Concerns';
-		body: 'The response format in textual responses should be Markdown. Apart from regular Markdown, it also supports annotations for classes and methods.
-		
-Classes may be annotated using `{{gtClass:ClassName}}`, where `ClassName` is the name of the class to be referenced.
+		title: 'Response Format';
+		body: 'The response format in all text should be Markdown. Apart from regular Markdown, it also supports annotations for classes and methods.
+- Classes may be annotated using `{{gtClass:ClassName}}`, where `ClassName` is the name of the class to be referenced.
+- Methods may be annotated using `{{gtMethod:ClassName>>#methodName}}`, where `ClassName` is the name of the class and `methodName` is the name of the method.
 
-Likewise, methods may be annotated using `{{gtMethod:ClassName>>#methodName}}`, where `ClassName` is the name of the class and `methodName` is the name of the method.'
+Code in text should be formatted as follows:
+- Smalltalk methods appear as:
+
+```smalltalk-method
+add: val
+	^ self + val
+```
+
+- Smalltalk snippets appear as:
+
+```smalltalk
+Point x: 1 y: 10
+```
+
+- the definition of a new class should be provided in the form of a script:
+
+```smalltalk
+Object subclass: #SomeClass
+	instanceVariableNames: ''someSlotA someSlotB''
+	classVariableNames: ''
+	package: ''SomePackage''
+```'
 ]
 
 { #category : #'as yet unclassified' }
@@ -311,29 +389,52 @@ GtLlmObjectAssistant >> traverse: anObject using: aChain [
 ]
 
 { #category : #'as yet unclassified' }
+GtLlmObjectAssistant >> treatProvider: aProvider [
+	| anInstance |
+	super treatProvider: aProvider.
+
+	anInstance := aProvider chat serializer instance.
+	anInstance
+		ifNotNil: [ aProvider addTool: (self getPropertyToolOn: anInstance) ].
+
+	aProvider addTool: self getActionsTool.
+	aProvider addTool: self getViewsTool.
+	aProvider addTool: self getMethodTool.
+	aProvider addTool: self getImplementorsTool.
+	aProvider addTool: self getReferencesTool.
+	aProvider addTool: self lookupClassTool.
+	aProvider addTool: self lookupPageTool.
+
+	aProvider
+		assistantMessageClass: GtOpenAIObjectMessage;
+		userMessageClass: GtOpenAIObjectMessage
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmObjectAssistant >> viewProposalAction [
 	<gtLlmAssistantAction>
 	^ GtLlmAssistantAction new
 		name: 'Propose a view';
-		priority: 1;
-		description: 'Propose a useful Phlow view for this object. Only reply with the Smalltalk code for the view. Look up existing views and their code for reference if needed. Take into account optional user directions if applicable.';
-		format: 'Propose a view (user direction: `{1}`)';
+		priority: 5;
+		description: 'Propose a useful Phlow view for this object. Only reply with the Smalltalk code for the view. Look up existing views and their code for reference, especially to check what new view would be useful before proposing any code. Take into account optional user directions if applicable.';
+		addArgument: 'User Instruction';
 		examples: {GtLlmAssistantActionExample new markUnverified
-					input: {'Action' -> 'Propose a view (user direction: ``)'.
+					input: {'Action' -> 'Propose a view'.
+							'Arguments' -> {''}.
 							'Object'
 								-> '{"string":"(1@5)","instanceSlots":[{"name":"x","class":"SmallInteger","value":"1"},{"name":"y","class":"SmallInteger","value":"5"}],"class":"Point"}'}
 							asDictionary;
 					output: {'Action' -> 'Propose a view'.
+							'Arguments' -> {''}.
 							'Object'
 								-> '{"string":"(1@5)","instanceSlots":[{"name":"x","class":"SmallInteger","value":"1"},{"name":"y","class":"SmallInteger","value":"5"}],"class":"Point"}'.
-							'Method'
-								-> 'gtCoordinatesFor: aView
+							'Code'
+								-> '[{"type": "method", "class": "Point", "code": "gtCoordinatesFor: aView
 	<gtView>
 	^ aView columnedList
 		title: ''Coordinates'';
 		priority: 10;
 		items: [ { ''x'' -> self x. ''y'' -> self y } ];
 		column: ''Axis'' text: #key;
-		column: ''Value'' text: #value'}
-							asDictionary}
+		column: ''Value'' text: #value"}]'} asDictionary}
 ]

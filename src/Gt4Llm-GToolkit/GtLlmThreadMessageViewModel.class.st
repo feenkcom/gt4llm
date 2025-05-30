@@ -11,7 +11,30 @@ Class {
 
 { #category : #accessing }
 GtLlmThreadMessageViewModel >> action [
-	^ ''
+	^ self threadMessage action
+]
+
+{ #category : #accessing }
+GtLlmThreadMessageViewModel >> actionArguments [
+	^ self threadMessage arguments
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmThreadMessageViewModel >> actionModel [
+	^ self threadMessage actionModel
+]
+
+{ #category : #accessing }
+GtLlmThreadMessageViewModel >> actionString [
+	| actionArguments |
+	self action ifNil: [ ^ '' ].
+
+	actionArguments := self actionArguments.
+
+	^ self action
+		, (actionArguments isEmptyOrNil
+				ifTrue: [ '' ]
+				ifFalse: [ '(' , (', ' join: actionArguments) , ')' ])
 ]
 
 { #category : #accessing }
@@ -31,6 +54,11 @@ GtLlmThreadMessageViewModel >> createdAt [
 { #category : #accessing }
 GtLlmThreadMessageViewModel >> elementClass [
 	^ GtLlmExpandableThreadMessageElement
+]
+
+{ #category : #accessing }
+GtLlmThreadMessageViewModel >> hasAction [
+	^ self action isNotNil
 ]
 
 { #category : #accessing }

@@ -19,8 +19,7 @@ GtLlmChatViewModel >> beSync [
 GtLlmChatViewModel >> initialize [
 	super initialize.
 	threadMessageViewModelsCache := Dictionary new.
-	newThreadMessageViewModel := GtLlmNewThreadMessageViewModel new
-			threadMessage: GtLlmNewThreadMessage new
+	newThreadMessageViewModel := GtLlmNewThreadMessage new asViewModel
 ]
 
 { #category : #accessing }
@@ -59,8 +58,8 @@ GtLlmChatViewModel >> threadMessageViewModels [
 					aViewModel := threadMessageViewModelsCache
 							at: aMessage id
 							ifPresent: [ :theViewModel | theViewModel threadMessage: aMessage ]
-							ifAbsentPut: [ (self newThreadMessageViewModelFor: aMessage)
-									isExpanded: lastMessage = aMessage ].
+							ifAbsentPut: [ aMessage asViewModel
+									isExpanded: (lastMessage = aMessage and: [ aMessage isToolRole not ]) ].
 					aStream nextPut: aViewModel ].
 			aStatus := assistantChat status.
 

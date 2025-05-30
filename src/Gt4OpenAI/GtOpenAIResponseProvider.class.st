@@ -3,7 +3,8 @@ Class {
 	#superclass : #GtOpenAIProvider,
 	#instVars : [
 		'tools',
-		'instructions'
+		'instructions',
+		'executions'
 	],
 	#category : #Gt4OpenAI
 }
@@ -19,18 +20,22 @@ GtOpenAIResponseProvider >> addTool: aTool [
 ]
 
 { #category : #'as yet unclassified' }
-GtOpenAIResponseProvider >> defaultAssistantMessageClass [
-	^ GtOpenAIMessage
-]
-
-{ #category : #'as yet unclassified' }
 GtOpenAIResponseProvider >> defaultTools [
 	^ GtLlmToolsGroup new
 ]
 
 { #category : #'as yet unclassified' }
-GtOpenAIResponseProvider >> defaultUserMessageClass [
-	^ GtOpenAIMessage
+GtOpenAIResponseProvider >> executions [
+	^ executions
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAIResponseProvider >> gtExecutionsFor: aView [
+	<gtView>
+	^ aView list
+		title: 'Executions';
+		items: [ executions ];
+		priority: 10
 ]
 
 { #category : #'as yet unclassified' }
@@ -38,6 +43,7 @@ GtOpenAIResponseProvider >> gtToolsFor: aView [
 	<gtView>
 	^ aView forward
 		title: 'Tools';
+		priority: 5;
 		object: [ tools ];
 		view: #gtItemsFor:
 ]
@@ -65,7 +71,9 @@ GtOpenAIResponseProvider >> handleToolCall: aToolCall [
 GtOpenAIResponseProvider >> initialize [
 	super initialize.
 
-	tools := self defaultTools
+	tools := self defaultTools.
+	
+	executions := OrderedCollection new.
 ]
 
 { #category : #accessing }
@@ -97,6 +105,22 @@ GtOpenAIResponseProvider >> performToolCallsIn: result [
 	self chat signalRunHasUpdated.
 
 	^ self executeWait
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAIResponseProvider >> sendFiles: aListOfFileReferences withMessage: aString [
+	self
+		sendAssistantMessage: (self userMessageClass new
+				content: {{'type' -> 'input_text'.
+							'text' -> aString} asDictionary}
+						, (aListOfFileReferences
+								collect: [ :aFileReference | 
+									{'type' -> 'input_image'.
+										'image_url'
+											-> ('data:image/jpeg;base64,' , aFileReference binaryContents base64Encoded)}
+										asDictionary ]);
+				role: 'user';
+				chat: self)
 ]
 
 { #category : #accessing }

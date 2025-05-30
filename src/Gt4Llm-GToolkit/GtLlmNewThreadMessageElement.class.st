@@ -5,7 +5,8 @@ Class {
 	#classTraits : 'TBrLayoutResizable classTrait + TGtLlmWithThreadMessageViewModel classTrait',
 	#instVars : [
 		'contentsElement',
-		'toolbar'
+		'toolbar',
+		'imagesElement'
 	],
 	#category : #'Gt4Llm-GToolkit'
 }
@@ -42,6 +43,7 @@ GtLlmNewThreadMessageElement >> buildAttachButton [
 										and: [ (FileSystemDirectoryEntry reference: aFileReference) isHidden not ] ];
 								okAction: [ :aFile :anOkButton | 
 									self threadMessageViewModel attachFile: aFile.
+									self updateImagesElement.
 									anOkButton fireEvent: BrDropdownHideWish new ] ]);
 		label: 'Attach';
 		icon: BrGlamorousVectorIcons changes;
@@ -49,6 +51,36 @@ GtLlmNewThreadMessageElement >> buildAttachButton [
 		constraintsDo: [ :c | 
 			c linear vertical alignBottom.
 			c linear horizontal alignLeft ]
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmNewThreadMessageElement >> buildProviderButton [
+	| aButton |
+	^ aButton := BrButton new beSmallSize
+			aptitude: BrGlamorousButtonWithLabelAptitude new
+					+ (BrGlamorousWithExplicitDropdownAptitude
+							handle: [ BrButton new beSmallSize
+									aptitude: BrGlamorousButtonWithLabelAptitude - BrGlamorousButtonExteriorAptitude;
+									label: self threadMessageViewModel connectionString ]
+							content: [ | aList |
+								aList := BrSimpleList new fitContent
+										id: #'provider-list';
+										items: self threadMessageViewModel connectionRegistry connectableConnections;
+										itemStencil: [ BrLabel new
+												aptitude: BrGlamorousLabelAptitude new
+														+ (BrStyleCommonAptitude new
+																selected: [ :aStyle | aStyle background: BrGlamorousColors selectedListItemColor ];
+																hovered: [ :aStyle | aStyle background: BrGlamorousColors hoveredListItemColor ]);
+												padding: (BlInsets all: 5) ];
+										itemDataBinder: [ :aLabel :anItem | aLabel text: anItem connectionString ];
+										when: BrSelectionChanged
+											do: [ :anEvent | 
+												self threadMessageViewModel
+													provider: (self threadMessageViewModel connectionRegistry connections
+															at: anEvent indices first) buildProvider.
+												aButton label: self threadMessageViewModel connectionString.
+												aList fireEvent: BrDropdownHideWish new ] ]);
+			label: self threadMessageViewModel connectionString
 ]
 
 { #category : #'initialization ' }
@@ -77,8 +109,10 @@ GtLlmNewThreadMessageElement >> initialize [
 	super initialize.
 
 	self initializeContentsElement.
+	self initializeImagesElement.
 	self initializeToolbar.
 	self addChild: contentsElement as: #contents.
+	self addChild: imagesElement as: #images.
 	self addChild: toolbar as: #toolbar.
 
 	self hMatchParent.
@@ -103,6 +137,11 @@ GtLlmNewThreadMessageElement >> initializeContentsElement [
 				combination: BlKeyCombination primaryReturn;
 				performBlock: [ :aBrTextEditor | self sendMessage ];
 				yourself)
+]
+
+{ #category : #'initialization ' }
+GtLlmNewThreadMessageElement >> initializeImagesElement [
+	imagesElement := BrHorizontalPane new fitContent clipChildren: false
 ]
 
 { #category : #'initialization ' }
@@ -171,12 +210,31 @@ GtLlmNewThreadMessageElement >> updateContentsElement [
 { #category : #'private - updating' }
 GtLlmNewThreadMessageElement >> updateElement [
 	self updateContentsElement.
+	self updateImagesElement.
 	self updateToolbar
+]
+
+{ #category : #'private - updating' }
+GtLlmNewThreadMessageElement >> updateImagesElement [
+	imagesElement removeChildren.
+
+	self threadMessageViewModel files
+		do: [ :aFile | 
+			imagesElement
+				addChild: (BrDeletableFileWidget new
+						vExact: 100;
+						hExact: 100;
+						isDeletable: true;
+						file: aFile;
+						onDeletion: [ :aFileForDeletion | 
+							self threadMessageViewModel files remove: aFileForDeletion.
+							self updateImagesElement ]) ]
 ]
 
 { #category : #'private - updating' }
 GtLlmNewThreadMessageElement >> updateToolbar [
 	toolbar removeAllItems.
 	toolbar addItem: self buildSendButton.
-	toolbar addItem: self buildAttachButton
+	toolbar addItem: self buildAttachButton.
+	toolbar addItem: self buildProviderButton
 ]

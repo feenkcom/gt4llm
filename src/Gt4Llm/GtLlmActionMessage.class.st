@@ -24,6 +24,19 @@ GtLlmActionMessage >> contentSummary [
 ]
 
 { #category : #'as yet unclassified' }
+GtLlmActionMessage >> gtChatRequestFor: aView [
+	<gtView>
+	<gtLlmMessageView>
+	self action = 'Chat' ifFalse: [ ^ aView empty ].
+	self isUserRole ifFalse: [ ^ aView empty ].
+
+	^ aView textEditor
+		title: 'Message';
+		priority: 1;
+		text: [ self arguments first ]
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmActionMessage >> gtContentFor: aView [
 	<gtView>
 	<gtLlmMessageView>

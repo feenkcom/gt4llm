@@ -32,8 +32,7 @@ GtOpenAIMessage class >> serializationProperties [
 		#metadata -> #metadata.
 		#run_id -> #runId.
 		#thread_id -> #threadId.
-		#role -> #role.
-		#attachments -> #attachments
+		#role -> #role
 	}
 ]
 
@@ -65,26 +64,6 @@ GtOpenAIMessage >> assistantId [
 { #category : #accessing }
 GtOpenAIMessage >> assistantId: anObject [
 	assistantId := anObject
-]
-
-{ #category : #accessing }
-GtOpenAIMessage >> attachments [
-	^ attachments
-]
-
-{ #category : #accessing }
-GtOpenAIMessage >> attachments: anObject [
-	attachments := anObject
-]
-
-{ #category : #accessing }
-GtOpenAIMessage >> chat [
-	^ chat
-]
-
-{ #category : #accessing }
-GtOpenAIMessage >> chat: anObject [
-	chat := anObject
 ]
 
 { #category : #accessing }
@@ -130,7 +109,7 @@ GtOpenAIMessage >> contentText [
 		ifFalse: [ ''
 				join: (content
 						collect: [ :aValue | 
-							(aValue at: 'text')
+							(aValue at: 'text' ifAbsent: [ nil ])
 								ifNil: [ '' ]
 								ifNotNil: [ :aTextObject | 
 									(aTextObject isKindOf: String)
@@ -171,21 +150,6 @@ GtOpenAIMessage >> gtAnnotationsFor: aView [
 		priority: 2;
 		object: [ self annotations ];
 		view: #gtAnnotationsFor:
-]
-
-{ #category : #'as yet unclassified' }
-GtOpenAIMessage >> gtMessageFilesFor: aView [
-	<gtView>
-	<gtLlmMessageView>
-	| messageFiles |
-	messageFiles := self messageFiles.
-
-	messageFiles ifEmpty: [ ^ aView empty ].
-
-	"for some reason we need this instead of a forward for the layout in the message to work"
-	^ (messageFiles gtFilesFor: aView) 
-		title: 'Message files';
-		priority: 10
 ]
 
 { #category : #testing }
@@ -253,16 +217,6 @@ GtOpenAIMessage >> isUserRole [
 	^ self role = #user
 ]
 
-{ #category : #'as yet unclassified' }
-GtOpenAIMessage >> messageFiles [
-	self contentText = self content ifTrue: [ ^ GtOpenAIFilesGroup new ].
-
-	^ GtOpenAIFilesGroup
-		withAll: (self content
-				select: [ :aValue | aValue type = 'image_file' ]
-				thenCollect: [ :aValue | self chat assistant client getFile: ((aValue at: 'image_file') at: 'file_id') ])
-]
-
 { #category : #accessing }
 GtOpenAIMessage >> metadata [
 	^ metadata
@@ -291,13 +245,6 @@ GtOpenAIMessage >> runId [
 { #category : #accessing }
 GtOpenAIMessage >> runId: anObject [
 	runId := anObject
-]
-
-{ #category : #accessing }
-GtOpenAIMessage >> senderText [
-	self isAssistantRole ifTrue: [ ^ 'Assistant' ].
-	self isSystemRole ifTrue: [ ^ 'System' ].
-	^ 'You'
 ]
 
 { #category : #accessing }

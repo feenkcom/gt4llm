@@ -6,10 +6,13 @@ Class {
 		'model',
 		'client',
 		'modelfile',
-		'tools'
+		'tools',
+		'files',
+		'executions'
 	],
 	#classVars : [
-		'DefaultModel'
+		'DefaultModel',
+		'IsConnectable'
 	],
 	#category : #Gt4Ollama
 }
@@ -22,6 +25,21 @@ GtOllamaProvider class >> default [
 { #category : #'as yet unclassified' }
 GtOllamaProvider class >> defaultModel [
 	^ DefaultModel ifNil: [ DefaultModel := 'llama3.1' ]
+]
+
+{ #category : #'as yet unclassified' }
+GtOllamaProvider class >> initialize [
+	IsConnectable := false
+]
+
+{ #category : #'as yet unclassified' }
+GtOllamaProvider class >> markConnectable [
+	IsConnectable := true
+]
+
+{ #category : #'as yet unclassified' }
+GtOllamaProvider class >> markNonconnectable [
+	IsConnectable := false
 ]
 
 { #category : #'as yet unclassified' }
@@ -45,10 +63,46 @@ GtOllamaProvider >> client: anObject [
 ]
 
 { #category : #'as yet unclassified' }
+GtOllamaProvider >> defaultAssistantMessageClass [
+	^ self chat messageClassForOllama
+]
+
+{ #category : #'as yet unclassified' }
+GtOllamaProvider >> defaultUserMessageClass [
+	^ self chat messageClassForOllama
+]
+
+{ #category : #'as yet unclassified' }
+GtOllamaProvider >> executions [
+	^ executions
+]
+
+{ #category : #accessing }
+GtOllamaProvider >> files [
+	^ files
+]
+
+{ #category : #accessing }
+GtOllamaProvider >> files: anObject [
+	files := anObject
+]
+
+{ #category : #'as yet unclassified' }
+GtOllamaProvider >> gtToolsFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Tools';
+		priority: 5;
+		object: [ tools ];
+		view: #gtItemsFor:
+]
+
+{ #category : #'as yet unclassified' }
 GtOllamaProvider >> initialize [
 	super initialize.
 
 	assistantWorking := false.
+	executions := OrderedCollection new.
 	
 	self initializeClient.
 	
@@ -63,6 +117,8 @@ GtOllamaProvider >> initializeClient [
 { #category : #'as yet unclassified' }
 GtOllamaProvider >> instructions: aString [
 	| internalModelName modelFile |
+	aString isEmptyOrNil ifTrue: [^ self].
+
 	internalModelName := 'gt-tutor-' , self model , '-' , self uuidClass new asString.
 	modelFile := GtLlmModelFile new
 			from: self model;
@@ -88,6 +144,13 @@ GtOllamaProvider >> model: anObject [
 	[ self client pullModel: model ] on: Error do: [  ]
 ]
 
+{ #category : #'as yet unclassified' }
+GtOllamaProvider >> modelName [
+	^ self modelfile
+		ifNil: [ self model ]
+		ifNotNil: [ :aFile | aFile directives first text ]
+]
+
 { #category : #accessing }
 GtOllamaProvider >> modelfile [
 	^ modelfile
@@ -107,14 +170,40 @@ GtOllamaProvider >> performToolCallsFor: aResult [
 			chat
 				addMessage: (GtLlmToolMessage new
 						toolCall: aToolCall;
-						output: toolOutput) ]
+						output: toolOutput) ].
+	self chat signalRunHasUpdated
+]
+
+{ #category : #'as yet unclassified' }
+GtOllamaProvider >> printOn: aStream [
+	aStream
+		nextPutAll: self class providerName;
+		nextPut: $(;
+		nextPutAll: (self modelfile
+				ifNil: [ self model ]
+				ifNotNil: [ self modelName ]);
+		nextPut: $)
 ]
 
 { #category : #'as yet unclassified' }
 GtOllamaProvider >> sendAssistantMessage: aMessage [
     | userMessage |
-	userMessage := userMessageClass new merge: aMessage.
+	userMessage := self userMessageClass new merge: aMessage.
 	userMessage role: 'user'.
+	self chat addMessage: userMessage.
+
+	self asyncWait
+]
+
+{ #category : #'as yet unclassified' }
+GtOllamaProvider >> sendFiles: aCollection withMessage: aString [
+	| userMessage |
+	userMessage := self userMessageClass new
+			content: aString;
+			images: (aCollection collect: [ :aFile | aFile binaryContents base64Encoded ]);
+			role: 'user';
+			chat: self.
+
 	self chat addMessage: userMessage.
 
 	self asyncWait
@@ -125,6 +214,16 @@ GtOllamaProvider >> status [
 	^ assistantWorking
 		ifTrue: [ GtLlmAssistantChatWorkingStatus new ]
 		ifFalse: [ GtLlmAssistantChatReadyStatus new ]
+]
+
+{ #category : #accessing }
+GtOllamaProvider >> tools [
+	^ tools
+]
+
+{ #category : #accessing }
+GtOllamaProvider >> tools: anObject [
+	tools := anObject
 ]
 
 { #category : #'as yet unclassified' }
@@ -143,9 +242,10 @@ GtOllamaProvider >> triggerAssistant [
 		doWhileTrue: [ result toolCalls isNotEmpty ].
 
 	self chat
-		addMessage: (assistantMessageClass new
+		addMessage: (self assistantMessageClass new
 				content: result content;
 				role: 'assistant';
+				model: self modelName;
 				chat: self;
 				rawData: result rawData).
 

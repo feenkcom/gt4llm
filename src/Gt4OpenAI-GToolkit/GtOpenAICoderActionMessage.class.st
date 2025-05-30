@@ -69,31 +69,6 @@ GtOpenAICoderActionMessage >> diffedCodeText [
 ]
 
 { #category : #'as yet unclassified' }
-GtOpenAICoderActionMessage >> gtActionAcceptFor: anAction [
-	<gtAction>
-	<gtLlmAction>
-	^ anAction button
-		priority: 10;
-		icon: BrGlamorousVectorIcons accept;
-		tooltip: 'Accept code';
-		action: [ :aButton | self chat serializer update: self codeSnippetBlock ]
-]
-
-{ #category : #'as yet unclassified' }
-GtOpenAICoderActionMessage >> gtCodeFor: aView [
-	<gtView>
-	<gtLlmMessageView>
-	self codeBlock isEmptyOrNil ifTrue: [ ^ aView empty ].
-
-	^ aView explicit
-		title: 'Code';
-		priority: 1;
-		stencil: [ (GtPharoMethodCoder
-				forClass: self chat serializer instance content selfObject class
-				source: self codeBlock) asExpandedOnlyElement ]
-]
-
-{ #category : #'as yet unclassified' }
 GtOpenAICoderActionMessage >> gtCodeSnippetFor: aView [
 	<gtView>
 	<gtLlmMessageView>
@@ -160,6 +135,16 @@ GtOpenAICoderActionMessage >> gtVariablesFor: aView [
 		items: [ self variablesBlock ];
 		column: 'Name' text: [ :aDict | aDict at: 'name' ];
 		column: 'Binding' text: [ :aDict | aDict at: 'value' ]
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAICoderActionMessage >> instanceClass [
+	^ self chat serializer instance content behavior
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAICoderActionMessage >> selfObject [
+	^ self chat serializer instance content selfObject
 ]
 
 { #category : #'as yet unclassified' }

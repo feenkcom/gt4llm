@@ -1,6 +1,9 @@
 Class {
 	#name : #GtLlmNewThreadMessageViewModel,
 	#superclass : #GtLlmBasicThreadMessageViewModel,
+	#instVars : [
+		'connectionRegistry'
+	],
 	#category : #'Gt4Llm-GToolkit'
 }
 
@@ -20,6 +23,24 @@ GtLlmNewThreadMessageViewModel >> beSync [
 ]
 
 { #category : #accessing }
+GtLlmNewThreadMessageViewModel >> connectionRegistry [
+	^ connectionRegistry
+		ifNil: [ connectionRegistry := GtLlmConnectionRegistry uniqueInstance ]
+]
+
+{ #category : #accessing }
+GtLlmNewThreadMessageViewModel >> connectionRegistry: anObject [
+	connectionRegistry := anObject
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmNewThreadMessageViewModel >> connectionString [
+	^ (self connectionRegistry connectionFor: self provider)
+		ifNil: [ self provider modelName ]
+		ifNotNil: #connectionString
+]
+
+{ #category : #accessing }
 GtLlmNewThreadMessageViewModel >> contents [
 	^ self threadMessage contents
 ]
@@ -34,9 +55,24 @@ GtLlmNewThreadMessageViewModel >> elementClass [
 	^ GtLlmNewThreadMessageElement
 ]
 
+{ #category : #'as yet unclassified' }
+GtLlmNewThreadMessageViewModel >> files [
+	^ self threadMessage files
+]
+
 { #category : #accessing }
 GtLlmNewThreadMessageViewModel >> onAddMessageContentsRequest: anAnnouncement [
 	self contents: anAnnouncement messageContents requester: nil
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmNewThreadMessageViewModel >> provider [
+	^ threadMessage assistantChat provider
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmNewThreadMessageViewModel >> provider: aProvider [
+	self threadMessage assistantChat provider: aProvider
 ]
 
 { #category : #actions }

@@ -15,6 +15,11 @@ GtOpenAIProvider class >> default [
 ]
 
 { #category : #'as yet unclassified' }
+GtOpenAIProvider class >> isConnectable [
+	^ GtOpenAIClient apiKeyFile exists
+]
+
+{ #category : #'as yet unclassified' }
 GtOpenAIProvider class >> providerName [
 	^ 'OpenAI Chat'
 ]
@@ -35,8 +40,23 @@ GtOpenAIProvider >> chat: anObject [
 ]
 
 { #category : #'as yet unclassified' }
+GtOpenAIProvider >> client [
+	^ client
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAIProvider >> defaultAssistantMessageClass [
+	^ self chat messageClassForOpenAI
+]
+
+{ #category : #'as yet unclassified' }
 GtOpenAIProvider >> defaultModel [
 	^ 'gpt-4.1'
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAIProvider >> defaultUserMessageClass [
+	^ self chat messageClassForOpenAI
 ]
 
 { #category : #'as yet unclassified' }
@@ -70,6 +90,20 @@ GtOpenAIProvider >> model: anObject [
 ]
 
 { #category : #'as yet unclassified' }
+GtOpenAIProvider >> modelName [
+	^ model
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAIProvider >> printOn: aStream [
+	aStream
+		nextPutAll: self class providerName;
+		nextPut: $(;
+		nextPutAll: self model;
+		nextPut: $)
+]
+
+{ #category : #'as yet unclassified' }
 GtOpenAIProvider >> sendAssistantMessage: aMessage [
 	aMessage serializeInline.
 	self chat addMessage: aMessage.
@@ -94,7 +128,10 @@ GtOpenAIProvider >> triggerAssistant [
 			andMessages: self chat messages.
 
 	self chat
-		addMessage: (self assistantMessageClass new content: result choices first message content).
+		addMessage: (self assistantMessageClass new
+				content: result choices first message content;
+				model: self model;
+				role: 'assistant').
 
 	assistantWorking := false.
 	self chat signalRunIsDone

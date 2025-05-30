@@ -2,7 +2,6 @@ Class {
 	#name : #GtAnthropicChatMessage,
 	#superclass : #GtLlmChatMessage,
 	#instVars : [
-		'model',
 		'stopReason',
 		'stopSequence',
 		'type',
@@ -44,17 +43,10 @@ GtAnthropicChatMessage >> actionModel [
 GtAnthropicChatMessage >> contentText [
 	^ (content isKindOf: String)
 		ifTrue: [ content ]
-		ifFalse: [ '' join: (content collect: [ :aValue | (aValue at: #text) ifNil: [ '' ] ]) ]
-]
-
-{ #category : #accessing }
-GtAnthropicChatMessage >> model [
-	^ model
-]
-
-{ #category : #accessing }
-GtAnthropicChatMessage >> model: anObject [
-	model := anObject
+		ifFalse: [ ''
+				join: (content
+						select: [ :aValue | (aValue at: #type) = 'text' ]
+						thenCollect: [ :aValue | (aValue at: #text) ifNil: [ '' ] ]) ]
 ]
 
 { #category : #'as yet unclassified' }

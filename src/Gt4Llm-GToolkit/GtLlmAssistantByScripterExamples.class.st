@@ -8,8 +8,11 @@ Class {
 GtLlmAssistantByScripterExamples >> assistantChat [
 	<gtExample>
 	| tutor chat |
-	tutor := self assistantWithStaticProviderStencil.
-	chat := tutor createChat.
+	tutor := self basicAssistant.
+	chat := tutor createChatWithProvider: (GtLlmStaticProvider new
+				messages: {'{"Action": "Chat", "Text": "Hello! I am your AI assistant, what can I do for you?"}'};
+				userMessageClass: GtLlmActionMessage;
+				assistantMessageClass: GtLlmActionMessage).
 
 	self assert: (chat provider isKindOf: GtLlmStaticProvider).
 	self assert: chat provider chat equals: chat.
@@ -18,31 +21,13 @@ GtLlmAssistantByScripterExamples >> assistantChat [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmAssistantByScripterExamples >> assistantWithStaticProviderStencil [
-	<gtExample>
-	| tutor |
-	tutor := self basicAssistant.
-
-	tutor
-		providerStencil: [ :instruction | 
-			GtLlmStaticProvider new
-				instructions: instruction asInstructionPiece instructionString;
-				format: instruction asJsonSchema;
-				messages: {'{"Action": "Chat", "Text": "Hello! I am your AI assistant, what can I do for you?"}'};
-				userMessageClass: GtLlmActionMessage;
-				assistantMessageClass: GtLlmActionMessage ].
-
-	^ tutor
-]
-
-{ #category : #'as yet unclassified' }
 GtLlmAssistantByScripterExamples >> basicAssistant [
 	<gtExample>
 	| tutor |
-	tutor :=  GtLlmAssistant new.
+	tutor :=  GtLlmAssistant new connection: GtLlmNullConnection new.
 	
 	self assert: tutor actions size equals: 1.
-	self assert: tutor instruction formats size equals: 2.
+	self assert: tutor instruction formats size equals: 3.
 	
 	^ tutor
 ]
@@ -69,7 +54,7 @@ GtLlmAssistantByScripterExamples >> chatElementWithMessageSent [
 		equals: 2.
 	self
 		assert: scripter element chatViewModel assistantChat messages first content
-		equals: '{"Action":"Chat: Hi!"}'.
+		equals: '{"Action":"Chat","Arguments":["Hi!"]}'.
 	self
 		assert: (scripter element chatViewModel assistantChat messages at: 2) content
 		equals: '{"Action": "Chat", "Text": "Hello! I am your AI assistant, what can I do for you?"}'.
@@ -94,6 +79,49 @@ GtLlmAssistantByScripterExamples >> chatElementWithMessageTyped [
 			s
 				label: 'Type message';
 				text: 'Hi!' ].
+
+
+	^ scripter
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmAssistantByScripterExamples >> chatElementWithProviderSelected [
+	<gtExample>
+	| scripter element |
+	scripter := self chatElementWithProviderSelectionOpened.
+	element := scripter element.
+
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Click on Null Provider';
+						onSpaceRoot;
+				id: #'provider-list' ].
+				
+	self assert: (element chatViewModel assistantChat provider isKindOf: GtLlmNullProvider).
+
+
+	^ scripter
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmAssistantByScripterExamples >> chatElementWithProviderSelectionOpened [
+	<gtExample>
+	| scripter element |
+	scripter := self scripterOnAssistantChat.
+	element := scripter element.
+	element chatViewModel newThreadMessageViewModel
+		connectionRegistry: (GtLlmConnectionRegistry new clearConnections
+				addConnection: (GtLlmConnection new
+						label: 'Null';
+						provider: GtLlmNullProvider)).
+
+	scripter
+		clickStep: [ :s | 
+			s
+				label: 'Click on Dropdown';
+				id: #toolbar;
+				onChildAt: 3 ].
 
 
 	^ scripter

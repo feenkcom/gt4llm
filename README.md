@@ -1,10 +1,11 @@
 # gt4llm
 
-is a library for working with LLMs, designed for use with [Glamorous Toolkit](https://gtoolkit.com).
+is a library for working with LLMs, designed for use with [Glamorous Toolkit](https://gtoolkit.com) and [Gemstone](https://gemtalksystems.com/).
 
 Currently it includes:
 - A client for [OpenAI](https://openai.com)
 - A client for [Ollama](https://ollama.com)
+- A client for [Anthropic](https://www.anthropic.com/)
 - General utilities for working with LLMs
 - Examples of integrating LLMs in user interfaces
 

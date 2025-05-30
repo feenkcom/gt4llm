@@ -11,7 +11,8 @@ GtPharoMethodCoder >> actionFormatAddOnFor: anAST into: coderAddOns [
 { #category : #'*Gt4OpenAI-GToolkit' }
 GtPharoMethodCoder >> initializeLlmAddOnsFor: anAst into: addOns viewModel: aGtPharoSourceCoderViewModel [
 	<gtAstCoderAddOns: 10>
-	GtLlmFeatures usesCoder ifFalse: [ ^ self ].
+	GtLlmFeatures isEnabledInCoder ifFalse: [ ^ self ].
+	GtLlmConnectionRegistry instance hasConnectableConnection ifFalse: [ ^ self ].
 	addOns addStyler: (GtLlmInstructionInPharoCommentStyler new).
 	addOns
 		addMainAction: 'Open chat' translated

@@ -49,8 +49,8 @@ GtLlmChat >> assistant [
 ]
 
 { #category : #accessing }
-GtLlmChat >> assistant: anObject [
-	assistant := anObject
+GtLlmChat >> assistant: anAssistant [
+	assistant := anAssistant
 ]
 
 { #category : #accessing }
@@ -83,6 +83,11 @@ GtLlmChat >> gtMessagesFor: aView [
 		column: 'Message' text: [ :item | item content ];
 		updateWhen: GtLlmThreadRunAnnouncement in: self announcer;
 		actionUpdateButton
+]
+
+{ #category : #accessing }
+GtLlmChat >> hasProvider [
+	^ provider isNotNil
 ]
 
 { #category : #accessing }
@@ -131,6 +136,10 @@ GtLlmChat >> messages: anObject [
 { #category : #accessing }
 GtLlmChat >> provider [
 	^ provider
+		ifNil: [ GtLlmConnectionRegistry uniqueInstance hasConnectableDefaultConnection
+				ifTrue: [ provider := GtLlmConnectionRegistry uniqueInstance defaultConnection
+							buildProvider chat: self ]
+				ifFalse: [ nil ] ]
 ]
 
 { #category : #accessing }
@@ -156,9 +165,11 @@ GtLlmChat >> responseFormat [
 	^ self provider format
 ]
 
-{ #category : #accessing }
-GtLlmChat >> sendAssistantMessage: aMessage [
-	^ self provider sendAssistantMessage: aMessage
+{ #category : #'as yet unclassified' }
+GtLlmChat >> sendFiles: aListOfFileReferences withMessage: aString [
+	self provider
+		sendFiles: aListOfFileReferences
+		withMessage: (self messageFromString: aString)
 ]
 
 { #category : #accessing }
@@ -193,7 +204,7 @@ GtLlmChat >> signalRunIsDone [
 
 { #category : #accessing }
 GtLlmChat >> status [
-	self provider ifNil: [ ^ GtLlmAssistantChatNotReadyStatus new ].
+	self hasProvider ifFalse: [ ^ GtLlmAssistantChatNotReadyStatus new ].
 
 	^ self provider status
 ]

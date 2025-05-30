@@ -7,7 +7,8 @@ Class {
 		'client',
 		'tools',
 		'maxTokens',
-		'instructions'
+		'instructions',
+		'executions'
 	],
 	#category : #Gt4Anthropic
 }
@@ -15,6 +16,11 @@ Class {
 { #category : #'as yet unclassified' }
 GtAnthropicProvider class >> default [
 	^ [ self withApiKeyFromFile ]
+]
+
+{ #category : #'as yet unclassified' }
+GtAnthropicProvider class >> isConnectable [
+	^ GtAnthropicClient apiKeyFile exists
 ]
 
 { #category : #'as yet unclassified' }
@@ -53,8 +59,47 @@ GtAnthropicProvider >> client: anObject [
 ]
 
 { #category : #'as yet unclassified' }
+GtAnthropicProvider >> defaultAsssistantMessageClass [
+	^ self chat messageClassForAnthropic
+]
+
+{ #category : #'as yet unclassified' }
 GtAnthropicProvider >> defaultMaxTokens [
 	^ 4096
+]
+
+{ #category : #'as yet unclassified' }
+GtAnthropicProvider >> defaultModel [
+	^ 'claude-3-7-sonnet-20250219'
+]
+
+{ #category : #'as yet unclassified' }
+GtAnthropicProvider >> defaultUserMessageClass [
+	^ self chat messageClassForAnthropic
+]
+
+{ #category : #'as yet unclassified' }
+GtAnthropicProvider >> executions [
+	^ executions
+]
+
+{ #category : #'as yet unclassified' }
+GtAnthropicProvider >> gtExecutionsFor: aView [
+	<gtView>
+	^ aView list
+		title: 'Executions';
+		items: [ executions ];
+		priority: 10
+]
+
+{ #category : #'as yet unclassified' }
+GtAnthropicProvider >> gtToolsFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Tools';
+		priority: 5;
+		object: [ tools ];
+		view: #gtItemsFor:
 ]
 
 { #category : #'as yet unclassified' }
@@ -72,11 +117,13 @@ GtAnthropicProvider >> initialize [
 	super initialize.
 
 	assistantWorking := false.
+	executions := OrderedCollection new.
 	
 	self initializeClient.
 	
 	tools := GtLlmToolsGroup new.
-	maxTokens := self defaultMaxTokens
+	maxTokens := self defaultMaxTokens.
+	model := self defaultModel
 ]
 
 { #category : #'as yet unclassified' }
@@ -114,6 +161,11 @@ GtAnthropicProvider >> model: anObject [
 	model := anObject
 ]
 
+{ #category : #accessing }
+GtAnthropicProvider >> modelName [
+	^ model
+]
+
 { #category : #'as yet unclassified' }
 GtAnthropicProvider >> performToolCallsFor: aResult [
 	aResult toolCalls
@@ -127,12 +179,39 @@ GtAnthropicProvider >> performToolCallsFor: aResult [
 ]
 
 { #category : #'as yet unclassified' }
+GtAnthropicProvider >> printOn: aStream [
+	aStream
+		nextPutAll: self class providerName;
+		nextPut: $(;
+		nextPutAll: self model;
+		nextPut: $)
+]
+
+{ #category : #'as yet unclassified' }
 GtAnthropicProvider >> sendAssistantMessage: aMessage [
 	userMessageClass adoptInstance: aMessage.
 	aMessage role: 'user'.
 	self chat addMessage: aMessage.
 
-	[ self triggerAssistant ] asAsyncPromise
+	executions add: [ self triggerAssistant ] asAsyncPromise
+]
+
+{ #category : #'as yet unclassified' }
+GtAnthropicProvider >> sendFiles: aListOfFileReferences withMessage: aString [
+	self
+		sendAssistantMessage: (self userMessageClass new
+				content: {{'type' -> 'text'.
+							'text' -> aString} asDictionary}
+						, (aListOfFileReferences
+								collect: [ :aFileReference | 
+									{'type' -> 'image'.
+										'source'
+											-> {'type' -> 'base64'.
+													'media_type' -> 'image/jpeg'.
+													'data' -> aFileReference binaryContents base64Encoded} asDictionary}
+										asDictionary ]);
+				role: 'user';
+				chat: self)
 ]
 
 { #category : #'as yet unclassified' }
@@ -140,6 +219,16 @@ GtAnthropicProvider >> status [
 	^ assistantWorking
 		ifTrue: [ GtLlmAssistantChatWorkingStatus new ]
 		ifFalse: [ GtLlmAssistantChatReadyStatus new ]
+]
+
+{ #category : #accessing }
+GtAnthropicProvider >> tools [
+	^ tools
+]
+
+{ #category : #accessing }
+GtAnthropicProvider >> tools: anObject [
+	tools := anObject
 ]
 
 { #category : #'as yet unclassified' }
@@ -159,7 +248,19 @@ GtAnthropicProvider >> triggerAssistant [
 
 	self chat addMessage: result.
 
-	self performToolCallsFor: result ] doWhileTrue: [ result toolCalls isNotEmpty ].
+	self performToolCallsFor: result.
+
+	result
+		content: (result content
+				collect: [ :aValue | 
+					(aValue at: #type) = 'text'
+						ifTrue: [ aValue
+								at: 'text'
+									put: (((aValue at: 'text') removePrefix: '```json') removeSuffix: '```');
+								yourself ]
+						ifFalse: [ aValue ] ]).
+
+	self chat signalRunHasUpdated ] doWhileTrue: [ result toolCalls isNotEmpty ].
 
 	self chat signalRunIsDone.
 

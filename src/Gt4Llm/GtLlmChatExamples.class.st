@@ -12,6 +12,7 @@ GtLlmChatExamples >> basicChat [
 	
 	self assert: chat messages size equals: 0.
 	self assert: chat status isDone not.
+	self assert: chat hasProvider not.
 	
 	^ chat
 ]

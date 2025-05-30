@@ -8,7 +8,7 @@ Class {
 		'format',
 		'instructions'
 	],
-	#category : #Gt4OpenAI
+	#category : 'Gt4OpenAI'
 }
 
 { #category : #accessing }
@@ -79,18 +79,6 @@ GtOpenAIGenerateResponseAPIClient >> model [
 { #category : #accessing }
 GtOpenAIGenerateResponseAPIClient >> model: anObject [
 	model := anObject
-]
-
-{ #category : #accessing }
-GtOpenAIGenerateResponseAPIClient >> request [
-	^ format
-		ifNil: [ self client postStreaming: '/responses' withEntity: self buildEntity ]
-		ifNotNil: [ self client post: '/responses' withEntity: self buildEntity ]
-]
-
-{ #category : #accessing }
-GtOpenAIGenerateResponseAPIClient >> serializationClass [
-	^ format ifNil: [ #GtOpenAIStreamedResponse asClass ] ifNotNil: [ GtOpenAIResponse ]
 ]
 
 { #category : #accessing }

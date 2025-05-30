@@ -7,8 +7,9 @@ Class {
 		'id',
 		'createdAt',
 		'chat',
-		'attachments',
-		'announcer'
+		'announcer',
+		'images',
+		'model'
 	],
 	#category : #Gt4Llm
 }
@@ -66,19 +67,14 @@ GtLlmChatMessage >> announcer [
 	^ announcer ifNil: [announcer := Announcer new]
 ]
 
+{ #category : #'as yet unclassified' }
+GtLlmChatMessage >> arguments [
+	^ [ self contentJson at: 'Arguments' ] on: Error do: [ nil ]
+]
+
 { #category : #accessing }
 GtLlmChatMessage >> asTokenizableString [
 	^ '<|im_start|>' , self role , '<|im_sep|>' , self content , '<|im_end|>'
-]
-
-{ #category : #accessing }
-GtLlmChatMessage >> attachments [
-	^ attachments
-]
-
-{ #category : #accessing }
-GtLlmChatMessage >> attachments: anObject [
-	attachments := anObject
 ]
 
 { #category : #accessing }
@@ -103,6 +99,19 @@ GtLlmChatMessage >> content: anObject [
 	self announce: GtLlmMessageContentsUpdated new
 ]
 
+{ #category : #accessing }
+GtLlmChatMessage >> contentFiles [
+	^ (self content isKindOf: String)
+		ifTrue: [ {} ]
+		ifFalse: [ content
+				select: [ :aValue | (aValue at: #type) = 'image' ]
+				thenCollect: [ :aValue | 
+					aValue
+						at: #source
+						at: #data
+						ifAbsent: [ '' ] ] ]
+]
+
 { #category : #'as yet unclassified' }
 GtLlmChatMessage >> contentJson [
 	^ STONJSON fromString: self contentText
@@ -115,7 +124,12 @@ GtLlmChatMessage >> contentSummary [
 
 { #category : #accessing }
 GtLlmChatMessage >> contentText [
-	^ self content
+	^ (self content isKindOf: String)
+		ifTrue: [ content ]
+		ifFalse: [ ''
+				join: (content
+						select: [ :aValue | (aValue at: #type) = 'text' ]
+						thenCollect: [ :aValue | (aValue at: #text) ifNil: [ '' ] ]) ]
 ]
 
 { #category : #accessing }
@@ -161,9 +175,20 @@ GtLlmChatMessage >> id: anId [
 ]
 
 { #category : #accessing }
+GtLlmChatMessage >> images [
+	^ images
+]
+
+{ #category : #accessing }
+GtLlmChatMessage >> images: anObject [
+	images := anObject
+]
+
+{ #category : #accessing }
 GtLlmChatMessage >> initialize [
 	id := self uuidClass new.
-	createdAt := DateAndTime now
+	createdAt := DateAndTime now.
+	images := OrderedCollection new
 ]
 
 { #category : #accessing }
@@ -201,6 +226,16 @@ GtLlmChatMessage >> isUserRole [
 	^ self role = 'user'
 ]
 
+{ #category : #accessing }
+GtLlmChatMessage >> model [
+	^ model
+]
+
+{ #category : #accessing }
+GtLlmChatMessage >> model: anObject [
+	model := anObject
+]
+
 { #category : #'announcer - subscription' }
 GtLlmChatMessage >> removeSubscription: subscription [
 	"Remove the given subscription from the receiver"
@@ -219,7 +254,10 @@ GtLlmChatMessage >> role: anObject [
 
 { #category : #accessing }
 GtLlmChatMessage >> senderText [
-	self isAssistantRole ifTrue: [ ^ 'Assistant' ].
+	self isAssistantRole
+		ifTrue: [ ^ self model
+				ifNil: [ 'Assistant' ]
+				ifNotNil: [ :aModel | GtLlmConnectionRegistry uniqueInstance labelForModel: aModel ] ].
 	self isSystemRole ifTrue: [ ^ 'System' ].
 	self isToolRole ifTrue: [ ^ 'Tool' ].
 	^ 'You'
@@ -230,13 +268,7 @@ GtLlmChatMessage >> serialize [
 	| serialized |
 	serialized := super serialize.
 
-	self attachments
-		ifNotNil: [ serialized
-				at: 'attachments'
-				put: (self attachments
-						collect: [ :aFile | 
-							{'file_id' -> aFile remoteId.
-								'tools' -> {{'type' -> 'file_search'} asDictionary}} asDictionary ]) ].
+	self images isEmptyOrNil ifFalse: [ serialized at: 'images' put: self images ].
 
 	^ serialized
 ]

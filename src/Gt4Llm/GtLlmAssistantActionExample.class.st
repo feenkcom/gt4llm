@@ -52,24 +52,18 @@ GtLlmAssistantActionExample >> asExpressionSource [
 
 { #category : #accessing }
 GtLlmAssistantActionExample >> asInstructionPiece [
-	^ GtLlmInstructionSection new
+	^ GtLlmInstructionList new
 		source: self;
-		title: 'Example';
-		body: (GtLlmInstructionComposite new
-				addItem: (GtLlmInstructionSection new
-						source: self;
-						title: 'Prompt';
-						body: ('```json
+		addItem: ('Prompt:
+```json
 ' , self inputJson
-								, '
-```') asInstructionPiece);
-				addItem: (GtLlmInstructionSection new
-						source: self;
-						title: 'Output';
-						body: ('```json
+				, '
+```') asInstructionPiece;
+		addItem: ('Output:
+```json
 ' , self outputJson
-								, '
-```') asInstructionPiece))
+				, '
+```') asInstructionPiece
 ]
 
 { #category : #accessing }
