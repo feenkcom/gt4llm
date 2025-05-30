@@ -115,8 +115,8 @@ GtOpenAIObjectMessage >> instanceClass [
 { #category : #'as yet unclassified' }
 GtOpenAIObjectMessage >> object [
 	^ self objectBlock
-		ifEmpty: [ nil ]
-		ifNotEmpty: [ :aStringOrDict | 
+		ifNil: [ nil ]
+		ifNotNil: [ :aStringOrDict | 
 			(aStringOrDict isKindOf: String)
 				ifTrue: [ STONJSON fromString: aStringOrDict ]
 				ifFalse: [ aStringOrDict ] ]
@@ -124,7 +124,7 @@ GtOpenAIObjectMessage >> object [
 
 { #category : #'as yet unclassified' }
 GtOpenAIObjectMessage >> objectBlock [
-	^ self contentJson at: 'Object' ifAbsent: [ '' ]
+	^ self contentJson at: 'Object' ifAbsent: [ nil ]
 ]
 
 { #category : #'as yet unclassified' }

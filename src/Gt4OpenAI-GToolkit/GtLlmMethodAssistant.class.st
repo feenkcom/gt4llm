@@ -132,7 +132,6 @@ GtLlmMethodAssistant >> treatProvider: aProvider [
 	aProvider addTool: self getImplementorsTool.
 	aProvider addTool: self getReferencesTool.
 	aProvider addTool: self getMethodTool.
-	aProvider addTool: self getMethodsTool.
 
 	aProvider
 		assistantMessageClass: GtOpenAICoderActionMessage;
