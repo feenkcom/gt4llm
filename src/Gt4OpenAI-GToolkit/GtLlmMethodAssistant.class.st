@@ -78,6 +78,33 @@ You can look up classes, methods and documentation in the current Glamorous Tool
 ]
 
 { #category : #proposals }
+GtLlmMethodAssistant >> proposeRenamesAction [
+	<gtLlmAssistantAction>
+	^ GtLlmAssistantAction new
+		name: 'Rename method';
+		priority: 3;
+		description: 'Propose a few potential renames for the method.';
+		examples: {GtLlmAssistantActionExample new
+					input: {'Action' -> 'Rename method'.
+							'Arguments' -> {}.
+							'Code'
+								-> '[{"type": "method", "class": "FixedWidthRectangle", "code": "width
+	^ 15 * 30"}]'.
+							'Object'
+								-> '{"string":"a FixedWidthRectangle","instanceSlots":[],"class":"FixedWidthRectangle"}'}
+							asDictionary;
+					output: {'Action' -> 'Rename method'.
+							'Arguments' -> {}.
+							'Text' -> ''.
+							'Object'
+								-> '{"string":"a FixedWidthRectangle","instanceSlots":[],"class":"FixedWidthRectangle"}'.
+							'Code'
+								-> '[{"type": "method", "class": "FixedWidthRectangle", "code": "fixedWidth
+	^ 15 * 30"}, {"type": "method", "class": "FixedWidthRectangle", "code": "staticWidth
+	^ 15 * 30"}]'} asDictionary}
+]
+
+{ #category : #proposals }
 GtLlmMethodAssistant >> reviewAction [
 	<gtLlmAssistantAction>
 	^ GtLlmAssistantAction new
@@ -132,7 +159,6 @@ GtLlmMethodAssistant >> treatProvider: aProvider [
 	aProvider addTool: self getImplementorsTool.
 	aProvider addTool: self getReferencesTool.
 	aProvider addTool: self getMethodTool.
-	aProvider addTool: self getMethodsTool.
 
 	aProvider
 		assistantMessageClass: GtOpenAICoderActionMessage;
