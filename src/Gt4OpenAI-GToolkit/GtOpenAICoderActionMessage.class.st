@@ -143,6 +143,11 @@ GtOpenAICoderActionMessage >> instanceClass [
 ]
 
 { #category : #'as yet unclassified' }
+GtOpenAICoderActionMessage >> methodCode [
+	^ self chat serializer instance content compiledMethod sourceCode
+]
+
+{ #category : #'as yet unclassified' }
 GtOpenAICoderActionMessage >> selfObject [
 	^ self chat serializer instance content selfObject
 ]

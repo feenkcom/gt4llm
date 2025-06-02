@@ -21,7 +21,10 @@ GtLlmChat >> gtMessagesWidgetFor: aView [
 		title: 'Chat';
 		priority: 0;
 		stencil: [ self asElement ];
-		actionUpdateButton
+		actionUpdateButton;
+		actionButtonIcon: BrGlamorousIcons trash
+			tooltip: 'Delete history'
+			action: [ self resetMessages ]
 ]
 
 { #category : #'*Gt4Llm-GToolkit' }
