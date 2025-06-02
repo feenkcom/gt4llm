@@ -9,6 +9,11 @@ Class {
 }
 
 { #category : #accessing }
+GtLlmActionCall class >> action: aString [
+	^ self new action: aString
+]
+
+{ #category : #accessing }
 GtLlmActionCall class >> action: aString arguments: aListOfStrings [
 	^ self new
 		action: aString;
@@ -33,4 +38,9 @@ GtLlmActionCall >> arguments [
 { #category : #accessing }
 GtLlmActionCall >> arguments: anObject [
 	arguments := anObject
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmActionCall >> initialize [
+	arguments := {}
 ]

@@ -2,5 +2,9 @@ Extension { #name : #GtPharoMethodCoderViewModel }
 
 { #category : #'*Gt4OpenAI-GToolkit' }
 GtPharoMethodCoderViewModel >> llmChat [
-	^ GtLlmMethodAssistant new chatOn: self
+	^ self coderModel
+		attributeNamed: #llmChat
+		ifAbsent: [ self coderModel
+				attributeNamed: #llmChat
+				put: (GtLlmMethodAssistant new chatOn: self) ]
 ]
