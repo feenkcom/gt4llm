@@ -34,7 +34,7 @@ GtLlmCoderChatButton >> llmStarted [
 GtLlmCoderChatButton >> onChatSet [
 	self
 		aptitude: BrGlamorousButtonWithIconAndLabelAptitude;
-		icon: BrGlamorousVectorIcons openAi;
+		icon: BrGlamorousVectorIcons chat;
 		beTinySize;
 		action: [ self phlow spawnObject: chat ].
 

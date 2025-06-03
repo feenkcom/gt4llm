@@ -8,7 +8,7 @@ GtPharoSnippetCoder >> initializeLlmAddOnsFor: anAst into: addOns [
 	addOns addStyler: (GtLlmInstructionInPharoCommentStyler new).
 	addOns
 		addMainAction: 'Open chat' translated
-		icon: BrGlamorousVectorIcons openAi
+		icon: BrGlamorousVectorIcons chat
 		action: [ :aCoderUIModel :anElement | 
 			anElement phlow spawnObject: self llmChat ]
 "		id: GtSourceCoderProfileActionId".
@@ -32,7 +32,7 @@ GtPharoSnippetCoder >> initializeLlmAddOnsFor: anAst into: addOns viewModel: aGt
 	addOns addStyler: (GtLlmInstructionInPharoCommentStyler new).
 	addOns
 		addMainAction: 'Open chat' translated
-		icon: BrGlamorousVectorIcons openAi
+		icon: BrGlamorousVectorIcons chat
 		action: [ :aCoderUIModel :anElement | 
 			anElement phlow spawnObject: aGtPharoSourceCoderViewModel llmChat ]
 "		id: GtSourceCoderProfileActionId".

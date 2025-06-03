@@ -33,7 +33,7 @@ GtLlmInstructionInPharoCommentStyler >> visitSmaCCParseNode: aSmaCCParseNode [
 																				copyFrom: each first + 2
 																				to: each second - 1).
 																	GtLlmEmbeddedChatElement new chatViewModel: llmChat asViewModel; vFitContentLimited ]);
-												icon: BrGlamorousVectorIcons openAi;
+												icon: BrGlamorousVectorIcons chat;
 												label: 'Propose change';
 												beTinySize;
 												margin: (BlInsets left: 2 right: 2);

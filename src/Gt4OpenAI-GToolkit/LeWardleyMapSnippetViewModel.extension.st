@@ -5,7 +5,7 @@ LeWardleyMapSnippetViewModel >> gtActionInspectChatFor: anAction [
 	<gtAction>
 	^ anAction button
 		tooltip: 'Inspect chat';
-		icon: BrGlamorousVectorIcons openAi;
+		icon: BrGlamorousVectorIcons chat;
 		target: LeSnippetContextMenuActionTarget uniqueInstance;
 		priority: 2;
 		action: [ :aButton :aSnippetElement | aSnippetElement phlow spawnObject: self wardleyMapViewModel llm ]
