@@ -12,7 +12,7 @@ ProtoObject >> gtActionChatFor: anAction [
 
 	^ anAction button
 		priority: 100;
-		icon: BrGlamorousVectorIcons openAi;
+		icon: BrGlamorousVectorIcons chat;
 		tooltip: 'Chat about object';
 		action: [ :aButton | 
 			aButton phlow
