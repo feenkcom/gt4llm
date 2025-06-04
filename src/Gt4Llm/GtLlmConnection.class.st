@@ -3,8 +3,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'provider',
-		'model',
-		'label'
+		'label',
+		'meta'
 	],
 	#category : #Gt4Llm
 }
@@ -16,8 +16,17 @@ GtLlmConnection >> = anotherConnection [
 ]
 
 { #category : #'as yet unclassified' }
+GtLlmConnection >> addOption: anOption withValue: aValue [
+	meta at: anOption put: aValue
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmConnection >> buildProvider [
-	^ self provider default value model: self model
+	| aProvider |
+	aProvider := self provider default value.
+	meta
+		keysAndValuesDo: [ :aKey :aValue | aProvider perform: aKey asSymbol asMutator withArguments: {aValue} ].
+	^ aProvider
 ]
 
 { #category : #'as yet unclassified' }
@@ -44,8 +53,26 @@ GtLlmConnection >> gtDetailsFor: aView [
 ]
 
 { #category : #'as yet unclassified' }
+GtLlmConnection >> gtOptionsFor: aView [
+	<gtView>
+	^ aView columnedList
+		title: 'Options';
+		priority: 2;
+		items: [ meta associations ];
+		column: 'Option' text: [ :aMeta | aMeta key ];
+		column: 'Value' text: [ :aMeta | aMeta value ]
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmConnection >> hash [
 	^ self model hash xor: self provider hash
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmConnection >> initialize [
+	super initialize.
+	
+	meta := Dictionary new
 ]
 
 { #category : #'as yet unclassified' }
@@ -65,12 +92,12 @@ GtLlmConnection >> label: anObject [
 
 { #category : #accessing }
 GtLlmConnection >> model [
-	^ model
+	^ meta at: #model
 ]
 
 { #category : #accessing }
 GtLlmConnection >> model: anObject [
-	model := anObject
+	self addOption: #model withValue: anObject
 ]
 
 { #category : #accessing }
