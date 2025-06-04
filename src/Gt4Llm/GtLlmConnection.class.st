@@ -92,7 +92,7 @@ GtLlmConnection >> label: anObject [
 
 { #category : #accessing }
 GtLlmConnection >> model [
-	^ meta at: #model
+	^ meta at: #model ifAbsent: [ nil ]
 ]
 
 { #category : #accessing }
