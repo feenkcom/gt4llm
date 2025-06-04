@@ -52,6 +52,11 @@ GtOllamaProvider >> addTool: aTool [
 	tools add: aTool
 ]
 
+{ #category : #'as yet unclassified' }
+GtOllamaProvider >> baseUrl: aUrl [
+	self client baseUrl: aUrl
+]
+
 { #category : #accessing }
 GtOllamaProvider >> client [
 	^ client

@@ -17,7 +17,8 @@ GtLlmValueSerializer >> serializeBinding: aBinding withValue: aBindingValue [
 GtLlmValueSerializer >> serializeValue: aValue [
 	^ {'class' -> aValue class name asString.
 		'string' -> (aValue asString escapeCharacter: '''').
-		'methods' -> (aValue methods collect: #selector).
+		'methods'
+			-> (aValue ifNil: [  ] ifNotNil: [ aValue class methods collect: #selector ]).
 		'instanceSlots'
 			-> (aValue class allSlots
 					collect: [ :aSlot | 
