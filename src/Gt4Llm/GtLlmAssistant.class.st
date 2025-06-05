@@ -89,7 +89,7 @@ GtLlmAssistant >> collectActions [
 		withAll: ((Pragma
 				allNamed: #gtLlmAssistantAction
 				from: self class
-				to: Object) collect: [ :aPragma | aPragma methodSelector ]))
+				to: Object) collect: [ :aPragma | aPragma methodSelector ])) asSet
 		collect: [ :aSelector | self perform: aSelector ]
 		thenSelect: [ :anAction | anAction isNotNil ])
 		collect: [ :anAction | anAction assistant: self ])
@@ -98,11 +98,11 @@ GtLlmAssistant >> collectActions [
 
 { #category : #'as yet unclassified' }
 GtLlmAssistant >> collectFormats [
-	^ ((Pragma
+	^ (((Pragma
 		allNamed: #gtLlmAssistantFormat
 		from: self class
-		to: Object)
-		collect: [ :aPragma | (self perform: aPragma methodSelector) assistant: self ])
+		to: Object) collect: [ :aPragma | aPragma methodSelector ]) asSet
+		collect: [ :aSelector | (self perform: aSelector) assistant: self ])
 		sorted: [ :a :b | a priority < b priority ]
 ]
 
