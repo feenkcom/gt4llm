@@ -34,6 +34,33 @@ GtLlmCodeSnippetAssistant >> chatOn: aCoderViewModel [
 ]
 
 { #category : #'as yet unclassified' }
+GtLlmCodeSnippetAssistant >> codeFormatDescription [
+	<gtLlmAssistantFormat>
+	^ GtLlmAssistantFormatDescription new
+		name: 'Code';
+		priority: 2;
+		format: 'Smalltalk code wrapped in an array JSON objects';
+		example: 'Snippets and methods should be given here. There are two types to the objects returned here: `snippet` and `method`. Method objects also have a class they refer to. It should always be an array, even if only one item is needed. Multiple items may be returned. If the method is to be installed on the class side rather than the instance side, set the optional `classSide` property to `true`. The original snippet MUST ALWAYS be returned first.
+		
+Example:
+```json
+[
+	{"type": "snippet",
+	 "code": "55 @ (13 * (5 negatedArcTan)"},
+	{"type": "method",
+	 "class": "Number",
+	 "code": "invertedArcTan
+	 ^ self arcTan negated"},
+	{"type": "method",
+	 "class": "Number",
+	 "classSide": true,
+	 "code": "classSideMethod
+	 ^ self new instanceSideMethod"}
+]
+```'
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmCodeSnippetAssistant >> defaultDescription [
 	^ 'You are an assistant for code snippets.'
 ]
@@ -136,8 +163,8 @@ GtLlmCodeSnippetAssistant >> treatProvider: aProvider [
 	aProvider addTool: self getMethodTool.
 
 	aProvider
-		assistantMessageClass: GtOpenAICoderActionMessage;
-		userMessageClass: GtOpenAICoderActionMessage
+		assistantMessageClass: GtOpenAICodeSnippetActionMessage;
+		userMessageClass: GtOpenAICodeSnippetActionMessage
 ]
 
 { #category : #'as yet unclassified' }
