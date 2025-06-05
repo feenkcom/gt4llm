@@ -18,7 +18,9 @@ GtLlmValueSerializer >> serializeValue: aValue [
 	^ {'class' -> aValue class name asString.
 		'string' -> (aValue asString escapeCharacter: '''').
 		'methods'
-			-> (aValue ifNil: [  ] ifNotNil: [ aValue class methods collect: #selector ]).
+			-> (aValue
+					ifNil: [ {} ]
+					ifNotNil: [ aValue class methods asArray collect: [ :aMethod | aMethod selector ] ]).
 		'instanceSlots'
 			-> (aValue class allSlots
 					collect: [ :aSlot | 
