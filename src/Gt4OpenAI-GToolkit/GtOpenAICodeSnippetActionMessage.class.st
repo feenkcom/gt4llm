@@ -18,7 +18,12 @@ GtOpenAICodeSnippetActionMessage >> acceptCodeAttribute [
 
 { #category : #'as yet unclassified' }
 GtOpenAICodeSnippetActionMessage >> codeSnippetBlock [
-	^ self codeBlock ifEmpty: [ nil ] ifNotEmpty: [ :snippets | snippets first ]
+	^ self codeBlock
+		ifEmpty: [ nil ]
+		ifNotEmpty: [ :snippets | 
+			snippets
+				detect: [ :aSnippet | aSnippet at: 'source_snippet' ifAbsent: [ false ] ]
+				ifNone: [ nil ] ]
 ]
 
 { #category : #'as yet unclassified' }
