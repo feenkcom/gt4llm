@@ -16,8 +16,8 @@ GtLlmCodeSnippetAssistant >> chatOn: aCoderViewModel [
 								-> (STONJSON
 										toString: {{'type' -> 'snippet'.
 													'code'
-														-> aModel coderModel sourceCode currentSourceText text asString}
-													asDictionary}).
+														-> aModel coderModel sourceCode currentSourceText text asString.
+													'source_snippet' -> true} asDictionary}).
 							'Object' -> (GtLlmValueSerializer new serializeValue: aModel selfObject).
 							'Variables'
 								-> (aModel sharedBindings bindings associations
@@ -40,13 +40,14 @@ GtLlmCodeSnippetAssistant >> codeFormatDescription [
 		name: 'Code';
 		priority: 2;
 		format: 'Smalltalk code wrapped in an array JSON objects';
-		example: 'Snippets and methods should be given here. There are two types to the objects returned here: `snippet` and `method`. Method objects also have a class they refer to. It should always be an array, even if only one item is needed. Multiple items may be returned. If the method is to be installed on the class side rather than the instance side, set the optional `classSide` property to `true`. The original snippet MUST ALWAYS be returned first.
+		example: 'Snippets and methods should be given here. There are two types to the objects returned here: `snippet` and `method`. Method objects also have a class they refer to. It should always be an array, even if only one item is needed. Multiple items may be returned. If the method is to be installed on the class side rather than the instance side, set the optional `classSide` property to `true`. The original snippet MUST ALWAYS be annotated with `source_snippet`.
 		
 Example:
 ```json
 [
 	{"type": "snippet",
-	 "code": "55 @ (13 * (5 negatedArcTan)"},
+	 "code": "55 @ (13 * (5 negatedArcTan)",
+	 "source_snippet": true},
 	{"type": "method",
 	 "class": "Number",
 	 "code": "invertedArcTan
