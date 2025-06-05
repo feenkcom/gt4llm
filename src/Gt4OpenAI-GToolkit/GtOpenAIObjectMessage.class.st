@@ -95,7 +95,7 @@ GtOpenAIObjectMessage >> gtObjectFor: aView [
 
 { #category : #'as yet unclassified' }
 GtOpenAIObjectMessage >> gtViewFor: aView [
-	<gtView>
+	"<gtView>"
 	"<gtLlmMessageView>"
 	| viewObject |
 	self codeBlock isEmptyOrNil ifTrue: [ ^ aView empty ].
