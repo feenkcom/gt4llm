@@ -34,6 +34,7 @@ GtLlmCoderChatButton >> llmStarted [
 GtLlmCoderChatButton >> onChatSet [
 	self
 		aptitude: BrGlamorousButtonWithIconAndLabelAptitude;
+		addAptitude: (BrGlamorousWithExplicitTooltipAptitude text: 'Open chat');
 		icon: BrGlamorousVectorIcons chat;
 		beTinySize;
 		action: [ self phlow spawnObject: chat ].
