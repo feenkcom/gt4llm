@@ -9,5 +9,5 @@ GtPharoMethodCoder >> initializeLlmAddOnsFor: anAst into: addOns viewModel: aGtP
 	addOns
 		addMainAction: (GtCoderCustomAction new
 				title: 'Open chat';
-				stencil: [ :aCoderActionsElement | GtLlmCoderChatButton new chat: aCoderActionsElement coderViewModel llmChat ])
+				stencil: [ GtLlmCoderChatButton new chat: aGtPharoSourceCoderViewModel llmChat ])
 ]
