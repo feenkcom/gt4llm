@@ -77,7 +77,7 @@ GtOpenAIObjectMessage >> gtCodeFor: aView [
 								coderViewModel: aViewModel;
 								expanded: false;
 								yourself) ].
-			container ]
+			container asScrollableElement]
 ]
 
 { #category : #'as yet unclassified' }

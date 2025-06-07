@@ -80,7 +80,7 @@ GtOpenAIActionMessage >> gtTextFor: aView [
 
 	^ aView textEditor
 		title: 'Text';
-		priority: 1;
+		priority: -1;
 		styler: (BlCompositeStyler new
 				stylers: {
 					GtLlmMessageStyler new
