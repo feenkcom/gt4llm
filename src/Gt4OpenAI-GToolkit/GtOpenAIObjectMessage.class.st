@@ -13,7 +13,6 @@ GtOpenAIObjectMessage >> codeBlock [
 { #category : #'as yet unclassified' }
 GtOpenAIObjectMessage >> gtActionFor: aView [
 	<gtView>
-	<gtLlmMessageView>
 	| view |
 	self action isEmptyOrNil ifTrue: [ ^ aView empty ].
 
@@ -52,7 +51,8 @@ GtOpenAIObjectMessage >> gtCodeFor: aView [
 	| codeBlock |
 	codeBlock := self codeBlock.
 	codeBlock isEmptyOrNil ifTrue: [ ^ aView empty ].
-
+	self isAssistantRole not ifTrue: [ ^ aView empty ].
+	
 	^ aView explicit
 		title: 'Code';
 		priority: 1;

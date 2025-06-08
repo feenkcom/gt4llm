@@ -18,10 +18,7 @@ GtLlmThreadMessageHeaderElement >> addActionElement [
 				vFitContent;
 				aptitude: BrGlamorousLabelAptitude new;
 				beSmallSize;
-				text: self threadMessageViewModel actionString;
-				when: BlClickEvent
-					do: [ :anEvent | anEvent target phlow spawnObject: self threadMessageViewModel actionModel ]).
-
+				text: self threadMessageViewModel actionString).
 	self addChild: aFrame
 ]
 
