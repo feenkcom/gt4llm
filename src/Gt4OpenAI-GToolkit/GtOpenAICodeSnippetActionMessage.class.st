@@ -106,7 +106,8 @@ GtOpenAICodeSnippetActionMessage >> gtDiffedFor: aView [
 	<gtView>
 	<gtLlmMessageView>
 	self codeSnippetBlock isEmptyOrNil ifTrue: [ ^ aView empty ].
-
+	self isAssistantRole not ifTrue: [ ^ aView empty ].
+	
 	^ aView diff
 		title: 'Diff';
 		priority: 3;
