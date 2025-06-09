@@ -1,52 +1,19 @@
 Class {
-	#name : #GtLlmObjectAssistant,
+	#name : #GtLlmClassAssistant,
 	#superclass : #GtLlmAssistant,
 	#category : #'Gt4OpenAI-GToolkit'
 }
 
 { #category : #'as yet unclassified' }
-GtLlmObjectAssistant >> actionProposalAction [
-	<gtLlmAssistantAction>
-	^ GtLlmAssistantAction new
-		name: 'Propose an action';
-		priority: 5;
-		description: 'Propose a useful Phlow action for this object. Only reply with the Smalltalk code for the action. Look up existing actions and their code for reference, especially to check what new action would be useful before proposing any code. Take into account optional user directions if applicable.';
-		addArgument: 'User Instruction';
-		examples: {GtLlmAssistantActionExample new markUnverified
-					input: {'Action' -> 'Propose an action'.
-							'Arguments' -> {''}.
-							'Object'
-								-> '{"string":"(1@5)","instanceSlots":[{"name":"x","class":"SmallInteger","value":"1"},{"name":"y","class":"SmallInteger","value":"5"}],"class":"Point"}'}
-							asDictionary;
-					output: {'Action' -> 'Propose an action'.
-							'Arguments' -> {''}.
-							'Object'
-								-> '{"string":"(1@5)","instanceSlots":[{"name":"x","class":"SmallInteger","value":"1"},{"name":"y","class":"SmallInteger","value":"5"}],"class":"Point"}'.
-							'Code'
-								-> '[{"type": "method", "class": "Point", "code": "gtGotoXActionFor: anAction
-	<gtAction>
-	^ anAction button
-		icon: BrGlamorousVectorIcons inspect;
-		label: ''Go to X'';
-		priority: 10;
-		action: [:aButton | aButton phlow spawnObject: self x]"}]'} asDictionary}
+GtLlmClassAssistant >> chatOn: anObject [
+	^ GtLlmActionChat new
+		assistant: self;
+		onInstance: (self serializerFor: anObject);
+		provider: self buildProvider
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmObjectAssistant >> chatOn: anObject [
-	| chat |
-	chat := GtLlmActionChat new
-			assistant: self;
-			onInstance: (self serializerFor: anObject);
-			provider: self buildProvider.
-
-	chat provider addTool: (self getPropertyToolOn: anObject).
-
-	^ chat
-]
-
-{ #category : #'as yet unclassified' }
-GtLlmObjectAssistant >> codeFormatDescription [
+GtLlmClassAssistant >> codeFormatDescription [
 	<gtLlmAssistantFormat>
 	^ GtLlmAssistantFormatDescription new
 		name: 'Code';
@@ -73,34 +40,22 @@ Example:
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmObjectAssistant >> defaultDescription [
-	^ 'You are an assistant for objects in Glamorous Toolkit.'
+GtLlmClassAssistant >> defaultDescription [
+	^ 'You are an assistant for classes in Glamorous Toolkit.'
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmObjectAssistant >> explanationAction [
+GtLlmClassAssistant >> explanationAction [
 	<gtLlmAssistantAction>
 	^ GtLlmAssistantAction new
-		name: 'Explain the object';
+		name: 'Explain the class';
 		priority: 10;
-		description: 'Explain the object, including its layout, its purpose, and other interesting facts. Use tools if necessary. Stick to the facts you can verify and avoid speculation.';
-		examples: {GtLlmAssistantActionExample new markUnverified
-					input: {'Action' -> 'Explain the object'.
-							'Object'
-								-> '{"string":"(100@30)","instanceSlots":[{"name":"x","class":"SmallInteger","value":"100"},{"name":"y","class":"SmallInteger","value":"30"}],"class":"Point"}'}
-							asDictionary;
-					output: {'Action' -> 'Propose a view'.
-							'Arguments' -> nil.
-							'Object'
-								-> '{"string":"(100@30)","instanceSlots":[{"name":"x","class":"SmallInteger","value":"100"},{"name":"y","class":"SmallInteger","value":"300"}],"class":"Point"}'.
-							'Code' -> '[]'.
-							'Text'
-								-> 'This object represents a two-dimensional point at the coordinates `100` and `30`.'}
-							asDictionary}
+		description: 'Explain the class, including its layout, its purpose, and other interesting facts. Use tools if necessary. Stick to the facts you can verify and avoid speculation.';
+		examples: {}
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmObjectAssistant >> getActionsTool [
+GtLlmClassAssistant >> getActionsTool [
 	^ GtLlmFunctionTool new
 		name: 'getClassActions';
 		parameters: {'className'};
@@ -117,7 +72,7 @@ GtLlmObjectAssistant >> getActionsTool [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmObjectAssistant >> getImplementorsTool [
+GtLlmClassAssistant >> getImplementorsTool [
 	^ GtLlmFunctionTool new
 		name: 'getImplementors';
 		parameters: {'methodName'};
@@ -128,7 +83,7 @@ GtLlmObjectAssistant >> getImplementorsTool [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmObjectAssistant >> getMethodTool [
+GtLlmClassAssistant >> getMethodTool [
 	^ GtLlmFunctionTool new
 		name: 'getClassMethod';
 		parameters: {'className'. 'methodName'};
@@ -153,17 +108,7 @@ GtLlmObjectAssistant >> getMethodTool [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmObjectAssistant >> getPropertyToolOn: anObject [
-	^ GtLlmFunctionTool new
-		name: 'getObjectProperty';
-		parameters: {'propertyName'};
-		description: 'Returns the property value by name. This can be an arbitrarily deeply nested accessor separated by spaces, including numbers to access a collection’s value by index (example: `property 2 collectionChildProperty`). Indices start at 1, not 0.';
-		block: [ :functionCall | 
-			self traverse: anObject using: (' ' split: functionCall anyArgument) ]
-]
-
-{ #category : #'as yet unclassified' }
-GtLlmObjectAssistant >> getReferencesTool [
+GtLlmClassAssistant >> getReferencesTool [
 	^ GtLlmFunctionTool new
 		name: 'getReferences';
 		parameters: {'methodName'};
@@ -174,7 +119,7 @@ GtLlmObjectAssistant >> getReferencesTool [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmObjectAssistant >> getViewsTool [
+GtLlmClassAssistant >> getViewsTool [
 	^ GtLlmFunctionTool new
 		name: 'getClassViews';
 		parameters: {'className'};
@@ -191,7 +136,22 @@ GtLlmObjectAssistant >> getViewsTool [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmObjectAssistant >> lookupClassTool [
+GtLlmClassAssistant >> gtProposeCheckExample [
+ 	<gtLlmAssistantAction>
+ 	^ GtLlmAssistantAction new
+ 		name: 'Propose an example';
+ 		priority: 20;
+ 		description: 'I want to check the functionality of the attached class.  Can you propose a GlamorousToolkit example method that tests its functionality.  The method should:
+- be put into a new appropriately named example class,
+- be annotated with the `<gtExample>` pragma,
+- create an instance of the attached method''s class (from the `class` property),
+- add appropriate assertions,
+- and should return the object being tested.';
+ 		examples: {}
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmClassAssistant >> lookupClassTool [
 	^ GtLlmFunctionTool new
 		name: 'lookupClass';
 		parameters: {'className'};
@@ -203,7 +163,7 @@ GtLlmObjectAssistant >> lookupClassTool [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmObjectAssistant >> lookupPageTool [
+GtLlmClassAssistant >> lookupPageTool [
 	^ GtLlmFunctionTool new
 		name: 'lookupDocumentationPage';
 		parameters: {'pageName'};
@@ -215,19 +175,7 @@ GtLlmObjectAssistant >> lookupPageTool [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmObjectAssistant >> objectFormatDescription [
-	<gtLlmAssistantFormat>
-	^ GtLlmAssistantFormatDescription new
-		name: 'Object';
-		priority: 2;
-		format: 'JSON';
-		example: '```
-{"string":"a GtTMoneyBag","instanceSlots":[{"name":"monies","class":"OrderedCollection","value":"an OrderedCollection(a GtTCurrencyMoney a GtTCurrencyMoney)"}],"class":"GtTMoneyBag"}
-```'
-]
-
-{ #category : #'as yet unclassified' }
-GtLlmObjectAssistant >> phlowInstructionSection [
+GtLlmClassAssistant >> phlowInstructionSection [
 	<gtLlmInstructionSection>
 	^ GtLlmInstructionSection new
 		title: 'Phlow views';
@@ -316,7 +264,7 @@ gtForwardFor: aView
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmObjectAssistant >> responseFormatSection [
+GtLlmClassAssistant >> responseFormatSection [
 	<gtLlmInstructionSection>
 	^ GtLlmInstructionSection new
 		source: self;
@@ -350,46 +298,20 @@ Object subclass: #SomeClass
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmObjectAssistant >> serializerFor: anObject [
+GtLlmClassAssistant >> serializerFor: aClass [
 	^ GtLlmSerializableValueHolder new
-		name: 'Object';
-		content: anObject;
-		serializer: [ :aModel | GtLlmValueSerializer new serializeValue: aModel ];
-		updater: [ :object :aString |
-			"not actually a good idea"
-			object readFromString: aString ]
+		name: 'Class';
+		content: aClass;
+		serializer: [ :aModel | GtLlmValueSerializer new serializeClass: aClass ];
+		updater: [ :object :aString | self halt ]
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmObjectAssistant >> traverse: anObject using: aChain [
-	| value traversed |
-	value := anObject.
-	traversed := OrderedCollection new.
-	aChain
-		do: [ :aKey | 
-			traversed add: aKey.
-			(value isKindOf: Dictionary)
-				ifTrue: [ value := value at: aKey ifAbsent: [ ^ 'Not found: ' , (' ' join: traversed) ] ]
-				ifFalse: [ (value isKindOf: SequenceableCollection)
-						ifTrue: [ value := value
-									at: aKey asInteger
-									ifAbsent: [ ^ 'Not found: ' , (' ' join: traversed) ] ]
-						ifFalse: [ value := (value class
-									slotNamed: aKey asSymbol
-									ifFound: #yourself
-									ifNone: [ ^ 'Not found: ' , (' ' join: traversed) ]) read: value ] ] ].
-
-	^ STONJSON toStringPretty: (GtLlmValueSerializer new serializeValue: value)
-]
-
-{ #category : #'as yet unclassified' }
-GtLlmObjectAssistant >> treatProvider: aProvider [
+GtLlmClassAssistant >> treatProvider: aProvider [
 	| anInstance |
 	super treatProvider: aProvider.
 
 	anInstance := aProvider chat serializer instance.
-	anInstance
-		ifNotNil: [ aProvider addTool: (self getPropertyToolOn: anInstance) ].
 
 	aProvider addTool: self getActionsTool.
 	aProvider addTool: self getViewsTool.
@@ -400,35 +322,6 @@ GtLlmObjectAssistant >> treatProvider: aProvider [
 	aProvider addTool: self lookupPageTool.
 
 	aProvider
-		assistantMessageClass: GtOpenAIObjectMessage;
-		userMessageClass: GtOpenAIObjectMessage
-]
-
-{ #category : #'as yet unclassified' }
-GtLlmObjectAssistant >> viewProposalAction [
-	<gtLlmAssistantAction>
-	^ GtLlmAssistantAction new
-		name: 'Propose a view';
-		priority: 5;
-		description: 'Propose a useful Phlow view for this object. Only reply with the Smalltalk code for the view. Look up existing views and their code for reference, especially to check what new view would be useful before proposing any code. Take into account optional user directions if applicable.';
-		addArgument: 'User Instruction';
-		examples: {GtLlmAssistantActionExample new markUnverified
-					input: {'Action' -> 'Propose a view'.
-							'Arguments' -> {''}.
-							'Object'
-								-> '{"string":"(1@5)","instanceSlots":[{"name":"x","class":"SmallInteger","value":"1"},{"name":"y","class":"SmallInteger","value":"5"}],"class":"Point"}'}
-							asDictionary;
-					output: {'Action' -> 'Propose a view'.
-							'Arguments' -> {''}.
-							'Object'
-								-> '{"string":"(1@5)","instanceSlots":[{"name":"x","class":"SmallInteger","value":"1"},{"name":"y","class":"SmallInteger","value":"5"}],"class":"Point"}'.
-							'Code'
-								-> '[{"type": "method", "class": "Point", "code": "gtCoordinatesFor: aView
-	<gtView>
-	^ aView columnedList
-		title: ''Coordinates'';
-		priority: 10;
-		items: [ { ''x'' -> self x. ''y'' -> self y } ];
-		column: ''Axis'' text: #key;
-		column: ''Value'' text: #value"}]'} asDictionary}
+		assistantMessageClass: GtOpenAIClassMessage;
+		userMessageClass: GtOpenAIClassMessage
 ]
