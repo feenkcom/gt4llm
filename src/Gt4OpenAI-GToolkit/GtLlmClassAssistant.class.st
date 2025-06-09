@@ -163,6 +163,26 @@ GtLlmClassAssistant >> lookupClassTool [
 ]
 
 { #category : #'as yet unclassified' }
+GtLlmClassAssistant >> lookupExamplesTool [
+	^ GtLlmFunctionTool new
+		name: 'lookupExamples';
+		parameters: {'className'};
+		description: 'Looks up examples for a class by name and returns the method names.';
+		block: [ :functionCall | 
+			(functionCall anyArgument asClassIfAbsent: [ nil ])
+				ifNil: [ 'Class not found' ]
+				ifNotNil: [ :aClass | 
+					Character cr
+						join: (((Pragma allNamed: #gtExample)
+								collect: #method
+								thenSelect: [ :aMethod | 
+									| pragma |
+									pragma := aMethod pragmaAt: #return:.
+									pragma isNotNil and: [ pragma arguments first = aClass name ] ])
+								collect: #name) ] ]
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmClassAssistant >> lookupPageTool [
 	^ GtLlmFunctionTool new
 		name: 'lookupDocumentationPage';
@@ -319,6 +339,7 @@ GtLlmClassAssistant >> treatProvider: aProvider [
 	aProvider addTool: self getImplementorsTool.
 	aProvider addTool: self getReferencesTool.
 	aProvider addTool: self lookupClassTool.
+	aProvider addTool: self lookupExamplesTool.
 	aProvider addTool: self lookupPageTool.
 
 	aProvider

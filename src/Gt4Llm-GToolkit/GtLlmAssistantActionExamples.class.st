@@ -7,12 +7,14 @@ Class {
 { #category : #'as yet unclassified' }
 GtLlmAssistantActionExamples >> actionWithExampleWithJsonContainingQuote [
 	<gtExample>
+	<return: #GtLlmAssistantAction>
 	| action |
 	action := GtLlmAssistantAction new
 			name: 'Some action';
 			description: 'Some description.';
 			addExample: self exampleWithJsonContainingQuote.
 	self shouldnt: [ RBParser parseMethod: action asMethodSource ] raise: Error.
+	^ action
 ]
 
 { #category : #asserting }
@@ -76,6 +78,7 @@ GtLlmAssistantActionExamples >> comparingStringBetween: actual and: expected [
 { #category : #'as yet unclassified' }
 GtLlmAssistantActionExamples >> exampleWithJsonContainingQuote [
 	<gtExample>
+	<return: #GtLlmAssistantActionExample>
 	| jsonString json example |
 	jsonString := '{"Action":"Some action","Text":"Some text","Post":"String with '' inside."}'.
 	json := STONJSON fromString: jsonString.
