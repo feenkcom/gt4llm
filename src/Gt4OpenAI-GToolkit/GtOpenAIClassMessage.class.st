@@ -62,17 +62,19 @@ GtOpenAIClassMessage >> gtCodeFor: aView [
 	^ aView explicit
 		title: 'Code';
 		priority: 1;
-		stencil: [ | container aViewModel aClass |
+		stencil: [ | container aViewModel aClass behavior |
 			container := BrVerticalPane new vFitContent hMatchParent.
 			codeBlock
 				do: [ :aCodeBlock | 
 					aViewModel := (aCodeBlock at: 'type') = 'method'
-							ifTrue: [ aClass := (aCodeBlock at: 'class') asClassIfAbsent: nil.
-								(GtPharoMethodCoder
-									forClass: ((aCodeBlock at: 'classSide' ifAbsent: [ false ])
-											ifTrue: [ aClass class ]
-											ifFalse: [ aClass ])
-									source: (aCodeBlock at: 'code')) asCoderViewModel ]
+							ifTrue: [ behavior := (aCodeBlock at: 'classSide' ifAbsent: [ false ])
+										ifTrue: [ GtPharoCoderBehavior classSideNamed: (aCodeBlock at: 'class') ]
+										ifFalse: [ GtPharoCoderBehavior named: (aCodeBlock at: 'class') ].
+								aClass := (aCodeBlock at: 'class') asClassIfAbsent: nil.
+								(GtPharoMethodCoder new
+									methodBehavior: behavior;
+									sourceCode: (GtCoderExplicitStringSource new source: (aCodeBlock at: 'code')))
+									asCoderViewModel ]
 							ifFalse: [ (GtPharoSnippetCoder forSource: (aCodeBlock at: 'code'))
 									asCoderViewModel ].
 					container
