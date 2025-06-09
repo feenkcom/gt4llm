@@ -14,6 +14,15 @@ GtLlmValueSerializer >> serializeBinding: aBinding withValue: aBindingValue [
 ]
 
 { #category : #'as yet unclassified' }
+GtLlmValueSerializer >> serializeClass: aClass [
+	^ {'name' -> aClass name.
+		'superclass' -> aClass superclass name.
+		'slots' -> aClass slotNames.
+		'comment' -> aClass instanceSide organization classComment.
+		'methods' -> (aClass allMethods collect: #selector)} asDictionary
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmValueSerializer >> serializeValue: aValue [
 	^ {'class' -> aValue class name asString.
 		'string' -> (aValue asString escapeCharacter: '''').
