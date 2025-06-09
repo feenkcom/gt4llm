@@ -16,7 +16,8 @@ GtLlmValueSerializer >> serializeBinding: aBinding withValue: aBindingValue [
 { #category : #'as yet unclassified' }
 GtLlmValueSerializer >> serializeClass: aClass [
 	^ {'name' -> aClass name.
-		'superclass' -> aClass superclass name.
+		'superclass'
+			-> (aClass superclass ifNil: [ nil ] ifNotNil: [ :aSuperclass | aSuperclass name ]).
 		'slots' -> aClass slotNames.
 		'comment' -> aClass instanceSide organization classComment.
 		'methods' -> (aClass allMethods collect: #selector)} asDictionary
