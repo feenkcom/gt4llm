@@ -303,7 +303,7 @@ GtLlmClassAssistant >> serializerFor: aClass [
 		name: 'Class';
 		content: aClass;
 		serializer: [ :aModel | GtLlmValueSerializer new serializeClass: aClass ];
-		updater: [ :object :aString | self halt ]
+		updater: [ :object :aString | self error: 'Unimplemented' ]
 ]
 
 { #category : #'as yet unclassified' }
