@@ -52,24 +52,28 @@ GtOpenAIObjectMessage >> gtCodeFor: aView [
 	codeBlock := self codeBlock.
 	codeBlock isEmptyOrNil ifTrue: [ ^ aView empty ].
 	self isAssistantRole not ifTrue: [ ^ aView empty ].
-	
+
 	^ aView explicit
 		title: 'Code';
 		priority: 1;
-		stencil: [ | container aViewModel instance aClass instanceClass |
+		stencil: [ | container aViewModel instance instanceClass behavior coder |
 			container := BrVerticalPane new vFitContent hMatchParent.
 			instance := self selfObject.
 			instanceClass := self instanceClass.
 			codeBlock
 				do: [ :aCodeBlock | 
 					aViewModel := (aCodeBlock at: 'type') = 'method'
-							ifTrue: [ aClass := (aCodeBlock at: 'class') asClassIfAbsent: nil.
-								(GtPharoMethodCoder
-									forClass: ((aCodeBlock at: 'classSide' ifAbsent: [ false ])
-											ifTrue: [ aClass class ]
-											ifFalse: [ aClass ])
-									source: (aCodeBlock at: 'code')) asCoderViewModel
-									selfObject: (aClass = instanceClass ifTrue: [ instance ] ifFalse: [ nil ]) ]
+							ifTrue: [ behavior := (aCodeBlock at: 'classSide' ifAbsent: [ false ])
+										ifTrue: [ GtPharoCoderBehavior classSideNamed: (aCodeBlock at: 'class') ]
+										ifFalse: [ GtPharoCoderBehavior named: (aCodeBlock at: 'class') ].
+								coder := (GtPharoMethodCoder new
+										methodBehavior: behavior;
+										sourceCode: (GtCoderExplicitStringSource new source: (aCodeBlock at: 'code')))
+										asCoderViewModel.
+
+								(aCodeBlock at: 'class') = instanceClass name
+									ifTrue: [ coder selfObject: instance ].
+								coder ]
 							ifFalse: [ (GtPharoSnippetCoder forSource: (aCodeBlock at: 'code'))
 									asCoderViewModel selfObject: instance ].
 					container
@@ -77,7 +81,7 @@ GtOpenAIObjectMessage >> gtCodeFor: aView [
 								coderViewModel: aViewModel;
 								expanded: false;
 								yourself) ].
-			container asScrollableElement]
+			container asScrollableElement ]
 ]
 
 { #category : #'as yet unclassified' }
