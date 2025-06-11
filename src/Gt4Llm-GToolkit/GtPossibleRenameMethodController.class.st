@@ -48,7 +48,8 @@ GtPossibleRenameMethodController >> installRenamer [
 		when: GtRenameActionAnnouncement
 		do: [ :ann | 
 			ann eventType = #textUpdated ifTrue: [ self updateSelector ].
-			ann eventType = #cancel ifTrue: [ self cancelRefactoring ] ].
+			ann eventType = #cancel ifTrue: [ self cancelRefactoring ] ]
+		for: self.
 	renameAction install
 ]
 
