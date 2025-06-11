@@ -5,7 +5,8 @@ Class {
 		'rawData',
 		'chat',
 		'createdAt',
-		'toolCall'
+		'toolCall',
+		'reasoning'
 	],
 	#category : #Gt4OpenAI
 }
@@ -93,6 +94,16 @@ GtOpenAIRawToolMessage >> rawData [
 { #category : #accessing }
 GtOpenAIRawToolMessage >> rawData: anObject [
 	rawData := anObject
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAIRawToolMessage >> reasoning [
+	^ reasoning
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAIRawToolMessage >> reasoning: anObject [
+	reasoning := anObject
 ]
 
 { #category : #'as yet unclassified' }
