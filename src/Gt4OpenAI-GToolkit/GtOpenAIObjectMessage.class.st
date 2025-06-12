@@ -139,9 +139,9 @@ GtOpenAIObjectMessage >> selfObject [
 { #category : #'as yet unclassified' }
 GtOpenAIObjectMessage >> viewObjectFor: aView [
 	| parsed script viewVariableName |
-	parsed := OpalCompiler new
+	parsed := self class compiler
 			source: self codeBlock;
-			noPattern: false;
+			isScripting: false;
 			options: #(+ optionParseErrors + optionSkipSemanticWarnings);
 			requestor: nil;
 			parse.
