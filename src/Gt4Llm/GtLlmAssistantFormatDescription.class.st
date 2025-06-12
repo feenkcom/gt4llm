@@ -101,8 +101,7 @@ GtLlmAssistantFormatDescription >> defaultPriority [
 
 { #category : #accessing }
 GtLlmAssistantFormatDescription >> defaultType [
-	^ {'string'.
-		'null'}
+	^ {'string'}
 ]
 
 { #category : #'as yet unclassified' }

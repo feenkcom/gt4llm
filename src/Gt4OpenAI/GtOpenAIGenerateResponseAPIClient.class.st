@@ -8,7 +8,7 @@ Class {
 		'format',
 		'instructions'
 	],
-	#category : 'Gt4OpenAI'
+	#category : #Gt4OpenAI
 }
 
 { #category : #accessing }
@@ -18,10 +18,13 @@ GtOpenAIGenerateResponseAPIClient >> buildEntity [
 			'stream' -> format isNil.
 			'input'
 				-> (self messages
-						collect: [ :aMessage | 
+						flatCollect: [ :aMessage | 
 							(aMessage isKindOf: GtLlmToolMessage)
-								ifTrue: [ aMessage serializeResponse ]
-								ifFalse: [ aMessage serialize ] ])} asDictionary.
+								ifTrue: [ {aMessage serializeResponse} ]
+								ifFalse: [ (aMessage isKindOf: GtOpenAIRawToolMessage)
+										ifTrue: [ (aMessage reasoning ifNil: [ {} ] ifNotNil: [ {aMessage reasoning rawData} ])
+												, {aMessage serialize} ]
+										ifFalse: [ {aMessage serialize} ] ] ])} asDictionary.
 
 	format
 		ifNotNil: [ entity
