@@ -101,6 +101,7 @@ GtLlmObjectAssistant >> explanationAction [
 
 { #category : #'as yet unclassified' }
 GtLlmObjectAssistant >> getActionsTool [
+	<gtLlmTool>
 	^ GtLlmFunctionTool new
 		name: 'getClassActions';
 		parameters: {'className'};
@@ -118,6 +119,7 @@ GtLlmObjectAssistant >> getActionsTool [
 
 { #category : #'as yet unclassified' }
 GtLlmObjectAssistant >> getImplementorsTool [
+	<gtLlmTool>
 	^ GtLlmFunctionTool new
 		name: 'getImplementors';
 		parameters: {'methodName'};
@@ -129,6 +131,7 @@ GtLlmObjectAssistant >> getImplementorsTool [
 
 { #category : #'as yet unclassified' }
 GtLlmObjectAssistant >> getMethodTool [
+	<gtLlmTool>
 	^ GtLlmFunctionTool new
 		name: 'getClassMethod';
 		parameters: {'className'. 'methodName'};
@@ -164,6 +167,7 @@ GtLlmObjectAssistant >> getPropertyToolOn: anObject [
 
 { #category : #'as yet unclassified' }
 GtLlmObjectAssistant >> getReferencesTool [
+	<gtLlmTool>
 	^ GtLlmFunctionTool new
 		name: 'getReferences';
 		parameters: {'methodName'};
@@ -175,6 +179,7 @@ GtLlmObjectAssistant >> getReferencesTool [
 
 { #category : #'as yet unclassified' }
 GtLlmObjectAssistant >> getViewsTool [
+	<gtLlmTool>
 	^ GtLlmFunctionTool new
 		name: 'getClassViews';
 		parameters: {'className'};
@@ -192,6 +197,7 @@ GtLlmObjectAssistant >> getViewsTool [
 
 { #category : #'as yet unclassified' }
 GtLlmObjectAssistant >> lookupClassTool [
+	<gtLlmTool>
 	^ GtLlmFunctionTool new
 		name: 'lookupClass';
 		parameters: {'className'};
@@ -204,6 +210,7 @@ GtLlmObjectAssistant >> lookupClassTool [
 
 { #category : #'as yet unclassified' }
 GtLlmObjectAssistant >> lookupPageTool [
+	<gtLlmTool>
 	^ GtLlmFunctionTool new
 		name: 'lookupDocumentationPage';
 		parameters: {'pageName'};
@@ -390,14 +397,6 @@ GtLlmObjectAssistant >> treatProvider: aProvider [
 	anInstance := aProvider chat serializer instance.
 	anInstance
 		ifNotNil: [ aProvider addTool: (self getPropertyToolOn: anInstance) ].
-
-	aProvider addTool: self getActionsTool.
-	aProvider addTool: self getViewsTool.
-	aProvider addTool: self getMethodTool.
-	aProvider addTool: self getImplementorsTool.
-	aProvider addTool: self getReferencesTool.
-	aProvider addTool: self lookupClassTool.
-	aProvider addTool: self lookupPageTool.
 
 	aProvider
 		assistantMessageClass: GtOpenAIObjectMessage;

@@ -5,6 +5,11 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
+GtLlmMethodAssistant >> actionProposalAction [
+	^ nil
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmMethodAssistant >> chatOn: aCoderViewModel [
 	| chat |
 	chat := GtLlmActionChat new
@@ -30,6 +35,16 @@ GtLlmMethodAssistant >> chatOn: aCoderViewModel [
 { #category : #'as yet unclassified' }
 GtLlmMethodAssistant >> defaultDescription [
 	^ 'You are an assistant for code snippets.'
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmMethodAssistant >> explainMethodAction [
+	<gtLlmAssistantAction>
+	^ GtLlmAssistantAction new
+		name: 'Explain the method';
+		priority: 10;
+		description: 'Explain the method including its purpose, its relation to its class, and other interesting facts. Use tools if necessary. Stick to the facts you can verify and avoid speculation.';
+		examples: {}
 ]
 
 { #category : #proposals }
@@ -150,17 +165,18 @@ GtLlmMethodAssistant >> treatBinding: aBinding in: aSnippetCoderViewModel [
 GtLlmMethodAssistant >> treatProvider: aProvider [
 	| aCoderViewModel |
 	super treatProvider: aProvider.
-	
+
 	aCoderViewModel := aProvider chat serializer instance content.
-	
-	aProvider addTool: (self getPropertyToolOn: aCoderViewModel selfObject).
-	aProvider addTool: self lookupClassTool.
-	aProvider addTool: self lookupPageTool.
-	aProvider addTool: self getImplementorsTool.
-	aProvider addTool: self getReferencesTool.
-	aProvider addTool: self getMethodTool.
+	aProvider
+		tools: self collectTools;
+		addTool: (self getPropertyToolOn: aCoderViewModel selfObject).
 
 	aProvider
 		assistantMessageClass: GtOpenAICoderActionMessage;
 		userMessageClass: GtOpenAICoderActionMessage
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmMethodAssistant >> viewProposalAction [
+	^ nil
 ]

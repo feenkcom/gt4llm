@@ -170,14 +170,9 @@ GtLlmCodeSnippetAssistant >> treatProvider: aProvider [
 
 	aCoderViewModel := aProvider chat serializer instance content.
 
-	aProvider tools: GtLlmToolsGroup new.
+	aProvider tools: self collectTools.
 	aProvider addTool: (self lookupBindingToolFor: aCoderViewModel).
 	aProvider addTool: (self getPropertyToolOn: aCoderViewModel selfObject).
-	aProvider addTool: self lookupClassTool.
-	aProvider addTool: self lookupPageTool.
-	aProvider addTool: self getImplementorsTool.
-	aProvider addTool: self getReferencesTool.
-	aProvider addTool: self getMethodTool.
 
 	aProvider
 		assistantMessageClass: GtOpenAICodeSnippetActionMessage;

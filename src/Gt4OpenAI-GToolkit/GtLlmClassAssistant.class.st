@@ -56,6 +56,7 @@ GtLlmClassAssistant >> explanationAction [
 
 { #category : #'as yet unclassified' }
 GtLlmClassAssistant >> getActionsTool [
+	<gtLlmTool>
 	^ GtLlmFunctionTool new
 		name: 'getClassActions';
 		parameters: {'className'};
@@ -73,6 +74,7 @@ GtLlmClassAssistant >> getActionsTool [
 
 { #category : #'as yet unclassified' }
 GtLlmClassAssistant >> getImplementorsTool [
+	<gtLlmTool>
 	^ GtLlmFunctionTool new
 		name: 'getImplementors';
 		parameters: {'methodName'};
@@ -84,6 +86,7 @@ GtLlmClassAssistant >> getImplementorsTool [
 
 { #category : #'as yet unclassified' }
 GtLlmClassAssistant >> getMethodTool [
+	<gtLlmTool>
 	^ GtLlmFunctionTool new
 		name: 'getClassMethod';
 		parameters: {'className'. 'methodName'};
@@ -109,6 +112,7 @@ GtLlmClassAssistant >> getMethodTool [
 
 { #category : #'as yet unclassified' }
 GtLlmClassAssistant >> getReferencesTool [
+	<gtLlmTool>
 	^ GtLlmFunctionTool new
 		name: 'getReferences';
 		parameters: {'methodName'};
@@ -120,6 +124,7 @@ GtLlmClassAssistant >> getReferencesTool [
 
 { #category : #'as yet unclassified' }
 GtLlmClassAssistant >> getViewsTool [
+	<gtLlmTool>
 	^ GtLlmFunctionTool new
 		name: 'getClassViews';
 		parameters: {'className'};
@@ -152,6 +157,7 @@ GtLlmClassAssistant >> gtProposeCheckExample [
 
 { #category : #'as yet unclassified' }
 GtLlmClassAssistant >> lookupClassTool [
+	<gtLlmTool>
 	^ GtLlmFunctionTool new
 		name: 'lookupClass';
 		parameters: {'className'};
@@ -164,6 +170,7 @@ GtLlmClassAssistant >> lookupClassTool [
 
 { #category : #'as yet unclassified' }
 GtLlmClassAssistant >> lookupExamplesTool [
+	<gtLlmTool>
 	^ GtLlmFunctionTool new
 		name: 'lookupExamples';
 		parameters: {'className'};
@@ -184,6 +191,7 @@ GtLlmClassAssistant >> lookupExamplesTool [
 
 { #category : #'as yet unclassified' }
 GtLlmClassAssistant >> lookupPageTool [
+	<gtLlmTool>
 	^ GtLlmFunctionTool new
 		name: 'lookupDocumentationPage';
 		parameters: {'pageName'};
@@ -332,15 +340,6 @@ GtLlmClassAssistant >> treatProvider: aProvider [
 	super treatProvider: aProvider.
 
 	anInstance := aProvider chat serializer instance.
-
-	aProvider addTool: self getActionsTool.
-	aProvider addTool: self getViewsTool.
-	aProvider addTool: self getMethodTool.
-	aProvider addTool: self getImplementorsTool.
-	aProvider addTool: self getReferencesTool.
-	aProvider addTool: self lookupClassTool.
-	aProvider addTool: self lookupExamplesTool.
-	aProvider addTool: self lookupPageTool.
 
 	aProvider
 		assistantMessageClass: GtOpenAIClassMessage;

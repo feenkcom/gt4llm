@@ -114,6 +114,18 @@ GtLlmAssistant >> collectSections [
 		to: Object) collect: [ :aPragma | self perform: aPragma methodSelector ]
 ]
 
+{ #category : #'as yet unclassified' }
+GtLlmAssistant >> collectTools [
+	^ GtLlmToolsGroup
+		withAll: ((Set
+				withAll: ((Pragma
+						allNamed: #gtLlmTool
+						from: self class
+						to: Object) collect: [ :aPragma | aPragma methodSelector ])) asSet
+				collect: [ :aSelector | self perform: aSelector ]
+				thenSelect: [ :aTool | aTool isNotNil ]) asOrderedCollection
+]
+
 { #category : #accessing }
 GtLlmAssistant >> connection [
 	^ connection
@@ -227,5 +239,6 @@ Multiple lines, multiple paragraphs are allowed.
 GtLlmAssistant >> treatProvider: aProvider [
 	aProvider 
 		instructions: instruction asInstructionPiece instructionString;
-		format: instruction asJsonSchema
+		format: instruction asJsonSchema;
+		tools: self collectTools
 ]
