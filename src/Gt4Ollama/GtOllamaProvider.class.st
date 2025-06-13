@@ -5,10 +5,10 @@ Class {
 		'assistantWorking',
 		'model',
 		'client',
-		'modelfile',
 		'tools',
 		'files',
-		'executions'
+		'executions',
+		'instructions'
 	],
 	#classVars : [
 		'DefaultModel',
@@ -120,20 +120,13 @@ GtOllamaProvider >> initializeClient [
 ]
 
 { #category : #'as yet unclassified' }
+GtOllamaProvider >> instructions [
+	^ instructions
+]
+
+{ #category : #'as yet unclassified' }
 GtOllamaProvider >> instructions: aString [
-	| internalModelName modelFile |
-	aString isEmptyOrNil ifTrue: [^ self].
-
-	internalModelName := 'gt-tutor-' , self model , '-' , self uuidClass new asString.
-	modelFile := GtLlmModelFile new
-			from: self model;
-			system: aString.
-
-	self client createModel: internalModelName withModelFile: modelFile.
-	
-	self modelfile: modelFile.
-
-	self model: internalModelName
+	instructions := aString
 ]
 
 { #category : #accessing }
@@ -151,19 +144,7 @@ GtOllamaProvider >> model: anObject [
 
 { #category : #'as yet unclassified' }
 GtOllamaProvider >> modelName [
-	^ self modelfile
-		ifNil: [ self model ]
-		ifNotNil: [ :aFile | aFile directives first text ]
-]
-
-{ #category : #accessing }
-GtOllamaProvider >> modelfile [
-	^ modelfile
-]
-
-{ #category : #accessing }
-GtOllamaProvider >> modelfile: anObject [
-	modelfile := anObject
+	^ self model
 ]
 
 { #category : #'as yet unclassified' }
@@ -184,9 +165,7 @@ GtOllamaProvider >> printOn: aStream [
 	aStream
 		nextPutAll: self class providerName;
 		nextPut: $(;
-		nextPutAll: (self modelfile
-				ifNil: [ self model ]
-				ifNotNil: [ self modelName ]);
+		nextPutAll: self modelName;
 		nextPut: $)
 ]
 
@@ -241,10 +220,10 @@ GtOllamaProvider >> triggerAssistant [
 			completeChatWithModel: self model
 			andMessages: self chat messages
 			andFormat: self format
-			andTools: tools.
+			andTools: tools
+			andInstructions: self instructions.
 
-	self performToolCallsFor: result ]
-		doWhileTrue: [ result toolCalls isNotEmpty ].
+	self performToolCallsFor: result ] doWhileTrue: [ result toolCalls isNotEmpty ].
 
 	self chat
 		addMessage: (self assistantMessageClass new
