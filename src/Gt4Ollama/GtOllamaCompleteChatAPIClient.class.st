@@ -5,7 +5,8 @@ Class {
 		'messages',
 		'model',
 		'format',
-		'tools'
+		'tools',
+		'instructions'
 	],
 	#category : #Gt4Ollama
 }
@@ -22,6 +23,11 @@ GtOllamaCompleteChatAPIClient >> entity [
 	self tools
 		ifNotNil: [ entity at: 'tools' put: (self tools collect: [ :aTool | aTool serialize ]) ].
 
+	self instructions
+		ifNotNil: [ (entity at: 'messages')
+				addFirst: {'role' -> 'system'.
+						'content' -> self instructions} asDictionary ].
+
 	^ entity
 ]
 
@@ -33,6 +39,16 @@ GtOllamaCompleteChatAPIClient >> format [
 { #category : #accessing }
 GtOllamaCompleteChatAPIClient >> format: anObject [
 	format := anObject
+]
+
+{ #category : #accessing }
+GtOllamaCompleteChatAPIClient >> instructions [
+	^ instructions
+]
+
+{ #category : #accessing }
+GtOllamaCompleteChatAPIClient >> instructions: anObject [
+	instructions := anObject
 ]
 
 { #category : #accessing }
