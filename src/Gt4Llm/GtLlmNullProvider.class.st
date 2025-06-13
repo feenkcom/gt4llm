@@ -56,3 +56,8 @@ GtLlmNullProvider >> sendMessage: aMessage [
 GtLlmNullProvider >> status [
 	^ GtLlmAssistantChatReadyStatus new
 ]
+
+{ #category : #'as yet unclassified' }
+GtLlmNullProvider >> tools: aGtLlmToolsGroup [ 
+	"do nothing"
+]
