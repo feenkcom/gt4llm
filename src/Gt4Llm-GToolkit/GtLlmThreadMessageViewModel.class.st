@@ -82,5 +82,7 @@ GtLlmThreadMessageViewModel >> onThreadMessageChanged [
 		ifFalse: [ contentText := nil.
 			contentString := nil ].
 
+	self isExpanded: self threadMessage isAssistantRole.
+
 	super onThreadMessageChanged
 ]
