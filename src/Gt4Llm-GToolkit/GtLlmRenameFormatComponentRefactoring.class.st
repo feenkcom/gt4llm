@@ -17,9 +17,19 @@ GtLlmRenameFormatComponentRefactoring class >> model: aModel rename: anOldName t
 		yourself
 ]
 
+{ #category : #transforming }
+GtLlmRenameFormatComponentRefactoring >> basicTransform [
+	self renameComponentReferences
+]
+
 { #category : #'as yet unclassified' }
 GtLlmRenameFormatComponentRefactoring >> preconditions [
 	^ RBCondition withBlock: [ newName isNotEmpty ]
+]
+
+{ #category : #transforming }
+GtLlmRenameFormatComponentRefactoring >> privateTranform [
+	self basicTransform
 ]
 
 { #category : #'as yet unclassified' }
@@ -43,7 +53,7 @@ GtLlmRenameFormatComponentRefactoring >> renameComponentReferences [
 						ifTrue: [ method compileTree: rewriter tree ] ] ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #transforming }
 GtLlmRenameFormatComponentRefactoring >> transform [
-	self renameComponentReferences
+	self basicTransform
 ]
