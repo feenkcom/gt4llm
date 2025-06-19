@@ -30,7 +30,7 @@ GtLlmThreadMessageViewModel >> actionString [
 	self action ifNil: [ ^ '' ].
 
 	self isAssistantRole
-		ifTrue: [ (self threadMessage contentJson at: 'Text')
+		ifTrue: [ (self threadMessage contentJson at: 'Text' ifAbsent: [ '' ])
 				ifEmpty: [  ]
 				ifNotEmpty: [ :aString | ^ aString ] ].
 
