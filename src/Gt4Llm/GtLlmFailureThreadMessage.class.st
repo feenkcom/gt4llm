@@ -39,6 +39,11 @@ GtLlmFailureThreadMessage >> chat: anObject [
 	chat := anObject
 ]
 
+{ #category : #'as yet unclassified' }
+GtLlmFailureThreadMessage >> contentJson [
+	^ {} asDictionary
+]
+
 { #category : #accessing }
 GtLlmFailureThreadMessage >> contentSummary [
 	^ self contentText lines ifEmpty: [ '' ] ifNotEmpty: #first
