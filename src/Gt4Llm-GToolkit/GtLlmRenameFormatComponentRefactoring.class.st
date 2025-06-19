@@ -28,7 +28,7 @@ GtLlmRenameFormatComponentRefactoring >> preconditions [
 ]
 
 { #category : #transforming }
-GtLlmRenameFormatComponentRefactoring >> privateTranform [
+GtLlmRenameFormatComponentRefactoring >> privateTransform [
 	self basicTransform
 ]
 
