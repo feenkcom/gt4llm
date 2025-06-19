@@ -49,7 +49,7 @@ GtOpenAIObjectMessage >> gtCodeFor: aView [
 	<gtView>
 	<gtLlmMessageView>
 	| codeBlock |
-	self isAssistantRole not ifTrue: [ ^ aView empty ].
+	self isAssistantRole ifFalse: [ ^ aView empty ].
 	codeBlock := self codeBlock.
 	codeBlock isEmptyOrNil ifTrue: [ ^ aView empty ].
 
