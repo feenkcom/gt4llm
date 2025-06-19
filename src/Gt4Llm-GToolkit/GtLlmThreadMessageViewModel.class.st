@@ -29,6 +29,14 @@ GtLlmThreadMessageViewModel >> actionString [
 	| actionArguments |
 	self action ifNil: [ ^ '' ].
 
+	self isAssistantRole
+		ifTrue: [ (self threadMessage contentJson at: 'Text' ifAbsent: [ '' ])
+				ifEmpty: [  ]
+				ifNotEmpty: [ :aString | ^ aString ] ].
+
+	self action = 'Chat'
+		ifTrue: [ self isUserRole ifTrue: [ ^ self actionArguments first ] ].
+
 	actionArguments := self actionArguments.
 
 	^ self action
