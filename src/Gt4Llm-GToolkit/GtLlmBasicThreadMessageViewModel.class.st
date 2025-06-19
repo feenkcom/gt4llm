@@ -86,6 +86,11 @@ GtLlmBasicThreadMessageViewModel >> isAssistantRole [
 ]
 
 { #category : #accessing }
+GtLlmBasicThreadMessageViewModel >> isUserRole [
+	^ self threadMessage isUserRole
+]
+
+{ #category : #accessing }
 GtLlmBasicThreadMessageViewModel >> messageHeaderElement [
 	^ GtLlmThreadMessageHeaderElement new threadMessageViewModel: self
 ]
