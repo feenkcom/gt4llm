@@ -49,13 +49,13 @@ GtOpenAIObjectMessage >> gtCodeFor: aView [
 	<gtView>
 	<gtLlmMessageView>
 	| codeBlock |
-	self isAssistantRole ifFalse: [ ^ aView empty ].
+	"self isAssistantRole ifFalse: [ ^ aView empty ]."
 	codeBlock := self codeBlock.
 	codeBlock isEmptyOrNil ifTrue: [ ^ aView empty ].
 
 	^ aView explicit
 		title: 'Code';
-		priority: 1;
+		priority: (self isAssistantRole ifTrue: [ 1 ] ifFalse: [ 50 ]);
 		stencil: [ | container aViewModel instance instanceClass behavior coder |
 			container := BrVerticalPane new vFitContent hMatchParent.
 			instance := self selfObject.
@@ -88,6 +88,7 @@ GtOpenAIObjectMessage >> gtCodeFor: aView [
 GtOpenAIObjectMessage >> gtObjectFor: aView [
 	<gtView>
 	<gtLlmMessageView>
+	self isUserRole ifFalse: [ ^ aView empty ].
 	self object ifNil: [ ^ aView empty ].
 
 	^ aView forward
