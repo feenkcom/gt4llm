@@ -196,12 +196,17 @@ GtLlmReificationForm >> installFormatComponentsOn: newTutor [
 { #category : #'as yet unclassified' }
 GtLlmReificationForm >> installMethodsOnMessages: newMessages andAssistant: newAssistant [
 	newAssistant
-		compile: 'defaultProviderStencil
-	^ [:aValue | (super defaultProviderStencil value: aValue) assistantMessageClass: '
-				, newMessages name , '; userMessageClass: ' , newMessages name , ' ]'.
-				
-	newAssistant compile: 'defaultDescription
-	^ ''', self message chat assistant description, ''''
+		compile: 'treatProvider: aProvider
+	super treatProvider: aProvider.
+	
+	aProvider
+		assistantMessageClass: ' , newMessages name
+				, ';
+		userMessageClass: ' , newMessages name.
+
+	newAssistant
+		compile: 'defaultDescription
+	^ ''' , self message chat assistant description , ''''
 ]
 
 { #category : #accessing }
