@@ -160,7 +160,7 @@ GtOpenAIObjectMessage >> namespace [
 			(aCodeBlock at: 'type') = 'method'
 				ifTrue: [ class := namespace classNamed: (aCodeBlock at: 'class') asSymbol.
 					(aCodeBlock at: 'classSide' ifAbsent: [ false ])
-						ifTrue: [ class := class class ].
+						ifTrue: [ class := class classSide ].
 					namespace
 						compile: (aCodeBlock at: 'code')
 						in: class

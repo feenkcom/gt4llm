@@ -86,6 +86,11 @@ GtOpenAIRawToolMessage >> isRawMessage [
 	^ true
 ]
 
+{ #category : #'as yet unclassified' }
+GtOpenAIRawToolMessage >> isToolRole [
+	^ true
+]
+
 { #category : #accessing }
 GtOpenAIRawToolMessage >> rawData [
 	^ rawData

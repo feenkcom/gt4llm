@@ -53,7 +53,7 @@ GtLlmActionTemplateElement >> createAction [
 GtLlmActionTemplateElement >> descriptionString [
 	^ self example
 		ifNil: [ 'Description' ]
-		ifNotNil: [ (self example input at: 'Action') copyReplaceAll: 'Chat request: ' with: '' ]
+		ifNotNil: [ (self example input at: 'Arguments') first ]
 ]
 
 { #category : #accessing }
