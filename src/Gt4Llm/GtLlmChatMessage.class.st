@@ -51,6 +51,11 @@ GtLlmChatMessage >> action [
 	^ [ self contentJson at: 'Action' ] on: Error do: [ nil ]
 ]
 
+{ #category : #'as yet unclassified' }
+GtLlmChatMessage >> ancestor [
+	^ self chat ancestorOf: self
+]
+
 { #category : #accessing }
 GtLlmChatMessage >> annotations [
 	^ {}
