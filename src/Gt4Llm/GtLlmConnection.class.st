@@ -53,6 +53,17 @@ GtLlmConnection >> gtDetailsFor: aView [
 ]
 
 { #category : #'as yet unclassified' }
+GtLlmConnection >> gtDisplayOn: stream [
+	stream
+		nextPutAll: 'Connection: ';
+		nextPutAll: self provider providerName;
+		space;
+		nextPutAll: self model;
+		space;
+		nextPutAll: (self isConnectable ifTrue: [ 'connectable' ] ifFalse: [ 'not connectable' ])
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmConnection >> gtOptionsFor: aView [
 	<gtView>
 	^ aView columnedList

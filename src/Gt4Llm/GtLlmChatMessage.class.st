@@ -51,6 +51,11 @@ GtLlmChatMessage >> action [
 	^ [ self contentJson at: 'Action' ] on: Error do: [ nil ]
 ]
 
+{ #category : #'as yet unclassified' }
+GtLlmChatMessage >> ancestor [
+	^ self chat ancestorOf: self
+]
+
 { #category : #accessing }
 GtLlmChatMessage >> annotations [
 	^ {}
@@ -114,7 +119,9 @@ GtLlmChatMessage >> contentFiles [
 
 { #category : #'as yet unclassified' }
 GtLlmChatMessage >> contentJson [
-	^ STONJSON fromString: self contentText
+	^ [ STONJSON fromString: self contentText ]
+		on: STONReaderError
+		do: [ {'Text' -> self contentText} asDictionary ]
 ]
 
 { #category : #accessing }

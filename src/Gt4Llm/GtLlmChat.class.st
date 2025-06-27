@@ -28,7 +28,13 @@ GtLlmChat >> ancestorOf: aMessage [
 	messages
 		withIndexDo: [ :possibleAncestor :index | 
 			possibleAncestor id = aMessage id
-				ifTrue: [ index = 1 ifTrue: [ ^ nil ] ifFalse: [ ^ messages at: index - 1 ] ] ].
+				ifTrue: [ index = 1
+						ifTrue: [ ^ nil ]
+						ifFalse: [ | actualIndex |
+							actualIndex := index.
+							[ (messages at: actualIndex - 1) isToolRole ]
+								whileTrue: [ actualIndex := actualIndex - 1 ].
+							^ messages at: actualIndex - 1 ] ] ].
 
 	self error: 'Message not found'
 ]

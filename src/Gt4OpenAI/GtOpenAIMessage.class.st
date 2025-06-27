@@ -37,11 +37,6 @@ GtOpenAIMessage class >> serializationProperties [
 ]
 
 { #category : #accessing }
-GtOpenAIMessage >> ancestor [
-	^ self chat ancestorOf: self
-]
-
-{ #category : #accessing }
 GtOpenAIMessage >> annotations [
 	(content isKindOf: String) ifTrue: [ ^ GtOpenAIAnnotationsGroup new ].
 
