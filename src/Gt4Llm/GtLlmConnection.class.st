@@ -60,7 +60,7 @@ GtLlmConnection >> gtDisplayOn: stream [
 		space;
 		nextPutAll: self model;
 		space;
-		nextPutAll: (self isConnectable ifTrue: [ 'connectable' ] ifFalse: 'not connectable')
+		nextPutAll: (self isConnectable ifTrue: [ 'connectable' ] ifFalse: [ 'not connectable' ])
 ]
 
 { #category : #'as yet unclassified' }
