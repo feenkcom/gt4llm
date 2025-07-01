@@ -48,6 +48,21 @@ GtLlmAssistantExamples >> assistantWithActionAdded [
 ]
 
 { #category : #'as yet unclassified' }
+GtLlmAssistantExamples >> assistantWithActionAddedTwice [
+	<gtExample>
+	| tutor exampleAction errored |
+	tutor := self assistantWithActionAdded.
+	exampleAction := GtLlmAssistantAction new name: 'example'.
+	errored := false.
+
+	[ tutor addAction: exampleAction ] on: Error do: [ errored := true ].
+
+	self assert: errored description: [ 'Actions should only be add-able once' ].
+
+	^ tutor
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmAssistantExamples >> assistantWithActionAndFormatAdded [
 	<gtExample>
 	| tutor exampleFormat |
@@ -59,6 +74,23 @@ GtLlmAssistantExamples >> assistantWithActionAndFormatAdded [
 
 	self assert: tutor instruction formats size equals: 4.
 	self assert: (tutor formatNamed: 'example') equals: exampleFormat.
+
+	^ tutor
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmAssistantExamples >> assistantWithFormatAddedTwice [
+	<gtExample>
+	| tutor exampleFormat errored |
+	tutor := self assistantWithActionAndFormatAdded.
+	exampleFormat := GtLlmAssistantFormatDescription new
+			name: 'example';
+			format: 'Text'.
+	errored := false.
+
+	[ tutor addFormat: exampleFormat ] on: Error do: [ errored := true ].
+
+	self assert: errored description: [ 'Formats should only be add-able once' ].
 
 	^ tutor
 ]
