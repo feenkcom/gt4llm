@@ -167,6 +167,12 @@ GtLlmChat >> removeSubscription: subscription [
 ]
 
 { #category : #'as yet unclassified' }
+GtLlmChat >> reset [
+	self provider: self assistant buildProvider.
+	self resetMessages
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmChat >> resetMessages [
 	self initializeMessages.
 	self signalRunIsDone
