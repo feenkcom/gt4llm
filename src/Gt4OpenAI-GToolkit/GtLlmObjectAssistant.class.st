@@ -40,8 +40,6 @@ GtLlmObjectAssistant >> chatOn: anObject [
 			onInstance: (self serializerFor: anObject);
 			provider: self buildProvider.
 
-	chat provider addTool: (self getPropertyToolOn: anObject).
-
 	^ chat
 ]
 
