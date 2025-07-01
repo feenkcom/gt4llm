@@ -29,11 +29,6 @@ GtLlmErrorThreadMessage >> arguments [
 	^ {}
 ]
 
-{ #category : #'as yet unclassified' }
-GtLlmErrorThreadMessage >> asViewModel [
-	^ GtLlmErrorThreadMessageViewModel new threadMessage: self
-]
-
 { #category : #accessing }
 GtLlmErrorThreadMessage >> chat [
 	^ chat
