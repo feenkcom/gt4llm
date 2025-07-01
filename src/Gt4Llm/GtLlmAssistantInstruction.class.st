@@ -28,6 +28,8 @@ GtLlmAssistantInstruction >> actions [
 
 { #category : #'as yet unclassified' }
 GtLlmAssistantInstruction >> addAction: anAction [
+	(self hasActionNamed: anAction name)
+		ifTrue: [ self error: 'Cannot add two LLM actions with the same name' ].
 	actions add: anAction
 ]
 
@@ -38,6 +40,8 @@ GtLlmAssistantInstruction >> addActions: aListOfActions [
 
 { #category : #accessing }
 GtLlmAssistantInstruction >> addComponent: aComponent [
+	(self hasFormatNamed: aComponent name)
+		ifTrue: [ self error: 'Cannot add two format components with the same name' ].
 	formats add: aComponent
 ]
 
@@ -177,6 +181,16 @@ GtLlmAssistantInstruction >> gtInstructionFor: aView [
 		priority: 1;
 		object: [self asInstructionPiece ];
 		view: #gtInstructionFor:
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmAssistantInstruction >> hasActionNamed: aString [
+	^ (self actionNamed: aString) isNotNil
+]
+
+{ #category : #accessing }
+GtLlmAssistantInstruction >> hasFormatNamed: aName [
+	^ (self formatNamed: aName) isNotNil
 ]
 
 { #category : #accessing }
