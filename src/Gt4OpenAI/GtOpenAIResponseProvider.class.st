@@ -16,6 +16,9 @@ GtOpenAIResponseProvider class >> providerName [
 
 { #category : #'as yet unclassified' }
 GtOpenAIResponseProvider >> addTool: aTool [
+	(tools anySatisfy: [ :tool | tool name = aTool name ])
+		ifTrue: [ self error: 'Cannot add a tool of the same name multiple times.' ].
+
 	tools add: aTool
 ]
 
