@@ -118,10 +118,14 @@ GtLlmNewThreadMessage >> sendMessage [
 	self files
 		ifEmpty: [ aBlock := [ assistantChat sendMessage: aMessageContent ] ]
 		ifNotEmpty: [ assistantChat sendFiles: files withMessage: aMessageContent ].
-		
+
 	files := OrderedCollection new.
 
-	isSync ifTrue: [ aBlock value ] ifFalse: [ future := aBlock asAsyncPromise ]
+	isSync
+		ifTrue: [ aBlock value ]
+		ifFalse: [ future := aBlock asAsyncPromise
+					then: [  ]
+					otherwise: [ :anError | anError inspect ] ]
 ]
 
 { #category : #actions }
