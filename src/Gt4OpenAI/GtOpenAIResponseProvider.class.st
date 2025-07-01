@@ -42,6 +42,31 @@ GtOpenAIResponseProvider >> gtExecutionsFor: aView [
 ]
 
 { #category : #'as yet unclassified' }
+GtOpenAIResponseProvider >> gtInstructionsFor: aView [
+	<gtView>
+	^ aView textEditor
+		title: 'Instructions';
+		priority: 5;
+		text: [ self instructions ifNil: [ '' ] ];
+		actionButtonIcon: BrGlamorousVectorIcons accept
+			tooltip: 'Save instructions'
+			action: [ :aButton | 
+				aButton parent parent parent parent
+					allChildrenBreadthFirstDetect: [ :anElement | anElement isKindOf: BrEditor ]
+					ifFound: [ :anEditor | self instructions: anEditor text asString ] ]
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAIResponseProvider >> gtSpawnChatFor: anAction [
+	<gtAction>
+	^ anAction button
+		priority: 1;
+		icon: BrGlamorousVectorIcons playinspect;
+		label: 'Chat';
+		action: [ :aButton | aButton phlow spawnObject: (GtLlmChat new provider: self) ]
+]
+
+{ #category : #'as yet unclassified' }
 GtOpenAIResponseProvider >> gtToolsFor: aView [
 	<gtView>
 	^ aView forward
