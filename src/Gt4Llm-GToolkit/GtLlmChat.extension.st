@@ -24,7 +24,7 @@ GtLlmChat >> gtMessagesWidgetFor: aView [
 		actionUpdateButton;
 		actionButtonIcon: BrGlamorousIcons trash
 			tooltip: 'Delete history'
-			action: [ self resetMessages ]
+			action: [ self reset ]
 ]
 
 { #category : #'*Gt4Llm-GToolkit' }
