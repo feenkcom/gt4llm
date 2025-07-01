@@ -164,8 +164,8 @@ GtLlmActionTemplateElement >> templatedText [
 
 	template := 'gt' asRopedText , actionNameAttribute codeEditor
 			, '
- 	<gtLlmTutorAction>
- 	^ GtLlmTutorAction new
+ 	<gtLlmAssistantAction>
+ 	^ GtLlmAssistantAction new
 	    name: ''' asRopedText , tutorNameAttribute codeEditor
 			, ''';
 	    priority: ' asRopedText , priorityAttribute codeEditor
@@ -176,7 +176,7 @@ GtLlmActionTemplateElement >> templatedText [
 	self example
 		ifNotNil: [ template := template
 					, ';
-		examples: {GtLlmTutorActionExample new
+		examples: {GtLlmAssistantActionExample new
 	input: { ' asRopedText , (self exampleStringFor: self example input)
 					, ' } asDictionary;
 	output: { ' asRopedText , (self exampleStringFor: self example output)
