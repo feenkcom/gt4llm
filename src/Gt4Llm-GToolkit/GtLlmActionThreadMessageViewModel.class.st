@@ -18,11 +18,6 @@ GtLlmActionThreadMessageViewModel >> action: anObject [
 ]
 
 { #category : #accessing }
-GtLlmActionThreadMessageViewModel >> elementClass [
-	^ GtLlmExpandableThreadMessageElement
-]
-
-{ #category : #accessing }
 GtLlmActionThreadMessageViewModel >> findActionTag [
 	action := self threadMessage action
 ]

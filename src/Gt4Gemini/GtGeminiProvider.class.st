@@ -177,7 +177,14 @@ GtGeminiProvider >> sendAssistantMessage: aMessage [
 	aMessage role: 'user'.
 	self chat addMessage: aMessage.
 
-	executions add: [ self triggerAssistant ] asAsyncPromise
+	executions
+		add: ([ self triggerAssistant ] asAsyncPromise
+				then: [  ]
+				otherwise: [ :anError | 
+					assistantWorking := false.
+					self chat
+						addMessage: (GtLlmErrorThreadMessage new exception: anError freeze).
+					self chat signalRunIsDone ])
 ]
 
 { #category : #'as yet unclassified' }

@@ -2,7 +2,14 @@ Extension { #name : #GtOllamaProvider }
 
 { #category : #'*Gt4Ollama-GToolkit' }
 GtOllamaProvider >> asyncWait [
-	executions add: ([self triggerAssistant] asAsyncPromise)
+	executions
+		add: ([ self triggerAssistant ] asAsyncPromise
+				then: [  ]
+				otherwise: [ :anError | 
+					assistantWorking := false.
+					self chat
+						addMessage: (GtLlmErrorThreadMessage new exception: anError freeze).
+					self chat signalRunIsDone ])
 ]
 
 { #category : #'*Gt4Ollama-GToolkit' }

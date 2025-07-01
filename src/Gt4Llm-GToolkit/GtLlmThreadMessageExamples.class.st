@@ -5,6 +5,16 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
+GtLlmThreadMessageExamples >> basicErrorThreadMessage [
+	<gtExample>
+	| aMessage |
+	aMessage := GtLlmErrorThreadMessage new
+			exception: (Error new messageText: 'Error!').
+
+	^ aMessage
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmThreadMessageExamples >> basicExpandableThreadMessageElement [
 	<gtExample>
 	| anElement |

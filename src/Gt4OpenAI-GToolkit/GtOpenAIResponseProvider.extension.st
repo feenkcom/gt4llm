@@ -3,7 +3,7 @@ Extension { #name : #GtOpenAIResponseProvider }
 { #category : #'*Gt4OpenAI-GToolkit' }
 GtOpenAIResponseProvider >> executeWait [
 	executions
-		add: ([ | result aMessage |
+		add: (([ | result aMessage |
 			result := client
 					generateResponseWithModel: self model
 					messages: self chat messages
@@ -21,9 +21,14 @@ GtOpenAIResponseProvider >> executeWait [
 
 
 					self chat addMessage: aMessage.
-					self chat signalRunIsDone.
-					assistantWorking := false ] ] asAsyncFuture
+					self chat signalRunIsDone ] ] asAsyncFuture
 				await: GtOpenAIUtilities executionConfiguration)
+				then: [ assistantWorking := false ]
+				otherwise: [ :anError | 
+					assistantWorking := false.
+					self chat
+						addMessage: (GtLlmErrorThreadMessage new exception: anError freeze).
+					self chat signalRunIsDone ])
 ]
 
 { #category : #'*Gt4OpenAI-GToolkit' }
