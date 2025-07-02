@@ -83,6 +83,16 @@ GtLlmProvider >> gtCallsFor: aView [
 ]
 
 { #category : #'as yet unclassified' }
+GtLlmProvider >> gtSpawnChatFor: anAction [
+	<gtAction>
+	^ anAction button
+		priority: 1;
+		icon: BrGlamorousVectorIcons playinspect;
+		label: 'Chat';
+		action: [ :aButton | aButton phlow spawnObject: (GtLlmChat new provider: self) ]
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmProvider >> sendAssistantMessage: anObject [ 
 	^ self subclassResponsibility
 ]
