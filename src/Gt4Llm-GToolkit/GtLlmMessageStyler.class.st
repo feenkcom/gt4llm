@@ -636,8 +636,9 @@ GtLlmMessageStyler >> visitClassAnnotation: aClassAnnotation [
 
 { #category : #generated }
 GtLlmMessageStyler >> visitCodeBlock: aCodeNode [
-	(aCodeNode language isNotNil and: [ aCodeNode isForSmalltalk ])
-		ifTrue: [ self styleSmalltalkCodeBlock: aCodeNode ].
+	"(aCodeNode language isNotNil and: [ aCodeNode isForSmalltalk ])
+		ifTrue: [ self styleSmalltalkCodeBlock: aCodeNode ]."
+
 	(self text from: aCodeNode startPosition to: aCodeNode stopPosition)
 		glamorousCodeFont.
 	(self text
@@ -664,6 +665,30 @@ GtLlmMessageStyler >> visitCodeBlock: aCodeNode [
 											to: aCodeNode end startPosition - 1) asString trim;
 									subscribeToSystem;
 									asExpandedOnlyElement ]} ].
+
+	aCodeNode language value = 'smalltalk-method'
+		ifTrue: [ | smalltalkMethodParser result |
+			smalltalkMethodParser := (#letter asPParser
+					, (#letter asPParser / #digit asPParser / '_' asPParser) star flatten
+					, '>>' asPParser , #endOfInput asPParser negate plus flatten)
+					==> [ :t | 
+						{t first asString , t second.
+							t fourth} ].
+			result := smalltalkMethodParser parse: aCodeNode code value trim.
+			result isPetit2Failure
+				ifFalse: [ result first asSymbol
+						asClassIfPresent: [ :class | 
+							self text
+								attributes: {BrTextHideAttribute new}
+								from: aCodeNode begin startPosition
+								to: aCodeNode end stopPosition.
+							(text from: aCodeNode end stopPosition to: aCodeNode end stopPosition)
+								attributes: {BrTextAdornmentDynamicAttribute new
+											beAppend;
+											stencil: [ GtPharoMethodCoder new
+													forClass: class source: result second;
+													subscribeToSystem;
+													asExpandedOnlyElement ]} ] ] ].
 	^ self visitContent: aCodeNode
 ]
 
