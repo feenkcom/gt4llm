@@ -38,8 +38,9 @@ GtLlmChatExamples >> chatWithProvider [
 	chat := self basicChat.
 
 	chat provider: GtLlmNullProvider new.
-	
+
+	self assert: chat provider class equals: GtLlmNullProvider.
 	self assert: chat status isDone.
-	
+
 	^ chat
 ]
