@@ -57,16 +57,6 @@ GtOpenAIResponseProvider >> gtInstructionsFor: aView [
 ]
 
 { #category : #'as yet unclassified' }
-GtOpenAIResponseProvider >> gtSpawnChatFor: anAction [
-	<gtAction>
-	^ anAction button
-		priority: 1;
-		icon: BrGlamorousVectorIcons playinspect;
-		label: 'Chat';
-		action: [ :aButton | aButton phlow spawnObject: (GtLlmChat new provider: self) ]
-]
-
-{ #category : #'as yet unclassified' }
 GtOpenAIResponseProvider >> gtToolsFor: aView [
 	<gtView>
 	^ aView forward
