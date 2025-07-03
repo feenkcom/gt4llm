@@ -13,6 +13,7 @@ Class {
 
 { #category : #accessing }
 GtBPEEncodingResult >> compressionRatio [
+	self output size = 0 ifTrue: [ ^ self tokens size ].
 	^ self tokens size / self output size
 ]
 
