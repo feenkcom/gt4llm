@@ -1,6 +1,6 @@
 # gt4llm
 
-is a library for working with LLMs, designed for use with [Glamorous Toolkit](https://gtoolkit.com) and [Gemstone](https://gemtalksystems.com/).
+is a library for working with LLMs, designed for use with [Glamorous Toolkit](https://gtoolkit.com) and [GemStone](https://gemtalksystems.com/).
 
 Currently it includes:
 - A client for [OpenAI](https://openai.com)
@@ -22,5 +22,9 @@ Metacello new
 	load.
 #BaselineOfGt4Llm asClass loadLepiter
 ```
+
+### Installation on Gemstone
+
+Currently, installation on GemStone is using the scripts in the scripts directory and is meant to be done in conjunction with gt4gemstone setup.
 
 Have fun!
