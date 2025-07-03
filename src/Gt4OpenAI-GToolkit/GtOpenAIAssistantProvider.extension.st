@@ -13,9 +13,14 @@ GtOpenAIAssistantProvider >> gtInstructionsFor: aView [
 	<gtView>
 	^ aView textEditor
 		title: 'Instructions';
-		priority: 1;
-		text: [ self instructions ];
-		styler: GtLlmMessageStyler new
+		priority: 5;
+		text: [ self instructions ifNil: [ '' ] ];
+		actionButtonIcon: #BrGlamorousVectorIcons asClass accept
+			tooltip: 'Save instructions'
+			action: [ :aButton | 
+				aButton parent parent parent parent
+					allChildrenBreadthFirstDetect: [ :anElement | anElement isKindOf: BrEditor ]
+					ifFound: [ :anEditor | self instructions: anEditor text asString ] ]
 ]
 
 { #category : #'*Gt4OpenAI-GToolkit' }
