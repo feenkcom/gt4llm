@@ -101,7 +101,7 @@ GtLlmModelFileExamples >> modelfileWithSystem [
 	| modelfile |
 	modelfile := self modelfile.
 
-	modelfile system: 'You are a helpfule assistant'.
+	modelfile system: 'You are a helpful assistant'.
 
 	self assert: modelfile directives size equals: 1.
 

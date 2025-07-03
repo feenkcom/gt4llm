@@ -334,7 +334,7 @@ Code in text should be formatted as follows:
 - Smalltalk methods appear as:
 
 ```smalltalk-method
-add: val
+SomeClass>>someMethodWithArgument: val
 	^ self + val
 ```
 

@@ -1,5 +1,5 @@
 #! /usr/bin/env bash
-### Export gtoolkit-wireencoding to a .gs file.
+### Export gt4llm to a .gs file.
 ### Requires loginSystemUser.topaz be configured with the correct credentials,
 ### and the environmental variable STONE to indicate the target stone name.
 ### Exits with 0 if success, topaz status if failed.
