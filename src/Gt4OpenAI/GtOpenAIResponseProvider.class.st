@@ -48,7 +48,7 @@ GtOpenAIResponseProvider >> gtInstructionsFor: aView [
 		title: 'Instructions';
 		priority: 5;
 		text: [ self instructions ifNil: [ '' ] ];
-		actionButtonIcon: BrGlamorousVectorIcons accept
+		actionButtonIcon: #BrGlamorousVectorIcons asClass accept
 			tooltip: 'Save instructions'
 			action: [ :aButton | 
 				aButton parent parent parent parent
