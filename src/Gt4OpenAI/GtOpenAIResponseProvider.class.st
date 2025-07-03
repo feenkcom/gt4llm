@@ -42,21 +42,6 @@ GtOpenAIResponseProvider >> gtExecutionsFor: aView [
 ]
 
 { #category : #'as yet unclassified' }
-GtOpenAIResponseProvider >> gtInstructionsFor: aView [
-	<gtView>
-	^ aView textEditor
-		title: 'Instructions';
-		priority: 5;
-		text: [ self instructions ifNil: [ '' ] ];
-		actionButtonIcon: #BrGlamorousVectorIcons asClass accept
-			tooltip: 'Save instructions'
-			action: [ :aButton | 
-				aButton parent parent parent parent
-					allChildrenBreadthFirstDetect: [ :anElement | anElement isKindOf: BrEditor ]
-					ifFound: [ :anEditor | self instructions: anEditor text asString ] ]
-]
-
-{ #category : #'as yet unclassified' }
 GtOpenAIResponseProvider >> gtToolsFor: aView [
 	<gtView>
 	^ aView forward
