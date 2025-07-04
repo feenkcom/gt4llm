@@ -305,7 +305,7 @@ Code in text should be formatted as follows:
 - Smalltalk methods appear as:
 
 ```smalltalk-method
-add: val
+SomeClass>>add: val
 	^ self + val
 ```
 
