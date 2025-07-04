@@ -10,8 +10,13 @@ Class {
 { #category : #'as yet unclassified' }
 GtLlmTextSnippetExporter >> exportAst: anAst [
 	stream := WriteStream on: ''.
-	anAst acceptVisitor: self.
+	self visit: anAst.
 	^ stream contents
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmTextSnippetExporter >> visit: anAst [
+	^ anAst acceptVisitor: self
 ]
 
 { #category : #'as yet unclassified' }

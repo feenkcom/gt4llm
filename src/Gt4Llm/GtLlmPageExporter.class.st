@@ -21,7 +21,7 @@ GtLlmPageExporter >> export [
 	stream := WriteStream on: ''.
 	level := 0.
 
-	page acceptVisitor: self.
+	self visit: page.
 
 	^ stream contents
 ]
@@ -63,6 +63,11 @@ GtLlmPageExporter >> page: anObject [
 { #category : #'as yet unclassified' }
 GtLlmPageExporter >> treatTextSnippetAst: anAst [
 	^ GtLlmTextSnippetExporter new exportAst: anAst
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmPageExporter >> visit: aPage [ 
+	^ aPage acceptVisitor: self
 ]
 
 { #category : #'as yet unclassified' }
