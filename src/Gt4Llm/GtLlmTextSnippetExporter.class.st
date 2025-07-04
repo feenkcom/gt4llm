@@ -22,11 +22,13 @@ GtLlmTextSnippetExporter >> visitBold: aLeBoldNode [
 { #category : #'as yet unclassified' }
 GtLlmTextSnippetExporter >> visitDocumenterAnnotation: aLeDocumenterAnnotationNode [
 	aLeDocumenterAnnotationNode annotation expanded
-		ifTrue: [ stream
+		ifTrue: [ | method |
+			method := aLeDocumenterAnnotationNode annotation nameNode imageObject.
+			stream
 				nextPutAll: '
 
 ```smalltalk-method
-' , aLeDocumenterAnnotationNode annotation nameNode imageObject sourceCode
+' , method methodClass asString , '>>' , method sourceCode
 						, '
 ```
 
