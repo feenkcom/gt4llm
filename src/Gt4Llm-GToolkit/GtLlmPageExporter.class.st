@@ -10,9 +10,12 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-GtLlmPageExporter >> codeSnippet: aString labelled: aName [ 
-	stream nextPutAll: '```', aName, '
-', aString, '
+GtLlmPageExporter >> codeSnippet: aString labelled: aName [
+	stream
+		nextPutAll: '```' , aName
+				, '
+' , (aString ifNil: [ '' ])
+				, '
 ```'
 ]
 
@@ -136,6 +139,13 @@ GtLlmPageExporter >> visitPage: aLePage [
 ]
 
 { #category : #'as yet unclassified' }
+GtLlmPageExporter >> visitPharoLinkSnippet: aLePharoLinkSnippet [ 
+	self codeSnippet: aLePharoLinkSnippet code labelled: 'remote-pharo'.
+
+	self visitChildren: aLePharoLinkSnippet
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmPageExporter >> visitPharoRewriteSnippet: aLePharoRewriteSnippet [
 	self
 		codeSnippet: aLePharoRewriteSnippet contentAsString
@@ -200,6 +210,30 @@ GtLlmPageExporter >> visitWardleyMapSnippet: aLeWardleyMapSnippet [
 		labelled: 'wardley-map'.
 
 	self visitChildren: aLeWardleyMapSnippet
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmPageExporter >> visitWordSnippet: aLeWordSnippet [
+	| explanation |
+	explanation := aLeWordSnippet explanation.
+	stream
+		nextPutAll: '**' , explanation word , '**';
+		nextPut: Character linefeed.
+	explanation meanings
+		do: [ :aMeaning | 
+			stream
+				nextPutAll: '*' , aMeaning partOfSpeech , '*';
+				nextPut: Character linefeed.
+			aMeaning definitions
+				do: [ :aDefinition | 
+					stream
+						nextPutAll: aDefinition definition;
+						nextPut: Character linefeed.
+					aDefinition exampleSentence
+						ifNotNil: [ :aSentence | 
+							stream
+								nextPutAll: '*' , aSentence , '*';
+								nextPut: Character linefeed ] ] ]
 ]
 
 { #category : #'as yet unclassified' }

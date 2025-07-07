@@ -25,42 +25,42 @@ GtLlmTextSnippetExporter >> visitBold: aLeBoldNode [
 ]
 
 { #category : #'as yet unclassified' }
+GtLlmTextSnippetExporter >> visitClassAnnotation: aLeClassAnnotationNode [
+	aLeClassAnnotationNode expanded
+		ifTrue: [ | aClass |
+			aClass := aLeClassAnnotationNode nameNode imageObject.
+			aClass
+				ifNil: [ stream nextPutAll: aLeClassAnnotationNode parent source ]
+				ifNotNil: [ stream
+						nextPutAll: '
+
+```smalltalk
+' , aClass definitionString
+								, '
+```
+
+' ] ]
+		ifFalse: [ stream nextPutAll: aLeClassAnnotationNode parent source ]
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmTextSnippetExporter >> visitCodeBlock: aLeCodeBlockNode [
 	stream nextPutAll: aLeCodeBlockNode source
 ]
 
 { #category : #'as yet unclassified' }
 GtLlmTextSnippetExporter >> visitDocumenterAnnotation: aLeDocumenterAnnotationNode [
-	aLeDocumenterAnnotationNode annotation expanded
-		ifTrue: [ | methodOrClass |
-			methodOrClass := aLeDocumenterAnnotationNode annotation nameNode imageObject.
-			methodOrClass
-				ifNil: [ stream nextPutAll: aLeDocumenterAnnotationNode source ]
-				ifNotNil: [ methodOrClass isClass
-						ifTrue: [ stream
-								nextPutAll: '
-
-```smalltalk
-' , methodOrClass definitionString
-										, '
-```
-
-' ]
-						ifFalse: [ stream
-								nextPutAll: '
-
-```smalltalk-method
-' , methodOrClass methodClass asString , '>>' , methodOrClass sourceCode
-										, '
-```
-
-' ] ] ]
-		ifFalse: [ stream nextPutAll: aLeDocumenterAnnotationNode source ]
+	self visit: aLeDocumenterAnnotationNode annotation
 ]
 
 { #category : #'as yet unclassified' }
 GtLlmTextSnippetExporter >> visitDoubleBracketLink: aLeDoubleBracketLinkNode [ 
 	stream nextPutAll: aLeDoubleBracketLinkNode source
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmTextSnippetExporter >> visitExampleAnnotation: aLeExampleAnnotationNode [
+	self visitMethodAnnotation: aLeExampleAnnotationNode
 ]
 
 { #category : #'as yet unclassified' }
@@ -89,6 +89,35 @@ GtLlmTextSnippetExporter >> visitItalic: aLeItalicNode [
 ]
 
 { #category : #'as yet unclassified' }
+GtLlmTextSnippetExporter >> visitMethodAnnotation: aLeMethodAnnotationNode [
+	aLeMethodAnnotationNode expanded
+		ifTrue: [ | aClass |
+			aClass := aLeMethodAnnotationNode nameNode imageObject.
+			aClass
+				ifNil: [ stream nextPutAll: aLeMethodAnnotationNode parent source ]
+				ifNotNil: [ stream
+						nextPutAll: '
+
+```smalltalk-method
+' , aClass methodClass asString , '>>' , aClass sourceCode
+								, '
+```
+
+' ] ]
+		ifFalse: [ stream nextPutAll: aLeMethodAnnotationNode parent source ]
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmTextSnippetExporter >> visitPackageAnnotation: aLePackageAnnotationNode [
+	stream nextPutAll: aLePackageAnnotationNode parent source
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmTextSnippetExporter >> visitPageAnnotation: aLePageAnnotationNode [
+	stream nextPutAll: aLePageAnnotationNode parent source
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmTextSnippetExporter >> visitString: aLeStringNode [
 	aLeStringNode parts do: [ :aPart | aPart acceptVisitor: self ]
 ]
@@ -96,4 +125,14 @@ GtLlmTextSnippetExporter >> visitString: aLeStringNode [
 { #category : #'as yet unclassified' }
 GtLlmTextSnippetExporter >> visitText: aLeTextNode [ 
 	stream nextPutAll: aLeTextNode content
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmTextSnippetExporter >> visitTodoAnnotation: aLeTodoAnnotationNode [
+	stream nextPutAll: aLeTodoAnnotationNode parent source
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmTextSnippetExporter >> visitWordAnnotation: aLeWordAnnotationNode [ 
+	stream nextPutAll: aLeWordAnnotationNode parent source
 ]
