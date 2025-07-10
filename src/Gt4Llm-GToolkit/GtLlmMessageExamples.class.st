@@ -10,7 +10,7 @@ GtLlmMessageExamples >> actionMessage [
 	| anActionMessage |
 	anActionMessage := GtLlmActionMessage new
 		role: 'assistant';
-		content: '{''Action'': ''An Action''}'.
+		content: '{"Action": "An Action"}'.
 		
 	self assert: anActionMessage action equals: 'An Action'.
 	
@@ -91,14 +91,16 @@ GtLlmMessageExamples >> executeShould: aBlock inScopeOf: anExceptionalEvent [
 { #category : #'as yet unclassified' }
 GtLlmMessageExamples >> parsedMessage [
 	<gtExample>
-	| anAssistantMessage |
+	| anAssistantMessage messageString |
+	messageString := 'This is an assistant message'.
 	anAssistantMessage := GtLlmChatMessage
-		from: {'role' -> 'assistant'.
-				'content' -> 'This is an assistant message'} asDictionary.
-				
+			from: {'role' -> 'assistant'.
+					'content' -> messageString} asDictionary.
+
 	self assert: anAssistantMessage isAssistantRole.
-	self assert: anAssistantMessage content equals: 'This is an assistant message'.
-	
+	self assert: anAssistantMessage content equals: messageString.
+	self assert: anAssistantMessage contentJson equals: {'Text' -> messageString} asDictionary.
+
 	^ anAssistantMessage
 ]
 
