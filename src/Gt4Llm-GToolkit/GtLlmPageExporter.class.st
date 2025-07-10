@@ -100,7 +100,7 @@ GtLlmPageExporter >> visitElementSnippet: aLeElementSnippet [
 
 { #category : #'as yet unclassified' }
 GtLlmPageExporter >> visitExampleSnippet: aLeExampleSnippet [
-	self codeSnippet: aLeExampleSnippet referencedExampleSourceCode labelled: 'example'.
+	self codeSnippet: aLeExampleSnippet inlinedSnippetSource labelled: 'example'.
 
 	self visitChildren: aLeExampleSnippet
 ]

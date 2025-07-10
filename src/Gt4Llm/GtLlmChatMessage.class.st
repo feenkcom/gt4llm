@@ -119,8 +119,8 @@ GtLlmChatMessage >> contentFiles [
 
 { #category : #'as yet unclassified' }
 GtLlmChatMessage >> contentJson [
-	^ [ STONJSON fromString: self contentText ]
-		on: STONReaderError
+	^ [ GtJson forJsonString: self contentText ]
+		on: NeoJSONParseError
 		do: [ {'Text' -> self contentText} asDictionary ]
 ]
 
