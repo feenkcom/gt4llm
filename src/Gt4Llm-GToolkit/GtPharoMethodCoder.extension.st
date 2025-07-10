@@ -36,5 +36,5 @@ GtPharoMethodCoder >> addReviewMethodMenuForAst: anAst to: coderAddOns from: aCo
 		action: [ :model :element | 
 			model llmChat
 				sendAction: (GtLlmActionCall action: 'Review method')
-				onAnswer: [ :anAnswer | element phlow spawnObject: (GtLlmAnswer new message: anAnswer) ] ]
+				onAnswer: [ :anAnswer | element phlow spawnObject: anAnswer ] ]
 ]
