@@ -119,9 +119,11 @@ GtLlmChatMessage >> contentFiles [
 
 { #category : #'as yet unclassified' }
 GtLlmChatMessage >> contentJson [
-	^ [ (NeoJSONReader on: self contentText readStream) next ]
-		on: NeoJSONParseError
-		do: [ {'Text' -> self contentText} asDictionary ]
+	^ [ | ston value |
+	ston := STON reader on: self contentText readStream.
+	value := ston next.
+	self assert: ston atEnd.
+	value ] on: Error do: [ {'Text' -> self contentText} asDictionary ]
 ]
 
 { #category : #accessing }
