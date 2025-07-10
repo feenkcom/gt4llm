@@ -10,7 +10,7 @@ GtLlmMessageExamples >> actionMessage [
 	| anActionMessage |
 	anActionMessage := GtLlmActionMessage new
 		role: 'assistant';
-		content: '{''Action'': ''An Action''}'.
+		content: '{"Action": "An Action"}'.
 		
 	self assert: anActionMessage action equals: 'An Action'.
 	
