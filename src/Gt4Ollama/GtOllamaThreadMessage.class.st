@@ -130,7 +130,7 @@ GtOllamaThreadMessage >> promptEvalDuration [
 
 { #category : #accessing }
 GtOllamaThreadMessage >> promptEvalDuration: anObject [
-	promptEvalDuration := anObject nanoSeconds
+	promptEvalDuration := anObject ifNotNil: [ :timestamp | timestamp nanoSeconds ]
 ]
 
 { #category : #accessing }
