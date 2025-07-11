@@ -18,7 +18,9 @@ GtMcpStdioTransport >> gtMessagesFor: aView [
 		items: [ messages ];
 		column: 'Method'
 			text: [ :aMessage | aMessage at: 'method' ifAbsent: [ 'response' ] ];
-		column: 'Body' text: [ :aMessage | aMessage ] weight: 3
+		column: 'Body'
+			text: [ :aMessage | aMessage ]
+			weight: 3
 ]
 
 { #category : #'as yet unclassified' }

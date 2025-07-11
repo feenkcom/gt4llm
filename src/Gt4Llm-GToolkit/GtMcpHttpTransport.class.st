@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'url',
 		'result',
-		'sessionId'
+		'sessionId',
+		'messages'
 	],
 	#category : #'Gt4Llm-GToolkit'
 }
@@ -30,7 +31,29 @@ GtMcpHttpTransport >> client [
 ]
 
 { #category : #'as yet unclassified' }
+GtMcpHttpTransport >> gtMessagesFor: aView [
+	<gtView>
+	^ aView columnedList
+		title: 'Messages';
+		priority: 1;
+		items: [ messages ];
+		column: 'Method'
+			text: [ :aMessage | aMessage at: 'method' ifAbsent: [ 'response' ] ];
+		column: 'Body'
+			text: [ :aMessage | aMessage ]
+			weight: 3
+]
+
+{ #category : #'as yet unclassified' }
+GtMcpHttpTransport >> initialize [
+	super initialize.
+	
+	messages := OrderedCollection new
+]
+
+{ #category : #'as yet unclassified' }
 GtMcpHttpTransport >> receiveResponse [
+	messages add: result.
 	^ result
 ]
 
@@ -38,6 +61,8 @@ GtMcpHttpTransport >> receiveResponse [
 GtMcpHttpTransport >> sendMessage: anObject [
 	| client |
 	client := self client contents: anObject.
+	
+	messages add: anObject.
 
 	result := client post.
 
