@@ -22,13 +22,17 @@ GtMcpStdioTransport >> process: anObject [
 
 { #category : #accessing }
 GtMcpStdioTransport >> receiveResponse [
-	| resultString ston value |
+	| resultString ston value result |
 	resultString := ''.
 	[ resultString := resultString , stdout pollString.
 	[ ston := STON reader on: resultString readStream.
 	value := ston next.
 	ston atEnd ] on: STONReaderError do: [ false ] ] whileFalse.
-	^ STONJSON fromString: resultString
+	result := STONJSON fromString: resultString.
+
+	(result includesKey: 'error') ifTrue: [ self error: (result at: 'error') asString ].
+
+	^ result
 ]
 
 { #category : #'as yet unclassified' }
