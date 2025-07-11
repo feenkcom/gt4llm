@@ -18,6 +18,14 @@ GtMcpClient >> callTool: aString withArguments: anObject [
 				'arguments' -> anObject} asDictionary) at: 'result' at: 'content'
 ]
 
+{ #category : #accessing }
+GtMcpClient >> getPrompt: aString withArguments: anObject [
+	^ (self
+		sendMethod: 'prompts/get'
+		withParams: {'name' -> aString.
+				'arguments' -> anObject} asDictionary) at: 'result'
+]
+
 { #category : #'as yet unclassified' }
 GtMcpClient >> gtCapabilitiesFor: aView [
 	<gtView>
@@ -27,6 +35,25 @@ GtMcpClient >> gtCapabilitiesFor: aView [
 		items: [ serverCapabilities associations ];
 		column: 'Capability' text: [ :aCapability | aCapability key ];
 		column: 'Information' text: [ :aCapability | aCapability value ]
+]
+
+{ #category : #'as yet unclassified' }
+GtMcpClient >> gtPromptsFor: aView [
+	<gtView>
+	(serverCapabilities includesKey: 'prompts') ifFalse: [ ^ aView empty ].
+
+	^ aView columnedList
+		title: 'Prompts';
+		priority: 2;
+		items: [ self listPrompts ];
+		column: 'Name' text: [ :aTool | aTool at: 'name' ];
+		column: 'Description'
+			text: [ :aTool | aTool at: 'description' ]
+			weight: 3;
+		column: 'Arguments'
+			text: [ :aTool | 
+				', '
+					join: ((aTool at: 'arguments') collect: [ :anArgument | anArgument at: 'name' ]) ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -71,6 +98,13 @@ GtMcpClient >> initializeSession [
 ]
 
 { #category : #'as yet unclassified' }
+GtMcpClient >> listPrompts [
+	^ (self sendMethod: 'prompts/list' withParams: {} asDictionary)
+		at: 'result'
+		at: 'prompts'
+]
+
+{ #category : #'as yet unclassified' }
 GtMcpClient >> listTools [
 	^ (self sendMethod: 'tools/list' withParams: {} asDictionary)
 		at: 'result'
@@ -86,6 +120,15 @@ GtMcpClient >> llmFunctionTools [
 				parameters: (aTool at: 'inputSchema' at: 'properties') keys;
 				description: (aTool at: 'description');
 				block: [ :functionCall | (self callTool: (aTool at: 'name') withArguments: functionCall arguments) asString ] ]
+]
+
+{ #category : #'as yet unclassified' }
+GtMcpClient >> messagesFromPrompt: aPromptName withArguments: anArgsDictionary [
+	^ ((self getPrompt: aPromptName withArguments: anArgsDictionary) at: 'messages')
+		collect: [ :aMessage | 
+			GtLlmChatMessage new
+				role: (aMessage at: 'role');
+				content: (aMessage at: 'content' at: 'text') ]
 ]
 
 { #category : #'as yet unclassified' }
