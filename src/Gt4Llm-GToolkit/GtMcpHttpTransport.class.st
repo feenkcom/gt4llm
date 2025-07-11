@@ -6,7 +6,7 @@ Class {
 		'result',
 		'sessionId'
 	],
-	#category : #Gt4Llm
+	#category : #'Gt4Llm-GToolkit'
 }
 
 { #category : #'as yet unclassified' }
