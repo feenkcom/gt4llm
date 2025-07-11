@@ -142,7 +142,9 @@ GtMcpClient >> llmFunctionTools [
 				name: (aTool at: 'name');
 				parameters: (aTool at: 'inputSchema' at: 'properties') keys;
 				description: (aTool at: 'description');
-				block: [ :functionCall | (self callTool: (aTool at: 'name') withArguments: functionCall arguments) asString ] ]
+				block: [ :functionCall | 
+					STONJSON
+						toString: (self callTool: (aTool at: 'name') withArguments: functionCall arguments) ] ]
 ]
 
 { #category : #'as yet unclassified' }
