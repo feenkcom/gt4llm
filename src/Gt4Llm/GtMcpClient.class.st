@@ -57,6 +57,22 @@ GtMcpClient >> gtPromptsFor: aView [
 ]
 
 { #category : #'as yet unclassified' }
+GtMcpClient >> gtResourcesFor: aView [
+	<gtView>
+	(serverCapabilities includesKey: 'resources') ifFalse: [ ^ aView empty ].
+
+	^ aView columnedList
+		title: 'Resources';
+		priority: 2;
+		items: [ self listResources ];
+		column: 'Name' text: [ :aTool | aTool at: 'name' ];
+		column: 'URI' text: [ :aTool | aTool at: 'uri' ] weight: 2;
+		column: 'Description'
+			text: [ :aTool | aTool at: 'description' ifAbsent: [ '' ] ]
+			weight: 3
+]
+
+{ #category : #'as yet unclassified' }
 GtMcpClient >> gtToolsFor: aView [
 	<gtView>
 	(serverCapabilities includesKey: 'tools') ifFalse: [ ^ aView empty ].
@@ -105,6 +121,13 @@ GtMcpClient >> listPrompts [
 ]
 
 { #category : #'as yet unclassified' }
+GtMcpClient >> listResources [
+	^ (self sendMethod: 'resources/list' withParams: {} asDictionary)
+		at: 'result'
+		at: 'resources'
+]
+
+{ #category : #'as yet unclassified' }
 GtMcpClient >> listTools [
 	^ (self sendMethod: 'tools/list' withParams: {} asDictionary)
 		at: 'result'
@@ -135,6 +158,13 @@ GtMcpClient >> messagesFromPrompt: aPromptName withArguments: anArgsDictionary [
 GtMcpClient >> nextMessageId [
 	messageId := messageId + 1.
 	^ messageId
+]
+
+{ #category : #'as yet unclassified' }
+GtMcpClient >> readResource: aString [
+	^ (self
+		sendMethod: 'resources/read'
+		withParams: {'uri' -> aString} asDictionary) at: 'result' at: 'contents'
 ]
 
 { #category : #'as yet unclassified' }
