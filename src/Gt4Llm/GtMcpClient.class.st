@@ -179,11 +179,6 @@ GtMcpClient >> sendMethod: aString withParams: anObject [
 ]
 
 { #category : #accessing }
-GtMcpClient >> terminateSession [
-	process kill
-]
-
-{ #category : #accessing }
 GtMcpClient >> transport [
 	^ transport
 ]
