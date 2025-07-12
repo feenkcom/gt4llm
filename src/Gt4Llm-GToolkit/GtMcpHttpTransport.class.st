@@ -20,7 +20,7 @@ GtMcpHttpTransport >> client [
 				entity
 					ifNil: [ {} ]
 					ifNotNil: [ NeoJSONReader
-							fromString: (entity contentType = 'application/json'
+							fromString: (entity contentType asString = 'application/json'
 									ifTrue: [ entity contents ]
 									ifFalse: [ (entity contents lines last: 2) first removePrefix: 'data: ' ]) ] ];
 			contentWriter: [ :data | ZnEntity json: (NeoJSONWriter toString: data) ].
