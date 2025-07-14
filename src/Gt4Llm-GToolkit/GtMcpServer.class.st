@@ -8,7 +8,8 @@ Class {
 		'prompts',
 		'server',
 		'history',
-		'errors'
+		'errors',
+		'debug'
 	],
 	#category : #'Gt4Llm-GToolkit'
 }
@@ -154,7 +155,7 @@ GtMcpServer >> handlePromptsList: _ [
 ]
 
 { #category : #'as yet unclassified' }
-GtMcpServer >> handleRequest: request response: _ [
+GtMcpServer >> handleRequest: request [
 	| jsonRpc response jsonRpcResult |
 	[ jsonRpc := GtMcpJsonRpc on: (STONJSON fromString: request entity contents) ]
 		on: Error
@@ -164,6 +165,7 @@ GtMcpServer >> handleRequest: request response: _ [
 		on: Error
 		do: [ :anError | 
 			errors add: anError freeze.
+			self isDebug ifTrue: [ anError signal ].
 			^ ZnResponse badRequest: request ].
 
 	response := (GtMcpJsonRpc new
@@ -243,11 +245,17 @@ GtMcpServer >> handleToolsList: _ [
 { #category : #'as yet unclassified' }
 GtMcpServer >> initialize [
 	port := 0.
+	debug := false.
 	tools := GtLlmToolsGroup new.
 	resources := GtMcpResourcesGroup new.
 	prompts := GtMcpPromptsGroup new.
 	history := OrderedCollection new.
 	errors := OrderedCollection new
+]
+
+{ #category : #'as yet unclassified' }
+GtMcpServer >> isDebug [
+	^ debug
 ]
 
 { #category : #accessing }
@@ -261,18 +269,35 @@ GtMcpServer >> port: anObject [
 ]
 
 { #category : #'as yet unclassified' }
+GtMcpServer >> prompts [
+	^ prompts
+]
+
+{ #category : #'as yet unclassified' }
 GtMcpServer >> registerForFinalization [
 	self class finalizationRegistry add: self
+]
+
+{ #category : #'as yet unclassified' }
+GtMcpServer >> resources [
+	^ resources
+]
+
+{ #category : #'as yet unclassified' }
+GtMcpServer >> setDebug [
+	debug := true
 ]
 
 { #category : #'as yet unclassified' }
 GtMcpServer >> start [
 	server := ZnMultiThreadedServer new
 			port: port;
-			delegate: (ZnDispatcherDelegate new map: '/' to: [ :request :response | self handleRequest: request response: response ]).
+			delegate: (ZnDispatcherDelegate new
+					map: '/'
+					to: [ :request :response | self handleRequest: request ]).
 
 	server start.
-	
+
 	self registerForFinalization
 ]
 
@@ -281,4 +306,9 @@ GtMcpServer >> stop [
 	server
 		ifNotNil: [ server stop.
 			server := nil ]
+]
+
+{ #category : #'as yet unclassified' }
+GtMcpServer >> tools [
+	^ tools
 ]
