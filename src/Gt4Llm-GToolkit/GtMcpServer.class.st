@@ -14,6 +14,11 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
+GtMcpServer >> addPrompt: aPrompt [
+	prompts add: aPrompt
+]
+
+{ #category : #'as yet unclassified' }
 GtMcpServer >> addResource: aResource [
 	resources add: aResource
 ]
@@ -64,6 +69,17 @@ GtMcpServer >> gtHistoryFor: aView [
 ]
 
 { #category : #'as yet unclassified' }
+GtMcpServer >> gtPromptsFor: aView [
+	<gtView>
+	prompts ifEmpty: [ ^ aView empty ].
+	^ aView forward
+		title: 'Prompts';
+		priority: 1;
+		object: [ prompts ];
+		view: #gtPromptsFor:
+]
+
+{ #category : #'as yet unclassified' }
 GtMcpServer >> gtResourcesFor: aView [
 	<gtView>
 	resources ifEmpty: [ ^ aView empty ].
@@ -99,6 +115,34 @@ GtMcpServer >> handleInitialize: aJsonRpc [
 { #category : #'as yet unclassified' }
 GtMcpServer >> handleNotificationsInitialized: _ [
 	^ {} asDictionary
+]
+
+{ #category : #'as yet unclassified' }
+GtMcpServer >> handlePromptsGet: aJsonRpc [
+	| prompt |
+	prompt := prompts
+			detect: [ :aResource | aResource name = (aJsonRpc params at: 'name') ].
+	^ {'description' -> prompt description.
+		'messages'
+			-> ((prompt callWith: (aJsonRpc params at: 'arguments')) collect: #serialize)}
+		asDictionary
+]
+
+{ #category : #'as yet unclassified' }
+GtMcpServer >> handlePromptsList: _ [
+	^ {'prompts'
+			-> (prompts
+					collect: [ :aPrompt | 
+						{'name' -> aPrompt name.
+							'title' -> aPrompt name.
+							'description' -> aPrompt description.
+							'arguments'
+								-> (aPrompt arguments
+										collect: [ :anArgument | 
+											{'name' -> anArgument.
+												'description' -> anArgument.
+												'required' -> true} asDictionary ])} asDictionary ]) asArray}
+		asDictionary
 ]
 
 { #category : #'as yet unclassified' }
@@ -149,6 +193,11 @@ GtMcpServer >> handleResourcesRead: aJsonRpc [
 ]
 
 { #category : #'as yet unclassified' }
+GtMcpServer >> handleResourcesTemplatesList: _ [
+	^ {'resourceTemplates' -> {}} asDictionary
+]
+
+{ #category : #'as yet unclassified' }
 GtMcpServer >> handleToolsCall: aJsonRpc [
 	| tool |
 	tool := tools detect: [ :aTool | aTool name = (aJsonRpc params at: 'name') ].
@@ -188,7 +237,7 @@ GtMcpServer >> initialize [
 	port := 0.
 	tools := GtLlmToolsGroup new.
 	resources := GtMcpResourcesGroup new.
-	prompts := OrderedCollection new.
+	prompts := GtMcpPromptsGroup new.
 	history := OrderedCollection new.
 	errors := OrderedCollection new
 ]
