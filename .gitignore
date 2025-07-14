@@ -1,0 +1,6 @@
+*.image
+*.changes
+*.mcz
+.smalltalk.ston
+
+*.log
