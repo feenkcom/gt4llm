@@ -60,6 +60,14 @@ GtLlmChat >> assistant: anAssistant [
 ]
 
 { #category : #accessing }
+GtLlmChat >> buildDefaultProvider [
+	^ GtLlmConnectionRegistry uniqueInstance hasConnectableDefaultConnection
+		ifTrue: [ provider := GtLlmConnectionRegistry uniqueInstance defaultConnection
+					buildProvider chat: self ]
+		ifFalse: [ nil ]
+]
+
+{ #category : #accessing }
 GtLlmChat >> defaultSerializer [
 	^ GtLlmMessageSerializer new
 ]
@@ -141,11 +149,7 @@ GtLlmChat >> messages: anObject [
 
 { #category : #accessing }
 GtLlmChat >> provider [
-	^ provider
-		ifNil: [ GtLlmConnectionRegistry uniqueInstance hasConnectableDefaultConnection
-				ifTrue: [ provider := GtLlmConnectionRegistry uniqueInstance defaultConnection
-							buildProvider chat: self ]
-				ifFalse: [ nil ] ]
+	^ provider ifNil: [ self buildDefaultProvider ]
 ]
 
 { #category : #accessing }
@@ -168,7 +172,9 @@ GtLlmChat >> removeSubscription: subscription [
 
 { #category : #'as yet unclassified' }
 GtLlmChat >> reset [
-	self provider: self assistant buildProvider.
+	self assistant
+		ifNil: [ self buildDefaultProvider ]
+		ifNotNil: [ self provider: self assistant buildProvider ].
 	self resetMessages
 ]
 

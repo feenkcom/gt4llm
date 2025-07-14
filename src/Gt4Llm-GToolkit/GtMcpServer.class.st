@@ -14,6 +14,16 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
+GtMcpServer >> addPrompt: aPrompt [
+	prompts add: aPrompt
+]
+
+{ #category : #'as yet unclassified' }
+GtMcpServer >> addResource: aResource [
+	resources add: aResource
+]
+
+{ #category : #'as yet unclassified' }
 GtMcpServer >> addTool: aTool [
 	tools add: aTool
 ]
@@ -33,6 +43,18 @@ GtMcpServer >> finalize [
 	super finalize
 ]
 
+{ #category : #'as yet unclassified' }
+GtMcpServer >> getCapabilities [
+	| capabilities |
+	capabilities := {} asDictionary.
+
+	tools ifNotEmpty: [ capabilities at: 'tools' put: {} asDictionary ].
+	resources ifNotEmpty: [ capabilities at: 'resources' put: {} asDictionary ].
+	prompts ifNotEmpty: [ capabilities at: 'prompts' put: {} asDictionary ].
+
+	^ capabilities
+]
+
 { #category : #views }
 GtMcpServer >> gtHistoryFor: aView [
 	<gtView>
@@ -47,6 +69,28 @@ GtMcpServer >> gtHistoryFor: aView [
 ]
 
 { #category : #'as yet unclassified' }
+GtMcpServer >> gtPromptsFor: aView [
+	<gtView>
+	prompts ifEmpty: [ ^ aView empty ].
+	^ aView forward
+		title: 'Prompts';
+		priority: 1;
+		object: [ prompts ];
+		view: #gtPromptsFor:
+]
+
+{ #category : #'as yet unclassified' }
+GtMcpServer >> gtResourcesFor: aView [
+	<gtView>
+	resources ifEmpty: [ ^ aView empty ].
+	^ aView forward
+		title: 'Resources';
+		priority: 1;
+		object: [ resources ];
+		view: #gtResourcesFor:
+]
+
+{ #category : #'as yet unclassified' }
 GtMcpServer >> gtToolsFor: aView [
 	<gtView>
 	tools ifEmpty: [ ^ aView empty ].
@@ -58,9 +102,17 @@ GtMcpServer >> gtToolsFor: aView [
 ]
 
 { #category : #'as yet unclassified' }
+GtMcpServer >> handleCompletionComplete: aJsonRpc [
+	^ {'completion'
+			-> {'values' -> {}.
+					'total' -> 0.
+					'hasMore' -> false} asDictionary} asDictionary
+]
+
+{ #category : #'as yet unclassified' }
 GtMcpServer >> handleInitialize: aJsonRpc [
 	^ {'protocolVersion' -> (aJsonRpc params at: 'protocolVersion').
-		'capabilities' -> {'tools' -> {} asDictionary} asDictionary.
+		'capabilities' -> self getCapabilities.
 		'serverInfo'
 			-> {'name' -> 'Glamorous Toolkit'.
 					'title' -> 'Glamorous Toolkit MCP Server'.
@@ -71,6 +123,34 @@ GtMcpServer >> handleInitialize: aJsonRpc [
 { #category : #'as yet unclassified' }
 GtMcpServer >> handleNotificationsInitialized: _ [
 	^ {} asDictionary
+]
+
+{ #category : #'as yet unclassified' }
+GtMcpServer >> handlePromptsGet: aJsonRpc [
+	| prompt |
+	prompt := prompts
+			detect: [ :aResource | aResource name = (aJsonRpc params at: 'name') ].
+	^ {'description' -> prompt description.
+		'messages'
+			-> ((prompt callWith: (aJsonRpc params at: 'arguments')) collect: #serialize)}
+		asDictionary
+]
+
+{ #category : #'as yet unclassified' }
+GtMcpServer >> handlePromptsList: _ [
+	^ {'prompts'
+			-> (prompts
+					collect: [ :aPrompt | 
+						{'name' -> aPrompt name.
+							'title' -> aPrompt name.
+							'description' -> aPrompt description.
+							'arguments'
+								-> (aPrompt arguments
+										collect: [ :anArgument | 
+											{'name' -> anArgument.
+												'description' -> anArgument.
+												'required' -> true} asDictionary ])} asDictionary ]) asArray}
+		asDictionary
 ]
 
 { #category : #'as yet unclassified' }
@@ -93,6 +173,36 @@ GtMcpServer >> handleRequest: request response: _ [
 	history add: request -> response.
 
 	^ response
+]
+
+{ #category : #'as yet unclassified' }
+GtMcpServer >> handleResourcesList: _ [
+	^ {'resources'
+			-> (resources
+					collect: [ :aResource | 
+						{'name' -> aResource name.
+							'title' -> aResource name.
+							'description' -> aResource description.
+							'uri' -> aResource uri.
+							'mimeType' -> aResource mimeType asString} asDictionary ]) asArray} asDictionary
+]
+
+{ #category : #'as yet unclassified' }
+GtMcpServer >> handleResourcesRead: aJsonRpc [
+	| resource |
+	resource := resources
+			detect: [ :aResource | aResource uri = (aJsonRpc params at: 'uri') ].
+	^ {'contents'
+			-> {{'name' -> resource name.
+						'title' -> resource name.
+						'uri' -> resource uri.
+						'mimeType' -> resource mimeType asString.
+						'text' -> resource contents} asDictionary}} asDictionary
+]
+
+{ #category : #'as yet unclassified' }
+GtMcpServer >> handleResourcesTemplatesList: _ [
+	^ {'resourceTemplates' -> {}} asDictionary
 ]
 
 { #category : #'as yet unclassified' }
@@ -134,8 +244,8 @@ GtMcpServer >> handleToolsList: _ [
 GtMcpServer >> initialize [
 	port := 0.
 	tools := GtLlmToolsGroup new.
-	resources := OrderedCollection new.
-	prompts := OrderedCollection new.
+	resources := GtMcpResourcesGroup new.
+	prompts := GtMcpPromptsGroup new.
 	history := OrderedCollection new.
 	errors := OrderedCollection new
 ]
