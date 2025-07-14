@@ -102,6 +102,14 @@ GtMcpServer >> gtToolsFor: aView [
 ]
 
 { #category : #'as yet unclassified' }
+GtMcpServer >> handleCompletionComplete: aJsonRpc [
+	^ {'completion'
+			-> {'values' -> {}.
+					'total' -> 0.
+					'hasMore' -> false} asDictionary} asDictionary
+]
+
+{ #category : #'as yet unclassified' }
 GtMcpServer >> handleInitialize: aJsonRpc [
 	^ {'protocolVersion' -> (aJsonRpc params at: 'protocolVersion').
 		'capabilities' -> self getCapabilities.
