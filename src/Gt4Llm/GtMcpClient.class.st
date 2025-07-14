@@ -89,7 +89,8 @@ GtMcpClient >> gtToolsFor: aView [
 GtMcpClient >> initialize [
 	super initialize.
 	
-	messageId := 0
+	messageId := 0.
+	serverCapabilities := {} asDictionary
 ]
 
 { #category : #'as yet unclassified' }
