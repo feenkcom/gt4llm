@@ -285,7 +285,8 @@ GtMcpServer >> resources [
 
 { #category : #'as yet unclassified' }
 GtMcpServer >> setDebug [
-	debug := true
+	debug := true.
+	server debugMode: true
 ]
 
 { #category : #'as yet unclassified' }
