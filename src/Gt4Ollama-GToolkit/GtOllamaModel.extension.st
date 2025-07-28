@@ -1,6 +1,6 @@
 Extension { #name : #GtOllamaModel }
 
-{ #category : #'*Gt4OpenAI-GToolkit' }
+{ #category : #'*Gt4Ollama-GToolkit' }
 GtOllamaModel >> gtDeleteModelActionFor: anAction [
 	<gtAction>
 	^ anAction button

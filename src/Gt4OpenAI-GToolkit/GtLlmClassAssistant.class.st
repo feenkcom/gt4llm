@@ -111,6 +111,19 @@ GtLlmClassAssistant >> getMethodTool [
 ]
 
 { #category : #'as yet unclassified' }
+GtLlmClassAssistant >> getPackageMembersTool [
+	<gtLlmTool>
+	^ GtLlmFunctionTool new
+		name: 'getPackageMembers';
+		parameters: {'packageName'};
+		description: 'Gets the names of the classes in this package.';
+		block: [ :functionCall | 
+			(functionCall anyArgument asPackageIfAbsent: [ nil ])
+				ifNil: [ 'Package not found' ]
+				ifNotNil: [ :aPackage | Character cr join: (aPackage classes collect: [ :aClass | aClass name ]) ] ]
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmClassAssistant >> getReferencesTool [
 	<gtLlmTool>
 	^ GtLlmFunctionTool new
