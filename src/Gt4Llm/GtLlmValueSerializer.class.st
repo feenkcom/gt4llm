@@ -20,6 +20,7 @@ GtLlmValueSerializer >> serializeClass: aClass [
 			-> (aClass superclass ifNil: [ nil ] ifNotNil: [ :aSuperclass | aSuperclass name ]).
 		'slots' -> aClass slotNames.
 		'comment' -> aClass instanceSide organization classComment.
+		'package' -> aClass package name.
 		'methods' -> (aClass allMethods collect: #selector)} asDictionary
 ]
 
