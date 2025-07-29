@@ -343,13 +343,9 @@ GtLlmMessageStyler >> styleButton: anAnnotation for: object defaultLabel: aLabel
 								aSpace icon: aTool icon.
 								aSpace extent: 1200 @ 600.
 								aSpace root background: Color transparent.
-								aSpace
-									addChild: (GtPager
-											createOn: (GtPagerWrapperElement new
-													tool: aTool;
-													embellisher: (GtPagerPageEmbellisher new extension: GtPagerPageEmbellisherExtension null))) maximized.
-								aSpace withHalos.
-								button showSpace: aSpace ] ].
+								aSpace inPager: aTool.
+								aSpace withSceneDriller.
+								aSpace showFrom: button ] ].
 				button viewModel
 					when: BlMouseEnterEvent
 					do: [ :anEvent | 
