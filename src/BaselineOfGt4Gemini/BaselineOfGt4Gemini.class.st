@@ -10,7 +10,7 @@ BaselineOfGt4Gemini >> baseline: spec [
 	spec for: #'common' do: [
 		spec
 			baseline: 'Gt4LlmCore' with: [
-				spec repository: 'github://feenkcom/gt4llm:v0.6.155/src' ].
+				spec repository: 'github://feenkcom/gt4llm:v0.6.156/src' ].
 
 		spec package: 'Gt4Gemini' with: [
 			spec requires: #(#Gt4LlmCore) ].
