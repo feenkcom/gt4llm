@@ -43,7 +43,7 @@ GtLlmFunctionTool >> description: anObject [
 { #category : #accessing }
 GtLlmFunctionTool >> function [
 	^ {'name' -> name.
-		'description' -> description.
+		'description' -> self description.
 		'parameters'
 			-> {'type' -> 'object'.
 					'properties'
