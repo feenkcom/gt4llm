@@ -6,7 +6,8 @@ Class {
 		'messages',
 		'tools',
 		'format',
-		'instructions'
+		'instructions',
+		'isStreaming'
 	],
 	#category : #Gt4OpenAI
 }
@@ -15,7 +16,7 @@ Class {
 GtOpenAIGenerateResponseAPIClient >> buildEntity [
 	| entity |
 	entity := {'model' -> self model.
-			'stream' -> format isNil.
+			'stream' -> isStreaming.
 			'input'
 				-> (self messages
 						flatCollect: [ :aMessage | 
@@ -62,6 +63,16 @@ GtOpenAIGenerateResponseAPIClient >> instructions [
 { #category : #accessing }
 GtOpenAIGenerateResponseAPIClient >> instructions: anObject [
 	instructions := anObject
+]
+
+{ #category : #accessing }
+GtOpenAIGenerateResponseAPIClient >> isStreaming [
+	^ isStreaming
+]
+
+{ #category : #accessing }
+GtOpenAIGenerateResponseAPIClient >> isStreaming: anObject [
+	isStreaming := anObject
 ]
 
 { #category : #accessing }

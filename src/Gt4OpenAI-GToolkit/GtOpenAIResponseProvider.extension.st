@@ -9,13 +9,14 @@ GtOpenAIResponseProvider >> executeWait [
 					messages: self chat messages
 					instructions: instructions
 					tools: tools
-					andFormat: format.
+					andFormat: format
+					isStreaming: isStreaming.
 
 			result hasToolCalls
 				ifTrue: [ self performToolCallsIn: result ]
-				ifFalse: [ aMessage := format
-							ifNil: [ self streamingMessageFrom: result ]
-							ifNotNil: [ self assistantMessageClass new
+				ifFalse: [ aMessage := isStreaming
+							ifTrue: [ self streamingMessageFrom: result ]
+							ifFalse: [ self assistantMessageClass new
 									model: self model;
 									merge: (result output detect: [ :anOutput | (anOutput rawData at: 'type') = 'message' ]) ].
 
