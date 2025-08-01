@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'tools',
 		'instructions',
-		'executions'
+		'executions',
+		'isStreaming'
 	],
 	#category : #Gt4OpenAI
 }
@@ -23,6 +24,16 @@ GtOpenAIResponseProvider >> addTool: aTool [
 ]
 
 { #category : #'as yet unclassified' }
+GtOpenAIResponseProvider >> beNotStreaming [
+	isStreaming := false
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAIResponseProvider >> beStreaming [
+	isStreaming := true
+]
+
+{ #category : #'as yet unclassified' }
 GtOpenAIResponseProvider >> defaultTools [
 	^ GtLlmToolsGroup new
 ]
@@ -30,6 +41,13 @@ GtOpenAIResponseProvider >> defaultTools [
 { #category : #'as yet unclassified' }
 GtOpenAIResponseProvider >> executions [
 	^ executions
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAIResponseProvider >> format: anObject [
+	super format: anObject.
+	
+	self beNotStreaming
 ]
 
 { #category : #'as yet unclassified' }
@@ -77,6 +95,7 @@ GtOpenAIResponseProvider >> initialize [
 	tools := self defaultTools.
 	
 	executions := OrderedCollection new.
+	isStreaming := true
 ]
 
 { #category : #accessing }
