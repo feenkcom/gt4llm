@@ -18,10 +18,20 @@ GtLlmTool >> defaultType [
 ]
 
 { #category : #'as yet unclassified' }
+GtLlmTool >> functionResponse [
+	^ {'type' -> type} asDictionary
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmTool >> initialize [
 	super initialize.
 	
 	self type: self defaultType
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmTool >> name [
+	^ type
 ]
 
 { #category : #accessing }
