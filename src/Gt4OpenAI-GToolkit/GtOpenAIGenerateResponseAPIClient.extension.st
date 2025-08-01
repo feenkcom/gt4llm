@@ -2,9 +2,9 @@ Extension { #name : #GtOpenAIGenerateResponseAPIClient }
 
 { #category : #'*Gt4OpenAI-GToolkit' }
 GtOpenAIGenerateResponseAPIClient >> request [
-	^ format
-		ifNil: [ self client postStreaming: '/responses' withEntity: self buildEntity ]
-		ifNotNil: [ self client post: '/responses' withEntity: self buildEntity ]
+	^ isStreaming
+		ifTrue: [ self client postStreaming: '/responses' withEntity: self buildEntity ]
+		ifFalse: [ self client post: '/responses' withEntity: self buildEntity ]
 ]
 
 { #category : #'*Gt4OpenAI-GToolkit' }
