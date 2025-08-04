@@ -11,13 +11,20 @@ Class {
 { #category : #accessing }
 GtLlmEntity class >> from: aDictionary [
 	| entity |
+
 	(aDictionary isKindOf: self) ifTrue: [ ^ aDictionary ].
 
+	(self isErrorResult: aDictionary)
+		ifTrue: [ self error: (aDictionary at: 'error') ].
+
 	entity := self new.
-
 	entity from: aDictionary.
-
 	^ entity
+]
+
+{ #category : #testing }
+GtLlmEntity class >> isErrorResult: aDictionary [
+	^ aDictionary size = 1 and: [ aDictionary includesKey: 'error' ]
 ]
 
 { #category : #accessing }
