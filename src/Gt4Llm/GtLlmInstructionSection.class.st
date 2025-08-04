@@ -7,7 +7,7 @@ Class {
 		'headerLevel',
 		'autoHeaderLevel'
 	],
-	#category : 'Gt4Llm'
+	#category : #Gt4Llm
 }
 
 { #category : #other }

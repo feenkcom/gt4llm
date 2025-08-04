@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'directives'
 	],
-	#category : 'Gt4Llm'
+	#category : #Gt4Llm
 }
 
 { #category : #other }

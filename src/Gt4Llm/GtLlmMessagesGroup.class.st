@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLlmMessagesGroup,
 	#superclass : #GtLlmGroup,
-	#category : 'Gt4Llm'
+	#category : #Gt4Llm
 }
 
 { #category : #converting }
