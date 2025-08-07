@@ -45,6 +45,10 @@ GtLlmConnectionRegistry >> knownConnectors [
 			label: 'Llama 3.2';
 			model: 'llama3.2'.
 		GtLlmConnection new
+			provider: GtOllamaProvider;
+			label: 'GPT OSS (Ollama 20b)';
+			model: 'gpt-oss'.
+		GtLlmConnection new
 			provider: GtAnthropicProvider;
 			label: 'Claude 3.7';
 			model: 'claude-3-7-sonnet-20250219'.

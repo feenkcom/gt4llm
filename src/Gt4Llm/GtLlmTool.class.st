@@ -18,6 +18,11 @@ GtLlmTool >> defaultType [
 ]
 
 { #category : #'as yet unclassified' }
+GtLlmTool >> description [
+	^ ''
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmTool >> functionResponse [
 	^ {'type' -> type} asDictionary
 ]
@@ -32,6 +37,11 @@ GtLlmTool >> initialize [
 { #category : #'as yet unclassified' }
 GtLlmTool >> name [
 	^ type
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmTool >> parameters [
+	^ {}
 ]
 
 { #category : #accessing }
