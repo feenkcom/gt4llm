@@ -29,6 +29,16 @@ GtLlmConnectionRegistry >> gtConnectionsFor: aView [
 ]
 
 { #category : #'*Gt4Llm-GToolkit' }
+GtLlmConnectionRegistry class >> gtConnectionsFor: aView [
+	<gtClassView>
+	^ aView forward
+		title: 'Connections';
+		priority: 10;
+		object: [ self uniqueInstance ];
+		view: #gtConnectionsFor:
+]
+
+{ #category : #'*Gt4Llm-GToolkit' }
 GtLlmConnectionRegistry class >> gtInstanceButtonFor: anAction [
 	<gtClassAction>
 	^ anAction button
