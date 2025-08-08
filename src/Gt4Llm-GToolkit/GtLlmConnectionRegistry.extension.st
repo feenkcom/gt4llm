@@ -50,8 +50,8 @@ GtLlmConnectionRegistry >> knownConnectors [
 			model: 'gpt-oss'.
 		GtLlmConnection new
 			provider: GtAnthropicProvider;
-			label: 'Claude 3.7';
-			model: 'claude-3-7-sonnet-20250219'.
+			label: 'Claude Opus 4.1';
+			model: 'laude-opus-4-1-20250805'.
 		GtLlmConnection new
 			provider: GtGeminiProvider;
 			label: 'Gemini 2.5 Flash Preview';
