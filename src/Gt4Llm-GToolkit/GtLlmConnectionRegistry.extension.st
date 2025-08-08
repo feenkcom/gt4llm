@@ -61,7 +61,7 @@ GtLlmConnectionRegistry >> knownConnectors [
 		GtLlmConnection new
 			provider: GtAnthropicProvider;
 			label: 'Claude Opus 4.1';
-			model: 'laude-opus-4-1-20250805'.
+			model: 'claude-opus-4-1-20250805'.
 		GtLlmConnection new
 			provider: GtGeminiProvider;
 			label: 'Gemini 2.5 Flash Preview';

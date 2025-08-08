@@ -132,5 +132,6 @@ GtLlmConnectionRegistry >> standardDefaultConnection [
 	^ GtLlmConnection new
 		provider: GtOpenAIResponseProvider;
 		label: 'GPT 5';
-		model: 'gpt-5'
+		model: 'gpt-5';
+		addOption: 'isStreaming' withValue: false
 ]

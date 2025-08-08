@@ -108,6 +108,11 @@ GtOpenAIResponseProvider >> instructions: anObject [
 	instructions := anObject
 ]
 
+{ #category : #'as yet unclassified' }
+GtOpenAIResponseProvider >> isStreaming: aBoolean [
+	isStreaming := aBoolean
+]
+
 { #category : #accessing }
 GtOpenAIResponseProvider >> performToolCallsIn: result [
 	| toolOutputs |

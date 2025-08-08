@@ -26,6 +26,10 @@ GtLlmProvider class >> new [
 	^ self basicNew initialize
 ]
 
+{ #category : #'as yet unclassified' }
+GtLlmProvider >> addBrowseTool [
+]
+
 { #category : #accessing }
 GtLlmProvider >> assistantMessageClass [
 	^ assistantMessageClass
