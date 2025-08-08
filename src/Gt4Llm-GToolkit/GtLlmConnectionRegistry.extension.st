@@ -29,6 +29,16 @@ GtLlmConnectionRegistry >> gtConnectionsFor: aView [
 ]
 
 { #category : #'*Gt4Llm-GToolkit' }
+GtLlmConnectionRegistry class >> gtConnectionsFor: aView [
+	<gtClassView>
+	^ aView forward
+		title: 'Connections';
+		priority: 10;
+		object: [ self uniqueInstance ];
+		view: #gtConnectionsFor:
+]
+
+{ #category : #'*Gt4Llm-GToolkit' }
 GtLlmConnectionRegistry class >> gtInstanceButtonFor: anAction [
 	<gtClassAction>
 	^ anAction button
@@ -50,8 +60,8 @@ GtLlmConnectionRegistry >> knownConnectors [
 			model: 'gpt-oss'.
 		GtLlmConnection new
 			provider: GtAnthropicProvider;
-			label: 'Claude 3.7';
-			model: 'claude-3-7-sonnet-20250219'.
+			label: 'Claude Opus 4.1';
+			model: 'claude-opus-4-1-20250805'.
 		GtLlmConnection new
 			provider: GtGeminiProvider;
 			label: 'Gemini 2.5 Flash Preview';
