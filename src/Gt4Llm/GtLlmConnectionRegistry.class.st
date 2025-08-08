@@ -131,6 +131,6 @@ GtLlmConnectionRegistry >> labelForModel: aModel [
 GtLlmConnectionRegistry >> standardDefaultConnection [
 	^ GtLlmConnection new
 		provider: GtOpenAIResponseProvider;
-		label: 'GPT 4.1';
-		model: 'gpt-4.1'
+		label: 'GPT 5';
+		model: 'gpt-5'
 ]
