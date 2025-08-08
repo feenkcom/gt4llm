@@ -39,6 +39,14 @@ GtAnthropicProvider class >> withApiKeyFromFile [
 ]
 
 { #category : #'as yet unclassified' }
+GtAnthropicProvider >> addBrowseTool [
+	self
+		addTool: (GtLlmTool new
+				type: 'web_search_20250305';
+				name: 'web_search')
+]
+
+{ #category : #'as yet unclassified' }
 GtAnthropicProvider >> addTool: aTool [
 	tools add: aTool
 ]

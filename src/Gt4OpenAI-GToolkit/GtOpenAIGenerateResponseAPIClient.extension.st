@@ -9,5 +9,7 @@ GtOpenAIGenerateResponseAPIClient >> request [
 
 { #category : #'*Gt4OpenAI-GToolkit' }
 GtOpenAIGenerateResponseAPIClient >> serializationClass [
-	^ format ifNil: [ #GtOpenAIStreamedResponse asClass ] ifNotNil: [ GtOpenAIResponse ]
+	^ isStreaming
+		ifTrue: [ #GtOpenAIStreamedResponse asClass ]
+		ifFalse: [ GtOpenAIResponse ]
 ]

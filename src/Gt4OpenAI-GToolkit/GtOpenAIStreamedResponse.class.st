@@ -37,7 +37,7 @@ GtOpenAIStreamedResponse >> onOutput: anAnnouncement [
 								arguments: (STONJSON fromString: (anAnnouncement event data at: 'item' at: 'arguments'))) ] ].
 
 	notificationMessage ifNil: [ ^ self ].
-
+	self inspect.
 	notificationMessage content: self output
 ]
 

@@ -2,7 +2,8 @@ Class {
 	#name : #GtLlmTool,
 	#superclass : #GtLlmEntity,
 	#instVars : [
-		'type'
+		'type',
+		'name'
 	],
 	#category : #Gt4Llm
 }
@@ -23,6 +24,12 @@ GtLlmTool >> description [
 ]
 
 { #category : #'as yet unclassified' }
+GtLlmTool >> functionAnthropic [
+	^ {'type' -> type.
+		'name' -> self name} asDictionary
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmTool >> functionResponse [
 	^ {'type' -> type} asDictionary
 ]
@@ -34,9 +41,14 @@ GtLlmTool >> initialize [
 	self type: self defaultType
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLlmTool >> name [
-	^ type
+	^ name ifNil: [ type ]
+]
+
+{ #category : #accessing }
+GtLlmTool >> name: anObject [
+	name := anObject
 ]
 
 { #category : #'as yet unclassified' }

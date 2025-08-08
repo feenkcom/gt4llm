@@ -3,7 +3,6 @@ Class {
 	#superclass : #GtLlmTool,
 	#instVars : [
 		'description',
-		'name',
 		'parameters',
 		'block'
 	],
@@ -106,16 +105,6 @@ GtLlmFunctionTool >> method [
 	class := split first asClassIfAbsent: [ ^ nil ].
 	methodName := ':' join: split allButFirst.
 	^ [ class >> methodName asSymbol ] on: Error do: [ nil ]
-]
-
-{ #category : #accessing }
-GtLlmFunctionTool >> name [
-	^ name
-]
-
-{ #category : #accessing }
-GtLlmFunctionTool >> name: anObject [
-	name := anObject
 ]
 
 { #category : #accessing }

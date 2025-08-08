@@ -29,6 +29,11 @@ GtOpenAIProvider class >> withApiKeyFromFile [
 	^ self new apiKey: GtOpenAIClient apiKeyFileContents
 ]
 
+{ #category : #'as yet unclassified' }
+GtOpenAIProvider >> addBrowseTool [
+	self addTool: (GtLlmTool new type: 'web_search_preview')
+]
+
 { #category : #accessing }
 GtOpenAIProvider >> apiKey: aString [
 	client apiKey: aString
