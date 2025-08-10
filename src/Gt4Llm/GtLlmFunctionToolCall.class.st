@@ -113,6 +113,14 @@ GtLlmFunctionToolCall >> printOn: aStream [
 		nextPut: $)
 ]
 
+{ #category : #'as yet unclassified' }
+GtLlmFunctionToolCall >> responseInput [
+	^ {'type' -> 'function_call'.
+		'call_id' -> self id.
+		'name' -> self name.
+		'arguments' -> (STONJSON toString: self arguments)} asDictionary
+]
+
 { #category : #accessing }
 GtLlmFunctionToolCall >> tool [
 	^ tool

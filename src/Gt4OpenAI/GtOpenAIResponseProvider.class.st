@@ -121,11 +121,7 @@ GtOpenAIResponseProvider >> performToolCallsIn: result [
 				| toolOutput |
 				chat
 					addMessage: (GtOpenAIRawToolMessage new
-							toolCall: aToolCall;
-							rawData: aToolCall rawData;
-							reasoning: (result output
-									detect: [ :anOutput | (anOutput rawData at: 'type') = 'reasoning' ]
-									ifNone: [ nil ])).
+							rawData: aToolCall responseInput).
 				toolOutput := tools performToolCall: aToolCall.
 				chat
 					addMessage: (GtLlmToolMessage new
