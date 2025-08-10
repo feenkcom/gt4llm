@@ -51,6 +51,25 @@ GtOpenAIClassMessage >> gtArgumentsFor: aView [
 ]
 
 { #category : #'as yet unclassified' }
+GtOpenAIClassMessage >> gtChangesFor: aView [
+	<gtView>
+	<gtLlmMessageView>
+	| codeBlock namespace |
+	self isAssistantRole ifFalse: [ ^ aView empty ].
+	codeBlock := self codeBlock.
+	codeBlock isEmptyOrNil ifTrue: [ ^ aView empty ].
+
+	namespace := self namespace.
+	namespace changes changes ifEmpty: [ ^ aView empty ].
+
+	^ aView forward
+		title: 'Changes';
+		priority: 10;
+		object: [ namespace ];
+		view: #gtApplyingChangesFor:
+]
+
+{ #category : #'as yet unclassified' }
 GtOpenAIClassMessage >> gtCodeFor: aView [
 	<gtView>
 	<gtLlmMessageView>
@@ -83,4 +102,38 @@ GtOpenAIClassMessage >> gtCodeFor: aView [
 								expanded: false;
 								yourself) ].
 			container asScrollableElement ]
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAIClassMessage >> isClassDefinitionString: anObject [
+	^ (RBParser
+		parseRewriteExpression: '``@a subclass: ``@b
+	instanceVariableNames: ``@c
+	classVariableNames: ``@d
+	package: ``@e')
+		match: (RBParser parseExpression: anObject)
+		inContext: Dictionary new
+]
+
+{ #category : #'as yet unclassified' }
+GtOpenAIClassMessage >> namespace [
+	| namespace codeBlock |
+	namespace := RBNamespace new.
+	codeBlock := self codeBlock.
+	codeBlock isEmptyOrNil ifTrue: [ ^ namespace ].
+
+	codeBlock
+		do: [ :aCodeBlock | 
+			| class |
+			(aCodeBlock at: 'type') = 'method'
+				ifTrue: [ class := namespace classNamed: (aCodeBlock at: 'class') asSymbol.
+					(aCodeBlock at: 'classSide' ifAbsent: [ false ])
+						ifTrue: [ class := class classSide ].
+					namespace
+						compile: (aCodeBlock at: 'code')
+						in: class
+						classified: 'llm-generated' ]
+				ifFalse: [ (self isClassDefinitionString: (aCodeBlock at: 'code'))
+						ifTrue: [ namespace defineClass: (aCodeBlock at: 'code') ] ] ].
+	^ namespace
 ]
