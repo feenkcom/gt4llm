@@ -29,6 +29,7 @@ Example:
 	{"type": "method",
 	 "class": "Number",
 	 "code": "invertedArcTan
+	 \"arctan but inverted\"
 	 ^ self arcTan negated"},
 	{"type": "method",
 	 "class": "Number",
