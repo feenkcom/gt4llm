@@ -79,7 +79,7 @@ GtLlmEmbeddedNewActionThreadMessageElement >> buildProviderButton [
 										when: BrSelectionChanged
 											do: [ :anEvent | 
 												self threadMessageViewModel
-													provider: (self threadMessageViewModel connectionRegistry connections
+													provider: (self threadMessageViewModel connectionRegistry connectableConnections
 															at: anEvent indices first) buildProvider.
 												aButton label: self threadMessageViewModel connectionString.
 												aList fireEvent: BrDropdownHideWish new ] ]);
