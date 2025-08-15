@@ -33,7 +33,8 @@ GtLlmActionChat >> gtAssistantInstructionFor: aView [
 	^ aView forward
 		title: 'Assistant instruction';
 		object: [ assistant ];
-		view: #gtInstructionFor:
+		view: #gtInstructionFor:;
+		actionButtonIcon: BrGlamorousVectorIcons inspect action: [ :b | b phlow spawnObject: assistant ]
 ]
 
 { #category : #'as yet unclassified' }
