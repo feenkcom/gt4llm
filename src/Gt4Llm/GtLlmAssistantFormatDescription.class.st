@@ -61,7 +61,7 @@ GtLlmAssistantFormatDescription >> asInstructionPiece [
 		body: (GtLlmInstructionList new
 				addItem: 'Name: ' , self name;
 				addItem: 'Format: ' , self format;
-				addItem: 'Examples:
+				addItem: 'Details:
 ' , (self example ifNil: [ 'none' ]))
 ]
 

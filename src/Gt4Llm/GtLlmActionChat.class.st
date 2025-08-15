@@ -27,15 +27,6 @@ GtLlmActionChat >> gtAssistantFormatsFor: aView [
 		view: #gtFormatComponentsFor:
 ]
 
-{ #category : #views }
-GtLlmActionChat >> gtAssistantInstructionFor: aView [
-	<gtView>
-	^ aView forward
-		title: 'Assistant instruction';
-		object: [ assistant ];
-		view: #gtInstructionFor:
-]
-
 { #category : #'as yet unclassified' }
 GtLlmActionChat >> gtInstanceFor: aView [
 	<gtView>
