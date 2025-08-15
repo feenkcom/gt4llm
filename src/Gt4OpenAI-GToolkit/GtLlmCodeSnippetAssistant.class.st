@@ -39,10 +39,13 @@ GtLlmCodeSnippetAssistant >> codeFormatDescription [
 	^ GtLlmAssistantFormatDescription new
 		name: 'Code';
 		priority: 2;
-		format: 'Smalltalk code wrapped in an array JSON objects';
-		example: 'Snippets and methods should be given here. There are two types to the objects returned here: `snippet` and `method`. Method objects also have a class they refer to. It should always be an array, even if only one item is needed. Multiple items may be returned. If the method is to be installed on the class side rather than the instance side, set the optional `classSide` property to `true`. Smalltalk comments should always be escaped inside a JSON string like this: `"code": "\"this is a comment\" 1 + 2"`.
+		format: 'Smalltalk code wrapped in an array of JSON objects';
+		example: 'The result is a list of snippets, class definitions and method definitions. It is always an array, even if only one item is needed. Multiple items may be returned. Split the items based on their intent:
+- A snippet is annotated with the type `snippet` it contains Smalltalk scripts that can be executed independently. The code is in the `code` property. The original snippet MUST ALWAYS be annotated with property `source_snippet` as `true`, no matter where in the list it is.
+- A class definition is provided as a snippet, but should be specifically annotated with the type `class`.
+- A method definition is annotated with the type `method` and has a class it refers to.
 
-The original snippet MUST ALWAYS be annotated with `source_snippet`, no matter where in the list it is.`.
+Smalltalk comments should always be escaped inside a JSON string like this: `"code": "\"this is a comment\" 1 + 2"`.
 
 Example:
 ```json
@@ -55,11 +58,16 @@ Example:
 	 "code": "invertedArcTan
 	 \"arctan but inverted\"
 	 ^ self arcTan negated"},
+	{"type": "class",
+	 "code": "Object subclass: #SomeClass
+	instanceVariableNames: ''someSlotA someSlotB''
+	classVariableNames: ''''
+	package: ''SomePackage''"},
 	{"type": "method",
-	 "class": "Number",
+	 "class": "SomeClass",
 	 "classSide": true,
 	 "code": "classSideMethod
-	 ^ self new instanceSideMethod"}
+	 ^ self new"}
 ]
 ```
 
