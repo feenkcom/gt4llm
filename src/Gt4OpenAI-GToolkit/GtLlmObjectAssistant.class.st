@@ -50,7 +50,7 @@ GtLlmObjectAssistant >> codeFormatDescription [
 		name: 'Code';
 		priority: 2;
 		format: 'Smalltalk code wrapped in an array JSON objects';
-		example: 'Snippets and methods should be given here. There are two types to the objects returned here: `snippet` and `method`. Method objects also have a class they refer to. It should always be an array, even if only one item is needed. Multiple items may be returned. If the method is to be installed on the class side rather than the instance side, set the optional `classSide` property to `true`. Smalltalk comments should always be escaped inside a JSON string like this: `"code": "\"this is a comment\" 1 + 2".
+		example: 'Snippets and methods should be given here. There are two types to the objects returned here: `snippet` and `method`. Method objects also have a class they refer to. It should always be an array, even if only one item is needed. Multiple items may be returned. If the method is to be installed on the class side rather than the instance side, set the optional `classSide` property to `true`. Smalltalk comments should always be escaped inside a JSON string like this: `"code": "\"this is a comment\" 1 + 2"`.
 		
 Example:
 ```json
