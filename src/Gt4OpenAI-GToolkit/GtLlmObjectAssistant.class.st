@@ -212,7 +212,7 @@ GtLlmObjectAssistant >> lookupClassTool [
 	^ GtLlmFunctionTool new
 		name: 'lookupClass';
 		parameters: {'className'};
-		description: 'Looks up documentation for a class by name and returns its comment in Markdown format.';
+		description: 'Get the details of a class asJSON.';
 		block: [ :functionCall | 
 			(functionCall anyArgument asClassIfAbsent: [ nil ])
 				ifNil: [ 'Class not found' ]
@@ -421,7 +421,7 @@ GtLlmObjectAssistant >> viewProposalAction [
 		name: 'Propose a view';
 		priority: 5;
 		description: 'Propose a useful Phlow view for this object. Only reply with the Smalltalk code for the view. Look up existing views and their code for reference, especially to check what new view would be useful before proposing any code. Take into account optional user directions if applicable.';
-		addArgument: 'User Instruction';
+		addArgument: 'User instruction';
 		examples: {GtLlmAssistantActionExample new markUnverified
 					input: {'Action' -> 'Propose a view'.
 							'Arguments' -> {''}.
