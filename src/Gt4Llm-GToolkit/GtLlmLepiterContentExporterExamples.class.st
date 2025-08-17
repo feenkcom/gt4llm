@@ -26,7 +26,6 @@ GtLlmLepiterContentExporterExamples >> exportingAPage [
 { #category : #'llm-generated' }
 GtLlmLepiterContentExporterExamples >> exportingTheChildrenOfPage [
 	<gtExample>
-	<noTest>
 	| page text pharo exporter result |
 	page := LePage new title: 'My Page'; yourself.
 	text := LeTextSnippet new string: 'Hello'; yourself.

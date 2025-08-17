@@ -2,12 +2,17 @@ Class {
 	#name : #GtLlmLepiterContentExporter,
 	#superclass : #Object,
 	#instVars : [
-		'page',
 		'stream',
-		'level'
+		'level',
+		'toExport'
 	],
 	#category : #'Gt4Llm-GToolkit-Exporter'
 }
+
+{ #category : #'as yet unclassified' }
+GtLlmLepiterContentExporter >> childrenOf: aContent [
+	toExport addAll: aContent children
+]
 
 { #category : #'as yet unclassified' }
 GtLlmLepiterContentExporter >> codeSnippet: aString labelled: aName [
@@ -19,11 +24,16 @@ GtLlmLepiterContentExporter >> codeSnippet: aString labelled: aName [
 ```'
 ]
 
+{ #category : #accessing }
+GtLlmLepiterContentExporter >> content: aLepiterContent [
+	toExport add: aLepiterContent
+]
+
 { #category : #'as yet unclassified' }
 GtLlmLepiterContentExporter >> export [
 	stream := WriteStream on: ''.
 	level := 0.
-	page acceptVisitor: self.
+	toExport do: [ :each | each acceptVisitor: self ].
 	^ stream contents
 ]
 
@@ -45,6 +55,12 @@ GtLlmLepiterContentExporter >> indent: aString [
 ]
 
 { #category : #'as yet unclassified' }
+GtLlmLepiterContentExporter >> initialize [
+	super initialize.
+	toExport := OrderedCollection new.
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmLepiterContentExporter >> linebreaks [
 	stream
 		nextPut: Character linefeed;
@@ -52,13 +68,8 @@ GtLlmLepiterContentExporter >> linebreaks [
 ]
 
 { #category : #accessing }
-GtLlmLepiterContentExporter >> page [
-	^ page
-]
-
-{ #category : #accessing }
-GtLlmLepiterContentExporter >> page: anObject [
-	page := anObject
+GtLlmLepiterContentExporter >> page: aLepiterContent [
+	toExport add: aLepiterContent
 ]
 
 { #category : #'as yet unclassified' }
