@@ -33,7 +33,7 @@ GtLlmLepiterContentExporter >> content: aLepiterContent [
 GtLlmLepiterContentExporter >> export [
 	stream := WriteStream on: ''.
 	level := 0.
-	toExport do: [ :each | each acceptVisitor: self ].
+	toExport do: [ :each | self visit: each ].
 	^ stream contents
 ]
 
@@ -75,6 +75,12 @@ GtLlmLepiterContentExporter >> page: aLepiterContent [
 { #category : #'as yet unclassified' }
 GtLlmLepiterContentExporter >> treatTextSnippetAst: anAst [
 	^ GtLlmTextSnippetExporter new exportAst: anAst
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmLepiterContentExporter >> visit: each [
+	"we use it to preserve the pattern we use throughout GT"
+	^ each acceptVisitor: self
 ]
 
 { #category : #'as yet unclassified' }
