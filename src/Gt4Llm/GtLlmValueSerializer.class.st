@@ -15,20 +15,24 @@ GtLlmValueSerializer >> serializeBinding: aBinding withValue: aBindingValue [
 
 { #category : #'as yet unclassified' }
 GtLlmValueSerializer >> serializeClass: aClass [
-	^ {'name' -> aClass name.
+	^ {'class' -> aClass name.
 		'superclass'
 			-> (aClass superclass ifNil: [ nil ] ifNotNil: [ :aSuperclass | aSuperclass name ]).
-		'slots' -> aClass slotNames.
 		'comment' -> aClass instanceSide organization classComment.
 		'package' -> aClass package name.
-		'methods' -> (aClass allMethods collect: #selector)} asDictionary
+		'instanceSlots' -> aClass slotNames.
+		'allInstanceMethods' -> (aClass methods asArray collect: [ :aMethod | aMethod selector ])} asDictionary
 ]
 
 { #category : #'as yet unclassified' }
 GtLlmValueSerializer >> serializeValue: aValue [
 	^ {'class' -> aValue class name asString.
-		'string' -> (aValue asString escapeCharacter: '''').
-		'methods'
+		'superclass'
+			-> (aValue class superclass ifNil: [ nil ] ifNotNil: [ :aSuperclass | aSuperclass name ]).
+		'comment' -> aValue class instanceSide organization classComment.
+		'package' -> aValue class package name.
+		'printString' -> (aValue printString escapeCharacter: '''').
+		'allInstanceMethods'
 			-> (aValue
 					ifNil: [ {} ]
 					ifNotNil: [ aValue class methods asArray collect: [ :aMethod | aMethod selector ] ]).

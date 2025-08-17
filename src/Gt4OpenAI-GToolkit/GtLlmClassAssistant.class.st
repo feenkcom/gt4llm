@@ -64,6 +64,7 @@ GtLlmClassAssistant >> explanationAction [
 		name: 'Explain the class';
 		priority: 10;
 		description: 'Explain the class, including its layout, its purpose, and other interesting facts. Use tools if necessary. Stick to the facts you can verify and avoid speculation.';
+		addArgument: 'User instruction';
 		examples: {}
 ]
 
@@ -168,17 +169,18 @@ GtLlmClassAssistant >> getViewsTool [
 
 { #category : #'as yet unclassified' }
 GtLlmClassAssistant >> gtProposeCheckExample [
- 	<gtLlmAssistantAction>
- 	^ GtLlmAssistantAction new
- 		name: 'Propose an example';
- 		priority: 20;
- 		description: 'I want to check the functionality of the attached class.  Can you propose a GlamorousToolkit example method that tests its functionality.  The method should:
+	<gtLlmAssistantAction>
+	^ GtLlmAssistantAction new
+		name: 'Propose an example';
+		priority: 20;
+		addArgument: 'User instruction';
+		description: 'I want to check the functionality of the attached class.  Can you propose a GlamorousToolkit example method that tests its functionality.  The method should:
 - be put into a new appropriately named example class,
 - be annotated with the `<gtExample>` pragma,
 - create an instance of the attached method''s class (from the `class` property),
 - add appropriate assertions,
 - and should return the object being tested.';
- 		examples: {}
+		examples: {}
 ]
 
 { #category : #'as yet unclassified' }
