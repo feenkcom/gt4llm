@@ -17,7 +17,7 @@ GtLlmCodeSnippetAssistant >> chatOn: aCoderViewModel [
 										toString: {{'type' -> 'snippet'.
 													'code'
 														-> aModel coderModel sourceCode currentSourceText text asString.
-													'source_snippet' -> true} asDictionary}).
+													'sourceSnippet' -> true} asDictionary}).
 							'Object' -> (GtLlmValueSerializer new serializeValue: aModel selfObject).
 							'Variables'
 								-> (aModel sharedBindings bindings associations
@@ -41,7 +41,7 @@ GtLlmCodeSnippetAssistant >> codeFormatDescription [
 		priority: 2;
 		format: 'Smalltalk code wrapped in an array of JSON objects';
 		example: 'The result is a list of snippets, class definitions and method definitions. It is always an array, even if only one item is needed. Multiple items may be returned. Split the items based on their intent:
-- A snippet is annotated with the type `snippet` it contains Smalltalk scripts that can be executed independently. The code is in the `code` property. The original snippet MUST ALWAYS be annotated with property `source_snippet` as `true`, no matter where in the list it is.
+- A snippet is annotated with the type `snippet` it contains Smalltalk scripts that can be executed independently. The code is in the `code` property. The original snippet MUST ALWAYS be annotated with property `sourceSnippet` as `true`, no matter where in the list it is.
 - A class definition is provided as a snippet, but should be specifically annotated with the type `class`.
 - A method definition is annotated with the type `method` and has a class it refers to.
 
@@ -52,7 +52,7 @@ Example:
 [
 	{"type": "snippet",
 	 "code": "55 @ (13 * (5 negatedArcTan))",
-	 "source_snippet": true},
+	 "sourceSnippet": true},
 	{"type": "method",
 	 "class": "Number",
 	 "code": "invertedArcTan
@@ -78,7 +78,7 @@ Alternative order if another snippet is also added:
 	 "code": "14 * 55"},
 	{"type": "snippet",
 	 "code": "55 @ (13 * (5 negatedArcTan))",
-	 "source_snippet": true},
+	 "sourceSnippet": true},
 	{"type": "method",
 	 "class": "Number",
 	 "classSide": true,
