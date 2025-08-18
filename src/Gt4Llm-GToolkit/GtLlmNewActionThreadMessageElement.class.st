@@ -21,8 +21,8 @@ GtLlmNewActionThreadMessageElement class >> newForChatList [
 		background: Color white;
 		addAptitude: BrGlamorousFocusableShadowAptitude new;
 		margin: (BlInsets
-				top: 5
-				bottom: 10
+				top: 3
+				bottom: 12
 				left: 5
 				right: 5)
 ]
@@ -56,7 +56,7 @@ GtLlmNewActionThreadMessageElement >> buildAttachButton [
 			c linear horizontal alignLeft ]
 ]
 
-{ #category : #'private - updating' }
+{ #category : #'as yet unclassified' }
 GtLlmNewActionThreadMessageElement >> buildProviderButton [
 	| aButton |
 	^ aButton := BrButton new beSmallSize
@@ -127,7 +127,7 @@ GtLlmNewActionThreadMessageElement >> initialize [
 	self initializeToolbar.
 	self initializeImagesElement.
 	self
-		addChild: (BrScrollPane new
+		addChild: (BrScrollPane new vFitContent
 				aptitude: BrScrollPaneAptitude;
 				content: toggleGroup)
 		as: #toggle.
@@ -137,7 +137,7 @@ GtLlmNewActionThreadMessageElement >> initialize [
 	self addChild: toolbar as: #toolbar.
 
 	self hMatchParent.
-	self vFitContentLimited
+	self vFitContent
 ]
 
 { #category : #'initialization ' }
@@ -166,14 +166,14 @@ GtLlmNewActionThreadMessageElement >> initializeDescriptionElement [
 					foreground: BrGlamorousColors disabledButtonTextColor)
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'initialization ' }
 GtLlmNewActionThreadMessageElement >> initializeImagesElement [
 	imagesElement := BrHorizontalPane new fitContent clipChildren: false
 ]
 
 { #category : #'initialization ' }
 GtLlmNewActionThreadMessageElement >> initializeToggleGroup [
-	toggleGroup := BrToggleGroup new
+	toggleGroup := BrToggleGroup new vFitContent
 			aptitude: BrGlamorousToggleGroupAptitude new;
 			margin: (BlInsets
 					top: 3
@@ -263,7 +263,7 @@ GtLlmNewActionThreadMessageElement >> updateElement [
 	self updateImagesElement
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'private - updating' }
 GtLlmNewActionThreadMessageElement >> updateImagesElement [
 	imagesElement removeChildren.
 
