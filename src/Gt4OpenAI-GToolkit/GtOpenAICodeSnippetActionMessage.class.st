@@ -22,7 +22,7 @@ GtOpenAICodeSnippetActionMessage >> codeSnippetBlock [
 		ifEmpty: [ nil ]
 		ifNotEmpty: [ :snippets | 
 			snippets
-				detect: [ :aSnippet | aSnippet at: 'source_snippet' ifAbsent: [ false ] ]
+				detect: [ :aSnippet | aSnippet at: 'sourceSnippet' ifAbsent: [ false ] ]
 				ifNone: [ nil ] ]
 ]
 
