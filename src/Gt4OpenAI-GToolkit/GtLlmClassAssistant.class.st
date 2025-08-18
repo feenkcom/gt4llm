@@ -188,7 +188,7 @@ GtLlmClassAssistant >> lookupClassTool [
 	^ GtLlmFunctionTool new
 		name: 'lookupClass';
 		parameters: {'className'};
-		description: 'Looks up documentation for a class by name and returns its comment in Markdown format.';
+		description: 'Get the details of a class as JSON.';
 		block: [ :functionCall | 
 			(functionCall anyArgument asClassIfAbsent: [ nil ])
 				ifNil: [ 'Class not found' ]
@@ -350,6 +350,23 @@ Object subclass: #SomeClass
 	classVariableNames: ''
 	package: ''SomePackage''
 ```'
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmClassAssistant >> searchClassTool [
+	<gtLlmTool>
+	^ GtLlmFunctionTool new
+		name: 'searchClasses';
+		parameters: {'query'};
+		description: 'Searches for classes matching the query substring (case-insensitive).';
+		block: [ :functionCall | 
+			STONJSON
+				toString: ((GtSpotterSubstringsFilter new
+						withWordsSplitter;
+						beCaseSensitiveByCapitalization;
+						applyInScope: SystemNavigation default allClassesAndTraits asAsyncStream
+							context: (GtSpotterContext new searchQuery: 'llm')) toArray wait
+						collect: #name) ]
 ]
 
 { #category : #'as yet unclassified' }
