@@ -30,8 +30,7 @@ Example:
 ```json
 [
 	{"type": "snippet",
-	 "code": "55 @ (13 * (5 negatedArcTan))",
-	 "source_snippet": true},
+	 "code": "55 @ (13 * (5 negatedArcTan))"},
 	{"type": "method",
 	 "class": "Number",
 	 "code": "invertedArcTan
