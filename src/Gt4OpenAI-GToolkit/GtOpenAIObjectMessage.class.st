@@ -156,17 +156,25 @@ GtOpenAIObjectMessage >> namespace [
 
 	codeBlock
 		do: [ :aCodeBlock | 
-			| class |
-			(aCodeBlock at: 'type') = 'method'
+			| class codeBlockType |
+			codeBlockType := aCodeBlock at: 'type'.
+			codeBlockType = 'method'
 				ifTrue: [ class := namespace classNamed: (aCodeBlock at: 'class') asSymbol.
 					(aCodeBlock at: 'classSide' ifAbsent: [ false ])
 						ifTrue: [ class := class classSide ].
 					namespace
 						compile: (aCodeBlock at: 'code')
 						in: class
-						classified: 'llm-generated' ]
-				ifFalse: [ (self isClassDefinitionString: (aCodeBlock at: 'code'))
-						ifTrue: [ namespace defineClass: (aCodeBlock at: 'code') ] ] ].
+						classified: 'llm-generated' ].
+			codeBlockType = 'class'
+				ifTrue: [ (self isClassDefinitionString: (aCodeBlock at: 'code'))
+						ifTrue: [ namespace defineClass: (aCodeBlock at: 'code') ] ].
+			"codeBlockType = 'snippet'
+				ifTrue: [ namespace changes
+						addChange: (LeSnippetChange new
+								snippet: ...;
+								newSource: (aCodeBlock at: 'code');
+								yourself) ]" ].
 	^ namespace
 ]
 
