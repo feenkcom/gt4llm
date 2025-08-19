@@ -219,35 +219,6 @@ GtLlmAssistant >> recomputeFormats [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmAssistant >> searchTool [
-	<gtLlmTool>
-	^ GtLlmFunctionTool new
-		name: 'search';
-		parameters: {'query'};
-		description: 'Generic search across all entities in the system. Returns a heterogeneous collection of things grouped by entity.';
-		block: [ :functionCall | 
-			| spotter searches result |
-			spotter := GtSpotter
-					on: (GtWorldSpotterSearchStart new
-							knowledgeBase: LeDatabasesRegistry uniqueInstance defaultLogicalDatabase).
-
-			spotter steps first searchQuery: 'llm'.
-
-			searches := (spotter steps first createSearchResultsStream
-					flatCollect: #value) toArray wait groupedBy: #search.
-
-			result := {} asDictionary.
-
-			searches
-				keysAndValuesDo: [ :aKey :aValue | 
-					result
-						at: aKey title
-						put: (aValue collect: [ :aCandidate | (aKey itemNameFor: aCandidate item) asString ]) ].
-
-			STONJSON toString: result ]
-]
-
-{ #category : #'as yet unclassified' }
 GtLlmAssistant >> textFormatDescription [
 	<gtLlmAssistantFormat>
 	^ GtLlmAssistantFormatDescription new
