@@ -23,6 +23,11 @@ GtLlmChat >> addMessage: aMessage [
 	messages add: (aMessage chat: self)
 ]
 
+{ #category : #'as yet unclassified' }
+GtLlmChat >> addTool: aTool [ 
+	self provider addTool: aTool
+]
+
 { #category : #accessing }
 GtLlmChat >> ancestorOf: aMessage [
 	messages

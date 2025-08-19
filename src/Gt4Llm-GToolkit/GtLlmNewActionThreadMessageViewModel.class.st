@@ -21,7 +21,7 @@ GtLlmNewActionThreadMessageViewModel >> currentAction: anObject [
 
 { #category : #accessing }
 GtLlmNewActionThreadMessageViewModel >> elementClass [
-	^ GtLlmEmbeddedNewActionThreadMessageElement
+	^ GtLlmNewActionThreadMessageElement
 ]
 
 { #category : #'as yet unclassified' }

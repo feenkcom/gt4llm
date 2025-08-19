@@ -61,8 +61,7 @@ Example:
 ```json
 [
 	{"type": "snippet",
-	 "code": "55 @ (13 * (5 negatedArcTan))",
-	 "source_snippet": true},
+	 "code": "55 @ (13 * (5 negatedArcTan))"},
 	{"type": "method",
 	 "class": "Number",
 	 "code": "invertedArcTan
@@ -212,7 +211,7 @@ GtLlmObjectAssistant >> lookupClassTool [
 	^ GtLlmFunctionTool new
 		name: 'lookupClass';
 		parameters: {'className'};
-		description: 'Get the details of a class asJSON.';
+		description: 'Get the details of a class as JSON.';
 		block: [ :functionCall | 
 			(functionCall anyArgument asClassIfAbsent: [ nil ])
 				ifNil: [ 'Class not found' ]
@@ -365,6 +364,23 @@ Object subclass: #SomeClass
 	classVariableNames: ''
 	package: ''SomePackage''
 ```'
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmObjectAssistant >> searchClassTool [
+	<gtLlmTool>
+	^ GtLlmFunctionTool new
+		name: 'searchClasses';
+		parameters: {'query'};
+		description: 'Searches for classes matching the query substring (case-insensitive).';
+		block: [ :functionCall | 
+			STONJSON
+				toString: ((GtSpotterSubstringsFilter new
+						withWordsSplitter;
+						beCaseSensitiveByCapitalization;
+						applyInScope: SystemNavigation default allClassesAndTraits asAsyncStream
+							context: (GtSpotterContext new searchQuery: 'llm')) toArray wait
+						collect: #name) ]
 ]
 
 { #category : #'as yet unclassified' }
