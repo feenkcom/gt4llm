@@ -6,7 +6,8 @@ Class {
 	#instVars : [
 		'contentsElement',
 		'toolbar',
-		'imagesElement'
+		'imagesElement',
+		'sendButton'
 	],
 	#category : #'Gt4Llm-GToolkit'
 }
@@ -18,8 +19,8 @@ GtLlmNewThreadMessageElement class >> newForChatList [
 		background: Color white;
 		addAptitude: BrGlamorousFocusableShadowAptitude new;
 		margin: (BlInsets
-				top: 5
-				bottom: 10
+				top: 3
+				bottom: 12
 				left: 5
 				right: 5)
 ]
@@ -85,7 +86,7 @@ GtLlmNewThreadMessageElement >> buildProviderButton [
 
 { #category : #'initialization ' }
 GtLlmNewThreadMessageElement >> buildSendButton [
-	^ BrButton new
+	^ sendButton := BrButton new
 		fitContent;
 		beSmallSize;
 		id: #send;
@@ -102,6 +103,16 @@ GtLlmNewThreadMessageElement >> buildSendButton [
 { #category : #initialization }
 GtLlmNewThreadMessageElement >> defaultLayout [
 	^ BlLinearLayout vertical
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmNewThreadMessageElement >> disableSend [
+	sendButton disable
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmNewThreadMessageElement >> enableSend [
+	sendButton enable
 ]
 
 { #category : #'initialization ' }
@@ -181,6 +192,16 @@ GtLlmNewThreadMessageElement >> subscribeToThreadMessageViewModel [
 	self threadMessage
 		when: GtLlmNewThreadMessageContentsChanged
 		send: #onThreadMessageContentsChanged:
+		to: self.
+		
+	self threadMessage assistantChat
+		when: GtLlmThreadRunStartedAnnouncement
+		send: #disableSend
+		to: self.
+		
+	self threadMessage assistantChat
+		when: GtLlmThreadRunIsDoneAnnouncement
+		send: #enableSend
 		to: self.
 
 	self threadMessageViewModel weak
