@@ -365,7 +365,7 @@ GtLlmClassAssistant >> searchClassTool [
 						withWordsSplitter;
 						beCaseSensitiveByCapitalization;
 						applyInScope: SystemNavigation default allClassesAndTraits asAsyncStream
-							context: (GtSpotterContext new searchQuery: 'llm')) toArray wait
+							context: (GtSpotterContext new searchQuery: functionCall anyArgument)) toArray wait
 						collect: #name) ]
 ]
 
