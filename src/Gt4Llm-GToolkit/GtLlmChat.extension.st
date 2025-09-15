@@ -11,6 +11,15 @@ GtLlmChat >> asViewModel [
 ]
 
 { #category : #'*Gt4Llm-GToolkit' }
+GtLlmChat >> copyLepiterSerialisationToClipboard [
+	| snippet serialization |
+
+	snippet := GtLlmLeSnippetVisitor new visitNode: self.
+	serialization := LeJsonV4 uniqueInstance serialize: snippet.
+	Clipboard default clipboardText: serialization.
+]
+
+{ #category : #'*Gt4Llm-GToolkit' }
 GtLlmChat >> gtMessagesWidgetFor: aView [
 	"cannot be a forward because the update wouldn’t work"
 
