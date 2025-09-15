@@ -9,6 +9,12 @@ GtAnthropicModelsGroup class >> itemClass [
 	^ GtAnthropicModel
 ]
 
+{ #category : #accessing }
+GtAnthropicModelsGroup class >> leJsonV4Name [
+
+	^ #gtAnthropicModelsGroup
+]
+
 { #category : #'as yet unclassified' }
 GtAnthropicModelsGroup >> gtViewModelsFor: aView [
 	<gtView>
