@@ -41,3 +41,9 @@ GtLlmLeSnippetVisitor >> visitGtLlmMessagesGroup: aGtLlmMessagesGroup [
 	aGtLlmMessagesGroup items do: [ :message |
 		stack top addSnippet: (message acceptVisitor: self) ]
 ]
+
+{ #category : #visiting }
+GtLlmLeSnippetVisitor >> visitNode: aGtLlmChat [
+
+	^ aGtLlmChat acceptVisitor: self
+]

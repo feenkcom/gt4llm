@@ -98,7 +98,7 @@ GtLlmChat >> buildDefaultProvider [
 GtLlmChat >> copyLepiterSerialisationToClipboard [
 	| snippet serialization |
 
-	snippet := self acceptVisitor: GtLlmLeSnippetVisitor new.
+	snippet := GtLlmLeSnippetVisitor new visitNode: self.
 	serialization := LeJsonV4 uniqueInstance serialize: snippet.
 	Clipboard default clipboardText: serialization.
 ]
