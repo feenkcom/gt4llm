@@ -13,6 +13,12 @@ Class {
 }
 
 { #category : #accessing }
+GtOpenAIAnnotation class >> leJsonV4Name [
+
+	^ #gtOpenAIAnnotation
+]
+
+{ #category : #accessing }
 GtOpenAIAnnotation class >> serializationProperties [
 	^ {
 		#text -> #text.

@@ -13,6 +13,18 @@ GtLlmToolMessage class >> defaultRole [
 	^ 'tool'
 ]
 
+{ #category : #accessing }
+GtLlmToolMessage class >> leJsonV4Name [
+
+	^ #gtLlmToolMessage
+]
+
+{ #category : #visiting }
+GtLlmToolMessage >> acceptVisitor: aVisitor [
+
+	^ aVisitor visitGtLlmToolMessage: self
+]
+
 { #category : #'as yet unclassified' }
 GtLlmToolMessage >> action [
 	^ 'Tool call(' , self toolCall humanReadable , ')'

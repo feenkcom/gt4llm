@@ -8,3 +8,15 @@ Class {
 GtLlmSystemMessage class >> defaultRole [
 	^ 'system'
 ]
+
+{ #category : #accessing }
+GtLlmSystemMessage class >> leJsonV4Name [
+
+	^ #gtLlmSystemMessage
+]
+
+{ #category : #visiting }
+GtLlmSystemMessage >> acceptVisitor: aVisitor [
+
+	^ aVisitor visitGtLlmSystemMessage: self
+]

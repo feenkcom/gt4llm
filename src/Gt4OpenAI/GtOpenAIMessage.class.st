@@ -21,6 +21,12 @@ GtOpenAIMessage class >> from: aDict [
 ]
 
 { #category : #accessing }
+GtOpenAIMessage class >> leJsonV4Name [
+
+	^ #gtOpenAIMessage
+]
+
+{ #category : #accessing }
 GtOpenAIMessage class >> serializationProperties [
 	^ {
 		#assistant_id -> #assistantId.

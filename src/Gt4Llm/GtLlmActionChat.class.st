@@ -4,6 +4,12 @@ Class {
 	#category : #Gt4Llm
 }
 
+{ #category : #visiting }
+GtLlmActionChat >> acceptVisitor: aVisitor [
+
+	^ aVisitor visitGtLlmActionChat: self
+]
+
 { #category : #'as yet unclassified' }
 GtLlmActionChat >> defaultSerializer [
 	^ GtLlmActionMessageSerializer new

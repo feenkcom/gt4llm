@@ -4,6 +4,12 @@ Class {
 	#category : #'Gt4OpenAI-GToolkit'
 }
 
+{ #category : #accessing }
+GtOpenAICoderActionMessage class >> leJsonV4Name [
+
+	^ #gtOpenAICoderActionMessage
+]
+
 { #category : #'as yet unclassified' }
 GtOpenAICoderActionMessage >> gtContentFor: aView [
 	<gtView>

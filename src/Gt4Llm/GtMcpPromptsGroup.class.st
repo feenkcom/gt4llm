@@ -4,6 +4,12 @@ Class {
 	#category : #Gt4Llm
 }
 
+{ #category : #accessing }
+GtMcpPromptsGroup class >> leJsonV4Name [
+
+	^ #gtMcpPromptsGroup
+]
+
 { #category : #'as yet unclassified' }
 GtMcpPromptsGroup >> gtPromptsFor: aView [
 	<gtView>

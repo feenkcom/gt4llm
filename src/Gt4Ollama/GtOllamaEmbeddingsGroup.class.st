@@ -15,6 +15,12 @@ GtOllamaEmbeddingsGroup class >> from: aList [
 ]
 
 { #category : #accessing }
+GtOllamaEmbeddingsGroup class >> leJsonV4Name [
+
+	^ #gtOllamaEmbeddingsGroup
+]
+
+{ #category : #accessing }
 GtOllamaEmbeddingsGroup >> client [
 	^ client
 ]

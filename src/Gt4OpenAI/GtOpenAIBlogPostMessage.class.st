@@ -4,6 +4,12 @@ Class {
 	#category : #Gt4OpenAI
 }
 
+{ #category : #accessing }
+GtOpenAIBlogPostMessage class >> leJsonV4Name [
+
+	^ #gtOpenAIBlogPostMessage
+]
+
 { #category : #'trait-TGtActionMessage' }
 GtOpenAIBlogPostMessage >> actionModel [
 	^ (self chat assistant actionNamed: self action)
