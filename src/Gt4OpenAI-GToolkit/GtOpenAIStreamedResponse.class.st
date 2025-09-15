@@ -14,6 +14,12 @@ GtOpenAIStreamedResponse class >> from: aStream [
 	^ self new stream: (GtOpenAISseStream new stream: aStream)
 ]
 
+{ #category : #accessing }
+GtOpenAIStreamedResponse class >> leJsonV4Name [
+
+	^ #gtOpenAIStreamedResponse
+]
+
 { #category : #'as yet unclassified' }
 GtOpenAIStreamedResponse >> hasToolCalls [
 	^ self stream hasEventOfType: 'response.output_item.added'

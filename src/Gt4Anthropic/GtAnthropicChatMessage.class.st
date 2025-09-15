@@ -15,6 +15,12 @@ GtAnthropicChatMessage class >> defaultRole [
 	^ nil
 ]
 
+{ #category : #accessing }
+GtAnthropicChatMessage class >> leJsonV4Name [
+
+	^ #gtAnthropicChatMessage
+]
+
 { #category : #'as yet unclassified' }
 GtAnthropicChatMessage class >> serializationProperties [
 	^ {#content -> #content.

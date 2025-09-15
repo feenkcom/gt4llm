@@ -13,6 +13,12 @@ GtOllamaStatusSteps class >> from: anArray [
 ]
 
 { #category : #accessing }
+GtOllamaStatusSteps class >> leJsonV4Name [
+
+	^ #gtOllamaStatusSteps
+]
+
+{ #category : #accessing }
 GtOllamaStatusSteps >> gtStepsFor: aView [
 	<gtView>
 	^ aView list

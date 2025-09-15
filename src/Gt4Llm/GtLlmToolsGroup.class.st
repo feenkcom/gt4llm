@@ -4,6 +4,12 @@ Class {
 	#category : #Gt4Llm
 }
 
+{ #category : #accessing }
+GtLlmToolsGroup class >> leJsonV4Name [
+
+	^ #gtLlmToolsGroup
+]
+
 { #category : #views }
 GtLlmToolsGroup >> gtItemsFor: aView [
 	<gtView>

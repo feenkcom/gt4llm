@@ -5,7 +5,7 @@ Class {
 		'model',
 		'messages'
 	],
-	#category : 'Gt4OpenAI'
+	#category : #Gt4OpenAI
 }
 
 { #category : #accessing }

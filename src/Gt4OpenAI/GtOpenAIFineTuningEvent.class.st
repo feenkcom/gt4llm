@@ -13,6 +13,12 @@ Class {
 }
 
 { #category : #accessing }
+GtOpenAIFineTuningEvent class >> leJsonV4Name [
+
+	^ #gtOpenAIFineTuningEvent
+]
+
+{ #category : #accessing }
 GtOpenAIFineTuningEvent class >> serializationProperties [
 	^ {#id -> #id.
 		#created_at -> #createdAt.

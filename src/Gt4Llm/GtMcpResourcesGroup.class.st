@@ -4,6 +4,12 @@ Class {
 	#category : #Gt4Llm
 }
 
+{ #category : #accessing }
+GtMcpResourcesGroup class >> leJsonV4Name [
+
+	^ #gtMcpResourcesGroup
+]
+
 { #category : #'as yet unclassified' }
 GtMcpResourcesGroup >> gtResourcesFor: aView [
 	<gtView>

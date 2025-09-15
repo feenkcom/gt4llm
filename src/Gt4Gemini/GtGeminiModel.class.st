@@ -13,6 +13,12 @@ Class {
 	#category : #Gt4Gemini
 }
 
+{ #category : #accessing }
+GtGeminiModel class >> leJsonV4Name [
+
+	^ #gtGeminiModel
+]
+
 { #category : #'as yet unclassified' }
 GtGeminiModel class >> serializationProperties [
 	^ {#name -> #name.

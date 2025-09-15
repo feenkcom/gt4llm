@@ -28,6 +28,12 @@ Class {
 	#category : #Gt4OpenAI
 }
 
+{ #category : #accessing }
+GtOpenAIResponse class >> leJsonV4Name [
+
+	^ #gtOpenAIResponse
+]
+
 { #category : #'as yet unclassified' }
 GtOpenAIResponse class >> serializationProperties [
 	^ {#id -> #id.

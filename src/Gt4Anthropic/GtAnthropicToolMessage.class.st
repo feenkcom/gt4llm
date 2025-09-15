@@ -7,6 +7,12 @@ Class {
 	#category : #Gt4Anthropic
 }
 
+{ #category : #accessing }
+GtAnthropicToolMessage class >> leJsonV4Name [
+
+	^ #gtAnthropicToolMessage
+]
+
 { #category : #'as yet unclassified' }
 GtAnthropicToolMessage >> action [
 	^ 'Tool result'

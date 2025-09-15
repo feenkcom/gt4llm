@@ -15,6 +15,12 @@ Class {
 }
 
 { #category : #accessing }
+GtOpenAIAssistant class >> leJsonV4Name [
+
+	^ #gtOpenAIAssistant
+]
+
+{ #category : #accessing }
 GtOpenAIAssistant class >> serializationProperties [
 	^ {#id -> #id.
 		#created_at -> #createdAt.

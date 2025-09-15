@@ -4,6 +4,12 @@ Class {
 	#category : #'Gt4OpenAI-GToolkit'
 }
 
+{ #category : #accessing }
+GtOpenAIObjectMessage class >> leJsonV4Name [
+
+	^ #gtOpenAIObjectMessage
+]
+
 { #category : #'as yet unclassified' }
 GtOpenAIObjectMessage >> codeBlock [
 	^ STON

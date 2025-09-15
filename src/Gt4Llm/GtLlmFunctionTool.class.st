@@ -9,9 +9,21 @@ Class {
 	#category : #Gt4Llm
 }
 
+{ #category : #accessing }
+GtLlmFunctionTool class >> leJsonV4Name [
+
+	^ #gtLlmFunctionTool
+]
+
 { #category : #'as yet unclassified' }
 GtLlmFunctionTool class >> serializationProperties [
 	^ {#type -> #type. #function -> #function}
+]
+
+{ #category : #visiting }
+GtLlmFunctionTool >> acceptVisitor: aVisitor [
+
+	^ aVisitor visitGtLlmFunctionTool: self
 ]
 
 { #category : #accessing }

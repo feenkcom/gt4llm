@@ -14,6 +14,12 @@ Class {
 }
 
 { #category : #accessing }
+GtOllamaRunningModel class >> leJsonV4Name [
+
+	^ #gtOllamaRunningModel
+]
+
+{ #category : #accessing }
 GtOllamaRunningModel class >> serializationProperties [
 	^ {#name -> #name.
 		#model -> #model.

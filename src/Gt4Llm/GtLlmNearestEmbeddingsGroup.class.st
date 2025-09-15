@@ -5,6 +5,12 @@ Class {
 }
 
 { #category : #accessing }
+GtLlmNearestEmbeddingsGroup class >> leJsonV4Name [
+
+	^ #gtLlmNearestEmbeddingsGroup
+]
+
+{ #category : #accessing }
 GtLlmNearestEmbeddingsGroup >> gtEmbeddingsFor: aView [
 	<gtView>
 	^ aView columnedList

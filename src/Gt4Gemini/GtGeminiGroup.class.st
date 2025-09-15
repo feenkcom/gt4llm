@@ -18,6 +18,12 @@ GtGeminiGroup class >> itemClass [
 	^ self subclassResponsibility
 ]
 
+{ #category : #accessing }
+GtGeminiGroup class >> leJsonV4Name [
+
+	^ #gtGeminiGroup
+]
+
 { #category : #'as yet unclassified' }
 GtGeminiGroup class >> property [
 	^ self subclassResponsibility

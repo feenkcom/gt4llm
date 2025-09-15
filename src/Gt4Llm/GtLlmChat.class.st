@@ -12,9 +12,31 @@ Class {
 	#category : #Gt4Llm
 }
 
+{ #category : #accessing }
+GtLlmChat class >> leJsonV4AttributeMapping [
+	"Answer the Array of attribute to store keys.
+	The provider should be stored, but isn't coded yet."
+
+	^ { #lastUpdate -> #lastUpdate.
+		#messages -> #messages.
+		#serializer -> #serializer. }
+]
+
+{ #category : #accessing }
+GtLlmChat class >> leJsonV4Name [
+
+	^ #gtLlmChat
+]
+
 { #category : #'as yet unclassified' }
 GtLlmChat class >> new [
 	^ self basicNew initialize
+]
+
+{ #category : #visiting }
+GtLlmChat >> acceptVisitor: aVisitor [
+
+	^ aVisitor visitGtLlmChat: self
 ]
 
 { #category : #accessing }
@@ -72,6 +94,15 @@ GtLlmChat >> buildDefaultProvider [
 		ifFalse: [ nil ]
 ]
 
+{ #category : #ui }
+GtLlmChat >> copyLepiterSerialisationToClipboard [
+	| snippet serialization |
+
+	snippet := self acceptVisitor: GtLlmLeSnippetVisitor new.
+	serialization := LeJsonV4 uniqueInstance serialize: snippet.
+	Clipboard default clipboardText: serialization.
+]
+
 { #category : #accessing }
 GtLlmChat >> defaultSerializer [
 	^ GtLlmMessageSerializer new
@@ -85,6 +116,18 @@ GtLlmChat >> descendantOf: aMessage [
 				ifTrue: [ index = messages size ifTrue: [ ^ nil ] ifFalse: [ ^ messages at: index + 1 ] ] ].
 
 	self error: 'Message not found'
+]
+
+{ #category : #ui }
+GtLlmChat >> gtCopySnippetSerialisationFor: anAction [
+	"Copy the serialisation of the receiver's Lepiter snippet to the clipboard.
+	This can then be pasted as a snippet from a lepiter page."
+	<gtAction>
+
+	^ anAction button
+		icon: BrGlamorousVectorIcons copyToClipboard;
+		tooltip: 'Copy the snippet definition to the clipboard';
+		action: [ :button | self copyLepiterSerialisationToClipboard ]
 ]
 
 { #category : #ui }

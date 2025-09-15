@@ -8,6 +8,12 @@ Class {
 }
 
 { #category : #accessing }
+GtOllamaEmbedding class >> leJsonV4Name [
+
+	^ #gtOllamaEmbedding
+]
+
+{ #category : #accessing }
 GtOllamaEmbedding class >> serializationProperties [
 	^ {#embedding -> #embedding}
 ]

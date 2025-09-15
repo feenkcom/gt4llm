@@ -14,6 +14,12 @@ GtOllamaModelsGroup class >> from: aDict [
 ]
 
 { #category : #accessing }
+GtOllamaModelsGroup class >> leJsonV4Name [
+
+	^ #gtOllamaModelsGroup
+]
+
+{ #category : #accessing }
 GtOllamaModelsGroup >> client [
 	^ client
 ]

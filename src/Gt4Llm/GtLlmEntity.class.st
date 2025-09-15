@@ -28,8 +28,28 @@ GtLlmEntity class >> isErrorResult: aDictionary [
 ]
 
 { #category : #accessing }
+GtLlmEntity class >> leJsonV4AttributeMapping [
+
+	^ OrderedCollection 
+		with: #rawData -> #rawData
+		with: #client -> #client
+]
+
+{ #category : #accessing }
+GtLlmEntity class >> leJsonV4Name [
+
+	^ #gtLlmEntity
+]
+
+{ #category : #accessing }
 GtLlmEntity class >> serializationProperties [
 	^ #()
+]
+
+{ #category : #visiting }
+GtLlmEntity >> acceptVisitor: aVisitor [
+
+	^ aVisitor visitGtLlmEntity: self
 ]
 
 { #category : #accessing }

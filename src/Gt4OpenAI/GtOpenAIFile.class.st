@@ -14,6 +14,12 @@ Class {
 }
 
 { #category : #accessing }
+GtOpenAIFile class >> leJsonV4Name [
+
+	^ #gtOpenAIFile
+]
+
+{ #category : #accessing }
 GtOpenAIFile class >> serializationProperties [
 	^ {#id -> #id.
 		#purpose -> #purpose.

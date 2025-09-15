@@ -18,6 +18,12 @@ GtLlmAssistantActionExamplesGroup class >> fromThreadMessages: aMessageGroup [
 ]
 
 { #category : #accessing }
+GtLlmAssistantActionExamplesGroup class >> leJsonV4Name [
+
+	^ #gtLlmAssistantActionExamplesGroup
+]
+
+{ #category : #accessing }
 GtLlmAssistantActionExamplesGroup >> gtExamplesFor: aView [
 	<gtView>
 	^ aView columnedList

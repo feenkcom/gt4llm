@@ -11,6 +11,12 @@ Class {
 }
 
 { #category : #accessing }
+GtOpenAIChatCompletionChoice class >> leJsonV4Name [
+
+	^ #gtOpenAIChatCompletionChoice
+]
+
+{ #category : #accessing }
 GtOpenAIChatCompletionChoice class >> serializationProperties [
 	^ {#finish_reason -> #finishReason.
 		#index -> #index.

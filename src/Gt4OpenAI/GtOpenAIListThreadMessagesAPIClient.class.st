@@ -5,7 +5,7 @@ Class {
 		'thread',
 		'params'
 	],
-	#category : 'Gt4OpenAI'
+	#category : #Gt4OpenAI
 }
 
 { #category : #other }

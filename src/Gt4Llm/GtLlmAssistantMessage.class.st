@@ -8,3 +8,15 @@ Class {
 GtLlmAssistantMessage class >> defaultRole [
 	^ 'assistant'
 ]
+
+{ #category : #accessing }
+GtLlmAssistantMessage class >> leJsonV4Name [
+
+	^ #gtLlmAssistantMessage
+]
+
+{ #category : #visiting }
+GtLlmAssistantMessage >> acceptVisitor: aVisitor [
+
+	^ aVisitor visitGtLlmAssistantMessage: self
+]

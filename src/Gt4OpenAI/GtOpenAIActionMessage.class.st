@@ -5,6 +5,12 @@ Class {
 	#category : #Gt4OpenAI
 }
 
+{ #category : #accessing }
+GtOpenAIActionMessage class >> leJsonV4Name [
+
+	^ #gtOpenAIActionMessage
+]
+
 { #category : #'as yet unclassified' }
 GtOpenAIActionMessage >> actionModel [
 	^ (self chat assistant actionNamed: self action)

@@ -10,6 +10,12 @@ Class {
 	#category : #Gt4Gemini
 }
 
+{ #category : #accessing }
+GtGtGeminiMessageCandidate class >> leJsonV4Name [
+
+	^ #gtGtGeminiMessageCandidate
+]
+
 { #category : #'as yet unclassified' }
 GtGtGeminiMessageCandidate class >> serializationProperties [
 	^ {

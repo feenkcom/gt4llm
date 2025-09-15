@@ -17,6 +17,12 @@ Class {
 }
 
 { #category : #accessing }
+GtOllamaThreadMessage class >> leJsonV4Name [
+
+	^ #gtOllamaThreadMessage
+]
+
+{ #category : #accessing }
 GtOllamaThreadMessage class >> serializationProperties [
 	^ {
 		#content -> #content.

@@ -7,6 +7,18 @@ Class {
 	#category : #Gt4Llm
 }
 
+{ #category : #accessing }
+GtLlmFileSearchTool class >> leJsonV4Name [
+
+	^ #gtLlmFileSearchTool
+]
+
+{ #category : #visiting }
+GtLlmFileSearchTool >> acceptVisitor: aVisitor [
+
+	^ aVisitor visitGtLlmFileSearchTool: self
+]
+
 { #category : #'as yet unclassified' }
 GtLlmFileSearchTool >> defaultType [
 	^ 'file_search'

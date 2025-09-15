@@ -4,6 +4,12 @@ Class {
 	#category : #'Gt4OpenAI-GToolkit'
 }
 
+{ #category : #accessing }
+GtOpenAICodeSnippetActionMessage class >> leJsonV4Name [
+
+	^ #gtOpenAICodeSnippetActionMessage
+]
+
 { #category : #'as yet unclassified' }
 GtOpenAICodeSnippetActionMessage >> acceptCodeAttribute [
 	^ GtButtonAttribute new

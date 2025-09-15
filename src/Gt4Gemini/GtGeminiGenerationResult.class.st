@@ -9,6 +9,12 @@ Class {
 	#category : #Gt4Gemini
 }
 
+{ #category : #accessing }
+GtGeminiGenerationResult class >> leJsonV4Name [
+
+	^ #gtGeminiGenerationResult
+]
+
 { #category : #'as yet unclassified' }
 GtGeminiGenerationResult class >> serializationProperties [
 	^ {#candidates -> #candidates.

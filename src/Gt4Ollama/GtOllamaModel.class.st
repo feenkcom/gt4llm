@@ -13,6 +13,12 @@ Class {
 }
 
 { #category : #accessing }
+GtOllamaModel class >> leJsonV4Name [
+
+	^ #gtOllamaModel
+]
+
+{ #category : #accessing }
 GtOllamaModel class >> serializationProperties [
 	^ {#name -> #name.
 		#model -> #model.

@@ -4,6 +4,12 @@ Class {
 	#category : #'Gt4OpenAI-GToolkit'
 }
 
+{ #category : #accessing }
+GtOpenAIWardleyMapMessage class >> leJsonV4Name [
+
+	^ #gtOpenAIWardleyMapMessage
+]
+
 { #category : #'as yet unclassified' }
 GtOpenAIWardleyMapMessage >> asViewModel [
 	^ GtLlmActionThreadMessageViewModel new threadMessage: self
