@@ -4,6 +4,12 @@ Class {
 	#category : #Gt4Llm
 }
 
+{ #category : #accessing }
+GtLlmFunctionToolWithProtocol class >> leJsonV4Name [
+
+	^ #gtLlmFunctionToolWithProtocol
+]
+
 { #category : #'as yet unclassified' }
 GtLlmFunctionToolWithProtocol >> block: aBlock [
 	block := [ :aFunctionCall | 

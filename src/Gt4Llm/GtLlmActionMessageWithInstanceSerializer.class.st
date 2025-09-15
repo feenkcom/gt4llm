@@ -7,6 +7,12 @@ Class {
 	#category : #Gt4Llm
 }
 
+{ #category : #accessing }
+GtLlmActionMessageWithInstanceSerializer class >> leJsonV4Name [
+
+	^ #gtLlmActionMessageWithInstanceSerializer
+]
+
 { #category : #'as yet unclassified' }
 GtLlmActionMessageWithInstanceSerializer >> gtInstanceFor: aView [
 	<gtView>

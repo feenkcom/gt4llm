@@ -15,6 +15,15 @@ Class {
 }
 
 { #category : #accessing }
+GtLlmChatMessage class >> deSerializeAllImplementorsInstances [
+	"Answer a collection of instances to be tested for serialisation / deserialisation"
+
+	^ self name = #GtLlmChatMessage
+		ifTrue: [ #() ]
+		ifFalse: [ { self new } ]
+]
+
+{ #category : #accessing }
 GtLlmChatMessage class >> defaultRole [
 	^ self subclassResponsibility
 ]
