@@ -7,10 +7,22 @@ Class {
 	#category : #Gt4Llm
 }
 
+{ #category : #accessing }
+GtLlmGroup class >> leJsonV4Name [
+
+	^ #gtLlmGroup
+]
+
 { #category : #'as yet unclassified' }
 GtLlmGroup class >> withAll: aCollection [
 	^ self new 
 		initializeWith: aCollection
+]
+
+{ #category : #visiting }
+GtLlmGroup >> acceptVisitor: aVisitor [
+
+	^ aVisitor visitGtLlmGroup: self
 ]
 
 { #category : #accessing }
@@ -290,6 +302,12 @@ GtLlmGroup >> isNotEmpty [
 GtLlmGroup >> items [
 	^ items ifNil: [
 		items := OrderedCollection new ]
+]
+
+{ #category : #'private - serialization' }
+GtLlmGroup >> items: aCollection [
+
+	items := aCollection
 ]
 
 { #category : #accessing }

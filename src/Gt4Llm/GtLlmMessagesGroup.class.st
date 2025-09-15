@@ -1,8 +1,20 @@
 Class {
 	#name : #GtLlmMessagesGroup,
 	#superclass : #GtLlmGroup,
-	#category : 'Gt4Llm'
+	#category : #Gt4Llm
 }
+
+{ #category : #accessing }
+GtLlmMessagesGroup class >> leJsonV4Name [
+
+	^ #gtLlmMessagesGroup
+]
+
+{ #category : #visiting }
+GtLlmMessagesGroup >> acceptVisitor: aVisitor [
+
+	^ aVisitor visitGtLlmMessagesGroup: self
+]
 
 { #category : #converting }
 GtLlmMessagesGroup >> asGPhlowItemsIterator [

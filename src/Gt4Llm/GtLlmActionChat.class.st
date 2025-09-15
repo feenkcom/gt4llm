@@ -4,6 +4,18 @@ Class {
 	#category : #Gt4Llm
 }
 
+{ #category : #accessing }
+GtLlmActionChat class >> leJsonV4Name [
+
+	^ #gtLlmActionChat
+]
+
+{ #category : #visiting }
+GtLlmActionChat >> acceptVisitor: aVisitor [
+
+	^ aVisitor visitGtLlmActionChat: self
+]
+
 { #category : #'as yet unclassified' }
 GtLlmActionChat >> defaultSerializer [
 	^ GtLlmActionMessageSerializer new

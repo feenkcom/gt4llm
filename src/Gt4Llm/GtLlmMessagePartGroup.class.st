@@ -4,6 +4,12 @@ Class {
 	#category : #Gt4Llm
 }
 
+{ #category : #accessing }
+GtLlmMessagePartGroup class >> leJsonV4Name [
+
+	^ #gtLlmMessagePartGroup
+]
+
 { #category : #'as yet unclassified' }
 GtLlmMessagePartGroup >> serialize [
 	^ self items collect: #serialize

@@ -5,6 +5,12 @@ Class {
 }
 
 { #category : #accessing }
+GtOllamaResponseMessage class >> leJsonV4Name [
+
+	^ #gtOllamaResponseMessage
+]
+
+{ #category : #accessing }
 GtOllamaResponseMessage >> content [
 
 	^ '' join: (rawData collect: [ :each | each at: 'response' ])

@@ -15,6 +15,15 @@ Class {
 }
 
 { #category : #accessing }
+GtLlmChatMessage class >> deSerializeAllImplementorsInstances [
+	"Answer a collection of instances to be tested for serialisation / deserialisation"
+
+	^ self name = #GtLlmChatMessage
+		ifTrue: [ #() ]
+		ifFalse: [ { self new } ]
+]
+
+{ #category : #accessing }
 GtLlmChatMessage class >> defaultRole [
 	^ self subclassResponsibility
 ]
@@ -32,6 +41,25 @@ GtLlmChatMessage class >> from: aDictionary [
 	^ roleClass new from: aDictionary
 ]
 
+{ #category : #accessing }
+GtLlmChatMessage class >> leJsonV4AttributeMapping [
+
+	^ super leJsonV4AttributeMapping
+		add: #content -> #content;
+		add: #role -> #role;
+		add: #id -> #id;
+		add: #createdAt -> #createdAt;
+		add: #images -> #images;
+		add: #model -> #model;
+		yourself.
+]
+
+{ #category : #accessing }
+GtLlmChatMessage class >> leJsonV4Name [
+
+	^ #gtLlmChatMessage
+]
+
 { #category : #'instance creation' }
 GtLlmChatMessage class >> rolesToClasses [
 	^ {('tool' -> GtLlmToolMessage).
@@ -44,6 +72,12 @@ GtLlmChatMessage class >> rolesToClasses [
 GtLlmChatMessage class >> serializationProperties [
 	^ {#role -> #role.
 		#content -> #content}
+]
+
+{ #category : #visiting }
+GtLlmChatMessage >> acceptVisitor: aVisitor [
+
+	^ aVisitor visitGtLlmChatMessage: self
 ]
 
 { #category : #'as yet unclassified' }

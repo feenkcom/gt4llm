@@ -9,6 +9,12 @@ GtGeminiModelsGroup class >> itemClass [
 	^ GtGeminiModel
 ]
 
+{ #category : #accessing }
+GtGeminiModelsGroup class >> leJsonV4Name [
+
+	^ #gtGeminiModelsGroup
+]
+
 { #category : #'as yet unclassified' }
 GtGeminiModelsGroup class >> property [
 	^ 'models'

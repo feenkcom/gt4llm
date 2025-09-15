@@ -19,6 +19,12 @@ Class {
 }
 
 { #category : #accessing }
+GtOpenAIFineTuningJob class >> leJsonV4Name [
+
+	^ #gtOpenAIFineTuningJob
+]
+
+{ #category : #accessing }
 GtOpenAIFineTuningJob class >> serializationProperties [
 	^ {#object -> #object.
 		#id -> #id.

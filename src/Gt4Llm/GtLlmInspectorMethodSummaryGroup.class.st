@@ -5,6 +5,12 @@ Class {
 }
 
 { #category : #accessing }
+GtLlmInspectorMethodSummaryGroup class >> leJsonV4Name [
+
+	^ #gtLlmInspectorMethodSummaryGroup
+]
+
+{ #category : #accessing }
 GtLlmInspectorMethodSummaryGroup >> gtPhlowMethodsFor: aView [
 	<gtView>
 	^ aView columnedList

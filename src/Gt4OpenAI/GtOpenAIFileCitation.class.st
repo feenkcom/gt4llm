@@ -10,6 +10,12 @@ Class {
 }
 
 { #category : #accessing }
+GtOpenAIFileCitation class >> leJsonV4Name [
+
+	^ #gtOpenAIFileCitation
+]
+
+{ #category : #accessing }
 GtOpenAIFileCitation class >> serializationProperties [
 	^ {#file_id -> #fileId.
 		#quote -> #quote}

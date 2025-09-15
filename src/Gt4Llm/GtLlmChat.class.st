@@ -12,9 +12,31 @@ Class {
 	#category : #Gt4Llm
 }
 
+{ #category : #accessing }
+GtLlmChat class >> leJsonV4AttributeMapping [
+	"Answer the Array of attribute to store keys.
+	The provider should be stored, but isn't coded yet."
+
+	^ { #lastUpdate -> #lastUpdate.
+		#messages -> #messages.
+		#serializer -> #serializer. }
+]
+
+{ #category : #accessing }
+GtLlmChat class >> leJsonV4Name [
+
+	^ #gtLlmChat
+]
+
 { #category : #'as yet unclassified' }
 GtLlmChat class >> new [
 	^ self basicNew initialize
+]
+
+{ #category : #visiting }
+GtLlmChat >> acceptVisitor: aVisitor [
+
+	^ aVisitor visitGtLlmChat: self
 ]
 
 { #category : #accessing }

@@ -4,6 +4,12 @@ Class {
 	#category : #'Gt4OpenAI-GToolkit'
 }
 
+{ #category : #accessing }
+GtOpenAIClassMessage class >> leJsonV4Name [
+
+	^ #gtOpenAIClassMessage
+]
+
 { #category : #'as yet unclassified' }
 GtOpenAIClassMessage >> classBlock [
 	^ self contentJson at: 'Class' ifAbsent: [ '' ]

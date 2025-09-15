@@ -9,6 +9,18 @@ GtLlmActionMessage class >> defaultRole [
 	^ nil
 ]
 
+{ #category : #accessing }
+GtLlmActionMessage class >> leJsonV4Name [
+
+	^ #gtLlmActionMessage
+]
+
+{ #category : #visiting }
+GtLlmActionMessage >> acceptVisitor: aVisitor [
+
+	^ aVisitor visitGtLlmActionMessage: self
+]
+
 { #category : #'as yet unclassified' }
 GtLlmActionMessage >> actionModel [
 	^ (self chat assistant actionNamed: self action)

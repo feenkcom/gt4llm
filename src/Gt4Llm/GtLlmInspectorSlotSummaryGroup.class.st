@@ -5,6 +5,12 @@ Class {
 }
 
 { #category : #accessing }
+GtLlmInspectorSlotSummaryGroup class >> leJsonV4Name [
+
+	^ #gtLlmInspectorSlotSummaryGroup
+]
+
+{ #category : #accessing }
 GtLlmInspectorSlotSummaryGroup >> gtSlotsFor: aView [
 	<gtView>
 	^ aView columnedList title: 'Slots'; priority: 1; items: [self items]; column: 'Name' text: #name; column: 'Value' text: #slotValue

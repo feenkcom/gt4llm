@@ -9,6 +9,12 @@ Class {
 	#category : #Gt4Anthropic
 }
 
+{ #category : #accessing }
+GtAnthropicModel class >> leJsonV4Name [
+
+	^ #gtAnthropicModel
+]
+
 { #category : #'as yet unclassified' }
 GtAnthropicModel class >> serializationProperties [
 	^ {#id -> #id.

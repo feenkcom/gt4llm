@@ -4,6 +4,12 @@ Class {
 	#category : #Gt4Gemini
 }
 
+{ #category : #accessing }
+GtGeminiMessageCandidateGroup class >> leJsonV4Name [
+
+	^ #gtGeminiMessageCandidateGroup
+]
+
 { #category : #'as yet unclassified' }
 GtGeminiMessageCandidateGroup >> gtMessagesFor: aView [
 	<gtView>

@@ -19,6 +19,12 @@ GtAnthropicGroup class >> itemClass [
 ]
 
 { #category : #accessing }
+GtAnthropicGroup class >> leJsonV4Name [
+
+	^ #gtAnthropicGroup
+]
+
+{ #category : #accessing }
 GtAnthropicGroup >> client [
 	^ client
 ]
