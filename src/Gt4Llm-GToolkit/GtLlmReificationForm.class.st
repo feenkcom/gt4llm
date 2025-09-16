@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLlmReificationForm,
-	#superclass : #GtCreationForm,
+	#superclass : #GtPharoCreationForm,
 	#instVars : [
 		'message',
 		'messageSuperclass',
