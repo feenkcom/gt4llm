@@ -70,7 +70,7 @@ GtLlmAssistant >> gtFormatComponentsFor: aView [
 
 { #category : #'*Gt4Llm-GToolkit' }
 GtLlmAssistant >> searchTool [
-	<gtLlmTool>
+	"<gtLlmTool>"
 	^ GtLlmFunctionTool new
 		name: 'search';
 		parameters: {'query'};
@@ -81,7 +81,7 @@ GtLlmAssistant >> searchTool [
 					on: (GtWorldSpotterSearchStart new
 							knowledgeBase: LeDatabasesRegistry uniqueInstance defaultLogicalDatabase).
 
-			spotter steps first searchQuery: 'llm'.
+			spotter steps first searchQuery: functionCall anyArgument.
 
 			searches := (spotter steps first createSearchResultsStream
 					flatCollect: #value) toArray wait groupedBy: #search.
