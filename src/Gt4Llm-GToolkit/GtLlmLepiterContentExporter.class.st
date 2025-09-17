@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'stream',
 		'level',
-		'toExport'
+		'toExport',
+		'startHeaderLevel'
 	],
 	#category : #'Gt4Llm-GToolkit-Exporter'
 }
@@ -38,11 +39,6 @@ GtLlmLepiterContentExporter >> export [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmLepiterContentExporter >> heading: aString [
-	^ self heading: aString level: 1
-]
-
-{ #category : #'as yet unclassified' }
 GtLlmLepiterContentExporter >> heading: aString level: anInteger [
 	^ ('#' repeat: anInteger) , ' ' , aString
 ]
@@ -58,6 +54,7 @@ GtLlmLepiterContentExporter >> indent: aString [
 GtLlmLepiterContentExporter >> initialize [
 	super initialize.
 	toExport := OrderedCollection new.
+	startHeaderLevel := 1.
 ]
 
 { #category : #'as yet unclassified' }
@@ -72,9 +69,14 @@ GtLlmLepiterContentExporter >> page: aLepiterContent [
 	toExport add: aLepiterContent
 ]
 
-{ #category : #'as yet unclassified' }
-GtLlmLepiterContentExporter >> treatTextSnippetAst: anAst [
-	^ GtLlmTextSnippetExporter new exportAst: anAst
+{ #category : #accessing }
+GtLlmLepiterContentExporter >> startHeaderLevel [
+	^ startHeaderLevel
+]
+
+{ #category : #accessing }
+GtLlmLepiterContentExporter >> startHeaderLevel: anObject [
+	startHeaderLevel := anObject
 ]
 
 { #category : #'as yet unclassified' }
@@ -142,8 +144,8 @@ GtLlmLepiterContentExporter >> visitJavaScriptSnippet: aLeJavaScriptSnippet [
 
 { #category : #'as yet unclassified' }
 GtLlmLepiterContentExporter >> visitPage: aLePage [
-	stream nextPutAll: (self heading: aLePage title).
-	
+	stream nextPutAll: (self heading: aLePage title level: startHeaderLevel).
+
 	self linebreaks.
 
 	aLePage
@@ -198,7 +200,10 @@ GtLlmLepiterContentExporter >> visitSnippet: aSnippet [
 
 { #category : #'as yet unclassified' }
 GtLlmLepiterContentExporter >> visitTextSnippet: aLeTextSnippet [
-	stream nextPutAll: (self treatTextSnippetAst: aLeTextSnippet ast).
+	stream
+		nextPutAll: (GtLlmTextSnippetExporter new
+				startHeaderLevel: startHeaderLevel;
+				exportAst: aLeTextSnippet ast).
 
 	self visitChildren: aLeTextSnippet
 ]

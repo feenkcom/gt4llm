@@ -2,7 +2,8 @@ Class {
 	#name : #GtLlmTextSnippetExporter,
 	#superclass : #Object,
 	#instVars : [
-		'stream'
+		'stream',
+		'startHeaderLevel'
 	],
 	#category : #'Gt4Llm-GToolkit-Exporter'
 }
@@ -12,6 +13,22 @@ GtLlmTextSnippetExporter >> exportAst: anAst [
 	stream := WriteStream on: ''.
 	self visit: anAst.
 	^ stream contents
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmTextSnippetExporter >> initialize [
+	super initialize.
+	startHeaderLevel := 0
+]
+
+{ #category : #accessing }
+GtLlmTextSnippetExporter >> startHeaderLevel [
+	^ startHeaderLevel
+]
+
+{ #category : #accessing }
+GtLlmTextSnippetExporter >> startHeaderLevel: anObject [
+	startHeaderLevel := anObject
 ]
 
 { #category : #'as yet unclassified' }
@@ -75,7 +92,10 @@ GtLlmTextSnippetExporter >> visitExternalUrlLink: aLeExternalUrlLinkNode [
 
 { #category : #'as yet unclassified' }
 GtLlmTextSnippetExporter >> visitHeader: aLeHeaderNode [
-	stream nextPutAll: aLeHeaderNode source
+	stream
+		nextPutAll: ('#' repeat: aLeHeaderNode numberSigns size + startHeaderLevel);
+		space;
+		nextPutAll: aLeHeaderNode headerName asString trim
 ]
 
 { #category : #'as yet unclassified' }
