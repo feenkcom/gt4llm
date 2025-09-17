@@ -98,11 +98,11 @@ GtLlmAssistantExamples >> assistantWithFormatAddedTwice [
 { #category : #'as yet unclassified' }
 GtLlmAssistantExamples >> basicAssistant [
 	<gtExample>
-	| tutor |
-	tutor :=  GtLlmAssistant new.
+	| assistant |
+	assistant :=  GtLlmAssistant new.
 	
-	self assert: tutor actions size equals: 1.
-	self assert: tutor instruction formats size equals: 3.
-	
-	^ tutor
+	self assert: assistant actions size equals: 1.
+	self assert: assistant instruction formats size equals: 3.
+	self assert: assistant collectTools isEmpty.
+	^ assistant
 ]
