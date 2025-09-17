@@ -24,6 +24,29 @@ GtLlmLepiterContentExporterExamples >> exportingAPage [
 ]
 
 { #category : #'llm-generated' }
+GtLlmLepiterContentExporterExamples >> exportingAPageWithStartLevelHeader [
+	<gtExample>
+	| page exporter result |
+	page := LePage new title: 'My Page'; yourself.
+	page addSnippet: (LeTextSnippet new string: '# Header1').
+	page addSnippet: (LeTextSnippet new string: '## Header2').
+	page addSnippet: (LePharoSnippet new code: '1 + 2').
+	exporter := GtLlmLepiterContentExporter new startHeaderLevel: 1.
+	exporter page: page.
+	result := exporter export.
+	self assert: result equals: '# My Page
+
+## Header1
+
+### Header2
+
+```pharo
+1 + 2
+```', String lf, String lf.
+	^ result
+]
+
+{ #category : #'llm-generated' }
 GtLlmLepiterContentExporterExamples >> exportingTheChildrenOfPage [
 	<gtExample>
 	| page text pharo exporter result |
