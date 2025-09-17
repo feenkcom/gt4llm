@@ -5,7 +5,7 @@ Class {
 		'chat',
 		'oldAptitude'
 	],
-	#category : #'Gt4OpenAI-GToolkit'
+	#category : #'Gt4OpenAI-GToolkit-Coder'
 }
 
 { #category : #accessing }
