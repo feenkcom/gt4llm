@@ -116,7 +116,7 @@ GtLlmLepiterContentExporter >> visitExampleSnippet: aLeExampleSnippet [
 		codeSnippet: (aLeExampleSnippet exampleMethod
 				ifNil: [ aLeExampleSnippet contentAsString ]
 				ifNotNil: [ aLeExampleSnippet inlinedSnippetSource ])
-		labelled: 'example'.
+		labelled: 'pharo'.
 
 	self visitChildren: aLeExampleSnippet
 ]

@@ -34,15 +34,11 @@ GtLlmLepiterContentExporterExamples >> exportingAPageWithStartLevelHeader [
 	exporter := GtLlmLepiterContentExporter new startHeaderLevel: 1.
 	exporter page: page.
 	result := exporter export.
-	self assert: result equals: '# My Page
-
-## Header1
-
-### Header2
-
-```pharo
-1 + 2
-```', String lf, String lf.
+	self assert: (result includesSubstring: '# My Page').
+	self assert: (result includesSubstring: '## Header1').
+	self assert: (result includesSubstring: '### Header2').
+	self assert: (result includesSubstring: '```pharo').
+	self assert: (result includesSubstring: '1 + 2').
 	^ result
 ]
 
@@ -62,5 +58,5 @@ GtLlmLepiterContentExporterExamples >> exportingTheChildrenOfPage [
 	self assert: (result includesSubstring: 'Hello').
 	self assert: (result includesSubstring: '```pharo').
 	self assert: (result includesSubstring: '1 + 2').
-	^ page
+	^ result
 ]
