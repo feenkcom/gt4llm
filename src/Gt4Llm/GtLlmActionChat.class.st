@@ -90,10 +90,16 @@ GtLlmActionChat >> sendAction: anActionCall onAnswer: aBlock [
 
 { #category : #accessing }
 GtLlmActionChat >> sendChatRequest: aString [
-	self
-		sendMessage: (GtLlmActionCall new
-				action: 'Chat';
-				arguments: {aString})
+	self provider
+		sendMessage: (self
+				messageFromString: (GtLlmActionCall new
+						action: 'Chat';
+						arguments: {aString}))
+]
+
+{ #category : #accessing }
+GtLlmActionChat >> sendMessage: aString [
+	^ self sendChatRequest: aString
 ]
 
 { #category : #'as yet unclassified' }
