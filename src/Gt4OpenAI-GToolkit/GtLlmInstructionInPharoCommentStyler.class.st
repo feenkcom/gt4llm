@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLlmInstructionInPharoCommentStyler,
 	#superclass : #GtGenericPharoStyler,
-	#category : #'Gt4OpenAI-GToolkit'
+	#category : #'Gt4OpenAI-GToolkit-Coder'
 }
 
 { #category : #'as yet unclassified' }

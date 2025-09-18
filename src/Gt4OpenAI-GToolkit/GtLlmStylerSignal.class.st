@@ -1,5 +1,5 @@
 Class {
 	#name : #GtLlmStylerSignal,
 	#superclass : #ContextStackSignal,
-	#category : #'Gt4OpenAI-GToolkit'
+	#category : #'Gt4OpenAI-GToolkit-Coder'
 }

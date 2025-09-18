@@ -24,6 +24,25 @@ GtLlmLepiterContentExporterExamples >> exportingAPage [
 ]
 
 { #category : #'llm-generated' }
+GtLlmLepiterContentExporterExamples >> exportingAPageWithStartLevelHeader [
+	<gtExample>
+	| page exporter result |
+	page := LePage new title: 'My Page'; yourself.
+	page addSnippet: (LeTextSnippet new string: '# Header1').
+	page addSnippet: (LeTextSnippet new string: '## Header2').
+	page addSnippet: (LePharoSnippet new code: '1 + 2').
+	exporter := GtLlmLepiterContentExporter new startHeaderLevel: 1.
+	exporter page: page.
+	result := exporter export.
+	self assert: (result includesSubstring: '# My Page').
+	self assert: (result includesSubstring: '## Header1').
+	self assert: (result includesSubstring: '### Header2').
+	self assert: (result includesSubstring: '```pharo').
+	self assert: (result includesSubstring: '1 + 2').
+	^ result
+]
+
+{ #category : #'llm-generated' }
 GtLlmLepiterContentExporterExamples >> exportingTheChildrenOfPage [
 	<gtExample>
 	| page text pharo exporter result |
@@ -39,5 +58,5 @@ GtLlmLepiterContentExporterExamples >> exportingTheChildrenOfPage [
 	self assert: (result includesSubstring: 'Hello').
 	self assert: (result includesSubstring: '```pharo').
 	self assert: (result includesSubstring: '1 + 2').
-	^ page
+	^ result
 ]
