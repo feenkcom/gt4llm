@@ -8,7 +8,7 @@ GtPharoSourceCoder >> addAssistantFormatMenuItemsFor: anAst to: coderAddOns from
 		ifNotNil: [ :node | 
 			node isLiteral ifFalse: [ ^ self ].
 			(node gtIsFormatComponentIn: aCoderViewModel behavior)
-				ifTrue: [ coderAddOns
+				ifTrue: [ (coderAddOns
 						addContextMenuItem: (self
 								createLabel: 'Rename Format'
 								description: node literalValue)
@@ -21,7 +21,8 @@ GtPharoSourceCoder >> addAssistantFormatMenuItemsFor: anAst to: coderAddOns from
 								in: aTextualViewModel
 								for: element ]
 						shortcutKey: GtLlmRenameAssistantFormatComponentShortcut new
-								combinationForPlatform gtDisplayString ] ]
+								combinationForPlatform gtDisplayString)
+						ifNotNil: [ :anAction | anAction priority: 5 ] ] ]
 ]
 
 { #category : #'*Gt4Llm-GToolkit' }
