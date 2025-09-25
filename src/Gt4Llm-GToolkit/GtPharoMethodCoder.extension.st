@@ -3,12 +3,13 @@ Extension { #name : #GtPharoMethodCoder }
 { #category : #'*Gt4Llm-GToolkit' }
 GtPharoMethodCoder >> addRenameMethodMenuForAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns: 216>
+	<gtCoderContextMenuAddOns>
 	GtLlmFeatures isEnabledInCoder ifFalse: [ ^ self ].
 
 	(self nodeFrom: aCoderViewModel)
 		ifNotNil: [ :node | 
 			node isMethodPattern ifFalse: [ ^ self ].
-			coderAddOns
+			(coderAddOns
 				addContextMenuItem: 'Propose method renames' asRopedText
 				group: BrMenuItemGroupConfiguration llm
 				hover: (self highlightNodeBlock: node)
@@ -21,14 +22,16 @@ GtPharoMethodCoder >> addRenameMethodMenuForAst: anAst to: coderAddOns from: aCo
 								possibilities: (anAnswer codeBlock
 										collect: [ :aCodeBlock | (GtPharoParser parse: (aCodeBlock at: 'code')) selector ]);
 								originalNode: node;
-								sourceCoderViewModel: model) executeIn: element ] ] ]
+								sourceCoderViewModel: model) executeIn: element ] ])
+				ifNotNil: [ :anAction | anAction priority: 216 ] ]
 ]
 
 { #category : #'*Gt4Llm-GToolkit' }
 GtPharoMethodCoder >> addReviewMethodMenuForAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns: 215>
+	<gtCoderContextMenuAddOns>
 	GtLlmFeatures isEnabledInCoder ifFalse: [ ^ self ].
-	coderAddOns
+	(coderAddOns
 		addContextMenuItem: 'Review method' asRopedText
 		group: BrMenuItemGroupConfiguration llm
 		hover: nil
@@ -36,5 +39,6 @@ GtPharoMethodCoder >> addReviewMethodMenuForAst: anAst to: coderAddOns from: aCo
 		action: [ :model :element | 
 			model llmChat
 				sendAction: (GtLlmActionCall action: 'Review method')
-				onAnswer: [ :anAnswer | element phlow spawnObject: anAnswer ] ]
+				onAnswer: [ :anAnswer | element phlow spawnObject: anAnswer ] ])
+		ifNotNil: [ :anAction | anAction priority: 215 ]
 ]
