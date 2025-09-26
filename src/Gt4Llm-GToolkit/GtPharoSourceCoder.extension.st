@@ -2,7 +2,6 @@ Extension { #name : #GtPharoSourceCoder }
 
 { #category : #'*Gt4Llm-GToolkit' }
 GtPharoSourceCoder >> addAssistantFormatMenuItemsFor: anAst to: coderAddOns from: aCoderViewModel [
-	<gtCoderContextMenuAddOns: 5>
 	<gtCoderContextMenuAddOns>
 	(aCoderViewModel behavior includesBehavior: GtLlmAssistant) ifFalse: [ ^ self ].
 	(self nodeFrom: aCoderViewModel)
