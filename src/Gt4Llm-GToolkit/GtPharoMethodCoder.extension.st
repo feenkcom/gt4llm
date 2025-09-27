@@ -2,7 +2,6 @@ Extension { #name : #GtPharoMethodCoder }
 
 { #category : #'*Gt4Llm-GToolkit' }
 GtPharoMethodCoder >> addRenameMethodMenuForAst: anAst to: coderAddOns from: aCoderViewModel [
-	<gtCoderContextMenuAddOns: 216>
 	<gtCoderContextMenuAddOns>
 	GtLlmFeatures isEnabledInCoder ifFalse: [ ^ self ].
 
@@ -28,7 +27,6 @@ GtPharoMethodCoder >> addRenameMethodMenuForAst: anAst to: coderAddOns from: aCo
 
 { #category : #'*Gt4Llm-GToolkit' }
 GtPharoMethodCoder >> addReviewMethodMenuForAst: anAst to: coderAddOns from: aCoderViewModel [
-	<gtCoderContextMenuAddOns: 215>
 	<gtCoderContextMenuAddOns>
 	GtLlmFeatures isEnabledInCoder ifFalse: [ ^ self ].
 	(coderAddOns
