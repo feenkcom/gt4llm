@@ -43,7 +43,7 @@ GtLlmChat >> gtMessagesWidgetFor: aView [
 		priority: 0;
 		stencil: [ self asElement ];
 		actionUpdateButton;
-		actionButtonIcon: BrGlamorousIcons trash
+		actionButtonIcon: BrGlamorousVectorIcons bin
 			tooltip: 'Delete history'
 			action: [ self reset ]
 ]
