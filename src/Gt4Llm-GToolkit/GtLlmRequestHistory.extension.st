@@ -4,7 +4,7 @@ Extension { #name : #GtLlmRequestHistory }
 GtLlmRequestHistory >> gtClearHistoryActionFor: anAction [
 	<gtAction>
 	^ anAction button
-		icon: BrGlamorousIcons trash;
+		icon: BrGlamorousVectorIcons bin;
 		tooltip: 'Clear';
 		priority: 80;
 		action: [ :aButton :aTab | 
