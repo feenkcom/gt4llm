@@ -131,7 +131,7 @@ GtLlmMessageStyler >> privateStyle: aText [
 	<return: #BlText>
 	| ast |
 	text := aText.
-	ast := LeParser parse: aText asString.
+	ast := LeParser parseWithErrors: aText asString.
 	self accept: ast.
 	^ aText
 ]
@@ -377,6 +377,49 @@ GtLlmMessageStyler >> styleButton: anAnnotation withTool: aBlock [
 		styleButton: anAnnotation
 		for: anAnnotation imageObject
 		withTool: aBlock
+]
+
+{ #category : #generated }
+GtLlmMessageStyler >> styleCodeBlockWithSmalltalkMethod: aCodeNode [
+	| smalltalkMethodParser result |
+	smalltalkMethodParser := (#letter asPParser
+			, (#letter asPParser / #digit asPParser / '_' asPParser) star flatten
+			, '>>' asPParser , #endOfInput asPParser negate plus flatten)
+			==> [ :t | 
+				{t first asString , t second.
+					t fourth} ].
+	result := smalltalkMethodParser parse: aCodeNode code value trim.
+	result isPetit2Failure
+		ifFalse: [ result first asSymbol
+				asClassIfPresent: [ :class | 
+					self text
+						attributes: {BrTextHideAttribute new}
+						from: aCodeNode begin startPosition
+						to: aCodeNode end stopPosition.
+					(text from: aCodeNode end stopPosition to: aCodeNode end stopPosition)
+						attributes: {BrTextAdornmentDynamicAttribute new
+									beAppend;
+									stencil: [ GtPharoMethodCoder new
+											forClass: class source: result second;
+											subscribeToSystem;
+											asExpandedOnlyElement ]} ] ]
+]
+
+{ #category : #generated }
+GtLlmMessageStyler >> styleCodeBlockWithSmalltalkSnippet: aCodeNode [
+	self text
+		attributes: {BrTextHideAttribute new}
+		from: aCodeNode begin startPosition
+		to: aCodeNode end stopPosition.
+	(text from: aCodeNode end stopPosition to: aCodeNode end stopPosition)
+		attributes: {BrTextAdornmentDynamicAttribute new
+					beAppend;
+					stencil: [ GtPharoSnippetCoder new
+							forSource: (self text
+									from: aCodeNode beginWithLanguageStopPosition + 1
+									to: aCodeNode end startPosition - 1) asString trim;
+							subscribeToSystem;
+							asExpandedOnlyElement ]}
 ]
 
 { #category : #accessing }
@@ -648,43 +691,9 @@ GtLlmMessageStyler >> visitCodeBlock: aCodeNode [
 		to: aCodeNode end startPosition - 1)
 		attributes: {BlTextHighlightAttribute paint: BrGlamorousColors neutralBackgroundColor}.
 	aCodeNode isForSmalltalk
-		ifTrue: [ self text
-				attributes: {BrTextHideAttribute new}
-				from: aCodeNode begin startPosition
-				to: aCodeNode end stopPosition.
-			(text from: aCodeNode end stopPosition to: aCodeNode end stopPosition)
-				attributes: {BrTextAdornmentDynamicAttribute new
-							beAppend;
-							stencil: [ GtPharoSnippetCoder new
-									forSource: (self text
-											from: aCodeNode beginWithLanguageStopPosition + 1
-											to: aCodeNode end startPosition - 1) asString trim;
-									subscribeToSystem;
-									asExpandedOnlyElement ]} ].
-
+		ifTrue: [ self styleCodeBlockWithSmalltalkSnippet: aCodeNode ].
 	aCodeNode language value = 'smalltalk-method'
-		ifTrue: [ | smalltalkMethodParser result |
-			smalltalkMethodParser := (#letter asPParser
-					, (#letter asPParser / #digit asPParser / '_' asPParser) star flatten
-					, '>>' asPParser , #endOfInput asPParser negate plus flatten)
-					==> [ :t | 
-						{t first asString , t second.
-							t fourth} ].
-			result := smalltalkMethodParser parse: aCodeNode code value trim.
-			result isPetit2Failure
-				ifFalse: [ result first asSymbol
-						asClassIfPresent: [ :class | 
-							self text
-								attributes: {BrTextHideAttribute new}
-								from: aCodeNode begin startPosition
-								to: aCodeNode end stopPosition.
-							(text from: aCodeNode end stopPosition to: aCodeNode end stopPosition)
-								attributes: {BrTextAdornmentDynamicAttribute new
-											beAppend;
-											stencil: [ GtPharoMethodCoder new
-													forClass: class source: result second;
-													subscribeToSystem;
-													asExpandedOnlyElement ]} ] ] ].
+		ifTrue: [ self styleCodeBlockWithSmalltalkMethod: aCodeNode ].
 	^ self visitContent: aCodeNode
 ]
 
