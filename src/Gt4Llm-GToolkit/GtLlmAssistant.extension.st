@@ -1,6 +1,22 @@
 Extension { #name : #GtLlmAssistant }
 
 { #category : #'*Gt4Llm-GToolkit' }
+GtLlmAssistant >> addInstructionSectionForLepiterPages: pageNames titled: title [
+	| instructionString |
+	instructionString := String cr
+			join: (pageNames
+					collect: [ :pageName | 
+						GtLlmLepiterContentExporter new
+							startHeaderLevel: 2;
+							page: (LeDatabase gtBook pageNamed: pageName);
+							export ]).
+	self
+		addInstructionSection: (GtLlmInstructionSection new
+				title: title;
+				body: instructionString)
+]
+
+{ #category : #'*Gt4Llm-GToolkit' }
 GtLlmAssistant >> gtActionsFor: aView [
 	<gtView>
 	| valueHolder |
