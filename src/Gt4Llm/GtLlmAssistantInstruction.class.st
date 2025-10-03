@@ -253,6 +253,14 @@ GtLlmAssistantInstruction >> replaceComponents: aListOfComponents [
 	formats removeAll addAll: aListOfComponents
 ]
 
+{ #category : #'as yet unclassified' }
+GtLlmAssistantInstruction >> replaceFormatNamed: aString with: aFormat [
+	self formats replace: [ :each | 
+		each name = aString
+			ifTrue: [ aFormat ]
+			ifFalse: [ each ] ].
+]
+
 { #category : #accessing }
 GtLlmAssistantInstruction >> sections [
 	^ sections
