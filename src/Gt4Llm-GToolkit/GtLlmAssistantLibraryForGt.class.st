@@ -1,0 +1,132 @@
+Class {
+	#name : #GtLlmAssistantLibraryForGt,
+	#superclass : #Object,
+	#category : #'Gt4Llm-GToolkit'
+}
+
+{ #category : #library }
+GtLlmAssistantLibraryForGt class >> codeFormatWithSnippetMethodClass [
+	^ GtLlmAssistantFormatDescription new
+		name: 'Code';
+		priority: 2;
+		format: 'Smalltalk code wrapped in an array JSON objects';
+		example: 'The result is a list of snippets, class definitions and method definitions. It is always an array, even if only one item is needed. Multiple items may be returned. Split the items based on their intent:
+- A snippet is annotated with the type `snippet` it contains Smalltalk scripts that can be executed independently. The code is in the `code` property.
+- A class definition is provided as a snippet, but should be specifically annotated with the type `class`.
+- A method definition is annotated with the type `method` and has a class it refers to.
+
+Smalltalk comments should always be escaped inside a JSON string like this: `"code": "\"this is a comment\" 1 + 2"`.
+
+Example:
+```json
+[
+	{"type": "snippet",
+	 "code": "55 @ (13 * (5 negatedArcTan))"},
+	{"type": "method",
+	 "class": "Number",
+	 "code": "invertedArcTan
+	 \"arctan but inverted\"
+	 ^ self arcTan negated"},
+	{"type": "class",
+	 "code": "Object subclass: #SomeClass
+	instanceVariableNames: ''someSlotA someSlotB''
+	classVariableNames: ''''
+	package: ''SomePackage''"},
+	{"type": "method",
+	 "class": "SomeClass",
+	 "classSide": true,
+	 "code": "classSideMethod
+	 ^ self new"}
+]
+```
+'
+]
+
+{ #category : #library }
+GtLlmAssistantLibraryForGt class >> codeFormatWithSnippetMethodClassAndSourceSnippet [
+	<gtLlmAssistantFormat>
+	^ GtLlmAssistantFormatDescription new
+		name: 'Code';
+		priority: 2;
+		format: 'Smalltalk code wrapped in an array of JSON objects';
+		example: 'The result is a list of snippets, class definitions and method definitions. It is always an array, even if only one item is needed. Multiple items may be returned. Split the items based on their intent:
+- A snippet is annotated with the type `snippet` it contains Smalltalk scripts that can be executed independently. The code is in the `code` property. The original snippet MUST ALWAYS be annotated with property `sourceSnippet` as `true`, no matter where in the list it is.
+- A class definition is provided as a snippet, but should be specifically annotated with the type `class`.
+- A method definition is annotated with the type `method` and has a class it refers to.
+
+Smalltalk comments should always be escaped inside a JSON string like this: `"code": "\"this is a comment\" 1 + 2"`.
+
+Example:
+```json
+[
+	{"type": "snippet",
+	 "code": "55 @ (13 * (5 negatedArcTan))",
+	 "sourceSnippet": true},
+	{"type": "method",
+	 "class": "Number",
+	 "code": "invertedArcTan
+	 \"arctan but inverted\"
+	 ^ self arcTan negated"},
+	{"type": "class",
+	 "code": "Object subclass: #SomeClass
+	instanceVariableNames: ''someSlotA someSlotB''
+	classVariableNames: ''''
+	package: ''SomePackage''"},
+	{"type": "method",
+	 "class": "SomeClass",
+	 "classSide": true,
+	 "code": "classSideMethod
+	 ^ self new"}
+]
+```
+
+Alternative order if another snippet is also added:
+```json
+[
+	{"type": "snippet",
+	 "code": "14 * 55"},
+	{"type": "snippet",
+	 "code": "55 @ (13 * (5 negatedArcTan))",
+	 "sourceSnippet": true},
+	{"type": "method",
+	 "class": "Number",
+	 "classSide": true,
+	 "code": "classSideMethod
+	 ^ self new instanceSideMethod"}
+]
+```'
+]
+
+{ #category : #librar }
+GtLlmAssistantLibraryForGt class >> textFormatWithBlocks [
+	^ GtLlmAssistantFormatDescription new
+		name: 'Text';
+		priority: 1;
+		format: 'Text';
+		example: 'The text is in Markdown. In addition, it also supports annotations for classes and methods.
+- Classes may be annotated using `{{gtClass:ClassName}}`, where `ClassName` is the name of the class to be referenced.
+- Methods may be annotated using `{{gtMethod:ClassName>>#methodName}}`, where `ClassName` is the name of the class and `methodName` is the name of the method.
+
+Code in text should be formatted as follows:
+- Smalltalk methods appear as:
+
+```smalltalk-method
+SomeClass>>someMethodWithArgument: val
+	^ self + val
+```
+
+- Smalltalk snippets appear as:
+
+```smalltalk
+Point x: 1 y: 10
+```
+
+- the definition of a new class should be provided in the form of a script:
+
+```smalltalk
+Object subclass: #SomeClass
+	instanceVariableNames: ''someSlotA someSlotB''
+	classVariableNames: ''
+	package: ''SomePackage''
+```'
+]
