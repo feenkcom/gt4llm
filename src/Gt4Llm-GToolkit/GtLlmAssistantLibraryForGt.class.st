@@ -97,8 +97,139 @@ Alternative order if another snippet is also added:
 ```'
 ]
 
-{ #category : #librar }
-GtLlmAssistantLibraryForGt class >> textFormatWithBlocks [
+{ #category : #tools }
+GtLlmAssistantLibraryForGt class >> getActionsTool [
+	^ GtLlmFunctionTool new
+		name: 'getClassActions';
+		parameters: {'className'};
+		description: 'Gets a class by name and returns a list of its actions.';
+		block: [ :functionCall | 
+			(functionCall anyArgument asClassIfAbsent: [ nil ])
+				ifNil: [ 'Class not found' ]
+				ifNotNil: [ :aClass | 
+					Character cr
+						join: ((Pragma
+								allNamed: #gtAction
+								from: aClass
+								to: Object) collect: #methodSelector) ] ]
+]
+
+{ #category : #tools }
+GtLlmAssistantLibraryForGt class >> getImplementorsTool [
+	^ GtLlmFunctionTool new
+		name: 'getImplementors';
+		parameters: {'methodName'};
+		description: 'Gets a method by name and returns a list of methods that implement it.';
+		block: [ :functionCall | 
+			Character cr
+				join: (functionCall anyArgument asSymbol gtImplementors result toArray wait collect: #name) ]
+]
+
+{ #category : #tools }
+GtLlmAssistantLibraryForGt class >> getMethodTool [
+	^ GtLlmFunctionTool new
+		name: 'getClassMethod';
+		parameters: {'className'. 'methodName'};
+		description: 'Gets a method by name and returns its source code.';
+		block: [ :functionCall | 
+			functionCall arguments
+				at: 'className'
+				ifPresent: [ :className | 
+					| class |
+					class := className asClassIfAbsent: [ nil ].
+					class
+						ifNil: [ 'Class not found' ]
+						ifNotNil: [ :aClass | 
+							functionCall arguments
+								at: 'methodName'
+								ifPresent: [ :methodName | 
+									aClass allMethods
+										detect: [ :aMethod | aMethod selector = methodName ]
+										ifFound: #sourceCode
+										ifNone: [ 'Method not found' ] ]
+								ifAbsent: [ 'Method not found' ] ] ] ]
+]
+
+{ #category : #tools }
+GtLlmAssistantLibraryForGt class >> getPropertyToolOn: anObject [
+	^ GtLlmFunctionTool new
+		name: 'getObjectProperty';
+		parameters: {'propertyName'};
+		description: 'Returns the property value by name. This can be an arbitrarily deeply nested accessor separated by spaces, including numbers to access a collection’s value by index (example: `property 2 collectionChildProperty`). Indices start at 1, not 0.';
+		block: [ :functionCall | 
+			self traverse: anObject using: (' ' split: functionCall anyArgument) ]
+]
+
+{ #category : #tools }
+GtLlmAssistantLibraryForGt class >> getReferencesTool [
+	^ GtLlmFunctionTool new
+		name: 'getReferences';
+		parameters: {'methodName'};
+		description: 'Gets a method by name and returns a list of methods that reference it.';
+		block: [ :functionCall | 
+			Character cr
+				join: (functionCall anyArgument asSymbol gtReferences result toArray wait collect: #name) ]
+]
+
+{ #category : #tools }
+GtLlmAssistantLibraryForGt class >> getViewsTool [
+	^ GtLlmFunctionTool new
+		name: 'getClassViews';
+		parameters: {'className'};
+		description: 'Gets a class by name and returns a list of its views.';
+		block: [ :functionCall | 
+			(functionCall anyArgument asClassIfAbsent: [ nil ])
+				ifNil: [ 'Class not found' ]
+				ifNotNil: [ :aClass | 
+					Character cr
+						join: ((Pragma
+								allNamed: #gtView
+								from: aClass
+								to: Object) collect: #methodSelector) ] ]
+]
+
+{ #category : #tools }
+GtLlmAssistantLibraryForGt class >> lookupClassTool [
+	^ GtLlmFunctionTool new
+		name: 'lookupClass';
+		parameters: {'className'};
+		description: 'Get the details of a class as JSON.';
+		block: [ :functionCall | 
+			(functionCall anyArgument asClassIfAbsent: [ nil ])
+				ifNil: [ 'Class not found' ]
+				ifNotNil: [ :aClass | STONJSON toString: (GtLlmValueSerializer new serializeClass: aClass) ] ]
+]
+
+{ #category : #tools }
+GtLlmAssistantLibraryForGt class >> lookupPageTool [
+	^ GtLlmFunctionTool new
+		name: 'lookupDocumentationPage';
+		parameters: {'pageName'};
+		description: 'Looks up a documentation page by name and returns its content in Markdown format. `pageName` may be a substring. If multiple pages are found, only the first one will be returned.';
+		block: [ :functionCall |
+			(LeDatabase gtBook asyncPagesForWord: functionCall anyArgument) toArray wait
+				ifEmpty: [ 'No page found' ]
+				ifNotEmpty: [ :pages | pages first asMarkdownPage ] ]
+]
+
+{ #category : #tools }
+GtLlmAssistantLibraryForGt class >> searchClassTool [
+	^ GtLlmFunctionTool new
+		name: 'searchClasses';
+		parameters: {'query'};
+		description: 'Searches for classes matching the query substring (case-insensitive).';
+		block: [ :functionCall | 
+			STONJSON
+				toString: ((GtSpotterSubstringsFilter new
+						withWordsSplitter;
+						beCaseSensitiveByCapitalization;
+						applyInScope: SystemNavigation default allClassesAndTraits asAsyncStream
+							context: (GtSpotterContext new searchQuery: functionCall anyArgument)) toArray wait
+						collect: #name) ]
+]
+
+{ #category : #library }
+GtLlmAssistantLibraryForGt class >> textFormatWithSmalltalkBlocks [
 	^ GtLlmAssistantFormatDescription new
 		name: 'Text';
 		priority: 1;
