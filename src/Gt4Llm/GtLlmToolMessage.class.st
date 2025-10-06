@@ -27,7 +27,7 @@ GtLlmToolMessage >> acceptVisitor: aVisitor [
 
 { #category : #'as yet unclassified' }
 GtLlmToolMessage >> action [
-	^ 'Tool call(' , self toolCall humanReadable , ')'
+	^ self toolCall humanReadable
 ]
 
 { #category : #'as yet unclassified' }

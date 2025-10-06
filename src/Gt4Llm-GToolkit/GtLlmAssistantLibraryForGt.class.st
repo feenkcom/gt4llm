@@ -115,6 +115,22 @@ GtLlmAssistantLibraryForGt class >> getActionsTool [
 ]
 
 { #category : #tools }
+GtLlmAssistantLibraryForGt class >> getClassReferencesTool [
+	^ GtLlmFunctionTool new
+		name: 'getClassReferences';
+		parameters: {'className'};
+		description: 'Gets a class by name and returns a list of methods that reference it.';
+		block: [ :functionCall | 
+			| class |
+			class := functionCall anyArgument asSymbol
+					asClassInEnvironment: [ :x | x ]
+					ifAbsent: [ nil ].
+			class
+				ifNil: [ 'Class not found' ]
+				ifNotNil: [ :c | Character cr join: (c gtReferences result toArray wait collect: #name) ] ]
+]
+
+{ #category : #tools }
 GtLlmAssistantLibraryForGt class >> getImplementorsTool [
 	^ GtLlmFunctionTool new
 		name: 'getImplementors';
@@ -123,6 +139,17 @@ GtLlmAssistantLibraryForGt class >> getImplementorsTool [
 		block: [ :functionCall | 
 			Character cr
 				join: (functionCall anyArgument asSymbol gtImplementors result toArray wait collect: #name) ]
+]
+
+{ #category : #tools }
+GtLlmAssistantLibraryForGt class >> getMethodReferencesTool [
+	^ GtLlmFunctionTool new
+		name: 'getMethodReferences';
+		parameters: {'methodName'};
+		description: 'Gets a method by name and returns a list of methods that reference it.';
+		block: [ :functionCall | 
+			Character cr
+				join: (functionCall anyArgument asSymbol gtReferences result toArray wait collect: #name) ]
 ]
 
 { #category : #tools }
@@ -158,17 +185,6 @@ GtLlmAssistantLibraryForGt class >> getPropertyToolOn: anObject [
 		description: 'Returns the property value by name. This can be an arbitrarily deeply nested accessor separated by spaces, including numbers to access a collection’s value by index (example: `property 2 collectionChildProperty`). Indices start at 1, not 0.';
 		block: [ :functionCall | 
 			self traverse: anObject using: (' ' split: functionCall anyArgument) ]
-]
-
-{ #category : #tools }
-GtLlmAssistantLibraryForGt class >> getReferencesTool [
-	^ GtLlmFunctionTool new
-		name: 'getReferences';
-		parameters: {'methodName'};
-		description: 'Gets a method by name and returns a list of methods that reference it.';
-		block: [ :functionCall | 
-			Character cr
-				join: (functionCall anyArgument asSymbol gtReferences result toArray wait collect: #name) ]
 ]
 
 { #category : #tools }
