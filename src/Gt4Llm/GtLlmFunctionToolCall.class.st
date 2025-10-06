@@ -82,10 +82,10 @@ GtLlmFunctionToolCall >> gtToolSourceCodeFor: aView [
 
 { #category : #'as yet unclassified' }
 GtLlmFunctionToolCall >> humanReadable [
-	^ self name , ' '
-		, (','
+	^ self name , ' ('
+		, (', '
 				join: (self arguments associations
-						collect: [ :anArgument | anArgument key , ': ' , anArgument value ]))
+						collect: [ :anArgument | anArgument key , ': ' , anArgument value ])), ')'
 ]
 
 { #category : #accessing }
