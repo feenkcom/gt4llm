@@ -91,7 +91,6 @@ GtLlmActionChat >> sendAction: anActionCall [
 
 { #category : #'as yet unclassified' }
 GtLlmActionChat >> sendAction: anActionCall onAnswer: aBlock [
-	GtJustContextStackSignal emit.
 	anActionCall subject ifNil: [ anActionCall subject: instance ].
 	self provider sendMessage: anActionCall serialize.
 	self executeWait: aBlock
