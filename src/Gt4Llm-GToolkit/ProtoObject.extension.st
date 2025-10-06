@@ -8,8 +8,6 @@ ProtoObject >> gtActionChatFor: anAction [
 	GtLlmConnectionRegistry instance hasConnectableDefaultConnection
 		ifFalse: [ ^ anAction empty ].
 
-
-
 	^ anAction button
 		priority: 100;
 		icon: BrGlamorousVectorIcons chat;

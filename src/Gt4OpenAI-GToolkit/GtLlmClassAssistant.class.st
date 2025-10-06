@@ -380,10 +380,7 @@ GtLlmClassAssistant >> serializerFor: aClass [
 
 { #category : #'as yet unclassified' }
 GtLlmClassAssistant >> treatProvider: aProvider [
-	| anInstance |
 	super treatProvider: aProvider.
-
-	anInstance := aProvider chat serializer instance.
 
 	aProvider
 		assistantMessageClass: GtOpenAIClassMessage;
