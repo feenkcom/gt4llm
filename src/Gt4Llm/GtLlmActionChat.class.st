@@ -1,6 +1,9 @@
 Class {
 	#name : #GtLlmActionChat,
 	#superclass : #GtLlmChat,
+	#instVars : [
+		'instance'
+	],
 	#category : #Gt4Llm
 }
 
@@ -42,14 +45,15 @@ GtLlmActionChat >> gtAssistantFormatsFor: aView [
 { #category : #'as yet unclassified' }
 GtLlmActionChat >> gtInstanceFor: aView [
 	<gtView>
-	
-	self gtDo: [] gemstoneDo: [ ^ aView empty ].
 
+	self gtDo: [] gemstoneDo: [ ^ aView empty ].
+	instance ifNil: [ ^ aView empty ].
+	
 	^ aView forward
 		title: 'Instance';
 		priority: 2;
-		object: [ self serializer ];
-		view: #gtInstanceFor:
+		object: [ instance ];
+		view: #gtLiveFor:
 ]
 
 { #category : #views }
@@ -63,9 +67,13 @@ GtLlmActionChat >> gtToolsFor: aView [
 ]
 
 { #category : #'as yet unclassified' }
+GtLlmActionChat >> instance [
+	^ instance
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmActionChat >> onInstance: anInstance [
-	self
-		serializer: (GtLlmActionMessageWithInstanceSerializer new instance: anInstance)
+	instance := anInstance
 ]
 
 { #category : #'as yet unclassified' }
@@ -83,20 +91,26 @@ GtLlmActionChat >> sendAction: anActionCall [
 
 { #category : #'as yet unclassified' }
 GtLlmActionChat >> sendAction: anActionCall onAnswer: aBlock [
-	self sendMessage: anActionCall.
-
+	anActionCall subject ifNil: [ anActionCall subject: instance ].
+	self provider sendMessage: anActionCall serialize.
 	self executeWait: aBlock
 ]
 
 { #category : #accessing }
 GtLlmActionChat >> sendChatRequest: aString [
-	self
-		sendMessage: (GtLlmActionCall new
+	^ self
+		sendAction: (GtLlmActionCall new
 				action: 'Chat';
 				arguments: {aString})
 ]
 
+{ #category : #accessing }
+GtLlmActionChat >> sendMessage: aMessage [
+	self assert: (aMessage isKindOf: GtLlmActionCall).
+	^ self sendAction: aMessage
+]
+
 { #category : #'as yet unclassified' }
 GtLlmActionChat >> updateInstance: aValue [
-	self serializer update: aValue
+	instance updateContent: aValue aValue
 ]

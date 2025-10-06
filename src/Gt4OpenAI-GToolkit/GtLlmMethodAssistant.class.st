@@ -166,7 +166,7 @@ GtLlmMethodAssistant >> treatProvider: aProvider [
 	| aCoderViewModel |
 	super treatProvider: aProvider.
 
-	aCoderViewModel := aProvider chat serializer instance content.
+	aCoderViewModel := aProvider chat instance content.
 	aProvider
 		tools: self collectTools;
 		addTool: (self getPropertyToolOn: aCoderViewModel selfObject).

@@ -4,7 +4,7 @@ Class {
 	#category : #'Gt4OpenAI-GToolkit-Coder'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #actions }
 GtLlmObjectAssistant >> actionProposalAction [
 	<gtLlmAssistantAction>
 	^ GtLlmAssistantAction new
@@ -43,7 +43,7 @@ GtLlmObjectAssistant >> chatOn: anObject [
 	^ chat
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #formats }
 GtLlmObjectAssistant >> codeFormatDescription [
 	<gtLlmAssistantFormat>
 	^ GtLlmAssistantFormatDescription new
@@ -87,7 +87,7 @@ GtLlmObjectAssistant >> defaultDescription [
 	^ 'You are an assistant for objects in Glamorous Toolkit.'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #actions }
 GtLlmObjectAssistant >> explanationAction [
 	<gtLlmAssistantAction>
 	^ GtLlmAssistantAction new
@@ -109,7 +109,7 @@ GtLlmObjectAssistant >> explanationAction [
 							asDictionary}
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tools }
 GtLlmObjectAssistant >> getActionsTool [
 	<gtLlmTool>
 	^ GtLlmFunctionTool new
@@ -127,7 +127,7 @@ GtLlmObjectAssistant >> getActionsTool [
 								to: Object) collect: #methodSelector) ] ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tools }
 GtLlmObjectAssistant >> getImplementorsTool [
 	<gtLlmTool>
 	^ GtLlmFunctionTool new
@@ -139,7 +139,7 @@ GtLlmObjectAssistant >> getImplementorsTool [
 				join: (functionCall anyArgument asSymbol gtImplementors result toArray wait collect: #name) ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tools }
 GtLlmObjectAssistant >> getMethodTool [
 	<gtLlmTool>
 	^ GtLlmFunctionTool new
@@ -165,7 +165,7 @@ GtLlmObjectAssistant >> getMethodTool [
 								ifAbsent: [ 'Method not found' ] ] ] ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tools }
 GtLlmObjectAssistant >> getPropertyToolOn: anObject [
 	^ GtLlmFunctionTool new
 		name: 'getObjectProperty';
@@ -175,7 +175,7 @@ GtLlmObjectAssistant >> getPropertyToolOn: anObject [
 			self traverse: anObject using: (' ' split: functionCall anyArgument) ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tools }
 GtLlmObjectAssistant >> getReferencesTool [
 	<gtLlmTool>
 	^ GtLlmFunctionTool new
@@ -187,7 +187,7 @@ GtLlmObjectAssistant >> getReferencesTool [
 				join: (functionCall anyArgument asSymbol gtReferences result toArray wait collect: #name) ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tools }
 GtLlmObjectAssistant >> getViewsTool [
 	<gtLlmTool>
 	^ GtLlmFunctionTool new
@@ -205,7 +205,7 @@ GtLlmObjectAssistant >> getViewsTool [
 								to: Object) collect: #methodSelector) ] ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tools }
 GtLlmObjectAssistant >> lookupClassTool [
 	<gtLlmTool>
 	^ GtLlmFunctionTool new
@@ -218,7 +218,7 @@ GtLlmObjectAssistant >> lookupClassTool [
 				ifNotNil: [ :aClass | STONJSON toString: (GtLlmValueSerializer new serializeClass: aClass) ] ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tools }
 GtLlmObjectAssistant >> lookupPageTool [
 	<gtLlmTool>
 	^ GtLlmFunctionTool new
@@ -231,7 +231,7 @@ GtLlmObjectAssistant >> lookupPageTool [
 				ifNotEmpty: [ :pages | pages first asMarkdownPage ] ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #formats }
 GtLlmObjectAssistant >> objectFormatDescription [
 	<gtLlmAssistantFormat>
 	^ GtLlmAssistantFormatDescription new
@@ -243,7 +243,7 @@ GtLlmObjectAssistant >> objectFormatDescription [
 ```'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #sections }
 GtLlmObjectAssistant >> phlowInstructionSection [
 	<gtLlmInstructionSection>
 	^ GtLlmInstructionSection new
@@ -332,7 +332,7 @@ gtForwardFor: aView
 ```'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #sections }
 GtLlmObjectAssistant >> responseFormatSection [
 	<gtLlmInstructionSection>
 	^ GtLlmInstructionSection new
@@ -366,7 +366,7 @@ Object subclass: #SomeClass
 ```'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tools }
 GtLlmObjectAssistant >> searchClassTool [
 	<gtLlmTool>
 	^ GtLlmFunctionTool new
@@ -421,7 +421,7 @@ GtLlmObjectAssistant >> treatProvider: aProvider [
 	| anInstance |
 	super treatProvider: aProvider.
 
-	anInstance := aProvider chat serializer instance.
+	anInstance := aProvider chat instance.
 	anInstance
 		ifNotNil: [ aProvider addTool: (self getPropertyToolOn: anInstance) ].
 
@@ -430,7 +430,7 @@ GtLlmObjectAssistant >> treatProvider: aProvider [
 		userMessageClass: GtOpenAIObjectMessage
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #actions }
 GtLlmObjectAssistant >> viewProposalAction [
 	<gtLlmAssistantAction>
 	^ GtLlmAssistantAction new
