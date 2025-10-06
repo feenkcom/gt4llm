@@ -18,9 +18,77 @@ GtLlmAssistantExamples >> assistantChat [
 ]
 
 { #category : #'as yet unclassified' }
+GtLlmAssistantExamples >> assistantChatWithInstance [
+	<gtExample>
+	| assistant chat |
+	assistant := self assistantWithActionAndFormatAdded.
+	chat := assistant createChatWithProvider: GtLlmNullProvider new.
+	chat onInstance: (GtLlmSerializableValueHolder new
+		name: 'SomeNumber';
+		content: 42;
+		serializer: [ :aModel | GtLlmValueSerializer new serializeValue: aModel ];
+		updater: [ :object :aString | self error: 'Unimplemented' ]).
+	
+	self assert: (chat provider isKindOf: GtLlmNullProvider).
+	self assert: chat provider chat equals: chat.
+
+	^ chat
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmAssistantExamples >> assistantChatWithInstanceWithMessage [
+	<gtExample>
+	| chat serialized |
+	chat := self assistantChatWithInstance.
+
+	chat sendAction: (GtLlmActionCall action: 'example' arguments: {}).
+
+	self assert: chat status isDone.
+	self assert: chat messages size equals: 1.
+	self assert: chat messages last action equals: 'example'.
+	serialized := STONJSON fromString: chat messages last content.
+	self assert: serialized isDictionary.
+	self assert: serialized size = 3.
+	self assert: (serialized at: 'Action') = 'example'.
+	self assert: (serialized at: 'Arguments') isEmpty.
+	self assert: (serialized includesKey: 'SomeNumber').
+
+	^ chat
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmAssistantExamples >> assistantChatWithInstanceWithMessageIncludingSubject [
+	<gtExample>
+	| chat serialized |
+	chat := self assistantChatWithInstance.
+	chat
+		sendAction: (GtLlmActionCall new
+				action: 'example';
+				arguments: {};
+				subject: (GtLlmSerializableValueHolder new
+						name: 'SomeOtherNumber';
+						content: 4242;
+						serializer: [ :aModel | GtLlmValueSerializer new serializeValue: aModel ];
+						updater: [ :object :aString | self error: 'Unimplemented' ])).
+
+	self assert: chat status isDone.
+	self assert: chat messages size equals: 1.
+	self assert: chat messages last action equals: 'example'.
+	serialized := STONJSON fromString: chat messages last content.
+	self assert: serialized isDictionary.
+	self assert: serialized size = 3.
+	self assert: (serialized at: 'Action') = 'example'.
+	self assert: (serialized at: 'Arguments') isEmpty.
+	self assert: (serialized includesKey: 'SomeNumber') not.
+	self assert: (serialized includesKey: 'SomeOtherNumber').
+
+	^ chat
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmAssistantExamples >> assistantChatWithMessage [
 	<gtExample>
-	| chat |
+	| chat serialized |
 	chat := self assistantChat.
 
 	chat sendAction: (GtLlmActionCall action: 'example' arguments: {}).
@@ -28,6 +96,11 @@ GtLlmAssistantExamples >> assistantChatWithMessage [
 	self assert: chat status isDone.
 	self assert: chat messages size equals: 1.
 	self assert: chat messages last action equals: 'example'.
+	serialized := STONJSON fromString: chat messages last content.
+	self assert: serialized isDictionary.
+	self assert: serialized size = 2.
+	self assert: (serialized at: 'Action') = 'example'.
+	self assert: (serialized at: 'Arguments') isEmpty.
 
 	^ chat
 ]
