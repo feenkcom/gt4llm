@@ -49,7 +49,7 @@ GtWardleyMapModel >> menuItemReviewMapButton [
 		label: 'Review the current state';
 		action: [ :aContextMenuItem :aBrButton :aBrButtonModel :anEvent | 
 			aContextMenuItem llm
-				sendAction: (GtLlmActionCall action: 'Review the current state' arguments: {})
+				sendAction: (GtLlmActionCall action: 'Review the current state')
 				onAnswer: [ :aMessage | 
 					aContextMenuItem wardleyMapViewModel onActionFinished.
 					aContextMenuItem editorElement phlow spawnObject: aMessage textBlock ].

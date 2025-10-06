@@ -147,7 +147,7 @@ GtOpenAICodeSnippetActionMessage >> methodCode [
 
 { #category : #'as yet unclassified' }
 GtOpenAICodeSnippetActionMessage >> selfObject [
-	^ self chat serializer instance content selfObject
+	^ self chat instance content selfObject
 ]
 
 { #category : #'as yet unclassified' }

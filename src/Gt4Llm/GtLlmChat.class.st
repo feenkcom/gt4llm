@@ -6,8 +6,7 @@ Class {
 		'lastUpdate',
 		'assistant',
 		'provider',
-		'messages',
-		'serializer'
+		'messages'
 	],
 	#category : #Gt4Llm
 }
@@ -19,7 +18,7 @@ GtLlmChat class >> leJsonV4AttributeMapping [
 
 	^ { #lastUpdate -> #lastUpdate.
 		#messages -> #messages.
-		#serializer -> #serializer. }
+		"#serializer -> #serializer." }
 ]
 
 { #category : #accessing }
@@ -95,11 +94,6 @@ GtLlmChat >> buildDefaultProvider [
 ]
 
 { #category : #accessing }
-GtLlmChat >> defaultSerializer [
-	^ GtLlmMessageSerializer new
-]
-
-{ #category : #accessing }
 GtLlmChat >> descendantOf: aMessage [
 	messages
 		withIndexDo: [ :possibleAncestor :index | 
@@ -135,8 +129,6 @@ GtLlmChat >> hasProvider [
 GtLlmChat >> initialize [
 	super initialize.
 	
-	self serializer: self defaultSerializer.
-	
 	self initializeMessages.
 	
 	self updateLastUpdate
@@ -155,11 +147,6 @@ GtLlmChat >> lastUpdate [
 { #category : #accessing }
 GtLlmChat >> lastUpdate: anObject [
 	lastUpdate := anObject
-]
-
-{ #category : #'as yet unclassified' }
-GtLlmChat >> messageFromString: aString [
-	^  serializer serialize: aString
 ]
 
 { #category : #accessing }
@@ -220,22 +207,13 @@ GtLlmChat >> responseFormat [
 GtLlmChat >> sendFiles: aListOfFileReferences withMessage: aString [
 	self provider
 		sendFiles: aListOfFileReferences
-		withMessage: (self messageFromString: aString)
+		withMessage: aString
 ]
 
 { #category : #accessing }
 GtLlmChat >> sendMessage: aMessage [
-	self provider sendMessage: (self messageFromString: aMessage)
-]
-
-{ #category : #accessing }
-GtLlmChat >> serializer [
-	^ serializer
-]
-
-{ #category : #accessing }
-GtLlmChat >> serializer: anObject [
-	serializer := anObject
+	self assert: aMessage isString.
+	self provider sendMessage: aMessage
 ]
 
 { #category : #'as yet unclassified' }

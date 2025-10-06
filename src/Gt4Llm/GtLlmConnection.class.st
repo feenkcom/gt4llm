@@ -11,8 +11,9 @@ Class {
 
 { #category : #'as yet unclassified' }
 GtLlmConnection >> = anotherConnection [
-	^ self model = anotherConnection model
-		and: [ self provider = anotherConnection provider ]
+	^anotherConnection class = self class and: 
+			[self model = anotherConnection model
+				and: [self provider = anotherConnection provider]]
 ]
 
 { #category : #'as yet unclassified' }

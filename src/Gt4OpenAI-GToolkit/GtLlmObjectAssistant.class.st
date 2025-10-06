@@ -421,7 +421,7 @@ GtLlmObjectAssistant >> treatProvider: aProvider [
 	| anInstance |
 	super treatProvider: aProvider.
 
-	anInstance := aProvider chat serializer instance.
+	anInstance := aProvider chat instance.
 	anInstance
 		ifNotNil: [ aProvider addTool: (self getPropertyToolOn: anInstance) ].
 
