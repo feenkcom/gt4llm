@@ -119,28 +119,24 @@ GtMcpServerExamples >> serverWithResource [
 { #category : #'as yet unclassified' }
 GtMcpServerExamples >> serverWithTool [
 	<gtExample>
-	| server request response |
+	| server |
 	server := self simpleServer.
-
 	server addTool: self simpleServerTool.
-
 	self assert: server tools size equals: 1.
+	^ server
+]
 
-	request := self
-			serverRequestWithEntity: {'jsonrpc' -> '2.0'.
-					'method' -> 'tools/list'} asDictionary.
-	response := server handleRequest: request.
-
-	self
-		assert: ((STONJSON fromString: response entity contents) at: 'result' at: 'tools') size
-		equals: 1.
+{ #category : #'as yet unclassified' }
+GtMcpServerExamples >> serverWithToolWithBadRequestAndResponse [
+	<gtExample>
+	| server request response |
+	server := self serverWithTool.
 
 	request := self
 			serverRequestWithEntity: {'jsonrpc' -> '2.0'.
 					'method' -> 'tools/call'.
 					'params' -> {'invalid' -> 1} asDictionary} asDictionary.
 	response := server handleRequest: request.
-
 	self assert: response equals: (ZnResponse badRequest: request).
 
 	request := self
@@ -148,22 +144,39 @@ GtMcpServerExamples >> serverWithTool [
 					'method' -> 'tools/call'.
 					'params' -> {'name' -> 'notFound'} asDictionary} asDictionary.
 	response := server handleRequest: request.
-
 	self assert: response equals: (ZnResponse badRequest: request).
 
+	^ server
+]
+
+{ #category : #'as yet unclassified' }
+GtMcpServerExamples >> serverWithToolWithSuccessfulRequestAndResponse [
+	<gtExample>
+	| server request response jsonResultContent jsonResultTools |
+	server := self serverWithTool.
+
+	request := self
+			serverRequestWithEntity: {'jsonrpc' -> '2.0'.
+					'method' -> 'tools/list'} asDictionary.
+	response := server handleRequest: request.
+	jsonResultTools := (STONJSON fromString: response entity contents)
+			at: 'result'
+			at: 'tools'.
+	self assert: jsonResultTools size equals: 1.
 
 	request := self
 			serverRequestWithEntity: {'jsonrpc' -> '2.0'.
 					'method' -> 'tools/call'.
 					'params'
 						-> {'name' -> 'Tool'.
-								'arguments' -> {'params' -> 'hello from tool'} asDictionary}
+								'arguments' -> {'param' -> 'hello from tool'} asDictionary}
 								asDictionary} asDictionary.
 	response := server handleRequest: request.
-
+	jsonResultContent := (STONJSON fromString: response entity contents)
+			at: 'result'
+			at: 'content'.
 	self
-		assert: ((STONJSON fromString: response entity contents) at: 'result' at: 'content')
-				first
+		assert: jsonResultContent first
 		equals: {'text' -> 'hello from tool'.
 				'type' -> 'text'} asDictionary.
 
