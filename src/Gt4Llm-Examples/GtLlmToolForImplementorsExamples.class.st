@@ -15,8 +15,9 @@ GtLlmToolForImplementorsExamples >> implementorsForExistingMethodName [
 		'arguments' -> {'methodName' -> 'performToolCall:'} asDictionary
 	} asDictionary.
 	result := tool performToolCall: call.
+	self assert: call tool == tool.
 	self assert: result isEmpty not.
-	self assert: (result includesSubstring: 'GtLlmToolForImplementors>>#performToolCall:').
+	self assert: (result includesSubstring: 'GtLlmAbstractFunctionTool>>#performToolCall:').
 	^ tool
 ]
 
@@ -31,6 +32,7 @@ GtLlmToolForImplementorsExamples >> implementorsForUnknownMethodName [
 		'arguments' -> {'methodName' -> 'unknownMethodName42'} asDictionary
 	} asDictionary.
 	result := tool performToolCall: call.
+	self assert: call tool == tool.
 	self assert: result equals: 'No implementors found'.
 	^ tool
 ]

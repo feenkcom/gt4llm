@@ -25,7 +25,7 @@ GtLlmToolForDocumentationLookup >> parameters [
 ]
 
 { #category : #'llm-generated' }
-GtLlmToolForDocumentationLookup >> performToolCall: aToolCall [
+GtLlmToolForDocumentationLookup >> privatePerformToolCall: aToolCall [
 	| arguments pageName pages |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	pageName := arguments at: 'pageName' ifAbsent: [ ^ 'Page name not provided' ].

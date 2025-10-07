@@ -110,20 +110,21 @@ GtLlmFunctionTool >> parameters: anObject [
 	parameters := anObject
 ]
 
-{ #category : #'as yet unclassified' }
-GtLlmFunctionTool >> performToolCall: aGtLlmFunctionToolCall [
+{ #category : #'llm-generated' }
+GtLlmFunctionTool >> privatePerformToolCall: aGtLlmFunctionToolCall [
 	| result |
 	self
 		assert: block isNotNil
 		description: [ 'Trying to call a function without a block' ].
 	self
 		assert: aGtLlmFunctionToolCall arguments keys asSet = parameters asSet
-		description: [ 'The arguments of the function call do not match the parameters of the tool' ].	"Commented due to Gemstone:
+		description: [ 'The arguments of the function call do not match the parameters of the tool' ].
+	"Commented due to Gemstone:
 	(GtLlmFunctionCallAboutToBePerformedSignal new
 		tool: self;
 		functionCall: aGtLlmFunctionToolCall) emit."
 	result := block value: aGtLlmFunctionToolCall.
-	aGtLlmFunctionToolCall performedByTool: self.	"Commented due to Gemstone:
+	"Commented due to Gemstone:
 	(GtLlmFunctionCallPerformedSignal new
 		tool: self;
 		functionCall: aGtLlmFunctionToolCall) emit."

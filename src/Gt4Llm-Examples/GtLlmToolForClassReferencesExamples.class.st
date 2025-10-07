@@ -15,6 +15,7 @@ GtLlmToolForClassReferencesExamples >> classReferencesForExistingClass [
 		'arguments' -> {'className' -> 'GtLlmToolForClassReferences'} asDictionary
 	} asDictionary.
 	result := tool performToolCall: call.
+	self assert: call tool == tool.
 	self assert: result isEmpty not.
 	self assert: (result includesSubstring: 'GtLlmToolForClassReferencesExamples').
 	^ tool
@@ -31,6 +32,7 @@ GtLlmToolForClassReferencesExamples >> classReferencesForUnknownClass [
 		'arguments' -> {'className' -> 'NonExistingClassName'} asDictionary
 	} asDictionary.
 	result := tool performToolCall: call.
+	self assert: call tool == tool.
 	self assert: result equals: 'Class not found'.
 	^ tool
 ]

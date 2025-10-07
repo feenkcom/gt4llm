@@ -29,8 +29,8 @@ GtLlmToolForClassReferences >> parameters [
 	^ #('className')
 ]
 
-{ #category : #'as yet unclassified' }
-GtLlmToolForClassReferences >> performToolCall: aToolCall [
+{ #category : #'llm-generated' }
+GtLlmToolForClassReferences >> privatePerformToolCall: aToolCall [
 	| class |
 	class := aToolCall anyArgument asSymbol asClassIfAbsent: [ nil ].
 	^ class
