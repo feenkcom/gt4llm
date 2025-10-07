@@ -4,7 +4,7 @@ Class {
 	#category : #'Gt4Llm-GToolkit'
 }
 
-{ #category : #accessing }
+{ #category : #'as yet unclassified' }
 GtLlmToolForClassReferences class >> leJsonV4Name [
 	^ #gtLlmToolForClassReferences
 ]
