@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'description',
 		'parameters',
-		'block'
+		'block',
+		'name'
 	],
 	#category : #Gt4Llm
 }
@@ -36,11 +37,6 @@ GtLlmFunctionTool >> block: anObject [
 	block := anObject
 ]
 
-{ #category : #'as yet unclassified' }
-GtLlmFunctionTool >> defaultType [
-	^ 'function'
-]
-
 { #category : #accessing }
 GtLlmFunctionTool >> description [
 	^ description
@@ -53,7 +49,7 @@ GtLlmFunctionTool >> description: anObject [
 
 { #category : #accessing }
 GtLlmFunctionTool >> function [
-	^ {'name' -> name.
+	^ {'name' -> self name.
 		'description' -> self description.
 		'parameters'
 			-> {'type' -> 'object'.
@@ -67,9 +63,9 @@ GtLlmFunctionTool >> function [
 
 { #category : #accessing }
 GtLlmFunctionTool >> functionResponse [
-	^ {'name' -> name.
-		'type' -> type.
-		'description' -> description.
+	^ {'name' -> self name.
+		'type' -> self type.
+		'description' -> self description.
 		'parameters'
 			-> {'type' -> 'object'.
 					'properties'
@@ -121,12 +117,22 @@ GtLlmFunctionTool >> initialize [
 { #category : #'as yet unclassified' }
 GtLlmFunctionTool >> method [
 	| split class methodName |
-	name ifNil: [ ^ nil ].
+	self name ifNil: [ ^ nil ].
 
-	split := '_' split: name.
+	split := '_' split: self name.
 	class := split first asClassIfAbsent: [ ^ nil ].
 	methodName := ':' join: split allButFirst.
 	^ [ class >> methodName asSymbol ] on: Error do: [ nil ]
+]
+
+{ #category : #accessing }
+GtLlmFunctionTool >> name [
+	^ name
+]
+
+{ #category : #accessing }
+GtLlmFunctionTool >> name: anObject [
+	name := anObject
 ]
 
 { #category : #accessing }
@@ -157,4 +163,9 @@ GtLlmFunctionTool >> performToolCall: aGtLlmFunctionToolCall [
 		tool: self;
 		functionCall: aGtLlmFunctionToolCall) emit."
 	^ result
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmFunctionTool >> type [
+	^ 'function'
 ]
