@@ -8,7 +8,7 @@ Class {
 		'params',
 		'result'
 	],
-	#category : #'Gt4Llm-GToolkit'
+	#category : #'Gt4Llm-GToolkit-Mcp'
 }
 
 { #category : #'as yet unclassified' }

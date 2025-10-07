@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLlmModelFileExamples,
 	#superclass : #Object,
-	#category : #'Gt4Llm-GToolkit'
+	#category : #'Gt4Llm-GToolkit-Examples'
 }
 
 { #category : #asserting }
