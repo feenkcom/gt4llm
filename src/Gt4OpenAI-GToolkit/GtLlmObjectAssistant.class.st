@@ -367,7 +367,7 @@ Object subclass: #SomeClass
 ]
 
 { #category : #tools }
-GtLlmObjectAssistant >> searchClassTool [
+GtLlmObjectAssistant >> searchClassesTool [
 	<gtLlmTool>
 	^ GtLlmFunctionTool new
 		name: 'searchClasses';

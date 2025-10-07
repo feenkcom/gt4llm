@@ -353,7 +353,7 @@ Object subclass: #SomeClass
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmClassAssistant >> searchClassTool [
+GtLlmClassAssistant >> searchClassesTool [
 	<gtLlmTool>
 	^ GtLlmFunctionTool new
 		name: 'searchClasses';

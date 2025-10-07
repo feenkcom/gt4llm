@@ -88,6 +88,16 @@ GtLlmFunctionTool >> gtBlockSourceCodeFor: aView [
 		view: #gtSourceCodeFor:
 ]
 
+{ #category : #views }
+GtLlmFunctionTool >> gtFunctionFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Function';
+		priority: 1;
+		object: [ self function ];
+		view: #gtItemsFor:
+]
+
 { #category : #'as yet unclassified' }
 GtLlmFunctionTool >> gtMethodFor: aView [
 	<gtView>
@@ -135,13 +145,14 @@ GtLlmFunctionTool >> performToolCall: aGtLlmFunctionToolCall [
 	self
 		assert: block isNotNil
 		description: [ 'Trying to call a function without a block' ].
-	"Commented due to Gemstone:
+	self
+		assert: aGtLlmFunctionToolCall arguments keys asSet = parameters asSet
+		description: [ 'The arguments of the function call do not match the parameters of the tool' ].	"Commented due to Gemstone:
 	(GtLlmFunctionCallAboutToBePerformedSignal new
 		tool: self;
 		functionCall: aGtLlmFunctionToolCall) emit."
 	result := block value: aGtLlmFunctionToolCall.
-	aGtLlmFunctionToolCall performedByTool: self.
-	"Commented due to Gemstone:
+	aGtLlmFunctionToolCall performedByTool: self.	"Commented due to Gemstone:
 	(GtLlmFunctionCallPerformedSignal new
 		tool: self;
 		functionCall: aGtLlmFunctionToolCall) emit."
