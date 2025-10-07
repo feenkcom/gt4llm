@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLlmToolForImplementorsExamples,
-	#superclass : #GtLlmToolExamples,
+	#superclass : #Object,
 	#category : #'Gt4Llm-Examples'
 }
 
