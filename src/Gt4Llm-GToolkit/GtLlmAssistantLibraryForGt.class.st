@@ -123,8 +123,7 @@ GtLlmAssistantLibraryForGt class >> getClassReferencesTool [
 		block: [ :functionCall | 
 			| class |
 			class := functionCall anyArgument asSymbol
-					asClassInEnvironment: [ :x | x ]
-					ifAbsent: [ nil ].
+					asClassIfAbsent: [ nil ].
 			class
 				ifNil: [ 'Class not found' ]
 				ifNotNil: [ :c | Character cr join: (c gtReferences result toArray wait collect: #name) ] ]
