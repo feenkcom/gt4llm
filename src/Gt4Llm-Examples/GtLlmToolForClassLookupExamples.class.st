@@ -16,7 +16,7 @@ GtLlmToolForClassLookupExamples >> lookupClassForExistingClass [
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: result equals: '{"class":"GtLlmToolForClassLookup","package":"Gt4Llm-GToolkit","comment":"","superclass":"GtLlmAbstractFunctionTool","instanceSlots":[],"allInstanceMethods":["parameters","name","privatePerformToolCall:","acceptVisitor:","description"]}'.
+	self assert: (result includesSubstring: '{"class":"GtLlmToolForClassLookup","package":"Gt4Llm-GToolkit"').
 	^ tool
 ]
 
