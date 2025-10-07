@@ -9,7 +9,7 @@ Class {
 		'imagesElement',
 		'sendButton'
 	],
-	#category : #'Gt4Llm-GToolkit'
+	#category : #'Gt4Llm-GToolkit-UI'
 }
 
 { #category : #factory }

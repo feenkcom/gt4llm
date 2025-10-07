@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLlmInspectorSummarizer,
 	#superclass : #Object,
-	#category : #'Gt4Llm-GToolkit'
+	#category : #'Gt4Llm-GToolkit-UI'
 }
 
 { #category : #accessing }

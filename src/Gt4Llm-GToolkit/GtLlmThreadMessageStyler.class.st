@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'annotations'
 	],
-	#category : #'Gt4Llm-GToolkit'
+	#category : #'Gt4Llm-GToolkit-UI'
 }
 
 { #category : #accessing }
