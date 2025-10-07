@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLlmFunctionTool,
-	#superclass : #GtLlmTool,
+	#superclass : #GtLlmAbstractFunctionTool,
 	#instVars : [
 		'description',
 		'parameters',
@@ -12,18 +12,11 @@ Class {
 
 { #category : #accessing }
 GtLlmFunctionTool class >> leJsonV4Name [
-
 	^ #gtLlmFunctionTool
-]
-
-{ #category : #'as yet unclassified' }
-GtLlmFunctionTool class >> serializationProperties [
-	^ {#type -> #type. #function -> #function}
 ]
 
 { #category : #visiting }
 GtLlmFunctionTool >> acceptVisitor: aVisitor [
-
 	^ aVisitor visitGtLlmFunctionTool: self
 ]
 
@@ -45,34 +38,6 @@ GtLlmFunctionTool >> description [
 { #category : #accessing }
 GtLlmFunctionTool >> description: anObject [
 	description := anObject
-]
-
-{ #category : #accessing }
-GtLlmFunctionTool >> function [
-	^ {'name' -> self name.
-		'description' -> self description.
-		'parameters'
-			-> {'type' -> 'object'.
-					'properties'
-						-> (parameters collect: [ :aName | aName -> {'type' -> 'string'} asDictionary ])
-								asDictionary.
-					'required' -> parameters.
-					'additionalProperties' -> false} asDictionary.
-		'strict' -> true} asDictionary
-]
-
-{ #category : #accessing }
-GtLlmFunctionTool >> functionResponse [
-	^ {'name' -> self name.
-		'type' -> self type.
-		'description' -> self description.
-		'parameters'
-			-> {'type' -> 'object'.
-					'properties'
-						-> (parameters collect: [ :aName | aName -> {'type' -> 'string'} asDictionary ])
-								asDictionary.
-					'required' -> parameters.
-					'additionalProperties' -> false} asDictionary} asDictionary
 ]
 
 { #category : #views }
@@ -163,9 +128,4 @@ GtLlmFunctionTool >> performToolCall: aGtLlmFunctionToolCall [
 		tool: self;
 		functionCall: aGtLlmFunctionToolCall) emit."
 	^ result
-]
-
-{ #category : #'as yet unclassified' }
-GtLlmFunctionTool >> type [
-	^ 'function'
 ]
