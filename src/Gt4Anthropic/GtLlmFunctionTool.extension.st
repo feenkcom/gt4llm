@@ -2,7 +2,7 @@ Extension { #name : #GtLlmFunctionTool }
 
 { #category : #'*Gt4Anthropic' }
 GtLlmFunctionTool >> functionAnthropic [
-	^ {'name' -> name.
+	^ {'name' -> self name.
 		'description' -> self description.
 		'input_schema'
 			-> {'type' -> 'object'.

@@ -20,11 +20,6 @@ GtLlmFileSearchTool >> acceptVisitor: aVisitor [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmFileSearchTool >> defaultType [
-	^ 'file_search'
-]
-
-{ #category : #'as yet unclassified' }
 GtLlmFileSearchTool >> description [
 	^ 'Search the files attached to the chat'
 ]
@@ -50,6 +45,11 @@ GtLlmFileSearchTool >> name [
 { #category : #'as yet unclassified' }
 GtLlmFileSearchTool >> parameters [
 	^ #()
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmFileSearchTool >> type [
+	^ 'file_search'
 ]
 
 { #category : #accessing }

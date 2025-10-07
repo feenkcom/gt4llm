@@ -2,7 +2,7 @@ Extension { #name : #GtLlmFunctionTool }
 
 { #category : #'*Gt4Gemini' }
 GtLlmFunctionTool >> functionGemini [
-	^ {'name' -> name.
+	^ {'name' -> self name.
 		'description' -> self description.
 		'parameters'
 			-> {'type' -> 'object'.
