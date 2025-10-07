@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLlmToolForClassReferencesExamples,
-	#superclass : #GtLlmToolExamples,
+	#superclass : #Object,
 	#category : #'Gt4Llm-Examples'
 }
 
