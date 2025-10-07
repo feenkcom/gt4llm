@@ -66,8 +66,14 @@ GtLlmAbstractFunctionTool >> parameters [
 	^ self subclassResponsibility
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'llm-generated' }
 GtLlmAbstractFunctionTool >> performToolCall: aToolCall [
+	aToolCall performedByTool: self.
+	^ self privatePerformToolCall: aToolCall
+]
+
+{ #category : #'llm-generated' }
+GtLlmAbstractFunctionTool >> privatePerformToolCall: aToolCall [
 	^ self subclassResponsibility
 ]
 

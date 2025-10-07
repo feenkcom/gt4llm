@@ -25,7 +25,7 @@ GtLlmToolForMethodReferences >> parameters [
 ]
 
 { #category : #'llm-generated' }
-GtLlmToolForMethodReferences >> performToolCall: aToolCall [
+GtLlmToolForMethodReferences >> privatePerformToolCall: aToolCall [
 	| argument selector references |
 	argument := aToolCall anyArgument.
 	argument ifNil: [ ^ 'Selector not provided' ].

@@ -15,6 +15,7 @@ GtLlmToolForDocumentationLookupExamples >> documentationLookupForExistingPage [
 		'arguments' -> {'pageName' -> 'Warmup: understanding the Money classes'} asDictionary
 	} asDictionary.
 	result := tool performToolCall: call.
+	self assert: call tool == tool.
 	self assert: (result includesSubstring: 'Warmup: understanding the Money classes').
 	^ tool
 ]
@@ -30,6 +31,7 @@ GtLlmToolForDocumentationLookupExamples >> documentationLookupForMissingPage [
 		'arguments' -> {'pageName' -> 'NonExistingDocumentationPage42'} asDictionary
 	} asDictionary.
 	result := tool performToolCall: call.
+	self assert: call tool == tool.
 	self assert: result equals: 'No page found'.
 	^ tool
 ]

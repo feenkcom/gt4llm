@@ -12,11 +12,12 @@ GtLlmToolForMethodReferencesExamples >> methodReferencesForExistingSelector [
 	call := GtLlmFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
-		'arguments' -> {'selector' -> 'gtReferences'} asDictionary
+		'arguments' -> {'selector' -> 'performToolCall:'} asDictionary
 	} asDictionary.
 	result := tool performToolCall: call.
+	self assert: call tool == tool.
 	self assert: result isEmpty not.
-	self assert: (result includesSubstring: 'GtLlmToolForClassReferences>>#performToolCall:').
+	self assert: (result includesSubstring: 'GtLlmToolForMethodReferencesExamples>>#methodReferencesForExistingSelector').
 	^ tool
 ]
 
@@ -31,6 +32,7 @@ GtLlmToolForMethodReferencesExamples >> methodReferencesForUnknownSelector [
 		'arguments' -> {'selector' -> 'unknownSelector42'} asDictionary
 	} asDictionary.
 	result := tool performToolCall: call.
+	self assert: call tool == tool.
 	self assert: result equals: 'No references found'.
 	^ tool
 ]

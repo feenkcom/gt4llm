@@ -25,7 +25,7 @@ GtLlmToolForImplementors >> parameters [
 ]
 
 { #category : #'llm-generated' }
-GtLlmToolForImplementors >> performToolCall: aToolCall [
+GtLlmToolForImplementors >> privatePerformToolCall: aToolCall [
 	| argument methodName implementors |
 	argument := aToolCall anyArgument.
 	argument ifNil: [ ^ 'Method name not provided' ].

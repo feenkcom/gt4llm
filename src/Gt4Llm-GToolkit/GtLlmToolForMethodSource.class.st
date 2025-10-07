@@ -25,7 +25,7 @@ GtLlmToolForMethodSource >> parameters [
 ]
 
 { #category : #'llm-generated' }
-GtLlmToolForMethodSource >> performToolCall: aToolCall [
+GtLlmToolForMethodSource >> privatePerformToolCall: aToolCall [
 	| arguments className class methodName classSideValue methodSymbol method |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	className := arguments at: 'className' ifAbsent: [ ^ 'Class name not provided' ].

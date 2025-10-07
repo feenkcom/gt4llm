@@ -25,7 +25,7 @@ GtLlmToolForClassLookup >> parameters [
 ]
 
 { #category : #'llm-generated' }
-GtLlmToolForClassLookup >> performToolCall: aToolCall [
+GtLlmToolForClassLookup >> privatePerformToolCall: aToolCall [
 	| arguments className class serializer |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	className := arguments at: 'className' ifAbsent: [ ^ 'Class name not provided' ].

@@ -15,7 +15,8 @@ GtLlmToolForClassLookupExamples >> lookupClassForExistingClass [
 		'arguments' -> {'className' -> 'GtLlmToolForClassLookup'} asDictionary
 	} asDictionary.
 	result := tool performToolCall: call.
-	self assert: (result = '{"class":"GtLlmToolForClassLookup","package":"Gt4Llm-GToolkit","comment":"","superclass":"GtLlmAbstractFunctionTool","instanceSlots":[],"allInstanceMethods":["parameters","name","performToolCall:","acceptVisitor:","description"]}').
+	self assert: call tool == tool.
+	self assert: result equals: '{"class":"GtLlmToolForClassLookup","package":"Gt4Llm-GToolkit","comment":"","superclass":"GtLlmAbstractFunctionTool","instanceSlots":[],"allInstanceMethods":["parameters","name","privatePerformToolCall:","acceptVisitor:","description"]}'.
 	^ tool
 ]
 
@@ -30,6 +31,7 @@ GtLlmToolForClassLookupExamples >> lookupClassForUnknownClass [
 		'arguments' -> {'className' -> 'NonExistingClassName42'} asDictionary
 	} asDictionary.
 	result := tool performToolCall: call.
+	self assert: call tool == tool.
 	self assert: result equals: 'Class not found'.
 	^ tool
 ]

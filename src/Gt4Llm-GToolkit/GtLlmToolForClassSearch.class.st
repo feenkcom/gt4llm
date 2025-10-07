@@ -25,7 +25,7 @@ GtLlmToolForClassSearch >> parameters [
 ]
 
 { #category : #'llm-generated' }
-GtLlmToolForClassSearch >> performToolCall: aToolCall [
+GtLlmToolForClassSearch >> privatePerformToolCall: aToolCall [
 	| arguments query matches |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	query := arguments at: 'query' ifAbsent: [ ^ 'Query not provided' ].

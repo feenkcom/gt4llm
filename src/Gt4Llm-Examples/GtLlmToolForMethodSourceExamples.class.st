@@ -19,6 +19,7 @@ GtLlmToolForMethodSourceExamples >> methodSourceForExistingClassSideMethod [
 		} asDictionary
 	} asDictionary.
 	result := tool performToolCall: call.
+	self assert: call tool == tool.
 	self assert: result equals: (GtLlmChat class>>#leJsonV4Name) sourceCode.
 	^ tool
 ]
@@ -33,12 +34,13 @@ GtLlmToolForMethodSourceExamples >> methodSourceForExistingInstanceSideMethod [
 		'name' -> tool name.
 		'arguments' -> {
 			'className' -> 'GtLlmToolForImplementors'.
-			'methodName' -> 'performToolCall:'.
+			'methodName' -> 'privatePerformToolCall:'.
 			'classSide' -> 'false'
 		} asDictionary
 	} asDictionary.
 	result := tool performToolCall: call.
-	self assert: result equals: (GtLlmToolForImplementors>>#performToolCall:) sourceCode.
+	self assert: call tool == tool.
+	self assert: result equals: (GtLlmToolForImplementors>>#privatePerformToolCall:) sourceCode.
 	^ tool
 ]
 
@@ -57,6 +59,7 @@ GtLlmToolForMethodSourceExamples >> methodSourceForUnknownClassSideMethod [
 		} asDictionary
 	} asDictionary.
 	result := tool performToolCall: call.
+	self assert: call tool == tool.
 	self assert: result equals: 'Method not found'.
 	^ tool
 ]
@@ -76,6 +79,7 @@ GtLlmToolForMethodSourceExamples >> methodSourceForUnknownInstanceSideMethod [
 		} asDictionary
 	} asDictionary.
 	result := tool performToolCall: call.
+	self assert: call tool == tool.
 	self assert: result equals: 'Method not found'.
 	^ tool
 ]
