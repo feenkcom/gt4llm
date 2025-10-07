@@ -73,6 +73,7 @@ GtLlmFunctionToolCall >> gtArgumentsFor: aView [
 { #category : #views }
 GtLlmFunctionToolCall >> gtToolSourceCodeFor: aView [
 	<gtView>
+	tool ifNil: [ ^ aView empty ].
 	^ aView forward
 		title: 'Tool source code';
 		priority: 5;

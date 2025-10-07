@@ -4,7 +4,7 @@ Class {
 	#category : #'Gt4Llm-GToolkit'
 }
 
-{ #category : #library }
+{ #category : #formats }
 GtLlmAssistantLibraryForGt class >> codeFormatWithSnippetMethodClass [
 	^ GtLlmAssistantFormatDescription new
 		name: 'Code';
@@ -42,9 +42,9 @@ Example:
 '
 ]
 
-{ #category : #library }
+{ #category : #formats }
 GtLlmAssistantLibraryForGt class >> codeFormatWithSnippetMethodClassAndSourceSnippet [
-	<gtLlmAssistantFormat>
+	"<gtLlmAssistantFormat>"
 	^ GtLlmAssistantFormatDescription new
 		name: 'Code';
 		priority: 2;
@@ -155,7 +155,7 @@ GtLlmAssistantLibraryForGt class >> getMethodReferencesTool [
 { #category : #tools }
 GtLlmAssistantLibraryForGt class >> getMethodTool [
 	^ GtLlmFunctionTool new
-		name: 'getClassMethod';
+		name: 'getCodeOfMethod';
 		parameters: {'className'. 'methodName'};
 		description: 'Gets a method by name and returns its source code.';
 		block: [ :functionCall | 
@@ -229,7 +229,7 @@ GtLlmAssistantLibraryForGt class >> lookupPageTool [
 ]
 
 { #category : #tools }
-GtLlmAssistantLibraryForGt class >> searchClassTool [
+GtLlmAssistantLibraryForGt class >> searchClassesTool [
 	^ GtLlmFunctionTool new
 		name: 'searchClasses';
 		parameters: {'query'};
@@ -244,7 +244,7 @@ GtLlmAssistantLibraryForGt class >> searchClassTool [
 						collect: #name) ]
 ]
 
-{ #category : #library }
+{ #category : #formats }
 GtLlmAssistantLibraryForGt class >> textFormatWithSmalltalkBlocks [
 	^ GtLlmAssistantFormatDescription new
 		name: 'Text';
