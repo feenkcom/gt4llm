@@ -17,8 +17,7 @@ GtOpenAIGenerateResponseAPIClient >> buildEntity [
 	| entity |
 	entity := {'model' -> self model.
 			'stream' -> isStreaming.
-			'input'
-				-> (self messages
+			'input' -> (self messages
 						flatCollect: [ :aMessage | 
 							(aMessage isKindOf: GtLlmToolMessage)
 								ifTrue: [ {aMessage serializeResponse} ]

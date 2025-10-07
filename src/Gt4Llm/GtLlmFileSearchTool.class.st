@@ -26,7 +26,7 @@ GtLlmFileSearchTool >> description [
 
 { #category : #'as yet unclassified' }
 GtLlmFileSearchTool >> functionResponse [
-	^ {'type' -> type.
+	^ {'type' -> self type.
 		'vector_store_ids' -> self vectorStoreIds} asDictionary
 ]
 
