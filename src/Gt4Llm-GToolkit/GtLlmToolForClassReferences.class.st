@@ -1,38 +1,22 @@
 Class {
 	#name : #GtLlmToolForClassReferences,
-	#superclass : #GtLlmTool,
-	#category : #'Gt4Llm-GToolkit-Tools'
+	#superclass : #GtLlmAbstractFunctionTool,
+	#category : #'Gt4Llm-GToolkit'
 }
 
 { #category : #accessing }
 GtLlmToolForClassReferences class >> leJsonV4Name [
-
 	^ #gtLlmToolForClassReferences
 ]
 
-{ #category : #accessing }
-GtLlmToolForClassReferences class >> serializationProperties [
-	^ {#type -> #type. #function -> #function}
+{ #category : #'as yet unclassified' }
+GtLlmToolForClassReferences >> acceptVisitor: aVisitor [
+	^ aVisitor visitGtLlmToolForClassReferences: self
 ]
 
 { #category : #'as yet unclassified' }
 GtLlmToolForClassReferences >> description [
 	^ 'Search the image for the references to the given class'
-]
-
-{ #category : #'as yet unclassified' }
-GtLlmToolForClassReferences >> functionResponse [
-	^ {'name' -> self name.
-		'type' -> self type.
-		'description' -> self description.
-		'parameters'
-			-> {'type' -> 'object'.
-					'properties'
-						-> (self parameters
-								collect: [ :aName | aName -> {'type' -> 'string'} asDictionary ])
-								asDictionary.
-					'required' -> self parameters.
-					'additionalProperties' -> false} asDictionary} asDictionary
 ]
 
 { #category : #'as yet unclassified' }
@@ -52,9 +36,4 @@ GtLlmToolForClassReferences >> performToolCall: aToolCall [
 	^ class
 		ifNil: [ 'Class not found' ]
 		ifNotNil: [ :c | Character cr join: (c gtReferences result toArray wait collect: #name) ]
-]
-
-{ #category : #'as yet unclassified' }
-GtLlmToolForClassReferences >> type [
-	^ 'function'
 ]

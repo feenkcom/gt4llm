@@ -22,11 +22,6 @@ GtLlmTool >> acceptVisitor: aVisitor [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmTool >> description [
-	^ ''
-]
-
-{ #category : #'as yet unclassified' }
 GtLlmTool >> functionAnthropic [
 	^ {'type' -> self type.
 		'name' -> self name} asDictionary
@@ -37,14 +32,9 @@ GtLlmTool >> functionResponse [
 	^ {'type' -> self type} asDictionary
 ]
 
-{ #category : #accessing }
-GtLlmTool >> name [
-	^ ''
-]
-
 { #category : #'as yet unclassified' }
-GtLlmTool >> parameters [
-	^ {}
+GtLlmTool >> name [
+	self subclassResponsibility
 ]
 
 { #category : #accessing }
