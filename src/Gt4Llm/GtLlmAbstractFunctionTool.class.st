@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLlmAbstractFunctionTool,
 	#superclass : #GtLlmTool,
-	#category : #'Gt4Llm-GToolkit-Tools'
+	#category : #Gt4Llm
 }
 
 { #category : #accessing }
