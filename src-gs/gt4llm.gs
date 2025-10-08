@@ -255,24 +255,6 @@ removeallclassmethods GtBPEEncoder
 
 doit
 (Object
-	subclass: 'GtBPEEncoderExamples'
-	instVarNames: #()
-	classVars: #()
-	classInstVars: #()
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #( #logCreation )
-)
-		category: 'Gt4Llm';
-		immediateInvariant.
-true.
-%
-
-removeallmethods GtBPEEncoderExamples
-removeallclassmethods GtBPEEncoderExamples
-
-doit
-(Object
 	subclass: 'GtBPEEncodingResult'
 	instVarNames: #(input tokens stats merges output)
 	classVars: #()
@@ -306,24 +288,6 @@ true.
 
 removeallmethods GtBPEMergeResult
 removeallclassmethods GtBPEMergeResult
-
-doit
-(Object
-	subclass: 'GtLlmActionCallExamples'
-	instVarNames: #()
-	classVars: #()
-	classInstVars: #()
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #( #logCreation )
-)
-		category: 'Gt4Llm';
-		immediateInvariant.
-true.
-%
-
-removeallmethods GtLlmActionCallExamples
-removeallclassmethods GtLlmActionCallExamples
 
 doit
 (Object
@@ -525,24 +489,6 @@ removeallclassmethods GtLlmAssistantChatWorkingStatus
 
 doit
 (Object
-	subclass: 'GtLlmAssistantExamples'
-	instVarNames: #()
-	classVars: #()
-	classInstVars: #()
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #( #logCreation )
-)
-		category: 'Gt4Llm';
-		immediateInvariant.
-true.
-%
-
-removeallmethods GtLlmAssistantExamples
-removeallclassmethods GtLlmAssistantExamples
-
-doit
-(Object
 	subclass: 'GtLlmAssistantFormatDescription'
 	instVarNames: #(name format tag example priority referencingActions definingMethod type items assistant)
 	classVars: #()
@@ -612,24 +558,6 @@ true.
 
 removeallmethods GtLlmActionChat
 removeallclassmethods GtLlmActionChat
-
-doit
-(Object
-	subclass: 'GtLlmChatExamples'
-	instVarNames: #()
-	classVars: #()
-	classInstVars: #()
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #( #logCreation )
-)
-		category: 'Gt4Llm';
-		immediateInvariant.
-true.
-%
-
-removeallmethods GtLlmChatExamples
-removeallclassmethods GtLlmChatExamples
 
 doit
 (Object
@@ -1697,7 +1625,7 @@ removeallclassmethods GtLlmFunctionToolCall
 doit
 (GtLlmEntity
 	subclass: 'GtLlmTool'
-	instVarNames: #(type name)
+	instVarNames: #()
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1714,8 +1642,8 @@ removeallclassmethods GtLlmTool
 
 doit
 (GtLlmTool
-	subclass: 'GtLlmFileSearchTool'
-	instVarNames: #(vectorStoreIds)
+	subclass: 'GtLlmAbstractFunctionTool'
+	instVarNames: #()
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1727,13 +1655,13 @@ doit
 true.
 %
 
-removeallmethods GtLlmFileSearchTool
-removeallclassmethods GtLlmFileSearchTool
+removeallmethods GtLlmAbstractFunctionTool
+removeallclassmethods GtLlmAbstractFunctionTool
 
 doit
-(GtLlmTool
+(GtLlmAbstractFunctionTool
 	subclass: 'GtLlmFunctionTool'
-	instVarNames: #(description parameters block)
+	instVarNames: #(description parameters block name)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1765,6 +1693,24 @@ true.
 
 removeallmethods GtLlmFunctionToolWithProtocol
 removeallclassmethods GtLlmFunctionToolWithProtocol
+
+doit
+(GtLlmTool
+	subclass: 'GtLlmFileSearchTool'
+	instVarNames: #(vectorStoreIds)
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #( #logCreation )
+)
+		category: 'Gt4Llm';
+		immediateInvariant.
+true.
+%
+
+removeallmethods GtLlmFileSearchTool
+removeallclassmethods GtLlmFileSearchTool
 
 doit
 (GtLlmEntity
@@ -3262,24 +3208,6 @@ removeallclassmethods GtLlmRequestResponse
 
 doit
 (Object
-	subclass: 'GtLlmToolExamples'
-	instVarNames: #()
-	classVars: #()
-	classInstVars: #()
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #( #logCreation )
-)
-		category: 'Gt4Llm';
-		immediateInvariant.
-true.
-%
-
-removeallmethods GtLlmToolExamples
-removeallclassmethods GtLlmToolExamples
-
-doit
-(Object
 	subclass: 'GtLlmValueHolder'
 	instVarNames: #(name announcer chat content)
 	classVars: #()
@@ -3367,24 +3295,6 @@ true.
 
 removeallmethods GtMcpClient
 removeallclassmethods GtMcpClient
-
-doit
-(Object
-	subclass: 'GtMcpClientExamples'
-	instVarNames: #()
-	classVars: #()
-	classInstVars: #()
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #( #logCreation )
-)
-		category: 'Gt4Llm';
-		immediateInvariant.
-true.
-%
-
-removeallmethods GtMcpClientExamples
-removeallclassmethods GtMcpClientExamples
 
 doit
 (Object
@@ -4112,53 +4022,6 @@ vocabularySize: anObject
 	vocabularySize := anObject
 %
 
-! Class implementation for 'GtBPEEncoderExamples'
-
-!		Instance methods for 'GtBPEEncoderExamples'
-
-category: 'as yet unclassified'
-method: GtBPEEncoderExamples
-bpeEncoderWithMergedTokens
-	<gtExample>
-	| encoder tokens result |
-	encoder := GtBPEEncoder new.
-	tokens := encoder tokenize: 'aaaa'.
-	result := encoder mergeTokens: tokens withVocabularySize: 258.
-	self assert: (result merges at: #(97 97)) equals: 257.
-	self assert: (result merges at: #(257 97)) equals: 258.
-	self assert: result output size equals: 2.
-	self assert: result output equals: #(258 97) asOrderedCollection.
-	^ encoder
-%
-
-category: 'accessing'
-method: GtBPEEncoderExamples
-encodedLorem
-	<gtExample>
-	| encoder encoded |
-	encoder := GtBPEEncoder new.
-	encoded := encoder encode: String loremIpsum.
-	
-	self assert: encoded output size equals: 300.
-	self assert: encoded compressionRatio > 1.
-	
-	^ encoded
-%
-
-category: 'accessing'
-method: GtBPEEncoderExamples
-preTrainedEncoderLorem
-	<gtExample>
-	| encoder encoded |
-	encoder := GtPretrainedEncoder new merges: self encodedLorem merges.
-	encoded := encoder encode: String loremIpsum.
-	
-	self assert: encoded size equals: 300.
-	self assert: (encoder decode: encoded) equals: String loremIpsum.
-	
-	^ encoded
-%
-
 ! Class implementation for 'GtBPEEncodingResult'
 
 !		Instance methods for 'GtBPEEncodingResult'
@@ -4311,62 +4174,6 @@ category: 'accessing'
 method: GtBPEMergeResult
 output: anObject
 	output := anObject
-%
-
-! Class implementation for 'GtLlmActionCallExamples'
-
-!		Instance methods for 'GtLlmActionCallExamples'
-
-category: 'as yet unclassified'
-method: GtLlmActionCallExamples
-actionCall
-	<gtExample>
-	| actionCall serialized unserialized |
-	actionCall := GtLlmActionCall new.
-	serialized := actionCall serialize.
-	self assert: serialized isString.
-	unserialized := STONJSON fromString: serialized.
-	self assert: unserialized isDictionary.
-	self assert: unserialized size equals: 2.
-	self assert: (unserialized at: 'Action') isNil.
-	self assert: (unserialized at: 'Arguments') isEmpty.
-	^ actionCall
-%
-
-category: 'as yet unclassified'
-method: GtLlmActionCallExamples
-actionCallWithName
-	<gtExample>
-	| actionCall serialized unserialized |
-	actionCall := self actionCall.
-	actionCall action: 'Some action name'.
-	serialized := actionCall serialize.
-	self assert: serialized isString.
-	unserialized := STONJSON fromString: serialized.
-	self assert: unserialized isDictionary.
-	self assert: unserialized size equals: 2.
-	self assert: (unserialized at: 'Action') equals: 'Some action name'.
-	self assert: (unserialized at: 'Arguments') isEmpty.
-	^ actionCall
-%
-
-category: 'as yet unclassified'
-method: GtLlmActionCallExamples
-actionCallWithNameAndArguments
-	<gtExample>
-	| actionCall serialized unserialized |
-	actionCall := self actionCallWithName.
-	actionCall arguments: {'Arg1' . 'Arg2'}.
-	serialized := actionCall serialize.
-	self assert: serialized isString.
-	unserialized := STONJSON fromString: serialized.
-	self assert: unserialized isDictionary.
-	self assert: unserialized size equals: 2.
-	self assert: (unserialized at: 'Action') equals: 'Some action name'.
-	self assert: (unserialized at: 'Arguments') size equals: 2.
-	self assert: (unserialized at: 'Arguments') first equals: 'Arg1'.
-	self assert: (unserialized at: 'Arguments') last equals: 'Arg2'.
-	^ actionCall
 %
 
 ! Class implementation for 'GtLlmActionReference'
@@ -5576,196 +5383,6 @@ isFailed
 	^ false
 %
 
-! Class implementation for 'GtLlmAssistantExamples'
-
-!		Instance methods for 'GtLlmAssistantExamples'
-
-category: 'as yet unclassified'
-method: GtLlmAssistantExamples
-assistantChat
-	<gtExample>
-	| assistant chat |
-	assistant := self assistantWithActionAndFormatAdded.
-	chat := assistant createChatWithProvider: GtLlmNullProvider new.
-
-	self assert: (chat provider isKindOf: GtLlmNullProvider).
-	self assert: chat provider chat equals: chat.
-
-	^ chat
-%
-
-category: 'as yet unclassified'
-method: GtLlmAssistantExamples
-assistantChatWithInstance
-	<gtExample>
-	| assistant chat |
-	assistant := self assistantWithActionAndFormatAdded.
-	chat := assistant createChatWithProvider: GtLlmNullProvider new.
-	chat onInstance: (GtLlmSerializableValueHolder new
-		name: 'SomeNumber';
-		content: 42;
-		serializer: [ :aModel | GtLlmValueSerializer new serializeValue: aModel ];
-		updater: [ :object :aString | self error: 'Unimplemented' ]).
-	
-	self assert: (chat provider isKindOf: GtLlmNullProvider).
-	self assert: chat provider chat equals: chat.
-
-	^ chat
-%
-
-category: 'as yet unclassified'
-method: GtLlmAssistantExamples
-assistantChatWithInstanceWithMessage
-	<gtExample>
-	| chat serialized |
-	chat := self assistantChatWithInstance.
-
-	chat sendAction: (GtLlmActionCall action: 'example' arguments: {}).
-
-	self assert: chat status isDone.
-	self assert: chat messages size equals: 1.
-	self assert: chat messages last action equals: 'example'.
-	serialized := STONJSON fromString: chat messages last content.
-	self assert: serialized isDictionary.
-	self assert: serialized size = 3.
-	self assert: (serialized at: 'Action') = 'example'.
-	self assert: (serialized at: 'Arguments') isEmpty.
-	self assert: (serialized includesKey: 'SomeNumber').
-
-	^ chat
-%
-
-category: 'as yet unclassified'
-method: GtLlmAssistantExamples
-assistantChatWithInstanceWithMessageIncludingSubject
-	<gtExample>
-	| chat serialized |
-	chat := self assistantChatWithInstance.
-	chat
-		sendAction: (GtLlmActionCall new
-				action: 'example';
-				arguments: {};
-				subject: (GtLlmSerializableValueHolder new
-						name: 'SomeOtherNumber';
-						content: 4242;
-						serializer: [ :aModel | GtLlmValueSerializer new serializeValue: aModel ];
-						updater: [ :object :aString | self error: 'Unimplemented' ])).
-
-	self assert: chat status isDone.
-	self assert: chat messages size equals: 1.
-	self assert: chat messages last action equals: 'example'.
-	serialized := STONJSON fromString: chat messages last content.
-	self assert: serialized isDictionary.
-	self assert: serialized size = 3.
-	self assert: (serialized at: 'Action') = 'example'.
-	self assert: (serialized at: 'Arguments') isEmpty.
-	self assert: (serialized includesKey: 'SomeNumber') not.
-	self assert: (serialized includesKey: 'SomeOtherNumber').
-
-	^ chat
-%
-
-category: 'as yet unclassified'
-method: GtLlmAssistantExamples
-assistantChatWithMessage
-	<gtExample>
-	| chat serialized |
-	chat := self assistantChat.
-
-	chat sendAction: (GtLlmActionCall action: 'example' arguments: {}).
-
-	self assert: chat status isDone.
-	self assert: chat messages size equals: 1.
-	self assert: chat messages last action equals: 'example'.
-	serialized := STONJSON fromString: chat messages last content.
-	self assert: serialized isDictionary.
-	self assert: serialized size = 2.
-	self assert: (serialized at: 'Action') = 'example'.
-	self assert: (serialized at: 'Arguments') isEmpty.
-
-	^ chat
-%
-
-category: 'as yet unclassified'
-method: GtLlmAssistantExamples
-assistantWithActionAdded
-	<gtExample>
-	| tutor exampleAction |
-	tutor := self basicAssistant.
-	exampleAction := GtLlmAssistantAction new name: 'example'.
-
-	tutor addAction: exampleAction.
-
-	self assert: tutor actions size equals: 2.
-	self assert: (tutor actionNamed: 'example') equals: exampleAction.
-	
-	^ tutor
-%
-
-category: 'as yet unclassified'
-method: GtLlmAssistantExamples
-assistantWithActionAddedTwice
-	<gtExample>
-	| tutor exampleAction errored |
-	tutor := self assistantWithActionAdded.
-	exampleAction := GtLlmAssistantAction new name: 'example'.
-	errored := false.
-
-	[ tutor addAction: exampleAction ] on: Error do: [ errored := true ].
-
-	self assert: errored description: [ 'Actions should only be add-able once' ].
-
-	^ tutor
-%
-
-category: 'as yet unclassified'
-method: GtLlmAssistantExamples
-assistantWithActionAndFormatAdded
-	<gtExample>
-	| tutor exampleFormat |
-	tutor := self assistantWithActionAdded.
-	exampleFormat := GtLlmAssistantFormatDescription new
-			name: 'example';
-			format: 'Text'.
-	tutor addFormat: exampleFormat.
-
-	self assert: tutor instruction formats size equals: 4.
-	self assert: (tutor formatNamed: 'example') equals: exampleFormat.
-
-	^ tutor
-%
-
-category: 'as yet unclassified'
-method: GtLlmAssistantExamples
-assistantWithFormatAddedTwice
-	<gtExample>
-	| tutor exampleFormat errored |
-	tutor := self assistantWithActionAndFormatAdded.
-	exampleFormat := GtLlmAssistantFormatDescription new
-			name: 'example';
-			format: 'Text'.
-	errored := false.
-
-	[ tutor addFormat: exampleFormat ] on: Error do: [ errored := true ].
-
-	self assert: errored description: [ 'Formats should only be add-able once' ].
-
-	^ tutor
-%
-
-category: 'as yet unclassified'
-method: GtLlmAssistantExamples
-basicAssistant
-	<gtExample>
-	| assistant |
-	assistant :=  GtLlmAssistant new.
-	
-	self assert: assistant actions size equals: 1.
-	self assert: assistant instruction formats size equals: 3.
-	self assert: assistant collectTools isEmpty.
-	^ assistant
-%
-
 ! Class implementation for 'GtLlmAssistantFormatDescription'
 
 !		Class methods for 'GtLlmAssistantFormatDescription'
@@ -6836,54 +6453,6 @@ category: 'as yet unclassified'
 method: GtLlmActionChat
 updateInstance: aValue
 	instance updateContent: aValue aValue
-%
-
-! Class implementation for 'GtLlmChatExamples'
-
-!		Instance methods for 'GtLlmChatExamples'
-
-category: 'as yet unclassified'
-method: GtLlmChatExamples
-basicChat
-	<gtExample>
-	| chat |
-	chat :=  GtLlmChat new.
-	
-	self assert: chat messages size equals: 0.
-	self assert: chat status isDone not.
-	self assert: chat hasProvider not.
-	
-	^ chat
-%
-
-category: 'as yet unclassified'
-method: GtLlmChatExamples
-chatWithMessages
-	<gtExample>
-	| chat |
-	chat := self chatWithProvider.
-
-	chat sendMessage: 'Hi!'.
-	
-	self assert: chat status isDone.
-	self assert: chat messages size equals: 1.
-	
-	^ chat
-%
-
-category: 'as yet unclassified'
-method: GtLlmChatExamples
-chatWithProvider
-	<gtExample>
-	| chat |
-	chat := self basicChat.
-
-	chat provider: GtLlmNullProvider new.
-
-	self assert: chat provider class equals: GtLlmNullProvider.
-	self assert: chat status isDone.
-
-	^ chat
 %
 
 ! Class implementation for 'GtLlmConnection'
@@ -8555,8 +8124,7 @@ buildEntity
 	| entity |
 	entity := {'model' -> self model.
 			'stream' -> isStreaming.
-			'input'
-				-> (self messages
+			'input' -> (self messages
 						flatCollect: [ :aMessage | 
 							(aMessage isKindOf: GtLlmToolMessage)
 								ifTrue: [ {aMessage serializeResponse} ]
@@ -10391,17 +9959,6 @@ gtArgumentsFor: aView
 		column: 'Value' text: #value
 %
 
-category: 'views'
-method: GtLlmFunctionToolCall
-gtToolSourceCodeFor: aView
-	<gtView>
-	^ aView forward
-		title: 'Tool source code';
-		priority: 5;
-		object: [ tool ];
-		view: #gtBlockSourceCodeFor:
-%
-
 category: 'as yet unclassified'
 method: GtLlmFunctionToolCall
 humanReadable
@@ -10497,53 +10054,21 @@ acceptVisitor: aVisitor
 
 category: 'as yet unclassified'
 method: GtLlmTool
-defaultType
-	^ ''
-%
-
-category: 'as yet unclassified'
-method: GtLlmTool
-description
-	^ ''
-%
-
-category: 'as yet unclassified'
-method: GtLlmTool
 functionAnthropic
-	^ {'type' -> type.
+	^ {'type' -> self type.
 		'name' -> self name} asDictionary
 %
 
 category: 'as yet unclassified'
 method: GtLlmTool
 functionResponse
-	^ {'type' -> type} asDictionary
+	^ {'type' -> self type} asDictionary
 %
 
 category: 'as yet unclassified'
-method: GtLlmTool
-initialize
-	super initialize.
-	
-	self type: self defaultType
-%
-
-category: 'accessing'
 method: GtLlmTool
 name
-	^ name ifNil: [ type ]
-%
-
-category: 'accessing'
-method: GtLlmTool
-name: anObject
-	name := anObject
-%
-
-category: 'as yet unclassified'
-method: GtLlmTool
-parameters
-	^ {}
+	self subclassResponsibility
 %
 
 category: 'accessing'
@@ -10560,84 +10085,101 @@ printOn: aStream
 category: 'accessing'
 method: GtLlmTool
 type
-	^ type
+	^ ''
 %
 
-category: 'accessing'
-method: GtLlmTool
-type: anObject
-	type := anObject
-%
+! Class implementation for 'GtLlmAbstractFunctionTool'
 
-! Class implementation for 'GtLlmFileSearchTool'
-
-!		Class methods for 'GtLlmFileSearchTool'
+!		Class methods for 'GtLlmAbstractFunctionTool'
 
 category: 'accessing'
-classmethod: GtLlmFileSearchTool
+classmethod: GtLlmAbstractFunctionTool
 leJsonV4Name
-
-	^ #gtLlmFileSearchTool
+	^ #gtLlmAbstractFunctionTool
 %
 
-!		Instance methods for 'GtLlmFileSearchTool'
-
-category: 'visiting'
-method: GtLlmFileSearchTool
-acceptVisitor: aVisitor
-
-	^ aVisitor visitGtLlmFileSearchTool: self
+category: 'accessing'
+classmethod: GtLlmAbstractFunctionTool
+serializationProperties
+	^ {#type -> #type. #function -> #function}
 %
+
+!		Instance methods for 'GtLlmAbstractFunctionTool'
 
 category: 'as yet unclassified'
-method: GtLlmFileSearchTool
-defaultType
-	^ 'file_search'
-%
-
-category: 'as yet unclassified'
-method: GtLlmFileSearchTool
+method: GtLlmAbstractFunctionTool
 description
-	^ 'Search the files attached to the chat'
+	^ self subclassResponsibility
+%
+
+category: 'accessing'
+method: GtLlmAbstractFunctionTool
+function
+	^ {'name' -> self name.
+		'description' -> self description.
+		'parameters'
+			-> {'type' -> 'object'.
+					'properties'
+						-> (self parameters collect: [ :aName | aName -> {'type' -> 'string'} asDictionary ])
+								asDictionary.
+					'required' -> self parameters.
+					'additionalProperties' -> false} asDictionary.
+		'strict' -> true} asDictionary
 %
 
 category: 'as yet unclassified'
-method: GtLlmFileSearchTool
+method: GtLlmAbstractFunctionTool
+functionAnthropic
+	^ {'name' -> self name.
+		'description' -> self description.
+		'input_schema'
+			-> {'type' -> 'object'.
+					'properties'
+						-> (self parameters collect: [ :aName | aName -> {'type' -> 'string'} asDictionary ])
+								asDictionary.
+					'required' -> self parameters} asDictionary} asDictionary
+%
+
+category: 'as yet unclassified'
+method: GtLlmAbstractFunctionTool
 functionResponse
-	^ {'type' -> type.
-		'vector_store_ids' -> self vectorStoreIds} asDictionary
+	^ {'name' -> self name.
+		'type' -> self type.
+		'description' -> self description.
+		'parameters'
+			-> {'type' -> 'object'.
+					'properties'
+						-> (self parameters
+								collect: [ :aName | aName -> {'type' -> 'string'} asDictionary ])
+								asDictionary.
+					'required' -> self parameters.
+					'additionalProperties' -> false} asDictionary} asDictionary
 %
 
 category: 'as yet unclassified'
-method: GtLlmFileSearchTool
-initialize
-	super initialize.
-	
-	vectorStoreIds := {}
-%
-
-category: 'as yet unclassified'
-method: GtLlmFileSearchTool
-name
-	^ 'File search'
-%
-
-category: 'as yet unclassified'
-method: GtLlmFileSearchTool
+method: GtLlmAbstractFunctionTool
 parameters
-	^ #()
+	"An array of strings representing parameter names"
+	^ self subclassResponsibility
 %
 
-category: 'accessing'
-method: GtLlmFileSearchTool
-vectorStoreIds
-	^ vectorStoreIds
+category: 'llm-generated'
+method: GtLlmAbstractFunctionTool
+performToolCall: aToolCall
+	aToolCall performedByTool: self.
+	^ self privatePerformToolCall: aToolCall
 %
 
-category: 'accessing'
-method: GtLlmFileSearchTool
-vectorStoreIds: anObject
-	vectorStoreIds := anObject
+category: 'llm-generated'
+method: GtLlmAbstractFunctionTool
+privatePerformToolCall: aToolCall
+	^ self subclassResponsibility
+%
+
+category: 'as yet unclassified'
+method: GtLlmAbstractFunctionTool
+type
+	^ 'function'
 %
 
 ! Class implementation for 'GtLlmFunctionTool'
@@ -10647,14 +10189,7 @@ vectorStoreIds: anObject
 category: 'accessing'
 classmethod: GtLlmFunctionTool
 leJsonV4Name
-
 	^ #gtLlmFunctionTool
-%
-
-category: 'as yet unclassified'
-classmethod: GtLlmFunctionTool
-serializationProperties
-	^ {#type -> #type. #function -> #function}
 %
 
 !		Instance methods for 'GtLlmFunctionTool'
@@ -10662,7 +10197,6 @@ serializationProperties
 category: 'visiting'
 method: GtLlmFunctionTool
 acceptVisitor: aVisitor
-
 	^ aVisitor visitGtLlmFunctionTool: self
 %
 
@@ -10678,12 +10212,6 @@ block: anObject
 	block := anObject
 %
 
-category: 'as yet unclassified'
-method: GtLlmFunctionTool
-defaultType
-	^ 'function'
-%
-
 category: 'accessing'
 method: GtLlmFunctionTool
 description
@@ -10696,36 +10224,6 @@ description: anObject
 	description := anObject
 %
 
-category: 'accessing'
-method: GtLlmFunctionTool
-function
-	^ {'name' -> name.
-		'description' -> self description.
-		'parameters'
-			-> {'type' -> 'object'.
-					'properties'
-						-> (parameters collect: [ :aName | aName -> {'type' -> 'string'} asDictionary ])
-								asDictionary.
-					'required' -> parameters.
-					'additionalProperties' -> false} asDictionary.
-		'strict' -> true} asDictionary
-%
-
-category: 'accessing'
-method: GtLlmFunctionTool
-functionResponse
-	^ {'name' -> name.
-		'type' -> type.
-		'description' -> description.
-		'parameters'
-			-> {'type' -> 'object'.
-					'properties'
-						-> (parameters collect: [ :aName | aName -> {'type' -> 'string'} asDictionary ])
-								asDictionary.
-					'required' -> parameters.
-					'additionalProperties' -> false} asDictionary} asDictionary
-%
-
 category: 'views'
 method: GtLlmFunctionTool
 gtBlockSourceCodeFor: aView
@@ -10734,6 +10232,17 @@ gtBlockSourceCodeFor: aView
 		title: 'Source code';
 		object: [ block ];
 		view: #gtSourceCodeFor:
+%
+
+category: 'views'
+method: GtLlmFunctionTool
+gtFunctionFor: aView
+	<gtView>
+	^ aView forward
+		title: 'Function';
+		priority: 1;
+		object: [ self function ];
+		view: #gtItemsFor:
 %
 
 category: 'as yet unclassified'
@@ -10762,12 +10271,24 @@ category: 'as yet unclassified'
 method: GtLlmFunctionTool
 method
 	| split class methodName |
-	name ifNil: [ ^ nil ].
+	self name ifNil: [ ^ nil ].
 
-	split := '_' split: name.
+	split := '_' split: self name.
 	class := split first asClassIfAbsent: [ ^ nil ].
 	methodName := ':' join: split allButFirst.
 	^ [ class >> methodName asSymbol ] on: Error do: [ nil ]
+%
+
+category: 'accessing'
+method: GtLlmFunctionTool
+name
+	^ name
+%
+
+category: 'accessing'
+method: GtLlmFunctionTool
+name: anObject
+	name := anObject
 %
 
 category: 'accessing'
@@ -10782,19 +10303,21 @@ parameters: anObject
 	parameters := anObject
 %
 
-category: 'as yet unclassified'
+category: 'llm-generated'
 method: GtLlmFunctionTool
-performToolCall: aGtLlmFunctionToolCall
+privatePerformToolCall: aGtLlmFunctionToolCall
 	| result |
 	self
 		assert: block isNotNil
 		description: [ 'Trying to call a function without a block' ].
+	self
+		assert: aGtLlmFunctionToolCall arguments keys asSet = parameters asSet
+		description: [ 'The arguments of the function call do not match the parameters of the tool' ].
 	"Commented due to Gemstone:
 	(GtLlmFunctionCallAboutToBePerformedSignal new
 		tool: self;
 		functionCall: aGtLlmFunctionToolCall) emit."
 	result := block value: aGtLlmFunctionToolCall.
-	aGtLlmFunctionToolCall performedByTool: self.
 	"Commented due to Gemstone:
 	(GtLlmFunctionCallPerformedSignal new
 		tool: self;
@@ -10840,6 +10363,54 @@ category: 'as yet unclassified'
 method: GtLlmFunctionToolWithProtocol
 protocolDescription
 	^ 'On success, an object of the form `{"type": "result", "value": "... result ... "}` will be returned. On error, an object of the form `{"type": "error", "error": "... error message ... "}` will be returned.'
+%
+
+! Class implementation for 'GtLlmFileSearchTool'
+
+!		Class methods for 'GtLlmFileSearchTool'
+
+category: 'accessing'
+classmethod: GtLlmFileSearchTool
+leJsonV4Name
+
+	^ #gtLlmFileSearchTool
+%
+
+!		Instance methods for 'GtLlmFileSearchTool'
+
+category: 'visiting'
+method: GtLlmFileSearchTool
+acceptVisitor: aVisitor
+
+	^ aVisitor visitGtLlmFileSearchTool: self
+%
+
+category: 'as yet unclassified'
+method: GtLlmFileSearchTool
+functionResponse
+	^ {'type' -> 'file_search'.
+		'description' -> 'Search the files attached to the chat'.
+		'vector_store_ids' -> self vectorStoreIds} asDictionary
+%
+
+category: 'as yet unclassified'
+method: GtLlmFileSearchTool
+initialize
+	super initialize.
+	
+	vectorStoreIds := {}
+%
+
+category: 'accessing'
+method: GtLlmFileSearchTool
+vectorStoreIds
+	^ vectorStoreIds
+%
+
+category: 'accessing'
+method: GtLlmFileSearchTool
+vectorStoreIds: anObject
+	vectorStoreIds := anObject
 %
 
 ! Class implementation for 'GtOllamaEmbedding'
@@ -18139,92 +17710,6 @@ response: anObject
 	response := anObject
 %
 
-! Class implementation for 'GtLlmToolExamples'
-
-!		Instance methods for 'GtLlmToolExamples'
-
-category: 'as yet unclassified'
-method: GtLlmToolExamples
-calledTool
-	<gtExample>
-	| tool call |
-	tool := self functionTool.
-	call := self toolCall.
-
-
-	self
-		assert: (tool performToolCall: call)
-		equals: call.
-
-	^ tool
-%
-
-category: 'as yet unclassified'
-method: GtLlmToolExamples
-functionTool
-	<gtExample>
-	| tool |
-	tool := self simpleFunctionTool
-			name: 'example';
-			description: 'Takes two arguments and passes them back unharmed.';
-			parameters: {'first'.
-					'second'};
-			block: [:functionCall | functionCall ].
-
-	^ tool
-%
-
-category: 'as yet unclassified'
-method: GtLlmToolExamples
-simpleFileSearchTool
-	<gtExample>
-	^ GtLlmFileSearchTool new
-%
-
-category: 'as yet unclassified'
-method: GtLlmToolExamples
-simpleFunctionTool
-	<gtExample>
-	| tool |
-	tool := GtLlmFunctionTool new.
-	
-	self assert: tool type equals: 'function'.
-	
-	^ tool
-%
-
-category: 'as yet unclassified'
-method: GtLlmToolExamples
-simpleTool
-	<gtExample>
-	^ GtLlmTool new
-%
-
-category: 'as yet unclassified'
-method: GtLlmToolExamples
-simpleToolCall
-	<gtExample>
-	^ GtLlmFunctionToolCall new
-%
-
-category: 'as yet unclassified'
-method: GtLlmToolExamples
-toolCall
-	<gtExample>
-	| call |
-	call := self simpleToolCall
-			function: {'name' -> 'example'.
-					'arguments' -> '{"first": 1, "second": 2}'} asDictionary.
-
-	self assert: call name equals: 'example'.
-	self
-		assert: call arguments
-		equals: {'first' -> 1.
-				'second' -> 2} asDictionary.
-
-	^ call
-%
-
 ! Class implementation for 'GtLlmValueHolder'
 
 !		Instance methods for 'GtLlmValueHolder'
@@ -18726,73 +18211,6 @@ transport: anObject
 	transport := anObject.
 
 	self initializeSession
-%
-
-! Class implementation for 'GtMcpClientExamples'
-
-!		Instance methods for 'GtMcpClientExamples'
-
-category: 'as yet unclassified'
-method: GtMcpClientExamples
-clientListPrompts
-	<gtExample>
-	| client |
-	client := self simpleClientWithTransport.
-	client transport
-		addMessage: {'result' -> {'prompts' -> {}} asDictionary} asDictionary.
-
-	self assert: client listPrompts size equals: 0.
-
-	^ client
-%
-
-category: 'as yet unclassified'
-method: GtMcpClientExamples
-clientListResources
-	<gtExample>
-	| client |
-	client := self simpleClientWithTransport.
-	client transport
-		addMessage: {'result' -> {'resources' -> {}} asDictionary} asDictionary.
-
-	self assert: client listResources size equals: 0.
-
-	^ client
-%
-
-category: 'as yet unclassified'
-method: GtMcpClientExamples
-clientListTools
-	<gtExample>
-	| client |
-	client := self simpleClientWithTransport.
-	client transport
-		addMessage: {'result' -> {'tools' -> {}} asDictionary} asDictionary.
-
-	self assert: client listTools size equals: 0.
-
-	^ client
-%
-
-category: 'as yet unclassified'
-method: GtMcpClientExamples
-simpleClient
-	<gtExample>
-	^ GtMcpClient new
-%
-
-category: 'as yet unclassified'
-method: GtMcpClientExamples
-simpleClientWithTransport
-	<gtExample>
-	^ GtMcpClient new
-		transport: (GtMcpStaticTransport new
-				messages: {{'result'
-								-> {'capabilities'
-											-> {'tools' -> {} asDictionary.
-													'prompts' -> {} asDictionary.
-													'resources' -> {} asDictionary} asDictionary} asDictionary}
-							asDictionary}asOrderedCollection)
 %
 
 ! Class implementation for 'GtMcpPrompt'
