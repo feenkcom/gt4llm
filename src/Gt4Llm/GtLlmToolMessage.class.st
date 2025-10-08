@@ -1,9 +1,8 @@
 Class {
 	#name : #GtLlmToolMessage,
-	#superclass : #GtLlmChatMessage,
+	#superclass : #GtLlmBasicChatMessage,
 	#instVars : [
-		'toolCall',
-		'output'
+		'toolCall'
 	],
 	#category : #Gt4Llm
 }
@@ -36,13 +35,8 @@ GtLlmToolMessage >> actionModel [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmToolMessage >> content [
-	^ self output
-]
-
-{ #category : #'as yet unclassified' }
-GtLlmToolMessage >> contentText [
-	^ ''
+GtLlmToolMessage >> arguments [
+	^ toolCall arguments
 ]
 
 { #category : #'as yet unclassified' }
@@ -57,13 +51,6 @@ GtLlmToolMessage >> gtArgumentsFor: aView [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmToolMessage >> gtContentFor: aView [
-	<gtView>
-	<gtLlmMessageView>
-	^ aView empty
-]
-
-{ #category : #'as yet unclassified' }
 GtLlmToolMessage >> gtOutputFor: aView [
 	<gtView>
 	<gtLlmMessageView>
@@ -75,12 +62,7 @@ GtLlmToolMessage >> gtOutputFor: aView [
 
 { #category : #accessing }
 GtLlmToolMessage >> output [
-	^ output
-]
-
-{ #category : #accessing }
-GtLlmToolMessage >> output: anObject [
-	output := anObject
+	^ toolCall result
 ]
 
 { #category : #'as yet unclassified' }

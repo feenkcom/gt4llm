@@ -15,6 +15,11 @@ GtLlmLeSnippetVisitor >> initialize [
 ]
 
 { #category : #visiting }
+GtLlmLeSnippetVisitor >> visitGtLlmBasicChatMessage: aGtLlmChatMessage [
+	"nothing"
+]
+
+{ #category : #visiting }
 GtLlmLeSnippetVisitor >> visitGtLlmChat: aGtLlmChat [
 	| snippet |
 

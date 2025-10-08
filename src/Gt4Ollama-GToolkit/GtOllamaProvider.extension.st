@@ -34,8 +34,3 @@ GtOllamaProvider class >> gtToggleEnabledActionFor: anAction [
 GtOllamaProvider class >> isConnectable [
 	^ IsConnectable
 ]
-
-{ #category : #'*Gt4Ollama-GToolkit' }
-GtOllamaProvider >> uuidClass [
-	^ UUID
-]
