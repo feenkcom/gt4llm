@@ -151,10 +151,12 @@ GtOllamaProvider >> modelName [
 GtOllamaProvider >> performToolCallsFor: aResult [
 	aResult toolCalls
 		do: [ :aToolCall | 
-			tools performToolCall: aToolCall.
+			| toolOutput |
+			toolOutput := tools performToolCall: aToolCall.
 			chat
 				addMessage: (GtLlmToolMessage new
-						toolCall: aToolCall) ].
+						toolCall: aToolCall;
+						output: toolOutput) ].
 	self chat signalRunHasUpdated
 ]
 

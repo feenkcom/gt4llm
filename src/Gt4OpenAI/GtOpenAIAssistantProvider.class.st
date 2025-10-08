@@ -209,9 +209,11 @@ GtOpenAIAssistantProvider >> performToolCalls [
 				toolOutput := tools performToolCall: aToolCall.
 				chat
 					addMessage: (GtLlmToolMessage new
-							toolCall: aToolCall).
+							toolCall: aToolCall;
+							output: toolOutput).
 				{'tool_call_id' -> aToolCall id.
 					'output' -> toolOutput} asDictionary ].
+
 	^ client
 		submitToolOutputs: toolOutputs
 		toThread: thread id
