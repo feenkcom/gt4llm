@@ -1,6 +1,6 @@
-Extension { #name : 'GtLlmConnectionRegistry' }
+Extension { #name : #GtLlmConnectionRegistry }
 
-{ #category : '*Gt4Llm-Gemstone' }
+{ #category : #'*Gt4Llm-Gemstone' }
 GtLlmConnectionRegistry >> knownConnectors [
 	^ {GtLlmConnection new
 			provider: GtOllamaProvider;

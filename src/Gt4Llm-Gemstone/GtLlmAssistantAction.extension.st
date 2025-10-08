@@ -1,6 +1,6 @@
-Extension { #name : 'GtLlmAssistantAction' }
+Extension { #name : #GtLlmAssistantAction }
 
-{ #category : '*Gt4Llm-Gemstone' }
+{ #category : #'*Gt4Llm-Gemstone' }
 GtLlmAssistantAction >> initializeMethod [
 	^ nil
 ]
