@@ -1,7 +1,7 @@
 Class {
 	#name : #GtBPEDemoMergeProxy,
 	#superclass : #PBProxyObject,
-	#category : #'Gt4Llm-GToolkit'
+	#category : #'Gt4Llm-GToolkit-BPE'
 }
 
 { #category : #accessing }

@@ -10,6 +10,7 @@ BaselineOfGt4LlmCore >> baseline: spec [
 	^ spec
 		for: #common
 		do: [ spec package: 'Gt4Llm'.
+			spec package: 'Gt4Llm-Examples' with: [ spec requires: #('Gt4Llm') ].
 			spec package: 'Gt4Llm-GToolkit' with: [ spec requires: #('Gt4Llm') ].
 			spec package: 'Gt4Llm-Lepiter' with: [ spec requires: #('Gt4Llm') ]. ]
 ]

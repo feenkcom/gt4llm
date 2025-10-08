@@ -201,7 +201,7 @@ GtOpenAIObjectMessage >> objectBlock [
 
 { #category : #'as yet unclassified' }
 GtOpenAIObjectMessage >> selfObject [
-	^ self chat serializer instance content
+	^ self chat instance content
 ]
 
 { #category : #'as yet unclassified' }

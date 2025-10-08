@@ -20,18 +20,9 @@ GtLlmFileSearchTool >> acceptVisitor: aVisitor [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmFileSearchTool >> defaultType [
-	^ 'file_search'
-]
-
-{ #category : #'as yet unclassified' }
-GtLlmFileSearchTool >> description [
-	^ 'Search the files attached to the chat'
-]
-
-{ #category : #'as yet unclassified' }
 GtLlmFileSearchTool >> functionResponse [
-	^ {'type' -> type.
+	^ {'type' -> 'file_search'.
+		'description' -> 'Search the files attached to the chat'.
 		'vector_store_ids' -> self vectorStoreIds} asDictionary
 ]
 
@@ -40,16 +31,6 @@ GtLlmFileSearchTool >> initialize [
 	super initialize.
 	
 	vectorStoreIds := {}
-]
-
-{ #category : #'as yet unclassified' }
-GtLlmFileSearchTool >> name [
-	^ 'File search'
-]
-
-{ #category : #'as yet unclassified' }
-GtLlmFileSearchTool >> parameters [
-	^ #()
 ]
 
 { #category : #accessing }

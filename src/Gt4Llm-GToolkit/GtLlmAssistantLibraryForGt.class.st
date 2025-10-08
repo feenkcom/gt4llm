@@ -1,10 +1,10 @@
 Class {
 	#name : #GtLlmAssistantLibraryForGt,
 	#superclass : #Object,
-	#category : #'Gt4Llm-GToolkit'
+	#category : #'Gt4Llm-GToolkit-UI'
 }
 
-{ #category : #library }
+{ #category : #formats }
 GtLlmAssistantLibraryForGt class >> codeFormatWithSnippetMethodClass [
 	^ GtLlmAssistantFormatDescription new
 		name: 'Code';
@@ -42,9 +42,9 @@ Example:
 '
 ]
 
-{ #category : #library }
+{ #category : #formats }
 GtLlmAssistantLibraryForGt class >> codeFormatWithSnippetMethodClassAndSourceSnippet [
-	<gtLlmAssistantFormat>
+	"<gtLlmAssistantFormat>"
 	^ GtLlmAssistantFormatDescription new
 		name: 'Code';
 		priority: 2;
@@ -115,69 +115,6 @@ GtLlmAssistantLibraryForGt class >> getActionsTool [
 ]
 
 { #category : #tools }
-GtLlmAssistantLibraryForGt class >> getClassReferencesTool [
-	^ GtLlmFunctionTool new
-		name: 'getClassReferences';
-		parameters: {'className'};
-		description: 'Gets a class by name and returns a list of methods that reference it.';
-		block: [ :functionCall | 
-			| class |
-			class := functionCall anyArgument asSymbol
-					asClassInEnvironment: [ :x | x ]
-					ifAbsent: [ nil ].
-			class
-				ifNil: [ 'Class not found' ]
-				ifNotNil: [ :c | Character cr join: (c gtReferences result toArray wait collect: #name) ] ]
-]
-
-{ #category : #tools }
-GtLlmAssistantLibraryForGt class >> getImplementorsTool [
-	^ GtLlmFunctionTool new
-		name: 'getImplementors';
-		parameters: {'methodName'};
-		description: 'Gets a method by name and returns a list of methods that implement it.';
-		block: [ :functionCall | 
-			Character cr
-				join: (functionCall anyArgument asSymbol gtImplementors result toArray wait collect: #name) ]
-]
-
-{ #category : #tools }
-GtLlmAssistantLibraryForGt class >> getMethodReferencesTool [
-	^ GtLlmFunctionTool new
-		name: 'getMethodReferences';
-		parameters: {'methodName'};
-		description: 'Gets a method by name and returns a list of methods that reference it.';
-		block: [ :functionCall | 
-			Character cr
-				join: (functionCall anyArgument asSymbol gtReferences result toArray wait collect: #name) ]
-]
-
-{ #category : #tools }
-GtLlmAssistantLibraryForGt class >> getMethodTool [
-	^ GtLlmFunctionTool new
-		name: 'getClassMethod';
-		parameters: {'className'. 'methodName'};
-		description: 'Gets a method by name and returns its source code.';
-		block: [ :functionCall | 
-			functionCall arguments
-				at: 'className'
-				ifPresent: [ :className | 
-					| class |
-					class := className asClassIfAbsent: [ nil ].
-					class
-						ifNil: [ 'Class not found' ]
-						ifNotNil: [ :aClass | 
-							functionCall arguments
-								at: 'methodName'
-								ifPresent: [ :methodName | 
-									aClass allMethods
-										detect: [ :aMethod | aMethod selector = methodName ]
-										ifFound: #sourceCode
-										ifNone: [ 'Method not found' ] ]
-								ifAbsent: [ 'Method not found' ] ] ] ]
-]
-
-{ #category : #tools }
 GtLlmAssistantLibraryForGt class >> getPropertyToolOn: anObject [
 	^ GtLlmFunctionTool new
 		name: 'getObjectProperty';
@@ -204,47 +141,7 @@ GtLlmAssistantLibraryForGt class >> getViewsTool [
 								to: Object) collect: #methodSelector) ] ]
 ]
 
-{ #category : #tools }
-GtLlmAssistantLibraryForGt class >> lookupClassTool [
-	^ GtLlmFunctionTool new
-		name: 'lookupClass';
-		parameters: {'className'};
-		description: 'Get the details of a class as JSON.';
-		block: [ :functionCall | 
-			(functionCall anyArgument asClassIfAbsent: [ nil ])
-				ifNil: [ 'Class not found' ]
-				ifNotNil: [ :aClass | STONJSON toString: (GtLlmValueSerializer new serializeClass: aClass) ] ]
-]
-
-{ #category : #tools }
-GtLlmAssistantLibraryForGt class >> lookupPageTool [
-	^ GtLlmFunctionTool new
-		name: 'lookupDocumentationPage';
-		parameters: {'pageName'};
-		description: 'Looks up a documentation page by name and returns its content in Markdown format. `pageName` may be a substring. If multiple pages are found, only the first one will be returned.';
-		block: [ :functionCall |
-			(LeDatabase gtBook asyncPagesForWord: functionCall anyArgument) toArray wait
-				ifEmpty: [ 'No page found' ]
-				ifNotEmpty: [ :pages | pages first asMarkdownPage ] ]
-]
-
-{ #category : #tools }
-GtLlmAssistantLibraryForGt class >> searchClassTool [
-	^ GtLlmFunctionTool new
-		name: 'searchClasses';
-		parameters: {'query'};
-		description: 'Searches for classes matching the query substring (case-insensitive).';
-		block: [ :functionCall | 
-			STONJSON
-				toString: ((GtSpotterSubstringsFilter new
-						withWordsSplitter;
-						beCaseSensitiveByCapitalization;
-						applyInScope: SystemNavigation default allClassesAndTraits asAsyncStream
-							context: (GtSpotterContext new searchQuery: functionCall anyArgument)) toArray wait
-						collect: #name) ]
-]
-
-{ #category : #library }
+{ #category : #formats }
 GtLlmAssistantLibraryForGt class >> textFormatWithSmalltalkBlocks [
 	^ GtLlmAssistantFormatDescription new
 		name: 'Text';

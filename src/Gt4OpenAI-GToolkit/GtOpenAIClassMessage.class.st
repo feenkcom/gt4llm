@@ -124,7 +124,7 @@ GtOpenAIClassMessage >> isClassDefinitionString: anObject [
 { #category : #'as yet unclassified' }
 GtOpenAIClassMessage >> namespace [
 	| namespace codeBlock |
-	namespace := RBNamespace new.
+	namespace := GtRBNamespace new.
 	codeBlock := self codeBlock.
 	codeBlock isEmptyOrNil ifTrue: [ ^ namespace ].
 

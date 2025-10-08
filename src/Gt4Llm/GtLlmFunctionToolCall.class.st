@@ -70,16 +70,6 @@ GtLlmFunctionToolCall >> gtArgumentsFor: aView [
 		column: 'Value' text: #value
 ]
 
-{ #category : #views }
-GtLlmFunctionToolCall >> gtToolSourceCodeFor: aView [
-	<gtView>
-	^ aView forward
-		title: 'Tool source code';
-		priority: 5;
-		object: [ tool ];
-		view: #gtBlockSourceCodeFor:
-]
-
 { #category : #'as yet unclassified' }
 GtLlmFunctionToolCall >> humanReadable [
 	^ self name , ' ('

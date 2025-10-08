@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'connectionRegistry'
 	],
-	#category : #'Gt4Llm-GToolkit'
+	#category : #'Gt4Llm-GToolkit-UI'
 }
 
 { #category : #'initialization ' }

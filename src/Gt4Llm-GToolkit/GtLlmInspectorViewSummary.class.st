@@ -7,7 +7,7 @@ Class {
 		'viewClass',
 		'withoutMarkup'
 	],
-	#category : #'Gt4Llm-GToolkit'
+	#category : #'Gt4Llm-GToolkit-UI'
 }
 
 { #category : #accessing }

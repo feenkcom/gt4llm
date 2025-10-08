@@ -8,7 +8,7 @@ Class {
 		'decorationBlock',
 		'tokenColors'
 	],
-	#category : #'Gt4Llm-GToolkit'
+	#category : #'Gt4Llm-GToolkit-Tokenization'
 }
 
 { #category : #accessing }

@@ -1,10 +1,6 @@
 Class {
 	#name : #GtLlmTool,
 	#superclass : #GtLlmEntity,
-	#instVars : [
-		'type',
-		'name'
-	],
 	#category : #Gt4Llm
 }
 
@@ -26,46 +22,19 @@ GtLlmTool >> acceptVisitor: aVisitor [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmTool >> defaultType [
-	^ ''
-]
-
-{ #category : #'as yet unclassified' }
-GtLlmTool >> description [
-	^ ''
-]
-
-{ #category : #'as yet unclassified' }
 GtLlmTool >> functionAnthropic [
-	^ {'type' -> type.
+	^ {'type' -> self type.
 		'name' -> self name} asDictionary
 ]
 
 { #category : #'as yet unclassified' }
 GtLlmTool >> functionResponse [
-	^ {'type' -> type} asDictionary
+	^ {'type' -> self type} asDictionary
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmTool >> initialize [
-	super initialize.
-	
-	self type: self defaultType
-]
-
-{ #category : #accessing }
 GtLlmTool >> name [
-	^ name ifNil: [ type ]
-]
-
-{ #category : #accessing }
-GtLlmTool >> name: anObject [
-	name := anObject
-]
-
-{ #category : #'as yet unclassified' }
-GtLlmTool >> parameters [
-	^ {}
+	self subclassResponsibility
 ]
 
 { #category : #accessing }
@@ -80,10 +49,5 @@ GtLlmTool >> printOn: aStream [
 
 { #category : #accessing }
 GtLlmTool >> type [
-	^ type
-]
-
-{ #category : #accessing }
-GtLlmTool >> type: anObject [
-	type := anObject
+	^ ''
 ]
