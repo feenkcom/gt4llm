@@ -4,7 +4,7 @@
 doit
 (Announcement
 	subclass: 'GtLlmActionCall'
-	instVarNames: #(action arguments)
+	instVarNames: #(action arguments subject)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -18,6 +18,24 @@ true.
 
 removeallmethods GtLlmActionCall
 removeallclassmethods GtLlmActionCall
+
+doit
+(Announcement
+	subclass: 'GtLlmMessageContentsUpdated'
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #( #logCreation )
+)
+		category: 'Gt4Llm';
+		immediateInvariant.
+true.
+%
+
+removeallmethods GtLlmMessageContentsUpdated
+removeallclassmethods GtLlmMessageContentsUpdated
 
 doit
 (Announcement
@@ -237,24 +255,6 @@ removeallclassmethods GtBPEEncoder
 
 doit
 (Object
-	subclass: 'GtBPEEncoderExamples'
-	instVarNames: #()
-	classVars: #()
-	classInstVars: #()
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #( #logCreation )
-)
-		category: 'Gt4Llm';
-		immediateInvariant.
-true.
-%
-
-removeallmethods GtBPEEncoderExamples
-removeallclassmethods GtBPEEncoderExamples
-
-doit
-(Object
 	subclass: 'GtBPEEncodingResult'
 	instVarNames: #(input tokens stats merges output)
 	classVars: #()
@@ -306,6 +306,96 @@ true.
 
 removeallmethods GtLlmActionReference
 removeallclassmethods GtLlmActionReference
+
+doit
+(Object
+	subclass: 'GtLlmAssistant'
+	instVarNames: #(instruction connection)
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #( #logCreation )
+)
+		category: 'Gt4Llm';
+		immediateInvariant.
+true.
+%
+
+removeallmethods GtLlmAssistant
+removeallclassmethods GtLlmAssistant
+
+doit
+(GtLlmAssistant
+	subclass: 'GtLlmTutor'
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #( #logCreation )
+)
+		category: 'Gt4Llm';
+		immediateInvariant.
+true.
+%
+
+removeallmethods GtLlmTutor
+removeallclassmethods GtLlmTutor
+
+doit
+(GtLlmAssistant
+	subclass: 'GtOpenAIBlogPostAssistant'
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #( #logCreation )
+)
+		category: 'Gt4OpenAI';
+		immediateInvariant.
+true.
+%
+
+removeallmethods GtOpenAIBlogPostAssistant
+removeallclassmethods GtOpenAIBlogPostAssistant
+
+doit
+(Object
+	subclass: 'GtLlmAssistantAction'
+	instVarNames: #(name examples pipeline description format priority definingMethod assistant arguments)
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #( #logCreation )
+)
+		category: 'Gt4Llm';
+		immediateInvariant.
+true.
+%
+
+removeallmethods GtLlmAssistantAction
+removeallclassmethods GtLlmAssistantAction
+
+doit
+(Object
+	subclass: 'GtLlmAssistantActionExample'
+	instVarNames: #(input output inputReferences action outputReferences unverified)
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #( #logCreation )
+)
+		category: 'Gt4Llm';
+		immediateInvariant.
+true.
+%
+
+removeallmethods GtLlmAssistantActionExample
+removeallclassmethods GtLlmAssistantActionExample
 
 doit
 (Object
@@ -399,8 +489,44 @@ removeallclassmethods GtLlmAssistantChatWorkingStatus
 
 doit
 (Object
+	subclass: 'GtLlmAssistantFormatDescription'
+	instVarNames: #(name format tag example priority referencingActions definingMethod type items assistant)
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #( #logCreation )
+)
+		category: 'Gt4Llm';
+		immediateInvariant.
+true.
+%
+
+removeallmethods GtLlmAssistantFormatDescription
+removeallclassmethods GtLlmAssistantFormatDescription
+
+doit
+(Object
+	subclass: 'GtLlmAssistantInstruction'
+	instVarNames: #(name actions description formats sections)
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #( #logCreation )
+)
+		category: 'Gt4Llm';
+		immediateInvariant.
+true.
+%
+
+removeallmethods GtLlmAssistantInstruction
+removeallclassmethods GtLlmAssistantInstruction
+
+doit
+(Object
 	subclass: 'GtLlmChat'
-	instVarNames: #(model announcer context lastUpdate tutor provider messages serializer)
+	instVarNames: #(announcer lastUpdate assistant provider messages)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -418,7 +544,7 @@ removeallclassmethods GtLlmChat
 doit
 (GtLlmChat
 	subclass: 'GtLlmActionChat'
-	instVarNames: #()
+	instVarNames: #(instance)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -435,8 +561,8 @@ removeallclassmethods GtLlmActionChat
 
 doit
 (Object
-	subclass: 'GtLlmChatExamples'
-	instVarNames: #()
+	subclass: 'GtLlmConnection'
+	instVarNames: #(provider label meta)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -448,8 +574,26 @@ doit
 true.
 %
 
-removeallmethods GtLlmChatExamples
-removeallclassmethods GtLlmChatExamples
+removeallmethods GtLlmConnection
+removeallclassmethods GtLlmConnection
+
+doit
+(Object
+	subclass: 'GtLlmConnectionRegistry'
+	instVarNames: #(connections defaultConnection)
+	classVars: #()
+	classInstVars: #(uniqueInstance)
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #( #logCreation )
+)
+		category: 'Gt4Llm';
+		immediateInvariant.
+true.
+%
+
+removeallmethods GtLlmConnectionRegistry
+removeallclassmethods GtLlmConnectionRegistry
 
 doit
 (Object
@@ -616,7 +760,7 @@ removeallclassmethods GtLlmEndpointClient
 doit
 (GtLlmEndpointClient
 	subclass: 'GtOllamaCompleteChatAPIClient'
-	instVarNames: #(messages model format tools)
+	instVarNames: #(messages model format tools instructions)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1030,6 +1174,24 @@ removeallclassmethods GtOpenAIGenerateEmbeddingAPIClient
 
 doit
 (GtLlmEndpointClient
+	subclass: 'GtOpenAIGenerateResponseAPIClient'
+	instVarNames: #(model messages tools format instructions isStreaming)
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #( #logCreation )
+)
+		category: 'Gt4OpenAI';
+		immediateInvariant.
+true.
+%
+
+removeallmethods GtOpenAIGenerateResponseAPIClient
+removeallclassmethods GtOpenAIGenerateResponseAPIClient
+
+doit
+(GtLlmEndpointClient
 	subclass: 'GtOpenAIGetFileAPIClient'
 	instVarNames: #(file)
 	classVars: #()
@@ -1283,7 +1445,7 @@ removeallclassmethods GtLlmEntity
 doit
 (GtLlmEntity
 	subclass: 'GtLlmChatMessage'
-	instVarNames: #(content role id createdAt chat attachments)
+	instVarNames: #(content role id createdAt chat announcer images model)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1389,24 +1551,6 @@ removeallmethods GtLlmUserMessage
 removeallclassmethods GtLlmUserMessage
 
 doit
-(GtLlmUserMessage
-	subclass: 'GtLlmCompositeMessage'
-	instVarNames: #(serializeInline)
-	classVars: #()
-	classInstVars: #()
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #( #logCreation )
-)
-		category: 'Gt4Llm';
-		immediateInvariant.
-true.
-%
-
-removeallmethods GtLlmCompositeMessage
-removeallclassmethods GtLlmCompositeMessage
-
-doit
 (GtLlmChatMessage
 	subclass: 'GtOpenAIMessage'
 	instVarNames: #(threadId assistantId runId metadata annotations pipeline step completedAt incompleteAt)
@@ -1463,7 +1607,7 @@ removeallclassmethods GtOpenAIBlogPostMessage
 doit
 (GtLlmEntity
 	subclass: 'GtLlmFunctionToolCall'
-	instVarNames: #(id arguments name)
+	instVarNames: #(id arguments name tool)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1481,7 +1625,7 @@ removeallclassmethods GtLlmFunctionToolCall
 doit
 (GtLlmEntity
 	subclass: 'GtLlmTool'
-	instVarNames: #(type)
+	instVarNames: #()
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1498,7 +1642,7 @@ removeallclassmethods GtLlmTool
 
 doit
 (GtLlmTool
-	subclass: 'GtLlmFileSearchTool'
+	subclass: 'GtLlmAbstractFunctionTool'
 	instVarNames: #()
 	classVars: #()
 	classInstVars: #()
@@ -1511,13 +1655,13 @@ doit
 true.
 %
 
-removeallmethods GtLlmFileSearchTool
-removeallclassmethods GtLlmFileSearchTool
+removeallmethods GtLlmAbstractFunctionTool
+removeallclassmethods GtLlmAbstractFunctionTool
 
 doit
-(GtLlmTool
+(GtLlmAbstractFunctionTool
 	subclass: 'GtLlmFunctionTool'
-	instVarNames: #(description name parameters block)
+	instVarNames: #(description parameters block name)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1531,6 +1675,42 @@ true.
 
 removeallmethods GtLlmFunctionTool
 removeallclassmethods GtLlmFunctionTool
+
+doit
+(GtLlmFunctionTool
+	subclass: 'GtLlmFunctionToolWithProtocol'
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #( #logCreation )
+)
+		category: 'Gt4Llm';
+		immediateInvariant.
+true.
+%
+
+removeallmethods GtLlmFunctionToolWithProtocol
+removeallclassmethods GtLlmFunctionToolWithProtocol
+
+doit
+(GtLlmTool
+	subclass: 'GtLlmFileSearchTool'
+	instVarNames: #(vectorStoreIds)
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #( #logCreation )
+)
+		category: 'Gt4Llm';
+		immediateInvariant.
+true.
+%
+
+removeallmethods GtLlmFileSearchTool
+removeallclassmethods GtLlmFileSearchTool
 
 doit
 (GtLlmEntity
@@ -1894,6 +2074,24 @@ removeallclassmethods GtOpenAIModel
 
 doit
 (GtLlmEntity
+	subclass: 'GtOpenAIResponse'
+	instVarNames: #(id createdAt status error incompleteDetails instructions maxOutputTokens model output parallelToolCalls previousResponseId reasoning store temperature text toolChoice tools topP truncation usage user metadata)
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #( #logCreation )
+)
+		category: 'Gt4OpenAI';
+		immediateInvariant.
+true.
+%
+
+removeallmethods GtOpenAIResponse
+removeallclassmethods GtOpenAIResponse
+
+doit
+(GtLlmEntity
 	subclass: 'GtOpenAIThread'
 	instVarNames: #(id createdAt metadata messages tools toolResources)
 	classVars: #()
@@ -1966,6 +2164,24 @@ removeallclassmethods GtOpenAIVectorStore
 
 doit
 (Object
+	subclass: 'GtLlmErrorThreadMessage'
+	instVarNames: #(exception createdAt chat)
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #( #logCreation )
+)
+		category: 'Gt4Llm';
+		immediateInvariant.
+true.
+%
+
+removeallmethods GtLlmErrorThreadMessage
+removeallclassmethods GtLlmErrorThreadMessage
+
+doit
+(Object
 	subclass: 'GtLlmFailureThreadMessage'
 	instVarNames: #(failureText createdAt chat)
 	classVars: #()
@@ -1981,6 +2197,24 @@ true.
 
 removeallmethods GtLlmFailureThreadMessage
 removeallclassmethods GtLlmFailureThreadMessage
+
+doit
+(Object
+	subclass: 'GtLlmFeatures'
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #(UseCoder MultiStep)
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #( #logCreation )
+)
+		category: 'Gt4Llm';
+		immediateInvariant.
+true.
+%
+
+removeallmethods GtLlmFeatures
+removeallclassmethods GtLlmFeatures
 
 doit
 (Object
@@ -2035,6 +2269,24 @@ true.
 
 removeallmethods GtLlmActionsGroup
 removeallclassmethods GtLlmActionsGroup
+
+doit
+(GtLlmGroup
+	subclass: 'GtLlmAssistantActionExamplesGroup'
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #( #logCreation )
+)
+		category: 'Gt4Llm';
+		immediateInvariant.
+true.
+%
+
+removeallmethods GtLlmAssistantActionExamplesGroup
+removeallclassmethods GtLlmAssistantActionExamplesGroup
 
 doit
 (GtLlmGroup
@@ -2164,7 +2416,7 @@ removeallclassmethods GtLlmToolsGroup
 
 doit
 (GtLlmGroup
-	subclass: 'GtLlmTutorActionExamplesGroup'
+	subclass: 'GtMcpPromptsGroup'
 	instVarNames: #()
 	classVars: #()
 	classInstVars: #()
@@ -2177,8 +2429,26 @@ doit
 true.
 %
 
-removeallmethods GtLlmTutorActionExamplesGroup
-removeallclassmethods GtLlmTutorActionExamplesGroup
+removeallmethods GtMcpPromptsGroup
+removeallclassmethods GtMcpPromptsGroup
+
+doit
+(GtLlmGroup
+	subclass: 'GtMcpResourcesGroup'
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #( #logCreation )
+)
+		category: 'Gt4Llm';
+		immediateInvariant.
+true.
+%
+
+removeallmethods GtMcpResourcesGroup
+removeallclassmethods GtMcpResourcesGroup
 
 doit
 (GtLlmGroup
@@ -2705,7 +2975,7 @@ removeallclassmethods GtLlmNearestEmbedding
 doit
 (Object
 	subclass: 'GtLlmNewThreadMessage'
-	instVarNames: #(assistantChat contents announcer files)
+	instVarNames: #(assistantChat contents announcer files future isSync)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -2737,6 +3007,24 @@ true.
 
 removeallmethods GtLlmNewActionThreadMessage
 removeallclassmethods GtLlmNewActionThreadMessage
+
+doit
+(Object
+	subclass: 'GtLlmNullConnection'
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #( #logCreation )
+)
+		category: 'Gt4Llm';
+		immediateInvariant.
+true.
+%
+
+removeallmethods GtLlmNullConnection
+removeallclassmethods GtLlmNullConnection
 
 doit
 (Object
@@ -2793,10 +3081,28 @@ removeallmethods GtLlmNullProvider
 removeallclassmethods GtLlmNullProvider
 
 doit
+(GtLlmNullProvider
+	subclass: 'GtLlmStaticProvider'
+	instVarNames: #(messages index)
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #( #logCreation )
+)
+		category: 'Gt4Llm';
+		immediateInvariant.
+true.
+%
+
+removeallmethods GtLlmStaticProvider
+removeallclassmethods GtLlmStaticProvider
+
+doit
 (GtLlmProvider
 	subclass: 'GtOllamaProvider'
-	instVarNames: #(assistantWorking model client modelfile tools)
-	classVars: #()
+	instVarNames: #(assistantWorking model client tools files executions instructions)
+	classVars: #(DefaultModel IsConnectable)
 	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: Globals
@@ -2813,7 +3119,7 @@ removeallclassmethods GtOllamaProvider
 doit
 (GtLlmProvider
 	subclass: 'GtOpenAIProvider'
-	instVarNames: #(model client)
+	instVarNames: #(model client assistantWorking)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -2847,6 +3153,24 @@ removeallmethods GtOpenAIAssistantProvider
 removeallclassmethods GtOpenAIAssistantProvider
 
 doit
+(GtOpenAIProvider
+	subclass: 'GtOpenAIResponseProvider'
+	instVarNames: #(tools instructions executions isStreaming)
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #( #logCreation )
+)
+		category: 'Gt4OpenAI';
+		immediateInvariant.
+true.
+%
+
+removeallmethods GtOpenAIResponseProvider
+removeallclassmethods GtOpenAIResponseProvider
+
+doit
 (Object
 	subclass: 'GtLlmProvisionalThreadMessage'
 	instVarNames: #(createdAt chat)
@@ -2866,8 +3190,8 @@ removeallclassmethods GtLlmProvisionalThreadMessage
 
 doit
 (Object
-	subclass: 'GtLlmToolExamples'
-	instVarNames: #()
+	subclass: 'GtLlmRequestResponse'
+	instVarNames: #(request response)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -2879,152 +3203,8 @@ doit
 true.
 %
 
-removeallmethods GtLlmToolExamples
-removeallclassmethods GtLlmToolExamples
-
-doit
-(Object
-	subclass: 'GtLlmTutor'
-	instVarNames: #(providerStencil instruction)
-	classVars: #()
-	classInstVars: #()
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #( #logCreation )
-)
-		category: 'Gt4Llm';
-		immediateInvariant.
-true.
-%
-
-removeallmethods GtLlmTutor
-removeallclassmethods GtLlmTutor
-
-doit
-(GtLlmTutor
-	subclass: 'GtOpenAIBlogPostTutor'
-	instVarNames: #()
-	classVars: #()
-	classInstVars: #()
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #( #logCreation )
-)
-		category: 'Gt4OpenAI';
-		immediateInvariant.
-true.
-%
-
-removeallmethods GtOpenAIBlogPostTutor
-removeallclassmethods GtOpenAIBlogPostTutor
-
-doit
-(Object
-	subclass: 'GtLlmTutorAction'
-	instVarNames: #(name examples pipeline description format priority tutor definingMethod)
-	classVars: #()
-	classInstVars: #()
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #( #logCreation )
-)
-		category: 'Gt4Llm';
-		immediateInvariant.
-true.
-%
-
-removeallmethods GtLlmTutorAction
-removeallclassmethods GtLlmTutorAction
-
-doit
-(Object
-	subclass: 'GtLlmTutorActionExample'
-	instVarNames: #(input output inputReferences action outputReferences unverified)
-	classVars: #()
-	classInstVars: #()
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #( #logCreation )
-)
-		category: 'Gt4Llm';
-		immediateInvariant.
-true.
-%
-
-removeallmethods GtLlmTutorActionExample
-removeallclassmethods GtLlmTutorActionExample
-
-doit
-(Object
-	subclass: 'GtLlmTutorExamples'
-	instVarNames: #()
-	classVars: #()
-	classInstVars: #()
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #( #logCreation )
-)
-		category: 'Gt4Llm';
-		immediateInvariant.
-true.
-%
-
-removeallmethods GtLlmTutorExamples
-removeallclassmethods GtLlmTutorExamples
-
-doit
-(Object
-	subclass: 'GtLlmTutorFormat'
-	instVarNames: #(name components)
-	classVars: #()
-	classInstVars: #()
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #( #logCreation )
-)
-		category: 'Gt4Llm';
-		immediateInvariant.
-true.
-%
-
-removeallmethods GtLlmTutorFormat
-removeallclassmethods GtLlmTutorFormat
-
-doit
-(Object
-	subclass: 'GtLlmTutorFormatDescription'
-	instVarNames: #(name format tag example priority tutor referencingActions definingMethod type)
-	classVars: #()
-	classInstVars: #()
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #( #logCreation )
-)
-		category: 'Gt4Llm';
-		immediateInvariant.
-true.
-%
-
-removeallmethods GtLlmTutorFormatDescription
-removeallclassmethods GtLlmTutorFormatDescription
-
-doit
-(Object
-	subclass: 'GtLlmTutorInstruction'
-	instVarNames: #(name actions description formats sections)
-	classVars: #()
-	classInstVars: #()
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #( #logCreation )
-)
-		category: 'Gt4Llm';
-		immediateInvariant.
-true.
-%
-
-removeallmethods GtLlmTutorInstruction
-removeallclassmethods GtLlmTutorInstruction
+removeallmethods GtLlmRequestResponse
+removeallclassmethods GtLlmRequestResponse
 
 doit
 (Object
@@ -3063,9 +3243,135 @@ removeallmethods GtLlmSerializableValueHolder
 removeallclassmethods GtLlmSerializableValueHolder
 
 doit
+(GtLlmSerializableValueHolder
+	subclass: 'GtLlmCustomSerializationValueHolder'
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #( #logCreation )
+)
+		category: 'Gt4Llm';
+		immediateInvariant.
+true.
+%
+
+removeallmethods GtLlmCustomSerializationValueHolder
+removeallclassmethods GtLlmCustomSerializationValueHolder
+
+doit
+(Object
+	subclass: 'GtLlmValueSerializer'
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #( #logCreation )
+)
+		category: 'Gt4Llm';
+		immediateInvariant.
+true.
+%
+
+removeallmethods GtLlmValueSerializer
+removeallclassmethods GtLlmValueSerializer
+
+doit
+(Object
+	subclass: 'GtMcpClient'
+	instVarNames: #(messageId stdout serverCapabilities transport)
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #( #logCreation )
+)
+		category: 'Gt4Llm';
+		immediateInvariant.
+true.
+%
+
+removeallmethods GtMcpClient
+removeallclassmethods GtMcpClient
+
+doit
+(Object
+	subclass: 'GtMcpPrompt'
+	instVarNames: #(name description arguments promptBlock)
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #( #logCreation )
+)
+		category: 'Gt4Llm';
+		immediateInvariant.
+true.
+%
+
+removeallmethods GtMcpPrompt
+removeallclassmethods GtMcpPrompt
+
+doit
+(Object
+	subclass: 'GtMcpResource'
+	instVarNames: #(name title uri mimeType contentsBlock description)
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #( #logCreation )
+)
+		category: 'Gt4Llm';
+		immediateInvariant.
+true.
+%
+
+removeallmethods GtMcpResource
+removeallclassmethods GtMcpResource
+
+doit
+(Object
+	subclass: 'GtMcpStaticTransport'
+	instVarNames: #(index messages)
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #( #logCreation )
+)
+		category: 'Gt4Llm';
+		immediateInvariant.
+true.
+%
+
+removeallmethods GtMcpStaticTransport
+removeallclassmethods GtMcpStaticTransport
+
+doit
+(Object
+	subclass: 'GtMcpStdioTransport'
+	instVarNames: #(process stdout messages)
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #( #logCreation )
+)
+		category: 'Gt4Llm';
+		immediateInvariant.
+true.
+%
+
+removeallmethods GtMcpStdioTransport
+removeallclassmethods GtMcpStdioTransport
+
+doit
 (Object
 	subclass: 'GtOllamaClient'
-	instVarNames: #(baseUrl)
+	instVarNames: #(baseUrl history)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -3083,7 +3389,7 @@ removeallclassmethods GtOllamaClient
 doit
 (Object
 	subclass: 'GtOpenAIClient'
-	instVarNames: #(baseUrl apiKey)
+	instVarNames: #(baseUrl apiKey history)
 	classVars: #(ApiKeyFile)
 	classInstVars: #()
 	poolDictionaries: #()
@@ -3316,6 +3622,24 @@ removeallclassmethods GtOpenAIVectorStoresGroup
 
 doit
 (Object
+	subclass: 'GtOpenAIRawToolMessage'
+	instVarNames: #(rawData chat createdAt toolCall reasoning)
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #( #logCreation )
+)
+		category: 'Gt4OpenAI';
+		immediateInvariant.
+true.
+%
+
+removeallmethods GtOpenAIRawToolMessage
+removeallclassmethods GtOpenAIRawToolMessage
+
+doit
+(Object
 	subclass: 'GtOpenAIResourceFile'
 	instVarNames: #(file description remoteId)
 	classVars: #()
@@ -3368,9 +3692,33 @@ true.
 removeallmethods GtPretrainedEncoder
 removeallclassmethods GtPretrainedEncoder
 
+doit
+(OrderedCollection
+	subclass: 'GtLlmRequestHistory'
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #( #logCreation )
+)
+		category: 'Gt4Llm';
+		immediateInvariant.
+true.
+%
+
+removeallmethods GtLlmRequestHistory
+removeallclassmethods GtLlmRequestHistory
+
 ! Class implementation for 'GtLlmActionCall'
 
 !		Class methods for 'GtLlmActionCall'
+
+category: 'accessing'
+classmethod: GtLlmActionCall
+action: aString
+	^ self new action: aString
+%
 
 category: 'accessing'
 classmethod: GtLlmActionCall
@@ -3404,6 +3752,55 @@ category: 'accessing'
 method: GtLlmActionCall
 arguments: anObject
 	arguments := anObject
+%
+
+category: 'views'
+method: GtLlmActionCall
+gtSerializedFor: aView
+	<gtView>
+	^ aView forward
+		title: 'Serialized';
+		object: [ self serialize ];
+		view: #gtJSONFor:
+%
+
+category: 'views'
+method: GtLlmActionCall
+gtSerializedJSONFor: aView
+	<gtView>
+	^ aView forward
+		title: 'JSON';
+		object: [ self serialize ];
+		view: #gtJSONDataFor:context:
+%
+
+category: 'as yet unclassified'
+method: GtLlmActionCall
+initialize
+	arguments := {}
+%
+
+category: 'as yet unclassified'
+method: GtLlmActionCall
+serialize
+	| toSerialize |
+	toSerialize := {'Action' -> action.
+			'Arguments' -> (arguments collect: #asString)}.
+	subject ifNotNil: [ toSerialize := toSerialize, subject serialize asOrderedCollection ].
+	^ STONJSON toString: toSerialize asDictionary
+%
+
+category: 'accessing'
+method: GtLlmActionCall
+subject
+	"this is an optional object that we might want to serialize"
+	^ subject
+%
+
+category: 'accessing'
+method: GtLlmActionCall
+subject: anObject
+	subject := anObject
 %
 
 ! Class implementation for 'GtLlmNewThreadMessageContentsChanged'
@@ -3625,38 +4022,6 @@ vocabularySize: anObject
 	vocabularySize := anObject
 %
 
-! Class implementation for 'GtBPEEncoderExamples'
-
-!		Instance methods for 'GtBPEEncoderExamples'
-
-category: 'accessing'
-method: GtBPEEncoderExamples
-encodedLorem
-	<gtExample>
-	| encoder encoded |
-	encoder := GtBPEEncoder new.
-	encoded := encoder encode: String loremIpsum.
-	
-	self assert: encoded output size equals: 300.
-	self assert: encoded compressionRatio > 1.
-	
-	^ encoded
-%
-
-category: 'accessing'
-method: GtBPEEncoderExamples
-preTrainedEncoderLorem
-	<gtExample>
-	| encoder encoded |
-	encoder := GtPretrainedEncoder new merges: self encodedLorem merges.
-	encoded := encoder encode: String loremIpsum.
-	
-	self assert: encoded size equals: 300.
-	self assert: (encoder decode: encoded) equals: String loremIpsum.
-	
-	^ encoded
-%
-
 ! Class implementation for 'GtBPEEncodingResult'
 
 !		Instance methods for 'GtBPEEncodingResult'
@@ -3664,6 +4029,7 @@ preTrainedEncoderLorem
 category: 'accessing'
 method: GtBPEEncodingResult
 compressionRatio
+	self output size = 0 ifTrue: [ ^ self tokens size ].
 	^ self tokens size / self output size
 %
 
@@ -3857,6 +4223,967 @@ category: 'accessing'
 method: GtLlmActionReference
 markOutput
 	isOutput := true
+%
+
+! Class implementation for 'GtLlmAssistant'
+
+!		Class methods for 'GtLlmAssistant'
+
+category: 'other'
+classmethod: GtLlmAssistant
+new
+	^ self basicNew initialize
+%
+
+!		Instance methods for 'GtLlmAssistant'
+
+category: 'as yet unclassified'
+method: GtLlmAssistant
+actionFormatDescription
+	<gtLlmAssistantFormat>
+	^ GtLlmAssistantFormatDescription new beRequired
+		name: 'Action';
+		format: 'Text';
+		example: '```text
+Create a draft
+```'
+%
+
+category: 'as yet unclassified'
+method: GtLlmAssistant
+actionNamed: anActionName
+	^ self instruction actionNamed: anActionName
+%
+
+category: 'accessing'
+method: GtLlmAssistant
+actions
+	^ instruction actions
+%
+
+category: 'as yet unclassified'
+method: GtLlmAssistant
+addAction: anAction
+	instruction addAction: (anAction assistant: self)
+%
+
+category: 'as yet unclassified'
+method: GtLlmAssistant
+addFormat: aComponent
+	instruction addComponent: aComponent
+%
+
+category: 'as yet unclassified'
+method: GtLlmAssistant
+addInstructionSection: aSection
+	instruction addSection: aSection
+%
+
+category: 'as yet unclassified'
+method: GtLlmAssistant
+argumentsFormatDescription
+	<gtLlmAssistantFormat>
+	^ GtLlmAssistantFormatDescription new
+		name: 'Arguments';
+		format: 'Array of text';
+		type: {'array'. 'null'};
+		items: {'type' -> 'string'} asDictionary;
+		example: '{"Argument 1", "Argument 2"}'
+%
+
+category: 'as yet unclassified'
+method: GtLlmAssistant
+buildProvider
+	^ connection buildProvider
+%
+
+category: 'as yet unclassified'
+method: GtLlmAssistant
+chatAction
+	<gtLlmAssistantAction>
+	^ GtLlmAssistantAction new
+		name: 'Chat';
+		priority: 1;
+		description: 'Chat using the text field.';
+		addArgument: 'Message';
+		examples: {GtLlmAssistantActionExample new markUnverified
+					input: {'Action' -> 'Chat'.
+							'Arguments' -> {'Hi! How are you?'}} asDictionary;
+					output: {'Action' -> 'Chat'.
+							'Arguments' -> {'Hi! How are you?'}.
+							'Text'
+								-> 'As an AI model, I do not have feelings. How can I assist you today?'}
+							asDictionary}
+%
+
+category: 'as yet unclassified'
+method: GtLlmAssistant
+collectActions
+	^ (((Set
+		withAll: ((Pragma
+				allNamed: #gtLlmAssistantAction
+				from: self class
+				to: Object) collect: [ :aPragma | aPragma methodSelector ])) asSet
+		collect: [ :aSelector | self perform: aSelector ]
+		thenSelect: [ :anAction | anAction isNotNil ])
+		collect: [ :anAction | anAction assistant: self ])
+		sorted: [ :a :b | a priority < b priority ]
+%
+
+category: 'as yet unclassified'
+method: GtLlmAssistant
+collectFormats
+	^ (((Pragma
+		allNamed: #gtLlmAssistantFormat
+		from: self class
+		to: Object) collect: [ :aPragma | aPragma methodSelector ]) asSet
+		collect: [ :aSelector | (self perform: aSelector) assistant: self ])
+		sorted: [ :a :b | a priority < b priority ]
+%
+
+category: 'as yet unclassified'
+method: GtLlmAssistant
+collectSections
+	^ (Pragma
+		allNamed: #gtLlmInstructionSection
+		from: self class
+		to: Object) collect: [ :aPragma | self perform: aPragma methodSelector ]
+%
+
+category: 'as yet unclassified'
+method: GtLlmAssistant
+collectTools
+	^ GtLlmToolsGroup
+		withAll: ((Set
+				withAll: ((Pragma
+						allNamed: #gtLlmTool
+						from: self class
+						to: Object) collect: [ :aPragma | aPragma methodSelector ])) asSet
+				collect: [ :aSelector | self perform: aSelector ]
+				thenSelect: [ :aTool | aTool isNotNil ]) asOrderedCollection
+%
+
+category: 'accessing'
+method: GtLlmAssistant
+connection
+	^ connection
+%
+
+category: 'accessing'
+method: GtLlmAssistant
+connection: anObject
+	connection := anObject
+%
+
+category: 'as yet unclassified'
+method: GtLlmAssistant
+createChat
+	^ self createChatWithProvider: self buildProvider
+%
+
+category: 'as yet unclassified'
+method: GtLlmAssistant
+createChatWithProvider: provider
+	^ GtLlmActionChat new
+		assistant: self;
+		provider: provider
+%
+
+category: 'as yet unclassified'
+method: GtLlmAssistant
+defaultDescription
+	^ 'You are an assistant.'
+%
+
+category: 'as yet unclassified'
+method: GtLlmAssistant
+description
+	^ self instruction description
+%
+
+category: 'accessing'
+method: GtLlmAssistant
+description: anObject
+	instruction description: anObject
+%
+
+category: 'as yet unclassified'
+method: GtLlmAssistant
+formatComponents
+	^ instruction formats
+%
+
+category: 'as yet unclassified'
+method: GtLlmAssistant
+formatNamed: aString
+	^ instruction componentNamed: aString
+%
+
+category: 'as yet unclassified'
+method: GtLlmAssistant
+gtInstructionFor: aView
+	<gtView>
+	^ aView forward
+		title: 'Instruction';
+		priority: 9;
+		object: [ instruction asInstructionPiece ];
+		view: #gtInstructionFor:
+%
+
+category: 'as yet unclassified'
+method: GtLlmAssistant
+initialize
+	super initialize.
+
+	self initializeInstruction.
+
+	self connection: GtLlmConnectionRegistry uniqueInstance defaultConnection.
+
+	self description: self defaultDescription
+%
+
+category: 'as yet unclassified'
+method: GtLlmAssistant
+initializeInstruction
+	instruction := GtLlmAssistantInstruction new.
+	instruction
+		addComponents: self collectFormats;
+		addActions: self collectActions;
+		addSections: self collectSections
+%
+
+category: 'accessing'
+method: GtLlmAssistant
+instruction
+	^ instruction
+%
+
+category: 'as yet unclassified'
+method: GtLlmAssistant
+recomputeActions
+	instruction replaceActions: self collectActions
+%
+
+category: 'as yet unclassified'
+method: GtLlmAssistant
+recomputeFormats
+	instruction replaceComponents: self collectFormats
+%
+
+category: 'as yet unclassified'
+method: GtLlmAssistant
+textFormatDescription
+	<gtLlmAssistantFormat>
+	^ GtLlmAssistantFormatDescription new
+		name: 'Text';
+		priority: 2;
+		format: 'Text';
+		example: '```text
+This node contains plain text.
+Multiple lines, multiple paragraphs are allowed.
+
+*markup* may also **be used**. `Code` can be highlighted,  and code sections using three backticks may be used.
+
+# Headings exist as well
+```'
+%
+
+category: 'as yet unclassified'
+method: GtLlmAssistant
+treatProvider: aProvider
+	aProvider 
+		instructions: instruction asInstructionPiece instructionString;
+		format: instruction asJsonSchema;
+		tools: self collectTools
+%
+
+! Class implementation for 'GtLlmTutor'
+
+!		Class methods for 'GtLlmTutor'
+
+category: 'testing'
+classmethod: GtLlmTutor
+isDeprecated
+	^ true
+%
+
+! Class implementation for 'GtOpenAIBlogPostAssistant'
+
+!		Instance methods for 'GtOpenAIBlogPostAssistant'
+
+category: 'as yet unclassified'
+method: GtOpenAIBlogPostAssistant
+createChatOn: aText
+	| chat |
+	chat := self createChat.
+	chat onInstance: (self valueHolderFor: aText).
+	^ chat
+%
+
+category: 'as yet unclassified'
+method: GtOpenAIBlogPostAssistant
+defaultDescription
+	^ 'You are an assistant that is used to interactively work on blog posts. You trigger certain actions to generate a desired result.'
+%
+
+category: 'as yet unclassified'
+method: GtOpenAIBlogPostAssistant
+gtCorrectGrammar
+	<gtLlmAssistantAction>
+	^ GtLlmAssistantAction new
+		name: 'Correct grammar';
+		priority: 10;
+		description: 'Correct grammar. Place the result in the `Post` property.';
+		examples: {GtLlmAssistantActionExample new
+					input: {'Action' -> 'Correct grammar'.
+							'Arguments' -> {}.
+							'Post'
+								-> 'There are at least two ways to use LLMs for supporting understanding of software systems:
+(A) use LLMs to generate summaries
+(B) use LLMs to generate tools with which you generate summaries
+
+The difference might appear subtle, but it''s significant. There are a number of recent article proposes mostly (A) as a direction. These use LLMs as solution generators.
+
+However, any concrete solutions entail biases. When we get the final answer, these biases are invisible. The solution might be correct, but you''d have no real way of knowing what tradeoffs they contain. The alternative is to regard current LLMs are generators of possibilities that should be evaluated against reality before being relied upon for decision making in a technical space.
+
+That is why I favor (B) especially when combined with a moldable development environment. When we get the tools we have a chance to review the bias and apply other forms of checks, too. We can then use these tools to produce visualizations of the system ourselves.
+
+LLMs work interestingly well for shallow questions (I call shallow the questions whose answers can be evaluated against reality quickly). Moldable Development splits technical decision making into small shallow problems addressed by small shallow tools. As such, it can be a fertile target LLMs.
+
+Oh yes, I know, agents can add include feedback when generating solutions. But even then, there is no reason to not expose biases. In a technical space we can nicely produce the tools we can use without intermediaries against the system.'}
+							asDictionary;
+					output: {'Action' -> 'Correct grammar'.
+							'Text' -> nil.
+							'Arguments' -> nil.
+							'Post'
+								-> 'There are at least two ways to use LLMs for supporting the understanding of software systems:
+(A) use LLMs to generate summaries
+(B) use LLMs to generate tools with which you generate summaries
+
+The difference might appear subtle, but it''s significant. A number of recent articles propose mostly (A) as a direction. These use LLMs as solution generators.
+
+However, any concrete solutions entail biases. When we get the final answer, these biases are invisible. The solution might be correct, but you''d have no real way of knowing what tradeoffs they contain. The alternative is to regard current LLMs as generators of possibilities that should be evaluated against reality before being relied upon for decision-making in a technical space.
+
+That is why I favor (B), especially when combined with a moldable development environment. When we get the tools, we have a chance to review the bias and apply other forms of checks, too. We can then use these tools to produce visualizations of the system ourselves.
+
+LLMs work interestingly well for shallow questions (I call shallow the questions whose answers can be evaluated against reality quickly). Moldable Development splits technical decision-making into small shallow problems addressed by small shallow tools. As such, it can be a fertile target for LLMs.
+
+Oh yes, I know, agents can include feedback when generating solutions. But even then, there is no reason not to expose biases. In a technical space, we can nicely produce the tools we can use without intermediaries against the system.'}
+							asDictionary}
+%
+
+category: 'as yet unclassified'
+method: GtOpenAIBlogPostAssistant
+gtCreateTitle
+	<gtLlmAssistantAction>
+	^ GtLlmAssistantAction new
+		name: 'Create title';
+		priority: 10;
+		description: 'Create title. Put result in the `Text` property. Do not use quotes of any kind. Be crisp.';
+		examples: {GtLlmAssistantActionExample new
+					input: {'Action' -> 'Create Title'.
+							'Arguments' -> nil.
+							'Post'
+								-> 'There are at least two ways to use LLMs for supporting understanding of software systems:
+(A) use LLMs to generate summaries
+(B) use LLMs to generate tools with which you generate summaries
+
+The difference might appear subtle, but it''s significant. There are a number of recent article proposes mostly (A) as a direction. These use LLMs as solution generators.
+
+However, any concrete solutions entail biases. When we get the final answer, these biases are invisible. The solution might be correct, but you''d have no real way of knowing what tradeoffs they contain. The alternative is to regard current LLMs are generators of possibilities that should be evaluated against reality before being relied upon for decision making in a technical space.
+
+That is why I favor (B) especially when combined with a moldable development environment. When we get the tools we have a chance to review the bias and apply other forms of checks, too. We can then use these tools to produce visualizations of the system ourselves.
+
+LLMs work interestingly well for shallow questions (I call shallow the questions whose answers can be evaluated against reality quickly). Moldable Development splits technical decision making into small shallow problems addressed by small shallow tools. As such, it can be a fertile target LLMs.
+
+Oh yes, I know, agents can add include feedback when generating solutions. But even then, there is no reason to not expose biases. In a technical space we can nicely produce the tools we can use without intermediaries against the system.'}
+							asDictionary;
+					output: {'Action' -> 'Create Title'.
+							'Arguments' -> nil.
+							'Text' -> 'Leveraging LLMs for Informed Software Understanding'.
+							'Post' -> nil} asDictionary}
+%
+
+category: 'as yet unclassified'
+method: GtOpenAIBlogPostAssistant
+gtPostFormatDescription
+	<gtLlmAssistantFormat>
+	^ GtLlmAssistantFormatDescription new
+	type: ((OrderedCollection new) add: 'string'; add: 'null'; yourself);
+	format: 'Text';
+	name: 'Post';
+	priority: 10;
+	example: ''
+%
+
+category: 'as yet unclassified'
+method: GtOpenAIBlogPostAssistant
+treatProvider: aProvider
+	super treatProvider: aProvider.
+
+	aProvider
+		assistantMessageClass: GtOpenAIBlogPostMessage;
+		userMessageClass: GtOpenAIBlogPostMessage
+%
+
+category: 'as yet unclassified'
+method: GtOpenAIBlogPostAssistant
+valueHolderFor: anObject
+	^ GtLlmSerializableValueHolder new
+		name: 'Post';
+		content: anObject;
+		serializer: #asString;
+		updater: [ :aText :aString | 
+			aText deleteAll
+				appendString: aString;
+				yourself ]
+%
+
+! Class implementation for 'GtLlmAssistantAction'
+
+!		Class methods for 'GtLlmAssistantAction'
+
+category: 'other'
+classmethod: GtLlmAssistantAction
+new
+	^ self basicNew initialize
+%
+
+!		Instance methods for 'GtLlmAssistantAction'
+
+category: 'as yet unclassified'
+method: GtLlmAssistantAction
+addArgument: anArgument
+	arguments add: anArgument
+%
+
+category: 'as yet unclassified'
+method: GtLlmAssistantAction
+addExample: anExample
+	examples add: (anExample action: self)
+%
+
+category: 'accessing'
+method: GtLlmAssistantAction
+arguments
+	^ arguments
+%
+
+category: 'accessing'
+method: GtLlmAssistantAction
+arguments: anObject
+	arguments := anObject
+%
+
+category: 'as yet unclassified'
+method: GtLlmAssistantAction
+asExpressionSource
+	^ self class name asString
+		, ' new
+	    name: ' , self name storeString
+		, ';
+	    priority: ' , self priority asString
+		, ';
+		description: ' , self description storeString
+		, (self arguments
+				collect: [ :anArgument | 
+					';
+		addArgument: ''' , anArgument , '''' ])
+		, ';
+		examples: {'
+		, ('.
+			' join: (self examples collect: #asExpressionSource)) , '}'
+%
+
+category: 'accessing'
+method: GtLlmAssistantAction
+asInstructionPiece
+	^ GtLlmInstructionSection new
+		source: self;
+		title: self name;
+		body: (GtLlmInstructionComposite new
+				addItem: self description;
+				addItem: (GtLlmInstructionSection new
+						source: self;
+						title: 'Examples';
+						body: (GtLlmInstructionComposite new items: self examples)))
+%
+
+category: 'as yet unclassified'
+method: GtLlmAssistantAction
+asMethodSource
+	| methodSource |
+	methodSource := (self definingMethod
+			ifNil: [ 'gtNAMEAction' ]
+			ifNotNil: [ :aMethod | aMethod selector asString ])
+			, '
+	<gtLlmAssistantAction>
+	^ ' , self asExpressionSource.
+	^ methodSource
+%
+
+category: 'accessing'
+method: GtLlmAssistantAction
+assistant
+	^ assistant
+%
+
+category: 'accessing'
+method: GtLlmAssistantAction
+assistant: anObject
+	assistant := anObject.
+	
+	self onAssistantChanged
+%
+
+category: 'accessing'
+method: GtLlmAssistantAction
+defaultPriority
+	^ 10
+%
+
+category: 'as yet unclassified'
+method: GtLlmAssistantAction
+definingMethod
+	^ definingMethod
+%
+
+category: 'as yet unclassified'
+method: GtLlmAssistantAction
+definingMethod: aMethod
+	definingMethod := nil
+%
+
+category: 'accessing'
+method: GtLlmAssistantAction
+description
+	^ description
+%
+
+category: 'accessing'
+method: GtLlmAssistantAction
+description: anObject
+	description := anObject
+%
+
+category: 'accessing'
+method: GtLlmAssistantAction
+examples
+	^ examples
+%
+
+category: 'accessing'
+method: GtLlmAssistantAction
+examples: anObject
+	examples := anObject asOrderedCollection.
+
+	examples do: [ :anExample | anExample action: self ]
+%
+
+category: 'accessing'
+method: GtLlmAssistantAction
+formatReferences
+	^ (self examples flatCollect: #formatReferences as: Set)
+		sorted: [ :a :b | a priority < b priority ]
+%
+
+category: 'accessing'
+method: GtLlmAssistantAction
+gtDescriptionFor: aView
+	<gtView>
+	^ aView textEditor
+		title: 'Description';
+		text: [ self description ]
+%
+
+category: 'accessing'
+method: GtLlmAssistantAction
+gtExamplesFor: aView
+	<gtView>
+	^ aView columnedList
+		title: 'Examples';
+		items: [ self examples ];
+		column: 'Input' text: #inputJson;
+		column: 'Output' text: #outputJson
+%
+
+category: 'accessing'
+method: GtLlmAssistantAction
+gtInputFormatReferencesFor: aView
+	<gtView>
+	^ aView columnedList
+		title: 'Input format references';
+		priority: 5;
+		items: [ self inputReferences ];
+		column: 'Name' text: #name;
+		column: 'Format' text: #format
+%
+
+category: 'accessing'
+method: GtLlmAssistantAction
+gtInstructionFor: aView
+	<gtView>
+	^ aView forward
+		title: 'Instruction';
+		priority: 2;
+		object: [self asInstructionPiece ];
+		view: #gtInstructionFor:
+%
+
+category: 'accessing'
+method: GtLlmAssistantAction
+gtOutputFormatReferencesFor: aView
+	<gtView>
+	^ aView columnedList
+		title: 'Output format references';
+		priority: 6;
+		items: [ self outputReferences ];
+		column: 'Name' text: #name;
+		column: 'Format' text: #format
+%
+
+category: 'as yet unclassified'
+method: GtLlmAssistantAction
+hasArgument
+	^ arguments isNotEmpty
+%
+
+category: 'accessing'
+method: GtLlmAssistantAction
+initialize
+	super initialize.
+
+	self priority: self defaultPriority.
+	self examples: OrderedCollection new.
+	self arguments: OrderedCollection new.
+	self name: ''.
+	self description: ''.
+
+	definingMethod := self initializeMethod
+%
+
+category: 'accessing'
+method: GtLlmAssistantAction
+inputReferences
+	^ (self examples flatCollect: #inputReferences as: Set)
+		sorted: [ :a :b | a priority < b priority ]
+%
+
+category: 'accessing'
+method: GtLlmAssistantAction
+name
+	^ name
+%
+
+category: 'accessing'
+method: GtLlmAssistantAction
+name: anObject
+	name := anObject
+%
+
+category: 'accessing'
+method: GtLlmAssistantAction
+onAssistantChanged
+	self examples do: [ :anExample | anExample verify resolveReferences ]
+%
+
+category: 'accessing'
+method: GtLlmAssistantAction
+outputReferences
+	^ (self examples flatCollect: #outputReferences as: Set)
+		sorted: [ :a :b | a priority < b priority ]
+%
+
+category: 'as yet unclassified'
+method: GtLlmAssistantAction
+persist
+	| methodSource |
+	methodSource := self asMethodSource.
+
+	"TODO: RBConfigurableFormatter and RBParser are defined as part of Rowan.
+	It needs to be exported to .gs to be usable in GemStone"
+	self definingMethod methodClass
+		compile: (#RBConfigurableFormatter asClass format: (#RBParser asClass parseMethod: methodSource)).
+	definingMethod := self definingMethod methodClass
+			>> self definingMethod selector
+%
+
+category: 'accessing'
+method: GtLlmAssistantAction
+pipeline
+	^ pipeline
+%
+
+category: 'accessing'
+method: GtLlmAssistantAction
+pipeline: anObject
+	pipeline := anObject
+%
+
+category: 'accessing'
+method: GtLlmAssistantAction
+printOn: aStream
+	super printOn: aStream.
+
+	aStream
+		nextPut: $(;
+		nextPutAll: self name;
+		nextPut: $)
+%
+
+category: 'accessing'
+method: GtLlmAssistantAction
+priority
+	^ priority
+%
+
+category: 'accessing'
+method: GtLlmAssistantAction
+priority: anObject
+	priority := anObject
+%
+
+category: 'as yet unclassified'
+method: GtLlmAssistantAction
+removeFromSystem
+	self definingMethod ifNotNil: [ :aMethod | aMethod removeFromSystem ]
+%
+
+! Class implementation for 'GtLlmAssistantActionExample'
+
+!		Class methods for 'GtLlmAssistantActionExample'
+
+category: 'instance creation'
+classmethod: GtLlmAssistantActionExample
+new
+	"Answer an initalised instance of the receiver.
+	For GemStone compatibility."
+
+	^ self basicNew initialize.
+%
+
+!		Instance methods for 'GtLlmAssistantActionExample'
+
+category: 'accessing'
+method: GtLlmAssistantActionExample
+action
+	^ action
+%
+
+category: 'accessing'
+method: GtLlmAssistantActionExample
+action: anObject
+	action := anObject
+%
+
+category: 'as yet unclassified'
+method: GtLlmAssistantActionExample
+asExpressionSource
+	^ self class name asString
+		, ' new
+	input: { '
+		, ('. '
+				join: (self input associations
+						collect: [ :aPair | 
+							'''' , aPair key , ''' -> '
+								, (aPair value ifNil: [ 'nil' ] ifNotNil: [ :aValue | aValue storeString ]) ]))
+		, ' } asDictionary;
+	output: { '
+		, ('. '
+				join: (self output associations
+						collect: [ :aPair | 
+							'''' , aPair key , ''' -> '
+								, (aPair value ifNil: [ 'nil' ] ifNotNil:[ :aValue | aValue storeString ]) ]))
+		, ' } asDictionary'
+%
+
+category: 'accessing'
+method: GtLlmAssistantActionExample
+asInstructionPiece
+	^ GtLlmInstructionList new
+		source: self;
+		addItem: ('Prompt:
+```json
+' , self inputJson
+				, '
+```') asInstructionPiece;
+		addItem: ('Output:
+```json
+' , self outputJson
+				, '
+```') asInstructionPiece
+%
+
+category: 'accessing'
+method: GtLlmAssistantActionExample
+formatReferences
+	^ inputReferences, outputReferences
+%
+
+category: 'accessing'
+method: GtLlmAssistantActionExample
+gtInputFormatReferencesFor: aView
+	<gtView>
+	^ aView columnedList
+		title: 'Input format references';
+		priority: 5;
+		items: [ self inputReferences ];
+		column: 'Name' text: #name;
+		column: 'Format' text: #format
+%
+
+category: 'accessing'
+method: GtLlmAssistantActionExample
+gtInstructionFor: aView
+	<gtView>
+	^ aView forward
+		title: 'Instruction';
+		priority: 1;
+		object: [ self asInstructionPiece ];
+		view: #gtInstructionFor:
+%
+
+category: 'accessing'
+method: GtLlmAssistantActionExample
+gtOutputFormatReferencesFor: aView
+	<gtView>
+	^ aView columnedList
+		title: 'Output format references';
+		priority: 6;
+		items: [ self outputReferences ];
+		column: 'Name' text: #name;
+		column: 'Format' text: #format
+%
+
+category: 'accessing'
+method: GtLlmAssistantActionExample
+initialize
+	super initialize.
+	
+	inputReferences := OrderedCollection new.
+	outputReferences := OrderedCollection new.
+	self markVerified
+%
+
+category: 'accessing'
+method: GtLlmAssistantActionExample
+input
+	^ input
+%
+
+category: 'accessing'
+method: GtLlmAssistantActionExample
+input: anObject
+	input := anObject
+%
+
+category: 'accessing'
+method: GtLlmAssistantActionExample
+inputJson
+	^ STONJSON toStringPretty: self input
+%
+
+category: 'accessing'
+method: GtLlmAssistantActionExample
+inputJson: aJson
+	^ self input: (STONJSON fromString: aJson)
+%
+
+category: 'accessing'
+method: GtLlmAssistantActionExample
+inputReferences
+	^ inputReferences
+%
+
+category: 'accessing'
+method: GtLlmAssistantActionExample
+inputReferences: anObject
+	inputReferences := anObject
+%
+
+category: 'as yet unclassified'
+method: GtLlmAssistantActionExample
+markUnverified
+	unverified := true
+%
+
+category: 'as yet unclassified'
+method: GtLlmAssistantActionExample
+markVerified
+	unverified := false
+%
+
+category: 'accessing'
+method: GtLlmAssistantActionExample
+output
+	^ output
+%
+
+category: 'accessing'
+method: GtLlmAssistantActionExample
+output: anObject
+	output := anObject
+%
+
+category: 'accessing'
+method: GtLlmAssistantActionExample
+outputJson
+	^ STONJSON toStringPretty: self output
+%
+
+category: 'accessing'
+method: GtLlmAssistantActionExample
+outputJson: aJson
+	^ self output: (STONJSON fromString: aJson)
+%
+
+category: 'accessing'
+method: GtLlmAssistantActionExample
+outputReferences
+	^ outputReferences
+%
+
+category: 'accessing'
+method: GtLlmAssistantActionExample
+outputReferences: anObject
+	outputReferences := anObject
+%
+
+category: 'accessing'
+method: GtLlmAssistantActionExample
+resolveReferences
+	inputReferences := input associations
+			select: [ :anAssociation | anAssociation value isNotNil ]
+			thenCollect: [ :anAssociation | 
+				(self action assistant formatNamed: anAssociation key)
+					addInputReference: self action ].
+	outputReferences := output associations
+			select: [ :anAssociation | anAssociation value isNotNil ]
+			thenCollect: [ :anAssociation | 
+				(self action assistant formatNamed: anAssociation key)
+					addOutputReference: self action ]
+%
+
+category: 'accessing'
+method: GtLlmAssistantActionExample
+unverified
+	^ unverified
+%
+
+category: 'accessing'
+method: GtLlmAssistantActionExample
+unverified: anObject
+	unverified := anObject
+%
+
+category: 'accessing'
+method: GtLlmAssistantActionExample
+verify
+	unverified ifTrue: [ ^ self ].
+	self
+		assert: self output keys asSet
+				= (self action assistant formatComponents collect: #name) asSet
+		description: 'Keys in the example output must correspond to the action format'
 %
 
 ! Class implementation for 'GtLlmAssistantChatStatus'
@@ -4056,9 +5383,588 @@ isFailed
 	^ false
 %
 
+! Class implementation for 'GtLlmAssistantFormatDescription'
+
+!		Class methods for 'GtLlmAssistantFormatDescription'
+
+category: 'other'
+classmethod: GtLlmAssistantFormatDescription
+new
+	^ self basicNew initialize
+%
+
+!		Instance methods for 'GtLlmAssistantFormatDescription'
+
+category: 'accessing'
+method: GtLlmAssistantFormatDescription
+addInputReference: anAction
+	referencingActions
+		detect: [ :aReference | aReference action = anAction ]
+		ifFound: [ :aReference | aReference markInput ]
+		ifNone: [ referencingActions
+				add: (GtLlmActionReference new markInput action: anAction) ]
+%
+
+category: 'accessing'
+method: GtLlmAssistantFormatDescription
+addOutputReference: anAction
+	referencingActions
+		detect: [ :aReference | aReference action = anAction ]
+		ifFound: [ :aReference | aReference markOutput ]
+		ifNone: [ referencingActions
+				add: (GtLlmActionReference new markOutput action: anAction) ]
+%
+
+category: 'as yet unclassified'
+method: GtLlmAssistantFormatDescription
+asExpressionSource
+	^ self class name
+		, ' new
+	type: ' , self type storeString
+		, ';
+	format: ' , self format storeString
+		, ';
+	name: ' , self name storeString
+		, ';
+	priority: ' , self priority asString
+		, ';
+	example: ' , self example storeString
+%
+
+category: 'accessing'
+method: GtLlmAssistantFormatDescription
+asInstructionPiece
+	^ GtLlmInstructionSection new
+		title: self name;
+		body: (GtLlmInstructionList new
+				addItem: 'Name: ' , self name;
+				addItem: 'Format: ' , self format;
+				addItem: 'Details:
+' , (self example ifNil: [ 'none' ]))
+%
+
+category: 'accessing'
+method: GtLlmAssistantFormatDescription
+asJsonSchema
+	| aDict |
+	aDict := {'type' -> self type.
+			'description'
+				-> (GtLlmInstructionList new
+						addItem: 'Format: ' , self format;
+						addItem: 'Examples:
+' , (self example ifNil: [ 'none' ])) instructionString} asDictionary.	"only relevant for arrays"
+	self items ifNotNil: [ aDict at: 'items' put: self items ].
+
+	^ aDict
+%
+
+category: 'accessing'
+method: GtLlmAssistantFormatDescription
+assistant
+	^ assistant
+%
+
+category: 'accessing'
+method: GtLlmAssistantFormatDescription
+assistant: anObject
+	assistant := anObject
+%
+
+category: 'as yet unclassified'
+method: GtLlmAssistantFormatDescription
+beRequired
+	self type remove: 'null' ifAbsent: [  ]
+%
+
+category: 'accessing'
+method: GtLlmAssistantFormatDescription
+defaultPriority
+	^ 10
+%
+
+category: 'accessing'
+method: GtLlmAssistantFormatDescription
+defaultType
+	^ {'string'}
+%
+
+category: 'as yet unclassified'
+method: GtLlmAssistantFormatDescription
+definingMethod
+	^ definingMethod
+%
+
+category: 'accessing'
+method: GtLlmAssistantFormatDescription
+example
+	^ example
+%
+
+category: 'accessing'
+method: GtLlmAssistantFormatDescription
+example: anObject
+	example := anObject
+%
+
+category: 'accessing'
+method: GtLlmAssistantFormatDescription
+format
+	^ format
+%
+
+category: 'accessing'
+method: GtLlmAssistantFormatDescription
+format: anObject
+	format := anObject
+%
+
+category: 'accessing'
+method: GtLlmAssistantFormatDescription
+gtActionsFor: aView
+	<gtView>
+	^ aView columnedList
+		title: 'Referencing actions';
+		priority: 5;
+		items: [ referencingActions ];
+		column: 'Action' text: [ :aReference | aReference action name ];
+		column: 'Input'
+			text: [ :aReference | aReference isInput ifTrue: [ 'true' ] ifFalse: [ '' ] ];
+		column: 'Output'
+			text: [ :aReference | aReference isOutput ifTrue: [ 'true' ] ifFalse: [ '' ] ]
+%
+
+category: 'as yet unclassified'
+method: GtLlmAssistantFormatDescription
+gtDefinitionFor: aView
+	<gtView>
+	^ aView forward
+		title: 'Definition';
+		priority: 1;
+		object: [ definingMethod ];
+		view: #gtSourceFor:
+%
+
+category: 'accessing'
+method: GtLlmAssistantFormatDescription
+gtInstructionFor: aView
+	<gtView>
+	^ aView forward 
+		title: 'Instruction';
+		priority: 2;
+		object: [ self asInstructionPiece ];
+		view: #gtInstructionFor:
+%
+
+category: 'accessing'
+method: GtLlmAssistantFormatDescription
+initialize
+	super initialize.
+	
+	priority := self defaultPriority.
+	
+	type := self defaultType asOrderedCollection.
+	
+	referencingActions := OrderedCollection new.
+	
+	definingMethod := self initializeMethod
+%
+
+category: 'accessing'
+method: GtLlmAssistantFormatDescription
+items
+	^ items
+%
+
+category: 'accessing'
+method: GtLlmAssistantFormatDescription
+items: anObject
+	items := anObject
+%
+
+category: 'accessing'
+method: GtLlmAssistantFormatDescription
+name
+	^ name
+%
+
+category: 'accessing'
+method: GtLlmAssistantFormatDescription
+name: anObject
+	name := anObject
+%
+
+category: 'accessing'
+method: GtLlmAssistantFormatDescription
+printOn: aStream
+	super printOn: aStream.
+
+	aStream
+		nextPut: $(;
+		nextPutAll: self name;
+		nextPut: $)
+%
+
+category: 'accessing'
+method: GtLlmAssistantFormatDescription
+priority
+	^ priority
+%
+
+category: 'accessing'
+method: GtLlmAssistantFormatDescription
+priority: anObject
+	priority := anObject
+%
+
+category: 'as yet unclassified'
+method: GtLlmAssistantFormatDescription
+removeFromSystem
+	self definingMethod ifNotNil: [ :aMethod | aMethod removeFromSystem ]
+%
+
+category: 'accessing'
+method: GtLlmAssistantFormatDescription
+type
+	^ type
+%
+
+category: 'accessing'
+method: GtLlmAssistantFormatDescription
+type: anObject
+	type := anObject
+%
+
+! Class implementation for 'GtLlmAssistantInstruction'
+
+!		Class methods for 'GtLlmAssistantInstruction'
+
+category: 'other'
+classmethod: GtLlmAssistantInstruction
+new
+	^ self basicNew initialize
+%
+
+!		Instance methods for 'GtLlmAssistantInstruction'
+
+category: 'as yet unclassified'
+method: GtLlmAssistantInstruction
+actionNamed: aString
+	^ actions detect: [ :anAction | anAction name = aString ] ifNone: [ nil ]
+%
+
+category: 'as yet unclassified'
+method: GtLlmAssistantInstruction
+actions
+	^ actions
+%
+
+category: 'as yet unclassified'
+method: GtLlmAssistantInstruction
+addAction: anAction
+	(self hasActionNamed: anAction name)
+		ifTrue: [ self error: 'Cannot add two LLM actions with the same name' ].
+	actions add: anAction
+%
+
+category: 'as yet unclassified'
+method: GtLlmAssistantInstruction
+addActions: aListOfActions
+	actions addAll: aListOfActions
+%
+
+category: 'accessing'
+method: GtLlmAssistantInstruction
+addComponent: aComponent
+	(self hasFormatNamed: aComponent name)
+		ifTrue: [ self error: 'Cannot add two format components with the same name' ].
+	formats add: aComponent
+%
+
+category: 'accessing'
+method: GtLlmAssistantInstruction
+addComponents: aListOfComponents
+	formats addAll: aListOfComponents
+%
+
+category: 'as yet unclassified'
+method: GtLlmAssistantInstruction
+addSection: aSection
+	sections add: aSection
+%
+
+category: 'as yet unclassified'
+method: GtLlmAssistantInstruction
+addSections: aSection
+	sections addAll: aSection
+%
+
+category: 'accessing'
+method: GtLlmAssistantInstruction
+asInstructionPiece
+	^ GtLlmInstructionWithSections new
+		source: self;
+		introduction: self description;
+		sections: self sections
+				, {GtLlmInstructionSection new
+							source: self;
+							title: 'Format components';
+							body: (GtLlmInstructionWithSections new
+									source: self;
+									introduction: 'Each format component has a name, a data format (such as JSON, YAML, etc.), a Markdown code block annotation tag that encloses it, and some examples.
+							
+The components that make up the state are as follows:';
+									sections: formats).
+						GtLlmInstructionSection new
+							source: self;
+							title: 'Actions';
+							body: (GtLlmInstructionWithSections new
+									introduction: 'All actions are listed below.';
+									sections: (actions collect: [ :anAction | anAction asInstructionPiece ])
+											, (GtLlmFeatures multiStep ifTrue: [ {self confirmationAction} ] ifFalse: [ {} ]))}
+%
+
+category: 'accessing'
+method: GtLlmAssistantInstruction
+asJsonSchema
+	^ {'type' -> 'object'.
+		'properties'
+			-> (formats
+					collect: [ :aComponent | aComponent name -> aComponent asJsonSchema ])
+					asDictionary.
+		'required' -> (formats collect: [:aFormat | aFormat name ]).
+		'additionalProperties' -> false} asDictionary
+%
+
+category: 'accessing'
+method: GtLlmAssistantInstruction
+communicationConventionsDescription
+	| instructions |
+	instructions := GtLlmInstructionList new
+			addItem: 'Always review the full conversation prior to answering and maintain continuity.';
+			addItem: 'Assume the user would like something concise when producing text.';
+			addItem: 'Prefer asking clarifying follow-up questions or using tools (see  the section "Tool use policy") over assumptions, especially when in doubt.';
+			addItem: 'Refuse actions that cannot be performed using your capabilities. When an action is refused, return a textual explanation of why it isn’t possible to fulfill the request.';
+			addItem: 'Similarly, give a concise description of any error you encounter on tool use or other system errors.'.
+
+	GtLlmFeatures multiStep
+		ifTrue: [ instructions
+				addItem: 'Multi-step actions (i.e. those involving tools) should be answered by a summary of the intended steps to take. If the user confirms this course of action, take it.' ].
+
+	^ GtLlmInstructionSection new
+		title: 'Communication rules';
+		body: instructions
+%
+
+category: 'accessing'
+method: GtLlmAssistantInstruction
+componentNamed: aName
+	^ formats detect: [ :aComponent | aComponent name = aName ] ifNone: [ nil ]
+%
+
+category: 'accessing'
+method: GtLlmAssistantInstruction
+confirmationAction
+	"this is a special assistant-only action, thus it is defined here."
+	^ GtLlmAssistantAction new
+		name: 'Confirmation';
+		priority: 1;
+		description: 'Presents an action plan to the user and asks for their confirmation to perform it. It is a special action returned by the assistant if an action requires confirmation by the user.';
+		examples: {GtLlmAssistantActionExample new markUnverified
+					input: {'Action' -> 'Chat'.
+							'Arguments' -> #('Please delete all files using your tools.')}
+							asDictionary;
+					output: {'Action' -> 'Confirmation'.
+							'Text'
+								-> 'I will delete all files using the `removeFile` tool. Do you accept?'}
+							asDictionary}
+%
+
+category: 'as yet unclassified'
+method: GtLlmAssistantInstruction
+defaultSections
+	^ {self interactionDescription.
+		self communicationConventionsDescription.
+		self toolUseDescription} asOrderedCollection
+%
+
+category: 'accessing'
+method: GtLlmAssistantInstruction
+description
+	^ description
+%
+
+category: 'accessing'
+method: GtLlmAssistantInstruction
+description: anObject
+	description := anObject
+%
+
+category: 'accessing'
+method: GtLlmAssistantInstruction
+formatNamed: aName
+	^ formats detect: [ :aComponent | aComponent name = aName ] ifNone: [ nil ]
+%
+
+category: 'accessing'
+method: GtLlmAssistantInstruction
+formats
+	^ formats
+%
+
+category: 'as yet unclassified'
+method: GtLlmAssistantInstruction
+gtActionsFor: aView
+	<gtView>
+	^ aView forward
+		title: 'Actions';
+		priority: 10;
+		object: [  actions ];
+		view: #gtActionsFor:
+%
+
+category: 'accessing'
+method: GtLlmAssistantInstruction
+gtInstructionFor: aView
+	<gtView>
+	^ aView forward
+		title: 'Instruction';
+		priority: 1;
+		object: [self asInstructionPiece ];
+		view: #gtInstructionFor:
+%
+
+category: 'as yet unclassified'
+method: GtLlmAssistantInstruction
+hasActionNamed: aString
+	^ (self actionNamed: aString) isNotNil
+%
+
+category: 'accessing'
+method: GtLlmAssistantInstruction
+hasFormatNamed: aName
+	^ (self formatNamed: aName) isNotNil
+%
+
+category: 'accessing'
+method: GtLlmAssistantInstruction
+initialize
+	formats := OrderedCollection new.
+	actions := GtLlmActionsGroup new.
+	description := ''.
+	sections := self defaultSections
+%
+
+category: 'accessing'
+method: GtLlmAssistantInstruction
+interactionDescription
+	| body |
+	body := GtLlmFeatures multiStep
+			ifTrue: [ 'Interactions are structured like this:
+1. The assistant (you) is given the current state and an action to perform.
+2. The assistant;
+    a. Determines what needs to be done. It consults tools as necessary and asks follow-up questions if the action is unclear. Multi-step actions require a summary of necessary steps beforehand and a user confirmation (see "Communication rules").
+    b. Performs the action on the state.
+    c. Outputs the new state.
+3. The user:
+	a. checks the output state.
+	b. provides the current state and next action to you (returning back to step 1.).
+	
+The state is an aggregate of the components listed below, sent to you as a JSON object.' ]
+			ifFalse: [ 'Interactions are structured like this:
+1. The assistant (you) is given the current state and an action to perform.
+2. The assistant;
+    a. Determines what needs to be done. It consults tools as necessary and asks follow-up questions if the action is unclear.
+    b. Performs the action on the state.
+    c. Outputs the new state.
+3. The user:
+	a. checks the output state.
+	b. provides the current state and next action to you (returning back to step 1.).
+	
+The state is an aggregate of the components listed below, sent to you as a JSON object.' ].
+
+	^ GtLlmInstructionSection new
+		title: 'Interaction description';
+		body: body
+%
+
+category: 'accessing'
+method: GtLlmAssistantInstruction
+name
+	^ name
+%
+
+category: 'accessing'
+method: GtLlmAssistantInstruction
+name: anObject
+	name := anObject
+%
+
+category: 'as yet unclassified'
+method: GtLlmAssistantInstruction
+replaceActions: aListOfActions
+	actions removeAll addAll: aListOfActions
+%
+
+category: 'accessing'
+method: GtLlmAssistantInstruction
+replaceComponents: aListOfComponents
+	formats removeAll addAll: aListOfComponents
+%
+
+category: 'as yet unclassified'
+method: GtLlmAssistantInstruction
+replaceFormatNamed: aString with: aFormat
+	self formats replace: [ :each | 
+		each name = aString
+			ifTrue: [ aFormat ]
+			ifFalse: [ each ] ].
+%
+
+category: 'accessing'
+method: GtLlmAssistantInstruction
+sections
+	^ sections
+%
+
+category: 'accessing'
+method: GtLlmAssistantInstruction
+sections: anObject
+	sections := anObject
+%
+
+category: 'accessing'
+method: GtLlmAssistantInstruction
+toolUseDescription
+	^ GtLlmInstructionSection new
+		title: 'Tool use policy';
+		body: 'You have access to various tools. Tool use is governed by the following rules:
+
+- Only use tools if you cannot answer the user''s question or request with certainty otherwise, except when writing code.
+- When writing code, ALWAYS use tools extensively to check the environment before suggesting anything or writing code. You MUST use tools before writing any code. Failure to do so is a violation of protocol.
+- Prefer checking with tools over assumptions. Verify your statements using tools unless you are absolutely certain.'
+%
+
 ! Class implementation for 'GtLlmChat'
 
 !		Class methods for 'GtLlmChat'
+
+category: 'accessing'
+classmethod: GtLlmChat
+leJsonV4AttributeMapping
+	"Answer the Array of attribute to store keys.
+	The provider should be stored, but isn't coded yet."
+
+	^ { #lastUpdate -> #lastUpdate.
+		#messages -> #messages.
+		"#serializer -> #serializer." }
+%
+
+category: 'accessing'
+classmethod: GtLlmChat
+leJsonV4Name
+
+	^ #gtLlmChat
+%
 
 category: 'as yet unclassified'
 classmethod: GtLlmChat
@@ -4068,11 +5974,24 @@ new
 
 !		Instance methods for 'GtLlmChat'
 
+category: 'visiting'
+method: GtLlmChat
+acceptVisitor: aVisitor
+
+	^ aVisitor visitGtLlmChat: self
+%
+
 category: 'accessing'
 method: GtLlmChat
 addMessage: aMessage
 	self updateLastUpdate.
 	messages add: (aMessage chat: self)
+%
+
+category: 'as yet unclassified'
+method: GtLlmChat
+addTool: aTool 
+	self provider addTool: aTool
 %
 
 category: 'accessing'
@@ -4081,7 +6000,13 @@ ancestorOf: aMessage
 	messages
 		withIndexDo: [ :possibleAncestor :index | 
 			possibleAncestor id = aMessage id
-				ifTrue: [ index = 1 ifTrue: [ ^ nil ] ifFalse: [ ^ messages at: index - 1 ] ] ].
+				ifTrue: [ index = 1
+						ifTrue: [ ^ nil ]
+						ifFalse: [ | actualIndex |
+							actualIndex := index.
+							[ (messages at: actualIndex - 1) isToolRole ]
+								whileTrue: [ actualIndex := actualIndex - 1 ].
+							^ messages at: actualIndex - 1 ] ] ].
 
 	self error: 'Message not found'
 %
@@ -4100,21 +6025,23 @@ announcer
 
 category: 'accessing'
 method: GtLlmChat
-context
-	^ context
+assistant
+	^ assistant
 %
 
 category: 'accessing'
 method: GtLlmChat
-context: anObject
-	context := anObject.
-	context chat: self
+assistant: anAssistant
+	assistant := anAssistant
 %
 
 category: 'accessing'
 method: GtLlmChat
-defaultSerializer
-	^ GtLlmMessageSerializer new
+buildDefaultProvider
+	^ GtLlmConnectionRegistry uniqueInstance hasConnectableDefaultConnection
+		ifTrue: [ provider := GtLlmConnectionRegistry uniqueInstance defaultConnection
+					buildProvider chat: self ]
+		ifFalse: [ nil ]
 %
 
 category: 'accessing'
@@ -4146,18 +6073,16 @@ gtMessagesFor: aView
 		actionUpdateButton
 %
 
-category: 'announcer'
+category: 'accessing'
 method: GtLlmChat
-hasSubscriber: anObject
-	^ self announcer hasSubscriber: anObject
+hasProvider
+	^ provider isNotNil
 %
 
 category: 'accessing'
 method: GtLlmChat
 initialize
 	super initialize.
-	
-	self serializer: self defaultSerializer.
 	
 	self initializeMessages.
 	
@@ -4182,12 +6107,6 @@ lastUpdate: anObject
 	lastUpdate := anObject
 %
 
-category: 'as yet unclassified'
-method: GtLlmChat
-messageFromString: aString
-	^  serializer serialize: aString
-%
-
 category: 'accessing'
 method: GtLlmChat
 messages
@@ -4204,20 +6123,8 @@ messages: anObject
 
 category: 'accessing'
 method: GtLlmChat
-model
-	^ model
-%
-
-category: 'accessing'
-method: GtLlmChat
-model: anObject
-	model := anObject
-%
-
-category: 'accessing'
-method: GtLlmChat
 provider
-	^ provider
+	^ provider ifNil: [ self buildDefaultProvider ]
 %
 
 category: 'accessing'
@@ -4225,6 +6132,13 @@ method: GtLlmChat
 provider: anObject
 	provider := anObject.
 	provider chat: self
+%
+
+category: 'accessing'
+method: GtLlmChat
+removeLastMessage
+	self updateLastUpdate.
+	messages removeLast
 %
 
 category: 'announcer - subscription'
@@ -4236,32 +6150,39 @@ removeSubscription: subscription
 
 category: 'as yet unclassified'
 method: GtLlmChat
+reset
+	self assistant
+		ifNil: [ self buildDefaultProvider ]
+		ifNotNil: [ self provider: self assistant buildProvider ].
+	self resetMessages
+%
+
+category: 'as yet unclassified'
+method: GtLlmChat
+resetMessages
+	self initializeMessages.
+	self signalRunIsDone
+%
+
+category: 'as yet unclassified'
+method: GtLlmChat
 responseFormat
 	^ self provider format
 %
 
-category: 'accessing'
+category: 'as yet unclassified'
 method: GtLlmChat
-sendAssistantMessage: aMessage
-	^ self provider sendAssistantMessage: aMessage
+sendFiles: aListOfFileReferences withMessage: aString
+	self provider
+		sendFiles: aListOfFileReferences
+		withMessage: aString
 %
 
 category: 'accessing'
 method: GtLlmChat
 sendMessage: aMessage
-	self provider sendMessage: (self messageFromString: aMessage)
-%
-
-category: 'accessing'
-method: GtLlmChat
-serializer
-	^ serializer
-%
-
-category: 'accessing'
-method: GtLlmChat
-serializer: anObject
-	serializer := anObject
+	self assert: aMessage isString.
+	self provider sendMessage: aMessage
 %
 
 category: 'as yet unclassified'
@@ -4285,7 +6206,7 @@ signalRunIsDone
 category: 'accessing'
 method: GtLlmChat
 status
-	self provider ifNil: [ ^ GtLlmAssistantChatNotReadyStatus new ].
+	self hasProvider ifFalse: [ ^ GtLlmAssistantChatNotReadyStatus new ].
 
 	^ self provider status
 %
@@ -4339,18 +6260,6 @@ subscribe: anAnnouncementClass send: aSelector to: anObject for: aSubscriber
 	^ self when: anAnnouncementClass send: aSelector to: anObject for: aSubscriber
 %
 
-category: 'accessing'
-method: GtLlmChat
-tutor
-	^ tutor
-%
-
-category: 'accessing'
-method: GtLlmChat
-tutor: anObject
-	tutor := anObject
-%
-
 category: 'announcer - subscription'
 method: GtLlmChat
 unsubscribe: anObject
@@ -4374,7 +6283,7 @@ weak
 category: 'announcer - subscription'
 method: GtLlmChat
 when: anAnnouncementClass do: aValuable
-	"Declare that when anAnnouncementClass is raised, aValuable is executed.  Pay attention that ushc method as well as when:do: should not be used on weak announcer since the block holds the receiver and more strongly."
+	"Declare that when anAnnouncementClass is raised, aValuable is executed.  Pay attention that such a method as well as when:do: should not be used on weak announcer since the block holds the receiver and more strongly."
 		^ self announcer when: anAnnouncementClass do: aValuable
 %
 
@@ -4383,7 +6292,7 @@ method: GtLlmChat
 when: anAnnouncementClass do: aValuable for: aSubscriber
 	"Declare that when anAnnouncementClass is raised, aValuable is executed and define the subscriber."
 
-	^ (self when: anAnnouncementClass do: aValuable) subscriber: aSubscriber; yourself
+	^ self announcer when: anAnnouncementClass do: aValuable for: aSubscriber
 %
 
 category: 'announcer - subscription'
@@ -4419,7 +6328,23 @@ when: anAnnouncementClass send: aSelector to: anObject for: aSubscriber
 
 ! Class implementation for 'GtLlmActionChat'
 
+!		Class methods for 'GtLlmActionChat'
+
+category: 'accessing'
+classmethod: GtLlmActionChat
+leJsonV4Name
+
+	^ #gtLlmActionChat
+%
+
 !		Instance methods for 'GtLlmActionChat'
+
+category: 'visiting'
+method: GtLlmActionChat
+acceptVisitor: aVisitor
+
+	^ aVisitor visitGtLlmActionChat: self
+%
 
 category: 'as yet unclassified'
 method: GtLlmActionChat
@@ -4427,25 +6352,71 @@ defaultSerializer
 	^ GtLlmActionMessageSerializer new
 %
 
+category: 'views'
+method: GtLlmActionChat
+gtAssistantActionsFor: aView
+	<gtView>
+	^ aView forward
+		title: 'Assistant actions';
+		object: [ assistant ];
+		view: #gtActionsFor:
+%
+
+category: 'views'
+method: GtLlmActionChat
+gtAssistantFormatsFor: aView
+	<gtView>
+	^ aView forward
+		title: 'Assistant formats';
+		object: [ assistant ];
+		view: #gtFormatComponentsFor:
+%
+
 category: 'as yet unclassified'
 method: GtLlmActionChat
 gtInstanceFor: aView
 	<gtView>
-	
-	self gtDo: [] gemstoneDo: [ ^ aView empty ].
 
+	self gtDo: [] gemstoneDo: [ ^ aView empty ].
+	instance ifNil: [ ^ aView empty ].
+	
 	^ aView forward
 		title: 'Instance';
 		priority: 2;
-		object: [ self serializer ];
-		view: #gtInstanceFor:
+		object: [ instance ];
+		view: #gtLiveFor:
+%
+
+category: 'views'
+method: GtLlmActionChat
+gtToolsFor: aView
+	<gtView>
+	^ aView forward
+		title: 'Tools';
+		priority: 10;
+		object: [ provider ];
+		view: #gtToolsFor:
+%
+
+category: 'as yet unclassified'
+method: GtLlmActionChat
+instance
+	^ instance
 %
 
 category: 'as yet unclassified'
 method: GtLlmActionChat
 onInstance: anInstance
-	self
-		serializer: (GtLlmActionMessageWithInstanceSerializer new instance: anInstance)
+	instance := anInstance
+%
+
+category: 'as yet unclassified'
+method: GtLlmActionChat
+provider: anLlmProvider
+	provider := anLlmProvider.
+	anLlmProvider ifNil: [ ^ self ].
+	anLlmProvider chat: self.
+	assistant treatProvider: anLlmProvider
 %
 
 category: 'as yet unclassified'
@@ -4457,69 +6428,322 @@ sendAction: anActionCall
 category: 'as yet unclassified'
 method: GtLlmActionChat
 sendAction: anActionCall onAnswer: aBlock
-	self
-		sendMessage: ((self tutor actionNamed: anActionCall action) format
-				format: anActionCall arguments).
-
+	anActionCall subject ifNil: [ anActionCall subject: instance ].
+	self provider sendMessage: anActionCall serialize.
 	self executeWait: aBlock
 %
 
 category: 'accessing'
 method: GtLlmActionChat
 sendChatRequest: aString
-	self sendMessage: 'Chat request: ' , aString
+	^ self
+		sendAction: (GtLlmActionCall new
+				action: 'Chat';
+				arguments: {aString})
+%
+
+category: 'accessing'
+method: GtLlmActionChat
+sendMessage: aMessage
+	self assert: (aMessage isKindOf: GtLlmActionCall).
+	^ self sendAction: aMessage
 %
 
 category: 'as yet unclassified'
 method: GtLlmActionChat
 updateInstance: aValue
-	self serializer update: aValue
+	instance updateContent: aValue aValue
 %
 
-! Class implementation for 'GtLlmChatExamples'
+! Class implementation for 'GtLlmConnection'
 
-!		Instance methods for 'GtLlmChatExamples'
+!		Instance methods for 'GtLlmConnection'
 
 category: 'as yet unclassified'
-method: GtLlmChatExamples
-basicChat
-	<gtExample>
-	| chat |
-	chat :=  GtLlmChat new.
-	
-	self assert: chat messages size equals: 0.
-	self assert: chat status isDone not.
-	
-	^ chat
+method: GtLlmConnection
+= anotherConnection
+	^anotherConnection class = self class and: 
+			[self model = anotherConnection model
+				and: [self provider = anotherConnection provider]]
 %
 
 category: 'as yet unclassified'
-method: GtLlmChatExamples
-chatWithMessages
-	<gtExample>
-	| chat |
-	chat := self chatWithProvider.
-
-	chat sendMessage: 'Hi!'.
-	
-	self assert: chat status isDone.
-	self assert: chat messages size equals: 1.
-	
-	^ chat
+method: GtLlmConnection
+addOption: anOption withValue: aValue
+	meta at: anOption put: aValue
 %
 
 category: 'as yet unclassified'
-method: GtLlmChatExamples
-chatWithProvider
-	<gtExample>
-	| chat |
-	chat := self basicChat.
+method: GtLlmConnection
+buildProvider
+	| aProvider |
+	aProvider := self provider default value.
+	meta
+		keysAndValuesDo: [ :aKey :aValue | aProvider perform: aKey asSymbol asMutator withArguments: {aValue} ].
+	^ aProvider
+%
 
-	chat provider: GtLlmNullProvider new.
+category: 'as yet unclassified'
+method: GtLlmConnection
+connectionString
+	^ self label ifNil: [ self model ]
+%
+
+category: 'as yet unclassified'
+method: GtLlmConnection
+details
+	^ {'Provider' -> self provider providerName.
+		'Model' -> self model.
+		'Label' -> self label}
+%
+
+category: 'as yet unclassified'
+method: GtLlmConnection
+gtDetailsFor: aView
+	<gtView>
+	^ aView columnedList
+		title: 'Details';
+		priority: 10;
+		items: [ self details ];
+		column: 'Property' text: #key;
+		column: 'Value' text: #value
+%
+
+category: 'as yet unclassified'
+method: GtLlmConnection
+gtDisplayOn: stream
+	stream
+		nextPutAll: 'Connection: ';
+		nextPutAll: self provider providerName;
+		space;
+		nextPutAll: self model;
+		space;
+		nextPutAll: (self isConnectable ifTrue: [ 'connectable' ] ifFalse: [ 'not connectable' ])
+%
+
+category: 'as yet unclassified'
+method: GtLlmConnection
+gtOptionsFor: aView
+	<gtView>
+	^ aView columnedList
+		title: 'Options';
+		priority: 2;
+		items: [ meta associations ];
+		column: 'Option' text: [ :aMeta | aMeta key ];
+		column: 'Value' text: [ :aMeta | aMeta value ]
+%
+
+category: 'as yet unclassified'
+method: GtLlmConnection
+hash
+	^ self model hash xor: self provider hash
+%
+
+category: 'as yet unclassified'
+method: GtLlmConnection
+initialize
+	super initialize.
 	
-	self assert: chat status isDone.
+	meta := Dictionary new
+%
+
+category: 'as yet unclassified'
+method: GtLlmConnection
+isConnectable
+	^ self provider isConnectable
+%
+
+category: 'accessing'
+method: GtLlmConnection
+label
+	^ label
+%
+
+category: 'accessing'
+method: GtLlmConnection
+label: anObject
+	label := anObject
+%
+
+category: 'accessing'
+method: GtLlmConnection
+model
+	^ meta at: #model ifAbsent: [ nil ]
+%
+
+category: 'accessing'
+method: GtLlmConnection
+model: anObject
+	self addOption: #model withValue: anObject
+%
+
+category: 'accessing'
+method: GtLlmConnection
+provider
+	^ provider
+%
+
+category: 'accessing'
+method: GtLlmConnection
+provider: anObject
+	provider := anObject
+%
+
+category: 'as yet unclassified'
+method: GtLlmConnection
+providerName
+	^ self provider providerName
+%
+
+! Class implementation for 'GtLlmConnectionRegistry'
+
+!		Class methods for 'GtLlmConnectionRegistry'
+
+category: 'as yet unclassified'
+classmethod: GtLlmConnectionRegistry
+cleanUniqueInstance
+	uniqueInstance ifNotNil: [ :anInstance | 
+		self onRemoveUniqueInstance: anInstance ].
+	uniqueInstance := nil.
+%
+
+category: 'as yet unclassified'
+classmethod: GtLlmConnectionRegistry
+cleanUp
+	self cleanUniqueInstance
+%
+
+category: 'as yet unclassified'
+classmethod: GtLlmConnectionRegistry
+default
+	^ self uniqueInstance
+%
+
+category: 'as yet unclassified'
+classmethod: GtLlmConnectionRegistry
+hasUniqueInstance
+
+	^ uniqueInstance isNotNil
+%
+
+category: 'as yet unclassified'
+classmethod: GtLlmConnectionRegistry
+instance
+	<gtExample>
+	^ self uniqueInstance
+%
+
+category: 'as yet unclassified'
+classmethod: GtLlmConnectionRegistry
+new
+	^ self basicNew initialize
+%
+
+category: 'as yet unclassified'
+classmethod: GtLlmConnectionRegistry
+onRemoveUniqueInstance: anInstance
+	"Classes may perform some activities on a singleton that is about to be released"
+%
+
+category: 'as yet unclassified'
+classmethod: GtLlmConnectionRegistry
+uniqueInstance
+	^ uniqueInstance ifNil: [ uniqueInstance := self new ]
+%
+
+!		Instance methods for 'GtLlmConnectionRegistry'
+
+category: 'as yet unclassified'
+method: GtLlmConnectionRegistry
+addConnection: aConnection
+	(connections includes: aConnection) ifTrue: [ ^ self ].
+	connections add: aConnection
+%
+
+category: 'as yet unclassified'
+method: GtLlmConnectionRegistry
+clearConnections
+	connections removeAll
+%
+
+category: 'as yet unclassified'
+method: GtLlmConnectionRegistry
+connectableConnections
+	^ self connections select: [ :aConnection | aConnection isConnectable ]
+%
+
+category: 'as yet unclassified'
+method: GtLlmConnectionRegistry
+connectionFor: aProvider
+	^ connections
+		detect: [ :aConnection | 
+			aConnection provider = aProvider class
+				and: [ aConnection model = aProvider modelName ] ]
+		ifNone: [ nil ]
+%
+
+category: 'as yet unclassified'
+method: GtLlmConnectionRegistry
+connections
+	^ connections
+%
+
+category: 'as yet unclassified'
+method: GtLlmConnectionRegistry
+defaultConnection
+	^ (defaultConnection isNil or: [ defaultConnection isConnectable not ])
+		ifTrue: [ self connectableConnections
+				ifEmpty: [ nil ]
+				ifNotEmpty: [ :aConnectionsList | aConnectionsList first ] ]
+		ifFalse: [ defaultConnection ]
+%
+
+category: 'as yet unclassified'
+method: GtLlmConnectionRegistry
+defaultConnection: aConnection
+	defaultConnection := aConnection.
+
+	(connections includes: aConnection) ifFalse: [ connections add: aConnection ]
+%
+
+category: 'as yet unclassified'
+method: GtLlmConnectionRegistry
+hasConnectableConnection
+	^ self connectableConnections isNotEmpty
+%
+
+category: 'as yet unclassified'
+method: GtLlmConnectionRegistry
+hasConnectableDefaultConnection
+	^ self defaultConnection isNotNil and: [ self defaultConnection isConnectable ]
+%
+
+category: 'as yet unclassified'
+method: GtLlmConnectionRegistry
+initialize
+	super initialize.
 	
-	^ chat
+	connections := OrderedCollection withAll: self knownConnectors.
+	self defaultConnection: self standardDefaultConnection
+%
+
+category: 'as yet unclassified'
+method: GtLlmConnectionRegistry
+labelForModel: aModel
+	^ connections
+		detect: [ :aConnection | aConnection model = aModel ]
+		ifFound: [ :aConnection | aConnection label ifNil: [ aModel ] ]
+		ifNone: [ aModel ]
+%
+
+category: 'as yet unclassified'
+method: GtLlmConnectionRegistry
+standardDefaultConnection
+	^ GtLlmConnection new
+		provider: GtOpenAIResponseProvider;
+		label: 'GPT 5 Codex';
+		model: 'gpt-5-codex';
+		addOption: 'isStreaming' withValue: false
 %
 
 ! Class implementation for 'GtLlmDistanceMetric'
@@ -4887,14 +7111,19 @@ category: 'accessing'
 method: GtOllamaCompleteChatAPIClient
 entity
 	| entity |
-	entity := {('stream' -> false).
-	('model' -> self model).
-	('messages' -> (self messages collect: [ :aMessage | aMessage serialize ]))}
-		asDictionary.
+	entity := {'stream' -> false.
+			'model' -> self model.
+			'messages' -> (self messages collect: [ :aMessage | aMessage serialize ])}
+			asDictionary.
 
 	self format ifNotNil: [ entity at: 'format' put: self format ].
 	self tools
-		ifNotNil: [ entity at: 'tools' put: (self tools collect: #'serialize') ].
+		ifNotNil: [ entity at: 'tools' put: (self tools collect: [ :aTool | aTool serialize ]) ].
+
+	self instructions
+		ifNotNil: [ (entity at: 'messages')
+				addFirst: {'role' -> 'system'.
+						'content' -> self instructions} asDictionary ].
 
 	^ entity
 %
@@ -4909,6 +7138,18 @@ category: 'accessing'
 method: GtOllamaCompleteChatAPIClient
 format: anObject
 	format := anObject
+%
+
+category: 'accessing'
+method: GtOllamaCompleteChatAPIClient
+instructions
+	^ instructions
+%
+
+category: 'accessing'
+method: GtOllamaCompleteChatAPIClient
+instructions: anObject
+	instructions := anObject
 %
 
 category: 'accessing'
@@ -5873,6 +8114,115 @@ serializationClass
 	^ GtOpenAIEmbeddingsGroup
 %
 
+! Class implementation for 'GtOpenAIGenerateResponseAPIClient'
+
+!		Instance methods for 'GtOpenAIGenerateResponseAPIClient'
+
+category: 'accessing'
+method: GtOpenAIGenerateResponseAPIClient
+buildEntity
+	| entity |
+	entity := {'model' -> self model.
+			'stream' -> isStreaming.
+			'input' -> (self messages
+						flatCollect: [ :aMessage | 
+							(aMessage isKindOf: GtLlmToolMessage)
+								ifTrue: [ {aMessage serializeResponse} ]
+								ifFalse: [ (aMessage isKindOf: GtOpenAIRawToolMessage)
+										ifTrue: [ (aMessage reasoning ifNil: [ {} ] ifNotNil: [ {aMessage reasoning rawData} ])
+												, {aMessage serialize} ]
+										ifFalse: [ {aMessage serialize} ] ] ])} asDictionary.
+
+	format
+		ifNotNil: [ entity
+				at: 'text'
+				put: {'format'
+							-> {'type' -> 'json_schema'.
+									'name' -> 'JsonSchema'.
+									'schema' -> format} asDictionary} asDictionary ].
+
+	tools isEmptyOrNil
+		ifFalse: [ entity
+				at: 'tools'
+				put: (self tools collect: [ :aTool | aTool functionResponse ]) ].
+
+	instructions ifNotNil: [ entity at: 'instructions' put: instructions ].
+
+	^ entity
+%
+
+category: 'accessing'
+method: GtOpenAIGenerateResponseAPIClient
+format
+	^ format
+%
+
+category: 'accessing'
+method: GtOpenAIGenerateResponseAPIClient
+format: anObject
+	format := anObject
+%
+
+category: 'accessing'
+method: GtOpenAIGenerateResponseAPIClient
+instructions
+	^ instructions
+%
+
+category: 'accessing'
+method: GtOpenAIGenerateResponseAPIClient
+instructions: anObject
+	instructions := anObject
+%
+
+category: 'accessing'
+method: GtOpenAIGenerateResponseAPIClient
+isStreaming
+	^ isStreaming
+%
+
+category: 'accessing'
+method: GtOpenAIGenerateResponseAPIClient
+isStreaming: anObject
+	isStreaming := anObject
+%
+
+category: 'accessing'
+method: GtOpenAIGenerateResponseAPIClient
+messages
+	^ messages
+%
+
+category: 'accessing'
+method: GtOpenAIGenerateResponseAPIClient
+messages: anObject
+	messages := anObject
+%
+
+category: 'accessing'
+method: GtOpenAIGenerateResponseAPIClient
+model
+	^ model
+%
+
+category: 'accessing'
+method: GtOpenAIGenerateResponseAPIClient
+model: anObject
+	model := anObject
+%
+
+category: 'accessing'
+method: GtOpenAIGenerateResponseAPIClient
+tools
+	^ tools
+%
+
+category: 'accessing'
+method: GtOpenAIGenerateResponseAPIClient
+tools: anObject
+	tools := anObject
+%
+
 ! Class implementation for 'GtOpenAIGetFileAPIClient'
 
 !		Instance methods for 'GtOpenAIGetFileAPIClient'
@@ -6242,13 +8592,37 @@ category: 'accessing'
 classmethod: GtLlmEntity
 from: aDictionary
 	| entity |
+
 	(aDictionary isKindOf: self) ifTrue: [ ^ aDictionary ].
 
+	(self isErrorResult: aDictionary)
+		ifTrue: [ self error: (aDictionary at: 'error') ].
+
 	entity := self new.
-
 	entity from: aDictionary.
-
 	^ entity
+%
+
+category: 'testing'
+classmethod: GtLlmEntity
+isErrorResult: aDictionary
+	^ aDictionary size = 1 and: [ aDictionary includesKey: 'error' ]
+%
+
+category: 'accessing'
+classmethod: GtLlmEntity
+leJsonV4AttributeMapping
+
+	^ OrderedCollection 
+		with: #rawData -> #rawData
+		with: #client -> #client
+%
+
+category: 'accessing'
+classmethod: GtLlmEntity
+leJsonV4Name
+
+	^ #gtLlmEntity
 %
 
 category: 'accessing'
@@ -6258,6 +8632,13 @@ serializationProperties
 %
 
 !		Instance methods for 'GtLlmEntity'
+
+category: 'visiting'
+method: GtLlmEntity
+acceptVisitor: aVisitor
+
+	^ aVisitor visitGtLlmEntity: self
+%
 
 category: 'accessing'
 method: GtLlmEntity
@@ -6287,7 +8668,7 @@ from: aDictionary
 	self class serializationProperties
 		do: [ :aPair | 
 			self
-				perform: (aPair value , ':') asSymbol
+				perform: aPair value asSymbol asMutator
 				withArguments: {aDictionary at: aPair key asString ifAbsent: [ nil ]} ]
 %
 
@@ -6347,6 +8728,16 @@ defaultRole
 	^ self subclassResponsibility
 %
 
+category: 'accessing'
+classmethod: GtLlmChatMessage
+deSerializeAllImplementorsInstances
+	"Answer a collection of instances to be tested for serialisation / deserialisation"
+
+	^ self name = #GtLlmChatMessage
+		ifTrue: [ #() ]
+		ifFalse: [ { self new } ]
+%
+
 category: 'instance creation'
 classmethod: GtLlmChatMessage
 from: aDictionary
@@ -6359,6 +8750,27 @@ from: aDictionary
 	roleClass := self rolesToClasses at: aRole ifAbsent: [ self ].
 
 	^ roleClass new from: aDictionary
+%
+
+category: 'accessing'
+classmethod: GtLlmChatMessage
+leJsonV4AttributeMapping
+
+	^ super leJsonV4AttributeMapping
+		add: #content -> #content;
+		add: #role -> #role;
+		add: #id -> #id;
+		add: #createdAt -> #createdAt;
+		add: #images -> #images;
+		add: #model -> #model;
+		yourself.
+%
+
+category: 'accessing'
+classmethod: GtLlmChatMessage
+leJsonV4Name
+
+	^ #gtLlmChatMessage
 %
 
 category: 'instance creation'
@@ -6379,10 +8791,23 @@ serializationProperties
 
 !		Instance methods for 'GtLlmChatMessage'
 
+category: 'visiting'
+method: GtLlmChatMessage
+acceptVisitor: aVisitor
+
+	^ aVisitor visitGtLlmChatMessage: self
+%
+
 category: 'as yet unclassified'
 method: GtLlmChatMessage
 action
 	^ [ self contentJson at: 'Action' ] on: Error do: [ nil ]
+%
+
+category: 'as yet unclassified'
+method: GtLlmChatMessage
+ancestor
+	^ self chat ancestorOf: self
 %
 
 category: 'accessing'
@@ -6391,22 +8816,29 @@ annotations
 	^ {}
 %
 
+category: 'announcer'
+method: GtLlmChatMessage
+announce: anAnnouncement
+	^ self announcer announce: anAnnouncement
+%
+
+category: 'announcer'
+method: GtLlmChatMessage
+announcer
+	<return: #Announcer>
+	^ announcer ifNil: [announcer := Announcer new]
+%
+
+category: 'as yet unclassified'
+method: GtLlmChatMessage
+arguments
+	^ [ self contentJson at: 'Arguments' ] on: Error do: [ nil ]
+%
+
 category: 'accessing'
 method: GtLlmChatMessage
 asTokenizableString
 	^ '<|im_start|>' , self role , '<|im_sep|>' , self content , '<|im_end|>'
-%
-
-category: 'accessing'
-method: GtLlmChatMessage
-attachments
-	^ attachments
-%
-
-category: 'accessing'
-method: GtLlmChatMessage
-attachments: anObject
-	attachments := anObject
 %
 
 category: 'accessing'
@@ -6430,13 +8862,33 @@ content
 category: 'accessing'
 method: GtLlmChatMessage
 content: anObject
-	content := anObject
+	content := anObject.
+	
+	self announce: GtLlmMessageContentsUpdated new
+%
+
+category: 'accessing'
+method: GtLlmChatMessage
+contentFiles
+	^ (self content isKindOf: String)
+		ifTrue: [ {} ]
+		ifFalse: [ content
+				select: [ :aValue | (aValue at: #type) = 'image' ]
+				thenCollect: [ :aValue | 
+					aValue
+						at: #source
+						at: #data
+						ifAbsent: [ '' ] ] ]
 %
 
 category: 'as yet unclassified'
 method: GtLlmChatMessage
 contentJson
-	^ STONJSON fromString: self contentText
+	^ [ | ston value |
+	ston := STON reader on: self contentText readStream.
+	value := ston next.
+	self assert: ston atEnd.
+	value ] on: Error do: [ {'Text' -> self contentText} asDictionary ]
 %
 
 category: 'accessing'
@@ -6448,7 +8900,12 @@ contentSummary
 category: 'accessing'
 method: GtLlmChatMessage
 contentText
-	^ self content
+	^ (self content isKindOf: String)
+		ifTrue: [ content ]
+		ifFalse: [ ''
+				join: (content
+						select: [ :aValue | (aValue at: #type) = 'text' ]
+						thenCollect: [ :aValue | (aValue at: #text) ifNil: [ '' ] ]) ]
 %
 
 category: 'accessing'
@@ -6483,6 +8940,12 @@ hasResponse
 	^ true
 %
 
+category: 'announcer'
+method: GtLlmChatMessage
+hasSubscriber: anObject
+	^ self announcer hasSubscriber: anObject
+%
+
 category: 'accessing'
 method: GtLlmChatMessage
 id
@@ -6497,9 +8960,22 @@ id: anId
 
 category: 'accessing'
 method: GtLlmChatMessage
+images
+	^ images
+%
+
+category: 'accessing'
+method: GtLlmChatMessage
+images: anObject
+	images := anObject
+%
+
+category: 'accessing'
+method: GtLlmChatMessage
 initialize
 	id := self uuidClass new.
-	createdAt := DateAndTime now
+	createdAt := DateAndTime now.
+	images := OrderedCollection new
 %
 
 category: 'accessing'
@@ -6511,6 +8987,12 @@ isAssistantRole
 category: 'accessing'
 method: GtLlmChatMessage
 isFailure
+	^ false
+%
+
+category: 'as yet unclassified'
+method: GtLlmChatMessage
+isRawMessage
 	^ false
 %
 
@@ -6540,6 +9022,25 @@ isUserRole
 
 category: 'accessing'
 method: GtLlmChatMessage
+model
+	^ model
+%
+
+category: 'accessing'
+method: GtLlmChatMessage
+model: anObject
+	model := anObject
+%
+
+category: 'announcer - subscription'
+method: GtLlmChatMessage
+removeSubscription: subscription
+	"Remove the given subscription from the receiver"
+	^ self announcer removeSubscription: subscription
+%
+
+category: 'accessing'
+method: GtLlmChatMessage
 role
 	^ role ifNil: [ role := self class defaultRole ]
 %
@@ -6553,7 +9054,10 @@ role: anObject
 category: 'accessing'
 method: GtLlmChatMessage
 senderText
-	self isAssistantRole ifTrue: [ ^ 'Assistant' ].
+	self isAssistantRole
+		ifTrue: [ ^ self model
+				ifNil: [ 'Assistant' ]
+				ifNotNil: [ :aModel | GtLlmConnectionRegistry uniqueInstance labelForModel: aModel ] ].
 	self isSystemRole ifTrue: [ ^ 'System' ].
 	self isToolRole ifTrue: [ ^ 'Tool' ].
 	^ 'You'
@@ -6565,13 +9069,7 @@ serialize
 	| serialized |
 	serialized := super serialize.
 
-	self attachments
-		ifNotNil: [ serialized
-				at: 'attachments'
-				put: (self attachments
-						collect: [ :aFile | 
-							{'file_id' -> aFile remoteId.
-								'tools' -> {{'type' -> 'file_search'} asDictionary}} asDictionary ]) ].
+	self images isEmptyOrNil ifFalse: [ serialized at: 'images' put: self images ].
 
 	^ serialized
 %
@@ -6579,6 +9077,115 @@ serialize
 category: 'as yet unclassified'
 method: GtLlmChatMessage
 serializeInline
+%
+
+category: 'announcer - subscription'
+method: GtLlmChatMessage
+subscribe: anAnnouncementClass do: aValuable
+	"Declare that when anAnnouncementClass is raised, aValuable is executed."
+	
+	self
+		deprecated: 'Please use #when:do: instead'
+		transformWith: '`@receiver subscribe: `@statements1 do: `@statements2' 
+						-> '`@receiver when: `@statements1 do: `@statements2'.
+
+	^ self when: anAnnouncementClass do: aValuable
+%
+
+category: 'announcer - subscription'
+method: GtLlmChatMessage
+subscribe: anAnnouncementClass do: aValuable for: aSubscriber
+	"Declare that when anAnnouncementClass is raised, aValuable is executed."
+	
+	self
+		deprecated: 'Please use #when:do:for: instead'
+		transformWith: '`@receiver subscribe: `@statements1 do: `@aValuable for: `@aSubscriber' 
+						-> '`@receiver when: `@statements1 do: `@aValuable for: `@aSubscriber'.
+	
+	^ self when: anAnnouncementClass do: aValuable for: aSubscriber
+%
+
+category: 'announcer - subscription'
+method: GtLlmChatMessage
+subscribe: anAnnouncementClass send: aSelector to: anObject
+	"Declare that when anAnnouncementClass is raised, anObject should receive the message aSelector."
+	self
+		deprecated: 'Please use #when:send:to: instead'
+		transformWith: '`@receiver subscribe: `@statements1 send: `@statements2 to: `@anObject' 
+						-> '`@receiver when: `@statements1 send: `@statements2 to: `@anObject'.
+	^ self when: anAnnouncementClass do: (MessageSend receiver: anObject selector: aSelector)
+%
+
+category: 'announcer - subscription'
+method: GtLlmChatMessage
+subscribe: anAnnouncementClass send: aSelector to: anObject for: aSubscriber
+	"Declare that when anAnnouncementClass is raised, anObject should receive the message aSelector."
+	self
+		deprecated: 'Please use #when:send:to:for: instead'
+		transformWith: '`@receiver subscribe: `@statements1 send: `@statements2 to: `@anObject for: `@aSubscriber' 
+						-> '`@receiver when: `@statements1 send: `@statements2 to: `@anObject for: `@aSubscriber'.
+
+	^ self when: anAnnouncementClass send: aSelector to: anObject for: aSubscriber
+%
+
+category: 'announcer - subscription'
+method: GtLlmChatMessage
+unsubscribe: anObject
+	"Unsubscribe all subscriptions of anObject from the receiver"
+	^ self announcer unsubscribe: anObject
+%
+
+category: 'announcer - subscription'
+method: GtLlmChatMessage
+weak
+	"announcer weak subscribe: foo"
+	^ self announcer weak
+%
+
+category: 'announcer - subscription'
+method: GtLlmChatMessage
+when: anAnnouncementClass do: aValuable
+	"Declare that when anAnnouncementClass is raised, aValuable is executed.  Pay attention that such a method as well as when:do: should not be used on weak announcer since the block holds the receiver and more strongly."
+		^ self announcer when: anAnnouncementClass do: aValuable
+%
+
+category: 'announcer - subscription'
+method: GtLlmChatMessage
+when: anAnnouncementClass do: aValuable for: aSubscriber
+	"Declare that when anAnnouncementClass is raised, aValuable is executed and define the subscriber."
+
+	^ self announcer when: anAnnouncementClass do: aValuable for: aSubscriber
+%
+
+category: 'announcer - subscription'
+method: GtLlmChatMessage
+when: anAnnouncementClass doOnce: aValuable for: aSubscriber
+	"Declare that when anAnnouncementClass is raised, aValuable is executed and define the subscriber.
+	A valuable is executed ONCE, and then a subscriber gets unsubscribed"
+	^ self
+		when: anAnnouncementClass
+		do: [ :anAnnouncement |
+			self unsubscribe: aSubscriber.
+			aValuable cull: anAnnouncement ]
+		for: aSubscriber
+%
+
+category: 'announcer - subscription'
+method: GtLlmChatMessage
+when: anAnnouncementClass send: aSelector to: anObject
+	"Declare that when anAnnouncementClass is raised, anObject should receive the message aSelector.
+    When the message expects one argument (eg #fooAnnouncement:) the announcement is passed as argument.
+    When the message expects two arguments (eg #fooAnnouncement:announcer:) both the announcement and the announcer 
+    are passed as argument"
+		^ self announcer when: anAnnouncementClass send: aSelector to: anObject
+%
+
+category: 'announcer - subscription'
+method: GtLlmChatMessage
+when: anAnnouncementClass send: aSelector to: anObject for: aSubscriber
+	"Declare that when anAnnouncementClass is raised, anObject should receive the message aSelector."
+
+	^ (self when: anAnnouncementClass send: aSelector to: anObject) subscriber: aSubscriber
 %
 
 ! Class implementation for 'GtLlmActionMessage'
@@ -6591,12 +9198,26 @@ defaultRole
 	^ nil
 %
 
+category: 'accessing'
+classmethod: GtLlmActionMessage
+leJsonV4Name
+
+	^ #gtLlmActionMessage
+%
+
 !		Instance methods for 'GtLlmActionMessage'
+
+category: 'visiting'
+method: GtLlmActionMessage
+acceptVisitor: aVisitor
+
+	^ aVisitor visitGtLlmActionMessage: self
+%
 
 category: 'as yet unclassified'
 method: GtLlmActionMessage
 actionModel
-	^ (self chat tutor actionNamed: self action)
+	^ (self chat assistant actionNamed: self action)
 		ifNil: [ self isUserRole
 				ifTrue: [ (self chat descendantOf: self)
 						ifNotNil: [ :aDescendant | aDescendant actionModel ] ]
@@ -6607,6 +9228,20 @@ category: 'as yet unclassified'
 method: GtLlmActionMessage
 contentSummary
 	^ self action
+%
+
+category: 'as yet unclassified'
+method: GtLlmActionMessage
+gtChatRequestFor: aView
+	<gtView>
+	<gtLlmMessageView>
+	self action = 'Chat' ifFalse: [ ^ aView empty ].
+	self isUserRole ifFalse: [ ^ aView empty ].
+
+	^ aView textEditor
+		title: 'Message';
+		priority: 1;
+		text: [ self arguments first ]
 %
 
 category: 'as yet unclassified'
@@ -6628,8 +9263,8 @@ gtPromoteToExampleActionFor: anAction
 		label: 'Promote example';
 		content: [ :aButton | 
 			| action example |
-			action := self chat tutor actionNamed: self action.
-			example := GtLlmTutorActionExample new
+			action := self chat assistant actionNamed: self action.
+			example := GtLlmAssistantActionExample new
 					input: self ancestor contentJson;
 					output: self contentJson.
 			action addExample: example.
@@ -6653,6 +9288,22 @@ defaultRole
 	^ 'assistant'
 %
 
+category: 'accessing'
+classmethod: GtLlmAssistantMessage
+leJsonV4Name
+
+	^ #gtLlmAssistantMessage
+%
+
+!		Instance methods for 'GtLlmAssistantMessage'
+
+category: 'visiting'
+method: GtLlmAssistantMessage
+acceptVisitor: aVisitor
+
+	^ aVisitor visitGtLlmAssistantMessage: self
+%
+
 ! Class implementation for 'GtLlmSystemMessage'
 
 !		Class methods for 'GtLlmSystemMessage'
@@ -6661,6 +9312,22 @@ category: 'accessing'
 classmethod: GtLlmSystemMessage
 defaultRole
 	^ 'system'
+%
+
+category: 'accessing'
+classmethod: GtLlmSystemMessage
+leJsonV4Name
+
+	^ #gtLlmSystemMessage
+%
+
+!		Instance methods for 'GtLlmSystemMessage'
+
+category: 'visiting'
+method: GtLlmSystemMessage
+acceptVisitor: aVisitor
+
+	^ aVisitor visitGtLlmSystemMessage: self
 %
 
 ! Class implementation for 'GtLlmToolMessage'
@@ -6673,12 +9340,26 @@ defaultRole
 	^ 'tool'
 %
 
+category: 'accessing'
+classmethod: GtLlmToolMessage
+leJsonV4Name
+
+	^ #gtLlmToolMessage
+%
+
 !		Instance methods for 'GtLlmToolMessage'
+
+category: 'visiting'
+method: GtLlmToolMessage
+acceptVisitor: aVisitor
+
+	^ aVisitor visitGtLlmToolMessage: self
+%
 
 category: 'as yet unclassified'
 method: GtLlmToolMessage
 action
-	^ 'Tool call: ' , self toolCall name
+	^ self toolCall humanReadable
 %
 
 category: 'as yet unclassified'
@@ -6742,6 +9423,14 @@ output: anObject
 	output := anObject
 %
 
+category: 'as yet unclassified'
+method: GtLlmToolMessage
+serializeResponse
+	^ {'type' -> 'function_call_output'.
+		'call_id' -> toolCall id.
+		'output' -> self output} asDictionary
+%
+
 category: 'accessing'
 method: GtLlmToolMessage
 toolCall
@@ -6764,68 +9453,20 @@ defaultRole
 	^ 'user'
 %
 
-! Class implementation for 'GtLlmCompositeMessage'
+category: 'accessing'
+classmethod: GtLlmUserMessage
+leJsonV4Name
 
-!		Instance methods for 'GtLlmCompositeMessage'
-
-category: 'as yet unclassified'
-method: GtLlmCompositeMessage
-addFile: aFileReference
-	| fileId |
-	fileId := (self chat client uploadFile: aFileReference withPurpose: 'vision')
-			id.
-	content
-		add: (GtLlmFileMessagePart new
-				fileId: fileId;
-				file: aFileReference)
+	^ #gtLlmUserMessage
 %
 
-category: 'as yet unclassified'
-method: GtLlmCompositeMessage
-addString: aString
-	content add: (GtLlmStringMessagePart new string: aString)
-%
+!		Instance methods for 'GtLlmUserMessage'
 
-category: 'as yet unclassified'
-method: GtLlmCompositeMessage
-content
-	^ serializeInline
-		ifTrue: [ content serializeInline ]
-		ifFalse: [ content serialize ]
-%
+category: 'visiting'
+method: GtLlmUserMessage
+acceptVisitor: aVisitor
 
-category: 'as yet unclassified'
-method: GtLlmCompositeMessage
-contentText
-	^ ''
-		join: ((content select: [ :aContent | aContent isString ]) collect: #string)
-%
-
-category: 'as yet unclassified'
-method: GtLlmCompositeMessage
-gtMessagePartsFor: aView
-	<gtView>
-	<gtLlmMessageView>
-	^ aView columnedList
-		title: 'Message parts';
-		priority: 3;
-		items: [ content ];
-		column: 'Type' text: #type;
-		column: 'Content' text: #content weight: 3
-%
-
-category: 'as yet unclassified'
-method: GtLlmCompositeMessage
-initialize
-	super initialize.
-	content := GtLlmMessagePartGroup new.
-	serializeInline := false
-%
-
-category: 'as yet unclassified'
-method: GtLlmCompositeMessage
-serializeInline
-	serializeInline := true
+	^ aVisitor visitGtLlmUserMessage: self
 %
 
 ! Class implementation for 'GtOpenAIMessage'
@@ -6836,6 +9477,13 @@ category: 'as yet unclassified'
 classmethod: GtOpenAIMessage
 from: aDict
 	^ self new from: aDict
+%
+
+category: 'accessing'
+classmethod: GtOpenAIMessage
+leJsonV4Name
+
+	^ #gtOpenAIMessage
 %
 
 category: 'accessing'
@@ -6851,18 +9499,11 @@ serializationProperties
 		#metadata -> #metadata.
 		#run_id -> #runId.
 		#thread_id -> #threadId.
-		#role -> #role.
-		#attachments -> #attachments
+		#role -> #role
 	}
 %
 
 !		Instance methods for 'GtOpenAIMessage'
-
-category: 'accessing'
-method: GtOpenAIMessage
-ancestor
-	^ self chat ancestorOf: self
-%
 
 category: 'accessing'
 method: GtOpenAIMessage
@@ -6882,12 +9523,6 @@ annotations
 
 category: 'accessing'
 method: GtOpenAIMessage
-announce: anAnnouncement
-	chat announce: anAnnouncement
-%
-
-category: 'accessing'
-method: GtOpenAIMessage
 assistantId
 	^ assistantId
 %
@@ -6896,30 +9531,6 @@ category: 'accessing'
 method: GtOpenAIMessage
 assistantId: anObject
 	assistantId := anObject
-%
-
-category: 'accessing'
-method: GtOpenAIMessage
-attachments
-	^ attachments
-%
-
-category: 'accessing'
-method: GtOpenAIMessage
-attachments: anObject
-	attachments := anObject
-%
-
-category: 'accessing'
-method: GtOpenAIMessage
-chat
-	^ chat
-%
-
-category: 'accessing'
-method: GtOpenAIMessage
-chat: anObject
-	chat := anObject
 %
 
 category: 'accessing'
@@ -6954,12 +9565,6 @@ content
 
 category: 'accessing'
 method: GtOpenAIMessage
-content: anObject
-	content := anObject
-%
-
-category: 'accessing'
-method: GtOpenAIMessage
 contentJson
 	self contentText ifEmpty: [ ^ {} asDictionary ].
 	^ STONJSON fromString: self contentText
@@ -6977,7 +9582,14 @@ contentText
 	^ (content isKindOf: String)
 		ifTrue: [ content ]
 		ifFalse: [ ''
-				join: (content collect: [ :aValue | ((aValue at: 'text') at: 'value') ifNil: [ '' ] ]) ]
+				join: (content
+						collect: [ :aValue | 
+							(aValue at: 'text' ifAbsent: [ nil ])
+								ifNil: [ '' ]
+								ifNotNil: [ :aTextObject | 
+									(aTextObject isKindOf: String)
+										ifTrue: [ aTextObject ]
+										ifFalse: [ (aTextObject at: 'value') ifNil: [ '' ] ] ] ]) ]
 %
 
 category: 'accessing'
@@ -7021,26 +9633,10 @@ gtAnnotationsFor: aView
 		view: #gtAnnotationsFor:
 %
 
-category: 'as yet unclassified'
-method: GtOpenAIMessage
-gtMessageFilesFor: aView
-	<gtView>
-	<gtLlmMessageView>
-	| messageFiles |
-	messageFiles := self messageFiles.
-
-	messageFiles ifEmpty: [ ^ aView empty ].
-
-	"for some reason we need this instead of a forward for the layout in the message to work"
-	^ (messageFiles gtFilesFor: aView) 
-		title: 'Message files';
-		priority: 10
-%
-
 category: 'testing'
 method: GtOpenAIMessage
 hasResponse
-	^ content anySatisfy: [ :aValue | (aValue at: #text at: #value) isNotEmpty ]
+	^ self contentText isNotEmpty
 %
 
 category: 'accessing'
@@ -7115,17 +9711,6 @@ isUserRole
 	^ self role = #user
 %
 
-category: 'as yet unclassified'
-method: GtOpenAIMessage
-messageFiles
-	self contentText = self content ifTrue: [ ^ GtOpenAIFilesGroup new ].
-
-	^ GtOpenAIFilesGroup
-		withAll: (self content
-				select: [ :aValue | aValue type = 'image_file' ]
-				thenCollect: [ :aValue | self chat assistant client getFile: ((aValue at: 'image_file') at: 'file_id') ])
-%
-
 category: 'accessing'
 method: GtOpenAIMessage
 metadata
@@ -7164,14 +9749,6 @@ runId: anObject
 
 category: 'accessing'
 method: GtOpenAIMessage
-senderText
-	self isAssistantRole ifTrue: [ ^ 'Assistant' ].
-	self isSystemRole ifTrue: [ ^ 'System' ].
-	^ 'You'
-%
-
-category: 'accessing'
-method: GtOpenAIMessage
 step
 	^ step
 %
@@ -7202,7 +9779,46 @@ threadId: anObject
 
 ! Class implementation for 'GtOpenAIActionMessage'
 
+!		Class methods for 'GtOpenAIActionMessage'
+
+category: 'accessing'
+classmethod: GtOpenAIActionMessage
+leJsonV4Name
+
+	^ #gtOpenAIActionMessage
+%
+
 !		Instance methods for 'GtOpenAIActionMessage'
+
+category: 'as yet unclassified'
+method: GtOpenAIActionMessage
+actionModel
+	^ (self chat assistant actionNamed: self action)
+		ifNil: [ self isUserRole
+				ifTrue: [ (self chat descendantOf: self)
+						ifNotNil: [ :aDescendant | aDescendant actionModel ] ]
+				ifFalse: [ nil ] ]
+%
+
+category: 'trait-TGtActionMessage'
+method: GtOpenAIActionMessage
+gtPromoteToExampleActionFor: anAction
+	<gtLlmAction>
+	self isAssistantRole ifFalse: [ ^ anAction noAction ].
+
+	^ anAction dropdown
+		priority: 5;
+		label: 'Promote example';
+		content: [ :aButton | 
+			| action example |
+			action := self chat assistant actionNamed: self action.
+			example := GtLlmAssistantActionExample new
+					input: self ancestor contentJson;
+					output: self contentJson.
+			action addExample: example.
+			action persist.
+			example asGtMagritteViewModel asElement ]
+%
 
 category: 'as yet unclassified'
 method: GtOpenAIActionMessage
@@ -7212,12 +9828,21 @@ textBlock
 
 ! Class implementation for 'GtOpenAIBlogPostMessage'
 
+!		Class methods for 'GtOpenAIBlogPostMessage'
+
+category: 'accessing'
+classmethod: GtOpenAIBlogPostMessage
+leJsonV4Name
+
+	^ #gtOpenAIBlogPostMessage
+%
+
 !		Instance methods for 'GtOpenAIBlogPostMessage'
 
 category: 'trait-TGtActionMessage'
 method: GtOpenAIBlogPostMessage
 actionModel
-	^ (self chat tutor actionNamed: self action)
+	^ (self chat assistant actionNamed: self action)
 		ifNil: [ self isUserRole
 				ifTrue: [ (self chat descendantOf: self)
 						ifNotNil: [ :aDescendant | aDescendant actionModel ] ]
@@ -7246,30 +9871,11 @@ gtPostFor: aView
 	| json |
 	[ json := self contentJson ] on: Error do: [ ^ aView empty ].
 	json at: 'Post' ifAbsent: [ ^ aView empty ].
+	(json at: 'Post') ifNil: [ ^ aView empty ].
 	^ aView textEditor
 		title: 'Post';
 		priority: 1;
 		text: [ json at: 'Post' ]
-%
-
-category: 'trait-TGtActionMessage'
-method: GtOpenAIBlogPostMessage
-gtPromoteToExampleActionFor: anAction
-	<gtLlmAction>
-	self isAssistantRole ifFalse: [ ^ anAction noAction ].
-
-	^ anAction dropdown
-		priority: 5;
-		label: 'Promote example';
-		content: [ :aButton | 
-			| action example |
-			action := self chat tutor actionNamed: self action.
-			example := GtLlmTutorActionExample new
-					input: self ancestor contentJson;
-					output: self contentJson.
-			action addExample: example.
-			action persist.
-			example asGtMagritteViewModel asElement ]
 %
 
 category: 'trait-TGtActionMessage'
@@ -7282,6 +9888,13 @@ textBlock
 
 !		Class methods for 'GtLlmFunctionToolCall'
 
+category: 'accessing'
+classmethod: GtLlmFunctionToolCall
+leJsonV4Name
+
+	^ #gtLlmFunctionToolCall
+%
+
 category: 'as yet unclassified'
 classmethod: GtLlmFunctionToolCall
 serializationProperties
@@ -7290,6 +9903,19 @@ serializationProperties
 %
 
 !		Instance methods for 'GtLlmFunctionToolCall'
+
+category: 'visiting'
+method: GtLlmFunctionToolCall
+acceptVisitor: aVisitor
+
+	^ aVisitor visitGtLlmFunctionToolCall: self
+%
+
+category: 'as yet unclassified'
+method: GtLlmFunctionToolCall
+anyArgument
+	^ arguments anyOne
+%
 
 category: 'accessing'
 method: GtLlmFunctionToolCall
@@ -7336,10 +9962,10 @@ gtArgumentsFor: aView
 category: 'as yet unclassified'
 method: GtLlmFunctionToolCall
 humanReadable
-	^ self name , ' '
-		, (','
+	^ self name , ' ('
+		, (', '
 				join: (self arguments associations
-						collect: [ :anArgument | anArgument key , ': ' , anArgument value ]))
+						collect: [ :anArgument | anArgument key , ': ' , anArgument value ])), ')'
 %
 
 category: 'accessing'
@@ -7368,6 +9994,12 @@ name: anObject
 
 category: 'as yet unclassified'
 method: GtLlmFunctionToolCall
+performedByTool: aTool
+	tool := aTool
+%
+
+category: 'as yet unclassified'
+method: GtLlmFunctionToolCall
 printOn: aStream
 	super printOn: aStream.
 
@@ -7379,9 +10011,31 @@ printOn: aStream
 		nextPut: $)
 %
 
+category: 'as yet unclassified'
+method: GtLlmFunctionToolCall
+responseInput
+	^ {'type' -> 'function_call'.
+		'call_id' -> self id.
+		'name' -> self name.
+		'arguments' -> (STONJSON toString: self arguments)} asDictionary
+%
+
+category: 'accessing'
+method: GtLlmFunctionToolCall
+tool
+	^ tool
+%
+
 ! Class implementation for 'GtLlmTool'
 
 !		Class methods for 'GtLlmTool'
+
+category: 'accessing'
+classmethod: GtLlmTool
+leJsonV4Name
+
+	^ #gtLlmTool
+%
 
 category: 'accessing'
 classmethod: GtLlmTool
@@ -7391,18 +10045,30 @@ serializationProperties
 
 !		Instance methods for 'GtLlmTool'
 
-category: 'as yet unclassified'
+category: 'visiting'
 method: GtLlmTool
-defaultType
-	^ ''
+acceptVisitor: aVisitor
+
+	^ aVisitor visitGtLlmTool: self
 %
 
 category: 'as yet unclassified'
 method: GtLlmTool
-initialize
-	super initialize.
-	
-	self type: self defaultType
+functionAnthropic
+	^ {'type' -> self type.
+		'name' -> self name} asDictionary
+%
+
+category: 'as yet unclassified'
+method: GtLlmTool
+functionResponse
+	^ {'type' -> self type} asDictionary
+%
+
+category: 'as yet unclassified'
+method: GtLlmTool
+name
+	self subclassResponsibility
 %
 
 category: 'accessing'
@@ -7419,36 +10085,120 @@ printOn: aStream
 category: 'accessing'
 method: GtLlmTool
 type
-	^ type
+	^ ''
+%
+
+! Class implementation for 'GtLlmAbstractFunctionTool'
+
+!		Class methods for 'GtLlmAbstractFunctionTool'
+
+category: 'accessing'
+classmethod: GtLlmAbstractFunctionTool
+leJsonV4Name
+	^ #gtLlmAbstractFunctionTool
 %
 
 category: 'accessing'
-method: GtLlmTool
-type: anObject
-	type := anObject
+classmethod: GtLlmAbstractFunctionTool
+serializationProperties
+	^ {#type -> #type. #function -> #function}
 %
 
-! Class implementation for 'GtLlmFileSearchTool'
-
-!		Instance methods for 'GtLlmFileSearchTool'
+!		Instance methods for 'GtLlmAbstractFunctionTool'
 
 category: 'as yet unclassified'
-method: GtLlmFileSearchTool
-defaultType
-	^ 'file_search'
+method: GtLlmAbstractFunctionTool
+description
+	^ self subclassResponsibility
+%
+
+category: 'accessing'
+method: GtLlmAbstractFunctionTool
+function
+	^ {'name' -> self name.
+		'description' -> self description.
+		'parameters'
+			-> {'type' -> 'object'.
+					'properties'
+						-> (self parameters collect: [ :aName | aName -> {'type' -> 'string'} asDictionary ])
+								asDictionary.
+					'required' -> self parameters.
+					'additionalProperties' -> false} asDictionary.
+		'strict' -> true} asDictionary
+%
+
+category: 'as yet unclassified'
+method: GtLlmAbstractFunctionTool
+functionAnthropic
+	^ {'name' -> self name.
+		'description' -> self description.
+		'input_schema'
+			-> {'type' -> 'object'.
+					'properties'
+						-> (self parameters collect: [ :aName | aName -> {'type' -> 'string'} asDictionary ])
+								asDictionary.
+					'required' -> self parameters} asDictionary} asDictionary
+%
+
+category: 'as yet unclassified'
+method: GtLlmAbstractFunctionTool
+functionResponse
+	^ {'name' -> self name.
+		'type' -> self type.
+		'description' -> self description.
+		'parameters'
+			-> {'type' -> 'object'.
+					'properties'
+						-> (self parameters
+								collect: [ :aName | aName -> {'type' -> 'string'} asDictionary ])
+								asDictionary.
+					'required' -> self parameters.
+					'additionalProperties' -> false} asDictionary} asDictionary
+%
+
+category: 'as yet unclassified'
+method: GtLlmAbstractFunctionTool
+parameters
+	"An array of strings representing parameter names"
+	^ self subclassResponsibility
+%
+
+category: 'llm-generated'
+method: GtLlmAbstractFunctionTool
+performToolCall: aToolCall
+	aToolCall performedByTool: self.
+	^ self privatePerformToolCall: aToolCall
+%
+
+category: 'llm-generated'
+method: GtLlmAbstractFunctionTool
+privatePerformToolCall: aToolCall
+	^ self subclassResponsibility
+%
+
+category: 'as yet unclassified'
+method: GtLlmAbstractFunctionTool
+type
+	^ 'function'
 %
 
 ! Class implementation for 'GtLlmFunctionTool'
 
 !		Class methods for 'GtLlmFunctionTool'
 
-category: 'as yet unclassified'
+category: 'accessing'
 classmethod: GtLlmFunctionTool
-serializationProperties
-	^ {#type -> #type. #function -> #function}
+leJsonV4Name
+	^ #gtLlmFunctionTool
 %
 
 !		Instance methods for 'GtLlmFunctionTool'
+
+category: 'visiting'
+method: GtLlmFunctionTool
+acceptVisitor: aVisitor
+	^ aVisitor visitGtLlmFunctionTool: self
+%
 
 category: 'accessing'
 method: GtLlmFunctionTool
@@ -7460,12 +10210,6 @@ category: 'accessing'
 method: GtLlmFunctionTool
 block: anObject
 	block := anObject
-%
-
-category: 'as yet unclassified'
-method: GtLlmFunctionTool
-defaultType
-	^ 'function'
 %
 
 category: 'accessing'
@@ -7480,30 +10224,25 @@ description: anObject
 	description := anObject
 %
 
-category: 'accessing'
+category: 'views'
 method: GtLlmFunctionTool
-function
-	^ {'name' -> name.
-		'description' -> description.
-		'parameters'
-			-> {'type' -> 'object'.
-					'properties'
-						-> (parameters collect: [ :aName | aName -> {'type' -> 'string'} asDictionary ])
-								asDictionary.
-					'required' -> parameters.
-					'additionalProperties' -> false} asDictionary.
-		'strict' -> true} asDictionary
+gtBlockSourceCodeFor: aView
+	<gtView>
+	^ aView forward
+		title: 'Source code';
+		object: [ block ];
+		view: #gtSourceCodeFor:
 %
 
-category: 'as yet unclassified'
+category: 'views'
 method: GtLlmFunctionTool
 gtFunctionFor: aView
 	<gtView>
 	^ aView forward
 		title: 'Function';
 		priority: 1;
-		object: [ STONJSON toStringPretty: self function ];
-		view: #gtJSONFor:
+		object: [ self function ];
+		view: #gtItemsFor:
 %
 
 category: 'as yet unclassified'
@@ -7532,9 +10271,9 @@ category: 'as yet unclassified'
 method: GtLlmFunctionTool
 method
 	| split class methodName |
-	name ifNil: [ ^ nil ].
+	self name ifNil: [ ^ nil ].
 
-	split := '_' split: name.
+	split := '_' split: self name.
 	class := split first asClassIfAbsent: [ ^ nil ].
 	methodName := ':' join: split allButFirst.
 	^ [ class >> methodName asSymbol ] on: Error do: [ nil ]
@@ -7564,20 +10303,126 @@ parameters: anObject
 	parameters := anObject
 %
 
-category: 'as yet unclassified'
+category: 'llm-generated'
 method: GtLlmFunctionTool
-performToolCall: aGtLlmFunctionToolCall
+privatePerformToolCall: aGtLlmFunctionToolCall
+	| result |
 	self
 		assert: block isNotNil
 		description: [ 'Trying to call a function without a block' ].
+	self
+		assert: aGtLlmFunctionToolCall arguments keys asSet = parameters asSet
+		description: [ 'The arguments of the function call do not match the parameters of the tool' ].
+	"Commented due to Gemstone:
+	(GtLlmFunctionCallAboutToBePerformedSignal new
+		tool: self;
+		functionCall: aGtLlmFunctionToolCall) emit."
+	result := block value: aGtLlmFunctionToolCall.
+	"Commented due to Gemstone:
+	(GtLlmFunctionCallPerformedSignal new
+		tool: self;
+		functionCall: aGtLlmFunctionToolCall) emit."
+	^ result
+%
 
-	^ block
-		value: (parameters collect: [ :aName | aGtLlmFunctionToolCall arguments at: aName ])
+! Class implementation for 'GtLlmFunctionToolWithProtocol'
+
+!		Class methods for 'GtLlmFunctionToolWithProtocol'
+
+category: 'accessing'
+classmethod: GtLlmFunctionToolWithProtocol
+leJsonV4Name
+
+	^ #gtLlmFunctionToolWithProtocol
+%
+
+!		Instance methods for 'GtLlmFunctionToolWithProtocol'
+
+category: 'as yet unclassified'
+method: GtLlmFunctionToolWithProtocol
+block: aBlock
+	block := [ :aFunctionCall | 
+		STONJSON
+			toString: ([ {'type' -> 'result'.
+					'value' -> (aBlock cull: aFunctionCall) asString} asDictionary ]
+					on: Error
+					do: [ :e | 
+						{'type' -> 'error'.
+							'error' -> e asString} asDictionary ]) ]
+%
+
+category: 'as yet unclassified'
+method: GtLlmFunctionToolWithProtocol
+description
+	^ description, '
+
+', self protocolDescription
+%
+
+category: 'as yet unclassified'
+method: GtLlmFunctionToolWithProtocol
+protocolDescription
+	^ 'On success, an object of the form `{"type": "result", "value": "... result ... "}` will be returned. On error, an object of the form `{"type": "error", "error": "... error message ... "}` will be returned.'
+%
+
+! Class implementation for 'GtLlmFileSearchTool'
+
+!		Class methods for 'GtLlmFileSearchTool'
+
+category: 'accessing'
+classmethod: GtLlmFileSearchTool
+leJsonV4Name
+
+	^ #gtLlmFileSearchTool
+%
+
+!		Instance methods for 'GtLlmFileSearchTool'
+
+category: 'visiting'
+method: GtLlmFileSearchTool
+acceptVisitor: aVisitor
+
+	^ aVisitor visitGtLlmFileSearchTool: self
+%
+
+category: 'as yet unclassified'
+method: GtLlmFileSearchTool
+functionResponse
+	^ {'type' -> 'file_search'.
+		'description' -> 'Search the files attached to the chat'.
+		'vector_store_ids' -> self vectorStoreIds} asDictionary
+%
+
+category: 'as yet unclassified'
+method: GtLlmFileSearchTool
+initialize
+	super initialize.
+	
+	vectorStoreIds := {}
+%
+
+category: 'accessing'
+method: GtLlmFileSearchTool
+vectorStoreIds
+	^ vectorStoreIds
+%
+
+category: 'accessing'
+method: GtLlmFileSearchTool
+vectorStoreIds: anObject
+	vectorStoreIds := anObject
 %
 
 ! Class implementation for 'GtOllamaEmbedding'
 
 !		Class methods for 'GtOllamaEmbedding'
+
+category: 'accessing'
+classmethod: GtOllamaEmbedding
+leJsonV4Name
+
+	^ #gtOllamaEmbedding
+%
 
 category: 'accessing'
 classmethod: GtOllamaEmbedding
@@ -7608,6 +10453,13 @@ size
 ! Class implementation for 'GtOllamaModel'
 
 !		Class methods for 'GtOllamaModel'
+
+category: 'accessing'
+classmethod: GtOllamaModel
+leJsonV4Name
+
+	^ #gtOllamaModel
+%
 
 category: 'accessing'
 classmethod: GtOllamaModel
@@ -7706,6 +10558,13 @@ size: anObject
 ! Class implementation for 'GtOllamaModelInformation'
 
 !		Class methods for 'GtOllamaModelInformation'
+
+category: 'accessing'
+classmethod: GtOllamaModelInformation
+leJsonV4Name
+
+	^ #gtOllamaModelInformation
+%
 
 category: 'accessing'
 classmethod: GtOllamaModelInformation
@@ -7854,6 +10713,15 @@ template: anObject
 
 ! Class implementation for 'GtOllamaResponseMessage'
 
+!		Class methods for 'GtOllamaResponseMessage'
+
+category: 'accessing'
+classmethod: GtOllamaResponseMessage
+leJsonV4Name
+
+	^ #gtOllamaResponseMessage
+%
+
 !		Instance methods for 'GtOllamaResponseMessage'
 
 category: 'accessing'
@@ -7878,6 +10746,13 @@ gtResponseFor: aView
 ! Class implementation for 'GtOllamaRunningModel'
 
 !		Class methods for 'GtOllamaRunningModel'
+
+category: 'accessing'
+classmethod: GtOllamaRunningModel
+leJsonV4Name
+
+	^ #gtOllamaRunningModel
+%
 
 category: 'accessing'
 classmethod: GtOllamaRunningModel
@@ -7987,6 +10862,13 @@ from: anArray
 	^ self new steps: (anArray collect: [ :aDict | aDict at: 'status' ])
 %
 
+category: 'accessing'
+classmethod: GtOllamaStatusSteps
+leJsonV4Name
+
+	^ #gtOllamaStatusSteps
+%
+
 !		Instance methods for 'GtOllamaStatusSteps'
 
 category: 'accessing'
@@ -8014,6 +10896,13 @@ steps: anObject
 ! Class implementation for 'GtOllamaThreadMessage'
 
 !		Class methods for 'GtOllamaThreadMessage'
+
+category: 'accessing'
+classmethod: GtOllamaThreadMessage
+leJsonV4Name
+
+	^ #gtOllamaThreadMessage
+%
 
 category: 'accessing'
 classmethod: GtOllamaThreadMessage
@@ -8152,7 +11041,7 @@ promptEvalDuration
 category: 'accessing'
 method: GtOllamaThreadMessage
 promptEvalDuration: anObject
-	promptEvalDuration := anObject nanoSeconds
+	promptEvalDuration := anObject ifNotNil: [ :timestamp | timestamp nanoSeconds ]
 %
 
 category: 'accessing'
@@ -8189,6 +11078,13 @@ totalDuration: anObject
 ! Class implementation for 'GtOpenAIAnnotation'
 
 !		Class methods for 'GtOpenAIAnnotation'
+
+category: 'accessing'
+classmethod: GtOpenAIAnnotation
+leJsonV4Name
+
+	^ #gtOpenAIAnnotation
+%
 
 category: 'accessing'
 classmethod: GtOpenAIAnnotation
@@ -8303,6 +11199,13 @@ type: anObject
 ! Class implementation for 'GtOpenAIAssistant'
 
 !		Class methods for 'GtOpenAIAssistant'
+
+category: 'accessing'
+classmethod: GtOpenAIAssistant
+leJsonV4Name
+
+	^ #gtOpenAIAssistant
+%
 
 category: 'accessing'
 classmethod: GtOpenAIAssistant
@@ -8441,6 +11344,13 @@ tools: anObject
 
 category: 'accessing'
 classmethod: GtOpenAIAssistantFile
+leJsonV4Name
+
+	^ #gtOpenAIAssistantFile
+%
+
+category: 'accessing'
+classmethod: GtOpenAIAssistantFile
 serializationProperties
 	^ {#id -> #id.
 		#created_at -> #createdAt.
@@ -8488,6 +11398,13 @@ id: anObject
 ! Class implementation for 'GtOpenAIChatCompletion'
 
 !		Class methods for 'GtOpenAIChatCompletion'
+
+category: 'accessing'
+classmethod: GtOpenAIChatCompletion
+leJsonV4Name
+
+	^ #gtOpenAIChatCompletion
+%
 
 category: 'accessing'
 classmethod: GtOpenAIChatCompletion
@@ -8594,6 +11511,13 @@ usage: anObject
 
 category: 'accessing'
 classmethod: GtOpenAIChatCompletionChoice
+leJsonV4Name
+
+	^ #gtOpenAIChatCompletionChoice
+%
+
+category: 'accessing'
+classmethod: GtOpenAIChatCompletionChoice
 serializationProperties
 	^ {#finish_reason -> #finishReason.
 		#index -> #index.
@@ -8668,6 +11592,13 @@ message: anObject
 
 category: 'accessing'
 classmethod: GtOpenAIDeletion
+leJsonV4Name
+
+	^ #gtOpenAIDeletion
+%
+
+category: 'accessing'
+classmethod: GtOpenAIDeletion
 serializationProperties
 	^ {#id -> #id.
 		#object -> #object.
@@ -8724,6 +11655,13 @@ from: anArray
 		embedding: (anArray collect: [ :aNumber | aNumber ] as: OrderedCollection)
 %
 
+category: 'accessing'
+classmethod: GtOpenAIEmbedding
+leJsonV4Name
+
+	^ #gtOpenAIEmbedding
+%
+
 !		Instance methods for 'GtOpenAIEmbedding'
 
 category: 'accessing'
@@ -8753,6 +11691,13 @@ size
 ! Class implementation for 'GtOpenAIFile'
 
 !		Class methods for 'GtOpenAIFile'
+
+category: 'accessing'
+classmethod: GtOpenAIFile
+leJsonV4Name
+
+	^ #gtOpenAIFile
+%
 
 category: 'accessing'
 classmethod: GtOpenAIFile
@@ -8908,6 +11853,13 @@ statusDetails: anObject
 
 category: 'accessing'
 classmethod: GtOpenAIFileCitation
+leJsonV4Name
+
+	^ #gtOpenAIFileCitation
+%
+
+category: 'accessing'
+classmethod: GtOpenAIFileCitation
 serializationProperties
 	^ {#file_id -> #fileId.
 		#quote -> #quote}
@@ -8962,6 +11914,13 @@ quote: anObject
 ! Class implementation for 'GtOpenAIFineTuningCheckpoint'
 
 !		Class methods for 'GtOpenAIFineTuningCheckpoint'
+
+category: 'accessing'
+classmethod: GtOpenAIFineTuningCheckpoint
+leJsonV4Name
+
+	^ #gtOpenAIFineTuningCheckpoint
+%
 
 category: 'accessing'
 classmethod: GtOpenAIFineTuningCheckpoint
@@ -9054,6 +12013,13 @@ stepNumber: anObject
 
 category: 'accessing'
 classmethod: GtOpenAIFineTuningEvent
+leJsonV4Name
+
+	^ #gtOpenAIFineTuningEvent
+%
+
+category: 'accessing'
+classmethod: GtOpenAIFineTuningEvent
 serializationProperties
 	^ {#id -> #id.
 		#created_at -> #createdAt.
@@ -9140,6 +12106,13 @@ type: anObject
 ! Class implementation for 'GtOpenAIFineTuningJob'
 
 !		Class methods for 'GtOpenAIFineTuningJob'
+
+category: 'accessing'
+classmethod: GtOpenAIFineTuningJob
+leJsonV4Name
+
+	^ #gtOpenAIFineTuningJob
+%
 
 category: 'accessing'
 classmethod: GtOpenAIFineTuningJob
@@ -9385,6 +12358,13 @@ validationFile: anObject
 
 category: 'accessing'
 classmethod: GtOpenAIModel
+leJsonV4Name
+
+	^ #gtOpenAIModel
+%
+
+category: 'accessing'
+classmethod: GtOpenAIModel
 serializationProperties
 	^ {#created -> #created.
 		#id -> #id.
@@ -9442,9 +12422,339 @@ ownedBy: anObject
 	ownedBy := anObject
 %
 
+! Class implementation for 'GtOpenAIResponse'
+
+!		Class methods for 'GtOpenAIResponse'
+
+category: 'accessing'
+classmethod: GtOpenAIResponse
+leJsonV4Name
+
+	^ #gtOpenAIResponse
+%
+
+category: 'as yet unclassified'
+classmethod: GtOpenAIResponse
+serializationProperties
+	^ {#id -> #id.
+		#created_at -> #createdAt.
+		#status -> #status.
+		#error -> #error.
+		#incomplete_details -> #incompleteDetails.
+		#instructions -> #instructions.
+		#max_output_tokens -> #maxOutputTokens.
+		#model -> #model.
+		#output -> #output.
+		#parallel_tool_calls -> #parallelToolCalls.
+		#previous_response_id -> #previousResponseId.
+		#reasoning -> #reasoning.
+		#store -> #store.
+		#temperature -> #temperature.
+		#text -> #text.
+		#tool_choice -> #toolChoice.
+		#tools -> #tools.
+		#top_p -> #topP.
+		#truncation -> #truncation.
+		#usage -> #usage.
+		#user -> #user.
+		#metadata -> #metadata}
+%
+
+!		Instance methods for 'GtOpenAIResponse'
+
+category: 'accessing'
+method: GtOpenAIResponse
+createdAt
+	^ createdAt
+%
+
+category: 'accessing'
+method: GtOpenAIResponse
+createdAt: anObject
+	createdAt := anObject
+%
+
+category: 'accessing'
+method: GtOpenAIResponse
+error
+	^ error
+%
+
+category: 'accessing'
+method: GtOpenAIResponse
+error: anObject
+	error := anObject
+%
+
+category: 'as yet unclassified'
+method: GtOpenAIResponse
+hasToolCalls
+	^ self toolCalls isNotEmpty
+%
+
+category: 'accessing'
+method: GtOpenAIResponse
+id
+	^ id
+%
+
+category: 'accessing'
+method: GtOpenAIResponse
+id: anObject
+	id := anObject
+%
+
+category: 'accessing'
+method: GtOpenAIResponse
+incompleteDetails
+	^ incompleteDetails
+%
+
+category: 'accessing'
+method: GtOpenAIResponse
+incompleteDetails: anObject
+	incompleteDetails := anObject
+%
+
+category: 'accessing'
+method: GtOpenAIResponse
+instructions
+	^ instructions
+%
+
+category: 'accessing'
+method: GtOpenAIResponse
+instructions: anObject
+	instructions := anObject
+%
+
+category: 'accessing'
+method: GtOpenAIResponse
+maxOutputTokens
+	^ maxOutputTokens
+%
+
+category: 'accessing'
+method: GtOpenAIResponse
+maxOutputTokens: anObject
+	maxOutputTokens := anObject
+%
+
+category: 'accessing'
+method: GtOpenAIResponse
+metadata
+	^ metadata
+%
+
+category: 'accessing'
+method: GtOpenAIResponse
+metadata: anObject
+	metadata := anObject
+%
+
+category: 'accessing'
+method: GtOpenAIResponse
+model
+	^ model
+%
+
+category: 'accessing'
+method: GtOpenAIResponse
+model: anObject
+	model := anObject
+%
+
+category: 'accessing'
+method: GtOpenAIResponse
+output
+	^ output
+%
+
+category: 'accessing'
+method: GtOpenAIResponse
+output: anObject
+	output := anObject collect: [ :aMessage | GtOpenAIMessage from: aMessage ]
+%
+
+category: 'accessing'
+method: GtOpenAIResponse
+parallelToolCalls
+	^ parallelToolCalls
+%
+
+category: 'accessing'
+method: GtOpenAIResponse
+parallelToolCalls: anObject
+	parallelToolCalls := anObject
+%
+
+category: 'accessing'
+method: GtOpenAIResponse
+previousResponseId
+	^ previousResponseId
+%
+
+category: 'accessing'
+method: GtOpenAIResponse
+previousResponseId: anObject
+	previousResponseId := anObject
+%
+
+category: 'accessing'
+method: GtOpenAIResponse
+reasoning
+	^ reasoning
+%
+
+category: 'accessing'
+method: GtOpenAIResponse
+reasoning: anObject
+	reasoning := anObject
+%
+
+category: 'accessing'
+method: GtOpenAIResponse
+status
+	^ status
+%
+
+category: 'accessing'
+method: GtOpenAIResponse
+status: anObject
+	status := anObject
+%
+
+category: 'accessing'
+method: GtOpenAIResponse
+store
+	^ store
+%
+
+category: 'accessing'
+method: GtOpenAIResponse
+store: anObject
+	store := anObject
+%
+
+category: 'accessing'
+method: GtOpenAIResponse
+temperature
+	^ temperature
+%
+
+category: 'accessing'
+method: GtOpenAIResponse
+temperature: anObject
+	temperature := anObject
+%
+
+category: 'accessing'
+method: GtOpenAIResponse
+text
+	^ text
+%
+
+category: 'accessing'
+method: GtOpenAIResponse
+text: anObject
+	text := anObject
+%
+
+category: 'as yet unclassified'
+method: GtOpenAIResponse
+toolCalls
+	^ self output
+		select: [ :aMessage | (aMessage rawData at: 'type') = 'function_call' ]
+		thenCollect: [ :aMessage | 
+			GtLlmFunctionToolCall new
+				rawData: aMessage rawData;
+				id: (aMessage rawData at: 'call_id');
+				name: (aMessage rawData at: 'name');
+				arguments: (STONJSON fromString: (aMessage rawData at: 'arguments')) ]
+%
+
+category: 'accessing'
+method: GtOpenAIResponse
+toolChoice
+	^ toolChoice
+%
+
+category: 'accessing'
+method: GtOpenAIResponse
+toolChoice: anObject
+	toolChoice := anObject
+%
+
+category: 'accessing'
+method: GtOpenAIResponse
+tools
+	^ tools
+%
+
+category: 'accessing'
+method: GtOpenAIResponse
+tools: anObject
+	tools := anObject
+%
+
+category: 'accessing'
+method: GtOpenAIResponse
+topP
+	^ topP
+%
+
+category: 'accessing'
+method: GtOpenAIResponse
+topP: anObject
+	topP := anObject
+%
+
+category: 'accessing'
+method: GtOpenAIResponse
+truncation
+	^ truncation
+%
+
+category: 'accessing'
+method: GtOpenAIResponse
+truncation: anObject
+	truncation := anObject
+%
+
+category: 'accessing'
+method: GtOpenAIResponse
+usage
+	^ usage
+%
+
+category: 'accessing'
+method: GtOpenAIResponse
+usage: anObject
+	usage := anObject
+%
+
+category: 'accessing'
+method: GtOpenAIResponse
+user
+	^ user
+%
+
+category: 'accessing'
+method: GtOpenAIResponse
+user: anObject
+	user := anObject
+%
+
 ! Class implementation for 'GtOpenAIThread'
 
 !		Class methods for 'GtOpenAIThread'
+
+category: 'accessing'
+classmethod: GtOpenAIThread
+leJsonV4Name
+
+	^ #gtOpenAIThread
+%
 
 category: 'accessing'
 classmethod: GtOpenAIThread
@@ -9542,6 +12852,13 @@ updateMessages
 ! Class implementation for 'GtOpenAIThreadRun'
 
 !		Class methods for 'GtOpenAIThreadRun'
+
+category: 'accessing'
+classmethod: GtOpenAIThreadRun
+leJsonV4Name
+
+	^ #gtOpenAIThreadRun
+%
 
 category: 'accessing'
 classmethod: GtOpenAIThreadRun
@@ -9901,6 +13218,13 @@ usage: anObject
 
 category: 'accessing'
 classmethod: GtOpenAIUsage
+leJsonV4Name
+
+	^ #gtOpenAIUsage
+%
+
+category: 'accessing'
+classmethod: GtOpenAIUsage
 serializationProperties
 	^ {#completion_tokens -> #completionTokens.
 		#prompt_tokens -> #promptTokens.
@@ -9948,6 +13272,13 @@ totalTokens: anObject
 ! Class implementation for 'GtOpenAIVectorStore'
 
 !		Class methods for 'GtOpenAIVectorStore'
+
+category: 'accessing'
+classmethod: GtOpenAIVectorStore
+leJsonV4Name
+
+	^ #gtOpenAIVectorStore
+%
 
 category: 'as yet unclassified'
 classmethod: GtOpenAIVectorStore
@@ -10034,6 +13365,166 @@ usageBytes: anObject
 	usageBytes := anObject
 %
 
+! Class implementation for 'GtLlmErrorThreadMessage'
+
+!		Instance methods for 'GtLlmErrorThreadMessage'
+
+category: 'as yet unclassified'
+method: GtLlmErrorThreadMessage
+action
+	^ nil
+%
+
+category: 'accessing'
+method: GtLlmErrorThreadMessage
+ancestor
+	^ self chat messages first
+%
+
+category: 'accessing'
+method: GtLlmErrorThreadMessage
+annotations
+	^ #()
+%
+
+category: 'as yet unclassified'
+method: GtLlmErrorThreadMessage
+arguments
+	^ {}
+%
+
+category: 'accessing'
+method: GtLlmErrorThreadMessage
+chat
+	^ chat
+%
+
+category: 'accessing'
+method: GtLlmErrorThreadMessage
+chat: anObject
+	chat := anObject
+%
+
+category: 'as yet unclassified'
+method: GtLlmErrorThreadMessage
+content
+	^ self contentText
+%
+
+category: 'as yet unclassified'
+method: GtLlmErrorThreadMessage
+contentJson
+	^ {} asDictionary
+%
+
+category: 'accessing'
+method: GtLlmErrorThreadMessage
+contentSummary
+	^ self contentText lines ifEmpty: [ '' ] ifNotEmpty: #first
+%
+
+category: 'accessing'
+method: GtLlmErrorThreadMessage
+contentText
+	^ self exception messageText
+%
+
+category: 'accessing'
+method: GtLlmErrorThreadMessage
+createdAt
+	^ createdAt
+%
+
+category: 'accessing'
+method: GtLlmErrorThreadMessage
+createdAt: anObject
+	createdAt := anObject
+%
+
+category: 'accessing'
+method: GtLlmErrorThreadMessage
+exception
+	^ exception
+%
+
+category: 'accessing'
+method: GtLlmErrorThreadMessage
+exception: anObject
+	exception := anObject
+%
+
+category: 'testing'
+method: GtLlmErrorThreadMessage
+hasResponse
+	^ true
+%
+
+category: 'accessing'
+method: GtLlmErrorThreadMessage
+id
+	^ '3a876ca3-32ce-0d00-b7b2-b9390ae84159'
+%
+
+category: 'as yet unclassified'
+method: GtLlmErrorThreadMessage
+initialize
+	super initialize.
+	
+	self createdAt: DateAndTime now.
+%
+
+category: 'testing'
+method: GtLlmErrorThreadMessage
+isAssistantRole
+	^ true
+%
+
+category: 'accessing'
+method: GtLlmErrorThreadMessage
+isFailure
+	^ true
+%
+
+category: 'as yet unclassified'
+method: GtLlmErrorThreadMessage
+isRawMessage
+	^ false
+%
+
+category: 'as yet unclassified'
+method: GtLlmErrorThreadMessage
+role
+	^ 'Error'
+%
+
+category: 'accessing'
+method: GtLlmErrorThreadMessage
+senderText
+	^  'System'
+%
+
+category: 'accessing'
+method: GtLlmErrorThreadMessage
+styler
+	^ nil
+%
+
+category: 'subscriptions'
+method: GtLlmErrorThreadMessage
+unsubscribe: anObject
+	"do nothing"
+
+	
+%
+
+category: 'subscriptions'
+method: GtLlmErrorThreadMessage
+when: anEventSelector send: aMessageSelector to: anObject
+	"do nothing"
+
+	
+%
+
 ! Class implementation for 'GtLlmFailureThreadMessage'
 
 !		Instance methods for 'GtLlmFailureThreadMessage'
@@ -10056,6 +13547,12 @@ annotations
 	^ #()
 %
 
+category: 'as yet unclassified'
+method: GtLlmFailureThreadMessage
+arguments
+	^ {}
+%
+
 category: 'accessing'
 method: GtLlmFailureThreadMessage
 chat
@@ -10066,6 +13563,12 @@ category: 'accessing'
 method: GtLlmFailureThreadMessage
 chat: anObject
 	chat := anObject
+%
+
+category: 'as yet unclassified'
+method: GtLlmFailureThreadMessage
+contentJson
+	^ {} asDictionary
 %
 
 category: 'accessing'
@@ -10154,6 +13657,59 @@ when: anEventSelector send: aMessageSelector to: anObject
 	"do nothing"
 
 	
+%
+
+! Class implementation for 'GtLlmFeatures'
+
+!		Class methods for 'GtLlmFeatures'
+
+category: 'as yet unclassified'
+classmethod: GtLlmFeatures
+beExperimental
+	self enableInCoder useMultiStep
+%
+
+category: 'as yet unclassified'
+classmethod: GtLlmFeatures
+disableInCoder
+	UseCoder := false
+%
+
+category: 'as yet unclassified'
+classmethod: GtLlmFeatures
+enableInCoder
+	UseCoder := true
+%
+
+category: 'as yet unclassified'
+classmethod: GtLlmFeatures
+initialize
+	UseCoder := false.
+	MultiStep := false
+%
+
+category: 'as yet unclassified'
+classmethod: GtLlmFeatures
+isEnabledInCoder
+	^ UseCoder ifNil: [ UseCoder := false ]
+%
+
+category: 'as yet unclassified'
+classmethod: GtLlmFeatures
+multiStep
+	^ MultiStep ifNil: [ false ]
+%
+
+category: 'as yet unclassified'
+classmethod: GtLlmFeatures
+setEnableInCoder: aBool
+	UseCoder := aBool
+%
+
+category: 'as yet unclassified'
+classmethod: GtLlmFeatures
+useMultiStep
+	MultiStep := true
 %
 
 ! Class implementation for 'GtLlmFineTuningFile'
@@ -10293,6 +13849,13 @@ serialize
 
 !		Class methods for 'GtLlmGroup'
 
+category: 'accessing'
+classmethod: GtLlmGroup
+leJsonV4Name
+
+	^ #gtLlmGroup
+%
+
 category: 'as yet unclassified'
 classmethod: GtLlmGroup
 withAll: aCollection
@@ -10301,6 +13864,13 @@ withAll: aCollection
 %
 
 !		Instance methods for 'GtLlmGroup'
+
+category: 'visiting'
+method: GtLlmGroup
+acceptVisitor: aVisitor
+
+	^ aVisitor visitGtLlmGroup: self
+%
 
 category: 'accessing'
 method: GtLlmGroup
@@ -10632,6 +14202,13 @@ items
 		items := OrderedCollection new ]
 %
 
+category: 'private - serialization'
+method: GtLlmGroup
+items: aCollection
+
+	items := aCollection
+%
+
 category: 'accessing'
 method: GtLlmGroup
 last
@@ -10685,6 +14262,12 @@ removeAll
 	self items removeAll
 %
 
+category: 'accessing'
+method: GtLlmGroup
+removeLast
+	self items removeLast
+%
+
 category: 'enumerating'
 method: GtLlmGroup
 reversed
@@ -10723,7 +14306,69 @@ withIndexDo: aBlock
 	^ self items withIndexDo: aBlock
 %
 
+! Class implementation for 'GtLlmActionsGroup'
+
+!		Class methods for 'GtLlmActionsGroup'
+
+category: 'accessing'
+classmethod: GtLlmActionsGroup
+leJsonV4Name
+
+	^ #gtLlmActionsGroup
+%
+
+! Class implementation for 'GtLlmAssistantActionExamplesGroup'
+
+!		Class methods for 'GtLlmAssistantActionExamplesGroup'
+
+category: 'accessing'
+classmethod: GtLlmAssistantActionExamplesGroup
+fromThreadMessages: aMessageGroup
+	^ self
+		withAll: ((aMessageGroup items groupsOf: 2)
+				collect: [ :aPair | 
+					| split |
+					split := aPair first contentText lines.
+					GtLlmAssistantActionExample new
+						instruction: split first;
+						input: (Character linefeed join: (split allButFirst: 3));
+						output: aPair second contentText ])
+%
+
+category: 'accessing'
+classmethod: GtLlmAssistantActionExamplesGroup
+leJsonV4Name
+
+	^ #gtLlmAssistantActionExamplesGroup
+%
+
+!		Instance methods for 'GtLlmAssistantActionExamplesGroup'
+
+category: 'accessing'
+method: GtLlmAssistantActionExamplesGroup
+gtExamplesFor: aView
+	<gtView>
+	^ aView columnedList
+		title: 'Examples';
+		priority: 1;
+		items: [ self items ];
+		column: 'Instruction'
+			text: #instruction
+			weight: 0.5;
+		column: 'Input' text: #input;
+		column: 'Output' text: #output
+%
+
 ! Class implementation for 'GtLlmInspectorMethodSummaryGroup'
+
+!		Class methods for 'GtLlmInspectorMethodSummaryGroup'
+
+category: 'accessing'
+classmethod: GtLlmInspectorMethodSummaryGroup
+leJsonV4Name
+
+	^ #gtLlmInspectorMethodSummaryGroup
+%
 
 !		Instance methods for 'GtLlmInspectorMethodSummaryGroup'
 
@@ -10740,6 +14385,15 @@ gtPhlowMethodsFor: aView
 
 ! Class implementation for 'GtLlmInspectorSlotSummaryGroup'
 
+!		Class methods for 'GtLlmInspectorSlotSummaryGroup'
+
+category: 'accessing'
+classmethod: GtLlmInspectorSlotSummaryGroup
+leJsonV4Name
+
+	^ #gtLlmInspectorSlotSummaryGroup
+%
+
 !		Instance methods for 'GtLlmInspectorSlotSummaryGroup'
 
 category: 'accessing'
@@ -10750,6 +14404,15 @@ gtSlotsFor: aView
 %
 
 ! Class implementation for 'GtLlmInspectorViewSummaryGroup'
+
+!		Class methods for 'GtLlmInspectorViewSummaryGroup'
+
+category: 'accessing'
+classmethod: GtLlmInspectorViewSummaryGroup
+leJsonV4Name
+
+	^ #gtLlmInspectorViewSummaryGroup
+%
 
 !		Instance methods for 'GtLlmInspectorViewSummaryGroup'
 
@@ -10767,6 +14430,15 @@ gtPhlowViewsFor: aView
 
 ! Class implementation for 'GtLlmMessagePartGroup'
 
+!		Class methods for 'GtLlmMessagePartGroup'
+
+category: 'accessing'
+classmethod: GtLlmMessagePartGroup
+leJsonV4Name
+
+	^ #gtLlmMessagePartGroup
+%
+
 !		Instance methods for 'GtLlmMessagePartGroup'
 
 category: 'as yet unclassified'
@@ -10783,7 +14455,23 @@ serializeInline
 
 ! Class implementation for 'GtLlmMessagesGroup'
 
+!		Class methods for 'GtLlmMessagesGroup'
+
+category: 'accessing'
+classmethod: GtLlmMessagesGroup
+leJsonV4Name
+
+	^ #gtLlmMessagesGroup
+%
+
 !		Instance methods for 'GtLlmMessagesGroup'
+
+category: 'visiting'
+method: GtLlmMessagesGroup
+acceptVisitor: aVisitor
+
+	^ aVisitor visitGtLlmMessagesGroup: self
+%
 
 category: 'converting'
 method: GtLlmMessagesGroup
@@ -10819,6 +14507,15 @@ serialize
 
 ! Class implementation for 'GtLlmNearestEmbeddingsGroup'
 
+!		Class methods for 'GtLlmNearestEmbeddingsGroup'
+
+category: 'accessing'
+classmethod: GtLlmNearestEmbeddingsGroup
+leJsonV4Name
+
+	^ #gtLlmNearestEmbeddingsGroup
+%
+
 !		Instance methods for 'GtLlmNearestEmbeddingsGroup'
 
 category: 'accessing'
@@ -10835,7 +14532,29 @@ gtEmbeddingsFor: aView
 
 ! Class implementation for 'GtLlmToolsGroup'
 
+!		Class methods for 'GtLlmToolsGroup'
+
+category: 'accessing'
+classmethod: GtLlmToolsGroup
+leJsonV4Name
+
+	^ #gtLlmToolsGroup
+%
+
 !		Instance methods for 'GtLlmToolsGroup'
+
+category: 'views'
+method: GtLlmToolsGroup
+gtItemsFor: aView
+	<gtView>
+	items ifNil: [ ^ aView empty ].
+	^ aView columnedList
+		title: 'Tools';
+		items: [ items ];
+		column: 'Name' text: [ :each | each name ];
+		column: 'Parameters' text: [ :each | ', ' join: each parameters ];
+		column: 'Description' text: [ :each | each description ]
+%
 
 category: 'as yet unclassified'
 method: GtLlmToolsGroup
@@ -10852,39 +14571,60 @@ serialize
 	^ Character cr join: (self items collect: [ :aTool | '- ' , aTool serialize ])
 %
 
-! Class implementation for 'GtLlmTutorActionExamplesGroup'
+! Class implementation for 'GtMcpPromptsGroup'
 
-!		Class methods for 'GtLlmTutorActionExamplesGroup'
+!		Class methods for 'GtMcpPromptsGroup'
 
 category: 'accessing'
-classmethod: GtLlmTutorActionExamplesGroup
-fromThreadMessages: aMessageGroup
-	^ self
-		withAll: ((aMessageGroup items groupsOf: 2)
-				collect: [ :aPair | 
-					| split |
-					split := aPair first contentText lines.
-					GtLlmTutorActionExample new
-						instruction: split first;
-						input: (Character linefeed join: (split allButFirst: 3));
-						output: aPair second contentText ])
+classmethod: GtMcpPromptsGroup
+leJsonV4Name
+
+	^ #gtMcpPromptsGroup
 %
 
-!		Instance methods for 'GtLlmTutorActionExamplesGroup'
+!		Instance methods for 'GtMcpPromptsGroup'
 
-category: 'accessing'
-method: GtLlmTutorActionExamplesGroup
-gtExamplesFor: aView
+category: 'as yet unclassified'
+method: GtMcpPromptsGroup
+gtPromptsFor: aView
 	<gtView>
 	^ aView columnedList
-		title: 'Examples';
+		title: 'Prompts';
 		priority: 1;
 		items: [ self items ];
-		column: 'Instruction'
-			text: #instruction
+		column: 'Name'
+			text: #name
 			weight: 0.5;
-		column: 'Input' text: #input;
-		column: 'Output' text: #output
+		column: 'Description' text: #description;
+		column: 'Arguments' text: [ :aPrompt | ',' join: aPrompt arguments ]
+%
+
+! Class implementation for 'GtMcpResourcesGroup'
+
+!		Class methods for 'GtMcpResourcesGroup'
+
+category: 'accessing'
+classmethod: GtMcpResourcesGroup
+leJsonV4Name
+
+	^ #gtMcpResourcesGroup
+%
+
+!		Instance methods for 'GtMcpResourcesGroup'
+
+category: 'as yet unclassified'
+method: GtMcpResourcesGroup
+gtResourcesFor: aView
+	<gtView>
+	^ aView columnedList
+		title: 'Resources';
+		priority: 1;
+		items: [ self items ];
+		column: 'Name'
+			text: #name
+			weight: 0.5;
+		column: 'Description' text: #description;
+		column: 'URI' text: #uri
 %
 
 ! Class implementation for 'GtOllamaEmbeddingsGroup'
@@ -10897,6 +14637,13 @@ from: aList
 	^ self
 		withAll: ((aList at: 'embeddings')
 				collect: [ :anArray | GtOllamaEmbedding new embedding: anArray ])
+%
+
+category: 'accessing'
+classmethod: GtOllamaEmbeddingsGroup
+leJsonV4Name
+
+	^ #gtOllamaEmbeddingsGroup
 %
 
 !		Instance methods for 'GtOllamaEmbeddingsGroup'
@@ -10925,6 +14672,13 @@ from: aDict
 		withAll: ((aDict at: 'models') collect: [ :aModelDict | GtOllamaModel from: aModelDict ])
 %
 
+category: 'accessing'
+classmethod: GtOllamaModelsGroup
+leJsonV4Name
+
+	^ #gtOllamaModelsGroup
+%
+
 !		Instance methods for 'GtOllamaModelsGroup'
 
 category: 'accessing'
@@ -10951,6 +14705,13 @@ from: aDict
 	^ self
 		withAll: ((aDict at: 'models')
 				collect: [ :aModelDict | GtOllamaRunningModel from: aModelDict ])
+%
+
+category: 'accessing'
+classmethod: GtOllamaRunningModelsGroup
+leJsonV4Name
+
+	^ #gtOllamaRunningModelsGroup
 %
 
 !		Instance methods for 'GtOllamaRunningModelsGroup'
@@ -10984,6 +14745,15 @@ gtModelsFor: aView
 %
 
 ! Class implementation for 'GtOpenAIResourceFilesGroup'
+
+!		Class methods for 'GtOpenAIResourceFilesGroup'
+
+category: 'accessing'
+classmethod: GtOpenAIResourceFilesGroup
+leJsonV4Name
+
+	^ #gtOpenAIResourceFilesGroup
+%
 
 !		Instance methods for 'GtOpenAIResourceFilesGroup'
 
@@ -11284,6 +15054,12 @@ category: 'accessing'
 method: GtLlmInstructionPiece
 source: anObject
 	source := anObject
+%
+
+category: 'as yet unclassified'
+method: GtLlmInstructionPiece
+title
+	^ ''
 %
 
 ! Class implementation for 'GtLlmInstructionComposite'
@@ -11590,13 +15366,12 @@ category: 'accessing'
 method: GtLlmInstructionWithSections
 instructionString
 	^ self introduction instructionString
-		,
-			'
+		, '
 	
 '
-		,
-			(Character cr
-				join: (self sections collect: [ :aSection | aSection instructionString ]))
+		, ('
+			
+' join: (self sections collect: [ :aSection | aSection instructionString ]))
 %
 
 category: 'accessing'
@@ -11768,7 +15543,22 @@ type
 
 ! Class implementation for 'GtLlmMessageSerializer'
 
+!		Class methods for 'GtLlmMessageSerializer'
+
+category: 'accessing'
+classmethod: GtLlmMessageSerializer
+leJsonV4Name
+
+	^ #gtLlmMessageSerializer
+%
+
 !		Instance methods for 'GtLlmMessageSerializer'
+
+category: 'as yet unclassified'
+method: GtLlmMessageSerializer
+instance
+	^ nil
+%
 
 category: 'as yet unclassified'
 method: GtLlmMessageSerializer
@@ -11778,22 +15568,36 @@ serialize: aString
 
 ! Class implementation for 'GtLlmActionMessageSerializer'
 
+!		Class methods for 'GtLlmActionMessageSerializer'
+
+category: 'accessing'
+classmethod: GtLlmActionMessageSerializer
+leJsonV4Name
+
+	^ #gtLlmActionMessageSerializer
+%
+
 !		Instance methods for 'GtLlmActionMessageSerializer'
 
 category: 'as yet unclassified'
 method: GtLlmActionMessageSerializer
-gtInstanceFor: aView
-	<gtView>
-	^ aView empty
-%
-
-category: 'as yet unclassified'
-method: GtLlmActionMessageSerializer
-serialize: aString
-	^ STONJSON toString: {'Action' -> aString} asDictionary
+serialize: aCall
+	| associations |
+	associations := {'Action' -> aCall action.
+			'Arguments' -> aCall arguments}.
+	^ STONJSON toString: associations asDictionary
 %
 
 ! Class implementation for 'GtLlmActionMessageWithInstanceSerializer'
+
+!		Class methods for 'GtLlmActionMessageWithInstanceSerializer'
+
+category: 'accessing'
+classmethod: GtLlmActionMessageWithInstanceSerializer
+leJsonV4Name
+
+	^ #gtLlmActionMessageWithInstanceSerializer
+%
 
 !		Instance methods for 'GtLlmActionMessageWithInstanceSerializer'
 
@@ -11825,10 +15629,11 @@ instance: anObject
 
 category: 'as yet unclassified'
 method: GtLlmActionMessageWithInstanceSerializer
-serialize: aString
+serialize: aMessage
 	^ STONJSON
-		toString: {'Action' -> aString.
-				self instance serialize} asDictionary
+		toString: ({'Action' -> aMessage action.
+				'Arguments' -> (aMessage arguments collect: #asString)}
+				, self instance serialize asOrderedCollection) asDictionary
 %
 
 category: 'as yet unclassified'
@@ -12169,7 +15974,7 @@ input
 category: 'accessing'
 method: GtLlmNewThreadMessage
 actions
-	^ assistantChat tutor actions
+	^ assistantChat assistant actions
 %
 
 category: 'as yet unclassified'
@@ -12194,6 +15999,12 @@ category: 'accessing'
 method: GtLlmNewThreadMessage
 assistantChat: anAssistantChat
 	assistantChat := anAssistantChat
+%
+
+category: 'as yet unclassified'
+method: GtLlmNewThreadMessage
+beSync
+	isSync := true
 %
 
 category: 'accessing'
@@ -12227,6 +16038,18 @@ contentText
 	^ self contents
 %
 
+category: 'as yet unclassified'
+method: GtLlmNewThreadMessage
+files
+	^ files
+%
+
+category: 'as yet unclassified'
+method: GtLlmNewThreadMessage
+future
+	^ future
+%
+
 category: 'accessing'
 method: GtLlmNewThreadMessage
 id
@@ -12239,7 +16062,8 @@ initialize
 	super initialize.
 	contents := ''.
 	announcer := Announcer new.
-	files := OrderedCollection new
+	files := OrderedCollection new.
+	isSync := false.
 %
 
 category: 'accessing'
@@ -12261,16 +16085,24 @@ onContentsChangeByRequester: aRequester
 category: 'actions'
 method: GtLlmNewThreadMessage
 sendMessage
-	| aMessageContent |
+	| aMessageContent aBlock |
 	contents ifNil: [ ^ self ].
-	
-	"todo: add files"
 
 	aMessageContent := self treatString.
 
 	self contents: '' requester: nil.
 
-	[assistantChat sendMessage: aMessageContent] asAsyncPromise
+	self files
+		ifEmpty: [ aBlock := [ assistantChat sendMessage: aMessageContent ] ]
+		ifNotEmpty: [ assistantChat sendFiles: files withMessage: aMessageContent ].
+
+	files := OrderedCollection new.
+
+	isSync
+		ifTrue: [ aBlock value ]
+		ifFalse: [ future := aBlock asAsyncPromise
+					then: [  ]
+					otherwise: [ :anError | anError inspect ] ]
 %
 
 category: 'actions'
@@ -12313,7 +16145,19 @@ currentAction: anObject
 category: 'as yet unclassified'
 method: GtLlmNewActionThreadMessage
 treatString
-	^ currentAction format format: {contents}
+	^ GtLlmActionCall new
+		action: currentAction name;
+		arguments: (currentAction hasArgument ifTrue: [ {contents asString} ] ifFalse: [ {} ])
+%
+
+! Class implementation for 'GtLlmNullConnection'
+
+!		Instance methods for 'GtLlmNullConnection'
+
+category: 'as yet unclassified'
+method: GtLlmNullConnection
+buildProvider
+	^ GtLlmNullProvider new
 %
 
 ! Class implementation for 'GtLlmPharoObjectSummarizer'
@@ -12543,16 +16387,35 @@ summarizeObject: anObject on: aStream includingSlots: shouldIncludeSlots includi
 
 category: 'as yet unclassified'
 classmethod: GtLlmProvider
+defaultProviders
+	^ self allSubclasses
+		select: [ :aSubclass | aSubclass class canUnderstand: #default ]
+%
+
+category: 'as yet unclassified'
+classmethod: GtLlmProvider
+isConnectable
+	^ false
+%
+
+category: 'as yet unclassified'
+classmethod: GtLlmProvider
 new
 	^ self basicNew initialize
 %
 
 !		Instance methods for 'GtLlmProvider'
 
+category: 'as yet unclassified'
+method: GtLlmProvider
+addBrowseTool
+%
+
 category: 'accessing'
 method: GtLlmProvider
 assistantMessageClass
 	^ assistantMessageClass
+		ifNil: [ assistantMessageClass := self defaultAssistantMessageClass ]
 %
 
 category: 'accessing'
@@ -12571,6 +16434,12 @@ category: 'accessing'
 method: GtLlmProvider
 chat: anObject
 	chat := anObject
+%
+
+category: 'as yet unclassified'
+method: GtLlmProvider
+client
+	^ self subclassResponsibility
 %
 
 category: 'as yet unclassified'
@@ -12599,11 +16468,13 @@ format: anObject
 
 category: 'as yet unclassified'
 method: GtLlmProvider
-initialize
-	super initialize.
-
-	userMessageClass := self defaultUserMessageClass.
-	assistantMessageClass := self defaultAssistantMessageClass
+gtCallsFor: aView
+	<gtView>
+	^ aView forward
+		title: 'Calls';
+		priority: 1;
+		object: [ self client ];
+		view: #gtCallsFor:
 %
 
 category: 'as yet unclassified'
@@ -12616,7 +16487,7 @@ category: 'as yet unclassified'
 method: GtLlmProvider
 sendMessage: aMessage
 	self
-		sendAssistantMessage: (userMessageClass new
+		sendAssistantMessage: (self userMessageClass new
 				content: aMessage;
 				role: 'user';
 				chat: self)
@@ -12631,7 +16502,7 @@ status
 category: 'accessing'
 method: GtLlmProvider
 userMessageClass
-	^ userMessageClass
+	^ userMessageClass ifNil: [ userMessageClass := self defaultUserMessageClass ]
 %
 
 category: 'accessing'
@@ -12642,7 +16513,27 @@ userMessageClass: anObject
 
 ! Class implementation for 'GtLlmNullProvider'
 
+!		Class methods for 'GtLlmNullProvider'
+
+category: 'as yet unclassified'
+classmethod: GtLlmNullProvider
+default
+	^ self new
+%
+
+category: 'as yet unclassified'
+classmethod: GtLlmNullProvider
+isConnectable
+	^ true
+%
+
 !		Instance methods for 'GtLlmNullProvider'
+
+category: 'as yet unclassified'
+method: GtLlmNullProvider
+client
+	^ nil
+%
 
 category: 'as yet unclassified'
 method: GtLlmNullProvider
@@ -12652,6 +16543,30 @@ format: aFormat
 category: 'as yet unclassified'
 method: GtLlmNullProvider
 instructions: aString
+%
+
+category: 'as yet unclassified'
+method: GtLlmNullProvider
+model
+	^ nil
+%
+
+category: 'as yet unclassified'
+method: GtLlmNullProvider
+model: aModelName
+%
+
+category: 'as yet unclassified'
+method: GtLlmNullProvider
+modelName
+	^ 'Null'
+%
+
+category: 'as yet unclassified'
+method: GtLlmNullProvider
+printOn: aStream
+	aStream
+		nextPutAll: 'Null'
 %
 
 category: 'as yet unclassified'
@@ -12666,7 +16581,112 @@ status
 	^ GtLlmAssistantChatReadyStatus new
 %
 
+category: 'as yet unclassified'
+method: GtLlmNullProvider
+tools: aGtLlmToolsGroup 
+	"do nothing"
+%
+
+! Class implementation for 'GtLlmStaticProvider'
+
+!		Instance methods for 'GtLlmStaticProvider'
+
+category: 'as yet unclassified'
+method: GtLlmStaticProvider
+initialize
+	super initialize.
+	
+	index := 1.
+	messages := {}
+%
+
+category: 'accessing'
+method: GtLlmStaticProvider
+messages
+	^ messages
+%
+
+category: 'accessing'
+method: GtLlmStaticProvider
+messages: anObject
+	messages := anObject
+%
+
+category: 'as yet unclassified'
+method: GtLlmStaticProvider
+nextMessage
+	| message |
+	index > messages size ifTrue: [ ^ String loremIpsum ].
+
+	message := messages at: index.
+
+	index := index + 1.
+
+	^ message
+%
+
+category: 'as yet unclassified'
+method: GtLlmStaticProvider
+printOn: aStream
+	aStream
+		nextPutAll: 'Static'
+%
+
+category: 'as yet unclassified'
+method: GtLlmStaticProvider
+sendMessage: aMessage
+	self chat
+		addMessage: (self userMessageClass new
+				role: 'user';
+				content: aMessage).
+
+	self chat
+		addMessage: (self assistantMessageClass new
+				role: 'assistant';
+				content: self nextMessage).
+				
+	self chat signalRunIsDone
+%
+
 ! Class implementation for 'GtOllamaProvider'
+
+!		Class methods for 'GtOllamaProvider'
+
+category: 'as yet unclassified'
+classmethod: GtOllamaProvider
+default
+	^ [ self new model: self defaultModel ]
+%
+
+category: 'as yet unclassified'
+classmethod: GtOllamaProvider
+defaultModel
+	^ DefaultModel ifNil: [ DefaultModel := 'llama3.1' ]
+%
+
+category: 'as yet unclassified'
+classmethod: GtOllamaProvider
+initialize
+	IsConnectable := false
+%
+
+category: 'as yet unclassified'
+classmethod: GtOllamaProvider
+markConnectable
+	IsConnectable := true
+%
+
+category: 'as yet unclassified'
+classmethod: GtOllamaProvider
+markNonconnectable
+	IsConnectable := false
+%
+
+category: 'as yet unclassified'
+classmethod: GtOllamaProvider
+providerName
+	^ 'Ollama'
+%
 
 !		Instance methods for 'GtOllamaProvider'
 
@@ -12674,6 +16694,12 @@ category: 'as yet unclassified'
 method: GtOllamaProvider
 addTool: aTool
 	tools add: aTool
+%
+
+category: 'as yet unclassified'
+method: GtOllamaProvider
+baseUrl: aUrl
+	self client baseUrl: aUrl
 %
 
 category: 'accessing'
@@ -12690,10 +16716,52 @@ client: anObject
 
 category: 'as yet unclassified'
 method: GtOllamaProvider
+defaultAssistantMessageClass
+	^ self chat messageClassForOllama
+%
+
+category: 'as yet unclassified'
+method: GtOllamaProvider
+defaultUserMessageClass
+	^ self chat messageClassForOllama
+%
+
+category: 'as yet unclassified'
+method: GtOllamaProvider
+executions
+	^ executions
+%
+
+category: 'accessing'
+method: GtOllamaProvider
+files
+	^ files
+%
+
+category: 'accessing'
+method: GtOllamaProvider
+files: anObject
+	files := anObject
+%
+
+category: 'as yet unclassified'
+method: GtOllamaProvider
+gtToolsFor: aView
+	<gtView>
+	^ aView forward
+		title: 'Tools';
+		priority: 5;
+		object: [ tools ];
+		view: #gtItemsFor:
+%
+
+category: 'as yet unclassified'
+method: GtOllamaProvider
 initialize
 	super initialize.
 
 	assistantWorking := false.
+	executions := OrderedCollection new.
 	
 	self initializeClient.
 	
@@ -12708,18 +16776,14 @@ initializeClient
 
 category: 'as yet unclassified'
 method: GtOllamaProvider
+instructions
+	^ instructions
+%
+
+category: 'as yet unclassified'
+method: GtOllamaProvider
 instructions: aString
-	| internalModelName modelFile |
-	internalModelName := 'gt-tutor-' , self model , '-' , self uuidClass new asString.
-	modelFile := GtLlmModelFile new
-			from: self model;
-			system: aString.
-
-	self client createModel: internalModelName withModelFile: modelFile.
-	
-	self modelfile: modelFile.
-
-	self model: internalModelName
+	instructions := aString
 %
 
 category: 'accessing'
@@ -12737,16 +16801,10 @@ model: anObject
 	[ self client pullModel: model ] on: Error do: [  ]
 %
 
-category: 'accessing'
+category: 'as yet unclassified'
 method: GtOllamaProvider
-modelfile
-	^ modelfile
-%
-
-category: 'accessing'
-method: GtOllamaProvider
-modelfile: anObject
-	modelfile := anObject
+modelName
+	^ self model
 %
 
 category: 'as yet unclassified'
@@ -12759,15 +16817,41 @@ performToolCallsFor: aResult
 			chat
 				addMessage: (GtLlmToolMessage new
 						toolCall: aToolCall;
-						output: toolOutput) ]
+						output: toolOutput) ].
+	self chat signalRunHasUpdated
+%
+
+category: 'as yet unclassified'
+method: GtOllamaProvider
+printOn: aStream
+	aStream
+		nextPutAll: self class providerName;
+		nextPut: $(;
+		nextPutAll: self modelName;
+		nextPut: $)
 %
 
 category: 'as yet unclassified'
 method: GtOllamaProvider
 sendAssistantMessage: aMessage
     | userMessage |
-	userMessage := userMessageClass new merge: aMessage.
+	userMessage := self userMessageClass new merge: aMessage.
 	userMessage role: 'user'.
+	self chat addMessage: userMessage.
+
+	self asyncWait
+%
+
+category: 'as yet unclassified'
+method: GtOllamaProvider
+sendFiles: aCollection withMessage: aString
+	| userMessage |
+	userMessage := self userMessageClass new
+			content: aString;
+			images: (aCollection collect: [ :aFile | aFile binaryContents base64Encoded ]);
+			role: 'user';
+			chat: self.
+
 	self chat addMessage: userMessage.
 
 	self asyncWait
@@ -12781,6 +16865,18 @@ status
 		ifFalse: [ GtLlmAssistantChatReadyStatus new ]
 %
 
+category: 'accessing'
+method: GtOllamaProvider
+tools
+	^ tools
+%
+
+category: 'accessing'
+method: GtOllamaProvider
+tools: anObject
+	tools := anObject
+%
+
 category: 'as yet unclassified'
 method: GtOllamaProvider
 triggerAssistant
@@ -12792,15 +16888,16 @@ triggerAssistant
 			completeChatWithModel: self model
 			andMessages: self chat messages
 			andFormat: self format
-			andTools: tools.
+			andTools: tools
+			andInstructions: self instructions.
 
-	self performToolCallsFor: result ]
-		doWhileTrue: [ result toolCalls isNotEmpty ].
+	self performToolCallsFor: result ] doWhileTrue: [ result toolCalls isNotEmpty ].
 
 	self chat
-		addMessage: (assistantMessageClass new
+		addMessage: (self assistantMessageClass new
 				content: result content;
 				role: 'assistant';
+				model: self modelName;
 				chat: self;
 				rawData: result rawData).
 
@@ -12815,11 +16912,35 @@ triggerAssistant
 
 category: 'as yet unclassified'
 classmethod: GtOpenAIProvider
+default
+	^ [ self withApiKeyFromFile ]
+%
+
+category: 'as yet unclassified'
+classmethod: GtOpenAIProvider
+isConnectable
+	^ GtOpenAIClient apiKeyFile exists
+%
+
+category: 'as yet unclassified'
+classmethod: GtOpenAIProvider
+providerName
+	^ 'OpenAI Chat'
+%
+
+category: 'as yet unclassified'
+classmethod: GtOpenAIProvider
 withApiKeyFromFile
 	^ self new apiKey: GtOpenAIClient apiKeyFileContents
 %
 
 !		Instance methods for 'GtOpenAIProvider'
+
+category: 'as yet unclassified'
+method: GtOpenAIProvider
+addBrowseTool
+	self addTool: (GtLlmTool new type: 'web_search_preview')
+%
 
 category: 'accessing'
 method: GtOpenAIProvider
@@ -12835,8 +16956,26 @@ chat: anObject
 
 category: 'as yet unclassified'
 method: GtOpenAIProvider
+client
+	^ client
+%
+
+category: 'as yet unclassified'
+method: GtOpenAIProvider
+defaultAssistantMessageClass
+	^ self chat messageClassForOpenAI
+%
+
+category: 'as yet unclassified'
+method: GtOpenAIProvider
 defaultModel
-	^ 'gpt-4o'
+	^ 'gpt-4.1'
+%
+
+category: 'as yet unclassified'
+method: GtOpenAIProvider
+defaultUserMessageClass
+	^ self chat messageClassForOpenAI
 %
 
 category: 'as yet unclassified'
@@ -12845,6 +16984,7 @@ initialize
 	super initialize.
 	
 	model := self defaultModel.
+	assistantWorking := false.
 	
 	self initializeClient
 %
@@ -12875,6 +17015,22 @@ model: anObject
 
 category: 'as yet unclassified'
 method: GtOpenAIProvider
+modelName
+	^ model
+%
+
+category: 'as yet unclassified'
+method: GtOpenAIProvider
+printOn: aStream
+	aStream
+		nextPutAll: self class providerName;
+		nextPut: $(;
+		nextPutAll: self model;
+		nextPut: $)
+%
+
+category: 'as yet unclassified'
+method: GtOpenAIProvider
 sendAssistantMessage: aMessage
 	aMessage serializeInline.
 	self chat addMessage: aMessage.
@@ -12883,18 +17039,10 @@ sendAssistantMessage: aMessage
 
 category: 'as yet unclassified'
 method: GtOpenAIProvider
-sendMessage: aMessage
-	| output |
-	output := aMessage.
-	output size > self maximumMessageSize
-		ifTrue: [ output := output first: self maximumMessageSize ].
-	super sendMessage: output
-%
-
-category: 'as yet unclassified'
-method: GtOpenAIProvider
 status
-	^ GtLlmAssistantChatReadyStatus new
+	^ assistantWorking
+		ifTrue: [ GtLlmAssistantChatWorkingStatus new ]
+		ifFalse: [ GtLlmAssistantChatReadyStatus new ]
 %
 
 category: 'as yet unclassified'
@@ -12902,18 +17050,31 @@ method: GtOpenAIProvider
 triggerAssistant
 	| result |
 	self chat signalRunHasStarted.
+	assistantWorking := true.
 
 	result := client
 			completeChatWithModel: self model
 			andMessages: self chat messages.
 
 	self chat
-		addMessage: (self assistantMessageClass new content: result choices first message content).
+		addMessage: (self assistantMessageClass new
+				content: result choices first message content;
+				model: self model;
+				role: 'assistant').
 
+	assistantWorking := false.
 	self chat signalRunIsDone
 %
 
 ! Class implementation for 'GtOpenAIAssistantProvider'
+
+!		Class methods for 'GtOpenAIAssistantProvider'
+
+category: 'as yet unclassified'
+classmethod: GtOpenAIAssistantProvider
+providerName
+	^ 'OpenAI Assistants'
+%
 
 !		Instance methods for 'GtOpenAIAssistantProvider'
 
@@ -13004,12 +17165,6 @@ defaultAssistantDescription
 
 category: 'as yet unclassified'
 method: GtOpenAIAssistantProvider
-defaultAssistantMessageClass
-	^ GtOpenAIMessage
-%
-
-category: 'as yet unclassified'
-method: GtOpenAIAssistantProvider
 defaultAssistantName
 	^ 'Tutor - ' , FileLocator home basename
 %
@@ -13018,12 +17173,6 @@ category: 'as yet unclassified'
 method: GtOpenAIAssistantProvider
 defaultTools
 	^ GtLlmToolsGroup new
-%
-
-category: 'as yet unclassified'
-method: GtOpenAIAssistantProvider
-defaultUserMessageClass
-	^ GtOpenAIMessage
 %
 
 category: 'as yet unclassified'
@@ -13061,8 +17210,10 @@ category: 'as yet unclassified'
 method: GtOpenAIAssistantProvider
 getMessages
 	^ thread updateMessages
-		collect: [ :aThreadMessage |
-			self assistantMessageClass new merge: aThreadMessage ]
+		collect: [ :aThreadMessage | 
+			self assistantMessageClass new
+				model: self model;
+				merge: aThreadMessage ]
 %
 
 category: 'as yet unclassified'
@@ -13086,6 +17237,16 @@ gtFilesFor: aView
 		priority: 5;
 		object: [ files ];
 		view: #gtFilesFor:
+%
+
+category: 'views'
+method: GtOpenAIAssistantProvider
+gtToolsFor: aView
+	<gtView>
+	^ aView forward
+		title: 'Tools';
+		object: [ tools ];
+		view: #gtItemsFor:
 %
 
 category: 'as yet unclassified'
@@ -13194,6 +17355,188 @@ updateMessages
 				ifFalse: [ (nonToolMessages at: anIndex) merge: aMessage ] ]
 %
 
+! Class implementation for 'GtOpenAIResponseProvider'
+
+!		Class methods for 'GtOpenAIResponseProvider'
+
+category: 'as yet unclassified'
+classmethod: GtOpenAIResponseProvider
+providerName
+	^ 'OpenAI Responses'
+%
+
+!		Instance methods for 'GtOpenAIResponseProvider'
+
+category: 'as yet unclassified'
+method: GtOpenAIResponseProvider
+addTool: aTool
+	(tools anySatisfy: [ :tool | tool name = aTool name ])
+		ifTrue: [ self error: 'Cannot add a tool of the same name multiple times.' ].
+
+	tools add: aTool
+%
+
+category: 'as yet unclassified'
+method: GtOpenAIResponseProvider
+beNotStreaming
+	isStreaming := false
+%
+
+category: 'as yet unclassified'
+method: GtOpenAIResponseProvider
+beStreaming
+	isStreaming := true
+%
+
+category: 'as yet unclassified'
+method: GtOpenAIResponseProvider
+defaultTools
+	^ GtLlmToolsGroup new
+%
+
+category: 'as yet unclassified'
+method: GtOpenAIResponseProvider
+executions
+	^ executions
+%
+
+category: 'as yet unclassified'
+method: GtOpenAIResponseProvider
+format: anObject
+	super format: anObject.
+	
+	self beNotStreaming
+%
+
+category: 'as yet unclassified'
+method: GtOpenAIResponseProvider
+gtExecutionsFor: aView
+	<gtView>
+	^ aView list
+		title: 'Executions';
+		items: [ executions ];
+		priority: 10
+%
+
+category: 'as yet unclassified'
+method: GtOpenAIResponseProvider
+gtToolsFor: aView
+	<gtView>
+	^ aView forward
+		title: 'Tools';
+		priority: 5;
+		object: [ tools ];
+		view: #gtItemsFor:
+%
+
+category: 'as yet unclassified'
+method: GtOpenAIResponseProvider
+handleToolCall: aToolCall
+	| toolOutput |
+	chat removeLastMessage.
+	chat
+		addMessage: (GtOpenAIRawToolMessage new
+				toolCall: aToolCall;
+				rawData: aToolCall rawData).
+	toolOutput := tools performToolCall: aToolCall.
+	chat
+		addMessage: (GtLlmToolMessage new
+				toolCall: aToolCall;
+				output: toolOutput).
+
+	self chat signalRunHasUpdated.
+
+	^ self executeWait
+%
+
+category: 'as yet unclassified'
+method: GtOpenAIResponseProvider
+initialize
+	super initialize.
+
+	tools := self defaultTools.
+	
+	executions := OrderedCollection new.
+	isStreaming := true
+%
+
+category: 'accessing'
+method: GtOpenAIResponseProvider
+instructions
+	^ instructions
+%
+
+category: 'accessing'
+method: GtOpenAIResponseProvider
+instructions: anObject
+	instructions := anObject
+%
+
+category: 'as yet unclassified'
+method: GtOpenAIResponseProvider
+isStreaming: aBoolean
+	isStreaming := aBoolean
+%
+
+category: 'accessing'
+method: GtOpenAIResponseProvider
+performToolCallsIn: result
+	| toolOutputs |
+	toolOutputs := result toolCalls
+			collect: [ :aToolCall | 
+				| toolOutput |
+				chat
+					addMessage: (GtOpenAIRawToolMessage new
+							rawData: aToolCall responseInput).
+				toolOutput := tools performToolCall: aToolCall.
+				chat
+					addMessage: (GtLlmToolMessage new
+							toolCall: aToolCall;
+							output: toolOutput) ].
+
+	self chat signalRunHasUpdated.
+
+	^ self executeWait
+%
+
+category: 'as yet unclassified'
+method: GtOpenAIResponseProvider
+sendFiles: aListOfFileReferences withMessage: aString
+	self
+		sendAssistantMessage: (self userMessageClass new
+				content: {{'type' -> 'input_text'.
+							'text' -> aString} asDictionary}
+						, (aListOfFileReferences
+								collect: [ :aFileReference | 
+									{'type' -> 'input_image'.
+										'image_url'
+											-> ('data:image/jpeg;base64,' , aFileReference binaryContents base64Encoded)}
+										asDictionary ]);
+				role: 'user';
+				chat: self)
+%
+
+category: 'accessing'
+method: GtOpenAIResponseProvider
+tools
+	^ tools
+%
+
+category: 'accessing'
+method: GtOpenAIResponseProvider
+tools: anObject
+	tools := anObject
+%
+
+category: 'as yet unclassified'
+method: GtOpenAIResponseProvider
+triggerAssistant
+	self chat signalRunHasStarted.
+	assistantWorking := true.
+
+	self executeWait
+%
+
 ! Class implementation for 'GtLlmProvisionalThreadMessage'
 
 !		Instance methods for 'GtLlmProvisionalThreadMessage'
@@ -13201,7 +17544,7 @@ updateMessages
 category: 'accessing'
 method: GtLlmProvisionalThreadMessage
 action
-	^ ''
+	^ nil
 %
 
 category: 'as yet unclassified'
@@ -13214,6 +17557,12 @@ category: 'accessing'
 method: GtLlmProvisionalThreadMessage
 annotations
 	^ #()
+%
+
+category: 'accessing'
+method: GtLlmProvisionalThreadMessage
+arguments
+	^ {}
 %
 
 category: 'accessing'
@@ -13311,1694 +17660,54 @@ when: anEventSelector send: aMessageSelector to: anObject
 	
 %
 
-! Class implementation for 'GtLlmToolExamples'
+! Class implementation for 'GtLlmRequestResponse'
 
-!		Instance methods for 'GtLlmToolExamples'
-
-category: 'as yet unclassified'
-method: GtLlmToolExamples
-calledTool
-	<gtExample>
-	| tool call |
-	tool := self functionTool.
-	call := self toolCall.
-
-
-	self
-		assert: (tool performToolCall: call)
-		equals: {1.
-				2}.
-
-	^ tool
-%
+!		Instance methods for 'GtLlmRequestResponse'
 
 category: 'as yet unclassified'
-method: GtLlmToolExamples
-functionTool
-	<gtExample>
-	| tool |
-	tool := self simpleFunctionTool
-			name: 'example';
-			description: 'Takes two arguments and passes them back unharmed.';
-			parameters: {'first'.
-					'second'};
-			block: #yourself.
-
-	^ tool
-%
-
-category: 'as yet unclassified'
-method: GtLlmToolExamples
-simpleFileSearchTool
-	<gtExample>
-	^ GtLlmFileSearchTool new
-%
-
-category: 'as yet unclassified'
-method: GtLlmToolExamples
-simpleFunctionTool
-	<gtExample>
-	| tool |
-	tool := GtLlmFunctionTool new.
-	
-	self assert: tool type equals: 'function'.
-	
-	^ tool
-%
-
-category: 'as yet unclassified'
-method: GtLlmToolExamples
-simpleTool
-	<gtExample>
-	^ GtLlmTool new
-%
-
-category: 'as yet unclassified'
-method: GtLlmToolExamples
-simpleToolCall
-	<gtExample>
-	^ GtLlmFunctionToolCall new
-%
-
-category: 'as yet unclassified'
-method: GtLlmToolExamples
-toolCall
-	<gtExample>
-	| call |
-	call := self simpleToolCall
-			function: {'name' -> 'example'.
-					'arguments' -> '{"first": 1, "second": 2}'} asDictionary.
-
-	self assert: call name equals: 'example'.
-	self
-		assert: call arguments
-		equals: {'first' -> 1.
-				'second' -> 2} asDictionary.
-
-	^ call
-%
-
-! Class implementation for 'GtLlmTutor'
-
-!		Class methods for 'GtLlmTutor'
-
-category: 'other'
-classmethod: GtLlmTutor
-new
-	^ self basicNew initialize
-%
-
-!		Instance methods for 'GtLlmTutor'
-
-category: 'as yet unclassified'
-method: GtLlmTutor
-actionFormatDescription
-	<gtLlmTutorFormat>
-	^ GtLlmTutorFormatDescription new beRequired
-		name: 'Action';
-		format: 'Text';
-		example: '```
-Create a draft
-```'
-%
-
-category: 'as yet unclassified'
-method: GtLlmTutor
-actionNamed: anActionName
-	^ self instruction actionNamed: anActionName
-%
-
-category: 'accessing'
-method: GtLlmTutor
-actions
-	^ instruction actions
-%
-
-category: 'as yet unclassified'
-method: GtLlmTutor
-addAction: anAction
-	instruction addAction: (anAction tutor: self)
-%
-
-category: 'as yet unclassified'
-method: GtLlmTutor
-addFormat: aComponent
-	instruction addComponent: aComponent
-%
-
-category: 'as yet unclassified'
-method: GtLlmTutor
-addInstructionSection: aSection
-	instruction addSection: aSection
-%
-
-category: 'as yet unclassified'
-method: GtLlmTutor
-chatAction
-	<gtLlmTutorAction>
-	^ GtLlmTutorAction new 
-		name: 'Answer a chat request';
-		priority: 1;
-		description: 'Answers a chat request using the text field.';
-		format: 'Chat request: {1}';
-		examples: {GtLlmTutorActionExample new markUnverified
-					input: {'Action' -> 'Chat request: How are you?'} asDictionary;
-					output: {'Action' -> 'Answer a chat request'.
-							'Text'
-								-> 'As an AI model, I do not have feelings. How can I assist you today?'}
-							asDictionary}
-%
-
-category: 'as yet unclassified'
-method: GtLlmTutor
-collectActions
-	^ ((Pragma
-		allNamed: #gtLlmTutorAction
-		from: self class
-		to: Object)
-		collect: [ :aPragma | (self perform: aPragma methodSelector) tutor: self ])
-		sorted: [ :a :b | a priority < b priority ]
-%
-
-category: 'as yet unclassified'
-method: GtLlmTutor
-collectFormats
-	^ ((Pragma
-		allNamed: #gtLlmTutorFormat
-		from: self class
-		to: Object)
-		collect: [ :aPragma | (self perform: aPragma methodSelector) tutor: self ])
-		sorted: [ :a :b | a priority < b priority ]
-%
-
-category: 'as yet unclassified'
-method: GtLlmTutor
-createChat
-	^ GtLlmActionChat new
-		provider: (self providerStencil value: instruction);
-		tutor: self
-%
-
-category: 'as yet unclassified'
-method: GtLlmTutor
-defaultDescription
-	^ 'You are an assistant.'
-%
-
-category: 'as yet unclassified'
-method: GtLlmTutor
-description
-	^ self instruction description
-%
-
-category: 'accessing'
-method: GtLlmTutor
-description: anObject
-	instruction description: anObject
-%
-
-category: 'as yet unclassified'
-method: GtLlmTutor
-formatComponents
-	^ instruction formats
-%
-
-category: 'as yet unclassified'
-method: GtLlmTutor
-formatNamed: aString
-	^ instruction componentNamed: aString
-%
-
-category: 'as yet unclassified'
-method: GtLlmTutor
-gtInstructionFor: aView
+method: GtLlmRequestResponse
+gtRequestFor: aView
 	<gtView>
 	^ aView forward
-		title: 'Instruction';
-		priority: 10;
-		object: [ instruction asInstructionPiece ];
-		view: #gtInstructionFor:
+		title: 'Request';
+		priority: 1;
+		object: [ request ];
+		view: #gtJsonFor:
 %
 
 category: 'as yet unclassified'
-method: GtLlmTutor
-initialize
-	super initialize.
-	self providerStencil: self defaultProviderStencil.
-	
-	
-	self initializeInstruction.
-	
-	self description: self defaultDescription
-%
-
-category: 'as yet unclassified'
-method: GtLlmTutor
-initializeInstruction
-	instruction := GtLlmTutorInstruction new.
-	instruction
-		addComponents: self collectFormats;
-		addActions: self collectActions
-%
-
-category: 'accessing'
-method: GtLlmTutor
-instruction
-	^ instruction
-%
-
-category: 'accessing'
-method: GtLlmTutor
-onAnthropicWithModel: aModel
-	self providerStencil: (self defaultAnthropicProviderStencilWithModel: aModel)
-%
-
-category: 'accessing'
-method: GtLlmTutor
-providerStencil
-	^ providerStencil
-%
-
-category: 'accessing'
-method: GtLlmTutor
-providerStencil: anObject
-	providerStencil := anObject
-%
-
-category: 'as yet unclassified'
-method: GtLlmTutor
-recomputeActions
-	instruction replaceActions: self collectActions
-%
-
-category: 'as yet unclassified'
-method: GtLlmTutor
-recomputeFormats
-	instruction replaceComponents: self collectFormats
-%
-
-category: 'as yet unclassified'
-method: GtLlmTutor
-textFormatDescription
-	<gtLlmTutorFormat>
-	^ GtLlmTutorFormatDescription new
-		name: 'Text';
+method: GtLlmRequestResponse
+gtResponseFor: aView
+	<gtView>
+	^ aView forward
+		title: 'Response';
 		priority: 2;
-		format: 'Text';
-		example: '```
-This node contains plain text.
-Multiple lines, multiple paragraphs are allowed.
-
-*markup* may also **be used**. `Code` can be highlighted, but code blocks with three tick marks MAY NOT be used.
-
-# Headings exist as well
-```'
-%
-
-! Class implementation for 'GtOpenAIBlogPostTutor'
-
-!		Instance methods for 'GtOpenAIBlogPostTutor'
-
-category: 'as yet unclassified'
-method: GtOpenAIBlogPostTutor
-createChatOn: aText
-	| chat |
-	chat := self createChat.
-	chat onInstance: (self valueHolderFor: aText).
-	^ chat
-%
-
-category: 'as yet unclassified'
-method: GtOpenAIBlogPostTutor
-defaultDescription
-	^ 'You are an assistant that is used to interactively work on blog posts. You trigger certain actions to generate a desired result.'
-%
-
-category: 'as yet unclassified'
-method: GtOpenAIBlogPostTutor
-defaultProviderStencil
-	^ [ :anInstructionFormat | 
-	GtOpenAIAssistantProvider withApiKeyFromFile
-		instructions: anInstructionFormat asInstructionPiece instructionString;
-		format: anInstructionFormat asJsonSchema;
-		assistantMessageClass: GtOpenAIBlogPostMessage;
-		userMessageClass: GtOpenAIBlogPostMessage ]
-%
-
-category: 'as yet unclassified'
-method: GtOpenAIBlogPostTutor
-gtCorrectGrammar
- 	<gtLlmTutorAction>
- 	^ GtLlmTutorAction new
-	    name: 'Correct grammar';
-	    priority: 10;
-		description: 'Correct grammar. Place the result in the `Post` property.';
-		examples: {GtLlmTutorActionExample new
-	input: { 'Action' -> 'Correct grammar'. 'Post' -> 'There are at least two ways to use LLMs for supporting understanding of software systems:
-(A) use LLMs to generate summaries
-(B) use LLMs to generate tools with which you generate summaries
-
-The difference might appear subtle, but it''s significant. There are a number of recent article proposes mostly (A) as a direction. These use LLMs as solution generators.
-
-However, any concrete solutions entail biases. When we get the final answer, these biases are invisible. The solution might be correct, but you''d have no real way of knowing what tradeoffs they contain. The alternative is to regard current LLMs are generators of possibilities that should be evaluated against reality before being relied upon for decision making in a technical space.
-
-That is why I favor (B) especially when combined with a moldable development environment. When we get the tools we have a chance to review the bias and apply other forms of checks, too. We can then use these tools to produce visualizations of the system ourselves.
-
-LLMs work interestingly well for shallow questions (I call shallow the questions whose answers can be evaluated against reality quickly). Moldable Development splits technical decision making into small shallow problems addressed by small shallow tools. As such, it can be a fertile target LLMs.
-
-Oh yes, I know, agents can add include feedback when generating solutions. But even then, there is no reason to not expose biases. In a technical space we can nicely produce the tools we can use without intermediaries against the system.' } asDictionary;
-	output: { 'Action' -> 'Correct grammar'. 'Text' -> nil. 'Post' -> 'There are at least two ways to use LLMs for supporting the understanding of software systems:
-(A) use LLMs to generate summaries
-(B) use LLMs to generate tools with which you generate summaries
-
-The difference might appear subtle, but it''s significant. A number of recent articles propose mostly (A) as a direction. These use LLMs as solution generators.
-
-However, any concrete solutions entail biases. When we get the final answer, these biases are invisible. The solution might be correct, but you''d have no real way of knowing what tradeoffs they contain. The alternative is to regard current LLMs as generators of possibilities that should be evaluated against reality before being relied upon for decision-making in a technical space.
-
-That is why I favor (B), especially when combined with a moldable development environment. When we get the tools, we have a chance to review the bias and apply other forms of checks, too. We can then use these tools to produce visualizations of the system ourselves.
-
-LLMs work interestingly well for shallow questions (I call shallow the questions whose answers can be evaluated against reality quickly). Moldable Development splits technical decision-making into small shallow problems addressed by small shallow tools. As such, it can be a fertile target for LLMs.
-
-Oh yes, I know, agents can include feedback when generating solutions. But even then, there is no reason not to expose biases. In a technical space, we can nicely produce the tools we can use without intermediaries against the system.' } asDictionary}
-%
-
-category: 'as yet unclassified'
-method: GtOpenAIBlogPostTutor
-gtCreateTitle
- 	<gtLlmTutorAction>
- 	^ GtLlmTutorAction new
-	    name: 'Create title';
-	    priority: 10;
-		description: 'Create title. Put result in the `Text` property. Do not use quotes of any kind. Be crisp.';
-		examples: {GtLlmTutorActionExample new
-	input: { 'Action' -> 'Create Title'. 'Post' -> 'There are at least two ways to use LLMs for supporting understanding of software systems:
-(A) use LLMs to generate summaries
-(B) use LLMs to generate tools with which you generate summaries
-
-The difference might appear subtle, but it''s significant. There are a number of recent article proposes mostly (A) as a direction. These use LLMs as solution generators.
-
-However, any concrete solutions entail biases. When we get the final answer, these biases are invisible. The solution might be correct, but you''d have no real way of knowing what tradeoffs they contain. The alternative is to regard current LLMs are generators of possibilities that should be evaluated against reality before being relied upon for decision making in a technical space.
-
-That is why I favor (B) especially when combined with a moldable development environment. When we get the tools we have a chance to review the bias and apply other forms of checks, too. We can then use these tools to produce visualizations of the system ourselves.
-
-LLMs work interestingly well for shallow questions (I call shallow the questions whose answers can be evaluated against reality quickly). Moldable Development splits technical decision making into small shallow problems addressed by small shallow tools. As such, it can be a fertile target LLMs.
-
-Oh yes, I know, agents can add include feedback when generating solutions. But even then, there is no reason to not expose biases. In a technical space we can nicely produce the tools we can use without intermediaries against the system.' } asDictionary;
-	output: { 'Action' -> 'Create Title'. 'Text' -> 'Leveraging LLMs for Informed Software Understanding'. 'Post' -> nil } asDictionary}
-%
-
-category: 'as yet unclassified'
-method: GtOpenAIBlogPostTutor
-gtPostFormatDescription
-	<gtLlmTutorFormat>
-	^ GtLlmTutorFormatDescription new
-	type: ((OrderedCollection new) add: 'string'; add: 'null'; yourself);
-	format: 'Text';
-	name: 'Post';
-	priority: 10;
-	example: ''
-%
-
-category: 'as yet unclassified'
-method: GtOpenAIBlogPostTutor
-valueHolderFor: anObject
-	^ GtLlmSerializableValueHolder new
-		name: 'Post';
-		content: anObject;
-		serializer: #asString;
-		updater: [ :aText :aString | 
-			aText deleteAll
-				appendString: aString;
-				yourself ]
-%
-
-! Class implementation for 'GtLlmTutorAction'
-
-!		Class methods for 'GtLlmTutorAction'
-
-category: 'other'
-classmethod: GtLlmTutorAction
-new
-	^ self basicNew initialize
-%
-
-!		Instance methods for 'GtLlmTutorAction'
-
-category: 'as yet unclassified'
-method: GtLlmTutorAction
-addExample: anExample
-	examples add: (anExample action: self)
-%
-
-category: 'as yet unclassified'
-method: GtLlmTutorAction
-asExpressionSource
-	^ self class name asString
-		, ' new
-	    name: ' , self name storeString
-		, ';
-	    priority: ' , self priority asString
-		, ';
-		description: ' , self description storeString
-		, ';
-		format: ' , self format storeString
-		, ';
-		examples: {' , ('.
-			' join: (self examples collect: #asExpressionSource)) , '}'
-%
-
-category: 'accessing'
-method: GtLlmTutorAction
-asInstructionPiece
-	^ GtLlmInstructionSection new
-		source: self;
-		title: self name;
-		body: (GtLlmInstructionComposite new
-				addItem: self description;
-				addItem: (GtLlmInstructionSection new
-						source: self;
-						title: 'Examples';
-						body: (GtLlmInstructionComposite new items: self examples)))
-%
-
-category: 'as yet unclassified'
-method: GtLlmTutorAction
-asMethodSource
-	| methodSource |
-	methodSource := (self definingMethod
-			ifNil: [ 'gtNAMEAction' ]
-			ifNotNil: [ :aMethod | aMethod selector asString ])
-			, '
-	<gtLlmTutorAction>
-	^ ' , self asExpressionSource.
-	^ methodSource
-%
-
-category: 'accessing'
-method: GtLlmTutorAction
-defaultPriority
-	^ 10
-%
-
-category: 'as yet unclassified'
-method: GtLlmTutorAction
-definingMethod
-	^ definingMethod
-%
-
-category: 'as yet unclassified'
-method: GtLlmTutorAction
-definingMethod: aMethod
-	definingMethod := nil
-%
-
-category: 'accessing'
-method: GtLlmTutorAction
-description
-	^ description
-%
-
-category: 'accessing'
-method: GtLlmTutorAction
-description: anObject
-	description := anObject
-%
-
-category: 'accessing'
-method: GtLlmTutorAction
-examples
-	^ examples
-%
-
-category: 'accessing'
-method: GtLlmTutorAction
-examples: anObject
-	examples := anObject asOrderedCollection.
-
-	examples do: [ :anExample | anExample action: self ]
-%
-
-category: 'accessing'
-method: GtLlmTutorAction
-format
-	^ format
-%
-
-category: 'accessing'
-method: GtLlmTutorAction
-format: anObject
-	format := anObject
-%
-
-category: 'accessing'
-method: GtLlmTutorAction
-formatReferences
-	^ (self examples flatCollect: #formatReferences as: Set)
-		sorted: [ :a :b | a priority < b priority ]
-%
-
-category: 'accessing'
-method: GtLlmTutorAction
-gtDescriptionFor: aView
-	<gtView>
-	^ aView textEditor
-		title: 'Description';
-		text: [ self description ]
-%
-
-category: 'accessing'
-method: GtLlmTutorAction
-gtExamplesFor: aView
-	<gtView>
-	^ aView columnedList
-		title: 'Examples';
-		items: [ self examples ];
-		column: 'Input' text: #inputJson;
-		column: 'Output' text: #outputJson
-%
-
-category: 'accessing'
-method: GtLlmTutorAction
-gtInputFormatReferencesFor: aView
-	<gtView>
-	^ aView columnedList
-		title: 'Input format references';
-		priority: 5;
-		items: [ self inputReferences ];
-		column: 'Name' text: #name;
-		column: 'Format' text: #format
-%
-
-category: 'accessing'
-method: GtLlmTutorAction
-gtInstructionFor: aView
-	<gtView>
-	^ aView forward
-		title: 'Instruction';
-		priority: 2;
-		object: [self asInstructionPiece ];
-		view: #gtInstructionFor:
-%
-
-category: 'accessing'
-method: GtLlmTutorAction
-gtOutputFormatReferencesFor: aView
-	<gtView>
-	^ aView columnedList
-		title: 'Output format references';
-		priority: 6;
-		items: [ self outputReferences ];
-		column: 'Name' text: #name;
-		column: 'Format' text: #format
-%
-
-category: 'as yet unclassified'
-method: GtLlmTutorAction
-hasArgument
-	^ format formatCount > 0
-%
-
-category: 'accessing'
-method: GtLlmTutorAction
-initialize
-	super initialize.
-
-	self priority: self defaultPriority.
-	self examples: OrderedCollection new.
-	self name: ''.
-	self description: ''.
-
-	definingMethod := self initializeMethod
-%
-
-category: 'accessing'
-method: GtLlmTutorAction
-inputReferences
-	^ (self examples flatCollect: #inputReferences as: Set)
-		sorted: [ :a :b | a priority < b priority ]
-%
-
-category: 'accessing'
-method: GtLlmTutorAction
-name
-	^ name
-%
-
-category: 'accessing'
-method: GtLlmTutorAction
-name: anObject
-	name := anObject.
-	self format isEmptyOrNil ifTrue: [ self format: name ]
-%
-
-category: 'accessing'
-method: GtLlmTutorAction
-onTutorChanged
-	self examples do: [ :anExample | anExample verify resolveReferences ]
-%
-
-category: 'accessing'
-method: GtLlmTutorAction
-outputReferences
-	^ (self examples flatCollect: #outputReferences as: Set)
-		sorted: [ :a :b | a priority < b priority ]
-%
-
-category: 'as yet unclassified'
-method: GtLlmTutorAction
-persist
-	| methodSource |
-	methodSource := self asMethodSource.
-
-	"TODO: RBConfigurableFormatter and RBParser are defined as part of Rowan.
-	It needs to be exported to .gs to be usable in GemStone"
-	self definingMethod methodClass
-		compile: (#RBConfigurableFormatter asClass format: (#RBParser asClass parseMethod: methodSource)).
-	definingMethod := self definingMethod methodClass
-			>> self definingMethod selector
-%
-
-category: 'accessing'
-method: GtLlmTutorAction
-pipeline
-	^ pipeline
-%
-
-category: 'accessing'
-method: GtLlmTutorAction
-pipeline: anObject
-	pipeline := anObject
-%
-
-category: 'accessing'
-method: GtLlmTutorAction
-printOn: aStream
-	super printOn: aStream.
-
-	aStream
-		nextPut: $(;
-		nextPutAll: self name;
-		nextPut: $)
-%
-
-category: 'accessing'
-method: GtLlmTutorAction
-priority
-	^ priority
-%
-
-category: 'accessing'
-method: GtLlmTutorAction
-priority: anObject
-	priority := anObject
-%
-
-category: 'as yet unclassified'
-method: GtLlmTutorAction
-removeFromSystem
-	self definingMethod ifNotNil: [ :aMethod | aMethod removeFromSystem ]
-%
-
-category: 'accessing'
-method: GtLlmTutorAction
-tutor
-	^ tutor
-%
-
-category: 'accessing'
-method: GtLlmTutorAction
-tutor: anObject
-	tutor := anObject.
-	
-	self onTutorChanged
-%
-
-! Class implementation for 'GtLlmTutorActionExample'
-
-!		Class methods for 'GtLlmTutorActionExample'
-
-category: 'instance creation'
-classmethod: GtLlmTutorActionExample
-new
-	"Answer an initalised instance of the receiver.
-	For GemStone compatibility."
-
-	^ self basicNew initialize.
-%
-
-!		Instance methods for 'GtLlmTutorActionExample'
-
-category: 'accessing'
-method: GtLlmTutorActionExample
-action
-	^ action
-%
-
-category: 'accessing'
-method: GtLlmTutorActionExample
-action: anObject
-	action := anObject
-%
-
-category: 'as yet unclassified'
-method: GtLlmTutorActionExample
-asExpressionSource
-	^ self class name asString
-		, ' new
-	input: { '
-		, ('. '
-				join: (self input associations
-						collect: [ :aPair | 
-							'''' , aPair key , ''' -> '
-								, (aPair value ifNil: [ 'nil' ] ifNotNil: [ :aValue | aValue storeString ]) ]))
-		, ' } asDictionary;
-	output: { '
-		, ('. '
-				join: (self output associations
-						collect: [ :aPair | 
-							'''' , aPair key , ''' -> '
-								, (aPair value ifNil: [ 'nil' ] ifNotNil:[ :aValue | aValue storeString ]) ]))
-		, ' } asDictionary'
-%
-
-category: 'accessing'
-method: GtLlmTutorActionExample
-asInstructionPiece
-	^ GtLlmInstructionSection new
-		source: self;
-		title: 'Example';
-		body: (GtLlmInstructionComposite new
-				addItem: (GtLlmInstructionSection new
-						source: self;
-						title: 'Prompt';
-						body: ('```
-' , self inputJson
-								, '
-```') asInstructionPiece);
-				addItem: (GtLlmInstructionSection new
-						source: self;
-						title: 'Output';
-						body: ('```
-' , self outputJson
-								, '
-```') asInstructionPiece))
-%
-
-category: 'asserting'
-method: GtLlmTutorActionExample
-assert: aBoolean description: aString
-  | str | 
-  aBoolean == true  ifFalse: [
-    str := aString .
-    str _isExecBlock ifTrue:[ str := aString value ].
-    self logFailure: str.
-    ^ GtGemStoneAssertionFailure signal: str
-  ]
-%
-
-category: 'accessing'
-method: GtLlmTutorActionExample
-formatReferences
-	^ inputReferences, outputReferences
-%
-
-category: 'accessing'
-method: GtLlmTutorActionExample
-gtInputFormatReferencesFor: aView
-	<gtView>
-	^ aView columnedList
-		title: 'Input format references';
-		priority: 5;
-		items: [ self inputReferences ];
-		column: 'Name' text: #name;
-		column: 'Format' text: #format
-%
-
-category: 'accessing'
-method: GtLlmTutorActionExample
-gtInstructionFor: aView
-	<gtView>
-	^ aView forward
-		title: 'Instruction';
-		priority: 1;
-		object: [ self asInstructionPiece ];
-		view: #gtInstructionFor:
-%
-
-category: 'accessing'
-method: GtLlmTutorActionExample
-gtOutputFormatReferencesFor: aView
-	<gtView>
-	^ aView columnedList
-		title: 'Output format references';
-		priority: 6;
-		items: [ self outputReferences ];
-		column: 'Name' text: #name;
-		column: 'Format' text: #format
-%
-
-category: 'accessing'
-method: GtLlmTutorActionExample
-initialize
-	super initialize.
-	
-	inputReferences := OrderedCollection new.
-	outputReferences := OrderedCollection new.
-	self markVerified
-%
-
-category: 'accessing'
-method: GtLlmTutorActionExample
-input
-	^ input
-%
-
-category: 'accessing'
-method: GtLlmTutorActionExample
-input: anObject
-	input := anObject
-%
-
-category: 'accessing'
-method: GtLlmTutorActionExample
-inputJson
-	^ STONJSON toStringPretty: self input
-%
-
-category: 'accessing'
-method: GtLlmTutorActionExample
-inputJson: aJson
-	^ self input: (STONJSON fromString: aJson)
-%
-
-category: 'accessing'
-method: GtLlmTutorActionExample
-inputReferences
-	^ inputReferences
-%
-
-category: 'accessing'
-method: GtLlmTutorActionExample
-inputReferences: anObject
-	inputReferences := anObject
-%
-
-category: 'as yet unclassified'
-method: GtLlmTutorActionExample
-markUnverified
-	unverified := true
-%
-
-category: 'as yet unclassified'
-method: GtLlmTutorActionExample
-markVerified
-	unverified := false
-%
-
-category: 'accessing'
-method: GtLlmTutorActionExample
-output
-	^ output
-%
-
-category: 'accessing'
-method: GtLlmTutorActionExample
-output: anObject
-	output := anObject
-%
-
-category: 'accessing'
-method: GtLlmTutorActionExample
-outputJson
-	^ STONJSON toStringPretty: self output
-%
-
-category: 'accessing'
-method: GtLlmTutorActionExample
-outputJson: aJson
-	^ self output: (STONJSON fromString: aJson)
-%
-
-category: 'accessing'
-method: GtLlmTutorActionExample
-outputReferences
-	^ outputReferences
-%
-
-category: 'accessing'
-method: GtLlmTutorActionExample
-outputReferences: anObject
-	outputReferences := anObject
-%
-
-category: 'accessing'
-method: GtLlmTutorActionExample
-resolveReferences
-	inputReferences := input associations
-			select: [ :anAssociation | anAssociation value isNotNil ]
-			thenCollect: [ :anAssociation | 
-				(self action tutor formatNamed: anAssociation key)
-					addInputReference: self action ].
-	outputReferences := output associations
-			select: [ :anAssociation | anAssociation value isNotNil ]
-			thenCollect: [ :anAssociation | 
-				(self action tutor formatNamed: anAssociation key)
-					addOutputReference: self action ]
-%
-
-category: 'accessing'
-method: GtLlmTutorActionExample
-unverified
-	^ unverified
-%
-
-category: 'accessing'
-method: GtLlmTutorActionExample
-unverified: anObject
-	unverified := anObject
-%
-
-category: 'accessing'
-method: GtLlmTutorActionExample
-verify
-	unverified ifTrue: [ ^ self ].
-	self
-		assert: self output keys asSet
-				= (self action tutor formatComponents collect: #name) asSet
-		description: 'Keys in the example output must correspond to the action format'
-%
-
-! Class implementation for 'GtLlmTutorExamples'
-
-!		Instance methods for 'GtLlmTutorExamples'
-
-category: 'as yet unclassified'
-method: GtLlmTutorExamples
-basicTutor
-	<gtExample>
-	| tutor |
-	tutor :=  GtLlmTutor new.
-	
-	self assert: tutor actions size equals: 1.
-	self assert: tutor instruction formats size equals: 2.
-	
-	^ tutor
-%
-
-category: 'as yet unclassified'
-method: GtLlmTutorExamples
-tutorChat
-	<gtExample>
-	| tutor chat |
-	tutor := self tutorWithActionAndFormatAdded.
-	chat := tutor createChat.
-
-	self assert: (chat provider isKindOf: GtLlmNullProvider).
-	self assert: chat provider chat equals: chat.
-	
-	^ chat
-%
-
-category: 'as yet unclassified'
-method: GtLlmTutorExamples
-tutorChatWithMessage
-	<gtExample>
-	| chat |
-	chat := self tutorChat.
-
-	chat sendAction: (GtLlmActionCall action: 'example' arguments: {}).
-
-	self assert: chat status isDone.
-	self assert: chat messages size equals: 1.
-	self assert: chat messages last action equals: 'example'.
-
-	^ chat
-%
-
-category: 'as yet unclassified'
-method: GtLlmTutorExamples
-tutorWithActionAdded
-	<gtExample>
-	| tutor exampleAction |
-	tutor := self tutorWithNullProviderStencil.
-	exampleAction := GtLlmTutorAction new name: 'example'.
-
-	tutor addAction: exampleAction.
-
-	self assert: tutor actions size equals: 2.
-	self assert: (tutor actionNamed: 'example') equals: exampleAction.
-	
-	^ tutor
-%
-
-category: 'as yet unclassified'
-method: GtLlmTutorExamples
-tutorWithActionAndFormatAdded
-	<gtExample>
-	| tutor exampleFormat |
-	tutor := self tutorWithActionAdded.
-	exampleFormat := GtLlmTutorFormatDescription new
-			name: 'example';
-			format: 'Text'.
-	tutor addFormat: exampleFormat.
-
-	self assert: tutor instruction formats size equals: 3.
-	self assert: (tutor formatNamed: 'example') equals: exampleFormat.
-
-	^ tutor
-%
-
-category: 'as yet unclassified'
-method: GtLlmTutorExamples
-tutorWithNullProviderStencil
-	<gtExample>
-	| tutor |
-	tutor := self basicTutor.
-
-	tutor
-		providerStencil: [ :instruction | 
-			GtLlmNullProvider new
-				instructions: instruction asInstructionPiece instructionString;
-				format: instruction asJsonSchema ].
-
-	^ tutor
-%
-
-! Class implementation for 'GtLlmTutorFormat'
-
-!		Class methods for 'GtLlmTutorFormat'
-
-category: 'other'
-classmethod: GtLlmTutorFormat
-new
-	^ self basicNew initialize
-%
-
-!		Instance methods for 'GtLlmTutorFormat'
-
-category: 'accessing'
-method: GtLlmTutorFormat
-actionComponent
-	<gtLlmFormatComponent>
-	^ GtLlmTutorFormatDescription new beRequired
-		name: 'Action';
-		format: 'Text';
-		example: '```
-Create a draft
-```'
-%
-
-category: 'accessing'
-method: GtLlmTutorFormat
-addComponent: aComponent
-	components add: aComponent
-%
-
-category: 'accessing'
-method: GtLlmTutorFormat
-addComponents: aListOfComponents
-	components addAll: aListOfComponents
-%
-
-category: 'accessing'
-method: GtLlmTutorFormat
-asInstructionPiece
-	^ GtLlmInstructionWithSections new
-		source: self;
-		introduction: 'You are a tutor that is used to interactively work on ' , self name
-				, 's. You trigger certain actions to generate a desired result.';
-		sections: {self interactionDescription.
-				self communicationConventionsDescription.
-				GtLlmInstructionSection new
-					source: self;
-					title: 'Components';
-					body: (GtLlmInstructionWithSections new
-							source: self;
-							introduction: 'Each component has a name, a data format (such as JSON, YAML, etc.), a Markdown code block annotation tag that encloses it, and some examples.
-							
-The components that make up the state are as follows:';
-							sections: components)}
-%
-
-category: 'accessing'
-method: GtLlmTutorFormat
-asJsonSchema
-	^ {'type' -> 'json_schema'.
-		'json_schema'
-			-> {'name' -> self name asCamelCase.
-					'schema'
-						-> {'type' -> 'object'.
-								'properties'
-									-> (components
-											collect: [ :aComponent | aComponent name -> aComponent asJsonSchema ])
-											asDictionary.
-								'required' -> (components collect: #name).
-								'additionalProperties' -> false} asDictionary.
-					'strict' -> true} asDictionary} asDictionary
-%
-
-category: 'accessing'
-method: GtLlmTutorFormat
-communicationConventionsDescription
-	^ GtLlmInstructionSection new
-		title: 'Communication rules';
-		body: (GtLlmInstructionList new
-				addItem: 'Always review the full conversation prior to answering and maintain continuity.';
-				addItem: 'Any action mut be answered by an action result, no extraneous prose or explanations. Only non-action messages may be answered in prose.';
-				addItem: 'Assume the user would like something concise.')
-%
-
-category: 'accessing'
-method: GtLlmTutorFormat
-componentNamed: aName
-	^ components detect: [ :aComponent | aComponent name = aName ] ifNone: [ nil ]
-%
-
-category: 'accessing'
-method: GtLlmTutorFormat
-components
-	^ components
-%
-
-category: 'accessing'
-method: GtLlmTutorFormat
-gtInstructionFor: aView
-	<gtView>
-	^ aView forward
-		title: 'Instruction';
-		priority: 1;
-		object: [self asInstructionPiece ];
-		view: #gtInstructionFor:
-%
-
-category: 'accessing'
-method: GtLlmTutorFormat
-initialize
-	components := OrderedCollection with: self actionComponent
-%
-
-category: 'accessing'
-method: GtLlmTutorFormat
-interactionDescription
-	^ GtLlmInstructionSection new
-		title: 'Interaction description';
-		body: 'A typical interaction goes like this:
-1. You are given the current state and an action to perform.
-2. You:
-    a. Determine what needs to be done
-    b. Perform the action on the state.
-    c. Output the new state.
-3. The environment:
-	a. checks your output state using multiple tools and user feedback.
-	b. provides the current state and next action to you (returning back to step 1.).
-	
-The state is an aggregate of the components listed below.'
-%
-
-category: 'accessing'
-method: GtLlmTutorFormat
-name
-	^ name
-%
-
-category: 'accessing'
-method: GtLlmTutorFormat
-name: anObject
-	name := anObject
-%
-
-! Class implementation for 'GtLlmTutorFormatDescription'
-
-!		Class methods for 'GtLlmTutorFormatDescription'
-
-category: 'other'
-classmethod: GtLlmTutorFormatDescription
-new
-	^ self basicNew initialize
-%
-
-!		Instance methods for 'GtLlmTutorFormatDescription'
-
-category: 'accessing'
-method: GtLlmTutorFormatDescription
-addInputReference: anAction
-	referencingActions
-		detect: [ :aReference | aReference action = anAction ]
-		ifFound: [ :aReference | aReference markInput ]
-		ifNone: [ referencingActions
-				add: (GtLlmActionReference new markInput action: anAction) ]
-%
-
-category: 'accessing'
-method: GtLlmTutorFormatDescription
-addOutputReference: anAction
-	referencingActions
-		detect: [ :aReference | aReference action = anAction ]
-		ifFound: [ :aReference | aReference markOutput ]
-		ifNone: [ referencingActions
-				add: (GtLlmActionReference new markOutput action: anAction) ]
-%
-
-category: 'as yet unclassified'
-method: GtLlmTutorFormatDescription
-asExpressionSource
-	^ self class name
-		, ' new
-	type: ' , self type storeString
-		, ';
-	format: ' , self format storeString
-		, ';
-	name: ' , self name storeString
-		, ';
-	priority: ' , self priority asString
-		, ';
-	example: ' , self example storeString
-%
-
-category: 'accessing'
-method: GtLlmTutorFormatDescription
-asInstructionPiece
-	^ GtLlmInstructionSection new
-		title: self name;
-		body: (GtLlmInstructionList new
-				addItem: 'Name: ' , self name;
-				addItem: 'Format: ' , self format;
-				addItem: 'Examples:
-' , (self example ifNil: [ 'none' ]))
-%
-
-category: 'accessing'
-method: GtLlmTutorFormatDescription
-asJsonSchema
-	^ {'type' -> self type.
-		'description'
-			-> (GtLlmInstructionList new
-					addItem: 'Format: ' , self format;
-					addItem: 'Examples:
-' , (self example ifNil: [ 'none' ])) instructionString} asDictionary
-%
-
-category: 'as yet unclassified'
-method: GtLlmTutorFormatDescription
-beRequired
-	self type remove: 'null' ifAbsent: [  ]
-%
-
-category: 'accessing'
-method: GtLlmTutorFormatDescription
-defaultPriority
-	^ 10
-%
-
-category: 'accessing'
-method: GtLlmTutorFormatDescription
-defaultType
-	^ {'string'.
-		'null'}
-%
-
-category: 'as yet unclassified'
-method: GtLlmTutorFormatDescription
-definingMethod
-	^ definingMethod
-%
-
-category: 'accessing'
-method: GtLlmTutorFormatDescription
-example
-	^ example
-%
-
-category: 'accessing'
-method: GtLlmTutorFormatDescription
-example: anObject
-	example := anObject
-%
-
-category: 'accessing'
-method: GtLlmTutorFormatDescription
-format
-	^ format
-%
-
-category: 'accessing'
-method: GtLlmTutorFormatDescription
-format: anObject
-	format := anObject
-%
-
-category: 'accessing'
-method: GtLlmTutorFormatDescription
-gtActionsFor: aView
-	<gtView>
-	^ aView columnedList
-		title: 'Referencing actions';
-		priority: 5;
-		items: [ referencingActions ];
-		column: 'Action' text: [ :aReference | aReference action name ];
-		column: 'Input'
-			text: [ :aReference | aReference isInput ifTrue: [ 'true' ] ifFalse: [ '' ] ];
-		column: 'Output'
-			text: [ :aReference | aReference isOutput ifTrue: [ 'true' ] ifFalse: [ '' ] ]
-%
-
-category: 'as yet unclassified'
-method: GtLlmTutorFormatDescription
-gtDefinitionFor: aView
-	<gtView>
-	^ aView forward
-		title: 'Definition';
-		priority: 1;
-		object: [ definingMethod ];
-		view: #gtSourceFor:
-%
-
-category: 'accessing'
-method: GtLlmTutorFormatDescription
-gtInstructionFor: aView
-	<gtView>
-	^ aView forward 
-		title: 'Instruction';
-		priority: 2;
-		object: [ self asInstructionPiece ];
-		view: #gtInstructionFor:
-%
-
-category: 'accessing'
-method: GtLlmTutorFormatDescription
-initialize
-	super initialize.
-	
-	priority := self defaultPriority.
-	
-	type := self defaultType asOrderedCollection.
-	
-	referencingActions := OrderedCollection new.
-	
-	definingMethod := self initializeMethod
-%
-
-category: 'accessing'
-method: GtLlmTutorFormatDescription
-name
-	^ name
-%
-
-category: 'accessing'
-method: GtLlmTutorFormatDescription
-name: anObject
-	name := anObject
-%
-
-category: 'accessing'
-method: GtLlmTutorFormatDescription
-printOn: aStream
-	super printOn: aStream.
-
-	aStream
-		nextPut: $(;
-		nextPutAll: self name;
-		nextPut: $)
-%
-
-category: 'accessing'
-method: GtLlmTutorFormatDescription
-priority
-	^ priority
-%
-
-category: 'accessing'
-method: GtLlmTutorFormatDescription
-priority: anObject
-	priority := anObject
-%
-
-category: 'as yet unclassified'
-method: GtLlmTutorFormatDescription
-removeFromSystem
-	self definingMethod ifNotNil: [ :aMethod | aMethod removeFromSystem ]
-%
-
-category: 'accessing'
-method: GtLlmTutorFormatDescription
-tutor
-	^ tutor
-%
-
-category: 'accessing'
-method: GtLlmTutorFormatDescription
-tutor: anObject
-	tutor := anObject
-%
-
-category: 'accessing'
-method: GtLlmTutorFormatDescription
-type
-	^ type
-%
-
-category: 'accessing'
-method: GtLlmTutorFormatDescription
-type: anObject
-	type := anObject
-%
-
-! Class implementation for 'GtLlmTutorInstruction'
-
-!		Class methods for 'GtLlmTutorInstruction'
-
-category: 'other'
-classmethod: GtLlmTutorInstruction
-new
-	^ self basicNew initialize
-%
-
-!		Instance methods for 'GtLlmTutorInstruction'
-
-category: 'as yet unclassified'
-method: GtLlmTutorInstruction
-actionNamed: aString
-	^ actions detect: [ :anAction | anAction name = aString ] ifNone: [ nil ]
-%
-
-category: 'as yet unclassified'
-method: GtLlmTutorInstruction
-actions
-	^ actions
-%
-
-category: 'as yet unclassified'
-method: GtLlmTutorInstruction
-addAction: anAction
-	actions add: anAction
-%
-
-category: 'as yet unclassified'
-method: GtLlmTutorInstruction
-addActions: aListOfActions
-	actions addAll: aListOfActions
-%
-
-category: 'accessing'
-method: GtLlmTutorInstruction
-addComponent: aComponent
-	formats add: aComponent
-%
-
-category: 'accessing'
-method: GtLlmTutorInstruction
-addComponents: aListOfComponents
-	formats addAll: aListOfComponents
-%
-
-category: 'as yet unclassified'
-method: GtLlmTutorInstruction
-addSection: aSection
-	sections add: aSection
-%
-
-category: 'accessing'
-method: GtLlmTutorInstruction
-asInstructionPiece
-	^ GtLlmInstructionWithSections new
-		source: self;
-		introduction: self description;
-		sections:
-				self sections
-						,
-							{(GtLlmInstructionSection new
-								source: self;
-								title: 'Format components';
-								body:
-										(GtLlmInstructionWithSections new
-												source: self;
-												introduction:
-														'Each format component has a name, a data format (such as JSON, YAML, etc.), a Markdown code block annotation tag that encloses it, and some examples.
-							
-The components that make up the state are as follows:';
-												sections: formats)).
-							(GtLlmInstructionSection new
-								source: self;
-								title: 'Actions';
-								body:
-										(GtLlmInstructionWithSections new
-												introduction: 'All actions are listed below.';
-												sections:
-														(actions collect: [ :anAction | anAction asInstructionPiece ]))).
-							(self errorHandlingDescription)}
-%
-
-category: 'accessing'
-method: GtLlmTutorInstruction
-asJsonSchema
-	^ {'type' -> 'object'.
-		'properties'
-			-> (formats
-					collect: [ :aComponent | aComponent name -> aComponent asJsonSchema ])
-					asDictionary.
-		'required' -> (formats collect: [:aFormat | aFormat name ]).
-		'additionalProperties' -> false} asDictionary
-%
-
-category: 'accessing'
-method: GtLlmTutorInstruction
-communicationConventionsDescription
-	^ GtLlmInstructionSection new
-		title: 'Communication rules';
-		body: (GtLlmInstructionList new
-				addItem: 'Always review the full conversation prior to answering and maintain continuity.';
-				addItem: 'Any action mut be answered by an action result, no extraneous prose or explanations. Only non-action messages may be answered in prose.';
-				addItem: 'Assume the user would like something concise.')
-%
-
-category: 'accessing'
-method: GtLlmTutorInstruction
-componentNamed: aName
-	^ formats detect: [ :aComponent | aComponent name = aName ] ifNone: [ nil ]
-%
-
-category: 'as yet unclassified'
-method: GtLlmTutorInstruction
-defaultSections
-	^ {self interactionDescription.
-		self communicationConventionsDescription} asOrderedCollection
-%
-
-category: 'accessing'
-method: GtLlmTutorInstruction
-description
-	^ description
+		object: [ response ];
+		view: #gtJsonFor:
 %
 
 category: 'accessing'
-method: GtLlmTutorInstruction
-description: anObject
-	description := anObject
-%
-
-category: 'accessing'
-method: GtLlmTutorInstruction
-errorHandlingDescription
-	^ GtLlmInstructionSection new
-		title: 'Error handling description';
-		body: 'If an error occurs during an action, a message will be sent that starts with `An error occured:` and the message below. You then correct the mistake by sending an action result that corrects the mistake.'
-%
-
-category: 'accessing'
-method: GtLlmTutorInstruction
-formatNamed: aName
-	^ formats detect: [ :aComponent | aComponent name = aName ] ifNone: [ nil ]
-%
-
-category: 'accessing'
-method: GtLlmTutorInstruction
-formats
-	^ formats
-%
-
-category: 'as yet unclassified'
-method: GtLlmTutorInstruction
-gtActionsFor: aView
-	<gtView>
-	^ aView forward
-		title: 'Actions';
-		priority: 10;
-		object: [  actions ];
-		view: #gtActionsFor:
-%
-
-category: 'accessing'
-method: GtLlmTutorInstruction
-gtInstructionFor: aView
-	<gtView>
-	^ aView forward
-		title: 'Instruction';
-		priority: 1;
-		object: [self asInstructionPiece ];
-		view: #gtInstructionFor:
-%
-
-category: 'accessing'
-method: GtLlmTutorInstruction
-initialize
-	formats := OrderedCollection new.
-	actions := GtLlmActionsGroup new.
-	description := ''.
-	sections := self defaultSections
-%
-
-category: 'accessing'
-method: GtLlmTutorInstruction
-interactionDescription
-	^ GtLlmInstructionSection new
-		title: 'Interaction description';
-		body: 'A typical interaction goes like this:
-1. You are given the current state and an action to perform.
-2. You:
-    a. Determine what needs to be done
-    b. Perform the action on the state.
-    c. Output the new state.
-3. The environment:
-	a. checks your output state using multiple tools and user feedback.
-	b. provides the current state and next action to you (returning back to step 1.).
-	
-The state is an aggregate of the components listed below.'
-%
-
-category: 'accessing'
-method: GtLlmTutorInstruction
-name
-	^ name
-%
-
-category: 'accessing'
-method: GtLlmTutorInstruction
-name: anObject
-	name := anObject
-%
-
-category: 'as yet unclassified'
-method: GtLlmTutorInstruction
-replaceActions: aListOfActions
-	actions removeAll addAll: aListOfActions
+method: GtLlmRequestResponse
+request
+	^ request
 %
 
 category: 'accessing'
-method: GtLlmTutorInstruction
-replaceComponents: aListOfComponents
-	formats removeAll addAll: aListOfComponents
+method: GtLlmRequestResponse
+request: anObject
+	request := anObject
 %
 
 category: 'accessing'
-method: GtLlmTutorInstruction
-sections
-	^ sections
+method: GtLlmRequestResponse
+response
+	^ response
 %
 
 category: 'accessing'
-method: GtLlmTutorInstruction
-sections: anObject
-	sections := anObject
+method: GtLlmRequestResponse
+response: anObject
+	response := anObject
 %
 
 ! Class implementation for 'GtLlmValueHolder'
@@ -15145,7 +17854,7 @@ weak
 category: 'announcer - subscription'
 method: GtLlmValueHolder
 when: anAnnouncementClass do: aValuable
-	"Declare that when anAnnouncementClass is raised, aValuable is executed.  Pay attention that ushc method as well as when:do: should not be used on weak announcer since the block holds the receiver and more strongly."
+	"Declare that when anAnnouncementClass is raised, aValuable is executed.  Pay attention that suach a method as well as when:do: should not be used on weak announcer since the block holds the receiver and more strongly."
 		^ self announcer when: anAnnouncementClass do: aValuable
 %
 
@@ -15154,7 +17863,7 @@ method: GtLlmValueHolder
 when: anAnnouncementClass do: aValuable for: aSubscriber
 	"Declare that when anAnnouncementClass is raised, aValuable is executed and define the subscriber."
 
-	^ (self when: anAnnouncementClass do: aValuable) subscriber: aSubscriber; yourself
+	^ self announcer when: anAnnouncementClass do: aValuable for: aSubscriber
 %
 
 category: 'announcer - subscription'
@@ -15237,7 +17946,545 @@ updater: anObject
 	updater := anObject
 %
 
+! Class implementation for 'GtLlmCustomSerializationValueHolder'
+
+!		Instance methods for 'GtLlmCustomSerializationValueHolder'
+
+category: 'as yet unclassified'
+method: GtLlmCustomSerializationValueHolder
+serialize
+	^ self contentValue
+%
+
+! Class implementation for 'GtLlmValueSerializer'
+
+!		Instance methods for 'GtLlmValueSerializer'
+
+category: 'serialization'
+method: GtLlmValueSerializer
+serializeBinding: aBinding withValue: aBindingValue
+	^ {'name' -> aBinding name.
+		'bindingClass' -> aBinding class name asString.
+		'value'
+			-> (self serializeValue: aBindingValue)}
+		asDictionary
+%
+
+category: 'serialization'
+method: GtLlmValueSerializer
+serializeClass: aClass
+	^ {'class' -> aClass name.
+		'superclass'
+			-> (aClass superclass ifNil: [ nil ] ifNotNil: [ :aSuperclass | aSuperclass name ]).
+		'comment' -> aClass instanceSide gtComment.
+		'package' -> aClass package name.
+		'instanceSlots' -> aClass slotNames.
+		'allInstanceMethods' -> (aClass methods asArray collect: [ :aMethod | aMethod selector ])} asDictionary
+%
+
+category: 'serialization'
+method: GtLlmValueSerializer
+serializeValue: aValue
+	^ {'class' -> aValue class name asString.
+		'superclass'
+			-> (aValue class superclass ifNil: [ nil ] ifNotNil: [ :aSuperclass | aSuperclass name ]).
+		'comment' -> aValue class instanceSide gtComment.
+		'package' -> aValue class package name.
+		'printString' -> (aValue printString escapeCharacter: '''').
+		'allInstanceMethods'
+			-> (aValue
+					ifNil: [ {} ]
+					ifNotNil: [ aValue class methods asArray collect: [ :aMethod | aMethod selector ] ]).
+		'instanceSlots'
+			-> (aValue class allSlots
+					collect: [ :aSlot | 
+						| slotValue |
+						slotValue := aValue readSlotNamed: aSlot name.
+						{'name' -> aSlot name.
+							'class' -> slotValue class asString.
+							'value' -> (slotValue asString escapeCharacter: '''')} asDictionary ])
+					asArray} asDictionary
+%
+
+! Class implementation for 'GtMcpClient'
+
+!		Instance methods for 'GtMcpClient'
+
+category: 'accessing'
+method: GtMcpClient
+callTool: aString withArguments: anObject
+	^ (self
+		sendMethod: 'tools/call'
+		withParams: {'name' -> aString.
+				'arguments' -> anObject} asDictionary) at: 'result' at: 'content'
+%
+
+category: 'accessing'
+method: GtMcpClient
+getPrompt: aString withArguments: anObject
+	^ (self
+		sendMethod: 'prompts/get'
+		withParams: {'name' -> aString.
+				'arguments' -> anObject} asDictionary) at: 'result'
+%
+
+category: 'as yet unclassified'
+method: GtMcpClient
+gtCapabilitiesFor: aView
+	<gtView>
+	^ aView columnedList
+		title: 'Capabilities';
+		priority: 1;
+		items: [ serverCapabilities associations ];
+		column: 'Capability' text: [ :aCapability | aCapability key ];
+		column: 'Information' text: [ :aCapability | aCapability value ]
+%
+
+category: 'as yet unclassified'
+method: GtMcpClient
+gtPromptsFor: aView
+	<gtView>
+	(serverCapabilities includesKey: 'prompts') ifFalse: [ ^ aView empty ].
+
+	^ aView columnedList
+		title: 'Prompts';
+		priority: 2;
+		items: [ self listPrompts ];
+		column: 'Name' text: [ :aTool | aTool at: 'name' ];
+		column: 'Description'
+			text: [ :aTool | aTool at: 'description' ]
+			weight: 3;
+		column: 'Arguments'
+			text: [ :aTool | 
+				', '
+					join: ((aTool at: 'arguments') collect: [ :anArgument | anArgument at: 'name' ]) ]
+%
+
+category: 'as yet unclassified'
+method: GtMcpClient
+gtResourcesFor: aView
+	<gtView>
+	(serverCapabilities includesKey: 'resources') ifFalse: [ ^ aView empty ].
+
+	^ aView columnedList
+		title: 'Resources';
+		priority: 2;
+		items: [ self listResources ];
+		column: 'Name' text: [ :aTool | aTool at: 'name' ];
+		column: 'URI' text: [ :aTool | aTool at: 'uri' ] weight: 2;
+		column: 'Description'
+			text: [ :aTool | aTool at: 'description' ifAbsent: [ '' ] ]
+			weight: 3
+%
+
+category: 'as yet unclassified'
+method: GtMcpClient
+gtToolsFor: aView
+	<gtView>
+	(serverCapabilities includesKey: 'tools') ifFalse: [ ^ aView empty ].
+
+	^ aView columnedList
+		title: 'Tools';
+		priority: 2;
+		items: [ self listTools ];
+		column: 'Name' text: [:aTool | aTool at: 'name' ];
+		column: 'Description' text: [:aTool | aTool at: 'description' ] weight: 3
+%
+
+category: 'as yet unclassified'
+method: GtMcpClient
+initialize
+	super initialize.
+	
+	messageId := 0.
+	serverCapabilities := {} asDictionary
+%
+
+category: 'as yet unclassified'
+method: GtMcpClient
+initializeSession
+	| response |
+	response := self
+			sendMethod: 'initialize'
+			withParams: {'protocolVersion' -> '2024-11-05'.
+					'capabilities'
+						-> {'roots' -> {} asDictionary.
+								'sampling' -> {} asDictionary.
+								'elicitation' -> {} asDictionary} asDictionary.
+					'clientInfo'
+						-> {'name' -> 'Glamorous Toolkit'.
+								'title' -> 'Glamorous Toolkit LLM Integration'.
+								'version' -> '1.0.0'} asDictionary} asDictionary.
+
+	serverCapabilities := response at: 'result' at: 'capabilities'.
+
+	transport
+		sendMessage: {'jsonrpc' -> '2.0'. 'method' -> 'notifications/initialized'} asDictionary
+%
+
+category: 'as yet unclassified'
+method: GtMcpClient
+listPrompts
+	^ (self sendMethod: 'prompts/list' withParams: {} asDictionary)
+		at: 'result'
+		at: 'prompts'
+%
+
+category: 'as yet unclassified'
+method: GtMcpClient
+listResources
+	^ (self sendMethod: 'resources/list' withParams: {} asDictionary)
+		at: 'result'
+		at: 'resources'
+%
+
+category: 'as yet unclassified'
+method: GtMcpClient
+listTools
+	^ (self sendMethod: 'tools/list' withParams: {} asDictionary)
+		at: 'result'
+		at: 'tools'
+%
+
+category: 'accessing'
+method: GtMcpClient
+llmFunctionTools
+	^ self listTools
+		collect: [ :aTool | 
+			GtLlmFunctionTool new
+				name: (aTool at: 'name');
+				parameters: (aTool at: 'inputSchema' at: 'properties') keys;
+				description: (aTool at: 'description');
+				block: [ :functionCall | 
+					STONJSON
+						toString: (self callTool: (aTool at: 'name') withArguments: functionCall arguments) ] ]
+%
+
+category: 'as yet unclassified'
+method: GtMcpClient
+messagesFromPrompt: aPromptName withArguments: anArgsDictionary
+	^ ((self getPrompt: aPromptName withArguments: anArgsDictionary) at: 'messages')
+		collect: [ :aMessage | 
+			GtLlmChatMessage new
+				role: (aMessage at: 'role');
+				content: (aMessage at: 'content' at: 'text') ]
+%
+
+category: 'as yet unclassified'
+method: GtMcpClient
+nextMessageId
+	messageId := messageId + 1.
+	^ messageId
+%
+
+category: 'as yet unclassified'
+method: GtMcpClient
+readResource: aString
+	^ (self
+		sendMethod: 'resources/read'
+		withParams: {'uri' -> aString} asDictionary) at: 'result' at: 'contents'
+%
+
+category: 'as yet unclassified'
+method: GtMcpClient
+sendMethod: aString withParams: anObject
+	| content |
+	content := {'jsonrpc' -> '2.0'.
+					'id' -> self nextMessageId.
+					'method' -> aString.
+					'params' -> anObject} asDictionary.
+	transport sendMessage: content.
+	^ transport receiveResponse
+%
+
+category: 'accessing'
+method: GtMcpClient
+transport
+	^ transport
+%
+
+category: 'accessing'
+method: GtMcpClient
+transport: anObject
+	transport ifNotNil: [ transport terminate ].
+
+	transport := anObject.
+
+	self initializeSession
+%
+
+! Class implementation for 'GtMcpPrompt'
+
+!		Instance methods for 'GtMcpPrompt'
+
+category: 'accessing'
+method: GtMcpPrompt
+arguments
+	^ arguments
+%
+
+category: 'accessing'
+method: GtMcpPrompt
+arguments: anObject
+	arguments := anObject
+%
+
+category: 'as yet unclassified'
+method: GtMcpPrompt
+callWith: args
+	^ promptBlock value: args
+%
+
+category: 'accessing'
+method: GtMcpPrompt
+description
+	^ description
+%
+
+category: 'accessing'
+method: GtMcpPrompt
+description: anObject
+	description := anObject
+%
+
+category: 'accessing'
+method: GtMcpPrompt
+name
+	^ name
+%
+
+category: 'accessing'
+method: GtMcpPrompt
+name: anObject
+	name := anObject
+%
+
+category: 'accessing'
+method: GtMcpPrompt
+promptBlock
+	^ promptBlock
+%
+
+category: 'accessing'
+method: GtMcpPrompt
+promptBlock: anObject
+	promptBlock := anObject
+%
+
+! Class implementation for 'GtMcpResource'
+
+!		Instance methods for 'GtMcpResource'
+
+category: 'as yet unclassified'
+method: GtMcpResource
+contents
+	^ contentsBlock value
+%
+
+category: 'accessing'
+method: GtMcpResource
+contentsBlock
+	^ contentsBlock
+%
+
+category: 'accessing'
+method: GtMcpResource
+contentsBlock: anObject
+	contentsBlock := anObject
+%
+
+category: 'accessing'
+method: GtMcpResource
+description
+	^ description ifNil: [ name ]
+%
+
+category: 'accessing'
+method: GtMcpResource
+description: anObject
+	description := anObject
+%
+
+category: 'accessing'
+method: GtMcpResource
+mimeType
+	^ mimeType
+%
+
+category: 'accessing'
+method: GtMcpResource
+mimeType: anObject
+	mimeType := anObject
+%
+
+category: 'accessing'
+method: GtMcpResource
+name
+	^ name
+%
+
+category: 'accessing'
+method: GtMcpResource
+name: anObject
+	name := anObject
+%
+
+category: 'accessing'
+method: GtMcpResource
+title
+	^ title ifNil: [ name ]
+%
+
+category: 'accessing'
+method: GtMcpResource
+title: anObject
+	title := anObject
+%
+
+category: 'accessing'
+method: GtMcpResource
+uri
+	^ uri
+%
+
+category: 'accessing'
+method: GtMcpResource
+uri: anObject
+	uri := anObject
+%
+
+! Class implementation for 'GtMcpStaticTransport'
+
+!		Instance methods for 'GtMcpStaticTransport'
+
+category: 'as yet unclassified'
+method: GtMcpStaticTransport
+addMessage: aMessage
+	messages add: aMessage
+%
+
+category: 'as yet unclassified'
+method: GtMcpStaticTransport
+initialize
+	super initialize.
+	
+	index := 0.
+	messages := OrderedCollection new
+%
+
+category: 'accessing'
+method: GtMcpStaticTransport
+messages
+	^ messages
+%
+
+category: 'accessing'
+method: GtMcpStaticTransport
+messages: anObject
+	messages := anObject
+%
+
+category: 'as yet unclassified'
+method: GtMcpStaticTransport
+receiveResponse
+	index := index + 1.
+	^ messages at: index ifAbsent: [ {} asDictionary ]
+%
+
+category: 'as yet unclassified'
+method: GtMcpStaticTransport
+sendMessage: aDict
+%
+
+! Class implementation for 'GtMcpStdioTransport'
+
+!		Instance methods for 'GtMcpStdioTransport'
+
+category: 'as yet unclassified'
+method: GtMcpStdioTransport
+gtMessagesFor: aView
+	<gtView>
+	^ aView columnedList
+		title: 'Messages';
+		priority: 1;
+		items: [ messages ];
+		column: 'Method'
+			text: [ :aMessage | aMessage at: 'method' ifAbsent: [ 'response' ] ];
+		column: 'Body'
+			text: [ :aMessage | aMessage ]
+			weight: 3
+%
+
+category: 'as yet unclassified'
+method: GtMcpStdioTransport
+initialize
+	super initialize.
+	
+	messages := OrderedCollection new
+%
+
+category: 'accessing'
+method: GtMcpStdioTransport
+process
+	^ process
+%
+
+category: 'accessing'
+method: GtMcpStdioTransport
+process: anObject
+	process := anObject.
+	
+	stdout := process asynchronousStdout
+%
+
+category: 'accessing'
+method: GtMcpStdioTransport
+receiveResponse
+	| resultString ston value result |
+	resultString := ''.
+	[ resultString := resultString , stdout pollString.
+	[ ston := STON reader on: resultString readStream.
+	value := ston next.
+	ston atEnd ] on: STONReaderError do: [ false ] ] whileFalse.
+	result := STONJSON fromString: resultString.
+	
+	messages add: result.
+
+	(result includesKey: 'error')
+		ifTrue: [ self error: (result at: 'error') asString ].
+
+
+	((result includesKey: 'method')
+		and: [ (result at: 'method') = 'notifications/message' ])
+		ifTrue: [ ^ self receiveResponse ].
+
+	^ result
+%
+
+category: 'as yet unclassified'
+method: GtMcpStdioTransport
+sendMessage: anObject
+	messages add: anObject.
+	process stdin
+		nextPutAll: (STONJSON toString: anObject);
+		crlf
+%
+
+category: 'as yet unclassified'
+method: GtMcpStdioTransport
+terminate
+	process kill
+%
+
 ! Class implementation for 'GtOllamaClient'
+
+!		Class methods for 'GtOllamaClient'
+
+category: 'accessing'
+classmethod: GtOllamaClient
+defaultBaseUrl
+	^ 'http://localhost:11434/api' asZnUrl
+%
 
 !		Instance methods for 'GtOllamaClient'
 
@@ -15297,6 +18544,19 @@ completeChatWithModel: aString andMessages: aCollection andFormat: aFormat andTo
 
 category: 'accessing'
 method: GtOllamaClient
+completeChatWithModel: aString andMessages: aCollection andFormat: aFormat andTools: tools andInstructions: instructions
+	^ GtOllamaCompleteChatAPIClient new
+		client: self;
+		model: aString;
+		messages: aCollection;
+		format: aFormat;
+		tools: tools;
+		instructions: instructions;
+		perform
+%
+
+category: 'accessing'
+method: GtOllamaClient
 createModel: aString withModelFile: aModelFile
 	^ GtOllamaCreateModelClient new
 		client: self;
@@ -15308,7 +18568,7 @@ createModel: aString withModelFile: aModelFile
 category: 'accessing'
 method: GtOllamaClient
 defaultBaseUrl
-	^ 'http://localhost:11434/api' asZnUrl
+	^ self class defaultBaseUrl
 %
 
 category: 'accessing'
@@ -15352,12 +18612,28 @@ generateResponseWithModel: modelString andPrompt: promptString
 
 category: 'accessing'
 method: GtOllamaClient
+generateResponseWithModel: modelString prompt: promptString andImages: anArrayOfStrings
+	^ GtOllamaGenerateResponseClient new
+		client: self;
+		model: modelString;
+		prompt: promptString;
+		images: anArrayOfStrings;
+		perform
+%
+
+category: 'accessing'
+method: GtOllamaClient
 get: aString
-	| aClient |
+	| aClient response |
 	aClient := self initializeClient beOneShot.
 	aClient url: self baseUrl / aString.
 
-	^ self checkForErrors: aClient get
+
+	response := aClient get.
+	
+	history add: (aClient request -> aClient response).
+	
+	^ response
 %
 
 category: 'accessing'
@@ -15367,6 +18643,17 @@ getModelInformationFor: aName
 		client: self;
 		model: aName;
 		perform
+%
+
+category: 'as yet unclassified'
+method: GtOllamaClient
+gtCallsFor: aView
+	<gtView>
+	^ aView forward
+		title: 'Calls';
+		priority: 5;
+		object: [ history ];
+		view: #gtCallsFor:
 %
 
 category: 'accessing'
@@ -15396,7 +18683,9 @@ method: GtOllamaClient
 initialize
 	super initialize.
 	
-	self baseUrl: self defaultBaseUrl
+	self baseUrl: self defaultBaseUrl.
+	
+	history := GtLlmRequestHistory new
 %
 
 category: 'accessing'
@@ -15418,13 +18707,17 @@ listRunningModels
 category: 'accessing'
 method: GtOllamaClient
 post: aString withEntity: anEntity
-	| aClient |
+	| aClient response |
 	aClient := self initializeClient beOneShot.
 	aClient url: self baseUrl / aString.
 
 	aClient contents: anEntity.
 
-	^ self checkForErrors: aClient post
+	response := aClient post.
+	
+	history add: (aClient request -> aClient response).
+	
+	^ response
 %
 
 category: 'accessing'
@@ -15470,6 +18763,7 @@ apiKeyFileContents
 category: 'accessing'
 classmethod: GtOpenAIClient
 defaultApiKeyFile
+	<gtExample>
 	^ FileLocator home / '.secrets' / 'open-ai-api-key.txt'
 %
 
@@ -15616,13 +18910,17 @@ defaultBaseUrl
 category: 'accessing'
 method: GtOpenAIClient
 delete: aUrl
-	| aClient |
+	| aClient response |
 	aClient := self initializeClient.
 	aClient url: self baseUrl / aUrl.
 	
 	aClient entity: nil.
 
-	^ self checkForErrors: aClient delete
+	response := aClient delete.
+	
+	history add: (aClient request -> aClient response).
+	
+	^ response
 %
 
 category: 'accessing'
@@ -15671,6 +18969,43 @@ generateEmbeddingsWithModel: aString andInput: anInputString
 		perform
 %
 
+category: 'as yet unclassified'
+method: GtOpenAIClient
+generateResponseWithModel: aString andMessages: aCollection
+	^ GtOpenAIGenerateResponseAPIClient new
+		client: self;
+		model: aString;
+		messages: aCollection;
+		perform 
+%
+
+category: 'as yet unclassified'
+method: GtOpenAIClient
+generateResponseWithModel: aString messages: aCollection instructions: anInstruction tools: aCollectionOfTools andFormat: aFormat
+	^ GtOpenAIGenerateResponseAPIClient new
+		client: self;
+		model: aString;
+		messages: aCollection;
+		instructions: anInstruction;
+		tools: aCollectionOfTools;
+		format: aFormat;
+		perform 
+%
+
+category: 'as yet unclassified'
+method: GtOpenAIClient
+generateResponseWithModel: aString messages: aCollection instructions: anInstruction tools: aCollectionOfTools andFormat: aFormat isStreaming: aBoolean
+	^ GtOpenAIGenerateResponseAPIClient new
+		client: self;
+		model: aString;
+		messages: aCollection;
+		instructions: anInstruction;
+		tools: aCollectionOfTools;
+		format: aFormat;
+		isStreaming: aBoolean;
+		perform 
+%
+
 category: 'accessing'
 method: GtOpenAIClient
 get: aUrl
@@ -15680,14 +19015,18 @@ get: aUrl
 category: 'accessing'
 method: GtOpenAIClient
 get: aUrl withParams: aListOfAssocs
-	| aClient |
+	| aClient response |
 	aClient := self initializeClient.
 	aClient url: self baseUrl / aUrl.
 	aListOfAssocs do: [ :aPair | aClient queryAt: aPair key put: aPair value ].
 
 	aClient entity: nil.
 
-	^ self checkForErrors: aClient get
+	response := aClient get.
+	
+	history add: (aClient request -> aClient response).
+	
+	^ self checkForErrors: response
 %
 
 category: 'accessing'
@@ -15745,6 +19084,17 @@ getRun: aRunId forThread: aThreadId
 		perform
 %
 
+category: 'as yet unclassified'
+method: GtOpenAIClient
+gtCallsFor: aView
+	<gtView>
+	^ aView forward
+		title: 'Calls';
+		priority: 5;
+		object: [ history ];
+		view: #gtCallsFor:
+%
+
 category: 'accessing'
 method: GtOpenAIClient
 gtModelsFor: aView
@@ -15760,6 +19110,8 @@ category: 'accessing'
 method: GtOpenAIClient
 initialize
 	super initialize.
+	
+	history := GtLlmRequestHistory new.
 
 	self baseUrl: self defaultBaseUrl
 %
@@ -15808,25 +19160,33 @@ listVectorStores
 category: 'accessing'
 method: GtOpenAIClient
 post: aString withEntity: anEntity
-	| aClient |
+	| aClient response |
 	aClient := self initializeClient.
 	aClient url: self baseUrl / aString.
 
 	aClient contents: anEntity.
+	
+	response := aClient post.
+	
+	history add: (aClient request -> aClient response).
 
-	^ self checkForErrors: aClient post
+	^ self checkForErrors: response
 %
 
 category: 'accessing'
 method: GtOpenAIClient
 postFile: aString withEntity: anEntity
-	| aClient |
+	| aClient response |
 	aClient := self initializeClient.
 	aClient url: self baseUrl / aString.
 
 	aClient entity: anEntity.
+	
+	response := aClient post.
+	
+	history add: (aClient request -> aClient response).
 
-	^ self checkForErrors: aClient post
+	^ self checkForErrors: response
 %
 
 category: 'as yet unclassified'
@@ -16531,6 +19891,158 @@ itemClass
 	^ GtOpenAIVectorStore
 %
 
+! Class implementation for 'GtOpenAIRawToolMessage'
+
+!		Instance methods for 'GtOpenAIRawToolMessage'
+
+category: 'as yet unclassified'
+method: GtOpenAIRawToolMessage
+action
+	^ 'Tool call(' , self toolCall humanReadable , ')'
+%
+
+category: 'as yet unclassified'
+method: GtOpenAIRawToolMessage
+actionModel
+	^ self toolCall
+%
+
+category: 'accessing'
+method: GtOpenAIRawToolMessage
+chat
+	^ chat
+%
+
+category: 'accessing'
+method: GtOpenAIRawToolMessage
+chat: anObject
+	chat := anObject
+%
+
+category: 'as yet unclassified'
+method: GtOpenAIRawToolMessage
+content
+	^ rawData
+%
+
+category: 'as yet unclassified'
+method: GtOpenAIRawToolMessage
+contentText
+	^ STONJSON toString: rawData
+%
+
+category: 'accessing'
+method: GtOpenAIRawToolMessage
+createdAt
+	^ createdAt
+%
+
+category: 'accessing'
+method: GtOpenAIRawToolMessage
+createdAt: anObject
+	createdAt := anObject
+%
+
+category: 'as yet unclassified'
+method: GtOpenAIRawToolMessage
+gtViewRawDataFor: aView
+	<gtView>
+	<gtLlmMessageView>
+	self rawData ifNil: [^ aView empty ].
+
+	^ aView forward
+		title: 'Raw data';
+		priority: 10;
+		object: [ self rawData ];
+		view: #gtItemsFor:
+%
+
+category: 'as yet unclassified'
+method: GtOpenAIRawToolMessage
+id
+	^ rawData at: 'id' ifAbsent: ''
+%
+
+category: 'as yet unclassified'
+method: GtOpenAIRawToolMessage
+initialize
+	super initialize.
+
+	createdAt := DateAndTime now
+%
+
+category: 'as yet unclassified'
+method: GtOpenAIRawToolMessage
+isAssistantRole
+	^ false
+%
+
+category: 'as yet unclassified'
+method: GtOpenAIRawToolMessage
+isRawMessage
+	^ true
+%
+
+category: 'as yet unclassified'
+method: GtOpenAIRawToolMessage
+isToolRole
+	^ true
+%
+
+category: 'accessing'
+method: GtOpenAIRawToolMessage
+rawData
+	^ rawData
+%
+
+category: 'accessing'
+method: GtOpenAIRawToolMessage
+rawData: anObject
+	rawData := anObject
+%
+
+category: 'as yet unclassified'
+method: GtOpenAIRawToolMessage
+reasoning
+	^ reasoning
+%
+
+category: 'as yet unclassified'
+method: GtOpenAIRawToolMessage
+reasoning: anObject
+	reasoning := anObject
+%
+
+category: 'as yet unclassified'
+method: GtOpenAIRawToolMessage
+role
+	^ 'raw'
+%
+
+category: 'as yet unclassified'
+method: GtOpenAIRawToolMessage
+senderText
+	^ 'Assistant'
+%
+
+category: 'as yet unclassified'
+method: GtOpenAIRawToolMessage
+serialize
+	^ rawData
+%
+
+category: 'accessing'
+method: GtOpenAIRawToolMessage
+toolCall
+	^ toolCall
+%
+
+category: 'accessing'
+method: GtOpenAIRawToolMessage
+toolCall: anObject
+	toolCall := anObject
+%
+
 ! Class implementation for 'GtOpenAIResourceFile'
 
 !		Instance methods for 'GtOpenAIResourceFile'
@@ -16715,6 +20227,31 @@ reversedMergesFromMerges
 				collect: [ :aValue | self reversedMergeFor: aValue in: simplyReversedMerges ])
 %
 
+! Class implementation for 'GtLlmRequestHistory'
+
+!		Instance methods for 'GtLlmRequestHistory'
+
+category: 'as yet unclassified'
+method: GtLlmRequestHistory
+add: aPair
+	super
+		add: (GtLlmRequestResponse new
+				request: aPair key;
+				response: aPair value)
+%
+
+category: 'as yet unclassified'
+method: GtLlmRequestHistory
+gtCallsFor: aView
+	<gtView>
+	^ aView columnedList
+		title: 'Calls';
+		priority: 5;
+		items: [ self ];
+		column: 'URL' text: [ :aRequestResponse | aRequestResponse request url ];
+		column: 'Method' text: [ :aRequestResponse | aRequestResponse request method ] width: 100
+%
+
 ! Class extensions for 'ExecBlock'
 
 !		Instance methods for 'ExecBlock'
@@ -16726,20 +20263,38 @@ doWhileTrue: aBlock
 	^ aBlock whileTrue: self
 %
 
-! Class extensions for 'GtLlmChatExamples'
+! Class extensions for 'GtLlmActionChat'
 
-!		Instance methods for 'GtLlmChatExamples'
+!		Instance methods for 'GtLlmActionChat'
 
-category: '*Gt4Llm-Gemstone'
-method: GtLlmChatExamples
-assert: aBoolean
-	self
-		assert: aBoolean
-		description: 'assert is not true'
+category: '*Gt4Ollama'
+method: GtLlmActionChat
+messageClassForOllama
+	^ GtLlmActionMessage
 %
 
+category: '*Gt4OpenAI'
+method: GtLlmActionChat
+messageClassForOpenAI
+	^ GtOpenAIActionMessage
+%
+
+! Class extensions for 'GtLlmAssistantAction'
+
+!		Instance methods for 'GtLlmAssistantAction'
+
 category: '*Gt4Llm-Gemstone'
-method: GtLlmChatExamples
+method: GtLlmAssistantAction
+initializeMethod
+	^ nil
+%
+
+! Class extensions for 'GtLlmAssistantActionExample'
+
+!		Instance methods for 'GtLlmAssistantActionExample'
+
+category: '*Gt4Llm-Gemstone'
+method: GtLlmAssistantActionExample
 assert: aBoolean description: aString
   | str | 
   aBoolean == true  ifFalse: [
@@ -16750,12 +20305,30 @@ assert: aBoolean description: aString
   ]
 %
 
+! Class extensions for 'GtLlmAssistantFormatDescription'
+
+!		Instance methods for 'GtLlmAssistantFormatDescription'
+
 category: '*Gt4Llm-Gemstone'
-method: GtLlmChatExamples
-assert: actual equals: expected
-	self
-		assert: actual = expected
-		description: actual printString , ' is not equal to ' , expected printString
+method: GtLlmAssistantFormatDescription
+initializeMethod
+	^ nil
+%
+
+! Class extensions for 'GtLlmChat'
+
+!		Instance methods for 'GtLlmChat'
+
+category: '*Gt4Ollama'
+method: GtLlmChat
+messageClassForOllama
+	^ GtLlmChatMessage
+%
+
+category: '*Gt4OpenAI'
+method: GtLlmChat
+messageClassForOpenAI
+	^ GtOpenAIMessage
 %
 
 ! Class extensions for 'GtLlmChatMessage'
@@ -16793,57 +20366,17 @@ gtJsonFor: aView
 		priority: 4.5
 %
 
-! Class extensions for 'GtLlmTutor'
+! Class extensions for 'GtLlmConnectionRegistry'
 
-!		Instance methods for 'GtLlmTutor'
-
-category: '*Gt4Ollama'
-method: GtLlmTutor
-defaultOllamaProviderStencilWithModel: aModel
-	^ [ :anInstructionFormat | 
-	GtOllamaProvider new
-		model: aModel;
-		instructions: anInstructionFormat asInstructionPiece instructionString;
-		format: anInstructionFormat asJsonSchema;
-		assistantMessageClass: GtLlmActionMessage;
-		userMessageClass: GtLlmActionMessage ]
-%
-
-category: '*Gt4OpenAI'
-method: GtLlmTutor
-defaultProviderStencil
-	^ [ :anInstructionFormat | 
-	GtOpenAIAssistantProvider withApiKeyFromFile
-		instructions: anInstructionFormat asInstructionPiece instructionString;
-		format: anInstructionFormat asJsonSchema;
-		assistantMessageClass: GtOpenAIActionMessage;
-		userMessageClass: GtOpenAIActionMessage ]
-%
-
-category: '*Gt4Ollama'
-method: GtLlmTutor
-onOllamaWithModel: aModel
-	self providerStencil: (self defaultOllamaProviderStencilWithModel: aModel)
-%
-
-! Class extensions for 'GtLlmTutorAction'
-
-!		Instance methods for 'GtLlmTutorAction'
+!		Instance methods for 'GtLlmConnectionRegistry'
 
 category: '*Gt4Llm-Gemstone'
-method: GtLlmTutorAction
-initializeMethod
-	^ nil
-%
-
-! Class extensions for 'GtLlmTutorFormatDescription'
-
-!		Instance methods for 'GtLlmTutorFormatDescription'
-
-category: '*Gt4Llm-Gemstone'
-method: GtLlmTutorFormatDescription
-initializeMethod
-	^ nil
+method: GtLlmConnectionRegistry
+knownConnectors
+	^ {GtLlmConnection new
+			provider: GtOllamaProvider;
+			label: 'Llama 3.1';
+			model: 'llama3.1'}
 %
 
 ! Class extensions for 'GtOllamaClient'
@@ -16922,6 +20455,48 @@ initializeClient
 		headerAt: 'OpenAI-Beta' put: 'assistants=v2'
 %
 
+! Class extensions for 'GtOpenAIGenerateResponseAPIClient'
+
+!		Instance methods for 'GtOpenAIGenerateResponseAPIClient'
+
+category: '*Gt4OpenAI-Gemstone'
+method: GtOpenAIGenerateResponseAPIClient
+request
+	^ self client post: '/responses' withEntity: (self buildEntity at: 'stream' put: false; yourself)
+%
+
+category: '*Gt4OpenAI-Gemstone'
+method: GtOpenAIGenerateResponseAPIClient
+serializationClass
+	^ GtOpenAIResponse
+%
+
+! Class extensions for 'GtOpenAIResponseProvider'
+
+!		Instance methods for 'GtOpenAIResponseProvider'
+
+category: '*Gt4OpenAI-Gemstone'
+method: GtOpenAIResponseProvider
+executeWait
+	| result aMessage |
+	result := client
+		generateResponseWithModel: self model
+		messages: self chat messages
+		instructions: instructions
+		tools: tools
+		andFormat: format.
+
+	result hasToolCalls
+		ifTrue: [ ^ self performToolCallsIn: result ].
+	aMessage := self assistantMessageClass new merge: result output first.
+
+
+	self chat addMessage: aMessage.
+
+	self chat signalRunIsDone.
+	assistantWorking := false
+%
+
 ! Class extensions for 'String'
 
 !		Instance methods for 'String'
@@ -16955,6 +20530,8 @@ formatCount
 ! Class Initialization
 
 run
+GtLlmFeatures initialize.
+GtOllamaProvider initialize.
 GtOpenAIClient initialize.
 true
 %

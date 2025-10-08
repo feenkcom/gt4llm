@@ -1,6 +1,6 @@
-Extension { #name : 'GtLlmAssistantActionExample' }
+Extension { #name : #GtLlmAssistantActionExample }
 
-{ #category : '*Gt4Llm-Gemstone' }
+{ #category : #'*Gt4Llm-Gemstone' }
 GtLlmAssistantActionExample >> assert: aBoolean description: aString [
   | str | 
   aBoolean == true  ifFalse: [
