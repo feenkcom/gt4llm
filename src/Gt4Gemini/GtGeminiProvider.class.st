@@ -105,15 +105,17 @@ GtGeminiProvider >> gtTriggerAssistantActionFor: anAction [
 GtGeminiProvider >> handleToolCallsIn: toolCalls [
 	toolCalls
 		do: [ :aToolCall | 
-			| call |
+			| call toolOutput |
 			call := GtLlmFunctionToolCall new
 					name: (aToolCall at: 'name');
 					arguments: (aToolCall at: 'args').
-			tools performToolCall: call.
+			toolOutput := tools performToolCall: call.
 			chat
 				addMessage: (GtLlmToolMessage new
-						toolCall: call) ].
+						toolCall: call;
+						output: toolOutput) ].
 	self chat signalRunHasUpdated.
+
 	^ self triggerAssistant
 ]
 

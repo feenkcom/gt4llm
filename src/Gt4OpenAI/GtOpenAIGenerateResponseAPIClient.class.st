@@ -17,15 +17,15 @@ GtOpenAIGenerateResponseAPIClient >> buildEntity [
 	| entity |
 	entity := {'model' -> self model.
 			'stream' -> isStreaming.
-			'input'
-				-> (self messages
+			'input' -> (self messages
 						flatCollect: [ :aMessage | 
 							(aMessage isKindOf: GtLlmToolMessage)
 								ifTrue: [ {aMessage serializeResponse} ]
 								ifFalse: [ (aMessage isKindOf: GtOpenAIRawToolMessage)
 										ifTrue: [ (aMessage reasoning ifNil: [ {} ] ifNotNil: [ {aMessage reasoning rawData} ])
 												, {aMessage serialize} ]
-										ifFalse: [ {aMessage serialize} ]]])} asDictionary.
+										ifFalse: [ {aMessage serialize} ] ] ])} asDictionary.
+
 	format
 		ifNotNil: [ entity
 				at: 'text'
@@ -33,11 +33,14 @@ GtOpenAIGenerateResponseAPIClient >> buildEntity [
 							-> {'type' -> 'json_schema'.
 									'name' -> 'JsonSchema'.
 									'schema' -> format} asDictionary} asDictionary ].
+
 	tools isEmptyOrNil
 		ifFalse: [ entity
 				at: 'tools'
 				put: (self tools collect: [ :aTool | aTool functionResponse ]) ].
+
 	instructions ifNotNil: [ entity at: 'instructions' put: instructions ].
+
 	^ entity
 ]
 

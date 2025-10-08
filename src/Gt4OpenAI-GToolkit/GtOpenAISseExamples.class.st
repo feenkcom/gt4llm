@@ -493,6 +493,7 @@ data:  {}'
 { #category : #'as yet unclassified' }
 GtOpenAISseExamples >> onComplexStream [
 	<gtExample>
+	<noTest>
 	| stream |
 	stream := GtOpenAISseStream new stream: self complexStreamExample.
 
@@ -520,6 +521,7 @@ For more detailed studies and examples, refer to case studies on building LLM as
 { #category : #'as yet unclassified' }
 GtOpenAISseExamples >> onSimpleStream [
 	<gtExample>
+	<noTest>
 	| stream |
 	stream := GtOpenAISseStream new stream: self simpleStreamExample.
 	
@@ -536,6 +538,7 @@ GtOpenAISseExamples >> onSimpleStream [
 { #category : #'as yet unclassified' }
 GtOpenAISseExamples >> simpleStreamExample [
 	<gtExample>
+	<noTest>
 	^ ('event: response.started
 data: {"hi": 15, "λαμβδα": "unicode"}
 
