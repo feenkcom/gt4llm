@@ -1,10 +1,10 @@
 Class {
 	#name : #GtLlmChatExamples,
 	#superclass : #Object,
-	#category : #Gt4Llm
+	#category : #'Gt4Llm-Examples'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLlmChatExamples >> basicChat [
 	<gtExample>
 	| chat |
@@ -17,7 +17,24 @@ GtLlmChatExamples >> basicChat [
 	^ chat
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
+GtLlmChatExamples >> chatFuture [
+	<gtExample>
+	| chat ran |
+	chat := self basicChat.
+
+	chat provider: GtLlmNullProvider new.
+	
+	ran := false.
+	
+	(chat whenReadyFuture then: [ran := true]) wait.
+	
+	self assert: ran.
+	
+	^ chat
+]
+
+{ #category : #accessing }
 GtLlmChatExamples >> chatWithMessages [
 	<gtExample>
 	| chat |
@@ -31,7 +48,7 @@ GtLlmChatExamples >> chatWithMessages [
 	^ chat
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLlmChatExamples >> chatWithProvider [
 	<gtExample>
 	| chat |

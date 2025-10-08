@@ -1,28 +1,22 @@
 Class {
 	#name : #GtLlmFunctionTool,
-	#superclass : #GtLlmTool,
+	#superclass : #GtLlmAbstractFunctionTool,
 	#instVars : [
 		'description',
 		'parameters',
-		'block'
+		'block',
+		'name'
 	],
 	#category : #Gt4Llm
 }
 
 { #category : #accessing }
 GtLlmFunctionTool class >> leJsonV4Name [
-
 	^ #gtLlmFunctionTool
-]
-
-{ #category : #'as yet unclassified' }
-GtLlmFunctionTool class >> serializationProperties [
-	^ {#type -> #type. #function -> #function}
 ]
 
 { #category : #visiting }
 GtLlmFunctionTool >> acceptVisitor: aVisitor [
-
 	^ aVisitor visitGtLlmFunctionTool: self
 ]
 
@@ -36,11 +30,6 @@ GtLlmFunctionTool >> block: anObject [
 	block := anObject
 ]
 
-{ #category : #'as yet unclassified' }
-GtLlmFunctionTool >> defaultType [
-	^ 'function'
-]
-
 { #category : #accessing }
 GtLlmFunctionTool >> description [
 	^ description
@@ -49,34 +38,6 @@ GtLlmFunctionTool >> description [
 { #category : #accessing }
 GtLlmFunctionTool >> description: anObject [
 	description := anObject
-]
-
-{ #category : #accessing }
-GtLlmFunctionTool >> function [
-	^ {'name' -> name.
-		'description' -> self description.
-		'parameters'
-			-> {'type' -> 'object'.
-					'properties'
-						-> (parameters collect: [ :aName | aName -> {'type' -> 'string'} asDictionary ])
-								asDictionary.
-					'required' -> parameters.
-					'additionalProperties' -> false} asDictionary.
-		'strict' -> true} asDictionary
-]
-
-{ #category : #accessing }
-GtLlmFunctionTool >> functionResponse [
-	^ {'name' -> name.
-		'type' -> type.
-		'description' -> description.
-		'parameters'
-			-> {'type' -> 'object'.
-					'properties'
-						-> (parameters collect: [ :aName | aName -> {'type' -> 'string'} asDictionary ])
-								asDictionary.
-					'required' -> parameters.
-					'additionalProperties' -> false} asDictionary} asDictionary
 ]
 
 { #category : #views }
@@ -121,12 +82,22 @@ GtLlmFunctionTool >> initialize [
 { #category : #'as yet unclassified' }
 GtLlmFunctionTool >> method [
 	| split class methodName |
-	name ifNil: [ ^ nil ].
+	self name ifNil: [ ^ nil ].
 
-	split := '_' split: name.
+	split := '_' split: self name.
 	class := split first asClassIfAbsent: [ ^ nil ].
 	methodName := ':' join: split allButFirst.
 	^ [ class >> methodName asSymbol ] on: Error do: [ nil ]
+]
+
+{ #category : #accessing }
+GtLlmFunctionTool >> name [
+	^ name
+]
+
+{ #category : #accessing }
+GtLlmFunctionTool >> name: anObject [
+	name := anObject
 ]
 
 { #category : #accessing }
@@ -139,20 +110,21 @@ GtLlmFunctionTool >> parameters: anObject [
 	parameters := anObject
 ]
 
-{ #category : #'as yet unclassified' }
-GtLlmFunctionTool >> performToolCall: aGtLlmFunctionToolCall [
+{ #category : #'llm-generated' }
+GtLlmFunctionTool >> privatePerformToolCall: aGtLlmFunctionToolCall [
 	| result |
 	self
 		assert: block isNotNil
 		description: [ 'Trying to call a function without a block' ].
 	self
 		assert: aGtLlmFunctionToolCall arguments keys asSet = parameters asSet
-		description: [ 'The arguments of the function call do not match the parameters of the tool' ].	"Commented due to Gemstone:
+		description: [ 'The arguments of the function call do not match the parameters of the tool' ].
+	"Commented due to Gemstone:
 	(GtLlmFunctionCallAboutToBePerformedSignal new
 		tool: self;
 		functionCall: aGtLlmFunctionToolCall) emit."
 	result := block value: aGtLlmFunctionToolCall.
-	aGtLlmFunctionToolCall performedByTool: self.	"Commented due to Gemstone:
+	"Commented due to Gemstone:
 	(GtLlmFunctionCallPerformedSignal new
 		tool: self;
 		functionCall: aGtLlmFunctionToolCall) emit."
