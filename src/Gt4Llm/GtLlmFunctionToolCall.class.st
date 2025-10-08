@@ -5,7 +5,8 @@ Class {
 		'id',
 		'arguments',
 		'name',
-		'tool'
+		'tool',
+		'result'
 	],
 	#category : #Gt4Llm
 }
@@ -70,6 +71,15 @@ GtLlmFunctionToolCall >> gtArgumentsFor: aView [
 		column: 'Value' text: #value
 ]
 
+{ #category : #views }
+GtLlmFunctionToolCall >> gtResultFor: aView [
+	<gtView>
+	result ifNil: [ ^ aView empty ].
+	^ aView textEditor
+		title: 'Result';
+		text: [ result ]
+]
+
 { #category : #'as yet unclassified' }
 GtLlmFunctionToolCall >> humanReadable [
 	^ self name , ' ('
@@ -121,6 +131,16 @@ GtLlmFunctionToolCall >> responseInput [
 		'call_id' -> self id.
 		'name' -> self name.
 		'arguments' -> (STONJSON toString: self arguments)} asDictionary
+]
+
+{ #category : #accessing }
+GtLlmFunctionToolCall >> result [
+	^ result
+]
+
+{ #category : #accessing }
+GtLlmFunctionToolCall >> result: anObject [
+	result := anObject
 ]
 
 { #category : #accessing }
