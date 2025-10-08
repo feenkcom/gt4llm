@@ -36,3 +36,20 @@ GtLlmToolForMethodReferencesExamples >> methodReferencesForUnknownSelector [
 	self assert: result equals: 'No references found'.
 	^ tool
 ]
+
+{ #category : #'llm-generated' }
+GtLlmToolForMethodReferencesExamples >> methodReferencesForValueOnlyReturns100 [
+	<gtExample>
+	| tool call result |
+	tool := GtLlmToolForMethodReferences new.
+	call := GtLlmFunctionToolCall new.
+	call function: {
+		'name' -> tool name.
+		'arguments' -> {'selector' -> 'value'} asDictionary
+	} asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: result isEmpty not.
+	self assert: result lines size equals: 100.
+	^ call
+]

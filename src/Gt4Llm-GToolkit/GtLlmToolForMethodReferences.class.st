@@ -16,7 +16,7 @@ GtLlmToolForMethodReferences >> acceptVisitor: aVisitor [
 
 { #category : #'llm-generated' }
 GtLlmToolForMethodReferences >> description [
-	^ 'Search the image for the senders of the given selector'
+	^ 'Search the image for the senders of the given selector (maximum 100)'
 ]
 
 { #category : #'llm-generated' }
@@ -37,5 +37,5 @@ GtLlmToolForMethodReferences >> privatePerformToolCall: aToolCall [
 	selector := argument asSymbol.
 	references := selector gtReferences result toArray wait collect: #name.
 	references isEmpty ifTrue: [ ^ 'No references found' ].
-	^ Character cr join: references
+	^ Character cr join: (references first: (100 min: references size))
 ]
