@@ -7,7 +7,7 @@ Class {
 		'chatViewModel',
 		'listElement'
 	],
-	#category : #'Gt4Llm-GToolkit'
+	#category : #'Gt4Llm-GToolkit-UI'
 }
 
 { #category : #'as yet unclassified' }

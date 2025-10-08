@@ -19,7 +19,7 @@ GtOpenAICoderActionMessage >> gtContentFor: aView [
 
 { #category : #'as yet unclassified' }
 GtOpenAICoderActionMessage >> instanceClass [
-	^ self chat serializer instance content behavior
+	^ self chat instance content behavior
 ]
 
 { #category : #'as yet unclassified' }
@@ -29,5 +29,5 @@ GtOpenAICoderActionMessage >> methodCode [
 
 { #category : #'as yet unclassified' }
 GtOpenAICoderActionMessage >> selfObject [
-	^ self chat serializer instance content selfObject
+	^ self chat instance content selfObject
 ]
