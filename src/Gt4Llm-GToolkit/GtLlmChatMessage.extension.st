@@ -1,11 +1,6 @@
 Extension { #name : #GtLlmChatMessage }
 
 { #category : #'*Gt4Llm-GToolkit' }
-GtLlmChatMessage >> asViewModel [
-	^ GtLlmThreadMessageViewModel new threadMessage: self
-]
-
-{ #category : #'*Gt4Llm-GToolkit' }
 GtLlmChatMessage >> gtContentFor: aView [
 	<gtView>
 	<gtLlmMessageView>
@@ -67,9 +62,4 @@ GtLlmChatMessage >> messageFiles [
 						end: aByteArray size - 1 ] ].
 
 	^ {}
-]
-
-{ #category : #'*Gt4Llm-GToolkit' }
-GtLlmChatMessage >> uuidClass [
-	^ UUID
 ]
