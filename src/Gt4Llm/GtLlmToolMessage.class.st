@@ -40,6 +40,11 @@ GtLlmToolMessage >> arguments [
 ]
 
 { #category : #'as yet unclassified' }
+GtLlmToolMessage >> contentText [
+	^ ''
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmToolMessage >> gtArgumentsFor: aView [
 	<gtView>
 	<gtLlmMessageView>
