@@ -1,34 +1,35 @@
 Class {
-	#name : #GtLlmToolForDocumentationLookupExamples,
+	#name : #GtLlmToolForSearchForLepiterPagesExamples,
 	#superclass : #Object,
 	#category : #'Gt4Llm-Examples'
 }
 
 { #category : #'llm-generated' }
-GtLlmToolForDocumentationLookupExamples >> documentationLookupForExistingPage [
+GtLlmToolForSearchForLepiterPagesExamples >> documentationLookupForExistingPage [
 	<gtExample>
 	| tool call result |
-	tool := GtLlmToolForDocumentationLookup new.
+	tool := GtLlmToolForSearchForLepiterPages new.
 	call := GtLlmFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
-		'arguments' -> {'pageName' -> 'Warmup: understanding the Money classes'} asDictionary
+		'arguments' -> {'query' -> 'Warmup: understanding the Money classes'} asDictionary
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
+	self assert: (STONJSON fromString: result) size equals: 1.
 	self assert: (result includesSubstring: 'Warmup: understanding the Money classes').
-	^ tool
+	^ call
 ]
 
 { #category : #'llm-generated' }
-GtLlmToolForDocumentationLookupExamples >> documentationLookupForMissingPage [
+GtLlmToolForSearchForLepiterPagesExamples >> documentationLookupForMissingPage [
 	<gtExample>
 	| tool call result |
-	tool := GtLlmToolForDocumentationLookup new.
+	tool := GtLlmToolForSearchForLepiterPages new.
 	call := GtLlmFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
-		'arguments' -> {'pageName' -> 'NonExistingDocumentationPage42'} asDictionary
+		'arguments' -> {'query' -> 'NonExistingDocumentationPage42'} asDictionary
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
