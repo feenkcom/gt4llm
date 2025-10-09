@@ -6,7 +6,7 @@ Class {
 
 { #category : #accessing }
 GtLlmToolForLepiterPageContents class >> leJsonV4Name [
-	^ #gtLlmToolForLepiterPageSerialization
+	^ #gtLlmToolForLepiterPageContents
 ]
 
 { #category : #accessing }
