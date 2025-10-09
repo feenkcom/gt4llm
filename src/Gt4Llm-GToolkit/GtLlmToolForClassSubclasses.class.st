@@ -4,6 +4,11 @@ Class {
 	#category : #'Gt4Llm-GToolkit'
 }
 
+{ #category : #accessing }
+GtLlmToolForClassSubclasses class >> leJsonV4Name [
+	^ #gtLlmToolForClassSubclasses
+]
+
 { #category : #'llm-generated' }
 GtLlmToolForClassSubclasses >> acceptVisitor: aVisitor [
 	^ aVisitor visitGtLlmToolForClassSubclasses: self
