@@ -1,36 +1,36 @@
 Class {
-	#name : #GtLlmToolForExampleRun,
+	#name : #GtLlmToolForExampleMethodRun,
 	#superclass : #GtLlmAbstractFunctionTool,
 	#category : #'Gt4Llm-GToolkit'
 }
 
 { #category : #accessing }
-GtLlmToolForExampleRun class >> leJsonV4Name [
+GtLlmToolForExampleMethodRun class >> leJsonV4Name [
 	^ #gtLlmToolForExampleRun
 ]
 
 { #category : #accessing }
-GtLlmToolForExampleRun >> acceptVisitor: aVisitor [
+GtLlmToolForExampleMethodRun >> acceptVisitor: aVisitor [
 	^ aVisitor visitGtLlmToolForExampleRun: self
 ]
 
 { #category : #accessing }
-GtLlmToolForExampleRun >> description [
+GtLlmToolForExampleMethodRun >> description [
 	^ 'Execute a gtExample method and report if it succeeds, fails, or errors'
 ]
 
 { #category : #accessing }
-GtLlmToolForExampleRun >> name [
+GtLlmToolForExampleMethodRun >> name [
 	^ 'exampleRun'
 ]
 
 { #category : #accessing }
-GtLlmToolForExampleRun >> parameters [
+GtLlmToolForExampleMethodRun >> parameters [
 	^ #('className' 'methodName' 'classSide')
 ]
 
 { #category : #accessing }
-GtLlmToolForExampleRun >> privatePerformToolCall: aToolCall [
+GtLlmToolForExampleMethodRun >> privatePerformToolCall: aToolCall [
 	| arguments className class methodName classSideValue method example exampleResult |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	className := arguments at: 'className' ifAbsent: [ ^ 'Class name not provided' ].

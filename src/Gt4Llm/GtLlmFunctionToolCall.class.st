@@ -85,7 +85,7 @@ GtLlmFunctionToolCall >> humanReadable [
 	^ self name , ' ('
 		, (', '
 				join: (self arguments associations
-						collect: [ :anArgument | anArgument key , ': ' , anArgument asString value ])), ')'
+						collect: [ :anArgument | anArgument key , ': ' , anArgument value asString])), ')'
 ]
 
 { #category : #accessing }

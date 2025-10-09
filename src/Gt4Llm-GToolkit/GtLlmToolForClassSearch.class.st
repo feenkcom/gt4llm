@@ -16,12 +16,12 @@ GtLlmToolForClassSearch >> acceptVisitor: aVisitor [
 
 { #category : #accessing }
 GtLlmToolForClassSearch >> description [
-	^ 'Searches for classes matching the query substring (case-insensitive).'
+	^ 'Searches for classes by name matching the query substring (case-insensitive).'
 ]
 
 { #category : #accessing }
 GtLlmToolForClassSearch >> name [
-	^ 'searchClasses'
+	^ 'searchForClasses'
 ]
 
 { #category : #accessing }

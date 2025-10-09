@@ -1,14 +1,14 @@
 Class {
-	#name : #GtLlmToolForExampleRunExamples,
+	#name : #GtLlmToolForExampleMethodRunExamples,
 	#superclass : #Object,
 	#category : #'Gt4Llm-Examples'
 }
 
 { #category : #'llm-generated' }
-GtLlmToolForExampleRunExamples >> exampleRunError [
+GtLlmToolForExampleMethodRunExamples >> exampleRunError [
 	<gtExample>
 	| tool call result |
-	tool := GtLlmToolForExampleRun new.
+	tool := GtLlmToolForExampleMethodRun new.
 	call := GtLlmFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
@@ -24,10 +24,10 @@ GtLlmToolForExampleRunExamples >> exampleRunError [
 ]
 
 { #category : #'llm-generated' }
-GtLlmToolForExampleRunExamples >> exampleRunFailure [
+GtLlmToolForExampleMethodRunExamples >> exampleRunFailure [
 	<gtExample>
 	| tool call result |
-	tool := GtLlmToolForExampleRun new.
+	tool := GtLlmToolForExampleMethodRun new.
 	call := GtLlmFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
@@ -43,10 +43,10 @@ GtLlmToolForExampleRunExamples >> exampleRunFailure [
 ]
 
 { #category : #'llm-generated' }
-GtLlmToolForExampleRunExamples >> exampleRunForNonExampleMethod [
+GtLlmToolForExampleMethodRunExamples >> exampleRunForNonExampleMethod [
 	<gtExample>
 	| tool call result |
-	tool := GtLlmToolForExampleRun new.
+	tool := GtLlmToolForExampleMethodRun new.
 	call := GtLlmFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
@@ -62,10 +62,10 @@ GtLlmToolForExampleRunExamples >> exampleRunForNonExampleMethod [
 ]
 
 { #category : #'llm-generated' }
-GtLlmToolForExampleRunExamples >> exampleRunSuccess [
+GtLlmToolForExampleMethodRunExamples >> exampleRunSuccess [
 	<gtExample>
 	| tool call result |
-	tool := GtLlmToolForExampleRun new.
+	tool := GtLlmToolForExampleMethodRun new.
 	call := GtLlmFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
