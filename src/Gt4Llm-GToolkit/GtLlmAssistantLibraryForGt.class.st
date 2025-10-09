@@ -1,6 +1,9 @@
 Class {
 	#name : #GtLlmAssistantLibraryForGt,
 	#superclass : #Object,
+	#classInstVars : [
+		'gtChat'
+	],
 	#category : #'Gt4Llm-GToolkit-UI'
 }
 
@@ -108,14 +111,48 @@ Alternative order if another snippet is also added:
 ```'
 ]
 
-{ #category : #tools }
-GtLlmAssistantLibraryForGt class >> getPropertyToolOn: anObject [
-	^ GtLlmFunctionTool new
-		name: 'getObjectProperty';
-		parameters: {'propertyName'};
-		description: 'Returns the property value by name. This can be an arbitrarily deeply nested accessor separated by spaces, including numbers to access a collection’s value by index (example: `property 2 collectionChildProperty`). Indices start at 1, not 0.';
-		block: [ :functionCall | 
-			self traverse: anObject using: (' ' split: functionCall anyArgument) ]
+{ #category : #'as yet unclassified' }
+GtLlmAssistantLibraryForGt class >> gtAssistant [
+	| assistant |
+	assistant := GtLlmAssistant new
+			description: 'You are an assistant for Glamorous Toolkit.'.
+	assistant instruction
+		replaceFormatNamed: 'Text'
+		with: GtLlmAssistantLibraryForGt textFormatWithSmalltalkBlocks.
+	assistant instruction
+		addComponent: GtLlmAssistantLibraryForGt codeFormatWithSnippetMethodClass.
+	assistant
+		addInstructionSectionForLepiterPages: #('Querying Pharo code with GT filters')
+		titled: 'Code queries using GT filters'.
+	assistant
+		addInstructionSectionForLepiterPages: #('Inspector views' 'Inspector actions')
+		titled: 'Phlow views and actions'.
+	assistant
+		addInstructionSectionForLepiterPages: #('Example-driven development tutorial: modeling prices' 'Warmup: understanding the Money classes')
+		titled: 'Examples'.
+	^ assistant
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmAssistantLibraryForGt class >> gtChat [
+	^ gtChat
+		ifNil: [ gtChat := self gtAssistant createChat.
+			gtChat provider
+				assistantMessageClass: GtOpenAIObjectMessage;
+				userMessageClass: GtOpenAIObjectMessage.
+			gtChat
+				addTool: GtLlmToolForClassSearch new;
+				addTool: GtLlmToolForClassSubclasses new;
+				addTool: GtLlmToolForClassLookup new;
+				addTool: GtLlmToolForClassReferences new;
+				addTool: GtLlmToolForMethodReferences new;
+				addTool: GtLlmToolForMethodImplementors new;
+				addTool: GtLlmToolForMethodSource new;
+				addTool: GtLlmToolForExampleMethodRun new;
+				addTool: GtLlmToolForSearchFilter new;
+				addTool: GtLlmToolForSearchForLepiterPages new;
+				addTool: GtLlmToolForLepiterPageContents new;
+				addTool: GtLlmToolForSmalltalkCodeEvaluation new ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -154,28 +191,6 @@ Object subclass: #SomeClass
 	classVariableNames: ''
 	package: ''SomePackage''
 ```'
-]
-
-{ #category : #tools }
-GtLlmAssistantLibraryForGt class >> traverse: anObject using: aChain [
-	| value traversed |
-	value := anObject.
-	traversed := OrderedCollection new.
-	aChain
-		do: [ :aKey | 
-			traversed add: aKey.
-			(value isKindOf: Dictionary)
-				ifTrue: [ value := value at: aKey ifAbsent: [ ^ 'Not found: ' , (' ' join: traversed) ] ]
-				ifFalse: [ (value isKindOf: SequenceableCollection)
-						ifTrue: [ value := value
-									at: aKey asInteger
-									ifAbsent: [ ^ 'Not found: ' , (' ' join: traversed) ] ]
-						ifFalse: [ value := (value class
-									slotNamed: aKey asSymbol
-									ifFound: #yourself
-									ifNone: [ ^ 'Not found: ' , (' ' join: traversed) ]) read: value ] ] ].
-
-	^ STONJSON toStringPretty: (GtLlmValueSerializer new serializeValue: value)
 ]
 
 { #category : #'as yet unclassified' }

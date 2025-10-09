@@ -40,7 +40,7 @@ GtLlmToolForMethodSourceExamples >> methodSourceForExistingInstanceSideMethod [
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: result equals: (GtLlmToolForImplementors>>#privatePerformToolCall:) sourceCode.
+	self assert: result equals: (GtLlmToolForMethodImplementors>>#privatePerformToolCall:) sourceCode.
 	^ tool
 ]
 

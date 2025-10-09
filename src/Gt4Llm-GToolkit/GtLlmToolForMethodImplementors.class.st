@@ -1,36 +1,36 @@
 Class {
-	#name : #GtLlmToolForImplementors,
+	#name : #GtLlmToolForMethodImplementors,
 	#superclass : #GtLlmAbstractFunctionTool,
 	#category : #'Gt4Llm-GToolkit'
 }
 
 { #category : #accessing }
-GtLlmToolForImplementors class >> leJsonV4Name [
-	^ #gtLlmToolForImplementors
+GtLlmToolForMethodImplementors class >> leJsonV4Name [
+	^ #gtLlmToolForMethodImplementors
 ]
 
 { #category : #accessing }
-GtLlmToolForImplementors >> acceptVisitor: aVisitor [
+GtLlmToolForMethodImplementors >> acceptVisitor: aVisitor [
 	^ aVisitor visitGtLlmToolForImplementors: self
 ]
 
 { #category : #accessing }
-GtLlmToolForImplementors >> description [
+GtLlmToolForMethodImplementors >> description [
 	^ 'Gets a method by name and returns a list of methods that implement it.'
 ]
 
 { #category : #accessing }
-GtLlmToolForImplementors >> name [
+GtLlmToolForMethodImplementors >> name [
 	^ 'getImplementors'
 ]
 
 { #category : #accessing }
-GtLlmToolForImplementors >> parameters [
+GtLlmToolForMethodImplementors >> parameters [
 	^ #('methodName')
 ]
 
 { #category : #accessing }
-GtLlmToolForImplementors >> privatePerformToolCall: aToolCall [
+GtLlmToolForMethodImplementors >> privatePerformToolCall: aToolCall [
 	| argument methodName implementors |
 	argument := aToolCall anyArgument.
 	argument ifNil: [ ^ 'Method name not provided' ].
