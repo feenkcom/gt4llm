@@ -12,7 +12,7 @@ GtLlmToolForSearchFilterExamples >> searchFilterForExampleMethods [
 	call := GtLlmFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
-		'arguments' -> {'query' -> '(#gtExample gtPragmas select: [ :method | method methodClass = GtLlmToolForSearchFilterExamples ])'} asDictionary
+		'arguments' -> {'query' -> 'GtLlmToolForSearchFilterExamples gtMethodsInClass & #gtExample gtPragmas'} asDictionary
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
