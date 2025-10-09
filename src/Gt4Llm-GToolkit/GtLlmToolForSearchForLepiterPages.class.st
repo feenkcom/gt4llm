@@ -6,7 +6,7 @@ Class {
 
 { #category : #accessing }
 GtLlmToolForSearchForLepiterPages class >> leJsonV4Name [
-	^ #gtLlmToolForDocumentationLookup
+	^ #gtLlmToolForSearchForLepiterPages
 ]
 
 { #category : #accessing }
