@@ -9,27 +9,27 @@ GtLlmToolForClassActions class >> leJsonV4Name [
 	^ #gtLlmToolForClassActions
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #accessing }
 GtLlmToolForClassActions >> acceptVisitor: aVisitor [
 	^ aVisitor visitGtLlmToolForClassActions: self
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #accessing }
 GtLlmToolForClassActions >> description [
 	^ 'Gets a class by name and returns a list of its actions.'
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #accessing }
 GtLlmToolForClassActions >> name [
 	^ 'getClassActions'
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #accessing }
 GtLlmToolForClassActions >> parameters [
 	^ #('className')
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #accessing }
 GtLlmToolForClassActions >> privatePerformToolCall: aToolCall [
 	| argument class pragmas selectors |
 	argument := aToolCall anyArgument.
