@@ -9,27 +9,27 @@ GtLlmToolForClassLookup class >> leJsonV4Name [
 	^ #gtLlmToolForClassLookup
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #accessing }
 GtLlmToolForClassLookup >> acceptVisitor: aVisitor [
 	^ aVisitor visitGtLlmToolForClassLookup: self
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #accessing }
 GtLlmToolForClassLookup >> description [
 	^ 'Get the details of a class as JSON.'
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #accessing }
 GtLlmToolForClassLookup >> name [
 	^ 'lookupClass'
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #accessing }
 GtLlmToolForClassLookup >> parameters [
 	^ #('className')
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #accessing }
 GtLlmToolForClassLookup >> privatePerformToolCall: aToolCall [
 	| arguments className class serializer |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].

@@ -4,32 +4,32 @@ Class {
 	#category : #'Gt4Llm-GToolkit'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLlmToolForImplementors class >> leJsonV4Name [
 	^ #gtLlmToolForImplementors
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #accessing }
 GtLlmToolForImplementors >> acceptVisitor: aVisitor [
 	^ aVisitor visitGtLlmToolForImplementors: self
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #accessing }
 GtLlmToolForImplementors >> description [
 	^ 'Gets a method by name and returns a list of methods that implement it.'
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #accessing }
 GtLlmToolForImplementors >> name [
 	^ 'getImplementors'
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #accessing }
 GtLlmToolForImplementors >> parameters [
 	^ #('methodName')
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #accessing }
 GtLlmToolForImplementors >> privatePerformToolCall: aToolCall [
 	| argument methodName implementors |
 	argument := aToolCall anyArgument.

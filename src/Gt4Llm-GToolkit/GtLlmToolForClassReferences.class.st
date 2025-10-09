@@ -4,32 +4,32 @@ Class {
 	#category : #'Gt4Llm-GToolkit'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLlmToolForClassReferences class >> leJsonV4Name [
 	^ #gtLlmToolForClassReferences
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLlmToolForClassReferences >> acceptVisitor: aVisitor [
 	^ aVisitor visitGtLlmToolForClassReferences: self
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLlmToolForClassReferences >> description [
 	^ 'Search the image for the references to the given class'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLlmToolForClassReferences >> name [
 	^ 'classReferences'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLlmToolForClassReferences >> parameters [
 	^ #('className')
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #accessing }
 GtLlmToolForClassReferences >> privatePerformToolCall: aToolCall [
 	| class |
 	class := aToolCall anyArgument asSymbol asClassIfAbsent: [ nil ].

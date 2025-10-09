@@ -4,32 +4,32 @@ Class {
 	#category : #'Gt4Llm-GToolkit'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLlmToolForExampleRun class >> leJsonV4Name [
 	^ #gtLlmToolForExampleRun
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #accessing }
 GtLlmToolForExampleRun >> acceptVisitor: aVisitor [
 	^ aVisitor visitGtLlmToolForExampleRun: self
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #accessing }
 GtLlmToolForExampleRun >> description [
 	^ 'Execute a gtExample method and report if it succeeds, fails, or errors'
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #accessing }
 GtLlmToolForExampleRun >> name [
 	^ 'exampleRun'
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #accessing }
 GtLlmToolForExampleRun >> parameters [
 	^ #('className' 'methodName' 'classSide')
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #accessing }
 GtLlmToolForExampleRun >> privatePerformToolCall: aToolCall [
 	| arguments className class methodName classSideValue method example exampleResult |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].

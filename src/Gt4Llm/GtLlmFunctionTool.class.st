@@ -59,7 +59,7 @@ GtLlmFunctionTool >> gtFunctionFor: aView [
 		view: #gtItemsFor:
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #views }
 GtLlmFunctionTool >> gtMethodFor: aView [
 	<gtView>
 	self method ifNil: [ ^ aView empty ].
@@ -70,7 +70,7 @@ GtLlmFunctionTool >> gtMethodFor: aView [
 		view: #gtSourceCodeFor:
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 GtLlmFunctionTool >> initialize [
 	super initialize.
 
@@ -79,7 +79,7 @@ GtLlmFunctionTool >> initialize [
 	description := ''
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLlmFunctionTool >> method [
 	| split class methodName |
 	self name ifNil: [ ^ nil ].
@@ -110,7 +110,7 @@ GtLlmFunctionTool >> parameters: anObject [
 	parameters := anObject
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #accessing }
 GtLlmFunctionTool >> privatePerformToolCall: aGtLlmFunctionToolCall [
 	| result |
 	self

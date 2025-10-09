@@ -4,32 +4,32 @@ Class {
 	#category : #'Gt4Llm-GToolkit'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLlmToolForMethodReferences class >> leJsonV4Name [
 	^ #gtLlmToolForMethodReferences
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #accessing }
 GtLlmToolForMethodReferences >> acceptVisitor: aVisitor [
 	^ aVisitor visitGtLlmToolForMethodReferences: self
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #accessing }
 GtLlmToolForMethodReferences >> description [
 	^ 'Search the image for the senders of the given selector (maximum 100)'
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #accessing }
 GtLlmToolForMethodReferences >> name [
 	^ 'methodReferences'
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #accessing }
 GtLlmToolForMethodReferences >> parameters [
 	^ #('selector')
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #accessing }
 GtLlmToolForMethodReferences >> privatePerformToolCall: aToolCall [
 	| argument selector references |
 	argument := aToolCall anyArgument.

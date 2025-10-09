@@ -4,32 +4,32 @@ Class {
 	#category : #'Gt4Llm-GToolkit'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLlmToolForClassViews class >> leJsonV4Name [
 	^ #gtLlmToolForClassViews
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #accessing }
 GtLlmToolForClassViews >> acceptVisitor: aVisitor [
 	^ aVisitor visitGtLlmToolForClassViews: self
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #accessing }
 GtLlmToolForClassViews >> description [
 	^ 'Gets a class by name and returns a list of its views.'
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #accessing }
 GtLlmToolForClassViews >> name [
 	^ 'getClassViews'
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #accessing }
 GtLlmToolForClassViews >> parameters [
 	^ #('className')
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #accessing }
 GtLlmToolForClassViews >> privatePerformToolCall: aToolCall [
 	| argument class pragmas selectors |
 	argument := aToolCall anyArgument.
