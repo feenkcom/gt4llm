@@ -156,6 +156,28 @@ Object subclass: #SomeClass
 ```'
 ]
 
+{ #category : #tools }
+GtLlmAssistantLibraryForGt class >> traverse: anObject using: aChain [
+	| value traversed |
+	value := anObject.
+	traversed := OrderedCollection new.
+	aChain
+		do: [ :aKey | 
+			traversed add: aKey.
+			(value isKindOf: Dictionary)
+				ifTrue: [ value := value at: aKey ifAbsent: [ ^ 'Not found: ' , (' ' join: traversed) ] ]
+				ifFalse: [ (value isKindOf: SequenceableCollection)
+						ifTrue: [ value := value
+									at: aKey asInteger
+									ifAbsent: [ ^ 'Not found: ' , (' ' join: traversed) ] ]
+						ifFalse: [ value := (value class
+									slotNamed: aKey asSymbol
+									ifFound: #yourself
+									ifNone: [ ^ 'Not found: ' , (' ' join: traversed) ]) read: value ] ] ].
+
+	^ STONJSON toStringPretty: (GtLlmValueSerializer new serializeValue: value)
+]
+
 { #category : #'as yet unclassified' }
 GtLlmAssistantLibraryForGt >> methodToRemoveOnTheInstanceSide [
 ]
