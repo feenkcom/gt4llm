@@ -42,7 +42,7 @@ GtLlmToolForExampleRun >> privatePerformToolCall: aToolCall [
 	method := class
 		compiledMethodAt: methodName asSymbol
 		ifAbsent: [ ^ 'Method not found' ].
-	(method pragmas anySatisfy: [ :pragma | pragma keyword = #gtExample ])
+	(method pragmas anySatisfy: [ :pragma | pragma selector = #gtExample ])
 		ifFalse: [ ^ 'Method is not an example' ].
 	example := method gtExample.
 	example ifNil: [ ^ 'Could not build example' ].
