@@ -1,6 +1,9 @@
 Class {
 	#name : #GtLlmToolForSearchForLepiterPages,
 	#superclass : #GtLlmAbstractFunctionTool,
+	#instVars : [
+		'knowledgeBases'
+	],
 	#category : #'Gt4Llm-GToolkit'
 }
 
@@ -17,6 +20,12 @@ GtLlmToolForSearchForLepiterPages >> acceptVisitor: aVisitor [
 { #category : #accessing }
 GtLlmToolForSearchForLepiterPages >> description [
 	^ 'Searches for Lepiter pages by name matching the query substring (case-insensitive).'
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmToolForSearchForLepiterPages >> initialize [
+	super initialize.
+	knowledgeBases := {LeDatabase gtBook}
 ]
 
 { #category : #accessing }

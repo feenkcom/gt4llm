@@ -1,14 +1,14 @@
 Class {
-	#name : #GtLlmToolForImplementorsExamples,
+	#name : #GtLlmToolForMethodImplementorsExamples,
 	#superclass : #Object,
 	#category : #'Gt4Llm-Examples'
 }
 
 { #category : #'llm-generated' }
-GtLlmToolForImplementorsExamples >> implementorsForExistingMethodName [
+GtLlmToolForMethodImplementorsExamples >> implementorsForExistingMethodName [
 	<gtExample>
 	| tool call result |
-	tool := GtLlmToolForImplementors new.
+	tool := GtLlmToolForMethodImplementors new.
 	call := GtLlmFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
@@ -22,10 +22,10 @@ GtLlmToolForImplementorsExamples >> implementorsForExistingMethodName [
 ]
 
 { #category : #'llm-generated' }
-GtLlmToolForImplementorsExamples >> implementorsForUnknownMethodName [
+GtLlmToolForMethodImplementorsExamples >> implementorsForUnknownMethodName [
 	<gtExample>
 	| tool call result |
-	tool := GtLlmToolForImplementors new.
+	tool := GtLlmToolForMethodImplementors new.
 	call := GtLlmFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
