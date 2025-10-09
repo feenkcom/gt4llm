@@ -9,27 +9,27 @@ GtLlmToolForClassSubclasses class >> leJsonV4Name [
 	^ #gtLlmToolForClassSubclasses
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #accessing }
 GtLlmToolForClassSubclasses >> acceptVisitor: aVisitor [
 	^ aVisitor visitGtLlmToolForClassSubclasses: self
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #accessing }
 GtLlmToolForClassSubclasses >> description [
 	^ 'Retrieve all subclasses of the given class'
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #accessing }
 GtLlmToolForClassSubclasses >> name [
 	^ 'classSubclasses'
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #accessing }
 GtLlmToolForClassSubclasses >> parameters [
 	^ #('className')
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #accessing }
 GtLlmToolForClassSubclasses >> privatePerformToolCall: aToolCall [
 	| argument class subclassNames |
 	argument := aToolCall anyArgument.

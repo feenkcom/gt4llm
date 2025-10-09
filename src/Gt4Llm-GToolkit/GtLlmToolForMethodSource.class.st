@@ -4,32 +4,32 @@ Class {
 	#category : #'Gt4Llm-GToolkit'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLlmToolForMethodSource class >> leJsonV4Name [
 	^ #gtLlmToolForMethodSource
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #accessing }
 GtLlmToolForMethodSource >> acceptVisitor: aVisitor [
 	^ aVisitor visitGtLlmToolForMethodSource: self
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #accessing }
 GtLlmToolForMethodSource >> description [
 	^ 'Gets a method by name and returns its source code. The third argument (classSide) should be true if the method is on the class side. It should be false if the method if on the instance side.'
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #accessing }
 GtLlmToolForMethodSource >> name [
 	^ 'getCodeOfMethod'
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #accessing }
 GtLlmToolForMethodSource >> parameters [
 	^ #('className' 'methodName' 'classSide')
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #accessing }
 GtLlmToolForMethodSource >> privatePerformToolCall: aToolCall [
 	| arguments className class methodName classSideValue methodSymbol method |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].

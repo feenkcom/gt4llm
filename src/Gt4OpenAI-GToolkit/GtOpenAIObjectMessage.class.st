@@ -172,9 +172,18 @@ GtOpenAIObjectMessage >> namespace [
 						compile: (aCodeBlock at: 'code')
 						in: class
 						classified: 'llm-generated' ].
+			codeBlockType = 'removeMethod'
+				ifTrue: [ class := namespace classNamed: (aCodeBlock at: 'class') asSymbol.
+					(aCodeBlock at: 'classSide' ifAbsent: [ false ])
+						ifTrue: [ class := class classSide ].
+					namespace
+						removeMethod: (aCodeBlock at: 'method')
+						from: class ].
 			codeBlockType = 'class'
 				ifTrue: [ (self isClassDefinitionString: (aCodeBlock at: 'code'))
 						ifTrue: [ namespace defineClass: (aCodeBlock at: 'code') ] ].
+			codeBlockType = 'removeClass'
+				ifTrue: [ namespace removeClassNamed: (aCodeBlock at: 'class') ].
 			"codeBlockType = 'snippet'
 				ifTrue: [ namespace changes
 						addChange: (LeSnippetChange new

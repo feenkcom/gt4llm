@@ -4,32 +4,32 @@ Class {
 	#category : #'Gt4Llm-GToolkit'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLlmToolForClassSearch class >> leJsonV4Name [
 	^ #gtLlmToolForClassSearch
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #accessing }
 GtLlmToolForClassSearch >> acceptVisitor: aVisitor [
 	^ aVisitor visitGtLlmToolForClassSearch: self
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #accessing }
 GtLlmToolForClassSearch >> description [
 	^ 'Searches for classes matching the query substring (case-insensitive).'
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #accessing }
 GtLlmToolForClassSearch >> name [
 	^ 'searchClasses'
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #accessing }
 GtLlmToolForClassSearch >> parameters [
 	^ #('query')
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #accessing }
 GtLlmToolForClassSearch >> privatePerformToolCall: aToolCall [
 	| arguments query matches |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
