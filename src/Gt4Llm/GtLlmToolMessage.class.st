@@ -69,7 +69,7 @@ GtLlmToolMessage >> gtOutputFor: aView [
 	<gtLlmMessageView>
 	^ aView textEditor
 		title: 'Output';
-		priority: 1;
+		priority: 0;
 		text: [ self output ]
 ]
 

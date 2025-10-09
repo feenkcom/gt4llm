@@ -98,23 +98,6 @@ Alternative order if another snippet is also added:
 ]
 
 { #category : #tools }
-GtLlmAssistantLibraryForGt class >> getActionsTool [
-	^ GtLlmFunctionTool new
-		name: 'getClassActions';
-		parameters: {'className'};
-		description: 'Gets a class by name and returns a list of its actions.';
-		block: [ :functionCall | 
-			(functionCall anyArgument asClassIfAbsent: [ nil ])
-				ifNil: [ 'Class not found' ]
-				ifNotNil: [ :aClass | 
-					Character cr
-						join: ((Pragma
-								allNamed: #gtAction
-								from: aClass
-								to: Object) collect: #methodSelector) ] ]
-]
-
-{ #category : #tools }
 GtLlmAssistantLibraryForGt class >> getPropertyToolOn: anObject [
 	^ GtLlmFunctionTool new
 		name: 'getObjectProperty';
@@ -122,23 +105,6 @@ GtLlmAssistantLibraryForGt class >> getPropertyToolOn: anObject [
 		description: 'Returns the property value by name. This can be an arbitrarily deeply nested accessor separated by spaces, including numbers to access a collection’s value by index (example: `property 2 collectionChildProperty`). Indices start at 1, not 0.';
 		block: [ :functionCall | 
 			self traverse: anObject using: (' ' split: functionCall anyArgument) ]
-]
-
-{ #category : #tools }
-GtLlmAssistantLibraryForGt class >> getViewsTool [
-	^ GtLlmFunctionTool new
-		name: 'getClassViews';
-		parameters: {'className'};
-		description: 'Gets a class by name and returns a list of its views.';
-		block: [ :functionCall | 
-			(functionCall anyArgument asClassIfAbsent: [ nil ])
-				ifNil: [ 'Class not found' ]
-				ifNotNil: [ :aClass | 
-					Character cr
-						join: ((Pragma
-								allNamed: #gtView
-								from: aClass
-								to: Object) collect: #methodSelector) ] ]
 ]
 
 { #category : #formats }
