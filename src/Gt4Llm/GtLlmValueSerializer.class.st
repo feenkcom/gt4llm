@@ -21,7 +21,9 @@ GtLlmValueSerializer >> serializeClass: aClass [
 		'comment' -> aClass instanceSide gtComment.
 		'package' -> aClass package name.
 		'instanceSlots' -> aClass slotNames.
-		'allInstanceMethods' -> (aClass methods asArray collect: [ :aMethod | aMethod selector ])} asDictionary
+		'classSlots' -> aClass class slotNames.
+		'allInstanceMethods' -> (aClass methods asArray collect: [ :aMethod | aMethod selector ]).
+		'allClassMethods' -> (aClass class methods asArray collect: [ :aMethod | aMethod selector ])} asDictionary
 ]
 
 { #category : #serialization }

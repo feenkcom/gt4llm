@@ -13,13 +13,24 @@ GtLlmAssistantLibraryForGt class >> codeFormatWithSnippetMethodClass [
 		example: 'The result is a list of snippets, class definitions and method definitions. It is always an array, even if only one item is needed. Multiple items may be returned. Split the items based on their intent:
 - A snippet is annotated with the type `snippet` it contains Smalltalk scripts that can be executed independently. The code is in the `code` property.
 - A class definition is provided as a snippet, but should be specifically annotated with the type `class`.
-- A method definition is annotated with the type `method` and has a class it refers to.
+- A method definition is annotated with the type `method` and has a `class` it refers to. The body including the signature is defined in a `code` property. If the method is on the class side it has a separate `classSide` boolean property.
+- A class removal is provided as a snippet with the type `removeClass` and has the `class` to remove.
+- A method removal is provided as a snippet with the type `removeMethod` and has the `class` and `method` names. If the method is on the class side it has a separate `classSide` boolean property.
 
 Smalltalk comments should always be escaped inside a JSON string like this: `"code": "\"this is a comment\" 1 + 2"`.
 
 Example:
 ```json
 [
+	{"type": "removeMethod",
+	 "class": "SomeClass",
+	 "method": "someMethod:"},
+	{"type": "removeClass",
+	 "class": "SomeOtherClass"},
+	{"type": "removeMethod",
+	 "class": "SomeClass",
+	 "method": "someClassSideMethod",
+	 "classSide": true},
 	{"type": "snippet",
 	 "code": "55 @ (13 * (5 negatedArcTan))"},
 	{"type": "method",
@@ -107,6 +118,10 @@ GtLlmAssistantLibraryForGt class >> getPropertyToolOn: anObject [
 			self traverse: anObject using: (' ' split: functionCall anyArgument) ]
 ]
 
+{ #category : #'as yet unclassified' }
+GtLlmAssistantLibraryForGt class >> methodToRemoveOnTheClassSide [
+]
+
 { #category : #formats }
 GtLlmAssistantLibraryForGt class >> textFormatWithSmalltalkBlocks [
 	^ GtLlmAssistantFormatDescription new
@@ -139,4 +154,8 @@ Object subclass: #SomeClass
 	classVariableNames: ''
 	package: ''SomePackage''
 ```'
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmAssistantLibraryForGt >> methodToRemoveOnTheInstanceSide [
 ]
