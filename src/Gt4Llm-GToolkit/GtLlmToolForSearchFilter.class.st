@@ -10,6 +10,11 @@ GtLlmToolForSearchFilter class >> leJsonV4Name [
 ]
 
 { #category : #accessing }
+GtLlmToolForSearchFilter class >> maximumResultItemCount [
+	^ 100
+]
+
+{ #category : #accessing }
 GtLlmToolForSearchFilter >> acceptVisitor: aVisitor [
 	^ aVisitor visitGtLlmToolForSearchFilter: self
 ]
@@ -33,12 +38,16 @@ GtLlmToolForSearchFilter >> parameters [
 GtLlmToolForSearchFilter >> privatePerformToolCall: aToolCall [
 	| arguments query |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
-	(arguments includesKey: 'query')
-		ifFalse: [ ^ 'Query not provided' ].
+	(arguments includesKey: 'query') ifFalse: [ ^ 'Query not provided' ].
 	query := (arguments at: 'query') asString.
-	^ [ Character cr join: ((OpalCompiler new
-		source: query;
-		evaluate) contents collect: [ :each | each printString ]) ]
+	^ [ | result resultItems |
+	result := OpalCompiler new
+			source: query;
+			evaluate.
+	resultItems := result contents.
+	resultItems := resultItems
+			first: (self class maximumResultItemCount min: resultItems size).
+	Character cr join: (resultItems collect: [ :each | each printString ]) ]
 		on: Error
 		do: [ :error | 'There was an error when evaluating the query: ' , error printString ]
 ]
