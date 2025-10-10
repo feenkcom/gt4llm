@@ -13,8 +13,8 @@ GtLlmToolForMethodSourceExamples >> methodSourceForExistingClassSideMethod [
 	call function: {
 		'name' -> tool name.
 		'arguments' -> {
-			'className' -> 'GtLlmChat'.
-			'methodName' -> 'leJsonV4Name'.
+			'className' -> #GtLlmChat.
+			'methodName' -> #leJsonV4Name.
 			'classSide' -> 'true'
 		} asDictionary
 	} asDictionary.
@@ -33,14 +33,34 @@ GtLlmToolForMethodSourceExamples >> methodSourceForExistingInstanceSideMethod [
 	call function: {
 		'name' -> tool name.
 		'arguments' -> {
-			'className' -> 'GtLlmToolForImplementors'.
-			'methodName' -> 'privatePerformToolCall:'.
+			'className' -> #GtLlmToolForMethodImplementors.
+			'methodName' -> #privatePerformToolCall:.
 			'classSide' -> 'false'
 		} asDictionary
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: result equals: (GtLlmToolForImplementors>>#privatePerformToolCall:) sourceCode.
+	self assert: result equals: (GtLlmToolForMethodImplementors>>#privatePerformToolCall:) sourceCode.
+	^ tool
+]
+
+{ #category : #'llm-generated' }
+GtLlmToolForMethodSourceExamples >> methodSourceForUnknownClass [
+	<gtExample>
+	| tool call result |
+	tool := GtLlmToolForMethodSource new.
+	call := GtLlmFunctionToolCall new.
+	call function: {
+		'name' -> tool name.
+		'arguments' -> {
+			'className' -> #ClassThatDoesNotExist.
+			'methodName' -> 'unknownSelector42'.
+			'classSide' -> 'class'
+		} asDictionary
+	} asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: result equals: 'Class not found'.
 	^ tool
 ]
 
@@ -53,7 +73,7 @@ GtLlmToolForMethodSourceExamples >> methodSourceForUnknownClassSideMethod [
 	call function: {
 		'name' -> tool name.
 		'arguments' -> {
-			'className' -> 'GtLlmToolForImplementors'.
+			'className' -> #GtLlmToolForMethodImplementors.
 			'methodName' -> 'unknownSelector42'.
 			'classSide' -> 'class'
 		} asDictionary
@@ -73,7 +93,7 @@ GtLlmToolForMethodSourceExamples >> methodSourceForUnknownInstanceSideMethod [
 	call function: {
 		'name' -> tool name.
 		'arguments' -> {
-			'className' -> 'GtLlmToolForImplementors'.
+			'className' -> #GtLlmToolForMethodImplementors.
 			'methodName' -> 'unknownSelector42'.
 			'classSide' -> 'false'
 		} asDictionary
