@@ -319,7 +319,7 @@ GtOpenAIClient >> gtCallsFor: aView [
 	<gtView>
 	^ aView forward
 		title: 'Calls';
-		priority: 5;
+		priority: 0;
 		object: [ history ];
 		view: #gtCallsFor:
 ]

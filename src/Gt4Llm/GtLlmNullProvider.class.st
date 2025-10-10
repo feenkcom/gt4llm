@@ -48,8 +48,8 @@ GtLlmNullProvider >> printOn: aStream [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmNullProvider >> sendMessage: aMessage [
-	self chat addMessage: (GtLlmUserMessage new content: aMessage)
+GtLlmNullProvider >> sendMessage: aMessageCall [
+	self chat addMessage: (GtLlmUserMessage new content: aMessageCall serialize)
 ]
 
 { #category : #'as yet unclassified' }

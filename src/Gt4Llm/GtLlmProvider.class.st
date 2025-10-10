@@ -92,10 +92,11 @@ GtLlmProvider >> sendAssistantMessage: anObject [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmProvider >> sendMessage: aMessage [
+GtLlmProvider >> sendMessage: aMessageCall [
 	self
 		sendAssistantMessage: (self userMessageClass new
-				content: aMessage;
+				content: aMessageCall serialize;
+				originMessageCall: aMessageCall;
 				role: 'user';
 				chat: self)
 ]
