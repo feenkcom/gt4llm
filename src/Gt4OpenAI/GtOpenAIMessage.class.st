@@ -7,7 +7,6 @@ Class {
 		'runId',
 		'metadata',
 		'annotations',
-		'pipeline',
 		'step',
 		'completedAt',
 		'incompleteAt'

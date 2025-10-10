@@ -194,5 +194,14 @@ Object subclass: #SomeClass
 ]
 
 { #category : #'as yet unclassified' }
+GtLlmAssistantLibraryForGt class >> valueHolderForObject: anObject [
+	^ GtLlmSerializableValueHolder new
+		name: 'Object';
+		content: anObject;
+		serializer: [ :aModel | GtLlmValueSerializer new serializeValue: aModel ];
+		updater: [  "not actually a good idea":object :aString | object readFromString: aString ]
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmAssistantLibraryForGt >> methodToRemoveOnTheInstanceSide [
 ]
