@@ -20,5 +20,12 @@ GtLlmRequestHistory >> gtCallsFor: aView [
 		priority: 5;
 		items: [ self ];
 		column: 'URL' text: [ :aRequestResponse | aRequestResponse request url ];
-		column: 'Method' text: [ :aRequestResponse | aRequestResponse request method ] width: 100
+		column: 'Request'
+			text: [ :aRequestResponse | aRequestResponse request method ]
+			width: 100;
+		column: 'Response'
+			text: [ :aRequestResponse | 
+				String
+					streamContents: [ :out | aRequestResponse response statusLine writeOn: out ] ]
+			width: 150
 ]

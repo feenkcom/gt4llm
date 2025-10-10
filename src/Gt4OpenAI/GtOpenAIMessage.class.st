@@ -147,7 +147,7 @@ GtOpenAIMessage >> gtAnnotationsFor: aView [
 	<gtView>
 	^ aView forward
 		title: 'Annotations';
-		priority: 2;
+		priority: 20;
 		object: [ self annotations ];
 		view: #gtAnnotationsFor:
 ]

@@ -11,9 +11,9 @@ Class {
 
 { #category : #'as yet unclassified' }
 GtLlmConnection >> = anotherConnection [
-	^anotherConnection class = self class and: 
-			[self model = anotherConnection model
-				and: [self provider = anotherConnection provider]]
+	^ anotherConnection class = self class
+		and: [ self model = anotherConnection model
+				and: [ self provider = anotherConnection provider ] ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -75,9 +75,10 @@ GtLlmConnection >> gtOptionsFor: aView [
 		column: 'Value' text: [ :aMeta | aMeta value ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #comparing }
 GtLlmConnection >> hash [
-	^ self model hash xor: self provider hash
+	^ (self class hash hashMultiply bitXor: self model hash hashMultiply)
+		bitXor: self provider hash hashMultiply
 ]
 
 { #category : #'as yet unclassified' }
