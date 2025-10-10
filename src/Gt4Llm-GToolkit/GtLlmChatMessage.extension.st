@@ -68,8 +68,3 @@ GtLlmChatMessage >> messageFiles [
 
 	^ {}
 ]
-
-{ #category : #'*Gt4Llm-GToolkit' }
-GtLlmChatMessage >> uuidClass [
-	^ UUID
-]

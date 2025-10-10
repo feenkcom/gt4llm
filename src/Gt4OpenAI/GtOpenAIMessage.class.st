@@ -6,7 +6,6 @@ Class {
 		'assistantId',
 		'runId',
 		'metadata',
-		'annotations',
 		'step',
 		'completedAt',
 		'incompleteAt'
@@ -45,15 +44,14 @@ GtOpenAIMessage class >> serializationProperties [
 GtOpenAIMessage >> annotations [
 	(content isKindOf: String) ifTrue: [ ^ GtOpenAIAnnotationsGroup new ].
 
-	^ annotations
-		ifNil: [ annotations := GtOpenAIAnnotationsGroup
-					withAll: ((content select: [ :aValue | (aValue at: 'type') = 'text' ])
-							flatCollect: [ :aValue | 
-								((aValue at: 'text') at: 'annotations')
-									collect: [ :anAnnotation | 
-										(GtOpenAIAnnotation from: anAnnotation)
-											client: self client;
-											message: self ] ]) ]
+	^ GtOpenAIAnnotationsGroup
+		withAll: ((content select: [ :aValue | (aValue at: 'type') = 'text' ])
+				flatCollect: [ :aValue | 
+					((aValue at: 'text') at: 'annotations')
+						collect: [ :anAnnotation | 
+							(GtOpenAIAnnotation from: anAnnotation)
+								client: self client;
+								message: self ] ])
 ]
 
 { #category : #accessing }
@@ -177,11 +175,6 @@ GtOpenAIMessage >> incompleteAt [
 	^ incompleteAt
 ]
 
-{ #category : #accessing }
-GtOpenAIMessage >> incompleteAt: anObject [
-	incompleteAt := anObject
-]
-
 { #category : #'as yet unclassified' }
 GtOpenAIMessage >> incompleteAtString [
 	^ nil
@@ -204,7 +197,7 @@ GtOpenAIMessage >> isFailure [
 
 { #category : #'as yet unclassified' }
 GtOpenAIMessage >> isReady [
-	^ self incompleteAt isNil or: [ self completedAt ]
+	^ incompleteAt isNil or: [ completedAt notNil ]
 ]
 
 { #category : #testing }

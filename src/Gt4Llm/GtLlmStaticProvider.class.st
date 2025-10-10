@@ -45,11 +45,11 @@ GtLlmStaticProvider >> printOn: aStream [
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmStaticProvider >> sendMessage: aMessage [
+GtLlmStaticProvider >> sendMessage: aMessageCall [
 	self chat
 		addMessage: (self userMessageClass new
 				role: 'user';
-				content: aMessage).
+				content: aMessageCall serialize).
 
 	self chat
 		addMessage: (self assistantMessageClass new

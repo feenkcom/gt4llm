@@ -211,9 +211,9 @@ GtLlmChat >> sendFiles: aListOfFileReferences withMessage: aString [
 ]
 
 { #category : #accessing }
-GtLlmChat >> sendMessage: aMessage [
-	self assert: aMessage isString.
-	self provider sendMessage: aMessage
+GtLlmChat >> sendMessage: aString [
+	self assert: aString isString.
+	self provider sendMessage: (GtLlmStringMessageCall new string: aString)
 ]
 
 { #category : #'as yet unclassified' }

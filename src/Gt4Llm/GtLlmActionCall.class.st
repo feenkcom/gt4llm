@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLlmActionCall,
-	#superclass : #Announcement,
+	#superclass : #GtLlmMessageCall,
 	#instVars : [
 		'action',
 		'arguments',
@@ -50,7 +50,7 @@ GtLlmActionCall >> gtSerializedFor: aView [
 		view: #gtJSONFor:
 ]
 
-{ #category : #views }
+{ #category : #'as yet unclassified' }
 GtLlmActionCall >> gtSerializedJSONFor: aView [
 	<gtView>
 	^ aView forward

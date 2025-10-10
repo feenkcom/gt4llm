@@ -99,7 +99,6 @@ GtLlmMessageExamples >> parsedMessage [
 
 	self assert: anAssistantMessage isAssistantRole.
 	self assert: anAssistantMessage content equals: messageString.
-	self assert: anAssistantMessage contentJson equals: {'Text' -> messageString} asDictionary.
 
 	^ anAssistantMessage
 ]
