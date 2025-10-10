@@ -49,23 +49,6 @@ GtLlmChat >> gtMessagesWidgetFor: aView [
 ]
 
 { #category : #'*Gt4Llm-GToolkit' }
-GtLlmChat >> gtWriteFor: aView [
-	<gtView>
-	^ aView textEditor
-		title: 'Write';
-		priority: 4;
-		text: [ 'Write a message here' ];
-		actionButtonIcon: BrGlamorousVectorIcons play
-			tooltip: 'Send'
-			action: [ :aButton | 
-				aButton parent parent parent parent
-					allChildrenBreadthFirstDetect: [ :anElement | anElement isKindOf: BrEditor ]
-					ifFound: [ :anEditor | 
-						self sendMessage: anEditor text asString.
-						anEditor text: '' ] ]
-]
-
-{ #category : #'*Gt4Llm-GToolkit' }
 GtLlmChat >> whenReadyFuture [
 	^ GtLlmChatReadyFuture new chat: self
 ]
