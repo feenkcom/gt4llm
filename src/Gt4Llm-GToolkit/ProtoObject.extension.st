@@ -14,7 +14,10 @@ ProtoObject >> gtActionChatFor: anAction [
 		tooltip: 'Chat about object';
 		action: [ :aButton | 
 			aButton phlow
-				spawnObject: (chat ifNil: [ chat := GtLlmObjectAssistant new chatOn: self ]) ];
+				spawnObject: (
+				"(GtLlmAssistantLibraryForGt gtChat
+						onInstance: (GtLlmAssistantLibraryForGt valueHolderForObject: self))"
+				chat ifNil: [ chat := GtLlmObjectAssistant new chatOn: self ]) ];
 		primaryModifierAction: [ :aButton | aButton phlow showObject: chat ]
 			mouseCursor: BlCopyCursor new
 ]

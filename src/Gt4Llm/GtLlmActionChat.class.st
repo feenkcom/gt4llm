@@ -92,7 +92,7 @@ GtLlmActionChat >> sendAction: anActionCall [
 { #category : #'as yet unclassified' }
 GtLlmActionChat >> sendAction: anActionCall onAnswer: aBlock [
 	anActionCall subject ifNil: [ anActionCall subject: instance ].
-	self provider sendMessage: anActionCall serialize.
+	self provider sendMessage: anActionCall.
 	self executeWait: aBlock
 ]
 
@@ -105,9 +105,9 @@ GtLlmActionChat >> sendChatRequest: aString [
 ]
 
 { #category : #accessing }
-GtLlmActionChat >> sendMessage: aMessage [
-	self assert: (aMessage isKindOf: GtLlmActionCall).
-	^ self sendAction: aMessage
+GtLlmActionChat >> sendMessage: anActionCall [
+	self assert: (anActionCall isKindOf: GtLlmActionCall).
+	^ self sendAction: anActionCall
 ]
 
 { #category : #'as yet unclassified' }

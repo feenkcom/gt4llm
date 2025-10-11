@@ -71,5 +71,6 @@ GtLlmChatMessage >> messageFiles [
 
 { #category : #'*Gt4Llm-GToolkit' }
 GtLlmChatMessage >> uuidClass [
+	"This is in a separate method in an extension package to be able to compile the base class to Gemstone"
 	^ UUID
 ]

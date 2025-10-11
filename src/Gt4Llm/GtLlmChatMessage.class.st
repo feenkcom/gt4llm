@@ -9,7 +9,8 @@ Class {
 		'chat',
 		'announcer',
 		'images',
-		'model'
+		'model',
+		'originMessageCall'
 	],
 	#category : #Gt4Llm
 }
@@ -153,11 +154,11 @@ GtLlmChatMessage >> contentFiles [
 
 { #category : #'as yet unclassified' }
 GtLlmChatMessage >> contentJson [
-	^ [ | ston value |
+	| ston value |
 	ston := STON reader on: self contentText readStream.
 	value := ston next.
 	self assert: ston atEnd.
-	value ] on: Error do: [ {'Text' -> self contentText} asDictionary ]
+	^ value 
 ]
 
 { #category : #accessing }
@@ -277,6 +278,11 @@ GtLlmChatMessage >> model [
 { #category : #accessing }
 GtLlmChatMessage >> model: anObject [
 	model := anObject
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmChatMessage >> originMessageCall: aMessageCall [ 
+	originMessageCall := aMessageCall
 ]
 
 { #category : #'announcer - subscription' }
