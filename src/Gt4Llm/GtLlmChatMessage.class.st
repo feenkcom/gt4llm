@@ -230,7 +230,7 @@ GtLlmChatMessage >> images: anObject [
 
 { #category : #accessing }
 GtLlmChatMessage >> initialize [
-	id := UUID new.
+	id := self uuidClass new.
 	createdAt := DateAndTime now.
 	images := OrderedCollection new
 ]
