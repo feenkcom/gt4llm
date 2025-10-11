@@ -23,7 +23,7 @@ GtLlmChat >> copyLepiterSerialisationToClipboard [
 GtLlmChat >> gtCopySnippetSerialisationFor: anAction [
 	"Copy the serialisation of the receiver's Lepiter snippet to the clipboard.
 	This can then be pasted as a snippet from a lepiter page."
-	<gtAction>
+	"<gtAction>"
 
 	^ anAction button
 		icon: BrGlamorousVectorIcons copyToClipboard;
