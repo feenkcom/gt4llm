@@ -21,7 +21,7 @@ GtLlmToolForExampleMethodRun >> description [
 
 { #category : #accessing }
 GtLlmToolForExampleMethodRun >> name [
-	^ 'exampleRun'
+	^ 'exampleMethodRun'
 ]
 
 { #category : #accessing }
