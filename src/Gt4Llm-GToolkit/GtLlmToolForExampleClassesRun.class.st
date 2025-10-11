@@ -16,17 +16,22 @@ GtLlmToolForExampleClassesRun >> acceptVisitor: aVisitor [
 
 { #category : #'llm-generated' }
 GtLlmToolForExampleClassesRun >> description [
-	^ 'Execute multiple gtExample methods gathered from classes, methods, or packages and report aggregated results.
+	^ 'Execute multiple gtExample methods gathered from one or more classes and report the aggregated results. The argument `classNames` is mandatory and it must be a non empty array of space separated strings holding class names.
 
 Examples:
+- To run just one class, provide an array with one value as the `classNames` value:
+```
+"classNames": "SomeClassWithExamples"
+```
 
-{"name": "examplesInClassesRun","arguments": {"classNames": ["SomeClassWithExamples", "SomeOtherClassWithExamples"]}}'
+- running multiple classes:
+```
+"classNames": "SomeClassWithExamples SomeOtherClassWithExamples"]
+```'
 ]
 
 { #category : #'as yet unclassified' }
-GtLlmToolForExampleClassesRun >> extractExamplesFromClassesFrom: toolCallArguments in: examplesSet reportingNotFoundIn: notFound [
-	| classNames |
-	classNames := (toolCallArguments at: 'classNames' ifAbsent: [ #() ]) asArray.
+GtLlmToolForExampleClassesRun >> extractExamplesFromClassesFrom: classNames in: examplesSet reportingNotFoundIn: notFound [
 	classNames
 		do: [ :className | 
 			Smalltalk globals
@@ -144,22 +149,17 @@ GtLlmToolForExampleClassesRun >> parameters [
 
 { #category : #'as yet unclassified' }
 GtLlmToolForExampleClassesRun >> privatePerformToolCall: aToolCall [
-	| arguments examples notFound details counts summary successes failures errors skipped |
-	arguments := aToolCall arguments ifNil: [ Dictionary new ].
+	| arguments examples notFound details summary successes failures errors skipped |
+	arguments := aToolCall arguments.
+	arguments ifNil: [ ^ 'Argument is empty' ].
+	arguments at: 'classNames' ifAbsent: [ ^ 'classNames is not provided' ].
+		
 	examples := IdentitySet new.
 	notFound := OrderedCollection new.
 	self
-		extractExamplesFromClassesFrom: arguments
+		extractExamplesFromClassesFrom: ((arguments at: 'classNames') findTokens: String space)
 		in: examples
 		reportingNotFoundIn: notFound.
-	"self
-		extractExamplesFromMethodsFrom: arguments
-		in: examples
-		reportingNotFoundIn: notFound.
-	self
-		extractExamplesFromPackagesFrom: arguments
-		in: examples
-		reportingNotFoundIn: notFound."
 	details := OrderedCollection new.
 	successes := 0.
 	failures := 0.

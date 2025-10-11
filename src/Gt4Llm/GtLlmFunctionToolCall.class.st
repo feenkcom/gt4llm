@@ -41,6 +41,8 @@ GtLlmFunctionToolCall >> arguments [
 
 { #category : #accessing }
 GtLlmFunctionToolCall >> arguments: anObject [
+	anObject asBeaconSignal emit.
+	GtJustContextStackSignal emit.
 	arguments := anObject
 ]
 

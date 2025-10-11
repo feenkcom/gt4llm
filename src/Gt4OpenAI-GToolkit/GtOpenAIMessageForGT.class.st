@@ -66,7 +66,8 @@ GtOpenAIMessageForGT >> gtChangesFor: aView [
 		title: 'Changes';
 		priority: 5;
 		object: [ namespace ];
-		view: #gtApplyingChangesFor:
+		view: #gtApplyingChangesFor:;
+		actionButtonIcon: BrGlamorousVectorIcons inspect tooltip: 'Inspect namespace with changes' action: [ :b | b phlow spawnObject: namespace ]
 ]
 
 { #category : #'as yet unclassified' }

@@ -14,7 +14,7 @@ GtLlmToolForExampleClassesRunExamples >> runExamplesForClass [
 	call function: {
 		'name' -> tool name.
 		'arguments' -> {
-			'classNames' -> #('GtLlmExampleRunDummyExamples')
+			'classNames' -> 'GtLlmExampleRunDummyExamples'
 		} asDictionary
 	} asDictionary.
 	result := tool performToolCall: call.
@@ -50,6 +50,27 @@ GtLlmToolForExampleClassesRunExamples >> runExamplesForMethod [
 ]
 
 { #category : #'llm-generated' }
+GtLlmToolForExampleClassesRunExamples >> runExamplesForMultipleClasses [
+	<gtExample>
+	<noTest>
+	| tool call result data |
+	tool := GtLlmToolForExampleClassesRun new.
+	call := GtLlmFunctionToolCall new.
+	call function: {
+		'name' -> tool name.
+		'arguments' -> {
+			'classNames' -> 'GtLlmExampleRunDummyExamples GtLlmToolForExampleMethodRunExamples'
+		} asDictionary
+	} asDictionary.
+	result := tool performToolCall: call.
+	data := NeoJSONReader fromString: result.
+	self assert: (data at: 'total') equals: 7.
+	self assert: (data at: 'skips') equals: 3.
+	self assert: ((data at: 'details') size) equals: 7.
+	^ tool
+]
+
+{ #category : #'llm-generated' }
 GtLlmToolForExampleClassesRunExamples >> runExamplesWithUnknownInputs [
 	<gtExample>
 	| tool call result data |
@@ -58,7 +79,7 @@ GtLlmToolForExampleClassesRunExamples >> runExamplesWithUnknownInputs [
 	call function: {
 		'name' -> tool name.
 		'arguments' -> {
-			'classNames' -> #('NonExistingExampleClass')
+			'classNames' -> 'NonExistingExampleClass'
 		} asDictionary
 	} asDictionary.
 	result := tool performToolCall: call.
