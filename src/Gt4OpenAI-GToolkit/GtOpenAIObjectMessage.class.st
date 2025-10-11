@@ -64,15 +64,15 @@ GtOpenAIObjectMessage >> gtChangesFor: aView [
 
 	^ aView forward
 		title: 'Changes';
-		priority: 10;
+		priority: 5;
 		object: [ namespace ];
 		view: #gtApplyingChangesFor:
 ]
 
 { #category : #'as yet unclassified' }
 GtOpenAIObjectMessage >> gtCodeFor: aView [
-	<gtView>
-	<gtLlmMessageView>
+"	<gtView>
+	<gtLlmMessageView>"
 	| codeBlock |
 	"self isAssistantRole ifFalse: [ ^ aView empty ]."
 	codeBlock := self codeBlock.

@@ -24,7 +24,7 @@ GtLlmChatMessage >> gtJsonFor: aView [
 
 	^ (self contentJson gtTreeFor: aView)
 		title: 'JSON data';
-		priority: 4.5
+		priority: 10
 ]
 
 { #category : #'*Gt4Llm-GToolkit' }
