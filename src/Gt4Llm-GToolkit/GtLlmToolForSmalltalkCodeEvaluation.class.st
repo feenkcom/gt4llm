@@ -16,7 +16,7 @@ GtLlmToolForSmalltalkCodeEvaluation >> acceptVisitor: aVisitor [
 
 { #category : #'llm-generated' }
 GtLlmToolForSmalltalkCodeEvaluation >> description [
-	^ 'Executes the provided Smalltalk code and returns the serialized result as JSON.'
+	^ 'Executes the provided Smalltalk code and returns the serialized result as JSON. Do not compile code using this tool. Do not delete files using this tool.'
 ]
 
 { #category : #'llm-generated' }
