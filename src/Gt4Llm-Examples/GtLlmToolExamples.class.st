@@ -12,10 +12,12 @@ GtLlmToolExamples >> calledTool [
 	| tool call |
 	tool := self functionTool.
 	call := self toolCall.
+	self assert: call isFinished not.
 	self
 		assert: (tool performToolCall: call)
 		equals: call.
 	self assert: call tool equals: tool.
+	self assert: call isFinished.
 	^ call
 ]
 
