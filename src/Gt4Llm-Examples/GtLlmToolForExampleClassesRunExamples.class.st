@@ -7,7 +7,6 @@ Class {
 { #category : #'llm-generated' }
 GtLlmToolForExampleClassesRunExamples >> runExamplesForClass [
 	<gtExample>
-	<noTest>
 	| tool call result data |
 	tool := GtLlmToolForExampleClassesRun new.
 	call := GtLlmFunctionToolCall new.

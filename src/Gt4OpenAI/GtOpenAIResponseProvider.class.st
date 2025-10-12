@@ -71,18 +71,20 @@ GtOpenAIResponseProvider >> gtToolsFor: aView [
 
 { #category : #'as yet unclassified' }
 GtOpenAIResponseProvider >> handleToolCall: aToolCall [
-	| toolOutput |
+	| toolOutput newMessage |
 	chat removeLastMessage.
-	chat
+	newMessage := GtLlmToolMessage new toolCall: aToolCall.	"chat
 		addMessage: (GtOpenAIRawToolMessage new
 				toolCall: aToolCall;
-				rawData: aToolCall rawData).
+				rawData: aToolCall rawData)."
+	chat addMessage: newMessage.
 	toolOutput := tools performToolCall: aToolCall.
-	chat
+	newMessage output: toolOutput.
+"	chat
 		addMessage: (GtLlmToolMessage new
 				toolCall: aToolCall;
 				output: toolOutput).
-
+"
 	self chat signalRunHasUpdated.
 
 	^ self executeWait
@@ -118,15 +120,19 @@ GtOpenAIResponseProvider >> performToolCallsIn: result [
 	| toolOutputs |
 	toolOutputs := result toolCalls
 			collect: [ :aToolCall | 
-				| toolOutput |
-				chat
+				| toolOutput newMessage|
+				newMessage := GtLlmToolMessage new
+							toolCall: aToolCall.
+				"chat
 					addMessage: (GtOpenAIRawToolMessage new
-							rawData: aToolCall responseInput).
+							rawData: aToolCall responseInput)."
+				chat addMessage: newMessage.
 				toolOutput := tools performToolCall: aToolCall.
-				chat
+				newMessage output: toolOutput
+"				chat
 					addMessage: (GtLlmToolMessage new
 							toolCall: aToolCall;
-							output: toolOutput) ].
+							output: toolOutput)" ].
 
 	self chat signalRunHasUpdated.
 

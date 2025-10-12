@@ -384,7 +384,7 @@ GtOpenAIClient >> post: aString withEntity: anEntity [
 	| aClient response |
 	aClient := self initializeClient.
 	aClient url: self baseUrl / aString.
-
+	anEntity asBeaconSignal emit.
 	aClient contents: anEntity.
 	
 	response := aClient post.
