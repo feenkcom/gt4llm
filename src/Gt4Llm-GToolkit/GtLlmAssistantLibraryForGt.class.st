@@ -252,7 +252,7 @@ GtLlmAssistantLibraryForGt class >> gtChat [
 				addTool: GtLlmToolForMethodReferences new;
 				addTool: GtLlmToolForMethodImplementors new;
 				addTool: GtLlmToolForMethodSource new;
-				"addTool: GtLlmToolForExampleMethodRun new;"
+				addTool: GtLlmToolForExampleMethodRun new;
 				addTool: GtLlmToolForExampleClassesRun new;
 				addTool: GtLlmToolForSearchFilter new;
 				addTool: GtLlmToolForSearchForLepiterPages new;
