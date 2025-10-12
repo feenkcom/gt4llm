@@ -7,7 +7,7 @@ Class {
 { #category : #accessing }
 GtOpenAIMessageForGT class >> leJsonV4Name [
 
-	^ #gtOpenAIObjectMessage
+	^ #gtOpenAIMessageForGT
 ]
 
 { #category : #'as yet unclassified' }
