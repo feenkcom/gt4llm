@@ -98,6 +98,11 @@ GtLlmFunctionToolCall >> id: anObject [
 	id := anObject
 ]
 
+{ #category : #'as yet unclassified' }
+GtLlmFunctionToolCall >> isFinished [
+	^ result notNil
+]
+
 { #category : #accessing }
 GtLlmFunctionToolCall >> name [
 	^ name
