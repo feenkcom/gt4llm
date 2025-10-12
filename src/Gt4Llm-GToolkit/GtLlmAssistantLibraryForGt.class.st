@@ -304,12 +304,60 @@ Object subclass: #SomeClass
 ]
 
 { #category : #'as yet unclassified' }
+GtLlmAssistantLibraryForGt class >> valueHolderForClass: aClass [
+	^ GtLlmSerializableValueHolder new
+		name: 'Class';
+		content: aClass;
+		serializer: [ :aModel | GtLlmValueSerializer new serializeClass: aClass ];
+		updater: [ :object :aString | self error: 'Unimplemented' ]
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmAssistantLibraryForGt class >> valueHolderForMethod: aMethodCoderViewModel [
+	^ GtLlmCustomSerializationValueHolder new
+		name: 'Code Snippet';
+		content: aMethodCoderViewModel;
+		serializer: [ :aModel | 
+			{'Code'
+					-> (STONJSON
+							toString: {{'type' -> 'method'.
+										'class' -> aModel coderModel methodBehavior behavior asString.
+										'code' -> aModel coderModel sourceCode currentSourceText text asString}
+										asDictionary}).
+				'Object' -> (GtLlmValueSerializer new serializeValue: aModel selfObject)} ];
+		updater: [ :aModel :aText | aModel coderModel forSource: aText ]
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmAssistantLibraryForGt class >> valueHolderForObject: anObject [
 	^ GtLlmSerializableValueHolder new
 		name: 'Object';
 		content: anObject;
 		serializer: [ :aModel | GtLlmValueSerializer new serializeValue: aModel ];
 		updater: [  "not actually a good idea":object :aString | object readFromString: aString ]
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmAssistantLibraryForGt class >> valueHolderForPharoSnippet: aCoderViewModel [
+	^ GtLlmCustomSerializationValueHolder new
+		name: 'Code Snippet';
+		content: aCoderViewModel;
+		serializer: [ :aModel | 
+			{'Code'
+					-> (STONJSON
+							toString: {{'type' -> 'pharoSnippet'.
+										'snippetId' -> aModel snippetModel uidString.
+										'content'
+											-> aModel snippetModel code "snippetModel sourceCode currentSourceText text asString".
+										'sourceSnippet' -> true} asDictionary}).
+				'Object' -> (GtLlmValueSerializer new serializeValue: aModel coderViewModel selfObject).
+				'Variables'
+					-> (aModel coderViewModel sharedBindings bindings associations
+							collect: [ :aPair | 
+								{'name' -> aPair key.
+									'value' -> (GtLlmValueSerializer new serializeValue: aPair value value)}
+									asDictionary ])} ];
+		updater: [ :aModel :aText | aModel snippetModel code: aText ]
 ]
 
 { #category : #'as yet unclassified' }
