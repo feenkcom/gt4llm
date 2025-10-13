@@ -101,13 +101,19 @@ GtLlmErrorThreadMessage >> isAssistantRole [
 	^ true
 ]
 
-{ #category : #accessing }
+{ #category : #testing }
 GtLlmErrorThreadMessage >> isFailure [
 	^ true
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 GtLlmErrorThreadMessage >> isRawMessage [
+	^ false
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmErrorThreadMessage >> isToolMessage [
+
 	^ false
 ]
 
