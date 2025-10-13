@@ -89,7 +89,7 @@ GtLlmFailureThreadMessage >> isAssistantRole [
 	^ true
 ]
 
-{ #category : #accessing }
+{ #category : #testing }
 GtLlmFailureThreadMessage >> isFailure [
 	^ true
 ]
