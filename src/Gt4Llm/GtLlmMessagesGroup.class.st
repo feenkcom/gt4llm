@@ -39,7 +39,27 @@ GtLlmMessagesGroup >> gtMessagesFor: aView [
 		column: 'Message' text: [ :item | item content ]
 ]
 
+{ #category : #'llm-generated' }
+GtLlmMessagesGroup >> gtViewToolMessagesGroupedByTypeFor: aView [
+	<gtView>
+
+	^ aView columnedList
+		title: 'Tool messages by type';
+		priority: 20;
+		items: [ self toolMessagesByType associations ];
+		column: 'Type' text: [ :each | each key asString ];
+		column: 'Value' text: [ :each | each value asString ]
+]
+
 { #category : #accessing }
 GtLlmMessagesGroup >> serialize [
 	^ {'messages' -> (self items collect: #serialize)} asDictionary
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmMessagesGroup >> toolMessagesByType [
+
+	^ (items select: #isToolMessage)
+		groupedBy: [ :each |
+			each toolCall tool ]
 ]

@@ -260,6 +260,12 @@ GtLlmChatMessage >> isSystemRole [
 	^ self role = 'system'
 ]
 
+{ #category : #testing }
+GtLlmChatMessage >> isToolMessage [
+
+	^ false
+]
+
 { #category : #accessing }
 GtLlmChatMessage >> isToolRole [
 	^ self role = 'tool'
