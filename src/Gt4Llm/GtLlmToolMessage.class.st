@@ -73,6 +73,12 @@ GtLlmToolMessage >> gtOutputFor: aView [
 		text: [ self output ]
 ]
 
+{ #category : #testing }
+GtLlmToolMessage >> isToolMessage [
+
+	^ true
+]
+
 { #category : #accessing }
 GtLlmToolMessage >> output [
 	^ output
