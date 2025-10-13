@@ -2,7 +2,8 @@ Class {
 	#name : #GtLlmAssistantLibraryForGt,
 	#superclass : #Object,
 	#classInstVars : [
-		'gtChat'
+		'gtChat',
+		'gtAssistant'
 	],
 	#category : #'Gt4Llm-GToolkit-UI'
 }
@@ -217,24 +218,29 @@ Alternative order if another snippet is also added:
 
 { #category : #'as yet unclassified' }
 GtLlmAssistantLibraryForGt class >> gtAssistant [
-	| assistant |
-	assistant := GtLlmAssistant new
-			description: 'You are an assistant for Glamorous Toolkit.'.
-	assistant instruction
-		replaceFormatNamed: 'Text'
-		with: GtLlmAssistantLibraryForGt textFormatWithSmalltalkBlocks.
-	assistant instruction
-		addComponent: GtLlmAssistantLibraryForGt changesFormatWithPageSnippetMethodClass.
-	assistant
-		addInstructionSectionForLepiterPages: #('Querying Pharo code with GT filters')
-		titled: 'Code queries using GT filters'.
-	assistant
-		addInstructionSectionForLepiterPages: #('Inspector views' 'Inspector actions')
-		titled: 'Phlow views and actions'.
-	assistant
-		addInstructionSectionForLepiterPages: #('Example-driven development tutorial: modeling prices' 'Warmup: understanding the Money classes')
-		titled: 'Examples'.
-	^ assistant
+	^ gtAssistant
+		ifNil: [ gtAssistant := GtLlmAssistant new
+					description: 'You are an assistant for Glamorous Toolkit.'.
+			gtAssistant instruction
+				replaceFormatNamed: 'Text'
+				with: GtLlmAssistantLibraryForGt textFormatWithSmalltalkBlocks.
+			gtAssistant instruction
+				addComponent: GtLlmAssistantLibraryForGt changesFormatWithPageSnippetMethodClass.
+			gtAssistant
+				addInstructionSectionForLepiterPages: #('Querying Pharo code with GT filters')
+				titled: 'Code queries using GT filters'.
+			gtAssistant
+				addInstructionSectionForLepiterPages: #('Inspector views' 'Inspector actions')
+				titled: 'Phlow views and actions'.
+			gtAssistant
+				addInstructionSectionForLepiterPages: #('Example-driven development tutorial: modeling prices' 'Warmup: understanding the Money classes')
+				titled: 'Examples'.
+			gtAssistant ]
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmAssistantLibraryForGt class >> gtAssistant: anAssistant [
+	gtAssistant := anAssistant
 ]
 
 { #category : #'as yet unclassified' }
@@ -261,7 +267,35 @@ GtLlmAssistantLibraryForGt class >> gtChat [
 ]
 
 { #category : #'as yet unclassified' }
+GtLlmAssistantLibraryForGt class >> gtChat: aChat [
+	^ gtChat
+		ifNil: [ gtChat := self gtAssistant createChat.
+			gtChat provider
+				assistantMessageClass: GtOpenAIMessageForGT;
+				userMessageClass: GtOpenAIMessageForGT.
+			gtChat
+				addTool: GtLlmToolForClassSearch new;
+				addTool: GtLlmToolForClassSubclasses new;
+				addTool: GtLlmToolForClassLookup new;
+				addTool: GtLlmToolForClassReferences new;
+				addTool: GtLlmToolForMethodReferences new;
+				addTool: GtLlmToolForMethodImplementors new;
+				addTool: GtLlmToolForMethodSource new;
+				addTool: GtLlmToolForExampleMethodRun new;
+				addTool: GtLlmToolForExampleClassesRun new;
+				addTool: GtLlmToolForSearchFilter new;
+				addTool: GtLlmToolForSearchForLepiterPages new;
+				addTool: GtLlmToolForLepiterPageContents new;
+				addTool: GtLlmToolForSmalltalkCodeEvaluation new ]
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmAssistantLibraryForGt class >> methodToRemoveOnTheClassSide [
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmAssistantLibraryForGt class >> resetGtAssistant [
+	gtAssistant := nil
 ]
 
 { #category : #'as yet unclassified' }
