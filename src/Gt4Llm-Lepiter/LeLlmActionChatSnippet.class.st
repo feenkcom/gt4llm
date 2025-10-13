@@ -7,5 +7,5 @@ Class {
 { #category : #accessing }
 LeLlmActionChatSnippet class >> leJsonV4Name [
 
-	^ #llmChatSnippet
+	^ #llmActionChatSnippet
 ]
