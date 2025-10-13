@@ -31,7 +31,7 @@ LeLlmChatMessageSnippet >> acceptVisitor: aVisitor [
 LeLlmChatMessageSnippet >> asSnippetViewModel [
 	<return: #LeSnippetViewModel>
 
-	^ LeTextCoderSnippetViewModel new snippetModel: self
+	^ LeLlmChatMessageSnippetViewModel new snippetModel: self
 ]
 
 { #category : #accessing }
