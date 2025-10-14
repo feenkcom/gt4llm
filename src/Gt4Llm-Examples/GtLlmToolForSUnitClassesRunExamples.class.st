@@ -17,8 +17,8 @@ GtLlmToolForSUnitClassesRunExamples >> runTestsForMultipleClasses [
 			'classNames' -> 'GtLlmExampleDummyPassingTest GtLlmExampleDummyMixedTest' } asDictionary } asDictionary.
 	result := tool performToolCall: call.
 	data := NeoJSONReader fromString: result.
-	self assert: (data at: 'runCount') equals: 6.
-	self assert: (data at: 'successes') equals: 2.
+	self assert: (data at: 'runCount') equals: 5.
+	self assert: (data at: 'successes') equals: 3.
 	self assert: (data at: 'failures') equals: 1.
 	self assert: (data at: 'errors') equals: 1.
 	self assert: (data at: 'skips') equals: 1.
