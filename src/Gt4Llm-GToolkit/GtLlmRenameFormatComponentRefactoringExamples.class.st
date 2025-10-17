@@ -114,7 +114,7 @@ GtLlmRenameFormatComponentRefactoringExamples >> exampleClassCoderActionExpanded
 					description: [ 'Refactoring preview bounds is out of space' ];
 				onSpaceRoot;
 				onDropdown: true;
-				/ BrAsyncWidget ].
+				/ GtRefactoringsPreviewElement ].
 	^ scripter
 ]
 
