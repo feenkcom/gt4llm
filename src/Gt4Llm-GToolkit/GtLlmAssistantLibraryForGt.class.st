@@ -219,13 +219,13 @@ Alternative order if another snippet is also added:
 { #category : #'as yet unclassified' }
 GtLlmAssistantLibraryForGt class >> gtAssistant [
 	^ gtAssistant
-		ifNil: [ gtAssistant := GtLlmAssistant new
+		ifNil: [ gtAssistant := GtLlmAssistantForGt new
 					description: 'You are an assistant for Glamorous Toolkit.'.
-			gtAssistant instruction
+			"gtAssistant instruction
 				replaceFormatNamed: 'Text'
 				with: GtLlmAssistantLibraryForGt textFormatWithSmalltalkBlocks.
 			gtAssistant instruction
-				addComponent: GtLlmAssistantLibraryForGt changesFormatWithPageSnippetMethodClass.
+				addComponent: GtLlmAssistantLibraryForGt changesFormatWithPageSnippetMethodClass."
 			gtAssistant
 				addInstructionSectionForLepiterPages: #('Querying Pharo code with GT filters')
 				titled: 'Code queries using GT filters'.
