@@ -310,30 +310,50 @@ GtLlmAssistantLibraryForGt class >> textFormatWithSmalltalkBlocks [
 		priority: 1;
 		format: 'Text';
 		example: 'The text is in Markdown. In addition, it also supports annotations for classes and methods.
-- Classes may be annotated using `{{gtClass:ClassName}}`, where `ClassName` is the name of the class to be referenced.
-- Methods may be annotated using `{{gtMethod:ClassName>>#methodName}}`, where `ClassName` is the name of the class and `methodName` is the name of the method.
+- Smalltalk classes may be annotated using `{{gtClass:ClassName}}`, where `ClassName` is the name of the class to be referenced.
+- Smalltalk methods may be annotated using `{{gtMethod:ClassName>>#methodName}}`, where `ClassName` is the name of the class and `methodName` is the name of the method.
 
 Code in text should be formatted as follows:
-- Smalltalk methods appear as:
 
+- Smalltalk methods appear as:
 ```smalltalk-method
 SomeClass>>someMethodWithArgument: val
 	^ self + val
 ```
 
 - Smalltalk snippets appear as:
-
 ```smalltalk
 Point x: 1 y: 10
 ```
 
-- the definition of a new class should be provided in the form of a script:
-
+- the definition of a new Smalltalk class should be provided in the form of a script:
 ```smalltalk
 Object subclass: #SomeClass
 	instanceVariableNames: ''someSlotA someSlotB''
 	classVariableNames: ''
 	package: ''SomePackage''
+```
+
+- SmaCC grammar definitions appear as:
+```smacc-grammar
+%root FileNode;
+<line>
+	: [^\r\n]+
+	;
+<newLine>
+	: \r | \n | \r\n
+	;
+File
+	: Lines {{FileNode}}
+	;
+Lines
+	: Line
+	| Lines <newLine> Line
+	;
+Line
+	: 
+	| <line> ''line''
+	;
 ```'
 ]
 
