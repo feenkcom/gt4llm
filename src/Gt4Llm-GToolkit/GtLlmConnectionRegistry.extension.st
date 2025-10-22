@@ -1,6 +1,16 @@
 Extension { #name : #GtLlmConnectionRegistry }
 
 { #category : #'*Gt4Llm-GToolkit' }
+GtLlmConnectionRegistry class >> gtConnectionsFor: aView [
+	<gtClassView>
+	^ aView forward
+		title: 'Connections';
+		priority: 10;
+		object: [ self uniqueInstance ];
+		view: #gtConnectionsFor:
+]
+
+{ #category : #'*Gt4Llm-GToolkit' }
 GtLlmConnectionRegistry >> gtConnectionsFor: aView [
 	<gtView>
 	^ aView columnedList
@@ -26,16 +36,6 @@ GtLlmConnectionRegistry >> gtConnectionsFor: aView [
 			action: [ :anItem :aConnection | 
 				self defaultConnection: aConnection.
 				anItem anchor phlow fireViewUpdateWish ]
-]
-
-{ #category : #'*Gt4Llm-GToolkit' }
-GtLlmConnectionRegistry class >> gtConnectionsFor: aView [
-	<gtClassView>
-	^ aView forward
-		title: 'Connections';
-		priority: 10;
-		object: [ self uniqueInstance ];
-		view: #gtConnectionsFor:
 ]
 
 { #category : #'*Gt4Llm-GToolkit' }
