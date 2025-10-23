@@ -9,6 +9,34 @@ GtLlmToolForRemoteExampleMethodsRun class >> leJsonV4Name [
 	^ #gtLlmToolForRemoteExampleMethodsRun
 ]
 
+{ #category : #'instance creation' }
+GtLlmToolForRemoteExampleMethodsRun class >> openAiAssistant [
+	"Answer a basic OpenAI assistant for testing the tool"
+	| assistant chat |
+
+	assistant := GtLlmAssistant new
+		description: 'You are an assistant for Glamorous Toolkit'.
+	assistant instruction
+		replaceFormatNamed: 'Text'
+		with: GtLlmAssistantLibraryForGt textFormatWithSmalltalkBlocks.
+	assistant instruction
+		"addComponent: GtLlmAssistantLibraryForGt codeFormatWithSnippetMethodClass."
+		addComponent: GtLlmAssistantLibraryForGt changesFormatWithPageSnippetMethodClass.
+	chat := assistant createChat.
+	chat provider
+		assistantMessageClass: GtOpenAIObjectMessage;
+		userMessageClass: GtOpenAIObjectMessage.
+	chat 
+		addTool: GtLlmToolForClassSearch new;
+		addTool: GtLlmToolForClassLookup new;
+		addTool: GtLlmToolForClassSubclasses new;
+		addTool: GtLlmToolForMethodImplementors new;
+		addTool: GtLlmToolForMethodReferences new;
+		addTool: GtLlmToolForMethodSource new;
+		addTool: GtLlmToolForRemoteExampleMethodsRun new.
+	^ chat.
+]
+
 { #category : #private }
 GtLlmToolForRemoteExampleMethodsRun >> addErrorDetails: aGtRrErrorDetails to: report [
 
@@ -53,6 +81,29 @@ GtLlmToolForRemoteExampleMethodsRun >> allChangesFromLocal: customChanges image:
 	^ GtRrImageSyncEvents new
 		sessionHistory: GtRrChangesSync uniqueInstance sessionHistory;
 		events: imageChanges, customChanges.
+]
+
+{ #category : #api }
+GtLlmToolForRemoteExampleMethodsRun >> changesArrayFromArguments: arguments [
+	| changesString changes |
+
+	changesString := arguments at: 'changes' ifAbsent: [ ^ #() ].
+	changesString ifEmpty: [ ^ #() ].
+	changes := STONJSON fromString: changesString.
+	changes isArray ifFalse:
+		[ self error: 'changes must be an Array, not a ', changes class name ].
+	^ changes
+]
+
+{ #category : #api }
+GtLlmToolForRemoteExampleMethodsRun >> checkNamesFromArguments: arguments [
+	| checkNames |
+
+	checkNames := STONJSON fromString: (arguments
+			at: 'checkNames'
+			ifAbsent: [ self error: 'Check names not provided' ]).
+	self validateCheckNames: checkNames.
+	^ checkNames
 ]
 
 { #category : #api }
@@ -110,7 +161,7 @@ GtLlmToolForRemoteExampleMethodsRun >> imageChanges [
 
 { #category : #accessing }
 GtLlmToolForRemoteExampleMethodsRun >> name [
-	^ 'remoteExampleMethodsRun'
+	^ 'runExampleMethods'
 ]
 
 { #category : #accessing }
@@ -131,15 +182,15 @@ GtLlmToolForRemoteExampleMethodsRun >> privateIsTrueValue: aValue [
 { #category : #api }
 GtLlmToolForRemoteExampleMethodsRun >> privatePerformToolCall: aToolCall [
 	| arguments checkNamesArray changesArray checkNames customChanges imageChanges imageSyncEvents job results runner jobSemaphore report |
-	arguments := aToolCall arguments ifNil: [ Dictionary new ].
-	checkNamesArray := arguments
-			at: 'checkNames'
-			ifAbsent: [ ^ 'Check names not provided' ].
-	changesArray := arguments at: 'changes' ifAbsent: [  ].
+
 	report := Dictionary new.
+	[ [
+	arguments := aToolCall arguments ifNil: [ Dictionary new ].
+	checkNamesArray := self checkNamesFromArguments: arguments.
+	changesArray := self changesArrayFromArguments: arguments.
 	runner := GtRemoteRunner new.
 	jobSemaphore := Semaphore new.
-	[ [ checkNames := self checkNamesFromArray: checkNamesArray.
+	checkNames := self checkNamesFromArray: checkNamesArray.
 	customChanges := self customChangesFromArray: changesArray.
 	imageChanges := self imageChanges.
 	imageSyncEvents := self allChangesFromLocal: customChanges image: imageChanges.
@@ -159,13 +210,15 @@ GtLlmToolForRemoteExampleMethodsRun >> privatePerformToolCall: aToolCall [
 		ifTrue: [ runner stop.
 			^ 'Timeout before result received' ].
 	(job hasErrors and: [ job errorDetails isNotNil ])
-		ifTrue: [ self addErrorMessage: 'Job completed with errors: ' , job errorDetails asString to: report ].
+		ifTrue: [ self
+				addErrorMessage: 'Job completed with errors: ' , job errorDetails asString
+				to: report ].
 	results := job results ifNil: [ #() ].
 	results isEmpty
 		ifTrue: [ self addErrorMessage: 'Job completed, but has no results' to: report ]
 		ifFalse: [ self reportResults: results on: report ] ]
-			on: Error
-			do: [ :ex | self errorReport: report exception: ex ] ] ensure: [ runner stop ].
+		on: Error
+		do: [ :ex | self errorReport: report exception: ex ] ] ensure: [ runner ifNotNil: [ runner stop ] ].
 	^ STONJSON toString: report
 ]
 
@@ -218,4 +271,13 @@ GtLlmToolForRemoteExampleMethodsRun >> tagsUsing: eventFactory [
 			localName: (index + 1) asString). ])
 				asDictionary
 		.
+]
+
+{ #category : #api }
+GtLlmToolForRemoteExampleMethodsRun >> validateCheckNames: checkNamesArray [
+
+	checkNamesArray isArray ifFalse:
+		[ self error: 'checkNames must be an Array, not a ', checkNamesArray class name ].
+	(checkNamesArray allSatisfy: [ :name | name isString ]) ifFalse:
+		[ self error: 'checkNames must be an Array of strings of format "ClassName>>methodName"' ].
 ]
