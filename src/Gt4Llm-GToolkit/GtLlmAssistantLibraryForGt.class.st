@@ -225,7 +225,7 @@ GtLlmAssistantLibraryForGt class >> gtAssistant [
 				addInstructionSectionForLepiterPages: #('Querying Pharo code with GT filters')
 				titled: 'Code queries using GT filters'."
 			gtAssistant
-				addInstructionSectionForLepiterPages: #('Inspector views' 'Inspector actions')
+				addInstructionSectionForLepiterPages: #('Inspector phlow views by example' 'Inspector phlow actions by example')
 				titled: 'Phlow views and actions'.
 			gtAssistant
 				addInstructionSectionForLepiterPages: #('Examples by example')
