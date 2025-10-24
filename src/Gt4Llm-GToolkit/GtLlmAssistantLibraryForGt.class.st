@@ -221,19 +221,14 @@ GtLlmAssistantLibraryForGt class >> gtAssistant [
 	^ gtAssistant
 		ifNil: [ gtAssistant := GtLlmAssistantForGt new
 					description: 'You are an assistant for Glamorous Toolkit.'.
-			"gtAssistant instruction
-				replaceFormatNamed: 'Text'
-				with: GtLlmAssistantLibraryForGt textFormatWithSmalltalkBlocks.
-			gtAssistant instruction
-				addComponent: GtLlmAssistantLibraryForGt changesFormatWithPageSnippetMethodClass."
-			gtAssistant
+			"gtAssistant
 				addInstructionSectionForLepiterPages: #('Querying Pharo code with GT filters')
-				titled: 'Code queries using GT filters'.
+				titled: 'Code queries using GT filters'."
 			gtAssistant
-				addInstructionSectionForLepiterPages: #('Inspector views' 'Inspector actions')
+				addInstructionSectionForLepiterPages: #('Inspector phlow views by example' 'Inspector phlow actions by example')
 				titled: 'Phlow views and actions'.
 			gtAssistant
-				addInstructionSectionForLepiterPages: #('Example-driven development tutorial: modeling prices' 'Warmup: understanding the Money classes')
+				addInstructionSectionForLepiterPages: #('Examples by example')
 				titled: 'Examples'.
 			gtAssistant ]
 ]
