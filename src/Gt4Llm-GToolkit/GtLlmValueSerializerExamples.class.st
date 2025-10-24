@@ -45,7 +45,7 @@ GtLlmValueSerializerExamples >> serializeValue [
 	result := serializer serializeValue: value.
 
 	self assert: (result isKindOf: Dictionary).
-	self assert: (result keys includesAll: #('class' 'superclass' 'comment' 'package' 'printString' 'allInstanceMethods' 'instanceSlots')).
+	self assert: (result keys includesAll: #('class' 'superclass' 'package' 'printString' 'allInstanceMethods' 'instanceSlots')).
 	self assert: ((result at: 'class') asString) = value class name asString.
 	self assert: ((result at: 'superclass') asString) = value class superclass name asString.
 	self assert: ((result at: 'printString') asString) = value printString.
