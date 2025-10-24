@@ -12,6 +12,8 @@ GtLlmToolForRemoteExampleMethodsRunExamples >> addClassToEventFactory [
 	<gtExample>
 	| tool eventFactory classDefinition omEntry epClassAddition rgClassAddition |
 
+	self forPharo12AndNewer: [] forPharo11: [ ^ self ].
+
 	tool := GtLlmToolForRemoteExampleMethodsRun new.
 	eventFactory := GtEpiceaEventFactory new.
 	classDefinition := {
@@ -64,6 +66,8 @@ GtLlmToolForRemoteExampleMethodsRunExamples >> exampleRunNewClassDefinition [
 	- neither the class or example exist in the main image"
 	<gtExample>
 	| tool call resultString result results exampleNamePrefix exampleClassDefinition exampleSource exampleClassName exampleSelector resultDictionary |
+
+	self forPharo12AndNewer: [] forPharo11: [ ^ self ].
 
 	tool := GtLlmToolForRemoteExampleMethodsRun new.
 	call := GtLlmFunctionToolCall new.
