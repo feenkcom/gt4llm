@@ -9,6 +9,48 @@ GtLlmToolForRemoteExampleMethodsRun class >> leJsonV4Name [
 	^ #gtLlmToolForRemoteExampleMethodsRun
 ]
 
+{ #category : #'instance creation' }
+GtLlmToolForRemoteExampleMethodsRun class >> openAiAssistant [
+	"Answer a basic OpenAI assistant for testing the tool"
+	| assistant chat |
+
+	assistant := GtLlmAssistant new
+		description: 'You are an assistant for Glamorous Toolkit'.
+	assistant instruction
+		replaceFormatNamed: 'Text'
+		with: GtLlmAssistantLibraryForGt textFormatWithSmalltalkBlocks.
+	assistant instruction
+		"addComponent: GtLlmAssistantLibraryForGt codeFormatWithSnippetMethodClass."
+		addComponent: GtLlmAssistantLibraryForGt changesFormatWithPageSnippetMethodClass.
+	chat := assistant createChat.
+	chat provider
+		assistantMessageClass: GtOpenAIObjectMessage;
+		userMessageClass: GtOpenAIObjectMessage.
+	chat 
+		addTool: GtLlmToolForClassSearch new;
+		addTool: GtLlmToolForClassLookup new;
+		addTool: GtLlmToolForClassSubclasses new;
+		addTool: GtLlmToolForMethodImplementors new;
+		addTool: GtLlmToolForMethodReferences new;
+		addTool: GtLlmToolForMethodSource new;
+		addTool: GtLlmToolForRemoteExampleMethodsRun new.
+	^ chat.
+]
+
+{ #category : #private }
+GtLlmToolForRemoteExampleMethodsRun >> addClass: changeDictionary to: eventFactory [
+	| definitionSource classBuilder classDefinition |
+	definitionSource := changeDictionary at: 'code'.
+	self validateClassDefinitionSource: definitionSource.
+	classBuilder := self class compiler evaluate: definitionSource.
+	classBuilder class = ShiftClassBuilder
+		ifFalse: [ self
+				error: 'Supplied class definition evaluates to a ' , classBuilder class name asString
+						, ', not a ShiftClassBuilder' ].
+	classDefinition := classBuilder asRingDefinition.
+	eventFactory addClass: classDefinition tags: (self tagsUsing: eventFactory)
+]
+
 { #category : #private }
 GtLlmToolForRemoteExampleMethodsRun >> addErrorDetails: aGtRrErrorDetails to: report [
 
@@ -56,6 +98,29 @@ GtLlmToolForRemoteExampleMethodsRun >> allChangesFromLocal: customChanges image:
 ]
 
 { #category : #api }
+GtLlmToolForRemoteExampleMethodsRun >> changesArrayFromArguments: arguments [
+	| changesString changes |
+
+	changesString := arguments at: 'changes' ifAbsent: [ ^ #() ].
+	changesString ifEmpty: [ ^ #() ].
+	changes := STONJSON fromString: changesString.
+	changes isArray ifFalse:
+		[ self error: 'changes must be an Array, not a ', changes class name ].
+	^ changes
+]
+
+{ #category : #api }
+GtLlmToolForRemoteExampleMethodsRun >> checkNamesFromArguments: arguments [
+	| checkNames |
+
+	checkNames := STONJSON fromString: (arguments
+			at: 'checkNames'
+			ifAbsent: [ self error: 'Check names not provided' ]).
+	self validateCheckNames: checkNames.
+	^ checkNames
+]
+
+{ #category : #api }
 GtLlmToolForRemoteExampleMethodsRun >> checkNamesFromArray: checkNamesArray [
 
 	checkNamesArray ifNil: [ ^ #() ].
@@ -80,8 +145,10 @@ GtLlmToolForRemoteExampleMethodsRun >> customChangesFromArray: changesArray [
 		type := changeDictionary at: 'type'.
 		type = 'method' ifTrue:
 			[ self addMethod: changeDictionary to: eventFactory ]
+		ifFalse: [ type = 'class' ifTrue:
+			[ self addClass: changeDictionary to: eventFactory ]
 		ifFalse:
-			[ self error: 'Unknown type: ', type printString. ] ].
+			[ self error: 'Unknown type: ', type printString. ] ] ].
 	^ eventFactory entries.
 ]
 
@@ -110,7 +177,7 @@ GtLlmToolForRemoteExampleMethodsRun >> imageChanges [
 
 { #category : #accessing }
 GtLlmToolForRemoteExampleMethodsRun >> name [
-	^ 'remoteExampleMethodsRun'
+	^ 'runExampleMethods'
 ]
 
 { #category : #accessing }
@@ -131,15 +198,15 @@ GtLlmToolForRemoteExampleMethodsRun >> privateIsTrueValue: aValue [
 { #category : #api }
 GtLlmToolForRemoteExampleMethodsRun >> privatePerformToolCall: aToolCall [
 	| arguments checkNamesArray changesArray checkNames customChanges imageChanges imageSyncEvents job results runner jobSemaphore report |
-	arguments := aToolCall arguments ifNil: [ Dictionary new ].
-	checkNamesArray := arguments
-			at: 'checkNames'
-			ifAbsent: [ ^ 'Check names not provided' ].
-	changesArray := arguments at: 'changes' ifAbsent: [  ].
+
 	report := Dictionary new.
+	[ [
+	arguments := aToolCall arguments ifNil: [ Dictionary new ].
+	checkNamesArray := self checkNamesFromArguments: arguments.
+	changesArray := self changesArrayFromArguments: arguments.
 	runner := GtRemoteRunner new.
 	jobSemaphore := Semaphore new.
-	[ [ checkNames := self checkNamesFromArray: checkNamesArray.
+	checkNames := self checkNamesFromArray: checkNamesArray.
 	customChanges := self customChangesFromArray: changesArray.
 	imageChanges := self imageChanges.
 	imageSyncEvents := self allChangesFromLocal: customChanges image: imageChanges.
@@ -159,13 +226,15 @@ GtLlmToolForRemoteExampleMethodsRun >> privatePerformToolCall: aToolCall [
 		ifTrue: [ runner stop.
 			^ 'Timeout before result received' ].
 	(job hasErrors and: [ job errorDetails isNotNil ])
-		ifTrue: [ self addErrorMessage: 'Job completed with errors: ' , job errorDetails asString to: report ].
+		ifTrue: [ self
+				addErrorMessage: 'Job completed with errors: ' , job errorDetails asString
+				to: report ].
 	results := job results ifNil: [ #() ].
 	results isEmpty
 		ifTrue: [ self addErrorMessage: 'Job completed, but has no results' to: report ]
 		ifFalse: [ self reportResults: results on: report ] ]
-			on: Error
-			do: [ :ex | self errorReport: report exception: ex ] ] ensure: [ runner stop ].
+		on: Error
+		do: [ :ex | self errorReport: report exception: ex ] ] ensure: [ runner ifNotNil: [ runner stop ] ].
 	^ STONJSON toString: report
 ]
 
@@ -218,4 +287,38 @@ GtLlmToolForRemoteExampleMethodsRun >> tagsUsing: eventFactory [
 			localName: (index + 1) asString). ])
 				asDictionary
 		.
+]
+
+{ #category : #api }
+GtLlmToolForRemoteExampleMethodsRun >> validateCheckNames: checkNamesArray [
+
+	checkNamesArray isArray ifFalse:
+		[ self error: 'checkNames must be an Array, not a ', checkNamesArray class name ].
+	(checkNamesArray allSatisfy: [ :name | name isString ]) ifFalse:
+		[ self error: 'checkNames must be an Array of strings of format "ClassName>>methodName"' ].
+]
+
+{ #category : #private }
+GtLlmToolForRemoteExampleMethodsRun >> validateClassDefinitionSource: definitionSource [
+	"The class definition source is considered valid if it sends the message #<< to what looks like a class or directly references ShiftClassBuilder."
+	| ast allChildren isShiftClassBuilder doesntBuildOrInstall |
+
+	ast := RBParser parseExpression: definitionSource.
+	allChildren := ast allChildren.
+	isShiftClassBuilder := allChildren anySatisfy: [ :child |
+		(child isMessage and: 
+		[ child selector = #<< and:
+		[ child receiver isVariable and:
+		[ child receiver name first isUppercase ] ] ]) or:
+			[ child isMessage and:
+			[ child receiver isVariable and:
+			[ child receiver name first isUppercase and:
+			[ child receiver name = #ShiftClassBuilder ] ] ] ] ].
+	isShiftClassBuilder ifFalse:
+		[ self error: 'Supplied class definition doesn''t use the ShiftClassBuilder' ].
+	doesntBuildOrInstall := allChildren noneSatisfy: [ :child |
+		child isMessage and:
+		[ #(build install) includes: child selector ] ].
+	doesntBuildOrInstall ifFalse:
+		[ self error: 'Supplied class definition attempts to build or install the class' ].
 ]
