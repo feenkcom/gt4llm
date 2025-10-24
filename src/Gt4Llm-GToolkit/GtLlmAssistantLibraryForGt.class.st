@@ -40,10 +40,9 @@ A text snippet is annotated with the type `textSnippet` can support markdown and
 A class definition should be specifically annotated with the type `class`. The actual definition is in the `code` property.
 - example to add a class:
 {"type": "class",
-"code": "Object subclass: #SomeClass
-instanceVariableNames: ''someSlotA someSlotB''
-classVariableNames: ''''
-package: ''SomePackage''"}
+"code": "Object << ''SomeClass''
+	slots: #(someSlotA someSlotB);
+	package: ''SomePackage''"}
 
 *Method definition*
 A method definition is annotated with the type `method` and has a `class` it refers to. The body including the signature is defined in a `code` property. If the method is on the class side it has a separate `classSide` boolean property.
@@ -221,19 +220,14 @@ GtLlmAssistantLibraryForGt class >> gtAssistant [
 	^ gtAssistant
 		ifNil: [ gtAssistant := GtLlmAssistantForGt new
 					description: 'You are an assistant for Glamorous Toolkit.'.
-			"gtAssistant instruction
-				replaceFormatNamed: 'Text'
-				with: GtLlmAssistantLibraryForGt textFormatWithSmalltalkBlocks.
-			gtAssistant instruction
-				addComponent: GtLlmAssistantLibraryForGt changesFormatWithPageSnippetMethodClass."
-			gtAssistant
+			"gtAssistant
 				addInstructionSectionForLepiterPages: #('Querying Pharo code with GT filters')
-				titled: 'Code queries using GT filters'.
+				titled: 'Code queries using GT filters'."
 			gtAssistant
-				addInstructionSectionForLepiterPages: #('Inspector views' 'Inspector actions')
+				addInstructionSectionForLepiterPages: #('Inspector phlow views by example' 'Inspector phlow actions by example')
 				titled: 'Phlow views and actions'.
 			gtAssistant
-				addInstructionSectionForLepiterPages: #('Example-driven development tutorial: modeling prices' 'Warmup: understanding the Money classes')
+				addInstructionSectionForLepiterPages: #('Examples by example')
 				titled: 'Examples'.
 			gtAssistant ]
 ]

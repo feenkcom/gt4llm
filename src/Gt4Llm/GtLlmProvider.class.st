@@ -80,7 +80,7 @@ GtLlmProvider >> format: anObject [
 GtLlmProvider >> gtCallsFor: aView [
 	<gtView>
 	^ aView forward
-		title: 'Calls';
+		title: 'API calls';
 		priority: 1;
 		object: [ self client ];
 		view: #gtCallsFor:
