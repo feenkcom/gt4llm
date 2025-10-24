@@ -39,14 +39,14 @@ GtLlmCoderChatButton >> onChatSet [
 		beTinySize;
 		action: [ self phlow spawnObject: chat ].
 
-	chat
+	"chat
 		when: GtLlmThreadRunStartedAnnouncement
 		send: #llmStarted
 		to: self.
 	chat
 		when: GtLlmThreadRunIsDoneAnnouncement
 		send: #llmFinished
-		to: self.
+		to: self."
 
 	chat status isDone ifTrue: [ self llmFinished ] ifFalse: [ self llmStarted ]
 ]
