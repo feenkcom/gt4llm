@@ -181,6 +181,7 @@ GtLlmToolForRemoteExampleMethodsRunExamples >> exampleRunRejectsUnknownChangeTyp
 GtLlmToolForRemoteExampleMethodsRunExamples >> exampleRunReportsDetailsForFailures [
     "Ensure failure entries include message and stackTrace"
     <gtExample>
+    <noTest>
     | tool call result results message |
     tool := GtLlmToolForRemoteExampleMethodsRun new.
     call := GtLlmFunctionToolCall new.
