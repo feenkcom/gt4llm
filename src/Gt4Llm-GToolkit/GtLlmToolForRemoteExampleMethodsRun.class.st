@@ -224,7 +224,10 @@ GtLlmToolForRemoteExampleMethodsRun >> privatePerformToolCall: aToolCall [
 	runner submitJob: job.
 	(jobSemaphore waitTimeoutSeconds: 300)
 		ifTrue: [ runner stop.
-			^ 'Timeout before result received' ].
+			self
+				addErrorMessage: 'Timeout before result received'
+				to: report.
+			^ STONJSON toString: report ].
 	(job hasErrors and: [ job errorDetails isNotNil ])
 		ifTrue: [ self
 				addErrorMessage: 'Job completed with errors: ' , job errorDetails asString
