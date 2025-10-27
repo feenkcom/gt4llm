@@ -40,10 +40,9 @@ A text snippet is annotated with the type `textSnippet` can support markdown and
 A class definition should be specifically annotated with the type `class`. The actual definition is in the `code` property.
 - example to add a class:
 {"type": "class",
-"code": "Object subclass: #SomeClass
-instanceVariableNames: ''someSlotA someSlotB''
-classVariableNames: ''''
-package: ''SomePackage''"}
+"code": "Object << ''SomeClass''
+	slots: #(someSlotA someSlotB);
+	package: ''SomePackage''"}
 
 *Method definition*
 A method definition is annotated with the type `method` and has a `class` it refers to. The body including the signature is defined in a `code` property. If the method is on the class side it has a separate `classSide` boolean property.
