@@ -216,7 +216,7 @@ GtLlmToolForRemoteExampleMethodsRunExamples >> exampleRunReportsDetailsForFailur
 GtLlmToolForRemoteExampleMethodsRunExamples >> exampleRunSuccess [
 	"Confirm that the GtLlmToolForRemoteExampleMethodsRun tool behaves as expected in the case where a collection of changes that don't exist in the main image is provided and a collection of examples that depends on the changes is run."
 	<gtExample>
-	"<noTest>"
+	<noTest>
 	| tool call resultString result results exampleNamePrefix |
 
 	tool := GtLlmToolForRemoteExampleMethodsRun new.
