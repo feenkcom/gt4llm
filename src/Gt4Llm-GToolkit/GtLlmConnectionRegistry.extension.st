@@ -51,19 +51,19 @@ GtLlmConnectionRegistry class >> gtInstanceButtonFor: anAction [
 { #category : #'*Gt4Llm-GToolkit' }
 GtLlmConnectionRegistry >> knownConnectors [
 	^ {GtLlmConnection new
-			provider: GtOllamaProvider;
+			providerClass: GtOllamaProvider;
 			label: 'Llama 3.2';
 			model: 'llama3.2'.
 		GtLlmConnection new
-			provider: GtOllamaProvider;
+			providerClass: GtOllamaProvider;
 			label: 'GPT OSS (Ollama 20b)';
 			model: 'gpt-oss'.
 		GtLlmConnection new
-			provider: GtAnthropicProvider;
+			providerClass: GtAnthropicProvider;
 			label: 'Claude Opus 4.1';
 			model: 'claude-opus-4-1-20250805'.
 		GtLlmConnection new
-			provider: GtGeminiProvider;
+			providerClass: GtGeminiProvider;
 			label: 'Gemini 2.5 Flash Preview';
 			model: 'gemini-2.5-flash-preview-05-20'}
 ]
