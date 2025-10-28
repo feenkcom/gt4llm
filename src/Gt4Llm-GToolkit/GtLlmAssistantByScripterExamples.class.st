@@ -114,7 +114,7 @@ GtLlmAssistantByScripterExamples >> chatElementWithProviderSelectionOpened [
 		connectionRegistry: (GtLlmConnectionRegistry new clearConnections
 				addConnection: (GtLlmConnection new
 						label: 'Null';
-						provider: GtLlmNullProvider)).
+						providerClass: GtLlmNullProvider)).
 
 	scripter
 		clickStep: [ :s | 

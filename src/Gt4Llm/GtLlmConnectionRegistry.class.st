@@ -75,7 +75,7 @@ GtLlmConnectionRegistry >> connectableConnections [
 GtLlmConnectionRegistry >> connectionFor: aProvider [
 	^ connections
 		detect: [ :aConnection | 
-			aConnection provider = aProvider class
+			aConnection providerClass = aProvider class
 				and: [ aConnection model = aProvider modelName ] ]
 		ifNone: [ nil ]
 ]
@@ -130,7 +130,7 @@ GtLlmConnectionRegistry >> labelForModel: aModel [
 { #category : #'as yet unclassified' }
 GtLlmConnectionRegistry >> standardDefaultConnection [
 	^ GtLlmConnection new
-		provider: GtOpenAIResponseProvider;
+		providerClass: GtOpenAIResponseProvider;
 		label: 'GPT 5 Codex';
 		model: 'gpt-5-codex';
 		addOption: 'isStreaming' withValue: false

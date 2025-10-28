@@ -2,9 +2,9 @@ Class {
 	#name : #GtLlmConnection,
 	#superclass : #Object,
 	#instVars : [
-		'provider',
 		'label',
-		'meta'
+		'meta',
+		'providerClass'
 	],
 	#category : #Gt4Llm
 }
@@ -13,7 +13,7 @@ Class {
 GtLlmConnection >> = anotherConnection [
 	^ anotherConnection class = self class
 		and: [ self model = anotherConnection model
-				and: [ self provider = anotherConnection provider ] ]
+				and: [ self providerClass = anotherConnection providerClass ] ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -24,10 +24,15 @@ GtLlmConnection >> addOption: anOption withValue: aValue [
 { #category : #'as yet unclassified' }
 GtLlmConnection >> buildProvider [
 	| aProvider |
-	aProvider := self provider default value.
+	aProvider := self providerClass default value.
 	meta
 		keysAndValuesDo: [ :aKey :aValue | aProvider perform: aKey asSymbol asMutator withArguments: {aValue} ].
 	^ aProvider
+]
+
+{ #category : #accessing }
+GtLlmConnection >> connectionProviderClass: aClass [
+	providerClass := aClass
 ]
 
 { #category : #'as yet unclassified' }
@@ -57,7 +62,7 @@ GtLlmConnection >> gtDetailsFor: aView [
 GtLlmConnection >> gtDisplayOn: stream [
 	stream
 		nextPutAll: 'Connection: ';
-		nextPutAll: self provider providerName;
+		nextPutAll: self providerClass providerName;
 		space;
 		nextPutAll: self model;
 		space;
@@ -90,7 +95,7 @@ GtLlmConnection >> initialize [
 
 { #category : #'as yet unclassified' }
 GtLlmConnection >> isConnectable [
-	^ self provider isConnectable
+	^ self providerClass isConnectable
 ]
 
 { #category : #accessing }
@@ -115,15 +120,27 @@ GtLlmConnection >> model: anObject [
 
 { #category : #accessing }
 GtLlmConnection >> provider [
-	^ provider
+	self deprecated: 'use providerClass' transformWith: '`@rcv provider' -> '`@rcv providerClass'.
+	^ providerClass
 ]
 
 { #category : #accessing }
-GtLlmConnection >> provider: anObject [
-	provider := anObject
+GtLlmConnection >> provider: aClass [
+	self deprecated: 'use providerClass:' transformWith: '`@rcv provider: `@arg' -> '`@rcv providerClass: `@arg'.
+	self providerClass: aClass
+]
+
+{ #category : #accessing }
+GtLlmConnection >> providerClass [
+	^ providerClass
+]
+
+{ #category : #accessing }
+GtLlmConnection >> providerClass: aClass [
+	providerClass := aClass
 ]
 
 { #category : #'as yet unclassified' }
 GtLlmConnection >> providerName [
-	^ self provider providerName
+	^ self providerClass providerName
 ]
