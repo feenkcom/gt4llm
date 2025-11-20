@@ -258,6 +258,7 @@ GtAnthropicProvider >> triggerAssistant [
 			messages: self chat messages
 			maxTokens: self maxTokens
 			system: instructions
+			format: self format
 			andTools: tools.
 
 
