@@ -6,7 +6,8 @@ Class {
 		'messages',
 		'maxTokens',
 		'tools',
-		'system'
+		'system',
+		'format'
 	],
 	#category : #Gt4Anthropic
 }
@@ -23,8 +24,19 @@ GtAnthropicCompleteChatAPIClient >> entity [
 		ifNotNil: [ anEntity at: 'tools' put: (self tools collect: #functionAnthropic) ].
 
 	self system ifNotNil: [ anEntity at: 'system' put: system ].
+	self format ifNotNil: [ anEntity at: 'output_format' put: format ].
 
 	^ anEntity
+]
+
+{ #category : #accessing }
+GtAnthropicCompleteChatAPIClient >> format [
+	^ format
+]
+
+{ #category : #accessing }
+GtAnthropicCompleteChatAPIClient >> format: anObject [
+	format := anObject
 ]
 
 { #category : #accessing }

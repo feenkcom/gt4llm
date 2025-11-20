@@ -96,6 +96,19 @@ GtAnthropicClient >> completeChatWithModel: aString messages: aCollection maxTok
 ]
 
 { #category : #'as yet unclassified' }
+GtAnthropicClient >> completeChatWithModel: aString messages: aCollection maxTokens: aNumber system: aSystemPrompt format: aFormat andTools: tools [
+	^ GtAnthropicCompleteChatAPIClient new
+		client: self;
+		model: aString;
+		messages: aCollection;
+		maxTokens: aNumber;
+		tools: tools;
+		system: aSystemPrompt;
+		format: aFormat;
+		perform
+]
+
+{ #category : #'as yet unclassified' }
 GtAnthropicClient >> defaultBaseUrl [
 	^ 'https://api.anthropic.com/v1/' asZnUrl
 ]
@@ -163,7 +176,8 @@ GtAnthropicClient >> initializeClient [
 	aClient forJsonREST.
 	aClient timeout: 600.
 	aClient headerAt: 'x-api-key' put: apiKey.
-	aClient headerAt: 'anthropic-version' put: self version. 
+	aClient headerAt: 'anthropic-version' put: self version.
+	aClient headerAt: 'anthropic-beta' put: 'structured-outputs-2025-11-13'.
 	^ aClient
 ]
 
