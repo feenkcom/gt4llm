@@ -42,7 +42,7 @@ GtLlmConnection >> connectionString [
 
 { #category : #'as yet unclassified' }
 GtLlmConnection >> details [
-	^ {'Provider' -> self provider providerName.
+	^ {'Provider' -> self providerClass providerName.
 		'Model' -> self model.
 		'Label' -> self label}
 ]
