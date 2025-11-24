@@ -64,6 +64,6 @@ GtLlmConnectionRegistry >> knownConnectors [
 			model: 'claude-opus-4-1-20250805'.
 		GtLlmConnection new
 			providerClass: GtGeminiProvider;
-			label: 'Gemini 2.5 Flash Preview';
-			model: 'gemini-2.5-flash-preview-09-2025'}
+			label: 'Gemini 3.0 Pro Preview';
+			model: 'gemini-3-pro-preview'}
 ]
