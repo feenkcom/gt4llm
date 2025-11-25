@@ -83,7 +83,7 @@ GtLlmConnection >> gtOptionsFor: aView [
 { #category : #comparing }
 GtLlmConnection >> hash [
 	^ (self class hash hashMultiply bitXor: self model hash hashMultiply)
-		bitXor: self provider hash hashMultiply
+		bitXor: self providerClass hash hashMultiply
 ]
 
 { #category : #'as yet unclassified' }
