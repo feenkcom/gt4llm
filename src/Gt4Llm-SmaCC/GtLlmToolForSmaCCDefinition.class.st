@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLlmToolForSmaCCDefinition,
 	#superclass : #GtLlmAbstractFunctionTool,
-	#category : #'Gt4Llm-GToolkit-Tools'
+	#category : #'Gt4Llm-SmaCC-Tools'
 }
 
 { #category : #accessing }
