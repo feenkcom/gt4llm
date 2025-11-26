@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLlmToolForSmaCCGrammar,
 	#superclass : #GtLlmAbstractFunctionTool,
-	#category : #'Gt4Llm-GToolkit-Tools'
+	#category : #'Gt4Llm-SmaCC-Tools'
 }
 
 { #category : #accessing }
@@ -26,15 +26,13 @@ GtLlmToolForSmaCCGrammar >> parameters [
 
 { #category : #'llm-generated' }
 GtLlmToolForSmaCCGrammar >> privatePerformToolCall: aToolCall [
-	| arguments grammar object serializer |
+	| arguments grammar object |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	grammar := arguments at: 'grammar' ifAbsent: [ ^ 'Grammar not provided' ].
 	grammar ifNil: [ ^ 'Grammar not provided' ].
 	grammar := grammar asString.
 	grammar isEmpty ifTrue: [ ^ 'Grammar not provided' ].
-	object := [ SmaCCDefinitionParser parse: grammar ]
-			on: Error
-			do: [ :ex | ^ 'Error: ' , String cr , ex stackString ].
-	serializer := GtLlmValueSerializer new.
-	^ STONJSON toStringPretty: (serializer serializeValue: object)
+	object := [ SmaCCDefinitionParser parse: grammar.
+		true ] on: Error do: [ :ex | ^ 'Error: ' , String cr , ex stackString ].
+	^ 'Grammar is valid'
 ]
