@@ -8,7 +8,8 @@ Class {
 		'messages',
 		'tools',
 		'format',
-		'instructions'
+		'instructions',
+		'userMessageClass'
 	],
 	#category : #Gt4LlmCore
 }
@@ -83,6 +84,14 @@ GtLChat >> copyLepiterSerialisationToClipboard [
 	snippet := GtLlmLeSnippetVisitor new visitNode: self.
 	serialization := LeJsonV4 uniqueInstance serialize: snippet.
 	Clipboard default clipboardText: serialization.
+]
+
+{ #category : #accessing }
+GtLChat >> createMessageForCall: aMessageCall [ 
+	^ self userMessageClass new
+		content: aMessageCall serialize;
+		originMessageCall: aMessageCall;
+		role: 'user'
 ]
 
 { #category : #accessing }
@@ -260,10 +269,24 @@ GtLChat >> sendFiles: aListOfFileReferences withMessage: aString [
 ]
 
 { #category : #accessing }
-GtLChat >> sendMessage: aString [
+GtLChat >> sendMessage: aMessage [
+	aMessage chat: self.
+	self addMessage: aMessage.
+	
+	self provider sendMessage: aMessage
+]
+
+{ #category : #accessing }
+GtLChat >> sendPlainMessage: aString [
+	| messageCall currentMessage |
 	self assert: aString isString.
-	self provider sendMessage: (GtLStringMessageCall new
-		string: aString)
+	
+	messageCall := GtLStringMessageCall new
+		string: aString.
+	
+	currentMessage := self createMessageForCall: messageCall.
+	
+	self sendMessage: currentMessage
 ]
 
 { #category : #announcing }
@@ -299,6 +322,16 @@ GtLChat >> tools: anObject [
 { #category : #accessing }
 GtLChat >> updateLastUpdate [
 	lastUpdate := DateAndTime now
+]
+
+{ #category : #accessing }
+GtLChat >> userMessageClass [
+	^ userMessageClass ifNil: [ userMessageClass := self provider defaultUserMessageClass ]
+]
+
+{ #category : #accessing }
+GtLChat >> userMessageClass: anObject [
+	userMessageClass := anObject
 ]
 
 { #category : #'announcer - subscription' }
