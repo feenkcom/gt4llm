@@ -86,7 +86,9 @@ GtLOpenAIProvider >> executeWait [
 					isStreaming: isStreaming.
 
 			result hasToolCalls
-				ifTrue: [ self performToolCallsIn: result ]
+				ifTrue: [ self 
+					performToolCallsIn: result
+					with: currentMessage tools ]
 				ifFalse: [ aMessage := isStreaming
 							ifTrue: [ self streamingMessageFrom: result ]
 							ifFalse: [ self assistantMessageClass new
@@ -130,7 +132,7 @@ GtLOpenAIProvider >> gtExecutionsFor: aView [
 GtLOpenAIProvider >> handleToolCall: aToolCall [
 	| toolOutput newMessage |
 	chat removeLastMessage.
-	newMessage := GtLlmToolMessage new toolCall: aToolCall.	"chat
+	newMessage := GtLToolMessage new toolCall: aToolCall.	"chat
 		addMessage: (GtOpenAIRawToolMessage new
 				toolCall: aToolCall;
 				rawData: aToolCall rawData)."
@@ -196,13 +198,37 @@ GtLOpenAIProvider >> performToolCallsIn: result [
 	toolOutputs := result toolCalls
 			collect: [ :aToolCall | 
 				| toolOutput newMessage|
-				newMessage := GtLlmToolMessage new
+				newMessage := GtLToolMessage new
 							toolCall: aToolCall.
 				"chat
 					addMessage: (GtOpenAIRawToolMessage new
 							rawData: aToolCall responseInput)."
 				chat addMessage: newMessage.
 				toolOutput := tools performToolCall: aToolCall.
+				newMessage output: toolOutput
+"				chat
+					addMessage: (GtLlmToolMessage new
+							toolCall: aToolCall;
+							output: toolOutput)" ].
+
+	self chat signalRunHasUpdated.
+
+	^ self executeWait
+]
+
+{ #category : #accessing }
+GtLOpenAIProvider >> performToolCallsIn: result with: activeTools [
+	| toolOutputs |
+	toolOutputs := result toolCalls
+			collect: [ :aToolCall | 
+				| toolOutput newMessage|
+				newMessage := GtLToolMessage new
+							toolCall: aToolCall.
+				"chat
+					addMessage: (GtOpenAIRawToolMessage new
+							rawData: aToolCall responseInput)."
+				chat addMessage: newMessage.
+				toolOutput := activeTools performToolCall: aToolCall.
 				newMessage output: toolOutput
 "				chat
 					addMessage: (GtLlmToolMessage new
@@ -224,12 +250,6 @@ GtLOpenAIProvider >> printOn: aStream [
 ]
 
 { #category : #'as yet unclassified' }
-GtLOpenAIProvider >> sendAssistantMessage: aMessage [
-	self chat addMessage: aMessage.
-	self triggerAssistant
-]
-
-{ #category : #'as yet unclassified' }
 GtLOpenAIProvider >> sendFiles: aListOfFileReferences withMessage: aString [
 	self
 		sendAssistantMessage: (self userMessageClass new
@@ -243,6 +263,11 @@ GtLOpenAIProvider >> sendFiles: aListOfFileReferences withMessage: aString [
 										asDictionary ]);
 				role: 'user';
 				chat: self)
+]
+
+{ #category : #'as yet unclassified' }
+GtLOpenAIProvider >> sendMessage: aMessage [
+	self triggerAssistant
 ]
 
 { #category : #'as yet unclassified' }

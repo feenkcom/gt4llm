@@ -13,7 +13,7 @@ Class {
 { #category : #accessing }
 GtLAnthropicChatMessage class >> leJsonV4Name [
 
-	^ #gtAnthropicChatMessage
+	^ #gtLAnthropicChatMessage
 ]
 
 { #category : #'as yet unclassified' }

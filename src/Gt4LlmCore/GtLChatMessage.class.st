@@ -66,7 +66,7 @@ GtLChatMessage class >> leJsonV4Name [
 
 { #category : #'instance creation' }
 GtLChatMessage class >> rolesToClasses [
-	^ {('tool' -> GtLlmToolMessage).
+	^ {('tool' -> GtLToolMessage).
 	('assistant' -> GtLlmAssistantMessage).
 	('user' -> GtLlmUserMessage).
 	('system' -> GtLlmSystemMessage)} asDictionary

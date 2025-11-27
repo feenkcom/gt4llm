@@ -3,7 +3,6 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'chat',
-		'userMessageClass',
 		'assistantMessageClass'
 	],
 	#category : #Gt4LlmCore
@@ -67,33 +66,11 @@ GtLProvider >> gtCallsFor: aView [
 ]
 
 { #category : #actions }
-GtLProvider >> sendAssistantMessage: anObject [ 
+GtLProvider >> sendMessage: anObject [ 
 	^ self subclassResponsibility
-]
-
-{ #category : #actions }
-GtLProvider >> sendMessage: aMessageCall [
-	| currentMessage |
-	currentMessage := self userMessageClass new
-			content: aMessageCall serialize;
-			originMessageCall: aMessageCall;
-			role: 'user';
-			chat: self chat.
-	self
-		sendAssistantMessage: currentMessage.
 ]
 
 { #category : #accessing }
 GtLProvider >> status [
 	^ self subclassResponsibility
-]
-
-{ #category : #accessing }
-GtLProvider >> userMessageClass [
-	^ userMessageClass ifNil: [ userMessageClass := self defaultUserMessageClass ]
-]
-
-{ #category : #accessing }
-GtLProvider >> userMessageClass: anObject [
-	userMessageClass := anObject
 ]

@@ -12,6 +12,11 @@ Class {
 	#category : #'Gt4Llm-OpenAI'
 }
 
+{ #category : #accessing }
+GtLOpenAIMessage class >> defaultRole [
+	^ nil
+]
+
 { #category : #'instance creation' }
 GtLOpenAIMessage class >> from: aDict [
 	^ self new from: aDict
