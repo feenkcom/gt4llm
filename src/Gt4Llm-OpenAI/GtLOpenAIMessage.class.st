@@ -45,14 +45,14 @@ GtLOpenAIMessage class >> serializationProperties [
 
 { #category : #accessing }
 GtLOpenAIMessage >> annotations [
-	(content isKindOf: String) ifTrue: [ ^ GtOpenAIAnnotationsGroup new ].
+	(content isKindOf: String) ifTrue: [ ^ GtLOpenAIAnnotationsGroup new ].
 
-	^ GtOpenAIAnnotationsGroup
+	^ GtLOpenAIAnnotationsGroup
 		withAll: ((content select: [ :aValue | (aValue at: 'type') = 'text' ])
 				flatCollect: [ :aValue | 
 					((aValue at: 'text') at: 'annotations')
 						collect: [ :anAnnotation | 
-							(GtOpenAIAnnotation from: anAnnotation)
+							(GtLOpenAIAnnotation from: anAnnotation)
 								client: self client;
 								message: self ] ])
 ]
@@ -180,7 +180,7 @@ GtLOpenAIMessage >> isReady [
 
 { #category : #accessing }
 GtLOpenAIMessage >> messageFiles [
-	self contentText = self content ifTrue: [ ^ GtOpenAIFilesGroup new ].
+	self contentText = self content ifTrue: [ ^ GtLOpenAIFilesGroup new ].
 
 	^ self content
 		select: [ :aValue | (aValue at: 'type') = 'input_image' ]
