@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLOpenAICreateFineTuningJobAPIClient,
-	#superclass : #GtLlmEndpointClient,
+	#superclass : #GtLAPICommand,
 	#instVars : [
 		'model',
 		'file'

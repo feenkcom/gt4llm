@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLOpenAICompleteChatAPIClient,
-	#superclass : #GtLlmEndpointClient,
+	#superclass : #GtLAPICommand,
 	#instVars : [
 		'model',
 		'messages'

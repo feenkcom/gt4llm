@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLOpenAICreateThreadAPIClient,
-	#superclass : #GtLlmEndpointClient,
+	#superclass : #GtLAPICommand,
 	#instVars : [
 		'messages'
 	],

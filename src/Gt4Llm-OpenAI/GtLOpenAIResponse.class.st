@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLOpenAIResponse,
-	#superclass : #GtLlmEntity,
+	#superclass : #GtLEntity,
 	#instVars : [
 		'id',
 		'createdAt',

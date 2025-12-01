@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLOpenAIListVectorStoresAPIClient,
-	#superclass : #GtLlmEndpointClient,
+	#superclass : #GtLAPICommand,
 	#category : #'Gt4Llm-OpenAI'
 }
 

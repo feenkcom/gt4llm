@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLOpenAICreateVectorStoreAPIClient,
-	#superclass : #GtLlmEndpointClient,
+	#superclass : #GtLAPICommand,
 	#instVars : [
 		'name',
 		'files'

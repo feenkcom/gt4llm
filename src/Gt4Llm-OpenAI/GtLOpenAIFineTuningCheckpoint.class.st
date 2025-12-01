@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLOpenAIFineTuningCheckpoint,
-	#superclass : #GtLlmEntity,
+	#superclass : #GtLEntity,
 	#instVars : [
 		'id',
 		'createdAt',

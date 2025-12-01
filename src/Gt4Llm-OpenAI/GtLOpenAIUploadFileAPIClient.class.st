@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLOpenAIUploadFileAPIClient,
-	#superclass : #GtLlmEndpointClient,
+	#superclass : #GtLAPICommand,
 	#instVars : [
 		'file',
 		'purpose'

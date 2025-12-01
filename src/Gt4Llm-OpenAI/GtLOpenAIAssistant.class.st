@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLOpenAIAssistant,
-	#superclass : #GtLlmEntity,
+	#superclass : #GtLEntity,
 	#instVars : [
 		'id',
 		'createdAt',

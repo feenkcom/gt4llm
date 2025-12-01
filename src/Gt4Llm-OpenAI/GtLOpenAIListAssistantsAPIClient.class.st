@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLOpenAIListAssistantsAPIClient,
-	#superclass : #GtLlmEndpointClient,
+	#superclass : #GtLAPICommand,
 	#category : #'Gt4Llm-OpenAI'
 }
 

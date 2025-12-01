@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLOpenAIVectorStore,
-	#superclass : #GtLlmEntity,
+	#superclass : #GtLEntity,
 	#instVars : [
 		'id',
 		'name',

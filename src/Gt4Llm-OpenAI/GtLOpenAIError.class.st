@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLOpenAIError,
-	#superclass : #GtLlmError,
+	#superclass : #GtLError,
 	#instVars : [
 		'type',
 		'param',

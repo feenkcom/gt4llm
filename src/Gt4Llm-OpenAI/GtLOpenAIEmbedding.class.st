@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLOpenAIEmbedding,
-	#superclass : #GtLlmEntity,
+	#superclass : #GtLEntity,
 	#instVars : [
 		'embedding'
 	],

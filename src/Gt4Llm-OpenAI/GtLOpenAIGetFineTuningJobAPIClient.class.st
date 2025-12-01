@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLOpenAIGetFineTuningJobAPIClient,
-	#superclass : #GtLlmEndpointClient,
+	#superclass : #GtLAPICommand,
 	#instVars : [
 		'job'
 	],

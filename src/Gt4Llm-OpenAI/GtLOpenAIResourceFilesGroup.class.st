@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLOpenAIResourceFilesGroup,
-	#superclass : #GtLlmGroup,
+	#superclass : #GtLGroup,
 	#category : #'Gt4Llm-OpenAI'
 }
 

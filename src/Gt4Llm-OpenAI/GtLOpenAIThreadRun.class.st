@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLOpenAIThreadRun,
-	#superclass : #GtLlmEntity,
+	#superclass : #GtLEntity,
 	#instVars : [
 		'id',
 		'createdAt',

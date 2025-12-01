@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLOpenAICreateAssistantFileAPIClient,
-	#superclass : #GtLlmEndpointClient,
+	#superclass : #GtLAPICommand,
 	#instVars : [
 		'file',
 		'assistant'
