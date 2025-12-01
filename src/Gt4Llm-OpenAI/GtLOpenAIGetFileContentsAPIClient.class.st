@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLOpenAIGetFileContentsAPIClient,
-	#superclass : #GtLlmEndpointClient,
+	#superclass : #GtLAPICommand,
 	#instVars : [
 		'file'
 	],

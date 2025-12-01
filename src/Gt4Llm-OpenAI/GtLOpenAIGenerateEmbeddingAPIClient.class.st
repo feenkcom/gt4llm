@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLOpenAIGenerateEmbeddingAPIClient,
-	#superclass : #GtLlmEndpointClient,
+	#superclass : #GtLAPICommand,
 	#instVars : [
 		'input',
 		'model'

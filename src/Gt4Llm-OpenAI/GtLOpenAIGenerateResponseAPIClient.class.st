@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLOpenAIGenerateResponseAPIClient,
-	#superclass : #GtLlmEndpointClient,
+	#superclass : #GtLAPICommand,
 	#instVars : [
 		'model',
 		'messages',

@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLOpenAIFineTuningEvent,
-	#superclass : #GtLlmEntity,
+	#superclass : #GtLEntity,
 	#instVars : [
 		'id',
 		'createdAt',

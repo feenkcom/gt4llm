@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLOpenAIFileCitation,
-	#superclass : #GtLlmEntity,
+	#superclass : #GtLEntity,
 	#instVars : [
 		'fileId',
 		'quote',

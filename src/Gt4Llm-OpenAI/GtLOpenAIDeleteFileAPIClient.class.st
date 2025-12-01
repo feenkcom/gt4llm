@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLOpenAIDeleteFileAPIClient,
-	#superclass : #GtLlmEndpointClient,
+	#superclass : #GtLAPICommand,
 	#instVars : [
 		'file'
 	],

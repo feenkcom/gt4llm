@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLOpenAIFineTuningJob,
-	#superclass : #GtLlmEntity,
+	#superclass : #GtLEntity,
 	#instVars : [
 		'object',
 		'id',

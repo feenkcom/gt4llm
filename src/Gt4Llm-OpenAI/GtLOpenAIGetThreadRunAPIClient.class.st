@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLOpenAIGetThreadRunAPIClient,
-	#superclass : #GtLlmEndpointClient,
+	#superclass : #GtLAPICommand,
 	#instVars : [
 		'run',
 		'thread'

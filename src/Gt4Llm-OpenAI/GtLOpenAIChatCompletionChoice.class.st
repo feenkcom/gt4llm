@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLOpenAIChatCompletionChoice,
-	#superclass : #GtLlmEntity,
+	#superclass : #GtLEntity,
 	#instVars : [
 		'logProbs',
 		'finishReason',

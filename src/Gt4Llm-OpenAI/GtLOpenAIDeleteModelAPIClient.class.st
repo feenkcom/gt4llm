@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLOpenAIDeleteModelAPIClient,
-	#superclass : #GtLlmEndpointClient,
+	#superclass : #GtLAPICommand,
 	#instVars : [
 		'model'
 	],

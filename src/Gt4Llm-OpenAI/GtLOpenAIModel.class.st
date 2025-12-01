@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLOpenAIModel,
-	#superclass : #GtLlmEntity,
+	#superclass : #GtLEntity,
 	#instVars : [
 		'created',
 		'object',

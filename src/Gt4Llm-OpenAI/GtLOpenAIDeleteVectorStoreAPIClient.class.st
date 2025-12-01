@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLOpenAIDeleteVectorStoreAPIClient,
-	#superclass : #GtLlmEndpointClient,
+	#superclass : #GtLAPICommand,
 	#instVars : [
 		'vectorStore'
 	],

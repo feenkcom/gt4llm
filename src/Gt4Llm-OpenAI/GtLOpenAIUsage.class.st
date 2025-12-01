@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLOpenAIUsage,
-	#superclass : #GtLlmEntity,
+	#superclass : #GtLEntity,
 	#instVars : [
 		'promptTokens',
 		'completionTokens',

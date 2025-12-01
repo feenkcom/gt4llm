@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLOpenAISubmitToolOutputsAPIClient,
-	#superclass : #GtLlmEndpointClient,
+	#superclass : #GtLAPICommand,
 	#instVars : [
 		'thread',
 		'run',

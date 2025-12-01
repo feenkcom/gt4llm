@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLOpenAIFile,
-	#superclass : #GtLlmEntity,
+	#superclass : #GtLEntity,
 	#instVars : [
 		'id',
 		'purpose',

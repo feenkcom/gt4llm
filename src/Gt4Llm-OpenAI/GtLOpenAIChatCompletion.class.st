@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLOpenAIChatCompletion,
-	#superclass : #GtLlmEntity,
+	#superclass : #GtLEntity,
 	#instVars : [
 		'id',
 		'created',

@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLOpenAIDeletion,
-	#superclass : #GtLlmEntity,
+	#superclass : #GtLEntity,
 	#instVars : [
 		'id',
 		'object',

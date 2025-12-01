@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLOpenAIDeleteAssistantAPIClient,
-	#superclass : #GtLlmEndpointClient,
+	#superclass : #GtLAPICommand,
 	#instVars : [
 		'assistant'
 	],
