@@ -19,7 +19,7 @@ GtLOpenAIProvider class >> default [
 
 { #category : #'as yet unclassified' }
 GtLOpenAIProvider class >> isConnectable [
-	^ GtOpenAIClient apiKeyFile exists
+	^ GtLOpenAIClient apiKeyFile exists
 ]
 
 { #category : #'as yet unclassified' }
@@ -34,7 +34,7 @@ GtLOpenAIProvider class >> withApiKeyFromClipboard [
 
 { #category : #'as yet unclassified' }
 GtLOpenAIProvider class >> withApiKeyFromFile [
-	^ self new apiKey: GtOpenAIClient apiKeyFileContents
+	^ self new apiKey: GtLOpenAIClient apiKeyFileContents
 ]
 
 { #category : #accessing }
@@ -98,7 +98,7 @@ GtLOpenAIProvider >> executeWait [
 
 					self chat addMessage: aMessage.
 					self chat signalRunIsDone ] ] asAsyncFuture
-				await: GtOpenAIUtilities executionConfiguration)
+				await: GtLOpenAIUtilities executionConfiguration)
 				then: [ assistantWorking := false ]
 				otherwise: [ :anError | 
 					assistantWorking := false.
@@ -164,7 +164,7 @@ GtLOpenAIProvider >> initialize [
 
 { #category : #'as yet unclassified' }
 GtLOpenAIProvider >> initializeClient [
-	client := GtOpenAIClient new
+	client := GtLOpenAIClient new
 ]
 
 { #category : #'as yet unclassified' }
