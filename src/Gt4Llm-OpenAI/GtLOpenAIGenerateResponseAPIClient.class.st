@@ -18,7 +18,7 @@ GtLOpenAIGenerateResponseAPIClient >> buildEntity [
 	input := OrderedCollection new.
 	self messages
 		do: [ :aMessage | 
-			(aMessage isKindOf: GtLlmToolMessage)
+			(aMessage isKindOf: GtLToolMessage)
 				ifTrue: [ input add: aMessage toolCall responseInput.
 					aMessage toolCall isFinished
 						ifTrue: [ input add: aMessage serializeResponse ]	"(aMessage reasoning ifNil: [ {} ] ifNotNil: [ {aMessage reasoning rawData} ])

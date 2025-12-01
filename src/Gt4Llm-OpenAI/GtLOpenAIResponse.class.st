@@ -230,7 +230,7 @@ GtLOpenAIResponse >> toolCalls [
 	^ self output
 		select: [ :aMessage | (aMessage rawData at: 'type') = 'function_call' ]
 		thenCollect: [ :aMessage | 
-			GtLlmFunctionToolCall new
+			GtLFunctionToolCall new
 				rawData: aMessage rawData;
 				id: (aMessage rawData at: 'call_id');
 				name: (aMessage rawData at: 'name');
