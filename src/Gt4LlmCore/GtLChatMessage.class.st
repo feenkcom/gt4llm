@@ -67,9 +67,9 @@ GtLChatMessage class >> leJsonV4Name [
 { #category : #'instance creation' }
 GtLChatMessage class >> rolesToClasses [
 	^ {('tool' -> GtLToolMessage).
-	('assistant' -> GtLlmAssistantMessage).
-	('user' -> GtLlmUserMessage).
-	('system' -> GtLlmSystemMessage)} asDictionary
+	('assistant' -> GtLAssistantMessage).
+	('user' -> GtLUserMessage).
+	('system' -> GtLSystemMessage)} asDictionary
 ]
 
 { #category : #accessing }
