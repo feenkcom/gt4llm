@@ -59,7 +59,7 @@ GtLOpenAIProvider >> client [
 
 { #category : #'as yet unclassified' }
 GtLOpenAIProvider >> defaultAssistantMessageClass [
-	^ self chat messageClassForOpenAI
+	^ GtLOpenAIMessage
 ]
 
 { #category : #'as yet unclassified' }
@@ -69,7 +69,7 @@ GtLOpenAIProvider >> defaultModel [
 
 { #category : #'as yet unclassified' }
 GtLOpenAIProvider >> defaultUserMessageClass [
-	^ self chat messageClassForOpenAI
+	^ GtLOpenAIMessage
 ]
 
 { #category : #actions }
@@ -86,9 +86,7 @@ GtLOpenAIProvider >> executeWait [
 					isStreaming: isStreaming.
 
 			result hasToolCalls
-				ifTrue: [ self 
-					performToolCallsIn: result
-					with: currentMessage tools ]
+				ifTrue: [ self performToolCallsIn: result with: currentMessage tools ]
 				ifFalse: [ aMessage := isStreaming
 							ifTrue: [ self streamingMessageFrom: result ]
 							ifFalse: [ self assistantMessageClass new
@@ -98,7 +96,9 @@ GtLOpenAIProvider >> executeWait [
 
 					self chat addMessage: aMessage.
 					self chat signalRunIsDone ] ] asAsyncFuture
-				await: GtLOpenAIUtilities executionConfiguration)
+				await: (AsyncFutureExecutionConfiguration new
+						customGroup: #OpenAI;
+						lowPriority))
 				then: [ assistantWorking := false ]
 				otherwise: [ :anError | 
 					assistantWorking := false.
