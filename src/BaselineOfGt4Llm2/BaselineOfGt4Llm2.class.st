@@ -11,6 +11,7 @@ BaselineOfGt4Llm2 >> baseline: spec [
 		for: #common
 		do: [ 
 			spec package: 'Gt4LlmCore'.
+			spec package: 'Gt4LlmCore-Examples' with: [ spec requires: #('Gt4LlmCore') ].
 			spec package: 'Gt4Llm-Anthropic' with: [ spec requires: #('Gt4LlmCore') ].
 			spec package: 'Gt4Llm-Gemini' with: [ spec requires: #('Gt4LlmCore') ].
 			spec package: 'Gt4Llm-Ollama' with: [ spec requires: #('Gt4LlmCore') ].
