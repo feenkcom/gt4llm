@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLOpenAIGenerateEmbeddingAPIClient,
+	#name : #GtLOpenAIGenerateEmbeddingAPICommand,
 	#superclass : #GtLAPICommand,
 	#instVars : [
 		'input',
@@ -9,27 +9,27 @@ Class {
 }
 
 { #category : #accessing }
-GtLOpenAIGenerateEmbeddingAPIClient >> input [
+GtLOpenAIGenerateEmbeddingAPICommand >> input [
 	^ input
 ]
 
 { #category : #accessing }
-GtLOpenAIGenerateEmbeddingAPIClient >> input: anObject [
+GtLOpenAIGenerateEmbeddingAPICommand >> input: anObject [
 	input := anObject
 ]
 
 { #category : #accessing }
-GtLOpenAIGenerateEmbeddingAPIClient >> model [
+GtLOpenAIGenerateEmbeddingAPICommand >> model [
 	^ model
 ]
 
 { #category : #accessing }
-GtLOpenAIGenerateEmbeddingAPIClient >> model: anObject [
+GtLOpenAIGenerateEmbeddingAPICommand >> model: anObject [
 	model := anObject
 ]
 
 { #category : #accessing }
-GtLOpenAIGenerateEmbeddingAPIClient >> request [
+GtLOpenAIGenerateEmbeddingAPICommand >> request [
 	^ self client
 		post: 'embeddings'
 		withEntity: {'model' -> self model.
@@ -37,6 +37,6 @@ GtLOpenAIGenerateEmbeddingAPIClient >> request [
 ]
 
 { #category : #accessing }
-GtLOpenAIGenerateEmbeddingAPIClient >> serializationClass [
+GtLOpenAIGenerateEmbeddingAPICommand >> serializationClass [
 	^ GtLOpenAIEmbeddingsGroup
 ]

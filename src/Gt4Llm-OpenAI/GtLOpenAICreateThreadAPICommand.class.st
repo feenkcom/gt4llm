@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLOpenAICreateThreadAPIClient,
+	#name : #GtLOpenAICreateThreadAPICommand,
 	#superclass : #GtLAPICommand,
 	#instVars : [
 		'messages'
@@ -8,23 +8,23 @@ Class {
 }
 
 { #category : #accessing }
-GtLOpenAICreateThreadAPIClient >> messages [
+GtLOpenAICreateThreadAPICommand >> messages [
 	^ messages
 ]
 
 { #category : #accessing }
-GtLOpenAICreateThreadAPIClient >> messages: anObject [
+GtLOpenAICreateThreadAPICommand >> messages: anObject [
 	messages := anObject
 ]
 
 { #category : #accessing }
-GtLOpenAICreateThreadAPIClient >> request [
+GtLOpenAICreateThreadAPICommand >> request [
 	^ self client
 		post: 'threads'
 		withEntity: {'messages' -> (self messages collect: #serialize)} asDictionary
 ]
 
 { #category : #accessing }
-GtLOpenAICreateThreadAPIClient >> serializationClass [
+GtLOpenAICreateThreadAPICommand >> serializationClass [
 	^ GtLOpenAIThread
 ]

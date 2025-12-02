@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLOpenAIGetFileContentsAPIClient,
+	#name : #GtLOpenAIGetFileContentsAPICommand,
 	#superclass : #GtLAPICommand,
 	#instVars : [
 		'file'
@@ -8,17 +8,17 @@ Class {
 }
 
 { #category : #accessing }
-GtLOpenAIGetFileContentsAPIClient >> file [
+GtLOpenAIGetFileContentsAPICommand >> file [
 	^ file
 ]
 
 { #category : #accessing }
-GtLOpenAIGetFileContentsAPIClient >> file: anObject [
+GtLOpenAIGetFileContentsAPICommand >> file: anObject [
 	file := anObject
 ]
 
 { #category : #actions }
-GtLOpenAIGetFileContentsAPIClient >> perform [
+GtLOpenAIGetFileContentsAPICommand >> perform [
 	^ ZnClient new
 		url: self client baseUrl / 'files' / self file / 'content';
 		setBearerAuthentication: self client apiKey;

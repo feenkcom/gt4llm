@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLOpenAIDeleteFileAPIClient,
+	#name : #GtLOpenAIDeleteFileAPICommand,
 	#superclass : #GtLAPICommand,
 	#instVars : [
 		'file'
@@ -8,22 +8,22 @@ Class {
 }
 
 { #category : #accessing }
-GtLOpenAIDeleteFileAPIClient >> file [
+GtLOpenAIDeleteFileAPICommand >> file [
 	^ file
 ]
 
 { #category : #accessing }
-GtLOpenAIDeleteFileAPIClient >> file: anObject [
+GtLOpenAIDeleteFileAPICommand >> file: anObject [
 	file := anObject
 ]
 
 { #category : #accessing }
-GtLOpenAIDeleteFileAPIClient >> request [
+GtLOpenAIDeleteFileAPICommand >> request [
 	^ self client
 		delete: 'files/', file
 ]
 
 { #category : #accessing }
-GtLOpenAIDeleteFileAPIClient >> serializationClass [
+GtLOpenAIDeleteFileAPICommand >> serializationClass [
 	^ GtLOpenAIDeletion
 ]

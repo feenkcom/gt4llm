@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLOpenAIGenerateResponseAPIClient,
+	#name : #GtLOpenAIGenerateResponseAPICommand,
 	#superclass : #GtLAPICommand,
 	#instVars : [
 		'model',
@@ -13,7 +13,7 @@ Class {
 }
 
 { #category : #accessing }
-GtLOpenAIGenerateResponseAPIClient >> buildEntity [
+GtLOpenAIGenerateResponseAPICommand >> buildEntity [
 	| entity input |
 	input := OrderedCollection new.
 	self messages
@@ -47,75 +47,75 @@ GtLOpenAIGenerateResponseAPIClient >> buildEntity [
 ]
 
 { #category : #accessing }
-GtLOpenAIGenerateResponseAPIClient >> format [
+GtLOpenAIGenerateResponseAPICommand >> format [
 	^ format
 ]
 
 { #category : #accessing }
-GtLOpenAIGenerateResponseAPIClient >> format: anObject [
+GtLOpenAIGenerateResponseAPICommand >> format: anObject [
 	format := anObject
 ]
 
 { #category : #accessing }
-GtLOpenAIGenerateResponseAPIClient >> instructions [
+GtLOpenAIGenerateResponseAPICommand >> instructions [
 	^ instructions
 ]
 
 { #category : #accessing }
-GtLOpenAIGenerateResponseAPIClient >> instructions: anObject [
+GtLOpenAIGenerateResponseAPICommand >> instructions: anObject [
 	instructions := anObject
 ]
 
 { #category : #accessing }
-GtLOpenAIGenerateResponseAPIClient >> isStreaming [
+GtLOpenAIGenerateResponseAPICommand >> isStreaming [
 	^ isStreaming
 ]
 
 { #category : #accessing }
-GtLOpenAIGenerateResponseAPIClient >> isStreaming: anObject [
+GtLOpenAIGenerateResponseAPICommand >> isStreaming: anObject [
 	isStreaming := anObject
 ]
 
 { #category : #accessing }
-GtLOpenAIGenerateResponseAPIClient >> messages [
+GtLOpenAIGenerateResponseAPICommand >> messages [
 	^ messages
 ]
 
 { #category : #accessing }
-GtLOpenAIGenerateResponseAPIClient >> messages: anObject [
+GtLOpenAIGenerateResponseAPICommand >> messages: anObject [
 	messages := anObject
 ]
 
 { #category : #accessing }
-GtLOpenAIGenerateResponseAPIClient >> model [
+GtLOpenAIGenerateResponseAPICommand >> model [
 	^ model
 ]
 
 { #category : #accessing }
-GtLOpenAIGenerateResponseAPIClient >> model: anObject [
+GtLOpenAIGenerateResponseAPICommand >> model: anObject [
 	model := anObject
 ]
 
 { #category : #'gt - extensions' }
-GtLOpenAIGenerateResponseAPIClient >> request [
+GtLOpenAIGenerateResponseAPICommand >> request [
 	^ isStreaming
 		ifTrue: [ self client postStreaming: '/responses' withEntity: self buildEntity ]
 		ifFalse: [ self client post: '/responses' withEntity: self buildEntity ]
 ]
 
 { #category : #'gt - extensions' }
-GtLOpenAIGenerateResponseAPIClient >> serializationClass [
+GtLOpenAIGenerateResponseAPICommand >> serializationClass [
 	^ isStreaming
 		ifTrue: [ #GtOpenAIStreamedResponse asClass ]
 		ifFalse: [ GtLOpenAIResponse ]
 ]
 
 { #category : #accessing }
-GtLOpenAIGenerateResponseAPIClient >> tools [
+GtLOpenAIGenerateResponseAPICommand >> tools [
 	^ tools
 ]
 
 { #category : #accessing }
-GtLOpenAIGenerateResponseAPIClient >> tools: anObject [
+GtLOpenAIGenerateResponseAPICommand >> tools: anObject [
 	tools := anObject
 ]

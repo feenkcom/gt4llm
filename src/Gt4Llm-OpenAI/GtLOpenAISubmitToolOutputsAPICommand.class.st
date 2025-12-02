@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLOpenAISubmitToolOutputsAPIClient,
+	#name : #GtLOpenAISubmitToolOutputsAPICommand,
 	#superclass : #GtLAPICommand,
 	#instVars : [
 		'thread',
@@ -10,43 +10,43 @@ Class {
 }
 
 { #category : #accessing }
-GtLOpenAISubmitToolOutputsAPIClient >> outputs [
+GtLOpenAISubmitToolOutputsAPICommand >> outputs [
 	^ outputs
 ]
 
 { #category : #accessing }
-GtLOpenAISubmitToolOutputsAPIClient >> outputs: anObject [
+GtLOpenAISubmitToolOutputsAPICommand >> outputs: anObject [
 	outputs := anObject
 ]
 
 { #category : #'as yet unclassified' }
-GtLOpenAISubmitToolOutputsAPIClient >> request [
+GtLOpenAISubmitToolOutputsAPICommand >> request [
 	^ self client
 		post: 'threads/' , self thread , '/runs/' , self run , '/submit_tool_outputs'
 		withEntity: {'tool_outputs' -> self outputs} asDictionary
 ]
 
 { #category : #accessing }
-GtLOpenAISubmitToolOutputsAPIClient >> run [
+GtLOpenAISubmitToolOutputsAPICommand >> run [
 	^ run
 ]
 
 { #category : #accessing }
-GtLOpenAISubmitToolOutputsAPIClient >> run: anObject [
+GtLOpenAISubmitToolOutputsAPICommand >> run: anObject [
 	run := anObject
 ]
 
 { #category : #'as yet unclassified' }
-GtLOpenAISubmitToolOutputsAPIClient >> serializationClass [
+GtLOpenAISubmitToolOutputsAPICommand >> serializationClass [
 	^ GtLOpenAIThreadRun
 ]
 
 { #category : #accessing }
-GtLOpenAISubmitToolOutputsAPIClient >> thread [
+GtLOpenAISubmitToolOutputsAPICommand >> thread [
 	^ thread
 ]
 
 { #category : #accessing }
-GtLOpenAISubmitToolOutputsAPIClient >> thread: anObject [
+GtLOpenAISubmitToolOutputsAPICommand >> thread: anObject [
 	thread := anObject
 ]

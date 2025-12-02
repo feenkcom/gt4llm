@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLOpenAIGetFileAPIClient,
+	#name : #GtLOpenAIGetFileAPICommand,
 	#superclass : #GtLAPICommand,
 	#instVars : [
 		'file'
@@ -8,21 +8,21 @@ Class {
 }
 
 { #category : #accessing }
-GtLOpenAIGetFileAPIClient >> file [
+GtLOpenAIGetFileAPICommand >> file [
 	^ file
 ]
 
 { #category : #accessing }
-GtLOpenAIGetFileAPIClient >> file: anObject [
+GtLOpenAIGetFileAPICommand >> file: anObject [
 	file := anObject
 ]
 
 { #category : #accessing }
-GtLOpenAIGetFileAPIClient >> request [
+GtLOpenAIGetFileAPICommand >> request [
 	^ self client get: '/files/', self file
 ]
 
 { #category : #accessing }
-GtLOpenAIGetFileAPIClient >> serializationClass [
+GtLOpenAIGetFileAPICommand >> serializationClass [
 	^ GtLOpenAIFile
 ]

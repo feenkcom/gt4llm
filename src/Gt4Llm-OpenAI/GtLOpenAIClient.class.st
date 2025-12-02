@@ -55,7 +55,7 @@ GtLOpenAIClient class >> withApiKeyFromFile [
 
 { #category : #accessing }
 GtLOpenAIClient >> addMessage: aMessage toThread: aThreadId [
-	^ GtLOpenAIAddMessageToThreadAPIClient new
+	^ GtLOpenAIAddMessageToThreadAPICommand new
 		client: self;
 		message: aMessage;
 		thread: aThreadId;
@@ -94,7 +94,7 @@ GtLOpenAIClient >> checkForErrors: aResponse [
 
 { #category : #'as yet unclassified' }
 GtLOpenAIClient >> completeChatWithModel: aString andMessages: aCollection [
-	^ GtLOpenAICompleteChatAPIClient new
+	^ GtLOpenAICompleteChatAPICommand new
 		client: self;
 		model: aString;
 		messages: aCollection;
@@ -103,7 +103,7 @@ GtLOpenAIClient >> completeChatWithModel: aString andMessages: aCollection [
 
 { #category : #accessing }
 GtLOpenAIClient >> createAssistant: anAssistant [ 
-	^ GtLOpenAICreateAssistantAPIClient new
+	^ GtLOpenAICreateAssistantAPICommand new
 		client: self;
 		assistant: anAssistant;
 		perform
@@ -111,7 +111,7 @@ GtLOpenAIClient >> createAssistant: anAssistant [
 
 { #category : #accessing }
 GtLOpenAIClient >> createFineTuningJobOnModel: aModelName withFile: aFileId [
-	^ GtLOpenAICreateFineTuningJobAPIClient new
+	^ GtLOpenAICreateFineTuningJobAPICommand new
 		client: self;
 		model: aModelName;
 		file: aFileId;
@@ -120,7 +120,7 @@ GtLOpenAIClient >> createFineTuningJobOnModel: aModelName withFile: aFileId [
 
 { #category : #accessing }
 GtLOpenAIClient >> createRunForThread: aThreadId usingAssistant: anAssistantId [
-	^ GtLOpenAICreateThreadRunAPIClient new
+	^ GtLOpenAICreateThreadRunAPICommand new
 		client: self;
 		assistant: anAssistantId;
 		thread: aThreadId;
@@ -129,7 +129,7 @@ GtLOpenAIClient >> createRunForThread: aThreadId usingAssistant: anAssistantId [
 
 { #category : #accessing }
 GtLOpenAIClient >> createRunForThread: aThreadId usingAssistant: anAssistantId andResponseFormat: aFormat [
-	^ GtLOpenAICreateThreadRunAPIClient new
+	^ GtLOpenAICreateThreadRunAPICommand new
 		client: self;
 		assistant: anAssistantId;
 		thread: aThreadId;
@@ -139,7 +139,7 @@ GtLOpenAIClient >> createRunForThread: aThreadId usingAssistant: anAssistantId a
 
 { #category : #accessing }
 GtLOpenAIClient >> createThreadWithMessages: aListOfMessages [ 
-	^ GtLOpenAICreateThreadAPIClient new
+	^ GtLOpenAICreateThreadAPICommand new
 		client: self;
 		messages: aListOfMessages;
 		perform
@@ -147,7 +147,7 @@ GtLOpenAIClient >> createThreadWithMessages: aListOfMessages [
 
 { #category : #accessing }
 GtLOpenAIClient >> createVectorStoreNamed: aName withFiles: aCollectionOfFileIds [
-	^ GtLOpenAICreateVectorStoreAPIClient new
+	^ GtLOpenAICreateVectorStoreAPICommand new
 		client: self;
 		name: aName;
 		files: aCollectionOfFileIds;
@@ -176,7 +176,7 @@ GtLOpenAIClient >> delete: aUrl [
 
 { #category : #accessing }
 GtLOpenAIClient >> deleteAssistant: anAssistantId [
-	^ GtLOpenAIDeleteAssistantAPIClient new
+	^ GtLOpenAIDeleteAssistantAPICommand new
 		client: self;
 		assistant: anAssistantId;
 		perform
@@ -184,7 +184,7 @@ GtLOpenAIClient >> deleteAssistant: anAssistantId [
 
 { #category : #accessing }
 GtLOpenAIClient >> deleteFile: aFileId [
-	^ GtLOpenAIDeleteFileAPIClient new
+	^ GtLOpenAIDeleteFileAPICommand new
 		client: self;
 		file: aFileId;
 		perform
@@ -192,7 +192,7 @@ GtLOpenAIClient >> deleteFile: aFileId [
 
 { #category : #'as yet unclassified' }
 GtLOpenAIClient >> deleteModel: aModel [ 
-	^ GtLOpenAIDeleteModelAPIClient new
+	^ GtLOpenAIDeleteModelAPICommand new
 		client: self;
 		model: aModel;
 		perform
@@ -200,7 +200,7 @@ GtLOpenAIClient >> deleteModel: aModel [
 
 { #category : #accessing }
 GtLOpenAIClient >> deleteVectorStore: anId [
-	^ GtLOpenAIDeleteVectorStoreAPIClient new
+	^ GtLOpenAIDeleteVectorStoreAPICommand new
 		client: self;
 		vectorStore: anId;
 		perform
@@ -208,7 +208,7 @@ GtLOpenAIClient >> deleteVectorStore: anId [
 
 { #category : #accessing }
 GtLOpenAIClient >> generateEmbeddingsWithModel: aString andInput: anInputString [
-	^ GtLOpenAIGenerateEmbeddingAPIClient new
+	^ GtLOpenAIGenerateEmbeddingAPICommand new
 		client: self;
 		model: aString;
 		input: anInputString;
@@ -217,7 +217,7 @@ GtLOpenAIClient >> generateEmbeddingsWithModel: aString andInput: anInputString 
 
 { #category : #'as yet unclassified' }
 GtLOpenAIClient >> generateResponseWithModel: aString andMessages: aCollection [
-	^ GtLOpenAIGenerateResponseAPIClient new
+	^ GtLOpenAIGenerateResponseAPICommand new
 		client: self;
 		model: aString;
 		messages: aCollection;
@@ -226,7 +226,7 @@ GtLOpenAIClient >> generateResponseWithModel: aString andMessages: aCollection [
 
 { #category : #'as yet unclassified' }
 GtLOpenAIClient >> generateResponseWithModel: aString messages: aCollection instructions: anInstruction tools: aCollectionOfTools andFormat: aFormat [
-	^ GtLOpenAIGenerateResponseAPIClient new
+	^ GtLOpenAIGenerateResponseAPICommand new
 		client: self;
 		model: aString;
 		messages: aCollection;
@@ -238,7 +238,7 @@ GtLOpenAIClient >> generateResponseWithModel: aString messages: aCollection inst
 
 { #category : #'as yet unclassified' }
 GtLOpenAIClient >> generateResponseWithModel: aString messages: aCollection instructions: anInstruction tools: aCollectionOfTools andFormat: aFormat isStreaming: aBoolean [
-	^ GtLOpenAIGenerateResponseAPIClient new
+	^ GtLOpenAIGenerateResponseAPICommand new
 		client: self;
 		model: aString;
 		messages: aCollection;
@@ -272,7 +272,7 @@ GtLOpenAIClient >> get: aUrl withParams: aListOfAssocs [
 
 { #category : #accessing }
 GtLOpenAIClient >> getFile: aFileId [
-	^ GtLOpenAIGetFileAPIClient new
+	^ GtLOpenAIGetFileAPICommand new
 		client: self;
 		file: aFileId;
 		perform
@@ -280,7 +280,7 @@ GtLOpenAIClient >> getFile: aFileId [
 
 { #category : #accessing }
 GtLOpenAIClient >> getFileContents: aFileId [
-	^ GtLOpenAIGetFileContentsAPIClient new
+	^ GtLOpenAIGetFileContentsAPICommand new
 		client: self;
 		file: aFileId;
 		perform
@@ -288,7 +288,7 @@ GtLOpenAIClient >> getFileContents: aFileId [
 
 { #category : #accessing }
 GtLOpenAIClient >> getFineTuningCheckpointsForJob: anId [
-	^ GtLOpenAIGetFineTuningCheckpointsForJobAPIClient new
+	^ GtLOpenAIGetFineTuningCheckpointsForJobAPICommand new
 		client: self;
 		job: anId;
 		perform
@@ -296,7 +296,7 @@ GtLOpenAIClient >> getFineTuningCheckpointsForJob: anId [
 
 { #category : #accessing }
 GtLOpenAIClient >> getFineTuningEventsForJob: anId [
-	^ GtLOpenAIGetFineTuningEventsForJobAPIClient new
+	^ GtLOpenAIGetFineTuningEventsForJobAPICommand new
 		client: self;
 		job: anId;
 		perform
@@ -304,7 +304,7 @@ GtLOpenAIClient >> getFineTuningEventsForJob: anId [
 
 { #category : #accessing }
 GtLOpenAIClient >> getFineTuningJob: anId [
-	^ GtLOpenAIGetFineTuningJobAPIClient new
+	^ GtLOpenAIGetFineTuningJobAPICommand new
 		client: self;
 		job: anId;
 		perform
@@ -312,7 +312,7 @@ GtLOpenAIClient >> getFineTuningJob: anId [
 
 { #category : #accessing }
 GtLOpenAIClient >> getRun: aRunId forThread: aThreadId [
-	^ GtLOpenAIGetThreadRunAPIClient new
+	^ GtLOpenAIGetThreadRunAPICommand new
 		client: self;
 		run: aRunId;
 		thread: aThreadId;
@@ -361,21 +361,21 @@ GtLOpenAIClient >> initializeClient [
 
 { #category : #accessing }
 GtLOpenAIClient >> listAssistants [
-	^ GtLOpenAIListAssistantsAPIClient new
+	^ GtLOpenAIListAssistantsAPICommand new
 		client: self;
 		perform
 ]
 
 { #category : #accessing }
 GtLOpenAIClient >> listFiles [
-	^ GtLOpenAIListFilesAPIClient new
+	^ GtLOpenAIListFilesAPICommand new
 		client: self;
 		perform
 ]
 
 { #category : #accessing }
 GtLOpenAIClient >> listMessagesForThread: aThreadId [ 
-	^ GtLOpenAIListThreadMessagesAPIClient new
+	^ GtLOpenAIListThreadMessagesAPICommand new
 		client: self;
 		thread: aThreadId;
 		perform
@@ -383,14 +383,14 @@ GtLOpenAIClient >> listMessagesForThread: aThreadId [
 
 { #category : #accessing }
 GtLOpenAIClient >> listModels [
-	^ GtLOpenAIListModelsAPIClient new
+	^ GtLOpenAIListModelsAPICommand new
 		client: self;
 		perform
 ]
 
 { #category : #accessing }
 GtLOpenAIClient >> listVectorStores [
-	^ GtLOpenAIListVectorStoresAPIClient new
+	^ GtLOpenAIListVectorStoresAPICommand new
 		client: self;
 		perform
 ]
@@ -440,7 +440,7 @@ GtLOpenAIClient >> postStreaming: aString withEntity: anEntity [
 
 { #category : #'as yet unclassified' }
 GtLOpenAIClient >> submitToolOutputs: output toThread: aThreadId anRun: aRunId [ 
-	^ GtLOpenAISubmitToolOutputsAPIClient new
+	^ GtLOpenAISubmitToolOutputsAPICommand new
 		client: self;
 		thread: aThreadId;
 		run: aRunId;
@@ -450,7 +450,7 @@ GtLOpenAIClient >> submitToolOutputs: output toThread: aThreadId anRun: aRunId [
 
 { #category : #accessing }
 GtLOpenAIClient >> uploadFile: aFileReference withPurpose: aString [ 
-	^ GtLOpenAIUploadFileAPIClient new
+	^ GtLOpenAIUploadFileAPICommand new
 		client: self;
 		file: aFileReference;
 		purpose: aString;

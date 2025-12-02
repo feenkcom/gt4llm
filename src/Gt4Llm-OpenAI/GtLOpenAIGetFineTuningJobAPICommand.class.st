@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLOpenAIGetFineTuningJobAPIClient,
+	#name : #GtLOpenAIGetFineTuningJobAPICommand,
 	#superclass : #GtLAPICommand,
 	#instVars : [
 		'job'
@@ -8,21 +8,21 @@ Class {
 }
 
 { #category : #accessing }
-GtLOpenAIGetFineTuningJobAPIClient >> job [
+GtLOpenAIGetFineTuningJobAPICommand >> job [
 	^ job
 ]
 
 { #category : #accessing }
-GtLOpenAIGetFineTuningJobAPIClient >> job: anObject [
+GtLOpenAIGetFineTuningJobAPICommand >> job: anObject [
 	job := anObject
 ]
 
 { #category : #accessing }
-GtLOpenAIGetFineTuningJobAPIClient >> request [
+GtLOpenAIGetFineTuningJobAPICommand >> request [
 	^ self client get: '/fine_tuning/jobs/' , self job
 ]
 
 { #category : #accessing }
-GtLOpenAIGetFineTuningJobAPIClient >> serializationClass [
+GtLOpenAIGetFineTuningJobAPICommand >> serializationClass [
 	^ GtLOpenAIFineTuningJob
 ]
