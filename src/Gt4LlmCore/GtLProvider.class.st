@@ -47,12 +47,12 @@ GtLProvider >> client [
 
 { #category : #accessing }
 GtLProvider >> defaultAssistantMessageClass [
-	^ GtLlmAssistantMessage
+	^ GtLChatMessage
 ]
 
 { #category : #accessing }
 GtLProvider >> defaultUserMessageClass [
-	^ GtLlmUserMessage
+	^ GtLUserMessage
 ]
 
 { #category : #'gt - extensions' }
