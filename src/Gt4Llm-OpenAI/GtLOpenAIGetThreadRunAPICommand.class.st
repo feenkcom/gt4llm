@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLOpenAIGetThreadRunAPIClient,
+	#name : #GtLOpenAIGetThreadRunAPICommand,
 	#superclass : #GtLAPICommand,
 	#instVars : [
 		'run',
@@ -9,31 +9,31 @@ Class {
 }
 
 { #category : #accessing }
-GtLOpenAIGetThreadRunAPIClient >> request [
+GtLOpenAIGetThreadRunAPICommand >> request [
 	^ self client get: 'threads/' , self thread , '/runs/' , self run
 ]
 
 { #category : #accessing }
-GtLOpenAIGetThreadRunAPIClient >> run [
+GtLOpenAIGetThreadRunAPICommand >> run [
 	^ run
 ]
 
 { #category : #accessing }
-GtLOpenAIGetThreadRunAPIClient >> run: anObject [
+GtLOpenAIGetThreadRunAPICommand >> run: anObject [
 	run := anObject
 ]
 
 { #category : #accessing }
-GtLOpenAIGetThreadRunAPIClient >> serializationClass [
+GtLOpenAIGetThreadRunAPICommand >> serializationClass [
 	^ GtLOpenAIThreadRun
 ]
 
 { #category : #accessing }
-GtLOpenAIGetThreadRunAPIClient >> thread [
+GtLOpenAIGetThreadRunAPICommand >> thread [
 	^ thread
 ]
 
 { #category : #accessing }
-GtLOpenAIGetThreadRunAPIClient >> thread: anObject [
+GtLOpenAIGetThreadRunAPICommand >> thread: anObject [
 	thread := anObject
 ]

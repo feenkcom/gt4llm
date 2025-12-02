@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLOpenAIDeleteAssistantAPIClient,
+	#name : #GtLOpenAIDeleteAssistantAPICommand,
 	#superclass : #GtLAPICommand,
 	#instVars : [
 		'assistant'
@@ -8,22 +8,22 @@ Class {
 }
 
 { #category : #accessing }
-GtLOpenAIDeleteAssistantAPIClient >> assistant [
+GtLOpenAIDeleteAssistantAPICommand >> assistant [
 	^ assistant
 ]
 
 { #category : #accessing }
-GtLOpenAIDeleteAssistantAPIClient >> assistant: anObject [
+GtLOpenAIDeleteAssistantAPICommand >> assistant: anObject [
 	assistant := anObject
 ]
 
 { #category : #accessing }
-GtLOpenAIDeleteAssistantAPIClient >> request [
+GtLOpenAIDeleteAssistantAPICommand >> request [
 	^ self client
 		delete: 'assistants/', assistant
 ]
 
 { #category : #accessing }
-GtLOpenAIDeleteAssistantAPIClient >> serializationClass [
+GtLOpenAIDeleteAssistantAPICommand >> serializationClass [
 	^ GtLOpenAIDeletion
 ]

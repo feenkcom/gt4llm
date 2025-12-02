@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLOpenAICreateThreadRunAPIClient,
+	#name : #GtLOpenAICreateThreadRunAPICommand,
 	#superclass : #GtLAPICommand,
 	#instVars : [
 		'assistant',
@@ -10,17 +10,17 @@ Class {
 }
 
 { #category : #accessing }
-GtLOpenAICreateThreadRunAPIClient >> assistant [
+GtLOpenAICreateThreadRunAPICommand >> assistant [
 	^ assistant
 ]
 
 { #category : #accessing }
-GtLOpenAICreateThreadRunAPIClient >> assistant: anObject [
+GtLOpenAICreateThreadRunAPICommand >> assistant: anObject [
 	assistant := anObject
 ]
 
 { #category : #accessing }
-GtLOpenAICreateThreadRunAPIClient >> request [
+GtLOpenAICreateThreadRunAPICommand >> request [
 	^ self client
 		post: 'threads/' , self thread , '/runs'
 		withEntity: {'assistant_id' -> self assistant.
@@ -28,26 +28,26 @@ GtLOpenAICreateThreadRunAPIClient >> request [
 ]
 
 { #category : #accessing }
-GtLOpenAICreateThreadRunAPIClient >> responseFormat [
+GtLOpenAICreateThreadRunAPICommand >> responseFormat [
 	^ responseFormat
 ]
 
 { #category : #accessing }
-GtLOpenAICreateThreadRunAPIClient >> responseFormat: anObject [
+GtLOpenAICreateThreadRunAPICommand >> responseFormat: anObject [
 	responseFormat := anObject
 ]
 
 { #category : #accessing }
-GtLOpenAICreateThreadRunAPIClient >> serializationClass [
+GtLOpenAICreateThreadRunAPICommand >> serializationClass [
 	^ GtLOpenAIThreadRun
 ]
 
 { #category : #accessing }
-GtLOpenAICreateThreadRunAPIClient >> thread [
+GtLOpenAICreateThreadRunAPICommand >> thread [
 	^ thread
 ]
 
 { #category : #accessing }
-GtLOpenAICreateThreadRunAPIClient >> thread: anObject [
+GtLOpenAICreateThreadRunAPICommand >> thread: anObject [
 	thread := anObject
 ]

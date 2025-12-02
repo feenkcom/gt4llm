@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLOpenAICreateVectorStoreAPIClient,
+	#name : #GtLOpenAICreateVectorStoreAPICommand,
 	#superclass : #GtLAPICommand,
 	#instVars : [
 		'name',
@@ -9,27 +9,27 @@ Class {
 }
 
 { #category : #accessing }
-GtLOpenAICreateVectorStoreAPIClient >> files [
+GtLOpenAICreateVectorStoreAPICommand >> files [
 	^ files
 ]
 
 { #category : #accessing }
-GtLOpenAICreateVectorStoreAPIClient >> files: anObject [
+GtLOpenAICreateVectorStoreAPICommand >> files: anObject [
 	files := anObject
 ]
 
 { #category : #accessing }
-GtLOpenAICreateVectorStoreAPIClient >> name [
+GtLOpenAICreateVectorStoreAPICommand >> name [
 	^ name
 ]
 
 { #category : #accessing }
-GtLOpenAICreateVectorStoreAPIClient >> name: anObject [
+GtLOpenAICreateVectorStoreAPICommand >> name: anObject [
 	name := anObject
 ]
 
 { #category : #'as yet unclassified' }
-GtLOpenAICreateVectorStoreAPIClient >> request [
+GtLOpenAICreateVectorStoreAPICommand >> request [
 	^ self client
 		post: 'vector_stores'
 		withEntity: {'name' -> self name.
@@ -37,6 +37,6 @@ GtLOpenAICreateVectorStoreAPIClient >> request [
 ]
 
 { #category : #'as yet unclassified' }
-GtLOpenAICreateVectorStoreAPIClient >> serializationClass [
+GtLOpenAICreateVectorStoreAPICommand >> serializationClass [
 	^ GtLOpenAIVectorStore
 ]

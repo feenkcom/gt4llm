@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLOpenAICreateFineTuningJobAPIClient,
+	#name : #GtLOpenAICreateFineTuningJobAPICommand,
 	#superclass : #GtLAPICommand,
 	#instVars : [
 		'model',
@@ -9,27 +9,27 @@ Class {
 }
 
 { #category : #accessing }
-GtLOpenAICreateFineTuningJobAPIClient >> file [
+GtLOpenAICreateFineTuningJobAPICommand >> file [
 	^ file
 ]
 
 { #category : #accessing }
-GtLOpenAICreateFineTuningJobAPIClient >> file: anObject [
+GtLOpenAICreateFineTuningJobAPICommand >> file: anObject [
 	file := anObject
 ]
 
 { #category : #accessing }
-GtLOpenAICreateFineTuningJobAPIClient >> model [
+GtLOpenAICreateFineTuningJobAPICommand >> model [
 	^ model
 ]
 
 { #category : #accessing }
-GtLOpenAICreateFineTuningJobAPIClient >> model: anObject [
+GtLOpenAICreateFineTuningJobAPICommand >> model: anObject [
 	model := anObject
 ]
 
 { #category : #accessing }
-GtLOpenAICreateFineTuningJobAPIClient >> request [
+GtLOpenAICreateFineTuningJobAPICommand >> request [
 	^ self client
 		post: 'fine_tuning/jobs'
 		withEntity: {'training_file' -> self file.
@@ -37,6 +37,6 @@ GtLOpenAICreateFineTuningJobAPIClient >> request [
 ]
 
 { #category : #accessing }
-GtLOpenAICreateFineTuningJobAPIClient >> serializationClass [
+GtLOpenAICreateFineTuningJobAPICommand >> serializationClass [
 	^ GtLOpenAIFineTuningJob
 ]

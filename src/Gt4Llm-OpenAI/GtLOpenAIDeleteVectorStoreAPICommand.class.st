@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLOpenAIDeleteVectorStoreAPIClient,
+	#name : #GtLOpenAIDeleteVectorStoreAPICommand,
 	#superclass : #GtLAPICommand,
 	#instVars : [
 		'vectorStore'
@@ -8,22 +8,22 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-GtLOpenAIDeleteVectorStoreAPIClient >> request [
+GtLOpenAIDeleteVectorStoreAPICommand >> request [
 	^ self client
 		delete: 'vector_stores/', vectorStore
 ]
 
 { #category : #'as yet unclassified' }
-GtLOpenAIDeleteVectorStoreAPIClient >> serializationClass [
+GtLOpenAIDeleteVectorStoreAPICommand >> serializationClass [
 	^ GtLOpenAIDeletion
 ]
 
 { #category : #accessing }
-GtLOpenAIDeleteVectorStoreAPIClient >> vectorStore [
+GtLOpenAIDeleteVectorStoreAPICommand >> vectorStore [
 	^ vectorStore
 ]
 
 { #category : #accessing }
-GtLOpenAIDeleteVectorStoreAPIClient >> vectorStore: anObject [
+GtLOpenAIDeleteVectorStoreAPICommand >> vectorStore: anObject [
 	vectorStore := anObject
 ]

@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLOpenAICompleteChatAPIClient,
+	#name : #GtLOpenAICompleteChatAPICommand,
 	#superclass : #GtLAPICommand,
 	#instVars : [
 		'model',
@@ -9,27 +9,27 @@ Class {
 }
 
 { #category : #accessing }
-GtLOpenAICompleteChatAPIClient >> messages [
+GtLOpenAICompleteChatAPICommand >> messages [
 	^ messages
 ]
 
 { #category : #accessing }
-GtLOpenAICompleteChatAPIClient >> messages: anObject [
+GtLOpenAICompleteChatAPICommand >> messages: anObject [
 	messages := anObject
 ]
 
 { #category : #accessing }
-GtLOpenAICompleteChatAPIClient >> model [
+GtLOpenAICompleteChatAPICommand >> model [
 	^ model
 ]
 
 { #category : #accessing }
-GtLOpenAICompleteChatAPIClient >> model: anObject [
+GtLOpenAICompleteChatAPICommand >> model: anObject [
 	model := anObject
 ]
 
 { #category : #accessing }
-GtLOpenAICompleteChatAPIClient >> request [
+GtLOpenAICompleteChatAPICommand >> request [
 	^ self client
 		post: '/chat/completions'
 		withEntity: {'model' -> self model.
@@ -37,6 +37,6 @@ GtLOpenAICompleteChatAPIClient >> request [
 ]
 
 { #category : #accessing }
-GtLOpenAICompleteChatAPIClient >> serializationClass [
+GtLOpenAICompleteChatAPICommand >> serializationClass [
 	^ GtLOpenAIChatCompletion
 ]

@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLOpenAIUploadFileAPIClient,
+	#name : #GtLOpenAIUploadFileAPICommand,
 	#superclass : #GtLAPICommand,
 	#instVars : [
 		'file',
@@ -9,17 +9,17 @@ Class {
 }
 
 { #category : #accessing }
-GtLOpenAIUploadFileAPIClient >> file [
+GtLOpenAIUploadFileAPICommand >> file [
 	^ file
 ]
 
 { #category : #accessing }
-GtLOpenAIUploadFileAPIClient >> file: anObject [
+GtLOpenAIUploadFileAPICommand >> file: anObject [
 	file := anObject
 ]
 
 { #category : #accessing }
-GtLOpenAIUploadFileAPIClient >> fileToEntity [
+GtLOpenAIUploadFileAPICommand >> fileToEntity [
 	| extension mimeType |
 	(self file isKindOf: GtLlmFineTuningFile)
 		ifTrue: [ ^ ZnEntity with: self file contents type: 'application/jsonl' ].
@@ -39,17 +39,17 @@ GtLOpenAIUploadFileAPIClient >> fileToEntity [
 ]
 
 { #category : #accessing }
-GtLOpenAIUploadFileAPIClient >> purpose [
+GtLOpenAIUploadFileAPICommand >> purpose [
 	^ purpose
 ]
 
 { #category : #accessing }
-GtLOpenAIUploadFileAPIClient >> purpose: anObject [
+GtLOpenAIUploadFileAPICommand >> purpose: anObject [
 	purpose := anObject
 ]
 
 { #category : #actions }
-GtLOpenAIUploadFileAPIClient >> request [
+GtLOpenAIUploadFileAPICommand >> request [
 	^ self client
 		postFile: '/files'
 		withEntity: (ZnMultiPartFormDataEntity new
@@ -62,6 +62,6 @@ GtLOpenAIUploadFileAPIClient >> request [
 ]
 
 { #category : #accessing }
-GtLOpenAIUploadFileAPIClient >> serializationClass [
+GtLOpenAIUploadFileAPICommand >> serializationClass [
 	^ GtLOpenAIFile
 ]

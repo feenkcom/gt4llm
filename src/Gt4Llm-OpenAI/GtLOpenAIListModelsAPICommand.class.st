@@ -1,15 +1,15 @@
 Class {
-	#name : #GtLOpenAIListModelsAPIClient,
+	#name : #GtLOpenAIListModelsAPICommand,
 	#superclass : #GtLAPICommand,
 	#category : #'Gt4Llm-OpenAI'
 }
 
 { #category : #accessing }
-GtLOpenAIListModelsAPIClient >> request [
+GtLOpenAIListModelsAPICommand >> request [
 	^ self client get: '/models'
 ]
 
 { #category : #accessing }
-GtLOpenAIListModelsAPIClient >> serializationClass [
+GtLOpenAIListModelsAPICommand >> serializationClass [
 	^ GtLOpenAIModelsGroup
 ]

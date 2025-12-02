@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLOpenAIListThreadMessagesAPIClient,
+	#name : #GtLOpenAIListThreadMessagesAPICommand,
 	#superclass : #GtLAPICommand,
 	#instVars : [
 		'thread',
@@ -9,51 +9,51 @@ Class {
 }
 
 { #category : #other }
-GtLOpenAIListThreadMessagesAPIClient class >> new [
+GtLOpenAIListThreadMessagesAPICommand class >> new [
 	^ self basicNew initialize
 ]
 
 { #category : #'as yet unclassified' }
-GtLOpenAIListThreadMessagesAPIClient >> defaultParams [
+GtLOpenAIListThreadMessagesAPICommand >> defaultParams [
 	^ {'limit' -> 100.
 		'order' -> 'asc'}
 ]
 
 { #category : #'as yet unclassified' }
-GtLOpenAIListThreadMessagesAPIClient >> initialize [
+GtLOpenAIListThreadMessagesAPICommand >> initialize [
 	super initialize.
 
 	params := self defaultParams
 ]
 
 { #category : #accessing }
-GtLOpenAIListThreadMessagesAPIClient >> params [
+GtLOpenAIListThreadMessagesAPICommand >> params [
 	^ params
 ]
 
 { #category : #accessing }
-GtLOpenAIListThreadMessagesAPIClient >> params: anObject [
+GtLOpenAIListThreadMessagesAPICommand >> params: anObject [
 	params := anObject
 ]
 
 { #category : #accessing }
-GtLOpenAIListThreadMessagesAPIClient >> request [
+GtLOpenAIListThreadMessagesAPICommand >> request [
 	^ self client
 		get: 'threads/' , self thread , '/messages'
 		withParams: self params
 ]
 
 { #category : #accessing }
-GtLOpenAIListThreadMessagesAPIClient >> serializationClass [
+GtLOpenAIListThreadMessagesAPICommand >> serializationClass [
 	^ GtLOpenAIMessagesGroup
 ]
 
 { #category : #accessing }
-GtLOpenAIListThreadMessagesAPIClient >> thread [
+GtLOpenAIListThreadMessagesAPICommand >> thread [
 	^ thread
 ]
 
 { #category : #accessing }
-GtLOpenAIListThreadMessagesAPIClient >> thread: anObject [
+GtLOpenAIListThreadMessagesAPICommand >> thread: anObject [
 	thread := anObject
 ]

@@ -1,15 +1,15 @@
 Class {
-	#name : #GtLOpenAIListAssistantsAPIClient,
+	#name : #GtLOpenAIListAssistantsAPICommand,
 	#superclass : #GtLAPICommand,
 	#category : #'Gt4Llm-OpenAI'
 }
 
 { #category : #'as yet unclassified' }
-GtLOpenAIListAssistantsAPIClient >> request [
+GtLOpenAIListAssistantsAPICommand >> request [
 	^ self client get: '/assistants'
 ]
 
 { #category : #'as yet unclassified' }
-GtLOpenAIListAssistantsAPIClient >> serializationClass [
+GtLOpenAIListAssistantsAPICommand >> serializationClass [
 	^ GtLOpenAIAssistantsGroup
 ]

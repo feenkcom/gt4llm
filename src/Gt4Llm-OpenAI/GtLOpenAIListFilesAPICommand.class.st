@@ -1,15 +1,15 @@
 Class {
-	#name : #GtLOpenAIListFilesAPIClient,
+	#name : #GtLOpenAIListFilesAPICommand,
 	#superclass : #GtLAPICommand,
 	#category : #'Gt4Llm-OpenAI'
 }
 
 { #category : #'as yet unclassified' }
-GtLOpenAIListFilesAPIClient >> request [
+GtLOpenAIListFilesAPICommand >> request [
 	^ self client get: '/files'
 ]
 
 { #category : #'as yet unclassified' }
-GtLOpenAIListFilesAPIClient >> serializationClass [
+GtLOpenAIListFilesAPICommand >> serializationClass [
 	^ GtLOpenAIFilesGroup
 ]

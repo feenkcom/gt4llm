@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLOpenAIDeleteModelAPIClient,
+	#name : #GtLOpenAIDeleteModelAPICommand,
 	#superclass : #GtLAPICommand,
 	#instVars : [
 		'model'
@@ -8,21 +8,21 @@ Class {
 }
 
 { #category : #accessing }
-GtLOpenAIDeleteModelAPIClient >> model [
+GtLOpenAIDeleteModelAPICommand >> model [
 	^ model
 ]
 
 { #category : #accessing }
-GtLOpenAIDeleteModelAPIClient >> model: anObject [
+GtLOpenAIDeleteModelAPICommand >> model: anObject [
 	model := anObject
 ]
 
 { #category : #'as yet unclassified' }
-GtLOpenAIDeleteModelAPIClient >> request [
+GtLOpenAIDeleteModelAPICommand >> request [
 	^ self client delete: 'models/' , model
 ]
 
 { #category : #'as yet unclassified' }
-GtLOpenAIDeleteModelAPIClient >> serializationClass [
+GtLOpenAIDeleteModelAPICommand >> serializationClass [
 	^ GtLOpenAIDeletion
 ]

@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLOpenAIAddMessageToThreadAPIClient,
+	#name : #GtLOpenAIAddMessageToThreadAPICommand,
 	#superclass : #GtLAPICommand,
 	#instVars : [
 		'message',
@@ -9,33 +9,33 @@ Class {
 }
 
 { #category : #accessing }
-GtLOpenAIAddMessageToThreadAPIClient >> message [
+GtLOpenAIAddMessageToThreadAPICommand >> message [
 	^ message
 ]
 
 { #category : #accessing }
-GtLOpenAIAddMessageToThreadAPIClient >> message: anObject [
+GtLOpenAIAddMessageToThreadAPICommand >> message: anObject [
 	message := anObject
 ]
 
 { #category : #accessing }
-GtLOpenAIAddMessageToThreadAPIClient >> request [
+GtLOpenAIAddMessageToThreadAPICommand >> request [
 	^ self client
 		post: 'threads/' , self thread , '/messages'
 		withEntity: self message serialize
 ]
 
 { #category : #accessing }
-GtLOpenAIAddMessageToThreadAPIClient >> serializationClass [
+GtLOpenAIAddMessageToThreadAPICommand >> serializationClass [
 	^ GtOpenAIMessage
 ]
 
 { #category : #accessing }
-GtLOpenAIAddMessageToThreadAPIClient >> thread [
+GtLOpenAIAddMessageToThreadAPICommand >> thread [
 	^ thread
 ]
 
 { #category : #accessing }
-GtLOpenAIAddMessageToThreadAPIClient >> thread: anObject [
+GtLOpenAIAddMessageToThreadAPICommand >> thread: anObject [
 	thread := anObject
 ]

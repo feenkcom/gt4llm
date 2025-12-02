@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLOpenAICreateAssistantAPIClient,
+	#name : #GtLOpenAICreateAssistantAPICommand,
 	#superclass : #GtLAPICommand,
 	#instVars : [
 		'assistant'
@@ -8,23 +8,23 @@ Class {
 }
 
 { #category : #accessing }
-GtLOpenAICreateAssistantAPIClient >> assistant [
+GtLOpenAICreateAssistantAPICommand >> assistant [
 	^ assistant
 ]
 
 { #category : #accessing }
-GtLOpenAICreateAssistantAPIClient >> assistant: anObject [
+GtLOpenAICreateAssistantAPICommand >> assistant: anObject [
 	assistant := anObject
 ]
 
 { #category : #accessing }
-GtLOpenAICreateAssistantAPIClient >> request [
+GtLOpenAICreateAssistantAPICommand >> request [
 	^ self client
 		post: '/assistants'
 		withEntity: self assistant serialize
 ]
 
 { #category : #accessing }
-GtLOpenAICreateAssistantAPIClient >> serializationClass [
+GtLOpenAICreateAssistantAPICommand >> serializationClass [
 	^ GtLOpenAIAssistant
 ]
