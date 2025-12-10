@@ -82,7 +82,7 @@ GtLOpenAIProvider >> executeWait [
 					messages: self chat messages
 					instructions: currentMessage instructions
 					tools: currentMessage tools
-					andFormat: currentMessage format
+					andFormat: currentMessage formatDescriptionsJsonSchema
 					isStreaming: isStreaming.
 
 			result hasToolCalls

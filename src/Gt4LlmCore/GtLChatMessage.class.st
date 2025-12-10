@@ -9,11 +9,11 @@ Class {
 		'chat',
 		'instructions',
 		'tools',
-		'format',
 		'announcer',
 		'images',
 		'model',
-		'originMessageCall'
+		'originMessageCall',
+		'formatDescriptions'
 	],
 	#category : #Gt4LlmCore
 }
@@ -135,8 +135,8 @@ GtLChatMessage >> chat: aChat [
 		instructions := chat currentInstructions ].
 	tools ifNil: [
 		tools := chat currentTools ].
-	format ifNil: [
-		format := chat currentFormat ].
+	formatDescriptions ifNil: [
+		formatDescriptions := chat currentFormatDescriptions ].
 ]
 
 { #category : #accessing }
@@ -205,12 +205,23 @@ GtLChatMessage >> descendant [
 
 { #category : #accessing }
 GtLChatMessage >> format [
-	^ format
+	^ formatDescriptions
 ]
 
 { #category : #accessing }
 GtLChatMessage >> format: anObject [
-	format := anObject
+	formatDescriptions := anObject
+]
+
+{ #category : #accessing }
+GtLChatMessage >> formatDescriptionsJsonSchema [
+	^ {'type' -> 'object'.
+		'properties'
+			-> (formatDescriptions
+					collect: [ :aComponent | aComponent name -> aComponent asJsonSchema ])
+					asDictionary.
+		'required' -> (formatDescriptions collect: [:aFormat | aFormat name ]).
+		'additionalProperties' -> false} asDictionary
 ]
 
 { #category : #'gt - extensions' }

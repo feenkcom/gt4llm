@@ -38,6 +38,11 @@ GtLChat >> acceptVisitor: aVisitor [
 	^ aVisitor visitGtLlmChat: self
 ]
 
+{ #category : #adding }
+GtLChat >> addFormatDescription: aFormatDescription [
+	format add: aFormatDescription
+]
+
 { #category : #accessing }
 GtLChat >> addMessage: aMessage [
 	self updateLastUpdate.
@@ -96,6 +101,11 @@ GtLChat >> createMessageForCall: aMessageCall [
 
 { #category : #accessing }
 GtLChat >> currentFormat [
+	^ format 
+]
+
+{ #category : #accessing }
+GtLChat >> currentFormatDescriptions [
 	^ format 
 ]
 
@@ -187,6 +197,7 @@ GtLChat >> initialize [
 	
 	self initializeMessages.
 	self initializeTools.
+	format := OrderedCollection new.
 	
 	self updateLastUpdate
 ]
