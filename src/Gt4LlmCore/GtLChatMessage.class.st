@@ -86,6 +86,11 @@ GtLChatMessage >> action [
 	^ [ self contentJson at: 'Action' ] on: Error do: [ nil ]
 ]
 
+{ #category : #accessing }
+GtLChatMessage >> addFormatDescription: aFormatDescription [
+	formatDescriptions add: aFormatDescription
+]
+
 { #category : #'as yet unclassified' }
 GtLChatMessage >> ancestor [
 	^ self chat ancestorOf: self
@@ -204,24 +209,20 @@ GtLChatMessage >> descendant [
 ]
 
 { #category : #accessing }
-GtLChatMessage >> format [
-	^ formatDescriptions
-]
-
-{ #category : #accessing }
-GtLChatMessage >> format: anObject [
-	formatDescriptions := anObject
+GtLChatMessage >> formatDescriptions: aCollection [ 
+	formatDescriptions := aCollection 
 ]
 
 { #category : #accessing }
 GtLChatMessage >> formatDescriptionsJsonSchema [
-	^ {'type' -> 'object'.
+	^ formatDescriptions asJsonSchemaDictionary 
+	"{'type' -> 'object'.
 		'properties'
 			-> (formatDescriptions
 					collect: [ :aComponent | aComponent name -> aComponent asJsonSchema ])
 					asDictionary.
 		'required' -> (formatDescriptions collect: [:aFormat | aFormat name ]).
-		'additionalProperties' -> false} asDictionary
+		'additionalProperties' -> false} asDictionary"
 ]
 
 { #category : #'gt - extensions' }
@@ -317,6 +318,8 @@ GtLChatMessage >> images: anObject [
 
 { #category : #accessing }
 GtLChatMessage >> initialize [
+	super initialize.
+	
 	id := self uuidClass new.
 	createdAt := DateAndTime now.
 	images := OrderedCollection new
