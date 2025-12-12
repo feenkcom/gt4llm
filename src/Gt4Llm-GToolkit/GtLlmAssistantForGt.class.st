@@ -22,6 +22,24 @@ GtLlmAssistantForGt >> objectFormatDescription [
 ```'
 ]
 
+{ #category : #accessing }
+GtLlmAssistantForGt >> pharoRewriteFormatDescription [
+	<gtLlmAssistantFormat>
+	^ GtLlmAssistantFormatDescription new
+		name: 'Pharo Rewrite';
+		priority: 10;
+		format: 'A Pharo AST search or rewrite wrapped in a JSON object';
+		example: 'The result is a JSON object that specifies a Pharo rewrite that can transform Pharo code. The rewrite is specified using the format of the RBParseTreeRewriter. The JSON object must contain a "search" property that is a string that is encoded to form a proper JSON string. The JSON object can also contain a "replace" property that specifies the replacement that is to be performed when the a match is found. Like the search property, the replace property should also be a proper JSON string. If the replace property is omitted, then it is used as a pattern to search for code.
+
+Example:
+```json
+{
+	"search": "``@col at: 2",
+	"replace": "``@col second"
+}
+```'
+]
+
 { #category : #'as yet unclassified' }
 GtLlmAssistantForGt >> textFormatDescription [
 	<gtLlmAssistantFormat>
