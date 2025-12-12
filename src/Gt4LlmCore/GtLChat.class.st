@@ -7,9 +7,9 @@ Class {
 		'provider',
 		'messages',
 		'tools',
-		'format',
 		'instructions',
-		'userMessageClass'
+		'userMessageClass',
+		'formatDescriptions'
 	],
 	#category : #Gt4LlmCore
 }
@@ -40,7 +40,7 @@ GtLChat >> acceptVisitor: aVisitor [
 
 { #category : #adding }
 GtLChat >> addFormatDescription: aFormatDescription [
-	format add: aFormatDescription
+	formatDescriptions add: aFormatDescription
 ]
 
 { #category : #accessing }
@@ -101,12 +101,12 @@ GtLChat >> createMessageForCall: aMessageCall [
 
 { #category : #accessing }
 GtLChat >> currentFormat [
-	^ format 
+	^ formatDescriptions 
 ]
 
 { #category : #accessing }
 GtLChat >> currentFormatDescriptions [
-	^ format 
+	^ formatDescriptions 
 ]
 
 { #category : #accessing }
@@ -121,12 +121,12 @@ GtLChat >> currentTools [
 
 { #category : #accessing }
 GtLChat >> format [
-	^ format 
+	^ formatDescriptions 
 ]
 
 { #category : #accessing }
 GtLChat >> format: anObject [
-	format := anObject
+	formatDescriptions := anObject
 ]
 
 { #category : #'gt - extensions' }
@@ -145,7 +145,7 @@ GtLChat >> gtCopySnippetSerialisationFor: anAction [
 { #category : #views }
 GtLChat >> gtFormatFor: aView [
 	<gtView>
-	format ifNil: [ ^ aView empty ].
+	formatDescriptions ifNil: [ ^ aView empty ].
 
 	^ aView textEditor
 		title: 'Format';
@@ -197,7 +197,7 @@ GtLChat >> initialize [
 	
 	self initializeMessages.
 	self initializeTools.
-	format := OrderedCollection new.
+	formatDescriptions := GtLCompositeResponseJsonSchemaDescription new.
 	
 	self updateLastUpdate
 ]

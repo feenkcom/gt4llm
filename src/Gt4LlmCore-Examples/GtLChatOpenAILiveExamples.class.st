@@ -49,6 +49,89 @@ GtLChatOpenAILiveExamples >> howAreYouCallExample [
 	^ self currentChat
 ]
 
+{ #category : #utils }
+GtLChatOpenAILiveExamples >> mathResponseSchemaForMathTutor [
+	| jsonObject |
+	jsonObject := NeoJSONObject fromString: '{
+      "type": "object",
+      "properties": {
+                    "steps": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "explanation": {"type": "string"},
+                                "output": {"type": "string"}
+                            },
+                            "required": ["explanation", "output"],
+                            "additionalProperties": false
+                        }
+                    },
+                    "final_answer": {"type": "string"}
+                },
+                "required": ["steps", "final_answer"],
+                "additionalProperties": false
+            }'.
+	^ NeoJSONSchema new json: jsonObject.
+]
+
+{ #category : #'examples - calls' }
+GtLChatOpenAILiveExamples >> messageWithFormatCallExample [
+	<gtExample>
+	| messageCall currentMessage responseMessage formatDescriptions |
+	messageCall := GtLStringMessageCall new
+		string: 'Return a list of the most populate programming languages.'.
+	
+	currentMessage := self currentChat createMessageForCall: messageCall.
+	
+	formatDescriptions := GtLCompositeResponseJsonSchemaDescription new.
+	formatDescriptions addSchemaDescription: (GtLResponseJsonSchemaDescription new
+		name: 'List';
+		priority: 2;
+		schema: (NeoJSONSchema new 
+			json: (NeoJSONObject fromString: '{
+			"type" : "array",
+			"items" : {
+				"type" : "string"
+			},
+			"additionalProperties": false
+		}'))).
+	currentMessage formatDescriptions: formatDescriptions.
+	
+	responseMessage := self currentChat sendMessage: currentMessage.
+	
+	self waitForChatCompletion.
+	self waitForChatCompletion.
+	self assert: self currentChat messages size equals: 2.
+	
+	^ self currentChat
+]
+
+{ #category : #'examples - calls' }
+GtLChatOpenAILiveExamples >> messageWithFormatCallExample_mathTutor [
+	<gtExample>
+	| messageCall currentMessage responseMessage formatDescriptions |
+	messageCall := GtLStringMessageCall new
+		string: 'You are a helpful math tutor. Guide the user through the solution step by step for the equation 8x + 7 = -23'.
+	
+	currentMessage := self currentChat createMessageForCall: messageCall.
+	
+	formatDescriptions := GtLCompositeResponseJsonSchemaDescription new.
+	formatDescriptions addSchemaDescription: (GtLResponseJsonSchemaDescription new
+		name: 'MathReasoning';
+		priority: 2;
+		schema: self mathResponseSchemaForMathTutor).
+	currentMessage formatDescriptions: formatDescriptions.
+	
+	responseMessage := self currentChat sendMessage: currentMessage.
+	
+	self waitForChatCompletion.
+	self waitForChatCompletion.
+	self assert: self currentChat messages size equals: 2.
+	
+	^ self currentChat
+]
+
 { #category : #'examples - calls' }
 GtLChatOpenAILiveExamples >> messageWithToolCallExample [
 	<gtExample>
