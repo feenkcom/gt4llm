@@ -44,6 +44,27 @@ GtLlmChatMessage >> gtMessageFilesFor: aView [
 ]
 
 { #category : #'*Gt4Llm-GToolkit' }
+GtLlmChatMessage >> gtPharoRewriteFor: aView [
+	<gtView>
+	<gtLlmMessageView>
+	| snippet rewrite |
+	self isAssistantRole ifFalse: [ ^ aView empty ].
+	rewrite := STONJSON
+			fromString: (self contentJson at: 'Pharo Rewrite' ifAbsent: [ ^ aView empty ]).
+
+	snippet := LePharoRewriteSnippet new
+			search: (rewrite at: 'search' ifAbsent: [ '' ]);
+			replace: (rewrite at: 'replace' ifAbsent: [ '' ]);
+			yourself.
+
+	^ aView forward
+		title: 'Rewrite';
+		priority: 5;
+		object: [ snippet ];
+		view: #gtLiveFor:
+]
+
+{ #category : #'*Gt4Llm-GToolkit' }
 GtLlmChatMessage >> messageFiles [
 	self images
 		ifNotNil: [ ^ self images
