@@ -84,8 +84,8 @@ GtLChatOpenAILiveExamples >> messageWithFormatCallExample [
 	
 	currentMessage := self currentChat createMessageForCall: messageCall.
 	
-	formatDescriptions := GtLCompositeResponseJsonSchemaDescription new.
-	formatDescriptions addSchemaDescription: (GtLResponseJsonSchemaDescription new
+	formatDescriptions := GtLResponseCompositeFormat new.
+	formatDescriptions addSchemaDescription: (GtLResponseJsonSchemaFormat new
 		name: 'List';
 		priority: 2;
 		schema: (NeoJSONSchema new 
@@ -108,7 +108,7 @@ GtLChatOpenAILiveExamples >> messageWithFormatCallExample [
 ]
 
 { #category : #'examples - calls' }
-GtLChatOpenAILiveExamples >> messageWithFormatCallExample_mathTutor [
+GtLChatOpenAILiveExamples >> messageWithFormatCallExample_mathTutor_jsonString [
 	<gtExample>
 	| messageCall currentMessage responseMessage formatDescriptions |
 	messageCall := GtLStringMessageCall new
@@ -116,11 +116,35 @@ GtLChatOpenAILiveExamples >> messageWithFormatCallExample_mathTutor [
 	
 	currentMessage := self currentChat createMessageForCall: messageCall.
 	
-	formatDescriptions := GtLCompositeResponseJsonSchemaDescription new.
-	formatDescriptions addSchemaDescription: (GtLResponseJsonSchemaDescription new
+	formatDescriptions := GtLResponseCompositeFormat new.
+	formatDescriptions addSchemaDescription: (GtLResponseJsonSchemaFormat new
 		name: 'MathReasoning';
 		priority: 2;
 		schema: self mathResponseSchemaForMathTutor).
+	currentMessage formatDescriptions: formatDescriptions.
+	
+	responseMessage := self currentChat sendMessage: currentMessage.
+	
+	self waitForChatCompletion.
+	self waitForChatCompletion.
+	self assert: self currentChat messages size equals: 2.
+	
+	^ self currentChat
+]
+
+{ #category : #'examples - calls' }
+GtLChatOpenAILiveExamples >> messageWithFormatCallExample_mathTutor_magritteSchema [
+	<gtExample>
+	| messageCall currentMessage responseMessage formatDescriptions |
+	messageCall := GtLStringMessageCall new
+		string: 'You are a helpful math tutor. Guide the user through the solution step by step for the equation 8x + 7 = -23'.
+	
+	currentMessage := self currentChat createMessageForCall: messageCall.
+	
+	formatDescriptions := GtLResponseCompositeFormat new.
+	formatDescriptions addSchemaDescription: (GtLResponseMagritteFormat new
+		name: 'MathReasoning'; 
+		modelClass: GtLDemoMathReasoning).
 	currentMessage formatDescriptions: formatDescriptions.
 	
 	responseMessage := self currentChat sendMessage: currentMessage.

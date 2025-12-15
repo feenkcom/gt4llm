@@ -150,7 +150,7 @@ GtLChat >> gtFormatFor: aView [
 	^ aView textEditor
 		title: 'Format';
 		priority: 2; 
-		text: [ NeoJSONWriter toStringPretty: self format ];
+		text: [ NeoJSONWriter toStringPretty: self format  asJsonSchemaDictionary ];
 		styler: JSONParser gtStyler;
 		actionButtonIcon: BrGlamorousVectorIcons playinspect
 			tooltip: 'Inspect Format'
@@ -197,7 +197,7 @@ GtLChat >> initialize [
 	
 	self initializeMessages.
 	self initializeTools.
-	formatDescriptions := GtLCompositeResponseJsonSchemaDescription new.
+	formatDescriptions := GtLResponseCompositeFormat new.
 	
 	self updateLastUpdate
 ]
