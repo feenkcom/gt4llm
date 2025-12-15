@@ -49,8 +49,10 @@ GtLlmChatMessage >> gtPharoRewriteFor: aView [
 	<gtLlmMessageView>
 	| snippet rewrite |
 	self isAssistantRole ifFalse: [ ^ aView empty ].
-	rewrite := STONJSON
-			fromString: (self contentJson at: 'Pharo Rewrite' ifAbsent: [ ^ aView empty ]).
+	[ rewrite := STONJSON
+			fromString: (self contentJson at: 'Pharo Rewrite' ifAbsent: [ ^ aView empty ]) ]
+		on: Error
+		do: [ :ex | ^ aView empty ].
 
 	snippet := LePharoRewriteSnippet new
 			search: (rewrite at: 'search' ifAbsent: [ '' ]);
