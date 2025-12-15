@@ -1,6 +1,6 @@
 Class {
-	#name : #GtLCompositeResponseJsonSchemaDescription,
-	#superclass : #GtLResponseBasicJsonSchemaDescription,
+	#name : #GtLResponseCompositeFormat,
+	#superclass : #Object,
 	#instVars : [
 		'schemaDescriptions'
 	],
@@ -8,17 +8,17 @@ Class {
 }
 
 { #category : #adding }
-GtLCompositeResponseJsonSchemaDescription >> addSchemaDescription: aSchema [
+GtLResponseCompositeFormat >> addSchemaDescription: aSchema [
 	schemaDescriptions add: aSchema
 ]
 
 { #category : #adding }
-GtLCompositeResponseJsonSchemaDescription >> addSchemaDescriptions: aCollection [
+GtLResponseCompositeFormat >> addSchemaDescriptions: aCollection [
 	schemaDescriptions addAll: aCollection
 ]
 
 { #category : #'as yet unclassified' }
-GtLCompositeResponseJsonSchemaDescription >> asJsonSchemaDictionary [
+GtLResponseCompositeFormat >> asJsonSchemaDictionary [
 	^ NeoJSONObject  new 
 			at: 'type' put: 'object';
 			at: 'properties' put: ((schemaDescriptions collect: [ :aSchema | 
@@ -30,12 +30,12 @@ GtLCompositeResponseJsonSchemaDescription >> asJsonSchemaDictionary [
 ]
 
 { #category : #'as yet unclassified' }
-GtLCompositeResponseJsonSchemaDescription >> formatDescriptionsJsonSchema [
+GtLResponseCompositeFormat >> formatDescriptionsJsonSchema [
 	^ self asJsonSchemaDictionary
 ]
 
 { #category : #views }
-GtLCompositeResponseJsonSchemaDescription >> gtViewRawJsonFor: aView [
+GtLResponseCompositeFormat >> gtViewRawJsonFor: aView [
 	<gtView>
 	^ aView forward
 		title: 'Raw JSON';
@@ -45,7 +45,7 @@ GtLCompositeResponseJsonSchemaDescription >> gtViewRawJsonFor: aView [
 ]
 
 { #category : #views }
-GtLCompositeResponseJsonSchemaDescription >> gtViewSchemaDescriptionsFor: aView [
+GtLResponseCompositeFormat >> gtViewSchemaDescriptionsFor: aView [
 	<gtView>
 	schemaDescriptions ifNil: [ ^ aView empty ].
 	^ aView columnedList
@@ -58,7 +58,7 @@ GtLCompositeResponseJsonSchemaDescription >> gtViewSchemaDescriptionsFor: aView 
 ]
 
 { #category : #views }
-GtLCompositeResponseJsonSchemaDescription >> gtViewSchemaDetailsFor: aView [
+GtLResponseCompositeFormat >> gtViewSchemaDetailsFor: aView [
 	<gtView>
 	^ aView forward
 		title: 'Schema Details';
@@ -68,7 +68,7 @@ GtLCompositeResponseJsonSchemaDescription >> gtViewSchemaDetailsFor: aView [
 ]
 
 { #category : #initialization }
-GtLCompositeResponseJsonSchemaDescription >> initialize [
+GtLResponseCompositeFormat >> initialize [
 	super initialize.
 	
 	schemaDescriptions := OrderedCollection new.
