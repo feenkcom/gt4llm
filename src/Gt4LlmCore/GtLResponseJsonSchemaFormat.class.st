@@ -1,20 +1,19 @@
 Class {
-	#name : #GtLResponseJsonSchemaDescription,
-	#superclass : #GtLResponseBasicJsonSchemaDescription,
+	#name : #GtLResponseJsonSchemaFormat,
+	#superclass : #GtLResponseInvividualFormat,
 	#instVars : [
-		'priority',
 		'schema'
 	],
 	#category : #Gt4LlmCore
 }
 
 { #category : #accessing }
-GtLResponseJsonSchemaDescription >> asJsonSchemaDictionary [
+GtLResponseJsonSchemaFormat >> asJsonSchemaDictionary [
 	^ schema raw
 ]
 
 { #category : #views }
-GtLResponseJsonSchemaDescription >> gtViewDetailsSchemaFor: aView [
+GtLResponseJsonSchemaFormat >> gtViewDetailsSchemaFor: aView [
 	<gtView>
 	^ aView forward
 		title: 'Schema Details';
@@ -24,7 +23,7 @@ GtLResponseJsonSchemaDescription >> gtViewDetailsSchemaFor: aView [
 ]
 
 { #category : #views }
-GtLResponseJsonSchemaDescription >> gtViewSchemaJsonFor: aView [
+GtLResponseJsonSchemaFormat >> gtViewSchemaJsonFor: aView [
 	<gtView>
 	^ aView forward
 		title: 'Raw JSON';
@@ -34,7 +33,7 @@ GtLResponseJsonSchemaDescription >> gtViewSchemaJsonFor: aView [
 ]
 
 { #category : #views }
-GtLResponseJsonSchemaDescription >> gtViewSchemaPropertiesFor: aView [
+GtLResponseJsonSchemaFormat >> gtViewSchemaPropertiesFor: aView [
 	<gtView>
 	^ aView forward
 		title: 'Schema Properties';
@@ -44,7 +43,7 @@ GtLResponseJsonSchemaDescription >> gtViewSchemaPropertiesFor: aView [
 ]
 
 { #category : #printing }
-GtLResponseJsonSchemaDescription >> printOn: aStream [
+GtLResponseJsonSchemaFormat >> printOn: aStream [
 	super printOn: aStream.
 	
 	aStream parenthesize: [
@@ -54,31 +53,21 @@ GtLResponseJsonSchemaDescription >> printOn: aStream [
 ]
 
 { #category : #accessing }
-GtLResponseJsonSchemaDescription >> priority [
-	^ priority
-]
-
-{ #category : #accessing }
-GtLResponseJsonSchemaDescription >> priority: anInteger [
-	priority := anInteger
-]
-
-{ #category : #accessing }
-GtLResponseJsonSchemaDescription >> propertyNames [
+GtLResponseJsonSchemaFormat >> propertyNames [
 	^ schema properties keys 
 ]
 
 { #category : #accessing }
-GtLResponseJsonSchemaDescription >> schema [
+GtLResponseJsonSchemaFormat >> schema [
 	^ schema
 ]
 
 { #category : #accessing }
-GtLResponseJsonSchemaDescription >> schema: aSchema [
+GtLResponseJsonSchemaFormat >> schema: aSchema [
 	schema := aSchema
 ]
 
 { #category : #accessing }
-GtLResponseJsonSchemaDescription >> type [
+GtLResponseJsonSchemaFormat >> type [
 	^ schema type
 ]
