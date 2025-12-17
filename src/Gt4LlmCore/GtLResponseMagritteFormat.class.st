@@ -15,8 +15,8 @@ GtLResponseMagritteFormat >> asJsonSchemaDictionary [
 { #category : #accessing }
 GtLResponseMagritteFormat >> computeSchema [
 	| exporter |
-	exporter := GtMagriteJSONSchemaExporter new.
-	^ exporter exportSchemaForClass: modelClass
+	exporter := GtMagritteJSONSchemaExporter forModelClass: modelClass.
+	^ exporter exportSchema.
 ]
 
 { #category : #views }

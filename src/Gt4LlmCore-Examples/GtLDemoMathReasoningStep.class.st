@@ -46,3 +46,14 @@ GtLDemoMathReasoningStep >> outputDescription [
 		  accessor: #output;
 		  beRequired
 ]
+
+{ #category : #printing }
+GtLDemoMathReasoningStep >> printOn: aStream [
+	super printOn: aStream.
+	
+	aStream parenthesize: [ 
+		aStream 
+			<< self output;
+			<< '; ';
+			<< self explanation ]
+]
