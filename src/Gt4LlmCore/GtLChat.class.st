@@ -38,15 +38,15 @@ GtLChat >> acceptVisitor: aVisitor [
 	^ aVisitor visitGtLlmChat: self
 ]
 
-{ #category : #adding }
-GtLChat >> addFormatDescription: aFormatDescription [
-	formatDescriptions add: aFormatDescription
-]
-
 { #category : #accessing }
 GtLChat >> addMessage: aMessage [
 	self updateLastUpdate.
 	messages add: (aMessage chat: self)
+]
+
+{ #category : #adding }
+GtLChat >> addSchemaDescription: aFormatDescription [
+	formatDescriptions addSchemaDescription: aFormatDescription
 ]
 
 { #category : #adding }
