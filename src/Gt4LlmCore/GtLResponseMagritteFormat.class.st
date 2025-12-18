@@ -7,6 +7,21 @@ Class {
 	#category : #Gt4LlmCore
 }
 
+{ #category : #'neo json' }
+GtLResponseMagritteFormat >> appendNeoJsonMappingTo: neoJsonMapper [
+	| magritteDescription mapperVisitor |
+	magritteDescription := modelClass new 
+		magritteDescription.
+	magritteDescription properties
+		at: 'originalClass'
+		put: modelClass.
+	
+	mapperVisitor := GtMagriteJSONSchemaNEOJsonMapperVisitor 
+		forNeoJsonMapper: neoJsonMapper.
+	
+	magritteDescription acceptMagritte: mapperVisitor.
+]
+
 { #category : #accessing }
 GtLResponseMagritteFormat >> asJsonSchemaDictionary [
 	^ self schema raw
@@ -57,6 +72,11 @@ GtLResponseMagritteFormat >> modelClass [
 { #category : #accessing }
 GtLResponseMagritteFormat >> modelClass: anObject [
 	modelClass := anObject
+]
+
+{ #category : #'neo json' }
+GtLResponseMagritteFormat >> nextEntryFromNeoJsonReader: jsonReader [ 
+	^ jsonReader nextAs: modelClass.
 ]
 
 { #category : #printing }
