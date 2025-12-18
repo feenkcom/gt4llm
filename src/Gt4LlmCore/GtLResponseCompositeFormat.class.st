@@ -84,7 +84,7 @@ GtLResponseCompositeFormat >> gtViewSchemaDescriptionsFor: aView [
 		items: [ schemaDescriptions ];
 		column: 'Value' text: [ :each | each name ] width: 200;
 		column: 'Type' text: [ :each | each type ] width: 200;
-		column: 'Properties' text: [ :each | each propertyNames ]
+		column: 'Properties' text: [ :each | each propertyNames asCommaString ]
 ]
 
 { #category : #views }

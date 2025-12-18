@@ -132,9 +132,9 @@ GtLChatMessage >> canExtractResponseModels [
 	| responseText |
 	rawData ifNil: [ ^ false ].
 	self chat ifNil: [ ^ false ].
-	self ancestor formatDescriptions 
+	self formatDescriptions 
 		hasSchemaDescriptors ifFalse: [ ^ false ].
-	
+		
 	responseText := self contentText.
 	responseText ifEmpty: [ ^ false ].
 	^ true
@@ -149,21 +149,20 @@ GtLChatMessage >> chat [
 GtLChatMessage >> chat: aChat [
 	chat := aChat.
 	
-	instructions ifNil: [
-		instructions := chat currentInstructions ].
-	tools ifNil: [
-		tools := chat currentTools ].
-	formatDescriptions hasSchemaDescriptors ifFalse: [
-		formatDescriptions addCompositeFormat: chat currentFormatDescriptions  ].
+	chat  
+		previousNonToolMessageIfPresent: [ :aPreviousMessage |
+			self updateDataFromMessage: aPreviousMessage ] 
+		ifAbsent: [ 
+			self  updateDataFromChat: aChat]
 ]
 
 { #category : #reading }
 GtLChatMessage >> computeResponseModelsByFormat [
 	| responseText |
-	self canExtractResponseModels ifFalse: [ ^ nil ].
-
+	
 	responseText := self contentText.
-	^ self ancestor formatDescriptions  readDomainObjectsFrom: responseText
+	^self formatDescriptions  
+		readDomainObjectsFrom: responseText
 ]
 
 { #category : #accessing }
@@ -526,6 +525,26 @@ GtLChatMessage >> tools [
 { #category : #accessing }
 GtLChatMessage >> tools: anObject [
 	tools := anObject
+]
+
+{ #category : #updating }
+GtLChatMessage >> updateDataFromChat: aChat [ 
+	instructions ifNil: [
+		instructions := aChat currentInstructions ].
+	formatDescriptions hasSchemaDescriptors ifFalse: [
+		formatDescriptions addCompositeFormat: aChat currentFormatDescriptions ].
+	tools ifNil: [
+		tools := aChat currentTools ]
+]
+
+{ #category : #accessing }
+GtLChatMessage >> updateDataFromMessage: aPreviousMessage [ 
+	instructions ifNil: [
+		instructions := aPreviousMessage instructions ].
+	formatDescriptions hasSchemaDescriptors ifFalse: [
+		formatDescriptions addCompositeFormat: aPreviousMessage formatDescriptions ].
+	tools ifNil: [
+		tools := aPreviousMessage tools ]
 ]
 
 { #category : #accessing }
