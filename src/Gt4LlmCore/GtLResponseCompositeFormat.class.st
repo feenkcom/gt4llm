@@ -8,6 +8,11 @@ Class {
 }
 
 { #category : #adding }
+GtLResponseCompositeFormat >> addCompositeFormat: aCompositeFormat [
+	self addSchemaDescriptions: aCompositeFormat schemaDescriptions
+]
+
+{ #category : #adding }
 GtLResponseCompositeFormat >> addSchemaDescription: aSchema [
 	schemaDescriptions add: aSchema
 ]
@@ -67,9 +72,19 @@ GtLResponseCompositeFormat >> gtViewSchemaDetailsFor: aView [
 		view: #gtTreeFor:context:
 ]
 
+{ #category : #testing }
+GtLResponseCompositeFormat >> hasSchemaDescriptors [
+	^ schemaDescriptions notEmpty
+]
+
 { #category : #initialization }
 GtLResponseCompositeFormat >> initialize [
 	super initialize.
 	
 	schemaDescriptions := OrderedCollection new.
+]
+
+{ #category : #'as yet unclassified' }
+GtLResponseCompositeFormat >> schemaDescriptions [
+	^ schemaDescriptions
 ]

@@ -49,6 +49,25 @@ GtLChatOpenAILiveExamples >> howAreYouCallExample [
 	^ self currentChat
 ]
 
+{ #category : #'examples - calls' }
+GtLChatOpenAILiveExamples >> howAreYouCallExample_withStringSchema [
+	<gtExample>
+	| messageCall currentMessage responseMessage  |
+	messageCall := GtLStringMessageCall new
+		string: 'How are you?'.
+	
+	currentMessage := self currentChat createMessageForCall: messageCall.
+	currentMessage addSchemaDescription: (GtLResponseStringFormat new
+			name: 'Respose').
+	
+	responseMessage := self currentChat sendMessage: currentMessage.
+	
+	self waitForChatCompletion.
+	self assert: self currentChat messages size equals: 2.
+	
+	^ self currentChat
+]
+
 { #category : #utils }
 GtLChatOpenAILiveExamples >> mathResponseSchemaForMathTutor [
 	| jsonObject |
@@ -87,7 +106,6 @@ GtLChatOpenAILiveExamples >> messageWithFormatCallExample [
 	formatDescriptions := GtLResponseCompositeFormat new.
 	formatDescriptions addSchemaDescription: (GtLResponseJsonSchemaFormat new
 		name: 'List';
-		priority: 2;
 		schema: (NeoJSONSchema new 
 			json: (NeoJSONObject fromString: '{
 			"type" : "array",
@@ -110,18 +128,14 @@ GtLChatOpenAILiveExamples >> messageWithFormatCallExample [
 { #category : #'examples - calls' }
 GtLChatOpenAILiveExamples >> messageWithFormatCallExample_mathTutor_jsonString [
 	<gtExample>
-	| messageCall currentMessage responseMessage formatDescriptions |
+	| messageCall currentMessage responseMessage |
 	messageCall := GtLStringMessageCall new
 		string: 'You are a helpful math tutor. Guide the user through the solution step by step for the equation 8x + 7 = -23'.
 	
 	currentMessage := self currentChat createMessageForCall: messageCall.
-	
-	formatDescriptions := GtLResponseCompositeFormat new.
-	formatDescriptions addSchemaDescription: (GtLResponseJsonSchemaFormat new
+	currentMessage addSchemaDescription: (GtLResponseJsonSchemaFormat new
 		name: 'MathReasoning';
-		priority: 2;
 		schema: self mathResponseSchemaForMathTutor).
-	currentMessage formatDescriptions: formatDescriptions.
 	
 	responseMessage := self currentChat sendMessage: currentMessage.
 	
@@ -135,17 +149,14 @@ GtLChatOpenAILiveExamples >> messageWithFormatCallExample_mathTutor_jsonString [
 { #category : #'examples - calls' }
 GtLChatOpenAILiveExamples >> messageWithFormatCallExample_mathTutor_magritteSchema [
 	<gtExample>
-	| messageCall currentMessage responseMessage formatDescriptions |
+	| messageCall currentMessage responseMessage |
 	messageCall := GtLStringMessageCall new
 		string: 'You are a helpful math tutor. Guide the user through the solution step by step for the equation 8x + 7 = -23'.
 	
 	currentMessage := self currentChat createMessageForCall: messageCall.
-	
-	formatDescriptions := GtLResponseCompositeFormat new.
-	formatDescriptions addSchemaDescription: (GtLResponseMagritteFormat new
+	currentMessage addSchemaDescription: (GtLResponseMagritteFormat new
 		name: 'MathReasoning'; 
 		modelClass: GtLDemoMathReasoning).
-	currentMessage formatDescriptions: formatDescriptions.
 	
 	responseMessage := self currentChat sendMessage: currentMessage.
 	
@@ -165,6 +176,8 @@ GtLChatOpenAILiveExamples >> messageWithToolCallExample [
 	
 	currentMessage := self currentChat createMessageForCall: messageCall.
 	currentMessage tools: (GtLToolsGroup withAll: {GtLlmToolForClassLookup new}).
+	currentMessage addSchemaDescription: (GtLResponseMarkdownFormat new
+			name: 'Description').
 	
 	responseMessage := self currentChat sendMessage: currentMessage.
 	

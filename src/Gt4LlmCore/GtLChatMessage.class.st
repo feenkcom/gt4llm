@@ -87,8 +87,8 @@ GtLChatMessage >> action [
 ]
 
 { #category : #accessing }
-GtLChatMessage >> addFormatDescription: aFormatDescription [
-	formatDescriptions add: aFormatDescription
+GtLChatMessage >> addSchemaDescription: aFormatDescription [
+	formatDescriptions addSchemaDescription: aFormatDescription
 ]
 
 { #category : #'as yet unclassified' }
@@ -140,8 +140,8 @@ GtLChatMessage >> chat: aChat [
 		instructions := chat currentInstructions ].
 	tools ifNil: [
 		tools := chat currentTools ].
-	formatDescriptions ifNil: [
-		formatDescriptions := chat currentFormatDescriptions ].
+	formatDescriptions hasSchemaDescriptors ifFalse: [
+		formatDescriptions addCompositeFormat: chat currentFormatDescriptions  ].
 ]
 
 { #category : #accessing }
@@ -286,6 +286,11 @@ GtLChatMessage >> gtTextFor: aView [
 		styler: [ GtLlmMessageStyler new threadMessageViewModel: self asViewModel ]
 ]
 
+{ #category : #testing }
+GtLChatMessage >> hasFormats [
+	^ formatDescriptions notNil and: [formatDescriptions hasSchemaDescriptors]
+]
+
 { #category : #accessing }
 GtLChatMessage >> hasResponse [
 	^ true
@@ -322,7 +327,9 @@ GtLChatMessage >> initialize [
 	
 	id := self uuidClass new.
 	createdAt := DateAndTime now.
-	images := OrderedCollection new
+	images := OrderedCollection new.
+	
+	formatDescriptions := GtLResponseCompositeFormat new
 ]
 
 { #category : #accessing }
