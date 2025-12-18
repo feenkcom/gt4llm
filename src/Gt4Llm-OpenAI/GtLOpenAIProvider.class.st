@@ -93,9 +93,8 @@ GtLOpenAIProvider >> executeWait [
 							ifTrue: [ self streamingMessageFrom: result ]
 							ifFalse: [ self assistantMessageClass new
 									model: self model;
-									merge: (result output detect: [ :anOutput | (anOutput rawData at: 'type') = 'message' ]) ].
-
-
+									merge: (result output detect: [ :anOutput | 
+										(anOutput rawData at: 'type') = 'message' ]) ].
 					self chat addMessage: aMessage.
 					self chat signalRunIsDone ] ] asAsyncFuture
 				await: (AsyncFutureExecutionConfiguration new

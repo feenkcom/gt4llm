@@ -127,6 +127,19 @@ GtLChatMessage >> asViewModel [
 	^ GtLlmThreadMessageViewModel new threadMessage: self
 ]
 
+{ #category : #testing }
+GtLChatMessage >> canExtractResponseModels [
+	| responseText |
+	rawData ifNil: [ ^ false ].
+	self chat ifNil: [ ^ false ].
+	self ancestor formatDescriptions 
+		hasSchemaDescriptors ifFalse: [ ^ false ].
+	
+	responseText := self contentText.
+	responseText ifEmpty: [ ^ false ].
+	^ true
+]
+
 { #category : #accessing }
 GtLChatMessage >> chat [
 	^ chat
@@ -142,6 +155,15 @@ GtLChatMessage >> chat: aChat [
 		tools := chat currentTools ].
 	formatDescriptions hasSchemaDescriptors ifFalse: [
 		formatDescriptions addCompositeFormat: chat currentFormatDescriptions  ].
+]
+
+{ #category : #reading }
+GtLChatMessage >> computeResponseModelsByFormat [
+	| responseText |
+	self canExtractResponseModels ifFalse: [ ^ nil ].
+
+	responseText := self contentText.
+	^ self ancestor formatDescriptions  readDomainObjectsFrom: responseText
 ]
 
 { #category : #accessing }
@@ -209,6 +231,11 @@ GtLChatMessage >> descendant [
 ]
 
 { #category : #accessing }
+GtLChatMessage >> formatDescriptions [
+	^ formatDescriptions
+]
+
+{ #category : #accessing }
 GtLChatMessage >> formatDescriptions: aCollection [ 
 	formatDescriptions := aCollection 
 ]
@@ -241,6 +268,21 @@ GtLChatMessage >> gtContentFor: aView [
 		priority: 5;
 		stencil: [ GtLlmThreadMessageElement new
 				threadMessageViewModel: self asViewModel ]
+]
+
+{ #category : #accessing }
+GtLChatMessage >> gtFormatFor: aView [
+	<gtView>
+	formatDescriptions ifNil: [ ^ aView empty ].
+
+	^ aView textEditor
+		title: 'Format JSON';
+		priority: 21; 
+		text: [ NeoJSONWriter toStringPretty: formatDescriptions  asJsonSchemaDictionary ];
+		styler: JSONParser gtStyler;
+		actionButtonIcon: BrGlamorousVectorIcons playinspect
+			tooltip: 'Inspect Format'
+			action: [ :aButton | aButton phlow spawnObject: formatDescriptions ]
 ]
 
 { #category : #'gt - extensions' }
@@ -284,6 +326,21 @@ GtLChatMessage >> gtTextFor: aView [
 		priority: 1;
 		text: [ json at: 'Text' ];
 		styler: [ GtLlmMessageStyler new threadMessageViewModel: self asViewModel ]
+]
+
+{ #category : #accessing }
+GtLChatMessage >> gtViewSchemaDescriptionsFor: aView [
+	<gtView>
+	formatDescriptions ifNil: [ ^ aView empty ].
+
+	^ aView forward
+		title: 'Format descriptions';
+		priority: 20; 
+		object: [ formatDescriptions ];
+		view: #gtViewSchemaDescriptionsFor:;
+		actionButtonIcon: BrGlamorousVectorIcons playinspect
+			tooltip: 'Inspect Format'
+			action: [ :aButton | aButton phlow spawnObject: formatDescriptions ]
 ]
 
 { #category : #testing }

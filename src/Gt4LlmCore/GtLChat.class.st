@@ -54,6 +54,22 @@ GtLChat >> addTool: aTool [
 	tools add: aTool
 ]
 
+{ #category : #accessing }
+GtLChat >> ancestorOf: aMessage [
+	messages
+		withIndexDo: [ :possibleAncestor :index | 
+			possibleAncestor id = aMessage id
+				ifTrue: [ index = 1
+						ifTrue: [ ^ nil ]
+						ifFalse: [ | actualIndex |
+							actualIndex := index.
+							[ (messages at: actualIndex - 1) isToolRole ]
+								whileTrue: [ actualIndex := actualIndex - 1 ].
+							^ messages at: actualIndex - 1 ] ] ].
+
+	self error: 'Message not found'
+]
+
 { #category : #announcer }
 GtLChat >> announce: anAnnouncement [
 	^ self announcer announce: anAnnouncement
@@ -148,9 +164,9 @@ GtLChat >> gtFormatFor: aView [
 	formatDescriptions ifNil: [ ^ aView empty ].
 
 	^ aView textEditor
-		title: 'Format';
+		title: 'Format JSON';
 		priority: 2; 
-		text: [ NeoJSONWriter toStringPretty: self format  asJsonSchemaDictionary ];
+		text: [ NeoJSONWriter toStringPretty: self currentFormat  asJsonSchemaDictionary ];
 		styler: JSONParser gtStyler;
 		actionButtonIcon: BrGlamorousVectorIcons playinspect
 			tooltip: 'Inspect Format'

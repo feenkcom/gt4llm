@@ -7,7 +7,8 @@ Class {
 		'metadata',
 		'step',
 		'completedAt',
-		'incompleteAt'
+		'incompleteAt',
+		'responseModels'
 	],
 	#category : #'Gt4Llm-OpenAI'
 }
@@ -78,11 +79,6 @@ GtLOpenAIMessage >> completedAtString: anObject [
 ]
 
 { #category : #accessing }
-GtLOpenAIMessage >> content [
-	^ content
-]
-
-{ #category : #accessing }
 GtLOpenAIMessage >> contentJson [
 	self contentText ifEmpty: [ ^ {} asDictionary ].
 	^ STONJSON fromString: self contentText
@@ -141,6 +137,20 @@ GtLOpenAIMessage >> gtAnnotationsFor: aView [
 		priority: 20;
 		object: [ self annotations ];
 		view: #gtAnnotationsFor:
+]
+
+{ #category : #accessing }
+GtLOpenAIMessage >> gtViewResponseModelsFor: aView [
+	<gtView>
+	<gtLlmMessageView>
+	
+	self canExtractResponseModels ifNil: [ ^ aView empty ].
+
+	^ aView forward
+		title: 'Response Models';
+		priority: 8;
+		object: [ self responseModels ];
+		view: #gtItemsFor:
 ]
 
 { #category : #testing }
@@ -202,6 +212,12 @@ GtLOpenAIMessage >> metadata [
 { #category : #accessing }
 GtLOpenAIMessage >> metadata: anObject [
 	metadata := anObject
+]
+
+{ #category : #accessing }
+GtLOpenAIMessage >> responseModels [
+	^ responseModels ifNil:[ 
+			responseModels := self computeResponseModelsByFormat ].
 ]
 
 { #category : #accessing }
