@@ -95,6 +95,7 @@ GtLOpenAIProvider >> executeWait [
 									model: self model;
 									merge: (result output detect: [ :anOutput | 
 										(anOutput rawData at: 'type') = 'message' ]) ].
+					
 					self chat addMessage: aMessage.
 					self chat signalRunIsDone ] ] asAsyncFuture
 				await: (AsyncFutureExecutionConfiguration new
@@ -191,30 +192,6 @@ GtLOpenAIProvider >> model: anObject [
 { #category : #'as yet unclassified' }
 GtLOpenAIProvider >> modelName [
 	^ model
-]
-
-{ #category : #accessing }
-GtLOpenAIProvider >> performToolCallsIn: result [
-	| toolOutputs |
-	toolOutputs := result toolCalls
-			collect: [ :aToolCall | 
-				| toolOutput newMessage|
-				newMessage := GtLToolMessage new
-							toolCall: aToolCall.
-				"chat
-					addMessage: (GtOpenAIRawToolMessage new
-							rawData: aToolCall responseInput)."
-				chat addMessage: newMessage.
-				toolOutput := tools performToolCall: aToolCall.
-				newMessage output: toolOutput
-"				chat
-					addMessage: (GtLlmToolMessage new
-							toolCall: aToolCall;
-							output: toolOutput)" ].
-
-	self chat signalRunHasUpdated.
-
-	^ self executeWait
 ]
 
 { #category : #accessing }

@@ -59,6 +59,14 @@ GtLOpenAIMessage >> annotations [
 ]
 
 { #category : #accessing }
+GtLOpenAIMessage >> chat: aChat [
+	super chat: aChat.
+	
+	self canExtractResponseModels ifTrue: [
+		responseModels := self computeResponseModelsByFormat]	
+]
+
+{ #category : #accessing }
 GtLOpenAIMessage >> completedAt [
 	^ completedAt
 ]
@@ -144,9 +152,9 @@ GtLOpenAIMessage >> gtViewResponseModelsFor: aView [
 	<gtView>
 	<gtLlmMessageView>
 	
-	self canExtractResponseModels ifNil: [ ^ aView empty ].
+	responseModels ifNil: [ ^ aView empty ].
 
-	^ aView forward
+	^aView forward
 		title: 'Response Models';
 		priority: 8;
 		object: [ self responseModels ];

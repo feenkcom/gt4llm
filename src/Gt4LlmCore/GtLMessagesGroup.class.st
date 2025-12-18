@@ -62,6 +62,16 @@ GtLMessagesGroup >> gtViewToolMessagesGroupedByTypeFor: aView [
 ]
 
 { #category : #accessing }
+GtLMessagesGroup >> lastNonToolMessageIfPresent: aPresentBlock ifAbsent: anAbsentBlock [
+	items ifNil: [ ^ anAbsentBlock value ].
+	
+	items reverseDo: [ :each |
+		each isToolRole ifFalse: [ ^ aPresentBlock cull: each ] ].
+		
+	^ anAbsentBlock value
+]
+
+{ #category : #accessing }
 GtLMessagesGroup >> serialize [
 	^ {'messages' -> (self items collect: #serialize)} asDictionary
 ]

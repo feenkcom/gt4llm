@@ -56,8 +56,7 @@ Denote code snippet in Smalltalk with:
 ```smalltalk-code
 ```
 ",
-			"type" : "string",
-			"additionalProperties": false
+			"type" : "string"
 		}')
 ]
 
@@ -73,7 +72,7 @@ GtLResponseMarkdownFormat >> printOn: aStream [
 
 { #category : #accessing }
 GtLResponseMarkdownFormat >> propertyNames [
-	^ schema properties keys 
+	^ #()
 ]
 
 { #category : #accessing }

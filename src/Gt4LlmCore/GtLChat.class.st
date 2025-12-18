@@ -41,7 +41,9 @@ GtLChat >> acceptVisitor: aVisitor [
 { #category : #accessing }
 GtLChat >> addMessage: aMessage [
 	self updateLastUpdate.
-	messages add: (aMessage chat: self)
+	
+	aMessage chat: self.
+	messages add: aMessage.
 ]
 
 { #category : #adding }
@@ -56,18 +58,29 @@ GtLChat >> addTool: aTool [
 
 { #category : #accessing }
 GtLChat >> ancestorOf: aMessage [
+	^self 
+		ancestorOf: aMessage 
+		ifPresent: [ :anAncestorMessage | anAncestorMessage] 
+		ifNone: [ self error: 'Message not found' ]
+]
+
+{ #category : #accessing }
+GtLChat >> ancestorOf: aMessage ifPresent: aPresentBlock ifNone: aMissingBlock [
 	messages
 		withIndexDo: [ :possibleAncestor :index | 
 			possibleAncestor id = aMessage id
 				ifTrue: [ index = 1
-						ifTrue: [ ^ nil ]
-						ifFalse: [ | actualIndex |
+						ifTrue: [ ^ aMissingBlock value ]
+						ifFalse: [ 
+							| actualIndex |
 							actualIndex := index.
-							[ (messages at: actualIndex - 1) isToolRole ]
-								whileTrue: [ actualIndex := actualIndex - 1 ].
-							^ messages at: actualIndex - 1 ] ] ].
+							[ 
+									(messages at: actualIndex - 1) isToolRole 
+							]	whileTrue: [ actualIndex := actualIndex - 1 ].
+							
+							^ aPresentBlock cull: (messages at: actualIndex - 1) ] ] ].
 
-	self error: 'Message not found'
+	^ aMissingBlock value
 ]
 
 { #category : #announcer }
@@ -258,6 +271,11 @@ GtLChat >> messages: anObject [
 	messages := anObject.
 
 	messages do: [ :aMessage | aMessage chat: self ]
+]
+
+{ #category : #accessing }
+GtLChat >> previousNonToolMessageIfPresent: aPresentBlock ifAbsent: anAbsentBlock [
+	^ messages lastNonToolMessageIfPresent: aPresentBlock ifAbsent: anAbsentBlock
 ]
 
 { #category : #accessing }
