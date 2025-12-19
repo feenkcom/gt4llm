@@ -2,9 +2,6 @@ Class {
 	#name : #GtLOpenAIMessage,
 	#superclass : #GtLChatMessage,
 	#instVars : [
-		'threadId',
-		'runId',
-		'metadata',
 		'step',
 		'completedAt',
 		'incompleteAt',
@@ -37,9 +34,6 @@ GtLOpenAIMessage class >> serializationProperties [
 		#incomplete_at -> #incompleteAtString.
 		#completed_at -> #completedAtString.
 		#id -> #idString.
-		#metadata -> #metadata.
-		#run_id -> #runId.
-		#thread_id -> #threadId.
 		#role -> #role
 	}
 ]
@@ -213,29 +207,9 @@ GtLOpenAIMessage >> messageFiles [
 ]
 
 { #category : #accessing }
-GtLOpenAIMessage >> metadata [
-	^ metadata
-]
-
-{ #category : #accessing }
-GtLOpenAIMessage >> metadata: anObject [
-	metadata := anObject
-]
-
-{ #category : #accessing }
 GtLOpenAIMessage >> responseModels [
 	^ responseModels ifNil:[ 
 			responseModels := self computeResponseModelsByFormat ].
-]
-
-{ #category : #accessing }
-GtLOpenAIMessage >> runId [
-	^ runId
-]
-
-{ #category : #accessing }
-GtLOpenAIMessage >> runId: anObject [
-	runId := anObject
 ]
 
 { #category : #accessing }
@@ -251,14 +225,4 @@ GtLOpenAIMessage >> step: anObject [
 { #category : #accessing }
 GtLOpenAIMessage >> styler [
 	^ self explicitRequirement
-]
-
-{ #category : #accessing }
-GtLOpenAIMessage >> threadId [
-	^ threadId
-]
-
-{ #category : #accessing }
-GtLOpenAIMessage >> threadId: anObject [
-	threadId := anObject
 ]
