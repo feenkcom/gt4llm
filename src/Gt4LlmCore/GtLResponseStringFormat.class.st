@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLResponseMarkdownFormat,
+	#name : #GtLResponseStringFormat,
 	#superclass : #GtLResponseInvividualFormat,
 	#instVars : [
 		'schema'
@@ -8,12 +8,12 @@ Class {
 }
 
 { #category : #accessing }
-GtLResponseMarkdownFormat >> asJsonSchemaDictionary [
+GtLResponseStringFormat >> asJsonSchemaDictionary [
 	^ schema raw
 ]
 
 { #category : #views }
-GtLResponseMarkdownFormat >> gtViewDetailsSchemaFor: aView [
+GtLResponseStringFormat >> gtViewDetailsSchemaFor: aView [
 	<gtView>
 	^ aView forward
 		title: 'Schema Details';
@@ -23,7 +23,7 @@ GtLResponseMarkdownFormat >> gtViewDetailsSchemaFor: aView [
 ]
 
 { #category : #views }
-GtLResponseMarkdownFormat >> gtViewSchemaJsonFor: aView [
+GtLResponseStringFormat >> gtViewSchemaJsonFor: aView [
 	<gtView>
 	^ aView forward
 		title: 'Raw JSON';
@@ -33,7 +33,7 @@ GtLResponseMarkdownFormat >> gtViewSchemaJsonFor: aView [
 ]
 
 { #category : #views }
-GtLResponseMarkdownFormat >> gtViewSchemaPropertiesFor: aView [
+GtLResponseStringFormat >> gtViewSchemaPropertiesFor: aView [
 	<gtView>
 	^ aView forward
 		title: 'Schema Properties';
@@ -43,25 +43,19 @@ GtLResponseMarkdownFormat >> gtViewSchemaPropertiesFor: aView [
 ]
 
 { #category : #initialization }
-GtLResponseMarkdownFormat >> initialize [
+GtLResponseStringFormat >> initialize [
 	super initialize.
 	
 	schema := NeoJSONSchema new
 					json: (NeoJSONObject
 							fromString: '
 							{
-			"description" : "Markdown.
-Use blockquote for code.
-Denote code snippet in Smalltalk with:
-```smalltalk-code
-```
-",
 			"type" : "string"
 		}')
 ]
 
 { #category : #printing }
-GtLResponseMarkdownFormat >> printOn: aStream [
+GtLResponseStringFormat >> printOn: aStream [
 	super printOn: aStream.
 	
 	aStream parenthesize: [
@@ -71,21 +65,21 @@ GtLResponseMarkdownFormat >> printOn: aStream [
 ]
 
 { #category : #accessing }
-GtLResponseMarkdownFormat >> propertyNames [
-	^ #()
+GtLResponseStringFormat >> propertyNames [
+	^ schema properties keys 
 ]
 
 { #category : #accessing }
-GtLResponseMarkdownFormat >> schema [
+GtLResponseStringFormat >> schema [
 	^ schema
 ]
 
 { #category : #accessing }
-GtLResponseMarkdownFormat >> schema: aSchema [
+GtLResponseStringFormat >> schema: aSchema [
 	schema := aSchema
 ]
 
 { #category : #accessing }
-GtLResponseMarkdownFormat >> type [
+GtLResponseStringFormat >> type [
 	^ schema type
 ]

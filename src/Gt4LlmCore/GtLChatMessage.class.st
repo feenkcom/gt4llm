@@ -87,8 +87,8 @@ GtLChatMessage >> action [
 ]
 
 { #category : #accessing }
-GtLChatMessage >> addFormatDescription: aFormatDescription [
-	formatDescriptions add: aFormatDescription
+GtLChatMessage >> addSchemaDescription: aFormatDescription [
+	formatDescriptions addSchemaDescription: aFormatDescription
 ]
 
 { #category : #'as yet unclassified' }
@@ -127,6 +127,19 @@ GtLChatMessage >> asViewModel [
 	^ GtLlmThreadMessageViewModel new threadMessage: self
 ]
 
+{ #category : #testing }
+GtLChatMessage >> canExtractResponseModels [
+	| responseText |
+	rawData ifNil: [ ^ false ].
+	self chat ifNil: [ ^ false ].
+	self formatDescriptions 
+		hasSchemaDescriptors ifFalse: [ ^ false ].
+		
+	responseText := self contentText.
+	responseText ifEmpty: [ ^ false ].
+	^ true
+]
+
 { #category : #accessing }
 GtLChatMessage >> chat [
 	^ chat
@@ -136,12 +149,20 @@ GtLChatMessage >> chat [
 GtLChatMessage >> chat: aChat [
 	chat := aChat.
 	
-	instructions ifNil: [
-		instructions := chat currentInstructions ].
-	tools ifNil: [
-		tools := chat currentTools ].
-	formatDescriptions ifNil: [
-		formatDescriptions := chat currentFormatDescriptions ].
+	chat  
+		previousNonToolMessageIfPresent: [ :aPreviousMessage |
+			self updateDataFromMessage: aPreviousMessage ] 
+		ifAbsent: [ 
+			self  updateDataFromChat: aChat]
+]
+
+{ #category : #reading }
+GtLChatMessage >> computeResponseModelsByFormat [
+	| responseText |
+	
+	responseText := self contentText.
+	^self formatDescriptions  
+		readDomainObjectsFrom: responseText
 ]
 
 { #category : #accessing }
@@ -209,6 +230,11 @@ GtLChatMessage >> descendant [
 ]
 
 { #category : #accessing }
+GtLChatMessage >> formatDescriptions [
+	^ formatDescriptions
+]
+
+{ #category : #accessing }
 GtLChatMessage >> formatDescriptions: aCollection [ 
 	formatDescriptions := aCollection 
 ]
@@ -241,6 +267,21 @@ GtLChatMessage >> gtContentFor: aView [
 		priority: 5;
 		stencil: [ GtLlmThreadMessageElement new
 				threadMessageViewModel: self asViewModel ]
+]
+
+{ #category : #accessing }
+GtLChatMessage >> gtFormatFor: aView [
+	<gtView>
+	formatDescriptions ifNil: [ ^ aView empty ].
+
+	^ aView textEditor
+		title: 'Format JSON';
+		priority: 21; 
+		text: [ NeoJSONWriter toStringPretty: formatDescriptions  asJsonSchemaDictionary ];
+		styler: JSONParser gtStyler;
+		actionButtonIcon: BrGlamorousVectorIcons playinspect
+			tooltip: 'Inspect Format'
+			action: [ :aButton | aButton phlow spawnObject: formatDescriptions ]
 ]
 
 { #category : #'gt - extensions' }
@@ -287,6 +328,26 @@ GtLChatMessage >> gtTextFor: aView [
 ]
 
 { #category : #accessing }
+GtLChatMessage >> gtViewSchemaDescriptionsFor: aView [
+	<gtView>
+	formatDescriptions ifNil: [ ^ aView empty ].
+
+	^ aView forward
+		title: 'Format descriptions';
+		priority: 20; 
+		object: [ formatDescriptions ];
+		view: #gtViewSchemaDescriptionsFor:;
+		actionButtonIcon: BrGlamorousVectorIcons playinspect
+			tooltip: 'Inspect Format'
+			action: [ :aButton | aButton phlow spawnObject: formatDescriptions ]
+]
+
+{ #category : #testing }
+GtLChatMessage >> hasFormats [
+	^ formatDescriptions notNil and: [formatDescriptions hasSchemaDescriptors]
+]
+
+{ #category : #accessing }
 GtLChatMessage >> hasResponse [
 	^ true
 ]
@@ -322,7 +383,9 @@ GtLChatMessage >> initialize [
 	
 	id := self uuidClass new.
 	createdAt := DateAndTime now.
-	images := OrderedCollection new
+	images := OrderedCollection new.
+	
+	formatDescriptions := GtLResponseCompositeFormat new
 ]
 
 { #category : #accessing }
@@ -462,6 +525,26 @@ GtLChatMessage >> tools [
 { #category : #accessing }
 GtLChatMessage >> tools: anObject [
 	tools := anObject
+]
+
+{ #category : #updating }
+GtLChatMessage >> updateDataFromChat: aChat [ 
+	instructions ifNil: [
+		instructions := aChat currentInstructions ].
+	formatDescriptions hasSchemaDescriptors ifFalse: [
+		formatDescriptions addCompositeFormat: aChat currentFormatDescriptions ].
+	tools ifNil: [
+		tools := aChat currentTools ]
+]
+
+{ #category : #accessing }
+GtLChatMessage >> updateDataFromMessage: aPreviousMessage [ 
+	instructions ifNil: [
+		instructions := aPreviousMessage instructions ].
+	formatDescriptions hasSchemaDescriptors ifFalse: [
+		formatDescriptions addCompositeFormat: aPreviousMessage formatDescriptions ].
+	tools ifNil: [
+		tools := aPreviousMessage tools ]
 ]
 
 { #category : #accessing }

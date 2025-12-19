@@ -38,20 +38,49 @@ GtLChat >> acceptVisitor: aVisitor [
 	^ aVisitor visitGtLlmChat: self
 ]
 
-{ #category : #adding }
-GtLChat >> addFormatDescription: aFormatDescription [
-	formatDescriptions add: aFormatDescription
-]
-
 { #category : #accessing }
 GtLChat >> addMessage: aMessage [
 	self updateLastUpdate.
-	messages add: (aMessage chat: self)
+	
+	aMessage chat: self.
+	messages add: aMessage.
+]
+
+{ #category : #adding }
+GtLChat >> addSchemaDescription: aFormatDescription [
+	formatDescriptions addSchemaDescription: aFormatDescription
 ]
 
 { #category : #adding }
 GtLChat >> addTool: aTool [ 
 	tools add: aTool
+]
+
+{ #category : #accessing }
+GtLChat >> ancestorOf: aMessage [
+	^self 
+		ancestorOf: aMessage 
+		ifPresent: [ :anAncestorMessage | anAncestorMessage] 
+		ifNone: [ self error: 'Message not found' ]
+]
+
+{ #category : #accessing }
+GtLChat >> ancestorOf: aMessage ifPresent: aPresentBlock ifNone: aMissingBlock [
+	messages
+		withIndexDo: [ :possibleAncestor :index | 
+			possibleAncestor id = aMessage id
+				ifTrue: [ index = 1
+						ifTrue: [ ^ aMissingBlock value ]
+						ifFalse: [ 
+							| actualIndex |
+							actualIndex := index.
+							[ 
+									(messages at: actualIndex - 1) isToolRole 
+							]	whileTrue: [ actualIndex := actualIndex - 1 ].
+							
+							^ aPresentBlock cull: (messages at: actualIndex - 1) ] ] ].
+
+	^ aMissingBlock value
 ]
 
 { #category : #announcer }
@@ -148,9 +177,9 @@ GtLChat >> gtFormatFor: aView [
 	formatDescriptions ifNil: [ ^ aView empty ].
 
 	^ aView textEditor
-		title: 'Format';
+		title: 'Format JSON';
 		priority: 2; 
-		text: [ NeoJSONWriter toStringPretty: self format  asJsonSchemaDictionary ];
+		text: [ NeoJSONWriter toStringPretty: self currentFormat  asJsonSchemaDictionary ];
 		styler: JSONParser gtStyler;
 		actionButtonIcon: BrGlamorousVectorIcons playinspect
 			tooltip: 'Inspect Format'
@@ -242,6 +271,11 @@ GtLChat >> messages: anObject [
 	messages := anObject.
 
 	messages do: [ :aMessage | aMessage chat: self ]
+]
+
+{ #category : #accessing }
+GtLChat >> previousNonToolMessageIfPresent: aPresentBlock ifAbsent: anAbsentBlock [
+	^ messages lastNonToolMessageIfPresent: aPresentBlock ifAbsent: anAbsentBlock
 ]
 
 { #category : #accessing }

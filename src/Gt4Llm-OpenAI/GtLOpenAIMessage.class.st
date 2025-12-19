@@ -7,7 +7,8 @@ Class {
 		'metadata',
 		'step',
 		'completedAt',
-		'incompleteAt'
+		'incompleteAt',
+		'responseModels'
 	],
 	#category : #'Gt4Llm-OpenAI'
 }
@@ -58,6 +59,14 @@ GtLOpenAIMessage >> annotations [
 ]
 
 { #category : #accessing }
+GtLOpenAIMessage >> chat: aChat [
+	super chat: aChat.
+	
+	self canExtractResponseModels ifTrue: [
+		responseModels := self computeResponseModelsByFormat]	
+]
+
+{ #category : #accessing }
 GtLOpenAIMessage >> completedAt [
 	^ completedAt
 ]
@@ -75,11 +84,6 @@ GtLOpenAIMessage >> completedAtString [
 { #category : #accessing }
 GtLOpenAIMessage >> completedAtString: anObject [
 	completedAt := self deserializeTime: anObject
-]
-
-{ #category : #accessing }
-GtLOpenAIMessage >> content [
-	^ content
 ]
 
 { #category : #accessing }
@@ -143,6 +147,20 @@ GtLOpenAIMessage >> gtAnnotationsFor: aView [
 		view: #gtAnnotationsFor:
 ]
 
+{ #category : #accessing }
+GtLOpenAIMessage >> gtViewResponseModelsFor: aView [
+	<gtView>
+	<gtLlmMessageView>
+	
+	responseModels ifNil: [ ^ aView empty ].
+
+	^aView forward
+		title: 'Response Models';
+		priority: 8;
+		object: [ self responseModels ];
+		view: #gtItemsFor:
+]
+
 { #category : #testing }
 GtLOpenAIMessage >> hasResponse [
 	^ self contentText isNotEmpty
@@ -202,6 +220,12 @@ GtLOpenAIMessage >> metadata [
 { #category : #accessing }
 GtLOpenAIMessage >> metadata: anObject [
 	metadata := anObject
+]
+
+{ #category : #accessing }
+GtLOpenAIMessage >> responseModels [
+	^ responseModels ifNil:[ 
+			responseModels := self computeResponseModelsByFormat ].
 ]
 
 { #category : #accessing }

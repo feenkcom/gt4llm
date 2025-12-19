@@ -30,12 +30,27 @@ GtLDemoMathReasoning >> finalAnswerDescription [
 { #category : #views }
 GtLDemoMathReasoning >> gtStepsFor: aView [
 	<gtView>
+	<gtLlmMessageView>
+	
 	steps ifNil: [ ^ aView empty ].
 	^ aView columnedList
-		title: 'Steps';
+		title: 'Reasoning Steps';
 		items: [ steps ];
 		column: 'Explanation' text: [ :each | each explanation ];
 		column: 'Value' text: [ :each | each output ]
+]
+
+{ #category : #views }
+GtLDemoMathReasoning >> printOn: aStream [
+	super printOn: aStream.
+	
+	aStream parenthesize: [ 
+		aStream 
+			print: self steps size;
+			<< ' ';
+			<< ('step' asPluralBasedOn: self steps size);
+			<< '; finalAnswer: ';
+			<< self finalAnswer ]
 ]
 
 { #category : #accessing }
