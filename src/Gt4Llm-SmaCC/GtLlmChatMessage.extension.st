@@ -42,3 +42,18 @@ GtLlmChatMessage >> gtSmaCCChangesFor: aView [
 			tooltip: 'Inspect grammar'
 			action: [ :b | b phlow spawnObject: changes newGrammar ]
 ]
+
+{ #category : #'*Gt4Llm-SmaCC' }
+GtLlmChatMessage >> gtTransformationsFor: aView [
+	<gtView>
+	<gtLlmMessageView>
+	self isAssistantRole ifFalse: [ ^ aView empty ].
+	self gtIsTransformationMessage ifFalse: [ ^ aView empty ].
+
+	^ aView forward
+		title: 'Transformations';
+		priority: 5;
+		object: [ self chat assistant
+				applyTransformations: (STONJSON fromString: (self contentJson at: 'Pharo Transformations')) ];
+		view: #gtApplyingChangesFor:
+]
