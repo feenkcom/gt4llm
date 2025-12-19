@@ -62,11 +62,11 @@ GtLMessagesGroup >> gtViewToolMessagesGroupedByTypeFor: aView [
 ]
 
 { #category : #accessing }
-GtLMessagesGroup >> lastNonToolMessageIfPresent: aPresentBlock ifAbsent: anAbsentBlock [
+GtLMessagesGroup >> lastUserMessageIfPresent: aPresentBlock ifAbsent: anAbsentBlock [
 	items ifNil: [ ^ anAbsentBlock value ].
 	
 	items reverseDo: [ :each |
-		each isToolRole ifFalse: [ ^ aPresentBlock cull: each ] ].
+		each isUserRole ifTrue: [ ^ aPresentBlock cull: each ] ].
 		
 	^ anAbsentBlock value
 ]
