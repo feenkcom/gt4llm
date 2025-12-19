@@ -150,10 +150,10 @@ GtLChatMessage >> chat: aChat [
 	chat := aChat.
 	
 	chat  
-		previousNonToolMessageIfPresent: [ :aPreviousMessage |
+		previousUserMessageIfPresent: [ :aPreviousMessage |
 			self updateDataFromMessage: aPreviousMessage ] 
 		ifAbsent: [ 
-			self  updateDataFromChat: aChat]
+			self updateDataFromChat: aChat]
 ]
 
 { #category : #reading }

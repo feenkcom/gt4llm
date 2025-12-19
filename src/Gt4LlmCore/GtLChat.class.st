@@ -274,8 +274,8 @@ GtLChat >> messages: anObject [
 ]
 
 { #category : #accessing }
-GtLChat >> previousNonToolMessageIfPresent: aPresentBlock ifAbsent: anAbsentBlock [
-	^ messages lastNonToolMessageIfPresent: aPresentBlock ifAbsent: anAbsentBlock
+GtLChat >> previousUserMessageIfPresent: aPresentBlock ifAbsent: anAbsentBlock [
+	^ messages lastUserMessageIfPresent: aPresentBlock ifAbsent: anAbsentBlock
 ]
 
 { #category : #accessing }
