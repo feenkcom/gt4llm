@@ -2,10 +2,20 @@ Class {
 	#name : #GtLlmRefactoringAssistant,
 	#superclass : #GtLlmAssistant,
 	#instVars : [
-		'model'
+		'model',
+		'transformations'
 	],
 	#category : #'Gt4Llm-Refactoring-Assistants'
 }
+
+{ #category : #private }
+GtLlmRefactoringAssistant >> applyTransformations: anArray [
+	| ns |
+	ns := GtRBNamespace new.
+	anArray
+		do: [ :each | (self transformationFor: each inModel: ns) primitiveExecute ].
+	^ ns
+]
 
 { #category : #tools }
 GtLlmRefactoringAssistant >> classLookupTool [
@@ -108,6 +118,16 @@ GtLlmRefactoringAssistant >> classSubclassesTool [
 				ifAbsent: [ 'Class name not provided' ] ]
 ]
 
+{ #category : #private }
+GtLlmRefactoringAssistant >> exampleTransformationsJSON [
+	^ STONJSON
+		toStringPretty: (self transformations asArray
+				collect: [ :each | 
+					each example copy
+						at: 'type' put: each name;
+						yourself ])
+]
+
 { #category : #initialization }
 GtLlmRefactoringAssistant >> initialize [
 	super initialize.
@@ -181,6 +201,26 @@ GtLlmRefactoringAssistant >> methodSourceTool [
 				ifAbsent: [ 'Class name not provided' ] ]
 ]
 
+{ #category : #formats }
+GtLlmRefactoringAssistant >> refactoringDescription [
+	<gtLlmAssistantFormat>
+	| stream |
+	stream := WriteStream on: String new.
+	stream
+		<< 'The result is a JSON object that specifies an array of Pharo transformations that can be used to modify Pharo source code.'
+		<< String cr << String cr << 'These are the available transformations:'
+		<< String cr << String cr.
+	(self transformations asSortedCollection: [ :a :b | a name < b name ])
+		do: [ :each | stream << '* ' << each name << ': ' << each description << String cr ].
+	stream << String cr << 'Example:' << String cr << '```json' << String cr
+		<< String cr << self exampleTransformationsJSON << '```' << String cr.
+	^ GtLlmAssistantFormatDescription new
+		name: 'Pharo Transformations';
+		priority: 10;
+		format: 'Code transformations for Pharo wrapped in a JSON array.';
+		example: stream contents
+]
+
 { #category : #private }
 GtLlmRefactoringAssistant >> sendersOf: query [
 	| stream count |
@@ -196,4 +236,28 @@ GtLlmRefactoringAssistant >> sendersOf: query [
 			count = 100 ifTrue: [ ^ stream contents ] ].
 	count = 0 ifTrue: [ ^ 'No references found' ].
 	^ stream contents
+]
+
+{ #category : #private }
+GtLlmRefactoringAssistant >> transformationFor: aDictionary inModel: aRBNamespace [
+	^ (self transformations at: (aDictionary at: 'type')) transformation
+		cull: aRBNamespace
+		cull: aDictionary
+]
+
+{ #category : #private }
+GtLlmRefactoringAssistant >> transformations [
+	^ transformations
+		ifNil: [ transformations := Dictionary new.
+			((Pragma allNamed: #gtLlmTransformationDescription)
+				collect: [ :each | 
+					(each method numArgs = 0 and: [ each method gtIsActive ])
+						ifTrue: [ each method methodClass isClassSide
+								ifTrue: [ each method
+										valueWithReceiver: each method methodClass instanceSide
+										arguments: #() ]
+								ifFalse: [ (self isKindOf: each method methodClass)
+										ifTrue: [ each method valueWithReceiver: self arguments: #() ] ] ] ])
+				do: [ :each | each notNil ifTrue: [ transformations at: each name put: each ] ].
+			transformations ]
 ]
