@@ -149,7 +149,7 @@ GtLOpenAIMessage >> gtViewResponseModelsFor: aView [
 	responseModels ifNil: [ ^ aView empty ].
 
 	^aView forward
-		title: 'Response Models';
+		title: 'Response models';
 		priority: 8;
 		object: [ self responseModels ];
 		view: #gtItemsFor:
