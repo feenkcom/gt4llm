@@ -95,12 +95,12 @@ GtLChat >> announcer [
 
 { #category : #converting }
 GtLChat >> asElement [
-	^ GtLlmChatElement new chatViewModel: self asViewModel
+	^ GtLChatElement new chatViewModel: self asViewModel
 ]
 
 { #category : #converting }
 GtLChat >> asViewModel [
-	^ GtLlmChatViewModel new assistantChat: self
+	^ GtLChatViewModel new assistantChat: self
 ]
 
 { #category : #accessing }
