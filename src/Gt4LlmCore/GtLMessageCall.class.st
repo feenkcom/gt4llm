@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLMessageCall,
 	#superclass : #Object,
-	#category : #Gt4LlmCore
+	#category : #'Gt4LlmCore-Core'
 }
 
 { #category : #'as yet unclassified' }
