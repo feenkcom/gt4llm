@@ -18,7 +18,7 @@ GtLThreadMessageHeaderElement >> addActionElement [
 				vFitContent;
 				aptitude: BrGlamorousLabelAptitude new;
 				beSmallSize;
-				text: self threadMessageViewModel actionString).
+				text: self threadMessageViewModel summaryString).
 	self addChild: aFrame
 ]
 
@@ -31,8 +31,7 @@ GtLThreadMessageHeaderElement >> addSenderElement [
 				aptitude: (BrGlamorousLabelAptitude new
 						foreground: BrGlamorousColors disabledButtonTextColor);
 				beSmallSize;
-				text: self threadMessageViewModel senderText
-						, (self threadMessageViewModel hasAction ifTrue: [ ':' ] ifFalse: [ '' ]);
+				text: self threadMessageViewModel senderText;
 				addAptitude: (BrGlamorousWithExplicitTooltipAptitude
 						text: (String
 								streamContents: [ :s | self threadMessageViewModel createdAt asLocal printSeparateDateAndTimeOn: s ])))
