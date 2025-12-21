@@ -82,9 +82,9 @@ Line
 GtLMarkdown >> gtMarkdownFor: aView [
 	<gtView>
 	description ifNil: [ ^ aView empty ].
-	^ aView explicit
-		title: 'Content';
-		priority: 5;
-		stencil: [ GtLThreadMessageElement new
-				threadMessageViewModel: (GtLThreadMessageViewModel new threadMessage: self) ]
+	^ aView textEditor
+		title: 'Markdown';
+		priority: 1;
+		styler: (GtLMessageStyler new);
+		text: [ description ]
 ]

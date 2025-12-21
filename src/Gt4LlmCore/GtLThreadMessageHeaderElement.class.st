@@ -1,8 +1,8 @@
 Class {
 	#name : #GtLThreadMessageHeaderElement,
 	#superclass : #BrHorizontalPane,
-	#traits : 'TGtLWithThreadMessageViewModel',
-	#classTraits : 'TGtLWithThreadMessageViewModel classTrait',
+	#traits : 'TGtLWithChatMessageViewModel',
+	#classTraits : 'TGtLWithChatMessageViewModel classTrait',
 	#category : #'Gt4LlmCore-UI'
 }
 
