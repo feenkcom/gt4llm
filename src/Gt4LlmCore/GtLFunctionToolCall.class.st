@@ -71,6 +71,16 @@ GtLFunctionToolCall >> gtArgumentsFor: aView [
 		column: 'Value' text: #value
 ]
 
+{ #category : #printing }
+GtLFunctionToolCall >> gtDisplayOn: aStream [
+	self name ifNil: [ ^ self ].
+	aStream
+		nextPutAll: self name;
+		nextPut: $(;
+		nextPutAll: (', ' join: (arguments values collect: #gtDisplayString));
+		nextPut: $)
+]
+
 { #category : #views }
 GtLFunctionToolCall >> gtResultFor: aView [
 	<gtView>

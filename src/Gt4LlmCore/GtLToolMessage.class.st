@@ -42,7 +42,7 @@ GtLToolMessage >> content [
 
 { #category : #'as yet unclassified' }
 GtLToolMessage >> contentText [
-	^ ''
+	^ self toolCall gtDisplayString
 ]
 
 { #category : #'as yet unclassified' }
@@ -61,6 +61,11 @@ GtLToolMessage >> gtContentFor: aView [
 	<gtView>
 	<gtLlmMessageView>
 	^ aView empty
+]
+
+{ #category : #'as yet unclassified' }
+GtLToolMessage >> gtDisplayOn: aStream [
+	self toolCall gtDisplayOn: aStream
 ]
 
 { #category : #'as yet unclassified' }
