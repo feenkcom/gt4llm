@@ -124,7 +124,7 @@ GtLChatMessage >> asTokenizableString [
 
 { #category : #converting }
 GtLChatMessage >> asViewModel [
-	^ GtLThreadMessageViewModel new threadMessage: self
+	^ GtLChatMessageViewModel new threadMessage: self
 ]
 
 { #category : #testing }
@@ -265,7 +265,7 @@ GtLChatMessage >> gtContentFor: aView [
 	^ aView explicit
 		title: 'Content';
 		priority: 5;
-		stencil: [ GtLThreadMessageElement new
+		stencil: [ GtLChatMessageElement new
 				threadMessageViewModel: self asViewModel ]
 ]
 

@@ -12,6 +12,11 @@ GtLResponseInvividualFormat >> appendNeoJsonMappingTo: mapper [
 	"By default add no mappings"
 ]
 
+{ #category : #converting }
+GtLResponseInvividualFormat >> asJsonSchemaDictionary [
+	^ self subclassResponsibility
+]
+
 { #category : #accessing }
 GtLResponseInvividualFormat >> name [
 	^ name

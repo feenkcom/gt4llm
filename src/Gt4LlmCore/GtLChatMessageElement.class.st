@@ -1,8 +1,8 @@
 Class {
-	#name : #GtLThreadMessageElement,
+	#name : #GtLChatMessageElement,
 	#superclass : #BlElement,
-	#traits : 'TGtLlmWithThreadMessageViewModel + TBrLayoutResizable',
-	#classTraits : 'TGtLlmWithThreadMessageViewModel classTrait + TBrLayoutResizable classTrait',
+	#traits : 'TGtLWithChatMessageViewModel + TBrLayoutResizable',
+	#classTraits : 'TGtLWithChatMessageViewModel classTrait + TBrLayoutResizable classTrait',
 	#instVars : [
 		'contentsElement',
 		'progressElement',
@@ -12,7 +12,7 @@ Class {
 }
 
 { #category : #factory }
-GtLThreadMessageElement class >> newForChatList [
+GtLChatMessageElement class >> newForChatList [
 	^ self new
 		geometry: (BlRoundedRectangleGeometry cornerRadius: 2);
 		background: Color white;
@@ -25,28 +25,28 @@ GtLThreadMessageElement class >> newForChatList [
 ]
 
 { #category : #accessing }
-GtLThreadMessageElement >> contentsAptitudeDo: aBlock [
+GtLChatMessageElement >> contentsAptitudeDo: aBlock [
 	aBlock value: contentsElement aptitude
 ]
 
 { #category : #accessing }
-GtLThreadMessageElement >> contentsElementDo: aBlock [
+GtLChatMessageElement >> contentsElementDo: aBlock [
 	aBlock value: contentsElement
 ]
 
 { #category : #initialization }
-GtLThreadMessageElement >> defaultLayout [
+GtLChatMessageElement >> defaultLayout [
 	^ BlLinearLayout vertical
 ]
 
 { #category : #'private - updating' }
-GtLThreadMessageElement >> hideProgressElement [
+GtLChatMessageElement >> hideProgressElement [
 	contentsElement visibility: BlVisibility visible.
 	progressElement visibility: BlVisibility gone.
 ]
 
 { #category : #initialization }
-GtLThreadMessageElement >> initialize [
+GtLChatMessageElement >> initialize [
 	super initialize.
 	self initializeContentsElement.
 	self initializeProgressElement.
@@ -60,7 +60,7 @@ GtLThreadMessageElement >> initialize [
 ]
 
 { #category : #initialization }
-GtLThreadMessageElement >> initializeContentsElement [
+GtLChatMessageElement >> initializeContentsElement [
 	contentsElement := BrEditor new
 			padding: (BlInsets all: 2);
 			hMatchParent;
@@ -70,7 +70,7 @@ GtLThreadMessageElement >> initializeContentsElement [
 ]
 
 { #category : #initialization }
-GtLThreadMessageElement >> initializeProgressElement [
+GtLChatMessageElement >> initializeProgressElement [
 	progressElement := BrLabel new
 			fitContent;
 			aptitude: (BrGlamorousLabelAptitude new
@@ -81,34 +81,34 @@ GtLThreadMessageElement >> initializeProgressElement [
 ]
 
 { #category : #'private - announcement handling' }
-GtLThreadMessageElement >> onMessageContentsChanged: anAnnouncement [
+GtLChatMessageElement >> onMessageContentsChanged: anAnnouncement [
 	self enqueueTask: (BlTaskAction new action: [ self updateContentsElement ])
 ]
 
 { #category : #'private - announcement handling' }
-GtLThreadMessageElement >> onRestyleRequested: anAnnouncement [
+GtLChatMessageElement >> onRestyleRequested: anAnnouncement [
 	self
 		enqueueTask: (BlTaskAction new action: [ contentsElement editor styleText ])
 ]
 
 { #category : #'private - hooks' }
-GtLThreadMessageElement >> onThreadMessageViewModelChanged [
+GtLChatMessageElement >> onThreadMessageViewModelChanged [
 	self updateElement
 ]
 
 { #category : #'private - announcement handling' }
-GtLThreadMessageElement >> onThreadMessageViewModelChanged: anAnnouncement [
+GtLChatMessageElement >> onThreadMessageViewModelChanged: anAnnouncement [
 	self enqueueTask: (BlTaskAction new action: [ self updateElement ])
 ]
 
 { #category : #'private - updating' }
-GtLThreadMessageElement >> showProgressElement [
+GtLChatMessageElement >> showProgressElement [
 	contentsElement visibility: BlVisibility gone.
 	progressElement visibility: BlVisibility visible.
 ]
 
 { #category : #'private - hooks' }
-GtLThreadMessageElement >> subscribeToThreadMessageViewModel [
+GtLChatMessageElement >> subscribeToThreadMessageViewModel [
 	self threadMessageViewModel weak
 		when: GtLlmThreadMessageRestyleRequested
 			send: #onRestyleRequested:
@@ -122,28 +122,28 @@ GtLThreadMessageElement >> subscribeToThreadMessageViewModel [
 ]
 
 { #category : #'private - updating' }
-GtLThreadMessageElement >> updateContentsElement [
+GtLChatMessageElement >> updateContentsElement [
 	contentsElement
 		text: self threadMessageViewModel contentText;
 		styler: self threadMessageViewModel styler
 ]
 
 { #category : #'private - updating' }
-GtLThreadMessageElement >> updateElement [
+GtLChatMessageElement >> updateElement [
 	self updateContentsElement.
 	self updateProgressElement.
 	self updateFailureIndicator.
 ]
 
 { #category : #'private - updating' }
-GtLThreadMessageElement >> updateFailureIndicator [
+GtLChatMessageElement >> updateFailureIndicator [
 	self threadMessageViewModel isFailure
 		ifTrue: [ self border: BrGlamorousColors errorBackgroundColor ]
 		ifFalse: [ self border: BlBorder empty ]
 ]
 
 { #category : #'private - updating' }
-GtLThreadMessageElement >> updateProgressElement [
+GtLChatMessageElement >> updateProgressElement [
 	self threadMessage hasResponse
 		ifTrue: [ self hideProgressElement ]
 		ifFalse: [ self showProgressElement ]

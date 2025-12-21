@@ -66,7 +66,7 @@ GtLFailureThreadMessage >> createdAt: anObject [
 
 { #category : #ui }
 GtLFailureThreadMessage >> elementClass [
-	^ GtLThreadMessageElement
+	^ GtLChatMessageElement
 ]
 
 { #category : #accessing }
@@ -86,8 +86,8 @@ GtLFailureThreadMessage >> gtContentFor: aView [
 	^ aView explicit
 		title: 'Content';
 		priority: 1;
-		stencil: [ GtLThreadMessageElement new
-				threadMessageViewModel: (GtLThreadMessageViewModel new threadMessage: self) ]
+		stencil: [ GtLChatMessageElement new
+				threadMessageViewModel: (GtLChatMessageViewModel new threadMessage: self) ]
 ]
 
 { #category : #testing }

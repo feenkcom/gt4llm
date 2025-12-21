@@ -51,7 +51,7 @@ GtLProvisionalThreadMessage >> createdAt: anObject [
 
 { #category : #ui }
 GtLProvisionalThreadMessage >> elementClass [
-	^ GtLThreadMessageElement
+	^ GtLChatMessageElement
 ]
 
 { #category : #ui }
@@ -61,7 +61,7 @@ GtLProvisionalThreadMessage >> gtContentFor: aView [
 	^ aView explicit
 		title: 'Content';
 		priority: 1;
-		stencil: [ GtLThreadMessageElement new
+		stencil: [ GtLChatMessageElement new
 				threadMessageViewModel: (GtLlmThreadMessageViewModel new threadMessage: self) ]
 ]
 

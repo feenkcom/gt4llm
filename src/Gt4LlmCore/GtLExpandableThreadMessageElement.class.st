@@ -1,8 +1,8 @@
 Class {
 	#name : #GtLExpandableThreadMessageElement,
 	#superclass : #BrExpander,
-	#traits : 'TGtLWithThreadMessageViewModel',
-	#classTraits : 'TGtLWithThreadMessageViewModel classTrait',
+	#traits : 'TGtLWithChatMessageViewModel',
+	#classTraits : 'TGtLWithChatMessageViewModel classTrait',
 	#instVars : [
 		'oneLineThreadMessageElement',
 		'threadMessageElement'
