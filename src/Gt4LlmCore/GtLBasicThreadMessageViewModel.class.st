@@ -66,7 +66,7 @@ GtLBasicThreadMessageViewModel >> gtMessageViewsFor: aView [
 		column: 'Index'
 			text: [ :_ :anIndex | anIndex ]
 			width: 40;
-		column: 'Viw' text: #yourself
+		column: 'View' text: #yourself
 ]
 
 { #category : #accessing }
