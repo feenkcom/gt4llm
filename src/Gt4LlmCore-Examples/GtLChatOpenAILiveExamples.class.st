@@ -188,6 +188,29 @@ GtLChatOpenAILiveExamples >> messageWithToolCallExample [
 	^ self currentChat
 ]
 
+{ #category : #'examples - calls' }
+GtLChatOpenAILiveExamples >> messageWithToolCallExample_magritteMarkdown [
+	<gtExample>
+	| messageCall currentMessage responseMessage |
+	messageCall := GtLStringMessageCall new
+			string: 'Use tools and give me a description of the class BlElement'.
+
+	currentMessage := self currentChat createMessageForCall: messageCall.
+	currentMessage tools: (GtLToolsGroup withAll: {GtLlmToolForClassLookup new}).
+	currentMessage
+		addSchemaDescription: (GtLResponseMagritteFormat new
+				name: 'Markdown';
+				modelClass: GtLMarkdown).
+
+	responseMessage := self currentChat sendMessage: currentMessage.
+
+	self waitForChatCompletion.
+	self waitForChatCompletion.
+	self assert: self currentChat messages size equals: 3.
+
+	^ self currentChat
+]
+
 { #category : #utils }
 GtLChatOpenAILiveExamples >> waitForChatCompletion [
 	self currentChat provider executions last wait

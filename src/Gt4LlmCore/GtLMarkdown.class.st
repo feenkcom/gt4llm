@@ -2,27 +2,27 @@ Class {
 	#name : #GtLMarkdown,
 	#superclass : #Object,
 	#instVars : [
-		'description'
+		'content'
 	],
 	#category : #'Gt4LlmCore-Core'
 }
 
 { #category : #accessing }
-GtLMarkdown >> description [
-	^ description
+GtLMarkdown >> content [
+	^ content
 ]
 
 { #category : #accessing }
-GtLMarkdown >> description: anObject [
-	description := anObject
+GtLMarkdown >> content: anObject [
+	content := anObject
 ]
 
 { #category : #accessing }
-GtLMarkdown >> descriptionDescription [
+GtLMarkdown >> contentDescription [
 	<magritteDescription>
 	
 	 ^ MAStringDescription new
-		  accessor: #description;
+		  accessor: #content;
 		  comment: '{
 	"description" : "This is a Markdown format with a few extensions.
 
@@ -78,13 +78,18 @@ Line
 		  beRequired
 ]
 
+{ #category : #'as yet unclassified' }
+GtLMarkdown >> gtDisplayOn: aStream [
+	aStream nextPutAll: content
+]
+
 { #category : #views }
 GtLMarkdown >> gtMarkdownFor: aView [
 	<gtView>
-	description ifNil: [ ^ aView empty ].
+	content ifNil: [ ^ aView empty ].
 	^ aView textEditor
 		title: 'Markdown';
 		priority: 1;
 		styler: (GtLMessageStyler new);
-		text: [ description ]
+		text: [ content ]
 ]
