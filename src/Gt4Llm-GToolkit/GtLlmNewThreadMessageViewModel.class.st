@@ -9,7 +9,7 @@ Class {
 
 { #category : #'initialization ' }
 GtLlmNewThreadMessageViewModel >> assistantChat: assistantChat [
-	threadMessage assistantChat: assistantChat
+	threadMessage chat: assistantChat
 ]
 
 { #category : #'as yet unclassified' }
@@ -67,7 +67,7 @@ GtLlmNewThreadMessageViewModel >> onAddMessageContentsRequest: anAnnouncement [
 
 { #category : #'as yet unclassified' }
 GtLlmNewThreadMessageViewModel >> provider [
-	^ threadMessage assistantChat provider
+	^ threadMessage chat provider
 ]
 
 { #category : #'as yet unclassified' }

@@ -124,7 +124,7 @@ GtLChatMessage >> asTokenizableString [
 
 { #category : #converting }
 GtLChatMessage >> asViewModel [
-	^ GtLlmThreadMessageViewModel new threadMessage: self
+	^ GtLThreadMessageViewModel new threadMessage: self
 ]
 
 { #category : #testing }
