@@ -193,12 +193,12 @@ GtLlmNewThreadMessageElement >> subscribeToThreadMessageViewModel [
 		when: GtLlmNewThreadMessageContentsChanged
 		send: #onThreadMessageContentsChanged:
 		to: self.
-		
+
 	self threadMessage assistantChat
 		when: GtLlmThreadRunStartedAnnouncement
 		send: #disableSend
 		to: self.
-		
+
 	self threadMessage assistantChat
 		when: GtLlmThreadRunIsDoneAnnouncement
 		send: #enableSend
