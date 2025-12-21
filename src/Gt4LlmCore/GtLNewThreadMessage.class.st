@@ -34,14 +34,14 @@ GtLNewThreadMessage >> asViewModel [
 
 { #category : #accessing }
 GtLNewThreadMessage >> assistantChat [
-	self deprecated: 'Use chat instead' transformWith: '`@rcv assistantChat' -> '`@rcv chat'.
+	"self deprecated: 'Use chat instead' transformWith: '`@rcv assistantChat' -> '`@rcv chat'."
 	^ chat
 ]
 
 { #category : #accessing }
 GtLNewThreadMessage >> assistantChat: anAssistantChat [
-	self deprecated: 'Use #chat: instead.' transformWith: '`@rcv assistantChat: `@arg' -> '`@rcv chat: `@arg'.
-
+	"self deprecated: 'Use #chat: instead.' transformWith: '`@rcv assistantChat: `@arg' -> '`@rcv chat: `@arg'.
+"
 	chat := anAssistantChat
 ]
 
