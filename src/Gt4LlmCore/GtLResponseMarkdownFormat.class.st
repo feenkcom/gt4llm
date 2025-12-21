@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'schema'
 	],
-	#category : #Gt4LlmCore
+	#category : #'Gt4LlmCore-Core'
 }
 
 { #category : #accessing }
@@ -115,16 +115,6 @@ GtLResponseMarkdownFormat >> printOn: aStream [
 { #category : #accessing }
 GtLResponseMarkdownFormat >> propertyNames [
 	^ #()
-]
-
-{ #category : #accessing }
-GtLResponseMarkdownFormat >> schema [
-	^ schema
-]
-
-{ #category : #accessing }
-GtLResponseMarkdownFormat >> schema: aSchema [
-	schema := aSchema
 ]
 
 { #category : #accessing }

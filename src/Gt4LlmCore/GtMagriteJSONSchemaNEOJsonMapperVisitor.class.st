@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'neoJsonMapper'
 	],
-	#category : #Gt4LlmCore
+	#category : #'Gt4LlmCore-Core'
 }
 
 { #category : #'instance creation' }

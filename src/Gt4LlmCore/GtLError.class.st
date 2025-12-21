@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLError,
 	#superclass : #Error,
-	#category : #Gt4LlmCore
+	#category : #'Gt4LlmCore-Core'
 }
 
 { #category : #'instance creation' }

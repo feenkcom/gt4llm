@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLToolsGroup,
 	#superclass : #GtLGroup,
-	#category : #Gt4LlmCore
+	#category : #'Gt4LlmCore-Core'
 }
 
 { #category : #accessing }

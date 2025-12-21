@@ -5,7 +5,7 @@ Class {
 		'chat',
 		'assistantMessageClass'
 	],
-	#category : #Gt4LlmCore
+	#category : #'Gt4LlmCore-Core'
 }
 
 { #category : #accessing }
