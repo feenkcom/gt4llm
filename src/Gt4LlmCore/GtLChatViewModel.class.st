@@ -84,7 +84,7 @@ GtLChatViewModel >> threadMessageViewModels [
 			aStatus isFailed
 				ifTrue: [ | aViewModel |
 					aViewModel := self
-							newThreadMessageViewModelFor: (GtLlmFailureThreadMessage new
+							newThreadMessageViewModelFor: (GtLFailureThreadMessage new
 									failureText: aStatus message;
 									createdAt: aStatus createdAt;
 									chat: self assistantChat).
@@ -94,7 +94,7 @@ GtLChatViewModel >> threadMessageViewModels [
 				ifFalse: [ (newMessages size > 0 and: [ newMessages last isAssistantRole ])
 						ifFalse: [ | aViewModel |
 							aViewModel := self
-									newThreadMessageViewModelFor: (GtLlmProvisionalThreadMessage new
+									newThreadMessageViewModelFor: (GtLProvisionalThreadMessage new
 											createdAt: aStatus createdAt;
 											chat: self assistantChat).
 							aStream nextPut: aViewModel ] ].
