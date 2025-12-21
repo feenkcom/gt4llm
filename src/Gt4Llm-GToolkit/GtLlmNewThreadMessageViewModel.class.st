@@ -9,7 +9,7 @@ Class {
 
 { #category : #'initialization ' }
 GtLlmNewThreadMessageViewModel >> assistantChat: assistantChat [
-	threadMessage chat: assistantChat
+	threadMessage assistantChat: assistantChat
 ]
 
 { #category : #'as yet unclassified' }
