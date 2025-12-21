@@ -18,7 +18,7 @@ GtLThreadMessageHeaderElement >> addActionElement [
 				vFitContent;
 				aptitude: BrGlamorousLabelAptitude new;
 				beSmallSize;
-				text: self threadMessageViewModel summaryString).
+				text: self threadMessageViewModel contentText).
 	self addChild: aFrame
 ]
 
