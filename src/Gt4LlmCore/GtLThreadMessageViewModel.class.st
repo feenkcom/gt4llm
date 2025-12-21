@@ -42,12 +42,3 @@ GtLThreadMessageViewModel >> onThreadMessageChanged [
 	self isExpanded: self threadMessage isAssistantRole.
 	super onThreadMessageChanged
 ]
-
-{ #category : #accessing }
-GtLThreadMessageViewModel >> summaryString [
-	self isAssistantRole
-		ifTrue: [ (self threadMessage contentText)
-				ifEmpty: [  ]
-				ifNotEmpty: [ :aString | ^ aString ] ].
-	self isUserRole ifTrue: [ ^ self threadMessage contentText ].
-]
