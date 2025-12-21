@@ -1,14 +1,28 @@
 Class {
 	#name : #GtLChatViewModel,
 	#superclass : #Object,
-	#traits : 'TGtLlmWithAssistantChat',
-	#classTraits : 'TGtLlmWithAssistantChat classTrait',
 	#instVars : [
 		'newThreadMessageViewModel',
-		'threadMessageViewModelsCache'
+		'threadMessageViewModelsCache',
+		'chat'
 	],
 	#category : #'Gt4LlmCore-UI'
 }
+
+{ #category : #accessing }
+GtLChatViewModel >> assistantChat [
+	<return: #GtLChat>
+	^ chat
+]
+
+{ #category : #accessing }
+GtLChatViewModel >> assistantChat: anObject [
+	chat = anObject ifTrue: [ ^ self ].
+	chat ifNotNil: [ self unsubscribeFromAssistantChat ].
+	chat := anObject.
+	self onAssistantChatChanged.
+	self subscribeToAssistantChat.
+]
 
 { #category : #'as yet unclassified' }
 GtLChatViewModel >> beSync [
@@ -29,12 +43,12 @@ GtLChatViewModel >> newThreadMessageViewModel [
 
 { #category : #accessing }
 GtLChatViewModel >> newThreadMessageViewModelFor: aMessage [
-	^ GtLlmThreadMessageViewModel new threadMessage: aMessage
+	^ GtLThreadMessageViewModel new threadMessage: aMessage
 ]
 
 { #category : #'private - hooks' }
 GtLChatViewModel >> onAssistantChatChanged [
-	newThreadMessageViewModel assistantChat: assistantChat
+	newThreadMessageViewModel assistantChat: chat
 ]
 
 { #category : #accessing }
@@ -42,10 +56,14 @@ GtLChatViewModel >> sendMessage: aString [
 	self assistantChat sendMessage: aString
 ]
 
+{ #category : #'private - hooks' }
+GtLChatViewModel >> subscribeToAssistantChat [
+]
+
 { #category : #accessing }
 GtLChatViewModel >> threadMessageViewModels [
 	| newMessages |
-	newMessages := assistantChat messages reject: #isRawMessage.
+	newMessages := chat messages reject: #isRawMessage.
 	^ Array
 		streamContents: [ :aStream | 
 			| aStatus lastMessage |
@@ -61,7 +79,7 @@ GtLChatViewModel >> threadMessageViewModels [
 							ifAbsentPut: [ aMessage asViewModel
 									isExpanded: (lastMessage = aMessage and: [ aMessage isAssistantRole ]) ].
 					aStream nextPut: aViewModel ].
-			aStatus := assistantChat status.
+			aStatus := chat status.
 
 			aStatus isFailed
 				ifTrue: [ | aViewModel |
@@ -82,4 +100,8 @@ GtLChatViewModel >> threadMessageViewModels [
 							aStream nextPut: aViewModel ] ].
 
 			aStream nextPut: self newThreadMessageViewModel ]
+]
+
+{ #category : #'private - hooks' }
+GtLChatViewModel >> unsubscribeFromAssistantChat [
 ]
