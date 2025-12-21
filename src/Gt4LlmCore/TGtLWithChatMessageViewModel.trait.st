@@ -1,5 +1,5 @@
 Trait {
-	#name : #TGtLWithThreadMessageViewModel,
+	#name : #TGtLWithChatMessageViewModel,
 	#instVars : [
 		'threadMessageViewModel'
 	],
@@ -7,7 +7,7 @@ Trait {
 }
 
 { #category : #'accessing - method dictionary' }
-TGtLWithThreadMessageViewModel classSide >> addAndClassifySelector: selector withMethod: compiledMethod inProtocol: aProtocol [
+TGtLWithChatMessageViewModel classSide >> addAndClassifySelector: selector withMethod: compiledMethod inProtocol: aProtocol [
 	"When a new methods is added, I add it to the localMethodDict and also propagate the changes to my users"
 	<reflection: 'Class structural modification - Selector/Method modification'>
 	self localMethodDict at: selector put: compiledMethod.
@@ -18,13 +18,13 @@ TGtLWithThreadMessageViewModel classSide >> addAndClassifySelector: selector wit
 ]
 
 { #category : #querying }
-TGtLWithThreadMessageViewModel classSide >> allTraits [
+TGtLWithChatMessageViewModel classSide >> allTraits [
 	<reflection: 'Class structural inspection - Traits'>
 	^ self traitComposition allTraits
 ]
 
 { #category : #initialization }
-TGtLWithThreadMessageViewModel classSide >> doRebuildMethodDictionary [
+TGtLWithChatMessageViewModel classSide >> doRebuildMethodDictionary [
 
 	| selectors removedSelectors modified |
 	"During the creation of the class or after a change in the traitComposition, the whole method dictionary is calculated.
@@ -48,7 +48,7 @@ TGtLWithThreadMessageViewModel classSide >> doRebuildMethodDictionary [
 ]
 
 { #category : #testing }
-TGtLWithThreadMessageViewModel classSide >> findOriginClassOf: aMethod [
+TGtLWithChatMessageViewModel classSide >> findOriginClassOf: aMethod [
 
 	"I return the myself or the trait that has the original implementation of a method.
 	If the method is an alias, the returned class includes the original aliased method"
@@ -64,7 +64,7 @@ TGtLWithThreadMessageViewModel classSide >> findOriginClassOf: aMethod [
 ]
 
 { #category : #testing }
-TGtLWithThreadMessageViewModel classSide >> findOriginMethodOf: aMethod [
+TGtLWithChatMessageViewModel classSide >> findOriginMethodOf: aMethod [
 
 	"I return the original method for a aMethod.
 	If this is a local method, the original method is itself.
@@ -86,26 +86,26 @@ TGtLWithThreadMessageViewModel classSide >> findOriginMethodOf: aMethod [
 ]
 
 { #category : #testing }
-TGtLWithThreadMessageViewModel classSide >> hasTraitComposition [
+TGtLWithChatMessageViewModel classSide >> hasTraitComposition [
 
 	^ self traitComposition isEmpty not
 ]
 
 { #category : #testing }
-TGtLWithThreadMessageViewModel classSide >> includesLocalSelector: aSymbol [
+TGtLWithChatMessageViewModel classSide >> includesLocalSelector: aSymbol [
 	<reflection: 'Class structural inspection - Shared pool inspection'>
 	^ self isLocalSelector: aSymbol
 ]
 
 { #category : #testing }
-TGtLWithThreadMessageViewModel classSide >> includesTrait: aTrait [
+TGtLWithChatMessageViewModel classSide >> includesTrait: aTrait [
 
 	<reflection: 'Class structural inspection - Traits'>
 	^ self traitComposition includesTrait: aTrait
 ]
 
 { #category : #testing }
-TGtLWithThreadMessageViewModel classSide >> isAliasSelector: aSymbol [
+TGtLWithChatMessageViewModel classSide >> isAliasSelector: aSymbol [
 	"Return true if the selector aSymbol is an alias defined
 	in my or in another composition somewhere deeper in
 	the tree of traits compositions."
@@ -114,7 +114,7 @@ TGtLWithThreadMessageViewModel classSide >> isAliasSelector: aSymbol [
 ]
 
 { #category : #testing }
-TGtLWithThreadMessageViewModel classSide >> isLocalAliasSelector: aSymbol [
+TGtLWithChatMessageViewModel classSide >> isLocalAliasSelector: aSymbol [
 	"Return true if the selector aSymbol is an alias defined
 	in my trait composition."
 
@@ -122,37 +122,37 @@ TGtLWithThreadMessageViewModel classSide >> isLocalAliasSelector: aSymbol [
 ]
 
 { #category : #testing }
-TGtLWithThreadMessageViewModel classSide >> isLocalSelector: aSelector [
+TGtLWithChatMessageViewModel classSide >> isLocalSelector: aSelector [
 	<reflection: 'Class structural inspection - Selectors and methods inspection'>
 	^ self localMethodDict includesKey: aSelector
 ]
 
 { #category : #accessing }
-TGtLWithThreadMessageViewModel classSide >> localMethodDict [
+TGtLWithChatMessageViewModel classSide >> localMethodDict [
 	"The local methodDict is in the metaclass. In this way I do not have to recompile the methods during the bootstrap when we don't have a compiler."
 	^ self class baseLocalMethods
 ]
 
 { #category : #accessing }
-TGtLWithThreadMessageViewModel classSide >> localMethodDict: aMethodDictionary [
+TGtLWithChatMessageViewModel classSide >> localMethodDict: aMethodDictionary [
 	^ self class baseLocalMethods: aMethodDictionary
 ]
 
 { #category : #accessing }
-TGtLWithThreadMessageViewModel classSide >> localMethods [
+TGtLWithChatMessageViewModel classSide >> localMethods [
 	"returns the methods of classes excluding the ones of the traits that the class uses"
 	<reflection: 'Class structural inspection - Selectors and methods inspection'>
 	^ self localMethodDict values
 ]
 
 { #category : #'accessing - method dictionary' }
-TGtLWithThreadMessageViewModel classSide >> localSelectors [
+TGtLWithChatMessageViewModel classSide >> localSelectors [
 	<reflection: 'Class structural inspection - Selectors and methods inspection'>
 	^ self localMethodDict keys
 ]
 
 { #category : #categories }
-TGtLWithThreadMessageViewModel classSide >> recategorizeSelector: selector from: oldProtocol to: newProtocol [
+TGtLWithChatMessageViewModel classSide >> recategorizeSelector: selector from: oldProtocol to: newProtocol [
 	"When a method is recategorized I have to classify the method, but also recategorize the aliases pointing to it"
 
 	| originalProtocol |
@@ -168,20 +168,20 @@ TGtLWithThreadMessageViewModel classSide >> recategorizeSelector: selector from:
 ]
 
 { #category : #recompilation }
-TGtLWithThreadMessageViewModel classSide >> recompile: selector from: oldClass [
+TGtLWithChatMessageViewModel classSide >> recompile: selector from: oldClass [
 
 	super recompile: selector from: oldClass.
 	TraitChange addSelector: selector on: self
 ]
 
 { #category : #'trait-composition' }
-TGtLWithThreadMessageViewModel classSide >> removeFromComposition: aTrait [
+TGtLWithChatMessageViewModel classSide >> removeFromComposition: aTrait [
 
 	self setTraitComposition: (self traitComposition copyWithoutTrait: aTrait asTraitComposition)
 ]
 
 { #category : #removing }
-TGtLWithThreadMessageViewModel classSide >> removeSelector: aSelector [
+TGtLWithChatMessageViewModel classSide >> removeSelector: aSelector [
 
 	"When a selector is removed it should be notified to my users.
 	Check the class TraitChange for more details"
@@ -193,13 +193,13 @@ TGtLWithThreadMessageViewModel classSide >> removeSelector: aSelector [
 ]
 
 { #category : #accessing }
-TGtLWithThreadMessageViewModel classSide >> traitComposition [
+TGtLWithChatMessageViewModel classSide >> traitComposition [
 	"My trait composition is in my class. So I do not need to recompile the methods when installing them during bootstrap"
 	^ self class baseComposition
 ]
 
 { #category : #accessing }
-TGtLWithThreadMessageViewModel classSide >> traitComposition: aComposition [
+TGtLWithChatMessageViewModel classSide >> traitComposition: aComposition [
 
 	aComposition asTraitComposition allTraits do: [ :aMaybeTrait |
 		aMaybeTrait isTrait ifFalse: [
@@ -209,40 +209,40 @@ TGtLWithThreadMessageViewModel classSide >> traitComposition: aComposition [
 ]
 
 { #category : #accessing }
-TGtLWithThreadMessageViewModel classSide >> traitCompositionString [
+TGtLWithChatMessageViewModel classSide >> traitCompositionString [
 	^ self traitComposition asString
 ]
 
 { #category : #accessing }
-TGtLWithThreadMessageViewModel classSide >> traits [
+TGtLWithChatMessageViewModel classSide >> traits [
 	<reflection: 'Class structural inspection - Traits'>
 	^ self traitComposition traits
 ]
 
 { #category : #accessing }
-TGtLWithThreadMessageViewModel >> beforeThreadMessageViewModelReset [
+TGtLWithChatMessageViewModel >> beforeThreadMessageViewModelReset [
 ]
 
 { #category : #'private - hooks' }
-TGtLWithThreadMessageViewModel >> onThreadMessageViewModelChanged [
+TGtLWithChatMessageViewModel >> onThreadMessageViewModelChanged [
 ]
 
 { #category : #'private - hooks' }
-TGtLWithThreadMessageViewModel >> subscribeToThreadMessageViewModel [
+TGtLWithChatMessageViewModel >> subscribeToThreadMessageViewModel [
 ]
 
 { #category : #accessing }
-TGtLWithThreadMessageViewModel >> threadMessage [
+TGtLWithChatMessageViewModel >> threadMessage [
 	^ threadMessageViewModel threadMessage
 ]
 
 { #category : #accessing }
-TGtLWithThreadMessageViewModel >> threadMessageViewModel [
+TGtLWithChatMessageViewModel >> threadMessageViewModel [
 	^ threadMessageViewModel
 ]
 
 { #category : #accessing }
-TGtLWithThreadMessageViewModel >> threadMessageViewModel: anObject [
+TGtLWithChatMessageViewModel >> threadMessageViewModel: anObject [
 	threadMessageViewModel = anObject ifTrue: [ ^ self ].
 	threadMessageViewModel ifNotNil: [ :anOldMessage | 
 		self beforeThreadMessageViewModelReset.
@@ -253,5 +253,5 @@ TGtLWithThreadMessageViewModel >> threadMessageViewModel: anObject [
 ]
 
 { #category : #'private - hooks' }
-TGtLWithThreadMessageViewModel >> unsubscribeFromThreadMessageViewModel [
+TGtLWithChatMessageViewModel >> unsubscribeFromThreadMessageViewModel [
 ]

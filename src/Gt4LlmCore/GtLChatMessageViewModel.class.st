@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLThreadMessageViewModel,
+	#name : #GtLChatMessageViewModel,
 	#superclass : #GtLBasicThreadMessageViewModel,
 	#instVars : [
 		'isExpanded'
@@ -8,37 +8,37 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-GtLThreadMessageViewModel >> contentText [
+GtLChatMessageViewModel >> contentText [
 	^ self threadMessage contentText
 ]
 
 { #category : #accessing }
-GtLThreadMessageViewModel >> createdAt [
+GtLChatMessageViewModel >> createdAt [
 	^ self threadMessage createdAt
 ]
 
 { #category : #accessing }
-GtLThreadMessageViewModel >> elementClass [
+GtLChatMessageViewModel >> elementClass [
 	^ GtLExpandableThreadMessageElement
 ]
 
 { #category : #accessing }
-GtLThreadMessageViewModel >> isExpanded [
+GtLChatMessageViewModel >> isExpanded [
 	^ isExpanded ifNil: [ true ]
 ]
 
 { #category : #accessing }
-GtLThreadMessageViewModel >> isExpanded: aBoolean [
+GtLChatMessageViewModel >> isExpanded: aBoolean [
 	isExpanded := aBoolean
 ]
 
 { #category : #testing }
-GtLThreadMessageViewModel >> isFailure [
+GtLChatMessageViewModel >> isFailure [
 	^ threadMessage isFailure
 ]
 
 { #category : #'private - hooks' }
-GtLThreadMessageViewModel >> onThreadMessageChanged [
+GtLChatMessageViewModel >> onThreadMessageChanged [
 	self isExpanded: self threadMessage isAssistantRole.
 	super onThreadMessageChanged
 ]

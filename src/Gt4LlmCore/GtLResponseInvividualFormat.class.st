@@ -4,12 +4,17 @@ Class {
 	#instVars : [
 		'name'
 	],
-	#category : #Gt4LlmCore
+	#category : #'Gt4LlmCore-Core'
 }
 
 { #category : #'neo json' }
 GtLResponseInvividualFormat >> appendNeoJsonMappingTo: mapper [
 	"By default add no mappings"
+]
+
+{ #category : #converting }
+GtLResponseInvividualFormat >> asJsonSchemaDictionary [
+	^ self subclassResponsibility
 ]
 
 { #category : #accessing }

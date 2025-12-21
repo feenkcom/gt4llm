@@ -43,7 +43,7 @@ GtLChatViewModel >> newThreadMessageViewModel [
 
 { #category : #accessing }
 GtLChatViewModel >> newThreadMessageViewModelFor: aMessage [
-	^ GtLThreadMessageViewModel new threadMessage: aMessage
+	^ GtLChatMessageViewModel new threadMessage: aMessage
 ]
 
 { #category : #'private - hooks' }
