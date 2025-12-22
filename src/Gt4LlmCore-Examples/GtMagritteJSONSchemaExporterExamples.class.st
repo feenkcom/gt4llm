@@ -12,6 +12,64 @@ GtMagritteJSONSchemaExporterExamples >> assertSchema: aJsonSchema equals: aSchem
 ]
 
 { #category : #expected }
+GtMagritteJSONSchemaExporterExamples >> expectedSchemaStringForMathReasoningWithDelegatedType [
+	^ '{
+	"type" : "object",
+	"properties" : {
+		"steps" : {
+			"type" : "array",
+			"items" : {
+				"type" : "object",
+				"properties" : {
+					"step" : {
+						"anyOf" : [
+							{
+								"type" : "object",
+								"properties" : {
+									"content" : {
+										"type" : "string",
+										"description" : "An explanation of this step"
+									}
+								},
+								"required" : [
+									"content"
+								],
+								"additionalProperties" : false
+							},
+							{
+								"type" : "object",
+								"properties" : {
+									"output" : {
+										"type" : "string"
+									}
+								},
+								"required" : [
+									"output"
+								],
+								"additionalProperties" : false
+							}
+						]
+					}
+				},
+				"required" : [
+					"step"
+				],
+				"additionalProperties" : false
+			}
+		},
+		"finalAnswer" : {
+			"type" : "string"
+		}
+	},
+	"required" : [
+		"steps",
+		"finalAnswer"
+	],
+	"additionalProperties" : false
+}'
+]
+
+{ #category : #expected }
 GtMagritteJSONSchemaExporterExamples >> expectedSchemaStringForMathReasoningWithMultipleTypes [
 	^ '{
 	"type" : "object",
@@ -98,6 +156,14 @@ GtMagritteJSONSchemaExporterExamples >> expectedSchemaStringForMathReasoningWith
 ]
 
 { #category : #generation }
+GtMagritteJSONSchemaExporterExamples >> generateSchemaForMathReasoningWithDelegatedType [
+	| exporter |
+	exporter := GtMagritteJSONSchemaExporter 
+		forModelClass: GtLDemoMathReasoningWithDelegatedSteps.
+	^ exporter exportSchema
+]
+
+{ #category : #generation }
 GtMagritteJSONSchemaExporterExamples >> generateSchemaForMathReasoningWithMultipleTypes [
 	| exporter |
 	exporter := GtMagritteJSONSchemaExporter 
@@ -110,6 +176,14 @@ GtMagritteJSONSchemaExporterExamples >> generateSchemaForMathReasoningWithSingle
 	| exporter |
 	exporter := GtMagritteJSONSchemaExporter forModelClass: GtLDemoMathReasoning.
 	^ exporter exportSchema
+]
+
+{ #category : #examples }
+GtMagritteJSONSchemaExporterExamples >> testSchemaGenerationForMathReasoningWithDelegatedType [
+	<gtExample>
+	self 
+		assertSchema: self generateSchemaForMathReasoningWithDelegatedType
+		equals: self expectedSchemaStringForMathReasoningWithDelegatedType
 ]
 
 { #category : #examples }
