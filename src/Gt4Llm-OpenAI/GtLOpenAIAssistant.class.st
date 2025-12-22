@@ -59,8 +59,7 @@ GtLOpenAIAssistant >> gtInstructionsFor: aView [
 		title: 'Tutor instructions';
 		priority: 5;
 		text: [ self instructions ];
-		styler: (GtLlmMessageStyler new
-				threadMessageViewModel: (GtLlmNewThreadMessageViewModel new threadMessage: GtLlmNewThreadMessage new))
+		styler: GtLMessageStyler new
 ]
 
 { #category : #accessing }

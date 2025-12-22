@@ -29,7 +29,7 @@ GtLNewThreadMessage >> annotations [
 
 { #category : #ui }
 GtLNewThreadMessage >> asViewModel [
-	^ GtLlmNewThreadMessageViewModel new threadMessage: self
+	^ GtLNewThreadMessageViewModel new threadMessage: self
 ]
 
 { #category : #accessing }
@@ -88,7 +88,7 @@ GtLNewThreadMessage >> contents: aString requester: aRequester [
 
 { #category : #ui }
 GtLNewThreadMessage >> elementClass [
-	^ GtLlmNewThreadMessageElement
+	^ GtLNewThreadMessageElement
 ]
 
 { #category : #'as yet unclassified' }
