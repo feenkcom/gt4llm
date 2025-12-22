@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'content'
 	],
-	#category : #'Gt4LlmCore-Core'
+	#category : #'Gt4LlmCore-Formats'
 }
 
 { #category : #accessing }
