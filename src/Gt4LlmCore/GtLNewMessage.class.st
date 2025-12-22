@@ -151,7 +151,7 @@ GtLNewMessage >> sendMessage [
 	self contents: '' requester: nil.
 
 	self files
-		ifEmpty: [ aBlock := [ chat sendMessage: aMessageContent ] ]
+		ifEmpty: [ aBlock := [ chat sendPlainMessage: aMessageContent ] ]
 		ifNotEmpty: [ chat sendFiles: files withMessage: aMessageContent ].
 
 	files := OrderedCollection new.
