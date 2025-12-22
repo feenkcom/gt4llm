@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLNewThreadMessageElement,
+	#name : #GtLNewMessageElement,
 	#superclass : #BlElement,
 	#traits : 'TBrLayoutResizable + TGtLlmWithThreadMessageViewModel',
 	#classTraits : 'TBrLayoutResizable classTrait + TGtLlmWithThreadMessageViewModel classTrait',
@@ -13,7 +13,7 @@ Class {
 }
 
 { #category : #factory }
-GtLNewThreadMessageElement class >> newForChatList [
+GtLNewMessageElement class >> newForChatList [
 	^ self new
 		geometry: (BlRoundedRectangleGeometry cornerRadius: 2);
 		background: Color white;
@@ -26,7 +26,7 @@ GtLNewThreadMessageElement class >> newForChatList [
 ]
 
 { #category : #'initialization ' }
-GtLNewThreadMessageElement >> buildAttachButton [
+GtLNewMessageElement >> buildAttachButton [
 	^ BrButton new
 		fitContent;
 		beSmallSize;
@@ -55,7 +55,7 @@ GtLNewThreadMessageElement >> buildAttachButton [
 ]
 
 { #category : #'as yet unclassified' }
-GtLNewThreadMessageElement >> buildProviderButton [
+GtLNewMessageElement >> buildProviderButton [
 	| aButton |
 	^ aButton := BrButton new beSmallSize
 			aptitude: BrGlamorousButtonWithLabelAptitude new
@@ -85,7 +85,7 @@ GtLNewThreadMessageElement >> buildProviderButton [
 ]
 
 { #category : #'initialization ' }
-GtLNewThreadMessageElement >> buildSendButton [
+GtLNewMessageElement >> buildSendButton [
 	^ sendButton := BrButton new
 		fitContent;
 		beSmallSize;
@@ -101,22 +101,22 @@ GtLNewThreadMessageElement >> buildSendButton [
 ]
 
 { #category : #initialization }
-GtLNewThreadMessageElement >> defaultLayout [
+GtLNewMessageElement >> defaultLayout [
 	^ BlLinearLayout vertical
 ]
 
 { #category : #'as yet unclassified' }
-GtLNewThreadMessageElement >> disableSend [
+GtLNewMessageElement >> disableSend [
 	sendButton disable
 ]
 
 { #category : #'as yet unclassified' }
-GtLNewThreadMessageElement >> enableSend [
+GtLNewMessageElement >> enableSend [
 	sendButton enable
 ]
 
 { #category : #'initialization ' }
-GtLNewThreadMessageElement >> initialize [
+GtLNewMessageElement >> initialize [
 	super initialize.
 
 	self initializeContentsElement.
@@ -131,7 +131,7 @@ GtLNewThreadMessageElement >> initialize [
 ]
 
 { #category : #'initialization ' }
-GtLNewThreadMessageElement >> initializeContentsElement [
+GtLNewMessageElement >> initializeContentsElement [
 	contentsElement := BrEditor new
 			hMatchParent;
 			vFitContentLimited;
@@ -151,44 +151,44 @@ GtLNewThreadMessageElement >> initializeContentsElement [
 ]
 
 { #category : #'initialization ' }
-GtLNewThreadMessageElement >> initializeImagesElement [
+GtLNewMessageElement >> initializeImagesElement [
 	imagesElement := BrHorizontalPane new fitContent clipChildren: false
 ]
 
 { #category : #'initialization ' }
-GtLNewThreadMessageElement >> initializeToolbar [
+GtLNewMessageElement >> initializeToolbar [
 	toolbar := BrToolbar new aptitude: BrGlamorousToolbarAptitude new
 ]
 
 { #category : #'private - announcement handling' }
-GtLNewThreadMessageElement >> onThreadMessageContentsChanged: anAnnouncement [
+GtLNewMessageElement >> onThreadMessageContentsChanged: anAnnouncement [
 	anAnnouncement requester = self ifTrue: [ ^ self ].
 	self enqueueTask: (BlTaskAction new action: [ self updateElement ])
 ]
 
 { #category : #'private - hooks' }
-GtLNewThreadMessageElement >> onThreadMessageViewModelChanged [
+GtLNewMessageElement >> onThreadMessageViewModelChanged [
 	self updateElement
 ]
 
 { #category : #'private - announcement handling' }
-GtLNewThreadMessageElement >> onThreadMessageViewModelChanged: anAnnouncement [
+GtLNewMessageElement >> onThreadMessageViewModelChanged: anAnnouncement [
 	self enqueueTask: (BlTaskAction new action: [ self updateElement ])
 ]
 
 { #category : #'private - actions' }
-GtLNewThreadMessageElement >> sendMessage [
+GtLNewMessageElement >> sendMessage [
 	threadMessageViewModel ifNil: [ ^ self ].
 	threadMessageViewModel sendMessage
 ]
 
 { #category : #'private - event handling' }
-GtLNewThreadMessageElement >> sendMessageFrom: aButton [
+GtLNewMessageElement >> sendMessageFrom: aButton [
 	self sendMessage
 ]
 
 { #category : #'private - hooks' }
-GtLNewThreadMessageElement >> subscribeToThreadMessageViewModel [
+GtLNewMessageElement >> subscribeToThreadMessageViewModel [
 	self threadMessage
 		when: GtLlmNewThreadMessageContentsChanged
 		send: #onThreadMessageContentsChanged:
@@ -211,32 +211,32 @@ GtLNewThreadMessageElement >> subscribeToThreadMessageViewModel [
 ]
 
 { #category : #'private - hooks' }
-GtLNewThreadMessageElement >> unsubscribeFromThreadMessageViewModel [
+GtLNewMessageElement >> unsubscribeFromThreadMessageViewModel [
 	self threadMessage unsubscribe: self
 ]
 
 { #category : #'private - updating' }
-GtLNewThreadMessageElement >> updateContents: aBlText [
+GtLNewMessageElement >> updateContents: aBlText [
 	threadMessageViewModel ifNil: [ ^ self ].
 	threadMessageViewModel contents: aBlText asString requester: self
 ]
 
 { #category : #'private - updating' }
-GtLNewThreadMessageElement >> updateContentsElement [
+GtLNewMessageElement >> updateContentsElement [
 	contentsElement
 		text: threadMessageViewModel contents;
 		styler: threadMessageViewModel styler
 ]
 
 { #category : #'private - updating' }
-GtLNewThreadMessageElement >> updateElement [
+GtLNewMessageElement >> updateElement [
 	self updateContentsElement.
 	self updateImagesElement.
 	self updateToolbar
 ]
 
 { #category : #'private - updating' }
-GtLNewThreadMessageElement >> updateImagesElement [
+GtLNewMessageElement >> updateImagesElement [
 	imagesElement removeChildren.
 
 	self threadMessageViewModel files
@@ -253,7 +253,7 @@ GtLNewThreadMessageElement >> updateImagesElement [
 ]
 
 { #category : #'private - updating' }
-GtLNewThreadMessageElement >> updateToolbar [
+GtLNewMessageElement >> updateToolbar [
 	toolbar removeAllItems.
 	toolbar addItem: self buildSendButton.
 	toolbar addItem: self buildAttachButton.
