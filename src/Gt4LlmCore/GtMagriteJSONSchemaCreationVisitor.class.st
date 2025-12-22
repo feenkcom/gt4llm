@@ -12,6 +12,36 @@ GtMagriteJSONSchemaCreationVisitor >> currentSchema [
 	^ currentSchema
 ]
 
+{ #category : #accessing }
+GtMagriteJSONSchemaCreationVisitor >> extractAnyOfSchemaForClasses: aCollectioOfClasses [ 
+	| individualSchema |
+	
+ 	individualSchema :=	aCollectioOfClasses 
+ 		collect: [ :aClass |
+ 			self extractSingleSchemaForClass: aClass ]
+ 		as: NeoJSONArray.
+ 		
+ 	^ NeoJSONObject  new 
+		at: 'anyOf' put: individualSchema;
+		yourself.
+]
+
+{ #category : #accessing }
+GtMagriteJSONSchemaCreationVisitor >> extractSchemaForClasses: aCollectioOfClasses [
+	^ (aCollectioOfClasses size = 1)
+		ifTrue: [ self extractSingleSchemaForClass: aCollectioOfClasses anyOne ] 
+		ifFalse: [ self extractAnyOfSchemaForClasses: aCollectioOfClasses ]
+]
+
+{ #category : #accessing }
+GtMagriteJSONSchemaCreationVisitor >> extractSingleSchemaForClass: aClass [
+	| itemsDescription |
+	itemsDescription := aClass new 
+			magritteDescription.
+	itemsDescription acceptMagritte:  self.
+	^ self currentSchema
+]
+
 { #category : #'visiting-description' }
 GtMagriteJSONSchemaCreationVisitor >> visitPriorityContainer: aContainer [
 	| schema propertiesSchema |
@@ -52,12 +82,10 @@ GtMagriteJSONSchemaCreationVisitor >> visitStringDescription: aStringDescription
 
 { #category : #'visiting-description' }
 GtMagriteJSONSchemaCreationVisitor >> visitToManyRelationDescription: aDescription [
-	| schema itemsDescription itemSchema  |
+	| schema itemSchema  |
 	
-	itemsDescription := aDescription classes first new 
-			magritteDescription.
-	itemsDescription acceptMagritte:  self.
-	itemSchema := self currentSchema.
+	itemSchema := self 
+		extractSchemaForClasses: aDescription classes.
 	
 	schema := NeoJSONObject  new 
 		at: 'type' put: 'array';
