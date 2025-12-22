@@ -253,6 +253,30 @@ GtLChatOpenAILiveExamples >> messageWithToolCallExample_magritteMarkdown [
 	^ self currentChat
 ]
 
+{ #category : #'examples - calls' }
+GtLChatOpenAILiveExamples >> messageWithToolCallExample_magritteMarkdown_codeChanges [
+	<gtExample>
+	| messageCall currentMessage responseMessage |
+	messageCall := GtLStringMessageCall new
+			string: 'Create a class for a Person with a first and last name'.
+
+	currentMessage := self currentChat createMessageForCall: messageCall.
+	currentMessage
+		addSchemaDescription: (GtLResponseMagritteFormat new
+				name: 'Markdown';
+				modelClass: GtLMarkdown);
+		addSchemaDescription: (GtLResponseMagritteFormat new
+				name: 'CodeTransformations';
+				modelClass: GtLCodeTransformations).
+
+	responseMessage := self currentChat sendMessage: currentMessage.
+
+	self waitForChatCompletion.
+	self assert: self currentChat messages size equals: 2.
+
+	^ self currentChat
+]
+
 { #category : #utils }
 GtLChatOpenAILiveExamples >> waitForChatCompletion [
 	self currentChat provider executions last wait
