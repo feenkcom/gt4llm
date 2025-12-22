@@ -94,3 +94,9 @@ GtMagriteJSONSchemaCreationVisitor >> visitToManyRelationDescription: aDescripti
 						
 		^ currentSchema := schema
 ]
+
+{ #category : #'visiting-description' }
+GtMagriteJSONSchemaCreationVisitor >> visitToOneRelationDescription: aDescription [ 
+	^ currentSchema := self 
+			extractSchemaForClasses: aDescription classes.
+]

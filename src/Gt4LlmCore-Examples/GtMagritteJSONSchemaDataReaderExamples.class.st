@@ -5,6 +5,29 @@ Class {
 }
 
 { #category : #expecting }
+GtMagritteJSONSchemaDataReaderExamples >> expectedMathReasoningDelegatedTypesTypeStep [
+	^ GtLDemoMathReasoningWithDelegatedSteps new
+		finalAnswer: 'The solution to the equation 8x + 7 = -23 is x = -15/4.';
+  	steps: {
+  		GtLDemoMathReasoningDelegatedStep new 
+  			step: (GtLDemoMathReasoningExplanationStep  new
+    			content: 'Start by isolating the term with x: subtract 7 from both sides, giving 8x = -30.').
+    		
+    	GtLDemoMathReasoningDelegatedStep new 
+  			step: (GtLDemoMathReasoningExplanationStep  new
+    			content: 'Next, divide both sides by 8 to solve for x. This yields x = -30/8.').
+      
+      GtLDemoMathReasoningDelegatedStep new 
+  			step:(GtLDemoMathReasoningExplanationStep  new
+    			content: 'Simplify the fraction by dividing numerator and denominator by 2: x = -15/4.').
+    	
+    	GtLDemoMathReasoningDelegatedStep new 
+  			step:(GtLDemoMathReasoningOutputStep  new
+      		output: 'x = -15/4').
+	}
+]
+
+{ #category : #expecting }
 GtMagritteJSONSchemaDataReaderExamples >> expectedMathReasoningMultipleTypesTypeStep [
 	^ GtLDemoMathReasoningWithDifferentSteps new
 		finalAnswer: 'x = -15/4';
@@ -58,6 +81,41 @@ GtMagritteJSONSchemaDataReaderExamples >> expectedMathReasoningWithSingleTypeSte
     		explanation: 'Simplify the fraction.';
       	output: 'x = -15 / 4'.
       }
+]
+
+{ #category : #accessing }
+GtMagritteJSONSchemaDataReaderExamples >> mathReasoningWithDelegatedTypeStepData [
+	^ '{
+	"finalAnswer" : "The solution to the equation 8x + 7 = -23 is x = -15/4.",
+	"steps" : [
+		{
+			"step" : {
+				"content" : "Start by isolating the term with x: subtract 7 from both sides, giving 8x = -30."
+			}
+		},
+		{
+			"step" : {
+				"content" : "Next, divide both sides by 8 to solve for x. This yields x = -30/8."
+			}
+		},
+		{
+			"step" : {
+				"content" : "Simplify the fraction by dividing numerator and denominator by 2: x = -15/4."
+			}
+		},
+		{
+			"step" : {
+				"output" : "x = -15/4"
+			}
+		}
+	]
+}'
+]
+
+{ #category : #accessing }
+GtMagritteJSONSchemaDataReaderExamples >> mathReasoningWithDelegatedTypeStepReader [
+	^ GtMagritteJSONSchemaDataReader 
+			forModelClass: GtLDemoMathReasoningWithDelegatedSteps
 ]
 
 { #category : #accessing }
@@ -129,6 +187,21 @@ GtMagritteJSONSchemaDataReaderExamples >> mathReasoningWithSingleTypeStepData [
 GtMagritteJSONSchemaDataReaderExamples >> mathReasoningWithSingleTypeStepReader [
 	^ GtMagritteJSONSchemaDataReader 
 			forModelClass: GtLDemoMathReasoning
+]
+
+{ #category : #examples }
+GtMagritteJSONSchemaDataReaderExamples >> readMathReasoningWithDelegatedType [
+	<gtExample>
+	| dataReader mathReasoning |
+	dataReader := self mathReasoningWithDelegatedTypeStepReader.
+	mathReasoning := dataReader 
+		readFrom: self mathReasoningWithDelegatedTypeStepData readStream.
+		
+	self 
+		assert: mathReasoning 
+		equals:self expectedMathReasoningDelegatedTypesTypeStep.
+		
+	^ mathReasoning
 ]
 
 { #category : #examples }
