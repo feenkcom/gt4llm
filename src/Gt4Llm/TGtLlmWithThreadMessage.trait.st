@@ -6,6 +6,11 @@ Trait {
 	#category : #Gt4Llm
 }
 
+{ #category : #accessing }
+TGtLlmWithThreadMessage >> hasThreadMessage [
+	^ threadMessage isNotNil
+]
+
 { #category : #'private - hooks' }
 TGtLlmWithThreadMessage >> onThreadMessageChanged [
 	
