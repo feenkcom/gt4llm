@@ -121,9 +121,12 @@ GtLThreadMessageContentHolder >> viewUpdater [
 GtLThreadMessageContentHolder >> views: aCollectionOfViews [
 	| views |
 	self removeChildNamed: #'message-tabs'.
-	views := aCollectionOfViews
-			reject: [ :aView | aView isKindOf: GtPhlowEmptyView ].
 
+	views := Array
+			new: aCollectionOfViews size
+			streamContents: [ :aStream | 
+				aCollectionOfViews
+					do: [ :aView | aView ifItHasContent: [ aStream nextPut: aView ] ] ].
 	views ifEmpty: [ ^ self ].
 
 	self addChild: (self viewsToTabGroup: aCollectionOfViews) as: #'message-tabs'
@@ -135,6 +138,14 @@ GtLThreadMessageContentHolder >> viewsToTabGroup: aCollectionOfViews [
 		asElementDo: [ :e | e vFitContentLimited ]  "
 
 	| tabs aTabGroup aListener aBuildContext |
+	aTabGroup := GtPhlowCompositeView new
+			views: aCollectionOfViews;
+			asElementDo: [ :e | e vFitContentLimited ].
+
+	true ifTrue: [ ^ aTabGroup ].
+
+	self flag: #remove.
+
 	tabs := OrderedCollection new.
 	aCollectionOfViews
 		do: [ :view | 
@@ -188,7 +199,9 @@ GtLThreadMessageContentHolder >> viewsToTabGroup: aCollectionOfViews [
 								anElement ] ] ]);
 			subscribeToSystem.
 
-	aTabGroup userData at: GtPhlowChangeMethodSystemAnnouncerListener put: aListener.
+	aTabGroup userData
+		at: GtPhlowChangeMethodSystemAnnouncerListener
+		put: aListener.
 
 	^ aTabGroup
 ]
