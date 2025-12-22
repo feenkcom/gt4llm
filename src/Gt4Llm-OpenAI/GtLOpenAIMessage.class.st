@@ -2,9 +2,7 @@ Class {
 	#name : #GtLOpenAIMessage,
 	#superclass : #GtLChatMessage,
 	#instVars : [
-		'step',
 		'completedAt',
-		'incompleteAt',
 		'responseModels'
 	],
 	#category : #'Gt4Llm-OpenAI'
@@ -31,7 +29,6 @@ GtLOpenAIMessage class >> serializationProperties [
 	^ {
 		#content -> #content.
 		#created_at -> #createdAtString.
-		#incomplete_at -> #incompleteAtString.
 		#completed_at -> #completedAtString.
 		#id -> #idString.
 		#role -> #role
@@ -161,11 +158,6 @@ GtLOpenAIMessage >> hasResponse [
 ]
 
 { #category : #accessing }
-GtLOpenAIMessage >> hasStep [
-	^ self step isNotNil
-]
-
-{ #category : #accessing }
 GtLOpenAIMessage >> idString [
 	^ nil
 ]
@@ -176,18 +168,8 @@ GtLOpenAIMessage >> idString: anObject [
 ]
 
 { #category : #accessing }
-GtLOpenAIMessage >> incompleteAt [
-	^ incompleteAt
-]
-
-{ #category : #accessing }
-GtLOpenAIMessage >> incompleteAtString [
-	^ nil
-]
-
-{ #category : #accessing }
 GtLOpenAIMessage >> isReady [
-	^ incompleteAt isNil or: [ completedAt notNil ]
+	^ completedAt notNil
 ]
 
 { #category : #accessing }
@@ -210,19 +192,4 @@ GtLOpenAIMessage >> messageFiles [
 GtLOpenAIMessage >> responseModels [
 	^ responseModels ifNil:[ 
 			responseModels := self computeResponseModelsByFormat ].
-]
-
-{ #category : #accessing }
-GtLOpenAIMessage >> step [
-	^ step
-]
-
-{ #category : #accessing }
-GtLOpenAIMessage >> step: anObject [
-	step := anObject
-]
-
-{ #category : #accessing }
-GtLOpenAIMessage >> styler [
-	^ self explicitRequirement
 ]

@@ -13,6 +13,6 @@ GtLStringMessageCall >> serialize [
 ]
 
 { #category : #accessing }
-GtLStringMessageCall >> string: anObject [
-	string := anObject
+GtLStringMessageCall >> string: aString [
+	string := aString
 ]
