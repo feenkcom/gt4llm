@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLNewThreadMessage,
+	#name : #GtLNewMessage,
 	#superclass : #Object,
 	#instVars : [
 		'contents',
@@ -13,96 +13,96 @@ Class {
 }
 
 { #category : #accessing }
-GtLNewThreadMessage >> actions [
+GtLNewMessage >> actions [
 	^ chat assistant actions
 ]
 
 { #category : #'as yet unclassified' }
-GtLNewThreadMessage >> addFile: aFileReference [
+GtLNewMessage >> addFile: aFileReference [
 	files add: aFileReference
 ]
 
 { #category : #accessing }
-GtLNewThreadMessage >> annotations [
+GtLNewMessage >> annotations [
 	^ {} asDictionary
 ]
 
 { #category : #ui }
-GtLNewThreadMessage >> asViewModel [
-	^ GtLNewThreadMessageViewModel new threadMessage: self
+GtLNewMessage >> asViewModel [
+	^ GtLNewMessageViewModel new threadMessage: self
 ]
 
 { #category : #accessing }
-GtLNewThreadMessage >> assistantChat [
+GtLNewMessage >> assistantChat [
 	"self deprecated: 'Use chat instead' transformWith: '`@rcv assistantChat' -> '`@rcv chat'."
 	^ chat
 ]
 
 { #category : #accessing }
-GtLNewThreadMessage >> assistantChat: anAssistantChat [
+GtLNewMessage >> assistantChat: anAssistantChat [
 	"self deprecated: 'Use #chat: instead.' transformWith: '`@rcv assistantChat: `@arg' -> '`@rcv chat: `@arg'.
 "
 	chat := anAssistantChat
 ]
 
 { #category : #'as yet unclassified' }
-GtLNewThreadMessage >> beSync [
+GtLNewMessage >> beSync [
 	isSync := true
 ]
 
 { #category : #accessing }
-GtLNewThreadMessage >> chat [
+GtLNewMessage >> chat [
 	^ chat
 ]
 
 { #category : #accessing }
-GtLNewThreadMessage >> chat: anObject [
+GtLNewMessage >> chat: anObject [
 	chat := anObject
 ]
 
 { #category : #accessing }
-GtLNewThreadMessage >> contentSummary [
+GtLNewMessage >> contentSummary [
 	^ self contentText lines ifEmpty: [ '' ] ifNotEmpty: #first
 ]
 
 { #category : #accessing }
-GtLNewThreadMessage >> contentText [
+GtLNewMessage >> contentText [
 	^ self contents
 ]
 
 { #category : #accessing }
-GtLNewThreadMessage >> contents [
+GtLNewMessage >> contents [
 	^ contents
 ]
 
 { #category : #accessing }
-GtLNewThreadMessage >> contents: anObject [
+GtLNewMessage >> contents: anObject [
 	contents := anObject
 ]
 
 { #category : #accessing }
-GtLNewThreadMessage >> contents: aString requester: aRequester [
+GtLNewMessage >> contents: aString requester: aRequester [
 	contents := aString.
 	self onContentsChangeByRequester: aRequester
 ]
 
 { #category : #ui }
-GtLNewThreadMessage >> elementClass [
-	^ GtLNewThreadMessageElement
+GtLNewMessage >> elementClass [
+	^ GtLNewMessageElement
 ]
 
 { #category : #'as yet unclassified' }
-GtLNewThreadMessage >> files [
+GtLNewMessage >> files [
 	^ files
 ]
 
 { #category : #'as yet unclassified' }
-GtLNewThreadMessage >> future [
+GtLNewMessage >> future [
 	^ future
 ]
 
 { #category : #ui }
-GtLNewThreadMessage >> gtLiveFor: aView [
+GtLNewMessage >> gtLiveFor: aView [
 	<gtView>
 	^ aView explicit
 		title: 'Live';
@@ -114,12 +114,12 @@ GtLNewThreadMessage >> gtLiveFor: aView [
 ]
 
 { #category : #accessing }
-GtLNewThreadMessage >> id [
+GtLNewMessage >> id [
 	^ '87fe83dd-90cd-0d00-9ada-2ba30d0bb652'
 ]
 
 { #category : #initialization }
-GtLNewThreadMessage >> initialize [
+GtLNewMessage >> initialize [
 	super initialize.
 	contents := ''.
 	announcer := Announcer new.
@@ -128,12 +128,12 @@ GtLNewThreadMessage >> initialize [
 ]
 
 { #category : #accessing }
-GtLNewThreadMessage >> isAssistantRole [
+GtLNewMessage >> isAssistantRole [
 	^ false
 ]
 
 { #category : #'private - notifying' }
-GtLNewThreadMessage >> onContentsChangeByRequester: aRequester [
+GtLNewMessage >> onContentsChangeByRequester: aRequester [
 	announcer
 		announce: (GtLlmNewThreadMessageContentsChanged new
 				threadMessage: self;
@@ -142,7 +142,7 @@ GtLNewThreadMessage >> onContentsChangeByRequester: aRequester [
 ]
 
 { #category : #actions }
-GtLNewThreadMessage >> sendMessage [
+GtLNewMessage >> sendMessage [
 	| aMessageContent aBlock |
 	contents ifNil: [ ^ self ].
 
@@ -164,17 +164,17 @@ GtLNewThreadMessage >> sendMessage [
 ]
 
 { #category : #actions }
-GtLNewThreadMessage >> treatString [
+GtLNewMessage >> treatString [
 	^ contents
 ]
 
 { #category : #subscriptions }
-GtLNewThreadMessage >> unsubscribe: anObject [
+GtLNewMessage >> unsubscribe: anObject [
 	^ announcer unsubscribe: anObject
 ]
 
 { #category : #subscriptions }
-GtLNewThreadMessage >> when: anEventSelector send: aMessageSelector to: anObject [
+GtLNewMessage >> when: anEventSelector send: aMessageSelector to: anObject [
 	^ announcer weak
 		when: anEventSelector
 		send: aMessageSelector

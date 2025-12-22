@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLNewThreadMessageViewModel,
+	#name : #GtLNewMessageViewModel,
 	#superclass : #GtLBasicThreadMessageViewModel,
 	#instVars : [
 		'connectionRegistry'
@@ -8,74 +8,74 @@ Class {
 }
 
 { #category : #'initialization ' }
-GtLNewThreadMessageViewModel >> assistantChat: assistantChat [
+GtLNewMessageViewModel >> assistantChat: assistantChat [
 	threadMessage assistantChat: assistantChat
 ]
 
 { #category : #'as yet unclassified' }
-GtLNewThreadMessageViewModel >> attachFile: aFileReference [
+GtLNewMessageViewModel >> attachFile: aFileReference [
 	self threadMessage addFile: aFileReference
 ]
 
 { #category : #'as yet unclassified' }
-GtLNewThreadMessageViewModel >> beSync [
+GtLNewMessageViewModel >> beSync [
 	threadMessage beSync
 ]
 
 { #category : #accessing }
-GtLNewThreadMessageViewModel >> connectionRegistry [
+GtLNewMessageViewModel >> connectionRegistry [
 	^ connectionRegistry
 		ifNil: [ connectionRegistry := GtLConnectionRegistry uniqueInstance ]
 ]
 
 { #category : #accessing }
-GtLNewThreadMessageViewModel >> connectionRegistry: anObject [
+GtLNewMessageViewModel >> connectionRegistry: anObject [
 	connectionRegistry := anObject
 ]
 
 { #category : #'as yet unclassified' }
-GtLNewThreadMessageViewModel >> connectionString [
+GtLNewMessageViewModel >> connectionString [
 	^ (self connectionRegistry connectionFor: self provider)
 		ifNil: [ self provider modelName ]
 		ifNotNil: #connectionString
 ]
 
 { #category : #accessing }
-GtLNewThreadMessageViewModel >> contents [
+GtLNewMessageViewModel >> contents [
 	^ self threadMessage contents
 ]
 
 { #category : #accessing }
-GtLNewThreadMessageViewModel >> contents: aString requester: aRequester [
+GtLNewMessageViewModel >> contents: aString requester: aRequester [
 	self threadMessage contents: aString requester: aRequester
 ]
 
 { #category : #accessing }
-GtLNewThreadMessageViewModel >> elementClass [
-	^ GtLNewThreadMessageElement
+GtLNewMessageViewModel >> elementClass [
+	^ GtLNewMessageElement
 ]
 
 { #category : #'as yet unclassified' }
-GtLNewThreadMessageViewModel >> files [
+GtLNewMessageViewModel >> files [
 	^ self threadMessage files
 ]
 
 { #category : #accessing }
-GtLNewThreadMessageViewModel >> onAddMessageContentsRequest: anAnnouncement [
+GtLNewMessageViewModel >> onAddMessageContentsRequest: anAnnouncement [
 	self contents: anAnnouncement messageContents requester: nil
 ]
 
 { #category : #'as yet unclassified' }
-GtLNewThreadMessageViewModel >> provider [
+GtLNewMessageViewModel >> provider [
 	^ threadMessage assistantChat provider
 ]
 
 { #category : #'as yet unclassified' }
-GtLNewThreadMessageViewModel >> provider: aProvider [
+GtLNewMessageViewModel >> provider: aProvider [
 	self threadMessage assistantChat provider: aProvider
 ]
 
 { #category : #actions }
-GtLNewThreadMessageViewModel >> sendMessage [
+GtLNewMessageViewModel >> sendMessage [
 	^ threadMessage sendMessage
 ]
