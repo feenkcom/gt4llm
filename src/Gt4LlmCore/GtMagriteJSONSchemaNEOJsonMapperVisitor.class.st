@@ -35,24 +35,56 @@ GtMagriteJSONSchemaNEOJsonMapperVisitor >> visitPriorityContainer: aContainer [
 
 { #category : #accessing }
 GtMagriteJSONSchemaNEOJsonMapperVisitor >> visitToManyRelationDescription: aDescription [
-	
+	| itemName targetDescriptions |
+
+	itemName := aDescription classes size > 1 
+		ifTrue: [ String streamContents: [ :s | 
+			(aDescription classes collect: [ :each | each name ] )
+					asStringOn: s 
+					 	delimiter: 'Or' ] ]
+		ifFalse: [ aDescription classes first ] .
+						 
 	neoJsonMapper
 		for: aDescription gtJsonSchemaTypeName
 		customDo: [ :mapping | 
 			mapping
-				listOfElementSchema: aDescription classes first.
+				listOfElementSchema: itemName.
 			mapping
 				writer: [ :jsonWriter :object | 
 					self error: 'Writer should not be used!' ] ].
-			
-	aDescription classes
-		do: [ :aModelClass | 
+					
+	targetDescriptions := aDescription classes
+		collect: [ :aModelClass | 
 			| magritteDescription |
 			magritteDescription := aModelClass new 
 				magritteDescription.
 			magritteDescription properties
 				at: 'originalClass'
 				put: aModelClass.
+			magritteDescription ].
 	
+	targetDescriptions do: [ :magritteDescription |
 			magritteDescription acceptMagritte: self ].
+			
+	aDescription classes size > 1 ifTrue: [
+		neoJsonMapper
+			for: itemName
+			customDo: [ :mapping | 
+				mapping
+					reader: [ :jsonReader | 
+						| aResult propertyNames |
+						propertyNames := jsonReader peekPropertyNames asSet .
+						aResult := targetDescriptions 
+							detect: [ :each | propertyNames = (each children 
+								collect: [ :aProperty |
+									aProperty accessor readSelector ]) asSet  ]
+							ifFound: [ :each | 
+								jsonReader nextAs: each gtJsonSchemaTypeName]
+							ifNone: [  jsonReader parseValue].
+						aResult ].
+				mapping
+					writer: [ :jsonWriter :object | 
+						self error: 'Writer should not be used!' ] ] ].
+		
+
 ]
