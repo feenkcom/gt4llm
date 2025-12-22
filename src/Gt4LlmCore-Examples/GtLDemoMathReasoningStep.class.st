@@ -8,6 +8,17 @@ Class {
 	#category : #'Gt4LlmCore-Examples'
 }
 
+{ #category : #comparison }
+GtLDemoMathReasoningStep >> = anObject [
+
+	"Answer whether the receiver and anObject represent the same object."
+
+	self == anObject ifTrue: [ ^ true ].
+	self class = anObject class ifFalse: [ ^ false ].
+	^ explanation = anObject explanation and: [
+		output = anObject output ]
+]
+
 { #category : #accessing }
 GtLDemoMathReasoningStep >> explanation [
 	^ explanation
@@ -26,6 +37,13 @@ GtLDemoMathReasoningStep >> explanationDescription [
 		  accessor: #explanation;
 		  comment: 'An explanation of this step';
 		  beRequired
+]
+
+{ #category : #comparing }
+GtLDemoMathReasoningStep >> hash [
+	^ (self class hash hashMultiply 
+		bitXor: explanation hash hashMultiply)
+		bitXor: output hash hashMultiply
 ]
 
 { #category : #accessing }

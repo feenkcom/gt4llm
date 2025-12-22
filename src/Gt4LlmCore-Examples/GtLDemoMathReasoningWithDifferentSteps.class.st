@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLDemoMathReasoning,
+	#name : #GtLDemoMathReasoningWithDifferentSteps,
 	#superclass : #Object,
 	#instVars : [
 		'steps',
@@ -9,7 +9,7 @@ Class {
 }
 
 { #category : #comparison }
-GtLDemoMathReasoning >> = anObject [
+GtLDemoMathReasoningWithDifferentSteps >> = anObject [
 
 	"Answer whether the receiver and anObject represent the same object."
 
@@ -20,17 +20,17 @@ GtLDemoMathReasoning >> = anObject [
 ]
 
 { #category : #accessing }
-GtLDemoMathReasoning >> finalAnswer [
+GtLDemoMathReasoningWithDifferentSteps >> finalAnswer [
 	^ finalAnswer
 ]
 
 { #category : #accessing }
-GtLDemoMathReasoning >> finalAnswer: anObject [
+GtLDemoMathReasoningWithDifferentSteps >> finalAnswer: anObject [
 	finalAnswer := anObject
 ]
 
 { #category : #accessing }
-GtLDemoMathReasoning >> finalAnswerDescription [
+GtLDemoMathReasoningWithDifferentSteps >> finalAnswerDescription [
 	<magritteDescription>
 	
 	 ^ MAStringDescription new
@@ -39,7 +39,7 @@ GtLDemoMathReasoning >> finalAnswerDescription [
 ]
 
 { #category : #views }
-GtLDemoMathReasoning >> gtStepsFor: aView [
+GtLDemoMathReasoningWithDifferentSteps >> gtStepsFor: aView [
 	<gtView>
 	<gtLlmMessageView>
 	
@@ -48,19 +48,19 @@ GtLDemoMathReasoning >> gtStepsFor: aView [
 		title: 'Reasoning steps';
 		priority: 10;
 		items: [ steps ];
-		column: 'Explanation' text: [ :each | each explanation ];
-		column: 'Value' text: [ :each | each output ]
+		column: 'Type' text: [ :each | each class name ];
+		column: 'Step' text: [ :each | each description ]
 ]
 
 { #category : #comparing }
-GtLDemoMathReasoning >> hash [
+GtLDemoMathReasoningWithDifferentSteps >> hash [
 	^ (self class hash hashMultiply 
 		bitXor: finalAnswer hash hashMultiply)
 		bitXor: steps hash hashMultiply
 ]
 
 { #category : #views }
-GtLDemoMathReasoning >> printOn: aStream [
+GtLDemoMathReasoningWithDifferentSteps >> printOn: aStream [
 	super printOn: aStream.
 	
 	aStream parenthesize: [ 
@@ -73,21 +73,21 @@ GtLDemoMathReasoning >> printOn: aStream [
 ]
 
 { #category : #accessing }
-GtLDemoMathReasoning >> steps [
+GtLDemoMathReasoningWithDifferentSteps >> steps [
 	^ steps
 ]
 
 { #category : #accessing }
-GtLDemoMathReasoning >> steps: anObject [
+GtLDemoMathReasoningWithDifferentSteps >> steps: anObject [
 	steps := anObject
 ]
 
 { #category : #accessing }
-GtLDemoMathReasoning >> stepsDescription [
+GtLDemoMathReasoningWithDifferentSteps >> stepsDescription [
 	<magritteDescription>
 	
 	 ^ MAToManyRelationDescription new
 			accessor: #steps;
-			classes: {GtLDemoMathReasoningStep};
+			classes: {GtLDemoMathReasoningExplanationStep . GtLDemoMathReasoningOutputStep};
 			beRequired
 ]
