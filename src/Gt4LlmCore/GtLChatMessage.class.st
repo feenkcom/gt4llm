@@ -159,10 +159,11 @@ GtLChatMessage >> chat: aChat [
 { #category : #reading }
 GtLChatMessage >> computeResponseModelsByFormat [
 	| responseText |
-	
+	self formatDescriptions hasSchemaDescriptors ifFalse: [ ^ {} ].
 	responseText := self contentText.
-	^self formatDescriptions  
-		readDomainObjectsFrom: responseText
+	^ [ self formatDescriptions readDomainObjectsFrom: responseText ]
+		on: NeoJSONParseError
+		do: [ :e | ^ {} ]
 ]
 
 { #category : #accessing }
