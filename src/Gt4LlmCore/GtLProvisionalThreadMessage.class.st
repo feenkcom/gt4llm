@@ -96,6 +96,11 @@ GtLProvisionalThreadMessage >> isUserRole [
 ]
 
 { #category : #'as yet unclassified' }
+GtLProvisionalThreadMessage >> responseModels [
+	^ {}
+]
+
+{ #category : #'as yet unclassified' }
 GtLProvisionalThreadMessage >> senderText [
 	^ 'Assistant'
 ]
