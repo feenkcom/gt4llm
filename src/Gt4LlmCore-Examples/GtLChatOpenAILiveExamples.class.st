@@ -168,6 +168,48 @@ GtLChatOpenAILiveExamples >> messageWithFormatCallExample_mathTutor_magritteSche
 ]
 
 { #category : #'examples - calls' }
+GtLChatOpenAILiveExamples >> messageWithFormatCallExample_mathTutor_magritteSchema_delegatedStepTypes [
+	<gtExample>
+	| messageCall currentMessage responseMessage |
+	messageCall := GtLStringMessageCall new
+		string: 'You are a helpful math tutor. Guide the user through the solution step by step for the equation 8x + 7 = -23. Make sure to have an explanation and an output step'.
+	
+	currentMessage := self currentChat createMessageForCall: messageCall.
+	currentMessage addSchemaDescription: (GtLResponseMagritteFormat new
+		name: 'MathReasoning'; 
+		modelClass: GtLDemoMathReasoningWithDelegatedSteps).
+	
+	responseMessage := self currentChat sendMessage: currentMessage.
+	
+	self waitForChatCompletion.
+	self waitForChatCompletion.
+	self assert: self currentChat messages size equals: 2.
+	
+	^ self currentChat
+]
+
+{ #category : #'examples - calls' }
+GtLChatOpenAILiveExamples >> messageWithFormatCallExample_mathTutor_magritteSchema_multipleStepTypes [
+	<gtExample>
+	| messageCall currentMessage responseMessage |
+	messageCall := GtLStringMessageCall new
+		string: 'You are a helpful math tutor. Guide the user through the solution step by step for the equation 8x + 7 = -23. Make sure to have an explanation and an output step'.
+	
+	currentMessage := self currentChat createMessageForCall: messageCall.
+	currentMessage addSchemaDescription: (GtLResponseMagritteFormat new
+		name: 'MathReasoning'; 
+		modelClass: GtLDemoMathReasoningWithDifferentSteps).
+	
+	responseMessage := self currentChat sendMessage: currentMessage.
+	
+	self waitForChatCompletion.
+	self waitForChatCompletion.
+	self assert: self currentChat messages size equals: 2.
+	
+	^ self currentChat
+]
+
+{ #category : #'examples - calls' }
 GtLChatOpenAILiveExamples >> messageWithToolCallExample [
 	<gtExample>
 	| messageCall currentMessage responseMessage  |
@@ -207,6 +249,30 @@ GtLChatOpenAILiveExamples >> messageWithToolCallExample_magritteMarkdown [
 	self waitForChatCompletion.
 	self waitForChatCompletion.
 	self assert: self currentChat messages size equals: 3.
+
+	^ self currentChat
+]
+
+{ #category : #'examples - calls' }
+GtLChatOpenAILiveExamples >> messageWithToolCallExample_magritteMarkdown_codeChanges [
+	<gtExample>
+	| messageCall currentMessage responseMessage |
+	messageCall := GtLStringMessageCall new
+			string: 'Create a class for a Person with a first and last name'.
+
+	currentMessage := self currentChat createMessageForCall: messageCall.
+	currentMessage
+		addSchemaDescription: (GtLResponseMagritteFormat new
+				name: 'Markdown';
+				modelClass: GtLMarkdown);
+		addSchemaDescription: (GtLResponseMagritteFormat new
+				name: 'CodeTransformations';
+				modelClass: GtLCodeTransformations).
+
+	responseMessage := self currentChat sendMessage: currentMessage.
+
+	self waitForChatCompletion.
+	self assert: self currentChat messages size equals: 2.
 
 	^ self currentChat
 ]
