@@ -86,6 +86,7 @@ GtLMarkdown >> gtDisplayOn: aStream [
 { #category : #views }
 GtLMarkdown >> gtMarkdownFor: aView [
 	<gtView>
+	<gtLlmView>
 	content ifNil: [ ^ aView empty ].
 	^ aView textEditor
 		title: 'Markdown';

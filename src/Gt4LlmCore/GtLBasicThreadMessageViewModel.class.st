@@ -13,7 +13,7 @@ Class {
 
 { #category : #accessing }
 GtLBasicThreadMessageViewModel class >> messageViewPragmas [
-	^ #(#gtLlmMessageView)
+	^ #(gtLlmMessageView  gtLlmView)
 ]
 
 { #category : #'as yet unclassified' }
@@ -110,10 +110,27 @@ GtLBasicThreadMessageViewModel >> messageViewPragmas [
 
 { #category : #accessing }
 GtLBasicThreadMessageViewModel >> messageViews [
-	^ GtPhlowViewsCollector new
-		fromObject: self threadMessage;
-		pragmaNames: self messageViewPragmas;
-		collect
+	| allViews |
+	allViews := OrderedCollection
+			streamContents: [ :aStream | 
+				aStream
+					nextPutAll: (GtPhlowViewsCollector new
+							fromObject: self threadMessage;
+							pragmaNames: self messageViewPragmas;
+							collect).
+
+				self hasThreadMessage
+					ifTrue: [ self threadMessage responseModels
+							do: [ :eachResponseModel | 
+								aStream
+									nextPutAll: (GtPhlowViewsCollector new
+											fromObject: eachResponseModel;
+											pragmaNames: self messageViewPragmas;
+											collect) ] ] ].
+
+	GtPhlowUtility sortByPriority: allViews.
+	
+	^ allViews
 ]
 
 { #category : #private }
