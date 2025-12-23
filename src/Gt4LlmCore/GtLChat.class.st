@@ -137,10 +137,9 @@ GtLChat >> createUserMessage [
 GtLChat >> createUserMessageForString: aString [
 	| newMessage |
 	newMessage := self createUserMessage.
-	newMessage 
-		addMagritteInputObject: (GtLMarkdown new
-			content: aString)
-		named: 'Markdown'.
+	newMessage
+		addMagritteInputObject: (GtLMarkdown new content: aString) named: 'Markdown';
+		addMagriteResponseDescriptionForClass: GtLMarkdown named: 'Markdown'.
 	^ newMessage
 ]
 
