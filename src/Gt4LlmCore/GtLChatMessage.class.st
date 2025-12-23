@@ -86,6 +86,13 @@ GtLChatMessage >> action [
 ]
 
 { #category : #accessing }
+GtLChatMessage >> addMagriteResponseDescriptionForClass: aClass named: aString [
+		self addSchemaDescription: (GtLResponseMagritteFormat new
+				name: aString;
+				modelClass: aClass)
+]
+
+{ #category : #accessing }
 GtLChatMessage >> addSchemaDescription: aFormatDescription [
 	formatDescriptions addSchemaDescription: aFormatDescription
 ]
@@ -263,6 +270,11 @@ GtLChatMessage >> gtFormatFor: aView [
 		actionButtonIcon: BrGlamorousVectorIcons playinspect
 			tooltip: 'Inspect Format'
 			action: [ :aButton | aButton phlow spawnObject: formatDescriptions ]
+]
+
+{ #category : #'gt - inspector' }
+GtLChatMessage >> gtInspectorTargetModels [
+	^ #()
 ]
 
 { #category : #'gt - extensions' }

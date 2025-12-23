@@ -120,7 +120,7 @@ GtLBasicThreadMessageViewModel >> messageViews [
 							collect).
 
 				self hasThreadMessage
-					ifTrue: [ self threadMessage responseModels
+					ifTrue: [ self threadMessage gtInspectorTargetModels
 							do: [ :eachResponseModel | 
 								aStream
 									nextPutAll: (GtPhlowViewsCollector new

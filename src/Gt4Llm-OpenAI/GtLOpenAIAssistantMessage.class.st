@@ -39,6 +39,11 @@ GtLOpenAIAssistantMessage >> computeResponseModelsByFormat [
 ]
 
 { #category : #accessing }
+GtLOpenAIAssistantMessage >> gtInspectorTargetModels [
+	^ self responseModels
+]
+
+{ #category : #accessing }
 GtLOpenAIAssistantMessage >> gtViewResponseModelsFor: aView [
 	<gtView>
 	<gtLlmMessageView>
