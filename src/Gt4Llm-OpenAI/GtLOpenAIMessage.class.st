@@ -2,8 +2,7 @@ Class {
 	#name : #GtLOpenAIMessage,
 	#superclass : #GtLChatMessage,
 	#instVars : [
-		'completedAt',
-		'responseModels'
+		'completedAt'
 	],
 	#category : #'Gt4Llm-OpenAI'
 }
@@ -47,14 +46,6 @@ GtLOpenAIMessage >> annotations [
 							(GtLOpenAIAnnotation from: anAnnotation)
 								client: self client;
 								message: self ] ])
-]
-
-{ #category : #accessing }
-GtLOpenAIMessage >> chat: aChat [
-	super chat: aChat.
-	
-	self canExtractResponseModels ifTrue: [
-		responseModels := self computeResponseModelsByFormat]	
 ]
 
 { #category : #accessing }
@@ -138,20 +129,6 @@ GtLOpenAIMessage >> gtAnnotationsFor: aView [
 		view: #gtAnnotationsFor:
 ]
 
-{ #category : #accessing }
-GtLOpenAIMessage >> gtViewResponseModelsFor: aView [
-	<gtView>
-	<gtLlmMessageView>
-	
-	responseModels ifNil: [ ^ aView empty ].
-
-	^aView forward
-		title: 'Response models';
-		priority: 8;
-		object: [ self responseModels ];
-		view: #gtItemsFor:
-]
-
 { #category : #testing }
 GtLOpenAIMessage >> hasResponse [
 	^ self contentText isNotEmpty
@@ -186,10 +163,4 @@ GtLOpenAIMessage >> messageFiles [
 				fromBuffer: byteArray
 				start: 0
 				end: byteArray size - 1 ]
-]
-
-{ #category : #accessing }
-GtLOpenAIMessage >> responseModels [
-	^ responseModels ifNil:[ 
-			responseModels := self computeResponseModelsByFormat ].
 ]
