@@ -102,7 +102,7 @@ GtLChatOpenAILiveExamples >> mathResponseSchemaForMathTutor [
 GtLChatOpenAILiveExamples >> messageExample_magritteMarkdown_codeChanges [
 	<gtExample>
 	| messageString currentMessage responseMessage |
-	messageString :='Create a class for a Person with a first and last name'.
+	messageString :='Create a class for a Person with a first and last name. Create a printing method.'.
 
 	currentMessage := self currentChat createUserMessage.
 	currentMessage 
@@ -111,9 +111,9 @@ GtLChatOpenAILiveExamples >> messageExample_magritteMarkdown_codeChanges [
 		named: 'Markdown'.
 		
 	currentMessage
-		addSchemaDescription: (GtLResponseMagritteFormat new
+		"addSchemaDescription: (GtLResponseMagritteFormat new
 				name: 'Markdown';
-				modelClass: GtLMarkdown);
+				modelClass: GtLMarkdown);"
 		addSchemaDescription: (GtLResponseMagritteFormat new
 				name: 'CodeTransformations';
 				modelClass: GtLCodeTransformations).
