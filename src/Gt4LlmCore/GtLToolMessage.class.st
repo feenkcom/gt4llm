@@ -95,6 +95,12 @@ GtLToolMessage >> output: anObject [
 ]
 
 { #category : #'as yet unclassified' }
+GtLToolMessage >> responseModels [
+	"we should collect the tools from the toolCall"
+	^ {}
+]
+
+{ #category : #'as yet unclassified' }
 GtLToolMessage >> serializeResponse [
 	^ {'type' -> 'function_call_output'.
 		'call_id' -> toolCall id.

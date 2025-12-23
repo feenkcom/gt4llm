@@ -33,7 +33,7 @@ GtLChatViewModel >> beSync [
 GtLChatViewModel >> initialize [
 	super initialize.
 	threadMessageViewModelsCache := Dictionary new.
-	newThreadMessageViewModel := GtLNewThreadMessage new asViewModel
+	newThreadMessageViewModel := GtLNewMessage new asViewModel
 ]
 
 { #category : #accessing }
