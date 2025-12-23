@@ -41,9 +41,11 @@ GtLChat >> acceptVisitor: aVisitor [
 { #category : #accessing }
 GtLChat >> addMessage: aMessage [
 	self updateLastUpdate.
-	
+
 	aMessage chat: self.
 	messages add: aMessage.
+
+	
 ]
 
 { #category : #adding }
@@ -329,7 +331,7 @@ GtLChat >> sendFiles: aListOfFileReferences withMessage: aString [
 		withMessage: aString
 ]
 
-{ #category : #accessing }
+{ #category : #'api - communication' }
 GtLChat >> sendMessage: aMessage [
 	aMessage chat: self.
 	self addMessage: aMessage.

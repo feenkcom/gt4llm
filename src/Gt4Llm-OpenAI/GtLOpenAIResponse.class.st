@@ -152,7 +152,7 @@ GtLOpenAIResponse >> output [
 
 { #category : #accessing }
 GtLOpenAIResponse >> output: anObject [
-	output := anObject collect: [ :aMessage | GtOpenAIMessage from: aMessage ]
+	output := anObject collect: [ :aMessage | GtOpenAIMessage from: aMessage ] as: Array
 ]
 
 { #category : #accessing }
