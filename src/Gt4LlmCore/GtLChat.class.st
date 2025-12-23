@@ -128,10 +128,20 @@ GtLChat >> createMessageForCall: aMessageCall [
 ]
 
 { #category : #accessing }
-GtLChat >> createUserMessageForString: aString [ 
+GtLChat >> createUserMessage [
 	^ self userMessageClass new
-		content: aString;
 		role: 'user'
+]
+
+{ #category : #accessing }
+GtLChat >> createUserMessageForString: aString [
+	| newMessage |
+	newMessage := self createUserMessage.
+	newMessage 
+		addMagritteInputObject: (GtLMarkdown new
+			content: aString)
+		named: 'Markdown'.
+	^ newMessage
 ]
 
 { #category : #accessing }

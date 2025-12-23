@@ -8,6 +8,11 @@ Class {
 }
 
 { #category : #accessing }
+GtLMarkdown >> asJsonDictionary [
+	^ {'content' -> self content} asDictionary
+]
+
+{ #category : #accessing }
 GtLMarkdown >> content [
 	^ content
 ]
@@ -80,7 +85,10 @@ Line
 
 { #category : #'as yet unclassified' }
 GtLMarkdown >> gtDisplayOn: aStream [
-	aStream nextPutAll: content
+	super gtDisplayOn: aStream.
+	
+	aStream parenthesize: [
+		aStream nextPutAll: content ]
 ]
 
 { #category : #views }
