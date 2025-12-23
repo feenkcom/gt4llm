@@ -9,6 +9,11 @@ Class {
 	#category : #'Gt4LlmCore-Formats'
 }
 
+{ #category : #'as yet unclassified' }
+GtLAddMethodSpecification class >> isConcrete [
+	^ true
+]
+
 { #category : #accessing }
 GtLAddMethodSpecification >> methodClassName [
 	^ methodClassName

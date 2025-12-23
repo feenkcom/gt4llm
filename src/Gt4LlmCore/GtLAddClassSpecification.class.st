@@ -11,6 +11,11 @@ Class {
 	#category : #'Gt4LlmCore-Formats'
 }
 
+{ #category : #'as yet unclassified' }
+GtLAddClassSpecification class >> isConcrete [
+	^ true
+]
+
 { #category : #accessing }
 GtLAddClassSpecification >> newClassName [
 	^ newClassName

@@ -74,7 +74,7 @@ GtLChatMessageViewModelsBuilder >> buildMessages [
 			aMessage isToolRole ifTrue: [
 				previousToolViewMessages add: aViewModel ].
 			
-			aMessage isAssistantRole ifTrue: [ 
+			(aMessage isAssistantRole and: [aMessage isFailure not]) ifTrue: [ 
 				stream nextPut: aViewModel.
 				aViewModel userViewMessage: previousUserViewMessage.
 				aViewModel toolViewMessages: previousToolViewMessages.

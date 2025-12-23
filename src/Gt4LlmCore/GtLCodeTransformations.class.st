@@ -48,6 +48,6 @@ GtLCodeTransformations >> transformationsDescription [
 	
 	 ^ MAToManyRelationDescription new
 			accessor: #transformations;
-			classes: {GtLAddClassSpecification . GtLAddMethodSpecification};
+			classes: (GtLCodeTransformationSpecification allSubclasses select: #isConcrete);
 			beRequired
 ]
