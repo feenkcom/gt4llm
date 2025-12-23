@@ -44,6 +44,17 @@ GtLOpenAIUserMessage >> computeContentFromInputModels [
 	^ NeoJSONWriter toStringPretty: contentDictionary
 ]
 
+{ #category : #adding }
+GtLOpenAIUserMessage >> generateInstructions [
+	| newInstructions |
+	newInstructions := GtLMessageInstruction new.
+	
+	inputModels do: [ :anInputModel | 
+		anInputModel addInstructionsTo: newInstructions	].
+	
+	^ newInstructions asJsonString
+]
+
 { #category : #'gt - inspector' }
 GtLOpenAIUserMessage >> gtInspectorTargetModels [
 	^ self inputModels flatCollect: [ :each |
@@ -74,4 +85,10 @@ GtLOpenAIUserMessage >> initialize [
 { #category : #accessing }
 GtLOpenAIUserMessage >> inputModels [
 	^ inputModels
+]
+
+{ #category : #accessing }
+GtLOpenAIUserMessage >> instructions [ 
+	^ instructions ifNil: [
+			self generateInstructions ]
 ]

@@ -10,3 +10,13 @@ GtLPlainObjectInputModel >> addContentTo: aDictionary [
 		at: name 
 		put: (GtLlmAssistantLibraryForGt valueHolderForObject: model) contentValue
 ]
+
+{ #category : #'as yet unclassified' }
+GtLPlainObjectInputModel >> addInstructionsTo: aMessageInstructions [
+
+	aMessageInstructions
+		addSection: (GtLlmInstructionSection new
+				source: self;
+				title: self name;
+				body: '')
+]
