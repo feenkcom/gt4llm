@@ -59,7 +59,7 @@ GtLOpenAIProvider >> client [
 
 { #category : #'as yet unclassified' }
 GtLOpenAIProvider >> defaultAssistantMessageClass [
-	^ GtLOpenAIMessage
+	^ GtLOpenAIAssistantMessage
 ]
 
 { #category : #'as yet unclassified' }
@@ -69,7 +69,7 @@ GtLOpenAIProvider >> defaultModel [
 
 { #category : #'as yet unclassified' }
 GtLOpenAIProvider >> defaultUserMessageClass [
-	^ GtLOpenAIMessage
+	^ GtLOpenAIUserMessage
 ]
 
 { #category : #actions }

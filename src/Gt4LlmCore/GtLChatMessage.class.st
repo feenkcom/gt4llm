@@ -12,7 +12,6 @@ Class {
 		'announcer',
 		'images',
 		'model',
-		'originMessageCall',
 		'formatDescriptions'
 	],
 	#category : #'Gt4LlmCore-Core'
@@ -87,6 +86,13 @@ GtLChatMessage >> action [
 ]
 
 { #category : #accessing }
+GtLChatMessage >> addMagriteResponseDescriptionForClass: aClass named: aString [
+		self addSchemaDescription: (GtLResponseMagritteFormat new
+				name: aString;
+				modelClass: aClass)
+]
+
+{ #category : #accessing }
 GtLChatMessage >> addSchemaDescription: aFormatDescription [
 	formatDescriptions addSchemaDescription: aFormatDescription
 ]
@@ -127,19 +133,6 @@ GtLChatMessage >> asViewModel [
 	^ GtLChatMessageViewModel new threadMessage: self
 ]
 
-{ #category : #testing }
-GtLChatMessage >> canExtractResponseModels [
-	| responseText |
-	rawData ifNil: [ ^ false ].
-	self chat ifNil: [ ^ false ].
-	self formatDescriptions 
-		hasSchemaDescriptors ifFalse: [ ^ false ].
-		
-	responseText := self contentText.
-	responseText ifEmpty: [ ^ false ].
-	^ true
-]
-
 { #category : #accessing }
 GtLChatMessage >> chat [
 	^ chat
@@ -154,16 +147,6 @@ GtLChatMessage >> chat: aChat [
 			self updateDataFromMessage: aPreviousMessage ] 
 		ifAbsent: [ 
 			self updateDataFromChat: aChat]
-]
-
-{ #category : #reading }
-GtLChatMessage >> computeResponseModelsByFormat [
-	| responseText |
-	self formatDescriptions hasSchemaDescriptors ifFalse: [ ^ {} ].
-	responseText := self contentText.
-	^ [ self formatDescriptions readDomainObjectsFrom: responseText ]
-		on: NeoJSONParseError
-		do: [ :e | ^ {} ]
 ]
 
 { #category : #accessing }
@@ -263,6 +246,9 @@ GtLChatMessage >> gtActionInspectFor: anAction [
 GtLChatMessage >> gtContentFor: aView [
 	<gtView>
 	<gtLlmMessageView>
+	
+	content ifNil: [ ^ aView empty ].
+	
 	^ aView explicit
 		title: 'Content';
 		priority: 5;
@@ -274,6 +260,7 @@ GtLChatMessage >> gtContentFor: aView [
 GtLChatMessage >> gtFormatFor: aView [
 	<gtView>
 	formatDescriptions ifNil: [ ^ aView empty ].
+	formatDescriptions hasMagritteDescription ifFalse: [ ^ aView empty ].
 
 	^ aView textEditor
 		title: 'Format JSON';
@@ -283,6 +270,11 @@ GtLChatMessage >> gtFormatFor: aView [
 		actionButtonIcon: BrGlamorousVectorIcons playinspect
 			tooltip: 'Inspect Format'
 			action: [ :aButton | aButton phlow spawnObject: formatDescriptions ]
+]
+
+{ #category : #'gt - inspector' }
+GtLChatMessage >> gtInspectorTargetModels [
+	^ #()
 ]
 
 { #category : #'gt - extensions' }
@@ -301,6 +293,7 @@ GtLChatMessage >> gtMessageFilesFor: aView [
 	<gtView>
 	<gtLlmMessageView>
 	| messageFiles |
+	content ifNil: [ ^ aView empty ].
 	messageFiles := self messageFiles.
 
 	messageFiles ifEmpty: [ ^ aView empty ].
@@ -474,11 +467,6 @@ GtLChatMessage >> model [
 { #category : #accessing }
 GtLChatMessage >> model: anObject [
 	model := anObject
-]
-
-{ #category : #'as yet unclassified' }
-GtLChatMessage >> originMessageCall: aMessageCall [ 
-	originMessageCall := aMessageCall
 ]
 
 { #category : #accessing }

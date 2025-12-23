@@ -7,7 +7,7 @@ GtLlmActionChat >> asViewModel [
 
 { #category : #'*Gt4Llm-GToolkit' }
 GtLlmActionChat >> executeWait: aBlock [
-	(self whenReadyFuture then: [ :_ | aBlock value: self messages last ]) await
+	(self whenReadyFuture then: [ :_ | aBlock cull: self messages last ]) await
 ]
 
 { #category : #'*Gt4Llm-GToolkit' }
