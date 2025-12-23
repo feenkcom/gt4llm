@@ -19,6 +19,11 @@ GtMagritteJSONSchemaExporter >> exportSchema [
 ]
 
 { #category : #exporting }
+GtMagritteJSONSchemaExporter >> exportSchemaAsJsonString [
+	^ NeoJSONWriter toStringPretty: self exportSchema json
+]
+
+{ #category : #exporting }
 GtMagritteJSONSchemaExporter >> exportSchemaData [
 	^ self exportSchemaDataForClass: modelClass
 ]

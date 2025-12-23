@@ -13,6 +13,11 @@ GtLInputModel >> addContentTo: aDictionary [
 	self subclassResponsibility
 ]
 
+{ #category : #adding }
+GtLInputModel >> addInstructionsTo: aMessageInstructions [
+	self subclassResponsibility
+]
+
 { #category : #accessing }
 GtLInputModel >> description [
 	^ model gtDisplayString
