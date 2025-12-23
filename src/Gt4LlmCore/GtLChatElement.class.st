@@ -67,7 +67,7 @@ GtLChatElement >> subscribeToAssistantChatViewModel [
 { #category : #'as yet unclassified' }
 GtLChatElement >> updateElement [
 	| allItems |
-	allItems := chatViewModel threadMessageViewModels.
+	allItems := chatViewModel messageViewModels.
 	listElement items: allItems.
 	listElement scrollToItem: allItems last
 ]

@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLFailureThreadMessage,
+	#name : #GtLFailureMessage,
 	#superclass : #Object,
 	#instVars : [
 		'failureText',
@@ -10,77 +10,77 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-GtLFailureThreadMessage >> action [
+GtLFailureMessage >> action [
 	^ ''
 ]
 
 { #category : #accessing }
-GtLFailureThreadMessage >> ancestor [
+GtLFailureMessage >> ancestor [
 	^ self chat messages first
 ]
 
 { #category : #accessing }
-GtLFailureThreadMessage >> annotations [
+GtLFailureMessage >> annotations [
 	^ #()
 ]
 
 { #category : #'as yet unclassified' }
-GtLFailureThreadMessage >> arguments [
+GtLFailureMessage >> arguments [
 	^ {}
 ]
 
 { #category : #accessing }
-GtLFailureThreadMessage >> chat [
+GtLFailureMessage >> chat [
 	^ chat
 ]
 
 { #category : #accessing }
-GtLFailureThreadMessage >> chat: anObject [
+GtLFailureMessage >> chat: anObject [
 	chat := anObject
 ]
 
 { #category : #'as yet unclassified' }
-GtLFailureThreadMessage >> contentJson [
+GtLFailureMessage >> contentJson [
 	^ {} asDictionary
 ]
 
 { #category : #accessing }
-GtLFailureThreadMessage >> contentSummary [
+GtLFailureMessage >> contentSummary [
 	^ self contentText lines ifEmpty: [ '' ] ifNotEmpty: #first
 ]
 
 { #category : #accessing }
-GtLFailureThreadMessage >> contentText [
+GtLFailureMessage >> contentText [
 	^ self failureText ifNil: [ '' ]
 ]
 
 { #category : #accessing }
-GtLFailureThreadMessage >> createdAt [
+GtLFailureMessage >> createdAt [
 	^ createdAt
 ]
 
 { #category : #accessing }
-GtLFailureThreadMessage >> createdAt: anObject [
+GtLFailureMessage >> createdAt: anObject [
 	createdAt := anObject
 ]
 
 { #category : #ui }
-GtLFailureThreadMessage >> elementClass [
+GtLFailureMessage >> elementClass [
 	^ GtLChatMessageElement
 ]
 
 { #category : #accessing }
-GtLFailureThreadMessage >> failureText [
+GtLFailureMessage >> failureText [
 	^ failureText
 ]
 
 { #category : #accessing }
-GtLFailureThreadMessage >> failureText: anObject [
+GtLFailureMessage >> failureText: anObject [
 	failureText := anObject
 ]
 
 { #category : #ui }
-GtLFailureThreadMessage >> gtContentFor: aView [
+GtLFailureMessage >> gtContentFor: aView [
 	<gtView>
 	<gtLlmMessageView>
 	^ aView explicit
@@ -91,44 +91,44 @@ GtLFailureThreadMessage >> gtContentFor: aView [
 ]
 
 { #category : #testing }
-GtLFailureThreadMessage >> hasResponse [
+GtLFailureMessage >> hasResponse [
 	^ true
 ]
 
 { #category : #accessing }
-GtLFailureThreadMessage >> id [
+GtLFailureMessage >> id [
 	^ '3a876ca3-32ce-0d00-b7b2-b9390ae84159'
 ]
 
 { #category : #testing }
-GtLFailureThreadMessage >> isAssistantRole [
+GtLFailureMessage >> isAssistantRole [
 	^ true
 ]
 
 { #category : #testing }
-GtLFailureThreadMessage >> isFailure [
+GtLFailureMessage >> isFailure [
 	^ true
 ]
 
 { #category : #accessing }
-GtLFailureThreadMessage >> senderText [
+GtLFailureMessage >> senderText [
 	^  'Assistant'
 ]
 
 { #category : #accessing }
-GtLFailureThreadMessage >> styler [
+GtLFailureMessage >> styler [
 	^ nil
 ]
 
 { #category : #subscriptions }
-GtLFailureThreadMessage >> unsubscribe: anObject [
+GtLFailureMessage >> unsubscribe: anObject [
 	"do nothing"
 
 	
 ]
 
 { #category : #subscriptions }
-GtLFailureThreadMessage >> when: anEventSelector send: aMessageSelector to: anObject [
+GtLFailureMessage >> when: anEventSelector send: aMessageSelector to: anObject [
 	"do nothing"
 
 	
