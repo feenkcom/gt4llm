@@ -65,6 +65,11 @@ GtLProvisionalThreadMessage >> gtContentFor: aView [
 				threadMessageViewModel: (GtLlmThreadMessageViewModel new threadMessage: self) ]
 ]
 
+{ #category : #'as yet unclassified' }
+GtLProvisionalThreadMessage >> gtInspectorTargetModels [
+	^ {}
+]
+
 { #category : #testing }
 GtLProvisionalThreadMessage >> hasResponse [
 	^ false
@@ -93,11 +98,6 @@ GtLProvisionalThreadMessage >> isFailure [
 { #category : #testing }
 GtLProvisionalThreadMessage >> isUserRole [
 	^ false
-]
-
-{ #category : #'as yet unclassified' }
-GtLProvisionalThreadMessage >> responseModels [
-	^ {}
 ]
 
 { #category : #'as yet unclassified' }
