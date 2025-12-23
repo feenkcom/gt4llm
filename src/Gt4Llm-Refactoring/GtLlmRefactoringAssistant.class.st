@@ -13,7 +13,12 @@ GtLlmRefactoringAssistant >> applyTransformations: anArray [
 	| ns |
 	ns := GtRBNamespace new.
 	anArray
-		do: [ :each | (self transformationFor: each inModel: ns) primitiveExecute ].
+		do: [ :each | 
+			| transformation changes |
+			transformation := self transformationFor: each inModel: ns.
+			changes := RBCompositeRefactoryChange new.
+			changes name: transformation gtDescription.
+			ns performChange: changes around: [ transformation primitiveExecute ] ].
 	^ ns
 ]
 
@@ -213,7 +218,7 @@ GtLlmRefactoringAssistant >> refactoringDescription [
 	(self transformations asSortedCollection: [ :a :b | a name < b name ])
 		do: [ :each | stream << '* ' << each name << ': ' << each description << String cr ].
 	stream << String cr << 'Example:' << String cr << '```json' << String cr
-		<< String cr << self exampleTransformationsJSON << '```' << String cr.
+		<< self exampleTransformationsJSON << String cr << '```' << String cr.
 	^ GtLlmAssistantFormatDescription new
 		name: 'Pharo Transformations';
 		priority: 10;
