@@ -124,8 +124,24 @@ GtLChat >> copyLepiterSerialisationToClipboard [
 GtLChat >> createMessageForCall: aMessageCall [ 
 	^ self userMessageClass new
 		content: aMessageCall serialize;
-		originMessageCall: aMessageCall;
 		role: 'user'
+]
+
+{ #category : #accessing }
+GtLChat >> createUserMessage [
+	^ self userMessageClass new
+		role: 'user'
+]
+
+{ #category : #accessing }
+GtLChat >> createUserMessageForString: aString [
+	| newMessage |
+	newMessage := self createUserMessage.
+	newMessage 
+		addMagritteInputObject: (GtLMarkdown new
+			content: aString)
+		named: 'Markdown'.
+	^ newMessage
 ]
 
 { #category : #accessing }
@@ -175,7 +191,8 @@ GtLChat >> gtCopySnippetSerialisationFor: anAction [
 GtLChat >> gtFormatFor: aView [
 	<gtView>
 	formatDescriptions ifNil: [ ^ aView empty ].
-
+	formatDescriptions hasSchemaDescriptors ifFalse: [ ^ aView empty ].
+	
 	^ aView textEditor
 		title: 'Format JSON';
 		priority: 2; 
@@ -323,13 +340,10 @@ GtLChat >> sendMessage: aMessage [
 
 { #category : #accessing }
 GtLChat >> sendPlainMessage: aString [
-	| messageCall currentMessage |
+	| currentMessage |
 	self assert: aString isString.
 	
-	messageCall := GtLStringMessageCall new
-		string: aString.
-	
-	currentMessage := self createMessageForCall: messageCall.
+	currentMessage := self createUserMessageForString: aString.
 	
 	self sendMessage: currentMessage
 ]
