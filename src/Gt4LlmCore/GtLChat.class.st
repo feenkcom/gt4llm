@@ -41,9 +41,11 @@ GtLChat >> acceptVisitor: aVisitor [
 { #category : #accessing }
 GtLChat >> addMessage: aMessage [
 	self updateLastUpdate.
-	
+
 	aMessage chat: self.
 	messages add: aMessage.
+
+	
 ]
 
 { #category : #adding }
@@ -124,8 +126,23 @@ GtLChat >> copyLepiterSerialisationToClipboard [
 GtLChat >> createMessageForCall: aMessageCall [ 
 	^ self userMessageClass new
 		content: aMessageCall serialize;
-		originMessageCall: aMessageCall;
 		role: 'user'
+]
+
+{ #category : #accessing }
+GtLChat >> createUserMessage [
+	^ self userMessageClass new
+		role: 'user'
+]
+
+{ #category : #accessing }
+GtLChat >> createUserMessageForString: aString [
+	| newMessage |
+	newMessage := self createUserMessage.
+	newMessage
+		addMagritteInputObject: (GtLMarkdown new content: aString) named: 'Markdown';
+		addMagriteResponseDescriptionForClass: GtLMarkdown named: 'Markdown'.
+	^ newMessage
 ]
 
 { #category : #accessing }
@@ -175,7 +192,8 @@ GtLChat >> gtCopySnippetSerialisationFor: anAction [
 GtLChat >> gtFormatFor: aView [
 	<gtView>
 	formatDescriptions ifNil: [ ^ aView empty ].
-
+	formatDescriptions hasSchemaDescriptors ifFalse: [ ^ aView empty ].
+	
 	^ aView textEditor
 		title: 'Format JSON';
 		priority: 2; 
@@ -313,7 +331,7 @@ GtLChat >> sendFiles: aListOfFileReferences withMessage: aString [
 		withMessage: aString
 ]
 
-{ #category : #accessing }
+{ #category : #'api - communication' }
 GtLChat >> sendMessage: aMessage [
 	aMessage chat: self.
 	self addMessage: aMessage.
@@ -323,13 +341,10 @@ GtLChat >> sendMessage: aMessage [
 
 { #category : #accessing }
 GtLChat >> sendPlainMessage: aString [
-	| messageCall currentMessage |
+	| currentMessage |
 	self assert: aString isString.
 	
-	messageCall := GtLStringMessageCall new
-		string: aString.
-	
-	currentMessage := self createMessageForCall: messageCall.
+	currentMessage := self createUserMessageForString: aString.
 	
 	self sendMessage: currentMessage
 ]

@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLProvisionalThreadMessage,
+	#name : #GtLProvisionalMessage,
 	#superclass : #Object,
 	#instVars : [
 		'createdAt',
@@ -8,54 +8,54 @@ Class {
 	#category : #'Gt4LlmCore-UI'
 }
 
-{ #category : #'as yet unclassified' }
-GtLProvisionalThreadMessage >> ancestor [
+{ #category : #accessing }
+GtLProvisionalMessage >> ancestor [
 	^ self chat messages first
 ]
 
 { #category : #accessing }
-GtLProvisionalThreadMessage >> annotations [
+GtLProvisionalMessage >> annotations [
 	^ #()
 ]
 
 { #category : #accessing }
-GtLProvisionalThreadMessage >> chat [
+GtLProvisionalMessage >> chat [
 	^ chat
 ]
 
 { #category : #accessing }
-GtLProvisionalThreadMessage >> chat: anObject [
+GtLProvisionalMessage >> chat: anObject [
 	chat := anObject
 ]
 
 { #category : #accessing }
-GtLProvisionalThreadMessage >> contentSummary [
+GtLProvisionalMessage >> contentSummary [
 	^ ''
 ]
 
 { #category : #accessing }
-GtLProvisionalThreadMessage >> contentText [
+GtLProvisionalMessage >> contentText [
 	^ ''
 ]
 
 { #category : #testing }
-GtLProvisionalThreadMessage >> createdAt [
+GtLProvisionalMessage >> createdAt [
 	<return: #DateAndTime>
 	^ createdAt
 ]
 
 { #category : #accessing }
-GtLProvisionalThreadMessage >> createdAt: anObject [
+GtLProvisionalMessage >> createdAt: anObject [
 	createdAt := anObject
 ]
 
 { #category : #ui }
-GtLProvisionalThreadMessage >> elementClass [
+GtLProvisionalMessage >> elementClass [
 	^ GtLChatMessageElement
 ]
 
 { #category : #ui }
-GtLProvisionalThreadMessage >> gtContentFor: aView [
+GtLProvisionalMessage >> gtContentFor: aView [
 	<gtView>
 	<gtLlmMessageView>
 	^ aView explicit
@@ -65,60 +65,60 @@ GtLProvisionalThreadMessage >> gtContentFor: aView [
 				threadMessageViewModel: (GtLlmThreadMessageViewModel new threadMessage: self) ]
 ]
 
+{ #category : #'as yet unclassified' }
+GtLProvisionalMessage >> gtInspectorTargetModels [
+	^ {}
+]
+
 { #category : #testing }
-GtLProvisionalThreadMessage >> hasResponse [
+GtLProvisionalMessage >> hasResponse [
 	^ false
 ]
 
 { #category : #accessing }
-GtLProvisionalThreadMessage >> hasStep [
+GtLProvisionalMessage >> hasStep [
 	^ false
 ]
 
 { #category : #accessing }
-GtLProvisionalThreadMessage >> id [
+GtLProvisionalMessage >> id [
 	^ 'c0801abb-21ce-0d00-a535-33e802e477be'
 ]
 
 { #category : #testing }
-GtLProvisionalThreadMessage >> isAssistantRole [
+GtLProvisionalMessage >> isAssistantRole [
 	^ true
 ]
 
 { #category : #testing }
-GtLProvisionalThreadMessage >> isFailure [
+GtLProvisionalMessage >> isFailure [
 	^ false
 ]
 
 { #category : #testing }
-GtLProvisionalThreadMessage >> isUserRole [
+GtLProvisionalMessage >> isUserRole [
 	^ false
 ]
 
 { #category : #'as yet unclassified' }
-GtLProvisionalThreadMessage >> responseModels [
-	^ {}
-]
-
-{ #category : #'as yet unclassified' }
-GtLProvisionalThreadMessage >> senderText [
+GtLProvisionalMessage >> senderText [
 	^ 'Assistant'
 ]
 
 { #category : #accessing }
-GtLProvisionalThreadMessage >> styler [
+GtLProvisionalMessage >> styler [
 	^ nil
 ]
 
 { #category : #subscriptions }
-GtLProvisionalThreadMessage >> unsubscribe: anObject [
+GtLProvisionalMessage >> unsubscribe: anObject [
 	"do nothing"
 
 	
 ]
 
 { #category : #subscriptions }
-GtLProvisionalThreadMessage >> when: anEventSelector send: aMessageSelector to: anObject [
+GtLProvisionalMessage >> when: anEventSelector send: aMessageSelector to: anObject [
 	"do nothing"
 
 	

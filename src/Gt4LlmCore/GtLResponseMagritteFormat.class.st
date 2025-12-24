@@ -38,7 +38,7 @@ GtLResponseMagritteFormat >> computeSchema [
 GtLResponseMagritteFormat >> gtViewDetailsSchemaFor: aView [
 	<gtView>
 	^ aView forward
-		title: 'Schema Details';
+		title: 'Schema details';
 		priority: 5;
 		object: [ self schema ];
 		view: #gtViewDetailsIn:
@@ -58,7 +58,7 @@ GtLResponseMagritteFormat >> gtViewSchemaJsonFor: aView [
 GtLResponseMagritteFormat >> gtViewSchemaPropertiesFor: aView [
 	<gtView>
 	^ aView forward
-		title: 'Schema Properties';
+		title: 'Schema properties';
 		priority: 10;
 		object: [ self schema ];
 		view: #gtViewPropertiesIn:
