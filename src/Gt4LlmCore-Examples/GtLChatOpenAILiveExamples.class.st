@@ -102,7 +102,7 @@ GtLChatOpenAILiveExamples >> mathResponseSchemaForMathTutor [
 GtLChatOpenAILiveExamples >> messageExample_magritteMarkdown_codeChanges [
 	<gtExample>
 	| messageString currentMessage responseMessage |
-	messageString :='Create a class for a Person with a first and last name. Create a printing method.'.
+	messageString :='Create a class for a Person with a first and last name. Create a printing method. Use CodeTransformations to express the changes.'.
 
 	currentMessage := self currentChat createUserMessage.
 	currentMessage 
