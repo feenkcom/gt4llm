@@ -10,16 +10,10 @@ Class {
 
 { #category : #private }
 GtLlmRefactoringAssistant >> applyTransformations: anArray [
-	| ns |
-	ns := GtRBNamespace new.
-	anArray
-		do: [ :each | 
-			| transformation changes |
-			transformation := self transformationFor: each inModel: ns.
-			changes := RBCompositeRefactoryChange new.
-			changes name: transformation gtDescription.
-			ns performChange: changes around: [ transformation primitiveExecute ] ].
-	^ ns
+	| transformation |
+	transformation := self transformationFrom: anArray.
+	transformation primitiveExecute.
+	^ transformation model
 ]
 
 { #category : #tools }
@@ -248,6 +242,16 @@ GtLlmRefactoringAssistant >> transformationFor: aDictionary inModel: aRBNamespac
 	^ (self transformations at: (aDictionary at: 'type')) transformation
 		cull: aRBNamespace
 		cull: aDictionary
+]
+
+{ #category : #private }
+GtLlmRefactoringAssistant >> transformationFrom: anArray [
+	| ns |
+	ns := GtRBNamespace new.
+	^ GtLlmCompositeTransformation new
+		model: ns;
+		refactorings: (anArray collect: [ :each | self transformationFor: each inModel: ns ]);
+		yourself
 ]
 
 { #category : #private }
