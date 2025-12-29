@@ -18,15 +18,6 @@ GtLVariableTransformationSpecification >> variableClassName: anObject [
 	variableClassName := anObject
 ]
 
-{ #category : #description }
-GtLVariableTransformationSpecification >> variableClassNameDescription [
-	<magritteDescription>
-	
-	 ^ MAStringDescription new
-		  accessor: #variableClassName;
-		  comment: 'The name of the class in which the variable is defined'
-]
-
 { #category : #accessing }
 GtLVariableTransformationSpecification >> variableName [
 	^ variableName
