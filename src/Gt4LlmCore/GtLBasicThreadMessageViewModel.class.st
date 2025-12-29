@@ -115,12 +115,18 @@ GtLBasicThreadMessageViewModel >> messageViews [
 			streamContents: [ :aStream | 
 				aStream
 					nextPutAll: (GtPhlowViewsCollector new
-							fromObject: self threadMessage;
+							fromObject: self;
 							pragmaNames: self messageViewPragmas;
 							collect).
 
 				self hasThreadMessage
-					ifTrue: [ self threadMessage gtInspectorTargetModels
+					ifTrue: [ aStream
+							nextPutAll: (GtPhlowViewsCollector new
+									fromObject: self threadMessage;
+									pragmaNames: self messageViewPragmas;
+									collect).
+
+						self threadMessage gtInspectorTargetModels
 							do: [ :eachResponseModel | 
 								aStream
 									nextPutAll: (GtPhlowViewsCollector new
@@ -129,7 +135,7 @@ GtLBasicThreadMessageViewModel >> messageViews [
 											collect) ] ] ].
 
 	GtPhlowUtility sortByPriority: allViews.
-	
+
 	^ allViews
 ]
 

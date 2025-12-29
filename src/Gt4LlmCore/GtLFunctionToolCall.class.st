@@ -45,6 +45,11 @@ GtLFunctionToolCall >> arguments: anObject [
 ]
 
 { #category : #accessing }
+GtLFunctionToolCall >> description [
+	^ tool description
+]
+
+{ #category : #accessing }
 GtLFunctionToolCall >> function [
 	^ {'name' -> name.
 		'arguments' -> (STONJSON toString: arguments)} asDictionary
