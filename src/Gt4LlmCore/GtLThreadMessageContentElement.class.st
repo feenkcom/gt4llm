@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLThreadMessageContentHolder,
+	#name : #GtLThreadMessageContentElement,
 	#superclass : #BrVerticalPane,
 	#instVars : [
 		'threadMessageViewModel',
@@ -10,23 +10,23 @@ Class {
 }
 
 { #category : #accessing }
-GtLThreadMessageContentHolder >> enqueueUpdate [
+GtLThreadMessageContentElement >> enqueueUpdate [
 	self
 		enqueueTask: (BlTaskAction new action: [ self onThreadMessageViewModelChanged ])
 ]
 
 { #category : #accessing }
-GtLThreadMessageContentHolder >> header [
+GtLThreadMessageContentElement >> header [
 	^ header
 ]
 
 { #category : #accessing }
-GtLThreadMessageContentHolder >> header: anObject [
+GtLThreadMessageContentElement >> header: anObject [
 	header := anObject
 ]
 
 { #category : #accessing }
-GtLThreadMessageContentHolder >> initialize [
+GtLThreadMessageContentElement >> initialize [
 	super initialize.
 	
 	self initializeHeader.
@@ -37,14 +37,14 @@ GtLThreadMessageContentHolder >> initialize [
 ]
 
 { #category : #accessing }
-GtLThreadMessageContentHolder >> initializeHeader [
+GtLThreadMessageContentElement >> initializeHeader [
 	header := BrHorizontalPane new
 			hMatchParent;
 			vFitContent
 ]
 
 { #category : #accessing }
-GtLThreadMessageContentHolder >> makeActionToolbar [
+GtLThreadMessageContentElement >> makeActionToolbar [
 	| actionToolbar |
 	actionToolbar := BrToolbar new aptitude: BrGlamorousToolbarAptitude new.
 
@@ -58,28 +58,28 @@ GtLThreadMessageContentHolder >> makeActionToolbar [
 ]
 
 { #category : #accessing }
-GtLThreadMessageContentHolder >> onMessageContentsUpdated: anAnnouncement [
+GtLThreadMessageContentElement >> onMessageContentsUpdated: anAnnouncement [
 	self viewUpdater requestUpdate
 ]
 
 { #category : #accessing }
-GtLThreadMessageContentHolder >> onThreadMessageViewModelChanged [
+GtLThreadMessageContentElement >> onThreadMessageViewModelChanged [
 	self updateHeader.
 	self updateViews
 ]
 
 { #category : #accessing }
-GtLThreadMessageContentHolder >> onThreadMessageViewModelChanged: anAnnouncement [
+GtLThreadMessageContentElement >> onThreadMessageViewModelChanged: anAnnouncement [
 	self enqueueUpdate
 ]
 
 { #category : #accessing }
-GtLThreadMessageContentHolder >> threadMessageViewModel [
+GtLThreadMessageContentElement >> threadMessageViewModel [
 	^ threadMessageViewModel
 ]
 
 { #category : #accessing }
-GtLThreadMessageContentHolder >> threadMessageViewModel: anObject [
+GtLThreadMessageContentElement >> threadMessageViewModel: anObject [
 	threadMessageViewModel = anObject ifTrue: [ ^ self ].
 
 	threadMessageViewModel ifNotNil: [ threadMessageViewModel unsubscribe: self ].
@@ -98,19 +98,19 @@ GtLThreadMessageContentHolder >> threadMessageViewModel: anObject [
 ]
 
 { #category : #accessing }
-GtLThreadMessageContentHolder >> updateHeader [
+GtLThreadMessageContentElement >> updateHeader [
 	self header removeChildren.
 	self header addChild: self threadMessageViewModel messageHeaderElement.
 	self header addChild: self makeActionToolbar
 ]
 
 { #category : #accessing }
-GtLThreadMessageContentHolder >> updateViews [
+GtLThreadMessageContentElement >> updateViews [
 	self views: self threadMessageViewModel messageViews
 ]
 
 { #category : #accessing }
-GtLThreadMessageContentHolder >> viewUpdater [
+GtLThreadMessageContentElement >> viewUpdater [
 	^ updater
 		ifNil: [ updater := BrElementUpdater new.
 			updater element: self selector: #updateViews.
@@ -118,7 +118,7 @@ GtLThreadMessageContentHolder >> viewUpdater [
 ]
 
 { #category : #accessing }
-GtLThreadMessageContentHolder >> views: aCollectionOfViews [
+GtLThreadMessageContentElement >> views: aCollectionOfViews [
 	| views |
 	self removeChildNamed: #'message-tabs'.
 
@@ -133,7 +133,7 @@ GtLThreadMessageContentHolder >> views: aCollectionOfViews [
 ]
 
 { #category : #accessing }
-GtLThreadMessageContentHolder >> viewsToTabGroup: aCollectionOfViews [
+GtLThreadMessageContentElement >> viewsToTabGroup: aCollectionOfViews [
 	"(GtPhlowCompositeView new views: aCollectionOfViews)
 		asElementDo: [ :e | e vFitContentLimited ]  "
 
