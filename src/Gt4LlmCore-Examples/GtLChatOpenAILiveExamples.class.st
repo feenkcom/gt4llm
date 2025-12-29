@@ -127,6 +127,42 @@ GtLChatOpenAILiveExamples >> messageExample_magritteMarkdown_codeChanges [
 ]
 
 { #category : #'examples - calls' }
+GtLChatOpenAILiveExamples >> messageExample_magritteMarkdown_codeChanges_refactorings [
+	<gtExample>
+	| currentMessage model responseMessage |
+	model := RBNamespace new.
+	currentMessage := self currentChat createUserMessage.
+	currentMessage
+		addMagritteInputObject: (GtLMarkdown new
+				content: 'Pull up common methods and slots in the DiffVisitor class. Use CodeTransformations.')
+		named: 'Markdown'.
+	currentMessage
+		tools: (GtLToolsGroup
+				withAll: {GtLlmRefactoringToolForClassSearch new model: model.
+						GtLlmRefactoringToolForClassSubclasses new model: model.
+						GtLlmRefactoringToolForClassLookup new model: model.
+						GtLlmRefactoringToolForClassReferences new model: model.
+						GtLlmRefactoringToolForMethodReferences new model: model.
+						GtLlmRefactoringToolForMethodImplementors new model: model.
+						GtLlmRefactoringToolForMethodSource new model: model.
+						GtLlmToolForExampleMethodRun new.
+						GtLlmToolForExampleClassesRun new.
+						GtLlmToolForSearchFilter new.
+						GtLlmToolForSearchForLepiterPages new.
+						GtLlmToolForLepiterPageContents new.
+						GtLlmToolForSmalltalkCodeEvaluation new}).
+	currentMessage
+		addMagriteResponseDescriptionForClass: GtLMarkdown
+		named: 'Markdown'.
+	currentMessage
+		addMagriteResponseDescriptionForClass: GtLCodeTransformations
+		named: 'CodeTransformations'.
+	responseMessage := self currentChat sendMessage: currentMessage.
+
+	^ self currentChat
+]
+
+{ #category : #'examples - calls' }
 GtLChatOpenAILiveExamples >> messageWithFormatCallExample [
 	<gtExample>
 	| messageString currentMessage responseMessage |

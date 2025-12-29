@@ -22,3 +22,12 @@ GtLPushUpInstanceVariableTransformationSpecification >> descriptionContainer [
 	^ super descriptionContainer
 		comment: 'The "Push up instance slot" transformation pushes up one slot from the variableClassName to the superclass.'
 ]
+
+{ #category : #'as yet unclassified' }
+GtLPushUpInstanceVariableTransformationSpecification >> gtDisplayOn: aStream [
+	aStream
+		nextPutAll: 'Push up slot ';
+		nextPutAll: variableName;
+		nextPutAll: ' from ';
+		nextPutAll: variableClassName
+]
