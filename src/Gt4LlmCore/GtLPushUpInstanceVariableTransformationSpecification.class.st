@@ -20,7 +20,7 @@ GtLPushUpInstanceVariableTransformationSpecification >> asRefactoringIn: aGtRBNa
 { #category : #'as yet unclassified' }
 GtLPushUpInstanceVariableTransformationSpecification >> descriptionContainer [
 	^ super descriptionContainer
-		comment: 'The "Push up instance slot" transformation pushes up one slot from the variableClassName to the superclass.'
+		comment: 'The "Push up instance variable" transformation pulls up instance variable definitions from subclasses into a superclass. The transformation must provide the variableClassName and variableName. The variablClassName specifies the superclass that will define variableName after the transformation is executed.'
 ]
 
 { #category : #'as yet unclassified' }
