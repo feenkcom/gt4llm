@@ -248,7 +248,7 @@ GtLlmRefactoringAssistant >> transformationFor: aDictionary inModel: aRBNamespac
 GtLlmRefactoringAssistant >> transformationFrom: anArray [
 	| ns |
 	ns := GtRBNamespace new.
-	^ GtLlmCompositeTransformation new
+	^ GtRBCompositeTransformation new
 		model: ns;
 		refactorings: (anArray collect: [ :each | self transformationFor: each inModel: ns ]);
 		yourself
