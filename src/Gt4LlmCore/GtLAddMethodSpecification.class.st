@@ -28,6 +28,17 @@ GtLAddMethodSpecification >> descriptionContainer [
 		comment: 'The "Add method" transformation adds a method to a class. The transformation must provide the className, source, and protocolName for the method.'
 ]
 
+{ #category : #'as yet unclassified' }
+GtLAddMethodSpecification >> gtDisplayOn: aStream [
+	aStream
+		nextPutAll: 'Add method ';
+		nextPutAll: (sourceCode lines first);
+		nextPutAll: ' in class ';
+		nextPutAll: methodClassName;
+		nextPutAll: ' protocol ';
+		nextPutAll: protocolName
+]
+
 { #category : #accessing }
 GtLAddMethodSpecification >> protocolName [
 	^ protocolName
