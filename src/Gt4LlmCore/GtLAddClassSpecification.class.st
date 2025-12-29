@@ -27,6 +27,12 @@ GtLAddClassSpecification >> asRefactoringIn: aNamespace [
 	"	instanceVariableNames: (Character space split: slotNames);"
 ]
 
+{ #category : #'as yet unclassified' }
+GtLAddClassSpecification >> descriptionContainer [
+	^ super descriptionContainer
+		comment: 'The "Add class" transformation adds a class into the system. The transformation must provide the className, packageName, and slotNames.'
+]
+
 { #category : #accessing }
 GtLAddClassSpecification >> newClassName [
 	^ newClassName
