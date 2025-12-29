@@ -16,6 +16,17 @@ GtLAddClassSpecification class >> isConcrete [
 	^ true
 ]
 
+{ #category : #'as yet unclassified' }
+GtLAddClassSpecification >> asRefactoringIn: aNamespace [
+	^ (RBAddClassRefactoring
+		model: aNamespace
+		addClass: newClassName asSymbol
+		superclass: supeclassName asSymbol
+		subclasses: {}
+		category: packageName asSymbol)
+	"	instanceVariableNames: (Character space split: slotNames);"
+]
+
 { #category : #accessing }
 GtLAddClassSpecification >> newClassName [
 	^ newClassName
@@ -67,7 +78,8 @@ GtLAddClassSpecification >> slotNamesDescription [
 	<magritteDescription>
 	
 	 ^ MAStringDescription new
-		  accessor: #slotNames
+		  accessor: #slotNames";
+		  classes: {String}"
 ]
 
 { #category : #accessing }

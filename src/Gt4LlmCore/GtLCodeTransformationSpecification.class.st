@@ -8,3 +8,8 @@ Class {
 GtLCodeTransformationSpecification class >> isConcrete [
 	^ false
 ]
+
+{ #category : #'as yet unclassified' }
+GtLCodeTransformationSpecification >> asRefactoringIn: aNamespace [
+	^ self subclassResponsibility
+]
