@@ -2,7 +2,6 @@ Class {
 	#name : #GtLAddMethodSpecification,
 	#superclass : #GtLMethodTransformationSpecification,
 	#instVars : [
-		'methodClassName',
 		'protocolName',
 		'sourceCode'
 	],
@@ -27,24 +26,6 @@ GtLAddMethodSpecification >> asRefactoringIn: aNamespace [
 GtLAddMethodSpecification >> descriptionContainer [
 	^ super descriptionContainer
 		comment: 'The "Add method" transformation adds a method to a class. The transformation must provide the className, source, and protocolName for the method.'
-]
-
-{ #category : #accessing }
-GtLAddMethodSpecification >> methodClassName [
-	^ methodClassName
-]
-
-{ #category : #accessing }
-GtLAddMethodSpecification >> methodClassName: anObject [
-	methodClassName := anObject
-]
-
-{ #category : #descriptions }
-GtLAddMethodSpecification >> methodClassNameDescription [
-	<magritteDescription>
-	
-	 ^ MAStringDescription new
-		  accessor: #methodClassName
 ]
 
 { #category : #accessing }
