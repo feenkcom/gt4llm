@@ -54,7 +54,7 @@ GtLExpandableThreadMessageElement >> initializeOneLineThreadMessageElement [
 
 { #category : #'initialization ' }
 GtLExpandableThreadMessageElement >> initializeThreadMessageElement [
-	threadMessageElement := GtLThreadMessageContentHolder new
+	threadMessageElement := GtLThreadMessageContentElement new
 ]
 
 { #category : #'initialization ' }
@@ -73,9 +73,4 @@ GtLExpandableThreadMessageElement >> onThreadMessageViewModelChanged [
 	threadMessageElement threadMessageViewModel: threadMessageViewModel.
 	self expanded: threadMessageViewModel isExpanded.
 	self margin: self margin + threadMessageViewModel uiInsets
-]
-
-{ #category : #accessing }
-GtLExpandableThreadMessageElement >> threadMessageElement [
-	^ threadMessageElement asElement
 ]

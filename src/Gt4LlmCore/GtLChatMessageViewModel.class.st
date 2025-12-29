@@ -9,7 +9,7 @@ Class {
 	#category : #'Gt4LlmCore-UI'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #'api - accessing' }
 GtLChatMessageViewModel >> contentText [
 	^ self threadMessage contentText
 ]
@@ -22,6 +22,31 @@ GtLChatMessageViewModel >> createdAt [
 { #category : #accessing }
 GtLChatMessageViewModel >> elementClass [
 	^ GtLExpandableThreadMessageElement
+]
+
+{ #category : #'gt - extensions' }
+GtLChatMessageViewModel >> gtToolViewMessagesFor: aView [
+	<gtView>
+	<gtLlmView>
+	self toolViewMessages ifEmpty: [ ^ aView empty ].
+
+	^ aView columnedList
+		title: 'Tools';
+		items: [ self toolViewMessages ];
+		column: 'Tool' text: #toolName;
+		column: 'Arguments'
+			text: [ :each | 
+				String
+					streamContents: [ :aStream | 
+						each toolArguments
+							do: [ :anAssoc | 
+								aStream
+									nextPutAll: anAssoc key asString;
+									nextPut: $:;
+									nextPutAll: anAssoc value asString ]
+							separatedBy: [ aStream nextPutAll: ', ' ] ] ];
+		column: 'Description' text: #toolDescription;
+		send: [ :each | each threadMessage ]
 ]
 
 { #category : #accessing }
@@ -43,6 +68,21 @@ GtLChatMessageViewModel >> isFailure [
 GtLChatMessageViewModel >> onThreadMessageChanged [
 	self isExpanded: self threadMessage isAssistantRole.
 	super onThreadMessageChanged
+]
+
+{ #category : #'api - accessing' }
+GtLChatMessageViewModel >> toolArguments [
+	^ self threadMessage toolArguments
+]
+
+{ #category : #'api - accessing' }
+GtLChatMessageViewModel >> toolDescription [
+	^ self threadMessage toolDescription
+]
+
+{ #category : #'api - accessing' }
+GtLChatMessageViewModel >> toolName [
+	^ self threadMessage toolName
 ]
 
 { #category : #'api - accessing' }

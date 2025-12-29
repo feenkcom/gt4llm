@@ -40,7 +40,7 @@ GtLToolMessage >> content [
 	^ self output
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'api - accessing' }
 GtLToolMessage >> contentText [
 	^ self toolCall gtDisplayString
 ]
@@ -56,19 +56,19 @@ GtLToolMessage >> gtArgumentsFor: aView [
 		view: #gtArgumentsFor:
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'gt - extensions' }
 GtLToolMessage >> gtContentFor: aView [
 	<gtView>
 	<gtLlmMessageView>
 	^ aView empty
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #printing }
 GtLToolMessage >> gtDisplayOn: aStream [
 	self toolCall gtDisplayOn: aStream
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'gt - extensions' }
 GtLToolMessage >> gtOutputFor: aView [
 	<gtView>
 	<gtLlmMessageView>
@@ -107,6 +107,14 @@ GtLToolMessage >> serializeResponse [
 		'output' -> self output} asDictionary
 ]
 
+{ #category : #'api - accessing' }
+GtLToolMessage >> toolArguments [
+	"Return tool arguments in a form of associations: argumentName -> argumentValue"
+
+	<return: #Collection of: #Association>
+	^ self toolCall arguments associations
+]
+
 { #category : #accessing }
 GtLToolMessage >> toolCall [
 	^ toolCall
@@ -115,4 +123,17 @@ GtLToolMessage >> toolCall [
 { #category : #accessing }
 GtLToolMessage >> toolCall: anObject [
 	toolCall := anObject
+]
+
+{ #category : #'api - accessing' }
+GtLToolMessage >> toolDescription [
+	"Return tool description"
+
+	<return: #String>
+	^ self toolCall description
+]
+
+{ #category : #'api - accessing' }
+GtLToolMessage >> toolName [
+	^ self toolCall name
 ]
