@@ -16,7 +16,7 @@ GtLAddMethodSpecification class >> isConcrete [
 
 { #category : #'as yet unclassified' }
 GtLAddMethodSpecification >> asRefactoringIn: aNamespace [
-	^ RBAddMethodRefactoring
+	^ GtRBAddMethodRefactoring
 		model: aNamespace
 		sourceCode: sourceCode
 		in: methodClassName
