@@ -19,6 +19,12 @@ GtLDemoMathReasoning >> = anObject [
 		steps = anObject steps ]
 ]
 
+{ #category : #'as yet unclassified' }
+GtLDemoMathReasoning >> descriptionContainer [
+	^ super descriptionContainer
+		comment: 'Math reasoning is made out of steps.'
+]
+
 { #category : #accessing }
 GtLDemoMathReasoning >> finalAnswer [
 	^ finalAnswer

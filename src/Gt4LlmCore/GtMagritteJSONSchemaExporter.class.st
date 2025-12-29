@@ -32,7 +32,7 @@ GtMagritteJSONSchemaExporter >> exportSchemaData [
 GtMagritteJSONSchemaExporter >> exportSchemaDataForClass: aClass [
 	| magritteDescription schemaCreationVisitor |
 	
-	magritteDescription := aClass new 
+	magritteDescription := aClass new
 		magritteDescription.
 	
 	schemaCreationVisitor := GtMagriteJSONSchemaCreationVisitor new.
