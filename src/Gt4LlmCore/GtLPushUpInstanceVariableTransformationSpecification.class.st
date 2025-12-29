@@ -28,6 +28,15 @@ GtLPushUpInstanceVariableTransformationSpecification >> gtDisplayOn: aStream [
 	aStream
 		nextPutAll: 'Push up slot ';
 		nextPutAll: variableName;
-		nextPutAll: ' from ';
+		nextPutAll: ' to ';
 		nextPutAll: variableClassName
+]
+
+{ #category : #description }
+GtLPushUpInstanceVariableTransformationSpecification >> variableClassNameDescription [
+	<magritteDescription>
+	
+	 ^ MAStringDescription new
+		  accessor: #variableClassName;
+		  comment: 'The name of the target superclass to which the variable is to be pushed'
 ]

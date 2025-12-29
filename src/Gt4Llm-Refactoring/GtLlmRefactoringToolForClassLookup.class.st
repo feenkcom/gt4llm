@@ -46,7 +46,7 @@ GtLlmRefactoringToolForClassLookup >> privatePerformToolCall: aToolCall [
 			'superclass' -> (targetClass superclass
 				ifNil: [ nil ]
 				ifNotNil: [ :spr | spr name asString ]).
-			'package' -> targetClass packageName.
+			'package' -> targetClass realClass packageName.
 			'instanceSlots' -> targetClass instanceVariableNames asArray.
 			'classSlots' -> targetClass classSide instanceVariableNames asArray.
 			'allInstanceMethods' -> targetClass selectors asArray.
