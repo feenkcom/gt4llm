@@ -122,23 +122,24 @@ GtMagritteJSONSchemaExporterExamples >> expectedSchemaStringForMathReasoningWith
 GtMagritteJSONSchemaExporterExamples >> expectedSchemaStringForMathReasoningWithSingleType [
 	^ '{
 	"type" : "object",
+	"description" : "Math reasoning is made out of steps.",
 	"properties" : {
 		"steps" : {
 			"type" : "array",
 			"items" : {
 				"type" : "object",
 				"properties" : {
+					"output" : {
+						"type" : "string"
+					},
 					"explanation" : {
 						"type" : "string",
 						"description" : "An explanation of this step"
-					},
-					"output" : {
-						"type" : "string"
 					}
 				},
 				"required" : [
-					"explanation",
-					"output"
+					"output",
+					"explanation"
 				],
 				"additionalProperties" : false
 			}
