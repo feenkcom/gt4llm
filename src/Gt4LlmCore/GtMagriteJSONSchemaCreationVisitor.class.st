@@ -45,26 +45,28 @@ GtMagriteJSONSchemaCreationVisitor >> extractSingleSchemaForClass: aClass [
 { #category : #'visiting-description' }
 GtMagriteJSONSchemaCreationVisitor >> visitPriorityContainer: aContainer [
 	| schema propertiesSchema |
-	schema := NeoJSONObject  new 
+	schema := NeoJSONObject new
 			at: 'type' put: 'object';
 			yourself.
-		
-	propertiesSchema := NeoJSONObject  new .
+	propertiesSchema := NeoJSONObject new.
+	aContainer hasComment ifTrue: [
+		schema at: 'description' put: aContainer comment	].
+
 	aContainer children
 		do: [ :aDescription | 
 			aDescription acceptMagritte: self.
-			propertiesSchema 
-				at: aDescription accessor readSelector 
+			propertiesSchema
+				at: aDescription accessor readSelector
 				put: self currentSchema ].
 			
-	schema	at: 'properties' put: propertiesSchema.
+	schema at: 'properties' put: propertiesSchema.
 	schema
-		at: 'required' put: (aContainer children
-				collect: [:aDescription | 
-					aDescription accessor readSelector ]);
-		at: 'additionalProperties'  put: false.
-						
-		^ currentSchema := schema
+		at: 'required'
+			put: (aContainer children
+					collect: [ :aDescription | aDescription accessor readSelector ]);
+		at: 'additionalProperties' put: false.
+
+	^ currentSchema := schema
 ]
 
 { #category : #'visiting-description' }
