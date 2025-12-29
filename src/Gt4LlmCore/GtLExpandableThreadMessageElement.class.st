@@ -74,8 +74,3 @@ GtLExpandableThreadMessageElement >> onThreadMessageViewModelChanged [
 	self expanded: threadMessageViewModel isExpanded.
 	self margin: self margin + threadMessageViewModel uiInsets
 ]
-
-{ #category : #accessing }
-GtLExpandableThreadMessageElement >> threadMessageElement [
-	^ threadMessageElement asElement
-]
