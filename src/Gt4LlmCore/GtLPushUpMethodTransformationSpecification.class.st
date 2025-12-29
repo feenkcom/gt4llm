@@ -28,6 +28,41 @@ GtLPushUpMethodTransformationSpecification >> descriptionContainer [
 		comment: 'The "Push up method" transformation pushes up one or more methods identified with selectors from the methodClassName to the targetClassName.'
 ]
 
+{ #category : #'as yet unclassified' }
+GtLPushUpMethodTransformationSpecification >> gtDisplayOn: aStream [
+	aStream
+		nextPutAll: 'Push up method ';
+		nextPutAll: self selector;
+		nextPutAll: ' from ';
+		nextPutAll: methodClassName
+]
+
+{ #category : #'as yet unclassified' }
+GtLPushUpMethodTransformationSpecification >> initialize [
+	super initialize.
+	selectors := OrderedCollection new
+]
+
+{ #category : #accessing }
+GtLPushUpMethodTransformationSpecification >> selector [
+	^ selectors anyOne
+]
+
+{ #category : #accessing }
+GtLPushUpMethodTransformationSpecification >> selector: aString [
+	selectors add: aString
+]
+
+{ #category : #description }
+GtLPushUpMethodTransformationSpecification >> selectorDescription [
+	<magritteDescription>
+	
+	 ^ MAStringDescription new
+		  label: 'Selector';
+		  accessor: #selector;
+	  	comment: 'The selector of the method to push up'
+]
+
 { #category : #accessing }
 GtLPushUpMethodTransformationSpecification >> selectors [
 	^ selectors
@@ -36,17 +71,6 @@ GtLPushUpMethodTransformationSpecification >> selectors [
 { #category : #accessing }
 GtLPushUpMethodTransformationSpecification >> selectors: anObject [
 	selectors := anObject
-]
-
-{ #category : #description }
-GtLPushUpMethodTransformationSpecification >> selectorsDescription [
-	<magritteDescription>
-	
-	 ^ MAToManyRelationDescription new
-		  label: 'Selectors';
-		  accessor: #selectors;
-	  	classes: {String};
-	  	comment: 'The list of selectors of methods to push up'
 ]
 
 { #category : #accessing }
