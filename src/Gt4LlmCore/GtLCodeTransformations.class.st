@@ -19,7 +19,7 @@ GtLCodeTransformations >> applyRefactoring [
 { #category : #accessing }
 GtLCodeTransformations >> asRefactoringIn: namespace [
 	| composite |
-	composite := GtLlmCompositeTransformation new
+	composite := GtRBCompositeTransformation new
 			model: namespace;
 			refactorings: (transformations collect: [ :each | each asRefactoringIn: namespace ]).
 	^ composite
