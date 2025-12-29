@@ -23,6 +23,12 @@ GtLAddMethodSpecification >> asRefactoringIn: aNamespace [
 		withProtocol: protocolName
 ]
 
+{ #category : #'as yet unclassified' }
+GtLAddMethodSpecification >> descriptionContainer [
+	^ super descriptionContainer
+		comment: 'The "Add method" transformation adds a method to a class. The transformation must provide the className, source, and protocolName for the method.'
+]
+
 { #category : #accessing }
 GtLAddMethodSpecification >> methodClassName [
 	^ methodClassName
