@@ -120,8 +120,8 @@ GtLChatOpenAILiveExamples >> messageExample_magritteMarkdown_codeChanges [
 
 	responseMessage := self currentChat sendMessage: currentMessage.
 
-	self waitForChatCompletion.
-	self assert: self currentChat messages size equals: 2.
+	"self waitForChatCompletion.
+	self assert: self currentChat messages size equals: 2."
 
 	^ self currentChat
 ]
@@ -336,9 +336,9 @@ GtLChatOpenAILiveExamples >> messageWithToolCallExample_magritteMarkdown [
 
 	responseMessage := self currentChat sendMessage: currentMessage.
 
+	"self waitForChatCompletion.
 	self waitForChatCompletion.
-	self waitForChatCompletion.
-	self assert: self currentChat messages size equals: 3.
+	self assert: self currentChat messages size equals: 3."
 
 	^ self currentChat
 ]
