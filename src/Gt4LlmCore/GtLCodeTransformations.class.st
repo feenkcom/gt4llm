@@ -7,6 +7,24 @@ Class {
 	#category : #'Gt4LlmCore-Formats'
 }
 
+{ #category : #accessing }
+GtLCodeTransformations >> applyRefactoring [
+	| namespace composite |
+	namespace := GtRBNamespace new.
+	composite := self asRefactoringIn: namespace.
+	composite primitiveExecute.
+	^ namespace
+]
+
+{ #category : #accessing }
+GtLCodeTransformations >> asRefactoringIn: namespace [
+	| composite |
+	composite := GtRBCompositeTransformation new
+			model: namespace;
+			refactorings: (transformations collect: [ :each | each asRefactoringIn: namespace ]).
+	^ composite
+]
+
 { #category : #views }
 GtLCodeTransformations >> gtViewTransformationsFor: aView [
 	<gtView>
