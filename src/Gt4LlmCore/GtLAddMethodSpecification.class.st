@@ -14,6 +14,15 @@ GtLAddMethodSpecification class >> isConcrete [
 	^ true
 ]
 
+{ #category : #'as yet unclassified' }
+GtLAddMethodSpecification >> asRefactoringIn: aNamespace [
+	^ RBAddMethodRefactoring
+		model: aNamespace
+		sourceCode: sourceCode
+		in: methodClassName
+		withProtocol: protocolName
+]
+
 { #category : #accessing }
 GtLAddMethodSpecification >> methodClassName [
 	^ methodClassName
