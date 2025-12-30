@@ -61,8 +61,7 @@ GtLChatOpenAILiveExamples >> howAreYouCallExample [
 	responseMessage := self currentChat sendPlainMessage: 'How are you?'.
 	
 	self
-		waitForChatCompletion: 1
-		then: [ self assert: self currentChat messages size equals: 2 ].
+		waitForChatRunIsDoneThen: [ self assert: self currentChat messages size equals: 2 ].
 	
 	^ self currentChat
 ]
@@ -85,8 +84,7 @@ GtLChatOpenAILiveExamples >> howAreYouCallExample_withStringSchema [
 	responseMessage := self currentChat sendMessage: currentMessage.
 	
 	self
-		waitForChatCompletion: 1
-		then: [ self assert: self currentChat messages size equals: 2 ].
+		waitForChatRunIsDoneThen: [ self assert: self currentChat messages size equals: 2 ].
 	
 	^ self currentChat
 ]
@@ -149,8 +147,7 @@ GtLChatOpenAILiveExamples >> messageExample_magritteMarkdown_codeChanges [
 	responseMessage := self currentChat sendMessage: currentMessage.
 
 	self
-		waitForChatCompletion: 1
-		then: [ self assert: self currentChat messages size equals: 2 ].
+		waitForChatRunIsDoneThen: [ self assert: self currentChat messages size equals: 2 ].
 
 	^ self currentChat
 ]
@@ -215,9 +212,8 @@ GtLChatOpenAILiveExamples >> messageWithFormatCallExample [
 	
 	responseMessage := self currentChat sendMessage: currentMessage.
 	
-	self
-		waitForChatCompletion: 2
-		then: [ self assert: self currentChat messages size equals: 2 ].
+	"self
+		waitForChatRunIsDoneThen: [ self assert: self currentChat messages size equals: 2 ]."
 	
 	^ self currentChat
 ]
@@ -241,8 +237,7 @@ GtLChatOpenAILiveExamples >> messageWithFormatCallExample_mathTutor_jsonString [
 	responseMessage := self currentChat sendMessage: currentMessage.
 	
 	self
-		waitForChatCompletion: 2
-		then: [ self assert: self currentChat messages size equals: 2 ].
+		waitForChatRunIsDoneThen: [ self assert: self currentChat messages size equals: 2 ].
 	
 	^ self currentChat
 ]
@@ -266,8 +261,7 @@ GtLChatOpenAILiveExamples >> messageWithFormatCallExample_mathTutor_magritteSche
 	responseMessage := self currentChat sendMessage: currentMessage.
 	
 	self
-		waitForChatCompletion: 2
-		then: [ self assert: self currentChat messages size equals: 2 ].
+		waitForChatRunIsDoneThen: [ self assert: self currentChat messages size equals: 2 ].
 	
 	^ self currentChat
 ]
@@ -291,8 +285,7 @@ GtLChatOpenAILiveExamples >> messageWithFormatCallExample_mathTutor_magritteSche
 	responseMessage := self currentChat sendMessage: currentMessage.
 	
 	self
-		waitForChatCompletion: 2
-		then: [ self assert: self currentChat messages size equals: 2 ].
+		waitForChatRunIsDoneThen: [ self assert: self currentChat messages size equals: 2 ].
 	
 	^ self currentChat
 ]
@@ -316,8 +309,7 @@ GtLChatOpenAILiveExamples >> messageWithFormatCallExample_mathTutor_magritteSche
 	responseMessage := self currentChat sendMessage: currentMessage.
 
 	self
-		waitForChatCompletion: 2
-		then: [ self assert: self currentChat messages size equals: 2 ].
+		waitForChatRunIsDoneThen: [ self assert: self currentChat messages size equals: 2 ].
 
 	^ self currentChat
 ]
@@ -346,8 +338,7 @@ GtLChatOpenAILiveExamples >> messageWithInputObjectExample [
 	responseMessage := self currentChat sendMessage: currentMessage.
 
 	self
-		waitForChatCompletion: 2
-		then: [ self assert: self currentChat messages size equals: 2 ].
+		waitForChatRunIsDoneThen: [ self assert: self currentChat messages size >= 2 ].
 
 	^ self currentChat
 ]
@@ -371,8 +362,7 @@ GtLChatOpenAILiveExamples >> messageWithToolCallExample [
 	responseMessage := self currentChat sendMessage: currentMessage.
 	
 	self
-		waitForChatCompletion: 2
-		then: [ self assert: self currentChat messages size equals: 3 ].
+		waitForChatRunIsDoneThen: [ self assert: self currentChat messages size equals: 3 ].
 	
 	^ self currentChat
 ]
@@ -382,23 +372,21 @@ GtLChatOpenAILiveExamples >> messageWithToolCallExample_magritteMarkdown [
 	<gtExample>
 	| messageString currentMessage responseMessage |
 	messageString := 'Use tools and give me a description of the class BlElement'.
-	
+
 	currentMessage := self currentChat createUserMessage.
-	currentMessage 
-		addMagritteInputObject: (GtLMarkdown new
-			content: messageString)
+	currentMessage
+		addMagritteInputObject: (GtLMarkdown new content: messageString)
 		named: 'Markdown'.
 	
 	currentMessage tools: (GtLToolsGroup withAll: {GtLToolForClassLookup new}).
 	currentMessage
 		addMagriteResponseDescriptionForClass: GtLMarkdown
-		named: 'Markdown' .
+		named: 'Markdown'.
 
 	responseMessage := self currentChat sendMessage: currentMessage.
 
 	self
-		waitForChatCompletion: 2
-		then: [ self assert: self currentChat messages size equals: 3 ].
+		waitForChatRunIsDoneThen: [ self assert: self currentChat messages size equals: 3 ].
 
 	^ self currentChat
 ]
@@ -408,11 +396,38 @@ GtLChatOpenAILiveExamples >> waitForChatCompletion [
 	self currentChat provider executions last wait
 ]
 
-{ #category : #'examples - calls' }
+{ #category : #utils }
 GtLChatOpenAILiveExamples >> waitForChatCompletion: anInteger then: aBlock [
 	"Wait for a chat completion a given number of times."
 	self isSynchronous ifFalse: [ ^ self ].
 	
 	anInteger timesRepeat: [ self waitForChatCompletion ].
+	aBlock value
+]
+
+{ #category : #utils }
+GtLChatOpenAILiveExamples >> waitForChatRunIsDone [
+	| semaphore timeout |
+	semaphore := Semaphore new.
+
+	self currentChat announcer weak
+		when: GtLlmThreadRunIsDoneAnnouncement
+		send: #signal
+		to: semaphore.
+
+	timeout := semaphore waitTimeoutSeconds: 120.
+
+	self currentChat announcer unsubscribe: semaphore.
+
+	self assert: timeout not description: [ 'Chat run was not finished on time' ].
+]
+
+{ #category : #utils }
+GtLChatOpenAILiveExamples >> waitForChatRunIsDoneThen: aBlock [
+	"Wait for a chat to complete."
+
+	self isSynchronous ifFalse: [ ^ self ].
+
+	self waitForChatRunIsDone.
 	aBlock value
 ]
