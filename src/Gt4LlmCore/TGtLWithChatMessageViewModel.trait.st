@@ -1,7 +1,7 @@
 Trait {
 	#name : #TGtLWithChatMessageViewModel,
 	#instVars : [
-		'threadMessageViewModel'
+		'messageViewModel'
 	],
 	#category : #'Gt4LlmCore-UI'
 }
@@ -34,35 +34,64 @@ TGtLWithChatMessageViewModel >> gtElementOverviewChatModel [
 		object: [ self threadMessage chat ]
 ]
 
-{ #category : #'private - hooks' }
-TGtLWithChatMessageViewModel >> onThreadMessageViewModelChanged [
+{ #category : #'api - message view model' }
+TGtLWithChatMessageViewModel >> message [
+	^ messageViewModel message
+]
+
+{ #category : #'api - message view model' }
+TGtLWithChatMessageViewModel >> messageViewModel [
+	^ messageViewModel
+]
+
+{ #category : #'api - message view model' }
+TGtLWithChatMessageViewModel >> messageViewModel: anObject [
+	messageViewModel = anObject ifTrue: [ ^ self ].
+	messageViewModel ifNotNil: [ :anOldMessage | 
+		self beforeThreadMessageViewModelReset.
+		self unsubscribeFromMessageViewModel ].
+	messageViewModel := anObject.
+	self onMessageViewModelChanged.
+	self subscribeToMessageViewModel
 ]
 
 { #category : #'private - hooks' }
-TGtLWithChatMessageViewModel >> subscribeToThreadMessageViewModel [
+TGtLWithChatMessageViewModel >> onMessageViewModelChanged [
+]
+
+{ #category : #'private - hooks' }
+TGtLWithChatMessageViewModel >> subscribeToMessageViewModel [
 ]
 
 { #category : #'api - message view model' }
 TGtLWithChatMessageViewModel >> threadMessage [
-	^ threadMessageViewModel threadMessage
+	self
+		deprecated: 'Please use #message instead.'
+		transformWith: '`@receiver threadMessage' -> '`@receiver message'.
+
+	^ self message
 ]
 
 { #category : #'api - message view model' }
 TGtLWithChatMessageViewModel >> threadMessageViewModel [
-	^ threadMessageViewModel
+	self
+		deprecated: 'Please use #messageViewModel instead.'
+		transformWith: '`@receiver threadMessageViewModel' -> '`@receiver messageViewModel'.
+
+	^ self messageViewModel
 ]
 
 { #category : #'api - message view model' }
 TGtLWithChatMessageViewModel >> threadMessageViewModel: anObject [
-	threadMessageViewModel = anObject ifTrue: [ ^ self ].
-	threadMessageViewModel ifNotNil: [ :anOldMessage | 
-		self beforeThreadMessageViewModelReset.
-		self unsubscribeFromThreadMessageViewModel ].
-	threadMessageViewModel := anObject.
-	self onThreadMessageViewModelChanged.
-	self subscribeToThreadMessageViewModel
+	self
+		deprecated: 'Please use messageViewModel: instead.'
+		transformWith:
+			'`@receiver threadMessageViewModel: `@statements1'
+				-> '`@receiver messageViewModel: `@statements1'.
+				
+	self messageViewModel: anObject
 ]
 
 { #category : #'private - hooks' }
-TGtLWithChatMessageViewModel >> unsubscribeFromThreadMessageViewModel [
+TGtLWithChatMessageViewModel >> unsubscribeFromMessageViewModel [
 ]

@@ -9,17 +9,17 @@ Class {
 
 { #category : #'initialization ' }
 GtLNewMessageViewModel >> assistantChat: assistantChat [
-	threadMessage assistantChat: assistantChat
+	self message assistantChat: assistantChat
 ]
 
 { #category : #'as yet unclassified' }
 GtLNewMessageViewModel >> attachFile: aFileReference [
-	self threadMessage addFile: aFileReference
+	self message addFile: aFileReference
 ]
 
 { #category : #'as yet unclassified' }
 GtLNewMessageViewModel >> beSync [
-	threadMessage beSync
+	self message beSync
 ]
 
 { #category : #accessing }
@@ -42,12 +42,12 @@ GtLNewMessageViewModel >> connectionString [
 
 { #category : #accessing }
 GtLNewMessageViewModel >> contents [
-	^ self threadMessage contents
+	^ self message contents
 ]
 
 { #category : #accessing }
 GtLNewMessageViewModel >> contents: aString requester: aRequester [
-	self threadMessage contents: aString requester: aRequester
+	self message contents: aString requester: aRequester
 ]
 
 { #category : #accessing }
@@ -57,7 +57,7 @@ GtLNewMessageViewModel >> elementClass [
 
 { #category : #'as yet unclassified' }
 GtLNewMessageViewModel >> files [
-	^ self threadMessage files
+	^ self message files
 ]
 
 { #category : #accessing }
@@ -67,15 +67,15 @@ GtLNewMessageViewModel >> onAddMessageContentsRequest: anAnnouncement [
 
 { #category : #'as yet unclassified' }
 GtLNewMessageViewModel >> provider [
-	^ threadMessage assistantChat provider
+	^ self message assistantChat provider
 ]
 
 { #category : #'as yet unclassified' }
 GtLNewMessageViewModel >> provider: aProvider [
-	self threadMessage assistantChat provider: aProvider
+	self message assistantChat provider: aProvider
 ]
 
 { #category : #actions }
 GtLNewMessageViewModel >> sendMessage [
-	^ threadMessage sendMessage
+	^ self message sendMessage
 ]

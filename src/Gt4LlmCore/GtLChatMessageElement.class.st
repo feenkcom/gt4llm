@@ -85,15 +85,15 @@ GtLChatMessageElement >> onMessageContentsChanged: anAnnouncement [
 	self enqueueTask: (BlTaskAction new action: [ self updateContentsElement ])
 ]
 
+{ #category : #'private - hooks' }
+GtLChatMessageElement >> onMessageViewModelChanged [
+	self updateElement
+]
+
 { #category : #'private - announcement handling' }
 GtLChatMessageElement >> onRestyleRequested: anAnnouncement [
 	self
 		enqueueTask: (BlTaskAction new action: [ contentsElement editor styleText ])
-]
-
-{ #category : #'private - hooks' }
-GtLChatMessageElement >> onThreadMessageViewModelChanged [
-	self updateElement
 ]
 
 { #category : #'private - announcement handling' }
@@ -108,8 +108,8 @@ GtLChatMessageElement >> showProgressElement [
 ]
 
 { #category : #'private - hooks' }
-GtLChatMessageElement >> subscribeToThreadMessageViewModel [
-	self threadMessageViewModel weak
+GtLChatMessageElement >> subscribeToMessageViewModel [
+	self messageViewModel weak
 		when: GtLlmThreadMessageRestyleRequested
 			send: #onRestyleRequested:
 			to: self;
@@ -119,6 +119,11 @@ GtLChatMessageElement >> subscribeToThreadMessageViewModel [
 		when: GtLlmMessageContentsUpdated
 			send: #onMessageContentsChanged:
 			to: self
+]
+
+{ #category : #'private - hooks' }
+GtLChatMessageElement >> unsubscribeFromMessageViewModel [
+	self messageViewModel unsubscribe: self
 ]
 
 { #category : #'private - updating' }

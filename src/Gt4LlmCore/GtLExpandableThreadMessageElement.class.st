@@ -22,8 +22,13 @@ GtLExpandableThreadMessageElement class >> newForChatList [
 ]
 
 { #category : #accessing }
+GtLExpandableThreadMessageElement >> beforeMessageViewModelReset [
+	self margin: self margin - messageViewModel uiInsets
+]
+
+{ #category : #accessing }
 GtLExpandableThreadMessageElement >> beforeThreadMessageViewModelReset [
-	self margin: self margin - threadMessageViewModel uiInsets
+	self margin: self margin - messageViewModel uiInsets
 ]
 
 { #category : #'initialization ' }
@@ -59,18 +64,18 @@ GtLExpandableThreadMessageElement >> initializeThreadMessageElement [
 
 { #category : #'initialization ' }
 GtLExpandableThreadMessageElement >> onCollapsed [
-	threadMessageViewModel ifNotNil: [ :aViewModel | aViewModel isExpanded: false ]
+	messageViewModel ifNotNil: [ :aViewModel | aViewModel isExpanded: false ]
 ]
 
 { #category : #'private - event handling' }
 GtLExpandableThreadMessageElement >> onExpanded [
-	threadMessageViewModel ifNotNil: [ :aViewModel | aViewModel isExpanded: true ]
+	messageViewModel ifNotNil: [ :aViewModel | aViewModel isExpanded: true ]
 ]
 
 { #category : #'private - hooks' }
-GtLExpandableThreadMessageElement >> onThreadMessageViewModelChanged [
-	oneLineThreadMessageElement threadMessageViewModel: threadMessageViewModel.
-	threadMessageElement threadMessageViewModel: threadMessageViewModel.
-	self expanded: threadMessageViewModel isExpanded.
-	self margin: self margin + threadMessageViewModel uiInsets
+GtLExpandableThreadMessageElement >> onMessageViewModelChanged [
+	oneLineThreadMessageElement messageViewModel: messageViewModel.
+	threadMessageElement messageViewModel: messageViewModel.
+	self expanded: messageViewModel isExpanded.
+	self margin: self margin + messageViewModel uiInsets
 ]

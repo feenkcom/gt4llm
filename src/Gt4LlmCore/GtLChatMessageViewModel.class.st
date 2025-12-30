@@ -11,12 +11,12 @@ Class {
 
 { #category : #'api - accessing' }
 GtLChatMessageViewModel >> contentText [
-	^ self threadMessage contentText
+	^ self message contentText
 ]
 
 { #category : #accessing }
 GtLChatMessageViewModel >> createdAt [
-	^ self threadMessage createdAt
+	^ self message createdAt
 ]
 
 { #category : #accessing }
@@ -65,9 +65,9 @@ GtLChatMessageViewModel >> isFailure [
 ]
 
 { #category : #'private - hooks' }
-GtLChatMessageViewModel >> onThreadMessageChanged [
-	self isExpanded: self threadMessage isAssistantRole.
-	super onThreadMessageChanged
+GtLChatMessageViewModel >> onMessageChanged [
+	self isExpanded: self message isAssistantRole.
+	super onMessageChanged
 ]
 
 { #category : #'api - accessing' }

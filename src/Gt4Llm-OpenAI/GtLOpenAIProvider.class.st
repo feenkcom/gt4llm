@@ -105,7 +105,7 @@ GtLOpenAIProvider >> executeWait [
 				otherwise: [ :anError | 
 					assistantWorking := false.
 					self chat
-						addMessage: (GtLErrorThreadMessage new exception: anError freeze).
+						addMessage: (GtLErrorMessage new exception: anError freeze).
 					self chat signalRunIsDone ])
 ]
 
