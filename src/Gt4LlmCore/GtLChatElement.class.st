@@ -10,7 +10,7 @@ Class {
 	#category : #'Gt4LlmCore-UI'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #'api - initialization' }
 GtLChatElement >> beSync [
 	self chatViewModel beSync
 ]
@@ -28,7 +28,7 @@ GtLChatElement >> chatViewModel: anObject [
 	self updateElement
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 GtLChatElement >> initialize [
 	super initialize.
 
@@ -38,7 +38,7 @@ GtLChatElement >> initialize [
 	self matchParent
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 GtLChatElement >> initializeListElement [
 	listElement := BrSimpleList vertical
 			hMatchParent;
@@ -50,12 +50,12 @@ GtLChatElement >> initializeListElement [
 			itemDataBinder: [ :anItemElement :anItem | anItemElement messageViewModel: anItem ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'private - event handling' }
 GtLChatElement >> onThreadRunAnnouncement: anAnnouncement [
 	self enqueueTask: (BlTaskAction new action: [ self updateElement ])
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'private - hooks' }
 GtLChatElement >> subscribeToAssistantChatViewModel [
 	self chatViewModel assistantChat weak
 		when: GtLlmThreadRunAnnouncement
@@ -63,7 +63,7 @@ GtLChatElement >> subscribeToAssistantChatViewModel [
 		to: self
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'private - updating' }
 GtLChatElement >> updateElement [
 	| allItems |
 	allItems := chatViewModel messageViewModels.

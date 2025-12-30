@@ -62,7 +62,7 @@ GtLProvisionalMessage >> gtContentFor: aView [
 		title: 'Content';
 		priority: 1;
 		stencil: [ GtLChatMessageElement new
-				threadMessageViewModel: (GtLlmThreadMessageViewModel new threadMessage: self) ]
+				messageViewModel: (GtLChatMessageViewModel new message: self) ]
 ]
 
 { #category : #'as yet unclassified' }
