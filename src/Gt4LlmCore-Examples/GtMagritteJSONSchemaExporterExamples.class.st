@@ -1,7 +1,7 @@
 Class {
 	#name : #GtMagritteJSONSchemaExporterExamples,
 	#superclass : #Object,
-	#category : #'Gt4LlmCore-Examples'
+	#category : #'Gt4LlmCore-Examples-Magritte'
 }
 
 { #category : #assertions }
