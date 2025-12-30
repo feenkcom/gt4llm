@@ -18,7 +18,7 @@ GtLThreadMessageHeaderElement >> addActionElement [
 				vFitContent;
 				aptitude: BrGlamorousLabelAptitude new;
 				beSmallSize;
-				text: self threadMessageViewModel contentText).
+				text: self messageViewModel contentText).
 	self addChild: aFrame
 ]
 
@@ -31,10 +31,10 @@ GtLThreadMessageHeaderElement >> addSenderElement [
 				aptitude: (BrGlamorousLabelAptitude new
 						foreground: BrGlamorousColors disabledButtonTextColor);
 				beSmallSize;
-				text: self threadMessageViewModel senderText;
+				text: self messageViewModel senderText;
 				addAptitude: (BrGlamorousWithExplicitTooltipAptitude
 						text: (String
-								streamContents: [ :s | self threadMessageViewModel createdAt asLocal printSeparateDateAndTimeOn: s ])))
+								streamContents: [ :s | self messageViewModel createdAt asLocal printSeparateDateAndTimeOn: s ])))
 ]
 
 { #category : #accessing }
@@ -46,7 +46,7 @@ GtLThreadMessageHeaderElement >> initialize [
 ]
 
 { #category : #'private - hooks' }
-GtLThreadMessageHeaderElement >> onThreadMessageViewModelChanged [
+GtLThreadMessageHeaderElement >> onMessageViewModelChanged [
 	self updateElement
 ]
 

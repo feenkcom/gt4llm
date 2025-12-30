@@ -46,9 +46,8 @@ GtLChatElement >> initializeListElement [
 			padding: (BlInsets all: 5);
 			itemType: [ :aFactory :anItem :anIndex | anItem elementClass ];
 			itemId: [ :anItem :anIndex | anItem id ];
-			itemStencil: [ :anElementClass :aListWidget | 
-				anElementClass newForChatList ];
-			itemDataBinder: [ :anItemElement :anItem | anItemElement threadMessageViewModel: anItem ]
+			itemStencil: [ :anElementClass :aListWidget | anElementClass newForChatList ];
+			itemDataBinder: [ :anItemElement :anItem | anItemElement messageViewModel: anItem ]
 ]
 
 { #category : #'as yet unclassified' }

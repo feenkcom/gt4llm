@@ -138,14 +138,14 @@ GtLChatMessageViewModelsBuilder >> newMessageViewModel: anObject [
 
 { #category : #'private - building' }
 GtLChatMessageViewModelsBuilder >> newMessageViewModelFor: aMessage [
-	^ GtLChatMessageViewModel new threadMessage: aMessage
+	^ GtLChatMessageViewModel new message: aMessage
 ]
 
 { #category : #'private - building' }
 GtLChatMessageViewModelsBuilder >> viewModelFor: aMessage [
 	^ cache
 		at: aMessage id
-		ifPresent: [ :theViewModel | theViewModel threadMessage: aMessage ]
+		ifPresent: [ :theViewModel | theViewModel message: aMessage ]
 		ifAbsentPut: [ aMessage asViewModel
 				isExpanded: (lastMessage = aMessage and: [ aMessage isAssistantRole ]) ]
 ]

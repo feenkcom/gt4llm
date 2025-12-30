@@ -1,8 +1,8 @@
 Class {
 	#name : #GtLNewMessageElement,
 	#superclass : #BlElement,
-	#traits : 'TBrLayoutResizable + TGtLlmWithThreadMessageViewModel',
-	#classTraits : 'TBrLayoutResizable classTrait + TGtLlmWithThreadMessageViewModel classTrait',
+	#traits : 'TBrLayoutResizable + TGtLWithChatMessageViewModel',
+	#classTraits : 'TBrLayoutResizable classTrait + TGtLWithChatMessageViewModel classTrait',
 	#instVars : [
 		'contentsElement',
 		'toolbar',
@@ -62,7 +62,7 @@ GtLNewMessageElement >> buildProviderButton [
 					+ (BrGlamorousWithExplicitDropdownAptitude
 							handle: [ BrButton new beSmallSize
 									aptitude: BrGlamorousButtonWithLabelAptitude - BrGlamorousButtonExteriorAptitude;
-									label: self threadMessageViewModel connectionString ]
+									label: self messageViewModel connectionString ]
 							content: [ | aList |
 								aList := BrSimpleList new fitContent
 										id: #'provider-list';
@@ -81,7 +81,7 @@ GtLNewMessageElement >> buildProviderButton [
 															at: anEvent indices first) buildProvider.
 												aButton label: self threadMessageViewModel connectionString.
 												aList fireEvent: BrDropdownHideWish new ] ]);
-			label: self threadMessageViewModel connectionString
+			label: self messageViewModel connectionString
 ]
 
 { #category : #'initialization ' }
@@ -160,15 +160,15 @@ GtLNewMessageElement >> initializeToolbar [
 	toolbar := BrToolbar new aptitude: BrGlamorousToolbarAptitude new
 ]
 
+{ #category : #'private - hooks' }
+GtLNewMessageElement >> onMessageViewModelChanged [
+	self updateElement
+]
+
 { #category : #'private - announcement handling' }
 GtLNewMessageElement >> onThreadMessageContentsChanged: anAnnouncement [
 	anAnnouncement requester = self ifTrue: [ ^ self ].
 	self enqueueTask: (BlTaskAction new action: [ self updateElement ])
-]
-
-{ #category : #'private - hooks' }
-GtLNewMessageElement >> onThreadMessageViewModelChanged [
-	self updateElement
 ]
 
 { #category : #'private - announcement handling' }
@@ -178,8 +178,8 @@ GtLNewMessageElement >> onThreadMessageViewModelChanged: anAnnouncement [
 
 { #category : #'private - actions' }
 GtLNewMessageElement >> sendMessage [
-	threadMessageViewModel ifNil: [ ^ self ].
-	threadMessageViewModel sendMessage
+	messageViewModel ifNil: [ ^ self ].
+	messageViewModel sendMessage
 ]
 
 { #category : #'private - event handling' }
@@ -188,44 +188,46 @@ GtLNewMessageElement >> sendMessageFrom: aButton [
 ]
 
 { #category : #'private - hooks' }
-GtLNewMessageElement >> subscribeToThreadMessageViewModel [
-	self threadMessage
+GtLNewMessageElement >> subscribeToMessageViewModel [
+	self message
 		when: GtLlmNewThreadMessageContentsChanged
 		send: #onThreadMessageContentsChanged:
 		to: self.
 
-	self threadMessage assistantChat
+	self message assistantChat
 		when: GtLlmThreadRunStartedAnnouncement
 		send: #disableSend
 		to: self.
 
-	self threadMessage assistantChat
+	self message assistantChat
 		when: GtLlmThreadRunIsDoneAnnouncement
 		send: #enableSend
 		to: self.
 
-	self threadMessageViewModel weak
+	self messageViewModel weak
 		when: GtLlmThreadMessageViewModelChanged
 		send: #onThreadMessageViewModelChanged:
 		to: self
 ]
 
 { #category : #'private - hooks' }
-GtLNewMessageElement >> unsubscribeFromThreadMessageViewModel [
-	self threadMessage unsubscribe: self
+GtLNewMessageElement >> unsubscribeFromMessageViewModel [
+	self message unsubscribe: self.
+	self message assistantChat unsubscribe: self.
+	self messageViewModel unsubscribe: self
 ]
 
 { #category : #'private - updating' }
 GtLNewMessageElement >> updateContents: aBlText [
-	threadMessageViewModel ifNil: [ ^ self ].
-	threadMessageViewModel contents: aBlText asString requester: self
+	messageViewModel ifNil: [ ^ self ].
+	messageViewModel contents: aBlText asString requester: self
 ]
 
 { #category : #'private - updating' }
 GtLNewMessageElement >> updateContentsElement [
 	contentsElement
-		text: threadMessageViewModel contents;
-		styler: threadMessageViewModel styler
+		text: messageViewModel contents;
+		styler: messageViewModel styler
 ]
 
 { #category : #'private - updating' }
@@ -239,7 +241,7 @@ GtLNewMessageElement >> updateElement [
 GtLNewMessageElement >> updateImagesElement [
 	imagesElement removeChildren.
 
-	self threadMessageViewModel files
+	self messageViewModel files
 		do: [ :aFile | 
 			imagesElement
 				addChild: (BrDeletableFileWidget new

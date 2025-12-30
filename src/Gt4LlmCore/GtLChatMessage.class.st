@@ -130,7 +130,7 @@ GtLChatMessage >> asTokenizableString [
 
 { #category : #converting }
 GtLChatMessage >> asViewModel [
-	^ GtLChatMessageViewModel new threadMessage: self
+	^ GtLChatMessageViewModel new message: self
 ]
 
 { #category : #accessing }
@@ -392,23 +392,35 @@ GtLChatMessage >> instructions: anObject [
 	instructions := anObject
 ]
 
-{ #category : #accessing }
+{ #category : #'api - testing' }
 GtLChatMessage >> isAssistantRole [
+	"Return true if the message is produced by an assistant, 
+	being a final answer to a previous user message."
+
+	<return: #Boolean>
 	^ self role = 'assistant'
 ]
 
-{ #category : #accessing }
+{ #category : #'api - testing' }
 GtLChatMessage >> isFailure [
+	"Return true if the message is a result of an error, while receiving a message."
+
+	<return: #Boolean>
 	^ false
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #deprecated }
 GtLChatMessage >> isRawMessage [
+	"I think it is not used at all."
+
 	^ false
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'api - testing' }
 GtLChatMessage >> isReady [
+	"Return true if a message is ready, e.g., fully initialized."
+
+	<return: #Boolean>
 	^ true
 ]
 
@@ -425,6 +437,10 @@ GtLChatMessage >> isToolMessage [
 
 { #category : #accessing }
 GtLChatMessage >> isToolRole [
+	"Return true if the message is produced by an assistant, 
+	being a tool used by the assistant, e.g., quering a system code."
+
+	<return: #Boolean>
 	^ self role = 'tool'
 ]
 

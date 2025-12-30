@@ -1,8 +1,8 @@
 Class {
 	#name : #GtLBasicThreadMessageViewModel,
 	#superclass : #Object,
-	#traits : 'TGtLlmWithThreadMessage + TGtAnnouncer',
-	#classTraits : 'TGtLlmWithThreadMessage classTrait + TGtAnnouncer classTrait',
+	#traits : 'TGtLWithMessage + TGtAnnouncer',
+	#classTraits : 'TGtLWithMessage classTrait + TGtAnnouncer classTrait',
 	#instVars : [
 		'announcer',
 		'styler',
@@ -23,7 +23,7 @@ GtLBasicThreadMessageViewModel >> ancestor [
 
 { #category : #accessing }
 GtLBasicThreadMessageViewModel >> annotations [
-	^ threadMessage ifNotNil: #annotations ifNil: [ #() ]
+	^ message ifNotNil: #annotations ifNil: [ #() ]
 ]
 
 { #category : #announcer }
@@ -39,12 +39,12 @@ GtLBasicThreadMessageViewModel >> asElement [
 
 { #category : #accessing }
 GtLBasicThreadMessageViewModel >> checkerInstance [
-	^ threadMessage chat checkerInstance
+	^ message chat checkerInstance
 ]
 
 { #category : #accessing }
 GtLBasicThreadMessageViewModel >> codeBlocksExecutor [
-	^ threadMessage codeBlocksExecutor
+	^ message codeBlocksExecutor
 ]
 
 { #category : #accessing }
@@ -71,7 +71,7 @@ GtLBasicThreadMessageViewModel >> gtMessageViewsFor: aView [
 
 { #category : #accessing }
 GtLBasicThreadMessageViewModel >> id [
-	^ threadMessage id
+	^ message id
 ]
 
 { #category : #initialization }
@@ -92,14 +92,14 @@ GtLBasicThreadMessageViewModel >> isUserRole [
 
 { #category : #accessing }
 GtLBasicThreadMessageViewModel >> messageHeaderElement [
-	^ GtLThreadMessageHeaderElement new threadMessageViewModel: self
+	^ GtLThreadMessageHeaderElement new messageViewModel: self
 ]
 
 { #category : #accessing }
 GtLBasicThreadMessageViewModel >> messageToolbarActions [
 	^ GtPhlowActionsCollector new
 		pragmaName: #gtLlmAction;
-		fromObject: self threadMessage;
+		fromObject: self message;
 		collect
 ]
 
@@ -122,11 +122,11 @@ GtLBasicThreadMessageViewModel >> messageViews [
 				self hasThreadMessage
 					ifTrue: [ aStream
 							nextPutAll: (GtPhlowViewsCollector new
-									fromObject: self threadMessage;
+									fromObject: self message;
 									pragmaNames: self messageViewPragmas;
 									collect).
 
-						self threadMessage gtInspectorTargetModels
+						self message gtInspectorTargetModels
 							do: [ :eachResponseModel | 
 								aStream
 									nextPutAll: (GtPhlowViewsCollector new
@@ -157,7 +157,7 @@ GtLBasicThreadMessageViewModel >> onAddMessageContents: anAnnouncement [
 ]
 
 { #category : #'private - hooks' }
-GtLBasicThreadMessageViewModel >> onThreadMessageChanged [
+GtLBasicThreadMessageViewModel >> onMessageChanged [
 	self notifyThreadMessageViewModelChanged
 ]
 
@@ -168,7 +168,7 @@ GtLBasicThreadMessageViewModel >> requestStyleSourceText [
 
 { #category : #'as yet unclassified' }
 GtLBasicThreadMessageViewModel >> senderText [
-	^ self threadMessage senderText
+	^ self message senderText
 ]
 
 { #category : #accessing }
@@ -177,8 +177,8 @@ GtLBasicThreadMessageViewModel >> styler [
 ]
 
 { #category : #'private - hooks' }
-GtLBasicThreadMessageViewModel >> subscribeToThreadMessage [
-	self threadMessage
+GtLBasicThreadMessageViewModel >> subscribeToMessage [
+	self message
 		when: GtLlmMessageContentsUpdated
 		send: #forwardAnnouncement:
 		to: self
@@ -186,7 +186,7 @@ GtLBasicThreadMessageViewModel >> subscribeToThreadMessage [
 
 { #category : #'as yet unclassified' }
 GtLBasicThreadMessageViewModel >> uiInsets [
-	self threadMessage isAssistantRole ifTrue: [ ^ BlInsets right: 50 ].
-	self threadMessage isToolRole ifTrue: [ ^ BlInsets left: 25 right: 25 ].
+	self message isAssistantRole ifTrue: [ ^ BlInsets right: 50 ].
+	self message isToolRole ifTrue: [ ^ BlInsets left: 25 right: 25 ].
 	^ BlInsets left: 50
 ]
