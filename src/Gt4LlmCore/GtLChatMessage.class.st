@@ -339,6 +339,11 @@ GtLChatMessage >> hasFormats [
 	^ formatDescriptions notNil and: [formatDescriptions hasSchemaDescriptors]
 ]
 
+{ #category : #'api - testing' }
+GtLChatMessage >> hasInstructions [
+	^ instructions isNotNil
+]
+
 { #category : #accessing }
 GtLChatMessage >> hasResponse [
 	^ true
