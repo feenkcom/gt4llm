@@ -89,6 +89,40 @@ GtLlmToolForRemoteExampleMethodsRun >> addMethod: changeDictionary to: eventFact
 		tags: (self tagsUsing: eventFactory).
 ]
 
+{ #category : #private }
+GtLlmToolForRemoteExampleMethodsRun >> addRemoveClass: changeDictionary to: eventFactory [
+	| definitionSource classBuilder classDefinition |
+	definitionSource := changeDictionary at: 'code'.
+	self validateClassDefinitionSource: definitionSource.
+	classBuilder := self class compiler evaluate: definitionSource.
+	classBuilder class = ShiftClassBuilder
+		ifFalse: [ self
+				error: 'Supplied class definition evaluates to a ' , classBuilder class name asString
+						, ', not a ShiftClassBuilder' ].
+	classDefinition := classBuilder asRingDefinition.
+	eventFactory removeClass: classDefinition tags: (self tagsUsing: eventFactory)
+]
+
+{ #category : #private }
+GtLlmToolForRemoteExampleMethodsRun >> addRemoveMethod: changeDictionary to: eventFactory [ 
+	| methodClass ast methodDefinition |
+	
+	methodClass := self class environment classOrTraitNamed:
+		(changeDictionary at: 'class').
+	ast := RBParser parseMethod: (changeDictionary at: 'code').
+	methodDefinition := eventFactory
+		methodDefinitionSelector: ast selector
+		className: methodClass name
+		meta: methodClass isMeta
+		package: methodClass package asRingDefinition
+		protocol: 'llm-generated'
+		sourceCode: ast sourceCode
+		stamp: 'llm ', DateAndTime now printString.
+	eventFactory 
+		removeMethod: methodDefinition 
+		tags: (self tagsUsing: eventFactory).
+]
+
 { #category : #api }
 GtLlmToolForRemoteExampleMethodsRun >> allChangesFromLocal: customChanges image: imageChanges [
 
@@ -147,8 +181,12 @@ GtLlmToolForRemoteExampleMethodsRun >> customChangesFromArray: changesArray [
 			[ self addMethod: changeDictionary to: eventFactory ]
 		ifFalse: [ type = 'class' ifTrue:
 			[ self addClass: changeDictionary to: eventFactory ]
+		ifFalse: [ type = 'removeMethod' ifTrue:
+			[ self addRemoveMethod: changeDictionary to: eventFactory]
+		ifFalse: [ type = 'removeClass' ifTrue:
+			[ self addRemoveClass: changeDictionary to: eventFactory]
 		ifFalse:
-			[ self error: 'Unknown type: ', type printString. ] ] ].
+			[ self error: 'Unknown type: ', type printString. ] ] ] ] ].
 	^ eventFactory entries.
 ]
 
