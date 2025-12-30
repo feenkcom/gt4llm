@@ -19,7 +19,7 @@ GtLJsonSchemaInputModel >> addInstructionsTo: aMessageInstructions [
 		addSection: (GtLlmInstructionSection new
 				source: self;
 				title: self name;
-				body: (NeoJSONWriter toStringPretty: self schema))
+				body: (NeoJSONWriter toStringPretty: self schema json))
 ]
 
 { #category : #accessing }
