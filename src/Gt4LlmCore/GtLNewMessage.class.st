@@ -29,7 +29,7 @@ GtLNewMessage >> annotations [
 
 { #category : #ui }
 GtLNewMessage >> asViewModel [
-	^ GtLNewMessageViewModel new threadMessage: self
+	^ GtLNewMessageViewModel new message: self
 ]
 
 { #category : #accessing }

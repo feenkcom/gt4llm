@@ -43,7 +43,7 @@ GtLThreadMessageContentElement >> makeActionToolbar [
 	| actionToolbar |
 	actionToolbar := BrToolbar new aptitude: BrGlamorousToolbarAptitude new.
 
-	self threadMessageViewModel messageToolbarActions
+	self messageViewModel messageToolbarActions
 		do: [ :each | 
 			each
 				asElement: [ :actionElement | actionToolbar addItem: actionElement beTinySize ]
@@ -58,7 +58,7 @@ GtLThreadMessageContentElement >> onMessageContentsUpdated: anAnnouncement [
 ]
 
 { #category : #'private - hooks' }
-GtLThreadMessageContentElement >> onThreadMessageViewModelChanged [
+GtLThreadMessageContentElement >> onMessageViewModelChanged [
 	self updateElement
 ]
 
@@ -68,19 +68,19 @@ GtLThreadMessageContentElement >> onThreadMessageViewModelChanged: anAnnouncemen
 ]
 
 { #category : #'private - hooks' }
-GtLThreadMessageContentElement >> subscribeToThreadMessageViewModel [
-	threadMessageViewModel weak
+GtLThreadMessageContentElement >> subscribeToMessageViewModel [
+	self messageViewModel weak
 		when: GtLlmThreadMessageViewModelChanged
 			send: #onThreadMessageViewModelChanged:
 			to: self;
 		when: GtLlmMessageContentsUpdated
 			send: #onMessageContentsUpdated:
-			to: self.
+			to: self
 ]
 
 { #category : #'private - hooks' }
-GtLThreadMessageContentElement >> unsubscribeFromThreadMessageViewModel [
-	threadMessageViewModel unsubscribe: self
+GtLThreadMessageContentElement >> unsubscribeFromMessageViewModel [
+	self messageViewModel unsubscribe: self
 ]
 
 { #category : #'private - hooks' }
@@ -92,7 +92,7 @@ GtLThreadMessageContentElement >> updateElement [
 { #category : #'private - updating' }
 GtLThreadMessageContentElement >> updateHeader [
 	header removeChildren.
-	header addChild: self threadMessageViewModel messageHeaderElement.
+	header addChild: self messageViewModel messageHeaderElement.
 	header addChild: self makeActionToolbar
 ]
 
@@ -100,7 +100,7 @@ GtLThreadMessageContentElement >> updateHeader [
 GtLThreadMessageContentElement >> updateViews [
 	"Called by updater"
 
-	self views: self threadMessageViewModel messageViews
+	self views: self messageViewModel messageViews
 ]
 
 { #category : #'private - updating' }
