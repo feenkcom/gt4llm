@@ -2,7 +2,6 @@ Class {
 	#name : #GtLAddMethodSpecification,
 	#superclass : #GtLMethodTransformationSpecification,
 	#instVars : [
-		'methodClassName',
 		'protocolName',
 		'sourceCode'
 	],
@@ -16,7 +15,7 @@ GtLAddMethodSpecification class >> isConcrete [
 
 { #category : #'as yet unclassified' }
 GtLAddMethodSpecification >> asRefactoringIn: aNamespace [
-	^ RBAddMethodRefactoring
+	^ GtRBAddMethodRefactoring
 		model: aNamespace
 		sourceCode: sourceCode
 		in: methodClassName
@@ -29,22 +28,15 @@ GtLAddMethodSpecification >> descriptionContainer [
 		comment: 'The "Add method" transformation adds a method to a class. The transformation must provide the className, source, and protocolName for the method.'
 ]
 
-{ #category : #accessing }
-GtLAddMethodSpecification >> methodClassName [
-	^ methodClassName
-]
-
-{ #category : #accessing }
-GtLAddMethodSpecification >> methodClassName: anObject [
-	methodClassName := anObject
-]
-
-{ #category : #descriptions }
-GtLAddMethodSpecification >> methodClassNameDescription [
-	<magritteDescription>
-	
-	 ^ MAStringDescription new
-		  accessor: #methodClassName
+{ #category : #'as yet unclassified' }
+GtLAddMethodSpecification >> gtDisplayOn: aStream [
+	aStream
+		nextPutAll: 'Add method ';
+		nextPutAll: (sourceCode lines first);
+		nextPutAll: ' in class ';
+		nextPutAll: methodClassName;
+		nextPutAll: ' protocol ';
+		nextPutAll: protocolName
 ]
 
 { #category : #accessing }
