@@ -39,6 +39,92 @@ GtLlmToolForRemoteExampleMethodsRunExamples >> addClassToEventFactory [
 ]
 
 { #category : #examples }
+GtLlmToolForRemoteExampleMethodsRunExamples >> addMethodToEventFactory [
+	"Confirm that method definitions are added as expected to the event factory"
+	<gtExample>
+	| tool eventFactory methodDefinition omEntry epMethodAddition rgMethodAddition |
+
+	tool := GtLlmToolForRemoteExampleMethodsRun new.
+	eventFactory := GtEpiceaEventFactory new.
+	methodDefinition := {
+		'type' -> 'method'.
+		'class' -> self class name asString.
+		'code' ->
+'fortyTwo
+	^ 42'.
+		} asDictionary.
+	tool addMethod: methodDefinition to: eventFactory.
+
+	self assert: eventFactory entries size equals: 1.
+	omEntry := eventFactory entries first.
+	epMethodAddition := omEntry content.
+	self assert: epMethodAddition class equals: EpMethodAddition.
+	self assert: epMethodAddition behaviorAffectedName equals: self class name asString.
+	rgMethodAddition := epMethodAddition methodAffected.
+	self assert: rgMethodAddition sourceCode
+		equals: (methodDefinition at: 'code').
+]
+
+{ #category : #examples }
+GtLlmToolForRemoteExampleMethodsRunExamples >> addRemoveClassToEventFactory [
+	"Confirm that class definitions are added as expected to the event factory"
+	<gtExample>
+	| tool eventFactory classDefinition omEntry epClassRemoval rgClassRemoval |
+
+	self forPharo12AndNewer: [] forPharo11: [ ^ self ].
+
+	tool := GtLlmToolForRemoteExampleMethodsRun new.
+	eventFactory := GtEpiceaEventFactory new.
+	classDefinition := {
+		'type' -> 'class'.
+		'code' ->
+'Object << #SomeClass
+	slots: #(someSlotA someSlotB);
+	sharedVariables: #(ClassVar1 ClassVar2);
+	package: ''SomePackage'''.
+		} asDictionary.
+	tool addRemoveClass: classDefinition to: eventFactory.
+
+	self assert: eventFactory entries size equals: 1.
+	omEntry := eventFactory entries first.
+	epClassRemoval := omEntry content.
+	self assert: epClassRemoval class equals: EpClassRemoval.
+	self assert: epClassRemoval behaviorAffectedName equals: #SomeClass.
+	rgClassRemoval := epClassRemoval behaviorAffected.
+	self assert: (rgClassRemoval instanceVariables collect: #name as: Array)
+		equals: #(someSlotA someSlotB).
+	self assert: (rgClassRemoval classVariables collect: #name as: Array)
+		equals: #(ClassVar1 ClassVar2).
+]
+
+{ #category : #examples }
+GtLlmToolForRemoteExampleMethodsRunExamples >> addRemoveMethodToEventFactory [
+	"Confirm that method definitions are added as expected to the event factory"
+	<gtExample>
+	| tool eventFactory methodDefinition omEntry epMethodRemoval rgMethodRemoval |
+
+	tool := GtLlmToolForRemoteExampleMethodsRun new.
+	eventFactory := GtEpiceaEventFactory new.
+	methodDefinition := {
+		'type' -> 'method'.
+		'class' -> self class name asString.
+		'code' ->
+'fortyTwo
+	^ 42'.
+		} asDictionary.
+	tool addRemoveMethod: methodDefinition to: eventFactory.
+
+	self assert: eventFactory entries size equals: 1.
+	omEntry := eventFactory entries first.
+	epMethodRemoval := omEntry content.
+	self assert: epMethodRemoval class equals: EpMethodRemoval.
+	self assert: epMethodRemoval behaviorAffectedName equals: self class name asString.
+	rgMethodRemoval := epMethodRemoval methodAffected.
+	self assert: rgMethodRemoval sourceCode
+		equals: (methodDefinition at: 'code').
+]
+
+{ #category : #examples }
 GtLlmToolForRemoteExampleMethodsRunExamples >> exampleRunFailsWithoutCheckNames [
     "Expect the tool to signal the missing checkNames error"
     <gtExample>
