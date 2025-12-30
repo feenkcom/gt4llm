@@ -5,7 +5,7 @@ Class {
 		'explanation',
 		'output'
 	],
-	#category : #'Gt4LlmCore-Examples'
+	#category : #'Gt4LlmCore-Examples-Magritte'
 }
 
 { #category : #comparison }

@@ -8,7 +8,7 @@ Class {
 	#classVars : [
 		'IsSynchronous'
 	],
-	#category : #'Gt4LlmCore-Examples'
+	#category : #'Gt4LlmCore-Examples-OpenAI'
 }
 
 { #category : #accessing }
@@ -158,6 +158,7 @@ GtLChatOpenAILiveExamples >> messageExample_magritteMarkdown_codeChanges [
 { #category : #'examples - calls' }
 GtLChatOpenAILiveExamples >> messageExample_magritteMarkdown_codeChanges_refactorings [
 	<gtExample>
+	<noTest>
 	| currentMessage model responseMessage |
 	model := RBNamespace new.
 	currentMessage := self currentChat createUserMessage.
