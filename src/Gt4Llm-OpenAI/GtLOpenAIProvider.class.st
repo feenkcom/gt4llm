@@ -74,39 +74,46 @@ GtLOpenAIProvider >> defaultUserMessageClass [
 
 { #category : #actions }
 GtLOpenAIProvider >> executeWait [
-	executions
-		add: (([ | result aMessage currentMessage |
-			currentMessage := self chat messages last.
-			result := client
-					generateResponseWithModel: self model
-					messages: self chat messages
-					instructions: currentMessage instructions
-					tools: currentMessage tools
-					andFormat: (currentMessage hasFormats 
+	| aSecondPromise aFuture aFirstPromise |
+	aFuture := [ | result aMessage currentMessage |
+		currentMessage := self chat messages last.
+		result := client
+				generateResponseWithModel: self model
+				messages: self chat messages
+				instructions: currentMessage instructions
+				tools: currentMessage tools
+				andFormat: (currentMessage hasFormats
 						ifTrue: [ currentMessage formatDescriptionsJsonSchema ]
-						ifFalse: [ nil ] )
-					isStreaming: isStreaming.
+						ifFalse: [ nil ])
+				isStreaming: isStreaming.
 
-			result hasToolCalls
-				ifTrue: [ self performToolCallsIn: result with: currentMessage tools ]
-				ifFalse: [ aMessage := isStreaming
-							ifTrue: [ self streamingMessageFrom: result ]
-							ifFalse: [ self assistantMessageClass new
-									model: self model;
-									merge: (result output detect: [ :anOutput | 
-										(anOutput rawData at: 'type') = 'message' ]) ].
-					
-					self chat addMessage: aMessage.
-					self chat signalRunIsDone ] ] asAsyncFuture
-				await: (AsyncFutureExecutionConfiguration new
-						customGroup: #OpenAI;
-						lowPriority))
-				then: [ assistantWorking := false ]
-				otherwise: [ :anError | 
-					assistantWorking := false.
-					self chat
-						addMessage: (GtLErrorMessage new exception: anError freeze).
-					self chat signalRunIsDone ])
+		result hasToolCalls
+			ifTrue: [ self performToolCallsIn: result with: currentMessage tools ]
+			ifFalse: [ aMessage := isStreaming
+						ifTrue: [ self streamingMessageFrom: result ]
+						ifFalse: [ self assistantMessageClass new
+								model: self model;
+								merge: (result output detect: [ :anOutput | (anOutput rawData at: 'type') = 'message' ]) ].
+
+				self chat addMessage: aMessage.
+				self chat signalRunIsDone.
+				aMessage ] ] asAsyncFuture.
+	aFirstPromise := aFuture
+			await: (AsyncFutureExecutionConfiguration new
+					customGroup: #OpenAI;
+					lowPriority).
+	aSecondPromise := aFirstPromise
+			then: [ :aMessage |
+				assistantWorking := false.
+				aMessage ]
+			otherwise: [ :anError | 
+				| aMessage |
+				assistantWorking := false.
+				aMessage := GtLErrorMessage freeze: anError.
+				self chat addMessage: aMessage.
+				self chat signalRunIsDone.
+				aMessage ].
+	executions add: aSecondPromise.
 ]
 
 { #category : #'as yet unclassified' }
