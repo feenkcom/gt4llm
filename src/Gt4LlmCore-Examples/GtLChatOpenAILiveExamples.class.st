@@ -188,33 +188,37 @@ GtLChatOpenAILiveExamples >> messageWithFormatCallExample [
 	<gtExample>
 	| messageString currentMessage responseMessage |
 	messageString := 'Return a list of the most popular programming languages.'.
-	
+
 	currentMessage := self currentChat createUserMessage.
-	currentMessage 
+	currentMessage
 		addInputModel: (GtLJsonSchemaInputModel new
-			name: 'String';
-			model: messageString;
-			schema: (NeoJSONSchema new 
-				json: (NeoJSONObject fromString: '{
+				name: 'String';
+				model: messageString;
+				schema: (NeoJSONSchema new
+						json: (NeoJSONObject
+								fromString: '{
 				"type" : "string"
 				}'))).
-	
-	currentMessage addSchemaDescription: (GtLResponseJsonSchemaFormat new
-		name: 'List';
-		schema: (NeoJSONSchema new 
-			json: (NeoJSONObject fromString: '{
+
+	currentMessage
+		addSchemaDescription: (GtLResponseJsonSchemaFormat new
+				name: 'List';
+				schema: (NeoJSONSchema new
+						json: (NeoJSONObject
+								fromString: '{
 			"type" : "array",
 			"items" : {
 				"type" : "string"
 			},
 			"additionalProperties": false
 		}'))).
-	
+
 	responseMessage := self currentChat sendMessage: currentMessage.
-	
+
 	self
-		waitForChatRunIsDoneThen: [ self assert: self currentChat messages size equals: 2 ].
-	
+		waitForChatRunIsDoneThen: [ self assert: self currentChat messages size equals: 2.
+			self assert: (self currentChat messages at: 2) isFailure ].
+
 	^ self currentChat
 ]
 
