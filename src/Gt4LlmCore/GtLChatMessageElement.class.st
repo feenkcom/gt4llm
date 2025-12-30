@@ -129,8 +129,8 @@ GtLChatMessageElement >> unsubscribeFromMessageViewModel [
 { #category : #'private - updating' }
 GtLChatMessageElement >> updateContentsElement [
 	contentsElement
-		text: self threadMessageViewModel contentText;
-		styler: self threadMessageViewModel styler
+		text: self messageViewModel contentText;
+		styler: self messageViewModel styler
 ]
 
 { #category : #'private - updating' }
@@ -142,14 +142,14 @@ GtLChatMessageElement >> updateElement [
 
 { #category : #'private - updating' }
 GtLChatMessageElement >> updateFailureIndicator [
-	self threadMessageViewModel isFailure
+	self messageViewModel isFailure
 		ifTrue: [ self border: BrGlamorousColors errorBackgroundColor ]
 		ifFalse: [ self border: BlBorder empty ]
 ]
 
 { #category : #'private - updating' }
 GtLChatMessageElement >> updateProgressElement [
-	self threadMessage hasResponse
+	self message hasResponse
 		ifTrue: [ self hideProgressElement ]
 		ifFalse: [ self showProgressElement ]
 ]
