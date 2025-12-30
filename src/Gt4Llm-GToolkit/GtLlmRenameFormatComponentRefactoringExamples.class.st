@@ -85,14 +85,14 @@ GtLlmRenameFormatComponentRefactoringExamples >> exampleClassCoderActionExpanded
 				// GtSourceCoderEditorId;
 				// #previewCheckButton ].
 
-	scripter
+"	scripter
 		clickStep: [ :s | 
 			s
 				label: 'Expand the refactoring preview dropdown';
 				onSpaceRoot;
 				onDropdown: true;
 				// GtChangesElement;
-				// BrInlineExpanderElement ].
+				// BrInlineExpanderElement ]."
 
 	scripter
 		doStep: [ :s | 
