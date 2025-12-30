@@ -61,7 +61,7 @@ GtLChatMessageViewModel >> isExpanded: aBoolean [
 
 { #category : #testing }
 GtLChatMessageViewModel >> isFailure [
-	^ threadMessage isFailure
+	^ self message isFailure
 ]
 
 { #category : #'private - hooks' }
