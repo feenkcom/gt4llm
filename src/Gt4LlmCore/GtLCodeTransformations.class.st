@@ -26,6 +26,17 @@ GtLCodeTransformations >> asRefactoringIn: namespace [
 ]
 
 { #category : #views }
+GtLCodeTransformations >> gtChangesFor: aView [
+	<gtView>
+	<gtLlmView>
+	^ aView forward
+		title: 'Changes';
+		priority: 1;
+		object: [ self applyRefactoring ];
+		view: #gtApplyingChangesFor:
+]
+
+{ #category : #views }
 GtLCodeTransformations >> gtViewTransformationsFor: aView [
 	<gtView>
 	transformations ifNil: [ ^ aView empty ].
