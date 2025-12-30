@@ -17,7 +17,7 @@ GtLPushUpMethodTransformationSpecification class >> isConcrete [
 GtLPushUpMethodTransformationSpecification >> asRefactoringIn: aNamespace [
 	^ GtPushUpMethodRefactoring
 		model: aNamespace
-		pullUp: selectors
+		pullUp: (selectors collect: #asSymbol)
 		from: methodClassName
 		to: targetClassName
 ]
