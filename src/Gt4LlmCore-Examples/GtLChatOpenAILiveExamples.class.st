@@ -141,11 +141,7 @@ GtLChatOpenAILiveExamples >> messageExample_magritteMarkdown_codeChanges [
 		addMagritteInputObject: (GtLMarkdown new
 			content: messageString)
 		named: 'Markdown'.
-		
 	currentMessage
-		"addSchemaDescription: (GtLResponseMagritteFormat new
-				name: 'Markdown';
-				modelClass: GtLMarkdown);"
 		addSchemaDescription: (GtLResponseMagritteFormat new
 				name: 'CodeTransformations';
 				modelClass: GtLCodeTransformations).
@@ -171,19 +167,13 @@ GtLChatOpenAILiveExamples >> messageExample_magritteMarkdown_codeChanges_refacto
 		named: 'Markdown'.
 	currentMessage
 		tools: (GtLToolsGroup
-				withAll: {GtLlmRefactoringToolForClassSearch new model: model.
-						GtLlmRefactoringToolForClassSubclasses new model: model.
-						GtLlmRefactoringToolForClassLookup new model: model.
-						GtLlmRefactoringToolForClassReferences new model: model.
-						GtLlmRefactoringToolForMethodReferences new model: model.
-						GtLlmRefactoringToolForMethodImplementors new model: model.
-						GtLlmRefactoringToolForMethodSource new model: model.
-						GtLlmToolForExampleMethodRun new.
-						GtLlmToolForExampleClassesRun new.
-						GtLlmToolForSearchFilter new.
-						GtLlmToolForSearchForLepiterPages new.
-						GtLlmToolForLepiterPageContents new.
-						GtLlmToolForSmalltalkCodeEvaluation new}).
+				withAll: {GtLRefactoringToolForClassSearch new model: model.
+						GtLRefactoringToolForClassSubclasses new model: model.
+						GtLRefactoringToolForClassLookup new model: model.
+						GtLRefactoringToolForClassReferences new model: model.
+						GtLRefactoringToolForMethodReferences new model: model.
+						GtLRefactoringToolForMethodImplementors new model: model.
+						GtLRefactoringToolForMethodSource new model: model}).
 	currentMessage
 		addMagriteResponseDescriptionForClass: GtLMarkdown
 		named: 'Markdown'.
@@ -347,7 +337,7 @@ GtLChatOpenAILiveExamples >> messageWithInputObjectExample [
 			gtExample returnValue
 		named: 'Object'.
 	
-	currentMessage tools: (GtLToolsGroup withAll: {GtLlmToolForClassLookup new}).
+	currentMessage tools: (GtLToolsGroup withAll: {GtLToolForClassLookup new}).
 	currentMessage
 		addMagriteResponseDescriptionForClass: GtLMarkdown
 		named: 'Markdown' .
@@ -373,7 +363,7 @@ GtLChatOpenAILiveExamples >> messageWithToolCallExample [
 			content: messageString)
 		named: 'Markdown'.
 	
-	currentMessage tools: (GtLToolsGroup withAll: {GtLlmToolForClassLookup new}).
+	currentMessage tools: (GtLToolsGroup withAll: {GtLToolForClassLookup new}).
 	currentMessage addSchemaDescription: (GtLResponseMarkdownFormat new
 			name: 'Description').
 	
@@ -398,7 +388,7 @@ GtLChatOpenAILiveExamples >> messageWithToolCallExample_magritteMarkdown [
 			content: messageString)
 		named: 'Markdown'.
 	
-	currentMessage tools: (GtLToolsGroup withAll: {GtLlmToolForClassLookup new}).
+	currentMessage tools: (GtLToolsGroup withAll: {GtLToolForClassLookup new}).
 	currentMessage
 		addMagriteResponseDescriptionForClass: GtLMarkdown
 		named: 'Markdown' .
