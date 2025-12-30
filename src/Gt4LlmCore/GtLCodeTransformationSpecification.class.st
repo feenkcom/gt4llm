@@ -13,3 +13,21 @@ GtLCodeTransformationSpecification class >> isConcrete [
 GtLCodeTransformationSpecification >> asRefactoringIn: aNamespace [
 	^ self subclassResponsibility
 ]
+
+{ #category : #views }
+GtLCodeTransformationSpecification >> gtChangesFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Changes';
+		object: [ self namespaceWithAppliedRefactoring ];
+		view: #gtApplyingChangesFor:
+]
+
+{ #category : #accessing }
+GtLCodeTransformationSpecification >> namespaceWithAppliedRefactoring [
+	| namespace composite |
+	namespace := GtRBNamespace new.
+	composite := self asRefactoringIn: namespace.
+	composite primitiveExecute.
+	^ namespace
+]
