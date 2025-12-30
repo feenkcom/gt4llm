@@ -187,7 +187,7 @@ GtLChatOpenAILiveExamples >> messageExample_magritteMarkdown_codeChanges_refacto
 GtLChatOpenAILiveExamples >> messageWithFormatCallExample [
 	<gtExample>
 	| messageString currentMessage responseMessage |
-	messageString := 'Return a list of the most populate programming languages.'.
+	messageString := 'Return a list of the most popular programming languages.'.
 	
 	currentMessage := self currentChat createUserMessage.
 	currentMessage 
@@ -212,8 +212,8 @@ GtLChatOpenAILiveExamples >> messageWithFormatCallExample [
 	
 	responseMessage := self currentChat sendMessage: currentMessage.
 	
-	"self
-		waitForChatRunIsDoneThen: [ self assert: self currentChat messages size equals: 2 ]."
+	self
+		waitForChatRunIsDoneThen: [ self assert: self currentChat messages size equals: 2 ].
 	
 	^ self currentChat
 ]
