@@ -246,14 +246,12 @@ GtLChatMessage >> gtActionInspectFor: anAction [
 GtLChatMessage >> gtContentFor: aView [
 	<gtView>
 	<gtLlmMessageView>
-	
 	content ifNil: [ ^ aView empty ].
-	
+
 	^ aView explicit
 		title: 'Content';
 		priority: 5;
-		stencil: [ GtLChatMessageElement new
-				threadMessageViewModel: self asViewModel ]
+		stencil: [ GtLChatMessageElement new messageViewModel: self asViewModel ]
 ]
 
 { #category : #accessing }
