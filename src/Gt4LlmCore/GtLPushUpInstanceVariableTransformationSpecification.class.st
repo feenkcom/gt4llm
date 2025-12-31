@@ -11,7 +11,7 @@ GtLPushUpInstanceVariableTransformationSpecification class >> isConcrete [
 
 { #category : #'as yet unclassified' }
 GtLPushUpInstanceVariableTransformationSpecification >> asRefactoringIn: aGtRBNamespace [
-	^ RBPullUpInstanceVariableRefactoring
+	^ GtRBPullUpInstanceVariableRefactoring
 		model: aGtRBNamespace
 		variable: variableName
 		class: variableClassName
