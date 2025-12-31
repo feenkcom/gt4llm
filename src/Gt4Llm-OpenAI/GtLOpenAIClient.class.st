@@ -54,6 +54,11 @@ GtLOpenAIClient class >> withApiKeyFromFile [
 ]
 
 { #category : #accessing }
+GtLOpenAIClient >> addHistoryRequestResponse: aClient [
+	history add: aClient request -> aClient response
+]
+
+{ #category : #accessing }
 GtLOpenAIClient >> addMessage: aMessage toThread: aThreadId [
 	^ GtLOpenAIAddMessageToThreadAPICommand new
 		client: self;
@@ -164,13 +169,9 @@ GtLOpenAIClient >> delete: aUrl [
 	| aClient response |
 	aClient := self initializeClient.
 	aClient url: self baseUrl / aUrl.
-	
 	aClient entity: nil.
-
 	response := aClient delete.
-	
-	history add: (aClient request -> aClient response).
-	
+	self addHistoryRequestResponse: aClient.
 	^ response
 ]
 
@@ -260,13 +261,9 @@ GtLOpenAIClient >> get: aUrl withParams: aListOfAssocs [
 	aClient := self initializeClient.
 	aClient url: self baseUrl / aUrl.
 	aListOfAssocs do: [ :aPair | aClient queryAt: aPair key put: aPair value ].
-
 	aClient entity: nil.
-
 	response := aClient get.
-	
-	history add: (aClient request -> aClient response).
-	
+	self addHistoryRequestResponse: aClient.
 	^ self checkForErrors: response
 ]
 
@@ -342,9 +339,7 @@ GtLOpenAIClient >> gtModelsFor: aView [
 { #category : #accessing }
 GtLOpenAIClient >> initialize [
 	super initialize.
-	
-	history := GtLlmRequestHistory new.
-
+	history := GtLRequestHistory new.
 	self baseUrl: self defaultBaseUrl
 ]
 
@@ -402,7 +397,7 @@ GtLOpenAIClient >> post: aString withEntity: anEntity [
 	aClient url: self baseUrl / aString.
 	aClient contents: anEntity.
 	response := aClient post.
-	history add: (aClient request -> aClient response).
+	self addHistoryRequestResponse: aClient.
 	^ self checkForErrors: response
 ]
 
@@ -411,13 +406,9 @@ GtLOpenAIClient >> postFile: aString withEntity: anEntity [
 	| aClient response |
 	aClient := self initializeClient.
 	aClient url: self baseUrl / aString.
-
 	aClient entity: anEntity.
-	
 	response := aClient post.
-	
-	history add: (aClient request -> aClient response).
-
+	self addHistoryRequestResponse: aClient.
 	^ self checkForErrors: response
 ]
 
@@ -428,12 +419,10 @@ GtLOpenAIClient >> postStreaming: aString withEntity: anEntity [
 			streaming: true;
 			contentReader: nil.
 	aClient url: self baseUrl / aString.
-
 	aClient contents: anEntity.
-.
 	response := aClient post.
-	
-	history add: (aClient request -> aClient response).
+
+	self addHistoryRequestResponse: aClient.
 
 	^ response
 ]

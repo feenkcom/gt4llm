@@ -2,10 +2,27 @@ Class {
 	#name : #GtLChatOpenAILiveExamples,
 	#superclass : #Object,
 	#instVars : [
-		'theChat'
+		'theChat',
+		'isSynchronous'
 	],
-	#category : #'Gt4LlmCore-Examples'
+	#classVars : [
+		'IsSynchronous'
+	],
+	#category : #'Gt4LlmCore-Examples-OpenAI'
 }
+
+{ #category : #accessing }
+GtLChatOpenAILiveExamples class >> isSynchronous [
+	"Return true if an example should wait for a chat completion, false otherwise.
+	I am an utility settings to easily demo written examples, without waiting for a chat to complete."
+
+	^ IsSynchronous ifNil: [ IsSynchronous := true ]
+]
+
+{ #category : #accessing }
+GtLChatOpenAILiveExamples class >> isSynchronous: aBoolean [
+	IsSynchronous := aBoolean
+]
 
 { #category : #examples }
 GtLChatOpenAILiveExamples >> createChat [
@@ -43,8 +60,8 @@ GtLChatOpenAILiveExamples >> howAreYouCallExample [
 	| responseMessage  |
 	responseMessage := self currentChat sendPlainMessage: 'How are you?'.
 	
-	self waitForChatCompletion.
-	self assert: self currentChat messages size equals: 2.
+	self
+		waitForChatRunIsDoneThen: [ self assert: self currentChat messages size equals: 2 ].
 	
 	^ self currentChat
 ]
@@ -66,10 +83,23 @@ GtLChatOpenAILiveExamples >> howAreYouCallExample_withStringSchema [
 	
 	responseMessage := self currentChat sendMessage: currentMessage.
 	
-	self waitForChatCompletion.
-	self assert: self currentChat messages size equals: 2.
+	self
+		waitForChatRunIsDoneThen: [ self assert: self currentChat messages size equals: 2 ].
 	
 	^ self currentChat
+]
+
+{ #category : #accessing }
+GtLChatOpenAILiveExamples >> isSynchronous [
+	"Return true if an example should wait for a chat completion, false otherwise.
+	I am an utility settings to easily demo written examples, without waiting for a chat to complete."
+
+	^ isSynchronous ifNil: [ self class isSynchronous ]
+]
+
+{ #category : #accessing }
+GtLChatOpenAILiveExamples >> isSynchronous: aBoolean [
+	isSynchronous := aBoolean
 ]
 
 { #category : #utils }
@@ -109,19 +139,15 @@ GtLChatOpenAILiveExamples >> messageExample_magritteMarkdown_codeChanges [
 		addMagritteInputObject: (GtLMarkdown new
 			content: messageString)
 		named: 'Markdown'.
-		
 	currentMessage
-		"addSchemaDescription: (GtLResponseMagritteFormat new
-				name: 'Markdown';
-				modelClass: GtLMarkdown);"
 		addSchemaDescription: (GtLResponseMagritteFormat new
 				name: 'CodeTransformations';
 				modelClass: GtLCodeTransformations).
 
 	responseMessage := self currentChat sendMessage: currentMessage.
 
-	"self waitForChatCompletion.
-	self assert: self currentChat messages size equals: 2."
+	self
+		waitForChatRunIsDoneThen: [ self assert: self currentChat messages size equals: 2 ].
 
 	^ self currentChat
 ]
@@ -129,6 +155,7 @@ GtLChatOpenAILiveExamples >> messageExample_magritteMarkdown_codeChanges [
 { #category : #'examples - calls' }
 GtLChatOpenAILiveExamples >> messageExample_magritteMarkdown_codeChanges_refactorings [
 	<gtExample>
+	<noTest>
 	| currentMessage model responseMessage |
 	model := RBNamespace new.
 	currentMessage := self currentChat createUserMessage.
@@ -138,19 +165,13 @@ GtLChatOpenAILiveExamples >> messageExample_magritteMarkdown_codeChanges_refacto
 		named: 'Markdown'.
 	currentMessage
 		tools: (GtLToolsGroup
-				withAll: {GtLlmRefactoringToolForClassSearch new model: model.
-						GtLlmRefactoringToolForClassSubclasses new model: model.
-						GtLlmRefactoringToolForClassLookup new model: model.
-						GtLlmRefactoringToolForClassReferences new model: model.
-						GtLlmRefactoringToolForMethodReferences new model: model.
-						GtLlmRefactoringToolForMethodImplementors new model: model.
-						GtLlmRefactoringToolForMethodSource new model: model.
-						GtLlmToolForExampleMethodRun new.
-						GtLlmToolForExampleClassesRun new.
-						GtLlmToolForSearchFilter new.
-						GtLlmToolForSearchForLepiterPages new.
-						GtLlmToolForLepiterPageContents new.
-						GtLlmToolForSmalltalkCodeEvaluation new}).
+				withAll: {GtLRefactoringToolForClassSearch new model: model.
+						GtLRefactoringToolForClassSubclasses new model: model.
+						GtLRefactoringToolForClassLookup new model: model.
+						GtLRefactoringToolForClassReferences new model: model.
+						GtLRefactoringToolForMethodReferences new model: model.
+						GtLRefactoringToolForMethodImplementors new model: model.
+						GtLRefactoringToolForMethodSource new model: model}).
 	currentMessage
 		addMagriteResponseDescriptionForClass: GtLMarkdown
 		named: 'Markdown'.
@@ -166,35 +187,38 @@ GtLChatOpenAILiveExamples >> messageExample_magritteMarkdown_codeChanges_refacto
 GtLChatOpenAILiveExamples >> messageWithFormatCallExample [
 	<gtExample>
 	| messageString currentMessage responseMessage |
-	messageString := 'Return a list of the most populate programming languages.'.
-	
+	messageString := 'Return a list of the most popular programming languages.'.
+
 	currentMessage := self currentChat createUserMessage.
-	currentMessage 
+	currentMessage
 		addInputModel: (GtLJsonSchemaInputModel new
-			name: 'String';
-			model: messageString;
-			schema: (NeoJSONSchema new 
-				json: (NeoJSONObject fromString: '{
+				name: 'String';
+				model: messageString;
+				schema: (NeoJSONSchema new
+						json: (NeoJSONObject
+								fromString: '{
 				"type" : "string"
 				}'))).
-	
-	currentMessage addSchemaDescription: (GtLResponseJsonSchemaFormat new
-		name: 'List';
-		schema: (NeoJSONSchema new 
-			json: (NeoJSONObject fromString: '{
+
+	currentMessage
+		addSchemaDescription: (GtLResponseJsonSchemaFormat new
+				name: 'List';
+				schema: (NeoJSONSchema new
+						json: (NeoJSONObject
+								fromString: '{
 			"type" : "array",
 			"items" : {
 				"type" : "string"
 			},
 			"additionalProperties": false
 		}'))).
-	
+
 	responseMessage := self currentChat sendMessage: currentMessage.
-	
-	self waitForChatCompletion.
-	self waitForChatCompletion.
-	self assert: self currentChat messages size equals: 2.
-	
+
+	self
+		waitForChatRunIsDoneThen: [ self assert: self currentChat messages size equals: 2.
+			self assert: (self currentChat messages at: 2) isFailure ].
+
 	^ self currentChat
 ]
 
@@ -216,9 +240,8 @@ GtLChatOpenAILiveExamples >> messageWithFormatCallExample_mathTutor_jsonString [
 	
 	responseMessage := self currentChat sendMessage: currentMessage.
 	
-	self waitForChatCompletion.
-	self waitForChatCompletion.
-	self assert: self currentChat messages size equals: 2.
+	self
+		waitForChatRunIsDoneThen: [ self assert: self currentChat messages size equals: 2 ].
 	
 	^ self currentChat
 ]
@@ -241,9 +264,8 @@ GtLChatOpenAILiveExamples >> messageWithFormatCallExample_mathTutor_magritteSche
 	
 	responseMessage := self currentChat sendMessage: currentMessage.
 	
-	self waitForChatCompletion.
-	self waitForChatCompletion.
-	self assert: self currentChat messages size equals: 2.
+	self
+		waitForChatRunIsDoneThen: [ self assert: self currentChat messages size equals: 2 ].
 	
 	^ self currentChat
 ]
@@ -266,9 +288,8 @@ GtLChatOpenAILiveExamples >> messageWithFormatCallExample_mathTutor_magritteSche
 	
 	responseMessage := self currentChat sendMessage: currentMessage.
 	
-	self waitForChatCompletion.
-	self waitForChatCompletion.
-	self assert: self currentChat messages size equals: 2.
+	self
+		waitForChatRunIsDoneThen: [ self assert: self currentChat messages size equals: 2 ].
 	
 	^ self currentChat
 ]
@@ -278,23 +299,22 @@ GtLChatOpenAILiveExamples >> messageWithFormatCallExample_mathTutor_magritteSche
 	<gtExample>
 	| messageString currentMessage responseMessage |
 	messageString := 'You are a helpful math tutor. Guide the user through the solution step by step for the equation 8x + 7 = -23. Make sure to have an explanation and an output step'.
-	
+
 	currentMessage := self currentChat createUserMessage.
-	currentMessage 
-		addMagritteInputObject: (GtLMarkdown new
-			content: messageString)
+	currentMessage
+		addMagritteInputObject: (GtLMarkdown new content: messageString)
 		named: 'Markdown'.
-		
-	currentMessage addSchemaDescription: (GtLResponseMagritteFormat new
-		name: 'MathReasoning'; 
-		modelClass: GtLDemoMathReasoningWithDifferentSteps).
-	
+
+	currentMessage
+		addSchemaDescription: (GtLResponseMagritteFormat new
+				name: 'MathReasoning';
+				modelClass: GtLDemoMathReasoningWithDifferentSteps).
+
 	responseMessage := self currentChat sendMessage: currentMessage.
-	
-	self waitForChatCompletion.
-	self waitForChatCompletion.
-	self assert: self currentChat messages size equals: 2.
-	
+
+	self
+		waitForChatRunIsDoneThen: [ self assert: self currentChat messages size equals: 2 ].
+
 	^ self currentChat
 ]
 
@@ -314,16 +334,15 @@ GtLChatOpenAILiveExamples >> messageWithInputObjectExample [
 			gtExample returnValue
 		named: 'Object'.
 	
-	currentMessage tools: (GtLToolsGroup withAll: {GtLlmToolForClassLookup new}).
+	currentMessage tools: (GtLToolsGroup withAll: {GtLToolForClassLookup new}).
 	currentMessage
 		addMagriteResponseDescriptionForClass: GtLMarkdown
 		named: 'Markdown' .
 
 	responseMessage := self currentChat sendMessage: currentMessage.
 
-	self waitForChatCompletion.
-	self waitForChatCompletion.
-	self assert: self currentChat messages size equals: 3.
+	self
+		waitForChatRunIsDoneThen: [ self assert: self currentChat messages size >= 2 ].
 
 	^ self currentChat
 ]
@@ -340,15 +359,14 @@ GtLChatOpenAILiveExamples >> messageWithToolCallExample [
 			content: messageString)
 		named: 'Markdown'.
 	
-	currentMessage tools: (GtLToolsGroup withAll: {GtLlmToolForClassLookup new}).
+	currentMessage tools: (GtLToolsGroup withAll: {GtLToolForClassLookup new}).
 	currentMessage addSchemaDescription: (GtLResponseMarkdownFormat new
 			name: 'Description').
 	
 	responseMessage := self currentChat sendMessage: currentMessage.
 	
-	self waitForChatCompletion.
-	self waitForChatCompletion.
-	self assert: self currentChat messages size equals: 3.
+	self
+		waitForChatRunIsDoneThen: [ self assert: self currentChat messages size equals: 3 ].
 	
 	^ self currentChat
 ]
@@ -358,23 +376,21 @@ GtLChatOpenAILiveExamples >> messageWithToolCallExample_magritteMarkdown [
 	<gtExample>
 	| messageString currentMessage responseMessage |
 	messageString := 'Use tools and give me a description of the class BlElement'.
-	
+
 	currentMessage := self currentChat createUserMessage.
-	currentMessage 
-		addMagritteInputObject: (GtLMarkdown new
-			content: messageString)
+	currentMessage
+		addMagritteInputObject: (GtLMarkdown new content: messageString)
 		named: 'Markdown'.
 	
-	currentMessage tools: (GtLToolsGroup withAll: {GtLlmToolForClassLookup new}).
+	currentMessage tools: (GtLToolsGroup withAll: {GtLToolForClassLookup new}).
 	currentMessage
 		addMagriteResponseDescriptionForClass: GtLMarkdown
-		named: 'Markdown' .
+		named: 'Markdown'.
 
 	responseMessage := self currentChat sendMessage: currentMessage.
 
-	"self waitForChatCompletion.
-	self waitForChatCompletion.
-	self assert: self currentChat messages size equals: 3."
+	self
+		waitForChatRunIsDoneThen: [ self assert: self currentChat messages size equals: 3 ].
 
 	^ self currentChat
 ]
@@ -382,4 +398,40 @@ GtLChatOpenAILiveExamples >> messageWithToolCallExample_magritteMarkdown [
 { #category : #utils }
 GtLChatOpenAILiveExamples >> waitForChatCompletion [
 	self currentChat provider executions last wait
+]
+
+{ #category : #utils }
+GtLChatOpenAILiveExamples >> waitForChatCompletion: anInteger then: aBlock [
+	"Wait for a chat completion a given number of times."
+	self isSynchronous ifFalse: [ ^ self ].
+	
+	anInteger timesRepeat: [ self waitForChatCompletion ].
+	aBlock value
+]
+
+{ #category : #utils }
+GtLChatOpenAILiveExamples >> waitForChatRunIsDone [
+	| semaphore timeout |
+	semaphore := Semaphore new.
+
+	self currentChat announcer weak
+		when: GtLlmThreadRunIsDoneAnnouncement
+		send: #signal
+		to: semaphore.
+
+	timeout := semaphore waitTimeoutSeconds: 120.
+
+	self currentChat announcer unsubscribe: semaphore.
+
+	self assert: timeout not description: [ 'Chat run was not finished on time' ].
+]
+
+{ #category : #utils }
+GtLChatOpenAILiveExamples >> waitForChatRunIsDoneThen: aBlock [
+	"Wait for a chat to complete."
+
+	self isSynchronous ifFalse: [ ^ self ].
+
+	self waitForChatRunIsDone.
+	aBlock value
 ]

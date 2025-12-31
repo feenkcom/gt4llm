@@ -31,9 +31,10 @@ GtLCodeTransformations >> gtChangesFor: aView [
 	<gtLlmView>
 	^ aView forward
 		title: 'Changes';
-		priority: 1;
+		priority: 2;
 		object: [ self applyRefactoring ];
-		view: #gtApplyingChangesFor:
+		view: #gtApplyingChangesFor:;
+		actionButtonIcon: BrGlamorousVectorIcons inspect tooltip: 'Inspect the changes' action: [ :b | b phlow spawnObject: self applyRefactoring  ]
 ]
 
 { #category : #views }

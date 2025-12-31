@@ -5,7 +5,7 @@ Class {
 		'steps',
 		'finalAnswer'
 	],
-	#category : #'Gt4LlmCore-Examples'
+	#category : #'Gt4LlmCore-Examples-Magritte'
 }
 
 { #category : #comparison }

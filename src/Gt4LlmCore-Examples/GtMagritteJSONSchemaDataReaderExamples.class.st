@@ -1,7 +1,7 @@
 Class {
 	#name : #GtMagritteJSONSchemaDataReaderExamples,
 	#superclass : #Object,
-	#category : #'Gt4LlmCore-Examples'
+	#category : #'Gt4LlmCore-Examples-Magritte'
 }
 
 { #category : #expecting }

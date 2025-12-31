@@ -61,7 +61,7 @@ GtLChatMessageViewModel >> isExpanded: aBoolean [
 
 { #category : #testing }
 GtLChatMessageViewModel >> isFailure [
-	^ threadMessage isFailure
+	^ self message isFailure
 ]
 
 { #category : #'private - hooks' }
@@ -72,17 +72,17 @@ GtLChatMessageViewModel >> onMessageChanged [
 
 { #category : #'api - accessing' }
 GtLChatMessageViewModel >> toolArguments [
-	^ self threadMessage toolArguments
+	^ self message toolArguments
 ]
 
 { #category : #'api - accessing' }
 GtLChatMessageViewModel >> toolDescription [
-	^ self threadMessage toolDescription
+	^ self message toolDescription
 ]
 
 { #category : #'api - accessing' }
 GtLChatMessageViewModel >> toolName [
-	^ self threadMessage toolName
+	^ self message toolName
 ]
 
 { #category : #'api - accessing' }
