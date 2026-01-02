@@ -238,6 +238,15 @@ GtLChat >> gtMessagesWidgetFor: aView [
 			action: [ self reset ]
 ]
 
+{ #category : #views }
+GtLChat >> gtToolsFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Tools';
+		object: [ tools ];
+		view: #gtItemsFor:
+]
+
 { #category : #accessing }
 GtLChat >> initialize [
 	super initialize.

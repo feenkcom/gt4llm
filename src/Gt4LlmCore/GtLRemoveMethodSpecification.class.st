@@ -2,22 +2,22 @@ Class {
 	#name : #GtLRemoveMethodSpecification,
 	#superclass : #GtLMethodTransformationSpecification,
 	#instVars : [
-		'selector'
+		'methodNameToRemove'
 	],
-	#category : #Gt4LlmCore
+	#category : #'Gt4LlmCore-Formats'
 }
 
 { #category : #testing }
 GtLRemoveMethodSpecification class >> isConcrete [
-	^ true
+	^ false
 ]
 
 { #category : #refactoring }
 GtLRemoveMethodSpecification >> asRefactoringIn: aNamespace [
 	^ RBRemoveMethodRefactoring
 		model: aNamespace
-		selector: (self selector ifNil: [ self error: 'Selector is required' ]) asSymbol
-		from: (self methodClassName ifNil: [ self error: 'Method class name is required' ])
+		selector: methodNameToRemove asSymbol
+		from: methodClassName asSymbol
 ]
 
 { #category : #magritte }
@@ -38,32 +38,22 @@ GtLRemoveMethodSpecification >> gtDisplayOn: aStream [
 		nextPutAll: className
 ]
 
-{ #category : #accessing }
-GtLRemoveMethodSpecification >> methodNameToRemove [
-	^ selector
-]
-
-{ #category : #accessing }
-GtLRemoveMethodSpecification >> methodNameToRemove: anObject [
-	selector := anObject
-]
-
-{ #category : #accessing }
-GtLRemoveMethodSpecification >> selector [
-	^ selector
-]
-
-{ #category : #accessing }
-GtLRemoveMethodSpecification >> selector: anObject [
-	selector := anObject
-]
-
 { #category : #magritte }
-GtLRemoveMethodSpecification >> selectorDescription [
+GtLRemoveMethodSpecification >> methodNameDescription [
 	<magritteDescription>
 
 	^ MAStringDescription new
 		label: 'Method name';
 		accessor: #methodNameToRemove;
 		comment: 'The name of the method to remove.'
+]
+
+{ #category : #accessing }
+GtLRemoveMethodSpecification >> methodNameToRemove [
+	^ methodNameToRemove
+]
+
+{ #category : #accessing }
+GtLRemoveMethodSpecification >> methodNameToRemove: anObject [
+	methodNameToRemove := anObject
 ]

@@ -9,6 +9,13 @@ GtLCodeTransformationSpecification class >> isConcrete [
 	^ false
 ]
 
+{ #category : #accessing }
+GtLCodeTransformationSpecification >> asRefactoring [
+	| namespace |
+	namespace := GtRBNamespace new.
+	^ self asRefactoringIn: namespace.
+]
+
 { #category : #'as yet unclassified' }
 GtLCodeTransformationSpecification >> asRefactoringIn: aNamespace [
 	^ self subclassResponsibility

@@ -87,7 +87,8 @@ GtLChatMessage >> action [
 
 { #category : #accessing }
 GtLChatMessage >> addMagriteResponseDescriptionForClass: aClass named: aString [
-		self addSchemaDescription: (GtLResponseMagritteFormat new
+	self
+		addSchemaDescription: (GtLResponseMagritteFormat new
 				name: aString;
 				modelClass: aClass)
 ]

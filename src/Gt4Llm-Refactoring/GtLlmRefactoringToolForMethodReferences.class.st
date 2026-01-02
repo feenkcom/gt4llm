@@ -7,6 +7,11 @@ Class {
 	#category : #'Gt4Llm-Refactoring'
 }
 
+{ #category : #'as yet unclassified' }
+GtLlmRefactoringToolForMethodReferences class >> leJsonV4Name [
+	^ #gtLlmRefactoringToolForMethodReferences
+]
+
 { #category : #'llm-generated' }
 GtLlmRefactoringToolForMethodReferences >> description [
 	^ 'Search the image for the senders of the given selector (maximum 100)'

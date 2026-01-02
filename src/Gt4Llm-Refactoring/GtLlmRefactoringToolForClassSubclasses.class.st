@@ -7,6 +7,11 @@ Class {
 	#category : #'Gt4Llm-Refactoring'
 }
 
+{ #category : #'as yet unclassified' }
+GtLlmRefactoringToolForClassSubclasses class >> leJsonV4Name [
+	^ #gtLlmRefactoringToolForClassSubclasses
+]
+
 { #category : #'llm-generated' }
 GtLlmRefactoringToolForClassSubclasses >> description [
 	^ 'Retrieve all subclasses of the given class'

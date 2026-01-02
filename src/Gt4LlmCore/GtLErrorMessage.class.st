@@ -76,6 +76,15 @@ GtLErrorMessage >> exception: anException [
 	exception := anException
 ]
 
+{ #category : #views }
+GtLErrorMessage >> gtExceptionStackFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Exception stack';
+		object: [ exception ];
+		view: #gtLiveFor:
+]
+
 { #category : #initialization }
 GtLErrorMessage >> initialize [
 	super initialize.
