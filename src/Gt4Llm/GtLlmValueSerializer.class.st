@@ -33,7 +33,7 @@ GtLlmValueSerializer >> serializeValue: aValue [
 			-> (aValue class superclass ifNil: [ nil ] ifNotNil: [ :aSuperclass | aSuperclass name ]).
 		"'comment' -> aValue class instanceSide gtComment."
 		'package' -> aValue class package name.
-		'printString' -> (aValue printString escapeCharacter: '''').
+		'printString' -> ([(aValue printString escapeCharacter: '''')] on: Error do: [:e | 'Error printing object' ]).
 		'allInstanceMethods'
 			-> (aValue
 					ifNil: [ {} ]
