@@ -31,15 +31,18 @@ GtLToolForSmalltalkCodeEvaluation >> parameters [
 
 { #category : #'llm-generated' }
 GtLToolForSmalltalkCodeEvaluation >> privatePerformToolCall: aToolCall [
-	| arguments code object serializer |
+	| arguments code object serializer serialization |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	code := arguments at: 'code' ifAbsent: [ ^ 'Code not provided' ].
 	code ifNil: [ ^ 'Code not provided' ].
 	code := code asString.
 	code isEmpty ifTrue: [ ^ 'Code not provided' ].
 	object := [ OpalCompiler new evaluate: code ]
-		on: Error
-		do: [ :ex | ^ 'Error: ', String cr, ex stackString ].
+			on: Error
+			do: [ :ex | ^ 'Error: ' , String cr , ex stackString ].
 	serializer := GtLlmValueSerializer new.
-	^ STONJSON toStringPretty: (serializer serializeValue: object)
+	serialization := [ serializer serializeValue: object ]
+			on: Error
+			do: [ :e | e printString ].
+	^ STONJSON toStringPretty: serialization
 ]

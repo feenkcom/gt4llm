@@ -44,6 +44,16 @@ GtLPushUpMethodTransformationSpecification >> initialize [
 ]
 
 { #category : #accessing }
+GtLPushUpMethodTransformationSpecification >> methodName [
+	^ selectors anyOne
+]
+
+{ #category : #accessing }
+GtLPushUpMethodTransformationSpecification >> methodName: aString [
+	selectors add: aString
+]
+
+{ #category : #accessing }
 GtLPushUpMethodTransformationSpecification >> selector [
 	^ selectors anyOne
 ]
@@ -59,8 +69,8 @@ GtLPushUpMethodTransformationSpecification >> selectorDescription [
 	
 	 ^ MAStringDescription new
 		  label: 'Selector';
-		  accessor: #selector;
-	  	comment: 'The selector of the method to push up'
+		  accessor: #methodName;
+	  	comment: 'The name of the method to push up'
 ]
 
 { #category : #accessing }
