@@ -9,7 +9,7 @@ Class {
 
 { #category : #'llm-generated' }
 GtLRefactoringToolForMethodReferences >> description [
-	^ 'Search the image for the senders of the given selector (maximum 100)'
+	^ 'Search the image for the method referencing the given selector. There will be a maximum of 100 results.'
 ]
 
 { #category : #'llm-generated' }
