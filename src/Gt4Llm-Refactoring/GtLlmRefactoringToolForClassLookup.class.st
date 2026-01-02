@@ -7,6 +7,11 @@ Class {
 	#category : #'Gt4Llm-Refactoring'
 }
 
+{ #category : #'as yet unclassified' }
+GtLlmRefactoringToolForClassLookup class >> leJsonV4Name [
+	^ #gtLlmRefactoringToolForClassLookup
+]
+
 { #category : #'llm-generated' }
 GtLlmRefactoringToolForClassLookup >> description [
 	^ 'Get the details of a class as JSON.'
