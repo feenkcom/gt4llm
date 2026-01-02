@@ -6,7 +6,7 @@ Class {
 
 { #category : #accessing }
 GtLAbstractFunctionTool class >> leJsonV4Name [
-	^ #gtLlmAbstractFunctionTool
+	^ #gtLAbstractFunctionTool
 ]
 
 { #category : #accessing }
