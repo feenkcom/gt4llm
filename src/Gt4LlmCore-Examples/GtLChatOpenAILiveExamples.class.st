@@ -79,7 +79,7 @@ GtLChatOpenAILiveExamples >> howAreYouCallExample_withStringSchema [
 		named: 'Markdown'.
 		
 	currentMessage addSchemaDescription: (GtLResponseStringFormat new
-			name: 'Respose').
+			name: 'Response').
 	
 	responseMessage := self currentChat sendMessage: currentMessage.
 	
