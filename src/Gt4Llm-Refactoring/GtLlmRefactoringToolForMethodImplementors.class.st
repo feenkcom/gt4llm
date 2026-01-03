@@ -7,6 +7,11 @@ Class {
 	#category : #'Gt4Llm-Refactoring'
 }
 
+{ #category : #'as yet unclassified' }
+GtLlmRefactoringToolForMethodImplementors class >> leJsonV4Name [
+	^ #gtLlmRefactoringToolForMethodImplementers
+]
+
 { #category : #'llm-generated' }
 GtLlmRefactoringToolForMethodImplementors >> description [
 	^ 'Gets a method by name and returns a list of methods that implement it.'

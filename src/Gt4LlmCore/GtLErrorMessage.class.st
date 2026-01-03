@@ -23,16 +23,6 @@ GtLErrorMessage >> action [
 	^ nil
 ]
 
-{ #category : #accessing }
-GtLErrorMessage >> ancestor [
-	^ self chat messages first
-]
-
-{ #category : #accessing }
-GtLErrorMessage >> annotations [
-	^ #()
-]
-
 { #category : #'as yet unclassified' }
 GtLErrorMessage >> arguments [
 	^ {}
@@ -76,6 +66,17 @@ GtLErrorMessage >> exception: anException [
 	exception := anException
 ]
 
+{ #category : #views }
+GtLErrorMessage >> gtExceptionStackFor: aView [
+	<gtView>
+	self exception ifNil: [ ^ aView empty ].
+	
+	^ aView forward
+		title: 'Exception stack';
+		object: [ self exception ];
+		view: #gtLiveFor:
+]
+
 { #category : #initialization }
 GtLErrorMessage >> initialize [
 	super initialize.
@@ -87,6 +88,10 @@ GtLErrorMessage >> initialize [
 
 { #category : #testing }
 GtLErrorMessage >> isAssistantRole [
+	"I am marked as assistant because I am the last message in an attempt to answer a user question.
+	Note, that the failure can come from a tool execution or any other execution code while
+	sending and retrieving information."
+
 	^ true
 ]
 
@@ -95,29 +100,29 @@ GtLErrorMessage >> isFailure [
 	^ true
 ]
 
-{ #category : #testing }
-GtLErrorMessage >> isToolMessage [
-
-	^ false
-]
-
 { #category : #'api - testing' }
 GtLErrorMessage >> isUserRole [
 	^ false
 ]
 
 { #category : #accessing }
-GtLErrorMessage >> otherException: anError [
-	self otherExceptions: (self otherExceptions copyWith: anError)
+GtLErrorMessage >> otherException: anException [
+	"Add an exception that was catched while handling the initial exception."
+
+	self otherExceptions: (self otherExceptions copyWith: anException)
 ]
 
 { #category : #accessing }
 GtLErrorMessage >> otherExceptions [
+	"Return a list of exceptions that were catched while handling the initial exception."
+
 	^ otherExceptions
 ]
 
 { #category : #accessing }
 GtLErrorMessage >> otherExceptions: aCollection [
+	"Set a list of exceptions that were catched while handling the initial exception."
+
 	otherExceptions := aCollection
 ]
 
@@ -131,14 +136,14 @@ GtLErrorMessage >> styler [
 	^ nil
 ]
 
-{ #category : #subscriptions }
+{ #category : #'announcer - subscription' }
 GtLErrorMessage >> unsubscribe: anObject [
 	"do nothing"
 
 	
 ]
 
-{ #category : #subscriptions }
+{ #category : #'announcer - subscription' }
 GtLErrorMessage >> when: anEventSelector send: aMessageSelector to: anObject [
 	"do nothing"
 

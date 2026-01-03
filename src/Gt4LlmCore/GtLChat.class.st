@@ -38,6 +38,14 @@ GtLChat >> acceptVisitor: aVisitor [
 	^ aVisitor visitGtLlmChat: self
 ]
 
+{ #category : #adding }
+GtLChat >> addMagriteResponseDescriptionForClass: aClass named: aString [
+	self
+		addSchemaDescription: (GtLResponseMagritteFormat new
+				name: aString;
+				modelClass: aClass)
+]
+
 { #category : #accessing }
 GtLChat >> addMessage: aMessage [
 	self updateLastUpdate.
@@ -140,8 +148,7 @@ GtLChat >> createUserMessageForString: aString [
 	| newMessage |
 	newMessage := self createUserMessage.
 	newMessage
-		addMagritteInputObject: (GtLMarkdown new content: aString) named: 'Markdown';
-		addMagriteResponseDescriptionForClass: GtLMarkdown named: 'Markdown'.
+		addMagritteInputObject: (GtLMarkdown new content: aString) named: 'Markdown'.
 	^ newMessage
 ]
 
@@ -198,6 +205,7 @@ GtLChat >> gtFormatFor: aView [
 		title: 'Format JSON';
 		priority: 2; 
 		text: [ NeoJSONWriter toStringPretty: self currentFormat  asJsonSchemaDictionary ];
+		aptitude: BrGlamorousCodeEditorAptitude;
 		styler: JSONParser gtStyler;
 		actionButtonIcon: BrGlamorousVectorIcons playinspect
 			tooltip: 'Inspect Format'
@@ -215,8 +223,10 @@ GtLChat >> gtMessagesFor: aView [
 		items: [ self messages ];
 		column: 'Role'
 			text: [ :item | item role ]
-			width: 100;
-		column: 'Message' text: [ :item | item content ];
+			width: 50;
+		column: 'Call' text: [ :item | item gtDisplayString ];
+		column: 'Content' text: [ :item | item content ];
+		column: 'Created' text: [ :item | item createdAt asStringYMDHMS ];
 		updateWhen: GtLlmThreadRunAnnouncement in: self announcer;
 		actionUpdateButton
 ]
@@ -236,6 +246,15 @@ GtLChat >> gtMessagesWidgetFor: aView [
 		actionButtonIcon: BrGlamorousVectorIcons bin
 			tooltip: 'Delete history'
 			action: [ self reset ]
+]
+
+{ #category : #views }
+GtLChat >> gtToolsFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Tools';
+		object: [ tools ];
+		view: #gtItemsFor:
 ]
 
 { #category : #accessing }

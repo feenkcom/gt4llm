@@ -87,7 +87,8 @@ GtLChatMessage >> action [
 
 { #category : #accessing }
 GtLChatMessage >> addMagriteResponseDescriptionForClass: aClass named: aString [
-		self addSchemaDescription: (GtLResponseMagritteFormat new
+	self
+		addSchemaDescription: (GtLResponseMagritteFormat new
 				name: aString;
 				modelClass: aClass)
 ]
@@ -533,6 +534,11 @@ GtLChatMessage >> tools [
 { #category : #accessing }
 GtLChatMessage >> tools: anObject [
 	tools := anObject
+]
+
+{ #category : #'announcer - subscription' }
+GtLChatMessage >> unsubscribe: anObject [
+	^ self announcer unsubscribe: anObject
 ]
 
 { #category : #updating }
