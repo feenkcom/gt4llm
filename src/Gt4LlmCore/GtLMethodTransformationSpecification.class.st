@@ -22,5 +22,6 @@ GtLMethodTransformationSpecification >> methodClassNameDescription [
 	<magritteDescription>
 	
 	 ^ MAStringDescription new
-		  accessor: #methodClassName
+		  accessor: #methodClassName;
+		  comment: 'The class of the method to be pushed down. This is required and must not be empty.'
 ]

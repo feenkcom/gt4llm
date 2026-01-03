@@ -3,21 +3,21 @@ Class {
 	#superclass : #GtLMethodTransformationSpecification,
 	#instVars : [
 		'targetClassName',
-		'selectors'
+		'methodNameToPushDown'
 	],
 	#category : #'Gt4LlmCore-Formats'
 }
 
 { #category : #'as yet unclassified' }
 GtLPushDownMethodSpecification class >> isConcrete [
-	^ true
+	^ false
 ]
 
 { #category : #'as yet unclassified' }
 GtLPushDownMethodSpecification >> asRefactoringIn: aNamespace [
 	^ RBPushDownMethodRefactoring
 		model: aNamespace
-		pushDown: selectors
+		pushDown: methodNameToPushDown
 		from: methodClassName
 ]
 
@@ -27,38 +27,31 @@ GtLPushDownMethodSpecification >> descriptionContainer [
 		comment: 'The "Push down method" transformation pushes down one method from a super class to subclasses. The transformation must provide the methodClassName and methodNameToPushDown. The methodClassName is the name of the superclass that implements the methodNameToPushDown. The methodNameToPushDown is the version of the method that is being pushed down to the subclasses.'
 ]
 
-{ #category : #'as yet unclassified' }
-GtLPushDownMethodSpecification >> initialize [
-	super initialize.
-	selectors := OrderedCollection new
+{ #category : #descriptions }
+GtLPushDownMethodSpecification >> methodClassNameDescription [
+	<magritteDescription>
+	
+	 ^ MAStringDescription new
+		  accessor: #methodClassName;
+		  comment: 'The class of the method to be pushed down. This is required and must not be empty.'
 ]
 
 { #category : #'as yet unclassified' }
 GtLPushDownMethodSpecification >> methodNameToPushDown [
-	^ selectors anyOne
+	^ methodNameToPushDown
 ]
 
 { #category : #'as yet unclassified' }
 GtLPushDownMethodSpecification >> methodNameToPushDown: aString [
-	selectors add: aString
+	methodNameToPushDown := aString
 ]
 
 { #category : #description }
-GtLPushDownMethodSpecification >> selectorDescription [
+GtLPushDownMethodSpecification >> methodNameToPushDownDescription [
 	<magritteDescription>
 	^ MAStringDescription new
-		label: 'Method name to push down';
+		label: 'Name of the method to push down';
 		accessor: #methodNameToPushDown;
-		comment: 'The name of method to push down';
+		comment: 'The name of method to push down. This is required and must not be empty.';
 		beRequired
-]
-
-{ #category : #accessing }
-GtLPushDownMethodSpecification >> selectors [
-	^ selectors
-]
-
-{ #category : #accessing }
-GtLPushDownMethodSpecification >> selectors: anObject [
-	selectors := anObject
 ]

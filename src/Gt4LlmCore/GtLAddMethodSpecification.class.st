@@ -39,6 +39,15 @@ GtLAddMethodSpecification >> gtDisplayOn: aStream [
 		nextPutAll: protocolName
 ]
 
+{ #category : #descriptions }
+GtLAddMethodSpecification >> methodClassNameDescription [
+	<magritteDescription>
+	
+	 ^ MAStringDescription new
+		  accessor: #methodClassName;
+		  comment: 'The class of the method to be added. This is required and must not be empty.'
+]
+
 { #category : #accessing }
 GtLAddMethodSpecification >> protocolName [
 	^ protocolName
