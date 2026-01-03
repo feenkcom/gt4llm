@@ -9,7 +9,7 @@ Class {
 
 { #category : #testing }
 GtLRemoveMethodSpecification class >> isConcrete [
-	^ false
+	^ true
 ]
 
 { #category : #refactoring }
@@ -44,7 +44,7 @@ GtLRemoveMethodSpecification >> methodClassNameDescription [
 	
 	 ^ MAStringDescription new
 		  accessor: #methodClassName;
-		  comment: 'The class of the method to be removed. This is required and must not be empty.'
+		  comment: 'The class holding the method to be removed. This is required and must not be empty.'
 ]
 
 { #category : #magritte }
