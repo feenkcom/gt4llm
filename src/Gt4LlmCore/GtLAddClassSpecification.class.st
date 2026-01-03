@@ -6,7 +6,7 @@ Class {
 		'packageName',
 		'slotNames',
 		'tagName',
-		'supeclassName'
+		'superclassName'
 	],
 	#category : #'Gt4LlmCore-Formats'
 }
@@ -18,19 +18,30 @@ GtLAddClassSpecification class >> isConcrete [
 
 { #category : #'as yet unclassified' }
 GtLAddClassSpecification >> asRefactoringIn: aNamespace [
-	^ (RBAddClassRefactoring
+	^ (GtRBAddClassWithVarsRefactoring
 		model: aNamespace
 		addClass: newClassName asSymbol
-		superclass: supeclassName asSymbol
+		superclass: superclassName asSymbol
 		subclasses: {}
 		category: packageName asSymbol)
-	"	instanceVariableNames: (Character space split: slotNames);"
+		instanceVariableNames: (Character space split: slotNames)
 ]
 
 { #category : #'as yet unclassified' }
 GtLAddClassSpecification >> descriptionContainer [
 	^ super descriptionContainer
 		comment: 'The "Add class" transformation adds a class into the system. The transformation must provide the className, packageName, and slotNames.'
+]
+
+{ #category : #'as yet unclassified' }
+GtLAddClassSpecification >> gtDisplayOn: aStream [
+	aStream
+		nextPutAll: 'Add class ';
+		nextPutAll: (newClassName);
+		nextPutAll: ' as subclass of ';
+		nextPutAll: superclassName;
+		nextPutAll: ' with slots ';
+		nextPutAll: slotNames
 ]
 
 { #category : #accessing }
@@ -89,21 +100,21 @@ GtLAddClassSpecification >> slotNamesDescription [
 ]
 
 { #category : #accessing }
-GtLAddClassSpecification >> supeclassName [
-	^ supeclassName
+GtLAddClassSpecification >> superclassName [
+	^ superclassName
 ]
 
 { #category : #accessing }
-GtLAddClassSpecification >> supeclassName: anObject [
-	supeclassName := anObject
+GtLAddClassSpecification >> superclassName: anObject [
+	superclassName := anObject
 ]
 
 { #category : #description }
-GtLAddClassSpecification >> supeclassNameDescription [
+GtLAddClassSpecification >> superclassNameDescription [
 	<magritteDescription>
 	
 	 ^ MAStringDescription new
-		  accessor: #supeclassName
+		  accessor: #superclassName
 ]
 
 { #category : #accessing }

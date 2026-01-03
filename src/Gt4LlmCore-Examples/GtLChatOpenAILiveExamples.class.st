@@ -162,7 +162,7 @@ GtLChatOpenAILiveExamples >> messageExample_magritteMarkdown_codeChanges_refacto
 	currentMessage := chat createUserMessage.
 	currentMessage
 		addMagritteInputObject: (GtLMarkdown new
-				content: 'Pull up common methods and slots in the DiffVisitor class. Use CodeTransformations.')
+				content: 'Push up common methods and slots from the subclasses in the DiffVisitor class. Use CodeTransformations.')
 		named: 'Markdown'.
 	chat
 		tools: (GtLToolsGroup

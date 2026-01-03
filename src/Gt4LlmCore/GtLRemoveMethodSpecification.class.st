@@ -38,6 +38,15 @@ GtLRemoveMethodSpecification >> gtDisplayOn: aStream [
 		nextPutAll: className
 ]
 
+{ #category : #descriptions }
+GtLRemoveMethodSpecification >> methodClassNameDescription [
+	<magritteDescription>
+	
+	 ^ MAStringDescription new
+		  accessor: #methodClassName;
+		  comment: 'The class of the method to be removed. This is required and must not be empty.'
+]
+
 { #category : #magritte }
 GtLRemoveMethodSpecification >> methodNameDescription [
 	<magritteDescription>

@@ -43,6 +43,15 @@ GtLPushUpMethodSpecification >> initialize [
 	selectors := OrderedCollection new
 ]
 
+{ #category : #descriptions }
+GtLPushUpMethodSpecification >> methodClassNameDescription [
+	<magritteDescription>
+	
+	 ^ MAStringDescription new
+		  accessor: #methodClassName;
+		  comment: 'The class of the method to be pushed up. This is required and must not be empty.'
+]
+
 { #category : #accessing }
 GtLPushUpMethodSpecification >> methodNameToPushUp [
 	^ selectors anyOne
