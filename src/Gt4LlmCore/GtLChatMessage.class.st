@@ -536,6 +536,11 @@ GtLChatMessage >> tools: anObject [
 	tools := anObject
 ]
 
+{ #category : #'announcer - subscription' }
+GtLChatMessage >> unsubscribe: anObject [
+	^ self announcer unsubscribe: anObject
+]
+
 { #category : #updating }
 GtLChatMessage >> updateDataFromChat: aChat [ 
 	instructions ifNil: [
