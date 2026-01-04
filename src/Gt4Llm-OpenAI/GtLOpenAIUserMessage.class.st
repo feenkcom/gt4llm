@@ -42,6 +42,22 @@ GtLOpenAIUserMessage >> addPlainInputObject: anObject named: aString [
 		model: anObject)
 ]
 
+{ #category : #'as yet unclassified' }
+GtLOpenAIUserMessage >> buildCompleteInstructions [
+	| inputInstructionsBody inputInstructions |
+
+	inputInstructionsBody := GtLlmInstructionWithSections new
+			introduction: 'The inputs provided follow the descriptions below'.
+	inputInstructions := GtLlmInstructionSection new
+			title: 'Input descriptions';
+			body: inputInstructionsBody.
+	self instructions addSection: inputInstructions.
+	inputModels
+		do: [ :anInputModel | anInputModel addInstructionsTo: inputInstructionsBody ].
+
+	^ self instructions instructionString
+]
+
 { #category : #accessing }
 GtLOpenAIUserMessage >> chat: aChat [
 	super chat: aChat.
@@ -106,15 +122,8 @@ GtLOpenAIUserMessage >> inputModels [
 { #category : #accessing }
 GtLOpenAIUserMessage >> instructions [
 	^ instructions
-		ifNil: [ | inputInstructions inputInstructionsBody |
+		ifNil: [ 
 			instructions := GtLlmInstructionWithSections new
 					introduction: (GtLlmInstructionString new string: '').
-			inputInstructionsBody := GtLlmInstructionWithSections new introduction: 'The inputs provided follow the descriptions below'.
-			inputInstructions := GtLlmInstructionSection new
-					title: 'Input descriptions';
-					body: inputInstructionsBody.
-			instructions addSection: inputInstructions.
-			inputModels
-				do: [ :anInputModel | anInputModel addInstructionsTo: inputInstructionsBody ].
 			instructions ]
 ]
