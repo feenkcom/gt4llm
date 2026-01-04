@@ -9,6 +9,7 @@ Class {
 
 { #category : #accessing }
 GtMagriteJSONSchemaCreationVisitor >> currentSchema [
+	"we have this state because magritte does not return the value of the accepting a visitor"
 	^ currentSchema
 ]
 
