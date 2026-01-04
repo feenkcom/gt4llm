@@ -41,7 +41,7 @@ GtLDemoMathReasoningWithDifferentSteps >> finalAnswerDescription [
 { #category : #views }
 GtLDemoMathReasoningWithDifferentSteps >> gtStepsFor: aView [
 	<gtView>
-	<gtLlmMessageView>
+	<gtLlmView>
 	
 	steps ifNil: [ ^ aView empty ].
 	^ aView columnedList
