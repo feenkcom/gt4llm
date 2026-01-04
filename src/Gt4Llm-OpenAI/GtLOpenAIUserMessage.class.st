@@ -108,7 +108,7 @@ GtLOpenAIUserMessage >> instructions [
 	^ instructions
 		ifNil: [ | inputInstructions inputInstructionsBody |
 			instructions := GtLlmInstructionWithSections new
-					introduction: (GtLlmInstructionString new string: 'This is a chat').
+					introduction: (GtLlmInstructionString new string: '').
 			inputInstructionsBody := GtLlmInstructionWithSections new introduction: 'The inputs provided follow the descriptions below'.
 			inputInstructions := GtLlmInstructionSection new
 					title: 'Input descriptions';
