@@ -134,6 +134,11 @@ GtLChatMessage >> asViewModel [
 	^ GtLChatMessageViewModel new message: self
 ]
 
+{ #category : #'as yet unclassified' }
+GtLChatMessage >> buildCompleteInstructions [
+	^ instructions instructionString
+]
+
 { #category : #accessing }
 GtLChatMessage >> chat [
 	^ chat
@@ -246,7 +251,7 @@ GtLChatMessage >> gtActionInspectFor: anAction [
 { #category : #'gt - extensions' }
 GtLChatMessage >> gtContentFor: aView [
 	<gtView>
-	<gtLlmMessageView>
+	<gtLlmView>
 	content ifNil: [ ^ aView empty ].
 
 	^ aView explicit
@@ -279,7 +284,7 @@ GtLChatMessage >> gtInspectorTargetModels [
 { #category : #'gt - extensions' }
 GtLChatMessage >> gtJsonFor: aView [
 	<gtView>
-	<gtLlmMessageView>
+	<gtLlmView>
 	[ self contentJson ] on: Error do: [ ^ aView empty ].
 
 	^ (self contentJson gtTreeFor: aView)
@@ -290,7 +295,7 @@ GtLChatMessage >> gtJsonFor: aView [
 { #category : #'gt - extensions' }
 GtLChatMessage >> gtMessageFilesFor: aView [
 	<gtView>
-	<gtLlmMessageView>
+	<gtLlmView>
 	| messageFiles |
 	content ifNil: [ ^ aView empty ].
 	messageFiles := self messageFiles.
@@ -307,7 +312,7 @@ GtLChatMessage >> gtMessageFilesFor: aView [
 { #category : #'gt - extensions' }
 GtLChatMessage >> gtTextFor: aView [
 	<gtView>
-	<gtLlmMessageView>
+	<gtLlmView>
 	| json |
 	[ json := self contentJson ] on: Error do: [ ^ aView empty ].
 

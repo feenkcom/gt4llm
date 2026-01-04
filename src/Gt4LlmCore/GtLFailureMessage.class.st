@@ -82,7 +82,7 @@ GtLFailureMessage >> failureText: anObject [
 { #category : #ui }
 GtLFailureMessage >> gtContentFor: aView [
 	<gtView>
-	<gtLlmMessageView>
+	<gtLlmView>
 	^ aView explicit
 		title: 'Content';
 		priority: 1;

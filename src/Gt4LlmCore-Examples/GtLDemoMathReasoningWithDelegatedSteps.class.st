@@ -41,7 +41,7 @@ GtLDemoMathReasoningWithDelegatedSteps >> finalAnswerDescription [
 { #category : #views }
 GtLDemoMathReasoningWithDelegatedSteps >> gtStepsFor: aView [
 	<gtView>
-	<gtLlmMessageView>
+	<gtLlmView>
 	
 	steps ifNil: [ ^ aView empty ].
 	^ aView columnedList

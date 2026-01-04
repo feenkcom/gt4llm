@@ -57,7 +57,7 @@ GtLProvisionalMessage >> elementClass [
 { #category : #ui }
 GtLProvisionalMessage >> gtContentFor: aView [
 	<gtView>
-	<gtLlmMessageView>
+	<gtLlmView>
 	^ aView explicit
 		title: 'Content';
 		priority: 1;

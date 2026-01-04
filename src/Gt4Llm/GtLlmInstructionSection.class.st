@@ -10,11 +10,6 @@ Class {
 	#category : #Gt4Llm
 }
 
-{ #category : #other }
-GtLlmInstructionSection class >> new [
-	^ self basicNew initialize
-]
-
 { #category : #accessing }
 GtLlmInstructionSection >> body [
 	^ body
