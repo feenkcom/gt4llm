@@ -54,18 +54,20 @@ GtMagriteJSONDataCreationVisitor >> visitToManyRelationDescription: aDescription
 	| result all |
 	result := self currentObject perform: aDescription accessor readSelector.
 	all := result
-			do: [ :each | 
+			collect: [ :each | 
 				| visitor |
 				visitor := GtMagriteJSONDataCreationVisitor new currentObject: each.
-				each magritteDescription acceptVisitor: visitor.
+				each magritteDescription acceptMagritte: visitor.
 				visitor jsonResult ].
 
 	^ jsonResult := NeoJSONArray withAll: all
 ]
 
 { #category : #'visiting-description' }
-GtMagriteJSONDataCreationVisitor >> visitToOneRelationDescription: aDescription [ 
-	self halt.
-	"^ currentObject := self 
-			extractSchemaForClasses: aDescription classes."
+GtMagriteJSONDataCreationVisitor >> visitToOneRelationDescription: aDescription [
+	| result visitor |
+	result := self currentObject perform: aDescription accessor readSelector.
+	visitor := GtMagriteJSONDataCreationVisitor new currentObject: result.
+	result magritteDescription acceptMagritte: visitor.
+	^ jsonResult := visitor jsonResult
 ]
