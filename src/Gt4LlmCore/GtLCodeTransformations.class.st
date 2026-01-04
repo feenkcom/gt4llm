@@ -9,11 +9,18 @@ Class {
 
 { #category : #accessing }
 GtLCodeTransformations >> applyRefactoring [
+	| composite |
+	composite := self asRefactoring.
+	composite primitiveExecute.
+	^ composite model
+]
+
+{ #category : #accessing }
+GtLCodeTransformations >> asRefactoring [
 	| namespace composite |
 	namespace := GtRBNamespace new.
 	composite := self asRefactoringIn: namespace.
-	composite primitiveExecute.
-	^ namespace
+	^ composite
 ]
 
 { #category : #accessing }
@@ -31,19 +38,30 @@ GtLCodeTransformations >> gtChangesFor: aView [
 	<gtLlmView>
 	^ aView forward
 		title: 'Changes';
-		priority: 2;
+		priority: 5;
 		object: [ self applyRefactoring ];
 		view: #gtApplyingChangesFor:;
 		actionButtonIcon: BrGlamorousVectorIcons inspect tooltip: 'Inspect the changes' action: [ :b | b phlow spawnObject: self applyRefactoring  ]
 ]
 
 { #category : #views }
+GtLCodeTransformations >> gtRefactoringsFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Refactorings';
+		priority: 2;
+		object: [ self asRefactoring ];
+		view: #gtRefactoringsFor:
+]
+
+{ #category : #views }
 GtLCodeTransformations >> gtViewTransformationsFor: aView [
 	<gtView>
+	<gtLlmView>
 	transformations ifNil: [ ^ aView empty ].
 	^ aView columnedList
-		title: 'Transformations';
-		priority: 10;
+		title: 'Transformation specifications';
+		priority: 1;
 		items: [ transformations ];
 		column: 'Value' text: [ :each | each gtDisplayString ]
 ]

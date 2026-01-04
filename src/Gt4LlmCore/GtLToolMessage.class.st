@@ -48,7 +48,7 @@ GtLToolMessage >> contentText [
 { #category : #'as yet unclassified' }
 GtLToolMessage >> gtArgumentsFor: aView [
 	<gtView>
-	<gtLlmMessageView>
+	<gtLlmView>
 	^ aView forward
 		title: 'Arguments';
 		priority: 5;
@@ -59,7 +59,7 @@ GtLToolMessage >> gtArgumentsFor: aView [
 { #category : #'gt - extensions' }
 GtLToolMessage >> gtContentFor: aView [
 	<gtView>
-	<gtLlmMessageView>
+	<gtLlmView>
 	^ aView empty
 ]
 
@@ -71,7 +71,7 @@ GtLToolMessage >> gtDisplayOn: aStream [
 { #category : #'gt - extensions' }
 GtLToolMessage >> gtOutputFor: aView [
 	<gtView>
-	<gtLlmMessageView>
+	<gtLlmView>
 	^ aView textEditor
 		title: 'Output';
 		priority: 0;

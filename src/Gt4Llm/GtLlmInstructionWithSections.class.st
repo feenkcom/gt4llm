@@ -39,13 +39,9 @@ GtLlmInstructionWithSections >> initialize [
 
 { #category : #accessing }
 GtLlmInstructionWithSections >> instructionString [
-	^ self introduction instructionString
-		, '
-	
-'
-		, ('
-			
-' join: (self sections collect: [ :aSection | aSection instructionString ]))
+	^ self introduction instructionString , String lf
+		, (String lf
+				join: (self sections collect: [ :aSection | aSection instructionString ]))
 ]
 
 { #category : #accessing }

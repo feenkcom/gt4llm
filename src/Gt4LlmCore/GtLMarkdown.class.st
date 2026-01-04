@@ -35,7 +35,7 @@ Annotate Smalltalk classes using `{{gtClass:ClassName}}`, where `ClassName` is t
 
 Annotate Smalltalk methods using `{{gtMethod:ClassName>>#methodName}}`, where `ClassName` is the name of the class and `methodName` is the name of the method.
 
-Use blockquote for code.
+For code use three backticks sections.
 
 Denote code snippet in Smalltalk with:
 ```smalltalk

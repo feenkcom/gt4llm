@@ -46,7 +46,7 @@ GtLOpenAIAssistantMessage >> gtInspectorTargetModels [
 { #category : #accessing }
 GtLOpenAIAssistantMessage >> gtViewResponseModelsFor: aView [
 	<gtView>
-	<gtLlmMessageView>
+	<gtLlmView>
 	
 	responseModels ifNil: [ ^ aView empty ].
 

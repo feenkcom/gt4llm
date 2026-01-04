@@ -13,6 +13,22 @@ GtLOpenAIUserMessage >> addInputModel: aModel [
 ]
 
 { #category : #accessing }
+GtLOpenAIUserMessage >> addInstructionSectionForLepiterPages: pageNames titled: title [ 
+	| instructionString |
+	instructionString := String cr
+			join: (pageNames
+					collect: [ :pageName | 
+						GtLlmLepiterContentExporter new
+							startHeaderLevel: 2;
+							page: (LeDatabase gtBook pageNamed: pageName);
+							export ]).
+	self instructions 
+		addSection: (GtLlmInstructionSection new
+				title: title;
+				body: instructionString)
+]
+
+{ #category : #accessing }
 GtLOpenAIUserMessage >> addMagritteInputObject: anObject named: aString [
 	self addInputModel: (GtLMagritteInputModel new
 		name: aString;
@@ -44,17 +60,6 @@ GtLOpenAIUserMessage >> computeContentFromInputModels [
 	^ NeoJSONWriter toStringPretty: contentDictionary
 ]
 
-{ #category : #adding }
-GtLOpenAIUserMessage >> generateInstructions [
-	| newInstructions |
-	newInstructions := GtLMessageInstruction new.
-	
-	inputModels do: [ :anInputModel | 
-		anInputModel addInstructionsTo: newInstructions	].
-	
-	^ newInstructions asJsonString
-]
-
 { #category : #'gt - inspector' }
 GtLOpenAIUserMessage >> gtInspectorTargetModels [
 	^ self inputModels flatCollect: [ :each |
@@ -62,9 +67,20 @@ GtLOpenAIUserMessage >> gtInspectorTargetModels [
 ]
 
 { #category : #views }
+GtLOpenAIUserMessage >> gtInstructionsFor: aView [
+	<gtView>
+	<gtLlmView>
+	^ aView forward
+		title: 'Instructions';
+		priority: 40;
+		object: [ instructions ];
+		view: #gtInstructionFor:
+]
+
+{ #category : #views }
 GtLOpenAIUserMessage >> gtViewInputModelsFor: aView [
 	<gtView>
-	<gtLlmMessageView>
+	<gtLlmView>
 	inputModels ifNil: [ ^ aView empty ].
 	^ aView columnedList
 		title: 'Input models';
@@ -88,7 +104,17 @@ GtLOpenAIUserMessage >> inputModels [
 ]
 
 { #category : #accessing }
-GtLOpenAIUserMessage >> instructions [ 
-	^ instructions ifNil: [
-			self generateInstructions ]
+GtLOpenAIUserMessage >> instructions [
+	^ instructions
+		ifNil: [ | inputInstructions inputInstructionsBody |
+			instructions := GtLlmInstructionWithSections new
+					introduction: (GtLlmInstructionString new string: 'This is a chat').
+			inputInstructionsBody := GtLlmInstructionWithSections new introduction: 'The inputs provided follow the descriptions below'.
+			inputInstructions := GtLlmInstructionSection new
+					title: 'Input descriptions';
+					body: inputInstructionsBody.
+			instructions addSection: inputInstructions.
+			inputModels
+				do: [ :anInputModel | anInputModel addInstructionsTo: inputInstructionsBody ].
+			instructions ]
 ]

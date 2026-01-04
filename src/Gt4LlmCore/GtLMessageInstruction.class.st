@@ -2,7 +2,6 @@ Class {
 	#name : #GtLMessageInstruction,
 	#superclass : #Object,
 	#instVars : [
-		'sections',
 		'rootSection'
 	],
 	#category : #Gt4LlmCore
@@ -18,14 +17,22 @@ GtLMessageInstruction >> asJsonString [
 	^ rootSection instructionString
 ]
 
+{ #category : #views }
+GtLMessageInstruction >> gtRootSectionFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Instruction';
+		object: [ rootSection ];
+		view: #gtInstructionFor:
+]
+
 { #category : #initialization }
 GtLMessageInstruction >> initialize [
 	super initialize.
 	
 	rootSection := GtLlmInstructionWithSections new
 		source: self;
-		introduction: 'Input descriptions';
-		sections: OrderedCollection new
+		introduction: (GtLlmInstructionString new string: 'Input descriptions')
 ]
 
 { #category : #'as yet unclassified' }
