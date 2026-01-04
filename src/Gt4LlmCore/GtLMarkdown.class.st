@@ -7,6 +7,11 @@ Class {
 	#category : #'Gt4LlmCore-Formats'
 }
 
+{ #category : #'instance creation' }
+GtLMarkdown class >> content: aString [
+	^ self new content: aString
+]
+
 { #category : #accessing }
 GtLMarkdown >> asJsonDictionary [
 	^ {'content' -> self content} asDictionary

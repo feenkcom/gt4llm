@@ -67,13 +67,13 @@ GtLOpenAIUserMessage >> chat: aChat [
 
 { #category : #accessing }
 GtLOpenAIUserMessage >> computeContentFromInputModels [
-	| contentDictionary |
+	| object |
 	
-	contentDictionary := NeoJSONObject new.
+	object := NeoJSONObject new.
 	inputModels do: [ :each |
-		each addContentTo: contentDictionary ].
+		each addContentTo: object ].
 	
-	^ NeoJSONWriter toStringPretty: contentDictionary
+	^ NeoJSONWriter toStringPretty: object
 ]
 
 { #category : #'gt - inspector' }
