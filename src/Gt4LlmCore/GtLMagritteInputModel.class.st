@@ -6,7 +6,10 @@ Class {
 
 { #category : #adding }
 GtLMagritteInputModel >> addContentTo: aDictionary [
-	aDictionary at: name put: model asJsonDictionary 
+	| exporter dict |
+	exporter := GtMagritteJSONDataExporter forObject: model.
+	dict := exporter exportObject asDictionary.
+	aDictionary at: name put: dict	"model asJsonDictionary "
 ]
 
 { #category : #adding }

@@ -66,7 +66,7 @@ GtLNewMessageElement >> buildProviderButton [
 							content: [ | aList |
 								aList := BrSimpleList new fitContent
 										id: #'provider-list';
-										items: self threadMessageViewModel connectionRegistry connectableConnections;
+										items: self messageViewModel connectionRegistry connectableConnections;
 										itemStencil: [ BrLabel new
 												aptitude: BrGlamorousLabelAptitude new
 														+ (BrStyleCommonAptitude new

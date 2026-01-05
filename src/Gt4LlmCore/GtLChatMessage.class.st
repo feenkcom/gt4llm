@@ -136,7 +136,7 @@ GtLChatMessage >> asViewModel [
 
 { #category : #'as yet unclassified' }
 GtLChatMessage >> buildCompleteInstructions [
-	^ instructions instructionString
+	^ self instructions instructionString
 ]
 
 { #category : #accessing }
@@ -331,7 +331,7 @@ GtLChatMessage >> gtViewSchemaDescriptionsFor: aView [
 	formatDescriptions ifNil: [ ^ aView empty ].
 
 	^ aView forward
-		title: 'Format descriptions';
+		title: 'Output format descriptions';
 		priority: 20; 
 		object: [ formatDescriptions ];
 		view: #gtViewSchemaDescriptionsFor:;

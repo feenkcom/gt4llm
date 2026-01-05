@@ -202,13 +202,13 @@ GtLChat >> gtFormatFor: aView [
 	formatDescriptions hasSchemaDescriptors ifFalse: [ ^ aView empty ].
 	
 	^ aView textEditor
-		title: 'Format JSON';
+		title: 'Output format JSON schema';
 		priority: 2; 
 		text: [ NeoJSONWriter toStringPretty: self currentFormat  asJsonSchemaDictionary ];
 		aptitude: BrGlamorousCodeEditorAptitude;
 		styler: JSONParser gtStyler;
 		actionButtonIcon: BrGlamorousVectorIcons playinspect
-			tooltip: 'Inspect Format'
+			tooltip: 'Inspect format'
 			action: [ :aButton | aButton phlow spawnObject: self format ]
 ]
 

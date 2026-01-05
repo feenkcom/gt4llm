@@ -65,6 +65,12 @@ GtLDemoMathReasoning >> hash [
 		bitXor: steps hash hashMultiply
 ]
 
+{ #category : #'as yet unclassified' }
+GtLDemoMathReasoning >> initialize [
+	super initialize.
+	steps := OrderedCollection new.
+]
+
 { #category : #views }
 GtLDemoMathReasoning >> printOn: aStream [
 	super printOn: aStream.

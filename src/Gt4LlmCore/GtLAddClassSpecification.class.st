@@ -18,13 +18,15 @@ GtLAddClassSpecification class >> isConcrete [
 
 { #category : #'as yet unclassified' }
 GtLAddClassSpecification >> asRefactoringIn: aNamespace [
-	^ (GtRBAddClassWithVarsRefactoring
-		model: aNamespace
-		addClass: newClassName asSymbol
-		superclass: superclassName asSymbol
-		subclasses: {}
-		category: packageName asSymbol)
-		instanceVariableNames: (Character space split: slotNames)
+	| refactoring |
+	refactoring := GtRBAddClassWithVarsRefactoring
+			model: aNamespace
+			addClass: newClassName asSymbol
+			superclass: superclassName asSymbol
+			subclasses: {}
+			category: packageName asSymbol.
+	slotNames notEmpty ifTrue: [ refactoring instanceVariableNames: (Character space split: slotNames) ].
+	^ refactoring
 ]
 
 { #category : #'as yet unclassified' }

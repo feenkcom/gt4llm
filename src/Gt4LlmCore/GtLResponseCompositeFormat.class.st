@@ -91,7 +91,7 @@ GtLResponseCompositeFormat >> gtViewSchemaDescriptionsFor: aView [
 GtLResponseCompositeFormat >> gtViewSchemaDetailsFor: aView [
 	<gtView>
 	^ aView forward
-		title: 'Schema Details';
+		title: 'Schema details';
 		priority: 25;
 		object: [ self asJsonSchemaDictionary ];
 		view: #gtTreeFor:context:
