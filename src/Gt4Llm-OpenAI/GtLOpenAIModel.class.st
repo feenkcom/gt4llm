@@ -13,7 +13,7 @@ Class {
 { #category : #accessing }
 GtLOpenAIModel class >> leJsonV4Name [
 
-	^ #gtOpenAIModel
+	^ #gtLOpenAIModel
 ]
 
 { #category : #accessing }

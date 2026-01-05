@@ -6,7 +6,7 @@ Class {
 
 { #category : #'as yet unclassified' }
 GtLToolForClassLookup class >> leJsonV4Name [
-	^ #gtLlmToolForClassLookup
+	^ #gtLToolForClassLookup
 ]
 
 { #category : #accessing }

@@ -6,7 +6,7 @@ Class {
 
 { #category : #accessing }
 GtLToolForSearchFilter class >> leJsonV4Name [
-	^ #gtLlmToolForSearchFilter
+	^ #gtLToolForSearchFilter
 ]
 
 { #category : #accessing }

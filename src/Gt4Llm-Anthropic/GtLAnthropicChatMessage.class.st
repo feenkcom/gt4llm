@@ -12,7 +12,6 @@ Class {
 
 { #category : #accessing }
 GtLAnthropicChatMessage class >> leJsonV4Name [
-
 	^ #gtLAnthropicChatMessage
 ]
 

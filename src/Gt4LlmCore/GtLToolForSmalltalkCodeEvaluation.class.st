@@ -6,7 +6,7 @@ Class {
 
 { #category : #'llm-generated' }
 GtLToolForSmalltalkCodeEvaluation class >> leJsonV4Name [
-	^ #gtLlmToolForSmalltalkCodeEvaluation
+	^ #gtLToolForSmalltalkCodeEvaluation
 ]
 
 { #category : #'llm-generated' }

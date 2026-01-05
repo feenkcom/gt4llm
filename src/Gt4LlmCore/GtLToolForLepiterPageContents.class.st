@@ -9,7 +9,7 @@ Class {
 
 { #category : #accessing }
 GtLToolForLepiterPageContents class >> leJsonV4Name [
-	^ #gtLlmToolForLepiterPageContents
+	^ #gtLToolForLepiterPageContents
 ]
 
 { #category : #accessing }

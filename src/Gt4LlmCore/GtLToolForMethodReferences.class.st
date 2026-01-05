@@ -6,7 +6,7 @@ Class {
 
 { #category : #accessing }
 GtLToolForMethodReferences class >> leJsonV4Name [
-	^ #gtLlmToolForMethodReferences
+	^ #gtLToolForMethodReferences
 ]
 
 { #category : #accessing }

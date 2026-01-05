@@ -9,8 +9,7 @@ Class {
 
 { #category : #accessing }
 GtLFileSearchTool class >> leJsonV4Name [
-
-	^ #gtLlmFileSearchTool
+	^ #gtLFileSearchTool
 ]
 
 { #category : #visiting }

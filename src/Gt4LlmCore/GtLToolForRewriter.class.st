@@ -6,7 +6,7 @@ Class {
 
 { #category : #accessing }
 GtLToolForRewriter class >> leJsonV4Name [
-	^ #gtLlmToolForRewriter
+	^ #gtLToolForRewriter
 ]
 
 { #category : #accessing }

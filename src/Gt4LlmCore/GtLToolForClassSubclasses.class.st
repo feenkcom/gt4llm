@@ -6,7 +6,7 @@ Class {
 
 { #category : #accessing }
 GtLToolForClassSubclasses class >> leJsonV4Name [
-	^ #gtLlmToolForClassSubclasses
+	^ #gtLToolForClassSubclasses
 ]
 
 { #category : #accessing }

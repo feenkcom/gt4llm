@@ -7,6 +7,11 @@ Class {
 	#category : #'Gt4Llm-OpenAI'
 }
 
+{ #category : #'as yet unclassified' }
+GtLOpenAIUserMessage class >> leJsonV4Name [
+	^ #gtLOpenAIUserMessage
+]
+
 { #category : #accessing }
 GtLOpenAIUserMessage >> addInputMagritteObject: anObject named: aString [
 	self addInputModel: (GtLMagritteInputModel new
