@@ -74,11 +74,11 @@ GtLChatOpenAILiveExamples >> howAreYouCallExample_withStringSchema [
 	
 	currentMessage := self currentChat createUserMessage.
 	currentMessage 
-		addMagritteInputObject: (GtLMarkdown new
+		addInputMagritteObject: (GtLMarkdown new
 			content: messageString)
 		named: 'Markdown'.
 		
-	currentMessage addSchemaDescription: (GtLResponseStringFormat new
+	currentMessage addResponseFormat: (GtLResponseStringFormat new
 			name: 'Response').
 	
 	responseMessage := self currentChat sendMessage: currentMessage.
@@ -136,11 +136,11 @@ GtLChatOpenAILiveExamples >> messageExample_magritteMarkdown_codeChanges [
 
 	currentMessage := self currentChat createUserMessage.
 	currentMessage 
-		addMagritteInputObject: (GtLMarkdown new
+		addInputMagritteObject: (GtLMarkdown new
 			content: messageString)
 		named: 'Markdown'.
 	currentMessage
-		addSchemaDescription: (GtLResponseMagritteFormat new
+		addResponseFormat: (GtLResponseMagritteFormat new
 				name: 'CodeTransformations';
 				modelClass: GtLCodeTransformations).
 
@@ -161,7 +161,7 @@ GtLChatOpenAILiveExamples >> messageExample_magritteMarkdown_codeChanges_refacto
 	chat := self currentChat.
 	currentMessage := chat createUserMessage.
 	currentMessage
-		addMagritteInputObject: (GtLMarkdown new
+		addInputMagritteObject: (GtLMarkdown new
 				content: 'Push up common methods and slots from the subclasses in the DiffVisitor class. Use CodeTransformations.')
 		named: 'Markdown'.
 	chat
@@ -174,10 +174,10 @@ GtLChatOpenAILiveExamples >> messageExample_magritteMarkdown_codeChanges_refacto
 						GtLRefactoringToolForMethodImplementors new model: model.
 						GtLRefactoringToolForMethodSource new model: model}).
 	chat
-		addMagriteResponseDescriptionForClass: GtLMarkdown
+		addResponseFormatForMagrite: GtLMarkdown
 		named: 'Markdown'.
 	chat
-		addMagriteResponseDescriptionForClass: GtLCodeTransformations
+		addResponseFormatForMagrite: GtLCodeTransformations
 		named: 'CodeTransformations'.
 	responseMessage := chat sendMessage: currentMessage.
 
@@ -202,7 +202,7 @@ GtLChatOpenAILiveExamples >> messageWithFormatCallExample [
 				}'))).
 
 	currentMessage
-		addSchemaDescription: (GtLResponseJsonSchemaFormat new
+		addResponseFormat: (GtLResponseJsonSchemaFormat new
 				name: 'List';
 				schema: (NeoJSONSchema new
 						json: (NeoJSONObject
@@ -231,11 +231,11 @@ GtLChatOpenAILiveExamples >> messageWithFormatCallExample_mathTutor_jsonString [
 	
 	currentMessage := self currentChat createUserMessage.
 	currentMessage 
-		addMagritteInputObject: (GtLMarkdown new
+		addInputMagritteObject: (GtLMarkdown new
 			content: messageString)
 		named: 'Markdown'.
 		
-	currentMessage addSchemaDescription: (GtLResponseJsonSchemaFormat new
+	currentMessage addResponseFormat: (GtLResponseJsonSchemaFormat new
 		name: 'MathReasoning';
 		schema: self mathResponseSchemaForMathTutor).
 	
@@ -255,11 +255,11 @@ GtLChatOpenAILiveExamples >> messageWithFormatCallExample_mathTutor_magritteSche
 	
 	currentMessage := self currentChat createUserMessage.
 	currentMessage 
-		addMagritteInputObject: (GtLMarkdown new
+		addInputMagritteObject: (GtLMarkdown new
 			content: messageString)
 		named: 'Markdown'.
 		
-	currentMessage addSchemaDescription: (GtLResponseMagritteFormat new
+	currentMessage addResponseFormat: (GtLResponseMagritteFormat new
 		name: 'MathReasoning'; 
 		modelClass: GtLDemoMathReasoning).
 	
@@ -279,11 +279,11 @@ GtLChatOpenAILiveExamples >> messageWithFormatCallExample_mathTutor_magritteSche
 	
 	currentMessage := self currentChat createUserMessage.
 	currentMessage 
-		addMagritteInputObject: (GtLMarkdown new
+		addInputMagritteObject: (GtLMarkdown new
 			content: messageString)
 		named: 'Markdown'.
 		
-	currentMessage addSchemaDescription: (GtLResponseMagritteFormat new
+	currentMessage addResponseFormat: (GtLResponseMagritteFormat new
 		name: 'MathReasoning'; 
 		modelClass: GtLDemoMathReasoningWithDelegatedSteps).
 	
@@ -303,11 +303,11 @@ GtLChatOpenAILiveExamples >> messageWithFormatCallExample_mathTutor_magritteSche
 
 	currentMessage := self currentChat createUserMessage.
 	currentMessage
-		addMagritteInputObject: (GtLMarkdown new content: messageString)
+		addInputMagritteObject: (GtLMarkdown new content: messageString)
 		named: 'Markdown'.
 
 	currentMessage
-		addSchemaDescription: (GtLResponseMagritteFormat new
+		addResponseFormat: (GtLResponseMagritteFormat new
 				name: 'MathReasoning';
 				modelClass: GtLDemoMathReasoningWithDifferentSteps).
 
@@ -327,7 +327,7 @@ GtLChatOpenAILiveExamples >> messageWithInputObjectExample [
 	
 	currentMessage := self currentChat createUserMessage.
 	currentMessage 
-		addMagritteInputObject: (GtLMarkdown new
+		addInputMagritteObject: (GtLMarkdown new
 			content: messageString)
 		named: 'Markdown'.
 	currentMessage 
@@ -337,7 +337,7 @@ GtLChatOpenAILiveExamples >> messageWithInputObjectExample [
 	
 	currentMessage tools: (GtLToolsGroup withAll: {GtLToolForClassLookup new}).
 	currentMessage
-		addMagriteResponseDescriptionForClass: GtLMarkdown
+		addResponseFormatForMagrite: GtLMarkdown
 		named: 'Markdown' .
 
 	responseMessage := self currentChat sendMessage: currentMessage.
@@ -356,12 +356,12 @@ GtLChatOpenAILiveExamples >> messageWithToolCallExample [
 	
 	currentMessage := self currentChat createUserMessage.
 	currentMessage 
-		addMagritteInputObject: (GtLMarkdown new
+		addInputMagritteObject: (GtLMarkdown new
 			content: messageString)
 		named: 'Markdown'.
 	
 	currentMessage tools: (GtLToolsGroup withAll: {GtLToolForClassLookup new}).
-	currentMessage addSchemaDescription: (GtLResponseMarkdownFormat new
+	currentMessage addResponseFormat: (GtLResponseMarkdownFormat new
 			name: 'Description').
 	
 	responseMessage := self currentChat sendMessage: currentMessage.
@@ -380,12 +380,12 @@ GtLChatOpenAILiveExamples >> messageWithToolCallExample_magritteMarkdown [
 
 	currentMessage := self currentChat createUserMessage.
 	currentMessage
-		addMagritteInputObject: (GtLMarkdown new content: messageString)
+		addInputMagritteObject: (GtLMarkdown new content: messageString)
 		named: 'Markdown'.
 	
 	currentMessage tools: (GtLToolsGroup withAll: {GtLToolForClassLookup new}).
 	currentMessage
-		addMagriteResponseDescriptionForClass: GtLMarkdown
+		addResponseFormatForMagrite: GtLMarkdown
 		named: 'Markdown'.
 
 	responseMessage := self currentChat sendMessage: currentMessage.

@@ -7,6 +7,13 @@ Class {
 	#category : #'Gt4Llm-OpenAI'
 }
 
+{ #category : #accessing }
+GtLOpenAIUserMessage >> addInputMagritteObject: anObject named: aString [
+	self addInputModel: (GtLMagritteInputModel new
+		name: aString;
+		model: anObject)
+]
+
 { #category : #adding }
 GtLOpenAIUserMessage >> addInputModel: aModel [
 	inputModels at: aModel name put: aModel.
@@ -26,13 +33,6 @@ GtLOpenAIUserMessage >> addInstructionSectionForLepiterPages: pageNames titled: 
 		addSection: (GtLlmInstructionSection new
 				title: title;
 				body: instructionString)
-]
-
-{ #category : #accessing }
-GtLOpenAIUserMessage >> addMagritteInputObject: anObject named: aString [
-	self addInputModel: (GtLMagritteInputModel new
-		name: aString;
-		model: anObject)
 ]
 
 { #category : #accessing }

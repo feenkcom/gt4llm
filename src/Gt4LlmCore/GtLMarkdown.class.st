@@ -36,9 +36,9 @@ GtLMarkdown >> contentDescription [
 		  comment: '{
 	"description" : "This is a Markdown format with a few extensions.
 
-Annotate Smalltalk classes using `{{gtClass:ClassName}}`, where `ClassName` is the name of the class to be referenced.
-
-Annotate Smalltalk methods using `{{gtMethod:ClassName>>#methodName}}`, where `ClassName` is the name of the class and `methodName` is the name of the method.
+In plain Markdown text, annotate entities as follows:
+- Smalltalk classes using `{{gtClass:ClassName}}`, where `ClassName` is the name of the class to be referenced.
+- Smalltalk methods using `{{gtMethod:ClassName>>#methodName}}`, where `ClassName` is the name of the class and `methodName` is the name of the method.
 
 For code use three backticks sections.
 
