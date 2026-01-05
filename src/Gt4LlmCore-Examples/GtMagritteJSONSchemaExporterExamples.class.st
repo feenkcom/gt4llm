@@ -7,8 +7,8 @@ Class {
 { #category : #assertions }
 GtMagritteJSONSchemaExporterExamples >> assertSchema: aJsonSchema equals: aSchemString [
 	self 
-		assert: (NeoJSONWriter toStringPretty: aJsonSchema json)
-		equals: aSchemString
+		assert: (NeoJSONWriter toStringPretty: aJsonSchema json) withInternalLineEndings
+		equals: aSchemString withInternalLineEndings
 ]
 
 { #category : #expected }

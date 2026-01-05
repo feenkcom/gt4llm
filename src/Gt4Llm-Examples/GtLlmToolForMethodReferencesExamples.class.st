@@ -12,8 +12,9 @@ GtLlmToolForMethodReferencesExamples >> methodReferencesForExistingSelector [
 	call := GtLlmFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
-		'arguments' -> {'selector' -> 'performToolCall:'} asDictionary
+		'arguments' -> {'selector' -> 'methodReferencesForExistingSelector'} asDictionary
 	} asDictionary.
+	#methodReferencesForExistingSelector printString.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
 	self assert: result isEmpty not.
