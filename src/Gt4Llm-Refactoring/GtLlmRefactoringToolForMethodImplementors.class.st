@@ -9,7 +9,7 @@ Class {
 
 { #category : #'as yet unclassified' }
 GtLlmRefactoringToolForMethodImplementors class >> leJsonV4Name [
-	^ #gtLlmRefactoringToolForMethodImplementers
+	^ #gtLlmRefactoringToolForMethodImplementors
 ]
 
 { #category : #'llm-generated' }
