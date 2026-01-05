@@ -12,12 +12,6 @@ Class {
 	#category : #'Gt4Llm-OpenAI'
 }
 
-{ #category : #accessing }
-GtLOpenAIVectorStore class >> leJsonV4Name [
-
-	^ #gtOpenAIVectorStore
-]
-
 { #category : #'as yet unclassified' }
 GtLOpenAIVectorStore class >> serializationProperties [
 	^ {#id -> #id.

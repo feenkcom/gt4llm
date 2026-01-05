@@ -13,12 +13,6 @@ Class {
 }
 
 { #category : #accessing }
-GtLOpenAIFineTuningCheckpoint class >> leJsonV4Name [
-
-	^ #gtOpenAIFineTuningCheckpoint
-]
-
-{ #category : #accessing }
 GtLOpenAIFineTuningCheckpoint class >> serializationProperties [
 	^ {#id -> #id.
 		#created_at -> #createdAt.
