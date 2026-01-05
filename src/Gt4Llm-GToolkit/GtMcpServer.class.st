@@ -34,7 +34,7 @@ GtMcpServer >> dispatch: jsonRpc [
 	| camelCasedMethod |
 	camelCasedMethod := (jsonRpc method replaceAllRegex: '[^a-zA-Z]' with: ' ')
 			asCamelCase asSymbol asMutator.
-	^ self perform: #handle , camelCasedMethod withArguments: {jsonRpc}
+	^ self perform: (#handle , camelCasedMethod) asSymbol withArguments: {jsonRpc}
 ]
 
 { #category : #'as yet unclassified' }
