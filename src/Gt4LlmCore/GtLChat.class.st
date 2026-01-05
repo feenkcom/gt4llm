@@ -27,12 +27,6 @@ GtLChat class >> leJsonV4AttributeMapping [
 		#format -> #format }"
 ]
 
-{ #category : #accessing }
-GtLChat class >> leJsonV4Name [
-
-	^ #gtLChat
-]
-
 { #category : #visiting }
 GtLChat >> acceptVisitor: aVisitor [
 

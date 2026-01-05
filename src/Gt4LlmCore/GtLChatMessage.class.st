@@ -57,11 +57,6 @@ GtLChatMessage class >> leJsonV4AttributeMapping [
 		yourself.
 ]
 
-{ #category : #accessing }
-GtLChatMessage class >> leJsonV4Name [
-	^ #gtLChatMessage
-]
-
 { #category : #'instance creation' }
 GtLChatMessage class >> rolesToClasses [
 	^ {('tool' -> GtLToolMessage)} asDictionary
