@@ -13,7 +13,7 @@ GtLResponseCompositeFormat >> addCompositeFormat: aCompositeFormat [
 ]
 
 { #category : #adding }
-GtLResponseCompositeFormat >> addSchemaDescription: aSchema [
+GtLResponseCompositeFormat >> addResponseFormat: aSchema [
 	schemaDescriptions add: aSchema
 ]
 

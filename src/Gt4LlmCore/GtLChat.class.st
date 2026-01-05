@@ -9,7 +9,7 @@ Class {
 		'tools',
 		'instructions',
 		'userMessageClass',
-		'formatDescriptions'
+		'responseFormat'
 	],
 	#category : #'Gt4LlmCore-Core'
 }
@@ -38,14 +38,6 @@ GtLChat >> acceptVisitor: aVisitor [
 	^ aVisitor visitGtLlmChat: self
 ]
 
-{ #category : #adding }
-GtLChat >> addMagriteResponseDescriptionForClass: aClass named: aString [
-	self
-		addSchemaDescription: (GtLResponseMagritteFormat new
-				name: aString;
-				modelClass: aClass)
-]
-
 { #category : #accessing }
 GtLChat >> addMessage: aMessage [
 	self updateLastUpdate.
@@ -57,8 +49,16 @@ GtLChat >> addMessage: aMessage [
 ]
 
 { #category : #adding }
-GtLChat >> addSchemaDescription: aFormatDescription [
-	formatDescriptions addSchemaDescription: aFormatDescription
+GtLChat >> addResponseFormat: aResponseFormat [
+	responseFormat addResponseFormat: aResponseFormat
+]
+
+{ #category : #adding }
+GtLChat >> addResponseFormatForMagrite: aClass named: aString [
+	self
+		addResponseFormat: (GtLResponseMagritteFormat new
+				name: aString;
+				modelClass: aClass)
 ]
 
 { #category : #adding }
@@ -148,18 +148,13 @@ GtLChat >> createUserMessageForString: aString [
 	| newMessage |
 	newMessage := self createUserMessage.
 	newMessage
-		addMagritteInputObject: (GtLMarkdown new content: aString) named: 'Markdown'.
+		addInputMagritteObject: (GtLMarkdown new content: aString) named: 'Markdown'.
 	^ newMessage
 ]
 
 { #category : #accessing }
 GtLChat >> currentFormat [
-	^ formatDescriptions 
-]
-
-{ #category : #accessing }
-GtLChat >> currentFormatDescriptions [
-	^ formatDescriptions 
+	^ responseFormat 
 ]
 
 { #category : #accessing }
@@ -174,12 +169,12 @@ GtLChat >> currentTools [
 
 { #category : #accessing }
 GtLChat >> format [
-	^ formatDescriptions 
+	^ responseFormat 
 ]
 
 { #category : #accessing }
 GtLChat >> format: anObject [
-	formatDescriptions := anObject
+	responseFormat := anObject
 ]
 
 { #category : #'gt - extensions' }
@@ -198,8 +193,8 @@ GtLChat >> gtCopySnippetSerialisationFor: anAction [
 { #category : #views }
 GtLChat >> gtFormatFor: aView [
 	<gtView>
-	formatDescriptions ifNil: [ ^ aView empty ].
-	formatDescriptions hasSchemaDescriptors ifFalse: [ ^ aView empty ].
+	responseFormat ifNil: [ ^ aView empty ].
+	responseFormat hasSchemaDescriptors ifFalse: [ ^ aView empty ].
 	
 	^ aView textEditor
 		title: 'Output format JSON schema';
@@ -263,7 +258,7 @@ GtLChat >> initialize [
 	
 	self initializeMessages.
 	self initializeTools.
-	formatDescriptions := GtLResponseCompositeFormat new.
+	responseFormat := GtLResponseCompositeFormat new.
 	
 	self updateLastUpdate
 ]
@@ -338,11 +333,6 @@ GtLChat >> resetMessages [
 	self signalRunIsDone
 ]
 
-{ #category : #accessing }
-GtLChat >> responseFormat [
-	^ self provider format
-]
-
 { #category : #actions }
 GtLChat >> sendFiles: aListOfFileReferences withMessage: aString [
 	self provider
@@ -362,9 +352,7 @@ GtLChat >> sendMessage: aMessage [
 GtLChat >> sendPlainMessage: aString [
 	| currentMessage |
 	self assert: aString isString.
-	
 	currentMessage := self createUserMessageForString: aString.
-	
 	self sendMessage: currentMessage
 ]
 
