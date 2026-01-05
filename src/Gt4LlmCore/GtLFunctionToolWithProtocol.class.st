@@ -6,8 +6,7 @@ Class {
 
 { #category : #accessing }
 GtLFunctionToolWithProtocol class >> leJsonV4Name [
-
-	^ #gtLlmFunctionToolWithProtocol
+	^ #gtLFunctionToolWithProtocol
 ]
 
 { #category : #'as yet unclassified' }

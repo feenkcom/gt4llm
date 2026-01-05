@@ -9,7 +9,7 @@ Class {
 
 { #category : #testing }
 GtLRemoveMethodSpecification class >> isConcrete [
-	^ true
+	^ false
 ]
 
 { #category : #refactoring }

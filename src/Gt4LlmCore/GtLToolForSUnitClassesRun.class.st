@@ -6,7 +6,7 @@ Class {
 
 { #category : #accessing }
 GtLToolForSUnitClassesRun class >> leJsonV4Name [
-	^ #gtLlmToolForSUnitClassesRun
+	^ #gtLToolForSUnitClassesRun
 ]
 
 { #category : #'llm-generated' }

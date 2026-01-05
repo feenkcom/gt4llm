@@ -12,7 +12,7 @@ Class {
 { #category : #accessing }
 GtLOpenAIAssistantFile class >> leJsonV4Name [
 
-	^ #gtOpenAIAssistantFile
+	^ #gtLOpenAIAssistantFile
 ]
 
 { #category : #accessing }

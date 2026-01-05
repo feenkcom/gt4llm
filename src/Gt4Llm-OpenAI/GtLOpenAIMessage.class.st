@@ -19,7 +19,6 @@ GtLOpenAIMessage class >> from: aDict [
 
 { #category : #accessing }
 GtLOpenAIMessage class >> leJsonV4Name [
-
 	^ #gtLOpenAIMessage
 ]
 

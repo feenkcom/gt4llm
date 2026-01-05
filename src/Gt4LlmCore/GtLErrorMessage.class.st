@@ -19,6 +19,11 @@ GtLErrorMessage class >> freeze: anError [
 ]
 
 { #category : #'as yet unclassified' }
+GtLErrorMessage class >> leJsonV4Name [
+	^ #gtLErrorMessage
+]
+
+{ #category : #'as yet unclassified' }
 GtLErrorMessage >> action [
 	^ nil
 ]

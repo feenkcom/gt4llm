@@ -59,7 +59,6 @@ GtLChatMessage class >> leJsonV4AttributeMapping [
 
 { #category : #accessing }
 GtLChatMessage class >> leJsonV4Name [
-
 	^ #gtLChatMessage
 ]
 

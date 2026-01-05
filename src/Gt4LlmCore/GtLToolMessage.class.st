@@ -15,7 +15,6 @@ GtLToolMessage class >> defaultRole [
 
 { #category : #accessing }
 GtLToolMessage class >> leJsonV4Name [
-
 	^ #gtLToolMessage
 ]
 
