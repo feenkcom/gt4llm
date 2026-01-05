@@ -19,11 +19,12 @@ GtLChat class >> leJsonV4AttributeMapping [
 	"Answer the Array of attribute to store keys.
 	The provider should be stored, but isn't coded yet."
 
-	^ { #lastUpdate -> #lastUpdate.
+	^ super leJsonV4AttributeMapping
+	"{ #lastUpdate -> #lastUpdate.
 		#messages -> #messages.
 		#tools -> #tools.
 		#instructions -> #instructions.
-		#format -> #format }
+		#format -> #format }"
 ]
 
 { #category : #accessing }

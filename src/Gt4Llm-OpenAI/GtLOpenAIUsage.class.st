@@ -10,12 +10,6 @@ Class {
 }
 
 { #category : #accessing }
-GtLOpenAIUsage class >> leJsonV4Name [
-
-	^ #gtOpenAIUsage
-]
-
-{ #category : #accessing }
 GtLOpenAIUsage class >> serializationProperties [
 	^ {#completion_tokens -> #completionTokens.
 		#prompt_tokens -> #promptTokens.

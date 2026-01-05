@@ -19,12 +19,6 @@ Class {
 }
 
 { #category : #accessing }
-GtLOpenAIFineTuningJob class >> leJsonV4Name [
-
-	^ #gtOpenAIFineTuningJob
-]
-
-{ #category : #accessing }
 GtLOpenAIFineTuningJob class >> serializationProperties [
 	^ {#object -> #object.
 		#id -> #id.
