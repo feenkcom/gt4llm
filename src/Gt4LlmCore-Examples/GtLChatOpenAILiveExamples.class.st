@@ -27,6 +27,7 @@ GtLChatOpenAILiveExamples class >> isSynchronous: aBoolean [
 { #category : #examples }
 GtLChatOpenAILiveExamples >> createChat [
 	<gtExample>
+	<noTest>
 	| newChat provider |
 	newChat := GtLChat new.
 	
@@ -39,6 +40,7 @@ GtLChatOpenAILiveExamples >> createChat [
 { #category : #examples }
 GtLChatOpenAILiveExamples >> createGpt51CodexConnection [
 	<gtExample>
+	<noTest>
 	^ GtLConnection new
 		providerClass: GtLOpenAIProvider;
 		label: 'GPT 5.1 Codex';
@@ -49,14 +51,14 @@ GtLChatOpenAILiveExamples >> createGpt51CodexConnection [
 { #category : #examples }
 GtLChatOpenAILiveExamples >> currentChat [
 	<gtExample>
-	
-	^ theChat ifNil: [
-			theChat := self createChat ]
+	<noTest>
+	^ theChat ifNil: [ theChat := self createChat ]
 ]
 
 { #category : #'examples - calls' }
 GtLChatOpenAILiveExamples >> howAreYouCallExample [
 	<gtExample>
+	<noTest>
 	| responseMessage  |
 	responseMessage := self currentChat sendPlainMessage: 'How are you?'.
 	
@@ -69,6 +71,7 @@ GtLChatOpenAILiveExamples >> howAreYouCallExample [
 { #category : #'examples - calls' }
 GtLChatOpenAILiveExamples >> howAreYouCallExample_withStringSchema [
 	<gtExample>
+	<noTest>
 	| messageString currentMessage responseMessage  |
 	messageString := 'How are you?'.
 	
@@ -131,6 +134,7 @@ GtLChatOpenAILiveExamples >> mathResponseSchemaForMathTutor [
 { #category : #'examples - calls' }
 GtLChatOpenAILiveExamples >> messageExample_magritteMarkdown_codeChanges [
 	<gtExample>
+	<noTest>
 	| messageString currentMessage responseMessage |
 	messageString :='Create a class for a Person with a first and last name. Create a printing method. Use CodeTransformations to express the changes.'.
 
@@ -187,6 +191,7 @@ GtLChatOpenAILiveExamples >> messageExample_magritteMarkdown_codeChanges_refacto
 { #category : #'examples - calls' }
 GtLChatOpenAILiveExamples >> messageWithFormatCallExample [
 	<gtExample>
+	<noTest>
 	| messageString currentMessage responseMessage |
 	messageString := 'Return a list of the most popular programming languages.'.
 
@@ -217,8 +222,7 @@ GtLChatOpenAILiveExamples >> messageWithFormatCallExample [
 	responseMessage := self currentChat sendMessage: currentMessage.
 
 	self
-		waitForChatRunIsDoneThen: [ self assert: self currentChat messages size equals: 2.
-			self assert: (self currentChat messages at: 2) isFailure ].
+		waitForChatRunIsDoneThen: [ self assert: self currentChat messages size equals: 2 ].
 
 	^ self currentChat
 ]
@@ -226,6 +230,7 @@ GtLChatOpenAILiveExamples >> messageWithFormatCallExample [
 { #category : #'examples - calls' }
 GtLChatOpenAILiveExamples >> messageWithFormatCallExample_mathTutor_jsonString [
 	<gtExample>
+	<noTest>
 	| messageString currentMessage responseMessage |
 	messageString := 'You are a helpful math tutor. Guide the user through the solution step by step for the equation 8x + 7 = -23'.
 	
@@ -250,6 +255,7 @@ GtLChatOpenAILiveExamples >> messageWithFormatCallExample_mathTutor_jsonString [
 { #category : #'examples - calls' }
 GtLChatOpenAILiveExamples >> messageWithFormatCallExample_mathTutor_magritteSchema [
 	<gtExample>
+	<noTest>
 	| messageString currentMessage responseMessage |
 	messageString := 'You are a helpful math tutor. Guide the user through the solution step by step for the equation 8x + 7 = -23'.
 	
@@ -274,6 +280,7 @@ GtLChatOpenAILiveExamples >> messageWithFormatCallExample_mathTutor_magritteSche
 { #category : #'examples - calls' }
 GtLChatOpenAILiveExamples >> messageWithFormatCallExample_mathTutor_magritteSchema_delegatedStepTypes [
 	<gtExample>
+	<noTest>
 	| messageString currentMessage responseMessage |
 	messageString := 'You are a helpful math tutor. Guide the user through the solution step by step for the equation 8x + 7 = -23. Make sure to have an explanation and an output step'.
 	
@@ -298,6 +305,7 @@ GtLChatOpenAILiveExamples >> messageWithFormatCallExample_mathTutor_magritteSche
 { #category : #'examples - calls' }
 GtLChatOpenAILiveExamples >> messageWithFormatCallExample_mathTutor_magritteSchema_multipleStepTypes [
 	<gtExample>
+	<noTest>
 	| messageString currentMessage responseMessage |
 	messageString := 'You are a helpful math tutor. Guide the user through the solution step by step for the equation 8x + 7 = -23. Make sure to have an explanation and an output step'.
 
@@ -322,6 +330,7 @@ GtLChatOpenAILiveExamples >> messageWithFormatCallExample_mathTutor_magritteSche
 { #category : #'examples - calls' }
 GtLChatOpenAILiveExamples >> messageWithInputObjectExample [
 	<gtExample>
+	<noTest>
 	| messageString currentMessage responseMessage |
 	messageString := 'Explain this object'.
 	
@@ -351,6 +360,7 @@ GtLChatOpenAILiveExamples >> messageWithInputObjectExample [
 { #category : #'examples - calls' }
 GtLChatOpenAILiveExamples >> messageWithToolCallExample [
 	<gtExample>
+	<noTest>
 	| messageString currentMessage responseMessage  |
 	messageString := 'Use tools and give me a description of the class BlElement'.
 	
@@ -375,6 +385,7 @@ GtLChatOpenAILiveExamples >> messageWithToolCallExample [
 { #category : #'examples - calls' }
 GtLChatOpenAILiveExamples >> messageWithToolCallExample_magritteMarkdown [
 	<gtExample>
+"	<noTest>"
 	| messageString currentMessage responseMessage |
 	messageString := 'Use tools and give me a description of the class BlElement'.
 
