@@ -58,7 +58,7 @@ GtLErrorMessage >> contentSummary [
 
 { #category : #accessing }
 GtLErrorMessage >> contentText [
-	^ self exception messageText
+	^ self exception ifNil: [ 'Error' ] ifNotNil: [: e | e messageText ]
 ]
 
 { #category : #accessing }

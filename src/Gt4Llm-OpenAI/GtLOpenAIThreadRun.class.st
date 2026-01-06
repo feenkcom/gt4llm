@@ -25,12 +25,6 @@ Class {
 }
 
 { #category : #accessing }
-GtLOpenAIThreadRun class >> leJsonV4Name [
-
-	^ #gtOpenAIThreadRun
-]
-
-{ #category : #accessing }
 GtLOpenAIThreadRun class >> serializationProperties [
 	^ {#id -> #id.
 		#created_at -> #createdAt.

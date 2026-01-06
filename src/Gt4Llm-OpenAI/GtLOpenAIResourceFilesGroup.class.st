@@ -5,12 +5,6 @@ Class {
 }
 
 { #category : #accessing }
-GtLOpenAIResourceFilesGroup class >> leJsonV4Name [
-
-	^ #gtOpenAIResourceFilesGroup
-]
-
-{ #category : #accessing }
 GtLOpenAIResourceFilesGroup >> gtFilesFor: aView [
 	<gtView>
 	^ aView columnedList
