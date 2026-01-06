@@ -7,7 +7,7 @@ Trait {
 }
 
 { #category : #accessing }
-TGtLWithMessage >> hasThreadMessage [
+TGtLWithMessage >> hasMessage [
 	^ message isNotNil
 ]
 

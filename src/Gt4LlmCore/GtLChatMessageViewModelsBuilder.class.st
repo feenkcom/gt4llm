@@ -125,7 +125,11 @@ GtLChatMessageViewModelsBuilder >> newMessageViewModel: anObject [
 GtLChatMessageViewModelsBuilder >> viewModelFor: aMessage [
 	^ cache
 		at: aMessage id
-		ifPresent: [ :theViewModel | theViewModel message: aMessage ]
+		ifPresent: [ :theViewModel | 
+			theViewModel message: aMessage.
+			lastMessage = aMessage ifTrue: [
+				theViewModel isExpanded: (theViewModel isExpanded or: [ aMessage isAssistantRole ]) ].
+			theViewModel ]
 		ifAbsentPut: [ aMessage asViewModel
 				isExpanded: (lastMessage = aMessage and: [ aMessage isAssistantRole ]) ]
 ]

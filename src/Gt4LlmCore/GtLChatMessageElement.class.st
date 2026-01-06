@@ -116,7 +116,7 @@ GtLChatMessageElement >> subscribeToMessageViewModel [
 		when: GtLlmThreadMessageViewModelChanged
 			send: #onThreadMessageViewModelChanged:
 			to: self;
-		when: GtLlmMessageContentsUpdated
+		when: GtLMessageViewModelContentsChanged
 			send: #onMessageContentsChanged:
 			to: self
 ]

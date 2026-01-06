@@ -153,7 +153,7 @@ GtLChatMessage >> content [
 GtLChatMessage >> content: anObject [
 	content := anObject.
 	
-	self announce: GtLlmMessageContentsUpdated new
+	self announce: (GtLMessageContentsChanged new message: self)
 ]
 
 { #category : #accessing }
@@ -189,7 +189,7 @@ GtLChatMessage >> contentText [
 		ifTrue: [ self content ]
 		ifFalse: [ ''
 				join: (self content
-						select: [ :aValue | (aValue at: #type) = 'text' ]
+						select: [ :aValue | #(text output_text) includes: (aValue at: #type) ]
 						thenCollect: [ :aValue | (aValue at: #text) ifNil: [ '' ] ]) ]
 ]
 
@@ -334,11 +334,6 @@ GtLChatMessage >> gtViewSchemaDescriptionsFor: aView [
 { #category : #testing }
 GtLChatMessage >> hasFormats [
 	^ formatDescriptions notNil and: [formatDescriptions hasSchemaDescriptors]
-]
-
-{ #category : #'api - testing' }
-GtLChatMessage >> hasInstructions [
-	^ instructions isNotNil
 ]
 
 { #category : #accessing }

@@ -4,8 +4,8 @@ Class {
 	#traits : 'TGtLWithMessageViewModel',
 	#classTraits : 'TGtLWithMessageViewModel classTrait',
 	#instVars : [
-		'header',
-		'viewUpdater'
+		'viewUpdater',
+		'headerElement'
 	],
 	#category : #'Gt4LlmCore-UI - Elements'
 }
@@ -21,12 +21,12 @@ GtLMessageContentElement >> initialize [
 		hMatchParent;
 		vFitContentLimited.
 
-	self addChild: header as: #'message-header'
+	self addChild: headerElement as: #'message-header'
 ]
 
 { #category : #initialization }
 GtLMessageContentElement >> initializeHeader [
-	header := BrHorizontalPane new
+	headerElement := BrHorizontalPane new
 			hMatchParent;
 			vFitContent
 ]
@@ -54,7 +54,9 @@ GtLMessageContentElement >> makeActionToolbar [
 
 { #category : #'private - event handling' }
 GtLMessageContentElement >> onMessageContentsUpdated: anAnnouncement [
-	viewUpdater requestUpdate
+	viewUpdater requestUpdate.
+
+	BlTaskAction enqueueElement: self action: [ self updateHeader ]
 ]
 
 { #category : #'private - hooks' }
@@ -73,7 +75,7 @@ GtLMessageContentElement >> subscribeToMessageViewModel [
 		when: GtLlmThreadMessageViewModelChanged
 			send: #onThreadMessageViewModelChanged:
 			to: self;
-		when: GtLlmMessageContentsUpdated
+		when: GtLMessageViewModelContentsChanged
 			send: #onMessageContentsUpdated:
 			to: self
 ]
@@ -91,9 +93,9 @@ GtLMessageContentElement >> updateElement [
 
 { #category : #'private - updating' }
 GtLMessageContentElement >> updateHeader [
-	header removeChildren.
-	header addChild: self messageViewModel messageHeaderElement.
-	header addChild: self makeActionToolbar
+	headerElement removeChildren.
+	headerElement addChild: self messageViewModel messageHeaderElement.
+	headerElement addChild: self makeActionToolbar
 ]
 
 { #category : #'private - updating' }

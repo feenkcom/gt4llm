@@ -117,31 +117,35 @@ GtLBasicMessageViewModel >> messageViewPragmas [
 GtLBasicMessageViewModel >> messageViews [
 	| allViews |
 	allViews := OrderedCollection
-			streamContents: [ :aStream | 
-				aStream
-					nextPutAll: (GtPhlowViewsCollector new
-							fromObject: self;
-							pragmaNames: self messageViewPragmas;
-							collect).
-
-				self hasThreadMessage
-					ifTrue: [ aStream
-							nextPutAll: (GtPhlowViewsCollector new
-									fromObject: self message;
-									pragmaNames: self messageViewPragmas;
-									collect).
-
-						self message gtInspectorTargetModels
-							do: [ :eachResponseModel | 
-								aStream
-									nextPutAll: (GtPhlowViewsCollector new
-											fromObject: eachResponseModel;
-											pragmaNames: self messageViewPragmas;
-											collect) ] ] ].
+			streamContents: [ :aStream | self messageViewsInto: aStream ].
 
 	GtPhlowUtility sortByPriority: allViews.
 
 	^ allViews
+]
+
+{ #category : #accessing }
+GtLBasicMessageViewModel >> messageViewsInto: aStream [
+	aStream
+		nextPutAll: (GtPhlowViewsCollector new
+				fromObject: self;
+				pragmaNames: self messageViewPragmas;
+				collect).
+
+	self hasMessage
+		ifTrue: [ aStream
+				nextPutAll: (GtPhlowViewsCollector new
+						fromObject: self message currentMessage;
+						pragmaNames: self messageViewPragmas;
+						collect).
+
+			self message currentMessage gtInspectorTargetModels
+				do: [ :eachResponseModel | 
+					aStream
+						nextPutAll: (GtPhlowViewsCollector new
+								fromObject: eachResponseModel;
+								pragmaNames: self messageViewPragmas;
+								collect) ] ]
 ]
 
 { #category : #private }
@@ -156,14 +160,15 @@ GtLBasicMessageViewModel >> notifyThreadMessageViewModelChanged [
 	self announce: GtLlmThreadMessageViewModelChanged new
 ]
 
-{ #category : #'private - announcement handling' }
-GtLBasicMessageViewModel >> onAddMessageContents: anAnnouncement [
-	self threadMessage chat announce: anAnnouncement
-]
-
 { #category : #'private - hooks' }
 GtLBasicMessageViewModel >> onMessageChanged [
 	self notifyThreadMessageViewModelChanged
+]
+
+{ #category : #'private - event handling' }
+GtLBasicMessageViewModel >> onMessageContentsChanged: anAnnouncement [
+	self announcer
+		announce: (GtLMessageViewModelContentsChanged new messageViewModel: self)
 ]
 
 { #category : #accessing }
@@ -184,12 +189,12 @@ GtLBasicMessageViewModel >> styler [
 { #category : #'private - hooks' }
 GtLBasicMessageViewModel >> subscribeToMessage [
 	self message
-		when: GtLlmMessageContentsUpdated
-		send: #forwardAnnouncement:
+		when: GtLMessageContentsChanged
+		send: #onMessageContentsChanged:
 		to: self
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'api - accessing' }
 GtLBasicMessageViewModel >> uiInsets [
 	self message isAssistantRole ifTrue: [ ^ BlInsets right: 50 ].
 	self message isToolRole ifTrue: [ ^ BlInsets left: 25 right: 25 ].
