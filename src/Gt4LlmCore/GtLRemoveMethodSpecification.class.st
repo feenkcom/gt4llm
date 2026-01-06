@@ -9,7 +9,7 @@ Class {
 
 { #category : #testing }
 GtLRemoveMethodSpecification class >> isConcrete [
-	^ true
+	^ false
 ]
 
 { #category : #refactoring }
@@ -29,7 +29,7 @@ GtLRemoveMethodSpecification >> descriptionContainer [
 { #category : #printing }
 GtLRemoveMethodSpecification >> gtDisplayOn: aStream [
 	| selectorString className |
-	selectorString := (self selector ifNil: [ '<selector>' ]) asString.
+	selectorString := (self methodNameToRemove ifNil: [ '<selector>' ]) asString.
 	className := self methodClassName ifNil: [ '<class>' ].
 	aStream
 		nextPutAll: 'Remove method ';

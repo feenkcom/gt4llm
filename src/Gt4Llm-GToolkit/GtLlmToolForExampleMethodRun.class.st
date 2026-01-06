@@ -6,7 +6,7 @@ Class {
 
 { #category : #accessing }
 GtLlmToolForExampleMethodRun class >> leJsonV4Name [
-	^ #gtLlmToolForExampleRun
+	^ #gtLlmToolForExampleMethodRun
 ]
 
 { #category : #accessing }

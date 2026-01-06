@@ -12,7 +12,7 @@ Class {
 
 { #category : #accessing }
 GtLFunctionTool class >> leJsonV4Name [
-	^ #gtLlmFunctionTool
+	^ #gtLFunctionTool
 ]
 
 { #category : #visiting }

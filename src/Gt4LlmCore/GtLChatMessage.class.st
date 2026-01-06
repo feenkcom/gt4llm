@@ -57,12 +57,6 @@ GtLChatMessage class >> leJsonV4AttributeMapping [
 		yourself.
 ]
 
-{ #category : #accessing }
-GtLChatMessage class >> leJsonV4Name [
-
-	^ #gtLChatMessage
-]
-
 { #category : #'instance creation' }
 GtLChatMessage class >> rolesToClasses [
 	^ {('tool' -> GtLToolMessage)} asDictionary
@@ -86,16 +80,16 @@ GtLChatMessage >> action [
 ]
 
 { #category : #accessing }
-GtLChatMessage >> addMagriteResponseDescriptionForClass: aClass named: aString [
-	self
-		addSchemaDescription: (GtLResponseMagritteFormat new
-				name: aString;
-				modelClass: aClass)
+GtLChatMessage >> addResponseFormat: aFormatDescription [
+	formatDescriptions addResponseFormat: aFormatDescription
 ]
 
 { #category : #accessing }
-GtLChatMessage >> addSchemaDescription: aFormatDescription [
-	formatDescriptions addSchemaDescription: aFormatDescription
+GtLChatMessage >> addResponseFormatForMagrite: aClass named: aString [
+	self
+		addResponseFormat: (GtLResponseMagritteFormat new
+				name: aString;
+				modelClass: aClass)
 ]
 
 { #category : #'as yet unclassified' }
@@ -231,14 +225,7 @@ GtLChatMessage >> formatDescriptions: aCollection [
 
 { #category : #accessing }
 GtLChatMessage >> formatDescriptionsJsonSchema [
-	^ formatDescriptions asJsonSchemaDictionary 
-	"{'type' -> 'object'.
-		'properties'
-			-> (formatDescriptions
-					collect: [ :aComponent | aComponent name -> aComponent asJsonSchema ])
-					asDictionary.
-		'required' -> (formatDescriptions collect: [:aFormat | aFormat name ]).
-		'additionalProperties' -> false} asDictionary"
+	^ formatDescriptions asJsonSchemaDictionary
 ]
 
 { #category : #'gt - extensions' }
@@ -551,7 +538,7 @@ GtLChatMessage >> updateDataFromChat: aChat [
 	instructions ifNil: [
 		instructions := aChat currentInstructions ].
 	formatDescriptions hasSchemaDescriptors ifFalse: [
-		formatDescriptions addCompositeFormat: aChat currentFormatDescriptions ].
+		formatDescriptions addCompositeFormat: aChat currentFormat ].
 	tools ifNil: [
 		tools := aChat currentTools ]
 ]

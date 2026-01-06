@@ -16,7 +16,7 @@ Class {
 { #category : #accessing }
 GtLOpenAIFile class >> leJsonV4Name [
 
-	^ #gtOpenAIFile
+	^ #gtLOpenAIFile
 ]
 
 { #category : #accessing }

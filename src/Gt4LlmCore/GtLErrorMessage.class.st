@@ -19,6 +19,11 @@ GtLErrorMessage class >> freeze: anError [
 ]
 
 { #category : #'as yet unclassified' }
+GtLErrorMessage class >> leJsonV4Name [
+	^ #gtLErrorMessage
+]
+
+{ #category : #'as yet unclassified' }
 GtLErrorMessage >> action [
 	^ nil
 ]
@@ -53,7 +58,7 @@ GtLErrorMessage >> contentSummary [
 
 { #category : #accessing }
 GtLErrorMessage >> contentText [
-	^ self exception messageText
+	^ self exception ifNil: [ 'Error' ] ifNotNil: [: e | e messageText ]
 ]
 
 { #category : #accessing }

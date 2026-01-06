@@ -6,7 +6,7 @@ Class {
 
 { #category : #accessing }
 GtLToolForRemoteExampleMethodsRun class >> leJsonV4Name [
-	^ #gtLlmToolForRemoteExampleMethodsRun
+	^ #gtLToolForRemoteExampleMethodsRun
 ]
 
 { #category : #'instance creation' }

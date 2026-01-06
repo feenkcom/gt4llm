@@ -5,13 +5,20 @@ Class {
 }
 
 { #category : #generation }
+GtMagritteJSONDataExporterExamples >> assertJson: json equals: expected [
+	self
+		assert: (STONJSON fromString: json withInternalLineEndings)
+		equals: (STONJSON fromString: expected withInternalLineEndings)
+]
+
+{ #category : #generation }
 GtMagritteJSONDataExporterExamples >> generateJsonForMathReasoningWithDelegatedSteps [
 	<gtExample>
 	| exporter json |
 	exporter := GtMagritteJSONDataExporter
 			forObject: (GtMagritteJSONSchemaDataReaderExamples new expectedMathReasoningDelegatedTypesTypeStep).
 	json := exporter exportObjectAsJsonString.
-	self assert: json equals: '{
+	self assertJson: json equals: '{
 	"steps" : [
 		{
 			"step" : {
@@ -46,7 +53,7 @@ GtMagritteJSONDataExporterExamples >> generateJsonForMathReasoningWithOnlyFinalA
 	exporter := GtMagritteJSONDataExporter
 			forObject: (GtLDemoMathReasoning new finalAnswer: 'final answer').
 	json := exporter exportObjectAsJsonString.
-	self assert: json equals: '{
+	self assertJson: json equals: '{
 	"steps" : [ ],
 	"finalAnswer" : "final answer"
 }'.
@@ -56,11 +63,12 @@ GtMagritteJSONDataExporterExamples >> generateJsonForMathReasoningWithOnlyFinalA
 { #category : #generation }
 GtMagritteJSONDataExporterExamples >> generateJsonForMathReasoningWithStepsAndFinalAnswer [
 	<gtExample>
-	| exporter json |
+	| exporter json expected |
 	exporter := GtMagritteJSONDataExporter
-			forObject: (GtMagritteJSONSchemaDataReaderExamples new expectedMathReasoningWithSingleTypeStep).
+			forObject: GtMagritteJSONSchemaDataReaderExamples new
+					expectedMathReasoningWithSingleTypeStep.
 	json := exporter exportObjectAsJsonString.
-	self assert: json equals: '{
+	expected := '{
 	"steps" : [
 		{
 			"output" : "8x + 7 = -23",
@@ -85,5 +93,6 @@ GtMagritteJSONDataExporterExamples >> generateJsonForMathReasoningWithStepsAndFi
 	],
 	"finalAnswer" : "x = -15 / 4"
 }'.
+	self assertJson: json equals: expected.
 	^ json
 ]

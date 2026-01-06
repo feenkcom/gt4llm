@@ -601,6 +601,7 @@ GtLToolForRemoteExampleMethodsRunExamples >> exampleRunNewClassDefinition [
 	- an example that checks for the existence of the class passes
 	- neither the class or example exist in the main image"
 	<gtExample>
+	<noTest>
 	| tool call resultString result results exampleNamePrefix exampleClassDefinition exampleSource exampleClassName exampleSelector resultDictionary |
 
 	self forPharo12AndNewer: [] forPharo11: [ ^ self ].
