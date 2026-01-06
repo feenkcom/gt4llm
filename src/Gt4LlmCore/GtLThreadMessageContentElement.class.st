@@ -1,13 +1,13 @@
 Class {
 	#name : #GtLThreadMessageContentElement,
 	#superclass : #BrVerticalPane,
-	#traits : 'TGtLWithChatMessageViewModel',
-	#classTraits : 'TGtLWithChatMessageViewModel classTrait',
+	#traits : 'TGtLWithMessageViewModel',
+	#classTraits : 'TGtLWithMessageViewModel classTrait',
 	#instVars : [
 		'header',
 		'viewUpdater'
 	],
-	#category : #'Gt4LlmCore-UI'
+	#category : #'Gt4LlmCore-UI - Elements'
 }
 
 { #category : #initialization }

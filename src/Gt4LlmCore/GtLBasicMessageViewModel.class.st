@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLBasicThreadMessageViewModel,
+	#name : #GtLBasicMessageViewModel,
 	#superclass : #Object,
 	#traits : 'TGtLWithMessage + TGtAnnouncer',
 	#classTraits : 'TGtLWithMessage classTrait + TGtAnnouncer classTrait',
@@ -12,53 +12,58 @@ Class {
 }
 
 { #category : #accessing }
-GtLBasicThreadMessageViewModel class >> messageViewPragmas [
+GtLBasicMessageViewModel class >> messageViewPragmas [
 	^ #(gtLlmMessageView  gtLlmView)
 ]
 
+{ #category : #visiting }
+GtLBasicMessageViewModel >> acceptVisitor: aVisitor [
+	^ aVisitor visitBasicMessageViewModel: self
+]
+
 { #category : #'as yet unclassified' }
-GtLBasicThreadMessageViewModel >> ancestor [
+GtLBasicMessageViewModel >> ancestor [
 	^ self threadMessage ancestor
 ]
 
 { #category : #accessing }
-GtLBasicThreadMessageViewModel >> annotations [
+GtLBasicMessageViewModel >> annotations [
 	^ message ifNotNil: #annotations ifNil: [ #() ]
 ]
 
 { #category : #announcer }
-GtLBasicThreadMessageViewModel >> announcer [
+GtLBasicMessageViewModel >> announcer [
 	<return: #Announcer>
 	^ announcer ifNil: [ announcer := Announcer new ]
 ]
 
-{ #category : #'as yet unclassified' }
-GtLBasicThreadMessageViewModel >> asElement [
-	^ self elementClass new threadMessageViewModel: self
+{ #category : #'api - converting' }
+GtLBasicMessageViewModel >> asElement [
+	^ self elementClass new messageViewModel: self
 ]
 
 { #category : #accessing }
-GtLBasicThreadMessageViewModel >> checkerInstance [
+GtLBasicMessageViewModel >> checkerInstance [
 	^ message chat checkerInstance
 ]
 
 { #category : #accessing }
-GtLBasicThreadMessageViewModel >> codeBlocksExecutor [
+GtLBasicMessageViewModel >> codeBlocksExecutor [
 	^ message codeBlocksExecutor
 ]
 
-{ #category : #accessing }
-GtLBasicThreadMessageViewModel >> elementClass [
+{ #category : #'api - converting' }
+GtLBasicMessageViewModel >> elementClass [
 	^ self subclassResponsibility
 ]
 
 { #category : #'private - hooks' }
-GtLBasicThreadMessageViewModel >> forwardAnnouncement: anAnnouncement [
+GtLBasicMessageViewModel >> forwardAnnouncement: anAnnouncement [
 		self announce: anAnnouncement
 ]
 
 { #category : #'gt - extensions' }
-GtLBasicThreadMessageViewModel >> gtMessageViewsFor: aView [
+GtLBasicMessageViewModel >> gtMessageViewsFor: aView [
 	<gtView>
 	^ aView columnedList
 		title: 'Message views';
@@ -70,33 +75,33 @@ GtLBasicThreadMessageViewModel >> gtMessageViewsFor: aView [
 ]
 
 { #category : #accessing }
-GtLBasicThreadMessageViewModel >> id [
+GtLBasicMessageViewModel >> id [
 	^ message id
 ]
 
 { #category : #initialization }
-GtLBasicThreadMessageViewModel >> initialize [
+GtLBasicMessageViewModel >> initialize [
 	super initialize.
 	checkRunResultViewModels := WeakIdentityKeyDictionary new
 ]
 
 { #category : #accessing }
-GtLBasicThreadMessageViewModel >> isAssistantRole [
+GtLBasicMessageViewModel >> isAssistantRole [
 	^ self threadMessage isAssistantRole
 ]
 
 { #category : #accessing }
-GtLBasicThreadMessageViewModel >> isUserRole [
+GtLBasicMessageViewModel >> isUserRole [
 	^ self threadMessage isUserRole
 ]
 
 { #category : #accessing }
-GtLBasicThreadMessageViewModel >> messageHeaderElement [
+GtLBasicMessageViewModel >> messageHeaderElement [
 	^ GtLThreadMessageHeaderElement new messageViewModel: self
 ]
 
 { #category : #accessing }
-GtLBasicThreadMessageViewModel >> messageToolbarActions [
+GtLBasicMessageViewModel >> messageToolbarActions [
 	^ GtPhlowActionsCollector new
 		pragmaName: #gtLlmAction;
 		fromObject: self message;
@@ -104,12 +109,12 @@ GtLBasicThreadMessageViewModel >> messageToolbarActions [
 ]
 
 { #category : #accessing }
-GtLBasicThreadMessageViewModel >> messageViewPragmas [
+GtLBasicMessageViewModel >> messageViewPragmas [
 	^ self class messageViewPragmas
 ]
 
 { #category : #accessing }
-GtLBasicThreadMessageViewModel >> messageViews [
+GtLBasicMessageViewModel >> messageViews [
 	| allViews |
 	allViews := OrderedCollection
 			streamContents: [ :aStream | 
@@ -140,44 +145,44 @@ GtLBasicThreadMessageViewModel >> messageViews [
 ]
 
 { #category : #private }
-GtLBasicThreadMessageViewModel >> newStyler [
+GtLBasicMessageViewModel >> newStyler [
 	^ BlCompositeStyler new
 		stylers: {GtLlmMessageStyler new threadMessageViewModel: self.
 				GtLlmThreadMessageStyler new annotations: self annotations}
 ]
 
 { #category : #'private - announcing' }
-GtLBasicThreadMessageViewModel >> notifyThreadMessageViewModelChanged [
+GtLBasicMessageViewModel >> notifyThreadMessageViewModelChanged [
 	self announce: GtLlmThreadMessageViewModelChanged new
 ]
 
 { #category : #'private - announcement handling' }
-GtLBasicThreadMessageViewModel >> onAddMessageContents: anAnnouncement [
+GtLBasicMessageViewModel >> onAddMessageContents: anAnnouncement [
 	self threadMessage chat announce: anAnnouncement
 ]
 
 { #category : #'private - hooks' }
-GtLBasicThreadMessageViewModel >> onMessageChanged [
+GtLBasicMessageViewModel >> onMessageChanged [
 	self notifyThreadMessageViewModelChanged
 ]
 
 { #category : #accessing }
-GtLBasicThreadMessageViewModel >> requestStyleSourceText [
+GtLBasicMessageViewModel >> requestStyleSourceText [
 	self announce: GtLlmThreadMessageRestyleRequested new
 ]
 
 { #category : #'as yet unclassified' }
-GtLBasicThreadMessageViewModel >> senderText [
+GtLBasicMessageViewModel >> senderText [
 	^ self message senderText
 ]
 
 { #category : #accessing }
-GtLBasicThreadMessageViewModel >> styler [
+GtLBasicMessageViewModel >> styler [
 	^ styler ifNil: [ styler := self newStyler ]
 ]
 
 { #category : #'private - hooks' }
-GtLBasicThreadMessageViewModel >> subscribeToMessage [
+GtLBasicMessageViewModel >> subscribeToMessage [
 	self message
 		when: GtLlmMessageContentsUpdated
 		send: #forwardAnnouncement:
@@ -185,7 +190,7 @@ GtLBasicThreadMessageViewModel >> subscribeToMessage [
 ]
 
 { #category : #'as yet unclassified' }
-GtLBasicThreadMessageViewModel >> uiInsets [
+GtLBasicMessageViewModel >> uiInsets [
 	self message isAssistantRole ifTrue: [ ^ BlInsets right: 50 ].
 	self message isToolRole ifTrue: [ ^ BlInsets left: 25 right: 25 ].
 	^ BlInsets left: 50

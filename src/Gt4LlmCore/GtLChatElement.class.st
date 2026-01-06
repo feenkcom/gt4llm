@@ -7,7 +7,7 @@ Class {
 		'chatViewModel',
 		'listElement'
 	],
-	#category : #'Gt4LlmCore-UI'
+	#category : #'Gt4LlmCore-UI - Elements'
 }
 
 { #category : #'api - initialization' }

@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLChatMessage,
-	#superclass : #GtLEntity,
+	#superclass : #GtLBasicMessage,
 	#instVars : [
 		'content',
 		'role',
@@ -121,11 +121,6 @@ GtLChatMessage >> arguments [
 { #category : #accessing }
 GtLChatMessage >> asTokenizableString [
 	^ '<|im_start|>' , self role , '<|im_sep|>' , self content , '<|im_end|>'
-]
-
-{ #category : #converting }
-GtLChatMessage >> asViewModel [
-	^ GtLChatMessageViewModel new message: self
 ]
 
 { #category : #'as yet unclassified' }
@@ -586,6 +581,11 @@ GtLChatMessage >> updateDataFromMessage: aPreviousMessage [
 GtLChatMessage >> uuidClass [
 	"This is in a separate method in an extension package to be able to compile the base class to Gemstone"
 	^ UUID
+]
+
+{ #category : #'api - converting' }
+GtLChatMessage >> viewModelClass [
+	^ GtLMessageViewModel
 ]
 
 { #category : #'announcer - subscription' }

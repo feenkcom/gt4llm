@@ -1,12 +1,12 @@
 Class {
 	#name : #GtLFailureMessage,
-	#superclass : #Object,
+	#superclass : #GtLBasicMessage,
 	#instVars : [
 		'failureText',
 		'createdAt',
 		'chat'
 	],
-	#category : #'Gt4LlmCore-UI'
+	#category : #'Gt4LlmCore-UI - View Models'
 }
 
 { #category : #'as yet unclassified' }
@@ -87,7 +87,7 @@ GtLFailureMessage >> gtContentFor: aView [
 		title: 'Content';
 		priority: 1;
 		stencil: [ GtLChatMessageElement new
-				threadMessageViewModel: (GtLChatMessageViewModel new threadMessage: self) ]
+				threadMessageViewModel: (GtLMessageViewModel new threadMessage: self) ]
 ]
 
 { #category : #testing }

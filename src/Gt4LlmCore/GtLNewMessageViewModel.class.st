@@ -1,11 +1,16 @@
 Class {
 	#name : #GtLNewMessageViewModel,
-	#superclass : #GtLBasicThreadMessageViewModel,
+	#superclass : #GtLBasicMessageViewModel,
 	#instVars : [
 		'connectionRegistry'
 	],
 	#category : #'Gt4LlmCore-UI - View Models'
 }
+
+{ #category : #visiting }
+GtLNewMessageViewModel >> acceptVisitor: aVisitor [
+	^ aVisitor visitNewMessageViewModel: self
+]
 
 { #category : #'initialization ' }
 GtLNewMessageViewModel >> assistantChat: assistantChat [
@@ -50,7 +55,7 @@ GtLNewMessageViewModel >> contents: aString requester: aRequester [
 	self message contents: aString requester: aRequester
 ]
 
-{ #category : #accessing }
+{ #category : #'api - converting' }
 GtLNewMessageViewModel >> elementClass [
 	^ GtLNewMessageElement
 ]
