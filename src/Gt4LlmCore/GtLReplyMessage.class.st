@@ -25,13 +25,17 @@ GtLReplyMessage >> assistantMessage [
 ]
 
 { #category : #accessing }
-GtLReplyMessage >> assistantMessage: anObject [
-	assistantMessage := anObject
+GtLReplyMessage >> assistantMessage: aMessage [
+	assistantMessage = aMessage ifTrue: [ ^ self ].
+
+	assistantMessage := aMessage.
+	
+	self notifyReplyMessageChanged
 ]
 
 { #category : #accessing }
 GtLReplyMessage >> content [
-	^ self currentMessageDo: #content ifAbsent: [ super content ]
+	^ self currentMessageDo: #content ifAbsent: [ '' ]
 ]
 
 { #category : #accessing }
@@ -59,10 +63,39 @@ GtLReplyMessage >> currentMessageDo: aBlock ifAbsent: anAbsentBlock [
 	^ anAbsentBlock value
 ]
 
+{ #category : #'gt - extensions' }
+GtLReplyMessage >> gtToolViewMessagesFor: aView [
+	<gtView>
+	<gtLlmView>
+	self toolMessages ifEmpty: [ ^ aView empty ].
+
+	^ aView columnedList
+		title: 'Tools';
+		items: [ self toolMessages ];
+		column: 'Tool' text: #toolName;
+		column: 'Arguments'
+			text: [ :each | 
+				String
+					streamContents: [ :aStream | 
+						each toolArguments
+							do: [ :anAssoc | 
+								aStream
+									nextPutAll: anAssoc key asString;
+									nextPut: $:;
+									nextPutAll: anAssoc value asString ]
+							separatedBy: [ aStream nextPutAll: ', ' ] ] ];
+		column: 'Description' text: #toolDescription
+]
+
 { #category : #initialization }
 GtLReplyMessage >> initialize [
 	super initialize.
 	toolMessages := #()
+]
+
+{ #category : #'api - testing' }
+GtLReplyMessage >> isAssistantRole [
+	^ self currentMessageDo: #isAssistantRole ifAbsent: [ false ]
 ]
 
 { #category : #testing }
@@ -82,9 +115,19 @@ GtLReplyMessage >> messagesDo: aBlock [
 	self assistantMessage ifNotNil: aBlock
 ]
 
+{ #category : #'private - notifying' }
+GtLReplyMessage >> notifyReplyMessageChanged [
+	self announcer announce: (GtLMessageContentsChanged new message: self)
+]
+
 { #category : #accessing }
 GtLReplyMessage >> role [
 	^ self currentMessageDo: #role ifAbsent: [ super role ifNil: [ #waiting ] ]
+]
+
+{ #category : #accessing }
+GtLReplyMessage >> senderText [
+	^ self currentMessageDo: #senderText ifAbsent: [ 'Waiting' ]
 ]
 
 { #category : #accessing }
@@ -93,8 +136,12 @@ GtLReplyMessage >> toolMessages [
 ]
 
 { #category : #accessing }
-GtLReplyMessage >> toolMessages: anObject [
-	toolMessages := anObject
+GtLReplyMessage >> toolMessages: aCollection [
+	toolMessages = aCollection ifTrue: [ ^ self ].
+
+	toolMessages := aCollection.
+	
+	self notifyReplyMessageChanged
 ]
 
 { #category : #accessing }
@@ -103,8 +150,8 @@ GtLReplyMessage >> userMessage [
 ]
 
 { #category : #accessing }
-GtLReplyMessage >> userMessage: anObject [
-	userMessage := anObject
+GtLReplyMessage >> userMessage: aMessage [
+	userMessage := aMessage
 ]
 
 { #category : #'api - converting' }

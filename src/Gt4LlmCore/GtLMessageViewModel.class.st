@@ -26,7 +26,7 @@ GtLMessageViewModel >> createdAt [
 
 { #category : #'api - converting' }
 GtLMessageViewModel >> elementClass [
-	^ GtLExpandableThreadMessageElement
+	^ GtLExpandableMessageElement
 ]
 
 { #category : #'gt - extensions' }
@@ -56,17 +56,28 @@ GtLMessageViewModel >> gtToolViewMessagesFor: aView [
 
 { #category : #accessing }
 GtLMessageViewModel >> isExpanded [
-	^ isExpanded ifNil: [ true ]
+	^ isExpanded ifNil: [ isExpanded := true ]
 ]
 
 { #category : #accessing }
 GtLMessageViewModel >> isExpanded: aBoolean [
-	isExpanded := aBoolean
+	isExpanded = aBoolean ifTrue: [ ^ self ].
+
+	isExpanded := aBoolean.
+	self notifyExpandedChanged
 ]
 
 { #category : #testing }
 GtLMessageViewModel >> isFailure [
 	^ self message isFailure
+]
+
+{ #category : #'private - notifying' }
+GtLMessageViewModel >> notifyExpandedChanged [
+	self announcer
+		announce: (GtLMessageViewModelExpansionChanged new
+				messageViewModel: self;
+				isExpanded: self isExpanded)
 ]
 
 { #category : #'private - hooks' }
