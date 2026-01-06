@@ -385,7 +385,7 @@ GtLChatOpenAILiveExamples >> messageWithToolCallExample [
 { #category : #'examples - calls' }
 GtLChatOpenAILiveExamples >> messageWithToolCallExample_magritteMarkdown [
 	<gtExample>
-"	<noTest>"
+	<noTest>
 	| messageString currentMessage responseMessage |
 	messageString := 'Use tools and give me a description of the class BlElement'.
 

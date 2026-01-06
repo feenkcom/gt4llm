@@ -18,11 +18,6 @@ GtLOpenAIMessage class >> from: aDict [
 ]
 
 { #category : #accessing }
-GtLOpenAIMessage class >> leJsonV4Name [
-	^ #gtLOpenAIMessage
-]
-
-{ #category : #accessing }
 GtLOpenAIMessage class >> serializationProperties [
 	^ {
 		#content -> #content.

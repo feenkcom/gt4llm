@@ -10,12 +10,6 @@ Class {
 }
 
 { #category : #accessing }
-GtLOpenAIDeletion class >> leJsonV4Name [
-
-	^ #gtOpenAIDeletion
-]
-
-{ #category : #accessing }
 GtLOpenAIDeletion class >> serializationProperties [
 	^ {#id -> #id.
 		#object -> #object.

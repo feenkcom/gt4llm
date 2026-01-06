@@ -13,12 +13,6 @@ Class {
 }
 
 { #category : #accessing }
-GtLOpenAIChatCompletion class >> leJsonV4Name [
-
-	^ #gtOpenAIChatCompletion
-]
-
-{ #category : #accessing }
 GtLOpenAIChatCompletion class >> serializationProperties [
 	^ {#id -> #id.
 		#created -> #created.

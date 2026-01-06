@@ -28,12 +28,6 @@ Class {
 	#category : #'Gt4Llm-OpenAI'
 }
 
-{ #category : #accessing }
-GtLOpenAIResponse class >> leJsonV4Name [
-
-	^ #gtOpenAIResponse
-]
-
 { #category : #'as yet unclassified' }
 GtLOpenAIResponse class >> serializationProperties [
 	^ {#id -> #id.

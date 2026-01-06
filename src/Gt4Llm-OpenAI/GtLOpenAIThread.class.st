@@ -13,12 +13,6 @@ Class {
 }
 
 { #category : #accessing }
-GtLOpenAIThread class >> leJsonV4Name [
-
-	^ #gtOpenAIThread
-]
-
-{ #category : #accessing }
 GtLOpenAIThread class >> serializationProperties [
 	^ {#id -> #id.
 		#created_at -> #createdAt.

@@ -15,12 +15,6 @@ GtLOpenAIEmbedding class >> from: anArray [
 ]
 
 { #category : #accessing }
-GtLOpenAIEmbedding class >> leJsonV4Name [
-
-	^ #gtOpenAIEmbedding
-]
-
-{ #category : #accessing }
 GtLOpenAIEmbedding >> embedding [
 	^ embedding
 ]

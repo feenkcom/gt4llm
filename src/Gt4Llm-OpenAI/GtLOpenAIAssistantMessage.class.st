@@ -7,11 +7,6 @@ Class {
 	#category : #'Gt4Llm-OpenAI'
 }
 
-{ #category : #'as yet unclassified' }
-GtLOpenAIAssistantMessage class >> leJsonV4Name [
-	^ #gtLOpenAIAssistantMessage
-]
-
 { #category : #testing }
 GtLOpenAIAssistantMessage >> canExtractResponseModels [
 	| responseText |
