@@ -44,10 +44,13 @@ GtLChatElement >> initializeListElement [
 			hMatchParent;
 			vMatchParent;
 			padding: (BlInsets all: 5);
-			itemType: [ :aFactory :anItem :anIndex | anItem elementClass ];
-			itemId: [ :anItem :anIndex | anItem id ];
+			itemId: [ :aViewModel :anIndex | aViewModel id ];
+			itemType: [ :aFactory :aViewModel :anIndex | aViewModel elementClass ];
 			itemStencil: [ :anElementClass :aListWidget | anElementClass newForChatList ];
-			itemDataBinder: [ :anItemElement :anItem | anItemElement messageViewModel: anItem ]
+			itemDataBinder: [ :aMessageElement :aViewModel :anIndex | 
+				aMessageElement 
+					id: (GtLMessageElementId indexed: anIndex);
+					messageViewModel: aViewModel ]
 ]
 
 { #category : #'private - event handling' }

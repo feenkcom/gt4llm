@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLThreadMessageHeaderElement,
+	#name : #GtLMessageHeaderElement,
 	#superclass : #BrHorizontalPane,
 	#traits : 'TGtLWithMessageViewModel',
 	#classTraits : 'TGtLWithMessageViewModel classTrait',
@@ -7,7 +7,7 @@ Class {
 }
 
 { #category : #accessing }
-GtLThreadMessageHeaderElement >> addActionElement [
+GtLMessageHeaderElement >> addActionElement [
 	| aFrame |
 	aFrame := BrFrame new matchParent.
 
@@ -23,7 +23,7 @@ GtLThreadMessageHeaderElement >> addActionElement [
 ]
 
 { #category : #accessing }
-GtLThreadMessageHeaderElement >> addSenderElement [
+GtLMessageHeaderElement >> addSenderElement [
 	self
 		addChild: (BrLabel new
 				hFitContentLimited;
@@ -38,7 +38,7 @@ GtLThreadMessageHeaderElement >> addSenderElement [
 ]
 
 { #category : #accessing }
-GtLThreadMessageHeaderElement >> initialize [
+GtLMessageHeaderElement >> initialize [
 	super initialize.
 	
 	self vFitContent.
@@ -46,12 +46,12 @@ GtLThreadMessageHeaderElement >> initialize [
 ]
 
 { #category : #'private - hooks' }
-GtLThreadMessageHeaderElement >> onMessageViewModelChanged [
+GtLMessageHeaderElement >> onMessageViewModelChanged [
 	self updateElement
 ]
 
 { #category : #accessing }
-GtLThreadMessageHeaderElement >> updateElement [
+GtLMessageHeaderElement >> updateElement [
 	self removeChildren.
 	
 	self addSenderElement.

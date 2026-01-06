@@ -47,7 +47,7 @@ GtLChatMessageViewModelsBuilder >> buildFailureMessage [
 			failureText: status message;
 			createdAt: status createdAt;
 			chat: chat.
-	aViewModel := self newMessageViewModelFor: aMessage.
+	aViewModel := aMessage asViewModel.
 	stream nextPut: aViewModel
 ]
 
@@ -119,11 +119,6 @@ GtLChatMessageViewModelsBuilder >> newMessageViewModel [
 { #category : #accessing }
 GtLChatMessageViewModelsBuilder >> newMessageViewModel: anObject [
 	newMessageViewModel := anObject
-]
-
-{ #category : #'private - building' }
-GtLChatMessageViewModelsBuilder >> newMessageViewModelFor: aMessage [
-	^ GtLMessageViewModel new message: aMessage
 ]
 
 { #category : #'private - building' }

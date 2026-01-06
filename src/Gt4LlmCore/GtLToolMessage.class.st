@@ -136,3 +136,8 @@ GtLToolMessage >> toolDescription [
 GtLToolMessage >> toolName [
 	^ self toolCall name
 ]
+
+{ #category : #'api - converting' }
+GtLToolMessage >> viewModelClass [
+	^ GtLToolMessageViewModel
+]

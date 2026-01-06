@@ -74,7 +74,7 @@ GtLChatMessage >> acceptVisitor: aVisitor [
 	^ aVisitor visitGtLlmChatMessage: self
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLChatMessage >> action [
 	^ [ self contentJson at: 'Action' ] on: Error do: [ nil ]
 ]
@@ -92,7 +92,7 @@ GtLChatMessage >> addResponseFormatForMagrite: aClass named: aString [
 				modelClass: aClass)
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLChatMessage >> ancestor [
 	^ self chat ancestorOf: self
 ]
@@ -113,7 +113,7 @@ GtLChatMessage >> announcer [
 	^ announcer ifNil: [announcer := Announcer new]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLChatMessage >> arguments [
 	^ [ self contentJson at: 'Arguments' ] on: Error do: [ nil ]
 ]
@@ -169,7 +169,7 @@ GtLChatMessage >> contentFiles [
 						ifAbsent: [ '' ] ] ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLChatMessage >> contentJson [
 	| ston value |
 	ston := STON reader on: self contentText readStream.
@@ -356,7 +356,7 @@ GtLChatMessage >> id [
 	^ id
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLChatMessage >> id: anId [
 	id := anId
 ]
@@ -528,7 +528,7 @@ GtLChatMessage >> senderText [
 	^ 'You'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLChatMessage >> serialize [
 	| serialized |
 	serialized := super serialize.
