@@ -258,7 +258,7 @@ GtLToolForRemoteExampleMethodsRunExamples >> addClassToEventFactory [
 
 	self forPharo12AndNewer: [] forPharo11: [ ^ self ].
 
-	tool := GtLlmToolForRemoteExampleMethodsRun new.
+	tool := GtLToolForRemoteExampleMethodsRun new.
 	eventFactory := GtEpiceaEventFactory new.
 	classDefinition := {
 		'type' -> 'class'.
@@ -288,7 +288,7 @@ GtLToolForRemoteExampleMethodsRunExamples >> addMethodToEventFactory [
 	<gtExample>
 	| tool eventFactory methodDefinition omEntry epMethodAddition rgMethodAddition |
 
-	tool := GtLlmToolForRemoteExampleMethodsRun new.
+	tool := GtLToolForRemoteExampleMethodsRun new.
 	eventFactory := GtEpiceaEventFactory new.
 	methodDefinition := {
 		'type' -> 'method'.
@@ -317,7 +317,7 @@ GtLToolForRemoteExampleMethodsRunExamples >> addRemoveClassToEventFactory [
 
 	self forPharo12AndNewer: [] forPharo11: [ ^ self ].
 
-	tool := GtLlmToolForRemoteExampleMethodsRun new.
+	tool := GtLToolForRemoteExampleMethodsRun new.
 	eventFactory := GtEpiceaEventFactory new.
 	classDefinition := {
 		'type' -> 'class'.
@@ -347,7 +347,7 @@ GtLToolForRemoteExampleMethodsRunExamples >> addRemoveMethodToEventFactory [
 	<gtExample>
 	| tool eventFactory methodDefinition omEntry epMethodRemoval rgMethodRemoval |
 
-	tool := GtLlmToolForRemoteExampleMethodsRun new.
+	tool := GtLToolForRemoteExampleMethodsRun new.
 	eventFactory := GtEpiceaEventFactory new.
 	methodDefinition := {
 		'type' -> 'method'.
@@ -579,8 +579,8 @@ GtLToolForRemoteExampleMethodsRunExamples >> exampleRunFailsWithoutCheckNames [
     "Expect the tool to signal the missing checkNames error"
     <gtExample>
     | tool call resultString result errorDictionary message |
-    tool := GtLlmToolForRemoteExampleMethodsRun new.
-    call := GtLlmFunctionToolCall new.
+    tool := GtLToolForRemoteExampleMethodsRun new.
+    call := GtLFunctionToolCall new.
     call function: {
         'name' -> tool name.
         'arguments' -> { 'changes' -> '[]' } asDictionary
@@ -606,8 +606,8 @@ GtLToolForRemoteExampleMethodsRunExamples >> exampleRunNewClassDefinition [
 
 	self forPharo12AndNewer: [] forPharo11: [ ^ self ].
 
-	tool := GtLlmToolForRemoteExampleMethodsRun new.
-	call := GtLlmFunctionToolCall new.
+	tool := GtLToolForRemoteExampleMethodsRun new.
+	call := GtLFunctionToolCall new.
 	exampleClassName := #GtLlmToolForRemoteExampleMethodsRunExamplesTestClass.
 	exampleSelector := #checkExampleTestClassPresence.
 	self assert: (self class environment classOrTraitNamed: exampleClassName) isNil
@@ -667,8 +667,8 @@ GtLToolForRemoteExampleMethodsRunExamples >> exampleRunRejectsNonArrayCheckNames
     "checkNames must deserialize to an Array"
     <gtExample>
     | tool call resultString result errorDictionary message |
-    tool := GtLlmToolForRemoteExampleMethodsRun new.
-    call := GtLlmFunctionToolCall new.
+    tool := GtLToolForRemoteExampleMethodsRun new.
+    call := GtLFunctionToolCall new.
     call function: {
         'name' -> tool name.
         'arguments' -> {
@@ -689,8 +689,8 @@ GtLToolForRemoteExampleMethodsRunExamples >> exampleRunRejectsUnknownChangeType 
     "Non-method change dictionaries should fail fast"
     <gtExample>
     | tool call resultString result errorDictionary message |
-    tool := GtLlmToolForRemoteExampleMethodsRun new.
-    call := GtLlmFunctionToolCall new.
+    tool := GtLToolForRemoteExampleMethodsRun new.
+    call := GtLFunctionToolCall new.
     call function: {
         'name' -> tool name.
         'arguments' -> {
@@ -720,8 +720,8 @@ GtLToolForRemoteExampleMethodsRunExamples >> exampleRunReportsDetailsForFailures
     <gtExample>
     <noTest>
     | tool call result results message |
-    tool := GtLlmToolForRemoteExampleMethodsRun new.
-    call := GtLlmFunctionToolCall new.
+    tool := GtLToolForRemoteExampleMethodsRun new.
+    call := GtLFunctionToolCall new.
     call function: {
         'name' -> tool name.
         'arguments' -> {
@@ -756,8 +756,8 @@ GtLToolForRemoteExampleMethodsRunExamples >> exampleRunSuccess [
 	<noTest>
 	| tool call resultString result results exampleNamePrefix |
 
-	tool := GtLlmToolForRemoteExampleMethodsRun new.
-	call := GtLlmFunctionToolCall new.
+	tool := GtLToolForRemoteExampleMethodsRun new.
+	call := GtLFunctionToolCall new.
 	exampleNamePrefix := self class name asString, '>>'.
 	call function: {
 		'name' -> tool name.
@@ -810,8 +810,8 @@ GtLToolForRemoteExampleMethodsRunExamples >> exampleRunSuccessEmptyChanges [
 	<noTest>
 	| tool call resultString result results exampleNamePrefix testResult |
 
-	tool := GtLlmToolForRemoteExampleMethodsRun new.
-	call := GtLlmFunctionToolCall new.
+	tool := GtLToolForRemoteExampleMethodsRun new.
+	call := GtLFunctionToolCall new.
 	exampleNamePrefix := self class name asString, '>>'.
 	call function: {
 		'name' -> tool name.
@@ -843,8 +843,8 @@ GtLToolForRemoteExampleMethodsRunExamples >> exampleRunSuccessNoChanges [
 	<noTest>
 	| tool call resultString result results exampleNamePrefix |
 
-	tool := GtLlmToolForRemoteExampleMethodsRun new.
-	call := GtLlmFunctionToolCall new.
+	tool := GtLToolForRemoteExampleMethodsRun new.
+	call := GtLFunctionToolCall new.
 	exampleNamePrefix := self class name asString, '>>'.
 	call function: {
 		'name' -> tool name.
@@ -872,8 +872,8 @@ GtLToolForRemoteExampleMethodsRunExamples >> exampleRunWithHashSelectors [
     <gtExample>
     <noTest>
     | tool call result results |
-    tool := GtLlmToolForRemoteExampleMethodsRun new.
-    call := GtLlmFunctionToolCall new.
+    tool := GtLToolForRemoteExampleMethodsRun new.
+    call := GtLFunctionToolCall new.
     call function: {
         'name' -> tool name.
         'arguments' -> {
