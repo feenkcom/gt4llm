@@ -106,3 +106,8 @@ GtLReplyMessage >> userMessage [
 GtLReplyMessage >> userMessage: anObject [
 	userMessage := anObject
 ]
+
+{ #category : #'api - converting' }
+GtLReplyMessage >> viewModelClass [
+	^ GtLReplyMessageViewModel
+]

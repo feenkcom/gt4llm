@@ -18,17 +18,17 @@ GtLErrorMessage class >> freeze: anError [
 	^ self new exception: (GtSystemUtility freeze: anError)
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLErrorMessage class >> leJsonV4Name [
 	^ #gtLErrorMessage
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLErrorMessage >> action [
 	^ nil
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLErrorMessage >> arguments [
 	^ {}
 ]
@@ -41,12 +41,12 @@ GtLErrorMessage >> chat: aChat [
 			self otherException: (GtSystemUtility freeze: anError) ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLErrorMessage >> content [
 	^ self contentText
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLErrorMessage >> contentJson [
 	^ {} asDictionary
 ]
@@ -87,8 +87,10 @@ GtLErrorMessage >> initialize [
 	super initialize.
 	
 	otherExceptions := #().
+	
+	self flag: #todo. 
+	"I doubt it is correct to set a fixed id. What if we have two error messages in the same list?"
 	self id: '3a876ca3-32ce-0d00-b7b2-b9390ae84159'.
-	self createdAt: DateAndTime now.
 ]
 
 { #category : #testing }
@@ -146,6 +148,11 @@ GtLErrorMessage >> unsubscribe: anObject [
 	"do nothing"
 
 	
+]
+
+{ #category : #'api - converting' }
+GtLErrorMessage >> viewModelClass [
+	^ GtLErrorMessageViewModel
 ]
 
 { #category : #'announcer - subscription' }

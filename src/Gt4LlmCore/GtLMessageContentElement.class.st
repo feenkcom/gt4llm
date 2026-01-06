@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLThreadMessageContentElement,
+	#name : #GtLMessageContentElement,
 	#superclass : #BrVerticalPane,
 	#traits : 'TGtLWithMessageViewModel',
 	#classTraits : 'TGtLWithMessageViewModel classTrait',
@@ -11,7 +11,7 @@ Class {
 }
 
 { #category : #initialization }
-GtLThreadMessageContentElement >> initialize [
+GtLMessageContentElement >> initialize [
 	super initialize.
 
 	self initializeViewUpdater.
@@ -25,21 +25,21 @@ GtLThreadMessageContentElement >> initialize [
 ]
 
 { #category : #initialization }
-GtLThreadMessageContentElement >> initializeHeader [
+GtLMessageContentElement >> initializeHeader [
 	header := BrHorizontalPane new
 			hMatchParent;
 			vFitContent
 ]
 
 { #category : #initialization }
-GtLThreadMessageContentElement >> initializeViewUpdater [
+GtLMessageContentElement >> initializeViewUpdater [
 	viewUpdater := BrElementUpdater new.
 	viewUpdater element: self selector: #updateViews.
 	viewUpdater postponedDuration: 300 milliseconds
 ]
 
 { #category : #'private - updating' }
-GtLThreadMessageContentElement >> makeActionToolbar [
+GtLMessageContentElement >> makeActionToolbar [
 	| actionToolbar |
 	actionToolbar := BrToolbar new aptitude: BrGlamorousToolbarAptitude new.
 
@@ -53,22 +53,22 @@ GtLThreadMessageContentElement >> makeActionToolbar [
 ]
 
 { #category : #'private - event handling' }
-GtLThreadMessageContentElement >> onMessageContentsUpdated: anAnnouncement [
+GtLMessageContentElement >> onMessageContentsUpdated: anAnnouncement [
 	viewUpdater requestUpdate
 ]
 
 { #category : #'private - hooks' }
-GtLThreadMessageContentElement >> onMessageViewModelChanged [
+GtLMessageContentElement >> onMessageViewModelChanged [
 	self updateElement
 ]
 
 { #category : #accessing }
-GtLThreadMessageContentElement >> onThreadMessageViewModelChanged: anAnnouncement [
+GtLMessageContentElement >> onThreadMessageViewModelChanged: anAnnouncement [
 	BlTaskAction enqueueElement: self action: [ self updateElement ]
 ]
 
 { #category : #'private - hooks' }
-GtLThreadMessageContentElement >> subscribeToMessageViewModel [
+GtLMessageContentElement >> subscribeToMessageViewModel [
 	self messageViewModel weak
 		when: GtLlmThreadMessageViewModelChanged
 			send: #onThreadMessageViewModelChanged:
@@ -79,32 +79,32 @@ GtLThreadMessageContentElement >> subscribeToMessageViewModel [
 ]
 
 { #category : #'private - hooks' }
-GtLThreadMessageContentElement >> unsubscribeFromMessageViewModel [
+GtLMessageContentElement >> unsubscribeFromMessageViewModel [
 	self messageViewModel unsubscribe: self
 ]
 
 { #category : #'private - hooks' }
-GtLThreadMessageContentElement >> updateElement [
+GtLMessageContentElement >> updateElement [
 	self updateHeader.
 	self updateViews
 ]
 
 { #category : #'private - updating' }
-GtLThreadMessageContentElement >> updateHeader [
+GtLMessageContentElement >> updateHeader [
 	header removeChildren.
 	header addChild: self messageViewModel messageHeaderElement.
 	header addChild: self makeActionToolbar
 ]
 
 { #category : #'private - updating' }
-GtLThreadMessageContentElement >> updateViews [
+GtLMessageContentElement >> updateViews [
 	"Called by updater"
 
 	self views: self messageViewModel messageViews
 ]
 
 { #category : #'private - updating' }
-GtLThreadMessageContentElement >> views: aCollectionOfViews [
+GtLMessageContentElement >> views: aCollectionOfViews [
 	| views |
 	self removeChildNamed: #'message-tabs'.
 
@@ -119,7 +119,7 @@ GtLThreadMessageContentElement >> views: aCollectionOfViews [
 ]
 
 { #category : #'private - updating' }
-GtLThreadMessageContentElement >> viewsToTabGroup: aCollectionOfViews [
+GtLMessageContentElement >> viewsToTabGroup: aCollectionOfViews [
 	"(GtPhlowCompositeView new views: aCollectionOfViews)
 		asElementDo: [ :e | e vFitContentLimited ]  "
 

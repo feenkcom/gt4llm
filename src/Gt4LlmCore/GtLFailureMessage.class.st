@@ -64,11 +64,6 @@ GtLFailureMessage >> createdAt: anObject [
 	createdAt := anObject
 ]
 
-{ #category : #ui }
-GtLFailureMessage >> elementClass [
-	^ GtLChatMessageElement
-]
-
 { #category : #accessing }
 GtLFailureMessage >> failureText [
 	^ failureText
@@ -125,6 +120,11 @@ GtLFailureMessage >> unsubscribe: anObject [
 	"do nothing"
 
 	
+]
+
+{ #category : #'api - converting' }
+GtLFailureMessage >> viewModelClass [
+	^ GtLFailureMessageViewModel
 ]
 
 { #category : #subscriptions }

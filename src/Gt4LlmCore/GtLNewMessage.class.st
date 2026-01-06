@@ -81,11 +81,6 @@ GtLNewMessage >> contents: aString requester: aRequester [
 	self onContentsChangeByRequester: aRequester
 ]
 
-{ #category : #ui }
-GtLNewMessage >> elementClass [
-	^ GtLNewMessageElement
-]
-
 { #category : #'as yet unclassified' }
 GtLNewMessage >> files [
 	^ files

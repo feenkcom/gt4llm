@@ -54,12 +54,12 @@ GtLExpandableThreadMessageElement >> initialize [
 
 { #category : #'initialization ' }
 GtLExpandableThreadMessageElement >> initializeOneLineThreadMessageElement [
-	oneLineThreadMessageElement := GtLThreadMessageHeaderElement new.
+	oneLineThreadMessageElement := GtLMessageHeaderElement new.
 ]
 
 { #category : #'initialization ' }
 GtLExpandableThreadMessageElement >> initializeThreadMessageElement [
-	threadMessageElement := GtLThreadMessageContentElement new
+	threadMessageElement := GtLMessageContentElement new
 ]
 
 { #category : #'initialization ' }

@@ -97,7 +97,7 @@ GtLBasicMessageViewModel >> isUserRole [
 
 { #category : #accessing }
 GtLBasicMessageViewModel >> messageHeaderElement [
-	^ GtLThreadMessageHeaderElement new messageViewModel: self
+	^ GtLMessageHeaderElement new messageViewModel: self
 ]
 
 { #category : #accessing }
