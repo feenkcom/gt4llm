@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'connectionRegistry'
 	],
-	#category : #'Gt4LlmCore-UI'
+	#category : #'Gt4LlmCore-UI - View Models'
 }
 
 { #category : #'initialization ' }

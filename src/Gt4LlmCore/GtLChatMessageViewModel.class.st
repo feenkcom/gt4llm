@@ -6,7 +6,7 @@ Class {
 		'userViewMessage',
 		'toolViewMessages'
 	],
-	#category : #'Gt4LlmCore-UI'
+	#category : #'Gt4LlmCore-UI - View Models'
 }
 
 { #category : #'api - accessing' }
