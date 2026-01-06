@@ -1,13 +1,13 @@
 Class {
 	#name : #GtLExpandableThreadMessageElement,
 	#superclass : #BrExpander,
-	#traits : 'TGtLWithChatMessageViewModel',
-	#classTraits : 'TGtLWithChatMessageViewModel classTrait',
+	#traits : 'TGtLWithMessageViewModel',
+	#classTraits : 'TGtLWithMessageViewModel classTrait',
 	#instVars : [
 		'oneLineThreadMessageElement',
 		'threadMessageElement'
 	],
-	#category : #'Gt4LlmCore-UI'
+	#category : #'Gt4LlmCore-UI - Elements'
 }
 
 { #category : #factory }

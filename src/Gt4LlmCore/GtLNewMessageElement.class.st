@@ -1,15 +1,15 @@
 Class {
 	#name : #GtLNewMessageElement,
 	#superclass : #BlElement,
-	#traits : 'TBrLayoutResizable + TGtLWithChatMessageViewModel',
-	#classTraits : 'TBrLayoutResizable classTrait + TGtLWithChatMessageViewModel classTrait',
+	#traits : 'TBrLayoutResizable + TGtLWithMessageViewModel',
+	#classTraits : 'TBrLayoutResizable classTrait + TGtLWithMessageViewModel classTrait',
 	#instVars : [
 		'contentsElement',
 		'toolbar',
 		'imagesElement',
 		'sendButton'
 	],
-	#category : #'Gt4LlmCore-UI'
+	#category : #'Gt4LlmCore-UI - Elements'
 }
 
 { #category : #factory }

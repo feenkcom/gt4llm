@@ -84,7 +84,7 @@ GtLReplyMessage >> messagesDo: aBlock [
 
 { #category : #accessing }
 GtLReplyMessage >> role [
-	^ self currentMessageDo: #role ifAbsent: [ super role ]
+	^ self currentMessageDo: #role ifAbsent: [ super role ifNil: [ #waiting ] ]
 ]
 
 { #category : #accessing }
