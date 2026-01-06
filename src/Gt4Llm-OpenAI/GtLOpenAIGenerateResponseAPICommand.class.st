@@ -17,7 +17,7 @@ GtLOpenAIGenerateResponseAPICommand >> buildEntity [
 	| entity input |
 	input := OrderedCollection new.
 	self messages
-		do: [ :aMessage | 
+		messagesDo: [ :aMessage | 
 			(aMessage isKindOf: GtLToolMessage)
 				ifTrue: [ input add: aMessage toolCall responseInput.
 					aMessage toolCall isFinished

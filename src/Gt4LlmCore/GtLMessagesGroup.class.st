@@ -71,6 +71,14 @@ GtLMessagesGroup >> lastUserMessageIfPresent: aPresentBlock ifAbsent: anAbsentBl
 	^ anAbsentBlock value
 ]
 
+{ #category : #enumerating }
+GtLMessagesGroup >> messagesDo: aBlock [
+	"Evaluate do block on all messages.
+	Note that some messages may be a composition of other messages."
+
+	self do: [ :eachMessage | eachMessage messagesDo: aBlock ]
+]
+
 { #category : #accessing }
 GtLMessagesGroup >> serialize [
 	^ {'messages' -> (self items collect: #serialize)} asDictionary

@@ -76,7 +76,7 @@ GtLOpenAIProvider >> defaultUserMessageClass [
 GtLOpenAIProvider >> executeWait [
 	| aSecondPromise aFuture aFirstPromise |
 	aFuture := [ | result aMessage currentMessage |
-		currentMessage := self chat messages last.
+		currentMessage := self chat messages last currentMessage.
 		result := client
 				generateResponseWithModel: self model
 				messages: self chat messages
@@ -95,7 +95,7 @@ GtLOpenAIProvider >> executeWait [
 								model: self model;
 								merge: (result output detect: [ :anOutput | (anOutput rawData at: 'type') = 'message' ]) ].
 
-				self chat addMessage: aMessage.
+				self chat addAssistantMessage: aMessage.
 				self chat signalRunIsDone.
 				aMessage ] ] asAsyncFuture.
 	aFirstPromise := aFuture
@@ -110,7 +110,7 @@ GtLOpenAIProvider >> executeWait [
 				| aMessage |
 				assistantWorking := false.
 				aMessage := GtLErrorMessage freeze: anError.
-				self chat addMessage: aMessage.
+				self chat addErrorMessage: aMessage.
 				self chat signalRunIsDone.
 				aMessage ].
 	executions add: aSecondPromise.
@@ -145,7 +145,7 @@ GtLOpenAIProvider >> handleToolCall: aToolCall [
 		addMessage: (GtOpenAIRawToolMessage new
 				toolCall: aToolCall;
 				rawData: aToolCall rawData)."
-	chat addMessage: newMessage.
+	chat addToolMessage: newMessage.
 	toolOutput := tools performToolCall: aToolCall.
 	newMessage output: toolOutput.
 "	chat
@@ -212,7 +212,7 @@ GtLOpenAIProvider >> performToolCallsIn: result with: activeTools [
 				"chat
 					addMessage: (GtOpenAIRawToolMessage new
 							rawData: aToolCall responseInput)."
-				chat addMessage: newMessage.
+				chat addToolMessage: newMessage.
 				toolOutput := activeTools performToolCall: aToolCall.
 				newMessage output: toolOutput
 "				chat

@@ -196,9 +196,9 @@ GtLChatMessage >> contentSummary [
 { #category : #accessing }
 GtLChatMessage >> contentText [
 	^ (self content isKindOf: String)
-		ifTrue: [ content ]
+		ifTrue: [ self content ]
 		ifFalse: [ ''
-				join: (content
+				join: (self content
 						select: [ :aValue | (aValue at: #type) = 'text' ]
 						thenCollect: [ :aValue | (aValue at: #text) ifNil: [ '' ] ]) ]
 ]
@@ -211,6 +211,15 @@ GtLChatMessage >> createdAt [
 { #category : #accessing }
 GtLChatMessage >> createdAt: anObject [
 	createdAt := self deserializeTime: anObject
+]
+
+{ #category : #'api - message' }
+GtLChatMessage >> currentMessage [
+	"Return a last message that should be used
+	to receive a LLM server response."
+
+	<return: #GtLChatMessage>
+	^ self
 ]
 
 { #category : #accessing }
@@ -425,6 +434,11 @@ GtLChatMessage >> isReady [
 	^ true
 ]
 
+{ #category : #testing }
+GtLChatMessage >> isReplyMessage [
+	^ false
+]
+
 { #category : #accessing }
 GtLChatMessage >> isSystemRole [
 	^ self role = 'system'
@@ -443,6 +457,13 @@ GtLChatMessage >> isToolRole [
 
 	<return: #Boolean>
 	^ self role = 'tool'
+]
+
+{ #category : #testing }
+GtLChatMessage >> isUserMessage [
+	"Return true if I am a message written by a user."
+
+	^ self isUserRole
 ]
 
 { #category : #accessing }
@@ -474,6 +495,14 @@ GtLChatMessage >> messageFiles [
 						end: aByteArray size - 1 ] ].
 
 	^ {}
+]
+
+{ #category : #'api - message' }
+GtLChatMessage >> messagesDo: aBlock [
+	"Evaluate do block on all messages.
+	Note that some messages may be a composition of other messages"
+
+	aBlock value: self
 ]
 
 { #category : #accessing }

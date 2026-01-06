@@ -8,7 +8,7 @@ Class {
 		'styler',
 		'checkRunResultViewModels'
 	],
-	#category : #'Gt4LlmCore-UI'
+	#category : #'Gt4LlmCore-UI - View Models'
 }
 
 { #category : #accessing }

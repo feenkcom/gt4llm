@@ -9,7 +9,7 @@ Class {
 	#category : #'Gt4Llm-OpenAI'
 }
 
-{ #category : #accessing }
+{ #category : #'instance creation' }
 GtLOpenAIError class >> from: aDictionary [
 	^ self new
 		messageText: (aDictionary at: 'message');
