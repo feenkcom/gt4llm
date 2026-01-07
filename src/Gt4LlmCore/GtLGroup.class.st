@@ -365,6 +365,11 @@ GtLGroup >> removeLast [
 	self items removeLast
 ]
 
+{ #category : #accessing }
+GtLGroup >> reverseDo: aBlock [
+	^ self items reverseDo: aBlock
+]
+
 { #category : #enumerating }
 GtLGroup >> reversed [
 	^ self species 

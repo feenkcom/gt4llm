@@ -1,12 +1,12 @@
 Class {
 	#name : #GtLFailureMessage,
-	#superclass : #Object,
+	#superclass : #GtLBasicMessage,
 	#instVars : [
 		'failureText',
 		'createdAt',
 		'chat'
 	],
-	#category : #'Gt4LlmCore-UI'
+	#category : #'Gt4LlmCore-UI - View Models'
 }
 
 { #category : #'as yet unclassified' }
@@ -64,11 +64,6 @@ GtLFailureMessage >> createdAt: anObject [
 	createdAt := anObject
 ]
 
-{ #category : #ui }
-GtLFailureMessage >> elementClass [
-	^ GtLChatMessageElement
-]
-
 { #category : #accessing }
 GtLFailureMessage >> failureText [
 	^ failureText
@@ -87,7 +82,7 @@ GtLFailureMessage >> gtContentFor: aView [
 		title: 'Content';
 		priority: 1;
 		stencil: [ GtLChatMessageElement new
-				threadMessageViewModel: (GtLChatMessageViewModel new threadMessage: self) ]
+				threadMessageViewModel: (GtLMessageViewModel new threadMessage: self) ]
 ]
 
 { #category : #testing }
@@ -125,6 +120,11 @@ GtLFailureMessage >> unsubscribe: anObject [
 	"do nothing"
 
 	
+]
+
+{ #category : #'api - converting' }
+GtLFailureMessage >> viewModelClass [
+	^ GtLFailureMessageViewModel
 ]
 
 { #category : #subscriptions }

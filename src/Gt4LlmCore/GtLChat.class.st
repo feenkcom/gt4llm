@@ -33,14 +33,39 @@ GtLChat >> acceptVisitor: aVisitor [
 	^ aVisitor visitGtLlmChat: self
 ]
 
-{ #category : #accessing }
+{ #category : #'api - message' }
+GtLChat >> addAssistantMessage: aMessage [
+	"Add assistant message.
+	Assistant messages are held in a reply message."
+
+	| aReplyMessage |
+	self updateLastUpdate.
+
+	aMessage chat: self.
+	aReplyMessage := self ensureReplyMessage.
+	aReplyMessage assistantMessage: aMessage
+]
+
+{ #category : #'api - message' }
+GtLChat >> addErrorMessage: anErrorMessage [
+	"Add error message.
+	Error messages are held in a reply message."
+
+	self updateLastUpdate.
+
+	self
+		lastReplyMessageDo: [ :aReplyMessage | 
+			anErrorMessage chat: self.
+			aReplyMessage assistantMessage: anErrorMessage ]
+		ifAbsent: [ self addMessage: anErrorMessage ]
+]
+
+{ #category : #'api - message' }
 GtLChat >> addMessage: aMessage [
 	self updateLastUpdate.
 
 	aMessage chat: self.
 	messages add: aMessage.
-
-	
 ]
 
 { #category : #adding }
@@ -56,9 +81,28 @@ GtLChat >> addResponseFormatForMagrite: aClass named: aString [
 				modelClass: aClass)
 ]
 
-{ #category : #adding }
+{ #category : #'api - tool' }
 GtLChat >> addTool: aTool [ 
 	tools add: aTool
+]
+
+{ #category : #'api - message' }
+GtLChat >> addToolMessage: aMessage [
+	"Add tool message.
+	Tool messages are held in a reply message."
+
+	| aReplyMessage |
+	self updateLastUpdate.
+
+	aMessage chat: self.
+	aReplyMessage := self ensureReplyMessage.
+	aReplyMessage addToolMessage: aMessage
+]
+
+{ #category : #'api - message' }
+GtLChat >> addUserMessage: aMessage [
+	self addMessage: aMessage.
+	self ensureReplyMessage.
 ]
 
 { #category : #accessing }
@@ -157,9 +201,39 @@ GtLChat >> currentInstructions [
 	^ instructions
 ]
 
+{ #category : #'api - message' }
+GtLChat >> currentMessage [
+	"Return a last message that should be used
+	to receive a LLM server response."
+
+	<return: #GtLChatMessage>
+	| aMessage |
+	aMessage := self messages last currentMessage.
+	^ aMessage
+]
+
 { #category : #accessing }
 GtLChat >> currentTools [
 	^ tools
+]
+
+{ #category : #'api - message' }
+GtLChat >> ensureReplyMessage [
+	| aReplyMessage |
+	messages
+		reverseDo: [ :eachMessage | 
+			eachMessage isReplyMessage ifTrue: [
+				^ eachMessage ].
+
+			eachMessage isUserMessage ifTrue: [ 
+				aReplyMessage := GtLReplyMessage new
+					userMessage: eachMessage.
+				self addMessage: aReplyMessage.
+				^ aReplyMessage ] ].
+
+	aReplyMessage := GtLReplyMessage new.
+	self addMessage: aReplyMessage.
+	^ aReplyMessage
 ]
 
 { #category : #accessing }
@@ -207,13 +281,18 @@ GtLChat >> gtMessagesFor: aView [
 	"cannot be a forward because the update wouldn’t work"
 
 	<gtView>
-	^ aView columnedList
+	^ aView columnedTree
 		title: 'Messages';
 		priority: 3;
 		items: [ self messages ];
+		children: [ :eachMessage | 
+			Array
+				streamContents: [ :aStream | 
+					eachMessage
+						messagesDo: [ :otherMessage | eachMessage == otherMessage ifFalse: [ aStream nextPut: otherMessage ] ] ] ];
 		column: 'Role'
 			text: [ :item | item role ]
-			width: 50;
+			width: 70;
 		column: 'Call' text: [ :item | item gtDisplayString ];
 		column: 'Content' text: [ :item | item content ];
 		column: 'Created' text: [ :item | item createdAt asStringYMDHMS ];
@@ -278,6 +357,19 @@ GtLChat >> instructions: anObject [
 	instructions := anObject
 ]
 
+{ #category : #'api - message' }
+GtLChat >> lastReplyMessageDo: aDoBlock ifAbsent: anAbsentBlock [
+	messages
+		reverseDo: [ :eachMessage | 
+			eachMessage isReplyMessage ifTrue: [
+				^ aDoBlock value: eachMessage ].
+
+			eachMessage isUserMessage ifTrue: [ 
+				^ anAbsentBlock value ] ].
+
+	^ anAbsentBlock value
+]
+
 { #category : #accessing }
 GtLChat >> lastUpdate [
 	^ lastUpdate
@@ -288,7 +380,7 @@ GtLChat >> lastUpdate: anObject [
 	lastUpdate := anObject
 ]
 
-{ #category : #accessing }
+{ #category : #'api - message' }
 GtLChat >> messages [
 	^ messages
 ]
@@ -337,8 +429,7 @@ GtLChat >> sendFiles: aListOfFileReferences withMessage: aString [
 
 { #category : #'api - communication' }
 GtLChat >> sendMessage: aMessage [
-	aMessage chat: self.
-	self addMessage: aMessage.
+	self addUserMessage: aMessage.
 	
 	self provider sendMessage: aMessage
 ]

@@ -33,7 +33,6 @@ GtLChatMessageViewModelsBuilder >> build [
 			stream := aStream.
 			self buildMessages.
 			self buildFailureMessage.
-			self buildProvisionalMessage.
 			self buildNewMessage.
 			stream := nil ]
 ]
@@ -48,7 +47,7 @@ GtLChatMessageViewModelsBuilder >> buildFailureMessage [
 			failureText: status message;
 			createdAt: status createdAt;
 			chat: chat.
-	aViewModel := self newMessageViewModelFor: aMessage.
+	aViewModel := aMessage asViewModel.
 	stream nextPut: aViewModel
 ]
 
@@ -92,20 +91,6 @@ GtLChatMessageViewModelsBuilder >> buildNewMessage [
 	stream nextPut: newMessageViewModel
 ]
 
-{ #category : #'private - building' }
-GtLChatMessageViewModelsBuilder >> buildProvisionalMessage [
-	| aViewModel |
-	status ifNil: [ ^ self ].
-	status isDone ifTrue: [ ^ self ].
-	(lastMessage ifNotNil: #isAssistantRole ifNil: [ false ]) ifFalse: [ ^ self ].
-	
-	aViewModel := self
-			newMessageViewModelFor: (GtLProvisionalMessage new
-					createdAt: status createdAt;
-					chat: chat).
-	stream nextPut: aViewModel
-]
-
 { #category : #accessing }
 GtLChatMessageViewModelsBuilder >> cache [
 	^ cache
@@ -137,15 +122,14 @@ GtLChatMessageViewModelsBuilder >> newMessageViewModel: anObject [
 ]
 
 { #category : #'private - building' }
-GtLChatMessageViewModelsBuilder >> newMessageViewModelFor: aMessage [
-	^ GtLChatMessageViewModel new message: aMessage
-]
-
-{ #category : #'private - building' }
 GtLChatMessageViewModelsBuilder >> viewModelFor: aMessage [
 	^ cache
 		at: aMessage id
-		ifPresent: [ :theViewModel | theViewModel message: aMessage ]
+		ifPresent: [ :theViewModel | 
+			theViewModel message: aMessage.
+			lastMessage = aMessage ifTrue: [
+				theViewModel isExpanded: (theViewModel isExpanded or: [ aMessage isAssistantRole ]) ].
+			theViewModel ]
 		ifAbsentPut: [ aMessage asViewModel
 				isExpanded: (lastMessage = aMessage and: [ aMessage isAssistantRole ]) ]
 ]

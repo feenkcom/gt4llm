@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLNewMessage,
-	#superclass : #Object,
+	#superclass : #GtLBasicMessage,
 	#instVars : [
 		'contents',
 		'announcer',
@@ -9,7 +9,7 @@ Class {
 		'isSync',
 		'chat'
 	],
-	#category : #'Gt4LlmCore-UI'
+	#category : #'Gt4LlmCore-UI - View Models'
 }
 
 { #category : #accessing }
@@ -25,11 +25,6 @@ GtLNewMessage >> addFile: aFileReference [
 { #category : #accessing }
 GtLNewMessage >> annotations [
 	^ {} asDictionary
-]
-
-{ #category : #ui }
-GtLNewMessage >> asViewModel [
-	^ GtLNewMessageViewModel new message: self
 ]
 
 { #category : #accessing }
@@ -84,11 +79,6 @@ GtLNewMessage >> contents: anObject [
 GtLNewMessage >> contents: aString requester: aRequester [
 	contents := aString.
 	self onContentsChangeByRequester: aRequester
-]
-
-{ #category : #ui }
-GtLNewMessage >> elementClass [
-	^ GtLNewMessageElement
 ]
 
 { #category : #'as yet unclassified' }
@@ -171,6 +161,11 @@ GtLNewMessage >> treatString [
 { #category : #subscriptions }
 GtLNewMessage >> unsubscribe: anObject [
 	^ announcer unsubscribe: anObject
+]
+
+{ #category : #'api - converting' }
+GtLNewMessage >> viewModelClass [
+	^ GtLNewMessageViewModel
 ]
 
 { #category : #subscriptions }

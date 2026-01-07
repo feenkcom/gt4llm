@@ -1,31 +1,36 @@
 Class {
-	#name : #GtLChatMessageViewModel,
-	#superclass : #GtLBasicThreadMessageViewModel,
+	#name : #GtLMessageViewModel,
+	#superclass : #GtLBasicMessageViewModel,
 	#instVars : [
 		'isExpanded',
 		'userViewMessage',
 		'toolViewMessages'
 	],
-	#category : #'Gt4LlmCore-UI'
+	#category : #'Gt4LlmCore-UI - View Models'
 }
 
+{ #category : #visiting }
+GtLMessageViewModel >> acceptVisitor: aVisitor [
+	^ aVisitor visitMessageViewModel: self
+]
+
 { #category : #'api - accessing' }
-GtLChatMessageViewModel >> contentText [
+GtLMessageViewModel >> contentText [
 	^ self message contentText
 ]
 
 { #category : #accessing }
-GtLChatMessageViewModel >> createdAt [
+GtLMessageViewModel >> createdAt [
 	^ self message createdAt
 ]
 
-{ #category : #accessing }
-GtLChatMessageViewModel >> elementClass [
-	^ GtLExpandableThreadMessageElement
+{ #category : #'api - converting' }
+GtLMessageViewModel >> elementClass [
+	^ GtLExpandableMessageElement
 ]
 
 { #category : #'gt - extensions' }
-GtLChatMessageViewModel >> gtToolViewMessagesFor: aView [
+GtLMessageViewModel >> gtToolViewMessagesFor: aView [
 	<gtView>
 	<gtLlmView>
 	self toolViewMessages ifEmpty: [ ^ aView empty ].
@@ -50,60 +55,71 @@ GtLChatMessageViewModel >> gtToolViewMessagesFor: aView [
 ]
 
 { #category : #accessing }
-GtLChatMessageViewModel >> isExpanded [
-	^ isExpanded ifNil: [ true ]
+GtLMessageViewModel >> isExpanded [
+	^ isExpanded ifNil: [ isExpanded := true ]
 ]
 
 { #category : #accessing }
-GtLChatMessageViewModel >> isExpanded: aBoolean [
-	isExpanded := aBoolean
+GtLMessageViewModel >> isExpanded: aBoolean [
+	isExpanded = aBoolean ifTrue: [ ^ self ].
+
+	isExpanded := aBoolean.
+	self notifyExpandedChanged
 ]
 
 { #category : #testing }
-GtLChatMessageViewModel >> isFailure [
+GtLMessageViewModel >> isFailure [
 	^ self message isFailure
 ]
 
+{ #category : #'private - notifying' }
+GtLMessageViewModel >> notifyExpandedChanged [
+	self announcer
+		announce: (GtLMessageViewModelExpansionChanged new
+				messageViewModel: self;
+				isExpanded: self isExpanded)
+]
+
 { #category : #'private - hooks' }
-GtLChatMessageViewModel >> onMessageChanged [
+GtLMessageViewModel >> onMessageChanged [
 	self isExpanded: self message isAssistantRole.
 	super onMessageChanged
 ]
 
 { #category : #'api - accessing' }
-GtLChatMessageViewModel >> toolArguments [
+GtLMessageViewModel >> toolArguments [
 	^ self message toolArguments
 ]
 
 { #category : #'api - accessing' }
-GtLChatMessageViewModel >> toolDescription [
+GtLMessageViewModel >> toolDescription [
 	^ self message toolDescription
 ]
 
 { #category : #'api - accessing' }
-GtLChatMessageViewModel >> toolName [
+GtLMessageViewModel >> toolName [
 	^ self message toolName
 ]
 
 { #category : #'api - accessing' }
-GtLChatMessageViewModel >> toolViewMessages [
+GtLMessageViewModel >> toolViewMessages [
 	^ toolViewMessages ifNil: [ #() ]
 ]
 
 { #category : #'api - initialization' }
-GtLChatMessageViewModel >> toolViewMessages: someMessageViewModels [
+GtLMessageViewModel >> toolViewMessages: someMessageViewModels [
 	"Set previous tool view messages."
 
 	toolViewMessages := someMessageViewModels
 ]
 
 { #category : #'api - accessing' }
-GtLChatMessageViewModel >> userViewMessage [
+GtLMessageViewModel >> userViewMessage [
 	^ userViewMessage
 ]
 
 { #category : #'api - initialization' }
-GtLChatMessageViewModel >> userViewMessage: aMessageViewModel [
+GtLMessageViewModel >> userViewMessage: aMessageViewModel [
 	"Set previous user view message."
 
 	userViewMessage := aMessageViewModel

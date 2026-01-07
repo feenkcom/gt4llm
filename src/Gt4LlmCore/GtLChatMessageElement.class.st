@@ -1,14 +1,14 @@
 Class {
 	#name : #GtLChatMessageElement,
 	#superclass : #BlElement,
-	#traits : 'TGtLWithChatMessageViewModel + TBrLayoutResizable',
-	#classTraits : 'TGtLWithChatMessageViewModel classTrait + TBrLayoutResizable classTrait',
+	#traits : 'TGtLWithMessageViewModel + TBrLayoutResizable',
+	#classTraits : 'TGtLWithMessageViewModel classTrait + TBrLayoutResizable classTrait',
 	#instVars : [
 		'contentsElement',
 		'progressElement',
 		'timeTooltip'
 	],
-	#category : #'Gt4LlmCore-UI'
+	#category : #'Gt4LlmCore-UI - Elements'
 }
 
 { #category : #factory }
@@ -116,7 +116,7 @@ GtLChatMessageElement >> subscribeToMessageViewModel [
 		when: GtLlmThreadMessageViewModelChanged
 			send: #onThreadMessageViewModelChanged:
 			to: self;
-		when: GtLlmMessageContentsUpdated
+		when: GtLMessageViewModelContentsChanged
 			send: #onMessageContentsChanged:
 			to: self
 ]

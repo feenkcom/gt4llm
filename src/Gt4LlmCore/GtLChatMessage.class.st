@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLChatMessage,
-	#superclass : #GtLEntity,
+	#superclass : #GtLBasicMessage,
 	#instVars : [
 		'content',
 		'role',
@@ -74,7 +74,7 @@ GtLChatMessage >> acceptVisitor: aVisitor [
 	^ aVisitor visitGtLlmChatMessage: self
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLChatMessage >> action [
 	^ [ self contentJson at: 'Action' ] on: Error do: [ nil ]
 ]
@@ -92,7 +92,7 @@ GtLChatMessage >> addResponseFormatForMagrite: aClass named: aString [
 				modelClass: aClass)
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLChatMessage >> ancestor [
 	^ self chat ancestorOf: self
 ]
@@ -113,7 +113,7 @@ GtLChatMessage >> announcer [
 	^ announcer ifNil: [announcer := Announcer new]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLChatMessage >> arguments [
 	^ [ self contentJson at: 'Arguments' ] on: Error do: [ nil ]
 ]
@@ -121,11 +121,6 @@ GtLChatMessage >> arguments [
 { #category : #accessing }
 GtLChatMessage >> asTokenizableString [
 	^ '<|im_start|>' , self role , '<|im_sep|>' , self content , '<|im_end|>'
-]
-
-{ #category : #converting }
-GtLChatMessage >> asViewModel [
-	^ GtLChatMessageViewModel new message: self
 ]
 
 { #category : #'as yet unclassified' }
@@ -158,7 +153,7 @@ GtLChatMessage >> content [
 GtLChatMessage >> content: anObject [
 	content := anObject.
 	
-	self announce: GtLlmMessageContentsUpdated new
+	self announce: (GtLMessageContentsChanged new message: self)
 ]
 
 { #category : #accessing }
@@ -174,7 +169,7 @@ GtLChatMessage >> contentFiles [
 						ifAbsent: [ '' ] ] ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLChatMessage >> contentJson [
 	| ston value |
 	ston := STON reader on: self contentText readStream.
@@ -191,10 +186,10 @@ GtLChatMessage >> contentSummary [
 { #category : #accessing }
 GtLChatMessage >> contentText [
 	^ (self content isKindOf: String)
-		ifTrue: [ content ]
+		ifTrue: [ self content ]
 		ifFalse: [ ''
-				join: (content
-						select: [ :aValue | (aValue at: #type) = 'text' ]
+				join: (self content
+						select: [ :aValue | #(text output_text) includes: (aValue at: #type) ]
 						thenCollect: [ :aValue | (aValue at: #text) ifNil: [ '' ] ]) ]
 ]
 
@@ -206,6 +201,15 @@ GtLChatMessage >> createdAt [
 { #category : #accessing }
 GtLChatMessage >> createdAt: anObject [
 	createdAt := self deserializeTime: anObject
+]
+
+{ #category : #'api - message' }
+GtLChatMessage >> currentMessage [
+	"Return a last message that should be used
+	to receive a LLM server response."
+
+	<return: #GtLChatMessage>
+	^ self
 ]
 
 { #category : #accessing }
@@ -332,11 +336,6 @@ GtLChatMessage >> hasFormats [
 	^ formatDescriptions notNil and: [formatDescriptions hasSchemaDescriptors]
 ]
 
-{ #category : #'api - testing' }
-GtLChatMessage >> hasInstructions [
-	^ instructions isNotNil
-]
-
 { #category : #accessing }
 GtLChatMessage >> hasResponse [
 	^ true
@@ -352,7 +351,7 @@ GtLChatMessage >> id [
 	^ id
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLChatMessage >> id: anId [
 	id := anId
 ]
@@ -420,6 +419,11 @@ GtLChatMessage >> isReady [
 	^ true
 ]
 
+{ #category : #testing }
+GtLChatMessage >> isReplyMessage [
+	^ false
+]
+
 { #category : #accessing }
 GtLChatMessage >> isSystemRole [
 	^ self role = 'system'
@@ -438,6 +442,13 @@ GtLChatMessage >> isToolRole [
 
 	<return: #Boolean>
 	^ self role = 'tool'
+]
+
+{ #category : #testing }
+GtLChatMessage >> isUserMessage [
+	"Return true if I am a message written by a user."
+
+	^ self isUserRole
 ]
 
 { #category : #accessing }
@@ -469,6 +480,14 @@ GtLChatMessage >> messageFiles [
 						end: aByteArray size - 1 ] ].
 
 	^ {}
+]
+
+{ #category : #'api - message' }
+GtLChatMessage >> messagesDo: aBlock [
+	"Evaluate do block on all messages.
+	Note that some messages may be a composition of other messages"
+
+	aBlock value: self
 ]
 
 { #category : #accessing }
@@ -504,7 +523,7 @@ GtLChatMessage >> senderText [
 	^ 'You'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLChatMessage >> serialize [
 	| serialized |
 	serialized := super serialize.
@@ -557,6 +576,11 @@ GtLChatMessage >> updateDataFromMessage: aPreviousMessage [
 GtLChatMessage >> uuidClass [
 	"This is in a separate method in an extension package to be able to compile the base class to Gemstone"
 	^ UUID
+]
+
+{ #category : #'api - converting' }
+GtLChatMessage >> viewModelClass [
+	^ GtLMessageViewModel
 ]
 
 { #category : #'announcer - subscription' }

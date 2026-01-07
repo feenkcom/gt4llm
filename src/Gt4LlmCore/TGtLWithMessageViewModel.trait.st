@@ -1,17 +1,17 @@
 Trait {
-	#name : #TGtLWithChatMessageViewModel,
+	#name : #TGtLWithMessageViewModel,
 	#instVars : [
 		'messageViewModel'
 	],
-	#category : #'Gt4LlmCore-UI'
+	#category : #'Gt4LlmCore-UI - View Models'
 }
 
 { #category : #accessing }
-TGtLWithChatMessageViewModel >> beforeThreadMessageViewModelReset [
+TGtLWithMessageViewModel >> beforeThreadMessageViewModelReset [
 ]
 
 { #category : #'gt - extensions' }
-TGtLWithChatMessageViewModel >> gtElementOverviewChatMessageModel [
+TGtLWithMessageViewModel >> gtElementOverviewChatMessageModel [
 	<gtInspectorElementOverview>
 	^ GtInspectorElementOverviewProperty new
 		label: 'Message model';
@@ -19,7 +19,7 @@ TGtLWithChatMessageViewModel >> gtElementOverviewChatMessageModel [
 ]
 
 { #category : #'gt - extensions' }
-TGtLWithChatMessageViewModel >> gtElementOverviewChatMessageViewModel [
+TGtLWithMessageViewModel >> gtElementOverviewChatMessageViewModel [
 	<gtInspectorElementOverview>
 	^ GtInspectorElementOverviewProperty new
 		label: 'Message view model';
@@ -27,7 +27,7 @@ TGtLWithChatMessageViewModel >> gtElementOverviewChatMessageViewModel [
 ]
 
 { #category : #'gt - extensions' }
-TGtLWithChatMessageViewModel >> gtElementOverviewChatModel [
+TGtLWithMessageViewModel >> gtElementOverviewChatModel [
 	<gtInspectorElementOverview>
 	^ GtInspectorElementOverviewProperty new
 		label: 'Chat model';
@@ -35,17 +35,17 @@ TGtLWithChatMessageViewModel >> gtElementOverviewChatModel [
 ]
 
 { #category : #'api - message view model' }
-TGtLWithChatMessageViewModel >> message [
+TGtLWithMessageViewModel >> message [
 	^ messageViewModel message
 ]
 
 { #category : #'api - message view model' }
-TGtLWithChatMessageViewModel >> messageViewModel [
+TGtLWithMessageViewModel >> messageViewModel [
 	^ messageViewModel
 ]
 
 { #category : #'api - message view model' }
-TGtLWithChatMessageViewModel >> messageViewModel: anObject [
+TGtLWithMessageViewModel >> messageViewModel: anObject [
 	messageViewModel = anObject ifTrue: [ ^ self ].
 	messageViewModel ifNotNil: [ :anOldMessage | 
 		self beforeThreadMessageViewModelReset.
@@ -56,15 +56,15 @@ TGtLWithChatMessageViewModel >> messageViewModel: anObject [
 ]
 
 { #category : #'private - hooks' }
-TGtLWithChatMessageViewModel >> onMessageViewModelChanged [
+TGtLWithMessageViewModel >> onMessageViewModelChanged [
 ]
 
 { #category : #'private - hooks' }
-TGtLWithChatMessageViewModel >> subscribeToMessageViewModel [
+TGtLWithMessageViewModel >> subscribeToMessageViewModel [
 ]
 
 { #category : #'api - message view model' }
-TGtLWithChatMessageViewModel >> threadMessage [
+TGtLWithMessageViewModel >> threadMessage [
 	self
 		deprecated: 'Please use #message instead.'
 		transformWith: '`@receiver threadMessage' -> '`@receiver message'.
@@ -73,7 +73,7 @@ TGtLWithChatMessageViewModel >> threadMessage [
 ]
 
 { #category : #'api - message view model' }
-TGtLWithChatMessageViewModel >> threadMessageViewModel [
+TGtLWithMessageViewModel >> threadMessageViewModel [
 	self
 		deprecated: 'Please use #messageViewModel instead.'
 		transformWith: '`@receiver threadMessageViewModel' -> '`@receiver messageViewModel'.
@@ -82,7 +82,7 @@ TGtLWithChatMessageViewModel >> threadMessageViewModel [
 ]
 
 { #category : #'api - message view model' }
-TGtLWithChatMessageViewModel >> threadMessageViewModel: anObject [
+TGtLWithMessageViewModel >> threadMessageViewModel: anObject [
 	self
 		deprecated: 'Please use messageViewModel: instead.'
 		transformWith:
@@ -93,5 +93,5 @@ TGtLWithChatMessageViewModel >> threadMessageViewModel: anObject [
 ]
 
 { #category : #'private - hooks' }
-TGtLWithChatMessageViewModel >> unsubscribeFromMessageViewModel [
+TGtLWithMessageViewModel >> unsubscribeFromMessageViewModel [
 ]

@@ -109,11 +109,6 @@ GtLOpenAIMessage >> createdAtString: anObject [
 ]
 
 { #category : #accessing }
-GtLOpenAIMessage >> elementClass [
-	^ self explicitRequirement
-]
-
-{ #category : #accessing }
 GtLOpenAIMessage >> gtAnnotationsFor: aView [
 	<gtView>
 	^ aView forward
