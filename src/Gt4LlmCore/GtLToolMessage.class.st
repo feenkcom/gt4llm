@@ -21,7 +21,7 @@ GtLToolMessage class >> leJsonV4Name [
 { #category : #visiting }
 GtLToolMessage >> acceptVisitor: aVisitor [
 
-	^ aVisitor visitGtLlmToolMessage: self
+	^ aVisitor visitGtLToolMessage: self
 ]
 
 { #category : #'as yet unclassified' }
