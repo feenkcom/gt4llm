@@ -146,8 +146,7 @@ GtLOpenAIResponse >> output [
 
 { #category : #accessing }
 GtLOpenAIResponse >> output: anArray [
-	GtJustContextStackSignal emit.
-	output := anArray "collect: [ :aMessage | GtOpenAIMessage from: aMessage ] as: Array"
+	output := anArray
 ]
 
 { #category : #accessing }
