@@ -43,7 +43,7 @@ GtLEntity class >> serializationProperties [
 { #category : #visiting }
 GtLEntity >> acceptVisitor: aVisitor [
 
-	^ aVisitor visitGtLlmEntity: self
+	^ aVisitor visitGtLEntity: self
 ]
 
 { #category : #accessing }

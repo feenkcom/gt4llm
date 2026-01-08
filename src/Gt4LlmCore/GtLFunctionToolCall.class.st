@@ -26,7 +26,7 @@ GtLFunctionToolCall class >> serializationProperties [
 { #category : #visiting }
 GtLFunctionToolCall >> acceptVisitor: aVisitor [
 
-	^ aVisitor visitGtLlmFunctionToolCall: self
+	^ aVisitor visitGtLFunctionToolCall: self
 ]
 
 { #category : #accessing }
