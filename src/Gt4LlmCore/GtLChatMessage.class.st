@@ -2,8 +2,6 @@ Class {
 	#name : #GtLChatMessage,
 	#superclass : #GtLBasicMessage,
 	#instVars : [
-		'content',
-		'role',
 		'id',
 		'createdAt',
 		'chat',
@@ -145,28 +143,14 @@ GtLChatMessage >> chat: aChat [
 ]
 
 { #category : #accessing }
-GtLChatMessage >> content [
-	^ content
-]
-
-{ #category : #accessing }
-GtLChatMessage >> content: anObject [
-	content := anObject.
-	
-	self announce: (GtLMessageContentsChanged new message: self)
-]
-
-{ #category : #accessing }
 GtLChatMessage >> contentFiles [
-	^ (self content isKindOf: String)
-		ifTrue: [ {} ]
-		ifFalse: [ content
+	^ self rawContent
 				select: [ :aValue | (aValue at: #type) = 'image' ]
 				thenCollect: [ :aValue | 
 					aValue
 						at: #source
 						at: #data
-						ifAbsent: [ '' ] ] ]
+						ifAbsent: [ '' ] ]
 ]
 
 { #category : #accessing }
@@ -179,18 +163,13 @@ GtLChatMessage >> contentJson [
 ]
 
 { #category : #accessing }
-GtLChatMessage >> contentSummary [
-	^ self contentText lines ifEmpty: [ '' ] ifNotEmpty: #first
+GtLChatMessage >> contentOneLineSummary [
+	^ self contentText copyReplaceAll: String lf with: String space
 ]
 
 { #category : #accessing }
 GtLChatMessage >> contentText [
-	^ (self content isKindOf: String)
-		ifTrue: [ self content ]
-		ifFalse: [ ''
-				join: (self content
-						select: [ :aValue | #(text output_text) includes: (aValue at: #type) ]
-						thenCollect: [ :aValue | (aValue at: #text) ifNil: [ '' ] ]) ]
+	^ self subclassResponsibility
 ]
 
 { #category : #accessing }
@@ -239,18 +218,6 @@ GtLChatMessage >> gtActionInspectFor: anAction [
 	^ super gtActionInspectFor: anAction
 ]
 
-{ #category : #'gt - extensions' }
-GtLChatMessage >> gtContentFor: aView [
-	<gtView>
-	<gtLlmView>
-	content ifNil: [ ^ aView empty ].
-
-	^ aView explicit
-		title: 'Content';
-		priority: 5;
-		stencil: [ GtLChatMessageElement new messageViewModel: self asViewModel ]
-]
-
 { #category : #accessing }
 GtLChatMessage >> gtFormatFor: aView [
 	<gtView>
@@ -288,7 +255,6 @@ GtLChatMessage >> gtMessageFilesFor: aView [
 	<gtView>
 	<gtLlmView>
 	| messageFiles |
-	content ifNil: [ ^ aView empty ].
 	messageFiles := self messageFiles.
 
 	messageFiles ifEmpty: [ ^ aView empty ].
@@ -502,12 +468,7 @@ GtLChatMessage >> model: anObject [
 
 { #category : #accessing }
 GtLChatMessage >> role [
-	^ role ifNil: [ role := self class defaultRole ]
-]
-
-{ #category : #accessing }
-GtLChatMessage >> role: anObject [
-	role := anObject
+	^ self class defaultRole
 ]
 
 { #category : #accessing }

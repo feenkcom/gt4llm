@@ -20,7 +20,7 @@ GtLOpenAIMessage class >> from: aDict [
 { #category : #accessing }
 GtLOpenAIMessage class >> serializationProperties [
 	^ {
-		#content -> #content.
+		#content -> #contentText.
 		#created_at -> #createdAtString.
 		#completed_at -> #completedAtString.
 		#id -> #idString.
@@ -66,26 +66,6 @@ GtLOpenAIMessage >> completedAtString: anObject [
 GtLOpenAIMessage >> contentJson [
 	self contentText ifEmpty: [ ^ {} asDictionary ].
 	^ STONJSON fromString: self contentText
-]
-
-{ #category : #accessing }
-GtLOpenAIMessage >> contentSummary [
-	^ self contentText lines ifEmpty: [ '' ] ifNotEmpty: #first
-]
-
-{ #category : #accessing }
-GtLOpenAIMessage >> contentText [
-	^ (content isKindOf: String)
-		ifTrue: [ content ]
-		ifFalse: [ ''
-				join: (content
-						collect: [ :aValue | 
-							(aValue at: 'text' ifAbsent: [ nil ])
-								ifNil: [ '' ]
-								ifNotNil: [ :aTextObject | 
-									(aTextObject isKindOf: String)
-										ifTrue: [ aTextObject ]
-										ifFalse: [ (aTextObject at: 'value') ifNil: [ '' ] ] ] ]) ]
 ]
 
 { #category : #accessing }

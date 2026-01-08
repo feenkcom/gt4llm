@@ -39,6 +39,11 @@ GtLReplyMessage >> content [
 ]
 
 { #category : #accessing }
+GtLReplyMessage >> contentText [
+	^ self currentMessageDo: #contentText ifAbsent: [ '' ]
+]
+
+{ #category : #accessing }
 GtLReplyMessage >> createdAt [
 	^ self currentMessageDo: #createdAt ifAbsent: [ super createdAt ]
 ]

@@ -145,8 +145,9 @@ GtLOpenAIResponse >> output [
 ]
 
 { #category : #accessing }
-GtLOpenAIResponse >> output: anObject [
-	output := anObject collect: [ :aMessage | GtOpenAIMessage from: aMessage ] as: Array
+GtLOpenAIResponse >> output: anArray [
+	GtJustContextStackSignal emit.
+	output := anArray "collect: [ :aMessage | GtOpenAIMessage from: aMessage ] as: Array"
 ]
 
 { #category : #accessing }
@@ -222,13 +223,13 @@ GtLOpenAIResponse >> text: anObject [
 { #category : #'as yet unclassified' }
 GtLOpenAIResponse >> toolCalls [
 	^ self output
-		select: [ :aMessage | (aMessage rawData at: 'type') = 'function_call' ]
-		thenCollect: [ :aMessage | 
+		select: [ :aDict | (aDict at: 'type') = 'function_call' ]
+		thenCollect: [ :aDict | 
 			GtLFunctionToolCall new
-				rawData: aMessage rawData;
-				id: (aMessage rawData at: 'call_id');
-				name: (aMessage rawData at: 'name');
-				arguments: (STONJSON fromString: (aMessage rawData at: 'arguments')) ]
+				rawData: aDict;
+				id: (aDict at: 'call_id');
+				name: (aDict at: 'name');
+				arguments: (STONJSON fromString: (aDict at: 'arguments')) ]
 ]
 
 { #category : #accessing }
