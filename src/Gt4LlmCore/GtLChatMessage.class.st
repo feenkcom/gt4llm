@@ -46,7 +46,7 @@ GtLChatMessage class >> from: aDictionary [
 GtLChatMessage class >> leJsonV4AttributeMapping [
 
 	^ super leJsonV4AttributeMapping
-		add: #content -> #content;
+		add: #contentText -> #content;
 		add: #role -> #role;
 		add: #id -> #id;
 		add: #createdAt -> #createdAt;
@@ -63,7 +63,7 @@ GtLChatMessage class >> rolesToClasses [
 { #category : #accessing }
 GtLChatMessage class >> serializationProperties [
 	^ {#role -> #role.
-		#content -> #content}
+		#content -> #contentText}
 ]
 
 { #category : #visiting }
@@ -170,6 +170,11 @@ GtLChatMessage >> contentOneLineSummary [
 { #category : #accessing }
 GtLChatMessage >> contentText [
 	^ self subclassResponsibility
+]
+
+{ #category : #accessing }
+GtLChatMessage >> contentText: aString [
+	"do nothing by default. here for automatic serialization compatibility"
 ]
 
 { #category : #accessing }
@@ -453,6 +458,11 @@ GtLChatMessage >> model: anObject [
 { #category : #accessing }
 GtLChatMessage >> role [
 	^ self class defaultRole
+]
+
+{ #category : #accessing }
+GtLChatMessage >> role: aString [
+	"do nothing because subclasses already know. have it here only for making the automatic serialization happy"
 ]
 
 { #category : #accessing }

@@ -64,7 +64,7 @@ GtLToolMessage >> gtContentFor: aView [
 
 { #category : #printing }
 GtLToolMessage >> gtDisplayOn: aStream [
-	self toolCall gtDisplayOn: aStream
+	self toolCall ifNotNil: [ :call | call gtDisplayOn: aStream ] ifNil: [ aStream nextPutAll: 'No tool' ]
 ]
 
 { #category : #'gt - extensions' }
