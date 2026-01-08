@@ -93,7 +93,7 @@ GtLOpenAIProvider >> executeWait [
 						ifTrue: [ self streamingMessageFrom: result ]
 						ifFalse: [ self assistantMessageClass new
 								model: self model;
-								merge: (result output detect: [ :anOutput | (anOutput rawData at: 'type') = 'message' ]) ].
+								rawData: (result output detect: [ :anOutput | (anOutput at: 'type') = 'message' ]) ].
 
 				self chat addAssistantMessage: aMessage.
 				self chat signalRunIsDone.

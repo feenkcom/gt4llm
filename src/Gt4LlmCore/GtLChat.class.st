@@ -170,16 +170,8 @@ GtLChat >> copyLepiterSerialisationToClipboard [
 ]
 
 { #category : #accessing }
-GtLChat >> createMessageForCall: aMessageCall [ 
-	^ self userMessageClass new
-		content: aMessageCall serialize;
-		role: 'user'
-]
-
-{ #category : #accessing }
 GtLChat >> createUserMessage [
 	^ self userMessageClass new
-		role: 'user'
 ]
 
 { #category : #accessing }
