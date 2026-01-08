@@ -69,7 +69,7 @@ GtLChatMessage class >> serializationProperties [
 { #category : #visiting }
 GtLChatMessage >> acceptVisitor: aVisitor [
 
-	^ aVisitor visitGtLlmChatMessage: self
+	^ aVisitor visitGtLChatMessage: self
 ]
 
 { #category : #accessing }
