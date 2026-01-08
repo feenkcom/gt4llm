@@ -55,6 +55,17 @@ GtLOpenAIAssistantMessage >> contentText [
 										ifFalse: [ (aTextObject at: 'value') ifNil: [ '' ] ] ] ]) ]"
 ]
 
+{ #category : #views }
+GtLOpenAIAssistantMessage >> gtContentFor: aView [
+	<gtView>
+	<gtLlmView>
+	^ aView textEditor
+		title: 'Content';
+		priority: 7;
+		styler: (GtLMessageStyler new);
+		text: [ self contentText ]
+]
+
 { #category : #accessing }
 GtLOpenAIAssistantMessage >> gtInspectorTargetModels [
 	^ self responseModels

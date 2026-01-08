@@ -251,22 +251,6 @@ GtLChatMessage >> gtJsonFor: aView [
 ]
 
 { #category : #'gt - extensions' }
-GtLChatMessage >> gtMessageFilesFor: aView [
-	<gtView>
-	<gtLlmView>
-	| messageFiles |
-	messageFiles := self messageFiles.
-
-	messageFiles ifEmpty: [ ^ aView empty ].
-
-	^ aView columnedList
-		title: 'Files';
-		items: [ messageFiles ];
-		column: 'Extent' text: #extent;
-		column: 'Size' text: [ :aFile | aFile imageInfo byteSize  ]
-]
-
-{ #category : #'gt - extensions' }
 GtLChatMessage >> gtTextFor: aView [
 	<gtView>
 	<gtLlmView>
