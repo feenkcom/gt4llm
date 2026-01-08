@@ -8,8 +8,8 @@ Class {
 GtLToolForMethodSourceExamples >> methodSourceForExistingClassSideMethod [
 	<gtExample>
 	| tool call result |
-	tool := GtLlmToolForMethodSource new.
-	call := GtLlmFunctionToolCall new.
+	tool := GtLToolForMethodSource new.
+	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
 		'arguments' -> {
@@ -28,8 +28,8 @@ GtLToolForMethodSourceExamples >> methodSourceForExistingClassSideMethod [
 GtLToolForMethodSourceExamples >> methodSourceForExistingInstanceSideMethod [
 	<gtExample>
 	| tool call result |
-	tool := GtLlmToolForMethodSource new.
-	call := GtLlmFunctionToolCall new.
+	tool := GtLToolForMethodSource new.
+	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
 		'arguments' -> {
@@ -48,8 +48,8 @@ GtLToolForMethodSourceExamples >> methodSourceForExistingInstanceSideMethod [
 GtLToolForMethodSourceExamples >> methodSourceForUnknownClass [
 	<gtExample>
 	| tool call result |
-	tool := GtLlmToolForMethodSource new.
-	call := GtLlmFunctionToolCall new.
+	tool := GtLToolForMethodSource new.
+	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
 		'arguments' -> {
@@ -68,8 +68,8 @@ GtLToolForMethodSourceExamples >> methodSourceForUnknownClass [
 GtLToolForMethodSourceExamples >> methodSourceForUnknownClassSideMethod [
 	<gtExample>
 	| tool call result |
-	tool := GtLlmToolForMethodSource new.
-	call := GtLlmFunctionToolCall new.
+	tool := GtLToolForMethodSource new.
+	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
 		'arguments' -> {
@@ -88,8 +88,8 @@ GtLToolForMethodSourceExamples >> methodSourceForUnknownClassSideMethod [
 GtLToolForMethodSourceExamples >> methodSourceForUnknownInstanceSideMethod [
 	<gtExample>
 	| tool call result |
-	tool := GtLlmToolForMethodSource new.
-	call := GtLlmFunctionToolCall new.
+	tool := GtLToolForMethodSource new.
+	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
 		'arguments' -> {
