@@ -107,14 +107,6 @@ GtLOpenAIClient >> completeChatWithModel: aString andMessages: aCollection [
 ]
 
 { #category : #accessing }
-GtLOpenAIClient >> createAssistant: anAssistant [ 
-	^ GtLOpenAICreateAssistantAPICommand new
-		client: self;
-		assistant: anAssistant;
-		perform
-]
-
-{ #category : #accessing }
 GtLOpenAIClient >> createFineTuningJobOnModel: aModelName withFile: aFileId [
 	^ GtLOpenAICreateFineTuningJobAPICommand new
 		client: self;
@@ -352,13 +344,6 @@ GtLOpenAIClient >> initializeClient [
 	aClient timeout: 1200.
 	aClient setBearerAuthentication: apiKey.
 	^ aClient
-]
-
-{ #category : #accessing }
-GtLOpenAIClient >> listAssistants [
-	^ GtLOpenAIListAssistantsAPICommand new
-		client: self;
-		perform
 ]
 
 { #category : #accessing }
