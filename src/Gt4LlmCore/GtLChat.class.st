@@ -313,7 +313,7 @@ GtLChat >> gtMessagesWidgetFor: aView [
 GtLChat >> gtToolsFor: aView [
 	<gtView>
 	^ aView forward
-		title: 'Tools';
+		title: 'Defined tools';
 		object: [ tools ];
 		view: #gtItemsFor:
 ]
