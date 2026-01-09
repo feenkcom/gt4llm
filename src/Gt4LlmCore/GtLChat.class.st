@@ -447,6 +447,14 @@ GtLChat >> sendPlainMessage: aString [
 	self sendMessage: currentMessage
 ]
 
+{ #category : #'api - communication' }
+GtLChat >> sendWith: aBlock [
+	| newMessage |
+	newMessage := self createUserMessage.
+	aBlock value: newMessage.
+	^ self sendMessage: newMessage
+]
+
 { #category : #announcing }
 GtLChat >> signalRunHasStarted [
 	self announcer announce: GtLlmThreadRunStartedAnnouncement new
