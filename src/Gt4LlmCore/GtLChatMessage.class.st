@@ -286,6 +286,25 @@ GtLChatMessage >> gtViewSchemaDescriptionsFor: aView [
 			action: [ :aButton | aButton phlow spawnObject: formatDescriptions ]
 ]
 
+{ #category : #'gt - inspector' }
+GtLChatMessage >> gtViewsInContext: aPhlowContext [
+	| collectedViews |
+	collectedViews := Array
+			streamContents: [ :aStream | 
+				aStream nextPutAll: (super gtViewsInContext: aPhlowContext).
+				self gtInspectorTargetModels
+					do: [ :eachTargetModel | 
+						aStream
+							nextPutAll: (GtPhlowViewsCollector new
+									fromObject: eachTargetModel;
+									pragmaNames: GtLSettings messageViewPragmaNames;
+									collect) ] ].
+
+	GtPhlowUtility sortByPriority: collectedViews.
+
+	^ collectedViews
+]
+
 { #category : #testing }
 GtLChatMessage >> hasFormats [
 	^ formatDescriptions notNil and: [formatDescriptions hasSchemaDescriptors]

@@ -8,3 +8,9 @@ Class {
 GtLToolsGroup class >> isDeprecated [
 	^ true
 ]
+
+{ #category : #'as yet unclassified' }
+GtLToolsGroup >> items: aCollection [
+	self removeAll.
+	self addAll: aCollection
+]

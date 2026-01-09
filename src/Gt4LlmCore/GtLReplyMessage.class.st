@@ -68,6 +68,18 @@ GtLReplyMessage >> currentMessageDo: aBlock ifAbsent: anAbsentBlock [
 	^ anAbsentBlock value
 ]
 
+{ #category : #'gt - inspector' }
+GtLReplyMessage >> gtInspectorTargetModels [
+	^ self
+		currentMessageDo: [ :aMessage | aMessage gtInspectorTargetModels ]
+		ifAbsent: [ super gtInspectorTargetModels ]
+]
+
+{ #category : #'gt - extensions' }
+GtLReplyMessage >> gtJsonFor: aView [
+	^ aView empty
+]
+
 { #category : #'gt - extensions' }
 GtLReplyMessage >> gtToolViewMessagesFor: aView [
 	<gtView>
@@ -90,6 +102,26 @@ GtLReplyMessage >> gtToolViewMessagesFor: aView [
 									nextPutAll: anAssoc value asString ]
 							separatedBy: [ aStream nextPutAll: ', ' ] ] ];
 		column: 'Description' text: #toolDescription
+]
+
+{ #category : #'gt - inspector' }
+GtLReplyMessage >> gtViewsInContext: aPhlowContext [
+	| collectedViews |
+	collectedViews := Array
+			streamContents: [ :aStream | 
+				aStream nextPutAll: (super gtViewsInContext: aPhlowContext).
+				self
+					currentMessageDo: [ :aMessage | 
+						aStream
+							nextPutAll: (GtPhlowViewsCollector new
+									fromObject: aMessage;
+									pragmaNames: GtLSettings messageViewPragmaNames;
+									collect) ]
+					ifAbsent: [  ] ].
+
+	GtPhlowUtility sortByPriority: collectedViews.
+
+	^ collectedViews
 ]
 
 { #category : #initialization }
