@@ -7,7 +7,8 @@ Class {
 		'contentsElement',
 		'toolbar',
 		'imagesElement',
-		'sendButton'
+		'sendButton',
+		'senderFuture'
 	],
 	#category : #'Gt4LlmCore-UI - Elements'
 }
@@ -122,6 +123,7 @@ GtLNewMessageElement >> initialize [
 	self initializeContentsElement.
 	self initializeImagesElement.
 	self initializeToolbar.
+	self initializeSenderFuture.
 	self addChild: contentsElement as: #contents.
 	self addChild: imagesElement as: #images.
 	self addChild: toolbar as: #toolbar.
@@ -156,6 +158,15 @@ GtLNewMessageElement >> initializeImagesElement [
 ]
 
 { #category : #'initialization ' }
+GtLNewMessageElement >> initializeSenderFuture [
+	senderFuture := (BrAsyncElementFuture on: self)
+			executionConfiguration: GtLSettings futureExecutionConfiguration;
+			whenPending: [ :anElement | self disableSend ];
+			whenError: [ :anElement :anError | self updateSendMessageError: anError ];
+			whenSuccess: [ :anElement :anObject | self enableSend ]
+]
+
+{ #category : #'initialization ' }
 GtLNewMessageElement >> initializeToolbar [
 	toolbar := BrToolbar new aptitude: BrGlamorousToolbarAptitude new
 ]
@@ -166,8 +177,8 @@ GtLNewMessageElement >> onMessageViewModelChanged [
 ]
 
 { #category : #'private - announcement handling' }
-GtLNewMessageElement >> onThreadMessageContentsChanged: anAnnouncement [
-	anAnnouncement requester = self ifTrue: [ ^ self ].
+GtLNewMessageElement >> onMessageViewModelContentsChanged: anAnnouncement [
+	anAnnouncement source = self ifTrue: [ ^ self ].
 	self enqueueTask: (BlTaskAction new action: [ self updateElement ])
 ]
 
@@ -178,8 +189,8 @@ GtLNewMessageElement >> onThreadMessageViewModelChanged: anAnnouncement [
 
 { #category : #'private - actions' }
 GtLNewMessageElement >> sendMessage [
-	messageViewModel ifNil: [ ^ self ].
-	messageViewModel sendMessage
+	self messageViewModel ifNil: [ ^ self ].
+	senderFuture future: self messageViewModel sendMessage
 ]
 
 { #category : #'private - event handling' }
@@ -189,38 +200,33 @@ GtLNewMessageElement >> sendMessageFrom: aButton [
 
 { #category : #'private - hooks' }
 GtLNewMessageElement >> subscribeToMessageViewModel [
-	self message
-		when: GtLlmNewThreadMessageContentsChanged
-		send: #onThreadMessageContentsChanged:
-		to: self.
-
-	self message assistantChat
+	self messageViewModel chat
 		when: GtLlmThreadRunStartedAnnouncement
-		send: #disableSend
-		to: self.
-
-	self message assistantChat
+			send: #disableSend
+			to: self;
 		when: GtLlmThreadRunIsDoneAnnouncement
-		send: #enableSend
-		to: self.
+			send: #enableSend
+			to: self.
 
 	self messageViewModel weak
+		when: GtLMessageViewModelContentsChanged
+			send: #onMessageViewModelContentsChanged:
+			to: self;
 		when: GtLlmThreadMessageViewModelChanged
-		send: #onThreadMessageViewModelChanged:
-		to: self
+			send: #onThreadMessageViewModelChanged:
+			to: self
 ]
 
 { #category : #'private - hooks' }
 GtLNewMessageElement >> unsubscribeFromMessageViewModel [
-	self message unsubscribe: self.
-	self message assistantChat unsubscribe: self.
+	self messageViewModel chat unsubscribe: self.
 	self messageViewModel unsubscribe: self
 ]
 
 { #category : #'private - updating' }
 GtLNewMessageElement >> updateContents: aBlText [
 	messageViewModel ifNil: [ ^ self ].
-	messageViewModel contents: aBlText asString requester: self
+	messageViewModel contents: aBlText asString source: self
 ]
 
 { #category : #'private - updating' }
@@ -252,6 +258,13 @@ GtLNewMessageElement >> updateImagesElement [
 						onDeletion: [ :aFileForDeletion | 
 							self threadMessageViewModel files remove: aFileForDeletion.
 							self updateImagesElement ]) ]
+]
+
+{ #category : #'private - event handling' }
+GtLNewMessageElement >> updateSendMessageError: anError [ 
+	| anErrorCopy |
+	anErrorCopy := GtSystemUtility freeze: anError.
+	anErrorCopy inspect.
 ]
 
 { #category : #'private - updating' }
