@@ -286,7 +286,7 @@ GtLChat >> gtMessagesFor: aView [
 			text: [ :item | item role ]
 			width: 70;
 		column: 'Call' text: [ :item | item gtDisplayString ];
-		column: 'Content' text: [ :item | item content ];
+		column: 'Content' text: [ :item | item contentOneLineSummary ];
 		column: 'Created' text: [ :item | item createdAt asStringYMDHMS ];
 		updateWhen: GtLlmThreadRunAnnouncement in: self announcer;
 		expandAll;
