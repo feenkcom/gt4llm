@@ -1,8 +1,13 @@
 Class {
 	#name : #GtLTool,
-	#superclass : #GtLlmEntity,
+	#superclass : #Object,
 	#category : #'Gt4LlmCore-Tools'
 }
+
+{ #category : #accessing }
+GtLTool class >> leJsonV4AttributeMapping [
+	^ {}
+]
 
 { #category : #accessing }
 GtLTool class >> leJsonV4Name [

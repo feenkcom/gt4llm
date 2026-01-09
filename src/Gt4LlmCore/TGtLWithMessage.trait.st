@@ -12,6 +12,11 @@ TGtLWithMessage >> hasMessage [
 ]
 
 { #category : #'api - message model' }
+TGtLWithMessage >> id [
+	^ self message id
+]
+
+{ #category : #'api - message model' }
 TGtLWithMessage >> message [
 	^ message
 ]

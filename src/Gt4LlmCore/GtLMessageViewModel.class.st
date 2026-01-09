@@ -1,6 +1,8 @@
 Class {
 	#name : #GtLMessageViewModel,
 	#superclass : #GtLBasicMessageViewModel,
+	#traits : 'TGtLWithMessage',
+	#classTraits : 'TGtLWithMessage classTrait',
 	#instVars : [
 		'isExpanded',
 		'userViewMessage',
