@@ -289,6 +289,7 @@ GtLChat >> gtMessagesFor: aView [
 		column: 'Content' text: [ :item | item content ];
 		column: 'Created' text: [ :item | item createdAt asStringYMDHMS ];
 		updateWhen: GtLlmThreadRunAnnouncement in: self announcer;
+		expandAll;
 		actionUpdateButton
 ]
 
