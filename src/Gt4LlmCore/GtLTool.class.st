@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLTool,
-	#superclass : #GtLlmEntity,
+	#superclass : #Object,
 	#category : #'Gt4LlmCore-Tools'
 }
 

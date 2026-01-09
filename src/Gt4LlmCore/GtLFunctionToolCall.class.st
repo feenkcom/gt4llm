@@ -92,6 +92,7 @@ GtLFunctionToolCall >> gtResultFor: aView [
 	result ifNil: [ ^ aView empty ].
 	^ aView textEditor
 		title: 'Result';
+		priority: 2;
 		text: [ result ]
 ]
 
