@@ -13,7 +13,7 @@ Class {
 
 { #category : #accessing }
 GtLBasicMessageViewModel class >> messageViewPragmas [
-	^ #(gtLlmMessageView  gtLlmView)
+	^ GtLSettings messageViewPragmaNames
 ]
 
 { #category : #visiting }
