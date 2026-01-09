@@ -10,3 +10,8 @@ GtLSettings class >> futureExecutionConfiguration [
 		customGroup: #AI;
 		lowPriority
 ]
+
+{ #category : #settings }
+GtLSettings class >> messageViewPragmaNames [
+	^ #(gtLlmMessageView gtLlmView)
+]
