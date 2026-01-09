@@ -49,6 +49,12 @@ GtLTools >> gtItemsFor: aView [
 		column: 'Description' text: [ :each | each description ]
 ]
 
+{ #category : #'as yet unclassified' }
+GtLTools >> items: aCollection [
+	self removeAll.
+	self addAll: aCollection
+]
+
 { #category : #actions }
 GtLTools >> performToolCall: aToolCall [
 	| tool |
