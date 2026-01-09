@@ -5,6 +5,11 @@ Class {
 }
 
 { #category : #accessing }
+GtLTool class >> leJsonV4AttributeMapping [
+	^ {}
+]
+
+{ #category : #accessing }
 GtLTool class >> leJsonV4Name [
 
 	^ #gtLTool
