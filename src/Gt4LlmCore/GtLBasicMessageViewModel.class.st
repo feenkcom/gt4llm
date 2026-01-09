@@ -1,8 +1,8 @@
 Class {
 	#name : #GtLBasicMessageViewModel,
 	#superclass : #Object,
-	#traits : 'TGtLWithMessage + TGtAnnouncer',
-	#classTraits : 'TGtLWithMessage classTrait + TGtAnnouncer classTrait',
+	#traits : 'TGtAnnouncer',
+	#classTraits : 'TGtAnnouncer classTrait',
 	#instVars : [
 		'announcer',
 		'styler',
@@ -28,7 +28,7 @@ GtLBasicMessageViewModel >> ancestor [
 
 { #category : #accessing }
 GtLBasicMessageViewModel >> annotations [
-	^ message ifNotNil: #annotations ifNil: [ #() ]
+	^ SmallDictionary new
 ]
 
 { #category : #announcer }
@@ -76,7 +76,9 @@ GtLBasicMessageViewModel >> gtMessageViewsFor: aView [
 
 { #category : #accessing }
 GtLBasicMessageViewModel >> id [
-	^ message id
+	"Return a unique id that identifies this message"
+
+	^ self subclassResponsibility
 ]
 
 { #category : #initialization }
@@ -196,7 +198,5 @@ GtLBasicMessageViewModel >> subscribeToMessage [
 
 { #category : #'api - accessing' }
 GtLBasicMessageViewModel >> uiInsets [
-	self message isAssistantRole ifTrue: [ ^ BlInsets right: 50 ].
-	self message isToolRole ifTrue: [ ^ BlInsets left: 25 right: 25 ].
 	^ BlInsets left: 50
 ]

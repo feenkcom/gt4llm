@@ -2,7 +2,8 @@ Class {
 	#name : #GtLMessageViewModelAnnouncement,
 	#superclass : #GtLAnnouncement,
 	#instVars : [
-		'messageViewModel'
+		'messageViewModel',
+		'source'
 	],
 	#category : #'Gt4LlmCore-Announcements'
 }
@@ -15,4 +16,14 @@ GtLMessageViewModelAnnouncement >> messageViewModel [
 { #category : #accessing }
 GtLMessageViewModelAnnouncement >> messageViewModel: anObject [
 	messageViewModel := anObject
+]
+
+{ #category : #accessing }
+GtLMessageViewModelAnnouncement >> source [
+	^ source
+]
+
+{ #category : #accessing }
+GtLMessageViewModelAnnouncement >> source: aSource [
+	source := aSource
 ]

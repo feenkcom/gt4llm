@@ -33,7 +33,7 @@ GtLChatViewModel >> beSync [
 GtLChatViewModel >> initialize [
 	super initialize.
 	messageViewModelsCache := Dictionary new.
-	newMessageViewModel := GtLNewMessage new asViewModel
+	newMessageViewModel := GtLNewMessageViewModel new
 ]
 
 { #category : #'api - accessing' }
@@ -52,7 +52,7 @@ GtLChatViewModel >> newMessageViewModel [
 
 { #category : #'private - hooks' }
 GtLChatViewModel >> onAssistantChatChanged [
-	newMessageViewModel assistantChat: chat
+	newMessageViewModel chat: chat
 ]
 
 { #category : #'api - communication' }

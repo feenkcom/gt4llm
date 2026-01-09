@@ -2,7 +2,11 @@ Class {
 	#name : #GtLNewMessageViewModel,
 	#superclass : #GtLBasicMessageViewModel,
 	#instVars : [
-		'connectionRegistry'
+		'connectionRegistry',
+		'chat',
+		'files',
+		'isSync',
+		'contents'
 	],
 	#category : #'Gt4LlmCore-UI - View Models'
 }
@@ -12,19 +16,30 @@ GtLNewMessageViewModel >> acceptVisitor: aVisitor [
 	^ aVisitor visitNewMessageViewModel: self
 ]
 
-{ #category : #'initialization ' }
-GtLNewMessageViewModel >> assistantChat: assistantChat [
-	self message assistantChat: assistantChat
-]
-
-{ #category : #'as yet unclassified' }
+{ #category : #'api - message' }
 GtLNewMessageViewModel >> attachFile: aFileReference [
-	self message addFile: aFileReference
+	files add: aFileReference
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'api - initialization' }
+GtLNewMessageViewModel >> beAsync [
+	isSync := false
+]
+
+{ #category : #'api - initialization' }
 GtLNewMessageViewModel >> beSync [
-	self message beSync
+	isSync := true
+]
+
+{ #category : #accessing }
+GtLNewMessageViewModel >> chat [
+	<return: #GtLChat>
+	^ chat
+]
+
+{ #category : #'api - initialization' }
+GtLNewMessageViewModel >> chat: aChat [
+	chat := aChat
 ]
 
 { #category : #accessing }
@@ -45,14 +60,17 @@ GtLNewMessageViewModel >> connectionString [
 		ifNotNil: #connectionString
 ]
 
-{ #category : #accessing }
+{ #category : #'api - message' }
 GtLNewMessageViewModel >> contents [
-	^ self message contents
+	^ contents
 ]
 
-{ #category : #accessing }
-GtLNewMessageViewModel >> contents: aString requester: aRequester [
-	self message contents: aString requester: aRequester
+{ #category : #'api - accessing' }
+GtLNewMessageViewModel >> contents: aString source: aSource [
+	"Set user message text that is going to be sent."
+
+	contents := aString.
+	self onContentsChangedSource: aSource
 ]
 
 { #category : #'api - converting' }
@@ -60,27 +78,61 @@ GtLNewMessageViewModel >> elementClass [
 	^ GtLNewMessageElement
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'api - accessing' }
 GtLNewMessageViewModel >> files [
-	^ self message files
+	^ files
 ]
 
-{ #category : #accessing }
-GtLNewMessageViewModel >> onAddMessageContentsRequest: anAnnouncement [
-	self contents: anAnnouncement messageContents requester: nil
+{ #category : #'api - accessing' }
+GtLNewMessageViewModel >> id [
+	"Return a unique id that identifies this message"
+
+	^ '87fe83dd-90cd-0d00-9ada-2ba30d0bb652'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
+GtLNewMessageViewModel >> initialize [
+	super initialize.
+	contents := ''.
+	files := OrderedCollection new.
+	isSync := false.
+]
+
+{ #category : #'private - event handling' }
+GtLNewMessageViewModel >> onContentsChangedSource: aSource [ 
+	self announcer
+		announce: (GtLMessageViewModelContentsChanged new
+				messageViewModel: self;
+				source: aSource)
+]
+
+{ #category : #'api - chat' }
 GtLNewMessageViewModel >> provider [
-	^ self message assistantChat provider
+	^ self chat provider
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'api - chat' }
 GtLNewMessageViewModel >> provider: aProvider [
-	self message assistantChat provider: aProvider
+	self chat provider: aProvider
 ]
 
 { #category : #actions }
 GtLNewMessageViewModel >> sendMessage [
-	^ self message sendMessage
+	<return: #TAsyncFuture>
+	| aMessageContent aBlock aMessageFiles |
+	contents ifNil: [ ^ nil asAsyncFuture ].
+	contents ifEmpty: [ ^ nil asAsyncFuture ].
+
+	aMessageContent := self contents.
+	aMessageFiles := self files asArray.
+	aBlock := aMessageFiles
+		ifEmpty: [ [ chat sendPlainMessage: aMessageContent ] ]
+		ifNotEmpty: [ [ chat sendFiles: aMessageFiles withMessage: aMessageContent ] ].
+
+	self contents: '' source: self.
+	files := OrderedCollection new.
+
+	^ isSync
+		ifTrue: [ aBlock value asAsyncFuture ]
+		ifFalse: [ aBlock asAsyncFuture ]
 ]
