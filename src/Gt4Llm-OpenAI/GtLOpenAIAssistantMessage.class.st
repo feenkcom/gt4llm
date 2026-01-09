@@ -15,8 +15,8 @@ GtLOpenAIAssistantMessage >> canExtractResponseModels [
 	self formatDescriptions 
 		hasSchemaDescriptors ifFalse: [ ^ false ].
 		
-	responseText := self contentText.
-	responseText ifEmpty: [ ^ false ].
+	"responseText := self contentText.
+	responseText ifEmpty: [ ^ false ]."
 	^ true
 ]
 
@@ -39,6 +39,34 @@ GtLOpenAIAssistantMessage >> computeResponseModelsByFormat [
 ]
 
 { #category : #accessing }
+GtLOpenAIAssistantMessage >> contentText [
+	^ '' join: (self rawContent collect: [:each | each at: 'text' ])
+
+	"(content isKindOf: String)
+		ifTrue: [ content ]
+		ifFalse: [ ''
+				join: (content
+						collect: [ :aValue | 
+							(aValue at: 'text' ifAbsent: [ nil ])
+								ifNil: [ '' ]
+								ifNotNil: [ :aTextObject | 
+									(aTextObject isKindOf: String)
+										ifTrue: [ aTextObject ]
+										ifFalse: [ (aTextObject at: 'value') ifNil: [ '' ] ] ] ]) ]"
+]
+
+{ #category : #views }
+GtLOpenAIAssistantMessage >> gtContentFor: aView [
+	<gtView>
+	<gtLlmView>
+	^ aView textEditor
+		title: 'Content';
+		priority: 7;
+		styler: (GtLMessageStyler new);
+		text: [ self contentText ]
+]
+
+{ #category : #accessing }
 GtLOpenAIAssistantMessage >> gtInspectorTargetModels [
 	^ self responseModels
 ]
@@ -57,8 +85,18 @@ GtLOpenAIAssistantMessage >> gtViewResponseModelsFor: aView [
 		view: #gtItemsFor:
 ]
 
+{ #category : #reading }
+GtLOpenAIAssistantMessage >> rawContent [
+	^ rawData at: 'content'
+]
+
 { #category : #accessing }
 GtLOpenAIAssistantMessage >> responseModels [
 	^ responseModels ifNil:[ 
 			responseModels := self computeResponseModelsByFormat ].
+]
+
+{ #category : #'as yet unclassified' }
+GtLOpenAIAssistantMessage >> role [
+	^ self rawData at: 'role'
 ]

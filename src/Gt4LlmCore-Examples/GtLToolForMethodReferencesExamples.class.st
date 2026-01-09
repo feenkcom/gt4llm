@@ -8,8 +8,8 @@ Class {
 GtLToolForMethodReferencesExamples >> methodReferencesForExistingSelector [
 	<gtExample>
 	| tool call result |
-	tool := GtLlmToolForMethodReferences new.
-	call := GtLlmFunctionToolCall new.
+	tool := GtLToolForMethodReferences new.
+	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
 		'arguments' -> {'selector' -> 'performToolCall:'} asDictionary
@@ -25,8 +25,8 @@ GtLToolForMethodReferencesExamples >> methodReferencesForExistingSelector [
 GtLToolForMethodReferencesExamples >> methodReferencesForUnknownSelector [
 	<gtExample>
 	| tool call result |
-	tool := GtLlmToolForMethodReferences new.
-	call := GtLlmFunctionToolCall new.
+	tool := GtLToolForMethodReferences new.
+	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
 		'arguments' -> {'selector' -> 'unknownSelector42'} asDictionary
@@ -41,8 +41,8 @@ GtLToolForMethodReferencesExamples >> methodReferencesForUnknownSelector [
 GtLToolForMethodReferencesExamples >> methodReferencesForValueOnlyReturns100 [
 	<gtExample>
 	| tool call result |
-	tool := GtLlmToolForMethodReferences new.
-	call := GtLlmFunctionToolCall new.
+	tool := GtLToolForMethodReferences new.
+	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
 		'arguments' -> {'selector' -> 'value'} asDictionary

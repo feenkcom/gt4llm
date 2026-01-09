@@ -41,12 +41,12 @@ GtLAnthropicChatMessage >> actionModel [
 
 { #category : #'as yet unclassified' }
 GtLAnthropicChatMessage >> contentText [
-	^ (content isKindOf: String)
+	^ '' "(content isKindOf: String)
 		ifTrue: [ content ]
 		ifFalse: [ ''
 				join: (content
 						select: [ :aValue | (aValue at: #type) = 'text' ]
-						thenCollect: [ :aValue | (aValue at: #text) ifNil: [ '' ] ]) ]
+						thenCollect: [ :aValue | (aValue at: #text) ifNil: [ '' ] ]) ]"
 ]
 
 { #category : #'as yet unclassified' }

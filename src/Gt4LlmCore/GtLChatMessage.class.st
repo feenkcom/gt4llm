@@ -2,8 +2,6 @@ Class {
 	#name : #GtLChatMessage,
 	#superclass : #GtLBasicMessage,
 	#instVars : [
-		'content',
-		'role',
 		'id',
 		'createdAt',
 		'chat',
@@ -48,7 +46,7 @@ GtLChatMessage class >> from: aDictionary [
 GtLChatMessage class >> leJsonV4AttributeMapping [
 
 	^ super leJsonV4AttributeMapping
-		add: #content -> #content;
+		add: #contentText -> #content;
 		add: #role -> #role;
 		add: #id -> #id;
 		add: #createdAt -> #createdAt;
@@ -65,13 +63,13 @@ GtLChatMessage class >> rolesToClasses [
 { #category : #accessing }
 GtLChatMessage class >> serializationProperties [
 	^ {#role -> #role.
-		#content -> #content}
+		#content -> #contentText}
 ]
 
 { #category : #visiting }
 GtLChatMessage >> acceptVisitor: aVisitor [
 
-	^ aVisitor visitGtLlmChatMessage: self
+	^ aVisitor visitGtLChatMessage: self
 ]
 
 { #category : #accessing }
@@ -145,28 +143,14 @@ GtLChatMessage >> chat: aChat [
 ]
 
 { #category : #accessing }
-GtLChatMessage >> content [
-	^ content
-]
-
-{ #category : #accessing }
-GtLChatMessage >> content: anObject [
-	content := anObject.
-	
-	self announce: (GtLMessageContentsChanged new message: self)
-]
-
-{ #category : #accessing }
 GtLChatMessage >> contentFiles [
-	^ (self content isKindOf: String)
-		ifTrue: [ {} ]
-		ifFalse: [ content
+	^ self rawContent
 				select: [ :aValue | (aValue at: #type) = 'image' ]
 				thenCollect: [ :aValue | 
 					aValue
 						at: #source
 						at: #data
-						ifAbsent: [ '' ] ] ]
+						ifAbsent: [ '' ] ]
 ]
 
 { #category : #accessing }
@@ -179,18 +163,18 @@ GtLChatMessage >> contentJson [
 ]
 
 { #category : #accessing }
-GtLChatMessage >> contentSummary [
-	^ self contentText lines ifEmpty: [ '' ] ifNotEmpty: #first
+GtLChatMessage >> contentOneLineSummary [
+	^ self contentText copyReplaceAll: String lf with: String space
 ]
 
 { #category : #accessing }
 GtLChatMessage >> contentText [
-	^ (self content isKindOf: String)
-		ifTrue: [ self content ]
-		ifFalse: [ ''
-				join: (self content
-						select: [ :aValue | #(text output_text) includes: (aValue at: #type) ]
-						thenCollect: [ :aValue | (aValue at: #text) ifNil: [ '' ] ]) ]
+	^ self subclassResponsibility
+]
+
+{ #category : #accessing }
+GtLChatMessage >> contentText: aString [
+	"do nothing by default. here for automatic serialization compatibility"
 ]
 
 { #category : #accessing }
@@ -239,18 +223,6 @@ GtLChatMessage >> gtActionInspectFor: anAction [
 	^ super gtActionInspectFor: anAction
 ]
 
-{ #category : #'gt - extensions' }
-GtLChatMessage >> gtContentFor: aView [
-	<gtView>
-	<gtLlmView>
-	content ifNil: [ ^ aView empty ].
-
-	^ aView explicit
-		title: 'Content';
-		priority: 5;
-		stencil: [ GtLChatMessageElement new messageViewModel: self asViewModel ]
-]
-
 { #category : #accessing }
 GtLChatMessage >> gtFormatFor: aView [
 	<gtView>
@@ -281,23 +253,6 @@ GtLChatMessage >> gtJsonFor: aView [
 	^ (self contentJson gtTreeFor: aView)
 		title: 'JSON data';
 		priority: 10
-]
-
-{ #category : #'gt - extensions' }
-GtLChatMessage >> gtMessageFilesFor: aView [
-	<gtView>
-	<gtLlmView>
-	| messageFiles |
-	content ifNil: [ ^ aView empty ].
-	messageFiles := self messageFiles.
-
-	messageFiles ifEmpty: [ ^ aView empty ].
-
-	^ aView columnedList
-		title: 'Files';
-		items: [ messageFiles ];
-		column: 'Extent' text: #extent;
-		column: 'Size' text: [ :aFile | aFile imageInfo byteSize  ]
 ]
 
 { #category : #'gt - extensions' }
@@ -502,12 +457,12 @@ GtLChatMessage >> model: anObject [
 
 { #category : #accessing }
 GtLChatMessage >> role [
-	^ role ifNil: [ role := self class defaultRole ]
+	^ self class defaultRole
 ]
 
 { #category : #accessing }
-GtLChatMessage >> role: anObject [
-	role := anObject
+GtLChatMessage >> role: aString [
+	"do nothing because subclasses already know. have it here only for making the automatic serialization happy"
 ]
 
 { #category : #accessing }

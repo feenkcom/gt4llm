@@ -39,6 +39,11 @@ GtLReplyMessage >> content [
 ]
 
 { #category : #accessing }
+GtLReplyMessage >> contentText [
+	^ self currentMessageDo: #contentText ifAbsent: [ '' ]
+]
+
+{ #category : #accessing }
 GtLReplyMessage >> createdAt [
 	^ self currentMessageDo: #createdAt ifAbsent: [ super createdAt ]
 ]
@@ -70,7 +75,7 @@ GtLReplyMessage >> gtToolViewMessagesFor: aView [
 	self toolMessages ifEmpty: [ ^ aView empty ].
 
 	^ aView columnedList
-		title: 'Tools';
+		title: 'Executed tools';
 		items: [ self toolMessages ];
 		column: 'Tool' text: #toolName;
 		column: 'Arguments'

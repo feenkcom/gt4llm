@@ -2,7 +2,8 @@ Class {
 	#name : #GtLOpenAIUserMessage,
 	#superclass : #GtLOpenAIMessage,
 	#instVars : [
-		'inputModels'
+		'inputModels',
+		'content'
 	],
 	#category : #'Gt4Llm-OpenAI'
 }
@@ -81,6 +82,16 @@ GtLOpenAIUserMessage >> computeContentFromInputModels [
 	^ NeoJSONWriter toStringPretty: object
 ]
 
+{ #category : #'as yet unclassified' }
+GtLOpenAIUserMessage >> content [
+	^ content
+]
+
+{ #category : #'as yet unclassified' }
+GtLOpenAIUserMessage >> contentText [
+	^ content
+]
+
 { #category : #'gt - inspector' }
 GtLOpenAIUserMessage >> gtInspectorTargetModels [
 	^ self inputModels flatCollect: [ :each |
@@ -131,4 +142,9 @@ GtLOpenAIUserMessage >> instructions [
 			instructions := GtLlmInstructionWithSections new
 					introduction: (GtLlmInstructionString new string: '').
 			instructions ]
+]
+
+{ #category : #'as yet unclassified' }
+GtLOpenAIUserMessage >> role [
+	^ 'user'
 ]

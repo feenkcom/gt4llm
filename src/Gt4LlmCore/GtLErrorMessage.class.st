@@ -52,11 +52,6 @@ GtLErrorMessage >> contentJson [
 ]
 
 { #category : #accessing }
-GtLErrorMessage >> contentSummary [
-	^ self contentText lines ifEmpty: [ '' ] ifNotEmpty: #first
-]
-
-{ #category : #accessing }
 GtLErrorMessage >> contentText [
 	^ self exception ifNil: [ 'Error' ] ifNotNil: [: e | e messageText ]
 ]

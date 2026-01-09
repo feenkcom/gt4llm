@@ -170,16 +170,8 @@ GtLChat >> copyLepiterSerialisationToClipboard [
 ]
 
 { #category : #accessing }
-GtLChat >> createMessageForCall: aMessageCall [ 
-	^ self userMessageClass new
-		content: aMessageCall serialize;
-		role: 'user'
-]
-
-{ #category : #accessing }
 GtLChat >> createUserMessage [
 	^ self userMessageClass new
-		role: 'user'
 ]
 
 { #category : #accessing }
@@ -294,7 +286,7 @@ GtLChat >> gtMessagesFor: aView [
 			text: [ :item | item role ]
 			width: 70;
 		column: 'Call' text: [ :item | item gtDisplayString ];
-		column: 'Content' text: [ :item | item content ];
+		column: 'Content' text: [ :item | item contentText ];
 		column: 'Created' text: [ :item | item createdAt asStringYMDHMS ];
 		updateWhen: GtLlmThreadRunAnnouncement in: self announcer;
 		actionUpdateButton
@@ -321,7 +313,7 @@ GtLChat >> gtMessagesWidgetFor: aView [
 GtLChat >> gtToolsFor: aView [
 	<gtView>
 	^ aView forward
-		title: 'Tools';
+		title: 'Defined tools';
 		object: [ tools ];
 		view: #gtItemsFor:
 ]
