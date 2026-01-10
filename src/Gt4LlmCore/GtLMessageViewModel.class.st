@@ -88,6 +88,20 @@ GtLMessageViewModel >> onMessageChanged [
 	super onMessageChanged
 ]
 
+{ #category : #'private - event handling' }
+GtLMessageViewModel >> onMessageContentsChanged: anAnnouncement [
+	self announcer
+		announce: (GtLMessageViewModelContentsChanged new messageViewModel: self)
+]
+
+{ #category : #'private - hooks' }
+GtLMessageViewModel >> subscribeToMessage [
+	self message
+		when: GtLMessageContentsChanged
+		send: #onMessageContentsChanged:
+		to: self
+]
+
 { #category : #'api - accessing' }
 GtLMessageViewModel >> toolArguments [
 	^ self message toolArguments
@@ -113,6 +127,11 @@ GtLMessageViewModel >> toolViewMessages: someMessageViewModels [
 	"Set previous tool view messages."
 
 	toolViewMessages := someMessageViewModels
+]
+
+{ #category : #'private - hooks' }
+GtLMessageViewModel >> unsubscribeFromMessage [
+	self message unsubscribe: self
 ]
 
 { #category : #'api - accessing' }
