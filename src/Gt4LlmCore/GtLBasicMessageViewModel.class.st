@@ -167,12 +167,6 @@ GtLBasicMessageViewModel >> onMessageChanged [
 	self notifyThreadMessageViewModelChanged
 ]
 
-{ #category : #'private - event handling' }
-GtLBasicMessageViewModel >> onMessageContentsChanged: anAnnouncement [
-	self announcer
-		announce: (GtLMessageViewModelContentsChanged new messageViewModel: self)
-]
-
 { #category : #accessing }
 GtLBasicMessageViewModel >> requestStyleSourceText [
 	self announce: GtLlmThreadMessageRestyleRequested new
@@ -186,14 +180,6 @@ GtLBasicMessageViewModel >> senderText [
 { #category : #accessing }
 GtLBasicMessageViewModel >> styler [
 	^ styler ifNil: [ styler := self newStyler ]
-]
-
-{ #category : #'private - hooks' }
-GtLBasicMessageViewModel >> subscribeToMessage [
-	self message
-		when: GtLMessageContentsChanged
-		send: #onMessageContentsChanged:
-		to: self
 ]
 
 { #category : #'api - accessing' }
