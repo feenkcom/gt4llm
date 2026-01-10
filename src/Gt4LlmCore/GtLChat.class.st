@@ -142,12 +142,12 @@ GtLChat >> announcer [
 	^ announcer ifNil: [ announcer := Announcer new ]
 ]
 
-{ #category : #converting }
+{ #category : #ui }
 GtLChat >> asElement [
 	^ GtLChatElement new chatViewModel: self asViewModel
 ]
 
-{ #category : #converting }
+{ #category : #ui }
 GtLChat >> asViewModel [
 	^ GtLChatViewModel new assistantChat: self
 ]
@@ -372,7 +372,7 @@ GtLChat >> lastUpdate: anObject [
 	lastUpdate := anObject
 ]
 
-{ #category : #'examples - calls' }
+{ #category : #utilities }
 GtLChat >> markdownResponse [
 	self addResponseFormatForMagrite: GtLMarkdown named: 'Markdown'
 ]
