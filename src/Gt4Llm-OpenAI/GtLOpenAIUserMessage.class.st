@@ -144,6 +144,13 @@ GtLOpenAIUserMessage >> instructions [
 			instructions ]
 ]
 
+{ #category : #accessing }
+GtLOpenAIUserMessage >> markdown: aString [
+	self
+		addInputMagritteObject: (GtLMarkdown new content: aString)
+		named: 'Markdown'
+]
+
 { #category : #'as yet unclassified' }
 GtLOpenAIUserMessage >> role [
 	^ 'user'

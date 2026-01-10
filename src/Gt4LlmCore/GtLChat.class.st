@@ -178,8 +178,7 @@ GtLChat >> createUserMessage [
 GtLChat >> createUserMessageForString: aString [
 	| newMessage |
 	newMessage := self createUserMessage.
-	newMessage
-		addInputMagritteObject: (GtLMarkdown new content: aString) named: 'Markdown'.
+	newMessage markdown: aString.
 	^ newMessage
 ]
 
@@ -337,7 +336,7 @@ GtLChat >> initializeMessages [
 
 { #category : #accessing }
 GtLChat >> initializeTools [
-	tools := GtLToolsGroup new.
+	tools := GtLTools new.
 ]
 
 { #category : #accessing }
@@ -371,6 +370,11 @@ GtLChat >> lastUpdate [
 { #category : #accessing }
 GtLChat >> lastUpdate: anObject [
 	lastUpdate := anObject
+]
+
+{ #category : #'examples - calls' }
+GtLChat >> markdownResponse [
+	self addResponseFormatForMagrite: GtLMarkdown named: 'Markdown'
 ]
 
 { #category : #'api - message' }
@@ -420,6 +424,14 @@ GtLChat >> sendFiles: aListOfFileReferences withMessage: aString [
 		withMessage: aString
 ]
 
+{ #category : #accessing }
+GtLChat >> sendMarkdown: aString [
+	| currentMessage |
+	self assert: aString isString.
+	currentMessage := self createUserMessageForString: aString.
+	self sendMessage: currentMessage
+]
+
 { #category : #'api - communication' }
 GtLChat >> sendMessage: aMessage [
 	self addUserMessage: aMessage.
@@ -433,6 +445,14 @@ GtLChat >> sendPlainMessage: aString [
 	self assert: aString isString.
 	currentMessage := self createUserMessageForString: aString.
 	self sendMessage: currentMessage
+]
+
+{ #category : #'api - communication' }
+GtLChat >> sendWith: aBlock [
+	| newMessage |
+	newMessage := self createUserMessage.
+	aBlock value: newMessage.
+	^ self sendMessage: newMessage
 ]
 
 { #category : #announcing }

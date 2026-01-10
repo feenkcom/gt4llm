@@ -126,7 +126,7 @@ GtLNewMessageViewModel >> sendMessage [
 	aMessageContent := self contents.
 	aMessageFiles := self files asArray.
 	aBlock := aMessageFiles
-		ifEmpty: [ [ chat sendPlainMessage: aMessageContent ] ]
+		ifEmpty: [ [ chat sendMarkdown: aMessageContent ] ]
 		ifNotEmpty: [ [ chat sendFiles: aMessageFiles withMessage: aMessageContent ] ].
 
 	self contents: '' source: self.
