@@ -144,6 +144,11 @@ GtLOpenAIUserMessage >> instructions [
 			instructions ]
 ]
 
+{ #category : #utilities }
+GtLOpenAIUserMessage >> lepiterExplanations: pageNames [
+	^ self addInstructionSectionForLepiterPages: pageNames titled: 'Explanations'
+]
+
 { #category : #accessing }
 GtLOpenAIUserMessage >> markdown: aString [
 	self

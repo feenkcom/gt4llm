@@ -7,6 +7,13 @@ Class {
 }
 
 { #category : #defaults }
+GtLTools class >> gtCodeChange [
+	^ self
+		withAll: {GtLToolForClassCreation new.
+					GtLToolForMethodCompilation new} asOrderedCollection
+]
+
+{ #category : #defaults }
 GtLTools class >> gtExamplesRun [
 	^ self
 		withAll: {	GtLlmToolForExampleMethodRun new.

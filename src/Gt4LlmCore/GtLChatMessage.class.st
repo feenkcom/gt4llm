@@ -121,7 +121,7 @@ GtLChatMessage >> asTokenizableString [
 	^ '<|im_start|>' , self role , '<|im_sep|>' , self content , '<|im_end|>'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 GtLChatMessage >> buildCompleteInstructions [
 	^ self instructions instructionString
 ]
@@ -223,7 +223,7 @@ GtLChatMessage >> gtActionInspectFor: anAction [
 	^ super gtActionInspectFor: anAction
 ]
 
-{ #category : #accessing }
+{ #category : #ui }
 GtLChatMessage >> gtFormatFor: aView [
 	<gtView>
 	formatDescriptions ifNil: [ ^ aView empty ].
@@ -271,7 +271,7 @@ GtLChatMessage >> gtTextFor: aView [
 		styler: [ GtLlmMessageStyler new threadMessageViewModel: self asViewModel ]
 ]
 
-{ #category : #accessing }
+{ #category : #ui }
 GtLChatMessage >> gtViewSchemaDescriptionsFor: aView [
 	<gtView>
 	formatDescriptions ifNil: [ ^ aView empty ].
@@ -310,7 +310,7 @@ GtLChatMessage >> hasFormats [
 	^ formatDescriptions notNil and: [formatDescriptions hasSchemaDescriptors]
 ]
 
-{ #category : #accessing }
+{ #category : #testing }
 GtLChatMessage >> hasResponse [
 	^ true
 ]
@@ -340,7 +340,7 @@ GtLChatMessage >> images: anObject [
 	images := anObject
 ]
 
-{ #category : #accessing }
+{ #category : #initialization }
 GtLChatMessage >> initialize [
 	super initialize.
 	
@@ -398,7 +398,7 @@ GtLChatMessage >> isReplyMessage [
 	^ false
 ]
 
-{ #category : #accessing }
+{ #category : #testing }
 GtLChatMessage >> isSystemRole [
 	^ self role = 'system'
 ]
@@ -409,7 +409,7 @@ GtLChatMessage >> isToolMessage [
 	^ false
 ]
 
-{ #category : #accessing }
+{ #category : #testing }
 GtLChatMessage >> isToolRole [
 	"Return true if the message is produced by an assistant, 
 	being a tool used by the assistant, e.g., quering a system code."
@@ -425,7 +425,7 @@ GtLChatMessage >> isUserMessage [
 	^ self isUserRole
 ]
 
-{ #category : #accessing }
+{ #category : #testing }
 GtLChatMessage >> isUserRole [
 	^ self role = 'user'
 ]
@@ -507,7 +507,7 @@ GtLChatMessage >> serialize [
 	^ serialized
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 GtLChatMessage >> serializeInline [
 ]
 
