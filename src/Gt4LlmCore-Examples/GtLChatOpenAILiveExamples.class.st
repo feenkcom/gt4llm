@@ -60,7 +60,7 @@ GtLChatOpenAILiveExamples >> howAreYouCallExample [
 	<gtExample>
 	<noTest>
 	| responseMessage  |
-	responseMessage := self currentChat sendPlainMessage: 'How are you?'.
+	responseMessage := self currentChat sendMarkdown: 'How are you?'.
 	
 	self
 		waitForChatRunIsDoneThen: [ self assert: self currentChat messages size equals: 2 ].
@@ -169,7 +169,7 @@ GtLChatOpenAILiveExamples >> messageExample_magritteMarkdown_codeChanges_refacto
 				content: 'Push up common methods and slots from the subclasses in the DiffVisitor class. Use CodeTransformations.')
 		named: 'Markdown'.
 	chat
-		tools: (GtLToolsGroup
+		tools: (GtLTools
 				withAll: {GtLRefactoringToolForClassSearch new model: model.
 						GtLRefactoringToolForClassSubclasses new model: model.
 						GtLRefactoringToolForClassLookup new model: model.
@@ -177,9 +177,7 @@ GtLChatOpenAILiveExamples >> messageExample_magritteMarkdown_codeChanges_refacto
 						GtLRefactoringToolForMethodReferences new model: model.
 						GtLRefactoringToolForMethodImplementors new model: model.
 						GtLRefactoringToolForMethodSource new model: model}).
-	chat
-		addResponseFormatForMagrite: GtLMarkdown
-		named: 'Markdown'.
+	chat markdownResponse.
 	chat
 		addResponseFormatForMagrite: GtLCodeTransformations
 		named: 'CodeTransformations'.
@@ -344,7 +342,7 @@ GtLChatOpenAILiveExamples >> messageWithInputObjectExample [
 			gtExample returnValue
 		named: 'Object'.
 	
-	currentMessage tools: (GtLToolsGroup withAll: {GtLToolForClassLookup new}).
+	currentMessage tools: (GtLTools withAll: {GtLToolForClassLookup new}).
 	currentMessage
 		addResponseFormatForMagrite: GtLMarkdown
 		named: 'Markdown' .
@@ -370,7 +368,7 @@ GtLChatOpenAILiveExamples >> messageWithToolCallExample [
 			content: messageString)
 		named: 'Markdown'.
 	
-	currentMessage tools: (GtLToolsGroup withAll: {GtLToolForClassLookup new}).
+	currentMessage tools: (GtLTools withAll: {GtLToolForClassLookup new}).
 	currentMessage addResponseFormat: (GtLResponseMarkdownFormat new
 			name: 'Description').
 	
@@ -394,7 +392,7 @@ GtLChatOpenAILiveExamples >> messageWithToolCallExample_magritteMarkdown [
 		addInputMagritteObject: (GtLMarkdown new content: messageString)
 		named: 'Markdown'.
 	
-	currentMessage tools: (GtLToolsGroup withAll: {GtLToolForClassLookup new}).
+	currentMessage tools: (GtLTools withAll: {GtLToolForClassLookup new}).
 	currentMessage
 		addResponseFormatForMagrite: GtLMarkdown
 		named: 'Markdown'.
