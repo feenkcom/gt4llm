@@ -8,16 +8,16 @@ Class {
 GtLToolForClassSearchExamples >> searchClassesWithMatches [
 	<gtExample>
 	| tool call result |
-	tool := GtLlmToolForClassSearch new.
-	call := GtLlmFunctionToolCall new.
+	tool := GtLToolForClassSearch new.
+	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
-		'arguments' -> {'query' -> 'GtLlmToolForClass'} asDictionary
+		'arguments' -> {'query' -> 'GtLToolForClass'} asDictionary
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result includesSubstring: 'GtLlmToolForClassReferences').
-	self assert: (result includesSubstring: 'GtLlmToolForClassSearch').
+	self assert: (result includesSubstring: 'GtLToolForClassReferences').
+	self assert: (result includesSubstring: 'GtLToolForClassSearch').
 	^ tool
 ]
 
@@ -25,8 +25,8 @@ GtLToolForClassSearchExamples >> searchClassesWithMatches [
 GtLToolForClassSearchExamples >> searchClassesWithNoMatches [
 	<gtExample>
 	| tool call result |
-	tool := GtLlmToolForClassSearch new.
-	call := GtLlmFunctionToolCall new.
+	tool := GtLToolForClassSearch new.
+	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
 		'arguments' -> {'query' -> 'ClassNameThatDoesNotExist42'} asDictionary

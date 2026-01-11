@@ -9,15 +9,15 @@ GtLRefactoringToolForMethodImplementorsExamples >> methodImplementorsForExisting
 	<gtExample>
 	| tool call result |
 	tool := self toolWithExampleHierarchy.
-	call := GtLlmFunctionToolCall new.
+	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
 		'arguments' -> {'methodName' -> 'example'} asDictionary
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result includesSubstring: 'GtLlmRefactoringMethodImplementorsBase').
-	self assert: (result includesSubstring: 'GtLlmRefactoringMethodImplementorsChild').
+	self assert: (result includesSubstring: 'GtLRefactoringMethodImplementorsBase').
+	self assert: (result includesSubstring: 'GtLRefactoringMethodImplementorsChild').
 	^ tool
 ]
 
@@ -26,7 +26,7 @@ GtLRefactoringToolForMethodImplementorsExamples >> methodImplementorsForUnknownS
 	<gtExample>
 	| tool call result |
 	tool := self toolWithExampleHierarchy.
-	call := GtLlmFunctionToolCall new.
+	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
 		'arguments' -> {'methodName' -> 'missingSelector'} asDictionary
@@ -41,21 +41,21 @@ GtLRefactoringToolForMethodImplementorsExamples >> methodImplementorsForUnknownS
 GtLRefactoringToolForMethodImplementorsExamples >> toolWithExampleHierarchy [
 	| namespace tool baseClass childClass |
 	namespace := GtRBNamespace new.
-	namespace defineClass: 'Object subclass: #GtLlmRefactoringMethodImplementorsBase
+	namespace defineClass: 'Object subclass: #GtLRefactoringMethodImplementorsBase
 		instanceVariableNames: ''''''
 		classVariableNames: ''''''
-		package: ''Gt4Llm-Refactoring-Examples''' .
-	namespace defineClass: 'GtLlmRefactoringMethodImplementorsBase subclass: #GtLlmRefactoringMethodImplementorsChild
+		package: ''DemoTest''' .
+	namespace defineClass: 'GtLRefactoringMethodImplementorsBase subclass: #GtLRefactoringMethodImplementorsChild
 		instanceVariableNames: ''''''
 		classVariableNames: ''''''
-		package: ''Gt4Llm-Refactoring-Examples''' .
-	baseClass := namespace classNamed: 'GtLlmRefactoringMethodImplementorsBase'.
-	childClass := namespace classNamed: 'GtLlmRefactoringMethodImplementorsChild'.
+		package: ''DemoTest''' .
+	baseClass := namespace classNamed: 'GtLRefactoringMethodImplementorsBase'.
+	childClass := namespace classNamed: 'GtLRefactoringMethodImplementorsChild'.
 	baseClass compile: 'example
 	^ 1' classified: 'examples'.
 	childClass compile: 'example
 	^ super example + 1' classified: 'examples'.
-	tool := GtLlmRefactoringToolForMethodImplementors new.
+	tool := GtLRefactoringToolForMethodImplementors new.
 	tool model: namespace.
 	^ tool
 ]

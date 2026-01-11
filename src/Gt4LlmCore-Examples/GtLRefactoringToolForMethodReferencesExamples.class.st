@@ -9,15 +9,15 @@ GtLRefactoringToolForMethodReferencesExamples >> methodReferencesForExistingSele
 	<gtExample>
 	| tool call result |
 	tool := self toolWithExampleSenders.
-	call := GtLlmFunctionToolCall new.
+	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
 		'arguments' -> {'selector' -> 'bar'} asDictionary
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result includesSubstring: 'GtLlmRefactoringMethodReferencesSender>>#call').
-	self assert: (result includesSubstring: 'GtLlmRefactoringMethodReferencesForwarder>>#call').
+	self assert: (result includesSubstring: 'GtLRefactoringMethodReferencesSender>>#call').
+	self assert: (result includesSubstring: 'GtLRefactoringMethodReferencesForwarder>>#call').
 	^ tool
 ]
 
@@ -26,7 +26,7 @@ GtLRefactoringToolForMethodReferencesExamples >> methodReferencesForUnknownSelec
 	<gtExample>
 	| tool call result |
 	tool := self toolWithExampleSenders.
-	call := GtLlmFunctionToolCall new.
+	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
 		'arguments' -> {'selector' -> 'missingSelector'} asDictionary
@@ -41,23 +41,23 @@ GtLRefactoringToolForMethodReferencesExamples >> methodReferencesForUnknownSelec
 GtLRefactoringToolForMethodReferencesExamples >> toolWithExampleSenders [
 	| namespace tool senderClass forwarderClass |
 	namespace := GtRBNamespace new.
-	namespace defineClass: 'Object subclass: #GtLlmRefactoringMethodReferencesSender
+	namespace defineClass: 'Object subclass: #GtLRefactoringMethodReferencesSender
 		instanceVariableNames: ''''''
 		classVariableNames: ''''''
-		package: ''Gt4Llm-Refactoring-Examples''' .
-	namespace defineClass: 'Object subclass: #GtLlmRefactoringMethodReferencesForwarder
+		package: ''DemoTest''' .
+	namespace defineClass: 'Object subclass: #GtLRefactoringMethodReferencesForwarder
 		instanceVariableNames: ''''''
 		classVariableNames: ''''''
-		package: ''Gt4Llm-Refactoring-Examples''' .
-	senderClass := namespace classNamed: 'GtLlmRefactoringMethodReferencesSender'.
-	forwarderClass := namespace classNamed: 'GtLlmRefactoringMethodReferencesForwarder'.
+		package: ''DemoTest''' .
+	senderClass := namespace classNamed: 'GtLRefactoringMethodReferencesSender'.
+	forwarderClass := namespace classNamed: 'GtLRefactoringMethodReferencesForwarder'.
 	senderClass compile: 'bar
 	^ 1' classified: 'examples'.
 	senderClass compile: 'call
 	^ self bar' classified: 'examples'.
 	forwarderClass compile: 'call
-	^ GtLlmRefactoringMethodReferencesSender new bar' classified: 'examples'.
-	tool := GtLlmRefactoringToolForMethodReferences new.
+	^ GtLRefactoringMethodReferencesSender new bar' classified: 'examples'.
+	tool := GtLRefactoringToolForMethodReferences new.
 	tool model: namespace.
 	^ tool
 ]

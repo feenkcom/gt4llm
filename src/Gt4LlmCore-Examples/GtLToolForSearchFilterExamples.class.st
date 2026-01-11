@@ -8,15 +8,15 @@ Class {
 GtLToolForSearchFilterExamples >> searchFilterForExampleMethods [
 	<gtExample>
 	| tool call result |
-	tool := GtLlmToolForSearchFilter new.
-	call := GtLlmFunctionToolCall new.
+	tool := GtLToolForSearchFilter new.
+	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
-		'arguments' -> {'query' -> 'GtLlmToolForSearchFilterExamples gtMethodsInClass & #gtExample gtPragmas'} asDictionary
+		'arguments' -> {'query' -> 'GtLToolForSearchFilterExamples gtMethodsInClass & #gtExample gtPragmas'} asDictionary
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result includesSubstring: 'GtLlmToolForSearchFilterExamples>>#searchFilterForExampleMethods').
+	self assert: (result includesSubstring: 'GtLToolForSearchFilterExamples>>#searchFilterForExampleMethods').
 	^ tool
 ]
 
@@ -24,8 +24,8 @@ GtLToolForSearchFilterExamples >> searchFilterForExampleMethods [
 GtLToolForSearchFilterExamples >> searchFilterWithError [
 	<gtExample>
 	| tool call result |
-	tool := GtLlmToolForSearchFilter new.
-	call := GtLlmFunctionToolCall new.
+	tool := GtLToolForSearchFilter new.
+	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
 		'arguments' -> {'query' -> 'self error: ''boom'''} asDictionary

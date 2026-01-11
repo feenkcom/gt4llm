@@ -8,11 +8,11 @@ Class {
 GtLToolForClassViewsExamples >> classViewsForClassWithNoViews [
 	<gtExample>
 	| tool call result |
-	tool := GtLlmToolForClassViews new.
-	call := GtLlmFunctionToolCall new.
+	tool := GtLToolForClassViews new.
+	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
-		'arguments' -> {'className' -> 'GtLlmToolForClassViewsExamples'} asDictionary
+		'arguments' -> {'className' -> 'GtLToolForClassViewsExamples'} asDictionary
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
@@ -24,8 +24,8 @@ GtLToolForClassViewsExamples >> classViewsForClassWithNoViews [
 GtLToolForClassViewsExamples >> classViewsForExistingClass [
 	<gtExample>
 	| tool call result |
-	tool := GtLlmToolForClassViews new.
-	call := GtLlmFunctionToolCall new.
+	tool := GtLToolForClassViews new.
+	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
 		'arguments' -> {'className' -> 'GtABAddressBook'} asDictionary
@@ -41,8 +41,8 @@ GtLToolForClassViewsExamples >> classViewsForExistingClass [
 GtLToolForClassViewsExamples >> classViewsForUnknownClass [
 	<gtExample>
 	| tool call result |
-	tool := GtLlmToolForClassViews new.
-	call := GtLlmFunctionToolCall new.
+	tool := GtLToolForClassViews new.
+	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
 		'arguments' -> {'className' -> 'NonExistingClassName'} asDictionary

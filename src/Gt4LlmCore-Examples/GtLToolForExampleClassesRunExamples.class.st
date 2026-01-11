@@ -8,8 +8,8 @@ Class {
 GtLToolForExampleClassesRunExamples >> runExamplesForClass [
 	<gtExample>
 	| tool call result data |
-	tool := GtLlmToolForExampleClassesRun new.
-	call := GtLlmFunctionToolCall new.
+	tool := GtLToolForExampleClassesRun new.
+	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
 		'arguments' -> {
@@ -25,40 +25,15 @@ GtLToolForExampleClassesRunExamples >> runExamplesForClass [
 ]
 
 { #category : #'llm-generated' }
-GtLToolForExampleClassesRunExamples >> runExamplesForMethod [
-	"<gtExample>"
-	| tool call result data detail |
-	tool := GtLlmToolForExampleClassesRun new.
-	call := GtLlmFunctionToolCall new.
-	call function: {
-		'name' -> tool name.
-		'arguments' -> {
-			'methods' -> { {
-				'className' -> 'GtLlmToolForExampleMethodRunExamples'.
-				'methodName' -> 'exampleRunSuccess'
-			} asDictionary }
-		} asDictionary
-	} asDictionary.
-	result := tool performToolCall: call.
-	data := NeoJSONReader fromString: result.
-	self assert: (data at: 'successes') equals: 1.
-	self assert: (data at: 'failures') equals: 0.
-	detail := (data at: 'details') first.
-	self assert: (detail at: 'status') equals: 'success'.
-	^ data
-]
-
-{ #category : #'llm-generated' }
 GtLToolForExampleClassesRunExamples >> runExamplesForMultipleClasses [
 	<gtExample>
-	<noTest>
 	| tool call result data |
-	tool := GtLlmToolForExampleClassesRun new.
-	call := GtLlmFunctionToolCall new.
+	tool := GtLToolForExampleClassesRun new.
+	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
 		'arguments' -> {
-			'classNames' -> 'GtLlmExampleRunDummyExamples GtLlmToolForExampleMethodRunExamples'
+			'classNames' -> 'GtLExampleRunDummyExamples GtLToolForExampleMethodRunExamples'
 		} asDictionary
 	} asDictionary.
 	result := tool performToolCall: call.
@@ -73,8 +48,8 @@ GtLToolForExampleClassesRunExamples >> runExamplesForMultipleClasses [
 GtLToolForExampleClassesRunExamples >> runExamplesWithUnknownInputs [
 	<gtExample>
 	| tool call result data |
-	tool := GtLlmToolForExampleClassesRun new.
-	call := GtLlmFunctionToolCall new.
+	tool := GtLToolForExampleClassesRun new.
+	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
 		'arguments' -> {

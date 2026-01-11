@@ -8,10 +8,10 @@ Class {
 GtLToolForLepiterPageContentsExamples >> pageSerializationForExistingPage [
 	<gtExample>
 	| tool call result database page expected |
-	tool := GtLlmToolForLepiterPageContents new.
+	tool := GtLToolForLepiterPageContents new.
 	database := LeDatabase gtBook.
 	page := database pageNamed: 'Warmup: understanding the Money classes'.
-	call := GtLlmFunctionToolCall new.
+	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
 		'arguments' -> { 'uid' -> page uidString } asDictionary
@@ -27,9 +27,9 @@ GtLToolForLepiterPageContentsExamples >> pageSerializationForExistingPage [
 GtLToolForLepiterPageContentsExamples >> pageSerializationForUnknownPage [
 	<gtExample>
 	| tool call result unknownUid |
-	tool := GtLlmToolForLepiterPageContents new.
+	tool := GtLToolForLepiterPageContents new.
 	unknownUid := UUID new asString36.
-	call := GtLlmFunctionToolCall new.
+	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
 		'arguments' -> { 'uid' -> unknownUid } asDictionary
@@ -44,8 +44,8 @@ GtLToolForLepiterPageContentsExamples >> pageSerializationForUnknownPage [
 GtLToolForLepiterPageContentsExamples >> pageSerializationWithoutUid [
 	<gtExample>
 	| tool call result |
-	tool := GtLlmToolForLepiterPageContents new.
-	call := GtLlmFunctionToolCall new.
+	tool := GtLToolForLepiterPageContents new.
+	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
 		'arguments' -> {}} asDictionary.

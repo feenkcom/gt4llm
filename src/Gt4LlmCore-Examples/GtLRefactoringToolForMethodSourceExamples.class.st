@@ -9,10 +9,10 @@ GtLRefactoringToolForMethodSourceExamples >> methodSourceForInstanceMethod [
 	<gtExample>
 	| tool call result |
 	tool := self toolWithExampleMethods.
-	call := GtLlmFunctionToolCall new.
+	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
-		'arguments' -> { 'className' -> 'GtLlmRefactoringMethodSourceExample'.
+		'arguments' -> { 'className' -> 'GtLRefactoringMethodSourceExample'.
 			'methodName' -> 'example'.
 			'classSide' -> 'false' } asDictionary
 	} asDictionary.
@@ -28,10 +28,10 @@ GtLRefactoringToolForMethodSourceExamples >> methodSourceForUnknownMethod [
 	<gtExample>
 	| tool call result |
 	tool := self toolWithExampleMethods.
-	call := GtLlmFunctionToolCall new.
+	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
-		'arguments' -> { 'className' -> 'GtLlmRefactoringMethodSourceExample'.
+		'arguments' -> { 'className' -> 'GtLRefactoringMethodSourceExample'.
 			'methodName' -> 'missing'.
 			'classSide' -> false } asDictionary
 	} asDictionary.
@@ -45,16 +45,16 @@ GtLRefactoringToolForMethodSourceExamples >> methodSourceForUnknownMethod [
 GtLRefactoringToolForMethodSourceExamples >> toolWithExampleMethods [
 	| namespace tool exampleClass |
 	namespace := GtRBNamespace new.
-	namespace defineClass: 'Object subclass: #GtLlmRefactoringMethodSourceExample
+	namespace defineClass: 'Object subclass: #GtLRefactoringMethodSourceExample
 		instanceVariableNames: ''''''
 		classVariableNames: ''''''
-		package: ''Gt4Llm-Refactoring-Examples''' .
-	exampleClass := namespace classNamed: 'GtLlmRefactoringMethodSourceExample'.
+		package: ''DemoTest''' .
+	exampleClass := namespace classNamed: 'GtLRefactoringMethodSourceExample'.
 	exampleClass compile: 'example
 	^ 42' classified: 'examples'.
 	exampleClass classSide compile: 'classExample
 	^ 21' classified: 'examples'.
-	tool := GtLlmRefactoringToolForMethodSource new.
+	tool := GtLRefactoringToolForMethodSource new.
 	tool model: namespace.
 	^ tool
 ]

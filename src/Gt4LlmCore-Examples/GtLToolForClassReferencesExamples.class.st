@@ -8,16 +8,16 @@ Class {
 GtLToolForClassReferencesExamples >> classReferencesForExistingClass [
 	<gtExample>
 	| tool call result |
-	tool := GtLlmToolForClassReferences new.
-	call := GtLlmFunctionToolCall new.
+	tool := GtLToolForClassReferences new.
+	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
-		'arguments' -> {'className' -> 'GtLlmToolForClassReferences'} asDictionary
+		'arguments' -> {'className' -> 'GtLToolForClassReferences'} asDictionary
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
 	self assert: result isEmpty not.
-	self assert: (result includesSubstring: 'GtLlmToolForClassReferencesExamples').
+	self assert: (result includesSubstring: 'GtLToolForClassReferencesExamples').
 	^ tool
 ]
 
@@ -25,8 +25,8 @@ GtLToolForClassReferencesExamples >> classReferencesForExistingClass [
 GtLToolForClassReferencesExamples >> classReferencesForUnknownClass [
 	<gtExample>
 	| tool call result |
-	tool := GtLlmToolForClassReferences new.
-	call := GtLlmFunctionToolCall new.
+	tool := GtLToolForClassReferences new.
+	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
 		'arguments' -> {'className' -> 'NonExistingClassName'} asDictionary

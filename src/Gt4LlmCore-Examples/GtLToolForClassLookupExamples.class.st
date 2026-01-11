@@ -8,16 +8,16 @@ Class {
 GtLToolForClassLookupExamples >> lookupClassForExistingClass [
 	<gtExample>
 	| tool call result |
-	tool := GtLlmToolForClassLookup new.
-	call := GtLlmFunctionToolCall new.
+	tool := GtLToolForClassLookup new.
+	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
-		'arguments' -> {'className' -> 'GtLlmToolForClassLookup'} asDictionary
+		'arguments' -> {'className' -> 'GtLToolForClassLookup'} asDictionary
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result includesSubstring: '"class":"GtLlmToolForClassLookup"').
-	self assert: (result includesSubstring: '"package":"Gt4Llm-GToolkit"').
+	self assert: (result includesSubstring: '"class":"GtLToolForClassLookup"').
+	self assert: (result includesSubstring: '"package":"Gt4LlmCore"').
 	self assert: (result includesSubstring: '"classSlots":[]').
 	self assert: (result includesSubstring: '"instanceSlots":[]').
 	self assert: (result includesSubstring: '"allInstanceMethods"').
@@ -30,8 +30,8 @@ GtLToolForClassLookupExamples >> lookupClassForExistingClass [
 GtLToolForClassLookupExamples >> lookupClassForUnknownClass [
 	<gtExample>
 	| tool call result |
-	tool := GtLlmToolForClassLookup new.
-	call := GtLlmFunctionToolCall new.
+	tool := GtLToolForClassLookup new.
+	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
 		'arguments' -> {'className' -> 'NonExistingClassName42'} asDictionary

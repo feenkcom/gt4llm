@@ -13,14 +13,14 @@ GtLToolForMethodSourceExamples >> methodSourceForExistingClassSideMethod [
 	call function: {
 		'name' -> tool name.
 		'arguments' -> {
-			'className' -> #GtLlmChat.
-			'methodName' -> #leJsonV4Name.
+			'className' -> #Collection.
+			'methodName' -> #withAll:.
 			'classSide' -> 'true'
 		} asDictionary
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: result equals: (GtLlmChat class>>#leJsonV4Name) sourceCode.
+	self assert: result equals: (Collection class>>#withAll:) sourceCode.
 	^ tool
 ]
 
@@ -40,7 +40,7 @@ GtLToolForMethodSourceExamples >> methodSourceForExistingInstanceSideMethod [
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: result equals: (GtLlmToolForMethodImplementors>>#privatePerformToolCall:) sourceCode.
+	self assert: result equals: (GtLToolForMethodImplementors>>#privatePerformToolCall:) sourceCode.
 	^ tool
 ]
 

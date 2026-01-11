@@ -8,8 +8,8 @@ Class {
 GtLToolForClassSubclassesExamples >> classSubclassesForClassWithNoSubclasses [
 	<gtExample>
 	| tool call result |
-	tool := GtLlmToolForClassSubclasses new.
-	call := GtLlmFunctionToolCall new.
+	tool := GtLToolForClassSubclasses new.
+	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
 		'arguments' -> {'className' -> 'GtLlmToolForClassSubclasses'} asDictionary
@@ -24,16 +24,16 @@ GtLToolForClassSubclassesExamples >> classSubclassesForClassWithNoSubclasses [
 GtLToolForClassSubclassesExamples >> classSubclassesForExistingClass [
 	<gtExample>
 	| tool call result |
-	tool := GtLlmToolForClassSubclasses new.
-	call := GtLlmFunctionToolCall new.
+	tool := GtLToolForClassSubclasses new.
+	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
-		'arguments' -> {'className' -> 'GtLlmAbstractFunctionTool'} asDictionary
+		'arguments' -> {'className' -> 'GtLAbstractFunctionTool'} asDictionary
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
 	self assert: result isEmpty not.
-	self assert: (result includesSubstring: 'GtLlmToolForClassReferences').
+	self assert: (result includesSubstring: 'GtLToolForClassReferences').
 	^ tool
 ]
 
@@ -41,8 +41,8 @@ GtLToolForClassSubclassesExamples >> classSubclassesForExistingClass [
 GtLToolForClassSubclassesExamples >> classSubclassesForUnknownClass [
 	<gtExample>
 	| tool call result |
-	tool := GtLlmToolForClassSubclasses new.
-	call := GtLlmFunctionToolCall new.
+	tool := GtLToolForClassSubclasses new.
+	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
 		'arguments' -> {'className' -> 'NonExistingClassName'} asDictionary

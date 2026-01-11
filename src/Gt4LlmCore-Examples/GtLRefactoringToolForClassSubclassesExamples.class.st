@@ -9,10 +9,10 @@ GtLRefactoringToolForClassSubclassesExamples >> classSubclassesForClassWithNoSub
 	<gtExample>
 	| tool call result |
 	tool := self toolWithExampleHierarchy.
-	call := GtLlmFunctionToolCall new.
+	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
-		'arguments' -> {'className' -> 'GtLlmRefactoringToolForClassSubclassesExampleChild'} asDictionary
+		'arguments' -> {'className' -> 'GtLRefactoringToolForClassSubclassesExampleChild'} asDictionary
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
@@ -25,14 +25,14 @@ GtLRefactoringToolForClassSubclassesExamples >> classSubclassesForExistingClass 
 	<gtExample>
 	| tool call result |
 	tool := self toolWithExampleHierarchy.
-	call := GtLlmFunctionToolCall new.
+	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
-		'arguments' -> {'className' -> 'GtLlmRefactoringToolForClassSubclassesExampleBase'} asDictionary
+		'arguments' -> {'className' -> 'GtLRefactoringToolForClassSubclassesExampleBase'} asDictionary
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: result equals: 'GtLlmRefactoringToolForClassSubclassesExampleChild'.
+	self assert: result equals: 'GtLRefactoringToolForClassSubclassesExampleChild'.
 	^ tool
 ]
 
@@ -41,7 +41,7 @@ GtLRefactoringToolForClassSubclassesExamples >> classSubclassesForUnknownClass [
 	<gtExample>
 	| tool call result |
 	tool := self toolWithExampleHierarchy.
-	call := GtLlmFunctionToolCall new.
+	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
 		'arguments' -> {'className' -> 'NonExistingClassName'} asDictionary
@@ -56,15 +56,15 @@ GtLRefactoringToolForClassSubclassesExamples >> classSubclassesForUnknownClass [
 GtLRefactoringToolForClassSubclassesExamples >> toolWithExampleHierarchy [
 	| namespace tool |
 	namespace := GtRBNamespace new.
-	namespace defineClass: 'Object subclass: #GtLlmRefactoringToolForClassSubclassesExampleBase
+	namespace defineClass: 'Object subclass: #GtLRefactoringToolForClassSubclassesExampleBase
 		instanceVariableNames: ''''
 		classVariableNames: ''''
-		package: ''Gt4Llm-Refactoring-Examples''' .
-	namespace defineClass: 'GtLlmRefactoringToolForClassSubclassesExampleBase subclass: #GtLlmRefactoringToolForClassSubclassesExampleChild
+		package: ''Demo''' .
+	namespace defineClass: 'GtLRefactoringToolForClassSubclassesExampleBase subclass: #GtLRefactoringToolForClassSubclassesExampleChild
 		instanceVariableNames: ''''
 		classVariableNames: ''''
-		package: ''Gt4Llm-Refactoring-Examples''' .
-	tool := GtLlmRefactoringToolForClassSubclasses new.
+		package: ''Demo''' .
+	tool := GtLRefactoringToolForClassSubclasses new.
 	tool model: namespace.
 	^ tool
 ]
