@@ -60,6 +60,22 @@ GtLChat >> addErrorMessage: anErrorMessage [
 		ifAbsent: [ self addMessage: anErrorMessage ]
 ]
 
+{ #category : #'as yet unclassified' }
+GtLChat >> addInstructionSectionForLepiterPages: pageNames titled: title [ 
+	| instructionString |
+	instructionString := String cr
+			join: (pageNames
+					collect: [ :pageName | 
+						GtLlmLepiterContentExporter new
+							startHeaderLevel: 2;
+							page: (LeDatabase gtBook pageNamed: pageName);
+							export ]).
+	self instructions 
+		addSection: (GtLlmInstructionSection new
+				title: title;
+				body: instructionString)
+]
+
 { #category : #'api - message' }
 GtLChat >> addMessage: aMessage [
 	self updateLastUpdate.
@@ -171,15 +187,7 @@ GtLChat >> copyLepiterSerialisationToClipboard [
 
 { #category : #accessing }
 GtLChat >> createUserMessage [
-	^ self userMessageClass new
-]
-
-{ #category : #accessing }
-GtLChat >> createUserMessageForString: aString [
-	| newMessage |
-	newMessage := self createUserMessage.
-	newMessage markdown: aString.
-	^ newMessage
+	^ self userMessageClass new chat: self
 ]
 
 { #category : #accessing }
@@ -342,6 +350,10 @@ GtLChat >> initializeTools [
 { #category : #accessing }
 GtLChat >> instructions [
 	^ instructions
+		ifNil: [ 
+			instructions := GtLlmInstructionWithSections new
+					introduction: (GtLlmInstructionString new string: '').
+			instructions ]
 ]
 
 { #category : #accessing }
@@ -370,6 +382,11 @@ GtLChat >> lastUpdate [
 { #category : #accessing }
 GtLChat >> lastUpdate: anObject [
 	lastUpdate := anObject
+]
+
+{ #category : #'as yet unclassified' }
+GtLChat >> lepiterExplanations: pageNames [
+	^ self addInstructionSectionForLepiterPages: pageNames titled: 'Explanations'
 ]
 
 { #category : #utilities }
@@ -426,10 +443,11 @@ GtLChat >> sendFiles: aListOfFileReferences withMessage: aString [
 
 { #category : #accessing }
 GtLChat >> sendMarkdown: aString [
-	| currentMessage |
+	| newMessage |
 	self assert: aString isString.
-	currentMessage := self createUserMessageForString: aString.
-	self sendMessage: currentMessage
+	newMessage := self createUserMessage.
+	newMessage markdown: aString.
+	^ self sendMessage: newMessage
 ]
 
 { #category : #'api - communication' }
@@ -441,10 +459,8 @@ GtLChat >> sendMessage: aMessage [
 
 { #category : #accessing }
 GtLChat >> sendPlainMessage: aString [
-	| currentMessage |
-	self assert: aString isString.
-	currentMessage := self createUserMessageForString: aString.
-	self sendMessage: currentMessage
+	self deprecated: 'use sendMarkdown: instead'.
+	^ self sendMarkdown: aString
 ]
 
 { #category : #'api - communication' }
