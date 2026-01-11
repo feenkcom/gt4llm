@@ -120,12 +120,22 @@ GtLConnection >> label: anObject [
 
 { #category : #accessing }
 GtLConnection >> model [
-	^ meta at: #model ifAbsent: [ nil ]
+	^ meta at: #modelName ifAbsent: [ nil ]
 ]
 
 { #category : #accessing }
 GtLConnection >> model: anObject [
-	self addOption: #model withValue: anObject
+	self addOption: #modelName withValue: anObject
+]
+
+{ #category : #accessing }
+GtLConnection >> modelName [
+	^ meta at: #modelName ifAbsent: [ nil ]
+]
+
+{ #category : #accessing }
+GtLConnection >> modelName: anObject [
+	self addOption: #modelName withValue: anObject
 ]
 
 { #category : #accessing }

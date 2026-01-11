@@ -9,8 +9,8 @@ Class {
 		'tools',
 		'announcer',
 		'images',
-		'model',
-		'formatDescriptions'
+		'formatDescriptions',
+		'modelName'
 	],
 	#category : #'Gt4LlmCore-Core'
 }
@@ -463,12 +463,12 @@ GtLChatMessage >> messagesDo: aBlock [
 
 { #category : #accessing }
 GtLChatMessage >> model [
-	^ model
+	^ modelName
 ]
 
 { #category : #accessing }
 GtLChatMessage >> model: anObject [
-	model := anObject
+	modelName := anObject
 ]
 
 { #category : #accessing }
