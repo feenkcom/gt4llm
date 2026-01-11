@@ -2,12 +2,12 @@ Class {
 	#name : #GtLOpenAIProvider,
 	#superclass : #GtLProvider,
 	#instVars : [
-		'model',
 		'client',
 		'isStreaming',
 		'executions',
 		'tools',
-		'providerWorking'
+		'providerWorking',
+		'modelName'
 	],
 	#category : #'Gt4Llm-OpenAI'
 }
@@ -24,7 +24,7 @@ GtLOpenAIProvider class >> isConnectable [
 
 { #category : #'as yet unclassified' }
 GtLOpenAIProvider class >> providerName [
-	^ 'OpenAI Chat'
+	^ 'OpenAI provider'
 ]
 
 { #category : #'instance creation' }
@@ -63,11 +63,6 @@ GtLOpenAIProvider >> defaultAssistantMessageClass [
 ]
 
 { #category : #'as yet unclassified' }
-GtLOpenAIProvider >> defaultModel [
-	^ 'gpt-4.1'
-]
-
-{ #category : #'as yet unclassified' }
 GtLOpenAIProvider >> defaultUserMessageClass [
 	^ GtLOpenAIUserMessage
 ]
@@ -78,7 +73,7 @@ GtLOpenAIProvider >> executeWait [
 	aFuture := [ | result aMessage currentMessage |
 		currentMessage := self chat messages last currentMessage.
 		result := client
-				generateResponseWithModel: self model
+				generateResponseWithModel: self modelName
 				messages: self chat messages
 				instructions: currentMessage buildCompleteInstructionString
 				tools: currentMessage tools
@@ -92,7 +87,7 @@ GtLOpenAIProvider >> executeWait [
 			ifFalse: [ aMessage := isStreaming
 						ifTrue: [ self streamingMessageFrom: result ]
 						ifFalse: [ self assistantMessageClass new
-								model: self model;
+								model: self modelName;
 								rawData: (result output detect: [ :anOutput | (anOutput at: 'type') = 'message' ]) ].
 
 				self chat addAssistantMessage: aMessage.
@@ -152,19 +147,11 @@ GtLOpenAIProvider >> handleToolCall: aToolCall [
 { #category : #'as yet unclassified' }
 GtLOpenAIProvider >> initialize [
 	super initialize.
-	
-	model := self defaultModel.
+	modelName := nil.	"set when the provider is built"
 	providerWorking := false.
-	
-	self initializeClient.
-	
+	client := GtLOpenAIClient new.
 	executions := OrderedCollection new.
 	isStreaming := true
-]
-
-{ #category : #'as yet unclassified' }
-GtLOpenAIProvider >> initializeClient [
-	client := GtLOpenAIClient new
 ]
 
 { #category : #'as yet unclassified' }
@@ -172,19 +159,14 @@ GtLOpenAIProvider >> isStreaming: aBoolean [
 	isStreaming := aBoolean
 ]
 
-{ #category : #accessing }
-GtLOpenAIProvider >> model [
-	^ model
-]
-
-{ #category : #accessing }
-GtLOpenAIProvider >> model: anObject [
-	model := anObject
-]
-
 { #category : #'as yet unclassified' }
 GtLOpenAIProvider >> modelName [
-	^ model
+	^ modelName
+]
+
+{ #category : #accessing }
+GtLOpenAIProvider >> modelName: aString [
+	modelName := aString
 ]
 
 { #category : #accessing }
@@ -207,7 +189,7 @@ GtLOpenAIProvider >> printOn: aStream [
 	aStream
 		nextPutAll: self class providerName;
 		nextPut: $(;
-		nextPutAll: self model;
+		nextPutAll: self modelName;
 		nextPut: $)
 ]
 

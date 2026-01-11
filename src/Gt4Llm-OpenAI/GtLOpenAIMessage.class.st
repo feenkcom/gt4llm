@@ -29,20 +29,6 @@ GtLOpenAIMessage class >> serializationProperties [
 ]
 
 { #category : #accessing }
-GtLOpenAIMessage >> annotations [
-	(content isKindOf: String) ifTrue: [ ^ GtLOpenAIAnnotationsGroup new ].
-
-	^ GtLOpenAIAnnotationsGroup
-		withAll: ((content select: [ :aValue | (aValue at: 'type') = 'text' ])
-				flatCollect: [ :aValue | 
-					((aValue at: 'text') at: 'annotations')
-						collect: [ :anAnnotation | 
-							(GtLOpenAIAnnotation from: anAnnotation)
-								client: self client;
-								message: self ] ])
-]
-
-{ #category : #accessing }
 GtLOpenAIMessage >> completedAt [
 	^ completedAt
 ]
@@ -86,16 +72,6 @@ GtLOpenAIMessage >> createdAtString [
 { #category : #accessing }
 GtLOpenAIMessage >> createdAtString: anObject [
 	createdAt := self deserializeTime: anObject
-]
-
-{ #category : #accessing }
-GtLOpenAIMessage >> gtAnnotationsFor: aView [
-	<gtView>
-	^ aView forward
-		title: 'Annotations';
-		priority: 20;
-		object: [ self annotations ];
-		view: #gtAnnotationsFor:
 ]
 
 { #category : #testing }
