@@ -8,8 +8,8 @@ Class {
 GtLToolForSmalltalkCodeEvaluationExamples >> executeSimpleDoIt [
 	<gtExample>
 	| tool call result expected |
-	tool := GtLlmToolForSmalltalkCodeEvaluation new.
-	call := GtLlmFunctionToolCall new.
+	tool := GtLToolForSmalltalkCodeEvaluation new.
+	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
 		'arguments' -> {
@@ -27,8 +27,8 @@ GtLToolForSmalltalkCodeEvaluationExamples >> executeSimpleDoIt [
 GtLToolForSmalltalkCodeEvaluationExamples >> executeWithError [
 	<gtExample>
 	| tool call result |
-	tool := GtLlmToolForSmalltalkCodeEvaluation new.
-	call := GtLlmFunctionToolCall new.
+	tool := GtLToolForSmalltalkCodeEvaluation new.
+	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
 		'arguments' -> {
@@ -46,8 +46,8 @@ GtLToolForSmalltalkCodeEvaluationExamples >> executeWithError [
 GtLToolForSmalltalkCodeEvaluationExamples >> missingCodeArgument [
 	<gtExample>
 	| tool call result |
-	tool := GtLlmToolForSmalltalkCodeEvaluation new.
-	call := GtLlmFunctionToolCall new.
+	tool := GtLToolForSmalltalkCodeEvaluation new.
+	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
 		'arguments' -> Dictionary new

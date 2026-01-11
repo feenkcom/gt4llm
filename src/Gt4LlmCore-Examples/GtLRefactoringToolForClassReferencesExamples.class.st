@@ -9,14 +9,14 @@ GtLRefactoringToolForClassReferencesExamples >> classReferencesForExistingClass 
 	<gtExample>
 	| tool call result |
 	tool := self toolWithExampleReferences.
-	call := GtLlmFunctionToolCall new.
+	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
-		'arguments' -> {'className' -> 'GtLlmRefactoringClassReferencesTarget'} asDictionary
+		'arguments' -> {'className' -> 'GtLRefactoringClassReferencesTarget'} asDictionary
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result includesSubstring: 'GtLlmRefactoringClassReferencesHolder').
+	self assert: (result includesSubstring: 'GtLRefactoringClassReferencesHolder').
 	^ tool
 ]
 
@@ -25,7 +25,7 @@ GtLRefactoringToolForClassReferencesExamples >> classReferencesForUnknownClass [
 	<gtExample>
 	| tool call result |
 	tool := self toolWithExampleReferences.
-	call := GtLlmFunctionToolCall new.
+	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
 		'arguments' -> {'className' -> 'UnknownClassName'} asDictionary
@@ -40,19 +40,19 @@ GtLRefactoringToolForClassReferencesExamples >> classReferencesForUnknownClass [
 GtLRefactoringToolForClassReferencesExamples >> toolWithExampleReferences [
 	| namespace tool targetClass holderClass |
 	namespace := GtRBNamespace new.
-	namespace defineClass: 'Object subclass: #GtLlmRefactoringClassReferencesTarget
+	namespace defineClass: 'Object subclass: #GtLRefactoringClassReferencesTarget
 		instanceVariableNames: ''''''
 		classVariableNames: ''''''
 		package: ''Gt4Llm-Refactoring-Examples''' .
-	namespace defineClass: 'Object subclass: #GtLlmRefactoringClassReferencesHolder
+	namespace defineClass: 'Object subclass: #GtLRefactoringClassReferencesHolder
 		instanceVariableNames: ''''''
 		classVariableNames: ''''''
 		package: ''Gt4Llm-Refactoring-Examples''' .
-	targetClass := namespace classNamed: 'GtLlmRefactoringClassReferencesTarget'.
-	holderClass := namespace classNamed: 'GtLlmRefactoringClassReferencesHolder'.
+	targetClass := namespace classNamed: 'GtLRefactoringClassReferencesTarget'.
+	holderClass := namespace classNamed: 'GtLRefactoringClassReferencesHolder'.
 	holderClass compile: 'reference
-	^ GtLlmRefactoringClassReferencesTarget new' classified: 'accessing'.
-	tool := GtLlmRefactoringToolForClassReferences new.
+	^ GtLRefactoringClassReferencesTarget new' classified: 'accessing'.
+	tool := GtLRefactoringToolForClassReferences new.
 	tool model: namespace.
 	^ tool
 ]

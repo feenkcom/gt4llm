@@ -8,11 +8,11 @@ Class {
 GtLToolForClassActionsExamples >> classActionsForClassWithNoActions [
 	<gtExample>
 	| tool call result |
-	tool := GtLlmToolForClassActions new.
-	call := GtLlmFunctionToolCall new.
+	tool := GtLToolForClassActions new.
+	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
-		'arguments' -> {'className' -> 'GtLlmToolForClassActionsExamples'} asDictionary
+		'arguments' -> {'className' -> 'GtLToolForClassActionsExamples'} asDictionary
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
@@ -24,8 +24,8 @@ GtLToolForClassActionsExamples >> classActionsForClassWithNoActions [
 GtLToolForClassActionsExamples >> classActionsForExistingClass [
 	<gtExample>
 	| tool call result |
-	tool := GtLlmToolForClassActions new.
-	call := GtLlmFunctionToolCall new.
+	tool := GtLToolForClassActions new.
+	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
 		'arguments' -> {'className' -> 'GtLudoRecordingGame'} asDictionary
@@ -41,8 +41,8 @@ GtLToolForClassActionsExamples >> classActionsForExistingClass [
 GtLToolForClassActionsExamples >> classActionsForUnknownClass [
 	<gtExample>
 	| tool call result |
-	tool := GtLlmToolForClassActions new.
-	call := GtLlmFunctionToolCall new.
+	tool := GtLToolForClassActions new.
+	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
 		'arguments' -> {'className' -> 'NonExistingClassName'} asDictionary
