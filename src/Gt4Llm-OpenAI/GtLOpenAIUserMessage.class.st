@@ -49,17 +49,17 @@ GtLOpenAIUserMessage >> addPlainInputObject: anObject named: aString [
 ]
 
 { #category : #'as yet unclassified' }
-GtLOpenAIUserMessage >> buildCompleteInstructions [
+GtLOpenAIUserMessage >> buildCompleteInstructionString [
 	| inputInstructionsBody inputInstructions |
-
-	inputInstructionsBody := GtLlmInstructionWithSections new
-			introduction: 'The inputs provided follow the descriptions below'.
-	inputInstructions := GtLlmInstructionSection new
-			title: 'Input descriptions';
-			body: inputInstructionsBody.
-	self instructions addSection: inputInstructions.
-	inputModels
-		do: [ :anInputModel | anInputModel addInstructionsTo: inputInstructionsBody ].
+	inputModels notEmpty
+		ifTrue: [ inputInstructionsBody := GtLlmInstructionWithSections new
+					introduction: 'The inputs provided follow the descriptions below'.
+			inputInstructions := GtLlmInstructionSection new
+					title: 'Input descriptions';
+					body: inputInstructionsBody.
+			self instructions addSection: inputInstructions.
+			inputModels
+				do: [ :anInputModel | anInputModel addInstructionsTo: inputInstructionsBody ] ].
 
 	^ self instructions instructionString
 ]

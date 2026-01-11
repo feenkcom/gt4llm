@@ -4,10 +4,10 @@ Class {
 	#instVars : [
 		'model',
 		'client',
-		'assistantWorking',
 		'isStreaming',
 		'executions',
-		'tools'
+		'tools',
+		'providerWorking'
 	],
 	#category : #'Gt4Llm-OpenAI'
 }
@@ -80,7 +80,7 @@ GtLOpenAIProvider >> executeWait [
 		result := client
 				generateResponseWithModel: self model
 				messages: self chat messages
-				instructions: currentMessage buildCompleteInstructions
+				instructions: currentMessage buildCompleteInstructionString
 				tools: currentMessage tools
 				andFormat: (currentMessage hasFormats
 						ifTrue: [ currentMessage formatDescriptionsJsonSchema ]
@@ -104,11 +104,11 @@ GtLOpenAIProvider >> executeWait [
 					lowPriority).
 	aSecondPromise := aFirstPromise
 			then: [ :aMessage |
-				assistantWorking := false.
+				providerWorking := false.
 				aMessage ]
 			otherwise: [ :anError | 
 				| aMessage |
-				assistantWorking := false.
+				providerWorking := false.
 				aMessage := GtLErrorMessage freeze: anError.
 				self chat addErrorMessage: aMessage.
 				self chat signalRunIsDone.
@@ -141,20 +141,11 @@ GtLOpenAIProvider >> gtExecutionsFor: aView [
 GtLOpenAIProvider >> handleToolCall: aToolCall [
 	| toolOutput newMessage |
 	chat removeLastMessage.
-	newMessage := GtLToolMessage new toolCall: aToolCall.	"chat
-		addMessage: (GtOpenAIRawToolMessage new
-				toolCall: aToolCall;
-				rawData: aToolCall rawData)."
+	newMessage := GtLToolMessage new toolCall: aToolCall.
 	chat addToolMessage: newMessage.
 	toolOutput := tools performToolCall: aToolCall.
 	newMessage output: toolOutput.
-"	chat
-		addMessage: (GtLlmToolMessage new
-				toolCall: aToolCall;
-				output: toolOutput).
-"
 	self chat signalRunHasUpdated.
-
 	^ self executeWait
 ]
 
@@ -163,7 +154,7 @@ GtLOpenAIProvider >> initialize [
 	super initialize.
 	
 	model := self defaultModel.
-	assistantWorking := false.
+	providerWorking := false.
 	
 	self initializeClient.
 	
@@ -179,11 +170,6 @@ GtLOpenAIProvider >> initializeClient [
 { #category : #'as yet unclassified' }
 GtLOpenAIProvider >> isStreaming: aBoolean [
 	isStreaming := aBoolean
-]
-
-{ #category : #'as yet unclassified' }
-GtLOpenAIProvider >> maximumMessageSize [
-	^ 30000
 ]
 
 { #category : #accessing }
@@ -209,19 +195,10 @@ GtLOpenAIProvider >> performToolCallsIn: result with: activeTools [
 				| toolOutput newMessage|
 				newMessage := GtLToolMessage new
 							toolCall: aToolCall.
-				"chat
-					addMessage: (GtOpenAIRawToolMessage new
-							rawData: aToolCall responseInput)."
 				chat addToolMessage: newMessage.
 				toolOutput := activeTools performToolCall: aToolCall.
-				newMessage output: toolOutput
-"				chat
-					addMessage: (GtLlmToolMessage new
-							toolCall: aToolCall;
-							output: toolOutput)" ].
-
+				newMessage output: toolOutput ].
 	self chat signalRunHasUpdated.
-
 	^ self executeWait
 ]
 
@@ -252,12 +229,14 @@ GtLOpenAIProvider >> sendFiles: aListOfFileReferences withMessage: aString [
 
 { #category : #'as yet unclassified' }
 GtLOpenAIProvider >> sendMessage: aMessage [
-	self triggerAssistant
+	self chat signalRunHasStarted.
+	providerWorking := true.
+	self executeWait
 ]
 
 { #category : #'as yet unclassified' }
 GtLOpenAIProvider >> status [
-	^ assistantWorking
+	^ providerWorking
 		ifTrue: [ GtLlmAssistantChatWorkingStatus new ]
 		ifFalse: [ GtLlmAssistantChatReadyStatus new ]
 ]
@@ -274,12 +253,4 @@ GtLOpenAIProvider >> streamingMessageFrom: aResult [
 	aResult notifyOnOutput: aMessage.
 
 	^ aMessage
-]
-
-{ #category : #'as yet unclassified' }
-GtLOpenAIProvider >> triggerAssistant [
-	self chat signalRunHasStarted.
-	assistantWorking := true.
-
-	self executeWait
 ]

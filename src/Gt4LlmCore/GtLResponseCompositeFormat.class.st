@@ -128,3 +128,8 @@ GtLResponseCompositeFormat >> readDomainObjectsFrom: aString [
 GtLResponseCompositeFormat >> schemaDescriptions [
 	^ schemaDescriptions
 ]
+
+{ #category : #'as yet unclassified' }
+GtLResponseCompositeFormat >> size [
+	^ schemaDescriptions size
+]

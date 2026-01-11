@@ -39,9 +39,13 @@ GtLlmInstructionWithSections >> initialize [
 
 { #category : #accessing }
 GtLlmInstructionWithSections >> instructionString [
-	^ self introduction instructionString , String lf
-		, (String lf
-				join: (self sections collect: [ :aSection | aSection instructionString ]))
+	| string |
+	string := self introduction instructionString.
+	^ self sections notEmpty
+		ifTrue: [ string , String lf
+				, (String lf
+						join: (self sections collect: [ :aSection | aSection instructionString ])) ]
+		ifFalse: [ string ]
 ]
 
 { #category : #accessing }
@@ -52,6 +56,11 @@ GtLlmInstructionWithSections >> introduction [
 { #category : #accessing }
 GtLlmInstructionWithSections >> introduction: anObject [
 	introduction := anObject asInstructionPiece
+]
+
+{ #category : #'as yet unclassified' }
+GtLlmInstructionWithSections >> isEmpty [ 
+	^ self instructionString isEmpty
 ]
 
 { #category : #accessing }
