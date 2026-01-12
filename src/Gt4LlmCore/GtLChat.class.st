@@ -275,6 +275,15 @@ GtLChat >> gtFormatFor: aView [
 			action: [ :aButton | aButton phlow spawnObject: self format ]
 ]
 
+{ #category : #views }
+GtLChat >> gtInstructionsFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Instructions';
+		object: [ instructions ];
+		view: #gtInstructionFor:
+]
+
 { #category : #ui }
 GtLChat >> gtMessagesFor: aView [
 	"cannot be a forward because the update wouldn’t work"
