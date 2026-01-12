@@ -18,7 +18,7 @@ GtLToolForSmalltalkCodeEvaluationExamples >> executeSimpleDoIt [
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	expected := STONJSON toStringPretty: (GtLlmValueSerializer new serializeValue: 3).
+	expected := STONJSON toStringPretty: (GtLValueSerializer new serializeValue: 3).
 	self assert: result equals: expected.
 	^ tool
 ]

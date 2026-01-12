@@ -35,6 +35,6 @@ GtLToolForClassLookup >> privatePerformToolCall: aToolCall [
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	className := arguments at: 'className' ifAbsent: [ ^ 'Class name not provided' ].
 	class := className asClassIfAbsent: [ ^ 'Class not found' ].
-	serializer := GtLlmValueSerializer new.
+	serializer := GtLValueSerializer new.
 	^ STONJSON toString: (serializer serializeClass: class)
 ]
