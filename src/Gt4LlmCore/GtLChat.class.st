@@ -61,19 +61,16 @@ GtLChat >> addErrorMessage: anErrorMessage [
 ]
 
 { #category : #'as yet unclassified' }
-GtLChat >> addInstructionSectionForLepiterPages: pageNames titled: title [ 
+GtLChat >> addInstructionSectionForLepiterPages: pageNames titled: title [
 	| instructionString |
 	instructionString := String cr
 			join: (pageNames
 					collect: [ :pageName | 
-						GtLlmLepiterContentExporter new
+						GtLLepiterContentExporter new
 							startHeaderLevel: 2;
 							page: (LeDatabase gtBook pageNamed: pageName);
 							export ]).
-	self instructions 
-		addSection: (GtLlmInstructionSection new
-				title: title;
-				body: instructionString)
+	self instruction: instructionString titled: title
 ]
 
 { #category : #'api - message' }
@@ -354,6 +351,14 @@ GtLChat >> initializeMessages [
 { #category : #accessing }
 GtLChat >> initializeTools [
 	tools := GtLTools new.
+]
+
+{ #category : #'as yet unclassified' }
+GtLChat >> instruction: instructionString titled: title [
+	self instructions
+		addSection: (GtLlmInstructionSection new
+				title: title;
+				body: instructionString)
 ]
 
 { #category : #accessing }
