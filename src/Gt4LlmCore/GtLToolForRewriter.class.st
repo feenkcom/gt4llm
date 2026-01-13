@@ -35,6 +35,6 @@ GtLToolForRewriter >> privatePerformToolCall: aToolCall [
 	object := [ OpalCompiler new evaluate: code ]
 		on: Error
 		do: [ :ex | ^ 'Error: ', String cr, ex stackString ].
-	serializer := GtLlmValueSerializer new.
+	serializer := GtLValueSerializer new.
 	^ STONJSON toStringPretty: (serializer serializeValue: object)
 ]

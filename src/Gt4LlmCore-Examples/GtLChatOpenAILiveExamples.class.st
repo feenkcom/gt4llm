@@ -107,6 +107,7 @@ GtLChatOpenAILiveExamples >> isSynchronous: aBoolean [
 
 { #category : #utils }
 GtLChatOpenAILiveExamples >> mathResponseSchemaForMathTutor [
+	<gtExample>
 	| jsonObject |
 	jsonObject := NeoJSONObject fromString: '{
       "type": "object",
