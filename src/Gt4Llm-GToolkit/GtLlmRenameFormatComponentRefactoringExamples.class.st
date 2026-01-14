@@ -149,6 +149,7 @@ GtLlmRenameFormatComponentRefactoringExamples >> exampleClassCoderActionExpanded
 		combination: BlKeyCombination primaryShiftR;
 		// (GtSourceCoderId indexed: 1);
 		// GtSourceCoderEditorId;
+		// GtSourceCoderEditorInnerId;
 		play.
 
 	^ scripter

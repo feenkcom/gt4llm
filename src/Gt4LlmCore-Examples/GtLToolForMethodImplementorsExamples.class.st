@@ -8,8 +8,8 @@ Class {
 GtLToolForMethodImplementorsExamples >> implementorsForExistingMethodName [
 	<gtExample>
 	| tool call result |
-	tool := GtLlmToolForMethodImplementors new.
-	call := GtLlmFunctionToolCall new.
+	tool := GtLToolForMethodImplementors new.
+	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
 		'arguments' -> {'methodName' -> 'performToolCall:'} asDictionary
@@ -17,7 +17,7 @@ GtLToolForMethodImplementorsExamples >> implementorsForExistingMethodName [
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
 	self assert: result isEmpty not.
-	self assert: (result includesSubstring: 'GtLlmAbstractFunctionTool>>#performToolCall:').
+	self assert: (result includesSubstring: 'GtLAbstractFunctionTool>>#performToolCall:').
 	^ tool
 ]
 
@@ -25,8 +25,8 @@ GtLToolForMethodImplementorsExamples >> implementorsForExistingMethodName [
 GtLToolForMethodImplementorsExamples >> implementorsForUnknownMethodName [
 	<gtExample>
 	| tool call result |
-	tool := GtLlmToolForMethodImplementors new.
-	call := GtLlmFunctionToolCall new.
+	tool := GtLToolForMethodImplementors new.
+	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
 		'arguments' -> {'methodName' -> 'unknownMethodName42'} asDictionary

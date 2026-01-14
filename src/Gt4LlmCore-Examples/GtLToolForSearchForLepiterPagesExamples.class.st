@@ -8,8 +8,8 @@ Class {
 GtLToolForSearchForLepiterPagesExamples >> documentationLookupForExistingPage [
 	<gtExample>
 	| tool call result |
-	tool := GtLlmToolForSearchForLepiterPages new.
-	call := GtLlmFunctionToolCall new.
+	tool := GtLToolForSearchForLepiterPages new.
+	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
 		'arguments' -> {'query' -> 'Warmup: understanding the Money classes'} asDictionary
@@ -25,8 +25,8 @@ GtLToolForSearchForLepiterPagesExamples >> documentationLookupForExistingPage [
 GtLToolForSearchForLepiterPagesExamples >> documentationLookupForMissingPage [
 	<gtExample>
 	| tool call result |
-	tool := GtLlmToolForSearchForLepiterPages new.
-	call := GtLlmFunctionToolCall new.
+	tool := GtLToolForSearchForLepiterPages new.
+	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
 		'arguments' -> {'query' -> 'NonExistingDocumentationPage42'} asDictionary

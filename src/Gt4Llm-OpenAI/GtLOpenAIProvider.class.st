@@ -2,12 +2,12 @@ Class {
 	#name : #GtLOpenAIProvider,
 	#superclass : #GtLProvider,
 	#instVars : [
-		'model',
 		'client',
-		'assistantWorking',
 		'isStreaming',
 		'executions',
-		'tools'
+		'tools',
+		'providerWorking',
+		'modelName'
 	],
 	#category : #'Gt4Llm-OpenAI'
 }
@@ -24,7 +24,7 @@ GtLOpenAIProvider class >> isConnectable [
 
 { #category : #'as yet unclassified' }
 GtLOpenAIProvider class >> providerName [
-	^ 'OpenAI Chat'
+	^ 'OpenAI provider'
 ]
 
 { #category : #'instance creation' }
@@ -63,11 +63,6 @@ GtLOpenAIProvider >> defaultAssistantMessageClass [
 ]
 
 { #category : #'as yet unclassified' }
-GtLOpenAIProvider >> defaultModel [
-	^ 'gpt-4.1'
-]
-
-{ #category : #'as yet unclassified' }
 GtLOpenAIProvider >> defaultUserMessageClass [
 	^ GtLOpenAIUserMessage
 ]
@@ -78,9 +73,9 @@ GtLOpenAIProvider >> executeWait [
 	aFuture := [ | result aMessage currentMessage |
 		currentMessage := self chat messages last currentMessage.
 		result := client
-				generateResponseWithModel: self model
+				generateResponseWithModel: self modelName
 				messages: self chat messages
-				instructions: currentMessage buildCompleteInstructions
+				instructions: currentMessage buildCompleteInstructionString
 				tools: currentMessage tools
 				andFormat: (currentMessage hasFormats
 						ifTrue: [ currentMessage formatDescriptionsJsonSchema ]
@@ -92,7 +87,7 @@ GtLOpenAIProvider >> executeWait [
 			ifFalse: [ aMessage := isStreaming
 						ifTrue: [ self streamingMessageFrom: result ]
 						ifFalse: [ self assistantMessageClass new
-								model: self model;
+								model: self modelName;
 								rawData: (result output detect: [ :anOutput | (anOutput at: 'type') = 'message' ]) ].
 
 				self chat addAssistantMessage: aMessage.
@@ -104,11 +99,11 @@ GtLOpenAIProvider >> executeWait [
 					lowPriority).
 	aSecondPromise := aFirstPromise
 			then: [ :aMessage |
-				assistantWorking := false.
+				providerWorking := false.
 				aMessage ]
 			otherwise: [ :anError | 
 				| aMessage |
-				assistantWorking := false.
+				providerWorking := false.
 				aMessage := GtLErrorMessage freeze: anError.
 				self chat addErrorMessage: aMessage.
 				self chat signalRunIsDone.
@@ -141,39 +136,22 @@ GtLOpenAIProvider >> gtExecutionsFor: aView [
 GtLOpenAIProvider >> handleToolCall: aToolCall [
 	| toolOutput newMessage |
 	chat removeLastMessage.
-	newMessage := GtLToolMessage new toolCall: aToolCall.	"chat
-		addMessage: (GtOpenAIRawToolMessage new
-				toolCall: aToolCall;
-				rawData: aToolCall rawData)."
+	newMessage := GtLToolMessage new toolCall: aToolCall.
 	chat addToolMessage: newMessage.
 	toolOutput := tools performToolCall: aToolCall.
 	newMessage output: toolOutput.
-"	chat
-		addMessage: (GtLlmToolMessage new
-				toolCall: aToolCall;
-				output: toolOutput).
-"
 	self chat signalRunHasUpdated.
-
 	^ self executeWait
 ]
 
 { #category : #'as yet unclassified' }
 GtLOpenAIProvider >> initialize [
 	super initialize.
-	
-	model := self defaultModel.
-	assistantWorking := false.
-	
-	self initializeClient.
-	
+	modelName := nil.	"set when the provider is built"
+	providerWorking := false.
+	client := GtLOpenAIClient new.
 	executions := OrderedCollection new.
 	isStreaming := true
-]
-
-{ #category : #'as yet unclassified' }
-GtLOpenAIProvider >> initializeClient [
-	client := GtLOpenAIClient new
 ]
 
 { #category : #'as yet unclassified' }
@@ -182,23 +160,13 @@ GtLOpenAIProvider >> isStreaming: aBoolean [
 ]
 
 { #category : #'as yet unclassified' }
-GtLOpenAIProvider >> maximumMessageSize [
-	^ 30000
-]
-
-{ #category : #accessing }
-GtLOpenAIProvider >> model [
-	^ model
-]
-
-{ #category : #accessing }
-GtLOpenAIProvider >> model: anObject [
-	model := anObject
-]
-
-{ #category : #'as yet unclassified' }
 GtLOpenAIProvider >> modelName [
-	^ model
+	^ modelName
+]
+
+{ #category : #accessing }
+GtLOpenAIProvider >> modelName: aString [
+	modelName := aString
 ]
 
 { #category : #accessing }
@@ -209,19 +177,10 @@ GtLOpenAIProvider >> performToolCallsIn: result with: activeTools [
 				| toolOutput newMessage|
 				newMessage := GtLToolMessage new
 							toolCall: aToolCall.
-				"chat
-					addMessage: (GtOpenAIRawToolMessage new
-							rawData: aToolCall responseInput)."
 				chat addToolMessage: newMessage.
 				toolOutput := activeTools performToolCall: aToolCall.
-				newMessage output: toolOutput
-"				chat
-					addMessage: (GtLlmToolMessage new
-							toolCall: aToolCall;
-							output: toolOutput)" ].
-
+				newMessage output: toolOutput ].
 	self chat signalRunHasUpdated.
-
 	^ self executeWait
 ]
 
@@ -230,7 +189,7 @@ GtLOpenAIProvider >> printOn: aStream [
 	aStream
 		nextPutAll: self class providerName;
 		nextPut: $(;
-		nextPutAll: self model;
+		nextPutAll: self modelName;
 		nextPut: $)
 ]
 
@@ -252,12 +211,14 @@ GtLOpenAIProvider >> sendFiles: aListOfFileReferences withMessage: aString [
 
 { #category : #'as yet unclassified' }
 GtLOpenAIProvider >> sendMessage: aMessage [
-	self triggerAssistant
+	self chat signalRunHasStarted.
+	providerWorking := true.
+	self executeWait
 ]
 
 { #category : #'as yet unclassified' }
 GtLOpenAIProvider >> status [
-	^ assistantWorking
+	^ providerWorking
 		ifTrue: [ GtLlmAssistantChatWorkingStatus new ]
 		ifFalse: [ GtLlmAssistantChatReadyStatus new ]
 ]
@@ -274,12 +235,4 @@ GtLOpenAIProvider >> streamingMessageFrom: aResult [
 	aResult notifyOnOutput: aMessage.
 
 	^ aMessage
-]
-
-{ #category : #'as yet unclassified' }
-GtLOpenAIProvider >> triggerAssistant [
-	self chat signalRunHasStarted.
-	assistantWorking := true.
-
-	self executeWait
 ]

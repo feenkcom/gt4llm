@@ -9,8 +9,8 @@ Class {
 		'tools',
 		'announcer',
 		'images',
-		'model',
-		'formatDescriptions'
+		'formatDescriptions',
+		'modelName'
 	],
 	#category : #'Gt4LlmCore-Core'
 }
@@ -122,7 +122,7 @@ GtLChatMessage >> asTokenizableString [
 ]
 
 { #category : #private }
-GtLChatMessage >> buildCompleteInstructions [
+GtLChatMessage >> buildCompleteInstructionString [
 	^ self instructions instructionString
 ]
 
@@ -134,12 +134,9 @@ GtLChatMessage >> chat [
 { #category : #accessing }
 GtLChatMessage >> chat: aChat [
 	chat := aChat.
-	
 	chat  
-		previousUserMessageIfPresent: [ :aPreviousMessage |
-			self updateDataFromMessage: aPreviousMessage ] 
-		ifAbsent: [ 
-			self updateDataFromChat: aChat]
+		previousUserMessageIfPresent: [ :msg | self updateDataFromMessage: msg ] 
+		ifAbsent: [ self updateDataFromChat: aChat]
 ]
 
 { #category : #accessing }
@@ -466,12 +463,12 @@ GtLChatMessage >> messagesDo: aBlock [
 
 { #category : #accessing }
 GtLChatMessage >> model [
-	^ model
+	^ modelName
 ]
 
 { #category : #accessing }
 GtLChatMessage >> model: anObject [
-	model := anObject
+	modelName := anObject
 ]
 
 { #category : #accessing }

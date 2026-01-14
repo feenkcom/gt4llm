@@ -8,12 +8,12 @@ Class {
 GtLToolForExampleMethodRunExamples >> exampleRunError [
 	<gtExample>
 	| tool call result |
-	tool := GtLlmToolForExampleMethodRun new.
-	call := GtLlmFunctionToolCall new.
+	tool := GtLToolForExampleMethodRun new.
+	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
 		'arguments' -> {
-			'className' -> 'GtLlmExampleRunDummyExamples'.
+			'className' -> 'GtLExampleRunDummyExamples'.
 			'methodName' -> 'errorExample'
 		} asDictionary
 	} asDictionary.
@@ -27,12 +27,12 @@ GtLToolForExampleMethodRunExamples >> exampleRunError [
 GtLToolForExampleMethodRunExamples >> exampleRunFailure [
 	<gtExample>
 	| tool call result |
-	tool := GtLlmToolForExampleMethodRun new.
-	call := GtLlmFunctionToolCall new.
+	tool := GtLToolForExampleMethodRun new.
+	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
 		'arguments' -> {
-			'className' -> 'GtLlmExampleRunDummyExamples'.
+			'className' -> 'GtLExampleRunDummyExamples'.
 			'methodName' -> 'failingExample'
 		} asDictionary
 	} asDictionary.
@@ -46,12 +46,12 @@ GtLToolForExampleMethodRunExamples >> exampleRunFailure [
 GtLToolForExampleMethodRunExamples >> exampleRunForNonExampleMethod [
 	<gtExample>
 	| tool call result |
-	tool := GtLlmToolForExampleMethodRun new.
-	call := GtLlmFunctionToolCall new.
+	tool := GtLToolForExampleMethodRun new.
+	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
 		'arguments' -> {
-			'className' -> 'GtLlmExampleRunDummyExamples'.
+			'className' -> 'GtLExampleRunDummyExamples'.
 			'methodName' -> 'regularMethod'
 		} asDictionary
 	} asDictionary.
@@ -65,8 +65,8 @@ GtLToolForExampleMethodRunExamples >> exampleRunForNonExampleMethod [
 GtLToolForExampleMethodRunExamples >> exampleRunSuccess [
 	<gtExample>
 	| tool call result |
-	tool := GtLlmToolForExampleMethodRun new.
-	call := GtLlmFunctionToolCall new.
+	tool := GtLToolForExampleMethodRun new.
+	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
 		'arguments' -> {

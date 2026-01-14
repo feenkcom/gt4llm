@@ -8,8 +8,8 @@ Class {
 GtLToolForSmalltalkCodeEvaluationExamples >> executeSimpleDoIt [
 	<gtExample>
 	| tool call result expected |
-	tool := GtLlmToolForSmalltalkCodeEvaluation new.
-	call := GtLlmFunctionToolCall new.
+	tool := GtLToolForSmalltalkCodeEvaluation new.
+	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
 		'arguments' -> {
@@ -18,7 +18,7 @@ GtLToolForSmalltalkCodeEvaluationExamples >> executeSimpleDoIt [
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	expected := STONJSON toStringPretty: (GtLlmValueSerializer new serializeValue: 3).
+	expected := STONJSON toStringPretty: (GtLValueSerializer new serializeValue: 3).
 	self assert: result equals: expected.
 	^ tool
 ]
@@ -27,8 +27,8 @@ GtLToolForSmalltalkCodeEvaluationExamples >> executeSimpleDoIt [
 GtLToolForSmalltalkCodeEvaluationExamples >> executeWithError [
 	<gtExample>
 	| tool call result |
-	tool := GtLlmToolForSmalltalkCodeEvaluation new.
-	call := GtLlmFunctionToolCall new.
+	tool := GtLToolForSmalltalkCodeEvaluation new.
+	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
 		'arguments' -> {
@@ -46,8 +46,8 @@ GtLToolForSmalltalkCodeEvaluationExamples >> executeWithError [
 GtLToolForSmalltalkCodeEvaluationExamples >> missingCodeArgument [
 	<gtExample>
 	| tool call result |
-	tool := GtLlmToolForSmalltalkCodeEvaluation new.
-	call := GtLlmFunctionToolCall new.
+	tool := GtLToolForSmalltalkCodeEvaluation new.
+	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
 		'arguments' -> Dictionary new

@@ -7,14 +7,13 @@ Class {
 { #category : #'llm-generated' }
 GtLToolForSUnitClassesRunExamples >> runTestsForMultipleClasses [
 	<gtExample>
-	<noTest>
 	| tool call result data |
-	tool := GtLlmToolForSUnitClassesRun new.
-	call := GtLlmFunctionToolCall new.
+	tool := GtLToolForSUnitClassesRun new.
+	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
 		'arguments' -> {
-			'classNames' -> 'GtLlmExampleDummyPassingTest GtLlmExampleDummyMixedTest' } asDictionary } asDictionary.
+			'classNames' -> 'GtLExampleDummyPassingTest GtLExampleDummyMixedTest' } asDictionary } asDictionary.
 	result := tool performToolCall: call.
 	data := NeoJSONReader fromString: result.
 	self assert: (data at: 'runCount') equals: 5.
@@ -30,8 +29,8 @@ GtLToolForSUnitClassesRunExamples >> runTestsForMultipleClasses [
 GtLToolForSUnitClassesRunExamples >> runTestsForSingleClass [
 	<gtExample>
 	| tool call result data detail |
-	tool := GtLlmToolForSUnitClassesRun new.
-	call := GtLlmFunctionToolCall new.
+	tool := GtLToolForSUnitClassesRun new.
+	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
 		'arguments' -> {
@@ -49,8 +48,8 @@ GtLToolForSUnitClassesRunExamples >> runTestsForSingleClass [
 GtLToolForSUnitClassesRunExamples >> runTestsWithUnknownInputs [
 	<gtExample>
 	| tool call result data |
-	tool := GtLlmToolForSUnitClassesRun new.
-	call := GtLlmFunctionToolCall new.
+	tool := GtLToolForSUnitClassesRun new.
+	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
 		'arguments' -> {
