@@ -3,7 +3,8 @@ Class {
 	#superclass : #GtLOpenAIMessage,
 	#instVars : [
 		'inputModels',
-		'content'
+		'content',
+		'images'
 	],
 	#category : #'Gt4Llm-OpenAI'
 }
@@ -92,6 +93,16 @@ GtLOpenAIUserMessage >> contentText [
 	^ content
 ]
 
+{ #category : #views }
+GtLOpenAIUserMessage >> gtImagesFor: aView [
+	<gtView>
+	images ifNil: [ ^ aView empty ].
+	^ aView columnedList
+		title: 'Images';
+		items: [ images ];
+		column: 'Value' text: [ :each | each gtDisplayString ]
+]
+
 { #category : #'gt - inspector' }
 GtLOpenAIUserMessage >> gtInspectorTargetModels [
 	^ self inputModels flatCollect: [ :each |
@@ -123,10 +134,21 @@ GtLOpenAIUserMessage >> gtViewInputModelsFor: aView [
 		send: [ :each | each value ]
 ]
 
+{ #category : #accessing }
+GtLOpenAIUserMessage >> images [
+	^ images
+]
+
+{ #category : #accessing }
+GtLOpenAIUserMessage >> images: anObject [
+	images := anObject
+]
+
 { #category : #initialization }
 GtLOpenAIUserMessage >> initialize [
 	super initialize.
-	
+
+	images := OrderedCollection new.
 	inputModels := Dictionary new.
 ]
 
@@ -159,4 +181,17 @@ GtLOpenAIUserMessage >> markdown: aString [
 { #category : #'as yet unclassified' }
 GtLOpenAIUserMessage >> role [
 	^ 'user'
+]
+
+{ #category : #'as yet unclassified' }
+GtLOpenAIUserMessage >> serializeForOpenAIResponsesAPI [
+	^ {#content
+			-> ({{'type' -> 'input_text'.
+						'text' -> self contentText} asDictionary}
+			, (self images
+					collect: [ :aRef | 
+						{'type' -> 'input_image'.
+							'image_url' -> ('data:image/jpeg;base64,' , aRef binaryContents base64Encoded)}
+							asDictionary ])).
+		#role -> self role} asDictionary
 ]

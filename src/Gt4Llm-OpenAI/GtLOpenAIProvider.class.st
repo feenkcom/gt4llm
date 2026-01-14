@@ -194,22 +194,6 @@ GtLOpenAIProvider >> printOn: aStream [
 ]
 
 { #category : #'as yet unclassified' }
-GtLOpenAIProvider >> sendFiles: aListOfFileReferences withMessage: aString [
-	self
-		sendAssistantMessage: (self userMessageClass new
-				content: {{'type' -> 'input_text'.
-							'text' -> aString} asDictionary}
-						, (aListOfFileReferences
-								collect: [ :aFileReference | 
-									{'type' -> 'input_image'.
-										'image_url'
-											-> ('data:image/jpeg;base64,' , aFileReference binaryContents base64Encoded)}
-										asDictionary ]);
-				role: 'user';
-				chat: self)
-]
-
-{ #category : #'as yet unclassified' }
 GtLOpenAIProvider >> sendMessage: aMessage [
 	self chat signalRunHasStarted.
 	providerWorking := true.

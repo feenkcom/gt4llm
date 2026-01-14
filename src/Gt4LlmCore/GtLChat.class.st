@@ -60,7 +60,7 @@ GtLChat >> addErrorMessage: anErrorMessage [
 		ifAbsent: [ self addMessage: anErrorMessage ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'api - communication' }
 GtLChat >> addInstructionSectionForLepiterPages: pageNames titled: title [
 	| instructionString |
 	instructionString := String cr
@@ -398,12 +398,12 @@ GtLChat >> lastUpdate: anObject [
 	lastUpdate := anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'api - communication' }
 GtLChat >> lepiterExplanations: pageNames [
 	^ self addInstructionSectionForLepiterPages: pageNames titled: 'Explanations'
 ]
 
-{ #category : #utilities }
+{ #category : #'api - communication' }
 GtLChat >> markdownResponse [
 	self addResponseFormatForMagrite: GtLMarkdown named: 'Markdown'
 ]
@@ -448,14 +448,7 @@ GtLChat >> resetMessages [
 	self signalRunIsDone
 ]
 
-{ #category : #actions }
-GtLChat >> sendFiles: aListOfFileReferences withMessage: aString [
-	self provider
-		sendFiles: aListOfFileReferences
-		withMessage: aString
-]
-
-{ #category : #accessing }
+{ #category : #'api - communication' }
 GtLChat >> sendMarkdown: aString [
 	| newMessage |
 	self assert: aString isString.
@@ -471,7 +464,7 @@ GtLChat >> sendMessage: aMessage [
 	self provider sendMessage: aMessage
 ]
 
-{ #category : #accessing }
+{ #category : #'api - communication' }
 GtLChat >> sendPlainMessage: aString [
 	self deprecated: 'use sendMarkdown: instead'.
 	^ self sendMarkdown: aString
