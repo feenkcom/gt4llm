@@ -21,7 +21,7 @@ GtLFileSearchTool >> acceptVisitor: aVisitor [
 { #category : #'as yet unclassified' }
 GtLFileSearchTool >> functionResponse [
 	^ {'type' -> 'file_search'.
-		'description' -> 'Search the files attached to the chat'.
+	"	'description' -> 'Search the files attached to the chat'."
 		'vector_store_ids' -> self vectorStoreIds} asDictionary
 ]
 
