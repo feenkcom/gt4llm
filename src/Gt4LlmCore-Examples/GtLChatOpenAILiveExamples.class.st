@@ -164,11 +164,6 @@ GtLChatOpenAILiveExamples >> messageExample_magritteMarkdown_codeChanges_refacto
 	| currentMessage model responseMessage chat |
 	model := RBNamespace new.
 	chat := self currentChat.
-	currentMessage := chat createUserMessage.
-	currentMessage
-		addInputMagritteObject: (GtLMarkdown new
-				content: 'Push up common methods and slots from the subclasses in the DiffVisitor class. Use CodeTransformations.')
-		named: 'Markdown'.
 	chat
 		tools: (GtLTools
 				withAll: {GtLRefactoringToolForClassSearch new model: model.
@@ -178,6 +173,11 @@ GtLChatOpenAILiveExamples >> messageExample_magritteMarkdown_codeChanges_refacto
 						GtLRefactoringToolForMethodReferences new model: model.
 						GtLRefactoringToolForMethodImplementors new model: model.
 						GtLRefactoringToolForMethodSource new model: model}).
+	currentMessage := chat createUserMessage.
+	currentMessage
+		addInputMagritteObject: (GtLMarkdown new
+				content: 'Push up common methods and slots from the subclasses in the DiffVisitor class. Use CodeTransformations.')
+		named: 'Markdown'.
 	chat markdownResponse.
 	chat
 		addResponseFormatForMagrite: GtLCodeTransformations
@@ -320,6 +320,29 @@ GtLChatOpenAILiveExamples >> messageWithFormatCallExample_mathTutor_magritteSche
 
 	responseMessage := self currentChat sendMessage: currentMessage.
 
+	self
+		waitForChatRunIsDoneThen: [ self assert: self currentChat messages size equals: 2 ].
+
+	^ self currentChat
+]
+
+{ #category : #'examples - calls' }
+GtLChatOpenAILiveExamples >> messageWithImages [
+	<gtExample>
+	<noTest>
+	| messageString responseMessage fileReference |
+	messageString := 'What do you see in the picture?'.
+
+	fileReference := BlElement new
+		background: Color red;
+		exportAsPNG.
+	responseMessage := self currentChat
+		markdownResponse;
+		sendWith: [ :m | 
+			m
+				markdown: messageString;
+				images: {fileReference} ].
+	
 	self
 		waitForChatRunIsDoneThen: [ self assert: self currentChat messages size equals: 2 ].
 

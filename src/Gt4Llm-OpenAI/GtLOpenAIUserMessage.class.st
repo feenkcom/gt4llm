@@ -96,7 +96,8 @@ GtLOpenAIUserMessage >> contentText [
 { #category : #views }
 GtLOpenAIUserMessage >> gtImagesFor: aView [
 	<gtView>
-	images ifNil: [ ^ aView empty ].
+	<gtLlmView>
+	images ifEmpty: [ ^ aView empty ].
 	^ aView columnedList
 		title: 'Images';
 		items: [ images ];
