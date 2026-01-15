@@ -8,7 +8,6 @@ Class {
 		'instructions',
 		'tools',
 		'announcer',
-		'images',
 		'formatDescriptions',
 		'modelName'
 	],
@@ -50,7 +49,7 @@ GtLChatMessage class >> leJsonV4AttributeMapping [
 		add: #role -> #role;
 		add: #id -> #id;
 		add: #createdAt -> #createdAt;
-		add: #images -> #images;
+"		add: #images -> #imageStrings;"
 		add: #model -> #model;
 		yourself.
 ]
@@ -327,23 +326,12 @@ GtLChatMessage >> id: anId [
 	id := anId
 ]
 
-{ #category : #accessing }
-GtLChatMessage >> images [
-	^ images
-]
-
-{ #category : #accessing }
-GtLChatMessage >> images: anObject [
-	images := anObject
-]
-
 { #category : #initialization }
 GtLChatMessage >> initialize [
 	super initialize.
 	
 	id := self uuidClass new.
 	createdAt := DateAndTime now.
-	images := OrderedCollection new.
 	
 	formatDescriptions := GtLResponseCompositeFormat new
 ]
@@ -494,14 +482,9 @@ GtLChatMessage >> senderText [
 	^ 'You'
 ]
 
-{ #category : #accessing }
-GtLChatMessage >> serialize [
-	| serialized |
-	serialized := super serialize.
-
-	self images isEmptyOrNil ifFalse: [ serialized at: 'images' put: self images ].
-
-	^ serialized
+{ #category : #'as yet unclassified' }
+GtLChatMessage >> serializeForOpenAIResponsesAPI [
+	^ self serialize
 ]
 
 { #category : #private }

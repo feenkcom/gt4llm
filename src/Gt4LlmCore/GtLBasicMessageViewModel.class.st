@@ -93,11 +93,6 @@ GtLBasicMessageViewModel >> isAssistantRole [
 ]
 
 { #category : #accessing }
-GtLBasicMessageViewModel >> isUserRole [
-	^ self threadMessage isUserRole
-]
-
-{ #category : #accessing }
 GtLBasicMessageViewModel >> messageHeaderElement [
 	^ GtLMessageHeaderElement new messageViewModel: self
 ]
