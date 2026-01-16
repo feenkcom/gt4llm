@@ -174,6 +174,16 @@ TGtLDomainObjectVisitor >> visitSearchFilterDomainObject: aDomainObject [
 ]
 
 { #category : #visiting }
+TGtLDomainObjectVisitor >> visitTestCaseDomainObject: aDomainObject [
+	^ self visitDomainObject: aDomainObject
+]
+
+{ #category : #visiting }
+TGtLDomainObjectVisitor >> visitTestCasesDomainObject: aDomainObject [
+	^ self visitDomainObject: aDomainObject
+]
+
+{ #category : #visiting }
 TGtLDomainObjectVisitor >> visitUnexpectedDomainObject: aDomainObject [
 	^ self visitDomainObject: aDomainObject
 ]

@@ -41,10 +41,10 @@ GtLExampleWithResultsDomainObject >> serializeToOpenAIResponseJsonObject [
 	<return: #NeoJSONObject>
 	^ NeoJSONObject new
 		at: #total put: self exampleWithResults size;
-		at: #successes put: (self exampleWithResults count: #isSuccess);
-		at: #failures put: (self exampleWithResults count: #isFailure);
-		at: #errors put: (self exampleWithResults count: #isError);
-		at: #skips put: (self exampleWithResults count: #isSkipped);
+		at: #successes put: (self exampleWithResults count: #isSuccessResult);
+		at: #failures put: (self exampleWithResults count: #isFailureResult);
+		at: #errors put: (self exampleWithResults count: #isErrorResult);
+		at: #skips put: (self exampleWithResults count: #isSkippedResult);
 		at: #notFound put: self notFoundClassNames;
 		at: #details
 			put: (self exampleWithResults collect: #serializeToOpenAIResponseJsonObject as: Array);
