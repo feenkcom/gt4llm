@@ -56,7 +56,7 @@ GtLIncorrectArgumentArrayItemDomainObject >> incorrectItems: anObject [
 ]
 
 { #category : #'api - testing' }
-GtLIncorrectArgumentArrayItemDomainObject >> isError [
+GtLIncorrectArgumentArrayItemDomainObject >> isErrorDomainObject [
 	^ true
 ]
 

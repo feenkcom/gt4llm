@@ -23,7 +23,7 @@ GtLProblemDomainObject >> description: anObject [
 ]
 
 { #category : #'api - testing' }
-GtLProblemDomainObject >> isError [
+GtLProblemDomainObject >> isErrorDomainObject [
 	^ true
 ]
 

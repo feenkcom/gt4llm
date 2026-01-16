@@ -45,7 +45,7 @@ GtLIncorrectArgumentValueDomainObject >> expectedArgumentValueKind: anObject [
 ]
 
 { #category : #'api - testing' }
-GtLIncorrectArgumentValueDomainObject >> isError [
+GtLIncorrectArgumentValueDomainObject >> isErrorDomainObject [
 	^ true
 ]
 

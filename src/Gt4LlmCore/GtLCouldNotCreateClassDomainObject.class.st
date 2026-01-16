@@ -53,7 +53,7 @@ GtLCouldNotCreateClassDomainObject >> instanceVariableNames: anObject [
 ]
 
 { #category : #'api - testing' }
-GtLCouldNotCreateClassDomainObject >> isError [
+GtLCouldNotCreateClassDomainObject >> isErrorDomainObject [
 	^ true
 ]
 

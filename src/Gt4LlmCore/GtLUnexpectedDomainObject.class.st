@@ -13,7 +13,7 @@ GtLUnexpectedDomainObject >> acceptVisitor: aVisitor [
 ]
 
 { #category : #'api - testing' }
-GtLUnexpectedDomainObject >> isError [
+GtLUnexpectedDomainObject >> isErrorDomainObject [
 	^ true
 ]
 

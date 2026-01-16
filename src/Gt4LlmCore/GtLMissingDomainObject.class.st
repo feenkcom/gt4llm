@@ -13,7 +13,7 @@ GtLMissingDomainObject >> acceptVisitor: aVisitor [
 ]
 
 { #category : #'api - testing' }
-GtLMissingDomainObject >> isError [
+GtLMissingDomainObject >> isErrorDomainObject [
 	^ true
 ]
 
