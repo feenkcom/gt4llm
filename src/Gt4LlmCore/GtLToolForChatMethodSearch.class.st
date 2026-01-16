@@ -5,6 +5,11 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
+GtLToolForChatMethodSearch class >> leJsonV4Name [
+	^ #gtLToolForChatMethodSearch
+]
+
+{ #category : #'as yet unclassified' }
 GtLToolForChatMethodSearch >> description [
 	^ 'Search for methods that match a searchPrompt.
 	
@@ -17,11 +22,6 @@ methods that are in {{gtClass:BlElement}} and also refer to `assert:description:
 ```
 methods that are annotated with `gtView` pragmas
 ```'
-]
-
-{ #category : #'as yet unclassified' }
-GtLToolForChatMethodSearch >> leJsonV4Name [
-	^ #gtLToolForChatMethodSearch
 ]
 
 { #category : #'as yet unclassified' }
