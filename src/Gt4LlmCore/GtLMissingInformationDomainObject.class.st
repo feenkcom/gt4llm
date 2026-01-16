@@ -14,7 +14,7 @@ GtLMissingInformationDomainObject >> acceptVisitor: aVisitor [
 ]
 
 { #category : #'api - testing' }
-GtLMissingInformationDomainObject >> isError [
+GtLMissingInformationDomainObject >> isErrorDomainObject [
 	^ true
 ]
 

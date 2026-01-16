@@ -13,7 +13,7 @@ GtLMethodIsNotExampleDomainObject >> acceptVisitor: aVisitor [
 ]
 
 { #category : #'api - testing' }
-GtLMethodIsNotExampleDomainObject >> isError [
+GtLMethodIsNotExampleDomainObject >> isErrorDomainObject [
 	^ true
 ]
 

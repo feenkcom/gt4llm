@@ -41,7 +41,7 @@ GtLExceptionDomainObject >> freeze: anException [
 ]
 
 { #category : #'api - testing' }
-GtLExceptionDomainObject >> isError [
+GtLExceptionDomainObject >> isErrorDomainObject [
 	^ true
 ]
 

@@ -28,7 +28,7 @@ GtLMissingArgumentDomainObject >> arguments: aDictionary [
 ]
 
 { #category : #'api - testing' }
-GtLMissingArgumentDomainObject >> isError [
+GtLMissingArgumentDomainObject >> isErrorDomainObject [
 	^ true
 ]
 

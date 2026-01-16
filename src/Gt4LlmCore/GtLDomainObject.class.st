@@ -34,7 +34,7 @@ GtLDomainObject >> gtJsonStringViewFor: aView [
 ]
 
 { #category : #'api - testing' }
-GtLDomainObject >> isError [
+GtLDomainObject >> isErrorDomainObject [
 	"Return true if the domain object represents some kind of failure or exception,
 	instead of an expected domain object."
 

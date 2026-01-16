@@ -9,7 +9,7 @@ TGtLDomainObject >> acceptVisitor: aVisitor [
 ]
 
 { #category : #'api - testing' }
-TGtLDomainObject >> isError [
+TGtLDomainObject >> isErrorDomainObject [
 	"Return true if the response represents some kind of error, that happened during a tool execution."
 
 	<return: #Boolean>
