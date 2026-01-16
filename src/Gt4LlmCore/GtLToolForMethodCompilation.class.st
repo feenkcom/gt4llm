@@ -33,29 +33,50 @@ GtLToolForMethodCompilation >> parameters [
 GtLToolForMethodCompilation >> privatePerformToolCall: aToolCall [
 	| arguments className class classSideValue source protocol selector |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
-	className := arguments at: 'className' ifAbsent: [ ^ 'Class name not provided' ].
-	class := className asClassIfAbsent: [ ^ 'Class not found' ].
+	className := arguments
+			at: 'className'
+			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
+					receiverName: self name;
+					arguments: arguments;
+					missingArgument: 'className' ].
+	class := className
+			asClassIfAbsent: [ ^ GtLMissingDomainObject new objectName: className ].
 	classSideValue := arguments at: 'classSide' ifAbsent: [ false ].
-	((classSideValue = true) or: [ classSideValue asString = 'true' ])
+	(classSideValue = true or: [ classSideValue asString = 'true' ])
 		ifTrue: [ class := class class ].
-	source := arguments at: 'sourceCode' ifAbsent: [ ^ 'Source code not provided' ].
-	source := source asString.
-	source isEmpty ifTrue: [ ^ 'Source code not provided' ].
+	source := arguments
+			at: 'sourceCode'
+			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
+					receiverName: self name;
+					arguments: arguments;
+					missingArgument: 'sourceCode' ].
+	source := source asString trimBoth.
+	source isEmpty
+		ifTrue: [ ^ GtLMissingArgumentDomainObject new
+				receiverName: self name;
+				arguments: arguments;
+				missingArgument: 'sourceCode' ].
 	protocol := arguments at: 'protocol' ifAbsent: [ 'as yet unclassified' ].
 	protocol := protocol ifNil: [ 'as yet unclassified' ].
 	protocol := protocol asString.
 	protocol isEmpty ifTrue: [ protocol := 'as yet unclassified' ].
-	selector := [
-		[ class compile: source classified: protocol ]
+	selector := [ [ class compile: source classified: protocol ]
 			on: CodeError
-			do: [ :notification | ^ 'Syntax error: ' , (notification messageText ifNil: [ notification description ]) ]
-	] on: Error do: [ :error | ^ 'Compilation error: ' , ((error respondsTo: #messageText)
-			ifTrue: [ error messageText ifNil: [ error description ] ]
-			ifFalse: [ error description ]) ].
-	^ String streamContents: [ :stream |
-		stream
-			nextPutAll: 'Method compiled: ';
-			nextPutAll: class name;
-			nextPutAll: '>>#';
-			nextPutAll: selector asString ]
+			do: [ :notification | 
+				^ GtLMethodCompilationExceptionDomainObject new
+					freeze: notification;
+					targetClass: class;
+					protocolName: protocol;
+					sourceCode: source;
+					description: 'Syntax error while compiling given method source code' ] ]
+			on: Error
+			do: [ :error | 
+				^ GtLMethodCompilationExceptionDomainObject new
+					freeze: error;
+					targetClass: class;
+					protocolName: protocol;
+					sourceCode: source;
+					description: 'Compilation error while compiling given method source code' ].
+
+	^ GtLMethodDomainObject new method: (class methodDict at: selector)
 ]

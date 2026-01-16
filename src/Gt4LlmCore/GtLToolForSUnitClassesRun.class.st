@@ -82,9 +82,18 @@ GtLToolForSUnitClassesRun >> parameters [
 GtLToolForSUnitClassesRun >> privatePerformToolCall: aToolCall [
 	| arguments rawClassNames classNames details notFound totalRunCount totalSuccessCount totalFailureCount totalErrorCount totalSkippedCount totalUnexpectedPassCount totalUnexpectedFailureCount totalUnexpectedErrorCount totalExpectedPassCount totalExpectedDefectCount summary |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
-	rawClassNames := arguments at: 'classNames' ifAbsent: [ ^ 'classNames is not provided' ].
+	rawClassNames := arguments
+			at: 'classNames'
+			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
+					receiverName: self name;
+					arguments: arguments;
+					missingArgument: 'classNames' ].
 	classNames := rawClassNames findTokens: String space.
-	classNames isEmpty ifTrue: [ ^ 'classNames is empty' ].
+	classNames isEmpty
+		ifTrue: [ ^ GtLMissingArgumentDomainObject new
+				receiverName: self name;
+				arguments: arguments;
+				missingArgument: 'classNames' ].
 	details := OrderedCollection new.
 	notFound := OrderedCollection new.
 	totalRunCount := 0.
@@ -97,44 +106,50 @@ GtLToolForSUnitClassesRun >> privatePerformToolCall: aToolCall [
 	totalUnexpectedErrorCount := 0.
 	totalExpectedPassCount := 0.
 	totalExpectedDefectCount := 0.
-	classNames do: [ :className |
-		Smalltalk globals
-			at: className asSymbol
-			ifPresent: [ :class |
-				(class inheritsFrom: TestCase)
-					ifFalse: [ notFound add: {
-						'type' -> 'class'.
-						'name' -> className asString.
-						'reason' -> 'Class is not a TestCase subclass' } asDictionary ]
-					ifTrue: [ | result |
-						result := class suite run.
-						totalRunCount := totalRunCount + result runCount.
-						totalSuccessCount := totalSuccessCount + result passedCount.
-						totalFailureCount := totalFailureCount + result failureCount.
-						totalErrorCount := totalErrorCount + result errorCount.
-						totalSkippedCount := totalSkippedCount + result skippedCount.
-						totalUnexpectedPassCount := totalUnexpectedPassCount + result unexpectedPassCount.
-						totalUnexpectedFailureCount := totalUnexpectedFailureCount + result unexpectedFailureCount.
-						totalUnexpectedErrorCount := totalUnexpectedErrorCount + result unexpectedErrorCount.
-						totalExpectedPassCount := totalExpectedPassCount + result expectedPassCount.
-						totalExpectedDefectCount := totalExpectedDefectCount + result expectedDefectCount.
-						result tests do: [ :test | details add: (self detailForTest: test inResult: result) ] ] ]
-			ifAbsent: [ notFound add: {
-				'type' -> 'class'.
-				'name' -> className asString.
-				'reason' -> 'Class not found' } asDictionary ] ].
-	summary := {
-		'runCount' -> totalRunCount.
-		'successes' -> totalSuccessCount.
-		'failures' -> totalFailureCount.
-		'errors' -> totalErrorCount.
-		'skips' -> totalSkippedCount.
-		'unexpectedPasses' -> totalUnexpectedPassCount.
-		'unexpectedFailures' -> totalUnexpectedFailureCount.
-		'unexpectedErrors' -> totalUnexpectedErrorCount.
-		'expectedPasses' -> totalExpectedPassCount.
-		'expectedDefects' -> totalExpectedDefectCount.
-		'details' -> details asArray.
-		'notFound' -> notFound asArray } asDictionary.
+	classNames
+		do: [ :className | 
+			Smalltalk globals
+				at: className asSymbol
+				ifPresent: [ :class | 
+					(class inheritsFrom: TestCase)
+						ifFalse: [ notFound
+								add: {'type' -> 'class'.
+										'name' -> className asString.
+										'reason' -> 'Class is not a TestCase subclass'} asDictionary ]
+						ifTrue: [ | result |
+							result := class suite run.
+							totalRunCount := totalRunCount + result runCount.
+							totalSuccessCount := totalSuccessCount + result passedCount.
+							totalFailureCount := totalFailureCount + result failureCount.
+							totalErrorCount := totalErrorCount + result errorCount.
+							totalSkippedCount := totalSkippedCount + result skippedCount.
+							totalUnexpectedPassCount := totalUnexpectedPassCount
+									+ result unexpectedPassCount.
+							totalUnexpectedFailureCount := totalUnexpectedFailureCount
+									+ result unexpectedFailureCount.
+							totalUnexpectedErrorCount := totalUnexpectedErrorCount
+									+ result unexpectedErrorCount.
+							totalExpectedPassCount := totalExpectedPassCount
+									+ result expectedPassCount.
+							totalExpectedDefectCount := totalExpectedDefectCount
+									+ result expectedDefectCount.
+							result tests
+								do: [ :test | details add: (self detailForTest: test inResult: result) ] ] ]
+				ifAbsent: [ notFound
+						add: {'type' -> 'class'.
+								'name' -> className asString.
+								'reason' -> 'Class not found'} asDictionary ] ].
+	summary := {'runCount' -> totalRunCount.
+			'successes' -> totalSuccessCount.
+			'failures' -> totalFailureCount.
+			'errors' -> totalErrorCount.
+			'skips' -> totalSkippedCount.
+			'unexpectedPasses' -> totalUnexpectedPassCount.
+			'unexpectedFailures' -> totalUnexpectedFailureCount.
+			'unexpectedErrors' -> totalUnexpectedErrorCount.
+			'expectedPasses' -> totalExpectedPassCount.
+			'expectedDefects' -> totalExpectedDefectCount.
+			'details' -> details asArray.
+			'notFound' -> notFound asArray} asDictionary.
 	^ NeoJSONWriter toString: summary
 ]

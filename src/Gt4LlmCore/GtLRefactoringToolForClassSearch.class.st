@@ -48,14 +48,30 @@ GtLRefactoringToolForClassSearch >> parameters [
 
 { #category : #'llm-generated' }
 GtLRefactoringToolForClassSearch >> privatePerformToolCall: aToolCall [
-	| arguments query |
-	self model ifNil: [ ^ 'Model not provided' ].
+	| arguments query promise result allClassNames |
+	self model
+		ifNil: [ ^ GtLMissingInformationDomainObject new
+				receiverName: self name;
+				missingModelName: 'model' ].
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
-	query := arguments at: 'query' ifAbsent: [ ^ 'Query not provided' ].
-	^ STONJSON
-		toString: (GtSpotterSubstringsFilter new
+	query := arguments
+			at: 'query'
+			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
+					receiverName: self name;
+					arguments: arguments;
+					missingArgument: 'query' ].
+	allClassNames := self classNames.
+	promise := (GtSpotterSubstringsFilter new
 			withWordsSplitter;
 			beCaseSensitiveByCapitalization;
-			applyInScope: self classNames asAsyncStream
-			context: (GtSpotterContext new searchQuery: query)) toArray wait
+			applyInScope: allClassNames asAsyncStream
+				context: (GtSpotterContext new searchQuery: query)) toArray
+			await: GtLSettings futureExecutionConfiguration.
+	result := promise wait.
+
+	^ GtLRefactoringClassSearchDomainObject new
+		model: self model;
+		query: query;
+		allClassNames: allClassNames;
+		foundClassNames: result
 ]

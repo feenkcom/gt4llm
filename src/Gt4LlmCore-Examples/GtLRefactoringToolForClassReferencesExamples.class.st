@@ -16,7 +16,7 @@ GtLRefactoringToolForClassReferencesExamples >> classReferencesForExistingClass 
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result includesSubstring: 'GtLRefactoringClassReferencesHolder').
+	self assert: (result serializeToOpenAIResponseJsonString includesSubstring: 'GtLRefactoringClassReferencesHolder').
 	^ tool
 ]
 

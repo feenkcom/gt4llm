@@ -39,15 +39,24 @@ GtLRefactoringToolForClassSubclasses >> parameters [
 
 { #category : #'llm-generated' }
 GtLRefactoringToolForClassSubclasses >> privatePerformToolCall: aToolCall [
-	| arguments className targetClass subclassNames |
-	self model ifNil: [ ^ 'Model not provided' ].
+	| arguments className targetClass subclasses |
+	self model
+		ifNil: [ ^ GtLMissingInformationDomainObject new
+				receiverName: self name;
+				missingModelName: 'model' ].
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	className := arguments
-		at: 'className'
-		ifAbsent: [ ^ 'Class name not provided' ].
+			at: 'className'
+			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
+					receiverName: self name;
+					arguments: arguments;
+					missingArgument: 'className' ].
 	targetClass := self model classNamed: className.
-	targetClass ifNil: [ ^ 'Class not found' ].
-	subclassNames := targetClass subclasses collect: [ :each | each name asString ].
-	subclassNames isEmpty ifTrue: [ ^ 'No subclasses found' ].
-	^ Character cr join: subclassNames
+	targetClass ifNil: [ ^ GtLMissingDomainObject new objectName: className ].
+	subclasses := targetClass subclasses.
+	
+	^ GtLRefactoringClassSubclassesDomainObject new 
+		model: self model;
+		targetClass: targetClass;
+		subclasses: subclasses
 ]

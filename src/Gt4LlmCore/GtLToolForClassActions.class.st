@@ -31,18 +31,22 @@ GtLToolForClassActions >> parameters [
 
 { #category : #accessing }
 GtLToolForClassActions >> privatePerformToolCall: aToolCall [
-	| argument class pragmas selectors |
-	argument := aToolCall anyArgument.
-	class := argument
-		ifNil: [ nil ]
-		ifNotNil: [ argument asClassIfAbsent: [ nil ] ].
-	^ class
-		ifNil: [ 'Class not found' ]
-		ifNotNil: [ :targetClass |
-			pragmas := Pragma allNamed: #gtAction from: targetClass toButExcluding: Object.
-			pragmas isEmpty
-				ifTrue: [ 'No actions found' ]
-				ifFalse: [
-					selectors := pragmas collect: [ :each | each method gtDisplayString ].
-					Character cr join: selectors ] ]
+	| className targetClass pragmas |
+	className := aToolCall anyArgument.
+	targetClass := className
+			ifNil: [ ^ GtLMissingArgumentDomainObject new
+					receiverName: self name;
+					arguments: aToolCall arguments;
+					missingArgument: 'className' ]
+			ifNotNil: [ className
+					asClassIfAbsent: [ ^ GtLMissingDomainObject new objectName: className ] ].
+
+	pragmas := Pragma
+			allNamed: #gtAction
+			from: targetClass
+			toButExcluding: Object.
+
+	^ GtLClassMethodsDomainObject new
+		targetClass: targetClass;
+		methods: (pragmas collect: [ :each | each method ])
 ]

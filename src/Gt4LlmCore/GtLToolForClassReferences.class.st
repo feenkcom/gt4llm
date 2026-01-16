@@ -31,9 +31,22 @@ GtLToolForClassReferences >> parameters [
 
 { #category : #accessing }
 GtLToolForClassReferences >> privatePerformToolCall: aToolCall [
-	| class |
-	class := aToolCall anyArgument asSymbol asClassIfAbsent: [ nil ].
-	^ class
-		ifNil: [ 'Class not found' ]
-		ifNotNil: [ :c | Character cr join: (c gtReferences result toArray wait collect: #name) ]
+	| className class references promise |
+	className := aToolCall anyArgument.
+	(className isNil or: [ className trimBoth isEmpty ])
+		ifTrue: [ ^ GtLMissingArgumentDomainObject new
+				receiverName: self name;
+				arguments: aToolCall arguments;
+				missingArgument: 'className' ].
+
+	class := className asSymbol asClassIfAbsent: [ nil ].
+	class ifNil: [ ^ GtLMissingDomainObject new objectName: className ].
+
+	promise := class gtReferences result toArray
+			await: GtLSettings futureExecutionConfiguration.
+	references := promise wait.
+
+	^ GtLClassReferencesDomainObject new
+		foundClass: class;
+		references: references
 ]

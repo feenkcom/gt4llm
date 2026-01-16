@@ -1,0 +1,58 @@
+Class {
+	#name : #GtLDomainObject,
+	#superclass : #Object,
+	#traits : 'TGtLDomainObject',
+	#classTraits : 'TGtLDomainObject classTrait',
+	#category : #'Gt4LlmCore-Domain Objects'
+}
+
+{ #category : #visiting }
+GtLDomainObject >> acceptVisitor: aVisitor [
+	^ aVisitor visitDomainObject: self
+]
+
+{ #category : #'gt - extensions' }
+GtLDomainObject >> gtJsonObjectViewFor: aView [
+	<gtView>
+	<gtLlmView>
+	^ aView forward
+		title: 'JSON Object';
+		priority: 20;
+		object: [ self serializeToOpenAIResponseJsonObject asGtJson ];
+		view: #gtJsonObjectFor:context:
+]
+
+{ #category : #'gt - extensions' }
+GtLDomainObject >> gtJsonStringViewFor: aView [
+	<gtView>
+	<gtLlmView>
+	^ aView forward
+		title: 'JSON String';
+		priority: 25;
+		object: [ self serializeToOpenAIResponseJsonObject asGtJson ];
+		view: #gtJsonStringFor:
+]
+
+{ #category : #'api - testing' }
+GtLDomainObject >> isError [
+	"Return true if the domain object represents some kind of failure or exception,
+	instead of an expected domain object."
+
+	^ false
+]
+
+{ #category : #'api - serializing' }
+GtLDomainObject >> serializeToOpenAIResponseJsonObject [
+	"Return a JSON dictionary that represents the domain object."
+
+	<return: #NeoJSONObject>
+	^ self subclassResponsibility
+]
+
+{ #category : #'api - serializing' }
+GtLDomainObject >> serializeToOpenAIResponseJsonString [
+	"Return a JSON string that represents the domain object."
+
+	<return: #String>
+	^ STONJSON toString: self serializeToOpenAIResponseJsonObject
+]
