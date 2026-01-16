@@ -33,14 +33,29 @@ GtLToolForMethodSource >> parameters [
 GtLToolForMethodSource >> privatePerformToolCall: aToolCall [
 	| arguments className class methodName classSideValue methodSymbol method |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
-	className := arguments at: 'className' ifAbsent: [ ^ 'Class name not provided' ].
-	class := className asClassIfAbsent: [ ^ 'Class not found' ].
-	methodName := arguments at: 'methodName' ifAbsent: [ ^ 'Method name not provided' ].
+	className := arguments
+			at: 'className'
+			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
+					receiverName: self name;
+					arguments: arguments;
+					missingArgument: 'className' ].
+	class := className
+			asClassIfAbsent: [ ^ GtLMissingDomainObject new objectName: className ].
+	methodName := arguments
+			at: 'methodName'
+			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
+					receiverName: self name;
+					arguments: arguments;
+					missingArgument: 'methodName' ].
 	classSideValue := arguments at: 'classSide' ifAbsent: [ false ].
-	((classSideValue = true) or: [ classSideValue asString = 'true' ]) ifTrue: [ class := class class ].
+	(classSideValue = true or: [ classSideValue asString = 'true' ])
+		ifTrue: [ class := class class ].
 	methodSymbol := methodName asSymbol.
-	^ class allMethods
-		detect: [ :each | each selector = methodSymbol ]
-		ifFound: [ :m | m sourceCode ]
-		ifNone: [ ^ 'Method not found' ]
+	method := class lookupSelector: methodSymbol.
+	method
+		ifNil: [ ^ GtLMissingDomainObject new
+				objectName: ('{1}>>#{2}'
+						format: {className.
+								methodName}) ].
+	^ GtLMethodDomainObject new method: method
 ]

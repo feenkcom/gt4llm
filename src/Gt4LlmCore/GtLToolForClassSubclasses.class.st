@@ -31,16 +31,20 @@ GtLToolForClassSubclasses >> parameters [
 
 { #category : #accessing }
 GtLToolForClassSubclasses >> privatePerformToolCall: aToolCall [
-	| argument class subclassNames |
-	argument := aToolCall anyArgument.
-	class := argument
-		ifNil: [ nil ]
-		ifNotNil: [ argument asSymbol asClassIfAbsent: [ nil ] ].
-	^ class
-		ifNil: [ 'Class not found' ]
-		ifNotNil: [ :c |
-			subclassNames := (c subclasses collect: [ :each | each name asString ]).
-			subclassNames isEmpty
-				ifTrue: [ 'No subclasses found' ]
-				ifFalse: [ Character cr join: subclassNames ] ]
+	| className class subclasses |
+	className := aToolCall anyArgument.
+	(className isNil or: [ className trimBoth isEmpty ])
+		ifTrue: [ ^ GtLMissingArgumentDomainObject new
+				receiverName: self name;
+				arguments: aToolCall arguments;
+				missingArgument: 'className' ].
+
+	class := className asSymbol asClassIfAbsent: [ nil ].
+	class ifNil: [ ^ GtLMissingDomainObject new objectName: className ].
+
+	subclasses := class subclasses.
+
+	^ GtLClassSubclassesDomainObject new
+		foundClass: class;
+		subclasses: subclasses
 ]

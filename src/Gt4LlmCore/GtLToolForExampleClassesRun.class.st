@@ -41,10 +41,7 @@ GtLToolForExampleClassesRun >> extractExamplesFromClassesFrom: classNames in: ex
 					factory := GtExampleFactory new.
 					factory sourceClass: class.
 					factory gtExamplesContained do: [ :example | examplesSet add: example ] ]
-				ifAbsent: [ notFound
-						add: {'type' -> 'class'.
-								'name' -> className asString.
-								'reason' -> 'Class not found'} asDictionary ] ]
+				ifAbsent: [ notFound add: className asString ] ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -147,57 +144,35 @@ GtLToolForExampleClassesRun >> parameters [
 	^ #('classNames')
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLToolForExampleClassesRun >> privatePerformToolCall: aToolCall [
-	| arguments examples notFound details summary successes failures errors skipped |
-	arguments := aToolCall arguments.
-	arguments ifNil: [ ^ 'Argument is empty' ].
-	arguments at: 'classNames' ifAbsent: [ ^ 'classNames is not provided' ].
-		
+	| arguments classNames examples notFound details |
+	arguments := aToolCall arguments ifNil: [ Dictionary new ].
+	classNames := arguments
+			at: 'classNames'
+			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
+					receiverName: self name;
+					arguments: arguments;
+					missingArgument: 'classNames' ].
+
 	examples := IdentitySet new.
 	notFound := OrderedCollection new.
 	self
-		extractExamplesFromClassesFrom: ((arguments at: 'classNames') findTokens: String space)
+		extractExamplesFromClassesFrom: (classNames findTokens: String space)
 		in: examples
 		reportingNotFoundIn: notFound.
 	details := OrderedCollection new.
-	successes := 0.
-	failures := 0.
-	errors := 0.
-	skipped := 0.
 	examples
 		do: [ :example | 
-			| exampleWithResult status message |
+			| exampleWithResult |
 			[ | detail |
-			exampleWithResult := example asExampleWithResult
-					run;
-					yourself.
-			exampleWithResult hasNoTestPragma
-				ifTrue: [ skipped := skipped + 1.
-					status := 'skipped' ]
-				ifFalse: [ message := exampleWithResult returnValue printString.
-					exampleWithResult isError
-						ifTrue: [ errors := errors + 1.
-							status := 'error' ];
-						ifFalse: [ exampleWithResult isSuccess
-								ifTrue: [ successes := successes + 1. status := 'success' ]
-								ifFalse: [ failures := failures + 1 . exampleWithResult isFailure ifTrue: [ status := 'failure' ] ] ] ].
-			detail := {'className' -> example methodClass name asString.
-					'selector' -> example selector asString.
-					'status' -> status.
-					'result' -> message} asDictionary.
-			details add: detail ]
-				on: Error
-				do: [ :ex | 
-					status := 'error'.
-					message := ex printString ] ].
+			exampleWithResult := example asExampleWithResult.
+			exampleWithResult hasNoTestPragma ifFalse: [ exampleWithResult run ].
+			detail := GtLExampleWithResultDomainObject new
+					exampleWithResult: exampleWithResult.
+			details add: detail ] on: Error do: [ :ex | ex return: nil ] ].
 
-	summary := {'total' -> details size.
-			'successes' -> successes .
-			'failures' -> failures .
-			'errors' -> errors .
-			'skips' -> skipped.
-			'details' -> details asArray.
-			'notFound' -> notFound} asDictionary.
-	^ NeoJSONWriter toString: summary
+	^ GtLExampleWithResultsDomainObject new
+		exampleWithResults: details asArray;
+		notFoundClassNames: notFound asArray
 ]

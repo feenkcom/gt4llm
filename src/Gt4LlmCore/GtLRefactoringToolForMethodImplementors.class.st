@@ -39,19 +39,26 @@ GtLRefactoringToolForMethodImplementors >> parameters [
 
 { #category : #'llm-generated' }
 GtLRefactoringToolForMethodImplementors >> privatePerformToolCall: aToolCall [
-	| arguments methodName result |
-	self model ifNil: [ ^ 'Model not provided' ].
+	| arguments methodName implementors |
+	self model
+		ifNil: [ ^ GtLMissingInformationDomainObject new
+				receiverName: self name;
+				missingModelName: 'model' ].
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
-	methodName := arguments at: 'methodName' ifAbsent: [ ^ 'Method name not provided' ].
-	result := String
-		streamContents: [ :stream |
-			self model
-				allImplementorsOf: methodName asSymbol
-				do: [ :each |
-					stream << each name.
-					each isMeta ifTrue: [ stream << ' class' ].
-					stream cr ] ].
-	^ result isEmpty
-		ifTrue: [ 'No implementors found' ]
-		ifFalse: [ result ]
+	methodName := arguments
+			at: 'methodName'
+			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
+					receiverName: self name;
+					arguments: arguments;
+					missingArgument: 'methodName' ].
+	implementors := Array
+			streamContents: [ :stream | 
+				self model
+					allImplementorsOf: methodName asSymbol
+					do: [ :each | stream nextPut: each ] ].
+
+	^ GtLRefactoringMethodImplementorsDomainObject new
+		model: self model;
+		methodName: methodName;
+		implementors: implementors
 ]

@@ -40,20 +40,20 @@ GtLRefactoringToolForClassLookup >> parameters [
 { #category : #'llm-generated' }
 GtLRefactoringToolForClassLookup >> privatePerformToolCall: aToolCall [
 	| arguments className targetClass |
-	self model ifNil: [ ^ 'Model not provided' ].
+	self model
+		ifNil: [ ^ GtLMissingInformationDomainObject new
+				receiverName: self name;
+				missingModelName: 'model' ].
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
-	className := arguments at: 'className' ifAbsent: [ ^ 'Class name not provided' ].
+	className := arguments
+			at: 'className'
+			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
+					receiverName: self name;
+					arguments: arguments;
+					missingArgument: 'className' ].
 	targetClass := self model classNamed: className.
-	targetClass ifNil: [ ^ 'Class not found' ].
-	^ STONJSON
-		toString: {
-			'class' -> targetClass name asString.
-			'superclass' -> (targetClass superclass
-				ifNil: [ nil ]
-				ifNotNil: [ :spr | spr name asString ]).
-			'package' -> targetClass realClass packageName.
-			'instanceSlots' -> targetClass instanceVariableNames asArray.
-			'classSlots' -> targetClass classSide instanceVariableNames asArray.
-			'allInstanceMethods' -> targetClass selectors asArray.
-			'allClassMethods' -> targetClass classSide selectors asArray } asDictionary
+	targetClass ifNil: [ ^ GtLMissingDomainObject new objectName: className ].
+	^ GtLRefactoringClassDomainObject new
+		model: self model;
+		targetClass: targetClass
 ]

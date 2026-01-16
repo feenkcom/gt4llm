@@ -28,13 +28,28 @@ GtLToolForRewriter >> parameters [
 GtLToolForRewriter >> privatePerformToolCall: aToolCall [
 	| arguments code object serializer |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
-	code := arguments at: 'rewrite' ifAbsent: [ ^ 'Rewrite not provided' ].
-	code ifNil: [ ^ 'Rewrite not provided' ].
+	code := arguments
+			at: 'rewrite'
+			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
+					receiverName: self name;
+					arguments: arguments;
+					missingArgument: 'rewrite' ].
+	code
+		ifNil: [ ^ GtLMissingArgumentDomainObject new
+				receiverName: self name;
+				arguments: arguments;
+				missingArgument: 'rewrite' ].
 	code := code asString.
-	code isEmpty ifTrue: [ ^ 'Rewrite not provided' ].
+	code isEmpty
+		ifTrue: [ ^ GtLMissingArgumentDomainObject new
+				receiverName: self name;
+				arguments: arguments;
+				missingArgument: 'rewrite' ].
 	object := [ OpalCompiler new evaluate: code ]
-		on: Error
-		do: [ :ex | ^ 'Error: ', String cr, ex stackString ].
-	serializer := GtLValueSerializer new.
-	^ STONJSON toStringPretty: (serializer serializeValue: object)
+			on: Error
+			do: [ :ex | 
+				^ GtLExceptionDomainObject new
+					freeze: ex;
+					description: 'Rewriter code execution failed' ].
+	^ GtLValueDomainObject new value: object
 ]

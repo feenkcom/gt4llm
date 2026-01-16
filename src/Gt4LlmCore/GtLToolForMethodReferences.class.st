@@ -31,11 +31,19 @@ GtLToolForMethodReferences >> parameters [
 
 { #category : #accessing }
 GtLToolForMethodReferences >> privatePerformToolCall: aToolCall [
-	| argument selector references |
+	| arguments argument selector references promise |
+	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	argument := aToolCall anyArgument.
-	argument ifNil: [ ^ 'Selector not provided' ].
+	argument
+		ifNil: [ ^ GtLMissingArgumentDomainObject new
+				receiverName: self name;
+				arguments: arguments;
+				missingArgument: 'methodName' ].
 	selector := argument asSymbol.
-	references := selector gtReferences result toArray wait collect: #name.
-	references isEmpty ifTrue: [ ^ 'No references found' ].
-	^ Character cr join: (references first: (100 min: references size))
+	promise := selector gtReferences result toArray
+			await: GtLSettings futureExecutionConfiguration.
+	references := promise wait.
+	^ GtLMethodsDomainObject new
+		methods: (references first: (100 min: references size));
+		mayHaveMore: references size > 100
 ]

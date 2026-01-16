@@ -33,39 +33,63 @@ GtLToolForClassCreation >> parameters [
 GtLToolForClassCreation >> privatePerformToolCall: aToolCall [
 	| arguments classNameValue classNameString classNameSymbol superclassValue superclassName superclass instanceVariables classVariables packageValue packageName createdClass |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
-	classNameValue := arguments at: 'className' ifAbsent: [ ^ 'Class name not provided' ].
+	classNameValue := arguments
+			at: 'className'
+			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
+					receiverName: self name;
+					arguments: aToolCall arguments;
+					missingArgument: 'className' ].
 	classNameString := classNameValue asString trimBoth.
-	classNameString isEmpty ifTrue: [ ^ 'Class name not provided' ].
+	classNameString isEmpty
+		ifTrue: [ ^ GtLMissingArgumentDomainObject new
+				receiverName: self name;
+				arguments: aToolCall arguments;
+				missingArgument: 'className' ].
 	classNameSymbol := classNameString asSymbol.
 	(Smalltalk globals includesKey: classNameSymbol)
-		ifTrue: [ ^ 'Class already exists' ].
-	superclassValue := arguments at: 'superclassName' ifAbsent: [ ^ 'Superclass name not provided' ].
+		ifTrue: [ ^ GtLUnexpectedDomainObject new objectName: classNameString ].
+	superclassValue := arguments
+			at: 'superclassName'
+			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
+					receiverName: self name;
+					arguments: aToolCall arguments;
+					missingArgument: 'superclassName' ].
 	superclassName := superclassValue asString trimBoth.
-	superclassName isEmpty ifTrue: [ ^ 'Superclass name not provided' ].
+	superclassName isEmpty
+		ifTrue: [ ^ GtLMissingArgumentDomainObject new
+				receiverName: self name;
+				arguments: aToolCall arguments;
+				missingArgument: 'superclassName' ].
 	superclass := Smalltalk globals
-		at: superclassName asSymbol
-		ifAbsent: [ ^ 'Superclass not found' ].
-	instanceVariables := self stringFromVariableNames: (arguments at: 'instanceVariables' ifAbsent: [ '' ]).
-	classVariables := self stringFromVariableNames: (arguments at: 'classVariables' ifAbsent: [ '' ]).
+			at: superclassName asSymbol
+			ifAbsent: [ ^ GtLMissingDomainObject new objectName: superclassName ].
+	instanceVariables := self
+			stringFromVariableNames: (arguments at: 'instanceVariables' ifAbsent: [ '' ]).
+	classVariables := self
+			stringFromVariableNames: (arguments at: 'classVariables' ifAbsent: [ '' ]).
 	packageValue := arguments at: 'package' ifAbsent: [ '' ].
 	packageName := packageValue ifNil: [ '' ].
 	packageName := packageName asString trimBoth.
-	packageName isEmpty ifTrue: [ ^ 'Package name not provided' ].
-	createdClass := [
-		superclass
+	packageName isEmpty
+		ifTrue: [ ^ GtLMissingArgumentDomainObject new
+				receiverName: self name;
+				arguments: aToolCall arguments;
+				missingArgument: 'package' ].
+	createdClass := [ superclass
 			subclass: classNameSymbol
 			instanceVariableNames: instanceVariables
 			classVariableNames: classVariables
 			package: packageName ]
-		on: Error
-		do: [ :error | ^ 'Class creation error: '
-				, ((error respondsTo: #messageText)
-					ifTrue: [ error messageText ifNil: [ error description ] ]
-					ifFalse: [ error description ]) ].
-	^ String streamContents: [ :stream |
-		stream
-			nextPutAll: 'Class created: ';
-			nextPutAll: createdClass name ]
+			on: Error
+			do: [ :error | 
+				^ GtLCouldNotCreateClassDomainObject new
+					superclass: superclass;
+					targetClassName: classNameString;
+					packageName: packageName;
+					instanceVariableNames: instanceVariables;
+					classVariableNames: classVariables;
+					freeze: error ].
+	^ GtLClassDomainObject new foundClass: createdClass
 ]
 
 { #category : #private }

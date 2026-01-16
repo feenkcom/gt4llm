@@ -33,16 +33,29 @@ GtLToolForSmalltalkCodeEvaluation >> parameters [
 GtLToolForSmalltalkCodeEvaluation >> privatePerformToolCall: aToolCall [
 	| arguments code object serializer serialization |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
-	code := arguments at: 'code' ifAbsent: [ ^ 'Code not provided' ].
-	code ifNil: [ ^ 'Code not provided' ].
-	code := code asString.
-	code isEmpty ifTrue: [ ^ 'Code not provided' ].
+	code := arguments
+			at: 'code'
+			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
+					receiverName: self name;
+					arguments: arguments;
+					missingArgument: 'code' ].
+	code
+		ifNil: [ ^ GtLMissingArgumentDomainObject new
+				receiverName: self name;
+				arguments: arguments;
+				missingArgument: 'code' ].
+	code := code asString trimBoth.
+	code isEmpty
+		ifTrue: [ ^ GtLMissingArgumentDomainObject new
+				receiverName: self name;
+				arguments: arguments;
+				missingArgument: 'code' ].
 	object := [ OpalCompiler new evaluate: code ]
 			on: Error
-			do: [ :ex | ^ 'Error: ' , String cr , ex stackString ].
-	serializer := GtLValueSerializer new.
-	serialization := [ serializer serializeValue: object ]
-			on: Error
-			do: [ :e | e printString ].
-	^ STONJSON toStringPretty: serialization
+			do: [ :ex | 
+				^ GtLExceptionDomainObject new
+					freeze: ex;
+					description: 'Error while evaluating smalltalk code' ].
+
+	^ GtLValueDomainObject new value: object
 ]

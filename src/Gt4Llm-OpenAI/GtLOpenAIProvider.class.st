@@ -174,12 +174,12 @@ GtLOpenAIProvider >> performToolCallsIn: result with: activeTools [
 	| toolOutputs |
 	toolOutputs := result toolCalls
 			collect: [ :aToolCall | 
-				| toolOutput newMessage|
+				| domainObject newMessage|
 				newMessage := GtLToolMessage new
 							toolCall: aToolCall.
 				chat addToolMessage: newMessage.
-				toolOutput := activeTools performToolCall: aToolCall.
-				newMessage output: toolOutput ].
+				domainObject := activeTools performToolCall: aToolCall.
+				newMessage output: domainObject ].
 	self chat signalRunHasUpdated.
 	^ self executeWait
 ]

@@ -156,12 +156,14 @@ GtLFunctionToolCall >> responseInput [
 
 { #category : #accessing }
 GtLFunctionToolCall >> result [
+	<return: #TGtLDomainObject>
+	GtJustContextStackSignal emit.
 	^ result
 ]
 
 { #category : #accessing }
-GtLFunctionToolCall >> result: anObject [
-	result := anObject
+GtLFunctionToolCall >> result: aToolResult [
+	result := aToolResult
 ]
 
 { #category : #accessing }

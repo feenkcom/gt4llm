@@ -13,11 +13,6 @@ GtLMarkdown class >> content: aString [
 ]
 
 { #category : #accessing }
-GtLMarkdown >> asJsonDictionary [
-	^ {'content' -> self content} asDictionary
-]
-
-{ #category : #accessing }
 GtLMarkdown >> content [
 	^ content
 ]

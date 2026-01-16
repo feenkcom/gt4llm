@@ -38,16 +38,28 @@ GtLToolForSearchFilter >> parameters [
 GtLToolForSearchFilter >> privatePerformToolCall: aToolCall [
 	| arguments query |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
-	(arguments includesKey: 'query') ifFalse: [ ^ 'Query not provided' ].
+	(arguments includesKey: 'query')
+		ifFalse: [ ^ GtLMissingArgumentDomainObject new
+				receiverName: self name;
+				arguments: arguments;
+				missingArgument: 'query' ].
 	query := (arguments at: 'query') asString.
-	^ [ | result resultItems |
+	^ [ | result allItems someItems |
 	result := OpalCompiler new
 			source: query;
 			evaluate.
-	resultItems := result contents.
-	resultItems := resultItems
-			first: (self class maximumResultItemCount min: resultItems size).
-	Character cr join: (resultItems collect: [ :each | each printString ]) ]
+	allItems := result contents.
+	someItems := allItems
+			first: (self class maximumResultItemCount min: allItems size).
+
+	GtLSearchFilterDomainObject new
+		query: query;
+		filter: result;
+		items: someItems;
+		mayHaveMore: allItems size > someItems size ]
 		on: Error
-		do: [ :error | 'There was an error when evaluating the query: ' , error printString ]
+		do: [ :error | 
+			GtLExceptionDomainObject new
+				exception: error;
+				description: 'There was an error when evaluating the query: ' , error printString ]
 ]

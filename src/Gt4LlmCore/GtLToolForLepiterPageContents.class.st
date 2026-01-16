@@ -42,13 +42,18 @@ GtLToolForLepiterPageContents >> parameters [
 GtLToolForLepiterPageContents >> privatePerformToolCall: aToolCall [
 	| arguments uuidString |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
-	arguments isEmpty ifTrue: [ ^ 'UID not provided' ].
-	uuidString := arguments at: 'uid' ifAbsent: [ ^ 'UID not provided' ].
+	uuidString := arguments
+			at: 'uid'
+			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
+					receiverName: self name;
+					arguments: arguments;
+					missingArgument: 'uid' ].
 	knowledgeBases
 		do: [ :knowledgeBase | 
 			knowledgeBase
 				pageWithID: uuidString
 				ifPresent: [ :page | ^ LeJsonV4 uniqueInstance serializePretty: page ]
 				ifAbsent: [  ] ].
-	^ 'Page not found'
+
+	^ GtLMissingDomainObject new objectName: uuidString
 ]

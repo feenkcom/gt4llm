@@ -39,18 +39,28 @@ GtLRefactoringToolForClassReferences >> parameters [
 
 { #category : #'llm-generated' }
 GtLRefactoringToolForClassReferences >> privatePerformToolCall: aToolCall [
-	| arguments className targetClass |
-	self model ifNil: [ ^ 'Model not provided' ].
+	| arguments className targetClass references |
+	self model
+		ifNil: [ ^ GtLMissingInformationDomainObject new
+				receiverName: self name;
+				missingModelName: 'model' ].
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
-	className := arguments at: 'className' ifAbsent: [ ^ 'Class name not provided' ].
+	className := arguments
+			at: 'className'
+			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
+					receiverName: self name;
+					arguments: arguments;
+					missingArgument: 'className' ].
 	targetClass := self model classNamed: className.
-	targetClass ifNil: [ ^ 'Class not found' ].
-	^ String
-		streamContents: [ :stream |
+	targetClass ifNil: [ ^ GtLMissingDomainObject new objectName: className ].
+	references := Array
+		streamContents: [ :stream | 
 			self model
 				allReferencesToClass: targetClass
-				do: [ :each |
-					stream << each modelClass name.
-					each modelClass isMeta ifTrue: [ stream << ' class' ].
-					stream << '>>#' << each selector << String cr ] ]
+				do: [ :each | stream << each ] ].
+	
+	^ GtLRefactoringClassReferencesDomainObject new 
+		model: self model;
+		targetClass: targetClass;
+		references: references.
 ]

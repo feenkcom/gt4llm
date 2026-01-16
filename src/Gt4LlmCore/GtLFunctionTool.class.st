@@ -128,5 +128,5 @@ GtLFunctionTool >> privatePerformToolCall: aGtLlmFunctionToolCall [
 	(GtLlmFunctionCallPerformedSignal new
 		tool: self;
 		functionCall: aGtLlmFunctionToolCall) emit."
-	^ result
+	^ GtLValueDomainObject new value: result
 ]

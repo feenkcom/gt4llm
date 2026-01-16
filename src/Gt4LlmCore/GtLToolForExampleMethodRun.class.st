@@ -31,28 +31,41 @@ GtLToolForExampleMethodRun >> parameters [
 
 { #category : #accessing }
 GtLToolForExampleMethodRun >> privatePerformToolCall: aToolCall [
-	| arguments className class methodName classSideValue method example exampleResult |
+	| arguments className targetClass methodName classSideValue method example exampleResult |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
-	className := arguments at: 'className' ifAbsent: [ ^ 'Class name not provided' ].
-	class := className asClassIfAbsent: [ ^ 'Class not found' ].
-	methodName := arguments at: 'methodName' ifAbsent: [ ^ 'Method name not provided' ].
+	className := arguments
+			at: 'className'
+			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
+					receiverName: self name;
+					arguments: arguments;
+					missingArgument: 'className' ].
+	targetClass := className
+			asClassIfAbsent: [ ^ GtLMissingDomainObject new objectName: className ].
+	methodName := arguments
+			at: 'methodName'
+			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
+					receiverName: self name;
+					arguments: arguments;
+					missingArgument: 'methodName' ].
 	classSideValue := arguments at: 'classSide' ifAbsent: [ false ].
-	((classSideValue = true) or: [ classSideValue asString = 'true' ])
-		ifTrue: [ class := class class ].
-	method := class
-		compiledMethodAt: methodName asSymbol
-		ifAbsent: [ ^ 'Method not found' ].
+	(#(true 'true' 't' 'yes' 'y') includes: classSideValue)
+		ifTrue: [ targetClass := targetClass classSide ].
+	method := targetClass
+			compiledMethodAt: methodName asSymbol
+			ifAbsent: [ ^ GtLMissingDomainObject new
+					objectName: ('{1}>>#{2}'
+							format: {targetClass.
+									methodName}) ].
 	(method pragmas anySatisfy: [ :pragma | pragma selector = #gtExample ])
-		ifFalse: [ ^ 'Method is not an example' ].
-	example := method gtExample.
-	example ifNil: [ ^ 'Could not build example' ].
-	[ 
-		exampleResult := example run.
-		exampleResult ifNil: [ ^ 'error' ].
-		exampleResult isFailure ifTrue: [ ^ 'failure' ].
-		exampleResult isError ifTrue: [ ^ 'error' ].
-		exampleResult hasProblems ifTrue: [ ^ 'error' ].
-		exampleResult isSuccess ifTrue: [ ^ 'success' ].
-		^ 'error'
-	] on: Error do: [ :ex | ^ 'error' ]
+		ifFalse: [ ^ GtLMethodIsNotExampleDomainObject new method: method ].
+	example := method gtExample asExampleWithResult.
+	example ifNil: [ ^ GtLMethodIsNotExampleDomainObject new method: method ].
+	[ exampleResult := example run ]
+		on: Error
+		do: [ :ex | 
+			^ GtLExceptionDomainObject new
+				freeze: ex;
+				description: ('Example execution failed: {1}' format: {method name}) ].
+
+	^ GtLExampleWithResultDomainObject new exampleWithResult: exampleResult
 ]

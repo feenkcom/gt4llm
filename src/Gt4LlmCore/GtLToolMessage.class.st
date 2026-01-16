@@ -90,6 +90,7 @@ GtLToolMessage >> output [
 
 { #category : #accessing }
 GtLToolMessage >> output: anObject [
+	GtJustContextStackSignal emit.
 	output := anObject
 ]
 
