@@ -23,22 +23,22 @@ GtLExampleWithResultDomainObject >> exampleWithResult: anObject [
 ]
 
 { #category : #'api - testing' }
-GtLExampleWithResultDomainObject >> isError [
+GtLExampleWithResultDomainObject >> isErrorResult [
 	^ self exampleWithResult isError
 ]
 
 { #category : #'api - testing' }
-GtLExampleWithResultDomainObject >> isFailure [
+GtLExampleWithResultDomainObject >> isFailureResult [
 	^ self exampleWithResult isFailure
 ]
 
 { #category : #'api - testing' }
-GtLExampleWithResultDomainObject >> isSkipped [
+GtLExampleWithResultDomainObject >> isSkippedResult [
 	^ self exampleWithResult isSkipped
 ]
 
 { #category : #'api - testing' }
-GtLExampleWithResultDomainObject >> isSuccess [
+GtLExampleWithResultDomainObject >> isSuccessResult [
 	^ self exampleWithResult isSuccess
 ]
 
@@ -63,6 +63,6 @@ GtLExampleWithResultDomainObject >> serializeToOpenAIResponseJsonObject [
 
 { #category : #accessing }
 GtLExampleWithResultDomainObject >> statusText [
-	self isSkipped ifTrue: [ ^ 'skipped' ].
+	self isSkippedResult ifTrue: [ ^ 'skipped' ].
 	^ self exampleWithResult statusText asString lowercase
 ]
