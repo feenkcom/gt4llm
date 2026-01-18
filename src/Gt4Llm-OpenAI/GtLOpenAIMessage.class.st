@@ -19,27 +19,7 @@ GtLOpenAIMessage >> createdAt: anObject [
 	createdAt := self deserializeTime: anObject
 ]
 
-{ #category : #accessing }
-GtLOpenAIMessage >> createdAtString [
-	^ nil
-]
-
-{ #category : #accessing }
-GtLOpenAIMessage >> createdAtString: anObject [
-	createdAt := self deserializeTime: anObject
-]
-
 { #category : #testing }
 GtLOpenAIMessage >> hasResponse [
 	^ self contentText isNotEmpty
-]
-
-{ #category : #accessing }
-GtLOpenAIMessage >> idString [
-	^ nil
-]
-
-{ #category : #accessing }
-GtLOpenAIMessage >> idString: anObject [
-	id := anObject
 ]
