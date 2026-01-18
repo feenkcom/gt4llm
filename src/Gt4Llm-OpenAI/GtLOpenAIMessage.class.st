@@ -1,16 +1,8 @@
 Class {
 	#name : #GtLOpenAIMessage,
 	#superclass : #GtLChatMessage,
-	#instVars : [
-		'completedAt'
-	],
 	#category : #'Gt4Llm-OpenAI'
 }
-
-{ #category : #accessing }
-GtLOpenAIMessage class >> defaultRole [
-	^ nil
-]
 
 { #category : #'instance creation' }
 GtLOpenAIMessage class >> from: aDict [
@@ -22,30 +14,9 @@ GtLOpenAIMessage class >> serializationProperties [
 	^ {
 		#content -> #contentText.
 		#created_at -> #createdAtString.
-		#completed_at -> #completedAtString.
 		#id -> #idString.
 		#role -> #role
 	}
-]
-
-{ #category : #accessing }
-GtLOpenAIMessage >> completedAt [
-	^ completedAt
-]
-
-{ #category : #accessing }
-GtLOpenAIMessage >> completedAt: anObject [
-	completedAt := anObject
-]
-
-{ #category : #accessing }
-GtLOpenAIMessage >> completedAtString [
-	^ nil
-]
-
-{ #category : #accessing }
-GtLOpenAIMessage >> completedAtString: anObject [
-	completedAt := self deserializeTime: anObject
 ]
 
 { #category : #accessing }
@@ -87,25 +58,4 @@ GtLOpenAIMessage >> idString [
 { #category : #accessing }
 GtLOpenAIMessage >> idString: anObject [
 	id := anObject
-]
-
-{ #category : #accessing }
-GtLOpenAIMessage >> isReady [
-	^ completedAt notNil
-]
-
-{ #category : #accessing }
-GtLOpenAIMessage >> messageFiles [
-	self contentText = self content ifTrue: [ ^ GtLOpenAIFilesGroup new ].
-
-	^ self content
-		select: [ :aValue | (aValue at: 'type') = 'input_image' ]
-		thenCollect: [ :aValue | 
-			| byteArray |
-			byteArray := ((aValue at: 'image_url')
-					removePrefix: 'data:image/jpeg;base64,') base64Decoded.
-			SkiaImage
-				fromBuffer: byteArray
-				start: 0
-				end: byteArray size - 1 ]
 ]

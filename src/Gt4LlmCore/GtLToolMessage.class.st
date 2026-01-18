@@ -8,11 +8,6 @@ Class {
 	#category : #'Gt4LlmCore-Core'
 }
 
-{ #category : #'as yet unclassified' }
-GtLToolMessage class >> defaultRole [
-	^ 'tool'
-]
-
 { #category : #accessing }
 GtLToolMessage class >> leJsonV4Name [
 	^ #gtLToolMessage
@@ -97,6 +92,11 @@ GtLToolMessage >> output: anObject [
 GtLToolMessage >> responseModels [
 	"we should collect the tools from the toolCall"
 	^ {}
+]
+
+{ #category : #'as yet unclassified' }
+GtLToolMessage >> role [
+	^ 'tool'
 ]
 
 { #category : #'as yet unclassified' }

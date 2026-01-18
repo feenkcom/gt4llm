@@ -8,11 +8,6 @@ Class {
 	#category : #'Gt4LlmCore-Core'
 }
 
-{ #category : #accessing }
-GtLErrorMessage class >> defaultRole [
-	^ 'error'
-]
-
 { #category : #'instance creation' }
 GtLErrorMessage class >> freeze: anError [ 
 	^ self new exception: (GtSystemUtility freeze: anError)
@@ -126,6 +121,11 @@ GtLErrorMessage >> otherExceptions: aCollection [
 	"Set a list of exceptions that were catched while handling the initial exception."
 
 	otherExceptions := aCollection
+]
+
+{ #category : #accessing }
+GtLErrorMessage >> role [
+	^ 'error'
 ]
 
 { #category : #accessing }
