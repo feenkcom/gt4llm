@@ -22,19 +22,6 @@ GtLChatMessage class >> deSerializeAllImplementorsInstances [
 		ifFalse: [ { self new } ]
 ]
 
-{ #category : #'instance creation' }
-GtLChatMessage class >> from: aDictionary [
-	| aRole aContent roleClass |
-	self isAbstract ifFalse: [ ^ self new from: aDictionary ].
-
-	aRole := aDictionary at: 'role'.
-	aContent := aDictionary at: 'content'.
-
-	roleClass := self rolesToClasses at: aRole ifAbsent: [ self ].
-
-	^ roleClass new from: aDictionary
-]
-
 { #category : #accessing }
 GtLChatMessage class >> leJsonV4AttributeMapping [
 

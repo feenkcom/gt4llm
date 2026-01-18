@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLOpenAIUserMessage,
-	#superclass : #GtLOpenAIMessage,
+	#superclass : #GtLChatMessage,
 	#instVars : [
 		'inputModels',
 		'content',
