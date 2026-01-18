@@ -100,7 +100,7 @@ GtLToolMessage >> role [
 ]
 
 { #category : #'as yet unclassified' }
-GtLToolMessage >> serializeResponse [
+GtLToolMessage >> serializeForOpenAIResponsesAPI [
 	^ {'type' -> 'function_call_output'.
 		'call_id' -> toolCall id.
 		'output' -> self output} asDictionary

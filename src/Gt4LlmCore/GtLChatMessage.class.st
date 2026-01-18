@@ -44,7 +44,6 @@ GtLChatMessage class >> leJsonV4AttributeMapping [
 		add: #id -> #id;
 		add: #createdAt -> #createdAt;
 "		add: #images -> #imageStrings;"
-		add: #model -> #model;
 		yourself.
 ]
 
@@ -53,21 +52,10 @@ GtLChatMessage class >> rolesToClasses [
 	^ {('tool' -> GtLToolMessage)} asDictionary
 ]
 
-{ #category : #accessing }
-GtLChatMessage class >> serializationProperties [
-	^ {#role -> #role.
-		#content -> #contentText}
-]
-
 { #category : #visiting }
 GtLChatMessage >> acceptVisitor: aVisitor [
 
 	^ aVisitor visitGtLChatMessage: self
-]
-
-{ #category : #accessing }
-GtLChatMessage >> action [
-	^ [ self contentJson at: 'Action' ] on: Error do: [ nil ]
 ]
 
 { #category : #accessing }
@@ -88,11 +76,6 @@ GtLChatMessage >> ancestor [
 	^ self chat ancestorOf: self
 ]
 
-{ #category : #accessing }
-GtLChatMessage >> annotations [
-	^ {}
-]
-
 { #category : #announcer }
 GtLChatMessage >> announce: anAnnouncement [
 	^ self announcer announce: anAnnouncement
@@ -102,11 +85,6 @@ GtLChatMessage >> announce: anAnnouncement [
 GtLChatMessage >> announcer [
 	<return: #Announcer>
 	^ announcer ifNil: [announcer := Announcer new]
-]
-
-{ #category : #accessing }
-GtLChatMessage >> arguments [
-	^ [ self contentJson at: 'Arguments' ] on: Error do: [ nil ]
 ]
 
 { #category : #accessing }
@@ -130,26 +108,6 @@ GtLChatMessage >> chat: aChat [
 	chat  
 		previousUserMessageIfPresent: [ :msg | self updateDataFromMessage: msg ] 
 		ifAbsent: [ self updateDataFromChat: aChat]
-]
-
-{ #category : #accessing }
-GtLChatMessage >> contentFiles [
-	^ self rawContent
-				select: [ :aValue | (aValue at: #type) = 'image' ]
-				thenCollect: [ :aValue | 
-					aValue
-						at: #source
-						at: #data
-						ifAbsent: [ '' ] ]
-]
-
-{ #category : #accessing }
-GtLChatMessage >> contentJson [
-	| ston value |
-	ston := STON reader on: self contentText readStream.
-	value := ston next.
-	self assert: ston atEnd.
-	^ value 
 ]
 
 { #category : #accessing }
@@ -232,33 +190,6 @@ GtLChatMessage >> gtFormatFor: aView [
 { #category : #'gt - inspector' }
 GtLChatMessage >> gtInspectorTargetModels [
 	^ #()
-]
-
-{ #category : #'gt - extensions' }
-GtLChatMessage >> gtJsonFor: aView [
-	<gtView>
-	<gtLlmView>
-	[ self contentJson ] on: Error do: [ ^ aView empty ].
-
-	^ (self contentJson gtTreeFor: aView)
-		title: 'JSON data';
-		priority: 10
-]
-
-{ #category : #'gt - extensions' }
-GtLChatMessage >> gtTextFor: aView [
-	<gtView>
-	<gtLlmView>
-	| json |
-	[ json := self contentJson ] on: Error do: [ ^ aView empty ].
-
-	json at: 'Text' ifAbsent: [ ^ aView empty ].
-
-	^ aView textEditor
-		title: 'Text';
-		priority: 1;
-		text: [ json at: 'Text' ];
-		styler: [ GtLlmMessageStyler new threadMessageViewModel: self asViewModel ]
 ]
 
 { #category : #ui }
@@ -357,13 +288,6 @@ GtLChatMessage >> isFailure [
 	^ false
 ]
 
-{ #category : #deprecated }
-GtLChatMessage >> isRawMessage [
-	"I think it is not used at all."
-
-	^ false
-]
-
 { #category : #'api - testing' }
 GtLChatMessage >> isReady [
 	"Return true if a message is ready, e.g., fully initialized."
@@ -436,11 +360,7 @@ GtLChatMessage >> senderText [
 
 { #category : #'as yet unclassified' }
 GtLChatMessage >> serializeForOpenAIResponsesAPI [
-	^ self serialize
-]
-
-{ #category : #private }
-GtLChatMessage >> serializeInline [
+	^ self subclassResponsibility
 ]
 
 { #category : #accessing }
