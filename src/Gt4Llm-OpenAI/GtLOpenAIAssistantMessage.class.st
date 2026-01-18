@@ -2,7 +2,9 @@ Class {
 	#name : #GtLOpenAIAssistantMessage,
 	#superclass : #GtLOpenAIMessage,
 	#instVars : [
-		'responseModels'
+		'responseModels',
+		'modelName',
+		'rawData'
 	],
 	#category : #'Gt4Llm-OpenAI'
 }
@@ -85,9 +87,24 @@ GtLOpenAIAssistantMessage >> gtViewResponseModelsFor: aView [
 		view: #gtItemsFor:
 ]
 
+{ #category : #'as yet unclassified' }
+GtLOpenAIAssistantMessage >> modelName: anObject [
+	modelName := anObject
+]
+
 { #category : #reading }
 GtLOpenAIAssistantMessage >> rawContent [
 	^ rawData at: 'content'
+]
+
+{ #category : #'as yet unclassified' }
+GtLOpenAIAssistantMessage >> rawData [
+	^ rawData
+]
+
+{ #category : #'as yet unclassified' }
+GtLOpenAIAssistantMessage >> rawData: anObject [
+	rawData := anObject
 ]
 
 { #category : #accessing }
@@ -99,4 +116,11 @@ GtLOpenAIAssistantMessage >> responseModels [
 { #category : #'as yet unclassified' }
 GtLOpenAIAssistantMessage >> role [
 	^ 'assistant'
+]
+
+{ #category : #'as yet unclassified' }
+GtLOpenAIAssistantMessage >> senderText [
+	^ modelName
+		ifNil: [ 'Assistant' ]
+		ifNotNil: [ :aModel | GtLConnectionRegistry uniqueInstance labelForModel: aModel ]
 ]

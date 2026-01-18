@@ -8,8 +8,7 @@ Class {
 		'instructions',
 		'tools',
 		'announcer',
-		'formatDescriptions',
-		'modelName'
+		'formatDescriptions'
 	],
 	#category : #'Gt4LlmCore-Core'
 }
@@ -419,16 +418,6 @@ GtLChatMessage >> messagesDo: aBlock [
 ]
 
 { #category : #accessing }
-GtLChatMessage >> model [
-	^ modelName
-]
-
-{ #category : #accessing }
-GtLChatMessage >> model: anObject [
-	modelName := anObject
-]
-
-{ #category : #accessing }
 GtLChatMessage >> role [
 	^ self subclassResponsibility
 ]
@@ -440,12 +429,6 @@ GtLChatMessage >> role: aString [
 
 { #category : #accessing }
 GtLChatMessage >> senderText [
-	self isAssistantRole
-		ifTrue: [ ^ self model
-				ifNil: [ 'Assistant' ]
-				ifNotNil: [ :aModel | 
-					GtLConnectionRegistry uniqueInstance 
-						labelForModel: aModel ] ].
 	self isSystemRole ifTrue: [ ^ 'System' ].
 	self isToolRole ifTrue: [ ^ 'Tool' ].
 	^ 'You'
