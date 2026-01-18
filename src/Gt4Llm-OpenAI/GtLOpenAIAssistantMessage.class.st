@@ -98,5 +98,5 @@ GtLOpenAIAssistantMessage >> responseModels [
 
 { #category : #'as yet unclassified' }
 GtLOpenAIAssistantMessage >> role [
-	^ self rawData at: 'role'
+	^ 'assistant'
 ]
