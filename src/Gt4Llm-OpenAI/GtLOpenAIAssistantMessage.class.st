@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLOpenAIAssistantMessage,
-	#superclass : #GtLOpenAIMessage,
+	#superclass : #GtLChatMessage,
 	#instVars : [
 		'responseModels',
 		'modelName',
@@ -85,6 +85,11 @@ GtLOpenAIAssistantMessage >> gtViewResponseModelsFor: aView [
 		priority: 8;
 		object: [ self responseModels ];
 		view: #gtItemsFor:
+]
+
+{ #category : #testing }
+GtLOpenAIAssistantMessage >> hasResponse [
+	^ self contentText isNotEmpty
 ]
 
 { #category : #'as yet unclassified' }
