@@ -10,22 +10,6 @@ GtLOpenAIMessage class >> from: aDict [
 ]
 
 { #category : #accessing }
-GtLOpenAIMessage class >> serializationProperties [
-	^ {
-		#content -> #contentText.
-		#created_at -> #createdAtString.
-		#id -> #idString.
-		#role -> #role
-	}
-]
-
-{ #category : #accessing }
-GtLOpenAIMessage >> contentJson [
-	self contentText ifEmpty: [ ^ {} asDictionary ].
-	^ STONJSON fromString: self contentText
-]
-
-{ #category : #accessing }
 GtLOpenAIMessage >> createdAt [
 	^ createdAt
 ]
