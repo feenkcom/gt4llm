@@ -23,11 +23,6 @@ GtLChatMessage class >> deSerializeAllImplementorsInstances [
 		ifFalse: [ { self new } ]
 ]
 
-{ #category : #accessing }
-GtLChatMessage class >> defaultRole [
-	^ nil
-]
-
 { #category : #'instance creation' }
 GtLChatMessage class >> from: aDictionary [
 	| aRole aContent roleClass |
@@ -415,32 +410,6 @@ GtLChatMessage >> isUserRole [
 	^ self role = 'user'
 ]
 
-{ #category : #accessing }
-GtLChatMessage >> messageFiles [
-	self images
-		ifNotNil: [ ^ self images
-				collect: [ :aBase64Image | 
-					| aByteArray |
-					aByteArray := aBase64Image base64Decoded.
-					SkiaImage
-						fromBuffer: aByteArray
-						start: 0
-						end: aByteArray size - 1 ] ].
-
-	self contentFiles
-		ifNotEmpty: [ :contentFiles | 
-			^ contentFiles
-				collect: [ :aBase64Image | 
-					| aByteArray |
-					aByteArray := aBase64Image base64Decoded.
-					SkiaImage
-						fromBuffer: aByteArray
-						start: 0
-						end: aByteArray size - 1 ] ].
-
-	^ {}
-]
-
 { #category : #'api - message' }
 GtLChatMessage >> messagesDo: aBlock [
 	"Evaluate do block on all messages.
@@ -461,7 +430,7 @@ GtLChatMessage >> model: anObject [
 
 { #category : #accessing }
 GtLChatMessage >> role [
-	^ self class defaultRole
+	^ self subclassResponsibility
 ]
 
 { #category : #accessing }
