@@ -86,7 +86,7 @@ GtLOpenAIProvider >> executeWait [
 			ifFalse: [ aMessage := isStreaming
 						ifTrue: [ self streamingMessageFrom: result ]
 						ifFalse: [ self assistantMessageClass new
-								model: self modelName;
+								modelName: self modelName;
 								rawData: (result output detect: [ :anOutput | (anOutput at: 'type') = 'message' ]) ].
 
 				self chat addAssistantMessage: aMessage.
