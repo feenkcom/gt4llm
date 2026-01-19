@@ -16,27 +16,27 @@ GtLTools class >> gtCodeChange [
 { #category : #defaults }
 GtLTools class >> gtExamplesRun [
 	^ self
-		withAll: {	GtLlmToolForExampleMethodRun new.
-					GtLlmToolForExampleClassesRun new} asOrderedCollection
+		withAll: {	GtLToolForExampleMethodRun new.
+					GtLToolForExampleClassesRun new} asOrderedCollection
 ]
 
 { #category : #defaults }
 GtLTools class >> gtSearch [
 	^ self
-		withAll: {GtLlmToolForClassSearch new.
-				GtLlmToolForClassSubclasses new.
-				GtLlmToolForClassLookup new.
-				GtLlmToolForClassReferences new.
-				GtLlmToolForMethodReferences new.
-				GtLlmToolForMethodImplementors new.
-				GtLlmToolForMethodSource new} asOrderedCollection
+		withAll: {GtLToolForClassSearch new.
+				GtLToolForClassSubclasses new.
+				GtLToolForClassLookup new.
+				GtLToolForClassReferences new.
+				GtLToolForMethodReferences new.
+				GtLToolForMethodImplementors new.
+				GtLToolForMethodSource new} asOrderedCollection
 ]
 
 { #category : #defaults }
 GtLTools class >> leSearch [
 	^ self
-		withAll: {GtLlmToolForSearchForLepiterPages new.
-					GtLlmToolForLepiterPageContents new.} asOrderedCollection
+		withAll: {GtLToolForSearchForLepiterPages new.
+					GtLToolForLepiterPageContents new.} asOrderedCollection
 ]
 
 { #category : #'as yet unclassified' }
