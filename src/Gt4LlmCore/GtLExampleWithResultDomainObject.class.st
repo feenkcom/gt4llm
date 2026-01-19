@@ -19,6 +19,8 @@ GtLExampleWithResultDomainObject >> exampleWithResult [
 
 { #category : #accessing }
 GtLExampleWithResultDomainObject >> exampleWithResult: anObject [
+	self assert: [ anObject isKindOf: GtExampleWithResult ].
+
 	exampleWithResult := anObject
 ]
 
@@ -64,5 +66,5 @@ GtLExampleWithResultDomainObject >> serializeToOpenAIResponseJsonObject [
 { #category : #accessing }
 GtLExampleWithResultDomainObject >> statusText [
 	self isSkippedResult ifTrue: [ ^ 'skipped' ].
-	^ self exampleWithResult statusText asString lowercase
+	^ self exampleWithResult statusText asString asLowercase
 ]

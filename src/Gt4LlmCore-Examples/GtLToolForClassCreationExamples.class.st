@@ -15,26 +15,24 @@ GtLToolForClassCreationExamples >> createClassThatAlreadyExists [
 		instanceVariableNames: ''
 		classVariableNames: ''
 		package: 'Gt4LlmCore-Examples'.
-	[
-		tool := GtLToolForClassCreation new.
-		call := GtLFunctionToolCall new.
-		call function: {
-			'name' -> tool name.
-			'arguments' -> {
-				'className' -> className.
-				'superclassName' -> #Object.
-				'instanceVariables' -> ''.
-				'classVariables' -> ''.
-				'package' -> 'Gt4LlmCore-Examples'
-			} asDictionary
-		} asDictionary.
-		result := tool performToolCall: call.
-		self assert: call tool == tool.
-		self assert: result equals: 'Class already exists'
-	] ensure: [
-		self removeClassNamedIfPresent: className
-	].
-	^ tool
+	[ tool := GtLToolForClassCreation new.
+	call := GtLFunctionToolCall new.
+	call
+		function: {'name' -> tool name.
+				'arguments'
+					-> {'className' -> className.
+							'superclassName' -> #Object.
+							'instanceVariables' -> ''.
+							'classVariables' -> ''.
+							'package' -> 'Gt4LlmCore-Examples'} asDictionary} asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: result isErrorDomainObject.
+	self
+		assert: result objectName
+		equals: 'GtLToolForClassCreationExamplesExisting' ]
+		ensure: [ self removeClassNamedIfPresent: className ].
+	^ call
 ]
 
 { #category : #examples }
@@ -46,35 +44,31 @@ GtLToolForClassCreationExamples >> createClassWithClassVariables [
 	self removeClassNamedIfPresent: subclassName.
 	self removeClassNamedIfPresent: baseClassName.
 	baseClass := Object
-		subclass: baseClassName
-		instanceVariableNames: ''
-		classVariableNames: ''
-		package: 'Gt4LlmCore-Examples'.
-	[
-		tool := GtLToolForClassCreation new.
-		call := GtLFunctionToolCall new.
-		call function: {
-			'name' -> tool name.
-			'arguments' -> {
-				'className' -> subclassName.
-				'superclassName' -> baseClassName.
-				'instanceVariables' -> 'value'.
-				'classVariables' -> #('SharedCounter').
-				'package' -> 'Gt4LlmCore-Examples'
-			} asDictionary
-		} asDictionary.
-		result := tool performToolCall: call.
-		self assert: call tool == tool.
-		self assert: result equals: 'Class created: GtLToolForClassCreationExamplesGenerated2'.
-		subclass := Smalltalk globals at: subclassName ifAbsent: [ nil ].
-		self assert: subclass notNil.
-		self assert: subclass superclass == baseClass.
-		self assert: (subclass classVariables collect: #name) = #('SharedCounter')
-	] ensure: [
-		self removeClassNamedIfPresent: subclassName.
-		self removeClassNamedIfPresent: baseClassName
-	].
-	^ tool
+			subclass: baseClassName
+			instanceVariableNames: ''
+			classVariableNames: ''
+			package: 'Gt4LlmCore-Examples'.
+	[ tool := GtLToolForClassCreation new.
+	call := GtLFunctionToolCall new.
+	call
+		function: {'name' -> tool name.
+				'arguments'
+					-> {'className' -> subclassName.
+							'superclassName' -> baseClassName.
+							'instanceVariables' -> 'value'.
+							'classVariables' -> #('SharedCounter').
+							'package' -> 'Gt4LlmCore-Examples'} asDictionary} asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: result isErrorDomainObject not.
+	self assert: result foundClass name equals: subclassName.
+	subclass := Smalltalk globals at: subclassName ifAbsent: [ nil ].
+	self assert: subclass notNil.
+	self assert: subclass superclass == baseClass.
+	self assert: (subclass classVariables collect: #name) = #('SharedCounter') ]
+		ensure: [ self removeClassNamedIfPresent: subclassName.
+			self removeClassNamedIfPresent: baseClassName ].
+	^ call
 ]
 
 { #category : #examples }
@@ -98,14 +92,15 @@ GtLToolForClassCreationExamples >> createClassWithInstanceVariables [
 		} asDictionary.
 		result := tool performToolCall: call.
 		self assert: call tool == tool.
-		self assert: result equals: 'Class created: GtLToolForClassCreationExamplesGenerated1'.
+		self assert: result isErrorDomainObject not.
 		createdClass := Smalltalk globals at: className ifAbsent: [ nil ].
 		self assert: createdClass notNil.
-		self assert: (createdClass instanceVariables collect: #name) = #('firstSlot' 'secondSlot')
+		self assert: (createdClass instanceVariables collect: #name) = #('firstSlot' 'secondSlot').
+		self assert: result foundClass equals: createdClass
 	] ensure: [
 		self removeClassNamedIfPresent: className
 	].
-	^ tool
+	^ call
 ]
 
 { #category : #examples }
@@ -114,20 +109,19 @@ GtLToolForClassCreationExamples >> createClassWithUnknownSuperclass [
 	| tool call result |
 	tool := GtLToolForClassCreation new.
 	call := GtLFunctionToolCall new.
-	call function: {
-		'name' -> tool name.
-		'arguments' -> {
-			'className' -> #GtLToolForClassCreationExamplesUnknownSuperclass.
-			'superclassName' -> 'ClassThatDoesNotExist'.
-			'instanceVariables' -> ''.
-			'classVariables' -> ''.
-			'package' -> 'Gt4LlmCore-Examples'
-		} asDictionary
-	} asDictionary.
+	call
+		function: {'name' -> tool name.
+				'arguments'
+					-> {'className' -> #GtLToolForClassCreationExamplesUnknownSuperclass.
+							'superclassName' -> 'ClassThatDoesNotExist'.
+							'instanceVariables' -> ''.
+							'classVariables' -> ''.
+							'package' -> 'Gt4LlmCore-Examples'} asDictionary} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: result equals: 'Superclass not found'.
-	^ tool
+	self assert: result isErrorDomainObject.
+	self assert: result objectName equals: 'ClassThatDoesNotExist'.
+	^ call
 ]
 
 { #category : #private }

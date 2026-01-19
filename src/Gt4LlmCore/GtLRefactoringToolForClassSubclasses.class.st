@@ -58,5 +58,5 @@ GtLRefactoringToolForClassSubclasses >> privatePerformToolCall: aToolCall [
 	^ GtLRefactoringClassSubclassesDomainObject new 
 		model: self model;
 		targetClass: targetClass;
-		subclasses: subclasses
+		subclasses: subclasses asArray
 ]

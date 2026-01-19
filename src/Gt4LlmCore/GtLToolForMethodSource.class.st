@@ -31,7 +31,7 @@ GtLToolForMethodSource >> parameters [
 
 { #category : #accessing }
 GtLToolForMethodSource >> privatePerformToolCall: aToolCall [
-	| arguments className class methodName classSideValue methodSymbol method |
+	| arguments className class methodName isClassSide methodSymbol method |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	className := arguments
 			at: 'className'
@@ -47,15 +47,18 @@ GtLToolForMethodSource >> privatePerformToolCall: aToolCall [
 					receiverName: self name;
 					arguments: arguments;
 					missingArgument: 'methodName' ].
-	classSideValue := arguments at: 'classSide' ifAbsent: [ false ].
-	(classSideValue = true or: [ classSideValue asString = 'true' ])
-		ifTrue: [ class := class class ].
+	isClassSide := arguments
+			at: 'classSide'
+			ifPresent: [ :aValue | #(true 'true' 't') includes: aValue ]
+			ifAbsent: [ false ].
+	isClassSide ifTrue: [ class := class class ].
 	methodSymbol := methodName asSymbol.
 	method := class lookupSelector: methodSymbol.
 	method
 		ifNil: [ ^ GtLMissingDomainObject new
-				objectName: ('{1}>>#{2}'
+				objectName: ('{1}{2}>>#{3}'
 						format: {className.
+								isClassSide ifTrue: [ ' class' ] ifFalse: [ '' ].
 								methodName}) ].
 	^ GtLMethodDomainObject new method: method
 ]

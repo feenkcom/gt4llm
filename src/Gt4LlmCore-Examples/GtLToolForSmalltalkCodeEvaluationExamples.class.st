@@ -18,9 +18,12 @@ GtLToolForSmalltalkCodeEvaluationExamples >> executeSimpleDoIt [
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	expected := STONJSON toStringPretty: (GtLValueSerializer new serializeValue: 3).
-	self assert: result equals: expected.
-	^ tool
+	self assert: result isErrorDomainObject not.
+	self assert: result value equals: 3.
+	expected := (GtLValueSerializer new serializeValue: 3).
+	self assert: result serializeToOpenAIResponseJsonObject equals: expected.
+
+	^ call
 ]
 
 { #category : #examples }
@@ -48,12 +51,13 @@ GtLToolForSmalltalkCodeEvaluationExamples >> missingCodeArgument [
 	| tool call result |
 	tool := GtLToolForSmalltalkCodeEvaluation new.
 	call := GtLFunctionToolCall new.
-	call function: {
-		'name' -> tool name.
-		'arguments' -> Dictionary new
-	} asDictionary.
+	call
+		function: {'name' -> tool name.
+				'arguments' -> Dictionary new} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: result equals: 'Code not provided'.
-	^ tool
+	self assert: result isErrorDomainObject.
+	self assert: result missingArgument equals: 'code'.
+	
+	^ call
 ]

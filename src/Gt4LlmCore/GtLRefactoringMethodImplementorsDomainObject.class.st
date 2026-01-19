@@ -13,6 +13,17 @@ GtLRefactoringMethodImplementorsDomainObject >> acceptVisitor: aVisitor [
 	^ aVisitor visitRefactoringMethodImplementorsDomainObject: self
 ]
 
+{ #category : #'gt - extensions' }
+GtLRefactoringMethodImplementorsDomainObject >> gtImplementorsFor: aView [
+	<gtView>
+	<gtLlmView>
+	implementors ifNil: [ ^ aView empty ].
+	^ aView columnedList
+		title: 'Implementors';
+		items: [ implementors ];
+		column: 'Value' text: [ :each | each gtDisplayString ]
+]
+
 { #category : #accessing }
 GtLRefactoringMethodImplementorsDomainObject >> implementors [
 	^ implementors ifNil: [ #() ]

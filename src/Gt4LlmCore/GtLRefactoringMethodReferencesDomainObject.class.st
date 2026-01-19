@@ -14,6 +14,17 @@ GtLRefactoringMethodReferencesDomainObject >> acceptVisitor: aVisitor [
 	^ aVisitor visitRefactoringMethodReferencesDomainObject: self
 ]
 
+{ #category : #views }
+GtLRefactoringMethodReferencesDomainObject >> gtReferencesFor: aView [
+	<gtView>
+	<gtLlmView>
+	references ifNil: [ ^ aView empty ].
+	^ aView columnedList
+		title: 'References';
+		items: [ self references ];
+		column: 'Value' text: [ :each | each gtDisplayString ]
+]
+
 { #category : #accessing }
 GtLRefactoringMethodReferencesDomainObject >> mayHaveMore [
 	^ mayHaveMore ifNil: [ false ]
