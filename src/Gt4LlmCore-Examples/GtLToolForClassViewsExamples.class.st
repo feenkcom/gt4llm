@@ -34,8 +34,8 @@ GtLToolForClassViewsExamples >> classViewsForExistingClass [
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: result isEmpty not.
-	self assert: (result includesSubstring: 'gtViewContactsListOn:').
+	self assert: result isErrorDomainObject not.
+	self assert: (result serializeToOpenAIResponseJsonString includesSubstring: 'gtViewContactsListOn:').
 	^ call
 ]
 

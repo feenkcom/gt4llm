@@ -10,18 +10,17 @@ GtLToolForExampleClassesRunExamples >> runExamplesForClass [
 	| tool call result data |
 	tool := GtLToolForExampleClassesRun new.
 	call := GtLFunctionToolCall new.
-	call function: {
-		'name' -> tool name.
-		'arguments' -> {
-			'classNames' -> 'GtLlmExampleRunDummyExamples'
-		} asDictionary
-	} asDictionary.
+	call
+		function: {'name' -> tool name.
+				'arguments' -> {'classNames' -> 'GtLlmExampleRunDummyExamples'} asDictionary}
+				asDictionary.
 	result := tool performToolCall: call.
-	data := NeoJSONReader fromString: result.
-	self assert: (data at: 'total') equals: 3.
-	self assert: (data at: 'skips') equals: 3.
-	self assert: ((data at: 'details') size) equals: 3.
-	^ tool
+	self assert: result isErrorDomainObject not.
+
+	self assert: result totalCount equals: 3.
+	self assert: result skippedCount equals: 3.
+	self assert: result exampleWithResults size equals: 3.
+	^ call
 ]
 
 { #category : #'llm-generated' }
@@ -30,35 +29,37 @@ GtLToolForExampleClassesRunExamples >> runExamplesForMultipleClasses [
 	| tool call result data |
 	tool := GtLToolForExampleClassesRun new.
 	call := GtLFunctionToolCall new.
-	call function: {
-		'name' -> tool name.
-		'arguments' -> {
-			'classNames' -> 'GtLExampleRunDummyExamples GtLToolForExampleMethodRunExamples'
-		} asDictionary
-	} asDictionary.
+	call
+		function: {'name' -> tool name.
+				'arguments'
+					-> {'classNames' -> 'GtLExampleRunDummyExamples GtLToolForExampleMethodRunExamples'}
+							asDictionary} asDictionary.
 	result := tool performToolCall: call.
-	data := NeoJSONReader fromString: result.
-	self assert: (data at: 'total') equals: 7.
-	self assert: (data at: 'skips') equals: 3.
-	self assert: ((data at: 'details') size) equals: 7.
-	^ tool
+
+	self assert: result isErrorDomainObject not.
+	self assert: result totalCount equals: 7.
+	self assert: result skippedCount equals: 3.
+	self assert: result exampleWithResults size equals: 7.
+	^ call
 ]
 
 { #category : #'llm-generated' }
 GtLToolForExampleClassesRunExamples >> runExamplesWithUnknownInputs [
 	<gtExample>
-	| tool call result data |
+	| tool call result |
 	tool := GtLToolForExampleClassesRun new.
 	call := GtLFunctionToolCall new.
-	call function: {
-		'name' -> tool name.
-		'arguments' -> {
-			'classNames' -> 'NonExistingExampleClass'
-		} asDictionary
-	} asDictionary.
+	call
+		function: {'name' -> tool name.
+				'arguments' -> {'classNames' -> 'NonExistingExampleClass'} asDictionary}
+				asDictionary.
 	result := tool performToolCall: call.
-	data := NeoJSONReader fromString: result.
-	self assert: (data at: 'total') equals: 0.
-	self assert: (data at: 'notFound') notEmpty.
-	^ data
+
+	self assert: result isErrorDomainObject not.
+	self assert: result totalCount equals: 0.
+	self assert: result skippedCount equals: 0.
+	self assert: result exampleWithResults size equals: 0.
+	self assert: result notFoundClassNames size equals: 1.
+	self assert: result notFoundClassNames anyOne equals: 'NonExistingExampleClass'.
+	^ call
 ]

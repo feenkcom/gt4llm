@@ -68,6 +68,6 @@ GtLIncorrectArgumentValueDomainObject >> serializeToOpenAIResponseJsonObject [
 		at: #error put: self messageText;
 		at: #argumentName put: self argumentName;
 		at: #argumentValue put: self argumentValue;
-		at: #expectedArgumentValueKind put: self expectedArgumentValueKind;
+		at: #expectedArgumentValueKind put: (self expectedArgumentValueKind ifNotNil: #name);
 		yourself
 ]

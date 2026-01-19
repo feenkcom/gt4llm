@@ -90,24 +90,22 @@ GtLToolForMethodCompilationExamples >> compileMethodWithSyntaxError [
 	targetClass := GtLToolForMethodCompilationExamples.
 	selector := #gtCompiledExampleWithSyntaxError.
 	tool := GtLToolForMethodCompilation new.
-	(targetClass includesSelector: selector) ifTrue: [ targetClass removeSelector: selector ].
-	[
-		call := GtLFunctionToolCall new.
-		call function: {
-			'name' -> tool name.
-			'arguments' -> {
-				'className' -> #GtLToolForMethodCompilationExamples.
-				'sourceCode' -> 'gtCompiledExampleWithSyntaxError ^'.
-				'protocol' -> 'examples'.
-				'classSide' -> 'false'
-			} asDictionary
-		} asDictionary.
-		result := tool performToolCall: call.
-		self assert: call tool == tool.
-		self assert: (result beginsWith: 'Syntax error').
-		self assert: (targetClass includesSelector: selector) not
-	] ensure: [
-		(targetClass includesSelector: selector) ifTrue: [ targetClass removeSelector: selector ]
-	].
-	^ tool
+	(targetClass includesSelector: selector)
+		ifTrue: [ targetClass removeSelector: selector ].
+	[ call := GtLFunctionToolCall new.
+	call
+		function: {'name' -> tool name.
+				'arguments'
+					-> {'className' -> #GtLToolForMethodCompilationExamples.
+							'sourceCode' -> 'gtCompiledExampleWithSyntaxError ^'.
+							'protocol' -> 'examples'.
+							'classSide' -> 'false'} asDictionary} asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: result isErrorDomainObject.
+	self assert: (result description beginsWith: 'Syntax error').
+	self assert: (targetClass includesSelector: selector) not ]
+		ensure: [ (targetClass includesSelector: selector)
+				ifTrue: [ targetClass removeSelector: selector ] ].
+	^ call
 ]

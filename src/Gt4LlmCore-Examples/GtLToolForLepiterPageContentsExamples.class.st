@@ -46,11 +46,12 @@ GtLToolForLepiterPageContentsExamples >> pageSerializationWithoutUid [
 	| tool call result |
 	tool := GtLToolForLepiterPageContents new.
 	call := GtLFunctionToolCall new.
-	call function: {
-		'name' -> tool name.
-		'arguments' -> {}} asDictionary.
+	call
+		function: {'name' -> tool name.
+				'arguments' -> Dictionary new} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: result equals: 'UID not provided'.
-	^ tool
+	self assert: result isErrorDomainObject.
+	self assert: result missingArgument equals: 'uid'.
+	^ call
 ]
