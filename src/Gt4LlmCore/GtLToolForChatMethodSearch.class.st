@@ -70,7 +70,7 @@ GtLToolForChatMethodSearch >> privatePerformToolCall: aToolCall [
 
 	[ | filter result promise |
 	filter := Object compiler
-			evaluate: (chat messages last assistantMessage responseModels at: 'PharoScript') content.
+			evaluate: (chat messages last finalMessage responseModels at: 'PharoScript') content.
 	promise := filter result toArray
 			await: GtLSettings futureExecutionConfiguration.
 	result := promise wait.
