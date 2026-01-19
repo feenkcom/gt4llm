@@ -41,7 +41,7 @@ GtLToolForRemoteExampleMethodsRun class >> openAiAssistant [
 GtLToolForRemoteExampleMethodsRun >> addClass: changeDictionary to: eventFactory onProblemDo: aBlock [
 	| definitionSource classBuilder classDefinition |
 	definitionSource := changeDictionary at: 'code'.
-	self validateClassDefinitionSource: definitionSource.
+	self validateClassDefinitionSource: definitionSource onProblemDo: aBlock.
 	classBuilder := self class compiler evaluate: definitionSource.
 	classBuilder class = ShiftClassBuilder
 		ifFalse: [ aBlock
