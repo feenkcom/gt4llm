@@ -17,7 +17,7 @@ GtLDomainObject >> gtJsonObjectViewFor: aView [
 	<gtLlmView>
 	^ aView forward
 		title: 'JSON Object';
-		priority: 20;
+		priority: 10;
 		object: [ self serializeToOpenAIResponseJsonObject asGtJson ];
 		view: #gtJsonObjectFor:context:
 ]
@@ -28,7 +28,7 @@ GtLDomainObject >> gtJsonStringViewFor: aView [
 	<gtLlmView>
 	^ aView forward
 		title: 'JSON String';
-		priority: 25;
+		priority: 11;
 		object: [ self serializeToOpenAIResponseJsonObject asGtJson ];
 		view: #gtJsonStringFor:
 ]
