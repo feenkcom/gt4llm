@@ -7,22 +7,24 @@ Class {
 { #category : #'llm-generated' }
 GtLToolForSUnitClassesRunExamples >> runTestsForMultipleClasses [
 	<gtExample>
-	| tool call result data |
+	| tool call result |
 	tool := GtLToolForSUnitClassesRun new.
 	call := GtLFunctionToolCall new.
-	call function: {
-		'name' -> tool name.
-		'arguments' -> {
-			'classNames' -> 'GtLExampleDummyPassingTest GtLExampleDummyMixedTest' } asDictionary } asDictionary.
+	call
+		function: {'name' -> tool name.
+				'arguments'
+					-> {'classNames' -> 'GtLExampleDummyPassingTest GtLExampleDummyMixedTest'}
+							asDictionary} asDictionary.
 	result := tool performToolCall: call.
-	data := NeoJSONReader fromString: result.
-	self assert: (data at: 'runCount') equals: 5.
-	self assert: (data at: 'successes') equals: 3.
-	self assert: (data at: 'failures') equals: 1.
-	self assert: (data at: 'errors') equals: 1.
-	self assert: (data at: 'skips') equals: 1.
-	self assert: (data at: 'expectedDefects') equals: 1.
-	^ data
+	
+	self assert: result isErrorDomainObject not.
+	self assert: result runCount equals: 5.
+	self assert: result passedCount equals: 3.
+	self assert: result failureCount equals: 1.
+	self assert: result errorCount equals: 1.
+	self assert: result skippedCount equals: 1.
+	self assert: result expectedDefectCount equals: 1.
+	^ call
 ]
 
 { #category : #'llm-generated' }
@@ -31,17 +33,19 @@ GtLToolForSUnitClassesRunExamples >> runTestsForSingleClass [
 	| tool call result data detail |
 	tool := GtLToolForSUnitClassesRun new.
 	call := GtLFunctionToolCall new.
-	call function: {
-		'name' -> tool name.
-		'arguments' -> {
-			'classNames' -> 'GtLlmExampleDummyPassingTest' } asDictionary } asDictionary.
+	call
+		function: {'name' -> tool name.
+				'arguments' -> {'classNames' -> 'GtLlmExampleDummyPassingTest'} asDictionary}
+				asDictionary.
 	result := tool performToolCall: call.
-	data := NeoJSONReader fromString: result.
-	self assert: (data at: 'runCount') equals: 1.
-	self assert: (data at: 'successes') equals: 1.
-	detail := (data at: 'details') first.
-	self assert: (detail at: 'status') equals: 'success'.
-	^ data
+
+	self assert: result isErrorDomainObject not.
+	self assert: result runCount equals: 1.
+	self assert: result passedCount equals: 1.
+	self assert: result testCases size equals: 1.
+	detail := result testCases anyOne.
+	self assert: detail statusText equals: 'success'.
+	^ call
 ]
 
 { #category : #'llm-generated' }
@@ -50,13 +54,18 @@ GtLToolForSUnitClassesRunExamples >> runTestsWithUnknownInputs [
 	| tool call result data |
 	tool := GtLToolForSUnitClassesRun new.
 	call := GtLFunctionToolCall new.
-	call function: {
-		'name' -> tool name.
-		'arguments' -> {
-			'classNames' -> 'NonExistingSUnitClass Object' } asDictionary } asDictionary.
+	call
+		function: {'name' -> tool name.
+				'arguments' -> {'classNames' -> 'NonExistingSUnitClass Object'} asDictionary}
+				asDictionary.
 	result := tool performToolCall: call.
-	data := NeoJSONReader fromString: result.
-	self assert: (data at: 'runCount') equals: 0.
-	self assert: ((data at: 'notFound') size) equals: 2.
-	^ data
+
+	self assert: result isErrorDomainObject not.
+	self assert: result runCount equals: 0.
+	self assert: result testCases size equals: 0.
+	self assert: result notFoundClassNames size equals: 1.
+	self assert: result notFoundClassNames anyOne equals: 'NonExistingSUnitClass'.
+	self assert: result notTestCaseClasses size equals: 1.
+	self assert: result notTestCaseClasses anyOne equals: Object.
+	^ call
 ]
