@@ -50,19 +50,22 @@ GtLOpenAIUserMessage >> addPlainInputObject: anObject named: aString [
 ]
 
 { #category : #'as yet unclassified' }
-GtLOpenAIUserMessage >> buildCompleteInstructionString [
-	| inputInstructionsBody inputInstructions |
+GtLOpenAIUserMessage >> buildCompleteInstructions [
+	| newInstructions inputInstructionsBody inputInstructions |
+	newInstructions := GtLlmInstructionWithSections new
+			introduction: (GtLlmInstructionString new string: '').
+	
 	inputModels notEmpty
 		ifTrue: [ inputInstructionsBody := GtLlmInstructionWithSections new
 					introduction: 'The inputs provided follow the descriptions below'.
 			inputInstructions := GtLlmInstructionSection new
 					title: 'Input descriptions';
 					body: inputInstructionsBody.
-			self instructions addSection: inputInstructions.
+			newInstructions addSection: inputInstructions.
 			inputModels
 				do: [ :anInputModel | anInputModel addInstructionsTo: inputInstructionsBody ] ].
-
-	^ self instructions instructionString
+				
+	^ newInstructions
 ]
 
 { #category : #accessing }
@@ -160,11 +163,8 @@ GtLOpenAIUserMessage >> inputModels [
 
 { #category : #accessing }
 GtLOpenAIUserMessage >> instructions [
-	^ instructions
-		ifNil: [ 
-			instructions := GtLlmInstructionWithSections new
-					introduction: (GtLlmInstructionString new string: '').
-			instructions ]
+	^ instructions ifNil: [ 
+			instructions := self buildCompleteInstructions ]
 ]
 
 { #category : #utilities }
