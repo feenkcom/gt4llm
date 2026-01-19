@@ -62,6 +62,11 @@ GtLToolMessage >> gtDisplayOn: aStream [
 	self toolCall ifNotNil: [ :call | call gtDisplayOn: aStream ] ifNil: [ aStream nextPutAll: 'No tool' ]
 ]
 
+{ #category : #'as yet unclassified' }
+GtLToolMessage >> gtInspectorTargetModels [
+	^ self output ifNotNil: [ :anOutput | {anOutput} ] ifNil: [ #() ]
+]
+
 { #category : #'gt - extensions' }
 GtLToolMessage >> gtOutputFor: aView [
 	<gtView>
