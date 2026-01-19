@@ -66,15 +66,19 @@ GtLReplyMessage >> currentMessageDo: aBlock ifAbsent: anAbsentBlock [
 
 { #category : #accessing }
 GtLReplyMessage >> finalMessage [
+	"Return a final message that can be either an assistant message or an error message."
+
 	^ finalMessage
 ]
 
 { #category : #accessing }
 GtLReplyMessage >> finalMessage: aMessage [
+	"Set a final message that can be either an assistant message or an error message."
+
 	finalMessage = aMessage ifTrue: [ ^ self ].
 
 	finalMessage := aMessage.
-	
+
 	self notifyReplyMessageChanged
 ]
 
