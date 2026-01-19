@@ -16,7 +16,9 @@ GtLToolForClassViewsExamples >> classViewsForClassWithNoViews [
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: result equals: 'No views found'.
+	self assert: result isErrorDomainObject not.
+	self assert: result targetClass equals: GtLToolForClassViewsExamples.
+	self assert: result methods equals: #().
 	^ call
 ]
 
@@ -49,6 +51,7 @@ GtLToolForClassViewsExamples >> classViewsForUnknownClass [
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: result equals: 'Class not found'.
+	self assert: result isErrorDomainObject.
+	self assert: result objectName equals: 'NonExistingClassName'.
 	^ call
 ]

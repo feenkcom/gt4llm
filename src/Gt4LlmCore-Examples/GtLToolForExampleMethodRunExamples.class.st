@@ -19,8 +19,9 @@ GtLToolForExampleMethodRunExamples >> exampleRunError [
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: result equals: 'error'.
-	^ tool
+	self assert: result isErrorDomainObject not.
+	self assert: result isErrorResult.
+	^ call
 ]
 
 { #category : #'llm-generated' }
@@ -38,8 +39,9 @@ GtLToolForExampleMethodRunExamples >> exampleRunFailure [
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: result equals: 'failure'.
-	^ tool
+	self assert: result isErrorDomainObject not.
+	self assert: result isFailureResult.
+	^ call
 ]
 
 { #category : #'llm-generated' }
@@ -48,17 +50,18 @@ GtLToolForExampleMethodRunExamples >> exampleRunForNonExampleMethod [
 	| tool call result |
 	tool := GtLToolForExampleMethodRun new.
 	call := GtLFunctionToolCall new.
-	call function: {
-		'name' -> tool name.
-		'arguments' -> {
-			'className' -> 'GtLExampleRunDummyExamples'.
-			'methodName' -> 'regularMethod'
-		} asDictionary
-	} asDictionary.
+	call
+		function: {'name' -> tool name.
+				'arguments'
+					-> {'className' -> 'GtLExampleRunDummyExamples'.
+							'methodName' -> 'regularMethod'} asDictionary} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: result equals: 'Method is not an example'.
-	^ tool
+	self assert: result isErrorDomainObject.
+	self
+		assert: result method name
+		equals: 'GtLExampleRunDummyExamples>>#regularMethod'.
+	^ call
 ]
 
 { #category : #'llm-generated' }
@@ -67,15 +70,14 @@ GtLToolForExampleMethodRunExamples >> exampleRunSuccess [
 	| tool call result |
 	tool := GtLToolForExampleMethodRun new.
 	call := GtLFunctionToolCall new.
-	call function: {
-		'name' -> tool name.
-		'arguments' -> {
-			'className' -> 'GtTMoneyExamples'.
-			'methodName' -> 'fortyTwoEuros'
-		} asDictionary
-	} asDictionary.
+	call
+		function: {'name' -> tool name.
+				'arguments'
+					-> {'className' -> 'GtTMoneyExamples'.
+							'methodName' -> 'fortyTwoEuros'} asDictionary} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: result equals: 'success'.
-	^ tool
+	self assert: result isErrorDomainObject not.
+	self assert: result isSuccessResult.
+	^ call
 ]

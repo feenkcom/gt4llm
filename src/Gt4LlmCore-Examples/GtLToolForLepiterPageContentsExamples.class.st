@@ -30,14 +30,14 @@ GtLToolForLepiterPageContentsExamples >> pageSerializationForUnknownPage [
 	tool := GtLToolForLepiterPageContents new.
 	unknownUid := UUID new asString36.
 	call := GtLFunctionToolCall new.
-	call function: {
-		'name' -> tool name.
-		'arguments' -> { 'uid' -> unknownUid } asDictionary
-	} asDictionary.
+	call
+		function: {'name' -> tool name.
+				'arguments' -> {'uid' -> unknownUid} asDictionary} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: result equals: 'Page not found'.
-	^ tool
+	self assert: result isErrorDomainObject.
+	self assert: result objectName equals: unknownUid.
+	^ call
 ]
 
 { #category : #'llm-generated' }

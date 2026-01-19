@@ -41,6 +41,11 @@ GtLMethodDomainObject >> serializeToOpenAIResponseJsonObject [
 		at: 'methodClass' put: self method methodClass name asString;
 		at: 'selector' put: self method selector asString;
 		at: 'method' put: self method name asString;
-		at: 'sourceCode' put: self method sourceCode;
+		at: 'sourceCode' put: self sourceCode;
 		yourself
+]
+
+{ #category : #'api - accessing' }
+GtLMethodDomainObject >> sourceCode [
+	^ self method sourceCode
 ]

@@ -32,12 +32,13 @@ GtLToolForClassLookupExamples >> lookupClassForUnknownClass [
 	| tool call result |
 	tool := GtLToolForClassLookup new.
 	call := GtLFunctionToolCall new.
-	call function: {
-		'name' -> tool name.
-		'arguments' -> {'className' -> 'NonExistingClassName42'} asDictionary
-	} asDictionary.
+	call
+		function: {'name' -> tool name.
+				'arguments' -> {'className' -> 'NonExistingClassName42'} asDictionary}
+				asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: result equals: 'Class not found'.
-	^ tool
+	self assert: result isErrorDomainObject.
+	self assert: result objectName equals: 'NonExistingClassName42'.
+	^ call
 ]

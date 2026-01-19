@@ -67,5 +67,5 @@ GtLToolForExampleMethodRun >> privatePerformToolCall: aToolCall [
 				freeze: ex;
 				description: ('Example execution failed: {1}' format: {method name}) ].
 
-	^ GtLExampleWithResultDomainObject new exampleWithResult: exampleResult
+	^ GtLExampleWithResultDomainObject new exampleWithResult: example
 ]

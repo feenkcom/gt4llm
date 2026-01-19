@@ -22,15 +22,29 @@ GtLRefactoringMethodSourceCodeDomainObject >> method: anObject [
 	method := anObject
 ]
 
+{ #category : #'api - accessing' }
+GtLRefactoringMethodSourceCodeDomainObject >> methodClassName [
+	^ self method methodClass name asString
+]
+
+{ #category : #'api - accessing' }
+GtLRefactoringMethodSourceCodeDomainObject >> methodName [
+	^ self method selector asString
+]
+
+{ #category : #'api - accessing' }
+GtLRefactoringMethodSourceCodeDomainObject >> methodSourceCode [
+	^ self method source
+]
+
 { #category : #'api - serializing' }
 GtLRefactoringMethodSourceCodeDomainObject >> serializeToOpenAIResponseJsonObject [
 	"Return a JSON dictionary that represents the domain object."
 
 	<return: #NeoJSONObject>
 	^ NeoJSONObject new
-		at: 'methodName' put: self method selector;
-		at: 'className'
-			put: (String streamContents: [ :a | self method methodClass name asString ]);
-		at: 'sourceCode' put: self method source;
+		at: 'methodName' put: self methodName;
+		at: 'className' put: self methodClassName;
+		at: 'sourceCode' put: self methodSourceCode;
 		yourself
 ]

@@ -33,8 +33,9 @@ GtLToolForMethodReferencesExamples >> methodReferencesForUnknownSelector [
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: result equals: 'No references found'.
-	^ tool
+	self assert: result isErrorDomainObject not.
+	self assert: result methods equals: #().
+	^ call
 ]
 
 { #category : #'llm-generated' }

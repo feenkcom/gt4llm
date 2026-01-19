@@ -27,12 +27,14 @@ GtLToolForSearchForLepiterPagesExamples >> documentationLookupForMissingPage [
 	| tool call result |
 	tool := GtLToolForSearchForLepiterPages new.
 	call := GtLFunctionToolCall new.
-	call function: {
-		'name' -> tool name.
-		'arguments' -> {'query' -> 'NonExistingDocumentationPage42'} asDictionary
-	} asDictionary.
+	call
+		function: {'name' -> tool name.
+				'arguments' -> {'query' -> 'NonExistingDocumentationPage42'} asDictionary}
+				asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: result equals: 'No page found'.
-	^ tool
+	self assert: result isErrorDomainObject not.
+	self assert: result pages equals: #().
+
+	^ call
 ]
