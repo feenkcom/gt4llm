@@ -8,11 +8,6 @@ Class {
 	#category : #'Gt4LlmCore-Core'
 }
 
-{ #category : #'as yet unclassified' }
-GtLToolMessage class >> defaultRole [
-	^ 'tool'
-]
-
 { #category : #accessing }
 GtLToolMessage class >> leJsonV4Name [
 	^ #gtLToolMessage
@@ -100,7 +95,12 @@ GtLToolMessage >> responseModels [
 ]
 
 { #category : #'as yet unclassified' }
-GtLToolMessage >> serializeResponse [
+GtLToolMessage >> role [
+	^ 'tool'
+]
+
+{ #category : #'as yet unclassified' }
+GtLToolMessage >> serializeForOpenAIResponsesAPI [
 	^ {'type' -> 'function_call_output'.
 		'call_id' -> toolCall id.
 		'output' -> self output} asDictionary
