@@ -185,6 +185,19 @@ GtLOpenAIUserMessage >> role [
 ]
 
 { #category : #serialization }
+GtLOpenAIUserMessage >> serializeForAnthropicMessagesAPI [
+	^ {#content
+			-> ({{'type' -> 'text'.
+						'text' -> self contentText} asDictionary}
+					, (self images
+							collect: [ :aRef | 
+								{'type' -> 'image'.
+									'media_type' -> 'image/jpeg'.
+									'image_url' -> aRef binaryContents base64Encoded} asDictionary ])).
+		#role -> self role} asDictionary
+]
+
+{ #category : #serialization }
 GtLOpenAIUserMessage >> serializeForOpenAIResponsesAPI [
 	^ {#content
 			-> ({{'type' -> 'input_text'.

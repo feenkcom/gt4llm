@@ -2,7 +2,6 @@ Class {
 	#name : #GtLAnthropicProvider,
 	#superclass : #GtLProvider,
 	#instVars : [
-		'assistantWorking',
 		'model',
 		'client',
 		'tools',
@@ -68,7 +67,7 @@ GtLAnthropicProvider >> client: anObject [
 
 { #category : #'as yet unclassified' }
 GtLAnthropicProvider >> defaultAsssistantMessageClass [
-	^ self chat messageClassForAnthropic
+	^ nil
 ]
 
 { #category : #'as yet unclassified' }
@@ -83,7 +82,75 @@ GtLAnthropicProvider >> defaultModel [
 
 { #category : #'as yet unclassified' }
 GtLAnthropicProvider >> defaultUserMessageClass [
-	^ self chat messageClassForAnthropic
+	^  GtLOpenAIUserMessage
+]
+
+{ #category : #actions }
+GtLAnthropicProvider >> executeWait [
+
+	| aSecondPromise aFuture aFirstPromise |
+	aFuture := [ | result aMessage currentMessage |
+		currentMessage := self chat messages last currentMessage.
+		result := client
+				generateResponseWithModel: self modelName
+				messages: self chat messages
+				instructions: currentMessage buildCompleteInstructionString
+				tools: currentMessage tools
+				andFormat: (currentMessage hasFormats
+						ifTrue: [ currentMessage formatDescriptionsJsonSchema ]
+						ifFalse: [ nil ]) .
+
+		result hasToolCalls
+			ifTrue: [ self performToolCallsIn: result with: currentMessage tools ]
+			ifFalse: [ aMessage :=  self assistantMessageClass new
+								modelName: self modelName;
+								rawData: (result output detect: [ :anOutput | (anOutput at: 'type') = 'message' ]) ].
+
+				self chat addAssistantMessage: aMessage.
+				self chat signalRunIsDone.
+				aMessage ] asAsyncFuture.
+	aFirstPromise := aFuture
+			await: (AsyncFutureExecutionConfiguration new
+					customGroup: #OpenAI;
+					lowPriority).
+	aSecondPromise := aFirstPromise
+			then: [ :aMessage |
+				providerWorking := false.
+				aMessage ]
+			otherwise: [ :anError | 
+				| aMessage |
+				providerWorking := false.
+				aMessage := GtLErrorMessage freeze: anError.
+				self chat addErrorMessage: aMessage.
+				self chat signalRunIsDone.
+				aMessage ].
+	executions add: aSecondPromise.
+
+"	[ result := self client
+			completeChatWithModel: self model
+			messages: self chat messages
+			maxTokens: self maxTokens
+			system: instructions
+			format: self format
+			andTools: tools.
+
+
+	self chat addMessage: result.
+
+	self performToolCallsFor: result.
+
+	result
+		content: (result content
+				collect: [ :aValue | 
+					(aValue at: #type) = 'text'
+						ifTrue: [ aValue
+								at: 'text'
+									put: (((aValue at: 'text') removePrefix: '```json') removeSuffix: '```');
+								yourself ]
+						ifFalse: [ aValue ] ]).
+
+	self chat signalRunHasUpdated ] doWhileTrue: [ result toolCalls isNotEmpty ].
+"
 ]
 
 { #category : #'as yet unclassified' }
@@ -124,7 +191,7 @@ GtLAnthropicProvider >> gtTriggerAssistantActionFor: anAction [
 GtLAnthropicProvider >> initialize [
 	super initialize.
 
-	assistantWorking := false.
+	providerWorking := false.
 	executions := OrderedCollection new.
 	
 	self initializeClient.
@@ -191,13 +258,13 @@ GtLAnthropicProvider >> printOn: aStream [
 	aStream
 		nextPutAll: self class providerName;
 		nextPut: $(;
-		nextPutAll: self model;
+		nextPutAll: self modelName;
 		nextPut: $)
 ]
 
 { #category : #'as yet unclassified' }
 GtLAnthropicProvider >> sendAssistantMessage: aMessage [
-	userMessageClass adoptInstance: aMessage.
+	self userMessageClass adoptInstance: aMessage.
 	aMessage role: 'user'.
 	self chat addMessage: aMessage.
 
@@ -205,7 +272,7 @@ GtLAnthropicProvider >> sendAssistantMessage: aMessage [
 		add: ([ self triggerAssistant ] asAsyncPromise
 				then: [  ]
 				otherwise: [ :anError | 
-					assistantWorking := false.
+					providerWorking := false.
 					self chat
 						addMessage: (GtLlmErrorThreadMessage new exception: anError freeze).
 					self chat signalRunIsDone ])
@@ -231,7 +298,7 @@ GtLAnthropicProvider >> sendFiles: aListOfFileReferences withMessage: aString [
 
 { #category : #'as yet unclassified' }
 GtLAnthropicProvider >> status [
-	^ assistantWorking
+	^ providerWorking
 		ifTrue: [ GtLlmAssistantChatWorkingStatus new ]
 		ifFalse: [ GtLlmAssistantChatReadyStatus new ]
 ]
@@ -249,7 +316,7 @@ GtLAnthropicProvider >> tools: anObject [
 { #category : #'as yet unclassified' }
 GtLAnthropicProvider >> triggerAssistant [
 	| result |
-	assistantWorking := true.
+	providerWorking := true.
 
 	self chat signalRunHasStarted.
 
@@ -280,5 +347,5 @@ GtLAnthropicProvider >> triggerAssistant [
 
 	self chat signalRunIsDone.
 
-	assistantWorking := false
+	providerWorking := false
 ]

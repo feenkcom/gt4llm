@@ -85,7 +85,7 @@ GtLAnthropicClient >> completeChatWithModel: aString messages: aCollection andMa
 
 { #category : #'as yet unclassified' }
 GtLAnthropicClient >> completeChatWithModel: aString messages: aCollection maxTokens: aNumber system: aSystemPrompt andTools: tools [
-	^ GtAnthropicCompleteChatAPIClient new
+	^ GtLAnthropicCompleteChatAPICommand new
 		client: self;
 		model: aString;
 		messages: aCollection;
@@ -97,7 +97,7 @@ GtLAnthropicClient >> completeChatWithModel: aString messages: aCollection maxTo
 
 { #category : #'as yet unclassified' }
 GtLAnthropicClient >> completeChatWithModel: aString messages: aCollection maxTokens: aNumber system: aSystemPrompt format: aFormat andTools: tools [
-	^ GtAnthropicCompleteChatAPIClient new
+	^ GtLAnthropicCompleteChatAPICommand new
 		client: self;
 		model: aString;
 		messages: aCollection;
