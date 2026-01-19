@@ -16,8 +16,9 @@ GtLToolForSearchForLepiterPagesExamples >> documentationLookupForExistingPage [
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (STONJSON fromString: result) size equals: 1.
-	self assert: (result includesSubstring: 'Warmup: understanding the Money classes').
+	self assert: result isErrorDomainObject not.
+	self assert: result pages size equals: 1.
+	self assert: (result serializeToOpenAIResponseJsonString includesSubstring: 'Warmup: understanding the Money classes').
 	^ call
 ]
 

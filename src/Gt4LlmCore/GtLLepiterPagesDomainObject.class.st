@@ -12,6 +12,17 @@ GtLLepiterPagesDomainObject >> acceptVisitor: aVisitor [
 	^ aVisitor visitLepiterPagesDomainObject: self
 ]
 
+{ #category : #'gt - extensions' }
+GtLLepiterPagesDomainObject >> gtPagesFor: aView [
+	<gtView>
+	<gtLlmView>
+	pages ifNil: [ ^ aView empty ].
+	^ aView columnedList
+		title: 'Pages';
+		items: [ self pages ];
+		column: 'Value' text: [ :each | each gtDisplayString ]
+]
+
 { #category : #accessing }
 GtLLepiterPagesDomainObject >> pages [
 	^ pages ifNil: [ #() ]

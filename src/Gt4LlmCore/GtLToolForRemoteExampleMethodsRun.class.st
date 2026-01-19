@@ -282,7 +282,7 @@ GtLToolForRemoteExampleMethodsRun >> privatePerformToolCall: aToolCall [
 		ifTrue: [ self addErrorMessage: 'Job completed, but has no results' to: report ]
 		ifFalse: [ self reportResults: results on: report ] ]
 		on: Error
-		do: [ :ex | self errorReport: report exception: ex ] ]
+		do: [ :ex | ex pass "self errorReport: report exception: ex" ] ]
 		ensure: [ runner ifNotNil: [ runner stop ] ].
 	^ report
 ]

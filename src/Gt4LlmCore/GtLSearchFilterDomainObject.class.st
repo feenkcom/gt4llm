@@ -25,6 +25,17 @@ GtLSearchFilterDomainObject >> filter: aSearchFilter [
 	filter := aSearchFilter
 ]
 
+{ #category : #'gt - extensions' }
+GtLSearchFilterDomainObject >> gtItemsFor: aView [
+	<gtView>
+	<gtLlmView>
+	items ifNil: [ ^ aView empty ].
+	^ aView columnedList
+		title: 'Items';
+		items: [ items ];
+		column: 'Value' text: [ :each | each gtDisplayString ]
+]
+
 { #category : #accessing }
 GtLSearchFilterDomainObject >> items [
 	^ items ifNil: [ items := #() ]

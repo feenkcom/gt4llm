@@ -32,17 +32,15 @@ GtLToolForSmalltalkCodeEvaluationExamples >> executeWithError [
 	| tool call result |
 	tool := GtLToolForSmalltalkCodeEvaluation new.
 	call := GtLFunctionToolCall new.
-	call function: {
-		'name' -> tool name.
-		'arguments' -> {
-			'code' -> '1 / 0'
-		} asDictionary
-	} asDictionary.
+	call
+		function: {'name' -> tool name.
+				'arguments' -> {'code' -> '1 / 0'} asDictionary} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result beginsWith: 'Error:').
-	self assert: ((result findString: 'ZeroDivide' startingAt: 1) > 0).
-	^ tool
+	self assert: result isErrorDomainObject.
+	self assert: (result description beginsWith: 'Error while evaluating smalltalk code').
+	self assert: (result messageText beginsWith: 'ZeroDivide').
+	^ call
 ]
 
 { #category : #examples }

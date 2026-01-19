@@ -60,6 +60,6 @@ GtLToolForSearchFilter >> privatePerformToolCall: aToolCall [
 		on: Error
 		do: [ :error | 
 			GtLExceptionDomainObject new
-				exception: error;
+				freeze: error;
 				description: 'There was an error when evaluating the query: ' , error printString ]
 ]
