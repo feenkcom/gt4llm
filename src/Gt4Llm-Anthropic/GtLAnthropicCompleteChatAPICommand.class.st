@@ -16,9 +16,8 @@ Class {
 GtLAnthropicCompleteChatAPICommand >> entity [
 	| anEntity |
 	anEntity := {'model' -> model.
-			'messages' -> (messages collect: #serialize).
+			'messages' -> (messages collect: #serializeForAnthropicMessagesAPI).
 			'max_tokens' -> maxTokens} asDictionary.
-
 
 	self tools
 		ifNotNil: [ anEntity at: 'tools' put: (self tools collect: #functionAnthropic) ].
@@ -76,7 +75,7 @@ GtLAnthropicCompleteChatAPICommand >> request [
 
 { #category : #'as yet unclassified' }
 GtLAnthropicCompleteChatAPICommand >> serializationClass [
-	^ GtAnthropicChatMessage
+	^ GtAnthropicResponse
 ]
 
 { #category : #accessing }
