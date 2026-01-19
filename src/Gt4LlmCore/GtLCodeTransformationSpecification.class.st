@@ -21,6 +21,28 @@ GtLCodeTransformationSpecification >> asRefactoringIn: aNamespace [
 	^ self subclassResponsibility
 ]
 
+{ #category : #accessing }
+GtLCodeTransformationSpecification >> changeType [
+	^ (self class name
+		withoutPrefix: 'GtL')
+		withoutSuffix: 'Specification'
+]
+
+{ #category : #accessing }
+GtLCodeTransformationSpecification >> changeType: toIgnore [
+	
+]
+
+{ #category : #accessing }
+GtLCodeTransformationSpecification >> changeTypeDescription [
+	"<magritteDescription>"
+	
+	 ^ MAStringDescription new
+		  accessor: #changeType;
+		  propertyAt: 'enum' put: {self changeType};
+		  yourself.
+]
+
 { #category : #views }
 GtLCodeTransformationSpecification >> gtChangesFor: aView [
 	<gtView>

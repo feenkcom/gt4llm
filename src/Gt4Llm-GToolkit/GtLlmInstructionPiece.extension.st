@@ -6,7 +6,7 @@ GtLlmInstructionPiece >> gtInstructionFor: aView [
 	^ aView textEditor
 		title: 'Instruction';
 		priority: 1;
-		text: [ self instructionString ];
+		text: [ self instructionString trimBoth ];
 		styler: (GtLlmMessageStyler new
 				threadMessageViewModel: (GtLlmNewThreadMessageViewModel new threadMessage: GtLlmNewThreadMessage new))
 ]
