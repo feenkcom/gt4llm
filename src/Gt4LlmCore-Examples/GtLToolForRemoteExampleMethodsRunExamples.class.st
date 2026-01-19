@@ -692,32 +692,27 @@ GtLToolForRemoteExampleMethodsRunExamples >> exampleRunRejectsNonArrayCheckNames
 
 { #category : #examples }
 GtLToolForRemoteExampleMethodsRunExamples >> exampleRunRejectsUnknownChangeType [
-    "Non-method change dictionaries should fail fast"
-    <gtExample>
-    | tool call resultString result errorDictionary message |
-    tool := GtLToolForRemoteExampleMethodsRun new.
-    call := GtLFunctionToolCall new.
-    call function: {
-        'name' -> tool name.
-        'arguments' -> {
-            'checkNames' -> (STONJSON toString: {
-                self class name asString, '>>exampleSuccess'
-            }).
-            'changes' -> (STONJSON toString: {
-                {
-                    'type' -> 'junk'.
-                    'junk' -> 'rubbish'.
-                } asDictionary
-            }).
-        } asDictionary
-    } asDictionary.
-    resultString := tool performToolCall: call.
-	result := STONJSON fromString: resultString.
-	errorDictionary := result at: 'error' ifAbsent:
-		[ AssertionFailure signal: '''error'' not found in: ', (STONJSON toStringPretty: result) ].
-	message := errorDictionary at: 'message' ifAbsent:
-		[ AssertionFailure signal: '''message'' not found in: ', (STONJSON toStringPretty: errorDictionary) ].
-	self assert: message equals: 'Unknown type: ''junk'''.
+	"Non-method change dictionaries should fail fast"
+
+	<gtExample>
+	| tool call result |
+	tool := GtLToolForRemoteExampleMethodsRun new.
+	call := GtLFunctionToolCall new.
+	call
+		function: {'name' -> tool name.
+				'arguments'
+					-> {'checkNames'
+								-> (STONJSON toString: {self class name asString , '>>exampleSuccess'}).
+							'changes'
+								-> (STONJSON
+										toString: {{'type' -> 'junk'.
+													'junk' -> 'rubbish'} asDictionary})} asDictionary} asDictionary.
+	result := tool performToolCall: call.
+
+	self assert: result isErrorDomainObject.
+	self assert: result description equals: 'Unknown type: ''junk'''.
+
+	^ call
 ]
 
 { #category : #examples }

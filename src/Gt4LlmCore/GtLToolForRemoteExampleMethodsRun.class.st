@@ -191,7 +191,7 @@ GtLToolForRemoteExampleMethodsRun >> customChangesFromArray: changesArray onProb
 								ifTrue: [ self addRemoveMethod: changeDictionary to: eventFactory ]
 								ifFalse: [ type = 'removeClass'
 										ifTrue: [ self addRemoveClass: changeDictionary to: eventFactory onProblemDo: aBlock ]
-										ifFalse: [ ^ GtLProblemDomainObject new description: 'Unknown type: ' , type printString ] ] ] ] ].
+										ifFalse: [ aBlock value: (GtLProblemDomainObject new description: 'Unknown type: ' , type printString) ] ] ] ] ].
 	^ eventFactory entries
 ]
 
@@ -200,15 +200,6 @@ GtLToolForRemoteExampleMethodsRun >> description [
 	^ 'Execute gtExample methods using the remote runner.
 - checkNames is an array of method names to run, e.g. ''ExampleClass>>exampleMethod''.
 - changes is an array of methods to modify, a dictionary with type=''method'', class=the class name, and code=the method source code.'
-]
-
-{ #category : #private }
-GtLToolForRemoteExampleMethodsRun >> errorReport: report exception: ex [
-
-	report at: 'error' put: {
-		'message' -> ex messageText.
-		'stackTrace' -> (self stackTraceFor: ex).
-		} asDictionary.
 ]
 
 { #category : #api }
