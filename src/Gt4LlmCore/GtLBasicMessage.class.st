@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLBasicMessage,
-	#superclass : #GtLEntity,
+	#superclass : #Object,
 	#category : #'Gt4LlmCore-Core'
 }
 

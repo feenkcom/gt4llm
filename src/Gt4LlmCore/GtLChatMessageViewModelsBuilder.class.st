@@ -21,7 +21,7 @@ Class {
 GtLChatMessageViewModelsBuilder >> build [
 	self assert: [ chat isNotNil ].
 	self assert: [ cache isNotNil ].
-	messages := chat messages reject: #isRawMessage.
+	messages := chat messages.
 	lastMessage := messages size > 0
 			ifTrue: [ messages last ]
 			ifFalse: [ nil ].

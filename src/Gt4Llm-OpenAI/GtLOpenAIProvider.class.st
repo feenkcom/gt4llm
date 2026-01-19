@@ -6,7 +6,6 @@ Class {
 		'isStreaming',
 		'executions',
 		'tools',
-		'providerWorking',
 		'modelName'
 	],
 	#category : #'Gt4Llm-OpenAI'
@@ -191,13 +190,6 @@ GtLOpenAIProvider >> printOn: aStream [
 		nextPut: $(;
 		nextPutAll: self modelName;
 		nextPut: $)
-]
-
-{ #category : #'as yet unclassified' }
-GtLOpenAIProvider >> sendMessage: aMessage [
-	self chat signalRunHasStarted.
-	providerWorking := true.
-	self executeWait
 ]
 
 { #category : #'as yet unclassified' }

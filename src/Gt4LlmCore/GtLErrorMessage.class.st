@@ -8,11 +8,6 @@ Class {
 	#category : #'Gt4LlmCore-Core'
 }
 
-{ #category : #accessing }
-GtLErrorMessage class >> defaultRole [
-	^ 'error'
-]
-
 { #category : #'instance creation' }
 GtLErrorMessage class >> freeze: anError [ 
 	^ self new exception: (GtSystemUtility freeze: anError)
@@ -29,11 +24,6 @@ GtLErrorMessage >> action [
 ]
 
 { #category : #accessing }
-GtLErrorMessage >> arguments [
-	^ {}
-]
-
-{ #category : #accessing }
 GtLErrorMessage >> chat: aChat [
 	[ super chat: aChat ]
 		on: Error
@@ -44,11 +34,6 @@ GtLErrorMessage >> chat: aChat [
 { #category : #accessing }
 GtLErrorMessage >> content [
 	^ self contentText
-]
-
-{ #category : #accessing }
-GtLErrorMessage >> contentJson [
-	^ {} asDictionary
 ]
 
 { #category : #accessing }
@@ -126,6 +111,11 @@ GtLErrorMessage >> otherExceptions: aCollection [
 	"Set a list of exceptions that were catched while handling the initial exception."
 
 	otherExceptions := aCollection
+]
+
+{ #category : #accessing }
+GtLErrorMessage >> role [
+	^ 'error'
 ]
 
 { #category : #accessing }

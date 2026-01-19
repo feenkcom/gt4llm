@@ -164,22 +164,22 @@ GtLConnectionRegistry >> initialize [
 
 { #category : #accessing }
 GtLConnectionRegistry >> knownConnectors [
-	^ {}"{GtLlmConnection new
+	^ {"GtLlmConnection new
 			providerClass: GtOllamaProvider;
 			label: 'Llama 3.2';
 			model: 'llama3.2'.
 		GtLlmConnection new
 			providerClass: GtOllamaProvider;
 			label: 'GPT OSS (Ollama 20b)';
-			model: 'gpt-oss'.
-		GtLlmConnection new
-			providerClass: GtAnthropicProvider;
-			label: 'Claude Opus 4.1';
-			model: 'claude-opus-4-1-20250805'.
-		GtLlmConnection new
+			model: 'gpt-oss'."
+		"GtLConnection new
+			providerClass: GtLAnthropicProvider;
+			label: 'Claude Opus 4.5';
+			model: 'claude-opus-4-5-20251101'."
+		"GtLlmConnection new
 			providerClass: GtGeminiProvider;
 			label: 'Gemini 3.0 Pro Preview';
-			model: 'gemini-3-pro-preview'}"
+			model: 'gemini-3-pro-preview'"}
 ]
 
 { #category : #utils }

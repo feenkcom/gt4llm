@@ -298,6 +298,9 @@ GtLChat >> gtMessagesFor: aView [
 		column: 'Role'
 			text: [ :item | item role ]
 			width: 70;
+		column: 'Sender'
+			text: [ :item | item senderText ]
+			width: 100;
 		column: 'Call' text: [ :item | item gtDisplayString ];
 		column: 'Content' text: [ :item | item contentOneLineSummary ];
 		column: 'Created' text: [ :item | item createdAt asStringYMDHMS ];

@@ -3,7 +3,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'chat',
-		'assistantMessageClass'
+		'assistantMessageClass',
+		'providerWorking'
 	],
 	#category : #'Gt4LlmCore-Core'
 }
@@ -55,6 +56,11 @@ GtLProvider >> defaultUserMessageClass [
 	^ GtLChatMessage
 ]
 
+{ #category : #actions }
+GtLProvider >> executeWait [
+	self subclassResponsibility
+]
+
 { #category : #'gt - extensions' }
 GtLProvider >> gtCallsFor: aView [
 	<gtView>
@@ -66,8 +72,10 @@ GtLProvider >> gtCallsFor: aView [
 ]
 
 { #category : #actions }
-GtLProvider >> sendMessage: anObject [ 
-	^ self subclassResponsibility
+GtLProvider >> sendMessage: aMessage [
+	self chat signalRunHasStarted.
+	providerWorking := true.
+	self executeWait
 ]
 
 { #category : #accessing }
