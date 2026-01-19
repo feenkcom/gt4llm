@@ -43,7 +43,7 @@ GtLChat >> addAssistantMessage: aMessage [
 
 	aMessage chat: self.
 	aReplyMessage := self ensureReplyMessage.
-	aReplyMessage assistantMessage: aMessage
+	aReplyMessage finalMessage: aMessage
 ]
 
 { #category : #'api - message' }
@@ -56,7 +56,7 @@ GtLChat >> addErrorMessage: anErrorMessage [
 	self
 		lastReplyMessageDo: [ :aReplyMessage | 
 			anErrorMessage chat: self.
-			aReplyMessage assistantMessage: anErrorMessage ]
+			aReplyMessage finalMessage: anErrorMessage ]
 		ifAbsent: [ self addMessage: anErrorMessage ]
 ]
 
