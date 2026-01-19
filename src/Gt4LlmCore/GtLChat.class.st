@@ -60,20 +60,17 @@ GtLChat >> addErrorMessage: anErrorMessage [
 		ifAbsent: [ self addMessage: anErrorMessage ]
 ]
 
-{ #category : #'as yet unclassified' }
-GtLChat >> addInstructionSectionForLepiterPages: pageNames titled: title [ 
+{ #category : #'api - communication' }
+GtLChat >> addInstructionSectionForLepiterPages: pageNames titled: title [
 	| instructionString |
 	instructionString := String cr
 			join: (pageNames
 					collect: [ :pageName | 
-						GtLlmLepiterContentExporter new
+						GtLLepiterContentExporter new
 							startHeaderLevel: 2;
 							page: (LeDatabase gtBook pageNamed: pageName);
 							export ]).
-	self instructions 
-		addSection: (GtLlmInstructionSection new
-				title: title;
-				body: instructionString)
+	self instruction: instructionString titled: title
 ]
 
 { #category : #'api - message' }
@@ -275,6 +272,15 @@ GtLChat >> gtFormatFor: aView [
 			action: [ :aButton | aButton phlow spawnObject: self format ]
 ]
 
+{ #category : #views }
+GtLChat >> gtInstructionsFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Instructions';
+		object: [ instructions ];
+		view: #gtInstructionFor:
+]
+
 { #category : #ui }
 GtLChat >> gtMessagesFor: aView [
 	"cannot be a forward because the update wouldn’t work"
@@ -292,6 +298,9 @@ GtLChat >> gtMessagesFor: aView [
 		column: 'Role'
 			text: [ :item | item role ]
 			width: 70;
+		column: 'Sender'
+			text: [ :item | item senderText ]
+			width: 100;
 		column: 'Call' text: [ :item | item gtDisplayString ];
 		column: 'Content' text: [ :item | item contentOneLineSummary ];
 		column: 'Created' text: [ :item | item createdAt asStringYMDHMS ];
@@ -347,6 +356,14 @@ GtLChat >> initializeTools [
 	tools := GtLTools new.
 ]
 
+{ #category : #'as yet unclassified' }
+GtLChat >> instruction: instructionString titled: title [
+	self instructions
+		addSection: (GtLlmInstructionSection new
+				title: title;
+				body: instructionString)
+]
+
 { #category : #accessing }
 GtLChat >> instructions [
 	^ instructions
@@ -384,12 +401,12 @@ GtLChat >> lastUpdate: anObject [
 	lastUpdate := anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'api - communication' }
 GtLChat >> lepiterExplanations: pageNames [
 	^ self addInstructionSectionForLepiterPages: pageNames titled: 'Explanations'
 ]
 
-{ #category : #utilities }
+{ #category : #'api - communication' }
 GtLChat >> markdownResponse [
 	self addResponseFormatForMagrite: GtLMarkdown named: 'Markdown'
 ]
@@ -434,14 +451,7 @@ GtLChat >> resetMessages [
 	self signalRunIsDone
 ]
 
-{ #category : #actions }
-GtLChat >> sendFiles: aListOfFileReferences withMessage: aString [
-	self provider
-		sendFiles: aListOfFileReferences
-		withMessage: aString
-]
-
-{ #category : #accessing }
+{ #category : #'api - communication' }
 GtLChat >> sendMarkdown: aString [
 	| newMessage |
 	self assert: aString isString.
@@ -457,7 +467,7 @@ GtLChat >> sendMessage: aMessage [
 	self provider sendMessage: aMessage
 ]
 
-{ #category : #accessing }
+{ #category : #'api - communication' }
 GtLChat >> sendPlainMessage: aString [
 	self deprecated: 'use sendMarkdown: instead'.
 	^ self sendMarkdown: aString

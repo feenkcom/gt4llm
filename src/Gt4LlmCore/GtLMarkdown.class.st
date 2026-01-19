@@ -28,8 +28,7 @@ GtLMarkdown >> contentDescription [
 	
 	 ^ MAStringDescription new
 		  accessor: #content;
-		  comment: '{
-	"description" : "This is a Markdown format with a few extensions.
+		  comment: 'This is a Markdown format with a few extensions.
 
 In plain Markdown text, annotate entities as follows:
 - Smalltalk classes using {{gtClass:ClassName}}, where `ClassName` is the name of the class to be referenced.
@@ -77,9 +76,7 @@ Line
 	| <line> ''line''
 	;
 ```
-",
-	"type" : "string"
-}';
+';
 		  beRequired
 ]
 

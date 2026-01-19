@@ -21,9 +21,9 @@ GtLOpenAIGenerateResponseAPICommand >> buildEntity [
 			(aMessage isKindOf: GtLToolMessage)
 				ifTrue: [ input add: aMessage toolCall responseInput.
 					aMessage toolCall isFinished
-						ifTrue: [ input add: aMessage serializeResponse ]	"(aMessage reasoning ifNil: [ {} ] ifNotNil: [ {aMessage reasoning rawData} ])
-												," ]
-				ifFalse: [ input add: aMessage serialize ] ].
+						ifTrue: [ input add: aMessage serializeForOpenAIResponsesAPI ]	
+						"(aMessage reasoning ifNil: [ {} ] ifNotNil: [ {aMessage reasoning rawData} ])" ]
+				ifFalse: [ input add: aMessage serializeForOpenAIResponsesAPI ] ].
 	entity := {'model' -> self model.
 			'stream' -> isStreaming.
 			'input' -> input} asDictionary.

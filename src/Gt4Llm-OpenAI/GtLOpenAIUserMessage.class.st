@@ -1,19 +1,20 @@
 Class {
 	#name : #GtLOpenAIUserMessage,
-	#superclass : #GtLOpenAIMessage,
+	#superclass : #GtLChatMessage,
 	#instVars : [
 		'inputModels',
-		'content'
+		'content',
+		'images'
 	],
 	#category : #'Gt4Llm-OpenAI'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #serialization }
 GtLOpenAIUserMessage class >> leJsonV4Name [
 	^ #gtLOpenAIUserMessage
 ]
 
-{ #category : #accessing }
+{ #category : #'api - message' }
 GtLOpenAIUserMessage >> addInputMagritteObject: anObject named: aString [
 	self addInputModel: (GtLMagritteInputModel new
 		name: aString;
@@ -25,7 +26,7 @@ GtLOpenAIUserMessage >> addInputModel: aModel [
 	inputModels at: aModel name put: aModel.
 ]
 
-{ #category : #accessing }
+{ #category : #'api - message' }
 GtLOpenAIUserMessage >> addInstructionSectionForLepiterPages: pageNames titled: title [ 
 	| instructionString |
 	instructionString := String cr
@@ -41,14 +42,14 @@ GtLOpenAIUserMessage >> addInstructionSectionForLepiterPages: pageNames titled: 
 				body: instructionString)
 ]
 
-{ #category : #accessing }
+{ #category : #'api - message' }
 GtLOpenAIUserMessage >> addPlainInputObject: anObject named: aString [
 	self addInputModel: (GtLPlainObjectInputModel new
 		name: aString;
 		model: anObject)
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 GtLOpenAIUserMessage >> buildCompleteInstructionString [
 	| inputInstructionsBody inputInstructions |
 	inputModels notEmpty
@@ -92,13 +93,24 @@ GtLOpenAIUserMessage >> contentText [
 	^ content
 ]
 
-{ #category : #'gt - inspector' }
+{ #category : #ui }
+GtLOpenAIUserMessage >> gtImagesFor: aView [
+	<gtView>
+	<gtLlmView>
+	images ifEmpty: [ ^ aView empty ].
+	^ aView columnedList
+		title: 'Images';
+		items: [ images ];
+		column: 'Value' text: [ :each | each gtDisplayString ]
+]
+
+{ #category : #ui }
 GtLOpenAIUserMessage >> gtInspectorTargetModels [
 	^ self inputModels flatCollect: [ :each |
 		each gtInspectorTargetModels ]
 ]
 
-{ #category : #views }
+{ #category : #ui }
 GtLOpenAIUserMessage >> gtInstructionsFor: aView [
 	<gtView>
 	<gtLlmView>
@@ -109,7 +121,7 @@ GtLOpenAIUserMessage >> gtInstructionsFor: aView [
 		view: #gtInstructionFor:
 ]
 
-{ #category : #views }
+{ #category : #ui }
 GtLOpenAIUserMessage >> gtViewInputModelsFor: aView [
 	<gtView>
 	<gtLlmView>
@@ -123,10 +135,21 @@ GtLOpenAIUserMessage >> gtViewInputModelsFor: aView [
 		send: [ :each | each value ]
 ]
 
+{ #category : #accessing }
+GtLOpenAIUserMessage >> images [
+	^ images
+]
+
+{ #category : #accessing }
+GtLOpenAIUserMessage >> images: anObject [
+	images := anObject
+]
+
 { #category : #initialization }
 GtLOpenAIUserMessage >> initialize [
 	super initialize.
-	
+
+	images := OrderedCollection new.
 	inputModels := Dictionary new.
 ]
 
@@ -144,19 +167,32 @@ GtLOpenAIUserMessage >> instructions [
 			instructions ]
 ]
 
-{ #category : #utilities }
+{ #category : #'api - message' }
 GtLOpenAIUserMessage >> lepiterExplanations: pageNames [
 	^ self addInstructionSectionForLepiterPages: pageNames titled: 'Explanations'
 ]
 
-{ #category : #accessing }
+{ #category : #'api - message' }
 GtLOpenAIUserMessage >> markdown: aString [
 	self
 		addInputMagritteObject: (GtLMarkdown new content: aString)
 		named: 'Markdown'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLOpenAIUserMessage >> role [
 	^ 'user'
+]
+
+{ #category : #serialization }
+GtLOpenAIUserMessage >> serializeForOpenAIResponsesAPI [
+	^ {#content
+			-> ({{'type' -> 'input_text'.
+						'text' -> self contentText} asDictionary}
+			, (self images
+					collect: [ :aRef | 
+						{'type' -> 'input_image'.
+							'image_url' -> ('data:image/jpeg;base64,' , aRef binaryContents base64Encoded)}
+							asDictionary ])).
+		#role -> self role} asDictionary
 ]

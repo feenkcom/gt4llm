@@ -3,24 +3,6 @@
 
 doit
 (Announcement
-	subclass: 'GtLlmActionCall'
-	instVarNames: #(action arguments subject)
-	classVars: #()
-	classInstVars: #()
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #( #logCreation )
-)
-		category: 'Gt4Llm';
-		immediateInvariant.
-true.
-%
-
-removeallmethods GtLlmActionCall
-removeallclassmethods GtLlmActionCall
-
-doit
-(Announcement
 	subclass: 'GtLlmMessageContentsUpdated'
 	instVarNames: #()
 	classVars: #()
@@ -327,24 +309,6 @@ removeallclassmethods GtLlmAssistant
 
 doit
 (GtLlmAssistant
-	subclass: 'GtLlmTutor'
-	instVarNames: #()
-	classVars: #()
-	classInstVars: #()
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #( #logCreation )
-)
-		category: 'Gt4Llm';
-		immediateInvariant.
-true.
-%
-
-removeallmethods GtLlmTutor
-removeallclassmethods GtLlmTutor
-
-doit
-(GtLlmAssistant
 	subclass: 'GtOpenAIBlogPostAssistant'
 	instVarNames: #()
 	classVars: #()
@@ -562,7 +526,7 @@ removeallclassmethods GtLlmActionChat
 doit
 (Object
 	subclass: 'GtLlmConnection'
-	instVarNames: #(provider label meta)
+	instVarNames: #(label meta providerClass)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1445,7 +1409,7 @@ removeallclassmethods GtLlmEntity
 doit
 (GtLlmEntity
 	subclass: 'GtLlmChatMessage'
-	instVarNames: #(content role id createdAt chat announcer images model)
+	instVarNames: #(content role id createdAt chat announcer images model originMessageCall)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1553,7 +1517,7 @@ removeallclassmethods GtLlmUserMessage
 doit
 (GtLlmChatMessage
 	subclass: 'GtOpenAIMessage'
-	instVarNames: #(threadId assistantId runId metadata annotations pipeline step completedAt incompleteAt)
+	instVarNames: #(threadId assistantId runId metadata step completedAt incompleteAt)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1607,7 +1571,7 @@ removeallclassmethods GtOpenAIBlogPostMessage
 doit
 (GtLlmEntity
 	subclass: 'GtLlmFunctionToolCall'
-	instVarNames: #(id arguments name tool)
+	instVarNames: #(id arguments name tool result)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -2686,6 +2650,60 @@ removeallclassmethods GtLlmInstructionWithSections
 
 doit
 (Object
+	subclass: 'GtLlmMessageCall'
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #( #logCreation )
+)
+		category: 'Gt4Llm';
+		immediateInvariant.
+true.
+%
+
+removeallmethods GtLlmMessageCall
+removeallclassmethods GtLlmMessageCall
+
+doit
+(GtLlmMessageCall
+	subclass: 'GtLlmActionCall'
+	instVarNames: #(action arguments subject)
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #( #logCreation )
+)
+		category: 'Gt4Llm';
+		immediateInvariant.
+true.
+%
+
+removeallmethods GtLlmActionCall
+removeallclassmethods GtLlmActionCall
+
+doit
+(GtLlmMessageCall
+	subclass: 'GtLlmStringMessageCall'
+	instVarNames: #(string)
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #( #logCreation )
+)
+		category: 'Gt4Llm';
+		immediateInvariant.
+true.
+%
+
+removeallmethods GtLlmStringMessageCall
+removeallclassmethods GtLlmStringMessageCall
+
+doit
+(Object
 	subclass: 'GtLlmMessagePart'
 	instVarNames: #()
 	classVars: #()
@@ -2971,6 +2989,24 @@ true.
 
 removeallmethods GtLlmNearestEmbedding
 removeallclassmethods GtLlmNearestEmbedding
+
+doit
+(Object
+	subclass: 'GtLlmNewAssistant'
+	instVarNames: #(instruction connection)
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #( #logCreation )
+)
+		category: 'Gt4Llm';
+		immediateInvariant.
+true.
+%
+
+removeallmethods GtLlmNewAssistant
+removeallclassmethods GtLlmNewAssistant
 
 doit
 (Object
@@ -3710,99 +3746,6 @@ true.
 removeallmethods GtLlmRequestHistory
 removeallclassmethods GtLlmRequestHistory
 
-! Class implementation for 'GtLlmActionCall'
-
-!		Class methods for 'GtLlmActionCall'
-
-category: 'accessing'
-classmethod: GtLlmActionCall
-action: aString
-	^ self new action: aString
-%
-
-category: 'accessing'
-classmethod: GtLlmActionCall
-action: aString arguments: aListOfStrings
-	^ self new
-		action: aString;
-		arguments: aListOfStrings
-%
-
-!		Instance methods for 'GtLlmActionCall'
-
-category: 'accessing'
-method: GtLlmActionCall
-action
-	^ action
-%
-
-category: 'accessing'
-method: GtLlmActionCall
-action: anObject
-	action := anObject
-%
-
-category: 'accessing'
-method: GtLlmActionCall
-arguments
-	^ arguments
-%
-
-category: 'accessing'
-method: GtLlmActionCall
-arguments: anObject
-	arguments := anObject
-%
-
-category: 'views'
-method: GtLlmActionCall
-gtSerializedFor: aView
-	<gtView>
-	^ aView forward
-		title: 'Serialized';
-		object: [ self serialize ];
-		view: #gtJSONFor:
-%
-
-category: 'views'
-method: GtLlmActionCall
-gtSerializedJSONFor: aView
-	<gtView>
-	^ aView forward
-		title: 'JSON';
-		object: [ self serialize ];
-		view: #gtJSONDataFor:context:
-%
-
-category: 'as yet unclassified'
-method: GtLlmActionCall
-initialize
-	arguments := {}
-%
-
-category: 'as yet unclassified'
-method: GtLlmActionCall
-serialize
-	| toSerialize |
-	toSerialize := {'Action' -> action.
-			'Arguments' -> (arguments collect: #asString)}.
-	subject ifNotNil: [ toSerialize := toSerialize, subject serialize asOrderedCollection ].
-	^ STONJSON toString: toSerialize asDictionary
-%
-
-category: 'accessing'
-method: GtLlmActionCall
-subject
-	"this is an optional object that we might want to serialize"
-	^ subject
-%
-
-category: 'accessing'
-method: GtLlmActionCall
-subject: anObject
-	subject := anObject
-%
-
 ! Class implementation for 'GtLlmNewThreadMessageContentsChanged'
 
 !		Instance methods for 'GtLlmNewThreadMessageContentsChanged'
@@ -4495,16 +4438,6 @@ treatProvider: aProvider
 		instructions: instruction asInstructionPiece instructionString;
 		format: instruction asJsonSchema;
 		tools: self collectTools
-%
-
-! Class implementation for 'GtLlmTutor'
-
-!		Class methods for 'GtLlmTutor'
-
-category: 'testing'
-classmethod: GtLlmTutor
-isDeprecated
-	^ true
 %
 
 ! Class implementation for 'GtOpenAIBlogPostAssistant'
@@ -6180,9 +6113,9 @@ sendFiles: aListOfFileReferences withMessage: aString
 
 category: 'accessing'
 method: GtLlmChat
-sendMessage: aMessage
-	self assert: aMessage isString.
-	self provider sendMessage: aMessage
+sendMessage: aString
+	self assert: aString isString.
+	self provider sendMessage: (GtLlmStringMessageCall new string: aString)
 %
 
 category: 'as yet unclassified'
@@ -6429,7 +6362,7 @@ category: 'as yet unclassified'
 method: GtLlmActionChat
 sendAction: anActionCall onAnswer: aBlock
 	anActionCall subject ifNil: [ anActionCall subject: instance ].
-	self provider sendMessage: anActionCall serialize.
+	self provider sendMessage: anActionCall.
 	self executeWait: aBlock
 %
 
@@ -6444,9 +6377,9 @@ sendChatRequest: aString
 
 category: 'accessing'
 method: GtLlmActionChat
-sendMessage: aMessage
-	self assert: (aMessage isKindOf: GtLlmActionCall).
-	^ self sendAction: aMessage
+sendMessage: anActionCall
+	self assert: (anActionCall isKindOf: GtLlmActionCall).
+	^ self sendAction: anActionCall
 %
 
 category: 'as yet unclassified'
@@ -6462,9 +6395,9 @@ updateInstance: aValue
 category: 'as yet unclassified'
 method: GtLlmConnection
 = anotherConnection
-	^anotherConnection class = self class and: 
-			[self model = anotherConnection model
-				and: [self provider = anotherConnection provider]]
+	^ anotherConnection class = self class
+		and: [ self model = anotherConnection model
+				and: [ self providerClass = anotherConnection providerClass ] ]
 %
 
 category: 'as yet unclassified'
@@ -6477,10 +6410,16 @@ category: 'as yet unclassified'
 method: GtLlmConnection
 buildProvider
 	| aProvider |
-	aProvider := self provider default value.
+	aProvider := self providerClass default value.
 	meta
 		keysAndValuesDo: [ :aKey :aValue | aProvider perform: aKey asSymbol asMutator withArguments: {aValue} ].
 	^ aProvider
+%
+
+category: 'accessing'
+method: GtLlmConnection
+connectionProviderClass: aClass
+	providerClass := aClass
 %
 
 category: 'as yet unclassified'
@@ -6492,7 +6431,7 @@ connectionString
 category: 'as yet unclassified'
 method: GtLlmConnection
 details
-	^ {'Provider' -> self provider providerName.
+	^ {'Provider' -> self providerClass providerName.
 		'Model' -> self model.
 		'Label' -> self label}
 %
@@ -6514,7 +6453,7 @@ method: GtLlmConnection
 gtDisplayOn: stream
 	stream
 		nextPutAll: 'Connection: ';
-		nextPutAll: self provider providerName;
+		nextPutAll: self providerClass providerName;
 		space;
 		nextPutAll: self model;
 		space;
@@ -6533,10 +6472,11 @@ gtOptionsFor: aView
 		column: 'Value' text: [ :aMeta | aMeta value ]
 %
 
-category: 'as yet unclassified'
+category: 'comparing'
 method: GtLlmConnection
 hash
-	^ self model hash xor: self provider hash
+	^ (self class hash hashMultiply bitXor: self model hash hashMultiply)
+		bitXor: self providerClass hash hashMultiply
 %
 
 category: 'as yet unclassified'
@@ -6550,7 +6490,7 @@ initialize
 category: 'as yet unclassified'
 method: GtLlmConnection
 isConnectable
-	^ self provider isConnectable
+	^ self providerClass isConnectable
 %
 
 category: 'accessing'
@@ -6580,19 +6520,33 @@ model: anObject
 category: 'accessing'
 method: GtLlmConnection
 provider
-	^ provider
+	self deprecated: 'use providerClass' transformWith: '`@rcv provider' -> '`@rcv providerClass'.
+	^ providerClass
 %
 
 category: 'accessing'
 method: GtLlmConnection
-provider: anObject
-	provider := anObject
+provider: aClass
+	self deprecated: 'use providerClass:' transformWith: '`@rcv provider: `@arg' -> '`@rcv providerClass: `@arg'.
+	self providerClass: aClass
+%
+
+category: 'accessing'
+method: GtLlmConnection
+providerClass
+	^ providerClass
+%
+
+category: 'accessing'
+method: GtLlmConnection
+providerClass: aClass
+	providerClass := aClass
 %
 
 category: 'as yet unclassified'
 method: GtLlmConnection
 providerName
-	^ self provider providerName
+	^ self providerClass providerName
 %
 
 ! Class implementation for 'GtLlmConnectionRegistry'
@@ -6677,7 +6631,7 @@ method: GtLlmConnectionRegistry
 connectionFor: aProvider
 	^ connections
 		detect: [ :aConnection | 
-			aConnection provider = aProvider class
+			aConnection providerClass = aProvider class
 				and: [ aConnection model = aProvider modelName ] ]
 		ifNone: [ nil ]
 %
@@ -6740,9 +6694,9 @@ category: 'as yet unclassified'
 method: GtLlmConnectionRegistry
 standardDefaultConnection
 	^ GtLlmConnection new
-		provider: GtOpenAIResponseProvider;
-		label: 'GPT 5 Codex';
-		model: 'gpt-5-codex';
+		providerClass: GtOpenAIResponseProvider;
+		label: 'GPT 5.1 Codex';
+		model: 'gpt-5.1-codex';
 		addOption: 'isStreaming' withValue: false
 %
 
@@ -8121,17 +8075,19 @@ serializationClass
 category: 'accessing'
 method: GtOpenAIGenerateResponseAPIClient
 buildEntity
-	| entity |
+	| entity input |
+	input := OrderedCollection new.
+	self messages
+		do: [ :aMessage | 
+			(aMessage isKindOf: GtLlmToolMessage)
+				ifTrue: [ input add: aMessage toolCall responseInput.
+					aMessage toolCall isFinished
+						ifTrue: [ input add: aMessage serializeResponse ]	"(aMessage reasoning ifNil: [ {} ] ifNotNil: [ {aMessage reasoning rawData} ])
+												," ]
+				ifFalse: [ input add: aMessage serialize ] ].
 	entity := {'model' -> self model.
 			'stream' -> isStreaming.
-			'input' -> (self messages
-						flatCollect: [ :aMessage | 
-							(aMessage isKindOf: GtLlmToolMessage)
-								ifTrue: [ {aMessage serializeResponse} ]
-								ifFalse: [ (aMessage isKindOf: GtOpenAIRawToolMessage)
-										ifTrue: [ (aMessage reasoning ifNil: [ {} ] ifNotNil: [ {aMessage reasoning rawData} ])
-												, {aMessage serialize} ]
-										ifFalse: [ {aMessage serialize} ] ] ])} asDictionary.
+			'input' -> input} asDictionary.
 
 	format
 		ifNotNil: [ entity
@@ -8884,11 +8840,11 @@ contentFiles
 category: 'as yet unclassified'
 method: GtLlmChatMessage
 contentJson
-	^ [ | ston value |
+	| ston value |
 	ston := STON reader on: self contentText readStream.
 	value := ston next.
 	self assert: ston atEnd.
-	value ] on: Error do: [ {'Text' -> self contentText} asDictionary ]
+	^ value 
 %
 
 category: 'accessing'
@@ -9008,6 +8964,13 @@ isSystemRole
 	^ self role = 'system'
 %
 
+category: 'testing'
+method: GtLlmChatMessage
+isToolMessage
+
+	^ false
+%
+
 category: 'accessing'
 method: GtLlmChatMessage
 isToolRole
@@ -9030,6 +8993,12 @@ category: 'accessing'
 method: GtLlmChatMessage
 model: anObject
 	model := anObject
+%
+
+category: 'as yet unclassified'
+method: GtLlmChatMessage
+originMessageCall: aMessageCall 
+	originMessageCall := aMessageCall
 %
 
 category: 'announcer - subscription'
@@ -9407,8 +9376,15 @@ gtOutputFor: aView
 	<gtLlmMessageView>
 	^ aView textEditor
 		title: 'Output';
-		priority: 1;
+		priority: 0;
 		text: [ self output ]
+%
+
+category: 'testing'
+method: GtLlmToolMessage
+isToolMessage
+
+	^ true
 %
 
 category: 'accessing'
@@ -9510,15 +9486,14 @@ method: GtOpenAIMessage
 annotations
 	(content isKindOf: String) ifTrue: [ ^ GtOpenAIAnnotationsGroup new ].
 
-	^ annotations
-		ifNil: [ annotations := GtOpenAIAnnotationsGroup
-					withAll: ((content select: [ :aValue | (aValue at: 'type') = 'text' ])
-							flatCollect: [ :aValue | 
-								((aValue at: 'text') at: 'annotations')
-									collect: [ :anAnnotation | 
-										(GtOpenAIAnnotation from: anAnnotation)
-											client: self client;
-											message: self ] ]) ]
+	^ GtOpenAIAnnotationsGroup
+		withAll: ((content select: [ :aValue | (aValue at: 'type') = 'text' ])
+				flatCollect: [ :aValue | 
+					((aValue at: 'text') at: 'annotations')
+						collect: [ :anAnnotation | 
+							(GtOpenAIAnnotation from: anAnnotation)
+								client: self client;
+								message: self ] ])
 %
 
 category: 'accessing'
@@ -9628,7 +9603,7 @@ gtAnnotationsFor: aView
 	<gtView>
 	^ aView forward
 		title: 'Annotations';
-		priority: 2;
+		priority: 20;
 		object: [ self annotations ];
 		view: #gtAnnotationsFor:
 %
@@ -9663,12 +9638,6 @@ incompleteAt
 	^ incompleteAt
 %
 
-category: 'accessing'
-method: GtOpenAIMessage
-incompleteAt: anObject
-	incompleteAt := anObject
-%
-
 category: 'as yet unclassified'
 method: GtOpenAIMessage
 incompleteAtString
@@ -9696,7 +9665,7 @@ isFailure
 category: 'as yet unclassified'
 method: GtOpenAIMessage
 isReady
-	^ self incompleteAt isNil or: [ self completedAt ]
+	^ incompleteAt isNil or: [ completedAt notNil ]
 %
 
 category: 'testing'
@@ -9959,13 +9928,23 @@ gtArgumentsFor: aView
 		column: 'Value' text: #value
 %
 
+category: 'views'
+method: GtLlmFunctionToolCall
+gtResultFor: aView
+	<gtView>
+	result ifNil: [ ^ aView empty ].
+	^ aView textEditor
+		title: 'Result';
+		text: [ result ]
+%
+
 category: 'as yet unclassified'
 method: GtLlmFunctionToolCall
 humanReadable
 	^ self name , ' ('
 		, (', '
 				join: (self arguments associations
-						collect: [ :anArgument | anArgument key , ': ' , anArgument value ])), ')'
+						collect: [ :anArgument | anArgument key , ': ' , anArgument value asString])), ')'
 %
 
 category: 'accessing'
@@ -9978,6 +9957,12 @@ category: 'accessing'
 method: GtLlmFunctionToolCall
 id: anObject
 	id := anObject
+%
+
+category: 'as yet unclassified'
+method: GtLlmFunctionToolCall
+isFinished
+	^ result notNil
 %
 
 category: 'accessing'
@@ -10018,6 +10003,18 @@ responseInput
 		'call_id' -> self id.
 		'name' -> self name.
 		'arguments' -> (STONJSON toString: self arguments)} asDictionary
+%
+
+category: 'accessing'
+method: GtLlmFunctionToolCall
+result
+	^ result
+%
+
+category: 'accessing'
+method: GtLlmFunctionToolCall
+result: anObject
+	result := anObject
 %
 
 category: 'accessing'
@@ -10166,8 +10163,11 @@ parameters
 category: 'llm-generated'
 method: GtLlmAbstractFunctionTool
 performToolCall: aToolCall
+	| result |
 	aToolCall performedByTool: self.
-	^ self privatePerformToolCall: aToolCall
+	result := self privatePerformToolCall: aToolCall.
+	aToolCall result: result.
+	^ result
 %
 
 category: 'llm-generated'
@@ -10245,7 +10245,7 @@ gtFunctionFor: aView
 		view: #gtItemsFor:
 %
 
-category: 'as yet unclassified'
+category: 'views'
 method: GtLlmFunctionTool
 gtMethodFor: aView
 	<gtView>
@@ -10257,7 +10257,7 @@ gtMethodFor: aView
 		view: #gtSourceCodeFor:
 %
 
-category: 'as yet unclassified'
+category: 'initialization'
 method: GtLlmFunctionTool
 initialize
 	super initialize.
@@ -10267,7 +10267,7 @@ initialize
 	description := ''
 %
 
-category: 'as yet unclassified'
+category: 'accessing'
 method: GtLlmFunctionTool
 method
 	| split class methodName |
@@ -10303,7 +10303,7 @@ parameters: anObject
 	parameters := anObject
 %
 
-category: 'llm-generated'
+category: 'accessing'
 method: GtLlmFunctionTool
 privatePerformToolCall: aGtLlmFunctionToolCall
 	| result |
@@ -13479,15 +13479,22 @@ isAssistantRole
 	^ true
 %
 
-category: 'accessing'
+category: 'testing'
 method: GtLlmErrorThreadMessage
 isFailure
 	^ true
 %
 
-category: 'as yet unclassified'
+category: 'testing'
 method: GtLlmErrorThreadMessage
 isRawMessage
+	^ false
+%
+
+category: 'as yet unclassified'
+method: GtLlmErrorThreadMessage
+isToolMessage
+
 	^ false
 %
 
@@ -13625,7 +13632,7 @@ isAssistantRole
 	^ true
 %
 
-category: 'accessing'
+category: 'testing'
 method: GtLlmFailureThreadMessage
 isFailure
 	^ true
@@ -14499,10 +14506,32 @@ gtMessagesFor: aView
 		column: 'Message' text: [ :item | item content ]
 %
 
+category: 'llm-generated'
+method: GtLlmMessagesGroup
+gtViewToolMessagesGroupedByTypeFor: aView
+	<gtView>
+
+	^ aView columnedList
+		title: 'Tool messages by type';
+		priority: 20;
+		items: [ self toolMessagesByType associations ];
+		column: 'Type' text: [ :each | each key asString ];
+		column: 'Value' text: [ :each | each value asString ]
+%
+
 category: 'accessing'
 method: GtLlmMessagesGroup
 serialize
 	^ {'messages' -> (self items collect: #serialize)} asDictionary
+%
+
+category: 'as yet unclassified'
+method: GtLlmMessagesGroup
+toolMessagesByType
+
+	^ (items select: #isToolMessage)
+		groupedBy: [ :each |
+			each toolCall tool ]
 %
 
 ! Class implementation for 'GtLlmNearestEmbeddingsGroup'
@@ -15172,14 +15201,6 @@ items: anObject
 
 ! Class implementation for 'GtLlmInstructionSection'
 
-!		Class methods for 'GtLlmInstructionSection'
-
-category: 'other'
-classmethod: GtLlmInstructionSection
-new
-	^ self basicNew initialize
-%
-
 !		Instance methods for 'GtLlmInstructionSection'
 
 category: 'accessing'
@@ -15365,13 +15386,13 @@ initialize
 category: 'accessing'
 method: GtLlmInstructionWithSections
 instructionString
-	^ self introduction instructionString
-		, '
-	
-'
-		, ('
-			
-' join: (self sections collect: [ :aSection | aSection instructionString ]))
+	| string |
+	string := self introduction instructionString.
+	^ self sections notEmpty
+		ifTrue: [ string , String lf
+				, (String lf
+						join: (self sections collect: [ :aSection | aSection instructionString ])) ]
+		ifFalse: [ string ]
 %
 
 category: 'accessing'
@@ -15384,6 +15405,12 @@ category: 'accessing'
 method: GtLlmInstructionWithSections
 introduction: anObject
 	introduction := anObject asInstructionPiece
+%
+
+category: 'as yet unclassified'
+method: GtLlmInstructionWithSections
+isEmpty 
+	^ self instructionString isEmpty
 %
 
 category: 'accessing'
@@ -15408,6 +15435,125 @@ method: GtLlmInstructionWithSections
 sections: anObject
 	sections := anObject asOrderedCollection
 			collect: [ :aSection | aSection asInstructionPiece parent: self ]
+%
+
+! Class implementation for 'GtLlmMessageCall'
+
+!		Instance methods for 'GtLlmMessageCall'
+
+category: 'as yet unclassified'
+method: GtLlmMessageCall
+serialize
+	^ self subclassResponsibility
+%
+
+! Class implementation for 'GtLlmActionCall'
+
+!		Class methods for 'GtLlmActionCall'
+
+category: 'accessing'
+classmethod: GtLlmActionCall
+action: aString
+	^ self new action: aString
+%
+
+category: 'accessing'
+classmethod: GtLlmActionCall
+action: aString arguments: aListOfStrings
+	^ self new
+		action: aString;
+		arguments: aListOfStrings
+%
+
+!		Instance methods for 'GtLlmActionCall'
+
+category: 'accessing'
+method: GtLlmActionCall
+action
+	^ action
+%
+
+category: 'accessing'
+method: GtLlmActionCall
+action: anObject
+	action := anObject
+%
+
+category: 'accessing'
+method: GtLlmActionCall
+arguments
+	^ arguments
+%
+
+category: 'accessing'
+method: GtLlmActionCall
+arguments: anObject
+	arguments := anObject
+%
+
+category: 'views'
+method: GtLlmActionCall
+gtSerializedFor: aView
+	<gtView>
+	^ aView forward
+		title: 'Serialized';
+		object: [ self serialize ];
+		view: #gtJSONFor:
+%
+
+category: 'as yet unclassified'
+method: GtLlmActionCall
+gtSerializedJSONFor: aView
+	<gtView>
+	^ aView forward
+		title: 'JSON';
+		object: [ self serialize ];
+		view: #gtJSONDataFor:context:
+%
+
+category: 'as yet unclassified'
+method: GtLlmActionCall
+initialize
+	arguments := {}
+%
+
+category: 'as yet unclassified'
+method: GtLlmActionCall
+serialize
+	| toSerialize |
+	toSerialize := {'Action' -> action.
+			'Arguments' -> (arguments collect: #asString)}.
+	subject ifNotNil: [ toSerialize := toSerialize, subject serialize asOrderedCollection ].
+	^ STONJSON toString: toSerialize asDictionary
+%
+
+category: 'accessing'
+method: GtLlmActionCall
+subject
+	"this is an optional object that we might want to serialize"
+	^ subject
+%
+
+category: 'accessing'
+method: GtLlmActionCall
+subject: anObject
+	subject := anObject
+%
+
+! Class implementation for 'GtLlmStringMessageCall'
+
+!		Instance methods for 'GtLlmStringMessageCall'
+
+category: 'as yet unclassified'
+method: GtLlmStringMessageCall
+serialize
+	^ string
+%
+
+category: 'accessing'
+method: GtLlmStringMessageCall
+string: anObject
+	string := anObject
 %
 
 ! Class implementation for 'GtLlmMessagePart'
@@ -15967,6 +16113,43 @@ input
 	^ self embedding input
 %
 
+! Class implementation for 'GtLlmNewAssistant'
+
+!		Instance methods for 'GtLlmNewAssistant'
+
+category: 'as yet unclassified'
+method: GtLlmNewAssistant
+recomputeFormats
+	instruction replaceComponents: self collectFormats
+%
+
+category: 'as yet unclassified'
+method: GtLlmNewAssistant
+textFormatDescription
+	<gtLlmAssistantFormat>
+	^ GtLlmAssistantFormatDescription new
+		name: 'Text';
+		priority: 2;
+		format: 'Text';
+		example: '```text
+This node contains plain text.
+Multiple lines, multiple paragraphs are allowed.
+
+*markup* may also **be used**. `Code` can be highlighted,  and code sections using three backticks may be used.
+
+# Headings exist as well
+```'
+%
+
+category: 'as yet unclassified'
+method: GtLlmNewAssistant
+treatProvider: aProvider
+	aProvider 
+		instructions: instruction asInstructionPiece instructionString;
+		format: instruction asJsonSchema;
+		tools: self collectTools
+%
+
 ! Class implementation for 'GtLlmNewThreadMessage'
 
 !		Instance methods for 'GtLlmNewThreadMessage'
@@ -16471,7 +16654,7 @@ method: GtLlmProvider
 gtCallsFor: aView
 	<gtView>
 	^ aView forward
-		title: 'Calls';
+		title: 'API calls';
 		priority: 1;
 		object: [ self client ];
 		view: #gtCallsFor:
@@ -16485,10 +16668,11 @@ sendAssistantMessage: anObject
 
 category: 'as yet unclassified'
 method: GtLlmProvider
-sendMessage: aMessage
+sendMessage: aMessageCall
 	self
 		sendAssistantMessage: (self userMessageClass new
-				content: aMessage;
+				content: aMessageCall serialize;
+				originMessageCall: aMessageCall;
 				role: 'user';
 				chat: self)
 %
@@ -16571,8 +16755,8 @@ printOn: aStream
 
 category: 'as yet unclassified'
 method: GtLlmNullProvider
-sendMessage: aMessage
-	self chat addMessage: (GtLlmUserMessage new content: aMessage)
+sendMessage: aMessageCall
+	self chat addMessage: (GtLlmUserMessage new content: aMessageCall serialize)
 %
 
 category: 'as yet unclassified'
@@ -16634,11 +16818,11 @@ printOn: aStream
 
 category: 'as yet unclassified'
 method: GtLlmStaticProvider
-sendMessage: aMessage
+sendMessage: aMessageCall
 	self chat
 		addMessage: (self userMessageClass new
 				role: 'user';
-				content: aMessage).
+				content: aMessageCall serialize).
 
 	self chat
 		addMessage: (self assistantMessageClass new
@@ -17432,18 +17616,20 @@ gtToolsFor: aView
 category: 'as yet unclassified'
 method: GtOpenAIResponseProvider
 handleToolCall: aToolCall
-	| toolOutput |
+	| toolOutput newMessage |
 	chat removeLastMessage.
-	chat
+	newMessage := GtLlmToolMessage new toolCall: aToolCall.	"chat
 		addMessage: (GtOpenAIRawToolMessage new
 				toolCall: aToolCall;
-				rawData: aToolCall rawData).
+				rawData: aToolCall rawData)."
+	chat addMessage: newMessage.
 	toolOutput := tools performToolCall: aToolCall.
-	chat
+	newMessage output: toolOutput.
+"	chat
 		addMessage: (GtLlmToolMessage new
 				toolCall: aToolCall;
 				output: toolOutput).
-
+"
 	self chat signalRunHasUpdated.
 
 	^ self executeWait
@@ -17484,15 +17670,19 @@ performToolCallsIn: result
 	| toolOutputs |
 	toolOutputs := result toolCalls
 			collect: [ :aToolCall | 
-				| toolOutput |
-				chat
+				| toolOutput newMessage|
+				newMessage := GtLlmToolMessage new
+							toolCall: aToolCall.
+				"chat
 					addMessage: (GtOpenAIRawToolMessage new
-							rawData: aToolCall responseInput).
+							rawData: aToolCall responseInput)."
+				chat addMessage: newMessage.
 				toolOutput := tools performToolCall: aToolCall.
-				chat
+				newMessage output: toolOutput
+"				chat
 					addMessage: (GtLlmToolMessage new
 							toolCall: aToolCall;
-							output: toolOutput) ].
+							output: toolOutput)" ].
 
 	self chat signalRunHasUpdated.
 
@@ -17979,7 +18169,9 @@ serializeClass: aClass
 		'comment' -> aClass instanceSide gtComment.
 		'package' -> aClass package name.
 		'instanceSlots' -> aClass slotNames.
-		'allInstanceMethods' -> (aClass methods asArray collect: [ :aMethod | aMethod selector ])} asDictionary
+		'classSlots' -> aClass class slotNames.
+		'allInstanceMethods' -> (aClass methods asArray collect: [ :aMethod | aMethod selector ]).
+		'allClassMethods' -> (aClass class methods asArray collect: [ :aMethod | aMethod selector ])} asDictionary
 %
 
 category: 'serialization'
@@ -17988,9 +18180,9 @@ serializeValue: aValue
 	^ {'class' -> aValue class name asString.
 		'superclass'
 			-> (aValue class superclass ifNil: [ nil ] ifNotNil: [ :aSuperclass | aSuperclass name ]).
-		'comment' -> aValue class instanceSide gtComment.
+		"'comment' -> aValue class instanceSide gtComment."
 		'package' -> aValue class package name.
-		'printString' -> (aValue printString escapeCharacter: '''').
+		'printString' -> ([(aValue printString escapeCharacter: '''')] on: Error do: [:e | 'Error printing object' ]).
 		'allInstanceMethods'
 			-> (aValue
 					ifNil: [ {} ]
@@ -19090,7 +19282,7 @@ gtCallsFor: aView
 	<gtView>
 	^ aView forward
 		title: 'Calls';
-		priority: 5;
+		priority: 0;
 		object: [ history ];
 		view: #gtCallsFor:
 %
@@ -19163,13 +19355,9 @@ post: aString withEntity: anEntity
 	| aClient response |
 	aClient := self initializeClient.
 	aClient url: self baseUrl / aString.
-
 	aClient contents: anEntity.
-	
 	response := aClient post.
-	
 	history add: (aClient request -> aClient response).
-
 	^ self checkForErrors: response
 %
 
@@ -20249,7 +20437,14 @@ gtCallsFor: aView
 		priority: 5;
 		items: [ self ];
 		column: 'URL' text: [ :aRequestResponse | aRequestResponse request url ];
-		column: 'Method' text: [ :aRequestResponse | aRequestResponse request method ] width: 100
+		column: 'Request'
+			text: [ :aRequestResponse | aRequestResponse request method ]
+			width: 100;
+		column: 'Response'
+			text: [ :aRequestResponse | 
+				String
+					streamContents: [ :out | aRequestResponse response statusLine writeOn: out ] ]
+			width: 150
 %
 
 ! Class extensions for 'ExecBlock'
