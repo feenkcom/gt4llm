@@ -118,6 +118,12 @@ GtLChat >> addUserMessage: aMessage [
 	self ensureReplyMessage.
 ]
 
+{ #category : #'api - message' }
+GtLChat >> allMessages [
+	^ Array
+		streamContents: [ :aStream | self messages messagesDo: [ :eachMessage | aStream nextPut: eachMessage ] ]
+]
+
 { #category : #accessing }
 GtLChat >> ancestorOf: aMessage [
 	^self 

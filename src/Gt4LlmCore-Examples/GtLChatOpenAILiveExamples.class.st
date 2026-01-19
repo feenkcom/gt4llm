@@ -399,7 +399,7 @@ GtLChatOpenAILiveExamples >> messageWithToolCallExample [
 	responseMessage := self currentChat sendMessage: currentMessage.
 	
 	self
-		waitForChatRunIsDoneThen: [ self assert: self currentChat messages size equals: 3 ].
+		waitForChatRunIsDoneThen: [ self assert: self currentChat messages size equals: 2 ].
 	
 	^ self currentChat
 ]
@@ -424,7 +424,7 @@ GtLChatOpenAILiveExamples >> messageWithToolCallExample_magritteMarkdown [
 	responseMessage := self currentChat sendMessage: currentMessage.
 
 	self
-		waitForChatRunIsDoneThen: [ self assert: self currentChat messages size equals: 3 ].
+		waitForChatRunIsDoneThen: [ self assert: self currentChat messages size equals: 2 ].
 
 	^ self currentChat
 ]
