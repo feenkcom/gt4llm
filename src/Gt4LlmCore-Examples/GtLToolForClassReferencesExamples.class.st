@@ -16,9 +16,9 @@ GtLToolForClassReferencesExamples >> classReferencesForExistingClass [
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: result isEmpty not.
-	self assert: (result includesSubstring: 'GtLToolForClassReferencesExamples').
-	^ tool
+	self assert: result isErrorDomainObject not.
+	self assert: (result serializeToOpenAIResponseJsonString includesSubstring: 'GtLToolForClassReferencesExamples').
+	^ call
 ]
 
 { #category : #'llm-generated' }

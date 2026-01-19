@@ -30,15 +30,18 @@ GtLToolForClassActionsExamples >> classActionsForExistingClass [
 	| tool call result |
 	tool := GtLToolForClassActions new.
 	call := GtLFunctionToolCall new.
-	call function: {
-		'name' -> tool name.
-		'arguments' -> {'className' -> 'GtLudoRecordingGame'} asDictionary
-	} asDictionary.
+	call
+		function: {'name' -> tool name.
+				'arguments' -> {'className' -> 'GtLudoRecordingGame'} asDictionary}
+				asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: result isEmpty not.
-	self assert: (result includesSubstring: 'gtAutoplayAction:').
-	^ tool
+	self assert: result isErrorDomainObject not.
+	self assert: result methods isNotEmpty.
+	self
+		assert: (result methods
+				anySatisfy: [ :eachMethod | eachMethod selector = 'gtAutoplayAction:' ]).
+	^ call
 ]
 
 { #category : #'llm-generated' }

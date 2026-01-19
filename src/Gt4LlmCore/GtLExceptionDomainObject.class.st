@@ -40,6 +40,18 @@ GtLExceptionDomainObject >> freeze: anException [
 	self exception: (GtSystemUtility freeze: anException)
 ]
 
+{ #category : #'gt - extensions' }
+GtLExceptionDomainObject >> gtExceptionStackFor: aView [
+	<gtView>
+	<gtLlmView>
+	exception ifNil: [ ^ aView empty ].
+	
+	^ aView forward
+		title: 'Exception stack';
+		object: [ self exception ];
+		view: #gtLiveFor:
+]
+
 { #category : #'api - testing' }
 GtLExceptionDomainObject >> isErrorDomainObject [
 	^ true

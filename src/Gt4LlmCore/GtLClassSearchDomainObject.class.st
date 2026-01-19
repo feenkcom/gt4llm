@@ -25,6 +25,17 @@ GtLClassSearchDomainObject >> foundClasses: aCollection [
 	foundClasses := aCollection
 ]
 
+{ #category : #views }
+GtLClassSearchDomainObject >> gtFoundClassesFor: aView [
+	<gtView>
+	<gtLlmView>
+	foundClasses ifNil: [ ^ aView empty ].
+	^ aView columnedList
+		title: 'Classes';
+		items: [ self foundClasses ];
+		column: 'Value' text: [ :each | each gtDisplayString ]
+]
+
 { #category : #accessing }
 GtLClassSearchDomainObject >> query [
 	^ query

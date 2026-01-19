@@ -33,6 +33,17 @@ GtLClassSubclassesDomainObject >> gtClassCoderViewFor: aView [
 		stencil: [ (GtCoderElement forClass: self foundClass) disablePlayPage ]
 ]
 
+{ #category : #'gt - extensions' }
+GtLClassSubclassesDomainObject >> gtSubclassesFor: aView [
+	<gtView>
+	<gtLlmView>
+	subclasses ifNil: [ ^ aView empty ].
+	^ aView columnedList
+		title: 'Subclasses';
+		items: [ self subclasses ];
+		column: 'Value' text: [ :each | each gtDisplayString ]
+]
+
 { #category : #'api - serializing' }
 GtLClassSubclassesDomainObject >> serializeToOpenAIResponseJsonObject [
 	"Return a JSON dictionary that represents the domain object."
