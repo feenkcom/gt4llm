@@ -714,9 +714,9 @@ GtLToolForRemoteExampleMethodsRunExamples >> exampleRunRejectsUnknownChangeType 
     resultString := tool performToolCall: call.
 	result := STONJSON fromString: resultString.
 	errorDictionary := result at: 'error' ifAbsent:
-		[ self error: '''error'' not found in: ', (STONJSON toStringPretty: result) ].
+		[ AssertionFailure signal: '''error'' not found in: ', (STONJSON toStringPretty: result) ].
 	message := errorDictionary at: 'message' ifAbsent:
-		[ self error: '''message'' not found in: ', (STONJSON toStringPretty: errorDictionary) ].
+		[ AssertionFailure signal: '''message'' not found in: ', (STONJSON toStringPretty: errorDictionary) ].
 	self assert: message equals: 'Unknown type: ''junk'''.
 ]
 

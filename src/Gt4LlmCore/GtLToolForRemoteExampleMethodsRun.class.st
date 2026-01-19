@@ -186,11 +186,11 @@ GtLToolForRemoteExampleMethodsRun >> customChangesFromArray: changesArray onProb
 			type = 'method'
 				ifTrue: [ self addMethod: changeDictionary to: eventFactory ]
 				ifFalse: [ type = 'class'
-						ifTrue: [ self addClass: changeDictionary to: eventFactory ]
+						ifTrue: [ self addClass: changeDictionary to: eventFactory onProblemDo: aBlock ]
 						ifFalse: [ type = 'removeMethod'
 								ifTrue: [ self addRemoveMethod: changeDictionary to: eventFactory ]
 								ifFalse: [ type = 'removeClass'
-										ifTrue: [ self addRemoveClass: changeDictionary to: eventFactory ]
+										ifTrue: [ self addRemoveClass: changeDictionary to: eventFactory onProblemDo: aBlock ]
 										ifFalse: [ ^ GtLProblemDomainObject new description: 'Unknown type: ' , type printString ] ] ] ] ].
 	^ eventFactory entries
 ]
@@ -241,15 +241,16 @@ GtLToolForRemoteExampleMethodsRun >> privateIsTrueValue: aValue [
 { #category : #api }
 GtLToolForRemoteExampleMethodsRun >> privatePerformToolCall: aToolCall [
 	| arguments checkNamesArray changesArray checkNames customChanges imageChanges imageSyncEvents job results runner jobSemaphore report |
-	report := GtLRemoteExamplesReportDomainObject new.
-	[ [ arguments := aToolCall arguments ifNil: [ Dictionary new ].
+	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	checkNamesArray := self
 			checkNamesFromArguments: arguments
 			onProblemDo: [ :aProblem | ^ aProblem ].
 	changesArray := self
 			changesArrayFromArguments: arguments
 			onProblemDo: [ :aProblem | ^ aProblem ].
-	runner := GtRemoteRunner new.
+
+	report := GtLRemoteExamplesReportDomainObject new.
+	[ [ runner := GtRemoteRunner new.
 	jobSemaphore := Semaphore new.
 	checkNames := self checkNamesFromArray: checkNamesArray.
 	customChanges := self
@@ -282,7 +283,7 @@ GtLToolForRemoteExampleMethodsRun >> privatePerformToolCall: aToolCall [
 		ifTrue: [ self addErrorMessage: 'Job completed, but has no results' to: report ]
 		ifFalse: [ self reportResults: results on: report ] ]
 		on: Error
-		do: [ :ex | ex pass "self errorReport: report exception: ex" ] ]
+		do: [ :ex | ^ GtLExceptionDomainObject new freeze: ex ] ]
 		ensure: [ runner ifNotNil: [ runner stop ] ].
 	^ report
 ]

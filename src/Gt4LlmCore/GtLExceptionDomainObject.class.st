@@ -73,5 +73,11 @@ GtLExceptionDomainObject >> serializeToOpenAIResponseJsonObject [
 		at: #error put: self messageText;
 		at: #errorClass put: self exception className;
 		at: #whatFailed put: self description;
+		at: #stackTrace put: self stackTrace;
 		yourself
+]
+
+{ #category : #'api - accessing' }
+GtLExceptionDomainObject >> stackTrace [
+	^ self exception stackString
 ]
