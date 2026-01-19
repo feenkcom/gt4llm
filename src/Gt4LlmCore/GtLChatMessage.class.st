@@ -26,8 +26,8 @@ GtLChatMessage class >> deSerializeAllImplementorsInstances [
 GtLChatMessage class >> leJsonV4AttributeMapping [
 
 	^ OrderedCollection new 
-		add: #rawData -> #rawData;
-		add: #client -> #client;
+		"add: #rawData -> #rawData;
+		add: #client -> #client;"
 		add: #contentText -> #content;
 		add: #role -> #role;
 		add: #id -> #id;
@@ -139,6 +139,13 @@ GtLChatMessage >> currentMessage [
 { #category : #accessing }
 GtLChatMessage >> descendant [
 	^ self chat descendantOf: self
+]
+
+{ #category : #accessing }
+GtLChatMessage >> deserializeTime: anObject [ 
+	^ (anObject isNil or: [ anObject isKindOf: DateAndTime ])
+		ifTrue: [ anObject ]
+		ifFalse: [ DateAndTime fromUnixTime: anObject ]
 ]
 
 { #category : #accessing }
