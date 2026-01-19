@@ -159,7 +159,7 @@ GtLReplyMessage >> notifyReplyMessageChanged [
 
 { #category : #accessing }
 GtLReplyMessage >> role [
-	^ self currentMessageDo: #role ifAbsent: [ super role ifNil: [ #waiting ] ]
+	^ self currentMessageDo: #role ifAbsent: [ #waiting ]
 ]
 
 { #category : #accessing }

@@ -87,7 +87,7 @@ GtLOpenAIProvider >> executeWait [
 			ifFalse: [ aMessage := isStreaming
 						ifTrue: [ self streamingMessageFrom: result ]
 						ifFalse: [ self assistantMessageClass new
-								model: self modelName;
+								modelName: self modelName;
 								rawData: (result output detect: [ :anOutput | (anOutput at: 'type') = 'message' ]) ].
 
 				self chat addAssistantMessage: aMessage.
@@ -191,22 +191,6 @@ GtLOpenAIProvider >> printOn: aStream [
 		nextPut: $(;
 		nextPutAll: self modelName;
 		nextPut: $)
-]
-
-{ #category : #'as yet unclassified' }
-GtLOpenAIProvider >> sendFiles: aListOfFileReferences withMessage: aString [
-	self
-		sendAssistantMessage: (self userMessageClass new
-				content: {{'type' -> 'input_text'.
-							'text' -> aString} asDictionary}
-						, (aListOfFileReferences
-								collect: [ :aFileReference | 
-									{'type' -> 'input_image'.
-										'image_url'
-											-> ('data:image/jpeg;base64,' , aFileReference binaryContents base64Encoded)}
-										asDictionary ]);
-				role: 'user';
-				chat: self)
 ]
 
 { #category : #'as yet unclassified' }
