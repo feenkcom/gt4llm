@@ -85,7 +85,7 @@ GtLToolMessage >> output [
 
 { #category : #accessing }
 GtLToolMessage >> output: anObject [
-	GtJustContextStackSignal emit.
+	self assert: [ anObject isKindOf: GtLDomainObject ].
 	output := anObject
 ]
 
@@ -102,9 +102,17 @@ GtLToolMessage >> role [
 
 { #category : #'as yet unclassified' }
 GtLToolMessage >> serializeForOpenAIResponsesAPI [
+	"Output should be defined using tools.
+	Available output values:
+		- array of objects
+		- string"
+	| anOutput |
+	self flag: #todo.
+	
+	anOutput := self output ifNotNil: #serializeToOpenAIResponseJsonString.
 	^ {'type' -> 'function_call_output'.
 		'call_id' -> toolCall id.
-		'output' -> self output} asDictionary
+		'output' -> anOutput} asDictionary
 ]
 
 { #category : #'api - accessing' }
