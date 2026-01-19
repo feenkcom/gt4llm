@@ -27,15 +27,18 @@ GtLToolForClassSubclassesExamples >> classSubclassesForExistingClass [
 	| tool call result |
 	tool := GtLToolForClassSubclasses new.
 	call := GtLFunctionToolCall new.
-	call function: {
-		'name' -> tool name.
-		'arguments' -> {'className' -> 'GtLAbstractFunctionTool'} asDictionary
-	} asDictionary.
+	call
+		function: {'name' -> tool name.
+				'arguments' -> {'className' -> 'GtLAbstractFunctionTool'} asDictionary}
+				asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: result isEmpty not.
-	self assert: (result includesSubstring: 'GtLToolForClassReferences').
-	^ tool
+	self assert: result isErrorDomainObject not.
+
+	self
+		assert: (result serializeToOpenAIResponseJsonString
+				includesSubstring: 'GtLToolForClassReferences').
+	^ call
 ]
 
 { #category : #'llm-generated' }

@@ -64,16 +64,21 @@ GtLToolForChatMethodSearch >> privatePerformToolCall: aToolCall [
 				markdown: 'Produce a PharoScript with the following search filter: ' , argument ].	"weak"
 	timeout := semaphore waitTimeoutSeconds: 120.
 	chat announcer unsubscribe: semaphore.
-	^ timeout not
-		ifTrue: [ [ | filter result |
-			filter := Object compiler
-					evaluate: (chat messages last assistantMessage responseModels at: 'PharoScript') content.
-			result := filter result toArray wait collect: #name.
-			result isEmpty ifTrue: [ ^ 'No references found' ].
-			^ Character cr join: (result first: (100 min: result size)) ]
-				on: Error
-				do: [ :e | 'Error' ] ]
-		ifFalse: [ 'Error' ]
+	timeout
+		ifTrue: [ ^ GtLProblemDomainObject new
+				description: 'Could not produce a PharoScript with a search filter on time' ].
+
+	[ | filter result promise |
+	filter := Object compiler
+			evaluate: (chat messages last assistantMessage responseModels at: 'PharoScript') content.
+	promise := filter result toArray
+			await: GtLSettings futureExecutionConfiguration.
+	result := promise wait.
+	^ GtLMethodsDomainObject new
+		methods: (result first: (100 min: result size));
+		mayHaveMore: result size > 100 ]
+		on: Error
+		do: [ :anException | ^ GtLExceptionDomainObject new freeze: anException ]
 ]
 
 { #category : #'as yet unclassified' }

@@ -17,8 +17,8 @@ GtLToolForChatMethodSearchExamples >> methodSearchHandlesError [
 					asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: result equals: 'Error'.
-	^ tool
+	self assert: result isErrorDomainObject.
+	^ call
 ]
 
 { #category : #examples }
@@ -35,8 +35,11 @@ GtLToolForChatMethodSearchExamples >> methodSearchReturnsMatches [
 					asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result includesSubstring: 'GtLToolForChatMethodSearchExamples').
-	^ tool
+	self assert: result isErrorDomainObject not.
+	self
+		assert: (result methods
+				anySatisfy: [ :each | each methodClass name = 'GtLToolForChatMethodSearchExamples' ]).
+	^ call
 ]
 
 { #category : #examples }

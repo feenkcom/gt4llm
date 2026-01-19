@@ -33,6 +33,17 @@ GtLClassReferencesDomainObject >> gtClassCoderViewFor: aView [
 		stencil: [ (GtCoderElement forClass: self foundClass) disablePlayPage ]
 ]
 
+{ #category : #views }
+GtLClassReferencesDomainObject >> gtReferencesFor: aView [
+	<gtView>
+	<gtLlmView>
+	references ifNil: [ ^ aView empty ].
+	^ aView columnedList
+		title: 'References';
+		items: [ self references ];
+		column: 'Value' text: [ :each | each gtDisplayString ]
+]
+
 { #category : #accessing }
 GtLClassReferencesDomainObject >> references [
 	^ references ifNil: [ #() ]

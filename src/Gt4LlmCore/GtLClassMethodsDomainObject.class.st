@@ -23,9 +23,20 @@ GtLClassMethodsDomainObject >> gtClassCoderViewFor: aView [
 		stencil: [ (GtCoderElement forClass: self targetClass) disablePlayPage ]
 ]
 
+{ #category : #'gt - extensions' }
+GtLClassMethodsDomainObject >> gtMethodsFor: aView [
+	<gtView>
+	<gtLlmView>
+	methods ifNil: [ ^ aView empty ].
+	^ aView columnedList
+		title: 'Methods';
+		items: [ self methods ];
+		column: 'Value' text: [ :each | each gtDisplayString ]
+]
+
 { #category : #accessing }
 GtLClassMethodsDomainObject >> methods [
-	^ methods
+	^ methods ifNil: [ #() ]
 ]
 
 { #category : #accessing }

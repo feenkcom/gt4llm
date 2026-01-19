@@ -13,6 +13,17 @@ GtLMethodsDomainObject >> acceptVisitor: aVisitor [
 	^ aVisitor visitMethodsDomainObject: self
 ]
 
+{ #category : #'gt - extensions' }
+GtLMethodsDomainObject >> gtMethodsFor: aView [
+	<gtView>
+	<gtLlmView>
+	methods ifNil: [ ^ aView empty ].
+	^ aView columnedList
+		title: 'Methods';
+		items: [ self methods ];
+		column: 'Value' text: [ :each | each gtDisplayString ]
+]
+
 { #category : #accessing }
 GtLMethodsDomainObject >> mayHaveMore [
 	^ mayHaveMore ifNil: [ false ]
