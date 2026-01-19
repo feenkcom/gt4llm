@@ -25,7 +25,9 @@ GtLChatMessage class >> deSerializeAllImplementorsInstances [
 { #category : #accessing }
 GtLChatMessage class >> leJsonV4AttributeMapping [
 
-	^ super leJsonV4AttributeMapping
+	^ OrderedCollection new 
+		add: #rawData -> #rawData;
+		add: #client -> #client;
 		add: #contentText -> #content;
 		add: #role -> #role;
 		add: #id -> #id;
