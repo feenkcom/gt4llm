@@ -86,16 +86,6 @@ GtLFunctionToolCall >> gtDisplayOn: aStream [
 		nextPut: $)
 ]
 
-{ #category : #views }
-GtLFunctionToolCall >> gtResultFor: aView [
-	<gtView>
-	result ifNil: [ ^ aView empty ].
-	^ aView textEditor
-		title: 'Result';
-		priority: 2;
-		text: [ result ]
-]
-
 { #category : #'gt - extensions' }
 GtLFunctionToolCall >> gtViewsInContext: aPhlowContext [
 	| collectedViews |

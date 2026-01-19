@@ -19,7 +19,8 @@ GtLMethodsDomainObject >> gtMethodsFor: aView [
 	<gtLlmView>
 	methods ifNil: [ ^ aView empty ].
 	^ aView columnedList
-		title: 'Methods';
+		title: 'Found methods';
+		priority: 1;
 		items: [ self methods ];
 		column: 'Value' text: [ :each | each gtDisplayString ]
 ]

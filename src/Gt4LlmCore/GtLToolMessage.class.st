@@ -45,7 +45,7 @@ GtLToolMessage >> gtArgumentsFor: aView [
 	<gtLlmView>
 	^ aView forward
 		title: 'Arguments';
-		priority: 5;
+		priority: 15;
 		object: [ self toolCall ];
 		view: #gtArgumentsFor:
 ]
@@ -65,16 +65,6 @@ GtLToolMessage >> gtDisplayOn: aStream [
 { #category : #'as yet unclassified' }
 GtLToolMessage >> gtInspectorTargetModels [
 	^ self output ifNotNil: [ :anOutput | {anOutput} ] ifNil: [ #() ]
-]
-
-{ #category : #'gt - extensions' }
-GtLToolMessage >> gtOutputFor: aView [
-	<gtView>
-	<gtLlmView>
-	^ aView textEditor
-		title: 'Output';
-		priority: 0;
-		text: [ self output ]
 ]
 
 { #category : #testing }
