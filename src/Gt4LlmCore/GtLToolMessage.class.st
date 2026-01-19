@@ -67,16 +67,6 @@ GtLToolMessage >> gtInspectorTargetModels [
 	^ self output ifNotNil: [ :anOutput | {anOutput} ] ifNil: [ #() ]
 ]
 
-{ #category : #'gt - extensions' }
-GtLToolMessage >> gtOutputFor: aView [
-	<gtView>
-	<gtLlmView>
-	^ aView textEditor
-		title: 'Output';
-		priority: 0;
-		text: [ self output ]
-]
-
 { #category : #testing }
 GtLToolMessage >> isToolMessage [
 
