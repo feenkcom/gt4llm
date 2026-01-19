@@ -13,6 +13,18 @@ GtLTestCaseDomainObject >> acceptVisitor: aVisitor [
 	^ aVisitor visitTestCaseDomainObject: self
 ]
 
+{ #category : #'gt - extensions' }
+GtLTestCaseDomainObject >> gtTestCaseFor: aView [
+	<gtView>
+	<gtLlmView>
+	self testCase ifNil: [ ^ aView empty ].
+	
+	^ aView forward
+		title: 'Method';
+		object: [ self testCase ];
+		view: #gtTestMethodFor:
+]
+
 { #category : #'api - testing' }
 GtLTestCaseDomainObject >> isErrorResult [
 	^ self result isError: self testCase
@@ -20,8 +32,7 @@ GtLTestCaseDomainObject >> isErrorResult [
 
 { #category : #'api - testing' }
 GtLTestCaseDomainObject >> isExpectedDefectResult [
-	^ (self isErrorResult or: [ self isFailureResult ])
-		and: [ self testCase shouldPass ]
+	^ self result expectedDefects includes: self testCase
 ]
 
 { #category : #'api - testing' }

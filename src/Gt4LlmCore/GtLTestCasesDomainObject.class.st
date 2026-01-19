@@ -34,6 +34,28 @@ GtLTestCasesDomainObject >> failureCount [
 	^ self testCases count: #isFailureResult
 ]
 
+{ #category : #'gt - extensions' }
+GtLTestCasesDomainObject >> gtTestCasesFor: aView [
+	<gtView>
+	<gtLlmView>
+	testCases ifNil: [ ^ aView empty ].
+	^ aView columnedList
+		title: 'TestCases';
+		items: [ self testCases ];
+		column: 'Class'
+			text: [ :eachTestCase | eachTestCase testCase class ]
+			weight: 2;
+		column: 'Method'
+			text: [ :eachTestCase | eachTestCase testCase selector ]
+			weight: 2;
+		column: 'State' text: [ :eachTestCase | eachTestCase statusText ];
+		column: 'Expected defect'
+			text: [ :eachTestCase | 
+				GtPhlowOverviewItem new
+					boolean: eachTestCase isExpectedDefectResult;
+					description ]
+]
+
 { #category : #accessing }
 GtLTestCasesDomainObject >> notFoundClassNames [
 	^ notFoundClassNames ifNil: [ #() ]
@@ -95,7 +117,7 @@ GtLTestCasesDomainObject >> skippedCount [
 { #category : #accessing }
 GtLTestCasesDomainObject >> testCases [
 	<return: #Array of: #GtLTestCaseDomainObject>
-	^ testCases
+	^ testCases ifNil: [ #() ]
 ]
 
 { #category : #accessing }
