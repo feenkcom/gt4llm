@@ -81,11 +81,6 @@ GtLChatMessage >> asTokenizableString [
 	^ '<|im_start|>' , self role , '<|im_sep|>' , self content , '<|im_end|>'
 ]
 
-{ #category : #private }
-GtLChatMessage >> buildCompleteInstructionString [
-	^ self instructions instructionString
-]
-
 { #category : #accessing }
 GtLChatMessage >> chat [
 	^ chat
@@ -97,6 +92,14 @@ GtLChatMessage >> chat: aChat [
 	chat  
 		previousUserMessageIfPresent: [ :msg | self updateDataFromMessage: msg ] 
 		ifAbsent: [ self updateDataFromChat: aChat]
+]
+
+{ #category : #private }
+GtLChatMessage >> completeInstructionString [
+	^ self instructions 
+		ifNil: [''] 
+		ifNotNil: [ :anInstructions |
+			anInstructions instructionString ]
 ]
 
 { #category : #accessing }

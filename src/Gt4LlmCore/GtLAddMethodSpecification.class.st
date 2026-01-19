@@ -22,6 +22,11 @@ GtLAddMethodSpecification >> asRefactoringIn: aNamespace [
 		withProtocol: protocolName
 ]
 
+{ #category : #accessing }
+GtLAddMethodSpecification >> changeType [
+	^ 'AddMethod'
+]
+
 { #category : #'as yet unclassified' }
 GtLAddMethodSpecification >> descriptionContainer [
 	^ super descriptionContainer
@@ -81,7 +86,8 @@ GtLAddMethodSpecification >> sourceCodeDescription [
 	<magritteDescription>
 	
 	 ^ MAStringDescription new
-		  accessor: #sourceCodeOfMethodToAdd
+		  accessor: #sourceCodeOfMethodToAdd;
+		  comment: 'The method source code in plain text; do not include the name of the class as the beginning'
 ]
 
 { #category : #accessing }

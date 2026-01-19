@@ -29,6 +29,11 @@ GtLAddClassSpecification >> asRefactoringIn: aNamespace [
 	^ refactoring
 ]
 
+{ #category : #accessing }
+GtLAddClassSpecification >> changeType [
+	^ 'AddClass'
+]
+
 { #category : #'as yet unclassified' }
 GtLAddClassSpecification >> descriptionContainer [
 	^ super descriptionContainer

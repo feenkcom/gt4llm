@@ -72,10 +72,16 @@ GtMagriteJSONSchemaCreationVisitor >> visitPriorityContainer: aContainer [
 
 { #category : #'visiting-description' }
 GtMagriteJSONSchemaCreationVisitor >> visitStringDescription: aStringDescription [
-	| schema|
+	| schema |
+	
 	schema := NeoJSONObject  new 
 			at: 'type' put: 'string';
 			yourself.
+			
+	(aStringDescription hasProperty: 'enum') ifTrue: [
+		schema 
+			at: 'enum' 
+			put: (aStringDescription propertyAt: 'enum') asArray ].
 			
 	aStringDescription hasComment ifTrue: [
 		schema at: 'description' put: aStringDescription comment	].
