@@ -74,7 +74,7 @@ GtLOpenAIProvider >> executeWait [
 		result := client
 				generateResponseWithModel: self modelName
 				messages: self chat messages
-				instructions: currentMessage buildCompleteInstructionString
+				instructions: currentMessage completeInstructionString
 				tools: currentMessage tools
 				andFormat: (currentMessage hasFormats
 						ifTrue: [ currentMessage formatDescriptionsJsonSchema ]

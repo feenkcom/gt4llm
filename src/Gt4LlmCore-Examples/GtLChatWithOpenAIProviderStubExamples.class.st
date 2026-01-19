@@ -11,7 +11,7 @@ GtLChatWithOpenAIProviderStubExamples >> chatWithInstructions [
 	chat := self chatWithOpenAIProviderStub.
 	chat addInstructionSectionForLepiterPages: {'Examples by example'} titled: 'Explanations'.
 	message := chat createUserMessage.
-	instructions := message buildCompleteInstructionString.
+	instructions := message completeInstructionString.
 	self assert: (instructions includesSubstring: 'Examples by example').
 	^ message
 ]
@@ -54,10 +54,10 @@ GtLChatWithOpenAIProviderStubExamples >> messageWithInstructions [
 	| chat message instructions |
 	chat := self chatWithOpenAIProviderStub.
 	message := chat createUserMessage.
-	instructions := message buildCompleteInstructionString.
+	instructions := message completeInstructionString.
 	self assert: instructions isEmpty.
 	message addInstructionSectionForLepiterPages: {'Examples by example'} titled: 'Explanations'.
-	instructions := message buildCompleteInstructionString.
+	instructions := message completeInstructionString.
 	self assert: instructions notEmpty.
 	^ message
 ]

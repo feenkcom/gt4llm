@@ -23,7 +23,7 @@ GtLRemoveMethodSpecification >> asRefactoringIn: aNamespace [
 { #category : #magritte }
 GtLRemoveMethodSpecification >> descriptionContainer [
 	^ super descriptionContainer
-		comment: 'The "Remove method" transformation removes a method identified by methodNameToRemove from the class named methodClassName.'
+		comment: 'The "Remove method" transformation removes a method identified by methodNameToRemove from the class named methodClassName. Only use it in case code needs to be removed.'
 ]
 
 { #category : #printing }
