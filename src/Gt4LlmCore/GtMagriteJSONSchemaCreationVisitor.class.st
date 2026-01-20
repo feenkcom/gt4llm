@@ -35,6 +35,33 @@ GtMagriteJSONSchemaCreationVisitor >> extractSchemaForClasses: aCollectioOfClass
 ]
 
 { #category : #accessing }
+GtMagriteJSONSchemaCreationVisitor >> extractSchemaWithExplicitContainersForClasses: aCollectioOfClasses [ 
+	| individualSchema |
+	
+ 	individualSchema :=	aCollectioOfClasses 
+ 		collect: [ :aClass |
+			| singleSchema containerSchema propertiesSchema |
+			singleSchema := self extractSingleSchemaForClass: aClass.
+ 			
+			containerSchema := NeoJSONObject new
+				at: 'type' put: 'object';
+			yourself.
+			propertiesSchema := NeoJSONObject new.
+			propertiesSchema at: aClass jsonSchemaLabel put: singleSchema.
+			
+			containerSchema 
+				at: 'properties' put: propertiesSchema;
+				at: 'required'put: (NeoJSONArray withAll: {aClass jsonSchemaLabel});
+				at: 'additionalProperties' put: false.
+			containerSchema ]
+ 		as: NeoJSONArray.
+ 				
+ 	^ NeoJSONObject  new 
+		at: 'anyOf' put: individualSchema;
+		yourself.
+]
+
+{ #category : #accessing }
 GtMagriteJSONSchemaCreationVisitor >> extractSingleSchemaForClass: aClass [
 	| itemsDescription |
 	itemsDescription := aClass new 
@@ -64,7 +91,8 @@ GtMagriteJSONSchemaCreationVisitor >> visitPriorityContainer: aContainer [
 	schema
 		at: 'required'
 			put: (aContainer children
-					collect: [ :aDescription | aDescription accessor readSelector ]);
+					collect: [ :aDescription | aDescription accessor readSelector ]
+					as: NeoJSONArray);
 		at: 'additionalProperties' put: false.
 
 	^ currentSchema := schema
@@ -93,8 +121,11 @@ GtMagriteJSONSchemaCreationVisitor >> visitStringDescription: aStringDescription
 GtMagriteJSONSchemaCreationVisitor >> visitToManyRelationDescription: aDescription [
 	| schema itemSchema  |
 	
-	itemSchema := self 
-		extractSchemaForClasses: aDescription classes.
+	itemSchema :=  (aDescription shouldUseExplicitContainerForChildren)
+		ifTrue: [
+			self extractSchemaWithExplicitContainersForClasses: aDescription classes ]
+		ifFalse: [
+			self extractSchemaForClasses: aDescription classes ].
 	
 	schema := NeoJSONObject  new 
 		at: 'type' put: 'array';

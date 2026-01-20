@@ -8,9 +8,14 @@ Class {
 	#category : #'Gt4LlmCore-Formats'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 GtLPushDownMethodSpecification class >> isConcrete [
 	^ false
+]
+
+{ #category : #accessing }
+GtLPushDownMethodSpecification class >> jsonSchemaLabel [
+	^ 'PushDownMethod'
 ]
 
 { #category : #'as yet unclassified' }

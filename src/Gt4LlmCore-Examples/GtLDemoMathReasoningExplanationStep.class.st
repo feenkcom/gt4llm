@@ -8,6 +8,11 @@ Class {
 }
 
 { #category : #comparing }
+GtLDemoMathReasoningExplanationStep class >> jsonSchemaLabel [
+	^ 'ExplanationStep'
+]
+
+{ #category : #comparing }
 GtLDemoMathReasoningExplanationStep >> = anObject [
 
 	"Answer whether the receiver and anObject represent the same object."

@@ -4,9 +4,16 @@ Class {
 	#category : #'Gt4LlmCore-Formats'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 GtLCodeTransformationSpecification class >> isConcrete [
 	^ false
+]
+
+{ #category : #accessing }
+GtLCodeTransformationSpecification class >> jsonSchemaLabel [
+	^ (self class name
+		withoutPrefix: 'GtL')
+		withoutSuffix: 'Specification'
 ]
 
 { #category : #accessing }
@@ -19,28 +26,6 @@ GtLCodeTransformationSpecification >> asRefactoring [
 { #category : #'as yet unclassified' }
 GtLCodeTransformationSpecification >> asRefactoringIn: aNamespace [
 	^ self subclassResponsibility
-]
-
-{ #category : #accessing }
-GtLCodeTransformationSpecification >> changeType [
-	^ (self class name
-		withoutPrefix: 'GtL')
-		withoutSuffix: 'Specification'
-]
-
-{ #category : #accessing }
-GtLCodeTransformationSpecification >> changeType: toIgnore [
-	
-]
-
-{ #category : #accessing }
-GtLCodeTransformationSpecification >> changeTypeDescription [
-	"<magritteDescription>"
-	
-	 ^ MAStringDescription new
-		  accessor: #changeType;
-		  propertyAt: 'enum' put: {self changeType};
-		  yourself.
 ]
 
 { #category : #views }

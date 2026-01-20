@@ -8,9 +8,14 @@ Class {
 	#category : #'Gt4LlmCore-Formats'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 GtLAddMethodSpecification class >> isConcrete [
 	^ true
+]
+
+{ #category : #accessing }
+GtLAddMethodSpecification class >> jsonSchemaLabel [
+	^ 'AddMethod'
 ]
 
 { #category : #'as yet unclassified' }
@@ -20,11 +25,6 @@ GtLAddMethodSpecification >> asRefactoringIn: aNamespace [
 		sourceCode: sourceCode
 		in: methodClassName
 		withProtocol: protocolName
-]
-
-{ #category : #accessing }
-GtLAddMethodSpecification >> changeType [
-	^ 'AddMethod'
 ]
 
 { #category : #'as yet unclassified' }

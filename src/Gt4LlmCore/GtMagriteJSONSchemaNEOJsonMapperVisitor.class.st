@@ -42,6 +42,74 @@ GtMagriteJSONSchemaNEOJsonMapperVisitor >> addExtraMappingsForDescriptors: targe
 ]
 
 { #category : #accessing }
+GtMagriteJSONSchemaNEOJsonMapperVisitor >> addMappingForArrayOfEntitiesFor: aDescription [ 
+	| itemName |
+	itemName := aDescription classes size > 1 
+		ifTrue: [ String streamContents: [ :s | 
+			(aDescription classes collect: [ :each | each name ] )
+					asStringOn: s 
+					 	delimiter: 'Or' ] ]
+		ifFalse: [ aDescription classes first ] .
+	
+	neoJsonMapper
+		for: aDescription gtJsonSchemaTypeName
+		customDo: [ :mapping | 
+			mapping
+				listOfElementSchema: itemName.
+			mapping
+				writer: [ :jsonWriter :object | 
+					self error: 'Writer should not be used!' ] ].
+]
+
+{ #category : #accessing }
+GtMagriteJSONSchemaNEOJsonMapperVisitor >> addMappingWithExplicitContainersFor: aDescription [ 
+	| itemName |
+	
+	self 
+		assert:  aDescription classes size > 1  
+		description: 'Explicit container only works with multiple classes'.
+
+	itemName := aDescription classes size > 1 
+		ifTrue: [ 'EntityFromContainerOfType', (String streamContents: [ :s | 
+			(aDescription classes collect: [ :each | each name ] )
+					asStringOn: s 
+					 	delimiter: 'Or' ]) ]
+		ifFalse: [ Error signal: 'Not Supported' ] .
+		
+	neoJsonMapper
+		for: aDescription gtJsonSchemaTypeName
+		customDo: [ :mapping | 
+			mapping
+				listOfElementSchema: itemName.
+			mapping
+				writer: [ :jsonWriter :object | 
+					self error: 'Writer should not be used!' ] ].
+
+	neoJsonMapper
+		for: itemName
+		customDo: [ :mapping | 
+			mapping reader: [ :jsonReader | 
+				| result |
+				result := OrderedCollection new.
+				jsonReader parseMapKeysDo: [ :key | 
+					| value |
+					aDescription classes 
+						detect: [ :aDomainClass | 
+							aDomainClass jsonSchemaLabel = key ]
+						ifFound: [ :aDomainClass |
+							value := jsonReader nextAs: aDomainClass. ]
+						ifNone: [ Error signal: 'Schema not found: ', key ].
+					result add: value ].
+					self 
+						assert: result size = 1 
+						description: 'Only '.
+						
+					result first ].
+			mapping writer: [ :jsonWriter :map | 
+				self error: 'to be implemented' ] ].
+]
+
+{ #category : #accessing }
 GtMagriteJSONSchemaNEOJsonMapperVisitor >> addMappingsForClasses: aCollectionOfClasses [
 	| targetDescriptions |
 	
@@ -68,7 +136,7 @@ GtMagriteJSONSchemaNEOJsonMapperVisitor >> neoJsonMapper: aNeoJsonMapper [
 	neoJsonMapper := aNeoJsonMapper 
 ]
 
-{ #category : #accessing }
+{ #category : #'visiting-description' }
 GtMagriteJSONSchemaNEOJsonMapperVisitor >> visitPriorityContainer: aContainer [
 	
 	neoJsonMapper
@@ -83,30 +151,19 @@ GtMagriteJSONSchemaNEOJsonMapperVisitor >> visitPriorityContainer: aContainer [
 			aDescription acceptMagritte: self ].
 ]
 
-{ #category : #accessing }
+{ #category : #'visiting-description' }
 GtMagriteJSONSchemaNEOJsonMapperVisitor >> visitToManyRelationDescription: aDescription [
-	| itemName |
-	
-	itemName := aDescription classes size > 1 
-		ifTrue: [ String streamContents: [ :s | 
-			(aDescription classes collect: [ :each | each name ] )
-					asStringOn: s 
-					 	delimiter: 'Or' ] ]
-		ifFalse: [ aDescription classes first ] .
-	
-	neoJsonMapper
-		for: aDescription gtJsonSchemaTypeName
-		customDo: [ :mapping | 
-			mapping
-				listOfElementSchema: itemName.
-			mapping
-				writer: [ :jsonWriter :object | 
-					self error: 'Writer should not be used!' ] ].
 
+	(aDescription shouldUseExplicitContainerForChildren)
+		ifTrue: [
+			self addMappingWithExplicitContainersFor: aDescription ]
+		ifFalse: [
+			self addMappingForArrayOfEntitiesFor: aDescription].
+	
 	self addMappingsForClasses: aDescription classes.
 ]
 
-{ #category : #accessing }
+{ #category : #'visiting-description' }
 GtMagriteJSONSchemaNEOJsonMapperVisitor >> visitToOneRelationDescription: aDescription [
 	
 	self addMappingsForClasses: aDescription classes.
