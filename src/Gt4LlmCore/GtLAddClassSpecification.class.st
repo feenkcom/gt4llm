@@ -16,6 +16,11 @@ GtLAddClassSpecification class >> isConcrete [
 	^ true
 ]
 
+{ #category : #accessing }
+GtLAddClassSpecification class >> jsonSchemaLabel [
+	^ 'AddClass'
+]
+
 { #category : #'as yet unclassified' }
 GtLAddClassSpecification >> asRefactoringIn: aNamespace [
 	| refactoring |
@@ -27,11 +32,6 @@ GtLAddClassSpecification >> asRefactoringIn: aNamespace [
 			category: packageName asSymbol.
 	slotNames notEmpty ifTrue: [ refactoring instanceVariableNames: (Character space split: slotNames) ].
 	^ refactoring
-]
-
-{ #category : #accessing }
-GtLAddClassSpecification >> changeType [
-	^ 'AddClass'
 ]
 
 { #category : #'as yet unclassified' }

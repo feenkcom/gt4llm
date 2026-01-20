@@ -9,7 +9,12 @@ Class {
 
 { #category : #testing }
 GtLRemoveMethodSpecification class >> isConcrete [
-	^ false
+	^ true
+]
+
+{ #category : #accessing }
+GtLRemoveMethodSpecification class >> jsonSchemaLabel [
+	^ 'RemoveMethod'
 ]
 
 { #category : #refactoring }

@@ -7,6 +7,11 @@ Class {
 	#category : #'Gt4LlmCore-Examples-Magritte'
 }
 
+{ #category : #accessing }
+GtLDemoMathReasoningOutputStep class >> jsonSchemaLabel [
+	^ 'OutputStep'
+]
+
 { #category : #comparison }
 GtLDemoMathReasoningOutputStep >> = anObject [
 
