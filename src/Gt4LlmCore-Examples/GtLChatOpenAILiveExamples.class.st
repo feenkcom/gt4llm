@@ -24,6 +24,27 @@ GtLChatOpenAILiveExamples class >> isSynchronous: aBoolean [
 	IsSynchronous := aBoolean
 ]
 
+{ #category : #'examples - calls' }
+GtLChatOpenAILiveExamples >> chatWithTwoBasicMessages [
+	<gtExample>
+	<noTest>
+	| chat |
+	chat := self currentChat.
+	chat sendMarkdown: 'Write a script for adding 2 and 40 in Smalltalk'.
+
+	self
+		waitForChatRunIsDoneThen: [ self assert: self currentChat messages size equals: 2.
+			self assert: self currentChat isFinishedSuccesss ].
+
+	chat sendMarkdown: 'Extend the script to multiply the overall result by 10'.
+
+	self
+		waitForChatRunIsDoneThen: [ self assert: self currentChat messages size equals: 4.
+			self assert: self currentChat isFinishedSuccesss ].
+
+	^ self currentChat
+]
+
 { #category : #examples }
 GtLChatOpenAILiveExamples >> createChat [
 	<gtExample>
