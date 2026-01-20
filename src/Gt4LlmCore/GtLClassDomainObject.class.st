@@ -29,14 +29,18 @@ GtLClassDomainObject >> gtClassCoderViewFor: aView [
 	^ aView explicit
 		title: 'Class';
 		priority: 10;
-		stencil: [ BrVerticalPane new
-				matchParent;
-				background: BrGlamorousColors backdropColor;
+		stencil: [ | container |
+			container := BrVerticalPane new
+					matchParent;
+					background: BrGlamorousColors backdropColor.
+			container
+				addAptitude: (BrLayoutResizerAptitude new common: [ container children ]);
 				addChild: ((GtCoderElement forClass: self foundClass)
 						disablePlayPage;
 						margin: (BlInsets all: 10);
 						background: Color white;
-						addAptitude: BrShadowAptitude) ]
+						addAptitude: BrShadowAptitude).
+			container ]
 ]
 
 { #category : #'api - serializing' }
