@@ -43,7 +43,7 @@ GtLChat >> addAssistantMessage: aMessage [
 
 	aMessage chat: self.
 	aReplyMessage := self ensureReplyMessage.
-	aReplyMessage assistantMessage: aMessage
+	aReplyMessage finalMessage: aMessage
 ]
 
 { #category : #'api - message' }
@@ -56,7 +56,7 @@ GtLChat >> addErrorMessage: anErrorMessage [
 	self
 		lastReplyMessageDo: [ :aReplyMessage | 
 			anErrorMessage chat: self.
-			aReplyMessage assistantMessage: anErrorMessage ]
+			aReplyMessage finalMessage: anErrorMessage ]
 		ifAbsent: [ self addMessage: anErrorMessage ]
 ]
 
@@ -116,6 +116,12 @@ GtLChat >> addToolMessage: aMessage [
 GtLChat >> addUserMessage: aMessage [
 	self addMessage: aMessage.
 	self ensureReplyMessage.
+]
+
+{ #category : #'api - message' }
+GtLChat >> allMessages [
+	^ Array
+		streamContents: [ :aStream | self messages messagesDo: [ :eachMessage | aStream nextPut: eachMessage ] ]
 ]
 
 { #category : #accessing }
@@ -298,6 +304,9 @@ GtLChat >> gtMessagesFor: aView [
 		column: 'Role'
 			text: [ :item | item role ]
 			width: 70;
+		column: 'Sender'
+			text: [ :item | item senderText ]
+			width: 100;
 		column: 'Call' text: [ :item | item gtDisplayString ];
 		column: 'Content' text: [ :item | item contentOneLineSummary ];
 		column: 'Created' text: [ :item | item createdAt asStringYMDHMS ];

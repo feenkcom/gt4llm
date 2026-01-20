@@ -7,18 +7,22 @@ Class {
 { #category : #'llm-generated' }
 GtLRefactoringToolForMethodImplementorsExamples >> methodImplementorsForExistingSelector [
 	<gtExample>
-	| tool call result |
+	| tool call result implementor |
 	tool := self toolWithExampleHierarchy.
 	call := GtLFunctionToolCall new.
-	call function: {
-		'name' -> tool name.
-		'arguments' -> {'methodName' -> 'example'} asDictionary
-	} asDictionary.
+	call
+		function: {'name' -> tool name.
+				'arguments' -> {'methodName' -> 'example'} asDictionary} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result includesSubstring: 'GtLRefactoringMethodImplementorsBase').
-	self assert: (result includesSubstring: 'GtLRefactoringMethodImplementorsChild').
-	^ tool
+	self assert: result isErrorDomainObject not.
+	implementor := result implementors
+			detect: [ :each | each name = 'GtLRefactoringMethodImplementorsBase' ].
+	self assert: implementor isNotNil.
+	implementor := result implementors
+			detect: [ :each | each name = 'GtLRefactoringMethodImplementorsChild' ].
+	self assert: implementor isNotNil.
+	^ call
 ]
 
 { #category : #'llm-generated' }
@@ -33,8 +37,10 @@ GtLRefactoringToolForMethodImplementorsExamples >> methodImplementorsForUnknownS
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: result equals: 'No implementors found'.
-	^ tool
+	self assert: result isErrorDomainObject not.
+	self assert: result methodName equals: 'missingSelector'.
+	self assert: result implementors equals: #().
+	^ call
 ]
 
 { #category : #'llm-generated' }

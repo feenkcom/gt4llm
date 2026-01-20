@@ -16,9 +16,9 @@ GtLToolForMethodImplementorsExamples >> implementorsForExistingMethodName [
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: result isEmpty not.
-	self assert: (result includesSubstring: 'GtLAbstractFunctionTool>>#performToolCall:').
-	^ tool
+	self assert: result isErrorDomainObject not.
+	self assert: (result serializeToOpenAIResponseJsonString includesSubstring: 'GtLAbstractFunctionTool>>#performToolCall:').
+	^ call
 ]
 
 { #category : #'llm-generated' }
@@ -27,12 +27,13 @@ GtLToolForMethodImplementorsExamples >> implementorsForUnknownMethodName [
 	| tool call result |
 	tool := GtLToolForMethodImplementors new.
 	call := GtLFunctionToolCall new.
-	call function: {
-		'name' -> tool name.
-		'arguments' -> {'methodName' -> 'unknownMethodName42'} asDictionary
-	} asDictionary.
+	call
+		function: {'name' -> tool name.
+				'arguments' -> {'methodName' -> 'unknownMethodName42'} asDictionary}
+				asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: result equals: 'No implementors found'.
-	^ tool
+	self assert: result isErrorDomainObject not.
+	self assert: result methods equals: #().
+	^ call
 ]

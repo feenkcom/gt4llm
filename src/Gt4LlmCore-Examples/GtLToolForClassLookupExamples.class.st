@@ -12,18 +12,19 @@ GtLToolForClassLookupExamples >> lookupClassForExistingClass [
 	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
-		'arguments' -> {'className' -> 'GtLToolForClassLookup'} asDictionary
+		'arguments' -> {'className' -> GtLToolForClassLookup name} asDictionary
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result includesSubstring: '"class":"GtLToolForClassLookup"').
-	self assert: (result includesSubstring: '"package":"Gt4LlmCore"').
-	self assert: (result includesSubstring: '"classSlots":[]').
-	self assert: (result includesSubstring: '"instanceSlots":[]').
-	self assert: (result includesSubstring: '"allInstanceMethods"').
-	self assert: (result includesSubstring: '"allClassMethods"').
+	self assert: result isErrorDomainObject not.
+	self assert: (result serializeToOpenAIResponseJsonString includesSubstring: '"class":"GtLToolForClassLookup"').
+	self assert: (result serializeToOpenAIResponseJsonString includesSubstring: '"package":"Gt4LlmCore"').
+	self assert: (result serializeToOpenAIResponseJsonString includesSubstring: '"classSlots":[]').
+	self assert: (result serializeToOpenAIResponseJsonString includesSubstring: '"instanceSlots":[]').
+	self assert: (result serializeToOpenAIResponseJsonString includesSubstring: '"allInstanceMethods"').
+	self assert: (result serializeToOpenAIResponseJsonString includesSubstring: '"allClassMethods"').
 
-	^ tool
+	^ call
 ]
 
 { #category : #'llm-generated' }
@@ -32,12 +33,13 @@ GtLToolForClassLookupExamples >> lookupClassForUnknownClass [
 	| tool call result |
 	tool := GtLToolForClassLookup new.
 	call := GtLFunctionToolCall new.
-	call function: {
-		'name' -> tool name.
-		'arguments' -> {'className' -> 'NonExistingClassName42'} asDictionary
-	} asDictionary.
+	call
+		function: {'name' -> tool name.
+				'arguments' -> {'className' -> 'NonExistingClassName42'} asDictionary}
+				asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: result equals: 'Class not found'.
-	^ tool
+	self assert: result isErrorDomainObject.
+	self assert: result objectName equals: 'NonExistingClassName42'.
+	^ call
 ]

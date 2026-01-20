@@ -78,7 +78,7 @@ GtLFunctionToolCall >> gtArgumentsFor: aView [
 
 { #category : #printing }
 GtLFunctionToolCall >> gtDisplayOn: aStream [
-	self name ifNil: [ ^ self ].
+	self name ifNil: [ ^ super gtDisplayOn: aStream ].
 	aStream
 		nextPutAll: self name;
 		nextPut: $(;
@@ -86,14 +86,23 @@ GtLFunctionToolCall >> gtDisplayOn: aStream [
 		nextPut: $)
 ]
 
-{ #category : #views }
-GtLFunctionToolCall >> gtResultFor: aView [
-	<gtView>
-	result ifNil: [ ^ aView empty ].
-	^ aView textEditor
-		title: 'Result';
-		priority: 2;
-		text: [ result ]
+{ #category : #'gt - extensions' }
+GtLFunctionToolCall >> gtViewsInContext: aPhlowContext [
+	| collectedViews |
+	collectedViews := Array
+			streamContents: [ :aStream | 
+				aStream nextPutAll: (super gtViewsInContext: aPhlowContext).
+				self result
+					ifNotNil: [ :aResult | 
+						aStream
+							nextPutAll: (GtPhlowViewsCollector new
+									fromObject: aResult;
+									pragmaNames: GtLSettings messageViewPragmaNames;
+									collect) ] ].
+
+	GtPhlowUtility sortByPriority: collectedViews.
+
+	^ collectedViews
 ]
 
 { #category : #printing }
@@ -156,12 +165,14 @@ GtLFunctionToolCall >> responseInput [
 
 { #category : #accessing }
 GtLFunctionToolCall >> result [
+	<return: #TGtLDomainObject>
+	GtJustContextStackSignal emit.
 	^ result
 ]
 
 { #category : #accessing }
-GtLFunctionToolCall >> result: anObject [
-	result := anObject
+GtLFunctionToolCall >> result: aToolResult [
+	result := aToolResult
 ]
 
 { #category : #accessing }

@@ -40,25 +40,40 @@ GtLRefactoringToolForMethodReferences >> parameters [
 { #category : #'llm-generated' }
 GtLRefactoringToolForMethodReferences >> privatePerformToolCall: aToolCall [
 	| arguments selector |
-	self model ifNil: [ ^ 'Model not provided' ].
+	self model
+		ifNil: [ ^ GtLMissingInformationDomainObject new
+				receiverName: self name;
+				missingModelName: 'model' ].
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
-	selector := arguments at: 'selector' ifAbsent: [ ^ 'Selector not provided' ].
+	selector := arguments
+			at: 'selector'
+			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
+					receiverName: self name;
+					arguments: arguments;
+					missingArgument: 'selector' ].
+	
 	^ self sendersOf: selector
 ]
 
 { #category : #'llm-generated' }
 GtLRefactoringToolForMethodReferences >> sendersOf: selectorString [
-	| stream count |
-	stream := WriteStream on: String new.
+	| referencesStream count |
+	referencesStream := WriteStream on: Array new.
 	count := 0.
 	self model
 		allReferencesTo: selectorString asSymbol
-		do: [ :each |
-			stream << each modelClass name.
-			each modelClass isMeta ifTrue: [ stream << ' class' ].
-			stream << '>>#' << each selector << String cr.
+		do: [ :eachReference | 
+			referencesStream nextPut: eachReference.
 			count := count + 1.
-			count = 100 ifTrue: [ ^ stream contents ] ].
-	count = 0 ifTrue: [ ^ 'No references found' ].
-	^ stream contents
+			count = 100
+				ifTrue: [ ^ GtLRefactoringMethodReferencesDomainObject new
+						model: self model;
+						methodName: selectorString;
+						references: referencesStream contents;
+						mayHaveMore: true ] ].
+	^ GtLRefactoringMethodReferencesDomainObject new
+		model: self model;
+		methodName: selectorString;
+		references: referencesStream contents;
+		mayHaveMore: false
 ]

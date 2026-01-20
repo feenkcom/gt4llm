@@ -31,11 +31,17 @@ GtLToolForMethodImplementors >> parameters [
 
 { #category : #accessing }
 GtLToolForMethodImplementors >> privatePerformToolCall: aToolCall [
-	| argument methodName implementors |
+	| arguments argument methodName implementors promise |
+	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	argument := aToolCall anyArgument.
-	argument ifNil: [ ^ 'Method name not provided' ].
+	argument
+		ifNil: [ ^ GtLMissingArgumentDomainObject new
+				receiverName: self name;
+				arguments: arguments;
+				missingArgument: 'methodName' ].
 	methodName := argument asSymbol.
-	implementors := methodName gtImplementors result toArray wait collect: #name.
-	implementors isEmpty ifTrue: [ ^ 'No implementors found' ].
-	^ Character cr join: implementors
+	promise := methodName gtImplementors result toArray
+			await: GtLSettings futureExecutionConfiguration.
+	implementors := promise wait.
+	^ GtLMethodsDomainObject new methods: implementors
 ]

@@ -16,25 +16,42 @@ GtLToolForClassLookup >> acceptVisitor: aVisitor [
 
 { #category : #accessing }
 GtLToolForClassLookup >> description [
+	GtJustContextStackSignal emit.
 	^ 'Get the details of a class as JSON.'
 ]
 
 { #category : #accessing }
 GtLToolForClassLookup >> name [
+	GtJustContextStackSignal emit.
 	^ 'lookupClass'
 ]
 
 { #category : #accessing }
+GtLToolForClassLookup >> parameterClassName [
+	<magritteDescription>
+	^ MAStringDescription new
+		label: 'Class name';
+		accessor: #className
+]
+
+{ #category : #accessing }
 GtLToolForClassLookup >> parameters [
+	GtJustContextStackSignal emit.
 	^ #('className')
 ]
 
 { #category : #accessing }
 GtLToolForClassLookup >> privatePerformToolCall: aToolCall [
-	| arguments className class serializer |
+	| arguments className class |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
-	className := arguments at: 'className' ifAbsent: [ ^ 'Class name not provided' ].
-	class := className asClassIfAbsent: [ ^ 'Class not found' ].
-	serializer := GtLValueSerializer new.
-	^ STONJSON toString: (serializer serializeClass: class)
+	className := arguments
+			at: 'className'
+			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
+					receiverName: self name;
+					arguments: arguments;
+					missingArgument: 'className' ].
+	class := className
+			asClassIfAbsent: [ ^ GtLMissingDomainObject new objectName: className ].
+
+	^ GtLClassDomainObject new foundClass: class
 ]

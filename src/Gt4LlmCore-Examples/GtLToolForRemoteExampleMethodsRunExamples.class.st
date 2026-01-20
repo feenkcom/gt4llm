@@ -253,22 +253,23 @@ GtLToolForRemoteExampleMethodsRunExamples class >> traits [
 { #category : #examples }
 GtLToolForRemoteExampleMethodsRunExamples >> addClassToEventFactory [
 	"Confirm that class definitions are added as expected to the event factory"
+
 	<gtExample>
 	| tool eventFactory classDefinition omEntry epClassAddition rgClassAddition |
-
-	self forPharo12AndNewer: [] forPharo11: [ ^ self ].
+	self forPharo12AndNewer: [  ] forPharo11: [ ^ self ].
 
 	tool := GtLToolForRemoteExampleMethodsRun new.
 	eventFactory := GtEpiceaEventFactory new.
-	classDefinition := {
-		'type' -> 'class'.
-		'code' ->
-'Object << #SomeClass
+	classDefinition := {'type' -> 'class'.
+			'code'
+				-> 'Object << #SomeClass
 	slots: #(someSlotA someSlotB);
 	sharedVariables: #(ClassVar1 ClassVar2);
-	package: ''SomePackage'''.
-		} asDictionary.
-	tool addClass: classDefinition to: eventFactory.
+	package: ''SomePackage'''} asDictionary.
+	tool
+		addClass: classDefinition
+		to: eventFactory
+		onProblemDo: [ :aDomainObject | ^ self error: 'Could not add class' ].
 
 	self assert: eventFactory entries size equals: 1.
 	omEntry := eventFactory entries first.
@@ -276,10 +277,14 @@ GtLToolForRemoteExampleMethodsRunExamples >> addClassToEventFactory [
 	self assert: epClassAddition class equals: EpClassAddition.
 	self assert: epClassAddition behaviorAffectedName equals: #SomeClass.
 	rgClassAddition := epClassAddition behaviorAffected.
-	self assert: (rgClassAddition instanceVariables collect: #name as: Array)
+	self
+		assert: (rgClassAddition instanceVariables collect: #name as: Array)
 		equals: #(someSlotA someSlotB).
-	self assert: (rgClassAddition classVariables collect: #name as: Array)
+	self
+		assert: (rgClassAddition classVariables collect: #name as: Array)
 		equals: #(ClassVar1 ClassVar2).
+
+	^ tool
 ]
 
 { #category : #examples }
@@ -312,22 +317,23 @@ GtLToolForRemoteExampleMethodsRunExamples >> addMethodToEventFactory [
 { #category : #examples }
 GtLToolForRemoteExampleMethodsRunExamples >> addRemoveClassToEventFactory [
 	"Confirm that class definitions are added as expected to the event factory"
+
 	<gtExample>
 	| tool eventFactory classDefinition omEntry epClassRemoval rgClassRemoval |
-
-	self forPharo12AndNewer: [] forPharo11: [ ^ self ].
+	self forPharo12AndNewer: [  ] forPharo11: [ ^ self ].
 
 	tool := GtLToolForRemoteExampleMethodsRun new.
 	eventFactory := GtEpiceaEventFactory new.
-	classDefinition := {
-		'type' -> 'class'.
-		'code' ->
-'Object << #SomeClass
+	classDefinition := {'type' -> 'class'.
+			'code'
+				-> 'Object << #SomeClass
 	slots: #(someSlotA someSlotB);
 	sharedVariables: #(ClassVar1 ClassVar2);
-	package: ''SomePackage'''.
-		} asDictionary.
-	tool addRemoveClass: classDefinition to: eventFactory.
+	package: ''SomePackage'''} asDictionary.
+	tool
+		addRemoveClass: classDefinition
+		to: eventFactory
+		onProblemDo: [ :aDomainObject | self error: 'Cannot remove class' ].
 
 	self assert: eventFactory entries size equals: 1.
 	omEntry := eventFactory entries first.
@@ -335,10 +341,14 @@ GtLToolForRemoteExampleMethodsRunExamples >> addRemoveClassToEventFactory [
 	self assert: epClassRemoval class equals: EpClassRemoval.
 	self assert: epClassRemoval behaviorAffectedName equals: #SomeClass.
 	rgClassRemoval := epClassRemoval behaviorAffected.
-	self assert: (rgClassRemoval instanceVariables collect: #name as: Array)
+	self
+		assert: (rgClassRemoval instanceVariables collect: #name as: Array)
 		equals: #(someSlotA someSlotB).
-	self assert: (rgClassRemoval classVariables collect: #name as: Array)
+	self
+		assert: (rgClassRemoval classVariables collect: #name as: Array)
 		equals: #(ClassVar1 ClassVar2).
+
+	^ tool
 ]
 
 { #category : #examples }
@@ -576,22 +586,21 @@ GtLToolForRemoteExampleMethodsRunExamples >> denyEmpty: aCollection [
 
 { #category : #examples }
 GtLToolForRemoteExampleMethodsRunExamples >> exampleRunFailsWithoutCheckNames [
-    "Expect the tool to signal the missing checkNames error"
-    <gtExample>
-    | tool call resultString result errorDictionary message |
-    tool := GtLToolForRemoteExampleMethodsRun new.
-    call := GtLFunctionToolCall new.
-    call function: {
-        'name' -> tool name.
-        'arguments' -> { 'changes' -> '[]' } asDictionary
-    } asDictionary.
-    resultString := tool performToolCall: call.
-	result := STONJSON fromString: resultString.
-	errorDictionary := result at: 'error' ifAbsent:
-		[ self error: '''error'' not found in: ', (STONJSON toStringPretty: result) ].
-	message := errorDictionary at: 'message' ifAbsent:
-		[ self error: '''message'' not found in: ', (STONJSON toStringPretty: errorDictionary) ].
-	self assert: message equals: 'Check names not provided'.
+	"Expect the tool to signal the missing checkNames error"
+
+	<gtExample>
+	| tool call result errorDictionary message |
+	tool := GtLToolForRemoteExampleMethodsRun new.
+	call := GtLFunctionToolCall new.
+	call
+		function: {'name' -> tool name.
+				'arguments' -> {'changes' -> '[]'} asDictionary} asDictionary.
+	result := tool performToolCall: call.
+
+	self assert: result isErrorDomainObject.
+	self assert: result missingArgument equals: 'checkNames'.
+
+	^ call
 ]
 
 { #category : #examples }
@@ -664,54 +673,46 @@ GtLToolForRemoteExampleMethodsRunExamples >> exampleRunNewClassDefinition [
 
 { #category : #examples }
 GtLToolForRemoteExampleMethodsRunExamples >> exampleRunRejectsNonArrayCheckNames [
-    "checkNames must deserialize to an Array"
-    <gtExample>
-    | tool call resultString result errorDictionary message |
-    tool := GtLToolForRemoteExampleMethodsRun new.
-    call := GtLFunctionToolCall new.
-    call function: {
-        'name' -> tool name.
-        'arguments' -> {
-            'checkNames' -> '"not-an-array"'.
-        } asDictionary
-    } asDictionary.
-    resultString := tool performToolCall: call.
-	result := STONJSON fromString: resultString.
-	errorDictionary := result at: 'error' ifAbsent:
-		[ self error: '''error'' not found in: ', (STONJSON toStringPretty: result) ].
-	message := errorDictionary at: 'message' ifAbsent:
-		[ self error: '''message'' not found in: ', (STONJSON toStringPretty: errorDictionary) ].
-	self assert: message equals: 'checkNames must be an Array, not a ByteString'.
+	"checkNames must deserialize to an Array"
+
+	<gtExample>
+	| tool call result |
+	tool := GtLToolForRemoteExampleMethodsRun new.
+	call := GtLFunctionToolCall new.
+	call
+		function: {'name' -> tool name.
+				'arguments' -> {'checkNames' -> '"not-an-array"'} asDictionary} asDictionary.
+	result := tool performToolCall: call.
+	self assert: result isErrorDomainObject.
+	self assert: result argumentName equals: 'checkNames'.
+	self assert: result expectedArgumentValueKind equals: Array.
+
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForRemoteExampleMethodsRunExamples >> exampleRunRejectsUnknownChangeType [
-    "Non-method change dictionaries should fail fast"
-    <gtExample>
-    | tool call resultString result errorDictionary message |
-    tool := GtLToolForRemoteExampleMethodsRun new.
-    call := GtLFunctionToolCall new.
-    call function: {
-        'name' -> tool name.
-        'arguments' -> {
-            'checkNames' -> (STONJSON toString: {
-                self class name asString, '>>exampleSuccess'
-            }).
-            'changes' -> (STONJSON toString: {
-                {
-                    'type' -> 'junk'.
-                    'junk' -> 'rubbish'.
-                } asDictionary
-            }).
-        } asDictionary
-    } asDictionary.
-    resultString := tool performToolCall: call.
-	result := STONJSON fromString: resultString.
-	errorDictionary := result at: 'error' ifAbsent:
-		[ self error: '''error'' not found in: ', (STONJSON toStringPretty: result) ].
-	message := errorDictionary at: 'message' ifAbsent:
-		[ self error: '''message'' not found in: ', (STONJSON toStringPretty: errorDictionary) ].
-	self assert: message equals: 'Unknown type: ''junk'''.
+	"Non-method change dictionaries should fail fast"
+
+	<gtExample>
+	| tool call result |
+	tool := GtLToolForRemoteExampleMethodsRun new.
+	call := GtLFunctionToolCall new.
+	call
+		function: {'name' -> tool name.
+				'arguments'
+					-> {'checkNames'
+								-> (STONJSON toString: {self class name asString , '>>exampleSuccess'}).
+							'changes'
+								-> (STONJSON
+										toString: {{'type' -> 'junk'.
+													'junk' -> 'rubbish'} asDictionary})} asDictionary} asDictionary.
+	result := tool performToolCall: call.
+
+	self assert: result isErrorDomainObject.
+	self assert: result description equals: 'Unknown type: ''junk'''.
+
+	^ call
 ]
 
 { #category : #examples }

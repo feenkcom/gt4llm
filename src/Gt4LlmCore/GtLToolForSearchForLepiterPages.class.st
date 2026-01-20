@@ -40,13 +40,17 @@ GtLToolForSearchForLepiterPages >> parameters [
 
 { #category : #accessing }
 GtLToolForSearchForLepiterPages >> privatePerformToolCall: aToolCall [
-	| arguments query pages |
+	| arguments query pages promise |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
-	query := arguments at: 'query' ifAbsent: [ ^ 'Query not provided' ].
-	pages := (LeDatabase gtBook asyncPagesForWord: query) toArray wait.
-	pages ifEmpty: [ ^ 'No page found' ].
-	^ STONJSON toString: (pages
-		collect: [ :each | 
-			{#pageTitle -> each title.
-				#uuid -> each uid asString36} asDictionary ])
+	query := arguments
+			at: 'query'
+			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
+					receiverName: self name;
+					arguments: arguments;
+					missingArgument: 'query' ].
+	promise := (LeDatabase gtBook asyncPagesForWord: query) toArray
+			await: GtLSettings futureExecutionConfiguration.
+	pages := promise wait.
+
+	^ GtLLepiterPagesDomainObject new pages: pages
 ]

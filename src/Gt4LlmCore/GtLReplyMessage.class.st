@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'userMessage',
 		'toolMessages',
-		'assistantMessage'
+		'finalMessage'
 	],
 	#category : #'Gt4LlmCore-Core'
 }
@@ -21,16 +21,12 @@ GtLReplyMessage >> addToolMessage: aToolMessage [
 
 { #category : #accessing }
 GtLReplyMessage >> assistantMessage [
-	^ assistantMessage
+	^ self finalMessage
 ]
 
 { #category : #accessing }
 GtLReplyMessage >> assistantMessage: aMessage [
-	assistantMessage = aMessage ifTrue: [ ^ self ].
-
-	assistantMessage := aMessage.
-	
-	self notifyReplyMessageChanged
+	self finalMessage: aMessage
 ]
 
 { #category : #accessing }
@@ -63,9 +59,27 @@ GtLReplyMessage >> currentMessageDo: aBlock ifAbsent: anAbsentBlock [
 	to receive a LLM server response."
 
 	<return: #GtLChatMessage>
-	assistantMessage ifNotNil: [ ^ aBlock value: assistantMessage ].
+	finalMessage ifNotNil: [ ^ aBlock value: finalMessage ].
 	toolMessages ifNotEmpty: [ ^ aBlock value: toolMessages last ].
 	^ anAbsentBlock value
+]
+
+{ #category : #accessing }
+GtLReplyMessage >> finalMessage [
+	"Return a final message that can be either an assistant message or an error message."
+
+	^ finalMessage
+]
+
+{ #category : #accessing }
+GtLReplyMessage >> finalMessage: aMessage [
+	"Set a final message that can be either an assistant message or an error message."
+
+	finalMessage = aMessage ifTrue: [ ^ self ].
+
+	finalMessage := aMessage.
+
+	self notifyReplyMessageChanged
 ]
 
 { #category : #'gt - inspector' }
@@ -149,7 +163,7 @@ GtLReplyMessage >> messagesDo: aBlock [
 	it is a standalone message in the chat messages collection."
 
 	self toolMessages do: aBlock.
-	self assistantMessage ifNotNil: aBlock
+	self finalMessage ifNotNil: aBlock
 ]
 
 { #category : #'private - notifying' }
@@ -159,7 +173,7 @@ GtLReplyMessage >> notifyReplyMessageChanged [
 
 { #category : #accessing }
 GtLReplyMessage >> role [
-	^ self currentMessageDo: #role ifAbsent: [ super role ifNil: [ #waiting ] ]
+	^ self currentMessageDo: #role ifAbsent: [ #waiting ]
 ]
 
 { #category : #accessing }

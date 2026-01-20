@@ -10,17 +10,25 @@ GtLRefactoringToolForMethodSourceExamples >> methodSourceForInstanceMethod [
 	| tool call result |
 	tool := self toolWithExampleMethods.
 	call := GtLFunctionToolCall new.
-	call function: {
-		'name' -> tool name.
-		'arguments' -> { 'className' -> 'GtLRefactoringMethodSourceExample'.
-			'methodName' -> 'example'.
-			'classSide' -> 'false' } asDictionary
-	} asDictionary.
+	call
+		function: {'name' -> tool name.
+				'arguments'
+					-> {'className' -> 'GtLRefactoringMethodSourceExample'.
+							'methodName' -> 'example'.
+							'classSide' -> 'false'} asDictionary} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: result equals: 'example
-	^ 42'.
-	^ tool
+
+	self assert: result isErrorDomainObject not.
+	self assert: result methodName equals: 'example'.
+	self assert: result methodClassName equals: 'GtLRefactoringMethodSourceExample'.
+	self
+		assert: result methodSourceCode
+		equals: ('example{1}{2}^ 42'
+				format: {Character cr.
+						Character tab}).
+
+	^ call
 ]
 
 { #category : #'llm-generated' }
@@ -29,16 +37,20 @@ GtLRefactoringToolForMethodSourceExamples >> methodSourceForUnknownMethod [
 	| tool call result |
 	tool := self toolWithExampleMethods.
 	call := GtLFunctionToolCall new.
-	call function: {
-		'name' -> tool name.
-		'arguments' -> { 'className' -> 'GtLRefactoringMethodSourceExample'.
-			'methodName' -> 'missing'.
-			'classSide' -> false } asDictionary
-	} asDictionary.
+	call
+		function: {'name' -> tool name.
+				'arguments'
+					-> {'className' -> 'GtLRefactoringMethodSourceExample'.
+							'methodName' -> 'missing'.
+							'classSide' -> false} asDictionary} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: result equals: 'Method not found'.
-	^ tool
+
+	self assert: result isErrorDomainObject.
+	self
+		assert: result objectName
+		equals: 'GtLRefactoringMethodSourceExample>>#missing'.
+	^ call
 ]
 
 { #category : #'llm-generated' }

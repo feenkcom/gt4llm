@@ -25,12 +25,6 @@ GtLlmInstructionWithSections >> children [
 ]
 
 { #category : #accessing }
-GtLlmInstructionWithSections >> gtDisplayOn: aStream [
-	aStream
-		nextPutAll: self introduction instructionString
-]
-
-{ #category : #accessing }
 GtLlmInstructionWithSections >> initialize [
 	super initialize.
 	
@@ -69,7 +63,8 @@ GtLlmInstructionWithSections >> printOn: aStream [
 
 	aStream
 		nextPut: $(;
-		nextPutAll: self introduction instructionString;
+		nextPutAll: (self instructionString trimBoth 
+			copyReplaceAll: String cr with: '') ;
 		nextPut: $)
 ]
 

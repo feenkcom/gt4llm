@@ -8,11 +8,6 @@ Class {
 	#category : #'Gt4LlmCore-Core'
 }
 
-{ #category : #'as yet unclassified' }
-GtLToolMessage class >> defaultRole [
-	^ 'tool'
-]
-
 { #category : #accessing }
 GtLToolMessage class >> leJsonV4Name [
 	^ #gtLToolMessage
@@ -50,7 +45,7 @@ GtLToolMessage >> gtArgumentsFor: aView [
 	<gtLlmView>
 	^ aView forward
 		title: 'Arguments';
-		priority: 5;
+		priority: 15;
 		object: [ self toolCall ];
 		view: #gtArgumentsFor:
 ]
@@ -67,14 +62,9 @@ GtLToolMessage >> gtDisplayOn: aStream [
 	self toolCall ifNotNil: [ :call | call gtDisplayOn: aStream ] ifNil: [ aStream nextPutAll: 'No tool' ]
 ]
 
-{ #category : #'gt - extensions' }
-GtLToolMessage >> gtOutputFor: aView [
-	<gtView>
-	<gtLlmView>
-	^ aView textEditor
-		title: 'Output';
-		priority: 0;
-		text: [ self output ]
+{ #category : #'as yet unclassified' }
+GtLToolMessage >> gtInspectorTargetModels [
+	^ self output ifNotNil: [ :anOutput | {anOutput} ] ifNil: [ #() ]
 ]
 
 { #category : #testing }
@@ -90,6 +80,7 @@ GtLToolMessage >> output [
 
 { #category : #accessing }
 GtLToolMessage >> output: anObject [
+	self assert: [ anObject isKindOf: GtLDomainObject ].
 	output := anObject
 ]
 
@@ -100,10 +91,23 @@ GtLToolMessage >> responseModels [
 ]
 
 { #category : #'as yet unclassified' }
-GtLToolMessage >> serializeResponse [
+GtLToolMessage >> role [
+	^ 'tool'
+]
+
+{ #category : #'as yet unclassified' }
+GtLToolMessage >> serializeForOpenAIResponsesAPI [
+	"Output should be defined using tools.
+	Available output values:
+		- array of objects
+		- string"
+	| anOutput |
+	self flag: #todo.
+	
+	anOutput := self output ifNotNil: #serializeToOpenAIResponseJsonString.
 	^ {'type' -> 'function_call_output'.
 		'call_id' -> toolCall id.
-		'output' -> self output} asDictionary
+		'output' -> anOutput} asDictionary
 ]
 
 { #category : #'api - accessing' }

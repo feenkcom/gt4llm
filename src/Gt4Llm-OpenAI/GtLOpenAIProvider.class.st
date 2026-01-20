@@ -6,7 +6,6 @@ Class {
 		'isStreaming',
 		'executions',
 		'tools',
-		'providerWorking',
 		'modelName'
 	],
 	#category : #'Gt4Llm-OpenAI'
@@ -75,7 +74,7 @@ GtLOpenAIProvider >> executeWait [
 		result := client
 				generateResponseWithModel: self modelName
 				messages: self chat messages
-				instructions: currentMessage buildCompleteInstructionString
+				instructions: currentMessage completeInstructionString
 				tools: currentMessage tools
 				andFormat: (currentMessage hasFormats
 						ifTrue: [ currentMessage formatDescriptionsJsonSchema ]
@@ -87,7 +86,7 @@ GtLOpenAIProvider >> executeWait [
 			ifFalse: [ aMessage := isStreaming
 						ifTrue: [ self streamingMessageFrom: result ]
 						ifFalse: [ self assistantMessageClass new
-								model: self modelName;
+								modelName: self modelName;
 								rawData: (result output detect: [ :anOutput | (anOutput at: 'type') = 'message' ]) ].
 
 				self chat addAssistantMessage: aMessage.
@@ -174,12 +173,12 @@ GtLOpenAIProvider >> performToolCallsIn: result with: activeTools [
 	| toolOutputs |
 	toolOutputs := result toolCalls
 			collect: [ :aToolCall | 
-				| toolOutput newMessage|
+				| domainObject newMessage|
 				newMessage := GtLToolMessage new
 							toolCall: aToolCall.
 				chat addToolMessage: newMessage.
-				toolOutput := activeTools performToolCall: aToolCall.
-				newMessage output: toolOutput ].
+				domainObject := activeTools performToolCall: aToolCall.
+				newMessage output: domainObject ].
 	self chat signalRunHasUpdated.
 	^ self executeWait
 ]
@@ -191,13 +190,6 @@ GtLOpenAIProvider >> printOn: aStream [
 		nextPut: $(;
 		nextPutAll: self modelName;
 		nextPut: $)
-]
-
-{ #category : #'as yet unclassified' }
-GtLOpenAIProvider >> sendMessage: aMessage [
-	self chat signalRunHasStarted.
-	providerWorking := true.
-	self executeWait
 ]
 
 { #category : #'as yet unclassified' }

@@ -10,13 +10,14 @@ GtLToolForClassSubclassesExamples >> classSubclassesForClassWithNoSubclasses [
 	| tool call result |
 	tool := GtLToolForClassSubclasses new.
 	call := GtLFunctionToolCall new.
-	call function: {
-		'name' -> tool name.
-		'arguments' -> {'className' -> 'GtLlmToolForClassSubclasses'} asDictionary
-	} asDictionary.
+	call
+		function: {'name' -> tool name.
+				'arguments' -> {'className' -> 'GtLlmToolForClassSubclasses'} asDictionary}
+				asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: result equals: 'No subclasses found'.
+	self assert: result isErrorDomainObject not.
+	self assert: result subclasses equals: #().
 	^ tool
 ]
 
@@ -26,15 +27,18 @@ GtLToolForClassSubclassesExamples >> classSubclassesForExistingClass [
 	| tool call result |
 	tool := GtLToolForClassSubclasses new.
 	call := GtLFunctionToolCall new.
-	call function: {
-		'name' -> tool name.
-		'arguments' -> {'className' -> 'GtLAbstractFunctionTool'} asDictionary
-	} asDictionary.
+	call
+		function: {'name' -> tool name.
+				'arguments' -> {'className' -> 'GtLAbstractFunctionTool'} asDictionary}
+				asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: result isEmpty not.
-	self assert: (result includesSubstring: 'GtLToolForClassReferences').
-	^ tool
+	self assert: result isErrorDomainObject not.
+
+	self
+		assert: (result serializeToOpenAIResponseJsonString
+				includesSubstring: 'GtLToolForClassReferences').
+	^ call
 ]
 
 { #category : #'llm-generated' }
@@ -43,12 +47,13 @@ GtLToolForClassSubclassesExamples >> classSubclassesForUnknownClass [
 	| tool call result |
 	tool := GtLToolForClassSubclasses new.
 	call := GtLFunctionToolCall new.
-	call function: {
-		'name' -> tool name.
-		'arguments' -> {'className' -> 'NonExistingClassName'} asDictionary
-	} asDictionary.
+	call
+		function: {'name' -> tool name.
+				'arguments' -> {'className' -> 'NonExistingClassName'} asDictionary}
+				asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: result equals: 'Class not found'.
-	^ tool
+	self assert: result isErrorDomainObject.
+	self assert: result objectName equals: 'NonExistingClassName'.
+	^ call
 ]

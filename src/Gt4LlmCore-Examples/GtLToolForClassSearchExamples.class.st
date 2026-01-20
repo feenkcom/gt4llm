@@ -16,9 +16,10 @@ GtLToolForClassSearchExamples >> searchClassesWithMatches [
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result includesSubstring: 'GtLToolForClassReferences').
-	self assert: (result includesSubstring: 'GtLToolForClassSearch').
-	^ tool
+	self assert: result isErrorDomainObject not.
+	self assert: (result serializeToOpenAIResponseJsonString includesSubstring: 'GtLToolForClassReferences').
+	self assert: (result serializeToOpenAIResponseJsonString includesSubstring: 'GtLToolForClassSearch').
+	^ call
 ]
 
 { #category : #'llm-generated' }
@@ -27,12 +28,13 @@ GtLToolForClassSearchExamples >> searchClassesWithNoMatches [
 	| tool call result |
 	tool := GtLToolForClassSearch new.
 	call := GtLFunctionToolCall new.
-	call function: {
-		'name' -> tool name.
-		'arguments' -> {'query' -> 'ClassNameThatDoesNotExist42'} asDictionary
-	} asDictionary.
+	call
+		function: {'name' -> tool name.
+				'arguments' -> {'query' -> 'ClassNameThatDoesNotExist42'} asDictionary}
+				asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: result equals: '[]'.
-	^ tool
+	self assert: result isErrorDomainObject not.
+	self assert: result foundClasses equals: #().
+	^ call
 ]
