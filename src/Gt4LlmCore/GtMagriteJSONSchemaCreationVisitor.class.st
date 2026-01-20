@@ -80,7 +80,8 @@ GtMagriteJSONSchemaCreationVisitor >> visitPriorityContainer: aContainer [
 	aContainer hasComment ifTrue: [
 		schema at: 'description' put: aContainer comment	].
 
-	aContainer children
+	(aContainer children
+		sorted: [ :aDescription | aDescription accessor readSelector] ascending)
 		do: [ :aDescription | 
 			aDescription acceptMagritte: self.
 			propertiesSchema
@@ -92,7 +93,7 @@ GtMagriteJSONSchemaCreationVisitor >> visitPriorityContainer: aContainer [
 		at: 'required'
 			put: (aContainer children
 					collect: [ :aDescription | aDescription accessor readSelector ]
-					as: NeoJSONArray);
+					as: NeoJSONArray) sorted;
 		at: 'additionalProperties' put: false.
 
 	^ currentSchema := schema
