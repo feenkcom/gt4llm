@@ -154,6 +154,11 @@ GtLReplyMessage >> isReplyMessage [
 	^ true
 ]
 
+{ #category : #'as yet unclassified' }
+GtLReplyMessage >> isSuccess [
+	^ finalMessage isFailure not
+]
+
 { #category : #'api - message' }
 GtLReplyMessage >> messagesDo: aBlock [
 	"Evaluate do block on all messages.

@@ -32,6 +32,7 @@ GtLClassSearchDomainObject >> gtFoundClassesFor: aView [
 	foundClasses ifNil: [ ^ aView empty ].
 	^ aView columnedList
 		title: 'Classes';
+		priority: 1;
 		items: [ self foundClasses ];
 		column: 'Value' text: [ :each | each gtDisplayString ]
 ]

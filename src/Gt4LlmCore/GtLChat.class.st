@@ -384,6 +384,11 @@ GtLChat >> instructions: anObject [
 	instructions := anObject
 ]
 
+{ #category : #'as yet unclassified' }
+GtLChat >> isFinishedSuccesss [
+	^ self messages last isReplyMessage and: [ self messages last isSuccess ]
+]
+
 { #category : #'api - message' }
 GtLChat >> lastReplyMessageDo: aDoBlock ifAbsent: anAbsentBlock [
 	messages
