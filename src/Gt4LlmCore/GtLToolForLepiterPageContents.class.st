@@ -52,7 +52,7 @@ GtLToolForLepiterPageContents >> privatePerformToolCall: aToolCall [
 		do: [ :knowledgeBase | 
 			knowledgeBase
 				pageWithID: uuidString
-				ifPresent: [ :page | ^ LeJsonV4 uniqueInstance serializePretty: page ]
+				ifPresent: [ :page | ^ GtLLepiterPageDomainObject new foundPage: page ]
 				ifAbsent: [  ] ].
 
 	^ GtLMissingDomainObject new objectName: uuidString

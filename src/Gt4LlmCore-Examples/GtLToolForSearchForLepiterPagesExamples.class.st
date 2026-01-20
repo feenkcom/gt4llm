@@ -19,6 +19,7 @@ GtLToolForSearchForLepiterPagesExamples >> documentationLookupForExistingPage [
 	self assert: result isErrorDomainObject not.
 	self assert: result pages size equals: 1.
 	self assert: (result serializeToOpenAIResponseJsonString includesSubstring: 'Warmup: understanding the Money classes').
+self assert: (result serializeToOpenAIResponseJsonString includesSubstring: 'uuid').
 	^ call
 ]
 

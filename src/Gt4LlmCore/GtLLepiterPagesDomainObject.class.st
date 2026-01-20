@@ -44,7 +44,7 @@ GtLLepiterPagesDomainObject >> serializeToOpenAIResponseJsonObject [
 					collect: [ :eachPage | 
 						NeoJSONObject new
 							at: #pageTitle put: eachPage title;
-							at: #uuid -> eachPage uid asString36;
+							at: #uuid put: eachPage uid asString36;
 							yourself ]);
 		yourself
 ]
