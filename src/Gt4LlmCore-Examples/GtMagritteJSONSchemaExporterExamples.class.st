@@ -22,6 +22,9 @@ GtMagritteJSONSchemaExporterExamples >> expectedSchemaStringForMathReasoningWith
 	^ '{
 	"type" : "object",
 	"properties" : {
+		"finalAnswer" : {
+			"type" : "string"
+		},
 		"steps" : {
 			"type" : "array",
 			"items" : {
@@ -62,14 +65,11 @@ GtMagritteJSONSchemaExporterExamples >> expectedSchemaStringForMathReasoningWith
 				],
 				"additionalProperties" : false
 			}
-		},
-		"finalAnswer" : {
-			"type" : "string"
 		}
 	},
 	"required" : [
-		"steps",
-		"finalAnswer"
+		"finalAnswer",
+		"steps"
 	],
 	"additionalProperties" : false
 }'
@@ -80,6 +80,9 @@ GtMagritteJSONSchemaExporterExamples >> expectedSchemaStringForMathReasoningWith
 	^ '{
 	"type" : "object",
 	"properties" : {
+		"finalAnswer" : {
+			"type" : "string"
+		},
 		"steps" : {
 			"type" : "array",
 			"items" : {
@@ -111,14 +114,11 @@ GtMagritteJSONSchemaExporterExamples >> expectedSchemaStringForMathReasoningWith
 					}
 				]
 			}
-		},
-		"finalAnswer" : {
-			"type" : "string"
 		}
 	},
 	"required" : [
-		"steps",
-		"finalAnswer"
+		"finalAnswer",
+		"steps"
 	],
 	"additionalProperties" : false
 }'
@@ -129,6 +129,9 @@ GtMagritteJSONSchemaExporterExamples >> expectedSchemaStringForMathReasoningWith
 	^ '{
 	"type" : "object",
 	"properties" : {
+		"finalAnswer" : {
+			"type" : "string"
+		},
 		"steps" : {
 			"type" : "array",
 			"items" : {
@@ -178,14 +181,11 @@ GtMagritteJSONSchemaExporterExamples >> expectedSchemaStringForMathReasoningWith
 					}
 				]
 			}
-		},
-		"finalAnswer" : {
-			"type" : "string"
 		}
 	},
 	"required" : [
-		"steps",
-		"finalAnswer"
+		"finalAnswer",
+		"steps"
 	],
 	"additionalProperties" : false
 }'
@@ -197,6 +197,9 @@ GtMagritteJSONSchemaExporterExamples >> expectedSchemaStringForMathReasoningWith
 	"type" : "object",
 	"description" : "Math reasoning is made out of steps.",
 	"properties" : {
+		"finalAnswer" : {
+			"type" : "string"
+		},
 		"steps" : {
 			"type" : "array",
 			"items" : {
@@ -216,14 +219,11 @@ GtMagritteJSONSchemaExporterExamples >> expectedSchemaStringForMathReasoningWith
 				],
 				"additionalProperties" : false
 			}
-		},
-		"finalAnswer" : {
-			"type" : "string"
 		}
 	},
 	"required" : [
-		"steps",
-		"finalAnswer"
+		"finalAnswer",
+		"steps"
 	],
 	"additionalProperties" : false
 }'
