@@ -7,7 +7,6 @@ Class {
 { #category : #examples }
 GtLChatWithScripterExamples >> chatElementWithEmptyReplyMessage [
 	<gtExample>
-	<noTest>
 	| chat scripter |
 	chat := self chatWithEmptyReplyMessage.
 	scripter := BlScripter new.
@@ -36,7 +35,6 @@ GtLChatWithScripterExamples >> chatElementWithEmptyReplyMessage [
 { #category : #examples }
 GtLChatWithScripterExamples >> chatElementWithEmptyReplyMessage_toolMessage [
 	<gtExample>
-	<noTest>
 	| chat scripter call reply tool |
 	scripter := self chatElementWithEmptyReplyMessage.
 	chat := scripter model.
@@ -77,9 +75,8 @@ GtLChatWithScripterExamples >> chatElementWithEmptyReplyMessage_toolMessage [
 { #category : #examples }
 GtLChatWithScripterExamples >> chatWithEmptyReplyMessage [
 	<gtExample>
-	<noTest>
 	| chat currentMessage |
-	chat := GtLChat new.
+	chat := GtLChat new provider: GtLOpenAIProviderStub new.
 	currentMessage := chat createUserMessage.
 	currentMessage
 		addInputMagritteObject: (GtLMarkdown new
