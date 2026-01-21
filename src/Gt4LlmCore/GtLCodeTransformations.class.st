@@ -96,7 +96,8 @@ GtLCodeTransformations >> transformationsDescription [
 	
 	 ^ MAToManyRelationDescription new
 			accessor: #transformations;
-			classes: (GtLCodeTransformationSpecification allSubclasses select: #isConcrete);
-			propertyAt: 'useExplicitContainerForChildren' put: true;
+			classes: (GtLCodeTransformationSpecification allSubclasses 
+				select: #isConcrete);
+			useExplicitContainerForChildren;
 			beRequired
 ]

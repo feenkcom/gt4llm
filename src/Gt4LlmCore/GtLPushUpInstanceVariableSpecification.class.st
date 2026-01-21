@@ -7,9 +7,14 @@ Class {
 	#category : #'Gt4LlmCore-Formats'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 GtLPushUpInstanceVariableSpecification class >> isConcrete [
 	^ true
+]
+
+{ #category : #accessing }
+GtLPushUpInstanceVariableSpecification class >> jsonSchemaLabel [
+	^ 'PushUpInstanceVariable'
 ]
 
 { #category : #'as yet unclassified' }

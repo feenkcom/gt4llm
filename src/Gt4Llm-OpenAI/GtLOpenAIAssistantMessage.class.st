@@ -129,3 +129,11 @@ GtLOpenAIAssistantMessage >> senderText [
 		ifNil: [ 'Assistant' ]
 		ifNotNil: [ :aModel | GtLConnectionRegistry uniqueInstance labelForModel: aModel ]
 ]
+
+{ #category : #'as yet unclassified' }
+GtLOpenAIAssistantMessage >> serializeForOpenAIResponsesAPI [
+	^ {#content
+			-> {{'type' -> 'output_text'.
+						'text' -> self contentText} asDictionary}.
+		#role -> self role} asDictionary
+]

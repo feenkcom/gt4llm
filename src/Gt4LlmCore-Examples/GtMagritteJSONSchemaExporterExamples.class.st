@@ -5,10 +5,16 @@ Class {
 }
 
 { #category : #assertions }
-GtMagritteJSONSchemaExporterExamples >> assertSchema: aJsonSchema equals: aSchemString [
+GtMagritteJSONSchemaExporterExamples >> assertSchema: aJsonSchema equals: aSchemaString [
+	| expectedSchema |
+	expectedSchema := NeoJSONSchema new json: (NeoJSONObject fromString: aSchemaString).
 	self 
 		assert: aJsonSchema
-		equals: (NeoJSONSchema new json: (NeoJSONObject fromString: aSchemString))
+		equals: expectedSchema.
+		
+	self 
+		assert: aJsonSchema raw
+		equals: expectedSchema raw.
 ]
 
 { #category : #expected }
@@ -16,6 +22,9 @@ GtMagritteJSONSchemaExporterExamples >> expectedSchemaStringForMathReasoningWith
 	^ '{
 	"type" : "object",
 	"properties" : {
+		"finalAnswer" : {
+			"type" : "string"
+		},
 		"steps" : {
 			"type" : "array",
 			"items" : {
@@ -56,14 +65,11 @@ GtMagritteJSONSchemaExporterExamples >> expectedSchemaStringForMathReasoningWith
 				],
 				"additionalProperties" : false
 			}
-		},
-		"finalAnswer" : {
-			"type" : "string"
 		}
 	},
 	"required" : [
-		"steps",
-		"finalAnswer"
+		"finalAnswer",
+		"steps"
 	],
 	"additionalProperties" : false
 }'
@@ -74,6 +80,9 @@ GtMagritteJSONSchemaExporterExamples >> expectedSchemaStringForMathReasoningWith
 	^ '{
 	"type" : "object",
 	"properties" : {
+		"finalAnswer" : {
+			"type" : "string"
+		},
 		"steps" : {
 			"type" : "array",
 			"items" : {
@@ -105,14 +114,78 @@ GtMagritteJSONSchemaExporterExamples >> expectedSchemaStringForMathReasoningWith
 					}
 				]
 			}
-		},
-		"finalAnswer" : {
-			"type" : "string"
 		}
 	},
 	"required" : [
-		"steps",
-		"finalAnswer"
+		"finalAnswer",
+		"steps"
+	],
+	"additionalProperties" : false
+}'
+]
+
+{ #category : #expected }
+GtMagritteJSONSchemaExporterExamples >> expectedSchemaStringForMathReasoningWithMultipleTypesWithContainer [
+	^ '{
+	"type" : "object",
+	"properties" : {
+		"finalAnswer" : {
+			"type" : "string"
+		},
+		"steps" : {
+			"type" : "array",
+			"items" : {
+				"anyOf" : [
+					{
+						"type" : "object",
+						"properties" : {
+							"ExplanationStep" : {
+								"type" : "object",
+								"properties" : {
+									"content" : {
+										"type" : "string",
+										"description" : "An explanation of this step"
+									}
+								},
+								"required" : [
+									"content"
+								],
+								"additionalProperties" : false
+							}
+						},
+						"required" : [
+							"ExplanationStep"
+						],
+						"additionalProperties" : false
+					},
+					{
+						"type" : "object",
+						"properties" : {
+							"OutputStep" : {
+								"type" : "object",
+								"properties" : {
+									"output" : {
+										"type" : "string"
+									}
+								},
+								"required" : [
+									"output"
+								],
+								"additionalProperties" : false
+							}
+						},
+						"required" : [
+							"OutputStep"
+						],
+						"additionalProperties" : false
+					}
+				]
+			}
+		}
+	},
+	"required" : [
+		"finalAnswer",
+		"steps"
 	],
 	"additionalProperties" : false
 }'
@@ -124,33 +197,33 @@ GtMagritteJSONSchemaExporterExamples >> expectedSchemaStringForMathReasoningWith
 	"type" : "object",
 	"description" : "Math reasoning is made out of steps.",
 	"properties" : {
+		"finalAnswer" : {
+			"type" : "string"
+		},
 		"steps" : {
 			"type" : "array",
 			"items" : {
 				"type" : "object",
 				"properties" : {
-					"output" : {
-						"type" : "string"
-					},
 					"explanation" : {
 						"type" : "string",
 						"description" : "An explanation of this step"
+					},
+					"output" : {
+						"type" : "string"
 					}
 				},
 				"required" : [
-					"output",
-					"explanation"
+					"explanation",
+					"output"
 				],
 				"additionalProperties" : false
 			}
-		},
-		"finalAnswer" : {
-			"type" : "string"
 		}
 	},
 	"required" : [
-		"steps",
-		"finalAnswer"
+		"finalAnswer",
+		"steps"
 	],
 	"additionalProperties" : false
 }'
@@ -169,6 +242,14 @@ GtMagritteJSONSchemaExporterExamples >> generateSchemaForMathReasoningWithMultip
 	| exporter |
 	exporter := GtMagritteJSONSchemaExporter 
 		forModelClass: GtLDemoMathReasoningWithDifferentSteps.
+	^ exporter exportSchema
+]
+
+{ #category : #generation }
+GtMagritteJSONSchemaExporterExamples >> generateSchemaForMathReasoningWithMultipleTypesWithContainer [
+	| exporter |
+	exporter := GtMagritteJSONSchemaExporter 
+		forModelClass: GtLDemoMathReasoningWithDifferentStepsWithContainer.
 	^ exporter exportSchema
 ]
 
@@ -193,6 +274,14 @@ GtMagritteJSONSchemaExporterExamples >> testSchemaGenerationForMathReasoningWith
 	self  
 		assertSchema: self generateSchemaForMathReasoningWithMultipleTypes
 		equals: self expectedSchemaStringForMathReasoningWithMultipleTypes
+]
+
+{ #category : #examples }
+GtMagritteJSONSchemaExporterExamples >> testSchemaGenerationForMathReasoningWithMultipleTypesWithContainer [
+	<gtExample>
+	self  
+		assertSchema: self generateSchemaForMathReasoningWithMultipleTypesWithContainer
+		equals: self expectedSchemaStringForMathReasoningWithMultipleTypesWithContainer
 ]
 
 { #category : #examples }

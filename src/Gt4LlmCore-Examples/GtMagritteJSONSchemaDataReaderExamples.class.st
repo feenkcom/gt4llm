@@ -57,6 +57,35 @@ GtMagritteJSONSchemaDataReaderExamples >> expectedMathReasoningMultipleTypesType
 ]
 
 { #category : #expecting }
+GtMagritteJSONSchemaDataReaderExamples >> expectedMathReasoningMultipleTypesTypeStepWithContainer [
+	^ GtLDemoMathReasoningWithDifferentStepsWithContainer new
+		finalAnswer: 'x = -15/4';
+  	steps: {
+    	GtLDemoMathReasoningExplanationStep  new
+    		content: 'We are given the equation 8x + 7 = -23. The goal is to isolate x.'.
+    		
+    	GtLDemoMathReasoningExplanationStep  new
+    		content: 'Subtract 7 from both sides to eliminate the constant on the left side, resulting in 8x + 7 - 7 = -23 - 7.'.
+      
+      GtLDemoMathReasoningOutputStep  new
+      	output: '8x = -30'.
+      
+      GtLDemoMathReasoningExplanationStep  new
+    		content: 'Divide both sides by 8 to solve for x.'.
+    	
+    	GtLDemoMathReasoningOutputStep  new
+      	output: 'x = -30/8'.
+ 
+       GtLDemoMathReasoningExplanationStep  new
+    		content: 'Simplify the fraction by dividing numerator and denominator by 2.'.
+    	
+    	GtLDemoMathReasoningOutputStep  new
+      	output: 'x = -15/4'.
+      	
+	}
+]
+
+{ #category : #expecting }
 GtMagritteJSONSchemaDataReaderExamples >> expectedMathReasoningWithSingleTypeStep [
 	^ GtLDemoMathReasoning new
 		finalAnswer: 'x = -15 / 4';
@@ -149,9 +178,59 @@ GtMagritteJSONSchemaDataReaderExamples >> mathReasoningWithMultipleTypesStepData
 ]
 
 { #category : #accessing }
+GtMagritteJSONSchemaDataReaderExamples >> mathReasoningWithMultipleTypesStepDataWithContainer [
+	^ '{
+	"finalAnswer" : "x = -15/4",
+	"steps" : [
+		{
+			"ExplanationStep" : {
+				"content" : "We are given the equation 8x + 7 = -23. The goal is to isolate x."
+			}
+		},
+		{
+			"ExplanationStep" : {
+				"content" : "Subtract 7 from both sides to eliminate the constant on the left side, resulting in 8x + 7 - 7 = -23 - 7."
+			}
+		},
+		{
+			"OutputStep" : {
+				"output" : "8x = -30"
+			}
+		},
+		{
+			"ExplanationStep" : {
+				"content" : "Divide both sides by 8 to solve for x."
+			}
+		},
+		{
+			"OutputStep" : {
+				"output" : "x = -30/8"
+			}
+		},
+		{
+			"ExplanationStep" : {
+				"content" : "Simplify the fraction by dividing numerator and denominator by 2."
+			}
+		},
+		{
+			"OutputStep" : {
+				"output" : "x = -15/4"
+			}
+		}
+	]
+}'
+]
+
+{ #category : #accessing }
 GtMagritteJSONSchemaDataReaderExamples >> mathReasoningWithMultipleTypesStepReader [
 	^ GtMagritteJSONSchemaDataReader 
 			forModelClass: GtLDemoMathReasoningWithDifferentSteps
+]
+
+{ #category : #accessing }
+GtMagritteJSONSchemaDataReaderExamples >> mathReasoningWithMultipleTypesStepReaderWithContainer [
+	^ GtMagritteJSONSchemaDataReader 
+			forModelClass: GtLDemoMathReasoningWithDifferentStepsWithContainer
 ]
 
 { #category : #accessing }
@@ -215,6 +294,21 @@ GtMagritteJSONSchemaDataReaderExamples >> readMathReasoningWithMultipleTypes [
 	self 
 		assert: mathReasoning 
 		equals:self expectedMathReasoningMultipleTypesTypeStep.
+		
+	^ mathReasoning
+]
+
+{ #category : #examples }
+GtMagritteJSONSchemaDataReaderExamples >> readMathReasoningWithMultipleTypesWithContainer [
+	<gtExample>
+	| dataReader mathReasoning |
+	dataReader := self mathReasoningWithMultipleTypesStepReaderWithContainer.
+	mathReasoning := dataReader 
+		readFrom: self mathReasoningWithMultipleTypesStepDataWithContainer readStream.
+		
+	self 
+		assert: mathReasoning 
+		equals:self expectedMathReasoningMultipleTypesTypeStepWithContainer.
 		
 	^ mathReasoning
 ]

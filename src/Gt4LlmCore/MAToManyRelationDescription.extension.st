@@ -7,3 +7,13 @@ MAToManyRelationDescription >> gtJsonSchemaTypeName [
 			 asStringOn: s 
 			 delimiter: 'Or' ] )
 ]
+
+{ #category : #'*Gt4LlmCore' }
+MAToManyRelationDescription >> shouldUseExplicitContainerForChildren [
+	^ self hasProperty: 'useExplicitContainerForChildren'
+]
+
+{ #category : #'*Gt4LlmCore' }
+MAToManyRelationDescription >> useExplicitContainerForChildren [
+	self propertyAt: 'useExplicitContainerForChildren' put: true
+]
