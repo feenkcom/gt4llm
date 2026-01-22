@@ -23,8 +23,8 @@ GtLTools class >> gtCodeRemoval [
 { #category : #defaults }
 GtLTools class >> gtExamplesRun [
 	^ self
-		withAll: {	GtLToolForExampleMethodRun new.
-					GtLToolForExampleClassesRun new} asOrderedCollection
+		withAll: {GtLToolForExampleMethodRun new.
+				GtLToolForExampleClassesRun new} asOrderedCollection
 ]
 
 { #category : #defaults }
@@ -44,6 +44,13 @@ GtLTools class >> leSearch [
 	^ self
 		withAll: {GtLToolForSearchForLepiterPages new.
 					GtLToolForLepiterPageContents new.} asOrderedCollection
+]
+
+{ #category : #defaults }
+GtLTools class >> sunitRun [
+	^ self
+		withAll: {GtLToolForSUnitMethodRun new.
+				GtLToolForSUnitClassesRun new} asOrderedCollection
 ]
 
 { #category : #'as yet unclassified' }
