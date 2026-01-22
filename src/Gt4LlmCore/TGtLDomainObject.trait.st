@@ -23,3 +23,20 @@ TGtLDomainObject >> serializeToOpenAIResponseJsonObject [
 	<return: #NeoJSONObject>
 	^ self explicitRequirement
 ]
+
+{ #category : #'api - serializing' }
+TGtLDomainObject >> serializeToOpenAIResponseJsonString [
+	"Return a JSON string that represents the domain object."
+
+	<return: #String>
+	^ self explicitRequirement
+]
+
+{ #category : #'api - serializing' }
+TGtLDomainObject >> serializeToOpenAIResponseOutput [
+	"Return a JSON that represents tool response output.
+	See GtLToolMessage>>#serializeForOpenAIResponsesAPI for more information."
+
+	<return: #String>
+	^ self explicitRequirement
+]
