@@ -596,25 +596,14 @@ GtLChatOpenAILiveExamples >> messageWithInputObjectExample [
 GtLChatOpenAILiveExamples >> messageWithToolCallExample [
 	<gtExample>
 	<noTest>
-	| messageString currentMessage responseMessage  |
-	messageString := 'Use tools and give me a description of the class BlElement'.
-	
-	currentMessage := self currentChat createUserMessage.
-	currentMessage 
-		addInputMagritteObject: (GtLMarkdown new
-			content: messageString)
-		named: 'Markdown'.
-	
-	currentMessage tools: (GtLTools withAll: {GtLToolForClassLookup new}).
-	currentMessage addResponseFormat: (GtLResponseMarkdownFormat new
-			name: 'Description').
-	
-	responseMessage := self currentChat sendMessage: currentMessage.
-	
-	self
-		waitForChatRunIsDoneThen: [ self assert: self currentChat messages size equals: 2 ].
-	
-	^ self currentChat
+	| chat  |
+	chat := self currentChat.
+	chat tools: (GtLTools withAll: {GtLToolForClassLookup new}).
+	chat markdownResponse.
+	chat sendMarkdown: 'Use tools and give me a description of the class BlElement'.
+	self waitForChatRunIsDoneThen: [ 
+		self assert: self currentChat messages size equals: 2 ].
+	^ chat
 ]
 
 { #category : #'examples - calls' }

@@ -58,31 +58,34 @@ GtLNewMessageElement >> buildAttachButton [
 { #category : #'as yet unclassified' }
 GtLNewMessageElement >> buildProviderButton [
 	| aButton |
-	^ aButton := BrButton new beSmallSize
-			aptitude: BrGlamorousButtonWithLabelAptitude new
-					+ (BrGlamorousWithExplicitDropdownAptitude
-							handle: [ BrButton new beSmallSize
-									aptitude: BrGlamorousButtonWithLabelAptitude - BrGlamorousButtonExteriorAptitude;
-									label: self messageViewModel connectionString ]
-							content: [ | aList |
-								aList := BrSimpleList new fitContent
-										id: #'provider-list';
-										items: self messageViewModel connectionRegistry connectableConnections;
-										itemStencil: [ BrLabel new
-												aptitude: BrGlamorousLabelAptitude new
-														+ (BrStyleCommonAptitude new
-																selected: [ :aStyle | aStyle background: BrGlamorousColors selectedListItemColor ];
-																hovered: [ :aStyle | aStyle background: BrGlamorousColors hoveredListItemColor ]);
-												padding: (BlInsets all: 5) ];
-										itemDataBinder: [ :aLabel :anItem | aLabel text: anItem connectionString ];
-										when: BrSelectionChanged
-											do: [ :anEvent | 
-												self threadMessageViewModel
-													provider: (self threadMessageViewModel connectionRegistry connectableConnections
-															at: anEvent indices first) buildProvider.
-												aButton label: self threadMessageViewModel connectionString.
-												aList fireEvent: BrDropdownHideWish new ] ]);
-			label: self messageViewModel connectionString
+	aButton := BrButton new.
+	aButton
+		beSmallSize;
+		aptitude: BrGlamorousButtonWithLabelAptitude new
+				+ (BrGlamorousWithExplicitDropdownAptitude
+						handle: [ BrButton new beSmallSize
+								aptitude: BrGlamorousButtonWithLabelAptitude - BrGlamorousButtonExteriorAptitude;
+								label: self messageViewModel connectionString ]
+						content: [ | aList |
+							aList := BrSimpleList new fitContent
+									id: #'provider-list';
+									items: self messageViewModel connectionRegistry connectableConnections;
+									itemStencil: [ BrLabel new
+											aptitude: BrGlamorousLabelAptitude new
+													+ (BrStyleCommonAptitude new
+															selected: [ :aStyle | aStyle background: BrGlamorousColors selectedListItemColor ];
+															hovered: [ :aStyle | aStyle background: BrGlamorousColors hoveredListItemColor ]);
+											padding: (BlInsets all: 5) ];
+									itemDataBinder: [ :aLabel :anItem | aLabel text: anItem connectionString ];
+									when: BrSelectionChanged
+										do: [ :anEvent | 
+											self threadMessageViewModel
+												provider: (self threadMessageViewModel connectionRegistry connectableConnections
+														at: anEvent indices first) buildProvider.
+											aButton label: self threadMessageViewModel connectionString.
+											aList fireEvent: BrDropdownHideWish new ] ]);
+		label: self messageViewModel connectionString.
+	^ aButton
 ]
 
 { #category : #'initialization ' }

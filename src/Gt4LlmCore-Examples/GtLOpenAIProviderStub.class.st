@@ -16,3 +16,13 @@ GtLOpenAIProviderStub >> chat: aGtLChat [
 GtLOpenAIProviderStub >> defaultUserMessageClass [
 	^ GtLOpenAIUserMessage
 ]
+
+{ #category : #'api - accessing' }
+GtLOpenAIProviderStub >> modelName [
+	^ 'stub'
+]
+
+{ #category : #'api - accessing' }
+GtLOpenAIProviderStub >> status [
+	^ GtLlmAssistantChatReadyStatus new
+]
