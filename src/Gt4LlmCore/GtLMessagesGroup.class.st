@@ -46,7 +46,7 @@ GtLMessagesGroup >> gtMessagesFor: aView [
 		column: 'Role'
 			text: [ :item | item role ]
 			width: 100;
-		column: 'Message' text: [ :item | item content ]
+		column: 'Message' text: [ :item | item contentText ]
 ]
 
 { #category : #'llm-generated' }
