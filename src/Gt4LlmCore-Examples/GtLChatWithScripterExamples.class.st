@@ -76,7 +76,7 @@ GtLChatWithScripterExamples >> chatElementWithEmptyReplyMessage_toolMessage [
 GtLChatWithScripterExamples >> chatWithEmptyReplyMessage [
 	<gtExample>
 	| chat currentMessage |
-	chat := GtLChat new.
+	chat := GtLChat new provider: GtLOpenAIProviderStub new.
 	currentMessage := chat createUserMessage.
 	currentMessage
 		addInputMagritteObject: (GtLMarkdown new
