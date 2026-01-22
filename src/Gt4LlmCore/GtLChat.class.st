@@ -281,6 +281,7 @@ GtLChat >> gtFormatFor: aView [
 { #category : #views }
 GtLChat >> gtInstructionsFor: aView [
 	<gtView>
+	instructions ifNil: [ ^ aView empty].
 	^ aView forward
 		title: 'Instructions';
 		object: [ instructions ];
