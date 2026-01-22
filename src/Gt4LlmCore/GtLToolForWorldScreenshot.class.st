@@ -8,6 +8,11 @@ Class {
 	#category : #Gt4LlmCore
 }
 
+{ #category : #'as yet unclassified' }
+GtLToolForWorldScreenshot class >> leJsonV4Name [
+	^ #gtLToolForWorldScreenshot
+]
+
 { #category : #private }
 GtLToolForWorldScreenshot >> binaryContentsOf: aFileReference [
 	| stream |
