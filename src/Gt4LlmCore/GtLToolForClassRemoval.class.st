@@ -1,0 +1,53 @@
+Class {
+	#name : #GtLToolForClassRemoval,
+	#superclass : #GtLAbstractFunctionTool,
+	#category : #Gt4LlmCore
+}
+
+{ #category : #accessing }
+GtLToolForClassRemoval >> description [
+	^ 'Removes the class with the provided name from the image.'
+]
+
+{ #category : #accessing }
+GtLToolForClassRemoval >> name [
+	^ 'removeClass'
+]
+
+{ #category : #accessing }
+GtLToolForClassRemoval >> parameters [
+	^ #('className')
+]
+
+{ #category : #execution }
+GtLToolForClassRemoval >> privatePerformToolCall: aToolCall [
+	| arguments classNameValue classNameString class removalResult |
+	arguments := aToolCall arguments ifNil: [ Dictionary new ].
+	classNameValue := arguments
+		at: 'className'
+		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
+			receiverName: self name;
+			arguments: arguments;
+			missingArgument: 'className' ].
+	classNameString := classNameValue asString trimBoth.
+	classNameString isEmpty
+		ifTrue: [ ^ GtLMissingArgumentDomainObject new
+			receiverName: self name;
+			arguments: arguments;
+			missingArgument: 'className' ].
+	class := Smalltalk globals
+		at: classNameString asSymbol
+		ifAbsent: [ ^ GtLMissingDomainObject new objectName: classNameString ].
+	[ class removeFromSystem ]
+		on: Error
+		do: [ :ex |
+			^ GtLExceptionDomainObject new
+				freeze: ex;
+				description: 'Error while removing class';
+				yourself ].
+	removalResult := {
+		'removedClassName' -> classNameString.
+		'status' -> 'removed'
+	} asDictionary.
+	^ GtLValueDomainObject new value: removalResult
+]

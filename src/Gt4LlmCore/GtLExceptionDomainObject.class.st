@@ -48,6 +48,7 @@ GtLExceptionDomainObject >> gtExceptionStackFor: aView [
 	
 	^ aView forward
 		title: 'Exception stack';
+		priority: 1;
 		object: [ self exception ];
 		view: #gtLiveFor:
 ]
