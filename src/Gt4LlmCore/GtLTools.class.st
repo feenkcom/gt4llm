@@ -14,6 +14,13 @@ GtLTools class >> gtCodeChange [
 ]
 
 { #category : #defaults }
+GtLTools class >> gtCodeRemoval [
+	^ self
+		withAll: {GtLToolForClassRemoval new.
+					GtLToolForMethodRemoval new} asOrderedCollection
+]
+
+{ #category : #defaults }
 GtLTools class >> gtExamplesRun [
 	^ self
 		withAll: {	GtLToolForExampleMethodRun new.
