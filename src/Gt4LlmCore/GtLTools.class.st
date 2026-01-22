@@ -10,7 +10,9 @@ Class {
 GtLTools class >> gtCodeChange [
 	^ self
 		withAll: {GtLToolForClassCreation new.
-					GtLToolForMethodCompilation new} asOrderedCollection
+					GtLToolForMethodCompilation new.
+					GtLToolForMethodRemoval new.
+					GtLToolForClassRemoval new} asOrderedCollection
 ]
 
 { #category : #defaults }
@@ -36,7 +38,8 @@ GtLTools class >> gtSearch [
 				GtLToolForClassReferences new.
 				GtLToolForMethodReferences new.
 				GtLToolForMethodImplementors new.
-				GtLToolForMethodSource new} asOrderedCollection
+				GtLToolForMethodSource new.
+				GtLToolForPackageClasses new} asOrderedCollection
 ]
 
 { #category : #defaults }
