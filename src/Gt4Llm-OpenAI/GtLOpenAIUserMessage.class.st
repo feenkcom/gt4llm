@@ -153,7 +153,7 @@ GtLOpenAIUserMessage >> initialize [
 	super initialize.
 
 	images := OrderedCollection new.
-	inputModels := Dictionary new.
+	inputModels := OrderedDictionary new.
 ]
 
 { #category : #accessing }

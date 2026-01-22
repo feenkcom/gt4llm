@@ -154,6 +154,198 @@ GtLChatOpenAILiveExamples >> mathResponseSchemaForMathTutor [
 ]
 
 { #category : #'examples - calls' }
+GtLChatOpenAILiveExamples >> messageExample_lepiterPage_improveSingleTextSnippet [
+	<gtExample>
+	<noTest>
+	| messageString currentMessage responseMessage lepiterPage |
+	messageString :='Improve the content of the first snippet in this page. Use a LepiterTransformation to express the change.'.
+	lepiterPage := LeDatabasesRegistry defaultLogicalDatabase
+		pageNamed: 'Releaser'.
+	
+	currentMessage := self currentChat createUserMessage.
+	currentMessage 
+		addInputMagritteObject: (GtLMarkdown new
+			content: messageString)
+		named: 'Markdown'.
+	currentMessage 
+		addInputModel: (GtLLepiterPageInputModel new
+			name: lepiterPage title;
+			model: lepiterPage).
+	currentMessage
+		addResponseFormat: (GtLResponseMagritteFormat new
+				name: 'LepiterTransformations';
+				modelClass: GtLLepiterTransformations).
+
+	responseMessage := self currentChat sendMessage: currentMessage.
+
+	self
+		waitForChatRunIsDoneThen: [ self assert: self currentChat messages size equals: 2 ].
+
+	^ self currentChat
+]
+
+{ #category : #'examples - calls' }
+GtLChatOpenAILiveExamples >> messageExample_lepiterPage_improveSnippets [
+	<gtExample>
+	<noTest>
+	| messageString currentMessage responseMessage lepiterPage |
+	messageString :='Improve the content of the snippets in this lepiter page. Use change transformations to express the changes.'.
+	lepiterPage := LeDatabasesRegistry defaultLogicalDatabase
+		pageNamed: 'Releaser'.
+	
+	currentMessage := self currentChat createUserMessage.
+	currentMessage tools: (GtLTools gtSearch, GtLTools leSearch).
+	currentMessage 
+		addInputMagritteObject: (GtLMarkdown new
+			content: messageString)
+		named: 'Markdown'.
+	currentMessage 
+		addInputModel: (GtLLepiterPageInputModel new
+			name: lepiterPage title;
+			model: lepiterPage).
+	currentMessage
+		addResponseFormat: (GtLResponseMagritteFormat new
+				name: 'ChangeTransformations';
+				modelClass: GtLChangeTransformations).
+
+	responseMessage := self currentChat sendMessage: currentMessage.
+
+	self
+		waitForChatRunIsDoneThen: [ 
+			self assert: self currentChat messages size > 2 ].
+
+	^ self currentChat
+]
+
+{ #category : #'examples - calls' }
+GtLChatOpenAILiveExamples >> messageExample_lepiterPage_improveTextSnippets [
+	<gtExample>
+	<noTest>
+	| messageString currentMessage responseMessage lepiterPage |
+	messageString :='Improve the content of the text snippets in this lepiter page. Use  Lepiter transformations to express the changes.'.
+	lepiterPage := LeDatabasesRegistry defaultLogicalDatabase
+		pageNamed: 'Releaser'.
+	
+	currentMessage := self currentChat createUserMessage.
+	currentMessage 
+		addInputMagritteObject: (GtLMarkdown new
+			content: messageString)
+		named: 'Markdown'.
+	currentMessage 
+		addInputModel: (GtLLepiterPageInputModel new
+			name: lepiterPage title;
+			model: lepiterPage).
+	currentMessage
+		addResponseFormat: (GtLResponseMagritteFormat new
+				name: 'LepiterTransformations';
+				modelClass: GtLLepiterTransformations).
+
+	responseMessage := self currentChat sendMessage: currentMessage.
+
+	self
+		waitForChatRunIsDoneThen: [ 
+			self assert: self currentChat messages size equals: 2 ].
+
+	^ self currentChat
+]
+
+{ #category : #'examples - calls' }
+GtLChatOpenAILiveExamples >> messageExample_lepiterPage_locatePageUid [
+	<gtExample>
+	<noTest>
+	| messageString currentMessage responseMessage lepiterPage |
+	messageString :='Return the id of this lepiter page.'.
+	lepiterPage := LeDatabasesRegistry defaultLogicalDatabase
+		pageNamed: 'An example of moldable logging using Beacon'.
+	
+	currentMessage := self currentChat createUserMessage.
+	currentMessage 
+		addInputMagritteObject: (GtLMarkdown new
+			content: messageString)
+		named: 'Markdown'.
+	currentMessage 
+		addInputModel: (GtLLepiterPageInputModel new
+			name: lepiterPage title;
+			model: lepiterPage).
+		currentMessage
+		addResponseFormat: (GtLResponseStringFormat new
+				name: 'uid').
+
+	responseMessage := self currentChat sendMessage: currentMessage.
+	"Page ID is e203cda7-b896-0d00-8c81-252704a2e9a0"
+
+	self
+		waitForChatRunIsDoneThen: [ 
+			self assert: self currentChat messages size equals: 2 ].
+
+	^ self currentChat
+]
+
+{ #category : #'examples - calls' }
+GtLChatOpenAILiveExamples >> messageExample_lepiterPage_locateSnippetUid [
+	<gtExample>
+	<noTest>
+	| messageString currentMessage responseMessage lepiterPage |
+	messageString :='Return the uid of the fourth snippet in the page. Take nesting of snippets into account when counting snippets'.
+	lepiterPage := LeDatabasesRegistry defaultLogicalDatabase
+		pageNamed: 'An example of moldable logging using Beacon'.
+	
+	currentMessage := self currentChat createUserMessage.
+	currentMessage 
+		addInputMagritteObject: (GtLMarkdown new
+			content: messageString)
+		named: 'Markdown'.
+	currentMessage 
+		addInputModel: (GtLLepiterPageInputModel new
+			name: lepiterPage title;
+			model: lepiterPage).
+		currentMessage
+		addResponseFormat: (GtLResponseMagritteFormat new
+				name: 'uid';
+				modelClass: LeUID).
+
+	responseMessage := self currentChat sendMessage: currentMessage.
+	"Fourth uid should be nYByMyTODQCyFRtBDMk7GQ=="
+
+	self
+		waitForChatRunIsDoneThen: [ 
+			self assert: self currentChat messages size equals: 2 ].
+
+	^ self currentChat
+]
+
+{ #category : #'examples - calls' }
+GtLChatOpenAILiveExamples >> messageExample_lepiterPage_summarize [
+	<gtExample>
+	<noTest>
+	| messageString currentMessage responseMessage lepiterPage |
+	messageString :='Create a summary of this lepiter page.'.
+	lepiterPage := LeDatabasesRegistry defaultLogicalDatabase
+		pageNamed: 'An example of moldable logging using Beacon'.
+	
+	currentMessage := self currentChat createUserMessage.
+	currentMessage 
+		addInputMagritteObject: (GtLMarkdown new
+			content: messageString)
+		named: 'Markdown'.
+	currentMessage 
+		addInputModel: (GtLLepiterPageInputModel new
+			name: lepiterPage title;
+			model: lepiterPage).
+	currentMessage
+		addResponseFormat: (GtLResponseMagritteFormat new
+				name: 'Summary';
+				modelClass: GtLMarkdown).
+
+	responseMessage := self currentChat sendMessage: currentMessage.
+
+	self
+		waitForChatRunIsDoneThen: [ self assert: self currentChat messages size equals: 2 ].
+
+	^ self currentChat
+]
+
+{ #category : #'examples - calls' }
 GtLChatOpenAILiveExamples >> messageExample_magritteMarkdown_codeChanges [
 	<gtExample>
 	<noTest>
