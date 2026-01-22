@@ -40,6 +40,19 @@ GtLInputModel >> gtInspectorTargetModels [
 	^ {self . model}
 ]
 
+{ #category : #'gt - inspector' }
+GtLInputModel >> gtViewContentDictionaryFor: aView [
+	<gtView>
+	^ aView forward
+			title: 'Content Dictionary';
+			object: [ 
+				| content |
+				content := OrderedDictionary new.
+				self addContentTo: content.
+				content ];
+			view: #gtTreeFor:
+]
+
 { #category : #accessing }
 GtLInputModel >> model: anObject [ 
 	model := anObject
