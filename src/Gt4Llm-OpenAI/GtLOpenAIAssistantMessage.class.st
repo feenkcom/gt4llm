@@ -70,7 +70,7 @@ GtLOpenAIAssistantMessage >> gtContentFor: aView [
 
 { #category : #accessing }
 GtLOpenAIAssistantMessage >> gtInspectorTargetModels [
-	^ self responseModels
+	^ self responseModels asArray
 ]
 
 { #category : #accessing }

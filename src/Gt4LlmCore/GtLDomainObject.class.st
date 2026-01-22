@@ -56,3 +56,15 @@ GtLDomainObject >> serializeToOpenAIResponseJsonString [
 	<return: #String>
 	^ STONJSON toString: self serializeToOpenAIResponseJsonObject
 ]
+
+{ #category : #'api - serializing' }
+GtLDomainObject >> serializeToOpenAIResponseOutput [
+	"Return a JSON that represents tool response output.
+	See GtLToolMessage>>#serializeForOpenAIResponsesAPI for more information."
+
+	<return: #Array of: #NeoJSONObject>
+	^ {NeoJSONObject new
+			at: #text put: self serializeToOpenAIResponseJsonString;
+			at: #type put: #input_text;
+			yourself}
+]
