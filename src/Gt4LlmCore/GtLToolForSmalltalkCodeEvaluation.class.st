@@ -29,33 +29,33 @@ GtLToolForSmalltalkCodeEvaluation >> parameters [
 	^ #('code')
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #private }
 GtLToolForSmalltalkCodeEvaluation >> privatePerformToolCall: aToolCall [
 	| arguments code object serializer serialization |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	code := arguments
-			at: 'code'
-			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-					receiverName: self name;
-					arguments: arguments;
-					missingArgument: 'code' ].
+		at: 'code'
+		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
+			receiverName: self name;
+			arguments: arguments;
+			missingArgument: 'code' ].
 	code
 		ifNil: [ ^ GtLMissingArgumentDomainObject new
-				receiverName: self name;
-				arguments: arguments;
-				missingArgument: 'code' ].
+			receiverName: self name;
+			arguments: arguments;
+			missingArgument: 'code' ].
 	code := code asString trimBoth.
 	code isEmpty
 		ifTrue: [ ^ GtLMissingArgumentDomainObject new
-				receiverName: self name;
-				arguments: arguments;
-				missingArgument: 'code' ].
+			receiverName: self name;
+			arguments: arguments;
+			missingArgument: 'code' ].
 	object := [ OpalCompiler new evaluate: code ]
-			on: Error
-			do: [ :ex | 
-				^ GtLExceptionDomainObject new
-					freeze: ex;
-					description: 'Error while evaluating smalltalk code' ].
+		on: Error
+		do: [ :ex | 
+			^ GtLExceptionDomainObject new
+				freeze: ex;
+				description: 'Error while evaluating smalltalk code' ].
 
 	^ GtLValueDomainObject new value: object
 ]

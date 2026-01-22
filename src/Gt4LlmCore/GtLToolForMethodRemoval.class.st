@@ -4,6 +4,11 @@ Class {
 	#category : #Gt4LlmCore
 }
 
+{ #category : #'as yet unclassified' }
+GtLToolForMethodRemoval class >> leJsonV4Name [
+	^ #gtLToolForMethodRemoval
+]
+
 { #category : #accessing }
 GtLToolForMethodRemoval >> description [
 	^ 'Removes a method from the specified class. Provide the class name, method name, and optionally set classSide to true to remove class-side methods.'
