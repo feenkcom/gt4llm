@@ -4,6 +4,11 @@ Class {
 	#category : #Gt4LlmCore
 }
 
+{ #category : #'as yet unclassified' }
+GtLToolForSUnitMethodRun class >> leJsonV4Name [
+	^ #gtLToolForSUnitMethodRun
+]
+
 { #category : #visiting }
 GtLToolForSUnitMethodRun >> acceptVisitor: aVisitor [
 	^ aVisitor visitGtLlmToolForSUnitMethodRun: self
