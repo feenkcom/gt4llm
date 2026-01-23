@@ -18,7 +18,7 @@ GtLToolForChatMethodSearch >> chat [
 	chat := GtLChat new.
 	provider ifNotNil: [ chat provider: provider ].
 	chat
-		addResponseFormatForMagrite: GtLPharoScript named: 'PharoScript';
+		addResponseFormatForMagritte: GtLPharoScript named: 'PharoScript';
 		lepiterExplanations: #('Querying with GT search filters by example').
 	^ chat
 ]
