@@ -25,6 +25,7 @@ GtLLepiterPageDomainObject >> foundPage: aLePage [
 { #category : #views }
 GtLLepiterPageDomainObject >> gtLepiterPageViewFor: aView [
 	<gtView>
+	<gtLlmView>
 	^ aView forward
 		title: 'Page';
 		priority: 1;
