@@ -393,7 +393,7 @@ GtLChatOpenAILiveExamples >> messageExample_magritteMarkdown_codeChanges_refacto
 		named: 'Markdown'.
 	chat markdownResponse.
 	chat
-		addResponseFormatForMagrite: GtLCodeTransformations
+		addResponseFormatForMagritte: GtLCodeTransformations
 		named: 'CodeTransformations'.
 	responseMessage := chat sendMessage: currentMessage.
 
@@ -568,21 +568,17 @@ GtLChatOpenAILiveExamples >> messageWithInputObjectExample [
 	<noTest>
 	| messageString currentMessage responseMessage |
 	messageString := 'Explain this object'.
-	
+
 	currentMessage := self currentChat createUserMessage.
-	currentMessage 
-		addInputMagritteObject: (GtLMarkdown new
-			content: messageString)
-		named: 'Markdown'.
-	currentMessage 
-		addPlainInputObject: (GtABCartoonAddressBookExample>>#cartoonAddressBook)
-			gtExample returnValue
-		named: 'Object'.
-	
-	currentMessage tools: (GtLTools withAll: {GtLToolForClassLookup new}).
 	currentMessage
-		addResponseFormatForMagrite: GtLMarkdown
-		named: 'Markdown' .
+		addInputMagritteObject: (GtLMarkdown new content: messageString)
+		named: 'Markdown'.
+	currentMessage
+		addPlainInputObject: (GtABCartoonAddressBookExample >> #cartoonAddressBook) gtExample returnValue
+		named: 'Object'.
+
+	currentMessage tools: (GtLTools withAll: {GtLToolForClassLookup new}).
+	currentMessage addResponseFormatForMagritte: GtLMarkdown named: 'Markdown'.
 
 	responseMessage := self currentChat sendMessage: currentMessage.
 
@@ -617,11 +613,9 @@ GtLChatOpenAILiveExamples >> messageWithToolCallExample_magritteMarkdown [
 	currentMessage
 		addInputMagritteObject: (GtLMarkdown new content: messageString)
 		named: 'Markdown'.
-	
+
 	currentMessage tools: (GtLTools withAll: {GtLToolForClassLookup new}).
-	currentMessage
-		addResponseFormatForMagrite: GtLMarkdown
-		named: 'Markdown'.
+	currentMessage addResponseFormatForMagritte: GtLMarkdown named: 'Markdown'.
 
 	responseMessage := self currentChat sendMessage: currentMessage.
 
