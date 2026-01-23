@@ -19,6 +19,7 @@ GtLLepiterPagesDomainObject >> gtPagesFor: aView [
 	pages ifNil: [ ^ aView empty ].
 	^ aView columnedList
 		title: 'Pages';
+		priority: 1;
 		items: [ self pages ];
 		column: 'Value' text: [ :each | each gtDisplayString ]
 ]

@@ -99,12 +99,22 @@ GtLToolMessage >> role [
 GtLToolMessage >> serializeForOpenAIResponsesAPI [
 	"Output should be defined using tools.
 	Available output values:
-		- array of objects
-		- string"
+		- array of objects of type:
+			- 'input_text' (with 'text' containing value), 
+			- 'input_image', 
+			- 'output_text', 
+			- 'refusal', 
+			- 'input_file', 
+			- 'computer_screenshot', and 
+			- 'summary_text'
+		- string
+	Documentation: https://platform.openai.com/docs/guides/function-calling#formatting-results"
+
 	| anOutput |
 	self flag: #todo.
-	
-	anOutput := self output ifNotNil: #serializeToOpenAIResponseJsonString.
+
+	anOutput := self output ifNotNil: #serializeToOpenAIResponseOutput.
+
 	^ {'type' -> 'function_call_output'.
 		'call_id' -> toolCall id.
 		'output' -> anOutput} asDictionary

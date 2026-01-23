@@ -85,7 +85,7 @@ GtLToolForSUnitClassesRun >> privatePerformToolCall: aToolCall [
 			Smalltalk globals
 				at: className asSymbol
 				ifPresent: [ :class | 
-					(class inheritsFrom: TestCase)
+					(class isTestCase)
 						ifFalse: [ notTestCase add: class ]
 						ifTrue: [ | result |
 							result := class suite run.

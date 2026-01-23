@@ -109,8 +109,9 @@ GtLOpenAIUserMessage >> gtImagesFor: aView [
 
 { #category : #ui }
 GtLOpenAIUserMessage >> gtInspectorTargetModels [
-	^ self inputModels flatCollect: [ :each |
-		each gtInspectorTargetModels ]
+	^ self inputModels
+		flatCollect: [ :each | each gtInspectorTargetModels ]
+		as: Array
 ]
 
 { #category : #ui }
@@ -153,7 +154,7 @@ GtLOpenAIUserMessage >> initialize [
 	super initialize.
 
 	images := OrderedCollection new.
-	inputModels := Dictionary new.
+	inputModels := OrderedDictionary new.
 ]
 
 { #category : #accessing }
