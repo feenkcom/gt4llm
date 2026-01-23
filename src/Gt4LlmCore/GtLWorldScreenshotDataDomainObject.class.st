@@ -31,7 +31,20 @@ GtLWorldScreenshotDataDomainObject >> gtImageFor: aView [
 { #category : #serialization }
 GtLWorldScreenshotDataDomainObject >> serializeToOpenAIResponseJsonObject [
 	<return: #String>
-	^ 'data:image/jpeg;base64', self encodedBytes
+	^ "'data:image/jpeg;base64', self encodedBytes" super serializeToOpenAIResponseJsonObject
+]
+
+{ #category : #serialization }
+GtLWorldScreenshotDataDomainObject >> serializeToOpenAIResponseOutput [
+		"Return a JSON that represents tool response output.
+	See GtLToolMessage>>#serializeForOpenAIResponsesAPI for more information."
+
+	<return: #Array of: #NeoJSONObject>
+	^ {NeoJSONObject new
+			"at: #text put: self serializeToOpenAIResponseJsonString"
+			at: #image_url put: ('data:image/jpeg;base64,' , self encodedBytes);
+			at: #type put: #input_image;
+			yourself}
 ]
 
 { #category : #accessing }
