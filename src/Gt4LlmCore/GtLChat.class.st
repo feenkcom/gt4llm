@@ -88,6 +88,12 @@ GtLChat >> addResponseFormat: aResponseFormat [
 
 { #category : #adding }
 GtLChat >> addResponseFormatForMagrite: aClass named: aString [
+	self deprecated: 'use addResponseFormatForMagritte:named:' transformWith: '`@rcv addResponseFormatForMagrite: `@arg1 named: `@arg2' -> '`@rcv addResponseFormatForMagritte: `@arg1 named: `@arg2'.
+	^ self addResponseFormatForMagritte: aClass named: aString.
+]
+
+{ #category : #adding }
+GtLChat >> addResponseFormatForMagritte: aClass named: aString [
 	self
 		addResponseFormat: (GtLResponseMagritteFormat new
 				name: aString;
@@ -420,7 +426,7 @@ GtLChat >> lepiterExplanations: pageNames [
 
 { #category : #'api - communication' }
 GtLChat >> markdownResponse [
-	self addResponseFormatForMagrite: GtLMarkdown named: 'Markdown'
+	self addResponseFormatForMagritte: GtLMarkdown named: 'Markdown'
 ]
 
 { #category : #'api - message' }

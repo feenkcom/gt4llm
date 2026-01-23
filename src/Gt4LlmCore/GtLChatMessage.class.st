@@ -54,6 +54,12 @@ GtLChatMessage >> addResponseFormat: aFormatDescription [
 
 { #category : #accessing }
 GtLChatMessage >> addResponseFormatForMagrite: aClass named: aString [
+	self deprecated: 'use addResponseFormatForMagritte:named:' transformWith: '`@rcv addResponseFormatForMagrite: `@arg1 named: `@arg2' -> '`@rcv addResponseFormatForMagritte: `@arg1 named: `@arg2'.
+	^ self addResponseFormatForMagritte: aClass named: aString.
+]
+
+{ #category : #accessing }
+GtLChatMessage >> addResponseFormatForMagritte: aClass named: aString [
 	self
 		addResponseFormat: (GtLResponseMagritteFormat new
 				name: aString;
