@@ -16,7 +16,9 @@ GtLToolForExampleMethodRun >> acceptVisitor: aVisitor [
 
 { #category : #accessing }
 GtLToolForExampleMethodRun >> description [
-	^ 'Execute a gtExample method and report if it succeeds, fails, or errors'
+	^ 'Execute a gtExample method and report:
+- status: Succeess, Error, Failure, Skipped.
+- result: if it succeeds, it gets the resulting object. if there is a failure or error it gets the exception.'
 ]
 
 { #category : #accessing }

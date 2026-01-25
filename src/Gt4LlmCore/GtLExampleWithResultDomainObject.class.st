@@ -46,7 +46,7 @@ GtLExampleWithResultDomainObject >> isSuccessResult [
 
 { #category : #accessing }
 GtLExampleWithResultDomainObject >> safeReturnValuePrintString [
-	^ [ self exampleWithResult returnValue printString ]
+	^ [ "self exampleWithResult returnValue printString" "STONJSON toStringPretty:" (GtLValueSerializer new serializeValue: self exampleWithResult returnValue)  ]
 		onErrorDo: [ :anError | anError return: 'printString error' ]
 ]
 
