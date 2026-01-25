@@ -100,15 +100,16 @@ GtLTestCaseDomainObject >> serializeToOpenAIResponseJsonObject [
 	"Return a JSON dictionary that represents the domain object."
 
 	<return: #NeoJSONObject>
-	^ NeoJSONObject new
+	result := NeoJSONObject new
 		at: #className put: self testCase class name asString;
 		at: #selector put: (self testCase selector ifNil: [ '' ] ifNotNil: #asString);
 		at: #status put: self statusText;
 		at: #result put: self messageText;
 		at: #shouldPass put: self testCase shouldPass;
-		at: #expectedFailure put: self testCase isExpectedFailure;
-		at: #stackTrace put: self stackTrace;
-		yourself
+		at: #expectedFailure put: self testCase isExpectedFailure.
+	"(self isErrorResult or: [ self isFailureResult ]) ifTrue: [
+		result at: #stackTrace put: self stackTrace ]."
+	^ result
 ]
 
 { #category : #accessing }
