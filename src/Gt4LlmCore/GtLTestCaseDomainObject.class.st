@@ -107,6 +107,7 @@ GtLTestCaseDomainObject >> serializeToOpenAIResponseJsonObject [
 		at: #result put: self messageText;
 		at: #shouldPass put: self testCase shouldPass;
 		at: #expectedFailure put: self testCase isExpectedFailure;
+		at: #stackTrace put: self stackTrace;
 		yourself
 ]
 
