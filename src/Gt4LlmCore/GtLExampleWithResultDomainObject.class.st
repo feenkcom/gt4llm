@@ -46,8 +46,18 @@ GtLExampleWithResultDomainObject >> isSuccessResult [
 
 { #category : #accessing }
 GtLExampleWithResultDomainObject >> safeReturnValuePrintString [
-	^ [ "self exampleWithResult returnValue printString" "STONJSON toStringPretty:" (GtLValueSerializer new serializeValue: self exampleWithResult returnValue)  ]
-		onErrorDo: [ :anError | anError return: 'printString error' ]
+	^ [ | object |
+	object := GtLValueSerializer new
+			serializeValue: self exampleWithResult returnValue.
+	(self isErrorResult or: [ self isFailureResult ])
+		ifTrue: [ object := NeoJSONObject new
+					at: #exception put: object;
+					at: #stacktrace put: (self exampleWithResult result returnValue signalerContext
+				ifNotNil: [ :anInterruptedContext | 
+					anInterruptedContext stack
+						ifNotNil: [ :aStack | (aStack collect: #gtDisplayString) asArray ] ]);
+						yourself ].
+	object ] onErrorDo: [ :anError | anError return: 'printString error' ]
 ]
 
 { #category : #'api - serializing' }
