@@ -9,7 +9,7 @@ Class {
 		'contentLabelElement',
 		'senderTooltipAptitude'
 	],
-	#category : #'Gt4LlmCore-UI - Elements'
+	#category : 'Gt4LlmCore-UI - Elements'
 }
 
 { #category : #initialization }

@@ -1,11 +1,11 @@
 Class {
 	#name : #GtLPrimitiveImageData,
-	#superclass : #GtLPrimitiveData,
+	#superclass : #Object,
 	#instVars : [
 		'imageType',
 		'imageBytes'
 	],
-	#category : #'Gt4LlmCore-Domain Objects'
+	#category : 'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #'instance creation' }
