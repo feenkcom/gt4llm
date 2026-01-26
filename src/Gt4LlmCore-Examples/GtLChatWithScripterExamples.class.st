@@ -56,17 +56,78 @@ GtLChatWithScripterExamples >> chatElementWithEmptyReplyMessage_toolMessage [
 
 	scripter assert
 		exists;
-		label: 'Reply message element exists';
+		label: 'Assert reply message element exists';
 		// (GtLMessageElementId indexed: 2);
 		play.
 
 	scripter assert
 		value: [ :aLabel | aLabel text asString ] equals: 'Tool';
-		label: 'Reply message element exists';
+		label: 'Assert reply message element label is tool';
 		// (GtLMessageElementId indexed: 2);
 		// GtLMessageHeaderElement;
 		// BrLabel;
 		@ 1;
+		play.
+		
+	scripter assert
+		value: [ :aLabel | aLabel text asString ] equals: GtLMessageState created messageExecutionStateLabel;
+		label: 'Assert reply message has waiting state label';
+		// (GtLMessageElementId indexed: 2);
+		// GtLMessageHeaderElement;
+		// BrLabel;
+		@ 3;
+		play.
+
+	^ scripter
+]
+
+{ #category : #examples }
+GtLChatWithScripterExamples >> chatElementWithEmptyReplyMessage_toolMessage_executing [
+	<gtExample>
+	| chat scripter reply tool |
+	scripter := self chatElementWithEmptyReplyMessage_toolMessage.
+	chat := scripter model.
+	reply := chat messages at: 2.
+	tool := reply toolMessages last.
+
+	scripter do
+		label: 'Set tool message running state';
+		block: [ tool beRunningExecutionState ];
+		play.
+
+	scripter assert
+		value: [ :aLabel | aLabel text asString ] equals: GtLMessageState running messageExecutionStateLabel;
+		label: 'Assert reply message has running state label';
+		// (GtLMessageElementId indexed: 2);
+		// GtLMessageHeaderElement;
+		// BrLabel;
+		@ 3;
+		play.
+
+	^ scripter
+]
+
+{ #category : #examples }
+GtLChatWithScripterExamples >> chatElementWithEmptyReplyMessage_toolMessage_finished [
+	<gtExample>
+	| chat scripter reply tool |
+	scripter := self chatElementWithEmptyReplyMessage_toolMessage_executing.
+	chat := scripter model.
+	reply := chat messages at: 2.
+	tool := reply toolMessages last.
+
+	scripter do
+		label: 'Set tool message finished state';
+		block: [ tool beFinishedExecutionState ];
+		play.
+
+	scripter assert
+		value: [ :aLabel | aLabel text asString ] equals: GtLMessageState finished messageExecutionStateLabel;
+		label: 'Assert reply message has finished state label';
+		// (GtLMessageElementId indexed: 2);
+		// GtLMessageHeaderElement;
+		// BrLabel;
+		@ 3;
 		play.
 
 	^ scripter

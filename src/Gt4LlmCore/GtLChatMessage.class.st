@@ -338,6 +338,11 @@ GtLChatMessage >> isUserRole [
 	^ self role = 'user'
 ]
 
+{ #category : #'api - execution' }
+GtLChatMessage >> messageExecutionStateLabel [
+	^ ''
+]
+
 { #category : #'api - message' }
 GtLChatMessage >> messagesDo: aBlock [
 	"Evaluate do block on all messages.

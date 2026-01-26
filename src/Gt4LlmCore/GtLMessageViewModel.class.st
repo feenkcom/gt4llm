@@ -74,6 +74,13 @@ GtLMessageViewModel >> isFailure [
 	^ self message isFailure
 ]
 
+{ #category : #'api - message model' }
+GtLMessageViewModel >> messageExecutionStateLabel [
+	^ self message
+		ifNotNil: [ :aMessage | aMessage messageExecutionStateLabel ]
+		ifNil: [ '' ]
+]
+
 { #category : #'private - notifying' }
 GtLMessageViewModel >> notifyExpandedChanged [
 	self announcer
@@ -94,12 +101,25 @@ GtLMessageViewModel >> onMessageContentsChanged: anAnnouncement [
 		announce: (GtLMessageViewModelContentsChanged new messageViewModel: self)
 ]
 
+{ #category : #'private - event handling' }
+GtLMessageViewModel >> onMessageExecutionStateChanged: anAnnouncement [
+	self message = anAnnouncement message ifFalse: [ ^ self ].
+
+	self announcer
+		announce: (GtLMessageViewModelExecutionStateChanged new
+				messageViewModel: self;
+				executionState: anAnnouncement executionState)
+]
+
 { #category : #'private - hooks' }
 GtLMessageViewModel >> subscribeToMessage [
 	self message
 		when: GtLMessageContentsChanged
-		send: #onMessageContentsChanged:
-		to: self
+			send: #onMessageContentsChanged:
+			to: self;
+		when: GtLMessageExecutionStateChanged
+			send: #onMessageExecutionStateChanged:
+			to: self
 ]
 
 { #category : #'api - accessing' }
