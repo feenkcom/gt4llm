@@ -31,20 +31,18 @@ GtLToolForPackageClasses >> parameters [
 
 { #category : #private }
 GtLToolForPackageClasses >> privatePerformToolCall: aToolCall [
-	| argument packageName organizer package classNames |
+	| argument packageName organizer package |
 	argument := aToolCall anyArgument.
 	packageName := argument ifNotNil: [ argument asString ].
+	packageName
+		ifNil: [ ^ GtLMissingArgumentDomainObject new
+				receiverName: self name;
+				arguments: aToolCall arguments;
+				missingArgument: 'packageName' ].
 	organizer := PackageOrganizer packageOrganizer.
-	package := packageName
-		ifNil: [ nil ]
-		ifNotNil: [ organizer
+	package := organizer
 			packageNamed: packageName asSymbol
-			ifAbsent: [ nil ] ].
-	^ package
-		ifNil: [ 'Package not found' ]
-		ifNotNil: [ :aPackage |
-			classNames := aPackage classes collect: [ :each | each name asString ].
-			classNames isEmpty
-				ifTrue: [ 'No classes found' ]
-				ifFalse: [ Character cr join: classNames ] ]
+			ifAbsent: [ ^ GtLMissingDomainObject new objectName: packageName ].
+
+	^ GtLClassesDomainObject new foundClasses: package classes
 ]
