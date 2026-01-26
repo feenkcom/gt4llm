@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'encodedBytes'
 	],
-	#category : #Gt4LlmCore
+	#category : #'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #private }
@@ -42,7 +42,7 @@ GtLWorldScreenshotDataDomainObject >> serializeToOpenAIResponseOutput [
 	<return: #Array of: #NeoJSONObject>
 	^ {NeoJSONObject new
 			"at: #text put: self serializeToOpenAIResponseJsonString"
-			at: #image_url put: ('data:image/jpeg;base64,' , self encodedBytes);
+			at: #image_url put: ('data:image/png;base64,' , self encodedBytes);
 			at: #type put: #input_image;
 			yourself}
 ]
