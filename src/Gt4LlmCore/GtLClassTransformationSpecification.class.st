@@ -1,5 +1,5 @@
 Class {
 	#name : #GtLClassTransformationSpecification,
 	#superclass : #GtLCodeTransformationSpecification,
-	#category : 'Gt4LlmCore-Formats'
+	#category : #'Gt4LlmCore-Formats'
 }
