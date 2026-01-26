@@ -154,10 +154,9 @@ GtLToolMessage >> serializeForOpenAIResponsesAPI [
 		- string
 	Documentation: https://platform.openai.com/docs/guides/function-calling#formatting-results"
 
-	| anOutput |
+	| anOutput | 
 	self flag: #todo.
-
-	anOutput := self output ifNotNil: #serializeToOpenAIResponseOutput.
+	anOutput := self output ifNotNil: [ :each | each serializeToOpenAIResponseOutput ].
 
 	^ {'type' -> 'function_call_output'.
 		'call_id' -> toolCall id.
