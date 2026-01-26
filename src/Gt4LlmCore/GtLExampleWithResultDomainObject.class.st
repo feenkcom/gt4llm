@@ -47,17 +47,19 @@ GtLExampleWithResultDomainObject >> isSuccessResult [
 { #category : #accessing }
 GtLExampleWithResultDomainObject >> safeReturnValuePrintString [
 	^ [ | object |
-	object := GtLValueSerializer new
-			serializeValue: self exampleWithResult returnValue.
-	(self isErrorResult or: [ self isFailureResult ])
-		ifTrue: [ object := NeoJSONObject new
-					at: #exception put: object;
-					at: #stacktrace put: (self exampleWithResult result returnValue signalerContext
-				ifNotNil: [ :anInterruptedContext | 
-					anInterruptedContext stack
-						ifNotNil: [ :aStack | (aStack collect: #gtDisplayString) asArray ] ]);
-						yourself ].
+	object := (self isErrorResult or: [ self isFailureResult ])
+		ifTrue: [ self exampleWithResult returnValue 
+			serializeToOpenAIResponseOutput ]
+		ifFalse: [ GtLValueSerializer new
+			serializeValue: self exampleWithResult returnValue ].
 	object ] onErrorDo: [ :anError | anError return: 'printString error' ]
+]
+
+{ #category : #'api - serializing' }
+GtLExampleWithResultDomainObject >> serializeToOpenAIResponseImages [
+	^ (self isErrorResult or: [ self isFailureResult ])
+		ifFalse: [ #() ]
+		ifTrue: [ self exampleWithResult returnValue serializeToOpenAIResponseImages ]. 
 ]
 
 { #category : #'api - serializing' }
@@ -65,12 +67,19 @@ GtLExampleWithResultDomainObject >> serializeToOpenAIResponseJsonObject [
 	"Return a JSON dictionary that represents the domain object."
 
 	<return: #NeoJSONObject>
+	
 	^ NeoJSONObject new
 		at: #className put: self exampleWithResult methodClass name asString;
 		at: #selector put: self exampleWithResult selector asString;
 		at: #status put: self statusText;
 		at: #result put: self safeReturnValuePrintString;
 		yourself
+]
+
+{ #category : #'api - serializing' }
+GtLExampleWithResultDomainObject >> serializeToOpenAIResponseOutput [
+	^ super serializeToOpenAIResponseOutput
+		, self serializeToOpenAIResponseImages.
 ]
 
 { #category : #accessing }
