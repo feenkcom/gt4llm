@@ -185,6 +185,11 @@ GtLChat >> buildDefaultProvider [
 		ifFalse: [ nil ]
 ]
 
+{ #category : #'api - communication' }
+GtLChat >> codeTransformationsResponse [
+	self addResponseFormatForMagritte: GtLCodeTransformations named: 'CodeTransformations'
+]
+
 { #category : #copying }
 GtLChat >> copyLepiterSerialisationToClipboard [
 	| snippet serialization |
