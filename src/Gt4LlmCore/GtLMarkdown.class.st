@@ -96,6 +96,11 @@ GtLMarkdown >> gtMarkdownFor: aView [
 	^ aView textEditor
 		title: 'Markdown';
 		priority: 1;
-		styler: (GtLMessageStyler new);
-		text: [ content ]
+		styler: GtLMessageStyler new;
+		text: [ content ];
+		actionButtonIcon: LeIcons lepiterIcon
+			tooltip: 'Create page from Markdown'
+			action: [ :b | 
+				b phlow
+					spawnObject: (LeDatabasesRegistry defaultPrimaryDatabase addPage: (LePage new addSnippet: (LeTextSnippet new string: content); yourself)) ]
 ]
