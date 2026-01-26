@@ -11,7 +11,7 @@ Class {
 		'userMessageClass',
 		'responseFormat'
 	],
-	#category : #'Gt4LlmCore-Core'
+	#category : 'Gt4LlmCore-Core'
 }
 
 { #category : #accessing }

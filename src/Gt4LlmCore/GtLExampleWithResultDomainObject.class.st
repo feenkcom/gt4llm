@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'exampleWithResult'
 	],
-	#category : #'Gt4LlmCore-Domain Objects'
+	#category : 'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #visiting }
@@ -47,10 +47,10 @@ GtLExampleWithResultDomainObject >> isSuccessResult [
 { #category : #accessing }
 GtLExampleWithResultDomainObject >> safeReturnValuePrintString [
 	^ [ | object |
-	(self isErrorResult or: [ self isFailureResult ])
-		ifTrue: [ object := self exampleWithResult returnValue 
-			serializeToOpenAIResponseData serializeToOpenAIResponseOutput ]
-		ifFalse: [ object := GtLValueSerializer new
+	object := (self isErrorResult or: [ self isFailureResult ])
+		ifTrue: [ self exampleWithResult returnValue 
+			serializeToOpenAIResponseOutput ]
+		ifFalse: [ GtLValueSerializer new
 			serializeValue: self exampleWithResult returnValue ].
 	object ] onErrorDo: [ :anError | anError return: 'printString error' ]
 ]
@@ -79,12 +79,7 @@ GtLExampleWithResultDomainObject >> serializeToOpenAIResponseJsonObject [
 { #category : #'api - serializing' }
 GtLExampleWithResultDomainObject >> serializeToOpenAIResponseOutput [
 	^ super serializeToOpenAIResponseOutput
-		, (self serializeToOpenAIResponseImages 
-			ifNotEmpty: [ :aCollectionOfImages |
-				aCollectionOfImages 
-					collect: [ :each | 
-						each  serializeToOpenAIResponseOutput ]
-					as: NeoJSONArray ]).
+		, self serializeToOpenAIResponseImages.
 ]
 
 { #category : #accessing }
