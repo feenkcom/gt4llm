@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLClassSearchDomainObject,
+	#name : #GtLClassesDomainObject,
 	#superclass : #GtLDomainObject,
 	#instVars : [
 		'query',
@@ -9,24 +9,24 @@ Class {
 }
 
 { #category : #visiting }
-GtLClassSearchDomainObject >> acceptVisitor: aVisitor [
+GtLClassesDomainObject >> acceptVisitor: aVisitor [
 	^ aVisitor visitClassSearchDomainObject: self
 ]
 
 { #category : #accessing }
-GtLClassSearchDomainObject >> foundClasses [
+GtLClassesDomainObject >> foundClasses [
 	^ foundClasses
 ]
 
 { #category : #accessing }
-GtLClassSearchDomainObject >> foundClasses: aCollection [
+GtLClassesDomainObject >> foundClasses: aCollection [
 	"Set collection of classes that match the query"
 
-	foundClasses := aCollection
+	foundClasses := aCollection asArray
 ]
 
 { #category : #views }
-GtLClassSearchDomainObject >> gtFoundClassesFor: aView [
+GtLClassesDomainObject >> gtFoundClassesFor: aView [
 	<gtView>
 	<gtLlmView>
 	foundClasses ifNil: [ ^ aView empty ].
@@ -37,25 +37,12 @@ GtLClassSearchDomainObject >> gtFoundClassesFor: aView [
 		column: 'Value' text: [ :each | each gtDisplayString ]
 ]
 
-{ #category : #accessing }
-GtLClassSearchDomainObject >> query [
-	^ query
-]
-
-{ #category : #accessing }
-GtLClassSearchDomainObject >> query: aString [
-	"Set a query that was used to search classes"
-
-	query := aString
-]
-
 { #category : #'api - serializing' }
-GtLClassSearchDomainObject >> serializeToOpenAIResponseJsonObject [
+GtLClassesDomainObject >> serializeToOpenAIResponseJsonObject [
 	"Return a JSON dictionary that represents the domain object."
 
 	<return: #NeoJSONObject>
 	^ NeoJSONObject new
-		at: 'query' put: self query;
 		at: 'foundClasses' put: (self foundClasses collect: #name as: Array);
 		yourself
 ]

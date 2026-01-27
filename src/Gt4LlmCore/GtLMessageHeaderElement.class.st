@@ -1,16 +1,20 @@
 Class {
 	#name : #GtLMessageHeaderElement,
-	#superclass : #BrHorizontalPane,
-	#traits : 'TGtLWithMessageViewModel',
-	#classTraits : 'TGtLWithMessageViewModel classTrait',
+	#superclass : #GtBasicMessageElement,
 	#instVars : [
 		'senderElement',
 		'contentElement',
 		'contentLabelElement',
-		'senderTooltipAptitude'
+		'senderTooltipAptitude',
+		'executionStateLabelElement'
 	],
 	#category : #'Gt4LlmCore-UI - Elements'
 }
+
+{ #category : #initialization }
+GtLMessageHeaderElement >> defaultLayout [
+	^ BlLinearLayout horizontal
+]
 
 { #category : #initialization }
 GtLMessageHeaderElement >> initialize [
@@ -28,13 +32,19 @@ GtLMessageHeaderElement >> initialize [
 
 { #category : #initialization }
 GtLMessageHeaderElement >> initializeContentElement [
-	contentElement := BrFrame new
-			matchParent;
+	contentElement := BrHorizontalPane new
+			hFitContentLimited;
+			vFitContent;
 			padding: (BlInsets left: 0 right: 15);
 			addChild: (contentLabelElement := BrLabel new
 						hFitContentLimited;
 						vFitContent;
 						aptitude: BrGlamorousLabelAptitude new;
+						beSmallSize);
+			addChild: (executionStateLabelElement := BrLabel new
+						hFitContent;
+						vFitContent;
+						aptitude: (BrGlamorousLabelAptitude new foreground: self theme button disabledTextColor);
 						beSmallSize)
 ]
 
@@ -60,6 +70,14 @@ GtLMessageHeaderElement >> onMessageViewModelContentsChanged: anAnnouncement [
 ]
 
 { #category : #'private - event handling' }
+GtLMessageHeaderElement >> onMessageViewModelExecutionChangedChanged: anAnnouncement [
+	GtJustContextStackSignal emit.
+	self messageViewModel = anAnnouncement messageViewModel ifFalse: [ ^ self ].
+
+	BlTaskAction enqueueElement: self action: [ self updateExecutionStateElement ]
+]
+
+{ #category : #'private - event handling' }
 GtLMessageHeaderElement >> onThreadMessageViewModelChanged: anAnnouncement [
 	BlTaskAction enqueueElement: self action: [ self updateElement ]
 ]
@@ -72,6 +90,9 @@ GtLMessageHeaderElement >> subscribeToMessageViewModel [
 			to: self;
 		when: GtLMessageViewModelContentsChanged
 			send: #onMessageViewModelContentsChanged:
+			to: self;
+		when: GtLMessageViewModelExecutionStateChanged
+			send: #onMessageViewModelExecutionChangedChanged:
 			to: self
 ]
 
@@ -88,7 +109,14 @@ GtLMessageHeaderElement >> updateContentElement [
 { #category : #'private - updating' }
 GtLMessageHeaderElement >> updateElement [
 	self updateSenderElement.
-	self updateContentElement
+	self updateContentElement.
+	self updateExecutionStateElement.
+]
+
+{ #category : #'private - updating' }
+GtLMessageHeaderElement >> updateExecutionStateElement [
+	GtJustContextStackSignal emit.
+	executionStateLabelElement text: self messageViewModel messageExecutionStateLabel
 ]
 
 { #category : #'private - updating' }

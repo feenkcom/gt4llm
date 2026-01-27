@@ -77,8 +77,14 @@ GtLReplyMessage >> finalMessage: aMessage [
 
 	finalMessage = aMessage ifTrue: [ ^ self ].
 
+	finalMessage ifNotNil: [ :oldMessage | oldMessage unsubscribe: self ].
 	finalMessage := aMessage.
 
+	aMessage
+				when: GtLMessageAnnouncement
+				send: #onInnerMessageAnnouncement:
+				to: self.
+	
 	self notifyReplyMessageChanged
 ]
 
@@ -159,6 +165,13 @@ GtLReplyMessage >> isSuccess [
 	^ finalMessage isFailure not
 ]
 
+{ #category : #'api - execution' }
+GtLReplyMessage >> messageExecutionStateLabel [
+	^ self
+		currentMessageDo: #messageExecutionStateLabel
+		ifAbsent: [ super messageExecutionStateLabel ]
+]
+
 { #category : #'api - message' }
 GtLReplyMessage >> messagesDo: aBlock [
 	"Evaluate do block on all messages.
@@ -174,6 +187,11 @@ GtLReplyMessage >> messagesDo: aBlock [
 { #category : #'private - notifying' }
 GtLReplyMessage >> notifyReplyMessageChanged [
 	self announcer announce: (GtLMessageContentsChanged new message: self)
+]
+
+{ #category : #'private - event handling' }
+GtLReplyMessage >> onInnerMessageAnnouncement: anAnnouncement [
+	self announce: (anAnnouncement copy message: self)
 ]
 
 { #category : #accessing }
@@ -193,11 +211,28 @@ GtLReplyMessage >> toolMessages [
 
 { #category : #accessing }
 GtLReplyMessage >> toolMessages: aCollection [
+	| oldCollection |
 	toolMessages = aCollection ifTrue: [ ^ self ].
 
+	oldCollection := toolMessages.
 	toolMessages := aCollection.
 	
+	self updateSubscriptionsFrom: oldCollection to: aCollection.
 	self notifyReplyMessageChanged
+]
+
+{ #category : #'private - updating' }
+GtLReplyMessage >> updateSubscriptionsFrom: oldCollection to: newCollection [
+	| removedMessages addedMessages |
+	removedMessages := oldCollection difference: newCollection.
+	addedMessages := newCollection difference: oldCollection.
+	removedMessages do: [ :eachMessage | eachMessage unsubscribe: self ].
+	addedMessages
+		do: [ :eachMessage | 
+			eachMessage
+				when: GtLMessageAnnouncement
+				send: #onInnerMessageAnnouncement:
+				to: self ]
 ]
 
 { #category : #accessing }

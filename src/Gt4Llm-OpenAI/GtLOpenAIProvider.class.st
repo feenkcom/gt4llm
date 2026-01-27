@@ -177,8 +177,10 @@ GtLOpenAIProvider >> performToolCallsIn: result with: activeTools [
 				newMessage := GtLToolMessage new
 							toolCall: aToolCall.
 				chat addToolMessage: newMessage.
-				domainObject := activeTools performToolCall: aToolCall.
-				newMessage output: domainObject ].
+				newMessage beRunningExecutionState.
+				[ domainObject := activeTools performToolCall: aToolCall.
+					newMessage output: domainObject ]
+					ensure: [ newMessage beFinishedExecutionState ] ].
 	self chat signalRunHasUpdated.
 	^ self executeWait
 ]
