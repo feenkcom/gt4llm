@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLToolForMethodImplementors,
 	#superclass : #GtLAbstractFunctionTool,
-	#category : #'Gt4LlmCore-Tools'
+	#category : 'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }
@@ -43,5 +43,6 @@ GtLToolForMethodImplementors >> privatePerformToolCall: aToolCall [
 	promise := methodName gtImplementors result toArray
 			await: GtLSettings futureExecutionConfiguration.
 	implementors := promise wait.
-	^ GtLMethodsDomainObject new methods: implementors
+	^ GtLMethodsDomainObject new 
+		methods: (implementors first: (100 min: implementors size))
 ]

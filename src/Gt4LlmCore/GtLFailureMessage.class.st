@@ -6,7 +6,7 @@ Class {
 		'createdAt',
 		'chat'
 	],
-	#category : #'Gt4LlmCore-Core'
+	#category : 'Gt4LlmCore-Core'
 }
 
 { #category : #'as yet unclassified' }
