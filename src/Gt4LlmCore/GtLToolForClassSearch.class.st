@@ -48,7 +48,5 @@ GtLToolForClassSearch >> privatePerformToolCall: aToolCall [
 			await: GtLSettings futureExecutionConfiguration.
 	matches := promise wait.
 
-	^ GtLClassSearchDomainObject new
-		query: query;
-		foundClasses: matches
+	^ GtLClassesDomainObject new foundClasses: matches
 ]

@@ -3,7 +3,8 @@ Class {
 	#superclass : #GtLChatMessage,
 	#instVars : [
 		'toolCall',
-		'output'
+		'output',
+		'executionState'
 	],
 	#category : #'Gt4LlmCore-Core'
 }
@@ -29,6 +30,16 @@ GtLToolMessage >> actionModel [
 	^ self toolCall
 ]
 
+{ #category : #'api - execution' }
+GtLToolMessage >> beFinishedExecutionState [
+	self executionState: GtLMessageState finished
+]
+
+{ #category : #'api - execution' }
+GtLToolMessage >> beRunningExecutionState [
+	self executionState: GtLMessageState running
+]
+
 { #category : #'as yet unclassified' }
 GtLToolMessage >> content [
 	^ self output
@@ -37,6 +48,20 @@ GtLToolMessage >> content [
 { #category : #'api - accessing' }
 GtLToolMessage >> contentText [
 	^ self toolCall gtDisplayString
+]
+
+{ #category : #'api - execution' }
+GtLToolMessage >> executionState [
+	<return: #GtLMessageState>
+	^ executionState
+]
+
+{ #category : #'api - execution' }
+GtLToolMessage >> executionState: aState [
+	executionState = aState ifTrue: [ ^ self ].
+	
+	executionState := aState.
+	self notifyExecutionStateChanged.
 ]
 
 { #category : #'as yet unclassified' }
@@ -67,14 +92,33 @@ GtLToolMessage >> gtInspectorTargetModels [
 	^ self output ifNotNil: [ :anOutput | {anOutput} ] ifNil: [ #() ]
 ]
 
+{ #category : #initialization }
+GtLToolMessage >> initialize [
+	super initialize.
+	executionState := GtLMessageState created
+]
+
 { #category : #testing }
 GtLToolMessage >> isToolMessage [
 
 	^ true
 ]
 
+{ #category : #'api - execution' }
+GtLToolMessage >> messageExecutionStateLabel [
+	^ self executionState messageExecutionStateLabel
+]
+
+{ #category : #'private - notifying' }
+GtLToolMessage >> notifyExecutionStateChanged [
+	self announce: (GtLMessageExecutionStateChanged new
+		message: self;
+		executionState: executionState)
+]
+
 { #category : #accessing }
 GtLToolMessage >> output [
+	<return: #TGtLDomainObject>
 	^ output
 ]
 

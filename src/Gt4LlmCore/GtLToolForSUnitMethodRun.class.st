@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLToolForSUnitMethodRun,
 	#superclass : #GtLAbstractFunctionTool,
-	#category : #Gt4LlmCore
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #'as yet unclassified' }
@@ -31,7 +31,7 @@ GtLToolForSUnitMethodRun >> parameters [
 
 { #category : #private }
 GtLToolForSUnitMethodRun >> privatePerformToolCall: aToolCall [
-	| arguments rawClassName rawMethodName className methodName testClass testSelector testCase testResult |
+	| arguments rawClassName rawMethodName className methodName testClass testSelector testCase testCaseWithResult |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 
 	rawClassName := arguments
@@ -66,16 +66,14 @@ GtLToolForSUnitMethodRun >> privatePerformToolCall: aToolCall [
 			objectName: ('{1}>>#{2}' format: { testClass name. methodName }) ].
 
 	testCase := testClass selector: testSelector.
-
-	[ testResult := testCase run ]
+	[ testCaseWithResult := testCase gtRunWithExplicitResult ]
 		on: Error
 		do: [ :ex |
 			^ GtLExceptionDomainObject new
 				freeze: ex;
 				description: ('Running test {1}>>#{2} failed' 
 					format: { testClass name. methodName }) ].
-
-	^ GtLTestCaseDomainObject new
-		testCase: testCase;
-		result: testResult
+	
+	^ GtLTestCaseWithResultDomainObject new
+		testCaseWithResult: testCaseWithResult
 ]
