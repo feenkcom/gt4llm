@@ -194,7 +194,7 @@ GtLConnectionRegistry >> labelForModel: aModel [
 GtLConnectionRegistry >> standardDefaultConnection [
 	^ GtLConnection new
 		providerClass: GtLOpenAIProvider;
-		label: 'GPT 5.1 Codex';
-		model: 'gpt-5.1-codex';
+		label: 'GPT 5.2 Codex';
+		model: 'gpt-5.2-codex';
 		addOption: 'isStreaming' withValue: false
 ]

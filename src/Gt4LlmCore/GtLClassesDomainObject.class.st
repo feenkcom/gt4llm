@@ -22,7 +22,7 @@ GtLClassesDomainObject >> foundClasses [
 GtLClassesDomainObject >> foundClasses: aCollection [
 	"Set collection of classes that match the query"
 
-	foundClasses := aCollection
+	foundClasses := aCollection asArray
 ]
 
 { #category : #views }

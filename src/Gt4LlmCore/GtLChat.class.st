@@ -501,7 +501,7 @@ GtLChat >> sendWith: aBlock [
 	| newMessage |
 	newMessage := self createUserMessage.
 	aBlock value: newMessage.
-	^ self sendMessage: newMessage
+	self sendMessage: newMessage
 ]
 
 { #category : #announcing }
