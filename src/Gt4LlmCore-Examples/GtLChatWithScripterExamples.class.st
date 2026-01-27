@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLChatWithScripterExamples,
 	#superclass : #Object,
-	#category : #'Gt4LlmCore-Examples-UI'
+	#category : 'Gt4LlmCore-Examples-UI'
 }
 
 { #category : #examples }
