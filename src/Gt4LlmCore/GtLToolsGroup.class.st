@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLToolsGroup,
 	#superclass : #GtLTools,
-	#category : #'Gt4LlmCore-Core'
+	#category : 'Gt4LlmCore-Core'
 }
 
 { #category : #'as yet unclassified' }

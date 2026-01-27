@@ -6,7 +6,7 @@ Class {
 		'references',
 		'mayHaveMore'
 	],
-	#category : #'Gt4LlmCore-Domain Objects'
+	#category : 'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #visiting }
