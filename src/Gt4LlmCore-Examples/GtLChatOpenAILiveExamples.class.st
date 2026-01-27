@@ -8,7 +8,7 @@ Class {
 	#classVars : [
 		'IsSynchronous'
 	],
-	#category : 'Gt4LlmCore-Examples-OpenAI'
+	#category : #'Gt4LlmCore-Examples-OpenAI'
 }
 
 { #category : #accessing }

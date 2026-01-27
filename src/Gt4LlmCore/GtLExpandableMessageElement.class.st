@@ -35,8 +35,8 @@ GtLExpandableMessageElement >> beforeThreadMessageViewModelReset [
 GtLExpandableMessageElement >> initialize [
 	super initialize.
 
-	self initializeOneLineThreadMessageElement.
-	self initializeThreadMessageElement.
+	self initializeOneLineMessageElement.
+	self initializeContentMessageElement.
 
 	self
 		addAptitude: GtCoderExpanderAptitude new;
@@ -53,13 +53,13 @@ GtLExpandableMessageElement >> initialize [
 ]
 
 { #category : #'initialization ' }
-GtLExpandableMessageElement >> initializeOneLineThreadMessageElement [
-	headerElement := GtLMessageHeaderElement new.
+GtLExpandableMessageElement >> initializeContentMessageElement [
+	contentElement := GtLMessageContentElement new
 ]
 
 { #category : #'initialization ' }
-GtLExpandableMessageElement >> initializeThreadMessageElement [
-	contentElement := GtLMessageContentElement new
+GtLExpandableMessageElement >> initializeOneLineMessageElement [
+	headerElement := GtLMessageHeaderElement new.
 ]
 
 { #category : #'initialization ' }

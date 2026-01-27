@@ -54,6 +54,7 @@ GtLErrorMessage >> exception: anException [
 { #category : #views }
 GtLErrorMessage >> gtExceptionStackFor: aView [
 	<gtView>
+	<gtLlmView>
 	self exception ifNil: [ ^ aView empty ].
 	
 	^ aView forward
