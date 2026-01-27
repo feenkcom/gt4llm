@@ -16,9 +16,9 @@ GtLToolForPackageClassesExamples >> packageClassesForExistingPackage [
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: result isEmpty not.
-	self assert: (result includesSubstring: 'GtLToolForPackageClasses').
-	^ tool
+	self assert: result isErrorDomainObject not.
+	self assert: (result foundClasses includes: GtLToolForPackageClasses).
+	^ call
 ]
 
 { #category : #examples }
