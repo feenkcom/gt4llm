@@ -40,11 +40,12 @@ GtLToolForPackageClassesExamples >> packageClassesForPackageWithNoClasses [
 		} asDictionary.
 		result := tool performToolCall: call.
 		self assert: call tool == tool.
-		self assert: result equals: 'No classes found'
+		self assert: result isErrorDomainObject not.
+		self assert: result foundClasses equals: #()
 	] ensure: [
 		existed ifFalse: [ organizer unregisterPackage: package ]
 	].
-	^ tool
+	^ call
 ]
 
 { #category : #examples }
@@ -59,6 +60,7 @@ GtLToolForPackageClassesExamples >> packageClassesForUnknownPackage [
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: result equals: 'Package not found'.
-	^ tool
+	self assert: result isErrorDomainObject.
+		self assert: result objectName equals: 'NonExistingPackageName42'.
+	^ call
 ]
