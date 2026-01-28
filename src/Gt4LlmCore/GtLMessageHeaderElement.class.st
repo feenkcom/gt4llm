@@ -8,7 +8,7 @@ Class {
 		'senderTooltipAptitude',
 		'executionStateLabelElement'
 	],
-	#category : 'Gt4LlmCore-UI - Elements'
+	#category : #'Gt4LlmCore-UI - Elements'
 }
 
 { #category : #initialization }
@@ -71,7 +71,6 @@ GtLMessageHeaderElement >> onMessageViewModelContentsChanged: anAnnouncement [
 
 { #category : #'private - event handling' }
 GtLMessageHeaderElement >> onMessageViewModelExecutionChangedChanged: anAnnouncement [
-	GtJustContextStackSignal emit.
 	self messageViewModel = anAnnouncement messageViewModel ifFalse: [ ^ self ].
 
 	BlTaskAction enqueueElement: self action: [ self updateExecutionStateElement ]
@@ -115,7 +114,6 @@ GtLMessageHeaderElement >> updateElement [
 
 { #category : #'private - updating' }
 GtLMessageHeaderElement >> updateExecutionStateElement [
-	GtJustContextStackSignal emit.
 	executionStateLabelElement text: self messageViewModel messageExecutionStateLabel
 ]
 

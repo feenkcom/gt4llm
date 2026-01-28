@@ -6,7 +6,7 @@ Class {
 		'Finished',
 		'Running'
 	],
-	#category : 'Gt4LlmCore-Core'
+	#category : #'Gt4LlmCore-Core'
 }
 
 { #category : #factory }

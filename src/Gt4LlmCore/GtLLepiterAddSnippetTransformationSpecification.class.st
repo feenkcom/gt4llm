@@ -1,5 +1,5 @@
 Class {
 	#name : #GtLLepiterAddSnippetTransformationSpecification,
 	#superclass : #GtLLepiterSnippetTransformationSpecification,
-	#category : 'Gt4LlmCore-Formats'
+	#category : #'Gt4LlmCore-Formats'
 }
