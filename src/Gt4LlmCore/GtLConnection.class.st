@@ -6,7 +6,7 @@ Class {
 		'meta',
 		'providerClass'
 	],
-	#category : #'Gt4LlmCore-Core'
+	#category : 'Gt4LlmCore-Core'
 }
 
 { #category : #comparing }

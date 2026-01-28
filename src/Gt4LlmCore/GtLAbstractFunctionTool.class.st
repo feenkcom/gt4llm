@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLAbstractFunctionTool,
 	#superclass : #GtLTool,
-	#category : #'Gt4LlmCore-Tools'
+	#category : 'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }

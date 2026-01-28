@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'objectName'
 	],
-	#category : #'Gt4LlmCore-Domain Objects'
+	#category : 'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #visiting }
