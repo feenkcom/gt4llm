@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'chat'
 	],
-	#category : 'Gt4LlmCore-Examples-OpenAI'
+	#category : #'Gt4LlmCore-Examples-OpenAI'
 }
 
 { #category : #'as yet unclassified' }
@@ -20,6 +20,12 @@ GtLOpenAIProviderStub >> defaultUserMessageClass [
 { #category : #'api - accessing' }
 GtLOpenAIProviderStub >> modelName [
 	^ 'stub'
+]
+
+{ #category : #'api - execution' }
+GtLOpenAIProviderStub >> state [
+	<return: #GtLProviderState>
+	^ GtLProviderState idle
 ]
 
 { #category : #'api - accessing' }
