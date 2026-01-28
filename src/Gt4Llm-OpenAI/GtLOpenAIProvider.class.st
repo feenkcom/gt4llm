@@ -171,14 +171,16 @@ GtLOpenAIProvider >> modelName: aString [
 { #category : #accessing }
 GtLOpenAIProvider >> performToolCallsIn: result with: activeTools [
 	| toolOutputs |
+	
 	toolOutputs := result toolCalls
 			collect: [ :aToolCall | 
-				| domainObject newMessage|
+				| newMessage|
 				newMessage := GtLToolMessage new
 							toolCall: aToolCall.
 				chat addToolMessage: newMessage.
 				newMessage beRunningExecutionState.
-				[ domainObject := activeTools performToolCall: aToolCall.
+				[ |domainObject|
+					domainObject := activeTools performToolCall: aToolCall.
 					newMessage output: domainObject ]
 					ensure: [ newMessage beFinishedExecutionState ] ].
 	self chat signalRunHasUpdated.
