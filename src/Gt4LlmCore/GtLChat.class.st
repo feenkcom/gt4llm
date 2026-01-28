@@ -68,7 +68,7 @@ GtLChat >> addInstructionSectionForLepiterPages: pageNames titled: title [
 					collect: [ :pageName | 
 						GtLLepiterContentExporter new
 							startHeaderLevel: 2;
-							page: (LeDatabase gtBook pageNamed: pageName);
+							page: (LeDatabasesRegistry defaultLogicalDatabase  pageNamed: pageName);
 							export ]).
 	self instruction: instructionString titled: title
 ]
