@@ -71,7 +71,6 @@ GtLOpenAIProvider >> defaultUserMessageClass [
 GtLOpenAIProvider >> executeAsyncMessage: anInputMessage [
 	<return: #TAsyncPromise>
 	| anErrorHandlerPromise aFuture aFirstPromise |
-	GtJustContextStackSignal emit.
 	executionState := executionState scheduled.
 	aFuture := [ self processNextMessage: anInputMessage ] asAsyncFuture.
 	aFirstPromise := aFuture await: GtLOpenAISettings futureExecutionConfiguration.
