@@ -13,7 +13,7 @@ Class {
 		'userMessageClass',
 		'responseFormat'
 	],
-	#category : 'Gt4LlmCore-Core'
+	#category : #'Gt4LlmCore-Core'
 }
 
 { #category : #accessing }
@@ -507,6 +507,14 @@ GtLChat >> sendWith: aBlock [
 ]
 
 { #category : #announcing }
+GtLChat >> signalExecutionStateChanged [
+	self announcer
+		announce: (GtLChatExecutionStateChanged new
+				chat: self;
+				state: self state)
+]
+
+{ #category : #announcing }
 GtLChat >> signalRunHasStarted [
 	self announcer announce: GtLlmThreadRunStartedAnnouncement new
 ]
@@ -521,9 +529,22 @@ GtLChat >> signalRunIsDone [
 	self announcer announce: GtLlmThreadRunIsDoneAnnouncement new
 ]
 
-{ #category : #accessing }
+{ #category : #'api - execution' }
+GtLChat >> state [
+	<return: #GtLProviderState>
+	^ self provider state
+]
+
+{ #category : #'api - execution' }
 GtLChat >> status [
+	self deprecated: 'Use #state instead'.
+	
 	^ self provider status
+]
+
+{ #category : #'api - execution' }
+GtLChat >> stopOngoingExecution [
+	self provider stopOngoingMessageExecution
 ]
 
 { #category : #accessing }

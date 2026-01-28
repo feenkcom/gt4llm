@@ -8,9 +8,10 @@ Class {
 		'toolbar',
 		'imagesElement',
 		'sendButton',
-		'senderFuture'
+		'senderFuture',
+		'stopButton'
 	],
-	#category : 'Gt4LlmCore-UI - Elements'
+	#category : #'Gt4LlmCore-UI - Elements'
 }
 
 { #category : #factory }
@@ -86,6 +87,20 @@ GtLNewMessageElement >> buildProviderButton [
 											aList fireEvent: BrDropdownHideWish new ] ]);
 		label: self messageViewModel connectionString.
 	^ aButton
+]
+
+{ #category : #'private - updating' }
+GtLNewMessageElement >> buildProviderStopButton [
+	stopButton := BrButton new.
+	stopButton
+		id: #'chat--stop';
+		beSmallSize;
+		aptitude: BrGlamorousButtonWithIconAptitude new;
+		icon: BrGlamorousVectorIcons stop;
+		label: 'Stop ongoing execution';
+		action: [ :theButton | self onStopOngoingExecution ];
+		visibility: BlVisibility gone.
+	^ stopButton
 ]
 
 { #category : #'initialization ' }
@@ -174,6 +189,17 @@ GtLNewMessageElement >> initializeToolbar [
 	toolbar := BrToolbar new aptitude: BrGlamorousToolbarAptitude new
 ]
 
+{ #category : #'private - testing' }
+GtLNewMessageElement >> isChatProviderRunning [
+	self messageViewModel ifNil: [ ^ false ].
+	^ self messageViewModel chat state ifCanStop: [ true ] ifIdle: [ false ]
+]
+
+{ #category : #'private - announcement handling' }
+GtLNewMessageElement >> onChatExecutionStateChanged: anAnnouncement [
+	self enqueueTask: (BlTaskAction new action: [ self updateStopButton ])
+]
+
 { #category : #'private - hooks' }
 GtLNewMessageElement >> onMessageViewModelChanged [
 	self updateElement
@@ -183,6 +209,12 @@ GtLNewMessageElement >> onMessageViewModelChanged [
 GtLNewMessageElement >> onMessageViewModelContentsChanged: anAnnouncement [
 	anAnnouncement source = self ifTrue: [ ^ self ].
 	self enqueueTask: (BlTaskAction new action: [ self updateElement ])
+]
+
+{ #category : #'private - event handling' }
+GtLNewMessageElement >> onStopOngoingExecution [
+	self messageViewModel ifNil: [ ^ self ].
+	self messageViewModel chat stopOngoingExecution
 ]
 
 { #category : #'private - announcement handling' }
@@ -209,6 +241,9 @@ GtLNewMessageElement >> subscribeToMessageViewModel [
 			to: self;
 		when: GtLlmThreadRunIsDoneAnnouncement
 			send: #enableSend
+			to: self;
+		when: GtLChatExecutionStateChanged
+			send: #onChatExecutionStateChanged:
 			to: self.
 
 	self messageViewModel weak
@@ -243,7 +278,8 @@ GtLNewMessageElement >> updateContentsElement [
 GtLNewMessageElement >> updateElement [
 	self updateContentsElement.
 	self updateImagesElement.
-	self updateToolbar
+	self updateToolbar.
+	self updateStopButton
 ]
 
 { #category : #'private - updating' }
@@ -271,9 +307,18 @@ GtLNewMessageElement >> updateSendMessageError: anError [
 ]
 
 { #category : #'private - updating' }
+GtLNewMessageElement >> updateStopButton [
+	stopButton
+		visibility: (self isChatProviderRunning
+				ifTrue: [ BlVisibility visible ]
+				ifFalse: [ BlVisibility gone ])
+]
+
+{ #category : #'private - updating' }
 GtLNewMessageElement >> updateToolbar [
 	toolbar removeAllItems.
 	toolbar addItem: self buildSendButton.
 	toolbar addItem: self buildAttachButton.
-	toolbar addItem: self buildProviderButton
+	toolbar addItem: self buildProviderButton.
+	toolbar addItem: self buildProviderStopButton
 ]

@@ -6,7 +6,7 @@ Class {
 		'Running',
 		'Scheduled'
 	],
-	#category : #'Gt4LlmCore-Core'
+	#category : #'Gt4LlmCore-Provider - Support'
 }
 
 { #category : #factory }
@@ -31,6 +31,22 @@ GtLProviderState >> finished [
 	^ self
 ]
 
+{ #category : #'api - testing' }
+GtLProviderState >> ifCanContinue: aCanBlock ifDisabled: aDisabledBlock [
+	"Evaluate aCanBlock if provider can proceed in executing other messages.
+	Evaluate aDisabledBlock otherwise."
+
+	^ aDisabledBlock value
+]
+
+{ #category : #'api - testing' }
+GtLProviderState >> ifCanStop: aCanBlock ifIdle: anIdleBlock [
+	"Evaluate aCanBlock if provider can be stopped.
+	Evaluate anIdleBlock otherwise."
+
+	^ anIdleBlock value
+]
+
 { #category : #'api - accessing' }
 GtLProviderState >> label [
 	"Return a simple short string identifying the state"
@@ -50,6 +66,13 @@ GtLProviderState >> running [
 GtLProviderState >> scheduled [
 	"Set to scheduled state, which means that it is not running a code yet,
 	but is about to schedule/start one."
+
+	^ self
+]
+
+{ #category : #'api - changes' }
+GtLProviderState >> stop [
+	"Interrupt ongoing provider execution."
 
 	^ self
 ]
