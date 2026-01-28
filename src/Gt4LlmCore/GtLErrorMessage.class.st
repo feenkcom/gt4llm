@@ -3,14 +3,15 @@ Class {
 	#superclass : #GtLChatMessage,
 	#instVars : [
 		'exception',
-		'otherExceptions'
+		'otherExceptions',
+		'inputMessage'
 	],
 	#category : #'Gt4LlmCore-Core'
 }
 
 { #category : #'instance creation' }
 GtLErrorMessage class >> freeze: anError [ 
-	^ self new exception: (GtSystemUtility freeze: anError)
+	^ self new freeze: anError
 ]
 
 { #category : #accessing }
@@ -51,6 +52,11 @@ GtLErrorMessage >> exception: anException [
 	exception := anException
 ]
 
+{ #category : #accessing }
+GtLErrorMessage >> freeze: anError [ 
+	self exception: (GtSystemUtility freeze: anError)
+]
+
 { #category : #views }
 GtLErrorMessage >> gtExceptionStackFor: aView [
 	<gtView>
@@ -72,6 +78,16 @@ GtLErrorMessage >> initialize [
 	self flag: #todo. 
 	"I doubt it is correct to set a fixed id. What if we have two error messages in the same list?"
 	self id: '3a876ca3-32ce-0d00-b7b2-b9390ae84159'.
+]
+
+{ #category : #accessing }
+GtLErrorMessage >> inputMessage [
+	^ inputMessage
+]
+
+{ #category : #accessing }
+GtLErrorMessage >> inputMessage: anObject [
+	inputMessage := anObject
 ]
 
 { #category : #testing }

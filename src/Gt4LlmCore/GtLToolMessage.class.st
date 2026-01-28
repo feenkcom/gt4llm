@@ -84,7 +84,9 @@ GtLToolMessage >> gtContentFor: aView [
 
 { #category : #printing }
 GtLToolMessage >> gtDisplayOn: aStream [
-	self toolCall ifNotNil: [ :call | call gtDisplayOn: aStream ] ifNil: [ aStream nextPutAll: 'No tool' ]
+	self toolCall
+		ifNotNil: [ :call | call gtDisplayOn: aStream ]
+		ifNil: [ aStream nextPutAll: 'No tool' ]
 ]
 
 { #category : #'as yet unclassified' }
