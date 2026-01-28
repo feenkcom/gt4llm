@@ -23,7 +23,8 @@ Class {
 		'truncation',
 		'usage',
 		'user',
-		'metadata'
+		'metadata',
+		'toolCalls'
 	],
 	#category : #'Gt4Llm-OpenAI'
 }
@@ -72,6 +73,17 @@ GtLOpenAIResponse >> error [
 { #category : #accessing }
 GtLOpenAIResponse >> error: anObject [
 	error := anObject
+]
+
+{ #category : #'gt - extensions' }
+GtLOpenAIResponse >> gtToolCallsViewFor: aView [
+	<gtView>
+	self output ifNil: [ ^ aView empty ].
+	
+	^ aView columnedList
+		title: 'Requested tool calls';
+		items: [ self toolCalls ];
+		column: 'Tool' text: #yourself
 ]
 
 { #category : #'as yet unclassified' }
@@ -146,7 +158,8 @@ GtLOpenAIResponse >> output [
 
 { #category : #accessing }
 GtLOpenAIResponse >> output: anArray [
-	output := anArray
+	output := anArray.
+	toolCalls := nil.
 ]
 
 { #category : #accessing }
@@ -219,16 +232,17 @@ GtLOpenAIResponse >> text: anObject [
 	text := anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'api - accessing' }
 GtLOpenAIResponse >> toolCalls [
-	^ self output
-		select: [ :aDict | (aDict at: 'type') = 'function_call' ]
-		thenCollect: [ :aDict | 
-			GtLFunctionToolCall new
-				rawData: aDict;
-				id: (aDict at: 'call_id');
-				name: (aDict at: 'name');
-				arguments: (STONJSON fromString: (aDict at: 'arguments')) ]
+	^ toolCalls
+		ifNil: [ toolCalls := (self output
+					select: [ :aDict | (aDict at: 'type') = 'function_call' ]
+					thenCollect: [ :aDict | 
+						GtLFunctionToolCall new
+							rawData: aDict;
+							id: (aDict at: 'call_id');
+							name: (aDict at: 'name');
+							arguments: (STONJSON fromString: (aDict at: 'arguments')) ]) as: Array ]
 ]
 
 { #category : #accessing }
