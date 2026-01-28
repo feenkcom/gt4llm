@@ -1,8 +1,8 @@
 Class {
 	#name : #GtLOpenAIUserMessage,
 	#superclass : #GtLChatMessage,
-	#traits : 'TGtLWithInstructionSectionAPI',
-	#classTraits : 'TGtLWithInstructionSectionAPI classTrait',
+	#traits : 'TGtLWithInstructionSectionAPI + TGtLWithInputModelsAPI',
+	#classTraits : 'TGtLWithInstructionSectionAPI classTrait + TGtLWithInputModelsAPI classTrait',
 	#instVars : [
 		'inputModels',
 		'content',
@@ -14,13 +14,6 @@ Class {
 { #category : #serialization }
 GtLOpenAIUserMessage class >> leJsonV4Name [
 	^ #gtLOpenAIUserMessage
-]
-
-{ #category : #'api - message' }
-GtLOpenAIUserMessage >> addInputMagritteObject: anObject named: aString [
-	self addInputModel: (GtLMagritteInputModel new
-		name: aString;
-		model: anObject)
 ]
 
 { #category : #adding }
@@ -42,13 +35,6 @@ GtLOpenAIUserMessage >> addInstructionSectionForLepiterPages: pageNames titled: 
 		addSection: (GtLlmInstructionSection new
 				title: title;
 				body: instructionString)
-]
-
-{ #category : #'api - message' }
-GtLOpenAIUserMessage >> addPlainInputObject: anObject named: aString [
-	self addInputModel: (GtLPlainObjectInputModel new
-		name: aString;
-		model: anObject)
 ]
 
 { #category : #'as yet unclassified' }
@@ -175,13 +161,6 @@ GtLOpenAIUserMessage >> instructions [
 { #category : #'api - message' }
 GtLOpenAIUserMessage >> lepiterExplanations: pageNames [
 	^ self addInstructionSectionForLepiterPages: pageNames titled: 'Explanations'
-]
-
-{ #category : #'api - message' }
-GtLOpenAIUserMessage >> markdown: aString [
-	self
-		addInputMagritteObject: (GtLMarkdown new content: aString)
-		named: 'Markdown'
 ]
 
 { #category : #accessing }

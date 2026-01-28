@@ -32,8 +32,12 @@ TGtLWithInstructionSectionAPI >> pageExplanation: aPageName [
 
 { #category : #'api - instructions' }
 TGtLWithInstructionSectionAPI >> pageIdExplanation: aPageId [
-	self pageObjectExplanation: (LeDatabasesRegistry defaultLogicalDatabase  
-		pageWithID: aPageId)
+	self pageIdExplanation: aPageId from: LeDatabasesRegistry defaultLogicalDatabase 
+]
+
+{ #category : #'api - instructions' }
+TGtLWithInstructionSectionAPI >> pageIdExplanation: aPageId from: aDatabase [
+	self pageObjectExplanation: (aDatabase pageWithID: aPageId)
 ]
 
 { #category : #'api - instructions' }
