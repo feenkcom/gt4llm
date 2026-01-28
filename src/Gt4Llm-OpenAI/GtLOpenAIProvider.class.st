@@ -6,7 +6,8 @@ Class {
 		'isStreaming',
 		'executions',
 		'tools',
-		'modelName'
+		'modelName',
+		'executionState'
 	],
 	#category : #'Gt4Llm-OpenAI'
 }
@@ -66,48 +67,30 @@ GtLOpenAIProvider >> defaultUserMessageClass [
 	^ GtLOpenAIUserMessage
 ]
 
-{ #category : #actions }
-GtLOpenAIProvider >> executeWait [
-	| aSecondPromise aFuture aFirstPromise |
-	aFuture := [ | result aMessage currentMessage |
-		currentMessage := self chat messages last currentMessage.
-		result := client
-				generateResponseWithModel: self modelName
-				messages: self chat messages
-				instructions: currentMessage completeInstructionString
-				tools: currentMessage tools
-				andFormat: (currentMessage hasFormats
-						ifTrue: [ currentMessage formatDescriptionsJsonSchema ]
-						ifFalse: [ nil ])
-				isStreaming: isStreaming.
-
-		result hasToolCalls
-			ifTrue: [ self performToolCallsIn: result with: currentMessage tools ]
-			ifFalse: [ aMessage := isStreaming
-						ifTrue: [ self streamingMessageFrom: result ]
-						ifFalse: [ self assistantMessageClass new
-								modelName: self modelName;
-								rawData: (result output detect: [ :anOutput | (anOutput at: 'type') = 'message' ]) ].
-
-				self chat addAssistantMessage: aMessage.
-				self chat signalRunIsDone.
-				aMessage ] ] asAsyncFuture.
-	aFirstPromise := aFuture
-			await: (AsyncFutureExecutionConfiguration new
-					customGroup: #OpenAI;
-					lowPriority).
-	aSecondPromise := aFirstPromise
-			then: [ :aMessage |
+{ #category : #'private - execution' }
+GtLOpenAIProvider >> executeAsyncMessage: anInputMessage [
+	<return: #TAsyncPromise>
+	| anErrorHandlerPromise aFuture aFirstPromise |
+	executionState := executionState scheduled.
+	aFuture := [ self processNextMessage: anInputMessage ] asAsyncFuture.
+	aFirstPromise := aFuture await: GtLOpenAISettings futureExecutionConfiguration.
+	anErrorHandlerPromise := aFirstPromise
+			then: [ :aProcessedMessage | 
+				executionState := executionState finished.
 				providerWorking := false.
-				aMessage ]
+				aProcessedMessage ]
 			otherwise: [ :anError | 
-				| aMessage |
+				| anErrorMessage |
+				executionState := executionState finished.
 				providerWorking := false.
-				aMessage := GtLErrorMessage freeze: anError.
-				self chat addErrorMessage: aMessage.
+				anErrorMessage := GtLErrorMessage new
+						freeze: anError;
+						inputMessage: anInputMessage.
+				self chat addErrorMessage: anErrorMessage.
 				self chat signalRunIsDone.
-				aMessage ].
-	executions add: aSecondPromise.
+				anErrorMessage ].
+	executions add: anErrorHandlerPromise.
+	^ anErrorHandlerPromise
 ]
 
 { #category : #'as yet unclassified' }
@@ -133,24 +116,32 @@ GtLOpenAIProvider >> gtExecutionsFor: aView [
 
 { #category : #'as yet unclassified' }
 GtLOpenAIProvider >> handleToolCall: aToolCall [
-	| toolOutput newMessage |
+	| domainObject toolMessage |
 	chat removeLastMessage.
-	newMessage := GtLToolMessage new toolCall: aToolCall.
-	chat addToolMessage: newMessage.
-	toolOutput := tools performToolCall: aToolCall.
-	newMessage output: toolOutput.
+	toolMessage := GtLToolMessage new toolCall: aToolCall.
+	chat addToolMessage: toolMessage.
+	toolMessage beRunningExecutionState.
+	[ domainObject := tools performToolCall: aToolCall.
+	toolMessage output: domainObject ]
+		ensure: [ toolMessage beFinishedExecutionState ].
 	self chat signalRunHasUpdated.
-	^ self executeWait
+	
+	"Let's review this when isStreaming works (is used).
+	Do we need to call #executeAsyncMessage: 
+	or can we call #processNextMessage:?"
+	self flag: #todo.
+	self executeAsyncMessage: toolMessage
 ]
 
 { #category : #'as yet unclassified' }
 GtLOpenAIProvider >> initialize [
 	super initialize.
 	modelName := nil.	"set when the provider is built"
-	providerWorking := false.
 	client := GtLOpenAIClient new.
 	executions := OrderedCollection new.
-	isStreaming := true
+	isStreaming := true.
+	providerWorking := false.
+	executionState := GtLProviderState idle
 ]
 
 { #category : #'as yet unclassified' }
@@ -170,21 +161,26 @@ GtLOpenAIProvider >> modelName: aString [
 
 { #category : #accessing }
 GtLOpenAIProvider >> performToolCallsIn: result with: activeTools [
-	| toolOutputs |
-	
-	toolOutputs := result toolCalls
+	<return: #GtLOpenAIProviderProcessedMessage>
+	| toolMessages processedMessage |
+	toolMessages := result toolCalls
 			collect: [ :aToolCall | 
-				| newMessage|
-				newMessage := GtLToolMessage new
-							toolCall: aToolCall.
-				chat addToolMessage: newMessage.
-				newMessage beRunningExecutionState.
-				[ |domainObject|
-					domainObject := activeTools performToolCall: aToolCall.
-					newMessage output: domainObject ]
-					ensure: [ newMessage beFinishedExecutionState ] ].
+				| domainObject toolMessage |
+				toolMessage := GtLToolMessage new toolCall: aToolCall.
+				chat addToolMessage: toolMessage.
+				toolMessage beRunningExecutionState.
+				[ domainObject := activeTools performToolCall: aToolCall.
+				toolMessage output: domainObject ]
+					ensure: [ toolMessage beFinishedExecutionState ].
+				toolMessage ]
+			as: Array.
 	self chat signalRunHasUpdated.
-	^ self executeWait
+
+	"We send all chat messages, so it is enough to process just the last tool message.
+	See: `GtLOpenAIGenerateResponseAPICommand>>#buildEntity`."
+	toolMessages ifEmpty: [ ^ nil ].
+	processedMessage := self processNextMessage: toolMessages last.
+	^ processedMessage
 ]
 
 { #category : #'as yet unclassified' }
@@ -193,7 +189,53 @@ GtLOpenAIProvider >> printOn: aStream [
 		nextPutAll: self class providerName;
 		nextPut: $(;
 		nextPutAll: self modelName;
+		nextPutAll: ', ';
+		nextPutAll: (self state ifNotNil: #label) asString;
 		nextPut: $)
+]
+
+{ #category : #'private - execution' }
+GtLOpenAIProvider >> processNextMessage: anInputMessage [
+	<return: #GtLOpenAIProviderProcessedMessage>
+	| result anOutputMessage anotherMessage |
+	executionState := executionState running.
+	result := client
+			generateResponseWithModel: self modelName
+			messages: self chat messages
+			instructions: anInputMessage completeInstructionString
+			tools: anInputMessage tools
+			andFormat: (anInputMessage hasFormats
+					ifTrue: [ anInputMessage formatDescriptionsJsonSchema ]
+					ifFalse: [ nil ])
+			isStreaming: isStreaming.
+
+	result hasToolCalls
+		ifTrue: [ anotherMessage := self performToolCallsIn: result with: anInputMessage tools ]
+		ifFalse: [ anOutputMessage := isStreaming
+					ifTrue: [ self streamingMessageFrom: result ]
+					ifFalse: [ self assistantMessageClass new
+							modelName: self modelName;
+							rawData: (result output detect: [ :anOutput | (anOutput at: 'type') = 'message' ]) ].
+
+			self chat addAssistantMessage: anOutputMessage.
+			self chat signalRunIsDone ].
+
+	^ GtLOpenAIProviderProcessedMessage new
+		inputMessage: anInputMessage;
+		result: result;
+		isStreaming: isStreaming;
+		anotherProcessedMessage: anotherMessage;
+		outputMessage: anOutputMessage
+]
+
+{ #category : #'api - execution' }
+GtLOpenAIProvider >> state [
+	"Provide an information in which state this provider is, e.g, idle, working.
+	
+	Replaces #status message"
+
+	<return: #GtLProviderState>
+	^ executionState
 ]
 
 { #category : #'as yet unclassified' }

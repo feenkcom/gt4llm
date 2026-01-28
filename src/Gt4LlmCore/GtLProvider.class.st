@@ -56,8 +56,20 @@ GtLProvider >> defaultUserMessageClass [
 	^ GtLChatMessage
 ]
 
-{ #category : #actions }
+{ #category : #'private - execution' }
+GtLProvider >> executeAsyncMessage: anInputMessage [
+	"The #executeWait should be removed and this message used instead."
+
+	<return: #TAsyncPromise>
+	self flag: #todo.
+
+	self executeWait
+]
+
+{ #category : #'private - execution' }
 GtLProvider >> executeWait [
+	self deprecated: 'Use (or implement) #executeAsyncMessage: instead'.
+
 	self subclassResponsibility
 ]
 
@@ -71,14 +83,27 @@ GtLProvider >> gtCallsFor: aView [
 		view: #gtCallsFor:
 ]
 
-{ #category : #actions }
+{ #category : #'api - execution' }
 GtLProvider >> sendMessage: aMessage [
+	<return: #TAsyncPromise>
 	self chat signalRunHasStarted.
 	providerWorking := true.
-	self executeWait
+	self executeAsyncMessage: aMessage
+]
+
+{ #category : #'api - execution' }
+GtLProvider >> state [
+	"Provide an information in which state this provider is, e.g, idle, working.
+	
+	Replaces #status message"
+
+	<return: #GtLProviderState>
+	^ self subclassResponsibility
 ]
 
 { #category : #accessing }
 GtLProvider >> status [
+	self deprecated: 'Use #state instead'.
+
 	^ self subclassResponsibility
 ]
