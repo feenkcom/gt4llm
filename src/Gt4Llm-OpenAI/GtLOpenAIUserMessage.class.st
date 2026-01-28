@@ -1,6 +1,8 @@
 Class {
 	#name : #GtLOpenAIUserMessage,
 	#superclass : #GtLChatMessage,
+	#traits : 'TGtLWithInstructionSectionAPI',
+	#classTraits : 'TGtLWithInstructionSectionAPI classTrait',
 	#instVars : [
 		'inputModels',
 		'content',
@@ -51,12 +53,14 @@ GtLOpenAIUserMessage >> addPlainInputObject: anObject named: aString [
 
 { #category : #'as yet unclassified' }
 GtLOpenAIUserMessage >> buildCompleteInstructions [
-	| newInstructions inputInstructionsBody inputInstructions |
+	| newInstructions  |
 	newInstructions := GtLlmInstructionWithSections new
 			introduction: (GtLlmInstructionString new string: '').
 	
 	inputModels notEmpty
-		ifTrue: [ inputInstructionsBody := GtLlmInstructionWithSections new
+		ifTrue: [ 
+			| inputInstructionsBody inputInstructions |
+			inputInstructionsBody := GtLlmInstructionWithSections new
 					introduction: 'The inputs provided follow the descriptions below'.
 			inputInstructions := GtLlmInstructionSection new
 					title: 'Input descriptions';

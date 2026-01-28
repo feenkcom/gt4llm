@@ -1,6 +1,8 @@
 Class {
 	#name : #GtLChat,
 	#superclass : #Object,
+	#traits : 'TGtLWithInstructionSectionAPI',
+	#classTraits : 'TGtLWithInstructionSectionAPI classTrait',
 	#instVars : [
 		'announcer',
 		'lastUpdate',
