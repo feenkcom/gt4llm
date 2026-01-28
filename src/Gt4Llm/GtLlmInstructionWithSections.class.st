@@ -26,6 +26,20 @@ GtLlmInstructionWithSections >> children [
 ]
 
 { #category : #accessing }
+GtLlmInstructionWithSections >> ensureSectionNamed: aSectionTitle [
+	^sections
+			detect: [ :aSection | aSection title = aSectionTitle ] 
+			ifFound: [ :each | each ] 
+			ifNone: [
+				| newSection|
+				newSection := GtLlmInstructionWithSections new
+					title: aSectionTitle;
+					introduction: (GtLlmInstructionString new string: '').
+				self addSection: newSection.
+				newSection ]
+]
+
+{ #category : #accessing }
 GtLlmInstructionWithSections >> initialize [
 	super initialize.
 	
