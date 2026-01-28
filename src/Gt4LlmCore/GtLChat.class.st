@@ -1,6 +1,8 @@
 Class {
 	#name : #GtLChat,
 	#superclass : #Object,
+	#traits : 'TGtLWithInstructionSectionAPI',
+	#classTraits : 'TGtLWithInstructionSectionAPI classTrait',
 	#instVars : [
 		'announcer',
 		'lastUpdate',
@@ -11,7 +13,7 @@ Class {
 		'userMessageClass',
 		'responseFormat'
 	],
-	#category : #'Gt4LlmCore-Core'
+	#category : 'Gt4LlmCore-Core'
 }
 
 { #category : #accessing }

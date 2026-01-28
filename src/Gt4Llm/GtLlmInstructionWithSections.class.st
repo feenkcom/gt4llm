@@ -3,7 +3,8 @@ Class {
 	#superclass : #GtLlmInstructionPiece,
 	#instVars : [
 		'introduction',
-		'sections'
+		'sections',
+		'title'
 	],
 	#category : #Gt4Llm
 }
@@ -25,10 +26,25 @@ GtLlmInstructionWithSections >> children [
 ]
 
 { #category : #accessing }
+GtLlmInstructionWithSections >> ensureSectionNamed: aSectionTitle [
+	^sections
+			detect: [ :aSection | aSection title = aSectionTitle ] 
+			ifFound: [ :each | each ] 
+			ifNone: [
+				| newSection|
+				newSection := GtLlmInstructionWithSections new
+					title: aSectionTitle;
+					introduction: (GtLlmInstructionString new string: '').
+				self addSection: newSection.
+				newSection ]
+]
+
+{ #category : #accessing }
 GtLlmInstructionWithSections >> initialize [
 	super initialize.
 	
-	sections := OrderedCollection new
+	sections := OrderedCollection new.
+	title := ''  
 ]
 
 { #category : #accessing }
@@ -52,7 +68,7 @@ GtLlmInstructionWithSections >> introduction: anObject [
 	introduction := anObject asInstructionPiece
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 GtLlmInstructionWithSections >> isEmpty [ 
 	^ self instructionString isEmpty
 ]
@@ -77,4 +93,14 @@ GtLlmInstructionWithSections >> sections [
 GtLlmInstructionWithSections >> sections: anObject [
 	sections := anObject asOrderedCollection
 			collect: [ :aSection | aSection asInstructionPiece parent: self ]
+]
+
+{ #category : #accessing }
+GtLlmInstructionWithSections >> title [
+	^title
+]
+
+{ #category : #accessing }
+GtLlmInstructionWithSections >> title: aSectionTitle [ 
+	title := aSectionTitle 
 ]

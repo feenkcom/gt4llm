@@ -8,7 +8,7 @@ Class {
 		'tool',
 		'result'
 	],
-	#category : #'Gt4LlmCore-Core'
+	#category : 'Gt4LlmCore-Core'
 }
 
 { #category : #accessing }

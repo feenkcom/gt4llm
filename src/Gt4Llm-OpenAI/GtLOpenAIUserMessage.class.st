@@ -1,6 +1,8 @@
 Class {
 	#name : #GtLOpenAIUserMessage,
 	#superclass : #GtLChatMessage,
+	#traits : 'TGtLWithInstructionSectionAPI + TGtLWithInputModelsAPI',
+	#classTraits : 'TGtLWithInstructionSectionAPI classTrait + TGtLWithInputModelsAPI classTrait',
 	#instVars : [
 		'inputModels',
 		'content',
@@ -12,13 +14,6 @@ Class {
 { #category : #serialization }
 GtLOpenAIUserMessage class >> leJsonV4Name [
 	^ #gtLOpenAIUserMessage
-]
-
-{ #category : #'api - message' }
-GtLOpenAIUserMessage >> addInputMagritteObject: anObject named: aString [
-	self addInputModel: (GtLMagritteInputModel new
-		name: aString;
-		model: anObject)
 ]
 
 { #category : #adding }
@@ -42,21 +37,16 @@ GtLOpenAIUserMessage >> addInstructionSectionForLepiterPages: pageNames titled: 
 				body: instructionString)
 ]
 
-{ #category : #'api - message' }
-GtLOpenAIUserMessage >> addPlainInputObject: anObject named: aString [
-	self addInputModel: (GtLPlainObjectInputModel new
-		name: aString;
-		model: anObject)
-]
-
 { #category : #'as yet unclassified' }
 GtLOpenAIUserMessage >> buildCompleteInstructions [
-	| newInstructions inputInstructionsBody inputInstructions |
+	| newInstructions  |
 	newInstructions := GtLlmInstructionWithSections new
 			introduction: (GtLlmInstructionString new string: '').
 	
 	inputModels notEmpty
-		ifTrue: [ inputInstructionsBody := GtLlmInstructionWithSections new
+		ifTrue: [ 
+			| inputInstructionsBody inputInstructions |
+			inputInstructionsBody := GtLlmInstructionWithSections new
 					introduction: 'The inputs provided follow the descriptions below'.
 			inputInstructions := GtLlmInstructionSection new
 					title: 'Input descriptions';
@@ -171,13 +161,6 @@ GtLOpenAIUserMessage >> instructions [
 { #category : #'api - message' }
 GtLOpenAIUserMessage >> lepiterExplanations: pageNames [
 	^ self addInstructionSectionForLepiterPages: pageNames titled: 'Explanations'
-]
-
-{ #category : #'api - message' }
-GtLOpenAIUserMessage >> markdown: aString [
-	self
-		addInputMagritteObject: (GtLMarkdown new content: aString)
-		named: 'Markdown'
 ]
 
 { #category : #accessing }
