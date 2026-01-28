@@ -5,7 +5,7 @@ Class {
 		'exception',
 		'otherExceptions'
 	],
-	#category : 'Gt4LlmCore-Core'
+	#category : #'Gt4LlmCore-Core'
 }
 
 { #category : #'instance creation' }

@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLFunctionToolWithProtocol,
 	#superclass : #GtLFunctionTool,
-	#category : 'Gt4LlmCore-Tools'
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }

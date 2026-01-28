@@ -8,7 +8,7 @@ Class {
 		'tool',
 		'result'
 	],
-	#category : 'Gt4LlmCore-Core'
+	#category : #'Gt4LlmCore-Core'
 }
 
 { #category : #accessing }
@@ -166,7 +166,6 @@ GtLFunctionToolCall >> responseInput [
 { #category : #accessing }
 GtLFunctionToolCall >> result [
 	<return: #TGtLDomainObject>
-	GtJustContextStackSignal emit.
 	^ result
 ]
 

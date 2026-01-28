@@ -3,7 +3,7 @@ Trait {
 	#instVars : [
 		'message'
 	],
-	#category : 'Gt4LlmCore-Core'
+	#category : #'Gt4LlmCore-Core'
 }
 
 { #category : #accessing }

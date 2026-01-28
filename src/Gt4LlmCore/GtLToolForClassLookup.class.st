@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLToolForClassLookup,
 	#superclass : #GtLAbstractFunctionTool,
-	#category : 'Gt4LlmCore-Tools'
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #'as yet unclassified' }
@@ -16,13 +16,11 @@ GtLToolForClassLookup >> acceptVisitor: aVisitor [
 
 { #category : #accessing }
 GtLToolForClassLookup >> description [
-	GtJustContextStackSignal emit.
 	^ 'Get the details of a class as JSON.'
 ]
 
 { #category : #accessing }
 GtLToolForClassLookup >> name [
-	GtJustContextStackSignal emit.
 	^ 'lookupClass'
 ]
 
@@ -36,7 +34,6 @@ GtLToolForClassLookup >> parameterClassName [
 
 { #category : #accessing }
 GtLToolForClassLookup >> parameters [
-	GtJustContextStackSignal emit.
 	^ #('className')
 ]
 

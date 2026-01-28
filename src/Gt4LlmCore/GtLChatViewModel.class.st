@@ -6,7 +6,7 @@ Class {
 		'newMessageViewModel',
 		'messageViewModelsCache'
 	],
-	#category : 'Gt4LlmCore-UI - View Models'
+	#category : #'Gt4LlmCore-UI - View Models'
 }
 
 { #category : #accessing }
