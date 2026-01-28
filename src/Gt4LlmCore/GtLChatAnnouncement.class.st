@@ -1,18 +1,18 @@
 Class {
-	#name : #GtLMessageAnnouncement,
+	#name : #GtLChatAnnouncement,
 	#superclass : #GtLAnnouncement,
 	#instVars : [
-		'message'
+		'chat'
 	],
 	#category : #'Gt4LlmCore-Announcements'
 }
 
 { #category : #accessing }
-GtLMessageAnnouncement >> message [
-	^ message
+GtLChatAnnouncement >> chat [
+	^ chat
 ]
 
 { #category : #accessing }
-GtLMessageAnnouncement >> message: anObject [
-	message := anObject
+GtLChatAnnouncement >> chat: anObject [
+	chat := anObject
 ]

@@ -1,10 +1,10 @@
 Class {
-	#name : #GtLMessageCreatedState,
+	#name : #GtLMessageSkippedState,
 	#superclass : #GtLMessageState,
 	#category : #'Gt4LlmCore-Core'
 }
 
 { #category : #'api - accessing' }
-GtLMessageCreatedState >> messageExecutionStateLabel [
-	^ 'waiting'
+GtLMessageSkippedState >> messageExecutionStateLabel [
+	^ 'skipped'
 ]

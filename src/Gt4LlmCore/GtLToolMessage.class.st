@@ -6,7 +6,7 @@ Class {
 		'output',
 		'executionState'
 	],
-	#category : 'Gt4LlmCore-Core'
+	#category : #'Gt4LlmCore-Core'
 }
 
 { #category : #accessing }
@@ -38,6 +38,11 @@ GtLToolMessage >> beFinishedExecutionState [
 { #category : #'api - execution' }
 GtLToolMessage >> beRunningExecutionState [
 	self executionState: GtLMessageState running
+]
+
+{ #category : #'api - execution' }
+GtLToolMessage >> beSkippedExecutionState [
+	self executionState: GtLMessageState skipped
 ]
 
 { #category : #'as yet unclassified' }
