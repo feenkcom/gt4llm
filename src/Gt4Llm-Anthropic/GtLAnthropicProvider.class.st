@@ -86,71 +86,30 @@ GtLAnthropicProvider >> defaultUserMessageClass [
 ]
 
 { #category : #actions }
-GtLAnthropicProvider >> executeWait [
-
+GtLAnthropicProvider >> executeAsyncMessage: anInputMessage [
+	<return: #TAsyncPromise>
 	| aSecondPromise aFuture aFirstPromise |
-	aFuture := [ | result aMessage currentMessage |
-		currentMessage := self chat messages last currentMessage.
-		result := client
-				generateResponseWithModel: self modelName
-				messages: self chat messages
-				instructions: currentMessage completeInstructionString
-				tools: currentMessage tools
-				andFormat: (currentMessage hasFormats
-						ifTrue: [ currentMessage formatDescriptionsJsonSchema ]
-						ifFalse: [ nil ]) .
-
-		result hasToolCalls
-			ifTrue: [ self performToolCallsIn: result with: currentMessage tools ]
-			ifFalse: [ aMessage :=  self assistantMessageClass new
-								modelName: self modelName;
-								rawData: (result output detect: [ :anOutput | (anOutput at: 'type') = 'message' ]) ].
-
-				self chat addAssistantMessage: aMessage.
-				self chat signalRunIsDone.
-				aMessage ] asAsyncFuture.
+	aFuture := [ 
+		self privateExecutionState: self state running.
+		self processNextMessage: anInputMessage ] asAsyncFuture.
 	aFirstPromise := aFuture
-			await: (AsyncFutureExecutionConfiguration new
-					customGroup: #OpenAI;
-					lowPriority).
+			await: GtLAnthropicSettings futureExecutionConfiguration.
 	aSecondPromise := aFirstPromise
-			then: [ :aMessage |
+			then: [ :aMessage | 
+				self privateExecutionState: self state finished.
 				providerWorking := false.
 				aMessage ]
 			otherwise: [ :anError | 
 				| aMessage |
+				self privateExecutionState: self state finished.
 				providerWorking := false.
-				aMessage := GtLErrorMessage freeze: anError.
+				aMessage := GtLErrorMessage new
+						freeze: anError;
+						inputMessage: anInputMessage.
 				self chat addErrorMessage: aMessage.
 				self chat signalRunIsDone.
 				aMessage ].
-	executions add: aSecondPromise.
-
-"	[ result := self client
-			completeChatWithModel: self model
-			messages: self chat messages
-			maxTokens: self maxTokens
-			system: instructions
-			format: self format
-			andTools: tools.
-
-
-	self chat addMessage: result.
-
-	self performToolCallsFor: result.
-
-	result
-		content: (result content
-				collect: [ :aValue | 
-					(aValue at: #type) = 'text'
-						ifTrue: [ aValue
-								at: 'text'
-									put: (((aValue at: 'text') removePrefix: '```json') removeSuffix: '```');
-								yourself ]
-						ifFalse: [ aValue ] ]).
-
-	self chat signalRunHasUpdated ] doWhileTrue: [ result toolCalls isNotEmpty ].
-"
+	executions add: aSecondPromise
 ]
 
 { #category : #'as yet unclassified' }
@@ -260,6 +219,38 @@ GtLAnthropicProvider >> printOn: aStream [
 		nextPut: $(;
 		nextPutAll: self modelName;
 		nextPut: $)
+]
+
+{ #category : #actions }
+GtLAnthropicProvider >> processNextMessage: anInputMessage [
+	<return: #GtLOpenAIProviderProcessedMessage or: nil>
+	| result anOutputMessage anotherMessage |
+	self state ifCanContinue: [ "continue" ] ifDisabled: [ ^ nil ].
+
+	anOutputMessage := nil.
+	anotherMessage := nil.
+	result := client
+			generateResponseWithModel: self modelName
+			messages: self chat messages
+			instructions: anInputMessage completeInstructionString
+			tools: anInputMessage tools
+			andFormat: (anInputMessage hasFormats
+					ifTrue: [ anInputMessage formatDescriptionsJsonSchema ]
+					ifFalse: [ nil ]).
+
+	result hasToolCalls
+		ifTrue: [ anotherMessage := self performToolCallsIn: result with: anInputMessage tools ]
+		ifFalse: [ anOutputMessage := self assistantMessageClass new
+					modelName: self modelName;
+					rawData: (result output detect: [ :anOutput | (anOutput at: 'type') = 'message' ]) ].
+
+	self chat addAssistantMessage: anOutputMessage.
+	self chat signalRunIsDone.
+	^ GtLAnthropicProviderProcessedMessage new
+		inputMessage: anInputMessage;
+		result: result;
+		anotherProcessedMessage: anotherMessage;
+		outputMessage: anOutputMessage
 ]
 
 { #category : #'as yet unclassified' }
