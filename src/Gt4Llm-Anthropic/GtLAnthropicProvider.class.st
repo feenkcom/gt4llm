@@ -100,11 +100,11 @@ GtLAnthropicProvider >> executeAsyncMessage: anInputMessage [
 				aMessage ]
 			otherwise: [ :anError | 
 				| aMessage |
-				self privateExecutionState: self state finished.
 				aMessage := GtLErrorMessage new
 						freeze: anError;
 						inputMessage: anInputMessage.
 				self chat addErrorMessage: aMessage.
+				self privateExecutionState: self state finished.
 				self chat signalRunIsDone.
 				aMessage ].
 	executions add: aSecondPromise
