@@ -97,12 +97,10 @@ GtLAnthropicProvider >> executeAsyncMessage: anInputMessage [
 	aSecondPromise := aFirstPromise
 			then: [ :aMessage | 
 				self privateExecutionState: self state finished.
-				providerWorking := false.
 				aMessage ]
 			otherwise: [ :anError | 
 				| aMessage |
 				self privateExecutionState: self state finished.
-				providerWorking := false.
 				aMessage := GtLErrorMessage new
 						freeze: anError;
 						inputMessage: anInputMessage.
@@ -150,7 +148,6 @@ GtLAnthropicProvider >> gtTriggerAssistantActionFor: anAction [
 GtLAnthropicProvider >> initialize [
 	super initialize.
 
-	providerWorking := false.
 	executions := OrderedCollection new.
 	
 	self initializeClient.
@@ -261,9 +258,10 @@ GtLAnthropicProvider >> sendAssistantMessage: aMessage [
 
 	executions
 		add: ([ self triggerAssistant ] asAsyncPromise
-				then: [  ]
+				then: [ 
+					self privateExecutionState: self state finished. ]
 				otherwise: [ :anError | 
-					providerWorking := false.
+					self privateExecutionState: self state finished.
 					self chat
 						addMessage: (GtLlmErrorThreadMessage new exception: anError freeze).
 					self chat signalRunIsDone ])
@@ -287,13 +285,6 @@ GtLAnthropicProvider >> sendFiles: aListOfFileReferences withMessage: aString [
 				chat: self)
 ]
 
-{ #category : #'as yet unclassified' }
-GtLAnthropicProvider >> status [
-	^ providerWorking
-		ifTrue: [ GtLlmAssistantChatWorkingStatus new ]
-		ifFalse: [ GtLlmAssistantChatReadyStatus new ]
-]
-
 { #category : #accessing }
 GtLAnthropicProvider >> tools [
 	^ tools
@@ -307,7 +298,7 @@ GtLAnthropicProvider >> tools: anObject [
 { #category : #'as yet unclassified' }
 GtLAnthropicProvider >> triggerAssistant [
 	| result |
-	providerWorking := true.
+	self privateExecutionState: self state running.
 
 	self chat signalRunHasStarted.
 
@@ -338,5 +329,5 @@ GtLAnthropicProvider >> triggerAssistant [
 
 	self chat signalRunIsDone.
 
-	providerWorking := false
+	self privateExecutionState: self state finished.
 ]
