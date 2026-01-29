@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLMethodSourcesDomainObject,
+	#name : #GtLMethodsSourceDomainObject,
 	#superclass : #GtLDomainObject,
 	#instVars : [
 		'methods'
@@ -8,17 +8,17 @@ Class {
 }
 
 { #category : #accessing }
-GtLMethodSourcesDomainObject >> methods [
+GtLMethodsSourceDomainObject >> methods [
 	^ methods
 ]
 
 { #category : #accessing }
-GtLMethodSourcesDomainObject >> methods: aCollection [
+GtLMethodsSourceDomainObject >> methods: aCollection [
 	methods := aCollection
 ]
 
 { #category : #serialization }
-GtLMethodSourcesDomainObject >> serializeToOpenAIResponseJsonObject [
+GtLMethodsSourceDomainObject >> serializeToOpenAIResponseJsonObject [
 	"Return a JSON dictionary that represents the domain object."
 
 	<return: #NeoJSONObject>
