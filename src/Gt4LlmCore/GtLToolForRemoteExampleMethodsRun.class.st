@@ -293,7 +293,7 @@ GtLToolForRemoteExampleMethodsRun >> reportResults: results on: report [
 							checkResult := GtLRemoteExampleReportDomainObject new result: result.
 
 							checkResults add: checkResult ] ] ].
-	report at: #results put: checkResults asArray
+	report results: checkResults asArray
 ]
 
 { #category : #private }
