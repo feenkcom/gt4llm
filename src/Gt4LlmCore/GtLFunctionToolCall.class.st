@@ -46,7 +46,7 @@ GtLFunctionToolCall >> arguments: anObject [
 
 { #category : #accessing }
 GtLFunctionToolCall >> description [
-	^ tool description
+	^ tool ifNotNil: #description ifNil: [ '' ]
 ]
 
 { #category : #accessing }
