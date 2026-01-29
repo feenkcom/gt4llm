@@ -79,10 +79,6 @@ GtLProvider >> gtCallsFor: aView [
 GtLProvider >> initialize [
 	super initialize.
 	
-	"This instance variable should be removed 
-	and executionState used instead."
-	providerWorking := false.
-	
 	executionState := GtLProviderState idle 
 ]
 
@@ -102,16 +98,12 @@ GtLProvider >> privateExecutionState: aState [
 { #category : #'api - execution' }
 GtLProvider >> sendMessage: aMessage [
 	<return: #TAsyncPromise>
-	self chat signalRunHasStarted.
-	providerWorking := true.
 	self executeAsyncMessage: aMessage
 ]
 
 { #category : #'api - execution' }
 GtLProvider >> state [
-	"Provide an information in which state this provider is, e.g, idle, working.
-	
-	Replaces #status message"
+	"Provide an information in which state this provider is, e.g, idle, working."
 
 	<return: #GtLProviderState>
 	^ executionState
@@ -119,9 +111,11 @@ GtLProvider >> state [
 
 { #category : #accessing }
 GtLProvider >> status [
-	self deprecated: 'Use #state instead'.
+	self
+		deprecated: 'Please use #state instead.'
+		transformWith: '`@receiver status' -> '`@receiver state'.
 
-	^ self subclassResponsibility
+	^ self state
 ]
 
 { #category : #'api - execution' }

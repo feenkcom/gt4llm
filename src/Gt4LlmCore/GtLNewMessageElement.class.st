@@ -197,7 +197,11 @@ GtLNewMessageElement >> isChatProviderRunning [
 
 { #category : #'private - announcement handling' }
 GtLNewMessageElement >> onChatExecutionStateChanged: anAnnouncement [
-	self enqueueTask: (BlTaskAction new action: [ self updateStopButton ])
+	self
+		enqueueTask: (BlTaskAction new
+				action: [ 
+					self updateSendButton.
+					self updateStopButton ])
 ]
 
 { #category : #'private - hooks' }
@@ -236,12 +240,6 @@ GtLNewMessageElement >> sendMessageFrom: aButton [
 { #category : #'private - hooks' }
 GtLNewMessageElement >> subscribeToMessageViewModel [
 	self messageViewModel chat
-		when: GtLlmThreadRunStartedAnnouncement
-			send: #disableSend
-			to: self;
-		when: GtLlmThreadRunIsDoneAnnouncement
-			send: #enableSend
-			to: self;
 		when: GtLChatExecutionStateChanged
 			send: #onChatExecutionStateChanged:
 			to: self.
@@ -279,7 +277,8 @@ GtLNewMessageElement >> updateElement [
 	self updateContentsElement.
 	self updateImagesElement.
 	self updateToolbar.
-	self updateStopButton
+	self updateStopButton.
+	self updateSendButton.
 ]
 
 { #category : #'private - updating' }
@@ -297,6 +296,11 @@ GtLNewMessageElement >> updateImagesElement [
 						onDeletion: [ :aFileForDeletion | 
 							self threadMessageViewModel files remove: aFileForDeletion.
 							self updateImagesElement ]) ]
+]
+
+{ #category : #'private - updating' }
+GtLNewMessageElement >> updateSendButton [
+	sendButton disabled: self isChatProviderRunning
 ]
 
 { #category : #'private - event handling' }

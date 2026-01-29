@@ -78,12 +78,10 @@ GtLOpenAIProvider >> executeAsyncMessage: anInputMessage [
 	anErrorHandlerPromise := aFirstPromise
 			then: [ :aProcessedMessage | 
 				self privateExecutionState: self state finished.
-				providerWorking := false.
 				aProcessedMessage ]
 			otherwise: [ :anError | 
 				| anErrorMessage |
 				self privateExecutionState: self state finished.
-				providerWorking := false.
 				anErrorMessage := GtLErrorMessage new
 						freeze: anError;
 						inputMessage: anInputMessage.
@@ -229,13 +227,6 @@ GtLOpenAIProvider >> processNextMessage: anInputMessage [
 		isStreaming: isStreaming;
 		anotherProcessedMessage: anotherMessage;
 		outputMessage: anOutputMessage
-]
-
-{ #category : #'as yet unclassified' }
-GtLOpenAIProvider >> status [
-	^ providerWorking
-		ifTrue: [ GtLlmAssistantChatWorkingStatus new ]
-		ifFalse: [ GtLlmAssistantChatReadyStatus new ]
 ]
 
 { #category : #utils }
