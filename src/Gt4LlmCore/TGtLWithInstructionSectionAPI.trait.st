@@ -1,6 +1,6 @@
 Trait {
 	#name : #TGtLWithInstructionSectionAPI,
-	#category : #'Gt4LlmCore-Core'
+	#category : 'Gt4LlmCore-Core'
 }
 
 { #category : #adding }

@@ -11,7 +11,7 @@ Class {
 		'senderFuture',
 		'stopButton'
 	],
-	#category : #'Gt4LlmCore-UI - Elements'
+	#category : 'Gt4LlmCore-UI - Elements'
 }
 
 { #category : #factory }
@@ -56,7 +56,7 @@ GtLNewMessageElement >> buildAttachButton [
 			c linear horizontal alignLeft ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'private - updating' }
 GtLNewMessageElement >> buildProviderButton [
 	| aButton |
 	aButton := BrButton new.
@@ -124,12 +124,12 @@ GtLNewMessageElement >> defaultLayout [
 	^ BlLinearLayout vertical
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'private - updating' }
 GtLNewMessageElement >> disableSend [
 	sendButton disable
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'private - updating' }
 GtLNewMessageElement >> enableSend [
 	sendButton enable
 ]
@@ -192,12 +192,19 @@ GtLNewMessageElement >> initializeToolbar [
 { #category : #'private - testing' }
 GtLNewMessageElement >> isChatProviderRunning [
 	self messageViewModel ifNil: [ ^ false ].
-	^ self messageViewModel chat state ifCanStop: [ true ] ifIdle: [ false ]
+	^ self messageViewModel chat state
+		ifCanStop: [ true ]
+		ifStopping: [ false ]
+		ifIdle: [ false ]
 ]
 
 { #category : #'private - announcement handling' }
 GtLNewMessageElement >> onChatExecutionStateChanged: anAnnouncement [
-	self enqueueTask: (BlTaskAction new action: [ self updateStopButton ])
+	self
+		enqueueTask: (BlTaskAction new
+				action: [ 
+					self updateSendButton.
+					self updateStopButton ])
 ]
 
 { #category : #'private - hooks' }
@@ -236,12 +243,6 @@ GtLNewMessageElement >> sendMessageFrom: aButton [
 { #category : #'private - hooks' }
 GtLNewMessageElement >> subscribeToMessageViewModel [
 	self messageViewModel chat
-		when: GtLlmThreadRunStartedAnnouncement
-			send: #disableSend
-			to: self;
-		when: GtLlmThreadRunIsDoneAnnouncement
-			send: #enableSend
-			to: self;
 		when: GtLChatExecutionStateChanged
 			send: #onChatExecutionStateChanged:
 			to: self.
@@ -279,7 +280,8 @@ GtLNewMessageElement >> updateElement [
 	self updateContentsElement.
 	self updateImagesElement.
 	self updateToolbar.
-	self updateStopButton
+	self updateStopButton.
+	self updateSendButton.
 ]
 
 { #category : #'private - updating' }
@@ -299,6 +301,16 @@ GtLNewMessageElement >> updateImagesElement [
 							self updateImagesElement ]) ]
 ]
 
+{ #category : #'private - updating' }
+GtLNewMessageElement >> updateSendButton [
+	self messageViewModel ifNil: [ ^ self ].
+	self messageViewModel chat ifNil: [ ^ self ].
+	self messageViewModel chat state
+		ifCanStop: [ sendButton disable ]
+		ifStopping: [ sendButton disable ]
+		ifIdle: [ sendButton enable ].
+]
+
 { #category : #'private - event handling' }
 GtLNewMessageElement >> updateSendMessageError: anError [ 
 	| anErrorCopy |
@@ -308,10 +320,18 @@ GtLNewMessageElement >> updateSendMessageError: anError [
 
 { #category : #'private - updating' }
 GtLNewMessageElement >> updateStopButton [
-	stopButton
-		visibility: (self isChatProviderRunning
-				ifTrue: [ BlVisibility visible ]
-				ifFalse: [ BlVisibility gone ])
+	self messageViewModel ifNil: [ ^ self ].
+	self messageViewModel chat ifNil: [ ^ self ].
+	self messageViewModel chat state
+		ifCanStop: [ stopButton
+				visibility: BlVisibility visible;
+				enable ]
+		ifStopping: [ stopButton
+				visibility: BlVisibility visible;
+				disable ]
+		ifIdle: [ stopButton
+				visibility: BlVisibility gone;
+				disable ]
 ]
 
 { #category : #'private - updating' }

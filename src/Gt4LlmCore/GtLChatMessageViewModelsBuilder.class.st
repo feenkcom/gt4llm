@@ -14,7 +14,7 @@ Class {
 		'newMessageViewModel',
 		'status'
 	],
-	#category : #'Gt4LlmCore-Support'
+	#category : 'Gt4LlmCore-Support'
 }
 
 { #category : #'api - building' }
@@ -22,33 +22,16 @@ GtLChatMessageViewModelsBuilder >> build [
 	self assert: [ chat isNotNil ].
 	self assert: [ cache isNotNil ].
 	messages := chat messages.
-	lastMessage := messages size > 0
-			ifTrue: [ messages last ]
-			ifFalse: [ nil ].
-	status := chat status.
+	lastMessage := messages size > 0 ifTrue: [ messages last ] ifFalse: [ nil ].
+	status := chat state.
 
 	^ Array
 		new: messages size
 		streamContents: [ :aStream | 
 			stream := aStream.
 			self buildMessages.
-			self buildFailureMessage.
 			self buildNewMessage.
 			stream := nil ]
-]
-
-{ #category : #'private - building' }
-GtLChatMessageViewModelsBuilder >> buildFailureMessage [
-	| aViewModel aMessage |
-	status ifNil: [ ^ self ].
-	status isFailed ifFalse: [ ^ self ].
-	
-	aMessage := GtLFailureMessage new
-			failureText: status message;
-			createdAt: status createdAt;
-			chat: chat.
-	aViewModel := aMessage asViewModel.
-	stream nextPut: aViewModel
 ]
 
 { #category : #'private - building' }

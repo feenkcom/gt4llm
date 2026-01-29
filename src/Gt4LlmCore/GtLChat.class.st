@@ -13,7 +13,7 @@ Class {
 		'userMessageClass',
 		'responseFormat'
 	],
-	#category : #'Gt4LlmCore-Core'
+	#category : 'Gt4LlmCore-Core'
 }
 
 { #category : #accessing }
@@ -516,16 +516,21 @@ GtLChat >> signalExecutionStateChanged [
 
 { #category : #announcing }
 GtLChat >> signalRunHasStarted [
+	self deprecated: 'Change provider state instead'.
 	self announcer announce: GtLlmThreadRunStartedAnnouncement new
 ]
 
 { #category : #announcing }
 GtLChat >> signalRunHasUpdated [
+	self
+		deprecated: 'Change provider state instead or other update announcements, e.g., message announcements'.
+
 	self announcer announce: GtOpenAIThreadRunUpdatedAnnouncement new
 ]
 
 { #category : #announcing }
 GtLChat >> signalRunIsDone [
+	self deprecated: 'Change provider state instead'.
 	self announcer announce: GtLlmThreadRunIsDoneAnnouncement new
 ]
 
@@ -537,9 +542,11 @@ GtLChat >> state [
 
 { #category : #'api - execution' }
 GtLChat >> status [
-	self deprecated: 'Use #state instead'.
-	
-	^ self provider status
+	self
+		deprecated: 'Please use #state instead.'
+		transformWith: '`@receiver status' -> '`@receiver state'.
+
+	^ self state
 ]
 
 { #category : #'api - execution' }

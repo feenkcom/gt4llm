@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLToolForRemoteExampleMethodsRunExamples,
 	#superclass : #Object,
-	#category : #'Gt4LlmCore-Examples-Tools'
+	#category : 'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #'accessing - method dictionary' }
@@ -238,16 +238,16 @@ GtLToolForRemoteExampleMethodsRunExamples class >> traitCompositionString [
 ]
 
 { #category : #accessing }
+GtLToolForRemoteExampleMethodsRunExamples class >> traits [
+	<reflection: 'Class structural inspection - Traits'>
+	^ self traitComposition traits
+]
+
+{ #category : #accessing }
 GtLToolForRemoteExampleMethodsRunExamples class >> traitUsers [
 	"I am a traited class, I have no users, this is for compatibility with traits"
 		<reflection: 'Class structural inspection - Traits'>
 	^ #()
-]
-
-{ #category : #accessing }
-GtLToolForRemoteExampleMethodsRunExamples class >> traits [
-	<reflection: 'Class structural inspection - Traits'>
-	^ self traitComposition traits
 ]
 
 { #category : #examples }
@@ -611,9 +611,7 @@ GtLToolForRemoteExampleMethodsRunExamples >> exampleRunNewClassDefinition [
 	- neither the class or example exist in the main image"
 	<gtExample>
 	<noTest>
-	| tool call resultString result results exampleNamePrefix exampleClassDefinition exampleSource exampleClassName exampleSelector resultDictionary |
-
-	self forPharo12AndNewer: [] forPharo11: [ ^ self ].
+	| tool call resultObject results exampleNamePrefix exampleClassDefinition exampleSource exampleClassName exampleSelector |
 
 	tool := GtLToolForRemoteExampleMethodsRun new.
 	call := GtLFunctionToolCall new.
@@ -657,17 +655,11 @@ GtLToolForRemoteExampleMethodsRunExamples >> exampleRunNewClassDefinition [
 				} asDictionary })
 		} asDictionary
 	} asDictionary.
-	resultString := tool performToolCall: call.
-	result := STONJSON fromString: resultString.
+	resultObject := tool performToolCall: call.
+	results := resultObject results.
 	self assert: call tool == tool.
-	self assert: result class name equals: #Dictionary.
-	self assert: result size equals: 1.
-	results := result at: 'results' ifAbsent:
-		[ self error: '''results'' not found in: ', (STONJSON toStringPretty: result) ].
 	self assert: results size equals: 1.
-	resultDictionary := results first at: 'result' ifAbsent:
-		[ self error: '''result'' not found in: ', (STONJSON toStringPretty: resultDictionary) ].
-	self assert: resultDictionary equals: 'pass'.
+	self assert: results first result shortName equals: #pass.
 	^ tool
 ]
 
@@ -720,7 +712,7 @@ GtLToolForRemoteExampleMethodsRunExamples >> exampleRunReportsDetailsForFailures
     "Ensure failure entries include message and stackTrace"
     <gtExample>
     <noTest>
-    | tool call result results message |
+    | tool call resultObject results message |
     tool := GtLToolForRemoteExampleMethodsRun new.
     call := GtLFunctionToolCall new.
     call function: {
@@ -741,13 +733,11 @@ GtLToolForRemoteExampleMethodsRunExamples >> exampleRunReportsDetailsForFailures
             }).
         } asDictionary
     } asDictionary.
-    result := STONJSON fromString: (tool performToolCall: call).
-    results := result at: 'results' ifAbsent:
-		[ self error: '''results'' not found in: ', (STONJSON toStringPretty: result) ].
-    message := (results detect: 
-    	[ :each | (each at: 'method') = 'exampleFailure' ])
-        	at: 'message'.
-    self assert: message equals: 'Assertion failed'.
+	resultObject := tool performToolCall: call.
+	results := resultObject results.
+	self assert: results size equals: 2.
+	message := results second result exceptionMessageText.
+	self assert: message equals: 'Assertion failed'.
 ]
 
 { #category : #examples }
@@ -755,7 +745,7 @@ GtLToolForRemoteExampleMethodsRunExamples >> exampleRunSuccess [
 	"Confirm that the GtLlmToolForRemoteExampleMethodsRun tool behaves as expected in the case where a collection of changes that don't exist in the main image is provided and a collection of examples that depends on the changes is run."
 	<gtExample>
 	<noTest>
-	| tool call resultString result results exampleNamePrefix |
+	| tool call resultObject results exampleNamePrefix |
 
 	tool := GtLToolForRemoteExampleMethodsRun new.
 	call := GtLFunctionToolCall new.
@@ -789,18 +779,14 @@ GtLToolForRemoteExampleMethodsRunExamples >> exampleRunSuccess [
 				} asDictionary. }).
 		} asDictionary
 	} asDictionary.
-	resultString := tool performToolCall: call.
-	result := STONJSON fromString: resultString.
+	resultObject := tool performToolCall: call.
+	results := resultObject results.
 	self assert: call tool == tool.
-	self assert: result class name equals: #Dictionary.
-	self assert: result size equals: 1.
-	results := result at: 'results' ifAbsent:
-		[ self error: '''results'' not found in: ', (STONJSON toStringPretty: result) ].
 	self assert: results size equals: 3.
-	self assert: (results collect: [ :resultDictionary |
-		resultDictionary at: 'result' ifAbsent:
-			[ self error: '''result'' not found in: ', (STONJSON toStringPretty: resultDictionary) ] ] as: Set) equals:
-		#('pass' 'failure' 'error') asSet.
+	self assert: (results collect: [ :domainResult |
+			domainResult result shortName  ] as: Set) 
+		equals:
+			#('pass' 'failure' 'error') asSet.
 	^ tool
 ]
 
@@ -809,7 +795,7 @@ GtLToolForRemoteExampleMethodsRunExamples >> exampleRunSuccessEmptyChanges [
 	"Confirm that the GtLlmToolForRemoteExampleMethodsRun tool behaves as expected in the case where a collection of changes that don't exist in the main image is provided and a collection of examples that depends on the changes is run."
 	<gtExample>
 	<noTest>
-	| tool call resultString result results exampleNamePrefix testResult |
+	| tool call resultObject results exampleNamePrefix testResult |
 
 	tool := GtLToolForRemoteExampleMethodsRun new.
 	call := GtLFunctionToolCall new.
@@ -823,17 +809,12 @@ GtLToolForRemoteExampleMethodsRunExamples >> exampleRunSuccessEmptyChanges [
 			'changes' -> '[]'.
 		} asDictionary
 	} asDictionary.
-	resultString := tool performToolCall: call.
-	result := STONJSON fromString: resultString.
+	resultObject := tool performToolCall: call.
+	results := resultObject results.
 	self assert: call tool == tool.
-	self assert: result class name equals: #Dictionary.
-	self assert: result size equals: 1.
-	results := result at: 'results' ifAbsent:
-		[ self error: '''results'' not found in: ', (STONJSON toStringPretty: result) ].
 	self assert: results size equals: 1.
-	testResult := results first at: 'result' ifAbsent:
-		[ self error: '''result'' not found in: ', (STONJSON toStringPretty: testResult)].
-	self assert: testResult equals: 'pass'.
+	testResult := results first result shortName.
+	self assert: testResult equals: #pass.
 	^ tool
 ]
 
@@ -842,7 +823,7 @@ GtLToolForRemoteExampleMethodsRunExamples >> exampleRunSuccessNoChanges [
 	"Confirm that the GtLlmToolForRemoteExampleMethodsRun tool behaves as expected in the case where a collection of changes that don't exist in the main image is provided and a collection of examples that depends on the changes is run."
 	<gtExample>
 	<noTest>
-	| tool call resultString result results exampleNamePrefix |
+	| tool call resultObject testResult results exampleNamePrefix |
 
 	tool := GtLToolForRemoteExampleMethodsRun new.
 	call := GtLFunctionToolCall new.
@@ -855,15 +836,14 @@ GtLToolForRemoteExampleMethodsRunExamples >> exampleRunSuccessNoChanges [
 				}).
 		} asDictionary
 	} asDictionary.
-	resultString := tool performToolCall: call.
-	result := STONJSON fromString: resultString.
+
+	resultObject := tool performToolCall: call.
+	results := resultObject results.
 	self assert: call tool == tool.
-	self assert: result class name equals: #Dictionary.
-	self assert: result size equals: 1.
-	results := result at: 'results' ifAbsent:
-		[ self error: '''results'' not found in: ', (STONJSON toStringPretty: result) ].
 	self assert: results size equals: 1.
-	self assert: (results first at: 'result') equals: 'pass'.
+	testResult := results first result shortName.
+	self assert: testResult equals: #pass.
+
 	^ tool
 ]
 
@@ -872,7 +852,7 @@ GtLToolForRemoteExampleMethodsRunExamples >> exampleRunWithHashSelectors [
     "Ensure #example selectors are normalized"
     <gtExample>
     <noTest>
-    | tool call result results |
+    | tool call resultObject results testResult |
     tool := GtLToolForRemoteExampleMethodsRun new.
     call := GtLFunctionToolCall new.
     call function: {
@@ -883,12 +863,13 @@ GtLToolForRemoteExampleMethodsRunExamples >> exampleRunWithHashSelectors [
             }).
         } asDictionary
     } asDictionary.
-    result := STONJSON fromString: (tool performToolCall: call).
-    results := result at: 'results' ifAbsent:
-		[ self error: '''results'' not found in: ', (STONJSON toStringPretty: result) ].
-    self
-        assert: (results first at: 'result')
-        equals: 'pass'.
+		resultObject := tool performToolCall: call.
+		results := resultObject results.
+		self assert: call tool == tool.
+		self assert: results size equals: 1.
+		testResult := results first result shortName.
+		self assert: testResult equals: #pass.
+		^ tool.
 ]
 
 { #category : #examples }
