@@ -8,7 +8,7 @@ Class {
 		'tool',
 		'result'
 	],
-	#category : #'Gt4LlmCore-Core'
+	#category : 'Gt4LlmCore-Core'
 }
 
 { #category : #accessing }
@@ -46,7 +46,7 @@ GtLFunctionToolCall >> arguments: anObject [
 
 { #category : #accessing }
 GtLFunctionToolCall >> description [
-	^ tool description
+	^ tool ifNotNil: #description ifNil: [ '' ]
 ]
 
 { #category : #accessing }

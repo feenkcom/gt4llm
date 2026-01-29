@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLProviderRunningState,
 	#superclass : #GtLProviderState,
-	#category : #'Gt4LlmCore-Provider - Support'
+	#category : 'Gt4LlmCore-Provider - Support'
 }
 
 { #category : #'api - changes' }
@@ -20,8 +20,9 @@ GtLProviderRunningState >> ifCanContinue: aCanBlock ifDisabled: aDisabledBlock [
 ]
 
 { #category : #'api - testing' }
-GtLProviderRunningState >> ifCanStop: aCanBlock ifIdle: anIdleBlock [
+GtLProviderRunningState >> ifCanStop: aCanBlock ifStopping: aStoppingBlock ifIdle: anIdleBlock [
 	"Evaluate aCanBlock if provider can be stopped.
+	Evaluate aStoppingBlock if provider is already stopping existing execution.
 	Evaluate anIdleBlock otherwise."
 
 	^ aCanBlock value
@@ -31,5 +32,5 @@ GtLProviderRunningState >> ifCanStop: aCanBlock ifIdle: anIdleBlock [
 GtLProviderRunningState >> stop [
 	"Interrupt ongoing provider execution."
 
-	^ GtLProviderState idle
+	^ GtLProviderState stopping
 ]

@@ -6,8 +6,7 @@ Class {
 		'isStreaming',
 		'executions',
 		'tools',
-		'modelName',
-		'executionState'
+		'modelName'
 	],
 	#category : #'Gt4Llm-OpenAI'
 }
@@ -71,24 +70,22 @@ GtLOpenAIProvider >> defaultUserMessageClass [
 GtLOpenAIProvider >> executeAsyncMessage: anInputMessage [
 	<return: #TAsyncPromise>
 	| anErrorHandlerPromise aFuture aFirstPromise |
-	self privateExecutionState: executionState scheduled.
+	self privateExecutionState: self state scheduled.
 	aFuture := [ 
-		self privateExecutionState: executionState running.
+		self privateExecutionState: self state running.
 		self processNextMessage: anInputMessage ] asAsyncFuture.
 	aFirstPromise := aFuture await: GtLOpenAISettings futureExecutionConfiguration.
 	anErrorHandlerPromise := aFirstPromise
 			then: [ :aProcessedMessage | 
-				self privateExecutionState: executionState finished.
-				providerWorking := false.
+				self privateExecutionState: self state finished.
 				aProcessedMessage ]
 			otherwise: [ :anError | 
 				| anErrorMessage |
-				self privateExecutionState: executionState finished.
-				providerWorking := false.
 				anErrorMessage := GtLErrorMessage new
 						freeze: anError;
 						inputMessage: anInputMessage.
 				self chat addErrorMessage: anErrorMessage.
+				self privateExecutionState: self state finished.
 				self chat signalRunIsDone.
 				anErrorMessage ].
 	executions add: anErrorHandlerPromise.
@@ -152,8 +149,6 @@ GtLOpenAIProvider >> initialize [
 	client := GtLOpenAIClient new.
 	executions := OrderedCollection new.
 	isStreaming := true.
-	providerWorking := false.
-	executionState := GtLProviderState idle
 ]
 
 { #category : #'as yet unclassified' }
@@ -171,11 +166,6 @@ GtLOpenAIProvider >> modelName: aString [
 	modelName := aString
 ]
 
-{ #category : #'private - notifying' }
-GtLOpenAIProvider >> notifyProviderStateChanged [
-	self chat ifNotNil: [ :aChat | aChat signalExecutionStateChanged ]
-]
-
 { #category : #accessing }
 GtLOpenAIProvider >> performToolCallsIn: result with: activeTools [
 	<return: #GtLOpenAIProviderProcessedMessage or: nil>
@@ -186,7 +176,7 @@ GtLOpenAIProvider >> performToolCallsIn: result with: activeTools [
 				toolMessage := GtLToolMessage new toolCall: aToolCall.
 				chat addToolMessage: toolMessage.
 
-				executionState
+				self state
 					ifCanContinue: [ toolMessage beRunningExecutionState.
 						[ domainObject := activeTools performToolCall: aToolCall.
 						toolMessage output: domainObject ]
@@ -215,18 +205,10 @@ GtLOpenAIProvider >> printOn: aStream [
 ]
 
 { #category : #'private - execution' }
-GtLOpenAIProvider >> privateExecutionState: aState [
-	executionState = aState ifTrue: [ ^ self ].
-	
-	executionState := aState.
-	self notifyProviderStateChanged
-]
-
-{ #category : #'private - execution' }
 GtLOpenAIProvider >> processNextMessage: anInputMessage [
 	<return: #GtLOpenAIProviderProcessedMessage or: nil>
 	| result anOutputMessage anotherMessage |
-	executionState ifCanContinue: [ "continue" ] ifDisabled: [ ^ nil ].
+	self state ifCanContinue: [ "continue" ] ifDisabled: [ ^ nil ].
 	
 	result := client
 			generateResponseWithModel: self modelName
@@ -255,28 +237,6 @@ GtLOpenAIProvider >> processNextMessage: anInputMessage [
 		isStreaming: isStreaming;
 		anotherProcessedMessage: anotherMessage;
 		outputMessage: anOutputMessage
-]
-
-{ #category : #'api - execution' }
-GtLOpenAIProvider >> state [
-	"Provide an information in which state this provider is, e.g, idle, working.
-	
-	Replaces #status message"
-
-	<return: #GtLProviderState>
-	^ executionState
-]
-
-{ #category : #'as yet unclassified' }
-GtLOpenAIProvider >> status [
-	^ providerWorking
-		ifTrue: [ GtLlmAssistantChatWorkingStatus new ]
-		ifFalse: [ GtLlmAssistantChatReadyStatus new ]
-]
-
-{ #category : #'api - execution' }
-GtLOpenAIProvider >> stopOngoingMessageExecution [
-	self privateExecutionState: executionState stop
 ]
 
 { #category : #utils }
