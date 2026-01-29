@@ -113,6 +113,16 @@ GtLOpenAIProvider >> gtExecutionsFor: aView [
 		priority: 10
 ]
 
+{ #category : #views }
+GtLOpenAIProvider >> gtViewCallsWithTokensFor: aView [
+	<gtView>
+	^(aView forward)
+		title: 'Tokens by call';
+		priority: 30;
+		object: [client];
+		view: #gtViewCallsWithTokensFor:
+]
+
 { #category : #'as yet unclassified' }
 GtLOpenAIProvider >> handleToolCall: aToolCall [
 	| domainObject toolMessage |
