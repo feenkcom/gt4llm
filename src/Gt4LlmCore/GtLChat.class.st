@@ -537,9 +537,11 @@ GtLChat >> state [
 
 { #category : #'api - execution' }
 GtLChat >> status [
-	self deprecated: 'Use #state instead'.
-	
-	^ self provider status
+	self
+		deprecated: 'Please use #state instead.'
+		transformWith: '`@receiver status' -> '`@receiver state'.
+
+	^ self state
 ]
 
 { #category : #'api - execution' }
