@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'chat',
 		'assistantMessageClass',
-		'providerWorking'
+		'providerWorking',
+		'executionState'
 	],
 	#category : #'Gt4LlmCore-Core'
 }
@@ -58,19 +59,10 @@ GtLProvider >> defaultUserMessageClass [
 
 { #category : #'private - execution' }
 GtLProvider >> executeAsyncMessage: anInputMessage [
-	"The #executeWait should be removed and this message used instead."
+	"Process a given user message."
 
 	<return: #TAsyncPromise>
-	self flag: #todo.
-
-	self executeWait
-]
-
-{ #category : #'private - execution' }
-GtLProvider >> executeWait [
-	self deprecated: 'Use (or implement) #executeAsyncMessage: instead'.
-
-	self subclassResponsibility
+	^ self subclassResponsibility
 ]
 
 { #category : #'gt - extensions' }
@@ -81,6 +73,30 @@ GtLProvider >> gtCallsFor: aView [
 		priority: 1;
 		object: [ self client ];
 		view: #gtCallsFor:
+]
+
+{ #category : #initialization }
+GtLProvider >> initialize [
+	super initialize.
+	
+	"This instance variable should be removed 
+	and executionState used instead."
+	providerWorking := false.
+	
+	executionState := GtLProviderState idle 
+]
+
+{ #category : #'private - notifying' }
+GtLProvider >> notifyProviderStateChanged [
+	self chat ifNotNil: [ :aChat | aChat signalExecutionStateChanged ]
+]
+
+{ #category : #'private - execution' }
+GtLProvider >> privateExecutionState: aState [
+	executionState = aState ifTrue: [ ^ self ].
+	
+	executionState := aState.
+	self notifyProviderStateChanged
 ]
 
 { #category : #'api - execution' }
@@ -98,7 +114,7 @@ GtLProvider >> state [
 	Replaces #status message"
 
 	<return: #GtLProviderState>
-	^ self subclassResponsibility
+	^ executionState
 ]
 
 { #category : #accessing }
@@ -106,4 +122,9 @@ GtLProvider >> status [
 	self deprecated: 'Use #state instead'.
 
 	^ self subclassResponsibility
+]
+
+{ #category : #'api - execution' }
+GtLProvider >> stopOngoingMessageExecution [
+	self privateExecutionState: executionState stop
 ]
