@@ -120,8 +120,12 @@ GtLReplyMessage >> gtToolViewMessagesFor: aView [
 									nextPutAll: anAssoc key asString;
 									nextPut: $:;
 									nextPutAll: anAssoc value asString ]
-							separatedBy: [ aStream nextPutAll: ', ' ] ] ];
-		column: 'Description' text: #toolDescription
+							separatedBy: [ aStream nextPutAll: ', ' ] ] ]
+			weight: 2;
+		column: 'Description'
+			text: #toolDescription
+			weight: 3;
+		column: 'State' text: #messageExecutionStateLabel width: 60
 ]
 
 { #category : #'gt - inspector' }

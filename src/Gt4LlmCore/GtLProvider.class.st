@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'chat',
 		'assistantMessageClass',
-		'providerWorking'
+		'providerWorking',
+		'executionState'
 	],
 	#category : #'Gt4LlmCore-Core'
 }
@@ -58,19 +59,10 @@ GtLProvider >> defaultUserMessageClass [
 
 { #category : #'private - execution' }
 GtLProvider >> executeAsyncMessage: anInputMessage [
-	"The #executeWait should be removed and this message used instead."
+	"Process a given user message."
 
 	<return: #TAsyncPromise>
-	self flag: #todo.
-
-	self executeWait
-]
-
-{ #category : #'private - execution' }
-GtLProvider >> executeWait [
-	self deprecated: 'Use (or implement) #executeAsyncMessage: instead'.
-
-	self subclassResponsibility
+	^ self subclassResponsibility
 ]
 
 { #category : #'gt - extensions' }
@@ -83,27 +75,50 @@ GtLProvider >> gtCallsFor: aView [
 		view: #gtCallsFor:
 ]
 
+{ #category : #initialization }
+GtLProvider >> initialize [
+	super initialize.
+	
+	executionState := GtLProviderState idle 
+]
+
+{ #category : #'private - notifying' }
+GtLProvider >> notifyProviderStateChanged [
+	self chat ifNotNil: [ :aChat | aChat signalExecutionStateChanged ]
+]
+
+{ #category : #'private - execution' }
+GtLProvider >> privateExecutionState: aState [
+	executionState = aState ifTrue: [ ^ self ].
+	
+	executionState := aState.
+	self notifyProviderStateChanged
+]
+
 { #category : #'api - execution' }
 GtLProvider >> sendMessage: aMessage [
 	<return: #TAsyncPromise>
-	self chat signalRunHasStarted.
-	providerWorking := true.
 	self executeAsyncMessage: aMessage
 ]
 
 { #category : #'api - execution' }
 GtLProvider >> state [
-	"Provide an information in which state this provider is, e.g, idle, working.
-	
-	Replaces #status message"
+	"Provide an information in which state this provider is, e.g, idle, working."
 
 	<return: #GtLProviderState>
-	^ self subclassResponsibility
+	^ executionState
 ]
 
 { #category : #accessing }
 GtLProvider >> status [
-	self deprecated: 'Use #state instead'.
+	self
+		deprecated: 'Please use #state instead.'
+		transformWith: '`@receiver status' -> '`@receiver state'.
 
-	^ self subclassResponsibility
+	^ self state
+]
+
+{ #category : #'api - execution' }
+GtLProvider >> stopOngoingMessageExecution [
+	self privateExecutionState: executionState stop
 ]
