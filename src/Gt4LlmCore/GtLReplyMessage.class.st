@@ -88,6 +88,28 @@ GtLReplyMessage >> finalMessage: aMessage [
 	self notifyReplyMessageChanged
 ]
 
+{ #category : #'gt - extensions' }
+GtLReplyMessage >> gtActionStopFor: anAction [
+	<gtAction>
+	<gtLlmAction>
+	self chat ifNil: [ ^ anAction noAction ].
+	self chat messages last == self ifFalse: [ ^ anAction noAction ].
+	self
+		currentMessageDo: [ :aMessage | aMessage isToolMessage ifFalse: [ ^ anAction noAction ] ]
+		ifAbsent: [  ].
+
+	^ self chat state
+		ifCanStop: [ anAction button
+				icon: BrGlamorousVectorIcons stop;
+				tooltip: 'Stop current execution';
+				id: #'chat--message-stop';
+				action: [ :aButton | 
+					aButton disable.
+					self chat stopOngoingExecution ] ]
+		ifStopping: [ anAction noAction ]
+		ifIdle: [ anAction noAction ]
+]
+
 { #category : #'gt - inspector' }
 GtLReplyMessage >> gtInspectorTargetModels [
 	^ self

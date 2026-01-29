@@ -1,5 +1,5 @@
 Class {
-	#name : #GtBasicMessageElement,
+	#name : #GtLBasicMessageElement,
 	#superclass : #BlElement,
 	#traits : 'TBrLayoutResizable + TGtLWithMessageViewModel',
 	#classTraits : 'TBrLayoutResizable classTrait + TGtLWithMessageViewModel classTrait',
