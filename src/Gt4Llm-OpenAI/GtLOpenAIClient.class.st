@@ -328,6 +328,20 @@ GtLOpenAIClient >> gtModelsFor: aView [
 		view: #gtViewModelsFor:
 ]
 
+{ #category : #'as yet unclassified' }
+GtLOpenAIClient >> gtViewCallsWithTokensFor: aView [
+	<gtView>
+	^ aView columnedList
+		title: 'Tokens by call';
+		priority: 10;
+		items: [ (history 
+			collect: [ :each | each -> each extractOpenAIUsageDetails ])
+			reject: [ :each | each value isNil ] ];
+		column: 'URL' text: [ :each | each key request url ];
+		column: 'Input tokens' text: [ :each | each value inputTokens ] width: 200;
+		column: 'Output tokens' text: [ :each | each value outputTokens ] width: 200
+]
+
 { #category : #accessing }
 GtLOpenAIClient >> initialize [
 	super initialize.
