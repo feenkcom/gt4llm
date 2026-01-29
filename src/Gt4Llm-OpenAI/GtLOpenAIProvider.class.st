@@ -81,11 +81,11 @@ GtLOpenAIProvider >> executeAsyncMessage: anInputMessage [
 				aProcessedMessage ]
 			otherwise: [ :anError | 
 				| anErrorMessage |
-				self privateExecutionState: self state finished.
 				anErrorMessage := GtLErrorMessage new
 						freeze: anError;
 						inputMessage: anInputMessage.
 				self chat addErrorMessage: anErrorMessage.
+				self privateExecutionState: self state finished.
 				self chat signalRunIsDone.
 				anErrorMessage ].
 	executions add: anErrorHandlerPromise.
