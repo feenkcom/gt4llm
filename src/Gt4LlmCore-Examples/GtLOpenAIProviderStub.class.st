@@ -22,6 +22,12 @@ GtLOpenAIProviderStub >> modelName [
 	^ 'stub'
 ]
 
+{ #category : #'api - execution' }
+GtLOpenAIProviderStub >> state [
+	<return: #GtLProviderState>
+	^ GtLProviderState idle
+]
+
 { #category : #'api - accessing' }
 GtLOpenAIProviderStub >> status [
 	^ GtLlmAssistantChatReadyStatus new

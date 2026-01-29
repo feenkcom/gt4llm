@@ -140,6 +140,17 @@ GtLErrorMessage >> senderText [
 	^  'System'
 ]
 
+{ #category : #'api - serializing' }
+GtLErrorMessage >> serializeForOpenAIResponsesAPI [
+	<return: #NeoJSONObject>
+	^ NeoJSONObject new
+		at: #error put: self exception messageText;
+		at: #errorClass put: self exception className;
+		at: #description put: self exception description;
+		at: #stackTrace put: self exception stackString;
+		yourself
+]
+
 { #category : #accessing }
 GtLErrorMessage >> styler [
 	^ nil

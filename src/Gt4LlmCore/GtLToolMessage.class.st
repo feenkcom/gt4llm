@@ -40,6 +40,11 @@ GtLToolMessage >> beRunningExecutionState [
 	self executionState: GtLMessageState running
 ]
 
+{ #category : #'api - execution' }
+GtLToolMessage >> beSkippedExecutionState [
+	self executionState: GtLMessageState skipped
+]
+
 { #category : #'as yet unclassified' }
 GtLToolMessage >> content [
 	^ self output

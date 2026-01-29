@@ -4,7 +4,8 @@ Class {
 	#classVars : [
 		'Created',
 		'Finished',
-		'Running'
+		'Running',
+		'Skipped'
 	],
 	#category : #'Gt4LlmCore-Core'
 }
@@ -22,6 +23,11 @@ GtLMessageState class >> finished [
 { #category : #factory }
 GtLMessageState class >> running [
 	^ Running ifNil: [ Running := GtLMessageRunningState new ]
+]
+
+{ #category : #factory }
+GtLMessageState class >> skipped [
+	^ Skipped ifNil: [ Skipped := GtLMessageSkippedState new ]
 ]
 
 { #category : #'api - accessing' }
