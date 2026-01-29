@@ -4,7 +4,8 @@ Class {
 	#classVars : [
 		'Idle',
 		'Running',
-		'Scheduled'
+		'Scheduled',
+		'Stopping'
 	],
 	#category : #'Gt4LlmCore-Provider - Support'
 }
@@ -24,6 +25,11 @@ GtLProviderState class >> scheduled [
 	^ Scheduled ifNil: [ Scheduled := GtLProviderScheduledState new ]
 ]
 
+{ #category : #factory }
+GtLProviderState class >> stopping [
+	^ Stopping ifNil: [ Stopping := GtLProviderStoppingState new ]
+]
+
 { #category : #'api - changes' }
 GtLProviderState >> finished [
 	"Set to finished state"
@@ -40,8 +46,9 @@ GtLProviderState >> ifCanContinue: aCanBlock ifDisabled: aDisabledBlock [
 ]
 
 { #category : #'api - testing' }
-GtLProviderState >> ifCanStop: aCanBlock ifIdle: anIdleBlock [
+GtLProviderState >> ifCanStop: aCanBlock ifStopping: aStoppingBlock ifIdle: anIdleBlock [
 	"Evaluate aCanBlock if provider can be stopped.
+	Evaluate aStoppingBlock if provider is already stopping existing execution.
 	Evaluate anIdleBlock otherwise."
 
 	^ anIdleBlock value

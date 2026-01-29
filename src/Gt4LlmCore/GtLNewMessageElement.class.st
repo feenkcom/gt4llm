@@ -56,7 +56,7 @@ GtLNewMessageElement >> buildAttachButton [
 			c linear horizontal alignLeft ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'private - updating' }
 GtLNewMessageElement >> buildProviderButton [
 	| aButton |
 	aButton := BrButton new.
@@ -124,12 +124,12 @@ GtLNewMessageElement >> defaultLayout [
 	^ BlLinearLayout vertical
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'private - updating' }
 GtLNewMessageElement >> disableSend [
 	sendButton disable
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'private - updating' }
 GtLNewMessageElement >> enableSend [
 	sendButton enable
 ]
@@ -192,7 +192,10 @@ GtLNewMessageElement >> initializeToolbar [
 { #category : #'private - testing' }
 GtLNewMessageElement >> isChatProviderRunning [
 	self messageViewModel ifNil: [ ^ false ].
-	^ self messageViewModel chat state ifCanStop: [ true ] ifIdle: [ false ]
+	^ self messageViewModel chat state
+		ifCanStop: [ true ]
+		ifStopping: [ false ]
+		ifIdle: [ false ]
 ]
 
 { #category : #'private - announcement handling' }
@@ -300,7 +303,12 @@ GtLNewMessageElement >> updateImagesElement [
 
 { #category : #'private - updating' }
 GtLNewMessageElement >> updateSendButton [
-	sendButton disabled: self isChatProviderRunning
+	self messageViewModel ifNil: [ ^ self ].
+	self messageViewModel chat ifNil: [ ^ self ].
+	self messageViewModel chat state
+		ifCanStop: [ sendButton disable ]
+		ifStopping: [ sendButton disable ]
+		ifIdle: [ sendButton enable ].
 ]
 
 { #category : #'private - event handling' }
@@ -312,10 +320,18 @@ GtLNewMessageElement >> updateSendMessageError: anError [
 
 { #category : #'private - updating' }
 GtLNewMessageElement >> updateStopButton [
-	stopButton
-		visibility: (self isChatProviderRunning
-				ifTrue: [ BlVisibility visible ]
-				ifFalse: [ BlVisibility gone ])
+	self messageViewModel ifNil: [ ^ self ].
+	self messageViewModel chat ifNil: [ ^ self ].
+	self messageViewModel chat state
+		ifCanStop: [ stopButton
+				visibility: BlVisibility visible;
+				enable ]
+		ifStopping: [ stopButton
+				visibility: BlVisibility visible;
+				disable ]
+		ifIdle: [ stopButton
+				visibility: BlVisibility gone;
+				disable ]
 ]
 
 { #category : #'private - updating' }
