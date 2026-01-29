@@ -119,5 +119,5 @@ GtLToolForMethodsSource >> privatePerformToolCall: aToolCall [
 				argumentValue: methodsArgument;
 				expectedItemKind: Dictionary;
 				incorrectItems: incorrectItems ].
-	^ GtLMethodSourcesDomainObject new methods: methods
+	^ GtLMethodsSourceDomainObject new methods: methods
 ]
