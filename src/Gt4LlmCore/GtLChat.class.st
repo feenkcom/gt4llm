@@ -516,16 +516,21 @@ GtLChat >> signalExecutionStateChanged [
 
 { #category : #announcing }
 GtLChat >> signalRunHasStarted [
+	self deprecated: 'Change provider state instead'.
 	self announcer announce: GtLlmThreadRunStartedAnnouncement new
 ]
 
 { #category : #announcing }
 GtLChat >> signalRunHasUpdated [
+	self
+		deprecated: 'Change provider state instead or other update announcements, e.g., message announcements'.
+
 	self announcer announce: GtOpenAIThreadRunUpdatedAnnouncement new
 ]
 
 { #category : #announcing }
 GtLChat >> signalRunIsDone [
+	self deprecated: 'Change provider state instead'.
 	self announcer announce: GtLlmThreadRunIsDoneAnnouncement new
 ]
 
