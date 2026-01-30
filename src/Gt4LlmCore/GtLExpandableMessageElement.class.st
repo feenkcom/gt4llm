@@ -43,6 +43,14 @@ GtLExpandableMessageElement >> initialize [
 		header: [ headerElement ];
 		content: [ contentElement ].
 
+	self
+		addAptitude: (BrLazyStyleCommonAptitude new
+				when: BlElementState collapsed & (BlElementState hovered | BlElementState focused)
+				style: [ :aStyle :aTheme | 
+					aStyle
+						do: [ :aWidget | headerElement showToolbarElement ]
+						after: [ :aWidget | headerElement hideToolbarElement ] ]).
+
 	self states withExpansion.
 	self whenExpandedDo: [ self onExpanded ].
 	self whenCollapsedDo: [ self onCollapsed ].
@@ -60,6 +68,7 @@ GtLExpandableMessageElement >> initializeContentMessageElement [
 { #category : #'initialization ' }
 GtLExpandableMessageElement >> initializeOneLineMessageElement [
 	headerElement := GtLMessageHeaderElement new.
+	headerElement hideToolbarElement.
 ]
 
 { #category : #'initialization ' }
