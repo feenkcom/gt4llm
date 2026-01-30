@@ -189,15 +189,6 @@ GtLNewMessageElement >> initializeToolbar [
 	toolbar := BrToolbar new aptitude: BrGlamorousToolbarAptitude new
 ]
 
-{ #category : #'private - testing' }
-GtLNewMessageElement >> isChatProviderRunning [
-	self messageViewModel ifNil: [ ^ false ].
-	^ self messageViewModel chat state
-		ifCanStop: [ true ]
-		ifStopping: [ false ]
-		ifIdle: [ false ]
-]
-
 { #category : #'private - announcement handling' }
 GtLNewMessageElement >> onChatExecutionStateChanged: anAnnouncement [
 	self
@@ -306,9 +297,15 @@ GtLNewMessageElement >> updateSendButton [
 	self messageViewModel ifNil: [ ^ self ].
 	self messageViewModel chat ifNil: [ ^ self ].
 	self messageViewModel chat state
-		ifCanStop: [ sendButton disable ]
-		ifStopping: [ sendButton disable ]
-		ifIdle: [ sendButton enable ].
+		ifCanStop: [ sendButton
+				disable;
+				visibility: BlVisibility gone ]
+		ifStopping: [ sendButton
+				disable;
+				visibility: BlVisibility gone ]
+		ifIdle: [ sendButton
+				enable;
+				visibility: BlVisibility visible ]
 ]
 
 { #category : #'private - event handling' }
@@ -338,7 +335,7 @@ GtLNewMessageElement >> updateStopButton [
 GtLNewMessageElement >> updateToolbar [
 	toolbar removeAllItems.
 	toolbar addItem: self buildSendButton.
+	toolbar addItem: self buildProviderStopButton.
 	toolbar addItem: self buildAttachButton.
-	toolbar addItem: self buildProviderButton.
-	toolbar addItem: self buildProviderStopButton
+	toolbar addItem: self buildProviderButton
 ]
