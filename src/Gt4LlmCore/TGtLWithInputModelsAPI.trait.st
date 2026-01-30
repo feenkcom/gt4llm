@@ -11,6 +11,11 @@ TGtLWithInputModelsAPI >> addInputMagritteObject: anObject named: aString [
 ]
 
 { #category : #'api - message' }
+TGtLWithInputModelsAPI >> addInputModel: anInputModel [
+	^ self explicitRequirement
+]
+
+{ #category : #'api - message' }
 TGtLWithInputModelsAPI >> addPlainInputObject: anObject named: aString [
 	self addInputModel: (GtLPlainObjectInputModel new
 		name: aString;
