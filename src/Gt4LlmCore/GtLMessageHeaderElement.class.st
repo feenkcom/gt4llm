@@ -1,12 +1,13 @@
 Class {
 	#name : #GtLMessageHeaderElement,
-	#superclass : #GtBasicMessageElement,
+	#superclass : #GtLBasicMessageElement,
 	#instVars : [
 		'senderElement',
 		'contentElement',
 		'contentLabelElement',
 		'senderTooltipAptitude',
-		'executionStateLabelElement'
+		'executionStateLabelElement',
+		'toolbarElement'
 	],
 	#category : #'Gt4LlmCore-UI - Elements'
 }
@@ -22,9 +23,11 @@ GtLMessageHeaderElement >> initialize [
 	
 	self initializeSenderElement.
 	self initializeContentElement.
+	self initializeToolbarElement.
 	
 	self addChild: senderElement as: #sender.
 	self addChild: contentElement as: #content.
+	self addChild: toolbarElement as: #toolbar.
 	
 	self vFitContent.
 	self hMatchParent
@@ -33,7 +36,7 @@ GtLMessageHeaderElement >> initialize [
 { #category : #initialization }
 GtLMessageHeaderElement >> initializeContentElement [
 	contentElement := BrHorizontalPane new
-			hFitContentLimited;
+			hMatchParent;
 			vFitContent;
 			padding: (BlInsets left: 0 right: 15);
 			addChild: (contentLabelElement := BrLabel new
@@ -51,7 +54,7 @@ GtLMessageHeaderElement >> initializeContentElement [
 { #category : #initialization }
 GtLMessageHeaderElement >> initializeSenderElement [
 	senderElement := BrLabel new
-			hFitContentLimited;
+			hFitContent;
 			vFitContent;
 			aptitude: (BrGlamorousLabelAptitude new
 					foreground: BrGlamorousColors disabledButtonTextColor);
@@ -59,8 +62,14 @@ GtLMessageHeaderElement >> initializeSenderElement [
 			addAptitude: (senderTooltipAptitude := BrGlamorousWithExplicitTooltipAptitude new)
 ]
 
+{ #category : #initialization }
+GtLMessageHeaderElement >> initializeToolbarElement [
+	toolbarElement := GtLActionToolbarMessageElement new fitContent
+]
+
 { #category : #'private - hooks' }
 GtLMessageHeaderElement >> onMessageViewModelChanged [
+	toolbarElement messageViewModel: self messageViewModel.
 	self updateElement
 ]
 

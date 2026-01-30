@@ -21,7 +21,7 @@ GtLMessageContentElement >> initialize [
 		hMatchParent;
 		vFitContentLimited.
 
-	self addChild: headerElement as: #'message-header'
+	self addChild: headerElement as: #'message-header'.
 ]
 
 { #category : #initialization }
@@ -46,7 +46,9 @@ GtLMessageContentElement >> makeActionToolbar [
 	self messageViewModel messageToolbarActions
 		do: [ :each | 
 			each
-				asElement: [ :actionElement | actionToolbar addItem: actionElement beTinySize ]
+				asElement: [ :actionElement |
+					actionElement states addState: BrSizeAdjustmentState tiny.
+					 actionToolbar addItem: actionElement ]
 				withHostElement: self ].
 
 	^ actionToolbar
@@ -54,9 +56,11 @@ GtLMessageContentElement >> makeActionToolbar [
 
 { #category : #'private - event handling' }
 GtLMessageContentElement >> onMessageContentsUpdated: anAnnouncement [
-	viewUpdater requestUpdate.
-
-	BlTaskAction enqueueElement: self action: [ self updateHeader ]
+	BlTaskAction
+		enqueueElement: self
+		action: [ 
+			viewUpdater requestUpdate.
+			self updateHeader ]
 ]
 
 { #category : #'private - hooks' }
@@ -94,8 +98,7 @@ GtLMessageContentElement >> updateElement [
 { #category : #'private - updating' }
 GtLMessageContentElement >> updateHeader [
 	headerElement removeChildren.
-	headerElement addChild: self messageViewModel messageHeaderElement.
-	headerElement addChild: self makeActionToolbar
+	headerElement addChildFirst: self messageViewModel messageHeaderElement.
 ]
 
 { #category : #'private - updating' }
