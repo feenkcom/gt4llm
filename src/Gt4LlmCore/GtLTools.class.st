@@ -51,6 +51,14 @@ GtLTools class >> leSearch [
 
 { #category : #defaults }
 GtLTools class >> sunitRun [
+	self 
+		deprecated: 'Please use #testRun instead.'
+		transformWith: '`@receiver sunitRun' -> '`@receiver testRun'.
+	^ self testRun
+]
+
+{ #category : #defaults }
+GtLTools class >> testRun [
 	^ self
 		withAll: {GtLToolForTestMethodRun new.
 				GtLToolForTestClassesRun new} asOrderedCollection
