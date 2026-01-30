@@ -17,6 +17,11 @@ GtLMessageHeaderElement >> defaultLayout [
 	^ BlLinearLayout horizontal
 ]
 
+{ #category : #'api - visibility' }
+GtLMessageHeaderElement >> hideToolbarElement [
+	^ toolbarElement visibility: BlVisibility hidden
+]
+
 { #category : #initialization }
 GtLMessageHeaderElement >> initialize [
 	super initialize.
@@ -24,6 +29,7 @@ GtLMessageHeaderElement >> initialize [
 	self initializeSenderElement.
 	self initializeContentElement.
 	self initializeToolbarElement.
+	self initializeEventListeners.
 	
 	self addChild: senderElement as: #sender.
 	self addChild: contentElement as: #content.
@@ -49,6 +55,12 @@ GtLMessageHeaderElement >> initializeContentElement [
 						vFitContent;
 						aptitude: (BrGlamorousLabelAptitude new foreground: self theme button disabledTextColor);
 						beSmallSize)
+]
+
+{ #category : #initialization }
+GtLMessageHeaderElement >> initializeEventListeners [
+	self when: GtLShowToolbarWish do: [ :anEvent | self showToolbarElement ].
+	self when: GtLHideToolbarWish do: [ :anEvent | self hideToolbarElement ]
 ]
 
 { #category : #initialization }
@@ -88,6 +100,11 @@ GtLMessageHeaderElement >> onMessageViewModelExecutionChangedChanged: anAnnounce
 { #category : #'private - event handling' }
 GtLMessageHeaderElement >> onThreadMessageViewModelChanged: anAnnouncement [
 	BlTaskAction enqueueElement: self action: [ self updateElement ]
+]
+
+{ #category : #'api - visibility' }
+GtLMessageHeaderElement >> showToolbarElement [
+	^ toolbarElement visibility: BlVisibility visible
 ]
 
 { #category : #'private - hooks' }
