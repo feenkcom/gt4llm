@@ -469,7 +469,7 @@ GtLChatOpenAILiveExamples >> messageWithFormatCallExample_mathTutor_magritteSche
 	^ self currentChat
 ]
 
-{ #category : #'examples - calls' }
+{ #category : #examples }
 GtLChatOpenAILiveExamples >> messageWithImages [
 	<gtExample>
 	<noTest>
@@ -484,8 +484,8 @@ GtLChatOpenAILiveExamples >> messageWithImages [
 		sendWith: [ :m | 
 			m
 				markdown: messageString;
-				images: {fileReference} ].
-	
+				images: { fileReference } ].
+
 	self
 		waitForChatRunIsDoneThen: [ self assert: self currentChat messages size equals: 2 ].
 
@@ -510,6 +510,33 @@ GtLChatOpenAILiveExamples >> messageWithInputObjectExample [
 	self
 		waitForChatRunIsDoneThen: [ self assert: self currentChat messages size >= 2 ].
 	
+	^ self currentChat
+]
+
+{ #category : #examples }
+GtLChatOpenAILiveExamples >> messageWithPdf [
+	<gtExample>
+	<noTest>
+	| messageString responseMessage fileReference |
+	messageString := 'What is in the PDF?'.
+
+	fileReference := 'paper.pdf' asFileReference.
+	fileReference
+		ensureDelete;
+		binaryWriteStreamDo: [ :s | 
+			| contents |
+			contents := ZnClient new get: 'https://arxiv.org/pdf/2409.00514'.
+			s nextPutAll: contents ].
+	responseMessage := self currentChat
+			markdownResponse;
+			sendWith: [ :m | 
+				m
+					markdown: messageString;
+					pdfs: {fileReference} ].
+
+	self
+		waitForChatRunIsDoneThen: [ self assert: self currentChat messages size equals: 2 ].
+
 	^ self currentChat
 ]
 

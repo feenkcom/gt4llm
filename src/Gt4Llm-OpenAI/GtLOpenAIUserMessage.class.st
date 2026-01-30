@@ -6,7 +6,7 @@ Class {
 	#instVars : [
 		'inputModels',
 		'content',
-		'images'
+		'attachments'
 	],
 	#category : #'Gt4Llm-OpenAI'
 }
@@ -35,6 +35,16 @@ GtLOpenAIUserMessage >> addInstructionSectionForLepiterPages: pageNames titled: 
 		addSection: (GtLlmInstructionSection new
 				title: title;
 				body: instructionString)
+]
+
+{ #category : #accessing }
+GtLOpenAIUserMessage >> attachments [
+	^ attachments
+]
+
+{ #category : #accessing }
+GtLOpenAIUserMessage >> attachments: aCollection [
+	attachments := aCollection
 ]
 
 { #category : #'as yet unclassified' }
@@ -87,13 +97,13 @@ GtLOpenAIUserMessage >> contentText [
 ]
 
 { #category : #ui }
-GtLOpenAIUserMessage >> gtImagesFor: aView [
+GtLOpenAIUserMessage >> gtAttachmentsFor: aView [
 	<gtView>
 	<gtLlmView>
-	images ifEmpty: [ ^ aView empty ].
+	attachments ifEmpty: [ ^ aView empty ].
 	^ aView columnedList
-		title: 'Images';
-		items: [ images ];
+		title: 'Attachments';
+		items: [ attachments ];
 		column: 'Value' text: [ :each | each gtDisplayString ]
 ]
 
@@ -130,20 +140,15 @@ GtLOpenAIUserMessage >> gtViewInputModelsFor: aView [
 ]
 
 { #category : #accessing }
-GtLOpenAIUserMessage >> images [
-	^ images
-]
-
-{ #category : #accessing }
-GtLOpenAIUserMessage >> images: anObject [
-	images := anObject
+GtLOpenAIUserMessage >> images: aCollection [
+	attachments := aCollection collect: [ :each | GtLInputImageFile fileReference: each ]
 ]
 
 { #category : #initialization }
 GtLOpenAIUserMessage >> initialize [
 	super initialize.
 
-	images := OrderedCollection new.
+	attachments := OrderedCollection new.
 	inputModels := OrderedDictionary new.
 ]
 
@@ -164,6 +169,11 @@ GtLOpenAIUserMessage >> lepiterExplanations: pageNames [
 ]
 
 { #category : #accessing }
+GtLOpenAIUserMessage >> pdfs: aCollection [
+	attachments := aCollection collect: [ :each | GtLInputPdfFile fileReference: each ]
+]
+
+{ #category : #accessing }
 GtLOpenAIUserMessage >> role [
 	^ 'user'
 ]
@@ -173,11 +183,8 @@ GtLOpenAIUserMessage >> serializeForAnthropicMessagesAPI [
 	^ {#content
 			-> ({{'type' -> 'text'.
 						'text' -> self contentText} asDictionary}
-					, (self images
-							collect: [ :aRef | 
-								{'type' -> 'image'.
-									'media_type' -> 'image/jpeg'.
-									'image_url' -> aRef binaryContents base64Encoded} asDictionary ])).
+					, (self attachments
+							collect: [ :each | each serializeForAnthropicMessagesAPI ])).
 		#role -> self role} asDictionary
 ]
 
@@ -186,10 +193,7 @@ GtLOpenAIUserMessage >> serializeForOpenAIResponsesAPI [
 	^ {#content
 			-> ({{'type' -> 'input_text'.
 						'text' -> self contentText} asDictionary}
-			, (self images
-					collect: [ :aRef | 
-						{'type' -> 'input_image'.
-							'image_url' -> ('data:image/jpeg;base64,' , aRef binaryContents base64Encoded)}
-							asDictionary ])).
+			, (self attachments
+					collect: [ :each | each serializeForOpenAIResponsesAPI ])).
 		#role -> self role} asDictionary
 ]
