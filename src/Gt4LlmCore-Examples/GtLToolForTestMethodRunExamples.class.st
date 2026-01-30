@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLToolForSUnitMethodRunExamples,
+	#name : #GtLToolForTestMethodRunExamples,
 	#superclass : #Object,
 	#instVars : [
 		'environment'
@@ -8,12 +8,12 @@ Class {
 }
 
 { #category : #'tear down' }
-GtLToolForSUnitMethodRunExamples >> cleanUp [
+GtLToolForTestMethodRunExamples >> cleanUp [
 	environment ifNotNil: [ :anEnvironment | anEnvironment removeFromSystem ]
 ]
 
 { #category : #utils }
-GtLToolForSUnitMethodRunExamples >> environment [
+GtLToolForTestMethodRunExamples >> environment [
 	^ environment
 		ifNil: [ environment := GtPharoDummiesGenerator new
 					amountOfPackages: 1;
@@ -23,11 +23,11 @@ GtLToolForSUnitMethodRunExamples >> environment [
 ]
 
 { #category : #examples }
-GtLToolForSUnitMethodRunExamples >> exampleRunError [
+GtLToolForTestMethodRunExamples >> exampleRunError [
 	<gtExample>
 	<after: #cleanUp>
 	| tool call result tagetClass |
-	tool := GtLToolForSUnitMethodRun new.
+	tool := GtLToolForTestMethodRun new.
 	call := GtLFunctionToolCall new.
 	
 	tagetClass := self environment anyDummyClass realClass.
@@ -51,11 +51,11 @@ GtLToolForSUnitMethodRunExamples >> exampleRunError [
 ]
 
 { #category : #examples }
-GtLToolForSUnitMethodRunExamples >> exampleRunFailure [
+GtLToolForTestMethodRunExamples >> exampleRunFailure [
 	<gtExample>
 	<after: #cleanUp>
 	| tool call result tagetClass |
-	tool := GtLToolForSUnitMethodRun new.
+	tool := GtLToolForTestMethodRun new.
 	call := GtLFunctionToolCall new.
 	
 	tagetClass := self environment anyDummyClass realClass.
@@ -79,10 +79,10 @@ GtLToolForSUnitMethodRunExamples >> exampleRunFailure [
 ]
 
 { #category : #examples }
-GtLToolForSUnitMethodRunExamples >> exampleRunForNonTestCaseClass [
+GtLToolForTestMethodRunExamples >> exampleRunForNonTestCaseClass [
 	<gtExample>
 	| tool call result |
-	tool := GtLToolForSUnitMethodRun new.
+	tool := GtLToolForTestMethodRun new.
 	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
@@ -100,10 +100,10 @@ GtLToolForSUnitMethodRunExamples >> exampleRunForNonTestCaseClass [
 ]
 
 { #category : #examples }
-GtLToolForSUnitMethodRunExamples >> exampleRunSuccess [
+GtLToolForTestMethodRunExamples >> exampleRunSuccess [
 	<gtExample>
 	| tool call result |
-	tool := GtLToolForSUnitMethodRun new.
+	tool := GtLToolForTestMethodRun new.
 	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
