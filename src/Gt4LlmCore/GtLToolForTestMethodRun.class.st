@@ -1,36 +1,36 @@
 Class {
-	#name : #GtLToolForSUnitMethodRun,
+	#name : #GtLToolForTestMethodRun,
 	#superclass : #GtLAbstractFunctionTool,
 	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #'as yet unclassified' }
-GtLToolForSUnitMethodRun class >> leJsonV4Name [
-	^ #gtLToolForSUnitMethodRun
+GtLToolForTestMethodRun class >> leJsonV4Name [
+	^ #gtLToolForTestMethodRun
 ]
 
 { #category : #visiting }
-GtLToolForSUnitMethodRun >> acceptVisitor: aVisitor [
+GtLToolForTestMethodRun >> acceptVisitor: aVisitor [
 	^ aVisitor visitGtLlmToolForSUnitMethodRun: self
 ]
 
 { #category : #accessing }
-GtLToolForSUnitMethodRun >> description [
+GtLToolForTestMethodRun >> description [
 	^ 'Execute a single SUnit test method on a subclass of TestCase (or other test classes that understand #isTestCase) and report the resulting status.'
 ]
 
 { #category : #accessing }
-GtLToolForSUnitMethodRun >> name [
+GtLToolForTestMethodRun >> name [
 	^ 'testMethodRun'
 ]
 
 { #category : #accessing }
-GtLToolForSUnitMethodRun >> parameters [
+GtLToolForTestMethodRun >> parameters [
 	^ #('className' 'methodName')
 ]
 
 { #category : #private }
-GtLToolForSUnitMethodRun >> privatePerformToolCall: aToolCall [
+GtLToolForTestMethodRun >> privatePerformToolCall: aToolCall [
 	| arguments rawClassName rawMethodName className methodName testClass testSelector testCase testCaseWithResult |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 

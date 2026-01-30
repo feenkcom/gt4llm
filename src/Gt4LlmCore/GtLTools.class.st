@@ -52,8 +52,8 @@ GtLTools class >> leSearch [
 { #category : #defaults }
 GtLTools class >> sunitRun [
 	^ self
-		withAll: {GtLToolForSUnitMethodRun new.
-				GtLToolForSUnitClassesRun new} asOrderedCollection
+		withAll: {GtLToolForTestMethodRun new.
+				GtLToolForTestClassesRun new} asOrderedCollection
 ]
 
 { #category : #'as yet unclassified' }
