@@ -64,7 +64,6 @@ GtLOpenAIAssistantMessage >> gtContentFor: aView [
 	^ aView textEditor
 		title: 'Content';
 		priority: 7;
-		styler: (GtLMessageStyler new);
 		text: [ self contentText ]
 ]
 

@@ -20,7 +20,7 @@ GtLToolForMethodsSourceExamples >> methodSourcesForExistingMethods [
 				{'className' -> GtLToolForMethodImplementors name.
 					'methodName' -> #privatePerformToolCall:.
 					'classSide' -> 'false'} asDictionary
-			} asArray
+			}
 		} asDictionary
 	} asDictionary.
 	result := tool performToolCall: call.
