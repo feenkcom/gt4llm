@@ -132,6 +132,7 @@ GtLErrorMessage >> otherExceptions: aCollection [
 
 { #category : #accessing }
 GtLErrorMessage >> role [
+	"Supported roles for OpenAI are: 'assistant', 'system', 'developer', and 'user'"
 	^ 'error'
 ]
 
@@ -144,10 +145,18 @@ GtLErrorMessage >> senderText [
 GtLErrorMessage >> serializeForOpenAIResponsesAPI [
 	<return: #NeoJSONObject>
 	^ NeoJSONObject new
-		at: #error put: self exception messageText;
-		at: #errorClass put: self exception className;
-		at: #description put: self exception description;
-		at: #stackTrace put: self exception stackString;
+		at: #role put: 'user';
+		at: #content
+			put: {NeoJSONObject new
+						at: #type put: 'input_text';
+						at: #text
+							put: (STONJSON toString: (NeoJSONObject new
+									at: #error put: self exception messageText;
+									at: #errorClass put: self exception className;
+									at: #description put: self exception description;
+									at: #stackTrace put: self exception stackString;
+									yourself));
+						yourself};
 		yourself
 ]
 
