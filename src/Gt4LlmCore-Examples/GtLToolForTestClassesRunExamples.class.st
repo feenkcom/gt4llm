@@ -1,14 +1,14 @@
 Class {
-	#name : #GtLToolForSUnitClassesRunExamples,
+	#name : #GtLToolForTestClassesRunExamples,
 	#superclass : #Object,
 	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #'llm-generated' }
-GtLToolForSUnitClassesRunExamples >> runTestsForMultipleClasses [
+GtLToolForTestClassesRunExamples >> runTestsForMultipleClasses [
 	<gtExample>
 	| tool call result |
-	tool := GtLToolForSUnitClassesRun new.
+	tool := GtLToolForTestClassesRun new.
 	call := GtLFunctionToolCall new.
 	call
 		function: {'name' -> tool name.
@@ -28,10 +28,10 @@ GtLToolForSUnitClassesRunExamples >> runTestsForMultipleClasses [
 ]
 
 { #category : #'llm-generated' }
-GtLToolForSUnitClassesRunExamples >> runTestsForSingleClass [
+GtLToolForTestClassesRunExamples >> runTestsForSingleClass [
 	<gtExample>
 	| tool call result data detail |
-	tool := GtLToolForSUnitClassesRun new.
+	tool := GtLToolForTestClassesRun new.
 	call := GtLFunctionToolCall new.
 	call
 		function: {'name' -> tool name.
@@ -49,10 +49,10 @@ GtLToolForSUnitClassesRunExamples >> runTestsForSingleClass [
 ]
 
 { #category : #'llm-generated' }
-GtLToolForSUnitClassesRunExamples >> runTestsWithUnknownInputs [
+GtLToolForTestClassesRunExamples >> runTestsWithUnknownInputs [
 	<gtExample>
 	| tool call result data |
-	tool := GtLToolForSUnitClassesRun new.
+	tool := GtLToolForTestClassesRun new.
 	call := GtLFunctionToolCall new.
 	call
 		function: {'name' -> tool name.

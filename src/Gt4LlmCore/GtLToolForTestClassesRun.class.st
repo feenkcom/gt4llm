@@ -1,21 +1,21 @@
 Class {
-	#name : #GtLToolForSUnitClassesRun,
+	#name : #GtLToolForTestClassesRun,
 	#superclass : #GtLAbstractFunctionTool,
 	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }
-GtLToolForSUnitClassesRun class >> leJsonV4Name [
-	^ #gtLToolForSUnitClassesRun
+GtLToolForTestClassesRun class >> leJsonV4Name [
+	^ #gtLToolForTestClassesRun
 ]
 
 { #category : #'llm-generated' }
-GtLToolForSUnitClassesRun >> acceptVisitor: aVisitor [
+GtLToolForTestClassesRun >> acceptVisitor: aVisitor [
 	^ aVisitor visitGtLlmToolForSUnitClassesRun: self
 ]
 
 { #category : #'llm-generated' }
-GtLToolForSUnitClassesRun >> description [
+GtLToolForTestClassesRun >> description [
 	^ 'Execute SUnit test classes and report the aggregated results. The argument `classNames` is mandatory and it must not be empty.
 
 Examples:
@@ -26,19 +26,19 @@ Examples:
 ]
 
 { #category : #'llm-generated' }
-GtLToolForSUnitClassesRun >> detailForTest: aTest inResult: aResult [
+GtLToolForTestClassesRun >> detailForTest: aTest inResult: aResult [
 	^ GtLTestCaseDomainObject new
 		testCase: aTest;
 		result: aResult
 ]
 
 { #category : #'llm-generated' }
-GtLToolForSUnitClassesRun >> name [
+GtLToolForTestClassesRun >> name [
 	^ 'testsInClassesRun'
 ]
 
 { #category : #'llm-generated' }
-GtLToolForSUnitClassesRun >> normalizedClassNamesFrom: rawValue [
+GtLToolForTestClassesRun >> normalizedClassNamesFrom: rawValue [
 	| items result |
 	rawValue ifNil: [ ^ #() ].
 	items := (rawValue isString or: [ rawValue isSymbol ])
@@ -57,12 +57,12 @@ GtLToolForSUnitClassesRun >> normalizedClassNamesFrom: rawValue [
 ]
 
 { #category : #'llm-generated' }
-GtLToolForSUnitClassesRun >> parameters [
+GtLToolForTestClassesRun >> parameters [
 	^ #('classNames')
 ]
 
 { #category : #'llm-generated' }
-GtLToolForSUnitClassesRun >> privatePerformToolCall: aToolCall [
+GtLToolForTestClassesRun >> privatePerformToolCall: aToolCall [
 	| arguments rawClassNames classNames details notFound notTestCase |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	rawClassNames := arguments
