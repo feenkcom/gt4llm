@@ -24,6 +24,28 @@ GtLExampleWithResultDomainObject >> exampleWithResult: anObject [
 	exampleWithResult := anObject
 ]
 
+{ #category : #views }
+GtLExampleWithResultDomainObject >> gtExampleSourceFor: aView [
+	<gtView>
+	<gtLlmView>
+	^ aView forward
+		title: 'Example source';
+		priority: 1;
+		object: [ exampleWithResult ];
+		view: #gtSourceFor:
+]
+
+{ #category : #views }
+GtLExampleWithResultDomainObject >> gtExampleWithResultFor: aView [
+	<gtView>
+	<gtLlmView>
+	^ aView forward
+		title: 'Example result';
+		priority: 2;
+		object: [ exampleWithResult ];
+		view: #gtLiveFor:
+]
+
 { #category : #'api - testing' }
 GtLExampleWithResultDomainObject >> isErrorResult [
 	^ self exampleWithResult isError
