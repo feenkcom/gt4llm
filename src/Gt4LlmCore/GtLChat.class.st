@@ -192,6 +192,22 @@ GtLChat >> codeTransformationsResponse [
 	self addResponseFormatForMagritte: GtLCodeTransformations named: 'CodeTransformations'
 ]
 
+{ #category : #actions }
+GtLChat >> compact [
+	self sendWith: [ :m | 
+		m markdown: self compactionPrompt ].
+]
+
+{ #category : #actions }
+GtLChat >> compactionPrompt [
+	^ 'Compact this chat for later continuation. Summarize:
+# The initial and remaining goals
+# Essential lessons
+# Decisions
+# Open questions
+# Next steps'
+]
+
 { #category : #copying }
 GtLChat >> copyLepiterSerialisationToClipboard [
 	| snippet serialization |
@@ -485,7 +501,6 @@ GtLChat >> sendMarkdown: aString [
 { #category : #'api - communication' }
 GtLChat >> sendMessage: aMessage [
 	self addUserMessage: aMessage.
-	
 	self provider sendMessage: aMessage
 ]
 
