@@ -577,6 +577,28 @@ GtLChatOpenAILiveExamples >> messageWithToolCallExample_magritteMarkdown [
 	^ self currentChat
 ]
 
+{ #category : #examples }
+GtLChatOpenAILiveExamples >> messageWithToolCallThenCompactionExample [
+	<noTest>
+
+	"<gtExample>"
+	| chat |
+	chat := self currentChat.
+	chat tools: (GtLTools withAll: {GtLToolForClassLookup new}).
+	chat markdownResponse.
+	chat sendMarkdown: 'Use tools and give me a description of the class BlElement'.
+	self
+		waitForChatRunIsDoneThen: [ self assert: self currentChat messages size equals: 2.
+			chat compact.
+			self
+				waitForChatRunIsDoneThen: [ self assert: self currentChat messages size equals: 4.
+					self assert: self currentChat messages last isCompactionMessage.
+					self
+						assert: self currentChat messages last assistantMessage isAssistantRole ] ].
+
+	^ chat
+]
+
 { #category : #utils }
 GtLChatOpenAILiveExamples >> waitForChatCompletion [
 	self currentChat provider executions last wait
