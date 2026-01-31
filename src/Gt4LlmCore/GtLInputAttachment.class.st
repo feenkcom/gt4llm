@@ -30,6 +30,6 @@ GtLInputAttachment >> fileReference: aFileReference [
 ]
 
 { #category : #printing }
-GtLInputAttachment >> gtDisplayString [
-	^ self fileReference gtDisplayString
+GtLInputAttachment >> gtDisplayOn: aStream [
+	^ self fileReference gtDisplayOn: aStream
 ]
