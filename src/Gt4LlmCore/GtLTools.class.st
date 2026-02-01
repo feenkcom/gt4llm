@@ -6,6 +6,11 @@ Class {
 	#category : #'Gt4LlmCore-Tools'
 }
 
+{ #category : #'as yet unclassified' }
+GtLTools class >> gt [
+	^ self gtSearch, self leSearch, self gtCodeChange, self gtCodeRemoval, self gtExamplesRun
+]
+
 { #category : #defaults }
 GtLTools class >> gtCodeChange [
 	^ self
