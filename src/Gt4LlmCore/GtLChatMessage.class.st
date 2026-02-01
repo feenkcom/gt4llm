@@ -94,10 +94,7 @@ GtLChatMessage >> chat [
 
 { #category : #accessing }
 GtLChatMessage >> chat: aChat [
-	chat := aChat.
-	chat  
-		previousUserMessageIfPresent: [ :msg | self updateDataFromMessage: msg ] 
-		ifAbsent: [ self updateDataFromChat: aChat]
+	chat := aChat
 ]
 
 { #category : #private }
@@ -200,10 +197,11 @@ GtLChatMessage >> gtInspectorTargetModels [
 { #category : #ui }
 GtLChatMessage >> gtViewSchemaDescriptionsFor: aView [
 	<gtView>
+	<gtLlmView>
 	formatDescriptions ifNil: [ ^ aView empty ].
 
 	^ aView forward
-		title: 'Output format descriptions';
+		title: 'Output formats';
 		priority: 20; 
 		object: [ formatDescriptions ];
 		view: #gtViewSchemaDescriptionsFor:;
@@ -400,12 +398,10 @@ GtLChatMessage >> updateDataFromChat: aChat [
 
 { #category : #accessing }
 GtLChatMessage >> updateDataFromMessage: aPreviousMessage [ 
-	instructions ifNil: [
-		instructions := aPreviousMessage instructions ].
+	instructions ifNil: [ instructions := aPreviousMessage instructions ].
 	formatDescriptions hasSchemaDescriptors ifFalse: [
 		formatDescriptions addCompositeFormat: aPreviousMessage formatDescriptions ].
-	tools ifNil: [
-		tools := aPreviousMessage tools ]
+	tools ifNil: [ tools := aPreviousMessage tools ]
 ]
 
 { #category : #accessing }
