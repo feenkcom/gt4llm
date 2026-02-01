@@ -114,6 +114,16 @@ GtLOpenAIProvider >> gtExecutionsFor: aView [
 ]
 
 { #category : #views }
+GtLOpenAIProvider >> gtSpawnClientFor: anAction [
+	<gtAction>
+	^ anAction button
+		icon: BrGlamorousVectorIcons inspect;
+		label: 'Client';
+		tooltip: 'Spawn client';
+		action: [ :button | button phlow spawnObject: client ]
+]
+
+{ #category : #views }
 GtLOpenAIProvider >> gtViewCallsWithTokensFor: aView [
 	<gtView>
 	^(aView forward)
