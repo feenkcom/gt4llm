@@ -107,6 +107,16 @@ GtLToolMessage >> gtInspectorTargetModels [
 	^ self output ifNotNil: [ :anOutput | {anOutput} ] ifNil: [ #() ]
 ]
 
+{ #category : #views }
+GtLToolMessage >> gtToolCallFor: anAction [
+	<gtAction>
+	^ anAction button
+		icon: BrGlamorousVectorIcons inspect;
+		label: 'Tool call';
+		tooltip: 'Spawn the tool call';
+		action: [ :button | button phlow spawnObject: self toolCall ]
+]
+
 { #category : #initialization }
 GtLToolMessage >> initialize [
 	super initialize.

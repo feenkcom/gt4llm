@@ -6,7 +6,8 @@ Class {
 		'arguments',
 		'name',
 		'tool',
-		'result'
+		'result',
+		'runtimeValues'
 	],
 	#category : #'Gt4LlmCore-Core'
 }
@@ -45,6 +46,11 @@ GtLFunctionToolCall >> arguments: anObject [
 ]
 
 { #category : #accessing }
+GtLFunctionToolCall >> at: aString putRuntimeValue: anObject [
+	^ runtimeValues at: aString put: anObject
+]
+
+{ #category : #accessing }
 GtLFunctionToolCall >> description [
 	^ tool ifNotNil: #description ifNil: [ '' ]
 ]
@@ -73,7 +79,8 @@ GtLFunctionToolCall >> gtArgumentsFor: aView [
 		priority: 1;
 		items: [ self arguments associations ];
 		column: 'Name' text: #key;
-		column: 'Value' text: #value
+		column: 'Value' text: #value;
+		send: #value
 ]
 
 { #category : #printing }
@@ -121,6 +128,12 @@ GtLFunctionToolCall >> id [
 { #category : #accessing }
 GtLFunctionToolCall >> id: anObject [
 	id := anObject
+]
+
+{ #category : #initialization }
+GtLFunctionToolCall >> initialize [
+	super initialize.
+	runtimeValues := Dictionary new.
 ]
 
 { #category : #testing }
