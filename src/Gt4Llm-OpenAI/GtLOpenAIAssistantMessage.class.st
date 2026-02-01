@@ -90,7 +90,9 @@ GtLOpenAIAssistantMessage >> gtViewResponseModelsFor: aView [
 
 { #category : #testing }
 GtLOpenAIAssistantMessage >> hasCompactionResponse [
-	^ self responseModels includesKey: 'Compaction'
+	^ self responseModels notNil
+		and: [ self responseModels notEmpty
+				and: [ self responseModels includesKey: 'Compaction' ] ]
 ]
 
 { #category : #testing }
