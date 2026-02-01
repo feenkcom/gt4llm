@@ -125,6 +125,16 @@ GtLOpenAIUserMessage >> gtInstructionsFor: aView [
 		view: #gtInstructionFor:
 ]
 
+{ #category : #views }
+GtLOpenAIUserMessage >> gtToolsFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Available tools';
+		priority: 30;
+		object: [ tools ];
+		view: #gtItemsFor:
+]
+
 { #category : #ui }
 GtLOpenAIUserMessage >> gtViewInputModelsFor: aView [
 	<gtView>

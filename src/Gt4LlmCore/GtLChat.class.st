@@ -303,7 +303,7 @@ GtLChat >> gtFormatFor: aView [
 	
 	^ aView textEditor
 		title: 'Output format JSON schema';
-		priority: 2; 
+		priority: 5; 
 		text: [ NeoJSONWriter toStringPretty: self currentFormat  asJsonSchemaDictionary ];
 		aptitude: BrGlamorousCodeEditorAptitude;
 		styler: JSONParser gtStyler;
@@ -362,6 +362,16 @@ GtLChat >> gtMessagesWidgetFor: aView [
 		actionButtonIcon: BrGlamorousVectorIcons bin
 			tooltip: 'Delete history'
 			action: [ self reset ]
+]
+
+{ #category : #views }
+GtLChat >> gtProviderFor: anAction [
+	<gtAction>
+	^ anAction button
+		icon: BrGlamorousVectorIcons inspect;
+		label: 'Provider';
+		tooltip: 'Spawn the provider';
+		action: [ :button | button phlow spawnObject: provider ]
 ]
 
 { #category : #views }

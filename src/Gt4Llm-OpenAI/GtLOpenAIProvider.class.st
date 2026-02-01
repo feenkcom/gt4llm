@@ -117,6 +117,16 @@ GtLOpenAIProvider >> gtExecutionsFor: aView [
 ]
 
 { #category : #views }
+GtLOpenAIProvider >> gtSpawnClientFor: anAction [
+	<gtAction>
+	^ anAction button
+		icon: BrGlamorousVectorIcons inspect;
+		label: 'Client';
+		tooltip: 'Spawn client';
+		action: [ :button | button phlow spawnObject: client ]
+]
+
+{ #category : #views }
 GtLOpenAIProvider >> gtViewCallsWithTokensFor: aView [
 	<gtView>
 	^(aView forward)
@@ -211,18 +221,17 @@ GtLOpenAIProvider >> printOn: aStream [
 GtLOpenAIProvider >> processNextMessage: anInputMessage [
 	<return: #GtLOpenAIProviderProcessedMessage or: nil>
 	| result anOutputMessage anotherMessage |
-	self state ifCanContinue: [ "continue" ] ifDisabled: [ ^ nil ].
-	
+	"continue"
+	self state ifCanContinue: [  ] ifDisabled: [ ^ nil ].
 	result := client
 			generateResponseWithModel: self modelName
-			messages: self chat messages
+			messages: self relevantChatMessages
 			instructions: anInputMessage completeInstructionString
 			tools: anInputMessage tools
 			andFormat: (anInputMessage hasFormats
 					ifTrue: [ anInputMessage formatDescriptionsJsonSchema ]
 					ifFalse: [ nil ])
 			isStreaming: isStreaming.
-
 	result hasToolCalls
 		ifTrue: [ anotherMessage := self performToolCallsIn: result with: anInputMessage tools ]
 		ifFalse: [ anOutputMessage := isStreaming
@@ -230,16 +239,24 @@ GtLOpenAIProvider >> processNextMessage: anInputMessage [
 					ifFalse: [ self assistantMessageClass new
 							modelName: self modelName;
 							rawData: (result output detect: [ :anOutput | (anOutput at: 'type') = 'message' ]) ].
-
 			self chat addAssistantMessage: anOutputMessage.
 			self chat signalRunIsDone ].
-
 	^ GtLOpenAIProviderProcessedMessage new
 		inputMessage: anInputMessage;
 		result: result;
 		isStreaming: isStreaming;
 		anotherProcessedMessage: anotherMessage;
 		outputMessage: anOutputMessage
+]
+
+{ #category : #'private - execution' }
+GtLOpenAIProvider >> relevantChatMessages [
+	| relevantMessages |
+	relevantMessages := self chat messages
+			messagesSelect: [ :each | each isAssistantRole and: [ each hasCompactionResponse ] ].
+	^ relevantMessages isEmpty
+		ifTrue: [ self chat messages ]
+		ifFalse: [ self chat messages messagesWithAndAfter: relevantMessages last ]
 ]
 
 { #category : #utils }
