@@ -142,6 +142,7 @@ GtLOpenAIProvider >> handleToolCall: aToolCall [
 	chat removeLastMessage.
 	toolMessage := GtLToolMessage new toolCall: aToolCall.
 	chat addToolMessage: toolMessage.
+	toolMessage chat: chat.
 	toolMessage beRunningExecutionState.
 	[ domainObject := tools performToolCall: aToolCall.
 	toolMessage output: domainObject ]
@@ -188,7 +189,7 @@ GtLOpenAIProvider >> performToolCallsIn: result with: activeTools [
 				| domainObject toolMessage |
 				toolMessage := GtLToolMessage new toolCall: aToolCall.
 				chat addToolMessage: toolMessage.
-
+				toolMessage chat: chat.
 				self state
 					ifCanContinue: [ toolMessage beRunningExecutionState.
 						[ domainObject := activeTools performToolCall: aToolCall.
