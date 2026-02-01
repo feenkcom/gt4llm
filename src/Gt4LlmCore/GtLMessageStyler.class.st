@@ -87,7 +87,7 @@ GtLMessageStyler >> fontSizeForHeadingLevel: aHeadingLevel [
 	"
 	| aFontSizeIncrement aMaxAmountOfHeadingLevels anExtraFontSize |
 	
-	aFontSizeIncrement := 0.1.
+	aFontSizeIncrement := 0.05.
 	aMaxAmountOfHeadingLevels := 6.
 
 	anExtraFontSize := (aMaxAmountOfHeadingLevels - aHeadingLevel max: 0) * aFontSizeIncrement.
@@ -508,7 +508,7 @@ GtLMessageStyler >> styleHeader: aHeaderNode [
 	aHeaderNode startPosition > 1
 		ifTrue: [ (self text from: aHeaderNode startPosition to: aHeaderNode stopPosition)
 				paragraphMargin: (BlInsets
-						top: (5 - aHeaderNode numberSigns size max: 1) * 10
+						top: (5 - aHeaderNode numberSigns size max: 1) * 5
 						left: 0
 						bottom: 5
 						right: 0) ]
