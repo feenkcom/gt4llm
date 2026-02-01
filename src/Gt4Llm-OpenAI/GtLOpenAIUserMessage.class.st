@@ -71,7 +71,7 @@ GtLOpenAIUserMessage >> buildCompleteInstructions [
 { #category : #accessing }
 GtLOpenAIUserMessage >> chat: aChat [
 	super chat: aChat.
-	
+	self updateDataFromChat: aChat.
 	content := self computeContentFromInputModels
 ]
 

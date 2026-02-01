@@ -13,24 +13,35 @@ GtLMarkdown class >> content: aString [
 ]
 
 { #category : #accessing }
-GtLMarkdown >> content [
-	^ content
+GtLMarkdown >> commentForSmaCC [
+	^ 'Denote SmaCC grammar definitions as:
+```smacc-grammar
+%root FileNode;
+<line>
+	: [^\r\n]+
+	;
+<newLine>
+	: \r | \n | \r\n
+	;
+File
+	: Lines {{FileNode}}
+	;
+Lines
+	: Line
+	| Lines <newLine> Line
+	;
+Line
+	: 
+	| <line> ''line''
+	;
+```
+'
 ]
 
 { #category : #accessing }
-GtLMarkdown >> content: anObject [
-	content := anObject
-]
+GtLMarkdown >> commentForSmalltalk [
 
-{ #category : #accessing }
-GtLMarkdown >> contentDescription [
-	<magritteDescription>
-	
-	 ^ MAStringDescription new
-		  accessor: #content;
-		  comment: 'This is a Markdown format with a few extensions.
-
-In plain Markdown text, annotate entities as follows:
+	^ 'In plain Markdown text, annotate entities as follows:
 - Smalltalk classes using {{gtClass:ClassName}}, where `ClassName` is the name of the class to be referenced.
 - Smalltalk methods using {{gtMethod:ClassName>>#methodName}}, where `ClassName` is the name of the class and `methodName` is the name of the method.
 
@@ -53,31 +64,27 @@ Object subclass: #SomeClass
 	instanceVariableNames: ''someSlotA someSlotB''
 	classVariableNames: ''
 	package: ''SomePackage''
-```
+```'
+]
 
-Denote SmaCC grammar definitions as:
-```smacc-grammar
-%root FileNode;
-<line>
-	: [^\r\n]+
-	;
-<newLine>
-	: \r | \n | \r\n
-	;
-File
-	: Lines {{FileNode}}
-	;
-Lines
-	: Line
-	| Lines <newLine> Line
-	;
-Line
-	: 
-	| <line> ''line''
-	;
-```
-';
-		  beRequired
+{ #category : #accessing }
+GtLMarkdown >> content [
+	^ content
+]
+
+{ #category : #accessing }
+GtLMarkdown >> content: anObject [
+	content := anObject
+]
+
+{ #category : #accessing }
+GtLMarkdown >> contentDescription [
+	<magritteDescription>
+	^ MAStringDescription new
+		accessor: #content;
+		comment: 'The Markdown format with a few extensions.' , String cr
+				, self commentForSmalltalk , String cr , self commentForSmaCC;
+		beRequired
 ]
 
 { #category : #'as yet unclassified' }
@@ -92,7 +99,7 @@ GtLMarkdown >> gtDisplayOn: aStream [
 GtLMarkdown >> gtMarkdownFor: aView [
 	<gtView>
 	<gtLlmView>
-	content ifNil: [ ^ aView empty ].
+	content isEmptyOrNil ifTrue: [ ^ aView empty ].
 	^ aView textEditor
 		title: 'Markdown';
 		priority: 1;

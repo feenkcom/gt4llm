@@ -25,7 +25,9 @@ GtLOpenAIAssistantMessage >> canExtractResponseModels [
 { #category : #accessing }
 GtLOpenAIAssistantMessage >> chat: aChat [
 	super chat: aChat.
-	
+	chat
+		previousUserMessageIfPresent: [ :msg | self updateDataFromMessage: msg ] 
+		ifAbsent: [ self updateDataFromChat: aChat].
 	self canExtractResponseModels ifTrue: [
 		responseModels := self computeResponseModelsByFormat]	
 ]
@@ -84,6 +86,11 @@ GtLOpenAIAssistantMessage >> gtViewResponseModelsFor: aView [
 		priority: 8;
 		object: [ self responseModels ];
 		view: #gtItemsFor:
+]
+
+{ #category : #testing }
+GtLOpenAIAssistantMessage >> hasCompactionResponse [
+	^ self responseModels includesKey: 'Compaction'
 ]
 
 { #category : #testing }

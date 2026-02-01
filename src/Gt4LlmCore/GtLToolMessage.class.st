@@ -46,6 +46,14 @@ GtLToolMessage >> beSkippedExecutionState [
 ]
 
 { #category : #'as yet unclassified' }
+GtLToolMessage >> chat: aChat [
+	super chat: aChat.
+	chat  
+		previousUserMessageIfPresent: [ :msg | self updateDataFromMessage: msg ] 
+		ifAbsent: [ self updateDataFromChat: aChat]
+]
+
+{ #category : #'as yet unclassified' }
 GtLToolMessage >> content [
 	^ self output
 ]
