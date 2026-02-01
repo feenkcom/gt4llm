@@ -402,7 +402,7 @@ GtLChatMessage >> updateDataFromMessage: aPreviousMessage [
 	instructions ifNil: [ instructions := aPreviousMessage instructions ].
 	formatDescriptions hasSchemaDescriptors ifFalse: [
 		formatDescriptions addCompositeFormat: aPreviousMessage formatDescriptions ].
-	tools ifNil: [ tools := aPreviousMessage tools ]
+	(tools isNil or: [tools isEmpty]) ifTrue: [ tools := aPreviousMessage tools ]
 ]
 
 { #category : #accessing }

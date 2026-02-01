@@ -129,7 +129,7 @@ GtLOpenAIUserMessage >> gtInstructionsFor: aView [
 GtLOpenAIUserMessage >> gtToolsFor: aView [
 	<gtView>
 	^ aView forward
-		title: 'Available tools';
+		title: 'Defined tools';
 		priority: 30;
 		object: [ tools ];
 		view: #gtItemsFor:
