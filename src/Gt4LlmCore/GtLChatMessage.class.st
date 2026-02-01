@@ -199,6 +199,7 @@ GtLChatMessage >> gtViewSchemaDescriptionsFor: aView [
 	<gtView>
 	<gtLlmView>
 	formatDescriptions ifNil: [ ^ aView empty ].
+	formatDescriptions hasSchemaDescriptors ifFalse: [ ^ aView empty ].
 
 	^ aView forward
 		title: 'Output formats';
@@ -261,7 +262,8 @@ GtLChatMessage >> initialize [
 	id := self uuidClass new.
 	createdAt := DateAndTime now.
 	
-	formatDescriptions := GtLResponseCompositeFormat new
+	formatDescriptions := GtLResponseCompositeFormat new.
+	tools := GtLTools new
 ]
 
 { #category : #accessing }
@@ -392,8 +394,7 @@ GtLChatMessage >> updateDataFromChat: aChat [
 		instructions := aChat currentInstructions ].
 	formatDescriptions hasSchemaDescriptors ifFalse: [
 		formatDescriptions addCompositeFormat: aChat currentFormat ].
-	tools ifNil: [
-		tools := aChat currentTools ]
+	tools isEmpty ifTrue: [ tools addAll: aChat currentTools ]
 ]
 
 { #category : #accessing }

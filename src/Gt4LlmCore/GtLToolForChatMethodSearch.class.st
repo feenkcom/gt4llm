@@ -53,6 +53,7 @@ GtLToolForChatMethodSearch >> privatePerformToolCall: aToolCall [
 	| argument chat semaphore timeout |
 	argument := aToolCall arguments anyOne.
 	chat := self chat.
+	aToolCall at: #chat putRuntimeValue: chat.
 	semaphore := Semaphore new.
 	chat announcer
 		when: GtLlmThreadRunIsDoneAnnouncement

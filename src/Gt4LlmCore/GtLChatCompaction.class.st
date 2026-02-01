@@ -13,3 +13,9 @@ GtLChatCompaction >> contentDescription [
 		String cr, self commentForSmalltalk,
 		String cr, self commentForSmaCC
 ]
+
+{ #category : #'as yet unclassified' }
+GtLChatCompaction >> gtMarkdownFor: aView [
+	^ (super gtMarkdownFor: aView)
+		title: 'Compaction'
+]
