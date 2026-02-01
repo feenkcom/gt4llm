@@ -206,11 +206,10 @@ GtLChat >> compact [
 { #category : #actions }
 GtLChat >> compactionPrompt [
 	^ 'Compact this chat for later continuation. Summarize:
-# The initial and remaining goals
-# Essential lessons
-# Decisions
-# Open questions
-# Next steps'
+- The initial and remaining goals
+- Essential lessons and decisions
+- Open questions
+- Next steps'
 ]
 
 { #category : #copying }
