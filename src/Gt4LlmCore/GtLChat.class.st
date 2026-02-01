@@ -368,7 +368,7 @@ GtLChat >> gtProviderFor: anAction [
 		icon: BrGlamorousVectorIcons inspect;
 		label: 'Provider';
 		tooltip: 'Spawn the provider';
-		action: [ :button | provider ]
+		action: [ :button | button phlow spawnObject: provider ]
 ]
 
 { #category : #views }

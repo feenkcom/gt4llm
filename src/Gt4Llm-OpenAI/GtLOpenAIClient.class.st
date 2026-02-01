@@ -334,12 +334,24 @@ GtLOpenAIClient >> gtViewCallsWithTokensFor: aView [
 	^ aView columnedList
 		title: 'Tokens by call';
 		priority: 10;
-		items: [ (history 
-			collect: [ :each | each -> each extractOpenAIUsageDetails ])
-			reject: [ :each | each value isNil ] ];
+		items: [ (history collect: [ :each | each -> each extractOpenAIUsageDetails ])
+				reject: [ :each | each value isNil ] ];
 		column: 'URL' text: [ :each | each key request url ];
-		column: 'Input tokens' text: [ :each | each value inputTokens ] width: 200;
-		column: 'Output tokens' text: [ :each | each value outputTokens ] width: 200
+		column: 'Request'
+			text: [ :each | each key request method ]
+			width: 100;
+		column: 'Response'
+			text: [ :each | 
+				String
+					streamContents: [ :out | each key response statusLine writeOn: out ] ]
+			width: 150;
+		column: 'Input tokens'
+			text: [ :each | each value inputTokens ]
+			width: 100;
+		column: 'Output tokens'
+			text: [ :each | each value outputTokens ]
+			width: 100;
+		send: #key
 ]
 
 { #category : #accessing }
