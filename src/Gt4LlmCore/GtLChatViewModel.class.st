@@ -1,13 +1,21 @@
 Class {
 	#name : #GtLChatViewModel,
 	#superclass : #Object,
+	#traits : 'TGtAnnouncer',
+	#classTraits : 'TGtAnnouncer classTrait',
 	#instVars : [
 		'chat',
 		'newMessageViewModel',
-		'messageViewModelsCache'
+		'messageViewModelsCache',
+		'announcer'
 	],
 	#category : #'Gt4LlmCore-UI - View Models'
 }
+
+{ #category : #announcer }
+GtLChatViewModel >> announcer [
+	^ announcer
+]
 
 { #category : #accessing }
 GtLChatViewModel >> assistantChat [
@@ -32,6 +40,7 @@ GtLChatViewModel >> beSync [
 { #category : #initialization }
 GtLChatViewModel >> initialize [
 	super initialize.
+	announcer := Announcer new.
 	messageViewModelsCache := Dictionary new.
 	newMessageViewModel := GtLNewMessageViewModel new
 ]
@@ -50,9 +59,24 @@ GtLChatViewModel >> newMessageViewModel [
 	^ newMessageViewModel
 ]
 
+{ #category : #'private - event handling' }
+GtLChatViewModel >> notifyChatMessageAdded: aMessage [
+	self
+		announce: (GtLChatViewModelMessageAdded new
+				chatViewModel: self;
+				message: aMessage)
+]
+
 { #category : #'private - hooks' }
 GtLChatViewModel >> onAssistantChatChanged [
 	newMessageViewModel chat: chat
+]
+
+{ #category : #'private - event handling' }
+GtLChatViewModel >> onChatMessageAdded: anAnnouncement [
+	anAnnouncement chat = self assistantChat ifFalse: [ ^ self ].
+	
+	self notifyChatMessageAdded: anAnnouncement message
 ]
 
 { #category : #'api - communication' }
@@ -62,8 +86,13 @@ GtLChatViewModel >> sendMessage: aString [
 
 { #category : #'private - hooks' }
 GtLChatViewModel >> subscribeToAssistantChat [
+	self assistantChat announcer weak
+		when: GtLChatMessageAdded
+		send: #onChatMessageAdded:
+		to: self
 ]
 
 { #category : #'private - hooks' }
 GtLChatViewModel >> unsubscribeFromAssistantChat [
+	self assistantChat announcer unsubscribe: self
 ]

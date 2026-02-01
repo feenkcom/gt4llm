@@ -78,6 +78,8 @@ GtLOpenAIProvider >> executeAsyncMessage: anInputMessage [
 	anErrorHandlerPromise := aFirstPromise
 			then: [ :aProcessedMessage | 
 				self privateExecutionState: self state finished.
+				self flag: #todo. "Remove signalRunIsDone"
+				self chat signalRunIsDone.
 				aProcessedMessage ]
 			otherwise: [ :anError | 
 				| anErrorMessage |
@@ -86,6 +88,7 @@ GtLOpenAIProvider >> executeAsyncMessage: anInputMessage [
 						inputMessage: anInputMessage.
 				self chat addErrorMessage: anErrorMessage.
 				self privateExecutionState: self state finished.
+				self flag: #todo. "Remove signalRunIsDone"
 				self chat signalRunIsDone.
 				anErrorMessage ].
 	executions add: anErrorHandlerPromise.

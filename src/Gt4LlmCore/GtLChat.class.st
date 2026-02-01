@@ -77,10 +77,13 @@ GtLChat >> addInstructionSectionForLepiterPages: pageNames titled: title [
 
 { #category : #'api - message' }
 GtLChat >> addMessage: aMessage [
+	self assert: [ (messages includes: aMessage) not ].
+
 	self updateLastUpdate.
 
 	aMessage chat: self.
 	messages add: aMessage.
+	self notifyMessageAdded: aMessage
 ]
 
 { #category : #adding }
@@ -461,6 +464,15 @@ GtLChat >> messages: anObject [
 	messages := anObject.
 
 	messages do: [ :aMessage | aMessage chat: self ]
+]
+
+{ #category : #'private - notifying' }
+GtLChat >> notifyMessageAdded: aMessage [
+	self
+		announce: (GtLChatMessageAdded new
+				chat: self;
+				messages: self messages;
+				message: aMessage)
 ]
 
 { #category : #accessing }
