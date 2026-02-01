@@ -11,6 +11,7 @@ GtLChatWithOpenAIProviderStubExamples >> chatWithInstructions [
 	chat := self chatWithOpenAIProviderStub.
 	chat addInstructionSectionForLepiterPages: {'Examples by example'} titled: 'Explanations'.
 	message := chat createUserMessage.
+	message chat: chat.
 	instructions := message completeInstructionString.
 	self assert: (instructions includesSubstring: 'Examples by example').
 	^ message
@@ -32,6 +33,7 @@ GtLChatWithOpenAIProviderStubExamples >> chatWithResponseFormat [
 	chat := self chatWithOpenAIProviderStub.
 	chat markdownResponse.
 	message := chat createUserMessage.
+	message chat: chat.
 	self assert: message formatDescriptions size = 1.
 	^ message
 ]
@@ -39,12 +41,14 @@ GtLChatWithOpenAIProviderStubExamples >> chatWithResponseFormat [
 { #category : #'as yet unclassified' }
 GtLChatWithOpenAIProviderStubExamples >> chatWithTools [
 	<gtExample>
-	| chat message tools |
+	| chat message tool |
 	chat := self chatWithOpenAIProviderStub.
-	tools := {GtLToolForClassLookup new}.
-	chat tools: tools.
+	tool := GtLToolForClassLookup new.
+	chat tools: {tool}.
 	message := chat createUserMessage.
-	self assert: message tools = tools.
+	message chat: chat.
+	self assert: message tools size = 1.
+	self assert: message tools anyOne = tool.
 	^ message
 ]
 
