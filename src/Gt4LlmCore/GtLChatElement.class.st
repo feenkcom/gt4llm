@@ -5,7 +5,8 @@ Class {
 	#classTraits : 'TBrLayoutResizable classTrait',
 	#instVars : [
 		'chatViewModel',
-		'listElement'
+		'listElement',
+		'listElementUpdater'
 	],
 	#category : #'Gt4LlmCore-UI - Elements'
 }
@@ -33,6 +34,7 @@ GtLChatElement >> initialize [
 	super initialize.
 
 	self initializeListElement.
+	self initializeListElementUpdater.
 	self addChild: listElement as: #list.
 	self padding: (BlInsets all: 3).
 	self matchParent
@@ -53,13 +55,33 @@ GtLChatElement >> initializeListElement [
 					messageViewModel: aViewModel ]
 ]
 
+{ #category : #initialization }
+GtLChatElement >> initializeListElementUpdater [
+	listElementUpdater := BrElementUpdater new
+			element: self selector: #updateElement;
+			postponedDuration: 300 milliseconds
+]
+
+{ #category : #'private - event handling' }
+GtLChatElement >> onChatViewModelMessageAdded: anAnnouncement [
+	self chatViewModel = anAnnouncement chatViewModel ifFalse: [ ^ self ].
+
+	BlTaskAction enqueueElement: self action: [ listElementUpdater requestUpdate ]
+]
+
 { #category : #'private - event handling' }
 GtLChatElement >> onThreadRunAnnouncement: anAnnouncement [
-	self enqueueTask: (BlTaskAction new action: [ self updateElement ])
+	self enqueueTask: (BlTaskAction new action: [ listElementUpdater requestUpdate ])
 ]
 
 { #category : #'private - hooks' }
 GtLChatElement >> subscribeToAssistantChatViewModel [
+	self chatViewModel weak
+		when: GtLChatViewModelMessageAdded
+		send: #onChatViewModelMessageAdded:
+		to: self.
+
+	self flag: #todo. "Remove this announcement from our new model"
 	self chatViewModel assistantChat weak
 		when: GtLlmThreadRunAnnouncement
 		send: #onThreadRunAnnouncement:

@@ -94,10 +94,7 @@ GtLChatMessage >> chat [
 
 { #category : #accessing }
 GtLChatMessage >> chat: aChat [
-	chat := aChat.
-	chat  
-		previousUserMessageIfPresent: [ :msg | self updateDataFromMessage: msg ] 
-		ifAbsent: [ self updateDataFromChat: aChat]
+	chat := aChat
 ]
 
 { #category : #private }
@@ -200,10 +197,12 @@ GtLChatMessage >> gtInspectorTargetModels [
 { #category : #ui }
 GtLChatMessage >> gtViewSchemaDescriptionsFor: aView [
 	<gtView>
+	<gtLlmView>
 	formatDescriptions ifNil: [ ^ aView empty ].
+	formatDescriptions hasSchemaDescriptors ifFalse: [ ^ aView empty ].
 
 	^ aView forward
-		title: 'Output format descriptions';
+		title: 'Output formats';
 		priority: 20; 
 		object: [ formatDescriptions ];
 		view: #gtViewSchemaDescriptionsFor:;
@@ -263,7 +262,8 @@ GtLChatMessage >> initialize [
 	id := self uuidClass new.
 	createdAt := DateAndTime now.
 	
-	formatDescriptions := GtLResponseCompositeFormat new
+	formatDescriptions := GtLResponseCompositeFormat new.
+	tools := GtLTools new
 ]
 
 { #category : #accessing }
@@ -394,18 +394,15 @@ GtLChatMessage >> updateDataFromChat: aChat [
 		instructions := aChat currentInstructions ].
 	formatDescriptions hasSchemaDescriptors ifFalse: [
 		formatDescriptions addCompositeFormat: aChat currentFormat ].
-	tools ifNil: [
-		tools := aChat currentTools ]
+	tools isEmpty ifTrue: [ tools addAll: aChat currentTools ]
 ]
 
 { #category : #accessing }
 GtLChatMessage >> updateDataFromMessage: aPreviousMessage [ 
-	instructions ifNil: [
-		instructions := aPreviousMessage instructions ].
+	instructions ifNil: [ instructions := aPreviousMessage instructions ].
 	formatDescriptions hasSchemaDescriptors ifFalse: [
 		formatDescriptions addCompositeFormat: aPreviousMessage formatDescriptions ].
-	tools ifNil: [
-		tools := aPreviousMessage tools ]
+	(tools isNil or: [tools isEmpty]) ifTrue: [ tools := aPreviousMessage tools ]
 ]
 
 { #category : #accessing }

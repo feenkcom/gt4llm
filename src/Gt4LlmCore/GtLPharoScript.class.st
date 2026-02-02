@@ -33,7 +33,7 @@ GtLPharoScript >> contentDescription [
 	
 	 ^ MAStringDescription new
 		  accessor: #content;
-		  comment: 'This is a Pharo script. It must contain correct Pharo code that can be executed.';
+		  comment: 'This is a Pharo script. It must contain correct Pharo code that can be executed, including appropriate temporary variable declarations.';
 		  beRequired
 ]
 

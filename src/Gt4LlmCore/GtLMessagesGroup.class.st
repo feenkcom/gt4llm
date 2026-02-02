@@ -79,6 +79,24 @@ GtLMessagesGroup >> messagesDo: aBlock [
 	self do: [ :eachMessage | eachMessage messagesDo: aBlock ]
 ]
 
+{ #category : #enumerating }
+GtLMessagesGroup >> messagesSelect: aBlock [
+	| all |
+	all := self species new.
+	self messagesDo: [ :eachMessage | 
+		(aBlock value: eachMessage) ifTrue: [ all add: eachMessage ] ].
+	^ all
+]
+
+{ #category : #enumerating }
+GtLMessagesGroup >> messagesWithAndAfter: aMessage [
+	| found |
+	found := false.
+	^ self messagesSelect: [ :eachMessage | 
+		(eachMessage = aMessage) ifTrue: [ found := true ].
+		found ].
+]
+
 { #category : #accessing }
 GtLMessagesGroup >> serialize [
 	^ {'messages' -> (self items collect: #serialize)} asDictionary

@@ -46,6 +46,14 @@ GtLToolMessage >> beSkippedExecutionState [
 ]
 
 { #category : #'as yet unclassified' }
+GtLToolMessage >> chat: aChat [
+	super chat: aChat.
+	chat  
+		previousUserMessageIfPresent: [ :msg | self updateDataFromMessage: msg ] 
+		ifAbsent: [ self updateDataFromChat: aChat]
+]
+
+{ #category : #'as yet unclassified' }
 GtLToolMessage >> content [
 	^ self output
 ]
@@ -97,6 +105,16 @@ GtLToolMessage >> gtDisplayOn: aStream [
 { #category : #'as yet unclassified' }
 GtLToolMessage >> gtInspectorTargetModels [
 	^ self output ifNotNil: [ :anOutput | {anOutput} ] ifNil: [ #() ]
+]
+
+{ #category : #views }
+GtLToolMessage >> gtToolCallFor: anAction [
+	<gtAction>
+	^ anAction button
+		icon: BrGlamorousVectorIcons inspect;
+		label: 'Tool call';
+		tooltip: 'Spawn the tool call';
+		action: [ :button | button phlow spawnObject: self toolCall ]
 ]
 
 { #category : #initialization }

@@ -71,7 +71,7 @@ GtLOpenAIUserMessage >> buildCompleteInstructions [
 { #category : #accessing }
 GtLOpenAIUserMessage >> chat: aChat [
 	super chat: aChat.
-	
+	self updateDataFromChat: aChat.
 	content := self computeContentFromInputModels
 ]
 
@@ -123,6 +123,16 @@ GtLOpenAIUserMessage >> gtInstructionsFor: aView [
 		priority: 40;
 		object: [ instructions ];
 		view: #gtInstructionFor:
+]
+
+{ #category : #views }
+GtLOpenAIUserMessage >> gtToolsFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Defined tools';
+		priority: 30;
+		object: [ tools ];
+		view: #gtItemsFor:
 ]
 
 { #category : #ui }

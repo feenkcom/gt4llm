@@ -77,10 +77,13 @@ GtLChat >> addInstructionSectionForLepiterPages: pageNames titled: title [
 
 { #category : #'api - message' }
 GtLChat >> addMessage: aMessage [
+	self assert: [ (messages includes: aMessage) not ].
+
 	self updateLastUpdate.
 
 	aMessage chat: self.
 	messages add: aMessage.
+	self notifyMessageAdded: aMessage
 ]
 
 { #category : #adding }
@@ -192,6 +195,23 @@ GtLChat >> codeTransformationsResponse [
 	self addResponseFormatForMagritte: GtLCodeTransformations named: 'CodeTransformations'
 ]
 
+{ #category : #actions }
+GtLChat >> compact [
+	self sendWith: [ :m |
+		m
+			addResponseFormatForMagritte: GtLChatCompaction named: 'Compaction';
+			markdown: self compactionPrompt ].
+]
+
+{ #category : #actions }
+GtLChat >> compactionPrompt [
+	^ 'Compact this chat for later continuation. Summarize:
+- The initial and remaining goals
+- Essential lessons and decisions
+- Open questions
+- Next steps'
+]
+
 { #category : #copying }
 GtLChat >> copyLepiterSerialisationToClipboard [
 	| snippet serialization |
@@ -203,7 +223,7 @@ GtLChat >> copyLepiterSerialisationToClipboard [
 
 { #category : #accessing }
 GtLChat >> createUserMessage [
-	^ self userMessageClass new chat: self
+	^ self userMessageClass new
 ]
 
 { #category : #accessing }
@@ -282,7 +302,7 @@ GtLChat >> gtFormatFor: aView [
 	
 	^ aView textEditor
 		title: 'Output format JSON schema';
-		priority: 2; 
+		priority: 5; 
 		text: [ NeoJSONWriter toStringPretty: self currentFormat  asJsonSchemaDictionary ];
 		aptitude: BrGlamorousCodeEditorAptitude;
 		styler: JSONParser gtStyler;
@@ -341,6 +361,16 @@ GtLChat >> gtMessagesWidgetFor: aView [
 		actionButtonIcon: BrGlamorousVectorIcons bin
 			tooltip: 'Delete history'
 			action: [ self reset ]
+]
+
+{ #category : #views }
+GtLChat >> gtProviderFor: anAction [
+	<gtAction>
+	^ anAction button
+		icon: BrGlamorousVectorIcons inspect;
+		label: 'Provider';
+		tooltip: 'Spawn the provider';
+		action: [ :button | button phlow spawnObject: provider ]
 ]
 
 { #category : #views }
@@ -445,6 +475,15 @@ GtLChat >> messages: anObject [
 	messages do: [ :aMessage | aMessage chat: self ]
 ]
 
+{ #category : #'private - notifying' }
+GtLChat >> notifyMessageAdded: aMessage [
+	self
+		announce: (GtLChatMessageAdded new
+				chat: self;
+				messages: self messages;
+				message: aMessage)
+]
+
 { #category : #accessing }
 GtLChat >> previousUserMessageIfPresent: aPresentBlock ifAbsent: anAbsentBlock [
 	^ messages lastUserMessageIfPresent: aPresentBlock ifAbsent: anAbsentBlock
@@ -484,8 +523,8 @@ GtLChat >> sendMarkdown: aString [
 
 { #category : #'api - communication' }
 GtLChat >> sendMessage: aMessage [
+	aMessage chat: self.
 	self addUserMessage: aMessage.
-	
 	self provider sendMessage: aMessage
 ]
 
