@@ -160,8 +160,12 @@ GtLToolMessage >> requestResponse [
 ]
 
 { #category : #accessing }
-GtLToolMessage >> requestResponse: anObject [
-	requestResponse := anObject
+GtLToolMessage >> requestResponse: aRequestResponse [
+	self assert: [ aRequestResponse isNotNil ].
+	
+	requestResponse
+		ifNotNil: [ requestResponse := requestResponse withFollowingRequestResponse: aRequestResponse ]
+		ifNil: [ requestResponse := aRequestResponse ]
 ]
 
 { #category : #'as yet unclassified' }

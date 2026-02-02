@@ -184,10 +184,14 @@ GtLOpenAIProvider >> modelName: aString [
 GtLOpenAIProvider >> performToolCallsIn: result with: activeTools [
 	<return: #GtLOpenAIProviderProcessedMessage or: nil>
 	| toolMessages |
-	toolMessages := result toolCalls
-			collect: [ :aToolCall | 
+	toolMessages := result toolCalls asArray
+			withIndexCollect: [ :aToolCall :anIndex | 
 				| domainObject toolMessage |
-				toolMessage := GtLToolMessage new toolCall: aToolCall.
+				toolMessage := GtLToolMessage new 
+					toolCall: aToolCall;
+					requestResponse: (GtLToolPreviousRequestResponse new
+						previousRequestResponse: result requestResponse;
+						toolCallIndex: anIndex).
 				chat addToolMessage: toolMessage.
 				toolMessage chat: chat.
 				self state
@@ -197,8 +201,7 @@ GtLOpenAIProvider >> performToolCallsIn: result with: activeTools [
 							ensure: [ toolMessage beFinishedExecutionState ] ]
 					ifDisabled: [ toolMessage beSkippedExecutionState ].
 				
-				toolMessage ]
-			as: Array.
+				toolMessage ].
 	self chat signalRunHasUpdated.
 	
 	"We send all chat messages, so it is enough to process just the last tool message.
