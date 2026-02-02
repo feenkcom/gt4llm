@@ -1,32 +1,18 @@
 Class {
 	#name : #GtLChatElement,
 	#superclass : #BlElement,
-	#traits : 'TBrLayoutResizable',
-	#classTraits : 'TBrLayoutResizable classTrait',
+	#traits : 'TBrLayoutResizable + TGtLWithChatViewModel',
+	#classTraits : 'TBrLayoutResizable classTrait + TGtLWithChatViewModel classTrait',
 	#instVars : [
-		'chatViewModel',
 		'listElement',
 		'listElementUpdater'
 	],
 	#category : #'Gt4LlmCore-UI - Elements'
 }
 
-{ #category : #'api - initialization' }
-GtLChatElement >> beSync [
-	self chatViewModel beSync
-]
-
 { #category : #accessing }
 GtLChatElement >> chatViewModel [
 	^ chatViewModel
-]
-
-{ #category : #accessing }
-GtLChatElement >> chatViewModel: anObject [
-	chatViewModel := anObject.
-
-	self subscribeToAssistantChatViewModel.
-	self updateElement
 ]
 
 { #category : #initialization }
@@ -62,6 +48,11 @@ GtLChatElement >> initializeListElementUpdater [
 			postponedDuration: 300 milliseconds
 ]
 
+{ #category : #'private - chat view model' }
+GtLChatElement >> onChatViewModelChanged [
+	self updateElement
+]
+
 { #category : #'private - event handling' }
 GtLChatElement >> onChatViewModelMessageAdded: anAnnouncement [
 	self chatViewModel = anAnnouncement chatViewModel ifFalse: [ ^ self ].
@@ -74,18 +65,24 @@ GtLChatElement >> onThreadRunAnnouncement: anAnnouncement [
 	self enqueueTask: (BlTaskAction new action: [ listElementUpdater requestUpdate ])
 ]
 
-{ #category : #'private - hooks' }
-GtLChatElement >> subscribeToAssistantChatViewModel [
+{ #category : #'private - chat view model' }
+GtLChatElement >> subscribeToChatViewModel [
 	self chatViewModel weak
 		when: GtLChatViewModelMessageAdded
 		send: #onChatViewModelMessageAdded:
 		to: self.
 
-	self flag: #todo. "Remove this announcement from our new model"
-	self chatViewModel assistantChat weak
+	self flag: #todo.	"Remove this announcement from our new model"
+	self chatViewModel chat weak
 		when: GtLlmThreadRunAnnouncement
 		send: #onThreadRunAnnouncement:
 		to: self
+]
+
+{ #category : #'private - chat view model' }
+GtLChatElement >> unsubscribeFromChatViewModel [
+	self chatViewModel announcer unsubscribe: self.
+	self chatViewModel chat announcer unsubscribe: self
 ]
 
 { #category : #'private - updating' }
