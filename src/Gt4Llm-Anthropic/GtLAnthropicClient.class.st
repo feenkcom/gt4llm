@@ -134,7 +134,7 @@ GtLAnthropicClient >> get: aUrl withParams: aListOfAssocs [
 
 	response := aClient get.
 
-	history add: aClient request -> aClient response.
+	history addRequest: aClient request response: aClient response.
 
 	^ self checkForErrors: response
 ]
@@ -198,7 +198,7 @@ GtLAnthropicClient >> post: aUrl withEntity: anEntity [
 
 	response := aClient post.
 
-	history add: aClient request -> aClient response.
+	history addRequest: aClient request response: aClient response.
 
 	^ self checkForErrors: response
 ]

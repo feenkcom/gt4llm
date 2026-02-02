@@ -3,7 +3,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'request',
-		'response'
+		'response',
+		'result'
 	],
 	#category : #'Gt4LlmCore-Client'
 }
@@ -50,6 +51,7 @@ GtLRequestResponse >> gtResponseJsonTreeFor: aView [
 
 { #category : #accessing }
 GtLRequestResponse >> request [
+	<return: #ZnRequest>
 	^ request
 ]
 
@@ -60,10 +62,21 @@ GtLRequestResponse >> request: anObject [
 
 { #category : #accessing }
 GtLRequestResponse >> response [
+	<return: #ZnResponse>
 	^ response
 ]
 
 { #category : #accessing }
 GtLRequestResponse >> response: anObject [
 	response := anObject
+]
+
+{ #category : #accessing }
+GtLRequestResponse >> result [
+	^ result
+]
+
+{ #category : #accessing }
+GtLRequestResponse >> result: anObject [
+	result := anObject
 ]

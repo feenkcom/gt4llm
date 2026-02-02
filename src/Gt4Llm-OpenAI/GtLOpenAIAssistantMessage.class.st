@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'responseModels',
 		'modelName',
-		'rawData'
+		'rawData',
+		'requestResponse'
 	],
 	#category : #'Gt4Llm-OpenAI'
 }
@@ -118,6 +119,17 @@ GtLOpenAIAssistantMessage >> rawData [
 { #category : #'as yet unclassified' }
 GtLOpenAIAssistantMessage >> rawData: anObject [
 	rawData := anObject
+]
+
+{ #category : #accessing }
+GtLOpenAIAssistantMessage >> requestResponse [
+	<return: #GtLRequestResponse>
+	^ requestResponse
+]
+
+{ #category : #accessing }
+GtLOpenAIAssistantMessage >> requestResponse: anObject [
+	requestResponse := anObject
 ]
 
 { #category : #accessing }
