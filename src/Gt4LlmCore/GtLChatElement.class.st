@@ -21,7 +21,7 @@ GtLChatElement >> initialize [
 
 	self initializeListElement.
 	self initializeListElementUpdater.
-	self addChild: listElement as: #list.
+	self addChild: listElement as: #'chat--message-list'.
 	self padding: (BlInsets all: 3).
 	self matchParent
 ]

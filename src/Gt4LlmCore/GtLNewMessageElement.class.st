@@ -57,14 +57,14 @@ GtLNewMessageElement >> initialize [
 	self initializeAttachButtonElement.
 	self initializeConnectionsButtonElement.
 
-	toolbarElement addChild: sendButton as: #'chat--send'.
-	toolbarElement addChild: stopButton as: #'chat--stop'.
-	toolbarElement addChild: attachButton as: #'chat--attach'.
-	toolbarElement addChild: connectionsButton as: #'chat--connections'.
+	toolbarElement addChild: sendButton as: #'chat--new-send'.
+	toolbarElement addChild: stopButton as: #'chat--new-stop'.
+	toolbarElement addChild: attachButton as: #'chat--new-attach'.
+	toolbarElement addChild: connectionsButton as: #'chat--new-connections'.
 
-	self addChild: contentsElement as: #contents.
-	self addChild: imagesElement as: #images.
-	self addChild: toolbarElement as: #toolbar.
+	self addChild: contentsElement as: #'chat--new-contents'.
+	self addChild: imagesElement as: #'chat--new-images'.
+	self addChild: toolbarElement as: #'chat--new-toolbar'.
 
 	self hMatchParent.
 	self vFitContentLimited
