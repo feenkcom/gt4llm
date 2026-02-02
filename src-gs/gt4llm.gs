@@ -2633,7 +2633,7 @@ removeallclassmethods GtLlmInstructionString
 doit
 (GtLlmInstructionPiece
 	subclass: 'GtLlmInstructionWithSections'
-	instVarNames: #(introduction sections)
+	instVarNames: #(introduction sections title)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -15370,9 +15370,17 @@ children
 
 category: 'accessing'
 method: GtLlmInstructionWithSections
-gtDisplayOn: aStream
-	aStream
-		nextPutAll: self introduction instructionString
+ensureSectionNamed: aSectionTitle
+	^sections
+			detect: [ :aSection | aSection title = aSectionTitle ] 
+			ifFound: [ :each | each ] 
+			ifNone: [
+				| newSection|
+				newSection := GtLlmInstructionWithSections new
+					title: aSectionTitle;
+					introduction: (GtLlmInstructionString new string: '').
+				self addSection: newSection.
+				newSection ]
 %
 
 category: 'accessing'
@@ -15380,7 +15388,8 @@ method: GtLlmInstructionWithSections
 initialize
 	super initialize.
 	
-	sections := OrderedCollection new
+	sections := OrderedCollection new.
+	title := ''  
 %
 
 category: 'accessing'
@@ -15407,7 +15416,7 @@ introduction: anObject
 	introduction := anObject asInstructionPiece
 %
 
-category: 'as yet unclassified'
+category: 'testing'
 method: GtLlmInstructionWithSections
 isEmpty 
 	^ self instructionString isEmpty
@@ -15420,7 +15429,8 @@ printOn: aStream
 
 	aStream
 		nextPut: $(;
-		nextPutAll: self introduction instructionString;
+		nextPutAll: (self instructionString trimBoth 
+			copyReplaceAll: String cr with: '') ;
 		nextPut: $)
 %
 
@@ -15435,6 +15445,18 @@ method: GtLlmInstructionWithSections
 sections: anObject
 	sections := anObject asOrderedCollection
 			collect: [ :aSection | aSection asInstructionPiece parent: self ]
+%
+
+category: 'accessing'
+method: GtLlmInstructionWithSections
+title
+	^title
+%
+
+category: 'accessing'
+method: GtLlmInstructionWithSections
+title: aSectionTitle 
+	title := aSectionTitle 
 %
 
 ! Class implementation for 'GtLlmMessageCall'
