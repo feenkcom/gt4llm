@@ -31,9 +31,9 @@ GtLMessageHeaderElement >> initialize [
 	self initializeToolbarElement.
 	self initializeEventListeners.
 	
-	self addChild: senderElement as: #sender.
-	self addChild: contentElement as: #content.
-	self addChild: toolbarElement as: #toolbar.
+	self addChild: senderElement as: #'chat--message-sender'.
+	self addChild: contentElement.
+	self addChild: toolbarElement as: #'chat--message-toolbar'.
 	
 	self vFitContent.
 	self hMatchParent
@@ -46,11 +46,13 @@ GtLMessageHeaderElement >> initializeContentElement [
 			vFitContent;
 			padding: (BlInsets left: 0 right: 15);
 			addChild: (contentLabelElement := BrLabel new
+						id: #'chat--message-content';
 						hFitContentLimited;
 						vFitContent;
 						aptitude: BrGlamorousLabelAptitude new;
 						beSmallSize);
 			addChild: (executionStateLabelElement := BrLabel new
+						id: #'chat--message-state';
 						hFitContent;
 						vFitContent;
 						aptitude: (BrGlamorousLabelAptitude new foreground: self theme button disabledTextColor);
