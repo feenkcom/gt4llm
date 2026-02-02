@@ -97,6 +97,7 @@ GtLOpenAIGenerateResponseAPICommand >> model: anObject [
 
 { #category : #'gt - extensions' }
 GtLOpenAIGenerateResponseAPICommand >> request [
+	<return: #GtLRequestResponse>
 	^ isStreaming
 		ifTrue: [ self client postStreaming: '/responses' withEntity: self buildEntity ]
 		ifFalse: [ self client post: '/responses' withEntity: self buildEntity ]

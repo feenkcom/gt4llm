@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'toolCall',
 		'output',
-		'executionState'
+		'executionState',
+		'requestResponse'
 	],
 	#category : #'Gt4LlmCore-Core'
 }
@@ -151,6 +152,16 @@ GtLToolMessage >> output [
 GtLToolMessage >> output: anObject [
 	self assert: [ anObject isKindOf: GtLDomainObject ].
 	output := anObject
+]
+
+{ #category : #accessing }
+GtLToolMessage >> requestResponse [
+	^ requestResponse
+]
+
+{ #category : #accessing }
+GtLToolMessage >> requestResponse: anObject [
+	requestResponse := anObject
 ]
 
 { #category : #'as yet unclassified' }

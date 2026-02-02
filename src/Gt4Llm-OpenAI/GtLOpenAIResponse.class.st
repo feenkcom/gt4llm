@@ -24,7 +24,8 @@ Class {
 		'usage',
 		'user',
 		'metadata',
-		'toolCalls'
+		'toolCalls',
+		'requestResponse'
 	],
 	#category : #'Gt4Llm-OpenAI'
 }
@@ -193,6 +194,16 @@ GtLOpenAIResponse >> reasoning: anObject [
 ]
 
 { #category : #accessing }
+GtLOpenAIResponse >> requestResponse [
+	^ requestResponse
+]
+
+{ #category : #accessing }
+GtLOpenAIResponse >> requestResponse: anObject [
+	requestResponse := anObject
+]
+
+{ #category : #accessing }
 GtLOpenAIResponse >> status [
 	^ status
 ]
@@ -234,6 +245,7 @@ GtLOpenAIResponse >> text: anObject [
 
 { #category : #'api - accessing' }
 GtLOpenAIResponse >> toolCalls [
+	<return: #Array of: #GtLFunctionToolCall>
 	^ toolCalls
 		ifNil: [ toolCalls := (self output
 					select: [ :aDict | (aDict at: 'type') = 'function_call' ]

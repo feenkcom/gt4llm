@@ -180,7 +180,7 @@ GtLOpenAIProvider >> modelName: aString [
 	modelName := aString
 ]
 
-{ #category : #accessing }
+{ #category : #'private - execution' }
 GtLOpenAIProvider >> performToolCallsIn: result with: activeTools [
 	<return: #GtLOpenAIProviderProcessedMessage or: nil>
 	| toolMessages |
@@ -222,7 +222,6 @@ GtLOpenAIProvider >> printOn: aStream [
 GtLOpenAIProvider >> processNextMessage: anInputMessage [
 	<return: #GtLOpenAIProviderProcessedMessage or: nil>
 	| result anOutputMessage anotherMessage |
-	"continue"
 	self state ifCanContinue: [  ] ifDisabled: [ ^ nil ].
 	result := client
 			generateResponseWithModel: self modelName
@@ -233,12 +232,14 @@ GtLOpenAIProvider >> processNextMessage: anInputMessage [
 					ifTrue: [ anInputMessage formatDescriptionsJsonSchema ]
 					ifFalse: [ nil ])
 			isStreaming: isStreaming.
+	anInputMessage requestResponse: result requestResponse.
 	result hasToolCalls
 		ifTrue: [ anotherMessage := self performToolCallsIn: result with: anInputMessage tools ]
 		ifFalse: [ anOutputMessage := isStreaming
 					ifTrue: [ self streamingMessageFrom: result ]
 					ifFalse: [ self assistantMessageClass new
 							modelName: self modelName;
+							requestResponse: result requestResponse;
 							rawData: (result output detect: [ :anOutput | (anOutput at: 'type') = 'message' ]) ].
 			self chat addAssistantMessage: anOutputMessage.
 			self chat signalRunIsDone ].
