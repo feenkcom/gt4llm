@@ -5,11 +5,13 @@ Class {
 	#classTraits : 'TBrLayoutResizable classTrait + TGtLWithMessageViewModel classTrait',
 	#instVars : [
 		'contentsElement',
-		'toolbar',
 		'imagesElement',
 		'sendButton',
-		'senderFuture',
-		'stopButton'
+		'stopButton',
+		'senderPromise',
+		'attachButton',
+		'connectionsButton',
+		'toolbarElement'
 	],
 	#category : #'Gt4LlmCore-UI - Elements'
 }
@@ -25,98 +27,6 @@ GtLNewMessageElement class >> newForChatList [
 				bottom: 12
 				left: 5
 				right: 5)
-]
-
-{ #category : #'initialization ' }
-GtLNewMessageElement >> buildAttachButton [
-	^ BrButton new
-		fitContent;
-		beSmallSize;
-		aptitude: BrGlamorousButtonWithIconAptitude new
-				+ (BrGlamorousWithExplicitDropdownAptitude
-						handle: [ BrButton new
-								aptitude: BrGlamorousButtonWithIconAptitude - BrGlamorousButtonWithLabelTooltipAptitude2
-										- BrGlamorousButtonExteriorAptitude;
-								icon: BrGlamorousVectorIcons changes ]
-						content: [ BrFileSelector new
-								folder: FileLocator home;
-								padding: (BlInsets all: 8);
-								fileFilterBlock: [ :aFileReference | 
-									aFileReference isFile
-										and: [ (FileSystemDirectoryEntry reference: aFileReference) isHidden not ] ];
-								okAction: [ :aFile :anOkButton | 
-									self threadMessageViewModel attachFile: aFile.
-									self updateImagesElement.
-									anOkButton fireEvent: BrDropdownHideWish new ] ]);
-		label: 'Attach';
-		icon: BrGlamorousVectorIcons changes;
-		margin: (BlInsets all: 3);
-		constraintsDo: [ :c | 
-			c linear vertical alignBottom.
-			c linear horizontal alignLeft ]
-]
-
-{ #category : #'private - updating' }
-GtLNewMessageElement >> buildProviderButton [
-	| aButton |
-	aButton := BrButton new.
-	aButton
-		beSmallSize;
-		aptitude: BrGlamorousButtonWithLabelAptitude new
-				+ (BrGlamorousWithExplicitDropdownAptitude
-						handle: [ BrButton new beSmallSize
-								aptitude: BrGlamorousButtonWithLabelAptitude - BrGlamorousButtonExteriorAptitude;
-								label: self messageViewModel connectionString ]
-						content: [ | aList |
-							aList := BrSimpleList new fitContent
-									id: #'provider-list';
-									items: self messageViewModel connectionRegistry connectableConnections;
-									itemStencil: [ BrLabel new
-											aptitude: BrGlamorousLabelAptitude new
-													+ (BrStyleCommonAptitude new
-															selected: [ :aStyle | aStyle background: BrGlamorousColors selectedListItemColor ];
-															hovered: [ :aStyle | aStyle background: BrGlamorousColors hoveredListItemColor ]);
-											padding: (BlInsets all: 5) ];
-									itemDataBinder: [ :aLabel :anItem | aLabel text: anItem connectionString ];
-									when: BrSelectionChanged
-										do: [ :anEvent | 
-											self threadMessageViewModel
-												provider: (self threadMessageViewModel connectionRegistry connectableConnections
-														at: anEvent indices first) buildProvider.
-											aButton label: self threadMessageViewModel connectionString.
-											aList fireEvent: BrDropdownHideWish new ] ]);
-		label: self messageViewModel connectionString.
-	^ aButton
-]
-
-{ #category : #'private - updating' }
-GtLNewMessageElement >> buildProviderStopButton [
-	stopButton := BrButton new.
-	stopButton
-		id: #'chat--stop';
-		beSmallSize;
-		aptitude: BrGlamorousButtonWithIconAptitude new;
-		icon: BrGlamorousVectorIcons stop;
-		label: 'Stop ongoing execution';
-		action: [ :theButton | self onStopOngoingExecution ];
-		visibility: BlVisibility gone.
-	^ stopButton
-]
-
-{ #category : #'initialization ' }
-GtLNewMessageElement >> buildSendButton [
-	^ sendButton := BrButton new
-		fitContent;
-		beSmallSize;
-		id: #send;
-		aptitude: BrGlamorousButtonWithIconAptitude;
-		label: 'Send';
-		icon: BrGlamorousVectorIcons accept;
-		action: [ :aButton | self sendMessageFrom: aButton ];
-		margin: (BlInsets all: 3);
-		constraintsDo: [ :c | 
-			c linear vertical alignBottom.
-			c linear horizontal alignLeft ]
 ]
 
 { #category : #initialization }
@@ -140,14 +50,84 @@ GtLNewMessageElement >> initialize [
 
 	self initializeContentsElement.
 	self initializeImagesElement.
-	self initializeToolbar.
-	self initializeSenderFuture.
+	self initializeToolbarElement.
+	self initializeSenderElementPromise.
+	self initializeSendButtonElement.
+	self initializeStopButtonElement.
+	self initializeAttachButtonElement.
+	self initializeConnectionsButtonElement.
+
+	toolbarElement addChild: sendButton as: #'chat--send'.
+	toolbarElement addChild: stopButton as: #'chat--stop'.
+	toolbarElement addChild: attachButton as: #'chat--attach'.
+	toolbarElement addChild: connectionsButton as: #'chat--connections'.
+
 	self addChild: contentsElement as: #contents.
 	self addChild: imagesElement as: #images.
-	self addChild: toolbar as: #toolbar.
+	self addChild: toolbarElement as: #toolbar.
 
 	self hMatchParent.
 	self vFitContentLimited
+]
+
+{ #category : #'initialization ' }
+GtLNewMessageElement >> initializeAttachButtonElement [
+	attachButton := BrButton new
+			fitContent;
+			beSmallSize;
+			aptitude: BrGlamorousButtonWithIconAptitude new
+					+ (BrGlamorousWithExplicitDropdownAptitude
+							handle: [ BrButton new
+									aptitude: BrGlamorousButtonWithIconAptitude - BrGlamorousButtonWithLabelTooltipAptitude2
+											- BrGlamorousButtonExteriorAptitude;
+									icon: BrGlamorousVectorIcons changes ]
+							content: [ BrFileSelector new
+									folder: FileLocator home;
+									padding: (BlInsets all: 8);
+									fileFilterBlock: [ :aFileReference | 
+										aFileReference isFile
+											and: [ (FileSystemDirectoryEntry reference: aFileReference) isHidden not ] ];
+									okAction: [ :aFile :anOkButton | 
+										self messageViewModel attachFile: aFile.
+										self updateImagesElement.
+										anOkButton fireEvent: BrDropdownHideWish new ] ]);
+			label: 'Attach';
+			icon: BrGlamorousVectorIcons changes;
+			margin: (BlInsets all: 3);
+			constraintsDo: [ :c | 
+				c linear vertical alignBottom.
+				c linear horizontal alignLeft ]
+]
+
+{ #category : #'private - updating' }
+GtLNewMessageElement >> initializeConnectionsButtonElement [
+	connectionsButton := BrButton new.
+	connectionsButton
+		beSmallSize;
+		aptitude: BrGlamorousButtonWithLabelAptitude new
+				+ (BrGlamorousWithExplicitDropdownAptitude
+						handle: [ BrButton new beSmallSize
+								aptitude: BrGlamorousButtonWithLabelAptitude - BrGlamorousButtonExteriorAptitude;
+								label: self messageViewModel connectionString ]
+						content: [ | aList |
+							aList := BrSimpleList new fitContent
+									id: #'provider-list';
+									items: self messageViewModel connectionRegistry connectableConnections;
+									itemStencil: [ BrLabel new
+											aptitude: BrGlamorousLabelAptitude new
+													+ (BrStyleCommonAptitude new
+															selected: [ :aStyle | aStyle background: BrGlamorousColors selectedListItemColor ];
+															hovered: [ :aStyle | aStyle background: BrGlamorousColors hoveredListItemColor ]);
+											padding: (BlInsets all: 5) ];
+									itemDataBinder: [ :aLabel :anItem | aLabel text: anItem connectionString ];
+									when: BrSelectionChanged
+										do: [ :anEvent | 
+											self messageViewModel
+												provider: (self messageViewModel connectionRegistry connectableConnections
+														at: anEvent indices first) buildProvider.
+											connectionsButton label: self messageViewModel connectionString.
+											aList fireEvent: BrDropdownHideWish new ] ]);
+		label: ''
 ]
 
 { #category : #'initialization ' }
@@ -166,7 +146,7 @@ GtLNewMessageElement >> initializeContentsElement [
 				name: 'Send message';
 				description: 'Send message to the OpenAI assistant chat';
 				combination: BlKeyCombination primaryReturn;
-				performBlock: [ :aBrTextEditor | self sendMessage ];
+				performBlock: [ :aBrTextEditor | self sendMessageFrom: aBrTextEditor ];
 				yourself)
 ]
 
@@ -176,17 +156,43 @@ GtLNewMessageElement >> initializeImagesElement [
 ]
 
 { #category : #'initialization ' }
-GtLNewMessageElement >> initializeSenderFuture [
-	senderFuture := (BrAsyncElementFuture on: self)
-			executionConfiguration: GtLSettings futureExecutionConfiguration;
+GtLNewMessageElement >> initializeSendButtonElement [
+	sendButton := BrButton new
+			fitContent;
+			beSmallSize;
+			id: #send;
+			aptitude: BrGlamorousButtonWithIconAptitude;
+			label: 'Send';
+			icon: BrGlamorousVectorIcons accept;
+			action: [ :aButton | self sendMessageFrom: aButton ];
+			margin: (BlInsets all: 3);
+			constraintsDo: [ :c | 
+				c linear vertical alignBottom.
+				c linear horizontal alignLeft ]
+]
+
+{ #category : #'initialization ' }
+GtLNewMessageElement >> initializeSenderElementPromise [
+	senderPromise := (BrAsyncElementPromise on: self)
 			whenPending: [ :anElement | self disableSend ];
 			whenError: [ :anElement :anError | self updateSendMessageError: anError ];
 			whenSuccess: [ :anElement :anObject | self enableSend ]
 ]
 
+{ #category : #initialization }
+GtLNewMessageElement >> initializeStopButtonElement [
+	stopButton := BrButton new
+			beSmallSize;
+			aptitude: BrGlamorousButtonWithIconAptitude new;
+			icon: BrGlamorousVectorIcons stop;
+			label: 'Stop ongoing execution';
+			action: [ :theButton | self onStopOngoingExecution ];
+			visibility: BlVisibility gone
+]
+
 { #category : #'initialization ' }
-GtLNewMessageElement >> initializeToolbar [
-	toolbar := BrToolbar new aptitude: BrGlamorousToolbarAptitude new
+GtLNewMessageElement >> initializeToolbarElement [
+	toolbarElement := BrToolbar new aptitude: BrGlamorousToolbarAptitude new
 ]
 
 { #category : #'private - announcement handling' }
@@ -220,15 +226,10 @@ GtLNewMessageElement >> onThreadMessageViewModelChanged: anAnnouncement [
 	self enqueueTask: (BlTaskAction new action: [ self updateElement ])
 ]
 
-{ #category : #'private - actions' }
-GtLNewMessageElement >> sendMessage [
-	self messageViewModel ifNil: [ ^ self ].
-	senderFuture future: self messageViewModel sendMessage
-]
-
 { #category : #'private - event handling' }
-GtLNewMessageElement >> sendMessageFrom: aButton [
-	self sendMessage
+GtLNewMessageElement >> sendMessageFrom: anElement [
+	self messageViewModel ifNil: [ ^ self ].
+	senderPromise promise: self messageViewModel sendMessage
 ]
 
 { #category : #'private - hooks' }
@@ -254,6 +255,11 @@ GtLNewMessageElement >> unsubscribeFromMessageViewModel [
 ]
 
 { #category : #'private - updating' }
+GtLNewMessageElement >> updateConnectionsButton [
+	connectionsButton label: self messageViewModel connectionString
+]
+
+{ #category : #'private - updating' }
 GtLNewMessageElement >> updateContents: aBlText [
 	messageViewModel ifNil: [ ^ self ].
 	messageViewModel contents: aBlText asString source: self
@@ -270,9 +276,9 @@ GtLNewMessageElement >> updateContentsElement [
 GtLNewMessageElement >> updateElement [
 	self updateContentsElement.
 	self updateImagesElement.
-	self updateToolbar.
 	self updateStopButton.
 	self updateSendButton.
+	self updateConnectionsButton
 ]
 
 { #category : #'private - updating' }
@@ -329,13 +335,4 @@ GtLNewMessageElement >> updateStopButton [
 		ifIdle: [ stopButton
 				visibility: BlVisibility gone;
 				disable ]
-]
-
-{ #category : #'private - updating' }
-GtLNewMessageElement >> updateToolbar [
-	toolbar removeAllItems.
-	toolbar addItem: self buildSendButton.
-	toolbar addItem: self buildProviderStopButton.
-	toolbar addItem: self buildAttachButton.
-	toolbar addItem: self buildProviderButton
 ]
