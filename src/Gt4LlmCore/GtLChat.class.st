@@ -527,7 +527,7 @@ GtLChat >> sendMessage: aMessage [
 	<return: #TAsyncPromise>
 	aMessage chat: self.
 	self addUserMessage: aMessage.
-	self provider sendMessage: aMessage
+	^ self provider sendMessage: aMessage
 ]
 
 { #category : #'api - communication' }
