@@ -200,6 +200,16 @@ GtLOpenAIClient >> deleteVectorStore: anId [
 		perform
 ]
 
+{ #category : #'as yet unclassified' }
+GtLOpenAIClient >> generateCompactResponseWithModel: aString messages: aCollection instructions: anInstruction [
+	^ GtLOpenAICompactAPICommand new
+		client: self;
+		model: aString;
+		messages: aCollection;
+		instructions: anInstruction;
+		perform 
+]
+
 { #category : #accessing }
 GtLOpenAIClient >> generateEmbeddingsWithModel: aString andInput: anInputString [
 	^ GtLOpenAIGenerateEmbeddingAPICommand new

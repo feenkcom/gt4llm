@@ -20,7 +20,8 @@ GtLCoderExpandableLepiterExplanationStyler >> stylePageNameInStringMessage: aMes
 
 	self
 		attribute: (GtCompletionStrategyAttribute new
-				strategy: (GtLLepiterPagesCompletionStrategy new database: LeDatabase gtBook ))
+				strategy: (GtLLepiterPagesCompletionStrategy new
+						database: LeDatabase gtBook))
 		from: pageName value startPosition
 		to: pageName value stopPosition.
 
@@ -37,7 +38,7 @@ GtLCoderExpandableLepiterExplanationStyler >> stylePageNameInStringMessage: aMes
 							pageViewModel: page asContentUIModel;
 							hMatchParent;
 							vExact: 300;
-							addAptitude: BrShadowAptitude new + (BrGlamorousWithVerticalResizerAptitude new beBottom);
+							addAptitude: BrShadowAptitude new + BrGlamorousWithVerticalResizerAptitude new beBottom;
 							background: Color white;
 							margin: (BlInsets all: 10) ] ].
 

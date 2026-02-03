@@ -258,10 +258,13 @@ GtLOpenAIProvider >> processNextMessage: anInputMessage [
 GtLOpenAIProvider >> relevantChatMessages [
 	| relevantMessages |
 	relevantMessages := self chat messages
-			messagesSelect: [ :each | each isAssistantRole and: [ each hasCompactionResponse ] ].
-	^ relevantMessages isEmpty
-		ifTrue: [ self chat messages ]
-		ifFalse: [ self chat messages messagesWithAndAfter: relevantMessages last ]
+			messagesSelect: [:each | each isAssistantRole and: [each hasCompactionResponse]].
+	^relevantMessages isEmpty
+		ifTrue: [self chat messages]
+		ifFalse: [
+			self chat messages 
+				messagesBeforeMatching: [:each | each isUserRole]
+				andAllWithAndAfter: relevantMessages last]
 ]
 
 { #category : #utils }
