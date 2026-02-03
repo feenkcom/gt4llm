@@ -1,4 +1,4 @@
 Trait {
 	#name : #TGtLWithChat,
-	#category : #'Gt4LlmCore-Core'
+	#category : 'Gt4LlmCore-Core'
 }

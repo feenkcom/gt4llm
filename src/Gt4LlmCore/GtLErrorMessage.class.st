@@ -6,7 +6,7 @@ Class {
 		'otherExceptions',
 		'inputMessage'
 	],
-	#category : #'Gt4LlmCore-Core'
+	#category : 'Gt4LlmCore-Core'
 }
 
 { #category : #'instance creation' }
@@ -67,6 +67,11 @@ GtLErrorMessage >> gtExceptionStackFor: aView [
 		title: 'Exception stack';
 		object: [ self exception ];
 		view: #gtLiveFor:
+]
+
+{ #category : #'as yet unclassified' }
+GtLErrorMessage >> hasCompactionResponse [
+	^false
 ]
 
 { #category : #initialization }
