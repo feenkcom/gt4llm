@@ -60,5 +60,10 @@ GtLToolForMethodSource >> privatePerformToolCall: aToolCall [
 						format: {className.
 								isClassSide ifTrue: [ ' class' ] ifFalse: [ '' ].
 								methodName}) ].
+								
+	method isSourceSearchable 
+		ifFalse: [ ^GtLNotSourceSearchableMethodDomainObject new 
+			method: method ].
+	
 	^ GtLMethodDomainObject new method: method
 ]
