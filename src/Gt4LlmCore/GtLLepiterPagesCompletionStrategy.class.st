@@ -10,16 +10,30 @@ Class {
 
 { #category : #accessing }
 GtLLepiterPagesCompletionStrategy >> completionActionStreamFor: aText at: positionInteger requested: aBoolean [
-	| currentInput |
-	currentInput := aText asString.
-	^ (database asyncPagesForWord: currentInput)
-		collect:
-			[ :page | 
-			GtInsertTextCompletionAction
-				labeled: (self labelFor: page title withSearch: currentInput)
-				completion: (page title allButFirst: currentInput size)
-				position: positionInteger
-				from: positionInteger - currentInput size + 1 ]
+	| string first last stringToComplete |
+	string := aText asString.
+	first := positionInteger.
+	[ first > 0 and: [ (string at: first) ~= $' ] ]
+		whileTrue: [ first := first - 1 ].
+	first = 0 ifTrue: [ ^ #() ].
+	last := positionInteger.
+	[ last <= string size and: [ (string at: last) ~= $' ] ]
+		whileTrue: [ last := last + 1 ].
+	stringToComplete := string copyFrom: first + 1 to: last - 1.
+	^ (database asyncPagesForWord: stringToComplete)
+		collect: [ :page | 
+			| label |
+			label := self labelFor: page title withSearch: stringToComplete.
+			(GtCompositeCompletionAction labeled: label)
+				addAction: (GtDeleteTextCompletionAction
+						labeled: label
+						from: first + 1
+						to: last - 1);
+				addAction: (GtInsertTextCompletionAction
+						labeled: label
+						completion: (page title)
+						position: first
+						from: first) ]
 ]
 
 { #category : #private }
