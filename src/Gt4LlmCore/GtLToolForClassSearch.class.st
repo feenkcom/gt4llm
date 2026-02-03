@@ -47,6 +47,8 @@ GtLToolForClassSearch >> privatePerformToolCall: aToolCall [
 				context: (GtSpotterContext new searchQuery: query)) toArray
 			await: GtLSettings futureExecutionConfiguration.
 	matches := promise wait.
-
-	^ GtLClassesDomainObject new foundClasses: matches
+	
+	^ GtLClassesDomainObject new 
+		foundClasses: (matches first: (200 min: matches size));
+		mayHaveMore: matches size > 200
 ]

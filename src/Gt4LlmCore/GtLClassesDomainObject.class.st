@@ -3,7 +3,8 @@ Class {
 	#superclass : #GtLDomainObject,
 	#instVars : [
 		'query',
-		'foundClasses'
+		'foundClasses',
+		'mayHaveMore'
 	],
 	#category : 'Gt4LlmCore-Domain Objects'
 }
@@ -37,6 +38,16 @@ GtLClassesDomainObject >> gtFoundClassesFor: aView [
 		column: 'Value' text: [ :each | each gtDisplayString ]
 ]
 
+{ #category : #accessing }
+GtLClassesDomainObject >> mayHaveMore [
+	^ mayHaveMore ifNil: [ false ]
+]
+
+{ #category : #accessing }
+GtLClassesDomainObject >> mayHaveMore: aBoolean [
+	mayHaveMore := aBoolean
+]
+
 { #category : #'api - serializing' }
 GtLClassesDomainObject >> serializeToOpenAIResponseJsonObject [
 	"Return a JSON dictionary that represents the domain object."
@@ -44,5 +55,6 @@ GtLClassesDomainObject >> serializeToOpenAIResponseJsonObject [
 	<return: #NeoJSONObject>
 	^ NeoJSONObject new
 		at: 'foundClasses' put: (self foundClasses collect: #name as: Array);
+		at: 'mayHaveMoreClasses' put: self mayHaveMore;
 		yourself
 ]
