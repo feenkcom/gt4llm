@@ -72,6 +72,15 @@ GtLMessagesGroup >> lastUserMessageIfPresent: aPresentBlock ifAbsent: anAbsentBl
 ]
 
 { #category : #enumerating }
+GtLMessagesGroup >> messagesBeforeMatching: aBlock andAllWithAndAfter: aMessage [
+	| found |
+	found := false.
+	^ self messagesSelect: [ :eachMessage | 
+		(eachMessage = aMessage) ifTrue: [ found := true ].
+		found or: [ aBlock value: eachMessage ] ].
+]
+
+{ #category : #enumerating }
 GtLMessagesGroup >> messagesDo: aBlock [
 	"Evaluate do block on all messages.
 	Note that some messages may be a composition of other messages."

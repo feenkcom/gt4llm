@@ -69,6 +69,11 @@ GtLErrorMessage >> gtExceptionStackFor: aView [
 		view: #gtLiveFor:
 ]
 
+{ #category : #'as yet unclassified' }
+GtLErrorMessage >> hasCompactionResponse [
+	^false
+]
+
 { #category : #initialization }
 GtLErrorMessage >> initialize [
 	super initialize.
