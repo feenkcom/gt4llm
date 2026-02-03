@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLToolForTestMethodRun,
 	#superclass : #GtLAbstractFunctionTool,
-	#category : #'Gt4LlmCore-Tools'
+	#category : 'Gt4LlmCore-Tools'
 }
 
 { #category : #'as yet unclassified' }
