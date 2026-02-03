@@ -55,7 +55,8 @@ GtLOpenAIClient class >> withApiKeyFromFile [
 
 { #category : #accessing }
 GtLOpenAIClient >> addHistoryRequestResponse: aClient [
-	history add: aClient request -> aClient response
+	<return: #GtLRequestResponse>
+	^ history addRequest: aClient request response: aClient response
 ]
 
 { #category : #accessing }
@@ -92,9 +93,7 @@ GtLOpenAIClient >> checkForErrors: aResponse [
 	((aResponse includesKey: 'error')
 		and: [ ((aResponse at: 'error') isKindOf: Collection)
 				and: [ (aResponse at: 'error') includesKey: 'message' ] ])
-		ifTrue: [ ^ (GtLOpenAIError from: (aResponse at: 'error')) signal ].
-
-	^ aResponse
+		ifTrue: [ (GtLOpenAIError from: (aResponse at: 'error')) signal ].
 ]
 
 { #category : #'as yet unclassified' }
@@ -158,13 +157,15 @@ GtLOpenAIClient >> defaultBaseUrl [
 
 { #category : #accessing }
 GtLOpenAIClient >> delete: aUrl [
-	| aClient response |
+	<return: #GtLRequestResponse>
+	| aClient result requestResponse |
 	aClient := self initializeClient.
 	aClient url: self baseUrl / aUrl.
 	aClient entity: nil.
-	response := aClient delete.
-	self addHistoryRequestResponse: aClient.
-	^ response
+	result := aClient delete.
+	requestResponse := self addHistoryRequestResponse: aClient.
+	requestResponse result: result.
+	^ requestResponse
 ]
 
 { #category : #accessing }
@@ -249,14 +250,17 @@ GtLOpenAIClient >> get: aUrl [
 
 { #category : #accessing }
 GtLOpenAIClient >> get: aUrl withParams: aListOfAssocs [
-	| aClient response |
+	<return: #GtLRequestResponse>
+	| aClient result requestResponse |
 	aClient := self initializeClient.
 	aClient url: self baseUrl / aUrl.
 	aListOfAssocs do: [ :aPair | aClient queryAt: aPair key put: aPair value ].
 	aClient entity: nil.
-	response := aClient get.
-	self addHistoryRequestResponse: aClient.
-	^ self checkForErrors: response
+	result := aClient get.
+	requestResponse := self addHistoryRequestResponse: aClient.
+	requestResponse result: result.
+	self checkForErrors: result.
+	^ requestResponse
 ]
 
 { #category : #accessing }
@@ -403,39 +407,46 @@ GtLOpenAIClient >> listVectorStores [
 
 { #category : #accessing }
 GtLOpenAIClient >> post: aString withEntity: anEntity [
-	| aClient response |
+	<return: #GtLRequestResponse>
+	| aClient result requestResponse |
 	aClient := self initializeClient.
 	aClient url: self baseUrl / aString.
 	aClient contents: anEntity.
-	response := aClient post.
-	self addHistoryRequestResponse: aClient.
-	^ self checkForErrors: response
+	result := aClient post.
+	requestResponse := self addHistoryRequestResponse: aClient.
+	requestResponse result: result.
+	self checkForErrors: result.
+	^ requestResponse
 ]
 
 { #category : #accessing }
 GtLOpenAIClient >> postFile: aString withEntity: anEntity [
-	| aClient response |
+	<return: #GtLRequestResponse>
+	| aClient result requestResponse |
 	aClient := self initializeClient.
 	aClient url: self baseUrl / aString.
 	aClient entity: anEntity.
-	response := aClient post.
-	self addHistoryRequestResponse: aClient.
-	^ self checkForErrors: response
+	result := aClient post.
+	requestResponse := self addHistoryRequestResponse: aClient.
+	requestResponse result: result.
+	self checkForErrors: result.
+	^ requestResponse
 ]
 
 { #category : #'gt - extensions' }
 GtLOpenAIClient >> postStreaming: aString withEntity: anEntity [
-	| aClient response |
+	<return: #GtLRequestResponse>
+	| aClient result requestResponse |
 	aClient := self initializeClient
 			streaming: true;
 			contentReader: nil.
 	aClient url: self baseUrl / aString.
 	aClient contents: anEntity.
-	response := aClient post.
+	result := aClient post.
 
-	self addHistoryRequestResponse: aClient.
-
-	^ response
+	requestResponse := self addHistoryRequestResponse: aClient.
+	requestResponse result: result.
+	^ requestResponse
 ]
 
 { #category : #'as yet unclassified' }

@@ -19,10 +19,13 @@ GtLAPICommand >> client: anObject [
 
 { #category : #accessing }
 GtLAPICommand >> perform [
-	| aResult |
-	aResult := self request.
+	| requestResponse result |
+	requestResponse := self request.
+	result := requestResponse result.
 
-	^ (self serializationClass from: aResult) client: self client
+	^ (self serializationClass from: result)
+		client: self client;
+		requestResponse: requestResponse
 ]
 
 { #category : #accessing }

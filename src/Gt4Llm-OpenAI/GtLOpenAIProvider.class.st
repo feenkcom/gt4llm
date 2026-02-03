@@ -180,14 +180,18 @@ GtLOpenAIProvider >> modelName: aString [
 	modelName := aString
 ]
 
-{ #category : #accessing }
+{ #category : #'private - execution' }
 GtLOpenAIProvider >> performToolCallsIn: result with: activeTools [
 	<return: #GtLOpenAIProviderProcessedMessage or: nil>
 	| toolMessages |
-	toolMessages := result toolCalls
-			collect: [ :aToolCall | 
+	toolMessages := result toolCalls asArray
+			withIndexCollect: [ :aToolCall :anIndex | 
 				| domainObject toolMessage |
-				toolMessage := GtLToolMessage new toolCall: aToolCall.
+				toolMessage := GtLToolMessage new 
+					toolCall: aToolCall;
+					requestResponse: (GtLToolPreviousRequestResponse new
+						previousRequestResponse: result requestResponse;
+						toolCallIndex: anIndex).
 				chat addToolMessage: toolMessage.
 				toolMessage chat: chat.
 				self state
@@ -197,8 +201,7 @@ GtLOpenAIProvider >> performToolCallsIn: result with: activeTools [
 							ensure: [ toolMessage beFinishedExecutionState ] ]
 					ifDisabled: [ toolMessage beSkippedExecutionState ].
 				
-				toolMessage ]
-			as: Array.
+				toolMessage ].
 	self chat signalRunHasUpdated.
 	
 	"We send all chat messages, so it is enough to process just the last tool message.
@@ -222,7 +225,6 @@ GtLOpenAIProvider >> printOn: aStream [
 GtLOpenAIProvider >> processNextMessage: anInputMessage [
 	<return: #GtLOpenAIProviderProcessedMessage or: nil>
 	| result anOutputMessage anotherMessage |
-	"continue"
 	self state ifCanContinue: [  ] ifDisabled: [ ^ nil ].
 	result := client
 			generateResponseWithModel: self modelName
@@ -233,12 +235,14 @@ GtLOpenAIProvider >> processNextMessage: anInputMessage [
 					ifTrue: [ anInputMessage formatDescriptionsJsonSchema ]
 					ifFalse: [ nil ])
 			isStreaming: isStreaming.
+	anInputMessage requestResponse: result requestResponse.
 	result hasToolCalls
 		ifTrue: [ anotherMessage := self performToolCallsIn: result with: anInputMessage tools ]
 		ifFalse: [ anOutputMessage := isStreaming
 					ifTrue: [ self streamingMessageFrom: result ]
 					ifFalse: [ self assistantMessageClass new
 							modelName: self modelName;
+							requestResponse: result requestResponse;
 							rawData: (result output detect: [ :anOutput | (anOutput at: 'type') = 'message' ]) ].
 			self chat addAssistantMessage: anOutputMessage.
 			self chat signalRunIsDone ].

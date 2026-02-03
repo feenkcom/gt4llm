@@ -1,10 +1,9 @@
 Class {
 	#name : #GtLChatViewModel,
 	#superclass : #Object,
-	#traits : 'TGtAnnouncer',
-	#classTraits : 'TGtAnnouncer classTrait',
+	#traits : 'TGtAnnouncer + TGtLWithChat',
+	#classTraits : 'TGtAnnouncer classTrait + TGtLWithChat classTrait',
 	#instVars : [
-		'chat',
 		'newMessageViewModel',
 		'messageViewModelsCache',
 		'announcer'
@@ -20,21 +19,11 @@ GtLChatViewModel >> announcer [
 { #category : #accessing }
 GtLChatViewModel >> assistantChat [
 	<return: #GtLChat>
-	^ chat
-]
+	self
+		deprecated: 'Please use #chat instead.'
+		transformWith: '`@receiver assistantChat' -> '`@receiver chat'.
 
-{ #category : #accessing }
-GtLChatViewModel >> assistantChat: aChat [
-	chat = aChat ifTrue: [ ^ self ].
-	chat ifNotNil: [ self unsubscribeFromAssistantChat ].
-	chat := aChat.
-	self onAssistantChatChanged.
-	self subscribeToAssistantChat.
-]
-
-{ #category : #'api - initialization' }
-GtLChatViewModel >> beSync [
-	newMessageViewModel beSync
+	^ self chat
 ]
 
 { #category : #initialization }
@@ -47,8 +36,8 @@ GtLChatViewModel >> initialize [
 
 { #category : #'api - accessing' }
 GtLChatViewModel >> messageViewModels [
-	^ GtLChatMessageViewModelsBuilder new 
-		chat: self assistantChat;
+	^ GtLChatMessageViewModelsBuilder new
+		chat: self chat;
 		cache: messageViewModelsCache;
 		newMessageViewModel: newMessageViewModel;
 		build
@@ -67,15 +56,15 @@ GtLChatViewModel >> notifyChatMessageAdded: aMessage [
 				message: aMessage)
 ]
 
-{ #category : #'private - hooks' }
-GtLChatViewModel >> onAssistantChatChanged [
+{ #category : #'private - chat' }
+GtLChatViewModel >> onChatChanged [
 	newMessageViewModel chat: chat
 ]
 
 { #category : #'private - event handling' }
 GtLChatViewModel >> onChatMessageAdded: anAnnouncement [
-	anAnnouncement chat = self assistantChat ifFalse: [ ^ self ].
-	
+	anAnnouncement chat = self chat ifFalse: [ ^ self ].
+
 	self notifyChatMessageAdded: anAnnouncement message
 ]
 
@@ -84,15 +73,15 @@ GtLChatViewModel >> sendMessage: aString [
 	self assistantChat sendMessage: aString
 ]
 
-{ #category : #'private - hooks' }
-GtLChatViewModel >> subscribeToAssistantChat [
-	self assistantChat announcer weak
+{ #category : #'private - chat' }
+GtLChatViewModel >> subscribeToChat [
+	self chat announcer weak
 		when: GtLChatMessageAdded
 		send: #onChatMessageAdded:
 		to: self
 ]
 
-{ #category : #'private - hooks' }
-GtLChatViewModel >> unsubscribeFromAssistantChat [
-	self assistantChat announcer unsubscribe: self
+{ #category : #'private - chat' }
+GtLChatViewModel >> unsubscribeFromChat [
+	self chat announcer unsubscribe: self
 ]

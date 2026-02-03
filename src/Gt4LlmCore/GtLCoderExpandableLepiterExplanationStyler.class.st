@@ -1,0 +1,102 @@
+Class {
+	#name : #GtLCoderExpandableLepiterExplanationStyler,
+	#superclass : #GtGenericPharoStyler,
+	#category : 'Gt4LlmCore-UI'
+}
+
+{ #category : #private }
+GtLCoderExpandableLepiterExplanationStyler >> isNonEmptyLiteralStringNode: nameNode [
+	^ nameNode isLiteral
+		and: [ nameNode literalValue isString
+			and: [ nameNode literalValue notEmpty ] ]
+]
+
+{ #category : #private }
+GtLCoderExpandableLepiterExplanationStyler >> stylePageNameInStringMessage: aMessageNode [
+	| pageName anExpanderAttribute |
+	pageName := aMessageNode arguments first.
+
+	(self isNonEmptyLiteralStringNode: pageName) ifFalse: [ ^ self ].
+
+	self
+		attribute: (GtCompletionStrategyAttribute new
+				strategy: (GtLLepiterPagesCompletionStrategy new
+						database: LeDatabase gtBook))
+		from: pageName value startPosition
+		to: pageName value stopPosition.
+
+	(LeDatabase gtBook hasPageNamed: pageName literalValue asString)
+		ifFalse: [ ^ self ].
+
+	anExpanderAttribute := BrGlamorousTriangleExpanderTextAttribute new
+			id: GtSourceCoderEmbeddedExpanderToggleId;
+			attributesCreatingBlock: [ BrTextAdornmentDynamicAttribute new
+					beAppend;
+					stencil: [ | page |
+						page := LeDatabase gtBook pageNamed: pageName literalValue asString.
+						LePageToolContentTreeElement new
+							pageViewModel: page asContentUIModel;
+							hMatchParent;
+							vExact: 300;
+							addAptitude: BrShadowAptitude new + BrGlamorousWithVerticalResizerAptitude new beBottom;
+							background: Color white;
+							margin: (BlInsets all: 10) ] ].
+
+	self
+		attribute: anExpanderAttribute
+		from: pageName value stopPosition
+		to: pageName value stopPosition
+]
+
+{ #category : #private }
+GtLCoderExpandableLepiterExplanationStyler >> styleSameStrings: aStringLiteralNodel [
+	| aStringMarker aStringHighlightAttribute theStringOccurences |
+	
+	aStringMarker := BrTextInvisibleMarkerAttribute new.
+	aStringHighlightAttribute := (GtPharoDynamicHighlightAttribute paint: BrGlamorousColors neutralBackgroundColor).
+
+	theStringOccurences := OrderedCollection new.
+	
+	aStringLiteralNodel topParent 
+		allNodesOfType: aStringLiteralNodel class
+		do: [ :aNode |
+			aNode string = aStringLiteralNodel string 
+				ifTrue: [ theStringOccurences add: aNode ] ].
+		
+	theStringOccurences size <= 1
+		ifTrue: [ ^ self ].
+
+	theStringOccurences do: [ :eachNode | 
+		(text
+			from: eachNode startPosition
+			to: eachNode stopPosition)
+				attribute: aStringMarker;
+				onCursorEnter: [ :aTextEditor :anEvent | 
+					aTextEditor text
+						findAttribute: aStringMarker
+						indicesDo: [ :aVariableStart :aVariableEnd |
+							aTextEditor text
+								attribute: aStringHighlightAttribute
+								from: aVariableStart
+								to: aVariableEnd ] ]
+				leave: [ :aTextEditor :anEvent |
+					aTextEditor text removeAttribute: aStringHighlightAttribute ] ] 
+]
+
+{ #category : #visiting }
+GtLCoderExpandableLepiterExplanationStyler >> visitMessage: aMessageNode [
+	super visitMessage: aMessageNode.
+	
+	(#(gtPageExplanation:) includes: aMessageNode selector)
+		ifTrue: [ self stylePageNameInStringMessage: aMessageNode ].
+]
+
+{ #category : #visiting }
+GtLCoderExpandableLepiterExplanationStyler >> visitStringLiteral: aStringLiteralNodel [
+	super visitStringLiteral: aStringLiteralNodel.
+	
+	(self isNonEmptyLiteralStringNode: aStringLiteralNodel)
+		ifFalse: [ ^ self ].
+		
+	self styleSameStrings: aStringLiteralNodel.
+]

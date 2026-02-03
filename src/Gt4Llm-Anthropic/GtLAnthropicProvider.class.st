@@ -9,7 +9,7 @@ Class {
 		'instructions',
 		'executions'
 	],
-	#category : #'Gt4Llm-Anthropic-Provider'
+	#category : 'Gt4Llm-Anthropic-Provider'
 }
 
 { #category : #'as yet unclassified' }

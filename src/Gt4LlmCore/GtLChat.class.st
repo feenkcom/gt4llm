@@ -179,7 +179,7 @@ GtLChat >> asElement [
 
 { #category : #ui }
 GtLChat >> asViewModel [
-	^ GtLChatViewModel new assistantChat: self
+	^ GtLChatViewModel new chat: self
 ]
 
 { #category : #accessing }
@@ -514,6 +514,7 @@ GtLChat >> resetMessages [
 
 { #category : #'api - communication' }
 GtLChat >> sendMarkdown: aString [
+	<return: #TAsyncPromise>
 	| newMessage |
 	self assert: aString isString.
 	newMessage := self createUserMessage.
@@ -523,6 +524,7 @@ GtLChat >> sendMarkdown: aString [
 
 { #category : #'api - communication' }
 GtLChat >> sendMessage: aMessage [
+	<return: #TAsyncPromise>
 	aMessage chat: self.
 	self addUserMessage: aMessage.
 	self provider sendMessage: aMessage

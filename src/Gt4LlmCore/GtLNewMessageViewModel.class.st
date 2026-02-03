@@ -5,7 +5,6 @@ Class {
 		'connectionRegistry',
 		'chat',
 		'files',
-		'isSync',
 		'contents'
 	],
 	#category : 'Gt4LlmCore-UI - View Models'
@@ -19,16 +18,6 @@ GtLNewMessageViewModel >> acceptVisitor: aVisitor [
 { #category : #'api - message' }
 GtLNewMessageViewModel >> attachFile: aFileReference [
 	files add: aFileReference
-]
-
-{ #category : #'api - initialization' }
-GtLNewMessageViewModel >> beAsync [
-	isSync := false
-]
-
-{ #category : #'api - initialization' }
-GtLNewMessageViewModel >> beSync [
-	isSync := true
 ]
 
 { #category : #accessing }
@@ -95,7 +84,6 @@ GtLNewMessageViewModel >> initialize [
 	super initialize.
 	contents := ''.
 	files := OrderedCollection new.
-	isSync := false.
 ]
 
 { #category : #'private - event handling' }
@@ -118,21 +106,18 @@ GtLNewMessageViewModel >> provider: aProvider [
 
 { #category : #actions }
 GtLNewMessageViewModel >> sendMessage [
-	<return: #TAsyncFuture>
-	| aMessageContent aBlock aMessageFiles |
-	contents ifNil: [ ^ nil asAsyncFuture ].
-	contents ifEmpty: [ ^ nil asAsyncFuture ].
+	<return: #TAsyncPromise>
+	| aMessageContent aMessageFiles |
+	contents ifNil: [ ^ nil asAsyncPromise ].
+	contents ifEmpty: [ ^ nil asAsyncPromise ].
 
 	aMessageContent := self contents.
 	aMessageFiles := self files asArray.
-	aBlock := aMessageFiles
-		ifEmpty: [ [ chat sendMarkdown: aMessageContent ] ]
-		ifNotEmpty: [ [ chat sendFiles: aMessageFiles withMessage: aMessageContent ] ].
 
 	self contents: '' source: self.
 	files := OrderedCollection new.
 
-	^ isSync
-		ifTrue: [ aBlock value asAsyncFuture ]
-		ifFalse: [ aBlock asAsyncFuture ]
+	^ aMessageFiles
+		ifEmpty: [ chat sendMarkdown: aMessageContent ]
+		ifNotEmpty: [ chat sendFiles: aMessageFiles withMessage: aMessageContent ]
 ]

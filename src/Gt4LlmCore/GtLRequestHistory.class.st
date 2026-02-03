@@ -5,11 +5,14 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-GtLRequestHistory >> add: aPair [
-	super
-		add: (GtLRequestResponse new
-				request: aPair key;
-				response: aPair value)
+GtLRequestHistory >> addRequest: aRequest response: aResponse [
+	<return: #GtLRequestResponse>
+	| aRequestResponse |
+	aRequestResponse := GtLRequestResponse new
+			request: aRequest;
+			response: aResponse.
+	self add: aRequestResponse.
+	^ aRequestResponse
 ]
 
 { #category : #'as yet unclassified' }
