@@ -6,7 +6,8 @@ Class {
 	#instVars : [
 		'inputModels',
 		'content',
-		'attachments'
+		'attachments',
+		'requestResponse'
 	],
 	#category : #'Gt4Llm-OpenAI'
 }
@@ -181,6 +182,17 @@ GtLOpenAIUserMessage >> lepiterExplanations: pageNames [
 { #category : #accessing }
 GtLOpenAIUserMessage >> pdfs: aCollection [
 	attachments := aCollection collect: [ :each | GtLInputPdfFile fileReference: each ]
+]
+
+{ #category : #accessing }
+GtLOpenAIUserMessage >> requestResponse [
+	<return: #GtLRequestResponse>
+	^ requestResponse
+]
+
+{ #category : #accessing }
+GtLOpenAIUserMessage >> requestResponse: anObject [
+	requestResponse := anObject
 ]
 
 { #category : #accessing }

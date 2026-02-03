@@ -1,8 +1,26 @@
 Class {
 	#name : #GtLChatWithScripterExamples,
 	#superclass : #Object,
-	#category : #'Gt4LlmCore-Examples-UI'
+	#category : 'Gt4LlmCore-Examples-UI'
 }
+
+{ #category : #examples }
+GtLChatWithScripterExamples >> chatElementWithEmptyMessages [
+	<gtExample>
+	| chat scripter |
+	chat := self emptyChat.
+	scripter := BlScripter new
+			model: chat;
+			element: chat asElement.
+
+	self assert: chat messages size equals: 0.
+
+	scripter llmChat
+		assertNumberOfMessageElementsIs: 0;
+		play.
+
+	^ scripter
+]
 
 { #category : #examples }
 GtLChatWithScripterExamples >> chatElementWithEmptyReplyMessage [
@@ -20,13 +38,11 @@ GtLChatWithScripterExamples >> chatElementWithEmptyReplyMessage [
 		// (GtLMessageElementId indexed: 2);
 		play.
 
-	scripter assert
-		value: [ :aLabel | aLabel text asString ] equals: 'Waiting';
-		label: 'Reply message element exists';
-		// (GtLMessageElementId indexed: 2);
-		// GtLMessageHeaderElement;
-		// BrLabel;
-		@ 1;
+	scripter llmChat
+		assertNumberOfMessageElementsIs: 2;
+		assertMessageElementExistsWithIndex: 2;
+		assertMessageElementHasWaitingSenderNameWithIndex: 2;
+		assertMessageElementHasEmptyStateWithIndex: 2;
 		play.
 
 	^ scripter
@@ -54,28 +70,11 @@ GtLChatWithScripterExamples >> chatElementWithEmptyReplyMessage_toolMessage [
 	self assert: reply toolMessages size equals: 1.
 	self assert: (reply toolMessages at: 1) equals: tool.
 
-	scripter assert
-		exists;
-		label: 'Assert reply message element exists';
-		// (GtLMessageElementId indexed: 2);
-		play.
-
-	scripter assert
-		value: [ :aLabel | aLabel text asString ] equals: 'Tool';
-		label: 'Assert reply message element label is tool';
-		// (GtLMessageElementId indexed: 2);
-		// GtLMessageHeaderElement;
-		// BrLabel;
-		@ 1;
-		play.
-		
-	scripter assert
-		value: [ :aLabel | aLabel text asString ] equals: GtLMessageState created messageExecutionStateLabel;
-		label: 'Assert reply message has waiting state label';
-		// (GtLMessageElementId indexed: 2);
-		// GtLMessageHeaderElement;
-		// BrLabel;
-		@ 3;
+	scripter llmChat
+		assertNumberOfMessageElementsIs: 2;
+		assertMessageElementExistsWithIndex: 2;
+		assertMessageElementHasToolSenderNameWithIndex: 2;
+		assertMessageElementHasWaitingStateWithIndex: 2;
 		play.
 
 	^ scripter
@@ -95,13 +94,11 @@ GtLChatWithScripterExamples >> chatElementWithEmptyReplyMessage_toolMessage_exec
 		block: [ tool beRunningExecutionState ];
 		play.
 
-	scripter assert
-		value: [ :aLabel | aLabel text asString ] equals: GtLMessageState running messageExecutionStateLabel;
-		label: 'Assert reply message has running state label';
-		// (GtLMessageElementId indexed: 2);
-		// GtLMessageHeaderElement;
-		// BrLabel;
-		@ 3;
+	scripter llmChat
+		assertNumberOfMessageElementsIs: 2;
+		assertMessageElementExistsWithIndex: 2;
+		assertMessageElementHasToolSenderNameWithIndex: 2;
+		assertMessageElementHasRunningStateWithIndex: 2;
 		play.
 
 	^ scripter
@@ -121,13 +118,11 @@ GtLChatWithScripterExamples >> chatElementWithEmptyReplyMessage_toolMessage_fini
 		block: [ tool beFinishedExecutionState ];
 		play.
 
-	scripter assert
-		value: [ :aLabel | aLabel text asString ] equals: GtLMessageState finished messageExecutionStateLabel;
-		label: 'Assert reply message has finished state label';
-		// (GtLMessageElementId indexed: 2);
-		// GtLMessageHeaderElement;
-		// BrLabel;
-		@ 3;
+	scripter llmChat
+		assertNumberOfMessageElementsIs: 2;
+		assertMessageElementExistsWithIndex: 2;
+		assertMessageElementHasToolSenderNameWithIndex: 2;
+		assertMessageElementHasFinishedStateWithIndex: 2;
 		play.
 
 	^ scripter
@@ -137,7 +132,7 @@ GtLChatWithScripterExamples >> chatElementWithEmptyReplyMessage_toolMessage_fini
 GtLChatWithScripterExamples >> chatWithEmptyReplyMessage [
 	<gtExample>
 	| chat currentMessage |
-	chat := GtLChat new provider: GtLOpenAIProviderStub new.
+	chat := self emptyChat.
 	currentMessage := chat createUserMessage.
 	currentMessage
 		addInputMagritteObject: (GtLMarkdown new
@@ -152,4 +147,16 @@ GtLChatWithScripterExamples >> chatWithEmptyReplyMessage [
 	self assert: (chat messages at: 2) isReplyMessage.
 
 	^ chat
+]
+
+{ #category : #examples }
+GtLChatWithScripterExamples >> emptyChat [
+	<gtExample>
+	| aChat |
+	aChat := GtLChat new provider: GtLOpenAIProviderStub new.
+	
+	self assert: aChat messages size equals: 0.
+	self assert: aChat state equals: GtLProviderState idle.
+	
+	^ aChat
 ]

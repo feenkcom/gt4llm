@@ -7,7 +7,7 @@ Class {
 		'outputMessage',
 		'anotherProcessedMessage'
 	],
-	#category : #'Gt4Llm-Anthropic-Model'
+	#category : 'Gt4Llm-Anthropic-Model'
 }
 
 { #category : #accessing }
