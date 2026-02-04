@@ -5,7 +5,7 @@ Class {
 		'stream',
 		'startHeaderLevel'
 	],
-	#category : #'Gt4Llm-GToolkit-Exporter'
+	#category : 'Gt4Llm-GToolkit-Exporter'
 }
 
 { #category : #'as yet unclassified' }

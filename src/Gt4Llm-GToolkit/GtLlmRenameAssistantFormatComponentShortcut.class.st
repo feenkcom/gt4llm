@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLlmRenameAssistantFormatComponentShortcut,
 	#superclass : #GtSourceCoderInlineRenameShortcut,
-	#category : #'Gt4Llm-GToolkit-UI'
+	#category : 'Gt4Llm-GToolkit-UI'
 }
 
 { #category : #'as yet unclassified' }
