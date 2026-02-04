@@ -5,11 +5,19 @@ Class {
 }
 
 { #category : #adding }
+GtLMagritteInputModel >> addContentOneLineSummaryTo: aStringStream [
+	GtMagritteStringStreamDataExporter new
+		object: model;
+		stringStream: aStringStream;
+		export
+]
+
+{ #category : #adding }
 GtLMagritteInputModel >> addContentTo: aDictionary [
 	| exporter dict |
 	exporter := GtMagritteJSONDataExporter forObject: model.
 	dict := exporter exportObject asDictionary.
-	aDictionary at: name put: dict	"model asJsonDictionary "
+	aDictionary at: name put: dict
 ]
 
 { #category : #adding }
