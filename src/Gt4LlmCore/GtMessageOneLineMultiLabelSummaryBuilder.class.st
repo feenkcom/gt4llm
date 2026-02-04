@@ -32,7 +32,7 @@ GtMessageOneLineMultiLabelSummaryBuilder >> newWithText: aString [
 	labelElement := BrLabel new
 			hFitContentLimited;
 			vFitContent;
-			aptitude: BrGlamorousShrinkingLabelAptitude new;
+			aptitude: BrGlamorousLabelAptitude"BrGlamorousShrinkingLabelAptitude" new;
 			beSmallSize;
 			text: aString.
 
