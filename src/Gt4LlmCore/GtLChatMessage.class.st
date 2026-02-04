@@ -107,6 +107,7 @@ GtLChatMessage >> completeInstructionString [
 
 { #category : #accessing }
 GtLChatMessage >> contentOneLineSummary [
+	<return: #String>
 	^ self contentText copyReplaceAll: String lf with: String space
 ]
 
