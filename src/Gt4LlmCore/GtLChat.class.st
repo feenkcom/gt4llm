@@ -199,7 +199,7 @@ GtLChat >> codeTransformationsResponse [
 GtLChat >> compact [
 	self sendWith: [ :m |
 		m
-			addResponseFormatForMagritte: GtLChatCompaction named: 'Compaction';
+			addResponseFormatForMagritte: GtLChatCompactedSummary named: 'Compaction';
 			markdown: self compactionPrompt ].
 ]
 
@@ -527,7 +527,7 @@ GtLChat >> sendMessage: aMessage [
 	<return: #TAsyncPromise>
 	aMessage chat: self.
 	self addUserMessage: aMessage.
-	self provider sendMessage: aMessage
+	^ self provider sendMessage: aMessage
 ]
 
 { #category : #'api - communication' }

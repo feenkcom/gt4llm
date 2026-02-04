@@ -69,5 +69,5 @@ GtLOpenAICompactAPICommand >> request [
 
 { #category : #accessing }
 GtLOpenAICompactAPICommand >> serializationClass [
-	^ GtLOpenAIResponse
+	^ GtLOpenAICompactionResponse
 ]

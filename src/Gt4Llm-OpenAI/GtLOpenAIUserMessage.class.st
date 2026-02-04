@@ -7,7 +7,8 @@ Class {
 		'inputModels',
 		'content',
 		'attachments',
-		'requestResponse'
+		'requestResponse',
+		'executionStrategy'
 	],
 	#category : #'Gt4Llm-OpenAI'
 }
@@ -87,6 +88,11 @@ GtLOpenAIUserMessage >> computeContentFromInputModels [
 	^ NeoJSONWriter toStringPretty: object
 ]
 
+{ #category : #accessing }
+GtLOpenAIUserMessage >> configureWithCompactionExecution [
+	executionStrategy := GtLOpenAIMessageCompactionExecutionStrategy new
+]
+
 { #category : #'as yet unclassified' }
 GtLOpenAIUserMessage >> content [
 	^ content
@@ -95,6 +101,16 @@ GtLOpenAIUserMessage >> content [
 { #category : #'as yet unclassified' }
 GtLOpenAIUserMessage >> contentText [
 	^ content
+]
+
+{ #category : #accessing }
+GtLOpenAIUserMessage >> executionStrategy [
+	^executionStrategy
+]
+
+{ #category : #accessing }
+GtLOpenAIUserMessage >> executionStrategy: anObject [
+	executionStrategy := anObject
 ]
 
 { #category : #ui }
@@ -172,6 +188,12 @@ GtLOpenAIUserMessage >> inputModels [
 GtLOpenAIUserMessage >> instructions [
 	^ instructions ifNil: [ 
 			instructions := self buildCompleteInstructions ]
+]
+
+{ #category : #testing }
+GtLOpenAIUserMessage >> isCompactionRequest [
+	^formatDescriptions schemaDescriptions anySatisfy: [ :each |
+		each name = 'Compaction' ]
 ]
 
 { #category : #'api - message' }

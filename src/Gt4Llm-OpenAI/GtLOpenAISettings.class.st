@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLOpenAISettings,
 	#superclass : #Object,
-	#category : 'Gt4Llm-OpenAI-Support'
+	#category : #'Gt4Llm-OpenAI-Support'
 }
 
 { #category : #settings }
