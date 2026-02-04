@@ -12,7 +12,7 @@ GtLCoderExpandableLepiterExplanationStyler >> isNonEmptyLiteralStringNode: nameN
 ]
 
 { #category : #private }
-GtLCoderExpandableLepiterExplanationStyler >> stylePageNameInStringMessage: aMessageNode [
+GtLCoderExpandableLepiterExplanationStyler >> stylePageNameInStringMessage: aMessageNode inLepiterBase: aLepiterBase [
 	| pageName anExpanderAttribute |
 	pageName := aMessageNode arguments first.
 
@@ -21,11 +21,11 @@ GtLCoderExpandableLepiterExplanationStyler >> stylePageNameInStringMessage: aMes
 	self
 		attribute: (GtCompletionStrategyAttribute new
 				strategy: (GtLLepiterPagesCompletionStrategy new
-						database: LeDatabase gtBook))
+						database: aLepiterBase))
 		from: pageName value startPosition
 		to: pageName value stopPosition.
 
-	(LeDatabase gtBook hasPageNamed: pageName literalValue asString)
+	(aLepiterBase hasPageNamed: pageName literalValue asString)
 		ifFalse: [ ^ self ].
 
 	anExpanderAttribute := BrGlamorousTriangleExpanderTextAttribute new
@@ -33,7 +33,7 @@ GtLCoderExpandableLepiterExplanationStyler >> stylePageNameInStringMessage: aMes
 			attributesCreatingBlock: [ BrTextAdornmentDynamicAttribute new
 					beAppend;
 					stencil: [ | page |
-						page := LeDatabase gtBook pageNamed: pageName literalValue asString.
+						page := aLepiterBase pageNamed: pageName literalValue asString.
 						LePageToolContentTreeElement new
 							pageViewModel: page asContentUIModel;
 							hMatchParent;
@@ -86,9 +86,15 @@ GtLCoderExpandableLepiterExplanationStyler >> styleSameStrings: aStringLiteralNo
 { #category : #visiting }
 GtLCoderExpandableLepiterExplanationStyler >> visitMessage: aMessageNode [
 	super visitMessage: aMessageNode.
-	
+
 	(#(gtPageExplanation:) includes: aMessageNode selector)
-		ifTrue: [ self stylePageNameInStringMessage: aMessageNode ].
+		ifTrue: [ self
+				stylePageNameInStringMessage: aMessageNode
+				inLepiterBase: LeDatabase gtBook ].
+	(#(pageExplanation:) includes: aMessageNode selector)
+		ifTrue: [ self
+				stylePageNameInStringMessage: aMessageNode
+				inLepiterBase: LeDatabasesRegistry defaultLogicalDatabase ]
 ]
 
 { #category : #visiting }

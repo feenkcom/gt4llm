@@ -6,7 +6,7 @@ Class {
 	#instVars : [
 		'assistant'
 	],
-	#category : #'Gt4Llm-GToolkit-UI'
+	#category : 'Gt4Llm-GToolkit-UI'
 }
 
 { #category : #accessing }
