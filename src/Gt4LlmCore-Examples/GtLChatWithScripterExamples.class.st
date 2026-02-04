@@ -129,6 +129,95 @@ GtLChatWithScripterExamples >> chatElementWithEmptyReplyMessage_toolMessage_fini
 ]
 
 { #category : #examples }
+GtLChatWithScripterExamples >> chatElementWithNewMessage [
+	<gtExample>
+	| chat scripter |
+	scripter := self chatElementWithEmptyMessages.
+	chat := scripter model.
+
+	self assert: chat messages size equals: 0.
+
+	scripter llmChat
+		typeNewMessage: 'What is GToolkit?';
+		assertNewMessageTextIs: 'What is GToolkit?';
+		assertNewMessageSendButtonIsEnabled;
+		assertNewMessageStopButtonIsDisabled;
+		assertNumberOfMessageElementsIs: 0;
+		play.
+
+	^ scripter
+]
+
+{ #category : #examples }
+GtLChatWithScripterExamples >> chatElementWithNewMessage_send [
+	<gtExample>
+	| chat scripter |
+	scripter := self chatElementWithNewMessage.
+	chat := scripter model.
+
+	self assert: chat messages size equals: 0.
+
+	scripter llmChat
+		clickSendMessage;
+		assertNewMessageTextIs: '';
+		assertNewMessageSendButtonIsEnabled;
+		assertNewMessageStopButtonIsDisabled;
+		assertNumberOfMessageElementsIs: 2;
+		assertMessageElementHasWaitingSenderNameWithIndex: 2;
+		assertMessageElementHasEmptyStateWithIndex: 2;
+		play.
+
+	^ scripter
+]
+
+{ #category : #examples }
+GtLChatWithScripterExamples >> chatElementWithNewMessage_sendWithException [
+	<gtExample>
+	| chat scripter |
+	scripter := self chatElementWithNewMessage.
+	chat := scripter model.
+
+	self assert: chat messages size equals: 0.
+
+	chat provider
+		sendMessageBlock: [ :aMessage | 
+			GtLOpenAIError new
+				messageText: 'Cannot send message';
+				type: 'error';
+				param: 'input';
+				code: 305;
+				signal ].
+
+	scripter llmChat
+		clickSendMessage;
+		assertNewMessageTextIs: '';
+		assertNewMessageSendButtonIsEnabled;
+		assertNewMessageStopButtonIsDisabled;
+		assertNumberOfMessageElementsIs: 2;
+		assertMessageElementHasWaitingSenderNameWithIndex: 2;
+		assertMessageElementHasEmptyStateWithIndex: 2;
+		assertNewMessageIsWithExceptionText: 'GtLOpenAIError: Cannot send message';
+		play.
+
+	^ scripter
+]
+
+{ #category : #examples }
+GtLChatWithScripterExamples >> chatElementWithNewMessage_sendWithException_close [
+	<gtExample>
+	| chat scripter |
+	scripter := self chatElementWithNewMessage_sendWithException.
+	chat := scripter model.
+
+	scripter llmChat
+		clickCloseException;
+		assertNewMessageIsWithoutException;
+		play.
+
+	^ scripter
+]
+
+{ #category : #examples }
 GtLChatWithScripterExamples >> chatWithEmptyReplyMessage [
 	<gtExample>
 	| chat currentMessage |
