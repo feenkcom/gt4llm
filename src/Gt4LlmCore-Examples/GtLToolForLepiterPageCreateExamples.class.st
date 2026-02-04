@@ -7,10 +7,10 @@ Class {
 { #category : #examples }
 GtLToolForLepiterPageCreateExamples >> missingDatabaseId [
 	<gtExample>
-	| tool call result database |
-	database := LeContentExamples new basicDatabase.
+	| tool call result logicalDB |
+	logicalDB := LeLogicalDatabase new.
 	tool := GtLToolForLepiterPageCreate new.
-	tool database: database.
+	tool database: logicalDB.
 	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
@@ -23,14 +23,15 @@ GtLToolForLepiterPageCreateExamples >> missingDatabaseId [
 { #category : #examples }
 GtLToolForLepiterPageCreateExamples >> missingTitle [
 	<gtExample>
-	| tool call result database |
-	database := LeContentExamples new basicDatabase.
+	| tool call result db logicalDB |
+	db := LeExplicitlyAttachedLinksExamples new primaryDatabase.
+	logicalDB := LeLogicalDatabase new primaryDB: db.
 	tool := GtLToolForLepiterPageCreate new.
-	tool database: database.
+	tool database: logicalDB.
 	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
-		'arguments' -> { 'databaseId' -> database uuid asString } asDictionary } asDictionary.
+		'arguments' -> { 'databaseId' -> db uuidString } asDictionary } asDictionary.
 	result := tool performToolCall: call.
 	self assert: result missingArgument equals: 'title'.
 	^ result
@@ -39,22 +40,23 @@ GtLToolForLepiterPageCreateExamples >> missingTitle [
 { #category : #examples }
 GtLToolForLepiterPageCreateExamples >> successfulPageCreate [
 	<gtExample>
-	| tool call result database pageUid page snippets |
-	database := LeContentExamples new basicDatabase.
+	| tool call result logicalDB pageUid page snippets db |
+	db := LeExplicitlyAttachedLinksExamples new primaryDatabase.
+	logicalDB := LeLogicalDatabase new primaryDB: db.
 	tool := GtLToolForLepiterPageCreate new.
-	tool database: database.
+	tool database: logicalDB.
 	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
 		'arguments' -> {
 			'title' -> 'New Page'.
 			'initialText' -> 'First snippet'.
-			'databaseId' -> database uuid asString.
+			'databaseId' -> db uuidString.
 		} asDictionary } asDictionary.
 	result := tool performToolCall: call.
 	self assert: (result value at: 'status') equals: 'created'.
 	pageUid := result value at: 'pageUid'.
-	page := database pageWithID: (UUID fromString: pageUid) ifAbsent: [ nil ].
+	page := logicalDB pageWithID: (UUID fromString: pageUid) ifAbsent: [ nil ].
 	self assert: page notNil.
 	self assert: page title equals: 'New Page'.
 	snippets := page children.
