@@ -32,9 +32,26 @@ GtMessageOneLineMultiLabelSummaryBuilder >> newWithText: aString [
 	labelElement := BrLabel new
 			hFitContentLimited;
 			vFitContent;
-			aptitude: BrGlamorousLabelAptitude new;
+			aptitude: BrGlamorousShrinkingLabelAptitude new;
 			beSmallSize;
 			text: aString.
+
+	(labelElements isNotEmpty and: [ labelElements last isKindOf: BrLabel ])
+		ifTrue: [ self textSeparator ].
+
+	labelElements add: labelElement
+]
+
+{ #category : #'api - building' }
+GtMessageOneLineMultiLabelSummaryBuilder >> textSeparator [
+	| labelElement |
+	labelElement := BrLabel new
+			hFitContentLimited;
+			vFitContent;
+			aptitude: (BrGlamorousLabelAptitude new
+					foreground: BrGlamorousColors disabledButtonTextColor);
+			beSmallSize;
+			text: '|'.
 
 	labelElements add: labelElement
 ]

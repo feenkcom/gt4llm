@@ -8,7 +8,7 @@ Class {
 
 { #category : #initialization }
 GtMessageOneLineMultiLabelSummaryElement >> defaultLayout [
-	^ BlLinearLayout horizontal
+	^ BlLinearLayout horizontal alignTopLeft
 ]
 
 { #category : #initialization }
@@ -86,8 +86,8 @@ GtMessageOneLineMultiLabelSummaryElement >> updateElement [
 	aBuilder labelElements
 		do: [ :eachElement | 
 			eachElement
-				margin: (BlInsets right: 5);
-				requestStyle ].
+				requestStyle;
+				constraintsDo: [ :c | c linear vertical alignTop ] ].
 
 	self
 		removeChildren;

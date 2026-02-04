@@ -60,7 +60,7 @@ GtLChatWithScripterExamples >> chatElementMarkdownAndLepiterPage [
 		assertNewMessageStopButtonIsDisabled;
 		assertNumberOfMessageElementsIs: 2;
 		assertMessageElementWithIndex: 1
-			hasHeaderContent: 'Improve the content of the first snippet in this page. Use a LepiterTransformation to express the change. Page: Releaser';
+			hasHeaderContent: 'Improve the content of the first snippet in this page. Use a LepiterTransformation to express the change. | Page: Releaser';
 		play.
 
 	^ scripter
