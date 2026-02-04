@@ -12,14 +12,11 @@ Class {
 
 { #category : #testing }
 GtLOpenAIAssistantMessage >> canExtractResponseModels [
-	| responseText |
 	rawData ifNil: [ ^ false ].
 	self chat ifNil: [ ^ false ].
 	self formatDescriptions 
 		hasSchemaDescriptors ifFalse: [ ^ false ].
-		
-	"responseText := self contentText.
-	responseText ifEmpty: [ ^ false ]."
+	
 	^ true
 ]
 
@@ -90,18 +87,19 @@ GtLOpenAIAssistantMessage >> gtViewResponseModelsFor: aView [
 ]
 
 { #category : #testing }
-GtLOpenAIAssistantMessage >> hasCompactionResponse [
-	^ self responseModels notNil
-		and: [ self responseModels notEmpty
-				and: [ self responseModels includesKey: 'Compaction' ] ]
-]
-
-{ #category : #testing }
 GtLOpenAIAssistantMessage >> hasResponse [
 	^ self contentText isNotEmpty
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
+GtLOpenAIAssistantMessage >> initializeFromResult: aResult [
+	self 
+		requestResponse: aResult requestResponse;
+		rawData: (aResult output detect: [ :anOutput | 
+			((anOutput at: 'type') = 'message') ])
+]
+
+{ #category : #accessing }
 GtLOpenAIAssistantMessage >> modelName: anObject [
 	modelName := anObject
 ]
@@ -111,12 +109,12 @@ GtLOpenAIAssistantMessage >> rawContent [
 	^ rawData at: 'content'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLOpenAIAssistantMessage >> rawData [
 	^ rawData
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLOpenAIAssistantMessage >> rawData: anObject [
 	rawData := anObject
 ]
@@ -138,19 +136,19 @@ GtLOpenAIAssistantMessage >> responseModels [
 			responseModels := self computeResponseModelsByFormat ].
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLOpenAIAssistantMessage >> role [
 	^ 'assistant'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLOpenAIAssistantMessage >> senderText [
 	^ modelName
 		ifNil: [ 'Assistant' ]
 		ifNotNil: [ :aModel | GtLConnectionRegistry uniqueInstance labelForModel: aModel ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #serializing }
 GtLOpenAIAssistantMessage >> serializeForOpenAIResponsesAPI [
 	^ {#content
 			-> {{'type' -> 'output_text'.

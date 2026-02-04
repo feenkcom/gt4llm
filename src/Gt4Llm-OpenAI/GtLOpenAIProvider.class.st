@@ -11,17 +11,17 @@ Class {
 	#category : #'Gt4Llm-OpenAI'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLOpenAIProvider class >> default [
 	^ [ self withApiKeyFromFile ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 GtLOpenAIProvider class >> isConnectable [
 	^ GtLOpenAIClient apiKeyFile exists
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLOpenAIProvider class >> providerName [
 	^ 'OpenAI provider'
 ]
@@ -31,7 +31,7 @@ GtLOpenAIProvider class >> withApiKeyFromClipboard [
 	^ self new apiKey: Clipboard clipboardText
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'instance creation' }
 GtLOpenAIProvider class >> withApiKeyFromFile [
 	^ self new apiKey: GtLOpenAIClient apiKeyFileContents
 ]
@@ -54,6 +54,27 @@ GtLOpenAIProvider >> beStreaming [
 { #category : #'as yet unclassified' }
 GtLOpenAIProvider >> client [
 	^ client
+]
+
+{ #category : #'private - execution' }
+GtLOpenAIProvider >> clientGenerateCompactionResponse: anInputMessage [
+	^client 
+				generateCompactResponseWithModel: self modelName 
+				messages: self relevantChatMessages 
+				instructions: nil
+]
+
+{ #category : #'private - execution' }
+GtLOpenAIProvider >> clientGenerateModelResponse: anInputMessage [
+	^client
+			generateResponseWithModel: self modelName
+			messages: self relevantChatMessages
+			instructions: anInputMessage completeInstructionString
+			tools: anInputMessage tools
+			andFormat: (anInputMessage hasFormats
+				ifTrue: [ anInputMessage formatDescriptionsJsonSchema ]
+				ifFalse: [ nil ])
+			isStreaming: isStreaming 
 ]
 
 { #category : #'as yet unclassified' }
@@ -156,7 +177,7 @@ GtLOpenAIProvider >> handleToolCall: aToolCall [
 	self executeAsyncMessage: toolMessage
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 GtLOpenAIProvider >> initialize [
 	super initialize.
 	modelName := nil.	"set when the provider is built"
@@ -186,7 +207,7 @@ GtLOpenAIProvider >> performToolCallsIn: result with: activeTools [
 	| toolMessages |
 	toolMessages := result toolCalls asArray
 			withIndexCollect: [ :aToolCall :anIndex | 
-				| domainObject toolMessage |
+				| toolMessage |
 				toolMessage := GtLToolMessage new 
 					toolCall: aToolCall;
 					requestResponse: (GtLToolPreviousRequestResponse new
@@ -196,7 +217,8 @@ GtLOpenAIProvider >> performToolCallsIn: result with: activeTools [
 				toolMessage chat: chat.
 				self state
 					ifCanContinue: [ toolMessage beRunningExecutionState.
-						[ domainObject := activeTools performToolCall: aToolCall.
+						[ |domainObject|
+						domainObject := activeTools performToolCall: aToolCall.
 						toolMessage output: domainObject ]
 							ensure: [ toolMessage beFinishedExecutionState ] ]
 					ifDisabled: [ toolMessage beSkippedExecutionState ].
@@ -210,7 +232,7 @@ GtLOpenAIProvider >> performToolCallsIn: result with: activeTools [
 	^ self processNextMessage: toolMessages last.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #printing }
 GtLOpenAIProvider >> printOn: aStream [
 	aStream
 		nextPutAll: self class providerName;
@@ -226,26 +248,26 @@ GtLOpenAIProvider >> processNextMessage: anInputMessage [
 	<return: #GtLOpenAIProviderProcessedMessage or: nil>
 	| result anOutputMessage anotherMessage |
 	self state ifCanContinue: [  ] ifDisabled: [ ^ nil ].
-	result := client
-			generateResponseWithModel: self modelName
-			messages: self relevantChatMessages
-			instructions: anInputMessage completeInstructionString
-			tools: anInputMessage tools
-			andFormat: (anInputMessage hasFormats
-					ifTrue: [ anInputMessage formatDescriptionsJsonSchema ]
-					ifFalse: [ nil ])
-			isStreaming: isStreaming.
+	
+	result := anInputMessage executionStrategy
+		ifNil: [ self clientGenerateModelResponse: anInputMessage ]
+		ifNotNil: [ :aMessageExecutionStrategy |
+			aMessageExecutionStrategy executeMessage: anInputMessage with: self ].
 	anInputMessage requestResponse: result requestResponse.
+	
 	result hasToolCalls
-		ifTrue: [ anotherMessage := self performToolCallsIn: result with: anInputMessage tools ]
-		ifFalse: [ anOutputMessage := isStreaming
+		ifTrue: [ 
+			anotherMessage := self performToolCallsIn: result with: anInputMessage tools ]
+		ifFalse: [ 
+			anOutputMessage := isStreaming
 					ifTrue: [ self streamingMessageFrom: result ]
-					ifFalse: [ self assistantMessageClass new
-							modelName: self modelName;
-							requestResponse: result requestResponse;
-							rawData: (result output detect: [ :anOutput | (anOutput at: 'type') = 'message' ]) ].
+					ifFalse: [ self 
+						responseTypeForResult: result 
+						fromInputMessage: anInputMessage].
+						
 			self chat addAssistantMessage: anOutputMessage.
 			self chat signalRunIsDone ].
+			
 	^ GtLOpenAIProviderProcessedMessage new
 		inputMessage: anInputMessage;
 		result: result;
@@ -265,6 +287,27 @@ GtLOpenAIProvider >> relevantChatMessages [
 			self chat messages 
 				messagesBeforeMatching: [:each | each isUserRole]
 				andAllWithAndAfter: relevantMessages last]
+]
+
+{ #category : #'private - execution' }
+GtLOpenAIProvider >> responseTypeForResult: aResult fromInputMessage: anInputMessage [ 
+	^ ((anInputMessage isCompactionRequest
+		ifTrue: [ GtLOpenAICompactionMessage ]
+		ifFalse: [self assistantMessageClass])) new
+			modelName: self modelName;
+			initializeFromResult: aResult
+]
+
+{ #category : #utils }
+GtLOpenAIProvider >> sendAPICompactionRequest [  
+	| newMessage |
+	newMessage := self chat createUserMessage.
+	newMessage
+		configureWithCompactionExecution;
+		addResponseFormatForMagritte: GtLChatCompactedData named: 'Compaction';
+		markdown: 'You are performing a CONTEXT CHECKPOINT COMPACTION. Create a handoff summary for another LLM that will resume the task.'.
+			
+	self chat sendMessage: newMessage.
 ]
 
 { #category : #utils }

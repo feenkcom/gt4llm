@@ -199,7 +199,7 @@ GtLChat >> codeTransformationsResponse [
 GtLChat >> compact [
 	self sendWith: [ :m |
 		m
-			addResponseFormatForMagritte: GtLChatCompaction named: 'Compaction';
+			addResponseFormatForMagritte: GtLChatCompactedSummary named: 'Compaction';
 			markdown: self compactionPrompt ].
 ]
 
