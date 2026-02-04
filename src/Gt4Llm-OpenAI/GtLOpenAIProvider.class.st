@@ -6,7 +6,8 @@ Class {
 		'isStreaming',
 		'executions',
 		'tools',
-		'modelName'
+		'modelName',
+		'compactionStrategy'
 	],
 	#category : #'Gt4Llm-OpenAI'
 }
@@ -49,6 +50,21 @@ GtLOpenAIProvider >> beNotStreaming [
 { #category : #configuring }
 GtLOpenAIProvider >> beStreaming [
 	isStreaming := true
+]
+
+{ #category : #configuring }
+GtLOpenAIProvider >> beWithApiCompaction [
+	compactionStrategy := GtLOpenAIApiCompactionStrategy forProvider: self
+]
+
+{ #category : #configuring }
+GtLOpenAIProvider >> beWithNoCompaction [
+	compactionStrategy := GtLOpenAINoCompactionStrategy forProvider: self
+]
+
+{ #category : #configuring }
+GtLOpenAIProvider >> beWithPromtCompaction [
+	compactionStrategy := GtLOpenAIPromtCompactionStrategy forProvider: self
 ]
 
 { #category : #accessing }
@@ -184,6 +200,8 @@ GtLOpenAIProvider >> initialize [
 	client := GtLOpenAIClient new.
 	executions := OrderedCollection new.
 	isStreaming := true.
+	
+	self beWithNoCompaction.
 ]
 
 { #category : #configuring }
@@ -248,6 +266,8 @@ GtLOpenAIProvider >> processNextMessage: anInputMessage [
 	<return: #GtLOpenAIProviderProcessedMessage or: nil>
 	| result anOutputMessage anotherMessage |
 	self state ifCanContinue: [  ] ifDisabled: [ ^ nil ].
+	
+	
 	
 	result := anInputMessage executionStrategy
 		ifNil: [ self clientGenerateModelResponse: anInputMessage ]
