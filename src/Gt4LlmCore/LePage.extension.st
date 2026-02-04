@@ -1,6 +1,28 @@
 Extension { #name : #LePage }
 
 { #category : #'*Gt4LlmCore' }
+LePage >> gtProposeATitleFor: anAction [
+	<gtAction>
+	GtLConnectionRegistry instance hasConnectableDefaultConnection
+		ifFalse: [ ^ anAction empty ].
+	^ anAction button
+		tooltip: 'Propose a title';
+		priority: 10;
+		target: LePageActionTarget;
+		icon: BrGlamorousVectorIcons chat;
+		menuItemGroup: BrMenuItemGroupConfiguration llm;
+		action: [ :aButton | 
+			| chat |
+			chat := GtLChat new
+					addResponseFormat: (GtLResponseStringFormat new name: 'String');
+					sendWith: [ :m | 
+						m
+							pageObject: self;
+							markdown: 'Propose a title for this page' ].
+			aButton phlow spawnObject: chat ]
+]
+
+{ #category : #'*Gt4LlmCore' }
 LePage >> gtReviewContentActionFor: anAction [
 	"Adapted from: GtLChatOpenAILiveExamples>>#messageExample_lepiterPage_improveSingleTextSnippet"
 
@@ -10,8 +32,8 @@ LePage >> gtReviewContentActionFor: anAction [
 	^ anAction button
 		tooltip: 'Review the spelling, grammar and content of this page';
 		target: LePageActionTarget;
-		icon: BrGlamorousVectorIcons repair;
-		menuItemGroup: BrMenuItemGroupConfiguration editing;
+		icon: BrGlamorousVectorIcons chat;
+		menuItemGroup: BrMenuItemGroupConfiguration llm;
 		action: [ :aButton | 
 			| chat |
 			chat := GtLChat new
@@ -25,5 +47,5 @@ LePage >> gtReviewContentActionFor: anAction [
 							addResponseFormat: (GtLResponseMagritteFormat new
 									name: 'LepiterTransformations';
 									modelClass: GtLLepiterTransformations) ].
-			aButton phlow spawnObject: chat ]
+			aButton phlow spawnObject: chat ]	
 ]

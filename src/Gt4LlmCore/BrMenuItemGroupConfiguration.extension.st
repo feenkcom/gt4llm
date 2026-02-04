@@ -1,10 +1,10 @@
 Extension { #name : #BrMenuItemGroupConfiguration }
 
-{ #category : #'*Gt4Llm-GToolkit' }
+{ #category : #'*Gt4LlmCore' }
 BrMenuItemGroupConfiguration class >> llm [
 	^ self new
-		name: (GtLlmConnectionRegistry instance defaultConnection
-				ifNil: [ #AI ]
+		name: (GtLConnectionRegistry instance defaultConnection
+				ifNil: [ #Llm ]
 				ifNotNil: #label);
 		priority: 45
 ]
