@@ -92,9 +92,11 @@ GtLOpenAIUserMessage >> computeContentFromInputModels [
 
 { #category : #'private - initialization' }
 GtLOpenAIUserMessage >> computeContentOneLineSummaryFromInputModels [
-	^ String streamContents: [ :aStream | 
-		inputModels do: [ :each | 
-			each addContentOneLineSummaryTo: aStream ] ]
+	^ String
+		streamContents: [ :aStream | 
+			inputModels
+				do: [ :each | each addContentOneLineSummaryTo: aStream ]
+				separatedBy: [ aStream space ] ]
 ]
 
 { #category : #accessing }

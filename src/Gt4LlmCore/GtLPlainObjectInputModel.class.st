@@ -4,6 +4,17 @@ Class {
 	#category : #Gt4LlmCore
 }
 
+{ #category : #adding }
+GtLPlainObjectInputModel >> addContentOneLineSummaryTo: aWriteStream [
+	| aString |
+	aString := [ model printString ]
+			on: Error
+			do: [ :e | e return: model className ].
+	aWriteStream
+		nextPutAll: 'Object: ';
+		nextPutAll: aString asString
+]
+
 { #category : #'as yet unclassified' }
 GtLPlainObjectInputModel >> addContentTo: aDictionary [
 	aDictionary

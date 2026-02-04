@@ -12,6 +12,13 @@ GtLLepiterPageInputModel class >> forPage: aPage [
 ]
 
 { #category : #adding }
+GtLLepiterPageInputModel >> addContentOneLineSummaryTo: aWriteStream [
+	aWriteStream
+		nextPutAll: 'Page: ';
+		nextPutAll: (model ifNotNil: [ :aPage | aPage title asString ] ifNil: [ '<missing page>' ])
+]
+
+{ #category : #adding }
 GtLLepiterPageInputModel >> addContentTo: aDictionary [
 	aDictionary 
 		at: name
