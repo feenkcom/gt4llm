@@ -9,6 +9,11 @@ Class {
 }
 
 { #category : #adding }
+GtLInputModel >> addContentOneLineSummaryTo: aStringStream [
+	self subclassResponsibility
+]
+
+{ #category : #adding }
 GtLInputModel >> addContentTo: aDictionary [
 	self subclassResponsibility
 ]

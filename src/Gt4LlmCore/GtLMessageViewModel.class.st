@@ -17,6 +17,11 @@ GtLMessageViewModel >> acceptVisitor: aVisitor [
 ]
 
 { #category : #'api - accessing' }
+GtLMessageViewModel >> contentOneLineSummary [
+	^ self message contentOneLineSummary
+]
+
+{ #category : #'api - accessing' }
 GtLMessageViewModel >> contentText [
 	^ self message contentOneLineSummary
 ]
