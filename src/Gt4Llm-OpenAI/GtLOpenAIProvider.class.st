@@ -93,6 +93,17 @@ GtLOpenAIProvider >> clientGenerateModelResponse: anInputMessage [
 			isStreaming: isStreaming 
 ]
 
+{ #category : #utils }
+GtLOpenAIProvider >> createAPICompactionMessage [  
+	| message |
+	message := self chat createUserMessage.
+	message
+		configureWithCompactionExecution;
+		addResponseFormatForMagritte: GtLChatCompactedData named: 'Compaction';
+		markdown: 'You are performing a CONTEXT CHECKPOINT COMPACTION. Create a handoff summary for another LLM that will resume the task.'.
+	^ message
+]
+
 { #category : #accessing }
 GtLOpenAIProvider >> defaultAssistantMessageClass [
 	^ GtLOpenAIAssistantMessage
@@ -110,6 +121,8 @@ GtLOpenAIProvider >> executeAsyncMessage: anInputMessage [
 	self privateExecutionState: self state scheduled.
 	aFuture := [ 
 		self privateExecutionState: self state running.
+		
+		"compactionStrategy requestCompactionIfNeeded."
 		self processNextMessage: anInputMessage ] asAsyncFuture.
 	aFirstPromise := aFuture await: GtLOpenAISettings futureExecutionConfiguration.
 	anErrorHandlerPromise := aFirstPromise
@@ -130,6 +143,19 @@ GtLOpenAIProvider >> executeAsyncMessage: anInputMessage [
 				anErrorMessage ].
 	executions add: anErrorHandlerPromise.
 	^ anErrorHandlerPromise
+]
+
+{ #category : #'private - execution' }
+GtLOpenAIProvider >> executeNextMessage: anInputMessage [
+	| result |
+
+	result := anInputMessage executionStrategy
+		ifNil: [ self clientGenerateModelResponse: anInputMessage ]
+		ifNotNil: [ :aMessageExecutionStrategy |
+			aMessageExecutionStrategy executeMessage: anInputMessage with: self ].
+	anInputMessage requestResponse: result requestResponse.
+	
+	^result
 ]
 
 { #category : #accessing }
@@ -267,16 +293,11 @@ GtLOpenAIProvider >> processNextMessage: anInputMessage [
 	| result anOutputMessage anotherMessage |
 	self state ifCanContinue: [  ] ifDisabled: [ ^ nil ].
 	
-	
-	
-	result := anInputMessage executionStrategy
-		ifNil: [ self clientGenerateModelResponse: anInputMessage ]
-		ifNotNil: [ :aMessageExecutionStrategy |
-			aMessageExecutionStrategy executeMessage: anInputMessage with: self ].
-	anInputMessage requestResponse: result requestResponse.
+	result := self executeNextMessage: anInputMessage.
 	
 	result hasToolCalls
 		ifTrue: [ 
+			compactionStrategy requestCompactionIfNeeded.
 			anotherMessage := self performToolCallsIn: result with: anInputMessage tools ]
 		ifFalse: [ 
 			anOutputMessage := isStreaming
@@ -319,15 +340,8 @@ GtLOpenAIProvider >> responseTypeForResult: aResult fromInputMessage: anInputMes
 ]
 
 { #category : #utils }
-GtLOpenAIProvider >> sendAPICompactionRequest [  
-	| newMessage |
-	newMessage := self chat createUserMessage.
-	newMessage
-		configureWithCompactionExecution;
-		addResponseFormatForMagritte: GtLChatCompactedData named: 'Compaction';
-		markdown: 'You are performing a CONTEXT CHECKPOINT COMPACTION. Create a handoff summary for another LLM that will resume the task.'.
-			
-	self chat sendMessage: newMessage.
+GtLOpenAIProvider >> sendAPICompactionMessage [  
+	^self chat sendMessage:  self createAPICompactionMessage
 ]
 
 { #category : #utils }

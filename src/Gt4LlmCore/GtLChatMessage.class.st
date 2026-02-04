@@ -106,7 +106,13 @@ GtLChatMessage >> completeInstructionString [
 ]
 
 { #category : #accessing }
+GtLChatMessage >> contentOneLineMultiLabelSummaryWith: aBuilder [
+	aBuilder newWithText: self contentOneLineSummary
+]
+
+{ #category : #accessing }
 GtLChatMessage >> contentOneLineSummary [
+	<return: #String>
 	^ self contentText copyReplaceAll: String lf with: String space
 ]
 
@@ -360,6 +366,14 @@ GtLChatMessage >> messageExecutionStateLabel [
 
 { #category : #'api - message' }
 GtLChatMessage >> messagesDo: aBlock [
+	"Evaluate do block on all messages.
+	Note that some messages may be a composition of other messages"
+
+	aBlock value: self
+]
+
+{ #category : #'api - message' }
+GtLChatMessage >> messagesReverseDo: aBlock [
 	"Evaluate do block on all messages.
 	Note that some messages may be a composition of other messages"
 

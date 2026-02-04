@@ -1,0 +1,57 @@
+Class {
+	#name : #GtMessageOneLineMultiLabelSummaryBuilder,
+	#superclass : #Object,
+	#instVars : [
+		'labelElements'
+	],
+	#category : #'Gt4LlmCore-UI - Support'
+}
+
+{ #category : #initialization }
+GtMessageOneLineMultiLabelSummaryBuilder >> initialize [
+	super initialize.
+	labelElements := OrderedCollection new
+]
+
+{ #category : #'api - accessing' }
+GtMessageOneLineMultiLabelSummaryBuilder >> labelElements [
+	^ labelElements
+]
+
+{ #category : #'api - building' }
+GtMessageOneLineMultiLabelSummaryBuilder >> newTextFromStringStream: aBlock [
+	| aString |
+	aString := String streamContents: [ :aStream | aBlock value: aStream ].
+	
+	self newWithText: aString
+]
+
+{ #category : #'api - building' }
+GtMessageOneLineMultiLabelSummaryBuilder >> newWithText: aString [
+	| labelElement |
+	labelElement := BrLabel new
+			hFitContentLimited;
+			vFitContent;
+			aptitude: BrGlamorousShrinkingLabelAptitude new;
+			beSmallSize;
+			text: aString.
+
+	(labelElements isNotEmpty and: [ labelElements last isKindOf: BrLabel ])
+		ifTrue: [ self textSeparator ].
+
+	labelElements add: labelElement
+]
+
+{ #category : #'api - building' }
+GtMessageOneLineMultiLabelSummaryBuilder >> textSeparator [
+	| labelElement |
+	labelElement := BrLabel new
+			hFitContentLimited;
+			vFitContent;
+			aptitude: (BrGlamorousLabelAptitude new
+					foreground: BrGlamorousColors disabledButtonTextColor);
+			beSmallSize;
+			text: '|'.
+
+	labelElements add: labelElement
+]

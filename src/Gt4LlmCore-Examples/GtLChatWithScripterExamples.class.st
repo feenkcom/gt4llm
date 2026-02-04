@@ -5,6 +5,68 @@ Class {
 }
 
 { #category : #examples }
+GtLChatWithScripterExamples >> chatElementMarkdownAndInputObject [
+	<gtExample>
+	| chat scripter |
+	scripter := self chatElementWithEmptyMessages.
+	chat := scripter model.
+
+	chat
+		sendWith: [ :msg | 
+			msg
+				markdown: 'Explain this object by exploring the classes that it relies upon.';
+				addPlainInputObject: GtABCartoonAddressBookExample new cartoonAddressBook
+					named: 'Object' ].
+
+	self assert: chat messages size equals: 2.
+
+	scripter llmChat
+		assertNewMessageTextIs: '';
+		assertNewMessageSendButtonIsEnabled;
+		assertNewMessageStopButtonIsDisabled;
+		assertNumberOfMessageElementsIs: 2;
+		assertMessageElementWithIndex: 1
+			hasHeaderContent: 'Explain this object by exploring the classes that it relies upon. Object: Cartoons';
+		play.
+
+	^ scripter
+]
+
+{ #category : #examples }
+GtLChatWithScripterExamples >> chatElementMarkdownAndLepiterPage [
+	<gtExample>
+	| chat scripter lepiterPage |
+	scripter := self chatElementWithEmptyMessages.
+	chat := scripter model.
+
+	lepiterPage := LeDatabasesRegistry defaultLogicalDatabase pageNamed: 'Releaser'.
+
+	chat
+		sendWith: [ :message | 
+			message
+				markdown: 'Improve the content of the first snippet in this page. Use a LepiterTransformation to express the change.';
+				addInputModel: (GtLLepiterPageInputModel new
+						name: lepiterPage title;
+						model: lepiterPage);
+				addResponseFormat: (GtLResponseMagritteFormat new
+						name: 'LepiterTransformations';
+						modelClass: GtLLepiterTransformations) ].
+
+	self assert: chat messages size equals: 2.
+
+	scripter llmChat
+		assertNewMessageTextIs: '';
+		assertNewMessageSendButtonIsEnabled;
+		assertNewMessageStopButtonIsDisabled;
+		assertNumberOfMessageElementsIs: 2;
+		assertMessageElementWithIndex: 1
+			hasHeaderContent: 'Improve the content of the first snippet in this page. Use a LepiterTransformation to express the change. | Page: Releaser';
+		play.
+
+	^ scripter
+]
+
+{ #category : #examples }
 GtLChatWithScripterExamples >> chatElementWithEmptyMessages [
 	<gtExample>
 	| chat scripter |
@@ -165,6 +227,8 @@ GtLChatWithScripterExamples >> chatElementWithNewMessage_send [
 		assertNumberOfMessageElementsIs: 2;
 		assertMessageElementHasWaitingSenderNameWithIndex: 2;
 		assertMessageElementHasEmptyStateWithIndex: 2;
+		assertMessageElementHasUserSenderNameWithIndex: 1;
+		assertMessageElementWithIndex: 1 hasHeaderContent: 'What is GToolkit?';
 		play.
 
 	^ scripter
