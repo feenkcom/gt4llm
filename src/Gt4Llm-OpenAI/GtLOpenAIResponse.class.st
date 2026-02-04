@@ -30,7 +30,7 @@ Class {
 	#category : #'Gt4Llm-OpenAI'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #serialization }
 GtLOpenAIResponse class >> serializationProperties [
 	^ {#id -> #id.
 		#created_at -> #createdAt.
@@ -87,7 +87,7 @@ GtLOpenAIResponse >> gtToolCallsViewFor: aView [
 		column: 'Tool' text: #yourself
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 GtLOpenAIResponse >> hasToolCalls [
 	^ self toolCalls isNotEmpty
 ]
