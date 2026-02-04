@@ -152,6 +152,11 @@ GtLChatMessage >> deserializeTime: anObject [
 ]
 
 { #category : #accessing }
+GtLChatMessage >> executionStrategy [
+	^nil
+]
+
+{ #category : #accessing }
 GtLChatMessage >> formatDescriptions [
 	^ formatDescriptions
 ]
@@ -231,6 +236,11 @@ GtLChatMessage >> gtViewsInContext: aPhlowContext [
 ]
 
 { #category : #testing }
+GtLChatMessage >> hasCompactionResponse [
+	^false
+]
+
+{ #category : #testing }
 GtLChatMessage >> hasFormats [
 	^ formatDescriptions notNil and: [formatDescriptions hasSchemaDescriptors]
 ]
@@ -283,6 +293,11 @@ GtLChatMessage >> isAssistantRole [
 
 	<return: #Boolean>
 	^ self role = 'assistant'
+]
+
+{ #category : #testing }
+GtLChatMessage >> isCompactionRequest [
+	^false
 ]
 
 { #category : #'api - testing' }
