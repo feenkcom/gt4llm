@@ -8,7 +8,6 @@ Class {
 		'imagesElement',
 		'sendButton',
 		'stopButton',
-		'senderPromise',
 		'attachButton',
 		'connectionsButton',
 		'toolbarElement'
@@ -51,7 +50,6 @@ GtLNewMessageElement >> initialize [
 	self initializeContentsElement.
 	self initializeImagesElement.
 	self initializeToolbarElement.
-	self initializeSenderElementPromise.
 	self initializeSendButtonElement.
 	self initializeStopButtonElement.
 	self initializeAttachButtonElement.
@@ -172,14 +170,6 @@ GtLNewMessageElement >> initializeSendButtonElement [
 ]
 
 { #category : #initialization }
-GtLNewMessageElement >> initializeSenderElementPromise [
-	senderPromise := (BrAsyncElementPromise on: self)
-			whenPending: [ :anElement | self disableSend ];
-			whenError: [ :anElement :anError | self updateSendMessageError: anError ];
-			whenSuccess: [ :anElement :anObject | self enableSend ]
-]
-
-{ #category : #initialization }
 GtLNewMessageElement >> initializeStopButtonElement [
 	stopButton := BrButton new
 			beSmallSize;
@@ -228,10 +218,11 @@ GtLNewMessageElement >> onThreadMessageViewModelChanged: anAnnouncement [
 
 { #category : #'private - event handling' }
 GtLNewMessageElement >> sendMessageFrom: anElement [
-	| aPromise |
 	self messageViewModel ifNil: [ ^ self ].
-	aPromise := self messageViewModel sendMessage.
-	senderPromise promise: aPromise
+
+	[ self messageViewModel sendMessage ]
+		on: Error
+		do: [ :anError | self updateSendMessageError: anError ]
 ]
 
 { #category : #'private - hooks' }
@@ -318,9 +309,16 @@ GtLNewMessageElement >> updateSendButton [
 
 { #category : #'private - updating' }
 GtLNewMessageElement >> updateSendMessageError: anError [
+	| maxIndex |
+	maxIndex := 0.
+	toolbarElement items
+		do: [ :eachElement | 
+			((eachElement isKindOf: GtLExceptionElement) and: [ eachElement id isIndexed ])
+				ifTrue: [ maxIndex := maxIndex max: eachElement id index ] ].
+
 	toolbarElement
 		addItem: (GtLExceptionElement new
-				id: #'chat--new-exception';
+				id: (#'chat--new-exception' asBlocElementId indexed: maxIndex + 1);
 				freeze: anError;
 				closeAction: [ :anExceptionElement | toolbarElement removeItem: anExceptionElement ];
 				hFitContentLimited;

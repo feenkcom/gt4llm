@@ -97,7 +97,6 @@ GtLProvider >> privateExecutionState: aState [
 
 { #category : #'api - execution' }
 GtLProvider >> sendMessage: aMessage [
-	<return: #TAsyncPromise>
 	self executeAsyncMessage: aMessage
 ]
 
