@@ -44,7 +44,7 @@ GtLNewMessageElement >> enableSend [
 	sendButton enable
 ]
 
-{ #category : #'initialization ' }
+{ #category : #initialization }
 GtLNewMessageElement >> initialize [
 	super initialize.
 
@@ -70,7 +70,7 @@ GtLNewMessageElement >> initialize [
 	self vFitContentLimited
 ]
 
-{ #category : #'initialization ' }
+{ #category : #initialization }
 GtLNewMessageElement >> initializeAttachButtonElement [
 	attachButton := BrButton new
 			fitContent;
@@ -130,7 +130,7 @@ GtLNewMessageElement >> initializeConnectionsButtonElement [
 		label: ''
 ]
 
-{ #category : #'initialization ' }
+{ #category : #initialization }
 GtLNewMessageElement >> initializeContentsElement [
 	contentsElement := BrEditor new
 			hMatchParent;
@@ -150,12 +150,12 @@ GtLNewMessageElement >> initializeContentsElement [
 				yourself)
 ]
 
-{ #category : #'initialization ' }
+{ #category : #initialization }
 GtLNewMessageElement >> initializeImagesElement [
 	imagesElement := BrHorizontalPane new fitContent clipChildren: false
 ]
 
-{ #category : #'initialization ' }
+{ #category : #initialization }
 GtLNewMessageElement >> initializeSendButtonElement [
 	sendButton := BrButton new
 			fitContent;
@@ -171,7 +171,7 @@ GtLNewMessageElement >> initializeSendButtonElement [
 				c linear horizontal alignLeft ]
 ]
 
-{ #category : #'initialization ' }
+{ #category : #initialization }
 GtLNewMessageElement >> initializeSenderElementPromise [
 	senderPromise := (BrAsyncElementPromise on: self)
 			whenPending: [ :anElement | self disableSend ];
@@ -190,7 +190,7 @@ GtLNewMessageElement >> initializeStopButtonElement [
 			visibility: BlVisibility gone
 ]
 
-{ #category : #'initialization ' }
+{ #category : #initialization }
 GtLNewMessageElement >> initializeToolbarElement [
 	toolbarElement := BrToolbar new aptitude: BrGlamorousToolbarAptitude new
 ]
@@ -228,8 +228,10 @@ GtLNewMessageElement >> onThreadMessageViewModelChanged: anAnnouncement [
 
 { #category : #'private - event handling' }
 GtLNewMessageElement >> sendMessageFrom: anElement [
+	| aPromise |
 	self messageViewModel ifNil: [ ^ self ].
-	senderPromise promise: self messageViewModel sendMessage
+	aPromise := self messageViewModel sendMessage.
+	senderPromise promise: aPromise
 ]
 
 { #category : #'private - hooks' }
@@ -314,11 +316,15 @@ GtLNewMessageElement >> updateSendButton [
 				visibility: BlVisibility visible ]
 ]
 
-{ #category : #'private - event handling' }
-GtLNewMessageElement >> updateSendMessageError: anError [ 
-	| anErrorCopy |
-	anErrorCopy := GtSystemUtility freeze: anError.
-	anErrorCopy inspect.
+{ #category : #'private - updating' }
+GtLNewMessageElement >> updateSendMessageError: anError [
+	toolbarElement
+		addItem: (GtLExceptionElement new
+				id: #'chat--new-exception';
+				freeze: anError;
+				closeAction: [ :anExceptionElement | toolbarElement removeItem: anExceptionElement ];
+				hFitContentLimited;
+				vFitContent)
 ]
 
 { #category : #'private - updating' }

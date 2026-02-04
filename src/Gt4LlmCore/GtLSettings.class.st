@@ -5,6 +5,11 @@ Class {
 }
 
 { #category : #settings }
+GtLSettings class >> defaultToolbarCellSpacing [
+	^ 5
+]
+
+{ #category : #settings }
 GtLSettings class >> futureExecutionConfiguration [
 	^ AsyncFutureExecutionConfiguration new
 		customGroup: #AI;
