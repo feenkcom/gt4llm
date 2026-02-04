@@ -130,7 +130,7 @@ GtLMessageHeaderElement >> unsubscribeFromMessageViewModel [
 
 { #category : #'private - updating' }
 GtLMessageHeaderElement >> updateContentElement [
-	contentLabelElement text: self messageViewModel contentText
+	contentLabelElement text: self messageViewModel contentOneLineSummary
 ]
 
 { #category : #'private - updating' }

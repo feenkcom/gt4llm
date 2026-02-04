@@ -165,6 +165,8 @@ GtLChatWithScripterExamples >> chatElementWithNewMessage_send [
 		assertNumberOfMessageElementsIs: 2;
 		assertMessageElementHasWaitingSenderNameWithIndex: 2;
 		assertMessageElementHasEmptyStateWithIndex: 2;
+		assertMessageElementHasUserSenderNameWithIndex: 1;
+		assertMessageElementWithIndex: 1 hasHeaderContent: 'What is GToolkit?';
 		play.
 
 	^ scripter
