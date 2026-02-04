@@ -135,6 +135,7 @@ GtLOpenAIUserMessage >> gtInspectorTargetModels [
 GtLOpenAIUserMessage >> gtInstructionsFor: aView [
 	<gtView>
 	<gtLlmView>
+	instructions ifNil: [ ^ aView empty ].
 	^ aView forward
 		title: 'Instructions';
 		priority: 40;

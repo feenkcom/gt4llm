@@ -40,7 +40,7 @@ GtLOpenAICompactionMessage >> computeResponseModelsByFormat [
 		ifFound: [ :aFormat |
 			{aFormat modelClass
 				fromOpenAICompactionMessage: self} ] 
-		ifNone: [ Error signal: 'Format not found'].
+		ifNone: [ {} ].
 ]
 
 { #category : #accessing }

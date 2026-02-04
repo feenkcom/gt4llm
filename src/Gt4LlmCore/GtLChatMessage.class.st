@@ -366,6 +366,14 @@ GtLChatMessage >> messagesDo: aBlock [
 	aBlock value: self
 ]
 
+{ #category : #'api - message' }
+GtLChatMessage >> messagesReverseDo: aBlock [
+	"Evaluate do block on all messages.
+	Note that some messages may be a composition of other messages"
+
+	aBlock value: self
+]
+
 { #category : #accessing }
 GtLChatMessage >> role [
 	^ self subclassResponsibility

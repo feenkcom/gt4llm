@@ -48,6 +48,15 @@ GtLProvider >> client [
 ]
 
 { #category : #accessing }
+GtLProvider >> compactionPrompt [
+	^ 'Compact this chat for later continuation. Summarize:
+- The initial and remaining goals
+- Essential lessons and decisions
+- Open questions
+- Next steps'
+]
+
+{ #category : #accessing }
 GtLProvider >> defaultAssistantMessageClass [
 	^ GtLChatMessage
 ]
@@ -98,6 +107,14 @@ GtLProvider >> privateExecutionState: aState [
 { #category : #'api - execution' }
 GtLProvider >> sendMessage: aMessage [
 	self executeAsyncMessage: aMessage
+]
+
+{ #category : #accessing }
+GtLProvider >> sendPromtCompactionMessage [  
+	^self chat sendWith: [ :m |
+		m
+			addResponseFormatForMagritte: GtLChatCompactedSummary named: 'Compaction';
+			markdown: self compactionPrompt ].
 ]
 
 { #category : #'api - execution' }
