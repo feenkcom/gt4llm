@@ -8,7 +8,7 @@ Class {
 		'messageViewModelsCache',
 		'announcer'
 	],
-	#category : 'Gt4LlmCore-UI - View Models'
+	#category : #'Gt4LlmCore-UI - View Models'
 }
 
 { #category : #announcer }

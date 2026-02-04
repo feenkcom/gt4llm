@@ -7,7 +7,7 @@ Class {
 		'listElement',
 		'listElementUpdater'
 	],
-	#category : 'Gt4LlmCore-UI - Elements'
+	#category : #'Gt4LlmCore-UI - Elements'
 }
 
 { #category : #accessing }

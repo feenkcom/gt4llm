@@ -7,7 +7,7 @@ Class {
 		'toExport',
 		'startHeaderLevel'
 	],
-	#category : 'Gt4LlmCore-Exporter'
+	#category : #'Gt4LlmCore-Exporter'
 }
 
 { #category : #'as yet unclassified' }
@@ -122,17 +122,17 @@ GtLLepiterContentExporter >> visitExampleSnippet: aLeExampleSnippet [
 ]
 
 { #category : #'as yet unclassified' }
-GtLLepiterContentExporter >> visitGemStoneSnippet: aLeGemStoneSnippet [ 
-	self codeSnippet: aLeGemStoneSnippet code labelled: 'gemstone'.
-
-	self visitChildren: aLeGemStoneSnippet
-]
-
-{ #category : #'as yet unclassified' }
 GtLLepiterContentExporter >> visitGQLSnippet: aGtGQLSnippet [
 	self codeSnippet: aGtGQLSnippet contentAsString labelled: 'graphql'.
 
 	self visitChildren: aGtGQLSnippet
+]
+
+{ #category : #'as yet unclassified' }
+GtLLepiterContentExporter >> visitGemStoneSnippet: aLeGemStoneSnippet [ 
+	self codeSnippet: aLeGemStoneSnippet code labelled: 'gemstone'.
+
+	self visitChildren: aLeGemStoneSnippet
 ]
 
 { #category : #'as yet unclassified' }
