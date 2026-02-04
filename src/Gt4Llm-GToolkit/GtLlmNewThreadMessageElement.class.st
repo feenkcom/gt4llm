@@ -189,6 +189,8 @@ GtLlmNewThreadMessageElement >> sendMessageFrom: aButton [
 
 { #category : #'private - hooks' }
 GtLlmNewThreadMessageElement >> subscribeToThreadMessageViewModel [
+	self flag: #todo. "Remove GtLlm* subscriptions."
+
 	self threadMessage
 		when: GtLlmNewThreadMessageContentsChanged
 		send: #onThreadMessageContentsChanged:
