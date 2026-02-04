@@ -45,7 +45,7 @@ GtLMessageHeaderElement >> initializeContentElement [
 			hMatchParent;
 			vFitContent;
 			padding: (BlInsets left: 0 right: 15);
-			addChild: (contentLabelElement := BrLabel new
+			addChild: (contentLabelElement := GtMessageOneLineSummaryElement new
 						id: #'chat--message-content';
 						hFitContentLimited;
 						vFitContent;
@@ -83,6 +83,7 @@ GtLMessageHeaderElement >> initializeToolbarElement [
 
 { #category : #'private - hooks' }
 GtLMessageHeaderElement >> onMessageViewModelChanged [
+	contentLabelElement messageViewModel: self messageViewModel.
 	toolbarElement messageViewModel: self messageViewModel.
 	self updateElement
 ]
@@ -129,14 +130,8 @@ GtLMessageHeaderElement >> unsubscribeFromMessageViewModel [
 ]
 
 { #category : #'private - updating' }
-GtLMessageHeaderElement >> updateContentElement [
-	contentLabelElement text: self messageViewModel contentOneLineSummary
-]
-
-{ #category : #'private - updating' }
 GtLMessageHeaderElement >> updateElement [
 	self updateSenderElement.
-	self updateContentElement.
 	self updateExecutionStateElement.
 ]
 

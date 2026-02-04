@@ -111,6 +111,7 @@ GtLOpenAIUserMessage >> content [
 
 { #category : #'as yet unclassified' }
 GtLOpenAIUserMessage >> contentOneLineSummary [
+	<return: #String>
 	^ contentOneLineSummary ifNil: [ self content ]
 ]
 
