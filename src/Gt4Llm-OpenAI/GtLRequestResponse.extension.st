@@ -11,3 +11,13 @@ GtLRequestResponse >> extractOpenAIUsageDetails [
 		ifPresent: [ :each | GtLOpenAIMessageTokensData from: each ] 
 		ifAbsent: [ nil ])
 ]
+
+{ #category : #'*Gt4Llm-OpenAI' }
+GtLRequestResponse >> resultOpenAIUsageDetails [ 
+	self result ifNil: [ ^ nil ].
+
+	^(result 
+		at: 'usage'
+		ifPresent: [ :each | GtLOpenAIMessageTokensData from: each ] 
+		ifAbsent: [ nil ])
+]

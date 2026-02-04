@@ -210,6 +210,19 @@ GtLReplyMessage >> messagesDo: aBlock [
 	self finalMessage ifNotNil: aBlock
 ]
 
+{ #category : #'api - message' }
+GtLReplyMessage >> messagesReverseDo: aBlock [
+	"Evaluate do block on all messages in reverse messages.
+	Note that some messages may be a composition of other messages.
+	
+	In this case, user message is ignored since 
+	it is a standalone message in the chat messages collection."
+
+	self finalMessage ifNotNil: aBlock.
+	self toolMessages reverseDo: aBlock.
+	
+]
+
 { #category : #'private - notifying' }
 GtLReplyMessage >> notifyReplyMessageChanged [
 	self announcer announce: (GtLMessageContentsChanged new message: self)

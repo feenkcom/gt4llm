@@ -14,7 +14,7 @@ Class {
 
 { #category : #initialization }
 GtLMessageHeaderElement >> defaultLayout [
-	^ BlLinearLayout horizontal
+	^ BlLinearLayout horizontal alignTopLeft
 ]
 
 { #category : #'api - visibility' }
@@ -44,18 +44,20 @@ GtLMessageHeaderElement >> initializeContentElement [
 	contentElement := BrHorizontalPane new
 			hMatchParent;
 			vFitContent;
+			constraintsDo: [ :c | c linear vertical alignTop ];
 			padding: (BlInsets left: 0 right: 15);
-			addChild: (contentLabelElement := BrLabel new
+			addChild: (contentLabelElement := GtMessageOneLineMultiLabelSummaryElement new
 						id: #'chat--message-content';
 						hFitContentLimited;
 						vFitContent;
-						aptitude: BrGlamorousLabelAptitude new;
-						beSmallSize);
+						beSmallSize;
+						constraintsDo: [ :c | c linear vertical alignTop ]);
 			addChild: (executionStateLabelElement := BrLabel new
 						id: #'chat--message-state';
 						hFitContent;
 						vFitContent;
 						aptitude: (BrGlamorousLabelAptitude new foreground: self theme button disabledTextColor);
+						constraintsDo: [ :c | c linear vertical alignTop ];
 						beSmallSize)
 ]
 
@@ -68,12 +70,14 @@ GtLMessageHeaderElement >> initializeEventListeners [
 { #category : #initialization }
 GtLMessageHeaderElement >> initializeSenderElement [
 	senderElement := BrLabel new
+			alignTopLeft;
 			hFitContent;
 			vFitContent;
 			aptitude: (BrGlamorousLabelAptitude new
 					foreground: BrGlamorousColors disabledButtonTextColor);
 			beSmallSize;
-			addAptitude: (senderTooltipAptitude := BrGlamorousWithExplicitTooltipAptitude new)
+			addAptitude: (senderTooltipAptitude := BrGlamorousWithExplicitTooltipAptitude new);
+			constraintsDo: [ :c | c linear vertical alignTop ]
 ]
 
 { #category : #initialization }
@@ -83,6 +87,7 @@ GtLMessageHeaderElement >> initializeToolbarElement [
 
 { #category : #'private - hooks' }
 GtLMessageHeaderElement >> onMessageViewModelChanged [
+	contentLabelElement messageViewModel: self messageViewModel.
 	toolbarElement messageViewModel: self messageViewModel.
 	self updateElement
 ]
@@ -129,14 +134,8 @@ GtLMessageHeaderElement >> unsubscribeFromMessageViewModel [
 ]
 
 { #category : #'private - updating' }
-GtLMessageHeaderElement >> updateContentElement [
-	contentLabelElement text: self messageViewModel contentText
-]
-
-{ #category : #'private - updating' }
 GtLMessageHeaderElement >> updateElement [
 	self updateSenderElement.
-	self updateContentElement.
 	self updateExecutionStateElement.
 ]
 

@@ -9,6 +9,11 @@ Class {
 }
 
 { #category : #adding }
+GtLInputModel >> addContentOneLineSummaryTo: aStringStream [
+	self subclassResponsibility
+]
+
+{ #category : #adding }
 GtLInputModel >> addContentTo: aDictionary [
 	self subclassResponsibility
 ]
@@ -16,6 +21,12 @@ GtLInputModel >> addContentTo: aDictionary [
 { #category : #adding }
 GtLInputModel >> addInstructionsTo: aMessageInstructions [
 	self subclassResponsibility
+]
+
+{ #category : #adding }
+GtLInputModel >> contentOneLineMultiLabelSummaryWith: aBuilder [
+	aBuilder newTextFromStringStream: [ :aWriteStream | 
+		self addContentOneLineSummaryTo: aWriteStream ]
 ]
 
 { #category : #accessing }
