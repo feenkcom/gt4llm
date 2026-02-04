@@ -309,9 +309,16 @@ GtLNewMessageElement >> updateSendButton [
 
 { #category : #'private - updating' }
 GtLNewMessageElement >> updateSendMessageError: anError [
+	| maxIndex |
+	maxIndex := 0.
+	toolbarElement items
+		do: [ :eachElement | 
+			((eachElement isKindOf: GtLExceptionElement) and: [ eachElement id isIndexed ])
+				ifTrue: [ maxIndex := maxIndex max: eachElement id index ] ].
+
 	toolbarElement
 		addItem: (GtLExceptionElement new
-				id: #'chat--new-exception';
+				id: (#'chat--new-exception' asBlocElementId indexed: maxIndex + 1);
 				freeze: anError;
 				closeAction: [ :anExceptionElement | toolbarElement removeItem: anExceptionElement ];
 				hFitContentLimited;
