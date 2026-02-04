@@ -41,22 +41,22 @@ GtLOpenAIProvider >> apiKey: aString [
 	client apiKey: aString
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #configuring }
 GtLOpenAIProvider >> beNotStreaming [
 	isStreaming := false
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #configuring }
 GtLOpenAIProvider >> beStreaming [
 	isStreaming := true
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLOpenAIProvider >> client [
 	^ client
 ]
 
-{ #category : #'private - execution' }
+{ #category : #'client calls' }
 GtLOpenAIProvider >> clientGenerateCompactionResponse: anInputMessage [
 	^client 
 				generateCompactResponseWithModel: self modelName 
@@ -64,7 +64,7 @@ GtLOpenAIProvider >> clientGenerateCompactionResponse: anInputMessage [
 				instructions: nil
 ]
 
-{ #category : #'private - execution' }
+{ #category : #'client calls' }
 GtLOpenAIProvider >> clientGenerateModelResponse: anInputMessage [
 	^client
 			generateResponseWithModel: self modelName
@@ -77,12 +77,12 @@ GtLOpenAIProvider >> clientGenerateModelResponse: anInputMessage [
 			isStreaming: isStreaming 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLOpenAIProvider >> defaultAssistantMessageClass [
 	^ GtLOpenAIAssistantMessage
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLOpenAIProvider >> defaultUserMessageClass [
 	^ GtLOpenAIUserMessage
 ]
@@ -116,19 +116,19 @@ GtLOpenAIProvider >> executeAsyncMessage: anInputMessage [
 	^ anErrorHandlerPromise
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLOpenAIProvider >> executions [
 	^ executions
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLOpenAIProvider >> format: anObject [
 	super format: anObject.
 	
 	self beNotStreaming
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #views }
 GtLOpenAIProvider >> gtExecutionsFor: aView [
 	<gtView>
 	^ aView list
@@ -157,7 +157,7 @@ GtLOpenAIProvider >> gtViewCallsWithTokensFor: aView [
 		view: #gtViewCallsWithTokensFor:
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'private - execution' }
 GtLOpenAIProvider >> handleToolCall: aToolCall [
 	| domainObject toolMessage |
 	chat removeLastMessage.
@@ -186,12 +186,12 @@ GtLOpenAIProvider >> initialize [
 	isStreaming := true.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #configuring }
 GtLOpenAIProvider >> isStreaming: aBoolean [
 	isStreaming := aBoolean
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLOpenAIProvider >> modelName [
 	^ modelName
 ]
