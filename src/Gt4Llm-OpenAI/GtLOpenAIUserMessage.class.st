@@ -95,7 +95,7 @@ GtLOpenAIUserMessage >> computeContentOneLineSummaryFromInputModels [
 	^ String
 		streamContents: [ :aStream | 
 			inputModels
-				do: [ :each | each addContentOneLineSummaryTo: aStream ]
+				do: [ :each | each addContentOneLineSummaryTo: (ZnIgnoreNewLineWriterStream on: aStream) ]
 				separatedBy: [ aStream space ] ]
 ]
 
