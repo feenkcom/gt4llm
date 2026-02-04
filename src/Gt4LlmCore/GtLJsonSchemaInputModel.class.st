@@ -7,12 +7,12 @@ Class {
 	#category : #Gt4LlmCore
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #adding }
 GtLJsonSchemaInputModel >> addContentTo: aDictionary [
 	aDictionary at: name put: model  
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #adding }
 GtLJsonSchemaInputModel >> addInstructionsTo: aMessageInstructions [
 
 	aMessageInstructions

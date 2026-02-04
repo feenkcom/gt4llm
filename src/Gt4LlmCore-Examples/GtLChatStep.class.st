@@ -39,6 +39,11 @@ GtLChatStep >> assertMessageElementHasToolSenderNameWithIndex: anIndex [
 ]
 
 { #category : #'steps - checks' }
+GtLChatStep >> assertMessageElementHasUserSenderNameWithIndex: anIndex [
+	^ self assertMessageElementWithIndex: anIndex hasSenderNamed: 'You'
+]
+
+{ #category : #'steps - checks' }
 GtLChatStep >> assertMessageElementHasWaitingSenderNameWithIndex: anIndex [
 	^ self assertMessageElementWithIndex: anIndex hasSenderNamed: 'Waiting'
 ]
@@ -61,6 +66,19 @@ GtLChatStep >> assertMessageElementWithIndex: anIndex hasChatStateNamed: aChatSt
 		/ #scrollable;
 		// (GtLMessageElementId indexed: anIndex);
 		// #'chat--message-state'
+]
+
+{ #category : #'steps - checks' }
+GtLChatStep >> assertMessageElementWithIndex: anIndex hasHeaderContent: aContentString [
+	^ self assert
+		label: ('Assert message element with index {1} has sender named {2}'
+				format: {anIndex.
+						aContentString});
+		value: [ :aLabel | aLabel text asString ] equals: aContentString;
+		onThisOrDeepChildElementId: #'chat--message-list';
+		/ #scrollable;
+		// (GtLMessageElementId indexed: anIndex);
+		// #'chat--message-content'
 ]
 
 { #category : #'steps - checks' }

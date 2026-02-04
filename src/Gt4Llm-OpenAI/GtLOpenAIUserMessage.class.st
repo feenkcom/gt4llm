@@ -8,7 +8,8 @@ Class {
 		'content',
 		'attachments',
 		'requestResponse',
-		'executionStrategy'
+		'executionStrategy',
+		'contentOneLineSummary'
 	],
 	#category : #'Gt4Llm-OpenAI'
 }
@@ -74,10 +75,11 @@ GtLOpenAIUserMessage >> buildCompleteInstructions [
 GtLOpenAIUserMessage >> chat: aChat [
 	super chat: aChat.
 	self updateDataFromChat: aChat.
-	content := self computeContentFromInputModels
+	content := self computeContentFromInputModels.
+	contentOneLineSummary := self computeContentOneLineSummaryFromInputModels
 ]
 
-{ #category : #accessing }
+{ #category : #'private - initialization' }
 GtLOpenAIUserMessage >> computeContentFromInputModels [
 	| object |
 	
@@ -88,6 +90,15 @@ GtLOpenAIUserMessage >> computeContentFromInputModels [
 	^ NeoJSONWriter toStringPretty: object
 ]
 
+{ #category : #'private - initialization' }
+GtLOpenAIUserMessage >> computeContentOneLineSummaryFromInputModels [
+	^ String
+		streamContents: [ :aStream | 
+			inputModels
+				do: [ :each | each addContentOneLineSummaryTo: (ZnIgnoreNewLineWriterStream on: aStream) ]
+				separatedBy: [ aStream space ] ]
+]
+
 { #category : #accessing }
 GtLOpenAIUserMessage >> configureWithCompactionExecution [
 	executionStrategy := GtLOpenAIMessageCompactionExecutionStrategy new
@@ -96,6 +107,17 @@ GtLOpenAIUserMessage >> configureWithCompactionExecution [
 { #category : #'as yet unclassified' }
 GtLOpenAIUserMessage >> content [
 	^ content
+]
+
+{ #category : #accessing }
+GtLOpenAIUserMessage >> contentOneLineMultiLabelSummaryWith: aBuilder [
+	inputModels do: [ :each | each contentOneLineMultiLabelSummaryWith: aBuilder ]
+]
+
+{ #category : #'as yet unclassified' }
+GtLOpenAIUserMessage >> contentOneLineSummary [
+	<return: #String>
+	^ contentOneLineSummary ifNil: [ self content ]
 ]
 
 { #category : #'as yet unclassified' }

@@ -106,7 +106,13 @@ GtLChatMessage >> completeInstructionString [
 ]
 
 { #category : #accessing }
+GtLChatMessage >> contentOneLineMultiLabelSummaryWith: aBuilder [
+	aBuilder newWithText: self contentOneLineSummary
+]
+
+{ #category : #accessing }
 GtLChatMessage >> contentOneLineSummary [
+	<return: #String>
 	^ self contentText copyReplaceAll: String lf with: String space
 ]
 
