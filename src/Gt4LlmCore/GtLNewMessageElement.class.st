@@ -13,7 +13,7 @@ Class {
 		'connectionsButton',
 		'toolbarElement'
 	],
-	#category : 'Gt4LlmCore-UI - Elements'
+	#category : #'Gt4LlmCore-UI - Elements'
 }
 
 { #category : #factory }

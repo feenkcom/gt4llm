@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLToolForClassLookup,
 	#superclass : #GtLAbstractFunctionTool,
-	#category : 'Gt4LlmCore-Tools'
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #'as yet unclassified' }

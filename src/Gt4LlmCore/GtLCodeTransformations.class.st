@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLCodeTransformations,
 	#superclass : #GtLBasicTransformations,
-	#category : 'Gt4LlmCore-Formats'
+	#category : #'Gt4LlmCore-Formats'
 }
 
 { #category : #accessing }

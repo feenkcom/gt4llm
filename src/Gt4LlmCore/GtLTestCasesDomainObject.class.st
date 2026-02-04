@@ -6,7 +6,7 @@ Class {
 		'notFoundClassNames',
 		'notTestCaseClasses'
 	],
-	#category : 'Gt4LlmCore-Domain Objects'
+	#category : #'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #visiting }

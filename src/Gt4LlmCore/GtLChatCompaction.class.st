@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLChatCompaction,
 	#superclass : #GtLMarkdown,
-	#category : 'Gt4LlmCore-Formats'
+	#category : #'Gt4LlmCore-Formats'
 }
 
 { #category : #'as yet unclassified' }
