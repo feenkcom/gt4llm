@@ -6,8 +6,7 @@ Class {
 		'modelName',
 		'rawData',
 		'requestResponse',
-		'rawContent',
-		'contentText'
+		'rawContent'
 	],
 	#category : #'Gt4Llm-OpenAI'
 }
@@ -46,7 +45,12 @@ GtLOpenAICompactionMessage >> computeResponseModelsByFormat [
 
 { #category : #accessing }
 GtLOpenAICompactionMessage >> contentText [
-	^ contentText
+	^ rawContent contentText
+]
+
+{ #category : #accessing }
+GtLOpenAICompactionMessage >> encryptedContent [
+	^ rawContent encryptedContent
 ]
 
 { #category : #views }
@@ -85,7 +89,7 @@ GtLOpenAICompactionMessage >> hasCompactionResponse [
 
 { #category : #testing }
 GtLOpenAICompactionMessage >> hasResponse [
-	^ self rawContent notNil
+	^ rawContent notNil
 ]
 
 { #category : #initialization }
@@ -98,27 +102,19 @@ GtLOpenAICompactionMessage >> initializeFromResult: aResult [
 				((anOutput at: 'type') = 'compaction') ]
 			ifFound: [ :data | 
 				self rawData: data.
-				rawContent := rawData at: 'encrypted_content'.
-				contentText := rawContent ]  
+				rawContent := GtLOpenAIRawCompactionData from: data  ]  
 			ifNone: [
 				aResult output 
 					detect: [ :anOutput | 
 						((anOutput at: 'type') = 'message') ]
 					ifFound: [ :data | 
 							self rawData: data.
-							rawContent := rawData at: 'content'.
-							contentText := '' join: (rawContent 
-								collect: [:each | each at: 'text' ])] ]
+							rawContent := GtLOpenAIRawMessageData from: data] ]
 ]
 
 { #category : #accessing }
 GtLOpenAICompactionMessage >> modelName: anObject [
 	modelName := anObject
-]
-
-{ #category : #reading }
-GtLOpenAICompactionMessage >> rawContent [
-	^ rawContent
 ]
 
 { #category : #accessing }
@@ -162,8 +158,5 @@ GtLOpenAICompactionMessage >> senderText [
 
 { #category : #serializing }
 GtLOpenAICompactionMessage >> serializeForOpenAIResponsesAPI [
-	^ {#content
-			-> {{'type' -> 'output_text'.
-						'text' -> self contentText} asDictionary}.
-		#role -> self role} asDictionary
+	^ rawContent serializeForOpenAIResponsesAPIFromMessage: self
 ]
