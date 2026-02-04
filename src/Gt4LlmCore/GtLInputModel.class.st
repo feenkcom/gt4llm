@@ -23,6 +23,12 @@ GtLInputModel >> addInstructionsTo: aMessageInstructions [
 	self subclassResponsibility
 ]
 
+{ #category : #adding }
+GtLInputModel >> contentOneLineMultiLabelSummaryWith: aBuilder [
+	aBuilder newTextFromStringStream: [ :aWriteStream | 
+		self addContentOneLineSummaryTo: aWriteStream ]
+]
+
 { #category : #accessing }
 GtLInputModel >> description [
 	^ model gtDisplayString

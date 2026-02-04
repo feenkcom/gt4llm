@@ -45,7 +45,7 @@ GtLMessageHeaderElement >> initializeContentElement [
 			hMatchParent;
 			vFitContent;
 			padding: (BlInsets left: 0 right: 15);
-			addChild: (contentLabelElement := GtMessageOneLineSummaryElement new
+			addChild: (contentLabelElement := GtMessageOneLineMultiLabelSummaryElement new
 						id: #'chat--message-content';
 						hFitContentLimited;
 						vFitContent;

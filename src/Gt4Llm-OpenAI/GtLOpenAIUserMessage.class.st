@@ -109,6 +109,11 @@ GtLOpenAIUserMessage >> content [
 	^ content
 ]
 
+{ #category : #accessing }
+GtLOpenAIUserMessage >> contentOneLineMultiLabelSummaryWith: aBuilder [
+	inputModels do: [ :each | each contentOneLineMultiLabelSummaryWith: aBuilder ]
+]
+
 { #category : #'as yet unclassified' }
 GtLOpenAIUserMessage >> contentOneLineSummary [
 	<return: #String>

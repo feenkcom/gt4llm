@@ -1,5 +1,5 @@
 Class {
-	#name : #GtMessageOneLineSummaryElement,
+	#name : #GtMessageOneLineOneLabelSummaryElement,
 	#superclass : #GtLBasicMessageElement,
 	#traits : 'TBrSizeAdjustable',
 	#classTraits : 'TBrSizeAdjustable classTrait',
@@ -10,12 +10,12 @@ Class {
 }
 
 { #category : #initialization }
-GtMessageOneLineSummaryElement >> defaultLayout [
+GtMessageOneLineOneLabelSummaryElement >> defaultLayout [
 	^ BlLinearLayout horizontal
 ]
 
 { #category : #initialization }
-GtMessageOneLineSummaryElement >> initialize [
+GtMessageOneLineOneLabelSummaryElement >> initialize [
 	super initialize.
 
 	self initializeLabelElement.
@@ -29,7 +29,7 @@ GtMessageOneLineSummaryElement >> initialize [
 ]
 
 { #category : #initialization }
-GtMessageOneLineSummaryElement >> initializeLabelElement [
+GtMessageOneLineOneLabelSummaryElement >> initializeLabelElement [
 	labelElement := BrLabel new
 			hFitContentLimited;
 			vFitContent;
@@ -38,25 +38,25 @@ GtMessageOneLineSummaryElement >> initializeLabelElement [
 ]
 
 { #category : #'private - hooks' }
-GtMessageOneLineSummaryElement >> onMessageViewModelChanged [
+GtMessageOneLineOneLabelSummaryElement >> onMessageViewModelChanged [
 	super onMessageViewModelChanged.
 	self updateElement
 ]
 
 { #category : #'private - event handling' }
-GtMessageOneLineSummaryElement >> onMessageViewModelContentsChanged: anAnnouncement [
+GtMessageOneLineOneLabelSummaryElement >> onMessageViewModelContentsChanged: anAnnouncement [
 	self messageViewModel = anAnnouncement messageViewModel ifFalse: [ ^ self ].
 
 	BlTaskAction enqueueElement: self action: [ self updateElement ]
 ]
 
 { #category : #'private - event handling' }
-GtMessageOneLineSummaryElement >> onThreadMessageViewModelChanged: anAnnouncement [
+GtMessageOneLineOneLabelSummaryElement >> onThreadMessageViewModelChanged: anAnnouncement [
 	BlTaskAction enqueueElement: self action: [ self updateElement ]
 ]
 
 { #category : #'private - hooks' }
-GtMessageOneLineSummaryElement >> subscribeToMessageViewModel [
+GtMessageOneLineOneLabelSummaryElement >> subscribeToMessageViewModel [
 	super subscribeToMessageViewModel.
 	self messageViewModel weak
 		when: GtLlmThreadMessageViewModelChanged
@@ -68,22 +68,22 @@ GtMessageOneLineSummaryElement >> subscribeToMessageViewModel [
 ]
 
 { #category : #accessing }
-GtMessageOneLineSummaryElement >> text [
+GtMessageOneLineOneLabelSummaryElement >> text [
 	^ labelElement text
 ]
 
 { #category : #accessing }
-GtMessageOneLineSummaryElement >> text: aText [
+GtMessageOneLineOneLabelSummaryElement >> text: aText [
 	labelElement text: aText
 ]
 
 { #category : #'private - hooks' }
-GtMessageOneLineSummaryElement >> unsubscribeFromMessageViewModel [
+GtMessageOneLineOneLabelSummaryElement >> unsubscribeFromMessageViewModel [
 	super unsubscribeFromMessageViewModel.
 	self messageViewModel unsubscribe: self
 ]
 
 { #category : #'private - updating' }
-GtMessageOneLineSummaryElement >> updateElement [
+GtMessageOneLineOneLabelSummaryElement >> updateElement [
 	labelElement text: self messageViewModel contentOneLineSummary
 ]
