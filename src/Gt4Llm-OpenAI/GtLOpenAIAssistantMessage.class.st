@@ -43,18 +43,6 @@ GtLOpenAIAssistantMessage >> computeResponseModelsByFormat [
 { #category : #accessing }
 GtLOpenAIAssistantMessage >> contentText [
 	^ '' join: (self rawContent collect: [:each | each at: 'text' ])
-
-	"(content isKindOf: String)
-		ifTrue: [ content ]
-		ifFalse: [ ''
-				join: (content
-						collect: [ :aValue | 
-							(aValue at: 'text' ifAbsent: [ nil ])
-								ifNil: [ '' ]
-								ifNotNil: [ :aTextObject | 
-									(aTextObject isKindOf: String)
-										ifTrue: [ aTextObject ]
-										ifFalse: [ (aTextObject at: 'value') ifNil: [ '' ] ] ] ]) ]"
 ]
 
 { #category : #views }
