@@ -77,7 +77,7 @@ GtLChatStep >> assertMessageElementWithIndex: anIndex hasSenderNamed: aSenderNam
 ]
 
 { #category : #'steps - checks' }
-GtLChatStep >> assertNewMessageIsWithExceptionText: anExceptionString [
+GtLChatStep >> assertNewMessageIsWithExceptionNumber: anIndex text: anExceptionString [
 	| aStep |
 	aStep := self
 			substeps2: 'Assert exception element'
@@ -95,18 +95,18 @@ GtLChatStep >> assertNewMessageIsWithExceptionText: anExceptionString [
 
 	aStep
 		// GtLNewMessageElement;
-		// #'chat--new-exception'.
+		// (#'chat--new-exception' asBlocElementId indexed: anIndex).
 
 	^ aStep
 ]
 
 { #category : #'steps - checks' }
-GtLChatStep >> assertNewMessageIsWithoutException [
+GtLChatStep >> assertNewMessageIsWithoutExceptions [
 	^ self assert
 		label: 'Assert exception element does not exist';
 		onParentStepTarget: self;
 		// GtLNewMessageElement;
-		// #'chat--new-exception';
+		// GtLExceptionElement;
 		notExists
 ]
 
@@ -179,10 +179,11 @@ GtLChatStep >> assertNumberOfMessageElementsIs: aCount [
 ]
 
 { #category : #'steps - interactions' }
-GtLChatStep >> clickCloseException [
+GtLChatStep >> clickCloseExceptionNumber: anIndex [
 	^ self click
 		label: 'Send message';
 		// GtLNewMessageElement;
+		// (#'chat--new-exception' asBlocElementId indexed: anIndex);
 		// #'chat--new-exception-close'
 ]
 

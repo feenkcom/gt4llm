@@ -10,7 +10,7 @@ Class {
 { #category : #'instance creation' }
 GtLChatCompactedData class >> fromOpenAICompactionMessage: aMessage [
 	^ self new
-		content: aMessage rawContent
+		content: aMessage encryptedContent
 ]
 
 { #category : #accessing }
