@@ -13,6 +13,29 @@ GtLOpenAICompactionStrategy class >> forProvider: aProvider [
 		provider: aProvider
 ]
 
+{ #category : #'api - compaction' }
+GtLOpenAICompactionStrategy >> executeCompaction [
+	self subclassResponsibility
+]
+
+{ #category : #testing }
+GtLOpenAICompactionStrategy >> isCompactionNeeded [
+	^self latestInputTokensCount > self thresholdTokensLimit
+]
+
+{ #category : #accessing }
+GtLOpenAICompactionStrategy >> latestInputTokensCount [
+	^ self latestTokensUsage inputTokens
+]
+
+{ #category : #accessing }
+GtLOpenAICompactionStrategy >> latestTokensUsage [
+	^ provider chat messages lastMessage
+			ifNil: [0] 
+			ifNotNil: [ :aMessage |
+				aMessage requestResponse resultOpenAIUsageDetails ]
+]
+
 { #category : #accessing }
 GtLOpenAICompactionStrategy >> provider [
 	^provider
@@ -21,4 +44,15 @@ GtLOpenAICompactionStrategy >> provider [
 { #category : #accessing }
 GtLOpenAICompactionStrategy >> provider: anObject [
 	provider := anObject
+]
+
+{ #category : #'api - compaction' }
+GtLOpenAICompactionStrategy >> requestCompactionIfNeeded [
+	self isCompactionNeeded ifTrue: [
+		self executeCompaction ]
+]
+
+{ #category : #accessing }
+GtLOpenAICompactionStrategy >> thresholdTokensLimit [
+	^ 10000
 ]

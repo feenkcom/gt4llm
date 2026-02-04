@@ -20,6 +20,11 @@ GtLToolPreviousRequestResponse >> previousRequestResponse: anObject [
 ]
 
 { #category : #accessing }
+GtLToolPreviousRequestResponse >> resultOpenAIUsageDetails [
+	^followingRequestResponse resultOpenAIUsageDetails
+]
+
+{ #category : #accessing }
 GtLToolPreviousRequestResponse >> toolCallIndex [
 	^ toolCallIndex
 ]

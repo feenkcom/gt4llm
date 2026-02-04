@@ -197,19 +197,7 @@ GtLChat >> codeTransformationsResponse [
 
 { #category : #actions }
 GtLChat >> compact [
-	self sendWith: [ :m |
-		m
-			addResponseFormatForMagritte: GtLChatCompactedSummary named: 'Compaction';
-			markdown: self compactionPrompt ].
-]
-
-{ #category : #actions }
-GtLChat >> compactionPrompt [
-	^ 'Compact this chat for later continuation. Summarize:
-- The initial and remaining goals
-- Essential lessons and decisions
-- Open questions
-- Next steps'
+	self provider sendPromtCompactionMessage
 ]
 
 { #category : #copying }
