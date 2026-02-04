@@ -105,9 +105,10 @@ GtLAnthropicProvider >> executeAsyncMessage: anInputMessage [
 						inputMessage: anInputMessage.
 				self chat addErrorMessage: aMessage.
 				self privateExecutionState: self state finished.
-				self chat signalRunIsDone.
 				aMessage ].
-	executions add: aSecondPromise
+	executions add: aSecondPromise.
+	
+	^ aSecondPromise
 ]
 
 { #category : #'as yet unclassified' }

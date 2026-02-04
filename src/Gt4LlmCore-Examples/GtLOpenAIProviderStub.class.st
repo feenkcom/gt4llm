@@ -30,13 +30,7 @@ GtLOpenAIProviderStub >> modelName [
 
 { #category : #'api - execution' }
 GtLOpenAIProviderStub >> sendMessage: aMessage [
-	<return: #TAsyncPromise>
-	^ sendMessageBlock
-		ifNotNil: [ :aBlock | 
-			[ aBlock cull: aMessage cull: self chat ] asAsyncFuture
-				await: GtLSettings futureExecutionConfiguration ]
-		ifNil: [ aMessage asAsyncFuture
-				await: GtLSettings futureExecutionConfiguration ]
+	sendMessageBlock ifNotNil: [ :aBlock | aBlock cull: aMessage cull: self chat ]
 ]
 
 { #category : #'api - stub' }

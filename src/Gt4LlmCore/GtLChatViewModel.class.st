@@ -68,11 +68,6 @@ GtLChatViewModel >> onChatMessageAdded: anAnnouncement [
 	self notifyChatMessageAdded: anAnnouncement message
 ]
 
-{ #category : #'api - communication' }
-GtLChatViewModel >> sendMessage: aString [
-	self assistantChat sendMessage: aString
-]
-
 { #category : #'private - chat' }
 GtLChatViewModel >> subscribeToChat [
 	self chat announcer weak

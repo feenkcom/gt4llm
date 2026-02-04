@@ -514,26 +514,24 @@ GtLChat >> resetMessages [
 
 { #category : #'api - communication' }
 GtLChat >> sendMarkdown: aString [
-	<return: #TAsyncPromise>
 	| newMessage |
 	self assert: aString isString.
 	newMessage := self createUserMessage.
 	newMessage markdown: aString.
-	^ self sendMessage: newMessage
+	self sendMessage: newMessage
 ]
 
 { #category : #'api - communication' }
 GtLChat >> sendMessage: aMessage [
-	<return: #TAsyncPromise>
 	aMessage chat: self.
 	self addUserMessage: aMessage.
-	^ self provider sendMessage: aMessage
+	self provider sendMessage: aMessage
 ]
 
 { #category : #'api - communication' }
 GtLChat >> sendPlainMessage: aString [
 	self deprecated: 'use sendMarkdown: instead'.
-	^ self sendMarkdown: aString
+	self sendMarkdown: aString
 ]
 
 { #category : #'api - communication' }
