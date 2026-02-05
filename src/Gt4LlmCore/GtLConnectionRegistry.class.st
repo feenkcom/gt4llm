@@ -195,6 +195,6 @@ GtLConnectionRegistry >> standardDefaultConnection [
 	^ GtLConnection new
 		providerClass: GtLOpenAIProvider;
 		label: 'GPT 5.2 Codex';
-		model: 'gpt-5.2-codex';
-		addOption: 'isStreaming' withValue: false
+		model: 'gpt-5.2-codex'";
+		addOption: 'isStreaming' withValue: false"
 ]
