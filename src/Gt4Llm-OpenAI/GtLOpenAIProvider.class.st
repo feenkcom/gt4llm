@@ -3,7 +3,6 @@ Class {
 	#superclass : #GtLProvider,
 	#instVars : [
 		'client',
-		'isStreaming',
 		'executions',
 		'tools',
 		'modelName',
@@ -40,16 +39,6 @@ GtLOpenAIProvider class >> withApiKeyFromFile [
 { #category : #accessing }
 GtLOpenAIProvider >> apiKey: aString [
 	client apiKey: aString
-]
-
-{ #category : #configuring }
-GtLOpenAIProvider >> beNotStreaming [
-	isStreaming := false
-]
-
-{ #category : #configuring }
-GtLOpenAIProvider >> beStreaming [
-	isStreaming := true
 ]
 
 { #category : #configuring }
@@ -90,7 +79,7 @@ GtLOpenAIProvider >> clientGenerateModelResponse: anInputMessage [
 			andFormat: (anInputMessage hasFormats
 				ifTrue: [ anInputMessage formatDescriptionsJsonSchema ]
 				ifFalse: [ nil ])
-			isStreaming: isStreaming 
+			isStreaming: false 
 ]
 
 { #category : #utils }
@@ -163,13 +152,6 @@ GtLOpenAIProvider >> executions [
 	^ executions
 ]
 
-{ #category : #accessing }
-GtLOpenAIProvider >> format: anObject [
-	super format: anObject.
-	
-	self beNotStreaming
-]
-
 { #category : #views }
 GtLOpenAIProvider >> gtExecutionsFor: aView [
 	<gtView>
@@ -225,14 +207,8 @@ GtLOpenAIProvider >> initialize [
 	modelName := nil.	"set when the provider is built"
 	client := GtLOpenAIClient new.
 	executions := OrderedCollection new.
-	isStreaming := true.
 	
 	self beWithNoCompaction.
-]
-
-{ #category : #configuring }
-GtLOpenAIProvider >> isStreaming: aBoolean [
-	isStreaming := aBoolean
 ]
 
 { #category : #accessing }
@@ -292,27 +268,24 @@ GtLOpenAIProvider >> processNextMessage: anInputMessage [
 	<return: #GtLOpenAIProviderProcessedMessage or: nil>
 	| result anOutputMessage anotherMessage |
 	self state ifCanContinue: [  ] ifDisabled: [ ^ nil ].
-	
+
 	result := self executeNextMessage: anInputMessage.
-	
+
 	result hasToolCalls
 		ifTrue: [ 
 			compactionStrategy requestCompactionIfNeeded.
 			anotherMessage := self performToolCallsIn: result with: anInputMessage tools ]
 		ifFalse: [ 
-			anOutputMessage := isStreaming
-					ifTrue: [ self streamingMessageFrom: result ]
-					ifFalse: [ self 
-						responseTypeForResult: result 
-						fromInputMessage: anInputMessage].
-						
+			anOutputMessage := self
+					responseTypeForResult: result
+					fromInputMessage: anInputMessage.
 			self chat addAssistantMessage: anOutputMessage.
 			self chat signalRunIsDone ].
-			
+
 	^ GtLOpenAIProviderProcessedMessage new
 		inputMessage: anInputMessage;
 		result: result;
-		isStreaming: isStreaming;
+		isStreaming: false;
 		anotherProcessedMessage: anotherMessage;
 		outputMessage: anOutputMessage
 ]
@@ -342,18 +315,4 @@ GtLOpenAIProvider >> responseTypeForResult: aResult fromInputMessage: anInputMes
 { #category : #utils }
 GtLOpenAIProvider >> sendAPICompactionMessage [  
 	^self chat sendMessage:  self createAPICompactionMessage
-]
-
-{ #category : #utils }
-GtLOpenAIProvider >> streamingMessageFrom: aResult [
-	| aMessage |
-	aResult provider: self.
-
-	aMessage := self assistantMessageClass new
-			role: 'assistant';
-			model: self model;
-			content: ''.
-	aResult notifyOnOutput: aMessage.
-
-	^ aMessage
 ]
