@@ -22,6 +22,11 @@ GtLDemoMathReasoningExplanationStep >> = anObject [
 	^ content = anObject content 
 ]
 
+{ #category : #'api - ui' }
+GtLDemoMathReasoningExplanationStep >> addContentOneLineSummaryTo: aWriteStream [
+	self content ifNotNil: [ :aString | aWriteStream nextPutAll: aString asString ]
+]
+
 { #category : #accessing }
 GtLDemoMathReasoningExplanationStep >> content [
 	^ content
@@ -40,6 +45,12 @@ GtLDemoMathReasoningExplanationStep >> contentDescription [
 		  accessor: #content;
 		  comment: 'An explanation of this step';
 		  beRequired
+]
+
+{ #category : #'api - ui' }
+GtLDemoMathReasoningExplanationStep >> contentOneLineMultiLabelSummaryWith: aBuilder [
+	aBuilder newTextFromStringStream: [ :aWriteStream | 
+		self addContentOneLineSummaryTo: aWriteStream ]
 ]
 
 { #category : #accessing }

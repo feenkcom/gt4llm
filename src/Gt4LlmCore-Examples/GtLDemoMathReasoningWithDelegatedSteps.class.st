@@ -19,6 +19,20 @@ GtLDemoMathReasoningWithDelegatedSteps >> = anObject [
 		steps = anObject steps ]
 ]
 
+{ #category : #'api - ui' }
+GtLDemoMathReasoningWithDelegatedSteps >> addContentOneLineSummaryTo: aWriteStream [
+	self steps
+		do: [ :eachStep | eachStep addContentOneLineSummaryTo: aWriteStream ]
+		separatedBy: [ aWriteStream space ]
+]
+
+{ #category : #'api - ui' }
+GtLDemoMathReasoningWithDelegatedSteps >> contentOneLineMultiLabelSummaryWith: aBuilder [
+	self steps
+		do: [ :eachStep | eachStep contentOneLineMultiLabelSummaryWith: aBuilder ]
+		separatedBy: [  ]
+]
+
 { #category : #accessing }
 GtLDemoMathReasoningWithDelegatedSteps >> finalAnswer [
 	^ finalAnswer

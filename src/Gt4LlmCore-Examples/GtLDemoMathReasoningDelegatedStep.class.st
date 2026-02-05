@@ -17,6 +17,16 @@ GtLDemoMathReasoningDelegatedStep >> = anObject [
 	^ step = anObject step 
 ]
 
+{ #category : #'api - ui' }
+GtLDemoMathReasoningDelegatedStep >> addContentOneLineSummaryTo: aWriteStream [
+	self step addContentOneLineSummaryTo: aWriteStream
+]
+
+{ #category : #'api - ui' }
+GtLDemoMathReasoningDelegatedStep >> contentOneLineMultiLabelSummaryWith: aBuilder [
+	self step contentOneLineMultiLabelSummaryWith: aBuilder
+]
+
 { #category : #accessing }
 GtLDemoMathReasoningDelegatedStep >> description [
 	^ self step description

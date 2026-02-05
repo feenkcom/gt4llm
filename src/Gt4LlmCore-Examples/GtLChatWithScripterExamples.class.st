@@ -26,7 +26,7 @@ GtLChatWithScripterExamples >> chatElementMarkdownAndInputObject [
 		assertNewMessageStopButtonIsDisabled;
 		assertNumberOfMessageElementsIs: 2;
 		assertMessageElementWithIndex: 1
-			hasHeaderContent: 'Explain this object by exploring the classes that it relies upon. Object: Cartoons';
+			hasHeaderContent: 'Explain this object by exploring the classes that it relies upon. | Object: Cartoons';
 		play.
 
 	^ scripter

@@ -7,6 +7,18 @@ Class {
 	#category : #'Gt4LlmCore-UI - Support'
 }
 
+{ #category : #'gt - extensions' }
+GtMessageOneLineMultiLabelSummaryBuilder >> gtLabelElementsFor: aView [
+	<gtView>
+	self labelElements ifNil: [ ^ aView empty ].
+
+	^ aView columnedList
+		title: 'Elements';
+		items: [ self labelElements ifNil: [ #() ] ];
+		column: 'Element' text: [ :each | each gtDisplayString ];
+		column: 'Kind' text: [ :each | each class ]
+]
+
 { #category : #initialization }
 GtMessageOneLineMultiLabelSummaryBuilder >> initialize [
 	super initialize.
@@ -21,7 +33,8 @@ GtMessageOneLineMultiLabelSummaryBuilder >> labelElements [
 { #category : #'api - building' }
 GtMessageOneLineMultiLabelSummaryBuilder >> newTextFromStringStream: aBlock [
 	| aString |
-	aString := String streamContents: [ :aStream | aBlock value: aStream ].
+	aString := String streamContents: [ :aStream | 
+		aBlock value: (ZnIgnoreNewLineWriterStream on: aStream) ].
 	
 	self newWithText: aString
 ]

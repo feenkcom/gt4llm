@@ -19,6 +19,20 @@ GtLDemoMathReasoning >> = anObject [
 		steps = anObject steps ]
 ]
 
+{ #category : #'api - ui' }
+GtLDemoMathReasoning >> addContentOneLineSummaryTo: aWriteStream [
+	self steps
+		do: [ :eachStep | eachStep addContentOneLineSummaryTo: aWriteStream ]
+		separatedBy: [ aWriteStream space ]
+]
+
+{ #category : #'api - ui' }
+GtLDemoMathReasoning >> contentOneLineMultiLabelSummaryWith: aBuilder [
+	self steps
+		do: [ :eachStep | eachStep contentOneLineMultiLabelSummaryWith: aBuilder ]
+		separatedBy: [  ]
+]
+
 { #category : #'as yet unclassified' }
 GtLDemoMathReasoning >> descriptionContainer [
 	^ super descriptionContainer

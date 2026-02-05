@@ -114,7 +114,7 @@ GtLOpenAIUserMessage >> contentOneLineMultiLabelSummaryWith: aBuilder [
 	inputModels do: [ :each | each contentOneLineMultiLabelSummaryWith: aBuilder ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'api - ui' }
 GtLOpenAIUserMessage >> contentOneLineSummary [
 	<return: #String>
 	^ contentOneLineSummary ifNil: [ self content ]

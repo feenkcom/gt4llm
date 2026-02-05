@@ -34,6 +34,23 @@ GtLReplyMessage >> content [
 	^ self currentMessageDo: #content ifAbsent: [ '' ]
 ]
 
+{ #category : #'api - ui' }
+GtLReplyMessage >> contentOneLineMultiLabelSummaryWith: aBuilder [
+	"Build a content one line summary widget."
+
+	^ self
+		currentMessageDo: [ :aMessage | aMessage contentOneLineMultiLabelSummaryWith: aBuilder ]
+		ifAbsent: [ super contentOneLineMultiLabelSummaryWith: aBuilder ]
+]
+
+{ #category : #'api - ui' }
+GtLReplyMessage >> contentOneLineSummary [
+	<return: #String>
+	^ self
+		currentMessageDo: #contentOneLineSummary
+		ifAbsent: [ super contentOneLineSummary ]
+]
+
 { #category : #accessing }
 GtLReplyMessage >> contentText [
 	^ self currentMessageDo: #contentText ifAbsent: [ '' ]
