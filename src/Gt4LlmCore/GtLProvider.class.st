@@ -79,7 +79,7 @@ GtLProvider >> gtCallsFor: aView [
 	<gtView>
 	^ aView forward
 		title: 'API calls';
-		priority: 1;
+		priority: 5;
 		object: [ self client ];
 		view: #gtCallsFor:
 ]

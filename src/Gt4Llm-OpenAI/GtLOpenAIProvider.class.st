@@ -193,8 +193,8 @@ GtLOpenAIProvider >> gtSpawnClientFor: anAction [
 GtLOpenAIProvider >> gtViewCallsWithTokensFor: aView [
 	<gtView>
 	^(aView forward)
-		title: 'Tokens by call';
-		priority: 30;
+		title: 'API calls and tokens';
+		priority: 1;
 		object: [client];
 		view: #gtViewCallsWithTokensFor:
 ]
