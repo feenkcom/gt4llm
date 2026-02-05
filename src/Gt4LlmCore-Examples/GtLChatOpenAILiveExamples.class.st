@@ -65,8 +65,7 @@ GtLChatOpenAILiveExamples >> createGpt51CodexConnection [
 	^ GtLConnection new
 		providerClass: GtLOpenAIProvider;
 		label: 'GPT 5.1 Codex';
-		model: 'gpt-5.1-codex';
-		addOption: 'isStreaming' withValue: false
+		model: 'gpt-5.1-codex'
 ]
 
 { #category : #examples }
