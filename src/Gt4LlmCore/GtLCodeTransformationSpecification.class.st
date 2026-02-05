@@ -16,6 +16,11 @@ GtLCodeTransformationSpecification class >> jsonSchemaLabel [
 		withoutSuffix: 'Specification'
 ]
 
+{ #category : #'api - ui' }
+GtLCodeTransformationSpecification >> addContentOneLineSummaryTo: aWriteStream [
+	self gtDisplayOn: aWriteStream
+]
+
 { #category : #accessing }
 GtLCodeTransformationSpecification >> asRefactoring [
 	| namespace |
@@ -26,6 +31,12 @@ GtLCodeTransformationSpecification >> asRefactoring [
 { #category : #'as yet unclassified' }
 GtLCodeTransformationSpecification >> asRefactoringIn: aNamespace [
 	^ self subclassResponsibility
+]
+
+{ #category : #'api - ui' }
+GtLCodeTransformationSpecification >> contentOneLineMultiLabelSummaryWith: aBuilder [
+	aBuilder newTextFromStringStream: [ :aWriteStream | 
+		self addContentOneLineSummaryTo: aWriteStream ]
 ]
 
 { #category : #views }

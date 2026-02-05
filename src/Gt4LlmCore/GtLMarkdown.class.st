@@ -12,6 +12,11 @@ GtLMarkdown class >> content: aString [
 	^ self new content: aString
 ]
 
+{ #category : #'api - ui' }
+GtLMarkdown >> addContentOneLineSummaryTo: aWriteStream [
+	self content ifNotNil: [ :aString | aWriteStream nextPutAll: aString asString ]
+]
+
 { #category : #accessing }
 GtLMarkdown >> commentForSmaCC [
 	^ 'Denote SmaCC grammar definitions as:
@@ -85,6 +90,12 @@ GtLMarkdown >> contentDescription [
 		comment: 'The Markdown format with a few extensions.' , String cr
 				, self commentForSmalltalk , String cr , self commentForSmaCC;
 		beRequired
+]
+
+{ #category : #'api - ui' }
+GtLMarkdown >> contentOneLineMultiLabelSummaryWith: aBuilder [
+	aBuilder newTextFromStringStream: [ :aWriteStream | 
+		self addContentOneLineSummaryTo: aWriteStream ]
 ]
 
 { #category : #'as yet unclassified' }

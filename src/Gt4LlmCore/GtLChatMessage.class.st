@@ -105,12 +105,14 @@ GtLChatMessage >> completeInstructionString [
 			anInstructions instructionString ]
 ]
 
-{ #category : #accessing }
+{ #category : #'api - ui' }
 GtLChatMessage >> contentOneLineMultiLabelSummaryWith: aBuilder [
+	"Build a content one line summary widget."
+
 	aBuilder newWithText: self contentOneLineSummary
 ]
 
-{ #category : #accessing }
+{ #category : #'api - ui' }
 GtLChatMessage >> contentOneLineSummary [
 	<return: #String>
 	^ self contentText copyReplaceAll: String lf with: String space

@@ -40,6 +40,24 @@ GtLOpenAIAssistantMessage >> computeResponseModelsByFormat [
 		do: [ :e | ^ {} ]
 ]
 
+{ #category : #'api - ui' }
+GtLOpenAIAssistantMessage >> contentOneLineMultiLabelSummaryWith: aBuilder [
+	"Build a content one line summary widget."
+
+	self responseModels do: [ :each | 
+		each contentOneLineMultiLabelSummaryWith: aBuilder ]
+]
+
+{ #category : #'api - ui' }
+GtLOpenAIAssistantMessage >> contentOneLineSummary [
+	<return: #String>
+	^ String
+		streamContents: [ :aStream | 
+			self responseModels
+				do: [ :each | each addContentOneLineSummaryTo: (ZnIgnoreNewLineWriterStream on: aStream) ]
+				separatedBy: [ aStream space ] ]
+]
+
 { #category : #accessing }
 GtLOpenAIAssistantMessage >> contentText [
 	^ '' join: (self rawContent collect: [:each | each at: 'text' ])
