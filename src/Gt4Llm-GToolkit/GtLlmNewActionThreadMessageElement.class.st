@@ -5,7 +5,7 @@ Class {
 		'toggleGroup',
 		'descriptionElement'
 	],
-	#category : #'Gt4Llm-GToolkit-UI'
+	#category : 'Gt4Llm-GToolkit-UI'
 }
 
 { #category : #'initialization ' }

@@ -8,7 +8,7 @@ Class {
 		'progressElement',
 		'timeTooltip'
 	],
-	#category : #'Gt4Llm-GToolkit-UI'
+	#category : 'Gt4Llm-GToolkit-UI'
 }
 
 { #category : #factory }

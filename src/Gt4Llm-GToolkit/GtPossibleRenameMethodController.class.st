@@ -10,7 +10,7 @@ Class {
 		'permutations',
 		'possibilities'
 	],
-	#category : #'Gt4Llm-GToolkit-UI'
+	#category : 'Gt4Llm-GToolkit-UI'
 }
 
 { #category : #accessing }

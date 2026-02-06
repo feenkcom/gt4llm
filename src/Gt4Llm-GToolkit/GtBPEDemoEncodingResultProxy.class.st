@@ -1,7 +1,7 @@
 Class {
 	#name : #GtBPEDemoEncodingResultProxy,
 	#superclass : #PBProxyObject,
-	#category : #'Gt4Llm-GToolkit-BPE'
+	#category : 'Gt4Llm-GToolkit-BPE'
 }
 
 { #category : #accessing }
