@@ -209,6 +209,11 @@ GtLOpenAIFineTuningJob >> refresh [
 	self from: (client getFineTuningJob: self id) serialize
 ]
 
+{ #category : #'as yet unclassified' }
+GtLOpenAIFineTuningJob >> requestResponse: aGtLRequestResponse [ 
+	"do nothing"
+]
+
 { #category : #accessing }
 GtLOpenAIFineTuningJob >> resultFiles [
 	^ resultFiles
