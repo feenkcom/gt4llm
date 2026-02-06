@@ -3,10 +3,10 @@ Class {
 	#superclass : #GtLChatMessage,
 	#instVars : [
 		'userMessage',
-		'toolMessages',
-		'finalMessage'
+		'finalMessage',
+		'executionMessages'
 	],
-	#category : #'Gt4LlmCore-Core'
+	#category : 'Gt4LlmCore-Core'
 }
 
 { #category : #accessing }
@@ -15,8 +15,18 @@ GtLReplyMessage class >> leJsonV4Name [
 ]
 
 { #category : #'api - message' }
+GtLReplyMessage >> addCompactionMessage: aCompactionMessage [
+	self addExecutionMessage: aCompactionMessage
+]
+
+{ #category : #'api - message' }
+GtLReplyMessage >> addExecutionMessage: aMessage [
+	self executionMessages: (self executionMessages copyWith: aMessage)
+]
+
+{ #category : #'api - message' }
 GtLReplyMessage >> addToolMessage: aToolMessage [
-	self toolMessages: (self toolMessages copyWith: aToolMessage)
+	self addExecutionMessage: aToolMessage
 ]
 
 { #category : #accessing }
@@ -77,8 +87,25 @@ GtLReplyMessage >> currentMessageDo: aBlock ifAbsent: anAbsentBlock [
 
 	<return: #GtLChatMessage>
 	finalMessage ifNotNil: [ ^ aBlock value: finalMessage ].
-	toolMessages ifNotEmpty: [ ^ aBlock value: toolMessages last ].
+	executionMessages ifNotEmpty: [ ^ aBlock value: executionMessages last ].
 	^ anAbsentBlock value
+]
+
+{ #category : #accessing }
+GtLReplyMessage >> executionMessages [
+	^ executionMessages
+]
+
+{ #category : #accessing }
+GtLReplyMessage >> executionMessages: aCollection [
+	| oldCollection |
+	executionMessages = aCollection ifTrue: [ ^ self ].
+
+	oldCollection := executionMessages.
+	executionMessages := aCollection.
+	
+	self updateSubscriptionsFrom: oldCollection to: aCollection.
+	self notifyReplyMessageChanged
 ]
 
 { #category : #accessing }
@@ -143,11 +170,12 @@ GtLReplyMessage >> gtJsonFor: aView [
 GtLReplyMessage >> gtToolViewMessagesFor: aView [
 	<gtView>
 	<gtLlmView>
-	self toolMessages ifEmpty: [ ^ aView empty ].
+	self executionMessages ifEmpty: [ ^ aView empty ].
 
 	^ aView columnedList
 		title: 'Executed tools';
-		items: [ self toolMessages ];
+		items: [ self executionMessages select: [:each |
+			each isToolMessage ] ];
 		column: 'Tool' text: #toolName;
 		column: 'Arguments'
 			text: [ :each | 
@@ -190,7 +218,7 @@ GtLReplyMessage >> gtViewsInContext: aPhlowContext [
 { #category : #initialization }
 GtLReplyMessage >> initialize [
 	super initialize.
-	toolMessages := #()
+	executionMessages := #()
 ]
 
 { #category : #'api - testing' }
@@ -223,7 +251,7 @@ GtLReplyMessage >> messagesDo: aBlock [
 	In this case, user message is ignored since 
 	it is a standalone message in the chat messages collection."
 
-	self toolMessages do: aBlock.
+	self executionMessages do: aBlock.
 	self finalMessage ifNotNil: aBlock
 ]
 
@@ -236,8 +264,7 @@ GtLReplyMessage >> messagesReverseDo: aBlock [
 	it is a standalone message in the chat messages collection."
 
 	self finalMessage ifNotNil: aBlock.
-	self toolMessages reverseDo: aBlock.
-	
+	self executionMessages reverseDo: aBlock.
 ]
 
 { #category : #'private - notifying' }
@@ -258,23 +285,6 @@ GtLReplyMessage >> role [
 { #category : #accessing }
 GtLReplyMessage >> senderText [
 	^ self currentMessageDo: #senderText ifAbsent: [ 'Waiting' ]
-]
-
-{ #category : #accessing }
-GtLReplyMessage >> toolMessages [
-	^ toolMessages
-]
-
-{ #category : #accessing }
-GtLReplyMessage >> toolMessages: aCollection [
-	| oldCollection |
-	toolMessages = aCollection ifTrue: [ ^ self ].
-
-	oldCollection := toolMessages.
-	toolMessages := aCollection.
-	
-	self updateSubscriptionsFrom: oldCollection to: aCollection.
-	self notifyReplyMessageChanged
 ]
 
 { #category : #'private - updating' }

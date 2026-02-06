@@ -6,7 +6,7 @@ Class {
 		'followingRequestResponse',
 		'previousRequestResponse'
 	],
-	#category : #'Gt4LlmCore-Core'
+	#category : 'Gt4LlmCore-Core'
 }
 
 { #category : #accessing }
@@ -21,7 +21,7 @@ GtLToolPreviousRequestResponse >> previousRequestResponse: anObject [
 
 { #category : #accessing }
 GtLToolPreviousRequestResponse >> resultOpenAIUsageDetails [
-	^followingRequestResponse resultOpenAIUsageDetails
+	^followingRequestResponse ifNotNil: [ :each | each resultOpenAIUsageDetails ]
 ]
 
 { #category : #accessing }
