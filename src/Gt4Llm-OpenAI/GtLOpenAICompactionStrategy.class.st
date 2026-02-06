@@ -25,13 +25,14 @@ GtLOpenAICompactionStrategy >> isCompactionNeeded [
 
 { #category : #accessing }
 GtLOpenAICompactionStrategy >> latestInputTokensCount [
-	^ self latestTokensUsage inputTokens
+	^ self latestTokensUsage
+		ifNil: [0] 
+		ifNotNil:[ :each | each inputTokens ]
 ]
 
 { #category : #accessing }
 GtLOpenAICompactionStrategy >> latestTokensUsage [
-	^ provider chat messages lastMessage
-			ifNil: [0] 
+	^ provider chat messages lastExecutedMessage
 			ifNotNil: [ :aMessage |
 				aMessage requestResponse resultOpenAIUsageDetails ]
 ]
@@ -54,5 +55,5 @@ GtLOpenAICompactionStrategy >> requestCompactionIfNeeded [
 
 { #category : #accessing }
 GtLOpenAICompactionStrategy >> thresholdTokensLimit [
-	^ 10000
+	^ 200000
 ]
