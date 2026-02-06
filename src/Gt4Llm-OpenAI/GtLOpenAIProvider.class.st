@@ -3,25 +3,25 @@ Class {
 	#superclass : #GtLProvider,
 	#instVars : [
 		'client',
-		'isStreaming',
 		'executions',
 		'tools',
-		'modelName'
+		'modelName',
+		'compactionStrategy'
 	],
 	#category : #'Gt4Llm-OpenAI'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLOpenAIProvider class >> default [
 	^ [ self withApiKeyFromFile ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 GtLOpenAIProvider class >> isConnectable [
 	^ GtLOpenAIClient apiKeyFile exists
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLOpenAIProvider class >> providerName [
 	^ 'OpenAI provider'
 ]
@@ -31,7 +31,7 @@ GtLOpenAIProvider class >> withApiKeyFromClipboard [
 	^ self new apiKey: Clipboard clipboardText
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'instance creation' }
 GtLOpenAIProvider class >> withApiKeyFromFile [
 	^ self new apiKey: GtLOpenAIClient apiKeyFileContents
 ]
@@ -41,27 +41,64 @@ GtLOpenAIProvider >> apiKey: aString [
 	client apiKey: aString
 ]
 
-{ #category : #'as yet unclassified' }
-GtLOpenAIProvider >> beNotStreaming [
-	isStreaming := false
+{ #category : #configuring }
+GtLOpenAIProvider >> beWithApiCompaction [
+	compactionStrategy := GtLOpenAIApiCompactionStrategy forProvider: self
 ]
 
-{ #category : #'as yet unclassified' }
-GtLOpenAIProvider >> beStreaming [
-	isStreaming := true
+{ #category : #configuring }
+GtLOpenAIProvider >> beWithNoCompaction [
+	compactionStrategy := GtLOpenAINoCompactionStrategy forProvider: self
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #configuring }
+GtLOpenAIProvider >> beWithPromtCompaction [
+	compactionStrategy := GtLOpenAIPromtCompactionStrategy forProvider: self
+]
+
+{ #category : #accessing }
 GtLOpenAIProvider >> client [
 	^ client
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'client calls' }
+GtLOpenAIProvider >> clientGenerateCompactionResponse: anInputMessage [
+	^client 
+				generateCompactResponseWithModel: self modelName 
+				messages: self relevantChatMessages 
+				instructions: nil
+]
+
+{ #category : #'client calls' }
+GtLOpenAIProvider >> clientGenerateModelResponse: anInputMessage [
+	^client
+			generateResponseWithModel: self modelName
+			messages: self relevantChatMessages
+			instructions: anInputMessage completeInstructionString
+			tools: anInputMessage tools
+			andFormat: (anInputMessage hasFormats
+				ifTrue: [ anInputMessage formatDescriptionsJsonSchema ]
+				ifFalse: [ nil ])
+			isStreaming: false 
+]
+
+{ #category : #utils }
+GtLOpenAIProvider >> createAPICompactionMessage [  
+	| message |
+	message := self chat createUserMessage.
+	message
+		configureWithCompactionExecution;
+		addResponseFormatForMagritte: GtLChatCompactedData named: 'Compaction';
+		markdown: 'You are performing a CONTEXT CHECKPOINT COMPACTION. Create a handoff summary for another LLM that will resume the task.'.
+	^ message
+]
+
+{ #category : #accessing }
 GtLOpenAIProvider >> defaultAssistantMessageClass [
 	^ GtLOpenAIAssistantMessage
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLOpenAIProvider >> defaultUserMessageClass [
 	^ GtLOpenAIUserMessage
 ]
@@ -73,6 +110,8 @@ GtLOpenAIProvider >> executeAsyncMessage: anInputMessage [
 	self privateExecutionState: self state scheduled.
 	aFuture := [ 
 		self privateExecutionState: self state running.
+		
+		"compactionStrategy requestCompactionIfNeeded."
 		self processNextMessage: anInputMessage ] asAsyncFuture.
 	aFirstPromise := aFuture await: GtLOpenAISettings futureExecutionConfiguration.
 	anErrorHandlerPromise := aFirstPromise
@@ -95,19 +134,25 @@ GtLOpenAIProvider >> executeAsyncMessage: anInputMessage [
 	^ anErrorHandlerPromise
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'private - execution' }
+GtLOpenAIProvider >> executeNextMessage: anInputMessage [
+	| result |
+
+	result := anInputMessage executionStrategy
+		ifNil: [ self clientGenerateModelResponse: anInputMessage ]
+		ifNotNil: [ :aMessageExecutionStrategy |
+			aMessageExecutionStrategy executeMessage: anInputMessage with: self ].
+	anInputMessage requestResponse: result requestResponse.
+	
+	^result
+]
+
+{ #category : #accessing }
 GtLOpenAIProvider >> executions [
 	^ executions
 ]
 
-{ #category : #'as yet unclassified' }
-GtLOpenAIProvider >> format: anObject [
-	super format: anObject.
-	
-	self beNotStreaming
-]
-
-{ #category : #'as yet unclassified' }
+{ #category : #views }
 GtLOpenAIProvider >> gtExecutionsFor: aView [
 	<gtView>
 	^ aView list
@@ -130,13 +175,13 @@ GtLOpenAIProvider >> gtSpawnClientFor: anAction [
 GtLOpenAIProvider >> gtViewCallsWithTokensFor: aView [
 	<gtView>
 	^(aView forward)
-		title: 'Tokens by call';
-		priority: 30;
+		title: 'API calls and tokens';
+		priority: 1;
 		object: [client];
 		view: #gtViewCallsWithTokensFor:
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'private - execution' }
 GtLOpenAIProvider >> handleToolCall: aToolCall [
 	| domainObject toolMessage |
 	chat removeLastMessage.
@@ -156,21 +201,17 @@ GtLOpenAIProvider >> handleToolCall: aToolCall [
 	self executeAsyncMessage: toolMessage
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 GtLOpenAIProvider >> initialize [
 	super initialize.
 	modelName := nil.	"set when the provider is built"
 	client := GtLOpenAIClient new.
 	executions := OrderedCollection new.
-	isStreaming := true.
+	
+	self beWithNoCompaction.
 ]
 
-{ #category : #'as yet unclassified' }
-GtLOpenAIProvider >> isStreaming: aBoolean [
-	isStreaming := aBoolean
-]
-
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLOpenAIProvider >> modelName [
 	^ modelName
 ]
@@ -186,7 +227,7 @@ GtLOpenAIProvider >> performToolCallsIn: result with: activeTools [
 	| toolMessages |
 	toolMessages := result toolCalls asArray
 			withIndexCollect: [ :aToolCall :anIndex | 
-				| domainObject toolMessage |
+				| toolMessage |
 				toolMessage := GtLToolMessage new 
 					toolCall: aToolCall;
 					requestResponse: (GtLToolPreviousRequestResponse new
@@ -196,7 +237,8 @@ GtLOpenAIProvider >> performToolCallsIn: result with: activeTools [
 				toolMessage chat: chat.
 				self state
 					ifCanContinue: [ toolMessage beRunningExecutionState.
-						[ domainObject := activeTools performToolCall: aToolCall.
+						[ |domainObject|
+						domainObject := activeTools performToolCall: aToolCall.
 						toolMessage output: domainObject ]
 							ensure: [ toolMessage beFinishedExecutionState ] ]
 					ifDisabled: [ toolMessage beSkippedExecutionState ].
@@ -210,7 +252,7 @@ GtLOpenAIProvider >> performToolCallsIn: result with: activeTools [
 	^ self processNextMessage: toolMessages last.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #printing }
 GtLOpenAIProvider >> printOn: aStream [
 	aStream
 		nextPutAll: self class providerName;
@@ -226,30 +268,24 @@ GtLOpenAIProvider >> processNextMessage: anInputMessage [
 	<return: #GtLOpenAIProviderProcessedMessage or: nil>
 	| result anOutputMessage anotherMessage |
 	self state ifCanContinue: [  ] ifDisabled: [ ^ nil ].
-	result := client
-			generateResponseWithModel: self modelName
-			messages: self relevantChatMessages
-			instructions: anInputMessage completeInstructionString
-			tools: anInputMessage tools
-			andFormat: (anInputMessage hasFormats
-					ifTrue: [ anInputMessage formatDescriptionsJsonSchema ]
-					ifFalse: [ nil ])
-			isStreaming: isStreaming.
-	anInputMessage requestResponse: result requestResponse.
+
+	result := self executeNextMessage: anInputMessage.
+
 	result hasToolCalls
-		ifTrue: [ anotherMessage := self performToolCallsIn: result with: anInputMessage tools ]
-		ifFalse: [ anOutputMessage := isStreaming
-					ifTrue: [ self streamingMessageFrom: result ]
-					ifFalse: [ self assistantMessageClass new
-							modelName: self modelName;
-							requestResponse: result requestResponse;
-							rawData: (result output detect: [ :anOutput | (anOutput at: 'type') = 'message' ]) ].
+		ifTrue: [ 
+			compactionStrategy requestCompactionIfNeeded.
+			anotherMessage := self performToolCallsIn: result with: anInputMessage tools ]
+		ifFalse: [ 
+			anOutputMessage := self
+					responseTypeForResult: result
+					fromInputMessage: anInputMessage.
 			self chat addAssistantMessage: anOutputMessage.
 			self chat signalRunIsDone ].
+
 	^ GtLOpenAIProviderProcessedMessage new
 		inputMessage: anInputMessage;
 		result: result;
-		isStreaming: isStreaming;
+		isStreaming: false;
 		anotherProcessedMessage: anotherMessage;
 		outputMessage: anOutputMessage
 ]
@@ -258,22 +294,25 @@ GtLOpenAIProvider >> processNextMessage: anInputMessage [
 GtLOpenAIProvider >> relevantChatMessages [
 	| relevantMessages |
 	relevantMessages := self chat messages
-			messagesSelect: [ :each | each isAssistantRole and: [ each hasCompactionResponse ] ].
-	^ relevantMessages isEmpty
-		ifTrue: [ self chat messages ]
-		ifFalse: [ self chat messages messagesWithAndAfter: relevantMessages last ]
+			messagesSelect: [:each | each isAssistantRole and: [each hasCompactionResponse]].
+	^relevantMessages isEmpty
+		ifTrue: [self chat messages]
+		ifFalse: [
+			self chat messages 
+				messagesBeforeMatching: [:each | each isUserRole]
+				andAllWithAndAfter: relevantMessages last]
+]
+
+{ #category : #'private - execution' }
+GtLOpenAIProvider >> responseTypeForResult: aResult fromInputMessage: anInputMessage [ 
+	^ ((anInputMessage isCompactionRequest
+		ifTrue: [ GtLOpenAICompactionMessage ]
+		ifFalse: [self assistantMessageClass])) new
+			modelName: self modelName;
+			initializeFromResult: aResult
 ]
 
 { #category : #utils }
-GtLOpenAIProvider >> streamingMessageFrom: aResult [
-	| aMessage |
-	aResult provider: self.
-
-	aMessage := self assistantMessageClass new
-			role: 'assistant';
-			model: self model;
-			content: ''.
-	aResult notifyOnOutput: aMessage.
-
-	^ aMessage
+GtLOpenAIProvider >> sendAPICompactionMessage [  
+	^self chat sendMessage:  self createAPICompactionMessage
 ]

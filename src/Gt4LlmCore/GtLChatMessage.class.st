@@ -105,8 +105,16 @@ GtLChatMessage >> completeInstructionString [
 			anInstructions instructionString ]
 ]
 
-{ #category : #accessing }
+{ #category : #'api - ui' }
+GtLChatMessage >> contentOneLineMultiLabelSummaryWith: aBuilder [
+	"Build a content one line summary widget."
+
+	aBuilder newWithText: self contentOneLineSummary
+]
+
+{ #category : #'api - ui' }
 GtLChatMessage >> contentOneLineSummary [
+	<return: #String>
 	^ self contentText copyReplaceAll: String lf with: String space
 ]
 
@@ -149,6 +157,11 @@ GtLChatMessage >> deserializeTime: anObject [
 	^ (anObject isNil or: [ anObject isKindOf: DateAndTime ])
 		ifTrue: [ anObject ]
 		ifFalse: [ DateAndTime fromUnixTime: anObject ]
+]
+
+{ #category : #accessing }
+GtLChatMessage >> executionStrategy [
+	^nil
 ]
 
 { #category : #accessing }
@@ -231,6 +244,11 @@ GtLChatMessage >> gtViewsInContext: aPhlowContext [
 ]
 
 { #category : #testing }
+GtLChatMessage >> hasCompactionResponse [
+	^false
+]
+
+{ #category : #testing }
 GtLChatMessage >> hasFormats [
 	^ formatDescriptions notNil and: [formatDescriptions hasSchemaDescriptors]
 ]
@@ -283,6 +301,11 @@ GtLChatMessage >> isAssistantRole [
 
 	<return: #Boolean>
 	^ self role = 'assistant'
+]
+
+{ #category : #testing }
+GtLChatMessage >> isCompactionRequest [
+	^false
 ]
 
 { #category : #'api - testing' }
@@ -345,6 +368,14 @@ GtLChatMessage >> messageExecutionStateLabel [
 
 { #category : #'api - message' }
 GtLChatMessage >> messagesDo: aBlock [
+	"Evaluate do block on all messages.
+	Note that some messages may be a composition of other messages"
+
+	aBlock value: self
+]
+
+{ #category : #'api - message' }
+GtLChatMessage >> messagesReverseDo: aBlock [
 	"Evaluate do block on all messages.
 	Note that some messages may be a composition of other messages"
 

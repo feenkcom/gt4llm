@@ -197,19 +197,7 @@ GtLChat >> codeTransformationsResponse [
 
 { #category : #actions }
 GtLChat >> compact [
-	self sendWith: [ :m |
-		m
-			addResponseFormatForMagritte: GtLChatCompaction named: 'Compaction';
-			markdown: self compactionPrompt ].
-]
-
-{ #category : #actions }
-GtLChat >> compactionPrompt [
-	^ 'Compact this chat for later continuation. Summarize:
-- The initial and remaining goals
-- Essential lessons and decisions
-- Open questions
-- Next steps'
+	self provider sendPromtCompactionMessage
 ]
 
 { #category : #copying }
@@ -514,17 +502,15 @@ GtLChat >> resetMessages [
 
 { #category : #'api - communication' }
 GtLChat >> sendMarkdown: aString [
-	<return: #TAsyncPromise>
 	| newMessage |
 	self assert: aString isString.
 	newMessage := self createUserMessage.
 	newMessage markdown: aString.
-	^ self sendMessage: newMessage
+	self sendMessage: newMessage
 ]
 
 { #category : #'api - communication' }
 GtLChat >> sendMessage: aMessage [
-	<return: #TAsyncPromise>
 	aMessage chat: self.
 	self addUserMessage: aMessage.
 	self provider sendMessage: aMessage
@@ -533,7 +519,7 @@ GtLChat >> sendMessage: aMessage [
 { #category : #'api - communication' }
 GtLChat >> sendPlainMessage: aString [
 	self deprecated: 'use sendMarkdown: instead'.
-	^ self sendMarkdown: aString
+	self sendMarkdown: aString
 ]
 
 { #category : #'api - communication' }

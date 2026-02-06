@@ -104,12 +104,11 @@ GtLNewMessageViewModel >> provider: aProvider [
 	self chat provider: aProvider
 ]
 
-{ #category : #actions }
+{ #category : #'api - chat' }
 GtLNewMessageViewModel >> sendMessage [
-	<return: #TAsyncPromise>
 	| aMessageContent aMessageFiles |
-	contents ifNil: [ ^ nil asAsyncPromise ].
-	contents ifEmpty: [ ^ nil asAsyncPromise ].
+	contents ifNil: [ ^ self ].
+	contents ifEmpty: [ ^ self ].
 
 	aMessageContent := self contents.
 	aMessageFiles := self files asArray.
@@ -117,7 +116,7 @@ GtLNewMessageViewModel >> sendMessage [
 	self contents: '' source: self.
 	files := OrderedCollection new.
 
-	^ aMessageFiles
+	aMessageFiles
 		ifEmpty: [ chat sendMarkdown: aMessageContent ]
 		ifNotEmpty: [ chat sendFiles: aMessageFiles withMessage: aMessageContent ]
 ]

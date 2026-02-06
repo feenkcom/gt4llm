@@ -12,14 +12,11 @@ Class {
 
 { #category : #testing }
 GtLOpenAIAssistantMessage >> canExtractResponseModels [
-	| responseText |
 	rawData ifNil: [ ^ false ].
 	self chat ifNil: [ ^ false ].
 	self formatDescriptions 
 		hasSchemaDescriptors ifFalse: [ ^ false ].
-		
-	"responseText := self contentText.
-	responseText ifEmpty: [ ^ false ]."
+	
 	^ true
 ]
 
@@ -43,21 +40,27 @@ GtLOpenAIAssistantMessage >> computeResponseModelsByFormat [
 		do: [ :e | ^ {} ]
 ]
 
+{ #category : #'api - ui' }
+GtLOpenAIAssistantMessage >> contentOneLineMultiLabelSummaryWith: aBuilder [
+	"Build a content one line summary widget."
+
+	self responseModels do: [ :each | 
+		each contentOneLineMultiLabelSummaryWith: aBuilder ]
+]
+
+{ #category : #'api - ui' }
+GtLOpenAIAssistantMessage >> contentOneLineSummary [
+	<return: #String>
+	^ String
+		streamContents: [ :aStream | 
+			self responseModels
+				do: [ :each | each addContentOneLineSummaryTo: (ZnIgnoreNewLineWriterStream on: aStream) ]
+				separatedBy: [ aStream space ] ]
+]
+
 { #category : #accessing }
 GtLOpenAIAssistantMessage >> contentText [
 	^ '' join: (self rawContent collect: [:each | each at: 'text' ])
-
-	"(content isKindOf: String)
-		ifTrue: [ content ]
-		ifFalse: [ ''
-				join: (content
-						collect: [ :aValue | 
-							(aValue at: 'text' ifAbsent: [ nil ])
-								ifNil: [ '' ]
-								ifNotNil: [ :aTextObject | 
-									(aTextObject isKindOf: String)
-										ifTrue: [ aTextObject ]
-										ifFalse: [ (aTextObject at: 'value') ifNil: [ '' ] ] ] ]) ]"
 ]
 
 { #category : #views }
@@ -90,18 +93,19 @@ GtLOpenAIAssistantMessage >> gtViewResponseModelsFor: aView [
 ]
 
 { #category : #testing }
-GtLOpenAIAssistantMessage >> hasCompactionResponse [
-	^ self responseModels notNil
-		and: [ self responseModels notEmpty
-				and: [ self responseModels includesKey: 'Compaction' ] ]
-]
-
-{ #category : #testing }
 GtLOpenAIAssistantMessage >> hasResponse [
 	^ self contentText isNotEmpty
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
+GtLOpenAIAssistantMessage >> initializeFromResult: aResult [
+	self 
+		requestResponse: aResult requestResponse;
+		rawData: (aResult output detect: [ :anOutput | 
+			((anOutput at: 'type') = 'message') ])
+]
+
+{ #category : #accessing }
 GtLOpenAIAssistantMessage >> modelName: anObject [
 	modelName := anObject
 ]
@@ -111,12 +115,12 @@ GtLOpenAIAssistantMessage >> rawContent [
 	^ rawData at: 'content'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLOpenAIAssistantMessage >> rawData [
 	^ rawData
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLOpenAIAssistantMessage >> rawData: anObject [
 	rawData := anObject
 ]
@@ -138,19 +142,19 @@ GtLOpenAIAssistantMessage >> responseModels [
 			responseModels := self computeResponseModelsByFormat ].
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLOpenAIAssistantMessage >> role [
 	^ 'assistant'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLOpenAIAssistantMessage >> senderText [
 	^ modelName
 		ifNil: [ 'Assistant' ]
 		ifNotNil: [ :aModel | GtLConnectionRegistry uniqueInstance labelForModel: aModel ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #serializing }
 GtLOpenAIAssistantMessage >> serializeForOpenAIResponsesAPI [
 	^ {#content
 			-> {{'type' -> 'output_text'.

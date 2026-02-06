@@ -7,7 +7,9 @@ Class {
 		'inputModels',
 		'content',
 		'attachments',
-		'requestResponse'
+		'requestResponse',
+		'executionStrategy',
+		'contentOneLineSummary'
 	],
 	#category : #'Gt4Llm-OpenAI'
 }
@@ -73,10 +75,11 @@ GtLOpenAIUserMessage >> buildCompleteInstructions [
 GtLOpenAIUserMessage >> chat: aChat [
 	super chat: aChat.
 	self updateDataFromChat: aChat.
-	content := self computeContentFromInputModels
+	content := self computeContentFromInputModels.
+	contentOneLineSummary := self computeContentOneLineSummaryFromInputModels
 ]
 
-{ #category : #accessing }
+{ #category : #'private - initialization' }
 GtLOpenAIUserMessage >> computeContentFromInputModels [
 	| object |
 	
@@ -87,14 +90,49 @@ GtLOpenAIUserMessage >> computeContentFromInputModels [
 	^ NeoJSONWriter toStringPretty: object
 ]
 
+{ #category : #'private - initialization' }
+GtLOpenAIUserMessage >> computeContentOneLineSummaryFromInputModels [
+	^ String
+		streamContents: [ :aStream | 
+			inputModels
+				do: [ :each | each addContentOneLineSummaryTo: (ZnIgnoreNewLineWriterStream on: aStream) ]
+				separatedBy: [ aStream space ] ]
+]
+
+{ #category : #accessing }
+GtLOpenAIUserMessage >> configureWithCompactionExecution [
+	executionStrategy := GtLOpenAIMessageCompactionExecutionStrategy new
+]
+
 { #category : #'as yet unclassified' }
 GtLOpenAIUserMessage >> content [
 	^ content
 ]
 
+{ #category : #accessing }
+GtLOpenAIUserMessage >> contentOneLineMultiLabelSummaryWith: aBuilder [
+	inputModels do: [ :each | each contentOneLineMultiLabelSummaryWith: aBuilder ]
+]
+
+{ #category : #'api - ui' }
+GtLOpenAIUserMessage >> contentOneLineSummary [
+	<return: #String>
+	^ contentOneLineSummary ifNil: [ self content ]
+]
+
 { #category : #'as yet unclassified' }
 GtLOpenAIUserMessage >> contentText [
 	^ content
+]
+
+{ #category : #accessing }
+GtLOpenAIUserMessage >> executionStrategy [
+	^executionStrategy
+]
+
+{ #category : #accessing }
+GtLOpenAIUserMessage >> executionStrategy: anObject [
+	executionStrategy := anObject
 ]
 
 { #category : #ui }
@@ -119,6 +157,7 @@ GtLOpenAIUserMessage >> gtInspectorTargetModels [
 GtLOpenAIUserMessage >> gtInstructionsFor: aView [
 	<gtView>
 	<gtLlmView>
+	instructions ifNil: [ ^ aView empty ].
 	^ aView forward
 		title: 'Instructions';
 		priority: 40;
@@ -172,6 +211,12 @@ GtLOpenAIUserMessage >> inputModels [
 GtLOpenAIUserMessage >> instructions [
 	^ instructions ifNil: [ 
 			instructions := self buildCompleteInstructions ]
+]
+
+{ #category : #testing }
+GtLOpenAIUserMessage >> isCompactionRequest [
+	^formatDescriptions schemaDescriptions anySatisfy: [ :each |
+		each name = 'Compaction' ]
 ]
 
 { #category : #'api - message' }

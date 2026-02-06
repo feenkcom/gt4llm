@@ -22,6 +22,18 @@ GtLDemoMathReasoningOutputStep >> = anObject [
 	^ output = anObject output 
 ]
 
+{ #category : #'api - ui' }
+GtLDemoMathReasoningOutputStep >> addContentOneLineSummaryTo: aWriteStream [
+	self output ifNotNil: [ :aString | 
+		aWriteStream nextPutAll: aString asString ]
+]
+
+{ #category : #'api - ui' }
+GtLDemoMathReasoningOutputStep >> contentOneLineMultiLabelSummaryWith: aBuilder [
+	aBuilder newTextFromStringStream: [ :aWriteStream | 
+		self addContentOneLineSummaryTo: aWriteStream ]
+]
+
 { #category : #accessing }
 GtLDemoMathReasoningOutputStep >> description [
 	^ self output

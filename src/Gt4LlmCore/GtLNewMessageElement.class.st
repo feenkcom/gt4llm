@@ -8,7 +8,6 @@ Class {
 		'imagesElement',
 		'sendButton',
 		'stopButton',
-		'senderPromise',
 		'attachButton',
 		'connectionsButton',
 		'toolbarElement'
@@ -44,14 +43,13 @@ GtLNewMessageElement >> enableSend [
 	sendButton enable
 ]
 
-{ #category : #'initialization ' }
+{ #category : #initialization }
 GtLNewMessageElement >> initialize [
 	super initialize.
 
 	self initializeContentsElement.
 	self initializeImagesElement.
 	self initializeToolbarElement.
-	self initializeSenderElementPromise.
 	self initializeSendButtonElement.
 	self initializeStopButtonElement.
 	self initializeAttachButtonElement.
@@ -70,7 +68,7 @@ GtLNewMessageElement >> initialize [
 	self vFitContentLimited
 ]
 
-{ #category : #'initialization ' }
+{ #category : #initialization }
 GtLNewMessageElement >> initializeAttachButtonElement [
 	attachButton := BrButton new
 			fitContent;
@@ -130,7 +128,7 @@ GtLNewMessageElement >> initializeConnectionsButtonElement [
 		label: ''
 ]
 
-{ #category : #'initialization ' }
+{ #category : #initialization }
 GtLNewMessageElement >> initializeContentsElement [
 	contentsElement := BrEditor new
 			hMatchParent;
@@ -150,12 +148,12 @@ GtLNewMessageElement >> initializeContentsElement [
 				yourself)
 ]
 
-{ #category : #'initialization ' }
+{ #category : #initialization }
 GtLNewMessageElement >> initializeImagesElement [
 	imagesElement := BrHorizontalPane new fitContent clipChildren: false
 ]
 
-{ #category : #'initialization ' }
+{ #category : #initialization }
 GtLNewMessageElement >> initializeSendButtonElement [
 	sendButton := BrButton new
 			fitContent;
@@ -171,14 +169,6 @@ GtLNewMessageElement >> initializeSendButtonElement [
 				c linear horizontal alignLeft ]
 ]
 
-{ #category : #'initialization ' }
-GtLNewMessageElement >> initializeSenderElementPromise [
-	senderPromise := (BrAsyncElementPromise on: self)
-			whenPending: [ :anElement | self disableSend ];
-			whenError: [ :anElement :anError | self updateSendMessageError: anError ];
-			whenSuccess: [ :anElement :anObject | self enableSend ]
-]
-
 { #category : #initialization }
 GtLNewMessageElement >> initializeStopButtonElement [
 	stopButton := BrButton new
@@ -190,7 +180,7 @@ GtLNewMessageElement >> initializeStopButtonElement [
 			visibility: BlVisibility gone
 ]
 
-{ #category : #'initialization ' }
+{ #category : #initialization }
 GtLNewMessageElement >> initializeToolbarElement [
 	toolbarElement := BrToolbar new aptitude: BrGlamorousToolbarAptitude new
 ]
@@ -229,7 +219,10 @@ GtLNewMessageElement >> onThreadMessageViewModelChanged: anAnnouncement [
 { #category : #'private - event handling' }
 GtLNewMessageElement >> sendMessageFrom: anElement [
 	self messageViewModel ifNil: [ ^ self ].
-	senderPromise promise: self messageViewModel sendMessage
+
+	[ self messageViewModel sendMessage ]
+		on: Error
+		do: [ :anError | self updateSendMessageError: anError ]
 ]
 
 { #category : #'private - hooks' }
@@ -314,11 +307,22 @@ GtLNewMessageElement >> updateSendButton [
 				visibility: BlVisibility visible ]
 ]
 
-{ #category : #'private - event handling' }
-GtLNewMessageElement >> updateSendMessageError: anError [ 
-	| anErrorCopy |
-	anErrorCopy := GtSystemUtility freeze: anError.
-	anErrorCopy inspect.
+{ #category : #'private - updating' }
+GtLNewMessageElement >> updateSendMessageError: anError [
+	| maxIndex |
+	maxIndex := 0.
+	toolbarElement items
+		do: [ :eachElement | 
+			((eachElement isKindOf: GtLExceptionElement) and: [ eachElement id isIndexed ])
+				ifTrue: [ maxIndex := maxIndex max: eachElement id index ] ].
+
+	toolbarElement
+		addItem: (GtLExceptionElement new
+				id: (#'chat--new-exception' asBlocElementId indexed: maxIndex + 1);
+				freeze: anError;
+				closeAction: [ :anExceptionElement | toolbarElement removeItem: anExceptionElement ];
+				hFitContentLimited;
+				vFitContent)
 ]
 
 { #category : #'private - updating' }

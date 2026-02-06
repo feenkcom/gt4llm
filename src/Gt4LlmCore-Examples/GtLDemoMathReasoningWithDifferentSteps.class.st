@@ -19,6 +19,20 @@ GtLDemoMathReasoningWithDifferentSteps >> = anObject [
 		steps = anObject steps ]
 ]
 
+{ #category : #'api - ui' }
+GtLDemoMathReasoningWithDifferentSteps >> addContentOneLineSummaryTo: aWriteStream [
+	self steps
+		do: [ :eachStep | eachStep addContentOneLineSummaryTo: aWriteStream ]
+		separatedBy: [ aWriteStream space ]
+]
+
+{ #category : #'api - ui' }
+GtLDemoMathReasoningWithDifferentSteps >> contentOneLineMultiLabelSummaryWith: aBuilder [
+	self steps
+		do: [ :eachStep | eachStep contentOneLineMultiLabelSummaryWith: aBuilder ]
+		separatedBy: [  ]
+]
+
 { #category : #accessing }
 GtLDemoMathReasoningWithDifferentSteps >> finalAnswer [
 	^ finalAnswer

@@ -5,6 +5,68 @@ Class {
 }
 
 { #category : #examples }
+GtLChatWithScripterExamples >> chatElementMarkdownAndInputObject [
+	<gtExample>
+	| chat scripter |
+	scripter := self chatElementWithEmptyMessages.
+	chat := scripter model.
+
+	chat
+		sendWith: [ :msg | 
+			msg
+				markdown: 'Explain this object by exploring the classes that it relies upon.';
+				addPlainInputObject: GtABCartoonAddressBookExample new cartoonAddressBook
+					named: 'Object' ].
+
+	self assert: chat messages size equals: 2.
+
+	scripter llmChat
+		assertNewMessageTextIs: '';
+		assertNewMessageSendButtonIsEnabled;
+		assertNewMessageStopButtonIsDisabled;
+		assertNumberOfMessageElementsIs: 2;
+		assertMessageElementWithIndex: 1
+			hasHeaderContent: 'Explain this object by exploring the classes that it relies upon. | Object: Cartoons';
+		play.
+
+	^ scripter
+]
+
+{ #category : #examples }
+GtLChatWithScripterExamples >> chatElementMarkdownAndLepiterPage [
+	<gtExample>
+	| chat scripter lepiterPage |
+	scripter := self chatElementWithEmptyMessages.
+	chat := scripter model.
+
+	lepiterPage := LeDatabasesRegistry defaultLogicalDatabase pageNamed: 'Releaser'.
+
+	chat
+		sendWith: [ :message | 
+			message
+				markdown: 'Improve the content of the first snippet in this page. Use a LepiterTransformation to express the change.';
+				addInputModel: (GtLLepiterPageInputModel new
+						name: lepiterPage title;
+						model: lepiterPage);
+				addResponseFormat: (GtLResponseMagritteFormat new
+						name: 'LepiterTransformations';
+						modelClass: GtLLepiterTransformations) ].
+
+	self assert: chat messages size equals: 2.
+
+	scripter llmChat
+		assertNewMessageTextIs: '';
+		assertNewMessageSendButtonIsEnabled;
+		assertNewMessageStopButtonIsDisabled;
+		assertNumberOfMessageElementsIs: 2;
+		assertMessageElementWithIndex: 1
+			hasHeaderContent: 'Improve the content of the first snippet in this page. Use a LepiterTransformation to express the change. | Page: Releaser';
+		play.
+
+	^ scripter
+]
+
+{ #category : #examples }
 GtLChatWithScripterExamples >> chatElementWithEmptyMessages [
 	<gtExample>
 	| chat scripter |
@@ -123,6 +185,145 @@ GtLChatWithScripterExamples >> chatElementWithEmptyReplyMessage_toolMessage_fini
 		assertMessageElementExistsWithIndex: 2;
 		assertMessageElementHasToolSenderNameWithIndex: 2;
 		assertMessageElementHasFinishedStateWithIndex: 2;
+		play.
+
+	^ scripter
+]
+
+{ #category : #examples }
+GtLChatWithScripterExamples >> chatElementWithNewMessage [
+	<gtExample>
+	| chat scripter |
+	scripter := self chatElementWithEmptyMessages.
+	chat := scripter model.
+
+	self assert: chat messages size equals: 0.
+
+	scripter llmChat
+		typeNewMessage: 'What is GToolkit?';
+		assertNewMessageTextIs: 'What is GToolkit?';
+		assertNewMessageSendButtonIsEnabled;
+		assertNewMessageStopButtonIsDisabled;
+		assertNumberOfMessageElementsIs: 0;
+		play.
+
+	^ scripter
+]
+
+{ #category : #examples }
+GtLChatWithScripterExamples >> chatElementWithNewMessage_send [
+	<gtExample>
+	| chat scripter |
+	scripter := self chatElementWithNewMessage.
+	chat := scripter model.
+
+	self assert: chat messages size equals: 0.
+
+	scripter llmChat
+		clickSendMessage;
+		assertNewMessageTextIs: '';
+		assertNewMessageSendButtonIsEnabled;
+		assertNewMessageStopButtonIsDisabled;
+		assertNumberOfMessageElementsIs: 2;
+		assertMessageElementHasWaitingSenderNameWithIndex: 2;
+		assertMessageElementHasEmptyStateWithIndex: 2;
+		assertMessageElementHasUserSenderNameWithIndex: 1;
+		assertMessageElementWithIndex: 1 hasHeaderContent: 'What is GToolkit?';
+		play.
+
+	^ scripter
+]
+
+{ #category : #examples }
+GtLChatWithScripterExamples >> chatElementWithNewMessage_sendWithException [
+	<gtExample>
+	| chat scripter |
+	scripter := self chatElementWithNewMessage.
+	chat := scripter model.
+
+	self assert: chat messages size equals: 0.
+
+	chat provider
+		sendMessageBlock: [ :aMessage | 
+			GtLOpenAIError new
+				messageText: 'Cannot send message';
+				type: 'error';
+				param: 'input';
+				code: 305;
+				signal ].
+
+	scripter llmChat
+		clickSendMessage;
+		assertNewMessageTextIs: '';
+		assertNewMessageSendButtonIsEnabled;
+		assertNewMessageStopButtonIsDisabled;
+		assertNumberOfMessageElementsIs: 2;
+		assertMessageElementHasWaitingSenderNameWithIndex: 2;
+		assertMessageElementHasEmptyStateWithIndex: 2;
+		assertNewMessageIsWithExceptionNumber: 1
+			text: 'GtLOpenAIError: Cannot send message';
+		play.
+
+	^ scripter
+]
+
+{ #category : #examples }
+GtLChatWithScripterExamples >> chatElementWithNewMessage_sendWithException_close [
+	<gtExample>
+	| chat scripter |
+	scripter := self chatElementWithNewMessage_sendWithException.
+	chat := scripter model.
+
+	scripter llmChat
+		clickCloseExceptionNumber: 1;
+		assertNewMessageIsWithoutExceptions;
+		play.
+
+	^ scripter
+]
+
+{ #category : #examples }
+GtLChatWithScripterExamples >> chatElementWithNewMessage_sendWithException_second [
+	<gtExample>
+	| chat scripter |
+	scripter := self chatElementWithNewMessage_sendWithException.
+	chat := scripter model.
+
+	self assert: chat messages size equals: 2.
+
+	chat provider
+		sendMessageBlock: [ :aMessage | 
+			Error new
+				messageText: 'Another problem';
+				signal ].
+
+	scripter llmChat
+		typeNewMessage: 'Answer the previous question.';
+		clickSendMessage;
+		assertNewMessageTextIs: '';
+		assertNewMessageSendButtonIsEnabled;
+		assertNewMessageStopButtonIsDisabled;
+		assertNumberOfMessageElementsIs: 4;
+		assertMessageElementHasWaitingSenderNameWithIndex: 4;
+		assertMessageElementHasEmptyStateWithIndex: 4;
+		assertNewMessageIsWithExceptionNumber: 1
+			text: 'GtLOpenAIError: Cannot send message';
+		play.
+
+	^ scripter
+]
+
+{ #category : #examples }
+GtLChatWithScripterExamples >> chatElementWithNewMessage_sendWithException_second_close [
+	<gtExample>
+	| chat scripter |
+	scripter := self chatElementWithNewMessage_sendWithException_second.
+	chat := scripter model.
+
+	scripter llmChat
+		clickCloseExceptionNumber: 1;
+		clickCloseExceptionNumber: 2;
+		assertNewMessageIsWithoutExceptions;
 		play.
 
 	^ scripter

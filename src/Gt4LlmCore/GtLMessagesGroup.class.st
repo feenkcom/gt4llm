@@ -62,6 +62,12 @@ GtLMessagesGroup >> gtViewToolMessagesGroupedByTypeFor: aView [
 ]
 
 { #category : #accessing }
+GtLMessagesGroup >> lastMessage [
+	self messagesReverseDo: [ :aMessage | ^ aMessage ].
+	^nil
+]
+
+{ #category : #accessing }
 GtLMessagesGroup >> lastUserMessageIfPresent: aPresentBlock ifAbsent: anAbsentBlock [
 	items ifNil: [ ^ anAbsentBlock value ].
 	
@@ -72,11 +78,28 @@ GtLMessagesGroup >> lastUserMessageIfPresent: aPresentBlock ifAbsent: anAbsentBl
 ]
 
 { #category : #enumerating }
+GtLMessagesGroup >> messagesBeforeMatching: aBlock andAllWithAndAfter: aMessage [
+	| found |
+	found := false.
+	^ self messagesSelect: [ :eachMessage | 
+		(eachMessage = aMessage) ifTrue: [ found := true ].
+		found or: [ aBlock value: eachMessage ] ].
+]
+
+{ #category : #enumerating }
 GtLMessagesGroup >> messagesDo: aBlock [
 	"Evaluate do block on all messages.
 	Note that some messages may be a composition of other messages."
 
 	self do: [ :eachMessage | eachMessage messagesDo: aBlock ]
+]
+
+{ #category : #enumerating }
+GtLMessagesGroup >> messagesReverseDo: aBlock [
+	"Evaluate do block on all messages in reverse order.
+	Note that some messages may be a composition of other messages."
+
+	self reverseDo: [ :eachMessage | eachMessage messagesReverseDo: aBlock ]
 ]
 
 { #category : #enumerating }
