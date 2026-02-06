@@ -29,3 +29,8 @@ GtLOpenAIFineTuningCheckpointsGroup >> gtCheckpointsFor: aView [
 			text: #createdAt
 			weight: 0.5
 ]
+
+{ #category : #'as yet unclassified' }
+GtLOpenAIFineTuningCheckpointsGroup >> requestResponse: aRequestResponse [
+	"do nothing"
+]

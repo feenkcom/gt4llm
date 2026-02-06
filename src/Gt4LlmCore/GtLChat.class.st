@@ -49,6 +49,19 @@ GtLChat >> addAssistantMessage: aMessage [
 ]
 
 { #category : #'api - message' }
+GtLChat >> addCompactionMessage: aMessage [
+	"Add a compaction message.
+	Compaction messages are held in a reply message."
+
+	| aReplyMessage |
+	self updateLastUpdate.
+
+	aMessage chat: self.
+	aReplyMessage := self ensureReplyMessage.
+	aReplyMessage addCompactionMessage: aMessage
+]
+
+{ #category : #'api - message' }
 GtLChat >> addErrorMessage: anErrorMessage [
 	"Add error message.
 	Error messages are held in a reply message."

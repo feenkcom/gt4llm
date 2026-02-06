@@ -131,6 +131,11 @@ GtLErrorMessage >> otherExceptions: aCollection [
 ]
 
 { #category : #accessing }
+GtLErrorMessage >> requestResponse [
+	^nil
+]
+
+{ #category : #accessing }
 GtLErrorMessage >> role [
 	"Supported roles for OpenAI are: 'assistant', 'system', 'developer', and 'user'"
 	^ 'error'
