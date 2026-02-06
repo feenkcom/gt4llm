@@ -21,7 +21,7 @@ GtLOpenAIUploadFileAPICommand >> file: anObject [
 { #category : #accessing }
 GtLOpenAIUploadFileAPICommand >> fileToEntity [
 	| extension mimeType |
-	(self file isKindOf: GtLlmFineTuningFile)
+	(self file isKindOf: GtLFineTuningFile)
 		ifTrue: [ ^ ZnEntity with: self file contents type: 'application/jsonl' ].
 
 	extension := self file extension ifNil: ''.

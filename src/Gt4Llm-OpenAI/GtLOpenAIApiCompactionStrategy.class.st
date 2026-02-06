@@ -15,9 +15,8 @@ GtLOpenAIApiCompactionStrategy >> executeCompaction [
 	outputMessage := self provider
 		responseTypeForResult: result 
 		fromInputMessage: inputMessage.
-		
 	outputMessage updateDataFromMessage: inputMessage.
 	
 	self provider chat 
-		addAssistantMessage: outputMessage.
+		addCompactionMessage: outputMessage.
 ]

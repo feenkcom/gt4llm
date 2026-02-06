@@ -7,6 +7,11 @@ Class {
 	#category : #Gt4LlmCore
 }
 
+{ #category : #'as yet unclassified' }
+GtLToolForLepiterPageCreate class >> leJsonV4Name [
+	^ #gtLToolForLepiterPageCreate
+]
+
 { #category : #accessing }
 GtLToolForLepiterPageCreate >> database [
 	^ database
