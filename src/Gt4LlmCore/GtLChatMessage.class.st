@@ -84,7 +84,11 @@ GtLChatMessage >> announcer [
 
 { #category : #accessing }
 GtLChatMessage >> asTokenizableString [
-	^ '<|im_start|>' , self role , '<|im_sep|>' , self content , '<|im_end|>'
+	^ '<|im_start|>' , 
+	self role , 
+	'<|im_sep|>' , 
+	self contentText , 
+	'<|im_end|>'
 ]
 
 { #category : #accessing }

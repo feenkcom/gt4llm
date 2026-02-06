@@ -20,3 +20,8 @@ GtLOpenAIFineTuningEventsGroup >> gtEventsFor: aView [
 		column: 'Message' text: #message weight: 2;
 		column: 'Time' text: #createdAt weight: 0.5
 ]
+
+{ #category : #'as yet unclassified' }
+GtLOpenAIFineTuningEventsGroup >> requestResponse: aRequestResponse [
+	"do nothing"
+]

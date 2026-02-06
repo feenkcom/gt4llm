@@ -83,7 +83,7 @@ GtLOpenAIAssistantMessage >> gtViewResponseModelsFor: aView [
 	<gtView>
 	<gtLlmView>
 	
-	responseModels ifNil: [ ^ aView empty ].
+	responseModels ifEmpty: [ ^ aView empty ].
 
 	^aView forward
 		title: 'Response models';
