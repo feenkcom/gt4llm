@@ -13,7 +13,7 @@ Class {
 		'userMessageClass',
 		'responseFormat'
 	],
-	#category : #'Gt4LlmCore-Core'
+	#category : 'Gt4LlmCore-Core'
 }
 
 { #category : #accessing }
@@ -46,6 +46,19 @@ GtLChat >> addAssistantMessage: aMessage [
 	aMessage chat: self.
 	aReplyMessage := self ensureReplyMessage.
 	aReplyMessage finalMessage: aMessage
+]
+
+{ #category : #'api - message' }
+GtLChat >> addCompactionMessage: aMessage [
+	"Add a compaction message.
+	Compaction messages are held in a reply message."
+
+	| aReplyMessage |
+	self updateLastUpdate.
+
+	aMessage chat: self.
+	aReplyMessage := self ensureReplyMessage.
+	aReplyMessage addCompactionMessage: aMessage
 ]
 
 { #category : #'api - message' }

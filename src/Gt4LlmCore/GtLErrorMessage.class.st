@@ -6,7 +6,7 @@ Class {
 		'otherExceptions',
 		'inputMessage'
 	],
-	#category : #'Gt4LlmCore-Core'
+	#category : 'Gt4LlmCore-Core'
 }
 
 { #category : #'instance creation' }
@@ -128,6 +128,11 @@ GtLErrorMessage >> otherExceptions: aCollection [
 	"Set a list of exceptions that were catched while handling the initial exception."
 
 	otherExceptions := aCollection
+]
+
+{ #category : #accessing }
+GtLErrorMessage >> requestResponse [
+	^nil
 ]
 
 { #category : #accessing }

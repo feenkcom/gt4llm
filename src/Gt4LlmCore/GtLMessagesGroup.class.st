@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLMessagesGroup,
 	#superclass : #GtLGroup,
-	#category : #'Gt4LlmCore-Core'
+	#category : 'Gt4LlmCore-Core'
 }
 
 { #category : #accessing }
@@ -59,6 +59,13 @@ GtLMessagesGroup >> gtViewToolMessagesGroupedByTypeFor: aView [
 		items: [ self toolMessagesByType associations ];
 		column: 'Type' text: [ :each | each key asString ];
 		column: 'Value' text: [ :each | each value asString ]
+]
+
+{ #category : #accessing }
+GtLMessagesGroup >> lastExecutedMessage [
+	self messagesReverseDo: [ :aMessage | 
+		aMessage requestResponse ifNotNil: [ ^ aMessage ] ].
+	^nil
 ]
 
 { #category : #accessing }
