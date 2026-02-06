@@ -136,6 +136,11 @@ GtLOpenAIFile >> purpose: anObject [
 	purpose := anObject
 ]
 
+{ #category : #'as yet unclassified' }
+GtLOpenAIFile >> requestResponse: aGtLRequestResponse [ 
+	"do nothing"
+]
+
 { #category : #accessing }
 GtLOpenAIFile >> status [
 	^ status

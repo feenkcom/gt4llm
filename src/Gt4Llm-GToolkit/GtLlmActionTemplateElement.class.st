@@ -11,7 +11,7 @@ Class {
 		'example',
 		'onActionCreated'
 	],
-	#category : #'Gt4Llm-GToolkit-UI'
+	#category : 'Gt4Llm-GToolkit-UI'
 }
 
 { #category : #accessing }

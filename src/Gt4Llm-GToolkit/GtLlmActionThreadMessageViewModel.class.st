@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'action'
 	],
-	#category : #'Gt4Llm-GToolkit-UI'
+	#category : 'Gt4Llm-GToolkit-UI'
 }
 
 { #category : #accessing }

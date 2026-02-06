@@ -3,7 +3,7 @@ Class {
 	#superclass : #BlElement,
 	#traits : 'TGtWithWardleyMapDecoratorViewModel + TBrLayoutResizable',
 	#classTraits : 'TGtWithWardleyMapDecoratorViewModel classTrait + TBrLayoutResizable classTrait',
-	#category : #'Gt4Llm-GToolkit-UI'
+	#category : 'Gt4Llm-GToolkit-UI'
 }
 
 { #category : #initialization }

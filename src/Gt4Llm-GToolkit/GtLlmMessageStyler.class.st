@@ -10,7 +10,7 @@ Class {
 		'expanded',
 		'elements'
 	],
-	#category : #'Gt4Llm-GToolkit-UI'
+	#category : 'Gt4Llm-GToolkit-UI'
 }
 
 { #category : #generated }

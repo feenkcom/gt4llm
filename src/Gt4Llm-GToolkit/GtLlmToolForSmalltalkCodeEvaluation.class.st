@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLlmToolForSmalltalkCodeEvaluation,
 	#superclass : #GtLlmAbstractFunctionTool,
-	#category : #'Gt4Llm-GToolkit-Tools'
+	#category : 'Gt4Llm-GToolkit-Tools'
 }
 
 { #category : #'llm-generated' }
