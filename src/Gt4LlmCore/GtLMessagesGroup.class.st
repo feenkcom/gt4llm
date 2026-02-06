@@ -62,6 +62,13 @@ GtLMessagesGroup >> gtViewToolMessagesGroupedByTypeFor: aView [
 ]
 
 { #category : #accessing }
+GtLMessagesGroup >> lastExecutedMessage [
+	self messagesReverseDo: [ :aMessage | 
+		aMessage requestResponse ifNotNil: [ ^ aMessage ] ].
+	^nil
+]
+
+{ #category : #accessing }
 GtLMessagesGroup >> lastMessage [
 	self messagesReverseDo: [ :aMessage | ^ aMessage ].
 	^nil

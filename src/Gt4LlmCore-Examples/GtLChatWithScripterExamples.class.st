@@ -129,8 +129,8 @@ GtLChatWithScripterExamples >> chatElementWithEmptyReplyMessage_toolMessage [
 	reply := chat messages at: 2.
 	self assert: reply isReplyMessage.
 	self assert: reply isToolMessage not.
-	self assert: reply toolMessages size equals: 1.
-	self assert: (reply toolMessages at: 1) equals: tool.
+	self assert: reply executionMessages size equals: 1.
+	self assert: (reply executionMessages at: 1) equals: tool.
 
 	scripter llmChat
 		assertNumberOfMessageElementsIs: 2;
@@ -149,7 +149,7 @@ GtLChatWithScripterExamples >> chatElementWithEmptyReplyMessage_toolMessage_exec
 	scripter := self chatElementWithEmptyReplyMessage_toolMessage.
 	chat := scripter model.
 	reply := chat messages at: 2.
-	tool := reply toolMessages last.
+	tool := reply executionMessages last.
 
 	scripter do
 		label: 'Set tool message running state';
@@ -173,7 +173,7 @@ GtLChatWithScripterExamples >> chatElementWithEmptyReplyMessage_toolMessage_fini
 	scripter := self chatElementWithEmptyReplyMessage_toolMessage_executing.
 	chat := scripter model.
 	reply := chat messages at: 2.
-	tool := reply toolMessages last.
+	tool := reply executionMessages last.
 
 	scripter do
 		label: 'Set tool message finished state';
