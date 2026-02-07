@@ -20,3 +20,7 @@ GtLOpenAIModelsGroup >> gtViewModelsFor: aView [
 		column: 'Owned by' text: #ownedBy;
 		column: 'Created on' text: #created
 ]
+
+{ #category : #'as yet unclassified' }
+GtLOpenAIModelsGroup >> requestResponse: requestResponse [
+]

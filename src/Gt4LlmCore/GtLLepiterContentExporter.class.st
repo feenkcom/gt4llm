@@ -86,6 +86,13 @@ GtLLepiterContentExporter >> visit: each [
 ]
 
 { #category : #'as yet unclassified' }
+GtLLepiterContentExporter >> visitBlockQuoteSnippet: aTextualSnippet [
+	self codeSnippet: aTextualSnippet text asString labelled: ''.
+
+	self visitChildren: aTextualSnippet
+]
+
+{ #category : #'as yet unclassified' }
 GtLLepiterContentExporter >> visitChangesSnippet: aLeChangesSnippet [
 	self codeSnippet: aLeChangesSnippet contentAsString labelled: 'changes'.
 

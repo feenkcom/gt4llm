@@ -11,11 +11,6 @@ Class {
 	#category : #'Gt4Llm-OpenAI'
 }
 
-{ #category : #accessing }
-GtLOpenAIProvider class >> default [
-	^ [ self withApiKeyFromFile ]
-]
-
 { #category : #testing }
 GtLOpenAIProvider class >> isConnectable [
 	^ GtLOpenAIClient apiKeyFile exists
@@ -34,6 +29,11 @@ GtLOpenAIProvider class >> withApiKeyFromClipboard [
 { #category : #'instance creation' }
 GtLOpenAIProvider class >> withApiKeyFromFile [
 	^ self new apiKey: GtLOpenAIClient apiKeyFileContents
+]
+
+{ #category : #'instance creation' }
+GtLOpenAIProvider class >> withDefaultSetup [
+	^ self withApiKeyFromFile
 ]
 
 { #category : #accessing }
@@ -104,14 +104,18 @@ GtLOpenAIProvider >> defaultUserMessageClass [
 ]
 
 { #category : #'private - execution' }
+GtLOpenAIProvider >> ensureContextCompactionIfNeeded [
+	compactionStrategy requestCompactionIfNeeded.
+]
+
+{ #category : #'private - execution' }
 GtLOpenAIProvider >> executeAsyncMessage: anInputMessage [
 	<return: #TAsyncPromise>
 	| anErrorHandlerPromise aFuture aFirstPromise |
 	self privateExecutionState: self state scheduled.
 	aFuture := [ 
 		self privateExecutionState: self state running.
-		
-		"compactionStrategy requestCompactionIfNeeded."
+		self ensureContextCompactionIfNeeded.
 		self processNextMessage: anInputMessage ] asAsyncFuture.
 	aFirstPromise := aFuture await: GtLOpenAISettings futureExecutionConfiguration.
 	anErrorHandlerPromise := aFirstPromise
@@ -183,15 +187,16 @@ GtLOpenAIProvider >> gtViewCallsWithTokensFor: aView [
 
 { #category : #'private - execution' }
 GtLOpenAIProvider >> handleToolCall: aToolCall [
-	| domainObject toolMessage |
+	| toolMessage |
 	chat removeLastMessage.
-	toolMessage := GtLToolMessage new toolCall: aToolCall.
-	chat addToolMessage: toolMessage.
+	toolMessage := GtLToolMessage new 
+		toolCall: aToolCall.
 	toolMessage chat: chat.
 	toolMessage beRunningExecutionState.
-	[ domainObject := tools performToolCall: aToolCall.
-	toolMessage output: domainObject ]
-		ensure: [ toolMessage beFinishedExecutionState ].
+	[ |domainObject|
+		domainObject := tools performToolCall: aToolCall.
+		toolMessage output: domainObject ]
+			ensure: [ toolMessage beFinishedExecutionState ].
 	self chat signalRunHasUpdated.
 	
 	"Let's review this when isStreaming works (is used).
@@ -225,6 +230,9 @@ GtLOpenAIProvider >> modelName: aString [
 GtLOpenAIProvider >> performToolCallsIn: result with: activeTools [
 	<return: #GtLOpenAIProviderProcessedMessage or: nil>
 	| toolMessages |
+	
+	self ensureContextCompactionIfNeeded.
+	
 	toolMessages := result toolCalls asArray
 			withIndexCollect: [ :aToolCall :anIndex | 
 				| toolMessage |
@@ -234,7 +242,6 @@ GtLOpenAIProvider >> performToolCallsIn: result with: activeTools [
 						previousRequestResponse: result requestResponse;
 						toolCallIndex: anIndex).
 				chat addToolMessage: toolMessage.
-				toolMessage chat: chat.
 				self state
 					ifCanContinue: [ toolMessage beRunningExecutionState.
 						[ |domainObject|
@@ -270,11 +277,11 @@ GtLOpenAIProvider >> processNextMessage: anInputMessage [
 	self state ifCanContinue: [  ] ifDisabled: [ ^ nil ].
 
 	result := self executeNextMessage: anInputMessage.
-
 	result hasToolCalls
 		ifTrue: [ 
-			compactionStrategy requestCompactionIfNeeded.
-			anotherMessage := self performToolCallsIn: result with: anInputMessage tools ]
+			anotherMessage := self 
+				performToolCallsIn: result 
+				with: anInputMessage tools ]
 		ifFalse: [ 
 			anOutputMessage := self
 					responseTypeForResult: result

@@ -40,6 +40,15 @@ GtLOpenAIUserMessage >> addInstructionSectionForLepiterPages: pageNames titled: 
 				body: instructionString)
 ]
 
+{ #category : #'as yet unclassified' }
+GtLOpenAIUserMessage >> asTokenizableString [
+	^ '<|im_start|>' , 
+	self role , 
+	'<|im_sep|>' , 
+	(self contentText), 
+	'<|im_end|>'
+]
+
 { #category : #accessing }
 GtLOpenAIUserMessage >> attachments [
 	^ attachments
@@ -106,7 +115,7 @@ GtLOpenAIUserMessage >> configureWithCompactionExecution [
 
 { #category : #'as yet unclassified' }
 GtLOpenAIUserMessage >> content [
-	^ content
+	^ content ifNil: [ self computeContentFromInputModels ]
 ]
 
 { #category : #accessing }
@@ -122,7 +131,7 @@ GtLOpenAIUserMessage >> contentOneLineSummary [
 
 { #category : #'as yet unclassified' }
 GtLOpenAIUserMessage >> contentText [
-	^ content
+	^ self content
 ]
 
 { #category : #accessing }

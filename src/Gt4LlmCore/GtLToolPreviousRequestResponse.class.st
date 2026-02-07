@@ -21,7 +21,7 @@ GtLToolPreviousRequestResponse >> previousRequestResponse: anObject [
 
 { #category : #accessing }
 GtLToolPreviousRequestResponse >> resultOpenAIUsageDetails [
-	^followingRequestResponse resultOpenAIUsageDetails
+	^followingRequestResponse ifNotNil: [ :each | each resultOpenAIUsageDetails ]
 ]
 
 { #category : #accessing }

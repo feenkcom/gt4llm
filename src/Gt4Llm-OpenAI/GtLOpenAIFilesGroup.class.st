@@ -23,3 +23,8 @@ GtLOpenAIFilesGroup >> gtFilesFor: aView [
 		column: 'Purpose' text: #purpose weight: 0.5;
 		column: 'Status' text: #status weight: 0.5
 ]
+
+{ #category : #'as yet unclassified' }
+GtLOpenAIFilesGroup >> requestResponse: aGtLRequestResponse [ 
+	"do nothing"
+]
