@@ -12,12 +12,6 @@ GtLFileSearchTool class >> leJsonV4Name [
 	^ #gtLFileSearchTool
 ]
 
-{ #category : #visiting }
-GtLFileSearchTool >> acceptVisitor: aVisitor [
-
-	^ aVisitor visitGtLlmFileSearchTool: self
-]
-
 { #category : #'as yet unclassified' }
 GtLFileSearchTool >> functionResponse [
 	^ {'type' -> 'file_search'.
@@ -38,6 +32,6 @@ GtLFileSearchTool >> vectorStoreIds [
 ]
 
 { #category : #accessing }
-GtLFileSearchTool >> vectorStoreIds: anObject [
-	vectorStoreIds := anObject
+GtLFileSearchTool >> vectorStoreIds: aCollection [
+	vectorStoreIds := aCollection
 ]
