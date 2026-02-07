@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'baseUrl',
 		'apiKey',
-		'history'
+		'history',
+		'clientBuilder'
 	],
 	#classVars : [
 		'ApiKeyFile'
@@ -24,7 +25,9 @@ GtLOpenAIClient class >> apiKeyFile: aFile [
 
 { #category : #accessing }
 GtLOpenAIClient class >> apiKeyFileContents [
-	^ ApiKeyFile contents trimBoth
+	^ ApiKeyFile exists 
+		ifTrue: [ ApiKeyFile contents trimBoth ] 
+		ifFalse: [ '' ]
 ]
 
 { #category : #accessing }
@@ -94,6 +97,20 @@ GtLOpenAIClient >> checkForErrors: aResponse [
 		and: [ ((aResponse at: 'error') isKindOf: Collection)
 				and: [ (aResponse at: 'error') includesKey: 'message' ] ])
 		ifTrue: [ (GtLOpenAIError from: (aResponse at: 'error')) signal ].
+]
+
+{ #category : #'api - initialization' }
+GtLOpenAIClient >> clientBuilder [
+	"For testing purposes only."
+
+	^ clientBuilder
+]
+
+{ #category : #'api - initialization' }
+GtLOpenAIClient >> clientBuilder: aGtLOpenAIClientStubBuilder [
+	"For testing purposes only."
+
+	clientBuilder := aGtLOpenAIClientStubBuilder
 ]
 
 { #category : #'as yet unclassified' }
@@ -322,7 +339,7 @@ GtLOpenAIClient >> getRun: aRunId forThread: aThreadId [
 		perform
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'gt - extensions' }
 GtLOpenAIClient >> gtCallsFor: aView [
 	<gtView>
 	^ aView forward
@@ -372,18 +389,15 @@ GtLOpenAIClient >> gtViewCallsWithTokensFor: aView [
 GtLOpenAIClient >> initialize [
 	super initialize.
 	history := GtLRequestHistory new.
+	clientBuilder := GtLOpenAIClientZincBuilder new.
 	self baseUrl: self defaultBaseUrl
 ]
 
-{ #category : #'gt - extensions' }
+{ #category : #'private - communication' }
 GtLOpenAIClient >> initializeClient [
-	| aClient |
-	aClient := ZnClient new.
-	aClient forJsonREST.
-	aClient headerAt: 'OpenAI-Beta' put: 'assistants=v2'.
-	aClient timeout: 1200.
-	aClient setBearerAuthentication: apiKey.
-	^ aClient
+	^ clientBuilder
+		apiKey: apiKey;
+		create
 ]
 
 { #category : #accessing }
