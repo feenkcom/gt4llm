@@ -25,7 +25,9 @@ GtLOpenAIClient class >> apiKeyFile: aFile [
 
 { #category : #accessing }
 GtLOpenAIClient class >> apiKeyFileContents [
-	^ ApiKeyFile contents trimBoth
+	^ ApiKeyFile exists 
+		ifTrue: [ ApiKeyFile contents trimBoth ] 
+		ifFalse: [ '' ]
 ]
 
 { #category : #accessing }
