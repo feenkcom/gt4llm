@@ -22,9 +22,19 @@ GtLConnection >> addOption: anOption withValue: aValue [
 ]
 
 { #category : #accessing }
+GtLConnection >> buildBareProvider [
+	"use this for more flexible setup, such as in examples"
+	| aProvider |
+	aProvider := self providerClass new.
+	meta
+		keysAndValuesDo: [ :aKey :aValue | aProvider perform: aKey asSymbol asMutator withArguments: {aValue} ].
+	^ aProvider
+]
+
+{ #category : #accessing }
 GtLConnection >> buildProvider [
 	| aProvider |
-	aProvider := self providerClass default value.
+	aProvider := self providerClass withDefaultSetup.
 	meta
 		keysAndValuesDo: [ :aKey :aValue | aProvider perform: aKey asSymbol asMutator withArguments: {aValue} ].
 	^ aProvider

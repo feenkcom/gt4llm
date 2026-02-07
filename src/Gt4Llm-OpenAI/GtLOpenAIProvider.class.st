@@ -11,11 +11,6 @@ Class {
 	#category : #'Gt4Llm-OpenAI'
 }
 
-{ #category : #accessing }
-GtLOpenAIProvider class >> default [
-	^ [ self withApiKeyFromFile ]
-]
-
 { #category : #testing }
 GtLOpenAIProvider class >> isConnectable [
 	^ GtLOpenAIClient apiKeyFile exists
@@ -34,6 +29,11 @@ GtLOpenAIProvider class >> withApiKeyFromClipboard [
 { #category : #'instance creation' }
 GtLOpenAIProvider class >> withApiKeyFromFile [
 	^ self new apiKey: GtLOpenAIClient apiKeyFileContents
+]
+
+{ #category : #'instance creation' }
+GtLOpenAIProvider class >> withDefaultSetup [
+	^ self withApiKeyFromFile
 ]
 
 { #category : #accessing }
