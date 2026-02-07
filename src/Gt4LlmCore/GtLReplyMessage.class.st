@@ -231,9 +231,9 @@ GtLReplyMessage >> isReplyMessage [
 	^ true
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'api - testing' }
 GtLReplyMessage >> isSuccess [
-	^ finalMessage isFailure not
+	^ finalMessage ifNotNil: #isSuccess ifNil: [ false ]
 ]
 
 { #category : #'api - execution' }

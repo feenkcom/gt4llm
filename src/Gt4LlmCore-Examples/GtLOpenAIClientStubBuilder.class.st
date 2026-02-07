@@ -7,13 +7,9 @@ Class {
 	#category : #'Gt4LlmCore-Examples-OpenAI'
 }
 
-{ #category : #'api - instantiation' }
-GtLOpenAIClientStubBuilder >> create [
-	"Create a new Zinc client to communicate with OpenAI server"
-
-	| aClient |
-	aClient := GtLOpenAIClientStub new responses: responses.
-	^ aClient
+{ #category : #'private - instance creation' }
+GtLOpenAIClientStubBuilder >> newBasicClient [
+	^ GtLOpenAIClientStub new responses: responses
 ]
 
 { #category : #accessing }
