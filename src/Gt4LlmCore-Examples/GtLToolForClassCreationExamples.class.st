@@ -65,7 +65,12 @@ GtLToolForClassCreationExamples >> createClassWithClassVariables [
 	subclass := Smalltalk globals at: subclassName ifAbsent: [ nil ].
 	self assert: subclass notNil.
 	self assert: subclass superclass == baseClass.
-	self assert: (subclass classVariables collect: #name) = #('SharedCounter') ]
+	self assert: (subclass classVariables collect: #name) = #('SharedCounter').
+	self assert: result originalClassName equals: subclassName asString.
+	self assert: result originalSuperclassName equals: baseClassName asString.
+	self assert: result originalPackageName equals: 'Gt4LlmCore-Examples'.
+	self assert: result originalInstanceVariableNames equals: 'value'.
+	self assert: result originalClassVariableNames equals: 'SharedCounter' ]
 		ensure: [ self removeClassNamedIfPresent: subclassName.
 			self removeClassNamedIfPresent: baseClassName ].
 	^ call
@@ -96,7 +101,12 @@ GtLToolForClassCreationExamples >> createClassWithInstanceVariables [
 		createdClass := Smalltalk globals at: className ifAbsent: [ nil ].
 		self assert: createdClass notNil.
 		self assert: (createdClass instanceVariables collect: #name) = #('firstSlot' 'secondSlot').
-		self assert: result foundClass equals: createdClass
+		self assert: result foundClass equals: createdClass.
+		self assert: result originalClassName equals: className asString.
+		self assert: result originalSuperclassName equals: 'Object'.
+		self assert: result originalPackageName equals: 'Gt4LlmCore-Examples'.
+		self assert: result originalInstanceVariableNames equals: 'firstSlot secondSlot'.
+		self assert: result originalClassVariableNames equals: ''
 	] ensure: [
 		self removeClassNamedIfPresent: className
 	].

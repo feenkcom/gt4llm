@@ -70,6 +70,16 @@ GtLFunctionToolCall >> function: aDict [
 		ifTrue: [ arguments := STONJSON fromString: arguments ]
 ]
 
+{ #category : #views }
+GtLFunctionToolCall >> gtActionForResultFor: anAction [
+	<gtAction>
+	^ anAction button
+		icon: BrGlamorousVectorIcons inspect;
+		label: 'Result';
+		tooltip: 'Spawn the result object';
+		action: [ :button | button phlow spawnObject: result ]
+]
+
 { #category : #'gt - extensions' }
 GtLFunctionToolCall >> gtArgumentsFor: aView [
 	<gtView>

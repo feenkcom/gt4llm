@@ -89,7 +89,14 @@ GtLToolForClassCreation >> privatePerformToolCall: aToolCall [
 					instanceVariableNames: instanceVariables;
 					classVariableNames: classVariables;
 					freeze: error ].
-	^ GtLClassDomainObject new foundClass: createdClass
+	^ GtLClassDomainObject new
+		foundClass: createdClass;
+		originalClassName: classNameString;
+		originalSuperclassName: superclassName;
+		originalPackageName: packageName;
+		originalInstanceVariableNames: instanceVariables;
+		originalClassVariableNames: classVariables;
+		yourself
 ]
 
 { #category : #private }

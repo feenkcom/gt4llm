@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLToolForClassesCreation,
 	#superclass : #GtLAbstractFunctionTool,
-	#category : #Gt4LlmCore
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }
@@ -73,7 +73,14 @@ GtLToolForClassesCreation >> classResultFromDescriptor: descriptor [
 				instanceVariableNames: instanceVariables;
 				classVariableNames: classVariables;
 				freeze: error ].
-	^ GtLClassDomainObject new foundClass: createdClass
+	^ GtLClassDomainObject new
+		foundClass: createdClass;
+		originalClassName: classNameString;
+		originalSuperclassName: superclassName;
+		originalPackageName: packageName;
+		originalInstanceVariableNames: instanceVariables;
+		originalClassVariableNames: classVariables;
+		yourself
 ]
 
 { #category : #private }
