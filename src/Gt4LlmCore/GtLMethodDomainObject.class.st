@@ -19,7 +19,7 @@ GtLMethodDomainObject >> gtClassCoderViewFor: aView [
 	<gtLlmView>
 	^ aView explicit
 		title: 'Coder';
-		priority: 10;
+		priority: 1;
 		stencil: [ (GtCoderElement forMethod: self method) disablePlayPage ]
 ]
 

@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLToolForWorldScreenshotExamples,
 	#superclass : #Object,
-	#category : #'Gt4LlmCore-Examples'
+	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #examples }

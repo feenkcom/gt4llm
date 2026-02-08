@@ -7,6 +7,17 @@ Class {
 	#category : #Gt4LlmCore
 }
 
+{ #category : #views }
+GtLMethodsSourceDomainObject >> gtMethodsFor: aView [
+	<gtView>
+	<gtLlmView>
+	^ aView forward
+		title: 'Methods';
+		priority: 1;
+		object: [ GtSearchFixedMethodsFilter new methods: (self methods collect: #method) ];
+		view: #gtItemsFor:
+]
+
 { #category : #accessing }
 GtLMethodsSourceDomainObject >> methods [
 	^ methods
