@@ -11,26 +11,12 @@ GtLAbstractFunctionTool class >> leJsonV4Name [
 
 { #category : #accessing }
 GtLAbstractFunctionTool class >> serializationProperties [
-	^ {#type -> #type. #function -> #function}
+	^ {#type -> #type. #function -> #functionResponse}
 ]
 
 { #category : #'as yet unclassified' }
 GtLAbstractFunctionTool >> description [
 	^ self subclassResponsibility
-]
-
-{ #category : #accessing }
-GtLAbstractFunctionTool >> function [
-	^ {'name' -> self name.
-		'description' -> self description.
-		'parameters'
-			-> {'type' -> 'object'.
-					'properties'
-						-> (self parameters collect: [ :aName | aName -> {'type' -> 'string'} asDictionary ])
-								asDictionary.
-					'required' -> self parameters.
-					'additionalProperties' -> false} asDictionary.
-		'strict' -> true} asDictionary
 ]
 
 { #category : #'as yet unclassified' }
