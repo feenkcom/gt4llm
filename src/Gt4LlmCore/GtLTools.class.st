@@ -15,7 +15,7 @@ GtLTools class >> gt [
 GtLTools class >> gtCodeChange [
 	^ self
 		withAll: {GtLToolForClassCreation new.
-					GtLToolForMethodCompilation new.
+					GtLToolForMethodsCompilation new.
 					GtLToolForMethodRemoval new.
 					GtLToolForClassRemoval new} asOrderedCollection
 ]

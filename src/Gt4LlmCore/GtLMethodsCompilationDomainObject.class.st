@@ -7,14 +7,25 @@ Class {
 	#category : #Gt4LlmCore
 }
 
+{ #category : #'as yet unclassified' }
+GtLMethodsCompilationDomainObject >> gtMethodsFor: aView [
+	<gtView>
+	<gtLlmView>
+	^ aView forward
+		title: 'Methods';
+		priority: 1;
+		object: [ GtSearchFixedMethodsFilter new methods: (self methods collect: #method) ];
+		view: #gtItemsFor:
+]
+
 { #category : #accessing }
 GtLMethodsCompilationDomainObject >> methods [
 	^ methods ifNil: [ #() ]
 ]
 
 { #category : #accessing }
-GtLMethodsCompilationDomainObject >> methods: anObject [
-	methods := anObject
+GtLMethodsCompilationDomainObject >> methods: aCollection [
+	methods := aCollection
 ]
 
 { #category : #serialization }
