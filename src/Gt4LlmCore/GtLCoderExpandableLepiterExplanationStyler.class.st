@@ -84,6 +84,23 @@ GtLCoderExpandableLepiterExplanationStyler >> styleSameStrings: aStringLiteralNo
 ]
 
 { #category : #visiting }
+GtLCoderExpandableLepiterExplanationStyler >> styleStringAsLepiter: aMessageNode [
+	| lepiterString lepiterText |
+	lepiterString := aMessageNode arguments first.
+	lepiterText := text
+			from: lepiterString startPosition + 1
+			to: lepiterString stopPosition - 1.
+	GtLMessageStyler new style: lepiterText.
+	(text from: lepiterString startPosition to: lepiterString stopPosition)
+		foreground: self theme editor pharoStringLiteralForeground.
+	self
+		attribute: (GtCompletionStrategyAttribute new
+				strategy: LeCompletionStrategy new)
+		from: lepiterString startPosition
+		to: lepiterString stopPosition	"database: aLepiterBase"
+]
+
+{ #category : #visiting }
 GtLCoderExpandableLepiterExplanationStyler >> visitMessage: aMessageNode [
 	super visitMessage: aMessageNode.
 
@@ -94,7 +111,9 @@ GtLCoderExpandableLepiterExplanationStyler >> visitMessage: aMessageNode [
 	(#(pageExplanation:) includes: aMessageNode selector)
 		ifTrue: [ self
 				stylePageNameInStringMessage: aMessageNode
-				inLepiterBase: LeDatabasesRegistry defaultLogicalDatabase ]
+				inLepiterBase: LeDatabasesRegistry defaultLogicalDatabase ].
+	(#(sendMarkdown: markdown:) includes: aMessageNode selector)
+		ifTrue: [ self styleStringAsLepiter: aMessageNode ]
 ]
 
 { #category : #visiting }
