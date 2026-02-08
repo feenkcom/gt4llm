@@ -57,6 +57,11 @@ GtLErrorMessage >> freeze: anError [
 	self exception: (GtSystemUtility freeze: anError)
 ]
 
+{ #category : #'as yet unclassified' }
+GtLErrorMessage >> gtDisplayOn: stream [
+	stream nextPutAll: self content
+]
+
 { #category : #views }
 GtLErrorMessage >> gtExceptionStackFor: aView [
 	<gtView>
