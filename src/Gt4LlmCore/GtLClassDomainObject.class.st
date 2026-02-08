@@ -2,7 +2,12 @@ Class {
 	#name : #GtLClassDomainObject,
 	#superclass : #GtLDomainObject,
 	#instVars : [
-		'foundClass'
+		'foundClass',
+		'originalClassName',
+		'originalSuperclassName',
+		'originalPackageName',
+		'originalInstanceVariableNames',
+		'originalClassVariableNames'
 	],
 	#category : #'Gt4LlmCore-Domain Objects'
 }
@@ -41,6 +46,56 @@ GtLClassDomainObject >> gtClassCoderViewFor: aView [
 						background: Color white;
 						addAptitude: BrShadowAptitude).
 			container ]
+]
+
+{ #category : #accessing }
+GtLClassDomainObject >> originalClassName [
+	^ originalClassName
+]
+
+{ #category : #accessing }
+GtLClassDomainObject >> originalClassName: aString [
+	originalClassName := aString
+]
+
+{ #category : #accessing }
+GtLClassDomainObject >> originalClassVariableNames [
+	^ originalClassVariableNames
+]
+
+{ #category : #accessing }
+GtLClassDomainObject >> originalClassVariableNames: aString [
+	originalClassVariableNames := aString
+]
+
+{ #category : #accessing }
+GtLClassDomainObject >> originalInstanceVariableNames [
+	^ originalInstanceVariableNames
+]
+
+{ #category : #accessing }
+GtLClassDomainObject >> originalInstanceVariableNames: aString [
+	originalInstanceVariableNames := aString
+]
+
+{ #category : #accessing }
+GtLClassDomainObject >> originalPackageName [
+	^ originalPackageName
+]
+
+{ #category : #accessing }
+GtLClassDomainObject >> originalPackageName: aString [
+	originalPackageName :=  aString
+]
+
+{ #category : #accessing }
+GtLClassDomainObject >> originalSuperclassName [
+	^ originalSuperclassName 
+]
+
+{ #category : #accessing }
+GtLClassDomainObject >> originalSuperclassName: aString [
+	originalSuperclassName := aString
 ]
 
 { #category : #'api - serializing' }

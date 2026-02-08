@@ -25,7 +25,8 @@ GtLClassesCreationDomainObject >> gtClassesFor: aView [
 		title: 'Classes';
 		priority: 1;
 		items: [ self classes ];
-		column: 'Value' text: [ :each | each gtDisplayString ]
+		column: 'Class' text: [ :each | each gtDisplayString ];
+		column: 'Superclass' text: [ :each | each superclass ]
 ]
 
 { #category : #accessing }

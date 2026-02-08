@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLToolForMethodsCompilation,
 	#superclass : #GtLAbstractFunctionTool,
-	#category : #Gt4LlmCore
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #serialization }
