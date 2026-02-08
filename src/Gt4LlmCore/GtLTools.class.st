@@ -43,7 +43,8 @@ GtLTools class >> gtSearch [
 				GtLToolForClassReferences new.
 				GtLToolForMethodReferences new.
 				GtLToolForMethodImplementors new.
-				GtLToolForMethodSource new.
+				"GtLToolForMethodSource new."
+				GtLToolForMethodsSource new.
 				GtLToolForPackageClasses new.
 				GtLToolForSubstringLiteralSearch new} asOrderedCollection
 ]
