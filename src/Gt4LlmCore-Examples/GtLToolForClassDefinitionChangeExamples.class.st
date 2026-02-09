@@ -13,7 +13,7 @@ GtLToolForClassDefinitionChangeExamples >> changeClassInstanceVariables [
 	targetClass := (Object <<className
 		slots: {'first'};
 		classSlots: {};
-		package: 'Gt4LlmCoreSomething') install.
+		package: 'Gt4LlmCoreNewPackage') install.
 	[ tool := GtLToolForClassDefinitionChange new.
 	call := GtLFunctionToolCall new.
 	call function: {
@@ -23,7 +23,7 @@ GtLToolForClassDefinitionChangeExamples >> changeClassInstanceVariables [
 			'superclassName' -> #Object.
 			'instanceVariables' -> #('alpha' 'beta').
 			'classVariables' -> #().
-			'package' -> 'Gt4LlmCoreSomething'} asDictionary
+			'package' -> 'Gt4LlmCoreNewPackage'} asDictionary
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
@@ -44,7 +44,7 @@ GtLToolForClassDefinitionChangeExamples >> changeClassVariables [
 	targetClass := (Object <<className
 		slots: {};
 		classSlots: {'OldCounter'};
-		package: 'Gt4LlmCoreSomething') install.
+		package: 'Gt4LlmCoreNewPackage') install.
 	[ tool := GtLToolForClassDefinitionChange new.
 	call := GtLFunctionToolCall new.
 	call function: {
@@ -54,7 +54,7 @@ GtLToolForClassDefinitionChangeExamples >> changeClassVariables [
 			'superclassName' -> #Object.
 			'instanceVariables' -> ''.
 			'classVariables' -> #('NewCounter' 'SharedValue').
-			'package' -> 'Gt4LlmCoreSomething'} asDictionary
+			'package' -> 'Gt4LlmCoreNewPackage'} asDictionary
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
@@ -80,17 +80,17 @@ GtLToolForClassDefinitionChangeExamples >> changeSuperclassAndPackage [
 		subclass: baseClassName
 		instanceVariableNames: ''
 		classVariableNames: ''
-		package: 'Gt4LlmCore-Examples'.
+		package: 'Gt4LlmCoreNewPackage'.
 	newBaseClass := Object
 		subclass: newBaseClassName
 		instanceVariableNames: ''
 		classVariableNames: ''
-		package: 'Gt4LlmCore-Examples'.
+		package: 'Gt4LlmCoreNewPackage'.
 	targetClass := baseClass
 		subclass: className
 		instanceVariableNames: ''
 		classVariableNames: ''
-		package: 'Gt4LlmCore-Examples'.
+		package: 'Gt4LlmCoreNewPackage'.
 	[ tool := GtLToolForClassDefinitionChange new.
 	call := GtLFunctionToolCall new.
 	call function: {
@@ -100,15 +100,15 @@ GtLToolForClassDefinitionChangeExamples >> changeSuperclassAndPackage [
 			'superclassName' -> newBaseClassName.
 			'instanceVariables' -> ''.
 			'classVariables' -> ''.
-			'package' -> 'Gt4LlmCore-NewPackage'} asDictionary
+			'package' -> 'Gt4LlmCoreNewPackage'} asDictionary
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
 	self assert: result isErrorDomainObject not.
 	self assert: targetClass superclass equals: newBaseClass.
-	self assert: targetClass package name equals: 'Gt4LlmCore-NewPackage'.
+	self assert: targetClass package name equals: 'Gt4LlmCoreNewPackage'.
 	self assert: result originalSuperclassName equals: newBaseClassName asString.
-	self assert: result originalPackageName equals: 'Gt4LlmCore-NewPackage' ]
+	self assert: result originalPackageName equals: 'Gt4LlmCoreNewPackage' ]
 		ensure: [
 			self removeClassNamedIfPresent: className.
 			self removeClassNamedIfPresent: baseClassName.
@@ -131,7 +131,7 @@ GtLToolForClassDefinitionChangeExamples >> changeUnknownClass [
 			'superclassName' -> #Object.
 			'instanceVariables' -> ''.
 			'classVariables' -> ''.
-			'package' -> 'Gt4LlmCore-Examples'} asDictionary
+			'package' -> 'Gt4LlmCoreNewPackage'} asDictionary
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
