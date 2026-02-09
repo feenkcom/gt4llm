@@ -8,13 +8,13 @@ Class {
 GtLToolForClassDefinitionChangeExamples >> changeClassInstanceVariables [
 	<gtExample>
 	| tool call result className targetClass |
-	className := #GtLToolForClassSignatureChangeExamplesWithIvars.
+	[ className := #GtLToolForClassSignatureChangeExamplesWithIvars.
 	self removeClassNamedIfPresent: className.
 	targetClass := (Object <<className
 		slots: {'first'};
 		classSlots: {};
 		package: 'Gt4LlmCoreNewPackage') install.
-	[ tool := GtLToolForClassDefinitionChange new.
+	tool := GtLToolForClassDefinitionChange new.
 	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
@@ -39,13 +39,13 @@ GtLToolForClassDefinitionChangeExamples >> changeClassInstanceVariables [
 GtLToolForClassDefinitionChangeExamples >> changeClassVariables [
 	<gtExample>
 	| tool call result className targetClass |
-	className := #GtLToolForClassSignatureChangeExamplesWithClassVars.
+	[ className := #GtLToolForClassSignatureChangeExamplesWithClassVars.
 	self removeClassNamedIfPresent: className.
 	targetClass := (Object <<className
 		slots: {};
 		classSlots: {'OldCounter'};
 		package: 'Gt4LlmCoreNewPackage') install.
-	[ tool := GtLToolForClassDefinitionChange new.
+	tool := GtLToolForClassDefinitionChange new.
 	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
@@ -70,7 +70,7 @@ GtLToolForClassDefinitionChangeExamples >> changeClassVariables [
 GtLToolForClassDefinitionChangeExamples >> changeSuperclassAndPackage [
 	<gtExample>
 	| tool call result baseClassName newBaseClassName className baseClass newBaseClass targetClass |
-	baseClassName := #GtLToolForClassSignatureChangeExamplesBase1.
+	[ baseClassName := #GtLToolForClassSignatureChangeExamplesBase1.
 	newBaseClassName := #GtLToolForClassSignatureChangeExamplesBase2.
 	className := #GtLToolForClassSignatureChangeExamplesTarget.
 	self removeClassNamedIfPresent: className.
@@ -91,7 +91,7 @@ GtLToolForClassDefinitionChangeExamples >> changeSuperclassAndPackage [
 		instanceVariableNames: ''
 		classVariableNames: ''
 		package: 'Gt4LlmCoreNewPackage'.
-	[ tool := GtLToolForClassDefinitionChange new.
+	tool := GtLToolForClassDefinitionChange new.
 	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
