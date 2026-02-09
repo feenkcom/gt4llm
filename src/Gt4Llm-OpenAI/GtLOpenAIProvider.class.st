@@ -209,6 +209,7 @@ GtLOpenAIProvider >> handleToolCall: aToolCall [
 { #category : #initialization }
 GtLOpenAIProvider >> initialize [
 	super initialize.
+	
 	modelName := nil.	"set when the provider is built"
 	client := GtLOpenAIClient new.
 	executions := OrderedCollection new.

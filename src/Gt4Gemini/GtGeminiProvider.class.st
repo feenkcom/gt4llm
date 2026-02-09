@@ -58,11 +58,6 @@ GtGeminiProvider >> client: anObject [
 ]
 
 { #category : #'as yet unclassified' }
-GtGeminiProvider >> defaultAsssistantMessageClass [
-	^ self chat messageClassForGemini
-]
-
-{ #category : #'as yet unclassified' }
 GtGeminiProvider >> defaultModel [
 	^ 'gemini-2.5-flash-preview-05-20'
 ]

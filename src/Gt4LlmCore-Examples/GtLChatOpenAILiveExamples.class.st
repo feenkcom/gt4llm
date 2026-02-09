@@ -151,7 +151,8 @@ GtLChatOpenAILiveExamples >> howAreYouCallExample [
 	self stubResponses: [ self howAreYouCallExample_stub_responses ].
 	
 	self
-		waitForChatRunIsDoneThen: [ self assert: self currentChat messages size equals: 2 ].
+		waitForChatRunIsDoneThen: [ 
+			self assert: self currentChat messages size equals: 2 ].
 	
 	^ self currentChat
 ]
