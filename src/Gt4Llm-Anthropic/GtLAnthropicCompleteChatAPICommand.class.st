@@ -14,7 +14,7 @@ Class {
 
 { #category : #'as yet unclassified' }
 GtLAnthropicCompleteChatAPICommand >> buildEntity [
-	| newEntity serializedMessages |
+	| newEntity serializedMessages jsonSchemaEntity |
 	
 	newEntity := {
 		'model' -> model.
@@ -42,7 +42,14 @@ GtLAnthropicCompleteChatAPICommand >> buildEntity [
 				as: Array) ].
 
 	self system ifNotNil: [ newEntity at: 'system' put: system ].
-	self format ifNotNil: [ newEntity at: 'output_format' put: format ].
+	self format ifNotNil: [  :aFormat |
+		jsonSchemaEntity := {
+			'schema' -> aFormat.
+			'type' -> 'json_schema'
+			} asDictionary.
+	
+		newEntity 
+		at: 'output_config' at: 'format' put: jsonSchemaEntity ].
 
 	^ newEntity
 ]
