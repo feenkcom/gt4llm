@@ -8,6 +8,17 @@ Class {
 }
 
 { #category : #adding }
+GtLJsonSchemaInputModel >> addContentOneLineSummaryTo: aWriteStream [
+	| aString |
+	aString := [ model printString ]
+			on: Error
+			do: [ :e | e return: model className ].
+	aWriteStream
+		nextPutAll: 'Object: ';
+		nextPutAll: aString asString
+]
+
+{ #category : #adding }
 GtLJsonSchemaInputModel >> addContentTo: aDictionary [
 	aDictionary at: name put: model  
 ]
