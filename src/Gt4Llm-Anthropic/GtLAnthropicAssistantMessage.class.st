@@ -83,7 +83,8 @@ GtLAnthropicAssistantMessage >> gtViewResponseModelsFor: aView [
 	<gtView>
 	<gtLlmView>
 	
-	responseModels ifEmpty: [ ^ aView empty ].
+	(responseModels isNil or: [responseModels isEmpty]) 
+		ifTrue: [ ^ aView empty ].
 
 	^aView forward
 		title: 'Response models';
