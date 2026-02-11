@@ -202,6 +202,37 @@ GtLAnthropicProvider >> performToolCallsFor: aResult [
 						contentText: toolOutput) ]
 ]
 
+{ #category : #'private - execution' }
+GtLAnthropicProvider >> performToolCallsIn: result with: activeTools [
+	<return: #GtLOpenAIProviderProcessedMessage or: nil>
+	| toolMessages |
+		
+	toolMessages := result toolCalls asArray
+			withIndexCollect: [ :aToolCall :anIndex | 
+				| toolMessage |
+				toolMessage := GtLToolMessage new 
+					toolCall: aToolCall;
+					requestResponse: (GtLToolPreviousRequestResponse new
+						previousRequestResponse: result requestResponse;
+						toolCallIndex: anIndex).
+				chat addToolMessage: toolMessage.
+				self state
+					ifCanContinue: [ toolMessage beRunningExecutionState.
+						[ |domainObject|
+						domainObject := activeTools performToolCall: aToolCall.
+						toolMessage output: domainObject ]
+							ensure: [ toolMessage beFinishedExecutionState ] ]
+					ifDisabled: [ toolMessage beSkippedExecutionState ].
+				
+				toolMessage ].
+	self chat signalRunHasUpdated.
+	
+	"We send all chat messages, so it is enough to process just the last tool message.
+	See: `GtLOpenAIGenerateResponseAPICommand>>#buildEntity`."
+	toolMessages ifEmpty: [ ^ nil ].
+	^ self processNextMessage: toolMessages last.
+]
+
 { #category : #'as yet unclassified' }
 GtLAnthropicProvider >> printOn: aStream [
 	aStream
