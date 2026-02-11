@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLMethodsSourceDomainObject,
+	#name : #GtLMethodsCompilationDomainObject,
 	#superclass : #GtLDomainObject,
 	#instVars : [
 		'methods'
@@ -7,8 +7,8 @@ Class {
 	#category : #Gt4LlmCore
 }
 
-{ #category : #views }
-GtLMethodsSourceDomainObject >> gtMethodsFor: aView [
+{ #category : #'as yet unclassified' }
+GtLMethodsCompilationDomainObject >> gtMethodsFor: aView [
 	<gtView>
 	<gtLlmView>
 	^ aView forward
@@ -19,22 +19,19 @@ GtLMethodsSourceDomainObject >> gtMethodsFor: aView [
 ]
 
 { #category : #accessing }
-GtLMethodsSourceDomainObject >> methods [
-	^ methods
+GtLMethodsCompilationDomainObject >> methods [
+	^ methods ifNil: [ #() ]
 ]
 
 { #category : #accessing }
-GtLMethodsSourceDomainObject >> methods: aCollection [
+GtLMethodsCompilationDomainObject >> methods: aCollection [
 	methods := aCollection
 ]
 
 { #category : #serialization }
-GtLMethodsSourceDomainObject >> serializeToOpenAIResponseJsonObject [
-	"Return a JSON dictionary that represents the domain object."
-
+GtLMethodsCompilationDomainObject >> serializeToOpenAIResponseJsonObject [
 	<return: #NeoJSONObject>
 	^ NeoJSONObject new
-		at: 'methods'
-			put: (self methods collect: #serializeToOpenAIResponseJsonObject as: Array);
+		at: 'methods' put: (self methods collect: #serializeToOpenAIResponseJsonObject as: Array);
 		yourself
 ]

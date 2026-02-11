@@ -4,15 +4,27 @@ Class {
 	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
-{ #category : #'examples - class' }
+{ #category : #examples }
 GtLDomainObjectExamples >> classDomainObject [
 	<gtExample>
 	| aDomainObject aJsonObject aValidator |
-	aDomainObject := GtLClassDomainObject new foundClass: GtLDummyOneObject.
+	aDomainObject := GtLClassDomainObject new
+		foundClass: GtLDummyOneObject;
+		originalClassName: 'GtLDummyOneObject';
+		originalSuperclassName: 'Object';
+		originalPackageName: 'Gt4LlmCore-Examples';
+		originalInstanceVariableNames: 'instVarA instVarB';
+		originalClassVariableNames: 'classInstVarA classInstVarB';
+		yourself.
 	aJsonObject := aDomainObject serializeToOpenAIResponseJsonObject.
 
 	aValidator := GtLValueSerializer new validateClass: aJsonObject.
 	self assert: aValidator isValid.
+	self assert: aDomainObject originalClassName equals: 'GtLDummyOneObject'.
+	self assert: aDomainObject originalSuperclassName equals: 'Object'.
+	self assert: aDomainObject originalPackageName equals: 'Gt4LlmCore-Examples'.
+	self assert: aDomainObject originalInstanceVariableNames equals: 'instVarA instVarB'.
+	self assert: aDomainObject originalClassVariableNames equals: 'classInstVarA classInstVarB'.
 
 	^ aDomainObject
 ]

@@ -5,7 +5,7 @@ Class {
 		'worldElementProvider',
 		'pngDataProvider'
 	],
-	#category : #Gt4LlmCore
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #'as yet unclassified' }

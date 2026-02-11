@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLOpenAIUserMessage,
+	#name : #GtLAnthropicUserMessage,
 	#superclass : #GtLChatMessage,
 	#traits : 'TGtLWithInstructionSectionAPI + TGtLWithInputModelsAPI',
 	#classTraits : 'TGtLWithInstructionSectionAPI classTrait + TGtLWithInputModelsAPI classTrait',
@@ -11,21 +11,21 @@ Class {
 		'executionStrategy',
 		'contentOneLineSummary'
 	],
-	#category : #'Gt4Llm-OpenAI'
+	#category : #'Gt4Llm-Anthropic-Client'
 }
 
 { #category : #serialization }
-GtLOpenAIUserMessage class >> leJsonV4Name [
-	^ #gtLOpenAIUserMessage
+GtLAnthropicUserMessage class >> leJsonV4Name [
+	^ #gtLAnthropicUserMessage
 ]
 
 { #category : #adding }
-GtLOpenAIUserMessage >> addInputModel: aModel [
+GtLAnthropicUserMessage >> addInputModel: aModel [
 	inputModels at: aModel name put: aModel.
 ]
 
 { #category : #'api - message' }
-GtLOpenAIUserMessage >> addInstructionSectionForLepiterPages: pageNames titled: title [ 
+GtLAnthropicUserMessage >> addInstructionSectionForLepiterPages: pageNames titled: title [ 
 	| instructionString |
 	instructionString := String cr
 			join: (pageNames
@@ -41,7 +41,7 @@ GtLOpenAIUserMessage >> addInstructionSectionForLepiterPages: pageNames titled: 
 ]
 
 { #category : #'as yet unclassified' }
-GtLOpenAIUserMessage >> asTokenizableString [
+GtLAnthropicUserMessage >> asTokenizableString [
 	^ '<|im_start|>' , 
 	self role , 
 	'<|im_sep|>' , 
@@ -50,17 +50,17 @@ GtLOpenAIUserMessage >> asTokenizableString [
 ]
 
 { #category : #accessing }
-GtLOpenAIUserMessage >> attachments [
+GtLAnthropicUserMessage >> attachments [
 	^ attachments
 ]
 
 { #category : #accessing }
-GtLOpenAIUserMessage >> attachments: aCollection [
+GtLAnthropicUserMessage >> attachments: aCollection [
 	attachments := aCollection
 ]
 
 { #category : #'as yet unclassified' }
-GtLOpenAIUserMessage >> buildCompleteInstructions [
+GtLAnthropicUserMessage >> buildCompleteInstructions [
 	| newInstructions  |
 	newInstructions := GtLlmInstructionWithSections new
 			introduction: (GtLlmInstructionString new string: '').
@@ -81,7 +81,7 @@ GtLOpenAIUserMessage >> buildCompleteInstructions [
 ]
 
 { #category : #accessing }
-GtLOpenAIUserMessage >> chat: aChat [
+GtLAnthropicUserMessage >> chat: aChat [
 	super chat: aChat.
 	self updateDataFromChat: aChat.
 	content := self computeContentFromInputModels.
@@ -89,7 +89,7 @@ GtLOpenAIUserMessage >> chat: aChat [
 ]
 
 { #category : #'private - initialization' }
-GtLOpenAIUserMessage >> computeContentFromInputModels [
+GtLAnthropicUserMessage >> computeContentFromInputModels [
 	| object |
 	
 	object := NeoJSONObject new.
@@ -100,7 +100,7 @@ GtLOpenAIUserMessage >> computeContentFromInputModels [
 ]
 
 { #category : #'private - initialization' }
-GtLOpenAIUserMessage >> computeContentOneLineSummaryFromInputModels [
+GtLAnthropicUserMessage >> computeContentOneLineSummaryFromInputModels [
 	^ String
 		streamContents: [ :aStream | 
 			inputModels
@@ -109,43 +109,43 @@ GtLOpenAIUserMessage >> computeContentOneLineSummaryFromInputModels [
 ]
 
 { #category : #accessing }
-GtLOpenAIUserMessage >> configureWithCompactionExecution [
+GtLAnthropicUserMessage >> configureWithCompactionExecution [
 	executionStrategy := GtLOpenAIMessageCompactionExecutionStrategy new
 ]
 
 { #category : #'as yet unclassified' }
-GtLOpenAIUserMessage >> content [
+GtLAnthropicUserMessage >> content [
 	^ content ifNil: [ self computeContentFromInputModels ]
 ]
 
 { #category : #accessing }
-GtLOpenAIUserMessage >> contentOneLineMultiLabelSummaryWith: aBuilder [
+GtLAnthropicUserMessage >> contentOneLineMultiLabelSummaryWith: aBuilder [
 	inputModels do: [ :each | each contentOneLineMultiLabelSummaryWith: aBuilder ]
 ]
 
 { #category : #'api - ui' }
-GtLOpenAIUserMessage >> contentOneLineSummary [
+GtLAnthropicUserMessage >> contentOneLineSummary [
 	<return: #String>
 	^ contentOneLineSummary ifNil: [ self content ]
 ]
 
 { #category : #'as yet unclassified' }
-GtLOpenAIUserMessage >> contentText [
+GtLAnthropicUserMessage >> contentText [
 	^ self content
 ]
 
 { #category : #accessing }
-GtLOpenAIUserMessage >> executionStrategy [
+GtLAnthropicUserMessage >> executionStrategy [
 	^executionStrategy
 ]
 
 { #category : #accessing }
-GtLOpenAIUserMessage >> executionStrategy: anObject [
+GtLAnthropicUserMessage >> executionStrategy: anObject [
 	executionStrategy := anObject
 ]
 
 { #category : #ui }
-GtLOpenAIUserMessage >> gtAttachmentsFor: aView [
+GtLAnthropicUserMessage >> gtAttachmentsFor: aView [
 	<gtView>
 	<gtLlmView>
 	attachments ifEmpty: [ ^ aView empty ].
@@ -156,14 +156,14 @@ GtLOpenAIUserMessage >> gtAttachmentsFor: aView [
 ]
 
 { #category : #ui }
-GtLOpenAIUserMessage >> gtInspectorTargetModels [
+GtLAnthropicUserMessage >> gtInspectorTargetModels [
 	^ self inputModels
 		flatCollect: [ :each | each gtInspectorTargetModels ]
 		as: Array
 ]
 
 { #category : #ui }
-GtLOpenAIUserMessage >> gtInstructionsFor: aView [
+GtLAnthropicUserMessage >> gtInstructionsFor: aView [
 	<gtView>
 	<gtLlmView>
 	instructions ifNil: [ ^ aView empty ].
@@ -175,7 +175,7 @@ GtLOpenAIUserMessage >> gtInstructionsFor: aView [
 ]
 
 { #category : #views }
-GtLOpenAIUserMessage >> gtToolsFor: aView [
+GtLAnthropicUserMessage >> gtToolsFor: aView [
 	<gtView>
 	^ aView forward
 		title: 'Defined tools';
@@ -185,7 +185,7 @@ GtLOpenAIUserMessage >> gtToolsFor: aView [
 ]
 
 { #category : #ui }
-GtLOpenAIUserMessage >> gtViewInputModelsFor: aView [
+GtLAnthropicUserMessage >> gtViewInputModelsFor: aView [
 	<gtView>
 	<gtLlmView>
 	inputModels ifNil: [ ^ aView empty ].
@@ -199,12 +199,12 @@ GtLOpenAIUserMessage >> gtViewInputModelsFor: aView [
 ]
 
 { #category : #accessing }
-GtLOpenAIUserMessage >> images: aCollection [
+GtLAnthropicUserMessage >> images: aCollection [
 	attachments := aCollection collect: [ :each | GtLInputImageFile fileReference: each ]
 ]
 
 { #category : #initialization }
-GtLOpenAIUserMessage >> initialize [
+GtLAnthropicUserMessage >> initialize [
 	super initialize.
 
 	attachments := OrderedCollection new.
@@ -212,50 +212,50 @@ GtLOpenAIUserMessage >> initialize [
 ]
 
 { #category : #accessing }
-GtLOpenAIUserMessage >> inputModels [
+GtLAnthropicUserMessage >> inputModels [
 	^ inputModels
 ]
 
 { #category : #accessing }
-GtLOpenAIUserMessage >> instructions [
+GtLAnthropicUserMessage >> instructions [
 	^ instructions ifNil: [ 
 			instructions := self buildCompleteInstructions ]
 ]
 
 { #category : #testing }
-GtLOpenAIUserMessage >> isCompactionRequest [
+GtLAnthropicUserMessage >> isCompactionRequest [
 	^formatDescriptions schemaDescriptions anySatisfy: [ :each |
 		each name = 'Compaction' ]
 ]
 
 { #category : #'api - message' }
-GtLOpenAIUserMessage >> lepiterExplanations: pageNames [
+GtLAnthropicUserMessage >> lepiterExplanations: pageNames [
 	^ self addInstructionSectionForLepiterPages: pageNames titled: 'Explanations'
 ]
 
 { #category : #accessing }
-GtLOpenAIUserMessage >> pdfs: aCollection [
-	attachments addAll: (aCollection collect: [ :each | GtLInputPdfFile fileReference: each ])
+GtLAnthropicUserMessage >> pdfs: aCollection [
+	attachments := aCollection collect: [ :each | GtLInputPdfFile fileReference: each ]
 ]
 
 { #category : #accessing }
-GtLOpenAIUserMessage >> requestResponse [
+GtLAnthropicUserMessage >> requestResponse [
 	<return: #GtLRequestResponse>
 	^ requestResponse
 ]
 
 { #category : #accessing }
-GtLOpenAIUserMessage >> requestResponse: anObject [
+GtLAnthropicUserMessage >> requestResponse: anObject [
 	requestResponse := anObject
 ]
 
 { #category : #accessing }
-GtLOpenAIUserMessage >> role [
+GtLAnthropicUserMessage >> role [
 	^ 'user'
 ]
 
 { #category : #serialization }
-GtLOpenAIUserMessage >> serializeForAnthropicMessagesAPI [
+GtLAnthropicUserMessage >> serializeForAnthropicMessagesAPI [
 	^ {#content
 			-> ({{'type' -> 'text'.
 						'text' -> self contentText} asDictionary}
@@ -265,7 +265,7 @@ GtLOpenAIUserMessage >> serializeForAnthropicMessagesAPI [
 ]
 
 { #category : #serialization }
-GtLOpenAIUserMessage >> serializeForOpenAIResponsesAPI [
+GtLAnthropicUserMessage >> serializeForOpenAIResponsesAPI [
 	^ {#content
 			-> ({{'type' -> 'input_text'.
 						'text' -> self contentText} asDictionary}

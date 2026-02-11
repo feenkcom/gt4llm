@@ -79,6 +79,5 @@ GtLToolForMethodCompilation >> privatePerformToolCall: aToolCall [
 					description: 'Compilation error while compiling given method source code' ].
 
 	^ GtLMethodDomainObject new
-		method: (class methodDict at: selector);
-		sourceCode: source
+		method: (class methodDict at: selector)
 ]

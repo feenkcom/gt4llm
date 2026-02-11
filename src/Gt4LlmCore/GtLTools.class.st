@@ -14,8 +14,9 @@ GtLTools class >> gt [
 { #category : #defaults }
 GtLTools class >> gtCodeChange [
 	^ self
-		withAll: {GtLToolForClassCreation new.
-					GtLToolForMethodCompilation new.
+		withAll: {GtLToolForClassesCreation new.
+					GtLToolForClassDefinitionChange new.
+					GtLToolForMethodsCompilation new.
 					GtLToolForMethodRemoval new.
 					GtLToolForClassRemoval new} asOrderedCollection
 ]

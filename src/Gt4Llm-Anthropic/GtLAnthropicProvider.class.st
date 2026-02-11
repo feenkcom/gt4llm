@@ -2,12 +2,12 @@ Class {
 	#name : #GtLAnthropicProvider,
 	#superclass : #GtLProvider,
 	#instVars : [
-		'model',
 		'client',
 		'tools',
 		'maxTokens',
 		'instructions',
-		'executions'
+		'executions',
+		'modelName'
 	],
 	#category : #'Gt4Llm-Anthropic-Provider'
 }
@@ -66,8 +66,8 @@ GtLAnthropicProvider >> client: anObject [
 ]
 
 { #category : #'as yet unclassified' }
-GtLAnthropicProvider >> defaultAsssistantMessageClass [
-	^ nil
+GtLAnthropicProvider >> defaultAssistantMessageClass [
+	^ GtLAnthropicAssistantMessage
 ]
 
 { #category : #'as yet unclassified' }
@@ -76,28 +76,25 @@ GtLAnthropicProvider >> defaultMaxTokens [
 ]
 
 { #category : #'as yet unclassified' }
-GtLAnthropicProvider >> defaultModel [
-	^ 'claude-3-7-sonnet-20250219'
-]
-
-{ #category : #'as yet unclassified' }
 GtLAnthropicProvider >> defaultUserMessageClass [
-	^  GtLOpenAIUserMessage
+	^  GtLAnthropicUserMessage
 ]
 
 { #category : #actions }
 GtLAnthropicProvider >> executeAsyncMessage: anInputMessage [
 	<return: #TAsyncPromise>
-	| aSecondPromise aFuture aFirstPromise |
+	| errorHandlerPromise aFuture firstPromise |
+	self privateExecutionState: self state scheduled.
 	aFuture := [ 
 		self privateExecutionState: self state running.
 		self processNextMessage: anInputMessage ] asAsyncFuture.
-	aFirstPromise := aFuture
-			await: GtLAnthropicSettings futureExecutionConfiguration.
-	aSecondPromise := aFirstPromise
-			then: [ :aMessage | 
+	firstPromise := aFuture await: GtLAnthropicSettings futureExecutionConfiguration.
+	errorHandlerPromise := firstPromise
+			then: [ :aProcessedMessage | 
 				self privateExecutionState: self state finished.
-				aMessage ]
+				self flag: #todo. "Remove signalRunIsDone"
+				self chat signalRunIsDone.
+				aProcessedMessage ]
 			otherwise: [ :anError | 
 				| aMessage |
 				aMessage := GtLErrorMessage new
@@ -105,10 +102,12 @@ GtLAnthropicProvider >> executeAsyncMessage: anInputMessage [
 						inputMessage: anInputMessage.
 				self chat addErrorMessage: aMessage.
 				self privateExecutionState: self state finished.
+				self flag: #todo. "Remove signalRunIsDone"
+				self chat signalRunIsDone.
 				aMessage ].
-	executions add: aSecondPromise.
+	executions add: errorHandlerPromise.
 	
-	^ aSecondPromise
+	^ errorHandlerPromise
 ]
 
 { #category : #'as yet unclassified' }
@@ -149,18 +148,16 @@ GtLAnthropicProvider >> gtTriggerAssistantActionFor: anAction [
 GtLAnthropicProvider >> initialize [
 	super initialize.
 
-	executions := OrderedCollection new.
+	modelName := nil.	"set when the provider is built"
 	
 	self initializeClient.
-	
-	tools := GtLlmToolsGroup new.
 	maxTokens := self defaultMaxTokens.
-	model := self defaultModel
+	executions := OrderedCollection new.
 ]
 
 { #category : #'as yet unclassified' }
 GtLAnthropicProvider >> initializeClient [
-	client := GtAnthropicClient new
+	client := GtLAnthropicClient new
 ]
 
 { #category : #'as yet unclassified' }
@@ -184,18 +181,13 @@ GtLAnthropicProvider >> maxTokens: anObject [
 ]
 
 { #category : #accessing }
-GtLAnthropicProvider >> model [
-	^ model
-]
-
-{ #category : #accessing }
-GtLAnthropicProvider >> model: anObject [
-	model := anObject
-]
-
-{ #category : #accessing }
 GtLAnthropicProvider >> modelName [
-	^ model
+	^ modelName
+]
+
+{ #category : #accessing }
+GtLAnthropicProvider >> modelName: anObject [
+	modelName := anObject
 ]
 
 { #category : #'as yet unclassified' }
@@ -208,6 +200,37 @@ GtLAnthropicProvider >> performToolCallsFor: aResult [
 				addMessage: (GtAnthropicToolMessage new
 						id: aToolCall id;
 						contentText: toolOutput) ]
+]
+
+{ #category : #'private - execution' }
+GtLAnthropicProvider >> performToolCallsIn: result with: activeTools [
+	<return: #GtLOpenAIProviderProcessedMessage or: nil>
+	| toolMessages |
+		
+	toolMessages := result toolCalls asArray
+			withIndexCollect: [ :aToolCall :anIndex | 
+				| toolMessage |
+				toolMessage := GtLToolMessage new 
+					toolCall: aToolCall;
+					requestResponse: (GtLToolPreviousRequestResponse new
+						previousRequestResponse: result requestResponse;
+						toolCallIndex: anIndex).
+				chat addToolMessage: toolMessage.
+				self state
+					ifCanContinue: [ toolMessage beRunningExecutionState.
+						[ |domainObject|
+						domainObject := activeTools performToolCall: aToolCall.
+						toolMessage output: domainObject ]
+							ensure: [ toolMessage beFinishedExecutionState ] ]
+					ifDisabled: [ toolMessage beSkippedExecutionState ].
+				
+				toolMessage ].
+	self chat signalRunHasUpdated.
+	
+	"We send all chat messages, so it is enough to process just the last tool message.
+	See: `GtLOpenAIGenerateResponseAPICommand>>#buildEntity`."
+	toolMessages ifEmpty: [ ^ nil ].
+	^ self processNextMessage: toolMessages last.
 ]
 
 { #category : #'as yet unclassified' }
@@ -230,6 +253,7 @@ GtLAnthropicProvider >> processNextMessage: anInputMessage [
 	result := client
 			generateResponseWithModel: self modelName
 			messages: self chat messages
+			maxTokens: 4096
 			instructions: anInputMessage completeInstructionString
 			tools: anInputMessage tools
 			andFormat: (anInputMessage hasFormats
@@ -240,7 +264,7 @@ GtLAnthropicProvider >> processNextMessage: anInputMessage [
 		ifTrue: [ anotherMessage := self performToolCallsIn: result with: anInputMessage tools ]
 		ifFalse: [ anOutputMessage := self assistantMessageClass new
 					modelName: self modelName;
-					rawData: (result output detect: [ :anOutput | (anOutput at: 'type') = 'message' ]) ].
+					rawData: (result content) ].
 
 	self chat addAssistantMessage: anOutputMessage.
 	self chat signalRunIsDone.
@@ -294,41 +318,4 @@ GtLAnthropicProvider >> tools [
 { #category : #accessing }
 GtLAnthropicProvider >> tools: anObject [
 	tools := anObject
-]
-
-{ #category : #'as yet unclassified' }
-GtLAnthropicProvider >> triggerAssistant [
-	| result |
-	self privateExecutionState: self state running.
-
-	self chat signalRunHasStarted.
-
-	[ result := self client
-			completeChatWithModel: self model
-			messages: self chat messages
-			maxTokens: self maxTokens
-			system: instructions
-			format: self format
-			andTools: tools.
-
-
-	self chat addMessage: result.
-
-	self performToolCallsFor: result.
-
-	result
-		content: (result content
-				collect: [ :aValue | 
-					(aValue at: #type) = 'text'
-						ifTrue: [ aValue
-								at: 'text'
-									put: (((aValue at: 'text') removePrefix: '```json') removeSuffix: '```');
-								yourself ]
-						ifFalse: [ aValue ] ]).
-
-	self chat signalRunHasUpdated ] doWhileTrue: [ result toolCalls isNotEmpty ].
-
-	self chat signalRunIsDone.
-
-	self privateExecutionState: self state finished.
 ]

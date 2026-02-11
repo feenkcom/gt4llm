@@ -13,19 +13,46 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-GtLAnthropicCompleteChatAPICommand >> entity [
-	| anEntity |
-	anEntity := {'model' -> model.
-			'messages' -> (messages collect: #serializeForAnthropicMessagesAPI).
-			'max_tokens' -> maxTokens} asDictionary.
-
+GtLAnthropicCompleteChatAPICommand >> buildEntity [
+	| newEntity serializedMessages jsonSchemaEntity |
+	
+	newEntity := {
+		'model' -> model.
+		'max_tokens' -> maxTokens} asDictionary.
+			
+	serializedMessages := OrderedCollection new.
+	self messages
+		messagesDo: [ :aMessage | 
+			aMessage isToolMessage
+				ifTrue: [ aMessage toolCall isFinished
+						ifTrue: [ 
+							serializedMessages 
+								add: aMessage toolCall 
+									responseInputForAnthropicMessagesAPI.
+							serializedMessages 
+								add: aMessage serializeForAnthropicMessagesAPI ] ]
+				ifFalse: [ serializedMessages 
+					add: aMessage serializeForAnthropicMessagesAPI ] ].
+				
+	newEntity at: 'messages' put: serializedMessages asArray.
+			
 	self tools
-		ifNotNil: [ anEntity at: 'tools' put: (self tools collect: #functionAnthropic) ].
+		ifNotNil: [ 
+			newEntity at: 'tools' put: (self tools 
+				collect: [:each |each functionAnthropic]
+				as: Array) ].
 
-	self system ifNotNil: [ anEntity at: 'system' put: system ].
-	self format ifNotNil: [ anEntity at: 'output_format' put: format ].
+	self system ifNotNil: [ newEntity at: 'system' put: system ].
+	self format ifNotNil: [  :aFormat |
+		jsonSchemaEntity := {
+			'schema' -> aFormat.
+			'type' -> 'json_schema'
+			} asDictionary.
+	
+		newEntity 
+		at: 'output_config' at: 'format' put: jsonSchemaEntity ].
 
-	^ anEntity
+	^ newEntity
 ]
 
 { #category : #accessing }
@@ -70,7 +97,7 @@ GtLAnthropicCompleteChatAPICommand >> model: anObject [
 
 { #category : #'as yet unclassified' }
 GtLAnthropicCompleteChatAPICommand >> request [
-	^ self client post: '/messages' withEntity: self entity
+	^ self client post: '/messages' withEntity: self buildEntity
 ]
 
 { #category : #'as yet unclassified' }

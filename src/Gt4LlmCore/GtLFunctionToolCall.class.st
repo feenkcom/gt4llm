@@ -70,6 +70,16 @@ GtLFunctionToolCall >> function: aDict [
 		ifTrue: [ arguments := STONJSON fromString: arguments ]
 ]
 
+{ #category : #views }
+GtLFunctionToolCall >> gtActionForResultFor: anAction [
+	<gtAction>
+	^ anAction button
+		icon: BrGlamorousVectorIcons inspect;
+		label: 'Result';
+		tooltip: 'Spawn the result object';
+		action: [ :button | button phlow spawnObject: result ]
+]
+
 { #category : #'gt - extensions' }
 GtLFunctionToolCall >> gtArgumentsFor: aView [
 	<gtView>
@@ -174,6 +184,18 @@ GtLFunctionToolCall >> responseInput [
 		'call_id' -> self id.
 		'name' -> self name.
 		'arguments' -> (STONJSON toString: self arguments)} asDictionary
+]
+
+{ #category : #accessing }
+GtLFunctionToolCall >> responseInputForAnthropicMessagesAPI [
+	^ {
+		'content' ->{{
+			'type' -> 'tool_use'.
+			'id' -> self id.
+			'name' -> self name.
+			'input' ->  self arguments} asDictionary}.
+		'role' -> 'assistant' } asDictionary 
+	
 ]
 
 { #category : #accessing }

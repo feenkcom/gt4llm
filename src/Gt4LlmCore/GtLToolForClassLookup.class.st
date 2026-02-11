@@ -37,7 +37,7 @@ GtLToolForClassLookup >> parameters [
 	^ #('className')
 ]
 
-{ #category : #accessing }
+{ #category : #private }
 GtLToolForClassLookup >> privatePerformToolCall: aToolCall [
 	| arguments className class |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
@@ -50,5 +50,8 @@ GtLToolForClassLookup >> privatePerformToolCall: aToolCall [
 	class := className
 			asClassIfAbsent: [ ^ GtLMissingDomainObject new objectName: className ].
 
-	^ GtLClassDomainObject new foundClass: class
+	^ GtLClassDomainObject new
+		foundClass: class;
+		originalClassName: className asString trimBoth;
+		yourself
 ]

@@ -180,6 +180,29 @@ GtLToolMessage >> role [
 ]
 
 { #category : #'as yet unclassified' }
+GtLToolMessage >> serializeForAnthropicMessagesAPI [
+	"[
+  {
+    ""type"": ""tool_result"",
+    ""tool_use_id"": ""toolu_01D7FLrfh4GYq7yT1ULFeyMV"",
+    ""content"": ""259.75 USD""
+  }
+]
+	Documentation: https://platform.claude.com/docs/en/api/messages/create"
+
+	| anOutput | 
+	
+	anOutput := self output ifNotNil: [ :each | each serializeToAnthropicResponseOutput ].
+
+	^ {
+		'content' ->{{
+				'type' -> 'tool_result'.
+				'tool_use_id' -> toolCall id.
+				'content' -> anOutput} asDictionary}.
+		'role' -> 'user' }asDictionary 
+]
+
+{ #category : #'as yet unclassified' }
 GtLToolMessage >> serializeForOpenAIResponsesAPI [
 	"Output should be defined using tools.
 	Available output values:

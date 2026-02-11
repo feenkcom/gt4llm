@@ -2,8 +2,7 @@ Class {
 	#name : #GtLMethodDomainObject,
 	#superclass : #GtLDomainObject,
 	#instVars : [
-		'method',
-		'sourceCode'
+		'method'
 	],
 	#category : #'Gt4LlmCore-Domain Objects'
 }
@@ -19,18 +18,8 @@ GtLMethodDomainObject >> gtClassCoderViewFor: aView [
 	<gtLlmView>
 	^ aView explicit
 		title: 'Coder';
-		priority: 10;
+		priority: 1;
 		stencil: [ (GtCoderElement forMethod: self method) disablePlayPage ]
-]
-
-{ #category : #views }
-GtLMethodDomainObject >> gtSourceCodeFor: aView [
-	<gtView>
-	sourceCode ifNil: [ ^ aView empty ].
-	^ aView textEditor
-		title: 'Source code';
-		text: [ sourceCode ];
-		aptitude: BrGlamorousCodeEditorAptitude
 ]
 
 { #category : #accessing }
@@ -56,12 +45,7 @@ GtLMethodDomainObject >> serializeToOpenAIResponseJsonObject [
 		yourself
 ]
 
-{ #category : #'api - accessing' }
+{ #category : #'as yet unclassified' }
 GtLMethodDomainObject >> sourceCode [
-	^ self method sourceCode
-]
-
-{ #category : #'api - accessing' }
-GtLMethodDomainObject >> sourceCode: aString [
-	sourceCode := aString
+	^ self method sourceCode.
 ]

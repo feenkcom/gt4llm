@@ -44,6 +44,12 @@ GtLAnthropicClient class >> withApiKeyFromFile [
 ]
 
 { #category : #accessing }
+GtLAnthropicClient >> addHistoryRequestResponse: aClient [
+	<return: #GtLRequestResponse>
+	^ history addRequest: aClient request response: aClient response
+]
+
+{ #category : #accessing }
 GtLAnthropicClient >> apiKey [
 	^ apiKey
 ]
@@ -74,29 +80,17 @@ GtLAnthropicClient >> checkForErrors: aResponse [
 ]
 
 { #category : #'as yet unclassified' }
-GtLAnthropicClient >> completeChatWithModel: aString messages: aCollection andMaxTokens: anInteger [
-	^ self
-		completeChatWithModel: aString
-		messages: aCollection
-		maxTokens: anInteger
-		system: nil
-		andTools: nil
+GtLAnthropicClient >> defaultBaseUrl [
+	^ 'https://api.anthropic.com/v1/' asZnUrl
 ]
 
 { #category : #'as yet unclassified' }
-GtLAnthropicClient >> completeChatWithModel: aString messages: aCollection maxTokens: aNumber system: aSystemPrompt andTools: tools [
-	^ GtLAnthropicCompleteChatAPICommand new
-		client: self;
-		model: aString;
-		messages: aCollection;
-		maxTokens: aNumber;
-		tools: tools;
-		system: aSystemPrompt;
-		perform
+GtLAnthropicClient >> defaultVersion [
+	^ '2023-06-01'
 ]
 
 { #category : #'as yet unclassified' }
-GtLAnthropicClient >> completeChatWithModel: aString messages: aCollection maxTokens: aNumber system: aSystemPrompt format: aFormat andTools: tools [
+GtLAnthropicClient >> generateResponseWithModel: aString messages: aCollection maxTokens: aNumber instructions: aSystemPrompt tools: tools andFormat: aFormat [ 
 	^ GtLAnthropicCompleteChatAPICommand new
 		client: self;
 		model: aString;
@@ -106,16 +100,6 @@ GtLAnthropicClient >> completeChatWithModel: aString messages: aCollection maxTo
 		system: aSystemPrompt;
 		format: aFormat;
 		perform
-]
-
-{ #category : #'as yet unclassified' }
-GtLAnthropicClient >> defaultBaseUrl [
-	^ 'https://api.anthropic.com/v1/' asZnUrl
-]
-
-{ #category : #'as yet unclassified' }
-GtLAnthropicClient >> defaultVersion [
-	^ '2023-06-01'
 ]
 
 { #category : #'as yet unclassified' }
@@ -190,17 +174,17 @@ GtLAnthropicClient >> listModels [
 
 { #category : #'as yet unclassified' }
 GtLAnthropicClient >> post: aUrl withEntity: anEntity [
-	| aClient response |
+	| aClient result requestResponse |
 	aClient := self initializeClient.
 	aClient url: self baseUrl / aUrl.
 
 	aClient contents: anEntity.
 
-	response := aClient post.
-
-	history addRequest: aClient request response: aClient response.
-
-	^ self checkForErrors: response
+	result := aClient post.
+	requestResponse := self addHistoryRequestResponse: aClient.
+	requestResponse result: result.
+	self checkForErrors: result.
+	^ requestResponse
 ]
 
 { #category : #accessing }

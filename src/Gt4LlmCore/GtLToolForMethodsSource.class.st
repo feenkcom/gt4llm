@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLToolForMethodsSource,
 	#superclass : #GtLAbstractFunctionTool,
-	#category : #Gt4LlmCore
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }
@@ -89,6 +89,9 @@ GtLToolForMethodsSource >> methodSourceFromDescriptor: descriptor [
 					format: {className.
 						classSide ifTrue: [ ' class' ] ifFalse: [ '' ].
 						methodName}) ].
+	method isSourceSearchable 
+		ifFalse: [ ^GtLNotSourceSearchableMethodDomainObject new 
+			method: method ].
 	^ GtLMethodDomainObject new method: method
 ]
 
