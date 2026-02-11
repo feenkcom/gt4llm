@@ -109,13 +109,13 @@ GtAnthropicResponse >> toolCalls [
 	<return: #Array of: #GtLFunctionToolCall>
 	^ toolCalls
 		ifNil: [ toolCalls := (self content
-					select: [ :aDict | (aDict at: 'type') = 'function_call' ]
+					select: [ :aDict | (aDict at: 'type') = 'tool_use' ]
 					thenCollect: [ :aDict | 
 						GtLFunctionToolCall new
 							rawData: aDict;
-							id: (aDict at: 'call_id');
+							id: (aDict at: 'id');
 							name: (aDict at: 'name');
-							arguments: (STONJSON fromString: (aDict at: 'arguments')) ]) as: Array ]
+							arguments: (aDict at: 'input') ]) as: Array ]
 ]
 
 { #category : #accessing }

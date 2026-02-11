@@ -27,7 +27,8 @@ GtLAnthropicCompleteChatAPICommand >> buildEntity [
 				ifTrue: [ aMessage toolCall isFinished
 						ifTrue: [ 
 							serializedMessages 
-								add: aMessage toolCall responseInput.
+								add: aMessage toolCall 
+									responseInputForAnthropicMessagesAPI.
 							serializedMessages 
 								add: aMessage serializeForAnthropicMessagesAPI ] ]
 				ifFalse: [ serializedMessages 

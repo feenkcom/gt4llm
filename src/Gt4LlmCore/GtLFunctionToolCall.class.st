@@ -187,6 +187,18 @@ GtLFunctionToolCall >> responseInput [
 ]
 
 { #category : #accessing }
+GtLFunctionToolCall >> responseInputForAnthropicMessagesAPI [
+	^ {
+		'content' ->{{
+			'type' -> 'tool_use'.
+			'id' -> self id.
+			'name' -> self name.
+			'input' ->  self arguments} asDictionary}.
+		'role' -> 'assistant' } asDictionary 
+	
+]
+
+{ #category : #accessing }
 GtLFunctionToolCall >> result [
 	<return: #TGtLDomainObject>
 	^ result
