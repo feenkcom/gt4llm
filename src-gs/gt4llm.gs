@@ -7013,13 +7013,6 @@ gtDistanceMetricsFor: aView
 		itemText: [ :aClass | aClass metricName ]
 %
 
-category: 'accessing'
-classmethod: GtLlmEmbeddingsUtilities
-yourself
-	<gtExample>
-	^ self
-%
-
 ! Class implementation for 'GtLlmEndpointClient'
 
 !		Instance methods for 'GtLlmEndpointClient'
