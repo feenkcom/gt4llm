@@ -36,6 +36,13 @@ GtLlmEmbeddingsUtilities class >> distancesFromEmbeddings: listOfEmbeddings to: 
 				embedding: anEmbedding ]
 ]
 
+{ #category : #'as yet unclassified' }
+GtLlmEmbeddingsUtilities class >> exampleSelf [
+	<gtExample>
+	
+	^ self
+]
+
 { #category : #view }
 GtLlmEmbeddingsUtilities class >> gtDistanceMetricsFor: aView [
 	<gtClassView>
