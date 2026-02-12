@@ -36,6 +36,13 @@ GtLlmEmbeddingsUtilities class >> distancesFromEmbeddings: listOfEmbeddings to: 
 				embedding: anEmbedding ]
 ]
 
+{ #category : #'as yet unclassified' }
+GtLlmEmbeddingsUtilities class >> exampleSelf [
+	<gtExample>
+	
+	^ self
+]
+
 { #category : #view }
 GtLlmEmbeddingsUtilities class >> gtDistanceMetricsFor: aView [
 	<gtClassView>
@@ -44,10 +51,4 @@ GtLlmEmbeddingsUtilities class >> gtDistanceMetricsFor: aView [
 		priority: 50;
 		items: [ self distanceMetrics ];
 		itemText: [ :aClass | aClass metricName ]
-]
-
-{ #category : #accessing }
-GtLlmEmbeddingsUtilities class >> yourself [
-	<gtExample>
-	^ self
 ]
