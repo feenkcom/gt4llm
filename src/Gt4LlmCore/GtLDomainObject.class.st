@@ -22,43 +22,6 @@ GtLDomainObject >> gtJsonObjectViewFor: aView [
 		view: #gtJsonObjectFor:context:
 ]
 
-{ #category : #'gt - extensions' }
-GtLDomainObject >> gtJsonOutputObjectViewFor: aView [
-	<gtView>
-	<gtLlmView>
-	^ aView forward
-		title: 'Output Object';
-		priority: 30;
-		object: [ self serializeToOpenAIResponseOutput asGtJson ];
-		view: ##gtJsonObjectFor:context:
-]
-
-{ #category : #'gt - extensions' }
-GtLDomainObject >> gtJsonOutputStringViewFor: aView [
-	<gtView>
-	<gtLlmView>
-	^ aView forward
-		title: 'Output JSON';
-		priority: 35;
-		object: [ self serializeToOpenAIResponseOutput asGtJson ];
-		view: #gtJsonStringFor:;
-		actionButtonIcon: BrGlamorousVectorIcons inspect
-			tooltip: 'Inspect JSON Object'
-			action: [ :aButton | aButton phlow 
-				spawnObject:  self serializeToOpenAIResponseOutput asGtJson  ]
-]
-
-{ #category : #'gt - extensions' }
-GtLDomainObject >> gtJsonStringViewFor: aView [
-	<gtView>
-	<gtLlmView>
-	^ aView forward
-		title: 'Serialized JSON';
-		priority: 11;
-		object: [ self serializeToOpenAIResponseJsonObject asGtJson ];
-		view: #gtJsonStringFor:
-]
-
 { #category : #'api - testing' }
 GtLDomainObject >> isErrorDomainObject [
 	"Return true if the domain object represents some kind of failure or exception,
