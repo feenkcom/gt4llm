@@ -200,7 +200,7 @@ GtLOpenAIUserMessage >> gtViewInputModelsFor: aView [
 
 { #category : #accessing }
 GtLOpenAIUserMessage >> images: aCollection [
-	attachments := aCollection collect: [ :each | GtLInputImageFile fileReference: each ]
+	attachments addAll: (aCollection collect: [ :each | GtLInputImageFile fileReference: each ])
 ]
 
 { #category : #initialization }
