@@ -126,7 +126,10 @@ GtLChatOpenAILiveExamples >> createGpt51CodexConnection [
 GtLChatOpenAILiveExamples >> createProvider [
 	<gtExample>
 	| aProvider |
-	aProvider := self createGpt51CodexConnection buildBareProvider.
+	
+	aProvider := self isLive 
+		ifTrue: [self createGpt51CodexConnection buildProvider] 
+		ifFalse: [self createGpt51CodexConnection buildBareProvider].
 
 	self isLive
 		ifFalse: [ aProvider client clientBuilder: GtLOpenAIClientStubBuilder new ].
