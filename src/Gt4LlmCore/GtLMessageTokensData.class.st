@@ -1,36 +1,36 @@
 Class {
-	#name : #GtLOpenAIMessageTokensData,
+	#name : #GtLMessageTokensData,
 	#superclass : #GtLEntity,
 	#instVars : [
 		'inputTokens',
 		'outputTokens'
 	],
-	#category : #'Gt4Llm-OpenAI'
+	#category : #Gt4LlmCore
 }
 
 { #category : #serialization }
-GtLOpenAIMessageTokensData class >> serializationProperties [
+GtLMessageTokensData class >> serializationProperties [
 	^ {
 		#input_tokens -> #inputTokens.
 		#output_tokens -> #outputTokens}
 ]
 
 { #category : #accessing }
-GtLOpenAIMessageTokensData >> inputTokens [
+GtLMessageTokensData >> inputTokens [
 	^inputTokens
 ]
 
 { #category : #accessing }
-GtLOpenAIMessageTokensData >> inputTokens: anObject [
+GtLMessageTokensData >> inputTokens: anObject [
 	inputTokens := anObject
 ]
 
 { #category : #accessing }
-GtLOpenAIMessageTokensData >> outputTokens [
+GtLMessageTokensData >> outputTokens [
 	^outputTokens
 ]
 
 { #category : #accessing }
-GtLOpenAIMessageTokensData >> outputTokens: anObject [
+GtLMessageTokensData >> outputTokens: anObject [
 	outputTokens := anObject
 ]
