@@ -145,6 +145,16 @@ GtLAnthropicProvider >> gtTriggerAssistantActionFor: anAction [
 ]
 
 { #category : #'as yet unclassified' }
+GtLAnthropicProvider >> gtViewCallsWithTokensFor: aView [
+	<gtView>
+	^(aView forward)
+		title: 'API calls and tokens';
+		priority: 1;
+		object: [client];
+		view: #gtViewCallsWithTokensFor:
+]
+
+{ #category : #'as yet unclassified' }
 GtLAnthropicProvider >> initialize [
 	super initialize.
 

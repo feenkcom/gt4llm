@@ -34,7 +34,7 @@ GtLOpenAICompactionStrategy >> latestInputTokensCount [
 GtLOpenAICompactionStrategy >> latestTokensUsage [
 	^ provider chat messages lastExecutedMessage
 			ifNotNil: [ :aMessage |
-				aMessage requestResponse resultOpenAIUsageDetails ]
+				aMessage requestResponse resultUsageDetails ]
 ]
 
 { #category : #accessing }
