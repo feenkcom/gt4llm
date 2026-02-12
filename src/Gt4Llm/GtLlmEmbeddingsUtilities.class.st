@@ -45,9 +45,3 @@ GtLlmEmbeddingsUtilities class >> gtDistanceMetricsFor: aView [
 		items: [ self distanceMetrics ];
 		itemText: [ :aClass | aClass metricName ]
 ]
-
-{ #category : #accessing }
-GtLlmEmbeddingsUtilities class >> yourself [
-	<gtExample>
-	^ self
-]
