@@ -365,7 +365,7 @@ GtLOpenAIClient >> gtViewCallsWithTokensFor: aView [
 	^ aView columnedList
 		title: 'Tokens by call';
 		priority: 10;
-		items: [ (history collect: [ :each | each -> each extractOpenAIUsageDetails ])
+		items: [ (history collect: [ :each | each -> each resultUsageDetails ])
 				reject: [ :each | each value isNil ] ];
 		column: 'URL' text: [ :each | each key request url ];
 		column: 'Request'
