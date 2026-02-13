@@ -172,10 +172,10 @@ GtLConnectionRegistry >> knownConnectors [
 			providerClass: GtOllamaProvider;
 			label: 'GPT OSS (Ollama 20b)';
 			model: 'gpt-oss'."
-		"GtLConnection new
+		GtLConnection new
 			providerClass: GtLAnthropicProvider;
-			label: 'Claude Opus 4.5';
-			model: 'claude-opus-4-5-20251101'."
+			label: 'Claude Opus 4.6';
+			model: 'claude-opus-4-6'.
 		"GtLlmConnection new
 			providerClass: GtGeminiProvider;
 			label: 'Gemini 3.0 Pro Preview';
