@@ -7002,6 +7002,14 @@ distancesFromEmbeddings: listOfEmbeddings to: aQueryEmbedding usingMetric: aMetr
 				embedding: anEmbedding ]
 %
 
+category: 'as yet unclassified'
+classmethod: GtLlmEmbeddingsUtilities
+exampleSelf
+	<gtExample>
+	
+	^ self
+%
+
 category: 'view'
 classmethod: GtLlmEmbeddingsUtilities
 gtDistanceMetricsFor: aView
