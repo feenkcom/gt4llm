@@ -38,6 +38,11 @@ GtLAnthropicProvider class >> withApiKeyFromFile [
 ]
 
 { #category : #'as yet unclassified' }
+GtLAnthropicProvider class >> withDefaultSetup [
+	^ self withApiKeyFromFile
+]
+
+{ #category : #'as yet unclassified' }
 GtLAnthropicProvider >> addBrowseTool [
 	self
 		addTool: (GtLlmTool new
