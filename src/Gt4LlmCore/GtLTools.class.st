@@ -8,7 +8,7 @@ Class {
 
 { #category : #'as yet unclassified' }
 GtLTools class >> gt [
-	^ self gtSearch, self leSearch, self gtCodeChange, self gtCodeRemoval, self gtExamplesRun
+	^ self gtSearch, self leSearch, self gtCodeChange, self gtExamplesRun
 ]
 
 { #category : #defaults }
