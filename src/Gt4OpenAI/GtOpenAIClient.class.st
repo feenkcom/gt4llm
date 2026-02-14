@@ -334,6 +334,15 @@ GtOpenAIClient >> gtModelsFor: aView [
 		view: #gtViewModelsFor:
 ]
 
+{ #category : #views }
+GtOpenAIClient >> gtUploadedFilesFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Uploaded files';
+		object: [ self listFiles ];
+		view: #gtFilesFor:
+]
+
 { #category : #accessing }
 GtOpenAIClient >> initialize [
 	super initialize.

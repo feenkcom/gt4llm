@@ -58,6 +58,11 @@ GtOpenAIFile >> createdAt: anObject [
 ]
 
 { #category : #accessing }
+GtOpenAIFile >> deleteFile [
+	^ client deleteFile: self id
+]
+
+{ #category : #accessing }
 GtOpenAIFile >> filename [
 	^ filename
 ]
