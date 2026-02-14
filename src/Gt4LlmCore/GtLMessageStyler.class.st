@@ -393,10 +393,9 @@ GtLMessageStyler >> styleCodeBlockWithSmalltalkMethod: aCodeNode [
 	result isPetit2Failure
 		ifFalse: [ result first asSymbol
 				asClassIfPresent: [ :class | 
-					self text
-						attributes: {BrTextHideAttribute new}
-						from: aCodeNode begin startPosition
-						to: aCodeNode end stopPosition.
+					self
+						styleAutoHiding: aCodeNode sourceInterval
+						text: (self text from: aCodeNode startPosition to: aCodeNode stopPosition).
 					(text from: aCodeNode end stopPosition to: aCodeNode end stopPosition)
 						attributes: {BrTextAdornmentDynamicAttribute new
 									beAppend;
@@ -409,10 +408,9 @@ GtLMessageStyler >> styleCodeBlockWithSmalltalkMethod: aCodeNode [
 
 { #category : #generated }
 GtLMessageStyler >> styleCodeBlockWithSmalltalkSnippet: aCodeNode [
-	self text
-		attributes: {BrTextHideAttribute new}
-		from: aCodeNode begin startPosition
-		to: aCodeNode end stopPosition.
+	self
+		styleAutoHiding: aCodeNode sourceInterval
+		text: (self text from: aCodeNode startPosition to: aCodeNode stopPosition).
 	(text from: aCodeNode end stopPosition to: aCodeNode end stopPosition)
 		attributes: {BrTextAdornmentDynamicAttribute new
 					beAppend;
