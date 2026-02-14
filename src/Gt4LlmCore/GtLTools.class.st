@@ -17,7 +17,7 @@ GtLTools class >> gtCodeChange [
 		withAll: {GtLToolForClassesCreation new.
 					GtLToolForClassDefinitionChange new.
 					GtLToolForMethodsCompilation new.
-					GtLToolForMethodRemoval new.
+					GtLToolForMethodsRemoval new.
 					GtLToolForClassRemoval new} asOrderedCollection
 ]
 

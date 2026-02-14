@@ -23,12 +23,7 @@ GtLAbstractFunctionTool >> description [
 GtLAbstractFunctionTool >> functionAnthropic [
 	^ {'name' -> self name.
 		'description' -> self description.
-		'input_schema'
-			-> {'type' -> 'object'.
-					'properties'
-						-> (self parameters collect: [ :aName | aName -> {'type' -> 'string'} asDictionary ])
-								asDictionary.
-					'required' -> self parameters} asDictionary} asDictionary
+		'input_schema' -> self functionJsonSchema} asDictionary
 ]
 
 { #category : #'as yet unclassified' }
@@ -44,18 +39,22 @@ GtLAbstractFunctionTool >> functionGemini [
 ]
 
 { #category : #'as yet unclassified' }
+GtLAbstractFunctionTool >> functionJsonSchema [
+	^ {'type' -> 'object'.
+		'properties'
+			-> (self parameters
+					collect: [ :aName | aName -> {'type' -> 'string'} asDictionary ])
+					asDictionary.
+		'required' -> self parameters.
+		'additionalProperties' -> false} asDictionary
+]
+
+{ #category : #'as yet unclassified' }
 GtLAbstractFunctionTool >> functionResponse [
 	^ {'name' -> self name.
 		'type' -> self type.
 		'description' -> self description.
-		'parameters'
-			-> {'type' -> 'object'.
-					'properties'
-						-> (self parameters
-								collect: [ :aName | aName -> {'type' -> 'string'} asDictionary ])
-								asDictionary.
-					'required' -> self parameters.
-					'additionalProperties' -> false} asDictionary} asDictionary
+		'parameters' -> self functionJsonSchema} asDictionary
 ]
 
 { #category : #'as yet unclassified' }

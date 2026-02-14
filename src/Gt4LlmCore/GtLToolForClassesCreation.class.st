@@ -102,35 +102,25 @@ GtLToolForClassesCreation >> description [
 ]
 
 { #category : #accessing }
-GtLToolForClassesCreation >> functionResponse [
+GtLToolForClassesCreation >> functionJsonSchema [
 	| classSchema |
 	classSchema := {'type' -> 'object'.
-		'properties' -> {
-			'className' -> {'type' -> 'string'} asDictionary.
-			'superclassName' -> {'type' -> 'string'} asDictionary.
-			'instanceVariables' -> {'type' -> 'string'} asDictionary.
-			'classVariables' -> {'type' -> 'string'} asDictionary.
-			'package' -> {'type' -> 'string'} asDictionary
-		} asDictionary.
-		'required' -> #('className' 'superclassName' 'instanceVariables' 'classVariables' 'package').
-		'additionalProperties' -> false
-	} asDictionary.
-	^ {'name' -> self name.
-		'type' -> self type.
-		'description' -> self description.
-		'parameters' -> {
-			'type' -> 'object'.
-			'properties' -> {
-				'classes' -> {
-					'type' -> 'array'.
-					'items' -> classSchema
-				} asDictionary
-			} asDictionary.
-			'required' -> #('classes').
-			'additionalProperties' -> false
-		} asDictionary.
-		'strict' -> true
-	} asDictionary
+			'properties'
+				-> {'className' -> {'type' -> 'string'} asDictionary.
+						'superclassName' -> {'type' -> 'string'} asDictionary.
+						'instanceVariables' -> {'type' -> 'string'} asDictionary.
+						'classVariables' -> {'type' -> 'string'} asDictionary.
+						'package' -> {'type' -> 'string'} asDictionary} asDictionary.
+			'required'
+				-> #('className' 'superclassName' 'instanceVariables' 'classVariables' 'package').
+			'additionalProperties' -> false} asDictionary.
+	^ {'type' -> 'object'.
+		'properties'
+			-> {'classes'
+						-> {'type' -> 'array'.
+								'items' -> classSchema} asDictionary} asDictionary.
+		'required' -> #('classes').
+		'additionalProperties' -> false} asDictionary
 ]
 
 { #category : #accessing }
@@ -153,7 +143,7 @@ GtLToolForClassesCreation >> privatePerformToolCall: aToolCall [
 			receiverName: self name;
 			arguments: arguments;
 			missingArgument: 'classes' ].
-	classesArgument isArray
+	(classesArgument isCollection and: [classesArgument isString not ])
 		ifFalse: [ ^ GtLIncorrectArgumentValueDomainObject new
 			argumentName: 'classes';
 			argumentValue: classesArgument;
