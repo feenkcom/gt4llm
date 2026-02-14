@@ -261,7 +261,7 @@ GtLAnthropicProvider >> printOn: aStream [
 GtLAnthropicProvider >> processNextMessage: anInputMessage [
 	<return: #GtLOpenAIProviderProcessedMessage or: nil>
 	| result anOutputMessage anotherMessage |
-	self state ifCanContinue: [ "continue" ] ifDisabled: [ ^ nil ].
+	self state ifCanContinue: [  "continue" ] ifDisabled: [ ^ nil ].
 
 	anOutputMessage := nil.
 	anotherMessage := nil.
@@ -279,10 +279,10 @@ GtLAnthropicProvider >> processNextMessage: anInputMessage [
 		ifTrue: [ anotherMessage := self performToolCallsIn: result with: anInputMessage tools ]
 		ifFalse: [ anOutputMessage := self assistantMessageClass new
 					modelName: self modelName;
-					rawData: (result content) ].
+					rawData: result content.
+			self chat addAssistantMessage: anOutputMessage.
+			self chat signalRunIsDone ].
 
-	self chat addAssistantMessage: anOutputMessage.
-	self chat signalRunIsDone.
 	^ GtLAnthropicProviderProcessedMessage new
 		inputMessage: anInputMessage;
 		result: result;
