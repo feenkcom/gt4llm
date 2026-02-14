@@ -36,6 +36,29 @@ Example JSON response:
 ]
 
 { #category : #'as yet unclassified' }
+GtLToolForMethodsSource >> functionAnthropic [
+	| methodSchema |
+	methodSchema := {'type' -> 'object'.
+		'properties' ->
+			{'className' -> {'type' -> 'string'} asDictionary.
+				'methodName' -> {'type' -> 'string'} asDictionary.
+				'classSide' -> {'type' -> 'boolean'} asDictionary} asDictionary.
+		'required' -> #('className' 'methodName' 'classSide').
+		'additionalProperties' -> false} asDictionary.
+	^ {'name' -> self name.
+		'description' -> self description.
+		'input_schema' ->
+			{'type' -> 'object'.
+				'properties' ->
+					{'methods' ->
+						{'type' -> 'array'.
+							'items' -> methodSchema} asDictionary} asDictionary.
+				'required' -> #('methods').
+				'additionalProperties' -> false} asDictionary.
+		'strict' -> true} asDictionary
+]
+
+{ #category : #'as yet unclassified' }
 GtLToolForMethodsSource >> functionResponse [
 	| methodSchema |
 	methodSchema := {'type' -> 'object'.
@@ -128,23 +151,23 @@ GtLToolForMethodsSource >> privatePerformToolCall: aToolCall [
 	| arguments methodsArgument methods |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	methodsArgument := arguments
-		at: 'methods'
-		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-				receiverName: self name;
-				arguments: arguments;
-				missingArgument: 'methods' ].
-	methodsArgument isArray
+			at: 'methods'
+			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
+					receiverName: self name;
+					arguments: arguments;
+					missingArgument: 'methods' ].
+	(methodsArgument isCollection and: [ methodsArgument isString not ])
 		ifFalse: [ ^ GtLIncorrectArgumentValueDomainObject new
 				argumentName: 'methods';
 				argumentValue: methodsArgument;
 				expectedArgumentValueKind: Array ].
 	methods := self
-		methodSourcesFrom: methodsArgument
-		ifInvalid: [ :incorrectItems | 
-			^ GtLIncorrectArgumentArrayItemDomainObject new
-				argumentName: 'methods';
-				argumentValue: methodsArgument;
-				expectedItemKind: Dictionary;
-				incorrectItems: incorrectItems ].
+			methodSourcesFrom: methodsArgument
+			ifInvalid: [ :incorrectItems | 
+				^ GtLIncorrectArgumentArrayItemDomainObject new
+					argumentName: 'methods';
+					argumentValue: methodsArgument;
+					expectedItemKind: Dictionary;
+					incorrectItems: incorrectItems ].
 	^ GtLMethodsSourceDomainObject new methods: methods
 ]
