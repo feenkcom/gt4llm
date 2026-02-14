@@ -36,7 +36,7 @@ Example JSON response:
 ]
 
 { #category : #'as yet unclassified' }
-GtLToolForMethodsSource >> functionAnthropic [
+GtLToolForMethodsSource >> functionJsonSchema [
 	| methodSchema |
 	methodSchema := {'type' -> 'object'.
 		'properties' ->
@@ -45,41 +45,13 @@ GtLToolForMethodsSource >> functionAnthropic [
 				'classSide' -> {'type' -> 'boolean'} asDictionary} asDictionary.
 		'required' -> #('className' 'methodName' 'classSide').
 		'additionalProperties' -> false} asDictionary.
-	^ {'name' -> self name.
-		'description' -> self description.
-		'input_schema' ->
-			{'type' -> 'object'.
+	^ {'type' -> 'object'.
 				'properties' ->
 					{'methods' ->
 						{'type' -> 'array'.
 							'items' -> methodSchema} asDictionary} asDictionary.
 				'required' -> #('methods').
-				'additionalProperties' -> false} asDictionary.
-		'strict' -> true} asDictionary
-]
-
-{ #category : #'as yet unclassified' }
-GtLToolForMethodsSource >> functionResponse [
-	| methodSchema |
-	methodSchema := {'type' -> 'object'.
-		'properties' ->
-			{'className' -> {'type' -> 'string'} asDictionary.
-				'methodName' -> {'type' -> 'string'} asDictionary.
-				'classSide' -> {'type' -> 'boolean'} asDictionary} asDictionary.
-		'required' -> #('className' 'methodName' 'classSide').
-		'additionalProperties' -> false} asDictionary.
-	^ {'name' -> self name.
-		'type' -> self type.
-		'description' -> self description.
-		'parameters' ->
-			{'type' -> 'object'.
-				'properties' ->
-					{'methods' ->
-						{'type' -> 'array'.
-							'items' -> methodSchema} asDictionary} asDictionary.
-				'required' -> #('methods').
-				'additionalProperties' -> false} asDictionary.
-		'strict' -> true} asDictionary
+				'additionalProperties' -> false} asDictionary
 ]
 
 { #category : #private }
