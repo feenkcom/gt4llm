@@ -382,13 +382,13 @@ GtLMessageStyler >> styleButton: anAnnotation withTool: aBlock [
 GtLMessageStyler >> styleCodeBlockWithSmalltalkMethod: aCodeNode [
 	| smalltalkMethodParser result |
 	smalltalkMethodParser := ((#letter asPParser
-		, (#letter asPParser / #digit asPParser / '_' asPParser)) star flatten
-		, ' class' asPParser optional , '>>' asPParser
-		, #endOfInput asPParser negate plus flatten)
-		==> [ :t | 
-			{t first asString . 
-				t second notNil. 
-				t fourth} ].
+			, (#letter asPParser / #digit asPParser / '_' asPParser)) star flatten
+			, ' class' asPParser optional , '>>' asPParser
+			, #endOfInput asPParser negate plus flatten)
+			==> [ :t | 
+				{t first asString.
+					t second notNil.
+					t fourth} ].
 	result := smalltalkMethodParser parse: aCodeNode code value trim.
 	result isPetit2Failure
 		ifFalse: [ result first asSymbol
@@ -401,7 +401,8 @@ GtLMessageStyler >> styleCodeBlockWithSmalltalkMethod: aCodeNode [
 						attributes: {BrTextAdornmentDynamicAttribute new
 									beAppend;
 									stencil: [ GtPharoMethodCoder new
-											forClass: (result second isNil ifTrue: [class ] ifFalse: [ class class ]) source: result third;
+											forClass: (result second = true ifTrue: [ class class ] ifFalse: [ class ])
+												source: result third;
 											subscribeToSystem;
 											asExpandedOnlyElement ]} ] ]
 ]
