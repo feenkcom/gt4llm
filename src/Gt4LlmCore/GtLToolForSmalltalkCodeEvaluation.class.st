@@ -31,7 +31,7 @@ GtLToolForSmalltalkCodeEvaluation >> parameters [
 
 { #category : #private }
 GtLToolForSmalltalkCodeEvaluation >> privatePerformToolCall: aToolCall [
-	| arguments code object serializer serialization |
+	| arguments code object |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	code := arguments
 		at: 'code'
