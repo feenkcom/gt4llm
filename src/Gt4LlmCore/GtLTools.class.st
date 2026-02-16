@@ -8,7 +8,7 @@ Class {
 
 { #category : #'as yet unclassified' }
 GtLTools class >> gt [
-	^ self gtSearch, self leSearch, self gtCodeChange, self gtCodeRemoval, self gtExamplesRun
+	^ self gtSearch, self leSearch, self gtCodeChange, self gtExamplesRun
 ]
 
 { #category : #defaults }
@@ -17,7 +17,7 @@ GtLTools class >> gtCodeChange [
 		withAll: {GtLToolForClassesCreation new.
 					GtLToolForClassDefinitionChange new.
 					GtLToolForMethodsCompilation new.
-					GtLToolForMethodRemoval new.
+					GtLToolForMethodsRemoval new.
 					GtLToolForClassRemoval new} asOrderedCollection
 ]
 

@@ -17,6 +17,23 @@ GtMagritteJSONSchemaExporterExamples >> assertSchema: aJsonSchema equals: aSchem
 		equals: expectedSchema raw.
 ]
 
+{ #category : #examples }
+GtMagritteJSONSchemaExporterExamples >> expectedSchemaStringForBooleanModel [
+	^ '{
+	"type" : "object",
+	"properties" : {
+		"flag" : {
+			"type" : "boolean",
+			"description" : "Whether the flag is enabled"
+		}
+	},
+	"required" : [
+		"flag"
+	],
+	"additionalProperties" : false
+}'
+]
+
 { #category : #expected }
 GtMagritteJSONSchemaExporterExamples >> expectedSchemaStringForMathReasoningWithDelegatedType [
 	^ '{
@@ -229,6 +246,13 @@ GtMagritteJSONSchemaExporterExamples >> expectedSchemaStringForMathReasoningWith
 }'
 ]
 
+{ #category : #examples }
+GtMagritteJSONSchemaExporterExamples >> generateSchemaForBooleanModel [
+	| exporter |
+	exporter := GtMagritteJSONSchemaExporter forModelClass: GtLDemoBooleanModel.
+	^ exporter exportSchema
+]
+
 { #category : #generation }
 GtMagritteJSONSchemaExporterExamples >> generateSchemaForMathReasoningWithDelegatedType [
 	| exporter |
@@ -258,6 +282,14 @@ GtMagritteJSONSchemaExporterExamples >> generateSchemaForMathReasoningWithSingle
 	| exporter |
 	exporter := GtMagritteJSONSchemaExporter forModelClass: GtLDemoMathReasoning.
 	^ exporter exportSchema
+]
+
+{ #category : #examples }
+GtMagritteJSONSchemaExporterExamples >> testSchemaGenerationForBooleanModel [
+	<gtExample>
+	self
+		assertSchema: self generateSchemaForBooleanModel
+		equals: self expectedSchemaStringForBooleanModel
 ]
 
 { #category : #examples }

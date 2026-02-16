@@ -70,6 +70,17 @@ GtMagriteJSONSchemaCreationVisitor >> extractSingleSchemaForClass: aClass [
 	^ self currentSchema
 ]
 
+{ #category : #visiting }
+GtMagriteJSONSchemaCreationVisitor >> visitBooleanDescription: aBooleanDescription [
+	| schema |
+	schema := NeoJSONObject new
+		at: 'type' put: 'boolean';
+		yourself.
+	aBooleanDescription hasComment ifTrue: [
+		schema at: 'description' put: aBooleanDescription comment ].
+	^ currentSchema := schema
+]
+
 { #category : #'visiting-description' }
 GtMagriteJSONSchemaCreationVisitor >> visitPriorityContainer: aContainer [
 	| schema propertiesSchema |

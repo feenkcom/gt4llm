@@ -382,36 +382,35 @@ GtLMessageStyler >> styleButton: anAnnotation withTool: aBlock [
 GtLMessageStyler >> styleCodeBlockWithSmalltalkMethod: aCodeNode [
 	| smalltalkMethodParser result |
 	smalltalkMethodParser := ((#letter asPParser
-		, (#letter asPParser / #digit asPParser / '_' asPParser)) star flatten
-		, ' class' asPParser optional , '>>' asPParser
-		, #endOfInput asPParser negate plus flatten)
-		==> [ :t | 
-			{t first asString . 
-				t second notNil. 
-				t fourth} ].
+			, (#letter asPParser / #digit asPParser / '_' asPParser)) star flatten
+			, ' class' asPParser optional , '>>' asPParser
+			, #endOfInput asPParser negate plus flatten)
+			==> [ :t | 
+				{t first asString.
+					t second notNil.
+					t fourth} ].
 	result := smalltalkMethodParser parse: aCodeNode code value trim.
 	result isPetit2Failure
 		ifFalse: [ result first asSymbol
 				asClassIfPresent: [ :class | 
-					self text
-						attributes: {BrTextHideAttribute new}
-						from: aCodeNode begin startPosition
-						to: aCodeNode end stopPosition.
+					self
+						styleAutoHiding: aCodeNode sourceInterval
+						text: (self text from: aCodeNode startPosition to: aCodeNode stopPosition).
 					(text from: aCodeNode end stopPosition to: aCodeNode end stopPosition)
 						attributes: {BrTextAdornmentDynamicAttribute new
 									beAppend;
 									stencil: [ GtPharoMethodCoder new
-											forClass: (result second isNil ifTrue: [class ] ifFalse: [ class class ]) source: result third;
+											forClass: (result second = true ifTrue: [ class class ] ifFalse: [ class ])
+												source: result third;
 											subscribeToSystem;
 											asExpandedOnlyElement ]} ] ]
 ]
 
 { #category : #generated }
 GtLMessageStyler >> styleCodeBlockWithSmalltalkSnippet: aCodeNode [
-	self text
-		attributes: {BrTextHideAttribute new}
-		from: aCodeNode begin startPosition
-		to: aCodeNode end stopPosition.
+	self
+		styleAutoHiding: aCodeNode sourceInterval
+		text: (self text from: aCodeNode startPosition to: aCodeNode stopPosition).
 	(text from: aCodeNode end stopPosition to: aCodeNode end stopPosition)
 		attributes: {BrTextAdornmentDynamicAttribute new
 					beAppend;

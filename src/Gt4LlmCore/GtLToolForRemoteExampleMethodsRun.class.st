@@ -135,7 +135,7 @@ GtLToolForRemoteExampleMethodsRun >> changesArrayFromArguments: arguments onProb
 	changesString := arguments at: 'changes' ifAbsent: [ ^ #() ].
 	changesString ifEmpty: [ ^ #() ].
 	changes := STONJSON fromString: changesString.
-	changes isArray
+	(changes isCollection and: [ changes isString not ])
 		ifFalse: [ aBlock
 				value: (GtLIncorrectArgumentValueDomainObject new
 						argumentName: 'changes';
@@ -328,7 +328,7 @@ GtLToolForRemoteExampleMethodsRun >> tagsUsing: eventFactory [
 { #category : #api }
 GtLToolForRemoteExampleMethodsRun >> validateCheckNames: checkNamesArray onProblemDo: aBlock [
 	| incorrectItems |
-	checkNamesArray isArray
+	(checkNamesArray isCollection and: [ checkNamesArray isString not ])
 		ifFalse: [ aBlock
 				value: (GtLIncorrectArgumentValueDomainObject new
 						argumentName: 'checkNames';
