@@ -75,11 +75,11 @@ GtLValueSerializer >> serializeValue: aValue [
 			-> (aValue class superclass ifNil: [ nil ] ifNotNil: [ :aSuperclass | aSuperclass name ]).
 		'package' -> aValue class package name.
 		'printString' -> ([(aValue printString escapeCharacter: '''')] on: Error do: [:e | 'Error printing object' ]).
-		'allInstanceMethods'
+		'instanceMethods'
 			-> (aValue
 					ifNil: [ {} ]
 					ifNotNil: [ aValue class methods asArray collect: [ :aMethod | aMethod selector ] ]).
-		'instanceSlots'
+		'allInstanceSlots'
 			-> (aValue class allSlots
 					collect: [ :aSlot | 
 						| slotValue |
