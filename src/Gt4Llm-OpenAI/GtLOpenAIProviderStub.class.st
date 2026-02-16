@@ -5,7 +5,7 @@ Class {
 		'chat',
 		'sendMessageBlock'
 	],
-	#category : #'Gt4LlmCore-Examples-OpenAI'
+	#category : #'Gt4Llm-OpenAI-Examples'
 }
 
 { #category : #'api - initialization' }
