@@ -77,12 +77,12 @@ GtLRewriteRule >> isMethodPattern: aBoolean [
 	isMethodPattern := aBoolean
 ]
 
-{ #category : #magritte }
+{ #category : #descriptions }
 GtLRewriteRule >> isMethodPatternDescription [
-	"<magritteDescription>"
+	<magritteDescription>
 	^ MABooleanDescription new
 		accessor: #isMethodPattern;
-		comment: 'Whether the rewrite rule applies to a whole method.'
+		comment: 'Whether the rewrite rule applies to an entire method including the signature. By default rewrite rules apply only to the body of the method.'
 ]
 
 { #category : #accessing }
