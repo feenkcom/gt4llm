@@ -154,7 +154,8 @@ GtLAnthropicAssistantMessage >> senderText [
 GtLAnthropicAssistantMessage >> serializeForAnthropicMessagesAPI [
 	^ {#content
 			-> ({{'type' -> 'text'.
-						'text' -> self contentText} asDictionary}).
+						'text' -> (self contentText
+							ifEmpty: ['empty'])} asDictionary}).
 		#role -> self role} asDictionary
 ]
 
