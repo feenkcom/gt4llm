@@ -68,6 +68,12 @@ GtLResponseJsonSchemaFormat >> schema: aSchema [
 ]
 
 { #category : #accessing }
+GtLResponseJsonSchemaFormat >> schemaDictionary: aDictionary [
+	self schema: (NeoJSONSchema new json:(NeoJSONObject 
+			fromString: (NeoJSONWriter  toStringPretty:aDictionary)))
+]
+
+{ #category : #accessing }
 GtLResponseJsonSchemaFormat >> type [
 	^ schema type
 ]

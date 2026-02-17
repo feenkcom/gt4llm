@@ -85,7 +85,7 @@ GtLTools >> gtItemsFor: aView [
 		title: 'Tools';
 		items: [ items ];
 		column: 'Name' text: [ :each | each name ];
-		column: 'Parameters' text: [ :each | ', ' join: each parameters ];
+		column: 'Parameters' text: [ :each | ', ' join: each parametersDescription ];
 		column: 'Description' text: [ :each | each description ]
 ]
 

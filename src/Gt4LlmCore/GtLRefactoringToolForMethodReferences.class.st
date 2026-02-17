@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLRefactoringToolForMethodReferences,
-	#superclass : #GtLAbstractFunctionTool,
+	#superclass : #GtLAbstractPlainSchemaFunctionTool,
 	#instVars : [
 		'model'
 	],
@@ -33,7 +33,7 @@ GtLRefactoringToolForMethodReferences >> name [
 ]
 
 { #category : #'llm-generated' }
-GtLRefactoringToolForMethodReferences >> parameters [
+GtLRefactoringToolForMethodReferences >> parametersDescription [
 	^ #('selector')
 ]
 

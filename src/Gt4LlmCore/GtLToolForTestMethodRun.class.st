@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLToolForTestMethodRun,
-	#superclass : #GtLAbstractFunctionTool,
+	#superclass : #GtLAbstractPlainSchemaFunctionTool,
 	#category : #'Gt4LlmCore-Tools'
 }
 
@@ -25,7 +25,7 @@ GtLToolForTestMethodRun >> name [
 ]
 
 { #category : #accessing }
-GtLToolForTestMethodRun >> parameters [
+GtLToolForTestMethodRun >> parametersDescription [
 	^ #('className' 'methodName')
 ]
 

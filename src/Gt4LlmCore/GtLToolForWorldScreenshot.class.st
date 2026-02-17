@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLToolForWorldScreenshot,
-	#superclass : #GtLAbstractFunctionTool,
+	#superclass : #GtLAbstractPlainSchemaFunctionTool,
 	#instVars : [
 		'worldElementProvider',
 		'pngDataProvider'
@@ -31,7 +31,7 @@ GtLToolForWorldScreenshot >> name [
 ]
 
 { #category : #accessing }
-GtLToolForWorldScreenshot >> parameters [
+GtLToolForWorldScreenshot >> parametersDescription [
 	^ #()
 ]
 

@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLToolForMethodsSource,
-	#superclass : #GtLAbstractFunctionTool,
+	#superclass : #GtLAbstractPlainSchemaFunctionTool,
 	#category : #'Gt4LlmCore-Tools'
 }
 
@@ -33,25 +33,6 @@ Example JSON response:
     {"methodClass": "GtLToolForMethodImplementors", "selector": "privatePerformToolCall:", "method": "GtLToolForMethodImplementors>>#privatePerformToolCall:", "sourceCode": "..."}
   ]
 }'
-]
-
-{ #category : #'as yet unclassified' }
-GtLToolForMethodsSource >> functionJsonSchema [
-	| methodSchema |
-	methodSchema := {'type' -> 'object'.
-		'properties' ->
-			{'className' -> {'type' -> 'string'} asDictionary.
-				'methodName' -> {'type' -> 'string'} asDictionary.
-				'classSide' -> {'type' -> 'boolean'} asDictionary} asDictionary.
-		'required' -> #('className' 'methodName' 'classSide').
-		'additionalProperties' -> false} asDictionary.
-	^ {'type' -> 'object'.
-				'properties' ->
-					{'methods' ->
-						{'type' -> 'array'.
-							'items' -> methodSchema} asDictionary} asDictionary.
-				'required' -> #('methods').
-				'additionalProperties' -> false} asDictionary
 ]
 
 { #category : #private }
@@ -109,13 +90,37 @@ GtLToolForMethodsSource >> methodSourcesFrom: methodsArgument ifInvalid: invalid
 ]
 
 { #category : #accessing }
+GtLToolForMethodsSource >> methodsListJsonSchemaDictionary [
+	| methodSchema |
+	methodSchema := {
+		'type' -> 'object'.
+		'properties' ->{
+				'className' -> {'type' -> 'string'} asDictionary.
+				'methodName' -> {'type' -> 'string'} asDictionary.
+				'classSide' -> {'type' -> 'boolean'} asDictionary} asDictionary.
+		'required' -> #('className' 'methodName' 'classSide').
+		'additionalProperties' -> false} asDictionary.
+		
+	^ {
+			'type' -> 'object'.
+			'properties' ->{
+					'methods' ->{
+						'type' -> 'array'.
+						'items' -> methodSchema} asDictionary} asDictionary.
+			'required' -> #('methods').
+			'additionalProperties' -> false} asDictionary
+]
+
+{ #category : #accessing }
 GtLToolForMethodsSource >> name [
 	^ 'getCodeOfMethods'
 ]
 
 { #category : #accessing }
-GtLToolForMethodsSource >> parameters [
-	^ #('methods')
+GtLToolForMethodsSource >> parametersDescription [
+	^ GtLResponseJsonSchemaFormat new
+			name: 'Parameters'; 
+			schemaDictionary: self methodsListJsonSchemaDictionary
 ]
 
 { #category : #execution }

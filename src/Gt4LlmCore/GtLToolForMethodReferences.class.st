@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLToolForMethodReferences,
-	#superclass : #GtLAbstractFunctionTool,
+	#superclass : #GtLAbstractPlainSchemaFunctionTool,
 	#category : #'Gt4LlmCore-Tools'
 }
 
@@ -25,7 +25,7 @@ GtLToolForMethodReferences >> name [
 ]
 
 { #category : #accessing }
-GtLToolForMethodReferences >> parameters [
+GtLToolForMethodReferences >> parametersDescription [
 	^ #('selector')
 ]
 

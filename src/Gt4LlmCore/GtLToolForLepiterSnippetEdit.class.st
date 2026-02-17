@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLToolForLepiterSnippetEdit,
-	#superclass : #GtLAbstractFunctionTool,
+	#superclass : #GtLAbstractPlainSchemaFunctionTool,
 	#instVars : [
 		'database'
 	],
@@ -39,7 +39,7 @@ GtLToolForLepiterSnippetEdit >> name [
 ]
 
 { #category : #accessing }
-GtLToolForLepiterSnippetEdit >> parameters [
+GtLToolForLepiterSnippetEdit >> parametersDescription [
 	^ #('pageUid' 'snippetUid' 'updatedText')
 ]
 

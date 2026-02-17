@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLToolForChatMethodSearch,
-	#superclass : #GtLAbstractFunctionTool,
+	#superclass : #GtLAbstractPlainSchemaFunctionTool,
 	#instVars : [
 		'provider'
 	],
@@ -44,7 +44,7 @@ GtLToolForChatMethodSearch >> name [
 ]
 
 { #category : #'as yet unclassified' }
-GtLToolForChatMethodSearch >> parameters [
+GtLToolForChatMethodSearch >> parametersDescription [
 	^ #('searchPrompt')
 ]
 

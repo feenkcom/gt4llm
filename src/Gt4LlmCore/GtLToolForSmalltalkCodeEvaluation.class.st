@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLToolForSmalltalkCodeEvaluation,
-	#superclass : #GtLAbstractFunctionTool,
+	#superclass : #GtLAbstractPlainSchemaFunctionTool,
 	#category : #'Gt4LlmCore-Tools'
 }
 
@@ -25,7 +25,7 @@ GtLToolForSmalltalkCodeEvaluation >> name [
 ]
 
 { #category : #'llm-generated' }
-GtLToolForSmalltalkCodeEvaluation >> parameters [
+GtLToolForSmalltalkCodeEvaluation >> parametersDescription [
 	^ #('code')
 ]
 

@@ -10,13 +10,13 @@ GtLAbstractFunctionTool class >> isAbstract [
 ]
 
 { #category : #accessing }
-GtLAbstractFunctionTool class >> leJsonV4Name [
-	^ #gtLAbstractFunctionTool
+GtLAbstractFunctionTool class >> serializationProperties [
+	^ {#type -> #type. }
 ]
 
 { #category : #accessing }
-GtLAbstractFunctionTool class >> serializationProperties [
-	^ {#type -> #type. #function -> #functionResponse}
+GtLAbstractFunctionTool >> computeParametersFormat [
+	^ self subclassResponsibility
 ]
 
 { #category : #accessing }
@@ -28,55 +28,29 @@ GtLAbstractFunctionTool >> description [
 GtLAbstractFunctionTool >> functionAnthropic [
 	^ {'name' -> self name.
 		'description' -> self description.
-		'input_schema' -> self functionJsonSchema} asDictionary
+		'input_schema' -> self parametersJsonSchemaDictionary} asDictionary
 ]
 
 { #category : #'api - responses' }
 GtLAbstractFunctionTool >> functionGemini [
 	^ {'name' -> self name.
 		'description' -> self description.
-		'parameters'
-			-> {'type' -> 'object'.
-					'properties'
-						-> (self parameters collect: [ :aName | aName -> {'type' -> 'string'} asDictionary ])
-								asDictionary.
-					'required' -> self parameters} asDictionary} asDictionary
+		'parameters' -> self parametersJsonSchemaDictionary} asDictionary
 ]
 
 { #category : #'api - responses' }
-GtLAbstractFunctionTool >> functionJsonSchema [
-	| parametersFormat |
-	parametersFormat := self parametersFormat.
-	^ parametersFormat asJsonSchemaDictionary
-]
-
-{ #category : #'api - responses' }
-GtLAbstractFunctionTool >> functionResponse [
+GtLAbstractFunctionTool >> functionOpenAI [
 	^ {'name' -> self name.
 		'type' -> self type.
 		'description' -> self description.
-		'parameters' -> self functionJsonSchema} asDictionary
+		'parameters' -> self parametersJsonSchemaDictionary} asDictionary
 ]
 
-{ #category : #accessing }
-GtLAbstractFunctionTool >> parameters [
-	"An array of strings representing parameter names"
-	^ self subclassResponsibility
-]
-
-{ #category : #utils }
-GtLAbstractFunctionTool >> parametersFormat [
+{ #category : #'api - responses' }
+GtLAbstractFunctionTool >> parametersJsonSchemaDictionary [
 	| parametersFormat |
-	
-	parametersFormat := GtLResponseCompositeFormat new.
-	self parameters do: [ :aParameterFormatOrString | 
-		| parameterFormat |
-		parameterFormat := aParameterFormatOrString isString
-			ifTrue: [ GtLResponseStringFormat named: aParameterFormatOrString  ] 
-			ifFalse: [ aParameterFormatOrString ].
-		parametersFormat addSchemaDescription: parameterFormat ].
-	
-	^ parametersFormat
+	parametersFormat := self computeParametersFormat.
+	^ parametersFormat asJsonSchemaDictionary
 ]
 
 { #category : #execution }

@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLToolForRemoteExampleMethodsRun,
-	#superclass : #GtLAbstractFunctionTool,
+	#superclass : #GtLAbstractPlainSchemaFunctionTool,
 	#category : #'Gt4LlmCore-Tools'
 }
 
@@ -215,7 +215,7 @@ GtLToolForRemoteExampleMethodsRun >> name [
 ]
 
 { #category : #accessing }
-GtLToolForRemoteExampleMethodsRun >> parameters [
+GtLToolForRemoteExampleMethodsRun >> parametersDescription [
 	^ #('checkNames' 'changes')
 ]
 

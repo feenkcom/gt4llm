@@ -5,6 +5,11 @@ Class {
 }
 
 { #category : #accessing }
+GtLTool class >> isAbstract [
+	^ self name = #GtLTool
+]
+
+{ #category : #accessing }
 GtLTool class >> leJsonV4AttributeMapping [
 	^ {}
 ]
@@ -33,7 +38,7 @@ GtLTool >> functionAnthropic [
 ]
 
 { #category : #'api - responses' }
-GtLTool >> functionResponse [
+GtLTool >> functionOpenAI [
 	^ {'type' -> self type} asDictionary
 ]
 

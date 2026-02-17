@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLToolForMethodsRemoval,
-	#superclass : #GtLAbstractFunctionTool,
+	#superclass : #GtLAbstractPlainSchemaFunctionTool,
 	#category : #Gt4LlmCore
 }
 
@@ -17,31 +17,6 @@ GtLToolForMethodsRemoval >> acceptVisitor: aVisitor [
 { #category : #accessing }
 GtLToolForMethodsRemoval >> description [
 	^ 'Removes multiple methods across classes and reports each result.'
-]
-
-{ #category : #accessing }
-GtLToolForMethodsRemoval >> functionJsonSchema [
-	| methodSchema |
-	methodSchema := {'type' -> 'object'.
-		'properties' -> {
-			'className' -> {'type' -> 'string'} asDictionary.
-			'methodName' -> {'type' -> 'string'} asDictionary.
-			'classSide' -> {'type' -> 'boolean'} asDictionary
-		} asDictionary.
-		'required' -> #('className' 'methodName' 'classSide').
-		'additionalProperties' -> false
-	} asDictionary.
-	^  {
-			'type' -> 'object'.
-			'properties' -> {
-				'methods' -> {
-					'type' -> 'array'.
-					'items' -> methodSchema
-				} asDictionary
-			} asDictionary.
-			'required' -> #('methods').
-			'additionalProperties' -> false
-		} asDictionary
 ]
 
 { #category : #private }
@@ -113,13 +88,40 @@ GtLToolForMethodsRemoval >> methodResultsFrom: methodsArgument ifInvalid: invali
 ]
 
 { #category : #accessing }
+GtLToolForMethodsRemoval >> methodsListJsonSchemaDictionary [
+	| methodSchema |
+	methodSchema := {'type' -> 'object'.
+		'properties' -> {
+			'className' -> {'type' -> 'string'} asDictionary.
+			'methodName' -> {'type' -> 'string'} asDictionary.
+			'classSide' -> {'type' -> 'boolean'} asDictionary
+		} asDictionary.
+		'required' -> #('className' 'methodName' 'classSide').
+		'additionalProperties' -> false
+	} asDictionary.
+	^  {
+			'type' -> 'object'.
+			'properties' -> {
+				'methods' -> {
+					'type' -> 'array'.
+					'items' -> methodSchema
+				} asDictionary
+			} asDictionary.
+			'required' -> #('methods').
+			'additionalProperties' -> false
+		} asDictionary
+]
+
+{ #category : #accessing }
 GtLToolForMethodsRemoval >> name [
 	^ 'removeMethods'
 ]
 
 { #category : #accessing }
-GtLToolForMethodsRemoval >> parameters [
-	^ #('methods')
+GtLToolForMethodsRemoval >> parametersDescription [
+	^ GtLResponseJsonSchemaFormat new
+			name: 'Parameters'; 
+			schemaDictionary: self methodsListJsonSchemaDictionary
 ]
 
 { #category : #api }

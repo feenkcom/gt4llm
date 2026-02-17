@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLToolForSearchForLepiterPages,
-	#superclass : #GtLAbstractFunctionTool,
+	#superclass : #GtLAbstractPlainSchemaFunctionTool,
 	#instVars : [
 		'knowledgeBases'
 	],
@@ -34,7 +34,7 @@ GtLToolForSearchForLepiterPages >> name [
 ]
 
 { #category : #accessing }
-GtLToolForSearchForLepiterPages >> parameters [
+GtLToolForSearchForLepiterPages >> parametersDescription [
 	^ #('query')
 ]
 

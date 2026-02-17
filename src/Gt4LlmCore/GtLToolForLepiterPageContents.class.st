@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLToolForLepiterPageContents,
-	#superclass : #GtLAbstractFunctionTool,
+	#superclass : #GtLAbstractPlainSchemaFunctionTool,
 	#instVars : [
 		'knowledgeBases'
 	],
@@ -34,7 +34,7 @@ GtLToolForLepiterPageContents >> name [
 ]
 
 { #category : #accessing }
-GtLToolForLepiterPageContents >> parameters [
+GtLToolForLepiterPageContents >> parametersDescription [
 	^ #('uid')
 ]
 
