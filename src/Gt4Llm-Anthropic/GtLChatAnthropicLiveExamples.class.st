@@ -23,8 +23,8 @@ GtLChatAnthropicLiveExamples >> createProvider [
 		ifTrue: [self createClauseOpus46Connection buildProvider] 
 		ifFalse: [self createClauseOpus46Connection buildBareProvider].
 
-	self isLive
-		ifFalse: [ aProvider client clientBuilder: GtLOpenAIClientStubBuilder new ].
+	"self isLive
+		ifFalse: [ aProvider client clientBuilder: GtLOpenAIClientStubBuilder new ]."
 
 	^ aProvider
 ]
