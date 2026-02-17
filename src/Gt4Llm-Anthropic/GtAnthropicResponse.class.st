@@ -115,7 +115,7 @@ GtAnthropicResponse >> toolCalls [
 							rawData: aDict;
 							id: (aDict at: 'id');
 							name: (aDict at: 'name');
-							arguments: (aDict at: 'input') ]) as: Array ]
+							rawArguments: (aDict at: 'input') ]) as: Array ]
 ]
 
 { #category : #accessing }

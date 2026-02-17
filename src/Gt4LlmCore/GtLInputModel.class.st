@@ -78,3 +78,36 @@ GtLInputModel >> name [
 GtLInputModel >> name: aString [ 
 	name := aString 
 ]
+
+{ #category : #serialization }
+GtLInputModel >> serializeModelToJsonString [
+	"Return a JSON string that represents the domain object."
+	| object |
+	
+	object := NeoJSONObject new.
+	self addContentTo: object.
+	
+	^ NeoJSONWriter toStringPretty: (object at: name)
+]
+
+{ #category : #serialization }
+GtLInputModel >> serializeToAnthropicResponseOutput [
+	"Return a JSON that represents tool response output."
+
+	<return: #Array of: #NeoJSONObject>
+	^ {NeoJSONObject new
+			at: 'text' put: self serializeModelToJsonString;
+			at: 'type' put: 'text';
+			yourself}
+]
+
+{ #category : #serialization }
+GtLInputModel >> serializeToOpenAIResponseOutput [
+	"Return a JSON that represents tool response output."
+
+	<return: #Array of: #NeoJSONObject>
+	^ {NeoJSONObject new
+			at: #text put: self serializeModelToJsonString;
+			at: #type put: #input_text;
+			yourself}
+]

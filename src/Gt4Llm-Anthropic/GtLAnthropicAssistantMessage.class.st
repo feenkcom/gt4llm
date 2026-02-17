@@ -158,11 +158,3 @@ GtLAnthropicAssistantMessage >> serializeForAnthropicMessagesAPI [
 							ifEmpty: ['empty'])} asDictionary}).
 		#role -> self role} asDictionary
 ]
-
-{ #category : #serializing }
-GtLAnthropicAssistantMessage >> serializeForOpenAIResponsesAPI [
-	^ {#content
-			-> {{'type' -> 'output_text'.
-						'text' -> self contentText} asDictionary}.
-		#role -> self role} asDictionary
-]

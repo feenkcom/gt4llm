@@ -4,6 +4,11 @@ Class {
 	#category : #'Gt4LlmCore-Tools'
 }
 
+{ #category : #testiung }
+GtLAbstractFunctionTool class >> isAbstract [
+	^ self name = #GtLAbstractFunctionTool
+]
+
 { #category : #accessing }
 GtLAbstractFunctionTool class >> leJsonV4Name [
 	^ #gtLAbstractFunctionTool
@@ -14,19 +19,19 @@ GtLAbstractFunctionTool class >> serializationProperties [
 	^ {#type -> #type. #function -> #functionResponse}
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLAbstractFunctionTool >> description [
 	^ self subclassResponsibility
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'api - responses' }
 GtLAbstractFunctionTool >> functionAnthropic [
 	^ {'name' -> self name.
 		'description' -> self description.
 		'input_schema' -> self functionJsonSchema} asDictionary
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'api - responses' }
 GtLAbstractFunctionTool >> functionGemini [
 	^ {'name' -> self name.
 		'description' -> self description.
@@ -38,18 +43,14 @@ GtLAbstractFunctionTool >> functionGemini [
 					'required' -> self parameters} asDictionary} asDictionary
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'api - responses' }
 GtLAbstractFunctionTool >> functionJsonSchema [
-	^ {'type' -> 'object'.
-		'properties'
-			-> (self parameters
-					collect: [ :aName | aName -> {'type' -> 'string'} asDictionary ])
-					asDictionary.
-		'required' -> self parameters.
-		'additionalProperties' -> false} asDictionary
+	| parametersFormat |
+	parametersFormat := self parametersFormat.
+	^ parametersFormat asJsonSchemaDictionary
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'api - responses' }
 GtLAbstractFunctionTool >> functionResponse [
 	^ {'name' -> self name.
 		'type' -> self type.
@@ -57,13 +58,28 @@ GtLAbstractFunctionTool >> functionResponse [
 		'parameters' -> self functionJsonSchema} asDictionary
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLAbstractFunctionTool >> parameters [
 	"An array of strings representing parameter names"
 	^ self subclassResponsibility
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #utils }
+GtLAbstractFunctionTool >> parametersFormat [
+	| parametersFormat |
+	
+	parametersFormat := GtLResponseCompositeFormat new.
+	self parameters do: [ :aParameterFormatOrString | 
+		| parameterFormat |
+		parameterFormat := aParameterFormatOrString isString
+			ifTrue: [ GtLResponseStringFormat named: aParameterFormatOrString  ] 
+			ifFalse: [ aParameterFormatOrString ].
+		parametersFormat addSchemaDescription: parameterFormat ].
+	
+	^ parametersFormat
+]
+
+{ #category : #execution }
 GtLAbstractFunctionTool >> performToolCall: aToolCall [
 	| result |
 	aToolCall performedByTool: self.
@@ -72,12 +88,12 @@ GtLAbstractFunctionTool >> performToolCall: aToolCall [
 	^ result
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #execution }
 GtLAbstractFunctionTool >> privatePerformToolCall: aToolCall [
 	^ self subclassResponsibility
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLAbstractFunctionTool >> type [
 	^ 'function'
 ]

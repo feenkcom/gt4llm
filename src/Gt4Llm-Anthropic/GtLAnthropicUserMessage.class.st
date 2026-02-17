@@ -263,13 +263,3 @@ GtLAnthropicUserMessage >> serializeForAnthropicMessagesAPI [
 							collect: [ :each | each serializeForAnthropicMessagesAPI ])).
 		#role -> self role} asDictionary
 ]
-
-{ #category : #serialization }
-GtLAnthropicUserMessage >> serializeForOpenAIResponsesAPI [
-	^ {#content
-			-> ({{'type' -> 'input_text'.
-						'text' -> self contentText} asDictionary}
-			, (self attachments
-					collect: [ :each | each serializeForOpenAIResponsesAPI ])).
-		#role -> self role} asDictionary
-]

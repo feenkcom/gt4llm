@@ -13,6 +13,7 @@ Exception >> serializeToOpenAIResponseOutput [
 			at: #stacktrace put: (self signalerContext
 				ifNotNil: [ :anInterruptedContext | 
 					anInterruptedContext stack
-						ifNotNil: [ :aStack | (aStack collect: #gtDisplayString) asArray ] ]);
+						ifNotNil: [ :aStack | 
+							(aStack collect: [ :each | each gtDisplayString ]) asArray ] ]);
 			yourself
 ]

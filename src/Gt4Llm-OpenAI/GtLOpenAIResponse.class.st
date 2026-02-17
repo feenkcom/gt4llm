@@ -254,7 +254,7 @@ GtLOpenAIResponse >> toolCalls [
 							rawData: aDict;
 							id: (aDict at: 'call_id');
 							name: (aDict at: 'name');
-							arguments: (STONJSON fromString: (aDict at: 'arguments')) ]) as: Array ]
+							rawArguments: (aDict at: 'arguments') ]) as: Array ]
 ]
 
 { #category : #accessing }

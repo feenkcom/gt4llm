@@ -94,6 +94,25 @@ GtLResponseMagritteFormat >> propertyNames [
 	^ self schema properties keys 
 ]
 
+{ #category : #'neo json' }
+GtLResponseMagritteFormat >> readGenericDomainObjectsFrom: aString [
+	| neoJsonMapper genericMapping |
+	
+	neoJsonMapper := NeoJSONReader on: aString readStream.
+	
+	self appendNeoJsonMappingTo: neoJsonMapper.
+	
+	genericMapping := (neoJsonMapper mappings  at: modelClass) copy.
+	genericMapping subjectClass: NeoJSONObject.
+	
+	neoJsonMapper mappings 
+		at: #GenericEntity
+		put: genericMapping.
+	
+	^ (neoJsonMapper nextAs: #GenericEntity)
+			asOrderedDictionary.
+]
+
 { #category : #accessing }
 GtLResponseMagritteFormat >> schema [
 	^ self computeSchema

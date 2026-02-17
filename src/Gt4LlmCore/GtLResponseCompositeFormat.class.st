@@ -18,6 +18,11 @@ GtLResponseCompositeFormat >> addResponseFormat: aSchema [
 ]
 
 { #category : #adding }
+GtLResponseCompositeFormat >> addSchemaDescription: aSchema [
+	schemaDescriptions add: aSchema
+]
+
+{ #category : #adding }
 GtLResponseCompositeFormat >> addSchemaDescriptions: aCollection [
 	schemaDescriptions addAll: aCollection
 ]

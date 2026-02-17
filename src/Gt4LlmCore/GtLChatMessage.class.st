@@ -403,11 +403,6 @@ GtLChatMessage >> senderText [
 	^ 'You'
 ]
 
-{ #category : #'as yet unclassified' }
-GtLChatMessage >> serializeForOpenAIResponsesAPI [
-	^ self subclassResponsibility
-]
-
 { #category : #accessing }
 GtLChatMessage >> tools [
 	^ tools

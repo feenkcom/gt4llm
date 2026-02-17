@@ -26,18 +26,18 @@ GtLTool >> acceptVisitor: aVisitor [
 	^ aVisitor visitGtLlmTool: self
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'api - responses' }
 GtLTool >> functionAnthropic [
 	^ {'type' -> self type.
 		'name' -> self name} asDictionary
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'api - responses' }
 GtLTool >> functionResponse [
 	^ {'type' -> self type} asDictionary
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLTool >> name [
 	self subclassResponsibility
 ]
