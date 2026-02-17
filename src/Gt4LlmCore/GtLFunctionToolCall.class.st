@@ -41,7 +41,7 @@ GtLFunctionToolCall >> arguments [
 	arguments ifNil: [
 			rawArguments ifNotNil: [
 				(rawArguments isKindOf: String)
-					ifTrue: [ arguments := STONJSON fromString: arguments ]
+					ifTrue: [ arguments := STONJSON fromString: rawArguments ]
 					ifFalse: [ arguments := rawArguments ] ] ].
 	^ arguments
 ]
