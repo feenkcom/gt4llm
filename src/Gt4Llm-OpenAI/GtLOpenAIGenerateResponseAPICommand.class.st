@@ -20,7 +20,7 @@ GtLOpenAIGenerateResponseAPICommand >> buildEntity [
 		messagesDo: [ :aMessage | 
 			aMessage isToolMessage
 				ifTrue: [ aMessage toolCall isFinished
-						ifTrue: [ input add: aMessage toolCall responseInput.
+						ifTrue: [ input add: aMessage toolCall responseInputForOpenAIResponsesAPI.
 							input add: aMessage serializeForOpenAIResponsesAPI ] ]
 				ifFalse: [ input add: aMessage serializeForOpenAIResponsesAPI ] ].
 	entity := {'model' -> self model.

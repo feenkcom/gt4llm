@@ -7,7 +7,8 @@ Class {
 		'name',
 		'tool',
 		'result',
-		'runtimeValues'
+		'runtimeValues',
+		'rawArguments'
 	],
 	#category : #'Gt4LlmCore-Core'
 }
@@ -32,17 +33,22 @@ GtLFunctionToolCall >> acceptVisitor: aVisitor [
 
 { #category : #accessing }
 GtLFunctionToolCall >> anyArgument [
-	^ arguments anyOne
+	^ self arguments anyOne
 ]
 
 { #category : #accessing }
 GtLFunctionToolCall >> arguments [
+	arguments ifNil: [
+			rawArguments ifNotNil: [
+				(rawArguments isKindOf: String)
+					ifTrue: [ arguments := STONJSON fromString: arguments ]
+					ifFalse: [ arguments := rawArguments ] ] ].
 	^ arguments
 ]
 
 { #category : #accessing }
 GtLFunctionToolCall >> arguments: anObject [
-	arguments := anObject
+	arguments := anObject.
 ]
 
 { #category : #accessing }
@@ -77,7 +83,8 @@ GtLFunctionToolCall >> gtActionForResultFor: anAction [
 		icon: BrGlamorousVectorIcons inspect;
 		label: 'Result';
 		tooltip: 'Spawn the result object';
-		action: [ :button | button phlow spawnObject: result ]
+		action: [ :button | 
+			button phlow spawnObject: result ]
 ]
 
 { #category : #'gt - extensions' }
@@ -99,7 +106,7 @@ GtLFunctionToolCall >> gtDisplayOn: aStream [
 	aStream
 		nextPutAll: self name;
 		nextPut: $(;
-		nextPutAll: (', ' join: (arguments values collect: #gtDisplayString));
+		nextPutAll: (', ' join: (self arguments values collect: #gtDisplayString));
 		nextPut: $)
 ]
 
@@ -179,11 +186,20 @@ GtLFunctionToolCall >> printOn: aStream [
 ]
 
 { #category : #accessing }
-GtLFunctionToolCall >> responseInput [
-	^ {'type' -> 'function_call'.
-		'call_id' -> self id.
-		'name' -> self name.
-		'arguments' -> (STONJSON toString: self arguments)} asDictionary
+GtLFunctionToolCall >> rawArguments [
+	^ rawArguments
+]
+
+{ #category : #accessing }
+GtLFunctionToolCall >> rawArguments: aStringOrDictionary [
+	rawArguments := aStringOrDictionary
+]
+
+{ #category : #accessing }
+GtLFunctionToolCall >> rawArgumentsJsonString [
+	^ (rawArguments isKindOf: String)
+				ifTrue: [ rawArguments ]
+				ifFalse: [  STONJSON toString: arguments ] 
 ]
 
 { #category : #accessing }
@@ -196,6 +212,14 @@ GtLFunctionToolCall >> responseInputForAnthropicMessagesAPI [
 			'input' ->  self arguments} asDictionary}.
 		'role' -> 'assistant' } asDictionary 
 	
+]
+
+{ #category : #accessing }
+GtLFunctionToolCall >> responseInputForOpenAIResponsesAPI [
+	^ {'type' -> 'function_call'.
+		'call_id' -> self id.
+		'name' -> self name.
+		'arguments' -> self rawArgumentsJsonString} asDictionary
 ]
 
 { #category : #accessing }
