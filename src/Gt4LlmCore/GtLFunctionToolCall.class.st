@@ -199,7 +199,7 @@ GtLFunctionToolCall >> rawArguments: aStringOrDictionary [
 GtLFunctionToolCall >> rawArgumentsJsonString [
 	^ (rawArguments isKindOf: String)
 				ifTrue: [ rawArguments ]
-				ifFalse: [  STONJSON toString: arguments ] 
+				ifFalse: [  NeoJSONWriter toStringPretty: rawArguments ] 
 ]
 
 { #category : #accessing }
@@ -209,7 +209,7 @@ GtLFunctionToolCall >> responseInputForAnthropicMessagesAPI [
 			'type' -> 'tool_use'.
 			'id' -> self id.
 			'name' -> self name.
-			'input' ->  self arguments} asDictionary}.
+			'input' ->  self rawArguments} asDictionary}.
 		'role' -> 'assistant' } asDictionary 
 	
 ]
