@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLToolForExampleMethodRun,
-	#superclass : #GtLAbstractFunctionTool,
+	#superclass : #GtLAbstractPlainSchemaFunctionTool,
 	#category : #'Gt4LlmCore-Tools'
 }
 
@@ -29,7 +29,7 @@ GtLToolForExampleMethodRun >> name [
 ]
 
 { #category : #accessing }
-GtLToolForExampleMethodRun >> parameters [
+GtLToolForExampleMethodRun >> parametersDescription [
 	^ #('className' 'methodName' 'classSide')
 ]
 

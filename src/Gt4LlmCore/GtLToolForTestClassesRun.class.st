@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLToolForTestClassesRun,
-	#superclass : #GtLAbstractFunctionTool,
+	#superclass : #GtLAbstractPlainSchemaFunctionTool,
 	#category : #'Gt4LlmCore-Tools'
 }
 
@@ -57,7 +57,7 @@ GtLToolForTestClassesRun >> normalizedClassNamesFrom: rawValue [
 ]
 
 { #category : #'llm-generated' }
-GtLToolForTestClassesRun >> parameters [
+GtLToolForTestClassesRun >> parametersDescription [
 	^ #('classNames')
 ]
 

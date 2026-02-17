@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLToolForExampleClassesRun,
-	#superclass : #GtLAbstractFunctionTool,
+	#superclass : #GtLAbstractPlainSchemaFunctionTool,
 	#category : #'Gt4LlmCore-Tools'
 }
 
@@ -140,7 +140,7 @@ GtLToolForExampleClassesRun >> name [
 ]
 
 { #category : #'llm-generated' }
-GtLToolForExampleClassesRun >> parameters [
+GtLToolForExampleClassesRun >> parametersDescription [
 	^ #('classNames')
 ]
 

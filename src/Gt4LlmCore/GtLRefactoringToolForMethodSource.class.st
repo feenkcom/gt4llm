@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLRefactoringToolForMethodSource,
-	#superclass : #GtLAbstractFunctionTool,
+	#superclass : #GtLAbstractPlainSchemaFunctionTool,
 	#instVars : [
 		'model'
 	],
@@ -33,7 +33,7 @@ GtLRefactoringToolForMethodSource >> name [
 ]
 
 { #category : #'llm-generated' }
-GtLRefactoringToolForMethodSource >> parameters [
+GtLRefactoringToolForMethodSource >> parametersDescription [
 	^ #('className' 'methodName' 'classSide')
 ]
 

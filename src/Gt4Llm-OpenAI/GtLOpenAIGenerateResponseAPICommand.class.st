@@ -38,7 +38,7 @@ GtLOpenAIGenerateResponseAPICommand >> buildEntity [
 	tools isEmptyOrNil
 		ifFalse: [ entity
 				at: 'tools'
-				put: (self tools collect: [ :aTool | aTool functionResponse ]) ].
+				put: (self tools collect: [ :aTool | aTool functionOpenAI ]) ].
 
 	instructions ifNotNil: [ entity at: 'instructions' put: instructions ].
 

@@ -13,7 +13,7 @@ GtLFileSearchTool class >> leJsonV4Name [
 ]
 
 { #category : #'as yet unclassified' }
-GtLFileSearchTool >> functionResponse [
+GtLFileSearchTool >> functionOpenAI [
 	^ {'type' -> 'file_search'.
 	"	'description' -> 'Search the files attached to the chat'."
 		'vector_store_ids' -> self vectorStoreIds} asDictionary

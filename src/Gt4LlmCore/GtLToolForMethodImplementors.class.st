@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLToolForMethodImplementors,
-	#superclass : #GtLAbstractFunctionTool,
+	#superclass : #GtLAbstractPlainSchemaFunctionTool,
 	#category : #'Gt4LlmCore-Tools'
 }
 
@@ -25,7 +25,7 @@ GtLToolForMethodImplementors >> name [
 ]
 
 { #category : #accessing }
-GtLToolForMethodImplementors >> parameters [
+GtLToolForMethodImplementors >> parametersDescription [
 	^ #('methodName')
 ]
 

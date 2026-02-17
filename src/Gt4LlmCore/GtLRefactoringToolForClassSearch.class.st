@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLRefactoringToolForClassSearch,
-	#superclass : #GtLAbstractFunctionTool,
+	#superclass : #GtLAbstractPlainSchemaFunctionTool,
 	#instVars : [
 		'model'
 	],
@@ -42,7 +42,7 @@ GtLRefactoringToolForClassSearch >> name [
 ]
 
 { #category : #'llm-generated' }
-GtLRefactoringToolForClassSearch >> parameters [
+GtLRefactoringToolForClassSearch >> parametersDescription [
 	^ #('query')
 ]
 

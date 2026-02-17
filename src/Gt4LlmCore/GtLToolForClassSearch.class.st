@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLToolForClassSearch,
-	#superclass : #GtLAbstractFunctionTool,
+	#superclass : #GtLAbstractPlainSchemaFunctionTool,
 	#category : #'Gt4LlmCore-Tools'
 }
 
@@ -25,7 +25,7 @@ GtLToolForClassSearch >> name [
 ]
 
 { #category : #accessing }
-GtLToolForClassSearch >> parameters [
+GtLToolForClassSearch >> parametersDescription [
 	^ #('query')
 ]
 

@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLToolForClassDefinitionChange,
-	#superclass : #GtLAbstractFunctionTool,
+	#superclass : #GtLAbstractPlainSchemaFunctionTool,
 	#category : #'Gt4LlmCore-Tools'
 }
 
@@ -25,7 +25,7 @@ GtLToolForClassDefinitionChange >> name [
 ]
 
 { #category : #accessing }
-GtLToolForClassDefinitionChange >> parameters [
+GtLToolForClassDefinitionChange >> parametersDescription [
 	^ #('className' 'superclassName' 'instanceVariables' 'classVariables' 'package')
 ]
 

@@ -1,11 +1,11 @@
 Class {
 	#name : #GtLFunctionTool,
-	#superclass : #GtLAbstractFunctionTool,
+	#superclass : #GtLAbstractPlainSchemaFunctionTool,
 	#instVars : [
 		'description',
-		'parameters',
 		'block',
-		'name'
+		'name',
+		'parametersDescription'
 	],
 	#category : #'Gt4LlmCore-Tools'
 }
@@ -75,7 +75,7 @@ GtLFunctionTool >> initialize [
 	super initialize.
 
 	name := ''.
-	parameters := {}.
+	parametersDescription := {}.
 	description := ''
 ]
 
@@ -101,29 +101,34 @@ GtLFunctionTool >> name: anObject [
 ]
 
 { #category : #accessing }
-GtLFunctionTool >> parameters [
-	^ parameters
-]
-
-{ #category : #accessing }
 GtLFunctionTool >> parameters: anObject [
-	parameters := anObject
+	self parametersDescription: anObject
 ]
 
 { #category : #accessing }
-GtLFunctionTool >> privatePerformToolCall: aGtLlmFunctionToolCall [
+GtLFunctionTool >> parametersDescription [
+	^ parametersDescription
+]
+
+{ #category : #accessing }
+GtLFunctionTool >> parametersDescription: anObject [
+	parametersDescription := anObject
+]
+
+{ #category : #accessing }
+GtLFunctionTool >> privatePerformToolCall: aGtLFunctionToolCall [
 	| result |
 	self
 		assert: block isNotNil
 		description: [ 'Trying to call a function without a block' ].
 	self
-		assert: aGtLlmFunctionToolCall arguments keys asSet = parameters asSet
+		assert: aGtLFunctionToolCall arguments keys size = parametersDescription size
 		description: [ 'The arguments of the function call do not match the parameters of the tool' ].
 	"Commented due to Gemstone:
 	(GtLlmFunctionCallAboutToBePerformedSignal new
 		tool: self;
 		functionCall: aGtLlmFunctionToolCall) emit."
-	result := block value: aGtLlmFunctionToolCall.
+	result := block value: aGtLFunctionToolCall.
 	"Commented due to Gemstone:
 	(GtLlmFunctionCallPerformedSignal new
 		tool: self;

@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLToolForLepiterPageCreate,
-	#superclass : #GtLAbstractFunctionTool,
+	#superclass : #GtLAbstractPlainSchemaFunctionTool,
 	#instVars : [
 		'database'
 	],
@@ -39,7 +39,7 @@ GtLToolForLepiterPageCreate >> name [
 ]
 
 { #category : #accessing }
-GtLToolForLepiterPageCreate >> parameters [
+GtLToolForLepiterPageCreate >> parametersDescription [
 	^ #('title' 'databaseId' 'initialText')
 ]
 

@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLToolForSubstringLiteralSearch,
-	#superclass : #GtLAbstractFunctionTool,
+	#superclass : #GtLAbstractPlainSchemaFunctionTool,
 	#category : #'Gt4LlmCore-Tools'
 }
 
@@ -25,7 +25,7 @@ GtLToolForSubstringLiteralSearch >> name [
 ]
 
 { #category : #accessing }
-GtLToolForSubstringLiteralSearch >> parameters [
+GtLToolForSubstringLiteralSearch >> parametersDescription [
 	^ #('query')
 ]
 

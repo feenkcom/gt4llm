@@ -9,8 +9,13 @@ GtLAbstractMagritteFunctionTool class >> isAbstract [
 	^ self name = #GtLAbstractMagritteFunctionTool
 ]
 
+{ #category : #accessing }
+GtLAbstractMagritteFunctionTool >> computeParametersFormat [
+	^ self parametersDescription
+]
+
 { #category : #utils }
-GtLAbstractMagritteFunctionTool >> parametersFormat [
+GtLAbstractMagritteFunctionTool >> parametersDescription [
 	^ GtLResponseMagritteFormat new
 			name: 'Parameters';
 			modelClass: self class
@@ -21,7 +26,7 @@ GtLAbstractMagritteFunctionTool >> performToolCall: aToolCall [
 	| domainObject resultObject |
 	
 	[ | arguments |
-		arguments := self parametersFormat 
+		arguments := self parametersDescription 
 			readGenericDomainObjectsFrom: aToolCall rawArgumentsJsonString.
 		aToolCall arguments: arguments  ]
 		on: NeoJSONParseError

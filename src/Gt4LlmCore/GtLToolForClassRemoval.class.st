@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLToolForClassRemoval,
-	#superclass : #GtLAbstractFunctionTool,
+	#superclass : #GtLAbstractPlainSchemaFunctionTool,
 	#category : #'Gt4LlmCore-Tools'
 }
 
@@ -20,7 +20,7 @@ GtLToolForClassRemoval >> name [
 ]
 
 { #category : #accessing }
-GtLToolForClassRemoval >> parameters [
+GtLToolForClassRemoval >> parametersDescription [
 	^ #('className')
 ]
 
