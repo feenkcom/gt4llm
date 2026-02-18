@@ -52,8 +52,8 @@ GtLOpenAIProvider >> beWithNoCompaction [
 ]
 
 { #category : #configuring }
-GtLOpenAIProvider >> beWithPromtCompaction [
-	compactionStrategy := GtLOpenAIPromtCompactionStrategy forProvider: self
+GtLOpenAIProvider >> beWithPromptCompaction [
+	compactionStrategy := GtLOpenAIPromptCompactionStrategy forProvider: self
 ]
 
 { #category : #accessing }
