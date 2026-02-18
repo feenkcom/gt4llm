@@ -33,11 +33,6 @@ GtLMagritteInputModel >> addInstructionsTo: aMessageInstructions [
 				body: (exporter exportSchemaAsJsonString))
 ]
 
-{ #category : #'as yet unclassified' }
-GtLMagritteInputModel >> model [
-	^ model
-]
-
 { #category : #printing }
 GtLMagritteInputModel >> printOn: aStream [
 

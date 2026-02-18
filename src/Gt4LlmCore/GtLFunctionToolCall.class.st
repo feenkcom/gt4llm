@@ -100,7 +100,7 @@ GtLFunctionToolCall >> gtArgumentsFor: aView [
 		title: 'Arguments';
 		priority: 1;
 		items: [ self arguments associations ];
-		column: 'Name' text: #key;
+		column: 'Name' text: #key width: 150;
 		column: 'Value' text: #value;
 		send: #value
 ]
