@@ -695,6 +695,23 @@ GtLChatLiveExamples >> messageWithToolCallThenCompactionExample [
 	^ chat
 ]
 
+{ #category : #'examples - calls' }
+GtLChatLiveExamples >> messageWithWorldScreenshotTool [
+	<gtExample>
+	<noTest>
+	| chat |
+	
+	chat := self currentChat.
+	chat tools: (GtLTools withAll: {GtLToolForWorldScreenshot new}).
+	chat markdownResponse.
+	chat sendMarkdown: 'Explain what you see on the windows using the given tool'.
+	
+	self waitForChatRunIsDoneThen: [ 
+		self assert: self currentChat messages size equals: 2 ].
+		
+	^ chat
+]
+
 { #category : #'examples - basic' }
 GtLChatLiveExamples >> stubResponses: aBlock [ 
 	"Execute the given aBlock only in stub mode"
