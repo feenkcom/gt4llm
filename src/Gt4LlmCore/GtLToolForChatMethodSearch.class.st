@@ -8,11 +8,6 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-GtLToolForChatMethodSearch class >> leJsonV4Name [
-	^ #gtLToolForChatMethodSearch
-]
-
-{ #category : #'as yet unclassified' }
 GtLToolForChatMethodSearch >> chat [
 	| chat |
 	chat := GtLChat new.

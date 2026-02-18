@@ -4,11 +4,6 @@ Class {
 	#category : #'Gt4LlmCore-Tools'
 }
 
-{ #category : #serialization }
-GtLMagritteToolForMethodSource class >> leJsonV4Name [
-	^ #gtLMagritteToolForMethodSource
-]
-
 { #category : #visiting }
 GtLMagritteToolForMethodSource >> acceptVisitor: aVisitor [
 	^ aVisitor visitGtLlmToolForMethodSource: self

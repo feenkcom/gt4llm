@@ -7,11 +7,6 @@ Class {
 	#category : #'Gt4LlmCore-Tools'
 }
 
-{ #category : #'as yet unclassified' }
-GtLRefactoringToolForClassSearch class >> leJsonV4Name [
-	^ #gtLRefactoringToolForClassSearch
-]
-
 { #category : #'llm-generated' }
 GtLRefactoringToolForClassSearch >> classNames [
 	| names |

@@ -5,11 +5,6 @@ Class {
 }
 
 { #category : #accessing }
-GtLToolForClassSearch class >> leJsonV4Name [
-	^ #gtLToolForClassSearch
-]
-
-{ #category : #accessing }
 GtLToolForClassSearch >> acceptVisitor: aVisitor [
 	^ aVisitor visitGtLlmToolForClassSearch: self
 ]

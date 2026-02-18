@@ -4,11 +4,6 @@ Class {
 	#category : #'Gt4LlmCore-Tools'
 }
 
-{ #category : #accessing }
-GtLToolForRemoteExampleMethodsRun class >> leJsonV4Name [
-	^ #gtLToolForRemoteExampleMethodsRun
-]
-
 { #category : #'instance creation' }
 GtLToolForRemoteExampleMethodsRun class >> openAiAssistant [
 	"Answer a basic OpenAI assistant for testing the tool"

@@ -4,11 +4,6 @@ Class {
 	#category : #'Gt4LlmCore-Tools'
 }
 
-{ #category : #'as yet unclassified' }
-GtLToolForTestMethodRun class >> leJsonV4Name [
-	^ #gtLToolForTestMethodRun
-]
-
 { #category : #visiting }
 GtLToolForTestMethodRun >> acceptVisitor: aVisitor [
 	^ aVisitor visitGtLlmToolForSUnitMethodRun: self

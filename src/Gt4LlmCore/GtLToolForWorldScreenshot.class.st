@@ -8,11 +8,6 @@ Class {
 	#category : #'Gt4LlmCore-Tools'
 }
 
-{ #category : #'as yet unclassified' }
-GtLToolForWorldScreenshot class >> leJsonV4Name [
-	^ #gtLToolForWorldScreenshot
-]
-
 { #category : #accessing }
 GtLToolForWorldScreenshot >> description [
 	^ 'Capture the currently focused window or Glamorous Toolkit as a PNG screenshot and return the Base64 encoding.'
