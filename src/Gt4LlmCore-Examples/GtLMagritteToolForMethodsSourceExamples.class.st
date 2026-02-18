@@ -10,10 +10,6 @@ GtLMagritteToolForMethodsSourceExamples >> methodSourcesForExistingMethods [
 	| tool call result model |
 	tool := GtLMagritteToolForMethodsSource new.
 	call := GtLFunctionToolCall new.
-	call function: {
-		'name' -> tool name.
-		'arguments' -> Dictionary new
-	} asDictionary.
 	call rawArguments: {
 		'methodDescriptors' -> {
 			{'methodClassName' -> 'Collection'.
@@ -44,10 +40,6 @@ GtLMagritteToolForMethodsSourceExamples >> methodSourcesForUnknownClass [
 	| tool call result model |
 	tool := GtLMagritteToolForMethodsSource new.
 	call := GtLFunctionToolCall new.
-	call function: {
-		'name' -> tool name.
-		'arguments' -> Dictionary new
-	} asDictionary.
 	call rawArguments: {
 		'methodDescriptors' -> {
 			{'methodClassName' -> 'ClassThatDoesNotExist'.
@@ -75,10 +67,6 @@ GtLMagritteToolForMethodsSourceExamples >> methodSourcesForUnknownMethod [
 	| tool call result model |
 	tool := GtLMagritteToolForMethodsSource new.
 	call := GtLFunctionToolCall new.
-	call function: {
-		'name' -> tool name.
-		'arguments' -> Dictionary new
-	} asDictionary.
 	call rawArguments: {
 		'methodDescriptors' -> {
 			{'methodClassName' -> GtLToolForMethodImplementors name.
