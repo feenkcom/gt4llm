@@ -10,17 +10,6 @@ GtLTool class >> isAbstract [
 ]
 
 { #category : #accessing }
-GtLTool class >> leJsonV4AttributeMapping [
-	^ {}
-]
-
-{ #category : #accessing }
-GtLTool class >> leJsonV4Name [
-
-	^ #gtLTool
-]
-
-{ #category : #accessing }
 GtLTool class >> serializationProperties [
 	^ {#type -> #type}
 ]

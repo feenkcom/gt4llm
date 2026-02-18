@@ -5,11 +5,6 @@ Class {
 }
 
 { #category : #'llm-generated' }
-GtLToolForSmalltalkCodeEvaluation class >> leJsonV4Name [
-	^ #gtLToolForSmalltalkCodeEvaluation
-]
-
-{ #category : #'llm-generated' }
 GtLToolForSmalltalkCodeEvaluation >> acceptVisitor: aVisitor [
 	^ aVisitor visitGtLlmToolForSmalltalkCodeEvaluation: self
 ]

@@ -4,11 +4,6 @@ Class {
 	#category : #'Gt4LlmCore-Tools'
 }
 
-{ #category : #serialization }
-GtLToolForSubstringLiteralSearch class >> leJsonV4Name [
-	^ #gtLToolForSubstringLiteralSearch
-]
-
 { #category : #visiting }
 GtLToolForSubstringLiteralSearch >> acceptVisitor: aVisitor [
 	^ aVisitor visitGtLToolForSubstringLiteralSearch: self
