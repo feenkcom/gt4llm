@@ -136,15 +136,12 @@ GtLMethodReference >> methodNameDescription [
 
 { #category : #enumerating }
 GtLMethodReference >> methodObjectIfMissing: anErrorBlock [
-	^ self 
-		compiledMethodIfPresent: [ :aMethod |
-			aMethod isSourceSearchable 
-				ifTrue: [
-					GtLMethodWithSource fromCompiledMethod: aMethod ]
-				ifFalse: [ 
-					GtLNotSourceSearchableMethodDomainObject new 
-						method: aMethod ].]
-		ifMissing: anErrorBlock.
+	^ self
+		compiledMethodIfPresent: [ :aMethod | 
+			aMethod isSourceSearchable
+				ifTrue: [ GtLMethodWithSource fromCompiledMethod: aMethod ]
+				ifFalse: [ GtLNotSourceSearchableMethodDomainObject new method: aMethod ] ]
+		ifMissing: anErrorBlock
 ]
 
 { #category : #printing }

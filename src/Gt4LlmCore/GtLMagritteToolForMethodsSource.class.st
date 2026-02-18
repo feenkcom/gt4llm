@@ -49,9 +49,8 @@ GtLMagritteToolForMethodsSource >> privatePerformToolCall: aToolCall [
 			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
 					arguments: arguments;
 					missingArgument: 'methodDescriptors' ].
-
 	methodObjects := methodDescriptors
-			collect: [ :aMethodDescriptor | aMethodDescriptor methodObjectIfMissing: [ :anErrorResult | anErrorResult ] ].
-
+			collect: [ :aMethodDescriptor | 
+				aMethodDescriptor methodObjectIfMissing: [ :anErrorResult | anErrorResult ] ].
 	^ GtLMethodsWithSource new methods: methodObjects asArray
 ]
