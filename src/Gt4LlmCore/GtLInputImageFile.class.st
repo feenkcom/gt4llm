@@ -5,16 +5,30 @@ Class {
 }
 
 { #category : #serialization }
+GtLInputImageFile >> contentType [
+	 self fileReference extension = 'png'
+	 	ifTrue: [ ^ 'image/png' ].
+	 
+		^ 'image/jpeg'
+]
+
+{ #category : #serialization }
 GtLInputImageFile >> serializeForAnthropicMessagesAPI [
-	^ {'type' -> 'image'.
-		'media_type' -> 'image/jpeg'.
-		'image_url' -> self fileReference binaryContents base64Encoded}
+	^ {
+		'type' -> 'image'.
+		'source'-> {
+			'media_type' -> self contentType.
+			'type' ->'base64'.
+			'data' -> self fileReference binaryContents base64Encoded } asDictionary}
 			asDictionary
 ]
 
 { #category : #serialization }
 GtLInputImageFile >> serializeForOpenAIResponsesAPI [
 	^ {'type' -> 'input_image'.
-		'image_url' -> ('data:image/jpeg;base64,' , self fileReference binaryContents base64Encoded)}
-			asDictionary
+		'image_url' -> ('data:'
+			,self contentType
+			,';base64,' 
+			, self fileReference binaryContents base64Encoded)}
+				asDictionary
 ]
