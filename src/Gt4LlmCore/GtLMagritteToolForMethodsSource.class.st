@@ -4,11 +4,6 @@ Class {
 	#category : #'Gt4LlmCore-Tools'
 }
 
-{ #category : #visiting }
-GtLMagritteToolForMethodsSource >> acceptVisitor: aVisitor [
-	^ aVisitor visitGtLlmToolForMethodsSource: self
-]
-
 { #category : #accessing }
 GtLMagritteToolForMethodsSource >> description [
 	^ 'Gets source code for multiple methods. Arguments must provide a methods array of method descriptors with className, methodName, and optional classSide values.
@@ -48,21 +43,15 @@ GtLMagritteToolForMethodsSource >> name [
 { #category : #execution }
 GtLMagritteToolForMethodsSource >> privatePerformToolCall: aToolCall [
 	| arguments methodDescriptors methodObjects |
-	arguments := aToolCall arguments 
-		ifNil: [ Dictionary new ].
+	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	methodDescriptors := arguments
-			at: 'methodDescriptors' ifAbsent: [ 
-				^ GtLMissingArgumentDomainObject new
+			at: 'methodDescriptors'
+			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
 					arguments: arguments;
 					missingArgument: 'methodDescriptors' ].
-	
-	methodObjects := OrderedCollection new: methodDescriptors size.
-	methodDescriptors do: [ :aMethodDescriptor | 
-		| result |
-		result := aMethodDescriptor 
-			methodObjectIfMissing: [ :anErrorResult | anErrorResult ].
-		methodObjects add: result ].
-					
-	^ GtLMethodsWithSource new 
-			methods: methodObjects asArray
+
+	methodObjects := methodDescriptors
+			collect: [ :aMethodDescriptor | aMethodDescriptor methodObjectIfMissing: [ :anErrorResult | anErrorResult ] ].
+
+	^ GtLMethodsWithSource new methods: methodObjects asArray
 ]
