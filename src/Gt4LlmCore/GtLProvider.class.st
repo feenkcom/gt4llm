@@ -56,6 +56,16 @@ GtLProvider >> compactionPrompt [
 - Next steps'
 ]
 
+{ #category : #utils }
+GtLProvider >> createPromptCompactionMessage [
+	| message |
+	message := self chat createUserMessage.
+	message
+		addResponseFormatForMagritte: GtLChatCompactedSummary named: 'Compaction';
+		markdown: self compactionPrompt.
+	^ message
+]
+
 { #category : #accessing }
 GtLProvider >> defaultAssistantMessageClass [
 	^ GtLChatMessage
@@ -110,11 +120,8 @@ GtLProvider >> sendMessage: aMessage [
 ]
 
 { #category : #accessing }
-GtLProvider >> sendPromtCompactionMessage [  
-	^self chat sendWith: [ :m |
-		m
-			addResponseFormatForMagritte: GtLChatCompactedSummary named: 'Compaction';
-			markdown: self compactionPrompt ].
+GtLProvider >> sendPromptCompactionMessage [  
+	^self chat sendMessage: self createPromptCompactionMessage
 ]
 
 { #category : #'api - execution' }
