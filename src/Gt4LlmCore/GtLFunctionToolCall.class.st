@@ -51,6 +51,11 @@ GtLFunctionToolCall >> arguments: anObject [
 	arguments := anObject.
 ]
 
+{ #category : #printing }
+GtLFunctionToolCall >> argumentsDisplayString [
+	^ ', ' join: (self arguments values collect: #gtDisplayString)
+]
+
 { #category : #accessing }
 GtLFunctionToolCall >> at: aString putRuntimeValue: anObject [
 	^ runtimeValues at: aString put: anObject
@@ -95,7 +100,7 @@ GtLFunctionToolCall >> gtArgumentsFor: aView [
 		title: 'Arguments';
 		priority: 1;
 		items: [ self arguments associations ];
-		column: 'Name' text: #key;
+		column: 'Name' text: #key width: 150;
 		column: 'Value' text: #value;
 		send: #value
 ]
@@ -106,7 +111,7 @@ GtLFunctionToolCall >> gtDisplayOn: aStream [
 	aStream
 		nextPutAll: self name;
 		nextPut: $(;
-		nextPutAll: (', ' join: (self arguments values collect: #gtDisplayString));
+		nextPutAll: (self argumentsDisplayString);
 		nextPut: $)
 ]
 
