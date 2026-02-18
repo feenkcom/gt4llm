@@ -15,8 +15,8 @@ GtLMagritteToolForMethodsSourceExamples >> methodSourcesForExistingMethods [
 			{'methodClassName' -> 'Collection'.
 				'methodName' -> 'withAll:'.
 				'classSide' -> true} asDictionary.
-			{'methodClassName' -> GtLToolForMethodImplementors name.
-				'methodName' -> 'privatePerformToolCall:'.
+			{'methodClassName' -> #GtLMagritteToolForMethodsSourceExamples.
+				'methodName' -> 'methodSourcesForExistingMethods'.
 				'classSide' -> false} asDictionary
 		} asArray
 	} asDictionary.
@@ -32,7 +32,7 @@ GtLMagritteToolForMethodsSourceExamples >> methodSourcesForExistingMethods [
 		equals: (Collection class>>#withAll:) sourceCode.
 	self
 		assert: model methods second sourceCode
-		equals: (GtLToolForMethodImplementors>>#privatePerformToolCall:) sourceCode.
+		equals: (GtLMagritteToolForMethodsSourceExamples>>#methodSourcesForExistingMethods) sourceCode.
 	^ call
 ]
 
