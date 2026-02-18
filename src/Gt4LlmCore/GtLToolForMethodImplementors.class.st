@@ -5,11 +5,6 @@ Class {
 }
 
 { #category : #accessing }
-GtLToolForMethodImplementors class >> leJsonV4Name [
-	^ #gtLToolForMethodImplementors
-]
-
-{ #category : #accessing }
 GtLToolForMethodImplementors >> acceptVisitor: aVisitor [
 	^ aVisitor visitGtLlmToolForImplementors: self
 ]

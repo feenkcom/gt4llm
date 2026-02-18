@@ -7,11 +7,6 @@ Class {
 	#category : #'Gt4LlmCore-Tools'
 }
 
-{ #category : #'as yet unclassified' }
-GtLRefactoringToolForClassReferences class >> leJsonV4Name [
-	^ #gtLRefactoringToolForClassReferences
-]
-
 { #category : #'llm-generated' }
 GtLRefactoringToolForClassReferences >> description [
 	^ 'Search the image for the references to the given class'

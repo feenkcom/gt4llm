@@ -8,11 +8,6 @@ Class {
 }
 
 { #category : #accessing }
-GtLToolForLepiterPageContents class >> leJsonV4Name [
-	^ #gtLToolForLepiterPageContents
-]
-
-{ #category : #accessing }
 GtLToolForLepiterPageContents >> acceptVisitor: aVisitor [
 	^ aVisitor visitGtLlmToolForLepiterPageSerialization: self
 ]

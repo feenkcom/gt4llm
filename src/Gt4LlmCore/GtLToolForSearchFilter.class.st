@@ -5,11 +5,6 @@ Class {
 }
 
 { #category : #accessing }
-GtLToolForSearchFilter class >> leJsonV4Name [
-	^ #gtLToolForSearchFilter
-]
-
-{ #category : #accessing }
 GtLToolForSearchFilter class >> maximumResultItemCount [
 	^ 100
 ]
