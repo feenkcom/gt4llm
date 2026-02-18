@@ -28,8 +28,9 @@ GtLToolForClassSubclassesExamples >> classSubclassesForExistingClass [
 	tool := GtLToolForClassSubclasses new.
 	call := GtLFunctionToolCall new.
 	call
-		function: {'name' -> tool name.
-				'arguments' -> {'className' -> 'GtLAbstractFunctionTool'} asDictionary}
+		function: {
+				'name' -> tool name.
+				'arguments' -> {'className' -> 'GtLAbstractPlainSchemaFunctionTool'} asDictionary}
 				asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.

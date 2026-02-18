@@ -1,16 +1,11 @@
 Class {
 	#name : #GtLToolForChatMethodSearch,
-	#superclass : #GtLAbstractFunctionTool,
+	#superclass : #GtLAbstractPlainSchemaFunctionTool,
 	#instVars : [
 		'provider'
 	],
 	#category : #'Gt4LlmCore-Tools'
 }
-
-{ #category : #'as yet unclassified' }
-GtLToolForChatMethodSearch class >> leJsonV4Name [
-	^ #gtLToolForChatMethodSearch
-]
 
 { #category : #'as yet unclassified' }
 GtLToolForChatMethodSearch >> chat [
@@ -44,7 +39,7 @@ GtLToolForChatMethodSearch >> name [
 ]
 
 { #category : #'as yet unclassified' }
-GtLToolForChatMethodSearch >> parameters [
+GtLToolForChatMethodSearch >> parametersDescription [
 	^ #('searchPrompt')
 ]
 

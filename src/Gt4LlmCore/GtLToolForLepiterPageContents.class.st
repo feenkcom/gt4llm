@@ -1,16 +1,11 @@
 Class {
 	#name : #GtLToolForLepiterPageContents,
-	#superclass : #GtLAbstractFunctionTool,
+	#superclass : #GtLAbstractPlainSchemaFunctionTool,
 	#instVars : [
 		'knowledgeBases'
 	],
 	#category : #'Gt4LlmCore-Tools'
 }
-
-{ #category : #accessing }
-GtLToolForLepiterPageContents class >> leJsonV4Name [
-	^ #gtLToolForLepiterPageContents
-]
 
 { #category : #accessing }
 GtLToolForLepiterPageContents >> acceptVisitor: aVisitor [
@@ -34,7 +29,7 @@ GtLToolForLepiterPageContents >> name [
 ]
 
 { #category : #accessing }
-GtLToolForLepiterPageContents >> parameters [
+GtLToolForLepiterPageContents >> parametersDescription [
 	^ #('uid')
 ]
 

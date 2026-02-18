@@ -11,10 +11,12 @@ Class {
 GtLMethodsSourceDomainObject >> gtMethodsFor: aView [
 	<gtView>
 	<gtLlmView>
+	
 	^ aView forward
 		title: 'Methods';
 		priority: 1;
-		object: [ GtSearchFixedMethodsFilter new methods: (self methods collect: #method) ];
+		object: [ GtSearchFixedMethodsFilter new methods: (self methods 
+			collect: [ :each | each method ]) ];
 		view: #gtItemsFor:
 ]
 

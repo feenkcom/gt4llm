@@ -1,13 +1,8 @@
 Class {
 	#name : #GtLToolForClassCreation,
-	#superclass : #GtLAbstractFunctionTool,
+	#superclass : #GtLAbstractPlainSchemaFunctionTool,
 	#category : #'Gt4LlmCore-Tools'
 }
-
-{ #category : #accessing }
-GtLToolForClassCreation class >> leJsonV4Name [
-	^ #gtLToolForClassCreation
-]
 
 { #category : #visiting }
 GtLToolForClassCreation >> acceptVisitor: aVisitor [
@@ -25,7 +20,7 @@ GtLToolForClassCreation >> name [
 ]
 
 { #category : #accessing }
-GtLToolForClassCreation >> parameters [
+GtLToolForClassCreation >> parametersDescription [
 	^ #('className' 'superclassName' 'instanceVariables' 'classVariables' 'package')
 ]
 

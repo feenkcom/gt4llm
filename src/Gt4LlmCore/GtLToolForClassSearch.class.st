@@ -1,13 +1,8 @@
 Class {
 	#name : #GtLToolForClassSearch,
-	#superclass : #GtLAbstractFunctionTool,
+	#superclass : #GtLAbstractPlainSchemaFunctionTool,
 	#category : #'Gt4LlmCore-Tools'
 }
-
-{ #category : #accessing }
-GtLToolForClassSearch class >> leJsonV4Name [
-	^ #gtLToolForClassSearch
-]
 
 { #category : #accessing }
 GtLToolForClassSearch >> acceptVisitor: aVisitor [
@@ -25,7 +20,7 @@ GtLToolForClassSearch >> name [
 ]
 
 { #category : #accessing }
-GtLToolForClassSearch >> parameters [
+GtLToolForClassSearch >> parametersDescription [
 	^ #('query')
 ]
 

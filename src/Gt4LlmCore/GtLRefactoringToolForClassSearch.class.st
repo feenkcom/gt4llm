@@ -1,16 +1,11 @@
 Class {
 	#name : #GtLRefactoringToolForClassSearch,
-	#superclass : #GtLAbstractFunctionTool,
+	#superclass : #GtLAbstractPlainSchemaFunctionTool,
 	#instVars : [
 		'model'
 	],
 	#category : #'Gt4LlmCore-Tools'
 }
-
-{ #category : #'as yet unclassified' }
-GtLRefactoringToolForClassSearch class >> leJsonV4Name [
-	^ #gtLRefactoringToolForClassSearch
-]
 
 { #category : #'llm-generated' }
 GtLRefactoringToolForClassSearch >> classNames [
@@ -42,7 +37,7 @@ GtLRefactoringToolForClassSearch >> name [
 ]
 
 { #category : #'llm-generated' }
-GtLRefactoringToolForClassSearch >> parameters [
+GtLRefactoringToolForClassSearch >> parametersDescription [
 	^ #('query')
 ]
 

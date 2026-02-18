@@ -1,16 +1,11 @@
 Class {
 	#name : #GtLRefactoringToolForClassReferences,
-	#superclass : #GtLAbstractFunctionTool,
+	#superclass : #GtLAbstractPlainSchemaFunctionTool,
 	#instVars : [
 		'model'
 	],
 	#category : #'Gt4LlmCore-Tools'
 }
-
-{ #category : #'as yet unclassified' }
-GtLRefactoringToolForClassReferences class >> leJsonV4Name [
-	^ #gtLRefactoringToolForClassReferences
-]
 
 { #category : #'llm-generated' }
 GtLRefactoringToolForClassReferences >> description [
@@ -33,7 +28,7 @@ GtLRefactoringToolForClassReferences >> name [
 ]
 
 { #category : #'llm-generated' }
-GtLRefactoringToolForClassReferences >> parameters [
+GtLRefactoringToolForClassReferences >> parametersDescription [
 	^ #('className')
 ]
 

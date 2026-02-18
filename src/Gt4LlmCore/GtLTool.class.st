@@ -5,14 +5,8 @@ Class {
 }
 
 { #category : #accessing }
-GtLTool class >> leJsonV4AttributeMapping [
-	^ {}
-]
-
-{ #category : #accessing }
-GtLTool class >> leJsonV4Name [
-
-	^ #gtLTool
+GtLTool class >> isAbstract [
+	^ self name = #GtLTool
 ]
 
 { #category : #accessing }
@@ -26,18 +20,18 @@ GtLTool >> acceptVisitor: aVisitor [
 	^ aVisitor visitGtLlmTool: self
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'api - responses' }
 GtLTool >> functionAnthropic [
 	^ {'type' -> self type.
 		'name' -> self name} asDictionary
 ]
 
-{ #category : #'as yet unclassified' }
-GtLTool >> functionResponse [
+{ #category : #'api - responses' }
+GtLTool >> functionOpenAI [
 	^ {'type' -> self type} asDictionary
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLTool >> name [
 	self subclassResponsibility
 ]

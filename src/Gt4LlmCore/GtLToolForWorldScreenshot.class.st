@@ -1,17 +1,12 @@
 Class {
 	#name : #GtLToolForWorldScreenshot,
-	#superclass : #GtLAbstractFunctionTool,
+	#superclass : #GtLAbstractPlainSchemaFunctionTool,
 	#instVars : [
 		'worldElementProvider',
 		'pngDataProvider'
 	],
 	#category : #'Gt4LlmCore-Tools'
 }
-
-{ #category : #'as yet unclassified' }
-GtLToolForWorldScreenshot class >> leJsonV4Name [
-	^ #gtLToolForWorldScreenshot
-]
 
 { #category : #accessing }
 GtLToolForWorldScreenshot >> description [
@@ -31,7 +26,7 @@ GtLToolForWorldScreenshot >> name [
 ]
 
 { #category : #accessing }
-GtLToolForWorldScreenshot >> parameters [
+GtLToolForWorldScreenshot >> parametersDescription [
 	^ #()
 ]
 

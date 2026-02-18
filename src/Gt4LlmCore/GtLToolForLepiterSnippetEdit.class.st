@@ -1,16 +1,11 @@
 Class {
 	#name : #GtLToolForLepiterSnippetEdit,
-	#superclass : #GtLAbstractFunctionTool,
+	#superclass : #GtLAbstractPlainSchemaFunctionTool,
 	#instVars : [
 		'database'
 	],
 	#category : #'Gt4LlmCore-Tools'
 }
-
-{ #category : #accessing }
-GtLToolForLepiterSnippetEdit class >> leJsonV4Name [
-	^ #gtLToolForLepiterSnippetEdit
-]
 
 { #category : #accessing }
 GtLToolForLepiterSnippetEdit >> database [
@@ -39,7 +34,7 @@ GtLToolForLepiterSnippetEdit >> name [
 ]
 
 { #category : #accessing }
-GtLToolForLepiterSnippetEdit >> parameters [
+GtLToolForLepiterSnippetEdit >> parametersDescription [
 	^ #('pageUid' 'snippetUid' 'updatedText')
 ]
 

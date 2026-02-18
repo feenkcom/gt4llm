@@ -1,13 +1,8 @@
 Class {
 	#name : #GtLToolForMethodImplementors,
-	#superclass : #GtLAbstractFunctionTool,
+	#superclass : #GtLAbstractPlainSchemaFunctionTool,
 	#category : #'Gt4LlmCore-Tools'
 }
-
-{ #category : #accessing }
-GtLToolForMethodImplementors class >> leJsonV4Name [
-	^ #gtLToolForMethodImplementors
-]
 
 { #category : #accessing }
 GtLToolForMethodImplementors >> acceptVisitor: aVisitor [
@@ -25,7 +20,7 @@ GtLToolForMethodImplementors >> name [
 ]
 
 { #category : #accessing }
-GtLToolForMethodImplementors >> parameters [
+GtLToolForMethodImplementors >> parametersDescription [
 	^ #('methodName')
 ]
 

@@ -1,16 +1,11 @@
 Class {
 	#name : #GtLToolForLepiterPageCreate,
-	#superclass : #GtLAbstractFunctionTool,
+	#superclass : #GtLAbstractPlainSchemaFunctionTool,
 	#instVars : [
 		'database'
 	],
 	#category : #'Gt4LlmCore-Tools'
 }
-
-{ #category : #'as yet unclassified' }
-GtLToolForLepiterPageCreate class >> leJsonV4Name [
-	^ #gtLToolForLepiterPageCreate
-]
 
 { #category : #accessing }
 GtLToolForLepiterPageCreate >> database [
@@ -39,7 +34,7 @@ GtLToolForLepiterPageCreate >> name [
 ]
 
 { #category : #accessing }
-GtLToolForLepiterPageCreate >> parameters [
+GtLToolForLepiterPageCreate >> parametersDescription [
 	^ #('title' 'databaseId' 'initialText')
 ]
 

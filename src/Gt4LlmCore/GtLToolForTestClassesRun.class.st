@@ -1,13 +1,8 @@
 Class {
 	#name : #GtLToolForTestClassesRun,
-	#superclass : #GtLAbstractFunctionTool,
+	#superclass : #GtLAbstractPlainSchemaFunctionTool,
 	#category : #'Gt4LlmCore-Tools'
 }
-
-{ #category : #accessing }
-GtLToolForTestClassesRun class >> leJsonV4Name [
-	^ #gtLToolForTestClassesRun
-]
 
 { #category : #'llm-generated' }
 GtLToolForTestClassesRun >> acceptVisitor: aVisitor [
@@ -57,7 +52,7 @@ GtLToolForTestClassesRun >> normalizedClassNamesFrom: rawValue [
 ]
 
 { #category : #'llm-generated' }
-GtLToolForTestClassesRun >> parameters [
+GtLToolForTestClassesRun >> parametersDescription [
 	^ #('classNames')
 ]
 

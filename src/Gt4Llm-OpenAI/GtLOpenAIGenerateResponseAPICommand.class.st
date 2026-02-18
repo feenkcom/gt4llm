@@ -20,7 +20,7 @@ GtLOpenAIGenerateResponseAPICommand >> buildEntity [
 		messagesDo: [ :aMessage | 
 			aMessage isToolMessage
 				ifTrue: [ aMessage toolCall isFinished
-						ifTrue: [ input add: aMessage toolCall responseInput.
+						ifTrue: [ input add: aMessage toolCall responseInputForOpenAIResponsesAPI.
 							input add: aMessage serializeForOpenAIResponsesAPI ] ]
 				ifFalse: [ input add: aMessage serializeForOpenAIResponsesAPI ] ].
 	entity := {'model' -> self model.
@@ -38,7 +38,7 @@ GtLOpenAIGenerateResponseAPICommand >> buildEntity [
 	tools isEmptyOrNil
 		ifFalse: [ entity
 				at: 'tools'
-				put: (self tools collect: [ :aTool | aTool functionResponse ]) ].
+				put: (self tools collect: [ :aTool | aTool functionOpenAI ]) ].
 
 	instructions ifNotNil: [ entity at: 'instructions' put: instructions ].
 

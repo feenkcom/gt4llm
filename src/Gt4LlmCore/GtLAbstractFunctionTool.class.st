@@ -4,66 +4,56 @@ Class {
 	#category : #'Gt4LlmCore-Tools'
 }
 
-{ #category : #accessing }
-GtLAbstractFunctionTool class >> leJsonV4Name [
-	^ #gtLAbstractFunctionTool
+{ #category : #testiung }
+GtLAbstractFunctionTool class >> isAbstract [
+	^ self name = #GtLAbstractFunctionTool
 ]
 
 { #category : #accessing }
 GtLAbstractFunctionTool class >> serializationProperties [
-	^ {#type -> #type. #function -> #functionResponse}
+	^ {#type -> #type. }
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
+GtLAbstractFunctionTool >> computeParametersFormat [
+	^ self subclassResponsibility
+]
+
+{ #category : #accessing }
 GtLAbstractFunctionTool >> description [
 	^ self subclassResponsibility
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'api - responses' }
 GtLAbstractFunctionTool >> functionAnthropic [
 	^ {'name' -> self name.
 		'description' -> self description.
-		'input_schema' -> self functionJsonSchema} asDictionary
+		'input_schema' -> self parametersJsonSchemaDictionary} asDictionary
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'api - responses' }
 GtLAbstractFunctionTool >> functionGemini [
 	^ {'name' -> self name.
 		'description' -> self description.
-		'parameters'
-			-> {'type' -> 'object'.
-					'properties'
-						-> (self parameters collect: [ :aName | aName -> {'type' -> 'string'} asDictionary ])
-								asDictionary.
-					'required' -> self parameters} asDictionary} asDictionary
+		'parameters' -> self parametersJsonSchemaDictionary} asDictionary
 ]
 
-{ #category : #'as yet unclassified' }
-GtLAbstractFunctionTool >> functionJsonSchema [
-	^ {'type' -> 'object'.
-		'properties'
-			-> (self parameters
-					collect: [ :aName | aName -> {'type' -> 'string'} asDictionary ])
-					asDictionary.
-		'required' -> self parameters.
-		'additionalProperties' -> false} asDictionary
-]
-
-{ #category : #'as yet unclassified' }
-GtLAbstractFunctionTool >> functionResponse [
+{ #category : #'api - responses' }
+GtLAbstractFunctionTool >> functionOpenAI [
 	^ {'name' -> self name.
 		'type' -> self type.
 		'description' -> self description.
-		'parameters' -> self functionJsonSchema} asDictionary
+		'parameters' -> self parametersJsonSchemaDictionary} asDictionary
 ]
 
-{ #category : #'as yet unclassified' }
-GtLAbstractFunctionTool >> parameters [
-	"An array of strings representing parameter names"
-	^ self subclassResponsibility
+{ #category : #'api - responses' }
+GtLAbstractFunctionTool >> parametersJsonSchemaDictionary [
+	| parametersFormat |
+	parametersFormat := self computeParametersFormat.
+	^ parametersFormat asJsonSchemaDictionary
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #execution }
 GtLAbstractFunctionTool >> performToolCall: aToolCall [
 	| result |
 	aToolCall performedByTool: self.
@@ -72,12 +62,12 @@ GtLAbstractFunctionTool >> performToolCall: aToolCall [
 	^ result
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #execution }
 GtLAbstractFunctionTool >> privatePerformToolCall: aToolCall [
 	^ self subclassResponsibility
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLAbstractFunctionTool >> type [
 	^ 'function'
 ]

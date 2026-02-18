@@ -41,3 +41,8 @@ GtLResponseInvividualFormat >> readDomainObjectsFrom: aString [
 	self appendNeoJsonMappingTo: neoJsonMapper.
 	^ self nextEntryFromNeoJsonReader: neoJsonMapper
 ]
+
+{ #category : #'neo json' }
+GtLResponseInvividualFormat >> readGenericDomainObjectsFrom: aString [
+	^ self readDomainObjectsFrom: aString
+]

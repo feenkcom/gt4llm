@@ -7,6 +7,12 @@ Class {
 	#category : #'Gt4LlmCore-Core'
 }
 
+{ #category : #'instance creation' }
+GtLResponseStringFormat class >> named: aName [
+	^ self new 
+		name: aName
+]
+
 { #category : #accessing }
 GtLResponseStringFormat >> asJsonSchemaDictionary [
 	^ schema raw

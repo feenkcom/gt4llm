@@ -1,13 +1,8 @@
 Class {
 	#name : #GtLToolForSubstringLiteralSearch,
-	#superclass : #GtLAbstractFunctionTool,
+	#superclass : #GtLAbstractPlainSchemaFunctionTool,
 	#category : #'Gt4LlmCore-Tools'
 }
-
-{ #category : #serialization }
-GtLToolForSubstringLiteralSearch class >> leJsonV4Name [
-	^ #gtLToolForSubstringLiteralSearch
-]
 
 { #category : #visiting }
 GtLToolForSubstringLiteralSearch >> acceptVisitor: aVisitor [
@@ -25,7 +20,7 @@ GtLToolForSubstringLiteralSearch >> name [
 ]
 
 { #category : #accessing }
-GtLToolForSubstringLiteralSearch >> parameters [
+GtLToolForSubstringLiteralSearch >> parametersDescription [
 	^ #('query')
 ]
 

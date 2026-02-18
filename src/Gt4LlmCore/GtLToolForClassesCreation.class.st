@@ -1,13 +1,8 @@
 Class {
 	#name : #GtLToolForClassesCreation,
-	#superclass : #GtLAbstractFunctionTool,
+	#superclass : #GtLAbstractPlainSchemaFunctionTool,
 	#category : #'Gt4LlmCore-Tools'
 }
-
-{ #category : #accessing }
-GtLToolForClassesCreation class >> leJsonV4Name [
-	^ #gtLToolForClassesCreation
-]
 
 { #category : #visiting }
 GtLToolForClassesCreation >> acceptVisitor: aVisitor [
@@ -97,12 +92,7 @@ GtLToolForClassesCreation >> classResultsFrom: classesArgument ifInvalid: invali
 ]
 
 { #category : #accessing }
-GtLToolForClassesCreation >> description [
-	^ 'Creates multiple classes in a single request and reports each result.'
-]
-
-{ #category : #accessing }
-GtLToolForClassesCreation >> functionJsonSchema [
+GtLToolForClassesCreation >> classesListJsonSchemaDictionary [
 	| classSchema |
 	classSchema := {'type' -> 'object'.
 			'properties'
@@ -124,13 +114,20 @@ GtLToolForClassesCreation >> functionJsonSchema [
 ]
 
 { #category : #accessing }
+GtLToolForClassesCreation >> description [
+	^ 'Creates multiple classes in a single request and reports each result.'
+]
+
+{ #category : #accessing }
 GtLToolForClassesCreation >> name [
 	^ 'createClasses'
 ]
 
-{ #category : #accessing }
-GtLToolForClassesCreation >> parameters [
-	^ #('classes')
+{ #category : #private }
+GtLToolForClassesCreation >> parametersDescription [
+	^ GtLResponseJsonSchemaFormat new
+			name: 'Parameters'; 
+			schemaDictionary: self classesListJsonSchemaDictionary
 ]
 
 { #category : #private }

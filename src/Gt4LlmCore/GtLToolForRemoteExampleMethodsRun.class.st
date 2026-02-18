@@ -1,13 +1,8 @@
 Class {
 	#name : #GtLToolForRemoteExampleMethodsRun,
-	#superclass : #GtLAbstractFunctionTool,
+	#superclass : #GtLAbstractPlainSchemaFunctionTool,
 	#category : #'Gt4LlmCore-Tools'
 }
-
-{ #category : #accessing }
-GtLToolForRemoteExampleMethodsRun class >> leJsonV4Name [
-	^ #gtLToolForRemoteExampleMethodsRun
-]
 
 { #category : #'instance creation' }
 GtLToolForRemoteExampleMethodsRun class >> openAiAssistant [
@@ -215,7 +210,7 @@ GtLToolForRemoteExampleMethodsRun >> name [
 ]
 
 { #category : #accessing }
-GtLToolForRemoteExampleMethodsRun >> parameters [
+GtLToolForRemoteExampleMethodsRun >> parametersDescription [
 	^ #('checkNames' 'changes')
 ]
 

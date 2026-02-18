@@ -1,13 +1,8 @@
 Class {
 	#name : #GtLToolForMethodReferences,
-	#superclass : #GtLAbstractFunctionTool,
+	#superclass : #GtLAbstractPlainSchemaFunctionTool,
 	#category : #'Gt4LlmCore-Tools'
 }
-
-{ #category : #accessing }
-GtLToolForMethodReferences class >> leJsonV4Name [
-	^ #gtLToolForMethodReferences
-]
 
 { #category : #accessing }
 GtLToolForMethodReferences >> acceptVisitor: aVisitor [
@@ -25,7 +20,7 @@ GtLToolForMethodReferences >> name [
 ]
 
 { #category : #accessing }
-GtLToolForMethodReferences >> parameters [
+GtLToolForMethodReferences >> parametersDescription [
 	^ #('selector')
 ]
 

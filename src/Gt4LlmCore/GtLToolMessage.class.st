@@ -150,7 +150,7 @@ GtLToolMessage >> output [
 
 { #category : #accessing }
 GtLToolMessage >> output: anObject [
-	self assert: [ anObject isKindOf: GtLDomainObject ].
+	self assert: [ (anObject isKindOf: GtLDomainObject) or: [anObject isKindOf: GtLInputModel] ].
 	output := anObject
 ]
 
@@ -192,7 +192,8 @@ GtLToolMessage >> serializeForAnthropicMessagesAPI [
 
 	| anOutput | 
 	
-	anOutput := self output ifNotNil: [ :each | each serializeToAnthropicResponseOutput ].
+	anOutput := self output ifNotNil: [ :each | 
+		each serializeToAnthropicResponseOutput ].
 
 	^ {
 		'content' ->{{
@@ -219,7 +220,8 @@ GtLToolMessage >> serializeForOpenAIResponsesAPI [
 
 	| anOutput | 
 	self flag: #todo.
-	anOutput := self output ifNotNil: [ :each | each serializeToOpenAIResponseOutput ].
+	anOutput := self output ifNotNil: [ :each | 
+		each serializeToOpenAIResponseOutput ].
 
 	^ {'type' -> 'function_call_output'.
 		'call_id' -> toolCall id.

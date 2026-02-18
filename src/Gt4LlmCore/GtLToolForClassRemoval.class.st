@@ -1,13 +1,8 @@
 Class {
 	#name : #GtLToolForClassRemoval,
-	#superclass : #GtLAbstractFunctionTool,
+	#superclass : #GtLAbstractPlainSchemaFunctionTool,
 	#category : #'Gt4LlmCore-Tools'
 }
-
-{ #category : #'as yet unclassified' }
-GtLToolForClassRemoval class >> leJsonV4Name [
-	^ #gtLToolForClassRemoval
-]
 
 { #category : #accessing }
 GtLToolForClassRemoval >> description [
@@ -20,7 +15,7 @@ GtLToolForClassRemoval >> name [
 ]
 
 { #category : #accessing }
-GtLToolForClassRemoval >> parameters [
+GtLToolForClassRemoval >> parametersDescription [
 	^ #('className')
 ]
 

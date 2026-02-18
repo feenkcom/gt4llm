@@ -41,8 +41,11 @@ GtLExampleWithResultsDomainObject >> gtExampleWithResultsFor: aView [
 	exampleWithResults ifNil: [ ^ aView empty ].
 	^ aView columnedList
 		title: 'Examples';
+		priority: 1;
 		items: [ self exampleWithResults ];
-		column: 'Value' text: [ :each | each gtDisplayString ]
+		column: 'Class' text: [ :each | each exampleWithResult methodClass ];
+		column: 'Method' text: [ :each | each exampleWithResult selector ];
+		column: 'Status' text: [ :each | each statusText ]
 ]
 
 { #category : #accessing }

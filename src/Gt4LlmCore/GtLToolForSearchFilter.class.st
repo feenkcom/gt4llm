@@ -1,13 +1,8 @@
 Class {
 	#name : #GtLToolForSearchFilter,
-	#superclass : #GtLAbstractFunctionTool,
+	#superclass : #GtLAbstractPlainSchemaFunctionTool,
 	#category : #'Gt4LlmCore-Tools'
 }
-
-{ #category : #accessing }
-GtLToolForSearchFilter class >> leJsonV4Name [
-	^ #gtLToolForSearchFilter
-]
 
 { #category : #accessing }
 GtLToolForSearchFilter class >> maximumResultItemCount [
@@ -30,7 +25,7 @@ GtLToolForSearchFilter >> name [
 ]
 
 { #category : #accessing }
-GtLToolForSearchFilter >> parameters [
+GtLToolForSearchFilter >> parametersDescription [
 	^ #('query')
 ]
 
