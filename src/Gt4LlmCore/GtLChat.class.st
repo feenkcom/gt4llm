@@ -210,7 +210,7 @@ GtLChat >> codeTransformationsResponse [
 
 { #category : #actions }
 GtLChat >> compact [
-	self provider sendPromtCompactionMessage
+	self provider sendPromptCompactionMessage
 ]
 
 { #category : #copying }
