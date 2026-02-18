@@ -4,11 +4,6 @@ Class {
 	#category : #'Gt4LlmCore-Tools'
 }
 
-{ #category : #accessing }
-GtLToolForClassDefinitionChange class >> leJsonV4Name [
-	^ #gtLToolForClassSignatureChange
-]
-
 { #category : #visiting }
 GtLToolForClassDefinitionChange >> acceptVisitor: aVisitor [
 	^ aVisitor visitGtLlmToolForClassSignatureChange: self

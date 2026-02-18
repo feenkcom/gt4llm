@@ -4,11 +4,6 @@ Class {
 	#category : #'Gt4LlmCore-Tools'
 }
 
-{ #category : #'as yet unclassified' }
-GtLToolForClassRemoval class >> leJsonV4Name [
-	^ #gtLToolForClassRemoval
-]
-
 { #category : #accessing }
 GtLToolForClassRemoval >> description [
 	^ 'Removes the class with the provided name from the image.'

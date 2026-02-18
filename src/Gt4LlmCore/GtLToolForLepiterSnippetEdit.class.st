@@ -8,11 +8,6 @@ Class {
 }
 
 { #category : #accessing }
-GtLToolForLepiterSnippetEdit class >> leJsonV4Name [
-	^ #gtLToolForLepiterSnippetEdit
-]
-
-{ #category : #accessing }
 GtLToolForLepiterSnippetEdit >> database [
 	^ database
 ]

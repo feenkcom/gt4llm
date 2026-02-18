@@ -7,11 +7,6 @@ Class {
 	#category : #'Gt4LlmCore-Tools'
 }
 
-{ #category : #accessing }
-GtLFileSearchTool class >> leJsonV4Name [
-	^ #gtLFileSearchTool
-]
-
 { #category : #'as yet unclassified' }
 GtLFileSearchTool >> functionOpenAI [
 	^ {'type' -> 'file_search'.

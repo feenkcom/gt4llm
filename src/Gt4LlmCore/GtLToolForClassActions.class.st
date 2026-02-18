@@ -4,11 +4,6 @@ Class {
 	#category : #'Gt4LlmCore-Tools'
 }
 
-{ #category : #'as yet unclassified' }
-GtLToolForClassActions class >> leJsonV4Name [
-	^ #gtLToolForClassActions
-]
-
 { #category : #accessing }
 GtLToolForClassActions >> acceptVisitor: aVisitor [
 	^ aVisitor visitGtLlmToolForClassActions: self
