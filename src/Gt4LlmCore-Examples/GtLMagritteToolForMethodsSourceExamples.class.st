@@ -23,6 +23,8 @@ GtLMagritteToolForMethodsSourceExamples >> methodSourcesForExistingMethods [
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
 	self assert: (result isKindOf: GtLMagritteInputModel).
+	self assert: call arguments size equals: 1.
+	self assert: (call arguments anyOne allSatisfy: [:e | e isKindOf: GtLMethodReference]).
 	model := result model.
 	self assert: model methods size equals: 2.
 	self
@@ -53,6 +55,8 @@ GtLMagritteToolForMethodsSourceExamples >> methodSourcesForUnknownClass [
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
 	self assert: (result isKindOf: GtLMagritteInputModel).
+	self assert: call arguments size equals: 1.
+	self assert: (call arguments anyOne allSatisfy: [:e | e isKindOf: GtLMethodReference]).
 	model := result model.
 	self assert: model methods size equals: 2.
 	self assert: model methods first isErrorDomainObject.
@@ -80,6 +84,8 @@ GtLMagritteToolForMethodsSourceExamples >> methodSourcesForUnknownMethod [
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
 	self assert: (result isKindOf: GtLMagritteInputModel).
+	self assert: call arguments size equals: 1.
+	self assert: (call arguments anyOne allSatisfy: [:e | e isKindOf: GtLMethodReference]).
 	model := result model.
 	self assert: model methods size equals: 2.
 	self assert: model methods first isErrorDomainObject.
