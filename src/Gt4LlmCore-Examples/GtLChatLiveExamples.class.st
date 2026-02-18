@@ -640,6 +640,24 @@ GtLChatLiveExamples >> messageWithToolCallExample [
 ]
 
 { #category : #'examples - calls' }
+GtLChatLiveExamples >> messageWithToolCallExample_lepiterToolSearch [
+	"Ready for stub execution"
+	<gtExample>
+	<noTest>
+	| chat  |
+	
+	chat := self currentChat.
+	chat tools: (GtLTools withAll: {GtLToolForSearchForLepiterPages new}).
+	chat markdownResponse.
+	chat sendMarkdown: 'Give a short summary of the lepiter page "Moldable Development exercises"'.
+	
+	self waitForChatRunIsDoneThen: [ 
+		self assert: self currentChat messages size equals: 2 ].
+		
+	^ chat
+]
+
+{ #category : #'examples - calls' }
 GtLChatLiveExamples >> messageWithToolCallExample_magritteMarkdown [
 	"Ready for stub execution"
 	<gtExample>

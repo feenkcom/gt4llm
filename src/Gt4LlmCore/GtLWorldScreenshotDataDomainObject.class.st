@@ -29,12 +29,6 @@ GtLWorldScreenshotDataDomainObject >> gtImageFor: aView [
 ]
 
 { #category : #serialization }
-GtLWorldScreenshotDataDomainObject >> serializeToAnthropicResponseJsonString [
-	<return: #String>
-	^ "'data:image/jpeg;base64', self encodedBytes" super serializeToOpenAIResponseJsonObject
-]
-
-{ #category : #serialization }
 GtLWorldScreenshotDataDomainObject >> serializeToAnthropicResponseOutput [
 		"Return a JSON that represents tool response output."
 	<return: #Array of: #NeoJSONObject>
