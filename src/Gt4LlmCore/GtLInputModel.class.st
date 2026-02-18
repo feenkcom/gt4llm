@@ -55,13 +55,37 @@ GtLInputModel >> gtInspectorTargetModels [
 GtLInputModel >> gtViewContentDictionaryFor: aView [
 	<gtView>
 	^ aView forward
-			title: 'Content Dictionary';
+			title: 'Content dictionary';
 			object: [ 
 				| content |
 				content := OrderedDictionary new.
 				self addContentTo: content.
 				content ];
 			view: #gtTreeFor:
+]
+
+{ #category : #ui }
+GtLInputModel >> gtViewsInContext: aPhlowContext [
+	| collectedViews |
+	collectedViews := Array
+			streamContents: [ :aStream | 
+				aStream nextPutAll: (super gtViewsInContext: aPhlowContext).
+				model
+					ifNotNil: [ :aModel | 
+						aStream
+							nextPutAll: (GtPhlowViewsCollector new
+									fromObject: aModel;
+									pragmaNames: GtLSettings messageViewPragmaNames;
+									collect) ] ].
+
+	GtPhlowUtility sortByPriority: collectedViews.
+
+	^ collectedViews
+]
+
+{ #category : #'as yet unclassified' }
+GtLInputModel >> model [
+	^ model
 ]
 
 { #category : #accessing }
