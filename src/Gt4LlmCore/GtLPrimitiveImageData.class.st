@@ -73,6 +73,19 @@ GtLPrimitiveImageData >> printOn: aStream [
 ]
 
 { #category : #serialization }
+GtLPrimitiveImageData >> serializeToAnthropicResponseOutput [
+	<return: #Array of: #NeoJSONObject>
+	
+	^ NeoJSONObject new
+			at: 'type' put: 'image';
+			at: 'source'put:  {
+				'media_type' -> 'image/png'.
+				'type' ->'base64'.
+				'data' -> self encodedBytes } asDictionary;
+			yourself
+]
+
+{ #category : #serialization }
 GtLPrimitiveImageData >> serializeToOpenAIResponseOutput [
 	"Return a JSON that represents tool response output.
 	See GtLToolMessage>>#serializeForOpenAIResponsesAPI for more information."
