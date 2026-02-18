@@ -4,7 +4,7 @@ Class {
 	#category : #Gt4LlmCore
 }
 
-{ #category : #serialization }
+{ #category : #accessing }
 GtLInputImageFile >> contentType [
 	 self fileReference extension = 'png'
 	 	ifTrue: [ ^ 'image/png' ].
