@@ -33,6 +33,16 @@ GtLMagritteInputModel >> addInstructionsTo: aMessageInstructions [
 				body: (exporter exportSchemaAsJsonString))
 ]
 
+{ #category : #views }
+GtLMagritteInputModel >> gtSpawnModelFor: anAction [
+	<gtAction>
+	^ anAction button
+		icon: BrGlamorousVectorIcons inspect;
+		label: 'Model';
+		tooltip: 'Spawn the model';
+		action: [ :button | button phlow spawnObject: model ]
+]
+
 { #category : #printing }
 GtLMagritteInputModel >> printOn: aStream [
 
