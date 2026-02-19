@@ -102,8 +102,7 @@ GtLAnthropicAssistantMessage >> hasResponse [
 GtLAnthropicAssistantMessage >> initializeFromResult: aResult [
 	self 
 		requestResponse: aResult requestResponse;
-		rawData: (aResult content detect: [ :anOutput | 
-			((anOutput at: 'type') = 'text') ])
+		rawData: aResult content
 ]
 
 { #category : #accessing }
