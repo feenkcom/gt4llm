@@ -3,7 +3,7 @@ Trait {
 	#instVars : [
 		'chatViewModel'
 	],
-	#category : #'Gt4LlmCore-UI - View Models'
+	#category : 'Gt4LlmCore-UI - View Models'
 }
 
 { #category : #'api - chat view model' }

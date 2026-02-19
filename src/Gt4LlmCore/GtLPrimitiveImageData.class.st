@@ -5,7 +5,7 @@ Class {
 		'imageType',
 		'imageBytes'
 	],
-	#category : #'Gt4LlmCore-Domain Objects'
+	#category : 'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #'instance creation' }
@@ -93,8 +93,8 @@ GtLPrimitiveImageData >> serializeToOpenAIResponseOutput [
 	<return: #Array of: #NeoJSONObject>
 	
 	^ NeoJSONObject new
-			at: #image_url put: ('data:image/',self imageType,';base64,' , self encodedBytes);
-			at: #type put: #input_image;
+			at: 'image_url' put: ('data:image/',self imageType,';base64,' , self encodedBytes);
+			at: 'type' put: 'input_image';
 			yourself
 ]
 

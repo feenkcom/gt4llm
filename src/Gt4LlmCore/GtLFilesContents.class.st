@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'files'
 	],
-	#category : #'Gt4LlmCore-Domain Objects'
+	#category : 'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #accessing }
