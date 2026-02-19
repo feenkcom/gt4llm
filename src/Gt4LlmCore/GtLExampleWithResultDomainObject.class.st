@@ -78,6 +78,13 @@ GtLExampleWithResultDomainObject >> safeReturnValuePrintString [
 ]
 
 { #category : #'api - serializing' }
+GtLExampleWithResultDomainObject >> serializeToAnthropicResponseOutput [
+	^ super serializeToAnthropicResponseOutput
+		, (self serializeToOpenAIResponseImages collect: [ :anPrimitiveImage |
+				anPrimitiveImage serializeToAnthropicResponseOutput ]).
+]
+
+{ #category : #'api - serializing' }
 GtLExampleWithResultDomainObject >> serializeToOpenAIResponseImages [
 	^ (self isErrorResult or: [ self isFailureResult ])
 		ifFalse: [ #() ]
@@ -101,7 +108,8 @@ GtLExampleWithResultDomainObject >> serializeToOpenAIResponseJsonObject [
 { #category : #'api - serializing' }
 GtLExampleWithResultDomainObject >> serializeToOpenAIResponseOutput [
 	^ super serializeToOpenAIResponseOutput
-		, self serializeToOpenAIResponseImages.
+		, (self serializeToOpenAIResponseImages collect: [ :anPrimitiveImage |
+				anPrimitiveImage serializeToOpenAIResponseOutput ])
 ]
 
 { #category : #accessing }
