@@ -116,16 +116,25 @@ GtLFunctionToolCall >> gtDisplayOn: aStream [
 ]
 
 { #category : #'gt - extensions' }
+GtLFunctionToolCall >> gtInspectorTargetModels [
+	| collection |
+	collection := {result}.
+	^ (result respondsTo: #gtInspectorTargetModels)
+		ifTrue: [ collection , result gtInspectorTargetModels ]
+		ifFalse: [ collection ]
+]
+
+{ #category : #'gt - extensions' }
 GtLFunctionToolCall >> gtViewsInContext: aPhlowContext [
 	| collectedViews |
 	collectedViews := Array
 			streamContents: [ :aStream | 
 				aStream nextPutAll: (super gtViewsInContext: aPhlowContext).
-				self result
-					ifNotNil: [ :aResult | 
+				self gtInspectorTargetModels
+					do: [ :eachTargetModel | 
 						aStream
 							nextPutAll: (GtPhlowViewsCollector new
-									fromObject: aResult;
+									fromObject: eachTargetModel;
 									pragmaNames: GtLSettings messageViewPragmaNames;
 									collect) ] ].
 
