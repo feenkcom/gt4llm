@@ -32,13 +32,33 @@ GtLFilePathReference >> fileReference [
 ]
 
 { #category : #views }
+GtLFilePathReference >> gtDirectoryFor: aView [
+	<gtView>
+	^ (self asFileReference exists and: [ self asFileReference isDirectory ]) ifFalse: [ ^ aView empty ].
+	^ aView forward
+		title: 'Directory';
+		object: [ self asFileReference ];
+		view: #gtItemsFor:
+]
+
+{ #category : #views }
 GtLFilePathReference >> gtFileContentsFor: aView [
 	<gtView>
 	^ (self asFileReference exists and: [ self asFileReference isFile ]) ifFalse: [ ^ aView empty ].
 	^ aView forward
-		title: 'gtContentsFor:';
+		title: 'Contents';
 		object: [ self asFileReference ];
 		view: #gtContentsFor:
+]
+
+{ #category : #testing }
+GtLFilePathReference >> isDirectory [
+	^ self fileReference isDirectory
+]
+
+{ #category : #testing }
+GtLFilePathReference >> isFile [
+	^ self fileReference isFile
 ]
 
 { #category : #accessing }
