@@ -87,6 +87,7 @@ GtLCoderExpandableLepiterExplanationStyler >> styleSameStrings: aStringLiteralNo
 GtLCoderExpandableLepiterExplanationStyler >> styleStringAsLepiter: aMessageNode [
 	| lepiterString lepiterText |
 	lepiterString := aMessageNode arguments first.
+	(self isNonEmptyLiteralStringNode: lepiterString) ifFalse: [ ^ self ].
 	lepiterText := text
 			from: lepiterString startPosition + 1
 			to: lepiterString stopPosition - 1.
@@ -97,7 +98,7 @@ GtLCoderExpandableLepiterExplanationStyler >> styleStringAsLepiter: aMessageNode
 		attribute: (GtCompletionStrategyAttribute new
 				strategy: LeCompletionStrategy new)
 		from: lepiterString startPosition
-		to: lepiterString stopPosition	"database: aLepiterBase"
+		to: lepiterString stopPosition
 ]
 
 { #category : #visiting }
