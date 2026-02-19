@@ -256,10 +256,10 @@ GtLAnthropicUserMessage >> role [
 
 { #category : #serialization }
 GtLAnthropicUserMessage >> serializeForAnthropicMessagesAPI [
-	^ {#content
+	^ {'content'
 			-> ({{'type' -> 'text'.
 						'text' -> self contentText} asDictionary}
 					, (self attachments
 							collect: [ :each | each serializeForAnthropicMessagesAPI ])).
-		#role -> self role} asDictionary
+		'role' -> self role} asDictionary
 ]
