@@ -24,6 +24,35 @@ GtLTestCaseWithResultDomainObject >> gtSourceCodeFor: aView [
 		view: #gtSourceCodeFor:
 ]
 
+{ #category : #'gt - extensions' }
+GtLTestCaseWithResultDomainObject >> gtViewExampleComparisonFailureDiffFor: aView [
+	<gtView>
+	<gtLlmView>
+
+	self testCaseWithResult isGtComparisonFailureExample	ifFalse: [ ^ aView empty ].
+	
+	^(aView forward)
+		title: 'Comparison Diff';
+		priority: 6;
+		object: [ self testCaseWithResult ];
+		view: #gtViewExampleComparisonFailureDiffFor:
+]
+
+{ #category : #'gt - extensions' }
+GtLTestCaseWithResultDomainObject >> gtViewExampleComparisonFailureDiffImageFor: aView [
+	<gtView>
+	<gtLlmView>
+
+	self testCaseWithResult isGtComparisonFailureExample	ifFalse: [ ^ aView empty ].
+	
+	^(aView forward)
+		title: 'Comparison Image';
+		priority: 6.1;
+		object: [ GtLPrimitiveImageData fromElement:  (self testCaseWithResult result exception
+			gtViewDiffFor: GtPhlowView empty) asElement ];
+		view: #gtImageFor:
+]
+
 { #category : #'api - testing' }
 GtLTestCaseWithResultDomainObject >> isErrorResult [
 	^ self result isError
@@ -90,6 +119,13 @@ GtLTestCaseWithResultDomainObject >> result [
 ]
 
 { #category : #'api - serializing' }
+GtLTestCaseWithResultDomainObject >> serializeToAnthropicResponseOutput [
+	^ super serializeToAnthropicResponseOutput
+		, (self serializeToOpenAIResponseImages collect: [ :anPrimitiveImage |
+				anPrimitiveImage serializeToAnthropicResponseOutput ]).
+]
+
+{ #category : #'api - serializing' }
 GtLTestCaseWithResultDomainObject >> serializeToOpenAIResponseImages [
 	^ (self isErrorResult or: [ self isFailureResult ])
 		ifFalse: [ #() ]
@@ -123,7 +159,8 @@ GtLTestCaseWithResultDomainObject >> serializeToOpenAIResponseJsonObject [
 { #category : #'api - serializing' }
 GtLTestCaseWithResultDomainObject >> serializeToOpenAIResponseOutput [
 	^ super serializeToOpenAIResponseOutput
-		, self serializeToOpenAIResponseImages 
+		, (self serializeToOpenAIResponseImages collect: [ :anPrimitiveImage |
+				anPrimitiveImage serializeToOpenAIResponseOutput ])
 ]
 
 { #category : #accessing }
