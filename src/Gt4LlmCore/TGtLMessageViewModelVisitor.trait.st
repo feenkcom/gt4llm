@@ -1,6 +1,6 @@
 Trait {
 	#name : #TGtLMessageViewModelVisitor,
-	#category : #'Gt4LlmCore-UI - View Models'
+	#category : 'Gt4LlmCore-UI - View Models'
 }
 
 { #category : #visiting }

@@ -1,12 +1,34 @@
 Class {
 	#name : #GtLToolForClassesCreation,
 	#superclass : #GtLAbstractPlainSchemaFunctionTool,
-	#category : #'Gt4LlmCore-Tools'
+	#category : 'Gt4LlmCore-Tools'
 }
 
 { #category : #visiting }
 GtLToolForClassesCreation >> acceptVisitor: aVisitor [
 	^ aVisitor visitGtLlmToolForClassesCreation: self
+]
+
+{ #category : #accessing }
+GtLToolForClassesCreation >> classesListJsonSchemaDictionary [
+	| classSchema |
+	classSchema := {'type' -> 'object'.
+			'properties'
+				-> {'className' -> {'type' -> 'string'} asDictionary.
+						'superclassName' -> {'type' -> 'string'} asDictionary.
+						'instanceVariables' -> {'type' -> 'string'} asDictionary.
+						'classVariables' -> {'type' -> 'string'} asDictionary.
+						'package' -> {'type' -> 'string'} asDictionary} asDictionary.
+			'required'
+				-> #('className' 'superclassName' 'instanceVariables' 'classVariables' 'package').
+			'additionalProperties' -> false} asDictionary.
+	^ {'type' -> 'object'.
+		'properties'
+			-> {'classes'
+						-> {'type' -> 'array'.
+								'items' -> classSchema} asDictionary} asDictionary.
+		'required' -> #('classes').
+		'additionalProperties' -> false} asDictionary
 ]
 
 { #category : #private }
@@ -89,28 +111,6 @@ GtLToolForClassesCreation >> classResultsFrom: classesArgument ifInvalid: invali
 			ifTrue: [ results add: (self classResultFromDescriptor: eachDescriptor) ] ].
 	incorrectItems isEmpty ifFalse: [ ^ invalidBlock value: incorrectItems ].
 	^ results asArray
-]
-
-{ #category : #accessing }
-GtLToolForClassesCreation >> classesListJsonSchemaDictionary [
-	| classSchema |
-	classSchema := {'type' -> 'object'.
-			'properties'
-				-> {'className' -> {'type' -> 'string'} asDictionary.
-						'superclassName' -> {'type' -> 'string'} asDictionary.
-						'instanceVariables' -> {'type' -> 'string'} asDictionary.
-						'classVariables' -> {'type' -> 'string'} asDictionary.
-						'package' -> {'type' -> 'string'} asDictionary} asDictionary.
-			'required'
-				-> #('className' 'superclassName' 'instanceVariables' 'classVariables' 'package').
-			'additionalProperties' -> false} asDictionary.
-	^ {'type' -> 'object'.
-		'properties'
-			-> {'classes'
-						-> {'type' -> 'array'.
-								'items' -> classSchema} asDictionary} asDictionary.
-		'required' -> #('classes').
-		'additionalProperties' -> false} asDictionary
 ]
 
 { #category : #accessing }

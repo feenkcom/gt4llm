@@ -6,7 +6,7 @@ Class {
 		'meta',
 		'providerClass'
 	],
-	#category : #'Gt4LlmCore-Core'
+	#category : 'Gt4LlmCore-Core'
 }
 
 { #category : #comparing }
@@ -36,7 +36,8 @@ GtLConnection >> buildProvider [
 	| aProvider |
 	aProvider := self providerClass withDefaultSetup.
 	meta
-		keysAndValuesDo: [ :aKey :aValue | aProvider perform: aKey asSymbol asMutator withArguments: {aValue} ].
+		keysAndValuesDo: [ :aKey :aValue |
+			 aProvider perform: aKey asSymbol asMutator withArguments: {aValue} ].
 	^ aProvider
 ]
 

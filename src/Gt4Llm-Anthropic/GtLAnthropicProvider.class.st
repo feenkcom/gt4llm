@@ -9,7 +9,7 @@ Class {
 		'executions',
 		'modelName'
 	],
-	#category : #'Gt4Llm-Anthropic-Provider'
+	#category : 'Gt4Llm-Anthropic-Provider'
 }
 
 { #category : #'as yet unclassified' }
