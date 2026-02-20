@@ -55,6 +55,12 @@ GtLOpenAIGenerateResponseAPICommand >> format: anObject [
 	format := anObject
 ]
 
+{ #category : #'as yet unclassified' }
+GtLOpenAIGenerateResponseAPICommand >> initialize [
+	super initialize.
+	isStreaming := false
+]
+
 { #category : #accessing }
 GtLOpenAIGenerateResponseAPICommand >> instructions [
 	^ instructions
