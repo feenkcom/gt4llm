@@ -36,7 +36,8 @@ GtLConnection >> buildProvider [
 	| aProvider |
 	aProvider := self providerClass withDefaultSetup.
 	meta
-		keysAndValuesDo: [ :aKey :aValue | aProvider perform: aKey asSymbol asMutator withArguments: {aValue} ].
+		keysAndValuesDo: [ :aKey :aValue |
+			 aProvider perform: aKey asSymbol asMutator withArguments: {aValue} ].
 	^ aProvider
 ]
 

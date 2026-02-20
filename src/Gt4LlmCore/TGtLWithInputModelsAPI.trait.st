@@ -36,6 +36,24 @@ TGtLWithInputModelsAPI >> markdown: aString [
 ]
 
 { #category : #'api - message' }
+TGtLWithInputModelsAPI >> markdownPage: aPageName [
+	self 
+		markdownPageObject: (LeDatabasesRegistry defaultLogicalDatabase 
+			pageNamed: aPageName)
+]
+
+{ #category : #'api - message' }
+TGtLWithInputModelsAPI >> markdownPageObject: aLepiterPage [
+	self 
+		addInputMagritteObject: (GtLMarkdown new
+				content: ((GtLLepiterContentExporter new)
+						startHeaderLevel: 2;
+						page: aLepiterPage;
+						export))
+		named: aLepiterPage title
+]
+
+{ #category : #'api - message' }
 TGtLWithInputModelsAPI >> page: aPageName [
 	self pageObject: (LeDatabasesRegistry defaultLogicalDatabase  
 		pageNamed: aPageName)
