@@ -257,7 +257,7 @@ GtLAnthropicProvider >> printOn: aStream [
 		nextPut: $)
 ]
 
-{ #category : #actions }
+{ #category : #'private - execution' }
 GtLAnthropicProvider >> processNextMessage: anInputMessage [
 	<return: #GtLOpenAIProviderProcessedMessage or: nil>
 	| result anOutputMessage anotherMessage |
@@ -277,9 +277,9 @@ GtLAnthropicProvider >> processNextMessage: anInputMessage [
 
 	result hasToolCalls
 		ifTrue: [ anotherMessage := self performToolCallsIn: result with: anInputMessage tools ]
-		ifFalse: [ anOutputMessage := self assistantMessageClass new
-					modelName: self modelName;
-					rawData: result content.
+		ifFalse: [ anOutputMessage := self
+					responseTypeForResult: result
+					fromInputMessage: anInputMessage.
 			self chat addAssistantMessage: anOutputMessage.
 			self chat signalRunIsDone ].
 
@@ -288,6 +288,13 @@ GtLAnthropicProvider >> processNextMessage: anInputMessage [
 		result: result;
 		anotherProcessedMessage: anotherMessage;
 		outputMessage: anOutputMessage
+]
+
+{ #category : #'private - execution' }
+GtLAnthropicProvider >> responseTypeForResult: aResult fromInputMessage: anInputMessage [ 
+	^ self assistantMessageClass new
+			modelName: self modelName;
+			initializeFromResult: aResult
 ]
 
 { #category : #'as yet unclassified' }
