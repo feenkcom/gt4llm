@@ -102,8 +102,7 @@ GtLAnthropicAssistantMessage >> hasResponse [
 GtLAnthropicAssistantMessage >> initializeFromResult: aResult [
 	self 
 		requestResponse: aResult requestResponse;
-		rawData: (aResult content detect: [ :anOutput | 
-			((anOutput at: 'type') = 'text') ])
+		rawData: aResult content
 ]
 
 { #category : #accessing }
@@ -152,9 +151,9 @@ GtLAnthropicAssistantMessage >> senderText [
 
 { #category : #serializing }
 GtLAnthropicAssistantMessage >> serializeForAnthropicMessagesAPI [
-	^ {#content
+	^ {'content'
 			-> ({{'type' -> 'text'.
 						'text' -> (self contentText
 							ifEmpty: ['empty'])} asDictionary}).
-		#role -> self role} asDictionary
+		'role' -> self role} asDictionary
 ]
