@@ -48,22 +48,24 @@ GtLMagritteToolForFilesGrep >> initialize [
 ]
 
 { #category : #private }
-GtLMagritteToolForFilesGrep >> limitedOutput: aString [
-	aString size > self resultLimit
-		ifTrue: [ ^ aString first: self resultLimit ].
-	^ aString
+GtLMagritteToolForFilesGrep >> limitedOutputLines: aString [
+	| lines |
+	lines := aString lines.
+	lines size > self resultLimit
+		ifTrue: [ ^ lines first: self resultLimit ].
+	^ lines
 ]
 
 { #category : #private }
 GtLMagritteToolForFilesGrep >> matchRangesForQuery: aQuery inFileReference: aFileReference [
-	| process output |
+	| process lines |
 	process := GtShellScriptProcess new
 			script: (self scriptForQuery: aQuery filePath: aFileReference pathString).
 	process start.
 	self waitForProcess: process.
 	process isSuccess not ifTrue: [ ^ {} ].
-	output := self limitedOutput: process output.
-	^ self parseGrepOutputLines: output lines.
+	lines := self limitedOutputLines: process output.
+	^ self parseGrepOutputLines: lines
 ]
 
 { #category : #accessing }
@@ -124,7 +126,7 @@ GtLMagritteToolForFilesGrep >> queryDescription [
 
 { #category : #accessing }
 GtLMagritteToolForFilesGrep >> resultLimit [
-	^ resultLimit ifNil: [ 2000 ]
+	^ resultLimit ifNil: [ 1000 ]
 ]
 
 { #category : #private }
@@ -151,8 +153,8 @@ GtLMagritteToolForFilesGrep >> scriptForQuery: aQuery filePath: aPathString [
 { #category : #private }
 GtLMagritteToolForFilesGrep >> waitForProcess: aProcess [
 	| deadline |
-	deadline := Time millisecondClockValue + 5000.
+	deadline := Time millisecondClockValue + 60000.
 	[ aProcess isSuccess or: [ aProcess isFailure or: [ Time millisecondClockValue > deadline ] ] ] whileFalse: [
-		20 milliSeconds wait ].
+		50 milliSeconds wait ].
 	^ aProcess didRun
 ]
