@@ -83,7 +83,7 @@ GtLEntity >> gtViewRawDataFor: aView [
 		title: 'Raw data';
 		priority: 10;
 		object: [ self rawData ];
-		view: #gtItemsFor:
+		view: #gtTreeFor:
 ]
 
 { #category : #updating }
