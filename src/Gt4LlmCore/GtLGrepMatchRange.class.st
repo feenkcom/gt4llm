@@ -11,6 +11,21 @@ Class {
 	#category : #Gt4LlmCore
 }
 
+{ #category : #'as yet unclassified' }
+GtLGrepMatchRange >> endIndex [
+	^ startIndex + matchString size
+]
+
+{ #category : #'as yet unclassified' }
+GtLGrepMatchRange >> gtDisplayOn: stream [
+	stream
+		nextPutAll: self path;
+		space;
+		nextPutAll: self matchString storeString;
+		space;
+		nextPutAll: self startIndex asString
+]
+
 { #category : #private }
 GtLGrepMatchRange >> matchString [
 	^ matchString
