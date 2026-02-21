@@ -105,7 +105,12 @@ GtLToolMessage >> gtDisplayOn: aStream [
 
 { #category : #'as yet unclassified' }
 GtLToolMessage >> gtInspectorTargetModels [
-	^ self output ifNotNil: [ :anOutput | {anOutput} ] ifNil: [ #() ]
+	^ self output
+		ifNotNil: [ :anOutput | 
+			(output respondsTo: #gtInspectorTargetModels)
+				ifTrue: [ {anOutput} , output gtInspectorTargetModels ]
+				ifFalse: [ {anOutput} ] ]
+		ifNil: [ #() ]
 ]
 
 { #category : #views }
