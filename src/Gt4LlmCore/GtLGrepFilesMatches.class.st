@@ -50,8 +50,24 @@ GtLGrepFilesMatches >> gtMatchesGroupedFor: aView [
 		title: 'Matches grouped';
 		priority: 1;
 		items: [ self files ];
-		column: 'File' text: [ :each | each pathString ];
-		column: 'Matches' text: [ :each | each ranges size ]
+		column: 'File' translated
+			icon: [ :eachItem | 
+				BrExpander new
+					vFitContent;
+					hMatchParent;
+					collapse;
+					margin: (BlInsets all: 10);
+					aptitude: GtCoderExpanderAptitude new;
+					header: [ BrLabel new
+							aptitude: BrGlamorousLabelAptitude;
+							text: eachItem pathString ];
+					content: [ | container |
+						container := BrFrame new
+								vExact: 400;
+								hMatchParent;
+								aptitude: BrGlamorousWithVerticalResizerAptitude;
+								addChild: ((eachItem gtFileContentsFor: GtPhlowEmptyView new) asElement constraintsDo: [:c | c vertical matchParent. c horizontal matchParent ]) ] ] weight: 1;
+		column: 'Matches' text: [ :each | each ranges size ] width: 50
 ]
 
 { #category : #accessing }
