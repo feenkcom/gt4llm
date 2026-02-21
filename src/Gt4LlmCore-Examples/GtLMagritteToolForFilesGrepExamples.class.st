@@ -18,7 +18,8 @@ GtLMagritteToolForFilesGrepExamples >> filesGrepForDirectory [
 		call := GtLFunctionToolCall new.
 		call rawArguments: {
 			'query' -> 'beta'.
-			'filePath' -> { 'pathString' -> directory pathString } asDictionary } asDictionary.
+			'filePath' -> { 'pathString' -> directory pathString } asDictionary.
+			'fileNamePatterns' -> #('*.txt') } asDictionary.
 		result := tool performToolCall: call.
 		self assert: call tool == tool.
 		self assert: (result isKindOf: GtLMagritteInputModel).
@@ -93,7 +94,8 @@ GtLMagritteToolForFilesGrepExamples >> filesGrepForNestedDirectory [
 		call := GtLFunctionToolCall new.
 		call rawArguments: {
 			'query' -> 'beta'.
-			'filePath' -> { 'pathString' -> root pathString } asDictionary } asDictionary.
+			'filePath' -> { 'pathString' -> root pathString } asDictionary.
+			'fileNamePatterns' -> #('*.txt') } asDictionary.
 		result := tool performToolCall: call.
 		self assert: call tool == tool.
 		self assert: (result isKindOf: GtLMagritteInputModel).
@@ -106,6 +108,32 @@ GtLMagritteToolForFilesGrepExamples >> filesGrepForNestedDirectory [
 			root exists ifTrue: [
 				root allChildren reversed do: [ :child | child delete ].
 				root exists ifTrue: [ root delete ] ] ]
+]
+
+{ #category : #examples }
+GtLMagritteToolForFilesGrepExamples >> filesGrepWithFileNamePatterns [
+	<gtExample>
+	| tool call result model directory fileOne fileTwo |
+	directory := FileReference newTempFilePrefix: 'GtLMagritteToolForFilesGrep' suffix: 'pattern'.
+	[ directory ensureCreateDirectory.
+		fileOne := directory / 'one.txt'.
+		fileTwo := directory / 'two.md'.
+		fileOne writeStreamDo: [ :stream | stream nextPutAll: 'alpha beta' ].
+		fileTwo writeStreamDo: [ :stream | stream nextPutAll: 'beta gamma' ].
+		tool := GtLMagritteToolForFilesGrep new.
+		call := GtLFunctionToolCall new.
+		call rawArguments: {
+			'query' -> 'beta'.
+			'filePath' -> { 'pathString' -> directory pathString } asDictionary.
+			'fileNamePatterns' -> #('*.md') } asDictionary.
+		result := tool performToolCall: call.
+		self assert: call tool == tool.
+		self assert: (result isKindOf: GtLMagritteInputModel).
+		model := result model.
+		self assert: model files size equals: 1.
+		self assert: model files first pathString equals: fileTwo pathString.
+		^ call ]
+		ensure: [ directory exists ifTrue: [ directory deleteAll ] ]
 ]
 
 { #category : #examples }

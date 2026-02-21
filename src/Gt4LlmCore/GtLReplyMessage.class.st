@@ -157,6 +157,7 @@ GtLReplyMessage >> gtActionStopFor: anAction [
 { #category : #views }
 GtLReplyMessage >> gtGroupedToolsFor: aView [
 	<gtView>
+	<gtLlmView>
 	^ aView columnedList
 		title: 'Grouped executed tools';
 		priority: 19;

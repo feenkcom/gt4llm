@@ -147,6 +147,18 @@ GtMagriteJSONSchemaCreationVisitor >> visitToManyRelationDescription: aDescripti
 		^ currentSchema := schema
 ]
 
+{ #category : #visiting }
+GtMagriteJSONSchemaCreationVisitor >> visitToManyScalarRelationDescription: aDescription [
+	| schema |
+	schema := NeoJSONObject new
+		at: 'type' put: 'array';
+		at: 'items' put: (NeoJSONObject new
+			at: 'type' put: 'string';
+			yourself);
+		yourself.
+	^ currentSchema := schema
+]
+
 { #category : #'visiting-description' }
 GtMagriteJSONSchemaCreationVisitor >> visitToOneRelationDescription: aDescription [ 
 	^ currentSchema := self 

@@ -3,10 +3,16 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'query',
-		'files'
+		'files',
+		'commandLine'
 	],
 	#category : #Gt4LlmCore
 }
+
+{ #category : #private }
+GtLGrepFilesMatches >> commandLine: aString [
+	commandLine := aString
+]
 
 { #category : #accessing }
 GtLGrepFilesMatches >> files [

@@ -9,12 +9,13 @@ Class {
 
 { #category : #accessing }
 GtLMagritteToolForFilesGrep >> description [
-	^ 'Greps for a query string in a file or directory. Arguments must provide a query string and a filePath.
+	^ 'Greps for a query string in a file or directory. Arguments must provide a query string and a filePath. Optionally set fileNamePatterns to pass --glob values to ripgrep.
 
 Example JSON arguments:
 {
   "query": "needle",
-  "filePath": "/path/to/one.txt"
+  "filePath": "/path/to/one.txt",
+  "fileNamePatterns": ["*.txt", "*.md"]
 }
 
 Example JSON response:
@@ -29,6 +30,14 @@ Example JSON response:
     }
   ]
 }'
+]
+
+{ #category : #accessing }
+GtLMagritteToolForFilesGrep >> fileNamePatternsDescription [
+	<magritteDescription>
+
+	^ MAToManyScalarRelationDescription new
+		accessor: #fileNamePatterns
 ]
 
 { #category : #accessing }
@@ -57,15 +66,27 @@ GtLMagritteToolForFilesGrep >> limitedOutputLines: aString [
 ]
 
 { #category : #private }
-GtLMagritteToolForFilesGrep >> matchRangesForQuery: aQuery inFileReference: aFileReference [
-	| process lines |
-	process := GtShellScriptProcess new
-			script: (self scriptForQuery: aQuery filePath: aFileReference pathString).
+GtLMagritteToolForFilesGrep >> matchRangesForQuery: aQuery inFileReference: aFileReference fileNamePatterns: fileNamePatterns [
+	| process lines commandLine ranges files |
+	commandLine := self
+			scriptForQuery: aQuery
+			filePath: aFileReference pathString
+			fileNamePatterns: fileNamePatterns.
+	process := GtShellScriptProcess new script: commandLine.
 	process start.
 	self waitForProcess: process.
 	process isSuccess not ifTrue: [ ^ {} ].
 	lines := self limitedOutputLines: process output.
-	^ self parseGrepOutputLines: lines
+	ranges := self parseGrepOutputLines: lines.
+	files := (ranges groupedBy: [ :r | r path ]) associations
+			collect: [ :assoc | 
+				GtLGrepFilePathReference new
+					pathString: assoc key;
+					ranges: assoc value ].
+	^ GtLGrepFilesMatches new
+		query: aQuery;
+		commandLine: commandLine;
+		files: files
 ]
 
 { #category : #accessing }
@@ -88,7 +109,7 @@ GtLMagritteToolForFilesGrep >> parseGrepOutputLines: lines [
 
 { #category : #private }
 GtLMagritteToolForFilesGrep >> privatePerformToolCall: aToolCall [
-	| arguments query filePath files fileReference ranges |
+	| arguments query filePath fileReference fileNamePatterns |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	query := arguments
 			at: 'query'
@@ -100,18 +121,14 @@ GtLMagritteToolForFilesGrep >> privatePerformToolCall: aToolCall [
 			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
 					arguments: arguments;
 					missingArgument: 'filePath' ].
+	fileNamePatterns := arguments at: 'fileNamePatterns' ifAbsent: [ #() ].
 	fileReference := filePath asFileReference.
 	fileReference exists
 		ifFalse: [ ^ GtLMissingDomainObject new objectName: filePath pathString asString ].
-	ranges := self matchRangesForQuery: query inFileReference: fileReference.
-	files := (ranges groupedBy: [ :r | r path ]) associations
-			collect: [ :assoc | 
-				GtLGrepFilePathReference new
-					pathString: assoc key;
-					ranges: assoc value ].
-	^ GtLGrepFilesMatches new
-		query: query;
-		files: files
+	^ self
+		matchRangesForQuery: query
+		inFileReference: fileReference
+		fileNamePatterns: fileNamePatterns
 ]
 
 { #category : #magritte }
@@ -135,19 +152,40 @@ GtLMagritteToolForFilesGrep >> ripgrepLineParser [
 	path := ($: asPParser negate) plus flatten.
 	number := #digit asPParser plus flatten ==> [ :s | s asNumber ].
 	message := #any asPParser star flatten.
-	^ ((path , $: asPParser , number , $: asPParser , number , $: asPParser ,number , $: asPParser , message)
-		==> [ :nodes | 
+	^ ((path , $: asPParser , number , $: asPParser , number , $: asPParser , number , $: asPParser , message)
+		==> [ :nodes |
 		GtLGrepMatchRange new
-						path: nodes first;
-						startLine: nodes third;
-						startColumn: nodes fifth;
-						startIndex: nodes seventh;
-						matchString: nodes ninth ])
+				path: nodes first;
+				startLine: nodes third;
+				startColumn: nodes fifth;
+				startIndex: nodes seventh;
+				matchString: nodes ninth ])
 ]
 
 { #category : #private }
 GtLMagritteToolForFilesGrep >> scriptForQuery: aQuery filePath: aPathString [
-	^ 'rg --no-heading --with-filename --byte-offset -o -n --column -- ' , aQuery storeString , ' ' , aPathString storeString
+	^ self
+		scriptForQuery: aQuery
+		filePath: aPathString
+		fileNamePatterns: #()
+]
+
+{ #category : #private }
+GtLMagritteToolForFilesGrep >> scriptForQuery: aQuery filePath: aPathString fileNamePatterns: aCollection [
+	^ String
+		streamContents: [ :stream | 
+			stream
+				nextPutAll: 'rg --no-heading --with-filename --byte-offset -o -n --column'.
+			aCollection
+				do: [ :each | 
+					stream
+						nextPutAll: ' --glob ';
+						nextPutAll: each storeString ].
+			stream
+				nextPutAll: ' -- ';
+				nextPutAll: aQuery storeString;
+				space;
+				nextPutAll: aPathString storeString ]
 ]
 
 { #category : #private }
