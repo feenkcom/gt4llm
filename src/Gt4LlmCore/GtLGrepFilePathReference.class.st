@@ -20,6 +20,7 @@ GtLGrepFilePathReference >> gtFileContentsFor: aView [
 	^ aView textEditor
 		title: 'Contents';
 		priority: 1;
+		aptitude: BrGlamorousCodeEditorAptitude;
 		text: [ self rangedFileReference highlightedText ]
 ]
 
@@ -29,8 +30,11 @@ GtLGrepFilePathReference >> gtRangesFor: aView [
 	ranges ifNil: [ ^ aView empty ].
 	^ aView columnedList
 		title: 'Ranges';
+		priority: 2;
 		items: [ ranges ];
-		column: 'Value' text: [ :each | each gtDisplayString ]
+		column: 'Value' text: [ :each | each matchString ];
+		column: 'Start index' text: [ :each | each startIndex ];
+		column: 'End index' text: [ :each | each endIndex ]
 ]
 
 { #category : #private }
@@ -39,10 +43,8 @@ GtLGrepFilePathReference >> rangedFileReference [
 	rangedReference := self asFileReference asGtFileReferenceWithRanges.
 	self ranges do: [ :range |
 		rangedReference
-			addStartLine: range startLine
-			startColumn: range startColumn
-			endLine: range endLine
-			endColumn: range endColumn ].
+			addStartIndex: range startIndex
+			endIndex: range endIndex ].
 	^ rangedReference
 ]
 

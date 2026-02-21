@@ -29,11 +29,25 @@ GtLGrepFilesMatches >> filesDescription [
 ]
 
 { #category : #gt }
-GtLGrepFilesMatches >> gtFilesFor: aView [
+GtLGrepFilesMatches >> gtMatchesFor: aView [
 	<gtView>
 	<gtLlmView>
 	^ aView columnedList
 		title: 'Matches';
+		priority: 1;
+		items: [ self files flatCollect: #ranges ];
+		column: 'File' text: [ :each | each path ];
+		column: 'Match' text: [ :each | each matchString ];
+		column: 'Start line' text: [ :each | each startLine ] width: 100;
+		column: 'Start column' text: [ :each | each startColumn ] width: 100
+]
+
+{ #category : #gt }
+GtLGrepFilesMatches >> gtMatchesGroupedFor: aView [
+	<gtView>
+	<gtLlmView>
+	^ aView columnedList
+		title: 'Matches grouped';
 		priority: 1;
 		items: [ self files ];
 		column: 'File' text: [ :each | each pathString ];
