@@ -8,7 +8,7 @@ Class {
 GtLMagritteToolForFilesGrepExamples >> filesGrepForDirectory [
 	<gtExample>
 	| tool call result model directory fileOne fileTwo |
-	directory := FileReference newTempFilePrefix: 'GtLMagritteToolForFilesGrep' suffix: 'dir'.
+	directory := './tmp/GtLMagritteToolForFilesGrepDir' asFileReference.
 	[ directory ensureCreateDirectory.
 		fileOne := directory / 'one.txt'.
 		fileTwo := directory / 'two.txt'.
@@ -35,9 +35,7 @@ GtLMagritteToolForFilesGrepExamples >> filesGrepForDirectory [
 GtLMagritteToolForFilesGrepExamples >> filesGrepForExistingFiles [
 	<gtExample>
 	| tool call result model fileOne |
-	[ fileOne := FileReference
-			newTempFilePrefix: 'GtLMagritteToolForFilesGrep'
-			suffix: 'one.txt'.
+	[ fileOne := 'GtLMagritteToolForFilesGrep_one.txt' asFileReference.
 	fileOne writeStreamDo: [ :stream | stream nextPutAll: 'Alpha', OSPlatform current lineEnding, 'beta Gamma' ].
 	tool := GtLMagritteToolForFilesGrep new.
 	call := GtLFunctionToolCall new.
@@ -82,7 +80,7 @@ GtLMagritteToolForFilesGrepExamples >> filesGrepForMissingFile [
 GtLMagritteToolForFilesGrepExamples >> filesGrepForNestedDirectory [
 	<gtExample>
 	| tool call result model root nested fileOne fileTwo |
-	root := FileReference newTempFilePrefix: 'GtLMagritteToolForFilesGrep' suffix: 'root'.
+	root := './tmp/GtLMagritteToolForFilesGrepRoot' asFileReference.
 	[ root ensureCreateDirectory.
 		nested := root / 'nested'.
 		nested ensureCreateDirectory.
@@ -114,7 +112,7 @@ GtLMagritteToolForFilesGrepExamples >> filesGrepForNestedDirectory [
 GtLMagritteToolForFilesGrepExamples >> filesGrepWithFileNamePatterns [
 	<gtExample>
 	| tool call result model directory fileOne fileTwo |
-	directory := FileReference newTempFilePrefix: 'GtLMagritteToolForFilesGrep' suffix: 'pattern'.
+	directory := './tmp/GtLMagritteToolForFilesGrepPattern' asFileReference.
 	[ directory ensureCreateDirectory.
 		fileOne := directory / 'one.txt'.
 		fileTwo := directory / 'two.md'.
