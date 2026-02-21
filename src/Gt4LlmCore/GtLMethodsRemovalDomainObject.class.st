@@ -7,6 +7,18 @@ Class {
 	#category : #Gt4LlmCore
 }
 
+{ #category : #views }
+GtLMethodsRemovalDomainObject >> gtMethodsFor: aView [
+	<gtView>
+	<gtLlmView>
+	methods ifNil: [ ^ aView empty ].
+	^ aView columnedList
+		title: 'Methods';
+		priority: 1;
+		items: [ methods ];
+		column: 'Value' text: [ :each | each gtDisplayString ]
+]
+
 { #category : #accessing }
 GtLMethodsRemovalDomainObject >> methods [
 	^ methods ifNil: [ #() ]
