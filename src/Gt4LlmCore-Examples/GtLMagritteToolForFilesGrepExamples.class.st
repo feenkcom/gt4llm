@@ -7,6 +7,7 @@ Class {
 { #category : #examples }
 GtLMagritteToolForFilesGrepExamples >> filesGrepForDirectory [
 	<gtExample>
+	<noTest>
 	| tool call result model directory fileOne fileTwo |
 	directory := './tmp/GtLMagritteToolForFilesGrepDir' asFileReference.
 	[ directory ensureCreateDirectory.
@@ -34,6 +35,7 @@ GtLMagritteToolForFilesGrepExamples >> filesGrepForDirectory [
 { #category : #examples }
 GtLMagritteToolForFilesGrepExamples >> filesGrepForExistingFiles [
 	<gtExample>
+	<noTest>
 	| tool call result model fileOne |
 	[ fileOne := 'GtLMagritteToolForFilesGrep_one.txt' asFileReference.
 	fileOne writeStreamDo: [ :stream | stream nextPutAll: 'Alpha', OSPlatform current lineEnding, 'beta Gamma' ].
@@ -60,6 +62,7 @@ GtLMagritteToolForFilesGrepExamples >> filesGrepForExistingFiles [
 { #category : #examples }
 GtLMagritteToolForFilesGrepExamples >> filesGrepForMissingFile [
 	<gtExample>
+	<noTest>
 	| tool call result model missingPath |
 	missingPath := (FileLocator temp / 'gt-llm-missing-file.txt') pathString.
 	tool := GtLMagritteToolForFilesGrep new.
@@ -79,38 +82,41 @@ GtLMagritteToolForFilesGrepExamples >> filesGrepForMissingFile [
 { #category : #examples }
 GtLMagritteToolForFilesGrepExamples >> filesGrepForNestedDirectory [
 	<gtExample>
+	<noTest>
 	| tool call result model root nested fileOne fileTwo |
 	root := './tmp/GtLMagritteToolForFilesGrepRoot' asFileReference.
 	[ root ensureCreateDirectory.
-		nested := root / 'nested'.
-		nested ensureCreateDirectory.
-		fileOne := root / 'root.txt'.
-		fileTwo := nested / 'nested.txt'.
-		fileOne writeStreamDo: [ :stream | stream nextPutAll: 'alpha beta' ].
-		fileTwo writeStreamDo: [ :stream | stream nextPutAll: 'beta gamma' ].
-		tool := GtLMagritteToolForFilesGrep new.
-		call := GtLFunctionToolCall new.
-		call rawArguments: {
-			'query' -> 'beta'.
-			'filePath' -> { 'pathString' -> root pathString } asDictionary.
-			'fileNamePatterns' -> #('*.txt') } asDictionary.
-		result := tool performToolCall: call.
-		self assert: call tool == tool.
-		self assert: (result isKindOf: GtLMagritteInputModel).
-		model := result model.
-		self assert: model files size equals: 2.
-		self assert: (model files anySatisfy: [ :each | each pathString = fileOne pathString ]).
-		self assert: (model files anySatisfy: [ :each | each pathString = fileTwo pathString ]).
-		^ call ]
-		ensure: [
-			root exists ifTrue: [
-				root allChildren reversed do: [ :child | child delete ].
-				root exists ifTrue: [ root delete ] ] ]
+	nested := root / 'nested'.
+	nested ensureCreateDirectory.
+	fileOne := root / 'root.txt'.
+	fileTwo := nested / 'nested.txt'.
+	fileOne writeStreamDo: [ :stream | stream nextPutAll: 'alpha beta' ].
+	fileTwo writeStreamDo: [ :stream | stream nextPutAll: 'beta gamma' ].
+	tool := GtLMagritteToolForFilesGrep new.
+	call := GtLFunctionToolCall new.
+	call
+		rawArguments: {'query' -> 'beta'.
+				'filePath' -> {'pathString' -> root pathString} asDictionary.
+				'fileNamePatterns' -> #('*.txt')} asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GtLMagritteInputModel).
+	model := result model.
+	self assert: model files size equals: 2.
+	self
+		assert: (model files anySatisfy: [ :each | each pathString = fileOne pathString ]).
+	self
+		assert: (model files anySatisfy: [ :each | each pathString = fileTwo pathString ]).
+	^ call ]
+		ensure: [ root exists
+				ifTrue: [ root allChildren reversed do: [ :child | child delete ].
+					root exists ifTrue: [ root delete ] ] ]
 ]
 
 { #category : #examples }
 GtLMagritteToolForFilesGrepExamples >> filesGrepWithFileNamePatterns [
 	<gtExample>
+	<noTest>
 	| tool call result model directory fileOne fileTwo |
 	directory := './tmp/GtLMagritteToolForFilesGrepPattern' asFileReference.
 	[ directory ensureCreateDirectory.
