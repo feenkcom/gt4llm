@@ -11,11 +11,25 @@ Class {
 GtLMethodsCompilationDomainObject >> gtMethodsFor: aView [
 	<gtView>
 	<gtLlmView>
+	(self methods anySatisfy: [:each | each isKindOf: GtLMethodCompilationExceptionDomainObject]) ifTrue: [ ^ aView empty ].
 	^ aView forward
 		title: 'Methods';
 		priority: 1;
 		object: [ GtSearchFixedMethodsFilter new methods: (self methods collect: #method) ];
 		view: #gtItemsFor:
+]
+
+{ #category : #'as yet unclassified' }
+GtLMethodsCompilationDomainObject >> gtMethodsWithExceptionsFor: aView [
+	<gtView>
+	<gtLlmView>
+	(self methods noneSatisfy: [:each | each isKindOf: GtLMethodCompilationExceptionDomainObject]) ifTrue: [ ^ aView empty ].
+	^ aView columnedList
+		title: 'Methods';
+		priority: 1;
+		items: [ self methods ];
+		column: 'Kind' text: [:each | each class name ];
+		column: 'Source' text: [ :each | each sourceCode ]
 ]
 
 { #category : #accessing }

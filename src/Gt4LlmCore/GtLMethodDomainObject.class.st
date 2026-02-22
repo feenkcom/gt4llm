@@ -49,3 +49,8 @@ GtLMethodDomainObject >> serializeToOpenAIResponseJsonObject [
 GtLMethodDomainObject >> sourceCode [
 	^ self method sourceCode.
 ]
+
+{ #category : #'as yet unclassified' }
+GtLMethodDomainObject >> targetClass [
+	^ method methodClass
+]
