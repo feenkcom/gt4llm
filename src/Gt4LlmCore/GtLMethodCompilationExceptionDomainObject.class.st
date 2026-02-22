@@ -14,6 +14,17 @@ GtLMethodCompilationExceptionDomainObject >> acceptVisitor: aVisitor [
 	^ aVisitor visitMethodCompilationExceptionDomainObject: self
 ]
 
+{ #category : #views }
+GtLMethodCompilationExceptionDomainObject >> gtSourceCodeFor: aView [
+	<gtView>
+	sourceCode ifNil: [ ^ aView empty ].
+	^ aView textEditor
+		title: 'Source';
+		priority: 0;
+		aptitude: BrGlamorousCodeEditorAptitude;
+		text: [ sourceCode ]
+]
+
 { #category : #accessing }
 GtLMethodCompilationExceptionDomainObject >> protocolName [
 	^ protocolName

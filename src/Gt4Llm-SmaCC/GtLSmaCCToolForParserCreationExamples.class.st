@@ -24,6 +24,8 @@ Foo: <number>+;'.
 	self assert: (result isKindOf: GtLMagritteInputModel).
 	self assert: call arguments size equals: 1.
 	self assert: (call arguments anyOne isKindOf: GtLSmaCCCreateParser).
+	self assert: (result model isKindOf: GtLSmaCCParserReference).
+	self assert: result model parserClass equals: #ExpParser.
 
 	grammar := model grammarFor: #ExpParser.
 	self assert: grammar source equals: definition.

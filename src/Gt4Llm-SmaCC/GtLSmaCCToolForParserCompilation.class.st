@@ -29,19 +29,21 @@ GtLSmaCCToolForParserCompilation >> name [
 	^ 'compileSmaCCParserDefinition'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 GtLSmaCCToolForParserCompilation >> privatePerformToolCall: aToolCall [
 	| arguments definitionReference |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	definitionReference := arguments
-			at: 'compileParser'
-			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-					arguments: arguments;
-					missingArgument: 'compileParser' ].
+		at: 'compileParser'
+		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
+			arguments: arguments;
+			missingArgument: 'compileParser' ].
 	^ self
 		grammarIn: definitionReference
 		do: [ :grammar | 
 			grammar compileParser.
-			GtLSmaCCSuccess new message: 'Parser was successfully compiled' ]
+			GtLSmaCCParserReference new
+				parserClass: definitionReference parserClass;
+				yourself ]
 		onError: [ :error | error ]
 ]

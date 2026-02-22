@@ -34,22 +34,23 @@ GtLSmaCCToolForParserUpdates >> parserUpdateDescription [
 		beRequired
 ]
 
-{ #category : #execution }
+{ #category : #private }
 GtLSmaCCToolForParserUpdates >> privatePerformToolCall: aToolCall [
 	| arguments updates |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	updates := arguments
-			at: 'parserUpdate'
-			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-					arguments: arguments;
-					missingArgument: 'parserUpdate' ].
+		at: 'parserUpdate'
+		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
+			arguments: arguments;
+			missingArgument: 'parserUpdate' ].
 	^ self
 		grammarIn: updates
 		do: [ :grammar | 
 			updates edits
 				do: [ :each | each validateFor: grammar onError: [ :error | ^ error ] ].
 			updates edits do: [ :each | each performOn: grammar ].
-			GtLSmaCCSuccess new
-				message: 'Parser was successfully updated. It will need to be compiled to be used.' ]
+			GtLSmaCCParserReference new
+				parserClass: updates parserClass;
+				yourself ]
 		onError: [ :error | error ]
 ]
