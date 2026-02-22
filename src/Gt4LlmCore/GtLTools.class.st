@@ -6,7 +6,13 @@ Class {
 	#category : #'Gt4LlmCore-Tools'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #defaults }
+GtLTools class >> files [
+	^ self
+		withAll: {GtLMagritteToolForDirectoryContents new . GtLMagritteToolForFilesContents new. GtLMagritteToolForFilesGrep new . GtLMagritteToolForFilesWrite new} asOrderedCollection
+]
+
+{ #category : #defaults }
 GtLTools class >> gt [
 	^ self gtSearch, self leSearch, self gtCodeChange, self gtExamplesRun
 ]
