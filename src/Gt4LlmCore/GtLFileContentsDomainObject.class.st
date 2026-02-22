@@ -5,20 +5,20 @@ Class {
 		'path',
 		'contents'
 	],
-	#category : #'Gt4LlmCore-Domain Objects'
+	#category : #'Gt4LlmCore-Magritte Objects'
 }
 
-{ #category : #accessing }
+{ #category : #'as yet unclassified' }
 GtLFileContentsDomainObject >> contents [
 	^ contents
 ]
 
 { #category : #accessing }
-GtLFileContentsDomainObject >> contents: aString [
+GtLFileContentsDomainObject >> contents: aString [ 
 	contents := aString
 ]
 
-{ #category : #accessing }
+{ #category : #'as yet unclassified' }
 GtLFileContentsDomainObject >> contentsDescription [
 	<magritteDescription>
 
@@ -28,7 +28,7 @@ GtLFileContentsDomainObject >> contentsDescription [
 		beRequired
 ]
 
-{ #category : #views }
+{ #category : #'as yet unclassified' }
 GtLFileContentsDomainObject >> gtContentsFor: aView [
 	<gtView>
 	contents ifNil: [ ^ aView empty ].
@@ -43,17 +43,17 @@ GtLFileContentsDomainObject >> gtDisplayOn: stream [
 	stream nextPutAll: self path
 ]
 
-{ #category : #accessing }
+{ #category : #'as yet unclassified' }
 GtLFileContentsDomainObject >> path [
 	^ path
 ]
 
 { #category : #accessing }
-GtLFileContentsDomainObject >> path: aPathString [
-	path := aPathString
+GtLFileContentsDomainObject >> path: aString [
+	path := aString
 ]
 
-{ #category : #accessing }
+{ #category : #'as yet unclassified' }
 GtLFileContentsDomainObject >> pathDescription [
 	<magritteDescription>
 
