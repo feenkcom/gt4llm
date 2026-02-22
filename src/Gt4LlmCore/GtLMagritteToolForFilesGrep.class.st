@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'resultLimit'
 	],
-	#category : #Gt4LlmCore
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }

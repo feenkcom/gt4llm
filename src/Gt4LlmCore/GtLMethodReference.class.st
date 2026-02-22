@@ -6,7 +6,7 @@ Class {
 		'classSide',
 		'methodClassName'
 	],
-	#category : #'Gt4LlmCore-Domain Objects'
+	#category : #'Gt4LlmCore-Magritte Objects'
 }
 
 { #category : #'instance creation' }

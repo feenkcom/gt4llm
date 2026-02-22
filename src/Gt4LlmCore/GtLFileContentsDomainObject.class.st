@@ -5,7 +5,7 @@ Class {
 		'path',
 		'contents'
 	],
-	#category : #'Gt4LlmCore-Domain Objects'
+	#category : #'Gt4LlmCore-Magritte Objects'
 }
 
 { #category : #'as yet unclassified' }

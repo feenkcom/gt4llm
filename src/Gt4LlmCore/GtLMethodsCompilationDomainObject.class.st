@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'methods'
 	],
-	#category : #Gt4LlmCore
+	#category : #'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #'as yet unclassified' }

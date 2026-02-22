@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLMagritteToolForFilesContents,
 	#superclass : #GtLAbstractMagritteFunctionTool,
-	#category : #Gt4LlmCore
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }

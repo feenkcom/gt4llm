@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'pathString'
 	],
-	#category : #'Gt4LlmCore-Domain Objects'
+	#category : #'Gt4LlmCore-Magritte Objects'
 }
 
 { #category : #converting }
