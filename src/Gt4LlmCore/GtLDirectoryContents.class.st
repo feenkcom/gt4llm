@@ -6,7 +6,7 @@ Class {
 		'files',
 		'directories'
 	],
-	#category : #Gt4LlmCore
+	#category : #'Gt4LlmCore-Magritte Objects'
 }
 
 { #category : #accessing }
