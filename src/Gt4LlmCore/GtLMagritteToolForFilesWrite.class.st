@@ -51,13 +51,16 @@ GtLMagritteToolForFilesWrite >> privatePerformToolCall: aToolCall [
 				missingArgument: 'files' ].
 	fileObjects := OrderedCollection new.
 	fileDescriptors do: [ :each |
-		| fileReference result |
+		| fileReference parentDirectory result |
 		fileReference := each path asFileReference.
 		(fileReference exists and: [ fileReference isDirectory ])
 			ifTrue: [ ^ GtLIncorrectArgumentValueDomainObject new
 					argumentName: 'path';
 					argumentValue: each path;
 					expectedArgumentValueKind: AbstractFileReference ].
+		parentDirectory := fileReference parent.
+		(parentDirectory notNil and: [ parentDirectory exists not ])
+			ifTrue: [ parentDirectory ensureCreateDirectory ].
 		result := [ fileReference writeStreamDo: [ :stream | stream nextPutAll: each contents ].
 			fileReference readStreamDo: [ :stream |
 				GtLFileContentsDomainObject new
