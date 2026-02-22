@@ -66,6 +66,33 @@ GtLMagritteToolForFilesWriteExamples >> filesWriteForExistingFiles [
 ]
 
 { #category : #examples }
+GtLMagritteToolForFilesWriteExamples >> filesWriteForMissingParentDirectory [
+	<gtExample>
+	| tool call result model tempDirectory nestedFile parentDirectory |
+	tempDirectory := GtTemporaryDirectory new.
+	parentDirectory := tempDirectory reference / 'nested'.
+	nestedFile := parentDirectory / 'child.txt'.
+	[ tool := GtLMagritteToolForFilesWrite new.
+		call := GtLFunctionToolCall new.
+		call rawArguments: {
+			'files' -> { {'path' -> nestedFile pathString. 'contents' -> 'Nested file'} asDictionary } asArray
+		} asDictionary.
+		result := tool performToolCall: call.
+		self assert: call tool == tool.
+		self assert: (result isKindOf: GtLMagritteInputModel).
+		model := result model.
+		self assert: model files size equals: 1.
+		self assert: model files first path equals: nestedFile pathString.
+		self assert: model files first contents equals: 'Nested file'.
+		self assert: parentDirectory exists.
+		^ call ]
+		ensure: [
+			nestedFile exists ifTrue: [ nestedFile delete ].
+			parentDirectory exists ifTrue: [ parentDirectory delete ].
+			tempDirectory reference exists ifTrue: [ tempDirectory reference delete ] ]
+]
+
+{ #category : #examples }
 GtLMagritteToolForFilesWriteExamples >> filesWriteWithoutFiles [
 	<gtExample>
 	| tool call result |
