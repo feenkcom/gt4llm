@@ -235,7 +235,7 @@ GtLAnthropicUserMessage >> lepiterExplanations: pageNames [
 
 { #category : #accessing }
 GtLAnthropicUserMessage >> pdfs: aCollection [
-	attachments := aCollection collect: [ :each | GtLInputPdfFile fileReference: each ]
+	attachments addAll: (aCollection collect: [ :each | GtLInputPdfFile fileReference: each ])
 ]
 
 { #category : #accessing }
