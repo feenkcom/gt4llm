@@ -26,6 +26,8 @@ GtLSmaCCToolForParserCompilationExamples >> compile [
 	self assert: (result isKindOf: GtLMagritteInputModel).
 	self assert: call arguments size equals: 1.
 	self assert: (call arguments anyOne isKindOf: GtLSmaCCParserReference).
+	self assert: (result model isKindOf: GtLSmaCCParserReference).
+	self assert: result model parserClass equals: #TemporaryExpressionParser.
 
 	self assert: (Smalltalk globals includesKey: #TemporaryExpressionParser).
 	self assert: (Smalltalk globals includesKey: #TemporaryExpressionScanner).

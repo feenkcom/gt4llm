@@ -32,17 +32,18 @@ GtLSmaCCToolForParserCreation >> parserCreationDescription [
 		beRequired
 ]
 
-{ #category : #execution }
+{ #category : #private }
 GtLSmaCCToolForParserCreation >> privatePerformToolCall: aToolCall [
 	| arguments creation |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	creation := arguments
-			at: 'parserCreation'
-			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-					arguments: arguments;
-					missingArgument: 'parserCreation' ].
+		at: 'parserCreation'
+		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
+			arguments: arguments;
+			missingArgument: 'parserCreation' ].
 	creation validateOnError: [ :error | ^ error ].
 	model defineParser: creation parserClass as: creation createGrammar.
-	^ GtLSmaCCSuccess new
-		message: 'Parser was successfully created. It will need to be compiled to be used.'
+	^ GtLSmaCCParserReference new
+		parserClass: creation parserClass;
+		yourself
 ]
