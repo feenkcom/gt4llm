@@ -74,8 +74,18 @@ GtLSmaCCToolForParserUpdatesExamples >> performUpdates [
 	self assert: (result isKindOf: GtLMagritteInputModel).
 	self assert: call arguments size equals: 1.
 	self assert: (call arguments anyOne isKindOf: GtLSmaCCUpdateParser).
-	self assert: (result model isKindOf: GtLSmaCCParserReference).
+	self assert: (result model isKindOf: GtLSmaCCParserUpdateResult).
 	self assert: result model parserClass equals: #ExpressionParser.
+	self
+		assert: result model oldGrammar source
+		equals: '<number> : \d+;
+Expression: Expression "+" <number>;'.
+	self
+		assert: result model newGrammar source
+		equals: '<number> : \d+;
+Expression : Multiplication;
+Multiplication : Multiplication "*" Addition | Addition;
+Addition : Addition "+" <number> | <number>;'.
 
 	self
 		assert: (model grammarFor: #ExpressionParser) source
