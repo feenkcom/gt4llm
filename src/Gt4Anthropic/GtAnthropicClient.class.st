@@ -25,6 +25,7 @@ GtAnthropicClient class >> apiKeyFileContents [
 
 { #category : #'as yet unclassified' }
 GtAnthropicClient class >> defaultApiKeyFile [
+	<gtExample>
 	^ FileLocator home / '.secrets' / 'anthropic-api-key.txt'
 ]
 
