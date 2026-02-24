@@ -29,6 +29,7 @@ GtLToolForClassesCreationExamples >> createClassesThatAlreadyExist [
 				'superclassName' -> #Object.
 				'instanceVariables' -> ''.
 				'classVariables' -> ''.
+				'traitCompositionString' -> Behavior traitCompositionString.
 				'package' -> 'Gt4LlmCoreNewPackage'} asDictionary
 		} asArray} asDictionary
 	} asDictionary.
@@ -58,6 +59,7 @@ GtLToolForClassesCreationExamples >> createClassesWithClassVariables [
 				'superclassName' -> baseClassName.
 				'instanceVariables' -> 'value'.
 				'classVariables' -> #('SharedCounter').
+				'traitCompositionString' -> Behavior traitCompositionString.
 				'package' -> 'Gt4LlmCoreNewPackage'} asDictionary} asArray.
 	tool := GtLToolForClassesCreation new.
 	call := GtLFunctionToolCall new.
@@ -89,11 +91,13 @@ GtLToolForClassesCreationExamples >> createClassesWithInstanceVariables [
 				'superclassName' -> #Object.
 				'instanceVariables' -> #('firstSlot' 'secondSlot').
 				'classVariables' -> #().
+				'traitCompositionString' -> Behavior traitCompositionString.
 				'package' -> 'Gt4LlmCoreNewPackage'} asDictionary.
 			{'className' -> classNames second.
 				'superclassName' -> #Object.
 				'instanceVariables' -> 'value'.
 				'classVariables' -> #().
+				'traitCompositionString' -> Behavior traitCompositionString.
 				'package' -> 'Gt4LlmCoreNewPackage'} asDictionary} asArray.
 	call := GtLFunctionToolCall new.
 	call
@@ -126,11 +130,13 @@ GtLToolForClassesCreationExamples >> createClassesWithMultipleResults [
 				'superclassName' -> #Object.
 				'instanceVariables' -> ''.
 				'classVariables' -> ''.
+				'traitCompositionString' -> Behavior traitCompositionString.
 				'package' -> 'Gt4LlmCoreNewPackage'} asDictionary.
 			{'className' -> #GtLToolForClassesCreationExamplesMissingSuperclass.
 				'superclassName' -> 'ClassThatDoesNotExistForClassesCreation'.
 				'instanceVariables' -> ''.
 				'classVariables' -> ''.
+				'traitCompositionString' -> Behavior traitCompositionString.
 				'package' -> 'Gt4LlmCoreNewPackage'} asDictionary} asArray.
 	call := GtLFunctionToolCall new.
 	call
@@ -148,6 +154,48 @@ GtLToolForClassesCreationExamples >> createClassesWithMultipleResults [
 ]
 
 { #category : #examples }
+GtLToolForClassesCreationExamples >> createClassesWithTraits [
+	<gtExample>
+	| tool call result classNames createdClasses sources |
+	[ tool := GtLToolForClassesCreation new.
+	classNames := {#GtLToolForClassesCreationExamplesGenerated1.
+			#GtLToolForClassesCreationExamplesGenerated2}.
+	classNames do: [ :className | self removeClassNamedIfPresent: className ].
+	sources := {{'className' -> classNames first.
+				'superclassName' -> #Object.
+				'instanceVariables' -> #('firstSlot' 'secondSlot').
+				'classVariables' -> #().
+				'traitCompositionString' -> Behavior traitCompositionString.
+				'package' -> 'Gt4LlmCoreNewPackage'} asDictionary.
+			{'className' -> classNames second.
+				'superclassName' -> #Object.
+				'instanceVariables' -> 'value'.
+				'classVariables' -> #().
+				'traitCompositionString' -> '{TComparable}'.
+				'package' -> 'Gt4LlmCoreNewPackage'} asDictionary} asArray.
+	call := GtLFunctionToolCall new.
+	call
+		function: {'name' -> tool name.
+				'arguments' -> {'classes' -> sources} asDictionary} asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: result isErrorDomainObject not.
+	self assert: result classes size equals: 2.
+	createdClasses := classNames
+			collect: [ :each | Smalltalk globals at: each ifAbsent: [ nil ] ].
+	self assert: (createdClasses allSatisfy: #notNil).
+	self
+		assert: (createdClasses first instanceVariables collect: #name)
+				= #('firstSlot' 'secondSlot').
+	self
+		assert: (createdClasses second instanceVariables collect: #name) = #('value').
+	self assert: createdClasses first traits isEmpty.
+	self assert: (createdClasses second traits includes: TComparable) ]
+		ensure: [ classNames do: [ :each | self removeClassNamedIfPresent: each ] ].
+	^ call
+]
+
+{ #category : #examples }
 GtLToolForClassesCreationExamples >> createClassesWithUnknownSuperclass [
 	<gtExample>
 	| tool call result className sources |
@@ -158,6 +206,7 @@ GtLToolForClassesCreationExamples >> createClassesWithUnknownSuperclass [
 				'superclassName' -> 'ClassThatDoesNotExistForClassesCreation'.
 				'instanceVariables' -> ''.
 				'classVariables' -> ''.
+				'traitCompositionString' -> Behavior traitCompositionString.
 				'package' -> 'Gt4LlmCoreNewPackage'} asDictionary} asArray.
 	call := GtLFunctionToolCall new.
 	call
