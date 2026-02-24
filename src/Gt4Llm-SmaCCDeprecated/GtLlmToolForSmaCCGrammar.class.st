@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLlmToolForSmaCCGrammar,
 	#superclass : #GtLlmAbstractFunctionTool,
-	#category : #'Gt4Llm-SmaCC-Tools'
+	#category : #'Gt4Llm-SmaCCDeprecated-Tools'
 }
 
 { #category : #accessing }

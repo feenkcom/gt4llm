@@ -1,11 +1,11 @@
 Extension { #name : #GtLlmChatMessage }
 
-{ #category : #'*Gt4Llm-SmaCC' }
+{ #category : #'*Gt4Llm-SmaCCDeprecated' }
 GtLlmChatMessage >> gtIsSmaCCEditMessage [
 	^ self contentJson includesKey: 'SmaCC Edits'
 ]
 
-{ #category : #'*Gt4Llm-SmaCC' }
+{ #category : #'*Gt4Llm-SmaCCDeprecated' }
 GtLlmChatMessage >> gtSmaCCChangesDiffFor: aView [
 	<gtView>
 	<gtLlmMessageView>
@@ -24,7 +24,7 @@ GtLlmChatMessage >> gtSmaCCChangesDiffFor: aView [
 			action: [ :b | b phlow spawnObject: changes ]
 ]
 
-{ #category : #'*Gt4Llm-SmaCC' }
+{ #category : #'*Gt4Llm-SmaCCDeprecated' }
 GtLlmChatMessage >> gtSmaCCChangesFor: aView [
 	<gtView>
 	<gtLlmMessageView>
