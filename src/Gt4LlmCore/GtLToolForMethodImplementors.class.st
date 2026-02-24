@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLToolForMethodImplementors,
 	#superclass : #GtLAbstractPlainSchemaFunctionTool,
-	#category : 'Gt4LlmCore-Tools'
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }

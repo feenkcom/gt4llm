@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLToolForTestClassesRun,
 	#superclass : #GtLAbstractPlainSchemaFunctionTool,
-	#category : 'Gt4LlmCore-Tools'
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #'llm-generated' }

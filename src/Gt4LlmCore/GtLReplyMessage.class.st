@@ -6,7 +6,7 @@ Class {
 		'finalMessage',
 		'executionMessages'
 	],
-	#category : 'Gt4LlmCore-Core'
+	#category : #'Gt4LlmCore-Core'
 }
 
 { #category : #accessing }

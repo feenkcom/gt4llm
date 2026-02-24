@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'modelClass'
 	],
-	#category : 'Gt4LlmCore-Core'
+	#category : #'Gt4LlmCore-Core'
 }
 
 { #category : #'neo json' }

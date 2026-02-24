@@ -6,7 +6,7 @@ Class {
 		'results',
 		'exception'
 	],
-	#category : 'Gt4LlmCore-Domain Objects'
+	#category : #'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #visiting }

@@ -8,7 +8,7 @@ Class {
 		'tagName',
 		'superclassName'
 	],
-	#category : 'Gt4LlmCore-Formats'
+	#category : #'Gt4LlmCore-Formats'
 }
 
 { #category : #'as yet unclassified' }

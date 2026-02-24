@@ -6,7 +6,7 @@ Class {
 		'model',
 		'name'
 	],
-	#category : 'Gt4LlmCore-FineTuning'
+	#category : #'Gt4LlmCore-FineTuning'
 }
 
 { #category : #accessing }

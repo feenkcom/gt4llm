@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLCoderExpandableLepiterExplanationStyler,
 	#superclass : #GtGenericPharoStyler,
-	#category : 'Gt4LlmCore-UI'
+	#category : #'Gt4LlmCore-UI'
 }
 
 { #category : #private }

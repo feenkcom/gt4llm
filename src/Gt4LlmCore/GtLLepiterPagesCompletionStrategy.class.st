@@ -5,7 +5,7 @@ Class {
 		'candidatePools',
 		'database'
 	],
-	#category : 'Gt4LlmCore-UI'
+	#category : #'Gt4LlmCore-UI'
 }
 
 { #category : #accessing }
