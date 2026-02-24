@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'labelElements'
 	],
-	#category : 'Gt4LlmCore-UI - Support'
+	#category : #'Gt4LlmCore-UI - Support'
 }
 
 { #category : #'gt - extensions' }

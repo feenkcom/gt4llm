@@ -7,7 +7,7 @@ Class {
 		'Scheduled',
 		'Stopping'
 	],
-	#category : 'Gt4LlmCore-Provider - Support'
+	#category : #'Gt4LlmCore-Provider - Support'
 }
 
 { #category : #factory }

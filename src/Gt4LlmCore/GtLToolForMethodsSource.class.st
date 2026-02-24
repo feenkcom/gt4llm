@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLToolForMethodsSource,
 	#superclass : #GtLAbstractPlainSchemaFunctionTool,
-	#category : 'Gt4LlmCore-Tools'
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #visiting }
@@ -28,28 +28,6 @@ Example JSON response:
     {"methodClass": "GtLToolForMethodImplementors", "selector": "privatePerformToolCall:", "method": "GtLToolForMethodImplementors>>#privatePerformToolCall:", "sourceCode": "..."}
   ]
 }'
-]
-
-{ #category : #accessing }
-GtLToolForMethodsSource >> methodsListJsonSchemaDictionary [
-	| methodSchema |
-	methodSchema := {
-		'type' -> 'object'.
-		'properties' ->{
-				'className' -> {'type' -> 'string'} asDictionary.
-				'methodName' -> {'type' -> 'string'} asDictionary.
-				'classSide' -> {'type' -> 'boolean'} asDictionary} asDictionary.
-		'required' -> #('className' 'methodName' 'classSide').
-		'additionalProperties' -> false} asDictionary.
-		
-	^ {
-			'type' -> 'object'.
-			'properties' ->{
-					'methods' ->{
-						'type' -> 'array'.
-						'items' -> methodSchema} asDictionary} asDictionary.
-			'required' -> #('methods').
-			'additionalProperties' -> false} asDictionary
 ]
 
 { #category : #private }
@@ -104,6 +82,28 @@ GtLToolForMethodsSource >> methodSourcesFrom: methodsArgument ifInvalid: invalid
 	incorrectItems isEmpty
 		ifFalse: [ ^ invalidBlock value: incorrectItems ].
 	^ methodSources asArray
+]
+
+{ #category : #accessing }
+GtLToolForMethodsSource >> methodsListJsonSchemaDictionary [
+	| methodSchema |
+	methodSchema := {
+		'type' -> 'object'.
+		'properties' ->{
+				'className' -> {'type' -> 'string'} asDictionary.
+				'methodName' -> {'type' -> 'string'} asDictionary.
+				'classSide' -> {'type' -> 'boolean'} asDictionary} asDictionary.
+		'required' -> #('className' 'methodName' 'classSide').
+		'additionalProperties' -> false} asDictionary.
+		
+	^ {
+			'type' -> 'object'.
+			'properties' ->{
+					'methods' ->{
+						'type' -> 'array'.
+						'items' -> methodSchema} asDictionary} asDictionary.
+			'required' -> #('methods').
+			'additionalProperties' -> false} asDictionary
 ]
 
 { #category : #accessing }

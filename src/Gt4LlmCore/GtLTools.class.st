@@ -3,13 +3,13 @@ Class {
 	#superclass : #Object,
 	#traits : 'TGtGroupWithItems',
 	#classTraits : 'TGtGroupWithItems classTrait',
-	#category : 'Gt4LlmCore-Tools'
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #defaults }
 GtLTools class >> files [
 	^ self
-		withAll: {GtLMagritteToolForDirectoryContents new . GtLMagritteToolForFilesContents new. GtLMagritteToolForFilesGrep new . GtLMagritteToolForFilesWrite new} asOrderedCollection
+		withAll: {GtLMagritteToolForDirectoryContents new . GtLMagritteToolForFilesContents new. "GtLMagritteToolForFilesGrep new ." GtLMagritteToolForFilesWrite new} asOrderedCollection
 ]
 
 { #category : #defaults }
