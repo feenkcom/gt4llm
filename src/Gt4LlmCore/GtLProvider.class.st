@@ -63,7 +63,7 @@ GtLProvider >> createPromptCompactionMessage [
 	message
 		addResponseFormatForMagritte: GtLChatCompactedSummary named: 'Compaction';
 		markdown: self compactionPrompt.
-	^ message
+	^message
 ]
 
 { #category : #accessing }

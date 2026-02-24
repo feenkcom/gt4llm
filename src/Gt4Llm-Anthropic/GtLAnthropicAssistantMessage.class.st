@@ -5,9 +5,10 @@ Class {
 		'responseModels',
 		'modelName',
 		'rawData',
-		'requestResponse'
+		'requestResponse',
+		'hasCompactionResponse'
 	],
-	#category : #'Gt4Llm-Anthropic-Client'
+	#category : 'Gt4Llm-Anthropic-Client'
 }
 
 { #category : #testing }
@@ -94,6 +95,11 @@ GtLAnthropicAssistantMessage >> gtViewResponseModelsFor: aView [
 ]
 
 { #category : #testing }
+GtLAnthropicAssistantMessage >> hasCompactionResponse [
+	^hasCompactionResponse ifNil: [ false ]
+]
+
+{ #category : #testing }
 GtLAnthropicAssistantMessage >> hasResponse [
 	^ self contentText isNotEmpty
 ]
@@ -103,6 +109,11 @@ GtLAnthropicAssistantMessage >> initializeFromResult: aResult [
 	self 
 		requestResponse: aResult requestResponse;
 		rawData: aResult content
+]
+
+{ #category : #configuring }
+GtLAnthropicAssistantMessage >> markWithCompactionResponse [
+	hasCompactionResponse := true
 ]
 
 { #category : #accessing }

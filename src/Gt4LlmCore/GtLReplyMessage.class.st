@@ -66,6 +66,16 @@ GtLReplyMessage >> contentText [
 	^ self currentMessageDo: #contentText ifAbsent: [ '' ]
 ]
 
+{ #category : #copying }
+GtLReplyMessage >> copyForIndependentRequest [
+	| copy |
+	
+	copy := self copy .
+	copy executionMessages: copy executionMessages copy.
+	
+	^ copy
+]
+
 { #category : #accessing }
 GtLReplyMessage >> createdAt [
 	^ self currentMessageDo: #createdAt ifAbsent: [ super createdAt ]

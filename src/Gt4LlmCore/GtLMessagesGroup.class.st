@@ -16,6 +16,15 @@ GtLMessagesGroup >> acceptVisitor: aVisitor [
 	^ aVisitor visitGtLlmMessagesGroup: self
 ]
 
+{ #category : #accessing }
+GtLMessagesGroup >> addLastExecutionMessage: aMessage [ 
+	self last isReplyMessage
+		ifTrue: [ self last
+		  addExecutionMessage: aMessage. ]
+		ifFalse: [
+			self add: aMessage  ].
+]
+
 { #category : #converting }
 GtLMessagesGroup >> asGPhlowItemsIterator [
 	^ GtRemotePhlowGenericCollectionIterator forCollection: self
@@ -24,6 +33,21 @@ GtLMessagesGroup >> asGPhlowItemsIterator [
 { #category : #accessing }
 GtLMessagesGroup >> asJson [
 	^ STONJSON toString: self serialize
+]
+
+{ #category : #copying }
+GtLMessagesGroup >> copyForIndependentRequest [
+	| copiedItems |
+	copiedItems := items copy 
+		collect: [ :each |
+			each isReplyMessage
+				ifTrue: [ each copyForIndependentRequest ]
+				ifFalse: [ each ] ].
+	^ self class withAll: copiedItems
+]
+
+{ #category : #accessing }
+GtLMessagesGroup >> copyForNew [
 ]
 
 { #category : #'gt - extensions' }
