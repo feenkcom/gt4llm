@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLAnthropicSettings,
 	#superclass : #Object,
-	#category : #'Gt4Llm-Anthropic-Provider'
+	#category : 'Gt4Llm-Anthropic-Provider'
 }
 
 { #category : #settings }

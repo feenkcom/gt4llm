@@ -11,7 +11,7 @@ Class {
 		'executionStrategy',
 		'contentOneLineSummary'
 	],
-	#category : #'Gt4Llm-Anthropic-Client'
+	#category : 'Gt4Llm-Anthropic-Client'
 }
 
 { #category : #serialization }
