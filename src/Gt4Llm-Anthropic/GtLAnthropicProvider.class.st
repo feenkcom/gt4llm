@@ -7,7 +7,8 @@ Class {
 		'maxTokens',
 		'instructions',
 		'executions',
-		'modelName'
+		'modelName',
+		'compactionStrategy'
 	],
 	#category : #'Gt4Llm-Anthropic-Provider'
 }
@@ -60,6 +61,12 @@ GtLAnthropicProvider >> apiKey: aString [
 	client apiKey: aString
 ]
 
+{ #category : #configuring }
+GtLAnthropicProvider >> beWithPromptCompaction [
+	compactionStrategy := GtLPromptCompactionStrategy forProvider: self.
+	compactionStrategy thresholdTokensLimit: 180000
+]
+
 { #category : #accessing }
 GtLAnthropicProvider >> client [
 	^ client
@@ -68,6 +75,26 @@ GtLAnthropicProvider >> client [
 { #category : #accessing }
 GtLAnthropicProvider >> client: anObject [
 	client := anObject
+]
+
+{ #category : #'client calls' }
+GtLAnthropicProvider >> clientGenerateModelResponse: anInputMessage [
+	^ self 
+			clientGenerateModelResponse: anInputMessage 
+			messages: self relevantChatMessages
+]
+
+{ #category : #'client calls' }
+GtLAnthropicProvider >> clientGenerateModelResponse: anInputMessage messages: aCollectionOfMessages [
+	^ client
+			generateResponseWithModel: self modelName
+			messages: aCollectionOfMessages
+			maxTokens: self maxTokens
+			instructions: anInputMessage completeInstructionString
+			tools: anInputMessage tools
+			andFormat: (anInputMessage hasFormats
+					ifTrue: [ anInputMessage formatDescriptionsJsonSchema ]
+					ifFalse: [ nil ])
 ]
 
 { #category : #'as yet unclassified' }
@@ -85,6 +112,12 @@ GtLAnthropicProvider >> defaultUserMessageClass [
 	^  GtLAnthropicUserMessage
 ]
 
+{ #category : #'private - execution' }
+GtLAnthropicProvider >> ensureContextCompactionIfNeeded [
+	compactionStrategy ifNil: [ ^ self ].
+	compactionStrategy requestCompactionIfNeeded.
+]
+
 { #category : #actions }
 GtLAnthropicProvider >> executeAsyncMessage: anInputMessage [
 	<return: #TAsyncPromise>
@@ -92,6 +125,7 @@ GtLAnthropicProvider >> executeAsyncMessage: anInputMessage [
 	self privateExecutionState: self state scheduled.
 	aFuture := [ 
 		self privateExecutionState: self state running.
+		self ensureContextCompactionIfNeeded.
 		self processNextMessage: anInputMessage ] asAsyncFuture.
 	firstPromise := aFuture await: GtLAnthropicSettings futureExecutionConfiguration.
 	errorHandlerPromise := firstPromise
@@ -113,6 +147,31 @@ GtLAnthropicProvider >> executeAsyncMessage: anInputMessage [
 	executions add: errorHandlerPromise.
 	
 	^ errorHandlerPromise
+]
+
+{ #category : #'private - execution' }
+GtLAnthropicProvider >> executeNextMessage: anInputMessage [
+	| result |
+
+	result := self clientGenerateModelResponse: anInputMessage.
+	anInputMessage requestResponse: result requestResponse.
+	
+	^result
+]
+
+{ #category : #'private - execution' }
+GtLAnthropicProvider >> executeNextPromtCompactionMessage: anInputMessage [
+	| relevantMessages result |
+
+	relevantMessages := self relevantChatMessages copyForIndependentRequest.
+	relevantMessages addLastExecutionMessage: anInputMessage.
+		
+	result := self 
+		clientGenerateModelResponse: anInputMessage
+		messages: relevantMessages.
+	anInputMessage requestResponse: result requestResponse.
+	
+	^result
 ]
 
 { #category : #'as yet unclassified' }
@@ -168,6 +227,8 @@ GtLAnthropicProvider >> initialize [
 	self initializeClient.
 	maxTokens := self defaultMaxTokens.
 	executions := OrderedCollection new.
+	
+	self beWithPromptCompaction.
 ]
 
 { #category : #'as yet unclassified' }
@@ -221,7 +282,9 @@ GtLAnthropicProvider >> performToolCallsFor: aResult [
 GtLAnthropicProvider >> performToolCallsIn: result with: activeTools [
 	<return: #GtLOpenAIProviderProcessedMessage or: nil>
 	| toolMessages |
-		
+	
+	self ensureContextCompactionIfNeeded.
+	
 	toolMessages := result toolCalls asArray
 			withIndexCollect: [ :aToolCall :anIndex | 
 				| toolMessage |
@@ -260,41 +323,56 @@ GtLAnthropicProvider >> printOn: aStream [
 { #category : #'private - execution' }
 GtLAnthropicProvider >> processNextMessage: anInputMessage [
 	<return: #GtLOpenAIProviderProcessedMessage or: nil>
-	| result anOutputMessage anotherMessage |
-	self state ifCanContinue: [  "continue" ] ifDisabled: [ ^ nil ].
+	| result outputMessage anotherMessage |
+	self state 
+		ifCanContinue: [  "continue" ] ifDisabled: [ ^ nil ].
 
-	anOutputMessage := nil.
+	outputMessage := nil.
 	anotherMessage := nil.
-	result := client
-			generateResponseWithModel: self modelName
-			messages: self chat messages
-			maxTokens: 4096
-			instructions: anInputMessage completeInstructionString
-			tools: anInputMessage tools
-			andFormat: (anInputMessage hasFormats
-					ifTrue: [ anInputMessage formatDescriptionsJsonSchema ]
-					ifFalse: [ nil ]).
-
+	result := self executeNextMessage: anInputMessage.
 	result hasToolCalls
-		ifTrue: [ anotherMessage := self performToolCallsIn: result with: anInputMessage tools ]
-		ifFalse: [ anOutputMessage := self
+		ifTrue: [ 
+			anotherMessage := self 
+				performToolCallsIn: result 
+				with: anInputMessage tools ]
+		ifFalse: [ 
+			outputMessage := self
 					responseTypeForResult: result
 					fromInputMessage: anInputMessage.
-			self chat addAssistantMessage: anOutputMessage.
+			self chat addAssistantMessage: outputMessage.
 			self chat signalRunIsDone ].
 
 	^ GtLAnthropicProviderProcessedMessage new
 		inputMessage: anInputMessage;
 		result: result;
 		anotherProcessedMessage: anotherMessage;
-		outputMessage: anOutputMessage
+		outputMessage: outputMessage
+]
+
+{ #category : #accessing }
+GtLAnthropicProvider >> relevantChatMessages [
+	| relevantMessages |
+	relevantMessages := self chat messages
+			messagesSelect: [:each | each isAssistantRole and: [each hasCompactionResponse]].
+	^relevantMessages isEmpty
+		ifTrue: [self chat messages]
+		ifFalse: [
+			self chat messages 
+				messagesBeforeMatching: [:each | each isUserRole]
+				andAllWithAndAfter: relevantMessages last]
 ]
 
 { #category : #'private - execution' }
 GtLAnthropicProvider >> responseTypeForResult: aResult fromInputMessage: anInputMessage [ 
-	^ self assistantMessageClass new
-			modelName: self modelName;
-			initializeFromResult: aResult
+	| newMessage |
+	newMessage := self assistantMessageClass new
+		modelName: self modelName;
+		initializeFromResult: aResult.
+	
+	anInputMessage isCompactionRequest ifTrue: [
+		newMessage markWithCompactionResponse ].
+			
+	^ newMessage
 ]
 
 { #category : #'as yet unclassified' }
