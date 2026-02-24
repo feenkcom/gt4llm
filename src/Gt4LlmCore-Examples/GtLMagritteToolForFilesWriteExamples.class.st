@@ -7,13 +7,16 @@ Class {
 { #category : #examples }
 GtLMagritteToolForFilesWriteExamples >> filesWriteForDirectoryPath [
 	<gtExample>
-	| tool call result model tempDirectory directoryPath |
+	| tempDirectory directoryPath |
 	tempDirectory := GtTemporaryDirectory new.
 	directoryPath := tempDirectory reference pathString.
-	[ tool := GtLMagritteToolForFilesWrite new.
+	[ 
+		|tool call result model|
+		tool := GtLMagritteToolForFilesWrite new.
 		call := GtLFunctionToolCall new.
 		call rawArguments: {
-			'files' -> { {'path' -> directoryPath. 'contents' -> 'Not a file'} asDictionary } asArray
+			'files' -> { {'path' -> directoryPath. 'contents' -> 
+				'Not a file' asByteArray base64Encoded} asDictionary } asArray
 		} asDictionary.
 		result := tool performToolCall: call.
 		self assert: call tool == tool.
@@ -30,21 +33,23 @@ GtLMagritteToolForFilesWriteExamples >> filesWriteForDirectoryPath [
 { #category : #examples }
 GtLMagritteToolForFilesWriteExamples >> filesWriteForExistingFiles [
 	<gtExample>
-	| tool call result model fileOne fileTwo |
+	|  fileOne fileTwo |
 	fileOne := FileReference
 			newTempFilePrefix: 'GtLMagritteToolForFilesWrite'
 			suffix: 'one.txt'.
 	fileTwo := FileReference
 			newTempFilePrefix: 'GtLMagritteToolForFilesWrite'
 			suffix: 'two.txt'.
-	[ tool := GtLMagritteToolForFilesWrite new.
+	[ 
+	|tool call result model|
+	tool := GtLMagritteToolForFilesWrite new.
 	call := GtLFunctionToolCall new.
 	call
 		rawArguments: {'files'
 					-> {{'path' -> fileOne pathString.
-								'contents' -> 'First file'} asDictionary.
+								'contents' -> 'First file' asByteArray base64Encoded} asDictionary.
 							{'path' -> fileTwo pathString.
-								'contents' -> 'Second file'} asDictionary} asArray} asDictionary.
+								'contents' -> 'Second file' asByteArray base64Encoded} asDictionary} asArray} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
 	self assert: (result isKindOf: GtLMagritteInputModel).
@@ -55,9 +60,9 @@ GtLMagritteToolForFilesWriteExamples >> filesWriteForExistingFiles [
 	model := result model.
 	self assert: model files size equals: 2.
 	self assert: model files first path equals: fileOne pathString.
-	self assert: model files first contents equals: 'First file'.
+	self assert: model files first contents equals: 'First file' asByteArray base64Encoded.
 	self assert: model files second path equals: fileTwo pathString.
-	self assert: model files second contents equals: 'Second file'.
+	self assert: model files second contents equals: 'Second file' asByteArray base64Encoded.
 	self assert: fileOne contents equals: 'First file'.
 	self assert: fileTwo contents equals: 'Second file'.
 	^ call ]
@@ -68,14 +73,15 @@ GtLMagritteToolForFilesWriteExamples >> filesWriteForExistingFiles [
 { #category : #examples }
 GtLMagritteToolForFilesWriteExamples >> filesWriteForMissingParentDirectory [
 	<gtExample>
-	| tool call result model tempDirectory nestedFile parentDirectory |
+	|  tempDirectory nestedFile parentDirectory |
 	tempDirectory := GtTemporaryDirectory new.
 	parentDirectory := tempDirectory reference / 'nested'.
 	nestedFile := parentDirectory / 'child.txt'.
-	[ tool := GtLMagritteToolForFilesWrite new.
+	[ |tool call result model|
+		tool := GtLMagritteToolForFilesWrite new.
 		call := GtLFunctionToolCall new.
 		call rawArguments: {
-			'files' -> { {'path' -> nestedFile pathString. 'contents' -> 'Nested file'} asDictionary } asArray
+			'files' -> { {'path' -> nestedFile pathString. 'contents' -> 'Nested file' asByteArray base64Encoded} asDictionary } asArray
 		} asDictionary.
 		result := tool performToolCall: call.
 		self assert: call tool == tool.
@@ -83,7 +89,7 @@ GtLMagritteToolForFilesWriteExamples >> filesWriteForMissingParentDirectory [
 		model := result model.
 		self assert: model files size equals: 1.
 		self assert: model files first path equals: nestedFile pathString.
-		self assert: model files first contents equals: 'Nested file'.
+		self assert: model files first contents equals: 'Nested file' asByteArray base64Encoded.
 		self assert: parentDirectory exists.
 		^ call ]
 		ensure: [

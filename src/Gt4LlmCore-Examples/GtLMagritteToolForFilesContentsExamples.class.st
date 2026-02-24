@@ -7,10 +7,11 @@ Class {
 { #category : #examples }
 GtLMagritteToolForFilesContentsExamples >> filesContentsForExistingFiles [
 	<gtExample>
-	| tool call result model fileOne fileTwo |
+	| fileOne fileTwo |
 	fileOne := FileReference newTempFilePrefix: 'GtLMagritteToolForFilesContents' suffix: 'one.txt'.
 	fileTwo := FileReference newTempFilePrefix: 'GtLMagritteToolForFilesContents' suffix: 'two.txt'.
-	[ fileOne writeStreamDo: [ :stream | stream nextPutAll: 'First file' ].
+	[ | tool call result model |
+		fileOne writeStreamDo: [ :stream | stream nextPutAll: 'First file' ].
 		fileTwo writeStreamDo: [ :stream | stream nextPutAll: 'Second file' ].
 		tool := GtLMagritteToolForFilesContents new.
 		call := GtLFunctionToolCall new.
@@ -26,9 +27,9 @@ GtLMagritteToolForFilesContentsExamples >> filesContentsForExistingFiles [
 		model := result model.
 		self assert: model files size equals: 2.
 		self assert: model files first path equals: fileOne pathString.
-		self assert: model files first contents equals: 'First file'.
+		self assert: model files first contents equals: 'First file' asByteArray base64Encoded.
 		self assert: model files second path equals: fileTwo pathString.
-		self assert: model files second contents equals: 'Second file'.
+		self assert: model files second contents equals: 'Second file' asByteArray base64Encoded .
 		^ call ]
 		ensure: [
 			fileOne exists ifTrue: [ fileOne delete ].
@@ -38,10 +39,11 @@ GtLMagritteToolForFilesContentsExamples >> filesContentsForExistingFiles [
 { #category : #examples }
 GtLMagritteToolForFilesContentsExamples >> filesContentsForMissingFile [
 	<gtExample>
-	| tool call result model missingPath existingFile |
+	| missingPath existingFile |
 	missingPath := (FileLocator temp / 'gt-llm-missing-file.txt') pathString.
 	existingFile := FileReference newTempFilePrefix: 'GtLMagritteToolForFilesContents' suffix: 'existing.txt'.
-	[ existingFile writeStreamDo: [ :stream | stream nextPutAll: 'Existing file' ].
+	[ | tool call result model |
+		existingFile writeStreamDo: [ :stream | stream nextPutAll: 'Existing file' ].
 		tool := GtLMagritteToolForFilesContents new.
 		call := GtLFunctionToolCall new.
 		call rawArguments: { 'filePaths' -> { {'pathString' -> missingPath} asDictionary.
@@ -53,7 +55,7 @@ GtLMagritteToolForFilesContentsExamples >> filesContentsForMissingFile [
 		self assert: model files size equals: 2.
 		self assert: model files first isErrorDomainObject.
 		self assert: model files first objectName equals: missingPath.
-		self assert: model files second contents equals: 'Existing file'.
+		self assert: model files second contents equals: 'Existing file' asByteArray base64Encoded.
 		^ call ]
 		ensure: [ existingFile exists ifTrue: [ existingFile delete ] ]
 ]

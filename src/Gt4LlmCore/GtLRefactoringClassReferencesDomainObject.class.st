@@ -5,7 +5,7 @@ Class {
 		'targetClass',
 		'references'
 	],
-	#category : #'Gt4LlmCore-Domain Objects'
+	#category : 'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #visiting }

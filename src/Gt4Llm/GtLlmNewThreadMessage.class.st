@@ -43,16 +43,6 @@ GtLlmNewThreadMessage >> beSync [
 ]
 
 { #category : #accessing }
-GtLlmNewThreadMessage >> contentSummary [
-	^ self contentText lines ifEmpty: [ '' ] ifNotEmpty: #first
-]
-
-{ #category : #accessing }
-GtLlmNewThreadMessage >> contentText [
-	^ self contents
-]
-
-{ #category : #accessing }
 GtLlmNewThreadMessage >> contents [
 	^ contents
 ]
@@ -66,6 +56,16 @@ GtLlmNewThreadMessage >> contents: anObject [
 GtLlmNewThreadMessage >> contents: aString requester: aRequester [
 	contents := aString.
 	self onContentsChangeByRequester: aRequester
+]
+
+{ #category : #accessing }
+GtLlmNewThreadMessage >> contentSummary [
+	^ self contentText lines ifEmpty: [ '' ] ifNotEmpty: #first
+]
+
+{ #category : #accessing }
+GtLlmNewThreadMessage >> contentText [
+	^ self contents
 ]
 
 { #category : #'as yet unclassified' }

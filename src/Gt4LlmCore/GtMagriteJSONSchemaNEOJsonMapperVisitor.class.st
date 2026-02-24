@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'neoJsonMapper'
 	],
-	#category : #'Gt4LlmCore-Core'
+	#category : 'Gt4LlmCore-Core'
 }
 
 { #category : #'instance creation' }
@@ -62,6 +62,28 @@ GtMagriteJSONSchemaNEOJsonMapperVisitor >> addMappingForArrayOfEntitiesFor: aDes
 ]
 
 { #category : #accessing }
+GtMagriteJSONSchemaNEOJsonMapperVisitor >> addMappingsForClasses: aCollectionOfClasses [
+	| targetDescriptions |
+	
+	targetDescriptions := aCollectionOfClasses
+		collect: [ :aModelClass | 
+			| magritteDescription |
+			magritteDescription := aModelClass new 
+				magritteDescription.
+			magritteDescription properties
+				at: 'originalClass'
+				put: aModelClass.
+			magritteDescription ].
+	
+	targetDescriptions do: [ :magritteDescription |
+			magritteDescription acceptMagritte: self ].
+
+	aCollectionOfClasses size > 1  
+		ifTrue: [ 
+			self addExtraMappingsForDescriptors: targetDescriptions ].
+]
+
+{ #category : #accessing }
 GtMagriteJSONSchemaNEOJsonMapperVisitor >> addMappingWithExplicitContainersFor: aDescription [ 
 	| itemName |
 	
@@ -107,28 +129,6 @@ GtMagriteJSONSchemaNEOJsonMapperVisitor >> addMappingWithExplicitContainersFor: 
 					result first ].
 			mapping writer: [ :jsonWriter :map | 
 				self error: 'to be implemented' ] ].
-]
-
-{ #category : #accessing }
-GtMagriteJSONSchemaNEOJsonMapperVisitor >> addMappingsForClasses: aCollectionOfClasses [
-	| targetDescriptions |
-	
-	targetDescriptions := aCollectionOfClasses
-		collect: [ :aModelClass | 
-			| magritteDescription |
-			magritteDescription := aModelClass new 
-				magritteDescription.
-			magritteDescription properties
-				at: 'originalClass'
-				put: aModelClass.
-			magritteDescription ].
-	
-	targetDescriptions do: [ :magritteDescription |
-			magritteDescription acceptMagritte: self ].
-
-	aCollectionOfClasses size > 1  
-		ifTrue: [ 
-			self addExtraMappingsForDescriptors: targetDescriptions ].
 ]
 
 { #category : #accessing }
