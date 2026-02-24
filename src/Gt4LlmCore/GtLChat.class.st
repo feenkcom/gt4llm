@@ -295,6 +295,11 @@ GtLChat >> gtCopySnippetSerialisationFor: anAction [
 		action: [ :button | self copyLepiterSerialisationToClipboard ]
 ]
 
+{ #category : #'as yet unclassified' }
+GtLChat >> gtDisplayOn: stream [
+	messages isEmpty ifFalse: [ stream nextPutAll: messages first gtDisplayString ]
+]
+
 { #category : #views }
 GtLChat >> gtFormatFor: aView [
 	<gtView>
