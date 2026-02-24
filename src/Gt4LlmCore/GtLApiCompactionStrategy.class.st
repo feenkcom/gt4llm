@@ -1,11 +1,11 @@
 Class {
-	#name : #GtLOpenAIApiCompactionStrategy,
-	#superclass : #GtLOpenAICompactionStrategy,
-	#category : #'Gt4Llm-OpenAI'
+	#name : #GtLApiCompactionStrategy,
+	#superclass : #GtLCompactionStrategy,
+	#category : #'Gt4LlmCore-Compaction'
 }
 
 { #category : #'api - compaction' }
-GtLOpenAIApiCompactionStrategy >> executeCompaction [
+GtLApiCompactionStrategy >> executeCompaction [
 	| inputMessage result outputMessage |
 	inputMessage := self provider createAPICompactionMessage.
 	

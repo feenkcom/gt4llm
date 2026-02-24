@@ -43,17 +43,19 @@ GtLOpenAIProvider >> apiKey: aString [
 
 { #category : #configuring }
 GtLOpenAIProvider >> beWithApiCompaction [
-	compactionStrategy := GtLOpenAIApiCompactionStrategy forProvider: self
+	compactionStrategy := GtLApiCompactionStrategy forProvider: self.
+	compactionStrategy thresholdTokensLimit: self compactionTokensThreshold.
 ]
 
 { #category : #configuring }
 GtLOpenAIProvider >> beWithNoCompaction [
-	compactionStrategy := GtLOpenAINoCompactionStrategy forProvider: self
+	compactionStrategy := GtLNoCompactionStrategy forProvider: self
 ]
 
 { #category : #configuring }
 GtLOpenAIProvider >> beWithPromptCompaction [
-	compactionStrategy := GtLOpenAIPromptCompactionStrategy forProvider: self
+	compactionStrategy := GtLPromptCompactionStrategy forProvider: self.
+	compactionStrategy thresholdTokensLimit: self compactionTokensThreshold.
 ]
 
 { #category : #accessing }
@@ -71,15 +73,27 @@ GtLOpenAIProvider >> clientGenerateCompactionResponse: anInputMessage [
 
 { #category : #'client calls' }
 GtLOpenAIProvider >> clientGenerateModelResponse: anInputMessage [
+	^self 
+			clientGenerateModelResponse: anInputMessage 
+			messages: self relevantChatMessages
+]
+
+{ #category : #'client calls' }
+GtLOpenAIProvider >> clientGenerateModelResponse: anInputMessage messages: aCollectionOfMessages [
 	^client
 			generateResponseWithModel: self modelName
-			messages: self relevantChatMessages
+			messages: aCollectionOfMessages
 			instructions: anInputMessage completeInstructionString
 			tools: anInputMessage tools
 			andFormat: (anInputMessage hasFormats
 				ifTrue: [ anInputMessage formatDescriptionsJsonSchema ]
 				ifFalse: [ nil ])
 			isStreaming: false 
+]
+
+{ #category : #configuring }
+GtLOpenAIProvider >> compactionTokensThreshold [
+	^ 220000
 ]
 
 { #category : #utils }
@@ -151,6 +165,21 @@ GtLOpenAIProvider >> executeNextMessage: anInputMessage [
 	^result
 ]
 
+{ #category : #'private - execution' }
+GtLOpenAIProvider >> executeNextPromtCompactionMessage: anInputMessage [
+	| relevantMessages result |
+
+	relevantMessages := self relevantChatMessages copyForIndependentRequest.
+	relevantMessages addLastExecutionMessage: anInputMessage.
+		
+	result := self 
+		clientGenerateModelResponse: anInputMessage
+		messages: relevantMessages.
+	anInputMessage requestResponse: result requestResponse.
+	
+	^result
+]
+
 { #category : #accessing }
 GtLOpenAIProvider >> executions [
 	^ executions
@@ -214,7 +243,7 @@ GtLOpenAIProvider >> initialize [
 	client := GtLOpenAIClient new.
 	executions := OrderedCollection new.
 	
-	self beWithNoCompaction.
+	self beWithPromptCompaction.
 ]
 
 { #category : #accessing }
@@ -274,7 +303,7 @@ GtLOpenAIProvider >> printOn: aStream [
 { #category : #'private - execution' }
 GtLOpenAIProvider >> processNextMessage: anInputMessage [
 	<return: #GtLOpenAIProviderProcessedMessage or: nil>
-	| result anOutputMessage anotherMessage |
+	| result outputMessage anotherMessage |
 	self state ifCanContinue: [  ] ifDisabled: [ ^ nil ].
 
 	result := self executeNextMessage: anInputMessage.
@@ -284,10 +313,10 @@ GtLOpenAIProvider >> processNextMessage: anInputMessage [
 				performToolCallsIn: result 
 				with: anInputMessage tools ]
 		ifFalse: [ 
-			anOutputMessage := self
+			outputMessage := self
 					responseTypeForResult: result
 					fromInputMessage: anInputMessage.
-			self chat addAssistantMessage: anOutputMessage.
+			self chat addAssistantMessage: outputMessage.
 			self chat signalRunIsDone ].
 
 	^ GtLOpenAIProviderProcessedMessage new
@@ -295,7 +324,7 @@ GtLOpenAIProvider >> processNextMessage: anInputMessage [
 		result: result;
 		isStreaming: false;
 		anotherProcessedMessage: anotherMessage;
-		outputMessage: anOutputMessage
+		outputMessage: outputMessage
 ]
 
 { #category : #'private - execution' }
@@ -313,11 +342,16 @@ GtLOpenAIProvider >> relevantChatMessages [
 
 { #category : #'private - execution' }
 GtLOpenAIProvider >> responseTypeForResult: aResult fromInputMessage: anInputMessage [ 
-	^ ((anInputMessage isCompactionRequest
+	| newMessage |
+	newMessage := ((anInputMessage isCompactionRequest
 		ifTrue: [ GtLOpenAICompactionMessage ]
-		ifFalse: [self assistantMessageClass])) new
+		ifFalse: [self assistantMessageClass])) new.
+		
+	newMessage
 			modelName: self modelName;
-			initializeFromResult: aResult
+			initializeFromResult: aResult.
+			
+	^ newMessage
 ]
 
 { #category : #utils }
