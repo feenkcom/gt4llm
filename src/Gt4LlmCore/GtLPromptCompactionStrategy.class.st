@@ -1,17 +1,17 @@
 Class {
-	#name : #GtLOpenAIPromptCompactionStrategy,
-	#superclass : #GtLOpenAICompactionStrategy,
-	#category : #'Gt4Llm-OpenAI'
+	#name : #GtLPromptCompactionStrategy,
+	#superclass : #GtLCompactionStrategy,
+	#category : #'Gt4LlmCore-Compaction'
 }
 
 { #category : #'as yet unclassified' }
-GtLOpenAIPromptCompactionStrategy >> executeCompaction [
+GtLPromptCompactionStrategy >> executeCompaction [
 	| inputMessage result outputMessage |
-	inputMessage := self provider sendPromptCompactionMessage.
+	inputMessage := self provider createPromptCompactionMessage.
 	
 	result := self provider 
-		executeNextMessage: inputMessage.
-		
+		executeNextPromtCompactionMessage: inputMessage.
+	
 	outputMessage := self provider
 		responseTypeForResult: result 
 		fromInputMessage: inputMessage.
