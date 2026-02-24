@@ -5,7 +5,7 @@ Class {
 		'button',
 		'chat'
 	],
-	#category : #'Gt4LlmCore-UI - Support'
+	#category : 'Gt4LlmCore-UI - Support'
 }
 
 { #category : #accessing }

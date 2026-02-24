@@ -1,12 +1,12 @@
 Class {
 	#name : #GtLMagritteToolForFilesContents,
 	#superclass : #GtLAbstractMagritteFunctionTool,
-	#category : #'Gt4LlmCore-Tools'
+	#category : 'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }
 GtLMagritteToolForFilesContents >> description [
-	^ 'Gets the contents of multiple files. Arguments must provide a filePaths array of path strings.
+	^ 'Gets the contents of multiple files. Arguments must provide a filePaths array of path strings. The contents is returned as a base64 encoded string.
 
 Example JSON arguments:
 {

@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLExampleDummyMixedTest,
 	#superclass : #TestCase,
-	#category : #'Gt4LlmCore-Examples-Tools'
+	#category : 'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #'llm-generated' }

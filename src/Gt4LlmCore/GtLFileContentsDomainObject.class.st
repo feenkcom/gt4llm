@@ -5,7 +5,7 @@ Class {
 		'path',
 		'contents'
 	],
-	#category : #'Gt4LlmCore-Magritte Objects'
+	#category : 'Gt4LlmCore-Magritte Objects'
 }
 
 { #category : #'as yet unclassified' }
@@ -25,6 +25,7 @@ GtLFileContentsDomainObject >> contentsDescription [
 	^ MAStringDescription new
 		label: 'Contents';
 		accessor: #contents;
+		comment: 'The content of a file encoded as base64';
 		beRequired
 ]
 
