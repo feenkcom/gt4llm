@@ -13,5 +13,5 @@ BaselineOfGt4LlmCore >> baseline: spec [
 			spec package: 'Gt4Llm-Examples' with: [ spec requires: #('Gt4Llm') ].
 			spec package: 'Gt4Llm-GToolkit' with: [ spec requires: #('Gt4Llm') ].
 			spec package: 'Gt4Llm-Lepiter' with: [ spec requires: #('Gt4Llm') ].
-			spec package: 'Gt4Llm-Refactoring' with: [ spec requires: #('Gt4Llm') ]. ]
+			spec package: 'Gt4Llm-Refactoring' with: [ spec requires: #('Gt4Llm') ] ]
 ]

@@ -6,7 +6,7 @@ Class {
 		'newGrammar',
 		'parserClass'
 	],
-	#category : #'Gt4Llm-SmaCC-Model'
+	#category : #'Gt4Llm-SmaCCDeprecated-Model'
 }
 
 { #category : #private }

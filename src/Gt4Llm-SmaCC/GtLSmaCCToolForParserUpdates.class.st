@@ -39,18 +39,25 @@ GtLSmaCCToolForParserUpdates >> privatePerformToolCall: aToolCall [
 	| arguments updates |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	updates := arguments
-		at: 'parserUpdate'
-		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-			arguments: arguments;
-			missingArgument: 'parserUpdate' ].
+			at: 'parserUpdate'
+			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
+					arguments: arguments;
+					missingArgument: 'parserUpdate' ].
 	^ self
 		grammarIn: updates
 		do: [ :grammar | 
+			| oldGrammar |
 			updates edits
 				do: [ :each | each validateFor: grammar onError: [ :error | ^ error ] ].
+			oldGrammar := GtSmaCCGrammar new.
+			oldGrammar scannerClassName: grammar scannerClassName.
+			oldGrammar parserClassName: grammar parserClassName.
+			oldGrammar updateSource: grammar source.
 			updates edits do: [ :each | each performOn: grammar ].
-			GtLSmaCCParserReference new
+			GtLSmaCCParserUpdateResult new
 				parserClass: updates parserClass;
+				oldGrammar: oldGrammar;
+				newGrammar: grammar;
 				yourself ]
 		onError: [ :error | error ]
 ]

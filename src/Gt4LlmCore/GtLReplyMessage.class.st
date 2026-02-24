@@ -158,6 +158,7 @@ GtLReplyMessage >> gtActionStopFor: anAction [
 GtLReplyMessage >> gtGroupedToolsFor: aView [
 	<gtView>
 	<gtLlmView>
+	executionMessages isEmpty ifTrue: [ ^ aView empty ].
 	^ aView columnedList
 		title: 'Grouped executed tools';
 		priority: 19;

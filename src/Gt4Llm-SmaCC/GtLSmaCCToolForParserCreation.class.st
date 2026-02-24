@@ -34,7 +34,7 @@ GtLSmaCCToolForParserCreation >> parserCreationDescription [
 
 { #category : #private }
 GtLSmaCCToolForParserCreation >> privatePerformToolCall: aToolCall [
-	| arguments creation |
+	| arguments creation grammar |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	creation := arguments
 		at: 'parserCreation'
@@ -42,8 +42,10 @@ GtLSmaCCToolForParserCreation >> privatePerformToolCall: aToolCall [
 			arguments: arguments;
 			missingArgument: 'parserCreation' ].
 	creation validateOnError: [ :error | ^ error ].
-	model defineParser: creation parserClass as: creation createGrammar.
-	^ GtLSmaCCParserReference new
+	grammar := creation createGrammar.
+	model defineParser: creation parserClass as: grammar.
+	^ GtLSmaCCParserCreationResult new
 		parserClass: creation parserClass;
+		createGrammar: grammar;
 		yourself
 ]
