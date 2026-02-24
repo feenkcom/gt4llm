@@ -15,6 +15,7 @@ GtLDomainObjectExamples >> classDomainObject [
 		originalPackageName: 'Gt4LlmCore-Examples';
 		originalInstanceVariableNames: 'instVarA instVarB';
 		originalClassVariableNames: 'classInstVarA classInstVarB';
+		originalTraitCompositionString: Behavior traitCompositionString;
 		yourself.
 	aJsonObject := aDomainObject serializeToOpenAIResponseJsonObject.
 
@@ -25,6 +26,7 @@ GtLDomainObjectExamples >> classDomainObject [
 	self assert: aDomainObject originalPackageName equals: 'Gt4LlmCore-Examples'.
 	self assert: aDomainObject originalInstanceVariableNames equals: 'instVarA instVarB'.
 	self assert: aDomainObject originalClassVariableNames equals: 'classInstVarA classInstVarB'.
+	self assert: aDomainObject originalTraitCompositionString equals: Behavior traitCompositionString.
 
 	^ aDomainObject
 ]

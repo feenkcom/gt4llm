@@ -48,5 +48,6 @@ GtLToolForClassLookup >> privatePerformToolCall: aToolCall [
 	^ GtLClassDomainObject new
 		foundClass: class;
 		originalClassName: className asString trimBoth;
+		originalTraitCompositionString: class traitCompositionString;
 		yourself
 ]

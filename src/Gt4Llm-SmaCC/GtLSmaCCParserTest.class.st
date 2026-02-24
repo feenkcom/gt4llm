@@ -6,7 +6,7 @@ Class {
 		'example',
 		'startingState'
 	],
-	#category : #'Gt4Llm-SmaCC-Domain Objects'
+	#category : 'Gt4Llm-SmaCC-Domain Objects'
 }
 
 { #category : #accessing }
@@ -68,7 +68,7 @@ GtLSmaCCParserTest >> startingStateDescription [
 
 { #category : #accessing }
 GtLSmaCCParserTest >> testParse [
-	| selector parser |
+	| selector parser startingStateId |
 	self parserClass isEmptyOrNil
 		ifTrue: [ ^ GtLMissingArgumentDomainObject new
 				arguments: nil;
@@ -81,15 +81,21 @@ GtLSmaCCParserTest >> testParse [
 	(parser inheritsFrom: SmaCCParser)
 		ifFalse: [ ^ GtLProblemDomainObject new
 				description: self parserClass , ' is not a valid SmaCC parser' ].
-	selector := self startingState isEmptyOrNil
-			ifTrue: [ #defaultStartingState ]
-			ifFalse: [ ('startingStateFor' , self startingState) asSymbol ].
-	(parser respondsTo: selector)
-		ifFalse: [ ^ GtLProblemDomainObject new
-				description: self startingState , ' is not a valid starting state for the parser' ].
+
+	(self startingState isEmptyOrNil not
+		and: [ self startingState allSatisfy: #isDigit ])
+		ifTrue: [ startingStateId := self startingState asInteger ]
+		ifFalse: [ selector := self startingState isEmptyOrNil
+					ifTrue: [ #defaultStartingState ]
+					ifFalse: [ ('startingStateFor' , self startingState) asSymbol ].
+			(parser respondsTo: selector)
+				ifFalse: [ ^ GtLProblemDomainObject new
+						description: self startingState , ' is not a valid starting state for the parser' ].
+			startingStateId := parser perform: selector ].
+
 	^ [ parser
 		parseStream: (SmaCCLineNumberStream on: self example readStream)
-		startingAt: (parser perform: selector).
+		startingAt: startingStateId.
 	GtLSmaCCSuccess new message: 'The sample was successfully parsed' ]
 		on: SmaCCParserError
 		do: [ :ex | 
