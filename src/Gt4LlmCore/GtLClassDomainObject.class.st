@@ -7,7 +7,8 @@ Class {
 		'originalSuperclassName',
 		'originalPackageName',
 		'originalInstanceVariableNames',
-		'originalClassVariableNames'
+		'originalClassVariableNames',
+		'originalTraitCompositionString'
 	],
 	#category : #'Gt4LlmCore-Domain Objects'
 }
@@ -96,6 +97,16 @@ GtLClassDomainObject >> originalSuperclassName [
 { #category : #accessing }
 GtLClassDomainObject >> originalSuperclassName: aString [
 	originalSuperclassName := aString
+]
+
+{ #category : #accessing }
+GtLClassDomainObject >> originalTraitCompositionString [
+	^ originalTraitCompositionString
+]
+
+{ #category : #accessing }
+GtLClassDomainObject >> originalTraitCompositionString: aString [
+	originalTraitCompositionString := aString
 ]
 
 { #category : #'api - serializing' }
