@@ -17,10 +17,10 @@ GtLFilePathReference >> contentsDomainObject [
 	| fileReference |
 	fileReference := self fileReference.
 	^ [ fileReference
-		readStreamDo: [ :stream | 
+		binaryReadStreamDo: [ :stream | 
 			GtLFileContentsDomainObject new
 				path: fileReference pathString;
-				contents: stream contents asString ]
+				contents: stream contents base64Encoded ]
 		ifAbsent: [ GtLMissingDomainObject new objectName: fileReference pathString ] ]
 		on: Error
 		do: [ :e | GtLExceptionDomainObject new freeze: e ]
