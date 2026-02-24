@@ -92,6 +92,7 @@ GtLToolForClassDefinitionChange >> privatePerformToolCall: aToolCall [
 		originalPackageName: packageName;
 		originalInstanceVariableNames: instanceVariables;
 		originalClassVariableNames: classVariables;
+		originalTraitCompositionString: updatedClass traitCompositionString;
 		yourself
 ]
 

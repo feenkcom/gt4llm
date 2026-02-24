@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'model'
 	],
-	#category : #'Gt4Llm-SmaCC-Tools'
+	#category : 'Gt4Llm-SmaCC-Tools'
 }
 
 { #category : #'as yet unclassified' }

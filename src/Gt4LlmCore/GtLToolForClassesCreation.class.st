@@ -18,9 +18,10 @@ GtLToolForClassesCreation >> classesListJsonSchemaDictionary [
 						'superclassName' -> {'type' -> 'string'} asDictionary.
 						'instanceVariables' -> {'type' -> 'string'} asDictionary.
 						'classVariables' -> {'type' -> 'string'} asDictionary.
+						'traitCompositionString' -> {'type' -> 'string'} asDictionary.
 						'package' -> {'type' -> 'string'} asDictionary} asDictionary.
 			'required'
-				-> #('className' 'superclassName' 'instanceVariables' 'classVariables' 'package').
+				-> #('className' 'superclassName' 'instanceVariables' 'classVariables' 'traitCompositionString' 'package').
 			'additionalProperties' -> false} asDictionary.
 	^ {'type' -> 'object'.
 		'properties'
@@ -33,63 +34,76 @@ GtLToolForClassesCreation >> classesListJsonSchemaDictionary [
 
 { #category : #private }
 GtLToolForClassesCreation >> classResultFromDescriptor: descriptor [
-	| classNameValue classNameString classNameSymbol superclassValue superclassName superclass instanceVariables classVariables packageValue packageName createdClass |
+	| classNameValue classNameString classNameSymbol superclassValue superclassName superclass instanceVariables classVariables traitCompositionValue traitCompositionString packageValue packageName createdClass |
 	classNameValue := descriptor
-		at: 'className'
-		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-			receiverName: self name;
-			arguments: descriptor;
-			missingArgument: 'className' ].
+			at: 'className'
+			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
+					receiverName: self name;
+					arguments: descriptor;
+					missingArgument: 'className' ].
 	classNameString := classNameValue asString trimBoth.
 	classNameString isEmpty
 		ifTrue: [ ^ GtLMissingArgumentDomainObject new
-			receiverName: self name;
-			arguments: descriptor;
-			missingArgument: 'className' ].
+				receiverName: self name;
+				arguments: descriptor;
+				missingArgument: 'className' ].
 	classNameSymbol := classNameString asSymbol.
 	(Smalltalk globals includesKey: classNameSymbol)
 		ifTrue: [ ^ GtLUnexpectedDomainObject new objectName: classNameString ].
 	superclassValue := descriptor
-		at: 'superclassName'
-		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-			receiverName: self name;
-			arguments: descriptor;
-			missingArgument: 'superclassName' ].
+			at: 'superclassName'
+			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
+					receiverName: self name;
+					arguments: descriptor;
+					missingArgument: 'superclassName' ].
 	superclassName := superclassValue asString trimBoth.
 	superclassName isEmpty
 		ifTrue: [ ^ GtLMissingArgumentDomainObject new
-			receiverName: self name;
-			arguments: descriptor;
-			missingArgument: 'superclassName' ].
+				receiverName: self name;
+				arguments: descriptor;
+				missingArgument: 'superclassName' ].
 	superclass := Smalltalk globals
-		at: superclassName asSymbol
-		ifAbsent: [ ^ GtLMissingDomainObject new objectName: superclassName ].
+			at: superclassName asSymbol
+			ifAbsent: [ ^ GtLMissingDomainObject new objectName: superclassName ].
 	instanceVariables := self
-		stringFromVariableNames: (descriptor at: 'instanceVariables' ifAbsent: [ '' ]).
+			stringFromVariableNames: (descriptor at: 'instanceVariables' ifAbsent: [ '' ]).
 	classVariables := self
-		stringFromVariableNames: (descriptor at: 'classVariables' ifAbsent: [ '' ]).
+			stringFromVariableNames: (descriptor at: 'classVariables' ifAbsent: [ '' ]).
+	traitCompositionValue := descriptor
+			at: 'traitCompositionString'
+			ifAbsent: [ nil ].
+	traitCompositionString := traitCompositionValue
+			ifNil: [ Behavior traitCompositionString ].
+	traitCompositionString := traitCompositionString asString trimBoth.
+	traitCompositionString isEmpty
+		ifTrue: [ traitCompositionString := Behavior traitCompositionString ].
 	packageValue := descriptor at: 'package' ifAbsent: [ '' ].
 	packageName := packageValue ifNil: [ '' ].
 	packageName := packageName asString trimBoth.
 	packageName isEmpty
 		ifTrue: [ ^ GtLMissingArgumentDomainObject new
-			receiverName: self name;
-			arguments: descriptor;
-			missingArgument: 'package' ].
-	createdClass := [ superclass
-		subclass: classNameSymbol
-		instanceVariableNames: instanceVariables
-		classVariableNames: classVariables
-		package: packageName ]
-		on: Error
-		do: [ :error |
-			^ GtLCouldNotCreateClassDomainObject new
-				superclass: superclass;
-				targetClassName: classNameString;
-				packageName: packageName;
-				instanceVariableNames: instanceVariables;
-				classVariableNames: classVariables;
-				freeze: error ].
+				receiverName: self name;
+				arguments: descriptor;
+				missingArgument: 'package' ].
+	createdClass := [ superclass classInstaller
+			make: [ :builder | 
+				builder
+					superclass: superclass;
+					name: classNameSymbol;
+					slotsFromString: instanceVariables;
+					sharedVariablesFromString: classVariables;
+					traitComposition: (self class compiler evaluate: traitCompositionString);
+					package: packageName;
+					environment: superclass environment ] ]
+			on: Error
+			do: [ :error | 
+				^ GtLCouldNotCreateClassDomainObject new
+					superclass: superclass;
+					targetClassName: classNameString;
+					packageName: packageName;
+					instanceVariableNames: instanceVariables;
+					classVariableNames: classVariables;
+					freeze: error ].
 	^ GtLClassDomainObject new
 		foundClass: createdClass;
 		originalClassName: classNameString;
@@ -97,6 +111,7 @@ GtLToolForClassesCreation >> classResultFromDescriptor: descriptor [
 		originalPackageName: packageName;
 		originalInstanceVariableNames: instanceVariables;
 		originalClassVariableNames: classVariables;
+		originalTraitCompositionString: traitCompositionString;
 		yourself
 ]
 

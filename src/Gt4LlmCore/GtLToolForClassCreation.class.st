@@ -11,7 +11,7 @@ GtLToolForClassCreation >> acceptVisitor: aVisitor [
 
 { #category : #accessing }
 GtLToolForClassCreation >> description [
-	^ 'Creates a class with the provided superclass, variables, and package.'
+	^ 'Creates a class with the provided superclass, variables, traits, and package.'
 ]
 
 { #category : #accessing }
@@ -21,12 +21,12 @@ GtLToolForClassCreation >> name [
 
 { #category : #accessing }
 GtLToolForClassCreation >> parametersDescription [
-	^ #('className' 'superclassName' 'instanceVariables' 'classVariables' 'package')
+	^ #('className' 'superclassName' 'instanceVariables' 'classVariables' 'traitCompositionString' 'package')
 ]
 
 { #category : #private }
 GtLToolForClassCreation >> privatePerformToolCall: aToolCall [
-	| arguments classNameValue classNameString classNameSymbol superclassValue superclassName superclass instanceVariables classVariables packageValue packageName createdClass |
+	| arguments classNameValue classNameString classNameSymbol superclassValue superclassName superclass instanceVariables classVariables traitCompositionValue traitCompositionString packageValue packageName createdClass |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	classNameValue := arguments
 			at: 'className'
@@ -62,6 +62,14 @@ GtLToolForClassCreation >> privatePerformToolCall: aToolCall [
 			stringFromVariableNames: (arguments at: 'instanceVariables' ifAbsent: [ '' ]).
 	classVariables := self
 			stringFromVariableNames: (arguments at: 'classVariables' ifAbsent: [ '' ]).
+	traitCompositionValue := arguments
+			at: 'traitCompositionString'
+			ifAbsent: [ nil ].
+	traitCompositionString := traitCompositionValue
+			ifNil: [ Behavior traitCompositionString ].
+	traitCompositionString := traitCompositionString asString trimBoth.
+	traitCompositionString isEmpty
+		ifTrue: [ traitCompositionString := Behavior traitCompositionString ].
 	packageValue := arguments at: 'package' ifAbsent: [ '' ].
 	packageName := packageValue ifNil: [ '' ].
 	packageName := packageName asString trimBoth.
@@ -70,11 +78,16 @@ GtLToolForClassCreation >> privatePerformToolCall: aToolCall [
 				receiverName: self name;
 				arguments: aToolCall arguments;
 				missingArgument: 'package' ].
-	createdClass := [ superclass
-			subclass: classNameSymbol
-			instanceVariableNames: instanceVariables
-			classVariableNames: classVariables
-			package: packageName ]
+	createdClass := [ superclass classInstaller
+			make: [ :builder | 
+				builder
+					superclass: superclass;
+					name: classNameSymbol;
+					slotsFromString: instanceVariables;
+					sharedVariablesFromString: classVariables;
+					traitComposition: (self class compiler evaluate: traitCompositionString);
+					package: packageName;
+					environment: superclass environment ] ]
 			on: Error
 			do: [ :error | 
 				^ GtLCouldNotCreateClassDomainObject new
@@ -91,6 +104,7 @@ GtLToolForClassCreation >> privatePerformToolCall: aToolCall [
 		originalPackageName: packageName;
 		originalInstanceVariableNames: instanceVariables;
 		originalClassVariableNames: classVariables;
+		originalTraitCompositionString: traitCompositionString;
 		yourself
 ]
 
