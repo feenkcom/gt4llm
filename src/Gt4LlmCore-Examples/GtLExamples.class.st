@@ -14,18 +14,17 @@ GtLExamples >> chatAnnouncements [
 	removed := OrderedCollection new.
 	l announcer
 		when: GtLChatAddedAnnouncement
-		do: [ :announcement | added add: announcement chat ];
+			do: [ :announcement | added add: announcement chat ]
+			for: self;
 		when: GtLChatRemovedAnnouncement
-		do: [ :announcement | removed add: announcement chat ].
-	[
-		chat := l gtChat.
-		l removeChat: chat.
-		self assert: added equals: { chat }.
-		self assert: removed equals: { chat }.
-		^ chat
-	] ensure: [
-		l registry removeAll.
-		l registry addAll: previous ]
+			do: [ :announcement | removed add: announcement chat ].
+	[ chat := l gtChat.
+	l removeChat: chat.
+	self assert: added asArray equals: {chat}.
+	self assert: removed asArray equals: {chat}.
+	^ chat ]
+		ensure: [ l registry removeAll.
+			l registry addAll: previous ]
 ]
 
 { #category : #examples }
