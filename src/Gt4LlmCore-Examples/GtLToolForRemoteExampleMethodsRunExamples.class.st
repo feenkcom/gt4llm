@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLToolForRemoteExampleMethodsRunExamples,
 	#superclass : #Object,
-	#category : 'Gt4LlmCore-Examples-Tools'
+	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #'accessing - method dictionary' }
@@ -238,16 +238,16 @@ GtLToolForRemoteExampleMethodsRunExamples class >> traitCompositionString [
 ]
 
 { #category : #accessing }
-GtLToolForRemoteExampleMethodsRunExamples class >> traits [
-	<reflection: 'Class structural inspection - Traits'>
-	^ self traitComposition traits
-]
-
-{ #category : #accessing }
 GtLToolForRemoteExampleMethodsRunExamples class >> traitUsers [
 	"I am a traited class, I have no users, this is for compatibility with traits"
 		<reflection: 'Class structural inspection - Traits'>
 	^ #()
+]
+
+{ #category : #accessing }
+GtLToolForRemoteExampleMethodsRunExamples class >> traits [
+	<reflection: 'Class structural inspection - Traits'>
+	^ self traitComposition traits
 ]
 
 { #category : #examples }

@@ -190,6 +190,11 @@ GtLChatMessage >> gtActionInspectFor: anAction [
 	^ super gtActionInspectFor: anAction
 ]
 
+{ #category : #'as yet unclassified' }
+GtLChatMessage >> gtDisplayOn: stream [
+	stream nextPutAll: self contentOneLineSummary
+]
+
 { #category : #ui }
 GtLChatMessage >> gtFormatFor: aView [
 	<gtView>
