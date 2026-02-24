@@ -8,11 +8,12 @@ Class {
 GtLToolForMethodReferencesExamples >> methodReferencesForExistingSelector [
 	<gtExample>
 	| tool call result |
+	#someUniqueSelector printString.
 	tool := GtLToolForMethodReferences new.
 	call := GtLFunctionToolCall new.
 	call
 		function: {'name' -> tool name.
-				'arguments' -> {'selector' -> 'performToolCall:'} asDictionary} asDictionary.
+				'arguments' -> {'selector' -> 'someUniqueSelector'} asDictionary} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
 	self assert: result isErrorDomainObject not.
