@@ -19,7 +19,7 @@ GtLInputImageFile >> serializeForAnthropicMessagesAPI [
 		'source'-> {
 			'media_type' -> self contentType.
 			'type' ->'base64'.
-			'data' -> self fileReference binaryContents base64Encoded } asDictionary}
+			'data' -> self base64EncodedContent } asDictionary}
 			asDictionary
 ]
 
@@ -29,6 +29,6 @@ GtLInputImageFile >> serializeForOpenAIResponsesAPI [
 		'image_url' -> ('data:'
 			,self contentType
 			,';base64,' 
-			, self fileReference binaryContents base64Encoded)}
+			, self base64EncodedContent)}
 				asDictionary
 ]

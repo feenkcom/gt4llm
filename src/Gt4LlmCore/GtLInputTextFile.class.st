@@ -1,16 +1,16 @@
 Class {
-	#name : #GtLInputPdfFile,
+	#name : #GtLInputTextFile,
 	#superclass : #GtLInputAttachment,
 	#category : #Gt4LlmCore
 }
 
-{ #category : #accessing }
-GtLInputPdfFile >> contentType [
-		^ 'application/pdf'
+{ #category : #serialization }
+GtLInputTextFile >> contentType [
+		^ 'text/plain'
 ]
 
 { #category : #serialization }
-GtLInputPdfFile >> serializeForAnthropicMessagesAPI [
+GtLInputTextFile >> serializeForAnthropicMessagesAPI [
 	^ {
 		'type' -> 'document'.
 		'source'-> {
@@ -21,7 +21,7 @@ GtLInputPdfFile >> serializeForAnthropicMessagesAPI [
 ]
 
 { #category : #serialization }
-GtLInputPdfFile >> serializeForOpenAIResponsesAPI [
+GtLInputTextFile >> serializeForOpenAIResponsesAPI [
 	^ {'type' -> 'input_file'.
 		'filename' -> self fileReference basename.
 		'file_data' -> ('data:'
