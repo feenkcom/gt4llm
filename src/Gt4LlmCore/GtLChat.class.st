@@ -136,6 +136,11 @@ GtLChat >> addToolMessage: aMessage [
 	aReplyMessage addToolMessage: aMessage
 ]
 
+{ #category : #'api - tool' }
+GtLChat >> addTools: aCollection [ 
+	tools addAll: aCollection
+]
+
 { #category : #'api - message' }
 GtLChat >> addUserMessage: aMessage [
 	self addMessage: aMessage.

@@ -11,6 +11,11 @@ Class {
 	#category : #'Gt4LlmCore-Coree'
 }
 
+{ #category : #accessing }
+GtL class >> chat [
+	^ self current chat
+]
+
 { #category : #'instance creation' }
 GtL class >> current [
 	Current ifNil: [ Current := self new ].
@@ -27,6 +32,21 @@ GtL class >> gtChat [
 	^ self current gtChat
 ]
 
+{ #category : #views }
+GtL class >> gtChatsFor: aView [
+	<gtClassView>
+	^ aView forward
+		title: 'Chats';
+		priority: 2;
+		object: [ self current ];
+		view: #gtViewChatsOn:
+]
+
+{ #category : #'as yet unclassified' }
+GtL class >> last [
+	^ self current lastChat
+]
+
 { #category : #'instance creation' }
 GtL class >> resetCurrent [
 	Current := nil
@@ -40,6 +60,13 @@ GtL >> announce: anAnnouncement [
 { #category : #accessing }
 GtL >> announcer [
 	^ announcer
+]
+
+{ #category : #'instance creation' }
+GtL >> chat [
+	| chat |
+	chat := GtLChat new.
+	self registerChat: chat
 ]
 
 { #category : #registry }
@@ -77,6 +104,8 @@ GtL >> gtViewChatsOn: aView [
 					ifEmpty: [ '-' ] ];
 		column: 'Finished'
 			text: [ :aChat | aChat messages isEmpty  or: [ aChat isFinishedSuccesss ] ];
+		contextItemLabel: 'Inspect chat' action: [ :anElement :aChat | anElement phlow spawnObject: aChat ];
+		contextItemLabel: 'Remove chat' action: [ :anElement :aChat | self removeChat: aChat ];
 		updateWhen: GtLChatAnnouncement in: self announcer;
 		updateWhen: GtLChatMessagesChanged in: self announcer
 ]
@@ -86,6 +115,11 @@ GtL >> initialize [
 	super initialize.
 	registry := OrderedCollection new.
 	announcer := Announcer new
+]
+
+{ #category : #registry }
+GtL >> lastChat [
+	^ registry last
 ]
 
 { #category : #announcing }
