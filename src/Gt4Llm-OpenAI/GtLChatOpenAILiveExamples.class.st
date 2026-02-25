@@ -294,6 +294,12 @@ GtLChatOpenAILiveExamples >> howAreYouCallExample_withStringSchema_stub_response
 		yourself
 ]
 
+{ #category : #'as yet unclassified' }
+GtLChatOpenAILiveExamples >> messageWithToolCallExample_magritteMarkdown [
+	<gtExample>
+	super messageWithToolCallExample_magritteMarkdown.
+]
+
 { #category : #responses }
 GtLChatOpenAILiveExamples >> messageWithToolCallExample_magritteMarkdown_stub_responses [
 	^ (Array new: 2)
