@@ -20,6 +20,11 @@ GtLInputAttachment >> asFileReference [
 ]
 
 { #category : #accessing }
+GtLInputAttachment >> base64EncodedContent [ 
+	^ self fileReference binaryContents base64Encoded
+]
+
+{ #category : #accessing }
 GtLInputAttachment >> fileReference [
 	^ fileReference
 ]
