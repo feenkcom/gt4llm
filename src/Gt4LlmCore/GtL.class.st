@@ -44,8 +44,11 @@ GtL >> announcer [
 
 { #category : #registry }
 GtL >> clearChats [
-	registry do: [ :each | self announce: (GtLChatRemovedAnnouncement new chat: each) ].
-	registry removeAll
+	| chats |
+	chats := registry copy.
+	chats do: [ :each | each announcer unsubscribe: self ].
+	registry removeAll.
+	chats do: [ :each | self announce: (GtLChatRemovedAnnouncement new chat: each) ]
 ]
 
 { #category : #'instance creation' }
@@ -62,12 +65,20 @@ GtL >> gtChat [
 { #category : #'gt-view' }
 GtL >> gtViewChatsOn: aView [
 	<gtView>
-	^ aView list
+	^ aView columnedList
 		title: 'Chats';
 		priority: 20;
 		items: [ self registry ];
-		itemText: [ :aChat | aChat ];
-		updateWhen: GtLChatAnnouncement in: self announcer
+		column: 'Chat' text: [ :aChat | aChat ];
+		column: 'Started'
+			text: [ :aChat | 
+				aChat messages
+					ifNotEmpty: [ :messages | messages first createdAt asLocalStringYMDHMS ]
+					ifEmpty: [ '-' ] ];
+		column: 'Finished'
+			text: [ :aChat | aChat messages isEmpty  or: [ aChat isFinishedSuccesss ] ];
+		updateWhen: GtLChatAnnouncement in: self announcer;
+		updateWhen: GtLChatMessagesChanged in: self announcer
 ]
 
 { #category : #initialization }
@@ -77,9 +88,18 @@ GtL >> initialize [
 	announcer := Announcer new
 ]
 
+{ #category : #announcing }
+GtL >> onChatMessagesChanged: anAnnouncement [
+	self announce: anAnnouncement
+]
+
 { #category : #registry }
 GtL >> registerChat: aChat [
 	registry add: aChat.
+	aChat announcer
+		when: GtLChatMessagesChanged
+		send: #onChatMessagesChanged:
+		to: self.
 	self announce: (GtLChatAddedAnnouncement new chat: aChat).
 	^ aChat
 ]
@@ -91,6 +111,7 @@ GtL >> registry [
 
 { #category : #registry }
 GtL >> removeChat: aChat [
+	(aChat announcer hasSubscriber: self) ifTrue: [ aChat announcer unsubscribe: self ].
 	(registry remove: aChat ifAbsent: [ ^ self ]) ifNotNil: [
 		self announce: (GtLChatRemovedAnnouncement new chat: aChat) ]
 ]
