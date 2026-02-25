@@ -66,7 +66,8 @@ GtL >> announcer [
 GtL >> chat [
 	| chat |
 	chat := GtLChat new.
-	self registerChat: chat
+	self registerChat: chat.
+	^ chat
 ]
 
 { #category : #registry }
@@ -82,7 +83,7 @@ GtL >> clearChats [
 GtL >> gtChat [
 	| chat |
 	chat := GtLChat new
-		tools: GtLTools gt;
+		tools: GtLTools gt, {GtLToolForSmalltalkCodeEvaluation new};
 		markdownResponse;
 		gtPageExplanation: 'Examples by example';
 		gtPageExplanation: 'Inspector phlow views by example'.
@@ -103,9 +104,25 @@ GtL >> gtViewChatsOn: aView [
 					ifNotEmpty: [ :messages | messages first createdAt asLocalStringYMDHMS ]
 					ifEmpty: [ '-' ] ];
 		column: 'Finished'
-			text: [ :aChat | aChat messages isEmpty  or: [ aChat isFinishedSuccesss ] ];
-		contextItemLabel: 'Inspect chat' action: [ :anElement :aChat | anElement phlow spawnObject: aChat ];
-		contextItemLabel: 'Remove chat' action: [ :anElement :aChat | self removeChat: aChat ];
+			text: [ :aChat | aChat messages isEmpty or: [ aChat isFinishedSuccesss ] ];
+		contextItemLabel: 'Inspect chat'
+			action: [ :anElement :aChat | anElement phlow spawnObject: aChat ];
+		contextItemLabel: 'Remove chat'
+			action: [ :anElement :aChat | self removeChat: aChat ];
+		"actionDropdownButtonIcon: BrGlamorousVectorIcons add
+			tooltip: 'Add chat'
+			content: [ | menuItems |
+				menuItems := BrMenuItems new
+						addItems: ({#chat -> 'Empty chat'.
+								#gtChat -> 'Default GT chat'}
+								collect: [ :assoc | 
+									BrMenuActionItem new
+										action: [ :element | element spawnObject: (GtL perform: assoc key) ];
+										label: assoc value ]).
+				BrMenuSteppedElement new
+					elementBuilder: BrGlamorousMenuElementBuilder new;
+					addAptitude: BrPopoverContainerAptitude new;
+					menuModel: menuItems ];"
 		updateWhen: GtLChatAnnouncement in: self announcer;
 		updateWhen: GtLChatMessagesChanged in: self announcer
 ]
