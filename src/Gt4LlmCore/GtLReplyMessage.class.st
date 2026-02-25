@@ -258,7 +258,7 @@ GtLReplyMessage >> isReplyMessage [
 
 { #category : #'api - testing' }
 GtLReplyMessage >> isSuccess [
-	^ finalMessage ifNotNil: #isSuccess ifNil: [ false ]
+	^ finalMessage notNil
 ]
 
 { #category : #'api - execution' }
