@@ -663,23 +663,22 @@ GtLChatLiveExamples >> messageWithToolCallExample_magritteMarkdown [
 	<gtExample>
 	| messageString currentMessage responseMessage |
 	messageString := 'Use tools and give me a description of the class BlElement'.
-
-	self stubResponses: [ self messageWithToolCallExample_magritteMarkdown_stub_responses ].
-	
+	self
+		stubResponses: [ self messageWithToolCallExample_magritteMarkdown_stub_responses ].
 	currentMessage := self currentChat createUserMessage.
+	currentMessage tools: (GtLTools withAll: {GtLToolForClassLookup new}).
+	currentMessage addResponseFormatForMagritte: GtLMarkdown named: 'Markdown'.
 	currentMessage
 		addInputMagritteObject: (GtLMarkdown new content: messageString)
 		named: 'Markdown'.
-
-	currentMessage tools: (GtLTools withAll: {GtLToolForClassLookup new}).
-	currentMessage addResponseFormatForMagritte: GtLMarkdown named: 'Markdown'.
-
 	responseMessage := self currentChat sendMessage: currentMessage.
-
+	self assert: self currentChat messages size equals: 2.
+	self assert: self currentChat isFinishedSuccesss not.
+	self assert: self currentChat messages last executionMessages isEmpty.
 	self
 		waitForChatRunIsDoneThen: [ self assert: self currentChat messages size equals: 2 ].
-
-	^ self currentChat
+	self assert: self currentChat isFinishedSuccesss.
+	^ self currentChat messages last
 ]
 
 { #category : #'examples - calls' }
