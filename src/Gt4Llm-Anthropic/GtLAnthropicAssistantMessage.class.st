@@ -8,7 +8,7 @@ Class {
 		'requestResponse',
 		'hasCompactionResponse'
 	],
-	#category : #'Gt4Llm-Anthropic-Client'
+	#category : 'Gt4Llm-Anthropic-Client'
 }
 
 { #category : #testing }

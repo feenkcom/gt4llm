@@ -5,7 +5,7 @@ Class {
 		'targetClassName',
 		'methodNameToPushDown'
 	],
-	#category : #'Gt4LlmCore-Formats'
+	#category : 'Gt4LlmCore-Formats'
 }
 
 { #category : #testing }

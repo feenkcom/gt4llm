@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLChatWithOpenAIProviderStubExamples,
 	#superclass : #Object,
-	#category : #'Gt4Llm-OpenAI-Examples'
+	#category : 'Gt4Llm-OpenAI-Examples'
 }
 
 { #category : #'as yet unclassified' }
@@ -9,7 +9,7 @@ GtLChatWithOpenAIProviderStubExamples >> chatWithInstructions [
 	<gtExample>
 	| chat message instructions |
 	chat := self chatWithOpenAIProviderStub.
-	chat addInstructionSectionForLepiterPages: {'Examples by example'} titled: 'Explanations'.
+	chat pageExplanation: 'Examples by example'.
 	message := chat createUserMessage.
 	message chat: chat.
 	instructions := message completeInstructionString.
@@ -60,7 +60,7 @@ GtLChatWithOpenAIProviderStubExamples >> messageWithInstructions [
 	message := chat createUserMessage.
 	instructions := message completeInstructionString.
 	self assert: instructions isEmpty.
-	message addInstructionSectionForLepiterPages: {'Examples by example'} titled: 'Explanations'.
+	message pageExplanation: 'Examples by example'.
 	instructions := message completeInstructionString.
 	self assert: instructions notEmpty.
 	^ message

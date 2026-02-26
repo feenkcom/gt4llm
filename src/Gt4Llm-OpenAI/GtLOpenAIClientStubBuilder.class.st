@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'responses'
 	],
-	#category : #'Gt4Llm-OpenAI-Examples'
+	#category : 'Gt4Llm-OpenAI-Examples'
 }
 
 { #category : #'private - instance creation' }
