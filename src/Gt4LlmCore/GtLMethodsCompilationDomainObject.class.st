@@ -19,6 +19,20 @@ GtLMethodsCompilationDomainObject >> gtMethodsFor: aView [
 		view: #gtItemsFor:
 ]
 
+{ #category : #views }
+GtLMethodsCompilationDomainObject >> gtMethodsListFor: aView [
+	<gtView>
+	<gtLlmView>
+	methods ifNil: [ ^ aView empty ].
+	^ aView columnedList
+		title: 'Method list';
+		priority: 2;
+		items: [ methods ];
+		column: 'Class' text: [ :each | each method gtDisplayString ];
+		column: 'State'
+			text: [ :each | each hasOldSourceCode ifTrue: [ 'Modified' ] ifFalse: [ 'New' ] ]
+]
+
 { #category : #'as yet unclassified' }
 GtLMethodsCompilationDomainObject >> gtMethodsWithExceptionsFor: aView [
 	<gtView>
