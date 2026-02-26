@@ -25,7 +25,7 @@ GtL class >> gtChatsFor: aView [
 	^ aView forward
 		title: 'Chats';
 		priority: 2;
-		object: [ self current ];
+		object: [ self registry ];
 		view: #gtViewChatsOn:
 ]
 
