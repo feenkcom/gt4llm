@@ -26,7 +26,7 @@ GtLToolForClassDefinitionChange >> parametersDescription [
 
 { #category : #private }
 GtLToolForClassDefinitionChange >> privatePerformToolCall: aToolCall [
-	| arguments classNameValue classNameString classNameSymbol targetClass superclassValue superclassName superclass instanceVariables classVariables packageValue packageName updatedClass builder |
+	| arguments classNameValue classNameString classNameSymbol targetClass superclassValue superclassName superclass instanceVariables classVariables packageValue packageName updatedClass builder currentInstanceVariables currentClassVariables |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	classNameValue := arguments
 		at: 'className'
@@ -44,33 +44,43 @@ GtLToolForClassDefinitionChange >> privatePerformToolCall: aToolCall [
 	targetClass := Smalltalk globals
 		at: classNameSymbol
 		ifAbsent: [ ^ GtLMissingDomainObject new objectName: classNameString ].
-	superclassValue := arguments
-		at: 'superclassName'
-		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-			receiverName: self name;
-			arguments: aToolCall arguments;
-			missingArgument: 'superclassName' ].
-	superclassName := superclassValue asString trimBoth.
-	superclassName isEmpty
-		ifTrue: [ ^ GtLMissingArgumentDomainObject new
-			receiverName: self name;
-			arguments: aToolCall arguments;
-			missingArgument: 'superclassName' ].
-	superclass := Smalltalk globals
-		at: superclassName asSymbol
-		ifAbsent: [ ^ GtLMissingDomainObject new objectName: superclassName ].
-	instanceVariables := self
-		stringFromVariableNames: (arguments at: 'instanceVariables' ifAbsent: [ '' ]).
-	classVariables := self
-		stringFromVariableNames: (arguments at: 'classVariables' ifAbsent: [ '' ]).
-	packageValue := arguments at: 'package' ifAbsent: [ '' ].
-	packageName := packageValue ifNil: [ '' ].
-	packageName := packageName asString trimBoth.
-	packageName isEmpty
-		ifTrue: [ ^ GtLMissingArgumentDomainObject new
-			receiverName: self name;
-			arguments: aToolCall arguments;
-			missingArgument: 'package' ].
+	currentInstanceVariables := self
+		stringFromVariableNames: (targetClass instanceVariables collect: #name).
+	currentClassVariables := self
+		stringFromVariableNames: (targetClass classVariables collect: #name).
+	(arguments includesKey: 'superclassName')
+		ifTrue: [
+			superclassValue := arguments at: 'superclassName'.
+			superclassName := superclassValue ifNil: [ '' ].
+			superclassName := superclassName asString trimBoth.
+			superclassName isEmpty
+				ifTrue: [ ^ GtLMissingArgumentDomainObject new
+						receiverName: self name;
+						arguments: aToolCall arguments;
+						missingArgument: 'superclassName' ].
+			superclass := Smalltalk globals
+				at: superclassName asSymbol
+				ifAbsent: [ ^ GtLMissingDomainObject new objectName: superclassName ] ]
+		ifFalse: [
+			superclass := targetClass superclass.
+			superclassName := superclass name ].
+	instanceVariables := (arguments includesKey: 'instanceVariables')
+		ifTrue: [ self stringFromVariableNames: (arguments at: 'instanceVariables') ]
+		ifFalse: [ currentInstanceVariables ].
+	classVariables := (arguments includesKey: 'classVariables')
+		ifTrue: [ self stringFromVariableNames: (arguments at: 'classVariables') ]
+		ifFalse: [ currentClassVariables ].
+	(arguments includesKey: 'package')
+		ifTrue: [
+			packageValue := arguments at: 'package'.
+			packageName := packageValue ifNil: [ '' ].
+			packageName := packageName asString trimBoth.
+			packageName isEmpty
+				ifTrue: [ ^ GtLMissingArgumentDomainObject new
+						receiverName: self name;
+						arguments: aToolCall arguments;
+						missingArgument: 'package' ] ]
+		ifFalse: [ packageName := targetClass package name ].
 	updatedClass := [
 		builder := ShiftClassBuilder new.
 		builder fillFor: targetClass.
