@@ -109,7 +109,7 @@ GtLCoderExpandableLepiterExplanationStyler >> visitMessage: aMessageNode [
 		ifTrue: [ self
 				stylePageNameInStringMessage: aMessageNode
 				inLepiterBase: LeDatabase gtBook ].
-	(#(pageExplanation: markdownPage:) includes: aMessageNode selector)
+	(#(markdownPage:) includes: aMessageNode selector)
 		ifTrue: [ self
 				stylePageNameInStringMessage: aMessageNode
 				inLepiterBase: LeDatabasesRegistry defaultLogicalDatabase ].

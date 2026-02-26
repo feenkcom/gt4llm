@@ -26,7 +26,7 @@ GtLToolForMethodCompilation >> parametersDescription [
 
 { #category : #private }
 GtLToolForMethodCompilation >> privatePerformToolCall: aToolCall [
-	| arguments className class classSideValue source protocol selector |
+	| arguments className class classSideValue source protocol selector methodNode oldSourceCode |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	className := arguments
 			at: 'className'
@@ -51,10 +51,26 @@ GtLToolForMethodCompilation >> privatePerformToolCall: aToolCall [
 				receiverName: self name;
 				arguments: arguments;
 				missingArgument: 'sourceCode' ].
-	protocol := arguments at: 'protocol' ifAbsent: [ 'as yet unclassified' ].
-	protocol := protocol ifNil: [ 'as yet unclassified' ].
-	protocol := protocol asString.
-	protocol isEmpty ifTrue: [ protocol := 'as yet unclassified' ].
+	protocol := arguments
+			at: 'protocol'
+			ifPresent: [ :p | (p isNil or: [ p asString isEmpty ]) ifTrue: [ 'as yet unclassified' ] ]
+			ifAbsent: [ 'as yet unclassified' ].
+	methodNode := [ GtPharoParser
+			parse: source
+			startingAt: GtPharoParser startingStateForMethod ]
+			on: Error
+			do: [ :error | 
+				^ GtLMethodCompilationExceptionDomainObject new
+					freeze: error;
+					targetClass: class;
+					protocolName: protocol;
+					sourceCode: source;
+					description: 'Syntax error while parsing the given method source code' ].
+	oldSourceCode := (methodNode notNil
+			and: [ methodNode selector notNil
+					and: [ class includesSelector: methodNode selector ] ])
+			ifTrue: [ (class >> methodNode selector) sourceCode ]
+			ifFalse: [ nil ].
 	selector := [ [ class compile: source classified: protocol ]
 			on: CodeError
 			do: [ :notification | 
@@ -72,7 +88,8 @@ GtLToolForMethodCompilation >> privatePerformToolCall: aToolCall [
 					protocolName: protocol;
 					sourceCode: source;
 					description: 'Compilation error while compiling given method source code' ].
-
 	^ GtLMethodDomainObject new
-		method: (class methodDict at: selector)
+		method: (class methodDict at: selector);
+		oldSourceCode: oldSourceCode;
+		newSourceCode: (class methodDict at: selector) sourceCode
 ]

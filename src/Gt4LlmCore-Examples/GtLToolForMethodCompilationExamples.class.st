@@ -29,7 +29,9 @@ GtLToolForMethodCompilationExamples >> compileClassSideMethod [
 	self assert: (metaClass includesSelector: selector).
 	self
 		assert: result method
-		equals: metaClass >> #gtCompiledExampleClassSideMethod ]
+		equals: metaClass >> #gtCompiledExampleClassSideMethod.
+	self assert: result oldSourceCode isNil.
+	self assert: result newSourceCode equals: source ]
 		ensure: [ (metaClass includesSelector: selector)
 				ifTrue: [ metaClass removeSelector: selector ] ].
 	^ call
@@ -57,7 +59,99 @@ GtLToolForMethodCompilationExamples >> compileInstanceSideMethod [
 	self assert: call tool == tool.
 	self assert: result isErrorDomainObject not.
 	self assert: (targetClass includesSelector: selector).
-	self assert: result method equals: targetClass >> selector ]
+	self assert: result method equals: targetClass >> selector.
+	self assert: result oldSourceCode isNil.
+	self assert: result newSourceCode equals: source ]
+		ensure: [ (targetClass includesSelector: selector)
+				ifTrue: [ targetClass removeSelector: selector ] ].
+	^ call
+]
+
+{ #category : #examples }
+GtLToolForMethodCompilationExamples >> compileInstanceSideMethodWithEmptyProtocol [
+	<gtExample>
+	| tool call result selector targetClass source |
+	selector := #gtCompiledExampleEmptyProtocol.
+	targetClass := GtLToolForMethodCompilationExamples.
+	source := 'gtCompiledExampleEmptyProtocol ^ 10'.
+	tool := GtLToolForMethodCompilation new.
+	(targetClass includesSelector: selector)
+		ifTrue: [ targetClass removeSelector: selector ].
+	[ call := GtLFunctionToolCall new.
+	call
+		function: {'name' -> tool name.
+				'arguments'
+					-> {'className' -> #GtLToolForMethodCompilationExamples.
+							'sourceCode' -> source.
+							'protocol' -> ''.
+							'classSide' -> 'false'} asDictionary} asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: result isErrorDomainObject not.
+	self assert: (targetClass includesSelector: selector).
+	self
+		assert: (targetClass organization protocolNameOfSelector: selector)
+		equals: 'as yet unclassified'.
+	self assert: result newSourceCode equals: source ]
+		ensure: [ (targetClass includesSelector: selector)
+				ifTrue: [ targetClass removeSelector: selector ] ].
+	^ call
+]
+
+{ #category : #examples }
+GtLToolForMethodCompilationExamples >> compileInstanceSideMethodWithExistingSource [
+	<gtExample>
+	| tool call result selector targetClass sourceBefore sourceAfter |
+	selector := #gtCompiledExampleInstanceExisting.
+	targetClass := GtLToolForMethodCompilationExamples.
+	sourceBefore := 'gtCompiledExampleInstanceExisting ^ 1'.
+	sourceAfter := 'gtCompiledExampleInstanceExisting ^ 2'.
+	targetClass compile: sourceBefore classified: 'examples'.
+	tool := GtLToolForMethodCompilation new.
+	[ call := GtLFunctionToolCall new.
+	call
+		function: {'name' -> tool name.
+				'arguments'
+					-> {'className' -> #GtLToolForMethodCompilationExamples.
+							'sourceCode' -> sourceAfter.
+							'protocol' -> 'examples'.
+							'classSide' -> 'false'} asDictionary} asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: result isErrorDomainObject not.
+	self assert: result method equals: targetClass >> selector.
+	self assert: result oldSourceCode equals: sourceBefore.
+	self assert: result newSourceCode equals: sourceAfter ]
+		ensure: [ (targetClass includesSelector: selector)
+				ifTrue: [ targetClass removeSelector: selector ] ].
+	^ call
+]
+
+{ #category : #examples }
+GtLToolForMethodCompilationExamples >> compileInstanceSideMethodWithMissingProtocol [
+	<gtExample>
+	| tool call result selector targetClass source |
+	selector := #gtCompiledExampleMissingProtocol.
+	targetClass := GtLToolForMethodCompilationExamples.
+	source := 'gtCompiledExampleMissingProtocol ^ 9'.
+	tool := GtLToolForMethodCompilation new.
+	(targetClass includesSelector: selector)
+		ifTrue: [ targetClass removeSelector: selector ].
+	[ call := GtLFunctionToolCall new.
+	call
+		function: {'name' -> tool name.
+				'arguments'
+					-> {'className' -> #GtLToolForMethodCompilationExamples.
+							'sourceCode' -> source.
+							'classSide' -> 'false'} asDictionary} asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: result isErrorDomainObject not.
+	self assert: (targetClass includesSelector: selector).
+	self
+		assert: (targetClass organization protocolNameOfSelector: selector)
+		equals: 'as yet unclassified'.
+	self assert: result newSourceCode equals: source ]
 		ensure: [ (targetClass includesSelector: selector)
 				ifTrue: [ targetClass removeSelector: selector ] ].
 	^ call
@@ -80,6 +174,44 @@ GtLToolForMethodCompilationExamples >> compileMethodForUnknownClass [
 	self assert: call tool == tool.
 	self assert: result isErrorDomainObject.
 	self assert: result objectName equals: 'ClassThatDoesNotExist'.
+	^ call
+]
+
+{ #category : #examples }
+GtLToolForMethodCompilationExamples >> compileMethodWithMissingClassName [
+	<gtExample>
+	| tool call result |
+	tool := GtLToolForMethodCompilation new.
+	call := GtLFunctionToolCall new.
+	call
+		function: {'name' -> tool name.
+				'arguments'
+					-> {'sourceCode' -> 'gtCompiledExampleMissingClassName ^ 1'.
+							'protocol' -> 'examples'.
+							'classSide' -> 'false'} asDictionary} asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: result isErrorDomainObject.
+	self assert: result missingArgument equals: 'className'.
+	^ call
+]
+
+{ #category : #examples }
+GtLToolForMethodCompilationExamples >> compileMethodWithMissingSourceCode [
+	<gtExample>
+	| tool call result |
+	tool := GtLToolForMethodCompilation new.
+	call := GtLFunctionToolCall new.
+	call
+		function: {'name' -> tool name.
+				'arguments'
+					-> {'className' -> #GtLToolForMethodCompilationExamples.
+							'protocol' -> 'examples'.
+							'classSide' -> 'false'} asDictionary} asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: result isErrorDomainObject.
+	self assert: result missingArgument equals: 'sourceCode'.
 	^ call
 ]
 
