@@ -21,12 +21,12 @@ GtLToolForClassCreation >> name [
 
 { #category : #accessing }
 GtLToolForClassCreation >> parametersDescription [
-	^ #('className' 'superclassName' 'instanceVariables' 'classVariables' 'traitCompositionString' 'package')
+	^ #('className' 'superclassName' 'instanceVariables' 'classVariables' 'traitCompositionString' 'package' 'comment')
 ]
 
 { #category : #private }
 GtLToolForClassCreation >> privatePerformToolCall: aToolCall [
-	| arguments classNameValue classNameString classNameSymbol superclassValue superclassName superclass instanceVariables classVariables traitCompositionValue traitCompositionString packageValue packageName createdClass |
+	| arguments classNameValue classNameString classNameSymbol superclassValue superclassName superclass instanceVariables classVariables traitCompositionValue traitCompositionString packageValue packageName commentValue commentString createdClass |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	classNameValue := arguments
 			at: 'className'
@@ -78,6 +78,9 @@ GtLToolForClassCreation >> privatePerformToolCall: aToolCall [
 				receiverName: self name;
 				arguments: aToolCall arguments;
 				missingArgument: 'package' ].
+	commentValue := arguments at: 'comment' ifAbsent: [ nil ].
+	commentString := commentValue ifNil: [ nil ] ifNotNil: [ commentValue asString trimBoth ].
+	(commentString notNil and: [ commentString isEmpty ]) ifTrue: [ commentString := nil ].
 	createdClass := [ superclass classInstaller
 			make: [ :builder | 
 				builder
@@ -87,6 +90,7 @@ GtLToolForClassCreation >> privatePerformToolCall: aToolCall [
 					sharedVariablesFromString: classVariables;
 					traitComposition: (self class compiler evaluate: traitCompositionString);
 					package: packageName;
+					comment: commentString;
 					environment: superclass environment ] ]
 			on: Error
 			do: [ :error | 

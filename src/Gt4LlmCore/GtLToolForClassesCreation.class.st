@@ -11,7 +11,7 @@ GtLToolForClassesCreation >> acceptVisitor: aVisitor [
 
 { #category : #private }
 GtLToolForClassesCreation >> classResultFromDescriptor: descriptor [
-	| classNameValue classNameString classNameSymbol superclassValue superclassName superclass instanceVariables classVariables traitCompositionValue traitCompositionString packageValue packageName createdClass |
+	| classNameValue classNameString classNameSymbol superclassValue superclassName superclass instanceVariables classVariables traitCompositionValue traitCompositionString packageValue packageName commentValue commentString createdClass |
 	classNameValue := descriptor
 			at: 'className'
 			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
@@ -62,6 +62,9 @@ GtLToolForClassesCreation >> classResultFromDescriptor: descriptor [
 				receiverName: self name;
 				arguments: descriptor;
 				missingArgument: 'package' ].
+	commentValue := descriptor at: 'comment' ifAbsent: [ nil ].
+	commentString := commentValue ifNil: [ nil ] ifNotNil: [ commentValue asString trimBoth ].
+	(commentString notNil and: [ commentString isEmpty ]) ifTrue: [ commentString := nil ].
 	createdClass := [ superclass classInstaller
 			make: [ :builder | 
 				builder
@@ -71,6 +74,7 @@ GtLToolForClassesCreation >> classResultFromDescriptor: descriptor [
 					sharedVariablesFromString: classVariables;
 					traitComposition: (self class compiler evaluate: traitCompositionString);
 					package: packageName;
+					comment: commentString;
 					environment: superclass environment ] ]
 			on: Error
 			do: [ :error | 
@@ -105,7 +109,7 @@ GtLToolForClassesCreation >> classResultsFrom: classesArgument ifInvalid: invali
 	^ results asArray
 ]
 
-{ #category : #accessing }
+{ #category : #private }
 GtLToolForClassesCreation >> classesListJsonSchemaDictionary [
 	| classSchema |
 	classSchema := {'type' -> 'object'.
@@ -115,9 +119,10 @@ GtLToolForClassesCreation >> classesListJsonSchemaDictionary [
 						'instanceVariables' -> {'type' -> 'string'} asDictionary.
 						'classVariables' -> {'type' -> 'string'} asDictionary.
 						'traitCompositionString' -> {'type' -> 'string'} asDictionary.
-						'package' -> {'type' -> 'string'} asDictionary} asDictionary.
+						'package' -> {'type' -> 'string'} asDictionary.
+						'comment' -> {'type' -> 'string'} asDictionary} asDictionary.
 			'required'
-				-> #('className' 'superclassName' 'instanceVariables' 'classVariables' 'traitCompositionString' 'package').
+				-> #('className' 'superclassName' 'package').
 			'additionalProperties' -> false} asDictionary.
 	^ {'type' -> 'object'.
 		'properties'
