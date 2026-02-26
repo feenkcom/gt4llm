@@ -80,6 +80,40 @@ GtLToolForClassCreationExamples >> createClassWithClassVariables [
 ]
 
 { #category : #examples }
+GtLToolForClassCreationExamples >> createClassWithComment [
+	<gtExample>
+	| tool call result className createdClass comment |
+	className := #GtLToolForClassCreationExamplesGeneratedWithComment.
+	comment := 'Example class comment'.
+	self removeClassNamedIfPresent: className.
+	tool := GtLToolForClassCreation new.
+	[
+		call := GtLFunctionToolCall new.
+		call function: {
+			'name' -> tool name.
+			'arguments' -> {
+				'className' -> className.
+				'superclassName' -> #Object.
+				'instanceVariables' -> #().
+				'classVariables' -> #().
+				'traitCompositionString' -> Behavior traitCompositionString.
+				'package' -> 'Gt4LlmCoreNewPackage'.
+				'comment' -> comment
+			} asDictionary
+		} asDictionary.
+		result := tool performToolCall: call.
+		self assert: call tool == tool.
+		self assert: result isErrorDomainObject not.
+		createdClass := Smalltalk globals at: className ifAbsent: [ nil ].
+		self assert: createdClass notNil.
+		self assert: createdClass comment equals: comment
+	] ensure: [
+		self removeClassNamedIfPresent: className
+	].
+	^ call
+]
+
+{ #category : #examples }
 GtLToolForClassCreationExamples >> createClassWithInstanceVariables [
 	<gtExample>
 	| tool call result className createdClass |

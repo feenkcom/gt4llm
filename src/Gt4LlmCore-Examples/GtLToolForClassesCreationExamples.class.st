@@ -80,6 +80,40 @@ GtLToolForClassesCreationExamples >> createClassesWithClassVariables [
 ]
 
 { #category : #examples }
+GtLToolForClassesCreationExamples >> createClassesWithComment [
+	<gtExample>
+	| tool call result classNames createdClasses sources comment |
+	[ tool := GtLToolForClassesCreation new.
+	classNames := {#GtLToolForClassesCreationExamplesGeneratedWithComment}.
+	comment := 'Example classes comment'.
+	classNames do: [ :className | self removeClassNamedIfPresent: className ].
+	sources := {{
+		'className' -> classNames first.
+		'superclassName' -> #Object.
+		'instanceVariables' -> #().
+		'classVariables' -> #().
+		'traitCompositionString' -> Behavior traitCompositionString.
+		'package' -> 'Gt4LlmCoreNewPackage'.
+		'comment' -> comment
+	} asDictionary} asArray.
+	call := GtLFunctionToolCall new.
+	call function: {
+		'name' -> tool name.
+		'arguments' -> {'classes' -> sources} asDictionary
+	} asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: result isErrorDomainObject not.
+	self assert: result classes size equals: 1.
+	createdClasses := classNames
+		collect: [ :each | Smalltalk globals at: each ifAbsent: [ nil ] ].
+	self assert: (createdClasses allSatisfy: #notNil).
+	self assert: createdClasses first comment equals: comment ]
+		ensure: [ classNames do: [ :each | self removeClassNamedIfPresent: each ] ].
+	^ call
+]
+
+{ #category : #examples }
 GtLToolForClassesCreationExamples >> createClassesWithInstanceVariables [
 	<gtExample>
 	| tool call result classNames createdClasses sources |
