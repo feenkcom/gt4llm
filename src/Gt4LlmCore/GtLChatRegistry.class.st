@@ -2,8 +2,8 @@ Class {
 	#name : #GtLChatRegistry,
 	#superclass : #Object,
 	#instVars : [
-		'registry',
-		'announcer'
+		'announcer',
+		'chats'
 	],
 	#classVars : [
 		'Current'
@@ -33,31 +33,17 @@ GtLChatRegistry >> announcer [
 ]
 
 { #category : #accessing }
-GtLChatRegistry >> chat [
-	| chat |
-	chat := GtLChat new.
-	self registerChat: chat.
-	^ chat
+GtLChatRegistry >> chats [
+	^ chats
 ]
 
 { #category : #accessing }
 GtLChatRegistry >> clearChats [
-	| chats |
-	chats := registry copy.
-	chats do: [ :each | each announcer unsubscribe: self ].
-	registry removeAll.
-	chats do: [ :each | self announce: (GtLChatRemovedAnnouncement new chat: each) ]
-]
-
-{ #category : #accessing }
-GtLChatRegistry >> gtChat [
-	| chat |
-	chat := GtLChat new
-		tools: GtLTools gt, {GtLToolForSmalltalkCodeEvaluation new};
-		markdownResponse;
-		gtPageExplanation: 'Examples by example';
-		gtPageExplanation: 'Inspector phlow views by example'.
-	^ self registerChat: chat
+	| chatsCopy |
+	chatsCopy := chats copy.
+	chatsCopy do: [ :each | each announcer unsubscribe: self ].
+	chats removeAll.
+	chatsCopy do: [ :each | self announce: (GtLChatRemovedAnnouncement new chat: each) ]
 ]
 
 { #category : #accessing }
@@ -66,7 +52,7 @@ GtLChatRegistry >> gtViewChatsOn: aView [
 	^ aView columnedList
 		title: 'Chats';
 		priority: 20;
-		items: [ self registry ];
+		items: [ self chats ];
 		column: 'Chat' text: [ :aChat | aChat ];
 		column: 'Started'
 			text: [ :aChat | 
@@ -79,20 +65,38 @@ GtLChatRegistry >> gtViewChatsOn: aView [
 			action: [ :anElement :aChat | anElement phlow spawnObject: aChat ];
 		contextItemLabel: 'Remove chat'
 			action: [ :anElement :aChat | self removeChat: aChat ];
-		updateWhen: GtLChatAnnouncement in: self announcer;
-		updateWhen: GtLChatMessagesChanged in: self announcer
+		updateWhen: GtLChatAnnouncement in: self announcer
 ]
 
 { #category : #initialization }
 GtLChatRegistry >> initialize [
 	super initialize.
-	registry := OrderedCollection new.
+	chats := OrderedCollection new.
 	announcer := Announcer new
 ]
 
 { #category : #accessing }
 GtLChatRegistry >> lastChat [
-	^ registry last
+	^ chats last
+]
+
+{ #category : #convenience }
+GtLChatRegistry >> newChat [
+	| chat |
+	chat := GtLChat new.
+	self registerChat: chat.
+	^ chat
+]
+
+{ #category : #accessing }
+GtLChatRegistry >> newGtChat [
+	| chat |
+	chat := GtLChat new
+		tools: GtLTools gt, {GtLToolForSmalltalkCodeEvaluation new};
+		markdownResponse;
+		gtPageExplanation: 'Examples by example';
+		gtPageExplanation: 'Inspector phlow views by example'.
+	^ self registerChat: chat
 ]
 
 { #category : #accessing }
@@ -102,7 +106,7 @@ GtLChatRegistry >> onChatMessagesChanged: anAnnouncement [
 
 { #category : #accessing }
 GtLChatRegistry >> registerChat: aChat [
-	registry add: aChat.
+	chats add: aChat.
 	aChat announcer
 		when: GtLChatMessagesChanged
 		send: #onChatMessagesChanged:
@@ -113,12 +117,12 @@ GtLChatRegistry >> registerChat: aChat [
 
 { #category : #accessing }
 GtLChatRegistry >> registry [
-	^ registry
+	^ chats
 ]
 
 { #category : #accessing }
 GtLChatRegistry >> removeChat: aChat [
 	(aChat announcer hasSubscriber: self) ifTrue: [ aChat announcer unsubscribe: self ].
-	(registry remove: aChat ifAbsent: [ ^ self ]) ifNotNil: [
+	(chats remove: aChat ifAbsent: [ ^ self ]) ifNotNil: [
 		self announce: (GtLChatRemovedAnnouncement new chat: aChat) ]
 ]
