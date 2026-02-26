@@ -16,43 +16,59 @@ GtLToolForMethodsCompilation >> description [
 
 { #category : #private }
 GtLToolForMethodsCompilation >> methodResultFromDescriptor: descriptor [
-	| className class classSideValue source protocol selector |
+	| className class classSideValue source protocol selector methodNode oldSourceCode |
 	className := descriptor
-		at: 'className'
-		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-			receiverName: self name;
-			arguments: descriptor;
-			missingArgument: 'className' ].
+			at: 'className'
+			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
+					receiverName: self name;
+					arguments: descriptor;
+					missingArgument: 'className' ].
 	class := className
-		asClassIfAbsent: [ ^ GtLMissingDomainObject new objectName: className ].
+			asClassIfAbsent: [ ^ GtLMissingDomainObject new objectName: className ].
 	classSideValue := descriptor at: 'classSide' ifAbsent: [ false ].
 	(classSideValue = true or: [ classSideValue asString = 'true' ])
 		ifTrue: [ class := class class ].
 	source := descriptor
-		at: 'sourceCode'
-		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-			receiverName: self name;
-			arguments: descriptor;
-			missingArgument: 'sourceCode' ].
+			at: 'sourceCode'
+			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
+					receiverName: self name;
+					arguments: descriptor;
+					missingArgument: 'sourceCode' ].
 	source := source asString trimBoth.
 	source isEmpty
 		ifTrue: [ ^ GtLMissingArgumentDomainObject new
-			receiverName: self name;
-			arguments: descriptor;
-			missingArgument: 'sourceCode' ].
+				receiverName: self name;
+				arguments: descriptor;
+				missingArgument: 'sourceCode' ].
 	protocol := descriptor at: 'protocol' ifAbsent: [ 'as yet unclassified' ].
 	protocol isEmpty ifTrue: [ protocol := 'as yet unclassified' ].
+	methodNode := [ GtPharoParser
+			parse: source
+			startingAt: GtPharoParser startingStateForMethod ]
+			on: Error
+			do: [ :error | 
+				^ GtLMethodCompilationExceptionDomainObject new
+					freeze: error;
+					targetClass: class;
+					protocolName: protocol;
+					sourceCode: source;
+					description: 'Syntax error while parsing the given method source code' ].
+	oldSourceCode := (methodNode notNil
+			and: [ methodNode selector notNil
+					and: [ class includesSelector: methodNode selector ] ])
+			ifTrue: [ (class >> methodNode selector) sourceCode ]
+			ifFalse: [ nil ].
 	selector := [ [ class compile: source classified: protocol ]
 			on: CodeError
-			do: [ :notification |
+			do: [ :notification | 
 				^ GtLMethodCompilationExceptionDomainObject new
 					freeze: notification;
 					targetClass: class;
 					protocolName: protocol;
 					sourceCode: source;
 					description: 'Syntax error while compiling given method source code' ] ]
-		on: Error
-		do: [ :error |
+			on: Error
+			do: [ :error | 
 				^ GtLMethodCompilationExceptionDomainObject new
 					freeze: error;
 					targetClass: class;
@@ -60,7 +76,9 @@ GtLToolForMethodsCompilation >> methodResultFromDescriptor: descriptor [
 					sourceCode: source;
 					description: 'Compilation error while compiling given method source code' ].
 	^ GtLMethodDomainObject new
-		method: (class methodDict at: selector)
+		method: (class methodDict at: selector);
+		oldSourceCode: oldSourceCode;
+		newSourceCode: (class methodDict at: selector) sourceCode
 ]
 
 { #category : #private }

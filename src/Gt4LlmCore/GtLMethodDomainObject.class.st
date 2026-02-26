@@ -2,7 +2,9 @@ Class {
 	#name : #GtLMethodDomainObject,
 	#superclass : #GtLDomainObject,
 	#instVars : [
-		'method'
+		'method',
+		'oldSourceCode',
+		'newSourceCode'
 	],
 	#category : #'Gt4LlmCore-Domain Objects'
 }
@@ -22,6 +24,22 @@ GtLMethodDomainObject >> gtClassCoderViewFor: aView [
 		stencil: [ (GtCoderElement forMethod: self method) disablePlayPage ]
 ]
 
+{ #category : #'as yet unclassified' }
+GtLMethodDomainObject >> gtDiffFor: aView [
+	<gtView>
+	<gtLlmView>
+	^ aView diff
+		title: 'Diff';
+		priority: 2;
+		from: [ oldSourceCode ifNil: [''] ];
+		to: [ newSourceCode ]
+]
+
+{ #category : #'as yet unclassified' }
+GtLMethodDomainObject >> hasOldSourceCode [
+	^ oldSourceCode notNil
+]
+
 { #category : #accessing }
 GtLMethodDomainObject >> method [
 	^ method
@@ -32,7 +50,27 @@ GtLMethodDomainObject >> method: aCompiledMethod [
 	method := aCompiledMethod
 ]
 
-{ #category : #'api - serializing' }
+{ #category : #accessing }
+GtLMethodDomainObject >> newSourceCode [
+	^ newSourceCode
+]
+
+{ #category : #accessing }
+GtLMethodDomainObject >> newSourceCode: aString [
+	newSourceCode := aString
+]
+
+{ #category : #accessing }
+GtLMethodDomainObject >> oldSourceCode [
+	^ oldSourceCode
+]
+
+{ #category : #accessing }
+GtLMethodDomainObject >> oldSourceCode: aString [
+	oldSourceCode := aString
+]
+
+{ #category : #serialization }
 GtLMethodDomainObject >> serializeToOpenAIResponseJsonObject [
 	"Return a JSON dictionary that represents the domain object."
 
@@ -42,6 +80,8 @@ GtLMethodDomainObject >> serializeToOpenAIResponseJsonObject [
 		at: 'selector' put: self method selector asString;
 		at: 'method' put: self method name asString;
 		at: 'sourceCode' put: self sourceCode;
+		at: 'oldSourceCode' put: self oldSourceCode;
+		at: 'newSourceCode' put: self newSourceCode;
 		yourself
 ]
 
