@@ -19,27 +19,6 @@ GtLAnthropicUserMessage class >> leJsonV4Name [
 	^ #gtLAnthropicUserMessage
 ]
 
-{ #category : #adding }
-GtLAnthropicUserMessage >> addInputModel: aModel [
-	inputModels at: aModel name put: aModel.
-]
-
-{ #category : #'api - message' }
-GtLAnthropicUserMessage >> addInstructionSectionForLepiterPages: pageNames titled: title [ 
-	| instructionString |
-	instructionString := String cr
-			join: (pageNames
-					collect: [ :pageName | 
-						GtLlmLepiterContentExporter new
-							startHeaderLevel: 2;
-							page: (LeDatabase gtBook pageNamed: pageName);
-							export ]).
-	self instructions 
-		addSection: (GtLlmInstructionSection new
-				title: title;
-				body: instructionString)
-]
-
 { #category : #'as yet unclassified' }
 GtLAnthropicUserMessage >> asTokenizableString [
 	^ '<|im_start|>' , 
@@ -57,27 +36,6 @@ GtLAnthropicUserMessage >> attachments [
 { #category : #accessing }
 GtLAnthropicUserMessage >> attachments: aCollection [
 	attachments := aCollection
-]
-
-{ #category : #'as yet unclassified' }
-GtLAnthropicUserMessage >> buildCompleteInstructions [
-	| newInstructions  |
-	newInstructions := GtLlmInstructionWithSections new
-			introduction: (GtLlmInstructionString new string: '').
-	
-	inputModels notEmpty
-		ifTrue: [ 
-			| inputInstructionsBody inputInstructions |
-			inputInstructionsBody := GtLlmInstructionWithSections new
-					introduction: 'The inputs provided follow the descriptions below'.
-			inputInstructions := GtLlmInstructionSection new
-					title: 'Input descriptions';
-					body: inputInstructionsBody.
-			newInstructions addSection: inputInstructions.
-			inputModels
-				do: [ :anInputModel | anInputModel addInstructionsTo: inputInstructionsBody ] ].
-				
-	^ newInstructions
 ]
 
 { #category : #accessing }
@@ -184,25 +142,6 @@ GtLAnthropicUserMessage >> gtToolsFor: aView [
 		view: #gtItemsFor:
 ]
 
-{ #category : #ui }
-GtLAnthropicUserMessage >> gtViewInputModelsFor: aView [
-	<gtView>
-	<gtLlmView>
-	inputModels ifNil: [ ^ aView empty ].
-	^ aView columnedList
-		title: 'Input models';
-		priority: 10;
-		items: [ inputModels associations ];
-		column: 'Name' text: [ :each | each key ] width: 200;
-		column: 'Object' text: [ :each | each value description ];
-		send: [ :each | each value ]
-]
-
-{ #category : #accessing }
-GtLAnthropicUserMessage >> images: aCollection [
-	attachments := aCollection collect: [ :each | GtLInputImageFile fileReference: each ]
-]
-
 { #category : #initialization }
 GtLAnthropicUserMessage >> initialize [
 	super initialize.
@@ -226,16 +165,6 @@ GtLAnthropicUserMessage >> instructions [
 GtLAnthropicUserMessage >> isCompactionRequest [
 	^formatDescriptions schemaDescriptions anySatisfy: [ :each |
 		each name = 'Compaction' ]
-]
-
-{ #category : #'api - message' }
-GtLAnthropicUserMessage >> lepiterExplanations: pageNames [
-	^ self addInstructionSectionForLepiterPages: pageNames titled: 'Explanations'
-]
-
-{ #category : #accessing }
-GtLAnthropicUserMessage >> pdfs: aCollection [
-	attachments addAll: (aCollection collect: [ :each | GtLInputPdfFile fileReference: each ])
 ]
 
 { #category : #accessing }

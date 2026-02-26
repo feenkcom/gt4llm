@@ -1,9 +1,6 @@
 Class {
 	#name : #GtLToolForSearchForLepiterPages,
 	#superclass : #GtLAbstractPlainSchemaFunctionTool,
-	#instVars : [
-		'knowledgeBases'
-	],
 	#category : #'Gt4LlmCore-Tools'
 }
 
@@ -17,12 +14,6 @@ GtLToolForSearchForLepiterPages >> description [
 	^ 'Searches for Lepiter pages by name matching the query substring (case-insensitive).'
 ]
 
-{ #category : #'as yet unclassified' }
-GtLToolForSearchForLepiterPages >> initialize [
-	super initialize.
-	knowledgeBases := {LeDatabase gtBook}
-]
-
 { #category : #accessing }
 GtLToolForSearchForLepiterPages >> name [
 	^ 'searchForlepiterPages'
@@ -30,12 +21,12 @@ GtLToolForSearchForLepiterPages >> name [
 
 { #category : #accessing }
 GtLToolForSearchForLepiterPages >> parametersDescription [
-	^ #('query')
+	^ #('query' 'knowledgeBases')
 ]
 
-{ #category : #accessing }
+{ #category : #private }
 GtLToolForSearchForLepiterPages >> privatePerformToolCall: aToolCall [
-	| arguments query pages promise |
+	| arguments query baseIds bases pages logicalDatabase missingIds |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	query := arguments
 			at: 'query'
@@ -43,9 +34,33 @@ GtLToolForSearchForLepiterPages >> privatePerformToolCall: aToolCall [
 					receiverName: self name;
 					arguments: arguments;
 					missingArgument: 'query' ].
-	promise := (LeDatabase gtBook asyncPagesForWord: query) toArray
-			await: GtLSettings futureExecutionConfiguration.
-	pages := promise wait.
+	baseIds := arguments at: 'knowledgeBases' ifAbsent: [ nil ].
+	logicalDatabase := LeDatabasesRegistry defaultLogicalDatabase.
+	missingIds := OrderedCollection new.
+	bases := baseIds
+		ifNil: [ { LeDatabase gtBook } ]
+		ifNotNil: [ | ids |
+			ids := (baseIds isString not and: [ baseIds isCollection])
+				ifTrue: [ baseIds ]
+				ifFalse: [ { baseIds } ].
+			ids collect: [ :each |
+				logicalDatabase
+					databaseWithID: each
+					ifNone: [
+						missingIds add: each.
+						nil ] ] thenSelect: #notNil ].
+	missingIds ifNotEmpty: [
+		^ GtLMissingDomainObject new
+			objectName: missingIds first ].
+	pages := bases
+		ifEmpty: [ #() ]
+		ifNotEmpty: [ | collected |
+			collected := OrderedCollection new.
+			bases do: [ :each | | promise |
+				promise := (each asyncPagesForWord: query) toArray
+					await: GtLSettings futureExecutionConfiguration.
+				collected addAll: promise wait ].
+			collected asArray ].
 
 	^ GtLLepiterPagesDomainObject new pages: pages
 ]
