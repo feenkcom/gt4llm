@@ -4,6 +4,11 @@ Trait {
 }
 
 { #category : #'api - message' }
+TGtLWithInputModelsAPI >> addAttachments: aCollectionOfAttachments [
+	self attachments addAll: aCollectionOfAttachments
+]
+
+{ #category : #'api - message' }
 TGtLWithInputModelsAPI >> addInputMagritteObject: anObject named: aString [
 	self addInputModel: (GtLMagritteInputModel new
 		name: aString;
@@ -11,8 +16,8 @@ TGtLWithInputModelsAPI >> addInputMagritteObject: anObject named: aString [
 ]
 
 { #category : #'api - message' }
-TGtLWithInputModelsAPI >> addInputModel: anInputModel [
-	^ self explicitRequirement
+TGtLWithInputModelsAPI >> addInputModel: aModel [
+	self inputModels at: aModel name put: aModel.
 ]
 
 { #category : #'api - message' }
@@ -22,10 +27,40 @@ TGtLWithInputModelsAPI >> addPlainInputObject: anObject named: aString [
 		model: anObject)
 ]
 
+{ #category : #accessing }
+TGtLWithInputModelsAPI >> attachments [
+	self explicitRequirement
+]
+
 { #category : #'api - message' }
 TGtLWithInputModelsAPI >> gtPage: aPageName [
 	self pageObject: (LeDatabase gtBook  
 		pageNamed: aPageName)
+]
+
+{ #category : #views }
+TGtLWithInputModelsAPI >> gtViewInputModelsFor: aView [
+	<gtView>
+	<gtLlmView>
+	self inputModels ifNil: [ ^ aView empty ].
+	^ aView columnedList
+		title: 'Input models';
+		priority: 10;
+		items: [ self inputModels associations ];
+		column: 'Name' text: [ :each | each key ] width: 200;
+		column: 'Object' text: [ :each | each value description ];
+		send: [ :each | each value ]
+]
+
+{ #category : #'api - message' }
+TGtLWithInputModelsAPI >> images: aCollection [
+	self addAttachments: (aCollection collect: [ :each | 
+		GtLInputImageFile fileReference: each ])
+]
+
+{ #category : #accessing }
+TGtLWithInputModelsAPI >> inputModels [
+	self explicitRequirement
 ]
 
 { #category : #'api - message' }
@@ -70,4 +105,10 @@ TGtLWithInputModelsAPI >> pageObject: aLepiterPage [
 	self addInputModel: (GtLLepiterPageInputModel new
 			name: aLepiterPage title;
 			model: aLepiterPage)
+]
+
+{ #category : #'api - message' }
+TGtLWithInputModelsAPI >> pdfs: aCollection [
+	self addAttachments: (aCollection collect: [ :each | 
+		GtLInputPdfFile fileReference: each ])
 ]

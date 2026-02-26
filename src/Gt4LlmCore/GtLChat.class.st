@@ -75,19 +75,6 @@ GtLChat >> addErrorMessage: anErrorMessage [
 		ifAbsent: [ self addMessage: anErrorMessage ]
 ]
 
-{ #category : #'api - communication' }
-GtLChat >> addInstructionSectionForLepiterPages: pageNames titled: title [
-	| instructionString |
-	instructionString := String cr
-			join: (pageNames
-					collect: [ :pageName | 
-						GtLLepiterContentExporter new
-							startHeaderLevel: 2;
-							page: (LeDatabasesRegistry defaultLogicalDatabase  pageNamed: pageName);
-							export ]).
-	self instruction: instructionString titled: title
-]
-
 { #category : #'api - message' }
 GtLChat >> addMessage: aMessage [
 	self assert: [ (messages includes: aMessage) not ].
@@ -461,11 +448,6 @@ GtLChat >> lastUpdate [
 { #category : #accessing }
 GtLChat >> lastUpdate: anObject [
 	lastUpdate := anObject
-]
-
-{ #category : #'api - communication' }
-GtLChat >> lepiterExplanations: pageNames [
-	^ self addInstructionSectionForLepiterPages: pageNames titled: 'Explanations'
 ]
 
 { #category : #'api - communication' }

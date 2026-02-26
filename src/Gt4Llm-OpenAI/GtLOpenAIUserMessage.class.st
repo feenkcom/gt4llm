@@ -19,27 +19,6 @@ GtLOpenAIUserMessage class >> leJsonV4Name [
 	^ #gtLOpenAIUserMessage
 ]
 
-{ #category : #adding }
-GtLOpenAIUserMessage >> addInputModel: aModel [
-	inputModels at: aModel name put: aModel.
-]
-
-{ #category : #'api - message' }
-GtLOpenAIUserMessage >> addInstructionSectionForLepiterPages: pageNames titled: title [ 
-	| instructionString |
-	instructionString := String cr
-			join: (pageNames
-					collect: [ :pageName | 
-						GtLlmLepiterContentExporter new
-							startHeaderLevel: 2;
-							page: (LeDatabase gtBook pageNamed: pageName);
-							export ]).
-	self instructions 
-		addSection: (GtLlmInstructionSection new
-				title: title;
-				body: instructionString)
-]
-
 { #category : #'as yet unclassified' }
 GtLOpenAIUserMessage >> asTokenizableString [
 	^ '<|im_start|>' , 
@@ -57,27 +36,6 @@ GtLOpenAIUserMessage >> attachments [
 { #category : #accessing }
 GtLOpenAIUserMessage >> attachments: aCollection [
 	attachments := aCollection
-]
-
-{ #category : #'as yet unclassified' }
-GtLOpenAIUserMessage >> buildCompleteInstructions [
-	| newInstructions  |
-	newInstructions := GtLlmInstructionWithSections new
-			introduction: (GtLlmInstructionString new string: '').
-	
-	inputModels notEmpty
-		ifTrue: [ 
-			| inputInstructionsBody inputInstructions |
-			inputInstructionsBody := GtLlmInstructionWithSections new
-					introduction: 'The inputs provided follow the descriptions below'.
-			inputInstructions := GtLlmInstructionSection new
-					title: 'Input descriptions';
-					body: inputInstructionsBody.
-			newInstructions addSection: inputInstructions.
-			inputModels
-				do: [ :anInputModel | anInputModel addInstructionsTo: inputInstructionsBody ] ].
-				
-	^ newInstructions
 ]
 
 { #category : #accessing }
@@ -184,25 +142,6 @@ GtLOpenAIUserMessage >> gtToolsFor: aView [
 		view: #gtItemsFor:
 ]
 
-{ #category : #ui }
-GtLOpenAIUserMessage >> gtViewInputModelsFor: aView [
-	<gtView>
-	<gtLlmView>
-	inputModels ifNil: [ ^ aView empty ].
-	^ aView columnedList
-		title: 'Input models';
-		priority: 10;
-		items: [ inputModels associations ];
-		column: 'Name' text: [ :each | each key ] width: 200;
-		column: 'Object' text: [ :each | each value description ];
-		send: [ :each | each value ]
-]
-
-{ #category : #accessing }
-GtLOpenAIUserMessage >> images: aCollection [
-	attachments addAll: (aCollection collect: [ :each | GtLInputImageFile fileReference: each ])
-]
-
 { #category : #initialization }
 GtLOpenAIUserMessage >> initialize [
 	super initialize.
@@ -226,16 +165,6 @@ GtLOpenAIUserMessage >> instructions [
 GtLOpenAIUserMessage >> isCompactionRequest [
 	^formatDescriptions schemaDescriptions anySatisfy: [ :each |
 		each name = 'Compaction' ]
-]
-
-{ #category : #'api - message' }
-GtLOpenAIUserMessage >> lepiterExplanations: pageNames [
-	^ self addInstructionSectionForLepiterPages: pageNames titled: 'Explanations'
-]
-
-{ #category : #accessing }
-GtLOpenAIUserMessage >> pdfs: aCollection [
-	attachments addAll: (aCollection collect: [ :each | GtLInputPdfFile fileReference: each ])
 ]
 
 { #category : #accessing }
