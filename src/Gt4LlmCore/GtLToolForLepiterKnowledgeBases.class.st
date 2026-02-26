@@ -14,29 +14,9 @@ GtLToolForLepiterKnowledgeBases >> description [
 	^ 'Retrieve the registered Lepiter knowledge bases.'
 ]
 
-{ #category : #magritte }
-GtLToolForLepiterKnowledgeBases >> dummy [
-	^ nil
-]
-
-{ #category : #magritte }
-GtLToolForLepiterKnowledgeBases >> dummyDescription [
-	<magritteDescription>
-	^ MAStringDescription new
-		accessor: #dummy;
-		beOptional
-]
-
 { #category : #accessing }
 GtLToolForLepiterKnowledgeBases >> name [
 	^ 'lepiterKnowledgeBases'
-]
-
-{ #category : #accessing }
-GtLToolForLepiterKnowledgeBases >> parametersDescription [
-	^ GtLResponseMagritteFormat new
-		name: 'Parameters';
-		modelClass: self class
 ]
 
 { #category : #execution }

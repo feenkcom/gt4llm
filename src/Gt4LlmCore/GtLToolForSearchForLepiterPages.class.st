@@ -1,9 +1,6 @@
 Class {
 	#name : #GtLToolForSearchForLepiterPages,
 	#superclass : #GtLAbstractPlainSchemaFunctionTool,
-	#instVars : [
-		'knowledgeBases'
-	],
 	#category : #'Gt4LlmCore-Tools'
 }
 
@@ -15,12 +12,6 @@ GtLToolForSearchForLepiterPages >> acceptVisitor: aVisitor [
 { #category : #accessing }
 GtLToolForSearchForLepiterPages >> description [
 	^ 'Searches for Lepiter pages by name matching the query substring (case-insensitive).'
-]
-
-{ #category : #'as yet unclassified' }
-GtLToolForSearchForLepiterPages >> initialize [
-	super initialize.
-	knowledgeBases := {LeDatabase gtBook}
 ]
 
 { #category : #accessing }
@@ -49,7 +40,7 @@ GtLToolForSearchForLepiterPages >> privatePerformToolCall: aToolCall [
 	bases := baseIds
 		ifNil: [ { LeDatabase gtBook } ]
 		ifNotNil: [ | ids |
-			ids := baseIds isCollection
+			ids := (baseIds isString not and: [ baseIds isCollection])
 				ifTrue: [ baseIds ]
 				ifFalse: [ { baseIds } ].
 			ids collect: [ :each |

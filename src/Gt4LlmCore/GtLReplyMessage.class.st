@@ -213,11 +213,11 @@ GtLReplyMessage >> gtToolViewMessagesFor: aView [
 									nextPut: $:;
 									nextPutAll: anAssoc value asString ]
 							separatedBy: [ aStream nextPutAll: ', ' ] ] ]
-			weight: 2;
-		column: 'Description'
+			weight: 3;
+"		column: 'Description'
 			text: #toolDescription
 			weight: 3;
-		column: 'State' text: #messageExecutionStateLabel width: 60
+"		column: 'State' text: #messageExecutionStateLabel width: 60
 ]
 
 { #category : #'gt - inspector' }

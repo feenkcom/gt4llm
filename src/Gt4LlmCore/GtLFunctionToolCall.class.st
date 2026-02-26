@@ -82,6 +82,19 @@ GtLFunctionToolCall >> function: aDict [
 ]
 
 { #category : #views }
+GtLFunctionToolCall >> gtActionFor: anAction [
+	<gtAction>
+	^ anAction button
+		icon: BrGlamorousVectorIcons debug;
+		action: [ :button | 
+			| newCall |
+			newCall := self class new.
+			newCall function: self function.
+			button phlow spawnObject: (tool performToolCall: newCall) ];
+		tooltip: 'Debug a new tool call'
+]
+
+{ #category : #views }
 GtLFunctionToolCall >> gtActionForResultFor: anAction [
 	<gtAction>
 	^ anAction button
@@ -90,6 +103,17 @@ GtLFunctionToolCall >> gtActionForResultFor: anAction [
 		tooltip: 'Spawn the result object';
 		action: [ :button | 
 			button phlow spawnObject: result ]
+]
+
+{ #category : #views }
+GtLFunctionToolCall >> gtActionForToolFor: anAction [
+	<gtAction>
+	^ anAction button
+		icon: BrGlamorousVectorIcons inspect;
+		label: 'Tool';
+		tooltip: 'Spawn the tool object';
+		action: [ :button | 
+			button phlow spawnObject: tool ]
 ]
 
 { #category : #'gt - extensions' }
