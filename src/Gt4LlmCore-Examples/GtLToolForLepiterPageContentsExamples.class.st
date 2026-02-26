@@ -4,7 +4,7 @@ Class {
 	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
-{ #category : #'llm-generated' }
+{ #category : #examples }
 GtLToolForLepiterPageContentsExamples >> pageSerializationForExistingPage [
 	<gtExample>
 	| tool call result database page expected |
@@ -14,7 +14,10 @@ GtLToolForLepiterPageContentsExamples >> pageSerializationForExistingPage [
 	call := GtLFunctionToolCall new.
 	call function: {
 		'name' -> tool name.
-		'arguments' -> { 'uid' -> page uidString } asDictionary
+		'arguments' -> {
+			'uid' -> page uidString.
+			'knowledgeBase' -> database uuidString
+		} asDictionary
 	} asDictionary.
 	result := tool performToolCall: call.
 	expected := LeJsonV4 uniqueInstance serializePretty: page.
@@ -23,16 +26,40 @@ GtLToolForLepiterPageContentsExamples >> pageSerializationForExistingPage [
 	^ tool
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #examples }
+GtLToolForLepiterPageContentsExamples >> pageSerializationForMissingKnowledgeBase [
+	<gtExample>
+	| tool call result |
+	tool := GtLToolForLepiterPageContents new.
+	call := GtLFunctionToolCall new.
+	call
+		function: {'name' -> tool name.
+				'arguments' -> {
+					'uid' -> UUID new asString36.
+					'knowledgeBase' -> 'missing-uuid-42'
+				} asDictionary} asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: result isErrorDomainObject.
+	self assert: (result isKindOf: GtLMissingDomainObject).
+	self assert: result objectName isNotNil.
+	^ call
+]
+
+{ #category : #examples }
 GtLToolForLepiterPageContentsExamples >> pageSerializationForUnknownPage [
 	<gtExample>
-	| tool call result unknownUid |
+	| tool call result unknownUid database |
 	tool := GtLToolForLepiterPageContents new.
+	database := LeDatabase gtBook.
 	unknownUid := UUID new asString36.
 	call := GtLFunctionToolCall new.
 	call
 		function: {'name' -> tool name.
-				'arguments' -> {'uid' -> unknownUid} asDictionary} asDictionary.
+				'arguments' -> {
+					'uid' -> unknownUid.
+					'knowledgeBase' -> database uuidString
+				} asDictionary} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
 	self assert: result isErrorDomainObject.
@@ -40,7 +67,25 @@ GtLToolForLepiterPageContentsExamples >> pageSerializationForUnknownPage [
 	^ call
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #examples }
+GtLToolForLepiterPageContentsExamples >> pageSerializationWithoutKnowledgeBase [
+	<gtExample>
+	| tool call result |
+	tool := GtLToolForLepiterPageContents new.
+	call := GtLFunctionToolCall new.
+	call
+		function: {'name' -> tool name.
+				'arguments' -> {
+					'uid' -> UUID new asString36
+				} asDictionary} asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: result isErrorDomainObject.
+	self assert: result missingArgument equals: 'knowledgeBase'.
+	^ call
+]
+
+{ #category : #examples }
 GtLToolForLepiterPageContentsExamples >> pageSerializationWithoutUid [
 	<gtExample>
 	| tool call result |
