@@ -78,10 +78,7 @@ GtLMethodDomainObject >> serializeToOpenAIResponseJsonObject [
 	^ NeoJSONObject new
 		at: 'methodClass' put: self method methodClass name asString;
 		at: 'selector' put: self method selector asString;
-		at: 'method' put: self method name asString;
-		at: 'sourceCode' put: self sourceCode;
-		at: 'oldSourceCode' put: self oldSourceCode;
-		at: 'newSourceCode' put: self newSourceCode;
+		at: 'sourceCode' put: self sourceCode
 		yourself
 ]
 
