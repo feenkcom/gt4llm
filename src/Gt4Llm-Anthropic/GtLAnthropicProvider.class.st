@@ -10,7 +10,7 @@ Class {
 		'modelName',
 		'compactionStrategy'
 	],
-	#category : #'Gt4Llm-Anthropic-Provider'
+	#category : 'Gt4Llm-Anthropic-Provider'
 }
 
 { #category : #'as yet unclassified' }

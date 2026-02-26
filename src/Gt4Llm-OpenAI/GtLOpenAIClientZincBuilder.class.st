@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'apiKey'
 	],
-	#category : #'Gt4Llm-OpenAI-Client'
+	#category : 'Gt4Llm-OpenAI-Client'
 }
 
 { #category : #accessing }

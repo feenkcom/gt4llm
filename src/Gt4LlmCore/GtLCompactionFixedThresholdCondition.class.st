@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'tokensLimit'
 	],
-	#category : #'Gt4LlmCore-Compaction'
+	#category : 'Gt4LlmCore-Compaction'
 }
 
 { #category : #testing }

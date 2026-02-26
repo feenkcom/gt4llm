@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLPromptCompactionStrategy,
 	#superclass : #GtLCompactionStrategy,
-	#category : #'Gt4LlmCore-Compaction'
+	#category : 'Gt4LlmCore-Compaction'
 }
 
 { #category : #'as yet unclassified' }

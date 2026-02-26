@@ -8,7 +8,7 @@ Class {
 		'matchString',
 		'startIndex'
 	],
-	#category : #'Gt4LlmCore-Magritte Objects'
+	#category : 'Gt4LlmCore-Magritte Objects'
 }
 
 { #category : #'as yet unclassified' }

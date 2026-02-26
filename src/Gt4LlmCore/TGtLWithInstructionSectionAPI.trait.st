@@ -1,6 +1,6 @@
 Trait {
 	#name : #TGtLWithInstructionSectionAPI,
-	#category : #'Gt4LlmCore-Core'
+	#category : 'Gt4LlmCore-Core'
 }
 
 { #category : #adding }
@@ -16,6 +16,27 @@ TGtLWithInstructionSectionAPI >> addToExplanationSectionLepiterPage: aLepiterPag
 		addSection: (GtLlmInstructionSection new
 				title: aLepiterPage title;
 				body: instructionString).
+]
+
+{ #category : #instructions }
+TGtLWithInstructionSectionAPI >> buildCompleteInstructions [
+	| newInstructions  |
+	newInstructions := GtLlmInstructionWithSections new
+			introduction: (GtLlmInstructionString new string: '').
+	
+	self inputModels notEmpty
+		ifTrue: [ 
+			| inputInstructionsBody inputInstructions |
+			inputInstructionsBody := GtLlmInstructionWithSections new
+					introduction: 'The inputs provided follow the descriptions below'.
+			inputInstructions := GtLlmInstructionSection new
+					title: 'Input descriptions';
+					body: inputInstructionsBody.
+			newInstructions addSection: inputInstructions.
+			self inputModels
+				do: [ :anInputModel | anInputModel addInstructionsTo: inputInstructionsBody ] ].
+				
+	^ newInstructions
 ]
 
 { #category : #'api - instructions' }

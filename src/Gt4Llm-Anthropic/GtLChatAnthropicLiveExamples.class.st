@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLChatAnthropicLiveExamples,
 	#superclass : #GtLChatLiveExamples,
-	#category : #'Gt4Llm-Anthropic-Examples'
+	#category : 'Gt4Llm-Anthropic-Examples'
 }
 
 { #category : #'examples - basic' }

@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLNoCompactionStrategy,
 	#superclass : #GtLCompactionStrategy,
-	#category : #'Gt4LlmCore-Compaction'
+	#category : 'Gt4LlmCore-Compaction'
 }
 
 { #category : #'api - compaction' }
