@@ -35,6 +35,11 @@ GtMagriteJSONDataCreationVisitor >> visitBooleanDescription: aStringDescription 
 ]
 
 { #category : #'visiting-description' }
+GtMagriteJSONDataCreationVisitor >> visitNumberDescription: aStringDescription [
+	^ jsonResult := self currentObject perform: aStringDescription accessor readSelector.
+]
+
+{ #category : #'visiting-description' }
 GtMagriteJSONDataCreationVisitor >> visitPriorityContainer: aContainer [
 	jsonResult := NeoJSONObject new.
 	aContainer children
