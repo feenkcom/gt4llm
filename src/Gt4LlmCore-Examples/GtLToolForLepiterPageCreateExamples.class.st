@@ -78,7 +78,7 @@ GtLToolForLepiterPageCreateExamples >> successfulPageCreate [
 	self assert: model status equals: 'created'.
 	self assert: model databaseId equals: db uuidString.
 	pageUid := model pageUid.
-	page := logicalDB pageWithID: (UUID fromString: pageUid) ifAbsent: [ nil ].
+	page := logicalDB pageWithID: (UUID fromString36: pageUid) ifAbsent: [ nil ].
 	self assert: page notNil.
 	self assert: model page == page.
 	self assert: page title equals: 'New Page'.
