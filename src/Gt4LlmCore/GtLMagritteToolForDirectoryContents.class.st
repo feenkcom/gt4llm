@@ -31,7 +31,7 @@ GtLMagritteToolForDirectoryContents >> directoryContentsFor: aPathString [
 	| reference files directories |
 	reference := aPathString asFileReference.
 	reference isDirectory
-		ifFalse: [ ^ GtLIncorrectArgumentValueDomainObject new
+		ifFalse: [ ^ GtLIncorrectArgumentTypeDomainObject new
 			argumentName: 'directoryPath';
 			argumentValue: aPathString;
 			expectedArgumentValueKind: AbstractFileReference ].

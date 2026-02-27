@@ -50,7 +50,7 @@ GtLToolForTestMethodRun >> privatePerformToolCall: aToolCall [
 		ifAbsent: [ ^ GtLMissingDomainObject new objectName: className ].
 
 	(testClass isTestCase)
-		ifFalse: [ ^ GtLIncorrectArgumentValueDomainObject new
+		ifFalse: [ ^ GtLIncorrectArgumentTypeDomainObject new
 			argumentName: 'className';
 			argumentValue: className;
 			expectedArgumentValueKind: 'a subclass of LwTestCase' ].

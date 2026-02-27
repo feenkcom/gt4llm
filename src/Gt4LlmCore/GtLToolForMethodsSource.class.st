@@ -39,6 +39,23 @@ GtLToolForMethodsSource >> methodSourceFromDescriptor: descriptor [
 				receiverName: self name;
 				arguments: descriptor;
 				missingArgument: 'className' ].
+	
+	classSide := descriptor
+		at: 'classSide'
+		ifPresent: [ :aValue | #(true 'true' 't') includes: aValue ]
+		ifAbsent: [ false ].
+	
+	(className endsWith: ' class') ifTrue: [
+		classSide ifFalse: [
+			^ GtLIncorrectArgumentValueDomainObject new
+					argumentName: 'classSide';
+					argumentValue: (descriptor 
+						at: 'classSide'
+						ifAbsent: [ false ]);
+					errorDescription: 'When the class name contains the suffix " class", the argument classSide must be false' ].
+	
+		className := className removeSuffix: ' class'	].
+		
 	class := className
 		asClassIfAbsent: [ ^ GtLMissingDomainObject new objectName: className ].
 	methodName := descriptor
@@ -47,10 +64,7 @@ GtLToolForMethodsSource >> methodSourceFromDescriptor: descriptor [
 				receiverName: self name;
 				arguments: descriptor;
 				missingArgument: 'methodName' ].
-	classSide := descriptor
-		at: 'classSide'
-		ifPresent: [ :aValue | #(true 'true' 't') includes: aValue ]
-		ifAbsent: [ false ].
+	
 	classSide ifTrue: [ class := class class ].
 	methodSymbol := methodName asSymbol.
 	method := class lookupSelector: methodSymbol.
@@ -129,7 +143,7 @@ GtLToolForMethodsSource >> privatePerformToolCall: aToolCall [
 					arguments: arguments;
 					missingArgument: 'methods' ].
 	(methodsArgument isCollection and: [ methodsArgument isString not ])
-		ifFalse: [ ^ GtLIncorrectArgumentValueDomainObject new
+		ifFalse: [ ^ GtLIncorrectArgumentTypeDomainObject new
 				argumentName: 'methods';
 				argumentValue: methodsArgument;
 				expectedArgumentValueKind: Array ].

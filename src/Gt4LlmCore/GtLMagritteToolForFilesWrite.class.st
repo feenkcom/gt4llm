@@ -54,7 +54,7 @@ GtLMagritteToolForFilesWrite >> privatePerformToolCall: aToolCall [
 		| fileReference parentDirectory result |
 		fileReference := each path asFileReference.
 		(fileReference exists and: [ fileReference isDirectory ])
-			ifTrue: [ ^ GtLIncorrectArgumentValueDomainObject new
+			ifTrue: [ ^ GtLIncorrectArgumentTypeDomainObject new
 					argumentName: 'path';
 					argumentValue: each path;
 					expectedArgumentValueKind: AbstractFileReference ].

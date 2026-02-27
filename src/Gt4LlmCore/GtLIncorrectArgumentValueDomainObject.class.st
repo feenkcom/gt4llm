@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'argumentName',
 		'argumentValue',
-		'expectedArgumentValueKind'
+		'errorDescription'
 	],
 	#category : #'Gt4LlmCore-Domain Objects'
 }
@@ -35,13 +35,13 @@ GtLIncorrectArgumentValueDomainObject >> argumentValue: anObject [
 ]
 
 { #category : #accessing }
-GtLIncorrectArgumentValueDomainObject >> expectedArgumentValueKind [
-	^ expectedArgumentValueKind
+GtLIncorrectArgumentValueDomainObject >> errorDescription [
+	^ errorDescription
 ]
 
 { #category : #accessing }
-GtLIncorrectArgumentValueDomainObject >> expectedArgumentValueKind: anObject [
-	expectedArgumentValueKind := anObject
+GtLIncorrectArgumentValueDomainObject >> errorDescription: anObject [
+	errorDescription := anObject
 ]
 
 { #category : #'api - testing' }
@@ -53,10 +53,10 @@ GtLIncorrectArgumentValueDomainObject >> isErrorDomainObject [
 GtLIncorrectArgumentValueDomainObject >> messageText [
 	"Return an error message"
 
-	^ '{1} must be a kind of {2}, not a {3}'
+	^ 'Argument {1} with value {2} has error {3}'
 		format: {self argumentName.
-				self expectedArgumentValueKind.
-				self argumentValue class}
+				self argumentValue asString.
+				self errorDescription }
 ]
 
 { #category : #'api - serializing' }
@@ -65,9 +65,9 @@ GtLIncorrectArgumentValueDomainObject >> serializeToOpenAIResponseJsonObject [
 
 	<return: #NeoJSONObject>
 	^ NeoJSONObject new
-		at: #error put: self messageText;
-		at: #argumentName put: self argumentName;
-		at: #argumentValue put: self argumentValue;
-		at: #expectedArgumentValueKind put: (self expectedArgumentValueKind ifNotNil: #name);
-		yourself
+			at: #error put: self messageText;
+			at: #argumentName put: self argumentName;
+			at: #argumentValue put: self argumentValue;
+			at: #errorDescription put: self errorDescription;
+			yourself
 ]
