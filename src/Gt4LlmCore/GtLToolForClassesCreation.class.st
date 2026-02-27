@@ -161,7 +161,7 @@ GtLToolForClassesCreation >> privatePerformToolCall: aToolCall [
 			arguments: arguments;
 			missingArgument: 'classes' ].
 	(classesArgument isCollection and: [classesArgument isString not ])
-		ifFalse: [ ^ GtLIncorrectArgumentValueDomainObject new
+		ifFalse: [ ^ GtLIncorrectArgumentTypeDomainObject new
 			argumentName: 'classes';
 			argumentValue: classesArgument;
 			expectedArgumentValueKind: Array ].

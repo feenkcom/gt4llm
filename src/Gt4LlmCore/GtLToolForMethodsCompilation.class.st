@@ -137,7 +137,7 @@ GtLToolForMethodsCompilation >> privatePerformToolCall: aToolCall [
 					arguments: arguments;
 					missingArgument: 'methods' ].
 	(methodsArgument isCollection and: [ methodsArgument isString not ])
-		ifFalse: [ ^ GtLIncorrectArgumentValueDomainObject new
+		ifFalse: [ ^ GtLIncorrectArgumentTypeDomainObject new
 				argumentName: 'methods';
 				argumentValue: methodsArgument;
 				expectedArgumentValueKind: Array ].
