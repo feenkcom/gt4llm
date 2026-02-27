@@ -13,6 +13,7 @@ Class {
 { #category : #'gt-views' }
 GtLLepiterSnippetDomainObject >> gtSnippetFor: aView [
 	<gtView>
+	<gtLlmView>
 	^ aView forward
 		title: 'Snippet';
 		priority: 1;
