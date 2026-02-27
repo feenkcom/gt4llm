@@ -58,9 +58,11 @@ GtLChatRegistry >> gtViewChatsOn: aView [
 			text: [ :aChat | 
 				aChat messages
 					ifNotEmpty: [ :messages | messages first createdAt asLocalStringYMDHMS ]
-					ifEmpty: [ '-' ] ];
+					ifEmpty: [ '-' ] ]
+			width: 130;
 		column: 'Finished'
-			text: [ :aChat | aChat messages isEmpty or: [ aChat isFinishedSuccesss ] ];
+			text: [ :aChat | aChat messages isEmpty or: [ aChat isFinishedSuccesss ] ]
+			width: 100;
 		contextItemLabel: 'Inspect chat'
 			action: [ :anElement :aChat | anElement phlow spawnObject: aChat ];
 		contextItemLabel: 'Remove chat'
