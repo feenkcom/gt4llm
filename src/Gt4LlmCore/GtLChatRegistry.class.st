@@ -92,7 +92,7 @@ GtLChatRegistry >> newChat [
 GtLChatRegistry >> newGtChat [
 	| chat |
 	chat := GtLChat new
-		tools: GtLTools gt, {GtLToolForSmalltalkCodeEvaluation new};
+		tools: GtLTools gt;
 		markdownResponse;
 		gtPageExplanation: 'Examples by example';
 		gtPageExplanation: 'Inspector phlow views by example'.

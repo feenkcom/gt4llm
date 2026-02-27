@@ -38,7 +38,8 @@ GtLInputModel >> description [
 GtLInputModel >> gtExportedJsonFor: aView [
 	<gtView>
 	^ aView forward
-		title: 'Exported JSON';
+		title: 'JSON string';
+		priority: 12;
 		object: [ | object |
 			object := NeoJSONObject new.
 			self addContentTo: object.
@@ -54,8 +55,10 @@ GtLInputModel >> gtInspectorTargetModels [
 { #category : #'gt - inspector' }
 GtLInputModel >> gtViewContentDictionaryFor: aView [
 	<gtView>
+	<gtLlmView>
 	^ aView forward
-			title: 'Content dictionary';
+			title: 'JSON data';
+			priority: 11;
 			object: [ 
 				| content |
 				content := OrderedDictionary new.
