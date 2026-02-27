@@ -81,6 +81,17 @@ GtMagriteJSONSchemaCreationVisitor >> visitBooleanDescription: aBooleanDescripti
 	^ currentSchema := schema
 ]
 
+{ #category : #visiting }
+GtMagriteJSONSchemaCreationVisitor >> visitNumberDescription: aBooleanDescription [
+	| schema |
+	schema := NeoJSONObject new
+		at: 'type' put: 'number';
+		yourself.
+	aBooleanDescription hasComment ifTrue: [
+		schema at: 'description' put: aBooleanDescription comment ].
+	^ currentSchema := schema
+]
+
 { #category : #'visiting-description' }
 GtMagriteJSONSchemaCreationVisitor >> visitPriorityContainer: aContainer [
 	| schema propertiesSchema |
