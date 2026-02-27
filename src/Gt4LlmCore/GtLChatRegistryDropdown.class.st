@@ -3,7 +3,7 @@ I provide a dropdown button that shows the chats registered in a GtLChatRegistry
 "
 Class {
 	#name : #GtLChatRegistryDropdown,
-	#superclass : #BlElement,
+	#superclass : #BrFrame,
 	#instVars : [
 		'registry',
 		'dropdownElement',
@@ -26,18 +26,20 @@ GtLChatRegistryDropdown >> dropdownElement [
 { #category : #initialization }
 GtLChatRegistryDropdown >> initialize [
 	super initialize.
-	self layout: BlFrameLayout new.
 	
-	self constraintsDo: [ :c |
-		c vertical fitContent.
-		c horizontal fitContent ].
-		
-	self addInteractiveModelState: BrLayoutHorizontalResizerModel fitContent.
-	self addInteractiveModelState: BrLayoutVerticalResizerModel fitContent.
+	self viewModel: BrWidgetModel new.
+	self hFitContent.
+	self vFitContent.
 	
 	self initializeDropdownElement.
 	self addChild: self dropdownElement as: #dropdown.
 	self addAptitude: (BrLayoutResizerAptitude new anyToFitContent: self).
+	
+	self dropdownElement 
+		when: GtPhlowObjectToSpawn 
+		do: [ :anEvent | 
+			anEvent isConsumed ifFalse: [
+					self phlow spawnOrShowObject: anEvent object ] ]
 ]
 
 { #category : #initialization }
@@ -80,7 +82,7 @@ GtLChatRegistryDropdown >> newDropdownContent [
 
 { #category : #private }
 GtLChatRegistryDropdown >> newListElement [
-	^ (self registry gtViewChatsOn: GtPhlowEmptyView new)
+	^ ((self registry gtViewChatsOn: GtPhlowEmptyView new))
 		asElementDo: [ :element |element ]
 ]
 
