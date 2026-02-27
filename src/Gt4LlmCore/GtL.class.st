@@ -16,7 +16,7 @@ GtL class >> gt [
 
 { #category : #'instance creation' }
 GtL class >> gtChat [
-	^ GtLChatRegistry current gtChat
+	^ GtLChatRegistry current newGtChat
 ]
 
 { #category : #'class initialization' }
@@ -27,6 +27,11 @@ GtL class >> gtChatsFor: aView [
 		priority: 2;
 		object: [ self registry ];
 		view: #gtViewChatsOn:
+]
+
+{ #category : #'instance creation' }
+GtL class >> gtDevelopmentChat [
+	^ GtLChatRegistry current newGtDevelopmentChat
 ]
 
 { #category : #'instance creation' }

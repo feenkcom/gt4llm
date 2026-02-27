@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLToolForLepiterSnippetEdit,
-	#superclass : #GtLAbstractPlainSchemaFunctionTool,
+	#superclass : #GtLAbstractMagritteFunctionTool,
 	#instVars : [
 		'database'
 	],
@@ -33,45 +33,50 @@ GtLToolForLepiterSnippetEdit >> name [
 	^ 'editLepiterSnippet'
 ]
 
-{ #category : #accessing }
-GtLToolForLepiterSnippetEdit >> parametersDescription [
-	^ #('pageUid' 'snippetUid' 'updatedText')
+{ #category : #magritte }
+GtLToolForLepiterSnippetEdit >> pageUidDescription [
+	<magritteDescription>
+
+	^ MAStringDescription new
+		label: 'Page uid';
+		accessor: #pageUid;
+		beRequired
 ]
 
-{ #category : #actions }
+{ #category : #private }
 GtLToolForLepiterSnippetEdit >> privatePerformToolCall: aToolCall [
-	| arguments pageUidString snippetUidString updatedText snippetUid pageUid snippets |
+	| arguments pageUidString snippetUidString updatedText snippetUid pageUid snippets oldText |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	pageUidString := arguments
-			at: 'pageUid'
-			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-					receiverName: self name;
-					arguments: arguments;
-					missingArgument: 'pageUid' ].
+		at: 'pageUid'
+		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
+			receiverName: self name;
+			arguments: arguments;
+			missingArgument: 'pageUid' ].
 	pageUidString := pageUidString trimBoth.
 	pageUidString isEmpty
 		ifTrue: [ ^ GtLMissingArgumentDomainObject new
-				receiverName: self name;
-				arguments: arguments;
-				missingArgument: 'pageUid' ].
-	pageUid := [ UUID fromString: pageUidString ]
-			on: Error
-			do: [ :error | 
-				^ GtLExceptionDomainObject new
-					freeze: error;
-					description: 'Invalid page uid' ].
+			receiverName: self name;
+			arguments: arguments;
+			missingArgument: 'pageUid' ].
+	pageUid := [ UUID fromString36: pageUidString ]
+		on: Error
+		do: [ :error | 
+			^ GtLExceptionDomainObject new
+				freeze: error;
+				description: 'Invalid page uid' ].
 	snippetUidString := arguments
-			at: 'snippetUid'
-			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-					receiverName: self name;
-					arguments: arguments;
-					missingArgument: 'snippetUid' ].
+		at: 'snippetUid'
+		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
+			receiverName: self name;
+			arguments: arguments;
+			missingArgument: 'snippetUid' ].
 	snippetUidString := snippetUidString trimBoth.
 	snippetUidString isEmpty
 		ifTrue: [ ^ GtLMissingArgumentDomainObject new
-				receiverName: self name;
-				arguments: arguments;
-				missingArgument: 'snippetUid' ].
+			receiverName: self name;
+			arguments: arguments;
+			missingArgument: 'snippetUid' ].
 	snippetUid := LeUID new.
 	[ snippetUid uidString: snippetUidString ]
 		on: Error
@@ -80,17 +85,17 @@ GtLToolForLepiterSnippetEdit >> privatePerformToolCall: aToolCall [
 				freeze: error;
 				description: 'Invalid snippet uid' ].
 	updatedText := arguments
-			at: 'updatedText'
-			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-					receiverName: self name;
-					arguments: arguments;
-					missingArgument: 'updatedText' ].
+		at: 'updatedText'
+		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
+			receiverName: self name;
+			arguments: arguments;
+			missingArgument: 'updatedText' ].
 	updatedText := updatedText asString.
 	updatedText isEmpty
 		ifTrue: [ ^ GtLMissingArgumentDomainObject new
-				receiverName: self name;
-				arguments: arguments;
-				missingArgument: 'updatedText' ].
+			receiverName: self name;
+			arguments: arguments;
+			missingArgument: 'updatedText' ].
 	self database
 		pageWithID: pageUid
 		ifPresent: [ :aPage | 
@@ -99,15 +104,38 @@ GtLToolForLepiterSnippetEdit >> privatePerformToolCall: aToolCall [
 			snippets ifEmpty: [ ^ GtLProblemDomainObject new
 						description: 'Could not locate snippet with id ' , snippetUid uidString ] ]
 		ifAbsent: [ ^ GtLProblemDomainObject new
-				description: 'Could not locate page with id ' , pageUid asString ].
+			description: 'Could not locate page with id ' , pageUid asString ].
+	oldText := snippets anyOne contentAsString.
 	[ snippets anyOne updateString: updatedText ]
 		on: Error
 		do: [ :error | 
 			^ GtLExceptionDomainObject new
 				freeze: error;
 				description: 'Error while applying snippet change' ].
-	^ GtLValueDomainObject new
-		value: {'status' -> 'updated'.
-				'snippetUid' -> snippetUid uidString.
-				'pageUid' -> pageUid asString} asDictionary
+	^ GtLLepiterSnippetEditDomainObject new
+		status: 'updated';
+		pageUid: pageUid asString;
+		snippetUid: snippetUid uidString;
+		snippet: snippets anyOne;
+		oldText: oldText
+]
+
+{ #category : #magritte }
+GtLToolForLepiterSnippetEdit >> snippetUidDescription [
+	<magritteDescription>
+
+	^ MAStringDescription new
+		label: 'Snippet uid';
+		accessor: #snippetUid;
+		beRequired
+]
+
+{ #category : #magritte }
+GtLToolForLepiterSnippetEdit >> updatedTextDescription [
+	<magritteDescription>
+
+	^ MAStringDescription new
+		label: 'Updated text';
+		accessor: #updatedText;
+		beRequired
 ]

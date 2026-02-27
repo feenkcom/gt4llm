@@ -14,7 +14,7 @@ GtLTools class >> files [
 
 { #category : #defaults }
 GtLTools class >> gt [
-	^ self gtSearch, self leSearch, self gtCodeChange, self gtExamplesRun
+	^ self gtSearch, self leSearch, self gtCodeChange, self gtExamplesRun, {GtLToolForSmalltalkCodeEvaluation new}
 ]
 
 { #category : #defaults }
@@ -60,7 +60,8 @@ GtLTools class >> gtSearch [
 GtLTools class >> leChange [
 	^ self
 		withAll: {GtLToolForLepiterPageCreate new.
-				GtLToolForLepiterSnippetEdit new} asOrderedCollection
+				GtLToolForLepiterSnippetEdit new.
+				GtLToolForLepiterSnippetCreate new} asOrderedCollection
 ]
 
 { #category : #defaults }
