@@ -21,7 +21,9 @@ GtLLepiterPagesDomainObject >> gtPagesFor: aView [
 		title: 'Pages';
 		priority: 1;
 		items: [ self pages ];
-		column: 'Value' text: [ :each | each gtDisplayString ]
+		column: 'Page' text: [ :each | each title ] width: 200;
+		column: 'Preview' text: [:each | each printPageSummaryLimitedTo: 100 ];
+		column: 'Database' text: [ :each | each database databaseName ] width: 100
 ]
 
 { #category : #accessing }

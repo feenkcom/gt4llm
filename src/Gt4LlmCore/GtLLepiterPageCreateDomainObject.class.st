@@ -34,6 +34,7 @@ GtLLepiterPageCreateDomainObject >> databaseIdDescription [
 { #category : #views }
 GtLLepiterPageCreateDomainObject >> gtPageFor: aView [
 	<gtView>
+	<gtLlmView>
 	^ aView forward
 		title: 'Page';
 		priority: 1;
