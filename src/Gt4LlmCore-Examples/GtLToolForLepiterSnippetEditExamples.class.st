@@ -71,7 +71,7 @@ GtLToolForLepiterSnippetEditExamples >> successfulSnippetEdit [
 	tool database: database.
 	call := GtLFunctionToolCall new.
 	call rawArguments: {
-		'pageUid' -> page uid asString.
+		'pageUid' -> page uidString.
 		'snippetUid' -> snippet uidString.
 		'updatedText' -> updatedText } asDictionary.
 	result := tool performToolCall: call.
