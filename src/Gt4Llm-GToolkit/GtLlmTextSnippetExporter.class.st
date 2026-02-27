@@ -15,6 +15,36 @@ GtLlmTextSnippetExporter >> exportAst: anAst [
 	^ stream contents
 ]
 
+{ #category : #private }
+GtLlmTextSnippetExporter >> fileReferenceDirectoryListingFor: aFileReference [
+	^ String streamContents: [ :stream |
+		(aFileReference children
+			asSortedCollection: [ :a :b | a basename <= b basename ])
+			do: [ :each | stream nextPutAll: each basename; lf ] ]
+]
+
+{ #category : #private }
+GtLlmTextSnippetExporter >> fileReferenceExportStringFor: aLeFileReference [
+	^ aLeFileReference fileReference isDirectory
+		ifTrue: [ self fileReferenceDirectoryListingFor: aLeFileReference fileReference ]
+		ifFalse: [ self fileReferenceFileContentsFor: aLeFileReference ]
+]
+
+{ #category : #private }
+GtLlmTextSnippetExporter >> fileReferenceFileContentsFor: aLeFileReference [
+	| contents interval lines start end |
+	contents := aLeFileReference fileReference contents.
+	interval := aLeFileReference range.
+	interval ifNil: [ ^ contents ].
+	lines := contents lines.
+	start := interval first max: 1.
+	end := interval last min: lines size.
+	start > end ifTrue: [ ^ '' ].
+	^ String streamContents: [ :stream |
+		(lines copyFrom: start to: end)
+			do: [ :line | stream nextPutAll: line; lf ] ]
+]
+
 { #category : #'as yet unclassified' }
 GtLlmTextSnippetExporter >> initialize [
 	super initialize.
@@ -88,6 +118,30 @@ GtLlmTextSnippetExporter >> visitExternalLabelUrlLink: aLeExternalLabelUrlLinkNo
 { #category : #'as yet unclassified' }
 GtLlmTextSnippetExporter >> visitExternalUrlLink: aLeExternalUrlLinkNode [ 
 	stream nextPutAll: aLeExternalUrlLinkNode source
+]
+
+{ #category : #visiting }
+GtLlmTextSnippetExporter >> visitFileReferenceAnnotation: aLeFileReferenceAnnotationNode [
+	| isExpanded fileReference contents |
+	isExpanded := aLeFileReferenceAnnotationNode expandedValue ifNil: [ false ].
+	isExpanded ifFalse: [ ^ stream nextPutAll: aLeFileReferenceAnnotationNode parent source ].
+
+	fileReference := LeFileReference
+		fromAnnotation: aLeFileReferenceAnnotationNode
+		inPage: nil.
+	(fileReference isNil or: [ fileReference fileReference exists not ])
+		ifTrue: [ ^ stream nextPutAll: aLeFileReferenceAnnotationNode parent source ].
+
+	contents := self fileReferenceExportStringFor: fileReference.
+	stream
+		nextPutAll: String cr;
+		nextPutAll: String cr;
+		nextPutAll: '```file-reference';
+		nextPutAll: String cr;
+		nextPutAll: contents;
+		nextPutAll: '```';
+		nextPutAll: String cr;
+		nextPutAll: String cr
 ]
 
 { #category : #'as yet unclassified' }
