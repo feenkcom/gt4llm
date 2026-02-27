@@ -82,19 +82,6 @@ GtLFunctionToolCall >> function: aDict [
 ]
 
 { #category : #views }
-GtLFunctionToolCall >> gtActionFor: anAction [
-	<gtAction>
-	^ anAction button
-		icon: BrGlamorousVectorIcons debug;
-		action: [ :button | 
-			| newCall |
-			newCall := self class new.
-			newCall function: self function.
-			button phlow spawnObject: (tool performToolCall: newCall) ];
-		tooltip: 'Debug a new tool call'
-]
-
-{ #category : #views }
 GtLFunctionToolCall >> gtActionForResultFor: anAction [
 	<gtAction>
 	^ anAction button
@@ -127,6 +114,19 @@ GtLFunctionToolCall >> gtArgumentsFor: aView [
 		column: 'Name' text: #key width: 150;
 		column: 'Value' text: #value;
 		send: #value
+]
+
+{ #category : #views }
+GtLFunctionToolCall >> gtDebugActionFor: anAction [
+	<gtAction>
+	^ anAction button
+		icon: BrGlamorousVectorIcons debug;
+		debugBlock: [ 
+			| newCall |
+			newCall := self class new.
+			newCall function: self function.
+			self tool performToolCall: newCall	];
+		tooltip: 'Debug a new tool call'
 ]
 
 { #category : #printing }
