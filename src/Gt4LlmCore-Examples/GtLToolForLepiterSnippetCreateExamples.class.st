@@ -46,7 +46,7 @@ GtLToolForLepiterSnippetCreateExamples >> successfulSnippetCreate [
 	tool database: database.
 	call := GtLFunctionToolCall new.
 	call rawArguments: {
-		'pageUid' -> page uid asString.
+		'pageUid' -> page uidString.
 		'snippetText' -> snippetText } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
