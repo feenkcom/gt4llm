@@ -55,6 +55,7 @@ GtLInputModel >> gtInspectorTargetModels [
 { #category : #'gt - inspector' }
 GtLInputModel >> gtViewContentDictionaryFor: aView [
 	<gtView>
+	<gtLlmView>
 	^ aView forward
 			title: 'JSON data';
 			priority: 11;
