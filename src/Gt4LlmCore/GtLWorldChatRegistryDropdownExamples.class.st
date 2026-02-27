@@ -2,19 +2,19 @@
 Examples for GtLChatRegistryDropdown using BlScripter.
 "
 Class {
-	#name : #GtLChatRegistryDropdownExamples,
+	#name : #GtLWorldChatRegistryDropdownExamples,
 	#superclass : #Object,
 	#category : #'Gt4LlmCore-UI - Registry'
 }
 
 { #category : #examples }
-GtLChatRegistryDropdownExamples >> dropdownUpdatesAfterAddingChat [
+GtLWorldChatRegistryDropdownExamples >> dropdownUpdatesAfterAddingChat [
 	<gtExample>
 	<return: #BlScripter>
 	| registry dropdown scripter |
 	registry := GtLChatRegistry new.
 	registry newChat.
-	dropdown := GtLChatRegistryDropdown new registry: registry; yourself.
+	dropdown := GtLWorldChatRegistryDropdown new registry: registry; yourself.
 	scripter := BlScripter new
 		model: registry;
 		element: dropdown.
@@ -31,8 +31,14 @@ GtLChatRegistryDropdownExamples >> dropdownUpdatesAfterAddingChat [
 		// BrColumnedList;
 		play.
 
-	registry newChat.
+	scripter do
+		block: [ registry newChat ];
+		play.
 
+	self 
+		assert: (scripter space root query // GtPhlowCellElement) result size
+		equals: 6.
+	
 	scripter assert
 		label: 'List updates to two chats';
 		value: [ :aList | aList items size ] equals: 2;
@@ -44,14 +50,17 @@ GtLChatRegistryDropdownExamples >> dropdownUpdatesAfterAddingChat [
 ]
 
 { #category : #examples }
-GtLChatRegistryDropdownExamples >> dropdownWithChats [
+GtLWorldChatRegistryDropdownExamples >> dropdownWithChats [
 	<gtExample>
 	<return: #BlScripter>
 	| registry dropdown scripter |
 	registry := GtLChatRegistry new.
+	
 	registry newChat.
 	registry newChat.
-	dropdown := GtLChatRegistryDropdown new registry: registry; yourself.
+	
+	dropdown := GtLWorldChatRegistryDropdown new 
+		registry: registry; yourself.
 	scripter := BlScripter new
 		model: registry;
 		element: dropdown.

@@ -2,29 +2,37 @@
 I provide a dropdown button that shows the chats registered in a GtLChatRegistry.
 "
 Class {
-	#name : #GtLChatRegistryDropdown,
+	#name : #GtLWorldChatRegistryDropdown,
 	#superclass : #BrFrame,
 	#instVars : [
 		'registry',
 		'dropdownElement',
 		'currentDropdownContent',
-		'listElement'
+		'listElement',
+		'contentUpdater'
 	],
 	#category : #'Gt4LlmCore-UI - Registry'
 }
 
+{ #category : #callbacks }
+GtLWorldChatRegistryDropdown >> actOnWorldRegistryChanged: anAnnouncement [
+
+	self registry: anAnnouncement chatRegistry.
+	self requestContentUpdate.
+]
+
 { #category : #private }
-GtLChatRegistryDropdown >> dropdownContent [
+GtLWorldChatRegistryDropdown >> dropdownContent [
 	^ currentDropdownContent ifNil: [ currentDropdownContent := self newDropdownContent ]
 ]
 
 { #category : #accessing }
-GtLChatRegistryDropdown >> dropdownElement [
+GtLWorldChatRegistryDropdown >> dropdownElement [
 	^ dropdownElement
 ]
 
 { #category : #initialization }
-GtLChatRegistryDropdown >> initialize [
+GtLWorldChatRegistryDropdown >> initialize [
 	super initialize.
 	
 	self viewModel: BrWidgetModel new.
@@ -35,6 +43,10 @@ GtLChatRegistryDropdown >> initialize [
 	self addChild: self dropdownElement as: #dropdown.
 	self addAptitude: (BrLayoutResizerAptitude new anyToFitContent: self).
 	
+	contentUpdater := BrElementUpdater new
+		postponedDuration: 100 milliSeconds;
+		element: self selector: #updateContent.
+	
 	self dropdownElement 
 		when: GtPhlowObjectToSpawn 
 		do: [ :anEvent | 
@@ -43,7 +55,7 @@ GtLChatRegistryDropdown >> initialize [
 ]
 
 { #category : #initialization }
-GtLChatRegistryDropdown >> initializeDropdownElement [
+GtLWorldChatRegistryDropdown >> initializeDropdownElement [
 	dropdownElement := self newButton
 		label: self tooltip;
 		addAptitude: (BrGlamorousWithExplicitDropdownAptitude
@@ -51,8 +63,20 @@ GtLChatRegistryDropdown >> initializeDropdownElement [
 			content: [ self reusedDropdownContent ])
 ]
 
+{ #category : #initialization }
+GtLWorldChatRegistryDropdown >> initializeForWorldElement: aWorldElement [
+
+	aWorldElement announcer
+		when: GtWorldElementChatRegistryChangedAnnouncement
+		send: #actOnWorldRegistryChanged:
+		to: self.
+
+	"It is possible to add the element to a world that already has a chat registry"
+	self registry: aWorldElement llmChatRegistry
+]
+
 { #category : #private }
-GtLChatRegistryDropdown >> newButton [
+GtLWorldChatRegistryDropdown >> newButton [
 	^ BrButton new
 		id: #'chat-registry--button';
 		icon: BrGlamorousVectorIcons chat;
@@ -60,7 +84,7 @@ GtLChatRegistryDropdown >> newButton [
 ]
 
 { #category : #private }
-GtLChatRegistryDropdown >> newDropdownButton [
+GtLWorldChatRegistryDropdown >> newDropdownButton [
 	^ BrButton new
 		icon: BrGlamorousVectorIcons chat;
 		label: self tooltip;
@@ -70,7 +94,7 @@ GtLChatRegistryDropdown >> newDropdownButton [
 ]
 
 { #category : #private }
-GtLChatRegistryDropdown >> newDropdownContent [
+GtLWorldChatRegistryDropdown >> newDropdownContent [
 	| container |
 	container := BrFrame new exact: 600@400.
 	listElement := self newListElement.
@@ -81,30 +105,49 @@ GtLChatRegistryDropdown >> newDropdownContent [
 ]
 
 { #category : #private }
-GtLChatRegistryDropdown >> newListElement [
-	^ ((self registry gtViewChatsOn: GtPhlowEmptyView new))
-		asElementDo: [ :element |element ]
+GtLWorldChatRegistryDropdown >> newListElement [
+	| phlowView |
+	
+	phlowView := self registry 
+		ifNil: [ GtPhlowEmptyView new ]
+		ifNotNil: [ 
+			self registry gtViewChatsOn: GtPhlowEmptyView new ].
+		
+	^ phlowView asElementDo: [ :element | element ]
 ]
 
 { #category : #accessing }
-GtLChatRegistryDropdown >> registry [
+GtLWorldChatRegistryDropdown >> registry [
 	^ registry ifNil: [
 			registry := GtLChatRegistry current.]
 ]
 
 { #category : #accessing }
-GtLChatRegistryDropdown >> registry: aRegistry [
+GtLWorldChatRegistryDropdown >> registry: aRegistry [
 	registry := aRegistry
 ]
 
+{ #category : #updating }
+GtLWorldChatRegistryDropdown >> requestContentUpdate [
+	contentUpdater ifNotNil: [ :anUpdater | 
+		anUpdater requestUpdate ]
+]
+
 { #category : #private }
-GtLChatRegistryDropdown >> reusedDropdownContent [
+GtLWorldChatRegistryDropdown >> reusedDropdownContent [
 	| dropdown |
 	dropdown := self dropdownContent.
 	^ dropdown removeFromParent
 ]
 
 { #category : #accessing }
-GtLChatRegistryDropdown >> tooltip [
+GtLWorldChatRegistryDropdown >> tooltip [
 	^ 'Chats'
+]
+
+{ #category : #updating }
+GtLWorldChatRegistryDropdown >> updateContent [ 
+	currentDropdownContent ifNil: [ ^ self ].
+	currentDropdownContent removeChildren. 
+	currentDropdownContent addChild: self newDropdownContent.
 ]
