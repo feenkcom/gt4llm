@@ -100,6 +100,12 @@ GtLChatRegistry >> newGtChat [
 ]
 
 { #category : #accessing }
+GtLChatRegistry >> newGtDevelopmentChat [ 
+	^ self newGtChat
+		gtPageExplanation: 'Chat for the development of Glamorous Toolkit itself'
+]
+
+{ #category : #accessing }
 GtLChatRegistry >> onChatMessagesChanged: anAnnouncement [
 	self announce: anAnnouncement
 ]
