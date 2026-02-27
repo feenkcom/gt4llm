@@ -14,6 +14,12 @@ GtLAbstractMagritteFunctionTool >> computeParametersFormat [
 	^ self parametersDescription
 ]
 
+{ #category : #'as yet unclassified' }
+GtLAbstractMagritteFunctionTool >> gtMagritteFor: aView [
+	"do not show the view"
+	^ aView	empty
+]
+
 { #category : #utils }
 GtLAbstractMagritteFunctionTool >> parametersDescription [
 	^ GtLResponseMagritteFormat new
