@@ -36,6 +36,11 @@ GtLMethodDomainObject >> gtDiffFor: aView [
 ]
 
 { #category : #'as yet unclassified' }
+GtLMethodDomainObject >> gtDisplayOn: stream [
+	method gtDisplayOn: stream.
+]
+
+{ #category : #'as yet unclassified' }
 GtLMethodDomainObject >> hasOldSourceCode [
 	^ oldSourceCode notNil
 ]
