@@ -19,7 +19,23 @@ GtLToolForLepiterSnippetCreate >> database: aDatabase [
 
 { #category : #accessing }
 GtLToolForLepiterSnippetCreate >> description [
-	^ 'Creates a new Lepiter text snippet for a page identified by its page id.'
+	^ 'Creates a new Lepiter snippet for a page identified by its page id.
+
+Example JSON arguments:
+{
+  "pageUid": "UUID",
+  "snippetText": "Transcript show: 1",
+  "snippetType": "pharo"
+}
+
+Supported snippet types are: text, pharo, python, shell.
+
+Example JSON response:
+{
+  "status": "created",
+  "pageUid": "UUID",
+  "snippetUid": "UUID"
+}'
 ]
 
 { #category : #initialization }
@@ -45,7 +61,7 @@ GtLToolForLepiterSnippetCreate >> pageUidDescription [
 
 { #category : #private }
 GtLToolForLepiterSnippetCreate >> privatePerformToolCall: aToolCall [
-	| arguments pageUidString snippetText pageUid snippet |
+	| arguments pageUidString snippetText pageUid snippet snippetType snippetClass |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	pageUidString := arguments
 		at: 'pageUid'
@@ -61,7 +77,7 @@ GtLToolForLepiterSnippetCreate >> privatePerformToolCall: aToolCall [
 			missingArgument: 'pageUid' ].
 	pageUid := [ UUID fromString36: pageUidString ]
 		on: Error
-		do: [ :error | 
+		do: [ :error |
 			^ GtLExceptionDomainObject new
 				freeze: error;
 				description: 'Invalid page uid' ].
@@ -77,13 +93,27 @@ GtLToolForLepiterSnippetCreate >> privatePerformToolCall: aToolCall [
 			receiverName: self name;
 			arguments: arguments;
 			missingArgument: 'snippetText' ].
+	snippetType := arguments at: 'snippetType' ifAbsent: [ 'text' ].
+	snippetType := snippetType asString trimBoth.
+	snippetType isEmpty ifTrue: [ snippetType := 'text' ].
+	snippetClass := {
+		'text' -> LeTextSnippet.
+		'pharo' -> LePharoSnippet.
+		'python' -> LePythonSnippet.
+		'shell' -> LeShellScriptSnippet } asDictionary
+			at: snippetType
+			ifAbsent: [ nil ].
+	snippetClass ifNil: [ ^ GtLProblemDomainObject new
+			description: 'Unknown snippet type ' , snippetType ].
 	self database
 		pageWithID: pageUid
 		ifPresent: [ :page |
-			[ snippet := LeTextSnippet string: snippetText.
+			[ snippet := snippetClass = LeTextSnippet
+				ifTrue: [ LeTextSnippet string: snippetText ]
+				ifFalse: [ snippetClass code: snippetText ].
 			page addSnippet: snippet ]
 				on: Error
-				do: [ :error | 
+				do: [ :error |
 					^ GtLExceptionDomainObject new
 						freeze: error;
 						description: 'Error while creating snippet' ] ]
@@ -96,12 +126,23 @@ GtLToolForLepiterSnippetCreate >> privatePerformToolCall: aToolCall [
 		snippet: snippet
 ]
 
-{ #category : #magritte }
+{ #category : #accessing }
 GtLToolForLepiterSnippetCreate >> snippetTextDescription [
 	<magritteDescription>
 
 	^ MAStringDescription new
 		label: 'Snippet text';
+		comment: 'Textual content of the snippet.';
 		accessor: #snippetText;
 		beRequired
+]
+
+{ #category : #accessing }
+GtLToolForLepiterSnippetCreate >> snippetTypeDescription [
+	<magritteDescription>
+
+	^ MAStringDescription new
+		label: 'Snippet type';
+		comment: 'One of text, pharo, python, shell. Defaults to text.';
+		accessor: #snippetType
 ]
