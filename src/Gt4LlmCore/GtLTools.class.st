@@ -14,7 +14,8 @@ GtLTools class >> files [
 
 { #category : #defaults }
 GtLTools class >> gt [
-	^ self gtSearch, self leSearch, self gtCodeChange, self gtExamplesRun, {GtLToolForSmalltalkCodeEvaluation new}
+	^ self gtSearch , self leSearch , self gtCodeChange , self leChange
+		, self gtExamplesRun , {GtLToolForSmalltalkCodeEvaluation new}
 ]
 
 { #category : #defaults }

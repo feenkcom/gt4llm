@@ -20,14 +20,6 @@ GtLToolForClassLookup >> name [
 ]
 
 { #category : #accessing }
-GtLToolForClassLookup >> parameterClassName [
-	<magritteDescription>
-	^ MAStringDescription new
-		label: 'Class name';
-		accessor: #className
-]
-
-{ #category : #accessing }
 GtLToolForClassLookup >> parametersDescription [
 	^ #('className')
 ]
