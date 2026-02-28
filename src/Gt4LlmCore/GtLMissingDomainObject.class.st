@@ -7,9 +7,9 @@ Class {
 	#category : #'Gt4LlmCore-Domain Objects'
 }
 
-{ #category : #visiting }
-GtLMissingDomainObject >> acceptVisitor: aVisitor [
-	^ aVisitor visitMissingDomainObject: self
+{ #category : #'as yet unclassified' }
+GtLMissingDomainObject >> gtDisplayOn: stream [
+	stream nextPutAll: self messageText
 ]
 
 { #category : #'api - testing' }
