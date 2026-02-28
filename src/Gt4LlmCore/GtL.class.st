@@ -6,7 +6,7 @@ Class {
 
 { #category : #'instance creation' }
 GtL class >> chat [
-	^ GtLChatRegistry current chat
+	^ GtLChatRegistry current newChat
 ]
 
 { #category : #'instance creation' }
