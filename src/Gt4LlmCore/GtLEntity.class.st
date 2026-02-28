@@ -81,7 +81,7 @@ GtLEntity >> gtViewRawDataFor: aView [
 
 	^ aView forward
 		title: 'Raw data';
-		priority: 10;
+		priority: 20;
 		object: [ self rawData ];
 		view: #gtTreeFor:
 ]

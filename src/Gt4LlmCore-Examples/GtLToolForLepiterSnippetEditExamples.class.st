@@ -10,14 +10,13 @@ GtLToolForLepiterSnippetEditExamples >> missingPageUid [
 	| tool call result |
 	tool := GtLToolForLepiterSnippetEdit new.
 	call := GtLFunctionToolCall new.
-	call function: {
-		'name' -> tool name.
-		'arguments' -> { 'snippetUid' -> 'invalid'. 'updatedText' -> 'Updated text' } asDictionary
-	} asDictionary.
+	call rawArguments: {
+		'snippetUid' -> 'invalid'.
+		'updatedText' -> 'Updated text' } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: result isErrorDomainObject.
-	self assert: result missingArgument equals: 'pageUid'.
+	self assert: (result isKindOf: GtLMagritteInputModel).
+	self assert: result model missingArgument equals: 'pageUid'.
 	^ call
 ]
 
@@ -28,14 +27,13 @@ GtLToolForLepiterSnippetEditExamples >> missingSnippetUid [
 	tool := GtLToolForLepiterSnippetEdit new.
 	pageUid := UUID new asString.
 	call := GtLFunctionToolCall new.
-	call function: {
-		'name' -> tool name.
-		'arguments' -> { 'pageUid' -> pageUid. 'updatedText' -> 'Updated text' } asDictionary
-	} asDictionary.
+	call rawArguments: {
+		'pageUid' -> pageUid.
+		'updatedText' -> 'Updated text' } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: result isErrorDomainObject.
-	self assert: result missingArgument equals: 'snippetUid'.
+	self assert: (result isKindOf: GtLMagritteInputModel).
+	self assert: result model missingArgument equals: 'snippetUid'.
 	^ call
 ]
 
@@ -47,21 +45,20 @@ GtLToolForLepiterSnippetEditExamples >> missingUpdatedText [
 	pageUid := UUID new asString.
 	snippetUid := (LeUID new uidString: (UUID new asString); uidString).
 	call := GtLFunctionToolCall new.
-	call function: {
-		'name' -> tool name.
-		'arguments' -> { 'pageUid' -> pageUid. 'snippetUid' -> snippetUid } asDictionary
-	} asDictionary.
+	call rawArguments: {
+		'pageUid' -> pageUid.
+		'snippetUid' -> snippetUid } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: result isErrorDomainObject.
-	self assert: result missingArgument equals: 'updatedText'.
+	self assert: (result isKindOf: GtLMagritteInputModel).
+	self assert: result model missingArgument equals: 'updatedText'.
 	^ call
 ]
 
 { #category : #examples }
 GtLToolForLepiterSnippetEditExamples >> successfulSnippetEdit [
 	<gtExample>
-	| tool call result snippet page database updatedText |
+	| tool call result snippet page database updatedText model |
 	database := LeContentExamples new basicDatabase.
 	page := database pageBuilder
 		title: 'one';
@@ -73,16 +70,16 @@ GtLToolForLepiterSnippetEditExamples >> successfulSnippetEdit [
 	tool := GtLToolForLepiterSnippetEdit new.
 	tool database: database.
 	call := GtLFunctionToolCall new.
-	call function: {
-		'name' -> tool name.
-		'arguments' -> {
-			'pageUid' -> page uid asString.
-			'snippetUid' -> snippet uidString.
-			'updatedText' -> updatedText } asDictionary
-	} asDictionary.
+	call rawArguments: {
+		'pageUid' -> page uidString.
+		'snippetUid' -> snippet uidString.
+		'updatedText' -> updatedText } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result value at: 'status') equals: 'updated'.
+	self assert: (result isKindOf: GtLMagritteInputModel).
+	model := result model.
+	self assert: model status equals: 'updated'.
+	self assert: model oldText equals: 'one > one'.
 	self assert: snippet string equals: updatedText.
 	^ call
 ]

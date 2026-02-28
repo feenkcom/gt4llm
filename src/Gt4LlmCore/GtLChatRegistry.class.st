@@ -58,9 +58,11 @@ GtLChatRegistry >> gtViewChatsOn: aView [
 			text: [ :aChat | 
 				aChat messages
 					ifNotEmpty: [ :messages | messages first createdAt asLocalStringYMDHMS ]
-					ifEmpty: [ '-' ] ];
+					ifEmpty: [ '-' ] ]
+			width: 130;
 		column: 'Finished'
-			text: [ :aChat | aChat messages isEmpty or: [ aChat isFinishedSuccesss ] ];
+			text: [ :aChat | aChat messages isEmpty or: [ aChat isFinishedSuccesss ] ]
+			width: 100;
 		contextItemLabel: 'Inspect chat'
 			action: [ :anElement :aChat | anElement phlow spawnObject: aChat ];
 		contextItemLabel: 'Remove chat'
@@ -92,11 +94,17 @@ GtLChatRegistry >> newChat [
 GtLChatRegistry >> newGtChat [
 	| chat |
 	chat := GtLChat new
-		tools: GtLTools gt, {GtLToolForSmalltalkCodeEvaluation new};
+		tools: GtLTools gt;
 		markdownResponse;
 		gtPageExplanation: 'Examples by example';
 		gtPageExplanation: 'Inspector phlow views by example'.
 	^ self registerChat: chat
+]
+
+{ #category : #accessing }
+GtLChatRegistry >> newGtDevelopmentChat [ 
+	^ self newGtChat
+		gtPageExplanation: 'Chat for the development of Glamorous Toolkit itself'
 ]
 
 { #category : #accessing }
