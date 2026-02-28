@@ -29,13 +29,12 @@ GtLToolForLepiterPageCreate >> databaseIdDescription [
 
 { #category : #accessing }
 GtLToolForLepiterPageCreate >> description [
-	^ 'Create a new Lepiter page in a database with the provided title, target database id, and optional initial text.
+	^ 'Create a new Lepiter page in a database with the provided title and target database id.
 
 Example JSON arguments:
 {
   "title": "New Page",
-  "databaseId": "UUID",
-  "initialText": "First snippet"
+  "databaseId": "UUID"
 }
 
 Example JSON response:
@@ -44,16 +43,6 @@ Example JSON response:
   "pageUid": "UUID",
   "title": "New Page"
 }'
-]
-
-{ #category : #magritte }
-GtLToolForLepiterPageCreate >> initialTextDescription [
-	<magritteDescription>
-
-	^ MAStringDescription new
-		label: 'Initial text';
-		accessor: #initialText;
-		beRequired
 ]
 
 { #category : #initialization }
@@ -69,7 +58,7 @@ GtLToolForLepiterPageCreate >> name [
 
 { #category : #private }
 GtLToolForLepiterPageCreate >> privatePerformToolCall: aToolCall [
-	| arguments title targetDatabase page databaseId baseDatabase initialText |
+	| arguments title targetDatabase page databaseId baseDatabase |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	title := arguments
 		at: 'title'
@@ -81,11 +70,6 @@ GtLToolForLepiterPageCreate >> privatePerformToolCall: aToolCall [
 		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
 			arguments: arguments;
 			missingArgument: 'databaseId' ].
-	initialText := arguments
-		at: 'initialText'
-		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-			arguments: arguments;
-			missingArgument: 'initialText' ].
 	baseDatabase := self database.
 	targetDatabase := (baseDatabase respondsTo: #databaseWithID:ifNone:)
 		ifTrue: [ baseDatabase databaseWithID: databaseId ifNone: [ nil ] ]
@@ -97,7 +81,6 @@ GtLToolForLepiterPageCreate >> privatePerformToolCall: aToolCall [
 	targetDatabase ifNil: [ ^ GtLProblemDomainObject new
 			description: 'Database with ' , databaseId asString , ' not found' ].
 	page := targetDatabase pageBuilder title: title; add.
-	page addSnippet: (LeTextSnippet string: initialText).
 	^ GtLLepiterPageCreateDomainObject new
 		status: 'created';
 		databaseId: databaseId;
