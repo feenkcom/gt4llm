@@ -70,6 +70,11 @@ GtLChatRegistry >> gtViewChatsOn: aView [
 		updateWhen: GtLChatAnnouncement in: self announcer
 ]
 
+{ #category : #'as yet unclassified' }
+GtLChatRegistry >> hasChats [
+	^ chats notEmpty
+]
+
 { #category : #initialization }
 GtLChatRegistry >> initialize [
 	super initialize.
