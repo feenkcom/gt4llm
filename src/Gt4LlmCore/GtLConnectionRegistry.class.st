@@ -48,6 +48,18 @@ GtLConnectionRegistry class >> gtInstanceButtonFor: anAction [
 		action: [ :aButton | aButton phlow spawnObject: self uniqueInstance]
 ]
 
+{ #category : #views }
+GtLConnectionRegistry class >> gtViewFor: aView [
+	<gtView>
+	<gtClassView>
+
+	^ aView forward
+		title: 'Connections';
+		priority: 10;
+		object: [ self default ];
+		view: #gtConnectionsFor:
+]
+
 { #category : #testing }
 GtLConnectionRegistry class >> hasUniqueInstance [
 
