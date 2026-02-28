@@ -48,6 +48,18 @@ GtLConnectionRegistry class >> gtInstanceButtonFor: anAction [
 		action: [ :aButton | aButton phlow spawnObject: self uniqueInstance]
 ]
 
+{ #category : #views }
+GtLConnectionRegistry class >> gtViewFor: aView [
+	<gtView>
+	<gtClassView>
+
+	^ aView forward
+		title: 'Connections';
+		priority: 10;
+		object: [ self default ];
+		view: #gtConnectionsFor:
+]
+
 { #category : #testing }
 GtLConnectionRegistry class >> hasUniqueInstance [
 
@@ -164,22 +176,22 @@ GtLConnectionRegistry >> initialize [
 
 { #category : #accessing }
 GtLConnectionRegistry >> knownConnectors [
-	^ {"GtLlmConnection new
-			providerClass: GtOllamaProvider;
-			label: 'Llama 3.2';
-			model: 'llama3.2'.
-		GtLlmConnection new
-			providerClass: GtOllamaProvider;
-			label: 'GPT OSS (Ollama 20b)';
-			model: 'gpt-oss'."
-		GtLConnection new
+	^ {GtLConnection new
 			providerClass: GtLAnthropicProvider;
 			label: 'Claude Opus 4.5';
 			model: 'claude-opus-4-5'.
-		"GtLlmConnection new
-			providerClass: GtGeminiProvider;
-			label: 'Gemini 3.0 Pro Preview';
-			model: 'gemini-3-pro-preview'"}
+		GtLConnection new
+			providerClass: GtLOpenAIProvider;
+			label: 'GPT 5.2';
+			model: 'gpt-5.2'.
+		GtLConnection new
+			providerClass: GtLOpenAIProvider;
+			label: 'GPT 5.3 Codex';
+			model: 'gpt-5.3-codex'.
+		GtLConnection new
+			providerClass: GtLOpenAIProvider;
+			label: 'GPT 5.3';
+			model: 'gpt-5.3'.}
 ]
 
 { #category : #utils }
@@ -194,7 +206,7 @@ GtLConnectionRegistry >> labelForModel: aModel [
 GtLConnectionRegistry >> standardDefaultConnection [
 	^ GtLConnection new
 		providerClass: GtLOpenAIProvider;
-		label: 'GPT 5.3 Codex';
-		model: 'gpt-5.3-codex'";
+		label: 'GPT 5.2 Codex';
+		model: 'gpt-5.2-codex'";
 		addOption: 'isStreaming' withValue: false"
 ]
