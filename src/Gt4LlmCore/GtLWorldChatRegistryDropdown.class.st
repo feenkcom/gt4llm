@@ -79,14 +79,14 @@ GtLWorldChatRegistryDropdown >> initializeForWorldElement: aWorldElement [
 GtLWorldChatRegistryDropdown >> newButton [
 	^ BrButton new
 		id: #'chat-registry--button';
-		icon: BrGlamorousVectorIcons chat;
+		icon: BrGlamorousVectorIcons emphasizedChat;
 		aptitude: BrGlamorousButtonWithIconAptitude - BrGlamorousButtonExteriorAptitude
 ]
 
 { #category : #private }
 GtLWorldChatRegistryDropdown >> newDropdownButton [
 	^ BrButton new
-		icon: BrGlamorousVectorIcons chat;
+		icon: BrGlamorousVectorIcons emphasizedChat;
 		label: self tooltip;
 		aptitude: BrGlamorousButtonWithIconAptitude
 			- BrGlamorousButtonWithLabelTooltipAptitude2
