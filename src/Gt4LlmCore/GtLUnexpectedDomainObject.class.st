@@ -7,11 +7,6 @@ Class {
 	#category : #'Gt4LlmCore-Domain Objects'
 }
 
-{ #category : #visiting }
-GtLUnexpectedDomainObject >> acceptVisitor: aVisitor [
-	^ aVisitor visitUnexpectedDomainObject: self
-]
-
 { #category : #'api - testing' }
 GtLUnexpectedDomainObject >> isErrorDomainObject [
 	^ true

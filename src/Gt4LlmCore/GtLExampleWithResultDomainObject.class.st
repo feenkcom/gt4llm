@@ -7,11 +7,6 @@ Class {
 	#category : #'Gt4LlmCore-Domain Objects'
 }
 
-{ #category : #visiting }
-GtLExampleWithResultDomainObject >> acceptVisitor: aVisitor [
-	^ aVisitor visitExampleWithResultDomainObject: self
-]
-
 { #category : #accessing }
 GtLExampleWithResultDomainObject >> exampleWithResult [
 	^ exampleWithResult

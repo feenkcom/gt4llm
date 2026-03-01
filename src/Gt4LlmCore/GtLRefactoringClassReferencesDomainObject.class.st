@@ -8,11 +8,6 @@ Class {
 	#category : #'Gt4LlmCore-Domain Objects'
 }
 
-{ #category : #visiting }
-GtLRefactoringClassReferencesDomainObject >> acceptVisitor: aVisitor [
-	^ aVisitor visitRefactoringClassReferencesDomainObject: self
-]
-
 { #category : #accessing }
 GtLRefactoringClassReferencesDomainObject >> references [
 	^ references ifNil: [ #() ]

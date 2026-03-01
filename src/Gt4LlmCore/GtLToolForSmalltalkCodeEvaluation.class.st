@@ -47,10 +47,12 @@ GtLToolForSmalltalkCodeEvaluation >> privatePerformToolCall: aToolCall [
 			missingArgument: 'code' ].
 	object := [ OpalCompiler new evaluate: code ]
 		on: Error
-		do: [ :ex | 
+		do: [ :ex |
 			^ GtLExceptionDomainObject new
 				freeze: ex;
 				description: 'Error while evaluating smalltalk code' ].
 
-	^ GtLValueDomainObject new value: object
+	^ GtLSmalltalkCodeEvaluationDomainObject new
+		code: code;
+		value: object
 ]

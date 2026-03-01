@@ -7,11 +7,6 @@ Class {
 	#category : #'Gt4LlmCore-Domain Objects'
 }
 
-{ #category : #visiting }
-GtLNotSourceSearchableMethodDomainObject >> acceptVisitor: aVisitor [
-	^ aVisitor visitNotSourceSearchableMethodDomainObject: self
-]
-
 { #category : #'gt - extensions' }
 GtLNotSourceSearchableMethodDomainObject >> gtClassCoderViewFor: aView [
 	<gtView>

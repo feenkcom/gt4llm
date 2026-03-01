@@ -12,11 +12,6 @@ Class {
 	#category : #'Gt4LlmCore-Domain Objects'
 }
 
-{ #category : #visiting }
-GtLCouldNotCreateClassDomainObject >> acceptVisitor: aVisitor [
-	^ aVisitor visitCouldNotCreateClassDomainObject: self
-]
-
 { #category : #accessing }
 GtLCouldNotCreateClassDomainObject >> classVariableNames [
 	^ classVariableNames

@@ -7,11 +7,6 @@ Class {
 	#category : #'Gt4LlmCore-Domain Objects'
 }
 
-{ #category : #visiting }
-GtLLepiterPageDomainObject >> acceptVisitor: aVisitor [
-	^ aVisitor visitLepiterPageDomainObject: self
-]
-
 { #category : #accessing }
 GtLLepiterPageDomainObject >> foundPage [
 	^ foundPage

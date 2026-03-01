@@ -9,11 +9,6 @@ Class {
 	#category : #'Gt4LlmCore-Domain Objects'
 }
 
-{ #category : #visiting }
-GtLRefactoringMethodReferencesDomainObject >> acceptVisitor: aVisitor [
-	^ aVisitor visitRefactoringMethodReferencesDomainObject: self
-]
-
 { #category : #views }
 GtLRefactoringMethodReferencesDomainObject >> gtReferencesFor: aView [
 	<gtView>

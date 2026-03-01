@@ -9,11 +9,6 @@ Class {
 	#category : #'Gt4LlmCore-Domain Objects'
 }
 
-{ #category : #visiting }
-GtLMissingArgumentDomainObject >> acceptVisitor: aVisitor [
-	^ aVisitor visitMissingArgumentDomainObject: self
-]
-
 { #category : #accessing }
 GtLMissingArgumentDomainObject >> arguments [
 	<return: #Dictionary>
