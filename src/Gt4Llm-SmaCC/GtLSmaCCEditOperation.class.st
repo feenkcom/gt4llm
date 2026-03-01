@@ -6,7 +6,7 @@ Class {
 		'newSource',
 		'oldSource'
 	],
-	#category : 'Gt4Llm-SmaCC-Domain Objects'
+	#category : #'Gt4Llm-SmaCC-Domain Objects'
 }
 
 { #category : #private }

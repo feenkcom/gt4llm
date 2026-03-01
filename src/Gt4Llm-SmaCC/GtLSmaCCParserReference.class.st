@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'parserClass'
 	],
-	#category : 'Gt4Llm-SmaCC-Domain Objects'
+	#category : #'Gt4Llm-SmaCC-Domain Objects'
 }
 
 { #category : #'as yet unclassified' }

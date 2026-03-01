@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'model'
 	],
-	#category : 'Gt4Llm-SmaCC-Tools'
+	#category : #'Gt4Llm-SmaCC-Tools'
 }
 
 { #category : #'as yet unclassified' }
@@ -20,7 +20,9 @@ GtLSmaCCTool >> grammarIn: anObject do: aBlock onError: errorBlock [
 		ifNil: [ ^ errorBlock
 				value: (GtLProblemDomainObject new
 						description: anObject parserClass , ' is not a SmaCC parser class.') ].
-	^ aBlock value: grammar
+	^ [ aBlock value: grammar ]
+		on: Error
+		do: [ :error | ^ errorBlock value: (GtLExceptionDomainObject new freeze: error) ]
 ]
 
 { #category : #accessing }

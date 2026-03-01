@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLSmaCCToolForParserUpdatesExamples,
 	#superclass : #Object,
-	#category : 'Gt4Llm-SmaCC-Examples'
+	#category : #'Gt4Llm-SmaCC-Examples'
 }
 
 { #category : #private }

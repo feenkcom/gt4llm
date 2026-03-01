@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'grammars'
 	],
-	#category : 'Gt4Llm-SmaCC-Model'
+	#category : #'Gt4Llm-SmaCC-Model'
 }
 
 { #category : #'as yet unclassified' }
