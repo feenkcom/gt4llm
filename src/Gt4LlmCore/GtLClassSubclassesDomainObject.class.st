@@ -8,11 +8,6 @@ Class {
 	#category : #'Gt4LlmCore-Domain Objects'
 }
 
-{ #category : #visiting }
-GtLClassSubclassesDomainObject >> acceptVisitor: aVisitor [
-	^ aVisitor visitClassSubclassesDomainObject: self
-]
-
 { #category : #accessing }
 GtLClassSubclassesDomainObject >> foundClass [
 	^ foundClass

@@ -7,11 +7,6 @@ Class {
 	#category : #'Gt4LlmCore-Domain Objects'
 }
 
-{ #category : #visiting }
-GtLRemoteExampleReportDomainObject >> acceptVisitor: aVisitor [
-	^ aVisitor visitRemoteExampleReportDomainObject: self
-]
-
 { #category : #accessing }
 GtLRemoteExampleReportDomainObject >> result [
 	^ result

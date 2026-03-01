@@ -8,11 +8,6 @@ Class {
 	#category : #'Gt4LlmCore-Domain Objects'
 }
 
-{ #category : #visiting }
-GtLRefactoringMethodImplementorsDomainObject >> acceptVisitor: aVisitor [
-	^ aVisitor visitRefactoringMethodImplementorsDomainObject: self
-]
-
 { #category : #'gt - extensions' }
 GtLRefactoringMethodImplementorsDomainObject >> gtImplementorsFor: aView [
 	<gtView>

@@ -3,11 +3,6 @@ Trait {
 	#category : #'Gt4LlmCore-Domain Objects'
 }
 
-{ #category : #visiting }
-TGtLDomainObject >> acceptVisitor: aVisitor [
-	^ self explicitRequirement
-]
-
 { #category : #'api - testing' }
 TGtLDomainObject >> isErrorDomainObject [
 	"Return true if the response represents some kind of error, that happened during a tool execution."

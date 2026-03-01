@@ -8,11 +8,6 @@ Class {
 	#category : #'Gt4LlmCore-Domain Objects'
 }
 
-{ #category : #visiting }
-GtLClassMethodsDomainObject >> acceptVisitor: aVisitor [
-	^ aVisitor visitClassMethodsDomainObject: self
-]
-
 { #category : #'gt - extensions' }
 GtLClassMethodsDomainObject >> gtClassCoderViewFor: aView [
 	<gtView>

@@ -9,11 +9,6 @@ Class {
 	#category : #'Gt4LlmCore-Domain Objects'
 }
 
-{ #category : #visiting }
-GtLTestCasesDomainObject >> acceptVisitor: aVisitor [
-	^ aVisitor visitTestCasesDomainObject: self
-]
-
 { #category : #accessing }
 GtLTestCasesDomainObject >> errorCount [
 	^ self testCases count: #isErrorResult

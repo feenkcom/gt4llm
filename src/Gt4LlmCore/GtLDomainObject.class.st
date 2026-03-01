@@ -6,11 +6,6 @@ Class {
 	#category : #'Gt4LlmCore-Domain Objects'
 }
 
-{ #category : #visiting }
-GtLDomainObject >> acceptVisitor: aVisitor [
-	^ aVisitor visitDomainObject: self
-]
-
 { #category : #'gt - extensions' }
 GtLDomainObject >> gtJsonObjectViewFor: aView [
 	<gtView>

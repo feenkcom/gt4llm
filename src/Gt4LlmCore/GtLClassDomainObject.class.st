@@ -13,11 +13,6 @@ Class {
 	#category : #'Gt4LlmCore-Domain Objects'
 }
 
-{ #category : #visiting }
-GtLClassDomainObject >> acceptVisitor: aVisitor [
-	^ aVisitor visitClassDomainObject: self
-]
-
 { #category : #accessing }
 GtLClassDomainObject >> foundClass [
 	^ foundClass

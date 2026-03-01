@@ -7,11 +7,6 @@ Class {
 	#category : #'Gt4LlmCore-Domain Objects'
 }
 
-{ #category : #visiting }
-GtLTestCaseWithResultDomainObject >> acceptVisitor: aVisitor [
-	^ aVisitor visitTestCaseDomainObject: self
-]
-
 { #category : #'gt - extensions' }
 GtLTestCaseWithResultDomainObject >> gtSourceCodeFor: aView [
 	<gtView>

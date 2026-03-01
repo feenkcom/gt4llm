@@ -7,11 +7,6 @@ Class {
 	#category : #'Gt4LlmCore-Domain Objects'
 }
 
-{ #category : #visiting }
-GtLMethodIsNotExampleDomainObject >> acceptVisitor: aVisitor [
-	^ aVisitor visitMethodIsNotExampleDomainObject: self
-]
-
 { #category : #'api - testing' }
 GtLMethodIsNotExampleDomainObject >> isErrorDomainObject [
 	^ true

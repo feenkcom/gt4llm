@@ -10,11 +10,6 @@ Class {
 	#category : #'Gt4LlmCore-Domain Objects'
 }
 
-{ #category : #visiting }
-GtLSearchFilterDomainObject >> acceptVisitor: aVisitor [
-	^ aVisitor visitSearchFilterDomainObject: self
-]
-
 { #category : #accessing }
 GtLSearchFilterDomainObject >> filter [
 	^ filter

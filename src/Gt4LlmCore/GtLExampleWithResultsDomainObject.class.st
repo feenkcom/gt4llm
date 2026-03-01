@@ -8,11 +8,6 @@ Class {
 	#category : #'Gt4LlmCore-Domain Objects'
 }
 
-{ #category : #visiting }
-GtLExampleWithResultsDomainObject >> acceptVisitor: aVisitor [
-	^ aVisitor visitExampleWithResultsDomainObject: self
-]
-
 { #category : #'api - accessing' }
 GtLExampleWithResultsDomainObject >> errorResultCount [
 	^ self exampleWithResults count: #isErrorResult

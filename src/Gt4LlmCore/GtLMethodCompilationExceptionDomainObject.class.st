@@ -9,11 +9,6 @@ Class {
 	#category : #'Gt4LlmCore-Domain Objects'
 }
 
-{ #category : #visiting }
-GtLMethodCompilationExceptionDomainObject >> acceptVisitor: aVisitor [
-	^ aVisitor visitMethodCompilationExceptionDomainObject: self
-]
-
 { #category : #views }
 GtLMethodCompilationExceptionDomainObject >> gtSourceCodeFor: aView [
 	<gtView>

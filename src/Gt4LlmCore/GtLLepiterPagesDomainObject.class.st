@@ -7,11 +7,6 @@ Class {
 	#category : #'Gt4LlmCore-Domain Objects'
 }
 
-{ #category : #visiting }
-GtLLepiterPagesDomainObject >> acceptVisitor: aVisitor [
-	^ aVisitor visitLepiterPagesDomainObject: self
-]
-
 { #category : #'gt - extensions' }
 GtLLepiterPagesDomainObject >> gtPagesFor: aView [
 	<gtView>

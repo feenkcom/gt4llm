@@ -9,11 +9,6 @@ Class {
 	#category : #'Gt4LlmCore-Domain Objects'
 }
 
-{ #category : #'api - serializing' }
-GtLRefactoringClassSearchDomainObject >> acceptVisitor: aVisitor [
-	^ aVisitor visitRefactoringClassSearchDomainObject: self
-]
-
 { #category : #accessing }
 GtLRefactoringClassSearchDomainObject >> allClassNames [
 	^ allClassNames

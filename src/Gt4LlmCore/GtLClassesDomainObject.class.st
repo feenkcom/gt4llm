@@ -9,11 +9,6 @@ Class {
 	#category : #'Gt4LlmCore-Domain Objects'
 }
 
-{ #category : #visiting }
-GtLClassesDomainObject >> acceptVisitor: aVisitor [
-	^ aVisitor visitClassSearchDomainObject: self
-]
-
 { #category : #accessing }
 GtLClassesDomainObject >> foundClasses [
 	^ foundClasses

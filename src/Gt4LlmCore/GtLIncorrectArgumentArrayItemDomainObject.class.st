@@ -10,11 +10,6 @@ Class {
 	#category : #'Gt4LlmCore-Domain Objects'
 }
 
-{ #category : #visiting }
-GtLIncorrectArgumentArrayItemDomainObject >> acceptVisitor: aVisitor [
-	^ aVisitor visitIncorrectArgumentArrayItemValueDomainObject: self
-]
-
 { #category : #accessing }
 GtLIncorrectArgumentArrayItemDomainObject >> argumentName [
 	^ argumentName

@@ -7,11 +7,6 @@ Class {
 	#category : #'Gt4LlmCore-Domain Objects'
 }
 
-{ #category : #visiting }
-GtLRefactoringClassDomainObject >> acceptVisitor: aVisitor [
-	^ aVisitor visitRefactoringClassDomainObject: self
-]
-
 { #category : #'api - serializing' }
 GtLRefactoringClassDomainObject >> serializeToOpenAIResponseJsonObject [
 	"Return a JSON dictionary that represents the domain object."
