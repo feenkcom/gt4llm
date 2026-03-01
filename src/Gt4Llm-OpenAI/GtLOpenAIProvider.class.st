@@ -243,7 +243,7 @@ GtLOpenAIProvider >> initialize [
 	client := GtLOpenAIClient new.
 	executions := OrderedCollection new.
 	
-	self beWithPromptCompaction.
+	self beWithApiCompaction.
 ]
 
 { #category : #accessing }
