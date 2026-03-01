@@ -62,7 +62,7 @@ GtLTools class >> leChange [
 	^ self
 		withAll: {GtLToolForLepiterPageCreate new.
 				GtLToolForLepiterSnippetEdit new.
-				GtLToolForLepiterSnippetCreate new} asOrderedCollection
+				GtLToolForLepiterSnippetsCreate new} asOrderedCollection
 ]
 
 { #category : #defaults }

@@ -109,7 +109,7 @@ GtLFunctionToolCall >> gtArgumentsFor: aView [
 	arguments ifNil: [ ^ aView empty ].
 	^ aView columnedList
 		title: 'Arguments';
-		priority: 1;
+		priority: 9;
 		items: [ self arguments associations ];
 		column: 'Name' text: #key width: 150;
 		column: 'Value' text: #value;
