@@ -61,6 +61,7 @@ GtLTools class >> gtSearch [
 GtLTools class >> leChange [
 	^ self
 		withAll: {GtLToolForLepiterPageCreate new.
+				GtLToolForLepiterPageRemove new.
 				GtLToolForLepiterSnippetEdit new.
 				GtLToolForLepiterSnippetsCreate new.
 				GtLToolForLepiterSnippetsRemove new} asOrderedCollection
