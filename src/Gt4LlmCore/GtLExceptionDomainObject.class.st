@@ -8,11 +8,6 @@ Class {
 	#category : #'Gt4LlmCore-Domain Objects'
 }
 
-{ #category : #visiting }
-GtLExceptionDomainObject >> acceptVisitor: aVisitor [
-	^ aVisitor visitExceptionDomainObject: self
-]
-
 { #category : #accessing }
 GtLExceptionDomainObject >> description [
 	^ description

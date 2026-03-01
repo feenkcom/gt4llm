@@ -7,11 +7,6 @@ Class {
 	#category : #'Gt4LlmCore-Domain Objects'
 }
 
-{ #category : #visiting }
-GtLRefactoringMethodSourceCodeDomainObject >> acceptVisitor: aVisitor [
-	^ aVisitor visitRefactoringMethodSourceCodeDomainObject: self
-]
-
 { #category : #accessing }
 GtLRefactoringMethodSourceCodeDomainObject >> method [
 	^ method

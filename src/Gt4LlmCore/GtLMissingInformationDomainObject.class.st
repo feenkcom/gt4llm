@@ -8,11 +8,6 @@ Class {
 	#category : #'Gt4LlmCore-Domain Objects'
 }
 
-{ #category : #visiting }
-GtLMissingInformationDomainObject >> acceptVisitor: aVisitor [
-	^ aVisitor visitMissingInformationDomainObject: self
-]
-
 { #category : #'api - testing' }
 GtLMissingInformationDomainObject >> isErrorDomainObject [
 	^ true

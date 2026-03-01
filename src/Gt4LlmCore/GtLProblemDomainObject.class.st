@@ -7,11 +7,6 @@ Class {
 	#category : #'Gt4LlmCore-Domain Objects'
 }
 
-{ #category : #visiting }
-GtLProblemDomainObject >> acceptVisitor: aVisitor [
-	^ aVisitor visitProblemDomainObject: self
-]
-
 { #category : #accessing }
 GtLProblemDomainObject >> description [
 	^ description

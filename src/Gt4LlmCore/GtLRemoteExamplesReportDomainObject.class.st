@@ -9,11 +9,6 @@ Class {
 	#category : #'Gt4LlmCore-Domain Objects'
 }
 
-{ #category : #visiting }
-GtLRemoteExamplesReportDomainObject >> acceptVisitor: aVisitor [
-	^ aVisitor visitRemoteExamplesReportDomainObject: self
-]
-
 { #category : #'api - initialization' }
 GtLRemoteExamplesReportDomainObject >> errorMessage: aString [
 	self errorMessages: (self errorMessages copyWith: aString)
