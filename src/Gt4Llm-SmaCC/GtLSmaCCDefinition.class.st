@@ -6,7 +6,7 @@ Class {
 		'parserClass',
 		'scannerClass'
 	],
-	#category : 'Gt4Llm-SmaCC-Domain Objects'
+	#category : #'Gt4Llm-SmaCC-Domain Objects'
 }
 
 { #category : #accessing }

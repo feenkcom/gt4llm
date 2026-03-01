@@ -120,5 +120,9 @@ GtLMarkdown >> gtMarkdownFor: aView [
 			tooltip: 'Create page from Markdown'
 			action: [ :b | 
 				b phlow
-					spawnObject: (LeDatabasesRegistry defaultPrimaryDatabase addPage: (LePage new addSnippet: (LeTextSnippet new string: content); yourself)) ]
+					spawnObject: (LeDatabasesRegistry defaultPrimaryDatabase addPage: (LePage new addSnippet: (LeTextSnippet new string: content); yourself)) ];
+		actionButtonIcon: BrGlamorousVectorIcons clipboard
+			tooltip: 'Copy contens to clipboard'
+			action: [ :b | 
+				GtClipboard clipboardText: content ]
 ]
