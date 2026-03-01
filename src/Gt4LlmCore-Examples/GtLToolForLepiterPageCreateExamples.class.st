@@ -21,26 +21,6 @@ GtLToolForLepiterPageCreateExamples >> missingDatabaseId [
 ]
 
 { #category : #examples }
-GtLToolForLepiterPageCreateExamples >> missingInitialText [
-	<gtExample>
-	| tool call result db logicalDB |
-	db := LeExplicitlyAttachedLinksExamples new primaryDatabase.
-	logicalDB := LeLogicalDatabase new primaryDB: db.
-	tool := GtLToolForLepiterPageCreate new.
-	tool database: logicalDB.
-	call := GtLFunctionToolCall new.
-	call rawArguments: {
-		'title' -> 'New Page'.
-		'databaseId' -> db uuidString.
-	} asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteInputModel).
-	self assert: result model missingArgument equals: 'initialText'.
-	^ call
-]
-
-{ #category : #examples }
 GtLToolForLepiterPageCreateExamples >> missingTitle [
 	<gtExample>
 	| tool call result db logicalDB |
@@ -68,7 +48,6 @@ GtLToolForLepiterPageCreateExamples >> successfulPageCreate [
 	call := GtLFunctionToolCall new.
 	call rawArguments: {
 		'title' -> 'New Page'.
-		'initialText' -> 'First snippet'.
 		'databaseId' -> db uuidString.
 	} asDictionary.
 	result := tool performToolCall: call.
@@ -83,7 +62,6 @@ GtLToolForLepiterPageCreateExamples >> successfulPageCreate [
 	self assert: model page == page.
 	self assert: page title equals: 'New Page'.
 	snippets := page children.
-	self assert: snippets size equals: 1.
-	self assert: snippets first contentAsString equals: 'First snippet'.
+	self assert: snippets isEmpty.
 	^ call
 ]
