@@ -89,7 +89,7 @@ GtLToolForLepiterSnippetsCreate >> name [
 ]
 
 { #category : #private }
-GtLToolForLepiterSnippetsCreate >> privatePerformToolCall: aToolCall [
+GtLToolForLepiterSnippetsCreate >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments snippetsArgument results |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	snippetsArgument := arguments

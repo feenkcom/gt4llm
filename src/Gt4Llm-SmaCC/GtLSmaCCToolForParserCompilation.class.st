@@ -30,7 +30,7 @@ GtLSmaCCToolForParserCompilation >> name [
 ]
 
 { #category : #private }
-GtLSmaCCToolForParserCompilation >> privatePerformToolCall: aToolCall [
+GtLSmaCCToolForParserCompilation >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments definitionReference |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	definitionReference := arguments

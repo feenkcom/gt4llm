@@ -79,6 +79,11 @@ GtLValueSerializer >> serializeValue: aValue [
 			-> (aValue
 					ifNil: [ {} ]
 					ifNotNil: [ aValue class methods asArray collect: [ :aMethod | aMethod selector ] ]).
+		'views' -> ((aValue gtViewsInCurrentContext
+			reject: [ :aView | aView isKindOf: GtPhlowEmptyView])
+			collect: [ :aView | {
+				'methodName' ->aView methodSelector.
+				'title' -> aView title } asDictionary ] )asArray.
 		'allInstanceSlots'
 			-> (aValue class allSlots
 					collect: [ :aSlot | 

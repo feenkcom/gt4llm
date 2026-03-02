@@ -68,7 +68,7 @@ GtLToolForLepiterPageRemove >> pageUidDescription [
 ]
 
 { #category : #private }
-GtLToolForLepiterPageRemove >> privatePerformToolCall: aToolCall [
+GtLToolForLepiterPageRemove >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments pageUidString databaseId baseDatabase targetDatabase pageUid page |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	pageUidString := arguments

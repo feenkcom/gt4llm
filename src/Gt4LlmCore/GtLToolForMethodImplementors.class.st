@@ -25,7 +25,7 @@ GtLToolForMethodImplementors >> parametersDescription [
 ]
 
 { #category : #accessing }
-GtLToolForMethodImplementors >> privatePerformToolCall: aToolCall [
+GtLToolForMethodImplementors >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments argument methodName implementors promise |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	argument := aToolCall anyArgument.

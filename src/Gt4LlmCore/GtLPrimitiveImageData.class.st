@@ -13,6 +13,7 @@ GtLPrimitiveImageData class >> fromElement: anElement [
 	| rootElement form |
 	rootElement := BlScripter new
 			element: anElement;
+			extent: 1600@1200;
 			elementWithoutParent.
 	form := BlExporter png
 			element: rootElement;

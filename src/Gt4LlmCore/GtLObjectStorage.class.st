@@ -81,3 +81,21 @@ GtLObjectStorage >> objectAt: anObjectId ifPresent: aPresentBlock ifAbsent: anAb
 GtLObjectStorage >> objectCount [
 	^ objectsByUUID size
 ]
+
+{ #category : #'utils - accessing' }
+GtLObjectStorage >> objectIds [
+	^ objectsByUUID keys collect: [ :each |
+			each asString36 ]
+]
+
+{ #category : #printing }
+GtLObjectStorage >> printOn: aStream [
+	super printOn: aStream.
+
+	aStream 
+		<< ' [';
+		print: self objectCount;
+		<< ' ';
+		<< ('object' asPluralBasedOn: self objectCount);
+		<< ']'
+]

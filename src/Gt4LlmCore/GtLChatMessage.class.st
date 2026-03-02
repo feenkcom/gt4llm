@@ -225,7 +225,7 @@ GtLChatMessage >> gtViewSchemaDescriptionsFor: aView [
 
 	^ aView forward
 		title: 'Output formats';
-		priority: 20; 
+		priority: 30; 
 		object: [ formatDescriptions ];
 		view: #gtViewSchemaDescriptionsFor:;
 		actionButtonIcon: BrGlamorousVectorIcons playinspect

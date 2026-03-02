@@ -21,12 +21,12 @@ GtLToolMessage >> acceptVisitor: aVisitor [
 	^ aVisitor visitGtLToolMessage: self
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLToolMessage >> action [
 	^ self toolCall humanReadable
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLToolMessage >> actionModel [
 	^ self toolCall
 ]
@@ -46,7 +46,7 @@ GtLToolMessage >> beSkippedExecutionState [
 	self executionState: GtLMessageState skipped
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLToolMessage >> chat: aChat [
 	super chat: aChat.
 	chat  
@@ -54,7 +54,7 @@ GtLToolMessage >> chat: aChat [
 		ifAbsent: [ self updateDataFromChat: aChat]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLToolMessage >> content [
 	^ self output
 ]
@@ -78,7 +78,7 @@ GtLToolMessage >> executionState: aState [
 	self notifyExecutionStateChanged.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'gt - extensions' }
 GtLToolMessage >> gtArgumentsFor: aView [
 	<gtView>
 	<gtLlmView>
@@ -108,9 +108,29 @@ GtLToolMessage >> gtInspectorTargetModels [
 	^ self output
 		ifNotNil: [ :anOutput | 
 			(output respondsTo: #gtInspectorTargetModels)
-				ifTrue: [ {anOutput} , output gtInspectorTargetModels ]
+				ifTrue: [ output gtInspectorTargetModels ]
 				ifFalse: [ {anOutput} ] ]
 		ifNil: [ #() ]
+]
+
+{ #category : #views }
+GtLToolMessage >> gtRequestResponseToolCallTreeFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'API tool call tree';
+		priority: 20;
+		object: [ requestResponse ];
+		view: #gtPreviousResponseTreeFor:
+]
+
+{ #category : #views }
+GtLToolMessage >> gtRequestResponseToolResultTreeFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'API tool result tree';
+		priority: 21;
+		object: [ requestResponse ];
+		view: #gtFollowingRequestTreeFor:
 ]
 
 { #category : #views }
@@ -173,18 +193,18 @@ GtLToolMessage >> requestResponse: aRequestResponse [
 		ifNil: [ requestResponse := aRequestResponse ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLToolMessage >> responseModels [
 	"we should collect the tools from the toolCall"
 	^ {}
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLToolMessage >> role [
 	^ 'tool'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #serialization }
 GtLToolMessage >> serializeForAnthropicMessagesAPI [
 	"[
   {

@@ -140,7 +140,7 @@ GtLToolForExampleClassesRun >> parametersDescription [
 ]
 
 { #category : #accessing }
-GtLToolForExampleClassesRun >> privatePerformToolCall: aToolCall [
+GtLToolForExampleClassesRun >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments classNames examples notFound details |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	classNames := arguments
