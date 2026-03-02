@@ -107,12 +107,6 @@ GtLOpenAIProvider >> createAPICompactionMessage [
 	^ message
 ]
 
-{ #category : #'private - execution' }
-GtLOpenAIProvider >> createToolExecutionContext [
-	^ GtLToolExecutionContext new 
-			objectStorage: self chat objectStorage
-]
-
 { #category : #accessing }
 GtLOpenAIProvider >> defaultAssistantMessageClass [
 	^ GtLOpenAIAssistantMessage
