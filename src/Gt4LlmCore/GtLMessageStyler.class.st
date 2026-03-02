@@ -754,3 +754,33 @@ GtLMessageStyler >> visitMethodAnnotation: aMethodAnnotation [
 		styleExpandingObject: aMethodAnnotation
 		withDefault: LepiterConstants defaultMethodShowSelector
 ]
+
+{ #category : #accessing }
+GtLMessageStyler >> visitPragmaAnnotation2: aPragmaAnnotation [
+	self visitAnnotation: aPragmaAnnotation.
+	self styleName: aPragmaAnnotation.
+	aPragmaAnnotation hasPragmaNameSpecified
+		ifTrue: [ self styleAutoHidingAnnotation: aPragmaAnnotation ].
+	self
+		styleButton: aPragmaAnnotation
+		withTool: [ GtInspectorTool
+				forObject: (GtPragmaType new keyword: aPragmaAnnotation pragmaName asSymbol) ].
+	self
+		styleExpandingObject: aPragmaAnnotation
+		withDefault: LepiterConstants defaultClassShowSelector
+]
+
+{ #category : #accessing }
+GtLMessageStyler >> visitPragmaAnnotation: aPragmaAnnotation [
+"	self visitAnnotation: aPragmaAnnotation.
+"	self styleName: aPragmaAnnotation.
+	aPragmaAnnotation hasPragmaNameSpecified
+		ifTrue: [ self styleAutoHidingAnnotation: aPragmaAnnotation ].
+	self
+		styleButton: aPragmaAnnotation
+		withTool: [ GtInspectorTool
+				forObject: (GtPragmaType new keyword: aPragmaAnnotation pragmaName asSymbol) ].
+	self
+		styleExpandingObject: aPragmaAnnotation
+		withDefault: LepiterConstants defaultClassShowSelector
+]
