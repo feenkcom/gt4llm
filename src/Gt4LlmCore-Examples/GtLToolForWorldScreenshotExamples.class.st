@@ -34,7 +34,7 @@ GtLToolForWorldScreenshotExamples >> worldScreenshotWithoutFocusedWorld [
 	result := tool performToolCall: call.
 	self assert: result isErrorDomainObject.
 	self
-		assert: ((result serializeToOpenAIResponseJsonObject at: #error)
+		assert: ((result serializeToLlmJsonObject at: #error)
 				includesSubstring: 'No focused GtWorldElement').
 	^ call
 ]

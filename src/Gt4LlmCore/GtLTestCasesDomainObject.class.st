@@ -82,7 +82,7 @@ GtLTestCasesDomainObject >> runCount [
 ]
 
 { #category : #'api - serializing' }
-GtLTestCasesDomainObject >> serializeToOpenAIResponseJsonObject [
+GtLTestCasesDomainObject >> serializeToLlmJsonObject [
 	"Return a JSON dictionary that represents the domain object."
 
 	<return: #NeoJSONObject>
@@ -100,7 +100,7 @@ GtLTestCasesDomainObject >> serializeToOpenAIResponseJsonObject [
 		at: #notFound put: self notFoundClassNames;
 		at: #notTestCaseClasses put: self notTestCaseClasses;
 		at: #details
-			put: (self testCases collect: #serializeToOpenAIResponseJsonObject as: Array);
+			put: (self testCases collect: #serializeToLlmJsonObject as: Array);
 		yourself
 ]
 

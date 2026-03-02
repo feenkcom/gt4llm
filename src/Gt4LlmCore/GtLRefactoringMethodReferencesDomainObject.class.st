@@ -57,7 +57,7 @@ GtLRefactoringMethodReferencesDomainObject >> references: aCollection [
 ]
 
 { #category : #'api - serializing' }
-GtLRefactoringMethodReferencesDomainObject >> serializeToOpenAIResponseJsonObject [
+GtLRefactoringMethodReferencesDomainObject >> serializeToLlmJsonObject [
 	"Return a JSON dictionary that represents the domain object."
 
 	<return: #NeoJSONObject>

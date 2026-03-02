@@ -91,7 +91,7 @@ GtLTestCaseDomainObject >> result: anObject [
 ]
 
 { #category : #'api - serializing' }
-GtLTestCaseDomainObject >> serializeToOpenAIResponseJsonObject [
+GtLTestCaseDomainObject >> serializeToLlmJsonObject [
 	"Return a JSON dictionary that represents the domain object."
 
 	<return: #NeoJSONObject>

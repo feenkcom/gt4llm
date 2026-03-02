@@ -13,7 +13,7 @@ GtLDomainObject >> gtJsonObjectViewFor: aView [
 	^ aView forward
 		title: 'Serialized object';
 		priority: 10;
-		object: [ self serializeToOpenAIResponseJsonObject asGtJson ];
+		object: [ self serializeToLlmJsonObject asGtJson ];
 		view: #gtJsonObjectFor:context:
 ]
 
@@ -30,7 +30,7 @@ GtLDomainObject >> serializeToAnthropicResponseJsonString [
 	"Return a JSON string that represents the domain object."
 
 	<return: #String>
-	^ STONJSON toString: self serializeToOpenAIResponseJsonObject
+	^ STONJSON toString: self serializeToLlmJsonObject
 ]
 
 { #category : #'api - serializing' }
@@ -46,7 +46,7 @@ GtLDomainObject >> serializeToAnthropicResponseOutput [
 ]
 
 { #category : #'api - serializing' }
-GtLDomainObject >> serializeToOpenAIResponseJsonObject [
+GtLDomainObject >> serializeToLlmJsonObject [
 	"Return a JSON dictionary that represents the domain object."
 
 	<return: #NeoJSONObject>
@@ -58,7 +58,7 @@ GtLDomainObject >> serializeToOpenAIResponseJsonString [
 	"Return a JSON string that represents the domain object."
 
 	<return: #String>
-	^ STONJSON toString: self serializeToOpenAIResponseJsonObject
+	^ STONJSON toString: self serializeToLlmJsonObject
 ]
 
 { #category : #'api - serializing' }
