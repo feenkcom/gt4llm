@@ -123,9 +123,25 @@ GtLInputModel >> serializeToAnthropicResponseOutput [
 
 	<return: #Array of: #NeoJSONObject>
 	^ {NeoJSONObject new
-			at: 'text' put: self serializeModelToJsonString;
+			at: 'text' put: self serializeToLlmJsonString;
 			at: 'type' put: 'text';
 			yourself}
+]
+
+{ #category : #serialization }
+GtLInputModel >> serializeToLlmJsonObject [
+	| wrapperObject |
+	wrapperObject := NeoJSONObject new.
+	self addContentTo: wrapperObject.
+	
+	^ (wrapperObject at: name)
+]
+
+{ #category : #serialization }
+GtLInputModel >> serializeToLlmJsonString [
+	"Return a JSON string that represents the domain object."
+	
+	^ NeoJSONWriter toStringPretty: self serializeToLlmJsonObject
 ]
 
 { #category : #serialization }
@@ -134,7 +150,7 @@ GtLInputModel >> serializeToOpenAIResponseOutput [
 
 	<return: #Array of: #NeoJSONObject>
 	^ {NeoJSONObject new
-			at: #text put: self serializeModelToJsonString;
+			at: #text put: self serializeToLlmJsonString;
 			at: #type put: #input_text;
 			yourself}
 ]
