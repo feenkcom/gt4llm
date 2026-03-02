@@ -6,7 +6,8 @@ Class {
 	#superclass : #GtLDomainObject,
 	#instVars : [
 		'code',
-		'value'
+		'object',
+		'objectId'
 	],
 	#category : #Gt4LlmCore
 }
@@ -47,11 +48,31 @@ GtLSmalltalkCodeEvaluationDomainObject >> gtValueLiveFor: aView [
 					background: BrGlamorousColors backdropColor.
 			container
 				addAptitude: (BrLayoutResizerAptitude new common: [ container children ]);
-				addChild: ((value gtViewsFor: GtPhlowEmptyView new) asElement
+				addChild: ((object gtViewsFor: GtPhlowEmptyView new) asElement
 						margin: (BlInsets all: 10);
 						background: Color white;
 						addAptitude: BrShadowAptitude;
 						vFitContentLimited) ]
+]
+
+{ #category : #accessing }
+GtLSmalltalkCodeEvaluationDomainObject >> object [
+	^ object
+]
+
+{ #category : #accessing }
+GtLSmalltalkCodeEvaluationDomainObject >> object: anObject [
+	object := anObject
+]
+
+{ #category : #accessing }
+GtLSmalltalkCodeEvaluationDomainObject >> objectId [
+	^ objectId
+]
+
+{ #category : #accessing }
+GtLSmalltalkCodeEvaluationDomainObject >> objectId: anObject [
+	objectId := anObject
 ]
 
 { #category : #serialization }
@@ -61,16 +82,8 @@ GtLSmalltalkCodeEvaluationDomainObject >> serializeToOpenAIResponseJsonObject [
 	<return: #NeoJSONObject>
 	^ NeoJSONObject new
 		at: 'code' put: self code;
-		at: 'value' put: (GtLValueSerializer new serializeValue: self value);
+		at: 'objectValue' put: (GtLValueSerializer new 
+			serializeValue: self object);
+		at: 'objectId' put: self objectId;
 		yourself
-]
-
-{ #category : #accessing }
-GtLSmalltalkCodeEvaluationDomainObject >> value [
-	^ value
-]
-
-{ #category : #accessing }
-GtLSmalltalkCodeEvaluationDomainObject >> value: anObject [
-	value := anObject
 ]

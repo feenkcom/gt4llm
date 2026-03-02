@@ -25,7 +25,7 @@ GtLToolForTestMethodRun >> parametersDescription [
 ]
 
 { #category : #private }
-GtLToolForTestMethodRun >> privatePerformToolCall: aToolCall [
+GtLToolForTestMethodRun >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments rawClassName rawMethodName className methodName testClass testSelector testCase testCaseWithResult |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 

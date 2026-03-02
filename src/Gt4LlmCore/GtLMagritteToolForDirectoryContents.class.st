@@ -61,7 +61,7 @@ GtLMagritteToolForDirectoryContents >> name [
 ]
 
 { #category : #processing }
-GtLMagritteToolForDirectoryContents >> privatePerformToolCall: aToolCall [
+GtLMagritteToolForDirectoryContents >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments path directoryReference |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	path := arguments

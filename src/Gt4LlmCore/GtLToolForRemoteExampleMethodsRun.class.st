@@ -225,7 +225,7 @@ GtLToolForRemoteExampleMethodsRun >> privateIsTrueValue: aValue [
 ]
 
 { #category : #api }
-GtLToolForRemoteExampleMethodsRun >> privatePerformToolCall: aToolCall [
+GtLToolForRemoteExampleMethodsRun >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments checkNamesArray changesArray checkNames customChanges imageChanges imageSyncEvents job results runner jobSemaphore report |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	checkNamesArray := self

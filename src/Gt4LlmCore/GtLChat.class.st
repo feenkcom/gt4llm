@@ -11,7 +11,8 @@ Class {
 		'tools',
 		'instructions',
 		'userMessageClass',
-		'responseFormat'
+		'responseFormat',
+		'objectStorage'
 	],
 	#category : #'Gt4LlmCore-Core'
 }
@@ -379,13 +380,24 @@ GtLChat >> gtToolsFor: aView [
 		view: #gtItemsFor:
 ]
 
-{ #category : #accessing }
+{ #category : #views }
+GtLChat >> gtViewObjectStorageFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Object storage';
+		priority: 40;
+		object: [ objectStorage ];
+		view: #gtObjectsByUUIDFor:
+]
+
+{ #category : #initialization }
 GtLChat >> initialize [
 	super initialize.
 	
 	self initializeMessages.
 	self initializeTools.
 	responseFormat := GtLResponseCompositeFormat new.
+	objectStorage := GtLObjectStorage new.
 	
 	self updateLastUpdate
 ]
@@ -474,6 +486,11 @@ GtLChat >> notifyMessageAdded: aMessage [
 				chat: self;
 				messages: self messages;
 				message: aMessage)
+]
+
+{ #category : #accessing }
+GtLChat >> objectStorage [
+	^ objectStorage
 ]
 
 { #category : #accessing }

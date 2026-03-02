@@ -41,7 +41,7 @@ GtLMagritteToolForFilesWrite >> name [
 ]
 
 { #category : #private }
-GtLMagritteToolForFilesWrite >> privatePerformToolCall: aToolCall [
+GtLMagritteToolForFilesWrite >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments fileDescriptors fileObjects |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	fileDescriptors := arguments

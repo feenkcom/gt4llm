@@ -121,10 +121,17 @@ GtLTools >> items: aCollection [
 
 { #category : #actions }
 GtLTools >> performToolCall: aToolCall [
+	^ self 
+			performToolCall: aToolCall 
+			inContext: (GtLToolExecutionContext new )
+]
+
+{ #category : #actions }
+GtLTools >> performToolCall: aToolCall inContext: anExecutionContext [
 	| tool |
 	tool := self detect: [ :aTool | aTool name = aToolCall name ].
 
-	^ tool performToolCall: aToolCall
+	^ tool performToolCall: aToolCall inContext: anExecutionContext
 ]
 
 { #category : #accessing }

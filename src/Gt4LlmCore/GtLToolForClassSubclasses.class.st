@@ -25,7 +25,7 @@ GtLToolForClassSubclasses >> parametersDescription [
 ]
 
 { #category : #accessing }
-GtLToolForClassSubclasses >> privatePerformToolCall: aToolCall [
+GtLToolForClassSubclasses >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| className class subclasses |
 	className := aToolCall anyArgument.
 	(className isNil or: [ className trimBoth isEmpty ])

@@ -108,7 +108,7 @@ GtLMagritteToolForFilesGrep >> parseGrepOutputLines: lines [
 ]
 
 { #category : #private }
-GtLMagritteToolForFilesGrep >> privatePerformToolCall: aToolCall [
+GtLMagritteToolForFilesGrep >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments query filePath fileReference fileNamePatterns |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	query := arguments

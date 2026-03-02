@@ -120,7 +120,7 @@ GtLToolForMethodsRemoval >> parametersDescription [
 ]
 
 { #category : #api }
-GtLToolForMethodsRemoval >> privatePerformToolCall: aToolCall [
+GtLToolForMethodsRemoval >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments methodsArgument methods |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	methodsArgument := arguments

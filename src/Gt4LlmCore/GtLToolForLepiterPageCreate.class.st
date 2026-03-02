@@ -57,7 +57,7 @@ GtLToolForLepiterPageCreate >> name [
 ]
 
 { #category : #private }
-GtLToolForLepiterPageCreate >> privatePerformToolCall: aToolCall [
+GtLToolForLepiterPageCreate >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments title targetDatabase page databaseId baseDatabase |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	title := arguments

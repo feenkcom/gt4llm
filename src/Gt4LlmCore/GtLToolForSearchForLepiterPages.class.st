@@ -25,7 +25,7 @@ GtLToolForSearchForLepiterPages >> parametersDescription [
 ]
 
 { #category : #private }
-GtLToolForSearchForLepiterPages >> privatePerformToolCall: aToolCall [
+GtLToolForSearchForLepiterPages >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments query baseIds bases pages logicalDatabase missingIds |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	query := arguments
