@@ -26,21 +26,13 @@ GtLDomainObject >> isErrorDomainObject [
 ]
 
 { #category : #'api - serializing' }
-GtLDomainObject >> serializeToAnthropicResponseJsonString [
-	"Return a JSON string that represents the domain object."
-
-	<return: #String>
-	^ STONJSON toString: self serializeToLlmJsonObject
-]
-
-{ #category : #'api - serializing' }
 GtLDomainObject >> serializeToAnthropicResponseOutput [
 	"Return a JSON that represents tool response output.
 	See GtLToolMessage>>#serializeForAnthropicMessagesAPI for more information."
 
 	<return: #Array of: #NeoJSONObject>
 	^ {NeoJSONObject new
-			at: 'text' put: self serializeToAnthropicResponseJsonString;
+			at: 'text' put: self serializeToLlmJsonString;
 			at: 'type' put: 'text';
 			yourself}
 ]
@@ -54,7 +46,7 @@ GtLDomainObject >> serializeToLlmJsonObject [
 ]
 
 { #category : #'api - serializing' }
-GtLDomainObject >> serializeToOpenAIResponseJsonString [
+GtLDomainObject >> serializeToLlmJsonString [
 	"Return a JSON string that represents the domain object."
 
 	<return: #String>
@@ -68,7 +60,7 @@ GtLDomainObject >> serializeToOpenAIResponseOutput [
 
 	<return: #Array of: #NeoJSONObject>
 	^ {NeoJSONObject new
-			at: #text put: self serializeToOpenAIResponseJsonString;
+			at: #text put: self serializeToLlmJsonString;
 			at: #type put: #input_text;
 			yourself}
 ]
