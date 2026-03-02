@@ -8,6 +8,7 @@ Class {
 GtLToolForSmalltalkCodeEvaluationExamples >> executeSimpleDoIt [
 	<gtExample>
 	| tool call result expected |
+	
 	tool := GtLToolForSmalltalkCodeEvaluation new.
 	call := GtLFunctionToolCall new.
 	call function: {
@@ -17,13 +18,15 @@ GtLToolForSmalltalkCodeEvaluationExamples >> executeSimpleDoIt [
 		} asDictionary
 	} asDictionary.
 	result := tool performToolCall: call.
+	
 	self assert: call tool == tool.
 	self assert: result isErrorDomainObject not.
 	self assert: result value equals: 3.
 	self assert: result code equals: '1 + 2'.
 	expected := NeoJSONObject new
 		at: 'code' put: '1 + 2';
-		at: 'value' put: (GtLValueSerializer new serializeValue: 3);
+		at: 'value' put: (GtLValueSerializer new 
+			serializeValue: 3);
 		yourself.
 	self assert: result serializeToOpenAIResponseJsonObject equals: expected.
 
