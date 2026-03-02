@@ -42,7 +42,7 @@ GtLRefactoringToolForClassSearch >> parametersDescription [
 ]
 
 { #category : #'llm-generated' }
-GtLRefactoringToolForClassSearch >> privatePerformToolCall: aToolCall [
+GtLRefactoringToolForClassSearch >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments query promise result allClassNames |
 	self model
 		ifNil: [ ^ GtLMissingInformationDomainObject new

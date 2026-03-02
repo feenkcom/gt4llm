@@ -25,7 +25,7 @@ GtLToolForClassLookup >> parametersDescription [
 ]
 
 { #category : #private }
-GtLToolForClassLookup >> privatePerformToolCall: aToolCall [
+GtLToolForClassLookup >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments className class |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	className := arguments

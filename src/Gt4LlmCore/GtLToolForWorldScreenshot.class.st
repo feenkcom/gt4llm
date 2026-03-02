@@ -51,7 +51,7 @@ GtLToolForWorldScreenshot >> pngDataProvider: aBlock [
 ]
 
 { #category : #private }
-GtLToolForWorldScreenshot >> privatePerformToolCall: aToolCall [
+GtLToolForWorldScreenshot >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| worldElement |
 	worldElement := self focusedWorldElement.
 	worldElement

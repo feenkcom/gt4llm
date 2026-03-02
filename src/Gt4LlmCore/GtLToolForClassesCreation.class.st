@@ -151,7 +151,7 @@ GtLToolForClassesCreation >> parametersDescription [
 ]
 
 { #category : #private }
-GtLToolForClassesCreation >> privatePerformToolCall: aToolCall [
+GtLToolForClassesCreation >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments classesArgument classes |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	classesArgument := arguments

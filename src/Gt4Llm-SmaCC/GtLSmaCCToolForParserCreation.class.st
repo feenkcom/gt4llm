@@ -33,7 +33,7 @@ GtLSmaCCToolForParserCreation >> parserCreationDescription [
 ]
 
 { #category : #private }
-GtLSmaCCToolForParserCreation >> privatePerformToolCall: aToolCall [
+GtLSmaCCToolForParserCreation >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments creation grammar |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	creation := arguments

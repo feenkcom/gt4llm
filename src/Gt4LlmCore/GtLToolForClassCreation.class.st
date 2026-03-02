@@ -25,7 +25,7 @@ GtLToolForClassCreation >> parametersDescription [
 ]
 
 { #category : #private }
-GtLToolForClassCreation >> privatePerformToolCall: aToolCall [
+GtLToolForClassCreation >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments classNameValue classNameString classNameSymbol superclassValue superclassName superclass instanceVariables classVariables traitCompositionValue traitCompositionString packageValue packageName commentValue commentString createdClass |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	classNameValue := arguments

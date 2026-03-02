@@ -29,7 +29,7 @@ GtLToolForExampleMethodRun >> parametersDescription [
 ]
 
 { #category : #accessing }
-GtLToolForExampleMethodRun >> privatePerformToolCall: aToolCall [
+GtLToolForExampleMethodRun >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments className targetClass methodName classSideValue method example exampleResult |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	className := arguments

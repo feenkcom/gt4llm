@@ -21,12 +21,12 @@ GtLToolMessage >> acceptVisitor: aVisitor [
 	^ aVisitor visitGtLToolMessage: self
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLToolMessage >> action [
 	^ self toolCall humanReadable
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLToolMessage >> actionModel [
 	^ self toolCall
 ]
@@ -46,7 +46,7 @@ GtLToolMessage >> beSkippedExecutionState [
 	self executionState: GtLMessageState skipped
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLToolMessage >> chat: aChat [
 	super chat: aChat.
 	chat  
@@ -54,7 +54,7 @@ GtLToolMessage >> chat: aChat [
 		ifAbsent: [ self updateDataFromChat: aChat]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLToolMessage >> content [
 	^ self output
 ]
@@ -78,7 +78,7 @@ GtLToolMessage >> executionState: aState [
 	self notifyExecutionStateChanged.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'gt - extensions' }
 GtLToolMessage >> gtArgumentsFor: aView [
 	<gtView>
 	<gtLlmView>
@@ -103,7 +103,7 @@ GtLToolMessage >> gtDisplayOn: aStream [
 		ifNil: [ aStream nextPutAll: 'No tool' ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'gt - extensions' }
 GtLToolMessage >> gtInspectorTargetModels [
 	^ self output
 		ifNotNil: [ :anOutput | 
@@ -173,18 +173,18 @@ GtLToolMessage >> requestResponse: aRequestResponse [
 		ifNil: [ requestResponse := aRequestResponse ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLToolMessage >> responseModels [
 	"we should collect the tools from the toolCall"
 	^ {}
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLToolMessage >> role [
 	^ 'tool'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #serialization }
 GtLToolMessage >> serializeForAnthropicMessagesAPI [
 	"[
   {

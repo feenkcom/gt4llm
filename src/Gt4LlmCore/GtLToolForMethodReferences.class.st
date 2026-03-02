@@ -25,7 +25,7 @@ GtLToolForMethodReferences >> parametersDescription [
 ]
 
 { #category : #accessing }
-GtLToolForMethodReferences >> privatePerformToolCall: aToolCall [
+GtLToolForMethodReferences >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments argument selector references promise |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	argument := aToolCall anyArgument.

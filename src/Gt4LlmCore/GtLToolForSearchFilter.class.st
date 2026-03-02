@@ -30,7 +30,7 @@ GtLToolForSearchFilter >> parametersDescription [
 ]
 
 { #category : #accessing }
-GtLToolForSearchFilter >> privatePerformToolCall: aToolCall [
+GtLToolForSearchFilter >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments query |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	(arguments includesKey: 'query')

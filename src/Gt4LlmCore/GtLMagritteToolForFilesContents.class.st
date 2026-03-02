@@ -46,7 +46,7 @@ GtLMagritteToolForFilesContents >> name [
 ]
 
 { #category : #private }
-GtLMagritteToolForFilesContents >> privatePerformToolCall: aToolCall [
+GtLMagritteToolForFilesContents >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments filePaths fileObjects |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	filePaths := arguments

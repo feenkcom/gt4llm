@@ -7,6 +7,49 @@ Class {
 { #category : #examples }
 GtLToolForSmalltalkCodeEvaluationExamples >> executeSimpleDoIt [
 	<gtExample>
+	| objectStorage tool call result expected |
+	
+	objectStorage := GtLObjectStorage new.
+	
+	tool := GtLToolForSmalltalkCodeEvaluation new.
+	call := GtLFunctionToolCall new.
+	call function: {
+		'name' -> tool name.
+		'arguments' -> {
+			'code' -> '1 + 2'
+		} asDictionary
+	} asDictionary.
+	result := tool 
+		performToolCall: call
+		inContext: (GtLToolExecutionContext new
+			objectStorage: objectStorage).
+	
+	self assert: call tool == tool.
+	self assert: result isErrorDomainObject not.
+	self assert: result object equals: 3.
+	self assert: result code equals: '1 + 2'.
+	
+	self assert: objectStorage objectCount equals: 1.
+	self 
+		assert: (objectStorage objectAt: objectStorage objectIds first)
+		equals: 3.
+	
+	expected := NeoJSONObject new
+		at: 'code' put: '1 + 2';
+		at: 'objectValue' put: (GtLValueSerializer new 
+			serializeValue: 3);
+		at: 'objectId' put: (objectStorage objectIds first);
+		yourself.
+	self 
+		assert: result serializeToOpenAIResponseJsonObject
+		equals: expected.
+
+	^ call
+]
+
+{ #category : #examples }
+GtLToolForSmalltalkCodeEvaluationExamples >> executeSimpleDoItWithoutObjectStorage [
+	<gtExample>
 	| tool call result expected |
 	
 	tool := GtLToolForSmalltalkCodeEvaluation new.
@@ -17,18 +60,22 @@ GtLToolForSmalltalkCodeEvaluationExamples >> executeSimpleDoIt [
 			'code' -> '1 + 2'
 		} asDictionary
 	} asDictionary.
-	result := tool performToolCall: call.
+	result := tool 
+		performToolCall: call.
 	
 	self assert: call tool == tool.
 	self assert: result isErrorDomainObject not.
-	self assert: result value equals: 3.
+	self assert: result object equals: 3.
 	self assert: result code equals: '1 + 2'.
 	expected := NeoJSONObject new
 		at: 'code' put: '1 + 2';
-		at: 'value' put: (GtLValueSerializer new 
+		at: 'objectValue' put: (GtLValueSerializer new 
 			serializeValue: 3);
+		at: 'objectId' put: nil;
 		yourself.
-	self assert: result serializeToOpenAIResponseJsonObject equals: expected.
+	self 
+		assert: result serializeToOpenAIResponseJsonObject
+		equals: expected.
 
 	^ call
 ]

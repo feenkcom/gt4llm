@@ -22,7 +22,7 @@ GtLSmaCCToolForParserTest >> name [
 ]
 
 { #category : #execution }
-GtLSmaCCToolForParserTest >> privatePerformToolCall: aToolCall [
+GtLSmaCCToolForParserTest >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments creation |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	creation := arguments

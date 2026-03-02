@@ -33,7 +33,7 @@ GtLRefactoringToolForClassReferences >> parametersDescription [
 ]
 
 { #category : #'llm-generated' }
-GtLRefactoringToolForClassReferences >> privatePerformToolCall: aToolCall [
+GtLRefactoringToolForClassReferences >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments className targetClass references |
 	self model
 		ifNil: [ ^ GtLMissingInformationDomainObject new
