@@ -61,7 +61,8 @@ GtLSmalltalkCodeEvaluationDomainObject >> serializeToOpenAIResponseJsonObject [
 	<return: #NeoJSONObject>
 	^ NeoJSONObject new
 		at: 'code' put: self code;
-		at: 'value' put: (GtLValueSerializer new serializeValue: self value);
+		at: 'value' put: (GtLValueSerializer new 
+			serializeValue: self value);
 		yourself
 ]
 
