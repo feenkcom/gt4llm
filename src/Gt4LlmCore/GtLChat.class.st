@@ -380,6 +380,16 @@ GtLChat >> gtToolsFor: aView [
 		view: #gtItemsFor:
 ]
 
+{ #category : #views }
+GtLChat >> gtViewObjectStorageFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Object storage';
+		priority: 40;
+		object: [ objectStorage ];
+		view: #gtObjectsByUUIDFor:
+]
+
 { #category : #initialization }
 GtLChat >> initialize [
 	super initialize.

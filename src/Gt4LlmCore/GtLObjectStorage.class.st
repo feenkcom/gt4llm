@@ -87,3 +87,15 @@ GtLObjectStorage >> objectIds [
 	^ objectsByUUID keys collect: [ :each |
 			each asString36 ]
 ]
+
+{ #category : #printing }
+GtLObjectStorage >> printOn: aStream [
+	super printOn: aStream.
+
+	aStream 
+		<< ' [';
+		print: self objectCount;
+		<< ' ';
+		<< ('object' asPluralBasedOn: self objectCount);
+		<< ']'
+]
