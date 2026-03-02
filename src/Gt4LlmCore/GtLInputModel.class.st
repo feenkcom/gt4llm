@@ -57,7 +57,7 @@ GtLInputModel >> gtViewContentDictionaryFor: aView [
 	<gtView>
 	<gtLlmView>
 	^ aView forward
-			title: 'JSON data';
+			title: 'Result data';
 			priority: 11;
 			object: [ 
 				| content |

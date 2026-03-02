@@ -108,9 +108,29 @@ GtLToolMessage >> gtInspectorTargetModels [
 	^ self output
 		ifNotNil: [ :anOutput | 
 			(output respondsTo: #gtInspectorTargetModels)
-				ifTrue: [ {anOutput} , output gtInspectorTargetModels ]
+				ifTrue: [ output gtInspectorTargetModels ]
 				ifFalse: [ {anOutput} ] ]
 		ifNil: [ #() ]
+]
+
+{ #category : #views }
+GtLToolMessage >> gtRequestResponseToolCallTreeFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'API tool call tree';
+		priority: 20;
+		object: [ requestResponse ];
+		view: #gtPreviousResponseTreeFor:
+]
+
+{ #category : #views }
+GtLToolMessage >> gtRequestResponseToolResultTreeFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'API tool result tree';
+		priority: 21;
+		object: [ requestResponse ];
+		view: #gtFollowingRequestTreeFor:
 ]
 
 { #category : #views }
