@@ -9,22 +9,12 @@ Class {
 
 { #category : #accessing }
 GtLToolForObjectView >> description [
-	^ 'Returns a phlow view for an object.'
+	^ 'Returns a phlow view for an object given an object id and a method name'
 ]
 
 { #category : #accessing }
 GtLToolForObjectView >> name [
 	^ 'getViewContent'
-]
-
-{ #category : #magritte }
-GtLToolForObjectView >> objectIdDescription [
-	<magritteDescription>
-	
-	^ MAStringDescription new
-		label: 'Object id';
-		accessor: #objectId;
-		beRequired
 ]
 
 { #category : #magritte }
@@ -68,14 +58,4 @@ GtLToolForObjectView >> privatePerformToolCall: aToolCall inContext: anExecution
 		
 	^ GtLPhlowViewDomainObject new
 			phlowView: phlowView
-]
-
-{ #category : #magritte }
-GtLToolForObjectView >> viewSelectorDescription [
-	<magritteDescription>
-	
-	^ MAStringDescription new
-		label: 'View selector';
-		accessor: #viewSelector;
-		beRequired
 ]
