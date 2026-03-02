@@ -64,7 +64,7 @@ GtLToolForExampleMethodRunExamples >> exampleRunForNonExampleMethod [
 	^ call
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #examples }
 GtLToolForExampleMethodRunExamples >> exampleRunSuccess [
 	<gtExample>
 	| tool call result |
@@ -79,5 +79,40 @@ GtLToolForExampleMethodRunExamples >> exampleRunSuccess [
 	self assert: call tool == tool.
 	self assert: result isErrorDomainObject not.
 	self assert: result isSuccessResult.
+	self assert: result objectId isNil.
+	^ call
+]
+
+{ #category : #examples }
+GtLToolForExampleMethodRunExamples >> exampleRunSuccessStoresObjectId [
+	<gtExample>
+	| objectStorage tool call result objectId expected |
+	objectStorage := GtLObjectStorage new.
+	tool := GtLToolForExampleMethodRun new.
+	call := GtLFunctionToolCall new.
+	call function: {
+		'name' -> tool name.
+		'arguments' -> {
+			'className' -> 'GtLExampleRunDummyExamples'.
+			'methodName' -> 'successfulExample'
+		} asDictionary
+	} asDictionary.
+	result := tool
+		performToolCall: call
+		inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
+	self assert: call tool == tool.
+	self assert: result isErrorDomainObject not.
+	self assert: result isSuccessResult.
+	objectId := result objectId.
+	self assert: objectId isString.
+	self assert: (objectStorage objectAt: objectId) equals: 42.
+	expected := NeoJSONObject new
+		at: #className put: 'GtLExampleRunDummyExamples';
+		at: #selector put: 'successfulExample';
+		at: #status put: 'success';
+		at: #result put: (GtLValueSerializer new serializeValue: 42);
+		at: #objectId put: objectId;
+		yourself.
+	self assert: result serializeToOpenAIResponseJsonObject equals: expected.
 	^ call
 ]

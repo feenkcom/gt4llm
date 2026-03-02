@@ -28,9 +28,9 @@ GtLToolForExampleMethodRun >> parametersDescription [
 	^ #('className' 'methodName' 'classSide')
 ]
 
-{ #category : #accessing }
+{ #category : #private }
 GtLToolForExampleMethodRun >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
-	| arguments className targetClass methodName classSideValue method example exampleResult |
+	| arguments className targetClass methodName classSideValue method example exampleResult objectId |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	className := arguments
 			at: 'className'
@@ -66,5 +66,10 @@ GtLToolForExampleMethodRun >> privatePerformToolCall: aToolCall inContext: anExe
 				freeze: ex;
 				description: ('Example execution failed: {1}' format: {method name}) ].
 
-	^ GtLExampleWithResultDomainObject new exampleWithResult: example
+	objectId := anExecutionContext objectStorage ifNotNil: [ :aStorage |
+		aStorage addNewObject: exampleResult returnValue ].
+	
+	^ GtLExampleWithResultDomainObject new
+		exampleWithResult: example;
+		objectId: objectId
 ]

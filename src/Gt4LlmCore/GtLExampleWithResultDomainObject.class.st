@@ -2,7 +2,8 @@ Class {
 	#name : #GtLExampleWithResultDomainObject,
 	#superclass : #GtLDomainObject,
 	#instVars : [
-		'exampleWithResult'
+		'exampleWithResult',
+		'objectId'
 	],
 	#category : #'Gt4LlmCore-Domain Objects'
 }
@@ -62,6 +63,16 @@ GtLExampleWithResultDomainObject >> isSuccessResult [
 ]
 
 { #category : #accessing }
+GtLExampleWithResultDomainObject >> objectId [
+	^ objectId
+]
+
+{ #category : #accessing }
+GtLExampleWithResultDomainObject >> objectId: anObject [
+	objectId := anObject
+]
+
+{ #category : #accessing }
 GtLExampleWithResultDomainObject >> safeReturnValuePrintString [
 	^ [ | object |
 	object := (self isErrorResult or: [ self isFailureResult ])
@@ -86,7 +97,7 @@ GtLExampleWithResultDomainObject >> serializeToOpenAIResponseImages [
 		ifTrue: [ self exampleWithResult returnValue serializeToOpenAIResponseImages ]. 
 ]
 
-{ #category : #'api - serializing' }
+{ #category : #serialization }
 GtLExampleWithResultDomainObject >> serializeToOpenAIResponseJsonObject [
 	"Return a JSON dictionary that represents the domain object."
 
@@ -97,6 +108,7 @@ GtLExampleWithResultDomainObject >> serializeToOpenAIResponseJsonObject [
 		at: #selector put: self exampleWithResult selector asString;
 		at: #status put: self statusText;
 		at: #result put: self safeReturnValuePrintString;
+		at: #objectId put: self objectId;
 		yourself
 ]
 
