@@ -10,7 +10,7 @@ GtLInputTextFile >> contentType [
 ]
 
 { #category : #serialization }
-GtLInputTextFile >> serializeForAnthropicMessagesAPI [
+GtLInputTextFile >> serializeToAnthropicResponseOutput [
 	^ {
 		'type' -> 'document'.
 		'source'-> {
@@ -21,7 +21,7 @@ GtLInputTextFile >> serializeForAnthropicMessagesAPI [
 ]
 
 { #category : #serialization }
-GtLInputTextFile >> serializeForOpenAIResponsesAPI [
+GtLInputTextFile >> serializeToOpenAIResponseOutput [
 	^ {'type' -> 'input_file'.
 		'filename' -> self fileReference basename.
 		'file_data' -> ('data:'
