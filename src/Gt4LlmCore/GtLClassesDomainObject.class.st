@@ -30,7 +30,7 @@ GtLClassesDomainObject >> gtFoundClassesFor: aView [
 		title: 'Classes';
 		priority: 1;
 		items: [ self foundClasses ];
-		column: 'Value' text: [ :each | each gtDisplayString ]
+		column: 'Class' text: [ :each | each gtDisplayString ]
 ]
 
 { #category : #accessing }

@@ -13,7 +13,7 @@ Class {
 GtLToolPreviousRequestResponse >> gtFollowingRequestFor: aView [
 	<gtView>
 	^ aView forward
-		title: 'Following request JSON';
+		title: 'Tool result JSON';
 		priority: 12;
 		object: [ followingRequestResponse ];
 		view: #gtRequestFor:
@@ -23,7 +23,7 @@ GtLToolPreviousRequestResponse >> gtFollowingRequestFor: aView [
 GtLToolPreviousRequestResponse >> gtFollowingRequestTreeFor: aView [
 	<gtView>
 	^ aView forward
-		title: 'Following request JSON tree';
+		title: 'Tool result tree';
 		priority: 11;
 		object: [ followingRequestResponse ];
 		view: #gtRequestJsonTreeFor:
@@ -33,7 +33,7 @@ GtLToolPreviousRequestResponse >> gtFollowingRequestTreeFor: aView [
 GtLToolPreviousRequestResponse >> gtPreviousRequestResponseFor: aView [
 	<gtView>
 	^ aView forward
-		title: 'Previous response JSON';
+		title: 'Tool call JSON';
 		priority: 2;
 		object: [ previousRequestResponse ];
 		view: #gtResponseFor:
@@ -43,7 +43,7 @@ GtLToolPreviousRequestResponse >> gtPreviousRequestResponseFor: aView [
 GtLToolPreviousRequestResponse >> gtPreviousResponseTreeFor: aView [
 	<gtView>
 	^ aView forward
-		title: 'Previous response JSON tree';
+		title: 'Tool call tree';
 		priority: 1;
 		object: [ previousRequestResponse ];
 		view: #gtResponseJsonTreeFor:
