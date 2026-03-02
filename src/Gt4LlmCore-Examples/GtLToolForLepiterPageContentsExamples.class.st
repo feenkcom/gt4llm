@@ -22,7 +22,7 @@ GtLToolForLepiterPageContentsExamples >> pageSerializationForExistingPage [
 	result := tool performToolCall: call.
 	expected := LeJsonV4 uniqueInstance serializePretty: page.
 	self assert: call tool == tool.
-	self assert: result serializeToOpenAIResponseJsonObject equals: expected.
+	self assert: result serializeToLlmJsonObject equals: expected.
 	^ tool
 ]
 

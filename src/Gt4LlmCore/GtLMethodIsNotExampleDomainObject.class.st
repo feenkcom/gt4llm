@@ -30,7 +30,7 @@ GtLMethodIsNotExampleDomainObject >> method: anObject [
 ]
 
 { #category : #'api - serializing' }
-GtLMethodIsNotExampleDomainObject >> serializeToOpenAIResponseJsonObject [
+GtLMethodIsNotExampleDomainObject >> serializeToLlmJsonObject [
 	"Return a JSON dictionary that represents the domain object."
 
 	<return: #NeoJSONObject>

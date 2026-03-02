@@ -9,7 +9,7 @@ Class {
 }
 
 { #category : #'api - serializing' }
-GtLRefactoringClassSubclassesDomainObject >> serializeToOpenAIResponseJsonObject [
+GtLRefactoringClassSubclassesDomainObject >> serializeToLlmJsonObject [
 	"Return a JSON dictionary that represents the domain object."
 
 	<return: #NeoJSONObject>

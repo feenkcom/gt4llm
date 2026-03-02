@@ -50,7 +50,7 @@ GtLClassReferencesDomainObject >> references: anObject [
 ]
 
 { #category : #'api - serializing' }
-GtLClassReferencesDomainObject >> serializeToOpenAIResponseJsonObject [
+GtLClassReferencesDomainObject >> serializeToLlmJsonObject [
 	"Return a JSON dictionary that represents the domain object."
 
 	<return: #NeoJSONObject>

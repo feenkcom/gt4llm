@@ -90,15 +90,8 @@ GtLExampleWithResultDomainObject >> serializeToAnthropicResponseOutput [
 				anPrimitiveImage serializeToAnthropicResponseOutput ]).
 ]
 
-{ #category : #'api - serializing' }
-GtLExampleWithResultDomainObject >> serializeToOpenAIResponseImages [
-	^ (self isErrorResult or: [ self isFailureResult ])
-		ifFalse: [ #() ]
-		ifTrue: [ self exampleWithResult returnValue serializeToOpenAIResponseImages ]. 
-]
-
 { #category : #serialization }
-GtLExampleWithResultDomainObject >> serializeToOpenAIResponseJsonObject [
+GtLExampleWithResultDomainObject >> serializeToLlmJsonObject [
 	"Return a JSON dictionary that represents the domain object."
 
 	<return: #NeoJSONObject>
@@ -110,6 +103,13 @@ GtLExampleWithResultDomainObject >> serializeToOpenAIResponseJsonObject [
 		at: #result put: self safeReturnValuePrintString;
 		at: #objectId put: self objectId;
 		yourself
+]
+
+{ #category : #'api - serializing' }
+GtLExampleWithResultDomainObject >> serializeToOpenAIResponseImages [
+	^ (self isErrorResult or: [ self isFailureResult ])
+		ifFalse: [ #() ]
+		ifTrue: [ self exampleWithResult returnValue serializeToOpenAIResponseImages ]. 
 ]
 
 { #category : #'api - serializing' }

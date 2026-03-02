@@ -12,7 +12,7 @@ TGtLDomainObject >> isErrorDomainObject [
 ]
 
 { #category : #'api - serializing' }
-TGtLDomainObject >> serializeToOpenAIResponseJsonObject [
+TGtLDomainObject >> serializeToLlmJsonObject [
 	"Return a JSON dictionary that represents the domain object."
 
 	<return: #NeoJSONObject>

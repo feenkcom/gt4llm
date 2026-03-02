@@ -30,9 +30,9 @@ GtLClassesCreationDomainObject >> gtClassesFor: aView [
 ]
 
 { #category : #accessing }
-GtLClassesCreationDomainObject >> serializeToOpenAIResponseJsonObject [
+GtLClassesCreationDomainObject >> serializeToLlmJsonObject [
 	<return: #NeoJSONObject>
 	^ NeoJSONObject new
-		at: 'classes' put: (self classes collect: #serializeToOpenAIResponseJsonObject as: Array);
+		at: 'classes' put: (self classes collect: #serializeToLlmJsonObject as: Array);
 		yourself
 ]

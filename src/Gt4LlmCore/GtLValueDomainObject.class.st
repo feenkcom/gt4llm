@@ -28,7 +28,7 @@ GtLValueDomainObject >> gtValueLiveFor: aView [
 ]
 
 { #category : #'api - serializing' }
-GtLValueDomainObject >> serializeToOpenAIResponseJsonObject [
+GtLValueDomainObject >> serializeToLlmJsonObject [
 	"Return a JSON dictionary that represents the domain object."
 
 	<return: #NeoJSONObject>
@@ -39,7 +39,7 @@ GtLValueDomainObject >> serializeToOpenAIResponseJsonObject [
 				return: (GtLExceptionDomainObject new
 						freeze: anError;
 						description: 'Cannot serialize object';
-						serializeToOpenAIResponseJsonObject) ]
+						serializeToLlmJsonObject) ]
 ]
 
 { #category : #accessing }

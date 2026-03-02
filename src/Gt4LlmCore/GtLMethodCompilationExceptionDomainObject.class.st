@@ -31,11 +31,11 @@ GtLMethodCompilationExceptionDomainObject >> protocolName: anObject [
 ]
 
 { #category : #'api - serializing' }
-GtLMethodCompilationExceptionDomainObject >> serializeToOpenAIResponseJsonObject [
+GtLMethodCompilationExceptionDomainObject >> serializeToLlmJsonObject [
 	"Return a JSON dictionary that represents the domain object."
 
 	<return: #NeoJSONObject>
-	^ super serializeToOpenAIResponseJsonObject
+	^ super serializeToLlmJsonObject
 		at: #methodClass put: self targetClass name asString;
 		at: #methodProtocol put: self protocolName asString;
 		at: #sourceCode put: self sourceCode;

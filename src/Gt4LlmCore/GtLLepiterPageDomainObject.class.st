@@ -29,7 +29,7 @@ GtLLepiterPageDomainObject >> gtLepiterPageViewFor: aView [
 ]
 
 { #category : #'api - serializing' }
-GtLLepiterPageDomainObject >> serializeToOpenAIResponseJsonObject [
+GtLLepiterPageDomainObject >> serializeToLlmJsonObject [
 	"Return a JSON dictionary that represents the domain object."
 
 	<return: #NeoJSONObject>

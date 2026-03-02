@@ -32,7 +32,7 @@ GtLLepiterPagesDomainObject >> pages: anObject [
 ]
 
 { #category : #'api - serializing' }
-GtLLepiterPagesDomainObject >> serializeToOpenAIResponseJsonObject [
+GtLLepiterPagesDomainObject >> serializeToLlmJsonObject [
 	"Return a JSON dictionary that represents the domain object."
 
 	<return: #NeoJSONObject>

@@ -54,7 +54,7 @@ GtLExampleWithResultsDomainObject >> notFoundClassNames: anObject [
 ]
 
 { #category : #'api - serializing' }
-GtLExampleWithResultsDomainObject >> serializeToOpenAIResponseJsonObject [
+GtLExampleWithResultsDomainObject >> serializeToLlmJsonObject [
 	"Return a JSON dictionary that represents the domain object."
 
 	<return: #NeoJSONObject>
@@ -66,7 +66,7 @@ GtLExampleWithResultsDomainObject >> serializeToOpenAIResponseJsonObject [
 		at: #skips put: self skippedCount;
 		at: #notFound put: self notFoundClassNames;
 		at: #details
-			put: (self exampleWithResults collect: #serializeToOpenAIResponseJsonObject as: Array);
+			put: (self exampleWithResults collect: #serializeToLlmJsonObject as: Array);
 		yourself
 ]
 

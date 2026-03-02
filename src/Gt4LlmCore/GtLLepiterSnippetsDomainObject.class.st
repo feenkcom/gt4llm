@@ -22,7 +22,7 @@ GtLLepiterSnippetsDomainObject >> gtSnippetsFor: aView [
 ]
 
 { #category : #serialization }
-GtLLepiterSnippetsDomainObject >> serializeToOpenAIResponseJsonObject [
+GtLLepiterSnippetsDomainObject >> serializeToLlmJsonObject [
 	"Return a JSON dictionary that represents the domain object."
 
 	<return: #NeoJSONObject>

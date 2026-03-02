@@ -32,7 +32,7 @@ GtLUnexpectedDomainObject >> objectName: anObject [
 ]
 
 { #category : #'api - serializing' }
-GtLUnexpectedDomainObject >> serializeToOpenAIResponseJsonObject [
+GtLUnexpectedDomainObject >> serializeToLlmJsonObject [
 	"Return a JSON dictionary that represents the domain object."
 
 	<return: #NeoJSONObject>

@@ -57,9 +57,9 @@ GtLMethodsCompilationDomainObject >> methods: aCollection [
 ]
 
 { #category : #serialization }
-GtLMethodsCompilationDomainObject >> serializeToOpenAIResponseJsonObject [
+GtLMethodsCompilationDomainObject >> serializeToLlmJsonObject [
 	<return: #NeoJSONObject>
 	^ NeoJSONObject new
-		at: 'methods' put: (self methods collect: #serializeToOpenAIResponseJsonObject as: Array);
+		at: 'methods' put: (self methods collect: #serializeToLlmJsonObject as: Array);
 		yourself
 ]

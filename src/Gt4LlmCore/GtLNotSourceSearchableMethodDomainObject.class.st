@@ -28,7 +28,7 @@ GtLNotSourceSearchableMethodDomainObject >> method: aCompiledMethod [
 ]
 
 { #category : #'api - serializing' }
-GtLNotSourceSearchableMethodDomainObject >> serializeToOpenAIResponseJsonObject [
+GtLNotSourceSearchableMethodDomainObject >> serializeToLlmJsonObject [
 	"Return a JSON dictionary that represents the domain object."
 
 	<return: #NeoJSONObject>
