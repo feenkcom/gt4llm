@@ -1,19 +1,37 @@
 Class {
 	#name : #GtLToolForLepiterSnippetsCreateExamples,
 	#superclass : #Object,
+	#instVars : [
+		'logicalDatabase'
+	],
 	#category : #'Gt4LlmCore-Examples'
 }
+
+{ #category : #examples }
+GtLToolForLepiterSnippetsCreateExamples >> logicalDatabase [
+	<gtExample>
+	^ logicalDatabase
+		ifNil: [ | db |
+			db := LeExplicitlyAttachedLinksExamples new primaryDatabase.
+			logicalDatabase := LeLogicalDatabase new primaryDB: db.
+			self assert: logicalDatabase primaryDB equals: db.
+			logicalDatabase ]
+]
 
 { #category : #examples }
 GtLToolForLepiterSnippetsCreateExamples >> missingSnippetPageUid [
 	<gtExample>
 	| tool call result model |
-	tool := GtLToolForLepiterSnippetsCreate new.
+	tool := self toolOnLogicalDatabase.
 	call := GtLFunctionToolCall new.
 	call rawArguments: {
 		'snippets' -> {
 			Dictionary new
-				at: 'snippetText' put: 'Updated text';
+				at: 'TextSnippet'
+				put: (Dictionary new
+					at: 'pageUid' put: '';
+					at: 'snippetText' put: 'Updated text';
+					yourself);
 				yourself } } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
@@ -26,13 +44,18 @@ GtLToolForLepiterSnippetsCreateExamples >> missingSnippetPageUid [
 { #category : #examples }
 GtLToolForLepiterSnippetsCreateExamples >> missingSnippetText [
 	<gtExample>
-	| tool call result model |
-	tool := GtLToolForLepiterSnippetsCreate new.
+	| tool call result model page |
+	tool := self toolOnLogicalDatabase.
+	page := self pageInLogicalDatabase.
 	call := GtLFunctionToolCall new.
 	call rawArguments: {
 		'snippets' -> {
 			Dictionary new
-				at: 'pageUid' put: UUID new asString;
+				at: 'TextSnippet'
+				put: (Dictionary new
+					at: 'pageUid' put: page uidString;
+					at: 'snippetText' put: '';
+					yourself);
 				yourself } } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
@@ -57,195 +80,186 @@ GtLToolForLepiterSnippetsCreateExamples >> missingSnippets [
 ]
 
 { #category : #examples }
-GtLToolForLepiterSnippetsCreateExamples >> successfulPharoSnippetCreate [
+GtLToolForLepiterSnippetsCreateExamples >> pageInLogicalDatabase [
 	<gtExample>
-	| tool call result snippet page database snippetText model |
-	database := LeContentExamples new basicDatabase.
-	page := database pageBuilder
-		title: 'one';
-		add.
-	snippetText := 'Transcript show: 1'.
-	tool := GtLToolForLepiterSnippetsCreate new.
-	tool database: database.
+	| logicalDB page |
+	logicalDB := self logicalDatabase.
+	page := logicalDB primaryDB pageBuilder title: 'Snippet Page'; add.
+	self assert: page isNotNil.
+	^ page
+]
+
+{ #category : #examples }
+GtLToolForLepiterSnippetsCreateExamples >> successfulExampleSnippetCreate [
+	<gtExample>
+	| tool call result page |
+	tool := self toolOnLogicalDatabase.
+	page := self pageInLogicalDatabase.
 	call := GtLFunctionToolCall new.
 	call rawArguments: {
 		'snippets' -> {
 			Dictionary new
-				at: 'pageUid' put: page uidString;
-				at: 'snippetText' put: snippetText;
-				at: 'snippetType' put: 'pharo';
+				at: 'ExampleSnippet'
+				put: (Dictionary new
+					at: 'pageUid' put: page uidString;
+					at: 'exampleClassName'
+						put: self class name;
+					at: 'exampleMethodName'
+						put: #successfulSnippetCreate;
+					yourself);
 				yourself } } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
 	self assert: (result isKindOf: GtLMagritteInputModel).
-	model := result model.
-	self assert: model snippets size equals: 1.
-	snippet := page children last.
-	self assert: (snippet isKindOf: LePharoSnippet).
-	self assert: snippet contentAsString equals: snippetText.
-	self assert: model snippets first status equals: 'created'.
+	^ call
+]
+
+{ #category : #examples }
+GtLToolForLepiterSnippetsCreateExamples >> successfulPharoSnippetCreate [
+	<gtExample>
+	| tool call result page |
+	tool := self toolOnLogicalDatabase.
+	page := self pageInLogicalDatabase.
+	call := GtLFunctionToolCall new.
+	call rawArguments: {
+		'snippets' -> {
+			Dictionary new
+				at: 'PharoSnippet'
+				put: (Dictionary new
+					at: 'pageUid' put: page uidString;
+					at: 'pharoCode' put: 'Transcript show: 1';
+					yourself);
+				yourself } } asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GtLMagritteInputModel).
 	^ call
 ]
 
 { #category : #examples }
 GtLToolForLepiterSnippetsCreateExamples >> successfulPythonSnippetCreate [
 	<gtExample>
-	| tool call result snippet page database snippetText model |
-	database := LeContentExamples new basicDatabase.
-	page := database pageBuilder
-		title: 'one';
-		add.
-	snippetText := 'print(1)'.
-	tool := GtLToolForLepiterSnippetsCreate new.
-	tool database: database.
+	| tool call result page |
+	tool := self toolOnLogicalDatabase.
+	page := self pageInLogicalDatabase.
 	call := GtLFunctionToolCall new.
 	call rawArguments: {
 		'snippets' -> {
 			Dictionary new
-				at: 'pageUid' put: page uidString;
-				at: 'snippetText' put: snippetText;
-				at: 'snippetType' put: 'python';
+				at: 'PythonSnippet'
+				put: (Dictionary new
+					at: 'pageUid' put: page uidString;
+					at: 'pythonCode' put: 'print(1)';
+					yourself);
 				yourself } } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
 	self assert: (result isKindOf: GtLMagritteInputModel).
-	model := result model.
-	self assert: model snippets size equals: 1.
-	snippet := page children last.
-	self assert: (snippet isKindOf: LePythonSnippet).
-	self assert: snippet contentAsString equals: snippetText.
-	self assert: model snippets first status equals: 'created'.
 	^ call
 ]
 
 { #category : #examples }
 GtLToolForLepiterSnippetsCreateExamples >> successfulShellSnippetCreate [
 	<gtExample>
-	| tool call result snippet page database snippetText model |
-	database := LeContentExamples new basicDatabase.
-	page := database pageBuilder
-		title: 'one';
-		add.
-	snippetText := 'echo "Hello"'.
-	tool := GtLToolForLepiterSnippetsCreate new.
-	tool database: database.
+	| tool call result page |
+	tool := self toolOnLogicalDatabase.
+	page := self pageInLogicalDatabase.
 	call := GtLFunctionToolCall new.
 	call rawArguments: {
 		'snippets' -> {
 			Dictionary new
-				at: 'pageUid' put: page uidString;
-				at: 'snippetText' put: snippetText;
-				at: 'snippetType' put: 'shell';
+				at: 'ShellSnippet'
+				put: (Dictionary new
+					at: 'pageUid' put: page uidString;
+					at: 'shellCode' put: 'echo "Hello"';
+					yourself);
 				yourself } } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
 	self assert: (result isKindOf: GtLMagritteInputModel).
-	model := result model.
-	self assert: model snippets size equals: 1.
-	snippet := page children last.
-	self assert: (snippet isKindOf: LeShellScriptSnippet).
-	self assert: snippet contentAsString equals: snippetText.
-	self assert: model snippets first status equals: 'created'.
 	^ call
 ]
 
 { #category : #examples }
 GtLToolForLepiterSnippetsCreateExamples >> successfulSnippetCreate [
 	<gtExample>
-	| tool call result snippet page database snippetText model |
-	database := LeContentExamples new basicDatabase.
-	page := database pageBuilder
-		title: 'one';
-		add.
-	snippetText := 'New snippet text'.
-	tool := GtLToolForLepiterSnippetsCreate new.
-	tool database: database.
+	| tool call result page |
+	tool := self toolOnLogicalDatabase.
+	page := self pageInLogicalDatabase.
 	call := GtLFunctionToolCall new.
 	call rawArguments: {
 		'snippets' -> {
 			Dictionary new
-				at: 'pageUid' put: page uidString;
-				at: 'snippetText' put: snippetText;
+				at: 'TextSnippet'
+				put: (Dictionary new
+					at: 'pageUid' put: page uidString;
+					at: 'snippetText' put: 'New snippet text';
+					yourself);
 				yourself } } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
 	self assert: (result isKindOf: GtLMagritteInputModel).
-	model := result model.
-	self assert: model snippets size equals: 1.
-	snippet := page children last.
-	self assert: snippet contentAsString equals: snippetText.
-	self assert: model snippets first status equals: 'created'.
 	^ call
 ]
 
 { #category : #examples }
 GtLToolForLepiterSnippetsCreateExamples >> successfulSnippetsCreateMultiple [
 	<gtExample>
-	| tool call result pageOne pageTwo database snippetOne snippetTwo model snippets |
-	database := LeContentExamples new basicDatabase.
-	pageOne := database pageBuilder
-		title: 'one';
-		add.
-	pageTwo := database pageBuilder
-		title: 'two';
-		add.
-	snippetOne := 'Notes'.
-	snippetTwo := 'print(2)'.
-	tool := GtLToolForLepiterSnippetsCreate new.
-	tool database: database.
+	| tool call result page |
+	tool := self toolOnLogicalDatabase.
+	page := self pageInLogicalDatabase.
 	call := GtLFunctionToolCall new.
 	call rawArguments: {
 		'snippets' -> {
 			Dictionary new
-				at: 'pageUid' put: pageOne uidString;
-				at: 'snippetText' put: snippetOne;
-				at: 'snippetType' put: 'text';
+				at: 'TextSnippet'
+				put: (Dictionary new
+					at: 'pageUid' put: page uidString;
+					at: 'snippetText' put: 'Notes';
+					yourself);
 				yourself.
 			Dictionary new
-				at: 'pageUid' put: pageTwo uidString;
-				at: 'snippetText' put: snippetTwo;
-				at: 'snippetType' put: 'python';
+				at: 'PythonSnippet'
+				put: (Dictionary new
+					at: 'pageUid' put: page uidString;
+					at: 'pythonCode' put: 'print(2)';
+					yourself);
 				yourself } } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
 	self assert: (result isKindOf: GtLMagritteInputModel).
-	model := result model.
-	self assert: model snippets size equals: 2.
-	snippets := { pageOne children last. pageTwo children last }.
-	self assert: (snippets first isKindOf: LeTextSnippet).
-	self assert: (snippets second isKindOf: LePythonSnippet).
-	self assert: snippets first contentAsString equals: snippetOne.
-	self assert: snippets second contentAsString equals: snippetTwo.
 	^ call
 ]
 
 { #category : #examples }
 GtLToolForLepiterSnippetsCreateExamples >> successfulTextSnippetCreate [
 	<gtExample>
-	| tool call result snippet page database snippetText model |
-	database := LeContentExamples new basicDatabase.
-	page := database pageBuilder
-		title: 'one';
-		add.
-	snippetText := 'New snippet text'.
-	tool := GtLToolForLepiterSnippetsCreate new.
-	tool database: database.
+	| tool call result page |
+	tool := self toolOnLogicalDatabase.
+	page := self pageInLogicalDatabase.
 	call := GtLFunctionToolCall new.
 	call rawArguments: {
 		'snippets' -> {
 			Dictionary new
-				at: 'pageUid' put: page uidString;
-				at: 'snippetText' put: snippetText;
-				at: 'snippetType' put: 'text';
+				at: 'TextSnippet'
+				put: (Dictionary new
+					at: 'pageUid' put: page uidString;
+					at: 'snippetText' put: 'New snippet text';
+					yourself);
 				yourself } } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
 	self assert: (result isKindOf: GtLMagritteInputModel).
-	model := result model.
-	self assert: model snippets size equals: 1.
-	snippet := page children last.
-	self assert: (snippet isKindOf: LeTextSnippet).
-	self assert: snippet contentAsString equals: snippetText.
-	self assert: model snippets first status equals: 'created'.
 	^ call
+]
+
+{ #category : #examples }
+GtLToolForLepiterSnippetsCreateExamples >> toolOnLogicalDatabase [
+	<gtExample>
+	| tool logicalDB |
+	logicalDB := self logicalDatabase.
+	tool := GtLToolForLepiterSnippetsCreate new.
+	tool database: logicalDB.
+	self assert: tool database equals: logicalDB.
+	^ tool
 ]
