@@ -16,7 +16,7 @@ GtLToolForSearchForLepiterPages >> description [
 
 { #category : #accessing }
 GtLToolForSearchForLepiterPages >> name [
-	^ 'searchForlepiterPages'
+	^ 'searchForLepiterPages'
 ]
 
 { #category : #accessing }
