@@ -25,8 +25,8 @@ GtLToolForSmalltalkCodeEvaluation >> parametersDescription [
 ]
 
 { #category : #private }
-GtLToolForSmalltalkCodeEvaluation >> privatePerformToolCall: aToolCall [
-	| arguments code object |
+GtLToolForSmalltalkCodeEvaluation >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
+	| arguments code object objectId |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	code := arguments
 		at: 'code'
@@ -52,7 +52,11 @@ GtLToolForSmalltalkCodeEvaluation >> privatePerformToolCall: aToolCall [
 				freeze: ex;
 				description: 'Error while evaluating smalltalk code' ].
 
+	objectId := anExecutionContext objectStorage ifNotNil: [ :aStorage |
+		aStorage addNewObject: object ].
+				
 	^ GtLSmalltalkCodeEvaluationDomainObject new
 		code: code;
-		value: object
+		object: object;
+		objectId: objectId
 ]

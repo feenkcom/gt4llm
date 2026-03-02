@@ -25,7 +25,7 @@ GtLToolForPackageClasses >> parametersDescription [
 ]
 
 { #category : #private }
-GtLToolForPackageClasses >> privatePerformToolCall: aToolCall [
+GtLToolForPackageClasses >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| argument packageName organizer package |
 	argument := aToolCall anyArgument.
 	packageName := argument ifNotNil: [ argument asString ].

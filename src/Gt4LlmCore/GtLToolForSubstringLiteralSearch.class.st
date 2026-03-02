@@ -25,7 +25,7 @@ GtLToolForSubstringLiteralSearch >> parametersDescription [
 ]
 
 { #category : #private }
-GtLToolForSubstringLiteralSearch >> privatePerformToolCall: aToolCall [
+GtLToolForSubstringLiteralSearch >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments argument query filter promise matches |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	argument := aToolCall anyArgument.

@@ -25,7 +25,7 @@ GtLToolForMethodSource >> parametersDescription [
 ]
 
 { #category : #accessing }
-GtLToolForMethodSource >> privatePerformToolCall: aToolCall [
+GtLToolForMethodSource >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments className class methodName isClassSide methodSymbol method |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	className := arguments

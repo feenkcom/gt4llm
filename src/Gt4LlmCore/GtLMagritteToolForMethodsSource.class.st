@@ -41,7 +41,7 @@ GtLMagritteToolForMethodsSource >> name [
 ]
 
 { #category : #execution }
-GtLMagritteToolForMethodsSource >> privatePerformToolCall: aToolCall [
+GtLMagritteToolForMethodsSource >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments methodDescriptors methodObjects |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	methodDescriptors := arguments

@@ -25,7 +25,7 @@ GtLToolForClassReferences >> parametersDescription [
 ]
 
 { #category : #accessing }
-GtLToolForClassReferences >> privatePerformToolCall: aToolCall [
+GtLToolForClassReferences >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| className class references promise |
 	className := aToolCall anyArgument.
 	(className isNil or: [ className trimBoth isEmpty ])

@@ -111,7 +111,7 @@ GtLFunctionTool >> parametersDescription: anObject [
 ]
 
 { #category : #accessing }
-GtLFunctionTool >> privatePerformToolCall: aGtLFunctionToolCall [
+GtLFunctionTool >> privatePerformToolCall: aGtLFunctionToolCall inContext: anExecutionContext [
 	| result |
 	self
 		assert: block isNotNil

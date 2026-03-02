@@ -35,7 +35,7 @@ GtLSmaCCToolForParserUpdates >> parserUpdateDescription [
 ]
 
 { #category : #private }
-GtLSmaCCToolForParserUpdates >> privatePerformToolCall: aToolCall [
+GtLSmaCCToolForParserUpdates >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments updates |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	updates := arguments

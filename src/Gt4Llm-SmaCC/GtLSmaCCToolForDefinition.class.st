@@ -37,7 +37,7 @@ GtLSmaCCToolForDefinition >> parserDefinitionDescription [
 ]
 
 { #category : #execution }
-GtLSmaCCToolForDefinition >> privatePerformToolCall: aToolCall [
+GtLSmaCCToolForDefinition >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments definitionReference |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	definitionReference := arguments

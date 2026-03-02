@@ -20,7 +20,7 @@ GtLToolForMethodRemoval >> parametersDescription [
 ]
 
 { #category : #execution }
-GtLToolForMethodRemoval >> privatePerformToolCall: aToolCall [
+GtLToolForMethodRemoval >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments classNameValue classNameString classSymbol targetClass classSideValue classSide behavior methodNameValue methodNameString selector compiledMethod missingName |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	classNameValue := arguments

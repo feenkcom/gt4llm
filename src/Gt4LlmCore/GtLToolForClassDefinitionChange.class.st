@@ -25,7 +25,7 @@ GtLToolForClassDefinitionChange >> parametersDescription [
 ]
 
 { #category : #private }
-GtLToolForClassDefinitionChange >> privatePerformToolCall: aToolCall [
+GtLToolForClassDefinitionChange >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments classNameValue classNameString classNameSymbol targetClass superclassValue superclassName superclass instanceVariables classVariables packageValue packageName updatedClass builder currentInstanceVariables currentClassVariables |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	classNameValue := arguments

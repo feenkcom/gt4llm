@@ -28,25 +28,26 @@ GtLAbstractMagritteFunctionTool >> parametersDescription [
 ]
 
 { #category : #utils }
-GtLAbstractMagritteFunctionTool >> performToolCall: aToolCall [
+GtLAbstractMagritteFunctionTool >> performToolCall: aToolCall inContext: anExecutionContext [
 	| domainObject resultObject |
-	
 	[ | arguments |
-		arguments := self parametersDescription 
+	arguments := self parametersDescription
 			readGenericDomainObjectsFrom: aToolCall rawArgumentsJsonString.
-		aToolCall arguments: arguments  ]
+	aToolCall arguments: arguments ]
 		on: NeoJSONParseError
 		do: [ :e | 
 			Error signal: 'to handle'.
 			aToolCall result: e.
-			^ e ] .
-	
+			^ e ].
+
 	aToolCall performedByTool: self.
-	domainObject := self privatePerformToolCall: aToolCall.
-	resultObject := GtLMagritteInputModel new 
-		name: 'Response';
-		model: domainObject.
+	domainObject := self 
+		privatePerformToolCall: aToolCall 
+		inContext: anExecutionContext.
+	resultObject := GtLMagritteInputModel new
+			name: 'Response';
+			model: domainObject.
 	aToolCall result: resultObject.
-	
+
 	^ resultObject
 ]

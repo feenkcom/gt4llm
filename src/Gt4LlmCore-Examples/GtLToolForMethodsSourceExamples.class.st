@@ -17,8 +17,8 @@ GtLToolForMethodsSourceExamples >> methodSourcesForExistingMethods [
 				{'className' -> #Collection.
 					'methodName' -> #withAll:.
 					'classSide' -> 'true'} asDictionary.
-				{'className' -> GtLToolForMethodImplementors name.
-					'methodName' -> #privatePerformToolCall:.
+				{'className' -> GtLToolForMethodsSourceExamples name.
+					'methodName' -> #methodSourcesForExistingMethods.
 					'classSide' -> 'false'} asDictionary
 			}
 		} asDictionary
@@ -32,7 +32,7 @@ GtLToolForMethodsSourceExamples >> methodSourcesForExistingMethods [
 		equals: (Collection class>>#withAll:) sourceCode.
 	self
 		assert: (result methods second sourceCode)
-		equals: (GtLToolForMethodImplementors>>#privatePerformToolCall:) sourceCode.
+		equals: (GtLToolForMethodsSourceExamples>>#methodSourcesForExistingMethods) sourceCode.
 	^ call
 ]
 
