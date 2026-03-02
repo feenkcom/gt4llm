@@ -19,14 +19,42 @@ GtLToolForSmalltalkCodeEvaluation >> name [
 	^ 'smalltalkCodeEvaluation'
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #accessing }
 GtLToolForSmalltalkCodeEvaluation >> parametersDescription [
-	^ #('code')
+	^ GtLResponseJsonSchemaFormat new
+		name: 'Parameters';
+		schemaDictionary: self parametersJsonSchemaDictionary
+]
+
+{ #category : #accessing }
+GtLToolForSmalltalkCodeEvaluation >> parametersJsonSchemaDictionary [
+	| bindingSchema |
+	bindingSchema := {
+		'type' -> 'object'.
+		'properties' -> {
+			'name' -> {'type' -> 'string'} asDictionary.
+			'objectId' -> {'type' -> 'string'} asDictionary
+		} asDictionary.
+		'required' -> #('name' 'objectId').
+		'additionalProperties' -> false
+	} asDictionary.
+	^ {
+		'type' -> 'object'.
+		'properties' -> {
+			'code' -> {'type' -> 'string'} asDictionary.
+			'bindings' -> {
+				'type' -> 'array'.
+				'items' -> bindingSchema
+			} asDictionary
+		} asDictionary.
+		'required' -> #('code').
+		'additionalProperties' -> false
+	} asDictionary
 ]
 
 { #category : #private }
 GtLToolForSmalltalkCodeEvaluation >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
-	| arguments code object objectId |
+	| arguments code object objectId bindings bindingsDictionary |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	code := arguments
 		at: 'code'
@@ -45,7 +73,37 @@ GtLToolForSmalltalkCodeEvaluation >> privatePerformToolCall: aToolCall inContext
 			receiverName: self name;
 			arguments: arguments;
 			missingArgument: 'code' ].
-	object := [ OpalCompiler new evaluate: code ]
+	bindings := arguments at: 'bindings' ifAbsent: [ nil ].
+	bindingsDictionary := nil.
+	(bindings notNil and: [ bindings notEmpty ]) ifTrue: [
+		anExecutionContext objectStorage
+			ifNil: [ ^ GtLMissingInformationDomainObject new
+				receiverName: self name;
+				missingModelName: 'objectStorage' ].
+		bindingsDictionary := Dictionary new.
+		bindings do: [ :each |
+			| bindingName bindingObjectId bindingObject |
+			bindingName := each
+				at: 'name'
+				ifAbsent: [ ^ GtLMissingArgumentDomainObject new
+					receiverName: self name;
+					arguments: arguments;
+					missingArgument: 'name' ].
+			bindingObjectId := each
+				at: 'objectId'
+				ifAbsent: [ ^ GtLMissingArgumentDomainObject new
+					receiverName: self name;
+					arguments: arguments;
+					missingArgument: 'objectId' ].
+			bindingObject := anExecutionContext objectStorage
+				objectAt: bindingObjectId
+				ifPresent: [ :storedObject | storedObject ]
+				ifAbsent: [ ^ GtLMissingDomainObject new objectName: bindingObjectId ].
+			bindingsDictionary at: bindingName asSymbol put: bindingObject ] ].
+	object := [ | compiler |
+		compiler := OpalCompiler new.
+		bindingsDictionary ifNotNil: [ compiler bindings: bindingsDictionary ].
+		compiler evaluate: code ]
 		on: Error
 		do: [ :ex |
 			^ GtLExceptionDomainObject new

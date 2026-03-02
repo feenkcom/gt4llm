@@ -81,6 +81,65 @@ GtLToolForSmalltalkCodeEvaluationExamples >> executeSimpleDoItWithoutObjectStora
 ]
 
 { #category : #examples }
+GtLToolForSmalltalkCodeEvaluationExamples >> executeWithBindings [
+	<gtExample>
+	| objectStorage tool call result bindingObjectId resultObjectId |
+	objectStorage := GtLObjectStorage new.
+	bindingObjectId := objectStorage addNewObject: 40.
+	tool := GtLToolForSmalltalkCodeEvaluation new.
+	call := GtLFunctionToolCall new.
+	call function: {
+		'name' -> tool name.
+		'arguments' -> {
+			'code' -> 'value + 2'.
+			'bindings' -> {
+				{
+					'name' -> 'value'.
+					'objectId' -> bindingObjectId
+				} asDictionary
+			} asArray
+		} asDictionary
+	} asDictionary.
+	result := tool
+		performToolCall: call
+		inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
+	self assert: call tool == tool.
+	self assert: result isErrorDomainObject not.
+	self assert: result object equals: 42.
+	resultObjectId := result objectId.
+	self assert: resultObjectId isString.
+	self assert: resultObjectId ~= bindingObjectId.
+	self assert: (objectStorage objectAt: bindingObjectId) equals: 40.
+	self assert: (objectStorage objectAt: resultObjectId) equals: 42.
+	^ call
+]
+
+{ #category : #examples }
+GtLToolForSmalltalkCodeEvaluationExamples >> executeWithBindingsMissingObjectStorage [
+	<gtExample>
+	| tool call result |
+	tool := GtLToolForSmalltalkCodeEvaluation new.
+	call := GtLFunctionToolCall new.
+	call function: {
+		'name' -> tool name.
+		'arguments' -> {
+			'code' -> 'value + 2'.
+			'bindings' -> {
+				{
+					'name' -> 'value'.
+					'objectId' -> 'missing'
+				} asDictionary
+			} asArray
+		} asDictionary
+	} asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: result isErrorDomainObject.
+	self assert: result missingModelName equals: 'objectStorage'.
+	^ call
+]
+
+{ #category : #examples }
 GtLToolForSmalltalkCodeEvaluationExamples >> executeWithError [
 	<gtExample>
 	| tool call result |
