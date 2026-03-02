@@ -55,15 +55,24 @@ GtLAbstractFunctionTool >> parametersJsonSchemaDictionary [
 
 { #category : #execution }
 GtLAbstractFunctionTool >> performToolCall: aToolCall [
+	^ self 
+			performToolCall: aToolCall 
+			inContext: (GtLToolExecutionContext new)
+]
+
+{ #category : #execution }
+GtLAbstractFunctionTool >> performToolCall: aToolCall inContext: anExecutionContext [
 	| result |
 	aToolCall performedByTool: self.
-	result := self privatePerformToolCall: aToolCall.
+	result := self 
+		privatePerformToolCall: aToolCall 
+		inContext: anExecutionContext.
 	aToolCall result: result.
 	^ result
 ]
 
 { #category : #execution }
-GtLAbstractFunctionTool >> privatePerformToolCall: aToolCall [
+GtLAbstractFunctionTool >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	^ self subclassResponsibility
 ]
 

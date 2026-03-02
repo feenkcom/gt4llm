@@ -57,7 +57,7 @@ GtLToolForTestClassesRun >> parametersDescription [
 ]
 
 { #category : #'llm-generated' }
-GtLToolForTestClassesRun >> privatePerformToolCall: aToolCall [
+GtLToolForTestClassesRun >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments rawClassNames classNames details notFound notTestCase |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	rawClassNames := arguments

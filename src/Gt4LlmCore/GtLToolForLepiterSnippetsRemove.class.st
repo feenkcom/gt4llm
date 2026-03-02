@@ -50,7 +50,7 @@ GtLToolForLepiterSnippetsRemove >> name [
 ]
 
 { #category : #private }
-GtLToolForLepiterSnippetsRemove >> privatePerformToolCall: aToolCall [
+GtLToolForLepiterSnippetsRemove >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments snippetsArgument results |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	snippetsArgument := arguments

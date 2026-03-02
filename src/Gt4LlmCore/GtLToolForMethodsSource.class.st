@@ -133,7 +133,7 @@ GtLToolForMethodsSource >> parametersDescription [
 ]
 
 { #category : #execution }
-GtLToolForMethodsSource >> privatePerformToolCall: aToolCall [
+GtLToolForMethodsSource >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments methodsArgument methods |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	methodsArgument := arguments

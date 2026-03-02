@@ -44,7 +44,7 @@ GtLToolForLepiterSnippetEdit >> pageUidDescription [
 ]
 
 { #category : #private }
-GtLToolForLepiterSnippetEdit >> privatePerformToolCall: aToolCall [
+GtLToolForLepiterSnippetEdit >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments pageUidString snippetUidString updatedText snippetUid pageUid snippets oldText |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	pageUidString := arguments

@@ -34,15 +34,15 @@ GtLToolForMethodSourceExamples >> methodSourceForExistingInstanceSideMethod [
 	call
 		function: {'name' -> tool name.
 				'arguments'
-					-> {'className' -> GtLToolForMethodImplementors name.
-							'methodName' -> #privatePerformToolCall:.
+					-> {'className' -> GtLToolForMethodSourceExamples name.
+							'methodName' -> #methodSourceForExistingInstanceSideMethod.
 							'classSide' -> 'false'} asDictionary} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
 	self assert: result isErrorDomainObject not.
 	self
 		assert: result sourceCode
-		equals: (GtLToolForMethodImplementors>>#privatePerformToolCall:) sourceCode.
+		equals: (GtLToolForMethodSourceExamples>>#methodSourceForExistingInstanceSideMethod) sourceCode.
 	^ call
 ]
 

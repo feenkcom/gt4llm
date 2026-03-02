@@ -25,7 +25,7 @@ GtLToolForClassSearch >> parametersDescription [
 ]
 
 { #category : #accessing }
-GtLToolForClassSearch >> privatePerformToolCall: aToolCall [
+GtLToolForClassSearch >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments query matches promise |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	query := arguments

@@ -30,7 +30,7 @@ GtLToolForLepiterPageContents >> parametersDescription [
 ]
 
 { #category : #private }
-GtLToolForLepiterPageContents >> privatePerformToolCall: aToolCall [
+GtLToolForLepiterPageContents >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments uuidString knowledgeBaseId database |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	uuidString := arguments

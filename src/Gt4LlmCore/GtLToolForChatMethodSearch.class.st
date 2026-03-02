@@ -44,11 +44,11 @@ GtLToolForChatMethodSearch >> parametersDescription [
 ]
 
 { #category : #'as yet unclassified' }
-GtLToolForChatMethodSearch >> privatePerformToolCall: aToolCall [
+GtLToolForChatMethodSearch >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| argument chat semaphore timeout |
 	argument := aToolCall arguments anyOne.
 	chat := self chat.
-	aToolCall at: #chat putRuntimeValue: chat.
+	aToolCall at: #innerChat putRuntimeValue: chat.
 	semaphore := Semaphore new.
 	chat announcer
 		when: GtLlmThreadRunIsDoneAnnouncement

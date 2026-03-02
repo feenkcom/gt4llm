@@ -81,3 +81,9 @@ GtLObjectStorage >> objectAt: anObjectId ifPresent: aPresentBlock ifAbsent: anAb
 GtLObjectStorage >> objectCount [
 	^ objectsByUUID size
 ]
+
+{ #category : #'utils - accessing' }
+GtLObjectStorage >> objectIds [
+	^ objectsByUUID keys collect: [ :each |
+			each asString36 ]
+]

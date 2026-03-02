@@ -25,7 +25,7 @@ GtLToolForMethodCompilation >> parametersDescription [
 ]
 
 { #category : #private }
-GtLToolForMethodCompilation >> privatePerformToolCall: aToolCall [
+GtLToolForMethodCompilation >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments className class classSideValue source protocol selector methodNode oldSourceCode |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	className := arguments

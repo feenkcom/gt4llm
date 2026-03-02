@@ -25,7 +25,7 @@ GtLToolForClassViews >> parametersDescription [
 ]
 
 { #category : #accessing }
-GtLToolForClassViews >> privatePerformToolCall: aToolCall [
+GtLToolForClassViews >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| className targetClass pragmas selectors |
 	className := aToolCall anyArgument.
 	targetClass := className

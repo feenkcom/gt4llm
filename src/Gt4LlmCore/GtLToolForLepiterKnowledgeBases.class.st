@@ -20,7 +20,7 @@ GtLToolForLepiterKnowledgeBases >> name [
 ]
 
 { #category : #execution }
-GtLToolForLepiterKnowledgeBases >> privatePerformToolCall: aToolCall [
+GtLToolForLepiterKnowledgeBases >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| databases |
 	databases := LeDatabasesRegistry defaultLogicalDatabase databases.
 	^ GtLLepiterKnowledgeBases new
