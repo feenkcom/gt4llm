@@ -9,49 +9,38 @@ Class {
 
 { #category : #private }
 GtLToolForLepiterSnippetsCreate >> createSnippetFrom: snippetArguments [
-	| pageUidString snippetText pageUid snippetType snippetClass snippet |
+	| pageUidString pageUid snippet snippetValidation |
 	pageUidString := snippetArguments pageUid.
 	(pageUidString isNil or: [ pageUidString trimBoth isEmpty ])
 		ifTrue: [ ^ GtLMissingArgumentDomainObject new
-			receiverName: self name;
-			arguments: snippetArguments;
-			missingArgument: 'pageUid' ].
+				receiverName: self name;
+				arguments: snippetArguments;
+				missingArgument: 'pageUid' ].
 	pageUid := [ UUID fromString36: pageUidString ]
-		on: Error
-		do: [ :error |
-			^ GtLExceptionDomainObject new
-				freeze: error;
-				description: 'Invalid page uid' ].
-	snippetText := snippetArguments snippetText.
-	(snippetText isNil or: [ snippetText asString isEmpty ])
-		ifTrue: [ ^ GtLMissingArgumentDomainObject new
-			receiverName: self name;
-			arguments: snippetArguments;
-			missingArgument: 'snippetText' ].
-	snippetText := snippetText asString.
-	snippetType := snippetArguments snippetType ifNil: [ 'text' ].
-	snippetClass := self snippetClassForType: snippetType.
-	snippetClass ifNil: [ ^ GtLProblemDomainObject new
-		description: 'Unknown snippet type ' , snippetType asString ].
-	self database
-		pageWithID: pageUid
-		ifPresent: [ :page |
-			[ snippet := snippetClass = LeTextSnippet
-				ifTrue: [ LeTextSnippet string: snippetText ]
-				ifFalse: [ snippetClass code: snippetText ].
-			page addSnippet: snippet ]
-				on: Error
-				do: [ :error |
-					^ GtLExceptionDomainObject new
-						freeze: error;
-						description: 'Error while creating snippet' ] ]
-		ifAbsent: [ ^ GtLProblemDomainObject new
-			description: 'Could not locate page with id ' , pageUid asString ].
-	^ GtLLepiterSnippetDomainObject new
-		status: 'created';
-		pageUid: pageUid asString;
-		snippetUid: snippet uidString;
-		snippet: snippet
+			on: Error
+			do: [ :error | 
+				^ GtLExceptionDomainObject new
+					freeze: error;
+					description: 'Invalid page uid' ].
+	^ snippetArguments
+		validateSnippetArgumentsFor: self
+		ifCorrect: [ self database
+				pageWithID: pageUid
+				ifPresent: [ :page | 
+					[ snippet := snippetArguments buildSnippetFor: self.
+					page addSnippet: snippet ]
+						on: Error
+						do: [ :error | 
+							^ GtLExceptionDomainObject new
+								freeze: error;
+								description: 'Error while creating snippet' ] ]
+				ifAbsent: [ ^ GtLProblemDomainObject new
+						description: 'Could not locate page with id ' , pageUid asString ].
+			^ GtLLepiterSnippetDomainObject new
+				status: 'created';
+				pageUid: pageUid asString;
+				snippetUid: snippet uidString;
+				snippet: snippet ]
 ]
 
 { #category : #accessing }
@@ -71,12 +60,13 @@ GtLToolForLepiterSnippetsCreate >> description [
 Example JSON arguments:
 {
   "snippets": [
-    {"pageUid": "UUID", "snippetText": "Transcript show: 1", "snippetType": "pharo"},
-    {"pageUid": "UUID", "snippetText": "Notes", "snippetType": "text"}
+    {"TextSnippet": {"pageUid": "UUID", "snippetText": "Notes"}},
+    {"PharoSnippet": {"pageUid": "UUID", "pharoCode": "Transcript show: 1"}},
+    {"ExampleSnippet": {"pageUid": "UUID", "exampleClassName": "MyExamples", "exampleMethodName": "exampleMethod"}}
   ]
 }
 
-Supported snippet types are: text, pharo, python, shell.
+Supported snippet types are: text, pharo, python, shell, example.
 
 Example JSON response:
 {
@@ -95,7 +85,7 @@ GtLToolForLepiterSnippetsCreate >> initialize [
 
 { #category : #accessing }
 GtLToolForLepiterSnippetsCreate >> name [
-	^ 'createLepiterSnippet'
+	^ 'createLepiterSnippets'
 ]
 
 { #category : #private }
@@ -135,18 +125,25 @@ GtLToolForLepiterSnippetsCreate >> snippetClassForType: snippetType [
 		'text' -> LeTextSnippet.
 		'pharo' -> LePharoSnippet.
 		'python' -> LePythonSnippet.
-		'shell' -> LeShellScriptSnippet } asDictionary
+		'shell' -> LeShellScriptSnippet.
+		'example' -> LeExampleSnippet } asDictionary
 			at: normalizedType
 			ifAbsent: [ nil ]
 ]
 
-{ #category : #accessing }
+{ #category : #magritte }
 GtLToolForLepiterSnippetsCreate >> snippetsDescription [
 	<magritteDescription>
 
 	^ MAToManyRelationDescription new
 		label: 'Snippets';
 		accessor: #snippets;
-		classes: { GtLLepiterSnippetCreationRequest };
+		classes: {
+			GtLLepiterTextSnippetCreationRequest.
+			GtLLepiterPharoSnippetCreationRequest.
+			GtLLepiterPythonSnippetCreationRequest.
+			GtLLepiterShellSnippetCreationRequest.
+			GtLLepiterExampleSnippetCreationRequest };
+		useExplicitContainerForChildren;
 		beRequired
 ]

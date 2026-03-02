@@ -2,12 +2,35 @@ Class {
 	#name : #GtLLepiterSnippetCreationRequest,
 	#superclass : #Object,
 	#instVars : [
-		'pageUid',
-		'snippetText',
-		'snippetType'
+		'pageUid'
 	],
 	#category : #Gt4LlmCore
 }
+
+{ #category : #'json schema' }
+GtLLepiterSnippetCreationRequest class >> jsonSchemaLabel [
+	^ "self snippetTypeValue capitalized , 'Snippet'" self subclassResponsibility
+]
+
+{ #category : #accessing }
+GtLLepiterSnippetCreationRequest class >> requestClassForType: aString [
+	| normalizedType |
+	normalizedType := aString ifNil: [ '' ] ifNotNil: [ aString asString trimBoth ].
+	normalizedType isEmpty ifTrue: [ normalizedType := 'text' ].
+	^ {
+		'text' -> GtLLepiterTextSnippetCreationRequest.
+		'pharo' -> GtLLepiterPharoSnippetCreationRequest.
+		'python' -> GtLLepiterPythonSnippetCreationRequest.
+		'shell' -> GtLLepiterShellSnippetCreationRequest.
+		'example' -> GtLLepiterExampleSnippetCreationRequest } asDictionary
+			at: normalizedType
+			ifAbsent: [ self ]
+]
+
+{ #category : #building }
+GtLLepiterSnippetCreationRequest >> buildSnippetFor: aTool [
+	self subclassResponsibility
+]
 
 { #category : #accessing }
 GtLLepiterSnippetCreationRequest >> pageUid [
@@ -19,53 +42,16 @@ GtLLepiterSnippetCreationRequest >> pageUid: aString [
 	pageUid := aString
 ]
 
-{ #category : #descriptions }
+{ #category : #magritte }
 GtLLepiterSnippetCreationRequest >> pageUidDescription [
 	<magritteDescription>
 
 	^ MAStringDescription new
 		label: 'Page uid';
-		accessor: #pageUid;
-		beRequired
+		accessor: #pageUid
 ]
 
-{ #category : #accessing }
-GtLLepiterSnippetCreationRequest >> snippetText [
-	^ snippetText
-]
-
-{ #category : #accessing }
-GtLLepiterSnippetCreationRequest >> snippetText: aString [
-	snippetText := aString
-]
-
-{ #category : #descriptions }
-GtLLepiterSnippetCreationRequest >> snippetTextDescription [
-	<magritteDescription>
-
-	^ MAStringDescription new
-		label: 'Snippet text';
-		comment: 'Textual content of the snippet.';
-		accessor: #snippetText;
-		beRequired
-]
-
-{ #category : #accessing }
-GtLLepiterSnippetCreationRequest >> snippetType [
-	^ snippetType
-]
-
-{ #category : #accessing }
-GtLLepiterSnippetCreationRequest >> snippetType: aString [
-	snippetType := aString
-]
-
-{ #category : #descriptions }
-GtLLepiterSnippetCreationRequest >> snippetTypeDescription [
-	<magritteDescription>
-
-	^ MAStringDescription new
-		label: 'Snippet type';
-		comment: 'One of text, pharo, python, shell. Defaults to text.';
-		accessor: #snippetType
+{ #category : #validation }
+GtLLepiterSnippetCreationRequest >> validateSnippetArgumentsFor: aTool ifCorrect: aBlock [
+	self subclassResponsibility
 ]
