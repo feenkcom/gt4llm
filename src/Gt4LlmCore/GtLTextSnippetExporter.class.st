@@ -127,8 +127,7 @@ GtLTextSnippetExporter >> visitFileReferenceAnnotation: aLeFileReferenceAnnotati
 	isExpanded ifFalse: [ ^ stream nextPutAll: aLeFileReferenceAnnotationNode parent source ].
 
 	fileReference := LeFileReference
-		fromAnnotation: aLeFileReferenceAnnotationNode
-		inPage: nil.
+		fromAnnotation: aLeFileReferenceAnnotationNode.
 	(fileReference isNil or: [ fileReference fileReference exists not ])
 		ifTrue: [ ^ stream nextPutAll: aLeFileReferenceAnnotationNode parent source ].
 
