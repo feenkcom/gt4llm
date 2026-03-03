@@ -26,7 +26,7 @@ GtLToolForExampleClassesRunExamples >> runExamplesForClass [
 { #category : #'llm-generated' }
 GtLToolForExampleClassesRunExamples >> runExamplesForMultipleClasses [
 	<gtExample>
-	| tool call result data |
+	| tool call result |
 	tool := GtLToolForExampleClassesRun new.
 	call := GtLFunctionToolCall new.
 	call
@@ -37,9 +37,9 @@ GtLToolForExampleClassesRunExamples >> runExamplesForMultipleClasses [
 	result := tool performToolCall: call.
 
 	self assert: result isErrorDomainObject not.
-	self assert: result totalCount equals: 7.
+	self assert: result totalCount equals: 8.
 	self assert: result skippedCount equals: 3.
-	self assert: result exampleWithResults size equals: 7.
+	self assert: result exampleWithResults size equals: 8.
 	^ call
 ]
 
