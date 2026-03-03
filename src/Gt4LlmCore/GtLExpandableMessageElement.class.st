@@ -39,9 +39,11 @@ GtLExpandableMessageElement >> initialize [
 	self initializeContentMessageElement.
 
 	self
-		addAptitude: GtCoderExpanderAptitude new;
+		addAptitude: (BrGlamorousExpanderSubtleAptitude new
+			sidebarExtraPadding: (BlInsets top: 5));
 		header: [ headerElement ];
 		content: [ contentElement ].
+	self addAptitude: BlGlamorousExpanderShadowAptitude new.
 
 	self
 		addAptitude: (BrLazyStyleCommonAptitude new
