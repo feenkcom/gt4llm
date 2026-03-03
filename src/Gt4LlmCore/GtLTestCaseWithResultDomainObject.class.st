@@ -121,14 +121,7 @@ GtLTestCaseWithResultDomainObject >> serializeToAnthropicResponseOutput [
 ]
 
 { #category : #'api - serializing' }
-GtLTestCaseWithResultDomainObject >> serializeToOpenAIResponseImages [
-	^ (self isErrorResult or: [ self isFailureResult ])
-		ifFalse: [ #() ]
-		ifTrue: [ self result exception serializeToOpenAIResponseImages ]. 
-]
-
-{ #category : #'api - serializing' }
-GtLTestCaseWithResultDomainObject >> serializeToOpenAIResponseJsonObject [
+GtLTestCaseWithResultDomainObject >> serializeToLlmJsonObject [
 	"Return a JSON dictionary that represents the domain object."
 
 	<return: #NeoJSONObject>
@@ -149,6 +142,13 @@ GtLTestCaseWithResultDomainObject >> serializeToOpenAIResponseJsonObject [
 			put: self result exception serializeToOpenAIResponseOutput ].
 		
 	^ data
+]
+
+{ #category : #'api - serializing' }
+GtLTestCaseWithResultDomainObject >> serializeToOpenAIResponseImages [
+	^ (self isErrorResult or: [ self isFailureResult ])
+		ifFalse: [ #() ]
+		ifTrue: [ self result exception serializeToOpenAIResponseImages ]. 
 ]
 
 { #category : #'api - serializing' }

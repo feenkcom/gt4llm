@@ -113,6 +113,6 @@ GtLToolForExampleMethodRunExamples >> exampleRunSuccessStoresObjectId [
 		at: #result put: (GtLValueSerializer new serializeValue: 42);
 		at: #objectId put: objectId;
 		yourself.
-	self assert: result serializeToOpenAIResponseJsonObject equals: expected.
+	self assert: result serializeToLlmJsonObject equals: expected.
 	^ call
 ]

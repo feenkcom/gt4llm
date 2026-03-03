@@ -40,7 +40,7 @@ GtLRefactoringClassSearchDomainObject >> query: anObject [
 ]
 
 { #category : #'api - serializing' }
-GtLRefactoringClassSearchDomainObject >> serializeToOpenAIResponseJsonObject [
+GtLRefactoringClassSearchDomainObject >> serializeToLlmJsonObject [
 	"Return a JSON dictionary that represents the domain object."
 
 	<return: #NeoJSONObject>

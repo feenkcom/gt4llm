@@ -43,9 +43,9 @@ GtLWorldScreenshotDataDomainObject >> serializeToAnthropicResponseOutput [
 ]
 
 { #category : #serialization }
-GtLWorldScreenshotDataDomainObject >> serializeToOpenAIResponseJsonObject [
+GtLWorldScreenshotDataDomainObject >> serializeToLlmJsonObject [
 	<return: #String>
-	^ "'data:image/jpeg;base64', self encodedBytes" super serializeToOpenAIResponseJsonObject
+	^ "'data:image/jpeg;base64', self encodedBytes" super serializeToLlmJsonObject
 ]
 
 { #category : #serialization }

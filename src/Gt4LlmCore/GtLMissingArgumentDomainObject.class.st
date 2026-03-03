@@ -63,7 +63,7 @@ GtLMissingArgumentDomainObject >> receiverName: aString [
 ]
 
 { #category : #'api - serializing' }
-GtLMissingArgumentDomainObject >> serializeToOpenAIResponseJsonObject [
+GtLMissingArgumentDomainObject >> serializeToLlmJsonObject [
 	"Return a JSON dictionary that represents the domain object."
 
 	<return: #NeoJSONObject>

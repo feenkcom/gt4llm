@@ -33,7 +33,7 @@ GtLRefactoringMethodSourceCodeDomainObject >> methodSourceCode [
 ]
 
 { #category : #'api - serializing' }
-GtLRefactoringMethodSourceCodeDomainObject >> serializeToOpenAIResponseJsonObject [
+GtLRefactoringMethodSourceCodeDomainObject >> serializeToLlmJsonObject [
 	"Return a JSON dictionary that represents the domain object."
 
 	<return: #NeoJSONObject>

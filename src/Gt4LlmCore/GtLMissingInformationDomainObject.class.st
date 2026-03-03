@@ -47,7 +47,7 @@ GtLMissingInformationDomainObject >> receiverName: anObject [
 ]
 
 { #category : #'api - serializing' }
-GtLMissingInformationDomainObject >> serializeToOpenAIResponseJsonObject [
+GtLMissingInformationDomainObject >> serializeToLlmJsonObject [
 	"Return a JSON dictionary that represents the domain object."
 
 	<return: #NeoJSONObject>

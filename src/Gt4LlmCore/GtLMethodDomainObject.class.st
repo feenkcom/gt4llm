@@ -71,7 +71,7 @@ GtLMethodDomainObject >> oldSourceCode: aString [
 ]
 
 { #category : #serialization }
-GtLMethodDomainObject >> serializeToOpenAIResponseJsonObject [
+GtLMethodDomainObject >> serializeToLlmJsonObject [
 	"Return a JSON dictionary that represents the domain object."
 
 	<return: #NeoJSONObject>

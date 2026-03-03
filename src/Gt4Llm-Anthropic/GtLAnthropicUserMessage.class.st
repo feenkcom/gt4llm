@@ -189,6 +189,6 @@ GtLAnthropicUserMessage >> serializeForAnthropicMessagesAPI [
 			-> ({{'type' -> 'text'.
 						'text' -> self contentText} asDictionary}
 					, (self attachments
-							collect: [ :each | each serializeForAnthropicMessagesAPI ])).
+							collect: [ :each | each serializeToAnthropicResponseOutput ])).
 		'role' -> self role} asDictionary
 ]

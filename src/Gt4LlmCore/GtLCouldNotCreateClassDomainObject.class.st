@@ -73,7 +73,7 @@ GtLCouldNotCreateClassDomainObject >> packageName: anObject [
 ]
 
 { #category : #'api - serializing' }
-GtLCouldNotCreateClassDomainObject >> serializeToOpenAIResponseJsonObject [
+GtLCouldNotCreateClassDomainObject >> serializeToLlmJsonObject [
 	"Return a JSON dictionary that represents the domain object."
 
 	<return: #NeoJSONObject>

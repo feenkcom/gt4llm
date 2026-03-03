@@ -45,12 +45,12 @@ GtLMethodsSourceDomainObject >> methods: aCollection [
 ]
 
 { #category : #serialization }
-GtLMethodsSourceDomainObject >> serializeToOpenAIResponseJsonObject [
+GtLMethodsSourceDomainObject >> serializeToLlmJsonObject [
 	"Return a JSON dictionary that represents the domain object."
 
 	<return: #NeoJSONObject>
 	^ NeoJSONObject new
 		at: 'methods'
-			put: (self methods collect: #serializeToOpenAIResponseJsonObject as: Array);
+			put: (self methods collect: #serializeToLlmJsonObject as: Array);
 		yourself
 ]

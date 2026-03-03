@@ -41,7 +41,7 @@ GtLToolForSmalltalkCodeEvaluationExamples >> executeSimpleDoIt [
 		at: 'objectId' put: (objectStorage objectIds first);
 		yourself.
 	self 
-		assert: result serializeToOpenAIResponseJsonObject
+		assert: result serializeToLlmJsonObject
 		equals: expected.
 
 	^ call
@@ -74,7 +74,7 @@ GtLToolForSmalltalkCodeEvaluationExamples >> executeSimpleDoItWithoutObjectStora
 		at: 'objectId' put: nil;
 		yourself.
 	self 
-		assert: result serializeToOpenAIResponseJsonObject
+		assert: result serializeToLlmJsonObject
 		equals: expected.
 
 	^ call

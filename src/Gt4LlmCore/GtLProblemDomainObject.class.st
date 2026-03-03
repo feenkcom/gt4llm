@@ -30,7 +30,7 @@ GtLProblemDomainObject >> messageText [
 ]
 
 { #category : #'api - serializing' }
-GtLProblemDomainObject >> serializeToOpenAIResponseJsonObject [
+GtLProblemDomainObject >> serializeToLlmJsonObject [
 	"Return a JSON dictionary that represents the domain object."
 
 	<return: #NeoJSONObject>

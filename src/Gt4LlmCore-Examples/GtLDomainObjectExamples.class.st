@@ -17,7 +17,7 @@ GtLDomainObjectExamples >> classDomainObject [
 		originalClassVariableNames: 'classInstVarA classInstVarB';
 		originalTraitCompositionString: Behavior traitCompositionString;
 		yourself.
-	aJsonObject := aDomainObject serializeToOpenAIResponseJsonObject.
+	aJsonObject := aDomainObject serializeToLlmJsonObject.
 
 	aValidator := GtLValueSerializer new validateClass: aJsonObject.
 	self assert: aValidator isValid.
@@ -41,7 +41,7 @@ GtLDomainObjectExamples >> missingArgumentDomainObject [
 			arguments: (OrderedDictionary new
 					at: #argumentOne put: 108;
 					yourself).
-	aJsonObject := aDomainObject serializeToOpenAIResponseJsonObject.
+	aJsonObject := aDomainObject serializeToLlmJsonObject.
 
 	^ aDomainObject
 ]
@@ -51,7 +51,7 @@ GtLDomainObjectExamples >> missingDomainObject [
 	<gtExample>
 	| aDomainObject aJsonObject |
 	aDomainObject := GtLMissingDomainObject new objectName: GtLDummyOneObject name.
-	aJsonObject := aDomainObject serializeToOpenAIResponseJsonObject.
+	aJsonObject := aDomainObject serializeToLlmJsonObject.
 
 	^ aDomainObject
 ]

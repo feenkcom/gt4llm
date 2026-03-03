@@ -18,7 +18,7 @@ GtLRemoteExampleReportDomainObject >> result: anObject [
 ]
 
 { #category : #'api - serializing' }
-GtLRemoteExampleReportDomainObject >> serializeToOpenAIResponseJsonObject [
+GtLRemoteExampleReportDomainObject >> serializeToLlmJsonObject [
 	"Return a JSON dictionary that represents the domain object."
 
 	<return: #NeoJSONObject>
