@@ -94,7 +94,9 @@ GtLBasicMessageViewModel >> isAssistantRole [
 
 { #category : #accessing }
 GtLBasicMessageViewModel >> messageHeaderElement [
-	^ GtLMessageHeaderElement new messageViewModel: self
+	^ GtLMessageHeaderElement new
+		messageViewModel: self;
+		showSubtleContentLabelElements
 ]
 
 { #category : #accessing }

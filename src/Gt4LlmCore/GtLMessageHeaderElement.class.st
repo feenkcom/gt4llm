@@ -110,6 +110,16 @@ GtLMessageHeaderElement >> onThreadMessageViewModelChanged: anAnnouncement [
 ]
 
 { #category : #'api - visibility' }
+GtLMessageHeaderElement >> showProminentContentLabelElement [
+	contentLabelElement showProminentContentLabelElement
+]
+
+{ #category : #'api - visibility' }
+GtLMessageHeaderElement >> showSubtleContentLabelElements [
+	contentLabelElement showSubtleContentLabelElements
+]
+
+{ #category : #'api - visibility' }
 GtLMessageHeaderElement >> showToolbarElement [
 	^ toolbarElement visibility: BlVisibility visible
 ]
