@@ -297,7 +297,9 @@ GtLAnthropicProvider >> performToolCallsIn: result with: activeTools [
 				self state
 					ifCanContinue: [ toolMessage beRunningExecutionState.
 						[ |domainObject|
-						domainObject := activeTools performToolCall: aToolCall.
+						domainObject := activeTools 
+							performToolCall: aToolCall
+							inContext: (self createToolExecutionContext).
 						toolMessage output: domainObject ]
 							ensure: [ toolMessage beFinishedExecutionState ] ]
 					ifDisabled: [ toolMessage beSkippedExecutionState ].

@@ -13,7 +13,7 @@ GtLDomainObject >> gtJsonObjectViewFor: aView [
 	^ aView forward
 		title: 'Serialized object';
 		priority: 10;
-		object: [ self serializeToOpenAIResponseJsonObject asGtJson ];
+		object: [ self serializeToLlmJsonObject asGtJson ];
 		view: #gtJsonObjectFor:context:
 ]
 
@@ -26,27 +26,19 @@ GtLDomainObject >> isErrorDomainObject [
 ]
 
 { #category : #'api - serializing' }
-GtLDomainObject >> serializeToAnthropicResponseJsonString [
-	"Return a JSON string that represents the domain object."
-
-	<return: #String>
-	^ STONJSON toString: self serializeToOpenAIResponseJsonObject
-]
-
-{ #category : #'api - serializing' }
 GtLDomainObject >> serializeToAnthropicResponseOutput [
 	"Return a JSON that represents tool response output.
 	See GtLToolMessage>>#serializeForAnthropicMessagesAPI for more information."
 
 	<return: #Array of: #NeoJSONObject>
 	^ {NeoJSONObject new
-			at: 'text' put: self serializeToAnthropicResponseJsonString;
+			at: 'text' put: self serializeToLlmJsonString;
 			at: 'type' put: 'text';
 			yourself}
 ]
 
 { #category : #'api - serializing' }
-GtLDomainObject >> serializeToOpenAIResponseJsonObject [
+GtLDomainObject >> serializeToLlmJsonObject [
 	"Return a JSON dictionary that represents the domain object."
 
 	<return: #NeoJSONObject>
@@ -54,11 +46,11 @@ GtLDomainObject >> serializeToOpenAIResponseJsonObject [
 ]
 
 { #category : #'api - serializing' }
-GtLDomainObject >> serializeToOpenAIResponseJsonString [
+GtLDomainObject >> serializeToLlmJsonString [
 	"Return a JSON string that represents the domain object."
 
 	<return: #String>
-	^ STONJSON toString: self serializeToOpenAIResponseJsonObject
+	^ STONJSON toString: self serializeToLlmJsonObject
 ]
 
 { #category : #'api - serializing' }
@@ -68,7 +60,7 @@ GtLDomainObject >> serializeToOpenAIResponseOutput [
 
 	<return: #Array of: #NeoJSONObject>
 	^ {NeoJSONObject new
-			at: #text put: self serializeToOpenAIResponseJsonString;
+			at: #text put: self serializeToLlmJsonString;
 			at: #type put: #input_text;
 			yourself}
 ]

@@ -105,7 +105,7 @@ GtLClassDomainObject >> originalTraitCompositionString: aString [
 ]
 
 { #category : #'api - serializing' }
-GtLClassDomainObject >> serializeToOpenAIResponseJsonObject [
+GtLClassDomainObject >> serializeToLlmJsonObject [
 	"Return a JSON dictionary that represents the domain object."
 
 	<return: #NeoJSONObject>

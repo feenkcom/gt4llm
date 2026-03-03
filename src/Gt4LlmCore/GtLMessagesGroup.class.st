@@ -153,7 +153,8 @@ GtLMessagesGroup >> messagesWithAndAfter: aMessage [
 
 { #category : #accessing }
 GtLMessagesGroup >> serialize [
-	^ {'messages' -> (self items collect: #serializeForOpenAIResponsesAPI)} asDictionary
+	^ {'messages' -> (self items collect: [ :each | 
+			each serializeForOpenAIResponsesAPI])} asDictionary
 ]
 
 { #category : #accessing }

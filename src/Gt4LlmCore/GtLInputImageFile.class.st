@@ -13,7 +13,7 @@ GtLInputImageFile >> contentType [
 ]
 
 { #category : #serialization }
-GtLInputImageFile >> serializeForAnthropicMessagesAPI [
+GtLInputImageFile >> serializeToAnthropicResponseOutput [
 	^ {
 		'type' -> 'image'.
 		'source'-> {
@@ -24,7 +24,7 @@ GtLInputImageFile >> serializeForAnthropicMessagesAPI [
 ]
 
 { #category : #serialization }
-GtLInputImageFile >> serializeForOpenAIResponsesAPI [
+GtLInputImageFile >> serializeToOpenAIResponseOutput [
 	^ {'type' -> 'input_image'.
 		'image_url' -> ('data:'
 			,self contentType

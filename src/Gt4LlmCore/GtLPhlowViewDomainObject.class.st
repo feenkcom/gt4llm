@@ -36,12 +36,7 @@ GtLPhlowViewDomainObject >> serializeToAnthropicResponseOutput [
 ]
 
 { #category : #'api - serializing' }
-GtLPhlowViewDomainObject >> serializeToOpenAIResponseImages [
-	^ {GtLPrimitiveImageData fromElement:  phlowView asElement}
-]
-
-{ #category : #'api - serializing' }
-GtLPhlowViewDomainObject >> serializeToOpenAIResponseJsonObject [
+GtLPhlowViewDomainObject >> serializeToLlmJsonObject [
 	"Return a JSON dictionary that represents the domain object."
 	<return: #NeoJSONObject>
 	| data |
@@ -52,6 +47,11 @@ GtLPhlowViewDomainObject >> serializeToOpenAIResponseJsonObject [
 		yourself.
 	
 	^ data
+]
+
+{ #category : #'api - serializing' }
+GtLPhlowViewDomainObject >> serializeToOpenAIResponseImages [
+	^ {GtLPrimitiveImageData fromElement:  phlowView asElement}
 ]
 
 { #category : #'api - serializing' }

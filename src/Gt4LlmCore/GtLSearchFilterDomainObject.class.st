@@ -62,7 +62,7 @@ GtLSearchFilterDomainObject >> query: anObject [
 ]
 
 { #category : #'api - serializing' }
-GtLSearchFilterDomainObject >> serializeToOpenAIResponseJsonObject [
+GtLSearchFilterDomainObject >> serializeToLlmJsonObject [
 	"Return a JSON dictionary that represents the domain object."
 
 	<return: #NeoJSONObject>

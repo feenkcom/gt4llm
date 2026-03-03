@@ -40,7 +40,7 @@ GtLClassSubclassesDomainObject >> gtSubclassesFor: aView [
 ]
 
 { #category : #'api - serializing' }
-GtLClassSubclassesDomainObject >> serializeToOpenAIResponseJsonObject [
+GtLClassSubclassesDomainObject >> serializeToLlmJsonObject [
 	"Return a JSON dictionary that represents the domain object."
 
 	<return: #NeoJSONObject>

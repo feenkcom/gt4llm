@@ -66,6 +66,12 @@ GtLProvider >> createPromptCompactionMessage [
 	^message
 ]
 
+{ #category : #'private - execution' }
+GtLProvider >> createToolExecutionContext [
+	^ GtLToolExecutionContext new 
+			objectStorage: self chat objectStorage
+]
+
 { #category : #accessing }
 GtLProvider >> defaultAssistantMessageClass [
 	^ GtLChatMessage

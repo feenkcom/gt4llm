@@ -76,7 +76,7 @@ GtLSmalltalkCodeEvaluationDomainObject >> objectId: anObject [
 ]
 
 { #category : #serialization }
-GtLSmalltalkCodeEvaluationDomainObject >> serializeToOpenAIResponseJsonObject [
+GtLSmalltalkCodeEvaluationDomainObject >> serializeToLlmJsonObject [
 	"Return a JSON dictionary that represents the domain object."
 
 	<return: #NeoJSONObject>
