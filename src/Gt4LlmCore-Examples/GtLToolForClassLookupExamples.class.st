@@ -17,12 +17,12 @@ GtLToolForClassLookupExamples >> lookupClassForExistingClass [
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
 	self assert: result isErrorDomainObject not.
-	self assert: (result serializeToOpenAIResponseJsonString includesSubstring: '"class":"GtLToolForClassLookup"').
-	self assert: (result serializeToOpenAIResponseJsonString includesSubstring: '"package":"Gt4LlmCore"').
-	self assert: (result serializeToOpenAIResponseJsonString includesSubstring: '"classSlots":[]').
-	self assert: (result serializeToOpenAIResponseJsonString includesSubstring: '"instanceSlots":[]').
-	self assert: (result serializeToOpenAIResponseJsonString includesSubstring: '"allInstanceMethods"').
-	self assert: (result serializeToOpenAIResponseJsonString includesSubstring: '"allClassMethods"').
+	self assert: (result serializeToLlmJsonString includesSubstring: '"class":"GtLToolForClassLookup"').
+	self assert: (result serializeToLlmJsonString includesSubstring: '"package":"Gt4LlmCore"').
+	self assert: (result serializeToLlmJsonString includesSubstring: '"classSlots":[]').
+	self assert: (result serializeToLlmJsonString includesSubstring: '"instanceSlots":[]').
+	self assert: (result serializeToLlmJsonString includesSubstring: '"allInstanceMethods"').
+	self assert: (result serializeToLlmJsonString includesSubstring: '"allClassMethods"').
 
 	^ call
 ]

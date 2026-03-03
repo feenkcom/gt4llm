@@ -17,8 +17,8 @@ GtLToolForClassSearchExamples >> searchClassesWithMatches [
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
 	self assert: result isErrorDomainObject not.
-	self assert: (result serializeToOpenAIResponseJsonString includesSubstring: 'GtLToolForClassReferences').
-	self assert: (result serializeToOpenAIResponseJsonString includesSubstring: 'GtLToolForClassSearch').
+	self assert: (result serializeToLlmJsonString includesSubstring: 'GtLToolForClassReferences').
+	self assert: (result serializeToLlmJsonString includesSubstring: 'GtLToolForClassSearch').
 	^ call
 ]
 

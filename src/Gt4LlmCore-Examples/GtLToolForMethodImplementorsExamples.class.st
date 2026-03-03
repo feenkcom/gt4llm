@@ -17,7 +17,7 @@ GtLToolForMethodImplementorsExamples >> implementorsForExistingMethodName [
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
 	self assert: result isErrorDomainObject not.
-	self assert: (result serializeToOpenAIResponseJsonString includesSubstring: 'GtLAbstractFunctionTool>>#performToolCall:').
+	self assert: (result serializeToLlmJsonString includesSubstring: 'GtLAbstractFunctionTool>>#performToolCall:').
 	^ call
 ]
 

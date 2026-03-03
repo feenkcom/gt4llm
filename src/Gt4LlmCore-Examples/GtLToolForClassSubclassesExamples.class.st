@@ -37,7 +37,7 @@ GtLToolForClassSubclassesExamples >> classSubclassesForExistingClass [
 	self assert: result isErrorDomainObject not.
 
 	self
-		assert: (result serializeToOpenAIResponseJsonString
+		assert: (result serializeToLlmJsonString
 				includesSubstring: 'GtLToolForClassReferences').
 	^ call
 ]
