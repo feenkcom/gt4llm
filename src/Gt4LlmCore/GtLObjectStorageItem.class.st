@@ -62,7 +62,9 @@ GtLObjectStorageItem >> objectValueDescription [
 
 { #category : #accessing }
 GtLObjectStorageItem >> objectValueString [
-	^ [ self objectValue gtDisplayString ]
+	^ [ | string |
+	string := self objectValue printString.
+	string first: (string size min: 100) ]
 		on: Error
 		do: [ :anError | 'Error printing object' ]
 ]

@@ -20,7 +20,6 @@ GtLToolForObjectStorageListExamples >> listObjectsWithStorage [
 	self assert: call tool == tool.
 	self assert: (result isKindOf: GtLMagritteInputModel).
 	model := result model.
-	self assert: model isErrorDomainObject not.
 	self assert: model items size equals: 2.
 	self assert: (model items collect: #objectValue) asSet equals: (Set with: 'One' with: 2).
 	^ call

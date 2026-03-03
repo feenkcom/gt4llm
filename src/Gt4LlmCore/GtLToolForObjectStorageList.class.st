@@ -27,6 +27,6 @@ GtLToolForObjectStorageList >> privatePerformToolCall: aToolCall inContext: anEx
 				objectId: eachId;
 				objectValue: (anExecutionContext objectStorage objectAt: eachId);
 				yourself ].
-	^ GtLObjectStorageItemsDomainObject new
+	^ GtLObjectStorageItems new
 		items: items
 ]
