@@ -1,6 +1,6 @@
 Class {
-	#name : #GtLObjectStorageItemsDomainObject,
-	#superclass : #GtLDomainObject,
+	#name : #GtLObjectStorageItems,
+	#superclass : #Object,
 	#instVars : [
 		'items'
 	],
@@ -8,7 +8,7 @@ Class {
 }
 
 { #category : #'gt-view' }
-GtLObjectStorageItemsDomainObject >> gtItemsFor: aView [
+GtLObjectStorageItems >> gtItemsFor: aView [
 	<gtView>
 	<gtLlmView>
 	items ifNil: [ ^ aView empty ].
@@ -21,17 +21,17 @@ GtLObjectStorageItemsDomainObject >> gtItemsFor: aView [
 ]
 
 { #category : #accessing }
-GtLObjectStorageItemsDomainObject >> items [
+GtLObjectStorageItems >> items [
 	^ items ifNil: [ #() ]
 ]
 
 { #category : #accessing }
-GtLObjectStorageItemsDomainObject >> items: anObject [
+GtLObjectStorageItems >> items: anObject [
 	items := anObject
 ]
 
 { #category : #magritte }
-GtLObjectStorageItemsDomainObject >> itemsDescription [
+GtLObjectStorageItems >> itemsDescription [
 	<magritteDescription>
 
 	^ MAToManyRelationDescription new
