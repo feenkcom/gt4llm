@@ -18,7 +18,7 @@ GtLToolForMethodReferencesExamples >> methodReferencesForExistingSelector [
 	self assert: call tool == tool.
 	self assert: result isErrorDomainObject not.
 	self
-		assert: (result serializeToOpenAIResponseJsonString
+		assert: (result serializeToLlmJsonString
 				includesSubstring: 'GtLToolForMethodReferencesExamples>>#methodReferencesForExistingSelector').
 	^ call
 ]

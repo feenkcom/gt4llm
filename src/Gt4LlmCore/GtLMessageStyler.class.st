@@ -366,7 +366,7 @@ GtLMessageStyler >> styleButton: anAnnotation for: object withTool: aBlock [
 	self
 		styleButton: anAnnotation
 		for: object
-		defaultLabel: #printString
+		defaultLabel: #gtDisplayString
 		withTool: aBlock
 ]
 
@@ -538,10 +538,10 @@ GtLMessageStyler >> styleLinkText: aSubText valid: hasValidTarget [
 ]
 
 { #category : #accessing }
-GtLMessageStyler >> styleName: aClassAnnotation [
+GtLMessageStyler >> styleName: anAnnotation [
 	| nameNode aLinkColor |
 
-	(nameNode := aClassAnnotation nameNode)
+	(nameNode := anAnnotation nameNode)
 		ifNil: [ ^ self ].
 
 	aLinkColor := nameNode isDefined
@@ -641,7 +641,6 @@ GtLMessageStyler >> variableBindings [
 
 { #category : #generated }
 GtLMessageStyler >> visitAnnotation: anAnnotation [
-	self styleAutoHidingAnnotation: anAnnotation.
 	^ self visitAnnotationParse: anAnnotation
 ]
 
@@ -654,6 +653,7 @@ GtLMessageStyler >> visitBold: aBoldNode [
 { #category : #accessing }
 GtLMessageStyler >> visitClassAnnotation: aClassAnnotation [
 	self visitAnnotation: aClassAnnotation.
+	self styleAutoHidingAnnotation: aClassAnnotation.
 	self styleName: aClassAnnotation.
 	self
 		styleButton: aClassAnnotation
@@ -746,6 +746,7 @@ GtLMessageStyler >> visitItalic: anItalicNode [
 { #category : #accessing }
 GtLMessageStyler >> visitMethodAnnotation: aMethodAnnotation [
 	self visitAnnotation: aMethodAnnotation.
+	self styleAutoHidingAnnotation: aMethodAnnotation.
 	self styleName: aMethodAnnotation.
 	self
 		styleButton: aMethodAnnotation
@@ -756,11 +757,23 @@ GtLMessageStyler >> visitMethodAnnotation: aMethodAnnotation [
 ]
 
 { #category : #accessing }
+GtLMessageStyler >> visitPackageAnnotation: aMethodAnnotation [
+	self visitAnnotation: aMethodAnnotation.
+	self styleAutoHidingAnnotation: aMethodAnnotation.
+	self styleName: aMethodAnnotation.
+	self
+		styleButton: aMethodAnnotation
+		withTool: [ GtPackageCoderTool package: aMethodAnnotation imageObject ].
+	self
+		styleExpandingObject: aMethodAnnotation
+		withDefault: LepiterConstants defaultPackageShowSelector
+]
+
+{ #category : #accessing }
 GtLMessageStyler >> visitPragmaAnnotation2: aPragmaAnnotation [
 	self visitAnnotation: aPragmaAnnotation.
 	self styleName: aPragmaAnnotation.
-	aPragmaAnnotation hasPragmaNameSpecified
-		ifTrue: [ self styleAutoHidingAnnotation: aPragmaAnnotation ].
+	self styleAutoHidingAnnotation: aPragmaAnnotation.
 	self
 		styleButton: aPragmaAnnotation
 		withTool: [ GtInspectorTool

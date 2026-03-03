@@ -39,11 +39,13 @@ GtLObjectStorage >> generateNewUUID [
 { #category : #views }
 GtLObjectStorage >> gtObjectsByUUIDFor: aView [
 	<gtView>
-	^ aView forward
+	objectsByUUID ifNil: [ ^ aView empty ].
+	^ aView columnedList
 		title: 'Objects by UUID';
-		priority: 10;
-		object: [ objectsByUUID ];
-		view: #gtItemsFor:
+		items: [ objectsByUUID associations ];
+		column: 'Key' text: [ :each | each key asString36 ] width: 200;
+		column: 'Value' text: [ :each | each value ]; 
+		send: [ :each | each value ]
 ]
 
 { #category : #'api - testing' }

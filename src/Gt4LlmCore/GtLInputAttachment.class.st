@@ -38,3 +38,13 @@ GtLInputAttachment >> fileReference: aFileReference [
 GtLInputAttachment >> gtDisplayOn: aStream [
 	^ self fileReference gtDisplayOn: aStream
 ]
+
+{ #category : #serialization }
+GtLInputAttachment >> serializeToAnthropicResponseOutput [
+	^ self subclassResponsibility
+]
+
+{ #category : #serialization }
+GtLInputAttachment >> serializeToOpenAIResponseOutput [
+	^ self subclassResponsibility
+]

@@ -55,7 +55,7 @@ GtLIncorrectArgumentValueDomainObject >> messageText [
 ]
 
 { #category : #'api - serializing' }
-GtLIncorrectArgumentValueDomainObject >> serializeToOpenAIResponseJsonObject [
+GtLIncorrectArgumentValueDomainObject >> serializeToLlmJsonObject [
 	"Return a JSON dictionary that represents the domain object."
 
 	<return: #NeoJSONObject>

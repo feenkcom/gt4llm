@@ -21,8 +21,8 @@ GtLToolForSearchForLepiterPagesExamples >> documentationLookupForExistingPage [
 	self assert: call tool == tool.
 	self assert: result isErrorDomainObject not.
 	self assert: result pages size equals: 1.
-	self assert: (result serializeToOpenAIResponseJsonString includesSubstring: 'Warmup: understanding the Money classes').
-	self assert: (result serializeToOpenAIResponseJsonString includesSubstring: 'uuid').
+	self assert: (result serializeToLlmJsonString includesSubstring: 'Warmup: understanding the Money classes').
+	self assert: (result serializeToLlmJsonString includesSubstring: 'uuid').
 	^ call
 ]
 
@@ -71,7 +71,7 @@ GtLToolForSearchForLepiterPagesExamples >> documentationLookupForMultipleKnowled
 	self assert: call tool == tool.
 	self assert: result isErrorDomainObject not.
 	self assert: result pages isNotEmpty.
-	self assert: (result serializeToOpenAIResponseJsonString includesSubstring: 'Warmup: understanding the Money classes').
+	self assert: (result serializeToLlmJsonString includesSubstring: 'Warmup: understanding the Money classes').
 	^ call
 ]
 

@@ -8,7 +8,7 @@ Class {
 }
 
 { #category : #'api - serializing' }
-GtLStringDomainObject >> serializeToOpenAIResponseJsonObject [
+GtLStringDomainObject >> serializeToLlmJsonObject [
 	"Return a JSON dictionary that represents the domain object."
 
 	<return: #String>

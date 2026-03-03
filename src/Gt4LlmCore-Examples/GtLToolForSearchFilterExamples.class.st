@@ -26,7 +26,7 @@ GtLToolForSearchFilterExamples >> searchFilterForExampleMethods [
 					eachMethod methodClass = GtLToolForSearchFilterExamples
 						and: [ eachMethod selector = #searchFilterForExampleMethods ] ]).
 	self
-		assert: (result serializeToOpenAIResponseJsonString
+		assert: (result serializeToLlmJsonString
 				includesSubstring: 'GtLToolForSearchFilterExamples>>#searchFilterForExampleMethods').
 	^ call
 ]

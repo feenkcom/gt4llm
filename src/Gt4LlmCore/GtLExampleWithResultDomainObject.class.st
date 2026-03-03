@@ -2,7 +2,8 @@ Class {
 	#name : #GtLExampleWithResultDomainObject,
 	#superclass : #GtLDomainObject,
 	#instVars : [
-		'exampleWithResult'
+		'exampleWithResult',
+		'objectId'
 	],
 	#category : #'Gt4LlmCore-Domain Objects'
 }
@@ -62,6 +63,16 @@ GtLExampleWithResultDomainObject >> isSuccessResult [
 ]
 
 { #category : #accessing }
+GtLExampleWithResultDomainObject >> objectId [
+	^ objectId
+]
+
+{ #category : #accessing }
+GtLExampleWithResultDomainObject >> objectId: anObject [
+	objectId := anObject
+]
+
+{ #category : #accessing }
 GtLExampleWithResultDomainObject >> safeReturnValuePrintString [
 	^ [ | object |
 	object := (self isErrorResult or: [ self isFailureResult ])
@@ -79,15 +90,8 @@ GtLExampleWithResultDomainObject >> serializeToAnthropicResponseOutput [
 				anPrimitiveImage serializeToAnthropicResponseOutput ]).
 ]
 
-{ #category : #'api - serializing' }
-GtLExampleWithResultDomainObject >> serializeToOpenAIResponseImages [
-	^ (self isErrorResult or: [ self isFailureResult ])
-		ifFalse: [ #() ]
-		ifTrue: [ self exampleWithResult returnValue serializeToOpenAIResponseImages ]. 
-]
-
-{ #category : #'api - serializing' }
-GtLExampleWithResultDomainObject >> serializeToOpenAIResponseJsonObject [
+{ #category : #serialization }
+GtLExampleWithResultDomainObject >> serializeToLlmJsonObject [
 	"Return a JSON dictionary that represents the domain object."
 
 	<return: #NeoJSONObject>
@@ -97,7 +101,15 @@ GtLExampleWithResultDomainObject >> serializeToOpenAIResponseJsonObject [
 		at: #selector put: self exampleWithResult selector asString;
 		at: #status put: self statusText;
 		at: #result put: self safeReturnValuePrintString;
+		at: #objectId put: self objectId;
 		yourself
+]
+
+{ #category : #'api - serializing' }
+GtLExampleWithResultDomainObject >> serializeToOpenAIResponseImages [
+	^ (self isErrorResult or: [ self isFailureResult ])
+		ifFalse: [ #() ]
+		ifTrue: [ self exampleWithResult returnValue serializeToOpenAIResponseImages ]. 
 ]
 
 { #category : #'api - serializing' }

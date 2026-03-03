@@ -40,7 +40,7 @@ GtLRefactoringMethodImplementorsDomainObject >> methodName: anObject [
 ]
 
 { #category : #'api - serializing' }
-GtLRefactoringMethodImplementorsDomainObject >> serializeToOpenAIResponseJsonObject [
+GtLRefactoringMethodImplementorsDomainObject >> serializeToLlmJsonObject [
 	"Return a JSON dictionary that represents the domain object."
 
 	<return: #NeoJSONObject>

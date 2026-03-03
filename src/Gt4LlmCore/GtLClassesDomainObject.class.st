@@ -44,7 +44,7 @@ GtLClassesDomainObject >> mayHaveMore: aBoolean [
 ]
 
 { #category : #'api - serializing' }
-GtLClassesDomainObject >> serializeToOpenAIResponseJsonObject [
+GtLClassesDomainObject >> serializeToLlmJsonObject [
 	"Return a JSON dictionary that represents the domain object."
 
 	<return: #NeoJSONObject>

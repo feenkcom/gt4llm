@@ -16,7 +16,7 @@ GtLRefactoringToolForClassReferencesExamples >> classReferencesForExistingClass 
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result serializeToOpenAIResponseJsonString includesSubstring: 'GtLRefactoringClassReferencesHolder').
+	self assert: (result serializeToLlmJsonString includesSubstring: 'GtLRefactoringClassReferencesHolder').
 	^ tool
 ]
 
@@ -35,7 +35,7 @@ GtLRefactoringToolForClassReferencesExamples >> classReferencesForUnknownClass [
 	self assert: result isErrorDomainObject.
 	self assert: result objectName equals: 'UnknownClassName'.
 	self
-		assert: result serializeToOpenAIResponseJsonString
+		assert: result serializeToLlmJsonString
 		equals: '{"error":"UnknownClassName is not found","missingObject":"UnknownClassName"}'.
 	^ tool
 ]

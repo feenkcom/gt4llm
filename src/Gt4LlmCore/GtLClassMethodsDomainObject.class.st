@@ -40,7 +40,7 @@ GtLClassMethodsDomainObject >> methods: anObject [
 ]
 
 { #category : #'api - serializing' }
-GtLClassMethodsDomainObject >> serializeToOpenAIResponseJsonObject [
+GtLClassMethodsDomainObject >> serializeToLlmJsonObject [
 	"Return a JSON dictionary that represents the domain object."
 
 	<return: #NeoJSONObject>
