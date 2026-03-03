@@ -3,6 +3,9 @@ Class {
 	#superclass : #GtLBasicMessageElement,
 	#traits : 'TBrSizeAdjustable',
 	#classTraits : 'TBrSizeAdjustable classTrait',
+	#instVars : [
+		'attributesBuilder'
+	],
 	#category : #'Gt4LlmCore-UI - Elements'
 }
 
@@ -14,6 +17,8 @@ GtMessageOneLineMultiLabelSummaryElement >> defaultLayout [
 { #category : #initialization }
 GtMessageOneLineMultiLabelSummaryElement >> initialize [
 	super initialize.
+	
+	attributesBuilder := BlTextAttributesBuilder new.
 
 	self
 		addAptitude: (BrLayoutResizerAptitude new
@@ -45,6 +50,18 @@ GtMessageOneLineMultiLabelSummaryElement >> onMessageViewModelContentsChanged: a
 { #category : #'private - event handling' }
 GtMessageOneLineMultiLabelSummaryElement >> onThreadMessageViewModelChanged: anAnnouncement [
 	BlTaskAction enqueueElement: self action: [ self updateElement ]
+]
+
+{ #category : #'api - updating' }
+GtMessageOneLineMultiLabelSummaryElement >> showProminentContentLabelElement [
+	attributesBuilder foreground: self theme editor defaultTextForeground.
+	self updateExistingLabelStylings
+]
+
+{ #category : #'api - updating' }
+GtMessageOneLineMultiLabelSummaryElement >> showSubtleContentLabelElements [
+	attributesBuilder foreground: self theme button disabledTextColor.
+	self updateExistingLabelStylings.
 ]
 
 { #category : #'private - hooks' }
@@ -80,7 +97,8 @@ GtMessageOneLineMultiLabelSummaryElement >> unsubscribeFromMessageViewModel [
 { #category : #'private - updating' }
 GtMessageOneLineMultiLabelSummaryElement >> updateElement [
 	| aBuilder |
-	aBuilder := GtMessageOneLineMultiLabelSummaryBuilder new.
+	aBuilder := GtMessageOneLineMultiLabelSummaryBuilder new
+		attributesBuilder: attributesBuilder.
 	self messageViewModel contentOneLineMultiLabelSummaryWith: aBuilder.
 
 	aBuilder labelElements
@@ -92,4 +110,15 @@ GtMessageOneLineMultiLabelSummaryElement >> updateElement [
 	self
 		removeChildren;
 		addChildren: aBuilder labelElements
+]
+
+{ #category : #'private - updating' }
+GtMessageOneLineMultiLabelSummaryElement >> updateExistingLabelStylings [
+	self
+		childrenDo: [ :eachChild | 
+			eachChild userData
+				at: #isMessageSummaryLabel
+				ifPresent: [ :aBoolean | 
+					eachChild aptitude attributesBuilder attributes: attributesBuilder attributes ]
+				ifAbsent: [  ] ]
 ]
