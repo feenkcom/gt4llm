@@ -676,8 +676,9 @@ GtLChatLiveExamples >> messageWithToolCallExample_magritteMarkdown [
 	self assert: self currentChat isFinishedSuccesss not.
 	self assert: self currentChat messages last executionMessages isEmpty.
 	self
-		waitForChatRunIsDoneThen: [ self assert: self currentChat messages size equals: 2 ].
-	self assert: self currentChat isFinishedSuccesss.
+		waitForChatRunIsDoneThen: [ 
+			self assert: self currentChat messages size equals: 2.
+			self assert: self currentChat isFinishedSuccesss. ].
 	^ self currentChat messages last
 ]
 
