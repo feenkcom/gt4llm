@@ -2,10 +2,21 @@ Class {
 	#name : #GtMessageOneLineMultiLabelSummaryBuilder,
 	#superclass : #Object,
 	#instVars : [
-		'labelElements'
+		'labelElements',
+		'attributesBuilder'
 	],
 	#category : #'Gt4LlmCore-UI - Support'
 }
+
+{ #category : #accessing }
+GtMessageOneLineMultiLabelSummaryBuilder >> attributesBuilder [
+	^ attributesBuilder
+]
+
+{ #category : #accessing }
+GtMessageOneLineMultiLabelSummaryBuilder >> attributesBuilder: anObject [
+	attributesBuilder := anObject
+]
 
 { #category : #'gt - extensions' }
 GtMessageOneLineMultiLabelSummaryBuilder >> gtLabelElementsFor: aView [
@@ -41,13 +52,20 @@ GtMessageOneLineMultiLabelSummaryBuilder >> newTextFromStringStream: aBlock [
 
 { #category : #'api - building' }
 GtMessageOneLineMultiLabelSummaryBuilder >> newWithText: aString [
-	| labelElement |
+	| labelElement labelAptitude |
+	labelAptitude := BrGlamorousLabelAptitude new.
+	
+	attributesBuilder ifNotNil: [ :aBuilder |
+		labelAptitude attributesBuilder attributes: aBuilder attributes ].
+			
 	labelElement := BrLabel new
 			hFitContentLimited;
 			vFitContent;
-			aptitude: BrGlamorousLabelAptitude"BrGlamorousShrinkingLabelAptitude" new;
+			aptitude: labelAptitude;
 			beSmallSize;
 			text: aString.
+			
+	labelElement userData at: #isMessageSummaryLabel put: true.
 
 	(labelElements isNotEmpty and: [ labelElements last isKindOf: BrLabel ])
 		ifTrue: [ self textSeparator ].
@@ -65,6 +83,18 @@ GtMessageOneLineMultiLabelSummaryBuilder >> textSeparator [
 					foreground: BrGlamorousColors disabledButtonTextColor);
 			beSmallSize;
 			text: '|'.
+			
+	labelElement userData at: #isMessageSummarySeparator put: true.
 
 	labelElements add: labelElement
+]
+
+{ #category : #accessing }
+GtMessageOneLineMultiLabelSummaryBuilder >> textStyler [
+	^ textStyler
+]
+
+{ #category : #accessing }
+GtMessageOneLineMultiLabelSummaryBuilder >> textStyler: anObject [
+	textStyler := anObject
 ]
