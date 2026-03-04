@@ -35,7 +35,7 @@ GtLToolForLepiterSnippetsCreateExamples >> missingSnippetPageUid [
 				yourself } } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteInputModel).
+	self assert: (result isKindOf: GtLMagritteBasedModel).
 	model := result model.
 	self assert: model snippets first missingArgument equals: 'pageUid'.
 	^ call
@@ -59,7 +59,7 @@ GtLToolForLepiterSnippetsCreateExamples >> missingSnippetText [
 				yourself } } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteInputModel).
+	self assert: (result isKindOf: GtLMagritteBasedModel).
 	model := result model.
 	self assert: model snippets first missingArgument equals: 'snippetText'.
 	^ call
@@ -74,7 +74,7 @@ GtLToolForLepiterSnippetsCreateExamples >> missingSnippets [
 	call rawArguments: {} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteInputModel).
+	self assert: (result isKindOf: GtLMagritteBasedModel).
 	self assert: result model missingArgument equals: 'snippets'.
 	^ call
 ]
@@ -110,7 +110,7 @@ GtLToolForLepiterSnippetsCreateExamples >> successfulExampleSnippetCreate [
 				yourself } } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteInputModel).
+	self assert: (result isKindOf: GtLMagritteBasedModel).
 	^ call
 ]
 
@@ -132,7 +132,7 @@ GtLToolForLepiterSnippetsCreateExamples >> successfulPharoSnippetCreate [
 				yourself } } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteInputModel).
+	self assert: (result isKindOf: GtLMagritteBasedModel).
 	^ call
 ]
 
@@ -154,7 +154,7 @@ GtLToolForLepiterSnippetsCreateExamples >> successfulPythonSnippetCreate [
 				yourself } } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteInputModel).
+	self assert: (result isKindOf: GtLMagritteBasedModel).
 	^ call
 ]
 
@@ -176,7 +176,7 @@ GtLToolForLepiterSnippetsCreateExamples >> successfulShellSnippetCreate [
 				yourself } } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteInputModel).
+	self assert: (result isKindOf: GtLMagritteBasedModel).
 	^ call
 ]
 
@@ -198,7 +198,7 @@ GtLToolForLepiterSnippetsCreateExamples >> successfulSnippetCreate [
 				yourself } } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteInputModel).
+	self assert: (result isKindOf: GtLMagritteBasedModel).
 	^ call
 ]
 
@@ -227,7 +227,7 @@ GtLToolForLepiterSnippetsCreateExamples >> successfulSnippetsCreateMultiple [
 				yourself } } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteInputModel).
+	self assert: (result isKindOf: GtLMagritteBasedModel).
 	^ call
 ]
 
@@ -249,7 +249,7 @@ GtLToolForLepiterSnippetsCreateExamples >> successfulTextSnippetCreate [
 				yourself } } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteInputModel).
+	self assert: (result isKindOf: GtLMagritteBasedModel).
 	^ call
 ]
 

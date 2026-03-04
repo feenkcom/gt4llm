@@ -240,7 +240,7 @@ GtLChatLiveExamples >> messageExample_lepiterPage_improveSingleTextSnippet [
 		sendWith: [ :message |
 			message
 				markdown: 'Improve the content of the first snippet in this page. Use a LepiterTransformation to express the change.';
-				addInputModel: (GtLLepiterPageInputModel new
+				addInputModel: (GtLLepiterPageModel new
 					name: lepiterPage title;
 					model: lepiterPage);
 				addResponseFormat: (GtLResponseMagritteFormat new
@@ -265,7 +265,7 @@ GtLChatLiveExamples >> messageExample_lepiterPage_improveSnippets [
 				message
 					tools: GtLTools gtSearch , GtLTools leSearch;
 					markdown: 'Improve the content of the snippets in this lepiter page. Use change transformations to express the changes.';
-					addInputModel: (GtLLepiterPageInputModel new
+					addInputModel: (GtLLepiterPageModel new
 							name: lepiterPage title;
 							model: lepiterPage);
 					addResponseFormat: (GtLResponseMagritteFormat new
@@ -290,7 +290,7 @@ GtLChatLiveExamples >> messageExample_lepiterPage_improveTextSnippets [
 		sendWith: [ :message |
 			message
 				markdown: 'Improve the content of the text snippets in this lepiter page. Use Lepiter transformations to express the changes.';
-				addInputModel: (GtLLepiterPageInputModel new
+				addInputModel: (GtLLepiterPageModel new
 					name: lepiterPage title;
 					model: lepiterPage);
 				addResponseFormat: (GtLResponseMagritteFormat new
@@ -316,7 +316,7 @@ GtLChatLiveExamples >> messageExample_lepiterPage_locatePageUid [
 		sendWith: [ :message |
 			message
 				markdown: 'Return the id of this lepiter page.';
-				addInputModel: (GtLLepiterPageInputModel new
+				addInputModel: (GtLLepiterPageModel new
 					name: lepiterPage title;
 					model: lepiterPage);
 				addResponseFormat: (GtLResponseStringFormat new
@@ -342,7 +342,7 @@ GtLChatLiveExamples >> messageExample_lepiterPage_locateSnippetUid [
 		sendWith: [ :message |
 			message
 				markdown: 'Return the uid of the fourth snippet in the page. Take nesting of snippets into account when counting snippets';
-				addInputModel: (GtLLepiterPageInputModel new
+				addInputModel: (GtLLepiterPageModel new
 					name: lepiterPage title;
 					model: lepiterPage);
 				addResponseFormat: (GtLResponseMagritteFormat new
@@ -369,7 +369,7 @@ GtLChatLiveExamples >> messageExample_lepiterPage_summarize [
 		sendWith: [ :message |
 			message
 				markdown: 'Create a summary of this lepiter page.';
-				addInputModel: (GtLLepiterPageInputModel new
+				addInputModel: (GtLLepiterPageModel new
 					name: lepiterPage title;
 					model: lepiterPage);
 				addResponseFormat: (GtLResponseMagritteFormat new

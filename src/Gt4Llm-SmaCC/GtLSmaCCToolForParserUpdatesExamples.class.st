@@ -40,7 +40,7 @@ GtLSmaCCToolForParserUpdatesExamples >> invalidParserClass [
 							asDictionary} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteInputModel).
+	self assert: (result isKindOf: GtLMagritteBasedModel).
 	self assert: call arguments size equals: 1.
 	self assert: (call arguments anyOne isKindOf: GtLSmaCCUpdateParser).
 	self assert: result model isErrorDomainObject.
@@ -71,7 +71,7 @@ GtLSmaCCToolForParserUpdatesExamples >> performUpdates [
 							asDictionary} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteInputModel).
+	self assert: (result isKindOf: GtLMagritteBasedModel).
 	self assert: call arguments size equals: 1.
 	self assert: (call arguments anyOne isKindOf: GtLSmaCCUpdateParser).
 	self assert: (result model isKindOf: GtLSmaCCParserUpdateResult).

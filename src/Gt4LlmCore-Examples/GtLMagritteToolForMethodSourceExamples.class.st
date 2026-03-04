@@ -19,7 +19,7 @@ GtLMagritteToolForMethodSourceExamples >> methodSourceForExistingClassSideMethod
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteInputModel).
+	self assert: (result isKindOf: GtLMagritteBasedModel).
 	self assert: call arguments size equals: 1.
 	self
 		assert: ((call arguments at: 'methodDescriptor') isKindOf: GtLMethodReference).
@@ -56,7 +56,7 @@ GtLMagritteToolForMethodSourceExamples >> methodSourceForExistingInstanceSideMet
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteInputModel).
+	self assert: (result isKindOf: GtLMagritteBasedModel).
 	self assert: call arguments size equals: 1.
 	self
 		assert: ((call arguments at: 'methodDescriptor') isKindOf: GtLMethodReference).
@@ -100,7 +100,7 @@ GtLMagritteToolForMethodSourceExamples >> methodSourceForUnknownClass [
 	self
 		assert: ((call arguments at: 'methodDescriptor') isKindOf: GtLMethodReference).
 		
-	self assert: (result isKindOf: GtLMagritteInputModel).
+	self assert: (result isKindOf: GtLMagritteBasedModel).
 	model := result model.
 	self assert: model isErrorDomainObject.
 	self assert: model objectName equals: 'ClassThatDoesNotExist'.
@@ -127,7 +127,7 @@ GtLMagritteToolForMethodSourceExamples >> methodSourceForUnknownClassSideMethod 
 	self
 		assert: ((call arguments at: 'methodDescriptor') isKindOf: GtLMethodReference).
 	
-	self assert: (result isKindOf: GtLMagritteInputModel).
+	self assert: (result isKindOf: GtLMagritteBasedModel).
 	model := result model.
 	self assert: model isErrorDomainObject.
 	self
@@ -155,7 +155,7 @@ GtLMagritteToolForMethodSourceExamples >> methodSourceForUnknownInstanceSideMeth
 	self
 		assert: ((call arguments at: 'methodDescriptor') isKindOf: GtLMethodReference).
 		
-	self assert: (result isKindOf: GtLMagritteInputModel).
+	self assert: (result isKindOf: GtLMagritteBasedModel).
 	model := result model.
 	self assert: model isErrorDomainObject.
 	self

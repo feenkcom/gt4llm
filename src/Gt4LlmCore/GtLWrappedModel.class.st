@@ -1,6 +1,6 @@
 Class {
-	#name : #GtLInputModel,
-	#superclass : #Object,
+	#name : #GtLWrappedModel,
+	#superclass : #GtLBasicModel,
 	#instVars : [
 		'name',
 		'model'
@@ -9,33 +9,33 @@ Class {
 }
 
 { #category : #adding }
-GtLInputModel >> addContentOneLineSummaryTo: aStringStream [
+GtLWrappedModel >> addContentOneLineSummaryTo: aStringStream [
 	self subclassResponsibility
 ]
 
 { #category : #adding }
-GtLInputModel >> addContentTo: aDictionary [
+GtLWrappedModel >> addContentTo: aDictionary [
 	self subclassResponsibility
 ]
 
 { #category : #adding }
-GtLInputModel >> addInstructionsTo: aMessageInstructions [
+GtLWrappedModel >> addInstructionsTo: aMessageInstructions [
 	self subclassResponsibility
 ]
 
 { #category : #adding }
-GtLInputModel >> contentOneLineMultiLabelSummaryWith: aBuilder [
+GtLWrappedModel >> contentOneLineMultiLabelSummaryWith: aBuilder [
 	aBuilder newTextFromStringStream: [ :aWriteStream | 
 		self addContentOneLineSummaryTo: aWriteStream ]
 ]
 
 { #category : #accessing }
-GtLInputModel >> description [
+GtLWrappedModel >> description [
 	^ model gtDisplayString
 ]
 
 { #category : #views }
-GtLInputModel >> gtExportedJsonFor: aView [
+GtLWrappedModel >> gtExportedJsonFor: aView [
 	<gtView>
 	^ aView forward
 		title: 'JSON string';
@@ -48,12 +48,12 @@ GtLInputModel >> gtExportedJsonFor: aView [
 ]
 
 { #category : #'gt - inspector' }
-GtLInputModel >> gtInspectorTargetModels [
+GtLWrappedModel >> gtInspectorTargetModels [
 	^ {self . model}
 ]
 
 { #category : #'gt - inspector' }
-GtLInputModel >> gtViewContentDictionaryFor: aView [
+GtLWrappedModel >> gtViewContentDictionaryFor: aView [
 	<gtView>
 	<gtLlmView>
 	^ aView forward
@@ -68,7 +68,7 @@ GtLInputModel >> gtViewContentDictionaryFor: aView [
 ]
 
 { #category : #ui }
-GtLInputModel >> gtViewsInContext: aPhlowContext [
+GtLWrappedModel >> gtViewsInContext: aPhlowContext [
 	| collectedViews |
 	collectedViews := Array
 			streamContents: [ :aStream | 
@@ -87,70 +87,30 @@ GtLInputModel >> gtViewsInContext: aPhlowContext [
 ]
 
 { #category : #accessing }
-GtLInputModel >> model [
+GtLWrappedModel >> model [
 	^ model
 ]
 
 { #category : #accessing }
-GtLInputModel >> model: anObject [ 
+GtLWrappedModel >> model: anObject [ 
 	model := anObject
 ]
 
 { #category : #accessing }
-GtLInputModel >> name [
+GtLWrappedModel >> name [
 	^ name
 ]
 
 { #category : #accessing }
-GtLInputModel >> name: aString [ 
+GtLWrappedModel >> name: aString [ 
 	name := aString 
 ]
 
 { #category : #serialization }
-GtLInputModel >> serializeModelToJsonString [
-	"Return a JSON string that represents the domain object."
-	| object |
-	
-	object := NeoJSONObject new.
-	self addContentTo: object.
-	
-	^ NeoJSONWriter toStringPretty: (object at: name)
-]
-
-{ #category : #serialization }
-GtLInputModel >> serializeToAnthropicResponseOutput [
-	"Return a JSON that represents tool response output."
-
-	<return: #Array of: #NeoJSONObject>
-	^ {NeoJSONObject new
-			at: 'text' put: self serializeToLlmJsonString;
-			at: 'type' put: 'text';
-			yourself}
-]
-
-{ #category : #serialization }
-GtLInputModel >> serializeToLlmJsonObject [
+GtLWrappedModel >> serializeToLlmJsonObject [
 	| wrapperObject |
 	wrapperObject := NeoJSONObject new.
 	self addContentTo: wrapperObject.
 	
 	^ (wrapperObject at: name)
-]
-
-{ #category : #serialization }
-GtLInputModel >> serializeToLlmJsonString [
-	"Return a JSON string that represents the domain object."
-	
-	^ NeoJSONWriter toStringPretty: self serializeToLlmJsonObject
-]
-
-{ #category : #serialization }
-GtLInputModel >> serializeToOpenAIResponseOutput [
-	"Return a JSON that represents tool response output."
-
-	<return: #Array of: #NeoJSONObject>
-	^ {NeoJSONObject new
-			at: #text put: self serializeToLlmJsonString;
-			at: #type put: #input_text;
-			yourself}
 ]

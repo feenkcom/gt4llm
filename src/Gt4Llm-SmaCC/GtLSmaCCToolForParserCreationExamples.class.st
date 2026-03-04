@@ -22,7 +22,7 @@ Foo: <number>+;'.
 							'definition' -> definition} asDictionary} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteInputModel).
+	self assert: (result isKindOf: GtLMagritteBasedModel).
 	self assert: call arguments size equals: 1.
 	self assert: (call arguments anyOne isKindOf: GtLSmaCCCreateParser).
 	self assert: (result model isKindOf: GtLSmaCCParserCreationResult).
@@ -59,7 +59,7 @@ Foo: <number>+;'.
 	self assert: call arguments size equals: 1.
 	self assert: (call arguments anyOne isKindOf: GtLSmaCCCreateParser).
 	
-	self assert: (result isKindOf: GtLMagritteInputModel).
+	self assert: (result isKindOf: GtLMagritteBasedModel).
 	self assert: (result model isKindOf: GtLSmaCCParserCreationResult).
 	self assert: result model parserClass equals: #ExpParser.
 	self assert: result model createGrammar source equals: definition.
@@ -95,7 +95,7 @@ Foo: <number>;'} asDictionary} asDictionary.
 	self assert: call arguments size equals: 1.
 	self assert: (call arguments anyOne isKindOf: GtLSmaCCCreateParser).
 	
-	self assert: (result isKindOf: GtLMagritteInputModel).
+	self assert: (result isKindOf: GtLMagritteBasedModel).
 	self assert: result model isErrorDomainObject.
 	^ call
 ]
@@ -121,7 +121,7 @@ Foo: <number> #missing ;'} asDictionary} asDictionary.
 	self assert: call arguments size equals: 1.
 	self assert: (call arguments anyOne isKindOf: GtLSmaCCCreateParser).
 	
-	self assert: (result isKindOf: GtLMagritteInputModel).
+	self assert: (result isKindOf: GtLMagritteBasedModel).
 	self assert: result model isErrorDomainObject.
 	^ call
 ]

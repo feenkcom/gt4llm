@@ -23,7 +23,7 @@ GtLMagritteToolForFilesGrepExamples >> filesGrepForDirectory [
 			'fileNamePatterns' -> #('*.txt') } asDictionary.
 		result := tool performToolCall: call.
 		self assert: call tool == tool.
-		self assert: (result isKindOf: GtLMagritteInputModel).
+		self assert: (result isKindOf: GtLMagritteBasedModel).
 		model := result model.
 		self assert: model files size equals: 2.
 		self assert: (model files anySatisfy: [ :each | each pathString = fileOne pathString ]).
@@ -45,7 +45,7 @@ GtLMagritteToolForFilesGrepExamples >> filesGrepForExistingFiles [
 		'filePath' -> { 'pathString' -> fileOne pathString } asDictionary } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteInputModel).
+	self assert: (result isKindOf: GtLMagritteBasedModel).
 	self assert: call arguments size equals: 2.
 	model := result model.
 	self assert: model query equals: 'beta'.
@@ -72,7 +72,7 @@ GtLMagritteToolForFilesGrepExamples >> filesGrepForMissingFile [
 		'filePath' -> { 'pathString' -> missingPath } asDictionary } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteInputModel).
+	self assert: (result isKindOf: GtLMagritteBasedModel).
 	model := result model.
 	self assert: model isErrorDomainObject.
 	self assert: model objectName = missingPath.
@@ -100,7 +100,7 @@ GtLMagritteToolForFilesGrepExamples >> filesGrepForNestedDirectory [
 				'fileNamePatterns' -> #('*.txt')} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteInputModel).
+	self assert: (result isKindOf: GtLMagritteBasedModel).
 	model := result model.
 	self assert: model files size equals: 2.
 	self
@@ -132,7 +132,7 @@ GtLMagritteToolForFilesGrepExamples >> filesGrepWithFileNamePatterns [
 			'fileNamePatterns' -> #('*.md') } asDictionary.
 		result := tool performToolCall: call.
 		self assert: call tool == tool.
-		self assert: (result isKindOf: GtLMagritteInputModel).
+		self assert: (result isKindOf: GtLMagritteBasedModel).
 		model := result model.
 		self assert: model files size equals: 1.
 		self assert: model files first pathString equals: fileTwo pathString.
@@ -149,7 +149,7 @@ GtLMagritteToolForFilesGrepExamples >> filesGrepWithoutQuery [
 	call rawArguments: { 'filePath' -> Dictionary new } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteInputModel).
+	self assert: (result isKindOf: GtLMagritteBasedModel).
 	self assert: result model isErrorDomainObject.
 	self assert: result model missingArgument equals: 'query'.
 	^ call
