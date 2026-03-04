@@ -769,6 +769,18 @@ GtLMessageStyler >> visitPackageAnnotation: aMethodAnnotation [
 		withDefault: LepiterConstants defaultPackageShowSelector
 ]
 
+{ #category : #generated }
+GtLMessageStyler >> visitPageAnnotation: aPageAnnotation [
+	| linkText |
+	self visitAnnotation: aPageAnnotation.
+	self styleAutoHidingAnnotation: aPageAnnotation.
+	linkText := self text
+		from: aPageAnnotation parent startPosition
+		to: aPageAnnotation parent stopPosition.
+	
+	self styleButton: aPageAnnotation withTool: [ LePagePhlowTool page: aPageAnnotation asPageInDefaultLogicalDatabase ].
+]
+
 { #category : #accessing }
 GtLMessageStyler >> visitPragmaAnnotation2: aPragmaAnnotation [
 	self visitAnnotation: aPragmaAnnotation.
