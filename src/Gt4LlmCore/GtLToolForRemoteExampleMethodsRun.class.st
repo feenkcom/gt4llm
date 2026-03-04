@@ -146,7 +146,6 @@ GtLToolForRemoteExampleMethodsRun >> checkNamesFromArguments: arguments onProble
 			fromString: (arguments
 					at: 'checkNames'
 					ifAbsent: [ aBlock value: (GtLMissingArgumentDomainObject new
-							receiverName: self name;
 							arguments: arguments;
 							missingArgument: 'checkNames') ]).
 	self validateCheckNames: checkNames onProblemDo: aBlock.

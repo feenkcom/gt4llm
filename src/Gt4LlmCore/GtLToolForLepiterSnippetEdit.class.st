@@ -50,13 +50,11 @@ GtLToolForLepiterSnippetEdit >> privatePerformToolCall: aToolCall inContext: anE
 	pageUidString := arguments
 		at: 'pageUid'
 		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-			receiverName: self name;
 			arguments: arguments;
 			missingArgument: 'pageUid' ].
 	pageUidString := pageUidString trimBoth.
 	pageUidString isEmpty
 		ifTrue: [ ^ GtLMissingArgumentDomainObject new
-			receiverName: self name;
 			arguments: arguments;
 			missingArgument: 'pageUid' ].
 	pageUid := [ UUID fromString36: pageUidString ]
@@ -68,13 +66,11 @@ GtLToolForLepiterSnippetEdit >> privatePerformToolCall: aToolCall inContext: anE
 	snippetUidString := arguments
 		at: 'snippetUid'
 		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-			receiverName: self name;
 			arguments: arguments;
 			missingArgument: 'snippetUid' ].
 	snippetUidString := snippetUidString trimBoth.
 	snippetUidString isEmpty
 		ifTrue: [ ^ GtLMissingArgumentDomainObject new
-			receiverName: self name;
 			arguments: arguments;
 			missingArgument: 'snippetUid' ].
 	snippetUid := LeUID new.
@@ -87,13 +83,11 @@ GtLToolForLepiterSnippetEdit >> privatePerformToolCall: aToolCall inContext: anE
 	updatedText := arguments
 		at: 'updatedText'
 		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-			receiverName: self name;
 			arguments: arguments;
 			missingArgument: 'updatedText' ].
 	updatedText := updatedText asString.
 	updatedText isEmpty
 		ifTrue: [ ^ GtLMissingArgumentDomainObject new
-			receiverName: self name;
 			arguments: arguments;
 			missingArgument: 'updatedText' ].
 	self database

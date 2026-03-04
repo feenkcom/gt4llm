@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLToolForObjectStorageList,
 	#superclass : #GtLAbstractMagritteFunctionTool,
-	#category : #Gt4LlmCore
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }
@@ -19,7 +19,6 @@ GtLToolForObjectStorageList >> privatePerformToolCall: aToolCall inContext: anEx
 	| items |
 	anExecutionContext objectStorage
 		ifNil: [ ^ GtLMissingInformationDomainObject new
-			receiverName: self name;
 			missingModelName: 'objectStorage' ].
 	items := anExecutionContext objectStorage objectIds
 		collect: [ :eachId |

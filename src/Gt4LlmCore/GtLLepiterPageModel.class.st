@@ -1,37 +1,37 @@
 Class {
-	#name : #GtLLepiterPageInputModel,
-	#superclass : #GtLInputModel,
+	#name : #GtLLepiterPageModel,
+	#superclass : #GtLWrappedModel,
 	#category : #Gt4LlmCore
 }
 
 { #category : #'instance creation' }
-GtLLepiterPageInputModel class >> forPage: aPage [
+GtLLepiterPageModel class >> forPage: aPage [
 	^ self new 
 		name: aPage title;
 		model: aPage
 ]
 
 { #category : #adding }
-GtLLepiterPageInputModel >> addContentOneLineSummaryTo: aWriteStream [
+GtLLepiterPageModel >> addContentOneLineSummaryTo: aWriteStream [
 	aWriteStream
 		nextPutAll: 'Page: ';
 		nextPutAll: (model ifNotNil: [ :aPage | aPage title asString ] ifNil: [ '<missing page>' ])
 ]
 
 { #category : #adding }
-GtLLepiterPageInputModel >> addContentTo: aDictionary [
+GtLLepiterPageModel >> addContentTo: aDictionary [
 	aDictionary 
 		at: name
 		put: (LeJsonV4 uniqueInstance serializePretty: model)
 ]
 
 { #category : #adding }
-GtLLepiterPageInputModel >> addInstructionsTo: aMessageInstructions [
+GtLLepiterPageModel >> addInstructionsTo: aMessageInstructions [
 	"No instructions now for a Lepiter page"
 ]
 
 { #category : #printing }
-GtLLepiterPageInputModel >> printOn: aStream [
+GtLLepiterPageModel >> printOn: aStream [
 
 	super printOn: aStream.
 	

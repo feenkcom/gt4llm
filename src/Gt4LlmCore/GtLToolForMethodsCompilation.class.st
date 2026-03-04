@@ -20,7 +20,6 @@ GtLToolForMethodsCompilation >> methodResultFromDescriptor: descriptor [
 	className := descriptor
 			at: 'className'
 			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-					receiverName: self name;
 					arguments: descriptor;
 					missingArgument: 'className' ].
 	class := className
@@ -31,13 +30,11 @@ GtLToolForMethodsCompilation >> methodResultFromDescriptor: descriptor [
 	source := descriptor
 			at: 'sourceCode'
 			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-					receiverName: self name;
 					arguments: descriptor;
 					missingArgument: 'sourceCode' ].
 	source := source asString trimBoth.
 	source isEmpty
 		ifTrue: [ ^ GtLMissingArgumentDomainObject new
-				receiverName: self name;
 				arguments: descriptor;
 				missingArgument: 'sourceCode' ].
 	protocol := descriptor at: 'protocol' ifAbsent: [ 'as yet unclassified' ].
@@ -133,7 +130,6 @@ GtLToolForMethodsCompilation >> privatePerformToolCall: aToolCall inContext: anE
 	methodsArgument := arguments
 			at: 'methods'
 			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-					receiverName: self name;
 					arguments: arguments;
 					missingArgument: 'methods' ].
 	(methodsArgument isCollection and: [ methodsArgument isString not ])

@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLIncorrectArgumentValueDomainObject,
-	#superclass : #GtLDomainObject,
+	#superclass : #GtLErroneousConditionDomainObject,
 	#instVars : [
 		'argumentName',
 		'argumentValue',
@@ -37,11 +37,6 @@ GtLIncorrectArgumentValueDomainObject >> errorDescription [
 { #category : #accessing }
 GtLIncorrectArgumentValueDomainObject >> errorDescription: anObject [
 	errorDescription := anObject
-]
-
-{ #category : #'api - testing' }
-GtLIncorrectArgumentValueDomainObject >> isErrorDomainObject [
-	^ true
 ]
 
 { #category : #'api - accessing' }

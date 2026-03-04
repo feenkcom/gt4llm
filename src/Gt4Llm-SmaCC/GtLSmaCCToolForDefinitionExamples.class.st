@@ -14,7 +14,7 @@ GtLSmaCCToolForDefinitionExamples >> definitionForMissingParser [
 		rawArguments: {'parserDefinition' -> {'parserClass' -> 'AsdfParser'} asDictionary} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteInputModel).
+	self assert: (result isKindOf: GtLMagritteBasedModel).
 	self assert: call arguments size equals: 1.
 	self assert: (call arguments anyOne isKindOf: GtLSmaCCParserReference).
 	model := result model.
@@ -32,12 +32,13 @@ GtLSmaCCToolForDefinitionExamples >> definitionForParser [
 		rawArguments: {'parserDefinition' -> {'parserClass' -> 'JSParser'} asDictionary} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteInputModel).
+	self assert: (result isKindOf: GtLMagritteBasedModel).
 	self assert: call arguments size equals: 1.
 	self assert: (call arguments anyOne isKindOf: GtLSmaCCParserReference).
 	model := result model.
 	self assert: model parserClass equals: 'JSParser'.
 	self assert: model scannerClass equals: 'JSScanner'.
+	self assert: model package equals: 'SmaCC_Javascript_Parser'.
 	self assert: model definition equals: #JSParser asClass parserDefinitionString.
 	^ call
 ]

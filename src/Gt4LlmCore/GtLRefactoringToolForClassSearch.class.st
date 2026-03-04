@@ -46,13 +46,11 @@ GtLRefactoringToolForClassSearch >> privatePerformToolCall: aToolCall inContext:
 	| arguments query promise result allClassNames |
 	self model
 		ifNil: [ ^ GtLMissingInformationDomainObject new
-				receiverName: self name;
 				missingModelName: 'model' ].
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	query := arguments
 			at: 'query'
 			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-					receiverName: self name;
 					arguments: arguments;
 					missingArgument: 'query' ].
 	allClassNames := self classNames.

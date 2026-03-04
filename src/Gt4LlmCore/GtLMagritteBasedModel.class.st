@@ -1,11 +1,11 @@
 Class {
-	#name : #GtLMagritteInputModel,
-	#superclass : #GtLInputModel,
+	#name : #GtLMagritteBasedModel,
+	#superclass : #GtLWrappedModel,
 	#category : #Gt4LlmCore
 }
 
 { #category : #adding }
-GtLMagritteInputModel >> addContentOneLineSummaryTo: aStringStream [
+GtLMagritteBasedModel >> addContentOneLineSummaryTo: aStringStream [
 	GtMagritteStringStreamDataExporter new
 		object: model;
 		stringStream: aStringStream;
@@ -13,7 +13,7 @@ GtLMagritteInputModel >> addContentOneLineSummaryTo: aStringStream [
 ]
 
 { #category : #adding }
-GtLMagritteInputModel >> addContentTo: aDictionary [
+GtLMagritteBasedModel >> addContentTo: aDictionary [
 	| exporter dict |
 	exporter := GtMagritteJSONDataExporter forObject: model.
 	dict := exporter exportObject asDictionary.
@@ -21,7 +21,7 @@ GtLMagritteInputModel >> addContentTo: aDictionary [
 ]
 
 { #category : #adding }
-GtLMagritteInputModel >> addInstructionsTo: aMessageInstructions [
+GtLMagritteBasedModel >> addInstructionsTo: aMessageInstructions [
 	| exporter |
 	exporter := GtMagritteJSONSchemaExporter
 			forModelClass: model class.
@@ -34,7 +34,7 @@ GtLMagritteInputModel >> addInstructionsTo: aMessageInstructions [
 ]
 
 { #category : #views }
-GtLMagritteInputModel >> gtSpawnModelFor: anAction [
+GtLMagritteBasedModel >> gtSpawnModelFor: anAction [
 	<gtAction>
 	^ anAction button
 		icon: BrGlamorousVectorIcons inspect;
@@ -44,7 +44,7 @@ GtLMagritteInputModel >> gtSpawnModelFor: anAction [
 ]
 
 { #category : #printing }
-GtLMagritteInputModel >> printOn: aStream [
+GtLMagritteBasedModel >> printOn: aStream [
 
 	super printOn: aStream.
 	

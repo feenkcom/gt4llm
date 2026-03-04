@@ -51,8 +51,18 @@ GtLMethodWithSource >> initializeFromCompiledMethod: aMethod [
 ]
 
 { #category : #accessing }
+GtLMethodWithSource >> isClassSide [
+	^ self methodReference isClassSide
+]
+
+{ #category : #accessing }
+GtLMethodWithSource >> methodClass [
+	^ self methodReference methodClass
+]
+
+{ #category : #accessing }
 GtLMethodWithSource >> methodClassName [
-	^ self methodReference targetClassName
+	^ self methodReference methodClassName
 ]
 
 { #category : #accessing }

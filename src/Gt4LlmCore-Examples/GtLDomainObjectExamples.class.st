@@ -34,24 +34,59 @@ GtLDomainObjectExamples >> classDomainObject [
 { #category : #'examples - class' }
 GtLDomainObjectExamples >> missingArgumentDomainObject [
 	<gtExample>
-	| aDomainObject aJsonObject |
-	aDomainObject := GtLMissingArgumentDomainObject new
-			receiverName: 'lookupClass';
+	| domainObject jsonObject |
+	domainObject := GtLMissingArgumentDomainObject new
 			missingArgument: 'className';
 			arguments: (OrderedDictionary new
 					at: #argumentOne put: 108;
 					yourself).
-	aJsonObject := aDomainObject serializeToLlmJsonObject.
+					
+	self assert: domainObject isErrorDomainObject.
+	self
+		assert: domainObject missingArgument
+		equals: 'className'.
+	self
+		assert: domainObject errorMessage
+		equals: 'Missing argument called className'.
+	
+	jsonObject := domainObject serializeToLlmJsonObject.
+	self 
+		assert: jsonObject
+		equals: ((NeoJSONObject new) 
+			at: 'missingArgument' 
+				put: 'className'; 
+			at: 'errorMessage'
+				put: 'Missing argument called className';
+			yourself).
 
-	^ aDomainObject
+
+	^ domainObject
 ]
 
 { #category : #'examples - class' }
 GtLDomainObjectExamples >> missingDomainObject [
 	<gtExample>
-	| aDomainObject aJsonObject |
-	aDomainObject := GtLMissingDomainObject new objectName: GtLDummyOneObject name.
-	aJsonObject := aDomainObject serializeToLlmJsonObject.
+	| domainObject jsonObject |
+	domainObject := GtLMissingDomainObject new 
+		objectName: GtLDummyOneObject name.
+		
+	self assert: domainObject isErrorDomainObject.
+	self
+		assert: domainObject missingObjectName
+		equals: 'GtLDummyOneObject'.
+	self
+		assert: domainObject errorMessage
+		equals: 'GtLDummyOneObject is not found'.
+	
+	jsonObject := domainObject serializeToLlmJsonObject.
+	self 
+		assert: jsonObject
+		equals: ((NeoJSONObject new) 
+			at: 'missingObjectName' 
+				put: 'GtLDummyOneObject'; 
+			at: 'errorMessage'
+				put: 'GtLDummyOneObject is not found';
+			yourself).
 
-	^ aDomainObject
+	^ domainObject
 ]

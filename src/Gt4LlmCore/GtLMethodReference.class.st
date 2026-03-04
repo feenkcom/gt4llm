@@ -61,7 +61,8 @@ GtLMethodReference >> compiledMethodIfPresent: aPresentBlock ifMissing: anErrorB
 				value: (GtLMissingDomainObject new 
 						objectName: self methodClassName) ].
 
-	self isClassSide ifTrue: [ targetClass := targetClass class ].
+	self isClassSide ifTrue: [ 
+		targetClass := targetClass class ].
 	methodSymbol := self methodName asSymbol.
 	method := targetClass lookupSelector: methodSymbol.
 	method ifNil: [ ^ anErrorBlock 
@@ -73,7 +74,7 @@ GtLMethodReference >> compiledMethodIfPresent: aPresentBlock ifMissing: anErrorB
 
 { #category : #initialization }
 GtLMethodReference >> initializeFromCompiledMethod: aMethod [ 
-	methodClassName := aMethod methodClass name.
+	methodClassName := aMethod methodClass instanceSide name.
 	methodName := aMethod selector. 
 	classSide := aMethod methodClass isClassSide
 ]
@@ -140,7 +141,7 @@ GtLMethodReference >> methodObjectIfMissing: anErrorBlock [
 		compiledMethodIfPresent: [ :aMethod | 
 			aMethod isSourceSearchable
 				ifTrue: [ GtLMethodWithSource fromCompiledMethod: aMethod ]
-				ifFalse: [ GtLNotSourceSearchableMethodDomainObject new method: aMethod ] ]
+				ifFalse: [ GtLNotSourceSearchableMethod  fromCompiledMethod: aMethod ] ]
 		ifMissing: anErrorBlock
 ]
 
