@@ -26,8 +26,9 @@ GtLMagritteToolForMethodSource >> name [
 
 { #category : #execution }
 GtLMagritteToolForMethodSource >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
-	| arguments methodDescriptor  |
+	| arguments methodDescriptor |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
+	
 	methodDescriptor := arguments
 			at: 'methodDescriptor'
 			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
