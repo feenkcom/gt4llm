@@ -18,7 +18,7 @@ GtLToolForLepiterSnippetsRemoveExamples >> missingSnippetKnowledgeBaseUid [
 				yourself } } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteInputModel).
+	self assert: (result isKindOf: GtLMagritteBasedModel).
 	model := result model.
 	self assert: model snippets first missingArgument equals: 'knowledgeBaseUid'.
 	^ call
@@ -38,7 +38,7 @@ GtLToolForLepiterSnippetsRemoveExamples >> missingSnippetPageUid [
 				yourself } } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteInputModel).
+	self assert: (result isKindOf: GtLMagritteBasedModel).
 	model := result model.
 	self assert: model snippets first missingArgument equals: 'pageUid'.
 	^ call
@@ -58,7 +58,7 @@ GtLToolForLepiterSnippetsRemoveExamples >> missingSnippetUid [
 				yourself } } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteInputModel).
+	self assert: (result isKindOf: GtLMagritteBasedModel).
 	model := result model.
 	self assert: model snippets first missingArgument equals: 'snippetUid'.
 	^ call
@@ -73,7 +73,7 @@ GtLToolForLepiterSnippetsRemoveExamples >> missingSnippets [
 	call rawArguments: {} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteInputModel).
+	self assert: (result isKindOf: GtLMagritteBasedModel).
 	self assert: result model missingArgument equals: 'snippets'.
 	^ call
 ]
@@ -113,7 +113,7 @@ GtLToolForLepiterSnippetsRemoveExamples >> multipleSnippetRemoval [
 				yourself } } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteInputModel).
+	self assert: (result isKindOf: GtLMagritteBasedModel).
 	model := result model.
 	self assert: model snippets size equals: 2.
 	self assert: model snippets first status equals: 'removed'.
@@ -148,7 +148,7 @@ GtLToolForLepiterSnippetsRemoveExamples >> successfulSnippetRemoval [
 				yourself } } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteInputModel).
+	self assert: (result isKindOf: GtLMagritteBasedModel).
 	model := result model.
 	self assert: model snippets size equals: 1.
 	self assert: model snippets first status equals: 'removed'.

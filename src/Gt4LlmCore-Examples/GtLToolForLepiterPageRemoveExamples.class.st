@@ -15,7 +15,7 @@ GtLToolForLepiterPageRemoveExamples >> missingDatabaseId [
 	call rawArguments: { 'pageUid' -> (UUID new asString36) } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteInputModel).
+	self assert: (result isKindOf: GtLMagritteBasedModel).
 	self assert: result model missingArgument equals: 'databaseId'.
 	^ call
 ]
@@ -32,7 +32,7 @@ GtLToolForLepiterPageRemoveExamples >> missingPageUid [
 	call rawArguments: { 'databaseId' -> db uuidString } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteInputModel).
+	self assert: (result isKindOf: GtLMagritteBasedModel).
 	self assert: result model missingArgument equals: 'pageUid'.
 	^ call
 ]
@@ -54,7 +54,7 @@ GtLToolForLepiterPageRemoveExamples >> successfulPageRemove [
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteInputModel).
+	self assert: (result isKindOf: GtLMagritteBasedModel).
 	model := result model.
 	self assert: model status equals: 'removed'.
 	self assert: model databaseId equals: db uuidString.

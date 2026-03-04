@@ -23,7 +23,7 @@ GtLSmaCCToolForParserCompilationExamples >> compile [
 				asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteInputModel).
+	self assert: (result isKindOf: GtLMagritteBasedModel).
 	self assert: call arguments size equals: 1.
 	self assert: (call arguments anyOne isKindOf: GtLSmaCCParserReference).
 	self assert: (result model isKindOf: GtLSmaCCParserReference).
@@ -61,7 +61,7 @@ GtLSmaCCToolForParserCompilationExamples >> invalidParserClass [
 		rawArguments: {'compileParser' -> {'parserClass' -> 'AbcParser'} asDictionary} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteInputModel).
+	self assert: (result isKindOf: GtLMagritteBasedModel).
 	self assert: call arguments size equals: 1.
 	self assert: (call arguments anyOne isKindOf: GtLSmaCCParserReference).
 	self assert: result model isErrorDomainObject.

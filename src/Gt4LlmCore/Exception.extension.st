@@ -36,7 +36,7 @@ Exception >> gtActionStartChatOnExceptionWithObjectsFor: anAction [
 			chat sendWith: [ :aMessage |
 				aMessage 
 					markdown: ('Analyse this exception and propose a possible fix.');
-					addInputModel: (GtLJsonSchemaInputModel new
+					addInputModel: (GtLJsonSchemaBasedModel new
 						name: 'Exception';
 						model: serializedObject;
 						schema: (NeoJSONSchema new 
@@ -58,7 +58,7 @@ Exception >> gtActionStartChatOnPlainExceptionFor: anAction [
 			chat sendWith: [ :aMessage |
 				aMessage 
 					markdown: ('Analyse this exception and propose a possible fix.');
-					addInputModel: (GtLJsonSchemaInputModel new
+					addInputModel: (GtLJsonSchemaBasedModel new
 						name: 'Exception';
 						model: self serializeToLlmJsonObject;
 						schema: (NeoJSONSchema new 
