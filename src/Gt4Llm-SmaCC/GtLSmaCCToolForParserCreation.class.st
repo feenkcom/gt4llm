@@ -6,7 +6,7 @@ Class {
 
 { #category : #accessing }
 GtLSmaCCToolForParserCreation >> description [
-	^ 'Creates a new SmaCC parser.
+	^ 'Creates a new SmaCC parser, or updates an existing parser.
 	
 Example JSON arguments:
 {
