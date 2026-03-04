@@ -31,7 +31,6 @@ GtLToolForClassLookup >> privatePerformToolCall: aToolCall inContext: anExecutio
 	className := arguments
 			at: 'className'
 			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-					receiverName: self name;
 					arguments: arguments;
 					missingArgument: 'className' ].
 	class := className

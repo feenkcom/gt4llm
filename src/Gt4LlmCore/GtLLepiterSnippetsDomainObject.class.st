@@ -1,10 +1,10 @@
 Class {
 	#name : #GtLLepiterSnippetsDomainObject,
-	#superclass : #GtLDomainObject,
+	#superclass : #Object,
 	#instVars : [
 		'snippets'
 	],
-	#category : #Gt4LlmCore
+	#category : #'Gt4LlmCore-Magritte Objects'
 }
 
 { #category : #'gt-views' }
@@ -21,22 +21,6 @@ GtLLepiterSnippetsDomainObject >> gtSnippetsFor: aView [
 		column: 'Snippet uid' text: [ :each | each snippetUid ] width: 160
 ]
 
-{ #category : #serialization }
-GtLLepiterSnippetsDomainObject >> serializeToLlmJsonObject [
-	"Return a JSON dictionary that represents the domain object."
-
-	<return: #NeoJSONObject>
-	^ NeoJSONObject new
-		at: #snippets
-			put: (self snippets collect: [ :eachSnippet | 
-				NeoJSONObject new
-					at: #status put: eachSnippet status;
-					at: #pageUid put: eachSnippet pageUid;
-					at: #snippetUid put: eachSnippet snippetUid;
-					yourself ]);
-		yourself
-]
-
 { #category : #accessing }
 GtLLepiterSnippetsDomainObject >> snippets [
 	^ snippets
@@ -45,4 +29,15 @@ GtLLepiterSnippetsDomainObject >> snippets [
 { #category : #accessing }
 GtLLepiterSnippetsDomainObject >> snippets: aCollection [
 	snippets := aCollection
+]
+
+{ #category : #serialization }
+GtLLepiterSnippetsDomainObject >> snippetsDescription [
+	<magritteDescription>
+
+	^ MAToManyRelationDescription new
+		label: 'Snippets';
+		accessor: #snippets;
+		classes: {GtLLepiterSnippetDomainObject};
+		beRequired
 ]

@@ -1,25 +1,38 @@
 Class {
 	#name : #GtLMissingInformationDomainObject,
-	#superclass : #GtLDomainObject,
+	#superclass : #GtLErroneousConditionDomainObject,
 	#instVars : [
-		'receiverName',
-		'missingModelName'
+		'missingModelName',
+		'errorMessage'
 	],
 	#category : #'Gt4LlmCore-Domain Objects'
 }
 
-{ #category : #'api - testing' }
-GtLMissingInformationDomainObject >> isErrorDomainObject [
-	^ true
+{ #category : #accessing }
+GtLMissingInformationDomainObject >> errorMessage [
+	^ errorMessage
+]
+
+{ #category : #accessing }
+GtLMissingInformationDomainObject >> errorMessage: anObject [
+	errorMessage := anObject
+]
+
+{ #category : #accessing }
+GtLMissingInformationDomainObject >> errorMessageDescription [
+	<magritteDescription>
+
+	^ MAStringDescription new
+			label: 'Error message';
+			accessor: #errorMessage;
+			beRequired
 ]
 
 { #category : #'api - accessing' }
 GtLMissingInformationDomainObject >> messageText [
 	"Return an error message"
 
-	^ '{1} is missing {2}'
-		format: {self receiverName.
-				self missingModelName}
+	^ self errorMessage
 ]
 
 { #category : #accessing }
@@ -31,29 +44,29 @@ GtLMissingInformationDomainObject >> missingModelName [
 GtLMissingInformationDomainObject >> missingModelName: aString [
 	"Set a missing model name."
 
-	missingModelName := aString
+	missingModelName := aString.
+	errorMessage ifNil: [
+		errorMessage := 'Missing {1}' format: { missingModelName } ]
 ]
 
 { #category : #accessing }
-GtLMissingInformationDomainObject >> receiverName [
-	^ receiverName
-]
+GtLMissingInformationDomainObject >> missingModelNameDescription [
+	<magritteDescription>
 
-{ #category : #accessing }
-GtLMissingInformationDomainObject >> receiverName: anObject [
-	"Set a receiver name that was missing a model."
-
-	receiverName := anObject
+	^ MAStringDescription new
+			label: 'Missing model name';
+			accessor: #missingModelName;
+			beRequired
 ]
 
 { #category : #'api - serializing' }
 GtLMissingInformationDomainObject >> serializeToLlmJsonObject [
 	"Return a JSON dictionary that represents the domain object."
+	
+	^ GtMagritteJSONDataExporter exportObject: self
+]
 
-	<return: #NeoJSONObject>
-	^ NeoJSONObject new
-		at: #error put: self messageText;
-		at: #missingModel put: self missingModelName;
-		at: #receiver put: self receiverName;
-		yourself
+{ #category : #testing }
+GtLMissingInformationDomainObject >> wasMovedToMagritteDescriptions [
+	^ true
 ]

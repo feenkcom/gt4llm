@@ -20,13 +20,11 @@ GtLToolForMethodsRemoval >> methodResultFromDescriptor: descriptor [
 	classNameValue := descriptor
 		at: 'className'
 		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-			receiverName: self name;
 			arguments: descriptor;
 			missingArgument: 'className' ].
 	classNameString := classNameValue asString trimBoth.
 	classNameString isEmpty
 		ifTrue: [ ^ GtLMissingArgumentDomainObject new
-			receiverName: self name;
 			arguments: descriptor;
 			missingArgument: 'className' ].
 	classSymbol := classNameString asSymbol.
@@ -44,13 +42,11 @@ GtLToolForMethodsRemoval >> methodResultFromDescriptor: descriptor [
 	methodNameValue := descriptor
 		at: 'methodName'
 		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-			receiverName: self name;
 			arguments: descriptor;
 			missingArgument: 'methodName' ].
 	methodNameString := methodNameValue asString trimBoth.
 	methodNameString isEmpty
 		ifTrue: [ ^ GtLMissingArgumentDomainObject new
-			receiverName: self name;
 			arguments: descriptor;
 			missingArgument: 'methodName' ].
 	selector := methodNameString asSymbol.
@@ -126,7 +122,6 @@ GtLToolForMethodsRemoval >> privatePerformToolCall: aToolCall inContext: anExecu
 	methodsArgument := arguments
 			at: 'methods'
 			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-					receiverName: self name;
 					arguments: arguments;
 					missingArgument: 'methods' ].
 	(methodsArgument isCollection and: [ methodsArgument isString not ])

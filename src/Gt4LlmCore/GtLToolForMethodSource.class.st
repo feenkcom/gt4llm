@@ -31,7 +31,6 @@ GtLToolForMethodSource >> privatePerformToolCall: aToolCall inContext: anExecuti
 	className := arguments
 			at: 'className'
 			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-					receiverName: self name;
 					arguments: arguments;
 					missingArgument: 'className' ].
 	class := className
@@ -39,7 +38,6 @@ GtLToolForMethodSource >> privatePerformToolCall: aToolCall inContext: anExecuti
 	methodName := arguments
 			at: 'methodName'
 			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-					receiverName: self name;
 					arguments: arguments;
 					missingArgument: 'methodName' ].
 	isClassSide := arguments

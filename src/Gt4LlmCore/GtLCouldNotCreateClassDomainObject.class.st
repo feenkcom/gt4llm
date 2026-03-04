@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLCouldNotCreateClassDomainObject,
-	#superclass : #GtLDomainObject,
+	#superclass : #GtLErroneousConditionDomainObject,
 	#instVars : [
 		'superclass',
 		'targetClassName',
@@ -45,11 +45,6 @@ GtLCouldNotCreateClassDomainObject >> instanceVariableNames [
 { #category : #accessing }
 GtLCouldNotCreateClassDomainObject >> instanceVariableNames: anObject [
 	instanceVariableNames := anObject
-]
-
-{ #category : #'api - testing' }
-GtLCouldNotCreateClassDomainObject >> isErrorDomainObject [
-	^ true
 ]
 
 { #category : #'api - accessing' }

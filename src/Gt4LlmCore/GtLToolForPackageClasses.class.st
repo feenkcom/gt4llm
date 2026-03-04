@@ -31,7 +31,6 @@ GtLToolForPackageClasses >> privatePerformToolCall: aToolCall inContext: anExecu
 	packageName := argument ifNotNil: [ argument asString ].
 	packageName
 		ifNil: [ ^ GtLMissingArgumentDomainObject new
-				receiverName: self name;
 				arguments: aToolCall arguments;
 				missingArgument: 'packageName' ].
 	organizer := PackageOrganizer packageOrganizer.
