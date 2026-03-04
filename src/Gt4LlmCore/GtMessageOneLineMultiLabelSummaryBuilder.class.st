@@ -62,7 +62,6 @@ GtMessageOneLineMultiLabelSummaryBuilder >> newWithText: aString [
 			hFitContentLimited;
 			vFitContent;
 			aptitude: labelAptitude;
-			beSmallSize;
 			text: aString.
 			
 	labelElement userData at: #isMessageSummaryLabel put: true.
@@ -81,7 +80,6 @@ GtMessageOneLineMultiLabelSummaryBuilder >> textSeparator [
 			vFitContent;
 			aptitude: (BrGlamorousLabelAptitude new
 					foreground: BrGlamorousColors disabledButtonTextColor);
-			beSmallSize;
 			text: '|'.
 			
 	labelElement userData at: #isMessageSummarySeparator put: true.
