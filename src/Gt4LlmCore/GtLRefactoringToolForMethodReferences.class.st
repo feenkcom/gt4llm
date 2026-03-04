@@ -37,13 +37,11 @@ GtLRefactoringToolForMethodReferences >> privatePerformToolCall: aToolCall inCon
 	| arguments selector |
 	self model
 		ifNil: [ ^ GtLMissingInformationDomainObject new
-				receiverName: self name;
 				missingModelName: 'model' ].
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	selector := arguments
 			at: 'selector'
 			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-					receiverName: self name;
 					arguments: arguments;
 					missingArgument: 'selector' ].
 	

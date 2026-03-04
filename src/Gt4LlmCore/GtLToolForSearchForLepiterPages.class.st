@@ -31,7 +31,6 @@ GtLToolForSearchForLepiterPages >> privatePerformToolCall: aToolCall inContext: 
 	query := arguments
 			at: 'query'
 			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-					receiverName: self name;
 					arguments: arguments;
 					missingArgument: 'query' ].
 	baseIds := arguments at: 'knowledgeBases' ifAbsent: [ nil ].

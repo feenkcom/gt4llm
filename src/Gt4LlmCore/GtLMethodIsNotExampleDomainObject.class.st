@@ -1,16 +1,11 @@
 Class {
 	#name : #GtLMethodIsNotExampleDomainObject,
-	#superclass : #GtLDomainObject,
+	#superclass : #GtLErroneousConditionDomainObject,
 	#instVars : [
 		'method'
 	],
 	#category : #'Gt4LlmCore-Domain Objects'
 }
-
-{ #category : #'api - testing' }
-GtLMethodIsNotExampleDomainObject >> isErrorDomainObject [
-	^ true
-]
 
 { #category : #'api - accessing' }
 GtLMethodIsNotExampleDomainObject >> messageText [

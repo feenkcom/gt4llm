@@ -63,13 +63,11 @@ GtLToolForTestClassesRun >> privatePerformToolCall: aToolCall inContext: anExecu
 	rawClassNames := arguments
 			at: 'classNames'
 			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-					receiverName: self name;
 					arguments: arguments;
 					missingArgument: 'classNames' ].
 	classNames := rawClassNames findTokens: String space.
 	classNames isEmpty
 		ifTrue: [ ^ GtLMissingArgumentDomainObject new
-				receiverName: self name;
 				arguments: arguments;
 				missingArgument: 'classNames' ].
 	details := OrderedCollection new.

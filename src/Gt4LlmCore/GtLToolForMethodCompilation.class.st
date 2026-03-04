@@ -31,7 +31,6 @@ GtLToolForMethodCompilation >> privatePerformToolCall: aToolCall inContext: anEx
 	className := arguments
 			at: 'className'
 			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-					receiverName: self name;
 					arguments: arguments;
 					missingArgument: 'className' ].
 	class := className
@@ -42,13 +41,11 @@ GtLToolForMethodCompilation >> privatePerformToolCall: aToolCall inContext: anEx
 	source := arguments
 			at: 'sourceCode'
 			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-					receiverName: self name;
 					arguments: arguments;
 					missingArgument: 'sourceCode' ].
 	source := source asString trimBoth.
 	source isEmpty
 		ifTrue: [ ^ GtLMissingArgumentDomainObject new
-				receiverName: self name;
 				arguments: arguments;
 				missingArgument: 'sourceCode' ].
 	protocol := arguments

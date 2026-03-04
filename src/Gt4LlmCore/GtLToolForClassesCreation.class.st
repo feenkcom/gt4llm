@@ -15,13 +15,11 @@ GtLToolForClassesCreation >> classResultFromDescriptor: descriptor [
 	classNameValue := descriptor
 			at: 'className'
 			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-					receiverName: self name;
 					arguments: descriptor;
 					missingArgument: 'className' ].
 	classNameString := classNameValue asString trimBoth.
 	classNameString isEmpty
 		ifTrue: [ ^ GtLMissingArgumentDomainObject new
-				receiverName: self name;
 				arguments: descriptor;
 				missingArgument: 'className' ].
 	classNameSymbol := classNameString asSymbol.
@@ -30,13 +28,11 @@ GtLToolForClassesCreation >> classResultFromDescriptor: descriptor [
 	superclassValue := descriptor
 			at: 'superclassName'
 			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-					receiverName: self name;
 					arguments: descriptor;
 					missingArgument: 'superclassName' ].
 	superclassName := superclassValue asString trimBoth.
 	superclassName isEmpty
 		ifTrue: [ ^ GtLMissingArgumentDomainObject new
-				receiverName: self name;
 				arguments: descriptor;
 				missingArgument: 'superclassName' ].
 	superclass := Smalltalk globals
@@ -59,7 +55,6 @@ GtLToolForClassesCreation >> classResultFromDescriptor: descriptor [
 	packageName := packageName asString trimBoth.
 	packageName isEmpty
 		ifTrue: [ ^ GtLMissingArgumentDomainObject new
-				receiverName: self name;
 				arguments: descriptor;
 				missingArgument: 'package' ].
 	commentValue := descriptor at: 'comment' ifAbsent: [ nil ].
@@ -157,7 +152,6 @@ GtLToolForClassesCreation >> privatePerformToolCall: aToolCall inContext: anExec
 	classesArgument := arguments
 		at: 'classes'
 		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-			receiverName: self name;
 			arguments: arguments;
 			missingArgument: 'classes' ].
 	(classesArgument isCollection and: [classesArgument isString not ])
