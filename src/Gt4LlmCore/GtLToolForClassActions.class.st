@@ -30,7 +30,6 @@ GtLToolForClassActions >> privatePerformToolCall: aToolCall inContext: anExecuti
 	className := aToolCall anyArgument.
 	targetClass := className
 			ifNil: [ ^ GtLMissingArgumentDomainObject new
-					receiverName: self name;
 					arguments: aToolCall arguments;
 					missingArgument: 'className' ]
 			ifNotNil: [ className

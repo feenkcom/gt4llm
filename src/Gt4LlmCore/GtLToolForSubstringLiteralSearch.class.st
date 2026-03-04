@@ -31,7 +31,6 @@ GtLToolForSubstringLiteralSearch >> privatePerformToolCall: aToolCall inContext:
 	argument := aToolCall anyArgument.
 	argument
 		ifNil: [ ^ GtLMissingArgumentDomainObject new
-				receiverName: self name;
 				arguments: arguments;
 				missingArgument: 'query' ].
 	query := argument asString.

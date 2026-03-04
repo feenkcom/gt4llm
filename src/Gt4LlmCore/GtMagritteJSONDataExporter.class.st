@@ -8,6 +8,13 @@ Class {
 }
 
 { #category : #'instance creation' }
+GtMagritteJSONDataExporter class >> exportObject: anObject [
+	| exporter  |
+	exporter := self forObject: anObject.
+	^ exporter exportObject .
+]
+
+{ #category : #utils }
 GtMagritteJSONDataExporter class >> forObject: aModelClass [
 	^ self new 
 		object: aModelClass

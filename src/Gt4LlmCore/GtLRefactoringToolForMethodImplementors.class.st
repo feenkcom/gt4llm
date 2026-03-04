@@ -37,13 +37,11 @@ GtLRefactoringToolForMethodImplementors >> privatePerformToolCall: aToolCall inC
 	| arguments methodName implementors |
 	self model
 		ifNil: [ ^ GtLMissingInformationDomainObject new
-				receiverName: self name;
 				missingModelName: 'model' ].
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	methodName := arguments
 			at: 'methodName'
 			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-					receiverName: self name;
 					arguments: arguments;
 					missingArgument: 'methodName' ].
 	implementors := Array

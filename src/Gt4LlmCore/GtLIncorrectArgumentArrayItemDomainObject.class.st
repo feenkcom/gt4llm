@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLIncorrectArgumentArrayItemDomainObject,
-	#superclass : #GtLDomainObject,
+	#superclass : #GtLErroneousConditionDomainObject,
 	#instVars : [
 		'argumentName',
 		'argumentValue',
@@ -48,11 +48,6 @@ GtLIncorrectArgumentArrayItemDomainObject >> incorrectItems [
 { #category : #accessing }
 GtLIncorrectArgumentArrayItemDomainObject >> incorrectItems: anObject [
 	incorrectItems := anObject
-]
-
-{ #category : #'api - testing' }
-GtLIncorrectArgumentArrayItemDomainObject >> isErrorDomainObject [
-	^ true
 ]
 
 { #category : #'api - accessing' }

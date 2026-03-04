@@ -36,7 +36,7 @@ GtLRefactoringToolForClassReferencesExamples >> classReferencesForUnknownClass [
 	self assert: result objectName equals: 'UnknownClassName'.
 	self
 		assert: result serializeToLlmJsonString
-		equals: '{"error":"UnknownClassName is not found","missingObject":"UnknownClassName"}'.
+		equals: '{"errorMessage":"UnknownClassName is not found","missingObjectName":"UnknownClassName"}'.
 	^ tool
 ]
 

@@ -31,13 +31,11 @@ GtLToolForClassCreation >> privatePerformToolCall: aToolCall inContext: anExecut
 	classNameValue := arguments
 			at: 'className'
 			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-					receiverName: self name;
 					arguments: aToolCall arguments;
 					missingArgument: 'className' ].
 	classNameString := classNameValue asString trimBoth.
 	classNameString isEmpty
 		ifTrue: [ ^ GtLMissingArgumentDomainObject new
-				receiverName: self name;
 				arguments: aToolCall arguments;
 				missingArgument: 'className' ].
 	classNameSymbol := classNameString asSymbol.
@@ -46,13 +44,11 @@ GtLToolForClassCreation >> privatePerformToolCall: aToolCall inContext: anExecut
 	superclassValue := arguments
 			at: 'superclassName'
 			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-					receiverName: self name;
 					arguments: aToolCall arguments;
 					missingArgument: 'superclassName' ].
 	superclassName := superclassValue asString trimBoth.
 	superclassName isEmpty
 		ifTrue: [ ^ GtLMissingArgumentDomainObject new
-				receiverName: self name;
 				arguments: aToolCall arguments;
 				missingArgument: 'superclassName' ].
 	superclass := Smalltalk globals
@@ -75,7 +71,6 @@ GtLToolForClassCreation >> privatePerformToolCall: aToolCall inContext: anExecut
 	packageName := packageName asString trimBoth.
 	packageName isEmpty
 		ifTrue: [ ^ GtLMissingArgumentDomainObject new
-				receiverName: self name;
 				arguments: aToolCall arguments;
 				missingArgument: 'package' ].
 	commentValue := arguments at: 'comment' ifAbsent: [ nil ].

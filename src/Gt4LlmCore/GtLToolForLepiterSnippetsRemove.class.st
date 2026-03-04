@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'database'
 	],
-	#category : #Gt4LlmCore
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }
@@ -56,7 +56,6 @@ GtLToolForLepiterSnippetsRemove >> privatePerformToolCall: aToolCall inContext: 
 	snippetsArgument := arguments
 		at: 'snippets'
 		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-			receiverName: self name;
 			arguments: arguments;
 			missingArgument: 'snippets' ].
 	(snippetsArgument isCollection and: [ snippetsArgument isString not ])
@@ -83,19 +82,16 @@ GtLToolForLepiterSnippetsRemove >> removeSnippetFrom: snippetArguments [
 	knowledgeBaseUid := snippetArguments knowledgeBaseUid.
 	(knowledgeBaseUid isNil or: [ knowledgeBaseUid trimBoth isEmpty ])
 		ifTrue: [ ^ GtLMissingArgumentDomainObject new
-			receiverName: self name;
 			arguments: snippetArguments;
 			missingArgument: 'knowledgeBaseUid' ].
 	pageUidString := snippetArguments pageUid.
 	(pageUidString isNil or: [ pageUidString trimBoth isEmpty ])
 		ifTrue: [ ^ GtLMissingArgumentDomainObject new
-			receiverName: self name;
 			arguments: snippetArguments;
 			missingArgument: 'pageUid' ].
 	snippetUidString := snippetArguments snippetUid.
 	(snippetUidString isNil or: [ snippetUidString trimBoth isEmpty ])
 		ifTrue: [ ^ GtLMissingArgumentDomainObject new
-			receiverName: self name;
 			arguments: snippetArguments;
 			missingArgument: 'snippetUid' ].
 	targetDatabase := self database.

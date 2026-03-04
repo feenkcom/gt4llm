@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLExceptionDomainObject,
-	#superclass : #GtLDomainObject,
+	#superclass : #GtLErroneousConditionDomainObject,
 	#instVars : [
 		'exception',
 		'description'
@@ -46,11 +46,6 @@ GtLExceptionDomainObject >> gtExceptionStackFor: aView [
 		priority: 1;
 		object: [ self exception ];
 		view: #gtLiveFor:
-]
-
-{ #category : #'api - testing' }
-GtLExceptionDomainObject >> isErrorDomainObject [
-	^ true
 ]
 
 { #category : #'api - accessing' }
