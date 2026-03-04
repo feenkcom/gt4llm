@@ -41,7 +41,6 @@ GtLLepiterShellSnippetCreationRequest >> shellCodeDescription [
 GtLLepiterShellSnippetCreationRequest >> validateSnippetArgumentsFor: aTool ifCorrect: aBlock [
 	(snippetText isNil or: [ snippetText asString isEmpty ])
 		ifTrue: [ ^ GtLMissingArgumentDomainObject new
-			receiverName: aTool name;
 			arguments: self;
 			missingArgument: 'snippetText' ].
 	^ aBlock value

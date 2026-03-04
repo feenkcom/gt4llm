@@ -37,13 +37,11 @@ GtLRefactoringToolForClassLookup >> privatePerformToolCall: aToolCall inContext:
 	| arguments className targetClass |
 	self model
 		ifNil: [ ^ GtLMissingInformationDomainObject new
-				receiverName: self name;
 				missingModelName: 'model' ].
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	className := arguments
 			at: 'className'
 			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-					receiverName: self name;
 					arguments: arguments;
 					missingArgument: 'className' ].
 	targetClass := self model classNamed: className.

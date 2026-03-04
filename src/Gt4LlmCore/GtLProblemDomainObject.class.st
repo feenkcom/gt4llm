@@ -1,40 +1,57 @@
 Class {
 	#name : #GtLProblemDomainObject,
-	#superclass : #GtLDomainObject,
+	#superclass : #GtLErroneousConditionDomainObject,
 	#instVars : [
-		'description'
+		'errorMessage'
 	],
 	#category : #'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #accessing }
 GtLProblemDomainObject >> description [
-	^ description
+	^ self errorMessage
 ]
 
 { #category : #accessing }
 GtLProblemDomainObject >> description: anObject [
-	description := anObject
+	self errorMessage:  anObject
 ]
 
-{ #category : #'api - testing' }
-GtLProblemDomainObject >> isErrorDomainObject [
-	^ true
+{ #category : #accessing }
+GtLProblemDomainObject >> errorMessage [
+	^ errorMessage
+]
+
+{ #category : #accessing }
+GtLProblemDomainObject >> errorMessage: anObject [
+	errorMessage := anObject
+]
+
+{ #category : #'api - accessing' }
+GtLProblemDomainObject >> errorMessageDescription [
+	<magritteDescription>
+
+	^ MAStringDescription new
+			label: 'Error message';
+			accessor: #errorMessage;
+			beRequired
 ]
 
 { #category : #'api - accessing' }
 GtLProblemDomainObject >> messageText [
 	"Return an error message"
 
-	^ '{1}' format: {self description}
+	^ self errorMessage
 ]
 
 { #category : #'api - serializing' }
 GtLProblemDomainObject >> serializeToLlmJsonObject [
 	"Return a JSON dictionary that represents the domain object."
+	
+	^ GtMagritteJSONDataExporter exportObject: self
+]
 
-	<return: #NeoJSONObject>
-	^ NeoJSONObject new
-		at: #error put: self messageText;
-		yourself
+{ #category : #testing }
+GtLProblemDomainObject >> wasMovedToMagritteDescriptions [
+	^ true
 ]

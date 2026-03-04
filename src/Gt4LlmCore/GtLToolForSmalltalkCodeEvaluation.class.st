@@ -59,18 +59,15 @@ GtLToolForSmalltalkCodeEvaluation >> privatePerformToolCall: aToolCall inContext
 	code := arguments
 		at: 'code'
 		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-			receiverName: self name;
 			arguments: arguments;
 			missingArgument: 'code' ].
 	code
 		ifNil: [ ^ GtLMissingArgumentDomainObject new
-			receiverName: self name;
 			arguments: arguments;
 			missingArgument: 'code' ].
 	code := code asString trimBoth.
 	code isEmpty
 		ifTrue: [ ^ GtLMissingArgumentDomainObject new
-			receiverName: self name;
 			arguments: arguments;
 			missingArgument: 'code' ].
 	bindings := arguments at: 'bindings' ifAbsent: [ nil ].
@@ -78,7 +75,6 @@ GtLToolForSmalltalkCodeEvaluation >> privatePerformToolCall: aToolCall inContext
 	(bindings notNil and: [ bindings notEmpty ]) ifTrue: [
 		anExecutionContext objectStorage
 			ifNil: [ ^ GtLMissingInformationDomainObject new
-				receiverName: self name;
 				missingModelName: 'objectStorage' ].
 		bindingsDictionary := Dictionary new.
 		bindings do: [ :each |
@@ -86,13 +82,11 @@ GtLToolForSmalltalkCodeEvaluation >> privatePerformToolCall: aToolCall inContext
 			bindingName := each
 				at: 'name'
 				ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-					receiverName: self name;
 					arguments: arguments;
 					missingArgument: 'name' ].
 			bindingObjectId := each
 				at: 'objectId'
 				ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-					receiverName: self name;
 					arguments: arguments;
 					missingArgument: 'objectId' ].
 			bindingObject := anExecutionContext objectStorage

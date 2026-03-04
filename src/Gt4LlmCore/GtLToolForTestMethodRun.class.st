@@ -32,13 +32,11 @@ GtLToolForTestMethodRun >> privatePerformToolCall: aToolCall inContext: anExecut
 	rawClassName := arguments
 		at: 'className'
 		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-			receiverName: self name;
 			arguments: arguments;
 			missingArgument: 'className' ].
 	rawMethodName := arguments
 		at: 'methodName'
 		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-			receiverName: self name;
 			arguments: arguments;
 			missingArgument: 'methodName' ].
 

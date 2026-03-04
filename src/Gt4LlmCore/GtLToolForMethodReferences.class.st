@@ -31,7 +31,6 @@ GtLToolForMethodReferences >> privatePerformToolCall: aToolCall inContext: anExe
 	argument := aToolCall anyArgument.
 	argument
 		ifNil: [ ^ GtLMissingArgumentDomainObject new
-				receiverName: self name;
 				arguments: arguments;
 				missingArgument: 'methodName' ].
 	selector := argument asSymbol.

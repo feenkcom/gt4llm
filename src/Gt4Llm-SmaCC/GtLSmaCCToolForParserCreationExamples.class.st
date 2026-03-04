@@ -41,6 +41,7 @@ Foo: <number>+;'.
 GtLSmaCCToolForParserCreationExamples >> createParser [
 	<gtExample>
 	| tool call result model grammar definition |
+	
 	model := GtLSmaCCModel new.
 	tool := GtLSmaCCToolForParserCreation new model: model.
 	call := GtLFunctionToolCall new.
@@ -52,11 +53,13 @@ Foo: <number>+;'.
 							'scannerClass' -> 'ExpScanner'.
 							'package' -> 'TestPackage'.
 							'definition' -> definition} asDictionary} asDictionary.
+	
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteInputModel).
 	self assert: call arguments size equals: 1.
 	self assert: (call arguments anyOne isKindOf: GtLSmaCCCreateParser).
+	
+	self assert: (result isKindOf: GtLMagritteInputModel).
 	self assert: (result model isKindOf: GtLSmaCCParserCreationResult).
 	self assert: result model parserClass equals: #ExpParser.
 	self assert: result model createGrammar source equals: definition.
@@ -66,6 +69,7 @@ Foo: <number>+;'.
 	self assert: grammar parserClassName equals: #ExpParser.
 	self assert: grammar scannerClassName equals: #ExpScanner.
 	self assert: grammar package equals: 'TestPackage'.
+	
 	^ grammar
 ]
 
@@ -84,11 +88,14 @@ GtLSmaCCToolForParserCreationExamples >> invalidClassName [
 							'definition'
 								-> '<number>: \d+;
 Foo: <number>;'} asDictionary} asDictionary.
+	
 	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteInputModel).
+	
+	self assert: call tool == tool. 
 	self assert: call arguments size equals: 1.
 	self assert: (call arguments anyOne isKindOf: GtLSmaCCCreateParser).
+	
+	self assert: (result isKindOf: GtLMagritteInputModel).
 	self assert: result model isErrorDomainObject.
 	^ call
 ]
@@ -108,11 +115,13 @@ GtLSmaCCToolForParserCreationExamples >> invalidDefinition [
 							'definition'
 								-> '<number>: \d+;
 Foo: <number> #missing ;'} asDictionary} asDictionary.
+
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteInputModel).
 	self assert: call arguments size equals: 1.
 	self assert: (call arguments anyOne isKindOf: GtLSmaCCCreateParser).
+	
+	self assert: (result isKindOf: GtLMagritteInputModel).
 	self assert: result model isErrorDomainObject.
 	^ call
 ]

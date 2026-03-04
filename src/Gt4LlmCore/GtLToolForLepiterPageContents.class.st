@@ -36,13 +36,11 @@ GtLToolForLepiterPageContents >> privatePerformToolCall: aToolCall inContext: an
 	uuidString := arguments
 			at: 'uid'
 			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-					receiverName: self name;
 					arguments: arguments;
 					missingArgument: 'uid' ].
 	knowledgeBaseId := arguments
 		at: 'knowledgeBase'
 		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-				receiverName: self name;
 				arguments: arguments;
 				missingArgument: 'knowledgeBase' ].
 	database := LeDatabasesRegistry defaultLogicalDatabase

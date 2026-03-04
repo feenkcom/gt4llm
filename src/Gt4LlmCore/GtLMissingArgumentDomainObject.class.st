@@ -1,10 +1,10 @@
 Class {
 	#name : #GtLMissingArgumentDomainObject,
-	#superclass : #GtLDomainObject,
+	#superclass : #GtLErroneousConditionDomainObject,
 	#instVars : [
 		'arguments',
 		'missingArgument',
-		'receiverName'
+		'errorMessage'
 	],
 	#category : #'Gt4LlmCore-Domain Objects'
 }
@@ -22,18 +22,31 @@ GtLMissingArgumentDomainObject >> arguments: aDictionary [
 	arguments := aDictionary
 ]
 
-{ #category : #'api - testing' }
-GtLMissingArgumentDomainObject >> isErrorDomainObject [
-	^ true
+{ #category : #accessing }
+GtLMissingArgumentDomainObject >> errorMessage [
+	^ errorMessage
 ]
 
-{ #category : #'api - accessing' }
+{ #category : #accessing }
+GtLMissingArgumentDomainObject >> errorMessage: anObject [
+	^ errorMessage := anObject
+]
+
+{ #category : #descriptions }
+GtLMissingArgumentDomainObject >> errorMessageDescription [
+	<magritteDescription>
+
+	^ MAStringDescription new
+			label: 'Error message';
+			accessor: #errorMessage;
+			beRequired
+]
+
+{ #category : #accessing }
 GtLMissingArgumentDomainObject >> messageText [
 	"Return an error message"
 
-	^ '{1} is missing argument called {2}'
-		format: {self receiverName.
-				self missingArgument}
+	^ self errorMessage
 ]
 
 { #category : #accessing }
@@ -46,30 +59,29 @@ GtLMissingArgumentDomainObject >> missingArgument [
 GtLMissingArgumentDomainObject >> missingArgument: aString [
 	"Set a missing argument name."
 
-	missingArgument := aString
+	missingArgument := aString.
+	errorMessage ifNil: [
+		errorMessage := 'Missing argument called {1}' format: {missingArgument}]
 ]
 
-{ #category : #accessing }
-GtLMissingArgumentDomainObject >> receiverName [
-	<return: #String>
-	^ receiverName
-]
+{ #category : #descriptions }
+GtLMissingArgumentDomainObject >> missingArgumentDescription [
+	<magritteDescription>
 
-{ #category : #accessing }
-GtLMissingArgumentDomainObject >> receiverName: aString [
-	"Set a receiver name that was missing the argument."
-
-	receiverName := aString
+	^ MAStringDescription new
+			label: 'Missing argument';
+			accessor: #missingArgument;
+			beRequired
 ]
 
 { #category : #'api - serializing' }
 GtLMissingArgumentDomainObject >> serializeToLlmJsonObject [
 	"Return a JSON dictionary that represents the domain object."
+	
+	^ GtMagritteJSONDataExporter exportObject: self.
+]
 
-	<return: #NeoJSONObject>
-	^ NeoJSONObject new
-		at: #error put: self messageText;
-		at: #missingArgument put: self missingArgument;
-		at: #receiver put: self receiverName;
-		yourself
+{ #category : #testing }
+GtLMissingArgumentDomainObject >> wasMovedToMagritteDescriptions [
+	^ true
 ]

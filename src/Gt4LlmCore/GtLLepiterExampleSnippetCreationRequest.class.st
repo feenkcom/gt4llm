@@ -67,12 +67,10 @@ GtLLepiterExampleSnippetCreationRequest >> exampleMethodNameDescription [
 GtLLepiterExampleSnippetCreationRequest >> validateSnippetArgumentsFor: aTool ifCorrect: aBlock [
 	(exampleClassName isNil or: [ exampleClassName trimBoth isEmpty ])
 		ifTrue: [ ^ GtLMissingArgumentDomainObject new
-				receiverName: aTool name;
 				arguments: self;
 				missingArgument: 'exampleClassName' ].
 	(exampleMethodName isNil or: [ exampleMethodName trimBoth isEmpty ])
 		ifTrue: [ ^ GtLMissingArgumentDomainObject new
-				receiverName: aTool name;
 				arguments: self;
 				missingArgument: 'exampleMethodName' ].
 	^ aBlock value
