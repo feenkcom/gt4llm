@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'definition',
 		'parserClass',
-		'scannerClass'
+		'scannerClass',
+		'package'
 	],
 	#category : #'Gt4Llm-SmaCC-Domain Objects'
 }
@@ -47,6 +48,25 @@ GtLSmaCCDefinition >> gtClassCoderViewFor: aView [
 						background: Color white;
 						addAptitude: BrShadowAptitude).
 			container ]
+]
+
+{ #category : #accessing }
+GtLSmaCCDefinition >> package [
+	^ package
+]
+
+{ #category : #accessing }
+GtLSmaCCDefinition >> package: anObject [
+	package := anObject
+]
+
+{ #category : #accessing }
+GtLSmaCCDefinition >> packageDescription [
+	<magritteDescription>
+	^ MAStringDescription new
+		label: 'Package';
+		accessor: #package;
+		beOptional
 ]
 
 { #category : #accessing }

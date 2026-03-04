@@ -5,6 +5,39 @@ Class {
 }
 
 { #category : #examples }
+GtLSmaCCToolForParserCreationExamples >> createOverExisting [
+	<gtExample>
+	| tool call result model grammar definition |
+	model := GtLSmaCCModel new.
+	model grammarFor: #GtPharoParser.
+	tool := GtLSmaCCToolForParserCreation new model: model.
+	call := GtLFunctionToolCall new.
+	definition := '<number>: \\d+;
+Foo: <number>+;'.
+	call
+		rawArguments: {'parserCreation'
+					-> {'parserClass' -> 'GtPharoParser'.
+							'scannerClass' -> 'GtPharoScanner'.
+							'package' -> 'TestPackage'.
+							'definition' -> definition} asDictionary} asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GtLMagritteInputModel).
+	self assert: call arguments size equals: 1.
+	self assert: (call arguments anyOne isKindOf: GtLSmaCCCreateParser).
+	self assert: (result model isKindOf: GtLSmaCCParserCreationResult).
+	self assert: result model parserClass equals: #GtPharoParser.
+	self assert: result model createGrammar source equals: definition.
+
+	grammar := model grammarFor: #GtPharoParser.
+	self assert: grammar source equals: definition.
+	self assert: grammar parserClassName equals: #GtPharoParser.
+	self assert: grammar scannerClassName equals: #GtPharoScanner.
+	self assert: grammar package equals: 'TestPackage'.
+	^ grammar
+]
+
+{ #category : #examples }
 GtLSmaCCToolForParserCreationExamples >> createParser [
 	<gtExample>
 	| tool call result model grammar definition |
