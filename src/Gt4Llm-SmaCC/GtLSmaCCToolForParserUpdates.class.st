@@ -8,6 +8,8 @@ Class {
 GtLSmaCCToolForParserUpdates >> description [
 	^ 'Updates a SmaCC grammar with edit operations. An edit operation has a type which can be insert, delete or modify. Insert operations have a newSource property that contain the new production, token or directive rule that should be inserted into the grammar. Delete operations specify a rule that should be removed from the grammar. They should contain an oldSource property that has current source that of the rule that is to be removed. Finally, the modify operation should contain both an oldSource and a newSource property. When applied the modify operation will replace the rule with the oldSource to be newSource. 
 	
+The oldSource or newSource properties of these edit operations must contain the complete source of the token or production (starting with the name and ending with the semicolon). Also, only a single token, production or annotation should be specified in the oldSource or newSource properties of a single operation. Finally, when performing a modify, the name of the token or production being updated should not change. If you want to make several changes, you can also use the create SmaCC parser definition tool to set the whole definition.
+	
 Example JSON arguments:
 {
 	"parserClass": "SimpleMathParser",
