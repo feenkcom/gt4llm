@@ -38,6 +38,7 @@ GtLSmaCCToolForDefinitionExamples >> definitionForParser [
 	model := result model.
 	self assert: model parserClass equals: 'JSParser'.
 	self assert: model scannerClass equals: 'JSScanner'.
+	self assert: model package equals: 'SmaCC_Javascript_Parser'.
 	self assert: model definition equals: #JSParser asClass parserDefinitionString.
 	^ call
 ]
