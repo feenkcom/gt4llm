@@ -35,7 +35,6 @@ GtLToolForSearchFilter >> privatePerformToolCall: aToolCall inContext: anExecuti
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	(arguments includesKey: 'query')
 		ifFalse: [ ^ GtLMissingArgumentDomainObject new
-				receiverName: self name;
 				arguments: arguments;
 				missingArgument: 'query' ].
 	query := (arguments at: 'query') asString.

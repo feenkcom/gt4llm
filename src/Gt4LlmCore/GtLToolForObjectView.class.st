@@ -4,7 +4,7 @@ I return the remote phlow view specification for a stored object and view select
 Class {
 	#name : #GtLToolForObjectView,
 	#superclass : #GtLAbstractPlainSchemaFunctionTool,
-	#category : #Gt4LlmCore
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }
@@ -41,7 +41,6 @@ GtLToolForObjectView >> privatePerformToolCall: aToolCall inContext: anExecution
 	
 	anExecutionContext objectStorage
 		ifNil: [ ^ GtLMissingInformationDomainObject new
-				receiverName: self name;
 				missingModelName: 'objectStorage' ].
 				
 	object := anExecutionContext objectStorage

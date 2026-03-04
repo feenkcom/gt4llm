@@ -86,7 +86,7 @@ GtLInputModel >> gtViewsInContext: aPhlowContext [
 	^ collectedViews
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLInputModel >> model [
 	^ model
 ]

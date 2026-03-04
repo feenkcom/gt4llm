@@ -47,9 +47,16 @@ GtLAbstractMagritteFunctionTool >> performToolCall: aToolCall inContext: anExecu
 	domainObject := self 
 		privatePerformToolCall: aToolCall 
 		inContext: anExecutionContext.
-	resultObject := GtLMagritteInputModel new
-			name: 'Response';
-			model: domainObject.
+		
+	((domainObject isKindOf: GtLDomainObject) not or: [
+			domainObject wasMovedToMagritteDescriptions ])
+		ifTrue: [
+			resultObject := GtLMagritteInputModel new
+				name: 'Response';
+				model: domainObject]
+		ifFalse: [ 
+			resultObject := domainObject ].
+				
 	aToolCall result: resultObject.
 
 	^ resultObject

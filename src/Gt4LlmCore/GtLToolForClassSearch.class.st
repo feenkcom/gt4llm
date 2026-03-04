@@ -31,7 +31,6 @@ GtLToolForClassSearch >> privatePerformToolCall: aToolCall inContext: anExecutio
 	query := arguments
 			at: 'query'
 			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-					receiverName: self name;
 					arguments: aToolCall arguments;
 					missingArgument: 'query' ].
 

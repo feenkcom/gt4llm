@@ -1,16 +1,11 @@
 Class {
 	#name : #GtLUnexpectedDomainObject,
-	#superclass : #GtLDomainObject,
+	#superclass : #GtLErroneousConditionDomainObject,
 	#instVars : [
 		'objectName'
 	],
 	#category : #'Gt4LlmCore-Domain Objects'
 }
-
-{ #category : #'api - testing' }
-GtLUnexpectedDomainObject >> isErrorDomainObject [
-	^ true
-]
 
 { #category : #'api - accessing' }
 GtLUnexpectedDomainObject >> messageText [
