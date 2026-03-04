@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'logicalDatabase'
 	],
-	#category : #Gt4LlmCore
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }
@@ -74,13 +74,11 @@ GtLToolForLepiterPageRemove >> privatePerformToolCall: aToolCall inContext: anEx
 	pageUidString := arguments
 		at: 'pageUid'
 		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-			receiverName: self name;
 			arguments: arguments;
 			missingArgument: 'pageUid' ].
 	databaseId := arguments
 		at: 'databaseId'
 		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-			receiverName: self name;
 			arguments: arguments;
 			missingArgument: 'databaseId' ].
 	baseDatabase := self database.
@@ -96,7 +94,6 @@ GtLToolForLepiterPageRemove >> privatePerformToolCall: aToolCall inContext: anEx
 	pageUidString := pageUidString asString trimBoth.
 	pageUidString isEmpty
 		ifTrue: [ ^ GtLMissingArgumentDomainObject new
-			receiverName: self name;
 			arguments: arguments;
 			missingArgument: 'pageUid' ].
 	pageUid := [ UUID fromString36: pageUidString ]

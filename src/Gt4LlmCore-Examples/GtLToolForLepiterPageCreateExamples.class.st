@@ -15,7 +15,7 @@ GtLToolForLepiterPageCreateExamples >> missingDatabaseId [
 	call rawArguments: { 'title' -> 'Untitled' } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteInputModel).
+	self assert: (result isKindOf: GtLMagritteBasedModel).
 	self assert: result model missingArgument equals: 'databaseId'.
 	^ call
 ]
@@ -32,7 +32,7 @@ GtLToolForLepiterPageCreateExamples >> missingTitle [
 	call rawArguments: { 'databaseId' -> db uuidString } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteInputModel).
+	self assert: (result isKindOf: GtLMagritteBasedModel).
 	self assert: result model missingArgument equals: 'title'.
 	^ call
 ]
@@ -52,7 +52,7 @@ GtLToolForLepiterPageCreateExamples >> successfulPageCreate [
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteInputModel).
+	self assert: (result isKindOf: GtLMagritteBasedModel).
 	model := result model.
 	self assert: model status equals: 'created'.
 	self assert: model databaseId equals: db uuidString.

@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'database'
 	],
-	#category : #Gt4LlmCore
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #private }
@@ -13,7 +13,6 @@ GtLToolForLepiterSnippetsCreate >> createSnippetFrom: snippetArguments [
 	pageUidString := snippetArguments pageUid.
 	(pageUidString isNil or: [ pageUidString trimBoth isEmpty ])
 		ifTrue: [ ^ GtLMissingArgumentDomainObject new
-				receiverName: self name;
 				arguments: snippetArguments;
 				missingArgument: 'pageUid' ].
 	pageUid := [ UUID fromString36: pageUidString ]
@@ -95,7 +94,6 @@ GtLToolForLepiterSnippetsCreate >> privatePerformToolCall: aToolCall inContext: 
 	snippetsArgument := arguments
 		at: 'snippets'
 		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-			receiverName: self name;
 			arguments: arguments;
 			missingArgument: 'snippets' ].
 	(snippetsArgument isCollection and: [ snippetsArgument isString not ])

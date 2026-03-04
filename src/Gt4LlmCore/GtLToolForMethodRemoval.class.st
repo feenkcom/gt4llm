@@ -26,13 +26,11 @@ GtLToolForMethodRemoval >> privatePerformToolCall: aToolCall inContext: anExecut
 	classNameValue := arguments
 		at: 'className'
 		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-			receiverName: self name;
 			arguments: arguments;
 			missingArgument: 'className' ].
 	classNameString := classNameValue asString trimBoth.
 	classNameString isEmpty
 		ifTrue: [ ^ GtLMissingArgumentDomainObject new
-			receiverName: self name;
 			arguments: arguments;
 			missingArgument: 'className' ].
 	classSymbol := classNameString asSymbol.
@@ -50,13 +48,11 @@ GtLToolForMethodRemoval >> privatePerformToolCall: aToolCall inContext: anExecut
 	methodNameValue := arguments
 		at: 'methodName'
 		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-			receiverName: self name;
 			arguments: arguments;
 			missingArgument: 'methodName' ].
 	methodNameString := methodNameValue asString trimBoth.
 	methodNameString isEmpty
 		ifTrue: [ ^ GtLMissingArgumentDomainObject new
-			receiverName: self name;
 			arguments: arguments;
 			missingArgument: 'methodName' ].
 	selector := methodNameString asSymbol.

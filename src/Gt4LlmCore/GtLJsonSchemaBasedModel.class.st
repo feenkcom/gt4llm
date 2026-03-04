@@ -1,6 +1,6 @@
 Class {
-	#name : #GtLJsonSchemaInputModel,
-	#superclass : #GtLInputModel,
+	#name : #GtLJsonSchemaBasedModel,
+	#superclass : #GtLWrappedModel,
 	#instVars : [
 		'schema'
 	],
@@ -8,7 +8,7 @@ Class {
 }
 
 { #category : #adding }
-GtLJsonSchemaInputModel >> addContentOneLineSummaryTo: aWriteStream [
+GtLJsonSchemaBasedModel >> addContentOneLineSummaryTo: aWriteStream [
 	| aString |
 	aString := [ model printString ]
 			on: Error
@@ -19,12 +19,12 @@ GtLJsonSchemaInputModel >> addContentOneLineSummaryTo: aWriteStream [
 ]
 
 { #category : #adding }
-GtLJsonSchemaInputModel >> addContentTo: aDictionary [
+GtLJsonSchemaBasedModel >> addContentTo: aDictionary [
 	aDictionary at: name put: model  
 ]
 
 { #category : #adding }
-GtLJsonSchemaInputModel >> addInstructionsTo: aMessageInstructions [
+GtLJsonSchemaBasedModel >> addInstructionsTo: aMessageInstructions [
 
 	aMessageInstructions
 		addSection: (GtLlmInstructionSection new
@@ -34,11 +34,11 @@ GtLJsonSchemaInputModel >> addInstructionsTo: aMessageInstructions [
 ]
 
 { #category : #accessing }
-GtLJsonSchemaInputModel >> schema [
+GtLJsonSchemaBasedModel >> schema [
 	^ schema
 ]
 
 { #category : #accessing }
-GtLJsonSchemaInputModel >> schema: anObject [
+GtLJsonSchemaBasedModel >> schema: anObject [
 	schema := anObject
 ]

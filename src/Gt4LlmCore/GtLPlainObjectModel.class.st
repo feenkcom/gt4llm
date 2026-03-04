@@ -1,11 +1,11 @@
 Class {
-	#name : #GtLPlainObjectInputModel,
-	#superclass : #GtLInputModel,
+	#name : #GtLPlainObjectModel,
+	#superclass : #GtLWrappedModel,
 	#category : #Gt4LlmCore
 }
 
 { #category : #adding }
-GtLPlainObjectInputModel >> addContentOneLineSummaryTo: aWriteStream [
+GtLPlainObjectModel >> addContentOneLineSummaryTo: aWriteStream [
 	| aString |
 	aString := [ model printString ]
 			on: Error
@@ -16,7 +16,7 @@ GtLPlainObjectInputModel >> addContentOneLineSummaryTo: aWriteStream [
 ]
 
 { #category : #'as yet unclassified' }
-GtLPlainObjectInputModel >> addContentTo: aDictionary [
+GtLPlainObjectModel >> addContentTo: aDictionary [
 	aDictionary
 		at: name
 		put: {'class' -> model class name asString.
@@ -45,7 +45,7 @@ GtLPlainObjectInputModel >> addContentTo: aDictionary [
 ]
 
 { #category : #'as yet unclassified' }
-GtLPlainObjectInputModel >> addInstructionsTo: aMessageInstructions [
+GtLPlainObjectModel >> addInstructionsTo: aMessageInstructions [
 
 	aMessageInstructions
 		addSection: (GtLlmInstructionSection new

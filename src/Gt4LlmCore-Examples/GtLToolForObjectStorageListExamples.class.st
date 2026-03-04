@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLToolForObjectStorageListExamples,
 	#superclass : #Object,
-	#category : #'Gt4LlmCore-Examples'
+	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #examples }
@@ -18,7 +18,7 @@ GtLToolForObjectStorageListExamples >> listObjectsWithStorage [
 		performToolCall: call
 		inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteInputModel).
+	self assert: (result isKindOf: GtLMagritteBasedModel).
 	model := result model.
 	self assert: model items size equals: 2.
 	self assert: (model items collect: #objectValue) asSet equals: (Set with: 'One' with: 2).
@@ -34,7 +34,7 @@ GtLToolForObjectStorageListExamples >> listObjectsWithoutStorage [
 	call rawArguments: Dictionary new.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteInputModel).
+	self assert: (result isKindOf: GtLMagritteBasedModel).
 	model := result model.
 	self assert: model isErrorDomainObject.
 	self assert: model missingModelName equals: 'objectStorage'.

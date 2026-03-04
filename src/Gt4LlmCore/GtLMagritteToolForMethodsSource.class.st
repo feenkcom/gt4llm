@@ -52,5 +52,6 @@ GtLMagritteToolForMethodsSource >> privatePerformToolCall: aToolCall inContext: 
 	methodObjects := methodDescriptors
 			collect: [ :aMethodDescriptor | 
 				aMethodDescriptor methodObjectIfMissing: [ :anErrorResult | anErrorResult ] ].
-	^ GtLMethodsWithSource new methods: methodObjects asArray
+	^ GtLMethodsWithSource new 
+			methods: methodObjects asArray
 ]

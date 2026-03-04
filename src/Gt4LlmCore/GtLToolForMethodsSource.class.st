@@ -36,7 +36,6 @@ GtLToolForMethodsSource >> methodSourceFromDescriptor: descriptor [
 	className := descriptor
 		at: 'className'
 		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-				receiverName: self name;
 				arguments: descriptor;
 				missingArgument: 'className' ].
 	
@@ -61,7 +60,6 @@ GtLToolForMethodsSource >> methodSourceFromDescriptor: descriptor [
 	methodName := descriptor
 		at: 'methodName'
 		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-				receiverName: self name;
 				arguments: descriptor;
 				missingArgument: 'methodName' ].
 	
@@ -139,7 +137,6 @@ GtLToolForMethodsSource >> privatePerformToolCall: aToolCall inContext: anExecut
 	methodsArgument := arguments
 			at: 'methods'
 			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-					receiverName: self name;
 					arguments: arguments;
 					missingArgument: 'methods' ].
 	(methodsArgument isCollection and: [ methodsArgument isString not ])

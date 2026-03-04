@@ -26,13 +26,11 @@ GtLToolForClassRemoval >> privatePerformToolCall: aToolCall inContext: anExecuti
 	classNameValue := arguments
 		at: 'className'
 		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-			receiverName: self name;
 			arguments: arguments;
 			missingArgument: 'className' ].
 	classNameString := classNameValue asString trimBoth.
 	classNameString isEmpty
 		ifTrue: [ ^ GtLMissingArgumentDomainObject new
-			receiverName: self name;
 			arguments: arguments;
 			missingArgument: 'className' ].
 	class := Smalltalk globals

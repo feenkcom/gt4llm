@@ -45,7 +45,7 @@ GtLChatWithScripterExamples >> chatElementMarkdownAndLepiterPage [
 		sendWith: [ :message | 
 			message
 				markdown: 'Improve the content of the first snippet in this page. Use a LepiterTransformation to express the change.';
-				addInputModel: (GtLLepiterPageInputModel new
+				addInputModel: (GtLLepiterPageModel new
 						name: lepiterPage title;
 						model: lepiterPage);
 				addResponseFormat: (GtLResponseMagritteFormat new

@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLMagritteToolForFilesContentsExamples,
 	#superclass : #Object,
-	#category : #'Gt4LlmCore-Examples'
+	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #examples }
@@ -21,7 +21,7 @@ GtLMagritteToolForFilesContentsExamples >> filesContentsForExistingFiles [
 				{'pathString' -> fileTwo pathString} asDictionary } asArray } asDictionary.
 		result := tool performToolCall: call.
 		self assert: call tool == tool.
-		self assert: (result isKindOf: GtLMagritteInputModel).
+		self assert: (result isKindOf: GtLMagritteBasedModel).
 		self assert: call arguments size equals: 1.
 		self assert: (call arguments anyOne allSatisfy: [ :each | each isKindOf: GtLFilePathReference ]).
 		model := result model.
@@ -50,7 +50,7 @@ GtLMagritteToolForFilesContentsExamples >> filesContentsForMissingFile [
 			{'pathString' -> existingFile pathString} asDictionary } asArray } asDictionary.
 		result := tool performToolCall: call.
 		self assert: call tool == tool.
-		self assert: (result isKindOf: GtLMagritteInputModel).
+		self assert: (result isKindOf: GtLMagritteBasedModel).
 		model := result model.
 		self assert: model files size equals: 2.
 		self assert: model files first isErrorDomainObject.
@@ -69,7 +69,7 @@ GtLMagritteToolForFilesContentsExamples >> filesContentsWithoutPaths [
 	call rawArguments: Dictionary new.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteInputModel).
+	self assert: (result isKindOf: GtLMagritteBasedModel).
 	self assert: result model isErrorDomainObject.
 	self assert: result model missingArgument equals: 'filePaths'.
 	^ call

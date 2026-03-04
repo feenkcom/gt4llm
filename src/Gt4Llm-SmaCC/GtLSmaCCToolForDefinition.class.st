@@ -51,6 +51,7 @@ GtLSmaCCToolForDefinition >> privatePerformToolCall: aToolCall inContext: anExec
 			GtLSmaCCDefinition new
 				parserClass: grammar parserClassName;
 				scannerClass: grammar scannerClassName;
+				package: grammar package;
 				definition: grammar source;
 				yourself ]
 		onError: [ :error | error ]

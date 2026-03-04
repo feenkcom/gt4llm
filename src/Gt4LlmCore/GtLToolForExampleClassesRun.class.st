@@ -146,7 +146,6 @@ GtLToolForExampleClassesRun >> privatePerformToolCall: aToolCall inContext: anEx
 	classNames := arguments
 			at: 'classNames'
 			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-					receiverName: self name;
 					arguments: arguments;
 					missingArgument: 'classNames' ].
 
