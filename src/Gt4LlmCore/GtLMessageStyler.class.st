@@ -301,14 +301,15 @@ GtLMessageStyler >> styleBold: aBoldNode [
 		whenOutside: aBoldNode sourceInterval
 ]
 
-{ #category : #accessing }
+{ #category : #private }
 GtLMessageStyler >> styleButton: anAnnotation for: object defaultLabel: aLabelBlock withTool: aBlock [
 	"Style the buttons for gtClass and gtMethod annotations"
 
-	| attribute anId |
-	anAnnotation isDefined ifFalse: [ ^ self ].
-
+	| attribute anId isValid |
 	anId := LeTextSnippetAttributeLabelElementId indexed: self nextUniqueId.
+	isValid := anAnnotation nameNode
+		ifNil: [ true ]
+		ifNotNil: [ :node | node isDefined ].
 
 	attribute := GtButtonAttribute new
 			beAppend;
@@ -323,7 +324,8 @@ GtLMessageStyler >> styleButton: anAnnotation for: object defaultLabel: aLabelBl
 								ifNotNil: [ :node | node labelFor: obj ] ].
 				button := LeSnippetStylerVisitor
 						textLinkButtonPadding: (BlInsets top: 2)
-						margin: BlInsets empty.
+						margin: BlInsets empty
+						valid: isValid.
 				button aptitude glamorousCodeFont.
 				button
 					id: anId;
@@ -423,25 +425,25 @@ GtLMessageStyler >> styleCodeBlockWithSmalltalkSnippet: aCodeNode [
 ]
 
 { #category : #accessing }
-GtLMessageStyler >> styleExpandingObject: aClassAnnotation withDefault: aSymbol [
+GtLMessageStyler >> styleExpandingObject: anAnnotation withDefault: aSymbol [
 	| cacheKey attribute |
-	aClassAnnotation isDefined ifFalse: [ ^ self ].
+	anAnnotation isDefined ifFalse: [ ^ self ].
 
-	cacheKey := aClassAnnotation source.
+	cacheKey := anAnnotation source.
 
 	attribute := GtCachedTextExpandButtonAttribute new
-			isExpanded: (self expanded at: cacheKey ifAbsentPut: [ aClassAnnotation expanded ]);
+			isExpanded: (self expanded at: cacheKey ifAbsentPut: [ anAnnotation expanded ]);
 			attributesCreatingBlock: [ GtResizablePreviewAttribute new
 					withCache: self elements key: cacheKey;
-					result: aClassAnnotation imageObject;
-					showSelector: (aClassAnnotation showSelector ifNil: [ aSymbol ]);
-					height: (aClassAnnotation height ifNil: [ LepiterConstants defaultPreviewHeight ]) ];
+					result: anAnnotation imageObject;
+					showSelector: (anAnnotation showSelector ifNil: [ aSymbol ]);
+					height: (anAnnotation height ifNil: [ LepiterConstants defaultPreviewHeight ]) ];
 			onCachingDo: [ :aBoolean :theAttribute | self expanded at: cacheKey put: aBoolean ].
 
 	self text
 		attribute: attribute
-		from: aClassAnnotation parent startPosition
-		to: aClassAnnotation parent stopPosition
+		from: anAnnotation parent startPosition
+		to: anAnnotation parent stopPosition
 ]
 
 { #category : #generated }
@@ -782,30 +784,15 @@ GtLMessageStyler >> visitPageAnnotation: aPageAnnotation [
 ]
 
 { #category : #accessing }
-GtLMessageStyler >> visitPragmaAnnotation2: aPragmaAnnotation [
-	self visitAnnotation: aPragmaAnnotation.
-	self styleName: aPragmaAnnotation.
+GtLMessageStyler >> visitPragmaAnnotation: aPragmaAnnotation [
+"	self visitAnnotation: aPragmaAnnotation.
+"	self styleName: aPragmaAnnotation.
 	self styleAutoHidingAnnotation: aPragmaAnnotation.
 	self
 		styleButton: aPragmaAnnotation
 		withTool: [ GtInspectorTool
 				forObject: (GtPragmaType new keyword: aPragmaAnnotation pragmaName asSymbol) ].
-	self
+	"self
 		styleExpandingObject: aPragmaAnnotation
-		withDefault: LepiterConstants defaultClassShowSelector
-]
-
-{ #category : #accessing }
-GtLMessageStyler >> visitPragmaAnnotation: aPragmaAnnotation [
-"	self visitAnnotation: aPragmaAnnotation.
-"	self styleName: aPragmaAnnotation.
-	aPragmaAnnotation hasPragmaNameSpecified
-		ifTrue: [ self styleAutoHidingAnnotation: aPragmaAnnotation ].
-	self
-		styleButton: aPragmaAnnotation
-		withTool: [ GtInspectorTool
-				forObject: (GtPragmaType new keyword: aPragmaAnnotation pragmaName asSymbol) ].
-	self
-		styleExpandingObject: aPragmaAnnotation
-		withDefault: LepiterConstants defaultClassShowSelector
+		withDefault: LepiterConstants defaultClassShowSelector"
 ]
