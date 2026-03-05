@@ -30,9 +30,9 @@ GtLMessageInstruction >> gtRootSectionFor: aView [
 GtLMessageInstruction >> initialize [
 	super initialize.
 	
-	rootSection := GtLlmInstructionWithSections new
+	rootSection := GtLInstructionWithSections new
 		source: self;
-		introduction: (GtLlmInstructionString new string: 'Input descriptions')
+		introduction: (GtLInstructionString new string: 'Input descriptions')
 ]
 
 { #category : #'as yet unclassified' }
