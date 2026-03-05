@@ -81,6 +81,13 @@ GtMagriteJSONDataCreationVisitor >> visitToManyRelationDescription: aDescription
 	^ jsonResult := NeoJSONArray withAll: all
 ]
 
+{ #category : #visiting }
+GtMagriteJSONDataCreationVisitor >> visitToManyScalarRelationDescription: aDescription [
+	| result |
+	result := self currentObject perform: aDescription accessor readSelector.
+	^ jsonResult := NeoJSONArray withAll: result
+]
+
 { #category : #'visiting-description' }
 GtMagriteJSONDataCreationVisitor >> visitToOneRelationDescription: aDescription [
 	| result visitor |
