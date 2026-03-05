@@ -23,5 +23,5 @@ GtLReplyMessageViewModel >> messageViewsInto: aStream [
 
 { #category : #'api - accessing' }
 GtLReplyMessageViewModel >> uiInsets [
-	^ BlInsets right: 50
+	^ BlInsets right: 0 "50"
 ]
