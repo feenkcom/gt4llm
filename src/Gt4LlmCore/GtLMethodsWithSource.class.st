@@ -11,7 +11,7 @@ Class {
 GtLMethodsWithSource >> gtMethodsFor: aView [
 	<gtView>
 	<gtLlmView>
-	
+	(self methods anySatisfy: [:each | each isKindOf: GtLMissingDomainObject]) ifTrue: [ ^ aView empty ].
 	^ aView forward
 		title: 'Methods';
 		priority: 1;
