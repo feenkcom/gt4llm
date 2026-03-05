@@ -9,7 +9,13 @@ Class {
 { #category : #defaults }
 GtLTools class >> files [
 	^ self
-		withAll: {GtLMagritteToolForDirectoryContents new . GtLMagritteToolForFilesContents new. "GtLMagritteToolForFilesGrep new ." GtLMagritteToolForFilesWrite new} asOrderedCollection
+		withAll: {
+			GtLMagritteToolForDirectoryContents new . 
+			GtLMagritteToolForFilesContents new. 
+			"GtLMagritteToolForFilesGrep new ." 
+			GtLMagritteToolForFilesWrite new.
+			GtLMagritteToolForFileInformation new.
+			GtLMagritteToolForFilesInformation new } asOrderedCollection
 ]
 
 { #category : #defaults }
