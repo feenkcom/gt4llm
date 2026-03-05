@@ -18,6 +18,15 @@ TGtLWithInstructionSectionAPI >> addToExplanationSectionLepiterPage: aLepiterPag
 				body: instructionString).
 ]
 
+{ #category : #adding }
+TGtLWithInstructionSectionAPI >> addToExplanationSectionNamed: aTitle withContent: aContentString [
+
+	(self instructions ensureSectionNamed: 'Explanations')
+		addSection: (GtLlmInstructionSection new
+				title: aTitle;
+				body: aContentString).
+]
+
 { #category : #instructions }
 TGtLWithInstructionSectionAPI >> buildCompleteInstructions [
 	| newInstructions  |
