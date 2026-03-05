@@ -13,7 +13,7 @@ TGtLWithInstructionSectionAPI >> addToExplanationSectionLepiterPage: aLepiterPag
 				export.
 	
 	(self instructions ensureSectionNamed: 'Explanations')
-		addSection: (GtLlmInstructionSection new
+		addSection: (GtLInstructionSection new
 				title: aLepiterPage title;
 				body: instructionString).
 ]
@@ -21,15 +21,15 @@ TGtLWithInstructionSectionAPI >> addToExplanationSectionLepiterPage: aLepiterPag
 { #category : #instructions }
 TGtLWithInstructionSectionAPI >> buildCompleteInstructions [
 	| newInstructions  |
-	newInstructions := GtLlmInstructionWithSections new
-			introduction: (GtLlmInstructionString new string: '').
+	newInstructions := GtLInstructionWithSections new
+			introduction: (GtLInstructionString new string: '').
 	
 	self inputModels notEmpty
 		ifTrue: [ 
 			| inputInstructionsBody inputInstructions |
-			inputInstructionsBody := GtLlmInstructionWithSections new
+			inputInstructionsBody := GtLInstructionWithSections new
 					introduction: 'The inputs provided follow the descriptions below'.
-			inputInstructions := GtLlmInstructionSection new
+			inputInstructions := GtLInstructionSection new
 					title: 'Input descriptions';
 					body: inputInstructionsBody.
 			newInstructions addSection: inputInstructions.
