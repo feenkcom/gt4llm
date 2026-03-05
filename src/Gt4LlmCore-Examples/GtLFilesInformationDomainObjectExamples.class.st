@@ -36,9 +36,18 @@ GtLFilesInformationDomainObjectExamples >> filesInformationSerialization [
 	domainObject := self filesInformationForExistingFiles.
 	jsonObject := GtMagritteJSONDataExporter exportObject: domainObject.
 	expected := NeoJSONObject new
-		at: 'files' put: (domainObject files
-			collect: [ :each | GtMagritteJSONDataExporter exportObject: each ]) asArray;
+		at: 'files'
+		put: (NeoJSONArray withAll: (domainObject files collect: [ :each |
+			NeoJSONObject new
+				at: 'path' put: each path;
+				at: 'size' put: each size;
+				at: 'creationTime' put: each creationTime asIso8601;
+				at: 'modificationTime' put: each modificationTime asIso8601;
+				at: 'accessTime' put: each accessTime asIso8601;
+				at: 'type' put: each type;
+				at: 'permissions' put: each permissions;
+				yourself ]) asArray);
 		yourself.
-	self assert: jsonObject printString equals: expected printString.
+	self assert: jsonObject equals: expected.
 	^ jsonObject
 ]

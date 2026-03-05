@@ -54,12 +54,15 @@ GtLTools class >> gtExamplesRun [
 { #category : #defaults }
 GtLTools class >> gtSearch [
 	^ self
-		withAll: {GtLToolForClassSearch new.
-				GtLToolForClassSubclasses new.
+		withAll: {
+				GtLMagritteToolForClassSearch new.
+				GtLMagritteToolForClassSubclasses new.
+				
 				GtLToolForClassLookup new.
 				GtLToolForClassReferences new.
 				GtLToolForMethodReferences new.
 				GtLToolForMethodImplementors new.
+				
 				"GtLMagritteToolForMethodSource new."
 				GtLMagritteToolForMethodsSource new.
 				GtLToolForPackageClasses new.
