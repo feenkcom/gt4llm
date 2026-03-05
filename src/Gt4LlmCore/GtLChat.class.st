@@ -422,11 +422,7 @@ GtLChat >> instruction: instructionString titled: title [
 
 { #category : #accessing }
 GtLChat >> instructions [
-	^ instructions
-		ifNil: [ 
-			instructions := GtLInstructionWithSections new
-					introduction: (GtLInstructionString new string: '').
-			instructions ]
+	^ instructions ifNil: [ instructions := GtLInstructionComposite new ]
 ]
 
 { #category : #accessing }

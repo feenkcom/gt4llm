@@ -6,6 +6,16 @@ String >> addContentOneLineSummaryTo: aWriteStream [
 ]
 
 { #category : #'*Gt4LlmCore' }
+String >> asGtLInstructionPiece [
+	^ GtLInstructionString new string: self
+]
+
+{ #category : #'*Gt4LlmCore' }
+String >> asInstructionPiece [
+	^ GtLInstructionString new string: self
+]
+
+{ #category : #'*Gt4LlmCore' }
 String >> gtLlmStringFor: aView [
 	<gtLlmView>
 	^ aView textEditor

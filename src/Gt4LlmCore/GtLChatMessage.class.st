@@ -426,7 +426,7 @@ GtLChatMessage >> unsubscribe: anObject [
 { #category : #updating }
 GtLChatMessage >> updateDataFromChat: aChat [ 
 	instructions ifNil: [
-		instructions := aChat currentInstructions ].
+		instructions := aChat instructions ].
 	formatDescriptions hasSchemaDescriptors ifFalse: [
 		formatDescriptions addCompositeFormat: aChat currentFormat ].
 	tools isEmpty ifTrue: [ tools addAll: aChat currentTools ]
