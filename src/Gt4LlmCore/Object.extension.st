@@ -28,7 +28,7 @@ Object >> gtActionObjectChatFor: anAction [
 	^ anAction button
 		icon: BrGlamorousVectorIcons chat;
 		tooltip: 'Chat about this object';
-		target: GtPhlowObjectActionTarget + GtPhlowObjectContextMenuTarget;
+		target: GtPhlowObjectContextMenuTarget;
 		menuItemGroup: BrMenuItemGroupConfiguration default;
 		menuItemPreview: [ self gtDisplayText ];
 		action: [ :button | 
