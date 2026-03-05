@@ -81,6 +81,24 @@ GtMagriteJSONSchemaCreationVisitor >> visitBooleanDescription: aBooleanDescripti
 	^ currentSchema := schema
 ]
 
+{ #category : #'visiting-description' }
+GtMagriteJSONSchemaCreationVisitor >> visitDateAndTimeDescription: aDateTimeDescription [
+	| schema |
+	
+	schema := NeoJSONObject  new 
+			at: 'type' put: 'string';
+			at: 'format' put: 'date-time';
+			yourself.
+	
+	schema 
+		at: 'description' 
+		put: ((aDateTimeDescription hasComment 
+			ifTrue: [ aDateTimeDescription comment, '. '] ifFalse: [ '' ]),
+				'ISO-8601 timestamp (RFC3339) like 2026-03-05T14:30:00Z').
+			
+	^ currentSchema := schema
+]
+
 { #category : #visiting }
 GtMagriteJSONSchemaCreationVisitor >> visitNumberDescription: aBooleanDescription [
 	| schema |
