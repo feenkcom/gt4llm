@@ -4,7 +4,7 @@ Searches for classes by name matching the query substring (case-insensitive).
 Class {
 	#name : #GtLMagritteToolForClassSearch,
 	#superclass : #GtLAbstractMagritteFunctionTool,
-	#category : #Gt4LlmCore
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }
