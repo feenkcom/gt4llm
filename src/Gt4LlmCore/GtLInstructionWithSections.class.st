@@ -11,7 +11,7 @@ Class {
 
 { #category : #accessing }
 GtLInstructionWithSections >> addSection: aSection [
-	sections add: (aSection asInstructionPiece parent: self)
+	sections add: (aSection asGtLInstructionPiece parent: self)
 ]
 
 { #category : #accessing }
@@ -32,9 +32,9 @@ GtLInstructionWithSections >> ensureSectionNamed: aSectionTitle [
 			ifFound: [ :each | each ] 
 			ifNone: [
 				| newSection|
-				newSection := GtLInstructionWithSections new
+				newSection := GtLInstructionSection new
 					title: aSectionTitle;
-					introduction: (GtLInstructionString new string: '').
+					body: (GtLInstructionComposite new).
 				self addSection: newSection.
 				newSection ]
 ]
@@ -65,7 +65,7 @@ GtLInstructionWithSections >> introduction [
 
 { #category : #accessing }
 GtLInstructionWithSections >> introduction: anObject [
-	introduction := anObject asInstructionPiece
+	introduction := anObject asGtLInstructionPiece
 ]
 
 { #category : #testing }

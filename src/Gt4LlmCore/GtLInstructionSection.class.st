@@ -17,7 +17,7 @@ GtLInstructionSection >> body [
 
 { #category : #accessing }
 GtLInstructionSection >> body: anObject [
-	body := anObject asInstructionPiece parent: self
+	body := anObject asGtLInstructionPiece parent: self
 ]
 
 { #category : #accessing }
@@ -70,7 +70,7 @@ GtLInstructionSection >> initialize [
 { #category : #accessing }
 GtLInstructionSection >> instructionString [
 	^ ('#' repeat: self headerLevel) , ' ' , self title
-		, String cr , self body instructionString
+		, String lf , self body instructionString
 ]
 
 { #category : #accessing }
