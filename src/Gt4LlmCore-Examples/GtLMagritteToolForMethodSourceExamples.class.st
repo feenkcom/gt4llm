@@ -17,13 +17,15 @@ GtLMagritteToolForMethodSourceExamples >> methodSourceForExistingClassSideMethod
 			'classSide' -> true
 		} asDictionary
 	} asDictionary.
+	
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteBasedModel).
 	self assert: call arguments size equals: 1.
 	self
 		assert: ((call arguments at: 'methodDescriptor') isKindOf: GtLMethodReference).
+		
 	model := result model.
+	self assert: (result isKindOf: GtLMagritteBasedModel).
 	self assert: (model isKindOf: GtLMethodWithSource).
 	
 	self
@@ -38,6 +40,7 @@ GtLMagritteToolForMethodSourceExamples >> methodSourceForExistingClassSideMethod
 	self
 		assert: model methodReference classSide
 		equals: true.
+		
 	^ call
 ]
 
@@ -56,10 +59,11 @@ GtLMagritteToolForMethodSourceExamples >> methodSourceForExistingInstanceSideMet
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteBasedModel).
 	self assert: call arguments size equals: 1.
 	self
 		assert: ((call arguments at: 'methodDescriptor') isKindOf: GtLMethodReference).
+		
+	self assert: (result isKindOf: GtLMagritteBasedModel).
 	model := result model.
 	self assert: (model isKindOf: GtLMethodWithSource).
 	
