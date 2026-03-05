@@ -7,15 +7,15 @@ Class {
 { #category : #examples }
 GtLMethodReferenceExamples >> methodReferenceObjectFromCompiledMethodClassSide [
 	<gtExample>
-	| methodReferenceObject jsonObject |
-	methodReferenceObject := GtLMethodReference 
-		fromCompiledMethod: (GtLMethodReference class>>#fromCompiledMethod:) .
-	
+	| methodReferenceObject |
+	methodReferenceObject := GtLMethodReference
+		fromCompiledMethod: (GtLMethodReference class>>#fromCompiledMethod:).
+
 	self
 		assert: methodReferenceObject methodName
 		equals: #fromCompiledMethod:.
-	self 
-		assert: methodReferenceObject methodClassName 
+	self
+		assert: methodReferenceObject methodClassName
 		equals: #GtLMethodReference.
 	self
 		assert: methodReferenceObject classSide
@@ -32,26 +32,34 @@ GtLMethodReferenceExamples >> methodReferenceObjectFromCompiledMethodClassSide [
 	self
 		assert: methodReferenceObject compiledMethod
 		equals: (GtLMethodReference class>>#fromCompiledMethod:).
-	
-	jsonObject := GtMagritteJSONDataExporter exportObject: methodReferenceObject .
-	self 
-		assert: jsonObject
-		equals: ((NeoJSONObject new) 
-			at: 'methodName' 
-				put: #fromCompiledMethod:;
-			at: 'classSide' put:  true; 
-			at: 'methodClassName' put: #GtLMethodReference; 
-			yourself).
 
 	^ methodReferenceObject
 ]
 
 { #category : #examples }
-GtLMethodReferenceExamples >> methodReferenceObjectFromCompiledMethodInstanceSide [
+GtLMethodReferenceExamples >> methodReferenceObjectFromCompiledMethodClassSideJsonExport [
 	<gtExample>
 	| methodReferenceObject jsonObject |
+	methodReferenceObject := self methodReferenceObjectFromCompiledMethodClassSide.
+	jsonObject := GtMagritteJSONDataExporter exportObject: methodReferenceObject.
+	self
+		assert: jsonObject
+		equals: ((NeoJSONObject new)
+			at: 'methodName'
+				put: #fromCompiledMethod:;
+			at: 'classSide' put: true;
+			at: 'methodClassName' put: #GtLMethodReference;
+			yourself).
+
+	^ jsonObject
+]
+
+{ #category : #examples }
+GtLMethodReferenceExamples >> methodReferenceObjectFromCompiledMethodInstanceSide [
+	<gtExample>
+	| methodReferenceObject |
 	methodReferenceObject := GtLMethodReference fromCompiledMethod: (GtLMethodReferenceExamples>>#methodReferenceObjectFromCompiledMethodInstanceSide).
-					
+
 	self
 		assert: methodReferenceObject methodName
 		equals: #methodReferenceObjectFromCompiledMethodInstanceSide.
@@ -73,16 +81,24 @@ GtLMethodReferenceExamples >> methodReferenceObjectFromCompiledMethodInstanceSid
 	self
 		assert: methodReferenceObject compiledMethod
 		equals: (GtLMethodReferenceExamples>>#methodReferenceObjectFromCompiledMethodInstanceSide).
-	
-	jsonObject := GtMagritteJSONDataExporter exportObject: methodReferenceObject .
-	self 
-		assert: jsonObject
-		equals: ((NeoJSONObject new) 
-			at: 'methodName' 
-				put: #methodReferenceObjectFromCompiledMethodInstanceSide;
-			at: 'classSide' put:  false; 
-			at: 'methodClassName' put: #GtLMethodReferenceExamples; 
-			yourself).
 
 	^ methodReferenceObject
+]
+
+{ #category : #examples }
+GtLMethodReferenceExamples >> methodReferenceObjectFromCompiledMethodInstanceSideJsonExport [
+	<gtExample>
+	| methodReferenceObject jsonObject |
+	methodReferenceObject := self methodReferenceObjectFromCompiledMethodInstanceSide.
+	jsonObject := GtMagritteJSONDataExporter exportObject: methodReferenceObject.
+	self
+		assert: jsonObject
+		equals: ((NeoJSONObject new)
+			at: 'methodName'
+				put: #methodReferenceObjectFromCompiledMethodInstanceSide;
+			at: 'classSide' put: false;
+			at: 'methodClassName' put: #GtLMethodReferenceExamples;
+			yourself).
+
+	^ jsonObject
 ]
