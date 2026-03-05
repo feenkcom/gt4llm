@@ -20,7 +20,7 @@ GtLMagritteToolForFilesWriteExamples >> filesWriteForDirectoryPath [
 		} asDictionary.
 		result := tool performToolCall: call.
 		self assert: call tool == tool.
-		self assert: (result isKindOf: GtLMagritteInputModel).
+		self assert: (result isKindOf: GtLMagritteBasedModel).
 		model := result model.
 		self assert: model isErrorDomainObject.
 		self assert: model argumentName equals: 'path'.
@@ -52,7 +52,7 @@ GtLMagritteToolForFilesWriteExamples >> filesWriteForExistingFiles [
 								'contents' -> 'Second file' asByteArray base64Encoded} asDictionary} asArray} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteInputModel).
+	self assert: (result isKindOf: GtLMagritteBasedModel).
 	self assert: call arguments size equals: 1.
 	self
 		assert: (call arguments anyOne
@@ -85,7 +85,7 @@ GtLMagritteToolForFilesWriteExamples >> filesWriteForMissingParentDirectory [
 		} asDictionary.
 		result := tool performToolCall: call.
 		self assert: call tool == tool.
-		self assert: (result isKindOf: GtLMagritteInputModel).
+		self assert: (result isKindOf: GtLMagritteBasedModel).
 		model := result model.
 		self assert: model files size equals: 1.
 		self assert: model files first path equals: nestedFile pathString.
@@ -107,7 +107,7 @@ GtLMagritteToolForFilesWriteExamples >> filesWriteWithoutFiles [
 	call rawArguments: Dictionary new.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteInputModel).
+	self assert: (result isKindOf: GtLMagritteBasedModel).
 	self assert: result model isErrorDomainObject.
 	self assert: result model missingArgument equals: 'files'.
 	^ call

@@ -15,7 +15,7 @@ GtLToolForLepiterSnippetEditExamples >> missingPageUid [
 		'updatedText' -> 'Updated text' } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteInputModel).
+	self assert: (result isKindOf: GtLMagritteBasedModel).
 	self assert: result model missingArgument equals: 'pageUid'.
 	^ call
 ]
@@ -32,7 +32,7 @@ GtLToolForLepiterSnippetEditExamples >> missingSnippetUid [
 		'updatedText' -> 'Updated text' } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteInputModel).
+	self assert: (result isKindOf: GtLMagritteBasedModel).
 	self assert: result model missingArgument equals: 'snippetUid'.
 	^ call
 ]
@@ -50,7 +50,7 @@ GtLToolForLepiterSnippetEditExamples >> missingUpdatedText [
 		'snippetUid' -> snippetUid } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteInputModel).
+	self assert: (result isKindOf: GtLMagritteBasedModel).
 	self assert: result model missingArgument equals: 'updatedText'.
 	^ call
 ]
@@ -76,7 +76,7 @@ GtLToolForLepiterSnippetEditExamples >> successfulSnippetEdit [
 		'updatedText' -> updatedText } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteInputModel).
+	self assert: (result isKindOf: GtLMagritteBasedModel).
 	model := result model.
 	self assert: model status equals: 'updated'.
 	self assert: model oldText equals: 'one > one'.

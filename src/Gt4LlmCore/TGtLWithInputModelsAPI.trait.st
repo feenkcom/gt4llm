@@ -10,7 +10,7 @@ TGtLWithInputModelsAPI >> addAttachments: aCollectionOfAttachments [
 
 { #category : #'api - message' }
 TGtLWithInputModelsAPI >> addInputMagritteObject: anObject named: aString [
-	self addInputModel: (GtLMagritteInputModel new
+	self addInputModel: (GtLMagritteBasedModel new
 		name: aString;
 		model: anObject)
 ]
@@ -22,7 +22,7 @@ TGtLWithInputModelsAPI >> addInputModel: aModel [
 
 { #category : #'api - message' }
 TGtLWithInputModelsAPI >> addPlainInputObject: anObject named: aString [
-	self addInputModel: (GtLPlainObjectInputModel new
+	self addInputModel: (GtLPlainObjectModel new
 		name: aString;
 		model: anObject)
 ]
@@ -102,7 +102,7 @@ TGtLWithInputModelsAPI >> pageId: aPageId [
 
 { #category : #'api - message' }
 TGtLWithInputModelsAPI >> pageObject: aLepiterPage [
-	self addInputModel: (GtLLepiterPageInputModel new
+	self addInputModel: (GtLLepiterPageModel new
 			name: aLepiterPage title;
 			model: aLepiterPage)
 ]

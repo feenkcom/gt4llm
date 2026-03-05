@@ -51,7 +51,7 @@ GtLAbstractMagritteFunctionTool >> performToolCall: aToolCall inContext: anExecu
 	((domainObject isKindOf: GtLDomainObject) not or: [
 			domainObject wasMovedToMagritteDescriptions ])
 		ifTrue: [
-			resultObject := GtLMagritteInputModel new
+			resultObject := GtLMagritteBasedModel new
 				name: 'Response';
 				model: domainObject]
 		ifFalse: [ 
