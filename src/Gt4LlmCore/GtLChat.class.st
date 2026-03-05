@@ -415,7 +415,7 @@ GtLChat >> initializeTools [
 { #category : #'as yet unclassified' }
 GtLChat >> instruction: instructionString titled: title [
 	self instructions
-		addSection: (GtLlmInstructionSection new
+		addSection: (GtLInstructionSection new
 				title: title;
 				body: instructionString)
 ]
@@ -424,8 +424,8 @@ GtLChat >> instruction: instructionString titled: title [
 GtLChat >> instructions [
 	^ instructions
 		ifNil: [ 
-			instructions := GtLlmInstructionWithSections new
-					introduction: (GtLlmInstructionString new string: '').
+			instructions := GtLInstructionWithSections new
+					introduction: (GtLInstructionString new string: '').
 			instructions ]
 ]
 
