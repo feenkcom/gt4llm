@@ -56,8 +56,8 @@ GtLTools class >> gtSearch [
 	^ self
 		withAll: {
 				GtLMagritteToolForClassSearch new.
+				GtLMagritteToolForClassSubclasses new.
 				
-				GtLToolForClassSubclasses new.
 				GtLToolForClassLookup new.
 				GtLToolForClassReferences new.
 				GtLToolForMethodReferences new.
