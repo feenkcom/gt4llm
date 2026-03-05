@@ -7,15 +7,15 @@ Class {
 { #category : #examples }
 GtLNotSourceSearchableMethodExamples >> methodWithNotSearchableSourceObjectFromCompiledMethodClassSide [
 	<gtExample>
-	| methodObject jsonObject |
-	methodObject := GtLNotSourceSearchableMethod 
-		fromCompiledMethod: (GtLMethodReference class>>#fromCompiledMethod:) .
-	
+	| methodObject |
+	methodObject := GtLNotSourceSearchableMethod
+		fromCompiledMethod: (GtLMethodReference class>>#fromCompiledMethod:).
+
 	self
 		assert: methodObject methodName
 		equals: #fromCompiledMethod:.
-	self 
-		assert: methodObject methodClassName 
+	self
+		assert: methodObject methodClassName
 		equals: #GtLMethodReference.
 	self
 		assert: methodObject isClassSide
@@ -29,9 +29,17 @@ GtLNotSourceSearchableMethodExamples >> methodWithNotSearchableSourceObjectFromC
 	self
 		assert: methodObject sourceCode
 		equals: '<not searchable method>'.
-	
-	jsonObject := GtMagritteJSONDataExporter exportObject: methodObject .
-	self 
+
+	^ methodObject
+]
+
+{ #category : #examples }
+GtLNotSourceSearchableMethodExamples >> methodWithNotSearchableSourceObjectFromCompiledMethodClassSideJsonExport [
+	<gtExample>
+	| methodObject jsonObject |
+	methodObject := self methodWithNotSearchableSourceObjectFromCompiledMethodClassSide.
+	jsonObject := GtMagritteJSONDataExporter exportObject: methodObject.
+	self
 		assert: jsonObject
 		equals: ((NeoJSONObject new)
 			at: 'methodReference' put: ((NeoJSONObject new)
@@ -40,7 +48,7 @@ GtLNotSourceSearchableMethodExamples >> methodWithNotSearchableSourceObjectFromC
 				at: 'classSide' put: true;
 				yourself);
 			at: 'sourceCode' put: '<not searchable method>';
-	yourself).
+			yourself).
 
-	^ methodObject
+	^ jsonObject
 ]
