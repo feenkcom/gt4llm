@@ -50,15 +50,13 @@ GtLMessageHeaderElement >> initializeContentElement [
 						id: #'chat--message-content';
 						hFitContentLimited;
 						vFitContent;
-						beSmallSize;
 						constraintsDo: [ :c | c linear vertical alignTop ]);
 			addChild: (executionStateLabelElement := BrLabel new
 						id: #'chat--message-state';
 						hFitContent;
 						vFitContent;
 						aptitude: (BrGlamorousLabelAptitude new foreground: self theme button disabledTextColor);
-						constraintsDo: [ :c | c linear vertical alignTop ];
-						beSmallSize)
+						constraintsDo: [ :c | c linear vertical alignTop ])
 ]
 
 { #category : #initialization }
@@ -75,7 +73,6 @@ GtLMessageHeaderElement >> initializeSenderElement [
 			vFitContent;
 			aptitude: (BrGlamorousLabelAptitude new
 					foreground: BrGlamorousColors disabledButtonTextColor);
-			beSmallSize;
 			addAptitude: (senderTooltipAptitude := BrGlamorousWithExplicitTooltipAptitude new);
 			constraintsDo: [ :c | c linear vertical alignTop ]
 ]
