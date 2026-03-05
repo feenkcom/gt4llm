@@ -4,18 +4,22 @@ Examples for GtLClassesQueryResult.
 Class {
 	#name : #GtLClassesQueryResultExamples,
 	#superclass : #GtLMagritteDomainObjectExamples,
-	#category : #'Gt4LlmCore-Examples'
+	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #examples }
 GtLClassesQueryResultExamples >> classesQueryResultSerialization [
 	<gtExample>
-	| domainObject jsonObject |
+	| domainObject jsonObject expected |
 	domainObject := self classesQueryResultWithMatches.
 	jsonObject := GtMagritteJSONDataExporter exportObject: domainObject.
-	self assert: (jsonObject at: 'query') equals: domainObject query.
-	self assert: (jsonObject at: 'foundClassNames') asArray equals: domainObject foundClassNames.
-	self assert: (jsonObject at: 'mayHaveMore') equals: domainObject mayHaveMore.
+	expected := NeoJSONObject new
+		at: 'query' put: domainObject query;
+		at: 'foundClassNames'
+			put: (NeoJSONArray withAll: domainObject foundClassNames asArray);
+		at: 'mayHaveMore' put: domainObject mayHaveMore;
+		yourself.
+	self assert: jsonObject equals: expected.
 	^ jsonObject
 ]
 

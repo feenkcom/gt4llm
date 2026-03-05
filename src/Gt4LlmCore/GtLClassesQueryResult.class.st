@@ -9,7 +9,7 @@ Class {
 		'foundClassNames',
 		'mayHaveMore'
 	],
-	#category : #Gt4LlmCore
+	#category : #'Gt4LlmCore-Magritte Objects'
 }
 
 { #category : #accessing }
@@ -45,24 +45,6 @@ GtLClassesQueryResult >> gtFoundClassNamesFor: aView [
 		itemText: [ :each | each ]
 ]
 
-{ #category : #views }
-GtLClassesQueryResult >> gtSummaryFor: aView [
-	<gtView>
-	^ aView text
-		title: 'Summary';
-		priority: 2;
-		text: [ String streamContents: [ :stream |
-			self query ifNotNil: [ :aQuery |
-				stream
-					nextPutAll: 'Query: ';
-					nextPutAll: aQuery;
-					nextPutAll: ' — ' ].
-			stream
-				nextPutAll: self foundClassNames size asString;
-				nextPutAll: ' classes'.
-			self mayHaveMore ifTrue: [ stream nextPutAll: ' (more available)' ] ] ]
-]
-
 { #category : #accessing }
 GtLClassesQueryResult >> mayHaveMore [
 	^ mayHaveMore ifNil: [ false ]
@@ -86,8 +68,13 @@ GtLClassesQueryResult >> mayHaveMoreDescription [
 { #category : #printing }
 GtLClassesQueryResult >> printOn: aStream [
 	super printOn: aStream.
-	aStream
-		parenthesize: [ aStream
+	aStream parenthesize: [
+			self query ifNotNil: [ :aQuery |
+				aStream
+					nextPutAll: 'Query: ';
+					nextPutAll: aQuery;
+					nextPutAll: ' — ' ].
+			aStream
 				nextPutAll: self foundClassNames size asString;
 				nextPutAll: ' classes'.
 			self mayHaveMore ifTrue: [ aStream nextPutAll: ' (more available)' ] ]
