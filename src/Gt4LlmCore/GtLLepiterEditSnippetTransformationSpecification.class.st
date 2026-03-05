@@ -2,36 +2,10 @@ Class {
 	#name : #GtLLepiterEditSnippetTransformationSpecification,
 	#superclass : #GtLLepiterSnippetTransformationSpecification,
 	#instVars : [
-		'snippetUid',
-		'pageUidString'
+		'snippetUid'
 	],
 	#category : #'Gt4LlmCore-Formats'
 }
-
-{ #category : #accessing }
-GtLLepiterEditSnippetTransformationSpecification >> pageUid [
-	^ UUID fromString: self pageUidString 
-]
-
-{ #category : #accessing }
-GtLLepiterEditSnippetTransformationSpecification >> pageUidString [
-	^ pageUidString
-]
-
-{ #category : #accessing }
-GtLLepiterEditSnippetTransformationSpecification >> pageUidString: anObject [
-	pageUidString := anObject
-]
-
-{ #category : #descriptions }
-GtLLepiterEditSnippetTransformationSpecification >> pageUidStringDescription [
-	<magritteDescription>
-	
-	^ MAStringDescription new
-		  accessor: #pageUidString;
-		  withUUIDFormatCommentWith: 'The uid of the page containing the snippet to edit.';
-		  beRequired
-]
 
 { #category : #accessing }
 GtLLepiterEditSnippetTransformationSpecification >> snippetUid [

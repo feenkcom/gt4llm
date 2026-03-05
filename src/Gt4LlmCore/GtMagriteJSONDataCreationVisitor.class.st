@@ -35,6 +35,14 @@ GtMagriteJSONDataCreationVisitor >> visitBooleanDescription: aStringDescription 
 ]
 
 { #category : #'visiting-description' }
+GtMagriteJSONDataCreationVisitor >> visitDateAndTimeDescription: aDateTimeDescription [
+	^ jsonResult := (self currentObject 
+			perform: aDateTimeDescription accessor readSelector) 
+				ifNotNil: [ :aDateAndTime |
+					aDateAndTime asIso8601 ].
+]
+
+{ #category : #'visiting-description' }
 GtMagriteJSONDataCreationVisitor >> visitNumberDescription: aStringDescription [
 	^ jsonResult := self currentObject perform: aStringDescription accessor readSelector.
 ]
