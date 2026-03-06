@@ -15,7 +15,7 @@ Arguments:
 - query: string
 
 Return values:
-- methods: array of method references
+- foundMethods: array of method references
 - mayHaveMore: boolean indicating if there are more matches than returned
 
 Example JSON arguments:
@@ -25,7 +25,7 @@ Example JSON arguments:
 
 Example JSON response:
 {
-  "methods": [
+  "foundMethods": [
     {
       "methodClassName": "GtLToolForSubstringLiteralSearch",
       "methodName": "privatePerformToolCall:inContext:",
@@ -60,7 +60,7 @@ GtLMagritteToolForSubstringLiteralSearch >> privatePerformToolCall: aToolCall in
 	matches := (filter result toArray
 		await: GtLSettings futureExecutionConfiguration) wait.
 
-	^ GtLMethodReferences fromReferences: matches
+	^ GtLMethodsSearchResult fromReferences: matches
 ]
 
 { #category : #accessing }

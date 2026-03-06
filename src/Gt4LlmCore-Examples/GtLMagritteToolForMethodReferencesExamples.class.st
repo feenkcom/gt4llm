@@ -20,10 +20,10 @@ GtLMagritteToolForMethodReferencesExamples >> methodReferencesForExistingSelecto
 	self assert: call arguments size equals: 1.
 	self assert: (result isKindOf: GtLMagritteBasedModel).
 	model := result model.
-	self assert: (model isKindOf: GtLMethodReferences).
-	self assert: model methods isNotEmpty.
+	self assert: (model isKindOf: GtLMethodsSearchResult).
+	self assert: model foundMethods isNotEmpty.
 	self
-		assert: (model methods anySatisfy: [ :each |
+		assert: (model foundMethods anySatisfy: [ :each |
 			each methodSignature includesSubstring: 'GtLToolForMethodReferencesExamples>>#methodReferencesForExistingSelector' ]).
 	self assert: model mayHaveMore not.
 	^ call
@@ -41,8 +41,8 @@ GtLMagritteToolForMethodReferencesExamples >> methodReferencesForUnknownSelector
 	self assert: call arguments size equals: 1.
 	self assert: (result isKindOf: GtLMagritteBasedModel).
 	model := result model.
-	self assert: (model isKindOf: GtLMethodReferences).
-	self assert: model methods equals: #().
+	self assert: (model isKindOf: GtLMethodsSearchResult).
+	self assert: model foundMethods equals: #().
 	self assert: model mayHaveMore not.
 	^ call
 ]
@@ -59,8 +59,8 @@ GtLMagritteToolForMethodReferencesExamples >> methodReferencesForValueOnlyReturn
 	self assert: call arguments size equals: 1.
 	self assert: (result isKindOf: GtLMagritteBasedModel).
 	model := result model.
-	self assert: (model isKindOf: GtLMethodReferences).
-	self assert: model methods size equals: 200.
+	self assert: (model isKindOf: GtLMethodsSearchResult).
+	self assert: model foundMethods size equals: 200.
 	self assert: model mayHaveMore.
 	^ call
 ]
