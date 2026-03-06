@@ -11,6 +11,17 @@ Class {
 	#category : #Gt4LlmCore
 }
 
+{ #category : #'instance creation' }
+GtLClassesSearchResult class >> fromMatches: aCollection [
+	| matchesArray limited |
+	matchesArray := aCollection asArray.
+	limited := matchesArray first: (200 min: matchesArray size).
+	^ self new
+		foundClassNames: (limited collect: #name);
+		mayHaveMore: matchesArray size > 200;
+		yourself
+]
+
 { #category : #accessing }
 GtLClassesSearchResult >> foundClassNames [
 	^ foundClassNames ifNil: [ #() ]

@@ -37,7 +37,7 @@ GtLMagritteToolForClassSearch >> name [
 
 { #category : #private }
 GtLMagritteToolForClassSearch >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
-	| arguments query matches promise limited |
+	| arguments query matches promise |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	query := arguments
 		at: 'query'
@@ -52,12 +52,8 @@ GtLMagritteToolForClassSearch >> privatePerformToolCall: aToolCall inContext: an
 				context: (GtSpotterContext new searchQuery: query)) toArray
 			await: GtLSettings futureExecutionConfiguration.
 	matches := promise wait.
-	limited := matches first: (200 min: matches size).
 
-	^ GtLClassesSearchResult new
-		foundClassNames: (limited collect: #name);
-		mayHaveMore: matches size > 200;
-		yourself
+	^ GtLClassesSearchResult fromMatches: matches
 ]
 
 { #category : #descriptions }
