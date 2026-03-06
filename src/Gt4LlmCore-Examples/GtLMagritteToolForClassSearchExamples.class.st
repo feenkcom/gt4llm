@@ -19,7 +19,6 @@ GtLMagritteToolForClassSearchExamples >> searchClassesWithMatches [
 	self assert: call arguments size equals: 1.
 	self assert: (result isKindOf: GtLMagritteBasedModel).
 	model := result model.
-	self assert: model query equals: 'GtLToolForClass'.
 	self assert: model foundClassNames isNotEmpty.
 	self assert: (model foundClassNames anySatisfy: [ :each | each includesSubstring: 'GtLToolForClassSearch' ]).
 	self assert: model mayHaveMore not.
@@ -56,7 +55,6 @@ GtLMagritteToolForClassSearchExamples >> searchClassesWithMoreThan200Matches [
 	self assert: call arguments size equals: 1.
 	self assert: (result isKindOf: GtLMagritteBasedModel).
 	model := result model.
-	self assert: model query equals: 'Object'.
 	self assert: model foundClassNames size equals: 200.
 	self assert: model mayHaveMore.
 	^ call
@@ -74,7 +72,6 @@ GtLMagritteToolForClassSearchExamples >> searchClassesWithNoMatches [
 	self assert: call arguments size equals: 1.
 	self assert: (result isKindOf: GtLMagritteBasedModel).
 	model := result model.
-	self assert: model query equals: 'ClassNameThatDoesNotExist42'.
 	self assert: model foundClassNames equals: #().
 	^ call
 ]
