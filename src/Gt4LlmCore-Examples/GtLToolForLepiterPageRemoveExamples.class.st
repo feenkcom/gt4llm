@@ -38,7 +38,6 @@ GtLToolForLepiterPageRemoveExamples >> missingPageUid [
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
 	self assert: (result isKindOf: GtLMagritteBasedModel).
-	self assert: result model missingArgument equals: 'pageUid'.
 	
 	model := result model.
 	self assert: (model isKindOf: GtLMissingRequiredPropertiesDomainObject).

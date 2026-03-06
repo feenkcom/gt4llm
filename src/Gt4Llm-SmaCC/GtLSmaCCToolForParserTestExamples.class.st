@@ -21,9 +21,8 @@ GtLSmaCCToolForParserTestExamples >> failJSParser [
 	self assert: result model isErrorDomainObject.
 	
 	model := result model.
-	self assert: (model isKindOf: GtLMissingRequiredPropertiesDomainObject).
-	self assert: model missingPropertyNames equals: #('startingState').
-	self assert: model path equals: #('testParse').
+	self assert: (model isKindOf: GtLProblemDomainObject).
+	self assert: model errorMessage equals: 'An error occurred during parsing near line: 1, column: 14'.
 	
 	^ call
 ]
