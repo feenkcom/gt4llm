@@ -1,8 +1,70 @@
 Class {
 	#name : #GtLToolForLepiterSnippetEditExamples,
 	#superclass : #Object,
-	#category : #'Gt4LlmCore-Examples-Tools'
+	#category : 'Gt4LlmCore-Examples-Tools'
 }
+
+{ #category : #examples }
+GtLToolForLepiterSnippetEditExamples >> emptyPageUid [
+	<gtExample>
+	| tool call result model |
+	tool := GtLToolForLepiterSnippetEdit new.
+	call := GtLFunctionToolCall new.
+	call rawArguments: {
+		'pageUid' -> ''.
+		'snippetUid' -> 'someSnippetUid'.
+		'updatedText' -> 'Updated text' } asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GtLMagritteBasedModel).
+	
+	model := result model.
+	self assert: (model isKindOf: GtLMissingArgumentDomainObject).
+	self assert: model missingArgument equals: 'pageUid'.
+	^ call
+]
+
+{ #category : #examples }
+GtLToolForLepiterSnippetEditExamples >> emptySnippetUid [
+	<gtExample>
+	| tool call result model |
+	tool := GtLToolForLepiterSnippetEdit new.
+	call := GtLFunctionToolCall new.
+	call rawArguments: {
+		'pageUid' -> (UUID new asString).
+		'snippetUid' -> ''.
+		'updatedText' -> 'Updated text' } asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GtLMagritteBasedModel).
+	
+	model := result model.
+	self assert: (model isKindOf: GtLMissingArgumentDomainObject).
+	self assert: model missingArgument equals: 'snippetUid'.
+	^ call
+]
+
+{ #category : #examples }
+GtLToolForLepiterSnippetEditExamples >> emptyUpdatedText [
+	<gtExample>
+	| tool call result model pageUid snippetUid |
+	tool := GtLToolForLepiterSnippetEdit new.
+	pageUid := UUID new asString.
+	snippetUid := (LeUID new uidString: (UUID new asString); uidString).
+	call := GtLFunctionToolCall new.
+	call rawArguments: {
+		'pageUid' -> pageUid.
+		'snippetUid' -> snippetUid.
+		'updatedText' -> '' } asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GtLMagritteBasedModel).
+	
+	model := result model.
+	self assert: (model isKindOf: GtLMissingArgumentDomainObject).
+	self assert: model missingArgument equals: 'updatedText'.
+	^ call
+]
 
 { #category : #examples }
 GtLToolForLepiterSnippetEditExamples >> missingPageUid [
@@ -67,6 +129,57 @@ GtLToolForLepiterSnippetEditExamples >> missingUpdatedText [
 	self assert: model missingPropertyNames equals: #('updatedText').
 	self assert: model path equals: #(nil).
 	
+	^ call
+]
+
+{ #category : #examples }
+GtLToolForLepiterSnippetEditExamples >> nilPageUid [
+	<gtExample>
+	| tool call result model |
+	tool := GtLToolForLepiterSnippetEdit new.
+	call := GtLFunctionToolCall new.
+	call rawArguments: '{"pageUid": null, "snippetUid": "someSnippetUid", "updatedText": "Updated text"}'.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GtLMagritteBasedModel).
+	
+	model := result model.
+	self assert: (model isKindOf: GtLJSONSchemaValidationErrorDomainObject).
+	^ call
+]
+
+{ #category : #examples }
+GtLToolForLepiterSnippetEditExamples >> nilSnippetUid [
+	<gtExample>
+	| tool call result model pageUid |
+	tool := GtLToolForLepiterSnippetEdit new.
+	pageUid := UUID new asString.
+	call := GtLFunctionToolCall new.
+	call rawArguments: '{"pageUid": "', pageUid, '", "snippetUid": null, "updatedText": "Updated text"}'.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GtLMagritteBasedModel).
+	
+	model := result model.
+	self assert: (model isKindOf: GtLJSONSchemaValidationErrorDomainObject).
+	^ call
+]
+
+{ #category : #examples }
+GtLToolForLepiterSnippetEditExamples >> nilUpdatedText [
+	<gtExample>
+	| tool call result model pageUid snippetUid |
+	tool := GtLToolForLepiterSnippetEdit new.
+	pageUid := UUID new asString.
+	snippetUid := (LeUID new uidString: (UUID new asString); uidString).
+	call := GtLFunctionToolCall new.
+	call rawArguments: '{"pageUid": "', pageUid, '", "snippetUid": "', snippetUid, '", "updatedText": null}'.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GtLMagritteBasedModel).
+	
+	model := result model.
+	self assert: (model isKindOf: GtLJSONSchemaValidationErrorDomainObject).
 	^ call
 ]
 

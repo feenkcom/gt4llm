@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'database'
 	],
-	#category : #'Gt4LlmCore-Tools'
+	#category : 'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }
@@ -52,11 +52,11 @@ GtLToolForLepiterSnippetEdit >> privatePerformToolCall: aToolCall inContext: anE
 		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
 			arguments: arguments;
 			missingArgument: 'pageUid' ].
-	pageUidString := pageUidString trimBoth.
-	pageUidString isEmpty
+	(pageUidString isNil or: [ pageUidString asString trimBoth isEmpty ])
 		ifTrue: [ ^ GtLMissingArgumentDomainObject new
 			arguments: arguments;
 			missingArgument: 'pageUid' ].
+	pageUidString := pageUidString trimBoth.
 	pageUid := [ UUID fromString36: pageUidString ]
 		on: Error
 		do: [ :error | 
@@ -68,11 +68,11 @@ GtLToolForLepiterSnippetEdit >> privatePerformToolCall: aToolCall inContext: anE
 		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
 			arguments: arguments;
 			missingArgument: 'snippetUid' ].
-	snippetUidString := snippetUidString trimBoth.
-	snippetUidString isEmpty
+	(snippetUidString isNil or: [ snippetUidString asString trimBoth isEmpty ])
 		ifTrue: [ ^ GtLMissingArgumentDomainObject new
 			arguments: arguments;
 			missingArgument: 'snippetUid' ].
+	snippetUidString := snippetUidString trimBoth.
 	snippetUid := LeUID new.
 	[ snippetUid uidString: snippetUidString ]
 		on: Error
@@ -85,11 +85,11 @@ GtLToolForLepiterSnippetEdit >> privatePerformToolCall: aToolCall inContext: anE
 		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
 			arguments: arguments;
 			missingArgument: 'updatedText' ].
-	updatedText := updatedText asString.
-	updatedText isEmpty
+	(updatedText isNil or: [ updatedText asString isEmpty ])
 		ifTrue: [ ^ GtLMissingArgumentDomainObject new
 			arguments: arguments;
 			missingArgument: 'updatedText' ].
+	updatedText := updatedText asString.
 	self database
 		pageWithID: pageUid
 		ifPresent: [ :aPage | 

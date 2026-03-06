@@ -4,7 +4,7 @@ Magritte-based tool for retrieving class references.
 Class {
 	#name : #GtLMagritteToolForClassReferences,
 	#superclass : #GtLAbstractMagritteFunctionTool,
-	#category : #'Gt4LlmCore-Tools'
+	#category : 'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }
@@ -55,7 +55,7 @@ GtLMagritteToolForClassReferences >> name [
 
 { #category : #private }
 GtLMagritteToolForClassReferences >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
-	| arguments className class references limitedReferences |
+	| arguments className class references |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	className := arguments
 		at: 'className'

@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'logicalDatabase'
 	],
-	#category : #'Gt4LlmCore-Tools'
+	#category : 'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }
@@ -65,9 +65,17 @@ GtLToolForLepiterPageCreate >> privatePerformToolCall: aToolCall inContext: anEx
 		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
 			arguments: arguments;
 			missingArgument: 'title' ].
+	(title isNil or: [ title asString trimBoth isEmpty ])
+		ifTrue: [ ^ GtLMissingArgumentDomainObject new
+			arguments: arguments;
+			missingArgument: 'title' ].
 	databaseId := arguments
 		at: 'databaseId'
 		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
+			arguments: arguments;
+			missingArgument: 'databaseId' ].
+	(databaseId isNil or: [ databaseId asString trimBoth isEmpty ])
+		ifTrue: [ ^ GtLMissingArgumentDomainObject new
 			arguments: arguments;
 			missingArgument: 'databaseId' ].
 	baseDatabase := self database.

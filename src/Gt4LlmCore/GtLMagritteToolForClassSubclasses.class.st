@@ -4,7 +4,7 @@ Magritte-based tool for listing subclasses of a given class.
 Class {
 	#name : #GtLMagritteToolForClassSubclasses,
 	#superclass : #GtLAbstractMagritteFunctionTool,
-	#category : #'Gt4LlmCore-Tools'
+	#category : 'Gt4LlmCore-Tools'
 }
 
 { #category : #magritte }

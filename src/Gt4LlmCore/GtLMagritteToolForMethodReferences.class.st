@@ -4,7 +4,7 @@ Magritte-based tool for retrieving method references.
 Class {
 	#name : #GtLMagritteToolForMethodReferences,
 	#superclass : #GtLAbstractMagritteFunctionTool,
-	#category : #'Gt4LlmCore-Tools'
+	#category : 'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }
