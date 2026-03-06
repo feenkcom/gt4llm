@@ -28,51 +28,10 @@ TGtLWithInstructionSectionAPI >> addToExplanationSectionNamed: aTitle withConten
 				body: aContentString).
 ]
 
-{ #category : #instructions }
-TGtLWithInstructionSectionAPI >> buildCompleteInstructions [
-	| newInstructions  |
-	newInstructions := GtLInstructionWithSections new
-			introduction: (GtLInstructionString new string: '').
-	
-	self inputModels notEmpty
-		ifTrue: [ 
-			| inputInstructionsBody inputInstructions |
-			inputInstructionsBody := GtLInstructionWithSections new
-					introduction: 'The inputs provided follow the descriptions below'.
-			inputInstructions := GtLInstructionSection new
-					title: 'Input descriptions';
-					body: inputInstructionsBody.
-			newInstructions addSection: inputInstructions.
-			self inputModels
-				do: [ :anInputModel | anInputModel addInstructionsTo: inputInstructionsBody ] ].
-				
-	^ newInstructions
-]
-
 { #category : #'api - instructions' }
 TGtLWithInstructionSectionAPI >> gtPageExplanation: aPageName [
 	self pageObjectExplanation: (LeDatabase gtBook  
 		pageNamed: aPageName)
-]
-
-{ #category : #instructions }
-TGtLWithInstructionSectionAPI >> inputDescriptionSection [
-	| newInstructions  |
-	newInstructions := GtLInstructionComposite new.
-	
-	self inputModels notEmpty
-		ifTrue: [ 
-			| inputInstructionsBody inputInstructions |
-			inputInstructionsBody := GtLInstructionWithSections new
-					introduction: 'The inputs provided follow the descriptions below'.
-			inputInstructions := GtLInstructionSection new
-					title: 'Input descriptions';
-					body: inputInstructionsBody.
-			newInstructions addItem: inputInstructions.
-			self inputModels
-				do: [ :anInputModel | anInputModel addInstructionsTo: inputInstructionsBody ] ].
-				
-	^ newInstructions
 ]
 
 { #category : #'api - instructions' }

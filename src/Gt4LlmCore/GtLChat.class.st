@@ -398,6 +398,7 @@ GtLChat >> initialize [
 	self initializeTools.
 	responseFormat := GtLResponseCompositeFormat new.
 	objectStorage := GtLObjectStorage new.
+	instructions := GtLInstructionComposite new.
 	
 	self updateLastUpdate
 ]
@@ -422,11 +423,12 @@ GtLChat >> instruction: instructionString titled: title [
 
 { #category : #accessing }
 GtLChat >> instructions [
-	^ instructions ifNil: [ instructions := GtLInstructionComposite new ]
+	^ instructions
 ]
 
 { #category : #accessing }
 GtLChat >> instructions: anObject [
+	GtJustContextStackSignal emit.
 	instructions := anObject
 ]
 

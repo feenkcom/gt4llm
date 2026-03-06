@@ -53,10 +53,34 @@ GtLInstructionComposite >> instructionString [
 	^ (String cr, String cr) join: (items collect: [:anItem | anItem instructionString])
 ]
 
+{ #category : #'as yet unclassified' }
+GtLInstructionComposite >> isEmpty [
+	^ items isEmpty
+]
+
 { #category : #accessing }
 GtLInstructionComposite >> items: anObject [
 	items := anObject
 			collect: [ :anInstruction | anInstruction asInstructionPiece parent: self ]
+]
+
+{ #category : #'as yet unclassified' }
+GtLInstructionComposite >> postCopy [
+	items := items copy.
+]
+
+{ #category : #'as yet unclassified' }
+GtLInstructionComposite >> sectionNamed: aSectionTitle ifAbsent: aBlock [
+	^ items
+			detect: [ :aSection | aSection title = aSectionTitle ] 
+			ifFound: [ :each | each ] 
+			ifNone: [
+				| newSection|
+				newSection := GtLInstructionSection new
+					title: aSectionTitle.
+				self addItem: newSection.
+				aBlock value: newSection.
+				newSection ]
 ]
 
 { #category : #'as yet unclassified' }
