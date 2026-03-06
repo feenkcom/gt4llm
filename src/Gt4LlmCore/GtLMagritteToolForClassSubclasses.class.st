@@ -47,15 +47,11 @@ GtLMagritteToolForClassSubclasses >> name [
 
 { #category : #execution }
 GtLMagritteToolForClassSubclasses >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
-	| arguments className class subclasses limitedSubclassNames |
+	| arguments className class subclasses |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
-	className := arguments
-		at: 'className'
-		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-				arguments: arguments;
-				missingArgument: 'className' ].
+	className := arguments	at: 'className'.
 
-	(className isNil or: [ className trimBoth isEmpty ])
+	(className trimBoth isEmpty)
 		ifTrue: [ ^ GtLMissingArgumentDomainObject new
 				arguments: arguments;
 				missingArgument: 'className' ].

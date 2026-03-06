@@ -89,26 +89,19 @@ GtLToolForLepiterSnippetsCreate >> name [
 
 { #category : #private }
 GtLToolForLepiterSnippetsCreate >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
-	| arguments snippetsArgument results |
+	| arguments snippets results |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
-	snippetsArgument := arguments
-		at: 'snippets'
-		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-			arguments: arguments;
-			missingArgument: 'snippets' ].
-	(snippetsArgument isCollection and: [ snippetsArgument isString not ])
-		ifFalse: [ ^ GtLIncorrectArgumentTypeDomainObject new
-			argumentName: 'snippets';
-			argumentValue: snippetsArgument;
-			expectedArgumentValueKind: Array ].
-	results := snippetsArgument collect: [ :each |
+	snippets := arguments at: 'snippets'.
+			
+	results := snippets collect: [ :each |
 		(each isKindOf: GtLLepiterSnippetCreationRequest)
 			ifFalse: [ ^ GtLIncorrectArgumentArrayItemDomainObject new
 				argumentName: 'snippets';
-				argumentValue: snippetsArgument;
+				argumentValue: snippets;
 				expectedItemKind: GtLLepiterSnippetCreationRequest;
 				incorrectItems: { each } ].
 		self createSnippetFrom: each ].
+		
 	^ GtLLepiterSnippetsDomainObject new
 		snippets: results;
 		yourself

@@ -71,21 +71,13 @@ GtLToolForLepiterPageRemove >> pageUidDescription [
 GtLToolForLepiterPageRemove >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments pageUidString databaseId baseDatabase targetDatabase pageUid page |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
-	pageUidString := arguments
-		at: 'pageUid'
-		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-			arguments: arguments;
-			missingArgument: 'pageUid' ].
-	(pageUidString isNil or: [ pageUidString asString trimBoth isEmpty ])
+	pageUidString := arguments	at: 'pageUid'.
+	(pageUidString trimBoth isEmpty)
 		ifTrue: [ ^ GtLMissingArgumentDomainObject new
 			arguments: arguments;
 			missingArgument: 'pageUid' ].
-	databaseId := arguments
-		at: 'databaseId'
-		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-			arguments: arguments;
-			missingArgument: 'databaseId' ].
-	(databaseId isNil or: [ databaseId asString trimBoth isEmpty ])
+	databaseId := arguments at: 'databaseId'.
+	(databaseId trimBoth isEmpty)
 		ifTrue: [ ^ GtLMissingArgumentDomainObject new
 			arguments: arguments;
 			missingArgument: 'databaseId' ].

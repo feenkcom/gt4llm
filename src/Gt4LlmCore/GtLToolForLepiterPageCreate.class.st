@@ -60,21 +60,13 @@ GtLToolForLepiterPageCreate >> name [
 GtLToolForLepiterPageCreate >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments title targetDatabase page databaseId baseDatabase |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
-	title := arguments
-		at: 'title'
-		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-			arguments: arguments;
-			missingArgument: 'title' ].
-	(title isNil or: [ title asString trimBoth isEmpty ])
+	title := arguments at: 'title'.
+	(title trimBoth isEmpty)
 		ifTrue: [ ^ GtLMissingArgumentDomainObject new
 			arguments: arguments;
 			missingArgument: 'title' ].
-	databaseId := arguments
-		at: 'databaseId'
-		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-			arguments: arguments;
-			missingArgument: 'databaseId' ].
-	(databaseId isNil or: [ databaseId asString trimBoth isEmpty ])
+	databaseId := arguments at: 'databaseId'.
+	(databaseId trimBoth isEmpty)
 		ifTrue: [ ^ GtLMissingArgumentDomainObject new
 			arguments: arguments;
 			missingArgument: 'databaseId' ].

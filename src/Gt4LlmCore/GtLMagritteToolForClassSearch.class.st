@@ -39,11 +39,7 @@ GtLMagritteToolForClassSearch >> name [
 GtLMagritteToolForClassSearch >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments query matches promise |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
-	query := arguments
-		at: 'query'
-		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-				arguments: arguments;
-				missingArgument: 'query' ].
+	query := arguments	at: 'query'.
 
 	promise := (GtSpotterSubstringsFilter new
 			withWordsSplitter;

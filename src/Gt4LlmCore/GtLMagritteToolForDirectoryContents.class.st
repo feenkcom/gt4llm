@@ -64,12 +64,9 @@ GtLMagritteToolForDirectoryContents >> name [
 GtLMagritteToolForDirectoryContents >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments path directoryReference |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
-	path := arguments
-		at: 'directoryPath'
-		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-				arguments: arguments;
-				missingArgument: 'directoryPath' ].
+	path := arguments at: 'directoryPath'.
 	path isEmpty ifTrue: [ ^ GtLMissingDomainObject new objectName: path ].
+	
 	(directoryReference := path asFileReference) exists
 		ifFalse: [ ^ GtLMissingDomainObject new objectName: path ].
 		
