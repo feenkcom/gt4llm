@@ -48,7 +48,7 @@ GtLClassDescription >> allClassMethodNamesDescription [
 		label: 'All class methods';
 		accessor: #allClassMethodNames;
 		name: #allClassMethodNames;
-		classes: {Symbol};
+		classes: {String};
 		beRequired;
 		yourself
 ]
@@ -70,7 +70,7 @@ GtLClassDescription >> allInstanceMethodNamesDescription [
 		label: 'All instance methods';
 		accessor: #allInstanceMethodNames;
 		name: #allInstanceMethodNames;
-		classes: {Symbol};
+		classes: {String};
 		beRequired;
 		yourself
 ]

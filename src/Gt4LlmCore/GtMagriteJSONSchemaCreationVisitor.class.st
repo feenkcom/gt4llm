@@ -178,13 +178,29 @@ GtMagriteJSONSchemaCreationVisitor >> visitToManyRelationDescription: aDescripti
 
 { #category : #'visiting-description' }
 GtMagriteJSONSchemaCreationVisitor >> visitToManyScalarRelationDescription: aDescription [
-	| schema |
+	| scalarType schema |
+	self 
+		assert: aDescription classes size = 1
+		description: 'Only one scalar type supported at the moment'.
+	
+	scalarType := nil.
+	aDescription classes first = String 
+		ifTrue: [ scalarType := 'string ' ].
+	aDescription classes first = Boolean 
+		ifTrue: [ scalarType := 'boolean' ].
+	scalarType ifNil: [
+		^ Error signal: 'Unsupported scallar type: ', aDescription classes first name ].
+	
 	schema := NeoJSONObject new
 		at: 'type' put: 'array';
 		at: 'items' put: (NeoJSONObject new
-			at: 'type' put: 'string';
+			at: 'type' put: scalarType;
 			yourself);
 		yourself.
+	
+	aDescription hasComment ifTrue: [
+		schema at: 'description' put: aDescription comment ].
+		
 	^ currentSchema := schema
 ]
 
