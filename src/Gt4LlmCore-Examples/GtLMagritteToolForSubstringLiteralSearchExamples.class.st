@@ -20,9 +20,9 @@ GtLMagritteToolForSubstringLiteralSearchExamples >> searchWithMatches [
 	self assert: call arguments size equals: 1.
 	self assert: (result isKindOf: GtLMagritteBasedModel).
 	model := result model.
-	self assert: (model isKindOf: GtLMethodReferences).
+	self assert: (model isKindOf: GtLMethodsSearchResult).
 	self
-		assert: (model methods anySatisfy: [ :each |
+		assert: (model foundMethods anySatisfy: [ :each |
 			each methodSignature = 'GtLToolForSubstringLiteralSearchExamples>>#searchWithMatches' ]).
 	self assert: model mayHaveMore not.
 	^ call
@@ -59,8 +59,8 @@ GtLMagritteToolForSubstringLiteralSearchExamples >> searchWithMoreThan200Matches
 	self assert: call arguments size equals: 1.
 	self assert: (result isKindOf: GtLMagritteBasedModel).
 	model := result model.
-	self assert: (model isKindOf: GtLMethodReferences).
-	self assert: model methods size equals: 200.
+	self assert: (model isKindOf: GtLMethodsSearchResult).
+	self assert: model foundMethods size equals: 200.
 	self assert: model mayHaveMore.
 	^ call
 ]
@@ -69,7 +69,7 @@ GtLMagritteToolForSubstringLiteralSearchExamples >> searchWithMoreThan200Matches
 GtLMagritteToolForSubstringLiteralSearchExamples >> searchWithNoMatches [
 	<gtExample>
 	| tool call result model query |
-	query := 'noLiteralMatchStringForSearch' , '42'.
+	query := 'noLiteralMatchString', 'ForSearch' , '42'.
 	tool := GtLMagritteToolForSubstringLiteralSearch new.
 	call := GtLFunctionToolCall new.
 	call rawArguments: { 'query' -> query } asDictionary.
@@ -78,8 +78,8 @@ GtLMagritteToolForSubstringLiteralSearchExamples >> searchWithNoMatches [
 	self assert: call arguments size equals: 1.
 	self assert: (result isKindOf: GtLMagritteBasedModel).
 	model := result model.
-	self assert: (model isKindOf: GtLMethodReferences).
-	self assert: model methods isEmpty.
+	self assert: (model isKindOf: GtLMethodsSearchResult).
+	self assert: model foundMethods isEmpty.
 	self assert: model mayHaveMore not.
 	^ call
 ]

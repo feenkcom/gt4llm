@@ -15,7 +15,7 @@ Arguments:
 - methodName: string
 
 Return values:
-- methods: array of method references
+- foundMethods: array of method references
 - mayHaveMore: boolean indicating if there are more matches than returned
 
 Example JSON arguments:
@@ -25,7 +25,7 @@ Example JSON arguments:
 
 Example JSON response:
 {
-  "methods": [
+  "foundMethods": [
     {
       "methodClassName": "GtLAbstractFunctionTool",
       "methodName": "performToolCall:",
@@ -70,5 +70,5 @@ GtLMagritteToolForMethodImplementors >> privatePerformToolCall: aToolCall inCont
 	implementors := (selector gtImplementors result toArray
 		await: GtLSettings futureExecutionConfiguration) wait.
 
-	^ GtLMethodReferences fromReferences: implementors
+	^ GtLMethodsSearchResult fromReferences: implementors
 ]
