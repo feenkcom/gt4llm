@@ -66,7 +66,7 @@ GtLTools class >> gtSearch [
 				"GtLMagritteToolForMethodSource new."
 				GtLMagritteToolForMethodsSource new.
 				GtLToolForPackageClasses new.
-				GtLToolForSubstringLiteralSearch new} asOrderedCollection
+				GtLMagritteToolForSubstringLiteralSearch new} asOrderedCollection
 ]
 
 { #category : #defaults }
