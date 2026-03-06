@@ -7,7 +7,7 @@ Class {
 { #category : #examples }
 GtLSmaCCToolForParserTestExamples >> failJSParser [
 	<gtExample>
-	| tool call result |
+	| tool call result model |
 	tool := GtLSmaCCToolForParserTest new model: GtLSmaCCModel new.
 	call := GtLFunctionToolCall new.
 	call
@@ -18,8 +18,13 @@ GtLSmaCCToolForParserTestExamples >> failJSParser [
 	self assert: call tool == tool.
 	self assert: (result isKindOf: GtLMagritteBasedModel).
 	self assert: call arguments size equals: 1.
-	self assert: (call arguments anyOne isKindOf: GtLSmaCCParserTest).
 	self assert: result model isErrorDomainObject.
+	
+	model := result model.
+	self assert: (model isKindOf: GtLMissingRequiredPropertiesDomainObject).
+	self assert: model missingPropertyNames equals: #('startingState').
+	self assert: model path equals: #('testParse').
+	
 	^ call
 ]
 

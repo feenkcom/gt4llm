@@ -100,7 +100,7 @@ GtLMagritteToolForMethodSourceExamples >> methodSourceForMissingArguments [
 	model := result model.
 	self assert: model isErrorDomainObject.
 	self assert: (model isKindOf: GtLMissingRequiredPropertiesDomainObject).
-	self assert: model missingPropertyNames asArray equals: #('methodDescriptor').
+	self assert: model missingPropertyNames equals: #('methodDescriptor').
 		
 	^ call
 ]
@@ -126,7 +126,7 @@ GtLMagritteToolForMethodSourceExamples >> methodSourceForMissingClassSide [
 	model := result model.
 	self assert: model isErrorDomainObject.
 	self assert: (model isKindOf: GtLMissingRequiredPropertiesDomainObject).
-	self assert: model missingPropertyNames asArray equals: #('classSide').
+	self assert: model missingPropertyNames equals: #('classSide').
 	self assert: model path asArray equals: #('methodDescriptor').
 		
 	^ call
@@ -152,7 +152,7 @@ GtLMagritteToolForMethodSourceExamples >> methodSourceForMissingMethodClassName 
 	model := result model.
 	self assert: model isErrorDomainObject.
 	self assert: (model isKindOf: GtLMissingRequiredPropertiesDomainObject).
-	self assert: model missingPropertyNames asArray equals: #('methodClassName').
+	self assert: model missingPropertyNames equals: #('methodClassName').
 	self assert: model path asArray equals: #('methodDescriptor').
 	^ call
 ]
@@ -178,7 +178,7 @@ GtLMagritteToolForMethodSourceExamples >> methodSourceForMissingMethodName [
 	model := result model.
 	self assert: model isErrorDomainObject.
 	self assert: (model isKindOf: GtLMissingRequiredPropertiesDomainObject).
-	self assert: model missingPropertyNames asArray equals: #('methodName').
+	self assert: model missingPropertyNames equals: #('methodName').
 	self assert: model path asArray equals: #('methodDescriptor').
 		
 	^ call

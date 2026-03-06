@@ -7,7 +7,7 @@ Class {
 { #category : #examples }
 GtLToolForLepiterPageCreateExamples >> missingDatabaseId [
 	<gtExample>
-	| tool call result logicalDB |
+	| tool call result logicalDB model |
 	logicalDB := LeLogicalDatabase new.
 	tool := GtLToolForLepiterPageCreate new.
 	tool database: logicalDB.
@@ -16,14 +16,18 @@ GtLToolForLepiterPageCreateExamples >> missingDatabaseId [
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
 	self assert: (result isKindOf: GtLMagritteBasedModel).
-	self assert: result model missingArgument equals: 'databaseId'.
+	
+	model := result model.
+	self assert: (model isKindOf: GtLMissingRequiredPropertiesDomainObject).
+	self assert: model missingPropertyNames equals: #('databaseId').
+	self assert: model path equals: #(nil).
 	^ call
 ]
 
 { #category : #examples }
 GtLToolForLepiterPageCreateExamples >> missingTitle [
 	<gtExample>
-	| tool call result db logicalDB |
+	| tool call result db logicalDB model |
 	db := LeExplicitlyAttachedLinksExamples new primaryDatabase.
 	logicalDB := LeLogicalDatabase new primaryDB: db.
 	tool := GtLToolForLepiterPageCreate new.
@@ -33,7 +37,12 @@ GtLToolForLepiterPageCreateExamples >> missingTitle [
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
 	self assert: (result isKindOf: GtLMagritteBasedModel).
-	self assert: result model missingArgument equals: 'title'.
+	
+	model := result model.
+	self assert: (model isKindOf: GtLMissingRequiredPropertiesDomainObject).
+	self assert: model missingPropertyNames equals: #('title').
+	self assert: model path equals: #(nil).
+	
 	^ call
 ]
 

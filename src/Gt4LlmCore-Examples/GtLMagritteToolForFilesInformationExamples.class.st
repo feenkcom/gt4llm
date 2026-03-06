@@ -163,6 +163,6 @@ GtLMagritteToolForFilesInformationExamples >> filesInformationWithoutPaths [
 	model := result model.
 	self assert: model isErrorDomainObject.
 	self assert: (model isKindOf: GtLMissingRequiredPropertiesDomainObject).
-	self assert: model missingPropertyNames asArray equals: #('filePaths').
+	self assert: model missingPropertyNames equals: #('filePaths').
 	^ call
 ]

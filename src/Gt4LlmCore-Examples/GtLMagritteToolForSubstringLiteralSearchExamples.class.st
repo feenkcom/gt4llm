@@ -60,7 +60,7 @@ GtLMagritteToolForSubstringLiteralSearchExamples >> searchWithMissingQuery [
 	model := result model.
 	self assert: model isErrorDomainObject.
 	self assert: (model isKindOf: GtLMissingRequiredPropertiesDomainObject).
-	self assert: model missingPropertyNames asArray equals: #('query').
+	self assert: model missingPropertyNames equals: #('query').
 	^ call
 ]
 

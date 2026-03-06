@@ -143,7 +143,7 @@ GtLMagritteToolForFilesGrepExamples >> filesGrepWithFileNamePatterns [
 { #category : #examples }
 GtLMagritteToolForFilesGrepExamples >> filesGrepWithoutQuery [
 	<gtExample>
-	| tool call result |
+	| tool call result model |
 	tool := GtLMagritteToolForFilesGrep new.
 	call := GtLFunctionToolCall new.
 	call rawArguments: { 'filePath' -> Dictionary new } asDictionary.
@@ -151,6 +151,11 @@ GtLMagritteToolForFilesGrepExamples >> filesGrepWithoutQuery [
 	self assert: call tool == tool.
 	self assert: (result isKindOf: GtLMagritteBasedModel).
 	self assert: result model isErrorDomainObject.
-	self assert: result model missingArgument equals: 'query'.
+	
+	model := result model.
+	self assert: (model isKindOf: GtLMissingRequiredPropertiesDomainObject).
+	self assert: model missingPropertyNames equals: #('pathString').
+	self assert: model path equals: #('filePath').
+	
 	^ call
 ]

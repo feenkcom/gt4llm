@@ -146,6 +146,6 @@ GtLMagritteToolForFilesWriteExamples >> filesWriteWithoutFiles [
 	model := result model.
 	self assert: model isErrorDomainObject.
 	self assert: (model isKindOf: GtLMissingRequiredPropertiesDomainObject).
-	self assert: model missingPropertyNames asArray equals: #('files').
+	self assert: model missingPropertyNames equals: #('files').
 	^ call
 ]
