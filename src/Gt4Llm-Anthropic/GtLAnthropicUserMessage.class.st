@@ -158,8 +158,15 @@ GtLAnthropicUserMessage >> inputModels [
 { #category : #accessing }
 GtLAnthropicUserMessage >> instructions [
 	^ instructions
-		ifNotNil: [ instructions addItem: self inputDescriptionSection ]
-		ifNil: [ instructions := self buildCompleteInstructions ]
+		ifNil: [  "instructions addItem: self inputDescriptionSection" ]
+		ifNotNil: [ 
+			self inputModels notEmpty
+				ifTrue: [ instructions
+						sectionNamed: 'Input descriptions'
+						ifAbsent: [ :aSection | 
+							aSection addString: 'The inputs provided follow the descriptions below'.
+							self inputModels
+								do: [ :anInputModel | anInputModel addInstructionsTo: aSection ] ] ] ]
 ]
 
 { #category : #testing }

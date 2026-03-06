@@ -10,6 +10,16 @@ Class {
 	#category : #'Gt4LlmCore-Instructions'
 }
 
+{ #category : #'as yet unclassified' }
+GtLInstructionSection >> addSection: aSection [
+	self body addItem: (aSection asGtLInstructionPiece parent: body)
+]
+
+{ #category : #accessing }
+GtLInstructionSection >> addString: aString [ 
+	self body addItem: (GtLInstructionString new string: aString)
+]
+
 { #category : #accessing }
 GtLInstructionSection >> body [
 	^ body
@@ -65,12 +75,19 @@ GtLInstructionSection >> initialize [
 	
 	headerLevel := 1.
 	autoHeaderLevel := true.
+	body := GtLInstructionComposite new parent: self.
 ]
 
 { #category : #accessing }
 GtLInstructionSection >> instructionString [
 	^ ('#' repeat: self headerLevel) , ' ' , self title
 		, String lf , self body instructionString
+]
+
+{ #category : #'as yet unclassified' }
+GtLInstructionSection >> postCopy [
+	body := body copy.
+	title := title copy
 ]
 
 { #category : #accessing }

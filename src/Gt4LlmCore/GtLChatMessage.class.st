@@ -290,7 +290,8 @@ GtLChatMessage >> initialize [
 	createdAt := DateAndTime now.
 	
 	formatDescriptions := GtLResponseCompositeFormat new.
-	tools := GtLTools new
+	tools := GtLTools new.
+	instructions := GtLInstructionComposite new.
 ]
 
 { #category : #accessing }
@@ -425,8 +426,7 @@ GtLChatMessage >> unsubscribe: anObject [
 
 { #category : #updating }
 GtLChatMessage >> updateDataFromChat: aChat [ 
-	instructions ifNil: [
-		instructions := aChat instructions ].
+	instructions isEmpty ifTrue: [ instructions := aChat instructions copy ].
 	formatDescriptions hasSchemaDescriptors ifFalse: [
 		formatDescriptions addCompositeFormat: aChat currentFormat ].
 	tools isEmpty ifTrue: [ tools addAll: aChat currentTools ]
@@ -434,7 +434,7 @@ GtLChatMessage >> updateDataFromChat: aChat [
 
 { #category : #accessing }
 GtLChatMessage >> updateDataFromMessage: aPreviousMessage [ 
-	instructions ifNil: [ instructions := aPreviousMessage instructions ].
+	instructions isEmpty ifTrue: [ instructions := aPreviousMessage instructions copy ].
 	formatDescriptions hasSchemaDescriptors ifFalse: [
 		formatDescriptions addCompositeFormat: aPreviousMessage formatDescriptions ].
 	(tools isNil or: [tools isEmpty]) ifTrue: [ tools := aPreviousMessage tools ]

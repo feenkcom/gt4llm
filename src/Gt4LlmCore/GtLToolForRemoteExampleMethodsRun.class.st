@@ -4,34 +4,6 @@ Class {
 	#category : #'Gt4LlmCore-Tools'
 }
 
-{ #category : #'instance creation' }
-GtLToolForRemoteExampleMethodsRun class >> openAiAssistant [
-	"Answer a basic OpenAI assistant for testing the tool"
-	| assistant chat |
-
-	assistant := GtLlmAssistant new
-		description: 'You are an assistant for Glamorous Toolkit'.
-	assistant instruction
-		replaceFormatNamed: 'Text'
-		with: GtLlmAssistantLibraryForGt textFormatWithSmalltalkBlocks.
-	assistant instruction
-		"addComponent: GtLlmAssistantLibraryForGt codeFormatWithSnippetMethodClass."
-		addComponent: GtLlmAssistantLibraryForGt changesFormatWithPageSnippetMethodClass.
-	chat := assistant createChat.
-	chat provider
-		assistantMessageClass: GtOpenAIObjectMessage;
-		userMessageClass: GtOpenAIObjectMessage.
-	chat 
-		addTool: GtLlmToolForClassSearch new;
-		addTool: GtLlmToolForClassLookup new;
-		addTool: GtLlmToolForClassSubclasses new;
-		addTool: GtLlmToolForMethodImplementors new;
-		addTool: GtLlmToolForMethodReferences new;
-		addTool: GtLlmToolForMethodSource new;
-		addTool: GtLlmToolForRemoteExampleMethodsRun new.
-	^ chat.
-]
-
 { #category : #private }
 GtLToolForRemoteExampleMethodsRun >> addClass: changeDictionary to: eventFactory onProblemDo: aBlock [
 	| definitionSource classBuilder classDefinition |

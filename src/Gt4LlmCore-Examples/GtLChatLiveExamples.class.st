@@ -672,6 +672,9 @@ GtLChatLiveExamples >> messageWithToolCallExample_magritteMarkdown [
 		addInputMagritteObject: (GtLMarkdown new content: messageString)
 		named: 'Markdown'.
 	responseMessage := self currentChat sendMessage: currentMessage.
+	self assert: self currentChat instructions isEmpty.
+	self assert: currentMessage instructions isEmpty not.
+	self assert: (currentMessage instructions instructionString includesSubstring: 'Input descriptions').
 	self assert: self currentChat messages size equals: 2.
 	self assert: self currentChat isFinishedSuccesss not.
 	self assert: self currentChat messages last executionMessages isEmpty.
