@@ -52,6 +52,8 @@ GtLMagritteToolForFilesWrite >> privatePerformToolCall: aToolCall inContext: anE
 	fileObjects := OrderedCollection new.
 	fileDescriptors do: [ :each |
 		| fileReference parentDirectory result |
+		each path isEmpty
+			ifTrue: [ ^ GtLMissingDomainObject new objectName: each path ].
 		fileReference := each path asFileReference.
 		(fileReference exists and: [ fileReference isDirectory ])
 			ifTrue: [ ^ GtLIncorrectArgumentTypeDomainObject new

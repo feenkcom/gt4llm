@@ -25,10 +25,5 @@ GtLToolForLepiterKnowledgeBases >> privatePerformToolCall: aToolCall inContext: 
 	databases := LeDatabasesRegistry defaultLogicalDatabase databases.
 	^ GtLLepiterKnowledgeBases new
 		knowledgeBases: (databases collect: [ :each |
-			GtLLepiterKnowledgeBase new
-				databaseName: each databaseName;
-				uuidString: each uuidString;
-				pageCount: each pageCount;
-				storeLocation: each storeLocation asString;
-				yourself ])
+			GtLLepiterKnowledgeBase forDatabase: each ])
 ]

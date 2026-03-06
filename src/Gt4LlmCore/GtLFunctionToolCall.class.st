@@ -124,7 +124,9 @@ GtLFunctionToolCall >> gtDebugActionFor: anAction [
 		debugBlock: [ 
 			| newCall |
 			newCall := self class new.
-			newCall function: self function.
+			newCall 
+				name: self name;
+				rawArguments:  self rawArguments.
 			self tool performToolCall: newCall	];
 		tooltip: 'Debug a new tool call'
 ]
@@ -231,6 +233,13 @@ GtLFunctionToolCall >> rawArguments [
 { #category : #accessing }
 GtLFunctionToolCall >> rawArguments: aStringOrDictionary [
 	rawArguments := aStringOrDictionary
+]
+
+{ #category : #accessing }
+GtLFunctionToolCall >> rawArgumentsJsonObject [
+	^ (rawArguments isKindOf: String)
+				ifTrue: [ NeoJSONReader fromString:  rawArguments ]
+				ifFalse: [ rawArguments  ] 
 ]
 
 { #category : #accessing }

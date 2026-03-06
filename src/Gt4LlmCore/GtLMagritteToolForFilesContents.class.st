@@ -27,6 +27,8 @@ Example JSON response:
 
 { #category : #private }
 GtLMagritteToolForFilesContents >> fileContentsFromPathString: aPathString [
+	(aPathString pathString isEmpty)
+		ifTrue: [ ^ GtLMissingDomainObject new objectName: aPathString pathString ].
 	^ aPathString contentsDomainObject
 ]
 

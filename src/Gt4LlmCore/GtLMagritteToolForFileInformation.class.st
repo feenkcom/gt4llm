@@ -86,5 +86,7 @@ GtLMagritteToolForFileInformation >> privatePerformToolCall: aToolCall inContext
 		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
 				arguments: arguments;
 				missingArgument: 'filePath' ].
+	filePath pathString isEmpty
+		ifTrue: [ ^ GtLMissingDomainObject new objectName: filePath pathString ].
 	^ self informationForFilePath: filePath pathString
 ]

@@ -65,6 +65,24 @@ GtLMagritteToolForMethodImplementorsExamples >> implementorsForUnknownMethodName
 ]
 
 { #category : #examples }
+GtLMagritteToolForMethodImplementorsExamples >> implementorsWithEmptyMethodName [
+	<gtExample>
+	| tool call result model |
+	tool := GtLMagritteToolForMethodImplementors new.
+	call := GtLFunctionToolCall new.
+	call rawArguments: { 'methodName' -> '' } asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: call arguments size equals: 1.
+	self assert: (result isKindOf: GtLMagritteBasedModel).
+	model := result model.
+	self assert: model isErrorDomainObject.
+	self assert: (model isKindOf: GtLMissingArgumentDomainObject).
+	self assert: model missingArgument equals: 'methodName'.
+	^ call
+]
+
+{ #category : #examples }
 GtLMagritteToolForMethodImplementorsExamples >> implementorsWithMissingMethodName [
 	<gtExample>
 	| tool call result model |
@@ -76,8 +94,26 @@ GtLMagritteToolForMethodImplementorsExamples >> implementorsWithMissingMethodNam
 	self assert: call arguments size equals: 0.
 	self assert: (result isKindOf: GtLMagritteBasedModel).
 	model := result model.
-	self assert: (model isKindOf: GtLMissingArgumentDomainObject).
-	self assert: model missingArgument equals: 'methodName'.
-	self assert: model errorMessage equals: 'Missing argument called methodName'.
+	self assert: model isErrorDomainObject.
+	self assert: (model isKindOf: GtLMissingRequiredPropertiesDomainObject).
+	self assert: model missingPropertyNames asArray equals: #('methodName').
+	^ call
+]
+
+{ #category : #examples }
+GtLMagritteToolForMethodImplementorsExamples >> implementorsWithNilMethodName [
+	<gtExample>
+	| tool call result model |
+	tool := GtLMagritteToolForMethodImplementors new.
+	call := GtLFunctionToolCall new.
+	call rawArguments: { 'methodName' -> nil } asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GtLMagritteBasedModel).
+	model := result model.
+	self assert: model isErrorDomainObject.
+	self assert: (model isKindOf: GtLJSONSchemaValidationErrorDomainObject).
+	self assert: model path asArray equals: #('methodName').
+	self assert: model errorMessage equals: '@[methodName] string expected'.
 	^ call
 ]

@@ -4,7 +4,7 @@ Request for creating a Python snippet.
 Class {
 	#name : #GtLLepiterPythonSnippetCreationRequest,
 	#superclass : #GtLLepiterTextualSnippetCreationRequest,
-	#category : #Gt4LlmCore
+	#category : #'Gt4LlmCore-Magritte Objects'
 }
 
 { #category : #'json schema' }
@@ -34,7 +34,9 @@ GtLLepiterPythonSnippetCreationRequest >> pythonCodeDescription [
 	^ MAStringDescription new
 		label: 'Python code';
 		comment: 'Python code for the snippet.';
-		accessor: #pythonCode
+		accessor: #pythonCode;
+		beRequired;
+		yourself
 ]
 
 { #category : #validation }
