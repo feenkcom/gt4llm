@@ -60,10 +60,12 @@ GtLSmaCCToolForParserUpdatesExamples >> performUpdates [
 							'edits'
 								-> {{'type' -> 'insert'.
 											'newSource'
-												-> 'Multiplication : Multiplication "*" Addition | Addition;'}
+												-> 'Multiplication : Multiplication "*" Addition | Addition;'.
+												}
 											asDictionary.
 										{'type' -> 'insert'.
-											'newSource' -> 'Addition : Addition "+" <number> | <number>;'}
+											'newSource' -> 'Addition : Addition "+" <number> | <number>;'.
+											}
 											asDictionary.
 										{'type' -> 'modify'.
 											'oldSource' -> 'Expression: Expression "+" <number>;'.

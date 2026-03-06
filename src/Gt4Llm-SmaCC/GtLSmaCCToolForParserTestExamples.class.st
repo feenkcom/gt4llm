@@ -13,7 +13,8 @@ GtLSmaCCToolForParserTestExamples >> failJSParser [
 	call
 		rawArguments: {'testParse'
 					-> {'parserClass' -> 'JSParser'.
-							'example' -> 'console.log("testing\n'} asDictionary} asDictionary.
+							'example' -> 'console.log("testing\n'.
+							'startingState' -> '' } asDictionary} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
 	self assert: (result isKindOf: GtLMagritteBasedModel).
@@ -36,7 +37,8 @@ GtLSmaCCToolForParserTestExamples >> testJSParser [
 	call
 		rawArguments: {'testParse'
 					-> {'parserClass' -> 'JSParser'.
-							'example' -> 'console.log("testing\n");'} asDictionary} asDictionary.
+							'example' -> 'console.log("testing\n");'.
+							'startingState' -> '' } asDictionary} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
 	self assert: (result isKindOf: GtLMagritteBasedModel).

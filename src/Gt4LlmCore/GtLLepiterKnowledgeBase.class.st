@@ -36,7 +36,7 @@ GtLLepiterKnowledgeBase >> databaseNameDescription [
 	^ MAStringDescription new
 		label: 'Database name';
 		accessor: #databaseName;
-		beOptional
+		beRequired
 ]
 
 { #category : #printing }
@@ -60,7 +60,7 @@ GtLLepiterKnowledgeBase >> pageCountDescription [
 	^ MANumberDescription new
 		label: 'Pages';
 		accessor: #pageCount;
-		beOptional
+		beRequired
 ]
 
 { #category : #accessing }
@@ -79,7 +79,7 @@ GtLLepiterKnowledgeBase >> storeLocationDescription [
 	^ MAStringDescription new
 		label: 'Store location';
 		accessor: #storeLocation;
-		beOptional
+		beRequired
 ]
 
 { #category : #accessing }
@@ -98,5 +98,5 @@ GtLLepiterKnowledgeBase >> uuidStringDescription [
 	^ MAStringDescription new
 		label: 'UUID';
 		accessor: #uuidString;
-		beOptional
+		beRequired
 ]

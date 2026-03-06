@@ -63,7 +63,7 @@ GtLSmaCCParserTest >> startingStateDescription [
 	^ MAStringDescription new
 		label: 'Starting State';
 		accessor: #startingState;
-		beOptional
+		beRequired
 ]
 
 { #category : #accessing }
