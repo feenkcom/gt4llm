@@ -61,7 +61,7 @@ GtLTools class >> gtSearch [
 				
 				GtLMagritteToolForClassReferences new.
 				GtLMagritteToolForMethodReferences new.
-				GtLToolForMethodImplementors new.
+				GtLMagritteToolForMethodImplementors new.
 				
 				"GtLMagritteToolForMethodSource new."
 				GtLMagritteToolForMethodsSource new.
