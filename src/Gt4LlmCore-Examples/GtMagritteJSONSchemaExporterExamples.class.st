@@ -17,7 +17,7 @@ GtMagritteJSONSchemaExporterExamples >> assertSchema: aJsonSchema equals: aSchem
 		equals: expectedSchema raw.
 ]
 
-{ #category : #examples }
+{ #category : #expected }
 GtMagritteJSONSchemaExporterExamples >> expectedSchemaStringForBooleanModel [
 	^ '{
 	"type" : "object",
@@ -246,7 +246,34 @@ GtMagritteJSONSchemaExporterExamples >> expectedSchemaStringForMathReasoningWith
 }'
 ]
 
-{ #category : #examples }
+{ #category : #expected }
+GtMagritteJSONSchemaExporterExamples >> expectedSchemaStringForScalarArrayModel [
+	^ '{
+	"type" : "object",
+	"properties" : {
+		"arrayOfBooleans" : {
+			"type" : "array",
+			"items" : {
+				"type" : "boolean"
+			}
+		},
+		"arrayOfStrings" : {
+			"type" : "array",
+			"items" : {
+				"type" : "string "
+			},
+			"description" : "An array of strings"
+		}
+	},
+	"required" : [
+		"arrayOfBooleans",
+		"arrayOfStrings"
+	],
+	"additionalProperties" : false
+}'
+]
+
+{ #category : #generation }
 GtMagritteJSONSchemaExporterExamples >> generateSchemaForBooleanModel [
 	| exporter |
 	exporter := GtMagritteJSONSchemaExporter forModelClass: GtLDemoBooleanModel.
@@ -281,6 +308,13 @@ GtMagritteJSONSchemaExporterExamples >> generateSchemaForMathReasoningWithMultip
 GtMagritteJSONSchemaExporterExamples >> generateSchemaForMathReasoningWithSingleType [
 	| exporter |
 	exporter := GtMagritteJSONSchemaExporter forModelClass: GtLDemoMathReasoning.
+	^ exporter exportSchema
+]
+
+{ #category : #generation }
+GtMagritteJSONSchemaExporterExamples >> generateSchemaForScalarArrayModel [
+	| exporter |
+	exporter := GtMagritteJSONSchemaExporter forModelClass: GtLDemoScalarArraysModel.
 	^ exporter exportSchema
 ]
 
@@ -322,4 +356,12 @@ GtMagritteJSONSchemaExporterExamples >> testSchemaGenerationForMathReasoningWith
 	self 
 		assertSchema: self generateSchemaForMathReasoningWithSingleType
 		equals: self expectedSchemaStringForMathReasoningWithSingleType
+]
+
+{ #category : #examples }
+GtMagritteJSONSchemaExporterExamples >> testSchemaGenerationForScalarArrayModel [
+	<gtExample>
+	self
+		assertSchema: self generateSchemaForScalarArrayModel
+		equals: self expectedSchemaStringForScalarArrayModel
 ]

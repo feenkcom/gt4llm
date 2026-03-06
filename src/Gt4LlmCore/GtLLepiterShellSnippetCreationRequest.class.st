@@ -4,7 +4,7 @@ Request for creating a shell snippet.
 Class {
 	#name : #GtLLepiterShellSnippetCreationRequest,
 	#superclass : #GtLLepiterTextualSnippetCreationRequest,
-	#category : #Gt4LlmCore
+	#category : #'Gt4LlmCore-Magritte Objects'
 }
 
 { #category : #'json schema' }
@@ -34,7 +34,9 @@ GtLLepiterShellSnippetCreationRequest >> shellCodeDescription [
 	^ MAStringDescription new
 		label: 'Shell code';
 		comment: 'Shell code for the snippet.';
-		accessor: #shellCode
+		accessor: #shellCode;
+		beRequired;
+		yourself
 ]
 
 { #category : #validation }

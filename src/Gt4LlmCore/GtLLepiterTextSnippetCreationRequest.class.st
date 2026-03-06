@@ -4,7 +4,7 @@ Request for creating a text snippet.
 Class {
 	#name : #GtLLepiterTextSnippetCreationRequest,
 	#superclass : #GtLLepiterTextualSnippetCreationRequest,
-	#category : #Gt4LlmCore
+	#category : #'Gt4LlmCore-Magritte Objects'
 }
 
 { #category : #'json schema' }
@@ -24,7 +24,9 @@ GtLLepiterTextSnippetCreationRequest >> snippetTextDescription [
 	^ MAStringDescription new
 		label: 'Snippet text';
 		comment: 'Textual content of the snippet.';
-		accessor: #snippetText
+		accessor: #snippetText;
+		beRequired;
+		yourself
 ]
 
 { #category : #validation }

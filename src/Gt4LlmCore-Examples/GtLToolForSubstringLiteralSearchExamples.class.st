@@ -27,7 +27,7 @@ GtLToolForSubstringLiteralSearchExamples >> searchWithMatches [
 GtLToolForSubstringLiteralSearchExamples >> searchWithNoMatches [
 	<gtExample>
 	| tool call result query |
-	query := 'noLiteralMatchString' , 'ForSearch'.
+	query := 'noLiteralMatchString' , 'ForSearch'. 
 	tool := GtLToolForSubstringLiteralSearch new.
 	call := GtLFunctionToolCall new.
 	call function: {

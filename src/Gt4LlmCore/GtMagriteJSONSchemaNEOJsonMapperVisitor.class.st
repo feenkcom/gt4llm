@@ -163,7 +163,7 @@ GtMagriteJSONSchemaNEOJsonMapperVisitor >> visitToManyRelationDescription: aDesc
 	self addMappingsForClasses: aDescription classes.
 ]
 
-{ #category : #visiting }
+{ #category : #'visiting-description' }
 GtMagriteJSONSchemaNEOJsonMapperVisitor >> visitToManyScalarRelationDescription: aDescription [
 	neoJsonMapper
 		for: aDescription gtJsonSchemaTypeName

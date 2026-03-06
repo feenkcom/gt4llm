@@ -52,6 +52,7 @@ GtLMagritteToolForDirectoryContentsExamples >> directoryContentsForFilePath [
 		self assert: (result isKindOf: GtLMagritteBasedModel).
 		model := result model.
 		self assert: model isErrorDomainObject.
+		self assert: (model isKindOf: GtLIncorrectArgumentTypeDomainObject).
 		self assert: model argumentName equals: 'directoryPath'.
 		self assert: model argumentValue equals: fileReference pathString.
 		self assert: model expectedArgumentValueKind equals: AbstractFileReference.
@@ -77,16 +78,53 @@ GtLMagritteToolForDirectoryContentsExamples >> directoryContentsForMissingDirect
 ]
 
 { #category : #examples }
+GtLMagritteToolForDirectoryContentsExamples >> directoryContentsWithEmptyPath [
+	<gtExample>
+	| tool call result model |
+	tool := GtLMagritteToolForDirectoryContents new.
+	call := GtLFunctionToolCall new.
+	call rawArguments: { 'directoryPath' -> '' } asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GtLMagritteBasedModel).
+	model := result model.
+	self assert: model isErrorDomainObject.
+	self assert: (model isKindOf: GtLMissingDomainObject).
+	self assert: model objectName equals: ''.
+	^ call
+]
+
+{ #category : #examples }
+GtLMagritteToolForDirectoryContentsExamples >> directoryContentsWithNilPath [
+	<gtExample>
+	| tool call result model |
+	tool := GtLMagritteToolForDirectoryContents new.
+	call := GtLFunctionToolCall new.
+	call rawArguments: { 'directoryPath' -> nil } asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GtLMagritteBasedModel).
+	model := result model.
+	self assert: model isErrorDomainObject.
+	self assert: (model isKindOf: GtLJSONSchemaValidationErrorDomainObject).
+	self assert: model path asArray equals: #('directoryPath').
+	self assert: model errorMessage equals: '@[directoryPath] string expected'.
+	^ call
+]
+
+{ #category : #examples }
 GtLMagritteToolForDirectoryContentsExamples >> directoryContentsWithoutPath [
 	<gtExample>
-	| tool call result |
+	| tool call result model |
 	tool := GtLMagritteToolForDirectoryContents new.
 	call := GtLFunctionToolCall new.
 	call rawArguments: Dictionary new.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
 	self assert: (result isKindOf: GtLMagritteBasedModel).
-	self assert: result model isErrorDomainObject.
-	self assert: result model missingArgument equals: 'directoryPath'.
+	model := result model.
+	self assert: model isErrorDomainObject.
+	self assert: (model isKindOf: GtLMissingRequiredPropertiesDomainObject).
+	self assert: model missingPropertyNames equals: #('directoryPath').
 	^ call
 ]

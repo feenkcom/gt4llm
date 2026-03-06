@@ -7,7 +7,7 @@ Class {
 { #category : #examples }
 GtLToolForLepiterSnippetEditExamples >> missingPageUid [
 	<gtExample>
-	| tool call result |
+	| tool call result model |
 	tool := GtLToolForLepiterSnippetEdit new.
 	call := GtLFunctionToolCall new.
 	call rawArguments: {
@@ -16,14 +16,19 @@ GtLToolForLepiterSnippetEditExamples >> missingPageUid [
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
 	self assert: (result isKindOf: GtLMagritteBasedModel).
-	self assert: result model missingArgument equals: 'pageUid'.
+	
+	model := result model.
+	self assert: (model isKindOf: GtLMissingRequiredPropertiesDomainObject).
+	self assert: model missingPropertyNames equals: #('pageUid').
+	self assert: model path equals: #(nil).
+	
 	^ call
 ]
 
 { #category : #examples }
 GtLToolForLepiterSnippetEditExamples >> missingSnippetUid [
 	<gtExample>
-	| tool call result pageUid |
+	| tool call result pageUid model|
 	tool := GtLToolForLepiterSnippetEdit new.
 	pageUid := UUID new asString.
 	call := GtLFunctionToolCall new.
@@ -33,14 +38,19 @@ GtLToolForLepiterSnippetEditExamples >> missingSnippetUid [
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
 	self assert: (result isKindOf: GtLMagritteBasedModel).
-	self assert: result model missingArgument equals: 'snippetUid'.
+	
+	model := result model.
+	self assert: (model isKindOf: GtLMissingRequiredPropertiesDomainObject).
+	self assert: model missingPropertyNames equals: #('snippetUid').
+	self assert: model path equals: #(nil).
+	
 	^ call
 ]
 
 { #category : #examples }
 GtLToolForLepiterSnippetEditExamples >> missingUpdatedText [
 	<gtExample>
-	| tool call result pageUid snippetUid |
+	| tool call result pageUid snippetUid model |
 	tool := GtLToolForLepiterSnippetEdit new.
 	pageUid := UUID new asString.
 	snippetUid := (LeUID new uidString: (UUID new asString); uidString).
@@ -51,7 +61,12 @@ GtLToolForLepiterSnippetEditExamples >> missingUpdatedText [
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
 	self assert: (result isKindOf: GtLMagritteBasedModel).
-	self assert: result model missingArgument equals: 'updatedText'.
+
+	model := result model.
+	self assert: (model isKindOf: GtLMissingRequiredPropertiesDomainObject).
+	self assert: model missingPropertyNames equals: #('updatedText').
+	self assert: model path equals: #(nil).
+	
 	^ call
 ]
 

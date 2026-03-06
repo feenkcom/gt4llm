@@ -44,7 +44,7 @@ GtLChatWithOpenAIProviderStubExamples >> chatWithTools [
 	<gtExample>
 	| chat message tool |
 	chat := self chatWithOpenAIProviderStub.
-	tool := GtLToolForClassLookup new.
+	tool := GtLMagritteToolForClassLookup new.
 	chat tools: {tool}.
 	message := chat createUserMessage.
 	message chat: chat.

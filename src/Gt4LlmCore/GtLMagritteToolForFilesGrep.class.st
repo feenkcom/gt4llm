@@ -9,12 +9,12 @@ Class {
 
 { #category : #accessing }
 GtLMagritteToolForFilesGrep >> description [
-	^ 'Greps for a query string in a file or directory. Arguments must provide a query string and a filePath. Optionally set fileNamePatterns to pass --glob values to ripgrep.
+	^ 'Greps for a query string in a file or directory. Arguments must provide a query string and a filePath reference. Optionally set fileNamePatterns to pass --glob values to ripgrep.
 
 Example JSON arguments:
 {
   "query": "needle",
-  "filePath": "/path/to/one.txt",
+  "filePath": {"pathString": "/path/to/one.txt"},
   "fileNamePatterns": ["*.txt", "*.md"]
 }
 
@@ -37,7 +37,10 @@ GtLMagritteToolForFilesGrep >> fileNamePatternsDescription [
 	<magritteDescription>
 
 	^ MAToManyScalarRelationDescription new
-		accessor: #fileNamePatterns
+		accessor: #fileNamePatterns;
+		classes: {String};
+		beOptional;
+		yourself
 ]
 
 { #category : #accessing }
@@ -47,7 +50,8 @@ GtLMagritteToolForFilesGrep >> filePathDescription [
 	^ MAToOneRelationDescription new
 		accessor: #filePath;
 		classes: {GtLFilePathReference};
-		beRequired
+		beRequired;
+		yourself
 ]
 
 { #category : #initialization }

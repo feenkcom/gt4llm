@@ -57,16 +57,14 @@ GtLTools class >> gtSearch [
 		withAll: {
 				GtLMagritteToolForClassSearch new.
 				GtLMagritteToolForClassSubclasses new.
-				
-				GtLToolForClassLookup new.
-				GtLToolForClassReferences new.
-				GtLToolForMethodReferences new.
-				GtLToolForMethodImplementors new.
-				
+				GtLMagritteToolForClassLookup new.
+				GtLMagritteToolForClassReferences new.
+				GtLMagritteToolForMethodReferences new.
+				GtLMagritteToolForMethodImplementors new.
 				"GtLMagritteToolForMethodSource new."
 				GtLMagritteToolForMethodsSource new.
-				GtLToolForPackageClasses new.
-				GtLToolForSubstringLiteralSearch new} asOrderedCollection
+				GtLMagritteToolForPackageClasses new.
+				GtLMagritteToolForSubstringLiteralSearch new} asOrderedCollection
 ]
 
 { #category : #defaults }
