@@ -6,13 +6,13 @@ Class {
 
 { #category : #accessing }
 GtLMagritteToolForFilesContents >> description [
-	^ 'Gets the contents of multiple files. Arguments must provide a filePaths array of path strings. The contents is returned as a base64 encoded string.
+	^ 'Gets the contents of multiple files. Arguments must provide a filePaths array of file path references. The contents is returned as a base64 encoded string.
 
 Example JSON arguments:
 {
   "filePaths": [
-    "/path/to/one.txt",
-    "/path/to/another.txt"
+    {"pathString": "/path/to/one.txt"},
+    {"pathString": "/path/to/another.txt"}
   ]
 }
 

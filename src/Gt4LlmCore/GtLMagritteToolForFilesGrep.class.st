@@ -9,12 +9,12 @@ Class {
 
 { #category : #accessing }
 GtLMagritteToolForFilesGrep >> description [
-	^ 'Greps for a query string in a file or directory. Arguments must provide a query string and a filePath. Optionally set fileNamePatterns to pass --glob values to ripgrep.
+	^ 'Greps for a query string in a file or directory. Arguments must provide a query string and a filePath reference. Optionally set fileNamePatterns to pass --glob values to ripgrep.
 
 Example JSON arguments:
 {
   "query": "needle",
-  "filePath": "/path/to/one.txt",
+  "filePath": {"pathString": "/path/to/one.txt"},
   "fileNamePatterns": ["*.txt", "*.md"]
 }
 
