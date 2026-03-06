@@ -4,6 +4,11 @@ Class {
 	#category : #'Gt4LlmCore-Tools'
 }
 
+{ #category : #testing }
+GtLToolForSubstringLiteralSearch class >> isDeprecated [
+	^ true
+]
+
 { #category : #visiting }
 GtLToolForSubstringLiteralSearch >> acceptVisitor: aVisitor [
 	^ aVisitor visitGtLToolForSubstringLiteralSearch: self

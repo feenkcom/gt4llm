@@ -20,7 +20,9 @@ GtLToolForLepiterSnippetsRemoveExamples >> missingSnippetKnowledgeBaseUid [
 	self assert: call tool == tool.
 	self assert: (result isKindOf: GtLMagritteBasedModel).
 	model := result model.
-	self assert: model snippets first missingArgument equals: 'knowledgeBaseUid'.
+	self assert: (model isKindOf: GtLMissingRequiredPropertiesDomainObject).
+	self assert: model missingPropertyNames equals: #('knowledgeBaseUid').
+	self assert: model path equals: #('snippets' 1).
 	^ call
 ]
 
@@ -40,7 +42,9 @@ GtLToolForLepiterSnippetsRemoveExamples >> missingSnippetPageUid [
 	self assert: call tool == tool.
 	self assert: (result isKindOf: GtLMagritteBasedModel).
 	model := result model.
-	self assert: model snippets first missingArgument equals: 'pageUid'.
+	self assert: (model isKindOf: GtLMissingRequiredPropertiesDomainObject).
+	self assert: model missingPropertyNames equals: #('pageUid').
+	self assert: model path equals: #('snippets' 1).
 	^ call
 ]
 
@@ -60,21 +64,26 @@ GtLToolForLepiterSnippetsRemoveExamples >> missingSnippetUid [
 	self assert: call tool == tool.
 	self assert: (result isKindOf: GtLMagritteBasedModel).
 	model := result model.
-	self assert: model snippets first missingArgument equals: 'snippetUid'.
+	self assert: (model isKindOf: GtLMissingRequiredPropertiesDomainObject).
+	self assert: model missingPropertyNames equals: #('snippetUid').
+	self assert: model path equals: #('snippets' 1).
 	^ call
 ]
 
 { #category : #examples }
 GtLToolForLepiterSnippetsRemoveExamples >> missingSnippets [
 	<gtExample>
-	| tool call result |
+	| tool call result model |
 	tool := GtLToolForLepiterSnippetsRemove new.
 	call := GtLFunctionToolCall new.
 	call rawArguments: {} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
 	self assert: (result isKindOf: GtLMagritteBasedModel).
-	self assert: result model missingArgument equals: 'snippets'.
+	model := result model.
+	self assert: (model isKindOf: GtLMissingRequiredPropertiesDomainObject).
+	self assert: model missingPropertyNames equals: #('snippets').
+	self assert: model path asArray equals: #(nil).
 	^ call
 ]
 

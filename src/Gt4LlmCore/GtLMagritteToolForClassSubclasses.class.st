@@ -64,12 +64,8 @@ GtLMagritteToolForClassSubclasses >> privatePerformToolCall: aToolCall inContext
 	class ifNil: [ ^ GtLMissingDomainObject new objectName: className ].
 
 	subclasses := class subclasses.
-	limitedSubclassNames := (subclasses first: (200 min: subclasses size)) 
-		collect: [ :each | each name ].
 
-	^ GtLClassSubclasses new
-		givenClassName: className;
-		subclassNames: limitedSubclassNames;
-		mayHaveMore: subclasses size > 200;
-		yourself
+	^ (GtLClassSubclasses fromClasses: subclasses)
+			givenClassName: className;
+			yourself
 ]

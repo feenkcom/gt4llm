@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'pageUid'
 	],
-	#category : #Gt4LlmCore
+	#category : #'Gt4LlmCore-Magritte Objects'
 }
 
 { #category : #'json schema' }

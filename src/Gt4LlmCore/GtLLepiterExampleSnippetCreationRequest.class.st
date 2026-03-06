@@ -8,7 +8,7 @@ Class {
 		'exampleClassName',
 		'exampleMethodName'
 	],
-	#category : #Gt4LlmCore
+	#category : #'Gt4LlmCore-Magritte Objects'
 }
 
 { #category : #'json schema' }

@@ -67,6 +67,8 @@ GtLMagritteToolForFilesInformation >> filePathsDescription [
 { #category : #private }
 GtLMagritteToolForFilesInformation >> informationForFilePath: aFilePathReference [
 	| fileReference |
+	aFilePathReference pathString isEmpty
+		ifTrue: [ ^ GtLMissingDomainObject new objectName: aFilePathReference pathString ].
 	fileReference := aFilePathReference pathString asFileReference.
 	fileReference exists
 		ifFalse: [ ^ GtLMissingDomainObject new objectName: fileReference pathString ].

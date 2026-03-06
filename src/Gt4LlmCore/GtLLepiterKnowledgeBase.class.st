@@ -10,6 +10,16 @@ Class {
 	#category : #'Gt4LlmCore-Magritte Objects'
 }
 
+{ #category : #'instance creation' }
+GtLLepiterKnowledgeBase class >> forDatabase: aDatabase [ 
+	^ self new 
+			databaseName: aDatabase databaseName;
+			uuidString: aDatabase uuidString;
+			pageCount: aDatabase pageCount;
+			storeLocation: aDatabase storeLocation asString;
+			yourself
+]
+
 { #category : #accessing }
 GtLLepiterKnowledgeBase >> databaseName [
 	^ databaseName

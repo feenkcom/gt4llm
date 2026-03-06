@@ -15,7 +15,6 @@ Arguments:
 - query: string
 
 Return values:
-- query: the input query string
 - foundClassNames: array of class names as strings
 - mayHaveMore: boolean indicating if there are more matches than returned
 
@@ -26,7 +25,6 @@ Example JSON arguments:
 
 Example JSON response:
 {
-  "query": "Collection",
   "foundClassNames": ["Collection", "CollectionSequence"],
   "mayHaveMore": false
 }'
@@ -55,11 +53,7 @@ GtLMagritteToolForClassSearch >> privatePerformToolCall: aToolCall inContext: an
 			await: GtLSettings futureExecutionConfiguration.
 	matches := promise wait.
 
-	^ GtLClassesQueryResult new
-		query: query;
-		foundClassNames: ((matches first: (200 min: matches size)) collect: #name);
-		mayHaveMore: matches size > 200;
-		yourself
+	^ GtLClassesSearchResult fromClasses: matches
 ]
 
 { #category : #descriptions }

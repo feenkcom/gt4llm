@@ -4,6 +4,11 @@ Class {
 	#category : #'Gt4LlmCore-Tools'
 }
 
+{ #category : #testing }
+GtLToolForPackageClasses class >> isDeprecated [
+	^ true
+]
+
 { #category : #visiting }
 GtLToolForPackageClasses >> acceptVisitor: aVisitor [
 	^ aVisitor visitGtLlmToolForPackageClasses: self

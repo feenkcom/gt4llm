@@ -21,6 +21,18 @@ GtLAbstractMagritteFunctionTool >> gtMagritteFor: aView [
 ]
 
 { #category : #utils }
+GtLAbstractMagritteFunctionTool >> jsonSchemaArgumentValidationErrorsFor: aToolCall [
+	| parameters schema validator |
+	parameters := self parametersDescription.
+	schema := parameters schema.
+
+	validator := schema validator.
+	validator validate: aToolCall rawArgumentsJsonObject.
+	^ validator validationErrors collect: [ :each |
+		each asGtLErrorReturnObject ]
+]
+
+{ #category : #utils }
 GtLAbstractMagritteFunctionTool >> parametersDescription [
 	^ GtLResponseMagritteFormat new
 			name: 'Parameters';
@@ -34,6 +46,16 @@ GtLAbstractMagritteFunctionTool >> performToolCall: aToolCall inContext: anExecu
 	aToolCall performedByTool: self.
 	[ 
 		| arguments |
+		
+		(self jsonSchemaArgumentValidationErrorsFor: aToolCall) 
+			ifNotEmpty: [ :aCollectionOfErrors |
+			
+				resultObject := GtLMagritteBasedModel new
+					name: 'Response';
+					model: aCollectionOfErrors first.
+			aToolCall result: resultObject.
+			^ resultObject ].
+		
 		arguments := self parametersDescription
 				readGenericDomainObjectsFrom: aToolCall rawArgumentsJsonString.
 		aToolCall arguments: arguments 

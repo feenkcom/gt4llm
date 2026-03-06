@@ -4,7 +4,7 @@ Request for creating a Pharo snippet.
 Class {
 	#name : #GtLLepiterPharoSnippetCreationRequest,
 	#superclass : #GtLLepiterTextualSnippetCreationRequest,
-	#category : #Gt4LlmCore
+	#category : #'Gt4LlmCore-Magritte Objects'
 }
 
 { #category : #'json schema' }
@@ -34,7 +34,9 @@ GtLLepiterPharoSnippetCreationRequest >> pharoCodeDescription [
 	^ MAStringDescription new
 		label: 'Pharo code';
 		comment: 'Pharo code for the snippet.';
-		accessor: #pharoCode
+		accessor: #pharoCode;
+		beRequired;
+		yourself
 ]
 
 { #category : #validation }
