@@ -6,7 +6,7 @@ Class {
 
 { #category : #accessing }
 GtLMagritteToolForMethodSource >> description [
-	^ 'Gets source code for a method. Arguments must provide a methodDescriptor object with methodClassName, methodName, and optional classSide values.
+	^ 'Gets source code for a method. Arguments must provide a methodDescriptor object with methodClassName, methodName, and classSide values.
 
 Example JSON arguments:
 {

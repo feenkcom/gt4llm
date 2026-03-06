@@ -131,8 +131,7 @@ GtMagriteJSONSchemaCreationVisitor >> visitPriorityContainer: aContainer [
 	schema at: 'properties' put: propertiesSchema.
 	schema
 		at: 'required'
-			put: ((aContainer children
-					select: [:aDescription | aDescription isRequired])
+			put: (aContainer children
 					collect: [ :aDescription | aDescription accessor readSelector ]
 					as: NeoJSONArray) sorted;
 		at: 'additionalProperties' put: false.
