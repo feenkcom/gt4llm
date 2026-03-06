@@ -106,6 +106,7 @@ Addition : Addition "+" <number> | <number>;'.
 					-> {'parserClass' -> 'ExpressionParser'.
 							'edits'
 								-> {{'type' -> 'delete'.
+								'newSource' -> ''.
 											'oldSource' -> 'Expression : Multiplication;'} asDictionary}}
 							asDictionary} asDictionary.
 	result := tool performToolCall: call.
