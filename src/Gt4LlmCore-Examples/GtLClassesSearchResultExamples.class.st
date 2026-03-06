@@ -15,8 +15,8 @@ GtLClassesSearchResultExamples >> classesSearchResultSerialization [
 	jsonObject := GtMagritteJSONDataExporter exportObject: domainObject.
 	expected := NeoJSONObject new
 		at: 'foundClassNames'
-			put: (NeoJSONArray withAll: #('A' 'B'));
-		at: 'mayHaveMore' put: true;
+			put: (NeoJSONArray withAll: #('Object' 'String'));
+		at: 'mayHaveMore' put: false;
 		yourself.
 	self assert: jsonObject equals: expected.
 	^ jsonObject
@@ -25,12 +25,10 @@ GtLClassesSearchResultExamples >> classesSearchResultSerialization [
 { #category : #examples }
 GtLClassesSearchResultExamples >> classesSearchResultWithMatches [
 	<gtExample>
-	| result |
-	result := GtLClassesSearchResult new
-		foundClassNames: { 'A'. 'B' };
-		mayHaveMore: true;
-		yourself.
-	self assert: result foundClassNames size equals: 2.
-	self assert: result mayHaveMore.
+	| matches result |
+	matches := { Object. String }.
+	result := GtLClassesSearchResult fromMatches: matches.
+	self assert: result foundClassNames equals: #('Object' 'String').
+	self assert: result mayHaveMore not.
 	^ result
 ]
