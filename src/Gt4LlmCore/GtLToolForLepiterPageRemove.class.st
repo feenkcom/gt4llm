@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'logicalDatabase'
 	],
-	#category : #'Gt4LlmCore-Tools'
+	#category : 'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }
@@ -76,9 +76,17 @@ GtLToolForLepiterPageRemove >> privatePerformToolCall: aToolCall inContext: anEx
 		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
 			arguments: arguments;
 			missingArgument: 'pageUid' ].
+	(pageUidString isNil or: [ pageUidString asString trimBoth isEmpty ])
+		ifTrue: [ ^ GtLMissingArgumentDomainObject new
+			arguments: arguments;
+			missingArgument: 'pageUid' ].
 	databaseId := arguments
 		at: 'databaseId'
 		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
+			arguments: arguments;
+			missingArgument: 'databaseId' ].
+	(databaseId isNil or: [ databaseId asString trimBoth isEmpty ])
+		ifTrue: [ ^ GtLMissingArgumentDomainObject new
 			arguments: arguments;
 			missingArgument: 'databaseId' ].
 	baseDatabase := self database.
@@ -92,10 +100,6 @@ GtLToolForLepiterPageRemove >> privatePerformToolCall: aToolCall inContext: anEx
 	targetDatabase ifNil: [ ^ GtLProblemDomainObject new
 			description: 'Database with ' , databaseId asString , ' not found' ].
 	pageUidString := pageUidString asString trimBoth.
-	pageUidString isEmpty
-		ifTrue: [ ^ GtLMissingArgumentDomainObject new
-			arguments: arguments;
-			missingArgument: 'pageUid' ].
 	pageUid := [ UUID fromString36: pageUidString ]
 		on: Error
 		do: [ :error |

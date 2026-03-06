@@ -44,20 +44,6 @@ GtLObjectStorageExamples >> accessingObjectThatIsMissingReturnsMissing [
 ]
 
 { #category : #examples }
-GtLObjectStorageExamples >> addObjectAnswersId [
-	<gtExample>
-	<return: #String>
-	| objectStorage objectId |
-	
-	objectStorage := self newObjectStorage.
-	objectId := objectStorage addNewObject: Object new.
-	self assert: objectId isString.
-	self assert: (objectStorage includesObjectWithId: objectId).
-	
-	^ objectStorage
-]
-
-{ #category : #examples }
 GtLObjectStorageExamples >> addingSameObjectTwiceAddsTwoObjects [
 	<gtExample>
 	<return: #Object>
@@ -71,6 +57,20 @@ GtLObjectStorageExamples >> addingSameObjectTwiceAddsTwoObjects [
 	self assert: objectStorage objectCount equals: 2.
 	self assert: (objectStorage objectAt: objectIdOne) == object.
 	self assert: (objectStorage objectAt: objectIdTwo) == object.
+	^ objectStorage
+]
+
+{ #category : #examples }
+GtLObjectStorageExamples >> addObjectAnswersId [
+	<gtExample>
+	<return: #String>
+	| objectStorage objectId |
+	
+	objectStorage := self newObjectStorage.
+	objectId := objectStorage addNewObject: Object new.
+	self assert: objectId isString.
+	self assert: (objectStorage includesObjectWithId: objectId).
+	
 	^ objectStorage
 ]
 

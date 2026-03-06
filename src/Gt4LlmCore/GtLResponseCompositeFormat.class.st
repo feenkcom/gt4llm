@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'schemaDescriptions'
 	],
-	#category : #'Gt4LlmCore-Core'
+	#category : 'Gt4LlmCore-Core'
 }
 
 { #category : #adding }
