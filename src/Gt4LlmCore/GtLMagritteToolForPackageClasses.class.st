@@ -4,7 +4,7 @@ Magritte-based tool for retrieving package classes.
 Class {
 	#name : #GtLMagritteToolForPackageClasses,
 	#superclass : #GtLAbstractMagritteFunctionTool,
-	#category : #Gt4LlmCore
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }
