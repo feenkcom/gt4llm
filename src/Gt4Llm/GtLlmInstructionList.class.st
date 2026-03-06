@@ -14,7 +14,7 @@ GtLlmInstructionList class >> new [
 
 { #category : #accessing }
 GtLlmInstructionList >> addItem: anItem [
-	items add: (anItem asInstructionPiece parent: self)
+	items add: (anItem asGtLInstructionPiece parent: self)
 ]
 
 { #category : #accessing }
