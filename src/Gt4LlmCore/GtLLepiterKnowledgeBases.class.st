@@ -37,5 +37,5 @@ GtLLepiterKnowledgeBases >> knowledgeBasesDescription [
 		label: 'Knowledge bases';
 		accessor: #knowledgeBases;
 		classes: {GtLLepiterKnowledgeBase};
-		beOptional
+		beRequired
 ]

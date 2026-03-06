@@ -92,5 +92,5 @@ GtLNotSourceSearchableMethod >> sourceCodeDescription [
 	^ MAStringDescription new
 		label: 'Source code';
 		accessor: #sourceCode;
-		beOptional
+		beRequired
 ]

@@ -32,7 +32,7 @@ GtLMethodReference >> classSideDescription [
 	^ MABooleanDescription new
 		label: 'Class side';
 		accessor: #classSide;
-		beOptional
+		beRequired
 ]
 
 { #category : #accessing }
