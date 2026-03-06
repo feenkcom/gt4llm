@@ -176,7 +176,7 @@ GtMagriteJSONSchemaCreationVisitor >> visitToManyRelationDescription: aDescripti
 		^ currentSchema := schema
 ]
 
-{ #category : #visiting }
+{ #category : #'visiting-description' }
 GtMagriteJSONSchemaCreationVisitor >> visitToManyScalarRelationDescription: aDescription [
 	| schema |
 	schema := NeoJSONObject new
