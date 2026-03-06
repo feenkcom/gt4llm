@@ -47,9 +47,9 @@ GtLMethodsSearchResult >> foundMethodsDescription [
 GtLMethodsSearchResult >> gtFoundMethodsFor: aView [
 	<gtView>
 	<gtLlmView>
-	self foundMethods ifEmpty: [ ^ aView empty ].
 	^ aView columnedList
-		title: 'Methods';
+		title: 'Found methods';
+		priority: 1;
 		items: [ self foundMethods ];
 		column: 'Method' text: [ :each | each methodSignature ]
 ]

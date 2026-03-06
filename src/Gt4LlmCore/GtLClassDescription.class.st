@@ -134,6 +134,29 @@ GtLClassDescription >> currentClassNameDescription [
 		yourself
 ]
 
+{ #category : #'as yet unclassified' }
+GtLClassDescription >> gtClassCoderViewFor: aView [
+	<gtView>
+	<gtLlmView>
+	| aClass |
+	aClass := self currentClassName asClassIfAbsent: [^ aView empty].
+	^ aView explicit
+		title: 'Class';
+		priority: 0;
+		stencil: [ | container |
+			container := BrVerticalPane new
+					matchParent;
+					background: BrGlamorousColors backdropColor.
+			container
+				addAptitude: (BrLayoutResizerAptitude new common: [ container children ]);
+				addChild: ((GtCoderElement forClass: aClass)
+						disablePlayPage;
+						margin: (BlInsets all: 10);
+						background: Color white;
+						addAptitude: BrShadowAptitude).
+			container ]
+]
+
 { #category : #'gt-views' }
 GtLClassDescription >> gtClassMethodsFor: aView [
 	<gtView>
