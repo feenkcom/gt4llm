@@ -47,6 +47,23 @@ GtLMagritteToolForClassReferencesExamples >> classReferencesForUnknownClass [
 ]
 
 { #category : #examples }
+GtLMagritteToolForClassReferencesExamples >> classReferencesWithEmptyClassName [
+	<gtExample>
+	| tool call result model |
+	tool := GtLMagritteToolForClassReferences new.
+	call := GtLFunctionToolCall new.
+	call rawArguments: { 'className' -> '' } asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GtLMagritteBasedModel).
+	model := result model.
+	self assert: model class equals: GtLMissingArgumentDomainObject.
+	self assert: model missingArgument equals: 'className'.
+	self assert: model errorMessage equals: 'Missing argument called className'.
+	^ call
+]
+
+{ #category : #examples }
 GtLMagritteToolForClassReferencesExamples >> classReferencesWithMissingClassName [
 	<gtExample>
 	| tool call result model |
@@ -55,12 +72,10 @@ GtLMagritteToolForClassReferencesExamples >> classReferencesWithMissingClassName
 	call rawArguments: {} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: call arguments size equals: 0.
 	self assert: (result isKindOf: GtLMagritteBasedModel).
 	model := result model.
-	self assert: (model isKindOf: GtLMissingArgumentDomainObject).
-	self assert: model missingArgument equals: 'className'.
-	self assert: model errorMessage equals: 'Missing argument called className'.
+	self assert: model class equals: GtLMissingRequiredPropertiesDomainObject.
+	self assert: model missingPropertyNames asArray equals: #('className').
 	^ call
 ]
 
@@ -80,5 +95,22 @@ GtLMagritteToolForClassReferencesExamples >> classReferencesWithMoreThan200Resul
 	self assert: model givenClassName equals: 'Object'.
 	self assert: model references size equals: 200.
 	self assert: model mayHaveMore.
+	^ call
+]
+
+{ #category : #examples }
+GtLMagritteToolForClassReferencesExamples >> classReferencesWithNilClassName [
+	<gtExample>
+	| tool call result model |
+	tool := GtLMagritteToolForClassReferences new.
+	call := GtLFunctionToolCall new.
+	call rawArguments: { 'className' -> nil } asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GtLMagritteBasedModel).
+	model := result model.
+	self assert: model class equals: GtLJSONSchemaValidationErrorDomainObject.
+	self assert: model path asArray equals: #('className').
+	self assert: model errorMessage equals: '@[className] string expected'.
 	^ call
 ]

@@ -31,6 +31,30 @@ GtLDomainObjectExamples >> classDomainObject [
 	^ aDomainObject
 ]
 
+{ #category : #examples }
+GtLDomainObjectExamples >> genericJSONSchemaValidationErrorDomainObject [
+	<gtExample>
+	| domainObject jsonObject path |
+	path := #('methodDescriptor' 'methodClassName').
+	domainObject := GtLJSONSchemaValidationErrorDomainObject new
+		path: path;
+		errorMessage: 'Invalid JSON schema'.
+
+	self assert: domainObject isErrorDomainObject.
+	self assert: domainObject path equals: path.
+	self assert: domainObject errorMessage equals: 'Invalid JSON schema'.
+
+	jsonObject := domainObject serializeToLlmJsonObject.
+	self
+		assert: (jsonObject at: 'errorMessage')
+		equals: 'Invalid JSON schema'.
+	self
+		assert: (jsonObject at: 'path') asArray
+		equals: path asArray.
+
+	^ domainObject
+]
+
 { #category : #'examples - class' }
 GtLDomainObjectExamples >> missingArgumentDomainObject [
 	<gtExample>
@@ -87,6 +111,36 @@ GtLDomainObjectExamples >> missingDomainObject [
 			at: 'errorMessage'
 				put: 'GtLDummyOneObject is not found';
 			yourself).
+
+	^ domainObject
+]
+
+{ #category : #examples }
+GtLDomainObjectExamples >> missingRequiredPropertiesDomainObject [
+	<gtExample>
+	| domainObject jsonObject missingPropertyNames path |
+	missingPropertyNames := #('methodClassName' 'methodName').
+	path := #('methodDescriptor').
+	domainObject := GtLMissingRequiredPropertiesDomainObject new
+		missingPropertyNames: missingPropertyNames;
+		path: path;
+		errorMessage: 'Missing required properties in methodDescriptor'.
+
+	self assert: domainObject isErrorDomainObject.
+	self assert: domainObject missingPropertyNames equals: missingPropertyNames.
+	self assert: domainObject path equals: path.
+	self assert: domainObject errorMessage equals: 'Missing required properties in methodDescriptor'.
+
+	jsonObject := domainObject serializeToLlmJsonObject.
+	self
+		assert: (jsonObject at: 'errorMessage')
+		equals: 'Missing required properties in methodDescriptor'.
+	self
+		assert: (jsonObject at: 'missingPropertyNames') asArray
+		equals: missingPropertyNames asArray.
+	self
+		assert: (jsonObject at: 'path') asArray
+		equals: path asArray.
 
 	^ domainObject
 ]

@@ -54,6 +54,44 @@ GtLMagritteToolForFileInformationExamples >> fileInformationForMissingFile [
 ]
 
 { #category : #examples }
+GtLMagritteToolForFileInformationExamples >> fileInformationWithEmptyPath [
+	<gtExample>
+	| tool call result model |
+	tool := GtLMagritteToolForFileInformation new.
+	call := GtLFunctionToolCall new.
+	call rawArguments: {
+		'filePath' -> { 'pathString' -> '' } asDictionary
+	} asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: call arguments size equals: 1.
+	self assert: (result isKindOf: GtLMagritteBasedModel).
+	model := result model.
+	self assert: model isErrorDomainObject.
+	self assert: (model isKindOf: GtLMissingDomainObject).
+	self assert: model objectName equals: ''.
+	^ call
+]
+
+{ #category : #examples }
+GtLMagritteToolForFileInformationExamples >> fileInformationWithNilPath [
+	<gtExample>
+	| tool call result model |
+	tool := GtLMagritteToolForFileInformation new.
+	call := GtLFunctionToolCall new.
+	call rawArguments: { 'filePath' -> nil } asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GtLMagritteBasedModel).
+	model := result model.
+	self assert: model isErrorDomainObject.
+	self assert: (model isKindOf: GtLJSONSchemaValidationErrorDomainObject).
+	self assert: model path asArray equals: #('filePath').
+	self assert: model errorMessage equals: '@[filePath] object expected'.
+	^ call
+]
+
+{ #category : #examples }
 GtLMagritteToolForFileInformationExamples >> fileInformationWithoutPath [
 	<gtExample>
 	| tool call result model |
@@ -65,7 +103,8 @@ GtLMagritteToolForFileInformationExamples >> fileInformationWithoutPath [
 	self assert: call arguments size equals: 0.
 	self assert: (result isKindOf: GtLMagritteBasedModel).
 	model := result model.
-	self assert: (model isKindOf: GtLMissingArgumentDomainObject).
-	self assert: model missingArgument equals: 'filePath'.
+	self assert: model isErrorDomainObject.
+	self assert: (model isKindOf: GtLMissingRequiredPropertiesDomainObject).
+	self assert: model missingPropertyNames asArray equals: #('filePath').
 	^ call
 ]

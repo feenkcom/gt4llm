@@ -83,33 +83,33 @@ GtLMagritteToolForMethodSourceExamples >> methodSourceForExistingInstanceSideMet
 	^ call
 ]
 
-{ #category : #Examples }
+{ #category : #examples }
 GtLMagritteToolForMethodSourceExamples >> methodSourceForMissingArguments [
 	<gtExample>
 	| tool call result model |
-	
+		
 	tool := GtLMagritteToolForMethodSource new.
 	call := GtLFunctionToolCall new.
 	call rawArguments: {} asDictionary.
 	result := tool performToolCall: call.
-	
+		
 	self assert: call tool == tool.
 	self assert: call arguments size equals: 0.
 	self assert: (result isKindOf: GtLMagritteBasedModel).
-	
+		
 	model := result model.
-	self assert: (model isKindOf: GtLMissingArgumentDomainObject).
-	self assert: model missingArgument equals: 'methodDescriptor'.
-	self assert: model errorMessage equals: 'Missing argument called methodDescriptor'.
-	
+	self assert: model isErrorDomainObject.
+	self assert: (model isKindOf: GtLMissingRequiredPropertiesDomainObject).
+	self assert: model missingPropertyNames asArray equals: #('methodDescriptor').
+		
 	^ call
 ]
 
-{ #category : #Examples }
+{ #category : #examples }
 GtLMagritteToolForMethodSourceExamples >> methodSourceForMissingClassSide [
 	<gtExample>
 	| tool call result model |
-	
+		
 	tool := GtLMagritteToolForMethodSource new.
 	call := GtLFunctionToolCall new.
 	call rawArguments: {
@@ -118,24 +118,21 @@ GtLMagritteToolForMethodSourceExamples >> methodSourceForMissingClassSide [
 			'methodName' -> 'methodSourceForMissingClassSide'
 		} asDictionary
 	} asDictionary.
-	
+		
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: call arguments size equals: 1.
-	self assert: ((call arguments at: 'methodDescriptor') isKindOf: GtLMethodReference).
 	self assert: (result isKindOf: GtLMagritteBasedModel).
-	
+		
 	model := result model.
-	self assert: (model isKindOf: GtLMethodWithSource).
-	self
-		assert: model sourceCode
-		equals: (GtLMagritteToolForMethodSourceExamples>>#methodSourceForMissingClassSide) sourceCode.
-	self assert: model methodReference classSide equals: false.
-	
+	self assert: model isErrorDomainObject.
+	self assert: (model isKindOf: GtLMissingRequiredPropertiesDomainObject).
+	self assert: model missingPropertyNames asArray equals: #('classSide').
+	self assert: model path asArray equals: #('methodDescriptor').
+		
 	^ call
 ]
 
-{ #category : #Examples }
+{ #category : #examples }
 GtLMagritteToolForMethodSourceExamples >> methodSourceForMissingMethodClassName [
 	<gtExample>
 	| tool call result model |
@@ -150,22 +147,21 @@ GtLMagritteToolForMethodSourceExamples >> methodSourceForMissingMethodClassName 
 	result := tool performToolCall: call.
 	
 	self assert: call tool == tool.
-	self assert: call arguments size equals: 1.
-	self assert: ((call arguments at: 'methodDescriptor') isKindOf: GtLMethodReference).
 	self assert: (result isKindOf: GtLMagritteBasedModel).
 	
 	model := result model.
-	self assert: (model isKindOf: GtLMissingArgumentDomainObject).
-	self assert: model missingArgument equals: 'targetClassName'.
-	self assert: model errorMessage equals: 'Missing argument called targetClassName'.
+	self assert: model isErrorDomainObject.
+	self assert: (model isKindOf: GtLMissingRequiredPropertiesDomainObject).
+	self assert: model missingPropertyNames asArray equals: #('methodClassName').
+	self assert: model path asArray equals: #('methodDescriptor').
 	^ call
 ]
 
-{ #category : #Examples }
+{ #category : #examples }
 GtLMagritteToolForMethodSourceExamples >> methodSourceForMissingMethodName [
 	<gtExample>
 	| tool call result model |
-	
+		
 	tool := GtLMagritteToolForMethodSource new.
 	call := GtLFunctionToolCall new.
 	call rawArguments: {
@@ -175,17 +171,16 @@ GtLMagritteToolForMethodSourceExamples >> methodSourceForMissingMethodName [
 		} asDictionary
 	} asDictionary.
 	result := tool performToolCall: call.
-	
+		
 	self assert: call tool == tool.
-	self assert: call arguments size equals: 1.
-	self assert: ((call arguments at: 'methodDescriptor') isKindOf: GtLMethodReference).
 	self assert: (result isKindOf: GtLMagritteBasedModel).
-	
+		
 	model := result model.
-	self assert: (model isKindOf: GtLMissingArgumentDomainObject).
-	self assert: model missingArgument equals: 'methodName'.
-	self assert: model errorMessage equals: 'Missing argument called methodName'.
-	
+	self assert: model isErrorDomainObject.
+	self assert: (model isKindOf: GtLMissingRequiredPropertiesDomainObject).
+	self assert: model missingPropertyNames asArray equals: #('methodName').
+	self assert: model path asArray equals: #('methodDescriptor').
+		
 	^ call
 ]
 
@@ -275,5 +270,115 @@ GtLMagritteToolForMethodSourceExamples >> methodSourceForUnknownInstanceSideMeth
 		assert: model errorMessage
 		equals: 'GtLToolForMethodImplementors>>#unknownSelector42 is not found'.
 		
+	^ call
+]
+
+{ #category : #examples }
+GtLMagritteToolForMethodSourceExamples >> methodSourceWithEmptyMethodClassName [
+	<gtExample>
+	| tool call result model |
+	tool := GtLMagritteToolForMethodSource new.
+	call := GtLFunctionToolCall new.
+	call rawArguments: {
+		'methodDescriptor' -> {
+			'methodClassName' -> ''.
+			'methodName' -> 'withAll:'.
+			'classSide' -> true
+		} asDictionary
+	} asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GtLMagritteBasedModel).
+	model := result model.
+	self assert: model isErrorDomainObject.
+	self assert: model class equals: GtLMissingDomainObject.
+	^ call
+]
+
+{ #category : #examples }
+GtLMagritteToolForMethodSourceExamples >> methodSourceWithEmptyMethodName [
+	<gtExample>
+	| tool call result model |
+	tool := GtLMagritteToolForMethodSource new.
+	call := GtLFunctionToolCall new.
+	call rawArguments: {
+		'methodDescriptor' -> {
+			'methodClassName' -> 'Collection'.
+			'methodName' -> ''.
+			'classSide' -> true
+		} asDictionary
+	} asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GtLMagritteBasedModel).
+	model := result model.
+	self assert: model isErrorDomainObject.
+	self assert: model class equals: GtLMissingDomainObject.
+	^ call
+]
+
+{ #category : #examples }
+GtLMagritteToolForMethodSourceExamples >> methodSourceWithNilDescriptor [
+	<gtExample>
+	| tool call result model |
+	tool := GtLMagritteToolForMethodSource new.
+	call := GtLFunctionToolCall new.
+	call rawArguments: { 'methodDescriptor' -> nil } asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GtLMagritteBasedModel).
+	model := result model.
+	self assert: model isErrorDomainObject.
+	self assert: (model isKindOf: GtLJSONSchemaValidationErrorDomainObject).
+	self assert: model path asArray equals: #('methodDescriptor').
+	self assert: model errorMessage equals: '@[methodDescriptor] object expected'.
+	^ call
+]
+
+{ #category : #examples }
+GtLMagritteToolForMethodSourceExamples >> methodSourceWithNilMethodClassName [
+	<gtExample>
+	| tool call result model |
+	tool := GtLMagritteToolForMethodSource new.
+	call := GtLFunctionToolCall new.
+	call rawArguments: {
+		'methodDescriptor' -> {
+			'methodClassName' -> nil.
+			'methodName' -> 'withAll:'.
+			'classSide' -> true
+		} asDictionary
+	} asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GtLMagritteBasedModel).
+	model := result model.
+	self assert: model isErrorDomainObject.
+	self assert: model class equals: GtLJSONSchemaValidationErrorDomainObject.
+	self assert: model path asArray equals: #('methodDescriptor' 'methodClassName').
+	self assert: model messageText equals: '@[methodDescriptor/methodClassName] string expected'.
+	^ call
+]
+
+{ #category : #examples }
+GtLMagritteToolForMethodSourceExamples >> methodSourceWithNilMethodName [
+	<gtExample>
+	| tool call result model |
+	tool := GtLMagritteToolForMethodSource new.
+	call := GtLFunctionToolCall new.
+	call rawArguments: {
+		'methodDescriptor' -> {
+			'methodClassName' -> 'Collection'.
+			'methodName' -> nil.
+			'classSide' -> true
+		} asDictionary
+	} asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GtLMagritteBasedModel).
+	model := result model.
+	self assert: model isErrorDomainObject.
+	self assert: model class equals: GtLJSONSchemaValidationErrorDomainObject.
+	self assert: model path asArray equals: #('methodDescriptor' 'methodName').
+	self assert: model messageText equals: '@[methodDescriptor/methodName] string expected'.
 	^ call
 ]

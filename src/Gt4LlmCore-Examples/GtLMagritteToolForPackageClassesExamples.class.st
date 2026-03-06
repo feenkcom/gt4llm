@@ -83,3 +83,39 @@ GtLMagritteToolForPackageClassesExamples >> packageClassesForUnknownPackage [
 	self assert: model objectName equals: 'NonExistingPackageName42'.
 	^ call
 ]
+
+{ #category : #examples }
+GtLMagritteToolForPackageClassesExamples >> packageClassesWithEmptyPackageName [
+	<gtExample>
+	| tool call result model |
+	tool := GtLMagritteToolForPackageClasses new.
+	call := GtLFunctionToolCall new.
+	call rawArguments: { 'packageName' -> '' } asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: call arguments size equals: 1.
+	self assert: (result isKindOf: GtLMagritteBasedModel).
+	model := result model.
+	self assert: model isErrorDomainObject.
+	self assert: (model isKindOf: GtLMissingArgumentDomainObject).
+	self assert: model missingArgument equals: 'packageName'.
+	^ call
+]
+
+{ #category : #examples }
+GtLMagritteToolForPackageClassesExamples >> packageClassesWithNilPackageName [
+	<gtExample>
+	| tool call result model |
+	tool := GtLMagritteToolForPackageClasses new.
+	call := GtLFunctionToolCall new.
+	call rawArguments: { 'packageName' -> nil } asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GtLMagritteBasedModel).
+	model := result model.
+	self assert: model isErrorDomainObject.
+	self assert: (model isKindOf: GtLJSONSchemaValidationErrorDomainObject).
+	self assert: model path asArray equals: #('packageName').
+	self assert: model errorMessage equals: '@[packageName] string expected'.
+	^ call
+]

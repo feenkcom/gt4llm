@@ -47,7 +47,6 @@ GtLClassDescription >> allClassMethodNamesDescription [
 	^ MAToManyScalarRelationDescription new
 		label: 'All class methods';
 		accessor: #allClassMethodNames;
-		name: #allClassMethodNames;
 		classes: {String};
 		beRequired;
 		yourself
@@ -69,7 +68,6 @@ GtLClassDescription >> allInstanceMethodNamesDescription [
 	^ MAToManyScalarRelationDescription new
 		label: 'All instance methods';
 		accessor: #allInstanceMethodNames;
-		name: #allInstanceMethodNames;
 		classes: {String};
 		beRequired;
 		yourself
@@ -91,7 +89,6 @@ GtLClassDescription >> classSlotNamesDescription [
 	^ MAToManyScalarRelationDescription new
 		label: 'Class slots';
 		accessor: #classSlotNames;
-		name: #classSlotNames;
 		classes: {String};
 		beRequired;
 		yourself
@@ -194,7 +191,6 @@ GtLClassDescription >> instanceSlotNamesDescription [
 	^ MAToManyScalarRelationDescription new
 		label: 'Instance slots';
 		accessor: #instanceSlotNames;
-		name: #instanceSlotNames;
 		classes: {String};
 		beRequired;
 		yourself

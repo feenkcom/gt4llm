@@ -59,14 +59,9 @@ GtLMagritteToolForClassLookup >> name [
 { #category : #private }
 GtLMagritteToolForClassLookup >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments className class |
-	arguments := aToolCall arguments ifNil: [ Dictionary new ].
+	arguments := aToolCall arguments.
 	
-	className := arguments
-		at: 'className'
-		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-				arguments: arguments;
-				missingArgument: 'className' ].
-				
+	className := arguments at: 'className'.
 	class := className
 		asClassIfAbsent: [ ^ GtLMissingDomainObject new objectName: className ].
 
