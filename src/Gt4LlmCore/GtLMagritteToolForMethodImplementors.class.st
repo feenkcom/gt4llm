@@ -55,13 +55,9 @@ GtLMagritteToolForMethodImplementors >> name [
 GtLMagritteToolForMethodImplementors >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments methodName selector implementors |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
-	methodName := arguments
-		at: 'methodName'
-		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-				arguments: arguments;
-				missingArgument: 'methodName' ].
+	methodName := arguments at: 'methodName'.
 
-	(methodName isNil or: [ methodName trimBoth isEmpty ])
+	(methodName trimBoth isEmpty)
 		ifTrue: [ ^ GtLMissingArgumentDomainObject new
 				arguments: arguments;
 				missingArgument: 'methodName' ].

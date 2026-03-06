@@ -47,32 +47,24 @@ GtLToolForLepiterSnippetEdit >> pageUidDescription [
 GtLToolForLepiterSnippetEdit >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments pageUidString snippetUidString updatedText snippetUid pageUid snippets oldText |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
-	pageUidString := arguments
-		at: 'pageUid'
-		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-			arguments: arguments;
-			missingArgument: 'pageUid' ].
-	pageUidString := pageUidString trimBoth.
-	pageUidString isEmpty
+	pageUidString := arguments at: 'pageUid'.
+	(pageUidString trimBoth isEmpty)
 		ifTrue: [ ^ GtLMissingArgumentDomainObject new
 			arguments: arguments;
 			missingArgument: 'pageUid' ].
+	pageUidString := pageUidString trimBoth.
 	pageUid := [ UUID fromString36: pageUidString ]
 		on: Error
 		do: [ :error | 
 			^ GtLExceptionDomainObject new
 				freeze: error;
 				description: 'Invalid page uid' ].
-	snippetUidString := arguments
-		at: 'snippetUid'
-		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-			arguments: arguments;
-			missingArgument: 'snippetUid' ].
-	snippetUidString := snippetUidString trimBoth.
-	snippetUidString isEmpty
+	snippetUidString := arguments	at: 'snippetUid'.
+	(snippetUidString asString trimBoth isEmpty)
 		ifTrue: [ ^ GtLMissingArgumentDomainObject new
 			arguments: arguments;
 			missingArgument: 'snippetUid' ].
+	snippetUidString := snippetUidString trimBoth.
 	snippetUid := LeUID new.
 	[ snippetUid uidString: snippetUidString ]
 		on: Error
@@ -85,11 +77,11 @@ GtLToolForLepiterSnippetEdit >> privatePerformToolCall: aToolCall inContext: anE
 		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
 			arguments: arguments;
 			missingArgument: 'updatedText' ].
-	updatedText := updatedText asString.
-	updatedText isEmpty
+	(updatedText isNil or: [ updatedText asString isEmpty ])
 		ifTrue: [ ^ GtLMissingArgumentDomainObject new
 			arguments: arguments;
 			missingArgument: 'updatedText' ].
+	updatedText := updatedText asString.
 	self database
 		pageWithID: pageUid
 		ifPresent: [ :aPage | 

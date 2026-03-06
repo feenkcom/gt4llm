@@ -49,13 +49,9 @@ GtLMagritteToolForPackageClasses >> packageNameDescription [
 GtLMagritteToolForPackageClasses >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments packageName organizer package |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
-	packageName := arguments
-		at: 'packageName'
-		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-				arguments: arguments;
-				missingArgument: 'packageName' ].
+	packageName := arguments at: 'packageName'.
 
-	(packageName isNil or: [ packageName trimBoth isEmpty ])
+	(packageName trimBoth isEmpty)
 		ifTrue: [ ^ GtLMissingArgumentDomainObject new
 				arguments: arguments;
 				missingArgument: 'packageName' ].

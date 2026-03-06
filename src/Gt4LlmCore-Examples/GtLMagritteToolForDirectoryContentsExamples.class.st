@@ -7,13 +7,14 @@ Class {
 { #category : #examples }
 GtLMagritteToolForDirectoryContentsExamples >> directoryContentsForExistingDirectory [
 	<gtExample>
-	| tool call result model tempDirectory root fileOne fileTwo subDirectory |
+	| tempDirectory root fileOne fileTwo subDirectory |
 	tempDirectory := GtTemporaryDirectory new.
 	root := tempDirectory reference.
 	fileOne := root / 'one.txt'.
 	fileTwo := root / 'two.txt'.
 	subDirectory := root / 'sub'.
-	[ fileOne writeStreamDo: [ :stream | stream nextPutAll: 'First file' ].
+	[ | tool call result model |
+		fileOne writeStreamDo: [ :stream | stream nextPutAll: 'First file' ].
 		fileTwo writeStreamDo: [ :stream | stream nextPutAll: 'Second file' ].
 		subDirectory ensureCreateDirectory.
 		tool := GtLMagritteToolForDirectoryContents new.

@@ -28,7 +28,6 @@ GtLJsonSchemaBasedModel >> addInstructionsTo: aMessageInstructions [
 
 	aMessageInstructions
 		addSection: (GtLInstructionSection new
-				source: self;
 				title: self name;
 				body: (NeoJSONWriter toStringPretty: self schema json))
 ]
