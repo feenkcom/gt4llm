@@ -47,12 +47,8 @@ GtLToolForLepiterSnippetEdit >> pageUidDescription [
 GtLToolForLepiterSnippetEdit >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments pageUidString snippetUidString updatedText snippetUid pageUid snippets oldText |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
-	pageUidString := arguments
-		at: 'pageUid'
-		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-			arguments: arguments;
-			missingArgument: 'pageUid' ].
-	(pageUidString isNil or: [ pageUidString asString trimBoth isEmpty ])
+	pageUidString := arguments at: 'pageUid'.
+	(pageUidString trimBoth isEmpty)
 		ifTrue: [ ^ GtLMissingArgumentDomainObject new
 			arguments: arguments;
 			missingArgument: 'pageUid' ].
@@ -63,12 +59,8 @@ GtLToolForLepiterSnippetEdit >> privatePerformToolCall: aToolCall inContext: anE
 			^ GtLExceptionDomainObject new
 				freeze: error;
 				description: 'Invalid page uid' ].
-	snippetUidString := arguments
-		at: 'snippetUid'
-		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-			arguments: arguments;
-			missingArgument: 'snippetUid' ].
-	(snippetUidString isNil or: [ snippetUidString asString trimBoth isEmpty ])
+	snippetUidString := arguments	at: 'snippetUid'.
+	(snippetUidString asString trimBoth isEmpty)
 		ifTrue: [ ^ GtLMissingArgumentDomainObject new
 			arguments: arguments;
 			missingArgument: 'snippetUid' ].

@@ -53,24 +53,11 @@ GtLToolForLepiterSnippetsRemove >> name [
 GtLToolForLepiterSnippetsRemove >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments snippetsArgument results |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
-	snippetsArgument := arguments
-		at: 'snippets'
-		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-			arguments: arguments;
-			missingArgument: 'snippets' ].
-	(snippetsArgument isCollection and: [ snippetsArgument isString not ])
-		ifFalse: [ ^ GtLIncorrectArgumentTypeDomainObject new
-			argumentName: 'snippets';
-			argumentValue: snippetsArgument;
-			expectedArgumentValueKind: Array ].
+	snippetsArgument := arguments at: 'snippets'.
+			
 	results := snippetsArgument collect: [ :each |
-		(each isKindOf: GtLLepiterSnippetRemovalRequest)
-			ifFalse: [ ^ GtLIncorrectArgumentArrayItemDomainObject new
-				argumentName: 'snippets';
-				argumentValue: snippetsArgument;
-				expectedItemKind: GtLLepiterSnippetRemovalRequest;
-				incorrectItems: { each } ].
 		self removeSnippetFrom: each ].
+		
 	^ GtLLepiterSnippetsDomainObject new
 		snippets: results;
 		yourself
@@ -78,19 +65,19 @@ GtLToolForLepiterSnippetsRemove >> privatePerformToolCall: aToolCall inContext: 
 
 { #category : #private }
 GtLToolForLepiterSnippetsRemove >> removeSnippetFrom: snippetArguments [
-	| pageUidString snippetUidString knowledgeBaseUid targetDatabase pageUid snippetUid snippets |
+	| pageUidString snippetUidString knowledgeBaseUid targetDatabase pageUid snippetUid  |
 	knowledgeBaseUid := snippetArguments knowledgeBaseUid.
-	(knowledgeBaseUid isNil or: [ knowledgeBaseUid trimBoth isEmpty ])
+	(knowledgeBaseUid trimBoth isEmpty)
 		ifTrue: [ ^ GtLMissingArgumentDomainObject new
 			arguments: snippetArguments;
 			missingArgument: 'knowledgeBaseUid' ].
 	pageUidString := snippetArguments pageUid.
-	(pageUidString isNil or: [ pageUidString trimBoth isEmpty ])
+	(pageUidString trimBoth isEmpty)
 		ifTrue: [ ^ GtLMissingArgumentDomainObject new
 			arguments: snippetArguments;
 			missingArgument: 'pageUid' ].
 	snippetUidString := snippetArguments snippetUid.
-	(snippetUidString isNil or: [ snippetUidString trimBoth isEmpty ])
+	(snippetUidString trimBoth isEmpty)
 		ifTrue: [ ^ GtLMissingArgumentDomainObject new
 			arguments: snippetArguments;
 			missingArgument: 'snippetUid' ].
@@ -122,6 +109,7 @@ GtLToolForLepiterSnippetsRemove >> removeSnippetFrom: snippetArguments [
 	targetDatabase
 		pageWithID: pageUid
 		ifPresent: [ :page |
+			|snippets|
 			snippets := page allChildrenSnippetsMatching: [ :aSnippet | aSnippet uid = snippetUid ].
 			snippets ifEmpty: [ ^ GtLProblemDomainObject new
 				description: 'Could not locate snippet with id ' , snippetUid uidString ].
@@ -133,6 +121,7 @@ GtLToolForLepiterSnippetsRemove >> removeSnippetFrom: snippetArguments [
 						description: 'Error while removing snippet' ] ]
 		ifAbsent: [ ^ GtLProblemDomainObject new
 			description: 'Could not locate page with id ' , pageUid ].
+			
 	^ GtLLepiterSnippetDomainObject new
 		status: 'removed';
 		pageUid: pageUid;

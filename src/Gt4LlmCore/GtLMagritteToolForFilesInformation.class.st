@@ -88,11 +88,7 @@ GtLMagritteToolForFilesInformation >> name [
 GtLMagritteToolForFilesInformation >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments filePaths fileObjects |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
-	filePaths := arguments
-		at: 'filePaths'
-		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-				arguments: arguments;
-				missingArgument: 'filePaths' ].
+	filePaths := arguments at: 'filePaths'.
 	fileObjects := filePaths collect: [ :pathReference |
 		self informationForFilePath: pathReference ].
 	^ GtLFilesInformation new

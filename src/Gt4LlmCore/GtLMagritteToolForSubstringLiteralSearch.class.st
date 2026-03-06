@@ -45,13 +45,9 @@ GtLMagritteToolForSubstringLiteralSearch >> name [
 GtLMagritteToolForSubstringLiteralSearch >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments query filter matches |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
-	query := arguments
-		at: 'query'
-		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-				arguments: arguments;
-				missingArgument: 'query' ].
+	query := arguments at: 'query'.
 
-	(query isNil or: [ query trimBoth isEmpty ])
+	(query trimBoth isEmpty)
 		ifTrue: [ ^ GtLMissingArgumentDomainObject new
 				arguments: arguments;
 				missingArgument: 'query' ].

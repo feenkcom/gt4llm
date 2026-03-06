@@ -92,10 +92,11 @@ GtLMagritteToolForFilesInformationExamples >> filesInformationForExistingFiles [
 { #category : #examples }
 GtLMagritteToolForFilesInformationExamples >> filesInformationForMissingFile [
 	<gtExample>
-	| missingPath existingFile tool call result model |
+	| missingPath existingFile |
 	missingPath := (FileLocator temp / 'gt-llm-missing-file-info.txt') pathString.
 	existingFile := FileReference newTempFilePrefix: 'GtLMagritteToolForFilesInformation' suffix: '.txt'.
-	[ existingFile writeStreamDo: [ :stream | stream nextPutAll: 'Existing file' ].
+	[ |tool call result model|
+		existingFile writeStreamDo: [ :stream | stream nextPutAll: 'Existing file' ].
 		tool := GtLMagritteToolForFilesInformation new.
 		call := GtLFunctionToolCall new.
 		call rawArguments: { 'filePaths' -> { {'pathString' -> missingPath} asDictionary.
