@@ -112,6 +112,13 @@ GtMagritteJSONSchemaDataReaderExamples >> expectedMathReasoningWithSingleTypeSte
       }
 ]
 
+{ #category : #expecting }
+GtMagritteJSONSchemaDataReaderExamples >> expectedModelWithScallarArrays [
+	^ GtLDemoScalarArraysModel new
+		arrayOfStrings: {'one' . 'Two' . 'Some other string'};
+  	arrayOfBooleans: {true . false. false. true . true}
+]
+
 { #category : #accessing }
 GtMagritteJSONSchemaDataReaderExamples >> mathReasoningWithDelegatedTypeStepData [
 	^ '{
@@ -268,6 +275,20 @@ GtMagritteJSONSchemaDataReaderExamples >> mathReasoningWithSingleTypeStepReader 
 			forModelClass: GtLDemoMathReasoning
 ]
 
+{ #category : #accessing }
+GtMagritteJSONSchemaDataReaderExamples >> modelWithScallarArraysData [
+	^ '{
+	"arrayOfStrings" : ["one", "Two", "Some other string"],
+	"arrayOfBooleans" : [true , false, false, true , true]
+}'
+]
+
+{ #category : #accessing }
+GtMagritteJSONSchemaDataReaderExamples >> modelWithScallarArraysReader [
+	^ GtMagritteJSONSchemaDataReader 
+			forModelClass: GtLDemoScalarArraysModel
+]
+
 { #category : #examples }
 GtMagritteJSONSchemaDataReaderExamples >> readMathReasoningWithDelegatedType [
 	<gtExample>
@@ -326,4 +347,19 @@ GtMagritteJSONSchemaDataReaderExamples >> readMathReasoningWithSingleType [
 		equals:self expectedMathReasoningWithSingleTypeStep.
 		
 	^ mathReasoning
+]
+
+{ #category : #examples }
+GtMagritteJSONSchemaDataReaderExamples >> readModelWithScallarArrays [
+	<gtExample>
+	| dataReader modelWithScalarArrays |
+	dataReader := self modelWithScallarArraysReader.
+	modelWithScalarArrays := dataReader 
+		readFrom: self modelWithScallarArraysData readStream.
+		
+	self 
+		assert: modelWithScalarArrays 
+		equals:self expectedModelWithScallarArrays.
+		
+	^ modelWithScalarArrays
 ]
