@@ -1,0 +1,83 @@
+"
+Examples for GtLMagritteToolForMethodImplementors.
+"
+Class {
+	#name : #GtLMagritteToolForMethodImplementorsExamples,
+	#superclass : #Object,
+	#category : #'Gt4LlmCore-Examples'
+}
+
+{ #category : #examples }
+GtLMagritteToolForMethodImplementorsExamples >> implementorsForExistingMethodName [
+	<gtExample>
+	| tool call result model |
+	tool := GtLMagritteToolForMethodImplementors new.
+	call := GtLFunctionToolCall new.
+	call rawArguments: { 'methodName' -> 'performToolCall:' } asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: call arguments size equals: 1.
+	self assert: (result isKindOf: GtLMagritteBasedModel).
+	model := result model.
+	self assert: (model isKindOf: GtLMethodReferences).
+	self assert: model methods isNotEmpty.
+	self
+		assert: (model methods anySatisfy: [ :each |
+			each methodSignature = 'GtLAbstractFunctionTool>>#performToolCall:' ]).
+	self assert: model mayHaveMore not.
+	^ call
+]
+
+{ #category : #examples }
+GtLMagritteToolForMethodImplementorsExamples >> implementorsForGtDisplayOnReturns200 [
+	<gtExample>
+	| tool call result model |
+	tool := GtLMagritteToolForMethodImplementors new.
+	call := GtLFunctionToolCall new.
+	call rawArguments: { 'methodName' -> 'gtDisplayOn:' } asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: call arguments size equals: 1.
+	self assert: (result isKindOf: GtLMagritteBasedModel).
+	model := result model.
+	self assert: (model isKindOf: GtLMethodReferences).
+	self assert: model methods size equals: 200.
+	self assert: model mayHaveMore.
+	^ call
+]
+
+{ #category : #examples }
+GtLMagritteToolForMethodImplementorsExamples >> implementorsForUnknownMethodName [
+	<gtExample>
+	| tool call result model |
+	tool := GtLMagritteToolForMethodImplementors new.
+	call := GtLFunctionToolCall new.
+	call rawArguments: { 'methodName' -> 'unknownMethodName42' } asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: call arguments size equals: 1.
+	self assert: (result isKindOf: GtLMagritteBasedModel).
+	model := result model.
+	self assert: (model isKindOf: GtLMethodReferences).
+	self assert: model methods equals: #().
+	self assert: model mayHaveMore not.
+	^ call
+]
+
+{ #category : #examples }
+GtLMagritteToolForMethodImplementorsExamples >> implementorsWithMissingMethodName [
+	<gtExample>
+	| tool call result model |
+	tool := GtLMagritteToolForMethodImplementors new.
+	call := GtLFunctionToolCall new.
+	call rawArguments: {} asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: call arguments size equals: 0.
+	self assert: (result isKindOf: GtLMagritteBasedModel).
+	model := result model.
+	self assert: (model isKindOf: GtLMissingArgumentDomainObject).
+	self assert: model missingArgument equals: 'methodName'.
+	self assert: model errorMessage equals: 'Missing argument called methodName'.
+	^ call
+]
