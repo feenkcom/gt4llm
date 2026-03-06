@@ -29,10 +29,12 @@ GtLSmaCCToolForParserUpdatesExamples >> invalidParserClass [
 							'edits'
 								-> {{'type' -> 'insert'.
 											'newSource'
-												-> 'Multiplication : Multiplication "*" Addition | Addition;'}
+												-> 'Multiplication : Multiplication "*" Addition | Addition;'.
+												'oldSource' -> ''}
 											asDictionary.
 										{'type' -> 'insert'.
-											'newSource' -> 'Addition : Addition "+" <number> | <number>;'}
+											'newSource' -> 'Addition : Addition "+" <number> | <number>;'.
+											'oldSource' -> ''}
 											asDictionary.
 										{'type' -> 'modify'.
 											'oldSource' -> 'Expression: Expression "+" <number>;'.
@@ -61,10 +63,12 @@ GtLSmaCCToolForParserUpdatesExamples >> performUpdates [
 								-> {{'type' -> 'insert'.
 											'newSource'
 												-> 'Multiplication : Multiplication "*" Addition | Addition;'.
+												'oldSource' -> ''
 												}
 											asDictionary.
 										{'type' -> 'insert'.
 											'newSource' -> 'Addition : Addition "+" <number> | <number>;'.
+											'oldSource' -> ''
 											}
 											asDictionary.
 										{'type' -> 'modify'.
