@@ -181,9 +181,17 @@ GtLConnectionRegistry >> knownConnectors [
 			label: 'Claude Opus 4.5';
 			model: 'claude-opus-4-5'.
 		GtLConnection new
+			providerClass: GtLAnthropicProvider;
+			label: 'Claude Opus 4.6';
+			model: 'claude-opus-4-6'.
+		GtLConnection new
 			providerClass: GtLOpenAIProvider;
 			label: 'GPT 5.2';
 			model: 'gpt-5.2'.
+		GtLConnection new
+			providerClass: GtLOpenAIProvider;
+			label: 'GPT 5.2 Codex';
+			model: 'gpt-5.2-codex'.
 		GtLConnection new
 			providerClass: GtLOpenAIProvider;
 			label: 'GPT 5.3 Codex';
@@ -206,7 +214,7 @@ GtLConnectionRegistry >> labelForModel: aModel [
 GtLConnectionRegistry >> standardDefaultConnection [
 	^ GtLConnection new
 		providerClass: GtLOpenAIProvider;
-		label: 'GPT 5.2 Codex';
-		model: 'gpt-5.2-codex'";
+		label: 'GPT 5.4';
+		model: 'gpt-5.4'";
 		addOption: 'isStreaming' withValue: false"
 ]
