@@ -53,7 +53,7 @@ GtLMagritteToolForClassSearch >> privatePerformToolCall: aToolCall inContext: an
 			await: GtLSettings futureExecutionConfiguration.
 	matches := promise wait.
 
-	^ GtLClassesSearchResult fromMatches: matches
+	^ GtLClassesSearchResult fromClasses: matches
 ]
 
 { #category : #descriptions }

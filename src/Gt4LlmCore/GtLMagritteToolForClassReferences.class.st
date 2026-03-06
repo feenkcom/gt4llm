@@ -73,12 +73,8 @@ GtLMagritteToolForClassReferences >> privatePerformToolCall: aToolCall inContext
 
 	references := (class gtReferences result toArray
 		await: GtLSettings futureExecutionConfiguration) wait.
-	limitedReferences := (references first: (200 min: references size))
-		collect: [ :each | GtLMethodReference fromCompiledMethod: each ].
-
-	^ GtLClassReferences new
+		
+	^ (GtLClassReferences fromCompiledMethods: references)
 		givenClassName: className;
-		references: limitedReferences;
-		mayHaveMore: references size > 200;
 		yourself
 ]
