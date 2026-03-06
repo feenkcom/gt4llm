@@ -666,7 +666,7 @@ GtLChatLiveExamples >> messageWithToolCallExample_magritteMarkdown [
 	self
 		stubResponses: [ self messageWithToolCallExample_magritteMarkdown_stub_responses ].
 	currentMessage := self currentChat createUserMessage.
-	currentMessage tools: (GtLTools withAll: {GtLToolForClassLookup new}).
+	currentMessage tools: (GtLTools withAll: {GtLMagritteToolForClassLookup new}).
 	currentMessage addResponseFormatForMagritte: GtLMarkdown named: 'Markdown'.
 	currentMessage
 		addInputMagritteObject: (GtLMarkdown new content: messageString)
