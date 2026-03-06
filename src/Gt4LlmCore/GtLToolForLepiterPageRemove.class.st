@@ -71,14 +71,14 @@ GtLToolForLepiterPageRemove >> pageUidDescription [
 GtLToolForLepiterPageRemove >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments pageUidString databaseId baseDatabase targetDatabase pageUid page |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
-	pageUidString := arguments
-		at: 'pageUid'
-		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
+	pageUidString := arguments	at: 'pageUid'.
+	(pageUidString trimBoth isEmpty)
+		ifTrue: [ ^ GtLMissingArgumentDomainObject new
 			arguments: arguments;
 			missingArgument: 'pageUid' ].
-	databaseId := arguments
-		at: 'databaseId'
-		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
+	databaseId := arguments at: 'databaseId'.
+	(databaseId trimBoth isEmpty)
+		ifTrue: [ ^ GtLMissingArgumentDomainObject new
 			arguments: arguments;
 			missingArgument: 'databaseId' ].
 	baseDatabase := self database.
@@ -92,10 +92,6 @@ GtLToolForLepiterPageRemove >> privatePerformToolCall: aToolCall inContext: anEx
 	targetDatabase ifNil: [ ^ GtLProblemDomainObject new
 			description: 'Database with ' , databaseId asString , ' not found' ].
 	pageUidString := pageUidString asString trimBoth.
-	pageUidString isEmpty
-		ifTrue: [ ^ GtLMissingArgumentDomainObject new
-			arguments: arguments;
-			missingArgument: 'pageUid' ].
 	pageUid := [ UUID fromString36: pageUidString ]
 		on: Error
 		do: [ :error |

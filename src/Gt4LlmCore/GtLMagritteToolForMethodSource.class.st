@@ -40,11 +40,7 @@ GtLMagritteToolForMethodSource >> privatePerformToolCall: aToolCall inContext: a
 	| arguments methodDescriptor |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	
-	methodDescriptor := arguments
-			at: 'methodDescriptor'
-			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-					arguments: arguments;
-					missingArgument: 'methodDescriptor' ].
+	methodDescriptor := arguments at: 'methodDescriptor'.
 	
 	^ methodDescriptor 
 			methodObjectIfMissing: [ :anErrorResult | anErrorResult ]

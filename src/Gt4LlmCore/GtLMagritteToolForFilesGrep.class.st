@@ -115,16 +115,8 @@ GtLMagritteToolForFilesGrep >> parseGrepOutputLines: lines [
 GtLMagritteToolForFilesGrep >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments query filePath fileReference fileNamePatterns |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
-	query := arguments
-			at: 'query'
-			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-					arguments: arguments;
-					missingArgument: 'query' ].
-	filePath := arguments
-			at: 'filePath'
-			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-					arguments: arguments;
-					missingArgument: 'filePath' ].
+	query := arguments at: 'query'.
+	filePath := arguments at: 'filePath'.
 	fileNamePatterns := arguments at: 'fileNamePatterns' ifAbsent: [ #() ].
 	fileReference := filePath asFileReference.
 	fileReference exists

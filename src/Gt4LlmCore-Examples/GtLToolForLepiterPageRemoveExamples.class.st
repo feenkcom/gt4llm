@@ -5,6 +5,45 @@ Class {
 }
 
 { #category : #examples }
+GtLToolForLepiterPageRemoveExamples >> emptyDatabaseId [
+	<gtExample>
+	| tool call result logicalDB model |
+	logicalDB := LeLogicalDatabase new.
+	tool := GtLToolForLepiterPageRemove new.
+	tool database: logicalDB.
+	call := GtLFunctionToolCall new.
+	call rawArguments: { 'pageUid' -> (UUID new asString36). 'databaseId' -> '' } asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GtLMagritteBasedModel).
+	
+	model := result model.
+	self assert: (model isKindOf: GtLMissingArgumentDomainObject).
+	self assert: model missingArgument equals: 'databaseId'.
+	^ call
+]
+
+{ #category : #examples }
+GtLToolForLepiterPageRemoveExamples >> emptyPageUid [
+	<gtExample>
+	| tool call result db logicalDB model |
+	db := LeExplicitlyAttachedLinksExamples new primaryDatabase.
+	logicalDB := LeLogicalDatabase new primaryDB: db.
+	tool := GtLToolForLepiterPageRemove new.
+	tool database: logicalDB.
+	call := GtLFunctionToolCall new.
+	call rawArguments: { 'pageUid' -> ''. 'databaseId' -> db uuidString } asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GtLMagritteBasedModel).
+	
+	model := result model.
+	self assert: (model isKindOf: GtLMissingArgumentDomainObject).
+	self assert: model missingArgument equals: 'pageUid'.
+	^ call
+]
+
+{ #category : #examples }
 GtLToolForLepiterPageRemoveExamples >> missingDatabaseId [
 	<gtExample>
 	| tool call result logicalDB model |
@@ -44,6 +83,43 @@ GtLToolForLepiterPageRemoveExamples >> missingPageUid [
 	self assert: model missingPropertyNames equals: #('pageUid').
 	self assert: model path equals: #(nil).
 	
+	^ call
+]
+
+{ #category : #examples }
+GtLToolForLepiterPageRemoveExamples >> nilDatabaseId [
+	<gtExample>
+	| tool call result logicalDB model |
+	logicalDB := LeLogicalDatabase new.
+	tool := GtLToolForLepiterPageRemove new.
+	tool database: logicalDB.
+	call := GtLFunctionToolCall new.
+	call rawArguments: '{"pageUid": "', (UUID new asString36), '", "databaseId": null}'.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GtLMagritteBasedModel).
+	
+	model := result model.
+	self assert: (model isKindOf: GtLJSONSchemaValidationErrorDomainObject).
+	^ call
+]
+
+{ #category : #examples }
+GtLToolForLepiterPageRemoveExamples >> nilPageUid [
+	<gtExample>
+	| tool call result db logicalDB model |
+	db := LeExplicitlyAttachedLinksExamples new primaryDatabase.
+	logicalDB := LeLogicalDatabase new primaryDB: db.
+	tool := GtLToolForLepiterPageRemove new.
+	tool database: logicalDB.
+	call := GtLFunctionToolCall new.
+	call rawArguments: '{"pageUid": null, "databaseId": "', db uuidString, '"}'.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GtLMagritteBasedModel).
+	
+	model := result model.
+	self assert: (model isKindOf: GtLJSONSchemaValidationErrorDomainObject).
 	^ call
 ]
 

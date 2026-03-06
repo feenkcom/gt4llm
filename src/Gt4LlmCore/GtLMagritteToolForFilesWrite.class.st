@@ -44,11 +44,7 @@ GtLMagritteToolForFilesWrite >> name [
 GtLMagritteToolForFilesWrite >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments fileDescriptors fileObjects |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
-	fileDescriptors := arguments
-		at: 'files'
-		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-				arguments: arguments;
-				missingArgument: 'files' ].
+	fileDescriptors := arguments	at: 'files'.
 	fileObjects := OrderedCollection new.
 	fileDescriptors do: [ :each |
 		| fileReference parentDirectory result |

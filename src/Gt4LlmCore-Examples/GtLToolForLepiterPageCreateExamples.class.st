@@ -5,6 +5,45 @@ Class {
 }
 
 { #category : #examples }
+GtLToolForLepiterPageCreateExamples >> emptyDatabaseId [
+	<gtExample>
+	| tool call result logicalDB model |
+	logicalDB := LeLogicalDatabase new.
+	tool := GtLToolForLepiterPageCreate new.
+	tool database: logicalDB.
+	call := GtLFunctionToolCall new.
+	call rawArguments: { 'title' -> 'New Page'. 'databaseId' -> '' } asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GtLMagritteBasedModel).
+	
+	model := result model.
+	self assert: (model isKindOf: GtLMissingArgumentDomainObject).
+	self assert: model missingArgument equals: 'databaseId'.
+	^ call
+]
+
+{ #category : #examples }
+GtLToolForLepiterPageCreateExamples >> emptyTitle [
+	<gtExample>
+	| tool call result db logicalDB model |
+	db := LeExplicitlyAttachedLinksExamples new primaryDatabase.
+	logicalDB := LeLogicalDatabase new primaryDB: db.
+	tool := GtLToolForLepiterPageCreate new.
+	tool database: logicalDB.
+	call := GtLFunctionToolCall new.
+	call rawArguments: { 'title' -> ''. 'databaseId' -> db uuidString } asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GtLMagritteBasedModel).
+	
+	model := result model.
+	self assert: (model isKindOf: GtLMissingArgumentDomainObject).
+	self assert: model missingArgument equals: 'title'.
+	^ call
+]
+
+{ #category : #examples }
 GtLToolForLepiterPageCreateExamples >> missingDatabaseId [
 	<gtExample>
 	| tool call result logicalDB model |
@@ -43,6 +82,43 @@ GtLToolForLepiterPageCreateExamples >> missingTitle [
 	self assert: model missingPropertyNames equals: #('title').
 	self assert: model path equals: #(nil).
 	
+	^ call
+]
+
+{ #category : #examples }
+GtLToolForLepiterPageCreateExamples >> nilDatabaseId [
+	<gtExample>
+	| tool call result logicalDB model |
+	logicalDB := LeLogicalDatabase new.
+	tool := GtLToolForLepiterPageCreate new.
+	tool database: logicalDB.
+	call := GtLFunctionToolCall new.
+	call rawArguments: '{"title": "New Page", "databaseId": null}'.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GtLMagritteBasedModel).
+	
+	model := result model.
+	self assert: (model isKindOf: GtLJSONSchemaValidationErrorDomainObject).
+	^ call
+]
+
+{ #category : #examples }
+GtLToolForLepiterPageCreateExamples >> nilTitle [
+	<gtExample>
+	| tool call result db logicalDB model |
+	db := LeExplicitlyAttachedLinksExamples new primaryDatabase.
+	logicalDB := LeLogicalDatabase new primaryDB: db.
+	tool := GtLToolForLepiterPageCreate new.
+	tool database: logicalDB.
+	call := GtLFunctionToolCall new.
+	call rawArguments: '{"title": null, "databaseId": "', db uuidString, '"}'.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GtLMagritteBasedModel).
+	
+	model := result model.
+	self assert: (model isKindOf: GtLJSONSchemaValidationErrorDomainObject).
 	^ call
 ]
 
