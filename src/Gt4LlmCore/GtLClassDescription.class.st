@@ -14,7 +14,7 @@ Class {
 		'allInstanceMethodNames',
 		'allClassMethodNames'
 	],
-	#category : #Gt4LlmCore
+	#category : #'Gt4LlmCore-Magritte Objects'
 }
 
 { #category : #'instance creation' }

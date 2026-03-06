@@ -4,7 +4,7 @@ Magritte-based tool for retrieving class references.
 Class {
 	#name : #GtLMagritteToolForClassReferences,
 	#superclass : #GtLAbstractMagritteFunctionTool,
-	#category : #Gt4LlmCore
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }

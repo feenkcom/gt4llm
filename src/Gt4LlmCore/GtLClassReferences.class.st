@@ -9,7 +9,7 @@ Class {
 		'references',
 		'mayHaveMore'
 	],
-	#category : #Gt4LlmCore
+	#category : #'Gt4LlmCore-Magritte Objects'
 }
 
 { #category : #accessing }
