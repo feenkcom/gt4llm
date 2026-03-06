@@ -12,6 +12,17 @@ Class {
 	#category : #'Gt4LlmCore-Magritte Objects'
 }
 
+{ #category : #'instance creation' }
+GtLClassReferences class >> fromCompiledMethods: aCollection [
+	| limitedMethods |
+	limitedMethods := aCollection first: (200 min: aCollection size).
+	^ self new
+		references: (limitedMethods collect: [ :each | 
+			GtLMethodReference fromCompiledMethod: each ]);
+		mayHaveMore: aCollection size > 200;
+		yourself
+]
+
 { #category : #accessing }
 GtLClassReferences >> givenClassName [
 	^ givenClassName

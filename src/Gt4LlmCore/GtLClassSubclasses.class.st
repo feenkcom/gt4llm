@@ -12,6 +12,17 @@ Class {
 	#category : #'Gt4LlmCore-Magritte Objects'
 }
 
+{ #category : #'instance creation' }
+GtLClassSubclasses class >> fromClasses: aCollection [
+	| matchesArray limited |
+	matchesArray := aCollection asArray.
+	limited := matchesArray first: (200 min: matchesArray size).
+	^ self new
+		subclassNames:  (limited collect: [ :each | each name ]);
+		mayHaveMore: matchesArray size > 200;
+		yourself
+]
+
 { #category : #accessing }
 GtLClassSubclasses >> givenClassName [
 	^ givenClassName

@@ -27,7 +27,7 @@ GtLClassesSearchResultExamples >> classesSearchResultWithMatches [
 	<gtExample>
 	| matches result |
 	matches := { Object. String }.
-	result := GtLClassesSearchResult fromMatches: matches.
+	result := GtLClassesSearchResult fromClasses: matches.
 	self assert: result foundClassNames equals: #('Object' 'String').
 	self assert: result mayHaveMore not.
 	^ result

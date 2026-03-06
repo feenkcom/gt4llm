@@ -65,5 +65,5 @@ GtLMagritteToolForPackageClasses >> privatePerformToolCall: aToolCall inContext:
 		packageNamed: packageName asSymbol
 		ifAbsent: [ ^ GtLMissingDomainObject new objectName: packageName ].
 
-	^ GtLClassesSearchResult fromMatches: package classes
+	^ GtLClassesSearchResult fromClasses: package classes
 ]
