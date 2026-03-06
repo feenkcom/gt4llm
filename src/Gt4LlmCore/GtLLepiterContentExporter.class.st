@@ -151,10 +151,10 @@ GtLLepiterContentExporter >> visitJavaScriptSnippet: aLeJavaScriptSnippet [
 
 { #category : #'as yet unclassified' }
 GtLLepiterContentExporter >> visitPage: aLePage [
-	stream nextPutAll: (self heading: aLePage title level: startHeaderLevel).
+	"stream nextPutAll: (self heading: aLePage title level: startHeaderLevel).
 
 	self linebreaks.
-
+"
 	aLePage
 		childrenDo: [ :aChild | 
 			aChild acceptVisitor: self.

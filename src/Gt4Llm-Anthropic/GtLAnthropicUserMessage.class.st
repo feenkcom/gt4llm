@@ -157,8 +157,9 @@ GtLAnthropicUserMessage >> inputModels [
 
 { #category : #accessing }
 GtLAnthropicUserMessage >> instructions [
-	^ instructions ifNil: [ 
-			instructions := self buildCompleteInstructions ]
+	^ instructions
+		ifNotNil: [ instructions addItem: self inputDescriptionSection ]
+		ifNil: [ instructions := self buildCompleteInstructions ]
 ]
 
 { #category : #testing }

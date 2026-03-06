@@ -10,7 +10,7 @@ Class {
 { #category : #examples }
 GtLMessageStylerExamples >> gtViewPragmaStyling [
 	<gtExample>
-	<return: #BlRopedText>
+	<return: #BlText>
 	| code text start end pragmaRange hasHide hasExpand hasButton |
 	code := 'asdads 
 
@@ -39,7 +39,7 @@ GtLMessageStylerExamples >> gtViewPragmaStyling [
 { #category : #examples }
 GtLMessageStylerExamples >> gtViewPragmaStylingWithoutFullName [
 	<gtExample>
-	<return: #BlRopedText>
+	<return: #BlText>
 	| code text start end pragmaRange hasHide hasExpand hasButton buttonColor buttonAttribute button |
 	code := '123  
 

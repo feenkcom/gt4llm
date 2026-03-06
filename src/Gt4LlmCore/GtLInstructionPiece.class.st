@@ -2,8 +2,7 @@ Class {
 	#name : #GtLInstructionPiece,
 	#superclass : #Object,
 	#instVars : [
-		'parent',
-		'source'
+		'parent'
 	],
 	#category : #'Gt4LlmCore-Instructions'
 }
@@ -21,8 +20,8 @@ GtLInstructionPiece >> allParents [
 	^ parents
 ]
 
-{ #category : #accessing }
-GtLInstructionPiece >> asInstructionPiece [
+{ #category : #'as yet unclassified' }
+GtLInstructionPiece >> asGtLInstructionPiece [
 	^ self
 ]
 
@@ -61,7 +60,7 @@ GtLInstructionPiece >> gtTreeFor: aView [
 		items: [ {self} ];
 		children: #children;
 		column: 'Text' text: [:each | each gtDisplayString ];
-		column: 'Type' text: [:each | (each class name removePrefix: 'GtLlmInstruction') asRopedText foreground: Color gray ] width: 100;
+		column: 'Type' text: [:each | (each class name removePrefix: 'GtLlmInstruction') asRopedText foreground: Color gray ] width: 200;
 		expandAll
 ]
 
@@ -78,18 +77,6 @@ GtLInstructionPiece >> parent [
 { #category : #accessing }
 GtLInstructionPiece >> parent: anObject [
 	parent := anObject.
-
-	self source ifNil: [ self source: parent source ]
-]
-
-{ #category : #accessing }
-GtLInstructionPiece >> source [
-	^ source
-]
-
-{ #category : #accessing }
-GtLInstructionPiece >> source: anObject [
-	source := anObject
 ]
 
 { #category : #'as yet unclassified' }

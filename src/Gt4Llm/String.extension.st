@@ -1,11 +1,6 @@
 Extension { #name : #String }
 
 { #category : #'*Gt4Llm' }
-String >> asInstructionPiece [
-	^ GtLlmInstructionString new string: self
-]
-
-{ #category : #'*Gt4Llm' }
 String >> formatCount [
 	"Count the number of arguments #format: would expect."
 
