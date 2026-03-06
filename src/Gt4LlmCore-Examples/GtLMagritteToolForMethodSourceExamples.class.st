@@ -124,12 +124,10 @@ GtLMagritteToolForMethodSourceExamples >> methodSourceForMissingClassSide [
 	self assert: (result isKindOf: GtLMagritteBasedModel).
 		
 	model := result model.
-	self assert: (model isKindOf: GtLMethodWithSource).
-	self assert: model methodClassName equals: 'GtLMagritteToolForMethodSourceExamples'.
-	self assert: model methodName equals: 'methodSourceForMissingClassSide'.
-	self assert: model isClassSide not.
-	self assert: model sourceCode equals: (GtLMagritteToolForMethodSourceExamples>>#methodSourceForMissingClassSide) sourceCode.
-		
+	self assert: model isErrorDomainObject.
+	self assert: (model isKindOf: GtLMissingRequiredPropertiesDomainObject).
+	self assert: model missingPropertyNames equals: #('classSide').
+	self assert: model path asArray equals: #('methodDescriptor').
 	^ call
 ]
 
