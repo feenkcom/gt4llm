@@ -35,7 +35,7 @@ GtLMagritteToolForClassLookupExamples >> lookupClassMissingArgument [
 	self assert: (result isKindOf: GtLMagritteBasedModel).
 	model := result model.
 	self assert: model class equals: GtLMissingRequiredPropertiesDomainObject.
-	self assert: model missingPropertyNames asArray equals: #('className').
+	self assert: model missingPropertyNames equals: #('className').
 	^ call
 ]
 

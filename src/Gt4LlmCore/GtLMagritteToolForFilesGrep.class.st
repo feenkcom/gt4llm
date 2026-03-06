@@ -37,7 +37,10 @@ GtLMagritteToolForFilesGrep >> fileNamePatternsDescription [
 	<magritteDescription>
 
 	^ MAToManyScalarRelationDescription new
-		accessor: #fileNamePatterns
+		accessor: #fileNamePatterns;
+		classes: {String};
+		beOptional;
+		yourself
 ]
 
 { #category : #accessing }
@@ -47,7 +50,8 @@ GtLMagritteToolForFilesGrep >> filePathDescription [
 	^ MAToOneRelationDescription new
 		accessor: #filePath;
 		classes: {GtLFilePathReference};
-		beRequired
+		beRequired;
+		yourself
 ]
 
 { #category : #initialization }

@@ -125,6 +125,6 @@ GtLMagritteToolForDirectoryContentsExamples >> directoryContentsWithoutPath [
 	model := result model.
 	self assert: model isErrorDomainObject.
 	self assert: (model isKindOf: GtLMissingRequiredPropertiesDomainObject).
-	self assert: model missingPropertyNames asArray equals: #('directoryPath').
+	self assert: model missingPropertyNames equals: #('directoryPath').
 	^ call
 ]

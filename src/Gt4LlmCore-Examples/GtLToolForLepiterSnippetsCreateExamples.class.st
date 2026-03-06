@@ -68,14 +68,19 @@ GtLToolForLepiterSnippetsCreateExamples >> missingSnippetText [
 { #category : #examples }
 GtLToolForLepiterSnippetsCreateExamples >> missingSnippets [
 	<gtExample>
-	| tool call result |
+	| tool call result model |
 	tool := GtLToolForLepiterSnippetsCreate new.
 	call := GtLFunctionToolCall new.
 	call rawArguments: {} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
 	self assert: (result isKindOf: GtLMagritteBasedModel).
-	self assert: result model missingArgument equals: 'snippets'.
+	
+	model := result model.
+	self assert: (model isKindOf: GtLMissingRequiredPropertiesDomainObject).
+	self assert: model missingPropertyNames equals: #('snippets').
+	self assert: model path equals: #(nil).
+	
 	^ call
 ]
 

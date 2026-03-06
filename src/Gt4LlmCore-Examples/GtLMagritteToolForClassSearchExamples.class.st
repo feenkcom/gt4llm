@@ -38,7 +38,7 @@ GtLMagritteToolForClassSearchExamples >> searchClassesWithMissingQuery [
 	self assert: (result isKindOf: GtLMagritteBasedModel).
 	model := result model.
 	self assert: model class equals: GtLMissingRequiredPropertiesDomainObject.
-	self assert: model missingPropertyNames asArray equals: #('query').
+	self assert: model missingPropertyNames equals: #('query').
 	^ call
 ]
 

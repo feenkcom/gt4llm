@@ -96,7 +96,7 @@ GtLMagritteToolForMethodImplementorsExamples >> implementorsWithMissingMethodNam
 	model := result model.
 	self assert: model isErrorDomainObject.
 	self assert: (model isKindOf: GtLMissingRequiredPropertiesDomainObject).
-	self assert: model missingPropertyNames asArray equals: #('methodName').
+	self assert: model missingPropertyNames equals: #('methodName').
 	^ call
 ]
 
