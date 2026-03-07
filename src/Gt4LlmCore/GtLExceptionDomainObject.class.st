@@ -71,8 +71,8 @@ GtLExceptionDomainObject >> serializeToLlmJsonObject [
 { #category : #'api - accessing' }
 GtLExceptionDomainObject >> stackTrace [
 	^ self exception signalerContext
-		ifNotNil: [ :anInterruptedContext | String lf join: ((anInterruptedContext stackOfSize: 100) collect: #gtDisplayString) ]
+		ifNotNil: [ :anInterruptedContext | String lf join: ((anInterruptedContext stackOfSize: 30) collect: #gtDisplayString) ]
 		ifNil: [ | stackString |
 			stackString := self exception stackString.
-			stackString first: (2000 min: stackString size) ]
+			stackString first: (1000 min: stackString size) ]
 ]
