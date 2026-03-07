@@ -48,11 +48,12 @@ GtLClassesSearchResult >> gtFoundClassNamesFor: aView [
 	<gtView>
 	<gtLlmView>
 	self foundClassNames ifNil: [ ^ aView empty ].
-	^ aView list
+	^ aView columnedList
 		title: 'Classes';
 		priority: 1;
 		items: [ self foundClassNames ];
-		itemText: [ :each | each ]
+		column: 'Class' text: [ :each | each ];
+		column: 'Package' text: [ :each | each asClassIfPresent: [:c | c package ] ]
 ]
 
 { #category : #accessing }

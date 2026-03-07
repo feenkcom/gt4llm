@@ -26,6 +26,7 @@ GtLLepiterTransformationSpecification >> gtChangesFor: aView [
 	<gtView>
 	^ aView forward
 		title: 'Changes';
+		priority: 2;
 		object: [ self namespaceWithAppliedRefactoring ];
 		view: #gtApplyingChangesFor:
 ]

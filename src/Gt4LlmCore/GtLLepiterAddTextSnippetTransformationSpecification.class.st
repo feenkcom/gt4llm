@@ -17,6 +17,16 @@ GtLLepiterAddTextSnippetTransformationSpecification class >> jsonSchemaLabel [
 	^ 'AddTextSnippet'
 ]
 
+{ #category : #views }
+GtLLepiterAddTextSnippetTransformationSpecification >> gtNewSnippetTextFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'New snippet';
+		priority: 1;
+		object: [ newSnippetText ];
+		view: #gtMarkdownFor:
+]
+
 { #category : #accessing }
 GtLLepiterAddTextSnippetTransformationSpecification >> newSnippetText [
 	^ newSnippetText

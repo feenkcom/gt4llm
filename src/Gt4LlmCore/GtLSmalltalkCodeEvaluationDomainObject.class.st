@@ -27,32 +27,27 @@ GtLSmalltalkCodeEvaluationDomainObject >> gtCodeFor: aView [
 	<gtView>
 	<gtLlmView>
 	^ aView explicit
-		title: 'Code';
+		title: 'Code and object';
 		priority: 9;
-		stencil: [ (GtPharoSnippetCoder new
-				forSource: self code;
-				subscribeToSystem;
-				asExpandedOnlyElement) vFitContentLimited ]
-]
-
-{ #category : #'as yet unclassified' }
-GtLSmalltalkCodeEvaluationDomainObject >> gtValueLiveFor: aView [
-	<gtView>
-	<gtLlmView>
-	^ aView explicit
-		title: 'Object';
-		priority: 8;
 		stencil: [ | container |
-			container := BrVerticalPane new
-					matchParent;
-					background: BrGlamorousColors backdropColor.
-			container
+			container := BrVerticalPane new.
+			container matchParent
 				addAptitude: (BrLayoutResizerAptitude new common: [ container children ]);
+				background: BrGlamorousColors backdropColor;
+				addChild: ((GtPharoSnippetCoder new
+						forSource: self code;
+						subscribeToSystem;
+						asExpandedOnlyElement)
+						margin: (BlInsets all: 10);
+						background: Color white;
+						addAptitude: BrShadowAptitude;
+						vFitContentLimited);
 				addChild: ((object gtViewsFor: GtPhlowEmptyView new) asElement
 						margin: (BlInsets all: 10);
 						background: Color white;
 						addAptitude: BrShadowAptitude;
-						vFitContentLimited) ]
+						vFitContentLimited;
+						hMatchParent) ]
 ]
 
 { #category : #accessing }
