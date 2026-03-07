@@ -23,9 +23,10 @@ GtLMethodsWithSource >> gtMethodsFor: aView [
 { #category : #views }
 GtLMethodsWithSource >> gtViewMethodsListFor: aView [
 	<gtView>
+	<gtLlmView>
 	^ aView forward
 		title: 'Methods list';
-		priority: 40;
+		priority: 1;
 		object: [ methods ];
 		view: #gtItemsFor:
 ]
