@@ -6,7 +6,18 @@ Class {
 
 { #category : #accessing }
 GtLMagritteToolForMethodSource >> description [
-	^ 'Gets a method by name and returns its source code. The third argument (classSide) should be true if the method is on the class side. It should be false if the method if on the instance side.'
+	^ 'Gets source code for a method. Arguments must provide a methodDescriptor object with methodClassName, methodName, and classSide values.
+
+Example JSON arguments:
+{
+  "methodDescriptor": {"methodClassName": "Collection", "methodName": "withAll:", "classSide": true}
+}
+
+Example JSON response:
+{
+  "methodReference": {"methodName": "withAll:", "methodClassName": "Collection", "classSide": true},
+  "sourceCode": "..."
+}'
 ]
 
 { #category : #descriptions }
@@ -29,11 +40,7 @@ GtLMagritteToolForMethodSource >> privatePerformToolCall: aToolCall inContext: a
 	| arguments methodDescriptor |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	
-	methodDescriptor := arguments
-			at: 'methodDescriptor'
-			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-					arguments: arguments;
-					missingArgument: 'methodDescriptor' ].
+	methodDescriptor := arguments at: 'methodDescriptor'.
 	
 	^ methodDescriptor 
 			methodObjectIfMissing: [ :anErrorResult | anErrorResult ]

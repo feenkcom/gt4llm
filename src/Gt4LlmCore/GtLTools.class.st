@@ -9,7 +9,13 @@ Class {
 { #category : #defaults }
 GtLTools class >> files [
 	^ self
-		withAll: {GtLMagritteToolForDirectoryContents new . GtLMagritteToolForFilesContents new. "GtLMagritteToolForFilesGrep new ." GtLMagritteToolForFilesWrite new} asOrderedCollection
+		withAll: {
+			GtLMagritteToolForDirectoryContents new . 
+			GtLMagritteToolForFilesContents new. 
+			"GtLMagritteToolForFilesGrep new ." 
+			GtLMagritteToolForFilesWrite new.
+			GtLMagritteToolForFileInformation new.
+			GtLMagritteToolForFilesInformation new } asOrderedCollection
 ]
 
 { #category : #defaults }
@@ -48,16 +54,17 @@ GtLTools class >> gtExamplesRun [
 { #category : #defaults }
 GtLTools class >> gtSearch [
 	^ self
-		withAll: {GtLToolForClassSearch new.
-				GtLToolForClassSubclasses new.
-				GtLToolForClassLookup new.
-				GtLToolForClassReferences new.
-				GtLToolForMethodReferences new.
-				GtLToolForMethodImplementors new.
+		withAll: {
+				GtLMagritteToolForClassSearch new.
+				GtLMagritteToolForClassSubclasses new.
+				GtLMagritteToolForClassLookup new.
+				GtLMagritteToolForClassReferences new.
+				GtLMagritteToolForMethodReferences new.
+				GtLMagritteToolForMethodImplementors new.
 				"GtLMagritteToolForMethodSource new."
 				GtLMagritteToolForMethodsSource new.
-				GtLToolForPackageClasses new.
-				GtLToolForSubstringLiteralSearch new} asOrderedCollection
+				GtLMagritteToolForPackageClasses new.
+				GtLMagritteToolForSubstringLiteralSearch new} asOrderedCollection
 ]
 
 { #category : #defaults }

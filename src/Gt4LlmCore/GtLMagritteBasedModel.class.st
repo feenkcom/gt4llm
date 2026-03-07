@@ -27,8 +27,7 @@ GtLMagritteBasedModel >> addInstructionsTo: aMessageInstructions [
 			forModelClass: model class.
 
 	aMessageInstructions
-		addSection: (GtLlmInstructionSection new
-				source: self;
+		addSection: (GtLInstructionSection new
 				title: self name;
 				body: (exporter exportSchemaAsJsonString))
 ]

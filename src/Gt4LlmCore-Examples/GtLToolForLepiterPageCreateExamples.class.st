@@ -5,9 +5,48 @@ Class {
 }
 
 { #category : #examples }
+GtLToolForLepiterPageCreateExamples >> emptyDatabaseId [
+	<gtExample>
+	| tool call result logicalDB model |
+	logicalDB := LeLogicalDatabase new.
+	tool := GtLToolForLepiterPageCreate new.
+	tool database: logicalDB.
+	call := GtLFunctionToolCall new.
+	call rawArguments: { 'title' -> 'New Page'. 'databaseId' -> '' } asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GtLMagritteBasedModel).
+	
+	model := result model.
+	self assert: (model isKindOf: GtLMissingArgumentDomainObject).
+	self assert: model missingArgument equals: 'databaseId'.
+	^ call
+]
+
+{ #category : #examples }
+GtLToolForLepiterPageCreateExamples >> emptyTitle [
+	<gtExample>
+	| tool call result db logicalDB model |
+	db := LeExplicitlyAttachedLinksExamples new primaryDatabase.
+	logicalDB := LeLogicalDatabase new primaryDB: db.
+	tool := GtLToolForLepiterPageCreate new.
+	tool database: logicalDB.
+	call := GtLFunctionToolCall new.
+	call rawArguments: { 'title' -> ''. 'databaseId' -> db uuidString } asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GtLMagritteBasedModel).
+	
+	model := result model.
+	self assert: (model isKindOf: GtLMissingArgumentDomainObject).
+	self assert: model missingArgument equals: 'title'.
+	^ call
+]
+
+{ #category : #examples }
 GtLToolForLepiterPageCreateExamples >> missingDatabaseId [
 	<gtExample>
-	| tool call result logicalDB |
+	| tool call result logicalDB model |
 	logicalDB := LeLogicalDatabase new.
 	tool := GtLToolForLepiterPageCreate new.
 	tool database: logicalDB.
@@ -16,14 +55,18 @@ GtLToolForLepiterPageCreateExamples >> missingDatabaseId [
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
 	self assert: (result isKindOf: GtLMagritteBasedModel).
-	self assert: result model missingArgument equals: 'databaseId'.
+	
+	model := result model.
+	self assert: (model isKindOf: GtLMissingRequiredPropertiesDomainObject).
+	self assert: model missingPropertyNames equals: #('databaseId').
+	self assert: model path equals: #(nil).
 	^ call
 ]
 
 { #category : #examples }
 GtLToolForLepiterPageCreateExamples >> missingTitle [
 	<gtExample>
-	| tool call result db logicalDB |
+	| tool call result db logicalDB model |
 	db := LeExplicitlyAttachedLinksExamples new primaryDatabase.
 	logicalDB := LeLogicalDatabase new primaryDB: db.
 	tool := GtLToolForLepiterPageCreate new.
@@ -33,7 +76,49 @@ GtLToolForLepiterPageCreateExamples >> missingTitle [
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
 	self assert: (result isKindOf: GtLMagritteBasedModel).
-	self assert: result model missingArgument equals: 'title'.
+	
+	model := result model.
+	self assert: (model isKindOf: GtLMissingRequiredPropertiesDomainObject).
+	self assert: model missingPropertyNames equals: #('title').
+	self assert: model path equals: #(nil).
+	
+	^ call
+]
+
+{ #category : #examples }
+GtLToolForLepiterPageCreateExamples >> nilDatabaseId [
+	<gtExample>
+	| tool call result logicalDB model |
+	logicalDB := LeLogicalDatabase new.
+	tool := GtLToolForLepiterPageCreate new.
+	tool database: logicalDB.
+	call := GtLFunctionToolCall new.
+	call rawArguments: '{"title": "New Page", "databaseId": null}'.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GtLMagritteBasedModel).
+	
+	model := result model.
+	self assert: (model isKindOf: GtLJSONSchemaValidationErrorDomainObject).
+	^ call
+]
+
+{ #category : #examples }
+GtLToolForLepiterPageCreateExamples >> nilTitle [
+	<gtExample>
+	| tool call result db logicalDB model |
+	db := LeExplicitlyAttachedLinksExamples new primaryDatabase.
+	logicalDB := LeLogicalDatabase new primaryDB: db.
+	tool := GtLToolForLepiterPageCreate new.
+	tool database: logicalDB.
+	call := GtLFunctionToolCall new.
+	call rawArguments: '{"title": null, "databaseId": "', db uuidString, '"}'.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GtLMagritteBasedModel).
+	
+	model := result model.
+	self assert: (model isKindOf: GtLJSONSchemaValidationErrorDomainObject).
 	^ call
 ]
 

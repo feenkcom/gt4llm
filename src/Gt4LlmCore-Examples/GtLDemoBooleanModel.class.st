@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'flag'
 	],
-	#category : #'Gt4LlmCore-Examples'
+	#category : #'Gt4LlmCore-Examples-Magritte'
 }
 
 { #category : #accessing }

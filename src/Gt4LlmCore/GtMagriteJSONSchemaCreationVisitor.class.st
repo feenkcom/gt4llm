@@ -81,6 +81,24 @@ GtMagriteJSONSchemaCreationVisitor >> visitBooleanDescription: aBooleanDescripti
 	^ currentSchema := schema
 ]
 
+{ #category : #'visiting-description' }
+GtMagriteJSONSchemaCreationVisitor >> visitDateAndTimeDescription: aDateTimeDescription [
+	| schema |
+	
+	schema := NeoJSONObject  new 
+			at: 'type' put: 'string';
+			at: 'format' put: 'date-time';
+			yourself.
+	
+	schema 
+		at: 'description' 
+		put: ((aDateTimeDescription hasComment 
+			ifTrue: [ aDateTimeDescription comment, '. '] ifFalse: [ '' ]),
+				'ISO-8601 timestamp (RFC3339) like 2026-03-05T14:30:00Z').
+			
+	^ currentSchema := schema
+]
+
 { #category : #visiting }
 GtMagriteJSONSchemaCreationVisitor >> visitNumberDescription: aBooleanDescription [
 	| schema |
@@ -158,15 +176,31 @@ GtMagriteJSONSchemaCreationVisitor >> visitToManyRelationDescription: aDescripti
 		^ currentSchema := schema
 ]
 
-{ #category : #visiting }
+{ #category : #'visiting-description' }
 GtMagriteJSONSchemaCreationVisitor >> visitToManyScalarRelationDescription: aDescription [
-	| schema |
+	| scalarType schema |
+	self 
+		assert: aDescription classes size = 1
+		description: 'Only one scalar type supported at the moment'.
+	
+	scalarType := nil.
+	aDescription classes first = String 
+		ifTrue: [ scalarType := 'string ' ].
+	aDescription classes first = Boolean 
+		ifTrue: [ scalarType := 'boolean' ].
+	scalarType ifNil: [
+		^ Error signal: 'Unsupported scallar type: ', aDescription classes first name ].
+	
 	schema := NeoJSONObject new
 		at: 'type' put: 'array';
 		at: 'items' put: (NeoJSONObject new
-			at: 'type' put: 'string';
+			at: 'type' put: scalarType;
 			yourself);
 		yourself.
+	
+	aDescription hasComment ifTrue: [
+		schema at: 'description' put: aDescription comment ].
+		
 	^ currentSchema := schema
 ]
 

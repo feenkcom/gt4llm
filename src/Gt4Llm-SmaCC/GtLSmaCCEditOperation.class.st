@@ -34,7 +34,7 @@ GtLSmaCCEditOperation >> newSourceDescription [
 	^ MAStringDescription new
 		label: 'New source';
 		accessor: #newSource;
-		beOptional
+		beRequired
 ]
 
 { #category : #accessing }
@@ -53,7 +53,7 @@ GtLSmaCCEditOperation >> oldSourceDescription [
 	^ MAStringDescription new
 		label: 'Old source';
 		accessor: #oldSource;
-		beOptional
+		beRequired
 ]
 
 { #category : #executing }

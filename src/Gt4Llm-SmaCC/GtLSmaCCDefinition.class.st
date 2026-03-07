@@ -66,7 +66,7 @@ GtLSmaCCDefinition >> packageDescription [
 	^ MAStringDescription new
 		label: 'Package';
 		accessor: #package;
-		beOptional
+		beRequired
 ]
 
 { #category : #accessing }
@@ -85,7 +85,7 @@ GtLSmaCCDefinition >> parserClassDescription [
 	^ MAStringDescription new
 		label: 'SmaCC Parser Class';
 		accessor: #parserClass;
-		beOptional
+		beRequired
 ]
 
 { #category : #accessing }
@@ -104,5 +104,5 @@ GtLSmaCCDefinition >> scannerClassDescription [
 	^ MAStringDescription new
 		label: 'SmaCC Scanner Class';
 		accessor: #scannerClass;
-		beOptional
+		beRequired
 ]

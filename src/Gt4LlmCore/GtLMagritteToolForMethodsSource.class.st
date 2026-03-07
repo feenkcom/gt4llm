@@ -6,21 +6,21 @@ Class {
 
 { #category : #accessing }
 GtLMagritteToolForMethodsSource >> description [
-	^ 'Gets source code for multiple methods. Arguments must provide a methods array of method descriptors with className, methodName, and optional classSide values.
+	^ 'Gets source code for multiple methods. Arguments must provide a methodDescriptors array of method descriptors with methodClassName, methodName, and optional classSide values.
 
 Example JSON arguments:
 {
-  "methods": [
-    {"className": "Collection", "methodName": "withAll:", "classSide": true},
-    {"className": "GtLToolForMethodImplementors", "methodName": "privatePerformToolCall:", "classSide": false}
+  "methodDescriptors": [
+    {"methodClassName": "Collection", "methodName": "withAll:", "classSide": true},
+    {"methodClassName": "GtLToolForMethodImplementors", "methodName": "privatePerformToolCall:", "classSide": false}
   ]
 }
 
 Example JSON response:
 {
   "methods": [
-    {"methodClass": "Collection class", "selector": "withAll:", "method": "Collection class>>#withAll:", "sourceCode": "..."},
-    {"methodClass": "GtLToolForMethodImplementors", "selector": "privatePerformToolCall:", "method": "GtLToolForMethodImplementors>>#privatePerformToolCall:", "sourceCode": "..."}
+    {"methodReference": {"methodName": "withAll:", "methodClassName": "Collection", "classSide": true}, "sourceCode": "..."},
+    {"methodReference": {"methodName": "privatePerformToolCall:", "methodClassName": "GtLToolForMethodImplementors", "classSide": false}, "sourceCode": "..."}
   ]
 }'
 ]
@@ -44,11 +44,7 @@ GtLMagritteToolForMethodsSource >> name [
 GtLMagritteToolForMethodsSource >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments methodDescriptors methodObjects |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
-	methodDescriptors := arguments
-			at: 'methodDescriptors'
-			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-					arguments: arguments;
-					missingArgument: 'methodDescriptors' ].
+	methodDescriptors := arguments	at: 'methodDescriptors'.
 	methodObjects := methodDescriptors
 			collect: [ :aMethodDescriptor | 
 				aMethodDescriptor methodObjectIfMissing: [ :anErrorResult | anErrorResult ] ].

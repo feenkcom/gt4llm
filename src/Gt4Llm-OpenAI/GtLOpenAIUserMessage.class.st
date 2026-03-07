@@ -157,8 +157,16 @@ GtLOpenAIUserMessage >> inputModels [
 
 { #category : #accessing }
 GtLOpenAIUserMessage >> instructions [
-	^ instructions ifNil: [ 
-			instructions := self buildCompleteInstructions ]
+	instructions
+		ifNil: [  "instructions addItem: self inputDescriptionSection" ]
+		ifNotNil: [ self inputModels notEmpty
+				ifTrue: [ instructions
+						sectionNamed: 'Input descriptions'
+						ifAbsent: [ :aSection | 
+							aSection addString: 'The inputs provided follow the descriptions below'.
+							self inputModels
+								do: [ :anInputModel | anInputModel addInstructionsTo: aSection ] ] ] ].
+	^ instructions
 ]
 
 { #category : #testing }

@@ -5,38 +5,27 @@ Trait {
 
 { #category : #adding }
 TGtLWithInstructionSectionAPI >> addToExplanationSectionLepiterPage: aLepiterPage [
-	| instructionString |
-	
+	| instructionString explanationSection |
+	explanationSection := self instructions ensureSectionNamed: 'Explanations'.
+
 	instructionString := GtLLepiterContentExporter new
-			startHeaderLevel: 2;
+			startHeaderLevel: explanationSection headerLevel + 1;
 			page: aLepiterPage;
-				export.
-	
-	(self instructions ensureSectionNamed: 'Explanations')
-		addSection: (GtLlmInstructionSection new
+			export.
+
+	explanationSection body
+		addItem: (GtLInstructionSection new
 				title: aLepiterPage title;
-				body: instructionString).
+				body: instructionString)
 ]
 
-{ #category : #instructions }
-TGtLWithInstructionSectionAPI >> buildCompleteInstructions [
-	| newInstructions  |
-	newInstructions := GtLlmInstructionWithSections new
-			introduction: (GtLlmInstructionString new string: '').
-	
-	self inputModels notEmpty
-		ifTrue: [ 
-			| inputInstructionsBody inputInstructions |
-			inputInstructionsBody := GtLlmInstructionWithSections new
-					introduction: 'The inputs provided follow the descriptions below'.
-			inputInstructions := GtLlmInstructionSection new
-					title: 'Input descriptions';
-					body: inputInstructionsBody.
-			newInstructions addSection: inputInstructions.
-			self inputModels
-				do: [ :anInputModel | anInputModel addInstructionsTo: inputInstructionsBody ] ].
-				
-	^ newInstructions
+{ #category : #adding }
+TGtLWithInstructionSectionAPI >> addToExplanationSectionNamed: aTitle withContent: aContentString [
+
+	(self instructions ensureSectionNamed: 'Explanations')
+		addSection: (GtLlmInstructionSection new
+				title: aTitle;
+				body: aContentString).
 ]
 
 { #category : #'api - instructions' }

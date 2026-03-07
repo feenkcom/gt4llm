@@ -9,12 +9,12 @@ Class {
 
 { #category : #accessing }
 GtLMagritteToolForFilesGrep >> description [
-	^ 'Greps for a query string in a file or directory. Arguments must provide a query string and a filePath. Optionally set fileNamePatterns to pass --glob values to ripgrep.
+	^ 'Greps for a query string in a file or directory. Arguments must provide a query string and a filePath reference. Optionally set fileNamePatterns to pass --glob values to ripgrep.
 
 Example JSON arguments:
 {
   "query": "needle",
-  "filePath": "/path/to/one.txt",
+  "filePath": {"pathString": "/path/to/one.txt"},
   "fileNamePatterns": ["*.txt", "*.md"]
 }
 
@@ -37,7 +37,10 @@ GtLMagritteToolForFilesGrep >> fileNamePatternsDescription [
 	<magritteDescription>
 
 	^ MAToManyScalarRelationDescription new
-		accessor: #fileNamePatterns
+		accessor: #fileNamePatterns;
+		classes: {String};
+		beOptional;
+		yourself
 ]
 
 { #category : #accessing }
@@ -47,7 +50,8 @@ GtLMagritteToolForFilesGrep >> filePathDescription [
 	^ MAToOneRelationDescription new
 		accessor: #filePath;
 		classes: {GtLFilePathReference};
-		beRequired
+		beRequired;
+		yourself
 ]
 
 { #category : #initialization }
@@ -111,16 +115,8 @@ GtLMagritteToolForFilesGrep >> parseGrepOutputLines: lines [
 GtLMagritteToolForFilesGrep >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments query filePath fileReference fileNamePatterns |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
-	query := arguments
-			at: 'query'
-			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-					arguments: arguments;
-					missingArgument: 'query' ].
-	filePath := arguments
-			at: 'filePath'
-			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-					arguments: arguments;
-					missingArgument: 'filePath' ].
+	query := arguments at: 'query'.
+	filePath := arguments at: 'filePath'.
 	fileNamePatterns := arguments at: 'fileNamePatterns' ifAbsent: [ #() ].
 	fileReference := filePath asFileReference.
 	fileReference exists

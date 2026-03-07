@@ -13,7 +13,8 @@ GtLChatWithOpenAIProviderStubExamples >> chatWithInstructions [
 	message := chat createUserMessage.
 	message chat: chat.
 	instructions := message completeInstructionString.
-	self assert: (instructions includesSubstring: 'Examples by example').
+	self assert: (instructions includesSubstring: '# Explanations').
+	self assert: (instructions includesSubstring: '## Examples by example').
 	^ message
 ]
 
@@ -43,7 +44,7 @@ GtLChatWithOpenAIProviderStubExamples >> chatWithTools [
 	<gtExample>
 	| chat message tool |
 	chat := self chatWithOpenAIProviderStub.
-	tool := GtLToolForClassLookup new.
+	tool := GtLMagritteToolForClassLookup new.
 	chat tools: {tool}.
 	message := chat createUserMessage.
 	message chat: chat.
@@ -62,6 +63,8 @@ GtLChatWithOpenAIProviderStubExamples >> messageWithInstructions [
 	self assert: instructions isEmpty.
 	message pageExplanation: 'Examples by example'.
 	instructions := message completeInstructionString.
+	self assert: (instructions includesSubstring: '# Explanations').
+	self assert: (instructions includesSubstring: '## Examples by example').
 	self assert: instructions notEmpty.
 	^ message
 ]

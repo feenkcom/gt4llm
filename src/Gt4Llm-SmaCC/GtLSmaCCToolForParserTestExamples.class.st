@@ -7,19 +7,24 @@ Class {
 { #category : #examples }
 GtLSmaCCToolForParserTestExamples >> failJSParser [
 	<gtExample>
-	| tool call result |
+	| tool call result model |
 	tool := GtLSmaCCToolForParserTest new model: GtLSmaCCModel new.
 	call := GtLFunctionToolCall new.
 	call
 		rawArguments: {'testParse'
 					-> {'parserClass' -> 'JSParser'.
-							'example' -> 'console.log("testing\n'} asDictionary} asDictionary.
+							'example' -> 'console.log("testing\n'.
+							'startingState' -> '' } asDictionary} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
 	self assert: (result isKindOf: GtLMagritteBasedModel).
 	self assert: call arguments size equals: 1.
-	self assert: (call arguments anyOne isKindOf: GtLSmaCCParserTest).
 	self assert: result model isErrorDomainObject.
+	
+	model := result model.
+	self assert: (model isKindOf: GtLProblemDomainObject).
+	self assert: model errorMessage equals: 'An error occurred during parsing near line: 1, column: 14'.
+	
 	^ call
 ]
 
@@ -32,7 +37,8 @@ GtLSmaCCToolForParserTestExamples >> testJSParser [
 	call
 		rawArguments: {'testParse'
 					-> {'parserClass' -> 'JSParser'.
-							'example' -> 'console.log("testing\n");'} asDictionary} asDictionary.
+							'example' -> 'console.log("testing\n");'.
+							'startingState' -> '' } asDictionary} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
 	self assert: (result isKindOf: GtLMagritteBasedModel).

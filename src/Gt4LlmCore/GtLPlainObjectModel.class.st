@@ -48,8 +48,7 @@ GtLPlainObjectModel >> addContentTo: aDictionary [
 GtLPlainObjectModel >> addInstructionsTo: aMessageInstructions [
 
 	aMessageInstructions
-		addSection: (GtLlmInstructionSection new
-				source: self;
+		addSection: (GtLInstructionSection new
 				title: self name;
 				body: '')
 ]

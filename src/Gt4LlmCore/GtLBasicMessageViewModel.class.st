@@ -181,5 +181,5 @@ GtLBasicMessageViewModel >> styler [
 
 { #category : #'api - accessing' }
 GtLBasicMessageViewModel >> uiInsets [
-	^ BlInsets left: 50
+	^ BlInsets left: 0"50"
 ]

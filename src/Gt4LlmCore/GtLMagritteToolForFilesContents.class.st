@@ -6,13 +6,13 @@ Class {
 
 { #category : #accessing }
 GtLMagritteToolForFilesContents >> description [
-	^ 'Gets the contents of multiple files. Arguments must provide a filePaths array of path strings. The contents is returned as a base64 encoded string.
+	^ 'Gets the contents of multiple files. Arguments must provide a filePaths array of file path references. The contents is returned as a base64 encoded string.
 
 Example JSON arguments:
 {
   "filePaths": [
-    "/path/to/one.txt",
-    "/path/to/another.txt"
+    {"pathString": "/path/to/one.txt"},
+    {"pathString": "/path/to/another.txt"}
   ]
 }
 
@@ -27,6 +27,8 @@ Example JSON response:
 
 { #category : #private }
 GtLMagritteToolForFilesContents >> fileContentsFromPathString: aPathString [
+	(aPathString pathString isEmpty)
+		ifTrue: [ ^ GtLMissingDomainObject new objectName: aPathString pathString ].
 	^ aPathString contentsDomainObject
 ]
 
@@ -49,11 +51,7 @@ GtLMagritteToolForFilesContents >> name [
 GtLMagritteToolForFilesContents >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments filePaths fileObjects |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
-	filePaths := arguments
-		at: 'filePaths'
-		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-				arguments: arguments;
-				missingArgument: 'filePaths' ].
+	filePaths := arguments at: 'filePaths'.
 	fileObjects := filePaths collect: [ :pathReference |
 		self fileContentsFromPathString: pathReference ].
 	^ GtLFilesContents new files: fileObjects asArray

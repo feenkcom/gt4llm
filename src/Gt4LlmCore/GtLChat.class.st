@@ -398,6 +398,7 @@ GtLChat >> initialize [
 	self initializeTools.
 	responseFormat := GtLResponseCompositeFormat new.
 	objectStorage := GtLObjectStorage new.
+	instructions := GtLInstructionComposite new.
 	
 	self updateLastUpdate
 ]
@@ -415,7 +416,7 @@ GtLChat >> initializeTools [
 { #category : #'as yet unclassified' }
 GtLChat >> instruction: instructionString titled: title [
 	self instructions
-		addSection: (GtLlmInstructionSection new
+		addSection: (GtLInstructionSection new
 				title: title;
 				body: instructionString)
 ]
@@ -423,14 +424,11 @@ GtLChat >> instruction: instructionString titled: title [
 { #category : #accessing }
 GtLChat >> instructions [
 	^ instructions
-		ifNil: [ 
-			instructions := GtLlmInstructionWithSections new
-					introduction: (GtLlmInstructionString new string: '').
-			instructions ]
 ]
 
 { #category : #accessing }
 GtLChat >> instructions: anObject [
+	GtJustContextStackSignal emit.
 	instructions := anObject
 ]
 

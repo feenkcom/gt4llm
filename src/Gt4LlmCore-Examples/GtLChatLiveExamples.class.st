@@ -586,7 +586,7 @@ GtLChatLiveExamples >> messageWithInputObjectExample [
 				markdown: 'Explain this object';
 				addPlainInputObject: (GtABCartoonAddressBookExample >> #cartoonAddressBook) gtExample returnValue
 					named: 'Object';
-				tools: (GtLTools withAll: {GtLToolForClassLookup new});
+				tools: (GtLTools withAll: {GtLMagritteToolForClassLookup new});
 				addResponseFormatForMagritte: GtLMarkdown named: 'Markdown' ].
 	
 	self
@@ -631,7 +631,7 @@ GtLChatLiveExamples >> messageWithToolCallExample [
 	self stubResponses: [ self messageWithToolCallExample_stub_responses ].
 	
 	chat := self currentChat.
-	chat tools: (GtLTools withAll: {GtLToolForClassLookup new}).
+	chat tools: (GtLTools withAll: {GtLMagritteToolForClassLookup new}).
 	chat markdownResponse.
 	chat sendMarkdown: 'Use tools and give me a description of the class BlElement'.
 	self waitForChatRunIsDoneThen: [ 
@@ -666,12 +666,15 @@ GtLChatLiveExamples >> messageWithToolCallExample_magritteMarkdown [
 	self
 		stubResponses: [ self messageWithToolCallExample_magritteMarkdown_stub_responses ].
 	currentMessage := self currentChat createUserMessage.
-	currentMessage tools: (GtLTools withAll: {GtLToolForClassLookup new}).
+	currentMessage tools: (GtLTools withAll: {GtLMagritteToolForClassLookup new}).
 	currentMessage addResponseFormatForMagritte: GtLMarkdown named: 'Markdown'.
 	currentMessage
 		addInputMagritteObject: (GtLMarkdown new content: messageString)
 		named: 'Markdown'.
 	responseMessage := self currentChat sendMessage: currentMessage.
+	self assert: self currentChat instructions isEmpty.
+	self assert: currentMessage instructions isEmpty not.
+	self assert: (currentMessage instructions instructionString includesSubstring: 'Input descriptions').
 	self assert: self currentChat messages size equals: 2.
 	self assert: self currentChat isFinishedSuccesss not.
 	self assert: self currentChat messages last executionMessages isEmpty.
@@ -699,7 +702,7 @@ GtLChatLiveExamples >> messageWithToolCallThenCompactionExample [
 	<noTest>
 	| chat |
 	chat := self currentChat.
-	chat tools: (GtLTools withAll: {GtLToolForClassLookup new}).
+	chat tools: (GtLTools withAll: {GtLMagritteToolForClassLookup new}).
 	chat markdownResponse.
 	chat sendMarkdown: 'Use tools and give me a description of the class BlElement'.
 	self
