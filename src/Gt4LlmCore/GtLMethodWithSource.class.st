@@ -34,6 +34,11 @@ GtLMethodWithSource >> gtClassCoderViewFor: aView [
 		stencil: [ (GtCoderElement forMethod: self compiledMethod) disablePlayPage ]
 ]
 
+{ #category : #accessing }
+GtLMethodWithSource >> gtDisplayOn: aStream [
+	aStream << self methodReference methodSignature
+]
+
 { #category : #views }
 GtLMethodWithSource >> gtViewPlainSourceCodeFor: aView [
 	<gtView>
