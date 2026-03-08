@@ -51,7 +51,8 @@ GtLMethodsSearchResult >> gtFoundMethodsFor: aView [
 		title: 'Found methods';
 		priority: 1;
 		items: [ self foundMethods ];
-		column: 'Method' text: [ :each | each methodSignature ]
+		column: 'Class' text: [ :each | each methodClass name ] width: 200;
+		column: 'Method' text: [ :each | each methodName ]
 ]
 
 { #category : #accessing }

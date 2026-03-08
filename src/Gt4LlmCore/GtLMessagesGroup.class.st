@@ -50,16 +50,6 @@ GtLMessagesGroup >> copyForIndependentRequest [
 GtLMessagesGroup >> copyForNew [
 ]
 
-{ #category : #'gt - extensions' }
-GtLMessagesGroup >> gtJsonFor: aView [
-	<gtView>
-	^ aView textEditor
-		title: 'JSON';
-		priority: 1;
-		text: [ self asJson ];
-		styler: JSONParser gtStyler
-]
-
 { #category : #accessing }
 GtLMessagesGroup >> gtMessagesFor: aView [
 	<gtView>
