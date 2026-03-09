@@ -153,6 +153,7 @@ GtLToolForSmalltalkCodeEvaluationExamples >> executeWithError [
 	self assert: result isErrorDomainObject.
 	self assert: (result description beginsWith: 'Error while evaluating smalltalk code').
 	self assert: (result messageText beginsWith: 'ZeroDivide').
+	self assert: result code equals: '1 / 0'.
 	^ call
 ]
 
