@@ -22,7 +22,7 @@ GtLTools class >> files [
 GtLTools class >> gt [
 	^ self gtSearch , self leSearch , self gtCodeChange , self leChange
 		, self gtExamplesRun
-		, {GtLToolForSmalltalkCodeEvaluation new.
+		, {GtLMagritteToolForSmalltalkCodeEvaluation new.
 				GtLToolForObjectView new.
 				GtLToolForObjectStorageList new}
 ]
