@@ -71,11 +71,6 @@ GtLResponseStringFormat >> printOn: aStream [
 ]
 
 { #category : #accessing }
-GtLResponseStringFormat >> propertyNames [
-	^ schema properties keys 
-]
-
-{ #category : #accessing }
 GtLResponseStringFormat >> schema [
 	^ schema
 ]
