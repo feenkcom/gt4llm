@@ -22,7 +22,7 @@ GtLToolForObjectView >> parametersDescription [
 	^ #('objectId' 'viewSelector')
 ]
 
-{ #category : #execution }
+{ #category : #private }
 GtLToolForObjectView >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments objectId viewSelector object viewSpecification phlowView method |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
@@ -56,8 +56,10 @@ GtLToolForObjectView >> privatePerformToolCall: aToolCall inContext: anExecution
 		on: Error
 		do: [ :r | ^ GtLExceptionDomainObject new ].
 
-	^ GtLPhlowViewDomainObject new
-		phlowView: phlowView;
-		viewMethodClassName: method methodClass name;
+	method ifNil: [ ^ GtLMissingDomainObject new objectName: viewSelector ].
+	
+	^ GtLPhlowViewDomainObject
+		phlowView: phlowView
+		viewMethodClassName: method methodClass name
 		viewMethodSourceCode: method sourceCode
 ]
