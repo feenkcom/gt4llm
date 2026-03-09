@@ -1,8 +1,13 @@
 Class {
 	#name : #GtLToolForSmalltalkCodeEvaluation,
 	#superclass : #GtLAbstractPlainSchemaFunctionTool,
-	#category : #'Gt4LlmCore-Tools'
+	#category : 'Gt4LlmCore-Tools'
 }
+
+{ #category : #testing }
+GtLToolForSmalltalkCodeEvaluation class >> isDeprecated [
+	^ true
+]
 
 { #category : #'llm-generated' }
 GtLToolForSmalltalkCodeEvaluation >> acceptVisitor: aVisitor [
