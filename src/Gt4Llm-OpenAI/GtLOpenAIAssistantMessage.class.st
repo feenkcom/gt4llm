@@ -67,6 +67,7 @@ GtLOpenAIAssistantMessage >> contentText [
 GtLOpenAIAssistantMessage >> gtContentFor: aView [
 	<gtView>
 	<gtLlmView>
+	self responseModels isEmpty ifFalse: [ ^ aView empty ].
 	^ aView textEditor
 		title: 'Content';
 		priority: 7;
