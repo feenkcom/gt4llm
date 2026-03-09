@@ -100,9 +100,10 @@ GtLToolForSmalltalkCodeEvaluation >> privatePerformToolCall: aToolCall inContext
 		compiler evaluate: code ]
 		on: Error
 		do: [ :ex |
-			^ GtLExceptionDomainObject new
+			^ GtLSmalltalkCodeEvaluationExceptionDomainObject new
 				freeze: ex;
-				description: 'Error while evaluating smalltalk code' ].
+				description: 'Error while evaluating smalltalk code';
+				code: code ].
 
 	objectId := anExecutionContext objectStorage ifNotNil: [ :aStorage |
 		aStorage addNewObject: object ].
