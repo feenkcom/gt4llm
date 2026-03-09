@@ -7,7 +7,7 @@ Class {
 	#instVars : [
 		'code'
 	],
-	#category : #Gt4LlmCore
+	#category : 'Gt4LlmCore-Magritte Objects'
 }
 
 { #category : #accessing }
