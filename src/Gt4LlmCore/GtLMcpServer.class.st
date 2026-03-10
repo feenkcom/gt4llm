@@ -164,7 +164,7 @@ GtLMcpServer >> handlePromptsGet: aJsonRpc [
 			detect: [ :aResource | aResource name = (aJsonRpc params at: 'name') ].
 	^ {'description' -> prompt description.
 		'messages'
-			-> ((prompt callWith: (aJsonRpc params at: 'arguments')) collect: #serialize)}
+			-> ((prompt callWith: (aJsonRpc params at: 'arguments')) collect: [:each | each serializeForAnthropicMessagesAPI])}
 		asDictionary
 ]
 

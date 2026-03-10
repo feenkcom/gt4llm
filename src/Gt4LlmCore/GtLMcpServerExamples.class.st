@@ -59,7 +59,13 @@ GtLMcpServerExamples >> serverWithPrompt [
 	self
 		assert: (((STONJSON fromString: response entity contents) at: 'result' at: 'messages')
 				first at: 'content')
-		equals: 'hello from prompt'.
+		equals: ((Array with: ((Dictionary new) 
+			at: 'type' put: 'text';
+			at:'text' put: '{
+	"Markdown" : {
+		"content" : "hello from prompt"
+	}
+}'; yourself))).
 
 	^ server
 ]
@@ -209,7 +215,8 @@ GtLMcpServerExamples >> simpleServerPrompt [
 		name: 'Prompt';
 		arguments: {'argument'};
 		description: 'A prompt';
-		promptBlock: [ :arguments | {GtLlmUserMessage new content: (arguments at: 'argument')} ]
+		promptBlock: [ :arguments | {GtLAnthropicUserMessage new 
+			markdown: (arguments at: 'argument')} ]
 ]
 
 { #category : #'as yet unclassified' }
