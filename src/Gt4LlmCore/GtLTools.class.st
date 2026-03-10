@@ -33,15 +33,15 @@ GtLTools class >> gtCodeChange [
 		withAll: {GtLMagritteToolForClassesCreation new.
 					GtLMagritteToolForClassDefinitionChange new.
 					GtLToolForMethodsCompilation new.
-					GtLToolForMethodsRemoval new.
-					GtLMagritteToolForClassRemovalExamples new} asOrderedCollection
+					GtLMagritteToolForMethodsRemoval new.
+					GtLMagritteToolForClassRemoval new} asOrderedCollection
 ]
 
 { #category : #defaults }
 GtLTools class >> gtCodeRemoval [
 	^ self
 		withAll: {GtLMagritteToolForClassRemovalExamples new.
-					GtLToolForMethodRemoval new} asOrderedCollection
+					GtLMagritteToolForMethodRemoval new} asOrderedCollection
 ]
 
 { #category : #defaults }

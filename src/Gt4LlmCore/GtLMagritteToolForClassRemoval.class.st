@@ -4,7 +4,7 @@ Magritte-based tool for removing a class from the image.
 Class {
 	#name : #GtLMagritteToolForClassRemoval,
 	#superclass : #GtLAbstractMagritteFunctionTool,
-	#category : #Gt4LlmCore
+	#category : 'Gt4LlmCore-Tools'
 }
 
 { #category : #magritte }
