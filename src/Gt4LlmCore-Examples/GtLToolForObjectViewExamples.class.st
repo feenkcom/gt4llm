@@ -10,7 +10,7 @@ Class {
 { #category : #examples }
 GtLToolForObjectViewExamples >> viewContentForExistingObjectAndView [
 	<gtExample>
-	| objectStorage tool call result objectId |
+	| objectStorage tool call result objectId serialized |
 	
 	objectStorage := GtLObjectStorage new.
 	objectId := objectStorage addNewObject: 'Hello'.
@@ -31,6 +31,14 @@ GtLToolForObjectViewExamples >> viewContentForExistingObjectAndView [
 	self assert: result isErrorDomainObject not.
 	self assert: result phlowView notNil.
 	self assert: result phlowView title equals: 'String'.
+	self assert: result viewMethodClassName equals: String name.
+	self assert: result viewMethodSourceCode equals: (String >> #gtStringFor:) sourceCode.
+	
+	serialized := result serializeToLlmJsonObject.
+	self assert: (serialized at: #viewMethodClass) equals: String name.
+	self
+		assert: (serialized at: #viewMethodSourceCode)
+		equals: (String >> #gtStringFor:) sourceCode.
 	
 	^ call
 ]

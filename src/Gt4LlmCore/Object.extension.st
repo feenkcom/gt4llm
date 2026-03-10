@@ -17,22 +17,17 @@ Object >> gtActionObjectChatFor: anAction [
 	| chatBlock |
 	GtLConnectionRegistry instance hasConnectableDefaultConnection
 		ifFalse: [ ^ anAction empty ].
-
-	chatBlock := [ GtLChat new
-			markdownResponse;
-			sendWith: [ :m | 
-				m
-					addPlainInputObject: self named: 'Object';
-					markdown: 'Describe the object' ] ].
-
+	chatBlock := [ | c |
+		c := GtL gt.
+		c objectStorage addNewObject: self.
+		c ].
 	^ anAction button
 		icon: BrGlamorousVectorIcons chat;
 		tooltip: 'Chat about this object';
 		target: GtPhlowObjectContextMenuTarget;
 		menuItemGroup: BrMenuItemGroupConfiguration default;
 		menuItemPreview: [ self gtDisplayText ];
-		action: [ :button | 
-			button phlow spawnObject: chatBlock value ];
+		action: [ :button | button phlow spawnObject: chatBlock value ];
 		primaryModifierAction: [ :aButton | 
 				BlSpace new
 					withCommonSettings;
