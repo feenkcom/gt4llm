@@ -9,6 +9,15 @@ Class {
 	#category : 'Gt4LlmCore-Domain Objects'
 }
 
+{ #category : #magritte }
+GtLMethodCompilationExceptionDomainObject >> descriptionDescription [
+	<magritteDescription>
+	^ MAStringDescription new
+		label: 'Description';
+		accessor: #description;
+		beRequired
+]
+
 { #category : #views }
 GtLMethodCompilationExceptionDomainObject >> gtSourceCodeFor: aView [
 	<gtView>
@@ -30,16 +39,21 @@ GtLMethodCompilationExceptionDomainObject >> protocolName: anObject [
 	protocolName := anObject
 ]
 
-{ #category : #'api - serializing' }
+{ #category : #magritte }
+GtLMethodCompilationExceptionDomainObject >> protocolNameDescription [
+	<magritteDescription>
+	^ MAStringDescription new
+		label: 'Protocol';
+		accessor: #protocolName;
+		name: #methodProtocol;
+		beRequired
+]
+
+{ #category : #serialization }
 GtLMethodCompilationExceptionDomainObject >> serializeToLlmJsonObject [
 	"Return a JSON dictionary that represents the domain object."
-
-	<return: #NeoJSONObject>
-	^ super serializeToLlmJsonObject
-		at: #methodClass put: self targetClass name asString;
-		at: #methodProtocol put: self protocolName asString;
-		at: #sourceCode put: self sourceCode;
-		yourself
+	
+	^ GtMagritteJSONDataExporter exportObject: self.
 ]
 
 { #category : #accessing }
@@ -52,6 +66,24 @@ GtLMethodCompilationExceptionDomainObject >> sourceCode: anObject [
 	sourceCode := anObject
 ]
 
+{ #category : #magritte }
+GtLMethodCompilationExceptionDomainObject >> sourceCodeDescription [
+	<magritteDescription>
+	^ MAStringDescription new
+		label: 'Source code';
+		accessor: #sourceCode;
+		beRequired
+]
+
+{ #category : #magritte }
+GtLMethodCompilationExceptionDomainObject >> stackTraceDescription [
+	<magritteDescription>
+	^ MAStringDescription new
+		label: 'Stack trace';
+		accessor: #stackTrace;
+		beRequired
+]
+
 { #category : #accessing }
 GtLMethodCompilationExceptionDomainObject >> targetClass [
 	^ targetClass
@@ -60,4 +92,19 @@ GtLMethodCompilationExceptionDomainObject >> targetClass [
 { #category : #accessing }
 GtLMethodCompilationExceptionDomainObject >> targetClass: anObject [
 	targetClass := anObject
+]
+
+{ #category : #magritte }
+GtLMethodCompilationExceptionDomainObject >> targetClassNameDescription [
+	<magritteDescription>
+	^ MAStringDescription new
+		label: 'Target class';
+		accessor: [ :obj | obj targetClass name asString ];
+		name: #methodClass;
+		beRequired
+]
+
+{ #category : #testing }
+GtLMethodCompilationExceptionDomainObject >> wasMovedToMagritteDescriptions [
+	^ true
 ]
