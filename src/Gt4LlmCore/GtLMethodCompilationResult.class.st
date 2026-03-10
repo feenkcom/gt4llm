@@ -51,6 +51,21 @@ GtLMethodCompilationResult >> gtDiffFor: aView [
 				asElement ]
 ]
 
+{ #category : #testing }
+GtLMethodCompilationResult >> hasOldSourceCode [
+	^ oldMethod notNil
+]
+
+{ #category : #accessing }
+GtLMethodCompilationResult >> isErrorDomainObject [
+	^false
+]
+
+{ #category : #accessing }
+GtLMethodCompilationResult >> newCompiledMethod [
+	^ newMethod compiledMethod
+]
+
 { #category : #accessing }
 GtLMethodCompilationResult >> newMethod [
 	^ newMethod

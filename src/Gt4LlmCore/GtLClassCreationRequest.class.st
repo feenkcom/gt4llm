@@ -70,6 +70,11 @@ GtLClassCreationRequest >> instanceVariablesDescription [
 		beOptional
 ]
 
+{ #category : #testing }
+GtLClassCreationRequest >> isErrorDomainObject [
+	^false
+]
+
 { #category : #accessing }
 GtLClassCreationRequest >> package [
 	^ package
