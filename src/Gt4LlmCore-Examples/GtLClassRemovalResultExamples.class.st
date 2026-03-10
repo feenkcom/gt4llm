@@ -4,7 +4,7 @@ Examples for GtLClassRemovalResult domain object.
 Class {
 	#name : #GtLClassRemovalResultExamples,
 	#superclass : #GtLMagritteDomainObjectExamples,
-	#category : #'Gt4LlmCore-Examples'
+	#category : 'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #examples }
@@ -24,13 +24,10 @@ GtLClassRemovalResultExamples >> classRemovalResultCreation [
 GtLClassRemovalResultExamples >> classRemovalResultSerialization [
 	<gtExample>
 	| result jsonObject expected |
-	result := GtLClassRemovalResult new
-		removedClassName: 'SampleClass';
-		status: 'removed';
-		yourself.
+	result := self classRemovalResultCreation.
 	jsonObject := GtMagritteJSONDataExporter exportObject: result.
 	expected := NeoJSONObject new
-		at: 'removedClassName' put: 'SampleClass';
+		at: 'removedClassName' put: 'MyTestClass';
 		at: 'status' put: 'removed';
 		yourself.
 	self assert: jsonObject equals: expected.
