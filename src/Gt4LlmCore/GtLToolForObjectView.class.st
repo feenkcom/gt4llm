@@ -4,7 +4,7 @@ I return the remote phlow view specification for a stored object and view select
 Class {
 	#name : #GtLToolForObjectView,
 	#superclass : #GtLAbstractPlainSchemaFunctionTool,
-	#category : 'Gt4LlmCore-Tools'
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }

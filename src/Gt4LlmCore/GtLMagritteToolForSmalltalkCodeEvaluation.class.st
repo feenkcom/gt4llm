@@ -4,7 +4,7 @@ Magritte-based tool for evaluating Smalltalk code and returning serialized resul
 Class {
 	#name : #GtLMagritteToolForSmalltalkCodeEvaluation,
 	#superclass : #GtLAbstractMagritteFunctionTool,
-	#category : 'Gt4LlmCore-Tools'
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #magritte }
