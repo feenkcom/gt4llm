@@ -22,39 +22,44 @@ GtLToolForObjectView >> parametersDescription [
 	^ #('objectId' 'viewSelector')
 ]
 
-{ #category : #execution }
+{ #category : #private }
 GtLToolForObjectView >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
-	| arguments objectId viewSelector object viewSpecification phlowView |
+	| arguments objectId viewSelector object viewSpecification phlowView method |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
-	
+
 	objectId := arguments
-		at: 'objectId'
-		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-				arguments: arguments;
-				missingArgument: 'objectId' ].
+			at: 'objectId'
+			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
+					arguments: arguments;
+					missingArgument: 'objectId' ].
 	viewSelector := arguments
-		at: 'viewSelector'
-		ifPresent: [ :each | each asSymbol ]
-		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-				arguments: arguments;
-				missingArgument: 'viewSelector' ].
-	
+			at: 'viewSelector'
+			ifPresent: [ :each | each asSymbol ]
+			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
+					arguments: arguments;
+					missingArgument: 'viewSelector' ].
+
 	anExecutionContext objectStorage
-		ifNil: [ ^ GtLMissingInformationDomainObject new
-				missingModelName: 'objectStorage' ].
-				
+		ifNil: [ ^ GtLMissingInformationDomainObject new missingModelName: 'objectStorage' ].
+
 	object := anExecutionContext objectStorage
-		objectAt: objectId
-		ifPresent: [ :storedObject | storedObject ]
-		ifAbsent: [ ^ GtLMissingDomainObject new objectName: objectId ].
-		
-	GtProcessStackOverflowChecker currentCheckerClass
-		checkDuring: [ 
-			phlowView := GtPhlowView empty
+			objectAt: objectId
+			ifPresent: [ :storedObject | storedObject ]
+			ifAbsent: [ ^ GtLMissingDomainObject new objectName: objectId ].
+
+	[ GtProcessStackOverflowChecker currentCheckerClass
+		checkDuring: [ phlowView := GtPhlowView empty
 					on: object
 					perform: viewSelector
 					withContext: GtPhlowContext new ].
-		
-	^ GtLPhlowViewDomainObject new
-			phlowView: phlowView
+	method := object class lookupSelector: viewSelector ]
+		on: Error
+		do: [ :r | ^ GtLExceptionDomainObject new ].
+
+	method ifNil: [ ^ GtLMissingDomainObject new objectName: viewSelector ].
+	
+	^ GtLPhlowViewDomainObject
+		phlowView: phlowView
+		viewMethodClassName: method methodClass name
+		viewMethodSourceCode: method sourceCode
 ]

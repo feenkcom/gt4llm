@@ -4,6 +4,11 @@ Class {
 	#category : #'Gt4LlmCore-Tools'
 }
 
+{ #category : #testing }
+GtLToolForClassRemoval class >> isDeprecated [
+	^ true
+]
+
 { #category : #accessing }
 GtLToolForClassRemoval >> description [
 	^ 'Removes the class with the provided name from the image.'

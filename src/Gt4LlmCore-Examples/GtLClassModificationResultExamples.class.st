@@ -1,0 +1,176 @@
+"
+Examples for GtLClassModificationResult domain object.
+"
+Class {
+	#name : #GtLClassModificationResultExamples,
+	#superclass : #Object,
+	#category : #'Gt4LlmCore-Examples-Domain Objects'
+}
+
+{ #category : #examples }
+GtLClassModificationResultExamples >> classModificationResultCreation [
+	<gtExample>
+	| result |
+	result := GtLClassModificationResult new
+		originalClass: self originalClassDefinition;
+		updatedClass: self updatedClassDefinition;
+		yourself.
+	
+	"Verify the stored objects"
+	self assert: result originalClass isNotNil.
+	self assert: result updatedClass isNotNil.
+	
+	"Verify delegation to updatedClass"
+	self assert: result currentClassName equals: 'MyExampleClass'.
+	self assert: result superclassName equals: 'Exception'.
+	self assert: result packageName equals: 'NewPackage'.
+	self assert: result comment equals: 'Updated comment'.
+	self assert: result instanceSlotNames equals: #('slot1' 'slot2' 'slot3').
+	self assert: result classSlotNames equals: #('classSlot').
+	self assert: result classVariableNames equals: #('SharedVar').
+	self assert: result traitCompositionString equals: '{}'.
+	
+	"Verify original is preserved"
+	self assert: result originalClass superclassName equals: 'Object'.
+	self assert: result originalClass packageName equals: 'OriginalPackage'.
+	self assert: result originalClass instanceSlotNames equals: #('slot1').
+	
+	^ result
+]
+
+{ #category : #examples }
+GtLClassModificationResultExamples >> classModificationResultFromRealClass [
+	<gtExample>
+	"Test using a real class from the system"
+	| originalDesc updatedDesc result |
+	originalDesc := GtLClassDefinitionDescription new initializeFromClass: Boolean.
+	updatedDesc := GtLClassDefinitionDescription new
+		currentClassName: 'Boolean';
+		superclassName: 'Object';
+		comment: 'Modified comment';
+		packageName: 'Kernel';
+		instanceSlotNames: #('newSlot');
+		classSlotNames: #();
+		classVariableNames: #();
+		traitCompositionString: '{}';
+		yourself.
+	
+	result := GtLClassModificationResult new
+		originalClass: originalDesc;
+		updatedClass: updatedDesc;
+		yourself.
+	
+	"Verify original has real data"
+	self assert: result originalClass currentClassName equals: #Boolean.
+	self assert: result originalClass superclassName equals: #Object.
+	self assert: result originalClass instanceSlotNames isEmpty.
+	
+	"Verify updated shows the changes"
+	self assert: result currentClassName equals: 'Boolean'.
+	self assert: result instanceSlotNames equals: #('newSlot').
+	self assert: result comment equals: 'Modified comment'.
+	
+	^ result
+]
+
+{ #category : #examples }
+GtLClassModificationResultExamples >> classModificationResultSerialization [
+	<gtExample>
+	| result json |
+	result := self classModificationResultCreation.
+	
+	json := GtMagritteJSONDataExporter exportObject: result.
+	
+	"Verify serialization delegates to updatedClass properties only"
+	self assert: (json at: 'currentClassName') equals: 'MyExampleClass'.
+	self assert: (json at: 'superclassName') equals: 'Exception'.
+	self assert: (json at: 'packageName') equals: 'NewPackage'.
+	self assert: (json at: 'comment') equals: 'Updated comment'.
+	self assert: (json at: 'instanceSlotNames') asArray equals: #('slot1' 'slot2' 'slot3').
+	self assert: (json at: 'classSlotNames') asArray equals: #('classSlot').
+	self assert: (json at: 'classVariableNames') asArray equals: #('SharedVar').
+	self assert: (json at: 'traitCompositionString') equals: '{}'.
+	
+	"Verify originalClass properties are NOT serialized"
+	self assert: (json includesKey: 'originalClass') not.
+	self assert: (json includesKey: 'updatedClass') not.
+	
+	^ json
+]
+
+{ #category : #examples }
+GtLClassModificationResultExamples >> classModificationResultSerializationWithoutOriginal [
+	<gtExample>
+	"Verify serialization works when originalClass is nil"
+	| result json |
+	result := self classModificationResultWithoutOriginal.
+	
+	json := GtMagritteJSONDataExporter exportObject: result.
+	
+	"Verify serialization still works"
+	self assert: (json at: 'currentClassName') equals: 'MyExampleClass'.
+	self assert: (json at: 'superclassName') equals: 'Exception'.
+	self assert: (json at: 'packageName') equals: 'NewPackage'.
+	
+	^ json
+]
+
+{ #category : #examples }
+GtLClassModificationResultExamples >> classModificationResultWithoutOriginal [
+	<gtExample>
+	"Test case where originalClass is nil (e.g., new class creation)"
+	| result |
+	result := GtLClassModificationResult new
+		originalClass: nil;
+		updatedClass: self updatedClassDefinition;
+		yourself.
+	
+	self assert: result originalClass isNil.
+	self assert: result updatedClass isNotNil.
+	
+	"Delegation still works"
+	self assert: result currentClassName equals: 'MyExampleClass'.
+	self assert: result superclassName equals: 'Exception'.
+	
+	^ result
+]
+
+{ #category : #'examples - support' }
+GtLClassModificationResultExamples >> originalClassDefinition [
+	<gtExample>
+	| description |
+	description := GtLClassDefinitionDescription new
+		currentClassName: 'MyExampleClass';
+		superclassName: 'Object';
+		comment: 'Original comment';
+		packageName: 'OriginalPackage';
+		instanceSlotNames: #('slot1');
+		classSlotNames: #();
+		classVariableNames: #();
+		traitCompositionString: '{}';
+		yourself.
+	self assert: description currentClassName equals: 'MyExampleClass'.
+	self assert: description packageName equals: 'OriginalPackage'.
+	^ description
+]
+
+{ #category : #'examples - support' }
+GtLClassModificationResultExamples >> updatedClassDefinition [
+	<gtExample>
+	| description |
+	description := GtLClassDefinitionDescription new
+		currentClassName: 'MyExampleClass';
+		superclassName: 'Exception';
+		comment: 'Updated comment';
+		packageName: 'NewPackage';
+		instanceSlotNames: #('slot1' 'slot2' 'slot3');
+		classSlotNames: #('classSlot');
+		classVariableNames: #('SharedVar');
+		traitCompositionString: '{}';
+		yourself.
+	self assert: description currentClassName equals: 'MyExampleClass'.
+	self assert: description superclassName equals: 'Exception'.
+	self assert: description packageName equals: 'NewPackage'.
+	self assert: description instanceSlotNames equals: #('slot1' 'slot2' 'slot3').
+	^ description
+]

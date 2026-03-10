@@ -4,6 +4,11 @@ Class {
 	#category : #'Gt4LlmCore-Tools'
 }
 
+{ #category : #testing }
+GtLToolForSmalltalkCodeEvaluation class >> isDeprecated [
+	^ true
+]
+
 { #category : #'llm-generated' }
 GtLToolForSmalltalkCodeEvaluation >> acceptVisitor: aVisitor [
 	^ aVisitor visitGtLlmToolForSmalltalkCodeEvaluation: self

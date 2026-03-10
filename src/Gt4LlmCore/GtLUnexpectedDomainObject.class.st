@@ -7,6 +7,15 @@ Class {
 	#category : #'Gt4LlmCore-Domain Objects'
 }
 
+{ #category : #'magritte-description' }
+GtLUnexpectedDomainObject >> errorMessageDescription [
+	<magritteDescription>
+	^ MAStringDescription new
+		label: 'Error';
+		accessor: #messageText;
+		beRequired
+]
+
 { #category : #'api - accessing' }
 GtLUnexpectedDomainObject >> messageText [
 	"Return an error message"
@@ -26,6 +35,15 @@ GtLUnexpectedDomainObject >> objectName: anObject [
 	objectName := anObject
 ]
 
+{ #category : #'magritte-description' }
+GtLUnexpectedDomainObject >> objectNameDescription [
+	<magritteDescription>
+	^ MAStringDescription new
+		label: 'Unexpected object';
+		accessor: #objectName;
+		beRequired
+]
+
 { #category : #'api - serializing' }
 GtLUnexpectedDomainObject >> serializeToLlmJsonObject [
 	"Return a JSON dictionary that represents the domain object."
@@ -35,4 +53,9 @@ GtLUnexpectedDomainObject >> serializeToLlmJsonObject [
 		at: #error put: self messageText;
 		at: #unexpectedObject put: self objectName;
 		yourself
+]
+
+{ #category : #testing }
+GtLUnexpectedDomainObject >> wasMovedToMagritteDescriptions [
+	^ true
 ]

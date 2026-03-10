@@ -4,6 +4,11 @@ Class {
 	#category : #'Gt4LlmCore-Tools'
 }
 
+{ #category : #testing }
+GtLToolForClassDefinitionChange class >> isDeprecated [
+	^ true
+]
+
 { #category : #visiting }
 GtLToolForClassDefinitionChange >> acceptVisitor: aVisitor [
 	^ aVisitor visitGtLlmToolForClassSignatureChange: self

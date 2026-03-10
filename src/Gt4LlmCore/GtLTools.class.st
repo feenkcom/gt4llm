@@ -22,7 +22,7 @@ GtLTools class >> files [
 GtLTools class >> gt [
 	^ self gtSearch , self leSearch , self gtCodeChange , self leChange
 		, self gtExamplesRun
-		, {GtLToolForSmalltalkCodeEvaluation new.
+		, {GtLMagritteToolForSmalltalkCodeEvaluation new.
 				GtLToolForObjectView new.
 				GtLToolForObjectStorageList new}
 ]
@@ -30,18 +30,18 @@ GtLTools class >> gt [
 { #category : #defaults }
 GtLTools class >> gtCodeChange [
 	^ self
-		withAll: {GtLToolForClassesCreation new.
-					GtLToolForClassDefinitionChange new.
+		withAll: {GtLMagritteToolForClassesCreation new.
+					GtLMagritteToolForClassDefinitionChange new.
 					GtLToolForMethodsCompilation new.
-					GtLToolForMethodsRemoval new.
-					GtLToolForClassRemoval new} asOrderedCollection
+					GtLMagritteToolForMethodsRemoval new.
+					GtLMagritteToolForClassRemoval new} asOrderedCollection
 ]
 
 { #category : #defaults }
 GtLTools class >> gtCodeRemoval [
 	^ self
-		withAll: {GtLToolForClassRemoval new.
-					GtLToolForMethodRemoval new} asOrderedCollection
+		withAll: {GtLMagritteToolForClassRemovalExamples new.
+					GtLMagritteToolForMethodRemoval new} asOrderedCollection
 ]
 
 { #category : #defaults }
