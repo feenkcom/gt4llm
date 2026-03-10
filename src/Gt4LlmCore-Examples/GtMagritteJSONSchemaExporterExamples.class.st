@@ -260,7 +260,7 @@ GtMagritteJSONSchemaExporterExamples >> expectedSchemaStringForScalarArrayModel 
 		"arrayOfStrings" : {
 			"type" : "array",
 			"items" : {
-				"type" : "string "
+				"type" : "string"
 			},
 			"description" : "An array of strings"
 		}
