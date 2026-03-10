@@ -5,7 +5,7 @@ Class {
 		'missingObjectName',
 		'errorMessage'
 	],
-	#category : 'Gt4LlmCore-Domain Objects'
+	#category : #'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #'api - accessing' }

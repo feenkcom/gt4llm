@@ -6,7 +6,7 @@ Class {
 		'protocolName',
 		'sourceCode'
 	],
-	#category : 'Gt4LlmCore-Domain Objects'
+	#category : #'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #magritte }
@@ -94,12 +94,17 @@ GtLMethodCompilationExceptionDomainObject >> targetClass: anObject [
 	targetClass := anObject
 ]
 
+{ #category : #accessing }
+GtLMethodCompilationExceptionDomainObject >> targetClassName [
+	^ targetClass name
+]
+
 { #category : #magritte }
 GtLMethodCompilationExceptionDomainObject >> targetClassNameDescription [
 	<magritteDescription>
 	^ MAStringDescription new
 		label: 'Target class';
-		accessor: [ :obj | obj targetClass name asString ];
+		accessor: #targetClass;
 		name: #methodClass;
 		beRequired
 ]
