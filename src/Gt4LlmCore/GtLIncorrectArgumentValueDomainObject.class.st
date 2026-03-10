@@ -19,6 +19,15 @@ GtLIncorrectArgumentValueDomainObject >> argumentName: anObject [
 	argumentName := anObject
 ]
 
+{ #category : #magritte }
+GtLIncorrectArgumentValueDomainObject >> argumentNameDescription [
+	<magritteDescription>
+	^ MAStringDescription new
+		label: 'Argument name';
+		accessor: #argumentName;
+		beRequired
+]
+
 { #category : #accessing }
 GtLIncorrectArgumentValueDomainObject >> argumentValue [
 	^ argumentValue
@@ -29,6 +38,15 @@ GtLIncorrectArgumentValueDomainObject >> argumentValue: anObject [
 	argumentValue := anObject
 ]
 
+{ #category : #magritte }
+GtLIncorrectArgumentValueDomainObject >> argumentValueDescription [
+	<magritteDescription>
+	^ MAStringDescription new
+		label: 'Argument value';
+		accessor: #argumentValue;
+		beRequired
+]
+
 { #category : #accessing }
 GtLIncorrectArgumentValueDomainObject >> errorDescription [
 	^ errorDescription
@@ -37,6 +55,15 @@ GtLIncorrectArgumentValueDomainObject >> errorDescription [
 { #category : #accessing }
 GtLIncorrectArgumentValueDomainObject >> errorDescription: anObject [
 	errorDescription := anObject
+]
+
+{ #category : #magritte }
+GtLIncorrectArgumentValueDomainObject >> errorDescriptionMagritteDescription [
+	<magritteDescription>
+	^ MAStringDescription new
+		label: 'Error description';
+		accessor: #errorDescription;
+		beRequired
 ]
 
 { #category : #'api - accessing' }
@@ -60,4 +87,9 @@ GtLIncorrectArgumentValueDomainObject >> serializeToLlmJsonObject [
 			at: #argumentValue put: self argumentValue;
 			at: #errorDescription put: self errorDescription;
 			yourself
+]
+
+{ #category : #testing }
+GtLIncorrectArgumentValueDomainObject >> wasMovedToMagritteDescriptions [
+	^ true
 ]

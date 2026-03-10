@@ -7,22 +7,22 @@ Class {
 	#category : 'Gt4LlmCore-Tools'
 }
 
-{ #category : #private }
-GtLMagritteToolForClassDefinitionChange >> applyClassChangeUsing: changeData [
+{ #category : #'private - change' }
+GtLMagritteToolForClassDefinitionChange >> applyClassChangeUsing: extractor [
 	| updatedClass originalDescription |
 	
 	"Capture original state before modifying"
 	originalDescription := GtLClassDefinitionDescription 
-		fromClass: changeData targetClass.
+		fromClass: extractor targetClass.
 	
 	updatedClass := [
 		| builder |
 		builder := ShiftClassBuilder new.
-		builder fillFor: changeData targetClass.
-		builder superclass: changeData superclass.
-		builder slots: changeData instanceVariables.
-		builder sharedVariables: changeData classVariables.
-		builder package: changeData packageName.
+		builder fillFor: extractor targetClass.
+		builder superclass: extractor superclass.
+		builder slots: extractor instanceVariables.
+		builder sharedVariables: extractor classVariables.
+		builder package: extractor packageName.
 		builder install ]
 		on: Error
 		do: [ :error |
@@ -73,93 +73,18 @@ Example JSON response:
 }'
 ]
 
-{ #category : #private }
-GtLMagritteToolForClassDefinitionChange >> extractDataInto: changeData ifError: errorBlock [
-	self extractTargetClassInto: changeData ifError: errorBlock.
-	self extractSuperclassInto: changeData ifError: errorBlock.
-	self extractVariablesInto: changeData.
-	self extractPackageInto: changeData ifError: errorBlock
-]
-
-{ #category : #private }
-GtLMagritteToolForClassDefinitionChange >> extractPackageInto: changeData ifError: errorBlock [
-	| request packageValue |
-	request := changeData request.
-	
-	packageValue := request package.
-	packageValue notNil
-		ifTrue: [
-			| packageName |
-			packageName := packageValue asString trimBoth.
-			packageName isEmpty
-				ifTrue: [ ^ errorBlock value: (GtLMissingDomainObject new objectName: 'package') ].
-			changeData packageName: packageName ]
-		ifFalse: [ changeData packageName: changeData targetClass package name ]
-]
-
-{ #category : #private }
-GtLMagritteToolForClassDefinitionChange >> extractSuperclassInto: changeData ifError: errorBlock [
-	| request superclassValue |
-	request := changeData request.
-	
-	superclassValue := request superclassName.
-	superclassValue notNil
-		ifTrue: [
-			| superclassName |
-			superclassName := superclassValue asString trimBoth.
-			superclassName isEmpty
-				ifTrue: [ ^ errorBlock value: (GtLMissingDomainObject new 
-					objectName: 'superclassName') ].
-			changeData superclass: (Smalltalk globals
-				at: superclassName asSymbol
-				ifAbsent: [ ^ errorBlock value: (GtLMissingDomainObject new
-					objectName: superclassName) ]) ]
-		ifFalse: [
-			changeData superclass: changeData targetClass superclass ]
-]
-
-{ #category : #private }
-GtLMagritteToolForClassDefinitionChange >> extractTargetClassInto: changeData ifError: errorBlock [
-	| request classNameValue classNameString |
-	request := changeData request.
-	
-	classNameValue := request targetClassName.
-	classNameString := (classNameValue ifNil: [ '' ]) asString trimBoth.
-	classNameString isEmpty
-		ifTrue: [ ^ errorBlock value: (GtLMissingDomainObject new objectName: 'targetClassName') ].
-	
-	changeData targetClass: (Smalltalk globals
-		at: classNameString asSymbol
-		ifAbsent: [ ^ errorBlock value: (GtLMissingDomainObject new objectName: classNameString) ])
-]
-
-{ #category : #private }
-GtLMagritteToolForClassDefinitionChange >> extractVariablesInto: changeData [
-	| request targetClass |
-	request := changeData request.
-	targetClass := changeData targetClass.
-	
-	changeData instanceVariables: (request instanceVariables notEmpty
-		ifTrue: [ request instanceVariables collect: [ :each | each asSymbol asSlot ] ]
-		ifFalse: [ targetClass localSlots collect: [ :slot | slot copy ] ]).
-	
-	changeData classVariables: (request classVariables notEmpty
-		ifTrue: [ request classVariables collect: [ :each | each asSymbol asClassVariable ] ]
-		ifFalse: [ targetClass classVariables collect: [ :var | var copy ] ])
-]
-
 { #category : #accessing }
 GtLMagritteToolForClassDefinitionChange >> name [
 	^ 'changeClassSignature'
 ]
 
-{ #category : #actions }
+{ #category : #private }
 GtLMagritteToolForClassDefinitionChange >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
-	| changeData |
+	| extractor |
 	
-	changeData := GtLClassChangeData new.
-	changeData request: (aToolCall arguments at: 'classChangeRequest').
+	extractor := GtLClassChangeDataExtractor new.
+	extractor request: (aToolCall arguments at: 'classChangeRequest').
 	
-	self extractDataInto: changeData ifError: [ :anError | ^ anError ].
-	^ self applyClassChangeUsing: changeData
+	extractor extractAllIfError: [ :anError | ^ anError ].
+	^ self applyClassChangeUsing: extractor
 ]
