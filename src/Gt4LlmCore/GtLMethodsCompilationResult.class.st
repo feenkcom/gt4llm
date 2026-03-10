@@ -13,16 +13,27 @@ Class {
 { #category : #views }
 GtLMethodsCompilationResult >> gtMethodsFor: aView [
 	<gtView>
-	^ aView list
+	<gtLlmView>
+	(self methods anySatisfy: [:each | each isKindOf: GtLMethodCompilationExceptionDomainObject]) ifTrue: [ ^ aView empty ].
+	^ aView forward
 		title: 'Methods';
 		priority: 1;
-		items: [ self methods ];
-		itemText: [ :each |
-			each isErrorDomainObject
-				ifTrue: [ each printString ]
-				ifFalse: [ 
-					(each newMethod ifNotNil: [ :m | m methodReference methodSignature ] ifNil: [ '?' ]),
-					' — ', each status ] ]
+		object: [ GtSearchFixedMethodsFilter new methods: (self methods collect: [:each | each newCompiledMethod]) ];
+		view: #gtItemsFor:
+]
+
+{ #category : #views }
+GtLMethodsCompilationResult >> gtMethodsListFor: aView [
+	<gtView>
+	<gtLlmView>
+	methods ifNil: [ ^ aView empty ].
+	^ aView columnedList
+		title: 'Method list';
+		priority: 2;
+		items: [ methods ];
+		column: 'Class' text: [ :each | each newCompiledMethod gtDisplayString ];
+		column: 'State'
+			text: [ :each | each hasOldSourceCode ifTrue: [ 'Modified' ] ifFalse: [ 'New' ] ]
 ]
 
 { #category : #accessing }

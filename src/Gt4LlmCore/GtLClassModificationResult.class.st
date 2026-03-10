@@ -164,6 +164,11 @@ GtLClassModificationResult >> instanceSlotNamesDescription [
 ]
 
 { #category : #accessing }
+GtLClassModificationResult >> isErrorDomainObject [
+	^false
+]
+
+{ #category : #accessing }
 GtLClassModificationResult >> originalClass [
 	^ originalClass
 ]
