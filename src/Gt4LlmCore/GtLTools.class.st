@@ -34,13 +34,13 @@ GtLTools class >> gtCodeChange [
 					GtLMagritteToolForClassDefinitionChange new.
 					GtLToolForMethodsCompilation new.
 					GtLToolForMethodsRemoval new.
-					GtLToolForClassRemoval new} asOrderedCollection
+					GtLMagritteToolForClassRemovalExamples new} asOrderedCollection
 ]
 
 { #category : #defaults }
 GtLTools class >> gtCodeRemoval [
 	^ self
-		withAll: {GtLToolForClassRemoval new.
+		withAll: {GtLMagritteToolForClassRemovalExamples new.
 					GtLToolForMethodRemoval new} asOrderedCollection
 ]
 
