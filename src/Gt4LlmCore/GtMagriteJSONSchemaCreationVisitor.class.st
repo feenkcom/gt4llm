@@ -186,7 +186,7 @@ GtMagriteJSONSchemaCreationVisitor >> visitToManyScalarRelationDescription: aDes
 	
 	scalarType := nil.
 	aDescription classes first = String 
-		ifTrue: [ scalarType := 'string ' ].
+		ifTrue: [ scalarType := 'string' ].
 	aDescription classes first = Boolean 
 		ifTrue: [ scalarType := 'boolean' ].
 	scalarType ifNil: [
