@@ -4,64 +4,41 @@ Magritte-based tool for compiling a method into a class.
 Class {
 	#name : #GtLMagritteToolForMethodCompilation,
 	#superclass : #GtLAbstractMagritteFunctionTool,
-	#category : #Gt4LlmCore
+	#category : 'Gt4LlmCore-Tools'
 }
 
 { #category : #private }
 GtLMagritteToolForMethodCompilation >> compileMethodFromRequest: request [
-	| className class source protocol methodNode oldMethodWithSource selector compiledMethod newMethodWithSource |
+	| extractor selector compiledMethod newMethodWithSource |
 	
-	className := request methodClassName.
-	(className isNil or: [ className trimBoth isEmpty ])
-		ifTrue: [ ^ GtLMissingDomainObject new objectName: (className ifNil: [ '' ]) ].
-	class := className asClassIfAbsent: [ ^ GtLMissingDomainObject new objectName: className ].
-	request isClassSide ifTrue: [ class := class class ].
-	source := request sourceCode.
-	(source isNil or: [ source trimBoth isEmpty ])
-		ifTrue: [ ^ GtLMissingDomainObject new objectName: 'sourceCode' ].
-	source := source trimBoth.
-	protocol := request protocol.
-	(protocol isNil or: [ protocol trimBoth isEmpty ])
-		ifTrue: [ protocol := 'as yet unclassified' ].
-		
-	methodNode := [ GtPharoParser
-		parse: source
-		startingAt: GtPharoParser startingStateForMethod ]
-		on: Error
-		do: [ :error |
-			^ GtLMethodCompilationExceptionDomainObject new
-				freeze: error;
-				targetClass: class;
-				protocolName: protocol;
-				sourceCode: source;
-				description: 'Syntax error while parsing the given method source code' ].
-				
-	oldMethodWithSource := (methodNode notNil
-		and: [ methodNode selector notNil
-			and: [ class includesSelector: methodNode selector ] ])
-		ifTrue: [ GtLMethodWithSource fromCompiledMethod: (class >> methodNode selector) ]
-		ifFalse: [ nil ].
-	selector := [ [ class compile: source classified: protocol ]
+	extractor := GtLMethodCompilationDataExtractor new.
+	extractor request: request.
+	
+	extractor extractAllIfError: [ :error | ^ error ].
+	
+	selector := [ [ extractor targetClass compile: extractor sourceCode classified: extractor protocol ]
 		on: CodeError
 		do: [ :notification |
 			^ GtLMethodCompilationExceptionDomainObject new
 				freeze: notification;
-				targetClass: class;
-				protocolName: protocol;
-				sourceCode: source;
+				targetClass: extractor targetClass;
+				protocolName: extractor protocol;
+				sourceCode: extractor sourceCode;
 				description: 'Syntax error while compiling given method source code' ] ]
 		on: Error
 		do: [ :error |
 			^ GtLMethodCompilationExceptionDomainObject new
 				freeze: error;
-				targetClass: class;
-				protocolName: protocol;
-				sourceCode: source;
+				targetClass: extractor targetClass;
+				protocolName: extractor protocol;
+				sourceCode: extractor sourceCode;
 				description: 'Compilation error while compiling given method source code' ].
-	compiledMethod := class methodDict at: selector.
+	
+	compiledMethod := extractor targetClass methodDict at: selector.
 	newMethodWithSource := GtLMethodWithSource fromCompiledMethod: compiledMethod.
+	
 	^ GtLMethodCompilationResult new
-		oldMethod: oldMethodWithSource;
+		oldMethod: extractor oldMethodWithSource;
 		newMethod: newMethodWithSource;
 		status: 'compiled';
 		yourself

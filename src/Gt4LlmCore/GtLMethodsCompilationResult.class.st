@@ -1,8 +1,8 @@
 "
-Result of removing multiple methods, containing individual removal results.
+Result of compiling multiple methods, containing individual compilation results.
 "
 Class {
-	#name : #GtLMethodsRemovalResult,
+	#name : #GtLMethodsCompilationResult,
 	#superclass : #Object,
 	#instVars : [
 		'methods'
@@ -11,7 +11,7 @@ Class {
 }
 
 { #category : #views }
-GtLMethodsRemovalResult >> gtMethodsFor: aView [
+GtLMethodsCompilationResult >> gtMethodsFor: aView [
 	<gtView>
 	^ aView list
 		title: 'Methods';
@@ -20,34 +20,36 @@ GtLMethodsRemovalResult >> gtMethodsFor: aView [
 		itemText: [ :each |
 			each isErrorDomainObject
 				ifTrue: [ each printString ]
-				ifFalse: [ each removedMethod methodReference methodSignature , ' — ' , each status ] ]
+				ifFalse: [ 
+					(each newMethod ifNotNil: [ :m | m methodReference methodSignature ] ifNil: [ '?' ]),
+					' — ', each status ] ]
 ]
 
 { #category : #accessing }
-GtLMethodsRemovalResult >> methods [
-	^ methods
+GtLMethodsCompilationResult >> methods [
+	^ methods ifNil: [ #() ]
 ]
 
 { #category : #accessing }
-GtLMethodsRemovalResult >> methods: aCollection [
+GtLMethodsCompilationResult >> methods: aCollection [
 	methods := aCollection
 ]
 
 { #category : #magritte }
-GtLMethodsRemovalResult >> methodsDescription [
+GtLMethodsCompilationResult >> methodsDescription [
 	<magritteDescription>
 	^ MAToManyRelationDescription new
 		accessor: #methods;
 		classes: {
-			GtLMethodRemovalResult.
+			GtLMethodCompilationResult.
+			GtLMethodCompilationExceptionDomainObject.
 			GtLMissingDomainObject.
-			GtLMissingArgumentDomainObject.
-			GtLExceptionDomainObject };
+			GtLMissingArgumentDomainObject };
 		beRequired
 ]
 
 { #category : #printing }
-GtLMethodsRemovalResult >> printOn: aStream [
+GtLMethodsCompilationResult >> printOn: aStream [
 	super printOn: aStream.
 	aStream parenthesize: [
 		aStream

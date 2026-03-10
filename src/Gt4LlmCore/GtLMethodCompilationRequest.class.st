@@ -34,7 +34,7 @@ GtLMethodCompilationRequest >> classSideDescription [
 
 { #category : #testing }
 GtLMethodCompilationRequest >> isClassSide [
-	^ classSide == true
+	^ classSide
 ]
 
 { #category : #accessing }
