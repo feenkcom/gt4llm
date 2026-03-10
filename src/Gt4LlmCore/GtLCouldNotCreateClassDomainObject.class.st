@@ -22,6 +22,23 @@ GtLCouldNotCreateClassDomainObject >> classVariableNames: anObject [
 	classVariableNames := anObject
 ]
 
+{ #category : #'magritte-description' }
+GtLCouldNotCreateClassDomainObject >> classVariableNamesDescription [
+	<magritteDescription>
+	^ MAStringDescription new
+		label: 'Class variables';
+		accessor: #classVariableNames
+]
+
+{ #category : #'magritte-description' }
+GtLCouldNotCreateClassDomainObject >> errorDescription [
+	<magritteDescription>
+	^ MAStringDescription new
+		label: 'Error';
+		accessor: #messageText;
+		beRequired
+]
+
 { #category : #accessing }
 GtLCouldNotCreateClassDomainObject >> exception [
 	^ exception
@@ -47,14 +64,24 @@ GtLCouldNotCreateClassDomainObject >> instanceVariableNames: anObject [
 	instanceVariableNames := anObject
 ]
 
-{ #category : #'api - accessing' }
+{ #category : #'magritte-description' }
+GtLCouldNotCreateClassDomainObject >> instanceVariableNamesDescription [
+	<magritteDescription>
+	^ MAStringDescription new
+		label: 'Instance variables';
+		accessor: #instanceVariableNames
+]
+
+{ #category : #accessing }
 GtLCouldNotCreateClassDomainObject >> messageText [
 	"Return an error message"
-
-	^ 'Class creation error: {1}'
-		format: {(self exception respondsTo: #messageText)
-					ifTrue: [ self exception messageText ifNil: [ self exception description ] ]
-					ifFalse: [ self exception description ]}
+	^ exception 
+		ifNil: [ 'Class creation error: unknown error' ]
+		ifNotNil: [
+			'Class creation error: {1}'
+				format: {(exception respondsTo: #messageText)
+						ifTrue: [ exception messageText ifNil: [ exception description ] ]
+						ifFalse: [ exception description ]} ]
 ]
 
 { #category : #accessing }
@@ -67,19 +94,20 @@ GtLCouldNotCreateClassDomainObject >> packageName: anObject [
 	packageName := anObject
 ]
 
-{ #category : #'api - serializing' }
+{ #category : #'magritte-description' }
+GtLCouldNotCreateClassDomainObject >> packageNameDescription [
+	<magritteDescription>
+	^ MAStringDescription new
+		label: 'Package';
+		accessor: #packageName;
+		beRequired
+]
+
+{ #category : #serialization }
 GtLCouldNotCreateClassDomainObject >> serializeToLlmJsonObject [
 	"Return a JSON dictionary that represents the domain object."
-
-	<return: #NeoJSONObject>
-	^ NeoJSONObject new
-		at: #error put: self messageText;
-		at: #class put: self targetClassName;
-		at: #superclass put: self superclass name;
-		at: #package put: self packageName;
-		at: #instanceVariables put: self instanceVariableNames;
-		at: #classVariables put: self classVariableNames;
-		yourself
+	
+	^ GtMagritteJSONDataExporter exportObject: self
 ]
 
 { #category : #accessing }
@@ -93,6 +121,20 @@ GtLCouldNotCreateClassDomainObject >> superclass: anObject [
 ]
 
 { #category : #accessing }
+GtLCouldNotCreateClassDomainObject >> superclassName [
+	^ superclass ifNotNil: [ :sc | sc name ] ifNil: [ nil ]
+]
+
+{ #category : #'magritte - descriptions' }
+GtLCouldNotCreateClassDomainObject >> superclassNameDescription [
+	<magritteDescription>
+	^ MAStringDescription new
+		label: 'Superclass';
+		accessor: #superclassName;
+		beOptional
+]
+
+{ #category : #accessing }
 GtLCouldNotCreateClassDomainObject >> targetClassName [
 	^ targetClassName
 ]
@@ -100,4 +142,18 @@ GtLCouldNotCreateClassDomainObject >> targetClassName [
 { #category : #accessing }
 GtLCouldNotCreateClassDomainObject >> targetClassName: anObject [
 	targetClassName := anObject
+]
+
+{ #category : #'magritte-description' }
+GtLCouldNotCreateClassDomainObject >> targetClassNameDescription [
+	<magritteDescription>
+	^ MAStringDescription new
+		label: 'Target class name';
+		accessor: #targetClassName;
+		beRequired
+]
+
+{ #category : #testing }
+GtLCouldNotCreateClassDomainObject >> wasMovedToMagritteDescriptions [
+	^ true
 ]

@@ -30,8 +30,8 @@ GtLTools class >> gt [
 { #category : #defaults }
 GtLTools class >> gtCodeChange [
 	^ self
-		withAll: {GtLToolForClassesCreation new.
-					GtLToolForClassDefinitionChange new.
+		withAll: {GtLMagritteToolForClassesCreation new.
+					GtLMagritteToolForClassDefinitionChange new.
 					GtLToolForMethodsCompilation new.
 					GtLToolForMethodsRemoval new.
 					GtLToolForClassRemoval new} asOrderedCollection
