@@ -7,7 +7,7 @@ Class {
 	#instVars : [
 		'methods'
 	],
-	#category : #Gt4LlmCore
+	#category : #'Gt4LlmCore-Magritte Objects'
 }
 
 { #category : #views }

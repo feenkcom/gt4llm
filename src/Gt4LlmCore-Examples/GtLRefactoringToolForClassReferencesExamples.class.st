@@ -35,8 +35,11 @@ GtLRefactoringToolForClassReferencesExamples >> classReferencesForUnknownClass [
 	self assert: result isErrorDomainObject.
 	self assert: result objectName equals: 'UnknownClassName'.
 	self
-		assert: result serializeToLlmJsonString
-		equals: '{"errorMessage":"UnknownClassName is not found","missingObjectName":"UnknownClassName"}'.
+		assert: result serializeToLlmJsonObject
+		equals: ((NeoJSONObject new) 
+			at: 'errorMessage' put: 'UnknownClassName is not found'; 
+			at: 'missingObjectName' put: 'UnknownClassName'; 
+			yourself).
 	^ tool
 ]
 

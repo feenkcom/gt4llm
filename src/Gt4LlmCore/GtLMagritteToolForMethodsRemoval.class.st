@@ -4,7 +4,7 @@ Magritte-based tool for removing multiple methods from classes.
 Class {
 	#name : #GtLMagritteToolForMethodsRemoval,
 	#superclass : #GtLAbstractMagritteFunctionTool,
-	#category : #Gt4LlmCore
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }

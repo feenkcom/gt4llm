@@ -13,7 +13,7 @@ GtLMcpServerExamples >> serverRequestWithEntity: anObject [
 { #category : #'as yet unclassified' }
 GtLMcpServerExamples >> serverWithPrompt [
 	<gtExample>
-	| server request response |
+	| server request response messageData |
 	server := self simpleServer.
 
 	server addPrompt: self simpleServerPrompt.
@@ -56,9 +56,15 @@ GtLMcpServerExamples >> serverWithPrompt [
 								asDictionary} asDictionary.
 	response := server handleRequest: request.
 
+	messageData := (((STONJSON fromString: response entity contents) at: 'result' at: 'messages')
+				first at: 'content') first.
+	
 	self
-		assert: (((STONJSON fromString: response entity contents) at: 'result' at: 'messages')
-				first at: 'content')
+		assert: (messageData at: 'type')
+		equals: 'text'.
+		
+		self
+		assert: (((STONJSON fromString: (messageData at: 'text')) at: 'Markdown') at: 'content')		
 		equals: 'hello from prompt'.
 
 	^ server
@@ -209,7 +215,8 @@ GtLMcpServerExamples >> simpleServerPrompt [
 		name: 'Prompt';
 		arguments: {'argument'};
 		description: 'A prompt';
-		promptBlock: [ :arguments | {GtLlmUserMessage new content: (arguments at: 'argument')} ]
+		promptBlock: [ :arguments | {GtLAnthropicUserMessage new 
+			markdown: (arguments at: 'argument')} ]
 ]
 
 { #category : #'as yet unclassified' }
