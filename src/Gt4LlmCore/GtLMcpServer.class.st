@@ -14,7 +14,7 @@ Class {
 	#classVars : [
 		'Current'
 	],
-	#category : 'Gt4LlmCore-Mcp'
+	#category : #'Gt4LlmCore-Mcp'
 }
 
 { #category : #accessing }
@@ -258,6 +258,8 @@ GtLMcpServer >> handleToolsList: aJsonRpc [
 
 { #category : #'as yet unclassified' }
 GtLMcpServer >> initialize [
+	super initialize.
+	
 	port := 0.
 	debug := false.
 	tools := GtLTools new.
