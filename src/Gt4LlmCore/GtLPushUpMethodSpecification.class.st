@@ -5,7 +5,7 @@ Class {
 		'targetClassName',
 		'selectors'
 	],
-	#category : #'Gt4LlmCore-Formats'
+	#category : 'Gt4LlmCore-Formats'
 }
 
 { #category : #testing }

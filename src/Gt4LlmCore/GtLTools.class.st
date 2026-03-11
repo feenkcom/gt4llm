@@ -3,7 +3,7 @@ Class {
 	#superclass : #Object,
 	#traits : 'TGtGroupWithItems',
 	#classTraits : 'TGtGroupWithItems classTrait',
-	#category : #'Gt4LlmCore-Tools'
+	#category : 'Gt4LlmCore-Tools'
 }
 
 { #category : #defaults }
@@ -30,11 +30,11 @@ GtLTools class >> gt [
 { #category : #defaults }
 GtLTools class >> gtCodeChange [
 	^ self
-		withAll: {GtLToolForClassesCreation new.
-					GtLToolForClassDefinitionChange new.
-					GtLToolForMethodsCompilation new.
-					GtLToolForMethodsRemoval new.
-					GtLToolForClassRemoval new} asOrderedCollection
+		withAll: {GtLMagritteToolForClassesCreation new.
+					GtLMagritteToolForClassDefinitionChange new.
+					GtLMagritteToolForMethodsCompilation new.
+					GtLMagritteToolForMethodsRemoval new.
+					GtLMagritteToolForClassRemoval new} asOrderedCollection
 ]
 
 { #category : #defaults }
@@ -78,17 +78,17 @@ GtLTools class >> leChange [
 ]
 
 { #category : #defaults }
+GtLTools class >> lepiter [
+	^ self leSearch
+		, self leChange
+]
+
+{ #category : #defaults }
 GtLTools class >> leSearch [
 	^ self
 		withAll: {GtLToolForLepiterKnowledgeBases new.
 				GtLToolForSearchForLepiterPages new.
 				GtLToolForLepiterPageContents new.} asOrderedCollection
-]
-
-{ #category : #defaults }
-GtLTools class >> lepiter [
-	^ self leSearch
-		, self leChange
 ]
 
 { #category : #defaults }

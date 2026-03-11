@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'testCaseWithResult'
 	],
-	#category : #'Gt4LlmCore-Domain Objects'
+	#category : 'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #'gt - extensions' }
@@ -116,7 +116,7 @@ GtLTestCaseWithResultDomainObject >> result [
 { #category : #'api - serializing' }
 GtLTestCaseWithResultDomainObject >> serializeToAnthropicResponseOutput [
 	^ super serializeToAnthropicResponseOutput
-		, (self serializeToOpenAIResponseImages collect: [ :anPrimitiveImage |
+		, (self serializeToLlmResponseImages collect: [ :anPrimitiveImage |
 				anPrimitiveImage serializeToAnthropicResponseOutput ]).
 ]
 
@@ -145,6 +145,13 @@ GtLTestCaseWithResultDomainObject >> serializeToLlmJsonObject [
 ]
 
 { #category : #'api - serializing' }
+GtLTestCaseWithResultDomainObject >> serializeToLlmResponseImages [
+	^ (self isErrorResult or: [ self isFailureResult ])
+		ifFalse: [ #() ]
+		ifTrue: [ self result exception serializeToLlmResponseImages ]. 
+]
+
+{ #category : #'api - serializing' }
 GtLTestCaseWithResultDomainObject >> serializeToOpenAIResponseImages [
 	^ (self isErrorResult or: [ self isFailureResult ])
 		ifFalse: [ #() ]
@@ -154,7 +161,7 @@ GtLTestCaseWithResultDomainObject >> serializeToOpenAIResponseImages [
 { #category : #'api - serializing' }
 GtLTestCaseWithResultDomainObject >> serializeToOpenAIResponseOutput [
 	^ super serializeToOpenAIResponseOutput
-		, (self serializeToOpenAIResponseImages collect: [ :anPrimitiveImage |
+		, (self serializeToLlmResponseImages collect: [ :anPrimitiveImage |
 				anPrimitiveImage serializeToOpenAIResponseOutput ])
 ]
 

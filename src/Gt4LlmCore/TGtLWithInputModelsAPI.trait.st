@@ -1,6 +1,6 @@
 Trait {
 	#name : #TGtLWithInputModelsAPI,
-	#category : #'Gt4LlmCore-Core'
+	#category : 'Gt4LlmCore-Core'
 }
 
 { #category : #'api - message' }

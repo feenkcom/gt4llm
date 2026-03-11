@@ -7,14 +7,15 @@ Class {
 		'viewMethodSourceCode',
 		'phlowViewForm'
 	],
-	#category : #'Gt4LlmCore-Domain Objects'
+	#category : 'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #'instance creation' }
 GtLPhlowViewDomainObject class >> phlowView: aPhlowView viewMethodClassName: aClassName viewMethodSourceCode: aSourceCode [
-	| rootElement form |
+	| form |
 	aPhlowView
 		asElementDo: [ :anElement | 
+			| rootElement |
 			rootElement := BlScripter new
 					element: anElement;
 					extent: 1600 @ 1200;
@@ -23,7 +24,7 @@ GtLPhlowViewDomainObject class >> phlowView: aPhlowView viewMethodClassName: aCl
 					element: rootElement;
 					doExport: [ :aCanvas | aCanvas asForm ] ].
 
-	^ self new
+	^self new
 		phlowView: aPhlowView;
 		phlowViewForm: form;
 		viewMethodClassName: aClassName;
@@ -79,7 +80,7 @@ GtLPhlowViewDomainObject >> phlowViewForm: aForm [
 { #category : #'api - serializing' }
 GtLPhlowViewDomainObject >> serializeToAnthropicResponseOutput [
 	^ super serializeToAnthropicResponseOutput
-		, (self serializeToOpenAIResponseImages collect: [ :anPrimitiveImage |
+		, (self serializeToLlmResponseImages collect: [ :anPrimitiveImage |
 				anPrimitiveImage serializeToAnthropicResponseOutput ]).
 ]
 
@@ -101,16 +102,25 @@ GtLPhlowViewDomainObject >> serializeToLlmJsonObject [
 ]
 
 { #category : #'api - serializing' }
+GtLPhlowViewDomainObject >> serializeToLlmResponseImages [
+	^ {GtLPrimitiveImageData
+			png: (ByteArray
+					streamContents: [ :out | 
+						PNGReadWriter putForm: phlowViewForm onStream: out ])}
+]
+
+{ #category : #'api - serializing' }
 GtLPhlowViewDomainObject >> serializeToOpenAIResponseImages [
 	^ {GtLPrimitiveImageData
 			png: (ByteArray
-					streamContents: [ :out | PNGReadWriter putForm: phlowViewForm onStream: out ])}
+					streamContents: [ :out | 
+						PNGReadWriter putForm: phlowViewForm onStream: out ])}
 ]
 
 { #category : #'api - serializing' }
 GtLPhlowViewDomainObject >> serializeToOpenAIResponseOutput [
 	^ super serializeToOpenAIResponseOutput
-		, (self serializeToOpenAIResponseImages collect: [ :anPrimitiveImage |
+		, (self serializeToLlmResponseImages collect: [ :anPrimitiveImage |
 				anPrimitiveImage serializeToOpenAIResponseOutput ])
 ]
 
