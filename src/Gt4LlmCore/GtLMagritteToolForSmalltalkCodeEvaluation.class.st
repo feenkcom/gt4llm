@@ -14,7 +14,7 @@ GtLMagritteToolForSmalltalkCodeEvaluation >> bindingsDescription [
 		label: 'Bindings';
 		accessor: #bindings;
 		classes: { GtLSmalltalkCodeEvaluationBinding };
-		beRequired
+		beOptional
 ]
 
 { #category : #magritte }

@@ -154,6 +154,37 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeSimpleDoIt [
 ]
 
 { #category : #examples }
+GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeSimpleDoItWithNoBindingKey [
+	<gtExample>
+	| objectStorage tool call result model |
+	objectStorage := GtLObjectStorage new.
+	tool := GtLMagritteToolForSmalltalkCodeEvaluation new.
+	call := GtLFunctionToolCall new.
+	call rawArguments: {
+		'code' -> '1 + 2'.
+	} asDictionary.
+	result := tool
+		performToolCall: call
+		inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
+	
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GtLMagritteBasedModel).
+	
+	model := result model.
+	self assert: (model isKindOf: GtLSmalltalkCodeEvaluationResult).
+	self assert: model object equals: 3.
+	self assert: model code equals: '1 + 2'.
+	self assert: model objectValue objectClassName equals: 'SmallInteger'.
+	self assert: model objectValue objectPrintString equals: '3'.
+	self assert: model objectId isNotEmpty.
+	
+	self assert: objectStorage objectCount equals: 1.
+	self assert: (objectStorage objectAt: objectStorage objectIds first) equals: 3.
+	
+	^ call
+]
+
+{ #category : #examples }
 GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeSimpleDoItWithoutObjectStorage [
 	<gtExample>
 	| tool call result model |
