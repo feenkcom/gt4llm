@@ -6,7 +6,7 @@ Class {
 		'protocolName',
 		'sourceCode'
 	],
-	#category : #'Gt4LlmCore-Domain Objects'
+	#category : 'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #magritte }
@@ -52,8 +52,13 @@ GtLMethodCompilationExceptionDomainObject >> protocolNameDescription [
 { #category : #serialization }
 GtLMethodCompilationExceptionDomainObject >> serializeToLlmJsonObject [
 	"Return a JSON dictionary that represents the domain object."
-	
-	^ GtMagritteJSONDataExporter exportObject: self.
+
+	<return: #NeoJSONObject>
+	^ super serializeToLlmJsonObject
+		at: #methodClass put: self targetClass name asString;
+		at: #methodProtocol put: self protocolName asString;
+		at: #sourceCode put: self sourceCode;
+		yourself
 ]
 
 { #category : #accessing }
@@ -107,9 +112,4 @@ GtLMethodCompilationExceptionDomainObject >> targetClassNameDescription [
 		accessor: #targetClass;
 		name: #methodClass;
 		beRequired
-]
-
-{ #category : #testing }
-GtLMethodCompilationExceptionDomainObject >> wasMovedToMagritteDescriptions [
-	^ true
 ]

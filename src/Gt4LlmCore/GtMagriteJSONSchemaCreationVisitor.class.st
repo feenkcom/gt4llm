@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'currentSchema'
 	],
-	#category : #'Gt4LlmCore-Core'
+	#category : 'Gt4LlmCore-Core'
 }
 
 { #category : #accessing }

@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLValueSerializer,
 	#superclass : #Object,
-	#category : #'Gt4LlmCore-Support'
+	#category : 'Gt4LlmCore-Support'
 }
 
 { #category : #schema }
@@ -66,6 +66,21 @@ GtLValueSerializer >> serializeClass: aClass [
 		at: 'allClassMethods'
 			put: (aClass class methods asArray collect: [ :aMethod | aMethod selector ]);
 		yourself
+]
+
+{ #category : #'as yet unclassified' }
+GtLValueSerializer >> serializeException: anException [
+	^NeoJSONObject new
+		at: #errorMessage put: anException description;
+		at: #errorClass put: anException className;
+		at: #stackTrace put: (anException signalerContext
+			ifNotNil: [ :ctx | 
+				String lf join: ((ctx stackOfSize: 30) 
+					collect: [ :each | each gtDisplayString]) ]
+			ifNil: [ | str | 
+				str := anException	 stackString ifNil: [''].
+				str takeFirst: 1000 ]);
+		yourself 
 ]
 
 { #category : #serialization }
