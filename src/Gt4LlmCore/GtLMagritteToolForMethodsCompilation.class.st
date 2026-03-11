@@ -4,7 +4,7 @@ Magritte-based tool for compiling multiple methods across classes.
 Class {
 	#name : #GtLMagritteToolForMethodsCompilation,
 	#superclass : #GtLAbstractMagritteFunctionTool,
-	#category : 'Gt4LlmCore-Tools'
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }

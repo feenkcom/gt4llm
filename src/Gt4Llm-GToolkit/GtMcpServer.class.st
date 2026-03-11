@@ -244,6 +244,7 @@ GtMcpServer >> handleToolsList: _ [
 
 { #category : #'as yet unclassified' }
 GtMcpServer >> initialize [
+	super initialize.
 	port := 0.
 	debug := false.
 	tools := GtLlmToolsGroup new.

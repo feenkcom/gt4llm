@@ -1,24 +1,8 @@
 Class {
 	#name : #GtLToolForObjectStorageListExamples,
 	#superclass : #Object,
-	#category : 'Gt4LlmCore-Examples-Tools'
+	#category : #'Gt4LlmCore-Examples-Tools'
 }
-
-{ #category : #examples }
-GtLToolForObjectStorageListExamples >> listObjectsWithoutStorage [
-	<gtExample>
-	| tool call result model |
-	tool := GtLToolForObjectStorageList new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: Dictionary new.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteBasedModel).
-	model := result model.
-	self assert: model isErrorDomainObject.
-	self assert: model missingModelName equals: 'objectStorage'.
-	^ call
-]
 
 { #category : #examples }
 GtLToolForObjectStorageListExamples >> listObjectsWithStorage [
@@ -38,5 +22,21 @@ GtLToolForObjectStorageListExamples >> listObjectsWithStorage [
 	model := result model.
 	self assert: model items size equals: 2.
 	self assert: (model items collect: #objectValue) asSet equals: (Set with: 'One' with: 2).
+	^ call
+]
+
+{ #category : #examples }
+GtLToolForObjectStorageListExamples >> listObjectsWithoutStorage [
+	<gtExample>
+	| tool call result model |
+	tool := GtLToolForObjectStorageList new.
+	call := GtLFunctionToolCall new.
+	call rawArguments: Dictionary new.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GtLMagritteBasedModel).
+	model := result model.
+	self assert: model isErrorDomainObject.
+	self assert: model missingModelName equals: 'objectStorage'.
 	^ call
 ]

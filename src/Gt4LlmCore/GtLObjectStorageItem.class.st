@@ -5,7 +5,7 @@ Class {
 		'objectId',
 		'objectValue'
 	],
-	#category : 'Gt4LlmCore-Magritte Objects'
+	#category : #'Gt4LlmCore-Magritte Objects'
 }
 
 { #category : #accessing }
