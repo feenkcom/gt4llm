@@ -13,7 +13,7 @@ GtLMcpServerExamples >> serverRequestWithEntity: anObject [
 { #category : #'as yet unclassified' }
 GtLMcpServerExamples >> serverWithPrompt [
 	<gtExample>
-	| server request response |
+	| server request response messageData |
 	server := self simpleServer.
 
 	server addPrompt: self simpleServerPrompt.
@@ -56,16 +56,16 @@ GtLMcpServerExamples >> serverWithPrompt [
 								asDictionary} asDictionary.
 	response := server handleRequest: request.
 
+	messageData := (((STONJSON fromString: response entity contents) at: 'result' at: 'messages')
+				first at: 'content') first.
+	
 	self
-		assert: (((STONJSON fromString: response entity contents) at: 'result' at: 'messages')
-				first at: 'content')
-		equals: ((Array with: ((Dictionary new) 
-			at: 'type' put: 'text';
-			at:'text' put: '{
-	"Markdown" : {
-		"content" : "hello from prompt"
-	}
-}'; yourself))).
+		assert: (messageData at: 'type')
+		equals: 'text'.
+		
+		self
+		assert: (((STONJSON fromString: (messageData at: 'text')) at: 'Markdown') at: 'content')		
+		equals: 'hello from prompt'.
 
 	^ server
 ]
