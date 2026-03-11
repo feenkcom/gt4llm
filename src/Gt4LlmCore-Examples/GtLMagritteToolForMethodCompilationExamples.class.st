@@ -172,8 +172,8 @@ GtLMagritteToolForMethodCompilationExamples >> compileMethodWithSyntaxError [
 		} asDictionary.
 		result := tool performToolCall: call.
 		self assert: call tool == tool.
-		self assert: (result isKindOf: GtLMagritteBasedModel).
-		model := result model.
+		self assert: (result isKindOf: GtLMethodCompilationExceptionDomainObject).
+		model := result.
 		self assert: model isErrorDomainObject.
 		self assert: (model description beginsWith: 'Syntax error').
 		self assert: (targetClass includesSelector: selector) not

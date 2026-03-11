@@ -68,6 +68,21 @@ GtLValueSerializer >> serializeClass: aClass [
 		yourself
 ]
 
+{ #category : #'as yet unclassified' }
+GtLValueSerializer >> serializeException: anException [
+	^NeoJSONObject new
+		at: #errorMessage put: anException description;
+		at: #errorClass put: anException className;
+		at: #stackTrace put: (anException signalerContext
+			ifNotNil: [ :ctx | 
+				String lf join: ((ctx stackOfSize: 30) 
+					collect: [ :each | each gtDisplayString]) ]
+			ifNil: [ | str | 
+				str := anException	 stackString ifNil: [''].
+				str takeFirst: 1000 ]);
+		yourself 
+]
+
 { #category : #serialization }
 GtLValueSerializer >> serializeValue: aValue [
 	^ {'class' -> aValue class name asString.

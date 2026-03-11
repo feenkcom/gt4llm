@@ -100,13 +100,14 @@ GtLSmalltalkCodeEvaluationExceptionResult >> freeze: anException [
 	| frozenException |
 	frozenException := GtSystemUtility freeze: anException.
 	self exception: frozenException.
-	self errorMessage: ('{1}' format: { frozenException }).
-	self errorClassName: frozenException className.
+	self errorMessage: frozenException  description.
+	self errorClassName: frozenException class name.
 	self stackTrace: (frozenException signalerContext
-		ifNotNil: [ :ctx | String lf join: ((ctx stackOfSize: 30) collect: #gtDisplayString) ]
+		ifNotNil: [ :ctx | String lf join: ((ctx stackOfSize: 30) collect: [ :each | 
+			each gtDisplayString]) ]
 		ifNil: [ | str | 
-			str := frozenException stackString.
-			str first: (1000 min: str size) ]).
+			str := frozenException stackString ifNil: [''].
+			str takeFirst: 1000 ]).
 ]
 
 { #category : #views }
