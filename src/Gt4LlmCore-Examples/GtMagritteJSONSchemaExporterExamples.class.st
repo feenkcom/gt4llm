@@ -273,6 +273,69 @@ GtMagritteJSONSchemaExporterExamples >> expectedSchemaStringForScalarArrayModel 
 }'
 ]
 
+{ #category : #expected }
+GtMagritteJSONSchemaExporterExamples >> expectedSchemaWithForcingAllRequied [
+	^ '{
+	"type" : "object",
+	"properties" : {
+		"flag" : {
+			"type" : "boolean",
+			"description" : "Whether the flag is enabled"
+		}
+	},
+	"required" : [
+		"flag"
+	],
+	"additionalProperties" : false
+}'
+]
+
+{ #category : #expected }
+GtMagritteJSONSchemaExporterExamples >> expectedSchemaWithForcingAllRequired [
+	^ '{
+	"type" : "object",
+	"properties" : {
+		"defaultField" : {
+			"type" : "string"
+		},
+		"optionalField" : {
+			"type" : "string"
+		},
+		"requiredFiel" : {
+			"type" : "string"
+		}
+	},
+	"required" : [
+		"defaultField",
+		"optionalField",
+		"requiredFiel"
+	],
+	"additionalProperties" : false
+}'
+]
+
+{ #category : #expected }
+GtMagritteJSONSchemaExporterExamples >> expectedSchemaWithOptionalFields [
+	^ '{
+	"type" : "object",
+	"properties" : {
+		"defaultField" : {
+			"type" : "string"
+		},
+		"optionalField" : {
+			"type" : "string"
+		},
+		"requiredFiel" : {
+			"type" : "string"
+		}
+	},
+	"required" : [
+		"requiredFiel"
+	],
+	"additionalProperties" : false
+}'
+]
+
 { #category : #generation }
 GtMagritteJSONSchemaExporterExamples >> generateSchemaForBooleanModel [
 	| exporter |
@@ -315,6 +378,21 @@ GtMagritteJSONSchemaExporterExamples >> generateSchemaForMathReasoningWithSingle
 GtMagritteJSONSchemaExporterExamples >> generateSchemaForScalarArrayModel [
 	| exporter |
 	exporter := GtMagritteJSONSchemaExporter forModelClass: GtLDemoScalarArraysModel.
+	^ exporter exportSchema
+]
+
+{ #category : #generation }
+GtMagritteJSONSchemaExporterExamples >> generateSchemaWithForcingAllRequied [
+	| exporter |
+	exporter := GtMagritteJSONSchemaExporter forModelClass: GtLDemoOptionalAndRequiredFields.
+	exporter markAllAsRequired.
+	^ exporter exportSchema
+]
+
+{ #category : #generation }
+GtMagritteJSONSchemaExporterExamples >> generateSchemaWithWithOptionalFields [
+	| exporter |
+	exporter := GtMagritteJSONSchemaExporter forModelClass: GtLDemoOptionalAndRequiredFields.
 	^ exporter exportSchema
 ]
 
@@ -364,4 +442,20 @@ GtMagritteJSONSchemaExporterExamples >> testSchemaGenerationForScalarArrayModel 
 	self
 		assertSchema: self generateSchemaForScalarArrayModel
 		equals: self expectedSchemaStringForScalarArrayModel
+]
+
+{ #category : #examples }
+GtMagritteJSONSchemaExporterExamples >> testSchemaGenerationWithForcingAllRequied [
+	<gtExample>
+	self
+		assertSchema: self generateSchemaWithForcingAllRequied
+		equals: self expectedSchemaWithForcingAllRequired
+]
+
+{ #category : #examples }
+GtMagritteJSONSchemaExporterExamples >> testSchemaGenerationWithOptionalFields [
+	<gtExample>
+	self
+		assertSchema: self generateSchemaWithWithOptionalFields
+		equals: self expectedSchemaWithOptionalFields
 ]

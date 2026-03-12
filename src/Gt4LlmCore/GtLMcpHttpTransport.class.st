@@ -7,7 +7,7 @@ Class {
 		'sessionId',
 		'messages'
 	],
-	#category : 'Gt4LlmCore-Mcp'
+	#category : #'Gt4LlmCore-Mcp'
 }
 
 { #category : #'as yet unclassified' }

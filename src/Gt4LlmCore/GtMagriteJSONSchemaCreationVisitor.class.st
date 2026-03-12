@@ -2,9 +2,10 @@ Class {
 	#name : #GtMagriteJSONSchemaCreationVisitor,
 	#superclass : #MAVisitor,
 	#instVars : [
-		'currentSchema'
+		'currentSchema',
+		'shouldMarkAllAsRequired'
 	],
-	#category : 'Gt4LlmCore-Core'
+	#category : #'Gt4LlmCore-Core'
 }
 
 { #category : #accessing }
@@ -70,6 +71,21 @@ GtMagriteJSONSchemaCreationVisitor >> extractSingleSchemaForClass: aClass [
 	^ self currentSchema
 ]
 
+{ #category : #accessing }
+GtMagriteJSONSchemaCreationVisitor >> markAllAsRequired [
+	shouldMarkAllAsRequired := true
+]
+
+{ #category : #accessing }
+GtMagriteJSONSchemaCreationVisitor >> shouldMarkAllAsRequired [
+	^ shouldMarkAllAsRequired ifNil: [ false ]
+]
+
+{ #category : #accessing }
+GtMagriteJSONSchemaCreationVisitor >> shouldMarkAllAsRequired: aBoolean [
+	shouldMarkAllAsRequired := aBoolean
+]
+
 { #category : #visiting }
 GtMagriteJSONSchemaCreationVisitor >> visitBooleanDescription: aBooleanDescription [
 	| schema |
@@ -129,13 +145,21 @@ GtMagriteJSONSchemaCreationVisitor >> visitPriorityContainer: aContainer [
 				put: self currentSchema ].
 			
 	schema at: 'properties' put: propertiesSchema.
-	schema
-		at: 'required'
-			put: ((aContainer children
-					select: [:aDescription | aDescription isRequired])
+	self shouldMarkAllAsRequired 
+		ifTrue: [
+			schema
+				at: 'required'
+				put: (aContainer children
 					collect: [ :aDescription | aDescription accessor readSelector ]
-					as: NeoJSONArray) sorted;
-		at: 'additionalProperties' put: false.
+					as: NeoJSONArray) sorted] 
+		ifFalse: [
+			schema
+				at: 'required'
+				put: ((aContainer children
+					select: [:aDescription | aDescription isRequired])
+						collect: [ :aDescription | aDescription accessor readSelector ]
+						as: NeoJSONArray) sorted ].
+		schema at: 'additionalProperties' put: false.
 
 	^ currentSchema := schema
 ]

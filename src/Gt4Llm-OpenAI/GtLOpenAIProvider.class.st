@@ -86,7 +86,7 @@ GtLOpenAIProvider >> clientGenerateModelResponse: anInputMessage messages: aColl
 			instructions: anInputMessage completeInstructionString
 			tools: anInputMessage tools
 			andFormat: (anInputMessage hasFormats
-				ifTrue: [ anInputMessage formatDescriptionsJsonSchema ]
+				ifTrue: [ anInputMessage formatDescriptionsJsonSchemaWithAllRequired ]
 				ifFalse: [ nil ])
 			isStreaming: false 
 ]
