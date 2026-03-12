@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'schemaDescriptions'
 	],
-	#category : 'Gt4LlmCore-Core'
+	#category : #'Gt4LlmCore-Core'
 }
 
 { #category : #adding }
@@ -65,8 +65,25 @@ GtLResponseCompositeFormat >> asJsonSchemaDictionary [
 ]
 
 { #category : #'as yet unclassified' }
+GtLResponseCompositeFormat >> asJsonSchemaDictionaryWithAllRequired [
+	^ NeoJSONObject  new 
+			at: 'type' put: 'object';
+			at: 'properties' put: ((schemaDescriptions collect: [ :aSchema | 
+				aSchema name -> aSchema asJsonSchemaDictionaryWithAllRequired ])
+						asDictionary);
+			at: 'required' put: (schemaDescriptions collect: [:aFormat | aFormat name ]);
+			at: 'additionalProperties'  put: false;
+			yourself
+]
+
+{ #category : #'as yet unclassified' }
 GtLResponseCompositeFormat >> formatDescriptionsJsonSchema [
 	^ self asJsonSchemaDictionary
+]
+
+{ #category : #'as yet unclassified' }
+GtLResponseCompositeFormat >> formatDescriptionsJsonSchemaWithAllRequired [
+	^ self asJsonSchemaDictionaryWithAllRequired
 ]
 
 { #category : #views }

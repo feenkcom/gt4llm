@@ -2,9 +2,10 @@ Class {
 	#name : #GtMagritteJSONSchemaExporter,
 	#superclass : #Object,
 	#instVars : [
-		'modelClass'
+		'modelClass',
+		'shouldMarkAllAsRequired'
 	],
-	#category : 'Gt4LlmCore-Core'
+	#category : #'Gt4LlmCore-Core'
 }
 
 { #category : #'instance creation' }
@@ -36,6 +37,7 @@ GtMagritteJSONSchemaExporter >> exportSchemaDataForClass: aClass [
 		magritteDescription.
 	
 	schemaCreationVisitor := GtMagriteJSONSchemaCreationVisitor new.
+	schemaCreationVisitor shouldMarkAllAsRequired: self shouldMarkAllAsRequired.
 	magritteDescription acceptMagritte: schemaCreationVisitor.
 	^ schemaCreationVisitor currentSchema
 ]
@@ -46,6 +48,11 @@ GtMagritteJSONSchemaExporter >> exportSchemaForClass: aClass [
 			json: (self exportSchemaDataForClass: aClass).
 ]
 
+{ #category : #testing }
+GtMagritteJSONSchemaExporter >> markAllAsRequired [
+	shouldMarkAllAsRequired := true
+]
+
 { #category : #accessing }
 GtMagritteJSONSchemaExporter >> modelClass [
 	^ modelClass
@@ -54,4 +61,9 @@ GtMagritteJSONSchemaExporter >> modelClass [
 { #category : #accessing }
 GtMagritteJSONSchemaExporter >> modelClass: aClass [
 	modelClass := aClass
+]
+
+{ #category : #testing }
+GtMagritteJSONSchemaExporter >> shouldMarkAllAsRequired [
+	^ shouldMarkAllAsRequired ifNil: [ false ]
 ]

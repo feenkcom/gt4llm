@@ -10,7 +10,7 @@ Class {
 		'announcer',
 		'formatDescriptions'
 	],
-	#category : 'Gt4LlmCore-Core'
+	#category : #'Gt4LlmCore-Core'
 }
 
 { #category : #accessing }
@@ -181,6 +181,11 @@ GtLChatMessage >> formatDescriptions: aCollection [
 { #category : #accessing }
 GtLChatMessage >> formatDescriptionsJsonSchema [
 	^ formatDescriptions asJsonSchemaDictionary
+]
+
+{ #category : #accessing }
+GtLChatMessage >> formatDescriptionsJsonSchemaWithAllRequired [
+	^ formatDescriptions asJsonSchemaDictionaryWithAllRequired
 ]
 
 { #category : #'gt - extensions' }

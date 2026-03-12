@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'modelClass'
 	],
-	#category : 'Gt4LlmCore-Core'
+	#category : #'Gt4LlmCore-Core'
 }
 
 { #category : #'neo json' }
@@ -25,6 +25,14 @@ GtLResponseMagritteFormat >> appendNeoJsonMappingTo: neoJsonMapper [
 { #category : #accessing }
 GtLResponseMagritteFormat >> asJsonSchemaDictionary [
 	^ self schema raw
+]
+
+{ #category : #accessing }
+GtLResponseMagritteFormat >> asJsonSchemaDictionaryWithAllRequired [
+	| exporter |
+	exporter := GtMagritteJSONSchemaExporter forModelClass: modelClass.
+	exporter markAllAsRequired.
+	^ exporter exportSchema.
 ]
 
 { #category : #accessing }
