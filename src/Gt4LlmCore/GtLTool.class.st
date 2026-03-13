@@ -1,8 +1,21 @@
 Class {
 	#name : #GtLTool,
 	#superclass : #Object,
-	#category : #'Gt4LlmCore-Tools'
+	#classVars : [
+		'ShouldEnableDataViews'
+	],
+	#category : 'Gt4LlmCore-Tools'
 }
+
+{ #category : #accessing }
+GtLTool class >> disableDataViews [
+	ShouldEnableDataViews := false
+]
+
+{ #category : #accessing }
+GtLTool class >> enableDataViews [
+	ShouldEnableDataViews := true
+]
 
 { #category : #accessing }
 GtLTool class >> isAbstract [
@@ -12,6 +25,11 @@ GtLTool class >> isAbstract [
 { #category : #accessing }
 GtLTool class >> serializationProperties [
 	^ {#type -> #type}
+]
+
+{ #category : #accessing }
+GtLTool class >> shouldEnableDataViews [
+	^ShouldEnableDataViews ifNil: [ false ]
 ]
 
 { #category : #visiting }

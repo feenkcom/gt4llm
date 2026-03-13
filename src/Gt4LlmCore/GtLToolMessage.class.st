@@ -7,7 +7,7 @@ Class {
 		'executionState',
 		'requestResponse'
 	],
-	#category : #'Gt4LlmCore-Core'
+	#category : 'Gt4LlmCore-Core'
 }
 
 { #category : #accessing }
@@ -116,6 +116,7 @@ GtLToolMessage >> gtInspectorTargetModels [
 { #category : #views }
 GtLToolMessage >> gtRequestResponseToolCallTreeFor: aView [
 	<gtView>
+	requestResponse ifNil: [ ^aView empty ].
 	^ aView forward
 		title: 'API tool call tree';
 		priority: 20;
@@ -126,6 +127,7 @@ GtLToolMessage >> gtRequestResponseToolCallTreeFor: aView [
 { #category : #views }
 GtLToolMessage >> gtRequestResponseToolResultTreeFor: aView [
 	<gtView>
+	requestResponse ifNil: [ ^aView empty ].
 	^ aView forward
 		title: 'API tool result tree';
 		priority: 21;
@@ -175,7 +177,10 @@ GtLToolMessage >> output [
 
 { #category : #accessing }
 GtLToolMessage >> output: anObject [
-	self assert: [ (anObject isKindOf: GtLDomainObject) or: [anObject isKindOf: GtLWrappedModel] ].
+	self assert: [ 
+		(anObject isKindOf: GtLDomainObject) or: [
+			(anObject isKindOf: GtLWrappedModel) or: [
+				anObject isKindOf: GTLDataViewWrapperModel]] ].
 	output := anObject
 ]
 
