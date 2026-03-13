@@ -99,33 +99,15 @@ GtLNewMessageElement >> initializeAttachButtonElement [
 
 { #category : #'private - updating' }
 GtLNewMessageElement >> initializeConnectionsButtonElement [
-	connectionsButton := BrButton new.
+	connectionsButton := BrLabel new.
 	connectionsButton
 		beSmallSize;
-		aptitude: BrGlamorousButtonWithLabelAptitude new
-				+ (BrGlamorousWithExplicitDropdownAptitude
-						handle: [ BrButton new beSmallSize
-								aptitude: BrGlamorousButtonWithLabelAptitude - BrGlamorousButtonExteriorAptitude;
-								label: self messageViewModel connectionString ]
-						content: [ | aList |
-							aList := BrSimpleList new fitContent
-									id: #'provider-list';
-									items: self messageViewModel connectionRegistry connectableConnections;
-									itemStencil: [ BrLabel new
-											aptitude: BrGlamorousLabelAptitude new
-													+ (BrStyleCommonAptitude new
-															selected: [ :aStyle | aStyle background: BrGlamorousColors selectedListItemColor ];
-															hovered: [ :aStyle | aStyle background: BrGlamorousColors hoveredListItemColor ]);
-											padding: (BlInsets all: 5) ];
-									itemDataBinder: [ :aLabel :anItem | aLabel text: anItem connectionString ];
-									when: BrSelectionChanged
-										do: [ :anEvent | 
-											self messageViewModel
-												provider: (self messageViewModel connectionRegistry connectableConnections
-														at: anEvent indices first) buildProvider.
-											connectionsButton label: self messageViewModel connectionString.
-											aList fireEvent: BrDropdownHideWish new ] ]);
-		label: ''
+		alignCenter;
+		aptitude: BrGlamorousLabelAptitude new;
+		text: '';
+		constraintsDo: [ :c | 
+			c linear vertical alignCenter.
+			c linear horizontal alignLeft ]
 ]
 
 { #category : #initialization }
@@ -249,7 +231,7 @@ GtLNewMessageElement >> unsubscribeFromMessageViewModel [
 
 { #category : #'private - updating' }
 GtLNewMessageElement >> updateConnectionsButton [
-	connectionsButton label: self messageViewModel connectionString
+	connectionsButton text: self messageViewModel connectionString
 ]
 
 { #category : #'private - updating' }
