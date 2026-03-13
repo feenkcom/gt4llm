@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'content'
 	],
-	#category : #'Gt4LlmCore-Formats'
+	#category : 'Gt4LlmCore-Formats'
 }
 
 { #category : #'instance creation' }

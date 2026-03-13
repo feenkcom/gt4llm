@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLAbstractFunctionTool,
 	#superclass : #GtLTool,
-	#category : #'Gt4LlmCore-Tools'
+	#category : 'Gt4LlmCore-Tools'
 }
 
 { #category : #testiung }
@@ -62,13 +62,26 @@ GtLAbstractFunctionTool >> performToolCall: aToolCall [
 
 { #category : #execution }
 GtLAbstractFunctionTool >> performToolCall: aToolCall inContext: anExecutionContext [
-	| result |
+	| domainObject |
 	aToolCall performedByTool: self.
-	result := self 
+	domainObject := self 
 		privatePerformToolCall: aToolCall 
 		inContext: anExecutionContext.
-	aToolCall result: result.
-	^ result
+	
+	"Temporary check to enble the new LLM views if used"
+	self class shouldEnableDataViews ifTrue: [
+		(domainObject llmDataViewsInContext: GtLDataViewContext new)
+			ifNotEmpty: [ :llmViews |
+				| resultObject |
+				resultObject := GTLDataViewWrapperModel new 
+					targetObject:  domainObject;
+					targetDataView:  llmViews.
+				aToolCall result: resultObject.
+
+				^ resultObject	] ].
+		
+	aToolCall result: domainObject.
+	^ domainObject
 ]
 
 { #category : #execution }
