@@ -17,6 +17,11 @@ GtLResponseInvividualFormat >> asJsonSchemaDictionary [
 	^ self subclassResponsibility
 ]
 
+{ #category : #converting }
+GtLResponseInvividualFormat >> asJsonSchemaDictionaryWithAllRequired [ 
+	^ self asJsonSchemaDictionary
+]
+
 { #category : #accessing }
 GtLResponseInvividualFormat >> name [
 	^ name

@@ -183,6 +183,11 @@ GtLChatMessage >> formatDescriptionsJsonSchema [
 	^ formatDescriptions asJsonSchemaDictionary
 ]
 
+{ #category : #accessing }
+GtLChatMessage >> formatDescriptionsJsonSchemaWithAllRequired [
+	^ formatDescriptions asJsonSchemaDictionaryWithAllRequired
+]
+
 { #category : #'gt - extensions' }
 GtLChatMessage >> gtActionInspectFor: anAction [
 	<gtAction>

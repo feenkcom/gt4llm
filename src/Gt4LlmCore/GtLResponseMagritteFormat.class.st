@@ -28,9 +28,22 @@ GtLResponseMagritteFormat >> asJsonSchemaDictionary [
 ]
 
 { #category : #accessing }
+GtLResponseMagritteFormat >> asJsonSchemaDictionaryWithAllRequired [
+	^ self computeSchemaWithAllRequired raw
+]
+
+{ #category : #accessing }
 GtLResponseMagritteFormat >> computeSchema [
 	| exporter |
 	exporter := GtMagritteJSONSchemaExporter forModelClass: modelClass.
+	^ exporter exportSchema.
+]
+
+{ #category : #accessing }
+GtLResponseMagritteFormat >> computeSchemaWithAllRequired [
+	| exporter |
+	exporter := GtMagritteJSONSchemaExporter forModelClass: modelClass.
+	exporter markAllAsRequired.
 	^ exporter exportSchema.
 ]
 
