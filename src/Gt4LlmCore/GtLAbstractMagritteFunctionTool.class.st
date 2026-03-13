@@ -70,6 +70,17 @@ GtLAbstractMagritteFunctionTool >> performToolCall: aToolCall inContext: anExecu
 		privatePerformToolCall: aToolCall 
 		inContext: anExecutionContext.
 		
+	"Temporary check to enble the new LLM views if used"
+	self class shouldEnableDataViews ifTrue: [
+		(domainObject llmDataViewsInContext: GtLDataViewContext new)
+			ifNotEmpty: [ :llmViews |
+				resultObject := GTLDataViewWrapperModel new 
+					targetObject:  domainObject;
+					targetDataView:  llmViews.
+				aToolCall result: resultObject.
+
+				^ resultObject ] ].
+		
 	((domainObject isKindOf: GtLDomainObject) not or: [
 			domainObject wasMovedToMagritteDescriptions ])
 		ifTrue: [

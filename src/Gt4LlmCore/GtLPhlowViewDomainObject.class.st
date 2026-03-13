@@ -62,6 +62,28 @@ GtLPhlowViewDomainObject >> gtLivePhlowViewFor: aView [
 				addChild: viewParent ]
 ]
 
+{ #category : #'llm views' }
+GtLPhlowViewDomainObject >> llmImageViewFor: aView [
+	<gtLlmDataView>
+	^aView imageData
+			title: 'Visual View' ;
+			png: [ByteArray
+				streamContents: [ :out | 
+						PNGReadWriter putForm: phlowViewForm onStream: out ]]
+]
+
+{ #category : #'llm views' }
+GtLPhlowViewDomainObject >> llmRawViewFor: aView [
+	<gtLlmDataView>
+	^aView jsonData: [ 
+			Dictionary new
+				at: #viewTitle put: phlowView title;
+				at: #priority put: phlowView priority;
+				at: #viewMethodClass put: viewMethodClassName;
+				at: #viewMethodSourceCode put: viewMethodSourceCode;
+				yourself  ]
+]
+
 { #category : #accessing }
 GtLPhlowViewDomainObject >> phlowView [
 	^ phlowView
@@ -75,6 +97,18 @@ GtLPhlowViewDomainObject >> phlowView: anObject [
 { #category : #'instance creation' }
 GtLPhlowViewDomainObject >> phlowViewForm: aForm [ 
 	phlowViewForm := aForm
+]
+
+{ #category : #printing }
+GtLPhlowViewDomainObject >> printOn: aStream [
+	super printOn: aStream.
+
+	self phlowView title ifNil: [ ^ self ].
+
+	aStream
+		nextPut: $(;
+		nextPutAll: self phlowView title asString;
+		nextPut: $)
 ]
 
 { #category : #'api - serializing' }
