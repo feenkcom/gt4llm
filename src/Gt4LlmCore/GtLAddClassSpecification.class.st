@@ -8,7 +8,7 @@ Class {
 		'tagName',
 		'superclassName'
 	],
-	#category : 'Gt4LlmCore-Formats'
+	#category : #'Gt4LlmCore-Formats'
 }
 
 { #category : #'as yet unclassified' }
@@ -66,7 +66,8 @@ GtLAddClassSpecification >> newClassNameDescription [
 	<magritteDescription>
 	
 	 ^ MAStringDescription new
-		  accessor: #newClassName
+		  accessor: #newClassName;
+		  beRequired
 ]
 
 { #category : #accessing }
@@ -84,7 +85,8 @@ GtLAddClassSpecification >> packageNameDescription [
 	<magritteDescription>
 	
 	 ^ MAStringDescription new
-		  accessor: #packageName
+		  accessor: #packageName;
+		  beRequired
 ]
 
 { #category : #accessing }
@@ -121,7 +123,8 @@ GtLAddClassSpecification >> superclassNameDescription [
 	<magritteDescription>
 	
 	 ^ MAStringDescription new
-		  accessor: #superclassName
+		  accessor: #superclassName;
+		  beRequired
 ]
 
 { #category : #accessing }

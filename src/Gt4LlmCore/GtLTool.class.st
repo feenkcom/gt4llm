@@ -4,7 +4,7 @@ Class {
 	#classVars : [
 		'ShouldEnableDataViews'
 	],
-	#category : 'Gt4LlmCore-Tools'
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }

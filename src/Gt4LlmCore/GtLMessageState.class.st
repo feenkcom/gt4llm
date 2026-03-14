@@ -7,7 +7,7 @@ Class {
 		'Running',
 		'Skipped'
 	],
-	#category : 'Gt4LlmCore-Core'
+	#category : #'Gt4LlmCore-Core'
 }
 
 { #category : #factory }

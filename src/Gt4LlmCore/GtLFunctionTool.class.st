@@ -7,7 +7,7 @@ Class {
 		'name',
 		'parametersDescription'
 	],
-	#category : 'Gt4LlmCore-Tools'
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #visiting }

@@ -4,7 +4,7 @@ Examples for GtLChatRegistryDropdown using BlScripter.
 Class {
 	#name : #GtLWorldChatRegistryDropdownExamples,
 	#superclass : #Object,
-	#category : 'Gt4LlmCore-UI - Registry'
+	#category : #'Gt4LlmCore-UI - Registry'
 }
 
 { #category : #examples }
