@@ -36,8 +36,9 @@ GtLMethodsCompilationResult >> gtMethodsListFor: aView [
 				BrExpander new
 					vFitContent;
 					hMatchParent;
+					margin: (BlInsets top: 5 left: 0 bottom: 5 right: 5);
 					collapse;
-					aptitude: (BrGlamorousExpanderSubtleAptitude new sidebarExtraPadding: (BlInsets top: 5));
+					aptitude: (GtCoderExpanderAptitude new "sidebarExtraPadding: (BlInsets top: 5)");
 					header: [ BrEditorElement new
 							constraintsDo: [ :c | 
 								c horizontal matchParent.
