@@ -3,12 +3,13 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'objectId',
-		'objectValue'
+		'objectValue',
+		'reason'
 	],
 	#category : #'Gt4LlmCore-Magritte Objects'
 }
 
-{ #category : #accessing }
+{ #category : #'gt views' }
 GtLObjectStorageItem >> gtValueFor: aView [
 	<gtView>
 	<gtLlmView>
@@ -17,7 +18,8 @@ GtLObjectStorageItem >> gtValueFor: aView [
 		priority: 1;
 		items: [ { self } ];
 		column: 'Object Id' text: [ :each | each objectId ];
-		column: 'Object' text: [ :each | each objectValueString ]
+		column: 'Object' text: [ :each | each objectValueString ];
+		column: 'Reason' text: [ :each | each reason ]
 ]
 
 { #category : #accessing }
@@ -67,4 +69,24 @@ GtLObjectStorageItem >> objectValueString [
 	string first: (string size min: 100) ]
 		on: Error
 		do: [ :anError | 'Error printing object' ]
+]
+
+{ #category : #accessing }
+GtLObjectStorageItem >> reason [
+	^ reason
+]
+
+{ #category : #accessing }
+GtLObjectStorageItem >> reason: aString [
+	reason := aString
+]
+
+{ #category : #magritte }
+GtLObjectStorageItem >> reasonDescription [
+	<magritteDescription>
+
+	^ MAStringDescription new
+		label: 'Reason';
+		accessor: #reason;
+		beRequired
 ]
