@@ -10,9 +10,10 @@ Class {
 		'stopButton',
 		'attachButton',
 		'connectionsButton',
-		'toolbarElement'
+		'toolbarElement',
+		'completer'
 	],
-	#category : 'Gt4LlmCore-UI - Elements'
+	#category : #'Gt4LlmCore-UI - Elements'
 }
 
 { #category : #factory }
@@ -127,7 +128,10 @@ GtLNewMessageElement >> initializeContentsElement [
 				description: 'Send message to the OpenAI assistant chat';
 				combination: BlKeyCombination primaryReturn;
 				performBlock: [ :aBrTextEditor | self sendMessageFrom: aBrTextEditor ];
-				yourself)
+				yourself).
+				
+	completer := GtCompletionController on: contentsElement.
+	completer install
 ]
 
 { #category : #initialization }
@@ -244,7 +248,9 @@ GtLNewMessageElement >> updateContents: aBlText [
 GtLNewMessageElement >> updateContentsElement [
 	contentsElement
 		text: messageViewModel contents;
-		styler: messageViewModel styler
+		styler: messageViewModel styler.
+
+	completer strategy: self messageViewModel completionStrategy
 ]
 
 { #category : #'private - updating' }

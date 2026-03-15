@@ -5,9 +5,11 @@ Class {
 		'connectionRegistry',
 		'chat',
 		'files',
-		'contents'
+		'contents',
+		'completionStrategy',
+		'database'
 	],
-	#category : 'Gt4LlmCore-UI - View Models'
+	#category : #'Gt4LlmCore-UI - View Models'
 }
 
 { #category : #visiting }
@@ -29,6 +31,16 @@ GtLNewMessageViewModel >> chat [
 { #category : #'api - initialization' }
 GtLNewMessageViewModel >> chat: aChat [
 	chat := aChat
+]
+
+{ #category : #accessing }
+GtLNewMessageViewModel >> completionStrategy [
+	^ completionStrategy
+]
+
+{ #category : #accessing }
+GtLNewMessageViewModel >> completionStrategy: anObject [
+	completionStrategy := anObject
 ]
 
 { #category : #accessing }
@@ -62,6 +74,17 @@ GtLNewMessageViewModel >> contents: aString source: aSource [
 	self onContentsChangedSource: aSource
 ]
 
+{ #category : #accessing }
+GtLNewMessageViewModel >> database [
+	^ database
+]
+
+{ #category : #accessing }
+GtLNewMessageViewModel >> database: aLeDatabase [
+	database := aLeDatabase.
+	completionStrategy database: database
+]
+
 { #category : #'api - converting' }
 GtLNewMessageViewModel >> elementClass [
 	^ GtLNewMessageElement
@@ -84,6 +107,8 @@ GtLNewMessageViewModel >> initialize [
 	super initialize.
 	contents := ''.
 	files := OrderedCollection new.
+	database := LeDatabasesRegistry  defaultLogicalDatabase.
+	completionStrategy := LeCompletionStrategy new database: database.
 ]
 
 { #category : #'private - event handling' }

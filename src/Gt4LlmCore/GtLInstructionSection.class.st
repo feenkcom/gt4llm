@@ -7,7 +7,7 @@ Class {
 		'headerLevel',
 		'autoHeaderLevel'
 	],
-	#category : 'Gt4LlmCore-Instructions'
+	#category : #'Gt4LlmCore-Instructions'
 }
 
 { #category : #'as yet unclassified' }
