@@ -31,9 +31,23 @@ GtLMethodsCompilationResult >> gtMethodsListFor: aView [
 		title: 'Method list';
 		priority: 2;
 		items: [ methods ];
-		column: 'Class' text: [ :each | each newCompiledMethod gtDisplayString ];
+		column: 'Class'
+			stencil: [ :each | 
+				BrExpander new
+					vFitContent;
+					hMatchParent;
+					collapse;
+					aptitude: (BrGlamorousExpanderSubtleAptitude new sidebarExtraPadding: (BlInsets top: 5));
+					header: [ BrEditorElement new
+							constraintsDo: [ :c | 
+								c horizontal matchParent.
+								c vertical fitContent ];
+							editor: (BrTextEditorModel new
+									text: each newCompiledMethod gtDisplayString asRopedText glamorousRegularFont) ];
+					content: [ each asDiffElement ] ];
 		column: 'State'
 			text: [ :each | each hasOldSourceCode ifTrue: [ 'Modified' ] ifFalse: [ 'New' ] ]
+			width: 60
 ]
 
 { #category : #accessing }
