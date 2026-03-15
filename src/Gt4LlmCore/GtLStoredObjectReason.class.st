@@ -13,8 +13,8 @@ GtLStoredObjectReason >> asReasonString [
 ]
 
 { #category : #printing }
-GtLStoredObjectReason >> gtDisplayString [
-	^ self asReasonString
+GtLStoredObjectReason >> gtDisplayOn: aStream [
+	aStream nextPutAll: self asReasonString
 ]
 
 { #category : #printing }
