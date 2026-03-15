@@ -116,7 +116,7 @@ GtLClassModificationResult >> gtDetailsFor: aView [
 	<gtLlmView>
 	^ aView columnedList
 		title: 'Details';
-		priority: 1;
+		priority: 2;
 		items: [ {
 			{ 'Class'. self currentClassName }.
 			{ 'Superclass'. self superclassName }.
@@ -138,7 +138,7 @@ GtLClassModificationResult >> gtDiffFor: aView [
 	(self originalClass isNil or: [ self updatedClass isNil ]) ifTrue: [ ^ aView empty ].
 	^ aView diff
 		title: 'Diff';
-		priority: 2;
+		priority: 1;
 		from: [ self originalClass asDefinitionString ];
 		to: [ self updatedClass asDefinitionString ]
 ]

@@ -56,30 +56,24 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeReturningObjectWithS
 	self assert: model object count equals: 42.
 	self assert: model object items equals: #('apple' 'banana' 'cherry').
 	
-	"Verify the serialized object value"
 	objectValue := model objectValue.
 	self assert: objectValue objectClassName equals: 'GtLSerializedObjectValueTestObject'.
 	self assert: objectValue superclassName equals: 'Object'.
 	self assert: objectValue packageName equals: 'Gt4LlmCore-Examples'.
 	self assert: (objectValue objectPrintString includesSubstring: 'TestObject').
-	
-	"Verify views are captured"
 	self assert: objectValue phlowViews isNotEmpty.
 	self assert: (objectValue phlowViews anySatisfy: [ :v | v title = 'Details' ]).
 	self assert: (objectValue phlowViews anySatisfy: [ :v | v title = 'Items' ]).
-	
-	"Verify slots are captured"
 	self assert: objectValue allInstanceSlots size equals: 3.
 	self assert: (objectValue allInstanceSlots anySatisfy: [ :s | 
 		s name = 'name' and: [ s valueClassName = 'ByteString' ] ]).
 	self assert: (objectValue allInstanceSlots anySatisfy: [ :s | 
 		s name = 'count' and: [ s valuePrintString = '42' ] ]).
-	
-	"Verify object was stored"
 	self assert: model objectId isNotEmpty.
 	self assert: (objectStorage objectAt: model objectId) == model object.
 	storedResult := objectStorage storedObjectAt: model objectId.
-	self assert: storedResult reason equals: 'GtLSerializedObjectValueTestObject exampleInstance'.
+	self assert: storedResult reason class equals: GtLStoredObjectCodeExecutionReason.
+	self assert: storedResult reason asReasonString equals: 'GtLSerializedObjectValueTestObject exampleInstance'.
 	
 	^ call
 ]
@@ -148,11 +142,11 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeSimpleDoIt [
 	self assert: model objectValue objectClassName equals: 'SmallInteger'.
 	self assert: model objectValue objectPrintString equals: '3'.
 	self assert: model objectId isNotEmpty.
-	
 	self assert: objectStorage objectCount equals: 1.
 	self assert: (objectStorage objectAt: objectStorage objectIds first) equals: 3.
 	storedResult := objectStorage storedObjectAt: model objectId.
-	self assert: storedResult reason equals: '1 + 2'.
+	self assert: storedResult reason class equals: GtLStoredObjectCodeExecutionReason.
+	self assert: storedResult reason asReasonString equals: '1 + 2'.
 	
 	^ call
 ]
@@ -181,11 +175,11 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeSimpleDoItWithNoBind
 	self assert: model objectValue objectClassName equals: 'SmallInteger'.
 	self assert: model objectValue objectPrintString equals: '3'.
 	self assert: model objectId isNotEmpty.
-	
 	self assert: objectStorage objectCount equals: 1.
 	self assert: (objectStorage objectAt: objectStorage objectIds first) equals: 3.
 	storedResult := objectStorage storedObjectAt: model objectId.
-	self assert: storedResult reason equals: '1 + 2'.
+	self assert: storedResult reason class equals: GtLStoredObjectCodeExecutionReason.
+	self assert: storedResult reason asReasonString equals: '1 + 2'.
 	
 	^ call
 ]
@@ -393,7 +387,7 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithBindings [
 	<gtExample>
 	| objectStorage tool call result model bindingObjectId resultObjectId storedResult |
 	objectStorage := GtLObjectStorage new.
-	bindingObjectId := objectStorage addNewObject: 40 reason: 'binding value'.
+	bindingObjectId := objectStorage addNewObject: 40.
 	
 	tool := GtLMagritteToolForSmalltalkCodeEvaluation new.
 	call := GtLFunctionToolCall new.
@@ -420,7 +414,8 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithBindings [
 	self assert: (objectStorage objectAt: bindingObjectId) equals: 40.
 	self assert: (objectStorage objectAt: resultObjectId) equals: 42.
 	storedResult := objectStorage storedObjectAt: resultObjectId.
-	self assert: storedResult reason equals: 'value + 2'.
+	self assert: storedResult reason class equals: GtLStoredObjectCodeExecutionReason.
+	self assert: storedResult reason asReasonString equals: 'value + 2'.
 	
 	^ call
 ]
