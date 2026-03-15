@@ -67,11 +67,12 @@ GtLErrorMessage >> gtExceptionStackFor: aView [
 	<gtView>
 	<gtLlmView>
 	self exception ifNil: [ ^ aView empty ].
-	
+
 	^ aView forward
 		title: 'Exception stack';
 		object: [ self exception ];
-		view: #gtLiveFor:
+		view: #gtLiveFor:;
+		actionButtonIcon: BrGlamorousVectorIcons debug action: [ [ self exception debug ] fork ]
 ]
 
 { #category : #initialization }
