@@ -14,7 +14,7 @@ GtLToolForObjectStorageList >> name [
 	^ 'listObjectStorage'
 ]
 
-{ #category : #accessing }
+{ #category : #private }
 GtLToolForObjectStorageList >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| items |
 	
@@ -24,9 +24,12 @@ GtLToolForObjectStorageList >> privatePerformToolCall: aToolCall inContext: anEx
 			
 	items := anExecutionContext objectStorage objectIds
 		collect: [ :eachId |
+			| storedObject |
+			storedObject := anExecutionContext objectStorage storedObjectAt: eachId.
 			GtLObjectStorageItem new
 				objectId: eachId;
-				objectValue: (anExecutionContext objectStorage objectAt: eachId);
+				objectValue: storedObject value;
+				reason: storedObject reason;
 				yourself ].
 				
 	^ GtLObjectStorageItems new

@@ -63,10 +63,10 @@ GtLToolForExampleMethodRun >> privatePerformToolCall: aToolCall inContext: anExe
 			^ GtLExceptionDomainObject new
 				freeze: ex;
 				description: ('Example execution failed: {1}' format: {method name}) ].
-
 	objectId := anExecutionContext objectStorage ifNotNil: [ :aStorage |
-		aStorage addNewObject: exampleResult returnValue ].
-	
+		aStorage
+			addNewObject: exampleResult returnValue
+			reason: (GtLStoredObjectExampleMethodReason toolCall: aToolCall) ].
 	^ GtLExampleWithResultDomainObject new
 		exampleWithResult: example;
 		objectId: objectId

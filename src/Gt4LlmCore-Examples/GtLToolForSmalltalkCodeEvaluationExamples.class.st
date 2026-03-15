@@ -7,7 +7,7 @@ Class {
 { #category : #examples }
 GtLToolForSmalltalkCodeEvaluationExamples >> executeSimpleDoIt [
 	<gtExample>
-	| objectStorage tool call result expected |
+	| objectStorage tool call result expected storedResult |
 	
 	objectStorage := GtLObjectStorage new.
 	
@@ -33,6 +33,9 @@ GtLToolForSmalltalkCodeEvaluationExamples >> executeSimpleDoIt [
 	self 
 		assert: (objectStorage objectAt: objectStorage objectIds first)
 		equals: 3.
+	storedResult := objectStorage storedObjectAt: objectStorage objectIds first.
+	self assert: storedResult reason class equals: GtLStoredObjectCodeExecutionReason.
+	self assert: storedResult reason asReasonString equals: '1 + 2'.
 	
 	expected := NeoJSONObject new
 		at: 'code' put: '1 + 2';
@@ -83,7 +86,7 @@ GtLToolForSmalltalkCodeEvaluationExamples >> executeSimpleDoItWithoutObjectStora
 { #category : #examples }
 GtLToolForSmalltalkCodeEvaluationExamples >> executeWithBindings [
 	<gtExample>
-	| objectStorage tool call result bindingObjectId resultObjectId |
+	| objectStorage tool call result bindingObjectId resultObjectId storedResult |
 	objectStorage := GtLObjectStorage new.
 	bindingObjectId := objectStorage addNewObject: 40.
 	tool := GtLToolForSmalltalkCodeEvaluation new.
@@ -111,6 +114,9 @@ GtLToolForSmalltalkCodeEvaluationExamples >> executeWithBindings [
 	self assert: resultObjectId ~= bindingObjectId.
 	self assert: (objectStorage objectAt: bindingObjectId) equals: 40.
 	self assert: (objectStorage objectAt: resultObjectId) equals: 42.
+	storedResult := objectStorage storedObjectAt: resultObjectId.
+	self assert: storedResult reason class equals: GtLStoredObjectCodeExecutionReason.
+	self assert: storedResult reason asReasonString equals: 'value + 2'.
 	^ call
 ]
 
