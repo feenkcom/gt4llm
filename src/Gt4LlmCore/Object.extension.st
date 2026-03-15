@@ -19,7 +19,7 @@ Object >> gtActionObjectChatFor: anAction [
 		ifFalse: [ ^ anAction empty ].
 	chatBlock := [ | c |
 		c := GtL gt.
-		c objectStorage addNewObject: self.
+		c objectStorage addNewObject: self reason: (GtLStoredObjectStringReason text: 'Initial object').
 		c ].
 	^ anAction button
 		icon: BrGlamorousVectorIcons chat;

@@ -109,7 +109,6 @@ GtLMethodCompilationExceptionDomainObject >> targetClassNameDescription [
 	<magritteDescription>
 	^ MAStringDescription new
 		label: 'Target class';
-		accessor: #targetClass;
-		name: #methodClass;
+		accessor: #targetClassName;
 		beRequired
 ]

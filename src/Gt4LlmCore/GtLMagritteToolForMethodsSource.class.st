@@ -26,7 +26,7 @@ Example JSON response:
 ]
 
 { #category : #descriptions }
-GtLMagritteToolForMethodsSource >> methodDescriptors [
+GtLMagritteToolForMethodsSource >> methodDescriptorsDescription [
 	<magritteDescription>
 	
 	 ^ MAToManyRelationDescription new

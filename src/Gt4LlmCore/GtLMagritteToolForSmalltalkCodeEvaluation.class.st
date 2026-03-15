@@ -75,22 +75,17 @@ GtLMagritteToolForSmalltalkCodeEvaluation >> name [
 	^ 'smalltalkCodeEvaluation'
 ]
 
-{ #category : #'tool execution' }
+{ #category : #private }
 GtLMagritteToolForSmalltalkCodeEvaluation >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments code bindings bindingsDictionary object objectId |
 	arguments := aToolCall arguments.
-	
-	"Get the code"
 	code := arguments at: 'code'.
 	(code isNil or: [ code isString and: [ code trimBoth isEmpty ] ]) ifTrue: [ 
 		^ GtLMissingArgumentDomainObject new
 			arguments: arguments;
 			missingArgument: 'code' ].
-	
-	"Get the bindings"
 	bindings := arguments at: 'bindings' ifAbsent: [ #() ].
 	bindingsDictionary := nil.
-	
 	bindings ifNotEmpty: [
 		anExecutionContext objectStorage
 			ifNil: [ ^ GtLMissingInformationDomainObject new
@@ -100,34 +95,25 @@ GtLMagritteToolForSmalltalkCodeEvaluation >> privatePerformToolCall: aToolCall i
 			| bindingName bindingObjectId bindingObject |
 			bindingName := each name.
 			bindingObjectId := each objectId.
-			
-			"Validate objectId is present and not empty"
 			(bindingObjectId isNil or: [ bindingObjectId isEmpty ])
 				ifTrue: [ ^ GtLMissingDomainObject new objectName: (bindingObjectId ifNil: [ 'nil' ]) ].
-			
 			bindingObject := anExecutionContext objectStorage
 				objectAt: bindingObjectId
 				ifPresent: [ :storedObject | storedObject ]
 				ifAbsent: [ ^ GtLMissingDomainObject new objectName: bindingObjectId ].
 			bindingsDictionary at: (bindingName ifNil: [ '' ]) asSymbol put: bindingObject ] ].
-	
-	"Evaluate the code"
 	object := [ | compiler |
 		compiler := OpalCompiler new.
 		bindingsDictionary ifNotNil: [ compiler bindings: bindingsDictionary ].
 		compiler evaluate: code ]
-	on: Error
-	do: [ :ex |
-		^ GtLSmalltalkCodeEvaluationExceptionResult new
-			freeze: ex;
-			whatFailed: 'Error while evaluating smalltalk code';
-			code: code ].
-	
-	"Store the result object"
+		on: Error
+		do: [ :ex |
+			^ GtLSmalltalkCodeEvaluationExceptionResult new
+				freeze: ex;
+				whatFailed: 'Error while evaluating smalltalk code';
+				code: code ].
 	objectId := anExecutionContext objectStorage ifNotNil: [ :aStorage |
-		aStorage addNewObject: object ].
-	
-	"Return the result"
+		aStorage addNewObject: object reason: (GtLStoredObjectCodeExecutionReason toolCall: aToolCall) ].
 	^ GtLSmalltalkCodeEvaluationResult new
 		code: code;
 		object: object;
