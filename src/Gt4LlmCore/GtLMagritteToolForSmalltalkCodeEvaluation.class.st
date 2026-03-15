@@ -75,7 +75,7 @@ GtLMagritteToolForSmalltalkCodeEvaluation >> name [
 	^ 'smalltalkCodeEvaluation'
 ]
 
-{ #category : #'tool execution' }
+{ #category : #private }
 GtLMagritteToolForSmalltalkCodeEvaluation >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments code bindings bindingsDictionary object objectId |
 	arguments := aToolCall arguments.
@@ -125,7 +125,7 @@ GtLMagritteToolForSmalltalkCodeEvaluation >> privatePerformToolCall: aToolCall i
 	
 	"Store the result object"
 	objectId := anExecutionContext objectStorage ifNotNil: [ :aStorage |
-		aStorage addNewObject: object ].
+		aStorage addNewObject: object reason: code ].
 	
 	"Return the result"
 	^ GtLSmalltalkCodeEvaluationResult new
