@@ -49,7 +49,7 @@ GtLStoredObject >> printOn: aStream [
 	reason ifNotNil: [
 		aStream
 			<< ' (';
-			<< reason;
+			<< reason asReasonString;
 			<< ')' ]
 ]
 
@@ -59,8 +59,8 @@ GtLStoredObject >> reason [
 ]
 
 { #category : #accessing }
-GtLStoredObject >> reason: aString [
-	reason := aString
+GtLStoredObject >> reason: aReason [
+	reason := aReason
 ]
 
 { #category : #accessing }
