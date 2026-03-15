@@ -40,12 +40,14 @@ GtLExceptionDomainObject >> gtExceptionStackFor: aView [
 	<gtView>
 	<gtLlmView>
 	exception ifNil: [ ^ aView empty ].
-	
+
 	^ aView forward
 		title: 'Exception stack';
 		priority: 1;
 		object: [ self exception ];
-		view: #gtLiveFor:
+		view: #gtLiveFor:;
+		actionButtonIcon: BrGlamorousVectorIcons debug
+			action: [ [ self exception debug ] fork ]
 ]
 
 { #category : #'api - accessing' }

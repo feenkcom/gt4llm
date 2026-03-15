@@ -72,7 +72,8 @@ GtLErrorMessage >> gtExceptionStackFor: aView [
 		title: 'Exception stack';
 		object: [ self exception ];
 		view: #gtLiveFor:;
-		actionButtonIcon: BrGlamorousVectorIcons debug action: [ [ self exception debug ] fork ]
+		actionButtonIcon: BrGlamorousVectorIcons debug
+			action: [ [ self exception debug ] fork ]
 ]
 
 { #category : #initialization }
