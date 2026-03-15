@@ -13,6 +13,25 @@ Class {
 }
 
 { #category : #views }
+GtLMethodCompilationResult >> asDiffElement [
+	| newSource oldSource |
+	oldSource := self oldMethod ifNil: [ '' ] ifNotNil: #sourceCode.
+	newSource := self newMethod ifNil: [ '' ] ifNotNil: #sourceCode.
+	^ GtDiffElementWithLabelStencil new
+		fromLabelText: 'Old from '
+				, (self newMethod
+						ifNotNil: [ :m | String space , m methodReference methodClass name ]);
+		toLabelText: 'New in '
+				, (self newMethod
+						ifNotNil: [ :m | String space , m methodReference methodClass name ]);
+		change: (GtDiffBuilder
+				computeDifferencesFrom: oldSource
+				to: newSource
+				using: GtSmaCCDiffSplitter forPharo);
+		asElement
+]
+
+{ #category : #views }
 GtLMethodCompilationResult >> gtDetailsFor: aView [
 	<gtView>
 	^ aView columnedList
@@ -31,24 +50,10 @@ GtLMethodCompilationResult >> gtDetailsFor: aView [
 { #category : #views }
 GtLMethodCompilationResult >> gtDiffFor: aView [
 	<gtView>
-	(self oldMethod isNil or: [ self newMethod isNil ]) 
-		ifTrue: [ ^ aView empty ].
-		
 	^ aView explicit
 		title: 'Diff';
 		priority: 5;
-		stencil: [
-			| oldSource newSource |
-			oldSource := self oldMethod sourceCode ifNil: [ '' ].
-			newSource := self newMethod sourceCode ifNil: [ '' ].
-			GtDiffElementWithLabelStencil new
-				fromLabelText: 'Old';
-				toLabelText: 'New';
-				change: (GtDiffBuilder
-					computeDifferencesFrom: oldSource
-					to: newSource
-					using: GtSmaCCDiffSplitter forPharo);
-				asElement ]
+		stencil: [ self asDiffElement ]
 ]
 
 { #category : #testing }
