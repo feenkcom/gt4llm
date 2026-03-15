@@ -7,10 +7,10 @@ Class {
 { #category : #examples }
 GtLToolForObjectStorageListExamples >> listObjectsWithStorage [
 	<gtExample>
-	| objectStorage tool call result model |
+	| objectStorage tool call result model oneItem twoItem |
 	objectStorage := GtLObjectStorage new.
-	objectStorage addNewObject: 'One'.
-	objectStorage addNewObject: 2.
+	objectStorage addNewObject: 'One' reason: 'first string'.
+	objectStorage addNewObject: 2 reason: 'second number'.
 	tool := GtLToolForObjectStorageList new.
 	call := GtLFunctionToolCall new.
 	call rawArguments: Dictionary new.
@@ -22,6 +22,10 @@ GtLToolForObjectStorageListExamples >> listObjectsWithStorage [
 	model := result model.
 	self assert: model items size equals: 2.
 	self assert: (model items collect: #objectValue) asSet equals: (Set with: 'One' with: 2).
+	oneItem := model items detect: [ :each | each objectValue = 'One' ].
+	twoItem := model items detect: [ :each | each objectValue = 2 ].
+	self assert: oneItem reason equals: 'first string'.
+	self assert: twoItem reason equals: 'second number'.
 	^ call
 ]
 

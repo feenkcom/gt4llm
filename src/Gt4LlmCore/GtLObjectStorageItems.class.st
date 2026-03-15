@@ -7,7 +7,7 @@ Class {
 	#category : #'Gt4LlmCore-Magritte Objects'
 }
 
-{ #category : #'gt-view' }
+{ #category : #'gt views' }
 GtLObjectStorageItems >> gtItemsFor: aView [
 	<gtView>
 	<gtLlmView>
@@ -17,7 +17,8 @@ GtLObjectStorageItems >> gtItemsFor: aView [
 		priority: 1;
 		items: [ self items ];
 		column: 'Object Id' text: [ :each | each objectId ];
-		column: 'Object' text: [ :each | each objectValue gtDisplayString ]
+		column: 'Object' text: [ :each | each objectValue gtDisplayString ];
+		column: 'Reason' text: [ :each | each reason ]
 ]
 
 { #category : #accessing }
