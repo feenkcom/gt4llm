@@ -86,7 +86,7 @@ GtLToolForExampleMethodRunExamples >> exampleRunSuccess [
 { #category : #examples }
 GtLToolForExampleMethodRunExamples >> exampleRunSuccessStoresObjectId [
 	<gtExample>
-	| objectStorage tool call result objectId expected |
+	| objectStorage tool call result objectId expected storedObject |
 	objectStorage := GtLObjectStorage new.
 	tool := GtLToolForExampleMethodRun new.
 	call := GtLFunctionToolCall new.
@@ -106,6 +106,8 @@ GtLToolForExampleMethodRunExamples >> exampleRunSuccessStoresObjectId [
 	objectId := result objectId.
 	self assert: objectId isString.
 	self assert: (objectStorage objectAt: objectId) equals: 42.
+	storedObject := objectStorage storedObjectAt: objectId.
+	self assert: storedObject reason equals: 'GtLExampleRunDummyExamples>>#successfulExample'.
 	expected := NeoJSONObject new
 		at: #className put: 'GtLExampleRunDummyExamples';
 		at: #selector put: 'successfulExample';
