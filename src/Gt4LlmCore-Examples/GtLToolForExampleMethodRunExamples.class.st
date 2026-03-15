@@ -107,7 +107,8 @@ GtLToolForExampleMethodRunExamples >> exampleRunSuccessStoresObjectId [
 	self assert: objectId isString.
 	self assert: (objectStorage objectAt: objectId) equals: 42.
 	storedObject := objectStorage storedObjectAt: objectId.
-	self assert: storedObject reason equals: 'GtLExampleRunDummyExamples>>#successfulExample'.
+	self assert: storedObject reason class equals: GtLStoredObjectExampleMethodReason.
+	self assert: storedObject reason asReasonString equals: 'GtLExampleRunDummyExamples>>#successfulExample'.
 	expected := NeoJSONObject new
 		at: #className put: 'GtLExampleRunDummyExamples';
 		at: #selector put: 'successfulExample';

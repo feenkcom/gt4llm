@@ -19,7 +19,7 @@ GtLObjectStorageItem >> gtValueFor: aView [
 		items: [ { self } ];
 		column: 'Object Id' text: [ :each | each objectId ];
 		column: 'Object' text: [ :each | each objectValueString ];
-		column: 'Reason' text: [ :each | each reason ]
+		column: 'Reason' text: [ :each | each reasonString ]
 ]
 
 { #category : #accessing }
@@ -87,6 +87,11 @@ GtLObjectStorageItem >> reasonDescription [
 
 	^ MAStringDescription new
 		label: 'Reason';
-		accessor: #reason;
+		accessor: #reasonString;
 		beRequired
+]
+
+{ #category : #accessing }
+GtLObjectStorageItem >> reasonString [
+	^ reason ifNil: [ '' ] ifNotNil: [ reason asReasonString ]
 ]

@@ -18,7 +18,7 @@ GtLObjectStorageItems >> gtItemsFor: aView [
 		items: [ self items ];
 		column: 'Object Id' text: [ :each | each objectId ];
 		column: 'Object' text: [ :each | each objectValue gtDisplayString ];
-		column: 'Reason' text: [ :each | each reason ]
+		column: 'Reason' text: [ :each | each reasonString ]
 ]
 
 { #category : #accessing }

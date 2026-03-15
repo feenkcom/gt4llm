@@ -11,11 +11,12 @@ Class {
 GtLObjectStorageExamples >> accessingObjectReturnsStoredObject [
 	<gtExample>
 	<return: #GtLStoredObject>
-	| objectStorage object objectId presentObject storedObject |
+	| objectStorage object objectId presentObject storedObject reason |
 	
+	reason := GtLStoredObjectStringReason text: 'for retrieval'.
 	objectStorage := self newObjectStorage.
 	object := Object new.
-	objectId := objectStorage addNewObject: object reason: 'for retrieval'.
+	objectId := objectStorage addNewObject: object reason: reason.
 	
 	self assert: (objectStorage objectAt: objectId) == object.
 	presentObject := objectStorage
@@ -26,7 +27,8 @@ GtLObjectStorageExamples >> accessingObjectReturnsStoredObject [
 	storedObject := objectStorage storedObjectAt: objectId.
 	self assert: storedObject value == object.
 	self assert: storedObject id equals: (UUID fromString36: objectId).
-	self assert: storedObject reason equals: 'for retrieval'.
+	self assert: storedObject reason == reason.
+	self assert: storedObject reason asReasonString equals: 'for retrieval'.
 	
 	^ storedObject
 ]
@@ -51,15 +53,17 @@ GtLObjectStorageExamples >> accessingObjectThatIsMissingReturnsMissing [
 GtLObjectStorageExamples >> addObjectAnswersId [
 	<gtExample>
 	<return: #GtLObjectStorage>
-	| objectStorage objectId storedObject |
+	| objectStorage objectId storedObject reason |
 	
+	reason := GtLStoredObjectStringReason text: 'test object'.
 	objectStorage := self newObjectStorage.
-	objectId := objectStorage addNewObject: Object new reason: 'test object'.
+	objectId := objectStorage addNewObject: Object new reason: reason.
 	storedObject := objectStorage storedObjectAt: objectId.
 	self assert: objectId isString.
 	self assert: (objectStorage includesObjectWithId: objectId).
 	self assert: storedObject id equals: (UUID fromString36: objectId).
-	self assert: storedObject reason equals: 'test object'.
+	self assert: storedObject reason == reason.
+	self assert: storedObject reason asReasonString equals: 'test object'.
 	
 	^ objectStorage
 ]
@@ -68,18 +72,20 @@ GtLObjectStorageExamples >> addObjectAnswersId [
 GtLObjectStorageExamples >> addingSameObjectTwiceAddsTwoObjects [
 	<gtExample>
 	<return: #GtLObjectStorage>
-	| objectStorage object objectIdOne objectIdTwo |
+	| objectStorage object objectIdOne objectIdTwo firstReason secondReason |
 	
+	firstReason := GtLStoredObjectStringReason text: 'first'.
+	secondReason := GtLStoredObjectStringReason text: 'second'.
 	objectStorage := self newObjectStorage.
 	object := Object new.
-	objectIdOne := objectStorage addNewObject: object reason: 'first'.
-	objectIdTwo := objectStorage addNewObject: object reason: 'second'.
+	objectIdOne := objectStorage addNewObject: object reason: firstReason.
+	objectIdTwo := objectStorage addNewObject: object reason: secondReason.
 	
 	self assert: objectStorage objectCount equals: 2.
 	self assert: (objectStorage objectAt: objectIdOne) == object.
 	self assert: (objectStorage objectAt: objectIdTwo) == object.
-	self assert: (objectStorage storedObjectAt: objectIdOne) reason equals: 'first'.
-	self assert: (objectStorage storedObjectAt: objectIdTwo) reason equals: 'second'.
+	self assert: (objectStorage storedObjectAt: objectIdOne) reason == firstReason.
+	self assert: (objectStorage storedObjectAt: objectIdTwo) reason == secondReason.
 	^ objectStorage
 ]
 
@@ -90,7 +96,7 @@ GtLObjectStorageExamples >> clearStorageRemovesObjects [
 	| objectStorage objectId |
 	
 	objectStorage := self newObjectStorage.
-	objectId := objectStorage addNewObject: Object new reason: 'temporary'.
+	objectId := objectStorage addNewObject: Object new reason: (GtLStoredObjectStringReason text: 'temporary').
 	self assert: (objectStorage includesObjectWithId: objectId).
 	
 	objectStorage clearCache.
@@ -119,8 +125,8 @@ GtLObjectStorageExamples >> objectCountTracksAddedObjects [
 	| objectStorage |
 	objectStorage := self newObjectStorage.
 	
-	objectStorage addNewObject: Object new reason: 'first object'.
-	objectStorage addNewObject: Object new reason: 'second object'.
+	objectStorage addNewObject: Object new reason: (GtLStoredObjectStringReason text: 'first object').
+	objectStorage addNewObject: Object new reason: (GtLStoredObjectStringReason text: 'second object').
 	self assert: objectStorage objectCount equals: 2.
 	
 	^ objectStorage
@@ -130,16 +136,18 @@ GtLObjectStorageExamples >> objectCountTracksAddedObjects [
 GtLObjectStorageExamples >> storedObjectIncludesIdValueAndReason [
 	<gtExample>
 	<return: #GtLStoredObject>
-	| objectStorage value objectId storedObject |
+	| objectStorage value objectId storedObject reason |
 	
+	reason := GtLStoredObjectStringReason text: 'kept for later use'.
 	objectStorage := self newObjectStorage.
 	value := Object new.
-	objectId := objectStorage addNewObject: value reason: 'kept for later use'.
+	objectId := objectStorage addNewObject: value reason: reason.
 	storedObject := objectStorage storedObjectAt: objectId.
 	
 	self assert: storedObject id equals: (UUID fromString36: objectId).
 	self assert: storedObject value == value.
-	self assert: storedObject reason equals: 'kept for later use'.
+	self assert: storedObject reason == reason.
+	self assert: storedObject reason asReasonString equals: 'kept for later use'.
 	
 	^ storedObject
 ]

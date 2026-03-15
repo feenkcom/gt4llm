@@ -9,23 +9,21 @@ Class {
 
 { #category : #accessing }
 GtLObjectStorage >> addNewObject: anObject [
-	^ self addNewObject: anObject reason: ''
+	^ self addNewObject: anObject reason: (GtLStoredObjectStringReason text: '')
 ]
 
 { #category : #accessing }
-GtLObjectStorage >> addNewObject: anObject reason: aString [
+GtLObjectStorage >> addNewObject: anObject reason: aReason [
 	"Add an object without checking if it already exists. Return the id of the object"
+
 	| newUUID storedObject |
-	
 	newUUID := self generateNewUUID.
 	storedObject := GtLStoredObject
-		id: newUUID
-		value: anObject
-		reason: aString.
-	objectsByUUID 
-		at: newUUID
-		put: storedObject.
-		
+			id: newUUID
+			value: anObject
+			reason: aReason.
+	objectsByUUID at: newUUID put: storedObject.
+
 	^ newUUID asString36
 ]
 
@@ -54,7 +52,7 @@ GtLObjectStorage >> gtObjectsByUUIDFor: aView [
 		items: [ objectsByUUID values ];
 		column: 'Key' text: [ :each | each id asString36 ] width: 200;
 		column: 'Value' text: [ :each | each value ];
-		column: 'Reason' text: [ :each | each reason ];
+		column: 'Reason' text: [ :each | each reason asReasonString ];
 		send: [ :each | each value ]
 ]
 
