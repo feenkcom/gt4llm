@@ -290,7 +290,11 @@ GtLChat >> gtCopySnippetSerialisationFor: anAction [
 
 { #category : #'as yet unclassified' }
 GtLChat >> gtDisplayOn: stream [
-	messages isEmpty ifFalse: [ stream nextPutAll: messages first gtDisplayString ]
+	stream nextPutAll: 'Chat'.
+	messages isEmpty
+		ifFalse: [ stream
+				nextPutAll: ': ';
+				nextPutAll: messages first gtDisplayString ]
 ]
 
 { #category : #views }

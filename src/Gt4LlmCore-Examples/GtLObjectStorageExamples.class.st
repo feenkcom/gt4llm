@@ -10,12 +10,12 @@ Class {
 { #category : #examples }
 GtLObjectStorageExamples >> accessingObjectReturnsStoredObject [
 	<gtExample>
-	<return: #Object>
-	| objectStorage object objectId presentObject |
+	<return: #GtLStoredObject>
+	| objectStorage object objectId presentObject storedObject |
 	
 	objectStorage := self newObjectStorage.
 	object := Object new.
-	objectId := objectStorage addNewObject: object.
+	objectId := objectStorage addNewObject: object reason: 'for retrieval'.
 	
 	self assert: (objectStorage objectAt: objectId) == object.
 	presentObject := objectStorage
@@ -23,8 +23,12 @@ GtLObjectStorageExamples >> accessingObjectReturnsStoredObject [
 		ifPresent: [ :found | found ]
 		ifAbsent: [ nil ].
 	self assert: presentObject == object.
+	storedObject := objectStorage storedObjectAt: objectId.
+	self assert: storedObject value == object.
+	self assert: storedObject id equals: (UUID fromString36: objectId).
+	self assert: storedObject reason equals: 'for retrieval'.
 	
-	^ object
+	^ storedObject
 ]
 
 { #category : #examples }
@@ -46,13 +50,16 @@ GtLObjectStorageExamples >> accessingObjectThatIsMissingReturnsMissing [
 { #category : #examples }
 GtLObjectStorageExamples >> addObjectAnswersId [
 	<gtExample>
-	<return: #String>
-	| objectStorage objectId |
+	<return: #GtLObjectStorage>
+	| objectStorage objectId storedObject |
 	
 	objectStorage := self newObjectStorage.
-	objectId := objectStorage addNewObject: Object new.
+	objectId := objectStorage addNewObject: Object new reason: 'test object'.
+	storedObject := objectStorage storedObjectAt: objectId.
 	self assert: objectId isString.
 	self assert: (objectStorage includesObjectWithId: objectId).
+	self assert: storedObject id equals: (UUID fromString36: objectId).
+	self assert: storedObject reason equals: 'test object'.
 	
 	^ objectStorage
 ]
@@ -60,35 +67,37 @@ GtLObjectStorageExamples >> addObjectAnswersId [
 { #category : #examples }
 GtLObjectStorageExamples >> addingSameObjectTwiceAddsTwoObjects [
 	<gtExample>
-	<return: #Object>
+	<return: #GtLObjectStorage>
 	| objectStorage object objectIdOne objectIdTwo |
 	
 	objectStorage := self newObjectStorage.
 	object := Object new.
-	objectIdOne := objectStorage addNewObject: object.
-	objectIdTwo := objectStorage addNewObject: object.
+	objectIdOne := objectStorage addNewObject: object reason: 'first'.
+	objectIdTwo := objectStorage addNewObject: object reason: 'second'.
 	
 	self assert: objectStorage objectCount equals: 2.
 	self assert: (objectStorage objectAt: objectIdOne) == object.
 	self assert: (objectStorage objectAt: objectIdTwo) == object.
+	self assert: (objectStorage storedObjectAt: objectIdOne) reason equals: 'first'.
+	self assert: (objectStorage storedObjectAt: objectIdTwo) reason equals: 'second'.
 	^ objectStorage
 ]
 
 { #category : #examples }
 GtLObjectStorageExamples >> clearStorageRemovesObjects [
 	<gtExample>
-	<return: #Number>
+	<return: #GtLObjectStorage>
 	| objectStorage objectId |
 	
 	objectStorage := self newObjectStorage.
-	objectId := objectStorage addNewObject: Object new.
+	objectId := objectStorage addNewObject: Object new reason: 'temporary'.
 	self assert: (objectStorage includesObjectWithId: objectId).
 	
 	objectStorage clearCache.
 	self assert: objectStorage objectCount equals: 0.
 	self assert: (objectStorage includesObjectWithId: objectId) not.
 	
-	^ objectStorage 
+	^ objectStorage
 ]
 
 { #category : #examples }
@@ -106,13 +115,31 @@ GtLObjectStorageExamples >> newObjectStorage [
 { #category : #examples }
 GtLObjectStorageExamples >> objectCountTracksAddedObjects [
 	<gtExample>
-	<return: #Number>
+	<return: #GtLObjectStorage>
 	| objectStorage |
 	objectStorage := self newObjectStorage.
 	
-	objectStorage addNewObject: Object new.
-	objectStorage addNewObject: Object new.
+	objectStorage addNewObject: Object new reason: 'first object'.
+	objectStorage addNewObject: Object new reason: 'second object'.
 	self assert: objectStorage objectCount equals: 2.
 	
-	^ objectStorage 
+	^ objectStorage
+]
+
+{ #category : #examples }
+GtLObjectStorageExamples >> storedObjectIncludesIdValueAndReason [
+	<gtExample>
+	<return: #GtLStoredObject>
+	| objectStorage value objectId storedObject |
+	
+	objectStorage := self newObjectStorage.
+	value := Object new.
+	objectId := objectStorage addNewObject: value reason: 'kept for later use'.
+	storedObject := objectStorage storedObjectAt: objectId.
+	
+	self assert: storedObject id equals: (UUID fromString36: objectId).
+	self assert: storedObject value == value.
+	self assert: storedObject reason equals: 'kept for later use'.
+	
+	^ storedObject
 ]
