@@ -42,31 +42,6 @@ GtLMessageViewModel >> elementClass [
 	^ GtLExpandableMessageElement
 ]
 
-{ #category : #'gt - extensions' }
-GtLMessageViewModel >> gtToolViewMessagesFor: aView [
-	<gtView>
-	<gtLlmView>
-	self toolViewMessages ifEmpty: [ ^ aView empty ].
-
-	^ aView columnedList
-		title: 'Tools';
-		items: [ self toolViewMessages ];
-		column: 'Tool' text: #toolName;
-		column: 'Arguments'
-			text: [ :each | 
-				String
-					streamContents: [ :aStream | 
-						each toolArguments
-							do: [ :anAssoc | 
-								aStream
-									nextPutAll: anAssoc key asString;
-									nextPut: $:;
-									nextPutAll: anAssoc value asString ]
-							separatedBy: [ aStream nextPutAll: ', ' ] ] ];
-		column: 'Description' text: #toolDescription;
-		send: [ :each | each threadMessage ]
-]
-
 { #category : #accessing }
 GtLMessageViewModel >> isExpanded [
 	^ isExpanded ifNil: [ isExpanded := true ]
@@ -146,18 +121,6 @@ GtLMessageViewModel >> toolDescription [
 { #category : #'api - accessing' }
 GtLMessageViewModel >> toolName [
 	^ self message toolName
-]
-
-{ #category : #'api - accessing' }
-GtLMessageViewModel >> toolViewMessages [
-	^ toolViewMessages ifNil: [ #() ]
-]
-
-{ #category : #'api - initialization' }
-GtLMessageViewModel >> toolViewMessages: someMessageViewModels [
-	"Set previous tool view messages."
-
-	toolViewMessages := someMessageViewModels
 ]
 
 { #category : #'private - hooks' }

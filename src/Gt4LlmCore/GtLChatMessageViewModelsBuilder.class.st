@@ -59,7 +59,6 @@ GtLChatMessageViewModelsBuilder >> buildMessages [
 			(aMessage isReplyMessage) ifTrue: [ 
 				stream nextPut: aViewModel.
 				aViewModel userViewMessage: previousUserViewMessage.
-				aViewModel toolViewMessages: previousToolViewMessages.
 				previousUserViewMessage := nil.
 				previousToolViewMessages := OrderedCollection new ] 
 		].
