@@ -113,3 +113,65 @@ GtLToolForObjectViewExamples >> viewContentForUnknownObjectId [
 	self assert: result objectName equals: objectId.
 	^ call
 ]
+
+{ #category : #Examples }
+GtLToolForObjectViewExamples >> viewContentForViewWithExceptionAtCreation [
+	<gtExample>
+	| objectStorage tool call result objectId serialized |
+	objectStorage := GtLObjectStorage new.
+	objectId := objectStorage addNewObject: GtInspectorSampleWithExceptionsInExtensions new.
+	tool := GtLToolForObjectView new.
+	call := GtLFunctionToolCall new.
+	call rawArguments: {
+		'objectId' -> objectId.
+		'viewSelector' -> 'gtViewWithExceptionAtCreationFor:'
+	} asDictionary.
+	result := tool
+		performToolCall: call
+		inContext: (GtLToolExecutionContext new 
+			objectStorage: objectStorage).
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GtLPhlowViewDomainObject).
+	self assert: result isErrorDomainObject not.
+	self assert: result phlowView notNil.
+	self assert: result phlowView title equals: 'Error'.
+	self assert: result viewMethodClassName equals: GtInspectorSampleWithExceptionsInExtensions name.
+	self assert: result viewMethodSourceCode equals: (GtInspectorSampleWithExceptionsInExtensions >> #gtViewWithExceptionAtCreationFor:) sourceCode.
+	serialized := result serializeToLlmJsonObject.
+	self assert: (serialized at: #viewMethodClass) equals: GtInspectorSampleWithExceptionsInExtensions name.
+	self
+		assert: (serialized at: #viewMethodSourceCode)
+		equals: (GtInspectorSampleWithExceptionsInExtensions >> #gtViewWithExceptionAtCreationFor:) sourceCode.
+	^ call
+]
+
+{ #category : #Examples }
+GtLToolForObjectViewExamples >> viewContentForViewWithExceptionInStencil [
+	<gtExample>
+	| objectStorage tool call result objectId serialized |
+	objectStorage := GtLObjectStorage new.
+	objectId := objectStorage addNewObject: GtInspectorSampleWithExceptionsInExtensions new.
+	tool := GtLToolForObjectView new.
+	call := GtLFunctionToolCall new.
+	call rawArguments: {
+		'objectId' -> objectId.
+		'viewSelector' -> 'gtViewWithExceptionInStencilFor:'
+	} asDictionary.
+	result := tool
+		performToolCall: call
+		inContext: (GtLToolExecutionContext new 
+			objectStorage: objectStorage).
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GtLPhlowViewDomainObject).
+	self assert: result isErrorDomainObject not.
+	self assert: result phlowView notNil.
+	self assert: result phlowView title equals: 'With error in stencil'.
+	self assert: result viewMethodClassName equals: GtInspectorSampleWithExceptionsInExtensions name.
+	self assert: result viewMethodSourceCode equals: (GtInspectorSampleWithExceptionsInExtensions >> #gtViewWithExceptionInStencilFor:) sourceCode.
+	serialized := result serializeToLlmJsonObject.
+	self assert: (serialized at: #viewMethodClass) equals: GtInspectorSampleWithExceptionsInExtensions name.
+	self
+		assert: (serialized at: #viewMethodSourceCode)
+		equals: (GtInspectorSampleWithExceptionsInExtensions >> #gtViewWithExceptionInStencilFor:) sourceCode.
+	^ call
+]

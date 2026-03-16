@@ -69,7 +69,7 @@ GtLMagritteToolForFileInformation >> informationForFilePath: aPathString [
 			initializeFromFileReference: fileReference;
 			yourself ]
 		on: Error
-		do: [ :error | GtLExceptionDomainObject new freeze: error ]
+		do: [ :error | GtLExceptionDomainObject freeze: error ]
 ]
 
 { #category : #accessing }

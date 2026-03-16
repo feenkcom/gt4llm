@@ -240,7 +240,7 @@ GtLToolForRemoteExampleMethodsRun >> privatePerformToolCall: aToolCall inContext
 		ifTrue: [ self addErrorMessage: 'Job completed, but has no results' to: report ]
 		ifFalse: [ self reportResults: results on: report ] ]
 		on: Error
-		do: [ :ex | ^ GtLExceptionDomainObject new freeze: ex ] ]
+		do: [ :ex | ^ GtLExceptionDomainObject freeze: ex ] ]
 		ensure: [ runner ifNotNil: [ runner stop ] ].
 	^ report
 ]

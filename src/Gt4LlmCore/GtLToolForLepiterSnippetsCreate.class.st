@@ -20,7 +20,7 @@ GtLToolForLepiterSnippetsCreate >> createSnippetFrom: snippetArguments [
 			do: [ :error | 
 				^ GtLExceptionDomainObject new
 					freeze: error;
-					description: 'Invalid page uid' ].
+					errorReason: 'Invalid page uid' ].
 	^ snippetArguments
 		validateSnippetArgumentsFor: self
 		ifCorrect: [ self database
@@ -32,7 +32,7 @@ GtLToolForLepiterSnippetsCreate >> createSnippetFrom: snippetArguments [
 						do: [ :error | 
 							^ GtLExceptionDomainObject new
 								freeze: error;
-								description: 'Error while creating snippet' ] ]
+								errorReason: 'Error while creating snippet' ] ]
 				ifAbsent: [ ^ GtLProblemDomainObject new
 						description: 'Could not locate page with id ' , pageUid asString ].
 			^ GtLLepiterSnippetDomainObject new

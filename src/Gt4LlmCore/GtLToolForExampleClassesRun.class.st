@@ -158,8 +158,7 @@ GtLToolForExampleClassesRun >> privatePerformToolCall: aToolCall inContext: anEx
 	details := OrderedCollection new.
 	examples
 		do: [ :example | 
-			| exampleWithResult |
-			[ | detail |
+			[ | detail exampleWithResult |
 			exampleWithResult := example asExampleWithResult.
 			exampleWithResult hasNoTestPragma ifFalse: [ exampleWithResult run ].
 			detail := GtLExampleWithResultDomainObject new

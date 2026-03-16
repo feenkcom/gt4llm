@@ -49,6 +49,13 @@ GtLSmalltalkCodeEvaluationExceptionDomainObject >> gtCodeFor: aView [
 						hMatchParent) ]
 ]
 
+{ #category : #'llm views' }
+GtLSmalltalkCodeEvaluationExceptionDomainObject >> llmJsonObject [
+	^super llmJsonObject
+		at: #code put: self code;
+		yourself
+]
+
 { #category : #serialization }
 GtLSmalltalkCodeEvaluationExceptionDomainObject >> serializeToLlmJsonObject [
 	"Return a JSON dictionary that represents the domain object."

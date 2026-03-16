@@ -65,8 +65,7 @@ GtLToolForMethodsRemoval >> methodResultFromDescriptor: descriptor [
 		do: [ :ex |
 			^ GtLExceptionDomainObject new
 				freeze: ex;
-				description: 'Error while removing method';
-				yourself ].
+				errorReason: 'Error while removing method' ].
 	^ GtLMethodDomainObject new method: compiledMethod
 ]
 

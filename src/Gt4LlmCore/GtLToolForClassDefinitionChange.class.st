@@ -94,8 +94,7 @@ GtLToolForClassDefinitionChange >> privatePerformToolCall: aToolCall inContext: 
 		do: [ :error |
 			^ GtLExceptionDomainObject new
 				freeze: error;
-				description: 'Error while changing class signature';
-				yourself ].
+				errorReason: 'Error while changing class signature' ].
 	^ GtLClassDomainObject new
 		foundClass: updatedClass;
 		originalClassName: classNameString;
