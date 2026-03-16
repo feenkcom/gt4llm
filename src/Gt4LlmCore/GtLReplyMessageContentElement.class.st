@@ -5,10 +5,10 @@ Class {
 		'headerElement',
 		'toolsExpanderElement',
 		'toolsHeaderElement',
-		'toolsContentElement',
 		'contentsExpanderElement',
 		'contentsElement',
-		'contentsHeaderElement'
+		'contentsHeaderElement',
+		'toolsContentsElement'
 	],
 	#category : #'Gt4LlmCore-UI - Elements'
 }
@@ -64,7 +64,7 @@ GtLReplyMessageContentElement >> initializeMessageContentElement [
 			content: [ contentsElement ];
 			hMatchParent;
 			vFitContentLimited;
-			collapse
+			expand
 ]
 
 { #category : #initialization }
@@ -72,14 +72,14 @@ GtLReplyMessageContentElement >> initializeToolsExpanderElement [
 	toolsHeaderElement := BrLabel new
 			aptitude: BrGlamorousLabelAptitude;
 			text: 'Executed tools'.
-	toolsContentElement := GtLMessageUsedToolsElement new
+	toolsContentsElement := GtLMessageUsedToolsElement new
 			hMatchParent;
 			vFitContentLimited.
 
 	toolsExpanderElement := BrExpander new
 			addAptitude: (BrGlamorousExpanderSubtleAptitude new sidebarExtraPadding: (BlInsets top: 5));
 			header: [ toolsHeaderElement ];
-			content: [ toolsContentElement ];
+			content: [ toolsContentsElement ];
 			hMatchParent;
 			vFitContentLimited;
 			collapse;
@@ -101,14 +101,44 @@ GtLReplyMessageContentElement >> initializeToolsExpanderElement [
 GtLReplyMessageContentElement >> onMessageViewModelChanged [
 	super onMessageViewModelChanged.
 	headerElement messageViewModel: self messageViewModel.
-	toolsContentElement messageViewModel: self messageViewModel.
+	toolsContentsElement messageViewModel: self messageViewModel.
 	contentsElement messageViewModel: self messageViewModel.
 	contentsHeaderElement messageViewModel: self messageViewModel.
 	self updateElement.
 ]
 
+{ #category : #'private - event handling' }
+GtLReplyMessageContentElement >> onMessageViewModelContentsChanged: anAnnouncement [
+	self messageViewModel = anAnnouncement messageViewModel ifFalse: [ ^ self ].
+	
+	BlTaskAction enqueueElement: self action: [ self updateContentsElement]
+]
+
+{ #category : #'as yet unclassified' }
+GtLReplyMessageContentElement >> subscribeToMessageViewModel [
+	super subscribeToMessageViewModel.
+
+	self messageViewModel announcer weak
+		when: GtLMessageViewModelContentsChanged
+		send: #onMessageViewModelContentsChanged:
+		to: self
+]
+
+{ #category : #'private - event handling' }
+GtLReplyMessageContentElement >> updateContentsElement [
+	self messageViewModel finalMessageViewModel
+		ifNotNil: [ :aViewModel | contentsExpanderElement visibility: BlVisibility visible ]
+		ifNil: [ contentsExpanderElement visibility: BlVisibility gone ]
+]
+
 { #category : #'private - updating' }
 GtLReplyMessageContentElement >> updateElement [
+	self updateToolsContentsElement.
+	self updateContentsElement.
+]
+
+{ #category : #'private - updating' }
+GtLReplyMessageContentElement >> updateToolsContentsElement [
 	self asyncSink
 		forwardStream: self messageViewModel executionMessageViewModelsStream
 ]
