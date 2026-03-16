@@ -79,3 +79,14 @@ GtPhlowChatToolExamples >> chatToolElementWithPlayground [
 	self assert: playground notNil.
 	^ anElement
 ]
+
+{ #category : #examples }
+GtPhlowChatToolExamples >> chatToolElementWithSidebar [
+	<gtExample>
+	| anElement sidebar |
+	anElement := GtPhlowChatToolElement new
+		chat: GtLChat new.
+	sidebar := anElement childNamed: #sidebar.
+	self assert: sidebar notNil.
+	^ anElement
+]
