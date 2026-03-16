@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLChatOpenAILiveExamples,
 	#superclass : #GtLChatLiveExamples,
-	#category : #'Gt4Llm-OpenAI-Examples'
+	#category : 'Gt4Llm-OpenAI-Examples'
 }
 
 { #category : #'examples - basic' }

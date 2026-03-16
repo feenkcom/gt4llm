@@ -13,7 +13,7 @@ Class {
 { #category : #'instance creation' }
 GtLPhlowViewDomainObject class >> phlowView: aPhlowView viewMethodClassName: aClassName viewMethodSourceCode: aSourceCode [
 	| form |
-	aPhlowView
+	[ aPhlowView
 		asElementDo: [ :anElement | 
 			| rootElement |
 			rootElement := BlScripter new
@@ -22,9 +22,11 @@ GtLPhlowViewDomainObject class >> phlowView: aPhlowView viewMethodClassName: aCl
 					elementWithoutParent.
 			form := BlExporter png
 					element: rootElement;
-					doExport: [ :aCanvas | aCanvas asForm ] ].
+					doExport: [ :aCanvas | aCanvas asForm ] ] ]
+		on: Error
+		do: [ :e | ^ GtLExceptionDomainObject new freeze: e ].
 
-	^self new
+	^ self new
 		phlowView: aPhlowView;
 		phlowViewForm: form;
 		viewMethodClassName: aClassName;
