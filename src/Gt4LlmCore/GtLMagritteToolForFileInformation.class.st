@@ -4,7 +4,7 @@ Returns metadata about a file or directory for a provided file path.
 Class {
 	#name : #GtLMagritteToolForFileInformation,
 	#superclass : #GtLAbstractMagritteFunctionTool,
-	#category : #'Gt4LlmCore-Tools'
+	#category : 'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }
@@ -69,7 +69,7 @@ GtLMagritteToolForFileInformation >> informationForFilePath: aPathString [
 			initializeFromFileReference: fileReference;
 			yourself ]
 		on: Error
-		do: [ :error | GtLExceptionDomainObject new freeze: error ]
+		do: [ :error | GtLExceptionDomainObject freeze: error ]
 ]
 
 { #category : #accessing }

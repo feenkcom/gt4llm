@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLToolForClassRemoval,
 	#superclass : #GtLAbstractPlainSchemaFunctionTool,
-	#category : #'Gt4LlmCore-Tools'
+	#category : 'Gt4LlmCore-Tools'
 }
 
 { #category : #testing }
@@ -46,8 +46,7 @@ GtLToolForClassRemoval >> privatePerformToolCall: aToolCall inContext: anExecuti
 		do: [ :ex |
 			^ GtLExceptionDomainObject new
 				freeze: ex;
-				description: 'Error while removing class';
-				yourself ].
+				errorReason: 'Error while removing class' ].
 	removalResult := {
 		'removedClassName' -> classNameString.
 		'status' -> 'removed'

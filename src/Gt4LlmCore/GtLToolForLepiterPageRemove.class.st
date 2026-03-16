@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'logicalDatabase'
 	],
-	#category : #'Gt4LlmCore-Tools'
+	#category : 'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }
@@ -97,7 +97,7 @@ GtLToolForLepiterPageRemove >> privatePerformToolCall: aToolCall inContext: anEx
 		do: [ :error |
 			^ GtLExceptionDomainObject new
 				freeze: error;
-				description: 'Invalid page uid' ].
+				errorReason: 'Invalid page uid' ].
 	page := nil.
 	targetDatabase
 		pageWithID: pageUid
@@ -108,7 +108,7 @@ GtLToolForLepiterPageRemove >> privatePerformToolCall: aToolCall inContext: anEx
 				do: [ :error |
 					^ GtLExceptionDomainObject new
 						freeze: error;
-						description: 'Error while removing page' ] ]
+						errorReason: 'Error while removing page' ] ]
 		ifAbsent: [ ^ GtLProblemDomainObject new
 			description: 'Could not locate page with id ' , pageUid asString ].
 	^ GtLLepiterPageRemoveDomainObject new

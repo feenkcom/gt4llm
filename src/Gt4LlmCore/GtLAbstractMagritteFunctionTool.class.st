@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLAbstractMagritteFunctionTool,
 	#superclass : #GtLAbstractFunctionTool,
-	#category : #'Gt4LlmCore-Tools'
+	#category : 'Gt4LlmCore-Tools'
 }
 
 { #category : #testing }
@@ -62,8 +62,7 @@ GtLAbstractMagritteFunctionTool >> performToolCall: aToolCall inContext: anExecu
 	]
 		on: NeoJSONParseError
 		do: [ :anException | 
-			aToolCall result: (GtLExceptionDomainObject new 
-				freeze: anException ).
+			aToolCall result: (GtLExceptionDomainObject freeze: anException ).
 			^ aToolCall result ].
 	
 	domainObject := self 

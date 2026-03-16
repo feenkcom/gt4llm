@@ -67,6 +67,15 @@ Exception >> gtActionStartChatOnPlainExceptionFor: anAction [
 ]
 
 { #category : #'*Gt4LlmCore' }
+Exception >> llmDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^aDataView jsonData: [ 
+			GtLValueSerializer new
+				serializeException: self  ]
+]
+
+{ #category : #'*Gt4LlmCore' }
 Exception >> serializeToLlmJsonObject [
 	^ GtLValueSerializer new
 			serializeException: self

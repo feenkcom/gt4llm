@@ -1,23 +1,28 @@
 Class {
 	#name : #GtLJsonDataView,
-	#superclass : #GtLPrimitiveDataView,
+	#superclass : #GtLDataView,
 	#instVars : [
-		'jsonObjectComputationBlock',
-		'computedJsonObject'
+		'jsonDataComputationBlock',
+		'computedJsonData'
 	],
 	#category : #Gt4LlmCore
 }
 
+{ #category : #'api - scripting' }
+GtLJsonDataView >> data: aBlockClosure [
+	jsonDataComputationBlock := aBlockClosure
+]
+
 { #category : #'gt - extensions' }
-GtLJsonDataView >> gtViewJsonObjectFor: aView [
+GtLJsonDataView >> gtViewJsonDataFor: aView [
 	<gtView>
 	
-	jsonObjectComputationBlock ifNil: [ ^ aView empty ].
+	jsonDataComputationBlock ifNil: [ ^ aView empty ].
 	
 	^ aView forward
-		title: 'JSON Object';
+		title: 'JSON Data';
 		priority: 10;
-		object: [ self llmJsonObject  asGtJson ];
+		object: [ self llmJsonData  asGtJson ];
 		view: #gtJsonObjectFor:context:
 ]
 
@@ -25,7 +30,7 @@ GtLJsonDataView >> gtViewJsonObjectFor: aView [
 GtLJsonDataView >> gtViewJsonStringFor: aView [
 	<gtView>
 	
-	jsonObjectComputationBlock ifNil: [ ^ aView empty ].
+	jsonDataComputationBlock ifNil: [ ^ aView empty ].
 	
 	^ aView textEditor
 		title: 'JSON string';
@@ -35,42 +40,38 @@ GtLJsonDataView >> gtViewJsonStringFor: aView [
 		text: [  self llmJsonString  ]
 ]
 
-{ #category : #accessing }
-GtLJsonDataView >> jsonObject: aBlockClosure [
-	jsonObjectComputationBlock := aBlockClosure
+{ #category : #serialization }
+GtLJsonDataView >> llmJsonData [
+	^computedJsonData ifNil: [
+		computedJsonData := jsonDataComputationBlock value ]
 ]
 
 { #category : #serialization }
 GtLJsonDataView >> llmJsonObject [
-	^computedJsonObject ifNil: [
-		computedJsonObject := jsonObjectComputationBlock value ]
+	^computedJsonData ifNil: [
+		computedJsonData := jsonDataComputationBlock value ]
 ]
 
 { #category : #serialization }
 GtLJsonDataView >> llmJsonString [
 	"Return a JSON string that represents the domain object."
 	
-	^ NeoJSONWriter toStringPretty: self llmJsonObject
+	^ NeoJSONWriter toStringPretty: self llmJsonData
+]
+
+{ #category : #'api - scripting' }
+GtLJsonDataView >> object: aBlockClosure [
+	self data: [ 
+		|jsonObject|
+		jsonObject := Dictionary new.
+		aBlockClosure value: jsonObject.
+		jsonObject ]
 ]
 
 { #category : #serialization }
-GtLJsonDataView >> serializeToAnthropicResponseOutput [
-	"Return a JSON that represents tool response output."
-
-	<return: #Array of: #NeoJSONObject>
-	^ {NeoJSONObject new
-			at: 'text' put: self llmJsonString;
-			at: 'type' put: 'text';
-			yourself}
-]
-
-{ #category : #serialization }
-GtLJsonDataView >> serializeToOpenAIResponseOutput [
-	"Return a JSON that represents tool response output."
-
-	<return: #Array of: #NeoJSONObject>
-	^ {NeoJSONObject new
-			at: #text put: self llmJsonString;
-			at: #type put: #input_text;
-			yourself}
+GtLJsonDataView >> serializeToLlmPrimiteDataOn: aBuilder [
+	aBuilder 
+		addJsonDataBlockFor: self llmJsonData
+		dataKey: self dataKey
+		from: self
 ]

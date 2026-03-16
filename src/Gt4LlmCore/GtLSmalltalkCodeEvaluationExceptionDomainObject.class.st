@@ -7,7 +7,7 @@ Class {
 	#instVars : [
 		'code'
 	],
-	#category : #'Gt4LlmCore-Domain Objects'
+	#category : 'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #accessing }
@@ -47,6 +47,13 @@ GtLSmalltalkCodeEvaluationExceptionDomainObject >> gtCodeFor: aView [
 						addAptitude: BrShadowAptitude;
 						vFitContentLimited;
 						hMatchParent) ]
+]
+
+{ #category : #'llm views' }
+GtLSmalltalkCodeEvaluationExceptionDomainObject >> llmJsonObject [
+	^super llmJsonObject
+		at: #code put: self code;
+		yourself
 ]
 
 { #category : #serialization }

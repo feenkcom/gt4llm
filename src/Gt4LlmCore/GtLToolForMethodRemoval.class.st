@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLToolForMethodRemoval,
 	#superclass : #GtLAbstractPlainSchemaFunctionTool,
-	#category : #'Gt4LlmCore-Tools'
+	#category : 'Gt4LlmCore-Tools'
 }
 
 { #category : #testing }
@@ -71,7 +71,7 @@ GtLToolForMethodRemoval >> privatePerformToolCall: aToolCall inContext: anExecut
 		do: [ :ex |
 			^ GtLExceptionDomainObject new
 				freeze: ex;
-				description: 'Error while removing method';
+				errorReason: 'Error while removing method';
 				yourself ].
 	^ GtLMethodDomainObject new method: compiledMethod
 ]

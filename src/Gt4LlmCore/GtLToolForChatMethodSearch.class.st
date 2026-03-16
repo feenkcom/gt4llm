@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'provider'
 	],
-	#category : #'Gt4LlmCore-Tools'
+	#category : 'Gt4LlmCore-Tools'
 }
 
 { #category : #'as yet unclassified' }
@@ -74,7 +74,7 @@ GtLToolForChatMethodSearch >> privatePerformToolCall: aToolCall inContext: anExe
 		methods: (result first: (100 min: result size));
 		mayHaveMore: result size > 100 ]
 		on: Error
-		do: [ :anException | ^ GtLExceptionDomainObject new freeze: anException ]
+		do: [ :anException | ^ GtLExceptionDomainObject freeze: anException ]
 ]
 
 { #category : #'as yet unclassified' }
