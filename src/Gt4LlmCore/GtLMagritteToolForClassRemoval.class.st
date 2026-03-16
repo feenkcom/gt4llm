@@ -53,7 +53,7 @@ GtLMagritteToolForClassRemoval >> privatePerformToolCall: aToolCall inContext: a
 		do: [ :ex |
 			^ GtLExceptionDomainObject new
 				freeze: ex;
-				description: 'Error while removing class';
+				errorReason: 'Error while removing class';
 				yourself ].
 				
 	^ GtLClassRemovalResult new

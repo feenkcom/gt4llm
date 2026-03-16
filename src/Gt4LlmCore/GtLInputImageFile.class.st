@@ -12,6 +12,15 @@ GtLInputImageFile >> contentType [
 		^ 'image/jpeg'
 ]
 
+{ #category : #views }
+GtLInputImageFile >> gtFileReferencePictureFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Picture';
+		object: [ fileReference ];
+		view: #gtFigureFor:
+]
+
 { #category : #serialization }
 GtLInputImageFile >> serializeToAnthropicResponseOutput [
 	^ {

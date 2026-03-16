@@ -55,7 +55,7 @@ GtLToolForObjectView >> privatePerformToolCall: aToolCall inContext: anExecution
 					withContext: GtPhlowContext new ].
 	method := object class lookupSelector: viewSelector ]
 		on: Error
-		do: [ :r | ^ GtLExceptionDomainObject new ].
+		do: [ :r | ^ GtLExceptionDomainObject freeze: r ].
 
 	method ifNil: [ ^ GtLMissingDomainObject new objectName: viewSelector ].
 	

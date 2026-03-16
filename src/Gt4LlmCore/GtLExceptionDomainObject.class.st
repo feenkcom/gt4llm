@@ -3,21 +3,39 @@ Class {
 	#superclass : #GtLErroneousConditionDomainObject,
 	#instVars : [
 		'exception',
-		'description'
+		'errorReason'
 	],
 	#category : #'Gt4LlmCore-Domain Objects'
 }
 
+{ #category : #'instance creation' }
+GtLExceptionDomainObject class >> freeze: anException [
+	^self new 
+		freeze: anException
+]
+
 { #category : #accessing }
 GtLExceptionDomainObject >> description [
-	^ description
+	^ errorReason
 ]
 
 { #category : #accessing }
 GtLExceptionDomainObject >> description: aString [
 	"Set a short text that describes what failed"
 
-	description := aString
+	errorReason := aString
+]
+
+{ #category : #accessing }
+GtLExceptionDomainObject >> errorReason [
+	^ errorReason
+]
+
+{ #category : #accessing }
+GtLExceptionDomainObject >> errorReason: aString [
+	"Set a short text that describes what failed"
+
+	errorReason := aString
 ]
 
 { #category : #accessing }
@@ -50,6 +68,28 @@ GtLExceptionDomainObject >> gtExceptionStackFor: aView [
 			action: [ [ self exception debug ] fork ]
 ]
 
+{ #category : #'llm views' }
+GtLExceptionDomainObject >> llmDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	self exception ifNil: [ ^ aDataView emptyData ].
+	
+	^ aDataView compositeData
+			addDataView: (aDataView forwardObject: [ self exception ]);
+			addDataView: (aDataView jsonData: [ self llmJsonObject ]);
+			yourself
+]
+
+{ #category : #'llm views' }
+GtLExceptionDomainObject >> llmJsonObject [
+	"Return a JSON dictionary that represents the domain object."
+	<return: #NeoJSONObject>
+	
+	^ NeoJSONObject new
+		at: #errorReason put: self description;
+		yourself
+]
+
 { #category : #'api - accessing' }
 GtLExceptionDomainObject >> messageText [
 	"Return an error message"
@@ -65,7 +105,7 @@ GtLExceptionDomainObject >> serializeToLlmJsonObject [
 	^ NeoJSONObject new
 		at: #error put: self messageText;
 		at: #errorClass put: self exception className;
-		at: #whatFailed put: self description;
+		at: #whatFailed put: self errorReason;
 		at: #stackTrace put: self stackTrace;
 		yourself
 ]

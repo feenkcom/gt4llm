@@ -26,10 +26,8 @@ GtLMagritteToolForClassDefinitionChange >> applyClassChangeUsing: extractor [
 		builder install ]
 		on: Error
 		do: [ :error |
-			^ GtLExceptionDomainObject new
-				freeze: error;
-				description: 'Error while changing class signature';
-				yourself ].
+			^ (GtLExceptionDomainObject freeze: error)
+					errorReason: 'Error while changing class signature' ].
 	
 	^ GtLClassModificationResult new
 		originalClass: originalDescription;

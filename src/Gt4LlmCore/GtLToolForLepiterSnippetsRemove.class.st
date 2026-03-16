@@ -98,14 +98,14 @@ GtLToolForLepiterSnippetsRemove >> removeSnippetFrom: snippetArguments [
 		do: [ :error |
 			^ GtLExceptionDomainObject new
 				freeze: error;
-				description: 'Invalid page uid' ].
+				errorReason: 'Invalid page uid' ].
 	snippetUid := LeUID new.
 	[ snippetUid uidString: snippetUidString ]
 		on: Error
 		do: [ :error |
 			^ GtLExceptionDomainObject new
 				freeze: error;
-				description: 'Invalid snippet uid' ].
+				errorReason: 'Invalid snippet uid' ].
 	targetDatabase
 		pageWithID: pageUid
 		ifPresent: [ :page |
@@ -118,7 +118,7 @@ GtLToolForLepiterSnippetsRemove >> removeSnippetFrom: snippetArguments [
 				do: [ :error |
 					^ GtLExceptionDomainObject new
 						freeze: error;
-						description: 'Error while removing snippet' ] ]
+						errorReason: 'Error while removing snippet' ] ]
 		ifAbsent: [ ^ GtLProblemDomainObject new
 			description: 'Could not locate page with id ' , pageUid ].
 			

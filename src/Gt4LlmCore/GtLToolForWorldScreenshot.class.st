@@ -64,7 +64,7 @@ GtLToolForWorldScreenshot >> privatePerformToolCall: aToolCall inContext: anExec
 		do: [ :ex | 
 			GtLExceptionDomainObject new
 				freeze: ex;
-				description: 'Failed to capture a GtWorldElement screenshot' ]
+				errorReason: 'Failed to capture a GtWorldElement screenshot' ]
 ]
 
 { #category : #accessing }

@@ -62,6 +62,55 @@ GtLExampleWithResultDomainObject >> isSuccessResult [
 	^ self exampleWithResult isSuccess
 ]
 
+{ #category : #'llm views' }
+GtLExampleWithResultDomainObject >> llmRawViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^aDataView jsonObject: [ :aJson |
+			aJson
+				at: #className put: self exampleWithResult methodClass name asString;
+				at: #selector put: self exampleWithResult selector asString;
+				at: #status put: self statusText;
+				at: #objectId put: self objectId	]
+]
+
+{ #category : #'llm views' }
+GtLExampleWithResultDomainObject >> llmResultExceptionViewFor: aDataView [
+	<gtLlmDataView>
+	(self isErrorResult not and: [ self isFailureResult not ]) ifTrue: [
+		^ aDataView emptyData ].
+	
+	^aDataView forwardObject
+			dataKey: #result;
+			object: [ 
+				self exampleWithResult returnValue  ]
+]
+
+{ #category : #'llm views' }
+GtLExampleWithResultDomainObject >> llmResultObject_forwardViewFor: aDataView [
+	<gtLlmDataView>
+	(self isErrorResult or: [ self isFailureResult ]) ifTrue: [
+		^ aDataView emptyData ].
+	
+	^aDataView forwardObject
+			dataKey: #result;
+			object: [ 
+					GtLValueDomainObject new 
+						value: self exampleWithResult returnValue  ]
+]
+
+{ #category : #'llm views' }
+GtLExampleWithResultDomainObject >> llmResultObject_magritteViewFor: aDataView [
+	"<gtLlmDataView>"
+	
+	(self isErrorResult or: [ self isFailureResult ]) ifFalse: [
+		^ aDataView emptyData ].
+	
+	^aDataView magritteObject: [ 
+			GtLSerializedObjectValue 
+				fromObject: self exampleWithResult returnValue  ]
+]
+
 { #category : #accessing }
 GtLExampleWithResultDomainObject >> objectId [
 	^ objectId

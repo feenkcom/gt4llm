@@ -58,7 +58,7 @@ GtLToolForLepiterSnippetEdit >> privatePerformToolCall: aToolCall inContext: anE
 		do: [ :error | 
 			^ GtLExceptionDomainObject new
 				freeze: error;
-				description: 'Invalid page uid' ].
+				errorReason: 'Invalid page uid' ].
 	snippetUidString := arguments	at: 'snippetUid'.
 	(snippetUidString asString trimBoth isEmpty)
 		ifTrue: [ ^ GtLMissingArgumentDomainObject new
@@ -71,7 +71,7 @@ GtLToolForLepiterSnippetEdit >> privatePerformToolCall: aToolCall inContext: anE
 		do: [ :error | 
 			^ GtLExceptionDomainObject new
 				freeze: error;
-				description: 'Invalid snippet uid' ].
+				errorReason: 'Invalid snippet uid' ].
 	updatedText := arguments
 		at: 'updatedText'
 		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
@@ -97,7 +97,7 @@ GtLToolForLepiterSnippetEdit >> privatePerformToolCall: aToolCall inContext: anE
 		do: [ :error | 
 			^ GtLExceptionDomainObject new
 				freeze: error;
-				description: 'Error while applying snippet change' ].
+				errorReason: 'Error while applying snippet change' ].
 	^ GtLLepiterSnippetEditDomainObject new
 		status: 'updated';
 		pageUid: pageUid asString;

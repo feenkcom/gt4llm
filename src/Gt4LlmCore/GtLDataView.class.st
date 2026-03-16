@@ -3,7 +3,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'title',
-		'buildContext'
+		'buildContext',
+		'dataKey'
 	],
 	#category : #Gt4LlmCore
 }
@@ -58,6 +59,16 @@ GtLDataView >> compositeData [
 	^ GtLCompositeDataView new
 ]
 
+{ #category : #accessing }
+GtLDataView >> dataKey [
+	^dataKey
+]
+
+{ #category : #accessing }
+GtLDataView >> dataKey: anObject [
+	dataKey := anObject
+]
+
 { #category : #decorating }
 GtLDataView >> emptyData [
 	^ GtLEmptyDataView new
@@ -80,44 +91,56 @@ GtLDataView >> errorViewWithException: anException isFrozen: aBoolean [
 		exception: frozenException
 ]
 
-{ #category : #utils }
+{ #category : #decorating }
+GtLDataView >> forwardObject [
+	^ GtLForwardDataView new
+]
+
+{ #category : #decorating }
+GtLDataView >> forwardObject: aBlockClosure [
+	^ self forwardObject
+		object: aBlockClosure
+]
+
+{ #category : #'gt - extensions' }
+GtLDataView >> gtInspectPrimitiveDataButtonFor: anAction [
+	<gtAction>
+	^(anAction button)
+		priority: 1;
+		label: 'Primitive Data';
+		icon: BrGlamorousVectorIcons inspect;
+		action: 
+				[:aButton |
+				aButton phlow spawnObject: self serializeToLlmPrimiteData]
+]
+
+{ #category : #'gt - extensions' }
+GtLDataView >> gtPhlowTreeChildren [
+	^ #()
+]
+
+{ #category : #'gt - extensions' }
 GtLDataView >> gtViewSerializationJSONFor: aView [
 	<gtView>
 	<gtLlmMessageView>
 	
-	^ aView columnedList
+	^ aView forward
 			title: 'LLM JSON';
 			priority: 62;
-			items: [ (Pragma
-				allNamed: #llmSerialization:
-				from: self class
-				to: Object) collect: [ :eachPragma |
-						eachPragma arguments first -> eachPragma methodSelector ] ];
-			column: 'LLM' text: [ :assoc | assoc key ];
-			send: [ :assoc | [
-					(self perform: assoc value)  asGtJson] 
-							on: Error do: [ :each | GtSystemUtility freeze: each] ]
+			object: [ self serializeToLlmPrimiteData ];
+			view: #gtViewSerializationJSONFor:
 ]
 
-{ #category : #utils }
+{ #category : #'gt - extensions' }
 GtLDataView >> gtViewSerializationObjectsFor: aView [
 	<gtView>
 	<gtLlmMessageView>
 	
-	^ aView columnedList
+	^ aView forward
 			title: 'LLM Objects';
 			priority: 60;
-			items: [ (Pragma
-				allNamed: #llmSerialization:
-				from: self class
-				to: Object) collect: [ :eachPragma |
-						eachPragma arguments first -> ([self perform: eachPragma methodSelector] 
-								on: Error do: [ :each | GtSystemUtility freeze: each]) ] ];
-			column: 'LLM' text: [ :assoc | assoc key ] width: 200;
-			column: 'Object count' text: [ :assoc | 
-				assoc value isCollection ifTrue: [ assoc value size ] ifFalse: ['-'] ] width: 100;
-			column: 'Value' text: [ :assoc | assoc value gtDisplayString ];
-			send: [ :assoc | assoc value ]
+			object: [  self serializeToLlmPrimiteData ];
+			view: #gtViewSerializationObjectsFor:
 ]
 
 { #category : #decorating }
@@ -133,7 +156,13 @@ GtLDataView >> jsonData [
 { #category : #decorating }
 GtLDataView >> jsonData: aBlock [
 	^self jsonData
-		jsonObject: aBlock
+		data: aBlock
+]
+
+{ #category : #decorating }
+GtLDataView >> jsonObject: aBlock [
+	^self jsonData
+		object: aBlock
 ]
 
 { #category : #utils }
@@ -193,6 +222,14 @@ GtLDataView >> on: anObject perform: aMessageSymbol withSomeArguments: aCollecti
 		withArguments: newCollectionOfArguments
 ]
 
+{ #category : #printing }
+GtLDataView >> printOn: aStream [
+	super printOn: aStream.
+	
+	aStream parenthesize: [
+		self viewDescriptionOn:  aStream ]
+]
+
 { #category : #accessing }
 GtLDataView >> priority [
 	^ 1000
@@ -200,14 +237,27 @@ GtLDataView >> priority [
 
 { #category : #serialization }
 GtLDataView >> serializeToAnthropicResponseOutput [
-	<llmSerialization: 'Anthropic'>
+	^self serializeToLlmPrimiteData serializeForAnthropic
+]
+
+{ #category : #serialization }
+GtLDataView >> serializeToLlmPrimiteData [
+	| dataBuilder |
+	
+	dataBuilder := GtLPrimitiveMessageDataBuilder new.
+	self serializeToLlmPrimiteDataOn:  dataBuilder.
+	
+	^dataBuilder messageDataBlock
+]
+
+{ #category : #serialization }
+GtLDataView >> serializeToLlmPrimiteDataOn: aBuilder [
 	self subclassResponsibility
 ]
 
 { #category : #serialization }
 GtLDataView >> serializeToOpenAIResponseOutput [
-	<llmSerialization: 'OpenAI'>
-	self subclassResponsibility
+	^self serializeToLlmPrimiteData serializeForOpenAI
 ]
 
 { #category : #accessing }
@@ -218,4 +268,20 @@ GtLDataView >> title [
 { #category : #accessing }
 GtLDataView >> title: anObject [
 	title := anObject
+]
+
+{ #category : #printing }
+GtLDataView >> viewDescriptionOn: aStream [
+
+	self title 
+		ifNotNil: [ 
+			aStream 
+				<< self title;
+				<<'; '].
+			
+	self dataKey 
+		ifNotNil: [ 
+			aStream 
+				<< 'key: ';
+				print: self dataKey ]
 ]

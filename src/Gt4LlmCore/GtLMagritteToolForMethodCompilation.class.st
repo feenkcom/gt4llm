@@ -16,7 +16,8 @@ GtLMagritteToolForMethodCompilation >> compileMethodFromRequest: request [
 	
 	extractor extractAllIfError: [ :error | ^ error ].
 	
-	selector := [ [ extractor targetClass compile: extractor sourceCode classified: extractor protocol ]
+	selector := [ [ extractor targetClass 
+			compile: extractor sourceCode classified: extractor protocol ]
 		on: CodeError
 		do: [ :notification |
 			^ GtLMethodCompilationExceptionDomainObject new

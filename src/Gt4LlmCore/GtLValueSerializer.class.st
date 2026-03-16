@@ -24,6 +24,12 @@ GtLValueSerializer class >> classSchema [
 				yourself)
 ]
 
+{ #category : #utils }
+GtLValueSerializer class >> serializeException: anException [
+	^self new 
+			serializeException: anException
+]
+
 { #category : #schema }
 GtLValueSerializer class >> valueSchema [
 	^ NeoJSONSchema new

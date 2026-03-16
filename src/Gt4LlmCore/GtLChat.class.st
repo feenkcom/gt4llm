@@ -293,6 +293,14 @@ GtLChat >> gtCopySnippetSerialisationFor: anAction [
 		action: [ :button | self copyLepiterSerialisationToClipboard ]
 ]
 
+{ #category : #'gt-inspector' }
+GtLChat >> gtDefaultInspectorTool [
+	^ GtPhlowCompositeTool new
+		addTool: (GtPhlowChatTool forChat: self);
+		addTool: (super gtDefaultInspectorTool);
+		name: 'Chat: ', self gtDisplayString
+]
+
 { #category : #'as yet unclassified' }
 GtLChat >> gtDisplayOn: stream [
 	stream nextPutAll: 'Chat'.
@@ -322,6 +330,7 @@ GtLChat >> gtFormatFor: aView [
 { #category : #views }
 GtLChat >> gtInstructionsFor: aView [
 	<gtView>
+	<gtLlmView>
 	instructions ifNil: [ ^ aView empty].
 	^ aView forward
 		title: 'Instructions';
@@ -329,11 +338,29 @@ GtLChat >> gtInstructionsFor: aView [
 		view: #gtInstructionFor:
 ]
 
+{ #category : #'gt - extensions' }
+GtLChat >> gtLiveChatFor: aView [
+	"cannot be a forward because the update wouldn’t work"
+
+	<gtView>
+	<gtLlmView>
+	self provider ifNil: [ ^ aView empty ].
+
+	^ aView explicit
+		title: 'Live';
+		priority: 0;
+		stencil: [ self asElement ];
+		actionButtonIcon: BrGlamorousVectorIcons bin
+			tooltip: 'Delete history'
+			action: [ self reset ]
+]
+
 { #category : #ui }
 GtLChat >> gtMessagesFor: aView [
 	"cannot be a forward because the update wouldn’t work"
 
 	<gtView>
+	<gtLlmView>
 	^ aView columnedTree
 		title: 'Messages';
 		priority: 3;
@@ -349,25 +376,7 @@ GtLChat >> gtMessagesFor: aView [
 		column: 'Content' text: [ :item | item contentOneLineSummary ];
 		column: 'Created' text: [ :item | item createdAt asStringYMDHMS ] width: 150;
 		updateWhen: GtLlmThreadRunAnnouncement in: self announcer;
-		expandAll;
-		actionUpdateButton
-]
-
-{ #category : #'gt - extensions' }
-GtLChat >> gtMessagesWidgetFor: aView [
-	"cannot be a forward because the update wouldn’t work"
-
-	<gtView>
-	self provider ifNil: [ ^ aView empty ].
-
-	^ aView explicit
-		title: 'Chat';
-		priority: 0;
-		stencil: [ self asElement ];
-		actionUpdateButton;
-		actionButtonIcon: BrGlamorousVectorIcons bin
-			tooltip: 'Delete history'
-			action: [ self reset ]
+		expandAll
 ]
 
 { #category : #views }

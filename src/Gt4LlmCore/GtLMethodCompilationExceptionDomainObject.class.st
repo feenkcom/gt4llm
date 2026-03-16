@@ -29,6 +29,15 @@ GtLMethodCompilationExceptionDomainObject >> gtSourceCodeFor: aView [
 		text: [ sourceCode ]
 ]
 
+{ #category : #'llm views' }
+GtLMethodCompilationExceptionDomainObject >> llmJsonObject [
+	^super llmJsonObject
+		at: #methodClass put: self targetClass name asString;
+		at: #methodProtocol put: self protocolName asString;
+		at: #sourceCode put: self sourceCode;
+		yourself
+]
+
 { #category : #accessing }
 GtLMethodCompilationExceptionDomainObject >> protocolName [
 	^ protocolName

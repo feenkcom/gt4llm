@@ -70,8 +70,7 @@ GtLMagritteToolForMethodsRemoval >> removeMethodFromDescriptor: methodDescriptor
 				do: [ :ex |
 					^ GtLExceptionDomainObject new
 						freeze: ex;
-						description: 'Error while removing method';
-						yourself ].
+						errorReason: 'Error while removing method' ].
 			GtLMethodRemovalResult new
 				removedMethod: methodWithSource;
 				status: 'removed';
