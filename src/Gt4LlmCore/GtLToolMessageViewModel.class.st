@@ -8,3 +8,12 @@ Class {
 GtLToolMessageViewModel >> acceptVisitor: aVisitor [
 	^ aVisitor visitToolMessageViewModel: self
 ]
+
+{ #category : #printing }
+GtLToolMessageViewModel >> gtDisplayOn: aStream [
+	self message
+		ifNil: [ super gtDisplayOn: aStream ]
+		ifNotNil: [ :aMessage | 
+			aStream nextPutAll: 'View model for '.
+			aMessage gtDisplayOn: aStream ]
+]

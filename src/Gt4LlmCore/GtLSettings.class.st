@@ -11,9 +11,20 @@ GtLSettings class >> defaultToolbarCellSpacing [
 
 { #category : #settings }
 GtLSettings class >> futureExecutionConfiguration [
+	"Future that calls LLM servers, tools, etc."
+
 	^ AsyncFutureExecutionConfiguration new
 		customGroup: #AI;
 		lowPriority
+]
+
+{ #category : #settings }
+GtLSettings class >> futureUIExecutionConfiguration [
+	"Future that computes UI elements"
+
+	^ AsyncFutureExecutionConfiguration new
+		customGroup: #AI;
+		highPriority
 ]
 
 { #category : #settings }

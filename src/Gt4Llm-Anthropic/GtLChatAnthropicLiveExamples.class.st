@@ -4,6 +4,13 @@ Class {
 	#category : #'Gt4Llm-Anthropic-Examples'
 }
 
+{ #category : #'examples - calls' }
+GtLChatAnthropicLiveExamples >> chatWithSeveralToolCalls [
+	<gtExample>
+	<noTest>
+	^ super chatWithSeveralToolCalls
+]
+
 { #category : #'examples - basic' }
 GtLChatAnthropicLiveExamples >> createClauseOpus46Connection [
 	<gtExample>

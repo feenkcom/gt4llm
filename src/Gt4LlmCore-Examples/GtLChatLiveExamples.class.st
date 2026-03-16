@@ -86,6 +86,31 @@ GtLChatLiveExamples class >> reset [
 ]
 
 { #category : #'examples - calls' }
+GtLChatLiveExamples >> chatWithSeveralToolCalls [
+	"Ready for stub execution"
+
+	<gtExample>
+	| messageString |
+	messageString := 'Explain how {{gtClass:BlElement}} handles keyboad shortucts. Explain where shortcuts are handled, how they are executed, and how can users add and remove shortcuts'.
+	self stubResponses: [ self chatWithSeveralToolCalls_stub_responses ].
+
+	self currentChat
+		tools: GtLTools gt;
+		markdownResponse.
+	self currentChat sendMarkdown: messageString.
+	self assert: self currentChat messages size equals: 2.
+	self
+		waitForChatRunIsDoneThen: [ self assert: self currentChat messages size equals: 2.
+			self assert: self currentChat isFinishedSuccesss ].
+	^ self currentChat
+]
+
+{ #category : #'examples - calls' }
+GtLChatLiveExamples >> chatWithSeveralToolCalls_stub_responses [
+	^ self subclassResponsibility
+]
+
+{ #category : #'examples - calls' }
 GtLChatLiveExamples >> chatWithTwoBasicMessages [
 	<gtExample>
 	<noTest>
