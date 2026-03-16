@@ -4,7 +4,7 @@ Examples for GtLSerializedViewInfo domain object.
 Class {
 	#name : #GtLSerializedViewInfoExamples,
 	#superclass : #Object,
-	#category : #'Gt4LlmCore-Examples-Domain Objects'
+	#category : 'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #examples }
