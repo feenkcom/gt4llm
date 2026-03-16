@@ -23,7 +23,7 @@ TGtLWithMessageViewModel >> gtElementOverviewChatMessageViewModel [
 	<gtInspectorElementOverview>
 	^ GtInspectorElementOverviewProperty new
 		label: 'Message view model';
-		object: [ self threadMessageViewModel ]
+		object: [ self messageViewModel ]
 ]
 
 { #category : #'gt - extensions' }

@@ -2,7 +2,8 @@ Class {
 	#name : #GtLReplyMessageViewModel,
 	#superclass : #GtLMessageViewModel,
 	#instVars : [
-		'executionMessageViewModelsCache'
+		'executionMessageViewModelsCache',
+		'finalMessageViewModel'
 	],
 	#classVars : [
 		'ElementClass'
@@ -35,11 +36,22 @@ GtLReplyMessageViewModel >> executionMessageViewModelsStream [
 		cache: executionMessageViewModelsCache
 ]
 
+{ #category : #'api - accessing' }
+GtLReplyMessageViewModel >> finalMessageViewModel [
+	^ finalMessageViewModel
+		ifNil: [ finalMessageViewModel := self message finalMessage ifNotNil: #asViewModel ]
+]
+
 { #category : #initialization }
 GtLReplyMessageViewModel >> initialize [
 	super initialize.
 
 	executionMessageViewModelsCache := AsyncSharedDictionary new
+]
+
+{ #category : #'api - testing' }
+GtLReplyMessageViewModel >> isFinished [
+	^ self finalMessageViewModel isNotNil
 ]
 
 { #category : #accessing }
