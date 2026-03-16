@@ -106,6 +106,11 @@ GtLObjectStorage >> printOn: aStream [
 		<< ']'
 ]
 
+{ #category : #'as yet unclassified' }
+GtLObjectStorage >> size [
+	^ objectsByUUID size
+]
+
 { #category : #accessing }
 GtLObjectStorage >> storedObjectAt: anObjectId [
 	| internalId |
