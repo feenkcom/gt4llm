@@ -5,6 +5,16 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
+GtLChatWithOpenAIProviderStubExamples >> addNewObject [
+	<gtExample>
+	| chat |
+	chat := self chatWithOpenAIProviderStub.
+	chat addNewObject: Object reasonString: 'Object'.
+	self assert: chat objectStorage size equals: 1.
+	^ chat
+]
+
+{ #category : #'as yet unclassified' }
 GtLChatWithOpenAIProviderStubExamples >> chatWithInstructions [
 	<gtExample>
 	| chat message instructions |

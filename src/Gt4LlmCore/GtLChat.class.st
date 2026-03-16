@@ -87,6 +87,11 @@ GtLChat >> addMessage: aMessage [
 	self notifyMessageAdded: aMessage
 ]
 
+{ #category : #'as yet unclassified' }
+GtLChat >> addNewObject: anObject reasonString: aString [ 
+	self objectStorage addNewObject: anObject reason: (GtLStoredObjectStringReason text: aString)
+]
+
 { #category : #adding }
 GtLChat >> addResponseFormat: aResponseFormat [
 	responseFormat addResponseFormat: aResponseFormat
