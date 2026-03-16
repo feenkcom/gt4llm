@@ -9,7 +9,7 @@ GtLChatWithOpenAIProviderStubExamples >> addNewObject [
 	<gtExample>
 	| chat |
 	chat := self chatWithOpenAIProviderStub.
-	chat addNewObject: Object reason: 'Object'.
+	chat addNewObject: Object reasonString: 'Object'.
 	self assert: chat objectStorage size equals: 1.
 	^ chat
 ]
