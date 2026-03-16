@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'value'
 	],
-	#category : #'Gt4LlmCore-Domain Objects'
+	#category : 'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #views }
@@ -27,6 +27,15 @@ GtLValueDomainObject >> gtValueLiveFor: aView [
 						vFitContentLimited) ]
 ]
 
+{ #category : #'llm views' }
+GtLValueDomainObject >> llmDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^aDataView jsonData: [ 
+			GtLValueSerializer new
+				serializeValue: self  ]
+]
+
 { #category : #'api - serializing' }
 GtLValueDomainObject >> serializeToLlmJsonObject [
 	"Return a JSON dictionary that represents the domain object."
@@ -38,7 +47,7 @@ GtLValueDomainObject >> serializeToLlmJsonObject [
 			anError
 				return: (GtLExceptionDomainObject new
 						freeze: anError;
-						description: 'Cannot serialize object';
+						errorReason: 'Cannot serialize object';
 						serializeToLlmJsonObject) ]
 ]
 

@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLValueSerializer,
 	#superclass : #Object,
-	#category : #'Gt4LlmCore-Support'
+	#category : 'Gt4LlmCore-Support'
 }
 
 { #category : #schema }
@@ -22,6 +22,12 @@ GtLValueSerializer class >> classSchema [
 							yourself);
 				at: #required put: #(class superclass package);
 				yourself)
+]
+
+{ #category : #utils }
+GtLValueSerializer class >> serializeException: anException [
+	^self new 
+			serializeException: anException
 ]
 
 { #category : #schema }

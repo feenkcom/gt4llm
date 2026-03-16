@@ -4,7 +4,7 @@ I return the remote phlow view specification for a stored object and view select
 Class {
 	#name : #GtLToolForObjectView,
 	#superclass : #GtLAbstractPlainSchemaFunctionTool,
-	#category : #'Gt4LlmCore-Tools'
+	#category : 'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }
@@ -55,7 +55,7 @@ GtLToolForObjectView >> privatePerformToolCall: aToolCall inContext: anExecution
 					withContext: GtPhlowContext new ].
 	method := object class lookupSelector: viewSelector ]
 		on: Error
-		do: [ :r | ^ GtLExceptionDomainObject new ].
+		do: [ :r | ^ GtLExceptionDomainObject freeze: r ].
 
 	method ifNil: [ ^ GtLMissingDomainObject new objectName: viewSelector ].
 	

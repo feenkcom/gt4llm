@@ -6,7 +6,7 @@ Class {
 		'protocolName',
 		'sourceCode'
 	],
-	#category : #'Gt4LlmCore-Domain Objects'
+	#category : 'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #magritte }
@@ -27,6 +27,15 @@ GtLMethodCompilationExceptionDomainObject >> gtSourceCodeFor: aView [
 		priority: 0;
 		aptitude: BrGlamorousCodeEditorAptitude;
 		text: [ sourceCode ]
+]
+
+{ #category : #'llm views' }
+GtLMethodCompilationExceptionDomainObject >> llmJsonObject [
+	^super llmJsonObject
+		at: #methodClass put: self targetClass name asString;
+		at: #methodProtocol put: self protocolName asString;
+		at: #sourceCode put: self sourceCode;
+		yourself
 ]
 
 { #category : #accessing }

@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLToolForClassDefinitionChange,
 	#superclass : #GtLAbstractPlainSchemaFunctionTool,
-	#category : #'Gt4LlmCore-Tools'
+	#category : 'Gt4LlmCore-Tools'
 }
 
 { #category : #testing }
@@ -94,8 +94,7 @@ GtLToolForClassDefinitionChange >> privatePerformToolCall: aToolCall inContext: 
 		do: [ :error |
 			^ GtLExceptionDomainObject new
 				freeze: error;
-				description: 'Error while changing class signature';
-				yourself ].
+				errorReason: 'Error while changing class signature' ].
 	^ GtLClassDomainObject new
 		foundClass: updatedClass;
 		originalClassName: classNameString;

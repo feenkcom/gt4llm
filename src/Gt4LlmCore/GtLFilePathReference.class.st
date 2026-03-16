@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'pathString'
 	],
-	#category : #'Gt4LlmCore-Magritte Objects'
+	#category : 'Gt4LlmCore-Magritte Objects'
 }
 
 { #category : #converting }
@@ -23,7 +23,7 @@ GtLFilePathReference >> contentsDomainObject [
 				contents: stream contents base64Encoded ]
 		ifAbsent: [ GtLMissingDomainObject new objectName: fileReference pathString ] ]
 		on: Error
-		do: [ :e | GtLExceptionDomainObject new freeze: e ]
+		do: [ :e | GtLExceptionDomainObject freeze: e ]
 ]
 
 { #category : #accessing }

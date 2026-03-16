@@ -4,7 +4,7 @@ Magritte-based tool for removing a class from the image.
 Class {
 	#name : #GtLMagritteToolForClassRemoval,
 	#superclass : #GtLAbstractMagritteFunctionTool,
-	#category : #'Gt4LlmCore-Tools'
+	#category : 'Gt4LlmCore-Tools'
 }
 
 { #category : #magritte }
@@ -53,7 +53,7 @@ GtLMagritteToolForClassRemoval >> privatePerformToolCall: aToolCall inContext: a
 		do: [ :ex |
 			^ GtLExceptionDomainObject new
 				freeze: ex;
-				description: 'Error while removing class';
+				errorReason: 'Error while removing class';
 				yourself ].
 				
 	^ GtLClassRemovalResult new

@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLMagritteToolForFilesWrite,
 	#superclass : #GtLAbstractMagritteFunctionTool,
-	#category : #'Gt4LlmCore-Tools'
+	#category : 'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }
@@ -66,7 +66,7 @@ GtLMagritteToolForFilesWrite >> privatePerformToolCall: aToolCall inContext: anE
 					path: fileReference pathString;
 					contents: stream contents base64Encoded ] ]
 			on: Error
-			do: [ :e | GtLExceptionDomainObject new freeze: e ].
+			do: [ :e | GtLExceptionDomainObject freeze: e ].
 		((result respondsTo: #isErrorDomainObject) and: [ result isErrorDomainObject ])
 			ifTrue: [ ^ result ].
 		fileObjects add: result ].

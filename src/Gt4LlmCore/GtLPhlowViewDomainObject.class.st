@@ -7,7 +7,7 @@ Class {
 		'viewMethodSourceCode',
 		'phlowViewForm'
 	],
-	#category : #'Gt4LlmCore-Domain Objects'
+	#category : 'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #'instance creation' }
@@ -63,25 +63,27 @@ GtLPhlowViewDomainObject >> gtLivePhlowViewFor: aView [
 ]
 
 { #category : #'llm views' }
-GtLPhlowViewDomainObject >> llmImageViewFor: aView [
+GtLPhlowViewDomainObject >> llmDataViewFor: aDataView [
 	<gtLlmDataView>
-	^aView imageData
-			title: 'Visual View' ;
-			png: [ByteArray
-				streamContents: [ :out | 
-						PNGReadWriter putForm: phlowViewForm onStream: out ]]
-]
-
-{ #category : #'llm views' }
-GtLPhlowViewDomainObject >> llmRawViewFor: aView [
-	<gtLlmDataView>
-	^aView jsonData: [ 
-			Dictionary new
+	
+	^aDataView jsonData: [ 
+			NeoJSONObject new
 				at: #viewTitle put: phlowView title;
 				at: #priority put: phlowView priority;
 				at: #viewMethodClass put: viewMethodClassName;
 				at: #viewMethodSourceCode put: viewMethodSourceCode;
 				yourself  ]
+]
+
+{ #category : #'llm views' }
+GtLPhlowViewDomainObject >> llmImageViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^aDataView imageData
+			title: 'Visual View' ;
+			png: [ ByteArray
+				streamContents: [ :out | 
+						PNGReadWriter putForm: phlowViewForm onStream: out ] ]
 ]
 
 { #category : #accessing }
@@ -129,8 +131,10 @@ GtLPhlowViewDomainObject >> serializeToLlmJsonObject [
 		at: #priority put: phlowView priority;
 		yourself.
 	
-	viewMethodClassName ifNotNil: [ data at: #viewMethodClass put: viewMethodClassName ].
-	viewMethodSourceCode ifNotNil: [ data at: #viewMethodSourceCode put: viewMethodSourceCode ].
+	viewMethodClassName ifNotNil: [ 
+		data at: #viewMethodClass put: viewMethodClassName ].
+	viewMethodSourceCode ifNotNil: [ 
+		data at: #viewMethodSourceCode put: viewMethodSourceCode ].
 	
 	^ data
 ]

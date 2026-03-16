@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLImageDataView,
-	#superclass : #GtLPrimitiveDataView,
+	#superclass : #GtLDataView,
 	#instVars : [
 		'imageType',
 		'imageBytesComputation',
@@ -87,29 +87,12 @@ GtLImageDataView >> printOn: aStream [
 ]
 
 { #category : #serialization }
-GtLImageDataView >> serializeToAnthropicResponseOutput [
-	<return: #Array of: #NeoJSONObject>
-	
-	^{ NeoJSONObject new
-			at: 'type' put: 'image';
-			at: 'source'put:  {
-				'media_type' -> 'image/png'.
-				'type' ->'base64'.
-				'data' -> self encodedBytes } asDictionary;
-			yourself}
-]
-
-{ #category : #serialization }
-GtLImageDataView >> serializeToOpenAIResponseOutput [
-	<return: #Array of: #NeoJSONObject>
-	"Return a JSON that represents tool response output.
-	See GtLToolMessage>>#serializeForOpenAIResponsesAPI for more information."
-	
-	^ {NeoJSONObject new
-			at: 'image_url' put: ('data:image/'
-				,self imageType,';base64,' , self encodedBytes);
-			at: 'type' put: 'input_image';
-			yourself}
+GtLImageDataView >> serializeToLlmPrimiteDataOn: aBuilder [
+	aBuilder 
+		addImageBlockFor: self computedImageBytes
+		type: self imageType
+		dataKey: self dataKey
+		from: self
 ]
 
 { #category : #'gt - extensions' }
