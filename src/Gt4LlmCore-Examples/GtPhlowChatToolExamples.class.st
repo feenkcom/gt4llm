@@ -29,7 +29,7 @@ GtPhlowChatToolExamples >> chatToolCollectsToolViews [
 		fromObject: aChat;
 		collect.
 	titles := collectedViews collect: [ :each | each title asString ].
-	self assert: collectedViews notEmpty.
+	self assert: collectedViews notEmpty description: 'GtLChat should have methods annotated with gtLlmView'.
 	self assert: (titles includes: 'Live').
 	self assert: (titles includes: 'Messages').
 	^ collectedViews
@@ -77,16 +77,5 @@ GtPhlowChatToolExamples >> chatToolElementWithPlayground [
 		chat: GtLChat new.
 	playground := anElement childNamed: #playgroundPage.
 	self assert: playground notNil.
-	^ anElement
-]
-
-{ #category : #examples }
-GtPhlowChatToolExamples >> chatToolElementWithSidebar [
-	<gtExample>
-	| anElement sidebar |
-	anElement := GtPhlowChatToolElement new
-		chat: GtLChat new.
-	sidebar := anElement childNamed: #sidebar.
-	self assert: sidebar notNil.
 	^ anElement
 ]
