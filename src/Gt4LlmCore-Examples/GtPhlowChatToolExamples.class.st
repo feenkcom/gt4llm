@@ -23,7 +23,8 @@ GtPhlowChatToolExamples >> chatTool [
 GtPhlowChatToolExamples >> chatToolCollectsToolViews [
 	<gtExample>
 	| aChat collectedViews titles |
-	aChat := GtLChat new.
+	aChat := GtLChat new .
+	aChat provider: GtLOpenAIProviderStub new.
 	collectedViews := GtPhlowViewsCollector new
 		pragmaName: #gtLlmView;
 		fromObject: aChat;
