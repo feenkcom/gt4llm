@@ -69,7 +69,9 @@ GtLReplyMessageContentElement >> initializeContentsExpanderElement [
 
 	contentsHeaderElement
 		when: BlClickEvent
-		do: [ :anEvent | contentsExpanderElement expand ]
+		do: [ :anEvent | 
+			anEvent consumed: true.
+			contentsExpanderElement expand ]
 ]
 
 { #category : #initialization }
@@ -124,10 +126,12 @@ GtLReplyMessageContentElement >> initializeToolsExpanderElement [
 			visibility: BlVisibility gone;
 			whenExpandedDo: [ :anEvent | self onToolsExpanded: anEvent ];
 			whenCollapsedDo: [ :anEvent | self onToolsCollapsed: anEvent ].
-			
+
 	toolsHeaderElement
 		when: BlClickEvent
-		do: [ :anEvent | toolsExpanderElement expand ].
+		do: [ :anEvent | 
+			anEvent consumed: true.
+			toolsExpanderElement expand ].
 
 	self
 		withAsyncSinkDo: [ :anElementSink | 

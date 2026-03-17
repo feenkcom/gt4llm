@@ -58,7 +58,9 @@ GtLUserMessageContentElement >> initializeContentsExpanderElement [
 
 	contentsHeaderElement
 		when: BlClickEvent
-		do: [ :anEvent | contentsExpanderElement expand ]
+		do: [ :anEvent | 
+			anEvent consumed: true.
+			contentsExpanderElement expand ]
 ]
 
 { #category : #initialization }
