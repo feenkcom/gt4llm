@@ -98,6 +98,7 @@ GtLReplyMessageContentElement >> initializeToolsExpanderElement [
 			text: 'Tools'.
 	toolsContentsElement := GtLMessageUsedToolsElement new
 			hMatchParent;
+			padding: (BlInsets bottom: 10);
 			vFitContentLimited;
 			addAptitude: (toolsResizerAptitude := BrGlamorousWithVerticalResizerAptitude new
 						beBottom;
