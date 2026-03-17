@@ -152,6 +152,31 @@ GtLChatMessage >> currentMessage [
 ]
 
 { #category : #accessing }
+GtLChatMessage >> dateString [
+	"Return a string that represents a human readable date and time, e.g., creation time."
+
+	<return: #String>
+	| aDateAndTime |
+	aDateAndTime := self createdAt asLocal.
+
+	^ String
+		streamContents: [ :aStream | 
+			aDateAndTime asDate printOn: aStream format: #(2 1 3 $  3 1 1).
+			aStream space.
+			aDateAndTime hour
+				printOn: aStream
+				base: 10
+				length: 2
+				padded: true.
+			aStream nextPut: $:.
+			aDateAndTime minute
+				printOn: aStream
+				base: 10
+				length: 2
+				padded: true ]
+]
+
+{ #category : #accessing }
 GtLChatMessage >> descendant [
 	^ self chat descendantOf: self
 ]

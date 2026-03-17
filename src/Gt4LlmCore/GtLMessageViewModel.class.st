@@ -5,11 +5,29 @@ Class {
 	#classTraits : 'TGtLWithMessage classTrait',
 	#instVars : [
 		'isExpanded',
-		'userViewMessage',
-		'toolViewMessages'
+		'userViewMessage'
+	],
+	#classInstVars : [
+		'defaultElementClass'
 	],
 	#category : 'Gt4LlmCore-UI - View Models'
 }
+
+{ #category : #settings }
+GtLMessageViewModel class >> elementClass [
+	"This is a temporary solution. 
+	We will remove it as soon as we finish the new message element."
+
+	^ defaultElementClass
+]
+
+{ #category : #settings }
+GtLMessageViewModel class >> elementClass: anElementClass [
+	"This is a temporary solution. 
+	We will remove it as soon as we finish the new message element."
+
+	defaultElementClass := anElementClass
+]
 
 { #category : #visiting }
 GtLMessageViewModel >> acceptVisitor: aVisitor [
@@ -37,9 +55,14 @@ GtLMessageViewModel >> createdAt [
 	^ self message createdAt
 ]
 
+{ #category : #accessing }
+GtLMessageViewModel >> dateString [
+	^ self message dateString
+]
+
 { #category : #'api - converting' }
 GtLMessageViewModel >> elementClass [
-	^ GtLExpandableMessageElement
+	^ self class elementClass ifNil: [ GtLExpandableMessageElement ]
 ]
 
 { #category : #accessing }
@@ -49,10 +72,15 @@ GtLMessageViewModel >> isExpanded [
 
 { #category : #accessing }
 GtLMessageViewModel >> isExpanded: aBoolean [
+	self isExpanded: aBoolean source: nil
+]
+
+{ #category : #accessing }
+GtLMessageViewModel >> isExpanded: aBoolean source: aSource [
 	isExpanded = aBoolean ifTrue: [ ^ self ].
 
 	isExpanded := aBoolean.
-	self notifyExpandedChanged
+	self notifyExpandedChangedSource: aSource
 ]
 
 { #category : #testing }
@@ -68,7 +96,7 @@ GtLMessageViewModel >> messageExecutionStateLabel [
 ]
 
 { #category : #'private - notifying' }
-GtLMessageViewModel >> notifyExpandedChanged [
+GtLMessageViewModel >> notifyExpandedChangedSource: aSource [
 	self announcer
 		announce: (GtLMessageViewModelExpansionChanged new
 				messageViewModel: self;
