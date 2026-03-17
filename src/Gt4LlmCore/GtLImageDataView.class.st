@@ -35,6 +35,23 @@ GtLImageDataView >> computedImageBytes [
 ]
 
 { #category : #accessing }
+GtLImageDataView >> element: aBlockReturningElement [
+	
+	self png: [
+		| rootElement form |
+		rootElement := BlScripter new
+			element: aBlockReturningElement value;
+			extent: 1600@1200;
+			elementWithoutParent.
+		form := BlExporter png
+			element: rootElement;
+			doExport: [ :aCanvas | aCanvas asForm ].
+	
+		(ByteArray
+			streamContents: [ :out | PNGReadWriter putForm: form onStream: out ]) ]
+]
+
+{ #category : #accessing }
 GtLImageDataView >> encodedBytes [
 	^ self computedImageBytes base64Encoded
 ]

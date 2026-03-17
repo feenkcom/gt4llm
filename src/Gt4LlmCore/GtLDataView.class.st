@@ -82,8 +82,8 @@ GtLDataView >> errorViewWithException: anException isFrozen: aBoolean [
 		ifTrue: [ anException ]
 		ifFalse: [ GtSystemUtility freeze: anException ].
 		
-	errorName := self name isNotNil
-		ifTrue: [ self name asString, ' (Error)' ] 
+	errorName := self title isNotNil
+		ifTrue: [ self title asString, ' (Error)' ] 
 		ifFalse: [ 'Error' ].
 		
 	^ GtPhlowViewWithError new
