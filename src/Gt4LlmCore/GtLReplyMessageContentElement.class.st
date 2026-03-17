@@ -57,7 +57,9 @@ GtLReplyMessageContentElement >> initializeContentsExpanderElement [
 			content: [ contentsElement ];
 			hMatchParent;
 			vFitContentLimited;
-			expand
+			expand;
+			whenExpandedDo: [ :anEvent | self onContentsExpanded: anEvent ];
+			whenCollapsedDo: [ :anEvent | self onContentsCollapsed: anEvent ]
 ]
 
 { #category : #initialization }
@@ -83,7 +85,7 @@ GtLReplyMessageContentElement >> initializeStyling [
 GtLReplyMessageContentElement >> initializeToolsExpanderElement [
 	toolsHeaderElement := BrLabel new
 			aptitude: BrGlamorousLabelAptitude;
-			text: 'Executed tools'.
+			text: 'Tools'.
 	toolsContentsElement := GtLMessageUsedToolsElement new
 			hMatchParent;
 			vFitContentLimited.
@@ -95,7 +97,9 @@ GtLReplyMessageContentElement >> initializeToolsExpanderElement [
 			hMatchParent;
 			vFitContentLimited;
 			collapse;
-			visibility: BlVisibility gone.
+			visibility: BlVisibility gone;
+			whenExpandedDo: [ :anEvent | self onToolsExpanded: anEvent ];
+			whenCollapsedDo: [ :anEvent | self onToolsCollapsed: anEvent ].
 
 	self
 		withAsyncSinkDo: [ :anElementSink | 
@@ -104,9 +108,23 @@ GtLReplyMessageContentElement >> initializeToolsExpanderElement [
 				whenUpdate: [ :anElement :aCounterSink | 
 					toolsExpanderElement visibility: BlVisibility visible.
 					toolsHeaderElement
-						text: ('{1} executed {2}'
+						text: ('{1} {2}'
 								format: {aCounterSink count.
 										'tool' asPluralBasedOn: aCounterSink count}) ] ]
+]
+
+{ #category : #'private - event handling' }
+GtLReplyMessageContentElement >> onContentsCollapsed: anEvent [
+	self messageViewModel ifNil: [ ^ self ].
+
+	self messageViewModel isContentsExpanded: false source: self
+]
+
+{ #category : #'private - event handling' }
+GtLReplyMessageContentElement >> onContentsExpanded: anEvent [
+	self messageViewModel ifNil: [ ^ self ].
+	
+	self messageViewModel isContentsExpanded: true source: self
 ]
 
 { #category : #'private - hooks' }
@@ -126,14 +144,40 @@ GtLReplyMessageContentElement >> onMessageViewModelContentsChanged: anAnnounceme
 	BlTaskAction enqueueElement: self action: [ self updateContentsElement]
 ]
 
+{ #category : #'private - event handling' }
+GtLReplyMessageContentElement >> onMessageViewModelExpansionChanged: anAnnouncement [
+	self messageViewModel = anAnnouncement messageViewModel ifFalse: [ ^ self ].
+
+	BlTaskAction
+		enqueueElement: self
+		action: [ self updateContentsExpanderElement ]
+]
+
+{ #category : #'private - event handling' }
+GtLReplyMessageContentElement >> onToolsCollapsed: anEvent [
+	self messageViewModel ifNil: [ ^ self ].
+
+	self messageViewModel isToolsExpanded: false source: self
+]
+
+{ #category : #'private - event handling' }
+GtLReplyMessageContentElement >> onToolsExpanded: anEvent [
+	self messageViewModel ifNil: [ ^ self ].
+	
+	self messageViewModel isToolsExpanded: true source: self
+]
+
 { #category : #'as yet unclassified' }
 GtLReplyMessageContentElement >> subscribeToMessageViewModel [
 	super subscribeToMessageViewModel.
 
 	self messageViewModel announcer weak
 		when: GtLMessageViewModelContentsChanged
-		send: #onMessageViewModelContentsChanged:
-		to: self
+			send: #onMessageViewModelContentsChanged:
+			to: self;
+		when: GtLMessageViewModelExpansionChanged
+			send: #onMessageViewModelExpansionChanged:
+			to: self
 ]
 
 { #category : #'private - event handling' }
@@ -144,8 +188,15 @@ GtLReplyMessageContentElement >> updateContentsElement [
 ]
 
 { #category : #'private - updating' }
+GtLReplyMessageContentElement >> updateContentsExpanderElement [
+	contentsExpanderElement expanded: self messageViewModel isContentsExpanded
+]
+
+{ #category : #'private - updating' }
 GtLReplyMessageContentElement >> updateElement [
+	self updateToolsExpanderElement.
 	self updateToolsContentsElement.
+	self updateContentsExpanderElement.
 	self updateContentsElement.
 ]
 
@@ -153,4 +204,9 @@ GtLReplyMessageContentElement >> updateElement [
 GtLReplyMessageContentElement >> updateToolsContentsElement [
 	self asyncSink
 		forwardStream: self messageViewModel executionMessageViewModelsStream
+]
+
+{ #category : #'private - updating' }
+GtLReplyMessageContentElement >> updateToolsExpanderElement [
+	toolsExpanderElement expanded: self messageViewModel isToolsExpanded
 ]

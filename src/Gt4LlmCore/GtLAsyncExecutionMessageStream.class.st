@@ -55,12 +55,13 @@ GtLAsyncExecutionMessageStream >> postSimilarCopy [
 
 { #category : #initialization }
 GtLAsyncExecutionMessageStream >> replyMessage: aReplyMessage [
-	executionMessages := AsyncMutex for: (LinkedList withAll: aReplyMessage executionMessages).
-	waker := AsyncFutureExecutionAtomicWaker new.
-	
-	replyMessage := aReplyMessage.
-	replyMessage announcer weak
-		when: GtLMessageExecutionMessagesChanged
-		send: #onMessageExecutionMessagesChanged:
-		to: self
+	aReplyMessage executionMessagesLock: [ :aList |
+		executionMessages := AsyncMutex for: (LinkedList withAll: aList).
+		waker := AsyncFutureExecutionAtomicWaker new.
+		
+		replyMessage := aReplyMessage.
+		replyMessage announcer weak
+			when: GtLMessageExecutionMessagesChanged
+			send: #onMessageExecutionMessagesChanged:
+			to: self ]
 ]

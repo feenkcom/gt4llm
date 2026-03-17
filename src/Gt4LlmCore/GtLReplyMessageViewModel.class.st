@@ -3,7 +3,8 @@ Class {
 	#superclass : #GtLMessageViewModel,
 	#instVars : [
 		'executionMessageViewModelsCache',
-		'finalMessageViewModel'
+		'finalMessageViewModel',
+		'isToolsExpanded'
 	],
 	#classVars : [
 		'ElementClass'
@@ -46,12 +47,33 @@ GtLReplyMessageViewModel >> finalMessageViewModel [
 GtLReplyMessageViewModel >> initialize [
 	super initialize.
 
-	executionMessageViewModelsCache := AsyncSharedDictionary new
+	executionMessageViewModelsCache := AsyncSharedDictionary new.
+	isToolsExpanded := false.
+]
+
+{ #category : #'api - accessing' }
+GtLReplyMessageViewModel >> isContentsExpanded [
+	^ self isExpanded
+]
+
+{ #category : #'api - accessing' }
+GtLReplyMessageViewModel >> isContentsExpanded: aBoolean source: aSource [
+	self isExpanded: aBoolean
 ]
 
 { #category : #'api - testing' }
 GtLReplyMessageViewModel >> isFinished [
 	^ self finalMessageViewModel isNotNil
+]
+
+{ #category : #'api - accessing' }
+GtLReplyMessageViewModel >> isToolsExpanded [
+	^ isToolsExpanded
+]
+
+{ #category : #'api - accessing' }
+GtLReplyMessageViewModel >> isToolsExpanded: aBoolean source: aSource [
+	isToolsExpanded := aBoolean
 ]
 
 { #category : #accessing }
