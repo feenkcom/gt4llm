@@ -83,7 +83,7 @@ GtLReplyMessageContentElement >> initializeStyling [
 GtLReplyMessageContentElement >> initializeToolsExpanderElement [
 	toolsHeaderElement := BrLabel new
 			aptitude: BrGlamorousLabelAptitude;
-			text: 'Executed tools'.
+			text: 'Tools'.
 	toolsContentsElement := GtLMessageUsedToolsElement new
 			hMatchParent;
 			vFitContentLimited.
@@ -104,7 +104,7 @@ GtLReplyMessageContentElement >> initializeToolsExpanderElement [
 				whenUpdate: [ :anElement :aCounterSink | 
 					toolsExpanderElement visibility: BlVisibility visible.
 					toolsHeaderElement
-						text: ('{1} executed {2}'
+						text: ('{1} {2}'
 								format: {aCounterSink count.
 										'tool' asPluralBasedOn: aCounterSink count}) ] ]
 ]
