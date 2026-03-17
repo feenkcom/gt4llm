@@ -13,7 +13,7 @@ Class {
 { #category : #'instance creation' }
 GtLPhlowViewDomainObject class >> phlowView: aPhlowView viewMethodClassName: aClassName viewMethodSourceCode: aSourceCode [
 	| form |
-	aPhlowView
+	[ aPhlowView
 		asElementDo: [ :anElement | 
 			| rootElement |
 			rootElement := BlScripter new
@@ -22,9 +22,11 @@ GtLPhlowViewDomainObject class >> phlowView: aPhlowView viewMethodClassName: aCl
 					elementWithoutParent.
 			form := BlExporter png
 					element: rootElement;
-					doExport: [ :aCanvas | aCanvas asForm ] ].
+					doExport: [ :aCanvas | aCanvas asForm ] ] ]
+		on: Error
+		do: [ :e | ^ GtLExceptionDomainObject new freeze: e ].
 
-	^self new
+	^ self new
 		phlowView: aPhlowView;
 		phlowViewForm: form;
 		viewMethodClassName: aClassName;
@@ -63,25 +65,27 @@ GtLPhlowViewDomainObject >> gtLivePhlowViewFor: aView [
 ]
 
 { #category : #'llm views' }
-GtLPhlowViewDomainObject >> llmImageViewFor: aView [
+GtLPhlowViewDomainObject >> llmDataViewFor: aDataView [
 	<gtLlmDataView>
-	^aView imageData
-			title: 'Visual View' ;
-			png: [ByteArray
-				streamContents: [ :out | 
-						PNGReadWriter putForm: phlowViewForm onStream: out ]]
-]
-
-{ #category : #'llm views' }
-GtLPhlowViewDomainObject >> llmRawViewFor: aView [
-	<gtLlmDataView>
-	^aView jsonData: [ 
-			Dictionary new
+	
+	^aDataView jsonData: [ 
+			NeoJSONObject new
 				at: #viewTitle put: phlowView title;
 				at: #priority put: phlowView priority;
 				at: #viewMethodClass put: viewMethodClassName;
 				at: #viewMethodSourceCode put: viewMethodSourceCode;
 				yourself  ]
+]
+
+{ #category : #'llm views' }
+GtLPhlowViewDomainObject >> llmImageViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^aDataView imageData
+			title: 'Visual View' ;
+			png: [ ByteArray
+				streamContents: [ :out | 
+						PNGReadWriter putForm: phlowViewForm onStream: out ] ]
 ]
 
 { #category : #accessing }
@@ -129,8 +133,10 @@ GtLPhlowViewDomainObject >> serializeToLlmJsonObject [
 		at: #priority put: phlowView priority;
 		yourself.
 	
-	viewMethodClassName ifNotNil: [ data at: #viewMethodClass put: viewMethodClassName ].
-	viewMethodSourceCode ifNotNil: [ data at: #viewMethodSourceCode put: viewMethodSourceCode ].
+	viewMethodClassName ifNotNil: [ 
+		data at: #viewMethodClass put: viewMethodClassName ].
+	viewMethodSourceCode ifNotNil: [ 
+		data at: #viewMethodSourceCode put: viewMethodSourceCode ].
 	
 	^ data
 ]

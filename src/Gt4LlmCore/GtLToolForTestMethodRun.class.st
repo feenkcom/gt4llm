@@ -64,7 +64,7 @@ GtLToolForTestMethodRun >> privatePerformToolCall: aToolCall inContext: anExecut
 		do: [ :ex |
 			^ GtLExceptionDomainObject new
 				freeze: ex;
-				description: ('Running test {1}>>#{2} failed' 
+				errorReason: ('Running test {1}>>#{2} failed' 
 					format: { testClass name. methodName }) ].
 	
 	^ GtLTestCaseWithResultDomainObject new

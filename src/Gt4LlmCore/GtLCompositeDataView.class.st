@@ -28,11 +28,17 @@ GtLCompositeDataView >> gtDataViewsFor: aView [
 	<gtView>
 	<gtLlmMessageView>
 	dataViews ifNil: [^aView empty].
-	^(aView columnedList)
+	^(aView columnedTree)
 		title: 'Data Views';
 		priority: 5;
 		items: [dataViews];
+		children: [ :each | each gtPhlowTreeChildren ];
 		column: 'Value' text: [:each | each gtDisplayString]
+]
+
+{ #category : #'gt - extensions' }
+GtLCompositeDataView >> gtPhlowTreeChildren [
+	^ dataViews
 ]
 
 { #category : #initialization }
@@ -41,14 +47,24 @@ GtLCompositeDataView >> initialize [
 	dataViews := OrderedCollection new.
 ]
 
-{ #category : #accessing }
-GtLCompositeDataView >> serializeToAnthropicResponseOutput [
-	^self dataViews flatCollect: [:each |
-		each serializeToAnthropicResponseOutput ] as: NeoJSONArray
+{ #category : #serialization }
+GtLCompositeDataView >> serializeToLlmPrimiteDataOn: aBuilder [
+	aBuilder 
+		forDataKey: self dataKey
+		do: [
+			self dataViews do: [ :each |
+				each serializeToLlmPrimiteDataOn: aBuilder ] ]
 ]
 
-{ #category : #accessing }
-GtLCompositeDataView >> serializeToOpenAIResponseOutput [
-	^self dataViews flatCollect: [:each |
-		each serializeToOpenAIResponseOutput ] as: NeoJSONArray
+{ #category : #printing }
+GtLCompositeDataView >> viewDescriptionOn: aStream [
+	super viewDescriptionOn: aStream.
+	
+	aStream 
+		<<'; '
+		print: self dataViews size;
+		<< ' ';
+		<< (self dataViews size = 1 
+			ifTrue: [ 'view' ]
+			ifFalse: [ 'views' ])
 ]

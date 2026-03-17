@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'userMessage',
 		'finalMessage',
-		'executionMessages'
+		'executionMessages',
+		'finishedAt'
 	],
 	#category : #'Gt4LlmCore-Core'
 }
@@ -76,11 +77,6 @@ GtLReplyMessage >> copyForIndependentRequest [
 	^ copy
 ]
 
-{ #category : #accessing }
-GtLReplyMessage >> createdAt [
-	^ self currentMessageDo: #createdAt ifAbsent: [ super createdAt ]
-]
-
 { #category : #'api - message' }
 GtLReplyMessage >> currentMessage [
 	"Return a last message that should be used
@@ -97,25 +93,39 @@ GtLReplyMessage >> currentMessageDo: aBlock ifAbsent: anAbsentBlock [
 
 	<return: #GtLChatMessage>
 	finalMessage ifNotNil: [ ^ aBlock value: finalMessage ].
-	executionMessages ifNotEmpty: [ ^ aBlock value: executionMessages last ].
+	executionMessages value ifNotEmpty: [ ^ aBlock value: executionMessages value last ].
 	^ anAbsentBlock value
 ]
 
 { #category : #accessing }
 GtLReplyMessage >> executionMessages [
-	^ executionMessages
+	^ executionMessages value
 ]
 
 { #category : #accessing }
-GtLReplyMessage >> executionMessages: aCollection [
-	| oldCollection |
-	executionMessages = aCollection ifTrue: [ ^ self ].
-
-	oldCollection := executionMessages.
-	executionMessages := aCollection.
+GtLReplyMessage >> executionMessages: newCollection [
+	| oldCollection removedMessages addedMessages |
+	executionMessages lock: [ :theCollection | 
+		theCollection = newCollection ifTrue: [ ^ self ].
+		
+		oldCollection := theCollection.
+		executionMessages value: newCollection ].
 	
-	self updateSubscriptionsFrom: oldCollection to: aCollection.
+	removedMessages := oldCollection difference: newCollection.
+	addedMessages := newCollection difference: oldCollection.
+	self updateSubscriptionsFrom: removedMessages to: addedMessages.
+	self notifyExecutionMessagesRemoved: removedMessages added: addedMessages.
 	self notifyReplyMessageChanged
+]
+
+{ #category : #accessing }
+GtLReplyMessage >> executionMessagesLock: aBlock [
+	^ executionMessages lock: aBlock
+]
+
+{ #category : #accessing }
+GtLReplyMessage >> executionMessagesStream [
+	^ GtLAsyncExecutionMessageStream forReplyMessage: self
 ]
 
 { #category : #accessing }
@@ -133,6 +143,7 @@ GtLReplyMessage >> finalMessage: aMessage [
 
 	finalMessage ifNotNil: [ :oldMessage | oldMessage unsubscribe: self ].
 	finalMessage := aMessage.
+	finishedAt := DateAndTime now.
 
 	aMessage
 				when: GtLMessageAnnouncement
@@ -140,6 +151,12 @@ GtLReplyMessage >> finalMessage: aMessage [
 				to: self.
 	
 	self notifyReplyMessageChanged
+]
+
+{ #category : #accessing }
+GtLReplyMessage >> finishedAt [
+	<return: #DateAndTime or: nil>
+	^ finishedAt
 ]
 
 { #category : #'gt - extensions' }
@@ -168,11 +185,13 @@ GtLReplyMessage >> gtActionStopFor: anAction [
 GtLReplyMessage >> gtGroupedToolsFor: aView [
 	<gtView>
 	<gtLlmView>
-	executionMessages isEmpty ifTrue: [ ^ aView empty ].
+	executionMessages ifNil: [ ^ aView empty ].
+	self executionMessages ifEmpty: [ ^ aView empty ].
+	
 	^ aView columnedList
 		title: 'Grouped executed tools';
 		priority: 19;
-		items: [ (executionMessages groupedBy: [ :each | each toolCall tool ]) associations ];
+		items: [ (self executionMessages groupedBy: [ :each | each toolCall tool ]) associations ];
 		column: 'Key' text: [ :each | each key name ] width: 150;
 		column: 'Amount' text: [ :each | each value size ] width: 100;
 		column: 'Details' text: [ :each | ', ' join: (each value collect: [:m | m toolCall argumentsDisplayString ]) ];
@@ -244,7 +263,7 @@ GtLReplyMessage >> gtViewsInContext: aPhlowContext [
 { #category : #initialization }
 GtLReplyMessage >> initialize [
 	super initialize.
-	executionMessages := #()
+	executionMessages := AsyncMutex for: #()
 ]
 
 { #category : #'api - testing' }
@@ -294,6 +313,15 @@ GtLReplyMessage >> messagesReverseDo: aBlock [
 ]
 
 { #category : #'private - notifying' }
+GtLReplyMessage >> notifyExecutionMessagesRemoved: removedMessages added: addedMessages [
+	self announcer
+		announce: (GtLMessageExecutionMessagesChanged new
+				message: self;
+				removedExecutionMessages: removedMessages;
+				addedExecutionMessages: addedMessages)
+]
+
+{ #category : #'private - notifying' }
 GtLReplyMessage >> notifyReplyMessageChanged [
 	self announcer announce: (GtLMessageContentsChanged new message: self)
 ]
@@ -313,11 +341,21 @@ GtLReplyMessage >> senderText [
 	^ self currentMessageDo: #senderText ifAbsent: [ 'Waiting' ]
 ]
 
+{ #category : #accessing }
+GtLReplyMessage >> senderText2 [
+	^ self chat
+		ifNotNil: [ :aChat | 
+			aChat provider
+				ifNotNil: [ :aProvider | 
+					aProvider modelName
+						ifNil: [ 'Assistant' ]
+						ifNotNil: [ :aModel | GtLConnectionRegistry uniqueInstance labelForModel: aModel ] ]
+				ifNil: [ 'Assistant' ] ]
+		ifNil: [ 'Assistant' ]
+]
+
 { #category : #'private - updating' }
-GtLReplyMessage >> updateSubscriptionsFrom: oldCollection to: newCollection [
-	| removedMessages addedMessages |
-	removedMessages := oldCollection difference: newCollection.
-	addedMessages := newCollection difference: oldCollection.
+GtLReplyMessage >> updateSubscriptionsFrom: removedMessages to: addedMessages [
 	removedMessages do: [ :eachMessage | eachMessage unsubscribe: self ].
 	addedMessages
 		do: [ :eachMessage | 
@@ -335,6 +373,12 @@ GtLReplyMessage >> userMessage [
 { #category : #accessing }
 GtLReplyMessage >> userMessage: aMessage [
 	userMessage := aMessage
+]
+
+{ #category : #accessing }
+GtLReplyMessage >> userMessageCreatedAt [
+	<return: #DateAndTime>
+	^ self userMessage ifNotNil: #createdAt ifNil: [ self createdAt ]
 ]
 
 { #category : #'api - converting' }

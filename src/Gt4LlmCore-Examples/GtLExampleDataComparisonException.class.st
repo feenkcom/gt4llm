@@ -43,6 +43,16 @@ GtLExampleDataComparisonException >> gtViewDiffFor: aView [
 				aButton phlow spawnObject: self computeDiff ]
 ]
 
+{ #category : #'llm views' }
+GtLExampleDataComparisonException >> llmDiffImageViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^aDataView imageData
+			title: 'Visual Diff' ;
+			element: [ (self 
+				gtViewDiffFor: GtPhlowView empty) asElement ]
+]
+
 { #category : #serialization }
 GtLExampleDataComparisonException >> serializeToLlmResponseImages [
 	^{(GtLPrimitiveImageData fromElement:  (self 
