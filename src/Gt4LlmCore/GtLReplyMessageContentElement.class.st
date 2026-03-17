@@ -56,7 +56,7 @@ GtLReplyMessageContentElement >> initialize [
 GtLReplyMessageContentElement >> initializeContentsExpanderElement [
 	contentsElement := GtLMessageViewsElement new.
 	contentsHeaderElement := GtMessageOneLineMultiLabelSummaryElement new.
-	
+
 	contentsExpanderElement := BrExpander new
 			addAptitude: (BrGlamorousExpanderSubtleAptitude new sidebarExtraPadding: (BlInsets top: 5));
 			header: [ contentsHeaderElement ];
@@ -65,7 +65,11 @@ GtLReplyMessageContentElement >> initializeContentsExpanderElement [
 			vFitContentLimited;
 			expand;
 			whenExpandedDo: [ :anEvent | self onContentsExpanded: anEvent ];
-			whenCollapsedDo: [ :anEvent | self onContentsCollapsed: anEvent ]
+			whenCollapsedDo: [ :anEvent | self onContentsCollapsed: anEvent ].
+
+	contentsHeaderElement
+		when: BlClickEvent
+		do: [ :anEvent | contentsExpanderElement expand ]
 ]
 
 { #category : #initialization }
@@ -120,6 +124,10 @@ GtLReplyMessageContentElement >> initializeToolsExpanderElement [
 			visibility: BlVisibility gone;
 			whenExpandedDo: [ :anEvent | self onToolsExpanded: anEvent ];
 			whenCollapsedDo: [ :anEvent | self onToolsCollapsed: anEvent ].
+			
+	toolsHeaderElement
+		when: BlClickEvent
+		do: [ :anEvent | toolsExpanderElement expand ].
 
 	self
 		withAsyncSinkDo: [ :anElementSink | 
