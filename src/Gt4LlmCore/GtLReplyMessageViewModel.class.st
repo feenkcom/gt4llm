@@ -44,6 +44,11 @@ GtLReplyMessageViewModel >> finalMessageViewModel [
 		ifNil: [ finalMessageViewModel := self message finalMessage ifNotNil: #asViewModel ]
 ]
 
+{ #category : #'api - accessing' }
+GtLReplyMessageViewModel >> finishedAt [
+	^ self message finishedAt
+]
+
 { #category : #initialization }
 GtLReplyMessageViewModel >> initialize [
 	super initialize.
@@ -104,4 +109,9 @@ GtLReplyMessageViewModel >> toolsContentsHeight: aHeightOrNil [
 { #category : #'api - accessing' }
 GtLReplyMessageViewModel >> uiInsets [
 	^ BlInsets right: 0 "50"
+]
+
+{ #category : #'api - accessing' }
+GtLReplyMessageViewModel >> userMessageCreatedAt [
+	^ self message userMessageCreatedAt
 ]
