@@ -123,6 +123,11 @@ GtLReplyMessage >> executionMessages: newCollection [
 ]
 
 { #category : #accessing }
+GtLReplyMessage >> executionMessagesLock: aBlock [
+	^ executionMessages lock: aBlock
+]
+
+{ #category : #accessing }
 GtLReplyMessage >> executionMessagesStream [
 	^ GtLAsyncExecutionMessageStream forReplyMessage: self
 ]
