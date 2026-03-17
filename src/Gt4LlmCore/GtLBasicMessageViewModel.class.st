@@ -169,9 +169,14 @@ GtLBasicMessageViewModel >> requestStyleSourceText [
 	self announce: GtLlmThreadMessageRestyleRequested new
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'api - accessing' }
 GtLBasicMessageViewModel >> senderText [
 	^ self message senderText
+]
+
+{ #category : #'api - accessing' }
+GtLBasicMessageViewModel >> senderText2 [
+	^ self message senderText2
 ]
 
 { #category : #accessing }

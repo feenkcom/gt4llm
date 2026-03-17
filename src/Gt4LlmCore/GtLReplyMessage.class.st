@@ -119,6 +119,7 @@ GtLReplyMessage >> executionMessages: newCollection [
 	addedMessages := newCollection difference: oldCollection.
 	self updateSubscriptionsFrom: removedMessages to: addedMessages.
 	self notifyExecutionMessagesRemoved: removedMessages added: addedMessages.
+	self notifyReplyMessageChanged
 ]
 
 { #category : #accessing }
@@ -274,8 +275,6 @@ GtLReplyMessage >> isSuccess [
 
 { #category : #'api - execution' }
 GtLReplyMessage >> messageExecutionStateLabel [
-	self finalMessage ifNil: [ ^ 'running' ].
-
 	^ self
 		currentMessageDo: #messageExecutionStateLabel
 		ifAbsent: [ super messageExecutionStateLabel ]
@@ -331,13 +330,20 @@ GtLReplyMessage >> role [
 
 { #category : #accessing }
 GtLReplyMessage >> senderText [
+	^ self currentMessageDo: #senderText ifAbsent: [ 'Waiting' ]
+]
+
+{ #category : #accessing }
+GtLReplyMessage >> senderText2 [
 	^ self chat
 		ifNotNil: [ :aChat | 
 			aChat provider
 				ifNotNil: [ :aProvider | 
 					aProvider modelName
 						ifNil: [ 'Assistant' ]
-						ifNotNil: [ :aModel | GtLConnectionRegistry uniqueInstance labelForModel: aModel ] ] ]
+						ifNotNil: [ :aModel | GtLConnectionRegistry uniqueInstance labelForModel: aModel ] ]
+				ifNil: [ 'Assistant' ] ]
+		ifNil: [ 'Assistant' ]
 ]
 
 { #category : #'private - updating' }
