@@ -16,9 +16,6 @@ Class {
 { #category : #'instance creation' }
 GtLReplyMessageContentElement class >> newForChatList [
 	^ self new
-		geometry: (BlRoundedRectangleGeometry cornerRadius: 2);
-		background: Color white;
-		addAptitude: BrGlamorousFocusableShadowAptitude new;
 		margin: (BlInsets
 				top: 5
 				bottom: 10
@@ -37,7 +34,8 @@ GtLReplyMessageContentElement >> initialize [
 
 	self initializeHeaderElement.
 	self initializeToolsExpanderElement.
-	self initializeMessageContentElement.
+	self initializeContentsExpanderElement.
+	self initializeStyling.
 
 	self
 		hMatchParent;
@@ -49,14 +47,9 @@ GtLReplyMessageContentElement >> initialize [
 ]
 
 { #category : #initialization }
-GtLReplyMessageContentElement >> initializeHeaderElement [
-	headerElement := GtLMessageHeaderElement new
-]
-
-{ #category : #initialization }
-GtLReplyMessageContentElement >> initializeMessageContentElement [
+GtLReplyMessageContentElement >> initializeContentsExpanderElement [
 	contentsElement := GtLMessageViewsElement new.
-	contentsHeaderElement := GtLMessageHeaderElement new.
+	contentsHeaderElement := GtMessageOneLineMultiLabelSummaryElement new.
 	
 	contentsExpanderElement := BrExpander new
 			addAptitude: (BrGlamorousExpanderSubtleAptitude new sidebarExtraPadding: (BlInsets top: 5));
@@ -65,6 +58,25 @@ GtLReplyMessageContentElement >> initializeMessageContentElement [
 			hMatchParent;
 			vFitContentLimited;
 			expand
+]
+
+{ #category : #initialization }
+GtLReplyMessageContentElement >> initializeHeaderElement [
+	headerElement := GtLMessageHeaderElement new
+]
+
+{ #category : #initialization }
+GtLReplyMessageContentElement >> initializeStyling [
+	self padding: (BlInsets all: 5).
+	self background: self theme default contentBackground.
+	self
+		addAptitude: BlGlamorousExpanderShadowAptitude new;
+		addAptitude: (BrLazyStyleCommonAptitude new
+				when: BlElementState hovered | BlElementState focused
+				style: [ :aStyle :aTheme | 
+					aStyle
+						do: [ :aWidget | headerElement showToolbarElement ]
+						after: [ :aWidget | headerElement hideToolbarElement ] ])
 ]
 
 { #category : #initialization }
