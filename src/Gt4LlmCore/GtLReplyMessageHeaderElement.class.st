@@ -154,5 +154,5 @@ GtLReplyMessageHeaderElement >> updateElement [
 
 { #category : #'private - updating' }
 GtLReplyMessageHeaderElement >> updateSenderElement [
-	senderElement text: self messageViewModel senderText
+	senderElement text: self messageViewModel senderText2
 ]

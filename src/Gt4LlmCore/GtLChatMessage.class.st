@@ -415,6 +415,13 @@ GtLChatMessage >> senderText [
 ]
 
 { #category : #accessing }
+GtLChatMessage >> senderText2 [
+	"Sender name for the new message UI"
+
+	^ self senderText
+]
+
+{ #category : #accessing }
 GtLChatMessage >> tools [
 	^ tools
 ]

@@ -124,7 +124,7 @@ GtLChatWithScripterExamples >> chatElementWithEmptyReplyMessage_toolMessage [
 		label: 'Add tool message';
 		block: [ chat addToolMessage: tool ];
 		play.
-
+		
 	self assert: chat messages size equals: 2.
 	reply := chat messages at: 2.
 	self assert: reply isReplyMessage.
