@@ -7,7 +7,7 @@ Class {
 		'dateElement',
 		'executionStateElement'
 	],
-	#category : #'Gt4LlmCore-UI - Elements'
+	#category : 'Gt4LlmCore-UI - Elements'
 }
 
 { #category : #initialization }

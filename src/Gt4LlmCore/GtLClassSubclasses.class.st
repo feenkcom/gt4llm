@@ -9,7 +9,7 @@ Class {
 		'subclassNames',
 		'mayHaveMore'
 	],
-	#category : #'Gt4LlmCore-Magritte Objects'
+	#category : 'Gt4LlmCore-Magritte Objects'
 }
 
 { #category : #'instance creation' }

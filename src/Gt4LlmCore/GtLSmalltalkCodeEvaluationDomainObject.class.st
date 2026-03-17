@@ -9,7 +9,7 @@ Class {
 		'object',
 		'objectId'
 	],
-	#category : #'Gt4LlmCore-Domain Objects'
+	#category : 'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #accessing }
@@ -73,8 +73,8 @@ GtLSmalltalkCodeEvaluationDomainObject >> objectId: anObject [
 { #category : #serialization }
 GtLSmalltalkCodeEvaluationDomainObject >> serializeToLlmJsonObject [
 	"Return a JSON dictionary that represents the domain object."
-
 	<return: #NeoJSONObject>
+	
 	^ NeoJSONObject new
 		at: 'code' put: self code;
 		at: 'objectValue' put: (GtLValueSerializer new 
