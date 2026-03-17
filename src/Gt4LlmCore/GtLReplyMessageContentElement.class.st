@@ -62,7 +62,7 @@ GtLReplyMessageContentElement >> initializeContentsExpanderElement [
 
 { #category : #initialization }
 GtLReplyMessageContentElement >> initializeHeaderElement [
-	headerElement := GtLMessageHeaderElement new
+	headerElement := GtLReplyMessageHeaderElement new
 ]
 
 { #category : #initialization }

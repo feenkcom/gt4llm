@@ -274,6 +274,8 @@ GtLReplyMessage >> isSuccess [
 
 { #category : #'api - execution' }
 GtLReplyMessage >> messageExecutionStateLabel [
+	self finalMessage ifNil: [ ^ 'running' ].
+
 	^ self
 		currentMessageDo: #messageExecutionStateLabel
 		ifAbsent: [ super messageExecutionStateLabel ]
@@ -329,7 +331,13 @@ GtLReplyMessage >> role [
 
 { #category : #accessing }
 GtLReplyMessage >> senderText [
-	^ self currentMessageDo: #senderText ifAbsent: [ 'Waiting' ]
+	^ self chat
+		ifNotNil: [ :aChat | 
+			aChat provider
+				ifNotNil: [ :aProvider | 
+					aProvider modelName
+						ifNil: [ 'Assistant' ]
+						ifNotNil: [ :aModel | GtLConnectionRegistry uniqueInstance labelForModel: aModel ] ] ]
 ]
 
 { #category : #'private - updating' }
