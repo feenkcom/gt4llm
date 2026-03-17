@@ -4,8 +4,7 @@ Class {
 	#instVars : [
 		'senderElement',
 		'toolbarElement',
-		'dateElement',
-		'executionStateElement'
+		'dateElement'
 	],
 	#category : #'Gt4LlmCore-UI - Elements'
 }
@@ -67,7 +66,7 @@ GtLMessageSenderAndDateHeaderElement >> initializeSenderElement [
 			geometry: (BlRoundedRectangleGeometry cornerRadius: 2);
 			aptitude: BrGlamorousLabelAptitude new;
 			constraintsDo: [ :c | c linear vertical alignTop ];
-			padding: (BlInsets all: 2)
+			padding: (BlInsets left: 2 right: 2)
 ]
 
 { #category : #initialization }
