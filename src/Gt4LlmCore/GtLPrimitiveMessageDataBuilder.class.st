@@ -65,3 +65,8 @@ GtLPrimitiveMessageDataBuilder >> initialize [
 GtLPrimitiveMessageDataBuilder >> messageDataBlock [
 	^messageDataBlock
 ]
+
+{ #category : #accessing }
+GtLPrimitiveMessageDataBuilder >> sourceDataView: aDataView [
+	messageDataBlock sourceDataView: aDataView
+]

@@ -174,7 +174,7 @@ GtLDataView >> object: anObject arguments: theExecutionArguments [
 
 { #category : #'message performing' }
 GtLDataView >> on: anObject perform: aMessageSymbol withArguments: aCollectionOfArguments [
-	<return: #GtPhlowView>
+	<return: #GtLDataView>
 	<gtCollector>
 	
 	^ [ 
@@ -191,7 +191,7 @@ GtLDataView >> on: anObject perform: aMessageSymbol withArguments: aCollectionOf
 
 { #category : #'message performing' }
 GtLDataView >> on: anObject perform: aMessageSymbol withContext: aContext [
-	<return: #GtPhlowView>
+	<return: #GtLDataView>
 	<gtCollector>
 	
 	^ self 
@@ -202,7 +202,7 @@ GtLDataView >> on: anObject perform: aMessageSymbol withContext: aContext [
 
 { #category : #'message performing' }
 GtLDataView >> on: anObject perform: aMessageSymbol withSomeArguments: aCollectionOfArguments [
-	<return: #GtPhlowAction>
+	<return: #GtLDataView>
 	<gtCollector>
 	| newCollectionOfArguments |
 	
@@ -245,6 +245,7 @@ GtLDataView >> serializeToLlmPrimiteData [
 	| dataBuilder |
 	
 	dataBuilder := GtLPrimitiveMessageDataBuilder new.
+	dataBuilder sourceDataView: self.
 	self serializeToLlmPrimiteDataOn:  dataBuilder.
 	
 	^dataBuilder messageDataBlock

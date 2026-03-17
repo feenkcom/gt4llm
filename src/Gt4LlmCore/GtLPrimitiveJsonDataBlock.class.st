@@ -10,8 +10,8 @@ Class {
 { #category : #adding }
 GtLPrimitiveJsonDataBlock >> addJsonBlock: anotherJsonBlock [
 	| commonKeys |
-	commonKeys := jsonData keys 
-		intersection: anotherJsonBlock llmJsonData keys.
+	commonKeys := self keysForMerge 
+		intersection: anotherJsonBlock keysForMerge.
 	commonKeys ifNotEmpty: [ 
 		Error signal: ('Cannot merge json objects. Common keys found: '
 			, commonKeys sorted asCommaString)  ].
@@ -24,6 +24,12 @@ GtLPrimitiveJsonDataBlock >> addJsonBlock: anotherJsonBlock [
 			ifAbsent: [ jsonData  
 				at: aKey
 				put: aValue ] ]
+]
+
+{ #category : #accessing }
+GtLPrimitiveJsonDataBlock >> containedJsonDataBlocksCount [
+	"Return 1 as this block itself counts as a single json data block."
+	^ 1
 ]
 
 { #category : #views }
@@ -64,10 +70,14 @@ GtLPrimitiveJsonDataBlock >> jsonData: anObject [
 ]
 
 { #category : #accessing }
-GtLPrimitiveJsonDataBlock >> jsonString [
-	"Return a JSON string that represents the domain object."
-	
-	^ NeoJSONWriter toStringPretty: self jsonData
+GtLPrimitiveJsonDataBlock >> keysForMerge [
+	^self dataKey
+		ifNil: [ 
+			(self jsonData isDictionary)
+				ifTrue: [ self jsonData keys ]
+				ifFalse: [ #() ] ] 
+		ifNotNil: [
+			{self dataKey} ]
 ]
 
 { #category : #accessing }
