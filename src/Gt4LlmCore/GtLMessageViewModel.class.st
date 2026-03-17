@@ -37,9 +37,14 @@ GtLMessageViewModel >> createdAt [
 	^ self message createdAt
 ]
 
+{ #category : #accessing }
+GtLMessageViewModel >> dateString [
+	^ self message dateString
+]
+
 { #category : #'api - converting' }
 GtLMessageViewModel >> elementClass [
-	^ GtLExpandableMessageElement
+	^ GtLUserMessageContentElement
 ]
 
 { #category : #accessing }
@@ -49,10 +54,15 @@ GtLMessageViewModel >> isExpanded [
 
 { #category : #accessing }
 GtLMessageViewModel >> isExpanded: aBoolean [
+	self isExpanded: aBoolean source: nil
+]
+
+{ #category : #accessing }
+GtLMessageViewModel >> isExpanded: aBoolean source: aSource [
 	isExpanded = aBoolean ifTrue: [ ^ self ].
 
 	isExpanded := aBoolean.
-	self notifyExpandedChanged
+	self notifyExpandedChangedSource: aSource
 ]
 
 { #category : #testing }
@@ -68,7 +78,7 @@ GtLMessageViewModel >> messageExecutionStateLabel [
 ]
 
 { #category : #'private - notifying' }
-GtLMessageViewModel >> notifyExpandedChanged [
+GtLMessageViewModel >> notifyExpandedChangedSource: aSource [
 	self announcer
 		announce: (GtLMessageViewModelExpansionChanged new
 				messageViewModel: self;

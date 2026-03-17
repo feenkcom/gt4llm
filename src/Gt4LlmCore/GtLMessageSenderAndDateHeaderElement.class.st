@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLReplyMessageHeaderElement,
+	#name : #GtLMessageSenderAndDateHeaderElement,
 	#superclass : #GtLBasicMessageElement,
 	#instVars : [
 		'senderElement',
@@ -11,17 +11,17 @@ Class {
 }
 
 { #category : #initialization }
-GtLReplyMessageHeaderElement >> defaultLayout [
+GtLMessageSenderAndDateHeaderElement >> defaultLayout [
 	^ BlLinearLayout horizontal alignTopLeft
 ]
 
 { #category : #'api - visibility' }
-GtLReplyMessageHeaderElement >> hideToolbarElement [
+GtLMessageSenderAndDateHeaderElement >> hideToolbarElement [
 	^ toolbarElement visibility: BlVisibility hidden
 ]
 
 { #category : #initialization }
-GtLReplyMessageHeaderElement >> initialize [
+GtLMessageSenderAndDateHeaderElement >> initialize [
 	super initialize.
 
 	self initializeSenderElement.
@@ -42,7 +42,7 @@ GtLReplyMessageHeaderElement >> initialize [
 ]
 
 { #category : #initialization }
-GtLReplyMessageHeaderElement >> initializeDateElement [
+GtLMessageSenderAndDateHeaderElement >> initializeDateElement [
 	dateElement := BrLabel new
 			aptitude: (BrGlamorousLabelAptitude new
 					foreground: BrGlamorousColors disabledButtonTextColor);
@@ -52,13 +52,13 @@ GtLReplyMessageHeaderElement >> initializeDateElement [
 ]
 
 { #category : #initialization }
-GtLReplyMessageHeaderElement >> initializeEventListeners [
+GtLMessageSenderAndDateHeaderElement >> initializeEventListeners [
 	self when: GtLShowToolbarWish do: [ :anEvent | self showToolbarElement ].
 	self when: GtLHideToolbarWish do: [ :anEvent | self hideToolbarElement ]
 ]
 
 { #category : #initialization }
-GtLReplyMessageHeaderElement >> initializeSenderElement [
+GtLMessageSenderAndDateHeaderElement >> initializeSenderElement [
 	senderElement := BrLabel new
 			alignTopLeft;
 			hFitContent;
@@ -69,40 +69,40 @@ GtLReplyMessageHeaderElement >> initializeSenderElement [
 ]
 
 { #category : #initialization }
-GtLReplyMessageHeaderElement >> initializeToolbarElement [
+GtLMessageSenderAndDateHeaderElement >> initializeToolbarElement [
 	toolbarElement := GtLActionToolbarMessageElement new fitContent
 ]
 
 { #category : #'private - hooks' }
-GtLReplyMessageHeaderElement >> onMessageViewModelChanged [
+GtLMessageSenderAndDateHeaderElement >> onMessageViewModelChanged [
 	toolbarElement messageViewModel: self messageViewModel.
 	self updateElement
 ]
 
 { #category : #'private - event handling' }
-GtLReplyMessageHeaderElement >> onMessageViewModelContentsChanged: anAnnouncement [
+GtLMessageSenderAndDateHeaderElement >> onMessageViewModelContentsChanged: anAnnouncement [
 	BlTaskAction enqueueElement: self action: [ self updateElement ]
 ]
 
 { #category : #'private - event handling' }
-GtLReplyMessageHeaderElement >> onMessageViewModelExecutionChangedChanged: anAnnouncement [
+GtLMessageSenderAndDateHeaderElement >> onMessageViewModelExecutionChangedChanged: anAnnouncement [
 	self messageViewModel = anAnnouncement messageViewModel ifFalse: [ ^ self ].
 
 	BlTaskAction enqueueElement: self action: [ self updateDateElement ]
 ]
 
 { #category : #'private - event handling' }
-GtLReplyMessageHeaderElement >> onThreadMessageViewModelChanged: anAnnouncement [
+GtLMessageSenderAndDateHeaderElement >> onThreadMessageViewModelChanged: anAnnouncement [
 	BlTaskAction enqueueElement: self action: [ self updateElement ]
 ]
 
 { #category : #'api - visibility' }
-GtLReplyMessageHeaderElement >> showToolbarElement [
+GtLMessageSenderAndDateHeaderElement >> showToolbarElement [
 	^ toolbarElement visibility: BlVisibility visible
 ]
 
 { #category : #'private - hooks' }
-GtLReplyMessageHeaderElement >> subscribeToMessageViewModel [
+GtLMessageSenderAndDateHeaderElement >> subscribeToMessageViewModel [
 	self messageViewModel weak
 		when: GtLlmThreadMessageViewModelChanged
 			send: #onThreadMessageViewModelChanged:
@@ -116,48 +116,22 @@ GtLReplyMessageHeaderElement >> subscribeToMessageViewModel [
 ]
 
 { #category : #'private - hooks' }
-GtLReplyMessageHeaderElement >> unsubscribeFromMessageViewModel [
+GtLMessageSenderAndDateHeaderElement >> unsubscribeFromMessageViewModel [
 	self messageViewModel unsubscribe: self
 ]
 
 { #category : #'private - updating' }
-GtLReplyMessageHeaderElement >> updateDateElement [
-	| creationDateAndTime finishedDateAndTime text |
-	self messageViewModel finalMessageViewModel
-		ifNil: [ ^ dateElement text: 'running' ].
-
-	creationDateAndTime := self messageViewModel userMessageCreatedAt asLocal.
-	finishedDateAndTime := self messageViewModel finishedAt asLocal.
-
-	text := String
-			streamContents: [ :aStream | 
-				finishedDateAndTime asDate printOn: aStream format: #(2 1 3 $  3 1 1).
-				aStream space.
-				finishedDateAndTime hour
-					printOn: aStream
-					base: 10
-					length: 2
-					padded: true.
-				aStream nextPut: $:.
-				finishedDateAndTime minute
-					printOn: aStream
-					base: 10
-					length: 2
-					padded: true.
-				aStream nextPutAll: ' (duration '.
-				aStream nextPutAll: (finishedDateAndTime - creationDateAndTime) gtHumanReadableString.
-				aStream nextPut: $) ].
-
-	dateElement text: text
+GtLMessageSenderAndDateHeaderElement >> updateDateElement [
+	dateElement text: self messageViewModel dateString
 ]
 
 { #category : #'private - updating' }
-GtLReplyMessageHeaderElement >> updateElement [
+GtLMessageSenderAndDateHeaderElement >> updateElement [
 	self updateSenderElement.
 	self updateDateElement.
 ]
 
 { #category : #'private - updating' }
-GtLReplyMessageHeaderElement >> updateSenderElement [
+GtLMessageSenderAndDateHeaderElement >> updateSenderElement [
 	senderElement text: self messageViewModel senderText2
 ]
