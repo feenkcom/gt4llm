@@ -97,6 +97,38 @@ GtLReplyMessage >> currentMessageDo: aBlock ifAbsent: anAbsentBlock [
 	^ anAbsentBlock value
 ]
 
+{ #category : #'api - ui' }
+GtLReplyMessage >> dateString [
+	"Return a string that represents a human readable date and time, e.g., creation time."
+
+	<return: #String>
+	| creationDateAndTime finishedDateAndTime |
+	creationDateAndTime := self userMessageCreatedAt asLocal.
+	finishedDateAndTime := self finishedAt ifNotNil: #asLocal.
+
+	^ String
+		streamContents: [ :aStream | 
+			finishedDateAndTime
+				ifNotNil: [ finishedDateAndTime asDate printOn: aStream format: #(2 1 3 $  3 1 1).
+					aStream space.
+					finishedDateAndTime hour
+						printOn: aStream
+						base: 10
+						length: 2
+						padded: true.
+					aStream nextPut: $:.
+					finishedDateAndTime minute
+						printOn: aStream
+						base: 10
+						length: 2
+						padded: true.
+					aStream nextPutAll: ' (duration '.
+					aStream
+						nextPutAll: (finishedDateAndTime - creationDateAndTime) gtHumanReadableString.
+					aStream nextPut: $) ]
+				ifNil: [ aStream nextPutAll: 'running' ] ]
+]
+
 { #category : #accessing }
 GtLReplyMessage >> executionMessages [
 	^ executionMessages value
