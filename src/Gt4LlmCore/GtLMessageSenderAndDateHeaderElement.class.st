@@ -12,7 +12,7 @@ Class {
 
 { #category : #initialization }
 GtLMessageSenderAndDateHeaderElement >> defaultLayout [
-	^ BlLinearLayout horizontal alignTopLeft
+	^ BlLinearLayout horizontal alignCenterLeft
 ]
 
 { #category : #'api - visibility' }
@@ -48,7 +48,7 @@ GtLMessageSenderAndDateHeaderElement >> initializeDateElement [
 					foreground: BrGlamorousColors disabledButtonTextColor);
 			fitContent;
 			constraintsDo: [ :c | c linear vertical alignTop ];
-			padding: (BlInsets left: 0 right: 15)
+			margin: (BlInsets left: 10 right: 10)
 ]
 
 { #category : #initialization }
@@ -63,9 +63,11 @@ GtLMessageSenderAndDateHeaderElement >> initializeSenderElement [
 			alignTopLeft;
 			hFitContent;
 			vFitContent;
-			aptitude: (BrGlamorousLabelAptitude new
-					foreground: BrGlamorousColors disabledButtonTextColor);
-			constraintsDo: [ :c | c linear vertical alignTop ]
+			background: self theme default backdropBackground;
+			geometry: (BlRoundedRectangleGeometry cornerRadius: 2);
+			aptitude: BrGlamorousLabelAptitude new;
+			constraintsDo: [ :c | c linear vertical alignTop ];
+			padding: (BlInsets all: 2)
 ]
 
 { #category : #initialization }
