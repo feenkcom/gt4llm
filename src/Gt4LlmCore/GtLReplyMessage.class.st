@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'userMessage',
 		'finalMessage',
-		'executionMessages'
+		'executionMessages',
+		'finishedAt'
 	],
 	#category : 'Gt4LlmCore-Core'
 }
@@ -76,11 +77,6 @@ GtLReplyMessage >> copyForIndependentRequest [
 	^ copy
 ]
 
-{ #category : #accessing }
-GtLReplyMessage >> createdAt [
-	^ self currentMessageDo: #createdAt ifAbsent: [ super createdAt ]
-]
-
 { #category : #'api - message' }
 GtLReplyMessage >> currentMessage [
 	"Return a last message that should be used
@@ -99,6 +95,38 @@ GtLReplyMessage >> currentMessageDo: aBlock ifAbsent: anAbsentBlock [
 	finalMessage ifNotNil: [ ^ aBlock value: finalMessage ].
 	executionMessages value ifNotEmpty: [ ^ aBlock value: executionMessages value last ].
 	^ anAbsentBlock value
+]
+
+{ #category : #'api - ui' }
+GtLReplyMessage >> dateString [
+	"Return a string that represents a human readable date and time, e.g., creation time."
+
+	<return: #String>
+	| creationDateAndTime finishedDateAndTime |
+	creationDateAndTime := self userMessageCreatedAt asLocal.
+	finishedDateAndTime := self finishedAt ifNotNil: #asLocal.
+
+	^ String
+		streamContents: [ :aStream | 
+			finishedDateAndTime
+				ifNotNil: [ finishedDateAndTime asDate printOn: aStream format: #(2 1 3 $  3 1 1).
+					aStream space.
+					finishedDateAndTime hour
+						printOn: aStream
+						base: 10
+						length: 2
+						padded: true.
+					aStream nextPut: $:.
+					finishedDateAndTime minute
+						printOn: aStream
+						base: 10
+						length: 2
+						padded: true.
+					aStream nextPutAll: ' (duration '.
+					aStream
+						nextPutAll: (finishedDateAndTime - creationDateAndTime) gtHumanReadableString.
+					aStream nextPut: $) ]
+				ifNil: [ aStream nextPutAll: 'running' ] ]
 ]
 
 { #category : #accessing }
@@ -147,6 +175,7 @@ GtLReplyMessage >> finalMessage: aMessage [
 
 	finalMessage ifNotNil: [ :oldMessage | oldMessage unsubscribe: self ].
 	finalMessage := aMessage.
+	finishedAt := DateAndTime now.
 
 	aMessage
 				when: GtLMessageAnnouncement
@@ -154,6 +183,12 @@ GtLReplyMessage >> finalMessage: aMessage [
 				to: self.
 	
 	self notifyReplyMessageChanged
+]
+
+{ #category : #accessing }
+GtLReplyMessage >> finishedAt [
+	<return: #DateAndTime or: nil>
+	^ finishedAt
 ]
 
 { #category : #'gt - extensions' }
@@ -370,6 +405,12 @@ GtLReplyMessage >> userMessage [
 { #category : #accessing }
 GtLReplyMessage >> userMessage: aMessage [
 	userMessage := aMessage
+]
+
+{ #category : #accessing }
+GtLReplyMessage >> userMessageCreatedAt [
+	<return: #DateAndTime>
+	^ self userMessage ifNotNil: #createdAt ifNil: [ self createdAt ]
 ]
 
 { #category : #'api - converting' }

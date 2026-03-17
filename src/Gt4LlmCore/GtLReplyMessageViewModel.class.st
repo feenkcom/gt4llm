@@ -4,30 +4,15 @@ Class {
 	#instVars : [
 		'executionMessageViewModelsCache',
 		'finalMessageViewModel',
-		'isToolsExpanded'
-	],
-	#classVars : [
-		'ElementClass'
+		'isToolsExpanded',
+		'toolsContentsHeight'
 	],
 	#category : 'Gt4LlmCore-UI - View Models'
 }
 
-{ #category : #settings }
-GtLReplyMessageViewModel class >> elementClass: anElementClass [
-	"This is a temporary solution. 
-	We will remove it as soon as we finish the new replay message element."
-
-	ElementClass := anElementClass
-]
-
 { #category : #visiting }
 GtLReplyMessageViewModel >> acceptVisitor: aVisitor [
 	^ aVisitor visitReplyMessageViewModel: self
-]
-
-{ #category : #'api - converting' }
-GtLReplyMessageViewModel >> elementClass [
-	^ ElementClass ifNil: [ super elementClass ]
 ]
 
 { #category : #'api - accessing' }
@@ -43,12 +28,18 @@ GtLReplyMessageViewModel >> finalMessageViewModel [
 		ifNil: [ finalMessageViewModel := self message finalMessage ifNotNil: #asViewModel ]
 ]
 
+{ #category : #'api - accessing' }
+GtLReplyMessageViewModel >> finishedAt [
+	^ self message finishedAt
+]
+
 { #category : #initialization }
 GtLReplyMessageViewModel >> initialize [
 	super initialize.
 
 	executionMessageViewModelsCache := AsyncSharedDictionary new.
 	isToolsExpanded := false.
+	toolsContentsHeight := nil.
 ]
 
 { #category : #'api - accessing' }
@@ -89,6 +80,22 @@ GtLReplyMessageViewModel >> messageViewsInto: aStream [
 ]
 
 { #category : #'api - accessing' }
+GtLReplyMessageViewModel >> toolsContentsHeight [
+	<return: #Number or: nil>
+	^ toolsContentsHeight
+]
+
+{ #category : #'api - accessing' }
+GtLReplyMessageViewModel >> toolsContentsHeight: aHeightOrNil [
+	toolsContentsHeight := aHeightOrNil
+]
+
+{ #category : #'api - accessing' }
 GtLReplyMessageViewModel >> uiInsets [
 	^ BlInsets right: 0 "50"
+]
+
+{ #category : #'api - accessing' }
+GtLReplyMessageViewModel >> userMessageCreatedAt [
+	^ self message userMessageCreatedAt
 ]

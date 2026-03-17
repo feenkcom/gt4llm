@@ -8,7 +8,11 @@ Class {
 		'contentsExpanderElement',
 		'contentsElement',
 		'contentsHeaderElement',
-		'toolsContentsElement'
+		'toolsContentsElement',
+		'toolsResizerAptitude',
+		'mayBeToolsResizerVisible',
+		'toolsCounter',
+		'toolsPeek'
 	],
 	#category : 'Gt4LlmCore-UI - Elements'
 }
@@ -31,6 +35,8 @@ GtLReplyMessageContentElement >> defaultLayout [
 { #category : #initialization }
 GtLReplyMessageContentElement >> initialize [
 	super initialize.
+	
+	mayBeToolsResizerVisible := false.
 
 	self initializeHeaderElement.
 	self initializeToolsExpanderElement.
@@ -50,7 +56,7 @@ GtLReplyMessageContentElement >> initialize [
 GtLReplyMessageContentElement >> initializeContentsExpanderElement [
 	contentsElement := GtLMessageViewsElement new.
 	contentsHeaderElement := GtMessageOneLineMultiLabelSummaryElement new.
-	
+
 	contentsExpanderElement := BrExpander new
 			addAptitude: (BrGlamorousExpanderSubtleAptitude new sidebarExtraPadding: (BlInsets top: 5));
 			header: [ contentsHeaderElement ];
@@ -59,12 +65,18 @@ GtLReplyMessageContentElement >> initializeContentsExpanderElement [
 			vFitContentLimited;
 			expand;
 			whenExpandedDo: [ :anEvent | self onContentsExpanded: anEvent ];
-			whenCollapsedDo: [ :anEvent | self onContentsCollapsed: anEvent ]
+			whenCollapsedDo: [ :anEvent | self onContentsCollapsed: anEvent ].
+
+	contentsHeaderElement
+		when: BlClickEvent
+		do: [ :anEvent | 
+			anEvent consumed: true.
+			contentsExpanderElement expand ]
 ]
 
 { #category : #initialization }
 GtLReplyMessageContentElement >> initializeHeaderElement [
-	headerElement := GtLReplyMessageHeaderElement new
+	headerElement := GtLMessageSenderAndDateHeaderElement new
 ]
 
 { #category : #initialization }
@@ -77,8 +89,14 @@ GtLReplyMessageContentElement >> initializeStyling [
 				when: BlElementState hovered | BlElementState focused
 				style: [ :aStyle :aTheme | 
 					aStyle
-						do: [ :aWidget | headerElement showToolbarElement ]
-						after: [ :aWidget | headerElement hideToolbarElement ] ])
+						do: [ :aWidget | 
+							headerElement showToolbarElement.
+							mayBeToolsResizerVisible
+								ifTrue: [ toolsResizerAptitude showResizer ]
+								ifFalse: [ toolsResizerAptitude hideResizer ] ]
+						after: [ :aWidget | 
+							headerElement hideToolbarElement.
+							toolsResizerAptitude hideResizer ] ])
 ]
 
 { #category : #initialization }
@@ -88,7 +106,15 @@ GtLReplyMessageContentElement >> initializeToolsExpanderElement [
 			text: 'Tools'.
 	toolsContentsElement := GtLMessageUsedToolsElement new
 			hMatchParent;
-			vFitContentLimited.
+			padding: (BlInsets bottom: 10);
+			vFitContentLimited;
+			addAptitude: (toolsResizerAptitude := BrGlamorousWithVerticalResizerAptitude new
+						beBottom;
+						resizerDo: [ :aResizer | 
+							aResizer
+								when: BlDoubleClickEvent
+								do: [ :anEvent | self onResizerDoubleClickEvent: anEvent ] ];
+						whenResizedDo: [ :anEvent | self onToolsExpanderResized: anEvent ]).
 
 	toolsExpanderElement := BrExpander new
 			addAptitude: (BrGlamorousExpanderSubtleAptitude new sidebarExtraPadding: (BlInsets top: 5));
@@ -101,16 +127,17 @@ GtLReplyMessageContentElement >> initializeToolsExpanderElement [
 			whenExpandedDo: [ :anEvent | self onToolsExpanded: anEvent ];
 			whenCollapsedDo: [ :anEvent | self onToolsCollapsed: anEvent ].
 
+	toolsHeaderElement
+		when: BlClickEvent
+		do: [ :anEvent | 
+			anEvent consumed: true.
+			toolsExpanderElement expand ].
+
 	self
 		withAsyncSinkDo: [ :anElementSink | 
 			anElementSink
-				sink: AsyncCounterSink new;
-				whenUpdate: [ :anElement :aCounterSink | 
-					toolsExpanderElement visibility: BlVisibility visible.
-					toolsHeaderElement
-						text: ('{1} {2}'
-								format: {aCounterSink count.
-										'tool' asPluralBasedOn: aCounterSink count}) ] ]
+				sink: ((toolsCounter := AsyncCounterSink new) fanout: (toolsPeek := AsyncPeekSink new));
+				whenUpdate: [ :anElement :aCounterSink | self onToolsCounterSinkUpdate: aCounterSink ] ]
 ]
 
 { #category : #'private - event handling' }
@@ -154,6 +181,14 @@ GtLReplyMessageContentElement >> onMessageViewModelExpansionChanged: anAnnouncem
 ]
 
 { #category : #'private - event handling' }
+GtLReplyMessageContentElement >> onResizerDoubleClickEvent: anEvent [ 
+	anEvent consumed: true.
+	
+	toolsContentsElement vFitContentLimited.
+	self messageViewModel toolsContentsHeight: nil.
+]
+
+{ #category : #'private - event handling' }
 GtLReplyMessageContentElement >> onToolsCollapsed: anEvent [
 	self messageViewModel ifNil: [ ^ self ].
 
@@ -161,10 +196,46 @@ GtLReplyMessageContentElement >> onToolsCollapsed: anEvent [
 ]
 
 { #category : #'private - event handling' }
+GtLReplyMessageContentElement >> onToolsCounterSinkUpdate: aFanoutSink [
+	| aText aCount aPeek |
+	aCount := toolsCounter count.
+	aPeek := toolsPeek value.
+	aText := String
+			streamContents: [ :aStream | 
+				aPeek
+					ifNotNil: [ | aToolSummary |
+						aToolSummary := aPeek contentOneLineSummary asString.
+						aToolSummary size > 45
+							ifTrue: [ aStream nextPutAll: (aToolSummary first: 45).
+								aStream nextPutAll: '...)' ]
+							ifFalse: [ aStream nextPutAll: aToolSummary ].
+						aCount > 1
+							ifTrue: [ aStream nextPutAll: ' + '.
+								aStream print: aCount - 1.
+								aStream nextPutAll: ' other '.
+								aStream nextPutAll: ('tool' asPluralBasedOn: aCount - 1) ] ]
+					ifNil: [ aStream print: aCount.
+						aStream space.
+						aStream nextPutAll: ('tool' asPluralBasedOn: aCount) ] ].
+
+	toolsHeaderElement text: aText.
+	toolsExpanderElement visibility: BlVisibility visible.
+	self updateToolsResizerVisiblity: toolsCounter count > 10
+]
+
+{ #category : #'private - event handling' }
 GtLReplyMessageContentElement >> onToolsExpanded: anEvent [
 	self messageViewModel ifNil: [ ^ self ].
 	
 	self messageViewModel isToolsExpanded: true source: self
+]
+
+{ #category : #'private - event handling' }
+GtLReplyMessageContentElement >> onToolsExpanderResized: anEvent [
+	anEvent consumed: true.
+	self messageViewModel ifNil: [ ^ self ].
+
+	self messageViewModel toolsContentsHeight: toolsContentsElement height
 ]
 
 { #category : #'as yet unclassified' }
@@ -203,10 +274,23 @@ GtLReplyMessageContentElement >> updateElement [
 { #category : #'private - updating' }
 GtLReplyMessageContentElement >> updateToolsContentsElement [
 	self asyncSink
-		forwardStream: self messageViewModel executionMessageViewModelsStream
+		forwardStream: self messageViewModel executionMessageViewModelsStream.
+
+	self messageViewModel toolsContentsHeight
+		ifNotNil: [ :aNumber | toolsContentsElement vExact: aNumber ]
+		ifNil: [ toolsContentsElement vFitContentLimited ]
 ]
 
 { #category : #'private - updating' }
 GtLReplyMessageContentElement >> updateToolsExpanderElement [
 	toolsExpanderElement expanded: self messageViewModel isToolsExpanded
+]
+
+{ #category : #'private - updating' }
+GtLReplyMessageContentElement >> updateToolsResizerVisiblity: mayBeVisible [
+	mayBeToolsResizerVisible = mayBeVisible ifTrue: [ ^ self ].
+	
+	mayBeToolsResizerVisible := mayBeVisible.
+	
+	self requestStyle
 ]
