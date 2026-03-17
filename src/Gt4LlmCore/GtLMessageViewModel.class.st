@@ -5,11 +5,29 @@ Class {
 	#classTraits : 'TGtLWithMessage classTrait',
 	#instVars : [
 		'isExpanded',
-		'userViewMessage',
-		'toolViewMessages'
+		'userViewMessage'
+	],
+	#classInstVars : [
+		'defaultElementClass'
 	],
 	#category : #'Gt4LlmCore-UI - View Models'
 }
+
+{ #category : #settings }
+GtLMessageViewModel class >> elementClass [
+	"This is a temporary solution. 
+	We will remove it as soon as we finish the new message element."
+
+	^ defaultElementClass
+]
+
+{ #category : #settings }
+GtLMessageViewModel class >> elementClass: anElementClass [
+	"This is a temporary solution. 
+	We will remove it as soon as we finish the new message element."
+
+	defaultElementClass := anElementClass
+]
 
 { #category : #visiting }
 GtLMessageViewModel >> acceptVisitor: aVisitor [
@@ -44,7 +62,7 @@ GtLMessageViewModel >> dateString [
 
 { #category : #'api - converting' }
 GtLMessageViewModel >> elementClass [
-	^ GtLUserMessageContentElement
+	^ self class elementClass ifNil: [ GtLExpandableMessageElement ]
 ]
 
 { #category : #accessing }
