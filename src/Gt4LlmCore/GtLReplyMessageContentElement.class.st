@@ -10,7 +10,9 @@ Class {
 		'contentsHeaderElement',
 		'toolsContentsElement',
 		'toolsResizerAptitude',
-		'mayBeToolsResizerVisible'
+		'mayBeToolsResizerVisible',
+		'toolsCounter',
+		'toolsPeek'
 	],
 	#category : #'Gt4LlmCore-UI - Elements'
 }
@@ -68,7 +70,7 @@ GtLReplyMessageContentElement >> initializeContentsExpanderElement [
 
 { #category : #initialization }
 GtLReplyMessageContentElement >> initializeHeaderElement [
-	headerElement := GtLReplyMessageHeaderElement new
+	headerElement := GtLMessageSenderAndDateHeaderElement new
 ]
 
 { #category : #initialization }
@@ -122,7 +124,7 @@ GtLReplyMessageContentElement >> initializeToolsExpanderElement [
 	self
 		withAsyncSinkDo: [ :anElementSink | 
 			anElementSink
-				sink: AsyncCounterSink new;
+				sink: ((toolsCounter := AsyncCounterSink new) fanout: (toolsPeek := AsyncPeekSink new));
 				whenUpdate: [ :anElement :aCounterSink | self onToolsCounterSinkUpdate: aCounterSink ] ]
 ]
 
@@ -182,14 +184,31 @@ GtLReplyMessageContentElement >> onToolsCollapsed: anEvent [
 ]
 
 { #category : #'private - event handling' }
-GtLReplyMessageContentElement >> onToolsCounterSinkUpdate: aCounterSink [
-	toolsExpanderElement visibility: BlVisibility visible.
-	toolsHeaderElement
-		text: ('{1} {2}'
-				format: {aCounterSink count.
-						'tool' asPluralBasedOn: aCounterSink count}).
+GtLReplyMessageContentElement >> onToolsCounterSinkUpdate: aFanoutSink [
+	| aText aCount aPeek |
+	aCount := toolsCounter count.
+	aPeek := toolsPeek value.
+	aText := String
+			streamContents: [ :aStream | 
+				aPeek
+					ifNotNil: [ | aToolSummary |
+						aToolSummary := aPeek contentOneLineSummary asString.
+						aToolSummary size > 45
+							ifTrue: [ aStream nextPutAll: (aToolSummary first: 45).
+								aStream nextPutAll: '...)' ]
+							ifFalse: [ aStream nextPutAll: aToolSummary ].
+						aCount > 1
+							ifTrue: [ aStream nextPutAll: ' + '.
+								aStream print: aCount - 1.
+								aStream nextPutAll: ' other '.
+								aStream nextPutAll: ('tool' asPluralBasedOn: aCount - 1) ] ]
+					ifNil: [ aStream print: aCount.
+						aStream space.
+						aStream nextPutAll: ('tool' asPluralBasedOn: aCount) ] ].
 
-	self updateToolsResizerVisiblity: aCounterSink count > 10
+	toolsHeaderElement text: aText.
+	toolsExpanderElement visibility: BlVisibility visible.
+	self updateToolsResizerVisiblity: toolsCounter count > 10
 ]
 
 { #category : #'private - event handling' }
