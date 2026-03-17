@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'executionMessageViewModelsCache',
 		'finalMessageViewModel',
-		'isToolsExpanded'
+		'isToolsExpanded',
+		'toolsContentsHeight'
 	],
 	#classVars : [
 		'ElementClass'
@@ -49,6 +50,7 @@ GtLReplyMessageViewModel >> initialize [
 
 	executionMessageViewModelsCache := AsyncSharedDictionary new.
 	isToolsExpanded := false.
+	toolsContentsHeight := nil.
 ]
 
 { #category : #'api - accessing' }
@@ -86,6 +88,17 @@ GtLReplyMessageViewModel >> messageViewsInto: aStream [
 						fromObject: self message;
 						pragmaNames: self messageViewPragmas;
 						collect) ]
+]
+
+{ #category : #'api - accessing' }
+GtLReplyMessageViewModel >> toolsContentsHeight [
+	<return: #Number or: nil>
+	^ toolsContentsHeight
+]
+
+{ #category : #'api - accessing' }
+GtLReplyMessageViewModel >> toolsContentsHeight: aHeightOrNil [
+	toolsContentsHeight := aHeightOrNil
 ]
 
 { #category : #'api - accessing' }
