@@ -7,28 +7,12 @@ Class {
 		'isToolsExpanded',
 		'toolsContentsHeight'
 	],
-	#classVars : [
-		'ElementClass'
-	],
 	#category : #'Gt4LlmCore-UI - View Models'
 }
-
-{ #category : #settings }
-GtLReplyMessageViewModel class >> elementClass: anElementClass [
-	"This is a temporary solution. 
-	We will remove it as soon as we finish the new replay message element."
-
-	ElementClass := anElementClass
-]
 
 { #category : #visiting }
 GtLReplyMessageViewModel >> acceptVisitor: aVisitor [
 	^ aVisitor visitReplyMessageViewModel: self
-]
-
-{ #category : #'api - converting' }
-GtLReplyMessageViewModel >> elementClass [
-	^ ElementClass ifNil: [ super elementClass ]
 ]
 
 { #category : #'api - accessing' }
