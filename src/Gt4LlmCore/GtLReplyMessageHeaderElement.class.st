@@ -122,26 +122,31 @@ GtLReplyMessageHeaderElement >> unsubscribeFromMessageViewModel [
 
 { #category : #'private - updating' }
 GtLReplyMessageHeaderElement >> updateDateElement [
-	| dateAndTime text |
-	self messageViewModel finalMessageViewModel ifNil: [ ^ dateElement text: 'running' ].
-	
-	dateAndTime := self messageViewModel createdAt asLocal.
+	| creationDateAndTime finishedDateAndTime text |
+	self messageViewModel finalMessageViewModel
+		ifNil: [ ^ dateElement text: 'running' ].
+
+	creationDateAndTime := self messageViewModel userMessageCreatedAt asLocal.
+	finishedDateAndTime := self messageViewModel finishedAt asLocal.
 
 	text := String
 			streamContents: [ :aStream | 
-				dateAndTime asDate printOn: aStream format: #(2 1 3 $  3 1 1).
+				finishedDateAndTime asDate printOn: aStream format: #(2 1 3 $  3 1 1).
 				aStream space.
-				dateAndTime hour
+				finishedDateAndTime hour
 					printOn: aStream
 					base: 10
 					length: 2
 					padded: true.
 				aStream nextPut: $:.
-				dateAndTime minute
+				finishedDateAndTime minute
 					printOn: aStream
 					base: 10
 					length: 2
-					padded: true ].
+					padded: true.
+				aStream nextPutAll: ' (duration '.
+				aStream nextPutAll: (finishedDateAndTime - creationDateAndTime) gtHumanReadableString.
+				aStream nextPut: $) ].
 
 	dateElement text: text
 ]

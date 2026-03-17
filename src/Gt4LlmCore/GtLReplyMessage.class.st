@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'userMessage',
 		'finalMessage',
-		'executionMessages'
+		'executionMessages',
+		'finishedAt'
 	],
 	#category : #'Gt4LlmCore-Core'
 }
@@ -76,11 +77,6 @@ GtLReplyMessage >> copyForIndependentRequest [
 	^ copy
 ]
 
-{ #category : #accessing }
-GtLReplyMessage >> createdAt [
-	^ self currentMessageDo: #createdAt ifAbsent: [ super createdAt ]
-]
-
 { #category : #'api - message' }
 GtLReplyMessage >> currentMessage [
 	"Return a last message that should be used
@@ -147,6 +143,7 @@ GtLReplyMessage >> finalMessage: aMessage [
 
 	finalMessage ifNotNil: [ :oldMessage | oldMessage unsubscribe: self ].
 	finalMessage := aMessage.
+	finishedAt := DateAndTime now.
 
 	aMessage
 				when: GtLMessageAnnouncement
@@ -154,6 +151,12 @@ GtLReplyMessage >> finalMessage: aMessage [
 				to: self.
 	
 	self notifyReplyMessageChanged
+]
+
+{ #category : #accessing }
+GtLReplyMessage >> finishedAt [
+	<return: #DateAndTime or: nil>
+	^ finishedAt
 ]
 
 { #category : #'gt - extensions' }
@@ -370,6 +373,12 @@ GtLReplyMessage >> userMessage [
 { #category : #accessing }
 GtLReplyMessage >> userMessage: aMessage [
 	userMessage := aMessage
+]
+
+{ #category : #accessing }
+GtLReplyMessage >> userMessageCreatedAt [
+	<return: #DateAndTime>
+	^ self userMessage ifNotNil: #createdAt ifNil: [ self createdAt ]
 ]
 
 { #category : #'api - converting' }
