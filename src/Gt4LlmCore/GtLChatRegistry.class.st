@@ -102,8 +102,8 @@ GtLChatRegistry >> newGtChat [
 		tools: GtLTools gt;
 		markdownResponse;
 		gtPageExplanation: 'Rules for Moldable Development for Glamorous Toolkit';
-		gtPageExplanation: 'Examples by example';
-		gtPageExplanation: 'Inspector phlow views by example'.
+		gtPageExplanation: 'Examples by example'";
+		gtPageExplanation: 'Inspector phlow views by example'".
 	^ self registerChat: chat
 ]
 
