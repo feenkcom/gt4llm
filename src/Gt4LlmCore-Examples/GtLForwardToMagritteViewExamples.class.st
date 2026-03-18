@@ -14,7 +14,7 @@ GtLForwardToMagritteViewExamples >> forwardToMagritteViewWithBothDataKeys [
 	| object dataView |
 	object := self objectWithMagritteViewWithDataKey.
 	
-	dataView := GtLForwardDataView new
+	dataView := GtLForwardObjectDataView new
 		object: [ object ];
 		view: #gtLlmMagritteViewFor:;
 		dataKey: #outerKey.
@@ -59,7 +59,7 @@ GtLForwardToMagritteViewExamples >> forwardToMagritteViewWithDataKey [
 	| object dataView |
 	object := self objectWithMagritteViewWithDataKey.
 	
-	dataView := GtLForwardDataView new
+	dataView := GtLForwardObjectDataView new
 		object: [ object ];
 		view: #gtLlmMagritteViewFor:.
 	
@@ -100,7 +100,7 @@ GtLForwardToMagritteViewExamples >> forwardToMagritteViewWithForwardDataKey [
 	| object dataView |
 	object := self objectWithMagritteView.
 	
-	dataView := GtLForwardDataView new
+	dataView := GtLForwardObjectDataView new
 		object: [ object ];
 		view: #gtLlmMagritteViewFor:;
 		dataKey: #forwardedMagritte.
@@ -143,7 +143,7 @@ GtLForwardToMagritteViewExamples >> forwardToMagritteViewWithoutDataKey [
 	| object dataView |
 	object := self objectWithMagritteView.
 	
-	dataView := GtLForwardDataView new
+	dataView := GtLForwardObjectDataView new
 		object: [ object ];
 		view: #gtLlmMagritteViewFor:.
 	

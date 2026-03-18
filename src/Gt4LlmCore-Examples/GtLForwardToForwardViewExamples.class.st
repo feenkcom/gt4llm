@@ -100,7 +100,7 @@ GtLForwardToForwardViewExamples >> forwardToChainOfForwarders [
 	| forwarder3 forwardDataView |
 	forwarder3 := self chainOfThreeForwarders.
 	
-	forwardDataView := GtLForwardDataView new
+	forwardDataView := GtLForwardObjectDataView new
 		object: [ forwarder3 ];
 		view: #gtLlmForwardViewFor:.
 	
@@ -121,7 +121,7 @@ GtLForwardToForwardViewExamples >> forwardToChainOfForwardersWithDataKeys [
 	| forwarder3 forwardDataView |
 	forwarder3 := self chainOfThreeForwardersWithDataKeys.
 	
-	forwardDataView := GtLForwardDataView new
+	forwardDataView := GtLForwardObjectDataView new
 		object: [ forwarder3 ];
 		view: #gtLlmForwardViewFor:.
 	
@@ -162,7 +162,7 @@ GtLForwardToForwardViewExamples >> forwardToChainOfForwardersWithOuterDataKey [
 	| forwarder3 forwardDataView |
 	forwarder3 := self chainOfThreeForwardersWithDataKeys.
 	
-	forwardDataView := GtLForwardDataView new
+	forwardDataView := GtLForwardObjectDataView new
 		object: [ forwarder3 ];
 		view: #gtLlmForwardViewFor:;
 		dataKey: #topLevel.
@@ -230,7 +230,7 @@ GtLForwardToForwardViewExamples >> forwardToForwardViewWithBothDataKeys [
 	| forwarder forwardDataView |
 	forwarder := self forwarderToJsonViewWithDataKey.
 	
-	forwardDataView := GtLForwardDataView new
+	forwardDataView := GtLForwardObjectDataView new
 		object: [ forwarder ];
 		view: #gtLlmForwardViewFor:;
 		dataKey: #outerKey.
@@ -277,7 +277,7 @@ GtLForwardToForwardViewExamples >> forwardToForwardViewWithInnerDataKey [
 	| forwarder forwardDataView |
 	forwarder := self forwarderToJsonViewWithDataKey.
 	
-	forwardDataView := GtLForwardDataView new
+	forwardDataView := GtLForwardObjectDataView new
 		object: [ forwarder ];
 		view: #gtLlmForwardViewFor:.
 	
@@ -318,7 +318,7 @@ GtLForwardToForwardViewExamples >> forwardToForwardViewWithoutDataKey [
 	| forwarder forwardDataView |
 	forwarder := self forwarderToJsonView.
 	
-	forwardDataView := GtLForwardDataView new
+	forwardDataView := GtLForwardObjectDataView new
 		object: [ forwarder ];
 		view: #gtLlmForwardViewFor:.
 	
@@ -361,7 +361,7 @@ GtLForwardToForwardViewExamples >> forwardToForwardViewWithOuterDataKey [
 	| forwarder forwardDataView |
 	forwarder := self forwarderToJsonView.
 	
-	forwardDataView := GtLForwardDataView new
+	forwardDataView := GtLForwardObjectDataView new
 		object: [ forwarder ];
 		view: #gtLlmForwardViewFor:;
 		dataKey: #outerForward.

@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLForwardDataView,
+	#name : #GtLForwardObjectDataView,
 	#superclass : #GtLDataView,
 	#instVars : [
 		'objectComputation',
@@ -11,7 +11,7 @@ Class {
 }
 
 { #category : #accessing }
-GtLForwardDataView >> computeForwardedView [
+GtLForwardObjectDataView >> computeForwardedView [
 	| targetObject computedView |
 	
 	[ targetObject := self targetObject ] 
@@ -29,24 +29,24 @@ GtLForwardDataView >> computeForwardedView [
 ]
 
 { #category : #'gt - extensions' }
-GtLForwardDataView >> gtPhlowTreeChildren [
+GtLForwardObjectDataView >> gtPhlowTreeChildren [
 	^ {self targetDataView}
 ]
 
 { #category : #'api - scripting' }
-GtLForwardDataView >> object: aBlockClosure [
+GtLForwardObjectDataView >> object: aBlockClosure [
 	objectComputation := aBlockClosure.
 	computedTargetObject := nil.
 	computedTargetView := nil.
 ]
 
 { #category : #serialization }
-GtLForwardDataView >> serializeToLlmPrimiteDataOn: aBuilder [
+GtLForwardObjectDataView >> serializeToLlmPrimiteDataOn: aBuilder [
 	self targetDataView serializeToLlmPrimiteDataOn: aBuilder 
 ]
 
 { #category : #accessing }
-GtLForwardDataView >> targetDataView [
+GtLForwardObjectDataView >> targetDataView [
 	^computedTargetView ifNil: [
 		computedTargetView := self compositeData.
 		computedTargetView addDataView: self computeForwardedView.
@@ -56,17 +56,17 @@ GtLForwardDataView >> targetDataView [
 ]
 
 { #category : #accessing }
-GtLForwardDataView >> targetObject [
+GtLForwardObjectDataView >> targetObject [
 	^computedTargetObject ifNil: [
 		computedTargetObject := objectComputation value ]
 ]
 
 { #category : #'api - scripting' }
-GtLForwardDataView >> view: aSymbol [
+GtLForwardObjectDataView >> view: aSymbol [
 	viewSymbol := aSymbol asSymbol
 ]
 
 { #category : #accessing }
-GtLForwardDataView >> viewSymbol [
+GtLForwardObjectDataView >> viewSymbol [
 	^viewSymbol ifNil: [ #llmDataViewsFor:	]
 ]

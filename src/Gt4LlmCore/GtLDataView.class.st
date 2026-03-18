@@ -103,7 +103,7 @@ GtLDataView >> errorViewWithException: anException isFrozen: aBoolean [
 
 { #category : #decorating }
 GtLDataView >> forwardObject [
-	^ GtLForwardDataView new
+	^ GtLForwardObjectDataView new
 ]
 
 { #category : #decorating }
