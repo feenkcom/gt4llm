@@ -16,11 +16,11 @@ GtLForwardCollectionToJsonViewExamples >> forwardToJsonViewWithoutDataKeys [
 	
 	self assert: dataView targetCollection equals: collection.
 	self assert: dataView dataKey isNil.
-	self 
+	"self 
 		assertCompositeView: dataView targetDataView 
-		hasSingleJsonDataViewWithDataKey: #firstData.
+		hasSingleJsonDataViewWithDataKey: #firstData."
 	
-	^ dataView
+	^ dataView targetDataView
 ]
 
 { #category : #'examples - support' }

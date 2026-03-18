@@ -23,7 +23,6 @@ GtLForwardCollectionDataView >> computeTargetView [
 		on: Error do: [ :anError |
 			^ self errorViewWithException: anError isFrozen: false ]. 
 	targetView := self compositeData.
-	targetView serializeAsArray.
 	
 	currentCollection do: [ :each |
 		targetView addDataView: (self computeForwardedViewFor: [ each ]) ].
