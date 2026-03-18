@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLJsonDataViewExamples,
-	#superclass : #Object,
-	#category : 'Gt4LlmCore-Examples-Data Views'
+	#superclass : #GtLDataViewExamples,
+	#category : #'Gt4LlmCore-Examples-Data Views'
 }
 
 { #category : #'as yet unclassified' }
