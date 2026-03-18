@@ -47,12 +47,6 @@ GtLJsonDataView >> llmJsonData [
 ]
 
 { #category : #serialization }
-GtLJsonDataView >> llmJsonObject [
-	^computedJsonData ifNil: [
-		computedJsonData := jsonDataComputationBlock value ]
-]
-
-{ #category : #serialization }
 GtLJsonDataView >> llmJsonString [
 	"Return a JSON string that represents the domain object."
 	

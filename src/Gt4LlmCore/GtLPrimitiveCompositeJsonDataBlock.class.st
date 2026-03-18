@@ -22,6 +22,13 @@ GtLPrimitiveCompositeJsonDataBlock >> condensedJsonBlock [
 			resultBlock	]
 ]
 
+{ #category : #accessing }
+GtLPrimitiveCompositeJsonDataBlock >> containedJsonDataBlocksCount [
+	"Return the total number of contained json blocks, recursively counting nested composites."
+	^ jsonDataBlocks inject: 0 into: [ :sum :each |
+			sum + each containedJsonDataBlocksCount ]
+]
+
 { #category : #'gt - extensions' }
 GtLPrimitiveCompositeJsonDataBlock >> gtPhlowTreeChildren [
 	^ jsonDataBlocks
@@ -75,8 +82,15 @@ GtLPrimitiveCompositeJsonDataBlock >> jsonDataBlocks [
 ]
 
 { #category : #accessing }
+GtLPrimitiveCompositeJsonDataBlock >> keysForMerge [
+	^self dataKey
+		ifNil: [ self condensedJsonBlock jsonData keys ] 
+		ifNotNil: [ {self dataKey} ]
+]
+
+{ #category : #accessing }
 GtLPrimitiveCompositeJsonDataBlock >> llmJsonData [
-	| computedJsonData|
+	| computedJsonData |
 	computedJsonData := self condensedJsonBlock jsonData.
 	^self dataKey 
 		ifNil: [ computedJsonData ] 
