@@ -14,7 +14,7 @@ Class {
 		'newMessageViewModel',
 		'status'
 	],
-	#category : 'Gt4LlmCore-Support'
+	#category : #'Gt4LlmCore-Support'
 }
 
 { #category : #'api - building' }

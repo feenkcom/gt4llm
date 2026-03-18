@@ -6,7 +6,7 @@ Class {
 		'toolbarElement',
 		'dateElement'
 	],
-	#category : 'Gt4LlmCore-UI - Elements'
+	#category : #'Gt4LlmCore-UI - Elements'
 }
 
 { #category : #initialization }
@@ -14,9 +14,10 @@ GtLMessageSenderAndDateHeaderElement >> defaultLayout [
 	^ BlLinearLayout horizontal alignCenterLeft
 ]
 
-{ #category : #'api - visibility' }
+{ #category : #initialization }
 GtLMessageSenderAndDateHeaderElement >> hideToolbarElement [
-	^ toolbarElement visibility: BlVisibility hidden
+	toolbarElement visibility: BlVisibility hidden.
+	dateElement visibility: BlVisibility hidden
 ]
 
 { #category : #initialization }
@@ -47,7 +48,8 @@ GtLMessageSenderAndDateHeaderElement >> initializeDateElement [
 					foreground: BrGlamorousColors disabledButtonTextColor);
 			fitContent;
 			constraintsDo: [ :c | c linear vertical alignTop ];
-			margin: (BlInsets left: 10 right: 10)
+			margin: (BlInsets left: 10 right: 10);
+			visibility: BlVisibility hidden
 ]
 
 { #category : #initialization }
@@ -97,9 +99,10 @@ GtLMessageSenderAndDateHeaderElement >> onThreadMessageViewModelChanged: anAnnou
 	BlTaskAction enqueueElement: self action: [ self updateElement ]
 ]
 
-{ #category : #'api - visibility' }
+{ #category : #initialization }
 GtLMessageSenderAndDateHeaderElement >> showToolbarElement [
-	^ toolbarElement visibility: BlVisibility visible
+	toolbarElement visibility: BlVisibility visible.
+	dateElement visibility: BlVisibility visible
 ]
 
 { #category : #'private - hooks' }

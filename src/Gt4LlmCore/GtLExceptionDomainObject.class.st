@@ -5,7 +5,7 @@ Class {
 		'exception',
 		'errorReason'
 	],
-	#category : 'Gt4LlmCore-Domain Objects'
+	#category : #'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #'instance creation' }

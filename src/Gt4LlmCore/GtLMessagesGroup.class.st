@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLMessagesGroup,
 	#superclass : #GtLGroup,
-	#category : 'Gt4LlmCore-Core'
+	#category : #'Gt4LlmCore-Core'
 }
 
 { #category : #accessing }
