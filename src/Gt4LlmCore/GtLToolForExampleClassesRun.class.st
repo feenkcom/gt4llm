@@ -161,11 +161,11 @@ GtLToolForExampleClassesRun >> privatePerformToolCall: aToolCall inContext: anEx
 			[ | detail exampleWithResult |
 			exampleWithResult := example asExampleWithResult.
 			exampleWithResult hasNoTestPragma ifFalse: [ exampleWithResult run ].
-			detail := GtLExampleWithResultDomainObject new
+			detail := GtLExampleWithResultStatusDomainObject new
 					exampleWithResult: exampleWithResult.
 			details add: detail ] on: Error do: [ :ex | ex return: nil ] ].
 
-	^ GtLExampleWithResultsDomainObject new
-		exampleWithResults: details asArray;
+	^ GtLExampleWithResultStatusesDomainObject new
+		exampleWithStatuses: details asArray;
 		notFoundClassNames: notFound asArray
 ]
