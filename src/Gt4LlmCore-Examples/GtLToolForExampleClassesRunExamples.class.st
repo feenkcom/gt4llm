@@ -19,7 +19,7 @@ GtLToolForExampleClassesRunExamples >> runExamplesForClass [
 
 	self assert: result totalCount equals: 3.
 	self assert: result skippedCount equals: 3.
-	self assert: result exampleWithResults size equals: 3.
+	self assert: result exampleWithStatuses size equals: 3.
 	^ call
 ]
 
@@ -39,7 +39,7 @@ GtLToolForExampleClassesRunExamples >> runExamplesForMultipleClasses [
 	self assert: result isErrorDomainObject not.
 	self assert: result totalCount equals: 8.
 	self assert: result skippedCount equals: 3.
-	self assert: result exampleWithResults size equals: 8.
+	self assert: result exampleWithStatuses size equals: 8.
 	^ call
 ]
 
@@ -58,7 +58,7 @@ GtLToolForExampleClassesRunExamples >> runExamplesWithUnknownInputs [
 	self assert: result isErrorDomainObject not.
 	self assert: result totalCount equals: 0.
 	self assert: result skippedCount equals: 0.
-	self assert: result exampleWithResults size equals: 0.
+	self assert: result exampleWithStatuses size equals: 0.
 	self assert: result notFoundClassNames size equals: 1.
 	self assert: result notFoundClassNames anyOne equals: 'NonExistingExampleClass'.
 	^ call

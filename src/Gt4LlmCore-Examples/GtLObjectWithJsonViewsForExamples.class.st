@@ -8,7 +8,9 @@ Class {
 		'firstJsonViewEnabled',
 		'secondJsonViewEnabled',
 		'firstJsonViewDataKey',
-		'secondJsonViewDataKey'
+		'secondJsonViewDataKey',
+		'firstValue',
+		'secondValue'
 	],
 	#category : #'Gt4LlmCore-Examples-Data Views'
 }
@@ -33,6 +35,11 @@ GtLObjectWithJsonViewsForExamples >> firstJsonViewEnabled: aBoolean [
 	firstJsonViewEnabled := aBoolean
 ]
 
+{ #category : #accessing }
+GtLObjectWithJsonViewsForExamples >> firstValue: aValue [
+	firstValue := aValue
+]
+
 { #category : #views }
 GtLObjectWithJsonViewsForExamples >> gtLlmFirstJsonViewFor: aDataView [
 	<gtLlmDataView>
@@ -42,7 +49,7 @@ GtLObjectWithJsonViewsForExamples >> gtLlmFirstJsonViewFor: aDataView [
 		data: [ 
 			NeoJSONObject new
 				at: 'type' put: 'first';
-				at: 'value' put: 100;
+				at: 'value' put: firstValue;
 				yourself ];
 		dataKey: self firstJsonViewDataKey
 ]
@@ -56,7 +63,7 @@ GtLObjectWithJsonViewsForExamples >> gtLlmSecondJsonViewFor: aDataView [
 		data: [ 
 			NeoJSONObject new
 				at: 'type' put: 'second';
-				at: 'value' put: 200;
+				at: 'value' put: secondValue;
 				yourself ];
 		dataKey: self secondJsonViewDataKey
 ]
@@ -68,7 +75,10 @@ GtLObjectWithJsonViewsForExamples >> initialize [
 	firstJsonViewEnabled := true.
 	secondJsonViewEnabled := true.
 	firstJsonViewDataKey := nil.
-	secondJsonViewDataKey := nil
+	secondJsonViewDataKey := nil.
+	
+	firstValue := 100.
+	secondValue := 200.
 ]
 
 { #category : #accessing }
@@ -89,4 +99,9 @@ GtLObjectWithJsonViewsForExamples >> secondJsonViewEnabled [
 { #category : #accessing }
 GtLObjectWithJsonViewsForExamples >> secondJsonViewEnabled: aBoolean [
 	secondJsonViewEnabled := aBoolean
+]
+
+{ #category : #accessing }
+GtLObjectWithJsonViewsForExamples >> secondValue: aValue [
+	secondValue := aValue
 ]

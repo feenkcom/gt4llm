@@ -158,14 +158,21 @@ GtLToolForExampleClassesRun >> privatePerformToolCall: aToolCall inContext: anEx
 	details := OrderedCollection new.
 	examples
 		do: [ :example | 
-			[ | detail exampleWithResult |
+			[ | detail exampleWithResult objectId |
 			exampleWithResult := example asExampleWithResult.
 			exampleWithResult hasNoTestPragma ifFalse: [ exampleWithResult run ].
-			detail := GtLExampleWithResultDomainObject new
-					exampleWithResult: exampleWithResult.
+			
+			objectId := anExecutionContext objectStorage ifNotNil: [ :aStorage |
+				aStorage
+					addNewObject: exampleWithResult returnValue
+					reason: (GtLStoredObjectExampleMethodReason toolCall: aToolCall) ].
+			
+			detail := GtLExampleWithResultStatusDomainObject new
+					exampleWithResult: exampleWithResult;
+					objectId: objectId.
 			details add: detail ] on: Error do: [ :ex | ex return: nil ] ].
 
-	^ GtLExampleWithResultsDomainObject new
-		exampleWithResults: details asArray;
+	^ GtLExampleWithResultStatusesDomainObject new
+		exampleWithStatuses: details asArray;
 		notFoundClassNames: notFound asArray
 ]
