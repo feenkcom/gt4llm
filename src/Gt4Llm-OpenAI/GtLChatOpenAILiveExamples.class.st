@@ -10950,12 +10950,6 @@ GtLChatOpenAILiveExamples >> howAreYouCallExample_withStringSchema_stub_response
 ]
 
 { #category : #'as yet unclassified' }
-GtLChatOpenAILiveExamples >> messageExample_magritteMarkdown_codeChanges [
-	<gtExample>
-	^ super messageExample_magritteMarkdown_codeChanges
-]
-
-{ #category : #'as yet unclassified' }
 GtLChatOpenAILiveExamples >> messageWithToolCallExample_magritteMarkdown [
 	<gtExample>
 	^ super messageWithToolCallExample_magritteMarkdown.
