@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLForwardCollectionToJsonViewExamples,
 	#superclass : #GtLForwardCollectionDataViewExamples,
-	#category : 'Gt4LlmCore-Examples-Data Views'
+	#category : #'Gt4LlmCore-Examples-Data Views'
 }
 
 { #category : #'examples - with inner data keys' }

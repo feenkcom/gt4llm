@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'step'
 	],
-	#category : 'Gt4LlmCore-Examples-Magritte'
+	#category : #'Gt4LlmCore-Examples-Magritte'
 }
 
 { #category : #comparing }

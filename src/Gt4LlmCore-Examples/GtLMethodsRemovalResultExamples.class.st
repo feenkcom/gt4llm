@@ -4,7 +4,7 @@ Examples for GtLMethodsRemovalResult domain object.
 Class {
 	#name : #GtLMethodsRemovalResultExamples,
 	#superclass : #GtLMagritteDomainObjectExamples,
-	#category : 'Gt4LlmCore-Examples-Domain Objects'
+	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #examples }
