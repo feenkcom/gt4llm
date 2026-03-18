@@ -3,7 +3,7 @@ I provide examples for GtLForwardDataView forwarding to JSON views.
 "
 Class {
 	#name : #GtLForwardToJsonViewExamples,
-	#superclass : #GtLForwardDataViewExamples,
+	#superclass : #GtLForwardObjectDataViewExamples,
 	#category : #'Gt4LlmCore-Examples-Data Views'
 }
 

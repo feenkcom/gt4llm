@@ -1,3 +1,9 @@
+"
+I render the header of a chat message, including sender information, a compact content summary, execution state, and contextual actions.
+
+## Example
+{{gtExample:GtLChatOpenAIElementExamples>>#messageHeaderElement|noCode|previewExpanded}}
+"
 Class {
 	#name : #GtLMessageHeaderElement,
 	#superclass : #GtLBasicMessageElement,

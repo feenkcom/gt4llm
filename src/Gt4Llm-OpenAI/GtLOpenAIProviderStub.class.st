@@ -25,7 +25,7 @@ GtLOpenAIProviderStub >> defaultUserMessageClass [
 
 { #category : #'api - accessing' }
 GtLOpenAIProviderStub >> modelName [
-	^ 'stub'
+	^ 'Stub'
 ]
 
 { #category : #'api - execution' }

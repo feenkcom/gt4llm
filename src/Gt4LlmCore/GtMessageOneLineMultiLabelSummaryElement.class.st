@@ -1,3 +1,9 @@
+"
+I render a one-line summary as multiple labels derived from a chat message.
+
+## Example
+{{gtExample:GtLChatOpenAIElementExamples>>#messageOneLineMultiLabelSummaryElement|noCode|previewExpanded}}
+"
 Class {
 	#name : #GtMessageOneLineMultiLabelSummaryElement,
 	#superclass : #GtLBasicMessageElement,
