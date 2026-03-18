@@ -30,7 +30,12 @@ GtLPrimitiveMessageDataBlock >> containedJsonDataBlocksCount [
 
 { #category : #accessing }
 GtLPrimitiveMessageDataBlock >> dataBlocks [
-	^{self compositeJsonDataBlock} , imageDataBlocks
+	| blocks |
+	blocks := OrderedCollection new.
+	compositeJsonDataBlock containedJsonDataBlocksCount > 0
+		ifTrue: [ blocks add: compositeJsonDataBlock ].
+	blocks addAll: imageDataBlocks.
+	^ blocks
 ]
 
 { #category : #views }

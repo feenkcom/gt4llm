@@ -4,7 +4,7 @@ Examples for GtLMagritteToolForMethodCompilation.
 Class {
 	#name : #GtLMagritteToolForMethodCompilationExamples,
 	#superclass : #Object,
-	#category : #'Gt4LlmCore-Examples'
+	#category : 'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #examples }
