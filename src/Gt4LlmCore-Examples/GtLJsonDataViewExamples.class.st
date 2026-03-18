@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLJsonDataViewExamples,
-	#superclass : #Object,
+	#superclass : #GtLDataViewExamples,
 	#category : #'Gt4LlmCore-Examples-Data Views'
 }
 
