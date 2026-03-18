@@ -1,0 +1,38 @@
+Class {
+	#name : #GtLPrimitiveCompositeJsonGenericDataBlock,
+	#superclass : #GtLPrimitiveCompositeJsonDataBlock,
+	#category : #Gt4LlmCore
+}
+
+{ #category : #accessing }
+GtLPrimitiveCompositeJsonGenericDataBlock >> condensedJsonBlock [
+	^jsonDataBlocks 
+		inject: (GtLPrimitiveJsonDataBlock new
+			dataKey: self dataKey;
+			jsonData: Dictionary new) 
+		into: [ :resultBlock :currentBlock |
+			resultBlock addJsonBlock: currentBlock.
+			resultBlock	]
+]
+
+{ #category : #accessing }
+GtLPrimitiveCompositeJsonGenericDataBlock >> keysForMerge [
+	^self dataKey
+		ifNil: [ self condensedJsonBlock jsonData keys ] 
+		ifNotNil: [ {self dataKey} ]
+]
+
+{ #category : #accessing }
+GtLPrimitiveCompositeJsonGenericDataBlock >> llmJsonData [
+	^self condensedJsonBlock llmJsonData
+]
+
+{ #category : #serialization }
+GtLPrimitiveCompositeJsonGenericDataBlock >> serializeForAnthropic [
+	^ self condensedJsonBlock serializeForAnthropic 
+]
+
+{ #category : #serialization }
+GtLPrimitiveCompositeJsonGenericDataBlock >> serializeForOpenAI [
+	^ self condensedJsonBlock serializeForOpenAI 
+]

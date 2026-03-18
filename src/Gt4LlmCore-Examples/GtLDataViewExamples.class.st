@@ -49,6 +49,7 @@ GtLDataViewExamples >> assertCompositeView: aCompositeView hasSingleJsonDataView
 	self assert: aCompositeView isNotNil.
 	self assert: aCompositeView class equals: GtLCompositeDataView.
 	self assert: aCompositeView dataViews size equals: 1.
+	self assert: aCompositeView isWithArraySerialization not.
 	self assert: aCompositeView dataViews first class equals: GtLJsonDataView.
 	self assert: aCompositeView dataViews first dataKey equals: aDataKey
 ]

@@ -22,7 +22,9 @@ GtLForwardCollectionDataView >> computeTargetView [
 	[currentCollection := self targetCollection ]
 		on: Error do: [ :anError |
 			^ self errorViewWithException: anError isFrozen: false ]. 
+			
 	targetView := self compositeData.
+	targetView beWithArraySerialization.
 	
 	currentCollection do: [ :each |
 		targetView addDataView: (self computeForwardedViewFor: [ each ]) ].
@@ -32,16 +34,7 @@ GtLForwardCollectionDataView >> computeTargetView [
 
 { #category : #serialization }
 GtLForwardCollectionDataView >> serializeToLlmPrimiteDataOn: aBuilder [
-	self assert: [ self dataKey notNil ].
-	
-	self targetDataView isErrorView ifTrue: [
-		^ self targetDataView serializeToLlmPrimiteDataOn: aBuilder  ].
-	
-	aBuilder 
-		forDataKey: self dataKey
-		do: [
-			self targetDataView dataViews do: [ :each |
-				each serializeToLlmPrimiteDataOn: aBuilder ] ]
+	self targetDataView serializeToLlmPrimiteDataOn: aBuilder
 ]
 
 { #category : #accessing }

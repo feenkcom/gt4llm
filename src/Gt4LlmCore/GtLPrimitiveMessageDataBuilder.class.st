@@ -36,6 +36,24 @@ GtLPrimitiveMessageDataBuilder >> addJsonDataBlockFor: aJsonData  dataKey: aData
 ]
 
 { #category : #adding }
+GtLPrimitiveMessageDataBuilder >> forArrayWithDataKey: aDataKey do: aBlock [
+	| previousComposite |
+	
+	self assert: aDataKey notNil.
+	
+	^[
+		previousComposite := currentCompositeJsonDataBlock.
+		currentCompositeJsonDataBlock := GtLPrimitiveCompositeJsonArrayDataBlock new
+			dataKey: aDataKey.
+		previousComposite addJsonDataBlock: currentCompositeJsonDataBlock.
+		
+		aBlock value
+	] 
+		ensure: [
+			currentCompositeJsonDataBlock := previousComposite ]
+]
+
+{ #category : #adding }
 GtLPrimitiveMessageDataBuilder >> forDataKey: aDataKey do: aBlock [
 	| previousComposite |
 	
@@ -43,7 +61,7 @@ GtLPrimitiveMessageDataBuilder >> forDataKey: aDataKey do: aBlock [
 	
 	^[
 		previousComposite := currentCompositeJsonDataBlock.
-		currentCompositeJsonDataBlock := GtLPrimitiveCompositeJsonDataBlock new
+		currentCompositeJsonDataBlock := GtLPrimitiveCompositeJsonGenericDataBlock new
 			dataKey: aDataKey.
 		previousComposite addJsonDataBlock: currentCompositeJsonDataBlock.
 		
