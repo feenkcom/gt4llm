@@ -75,6 +75,16 @@ GtLDataView >> emptyData [
 ]
 
 { #category : #'message performing' }
+GtLDataView >> ensureContext [
+
+	(self buildContext notNil and: [ 
+		 self buildContext hasContext ]) ifTrue: [ 
+		^ self buildContext context ].
+
+	^ GtPhlowContext new
+]
+
+{ #category : #'message performing' }
 GtLDataView >> errorViewWithException: anException isFrozen: aBoolean [
 	| errorName frozenException |
 	
@@ -165,11 +175,35 @@ GtLDataView >> jsonObject: aBlock [
 		object: aBlock
 ]
 
+{ #category : #decorating }
+GtLDataView >> magritteObject [
+	^ GtLMagritteDataView new
+]
+
+{ #category : #decorating }
+GtLDataView >> magritteObject: aBlockClosure [
+	^ self magritteObject	
+			object: [ self ]
+]
+
 { #category : #utils }
 GtLDataView >> object: anObject arguments: theExecutionArguments [
 	self buildContext: (GtLDataViewBuildContext new
 		object: anObject;
 		arguments: theExecutionArguments)
+]
+
+{ #category : #'message performing' }
+GtLDataView >> on: anObject perform: aMessageSymbol [
+	<return: #GtLDataView>
+	<gtCollector>
+	
+	^ self 
+		on: anObject 
+		perform: aMessageSymbol 
+		withSomeArguments: { 
+			  self.
+			  self ensureContext }
 ]
 
 { #category : #'message performing' }

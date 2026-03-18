@@ -6,3 +6,74 @@ Class {
 	#superclass : #Object,
 	#category : 'Gt4LlmCore-Examples-Data Views'
 }
+
+{ #category : #assertions }
+GtLDataViewExamples >> assertCompositeView: aCompositeView hasInnerCompositeWithViewCount: anInteger [
+	"Assert that aCompositeView is a composite containing another composite with the given number of views."
+	| innerComposite |
+	self assert: aCompositeView isNotNil.
+	self assert: aCompositeView class equals: GtLCompositeDataView.
+	self assert: aCompositeView dataViews size equals: 1.
+	
+	innerComposite := aCompositeView dataViews first.
+	self assert: innerComposite class equals: GtLCompositeDataView.
+	self assert: innerComposite dataViews size equals: anInteger.
+	
+	^ innerComposite
+]
+
+{ #category : #assertions }
+GtLDataViewExamples >> assertCompositeView: aCompositeView hasJsonDataViewWithDataKey: aDataKey atIndex: anIndex [
+	"Assert that the view at anIndex in aCompositeView is a GtLJsonDataView with the given dataKey."
+	| view |
+	self assert: aCompositeView dataViews size >= anIndex.
+	view := aCompositeView dataViews at: anIndex.
+	self assert: view class equals: GtLJsonDataView.
+	self assert: view dataKey equals: aDataKey.
+	^ view
+]
+
+{ #category : #assertions }
+GtLDataViewExamples >> assertCompositeView: aCompositeView hasMagritteDataViewWithDataKey: aDataKey atIndex: anIndex [
+	"Assert that the view at anIndex in aCompositeView is a GtLMagritteDataView with the given dataKey."
+	| view |
+	self assert: aCompositeView dataViews size >= anIndex.
+	view := aCompositeView dataViews at: anIndex.
+	self assert: view class equals: GtLMagritteDataView.
+	self assert: view dataKey equals: aDataKey.
+	^ view
+]
+
+{ #category : #assertions }
+GtLDataViewExamples >> assertCompositeView: aCompositeView hasSingleJsonDataViewWithDataKey: aDataKey [
+	self assert: aCompositeView isNotNil.
+	self assert: aCompositeView class equals: GtLCompositeDataView.
+	self assert: aCompositeView dataViews size equals: 1.
+	self assert: aCompositeView dataViews first class equals: GtLJsonDataView.
+	self assert: aCompositeView dataViews first dataKey equals: aDataKey
+]
+
+{ #category : #assertions }
+GtLDataViewExamples >> assertCompositeView: aCompositeView hasSingleMagritteDataViewWithDataKey: aDataKey [
+	"Assert that aCompositeView is a GtLCompositeDataView with exactly one GtLMagritteDataView having the given dataKey."
+	self assert: aCompositeView isNotNil.
+	self assert: aCompositeView class equals: GtLCompositeDataView.
+	self assert: aCompositeView dataViews size equals: 1.
+	self assert: aCompositeView dataViews first class equals: GtLMagritteDataView.
+	self assert: aCompositeView dataViews first dataKey equals: aDataKey
+]
+
+{ #category : #assertions }
+GtLDataViewExamples >> assertForwardDataView: aForwardDataView hasTargetObject: anObject [
+	"Assert that aForwardDataView targets the expected object and uses the default view symbol."
+	self assert: aForwardDataView class equals: GtLForwardDataView.
+	self assert: aForwardDataView targetObject equals: anObject.
+	self assert: aForwardDataView viewSymbol equals: #llmDataViewsFor:
+]
+
+{ #category : #assertions }
+GtLDataViewExamples >> assertForwardDataView: aForwardDataView hasTargetObject: anObject withDataKey: aDataKey [
+	"Assert that aForwardDataView targets the expected object with the given data key."
+	self assertForwardDataView: aForwardDataView hasTargetObject: anObject.
+	self assert: aForwardDataView dataKey equals: aDataKey
+]
