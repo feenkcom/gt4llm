@@ -90,7 +90,7 @@ GtLPrimitiveCompositeJsonDataBlock >> keysForMerge [
 
 { #category : #accessing }
 GtLPrimitiveCompositeJsonDataBlock >> llmJsonData [
-	| computedJsonData|
+	| computedJsonData |
 	computedJsonData := self condensedJsonBlock jsonData.
 	^self dataKey 
 		ifNil: [ computedJsonData ] 

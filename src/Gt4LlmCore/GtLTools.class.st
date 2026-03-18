@@ -32,6 +32,7 @@ GtLTools class >> gtCodeChange [
 	^ self
 		withAll: {GtLMagritteToolForClassesCreation new.
 					GtLMagritteToolForClassDefinitionChange new.
+					GtLMagritteToolForClassCommentChange new.
 					GtLMagritteToolForMethodsCompilation new.
 					GtLMagritteToolForMethodsRemoval new.
 					GtLMagritteToolForClassRemoval new} asOrderedCollection
