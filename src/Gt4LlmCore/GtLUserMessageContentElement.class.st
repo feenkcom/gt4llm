@@ -1,3 +1,9 @@
+"
+I render a user chat message with a header and an expandable content area.
+
+## Example
+{{gtExample:GtLChatOpenAIElementExamples>>#userMessageElement|noCode|previewExpanded}}
+"
 Class {
 	#name : #GtLUserMessageContentElement,
 	#superclass : #GtLBasicMessageElement,
@@ -66,7 +72,7 @@ GtLUserMessageContentElement >> initializeContentsExpanderElement [
 
 { #category : #initialization }
 GtLUserMessageContentElement >> initializeHeaderElement [
-	headerElement := GtLMessageSenderAndDateHeaderElement new
+	headerElement := GtLMessageSenderAndDateHeaderElement new hideToolbarElement
 ]
 
 { #category : #initialization }

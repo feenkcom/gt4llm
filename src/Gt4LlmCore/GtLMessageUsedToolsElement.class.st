@@ -1,3 +1,9 @@
+"
+I render the list of tools used while producing a reply message.
+
+## Example
+{{gtExample:GtLChatOpenAIElementExamples>>#messageUsedToolsElement|noCode|previewExpanded}}
+"
 Class {
 	#name : #GtLMessageUsedToolsElement,
 	#superclass : #GtLBasicMessageElement,
