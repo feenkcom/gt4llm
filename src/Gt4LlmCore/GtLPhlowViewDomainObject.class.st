@@ -7,7 +7,7 @@ Class {
 		'viewMethodSourceCode',
 		'phlowViewForm'
 	],
-	#category : 'Gt4LlmCore-Domain Objects'
+	#category : #'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #'instance creation' }
@@ -54,7 +54,7 @@ GtLPhlowViewDomainObject >> gtLivePhlowViewFor: aView [
 				addAptitude: (BrLayoutResizerAptitude new common: [ container children ]);
 				background: BrGlamorousColors backdropColor;
 				addChild: ((GtPharoMethodCoder new
-						forMethod: self phlowView definingMethod;
+						forMethod: self phlowView definingMethod compiledMethod;
 						subscribeToSystem;
 						asExpandedOnlyElement)
 						margin: (BlInsets all: 10);
