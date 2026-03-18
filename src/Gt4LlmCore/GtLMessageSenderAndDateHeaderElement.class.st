@@ -1,3 +1,9 @@
+"
+I render a compact message header focused on sender and date, together with contextual actions.
+
+## Example
+{{gtExample:GtLChatOpenAIElementExamples>>#messageSenderAndDateHeaderElement|noCode|previewExpanded}}
+"
 Class {
 	#name : #GtLMessageSenderAndDateHeaderElement,
 	#superclass : #GtLBasicMessageElement,
@@ -48,8 +54,7 @@ GtLMessageSenderAndDateHeaderElement >> initializeDateElement [
 					foreground: BrGlamorousColors disabledButtonTextColor);
 			fitContent;
 			constraintsDo: [ :c | c linear vertical alignTop ];
-			margin: (BlInsets left: 10 right: 10);
-			visibility: BlVisibility hidden
+			margin: (BlInsets left: 10 right: 10)
 ]
 
 { #category : #initialization }

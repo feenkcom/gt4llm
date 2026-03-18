@@ -17,9 +17,24 @@ Object >> gtActionObjectChatFor: anAction [
 	| chatBlock |
 	GtLConnectionRegistry instance hasConnectableDefaultConnection
 		ifFalse: [ ^ anAction empty ].
-	chatBlock := [ | c |
+	chatBlock := [ | c storedObjectId storeObject |
 		c := GtL gt.
-		c objectStorage addNewObject: self reason: (GtLStoredObjectStringReason text: 'Initial object').
+		storedObjectId := c addNewObject: self reasonString: 'Initial object'.
+		storeObject := c objectStorage objectAt: storedObjectId.
+		c
+			pageObjectExplanation: (LePage new
+					title: 'Objects';
+					addSnippet: (LeTextSnippet
+							string: 'Relate the conversation primarily to the initial object, also attached to the first message.');
+					yourself);
+			sendWith: [ :m | 
+				m
+					markdown: 'Describe the object';
+					addInputMagritteObject: (GtLObjectStorageValueResult new
+								objectId: storedObjectId;
+								object: self;
+								objectValue: (GtLSerializedObjectValue fromObject: self))
+						named: 'Initial object' ].
 		c ].
 	^ anAction button
 		icon: BrGlamorousVectorIcons chat;

@@ -27,6 +27,18 @@ GtLChatStep >> assertMessageElementHasFinishedStateWithIndex: anIndex [
 ]
 
 { #category : #'steps - checks' }
+GtLChatStep >> assertMessageElementHasProviderModelSenderNameWithIndex: anIndex [
+	^ self
+		assertMessageElementWithIndex: anIndex
+		hasSenderNamed: [ :aMessageViewModel | aMessageViewModel message chat provider modelName ]
+]
+
+{ #category : #'steps - checks' }
+GtLChatStep >> assertMessageElementHasRunningDateStringWithIndex: anIndex [
+	^ self assertMessageElementWithIndex: anIndex hasDateString: 'running'
+]
+
+{ #category : #'steps - checks' }
 GtLChatStep >> assertMessageElementHasRunningStateWithIndex: anIndex [
 	^ self
 		assertMessageElementWithIndex: anIndex
@@ -69,6 +81,19 @@ GtLChatStep >> assertMessageElementWithIndex: anIndex hasChatStateNamed: aChatSt
 ]
 
 { #category : #'steps - checks' }
+GtLChatStep >> assertMessageElementWithIndex: anIndex hasDateString: aDateName [
+	^ self assert
+		label: ('Assert message element with index {1} has chat state named {2}'
+				format: {anIndex.
+						aDateName});
+		value: [ :aLabel | aLabel text asString ] equals: aDateName;
+		onThisOrDeepChildElementId: #'chat--message-list';
+		/ #scrollable;
+		// (GtLMessageElementId indexed: anIndex);
+		// #'chat--message-date'
+]
+
+{ #category : #'steps - checks' }
 GtLChatStep >> assertMessageElementWithIndex: anIndex hasHeaderContent: aContentString [
 	^ self assert
 		label: ('Assert message element with index {1} has sender named {2}'
@@ -82,12 +107,24 @@ GtLChatStep >> assertMessageElementWithIndex: anIndex hasHeaderContent: aContent
 ]
 
 { #category : #'steps - checks' }
-GtLChatStep >> assertMessageElementWithIndex: anIndex hasSenderNamed: aSenderName [
+GtLChatStep >> assertMessageElementWithIndex: anIndex hasSenderNamed: aSenderNameOrBlock [
 	^ self assert
 		label: ('Assert message element with index {1} has sender named {2}'
 				format: {anIndex.
-						aSenderName});
-		value: [ :aLabel | aLabel text asString ] equals: aSenderName;
+						aSenderNameOrBlock});
+		value: [ :aLabel | aLabel text asString ]
+			equals: [ :aLabel | 
+				aSenderNameOrBlock isString
+					ifTrue: [ aSenderNameOrBlock ]
+					ifFalse: [ | aParentId |
+						aParentId := GtLMessageElementId indexed: anIndex.
+						aLabel
+							topMostParentSuchThat: [ :eachParent | eachParent id = aParentId ]
+							ifFound: [ :aParent | aSenderNameOrBlock cull: aParent messageViewModel ]
+							ifNone: [ AssertionFailure
+									signal: ('Could not find {1} parent of child {2}'
+											format: {aParentId.
+													aLabel}) ] ] ];
 		onThisOrDeepChildElementId: #'chat--message-list';
 		/ #scrollable;
 		// (GtLMessageElementId indexed: anIndex);

@@ -103,8 +103,8 @@ GtLChatWithScripterExamples >> chatElementWithEmptyReplyMessage [
 	scripter llmChat
 		assertNumberOfMessageElementsIs: 2;
 		assertMessageElementExistsWithIndex: 2;
-		assertMessageElementHasWaitingSenderNameWithIndex: 2;
-		assertMessageElementHasEmptyStateWithIndex: 2;
+		assertMessageElementHasProviderModelSenderNameWithIndex: 2;
+		assertMessageElementHasRunningDateStringWithIndex: 2;
 		play.
 
 	^ scripter
@@ -135,8 +135,8 @@ GtLChatWithScripterExamples >> chatElementWithEmptyReplyMessage_toolMessage [
 	scripter llmChat
 		assertNumberOfMessageElementsIs: 2;
 		assertMessageElementExistsWithIndex: 2;
-		assertMessageElementHasToolSenderNameWithIndex: 2;
-		assertMessageElementHasWaitingStateWithIndex: 2;
+		assertMessageElementHasProviderModelSenderNameWithIndex: 2;
+		assertMessageElementHasRunningDateStringWithIndex: 2;
 		play.
 
 	^ scripter
@@ -159,8 +159,8 @@ GtLChatWithScripterExamples >> chatElementWithEmptyReplyMessage_toolMessage_exec
 	scripter llmChat
 		assertNumberOfMessageElementsIs: 2;
 		assertMessageElementExistsWithIndex: 2;
-		assertMessageElementHasToolSenderNameWithIndex: 2;
-		assertMessageElementHasRunningStateWithIndex: 2;
+		assertMessageElementHasProviderModelSenderNameWithIndex: 2;
+		assertMessageElementHasRunningDateStringWithIndex: 2;
 		play.
 
 	^ scripter
@@ -183,8 +183,8 @@ GtLChatWithScripterExamples >> chatElementWithEmptyReplyMessage_toolMessage_fini
 	scripter llmChat
 		assertNumberOfMessageElementsIs: 2;
 		assertMessageElementExistsWithIndex: 2;
-		assertMessageElementHasToolSenderNameWithIndex: 2;
-		assertMessageElementHasFinishedStateWithIndex: 2;
+		assertMessageElementHasProviderModelSenderNameWithIndex: 2;
+		assertMessageElementHasRunningDateStringWithIndex: 2;
 		play.
 
 	^ scripter
@@ -225,8 +225,8 @@ GtLChatWithScripterExamples >> chatElementWithNewMessage_send [
 		assertNewMessageSendButtonIsEnabled;
 		assertNewMessageStopButtonIsDisabled;
 		assertNumberOfMessageElementsIs: 2;
-		assertMessageElementHasWaitingSenderNameWithIndex: 2;
-		assertMessageElementHasEmptyStateWithIndex: 2;
+		assertMessageElementHasProviderModelSenderNameWithIndex: 2;
+		assertMessageElementHasRunningDateStringWithIndex: 2;
 		assertMessageElementHasUserSenderNameWithIndex: 1;
 		assertMessageElementWithIndex: 1 hasHeaderContent: 'What is GToolkit?';
 		play.
@@ -258,8 +258,8 @@ GtLChatWithScripterExamples >> chatElementWithNewMessage_sendWithException [
 		assertNewMessageSendButtonIsEnabled;
 		assertNewMessageStopButtonIsDisabled;
 		assertNumberOfMessageElementsIs: 2;
-		assertMessageElementHasWaitingSenderNameWithIndex: 2;
-		assertMessageElementHasEmptyStateWithIndex: 2;
+		assertMessageElementHasProviderModelSenderNameWithIndex: 2;
+		assertMessageElementHasRunningDateStringWithIndex: 2;
 		assertNewMessageIsWithExceptionNumber: 1
 			text: 'GtLOpenAIError: Cannot send message';
 		play.
@@ -304,8 +304,8 @@ GtLChatWithScripterExamples >> chatElementWithNewMessage_sendWithException_secon
 		assertNewMessageSendButtonIsEnabled;
 		assertNewMessageStopButtonIsDisabled;
 		assertNumberOfMessageElementsIs: 4;
-		assertMessageElementHasWaitingSenderNameWithIndex: 4;
-		assertMessageElementHasEmptyStateWithIndex: 4;
+		assertMessageElementHasProviderModelSenderNameWithIndex: 2;
+		assertMessageElementHasRunningDateStringWithIndex: 2;
 		assertNewMessageIsWithExceptionNumber: 1
 			text: 'GtLOpenAIError: Cannot send message';
 		play.

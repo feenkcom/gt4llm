@@ -1,3 +1,9 @@
+"
+I render a one-line summary as a single label.
+
+## Example
+{{gtExample:GtLChatOpenAIElementExamples>>#messageOneLineOneLabelSummaryElement|noCode|previewExpanded}}
+"
 Class {
 	#name : #GtMessageOneLineOneLabelSummaryElement,
 	#superclass : #GtLBasicMessageElement,

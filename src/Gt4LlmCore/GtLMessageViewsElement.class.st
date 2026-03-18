@@ -1,3 +1,9 @@
+"
+I render the computed views of a chat message content.
+
+## Example
+{{gtExample:GtLChatOpenAIElementExamples>>#messageViewsElement|noCode|previewExpanded}}
+"
 Class {
 	#name : #GtLMessageViewsElement,
 	#superclass : #GtLBasicMessageElement,

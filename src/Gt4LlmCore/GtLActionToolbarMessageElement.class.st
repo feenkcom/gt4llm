@@ -1,3 +1,9 @@
+"
+I render the compact action toolbar associated with a chat message.
+
+## Example
+{{gtExample:GtLChatOpenAIElementExamples>>#actionToolbarMessageElement|noCode|previewExpanded}}
+"
 Class {
 	#name : #GtLActionToolbarMessageElement,
 	#superclass : #GtLBasicMessageElement,
