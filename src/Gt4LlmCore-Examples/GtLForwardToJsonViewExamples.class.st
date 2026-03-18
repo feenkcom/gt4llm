@@ -15,7 +15,7 @@ GtLForwardToJsonViewExamples >> forwardToFirstJsonViewWithBothDataKeys [
 	object := self objectWithJsonViewsWithDataKeys.
 	object secondJsonViewEnabled: false.
 	
-	dataView := GtLForwardDataView new
+	dataView := GtLForwardObjectDataView new
 		object: [ object ];
 		view: #gtLlmFirstJsonViewFor:;
 		dataKey: #outerKey.
@@ -61,7 +61,7 @@ GtLForwardToJsonViewExamples >> forwardToFirstJsonViewWithDataKey [
 	object := self objectWithJsonViewsWithDataKeys.
 	object secondJsonViewEnabled: false.
 	
-	dataView := GtLForwardDataView new
+	dataView := GtLForwardObjectDataView new
 		object: [ object ];
 		view: #gtLlmFirstJsonViewFor:.
 	
@@ -103,7 +103,7 @@ GtLForwardToJsonViewExamples >> forwardToFirstJsonViewWithForwardDataKey [
 	object := self objectWithJsonViews.
 	object secondJsonViewEnabled: false.
 	
-	dataView := GtLForwardDataView new
+	dataView := GtLForwardObjectDataView new
 		object: [ object ];
 		view: #gtLlmFirstJsonViewFor:;
 		dataKey: #forwardedFirst.
@@ -147,7 +147,7 @@ GtLForwardToJsonViewExamples >> forwardToFirstJsonViewWithoutDataKey [
 	object := self objectWithJsonViews.
 	object secondJsonViewEnabled: false.
 	
-	dataView := GtLForwardDataView new
+	dataView := GtLForwardObjectDataView new
 		object: [ object ];
 		view: #gtLlmFirstJsonViewFor:.
 	
@@ -186,7 +186,7 @@ GtLForwardToJsonViewExamples >> forwardToSecondJsonViewWithoutDataKey [
 	object := self objectWithJsonViews.
 	object firstJsonViewEnabled: false.
 	
-	dataView := GtLForwardDataView new
+	dataView := GtLForwardObjectDataView new
 		object: [ object ];
 		view: #gtLlmSecondJsonViewFor:.
 	

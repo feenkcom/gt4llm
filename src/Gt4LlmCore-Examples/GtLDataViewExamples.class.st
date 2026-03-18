@@ -66,7 +66,7 @@ GtLDataViewExamples >> assertCompositeView: aCompositeView hasSingleMagritteData
 { #category : #assertions }
 GtLDataViewExamples >> assertForwardDataView: aForwardDataView hasTargetObject: anObject [
 	"Assert that aForwardDataView targets the expected object and uses the default view symbol."
-	self assert: aForwardDataView class equals: GtLForwardDataView.
+	self assert: aForwardDataView class equals: GtLForwardObjectDataView.
 	self assert: aForwardDataView targetObject equals: anObject.
 	self assert: aForwardDataView viewSymbol equals: #llmDataViewsFor:
 ]

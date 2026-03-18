@@ -13,7 +13,7 @@ GtLForwardToAllViewsExamples >> forwardToBothJsonViews [
 	| object forwardDataView innerComposite |
 	object := self objectWithTwoJsonViews.
 	
-	forwardDataView := GtLForwardDataView new
+	forwardDataView := GtLForwardObjectDataView new
 		object: [ object ].
 	
 	self assertForwardDataView: forwardDataView hasTargetObject: object.
@@ -40,7 +40,7 @@ GtLForwardToAllViewsExamples >> forwardToBothJsonViewsWithDataKey [
 	| object forwardDataView innerComposite |
 	object := self objectWithTwoJsonViews.
 	
-	forwardDataView := GtLForwardDataView new
+	forwardDataView := GtLForwardObjectDataView new
 		object: [ object ];
 		dataKey: #allJsonViews.
 	
@@ -116,7 +116,7 @@ GtLForwardToAllViewsExamples >> forwardToMultipleViews [
 	| object forwardDataView innerComposite |
 	object := self objectWithMultipleViews.
 	
-	forwardDataView := GtLForwardDataView new
+	forwardDataView := GtLForwardObjectDataView new
 		object: [ object ].
 	
 	self assertForwardDataView: forwardDataView hasTargetObject: object.
@@ -137,7 +137,7 @@ GtLForwardToAllViewsExamples >> forwardToMultipleViewsWithDataKey [
 	| object forwardDataView innerComposite |
 	object := self objectWithMultipleViews.
 	
-	forwardDataView := GtLForwardDataView new
+	forwardDataView := GtLForwardObjectDataView new
 		object: [ object ];
 		dataKey: #allViews.
 	
