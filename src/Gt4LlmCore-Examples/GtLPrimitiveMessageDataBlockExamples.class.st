@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLPrimitiveMessageDataBlockExamples,
 	#superclass : #GtLPrimitiveDataBlockExamples,
-	#category : 'Gt4LlmCore-Examples-Data Views'
+	#category : #'Gt4LlmCore-Examples-Data Views'
 }
 
 { #category : #examples }
@@ -13,7 +13,7 @@ GtLPrimitiveMessageDataBlockExamples >> basicMessageDataBlock [
 	self assert: block compositeJsonDataBlock isNotNil.
 	self assert: block compositeJsonDataBlock jsonDataBlocks isEmpty.
 	self assert: block imageDataBlocks isEmpty.
-	self assert: block dataBlocks size equals: 1.
+	self assert: block dataBlocks size equals: 0.
 	self assert: block containedJsonDataBlocksCount equals: 0.
 	
 	^ block
@@ -204,8 +204,8 @@ GtLPrimitiveMessageDataBlockExamples >> messageDataBlockWithOneImageBlock [
 	
 	self assert: block compositeJsonDataBlock jsonDataBlocks isEmpty.
 	self assert: block imageDataBlocks size equals: 1.
-	self assert: block dataBlocks size equals: 2.
-	self assertSerializationForDataBlockWithTwoDataParts: block.
+	self assert: block dataBlocks size equals: 1.
+	self assertSerializationForDataBlockWithOneDataPart: block.
 	
 	^ block
 ]
