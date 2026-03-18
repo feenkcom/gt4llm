@@ -44,7 +44,8 @@ GtLUserMessageContentElement >> initialize [
 { #category : #initialization }
 GtLUserMessageContentElement >> initializeContentsExpanderElement [
 	contentsElement := GtLMessageViewsElement new.
-	contentsHeaderElement := GtMessageOneLineMultiLabelSummaryElement new.
+	contentsHeaderElement := GtMessageOneLineMultiLabelSummaryElement new
+			id: #'chat--message-content'.
 
 	contentsExpanderElement := BrExpander new
 			addAptitude: (BrGlamorousExpanderSubtleAptitude new sidebarExtraPadding: (BlInsets top: 5));

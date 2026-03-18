@@ -15,6 +15,11 @@ GtLReplyMessageViewModel >> acceptVisitor: aVisitor [
 	^ aVisitor visitReplyMessageViewModel: self
 ]
 
+{ #category : #'api - converting' }
+GtLReplyMessageViewModel >> defaultElementClass [
+	^ GtLReplyMessageContentElement
+]
+
 { #category : #'api - accessing' }
 GtLReplyMessageViewModel >> executionMessageViewModelsStream [
 	^ self message executionMessagesStream
