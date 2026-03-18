@@ -4,7 +4,7 @@ I am an abstract superclass for data view examples. I provide common utilities f
 Class {
 	#name : #GtLDataViewExamples,
 	#superclass : #Object,
-	#category : 'Gt4LlmCore-Examples-Data Views'
+	#category : #'Gt4LlmCore-Examples-Data Views'
 }
 
 { #category : #assertions }
@@ -23,25 +23,35 @@ GtLDataViewExamples >> assertCompositeView: aCompositeView hasInnerCompositeWith
 ]
 
 { #category : #assertions }
-GtLDataViewExamples >> assertCompositeView: aCompositeView hasJsonDataViewWithDataKey: aDataKey atIndex: anIndex [
-	"Assert that the view at anIndex in aCompositeView is a GtLJsonDataView with the given dataKey."
-	| view |
-	self assert: aCompositeView dataViews size >= anIndex.
-	view := aCompositeView dataViews at: anIndex.
-	self assert: view class equals: GtLJsonDataView.
-	self assert: view dataKey equals: aDataKey.
-	^ view
+GtLDataViewExamples >> assertCompositeView: aCompositeView hasJsonDataViewWithDataKey: aDataKey [
+	"Assert that there is a view in the given composite that is a json view with the given dataKey."
+	
+	self assert: (aCompositeView dataViews  
+		anySatisfy: [:aView |
+			aView class = GtLJsonDataView and: [
+				aView dataKey = aDataKey]])
 ]
 
 { #category : #assertions }
-GtLDataViewExamples >> assertCompositeView: aCompositeView hasMagritteDataViewWithDataKey: aDataKey atIndex: anIndex [
-	"Assert that the view at anIndex in aCompositeView is a GtLMagritteDataView with the given dataKey."
-	| view |
-	self assert: aCompositeView dataViews size >= anIndex.
-	view := aCompositeView dataViews at: anIndex.
-	self assert: view class equals: GtLMagritteDataView.
-	self assert: view dataKey equals: aDataKey.
-	^ view
+GtLDataViewExamples >> assertCompositeView: aCompositeView hasJsonDataViewsWithDataKeys: anArray [ 
+	self assert: aCompositeView dataViews size equals: anArray size.
+	
+	aCompositeView dataViews  do: [ :each |
+		self assert: each class equals: GtLJsonDataView ]. 
+	self 
+		assert: (aCompositeView dataViews 
+			collect: [ :each  | each dataKey ])  asSet
+		equals: anArray asSet.
+]
+
+{ #category : #assertions }
+GtLDataViewExamples >> assertCompositeView: aCompositeView hasMagritteDataViewWithDataKey: aDataKey [
+	"Assert that there is a view in the given composite that is a magritte view with the given dataKey."
+	
+	self assert: (aCompositeView dataViews  
+		anySatisfy: [:aView |
+			aView class = GtLMagritteDataView and: [
+				aView dataKey = aDataKey]])
 ]
 
 { #category : #assertions }

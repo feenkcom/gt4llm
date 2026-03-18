@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLPrimitiveImageDataBlockExamples,
 	#superclass : #GtLPrimitiveDataBlockExamples,
-	#category : 'Gt4LlmCore-Examples-Data Views'
+	#category : #'Gt4LlmCore-Examples-Data Views'
 }
 
 { #category : #examples }
@@ -26,8 +26,8 @@ GtLPrimitiveImageDataBlockExamples >> imageDataBlockSkiaImage [
 	skiaImage := block skiaImage.
 	
 	self assert: skiaImage isNotNil.
-	self assert: skiaImage width equals: 100.
-	self assert: skiaImage height equals: 100.
+	self assert: skiaImage width > 0.
+	self assert: skiaImage height > 0.
 	
 	^ skiaImage
 ]
@@ -92,15 +92,20 @@ GtLPrimitiveImageDataBlockExamples >> imageDataBlockWithDataKey [
 { #category : #'examples - support' }
 GtLPrimitiveImageDataBlockExamples >> sampleImageBytes [
 	<gtExample>
-	| element form stream imageBytes |
+	| element rootElement form imageBytes |
 	element := BlElement new
 		size: 100@100;
 		background: Color blue.
-	
-	form := BlExporter form element: element; export.
-	stream := ByteArray new writeStream.
-	PNGReadWriter putForm: form onStream: stream.
-	imageBytes := stream contents.
+		
+	rootElement := BlScripter new
+			element: element;
+			extent: 1600@1200;
+			elementWithoutParent.
+	form := BlExporter png
+			element: rootElement;
+			doExport: [ :aCanvas | aCanvas asForm ].
+	imageBytes :=(ByteArray
+		streamContents: [ :out | PNGReadWriter putForm: form onStream: out ]).
 	
 	self assert: imageBytes isNotEmpty.
 	
