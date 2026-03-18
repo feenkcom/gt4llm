@@ -75,6 +75,16 @@ GtLDataView >> emptyData [
 ]
 
 { #category : #'message performing' }
+GtLDataView >> ensureContext [
+
+	(self buildContext notNil and: [ 
+		 self buildContext hasContext ]) ifTrue: [ 
+		^ self buildContext context ].
+
+	^ GtPhlowContext new
+]
+
+{ #category : #'message performing' }
 GtLDataView >> errorViewWithException: anException isFrozen: aBoolean [
 	| errorName frozenException |
 	
@@ -93,7 +103,7 @@ GtLDataView >> errorViewWithException: anException isFrozen: aBoolean [
 
 { #category : #decorating }
 GtLDataView >> forwardObject [
-	^ GtLForwardDataView new
+	^ GtLForwardObjectDataView new
 ]
 
 { #category : #decorating }
@@ -148,6 +158,11 @@ GtLDataView >> imageData [
 	^ GtLImageDataView new
 ]
 
+{ #category : #testing }
+GtLDataView >> isErrorView [
+	^false
+]
+
 { #category : #decorating }
 GtLDataView >> jsonData [
 	^ GtLJsonDataView new
@@ -165,6 +180,17 @@ GtLDataView >> jsonObject: aBlock [
 		object: aBlock
 ]
 
+{ #category : #decorating }
+GtLDataView >> magritteObject [
+	^ GtLMagritteDataView new
+]
+
+{ #category : #decorating }
+GtLDataView >> magritteObject: aBlockClosure [
+	^ self magritteObject	
+			object: [ self ]
+]
+
 { #category : #utils }
 GtLDataView >> object: anObject arguments: theExecutionArguments [
 	self buildContext: (GtLDataViewBuildContext new
@@ -173,8 +199,21 @@ GtLDataView >> object: anObject arguments: theExecutionArguments [
 ]
 
 { #category : #'message performing' }
+GtLDataView >> on: anObject perform: aMessageSymbol [
+	<return: #GtLDataView>
+	<gtCollector>
+	
+	^ self 
+		on: anObject 
+		perform: aMessageSymbol 
+		withSomeArguments: { 
+			  self.
+			  self ensureContext }
+]
+
+{ #category : #'message performing' }
 GtLDataView >> on: anObject perform: aMessageSymbol withArguments: aCollectionOfArguments [
-	<return: #GtPhlowView>
+	<return: #GtLDataView>
 	<gtCollector>
 	
 	^ [ 
@@ -191,7 +230,7 @@ GtLDataView >> on: anObject perform: aMessageSymbol withArguments: aCollectionOf
 
 { #category : #'message performing' }
 GtLDataView >> on: anObject perform: aMessageSymbol withContext: aContext [
-	<return: #GtPhlowView>
+	<return: #GtLDataView>
 	<gtCollector>
 	
 	^ self 
@@ -202,7 +241,7 @@ GtLDataView >> on: anObject perform: aMessageSymbol withContext: aContext [
 
 { #category : #'message performing' }
 GtLDataView >> on: anObject perform: aMessageSymbol withSomeArguments: aCollectionOfArguments [
-	<return: #GtPhlowAction>
+	<return: #GtLDataView>
 	<gtCollector>
 	| newCollectionOfArguments |
 	
@@ -245,6 +284,7 @@ GtLDataView >> serializeToLlmPrimiteData [
 	| dataBuilder |
 	
 	dataBuilder := GtLPrimitiveMessageDataBuilder new.
+	dataBuilder sourceDataView: self.
 	self serializeToLlmPrimiteDataOn:  dataBuilder.
 	
 	^dataBuilder messageDataBlock
