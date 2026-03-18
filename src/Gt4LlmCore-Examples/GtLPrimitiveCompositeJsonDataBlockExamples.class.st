@@ -301,6 +301,35 @@ GtLPrimitiveCompositeJsonDataBlockExamples >> compositeWithTwoBlocksWithoutDataK
 	^ composite
 ]
 
+{ #category : #'examples - nested composites' }
+GtLPrimitiveCompositeJsonDataBlockExamples >> compositeWithTwoEmptyComposites [
+	"Tests a composite containing two empty sibling composite blocks:
+	- Main composite: no data key
+	- Composite A: no data key, empty
+	- Composite B: no data key, empty
+	The result should have no JSON data since both child composites are empty."
+	<gtExample>
+	| mainComposite compositeA compositeB |
+	
+	compositeA := GtLPrimitiveCompositeJsonDataBlock new.
+	self assert: compositeA jsonDataBlocks isEmpty.
+	self assert: compositeA containedJsonDataBlocksCount equals: 0.
+	
+	compositeB := GtLPrimitiveCompositeJsonDataBlock new.
+	self assert: compositeB jsonDataBlocks isEmpty.
+	self assert: compositeB containedJsonDataBlocksCount equals: 0.
+	
+	mainComposite := GtLPrimitiveCompositeJsonDataBlock new.
+	mainComposite addJsonDataBlock: compositeA.
+	mainComposite addJsonDataBlock: compositeB.
+	
+	self assert: mainComposite jsonDataBlocks size equals: 2.
+	self assert: mainComposite containedJsonDataBlocksCount equals: 0.
+	self assert: mainComposite llmJsonData equals: Dictionary new.
+	
+	^ mainComposite
+]
+
 { #category : #examples }
 GtLPrimitiveCompositeJsonDataBlockExamples >> compositeWithTwoSiblingComposites [
 	"Tests a composite containing two sibling composite blocks:

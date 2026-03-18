@@ -14,12 +14,13 @@ GtLMagritteDataView >> gtPhlowTreeChildren [
 	^ {targetDataView}
 ]
 
-{ #category : #'api - scripting' }
+{ #category : #accessing }
 GtLMagritteDataView >> object: aBlockClosure [
 	objectComputation := aBlockClosure.
 	computedTargetObject := nil.
 	targetDataView := self jsonData: [
-		GtMagritteJSONDataExporter exportObject: self ]
+		GtMagritteJSONDataExporter exportObject: self targetObject ].
+	targetDataView dataKey: self dataKey
 ]
 
 { #category : #serialization }

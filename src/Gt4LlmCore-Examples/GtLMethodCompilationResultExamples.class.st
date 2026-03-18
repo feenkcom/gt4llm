@@ -4,7 +4,7 @@ Examples for GtLMethodCompilationResult domain object.
 Class {
 	#name : #GtLMethodCompilationResultExamples,
 	#superclass : #GtLMagritteDomainObjectExamples,
-	#category : #'Gt4LlmCore-Examples'
+	#category : 'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #examples }
