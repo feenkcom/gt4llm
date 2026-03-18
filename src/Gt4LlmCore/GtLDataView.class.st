@@ -158,6 +158,11 @@ GtLDataView >> imageData [
 	^ GtLImageDataView new
 ]
 
+{ #category : #testing }
+GtLDataView >> isErrorView [
+	^false
+]
+
 { #category : #decorating }
 GtLDataView >> jsonData [
 	^ GtLJsonDataView new

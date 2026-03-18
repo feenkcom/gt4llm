@@ -3,7 +3,7 @@ I provide examples for GtLForwardDataView forwarding to another forward view (ch
 "
 Class {
 	#name : #GtLForwardToForwardViewExamples,
-	#superclass : #GtLForwardDataViewExamples,
+	#superclass : #GtLForwardObjectDataViewExamples,
 	#category : 'Gt4LlmCore-Examples-Data Views'
 }
 

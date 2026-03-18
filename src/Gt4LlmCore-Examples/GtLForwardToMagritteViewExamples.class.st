@@ -3,7 +3,7 @@ I provide examples for GtLForwardDataView forwarding to Magritte views.
 "
 Class {
 	#name : #GtLForwardToMagritteViewExamples,
-	#superclass : #GtLForwardDataViewExamples,
+	#superclass : #GtLForwardObjectDataViewExamples,
 	#category : 'Gt4LlmCore-Examples-Data Views'
 }
 
