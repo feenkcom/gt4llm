@@ -36,16 +36,16 @@ LePage >> gtReviewContentActionFor: anAction [
 		menuItemGroup: BrMenuItemGroupConfiguration llm;
 		action: [ :aButton | 
 			| chat |
-			chat := GtLChat new
+			chat := GtL chat
 					tools: GtLTools leSearch;
+					addResponseFormat: (GtLResponseMagritteFormat new
+									name: 'LepiterTransformations';
+									modelClass: GtLLepiterTransformations);
 					sendWith: [ :message | 
 						message
 							markdown: 'Review the spelling, grammar, content and presentation of this page. Use LepiterTransformations to express proposed changes.';
 							addInputModel: (GtLLepiterPageModel new
 									name: self title;
-									model: self);
-							addResponseFormat: (GtLResponseMagritteFormat new
-									name: 'LepiterTransformations';
-									modelClass: GtLLepiterTransformations) ].
+									model: self) ].
 			aButton phlow spawnObject: chat ]	
 ]
