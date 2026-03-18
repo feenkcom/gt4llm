@@ -89,7 +89,7 @@ GtLChat >> addMessage: aMessage [
 
 { #category : #'as yet unclassified' }
 GtLChat >> addNewObject: anObject reasonString: aString [ 
-	self objectStorage addNewObject: anObject reason: (GtLStoredObjectStringReason text: aString)
+	^ self objectStorage addNewObject: anObject reason: (GtLStoredObjectStringReason text: aString)
 ]
 
 { #category : #adding }

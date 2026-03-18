@@ -30,6 +30,11 @@ GtLStoredObject >> id: anObject [
 	id := anObject
 ]
 
+{ #category : #accessing }
+GtLStoredObject >> idString36 [
+	^ id asString36
+]
+
 { #category : #'instance creation' }
 GtLStoredObject >> initializeWithId: anId value: anObject reason: aString [
 	id := anId.
