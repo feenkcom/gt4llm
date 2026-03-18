@@ -3,12 +3,9 @@ Represents the successful result of a Smalltalk code evaluation with the code, s
 "
 Class {
 	#name : #GtLSmalltalkCodeEvaluationResult,
-	#superclass : #Object,
+	#superclass : #GtLObjectStorageValueResult,
 	#instVars : [
-		'code',
-		'objectValue',
-		'objectId',
-		'object'
+		'code'
 	],
 	#category : 'Gt4LlmCore-Magritte Objects'
 }
@@ -23,7 +20,7 @@ GtLSmalltalkCodeEvaluationResult >> code: aString [
 	code := aString
 ]
 
-{ #category : #magritte }
+{ #category : #descriptions }
 GtLSmalltalkCodeEvaluationResult >> codeDescription [
 	<magritteDescription>
 	^ MAStringDescription new
@@ -60,62 +57,8 @@ GtLSmalltalkCodeEvaluationResult >> gtCodeFor: aView [
 						hMatchParent) ]
 ]
 
-{ #category : #accessing }
-GtLSmalltalkCodeEvaluationResult >> object [
-	"Return the actual result object (not serialized)."
-	^ object
-]
-
-{ #category : #accessing }
-GtLSmalltalkCodeEvaluationResult >> object: anObject [
-	"Set the actual result object (not serialized)."
-	object := anObject
-]
-
-{ #category : #accessing }
-GtLSmalltalkCodeEvaluationResult >> objectId [
-	^ objectId ifNil: [ '' ]
-]
-
-{ #category : #accessing }
-GtLSmalltalkCodeEvaluationResult >> objectId: aString [
-	objectId := aString
-]
-
-{ #category : #magritte }
-GtLSmalltalkCodeEvaluationResult >> objectIdDescription [
-	<magritteDescription>
-	^ MAStringDescription new
-		label: 'Object ID';
-		accessor: #objectId;
-		beRequired
-]
-
-{ #category : #accessing }
-GtLSmalltalkCodeEvaluationResult >> objectValue [
-	^ objectValue
-]
-
-{ #category : #accessing }
-GtLSmalltalkCodeEvaluationResult >> objectValue: aGtLSerializedObjectValue [
-	objectValue := aGtLSerializedObjectValue
-]
-
-{ #category : #magritte }
-GtLSmalltalkCodeEvaluationResult >> objectValueDescription [
-	<magritteDescription>
-	^ MAToOneRelationDescription new
-		label: 'Object value';
-		accessor: #objectValue;
-		classes: { GtLSerializedObjectValue };
-		beRequired
-]
-
 { #category : #printing }
 GtLSmalltalkCodeEvaluationResult >> printOn: aStream [
 	super printOn: aStream.
-	aStream
-		nextPut: $(;
-		nextPutAll: (code ifNil: [ '' ] ifNotNil: [ code truncateTo: 30 ]);
-		nextPut: $)
+	aStream nextPutAll: ' code: '; nextPutAll: self code
 ]

@@ -61,8 +61,13 @@ GtLMessageViewModel >> dateString [
 ]
 
 { #category : #'api - converting' }
+GtLMessageViewModel >> defaultElementClass [
+	^ GtLUserMessageContentElement
+]
+
+{ #category : #'api - converting' }
 GtLMessageViewModel >> elementClass [
-	^ self class elementClass ifNil: [ GtLExpandableMessageElement ]
+	^ self class elementClass ifNil: [ self defaultElementClass ]
 ]
 
 { #category : #accessing }

@@ -5,7 +5,7 @@ Class {
 		'chat',
 		'sendMessageBlock'
 	],
-	#category : #'Gt4Llm-OpenAI-Examples'
+	#category : 'Gt4Llm-OpenAI-Examples'
 }
 
 { #category : #'api - initialization' }
@@ -25,7 +25,7 @@ GtLOpenAIProviderStub >> defaultUserMessageClass [
 
 { #category : #'api - accessing' }
 GtLOpenAIProviderStub >> modelName [
-	^ 'stub'
+	^ 'Stub'
 ]
 
 { #category : #'api - execution' }

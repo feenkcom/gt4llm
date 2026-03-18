@@ -31,7 +31,7 @@ TGtLWithMessageViewModel >> gtElementOverviewChatModel [
 	<gtInspectorElementOverview>
 	^ GtInspectorElementOverviewProperty new
 		label: 'Chat model';
-		object: [ self threadMessage chat ]
+		object: [ self message chat ]
 ]
 
 { #category : #'api - message view model' }

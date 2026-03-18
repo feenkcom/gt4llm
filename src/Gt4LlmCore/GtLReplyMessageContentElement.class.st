@@ -1,3 +1,9 @@
+"
+I render an assistant reply message with a header, expandable content, and expandable used tools.
+
+## Example
+{{gtExample:GtLChatOpenAIElementExamples>>#replyMessageElement|noCode|previewExpanded}}
+"
 Class {
 	#name : #GtLReplyMessageContentElement,
 	#superclass : #GtLBasicMessageElement,
@@ -76,7 +82,7 @@ GtLReplyMessageContentElement >> initializeContentsExpanderElement [
 
 { #category : #initialization }
 GtLReplyMessageContentElement >> initializeHeaderElement [
-	headerElement := GtLMessageSenderAndDateHeaderElement new
+	headerElement := GtLMessageSenderAndDateHeaderElement new hideToolbarElement
 ]
 
 { #category : #initialization }
