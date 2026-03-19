@@ -52,7 +52,7 @@ GtLSmalltalkCodeEvaluationExceptionDomainObject >> gtCodeFor: aView [
 { #category : #'llm views' }
 GtLSmalltalkCodeEvaluationExceptionDomainObject >> llmJsonObject [
 	^super llmJsonObject
-		at: #code put: self code;
+		at: 'code' put: self code;
 		yourself
 ]
 

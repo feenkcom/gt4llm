@@ -112,8 +112,10 @@ GtLMagritteToolForSmalltalkCodeEvaluation >> privatePerformToolCall: aToolCall i
 				freeze: ex;
 				whatFailed: 'Error while evaluating smalltalk code';
 				code: code ].
+				
 	objectId := anExecutionContext objectStorage ifNotNil: [ :aStorage |
 		aStorage addNewObject: object reason: (GtLStoredObjectCodeExecutionReason toolCall: aToolCall) ].
+		
 	^ GtLSmalltalkCodeEvaluationResult new
 		code: code;
 		object: object;
