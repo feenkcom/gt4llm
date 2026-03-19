@@ -63,52 +63,46 @@ GtLExampleWithResultDomainObject >> isSuccessResult [
 ]
 
 { #category : #'llm views' }
-GtLExampleWithResultDomainObject >> llmRawViewFor: aDataView [
+GtLExampleWithResultDomainObject >> llmRawDataViewFor: aDataView [
 	<gtLlmDataView>
 	
-	^aDataView jsonObject: [ :aJson |
+	^aDataView jsonObject
+		title: 'Example details';
+		data: [ :aJson |
 			aJson
-				at: #className put: self exampleWithResult methodClass name asString;
-				at: #selector put: self exampleWithResult selector asString;
-				at: #status put: self statusText;
-				at: #objectId put: self objectId	]
+				at: #exampleClassName put: self exampleWithResult methodClass name asString;
+				at: #exampleMethodName put: self exampleWithResult selector asString;
+				at: #exampleStatus put: self statusText	]
 ]
 
 { #category : #'llm views' }
 GtLExampleWithResultDomainObject >> llmResultExceptionViewFor: aDataView [
 	<gtLlmDataView>
+	
 	(self isErrorResult not and: [ self isFailureResult not ]) ifTrue: [
 		^ aDataView emptyData ].
 	
 	^aDataView forwardObject
+			title: 'Exception details';
 			dataKey: #result;
 			object: [ 
 				self exampleWithResult returnValue  ]
 ]
 
 { #category : #'llm views' }
-GtLExampleWithResultDomainObject >> llmResultObject_forwardViewFor: aDataView [
+GtLExampleWithResultDomainObject >> llmResultObjectViewFor: aDataView [
 	<gtLlmDataView>
+	
 	(self isErrorResult or: [ self isFailureResult ]) ifTrue: [
 		^ aDataView emptyData ].
 	
 	^aDataView forwardObject
+			title: 'Object details';
 			dataKey: #result;
 			object: [ 
-					GtLValueDomainObject new 
-						value: self exampleWithResult returnValue  ]
-]
-
-{ #category : #'llm views' }
-GtLExampleWithResultDomainObject >> llmResultObject_magritteViewFor: aDataView [
-	"<gtLlmDataView>"
-	
-	(self isErrorResult or: [ self isFailureResult ]) ifFalse: [
-		^ aDataView emptyData ].
-	
-	^aDataView magritteObject: [ 
-			GtLSerializedObjectValue 
-				fromObject: self exampleWithResult returnValue  ]
+					GtLObjectStorageValueResult 
+						forObject: self exampleWithResult returnValue
+						withId: self objectId  ]
 ]
 
 { #category : #accessing }

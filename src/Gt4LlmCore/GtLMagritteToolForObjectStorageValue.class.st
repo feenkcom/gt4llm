@@ -42,8 +42,7 @@ GtLMagritteToolForObjectStorageValue >> privatePerformToolCall: aToolCall inCont
 		objectAt: objectId
 		ifPresent: [ :storedObject | storedObject ]
 		ifAbsent: [ ^ GtLMissingDomainObject new objectName: objectId ].
-	^ GtLObjectStorageValueResult new
-		object: object;
-		objectValue: (GtLSerializedObjectValue fromObject: object);
-		objectId: objectId
+	^ GtLObjectStorageValueResult 
+			forObject:  object
+			withId: objectId
 ]
