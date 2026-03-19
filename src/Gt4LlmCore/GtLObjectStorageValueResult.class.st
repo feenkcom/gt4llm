@@ -32,7 +32,7 @@ GtLObjectStorageValueResult >> llmComputedObjectViewFor: aDataView [
 	
 	^ aDataView forwardObject
 			dataKey: 'objectDetails';
-			object: [ self ]
+			object: [ self object ]
 ]
 
 { #category : #'llm views' }
