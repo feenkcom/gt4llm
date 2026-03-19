@@ -54,6 +54,16 @@ GtLPrimitiveMessageDataBlock >> gtViewCondensedJsonDataFor: aView [
 ]
 
 { #category : #views }
+GtLPrimitiveMessageDataBlock >> gtViewCondensedJsonStringFor: aView [
+	<gtView>
+	^(aView forward)
+		title: 'Condensed JSON String';
+		priority: 15.1;
+		object: [self compositeJsonDataBlock];
+		view: #gtViewJsonStringFor:
+]
+
+{ #category : #views }
 GtLPrimitiveMessageDataBlock >> gtViewDataBlocksFor: aView [
 	<gtView>
 	^(aView columnedTree)
@@ -74,7 +84,7 @@ GtLPrimitiveMessageDataBlock >> imageDataBlocks [
 GtLPrimitiveMessageDataBlock >> initialize [
 	super initialize.
 	
-	compositeJsonDataBlock := GtLPrimitiveCompositeJsonDataBlock new.
+	compositeJsonDataBlock := GtLPrimitiveCompositeJsonGenericDataBlock new.
 	imageDataBlocks := OrderedCollection new.
 ]
 

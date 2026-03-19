@@ -2,7 +2,8 @@ Class {
 	#name : #GtLCompositeDataView,
 	#superclass : #GtLDataView,
 	#instVars : [
-		'dataViews'
+		'dataViews',
+		'serializationType'
 	],
 	#category : #Gt4LlmCore
 }
@@ -16,6 +17,11 @@ GtLCompositeDataView >> addDataView: aDataView [
 GtLCompositeDataView >> addDataViews: aCollection [
 	aCollection do: [ :aView |
 		self addDataView:  aView ]
+]
+
+{ #category : #'api - configuration' }
+GtLCompositeDataView >> beWithArraySerialization [
+	serializationType := #array
 ]
 
 { #category : #accessing }
@@ -45,15 +51,29 @@ GtLCompositeDataView >> gtPhlowTreeChildren [
 GtLCompositeDataView >> initialize [ 
 	super initialize.
 	dataViews := OrderedCollection new.
+	serializationType := #object
+]
+
+{ #category : #testing }
+GtLCompositeDataView >> isWithArraySerialization [
+	^serializationType = #array
 ]
 
 { #category : #serialization }
 GtLCompositeDataView >> serializeToLlmPrimiteDataOn: aBuilder [
-	aBuilder 
-		forDataKey: self dataKey
-		do: [
-			self dataViews do: [ :each |
-				each serializeToLlmPrimiteDataOn: aBuilder ] ]
+	self isWithArraySerialization
+		ifTrue: [
+			aBuilder 
+				forArrayWithDataKey: self dataKey
+				do: [
+					self dataViews do: [ :each |
+						each serializeToLlmPrimiteDataOn: aBuilder ] ] ]
+		ifFalse: [
+			aBuilder 
+				forDataKey: self dataKey
+				do: [
+					self dataViews do: [ :each |
+						each serializeToLlmPrimiteDataOn: aBuilder ] ] ]
 ]
 
 { #category : #printing }

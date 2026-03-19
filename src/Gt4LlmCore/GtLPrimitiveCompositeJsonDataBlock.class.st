@@ -13,16 +13,6 @@ GtLPrimitiveCompositeJsonDataBlock >> addJsonDataBlock: aJsonBlock [
 ]
 
 { #category : #accessing }
-GtLPrimitiveCompositeJsonDataBlock >> condensedJsonBlock [
-	^jsonDataBlocks 
-		inject: (GtLPrimitiveJsonDataBlock new
-			jsonData: Dictionary new) 
-		into: [ :resultBlock :currentBlock |
-			resultBlock addJsonBlock: currentBlock.
-			resultBlock	]
-]
-
-{ #category : #accessing }
 GtLPrimitiveCompositeJsonDataBlock >> containedJsonDataBlocksCount [
 	"Return the total number of contained json blocks, recursively counting nested composites."
 	^ jsonDataBlocks inject: 0 into: [ :sum :each |
@@ -82,32 +72,8 @@ GtLPrimitiveCompositeJsonDataBlock >> jsonDataBlocks [
 ]
 
 { #category : #accessing }
-GtLPrimitiveCompositeJsonDataBlock >> keysForMerge [
-	^self dataKey
-		ifNil: [ self condensedJsonBlock jsonData keys ] 
-		ifNotNil: [ {self dataKey} ]
-]
-
-{ #category : #accessing }
 GtLPrimitiveCompositeJsonDataBlock >> llmJsonData [
-	| computedJsonData |
-	computedJsonData := self condensedJsonBlock jsonData.
-	^self dataKey 
-		ifNil: [ computedJsonData ] 
-		ifNotNil: [ 
-			Dictionary new
-				at: self dataKey put: computedJsonData;
-				yourself ]
-]
-
-{ #category : #serialization }
-GtLPrimitiveCompositeJsonDataBlock >> serializeForAnthropic [
-	^ self condensedJsonBlock serializeForAnthropic 
-]
-
-{ #category : #serialization }
-GtLPrimitiveCompositeJsonDataBlock >> serializeForOpenAI [
-	^ self condensedJsonBlock serializeForOpenAI 
+	self subclassResponsibility
 ]
 
 { #category : #accessing }

@@ -21,10 +21,7 @@ GtLTools class >> files [
 { #category : #defaults }
 GtLTools class >> gt [
 	^ self gtSearch , self leSearch , self gtCodeChange , self leChange
-		, self gtExamplesRun
-		, {GtLMagritteToolForSmalltalkCodeEvaluation new.
-				GtLToolForObjectView new.
-				GtLToolForObjectStorageList new}
+		, self gtExamplesRun , self gtObjectsExecution
 ]
 
 { #category : #defaults }
@@ -50,6 +47,15 @@ GtLTools class >> gtExamplesRun [
 	^ self
 		withAll: {GtLToolForExampleMethodRun new.
 				GtLToolForExampleClassesRun new} asOrderedCollection
+]
+
+{ #category : #defaults }
+GtLTools class >> gtObjectsExecution [
+	^ {GtLMagritteToolForSmalltalkCodeEvaluation new.
+		GtLToolForObjectView new.
+		GtLToolForObjectStorageList new.
+		GtLMagritteToolForObjectStorageValue new.
+		GtLMagritteToolForObjectStorageSlotValue new}
 ]
 
 { #category : #defaults }

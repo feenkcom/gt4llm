@@ -1,0 +1,44 @@
+Class {
+	#name : #GtLPrimitiveCompositeJsonArrayDataBlock,
+	#superclass : #GtLPrimitiveCompositeJsonDataBlock,
+	#category : #Gt4LlmCore
+}
+
+{ #category : #accessing }
+GtLPrimitiveCompositeJsonArrayDataBlock >> condensedJsonBlock [
+	^GtLPrimitiveJsonDataBlock new
+			dataKey: self dataKey;
+			jsonData: (self jsonDataBlocksCollect:  [ :each | each llmJsonData ])
+]
+
+{ #category : #accessing }
+GtLPrimitiveCompositeJsonArrayDataBlock >> jsonDataBlocksCollect:  aBlock [
+	^self jsonDataBlocks 
+			collect: aBlock as: Array
+]
+
+{ #category : #accessing }
+GtLPrimitiveCompositeJsonArrayDataBlock >> keysForMerge [
+	^ {self dataKey}
+]
+
+{ #category : #accessing }
+GtLPrimitiveCompositeJsonArrayDataBlock >> llmJsonData [
+	^ self condensedJsonBlock llmJsonData
+]
+
+{ #category : #serialization }
+GtLPrimitiveCompositeJsonArrayDataBlock >> serializeForAnthropic [
+	^ self condensedJsonBlock serializeForAnthropic 
+]
+
+{ #category : #serialization }
+GtLPrimitiveCompositeJsonArrayDataBlock >> serializeForBedrockConverse [
+	<sys_ext>
+	^ self condensedJsonBlock serializeForBedrockConverse 
+]
+
+{ #category : #serialization }
+GtLPrimitiveCompositeJsonArrayDataBlock >> serializeForOpenAI [
+	^ self condensedJsonBlock serializeForOpenAI 
+]

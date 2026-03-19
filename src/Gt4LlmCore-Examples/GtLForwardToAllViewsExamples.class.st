@@ -24,12 +24,7 @@ GtLForwardToAllViewsExamples >> forwardToBothJsonViews [
 	
 	self 
 		assertCompositeView: innerComposite 
-		hasJsonDataViewWithDataKey: #second 
-		atIndex: 1.
-	self 
-		assertCompositeView: innerComposite 
-		hasJsonDataViewWithDataKey: #first
-		atIndex: 2.
+		hasJsonDataViewsWithDataKeys: {#first . #second }.
 	
 	^ forwardDataView
 ]
@@ -50,8 +45,9 @@ GtLForwardToAllViewsExamples >> forwardToBothJsonViewsWithDataKey [
 		assertCompositeView: forwardDataView targetDataView 
 		hasInnerCompositeWithViewCount: 2.
 	
-	self assertCompositeView: innerComposite hasJsonDataViewWithDataKey: #second atIndex: 1.
-	self assertCompositeView: innerComposite hasJsonDataViewWithDataKey: #first atIndex: 2.
+	self 
+		assertCompositeView: innerComposite 
+		hasJsonDataViewsWithDataKeys: {#first . #second}.
 	
 	^ forwardDataView
 ]
@@ -125,8 +121,8 @@ GtLForwardToAllViewsExamples >> forwardToMultipleViews [
 		assertCompositeView: forwardDataView targetDataView 
 		hasInnerCompositeWithViewCount: 2.
 	
-	self assertCompositeView: innerComposite hasMagritteDataViewWithDataKey: #magritteData atIndex: 1.
-	self assertCompositeView: innerComposite hasJsonDataViewWithDataKey: #jsonData atIndex: 2.
+	self assertCompositeView: innerComposite hasMagritteDataViewWithDataKey: #magritteData.
+	self assertCompositeView: innerComposite hasJsonDataViewWithDataKey: #jsonData.
 	
 	^ forwardDataView
 ]
@@ -152,12 +148,10 @@ GtLForwardToAllViewsExamples >> forwardToMultipleViewsWithDataKey [
 		
 	self 
 		assertCompositeView: innerComposite 
-		hasMagritteDataViewWithDataKey: #magritteData 
-		atIndex: 1.
+		hasMagritteDataViewWithDataKey: #magritteData.
 	self 
 		assertCompositeView: innerComposite 
-		hasJsonDataViewWithDataKey: #jsonData 
-		atIndex: 2.
+		hasJsonDataViewWithDataKey: #jsonData.
 	
 	^ forwardDataView
 ]
