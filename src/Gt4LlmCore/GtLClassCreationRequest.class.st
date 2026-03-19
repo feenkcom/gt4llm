@@ -8,7 +8,8 @@ Class {
 		'classVariables',
 		'traitCompositionString',
 		'package',
-		'comment'
+		'comment',
+		'packageTag'
 	],
 	#category : #'Gt4LlmCore-Magritte Objects'
 }
@@ -92,6 +93,24 @@ GtLClassCreationRequest >> packageDescription [
 		label: 'Package';
 		accessor: #package;
 		beRequired
+]
+
+{ #category : #accessing }
+GtLClassCreationRequest >> packageTag [
+	^ packageTag
+]
+
+{ #category : #accessing }
+GtLClassCreationRequest >> packageTag: aString [
+	packageTag := aString
+]
+
+{ #category : #'magritte-description' }
+GtLClassCreationRequest >> packageTagDescription [
+	<magritteDescription>
+	^ MAStringDescription new
+		label: 'Package tag';
+		accessor: #packageTag
 ]
 
 { #category : #printing }

@@ -23,7 +23,7 @@ GtLMagritteToolForClassesCreation >> description [
 Example JSON arguments:
 {
   "classes": [
-    {"targetClassName": "MyClass", "superclassName": "Object", "package": "MyPackage", "traitComposition": "TMyTrait"},
+    {"targetClassName": "MyClass", "superclassName": "Object", "package": "MyPackage", "packageTag": "MyTag", "traitComposition": "TMyTrait"},
     {"targetClassName": "MySubclass", "superclassName": "MyClass", "package": "MyPackage", "instanceVariables": "value", "classVariables": "SharedValue"}
   ]
 }

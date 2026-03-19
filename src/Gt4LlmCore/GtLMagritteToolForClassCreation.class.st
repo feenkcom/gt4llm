@@ -42,6 +42,7 @@ GtLMagritteToolForClassCreation >> createClassUsing: extractor ifError: errorBlo
 				sharedVariables: extractor classVariables;
 				traitComposition: extractor traitComposition;
 				package: extractor packageName;
+				tag: extractor packageTagName;
 				comment: extractor comment;
 				environment: extractor superclass environment ] ]
 		on: Error
@@ -50,6 +51,7 @@ GtLMagritteToolForClassCreation >> createClassUsing: extractor ifError: errorBlo
 				superclass: extractor superclass;
 				targetClassName: extractor targetClassName;
 				packageName: extractor packageName;
+				packageTagName: extractor packageTagName;
 				instanceVariableNames: (extractor instanceVariables collect: #name) asArray;
 				classVariableNames: (extractor classVariables collect: #name) asArray;
 				freeze: error) ].

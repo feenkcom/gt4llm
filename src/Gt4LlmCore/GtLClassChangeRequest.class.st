@@ -6,7 +6,8 @@ Class {
 		'superclassName',
 		'instanceVariables',
 		'classVariables',
-		'package'
+		'package',
+		'packageTag'
 	],
 	#category : #'Gt4LlmCore-Magritte Objects'
 }
@@ -67,6 +68,25 @@ GtLClassChangeRequest >> packageDescription [
 	^ MAStringDescription new
 		label: 'Package';
 		accessor: #package;
+		beOptional
+]
+
+{ #category : #accessing }
+GtLClassChangeRequest >> packageTag [
+	^ packageTag
+]
+
+{ #category : #accessing }
+GtLClassChangeRequest >> packageTag: aString [
+	packageTag := aString
+]
+
+{ #category : #magritte }
+GtLClassChangeRequest >> packageTagDescription [
+	<magritteDescription>
+	^ MAStringDescription new
+		label: 'Package tag';
+		accessor: #packageTag;
 		beOptional
 ]
 

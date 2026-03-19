@@ -12,7 +12,8 @@ Class {
 		'instanceSlotNames',
 		'classSlotNames',
 		'allInstanceMethodNames',
-		'allClassMethodNames'
+		'allClassMethodNames',
+		'packageTagName'
 	],
 	#category : #'Gt4LlmCore-Magritte Objects'
 }
@@ -24,6 +25,7 @@ GtLClassDescription class >> fromClass: aClass [
 		superclassName: (aClass superclass ifNil: [ nil ] ifNotNil: [ :aSuperclass | aSuperclass name ]);
 		comment: aClass instanceSide gtComment;
 		packageName: aClass package name;
+		packageTagName: (aClass packageTag isRoot ifTrue: [ nil ] ifFalse: [ aClass packageTag name ]);
 		instanceSlotNames: aClass slotNames;
 		classSlotNames: aClass class slotNames;
 		allInstanceMethodNames: (aClass methods asArray collect: [ :aMethod | aMethod selector ]);
@@ -236,6 +238,27 @@ GtLClassDescription >> packageNameDescription [
 		label: 'Package';
 		accessor: #packageName;
 		name: #packageName;
+		beRequired;
+		yourself
+]
+
+{ #category : #accessing }
+GtLClassDescription >> packageTagName [
+	^ packageTagName
+]
+
+{ #category : #accessing }
+GtLClassDescription >> packageTagName: aString [
+	packageTagName := aString
+]
+
+{ #category : #magritte }
+GtLClassDescription >> packageTagNameDescription [
+	<magritteDescription>
+	^ MAStringDescription new
+		label: 'Package tag';
+		accessor: #packageTagName;
+		name: #packageTagName;
 		beRequired;
 		yourself
 ]
