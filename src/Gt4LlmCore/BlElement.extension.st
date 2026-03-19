@@ -5,6 +5,6 @@ BlElement >> llmImageViewFor: aDataView [
 	<gtLlmDataView>
 	
 	^aDataView imageData
-			title: 'Visual Diff' ;
+			title: 'Image' ;
 			element: [ self ]
 ]
