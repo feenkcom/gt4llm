@@ -48,6 +48,7 @@ GtLClassCreationDataExtractor >> extractAllIfError: errorBlock [
 	self extractVariables.
 	self extractTraitComposition.
 	self extractPackageIfError: errorBlock.
+	self extractPackageTagIfError: errorBlock.
 	self extractComment
 ]
 
