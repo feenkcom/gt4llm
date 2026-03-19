@@ -42,6 +42,13 @@ GtLMissingArgumentDomainObject >> errorMessageDescription [
 			beRequired
 ]
 
+{ #category : #'llm views' }
+GtLMissingArgumentDomainObject >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
+]
+
 { #category : #accessing }
 GtLMissingArgumentDomainObject >> messageText [
 	"Return an error message"

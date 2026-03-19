@@ -26,6 +26,22 @@ GtLObjectStorageValueResult >> gtObjectFor: aView [
 			matchParent) ]
 ]
 
+{ #category : #'llm views' }
+GtLObjectStorageValueResult >> llmComputedObjectViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView forwardObject
+			dataKey: 'objectDetails';
+			object: [ self ]
+]
+
+{ #category : #'llm views' }
+GtLObjectStorageValueResult >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
+]
+
 { #category : #accessing }
 GtLObjectStorageValueResult >> object [
 	^ object

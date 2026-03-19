@@ -153,6 +153,28 @@ GtLSmalltalkCodeEvaluationExceptionResult >> gtExceptionStackFor: aView [
 			action: [ [ self exception debug ] fork ]
 ]
 
+{ #category : #'llm views' }
+GtLSmalltalkCodeEvaluationExceptionResult >> llmExceptionViewFor: aDataView [
+	<gtLlmDataView>
+	
+	self exception ifNil: [ ^ aDataView emptyData ].
+	
+	^ aDataView forwardObject
+			dataKey: 'errorDetails';
+			object: [ self exception ]
+]
+
+{ #category : #'llm views' }
+GtLSmalltalkCodeEvaluationExceptionResult >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView jsonData: [ 
+			NeoJSONObject new
+				at: 'errorReason' put: self whatFailed;
+				at: 'code' put: self code;
+				yourself ]
+]
+
 { #category : #printing }
 GtLSmalltalkCodeEvaluationExceptionResult >> printOn: aStream [
 	super printOn: aStream.
