@@ -53,13 +53,13 @@ GtMessageOneLineMultiLabelSummaryBuilder >> newTextFromStringStream: aBlock [
 { #category : #'api - building' }
 GtMessageOneLineMultiLabelSummaryBuilder >> newWithText: aString [
 	| labelElement labelAptitude |
-	labelAptitude := BrGlamorousLabelAptitude new.
+	labelAptitude := BrGlamorousShrinkingLabelAptitude new labelMeasurement.
 	
 	attributesBuilder ifNotNil: [ :aBuilder |
 		labelAptitude attributesBuilder attributes: aBuilder attributes ].
 			
 	labelElement := BrLabel new
-			hFitContentLimited;
+			hMatchParent;
 			vFitContent;
 			aptitude: labelAptitude;
 			text: aString.
@@ -76,8 +76,7 @@ GtMessageOneLineMultiLabelSummaryBuilder >> newWithText: aString [
 GtMessageOneLineMultiLabelSummaryBuilder >> textSeparator [
 	| labelElement |
 	labelElement := BrLabel new
-			hFitContentLimited;
-			vFitContent;
+			fitContent;
 			aptitude: (BrGlamorousLabelAptitude new
 					foreground: BrGlamorousColors disabledButtonTextColor);
 			text: '|'.

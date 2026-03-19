@@ -15,6 +15,22 @@ Class {
 	#category : #'Gt4LlmCore-UI - Elements'
 }
 
+{ #category : #'private - updating' }
+GtMessageOneLineMultiLabelSummaryElement >> allSummaryLabels [
+	^ Array
+		streamContents: [ :aStream | self allSummaryLabelsDo: [ :aLabel | aStream nextPut: aLabel ] ]
+]
+
+{ #category : #'private - updating' }
+GtMessageOneLineMultiLabelSummaryElement >> allSummaryLabelsDo: aBlock [
+	self
+		childrenDo: [ :eachChild | 
+			eachChild userData
+				at: #isMessageSummaryLabel
+				ifPresent: [ :aBoolean | aBoolean ifTrue: [ aBlock cull: eachChild ] ]
+				ifAbsent: [  ] ]
+]
+
 { #category : #initialization }
 GtMessageOneLineMultiLabelSummaryElement >> defaultLayout [
 	^ BlLinearLayout horizontal alignTopLeft
@@ -23,20 +39,18 @@ GtMessageOneLineMultiLabelSummaryElement >> defaultLayout [
 { #category : #initialization }
 GtMessageOneLineMultiLabelSummaryElement >> initialize [
 	super initialize.
-	
+
 	attributesBuilder := BlTextAttributesBuilder new.
 
 	self
 		addAptitude: (BrLayoutResizerAptitude new
-				hMatchParentToFitContentLimited: [ self children ];
-				vMatchParentToFitContent: [ self children ];
-				fitContentToFitContent: [ self children ];
-				fitContentLimitedToFitContentLimited: [ self children ];
-				hExactToFitContentLimited: [ self children ];
-				vExactToMatchParent: [ self children ]).
+				hMatchParentToMatchParent: [ self allSummaryLabels ];
+				hFitContentToFitContent: [ self allSummaryLabels ];
+				hFitContentLimitedToFitContentLimited: [ self allSummaryLabels ];
+				hExactToMatchParent: [ self allSummaryLabels ]).
 
 	self
-		hFitContentLimited;
+		hMatchParent;
 		vFitContent
 ]
 
@@ -120,11 +134,6 @@ GtMessageOneLineMultiLabelSummaryElement >> updateElement [
 
 { #category : #'private - updating' }
 GtMessageOneLineMultiLabelSummaryElement >> updateExistingLabelStylings [
-	self
-		childrenDo: [ :eachChild | 
-			eachChild userData
-				at: #isMessageSummaryLabel
-				ifPresent: [ :aBoolean | 
-					eachChild aptitude attributesBuilder attributes: attributesBuilder attributes ]
-				ifAbsent: [  ] ]
+	self allSummaryLabelsDo: [ :eachChild | 
+		eachChild aptitude attributesBuilder attributes: attributesBuilder attributes ]
 ]
