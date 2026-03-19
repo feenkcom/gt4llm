@@ -19,9 +19,12 @@ GtLForwardCollectionDataView >> computeForwardedViews [
 GtLForwardCollectionDataView >> computeTargetView [
 	| currentCollection targetView |
 	
-	[currentCollection := self targetCollection ]
+	[ currentCollection := self targetCollection ]
 		on: Error do: [ :anError |
-			^ self errorViewWithException: anError isFrozen: false ]. 
+			^ self 
+				errorViewWithException: anError 
+				reason: 'Error computing target collection for collection forwarded data view' 
+				isFrozen: false ]. 
 			
 	targetView := self compositeData.
 	targetView beWithArraySerialization.
