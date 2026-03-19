@@ -12,9 +12,9 @@ GtLPrimitiveJsonDataBlock >> addJsonBlock: anotherJsonBlock [
 	| commonKeys |
 	commonKeys := self keysForMerge 
 		intersection: anotherJsonBlock keysForMerge.
-	commonKeys ifNotEmpty: [ 
+	commonKeys ifNotEmpty: [
 		Error signal: ('Cannot merge json objects. Common keys found: '
-			, commonKeys sorted asCommaString)  ].
+			, commonKeys sorted asCommaString) ].
 		
 	anotherJsonBlock llmJsonData keysAndValuesDo: [ :aKey :aValue |
 		jsonData 
@@ -26,10 +26,54 @@ GtLPrimitiveJsonDataBlock >> addJsonBlock: anotherJsonBlock [
 				put: aValue ] ]
 ]
 
+{ #category : #adding }
+GtLPrimitiveJsonDataBlock >> addJsonBlock: anotherJsonBlock disabiguatingKeys: allowedDuplicatedKeys [
+	| commonKeys notAllowedCommonKeys |
+	commonKeys := self keysForMerge 
+		intersection: anotherJsonBlock keysForMerge.
+	notAllowedCommonKeys := commonKeys copyWithoutAll: allowedDuplicatedKeys.
+	notAllowedCommonKeys  ifNotEmpty: [ 
+		Error signal: ('Cannot merge json objects. Common keys found: '
+			, notAllowedCommonKeys sorted asCommaString)  ].
+		
+	anotherJsonBlock llmJsonData keysAndValuesDo: [ :aKey :aValue |
+		| targetKey |
+		targetKey := aKey.
+		((jsonData includesKey: aKey) and: [ allowedDuplicatedKeys includes: aKey ]) ifTrue: [
+				| newKey |
+				newKey := self disambiguateKey: aKey in: jsonData.
+				targetKey := newKey ].
+		
+		jsonData 
+			at: targetKey
+			ifPresent: [ :existingValue |
+				Error signal: 'Key already present: ', targetKey asString ]
+			ifAbsent: [ jsonData  
+				at: targetKey
+				put: aValue ] ]
+]
+
 { #category : #accessing }
 GtLPrimitiveJsonDataBlock >> containedJsonDataBlocksCount [
 	"Return 1 as this block itself counts as a single json data block."
 	^ 1
+]
+
+{ #category : #adding }
+GtLPrimitiveJsonDataBlock >> disambiguateKey: aKey in: aJsonDictionary [
+	| newKey index |
+	
+	index := 0.
+	newKey := aKey.
+	[ 
+		(index > 100) ifTrue: [
+				Error signal: ''].
+		index := index + 1.
+		newKey := aKey, '_', index asString.
+	] doWhileTrue: [
+		aJsonDictionary includesKey: newKey ].
+	
+	^ newKey
 ]
 
 { #category : #views }

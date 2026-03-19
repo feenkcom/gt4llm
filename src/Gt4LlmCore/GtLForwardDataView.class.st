@@ -16,7 +16,10 @@ GtLForwardDataView >> computeForwardedViewFor: anObjectComputation [
 	
 	[ targetObject := anObjectComputation value ] 
 		on: Error do: [ :anError |
-			^ self errorViewWithException: anError isFrozen: false ].
+			^ self 
+				errorViewWithException: anError 
+				reason: 'Error computing target object for object forwarded data view' 
+				isFrozen: false ].
 	
 	computedView := self on: targetObject perform: self viewSymbol.
 	
