@@ -28,11 +28,11 @@ GtLTools class >> gt [
 GtLTools class >> gtCodeChange [
 	^ self
 		withAll: {GtLMagritteToolForClassesCreation new.
-					GtLMagritteToolForClassDefinitionChange new.
-					GtLMagritteToolForClassCommentChange new.
-					GtLMagritteToolForMethodsCompilation new.
-					GtLMagritteToolForMethodsRemoval new.
-					GtLMagritteToolForClassRemoval new} asOrderedCollection
+				GtLMagritteToolForClassDefinitionChange new.
+				GtLMagritteToolForClassCommentChange new.
+				GtLMagritteToolForMethodsCompilation new.
+				GtLMagritteToolForMethodsRemoval new.
+				GtLMagritteToolForClassRemoval new} asOrderedCollection
 ]
 
 { #category : #defaults }
