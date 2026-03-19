@@ -12,6 +12,14 @@ Class {
 	#category : #Gt4LlmCore
 }
 
+{ #category : #'instance creation' }
+GtLObjectStorageValueResult class >> forObject: anObject withId: anObjectId [
+	^ self new 
+		object: anObject;
+		objectValue: (GtLSerializedObjectValue fromObject: anObject);
+		objectId: anObjectId
+]
+
 { #category : #'gt-extensions' }
 GtLObjectStorageValueResult >> gtObjectFor: aView [
 	<gtView>

@@ -75,6 +75,7 @@ GtLExceptionDomainObject >> llmExceptionViewFor: aDataView [
 	self exception ifNil: [ ^ aDataView emptyData ].
 	
 	^ aDataView forwardObject
+			title: 'Exception specific details';
 			dataKey: 'errorDetails';
 			object: [ self exception ]
 ]
@@ -94,6 +95,7 @@ GtLExceptionDomainObject >> llmRawDataViewFor: aDataView [
 	<gtLlmDataView>
 	
 	^ aDataView 
+			title: 'Exception generic details';
 			jsonData: [ self llmJsonObject ]
 ]
 

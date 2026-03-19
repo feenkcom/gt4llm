@@ -8,6 +8,28 @@ Class {
 }
 
 { #category : #'api - accessing' }
+GtLMethodIsNotExampleDomainObject >> errorMessage [
+	^ self messageText
+]
+
+{ #category : #accessing }
+GtLMethodIsNotExampleDomainObject >> errorMessageDescription [
+	<magritteDescription>
+
+	^ MAStringDescription new
+			label: 'Error message';
+			accessor: #errorMessage;
+			beRequired
+]
+
+{ #category : #'llm views' }
+GtLMethodIsNotExampleDomainObject >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
+]
+
+{ #category : #'api - accessing' }
 GtLMethodIsNotExampleDomainObject >> messageText [
 	"Return an error message"
 
@@ -24,13 +46,29 @@ GtLMethodIsNotExampleDomainObject >> method: anObject [
 	method := anObject
 ]
 
+{ #category : #accessing }
+GtLMethodIsNotExampleDomainObject >> methodName [
+	^ self method name
+]
+
+{ #category : #accessing }
+GtLMethodIsNotExampleDomainObject >> methodNameDescription [
+	<magritteDescription>
+
+	^ MAStringDescription new
+			label: 'Method name';
+			accessor: #methodName;
+			beRequired
+]
+
 { #category : #'api - serializing' }
 GtLMethodIsNotExampleDomainObject >> serializeToLlmJsonObject [
 	"Return a JSON dictionary that represents the domain object."
+	
+	^ GtMagritteJSONDataExporter exportObject: self.
+]
 
-	<return: #NeoJSONObject>
-	^ NeoJSONObject new
-		at: #error put: self messageText;
-		at: #method put: self method name;
-		yourself
+{ #category : #testing }
+GtLMethodIsNotExampleDomainObject >> wasMovedToMagritteDescriptions [
+	^ true
 ]

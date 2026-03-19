@@ -53,10 +53,9 @@ GtLMagritteToolForObjectStorageSlotValue >> privatePerformToolCall: aToolCall in
 	slotValue := [ object readSlotNamed: slot name ]
 		on: Error
 		do: [ :anError | ^ GtLExceptionDomainObject freeze: anError ].
-	^ GtLObjectStorageValueResult new
-		object: slotValue;
-		objectValue: (GtLSerializedObjectValue fromObject: slotValue);
-		objectId: objectId
+	^ GtLObjectStorageValueResult 
+			forObject:  slotValue
+			withId: objectId
 ]
 
 { #category : #descriptions }
