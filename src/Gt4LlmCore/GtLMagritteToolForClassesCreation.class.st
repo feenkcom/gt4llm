@@ -24,12 +24,12 @@ Trait names usually starts with "T".
 Example JSON arguments:
 {
   "classes": [
-    {"targetClassName": "MyClass", "superclassName": "Object", "package": "MyPackage", "packageTag": "MyTag", "traitComposition": "TMyTrait"},
+    {"targetClassName": "MyClass", "superclassName": "Object", "package": "MyPackage", "packageTag": "MyTag", "traitComposition": "{TMyTrait}"},
     {"targetClassName": "MySubclass", "superclassName": "MyClass", "package": "MyPackage", "instanceVariables": "value", "classInstanceVariables": "valueTwo"}
   ],
   "traits": [
-    {"targetTraitName": "TMyTrait", "package": "MyPackage", "packageTag": "MyTag", "traitComposition": ""},
-    {"targetTraitName": "TMyTraitTwo", "package": "MyPackage", "instanceVariables": "value", "classInstanceVariables": "valueTwo", "traitComposition": "TMyTrait"}
+    {"targetTraitName": "TMyTrait", "package": "MyPackage", "packageTag": "MyTag", "traitComposition": "{}"},
+    {"targetTraitName": "TMyTraitTwo", "package": "MyPackage", "instanceVariables": "value", "classInstanceVariables": "valueTwo", "traitComposition": "{TMyTrait}"}
   ]
 }
 

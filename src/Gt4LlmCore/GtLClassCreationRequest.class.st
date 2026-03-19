@@ -9,10 +9,30 @@ Class {
 		'traitCompositionString',
 		'package',
 		'comment',
-		'packageTag'
+		'packageTag',
+		'classInstanceVariables'
 	],
 	#category : #'Gt4LlmCore-Magritte Objects'
 }
+
+{ #category : #accessing }
+GtLClassCreationRequest >> classInstanceVariables [
+	^ classInstanceVariables
+]
+
+{ #category : #accessing }
+GtLClassCreationRequest >> classInstanceVariables: aStringOrCollection [
+	classInstanceVariables := aStringOrCollection
+]
+
+{ #category : #'magritte - descriptions' }
+GtLClassCreationRequest >> classInstanceVariablesDescription [
+	<magritteDescription>
+	^ MAStringDescription new
+		label: 'Class instance variables';
+		accessor: #classInstanceVariables;
+		beOptional
+]
 
 { #category : #accessing }
 GtLClassCreationRequest >> classVariables [

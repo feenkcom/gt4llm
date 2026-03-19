@@ -7,10 +7,32 @@ Class {
 		'instanceVariables',
 		'classVariables',
 		'package',
-		'packageTag'
+		'packageTag',
+		'classInstanceVariables',
+		'traitCompositionString'
 	],
 	#category : #'Gt4LlmCore-Magritte Objects'
 }
+
+{ #category : #accessing }
+GtLClassChangeRequest >> classInstanceVariables [
+	^ classInstanceVariables ifNil: [ #() ]
+]
+
+{ #category : #accessing }
+GtLClassChangeRequest >> classInstanceVariables: aStringOrCollection [
+	classInstanceVariables := aStringOrCollection
+]
+
+{ #category : #magritte }
+GtLClassChangeRequest >> classInstanceVariablesDescription [
+	<magritteDescription>
+	^ MAToManyScalarRelationDescription new
+		label: 'Instance variables';
+		accessor: #classInstanceVariables;
+		classes: { String };
+		beOptional
+]
 
 { #category : #accessing }
 GtLClassChangeRequest >> classVariables [
@@ -138,11 +160,30 @@ GtLClassChangeRequest >> targetClassName: aString [
 	targetClassName := aString
 ]
 
-{ #category : #'magritte-description' }
+{ #category : #magritte }
 GtLClassChangeRequest >> targetClassNameDescription [
 	<magritteDescription>
 	^ MAStringDescription new
 		label: 'Target class name';
 		accessor: #targetClassName;
 		beRequired
+]
+
+{ #category : #accessing }
+GtLClassChangeRequest >> traitCompositionString [
+	^ traitCompositionString
+]
+
+{ #category : #accessing }
+GtLClassChangeRequest >> traitCompositionString: aString [
+	traitCompositionString := aString
+]
+
+{ #category : #magritte }
+GtLClassChangeRequest >> traitCompositionStringDescription [
+	<magritteDescription>
+	^ MAStringDescription new
+		label: 'Trait composition';
+		accessor: #traitCompositionString;
+		beOptional
 ]

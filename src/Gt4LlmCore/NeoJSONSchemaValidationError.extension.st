@@ -10,7 +10,7 @@ NeoJSONSchemaValidationError >> asGtLErrorReturnObject [
 				missingPropertyNames: (((((message 
 					removePrefix: 'required properties missing') trimBoth
 					removePrefix: '[')
-					removeSuffix: ']') splitOn: '', '')
+					removeSuffix: ']') splitOn: $,)
 						collect: [ :each | each trimBoth ] as: Array) ].
 	^ GtLJSONSchemaValidationErrorDomainObject new 
 			path: self location asArray;
