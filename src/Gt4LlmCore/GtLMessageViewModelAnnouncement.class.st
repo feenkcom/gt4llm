@@ -5,7 +5,7 @@ Class {
 		'messageViewModel',
 		'source'
 	],
-	#category : 'Gt4LlmCore-Announcements'
+	#category : #'Gt4LlmCore-Announcements'
 }
 
 { #category : #accessing }

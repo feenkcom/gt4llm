@@ -8,7 +8,7 @@ Class {
 		'executionMessages',
 		'waker'
 	],
-	#category : 'Gt4LlmCore-Support'
+	#category : #'Gt4LlmCore-Support'
 }
 
 { #category : #'instance creation' }

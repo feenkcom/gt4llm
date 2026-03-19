@@ -10,7 +10,7 @@ Class {
 	#instVars : [
 		'viewUpdater'
 	],
-	#category : 'Gt4LlmCore-UI - Elements'
+	#category : #'Gt4LlmCore-UI - Elements'
 }
 
 { #category : #'private - updating' }

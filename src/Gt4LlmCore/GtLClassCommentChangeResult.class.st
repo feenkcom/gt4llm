@@ -7,7 +7,7 @@ Class {
 		'oldClassComment',
 		'newClassComment'
 	],
-	#category : 'Gt4LlmCore-Magritte Objects'
+	#category : #'Gt4LlmCore-Magritte Objects'
 }
 
 { #category : #magritte }
