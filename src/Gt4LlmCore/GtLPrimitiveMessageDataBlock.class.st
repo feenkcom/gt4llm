@@ -19,6 +19,11 @@ GtLPrimitiveMessageDataBlock >> addJsonDataBlock: aJsonBlock [
 ]
 
 { #category : #utils }
+GtLPrimitiveMessageDataBlock >> compositeJsonData [
+	^compositeJsonDataBlock llmJsonData
+]
+
+{ #category : #utils }
 GtLPrimitiveMessageDataBlock >> compositeJsonDataBlock [
 	^compositeJsonDataBlock
 ]

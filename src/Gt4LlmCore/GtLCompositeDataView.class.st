@@ -29,15 +29,16 @@ GtLCompositeDataView >> dataViews [
 	^dataViews
 ]
 
-{ #category : #views }
+{ #category : #'gt - extensions' }
 GtLCompositeDataView >> gtDataViewsFor: aView [
 	<gtView>
 	<gtLlmMessageView>
 	dataViews ifNil: [^aView empty].
 	^(aView columnedTree)
 		title: 'Data Views';
-		priority: 5;
-		items: [dataViews];
+		priority: 20;
+		items: [{self}];
+		expandAll;
 		children: [ :each | each gtPhlowTreeChildren ];
 		column: 'Value' text: [:each | each gtDisplayString]
 ]
@@ -45,6 +46,48 @@ GtLCompositeDataView >> gtDataViewsFor: aView [
 { #category : #'gt - extensions' }
 GtLCompositeDataView >> gtPhlowTreeChildren [
 	^ dataViews
+]
+
+{ #category : #'gt - extensions' }
+GtLCompositeDataView >> gtViewContentDataBlocksFor: aView [
+	<gtView>
+	<gtLlmMessageView>
+	
+	dataViews ifNil: [^aView empty].
+	^(aView forward)
+		title: 'Data Blocks';
+		priority: 20.1;
+		object: [ self serializeToLlmPrimiteData  ];
+		view: #gtViewDataBlocksFor:
+		
+]
+
+{ #category : #'gt - extensions' }
+GtLCompositeDataView >> gtViewContentJsonDataFor: aView [
+	<gtView>
+	<gtLlmMessageView>
+	
+	dataViews ifNil: [^aView empty].
+	^(aView forward)
+		title: 'JSON Data';
+		priority: 35.1;
+		object: [ self serializeToLlmPrimiteData ];
+		view: #gtViewCondensedJsonDataFor:
+		
+]
+
+{ #category : #'gt - extensions' }
+GtLCompositeDataView >> gtViewContentJsonStringFor: aView [
+	<gtView>
+	<gtLlmMessageView>
+	
+	dataViews ifNil: [^aView empty].
+	^(aView forward)
+		title: 'JSON String';
+		priority: 35.2;
+		object: [ self serializeToLlmPrimiteData  ];
+		view: #gtViewCondensedJsonStringFor:
+		
 ]
 
 { #category : #initialization }

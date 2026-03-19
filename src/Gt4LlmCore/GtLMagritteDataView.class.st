@@ -12,14 +12,41 @@ Class {
 { #category : #accessing }
 GtLMagritteDataView >> computeTargetView [
 	^ cachedTargetDataView := self jsonData
-		data: [ 
-			GtMagritteJSONDataExporter exportObject: self targetObject ];
-		dataKey: self dataKey
+			title: 'Magritte JSON data';
+			data: [ 
+				GtMagritteJSONDataExporter exportObject: self targetObject ];
+			dataKey: self dataKey
 ]
 
 { #category : #'gt - extensions' }
 GtLMagritteDataView >> gtPhlowTreeChildren [
 	^ {cachedTargetDataView}
+]
+
+{ #category : #'gt - extensions' }
+GtLMagritteDataView >> gtViewContentJsonDataFor: aView [
+	<gtView>
+	<gtLlmMessageView>
+	
+	^(aView forward)
+		title: 'JSON Data';
+		priority: 30;
+		object: [ self serializeToLlmPrimiteData  ];
+		view: #gtViewCondensedJsonDataFor:
+		
+]
+
+{ #category : #'gt - extensions' }
+GtLMagritteDataView >> gtViewContentJsonStringFor: aView [
+	<gtView>
+	<gtLlmMessageView>
+	
+	^(aView forward)
+		title: 'JSON String';
+		priority: 30.1;
+		object: [ self serializeToLlmPrimiteData  ];
+		view: #gtViewCondensedJsonStringFor:
+		
 ]
 
 { #category : #accessing }
