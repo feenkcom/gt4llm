@@ -104,7 +104,7 @@ GtLDataView >> errorViewWithException: anException reason: anExceptionReason isF
 	^ GtLDataViewWithError new
 		title: errorName;
 		exception: frozenException;
-		exceptionReason: anExceptionReason
+		errorReason: anExceptionReason
 ]
 
 { #category : #decorating }
