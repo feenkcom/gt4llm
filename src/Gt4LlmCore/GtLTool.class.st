@@ -17,6 +17,18 @@ GtLTool class >> enableDataViews [
 	ShouldEnableDataViews := true
 ]
 
+{ #category : #'gt - extensions' }
+GtLTool class >> gtToolsFor: aView [
+	<gtView>
+	<gtClassView>
+	^ aView columnedList
+		title: 'Tools';
+		items: [ ((self withAllSubclasses reject: #isAbstract)
+				sort: [ :a :b | a name < b name ]) collect: #new ];
+		column: 'Name' text: [ :aTool | aTool name ];
+		column: 'Class' text: [ :aTool | aTool class name ]
+]
+
 { #category : #accessing }
 GtLTool class >> isAbstract [
 	^ self name = #GtLTool
