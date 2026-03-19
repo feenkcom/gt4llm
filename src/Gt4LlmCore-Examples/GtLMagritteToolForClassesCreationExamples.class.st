@@ -121,6 +121,52 @@ GtLMagritteToolForClassesCreationExamples >> createClassesWithUnknownSuperclass 
 	^ call
 ]
 
+{ #category : #examples }
+GtLMagritteToolForClassesCreationExamples >> createTraitsWithInstanceVariables [
+	<gtExample>
+	| tool call result model traitsNames createdTraits |
+	[ tool := GtLMagritteToolForClassesCreation new.
+	traitsNames := {#TGtLMagritteToolForClassesCreationExamplesGeneratedTrait1.
+			#TGtLMagritteToolForClassesCreationExamplesGeneratedTrait2}.
+	traitsNames do: [ :traitName | self removeClassNamedIfPresent: traitName ].
+	call := GtLFunctionToolCall new.
+	call
+		rawArguments: {'classes' -> {}.
+				'traits'
+					-> {{'targetTraitName' -> traitsNames first.
+								'instanceVariables' -> 'firstSlot secondSlot'.
+								'package' -> 'Gt4LlmCoreNewPackage'.
+								'packageTag' -> 'TagOne'} asDictionary.
+							{'targetTraitName' -> traitsNames second.
+								'instanceVariables' -> 'value'.
+								'classInstanceVariables' -> 'classValue'.
+								'package' -> 'Gt4LlmCoreNewPackage'.
+								'packageTag' -> 'TagTwo'} asDictionary} asArray} asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GtLMagritteBasedModel).
+	model := result model.
+	self assert: (model isKindOf: GtLClassesCreationResult).
+	self assert: model classes size equals: 2.
+	createdTraits := traitsNames
+			collect: [ :each | Smalltalk globals at: each ifAbsent: [ nil ] ].
+	self assert: (createdTraits allSatisfy: #notNil).
+	self assert: (createdTraits allSatisfy: #isTrait).
+	self
+		assert: (createdTraits first instanceVariables collect: #name)
+				= #('firstSlot' 'secondSlot').
+	self
+		assert: (createdTraits second instanceVariables collect: #name) = #('value').
+	self
+		assert: (createdTraits second classSide instanceVariables collect: #name as: Array)
+		equals: #('classValue').
+	self assert: createdTraits first package name equals: 'Gt4LlmCoreNewPackage'.
+	self assert: createdTraits second package name equals: 'Gt4LlmCoreNewPackage'.
+	self assert: createdTraits second packageTag name equals: 'TagTwo' ]
+		ensure: [ traitsNames do: [ :each | self removeClassNamedIfPresent: each ] ].
+	^ call
+]
+
 { #category : #private }
 GtLMagritteToolForClassesCreationExamples >> removeClassNamedIfPresent: aSymbol [
 	Smalltalk globals

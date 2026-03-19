@@ -8,15 +8,26 @@ Class {
 		'request',
 		'targetClassName',
 		'superclass',
-		'instanceVariables',
 		'classVariables',
 		'traitComposition',
 		'packageName',
 		'comment',
-		'packageTagName'
+		'packageTagName',
+		'instanceSlots',
+		'classSlots'
 	],
 	#category : #'Gt4LlmCore-Tools'
 }
+
+{ #category : #accessing }
+GtLClassCreationDataExtractor >> classInstanceVariables [
+	^ classSlots
+]
+
+{ #category : #accessing }
+GtLClassCreationDataExtractor >> classInstanceVariables: aCollection [
+	classSlots := aCollection
+]
 
 { #category : #accessing }
 GtLClassCreationDataExtractor >> classVariables [
@@ -139,15 +150,23 @@ GtLClassCreationDataExtractor >> extractTraitComposition [
 { #category : #extraction }
 GtLClassCreationDataExtractor >> extractVariables [
 	"Extract instance and class variables from the request."
-	| instanceVars classVars |
+	| instanceSlotNames classVars classSlotNames |
 	
-	instanceVars := request instanceVariables.
-	instanceVariables := instanceVars
+	instanceSlotNames := request instanceVariables.
+	instanceSlots := instanceSlotNames
 		ifNil: [ #() ]
 		ifNotNil: [ 
-			(instanceVars isString or: [ instanceVars isSymbol ])
-				ifTrue: [ instanceVars asString asSlotCollection ]
-				ifFalse: [ instanceVars collect: [ :each | each asSymbol asSlot ] ] ].
+			(instanceSlotNames isString or: [ instanceSlotNames isSymbol ])
+				ifTrue: [ instanceSlotNames asString asSlotCollection ]
+				ifFalse: [ instanceSlotNames collect: [ :each | each asSymbol asSlot ] ] ].
+				
+	classSlotNames := request classInstanceVariables.
+	classSlots := classSlotNames
+		ifNil: [ #() ]
+		ifNotNil: [ 
+			(classSlotNames isString or: [ classSlotNames isSymbol ])
+				ifTrue: [ classSlotNames asString asSlotCollection ]
+				ifFalse: [ classSlotNames collect: [ :each | each asSymbol asSlot ] ] ].
 	
 	classVars := request classVariables.
 	classVariables := classVars
@@ -168,7 +187,8 @@ GtLClassCreationDataExtractor >> gtDetailsFor: aView [
 			{ 'Request' -> request.
 			  'Target class name' -> targetClassName.
 			  'Superclass' -> superclass.
-			  'Instance variables' -> instanceVariables.
+			  'Instance slots' -> instanceSlots.
+			  'Class slots' -> classSlots.
 			  'Class variables' -> classVariables.
 			  'Trait composition' -> traitComposition.
 			  'Package name' -> packageName.
@@ -181,12 +201,12 @@ GtLClassCreationDataExtractor >> gtDetailsFor: aView [
 
 { #category : #accessing }
 GtLClassCreationDataExtractor >> instanceVariables [
-	^ instanceVariables
+	^ instanceSlots
 ]
 
 { #category : #accessing }
 GtLClassCreationDataExtractor >> instanceVariables: aCollection [
-	instanceVariables := aCollection
+	instanceSlots := aCollection
 ]
 
 { #category : #accessing }
