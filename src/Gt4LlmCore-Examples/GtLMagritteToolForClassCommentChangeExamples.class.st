@@ -67,7 +67,7 @@ GtLMagritteToolForClassCommentChangeExamples >> changeCommentUnknownClass [
 	^ call
 ]
 
-{ #category : #accessing }
+{ #category : #comment }
 GtLMagritteToolForClassCommentChangeExamples >> comment [
 	^ 'Examples for GtLMagritteToolForClassCommentChange.'
 ]

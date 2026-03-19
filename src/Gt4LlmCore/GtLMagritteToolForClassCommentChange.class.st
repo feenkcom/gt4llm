@@ -28,7 +28,7 @@ GtLMagritteToolForClassCommentChange >> classNameDescription [
 
 { #category : #magritte }
 GtLMagritteToolForClassCommentChange >> description [
-	^ 'Change the class comment.
+	^ 'Change the class or trait comment. Both, class and trait use the same argument names and response structure.
 
 Example JSON arguments:
 {
@@ -45,7 +45,7 @@ Example JSON response:
 
 { #category : #magritte }
 GtLMagritteToolForClassCommentChange >> name [
-	^ 'changeClassComment'
+	^ 'changeClassOrTraitComment'
 ]
 
 { #category : #private }
