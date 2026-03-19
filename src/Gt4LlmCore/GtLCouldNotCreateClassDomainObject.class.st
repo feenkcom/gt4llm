@@ -7,7 +7,8 @@ Class {
 		'packageName',
 		'instanceVariableNames',
 		'classVariableNames',
-		'exception'
+		'exception',
+		'packageTagName'
 	],
 	#category : #'Gt4LlmCore-Domain Objects'
 }
@@ -100,6 +101,25 @@ GtLCouldNotCreateClassDomainObject >> packageNameDescription [
 	^ MAStringDescription new
 		label: 'Package';
 		accessor: #packageName;
+		beRequired
+]
+
+{ #category : #accessing }
+GtLCouldNotCreateClassDomainObject >> packageTagName [
+	^ packageTagName
+]
+
+{ #category : #accessing }
+GtLCouldNotCreateClassDomainObject >> packageTagName: anObject [
+	packageTagName := anObject
+]
+
+{ #category : #'magritte-description' }
+GtLCouldNotCreateClassDomainObject >> packageTagNameDescription [
+	<magritteDescription>
+	^ MAStringDescription new
+		label: 'Package tag';
+		accessor: #packageTagName;
 		beRequired
 ]
 

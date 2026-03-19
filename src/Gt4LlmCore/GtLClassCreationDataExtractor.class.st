@@ -12,7 +12,8 @@ Class {
 		'classVariables',
 		'traitComposition',
 		'packageName',
-		'comment'
+		'comment',
+		'packageTagName'
 	],
 	#category : #'Gt4LlmCore-Tools'
 }
@@ -73,6 +74,18 @@ GtLClassCreationDataExtractor >> extractPackageIfError: errorBlock [
 		ifTrue: [ ^ errorBlock value: (GtLMissingDomainObject new objectName: 'package') ].
 	
 	packageName := pkgName
+]
+
+{ #category : #extraction }
+GtLClassCreationDataExtractor >> extractPackageTagIfError: errorBlock [
+	"Extract and validate the package tag name from the request."
+
+	| packageTagValue pkgTagName |
+	packageTagValue := request packageTag.
+	pkgTagName := (packageTagValue ifNil: [ '' ]) asString trimBoth.
+	pkgTagName isEmpty
+		ifTrue: [ packageTagName := nil ]
+		ifFalse: [ packageTagName := pkgTagName ]
 ]
 
 { #category : #extraction }
@@ -158,6 +171,7 @@ GtLClassCreationDataExtractor >> gtDetailsFor: aView [
 			  'Class variables' -> classVariables.
 			  'Trait composition' -> traitComposition.
 			  'Package name' -> packageName.
+			  'Package tag name' -> packageTagName.
 			  'Comment' -> comment } ];
 		column: 'Property' text: #key;
 		column: 'Value' text: #value;
@@ -182,6 +196,16 @@ GtLClassCreationDataExtractor >> packageName [
 { #category : #accessing }
 GtLClassCreationDataExtractor >> packageName: aString [
 	packageName := aString
+]
+
+{ #category : #accessing }
+GtLClassCreationDataExtractor >> packageTagName [
+	^ packageTagName
+]
+
+{ #category : #accessing }
+GtLClassCreationDataExtractor >> packageTagName: aString [
+	packageTagName := aString
 ]
 
 { #category : #printing }
