@@ -31,6 +31,7 @@ GtLObjectStorageValueResult >> llmComputedObjectViewFor: aDataView [
 	<gtLlmDataView>
 	
 	^ aDataView forwardObject
+			title: 'Object specific details';
 			dataKey: 'objectDetails';
 			object: [ self object ]
 ]
@@ -39,7 +40,9 @@ GtLObjectStorageValueResult >> llmComputedObjectViewFor: aDataView [
 GtLObjectStorageValueResult >> llmRawDataViewFor: aDataView [
 	<gtLlmDataView>
 	
-	^ aDataView magritteObject: [ self ]
+	^ aDataView magritteObject
+			title: 'Object generic details';
+			object: [ self ]
 ]
 
 { #category : #accessing }

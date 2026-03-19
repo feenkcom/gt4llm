@@ -194,7 +194,7 @@ GtLDataView >> magritteObject [
 { #category : #decorating }
 GtLDataView >> magritteObject: aBlockClosure [
 	^ self magritteObject	
-			object: [ self ]
+			object: aBlockClosure
 ]
 
 { #category : #utils }
@@ -329,9 +329,7 @@ GtLDataView >> viewDescriptionOn: aStream [
 				<< self title;
 				<<'; '].
 			
-	self dataKey 
-		ifNotNil: [ 
-			aStream 
-				<< 'key: ';
-				print: self dataKey ]
+	aStream 
+			<< 'key: ';
+			print: (self dataKey ifNil: [ '<none>' ])
 ]
