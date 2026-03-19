@@ -41,6 +41,18 @@ GtLForwardDataView >> gtPhlowTreeChildren [
 	^ {self targetDataView}
 ]
 
+{ #category : #'gt - extensions' }
+GtLForwardDataView >> gtViewContentJsonStringFor: aView [
+	<gtView>
+	<gtLlmMessageView>
+	
+	^(aView forward)
+		title: 'JSON String';
+		priority: 30.1;
+		object: [ self serializeToLlmPrimiteData  ];
+		view: #gtViewCondensedJsonStringFor:
+]
+
 { #category : #'api - scripting' }
 GtLForwardDataView >> object: aBlockClosure [
 	objectComputation := aBlockClosure.

@@ -9,6 +9,7 @@ ProtoObject >> llmDataViewsFor: aDataView [
 { #category : #'*Gt4LlmCore' }
 ProtoObject >> llmDataViewsFor: aDataView inContext: aContext [
 	^aDataView compositeData
+		title: 'Object views';
 		addDataViews: (self llmDataViewsInContext: aContext);
 		yourself
 ]

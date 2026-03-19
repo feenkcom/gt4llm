@@ -13,6 +13,7 @@ GtLForwardObjectDataView >> computeForwardedView [
 GtLForwardObjectDataView >> computeTargetView [
 	| targetView |
 	targetView := self compositeData.
+	targetView title: 'Forwarded views'.
 	targetView addDataView: self computeForwardedView.
 	^targetView
 ]
