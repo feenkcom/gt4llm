@@ -8,7 +8,7 @@ Class {
 	#classVars : [
 		'Current'
 	],
-	#category : #Gt4LlmCore
+	#category : #'Gt4LlmCore-Registry - Model'
 }
 
 { #category : #'instance creation' }
