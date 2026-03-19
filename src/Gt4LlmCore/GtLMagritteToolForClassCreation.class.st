@@ -72,6 +72,7 @@ Example JSON arguments:
     "targetClassName": "MyClass",
     "superclassName": "Object",
     "package": "MyPackage",
+    "packageTag": "MyTag",
     "instanceVariables": "slot1 slot2",
     "classVariables": "SharedValue",
     "traitCompositionString": "{}",
