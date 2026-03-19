@@ -38,17 +38,22 @@ GtLImageDataView >> computedImageBytes [
 GtLImageDataView >> element: aBlockReturningElement [
 	
 	self png: [
-		| rootElement form |
-		rootElement := BlScripter new
-			element: aBlockReturningElement value;
-			extent: 1600@1200;
-			elementWithoutParent.
+		| targetElement rootElement form |
+		targetElement := aBlockReturningElement value.
+		rootElement :=  targetElement hasParent 
+			ifTrue: [ targetElement ]
+			ifFalse: [
+				BlScripter new
+					element: targetElement;
+					extent: 1600@1200;
+					elementWithoutParent].
 		form := BlExporter png
 			element: rootElement;
 			doExport: [ :aCanvas | aCanvas asForm ].
 	
 		(ByteArray
-			streamContents: [ :out | PNGReadWriter putForm: form onStream: out ]) ]
+			streamContents: [ :out | 
+				PNGReadWriter putForm: form onStream: out ]) ]
 ]
 
 { #category : #accessing }

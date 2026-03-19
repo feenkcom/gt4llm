@@ -66,9 +66,9 @@ GtLExampleWithResultDomainObject >> isSuccessResult [
 GtLExampleWithResultDomainObject >> llmRawDataViewFor: aDataView [
 	<gtLlmDataView>
 	
-	^aDataView jsonObject
+	^aDataView jsonData
 		title: 'Example details';
-		data: [ :aJson |
+		object: [ :aJson |
 			aJson
 				at: #exampleClassName put: self exampleWithResult methodClass name asString;
 				at: #exampleMethodName put: self exampleWithResult selector asString;
