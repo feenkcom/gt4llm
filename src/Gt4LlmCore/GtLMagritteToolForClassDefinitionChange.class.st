@@ -52,7 +52,9 @@ GtLMagritteToolForClassDefinitionChange >> classChangeRequestDescription [
 
 { #category : #accessing }
 GtLMagritteToolForClassDefinitionChange >> description [
-	^ 'Changes a class signature by updating superclass, instance variables, class variables, package, package tag. It also changes a Trait signature by updating instance variables, class instance variables, package, and package tag.
+	^ 'Changes a class signature by updating superclass, instance variables, class variables, package, package tag. 
+	
+	It also changes a Trait signature by updating instance variables, class instance variables, package, and package tag. In terms of definition, trait is a specialized class, so it have same arguments. It therefore defines trait name using `targetClassName` argument. Trait does not define superclassName, neither `classVariables`.
 
 Example JSON arguments:
 {
@@ -82,7 +84,7 @@ Example JSON response:
 
 { #category : #accessing }
 GtLMagritteToolForClassDefinitionChange >> name [
-	^ 'changeClassSignature'
+	^ 'changeClassOrTraitSignature'
 ]
 
 { #category : #private }
