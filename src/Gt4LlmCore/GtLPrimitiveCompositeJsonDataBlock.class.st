@@ -30,7 +30,7 @@ GtLPrimitiveCompositeJsonDataBlock >> gtViewDataBlocksFor: aView [
 	
 	^(aView columnedTree)
 		title: 'Data Blocks';
-		priority: 10;
+		priority: 5;
 		items: [ self jsonDataBlocks];
 		children: [ :each | each gtPhlowTreeChildren  ];
 		column: 'Value' text: [:each | each gtDisplayString]

@@ -11,7 +11,9 @@ GtLPrimitiveCompositeJsonGenericDataBlock >> condensedJsonBlock [
 			dataKey: self dataKey;
 			jsonData: Dictionary new) 
 		into: [ :resultBlock :currentBlock |
-			resultBlock addJsonBlock: currentBlock.
+			resultBlock 
+				addJsonBlock: currentBlock 
+				disabiguatingKeys: #('dataViewError').
 			resultBlock	]
 ]
 
