@@ -55,7 +55,8 @@ Example JSON arguments:
     "superclassName": "NewSuperclass",
     "instanceVariables": ["slot1", "slot2"],
     "classVariables": ["SharedValue"],
-    "package": "MyPackage"
+    "package": "MyPackage",
+    "packageTag": "MyTag"
   }
 }
 

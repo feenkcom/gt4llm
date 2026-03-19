@@ -41,6 +41,7 @@ GtLClassDescriptionExamples >> classDescriptionSerialization [
 		superclassName: 'Object';
 		comment: 'Sample';
 		packageName: 'Samples';
+		packageTagName: 'SampleTag';
 		instanceSlotNames: #('a' 'b');
 		classSlotNames: #('c');
 		allInstanceMethodNames: #(foo bar:);
@@ -53,6 +54,7 @@ GtLClassDescriptionExamples >> classDescriptionSerialization [
 		at: 'superclassName' put: description superclassName;
 		at: 'comment' put: description comment;
 		at: 'packageName' put: description packageName;
+		at: 'packageTagName' put: description packageTagName;
 		at: 'instanceSlotNames' put: (NeoJSONArray withAll: description instanceSlotNames asArray);
 		at: 'classSlotNames' put: (NeoJSONArray withAll: description classSlotNames asArray);
 		at: 'allInstanceMethodNames'

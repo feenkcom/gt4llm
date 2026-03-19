@@ -10,7 +10,8 @@ Class {
 		'superclass',
 		'instanceVariables',
 		'classVariables',
-		'packageName'
+		'packageName',
+		'packageTagName'
 	],
 	#category : #'Gt4LlmCore-Tools'
 }
@@ -33,7 +34,8 @@ GtLClassChangeDataExtractor >> extractAllIfError: errorBlock [
 	self extractTargetClassIfError: errorBlock.
 	self extractSuperclassIfError: errorBlock.
 	self extractVariables.
-	self extractPackageIfError: errorBlock
+	self extractPackageIfError: errorBlock.
+	self extractPackageTagIfError: errorBlock
 ]
 
 { #category : #extraction }
@@ -51,6 +53,24 @@ GtLClassChangeDataExtractor >> extractPackageIfError: errorBlock [
 				ifTrue: [ ^ errorBlock value: (GtLMissingDomainObject new objectName: 'package') ].
 			packageName := pkgName ]
 		ifFalse: [ packageName := targetClass package name ]
+]
+
+{ #category : #extraction }
+GtLClassChangeDataExtractor >> extractPackageTagIfError: errorBlock [
+	"Extract the package tag name from the request.
+	If not provided, use the current package of the target class."
+
+	| packageTagValue |
+	packageTagValue := request packageTag.
+	packageTagValue notNil
+		ifTrue: [ | pkgTagName |
+			pkgTagName := packageTagValue asString trimBoth.
+			pkgTagName isEmpty
+				ifTrue: [ packageTagName := nil ]
+				ifFalse: [ packageTagName := pkgTagName ] ]
+		ifFalse: [ targetClass packageTag isRoot
+				ifTrue: [ packageTagName := nil ]
+				ifFalse: [ packageTagName := targetClass packageTag name ] ]
 ]
 
 { #category : #extraction }
@@ -140,6 +160,16 @@ GtLClassChangeDataExtractor >> packageName [
 { #category : #accessing }
 GtLClassChangeDataExtractor >> packageName: aString [
 	packageName := aString
+]
+
+{ #category : #accessing }
+GtLClassChangeDataExtractor >> packageTagName [
+	^ packageTagName
+]
+
+{ #category : #accessing }
+GtLClassChangeDataExtractor >> packageTagName: aString [
+	packageTagName := aString
 ]
 
 { #category : #printing }

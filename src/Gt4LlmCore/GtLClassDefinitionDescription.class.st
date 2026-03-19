@@ -9,7 +9,8 @@ Class {
 		'instanceSlotNames',
 		'classSlotNames',
 		'classVariableNames',
-		'traitCompositionString'
+		'traitCompositionString',
+		'packageTagName'
 	],
 	#category : #'Gt4LlmCore-Magritte Objects'
 }
@@ -177,6 +178,7 @@ GtLClassDefinitionDescription >> initializeFromClass: aClass [
 			ifNotNil: [ :aSuperclass | aSuperclass name ]);
 		comment: aClass instanceSide gtComment;
 		packageName: aClass package name;
+		packageTagName: (aClass packageTag isRoot ifTrue: [ nil ] ifFalse: [ aClass packageTag name ]);
 		instanceSlotNames: (aClass instanceVariables collect: [:each | each name]);
 		classSlotNames: (aClass class slotNames);
 		classVariableNames: (aClass classVariables collect: [:each | each name ]);
@@ -220,6 +222,26 @@ GtLClassDefinitionDescription >> packageNameDescription [
 	^ MAStringDescription new
 		label: 'Package';
 		accessor: #packageName;
+		beRequired;
+		yourself
+]
+
+{ #category : #accessing }
+GtLClassDefinitionDescription >> packageTagName [
+	^ packageTagName
+]
+
+{ #category : #accessing }
+GtLClassDefinitionDescription >> packageTagName: aString [
+	packageTagName := aString
+]
+
+{ #category : #'magritte-description' }
+GtLClassDefinitionDescription >> packageTagNameDescription [
+	<magritteDescription>
+	^ MAStringDescription new
+		label: 'Package tag';
+		accessor: #packageTagName;
 		beRequired;
 		yourself
 ]
