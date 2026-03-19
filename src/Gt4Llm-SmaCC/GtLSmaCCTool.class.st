@@ -7,6 +7,11 @@ Class {
 	#category : #'Gt4Llm-SmaCC-Tools'
 }
 
+{ #category : #testing }
+GtLSmaCCTool class >> isAbstract [
+	^ self name = #GtLSmaCCTool
+]
+
 { #category : #'as yet unclassified' }
 GtLSmaCCTool >> grammarIn: anObject do: aBlock onError: errorBlock [
 	| grammar |
