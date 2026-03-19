@@ -36,6 +36,13 @@ GtLChatAnthropicLiveExamples >> createProvider [
 	^ aProvider
 ]
 
+{ #category : #examples }
+GtLChatAnthropicLiveExamples >> exploringChatObject [
+	<gtExample>
+	<noTest>
+	^ super exploringChatObject
+]
+
 { #category : #'examples - calls' }
 GtLChatAnthropicLiveExamples >> howAreYouCallExample [
 	"Ready for stub execution"

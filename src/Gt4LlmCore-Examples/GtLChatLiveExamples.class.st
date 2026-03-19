@@ -155,6 +155,43 @@ GtLChatLiveExamples >> currentChat [
 	^ theChat ifNil: [ theChat := self createChat ]
 ]
 
+{ #category : #examples }
+GtLChatLiveExamples >> exploringChatObject [
+	<gtExample>
+	| chatObject chat storedObjectId storedObject |
+	chatObject := self class new howAreYouCallExample.
+
+	self stubResponses: [ self exploringChatObject_stub_responses ].
+
+	chat := self currentChat.
+	chat tools: GtLTools gt.
+	chat markdownResponse.
+	storedObjectId := chat addNewObject: chatObject reasonString: 'Initial object'.
+	storedObject := chat objectStorage objectAt: storedObjectId.
+	chat
+		pageObjectExplanation: (LePage new
+				title: 'Objects';
+				addSnippet: (LeTextSnippet new
+						string: 'Relate the conversation and actions primarily to the objects from the object storage. Place particular attention to the initial object, also attached to the first message.');
+				yourself).
+	chat
+		sendWith: [ :m | 
+			m
+				addInputMagritteObject: (GtLObjectStorageValueResult new
+							objectId: storedObjectId;
+							object: storedObject;
+							objectValue: (GtLSerializedObjectValue fromObject: storedObject))
+					named: 'Initial object';
+				markdown: 'What does the final reply message of the object say?' ].
+
+	^ chat
+]
+
+{ #category : #responses }
+GtLChatLiveExamples >> exploringChatObject_stub_responses [
+	^ self subclassResponsibility
+]
+
 { #category : #'examples - calls' }
 GtLChatLiveExamples >> howAreYouCallExample [
 	"Ready for stub execution"
