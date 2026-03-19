@@ -32,30 +32,34 @@ GtLMagritteToolForClassCreation >> createClassFromRequest: aRequest [
 { #category : #'private - creation' }
 GtLMagritteToolForClassCreation >> createClassUsing: extractor ifError: errorBlock [
 	| createdClass |
-	
 	createdClass := [ extractor superclass classInstaller
-		make: [ :builder |
-			builder
-				superclass: extractor superclass;
-				name: extractor targetClassName;
-				slots: extractor instanceVariables;
-				sharedVariables: extractor classVariables;
-				traitComposition: extractor traitComposition;
-				package: extractor packageName;
-				tag: extractor packageTagName;
-				comment: extractor comment;
-				environment: extractor superclass environment ] ]
-		on: Error
-		do: [ :error |
-			^ errorBlock value: (GtLCouldNotCreateClassDomainObject new
-				superclass: extractor superclass;
-				targetClassName: extractor targetClassName;
-				packageName: extractor packageName;
-				packageTagName: extractor packageTagName;
-				instanceVariableNames: (extractor instanceVariables collect: #name) asArray;
-				classVariableNames: (extractor classVariables collect: #name) asArray;
-				freeze: error) ].
-	
+			make: [ :builder | 
+				builder
+					superclass: extractor superclass;
+					name: extractor targetClassName;
+					slots: extractor instanceVariables;
+					classSlots: extractor classInstanceVariables;
+					sharedVariables: extractor classVariables;
+					traitComposition: extractor traitComposition;
+					package: extractor packageName;
+					tag: extractor packageTagName;
+					comment: extractor comment;
+					environment: extractor superclass environment.
+
+				(extractor superclass = Trait or: extractor superclass isTrait)
+					ifTrue: [ builder beTrait ] ] ]
+			on: Error
+			do: [ :error | 
+				^ errorBlock
+					value: (GtLCouldNotCreateClassDomainObject new
+							superclass: extractor superclass;
+							targetClassName: extractor targetClassName;
+							packageName: extractor packageName;
+							packageTagName: extractor packageTagName;
+							instanceVariableNames: (extractor instanceVariables collect: #name) asArray;
+							classVariableNames: (extractor classVariables collect: #name) asArray;
+							freeze: error) ].
+
 	^ GtLClassModificationResult new
 		originalClass: nil;
 		updatedClass: (GtLClassDefinitionDescription fromClass: createdClass);
