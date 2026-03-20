@@ -175,8 +175,10 @@ GtLForwardToAllViewsExamples >> forwardToMultipleViewsWithDataKey_serialization 
 				at: #itemName put: 'Multi-View Item';
 				at: #itemAmount put: 99;
 				yourself);
-			at: #name put: 'Multi-View Item';
-			at: #amount put: 99;
+			at: #magritteData put: (NeoJSONObject new
+				at: #name put: 'Multi-View Item';
+				at: #amount put: 99;
+				yourself);
 			yourself);
 		yourself.
 	self assert: actualData equals: expectedData.
@@ -201,8 +203,10 @@ GtLForwardToAllViewsExamples >> forwardToMultipleViews_serialization [
 			at: #itemName put: 'Multi-View Item';
 			at: #itemAmount put: 99;
 			yourself);
-		at: #name put: 'Multi-View Item';
-		at: #amount put: 99;
+		at: #magritteData put: (NeoJSONObject new
+			at: #name put: 'Multi-View Item';
+			at: #amount put: 99;
+			yourself);
 		yourself.
 	self assert: actualData equals: expectedData.
 	

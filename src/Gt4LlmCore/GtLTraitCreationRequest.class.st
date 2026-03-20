@@ -1,9 +1,8 @@
 Class {
-	#name : #GtLClassCreationRequest,
+	#name : #GtLTraitCreationRequest,
 	#superclass : #Object,
 	#instVars : [
-		'targetClassName',
-		'superclassName',
+		'targetTraitName',
 		'instanceVariables',
 		'classVariables',
 		'traitCompositionString',
@@ -16,17 +15,17 @@ Class {
 }
 
 { #category : #accessing }
-GtLClassCreationRequest >> classInstanceVariables [
+GtLTraitCreationRequest >> classInstanceVariables [
 	^ classInstanceVariables
 ]
 
 { #category : #accessing }
-GtLClassCreationRequest >> classInstanceVariables: aStringOrCollection [
+GtLTraitCreationRequest >> classInstanceVariables: aStringOrCollection [
 	classInstanceVariables := aStringOrCollection
 ]
 
 { #category : #'magritte - descriptions' }
-GtLClassCreationRequest >> classInstanceVariablesDescription [
+GtLTraitCreationRequest >> classInstanceVariablesDescription [
 	<magritteDescription>
 	^ MAStringDescription new
 		label: 'Class instance variables';
@@ -35,17 +34,17 @@ GtLClassCreationRequest >> classInstanceVariablesDescription [
 ]
 
 { #category : #accessing }
-GtLClassCreationRequest >> classVariables [
+GtLTraitCreationRequest >> classVariables [
 	^ classVariables
 ]
 
 { #category : #accessing }
-GtLClassCreationRequest >> classVariables: aStringOrCollection [
+GtLTraitCreationRequest >> classVariables: aStringOrCollection [
 	classVariables := aStringOrCollection
 ]
 
 { #category : #'magritte - descriptions' }
-GtLClassCreationRequest >> classVariablesDescription [
+GtLTraitCreationRequest >> classVariablesDescription [
 	<magritteDescription>
 	^ MAStringDescription new
 		label: 'Class variables';
@@ -54,17 +53,17 @@ GtLClassCreationRequest >> classVariablesDescription [
 ]
 
 { #category : #accessing }
-GtLClassCreationRequest >> comment [
+GtLTraitCreationRequest >> comment [
 	^ comment
 ]
 
 { #category : #accessing }
-GtLClassCreationRequest >> comment: aString [
+GtLTraitCreationRequest >> comment: aString [
 	comment := aString
 ]
 
 { #category : #'magritte - descriptions' }
-GtLClassCreationRequest >> commentDescription [
+GtLTraitCreationRequest >> commentDescription [
 	<magritteDescription>
 	^ MAStringDescription new
 		label: 'Comment';
@@ -73,17 +72,17 @@ GtLClassCreationRequest >> commentDescription [
 ]
 
 { #category : #accessing }
-GtLClassCreationRequest >> instanceVariables [
+GtLTraitCreationRequest >> instanceVariables [
 	^ instanceVariables
 ]
 
 { #category : #accessing }
-GtLClassCreationRequest >> instanceVariables: aStringOrCollection [
+GtLTraitCreationRequest >> instanceVariables: aStringOrCollection [
 	instanceVariables := aStringOrCollection
 ]
 
 { #category : #'magritte - descriptions' }
-GtLClassCreationRequest >> instanceVariablesDescription [
+GtLTraitCreationRequest >> instanceVariablesDescription [
 	<magritteDescription>
 	^ MAStringDescription new
 		label: 'Instance variables';
@@ -92,22 +91,22 @@ GtLClassCreationRequest >> instanceVariablesDescription [
 ]
 
 { #category : #testing }
-GtLClassCreationRequest >> isErrorDomainObject [
+GtLTraitCreationRequest >> isErrorDomainObject [
 	^false
 ]
 
 { #category : #accessing }
-GtLClassCreationRequest >> package [
+GtLTraitCreationRequest >> package [
 	^ package
 ]
 
 { #category : #accessing }
-GtLClassCreationRequest >> package: aString [
+GtLTraitCreationRequest >> package: aString [
 	package := aString
 ]
 
 { #category : #'magritte-description' }
-GtLClassCreationRequest >> packageDescription [
+GtLTraitCreationRequest >> packageDescription [
 	<magritteDescription>
 	^ MAStringDescription new
 		label: 'Package';
@@ -116,17 +115,17 @@ GtLClassCreationRequest >> packageDescription [
 ]
 
 { #category : #accessing }
-GtLClassCreationRequest >> packageTag [
+GtLTraitCreationRequest >> packageTag [
 	^ packageTag
 ]
 
 { #category : #accessing }
-GtLClassCreationRequest >> packageTag: aString [
+GtLTraitCreationRequest >> packageTag: aString [
 	packageTag := aString
 ]
 
 { #category : #'magritte-description' }
-GtLClassCreationRequest >> packageTagDescription [
+GtLTraitCreationRequest >> packageTagDescription [
 	<magritteDescription>
 	^ MAStringDescription new
 		label: 'Package tag';
@@ -135,64 +134,55 @@ GtLClassCreationRequest >> packageTagDescription [
 ]
 
 { #category : #printing }
-GtLClassCreationRequest >> printOn: aStream [
+GtLTraitCreationRequest >> printOn: aStream [
 	super printOn: aStream.
 	aStream
 		nextPutAll: ' (';
-		nextPutAll: (targetClassName ifNil: [ 'unnamed' ]);
+		nextPutAll: (targetTraitName ifNil: [ 'unnamed' ]);
 		nextPut: $)
 ]
 
 { #category : #accessing }
-GtLClassCreationRequest >> superclassName [
-	^ superclassName
+GtLTraitCreationRequest >> superclassName [
+	^ Trait name
 ]
 
 { #category : #accessing }
-GtLClassCreationRequest >> superclassName: aString [
-	superclassName := aString
+GtLTraitCreationRequest >> targetClassName [
+	^ self targetTraitName
+]
+
+{ #category : #accessing }
+GtLTraitCreationRequest >> targetTraitName [
+	^ targetTraitName
+]
+
+{ #category : #accessing }
+GtLTraitCreationRequest >> targetTraitName: anObject [
+	targetTraitName := anObject
 ]
 
 { #category : #'magritte-description' }
-GtLClassCreationRequest >> superclassNameDescription [
+GtLTraitCreationRequest >> targetTraitNameDescription [
 	<magritteDescription>
 	^ MAStringDescription new
-		label: 'Superclass name';
-		accessor: #superclassName;
+		label: 'Target trait name';
+		accessor: #targetTraitName;
 		beRequired
 ]
 
 { #category : #accessing }
-GtLClassCreationRequest >> targetClassName [
-	^ targetClassName
-]
-
-{ #category : #accessing }
-GtLClassCreationRequest >> targetClassName: aString [
-	targetClassName := aString
-]
-
-{ #category : #'magritte-description' }
-GtLClassCreationRequest >> targetClassNameDescription [
-	<magritteDescription>
-	^ MAStringDescription new
-		label: 'Target class name';
-		accessor: #targetClassName;
-		beRequired
-]
-
-{ #category : #accessing }
-GtLClassCreationRequest >> traitCompositionString [
+GtLTraitCreationRequest >> traitCompositionString [
 	^ traitCompositionString
 ]
 
 { #category : #accessing }
-GtLClassCreationRequest >> traitCompositionString: aString [
+GtLTraitCreationRequest >> traitCompositionString: aString [
 	traitCompositionString := aString
 ]
 
 { #category : #'magritte - descriptions' }
-GtLClassCreationRequest >> traitCompositionStringDescription [
+GtLTraitCreationRequest >> traitCompositionStringDescription [
 	<magritteDescription>
 	^ MAStringDescription new
 		label: 'Trait composition';

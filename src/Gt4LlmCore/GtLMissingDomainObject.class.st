@@ -35,6 +35,13 @@ GtLMissingDomainObject >> gtDisplayOn: stream [
 	stream nextPutAll: self errorMessage
 ]
 
+{ #category : #'llm views' }
+GtLMissingDomainObject >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
+]
+
 { #category : #'api - accessing' }
 GtLMissingDomainObject >> messageText [
 	"Return an error message"

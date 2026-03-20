@@ -69,15 +69,15 @@ GtLExceptionDomainObject >> gtExceptionStackFor: aView [
 ]
 
 { #category : #'llm views' }
-GtLExceptionDomainObject >> llmDataViewFor: aDataView [
+GtLExceptionDomainObject >> llmExceptionViewFor: aDataView [
 	<gtLlmDataView>
 	
 	self exception ifNil: [ ^ aDataView emptyData ].
 	
-	^ aDataView compositeData
-			addDataView: (aDataView forwardObject: [ self exception ]);
-			addDataView: (aDataView jsonData: [ self llmJsonObject ]);
-			yourself
+	^ aDataView forwardObject
+			title: 'Exception specific details';
+			dataKey: 'errorDetails';
+			object: [ self exception ]
 ]
 
 { #category : #'llm views' }
@@ -86,8 +86,17 @@ GtLExceptionDomainObject >> llmJsonObject [
 	<return: #NeoJSONObject>
 	
 	^ NeoJSONObject new
-		at: #errorReason put: self description;
+		at: 'errorReason' put: self description;
 		yourself
+]
+
+{ #category : #'llm views' }
+GtLExceptionDomainObject >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView 
+			title: 'Exception generic details';
+			jsonData: [ self llmJsonObject ]
 ]
 
 { #category : #'api - accessing' }

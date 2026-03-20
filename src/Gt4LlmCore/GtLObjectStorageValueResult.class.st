@@ -12,6 +12,14 @@ Class {
 	#category : #Gt4LlmCore
 }
 
+{ #category : #'instance creation' }
+GtLObjectStorageValueResult class >> forObject: anObject withId: anObjectId [
+	^ self new 
+		object: anObject;
+		objectValue: (GtLSerializedObjectValue fromObject: anObject);
+		objectId: anObjectId
+]
+
 { #category : #'gt-extensions' }
 GtLObjectStorageValueResult >> gtObjectFor: aView [
 	<gtView>
@@ -24,6 +32,25 @@ GtLObjectStorageValueResult >> gtObjectFor: aView [
 			background: Color white;
 			addAptitude: BrShadowAptitude;
 			matchParent) ]
+]
+
+{ #category : #'llm views' }
+GtLObjectStorageValueResult >> llmComputedObjectViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView forwardObject
+			title: 'Object specific details';
+			dataKey: 'objectDetails';
+			object: [ self object ]
+]
+
+{ #category : #'llm views' }
+GtLObjectStorageValueResult >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject
+			title: 'Object generic details';
+			object: [ self ]
 ]
 
 { #category : #accessing }

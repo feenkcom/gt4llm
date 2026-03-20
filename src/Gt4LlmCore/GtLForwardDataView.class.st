@@ -16,7 +16,10 @@ GtLForwardDataView >> computeForwardedViewFor: anObjectComputation [
 	
 	[ targetObject := anObjectComputation value ] 
 		on: Error do: [ :anError |
-			^ self errorViewWithException: anError isFrozen: false ].
+			^ self 
+				errorViewWithException: anError 
+				reason: 'Error computing target object for object forwarded data view' 
+				isFrozen: false ].
 	
 	computedView := self on: targetObject perform: self viewSymbol.
 	
@@ -36,6 +39,18 @@ GtLForwardDataView >> computeTargetView [
 { #category : #'gt - extensions' }
 GtLForwardDataView >> gtPhlowTreeChildren [
 	^ {self targetDataView}
+]
+
+{ #category : #'gt - extensions' }
+GtLForwardDataView >> gtViewContentJsonStringFor: aView [
+	<gtView>
+	<gtLlmMessageView>
+	
+	^(aView forward)
+		title: 'JSON String';
+		priority: 30.1;
+		object: [ self serializeToLlmPrimiteData  ];
+		view: #gtViewCondensedJsonStringFor:
 ]
 
 { #category : #'api - scripting' }

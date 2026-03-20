@@ -10,10 +10,23 @@ Class {
 		'superclass',
 		'instanceVariables',
 		'classVariables',
-		'packageName'
+		'packageName',
+		'packageTagName',
+		'classInstanceVariables',
+		'traitComposition'
 	],
 	#category : #'Gt4LlmCore-Tools'
 }
+
+{ #category : #accessing }
+GtLClassChangeDataExtractor >> classInstanceVariables [
+	^ classInstanceVariables
+]
+
+{ #category : #accessing }
+GtLClassChangeDataExtractor >> classInstanceVariables: aCollection [
+	classInstanceVariables := aCollection
+]
 
 { #category : #accessing }
 GtLClassChangeDataExtractor >> classVariables [
@@ -33,7 +46,9 @@ GtLClassChangeDataExtractor >> extractAllIfError: errorBlock [
 	self extractTargetClassIfError: errorBlock.
 	self extractSuperclassIfError: errorBlock.
 	self extractVariables.
-	self extractPackageIfError: errorBlock
+	self extractTraitComposition.
+	self extractPackageIfError: errorBlock.
+	self extractPackageTagIfError: errorBlock
 ]
 
 { #category : #extraction }
@@ -51,6 +66,24 @@ GtLClassChangeDataExtractor >> extractPackageIfError: errorBlock [
 				ifTrue: [ ^ errorBlock value: (GtLMissingDomainObject new objectName: 'package') ].
 			packageName := pkgName ]
 		ifFalse: [ packageName := targetClass package name ]
+]
+
+{ #category : #extraction }
+GtLClassChangeDataExtractor >> extractPackageTagIfError: errorBlock [
+	"Extract the package tag name from the request.
+	If not provided, use the current package of the target class."
+
+	| packageTagValue |
+	packageTagValue := request packageTag.
+	packageTagValue notNil
+		ifTrue: [ | pkgTagName |
+			pkgTagName := packageTagValue asString trimBoth.
+			pkgTagName isEmpty
+				ifTrue: [ packageTagName := nil ]
+				ifFalse: [ packageTagName := pkgTagName ] ]
+		ifFalse: [ targetClass packageTag isRoot
+				ifTrue: [ packageTagName := nil ]
+				ifFalse: [ packageTagName := targetClass packageTag name ] ]
 ]
 
 { #category : #extraction }
@@ -91,6 +124,20 @@ GtLClassChangeDataExtractor >> extractTargetClassIfError: errorBlock [
 ]
 
 { #category : #extraction }
+GtLClassChangeDataExtractor >> extractTraitComposition [
+	"Extract the trait composition from the request."
+
+	traitComposition := request traitCompositionString
+			ifNil: [ targetClass traitComposition copyTraitExpression ]
+			ifNotNil: [ :aString | 
+				| traitCompositionString |
+				traitCompositionString := aString asString trimBoth.
+				traitCompositionString isEmpty
+					ifTrue: [ targetClass traitComposition copyTraitExpression ]
+					ifFalse: [ targetClass compiler evaluate: traitCompositionString ] ]
+]
+
+{ #category : #extraction }
 GtLClassChangeDataExtractor >> extractVariables [
 	"Extract instance and class variables from the request.
 	If not provided, use the current variables of the target class."
@@ -98,6 +145,10 @@ GtLClassChangeDataExtractor >> extractVariables [
 	instanceVariables := request instanceVariables notEmpty
 		ifTrue: [ request instanceVariables collect: [ :each | each asSymbol asSlot ] ]
 		ifFalse: [ targetClass localSlots collect: [ :slot | slot copy ] ].
+	
+	classInstanceVariables := request classInstanceVariables notEmpty
+		ifTrue: [ request classInstanceVariables collect: [ :each | each asSymbol asSlot ] ]
+		ifFalse: [ targetClass classSide localSlots collect: [ :slot | slot copy ] ].
 	
 	classVariables := request classVariables notEmpty
 		ifTrue: [ request classVariables collect: [ :each | each asSymbol asClassVariable ] ]
@@ -110,13 +161,14 @@ GtLClassChangeDataExtractor >> gtDetailsFor: aView [
 	^ aView columnedList
 		title: 'Details';
 		priority: 10;
-		items: [
-			{ 'Request' -> request.
-			  'Target class' -> targetClass.
-			  'Superclass' -> superclass.
-			  'Instance variables' -> instanceVariables.
-			  'Class variables' -> classVariables.
-			  'Package name' -> packageName } ];
+		items: [ {'Request' -> request.
+				'Target class' -> targetClass.
+				'Superclass' -> superclass.
+				'Instance slots' -> instanceVariables.
+				'Class slots' -> classInstanceVariables.
+				'Class variables' -> classVariables.
+				'Package name' -> packageName.
+				'Package tag name' -> packageTagName} ];
 		column: 'Property' text: #key;
 		column: 'Value' text: #value;
 		send: #value
@@ -140,6 +192,16 @@ GtLClassChangeDataExtractor >> packageName [
 { #category : #accessing }
 GtLClassChangeDataExtractor >> packageName: aString [
 	packageName := aString
+]
+
+{ #category : #accessing }
+GtLClassChangeDataExtractor >> packageTagName [
+	^ packageTagName
+]
+
+{ #category : #accessing }
+GtLClassChangeDataExtractor >> packageTagName: aString [
+	packageTagName := aString
 ]
 
 { #category : #printing }
@@ -181,4 +243,14 @@ GtLClassChangeDataExtractor >> targetClass [
 { #category : #accessing }
 GtLClassChangeDataExtractor >> targetClass: aClass [
 	targetClass := aClass
+]
+
+{ #category : #accessing }
+GtLClassChangeDataExtractor >> traitComposition [
+	^ traitComposition
+]
+
+{ #category : #accessing }
+GtLClassChangeDataExtractor >> traitComposition: anObject [
+	traitComposition := anObject
 ]

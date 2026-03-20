@@ -86,6 +86,11 @@ GtLDataView >> ensureContext [
 
 { #category : #'message performing' }
 GtLDataView >> errorViewWithException: anException isFrozen: aBoolean [
+	^ self errorViewWithException: anException reason: nil isFrozen: aBoolean
+]
+
+{ #category : #'message performing' }
+GtLDataView >> errorViewWithException: anException reason: anExceptionReason isFrozen: aBoolean [
 	| errorName frozenException |
 	
 	frozenException := aBoolean 
@@ -96,9 +101,10 @@ GtLDataView >> errorViewWithException: anException isFrozen: aBoolean [
 		ifTrue: [ self title asString, ' (Error)' ] 
 		ifFalse: [ 'Error' ].
 		
-	^ GtPhlowViewWithError new
+	^ GtLDataViewWithError new
 		title: errorName;
-		exception: frozenException
+		exception: frozenException;
+		errorReason: anExceptionReason
 ]
 
 { #category : #decorating }
@@ -188,7 +194,7 @@ GtLDataView >> magritteObject [
 { #category : #decorating }
 GtLDataView >> magritteObject: aBlockClosure [
 	^ self magritteObject	
-			object: [ self ]
+			object: aBlockClosure
 ]
 
 { #category : #utils }
@@ -225,6 +231,10 @@ GtLDataView >> on: anObject perform: aMessageSymbol withArguments: aCollectionOf
 		on: self class handledExceptions do: [ :anException |
 			self 
 				errorViewWithException: anException 
+				reason: ('Error executing the view method {1} on the class {2}' 
+					format: {
+						aMessageSymbol.
+						anObject class name })
 				isFrozen: false ]
 ]
 
@@ -319,9 +329,7 @@ GtLDataView >> viewDescriptionOn: aStream [
 				<< self title;
 				<<'; '].
 			
-	self dataKey 
-		ifNotNil: [ 
-			aStream 
-				<< 'key: ';
-				print: self dataKey ]
+	aStream 
+			<< 'key: ';
+			print: (self dataKey ifNil: [ '<none>' ])
 ]

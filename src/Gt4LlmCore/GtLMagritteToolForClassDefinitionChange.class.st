@@ -20,9 +20,15 @@ GtLMagritteToolForClassDefinitionChange >> applyClassChangeUsing: extractor [
 		builder := ShiftClassBuilder new.
 		builder fillFor: extractor targetClass.
 		builder superclass: extractor superclass.
+		builder traitComposition: extractor traitComposition. 
 		builder slots: extractor instanceVariables.
+		builder classSlots: extractor classInstanceVariables.
 		builder sharedVariables: extractor classVariables.
 		builder package: extractor packageName.
+		builder tag: extractor packageTagName.
+		
+		extractor targetClass isTrait ifTrue: [ builder beTrait ].
+		
 		builder install ]
 		on: Error
 		do: [ :error |
@@ -46,16 +52,21 @@ GtLMagritteToolForClassDefinitionChange >> classChangeRequestDescription [
 
 { #category : #accessing }
 GtLMagritteToolForClassDefinitionChange >> description [
-	^ 'Changes a class signature by updating superclass, instance variables, class variables, and package.
+	^ 'Changes a class signature by updating superclass, instance variables, class variables, package, package tag. 
+	
+	It also changes a Trait signature by updating instance variables, class instance variables, package, and package tag. In terms of definition, trait is a specialized class, so it have same arguments. It therefore defines trait name using `targetClassName` argument. Trait does not define superclassName, neither `classVariables`.
 
 Example JSON arguments:
 {
   "classChangeRequest": {
     "targetClassName": "MyClass",
     "superclassName": "NewSuperclass",
+    "traitComposition": "{TMyTrait}",
     "instanceVariables": ["slot1", "slot2"],
+    "classInstanceVariables": ["slot3", "slot4"],
     "classVariables": ["SharedValue"],
-    "package": "MyPackage"
+    "package": "MyPackage",
+    "packageTag": "MyTag"
   }
 }
 
@@ -65,7 +76,7 @@ Example JSON response:
   "superclassName": "NewSuperclass",
   "packageName": "MyPackage",
   "instanceSlotNames": ["slot1", "slot2"],
-  "classSlotNames": [],
+  "classSlotNames": ["slot3", "slot4"],
   "classVariableNames": ["SharedValue"],
   "traitCompositionString": "{}"
 }'
@@ -73,7 +84,7 @@ Example JSON response:
 
 { #category : #accessing }
 GtLMagritteToolForClassDefinitionChange >> name [
-	^ 'changeClassSignature'
+	^ 'changeClassOrTraitSignature'
 ]
 
 { #category : #private }

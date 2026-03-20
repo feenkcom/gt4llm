@@ -119,7 +119,7 @@ GtLToolMessage >> gtRequestResponseToolCallTreeFor: aView [
 	requestResponse ifNil: [ ^aView empty ].
 	^ aView forward
 		title: 'API tool call tree';
-		priority: 20;
+		priority: 25.1;
 		object: [ requestResponse ];
 		view: #gtPreviousResponseTreeFor:
 ]
@@ -130,7 +130,7 @@ GtLToolMessage >> gtRequestResponseToolResultTreeFor: aView [
 	requestResponse ifNil: [ ^aView empty ].
 	^ aView forward
 		title: 'API tool result tree';
-		priority: 21;
+		priority: 25.2;
 		object: [ requestResponse ];
 		view: #gtFollowingRequestTreeFor:
 ]

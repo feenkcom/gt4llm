@@ -8,14 +8,26 @@ Class {
 		'request',
 		'targetClassName',
 		'superclass',
-		'instanceVariables',
 		'classVariables',
 		'traitComposition',
 		'packageName',
-		'comment'
+		'comment',
+		'packageTagName',
+		'instanceSlots',
+		'classSlots'
 	],
 	#category : #'Gt4LlmCore-Tools'
 }
+
+{ #category : #accessing }
+GtLClassCreationDataExtractor >> classInstanceVariables [
+	^ classSlots
+]
+
+{ #category : #accessing }
+GtLClassCreationDataExtractor >> classInstanceVariables: aCollection [
+	classSlots := aCollection
+]
 
 { #category : #accessing }
 GtLClassCreationDataExtractor >> classVariables [
@@ -47,6 +59,7 @@ GtLClassCreationDataExtractor >> extractAllIfError: errorBlock [
 	self extractVariables.
 	self extractTraitComposition.
 	self extractPackageIfError: errorBlock.
+	self extractPackageTagIfError: errorBlock.
 	self extractComment
 ]
 
@@ -73,6 +86,18 @@ GtLClassCreationDataExtractor >> extractPackageIfError: errorBlock [
 		ifTrue: [ ^ errorBlock value: (GtLMissingDomainObject new objectName: 'package') ].
 	
 	packageName := pkgName
+]
+
+{ #category : #extraction }
+GtLClassCreationDataExtractor >> extractPackageTagIfError: errorBlock [
+	"Extract and validate the package tag name from the request."
+
+	| packageTagValue pkgTagName |
+	packageTagValue := request packageTag.
+	pkgTagName := (packageTagValue ifNil: [ '' ]) asString trimBoth.
+	pkgTagName isEmpty
+		ifTrue: [ packageTagName := nil ]
+		ifFalse: [ packageTagName := pkgTagName ]
 ]
 
 { #category : #extraction }
@@ -125,15 +150,23 @@ GtLClassCreationDataExtractor >> extractTraitComposition [
 { #category : #extraction }
 GtLClassCreationDataExtractor >> extractVariables [
 	"Extract instance and class variables from the request."
-	| instanceVars classVars |
+	| instanceSlotNames classVars classSlotNames |
 	
-	instanceVars := request instanceVariables.
-	instanceVariables := instanceVars
+	instanceSlotNames := request instanceVariables.
+	instanceSlots := instanceSlotNames
 		ifNil: [ #() ]
 		ifNotNil: [ 
-			(instanceVars isString or: [ instanceVars isSymbol ])
-				ifTrue: [ instanceVars asString asSlotCollection ]
-				ifFalse: [ instanceVars collect: [ :each | each asSymbol asSlot ] ] ].
+			(instanceSlotNames isString or: [ instanceSlotNames isSymbol ])
+				ifTrue: [ instanceSlotNames asString asSlotCollection ]
+				ifFalse: [ instanceSlotNames collect: [ :each | each asSymbol asSlot ] ] ].
+				
+	classSlotNames := request classInstanceVariables.
+	classSlots := classSlotNames
+		ifNil: [ #() ]
+		ifNotNil: [ 
+			(classSlotNames isString or: [ classSlotNames isSymbol ])
+				ifTrue: [ classSlotNames asString asSlotCollection ]
+				ifFalse: [ classSlotNames collect: [ :each | each asSymbol asSlot ] ] ].
 	
 	classVars := request classVariables.
 	classVariables := classVars
@@ -154,10 +187,12 @@ GtLClassCreationDataExtractor >> gtDetailsFor: aView [
 			{ 'Request' -> request.
 			  'Target class name' -> targetClassName.
 			  'Superclass' -> superclass.
-			  'Instance variables' -> instanceVariables.
+			  'Instance slots' -> instanceSlots.
+			  'Class slots' -> classSlots.
 			  'Class variables' -> classVariables.
 			  'Trait composition' -> traitComposition.
 			  'Package name' -> packageName.
+			  'Package tag name' -> packageTagName.
 			  'Comment' -> comment } ];
 		column: 'Property' text: #key;
 		column: 'Value' text: #value;
@@ -166,12 +201,12 @@ GtLClassCreationDataExtractor >> gtDetailsFor: aView [
 
 { #category : #accessing }
 GtLClassCreationDataExtractor >> instanceVariables [
-	^ instanceVariables
+	^ instanceSlots
 ]
 
 { #category : #accessing }
 GtLClassCreationDataExtractor >> instanceVariables: aCollection [
-	instanceVariables := aCollection
+	instanceSlots := aCollection
 ]
 
 { #category : #accessing }
@@ -182,6 +217,16 @@ GtLClassCreationDataExtractor >> packageName [
 { #category : #accessing }
 GtLClassCreationDataExtractor >> packageName: aString [
 	packageName := aString
+]
+
+{ #category : #accessing }
+GtLClassCreationDataExtractor >> packageTagName [
+	^ packageTagName
+]
+
+{ #category : #accessing }
+GtLClassCreationDataExtractor >> packageTagName: aString [
+	packageTagName := aString
 ]
 
 { #category : #printing }
