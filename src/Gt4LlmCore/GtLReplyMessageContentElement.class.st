@@ -6,7 +6,7 @@ I render an assistant reply message with a header, expandable content, and expan
 "
 Class {
 	#name : #GtLReplyMessageContentElement,
-	#superclass : #GtLBasicMessageElement,
+	#superclass : #GtLMessageBasicElement,
 	#instVars : [
 		'headerElement',
 		'toolsExpanderElement',

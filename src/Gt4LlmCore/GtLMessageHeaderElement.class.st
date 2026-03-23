@@ -6,7 +6,7 @@ I render the header of a chat message, including sender information, a compact c
 "
 Class {
 	#name : #GtLMessageHeaderElement,
-	#superclass : #GtLBasicMessageElement,
+	#superclass : #GtLMessageBasicElement,
 	#instVars : [
 		'senderElement',
 		'contentElement',

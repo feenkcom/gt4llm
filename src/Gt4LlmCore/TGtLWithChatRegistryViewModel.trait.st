@@ -1,5 +1,5 @@
 Trait {
-	#name : #TGtLWithRegistryViewModel,
+	#name : #TGtLWithChatRegistryViewModel,
 	#instVars : [
 		'registryViewModel'
 	],
@@ -7,17 +7,17 @@ Trait {
 }
 
 { #category : #'private - hooks' }
-TGtLWithRegistryViewModel >> onRegistryViewModelChanged [
+TGtLWithChatRegistryViewModel >> onRegistryViewModelChanged [
 	"Hook for subclasses/clients when the registry view model changes."
 ]
 
 { #category : #accessing }
-TGtLWithRegistryViewModel >> registryViewModel [
+TGtLWithChatRegistryViewModel >> registryViewModel [
 	^ registryViewModel
 ]
 
 { #category : #accessing }
-TGtLWithRegistryViewModel >> registryViewModel: anObject [
+TGtLWithChatRegistryViewModel >> registryViewModel: anObject [
 	registryViewModel = anObject ifTrue: [ ^ self ].
 	registryViewModel ifNotNil: [ :anOldRegistryViewModel |
 		self unsubscribeFromRegistryViewModel ].
@@ -27,11 +27,11 @@ TGtLWithRegistryViewModel >> registryViewModel: anObject [
 ]
 
 { #category : #'private - hooks' }
-TGtLWithRegistryViewModel >> subscribeToRegistryViewModel [
+TGtLWithChatRegistryViewModel >> subscribeToRegistryViewModel [
 	"Hook for subclasses/clients to subscribe to the current registry view model."
 ]
 
 { #category : #'private - hooks' }
-TGtLWithRegistryViewModel >> unsubscribeFromRegistryViewModel [
+TGtLWithChatRegistryViewModel >> unsubscribeFromRegistryViewModel [
 	"Hook for subclasses/clients to unsubscribe from the previous registry view model."
 ]

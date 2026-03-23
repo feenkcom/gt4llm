@@ -270,6 +270,13 @@ GtLChat >> ensureReplyMessage [
 	^ aReplyMessage
 ]
 
+{ #category : #'api - message' }
+GtLChat >> firstMessage [
+	^ self messages
+		ifNotNil: [ :aCollection | aCollection ifNotEmpty: #first ifEmpty: [ nil ] ]
+		ifNil: [ nil ]
+]
+
 { #category : #accessing }
 GtLChat >> format [
 	^ responseFormat 
@@ -301,7 +308,7 @@ GtLChat >> gtDefaultInspectorTool [
 		name: 'Chat: ', self gtDisplayString
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #printing }
 GtLChat >> gtDisplayOn: stream [
 	stream nextPutAll: 'Chat'.
 	messages isEmpty
@@ -336,6 +343,16 @@ GtLChat >> gtInstructionsFor: aView [
 		title: 'Instructions';
 		object: [ instructions ];
 		view: #gtInstructionFor:
+]
+
+{ #category : #printing }
+GtLChat >> gtLimitedDisplayString [
+	^ String
+		streamContents: [ :aStream | 
+			self firstMessage
+				ifNotNil: [ :aMessage | aMessage gtDisplayOn: aStream ]
+				ifNil: [ self gtDisplayOn: aStream ] ]
+		limitedTo: 60
 ]
 
 { #category : #'gt - extensions' }
@@ -387,6 +404,33 @@ GtLChat >> gtProviderFor: anAction [
 		label: 'Provider';
 		tooltip: 'Spawn the provider';
 		action: [ :button | button phlow spawnObject: provider ]
+]
+
+{ #category : #'gt - extensions' }
+GtLChat >> gtRegistryInspectChatActionFor: anAction context: aPhlowContext [
+	<gtAction>
+	^ anAction button
+		target: GtLChatRegistryActionTarget;
+		icon: BrGlamorousVectorIcons inspect;
+		tooltip: 'Inspect';
+		menuItemPreview: [ self gtLimitedDisplayString ];
+		menuItemGroup: BrMenuItemGroupConfiguration navigation;
+		action: [ :aButton | aButton phlow spawnObject: self ]
+]
+
+{ #category : #'gt - extensions' }
+GtLChat >> gtRegistryRemoveChatActionFor: anAction context: aPhlowContext [
+	<gtAction>
+	| aRegistry |
+	aRegistry := aPhlowContext at: #chatRegistry ifAbsent: [ ^ anAction noAction ].
+
+	^ anAction button
+		target: GtLChatRegistryActionTarget;
+		icon: BrGlamorousVectorIcons bin;
+		tooltip: 'Remove';
+		menuItemPreview: [ self gtLimitedDisplayString ];
+		menuItemGroup: BrMenuItemGroupConfiguration removal;
+		action: [ :aButton | aRegistry removeChat: self ]
 ]
 
 { #category : #views }
@@ -446,7 +490,6 @@ GtLChat >> instructions [
 
 { #category : #accessing }
 GtLChat >> instructions: anObject [
-	GtJustContextStackSignal emit.
 	instructions := anObject
 ]
 

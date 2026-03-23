@@ -111,6 +111,11 @@ GtLNewMessageViewModel >> initialize [
 	completionStrategy := LeCompletionStrategy new database: database.
 ]
 
+{ #category : #'api - testing' }
+GtLNewMessageViewModel >> isNewMessageViewModel [
+	^ true
+]
+
 { #category : #'private - event handling' }
 GtLNewMessageViewModel >> onContentsChangedSource: aSource [ 
 	self announcer

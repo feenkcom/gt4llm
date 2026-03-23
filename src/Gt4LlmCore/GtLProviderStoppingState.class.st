@@ -19,3 +19,11 @@ GtLProviderStoppingState >> ifCanStop: aCanBlock ifStopping: aStoppingBlock ifId
 	
 	^ aStoppingBlock value
 ]
+
+{ #category : #'api - accessing' }
+GtLProviderStoppingState >> label [
+	"Return a simple short string identifying the state"
+
+	<return: #String>
+	^ 'stopping'
+]

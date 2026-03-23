@@ -32,17 +32,28 @@ GtLChatRegistry >> announcer [
 	^ announcer
 ]
 
+{ #category : #'api - converting' }
+GtLChatRegistry >> asViewModel [
+	^ GtLChatRegistryViewModel new registry: self
+]
+
 { #category : #accessing }
 GtLChatRegistry >> chats [
-	^ chats
+	^ chats value
+]
+
+{ #category : #accessing }
+GtLChatRegistry >> chatsStream [
+	^ GtLAsyncChatStream forChatRegistry: self
 ]
 
 { #category : #accessing }
 GtLChatRegistry >> clearChats [
 	| chatsCopy |
-	chatsCopy := chats copy.
-	chatsCopy do: [ :each | each announcer unsubscribe: self ].
-	chats removeAll.
+	chats lock: [ :theChats | 
+		chatsCopy := theChats copy.
+		chatsCopy do: [ :each | each announcer unsubscribe: self ].
+		theChats removeAll ].
 	chatsCopy do: [ :each | self announce: (GtLChatRemovedAnnouncement new chat: each) ]
 ]
 
@@ -63,28 +74,31 @@ GtLChatRegistry >> gtViewChatsOn: aView [
 		column: 'Finished'
 			text: [ :aChat | aChat messages isEmpty or: [ aChat isFinishedSuccesss ] ]
 			width: 100;
-		contextItemLabel: 'Inspect chat'
-			action: [ :anElement :aChat | anElement phlow spawnObject: aChat ];
-		contextItemLabel: 'Remove chat'
-			action: [ :anElement :aChat | self removeChat: aChat ];
+		dynamicContextItems: [ :anElement :aChat | 
+			GtLChatRegistryActionTarget
+				menuItemsForObject: aChat
+				inContext: (GtPhlowContext new
+						at: #chatRegistry put: self;
+						yourself)
+				hostElement: anElement ];
 		updateWhen: GtLChatAnnouncement in: self announcer
 ]
 
 { #category : #'as yet unclassified' }
 GtLChatRegistry >> hasChats [
-	^ chats notEmpty
+	^ chats lock: [ :theChat | theChat notEmpty ]
 ]
 
 { #category : #initialization }
 GtLChatRegistry >> initialize [
 	super initialize.
-	chats := OrderedCollection new.
+	chats := AsyncMutex for: OrderedCollection new.
 	announcer := Announcer new
 ]
 
 { #category : #accessing }
 GtLChatRegistry >> lastChat [
-	^ chats last
+	^ chats lock: [ :theChat | theChat last ]
 ]
 
 { #category : #convenience }
@@ -120,23 +134,33 @@ GtLChatRegistry >> onChatMessagesChanged: anAnnouncement [
 
 { #category : #accessing }
 GtLChatRegistry >> registerChat: aChat [
-	chats add: aChat.
 	aChat announcer
 		when: GtLChatMessagesChanged
 		send: #onChatMessagesChanged:
 		to: self.
-	self announce: (GtLChatAddedAnnouncement new chat: aChat).
+	chats lock: [ :theChats | theChats add: aChat ].
+	self
+		announce: (GtLChatAddedAnnouncement new
+				registry: self;
+				chat: aChat).
 	^ aChat
 ]
 
 { #category : #accessing }
 GtLChatRegistry >> registry [
-	^ chats
+	^ self chats
 ]
 
 { #category : #accessing }
 GtLChatRegistry >> removeChat: aChat [
-	(aChat announcer hasSubscriber: self) ifTrue: [ aChat announcer unsubscribe: self ].
-	(chats remove: aChat ifAbsent: [ ^ self ]) ifNotNil: [
-		self announce: (GtLChatRemovedAnnouncement new chat: aChat) ]
+	| removedChat |
+	(aChat announcer hasSubscriber: self)
+		ifTrue: [ aChat announcer unsubscribe: self ].
+	chats
+		lock: [ :theChat | removedChat := theChat remove: aChat ifAbsent: [ nil ] ].
+	removedChat
+		ifNotNil: [ self
+				announce: (GtLChatRemovedAnnouncement new
+						registry: self;
+						chat: aChat) ]
 ]

@@ -6,7 +6,7 @@ I render a one-line summary as multiple labels derived from a chat message.
 "
 Class {
 	#name : #GtMessageOneLineMultiLabelSummaryElement,
-	#superclass : #GtLBasicMessageElement,
+	#superclass : #GtLMessageBasicElement,
 	#traits : 'TBrSizeAdjustable',
 	#classTraits : 'TBrSizeAdjustable classTrait',
 	#instVars : [

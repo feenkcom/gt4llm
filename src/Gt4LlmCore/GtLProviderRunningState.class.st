@@ -28,6 +28,14 @@ GtLProviderRunningState >> ifCanStop: aCanBlock ifStopping: aStoppingBlock ifIdl
 	^ aCanBlock value
 ]
 
+{ #category : #'api - accessing' }
+GtLProviderRunningState >> label [
+	"Return a simple short string identifying the state"
+
+	<return: #String>
+	^ 'running'
+]
+
 { #category : #'api - changes' }
 GtLProviderRunningState >> stop [
 	"Interrupt ongoing provider execution."

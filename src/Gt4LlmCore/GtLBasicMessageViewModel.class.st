@@ -92,6 +92,11 @@ GtLBasicMessageViewModel >> isAssistantRole [
 	^ self threadMessage isAssistantRole
 ]
 
+{ #category : #'api - testing' }
+GtLBasicMessageViewModel >> isNewMessageViewModel [
+	^ false
+]
+
 { #category : #accessing }
 GtLBasicMessageViewModel >> messageHeaderElement [
 	^ GtLMessageHeaderElement new

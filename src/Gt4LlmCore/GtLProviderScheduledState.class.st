@@ -13,6 +13,14 @@ GtLProviderScheduledState >> ifCanStop: aCanBlock ifStopping: aStoppingBlock ifI
 	^ aCanBlock value
 ]
 
+{ #category : #'api - accessing' }
+GtLProviderScheduledState >> label [
+	"Return a simple short string identifying the state"
+
+	<return: #String>
+	^ 'starting'
+]
+
 { #category : #'api - changes' }
 GtLProviderScheduledState >> running [
 	"Set to running state, which means that a message is processed."
