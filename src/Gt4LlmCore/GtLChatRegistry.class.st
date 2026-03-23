@@ -43,11 +43,6 @@ GtLChatRegistry >> chats [
 ]
 
 { #category : #accessing }
-GtLChatRegistry >> chatsStream [
-	^ GtLAsyncChatStream forChatRegistry: self
-]
-
-{ #category : #accessing }
 GtLChatRegistry >> clearChats [
 	| chatsCopy |
 	chats lock: [ :theChats | 
@@ -55,6 +50,45 @@ GtLChatRegistry >> clearChats [
 		chatsCopy do: [ :each | each announcer unsubscribe: self ].
 		theChats removeAll ].
 	chatsCopy do: [ :each | self announce: (GtLChatRemovedAnnouncement new chat: each) ]
+]
+
+{ #category : #accessing }
+GtLChatRegistry >> defaultChatDescription [
+	<return: #GtLChatRegistryDescription>
+	^ self descriptions ifNotEmpty: #first ifEmpty: [ nil ]
+]
+
+{ #category : #accessing }
+GtLChatRegistry >> descriptions [
+	<return: #Collection of: #GtLChatRegistryDescription>
+	| somePragmas someDescriptions |
+	somePragmas := Pragma
+			allNamed: #gtLlmRegistry
+			from: self class
+			to: GtLChatRegistry.
+
+	someDescriptions := somePragmas
+			collect: [ :eachPragma | 
+				[ | aDescription |
+				aDescription := self perform: eachPragma methodSelector.
+				aDescription definingMethod: eachPragma method.
+				aDescription ]
+					on: Error
+					do: [ :anException | 
+						anException
+							emit;
+							return: nil ] ]
+			thenReject: #isNil.
+
+	someDescriptions
+		ifEmpty: [ someDescriptions := {GtLChatRegistryDescription new
+						label: 'Basic Chat';
+						priority: 50;
+						stencil: [ self newChat ]} ].
+
+	GtPhlowUtility sortByPriority: someDescriptions.
+
+	^ someDescriptions
 ]
 
 { #category : #accessing }
@@ -112,13 +146,29 @@ GtLChatRegistry >> newChat [
 
 { #category : #accessing }
 GtLChatRegistry >> newGtChat [
+	^ self newGtChatWithProvider: nil
+]
+
+{ #category : #descriptions }
+GtLChatRegistry >> newGtChatDescription [
+	<gtLlmRegistry>
+	^ GtLChatRegistryDescription new
+		label: 'GT Chat';
+		priority: 50;
+		chat: [ :aProvider | self newGtChatWithProvider: aProvider ]
+]
+
+{ #category : #accessing }
+GtLChatRegistry >> newGtChatWithProvider: aProviderOrNil [
 	| chat |
-	chat := GtLChat new
+	chat := GtLChat new.
+	aProviderOrNil ifNotNil: [ chat provider: aProviderOrNil ].
+	chat
 		tools: GtLTools gt;
 		markdownResponse;
 		gtPageExplanation: 'Rules for Moldable Development for Glamorous Toolkit';
-		gtPageExplanation: 'Examples by example'";
-		gtPageExplanation: 'Inspector phlow views by example'".
+		gtPageExplanation: 'Examples by example'.	";
+		gtPageExplanation: 'Inspector phlow views by example'"
 	^ self registerChat: chat
 ]
 

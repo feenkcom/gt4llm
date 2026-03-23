@@ -4,10 +4,18 @@ Class {
 	#instVars : [
 		'registryViewModel',
 		'connectionRegistry',
-		'selectedConnection'
+		'selectedConnection',
+		'selectedDescription'
 	],
 	#category : #'Gt4LlmCore-UI - View Models'
 }
+
+{ #category : #'as yet unclassified' }
+GtLChatRegistryWithConnectionsViewModel >> addChat [
+	| aProvider |
+	aProvider := self selectedConnection buildProvider.
+	^ self selectedDescription newChatWithProvider: aProvider
+]
 
 { #category : #accessing }
 GtLChatRegistryWithConnectionsViewModel >> announcer [
@@ -17,6 +25,11 @@ GtLChatRegistryWithConnectionsViewModel >> announcer [
 { #category : #converting }
 GtLChatRegistryWithConnectionsViewModel >> asChatRegistryWithConnectionsViewModel [
 	^ self
+]
+
+{ #category : #accessing }
+GtLChatRegistryWithConnectionsViewModel >> chatDescriptions [
+	^ self registryViewModel chatDescriptions
 ]
 
 { #category : #accessing }
@@ -35,6 +48,11 @@ GtLChatRegistryWithConnectionsViewModel >> connectionRegistry [
 { #category : #accessing }
 GtLChatRegistryWithConnectionsViewModel >> connectionRegistry: aConnectionRegistry [
 	connectionRegistry := aConnectionRegistry
+]
+
+{ #category : #accessing }
+GtLChatRegistryWithConnectionsViewModel >> defaultChatDescription [
+	^ self registryViewModel defaultChatDescription
 ]
 
 { #category : #accessing }
@@ -62,4 +80,15 @@ GtLChatRegistryWithConnectionsViewModel >> selectedConnection [
 { #category : #accessing }
 GtLChatRegistryWithConnectionsViewModel >> selectedConnection: aConnection source: aSource [
 	selectedConnection := aConnection
+]
+
+{ #category : #accessing }
+GtLChatRegistryWithConnectionsViewModel >> selectedDescription [
+	^ selectedDescription
+		ifNil: [ selectedDescription := self defaultChatDescription ]
+]
+
+{ #category : #accessing }
+GtLChatRegistryWithConnectionsViewModel >> selectedDescription: aDescription source: aSource [
+	selectedDescription := aDescription
 ]
