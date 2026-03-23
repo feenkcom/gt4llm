@@ -117,7 +117,7 @@ GtLToolForExampleClassesRun >> extractExamplesFromPackagesFrom: arguments in: ex
 	packageNames
 		do: [ :packageName | 
 			| package |
-			package := RPackageOrganizer default
+			package := self packageOrganizer
 					packageNamed: packageName asString
 					ifAbsent: [ notFound
 							add: (Dictionary
