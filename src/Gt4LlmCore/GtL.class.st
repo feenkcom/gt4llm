@@ -16,7 +16,7 @@ GtL class >> gt [
 
 { #category : #'instance creation' }
 GtL class >> gtChat [
-	^ GtLChatRegistry current newGtChat
+	^ self gt
 ]
 
 { #category : #'class initialization' }

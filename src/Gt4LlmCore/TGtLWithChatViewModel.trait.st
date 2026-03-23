@@ -7,6 +7,11 @@ Trait {
 }
 
 { #category : #'api - chat view model' }
+TGtLWithChatViewModel >> chat [
+	^ self chatViewModel ifNotNil: #chat
+]
+
+{ #category : #'api - chat view model' }
 TGtLWithChatViewModel >> chatViewModel [
 	^ chatViewModel
 ]

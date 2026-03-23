@@ -6,7 +6,7 @@ I render a user chat message with a header and an expandable content area.
 "
 Class {
 	#name : #GtLUserMessageContentElement,
-	#superclass : #GtLBasicMessageElement,
+	#superclass : #GtLMessageBasicElement,
 	#instVars : [
 		'headerElement',
 		'contentsExpanderElement',

@@ -6,7 +6,7 @@ I render the computed views of a chat message content.
 "
 Class {
 	#name : #GtLMessageViewsElement,
-	#superclass : #GtLBasicMessageElement,
+	#superclass : #GtLMessageBasicElement,
 	#instVars : [
 		'viewUpdater'
 	],

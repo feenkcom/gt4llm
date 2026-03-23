@@ -6,7 +6,7 @@ I render a compact message header focused on sender and date, together with cont
 "
 Class {
 	#name : #GtLMessageSenderAndDateHeaderElement,
-	#superclass : #GtLBasicMessageElement,
+	#superclass : #GtLMessageBasicElement,
 	#instVars : [
 		'senderElement',
 		'toolbarElement',

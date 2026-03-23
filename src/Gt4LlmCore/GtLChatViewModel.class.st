@@ -26,6 +26,13 @@ GtLChatViewModel >> assistantChat [
 	^ self chat
 ]
 
+{ #category : #'api - accessing' }
+GtLChatViewModel >> firstMessageViewModel [
+	^ (self messageViewModels reject: #isNewMessageViewModel)
+		ifNotEmpty: [ :aCollection | aCollection first ]
+		ifEmpty: [ nil ]
+]
+
 { #category : #initialization }
 GtLChatViewModel >> initialize [
 	super initialize.

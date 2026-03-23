@@ -6,7 +6,7 @@ I render a one-line summary as a single label.
 "
 Class {
 	#name : #GtMessageOneLineOneLabelSummaryElement,
-	#superclass : #GtLBasicMessageElement,
+	#superclass : #GtLMessageBasicElement,
 	#traits : 'TBrSizeAdjustable',
 	#classTraits : 'TBrSizeAdjustable classTrait',
 	#instVars : [
