@@ -81,7 +81,8 @@ GtLChatRegistry >> gtViewChatsOn: aView [
 						at: #chatRegistry put: self;
 						yourself)
 				hostElement: anElement ];
-		updateWhen: GtLChatAnnouncement in: self announcer
+		updateWhen: GtLChatAnnouncement in: self announcer;
+		updateWhen: GtLChatRegistryAnnouncement in: self announcer
 ]
 
 { #category : #'as yet unclassified' }
@@ -135,7 +136,7 @@ GtLChatRegistry >> onChatMessagesChanged: anAnnouncement [
 { #category : #accessing }
 GtLChatRegistry >> registerChat: aChat [
 	aChat announcer
-		when: GtLChatMessagesChanged
+		when: GtLChatAnnouncement
 		send: #onChatMessagesChanged:
 		to: self.
 	chats lock: [ :theChats | theChats add: aChat ].
