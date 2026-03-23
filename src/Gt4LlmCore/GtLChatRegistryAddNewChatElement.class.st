@@ -25,22 +25,23 @@ GtLChatRegistryAddNewChatElement >> connectionLabel [
 
 { #category : #initialization }
 GtLChatRegistryAddNewChatElement >> defaultLayout [
-	^ BlLinearLayout horizontal alignCenterLeft
+	^ BlLinearLayout horizontal
+		alignCenterLeft;
+		cellSpacing: 5
 ]
 
 { #category : #initialization }
 GtLChatRegistryAddNewChatElement >> initialize [
 	super initialize.
 
-	self initializeAddChatElement.
 	self initializeChatDescriptionsElement.
 	self initializeConnectionElement.
+	self initializeAddChatElement.
 
-	self addChild: addChatElement.
-	self addChild: ((self newLabelWithText: 'New') margin: (BlInsets right: 3)).
 	self addChild: chatsElement.
-	self addChild: ((self newLabelWithText: 'with') margin: (BlInsets left: 3 right: 3)).
+	self addChild: (self newLabelWithText: 'with').
 	self addChild: connectionElement.
+	self addChild: addChatElement.
 
 	self fitContent
 ]
@@ -57,7 +58,10 @@ GtLChatRegistryAddNewChatElement >> initializeAddChatElement [
 { #category : #initialization }
 GtLChatRegistryAddNewChatElement >> initializeChatDescriptionsElement [
 	chatsElement := (BrButton new
-			aptitude: BrGlamorousButtonWithLabelAptitude;
+			aptitude: BrGlamorousButtonRectangularAptitude;
+			addAptitude: (BrGlamorousButtonExteriorAptitude new
+					backgroundPaint: self theme default backdropBackground);
+			addAptitude: BrGlamorousButtonLabelAptitude;
 			addAptitude: BrGlamorousButtonIconDropdownAptitude;
 			label: self chatDescriptionLabel)
 			addAptitude: (BrGlamorousWithExplicitDropdownAptitude new
@@ -71,7 +75,10 @@ GtLChatRegistryAddNewChatElement >> initializeChatDescriptionsElement [
 { #category : #initialization }
 GtLChatRegistryAddNewChatElement >> initializeConnectionElement [
 	connectionElement := (BrButton new
-			aptitude: BrGlamorousButtonWithLabelAptitude;
+			aptitude: BrGlamorousButtonRectangularAptitude;
+			addAptitude: (BrGlamorousButtonExteriorAptitude new
+					backgroundPaint: self theme default backdropBackground);
+			addAptitude: BrGlamorousButtonLabelAptitude;
 			addAptitude: BrGlamorousButtonIconDropdownAptitude;
 			label: self connectionLabel)
 			addAptitude: (BrGlamorousWithExplicitDropdownAptitude new

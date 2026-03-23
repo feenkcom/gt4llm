@@ -35,16 +35,12 @@ GtLChatRegistryElement >> initialize [
 GtLChatRegistryElement >> initializeAddNewChatElement [
 	addNewChatElement := GtLChatRegistryAddNewChatElement new
 			hMatchParent;
-			padding: (BlInsets top: 3 left: 10 bottom: 3 right: 10);
-			background: self theme default contentBackground;
-			addAptitude: BrGlamorousFocusableShadowAptitude new
+			padding: (BlInsets top: 3 left: 0 bottom: 3 right: 0)
 ]
 
 { #category : #initialization }
 GtLChatRegistryElement >> initializeListElement [
 	listElement := GtLChatRegistryListElement new
-			background: self theme default contentBackground;
-			addAptitude: BrGlamorousFocusableShadowAptitude new
 ]
 
 { #category : #'private - instance creation' }
