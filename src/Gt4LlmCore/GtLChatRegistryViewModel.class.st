@@ -21,16 +21,19 @@ GtLChatRegistryViewModel >> asChatRegistryWithConnectionsViewModel [
 ]
 
 { #category : #accessing }
+GtLChatRegistryViewModel >> chatDescriptions [
+	^ self registry descriptions
+]
+
+{ #category : #accessing }
 GtLChatRegistryViewModel >> chatViewModels [
 	^ self registry chats
 		collect: [ :eachChat | self ensureChatViewModelFor: eachChat ]
 ]
 
 { #category : #accessing }
-GtLChatRegistryViewModel >> chatViewModelsStream [
-	^ self registry chatsStream
-		map: [ :aChat | aChat asViewModel ]
-		cache: chatViewModelsCache
+GtLChatRegistryViewModel >> defaultChatDescription [ 
+	^ self registry defaultChatDescription
 ]
 
 { #category : #accessing }

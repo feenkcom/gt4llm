@@ -2,10 +2,19 @@ Class {
 	#name : #GtLChatRegistryAddNewChatElement,
 	#superclass : #GtLChatRegistryBasicElement,
 	#instVars : [
-		'connectionElement'
+		'connectionElement',
+		'chatsElement',
+		'addChatElement'
 	],
 	#category : #'Gt4LlmCore-UI - Registry'
 }
+
+{ #category : #initialization }
+GtLChatRegistryAddNewChatElement >> chatDescriptionLabel [
+	^ self registryViewModel
+		ifNotNil: [ :aViewModel | aViewModel selectedDescription ifNotNil: #label ifNil: [ 'Chat' ] ]
+		ifNil: [ 'Chat' ]
+]
 
 { #category : #initialization }
 GtLChatRegistryAddNewChatElement >> connectionLabel [
@@ -23,20 +32,54 @@ GtLChatRegistryAddNewChatElement >> defaultLayout [
 GtLChatRegistryAddNewChatElement >> initialize [
 	super initialize.
 
+	self initializeAddChatElement.
+	self initializeChatDescriptionsElement.
 	self initializeConnectionElement.
 
-	self
-		addChild: ((self newLabelWithText: 'New chat with') margin: (BlInsets right: 3)).
+	self addChild: addChatElement.
+	self addChild: ((self newLabelWithText: 'New') margin: (BlInsets right: 3)).
+	self addChild: chatsElement.
+	self addChild: ((self newLabelWithText: 'with') margin: (BlInsets left: 3 right: 3)).
 	self addChild: connectionElement.
 
 	self fitContent
 ]
 
 { #category : #initialization }
-GtLChatRegistryAddNewChatElement >> initializeConnectionElement [
-	connectionElement := self newConnectionBasicElement
+GtLChatRegistryAddNewChatElement >> initializeAddChatElement [
+	addChatElement := BrButton new
+			aptitude: BrGlamorousButtonWithIconAptitude;
+			icon: BrGlamorousVectorIcons add;
+			label: 'Add chat';
+			action: [ :aButtonElement :aButtonModel :anEvent | self onAddChat: anEvent ]
+]
+
+{ #category : #initialization }
+GtLChatRegistryAddNewChatElement >> initializeChatDescriptionsElement [
+	chatsElement := (BrButton new
+			aptitude: BrGlamorousButtonWithLabelAptitude;
+			addAptitude: BrGlamorousButtonIconDropdownAptitude;
+			label: self chatDescriptionLabel)
 			addAptitude: (BrGlamorousWithExplicitDropdownAptitude new
-					handle: [ self newConnectionBasicElement ]
+					handle: [ BrButton new
+							aptitude: BrGlamorousButtonWithLabelAptitude - BrGlamorousButtonExteriorAptitude;
+							addAptitude: BrGlamorousButtonIconDropdownAptitude;
+							label: self chatDescriptionLabel ]
+					menu: [ self newChatDescriptionsMenuModel ])
+]
+
+{ #category : #initialization }
+GtLChatRegistryAddNewChatElement >> initializeConnectionElement [
+	connectionElement := (BrButton new
+			aptitude: BrGlamorousButtonWithLabelAptitude;
+			addAptitude: BrGlamorousButtonIconDropdownAptitude;
+			label: self connectionLabel)
+			addAptitude: (BrGlamorousWithExplicitDropdownAptitude new
+					handle: [ (BrButton new
+							aptitude: BrGlamorousButtonWithLabelAptitude - BrGlamorousButtonExteriorAptitude;
+							addAptitude: BrGlamorousButtonIconDropdownAptitude;
+							label: self connectionLabel)
+							removeAptitude: BrGlamorousButtonExteriorAptitude ]
 					menu: [ self newAvailableConnectionsMenuModel ])
 ]
 
@@ -60,9 +103,30 @@ GtLChatRegistryAddNewChatElement >> newAvailableConnectionsMenuModel [
 ]
 
 { #category : #initialization }
+GtLChatRegistryAddNewChatElement >> newChatDescriptionsMenuModel [
+	| someDescriptions aMenuItems |
+	someDescriptions := self registryViewModel chatDescriptions.
+	someDescriptions ifEmpty: [ ^ nil ].
+
+	aMenuItems := BrMenuItems new.
+	someDescriptions
+		do: [ :eachDescription | 
+			| anItem |
+			anItem := BrMenuActionItem new
+					label: [ eachDescription label ];
+					action: [ :anElement :aButtonModel :anEvent | 
+						self onSelectDescription: eachDescription ];
+					definition: [ eachDescription definingMethod ].
+			aMenuItems addItem: anItem ].
+
+	^ aMenuItems
+]
+
+{ #category : #initialization }
 GtLChatRegistryAddNewChatElement >> newConnectionBasicElement [
 	^ BrButton new
 		aptitude: BrGlamorousButtonWithLabelAptitude;
+		addAptitude: BrGlamorousButtonIconDropdownAptitude;
 		label: self connectionLabel
 ]
 
@@ -71,6 +135,13 @@ GtLChatRegistryAddNewChatElement >> newLabelWithText: aString [
 	^ BrLabel new
 		aptitude: BrGlamorousLabelAptitude new;
 		text: aString
+]
+
+{ #category : #'private - event handling' }
+GtLChatRegistryAddNewChatElement >> onAddChat: anEvent [ 
+	self registryViewModel ifNil: [ ^ self ].
+	
+	self registryViewModel addChat
 ]
 
 { #category : #'private - hooks' }
@@ -84,7 +155,14 @@ GtLChatRegistryAddNewChatElement >> onRegistryViewModelChanged [
 GtLChatRegistryAddNewChatElement >> onSelectConnection: aConnection [
 	self registryViewModel selectedConnection: aConnection source: self.
 	
-	BlTaskAction enqueueElement: self action: [ self updateElement ]
+	BlTaskAction enqueueElement: self action: [ self updateConnectionElement ]
+]
+
+{ #category : #'private - event handling' }
+GtLChatRegistryAddNewChatElement >> onSelectDescription: aDescription [
+	self registryViewModel selectedDescription: aDescription source: self.
+	
+	BlTaskAction enqueueElement: self action: [ self updateDescriptionElement ]
 ]
 
 { #category : #accessing }
@@ -98,6 +176,12 @@ GtLChatRegistryAddNewChatElement >> updateConnectionElement [
 ]
 
 { #category : #'private - updating' }
+GtLChatRegistryAddNewChatElement >> updateDescriptionElement [
+	chatsElement label: self chatDescriptionLabel
+]
+
+{ #category : #'private - updating' }
 GtLChatRegistryAddNewChatElement >> updateElement [
+	self updateDescriptionElement.
 	self updateConnectionElement
 ]
