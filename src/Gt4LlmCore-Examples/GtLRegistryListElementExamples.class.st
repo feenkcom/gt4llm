@@ -42,14 +42,61 @@ GtLRegistryListElementExamples >> registryListUpdatesWhenChatsAreAdded [
 { #category : #examples }
 GtLRegistryListElementExamples >> registryListUpdatesWhenChatsAreAdded_removeOneChat [
 	<gtExample>
-	| scripter |
+	| scripter anItemId |
 	scripter := self registryListUpdatesWhenChatsAreAdded.
+
+	anItemId := #'registry-chat' asBlocElementId indexed: 2.
+	scripter menuStep
+		openContextMenu;
+		assertMenuContainerExist;
+		// anItemId;
+		play.
+
+	scripter menuStep
+		hoverMenuItemWithId: #'chat--remove';
+		clickMenuItemWithId: #'chat--remove';
+		onPopover;
+		play.
+
+	self assert: scripter chatCount: 2.
+		
+	^ scripter
+]
+
+{ #category : #examples }
+GtLRegistryListElementExamples >> registryListUpdatesWhenChatsAreAdded_removeTwoChats [
+	<gtExample>
+	| scripter anItemAId anItemBId |
+	scripter := self registryListUpdatesWhenChatsAreAdded.
+
+	anItemAId := #'registry-chat' asBlocElementId indexed: 2.
+	anItemBId := #'registry-chat' asBlocElementId indexed: 3.
+
+	scripter click
+		// anItemAId;
+		play.
+	scripter click
+		modifiers: BlKeyModifiers shift;
+		// anItemBId;
+		play.
+
+	self
+		assert: (scripter element query // BrColumnedList) anyOne selectedItems size
+		equals: 2.
 
 	scripter menuStep
 		openContextMenu;
-		// #scrollable;
-		onChildAt: 2;
+		assertMenuContainerExist;
+		// anItemAId;
 		play.
+
+	scripter menuStep
+		hoverMenuItemWithId: #'chat--remove';
+		clickMenuItemWithId: #'chat--remove';
+		onPopover;
+		play.
+
+	self assert: scripter chatCount: 1.
 
 	^ scripter
 ]

@@ -66,7 +66,7 @@ GtLWorldChatRegistryDropdown >> initializeDropdownElement [
 { #category : #initialization }
 GtLWorldChatRegistryDropdown >> initializeForWorldElement: aWorldElement [
 
-	aWorldElement announcer
+	aWorldElement announcer weak
 		when: GtWorldElementChatRegistryChangedAnnouncement
 		send: #actOnWorldRegistryChanged:
 		to: self.
@@ -95,25 +95,29 @@ GtLWorldChatRegistryDropdown >> newDropdownButton [
 
 { #category : #private }
 GtLWorldChatRegistryDropdown >> newDropdownContent [
-	| container |
-	container := BrFrame new exact: 600@400.
 	listElement := self newListElement.
-	container addChild: listElement.
-	container addAptitude:  (BrGlamorousWithVerticalResizerAptitude
-				+ BrGlamorousWithHorizontalResizerAptitude new beLeft).
-	^ container
+	listElement
+		addAptitude: (BrGlamorousPopoverResizableAptitude new whenResizedDo: [ :anEvent |  ]);
+		hExact: 600.
+
+	^ listElement
 ]
 
 { #category : #private }
 GtLWorldChatRegistryDropdown >> newListElement [
-	| phlowView |
-	
-	phlowView := self registry 
-		ifNil: [ GtPhlowEmptyView new ]
-		ifNotNil: [ 
-			self registry gtViewChatsOn: GtPhlowEmptyView new ].
-		
-	^ phlowView asElementDo: [ :element | element ]
+	^ GtLChatRegistryElement new
+		registryViewModel: self registry asViewModel;
+		padding: (BlInsets all: 10);
+		withDeselectionOnSpawnEvents;
+		when: GtPhlowObjectToSpawn
+			do: [ :anEvent | self onGtPhlowObjectToSpawn: anEvent ]
+]
+
+{ #category : #private }
+GtLWorldChatRegistryDropdown >> onGtPhlowObjectToSpawn: anEvent [
+	BlTaskAction
+		enqueueElement: self
+		action: [ dropdownElement dispatchEvent: BrDropdownHideWish new ]
 ]
 
 { #category : #accessing }

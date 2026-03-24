@@ -22,9 +22,15 @@ GtLChatRegistryElement >> initialize [
 	self initializeListElement.
 	self initializeAddNewChatElement.
 
-	self addChild: ((self newLabelWithText: 'Chats') margin: (BlInsets left: 10)).
+	self
+		addChild: ((self newLabelWithText: 'Chats') margin: (BlInsets left: 10))
+		as: #header.
 	self addChild: listElement.
 	self addChild: addNewChatElement.
+
+	self
+		addAptitude: (BrLayoutResizerAptitude new
+				common: listElement).
 
 	self
 		hMatchParent;
@@ -50,22 +56,23 @@ GtLChatRegistryElement >> newLabelWithText: aString [
 		text: aString
 ]
 
-{ #category : #'private - instance creation' }
-GtLChatRegistryElement >> newListElement [
-	^ GtLChatRegistryListElement new
-		registryViewModel: self registryViewModel;
-		yourself
-]
-
-{ #category : #'private - instance creation' }
-GtLChatRegistryElement >> newTitleElement [
-	^ self newLabelWithText: 'Chats'
-]
-
 { #category : #updating }
 GtLChatRegistryElement >> onRegistryViewModelChanged [
 	super onRegistryViewModelChanged.
 
 	listElement registryViewModel: self registryViewModel.
 	addNewChatElement registryViewModel: self registryViewModel.
+]
+
+{ #category : #'api - initialization' }
+GtLChatRegistryElement >> withDeselectionOnSpawnEvents [
+	listElement withDeselectionOnSpawnEvents
+]
+
+{ #category : #'api - initialization' }
+GtLChatRegistryElement >> withoutChatsHeader [
+	self
+		childWithId: #header
+		ifFound: [ :anElement | anElement visibility: BlVisibility gone ]
+		ifNone: [  ]
 ]

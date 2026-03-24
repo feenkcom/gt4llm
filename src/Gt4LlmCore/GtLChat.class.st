@@ -410,6 +410,7 @@ GtLChat >> gtProviderFor: anAction [
 GtLChat >> gtRegistryInspectChatActionFor: anAction context: aPhlowContext [
 	<gtAction>
 	^ anAction button
+		id: #'chat--inspect';
 		target: GtLChatRegistryActionTarget;
 		icon: BrGlamorousVectorIcons inspect;
 		tooltip: 'Inspect';
@@ -425,6 +426,7 @@ GtLChat >> gtRegistryRemoveChatActionFor: anAction context: aPhlowContext [
 	aRegistry := aPhlowContext at: #chatRegistry ifAbsent: [ ^ anAction noAction ].
 
 	^ anAction button
+		id: #'chat--remove';
 		target: GtLChatRegistryActionTarget;
 		icon: BrGlamorousVectorIcons bin;
 		tooltip: 'Remove';
