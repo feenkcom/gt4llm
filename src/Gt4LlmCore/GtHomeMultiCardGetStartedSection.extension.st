@@ -10,6 +10,7 @@ GtHomeMultiCardGetStartedSection >> gtLlmCard [
 		stencil: [ | anElement |
 			anElement := GtLChatRegistryElement new.
 			anElement
+				withDeselectionOnSpawnEvents;
 				registryViewModel: GtL registry asViewModel;
 				background: anElement theme default contentBackground;
 				addAptitude: BrShadowAptitude new beLarge;
