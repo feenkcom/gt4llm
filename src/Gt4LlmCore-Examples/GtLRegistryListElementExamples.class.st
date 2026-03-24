@@ -30,11 +30,11 @@ GtLRegistryListElementExamples >> registryListUpdatesWhenChatsAreAdded [
 			model: registry.
 	scripter pulse.
 	self assert: scripter chatCount: 0.
-	registry newChat.
+	registry newChatWithProvider: GtLOpenAIProviderStub new.
 	self assert: scripter chatCount: 1.
-	registry newChat.
+	registry newChatWithProvider: GtLOpenAIProviderStub new.
 	self assert: scripter chatCount: 2.
-	registry newChat.
+	registry newChatWithProvider: GtLOpenAIProviderStub new.
 	self assert: scripter chatCount: 3.
 	^ scripter
 ]
