@@ -34,8 +34,8 @@ GtLChatRegistryListElement >> initialize [
 GtLChatRegistryListElement >> initializeListElement [
 	listElement := BrColumnedList new
 			aptitude: BrColumnedMultiListAptitude;
-			rowStencil: (GtPhlowColumnedListItemElementWithContextMenuDecorator new
-					contextMenuItemsStencil: [ :itemElement :itemObject :itemIndex :itemType | 
+			rowStencil: (BrGlamorousColumnedListItemElementWithContextMenuDecorator new
+					contextMenuStencil: [ :itemElement :itemObject :itemIndex :itemType | 
 						| someChats |
 						someChats := listElement selectedItems.
 						((someChats includes: itemObject) and: [ someChats size > 1 ])
@@ -48,6 +48,8 @@ GtLChatRegistryListElement >> initializeListElement [
 					stencilBuilder: (BrGlamorousColumnedListSelectableRowElementStencilBuilder new
 							cellSpacing: 10;
 							padding: (BlInsets top: 3 bottom: 3)));
+			rowDataBinder: [ :aRowElement :anItemObject :aRowPosition |
+				aRowElement id: (#'registry-chat' asBlocElementId indexed: aRowPosition) ];
 			addEventHandler: (GtPhlowListToSelectHandler new
 					transformation: [ :aViewModelOrCollection | 
 						aViewModelOrCollection isCollection

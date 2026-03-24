@@ -84,7 +84,7 @@ GtLChatRegistry >> descriptions [
 		ifEmpty: [ someDescriptions := {GtLChatRegistryDescription new
 						label: 'Basic Chat';
 						priority: 50;
-						stencil: [ self newChat ]} ].
+						chat: [ :aProvider | self newChatWithProvider: aProvider ]} ].
 
 	GtPhlowUtility sortByPriority: someDescriptions.
 
@@ -94,29 +94,12 @@ GtLChatRegistry >> descriptions [
 { #category : #accessing }
 GtLChatRegistry >> gtViewChatsOn: aView [
 	<gtView>
-	^ aView columnedList
+	^ aView explicit
 		title: 'Chats';
 		priority: 20;
-		items: [ self chats ];
-		column: 'Chat' text: [ :aChat | aChat ];
-		column: 'Started'
-			text: [ :aChat | 
-				aChat messages
-					ifNotEmpty: [ :messages | messages first createdAt asLocalStringYMDHMS ]
-					ifEmpty: [ '-' ] ]
-			width: 130;
-		column: 'Finished'
-			text: [ :aChat | aChat messages isEmpty or: [ aChat isFinishedSuccesss ] ]
-			width: 100;
-		dynamicContextItems: [ :anElement :aChat | 
-			GtLChatRegistryActionTarget
-				menuItemsForObject: aChat
-				inContext: (GtPhlowContext new
-						at: #chatRegistry put: self;
-						yourself)
-				hostElement: anElement ];
-		updateWhen: GtLChatAnnouncement in: self announcer;
-		updateWhen: GtLChatRegistryAnnouncement in: self announcer
+		stencil: [ GtLChatRegistryElement new
+				registryViewModel: self asViewModel;
+				withoutChatsHeader ]
 ]
 
 { #category : #'as yet unclassified' }

@@ -42,14 +42,23 @@ GtLRegistryListElementExamples >> registryListUpdatesWhenChatsAreAdded [
 { #category : #examples }
 GtLRegistryListElementExamples >> registryListUpdatesWhenChatsAreAdded_removeOneChat [
 	<gtExample>
-	| scripter |
+	| scripter anItemId |
 	scripter := self registryListUpdatesWhenChatsAreAdded.
 
+	anItemId := #'registry-chat' asBlocElementId indexed: 2.
 	scripter menuStep
 		openContextMenu;
-		// #scrollable;
-		onChildAt: 2;
+		assertMenuContainerExist;
+		// anItemId;
 		play.
 
+	scripter menuStep
+		hoverMenuItemWithId: #'chat--remove';
+		clickMenuItemWithId: #'chat--remove';
+		onPopover;
+		play.
+
+	self assert: scripter chatCount: 2.
+		
 	^ scripter
 ]
