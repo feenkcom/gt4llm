@@ -132,7 +132,7 @@ GtLChatRegistryListElement >> subscribeToRegistryViewModel [
 GtLChatRegistryListElement >> unsubscribeFromRegistryViewModel [
 	super unsubscribeFromRegistryViewModel.
 
-	self registryViewModel announcer weak unsubscribe: self
+	self registryViewModel announcer unsubscribe: self
 ]
 
 { #category : #'private - updating' }
@@ -144,10 +144,5 @@ GtLChatRegistryListElement >> updateElement [
 
 { #category : #'private - updating' }
 GtLChatRegistryListElement >> updateSelectionWithout: aChatViewModel [
-	(listElement selectedItems includes: aChatViewModel) ifFalse: [ ^ self ].
-
-	listElement
-		itemSuchThat: [ :eachItem | eachItem = aChatViewModel ]
-		ifFound: [ :anIndex :isSynchronous | listElement deselectOne: anIndex ]
-		ifNone: [ :isSynchronous |  ]
+	listElement deselectAll
 ]

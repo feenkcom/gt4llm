@@ -66,7 +66,7 @@ GtLWorldChatRegistryDropdown >> initializeDropdownElement [
 { #category : #initialization }
 GtLWorldChatRegistryDropdown >> initializeForWorldElement: aWorldElement [
 
-	aWorldElement announcer
+	aWorldElement announcer weak
 		when: GtWorldElementChatRegistryChangedAnnouncement
 		send: #actOnWorldRegistryChanged:
 		to: self.
