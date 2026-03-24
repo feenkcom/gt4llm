@@ -109,6 +109,11 @@ GtLChatRegistryListElement >> onChatRegistryViewModelRemovedAnnouncement: anAnno
 		self updateElement ]
 ]
 
+{ #category : #'private - event handling' }
+GtLChatRegistryListElement >> onGtPhlowObjectToSpawn: anEvent [
+	listElement deselectAll
+]
+
 { #category : #'api - hooks' }
 GtLChatRegistryListElement >> onRegistryViewModelChanged [
 	super onRegistryViewModelChanged.
@@ -145,4 +150,11 @@ GtLChatRegistryListElement >> updateElement [
 { #category : #'private - updating' }
 GtLChatRegistryListElement >> updateSelectionWithout: aChatViewModel [
 	listElement deselectAll
+]
+
+{ #category : #'api - initialization' }
+GtLChatRegistryListElement >> withDeselectionOnSpawnEvents [
+	listElement
+		when: GtPhlowObjectToSpawn
+		do: [ :anEvent | self onGtPhlowObjectToSpawn: anEvent ]
 ]
