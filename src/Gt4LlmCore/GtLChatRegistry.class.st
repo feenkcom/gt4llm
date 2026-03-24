@@ -138,8 +138,14 @@ GtLChatRegistry >> lastChat [
 
 { #category : #convenience }
 GtLChatRegistry >> newChat [
+	^ self newChatWithProvider: nil
+]
+
+{ #category : #convenience }
+GtLChatRegistry >> newChatWithProvider: aProvider [
 	| chat |
 	chat := GtLChat new.
+	aProvider ifNotNil: [ chat provider: aProvider ].
 	self registerChat: chat.
 	^ chat
 ]
