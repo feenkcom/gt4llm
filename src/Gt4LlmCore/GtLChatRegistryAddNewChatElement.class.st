@@ -146,9 +146,11 @@ GtLChatRegistryAddNewChatElement >> newLabelWithText: aString [
 
 { #category : #'private - event handling' }
 GtLChatRegistryAddNewChatElement >> onAddChat: anEvent [ 
+	| aChat |
 	self registryViewModel ifNil: [ ^ self ].
 	
-	self registryViewModel addChat
+	aChat := self registryViewModel addChat.
+	self phlow spawnObject: aChat
 ]
 
 { #category : #'private - hooks' }
