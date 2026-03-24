@@ -10,6 +10,7 @@ Class {
 GtLChatRegistryGroup >> gtRegistryInspectChatActionFor: anAction context: aPhlowContext [
 	<gtAction>
 	^ anAction button
+		id: #'chat--inspect';
 		target: GtLChatRegistryActionTarget;
 		icon: BrGlamorousVectorIcons inspect;
 		tooltip: 'Inspect';
@@ -28,6 +29,7 @@ GtLChatRegistryGroup >> gtRegistryRemoveChatActionFor: anAction context: aPhlowC
 
 
 	^ anAction button
+		id: #'chat--remove';
 		target: GtLChatRegistryActionTarget;
 		icon: BrGlamorousVectorIcons bin;
 		tooltip: 'Remove';
