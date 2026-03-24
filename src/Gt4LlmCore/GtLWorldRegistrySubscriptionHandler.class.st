@@ -28,6 +28,8 @@ GtLWorldRegistrySubscriptionHandler >> onPhlowObjectToSpawn: anEvent [
 
 	BlSpace new
 		withCommonSettings;
+		title: (String streamContents: [ :s | anEvent object gtDisplayOn: s ] limitedTo: 30);
+		icon: BrGlamorousVectorIcons emphasizedChat;
 		inPager: [ anEvent tool ];
 		showFrom: registryElement
 ]
