@@ -6,7 +6,7 @@ I render the list of tools used while producing a reply message.
 "
 Class {
 	#name : #GtLMessageUsedToolsElement,
-	#superclass : #GtLBasicMessageElement,
+	#superclass : #GtLMessageBasicElement,
 	#instVars : [
 		'listElement'
 	],

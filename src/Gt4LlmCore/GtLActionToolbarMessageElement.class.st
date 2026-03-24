@@ -6,7 +6,7 @@ I render the compact action toolbar associated with a chat message.
 "
 Class {
 	#name : #GtLActionToolbarMessageElement,
-	#superclass : #GtLBasicMessageElement,
+	#superclass : #GtLMessageBasicElement,
 	#instVars : [
 		'toolbarElement',
 		'toolbarUpdater'

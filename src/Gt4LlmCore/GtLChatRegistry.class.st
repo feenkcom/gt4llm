@@ -32,18 +32,63 @@ GtLChatRegistry >> announcer [
 	^ announcer
 ]
 
+{ #category : #'api - converting' }
+GtLChatRegistry >> asViewModel [
+	^ GtLChatRegistryViewModel new registry: self
+]
+
 { #category : #accessing }
 GtLChatRegistry >> chats [
-	^ chats
+	^ chats value
 ]
 
 { #category : #accessing }
 GtLChatRegistry >> clearChats [
 	| chatsCopy |
-	chatsCopy := chats copy.
-	chatsCopy do: [ :each | each announcer unsubscribe: self ].
-	chats removeAll.
+	chats lock: [ :theChats | 
+		chatsCopy := theChats copy.
+		chatsCopy do: [ :each | each announcer unsubscribe: self ].
+		theChats removeAll ].
 	chatsCopy do: [ :each | self announce: (GtLChatRemovedAnnouncement new chat: each) ]
+]
+
+{ #category : #accessing }
+GtLChatRegistry >> defaultChatDescription [
+	<return: #GtLChatRegistryDescription>
+	^ self descriptions ifNotEmpty: #first ifEmpty: [ nil ]
+]
+
+{ #category : #accessing }
+GtLChatRegistry >> descriptions [
+	<return: #Collection of: #GtLChatRegistryDescription>
+	| somePragmas someDescriptions |
+	somePragmas := Pragma
+			allNamed: #gtLlmRegistry
+			from: self class
+			to: GtLChatRegistry.
+
+	someDescriptions := somePragmas
+			collect: [ :eachPragma | 
+				[ | aDescription |
+				aDescription := self perform: eachPragma methodSelector.
+				aDescription definingMethod: eachPragma method.
+				aDescription ]
+					on: Error
+					do: [ :anException | 
+						anException
+							emit;
+							return: nil ] ]
+			thenReject: #isNil.
+
+	someDescriptions
+		ifEmpty: [ someDescriptions := {GtLChatRegistryDescription new
+						label: 'Basic Chat';
+						priority: 50;
+						stencil: [ self newChat ]} ].
+
+	GtPhlowUtility sortByPriority: someDescriptions.
+
+	^ someDescriptions
 ]
 
 { #category : #accessing }
@@ -63,47 +108,73 @@ GtLChatRegistry >> gtViewChatsOn: aView [
 		column: 'Finished'
 			text: [ :aChat | aChat messages isEmpty or: [ aChat isFinishedSuccesss ] ]
 			width: 100;
-		contextItemLabel: 'Inspect chat'
-			action: [ :anElement :aChat | anElement phlow spawnObject: aChat ];
-		contextItemLabel: 'Remove chat'
-			action: [ :anElement :aChat | self removeChat: aChat ];
-		updateWhen: GtLChatAnnouncement in: self announcer
+		dynamicContextItems: [ :anElement :aChat | 
+			GtLChatRegistryActionTarget
+				menuItemsForObject: aChat
+				inContext: (GtPhlowContext new
+						at: #chatRegistry put: self;
+						yourself)
+				hostElement: anElement ];
+		updateWhen: GtLChatAnnouncement in: self announcer;
+		updateWhen: GtLChatRegistryAnnouncement in: self announcer
 ]
 
 { #category : #'as yet unclassified' }
 GtLChatRegistry >> hasChats [
-	^ chats notEmpty
+	^ chats lock: [ :theChat | theChat notEmpty ]
 ]
 
 { #category : #initialization }
 GtLChatRegistry >> initialize [
 	super initialize.
-	chats := OrderedCollection new.
+	chats := AsyncMutex for: OrderedCollection new.
 	announcer := Announcer new
 ]
 
 { #category : #accessing }
 GtLChatRegistry >> lastChat [
-	^ chats last
+	^ chats lock: [ :theChat | theChat last ]
 ]
 
 { #category : #convenience }
 GtLChatRegistry >> newChat [
+	^ self newChatWithProvider: nil
+]
+
+{ #category : #convenience }
+GtLChatRegistry >> newChatWithProvider: aProvider [
 	| chat |
 	chat := GtLChat new.
+	aProvider ifNotNil: [ chat provider: aProvider ].
 	self registerChat: chat.
 	^ chat
 ]
 
 { #category : #accessing }
 GtLChatRegistry >> newGtChat [
+	^ self newGtChatWithProvider: nil
+]
+
+{ #category : #descriptions }
+GtLChatRegistry >> newGtChatDescription [
+	<gtLlmRegistry>
+	^ GtLChatRegistryDescription new
+		label: 'GT Chat';
+		priority: 50;
+		chat: [ :aProvider | self newGtChatWithProvider: aProvider ]
+]
+
+{ #category : #accessing }
+GtLChatRegistry >> newGtChatWithProvider: aProviderOrNil [
 	| chat |
-	chat := GtLChat new
+	chat := GtLChat new.
+	aProviderOrNil ifNotNil: [ chat provider: aProviderOrNil ].
+	chat
 		tools: GtLTools gt;
 		markdownResponse;
 		gtPageExplanation: 'Rules for Moldable Development for Glamorous Toolkit';
-		gtPageExplanation: 'Examples by example'";
-		gtPageExplanation: 'Inspector phlow views by example'".
+		gtPageExplanation: 'Examples by example'.	";
+		gtPageExplanation: 'Inspector phlow views by example'"
 	^ self registerChat: chat
 ]
 
@@ -120,23 +191,33 @@ GtLChatRegistry >> onChatMessagesChanged: anAnnouncement [
 
 { #category : #accessing }
 GtLChatRegistry >> registerChat: aChat [
-	chats add: aChat.
 	aChat announcer
-		when: GtLChatMessagesChanged
+		when: GtLChatAnnouncement
 		send: #onChatMessagesChanged:
 		to: self.
-	self announce: (GtLChatAddedAnnouncement new chat: aChat).
+	chats lock: [ :theChats | theChats add: aChat ].
+	self
+		announce: (GtLChatAddedAnnouncement new
+				registry: self;
+				chat: aChat).
 	^ aChat
 ]
 
 { #category : #accessing }
 GtLChatRegistry >> registry [
-	^ chats
+	^ self chats
 ]
 
 { #category : #accessing }
 GtLChatRegistry >> removeChat: aChat [
-	(aChat announcer hasSubscriber: self) ifTrue: [ aChat announcer unsubscribe: self ].
-	(chats remove: aChat ifAbsent: [ ^ self ]) ifNotNil: [
-		self announce: (GtLChatRemovedAnnouncement new chat: aChat) ]
+	| removedChat |
+	(aChat announcer hasSubscriber: self)
+		ifTrue: [ aChat announcer unsubscribe: self ].
+	chats
+		lock: [ :theChat | removedChat := theChat remove: aChat ifAbsent: [ nil ] ].
+	removedChat
+		ifNotNil: [ self
+				announce: (GtLChatRemovedAnnouncement new
+						registry: self;
+						chat: aChat) ]
 ]

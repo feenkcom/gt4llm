@@ -1,8 +1,6 @@
 Class {
 	#name : #GtLChatElement,
-	#superclass : #BlElement,
-	#traits : 'TBrLayoutResizable + TGtLWithChatViewModel',
-	#classTraits : 'TBrLayoutResizable classTrait + TGtLWithChatViewModel classTrait',
+	#superclass : #GtLChatBasicElement,
 	#instVars : [
 		'listElement',
 		'listElementUpdater'
@@ -67,6 +65,7 @@ GtLChatElement >> onThreadRunAnnouncement: anAnnouncement [
 
 { #category : #'private - chat view model' }
 GtLChatElement >> subscribeToChatViewModel [
+	super subscribeToChatViewModel.
 	self chatViewModel weak
 		when: GtLChatViewModelMessageAdded
 		send: #onChatViewModelMessageAdded:
@@ -81,6 +80,7 @@ GtLChatElement >> subscribeToChatViewModel [
 
 { #category : #'private - chat view model' }
 GtLChatElement >> unsubscribeFromChatViewModel [
+	super unsubscribeFromChatViewModel.
 	self chatViewModel announcer unsubscribe: self.
 	self chatViewModel chat announcer unsubscribe: self
 ]
