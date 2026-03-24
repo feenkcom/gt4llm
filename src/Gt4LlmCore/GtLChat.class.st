@@ -410,7 +410,7 @@ GtLChat >> gtProviderFor: anAction [
 GtLChat >> gtRegistryInspectChatActionFor: anAction context: aPhlowContext [
 	<gtAction>
 	^ anAction button
-		id: #'chat-inspect';
+		id: #'chat--inspect';
 		target: GtLChatRegistryActionTarget;
 		icon: BrGlamorousVectorIcons inspect;
 		tooltip: 'Inspect';

@@ -22,12 +22,22 @@ GtLWorldRegistrySubscriptionHandler >> onElementAddedToSceneGraphEvent: anEvent 
 		ifFalse: [ registryElement visibility: BlVisibility gone ]
 ]
 
+{ #category : #'private - event handling' }
+GtLWorldRegistrySubscriptionHandler >> onPhlowObjectToSpawn: anEvent [
+	anEvent consumed: true.
+
+	BlSpace new
+		withCommonSettings;
+		inPager: [ anEvent tool ];
+		showFrom: registryElement
+]
+
 { #category : #'api - initialization' }
 GtLWorldRegistrySubscriptionHandler >> subscribeInWordElement: aWorldElement forRegistryElement: aRegistryElement [
 	registryElement := aRegistryElement.
 	aRegistryElement registryViewModel: aWorldElement llmChatRegistry asViewModel.
 	aRegistryElement userData at: self class put: self.
-	
+
 	aWorldElement announcer weak
 		when: GtWorldElementChatRegistryChangedAnnouncement
 		send: #actOnWorldRegistryChanged:
@@ -36,4 +46,7 @@ GtLWorldRegistrySubscriptionHandler >> subscribeInWordElement: aWorldElement for
 	aRegistryElement
 		when: BlElementAddedToSceneGraphEvent
 		do: [ :anEvent | self onElementAddedToSceneGraphEvent: anEvent ].
+	aRegistryElement
+		when: GtPhlowObjectToSpawn
+		do: [ :anEvent | self onPhlowObjectToSpawn: anEvent ]
 ]
