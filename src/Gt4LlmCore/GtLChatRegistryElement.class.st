@@ -22,9 +22,15 @@ GtLChatRegistryElement >> initialize [
 	self initializeListElement.
 	self initializeAddNewChatElement.
 
-	self addChild: ((self newLabelWithText: 'Chats') margin: (BlInsets left: 10)).
+	self
+		addChild: ((self newLabelWithText: 'Chats') margin: (BlInsets left: 10))
+		as: #header.
 	self addChild: listElement.
 	self addChild: addNewChatElement.
+
+	self
+		addAptitude: (BrLayoutResizerAptitude new
+				common: listElement).
 
 	self
 		hMatchParent;
@@ -68,4 +74,12 @@ GtLChatRegistryElement >> onRegistryViewModelChanged [
 
 	listElement registryViewModel: self registryViewModel.
 	addNewChatElement registryViewModel: self registryViewModel.
+]
+
+{ #category : #'api - initialization' }
+GtLChatRegistryElement >> withoutChatsHeader [
+	self
+		childWithId: #header
+		ifFound: [ :anElement | anElement visibility: BlVisibility gone ]
+		ifNone: [  ]
 ]

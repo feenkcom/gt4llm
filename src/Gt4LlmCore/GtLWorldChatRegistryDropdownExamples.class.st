@@ -13,7 +13,7 @@ GtLWorldChatRegistryDropdownExamples >> dropdownUpdatesAfterAddingChat [
 	<return: #BlScripter>
 	| registry dropdown scripter |
 	registry := GtLChatRegistry new.
-	registry newChat.
+	registry newChatWithProvider: GtLOpenAIProviderStub new.
 	dropdown := GtLWorldChatRegistryDropdown new registry: registry; yourself.
 	scripter := BlScripter new
 		model: registry;
@@ -32,12 +32,12 @@ GtLWorldChatRegistryDropdownExamples >> dropdownUpdatesAfterAddingChat [
 		play.
 
 	scripter do
-		block: [ registry newChat ];
+		block: [ registry newChatWithProvider: GtLOpenAIProviderStub new ];
 		play.
 
 	self 
-		assert: (scripter space root query // GtPhlowCellElement) result size
-		equals: 6.
+		assert: (scripter space root query // BrColumnedList / #scrollable ) anyOne childrenCount
+		equals: 2.
 	
 	scripter assert
 		label: 'List updates to two chats';
@@ -56,8 +56,8 @@ GtLWorldChatRegistryDropdownExamples >> dropdownWithChats [
 	| registry dropdown scripter |
 	registry := GtLChatRegistry new.
 	
-	registry newChat.
-	registry newChat.
+	registry newChatWithProvider: GtLOpenAIProviderStub new.
+	registry newChatWithProvider: GtLOpenAIProviderStub new.
 	
 	dropdown := GtLWorldChatRegistryDropdown new 
 		registry: registry; yourself.
