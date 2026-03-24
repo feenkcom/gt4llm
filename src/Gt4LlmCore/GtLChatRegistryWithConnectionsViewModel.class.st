@@ -33,6 +33,11 @@ GtLChatRegistryWithConnectionsViewModel >> chatDescriptions [
 ]
 
 { #category : #accessing }
+GtLChatRegistryWithConnectionsViewModel >> chatViewModels [
+	^ self registryViewModel chatViewModels
+]
+
+{ #category : #accessing }
 GtLChatRegistryWithConnectionsViewModel >> connectableConnections [
 	<return: #Collection of: #GtLConnection>
 	^ self connectionRegistry connectableConnections
