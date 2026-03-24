@@ -107,7 +107,17 @@ GtLWorldChatRegistryDropdown >> newDropdownContent [
 GtLWorldChatRegistryDropdown >> newListElement [
 	^ GtLChatRegistryElement new
 		registryViewModel: self registry asViewModel;
-		padding: (BlInsets all: 10)
+		padding: (BlInsets all: 10);
+		withDeselectionOnSpawnEvents;
+		when: GtPhlowObjectToSpawn
+			do: [ :anEvent | self onGtPhlowObjectToSpawn: anEvent ]
+]
+
+{ #category : #private }
+GtLWorldChatRegistryDropdown >> onGtPhlowObjectToSpawn: anEvent [
+	BlTaskAction
+		enqueueElement: self
+		action: [ dropdownElement dispatchEvent: BrDropdownHideWish new ]
 ]
 
 { #category : #accessing }
