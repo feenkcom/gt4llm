@@ -4,12 +4,28 @@ Examples for GtLMagritteToolForSmalltalkCodeEvaluation.
 Class {
 	#name : #GtLMagritteToolForSmalltalkCodeEvaluationExamples,
 	#superclass : #Object,
+	#traits : 'TGtLInvalidInputDataAssertions',
+	#classTraits : 'TGtLInvalidInputDataAssertions classTrait',
 	#category : 'Gt4LlmCore-Examples-Tools'
 }
 
-{ #category : #examples }
+{ #category : #assertions }
+GtLMagritteToolForSmalltalkCodeEvaluationExamples >> assertSmalltalkCodeEvaluationException: aDomainObject withCode: aCodeString exceptionClass: anExceptionClass messageSubstring: aMessageSubstring [
+	"Assert that the domain object is a GtLSmalltalkCodeEvaluationExceptionDomainObject with expected values."
+	
+	self assert: aDomainObject isErrorDomainObject.
+	self assert: (aDomainObject isKindOf: GtLSmalltalkCodeEvaluationExceptionDomainObject).
+	self assert: aDomainObject code equals: aCodeString.
+	self assert: aDomainObject errorReason equals: 'Error while evaluating smalltalk code'.
+	self assert: aDomainObject exception isNotNil.
+	self assert: aDomainObject exception class equals: anExceptionClass.
+	self assert: (aDomainObject messageText includesSubstring: aMessageSubstring)
+]
+
+{ #category : #'examples - errors' }
 GtLMagritteToolForSmalltalkCodeEvaluationExamples >> emptyCodeArgument [
 	<gtExample>
+	<return: #GtLFunctionToolCall>
 	| tool call result targetObject |
 	tool := GtLMagritteToolForSmalltalkCodeEvaluation new.
 	call := GtLFunctionToolCall new.
@@ -23,9 +39,10 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> emptyCodeArgument [
 	self assert: (result isKindOf: GTLDataViewWrapperModel).
 	
 	targetObject := result targetObject.
-	self assert: targetObject isErrorDomainObject.
-	self assert: (targetObject isKindOf: GtLMissingArgumentDomainObject).
-	self assert: targetObject missingArgument equals: 'code'.
+	self
+		assertMissingArgument: targetObject
+		withArgumentName: 'code'
+		errorMessage: 'Missing argument called code'.
 	
 	^ call
 ]
@@ -250,9 +267,10 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeSimpleDoItWithoutObj
 	^ call
 ]
 
-{ #category : #examples }
+{ #category : #'examples - errors' }
 GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithBindingEmptyName [
 	<gtExample>
+	<return: #GtLFunctionToolCall>
 	"Test that a binding with empty name is handled."
 	| objectStorage tool call result targetObject bindingObjectId |
 	objectStorage := GtLObjectStorage new.
@@ -274,15 +292,19 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithBindingEmptyName
 	targetObject := result targetObject.
 	
 	"Should fail because binding name is empty - can't create valid symbol"
-	self assert: (targetObject isKindOf: GtLSmalltalkCodeEvaluationExceptionResult).
-	self assert: targetObject isErrorDomainObject.
+	self
+		assertSmalltalkCodeEvaluationException: targetObject
+		withCode: 'value + 2'
+		exceptionClass: CodeError
+		messageSubstring: 'Undeclared variable'.
 	
 	^ call
 ]
 
-{ #category : #examples }
+{ #category : #'examples - errors' }
 GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithBindingEmptyObjectId [
 	<gtExample>
+	<return: #GtLFunctionToolCall>
 	"Test that a binding with empty objectId is handled."
 	| objectStorage tool call result targetObject |
 	objectStorage := GtLObjectStorage new.
@@ -301,16 +323,15 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithBindingEmptyObje
 	
 	self assert: (result isKindOf: GTLDataViewWrapperModel).
 	targetObject := result targetObject.
-	
-	"Should fail because objectId is empty - caught early in validation"
-	self assert: (targetObject isKindOf: GtLMissingDomainObject).
-	self assert: targetObject isErrorDomainObject.
-	self assert: targetObject objectName equals: ''.
+	self
+		assertMissingObject: targetObject
+		withObjectName: ''
+		errorMessage: ' is not found'.
 	
 	^ call
 ]
 
-{ #category : #'examples - error cases' }
+{ #category : #'examples - errors' }
 GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithBindingMissingName [
 	<gtExample>
 	<return: #GtLFunctionToolCall>
@@ -335,14 +356,16 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithBindingMissingNa
 	targetObject := result targetObject.
 	
 	"Should fail - missing required property 'name' in bindings"
-	self assert: targetObject isErrorDomainObject.
-	self assert: (targetObject isKindOf: GtLMissingRequiredPropertiesDomainObject).
-	self assert: targetObject missingPropertyNames equals: #('name').
+	self
+		assertMissingRequiredProperties: targetObject
+		withPropertyNames: #('name')
+		path: #(#bindings 1)
+		errorMessage: '@[bindings/1] required properties missing [name]'.
 	
 	^ call
 ]
 
-{ #category : #'examples - error cases' }
+{ #category : #'examples - errors' }
 GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithBindingMissingObjectId [
 	<gtExample>
 	<return: #GtLFunctionToolCall>
@@ -366,14 +389,16 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithBindingMissingOb
 	targetObject := result targetObject.
 	
 	"Should fail - missing required property 'objectId' in bindings"
-	self assert: targetObject isErrorDomainObject.
-	self assert: (targetObject isKindOf: GtLMissingRequiredPropertiesDomainObject).
-	self assert: targetObject missingPropertyNames equals: #('objectId').
+	self
+		assertMissingRequiredProperties: targetObject
+		withPropertyNames: #('objectId')
+		path: #(#bindings 1)
+		errorMessage: '@[bindings/1] required properties missing [objectId]'.
 	
 	^ call
 ]
 
-{ #category : #'examples - error cases' }
+{ #category : #'examples - errors' }
 GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithBindingNilName [
 	<gtExample>
 	<return: #GtLFunctionToolCall>
@@ -398,15 +423,15 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithBindingNilName [
 	targetObject := result targetObject.
 	
 	"Should fail - nil name returns JSON schema validation error"
-	self assert: targetObject isErrorDomainObject.
-	self assert: (targetObject isKindOf: GtLJSONSchemaValidationErrorDomainObject).
-	self assert: targetObject errorMessage equals: '@[bindings/1/name] string expected'.
-	self assert: targetObject path equals: #(#bindings 1 #name).
+	self
+		assertJSONSchemaValidationError: targetObject
+		withPath: #(#bindings 1 #name)
+		errorMessage: '@[bindings/1/name] string expected'.
 	
 	^ call
 ]
 
-{ #category : #'examples - error cases' }
+{ #category : #'examples - errors' }
 GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithBindingNilObjectId [
 	<gtExample>
 	<return: #GtLFunctionToolCall>
@@ -430,8 +455,10 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithBindingNilObject
 	targetObject := result targetObject.
 	
 	"Should fail - nil objectId returns JSON schema validation error"
-	self assert: targetObject isErrorDomainObject.
-	self assert: (targetObject isKindOf: GtLJSONSchemaValidationErrorDomainObject).
+	self
+		assertJSONSchemaValidationError: targetObject
+		withPath: #(#bindings 1 #objectId)
+		errorMessage: '@[bindings/1/objectId] string expected'.
 	
 	^ call
 ]
@@ -474,9 +501,10 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithBindings [
 	^ call
 ]
 
-{ #category : #examples }
+{ #category : #'examples - errors' }
 GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithBindingsMissingObjectStorage [
 	<gtExample>
+	<return: #GtLFunctionToolCall>
 	| tool call result targetObject |
 	tool := GtLMagritteToolForSmalltalkCodeEvaluation new.
 	call := GtLFunctionToolCall new.
@@ -492,15 +520,18 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithBindingsMissingO
 	self assert: (result isKindOf: GTLDataViewWrapperModel).
 	
 	targetObject := result targetObject.
-	self assert: targetObject isErrorDomainObject.
-	self assert: targetObject missingModelName equals: 'objectStorage'.
+	self
+		assertMissingInformation: targetObject
+		withModelName: 'objectStorage'
+		errorMessage: 'Missing objectStorage'.
 	
 	^ call
 ]
 
-{ #category : #examples }
+{ #category : #'examples - errors' }
 GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithError [
 	<gtExample>
+	<return: #GtLFunctionToolCall>
 	| tool call result targetObject |
 	tool := GtLMagritteToolForSmalltalkCodeEvaluation new.
 	call := GtLFunctionToolCall new.
@@ -514,18 +545,16 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithError [
 	self assert: (result isKindOf: GTLDataViewWrapperModel).
 	
 	targetObject := result targetObject.
-	self assert: (targetObject isKindOf: GtLSmalltalkCodeEvaluationExceptionResult).
-	self assert: targetObject isErrorDomainObject.
-	self assert: targetObject code equals: '1 / 0'.
-	self assert: (targetObject whatFailed beginsWith: 'Error while evaluating smalltalk code').
-	self assert: (targetObject errorMessage includesSubstring: 'ZeroDivide').
-	self assert: targetObject errorClassName equals: 'ZeroDivide'.
-	self assert: targetObject exception isNotNil.
+	self
+		assertSmalltalkCodeEvaluationException: targetObject
+		withCode: '1 / 0'
+		exceptionClass: ZeroDivide
+		messageSubstring: 'ZeroDivide'.
 	
 	^ call
 ]
 
-{ #category : #'examples - error cases' }
+{ #category : #'examples - errors' }
 GtLMagritteToolForSmalltalkCodeEvaluationExamples >> missingCodeArgument [
 	<gtExample>
 	<return: #GtLFunctionToolCall>
@@ -541,9 +570,11 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> missingCodeArgument [
 	self assert: (result isKindOf: GTLDataViewWrapperModel).
 	
 	targetObject := result targetObject.
-	self assert: targetObject isErrorDomainObject.
-	self assert: (targetObject isKindOf: GtLMissingRequiredPropertiesDomainObject).
-	self assert: targetObject missingPropertyNames equals: #('code').
+	self
+		assertMissingRequiredProperties: targetObject
+		withPropertyNames: #('code')
+		path: #(nil)
+		errorMessage: 'required properties missing [code]'.
 	
 	^ call
 ]
