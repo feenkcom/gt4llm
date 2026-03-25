@@ -1,11 +1,11 @@
 Class {
 	#name : #GtLExampleWithResultDomainObject,
-	#superclass : #GtLDomainObject,
+	#superclass : #Object,
 	#instVars : [
 		'exampleWithResult',
 		'objectId'
 	],
-	#category : 'Gt4LlmCore-Domain Objects'
+	#category : #'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #accessing }
@@ -125,66 +125,7 @@ GtLExampleWithResultDomainObject >> objectId: anObject [
 ]
 
 { #category : #accessing }
-GtLExampleWithResultDomainObject >> safeReturnValuePrintString [
-	^ [ | object |
-	object := (self isErrorResult or: [ self isFailureResult ])
-		ifTrue: [ self exampleWithResult returnValue 
-			serializeToOpenAIResponseOutput ]
-		ifFalse: [ GtLValueSerializer new
-			serializeValue: self exampleWithResult returnValue ].
-	object ] onErrorDo: [ :anError | anError return: 'printString error' ]
-]
-
-{ #category : #'api - serializing' }
-GtLExampleWithResultDomainObject >> serializeToAnthropicResponseOutput [
-	^ super serializeToAnthropicResponseOutput
-		, (self serializeToLlmResponseImages collect: [ :anPrimitiveImage |
-				anPrimitiveImage serializeToAnthropicResponseOutput ]).
-]
-
-{ #category : #serialization }
-GtLExampleWithResultDomainObject >> serializeToLlmJsonObject [
-	"Return a JSON dictionary that represents the domain object."
-
-	<return: #NeoJSONObject>
-	
-	^ NeoJSONObject new
-		at: #className put: self exampleWithResult methodClass name asString;
-		at: #selector put: self exampleWithResult selector asString;
-		at: #status put: self statusText;
-		at: #result put: self safeReturnValuePrintString;
-		at: #objectId put: self objectId;
-		yourself
-]
-
-{ #category : #'api - serializing' }
-GtLExampleWithResultDomainObject >> serializeToLlmResponseImages [
-	^ (self isErrorResult or: [ self isFailureResult ])
-		ifFalse: [ #() ]
-		ifTrue: [ self exampleWithResult returnValue serializeToLlmResponseImages ]. 
-]
-
-{ #category : #'api - serializing' }
-GtLExampleWithResultDomainObject >> serializeToOpenAIResponseImages [
-	^ (self isErrorResult or: [ self isFailureResult ])
-		ifFalse: [ #() ]
-		ifTrue: [ self exampleWithResult returnValue serializeToOpenAIResponseImages ]. 
-]
-
-{ #category : #'api - serializing' }
-GtLExampleWithResultDomainObject >> serializeToOpenAIResponseOutput [
-	^ super serializeToOpenAIResponseOutput
-		, (self serializeToLlmResponseImages collect: [ :anPrimitiveImage |
-				anPrimitiveImage serializeToOpenAIResponseOutput ])
-]
-
-{ #category : #accessing }
 GtLExampleWithResultDomainObject >> statusText [
 	self isSkippedResult ifTrue: [ ^ 'skipped' ].
 	^ self exampleWithResult statusText asString asLowercase
-]
-
-{ #category : #magritte }
-GtLExampleWithResultDomainObject >> wasMovedToMagritteDescriptions [
-	^ true
 ]
