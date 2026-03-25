@@ -4,7 +4,7 @@ Examples for GtLSerializedSlotInfo domain object.
 Class {
 	#name : #GtLSerializedSlotInfoExamples,
 	#superclass : #Object,
-	#category : 'Gt4LlmCore-Examples-Domain Objects'
+	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #examples }

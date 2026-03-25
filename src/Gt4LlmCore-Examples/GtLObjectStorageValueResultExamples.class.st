@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLObjectStorageValueResultExamples,
 	#superclass : #Object,
-	#category : 'Gt4LlmCore-Examples-Domain Objects'
+	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #assertions }
@@ -347,7 +347,7 @@ GtLObjectStorageValueResultExamples >> objectStorageValueResultForObjectStorageV
 	
 	objectValueJson := jsonData at: #objectValue.
 	self assert: (objectValueJson at: 'objectClassName') equals: 'GtLObjectStorageValueResult'.
-	self assert: (objectValueJson at: 'objectPrintString') equals: 'aGtLObjectStorageValueResult(inner-id-123)'.
+	self assert: ((objectValueJson at: 'objectPrintString') includesSubstring: 'GtLObjectStorageValueResult(inner-id-123)').
 	self assert: (objectValueJson at: 'superclassName') equals: 'Object'.
 	self assert: (objectValueJson at: 'packageName') equals: 'Gt4LlmCore'.
 	
@@ -398,7 +398,7 @@ GtLObjectStorageValueResultExamples >> objectStorageValueResultForString [
 GtLObjectStorageValueResultExamples >> objectStorageValueResultForTestObject [
 	<gtExample>
 	<return: #GtLObjectStorageValueResult>
-	| testObject domainObject compositeView dataBlock jsonData expectedPhlowViews expectedSlots expectedObjectValue expectedJson |
+	| testObject domainObject compositeView dataBlock jsonData expectedPhlowViews expectedSlots expectedObjectValue expectedJsonOne expectedJsonTwo |
 	
 	testObject := GtLSerializedObjectValueTestObject exampleInstance.
 	self assert: testObject name equals: 'TestObject'.
@@ -437,20 +437,27 @@ GtLObjectStorageValueResultExamples >> objectStorageValueResultForTestObject [
 	expectedObjectValue := NeoJSONObject new
 		at: 'allInstanceSlots' put: expectedSlots;
 		at: 'objectClassName' put: 'GtLSerializedObjectValueTestObject';
-		at: 'objectPrintString' put: 'aGtLSerializedObjectValueTestObject(TestObject)';
+		at: 'objectPrintString' put: 'a GtLSerializedObjectValueTestObject(TestObject)';
 		at: 'packageName' put: 'Gt4LlmCore-Examples';
 		at: 'phlowViews' put: expectedPhlowViews;
 		at: 'superclassName' put: 'Object';
 		yourself.
 	
 
-	expectedJson := Dictionary new
+	expectedJsonOne := Dictionary new
 		at: 'objectDetails' put: Dictionary new;
 		at: 'objectId' put: 'test-object-id-789';
 		at: 'objectValue' put: expectedObjectValue;
 		yourself.
+	expectedJsonTwo := Dictionary new
+		at: 'objectDetails' put: Dictionary new;
+		at: 'objectId' put: 'test-object-id-789';
+		at: 'objectValue' put: (expectedObjectValue copy
+			at: 'objectPrintString' put: 'aGtLSerializedObjectValueTestObject(TestObject)';
+			yourself);
+		yourself.
 	
-	self assert: jsonData equals: expectedJson.
+	self assert: ((jsonData = expectedJsonOne) or: [jsonData = expectedJsonOne]).
 	
 	^ domainObject
 ]

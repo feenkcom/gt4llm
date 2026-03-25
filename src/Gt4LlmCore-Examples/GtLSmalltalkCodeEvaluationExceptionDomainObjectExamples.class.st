@@ -4,7 +4,7 @@ Examples for GtLSmalltalkCodeEvaluationExceptionDomainObject domain object.
 Class {
 	#name : #GtLSmalltalkCodeEvaluationExceptionDomainObjectExamples,
 	#superclass : #Object,
-	#category : 'Gt4LlmCore-Examples-Domain Objects'
+	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #examples }
