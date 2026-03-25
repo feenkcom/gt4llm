@@ -2,15 +2,15 @@
 Examples for GtLMagritteToolForExampleMethodRun.
 "
 Class {
-	#name : #GtLMagritteToolForExampleMethodRunExamples,
+	#name : #GtLToolForExampleMethodRunExamples,
 	#superclass : #Object,
 	#traits : 'TGtLInvalidInputDataAssertions',
 	#classTraits : 'TGtLInvalidInputDataAssertions classTrait',
-	#category : 'Gt4LlmCore-Examples-Tools'
+	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #examples }
-GtLMagritteToolForExampleMethodRunExamples >> exampleRunError [
+GtLToolForExampleMethodRunExamples >> exampleRunError [
 	<gtExample>
 	| tool call result targetObject |
 	tool := GtLToolForExampleMethodRun new.
@@ -32,7 +32,7 @@ GtLMagritteToolForExampleMethodRunExamples >> exampleRunError [
 ]
 
 { #category : #examples }
-GtLMagritteToolForExampleMethodRunExamples >> exampleRunFailure [
+GtLToolForExampleMethodRunExamples >> exampleRunFailure [
 	<gtExample>
 	| tool call result targetObject |
 	tool := GtLToolForExampleMethodRun new.
@@ -55,7 +55,7 @@ GtLMagritteToolForExampleMethodRunExamples >> exampleRunFailure [
 ]
 
 { #category : #examples }
-GtLMagritteToolForExampleMethodRunExamples >> exampleRunForMissingExampleClassName [
+GtLToolForExampleMethodRunExamples >> exampleRunForMissingExampleClassName [
 	<gtExample>
 	| tool call result targetObject |
 	tool := GtLToolForExampleMethodRun new.
@@ -82,7 +82,7 @@ GtLMagritteToolForExampleMethodRunExamples >> exampleRunForMissingExampleClassNa
 ]
 
 { #category : #examples }
-GtLMagritteToolForExampleMethodRunExamples >> exampleRunForMissingExampleReference [
+GtLToolForExampleMethodRunExamples >> exampleRunForMissingExampleReference [
 	<gtExample>
 	| tool call result targetObject |
 	tool := GtLToolForExampleMethodRun new.
@@ -104,7 +104,7 @@ GtLMagritteToolForExampleMethodRunExamples >> exampleRunForMissingExampleReferen
 ]
 
 { #category : #examples }
-GtLMagritteToolForExampleMethodRunExamples >> exampleRunForMissingMethodName [
+GtLToolForExampleMethodRunExamples >> exampleRunForMissingMethodName [
 	<gtExample>
 	| tool call result targetObject |
 	tool := GtLToolForExampleMethodRun new.
@@ -131,7 +131,7 @@ GtLMagritteToolForExampleMethodRunExamples >> exampleRunForMissingMethodName [
 ]
 
 { #category : #examples }
-GtLMagritteToolForExampleMethodRunExamples >> exampleRunForNilExampleClassName [
+GtLToolForExampleMethodRunExamples >> exampleRunForNilExampleClassName [
 	<gtExample>
 	| tool call result targetObject |
 	tool := GtLToolForExampleMethodRun new.
@@ -158,7 +158,7 @@ GtLMagritteToolForExampleMethodRunExamples >> exampleRunForNilExampleClassName [
 ]
 
 { #category : #examples }
-GtLMagritteToolForExampleMethodRunExamples >> exampleRunForNilMethodName [
+GtLToolForExampleMethodRunExamples >> exampleRunForNilMethodName [
 	<gtExample>
 	| tool call result targetObject |
 	tool := GtLToolForExampleMethodRun new.
@@ -185,7 +185,7 @@ GtLMagritteToolForExampleMethodRunExamples >> exampleRunForNilMethodName [
 ]
 
 { #category : #examples }
-GtLMagritteToolForExampleMethodRunExamples >> exampleRunForNonExampleMethod [
+GtLToolForExampleMethodRunExamples >> exampleRunForNonExampleMethod [
 	<gtExample>
 	| tool call result |
 	tool := GtLToolForExampleMethodRun new.
@@ -208,7 +208,7 @@ GtLMagritteToolForExampleMethodRunExamples >> exampleRunForNonExampleMethod [
 ]
 
 { #category : #examples }
-GtLMagritteToolForExampleMethodRunExamples >> exampleRunForUnknownClass [
+GtLToolForExampleMethodRunExamples >> exampleRunForUnknownClass [
 	<gtExample>
 	| tool call result targetObject |
 	tool := GtLToolForExampleMethodRun new.
@@ -235,7 +235,7 @@ GtLMagritteToolForExampleMethodRunExamples >> exampleRunForUnknownClass [
 ]
 
 { #category : #examples }
-GtLMagritteToolForExampleMethodRunExamples >> exampleRunForUnknownMethod [
+GtLToolForExampleMethodRunExamples >> exampleRunForUnknownMethod [
 	<gtExample>
 	| tool call result targetObject |
 	tool := GtLToolForExampleMethodRun new.
@@ -262,7 +262,7 @@ GtLMagritteToolForExampleMethodRunExamples >> exampleRunForUnknownMethod [
 ]
 
 { #category : #examples }
-GtLMagritteToolForExampleMethodRunExamples >> exampleRunSuccess [
+GtLToolForExampleMethodRunExamples >> exampleRunSuccess [
 	<gtExample>
 	| tool call result targetObject |
 	tool := GtLToolForExampleMethodRun new.
@@ -288,7 +288,7 @@ GtLMagritteToolForExampleMethodRunExamples >> exampleRunSuccess [
 ]
 
 { #category : #examples }
-GtLMagritteToolForExampleMethodRunExamples >> exampleRunSuccessStoresObjectId [
+GtLToolForExampleMethodRunExamples >> exampleRunSuccessStoresObjectId [
 	<gtExample>
 	| objectStorage tool call result targetObject objectId storedObject |
 	objectStorage := GtLObjectStorage new.
