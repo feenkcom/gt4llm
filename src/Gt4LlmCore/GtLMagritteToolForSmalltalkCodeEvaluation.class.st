@@ -107,15 +107,16 @@ GtLMagritteToolForSmalltalkCodeEvaluation >> privatePerformToolCall: aToolCall i
 				ifPresent: [ :storedObject | storedObject ]
 				ifAbsent: [ ^ GtLMissingDomainObject new objectName: bindingObjectId ].
 			bindingsDictionary at: (bindingName ifNil: [ '' ]) asSymbol put: bindingObject ] ].
+			
 	object := [ | compiler |
 		compiler := OpalCompiler new.
 		bindingsDictionary ifNotNil: [ compiler bindings: bindingsDictionary ].
 		compiler evaluate: code ]
 		on: Error
 		do: [ :ex |
-			^ GtLSmalltalkCodeEvaluationExceptionResult new
+			^ GtLSmalltalkCodeEvaluationExceptionDomainObject new
 				freeze: ex;
-				whatFailed: 'Error while evaluating smalltalk code';
+				errorReason: 'Error while evaluating smalltalk code';
 				code: code ].
 				
 	objectId := anExecutionContext objectStorage ifNotNil: [ :aStorage |
