@@ -19,6 +19,19 @@ GtLExampleRunDummyExamples >> failingExample [
 ]
 
 { #category : #'llm-generated' }
+GtLExampleRunDummyExamples >> failingExampleWithComparisonFailures [
+	<gtExample>
+	<noTest>
+	 
+		(GtLExampleDataComparisonException new
+			expectedData: (GtLExampleComparisonWrappedString new
+				targetString: GtExampleComparisonExceptionWithDebuggingViews new expectedStringForTest);
+			actualData: (GtLExampleComparisonWrappedString new
+				targetString: GtExampleComparisonExceptionWithDebuggingViews new computedStringForTest)) signal
+	
+]
+
+{ #category : #'llm-generated' }
 GtLExampleRunDummyExamples >> regularMethod [
 	^ 7
 ]
@@ -28,4 +41,11 @@ GtLExampleRunDummyExamples >> successfulExample [
 	<gtExample>
 	<noTest>
 	^ 42
+]
+
+{ #category : #'llm-generated' }
+GtLExampleRunDummyExamples >> successfulExampleWithObjectWithADataJsonView [
+	<gtExample>
+	<noTest>
+	^ GtLObjectWithADataJsonViewForTest new
 ]

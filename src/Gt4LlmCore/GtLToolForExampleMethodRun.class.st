@@ -1,13 +1,11 @@
+"
+Magritte-based tool for executing a gtExample method and reporting the result.
+"
 Class {
 	#name : #GtLToolForExampleMethodRun,
-	#superclass : #GtLAbstractPlainSchemaFunctionTool,
+	#superclass : #GtLAbstractMagritteFunctionTool,
 	#category : 'Gt4LlmCore-Tools'
 }
-
-{ #category : #accessing }
-GtLToolForExampleMethodRun >> acceptVisitor: aVisitor [
-	^ aVisitor visitGtLlmToolForExampleRun: self
-]
 
 { #category : #accessing }
 GtLToolForExampleMethodRun >> description [
@@ -18,55 +16,63 @@ if it succeeds, it gets the resulting object.
 if there is a failure or error it gets the exception object and the stack trace.'
 ]
 
+{ #category : #magritte }
+GtLToolForExampleMethodRun >> exampleReferenceDescription [
+	<magritteDescription>
+	
+	^ MAToOneRelationDescription new
+		accessor: #exampleReference;
+		classes: {GtLExampleReference};
+		beRequired
+]
+
+{ #category : #testing }
+GtLToolForExampleMethodRun >> isUsingDataViews [
+	^true
+]
+
 { #category : #accessing }
 GtLToolForExampleMethodRun >> name [
 	^ 'exampleMethodRun'
 ]
 
-{ #category : #accessing }
-GtLToolForExampleMethodRun >> parametersDescription [
-	^ #('className' 'methodName' 'classSide')
+{ #category : #execution }
+GtLToolForExampleMethodRun >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
+	| arguments exampleReference |
+	arguments := aToolCall arguments ifNil: [ Dictionary new ].
+	exampleReference := arguments at: 'exampleReference'.
+	
+	^ exampleReference 
+		compiledMethodIfPresent: [ :aMethod | 
+			self 
+				runExample: aMethod 
+				fromReference: exampleReference 
+				inContext: anExecutionContext 
+				toolCall: aToolCall ]
+		ifMissing: [ :anErrorResult | anErrorResult ]
 ]
 
 { #category : #private }
-GtLToolForExampleMethodRun >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
-	| arguments className targetClass methodName classSideValue method example exampleResult objectId |
-	arguments := aToolCall arguments ifNil: [ Dictionary new ].
-	className := arguments
-			at: 'className'
-			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-					arguments: arguments;
-					missingArgument: 'className' ].
-	targetClass := className
-			asClassIfAbsent: [ ^ GtLMissingDomainObject new objectName: className ].
-	methodName := arguments
-			at: 'methodName'
-			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-					arguments: arguments;
-					missingArgument: 'methodName' ].
-	classSideValue := arguments at: 'classSide' ifAbsent: [ false ].
-	(#(true 'true' 't' 'yes' 'y') includes: classSideValue)
-		ifTrue: [ targetClass := targetClass classSide ].
-	method := targetClass
-			compiledMethodAt: methodName asSymbol
-			ifAbsent: [ ^ GtLMissingDomainObject new
-					objectName: ('{1}>>#{2}'
-							format: {targetClass.
-									methodName}) ].
+GtLToolForExampleMethodRun >> runExample: method fromReference: exampleReference inContext: anExecutionContext toolCall: aToolCall [
+	| example exampleResult objectId |
+	
 	(method pragmas anySatisfy: [ :pragma | pragma selector = #gtExample ])
 		ifFalse: [ ^ GtLMethodIsNotExampleDomainObject new method: method ].
 	example := method gtExample asExampleWithResult.
 	example ifNil: [ ^ GtLMethodIsNotExampleDomainObject new method: method ].
+	
 	[ exampleResult := example run ]
 		on: Error
 		do: [ :ex | 
 			^ GtLExceptionDomainObject new
 				freeze: ex;
 				description: ('Example execution failed: {1}' format: {method name}) ].
+				
 	objectId := anExecutionContext objectStorage ifNotNil: [ :aStorage |
 		aStorage
 			addNewObject: exampleResult returnValue
 			reason: (GtLStoredObjectExampleMethodReason toolCall: aToolCall) ].
+			
 	^ GtLExampleWithResultDomainObject new
 		exampleWithResult: example;
 		objectId: objectId

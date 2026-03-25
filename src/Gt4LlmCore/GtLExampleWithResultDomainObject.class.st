@@ -9,6 +9,14 @@ Class {
 }
 
 { #category : #accessing }
+GtLExampleWithResultDomainObject >> exampleReference [
+	^ GtLExampleReference new 
+			methodName: self exampleWithResult selector asString;
+			exampleClassName: self exampleWithResult methodClass name asString;
+			classSide: self exampleWithResult methodClass isClassSide
+]
+
+{ #category : #accessing }
 GtLExampleWithResultDomainObject >> exampleWithResult [
 	^ exampleWithResult
 ]
@@ -66,13 +74,14 @@ GtLExampleWithResultDomainObject >> isSuccessResult [
 GtLExampleWithResultDomainObject >> llmRawDataViewFor: aDataView [
 	<gtLlmDataView>
 	
-	^aDataView jsonData
+	^aDataView compositeData
 		title: 'Example details';
-		object: [ :aJson |
+		addDataView: (aDataView magritteObject 
+			dataKey: 'exampleReference';
+			object: [ self exampleReference ]);
+		addDataView: (aDataView jsonObject: [ :aJson |
 			aJson
-				at: #exampleClassName put: self exampleWithResult methodClass name asString;
-				at: #exampleMethodName put: self exampleWithResult selector asString;
-				at: #exampleStatus put: self statusText	]
+				at: 'exampleStatus' put: self statusText	])
 ]
 
 { #category : #'llm views' }
@@ -173,4 +182,9 @@ GtLExampleWithResultDomainObject >> serializeToOpenAIResponseOutput [
 GtLExampleWithResultDomainObject >> statusText [
 	self isSkippedResult ifTrue: [ ^ 'skipped' ].
 	^ self exampleWithResult statusText asString asLowercase
+]
+
+{ #category : #magritte }
+GtLExampleWithResultDomainObject >> wasMovedToMagritteDescriptions [
+	^ true
 ]

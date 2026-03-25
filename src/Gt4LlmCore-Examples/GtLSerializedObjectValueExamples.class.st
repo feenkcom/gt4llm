@@ -3,7 +3,7 @@ Examples for GtLSerializedObjectValue domain object.
 "
 Class {
 	#name : #GtLSerializedObjectValueExamples,
-	#superclass : #Object,
+	#superclass : #GtLMagritteDomainObjectExamples,
 	#category : 'Gt4LlmCore-Examples-Domain Objects'
 }
 
