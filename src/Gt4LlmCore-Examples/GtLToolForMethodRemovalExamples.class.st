@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLToolForMethodRemovalExamples,
 	#superclass : #Object,
-	#category : 'Gt4LlmCore-Examples-Tools'
+	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #helpers }

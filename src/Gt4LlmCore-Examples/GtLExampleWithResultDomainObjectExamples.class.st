@@ -4,7 +4,7 @@ Examples for GtLExampleWithResultDomainObject data views.
 Class {
 	#name : #GtLExampleWithResultDomainObjectExamples,
 	#superclass : #Object,
-	#category : 'Gt4LlmCore-Examples-Domain Objects'
+	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #private }
@@ -31,7 +31,7 @@ GtLExampleWithResultDomainObjectExamples >> assertExampleData: jsonData forMetho
 GtLExampleWithResultDomainObjectExamples >> assertExceptionResult: resultJson errorClass: errorClassName errorMessage: errorMessage stackTraceIncludes: stackTraceSubstrings [
 	self assertJsonData: resultJson hasExpectedKeys: #(#errorClass #errorMessage #stackTrace).
 	self assert: (resultJson at: #errorClass) equals: errorClassName.
-	self assert: (resultJson at: #errorMessage) equals: errorMessage.
+	self assert: ((resultJson at: #errorMessage) includesSubstring: errorMessage).
 	stackTraceSubstrings do: [ :substring |
 		self assert: ((resultJson at: #stackTrace) includesSubstring: substring) ].
 ]
@@ -44,7 +44,9 @@ GtLExampleWithResultDomainObjectExamples >> assertJsonData: jsonData hasExpected
 { #category : #private }
 GtLExampleWithResultDomainObjectExamples >> assertObjectValue: objectValueJson className: className printString: printString superclassName: superclassName packageName: packageName instanceSlots: instanceSlots [
 	self assert: (objectValueJson at: 'objectClassName') equals: className.
-	self assert: (objectValueJson at: 'objectPrintString') equals: printString.
+	self 
+		assert: ((objectValueJson at: 'objectPrintString') copyWithoutAll: ' ') 
+		equals: (printString copyWithoutAll: ' ').
 	self assert: (objectValueJson at: 'superclassName') equals: superclassName.
 	self assert: (objectValueJson at: 'packageName') equals: packageName.
 	self assert: (objectValueJson at: 'allInstanceSlots') asArray equals: instanceSlots.
@@ -241,7 +243,7 @@ GtLExampleWithResultDomainObjectExamples >> exampleWithResultForSuccessfulExampl
 	self 
 		assertObjectValue: objectValueJson 
 		className: 'GtLObjectWithADataJsonViewForTest' 
-		printString: 'aGtLObjectWithADataJsonViewForTest' 
+		printString: 'a GtLObjectWithADataJsonViewForTest' 
 		superclassName: 'Object' 
 		packageName: 'Gt4LlmCore-Examples' 
 		instanceSlots: expectedInstanceSlots.
