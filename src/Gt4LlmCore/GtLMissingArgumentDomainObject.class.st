@@ -6,7 +6,7 @@ Class {
 		'missingArgument',
 		'errorMessage'
 	],
-	#category : #'Gt4LlmCore-Domain Objects'
+	#category : 'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #accessing }
@@ -23,8 +23,15 @@ GtLMissingArgumentDomainObject >> arguments: aDictionary [
 ]
 
 { #category : #accessing }
+GtLMissingArgumentDomainObject >> defaultErrorMessage [
+	^missingArgument 
+		ifNil: [''] 
+		ifNotNil: [ 'Missing argument called {1}' format: {missingArgument} ]
+]
+
+{ #category : #accessing }
 GtLMissingArgumentDomainObject >> errorMessage [
-	^ errorMessage
+	^ errorMessage ifNil: [ self defaultErrorMessage ]
 ]
 
 { #category : #accessing }
@@ -64,11 +71,7 @@ GtLMissingArgumentDomainObject >> missingArgument [
 
 { #category : #accessing }
 GtLMissingArgumentDomainObject >> missingArgument: aString [
-	"Set a missing argument name."
-
 	missingArgument := aString.
-	errorMessage ifNil: [
-		errorMessage := 'Missing argument called {1}' format: {missingArgument}]
 ]
 
 { #category : #descriptions }

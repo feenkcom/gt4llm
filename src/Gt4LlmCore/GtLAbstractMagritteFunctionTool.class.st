@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLAbstractMagritteFunctionTool,
 	#superclass : #GtLAbstractFunctionTool,
-	#category : #'Gt4LlmCore-Tools'
+	#category : 'Gt4LlmCore-Tools'
 }
 
 { #category : #testing }
@@ -44,15 +44,12 @@ GtLAbstractMagritteFunctionTool >> performToolCall: aToolCall inContext: anExecu
 	| domainObject resultObject |
 	
 	aToolCall performedByTool: self.
-	[ 
+	[
 		| arguments |
 		
 		(self jsonSchemaArgumentValidationErrorsFor: aToolCall) 
 			ifNotEmpty: [ :aCollectionOfErrors |
-			
-				resultObject := GtLMagritteBasedModel new
-					name: 'Response';
-					model: aCollectionOfErrors first.
+				resultObject := self resultObjectFromDomainObject: aCollectionOfErrors first.
 			aToolCall result: resultObject.
 			^ resultObject ].
 		
@@ -62,34 +59,38 @@ GtLAbstractMagritteFunctionTool >> performToolCall: aToolCall inContext: anExecu
 	]
 		on: NeoJSONParseError
 		do: [ :anException | 
-			aToolCall result: (GtLExceptionDomainObject freeze: anException ).
+			aToolCall result: (self  
+				resultObjectFromDomainObject:(GtLExceptionDomainObject 
+					freeze: anException )).
 			^ aToolCall result ].
 	
 	domainObject := self 
 		privatePerformToolCall: aToolCall 
 		inContext: anExecutionContext.
-		
-	"Temporary check to enble the new LLM views if used"
-	self class shouldEnableDataViews ifTrue: [
-		(domainObject llmDataViewsInContext: GtLDataViewContext new)
-			ifNotEmpty: [ :llmViews |
-				resultObject := GTLDataViewWrapperModel new 
-					targetObject:  domainObject;
-					targetDataView:  llmViews.
-				aToolCall result: resultObject.
-
-				^ resultObject ] ].
-		
-	((domainObject isKindOf: GtLDomainObject) not or: [
-			domainObject wasMovedToMagritteDescriptions ])
-		ifTrue: [
-			resultObject := GtLMagritteBasedModel new
-				name: 'Response';
-				model: domainObject]
-		ifFalse: [ 
-			resultObject := domainObject ].
+	resultObject := self resultObjectFromDomainObject: domainObject.
 				
 	aToolCall result: resultObject.
 
 	^ resultObject
+]
+
+{ #category : #utils }
+GtLAbstractMagritteFunctionTool >> resultObjectFromDomainObject: domainObject [ 
+
+	"Temporary check to enble the new LLM views if used"
+	(self class shouldEnableDataViews or: [self isUsingDataViews]) ifTrue: [
+		(domainObject llmDataViewsInContext: GtLDataViewContext new)
+			ifNotEmpty: [ :llmViews |
+				^GTLDataViewWrapperModel new 
+					targetObject:  domainObject;
+					targetDataView:  llmViews ] ].
+		
+	^((domainObject isKindOf: GtLDomainObject) not or: [
+			domainObject wasMovedToMagritteDescriptions ])
+		ifTrue: [
+			GtLMagritteBasedModel new
+				name: 'Response';
+				model: domainObject]
+		ifFalse: [ 
+			domainObject ].
 ]

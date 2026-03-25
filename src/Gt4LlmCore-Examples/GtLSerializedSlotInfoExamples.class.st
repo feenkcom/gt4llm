@@ -4,7 +4,7 @@ Examples for GtLSerializedSlotInfo domain object.
 Class {
 	#name : #GtLSerializedSlotInfoExamples,
 	#superclass : #Object,
-	#category : #'Gt4LlmCore-Examples-Domain Objects'
+	#category : 'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #examples }
@@ -40,6 +40,37 @@ GtLSerializedSlotInfoExamples >> simpleSlotInfoSerialization [
 	self assert: jsonObject equals: expected.
 	
 	^ jsonObject
+]
+
+{ #category : #examples }
+GtLSerializedSlotInfoExamples >> slotInfoEquality [
+	<gtExample>
+	<return: #GtLSerializedSlotInfo>
+	| slotInfo1 slotInfo2 slotInfo3 |
+	
+	slotInfo1 := GtLSerializedSlotInfo new
+		name: 'mySlot';
+		valueClassName: 'SmallInteger';
+		valuePrintString: '42';
+		yourself.
+	
+	slotInfo2 := GtLSerializedSlotInfo new
+		name: 'mySlot';
+		valueClassName: 'SmallInteger';
+		valuePrintString: '42';
+		yourself.
+	
+	slotInfo3 := GtLSerializedSlotInfo new
+		name: 'otherSlot';
+		valueClassName: 'ByteString';
+		valuePrintString: '''hello''';
+		yourself.
+	
+	self assert: slotInfo1 equals: slotInfo2.
+	self assert: slotInfo1 hash equals: slotInfo2 hash.
+	self assert: (slotInfo1 = slotInfo3) not.
+	
+	^ slotInfo1
 ]
 
 { #category : #examples }

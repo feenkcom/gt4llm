@@ -15,7 +15,7 @@ Class {
 		'<parameter',
 		'name="package">Gt4LlmCore'
 	],
-	#category : #'Gt4LlmCore-Magritte Objects'
+	#category : 'Gt4LlmCore-Magritte Objects'
 }
 
 { #category : #'instance creation' }
@@ -24,6 +24,20 @@ GtLSerializedSlotInfo class >> fromSlot: aSlot ofObject: anObject [
 	^ self new
 		initializeFromSlot: aSlot ofObject: anObject;
 		yourself
+]
+
+{ #category : #comparing }
+GtLSerializedSlotInfo >> = anObject [
+	self == anObject ifTrue: [ ^ true ].
+	self class = anObject class ifFalse: [ ^ false ].
+	^ name = anObject name
+		and: [ valueClassName = anObject valueClassName
+			and: [ valuePrintString = anObject valuePrintString ] ]
+]
+
+{ #category : #comparing }
+GtLSerializedSlotInfo >> hash [
+	^ (name hash bitXor: valueClassName hash) bitXor: valuePrintString hash
 ]
 
 { #category : #initialization }
