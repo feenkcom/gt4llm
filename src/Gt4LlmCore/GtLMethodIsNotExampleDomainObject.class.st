@@ -33,7 +33,7 @@ GtLMethodIsNotExampleDomainObject >> llmRawDataViewFor: aDataView [
 GtLMethodIsNotExampleDomainObject >> messageText [
 	"Return an error message"
 
-	^ 'Method is not an example: {1}' format: {self method name}
+	^ 'Method is not an example: {1}' format: {self methodName}
 ]
 
 { #category : #accessing }

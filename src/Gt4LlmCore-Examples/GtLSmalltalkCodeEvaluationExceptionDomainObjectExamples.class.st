@@ -3,7 +3,7 @@ Examples for GtLSmalltalkCodeEvaluationExceptionDomainObject domain object.
 "
 Class {
 	#name : #GtLSmalltalkCodeEvaluationExceptionDomainObjectExamples,
-	#superclass : #Object,
+	#superclass : #GtLErroneousConditionDomainObjectExamples,
 	#category : 'Gt4LlmCore-Examples-Domain Objects'
 }
 
