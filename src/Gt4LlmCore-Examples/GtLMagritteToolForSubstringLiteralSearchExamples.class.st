@@ -4,7 +4,7 @@ Examples for GtLMagritteToolForSubstringLiteralSearch.
 Class {
 	#name : #GtLMagritteToolForSubstringLiteralSearchExamples,
 	#superclass : #Object,
-	#category : 'Gt4LlmCore-Examples-Tools'
+	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #examples }

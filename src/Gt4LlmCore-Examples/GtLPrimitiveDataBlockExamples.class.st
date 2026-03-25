@@ -4,7 +4,7 @@ I am the common superclass for all example classes for primitive data blocks.
 Class {
 	#name : #GtLPrimitiveDataBlockExamples,
 	#superclass : #Object,
-	#category : 'Gt4LlmCore-Examples-Data Views'
+	#category : #'Gt4LlmCore-Examples-Data Views'
 }
 
 { #category : #assertions }

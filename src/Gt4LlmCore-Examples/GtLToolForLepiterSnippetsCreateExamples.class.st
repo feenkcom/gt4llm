@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'logicalDatabase'
 	],
-	#category : 'Gt4LlmCore-Examples-Tools'
+	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #'examples - mixed errors' }
@@ -211,25 +211,6 @@ GtLToolForLepiterSnippetsCreateExamples >> missingSnippetPageUid [
 ]
 
 { #category : #examples }
-GtLToolForLepiterSnippetsCreateExamples >> missingSnippets [
-	<gtExample>
-	| tool call result model |
-	tool := GtLToolForLepiterSnippetsCreate new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: {} asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteBasedModel).
-	
-	model := result model.
-	self assert: (model isKindOf: GtLMissingRequiredPropertiesDomainObject).
-	self assert: model missingPropertyNames equals: #('snippets').
-	self assert: model path equals: #(nil).
-	
-	^ call
-]
-
-{ #category : #examples }
 GtLToolForLepiterSnippetsCreateExamples >> missingSnippetText [
 	<gtExample>
 	| tool call result model page |
@@ -250,6 +231,25 @@ GtLToolForLepiterSnippetsCreateExamples >> missingSnippetText [
 	self assert: (result isKindOf: GtLMagritteBasedModel).
 	model := result model.
 	self assert: model snippets first missingArgument equals: 'snippetText'.
+	^ call
+]
+
+{ #category : #examples }
+GtLToolForLepiterSnippetsCreateExamples >> missingSnippets [
+	<gtExample>
+	| tool call result model |
+	tool := GtLToolForLepiterSnippetsCreate new.
+	call := GtLFunctionToolCall new.
+	call rawArguments: {} asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GtLMagritteBasedModel).
+	
+	model := result model.
+	self assert: (model isKindOf: GtLMissingRequiredPropertiesDomainObject).
+	self assert: model missingPropertyNames equals: #('snippets').
+	self assert: model path equals: #(nil).
+	
 	^ call
 ]
 
