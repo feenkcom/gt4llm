@@ -13,6 +13,11 @@ GtLPrimitiveCompositeJsonDataBlock >> addJsonDataBlock: aJsonBlock [
 ]
 
 { #category : #accessing }
+GtLPrimitiveCompositeJsonDataBlock >> condensedJsonBlock [
+	^self subclassResponsibility
+]
+
+{ #category : #accessing }
 GtLPrimitiveCompositeJsonDataBlock >> containedJsonDataBlocksCount [
 	"Return the total number of contained json blocks, recursively counting nested composites."
 	^ jsonDataBlocks inject: 0 into: [ :sum :each |
@@ -73,7 +78,17 @@ GtLPrimitiveCompositeJsonDataBlock >> jsonDataBlocks [
 
 { #category : #accessing }
 GtLPrimitiveCompositeJsonDataBlock >> llmJsonData [
-	self subclassResponsibility
+	^self condensedJsonBlock llmJsonData
+]
+
+{ #category : #serialization }
+GtLPrimitiveCompositeJsonDataBlock >> serializeForAnthropic [
+	^ self condensedJsonBlock serializeForAnthropic 
+]
+
+{ #category : #serialization }
+GtLPrimitiveCompositeJsonDataBlock >> serializeForOpenAI [
+	^ self condensedJsonBlock serializeForOpenAI 
 ]
 
 { #category : #accessing }

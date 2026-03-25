@@ -23,18 +23,3 @@ GtLPrimitiveCompositeJsonGenericDataBlock >> keysForMerge [
 		ifNil: [ self condensedJsonBlock jsonData keys ] 
 		ifNotNil: [ {self dataKey} ]
 ]
-
-{ #category : #accessing }
-GtLPrimitiveCompositeJsonGenericDataBlock >> llmJsonData [
-	^self condensedJsonBlock llmJsonData
-]
-
-{ #category : #serialization }
-GtLPrimitiveCompositeJsonGenericDataBlock >> serializeForAnthropic [
-	^ self condensedJsonBlock serializeForAnthropic 
-]
-
-{ #category : #serialization }
-GtLPrimitiveCompositeJsonGenericDataBlock >> serializeForOpenAI [
-	^ self condensedJsonBlock serializeForOpenAI 
-]
