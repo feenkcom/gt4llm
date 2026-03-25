@@ -5,7 +5,7 @@ Class {
 		'currentObject',
 		'jsonResult'
 	],
-	#category : #'Gt4LlmCore-Core'
+	#category : 'Gt4LlmCore-Core'
 }
 
 { #category : #accessing }
@@ -50,15 +50,15 @@ GtMagriteJSONDataCreationVisitor >> visitNumberDescription: aStringDescription [
 { #category : #'visiting-description' }
 GtMagriteJSONDataCreationVisitor >> visitPriorityContainer: aContainer [
 	jsonResult := NeoJSONObject new.
-	aContainer children
+	(aContainer children
+		sorted: [ :aDescription | aDescription accessor readSelector] ascending)
 		do: [ :aDescription | 
 			| propertyValue visitor |
 			propertyValue := self currentObject
 					perform: aDescription accessor readSelector.
 			visitor := GtMagriteJSONDataCreationVisitor new currentObject: self currentObject.
 			aDescription acceptMagritte: visitor.
-			jsonResult at: aDescription accessor readSelector put: visitor jsonResult.
-			 ].
+			jsonResult at: aDescription accessor readSelector put: visitor jsonResult ].
 	^ jsonResult
 ]
 

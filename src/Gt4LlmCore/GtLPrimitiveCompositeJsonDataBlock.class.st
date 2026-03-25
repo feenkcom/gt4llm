@@ -78,7 +78,19 @@ GtLPrimitiveCompositeJsonDataBlock >> jsonDataBlocks [
 
 { #category : #accessing }
 GtLPrimitiveCompositeJsonDataBlock >> llmJsonData [
-	^self condensedJsonBlock llmJsonData
+	^self dataKey
+		ifNil: [ self condensedJsonBlock llmJsonData] 
+		ifNotNil: [
+			Dictionary new 
+				at: self dataKey put: self condensedJsonBlock llmJsonData;
+				yourself]
+]
+
+{ #category : #accessing }
+GtLPrimitiveCompositeJsonDataBlock >> serializedJsonString [
+	"Return a JSON string that represents the domain object."
+	
+	^ NeoJSONWriter toStringPretty: self llmJsonData
 ]
 
 { #category : #serialization }
@@ -89,11 +101,4 @@ GtLPrimitiveCompositeJsonDataBlock >> serializeForAnthropic [
 { #category : #serialization }
 GtLPrimitiveCompositeJsonDataBlock >> serializeForOpenAI [
 	^ self condensedJsonBlock serializeForOpenAI 
-]
-
-{ #category : #accessing }
-GtLPrimitiveCompositeJsonDataBlock >> serializedJsonString [
-	"Return a JSON string that represents the domain object."
-	
-	^ NeoJSONWriter toStringPretty: self llmJsonData
 ]

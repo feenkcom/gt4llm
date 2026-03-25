@@ -8,7 +8,7 @@ Class {
 		'methodName',
 		'title'
 	],
-	#category : #'Gt4LlmCore-Magritte Objects'
+	#category : 'Gt4LlmCore-Magritte Objects'
 }
 
 { #category : #'instance creation' }
@@ -17,6 +17,18 @@ GtLSerializedViewInfo class >> fromView: aView [
 	^ self new
 		initializeFromView: aView;
 		yourself
+]
+
+{ #category : #comparing }
+GtLSerializedViewInfo >> = anObject [
+	self == anObject ifTrue: [ ^ true ].
+	self class = anObject class ifFalse: [ ^ false ].
+	^ methodName = anObject methodName and: [ title = anObject title ]
+]
+
+{ #category : #comparing }
+GtLSerializedViewInfo >> hash [
+	^ methodName hash bitXor: title hash
 ]
 
 { #category : #initialization }

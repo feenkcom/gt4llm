@@ -4,7 +4,7 @@ Examples for GtLSerializedViewInfo domain object.
 Class {
 	#name : #GtLSerializedViewInfoExamples,
 	#superclass : #Object,
-	#category : #'Gt4LlmCore-Examples-Domain Objects'
+	#category : 'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #examples }
@@ -37,4 +37,32 @@ GtLSerializedViewInfoExamples >> simpleViewInfoSerialization [
 	self assert: jsonObject equals: expected.
 	
 	^ jsonObject
+]
+
+{ #category : #examples }
+GtLSerializedViewInfoExamples >> viewInfoEquality [
+	<gtExample>
+	<return: #GtLSerializedViewInfo>
+	| viewInfo1 viewInfo2 viewInfo3 |
+	
+	viewInfo1 := GtLSerializedViewInfo new
+		methodName: 'gtPrintFor:';
+		title: 'Print';
+		yourself.
+	
+	viewInfo2 := GtLSerializedViewInfo new
+		methodName: 'gtPrintFor:';
+		title: 'Print';
+		yourself.
+	
+	viewInfo3 := GtLSerializedViewInfo new
+		methodName: 'gtRawFor:';
+		title: 'Raw';
+		yourself.
+	
+	self assert: viewInfo1 equals: viewInfo2.
+	self assert: viewInfo1 hash equals: viewInfo2 hash.
+	self assert: (viewInfo1 = viewInfo3) not.
+	
+	^ viewInfo1
 ]

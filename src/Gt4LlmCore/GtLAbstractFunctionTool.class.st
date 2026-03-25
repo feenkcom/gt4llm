@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLAbstractFunctionTool,
 	#superclass : #GtLTool,
-	#category : #'Gt4LlmCore-Tools'
+	#category : 'Gt4LlmCore-Tools'
 }
 
 { #category : #testiung }
@@ -44,6 +44,11 @@ GtLAbstractFunctionTool >> functionOpenAI [
 		'type' -> self type.
 		'description' -> self description.
 		'parameters' -> self parametersJsonSchemaDictionary} asDictionary
+]
+
+{ #category : #testing }
+GtLAbstractFunctionTool >> isUsingDataViews [
+	^false
 ]
 
 { #category : #'api - responses' }

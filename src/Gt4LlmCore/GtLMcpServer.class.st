@@ -14,7 +14,7 @@ Class {
 	#classVars : [
 		'Current'
 	],
-	#category : #'Gt4LlmCore-Mcp'
+	#category : 'Gt4LlmCore-Mcp'
 }
 
 { #category : #accessing }

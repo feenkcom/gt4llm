@@ -4,13 +4,13 @@ Examples for GtLMagritteToolForSmalltalkCodeEvaluation.
 Class {
 	#name : #GtLMagritteToolForSmalltalkCodeEvaluationExamples,
 	#superclass : #Object,
-	#category : #'Gt4LlmCore-Examples-Tools'
+	#category : 'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #examples }
 GtLMagritteToolForSmalltalkCodeEvaluationExamples >> emptyCodeArgument [
 	<gtExample>
-	| tool call result model |
+	| tool call result targetObject |
 	tool := GtLMagritteToolForSmalltalkCodeEvaluation new.
 	call := GtLFunctionToolCall new.
 	call rawArguments: {
@@ -20,12 +20,53 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> emptyCodeArgument [
 	result := tool performToolCall: call.
 	
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteBasedModel).
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
 	
-	model := result model.
-	self assert: model isErrorDomainObject.
-	self assert: (model isKindOf: GtLMissingArgumentDomainObject).
-	self assert: model missingArgument equals: 'code'.
+	targetObject := result targetObject.
+	self assert: targetObject isErrorDomainObject.
+	self assert: (targetObject isKindOf: GtLMissingArgumentDomainObject).
+	self assert: targetObject missingArgument equals: 'code'.
+	
+	^ call
+]
+
+{ #category : #examples }
+GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeReturningBlElement [
+	<gtExample>
+	<return: #GtLFunctionToolCall>
+	"Test execution that returns a BlElement, which has image views."
+	| objectStorage tool call result targetObject objectValue |
+	objectStorage := GtLObjectStorage new.
+	tool := GtLMagritteToolForSmalltalkCodeEvaluation new.
+	call := GtLFunctionToolCall new.
+	call rawArguments: {
+		'code' -> 'BlElement new'.
+		'bindings' -> #()
+	} asDictionary.
+	result := tool
+		performToolCall: call
+		inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
+	
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	
+	targetObject := result targetObject.
+	self assert: (targetObject isKindOf: GtLSmalltalkCodeEvaluationResult).
+	self assert: (targetObject object isKindOf: BlElement).
+	self assert: targetObject code equals: 'BlElement new'.
+	
+	objectValue := targetObject objectValue.
+	self assert: objectValue objectClassName equals: 'BlElement'.
+	self assert: objectValue superclassName equals: 'Object'.
+	self assert: objectValue packageName equals: 'Bloc'.
+	self assert: objectValue phlowViews isNotEmpty.
+	self assert: (objectValue phlowViews anySatisfy: [ :v | v title = 'Preview' ]).
+	self assert: (objectValue phlowViews anySatisfy: [ :v | v title = 'Print' ]).
+	self assert: objectValue allInstanceSlots isNotEmpty.
+	
+	self assert: targetObject objectId isNotEmpty.
+	self assert: objectStorage objectCount equals: 1.
+	self assert: (objectStorage objectAt: targetObject objectId) == targetObject object.
 	
 	^ call
 ]
@@ -34,7 +75,7 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> emptyCodeArgument [
 GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeReturningObjectWithSlots [
 	<gtExample>
 	"Test execution that returns an object with slots and views."
-	| objectStorage tool call result model objectValue storedResult |
+	| objectStorage tool call result targetObject objectValue storedResult |
 	objectStorage := GtLObjectStorage new.
 	tool := GtLMagritteToolForSmalltalkCodeEvaluation new.
 	call := GtLFunctionToolCall new.
@@ -47,16 +88,16 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeReturningObjectWithS
 		inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
 	
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteBasedModel).
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
 	
-	model := result model.
-	self assert: (model isKindOf: GtLSmalltalkCodeEvaluationResult).
-	self assert: (model object isKindOf: GtLSerializedObjectValueTestObject).
-	self assert: model object name equals: 'TestObject'.
-	self assert: model object count equals: 42.
-	self assert: model object items equals: #('apple' 'banana' 'cherry').
+	targetObject := result targetObject.
+	self assert: (targetObject isKindOf: GtLSmalltalkCodeEvaluationResult).
+	self assert: (targetObject object isKindOf: GtLSerializedObjectValueTestObject).
+	self assert: targetObject object name equals: 'TestObject'.
+	self assert: targetObject object count equals: 42.
+	self assert: targetObject object items equals: #('apple' 'banana' 'cherry').
 	
-	objectValue := model objectValue.
+	objectValue := targetObject objectValue.
 	self assert: objectValue objectClassName equals: 'GtLSerializedObjectValueTestObject'.
 	self assert: objectValue superclassName equals: 'Object'.
 	self assert: objectValue packageName equals: 'Gt4LlmCore-Examples'.
@@ -69,9 +110,9 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeReturningObjectWithS
 		s name = 'name' and: [ s valueClassName = 'ByteString' ] ]).
 	self assert: (objectValue allInstanceSlots anySatisfy: [ :s | 
 		s name = 'count' and: [ s valuePrintString = '42' ] ]).
-	self assert: model objectId isNotEmpty.
-	self assert: (objectStorage objectAt: model objectId) == model object.
-	storedResult := objectStorage storedObjectAt: model objectId.
+	self assert: targetObject objectId isNotEmpty.
+	self assert: (objectStorage objectAt: targetObject objectId) == targetObject object.
+	storedResult := objectStorage storedObjectAt: targetObject objectId.
 	self assert: storedResult reason class equals: GtLStoredObjectCodeExecutionReason.
 	self assert: storedResult reason asReasonString equals: 'GtLSerializedObjectValueTestObject exampleInstance'.
 	
@@ -82,10 +123,11 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeReturningObjectWithS
 GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeReturningObjectWithSlotsSerialization [
 	<gtExample>
 	"Test that the result serializes correctly to JSON."
-	| call result jsonObject objectValue slots |
+	| call result targetObject jsonObject objectValue slots |
 	call := self executeReturningObjectWithSlots.
 	result := call result.
-	jsonObject := GtMagritteJSONDataExporter exportObject: result model.
+	targetObject := result targetObject.
+	jsonObject := GtMagritteJSONDataExporter exportObject: targetObject.
 	
 	"Verify top-level structure"
 	self assert: (jsonObject at: 'code') equals: 'GtLSerializedObjectValueTestObject exampleInstance'.
@@ -120,7 +162,7 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeReturningObjectWithS
 { #category : #examples }
 GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeSimpleDoIt [
 	<gtExample>
-	| objectStorage tool call result model storedResult |
+	| objectStorage tool call result targetObject storedResult |
 	objectStorage := GtLObjectStorage new.
 	tool := GtLMagritteToolForSmalltalkCodeEvaluation new.
 	call := GtLFunctionToolCall new.
@@ -133,18 +175,18 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeSimpleDoIt [
 		inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
 	
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteBasedModel).
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
 	
-	model := result model.
-	self assert: (model isKindOf: GtLSmalltalkCodeEvaluationResult).
-	self assert: model object equals: 3.
-	self assert: model code equals: '1 + 2'.
-	self assert: model objectValue objectClassName equals: 'SmallInteger'.
-	self assert: model objectValue objectPrintString equals: '3'.
-	self assert: model objectId isNotEmpty.
+	targetObject := result targetObject.
+	self assert: (targetObject isKindOf: GtLSmalltalkCodeEvaluationResult).
+	self assert: targetObject object equals: 3.
+	self assert: targetObject code equals: '1 + 2'.
+	self assert: targetObject objectValue objectClassName equals: 'SmallInteger'.
+	self assert: targetObject objectValue objectPrintString equals: '3'.
+	self assert: targetObject objectId isNotEmpty.
 	self assert: objectStorage objectCount equals: 1.
 	self assert: (objectStorage objectAt: objectStorage objectIds first) equals: 3.
-	storedResult := objectStorage storedObjectAt: model objectId.
+	storedResult := objectStorage storedObjectAt: targetObject objectId.
 	self assert: storedResult reason class equals: GtLStoredObjectCodeExecutionReason.
 	self assert: storedResult reason asReasonString equals: '1 + 2'.
 	
@@ -154,7 +196,7 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeSimpleDoIt [
 { #category : #examples }
 GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeSimpleDoItWithNoBindingKey [
 	<gtExample>
-	| objectStorage tool call result model storedResult |
+	| objectStorage tool call result targetObject storedResult |
 	objectStorage := GtLObjectStorage new.
 	tool := GtLMagritteToolForSmalltalkCodeEvaluation new.
 	call := GtLFunctionToolCall new.
@@ -166,18 +208,18 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeSimpleDoItWithNoBind
 		inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
 	
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteBasedModel).
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
 	
-	model := result model.
-	self assert: (model isKindOf: GtLSmalltalkCodeEvaluationResult).
-	self assert: model object equals: 3.
-	self assert: model code equals: '1 + 2'.
-	self assert: model objectValue objectClassName equals: 'SmallInteger'.
-	self assert: model objectValue objectPrintString equals: '3'.
-	self assert: model objectId isNotEmpty.
+	targetObject := result targetObject.
+	self assert: (targetObject isKindOf: GtLSmalltalkCodeEvaluationResult).
+	self assert: targetObject object equals: 3.
+	self assert: targetObject code equals: '1 + 2'.
+	self assert: targetObject objectValue objectClassName equals: 'SmallInteger'.
+	self assert: targetObject objectValue objectPrintString equals: '3'.
+	self assert: targetObject objectId isNotEmpty.
 	self assert: objectStorage objectCount equals: 1.
 	self assert: (objectStorage objectAt: objectStorage objectIds first) equals: 3.
-	storedResult := objectStorage storedObjectAt: model objectId.
+	storedResult := objectStorage storedObjectAt: targetObject objectId.
 	self assert: storedResult reason class equals: GtLStoredObjectCodeExecutionReason.
 	self assert: storedResult reason asReasonString equals: '1 + 2'.
 	
@@ -187,7 +229,7 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeSimpleDoItWithNoBind
 { #category : #examples }
 GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeSimpleDoItWithoutObjectStorage [
 	<gtExample>
-	| tool call result model |
+	| tool call result targetObject |
 	tool := GtLMagritteToolForSmalltalkCodeEvaluation new.
 	call := GtLFunctionToolCall new.
 	call rawArguments: {
@@ -197,22 +239,22 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeSimpleDoItWithoutObj
 	result := tool performToolCall: call.
 	
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteBasedModel).
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
 	
-	model := result model.
-	self assert: (model isKindOf: GtLSmalltalkCodeEvaluationResult).
-	self assert: model object equals: 3.
-	self assert: model code equals: '1 + 2'.
-	self assert: model objectId equals: ''.
+	targetObject := result targetObject.
+	self assert: (targetObject isKindOf: GtLSmalltalkCodeEvaluationResult).
+	self assert: targetObject object equals: 3.
+	self assert: targetObject code equals: '1 + 2'.
+	self assert: targetObject objectId equals: ''.
 	
 	^ call
 ]
 
-{ #category : #'examples - bindings errors' }
+{ #category : #examples }
 GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithBindingEmptyName [
 	<gtExample>
 	"Test that a binding with empty name is handled."
-	| objectStorage tool call result model bindingObjectId |
+	| objectStorage tool call result targetObject bindingObjectId |
 	objectStorage := GtLObjectStorage new.
 	bindingObjectId := objectStorage addNewObject: 40.
 	
@@ -228,21 +270,21 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithBindingEmptyName
 		performToolCall: call
 		inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
 	
-	self assert: (result isKindOf: GtLMagritteBasedModel).
-	model := result model.
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	targetObject := result targetObject.
 	
 	"Should fail because binding name is empty - can't create valid symbol"
-	self assert: (model isKindOf: GtLSmalltalkCodeEvaluationExceptionResult).
-	self assert: model isErrorDomainObject.
+	self assert: (targetObject isKindOf: GtLSmalltalkCodeEvaluationExceptionResult).
+	self assert: targetObject isErrorDomainObject.
 	
 	^ call
 ]
 
-{ #category : #'examples - bindings edge cases' }
+{ #category : #examples }
 GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithBindingEmptyObjectId [
 	<gtExample>
 	"Test that a binding with empty objectId is handled."
-	| objectStorage tool call result model |
+	| objectStorage tool call result targetObject |
 	objectStorage := GtLObjectStorage new.
 	
 	tool := GtLMagritteToolForSmalltalkCodeEvaluation new.
@@ -257,22 +299,23 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithBindingEmptyObje
 		performToolCall: call
 		inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
 	
-	self assert: (result isKindOf: GtLMagritteBasedModel).
-	model := result model.
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	targetObject := result targetObject.
 	
 	"Should fail because objectId is empty - caught early in validation"
-	self assert: (model isKindOf: GtLMissingDomainObject).
-	self assert: model isErrorDomainObject.
-	self assert: model objectName equals: ''.
+	self assert: (targetObject isKindOf: GtLMissingDomainObject).
+	self assert: targetObject isErrorDomainObject.
+	self assert: targetObject objectName equals: ''.
 	
 	^ call
 ]
 
-{ #category : #'examples - bindings edge cases' }
+{ #category : #'examples - error cases' }
 GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithBindingMissingName [
 	<gtExample>
-	"Test that a binding with missing name is handled - Magritte returns empty string for missing name."
-	| objectStorage tool call result model bindingObjectId |
+	<return: #GtLFunctionToolCall>
+	"Test that a binding with missing name is handled - returns missing required properties error."
+	| objectStorage tool call result targetObject bindingObjectId |
 	objectStorage := GtLObjectStorage new.
 	bindingObjectId := objectStorage addNewObject: 40.
 	
@@ -288,20 +331,23 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithBindingMissingNa
 		performToolCall: call
 		inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
 	
-	self assert: (result isKindOf: GtLMagritteBasedModel).
-	model := result model.
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	targetObject := result targetObject.
 	
-	"Should fail - either validation error or compilation error"
-	self assert: model isErrorDomainObject.
+	"Should fail - missing required property 'name' in bindings"
+	self assert: targetObject isErrorDomainObject.
+	self assert: (targetObject isKindOf: GtLMissingRequiredPropertiesDomainObject).
+	self assert: targetObject missingPropertyNames equals: #('name').
 	
 	^ call
 ]
 
-{ #category : #'examples - bindings edge cases' }
+{ #category : #'examples - error cases' }
 GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithBindingMissingObjectId [
 	<gtExample>
-	"Test that a binding with missing objectId is handled - Magritte validation catches null."
-	| objectStorage tool call result model |
+	<return: #GtLFunctionToolCall>
+	"Test that a binding with missing objectId is handled - returns missing required properties error."
+	| objectStorage tool call result targetObject |
 	objectStorage := GtLObjectStorage new.
 	
 	tool := GtLMagritteToolForSmalltalkCodeEvaluation new.
@@ -316,20 +362,23 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithBindingMissingOb
 		performToolCall: call
 		inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
 	
-	self assert: (result isKindOf: GtLMagritteBasedModel).
-	model := result model.
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	targetObject := result targetObject.
 	
-	"Should fail - Magritte validation catches null objectId"
-	self assert: model isErrorDomainObject.
+	"Should fail - missing required property 'objectId' in bindings"
+	self assert: targetObject isErrorDomainObject.
+	self assert: (targetObject isKindOf: GtLMissingRequiredPropertiesDomainObject).
+	self assert: targetObject missingPropertyNames equals: #('objectId').
 	
 	^ call
 ]
 
-{ #category : #'examples - bindings edge cases' }
+{ #category : #'examples - error cases' }
 GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithBindingNilName [
 	<gtExample>
-	"Test that a binding with nil name is handled - Magritte validation catches null for required string."
-	| objectStorage tool call result model bindingObjectId |
+	<return: #GtLFunctionToolCall>
+	"Test that a binding with nil name is handled - returns JSON schema validation error."
+	| objectStorage tool call result targetObject bindingObjectId |
 	objectStorage := GtLObjectStorage new.
 	bindingObjectId := objectStorage addNewObject: 40.
 	
@@ -345,20 +394,24 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithBindingNilName [
 		performToolCall: call
 		inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
 	
-	self assert: (result isKindOf: GtLMagritteBasedModel).
-	model := result model.
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	targetObject := result targetObject.
 	
-	"Magritte validation catches null name - it's an error"
-	self assert: model isErrorDomainObject.
+	"Should fail - nil name returns JSON schema validation error"
+	self assert: targetObject isErrorDomainObject.
+	self assert: (targetObject isKindOf: GtLJSONSchemaValidationErrorDomainObject).
+	self assert: targetObject errorMessage equals: '@[bindings/1/name] string expected'.
+	self assert: targetObject path equals: #(#bindings 1 #name).
 	
 	^ call
 ]
 
-{ #category : #'examples - bindings edge cases' }
+{ #category : #'examples - error cases' }
 GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithBindingNilObjectId [
 	<gtExample>
-	"Test that a binding with nil objectId is handled - Magritte validation catches this."
-	| objectStorage tool call result model |
+	<return: #GtLFunctionToolCall>
+	"Test that a binding with nil objectId is handled - returns JSON schema validation error."
+	| objectStorage tool call result targetObject |
 	objectStorage := GtLObjectStorage new.
 	
 	tool := GtLMagritteToolForSmalltalkCodeEvaluation new.
@@ -373,11 +426,12 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithBindingNilObject
 		performToolCall: call
 		inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
 	
-	self assert: (result isKindOf: GtLMagritteBasedModel).
-	model := result model.
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	targetObject := result targetObject.
 	
-	"Magritte validation catches null values for required fields"
-	self assert: model isErrorDomainObject.
+	"Should fail - nil objectId returns JSON schema validation error"
+	self assert: targetObject isErrorDomainObject.
+	self assert: (targetObject isKindOf: GtLJSONSchemaValidationErrorDomainObject).
 	
 	^ call
 ]
@@ -385,7 +439,7 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithBindingNilObject
 { #category : #examples }
 GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithBindings [
 	<gtExample>
-	| objectStorage tool call result model bindingObjectId resultObjectId storedResult |
+	| objectStorage tool call result targetObject bindingObjectId resultObjectId storedResult |
 	objectStorage := GtLObjectStorage new.
 	bindingObjectId := objectStorage addNewObject: 40.
 	
@@ -402,13 +456,13 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithBindings [
 		inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
 	
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteBasedModel).
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
 	
-	model := result model.
-	self assert: (model isKindOf: GtLSmalltalkCodeEvaluationResult).
-	self assert: model object equals: 42.
+	targetObject := result targetObject.
+	self assert: (targetObject isKindOf: GtLSmalltalkCodeEvaluationResult).
+	self assert: targetObject object equals: 42.
 	
-	resultObjectId := model objectId.
+	resultObjectId := targetObject objectId.
 	self assert: resultObjectId isNotEmpty.
 	self assert: resultObjectId ~= bindingObjectId.
 	self assert: (objectStorage objectAt: bindingObjectId) equals: 40.
@@ -423,7 +477,7 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithBindings [
 { #category : #examples }
 GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithBindingsMissingObjectStorage [
 	<gtExample>
-	| tool call result model |
+	| tool call result targetObject |
 	tool := GtLMagritteToolForSmalltalkCodeEvaluation new.
 	call := GtLFunctionToolCall new.
 	call rawArguments: {
@@ -435,11 +489,11 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithBindingsMissingO
 	result := tool performToolCall: call.
 	
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteBasedModel).
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
 	
-	model := result model.
-	self assert: model isErrorDomainObject.
-	self assert: model missingModelName equals: 'objectStorage'.
+	targetObject := result targetObject.
+	self assert: targetObject isErrorDomainObject.
+	self assert: targetObject missingModelName equals: 'objectStorage'.
 	
 	^ call
 ]
@@ -447,7 +501,7 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithBindingsMissingO
 { #category : #examples }
 GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithError [
 	<gtExample>
-	| tool call result model |
+	| tool call result targetObject |
 	tool := GtLMagritteToolForSmalltalkCodeEvaluation new.
 	call := GtLFunctionToolCall new.
 	call rawArguments: {
@@ -457,24 +511,25 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithError [
 	result := tool performToolCall: call.
 	
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteBasedModel).
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
 	
-	model := result model.
-	self assert: (model isKindOf: GtLSmalltalkCodeEvaluationExceptionResult).
-	self assert: model isErrorDomainObject.
-	self assert: model code equals: '1 / 0'.
-	self assert: (model whatFailed beginsWith: 'Error while evaluating smalltalk code').
-	self assert: (model errorMessage includesSubstring: 'ZeroDivide').
-	self assert: model errorClassName equals: 'ZeroDivide'.
-	self assert: model exception isNotNil.
+	targetObject := result targetObject.
+	self assert: (targetObject isKindOf: GtLSmalltalkCodeEvaluationExceptionResult).
+	self assert: targetObject isErrorDomainObject.
+	self assert: targetObject code equals: '1 / 0'.
+	self assert: (targetObject whatFailed beginsWith: 'Error while evaluating smalltalk code').
+	self assert: (targetObject errorMessage includesSubstring: 'ZeroDivide').
+	self assert: targetObject errorClassName equals: 'ZeroDivide'.
+	self assert: targetObject exception isNotNil.
 	
 	^ call
 ]
 
-{ #category : #examples }
+{ #category : #'examples - error cases' }
 GtLMagritteToolForSmalltalkCodeEvaluationExamples >> missingCodeArgument [
 	<gtExample>
-	| tool call result model |
+	<return: #GtLFunctionToolCall>
+	| tool call result targetObject |
 	tool := GtLMagritteToolForSmalltalkCodeEvaluation new.
 	call := GtLFunctionToolCall new.
 	call rawArguments: {
@@ -483,12 +538,12 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> missingCodeArgument [
 	result := tool performToolCall: call.
 	
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteBasedModel).
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
 	
-	model := result model.
-	self assert: model isErrorDomainObject.
-	self assert: (model isKindOf: GtLMissingRequiredPropertiesDomainObject).
-	self assert: model missingPropertyNames equals: #('code').
+	targetObject := result targetObject.
+	self assert: targetObject isErrorDomainObject.
+	self assert: (targetObject isKindOf: GtLMissingRequiredPropertiesDomainObject).
+	self assert: targetObject missingPropertyNames equals: #('code').
 	
 	^ call
 ]

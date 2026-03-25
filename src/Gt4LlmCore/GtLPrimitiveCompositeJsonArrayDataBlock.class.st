@@ -7,7 +7,7 @@ Class {
 { #category : #accessing }
 GtLPrimitiveCompositeJsonArrayDataBlock >> condensedJsonBlock [
 	^GtLPrimitiveJsonDataBlock new
-			dataKey: self dataKey;
+			dataKey: nil; "is nil as we collect the inner data"
 			jsonData: (self jsonDataBlocksCollect:  [ :each | each llmJsonData ])
 ]
 

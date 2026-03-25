@@ -7,7 +7,7 @@ Class {
 	#instVars : [
 		'listElement'
 	],
-	#category : #'Gt4LlmCore-UI - Registry'
+	#category : 'Gt4LlmCore-UI - Registry'
 }
 
 { #category : #layout }

@@ -8,7 +8,7 @@ Class {
 		'fileError',
 		'clientClass'
 	],
-	#category : #'Gt4LlmCore-UI'
+	#category : 'Gt4LlmCore-UI'
 }
 
 { #category : #accessing }

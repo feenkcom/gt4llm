@@ -28,6 +28,13 @@ GtLJSONSchemaValidationErrorDomainObject >> errorMessageDescription [
 		beRequired
 ]
 
+{ #category : #'llm views' }
+GtLJSONSchemaValidationErrorDomainObject >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
+]
+
 { #category : #accessing }
 GtLJSONSchemaValidationErrorDomainObject >> messageText [
 	"Return an error message"
