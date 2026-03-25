@@ -21,24 +21,3 @@ GtLPrimitiveCompositeJsonArrayDataBlock >> jsonDataBlocksCollect:  aBlock [
 GtLPrimitiveCompositeJsonArrayDataBlock >> keysForMerge [
 	^ {self dataKey}
 ]
-
-{ #category : #accessing }
-GtLPrimitiveCompositeJsonArrayDataBlock >> llmJsonData [
-	^ self condensedJsonBlock llmJsonData
-]
-
-{ #category : #serialization }
-GtLPrimitiveCompositeJsonArrayDataBlock >> serializeForAnthropic [
-	^ self condensedJsonBlock serializeForAnthropic 
-]
-
-{ #category : #serialization }
-GtLPrimitiveCompositeJsonArrayDataBlock >> serializeForBedrockConverse [
-	<sys_ext>
-	^ self condensedJsonBlock serializeForBedrockConverse 
-]
-
-{ #category : #serialization }
-GtLPrimitiveCompositeJsonArrayDataBlock >> serializeForOpenAI [
-	^ self condensedJsonBlock serializeForOpenAI 
-]
