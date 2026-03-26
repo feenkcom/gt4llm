@@ -3,9 +3,54 @@ Examples for GtLSerializedObjectValue domain object.
 "
 Class {
 	#name : #GtLSerializedObjectValueExamples,
-	#superclass : #Object,
+	#superclass : #GtLMagritteDomainObjectExamples,
 	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
+
+{ #category : #examples }
+GtLSerializedObjectValueExamples >> objectValueEquality [
+	<gtExample>
+	<return: #GtLSerializedObjectValue>
+	| objectValue1 objectValue2 objectValue3 viewInfo |
+	
+	viewInfo := GtLSerializedViewInfo new
+		methodName: 'gtPrintFor:';
+		title: 'Print';
+		yourself.
+	
+	objectValue1 := GtLSerializedObjectValue new
+		objectClassName: 'SmallInteger';
+		superclassName: 'Integer';
+		packageName: 'Kernel';
+		objectPrintString: '42';
+		phlowViews: { viewInfo };
+		allInstanceSlots: #();
+		yourself.
+	
+	objectValue2 := GtLSerializedObjectValue new
+		objectClassName: 'SmallInteger';
+		superclassName: 'Integer';
+		packageName: 'Kernel';
+		objectPrintString: '42';
+		phlowViews: { viewInfo copy };
+		allInstanceSlots: #();
+		yourself.
+	
+	objectValue3 := GtLSerializedObjectValue new
+		objectClassName: 'ByteString';
+		superclassName: 'String';
+		packageName: 'Collections-Strings';
+		objectPrintString: '''hello''';
+		phlowViews: #();
+		allInstanceSlots: #();
+		yourself.
+	
+	self assert: objectValue1 equals: objectValue2.
+	self assert: objectValue1 hash equals: objectValue2 hash.
+	self assert: (objectValue1 = objectValue3) not.
+	
+	^ objectValue1
+]
 
 { #category : #examples }
 GtLSerializedObjectValueExamples >> objectValueFromObject [

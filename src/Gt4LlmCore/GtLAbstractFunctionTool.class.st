@@ -46,6 +46,11 @@ GtLAbstractFunctionTool >> functionOpenAI [
 		'parameters' -> self parametersJsonSchemaDictionary} asDictionary
 ]
 
+{ #category : #testing }
+GtLAbstractFunctionTool >> isUsingDataViews [
+	^false
+]
+
 { #category : #'api - responses' }
 GtLAbstractFunctionTool >> parametersJsonSchemaDictionary [
 	| parametersFormat |

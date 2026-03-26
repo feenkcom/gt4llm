@@ -9,8 +9,16 @@ Class {
 }
 
 { #category : #accessing }
+GtLMissingInformationDomainObject >> defaultErrorMessage [
+	^missingModelName 
+		ifNil: [''] 
+		ifNotNil: [ 'Missing {1}' format: { missingModelName }  ]
+]
+
+{ #category : #accessing }
 GtLMissingInformationDomainObject >> errorMessage [
-	^ errorMessage
+	^ errorMessage ifNil: [
+			self defaultErrorMessage ]
 ]
 
 { #category : #accessing }
@@ -24,8 +32,7 @@ GtLMissingInformationDomainObject >> errorMessageDescription [
 
 	^ MAStringDescription new
 			label: 'Error message';
-			accessor: #errorMessage;
-			beRequired
+			accessor: #errorMessage
 ]
 
 { #category : #'llm views' }
@@ -52,8 +59,6 @@ GtLMissingInformationDomainObject >> missingModelName: aString [
 	"Set a missing model name."
 
 	missingModelName := aString.
-	errorMessage ifNil: [
-		errorMessage := 'Missing {1}' format: { missingModelName } ]
 ]
 
 { #category : #accessing }

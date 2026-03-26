@@ -89,7 +89,7 @@ GtLToolForClassDefinitionChangeExamples >> changeClassVariablesWithPartialArgume
 	self assert: result isErrorDomainObject not.
 	self assert: result foundClass equals: targetClass.
 	self assert: (targetClass instanceVariables collect: #name) = #('first').
-	self assert: (targetClass classVariables collect: #name) = #('NewShared' 'SharedValue').
+	self assert: (targetClass classVariables collect: #name) sorted = #('NewShared' 'SharedValue').
 	self assert: targetClass superclass equals: Object.
 	self assert: targetClass package name equals: 'Gt4LlmCoreNewPackage'.
 	self assert: result originalInstanceVariableNames equals: 'first'.

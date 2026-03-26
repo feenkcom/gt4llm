@@ -19,6 +19,18 @@ GtLSerializedViewInfo class >> fromView: aView [
 		yourself
 ]
 
+{ #category : #comparing }
+GtLSerializedViewInfo >> = anObject [
+	self == anObject ifTrue: [ ^ true ].
+	self class = anObject class ifFalse: [ ^ false ].
+	^ methodName = anObject methodName and: [ title = anObject title ]
+]
+
+{ #category : #comparing }
+GtLSerializedViewInfo >> hash [
+	^ methodName hash bitXor: title hash
+]
+
 { #category : #initialization }
 GtLSerializedViewInfo >> initializeFromView: aView [
 	"Initialize from a phlow view."

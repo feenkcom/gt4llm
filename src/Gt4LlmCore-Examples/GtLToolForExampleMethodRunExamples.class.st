@@ -1,121 +1,320 @@
+"
+Examples for GtLMagritteToolForExampleMethodRun.
+"
 Class {
 	#name : #GtLToolForExampleMethodRunExamples,
 	#superclass : #Object,
+	#traits : 'TGtLInvalidInputDataAssertions',
+	#classTraits : 'TGtLInvalidInputDataAssertions classTrait',
 	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
-{ #category : #'llm-generated' }
+{ #category : #examples }
 GtLToolForExampleMethodRunExamples >> exampleRunError [
 	<gtExample>
-	| tool call result |
+	| tool call result targetObject |
 	tool := GtLToolForExampleMethodRun new.
 	call := GtLFunctionToolCall new.
-	call function: {
-		'name' -> tool name.
-		'arguments' -> {
-			'className' -> 'GtLExampleRunDummyExamples'.
-			'methodName' -> 'errorExample'
+	call rawArguments: {
+		'exampleReference' -> {
+			'exampleClassName' -> 'GtLExampleRunDummyExamples'.
+			'methodName' -> 'errorExample'.
+			'classSide' -> false
 		} asDictionary
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: result isErrorDomainObject not.
-	self assert: result isErrorResult.
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	targetObject := result targetObject.
+	self assert: (targetObject isKindOf: GtLExampleWithResultDomainObject).
+	self assert: targetObject isErrorResult.
 	^ call
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #examples }
 GtLToolForExampleMethodRunExamples >> exampleRunFailure [
 	<gtExample>
-	| tool call result |
+	| tool call result targetObject |
 	tool := GtLToolForExampleMethodRun new.
 	call := GtLFunctionToolCall new.
-	call function: {
-		'name' -> tool name.
-		'arguments' -> {
-			'className' -> 'GtLExampleRunDummyExamples'.
-			'methodName' -> 'failingExample'
+	call rawArguments: {
+		'exampleReference' -> {
+			'exampleClassName' -> 'GtLExampleRunDummyExamples'.
+			'methodName' -> 'failingExample'.
+			'classSide' -> false
 		} asDictionary
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: result isErrorDomainObject not.
-	self assert: result isFailureResult.
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	
+	targetObject := result targetObject.
+	self assert: (targetObject isKindOf: GtLExampleWithResultDomainObject).
+	self assert: targetObject isFailureResult.
 	^ call
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #examples }
+GtLToolForExampleMethodRunExamples >> exampleRunForMissingExampleClassName [
+	<gtExample>
+	| tool call result targetObject |
+	tool := GtLToolForExampleMethodRun new.
+	call := GtLFunctionToolCall new.
+	call rawArguments: {
+		'exampleReference' -> {
+			'methodName' -> 'someMethod'.
+			'classSide' -> false
+		} asDictionary
+	} asDictionary.
+	result := tool performToolCall: call.
+	
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	
+	targetObject := result targetObject.
+	self
+		assertMissingRequiredProperties: targetObject
+		withPropertyNames: #('exampleClassName')
+		path: #('exampleReference')
+		errorMessage: '@[exampleReference] required properties missing [exampleClassName]'.
+	
+	^ call
+]
+
+{ #category : #examples }
+GtLToolForExampleMethodRunExamples >> exampleRunForMissingExampleReference [
+	<gtExample>
+	| tool call result targetObject |
+	tool := GtLToolForExampleMethodRun new.
+	call := GtLFunctionToolCall new.
+	call rawArguments: Dictionary new.
+	result := tool performToolCall: call.
+	
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	
+	targetObject := result targetObject.
+	self
+		assertMissingRequiredProperties: targetObject
+		withPropertyNames: #('exampleReference')
+		path: #(nil)
+		errorMessage: 'required properties missing [exampleReference]'.
+	
+	^ call
+]
+
+{ #category : #examples }
+GtLToolForExampleMethodRunExamples >> exampleRunForMissingMethodName [
+	<gtExample>
+	| tool call result targetObject |
+	tool := GtLToolForExampleMethodRun new.
+	call := GtLFunctionToolCall new.
+	call rawArguments: {
+		'exampleReference' -> {
+			'exampleClassName' -> 'GtTMoneyExamples'.
+			'classSide' -> false
+		} asDictionary
+	} asDictionary.
+	result := tool performToolCall: call.
+	
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	
+	targetObject := result targetObject.
+	self
+		assertMissingRequiredProperties: targetObject
+		withPropertyNames: #('methodName')
+		path: #('exampleReference')
+		errorMessage: '@[exampleReference] required properties missing [methodName]'.
+	
+	^ call
+]
+
+{ #category : #examples }
+GtLToolForExampleMethodRunExamples >> exampleRunForNilExampleClassName [
+	<gtExample>
+	| tool call result targetObject |
+	tool := GtLToolForExampleMethodRun new.
+	call := GtLFunctionToolCall new.
+	call rawArguments: {
+		'exampleReference' -> {
+			'exampleClassName' -> nil.
+			'methodName' -> 'someMethod'.
+			'classSide' -> false
+		} asDictionary
+	} asDictionary.
+	result := tool performToolCall: call.
+	
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	
+	targetObject := result targetObject.
+	self
+		assertJSONSchemaValidationError: targetObject
+		withPath: #('exampleReference' 'exampleClassName')
+		errorMessage: '@[exampleReference/exampleClassName] string expected'.
+	
+	^ call
+]
+
+{ #category : #examples }
+GtLToolForExampleMethodRunExamples >> exampleRunForNilMethodName [
+	<gtExample>
+	| tool call result targetObject |
+	tool := GtLToolForExampleMethodRun new.
+	call := GtLFunctionToolCall new.
+	call rawArguments: {
+		'exampleReference' -> {
+			'exampleClassName' -> 'GtTMoneyExamples'.
+			'methodName' -> nil.
+			'classSide' -> false
+		} asDictionary
+	} asDictionary.
+	result := tool performToolCall: call.
+	
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	
+	targetObject := result targetObject.
+	self
+		assertJSONSchemaValidationError: targetObject
+		withPath: #('exampleReference' 'methodName')
+		errorMessage: '@[exampleReference/methodName] string expected'.
+	
+	^ call
+]
+
+{ #category : #examples }
 GtLToolForExampleMethodRunExamples >> exampleRunForNonExampleMethod [
 	<gtExample>
 	| tool call result |
 	tool := GtLToolForExampleMethodRun new.
 	call := GtLFunctionToolCall new.
-	call
-		function: {'name' -> tool name.
-				'arguments'
-					-> {'className' -> 'GtLExampleRunDummyExamples'.
-							'methodName' -> 'regularMethod'} asDictionary} asDictionary.
+	call rawArguments: {
+		'exampleReference' -> {
+			'exampleClassName' -> 'GtLExampleRunDummyExamples'.
+			'methodName' -> 'regularMethod'.
+			'classSide' -> false
+		} asDictionary
+	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: result isErrorDomainObject.
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	self assert: (result targetObject isKindOf: GtLMethodIsNotExampleDomainObject).
 	self
-		assert: result method name
+		assert: result targetObject method name
 		equals: 'GtLExampleRunDummyExamples>>#regularMethod'.
+	^ call
+]
+
+{ #category : #examples }
+GtLToolForExampleMethodRunExamples >> exampleRunForUnknownClass [
+	<gtExample>
+	| tool call result targetObject |
+	tool := GtLToolForExampleMethodRun new.
+	call := GtLFunctionToolCall new.
+	call rawArguments: {
+		'exampleReference' -> {
+			'exampleClassName' -> 'NonExistentClassXYZ123'.
+			'methodName' -> 'someMethod'.
+			'classSide' -> false
+		} asDictionary
+	} asDictionary.
+	result := tool performToolCall: call.
+	
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	
+	targetObject := result targetObject.
+	self
+		assertMissingObject: targetObject
+		withObjectName: 'NonExistentClassXYZ123'
+		errorMessage: 'NonExistentClassXYZ123 is not found'.
+	
+	^ call
+]
+
+{ #category : #examples }
+GtLToolForExampleMethodRunExamples >> exampleRunForUnknownMethod [
+	<gtExample>
+	| tool call result targetObject |
+	tool := GtLToolForExampleMethodRun new.
+	call := GtLFunctionToolCall new.
+	call rawArguments: {
+		'exampleReference' -> {
+			'exampleClassName' -> 'GtTMoneyExamples'.
+			'methodName' -> 'nonExistentMethodXYZ123'.
+			'classSide' -> false
+		} asDictionary
+	} asDictionary.
+	result := tool performToolCall: call.
+	
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	
+	targetObject := result targetObject.
+	self
+		assertMissingObject: targetObject
+		withObjectName: 'GtTMoneyExamples>>#nonExistentMethodXYZ123'
+		errorMessage: 'GtTMoneyExamples>>#nonExistentMethodXYZ123 is not found'.
+	
 	^ call
 ]
 
 { #category : #examples }
 GtLToolForExampleMethodRunExamples >> exampleRunSuccess [
 	<gtExample>
-	| tool call result |
+	| tool call result targetObject |
 	tool := GtLToolForExampleMethodRun new.
 	call := GtLFunctionToolCall new.
-	call
-		function: {'name' -> tool name.
-				'arguments'
-					-> {'className' -> 'GtTMoneyExamples'.
-							'methodName' -> 'fortyTwoEuros'} asDictionary} asDictionary.
+	call rawArguments: {
+		'exampleReference' -> {
+			'exampleClassName' -> 'GtTMoneyExamples'.
+			'methodName' -> 'fortyTwoEuros'.
+			'classSide' -> false
+		} asDictionary
+	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: result isErrorDomainObject not.
-	self assert: result isSuccessResult.
-	self assert: result objectId isNil.
+	self assert: call arguments size equals: 1.
+	self assert: ((call arguments at: 'exampleReference') isKindOf: GtLExampleReference).
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	
+	targetObject := result targetObject.
+	self assert: (targetObject isKindOf: GtLExampleWithResultDomainObject).
+	self assert: targetObject isSuccessResult.
+	self assert: targetObject objectId isNil.
 	^ call
 ]
 
 { #category : #examples }
 GtLToolForExampleMethodRunExamples >> exampleRunSuccessStoresObjectId [
 	<gtExample>
-	| objectStorage tool call result objectId expected storedObject |
+	| objectStorage tool call result targetObject objectId storedObject |
 	objectStorage := GtLObjectStorage new.
 	tool := GtLToolForExampleMethodRun new.
 	call := GtLFunctionToolCall new.
-	call function: {
-		'name' -> tool name.
-		'arguments' -> {
-			'className' -> 'GtLExampleRunDummyExamples'.
-			'methodName' -> 'successfulExample'
+	call rawArguments: {
+		'exampleReference' -> {
+			'exampleClassName' -> 'GtLExampleRunDummyExamples'.
+			'methodName' -> 'successfulExample'.
+			'classSide' -> false
 		} asDictionary
 	} asDictionary.
 	result := tool
 		performToolCall: call
 		inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
 	self assert: call tool == tool.
-	self assert: result isErrorDomainObject not.
-	self assert: result isSuccessResult.
-	objectId := result objectId.
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	targetObject := result targetObject.
+	
+	self assert: (targetObject isKindOf: GtLExampleWithResultDomainObject).
+	self assert: targetObject isSuccessResult.
+	objectId := targetObject objectId.
 	self assert: objectId isString.
 	self assert: (objectStorage objectAt: objectId) equals: 42.
 	storedObject := objectStorage storedObjectAt: objectId.
 	self assert: storedObject reason class equals: GtLStoredObjectExampleMethodReason.
-	self assert: storedObject reason asReasonString equals: 'GtLExampleRunDummyExamples>>#successfulExample'.
-	expected := NeoJSONObject new
-		at: #className put: 'GtLExampleRunDummyExamples';
-		at: #selector put: 'successfulExample';
-		at: #status put: 'success';
-		at: #result put: (GtLValueSerializer new serializeValue: 42);
-		at: #objectId put: objectId;
-		yourself.
-	self assert: result serializeToLlmJsonObject equals: expected.
+	
 	^ call
 ]

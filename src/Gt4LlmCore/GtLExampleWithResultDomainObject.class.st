@@ -1,12 +1,20 @@
 Class {
 	#name : #GtLExampleWithResultDomainObject,
-	#superclass : #GtLDomainObject,
+	#superclass : #Object,
 	#instVars : [
 		'exampleWithResult',
 		'objectId'
 	],
 	#category : #'Gt4LlmCore-Domain Objects'
 }
+
+{ #category : #accessing }
+GtLExampleWithResultDomainObject >> exampleReference [
+	^ GtLExampleReference new 
+			methodName: self exampleWithResult selector asString;
+			exampleClassName: self exampleWithResult methodClass name asString;
+			classSide: self exampleWithResult methodClass isClassSide
+]
 
 { #category : #accessing }
 GtLExampleWithResultDomainObject >> exampleWithResult [
@@ -66,13 +74,14 @@ GtLExampleWithResultDomainObject >> isSuccessResult [
 GtLExampleWithResultDomainObject >> llmRawDataViewFor: aDataView [
 	<gtLlmDataView>
 	
-	^aDataView jsonData
+	^aDataView compositeData
 		title: 'Example details';
-		object: [ :aJson |
+		addDataView: (aDataView magritteObject 
+			dataKey: 'exampleReference';
+			object: [ self exampleReference ]);
+		addDataView: (aDataView jsonObject: [ :aJson |
 			aJson
-				at: #exampleClassName put: self exampleWithResult methodClass name asString;
-				at: #exampleMethodName put: self exampleWithResult selector asString;
-				at: #exampleStatus put: self statusText	]
+				at: 'exampleStatus' put: self statusText	])
 ]
 
 { #category : #'llm views' }
@@ -113,60 +122,6 @@ GtLExampleWithResultDomainObject >> objectId [
 { #category : #accessing }
 GtLExampleWithResultDomainObject >> objectId: anObject [
 	objectId := anObject
-]
-
-{ #category : #accessing }
-GtLExampleWithResultDomainObject >> safeReturnValuePrintString [
-	^ [ | object |
-	object := (self isErrorResult or: [ self isFailureResult ])
-		ifTrue: [ self exampleWithResult returnValue 
-			serializeToOpenAIResponseOutput ]
-		ifFalse: [ GtLValueSerializer new
-			serializeValue: self exampleWithResult returnValue ].
-	object ] onErrorDo: [ :anError | anError return: 'printString error' ]
-]
-
-{ #category : #'api - serializing' }
-GtLExampleWithResultDomainObject >> serializeToAnthropicResponseOutput [
-	^ super serializeToAnthropicResponseOutput
-		, (self serializeToLlmResponseImages collect: [ :anPrimitiveImage |
-				anPrimitiveImage serializeToAnthropicResponseOutput ]).
-]
-
-{ #category : #serialization }
-GtLExampleWithResultDomainObject >> serializeToLlmJsonObject [
-	"Return a JSON dictionary that represents the domain object."
-
-	<return: #NeoJSONObject>
-	
-	^ NeoJSONObject new
-		at: #className put: self exampleWithResult methodClass name asString;
-		at: #selector put: self exampleWithResult selector asString;
-		at: #status put: self statusText;
-		at: #result put: self safeReturnValuePrintString;
-		at: #objectId put: self objectId;
-		yourself
-]
-
-{ #category : #'api - serializing' }
-GtLExampleWithResultDomainObject >> serializeToLlmResponseImages [
-	^ (self isErrorResult or: [ self isFailureResult ])
-		ifFalse: [ #() ]
-		ifTrue: [ self exampleWithResult returnValue serializeToLlmResponseImages ]. 
-]
-
-{ #category : #'api - serializing' }
-GtLExampleWithResultDomainObject >> serializeToOpenAIResponseImages [
-	^ (self isErrorResult or: [ self isFailureResult ])
-		ifFalse: [ #() ]
-		ifTrue: [ self exampleWithResult returnValue serializeToOpenAIResponseImages ]. 
-]
-
-{ #category : #'api - serializing' }
-GtLExampleWithResultDomainObject >> serializeToOpenAIResponseOutput [
-	^ super serializeToOpenAIResponseOutput
-		, (self serializeToLlmResponseImages collect: [ :anPrimitiveImage |
-				anPrimitiveImage serializeToOpenAIResponseOutput ])
 ]
 
 { #category : #accessing }

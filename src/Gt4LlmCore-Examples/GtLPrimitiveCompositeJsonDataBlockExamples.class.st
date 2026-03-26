@@ -53,7 +53,7 @@ GtLPrimitiveCompositeJsonDataBlockExamples >> compositeWithDataKeyAndBlocksWithD
 	
 	self assert: composite jsonDataBlocks size equals: 2.
 	self assert: composite dataKey equals: 'data'.
-	self assert: composite condensedJsonBlock dataKey equals: 'data'.
+	self assert: composite condensedJsonBlock dataKey equals: nil.
 	self assert: composite llmJsonData equals: expectedJsonData.
 	self assertSerializationForDataBlockWithOneDataPart: composite.
 	
@@ -89,7 +89,7 @@ GtLPrimitiveCompositeJsonDataBlockExamples >> compositeWithDataKeyAndBlocksWitho
 	
 	self assert: composite jsonDataBlocks size equals: 2.
 	self assert: composite dataKey equals: 'data'.
-	self assert: composite condensedJsonBlock dataKey equals: 'data'.
+	self assert: composite condensedJsonBlock dataKey equals: nil.
 	self assert: composite llmJsonData equals: expectedJsonData.
 	self assertSerializationForDataBlockWithOneDataPart: composite.
 	
@@ -136,7 +136,7 @@ GtLPrimitiveCompositeJsonDataBlockExamples >> compositeWithDataKeyAndMixedBlocks
 	self assert: composite jsonDataBlocks size equals: 3.
 	self assert: composite dataKey equals: 'data'.
 	self assert: composite llmJsonData equals: expectedJsonData.
-	self assert: composite condensedJsonBlock dataKey equals: 'data'.
+	self assert: composite condensedJsonBlock dataKey equals: nil.
 	self assertSerializationForDataBlockWithOneDataPart: composite.
 	
 	^ composite
@@ -201,6 +201,34 @@ GtLPrimitiveCompositeJsonDataBlockExamples >> compositeWithOneBlockWithDataKey [
 	
 	expectedJsonData := Dictionary new
 		at: 'person' put: (Dictionary new
+			at: 'name' put: 'John';
+			yourself);
+		yourself.
+	
+	self assert: composite jsonDataBlocks size equals: 1.
+	self assert: composite llmJsonData equals: expectedJsonData.
+	self assert: composite condensedJsonBlock dataKey isNil.
+	self assertSerializationForDataBlockWithOneDataPart: composite.
+	
+	^ composite
+]
+
+{ #category : #examples }
+GtLPrimitiveCompositeJsonDataBlockExamples >> compositeWithOneBlockWithDataKeyWithSameKey [
+	<gtExample>
+	| composite jsonBlock expectedJsonData |
+	composite := self basicCompositeJsonDataBlock.
+	
+	jsonBlock := GtLPrimitiveJsonDataBlock new
+		dataKey: 'name';
+		jsonData: (Dictionary new
+			at: 'name' put: 'John';
+			yourself).
+	
+	composite addJsonDataBlock: jsonBlock.
+	
+	expectedJsonData := Dictionary new
+		at: 'name' put: (Dictionary new
 			at: 'name' put: 'John';
 			yourself);
 		yourself.
@@ -448,7 +476,7 @@ GtLPrimitiveCompositeJsonDataBlockExamples >> compositeWithTwoSiblingCompositesM
 	self assert: mainComposite jsonDataBlocks size equals: 3.
 	self assert: mainComposite containedJsonDataBlocksCount equals: 5.
 	self assert: mainComposite llmJsonData equals: expectedJsonData.
-	self assert: mainComposite condensedJsonBlock dataKey equals: 'record'.
+	self assert: mainComposite condensedJsonBlock dataKey equals: nil.
 	self assertSerializationForDataBlockWithOneDataPart: mainComposite.
 	
 	^ mainComposite
@@ -593,7 +621,7 @@ GtLPrimitiveCompositeJsonDataBlockExamples >> nestedCompositeWithBothDataKeys [
 		yourself.
 	
 	self assert: outerComposite llmJsonData equals: expectedJsonData.
-	self assert: outerComposite condensedJsonBlock dataKey equals: 'data'.
+	self assert: outerComposite condensedJsonBlock dataKey equals: nil.
 	self assertSerializationForDataBlockWithOneDataPart: outerComposite.
 	
 	^ outerComposite
@@ -729,7 +757,7 @@ GtLPrimitiveCompositeJsonDataBlockExamples >> nestedCompositeWithOuterDataKey [
 		yourself.
 	
 	self assert: outerComposite llmJsonData equals: expectedJsonData.
-	self assert: outerComposite condensedJsonBlock dataKey equals: 'data'.
+	self assert: outerComposite condensedJsonBlock dataKey equals: nil.
 	self assertSerializationForDataBlockWithOneDataPart: outerComposite.
 	
 	^ outerComposite

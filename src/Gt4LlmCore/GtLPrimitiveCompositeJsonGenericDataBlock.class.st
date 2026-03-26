@@ -8,7 +8,7 @@ Class {
 GtLPrimitiveCompositeJsonGenericDataBlock >> condensedJsonBlock [
 	^jsonDataBlocks 
 		inject: (GtLPrimitiveJsonDataBlock new
-			dataKey: self dataKey;
+			dataKey: nil; "is nil as we collect the inner data, and it could have same key"
 			jsonData: Dictionary new) 
 		into: [ :resultBlock :currentBlock |
 			resultBlock 

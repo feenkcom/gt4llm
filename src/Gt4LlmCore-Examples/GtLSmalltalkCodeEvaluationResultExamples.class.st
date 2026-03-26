@@ -16,6 +16,7 @@ GtLSmalltalkCodeEvaluationResultExamples >> simpleObjectValue [
 { #category : #examples }
 GtLSmalltalkCodeEvaluationResultExamples >> simpleResult [
 	<gtExample>
+	<return: #GtLSmalltalkCodeEvaluationResult>
 	| result |
 	result := GtLSmalltalkCodeEvaluationResult new
 		code: '1 + 2';
@@ -33,29 +34,43 @@ GtLSmalltalkCodeEvaluationResultExamples >> simpleResult [
 ]
 
 { #category : #examples }
-GtLSmalltalkCodeEvaluationResultExamples >> simpleResultSerialization [
+GtLSmalltalkCodeEvaluationResultExamples >> simpleResultDataViewSerialization [
 	<gtExample>
-	| result jsonObject expected |
+	<return: #Dictionary>
+	| result compositeView dataBlock jsonData expectedPhlowViews expectedObjectValue expectedJson |
 	result := self simpleResult.
-	jsonObject := GtMagritteJSONDataExporter exportObject: result.
 	
-	expected := NeoJSONObject new
-		at: 'code' put: '1 + 2';
-		at: 'objectValue' put: (NeoJSONObject new
-			at: 'objectClassName' put: 'SmallInteger';
-			at: 'superclassName' put: 'Integer';
-			at: 'packageName' put: 'Kernel';
-			at: 'objectPrintString' put: '3';
-			at: 'phlowViews' put: (NeoJSONArray with: (NeoJSONObject new
-				at: 'methodName' put: 'gtPrintFor:';
-				at: 'title' put: 'Print';
-				yourself));
-			at: 'allInstanceSlots' put: (NeoJSONArray new);
-			yourself);
-		at: 'objectId' put: 'test-uuid-123';
+	compositeView := result llmDataViewsFor: GtLDataView new.
+	self assert: compositeView dataViews size equals: 2.
+	
+	dataBlock := compositeView serializeToLlmPrimiteData.
+	self assert: dataBlock dataBlocks size equals: 1.
+	self assert: dataBlock imageDataBlocks isEmpty.
+	
+	jsonData := dataBlock compositeJsonData.
+	
+	expectedPhlowViews := NeoJSONArray with: (NeoJSONObject new
+		at: 'methodName' put: 'gtPrintFor:';
+		at: 'title' put: 'Print';
+		yourself).
+	
+	expectedObjectValue := NeoJSONObject new
+		at: 'allInstanceSlots' put: NeoJSONArray new;
+		at: 'objectClassName' put: 'SmallInteger';
+		at: 'objectPrintString' put: '3';
+		at: 'packageName' put: 'Kernel';
+		at: 'phlowViews' put: expectedPhlowViews;
+		at: 'superclassName' put: 'Integer';
 		yourself.
 	
-	self assert: jsonObject equals: expected.
+	expectedJson := Dictionary new
+		at: #code put: '1 + 2';
+		at: 'objectDetails' put: Dictionary new;
+		at: #objectId put: 'test-uuid-123';
+		at: #objectValue put: expectedObjectValue;
+		yourself.
 	
-	^ jsonObject
+	self assert: jsonData equals: expectedJson.
+	
+	^ jsonData
 ]

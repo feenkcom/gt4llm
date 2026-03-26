@@ -26,6 +26,20 @@ GtLSerializedSlotInfo class >> fromSlot: aSlot ofObject: anObject [
 		yourself
 ]
 
+{ #category : #comparing }
+GtLSerializedSlotInfo >> = anObject [
+	self == anObject ifTrue: [ ^ true ].
+	self class = anObject class ifFalse: [ ^ false ].
+	^ name = anObject name
+		and: [ valueClassName = anObject valueClassName
+			and: [ valuePrintString = anObject valuePrintString ] ]
+]
+
+{ #category : #comparing }
+GtLSerializedSlotInfo >> hash [
+	^ (name hash bitXor: valueClassName hash) bitXor: valuePrintString hash
+]
+
 { #category : #initialization }
 GtLSerializedSlotInfo >> initializeFromSlot: aSlot ofObject: anObject [
 	"Initialize from a slot and its owning object."

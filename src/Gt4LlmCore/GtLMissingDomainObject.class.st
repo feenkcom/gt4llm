@@ -8,11 +8,17 @@ Class {
 	#category : #'Gt4LlmCore-Domain Objects'
 }
 
+{ #category : #accessing }
+GtLMissingDomainObject >> defaultErrorMessage [
+	^missingObjectName 
+		ifNil: [''] 
+		ifNotNil: [ '{1} is not found' format: {missingObjectName}  ]
+]
+
 { #category : #'api - accessing' }
 GtLMissingDomainObject >> errorMessage [
-	"Return an error message"
-
-	^ errorMessage
+	^ errorMessage ifNil: [
+			self defaultErrorMessage ]
 ]
 
 { #category : #'api - accessing' }
@@ -44,8 +50,6 @@ GtLMissingDomainObject >> llmRawDataViewFor: aDataView [
 
 { #category : #'api - accessing' }
 GtLMissingDomainObject >> messageText [
-	"Return an error message"
-
 	^ self errorMessage
 ]
 
@@ -57,8 +61,6 @@ GtLMissingDomainObject >> missingObjectName [
 { #category : #accessing }
 GtLMissingDomainObject >> missingObjectName: aName [
 	missingObjectName := aName.
-	errorMessage ifNil: [
-		errorMessage := '{1} is not found' format: {aName}]
 ]
 
 { #category : #descriptions }

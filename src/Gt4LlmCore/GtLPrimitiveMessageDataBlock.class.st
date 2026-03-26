@@ -95,12 +95,16 @@ GtLPrimitiveMessageDataBlock >> initialize [
 
 { #category : #serialization }
 GtLPrimitiveMessageDataBlock >> serializeForAnthropic [
-	^ self dataBlocks flatCollect: [ :each |
-			each serializeForAnthropic ] 
+	^ self dataBlocks 
+			flatCollect: [ :each |
+				each serializeForAnthropic ] 
+			as: Array
 ]
 
 { #category : #serialization }
 GtLPrimitiveMessageDataBlock >> serializeForOpenAI [
-	^ self dataBlocks flatCollect: [ :each |
-			each serializeForOpenAI ] 
+	^ self dataBlocks 
+			flatCollect: [ :each |
+				each serializeForOpenAI ] 
+			as: Array
 ]

@@ -30,16 +30,14 @@ GtLToolForExampleClassesRunExamples >> runExamplesForMultipleClasses [
 	tool := GtLToolForExampleClassesRun new.
 	call := GtLFunctionToolCall new.
 	call
-		function: {'name' -> tool name.
-				'arguments'
-					-> {'classNames' -> 'GtLExampleRunDummyExamples GtLToolForExampleMethodRunExamples'}
-							asDictionary} asDictionary.
+		rawArguments: {
+			'classNames' -> 'GtLExampleRunDummyExamples GtLToolForExampleMethodRunExamples'} asDictionary.
 	result := tool performToolCall: call.
 
 	self assert: result isErrorDomainObject not.
-	self assert: result totalCount equals: 8.
-	self assert: result skippedCount equals: 3.
-	self assert: result exampleWithStatuses size equals: 8.
+	self assert: result totalCount equals: 17.
+	self assert: result skippedCount equals: 5.
+	self assert: result exampleWithStatuses size equals: 17.
 	^ call
 ]
 

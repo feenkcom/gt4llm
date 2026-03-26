@@ -23,6 +23,18 @@ GtLSerializedObjectValue class >> fromObject: anObject [
 		yourself
 ]
 
+{ #category : #comparing }
+GtLSerializedObjectValue >> = anObject [
+	self == anObject ifTrue: [ ^ true ].
+	self class = anObject class ifFalse: [ ^ false ].
+	^ objectClassName = anObject objectClassName
+		and: [ superclassName = anObject superclassName
+			and: [ packageName = anObject packageName
+				and: [ objectPrintString = anObject objectPrintString
+					and: [ phlowViews = anObject phlowViews
+						and: [ allInstanceSlots = anObject allInstanceSlots ] ] ] ] ]
+]
+
 { #category : #accessing }
 GtLSerializedObjectValue >> allInstanceSlots [
 	^ allInstanceSlots ifNil: [ #() ]
@@ -41,6 +53,15 @@ GtLSerializedObjectValue >> allInstanceSlotsDescription [
 		accessor: #allInstanceSlots;
 		classes: { GtLSerializedSlotInfo };
 		beRequired
+]
+
+{ #category : #comparing }
+GtLSerializedObjectValue >> hash [
+	^ ((((objectClassName hash bitXor: superclassName hash)
+		bitXor: packageName hash)
+			bitXor: objectPrintString hash)
+				bitXor: phlowViews hash)
+					bitXor: allInstanceSlots hash
 ]
 
 { #category : #initialization }

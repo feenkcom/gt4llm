@@ -78,7 +78,12 @@ GtLPrimitiveCompositeJsonDataBlock >> jsonDataBlocks [
 
 { #category : #accessing }
 GtLPrimitiveCompositeJsonDataBlock >> llmJsonData [
-	^self condensedJsonBlock llmJsonData
+	^self dataKey
+		ifNil: [ self condensedJsonBlock llmJsonData] 
+		ifNotNil: [
+			Dictionary new 
+				at: self dataKey put: self condensedJsonBlock llmJsonData;
+				yourself]
 ]
 
 { #category : #serialization }
