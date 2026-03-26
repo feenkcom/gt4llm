@@ -1,13 +1,8 @@
 Class {
 	#name : #GtLToolForTestMethodRun,
 	#superclass : #GtLAbstractPlainSchemaFunctionTool,
-	#category : #'Gt4LlmCore-Tools'
+	#category : 'Gt4LlmCore-Tools'
 }
-
-{ #category : #visiting }
-GtLToolForTestMethodRun >> acceptVisitor: aVisitor [
-	^ aVisitor visitGtLlmToolForSUnitMethodRun: self
-]
 
 { #category : #accessing }
 GtLToolForTestMethodRun >> description [

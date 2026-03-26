@@ -1,11 +1,11 @@
 Class {
 	#name : #GtLExampleWithResultStatusDomainObject,
-	#superclass : #GtLDomainObject,
+	#superclass : #Object,
 	#instVars : [
 		'exampleWithResult',
 		'objectId'
 	],
-	#category : #'Gt4LlmCore-Domain Objects'
+	#category : 'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #accessing }
@@ -62,18 +62,8 @@ GtLExampleWithResultStatusDomainObject >> isSuccessResult [
 	^ self exampleWithResult isSuccess
 ]
 
-{ #category : #accessing }
-GtLExampleWithResultStatusDomainObject >> objectId [
-	^ objectId
-]
-
-{ #category : #accessing }
-GtLExampleWithResultStatusDomainObject >> objectId: anObject [
-	objectId := anObject
-]
-
-{ #category : #serialization }
-GtLExampleWithResultStatusDomainObject >> serializeToLlmJsonObject [
+{ #category : #'llm views' }
+GtLExampleWithResultStatusDomainObject >> llmJsonObject [
 	"Return a JSON dictionary that represents the domain object."
 	<return: #NeoJSONObject>
 	
@@ -83,6 +73,16 @@ GtLExampleWithResultStatusDomainObject >> serializeToLlmJsonObject [
 		at: #status put: self statusText;
 		at: #objectId put: self objectId;
 		yourself
+]
+
+{ #category : #accessing }
+GtLExampleWithResultStatusDomainObject >> objectId [
+	^ objectId
+]
+
+{ #category : #accessing }
+GtLExampleWithResultStatusDomainObject >> objectId: anObject [
+	objectId := anObject
 ]
 
 { #category : #accessing }
