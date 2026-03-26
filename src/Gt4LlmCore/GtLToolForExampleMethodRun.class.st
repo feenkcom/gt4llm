@@ -4,7 +4,7 @@ Magritte-based tool for executing a gtExample method and reporting the result.
 Class {
 	#name : #GtLToolForExampleMethodRun,
 	#superclass : #GtLAbstractMagritteFunctionTool,
-	#category : #'Gt4LlmCore-Tools'
+	#category : 'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }
@@ -54,19 +54,30 @@ GtLToolForExampleMethodRun >> privatePerformToolCall: aToolCall inContext: anExe
 
 { #category : #private }
 GtLToolForExampleMethodRun >> runExample: method fromReference: exampleReference inContext: anExecutionContext toolCall: aToolCall [
+	^self 
+		runExample: method 
+		fromReference: exampleReference 
+		inContext: anExecutionContext 
+		toolCall: aToolCall 
+		ifError: [ :anError | anError ]
+]
+
+{ #category : #private }
+GtLToolForExampleMethodRun >> runExample: method fromReference: exampleReference inContext: anExecutionContext toolCall: aToolCall ifError: anErrorBlock [
 	| example exampleResult objectId |
 	
 	(method pragmas anySatisfy: [ :pragma | pragma selector = #gtExample ])
 		ifFalse: [ ^ GtLMethodIsNotExampleDomainObject new method: method ].
 	example := method gtExample asExampleWithResult.
-	example ifNil: [ ^ GtLMethodIsNotExampleDomainObject new method: method ].
+	example ifNil: [ ^ anErrorBlock cull: (GtLMethodIsNotExampleDomainObject new
+		 method: method) ].
 	
 	[ exampleResult := example run ]
 		on: Error
 		do: [ :ex | 
-			^ GtLExceptionDomainObject new
-				freeze: ex;
-				description: ('Example execution failed: {1}' format: {method name}) ].
+			^ anErrorBlock cull: (GtLExceptionDomainObject new
+					freeze: ex;
+					description: ('Example execution failed: {1}' format: {method name})) ].
 				
 	objectId := anExecutionContext objectStorage ifNotNil: [ :aStorage |
 		aStorage

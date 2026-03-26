@@ -4,7 +4,7 @@ Examples for GtLMagritteToolForClassRemoval.
 Class {
 	#name : #GtLMagritteToolForClassRemovalExamples,
 	#superclass : #Object,
-	#category : #'Gt4LlmCore-Examples-Tools'
+	#category : 'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #private }

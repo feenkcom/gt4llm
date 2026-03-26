@@ -4,7 +4,7 @@ Examples for GtLExceptionDomainObject testing state and serialization using data
 Class {
 	#name : #GtLExceptionDomainObjectExamples,
 	#superclass : #GtLErroneousConditionDomainObjectExamples,
-	#category : #'Gt4LlmCore-Examples-Domain Objects'
+	#category : 'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #assertions }

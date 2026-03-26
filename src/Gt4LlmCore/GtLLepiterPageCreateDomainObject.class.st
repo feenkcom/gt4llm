@@ -8,7 +8,7 @@ Class {
 		'databaseId',
 		'page'
 	],
-	#category : #'Gt4LlmCore-Magritte Objects'
+	#category : 'Gt4LlmCore-Magritte Objects'
 }
 
 { #category : #accessing }

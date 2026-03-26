@@ -4,7 +4,7 @@ Examples for GtLMagritteToolForPackageClasses.
 Class {
 	#name : #GtLMagritteToolForPackageClassesExamples,
 	#superclass : #Object,
-	#category : #'Gt4LlmCore-Examples-Tools'
+	#category : 'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #examples }

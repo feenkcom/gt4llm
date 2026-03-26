@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLObjectWithErrorViewsForExamples,
 	#superclass : #GtLObjectWithViewsForExamples,
-	#category : #'Gt4LlmCore-Examples-Data Views'
+	#category : 'Gt4LlmCore-Examples-Data Views'
 }
 
 { #category : #views }
