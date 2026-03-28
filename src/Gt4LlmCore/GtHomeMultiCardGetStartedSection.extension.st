@@ -37,6 +37,7 @@ GtHomeMultiCardGetStartedSection >> gtLlmCard [
 				addAptitude: (GtPhlowBrowseDefinitionAptitude new
 						definition: [ GtHomeMultiCardGetStartedSection >> #gtLlmCard ]);
 				hExact: 500;
+				vExact: 400;
 				padding: (BlInsets
 						top: 10
 						left: 10

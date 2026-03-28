@@ -32,9 +32,9 @@ GtLChatRegistryElement >> initialize [
 		addAptitude: (BrLayoutResizerAptitude new
 				common: listElement).
 
-	self
-		hMatchParent;
-		vFitContentLimited
+	self matchParent
+	"	hMatchParent;
+		vFitContentLimited"
 ]
 
 { #category : #initialization }
@@ -52,7 +52,7 @@ GtLChatRegistryElement >> initializeListElement [
 { #category : #'private - instance creation' }
 GtLChatRegistryElement >> newLabelWithText: aString [
 	^ BrLabel new
-		aptitude: BrGlamorousLabelAptitude new;
+		aptitude: (BrGlamorousLabelAptitude new bold ; fontSize: 18);
 		text: aString
 ]
 
