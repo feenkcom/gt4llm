@@ -1,12 +1,18 @@
 Class {
 	#name : #GtLToolForExampleClassesRun,
-	#superclass : #GtLAbstractPlainSchemaFunctionTool,
+	#superclass : #GtLAbstractMagritteFunctionTool,
 	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #'llm-generated' }
-GtLToolForExampleClassesRun >> acceptVisitor: aVisitor [
-	^ aVisitor visitGtLlmToolForExampleGroupRun: self
+GtLToolForExampleClassesRun >> classNamesDescription [
+	<magritteDescription>
+
+	^ MAToManyScalarRelationDescription new
+		label: 'Class names';
+		accessor: #classNames;
+		classes: { String };
+		beRequired
 ]
 
 { #category : #'llm-generated' }
@@ -129,30 +135,26 @@ GtLToolForExampleClassesRun >> extractExamplesFromPackagesFrom: arguments in: ex
 				ifNotNil: [ package gtExamplesAllContained do: [ :example | examplesSet add: example ] ] ]
 ]
 
-{ #category : #'llm-generated' }
-GtLToolForExampleClassesRun >> name [
-	^ 'examplesInClassesRun'
+{ #category : #testing }
+GtLToolForExampleClassesRun >> isUsingDataViews [
+	^true
 ]
 
 { #category : #'llm-generated' }
-GtLToolForExampleClassesRun >> parametersDescription [
-	^ #('classNames')
+GtLToolForExampleClassesRun >> name [
+	^ 'examplesInClassesRun'
 ]
 
 { #category : #accessing }
 GtLToolForExampleClassesRun >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments classNames examples notFound details |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
-	classNames := arguments
-			at: 'classNames'
-			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-					arguments: arguments;
-					missingArgument: 'classNames' ].
+	classNames := arguments	at: 'classNames'.
 
 	examples := IdentitySet new.
 	notFound := OrderedCollection new.
 	self
-		extractExamplesFromClassesFrom: (classNames findTokens: String space)
+		extractExamplesFromClassesFrom: classNames
 		in: examples
 		reportingNotFoundIn: notFound.
 	details := OrderedCollection new.
@@ -160,17 +162,18 @@ GtLToolForExampleClassesRun >> privatePerformToolCall: aToolCall inContext: anEx
 		do: [ :example | 
 			[ | detail exampleWithResult objectId |
 			exampleWithResult := example asExampleWithResult.
-			exampleWithResult hasNoTestPragma ifFalse: [ exampleWithResult run ].
-			
-			objectId := anExecutionContext objectStorage ifNotNil: [ :aStorage |
-				aStorage
-					addNewObject: exampleWithResult returnValue
-					reason: (GtLStoredObjectExampleMethodReason toolCall: aToolCall) ].
-			
+			exampleWithResult hasNoTestPragma 
+				ifFalse: [ 
+					exampleWithResult run.
+					objectId := anExecutionContext objectStorage ifNotNil: [ :aStorage |
+						aStorage
+							addNewObject: exampleWithResult returnValue
+							reason: (GtLStoredObjectExampleMethodReason toolCall: aToolCall) ] ].
 			detail := GtLExampleWithResultStatusDomainObject new
 					exampleWithResult: exampleWithResult;
 					objectId: objectId.
-			details add: detail ] on: Error do: [ :ex | ex return: nil ] ].
+			details add: detail
+			 ] on: Error do: [ :ex | ex return: nil ] ].
 
 	^ GtLExampleWithResultStatusesDomainObject new
 		exampleWithStatuses: details asArray;
