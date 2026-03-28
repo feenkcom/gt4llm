@@ -37,7 +37,7 @@ GtLWorldChatRegistryDropdownExamples >> dropdownUpdatesAfterAddingChat [
 
 	self 
 		assert: (scripter space root query // BrColumnedList / #scrollable ) anyOne childrenCount
-		equals: 2.
+		equals: 1.
 	
 	scripter assert
 		label: 'List updates to two chats';

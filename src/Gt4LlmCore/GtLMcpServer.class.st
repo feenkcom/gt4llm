@@ -82,7 +82,7 @@ GtLMcpServer >> getCapabilities [
 { #category : #views }
 GtLMcpServer >> gtErrorsFor: aView [
 	<gtView>
-	errors ifNil: [^aView empty].
+	errors ifEmpty: [^aView empty].
 	^(aView columnedList)
 		title: 'Errors';
 		items: [errors];
