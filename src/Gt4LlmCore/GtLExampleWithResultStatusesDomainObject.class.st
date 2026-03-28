@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLExampleWithResultStatusesDomainObject,
-	#superclass : #GtLDomainObject,
+	#superclass : #Object,
 	#instVars : [
 		'notFoundClassNames',
 		'exampleWithStatuses'
@@ -44,21 +44,12 @@ GtLExampleWithResultStatusesDomainObject >> gtExampleWithStatusesFor: aView [
 		column: 'Status' text: [ :each | each statusText ]
 ]
 
-{ #category : #accessing }
-GtLExampleWithResultStatusesDomainObject >> notFoundClassNames [
-	^ notFoundClassNames ifNil: [ #() ]
-]
-
-{ #category : #accessing }
-GtLExampleWithResultStatusesDomainObject >> notFoundClassNames: anObject [
-	notFoundClassNames := anObject
-]
-
-{ #category : #'api - serializing' }
-GtLExampleWithResultStatusesDomainObject >> serializeToLlmJsonObject [
+{ #category : #'llm views' }
+GtLExampleWithResultStatusesDomainObject >> llmJsonObject [
 	"Return a JSON dictionary that represents the domain object."
 
 	<return: #NeoJSONObject>
+	
 	^ NeoJSONObject new
 		at: #total put: self totalCount;
 		at: #successes put: self successResultCount;
@@ -67,8 +58,28 @@ GtLExampleWithResultStatusesDomainObject >> serializeToLlmJsonObject [
 		at: #skips put: self skippedCount;
 		at: #notFound put: self notFoundClassNames;
 		at: #details
-			put: (self exampleWithStatuses collect: #serializeToLlmJsonObject as: Array);
+			put: (self exampleWithStatuses 
+				collect: [ :each | each llmJsonObject ] as: Array);
 		yourself
+]
+
+{ #category : #accessing }
+GtLExampleWithResultStatusesDomainObject >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView 
+			title: 'Example results';
+			jsonData: [ self llmJsonObject ]
+]
+
+{ #category : #accessing }
+GtLExampleWithResultStatusesDomainObject >> notFoundClassNames [
+	^ notFoundClassNames ifNil: [ #() ]
+]
+
+{ #category : #accessing }
+GtLExampleWithResultStatusesDomainObject >> notFoundClassNames: anObject [
+	notFoundClassNames := anObject
 ]
 
 { #category : #'api - accessing' }

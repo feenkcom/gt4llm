@@ -4,11 +4,6 @@ Class {
 	#category : #'Gt4LlmCore-Tools'
 }
 
-{ #category : #visiting }
-GtLToolForTestMethodRun >> acceptVisitor: aVisitor [
-	^ aVisitor visitGtLlmToolForSUnitMethodRun: self
-]
-
 { #category : #accessing }
 GtLToolForTestMethodRun >> description [
 	^ 'Execute a single SUnit test method on a subclass of TestCase (or other test classes that understand #isTestCase) and report the resulting status.'
