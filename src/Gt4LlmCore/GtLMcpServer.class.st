@@ -239,7 +239,7 @@ GtLMcpServer >> handleToolsCall: aJsonRpc [
 	tool := tools detect: [:aTool | aTool name = (aJsonRpc params at: 'name')].
 	toolCall := (GtLFunctionToolCall new)
 				name: (aJsonRpc params at: 'name');
-				arguments: (aJsonRpc params at: 'arguments').
+				rawArguments: (aJsonRpc params at: 'arguments').
 	output := tool performToolCall: toolCall.
 	toolMessage := GtLToolMessage new toolCall: toolCall.
 	toolMessage output: output.
