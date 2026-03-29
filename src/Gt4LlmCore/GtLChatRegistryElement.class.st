@@ -23,7 +23,7 @@ GtLChatRegistryElement >> initialize [
 	self initializeAddNewChatElement.
 
 	self
-		addChild: ((self newLabelWithText: 'Chats') padding: (BlInsets top: 10 left: 10))
+		addChild: ((self newLabelWithText: 'Chats') padding: (BlInsets top: 10 left: 10 bottom: 5 right: 10))
 		as: #header.
 	self addChild: listElement.
 	self addChild: addNewChatElement.
