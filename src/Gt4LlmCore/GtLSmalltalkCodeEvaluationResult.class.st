@@ -49,7 +49,7 @@ GtLSmalltalkCodeEvaluationResult >> gtCodeFor: aView [
 						background: Color white;
 						addAptitude: BrShadowAptitude;
 						vFitContentLimited);
-				addChild: ((object gtViewsFor: GtPhlowEmptyView new) asElement
+				addChild: ((object gtDefaultInspectorTool) asElement
 						margin: (BlInsets all: 10);
 						background: Color white;
 						addAptitude: BrShadowAptitude;

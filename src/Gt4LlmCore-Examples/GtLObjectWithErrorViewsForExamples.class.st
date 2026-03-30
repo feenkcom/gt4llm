@@ -29,6 +29,16 @@ GtLObjectWithErrorViewsForExamples >> forwardToDataViewWithErrorFor: aDataView [
 ]
 
 { #category : #views }
+GtLObjectWithErrorViewsForExamples >> forwardToJsonViewWithObjectCreationErrorViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView forwardObject
+			title: 'Error in forwarded json computation';
+			object: [ self  ];
+			view: #jsonWithObjectCreationErrorFor:
+]
+
+{ #category : #views }
 GtLObjectWithErrorViewsForExamples >> forwardToNonExistingViewErrorFor: aDataView [
 	<gtLlmDataView>
 	
@@ -36,4 +46,33 @@ GtLObjectWithErrorViewsForExamples >> forwardToNonExistingViewErrorFor: aDataVie
 			object: [ self ];
 			dataKey: 'forwardToNonExistingViewError';
 			view: #nonExistingDataViewFor:
+]
+
+{ #category : #views }
+GtLObjectWithErrorViewsForExamples >> forwardToWorwardObjectCreationErrorFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView forwardObject
+			title: 'Error in forwarded view object computation';
+			object: [ 1/0 ];
+			view: #forwardWithObjectCreationErrorAndUnknowViewFor:
+]
+
+{ #category : #views }
+GtLObjectWithErrorViewsForExamples >> forwardWithObjectCreationErrorAndUnknowViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView forwardObject
+			title: 'Error in object computation';
+			object: [ 1/0 ];
+			view: #someViewThatDoesNotExistOnException:
+]
+
+{ #category : #views }
+GtLObjectWithErrorViewsForExamples >> jsonWithObjectCreationErrorFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView jsonData
+			title: 'Error in json data computation';
+			data: [ 1/0 ]
 ]

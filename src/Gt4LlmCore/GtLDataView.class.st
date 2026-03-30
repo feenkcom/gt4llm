@@ -271,6 +271,27 @@ GtLDataView >> on: anObject perform: aMessageSymbol withSomeArguments: aCollecti
 		withArguments: newCollectionOfArguments
 ]
 
+{ #category : #'message performing' }
+GtLDataView >> performComputation: aBlockClosure onErrorDataDo: anErrorBlock withReason: anErrorReason withBuilder: aBuilder [
+	^self 
+		performComputation: aBlockClosure
+		onErrorView: [ :anErrorView |
+			^ anErrorBlock cull: ((anErrorView 
+					errorReason: anErrorReason) 
+						serializeToLlmPrimiteDataOn: aBuilder) ].
+]
+
+{ #category : #'message performing' }
+GtLDataView >> performComputation: aBlockClosure onErrorView: anErrorBlock [
+	^aBlockClosure
+		on: Error 
+		do: [ :anError |
+			^anErrorBlock value: (self 
+				errorViewWithException: anError 
+				reason: nil
+				isFrozen: false) ].
+]
+
 { #category : #printing }
 GtLDataView >> printOn: aStream [
 	super printOn: aStream.
