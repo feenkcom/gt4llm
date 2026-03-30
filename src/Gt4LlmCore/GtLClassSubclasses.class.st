@@ -73,6 +73,13 @@ GtLClassSubclasses >> gtSummaryFor: aView [
 			self mayHaveMore ifTrue: [ stream nextPutAll: ' (more available)' ] ] ]
 ]
 
+{ #category : #'llm views' }
+GtLClassSubclasses >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
+]
+
 { #category : #accessing }
 GtLClassSubclasses >> mayHaveMore [
 	^ mayHaveMore
