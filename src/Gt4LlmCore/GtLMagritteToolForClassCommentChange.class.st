@@ -43,6 +43,11 @@ Example JSON response:
 }'
 ]
 
+{ #category : #testing }
+GtLMagritteToolForClassCommentChange >> isUsingDataViews [
+	^true
+]
+
 { #category : #magritte }
 GtLMagritteToolForClassCommentChange >> name [
 	^ 'changeClassOrTraitComment'
@@ -73,7 +78,8 @@ GtLMagritteToolForClassCommentChange >> privatePerformToolCall: aToolCall inCont
 					arguments: arguments;
 					missingArgument: 'classComment' ].
 	classComment isString
-		ifFalse: [ ^ GtLProblemDomainObject new description: 'Class comment must be a string' ].
+		ifFalse: [ ^ GtLProblemDomainObject new 
+			errorMessage: 'Class comment must be a string' ].
 
 	oldClassComment := class comment.
 	class comment: classComment.

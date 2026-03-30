@@ -37,6 +37,13 @@ GtLProblemDomainObject >> errorMessageDescription [
 			beRequired
 ]
 
+{ #category : #'llm - views' }
+GtLProblemDomainObject >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
+]
+
 { #category : #'api - accessing' }
 GtLProblemDomainObject >> messageText [
 	"Return an error message"
