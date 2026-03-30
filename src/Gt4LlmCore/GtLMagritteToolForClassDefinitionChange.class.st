@@ -82,6 +82,11 @@ Example JSON response:
 }'
 ]
 
+{ #category : #testing }
+GtLMagritteToolForClassDefinitionChange >> isUsingDataViews [
+	^true
+]
+
 { #category : #accessing }
 GtLMagritteToolForClassDefinitionChange >> name [
 	^ 'changeClassOrTraitSignature'
