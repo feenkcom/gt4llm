@@ -45,6 +45,13 @@ GtLClassesCreationResult >> gtClassesFor: aView [
 				ifFalse: [ each currentClassName ] ]
 ]
 
+{ #category : #'llm - views' }
+GtLClassesCreationResult >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
+]
+
 { #category : #printing }
 GtLClassesCreationResult >> printOn: aStream [
 	super printOn: aStream.

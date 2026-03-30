@@ -31,72 +31,122 @@ GtLClassesCreationResultExamples >> anotherClassModificationResult [
 { #category : #'examples - serialization' }
 GtLClassesCreationResultExamples >> creationResultSerializationWithMixedResults [
 	<gtExample>
-	| result json classesJson |
+	<return: #GtLCompositeDataBlock>
+	| result compositeView dataBlock jsonData classesJson |
 	result := self creationResultWithMixedResults.
 	
-	json := GtMagritteJSONDataExporter exportObject: result.
+	compositeView := result llmDataViewsFor: GtLDataView new.
+	self assert: compositeView dataViews size equals: 1.
 	
-	self assert: (json includesKey: 'classes').
-	classesJson := json at: 'classes'.
+	dataBlock := compositeView serializeToLlmPrimiteData.
+	self assert: dataBlock isNotNil.
+	self assert: dataBlock dataBlocks size equals: 1.
+	self assert: dataBlock imageDataBlocks isEmpty.
+	
+	jsonData := dataBlock compositeJsonData.
+	self assert: (jsonData includesKey: #classes).
+	classesJson := jsonData at: #classes.
 	self assert: classesJson size equals: 4.
 	
 	"First element: successful class"
-	self assert: (classesJson first at: 'currentClassName') equals: 'SampleCreatedClass'.
+	self assert: (classesJson first at: #currentClassName) equals: 'SampleCreatedClass'.
+	self assert: (classesJson first at: #superclassName) equals: 'Object'.
+	self assert: (classesJson first at: #packageName) equals: 'SamplePackage'.
 	
 	"Second element: missing domain object error"
-	self assert: (classesJson second at: 'missingObjectName') equals: 'UnknownSuperclass'.
+	self assert: (classesJson second at: #missingObjectName) equals: 'UnknownSuperclass'.
+	self assert: (classesJson second at: #errorMessage) equals: 'UnknownSuperclass is not found'.
 	
 	"Third element: another successful class"
-	self assert: (classesJson third at: 'currentClassName') equals: 'AnotherCreatedClass'.
+	self assert: (classesJson third at: #currentClassName) equals: 'AnotherCreatedClass'.
+	self assert: (classesJson third at: #superclassName) equals: 'Exception'.
 	
 	"Fourth element: could not create class error"
-	self assert: (classesJson fourth at: 'targetClassName') equals: 'FailedClass'.
-	self assert: (classesJson fourth at: 'packageName') equals: 'TestPackage'.
+	self assert: (classesJson fourth at: #targetClassName) equals: 'FailedClass'.
+	self assert: (classesJson fourth at: #packageName) equals: 'TestPackage'.
+	self assert: (classesJson fourth at: #messageText) equals: 'Class creation error: unknown error'.
 	
-	^ json
+	^ dataBlock
 ]
 
 { #category : #'examples - serialization' }
 GtLClassesCreationResultExamples >> creationResultSerializationWithMultipleClasses [
 	<gtExample>
-	| result json classesJson |
+	<return: #GtLCompositeDataBlock>
+	| result compositeView dataBlock jsonData firstClassJson secondClassJson expectedJson |
 	result := self creationResultWithMultipleClasses.
 	
-	json := GtMagritteJSONDataExporter exportObject: result.
+	compositeView := result llmDataViewsFor: GtLDataView new.
+	self assert: compositeView dataViews size equals: 1.
 	
-	self assert: (json includesKey: 'classes').
-	classesJson := json at: 'classes'.
-	self assert: classesJson size equals: 2.
+	dataBlock := compositeView serializeToLlmPrimiteData.
+	self assert: dataBlock isNotNil.
+	self assert: dataBlock dataBlocks size equals: 1.
+	self assert: dataBlock imageDataBlocks isEmpty.
 	
-	"Verify first class"
-	self assert: (classesJson first at: 'currentClassName') equals: 'SampleCreatedClass'.
-	self assert: (classesJson first at: 'superclassName') equals: 'Object'.
+	jsonData := dataBlock compositeJsonData.
 	
-	"Verify second class"
-	self assert: (classesJson second at: 'currentClassName') equals: 'AnotherCreatedClass'.
-	self assert: (classesJson second at: 'superclassName') equals: 'Exception'.
+	firstClassJson := NeoJSONObject new
+		at: #currentClassName put: 'SampleCreatedClass';
+		at: #superclassName put: 'Object';
+		at: #packageName put: 'SamplePackage';
+		at: #comment put: 'A sample class';
+		at: #instanceSlotNames put: (NeoJSONArray withAll: #('slot1'));
+		at: #classSlotNames put: NeoJSONArray new;
+		at: #classVariableNames put: NeoJSONArray new;
+		at: #traitCompositionString put: '{}';
+		yourself.
+	secondClassJson := NeoJSONObject new
+		at: #currentClassName put: 'AnotherCreatedClass';
+		at: #superclassName put: 'Exception';
+		at: #packageName put: 'SamplePackage';
+		at: #comment put: 'Another sample class';
+		at: #instanceSlotNames put: (NeoJSONArray withAll: #('value' 'count'));
+		at: #classSlotNames put: NeoJSONArray new;
+		at: #classVariableNames put: NeoJSONArray new;
+		at: #traitCompositionString put: '{}';
+		yourself.
+	expectedJson := {
+		#classes -> (NeoJSONArray with: firstClassJson with: secondClassJson)
+	} asDictionary.
+	self assert: jsonData equals: expectedJson.
 	
-	^ json
+	^ dataBlock
 ]
 
 { #category : #'examples - serialization' }
 GtLClassesCreationResultExamples >> creationResultSerializationWithSingleClass [
 	<gtExample>
-	| result json classesJson |
+	<return: #GtLCompositeDataBlock>
+	| result compositeView dataBlock jsonData expectedClassJson expectedJson |
 	result := self creationResultWithSingleClass.
 	
-	json := GtMagritteJSONDataExporter exportObject: result.
+	compositeView := result llmDataViewsFor: GtLDataView new.
+	self assert: compositeView dataViews size equals: 1.
 	
-	self assert: (json includesKey: 'classes').
-	classesJson := json at: 'classes'.
-	self assert: classesJson size equals: 1.
+	dataBlock := compositeView serializeToLlmPrimiteData.
+	self assert: dataBlock isNotNil.
+	self assert: dataBlock dataBlocks size equals: 1.
+	self assert: dataBlock imageDataBlocks isEmpty.
 	
-	"Verify the nested class is serialized with its properties"
-	self assert: (classesJson first at: 'currentClassName') equals: 'SampleCreatedClass'.
-	self assert: (classesJson first at: 'superclassName') equals: 'Object'.
-	self assert: (classesJson first at: 'packageName') equals: 'SamplePackage'.
+	jsonData := dataBlock compositeJsonData.
 	
-	^ json
+	expectedClassJson := NeoJSONObject new
+		at: #currentClassName put: 'SampleCreatedClass';
+		at: #superclassName put: 'Object';
+		at: #packageName put: 'SamplePackage';
+		at: #comment put: 'A sample class';
+		at: #instanceSlotNames put: (NeoJSONArray withAll: #('slot1'));
+		at: #classSlotNames put: NeoJSONArray new;
+		at: #classVariableNames put: NeoJSONArray new;
+		at: #traitCompositionString put: '{}';
+		yourself.
+	expectedJson := {
+		#classes -> (NeoJSONArray with: expectedClassJson)
+	} asDictionary.
+	self assert: jsonData equals: expectedJson.
+	
+	^ dataBlock
 ]
 
 { #category : #examples }
@@ -171,15 +221,25 @@ GtLClassesCreationResultExamples >> emptyCreationResult [
 { #category : #'examples - serialization' }
 GtLClassesCreationResultExamples >> emptyCreationResultSerialization [
 	<gtExample>
-	| result json |
+	<return: #GtLCompositeDataBlock>
+	| result compositeView dataBlock jsonData expectedJson |
 	result := self emptyCreationResult.
 	
-	json := GtMagritteJSONDataExporter exportObject: result.
+	compositeView := result llmDataViewsFor: GtLDataView new.
+	self assert: compositeView dataViews size equals: 1.
 	
-	self assert: (json includesKey: 'classes').
-	self assert: (json at: 'classes') isEmpty.
+	dataBlock := compositeView serializeToLlmPrimiteData.
+	self assert: dataBlock isNotNil.
+	self assert: dataBlock dataBlocks size equals: 1.
+	self assert: dataBlock imageDataBlocks isEmpty.
 	
-	^ json
+	jsonData := dataBlock compositeJsonData.
+	expectedJson := {
+		#classes -> NeoJSONArray new
+	} asDictionary.
+	self assert: jsonData equals: expectedJson.
+	
+	^ dataBlock
 ]
 
 { #category : #'examples - support' }
