@@ -76,43 +76,64 @@ GtLClassModificationResultExamples >> classModificationResultFromRealClass [
 { #category : #examples }
 GtLClassModificationResultExamples >> classModificationResultSerialization [
 	<gtExample>
-	| result json |
+	<return: #GtLCompositeDataBlock>
+	| result compositeView dataBlock jsonData expectedJson |
 	result := self classModificationResultCreation.
 	
-	json := GtMagritteJSONDataExporter exportObject: result.
+	compositeView := result llmDataViewsFor: GtLDataView new.
+	self assert: compositeView dataViews size equals: 1.
 	
-	"Verify serialization delegates to updatedClass properties only"
-	self assert: (json at: 'currentClassName') equals: 'MyExampleClass'.
-	self assert: (json at: 'superclassName') equals: 'Exception'.
-	self assert: (json at: 'packageName') equals: 'NewPackage'.
-	self assert: (json at: 'comment') equals: 'Updated comment'.
-	self assert: (json at: 'instanceSlotNames') asArray equals: #('slot1' 'slot2' 'slot3').
-	self assert: (json at: 'classSlotNames') asArray equals: #('classSlot').
-	self assert: (json at: 'classVariableNames') asArray equals: #('SharedVar').
-	self assert: (json at: 'traitCompositionString') equals: '{}'.
+	dataBlock := compositeView serializeToLlmPrimiteData.
+	self assert: dataBlock isNotNil.
+	self assert: dataBlock dataBlocks size equals: 1.
+	self assert: dataBlock imageDataBlocks isEmpty.
 	
-	"Verify originalClass properties are NOT serialized"
-	self assert: (json includesKey: 'originalClass') not.
-	self assert: (json includesKey: 'updatedClass') not.
+	jsonData := dataBlock compositeJsonData.
+	expectedJson := {
+		#currentClassName -> 'MyExampleClass'.
+		#superclassName -> 'Exception'.
+		#packageName -> 'NewPackage'.
+		#comment -> 'Updated comment'.
+		#instanceSlotNames -> (NeoJSONArray withAll: #('slot1' 'slot2' 'slot3')).
+		#classSlotNames -> (NeoJSONArray withAll: #('classSlot')).
+		#classVariableNames -> (NeoJSONArray withAll: #('SharedVar')).
+		#traitCompositionString -> '{}'
+	} asDictionary.
+	self assert: jsonData equals: expectedJson.
 	
-	^ json
+	^ dataBlock
 ]
 
 { #category : #examples }
 GtLClassModificationResultExamples >> classModificationResultSerializationWithoutOriginal [
 	<gtExample>
+	<return: #GtLCompositeDataBlock>
 	"Verify serialization works when originalClass is nil"
-	| result json |
+	| result compositeView dataBlock jsonData expectedJson |
 	result := self classModificationResultWithoutOriginal.
 	
-	json := GtMagritteJSONDataExporter exportObject: result.
+	compositeView := result llmDataViewsFor: GtLDataView new.
+	self assert: compositeView dataViews size equals: 1.
 	
-	"Verify serialization still works"
-	self assert: (json at: 'currentClassName') equals: 'MyExampleClass'.
-	self assert: (json at: 'superclassName') equals: 'Exception'.
-	self assert: (json at: 'packageName') equals: 'NewPackage'.
+	dataBlock := compositeView serializeToLlmPrimiteData.
+	self assert: dataBlock isNotNil.
+	self assert: dataBlock dataBlocks size equals: 1.
+	self assert: dataBlock imageDataBlocks isEmpty.
 	
-	^ json
+	jsonData := dataBlock compositeJsonData.
+	expectedJson := {
+		#currentClassName -> 'MyExampleClass'.
+		#superclassName -> 'Exception'.
+		#packageName -> 'NewPackage'.
+		#comment -> 'Updated comment'.
+		#instanceSlotNames -> (NeoJSONArray withAll: #('slot1' 'slot2' 'slot3')).
+		#classSlotNames -> (NeoJSONArray withAll: #('classSlot')).
+		#classVariableNames -> (NeoJSONArray withAll: #('SharedVar')).
+		#traitCompositionString -> '{}'
+	} asDictionary.
+	self assert: jsonData equals: expectedJson.
+	
+	^ dataBlock
 ]
 
 { #category : #examples }

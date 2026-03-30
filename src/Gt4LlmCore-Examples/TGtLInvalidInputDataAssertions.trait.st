@@ -62,3 +62,13 @@ TGtLInvalidInputDataAssertions >> assertMissingRequiredProperties: aDomainObject
 	self assert: aDomainObject errorMessage equals: anErrorMessage.
 	self assert: aDomainObject messageText equals: anErrorMessage
 ]
+
+{ #category : #assertions }
+TGtLInvalidInputDataAssertions >> assertUnexpectedObject: aDomainObject withObjectName: anObjectName errorMessage: anErrorMessage [
+	"Assert that the domain object is a GtLUnexpectedDomainObject with expected values."
+	
+	self assert: aDomainObject isErrorDomainObject.
+	self assert: (aDomainObject isKindOf: GtLUnexpectedDomainObject).
+	self assert: aDomainObject objectName equals: anObjectName.
+	self assert: aDomainObject messageText equals: anErrorMessage
+]

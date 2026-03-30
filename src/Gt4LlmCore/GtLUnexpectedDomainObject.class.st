@@ -16,6 +16,13 @@ GtLUnexpectedDomainObject >> errorMessageDescription [
 		beRequired
 ]
 
+{ #category : #'llm - views' }
+GtLUnexpectedDomainObject >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
+]
+
 { #category : #'api - accessing' }
 GtLUnexpectedDomainObject >> messageText [
 	"Return an error message"

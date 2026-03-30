@@ -128,7 +128,8 @@ GtLClassCreationDataExtractor >> extractTargetClassNameIfError: errorBlock [
 	classNameSymbol := classNameString asSymbol.
 	
 	(Smalltalk globals includesKey: classNameSymbol)
-		ifTrue: [ ^ errorBlock value: (GtLUnexpectedDomainObject new objectName: classNameString) ].
+		ifTrue: [ ^ errorBlock value: (GtLUnexpectedDomainObject new 
+			objectName: classNameString) ].
 	
 	targetClassName := classNameSymbol
 ]
