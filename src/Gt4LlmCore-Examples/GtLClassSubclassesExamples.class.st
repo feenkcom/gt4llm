@@ -8,6 +8,31 @@ Class {
 }
 
 { #category : #examples }
+GtLClassSubclassesExamples >> classSubclassesDataViewSerialization [
+	<gtExample>
+	<return: #GtLCompositeDataBlock>
+	| domainObject compositeView dataBlock jsonData expectedJson |
+	domainObject := self classSubclassesDomainObject.
+	compositeView := domainObject llmDataViewsFor: GtLDataView new.
+	self assert: compositeView dataViews size equals: 1.
+	
+	dataBlock := compositeView serializeToLlmPrimiteData.
+	self assert: dataBlock isNotNil.
+	self assert: dataBlock dataBlocks size equals: 1.
+	self assert: dataBlock imageDataBlocks isEmpty.
+	
+	jsonData := dataBlock compositeJsonData.
+	expectedJson := {
+		#givenClassName -> 'SampleClass'.
+		#subclassNames -> (NeoJSONArray with: 'A' with: 'B').
+		#mayHaveMore -> true
+	} asDictionary.
+	self assert: jsonData equals: expectedJson.
+	
+	^ dataBlock
+]
+
+{ #category : #examples }
 GtLClassSubclassesExamples >> classSubclassesDomainObject [
 	<gtExample>
 	| result |
@@ -20,20 +45,4 @@ GtLClassSubclassesExamples >> classSubclassesDomainObject [
 	self assert: result subclassNames size equals: 2.
 	self assert: result mayHaveMore.
 	^ result
-]
-
-{ #category : #examples }
-GtLClassSubclassesExamples >> classSubclassesDomainObjectSerialization [
-	<gtExample>
-	| domainObject jsonObject |
-	domainObject := self classSubclassesDomainObject.
-	jsonObject := GtMagritteJSONDataExporter exportObject: domainObject.
-	self
-		assert: jsonObject
-		equals: (NeoJSONObject new
-			at: 'subclassNames' put: (NeoJSONArray with: 'A' with: 'B');
-			at: 'givenClassName' put: 'SampleClass';
-			at: 'mayHaveMore' put: true;
-			yourself).
-	^ jsonObject
 ]

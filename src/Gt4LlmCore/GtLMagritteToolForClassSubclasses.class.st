@@ -40,6 +40,11 @@ Example JSON response:
 }'
 ]
 
+{ #category : #testing }
+GtLMagritteToolForClassSubclasses >> isUsingDataViews [
+	^ true
+]
+
 { #category : #accessing }
 GtLMagritteToolForClassSubclasses >> name [
 	^ 'classSubclasses'
