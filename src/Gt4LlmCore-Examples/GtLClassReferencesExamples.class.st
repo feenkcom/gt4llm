@@ -11,13 +11,13 @@ Class {
 GtLClassReferencesExamples >> classReferencesCreation [
 	<gtExample>
 	| reference result |
-	reference := GtLMethodReference fromCompiledMethod: (GtLToolForClassReferences >> #name).
+	reference := GtLMethodReference fromCompiledMethod: (GtLMagritteToolForClassReferences >> #name).
 	result := GtLClassReferences new
-		givenClassName: 'GtLToolForClassReferences';
+		givenClassName: 'GtLMagritteToolForClassReferences';
 		references: { reference };
 		mayHaveMore: true;
 		yourself.
-	self assert: result givenClassName equals: 'GtLToolForClassReferences'.
+	self assert: result givenClassName equals: 'GtLMagritteToolForClassReferences'.
 	self assert: result references size equals: 1.
 	self assert: result mayHaveMore.
 	^ result
@@ -31,11 +31,11 @@ GtLClassReferencesExamples >> classReferencesSerialization [
 	jsonObject := GtMagritteJSONDataExporter exportObject: domainObject.
 	referenceJson := NeoJSONObject new
 		at: 'methodName' put: 'name';
-		at: 'methodClassName' put: 'GtLToolForClassReferences';
+		at: 'methodClassName' put: 'GtLMagritteToolForClassReferences';
 		at: 'classSide' put: false;
 		yourself.
 	expected := NeoJSONObject new
-		at: 'givenClassName' put: 'GtLToolForClassReferences';
+		at: 'givenClassName' put: 'GtLMagritteToolForClassReferences';
 		at: 'references' put: (NeoJSONArray with: referenceJson);
 		at: 'mayHaveMore' put: true;
 		yourself.
