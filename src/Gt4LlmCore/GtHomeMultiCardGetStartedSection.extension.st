@@ -36,7 +36,8 @@ GtHomeMultiCardGetStartedSection >> gtLlmCard [
 												after: [ :aWidget | aResizer visibility: BlVisibility hidden ] ]) ]);
 				addAptitude: (GtPhlowBrowseDefinitionAptitude new
 						definition: [ GtHomeMultiCardGetStartedSection >> #gtLlmCard ]);
-				hExact: 500;
+				hExact: 350;
+				vExact: 400;
 				padding: (BlInsets
 						top: 10
 						left: 10

@@ -27,12 +27,13 @@ GtLChatRegistryListElement >> initialize [
 		
 	self
 		hMatchParent;
-		vFitContentLimited.
+		vMatchParent"FitContentLimited".
 ]
 
 { #category : #initialization }
 GtLChatRegistryListElement >> initializeListElement [
 	listElement := BrColumnedList new
+			matchParent;
 			aptitude: BrColumnedMultiListAptitude;
 			rowStencil: (BrGlamorousColumnedListItemElementWithContextMenuDecorator new
 					contextMenuStencil: [ :itemElement :itemObject :itemIndex :itemType | 
@@ -54,8 +55,8 @@ GtLChatRegistryListElement >> initializeListElement [
 					transformation: [ :aViewModelOrCollection | 
 						aViewModelOrCollection isCollection
 							ifTrue: [ aViewModelOrCollection collect: #chat as: Array ]
-							ifFalse: [ aViewModelOrCollection chat ] ]);
-			addAptitude: (BrColumnedListHeaderAptitude new cellSpacing: 10).
+							ifFalse: [ aViewModelOrCollection chat ] ])";
+			addAptitude: (BrColumnedListHeaderAptitude new cellSpacing: 10)".
 
 	listElement column
 		title: 'Chat';

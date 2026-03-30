@@ -12,7 +12,7 @@ Class {
 GtLChatRegistryElement >> defaultLayout [
 	^ BlLinearLayout vertical
 		alignTopLeft;
-		cellSpacing: 10
+		cellSpacing: 0
 ]
 
 { #category : #initialization }
@@ -23,7 +23,7 @@ GtLChatRegistryElement >> initialize [
 	self initializeAddNewChatElement.
 
 	self
-		addChild: ((self newLabelWithText: 'Chats') margin: (BlInsets left: 10))
+		addChild: ((self newLabelWithText: 'Chats') padding: (BlInsets top: 10 left: 10 bottom: 5 right: 10))
 		as: #header.
 	self addChild: listElement.
 	self addChild: addNewChatElement.
@@ -32,9 +32,9 @@ GtLChatRegistryElement >> initialize [
 		addAptitude: (BrLayoutResizerAptitude new
 				common: listElement).
 
-	self
-		hMatchParent;
-		vFitContentLimited
+	self matchParent
+	"	hMatchParent;
+		vFitContentLimited"
 ]
 
 { #category : #initialization }
@@ -52,7 +52,7 @@ GtLChatRegistryElement >> initializeListElement [
 { #category : #'private - instance creation' }
 GtLChatRegistryElement >> newLabelWithText: aString [
 	^ BrLabel new
-		aptitude: BrGlamorousLabelAptitude new;
+		aptitude: (BrGlamorousLabelAptitude new bold ; fontSize: 18);
 		text: aString
 ]
 

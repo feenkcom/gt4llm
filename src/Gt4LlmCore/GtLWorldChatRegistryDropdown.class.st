@@ -98,7 +98,8 @@ GtLWorldChatRegistryDropdown >> newDropdownContent [
 	listElement := self newListElement.
 	listElement
 		addAptitude: (BrGlamorousPopoverResizableAptitude new whenResizedDo: [ :anEvent |  ]);
-		hExact: 600.
+		hExact: 600;
+		vFitContentLimited.
 
 	^ listElement
 ]
