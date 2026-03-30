@@ -56,6 +56,13 @@ GtLClassesSearchResult >> gtFoundClassNamesFor: aView [
 		column: 'Package' text: [ :each | each asClassIfPresent: [:c | c package ] ]
 ]
 
+{ #category : #'llm views' }
+GtLClassesSearchResult >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
+]
+
 { #category : #accessing }
 GtLClassesSearchResult >> mayHaveMore [
 	^ mayHaveMore ifNil: [ false ]
