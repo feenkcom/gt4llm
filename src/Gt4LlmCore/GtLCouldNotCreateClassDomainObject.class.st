@@ -73,6 +73,13 @@ GtLCouldNotCreateClassDomainObject >> instanceVariableNamesDescription [
 		accessor: #instanceVariableNames
 ]
 
+{ #category : #'llm - views' }
+GtLCouldNotCreateClassDomainObject >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
+]
+
 { #category : #accessing }
 GtLCouldNotCreateClassDomainObject >> messageText [
 	"Return an error message"

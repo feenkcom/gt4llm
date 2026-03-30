@@ -168,6 +168,13 @@ GtLClassModificationResult >> isErrorDomainObject [
 	^false
 ]
 
+{ #category : #'llm views' }
+GtLClassModificationResult >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
+]
+
 { #category : #accessing }
 GtLClassModificationResult >> originalClass [
 	^ originalClass
