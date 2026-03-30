@@ -7,7 +7,7 @@ Class {
 		'arguments',
 		'promptBlock'
 	],
-	#category : #'Gt4LlmCore-Mcp'
+	#category : 'Gt4LlmCore-Mcp'
 }
 
 { #category : #accessing }

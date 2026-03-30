@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'items'
 	],
-	#category : #'Gt4LlmCore-Instructions'
+	#category : 'Gt4LlmCore-Instructions'
 }
 
 { #category : #other }
