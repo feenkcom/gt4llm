@@ -221,6 +221,13 @@ GtLClassDescription >> instanceSlotNamesDescription [
 		yourself
 ]
 
+{ #category : #'llm - views' }
+GtLClassDescription >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
+]
+
 { #category : #accessing }
 GtLClassDescription >> packageName [
 	^ packageName
