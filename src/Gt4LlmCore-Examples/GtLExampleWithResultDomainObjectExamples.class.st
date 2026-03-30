@@ -4,7 +4,7 @@ Examples for GtLExampleWithResultDomainObject data views.
 Class {
 	#name : #GtLExampleWithResultDomainObjectExamples,
 	#superclass : #Object,
-	#category : #'Gt4LlmCore-Examples-Domain Objects'
+	#category : 'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #private }

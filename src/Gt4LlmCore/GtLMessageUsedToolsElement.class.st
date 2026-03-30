@@ -10,7 +10,7 @@ Class {
 	#instVars : [
 		'listElement'
 	],
-	#category : #'Gt4LlmCore-UI - Elements'
+	#category : 'Gt4LlmCore-UI - Elements'
 }
 
 { #category : #initialization }
