@@ -6,7 +6,7 @@ Class {
 		'response',
 		'result'
 	],
-	#category : 'Gt4LlmCore-Client'
+	#category : #'Gt4LlmCore-Client'
 }
 
 { #category : #'as yet unclassified' }

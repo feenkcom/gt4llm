@@ -134,13 +134,6 @@ GtLPrimitiveJsonDataBlock >> llmJsonData [
 				yourself]
 ]
 
-{ #category : #accessing }
-GtLPrimitiveJsonDataBlock >> serializedJsonString [
-	"Return a JSON string that represents the domain object."
-	
-	^ NeoJSONWriter toStringPretty: self llmJsonData
-]
-
 { #category : #serialization }
 GtLPrimitiveJsonDataBlock >> serializeForAnthropic [
 	"Return a JSON that represents tool response output."
@@ -161,4 +154,11 @@ GtLPrimitiveJsonDataBlock >> serializeForOpenAI [
 			at: #text put: self serializedJsonString;
 			at: #type put: #input_text;
 			yourself}
+]
+
+{ #category : #accessing }
+GtLPrimitiveJsonDataBlock >> serializedJsonString [
+	"Return a JSON string that represents the domain object."
+	
+	^ NeoJSONWriter toStringPretty: self llmJsonData
 ]

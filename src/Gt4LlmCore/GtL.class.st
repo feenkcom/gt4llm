@@ -1,7 +1,7 @@
 Class {
 	#name : #GtL,
 	#superclass : #Object,
-	#category : 'Gt4LlmCore-Core'
+	#category : #'Gt4LlmCore-Core'
 }
 
 { #category : #'instance creation' }
