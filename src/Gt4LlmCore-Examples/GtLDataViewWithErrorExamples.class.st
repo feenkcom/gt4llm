@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLDataViewWithErrorExamples,
 	#superclass : #GtLDataViewExamples,
-	#category : #'Gt4LlmCore-Examples-Data Views'
+	#category : 'Gt4LlmCore-Examples-Data Views'
 }
 
 { #category : #assertions }
@@ -173,6 +173,102 @@ GtLDataViewWithErrorExamples >> onCollectObjectViewsWithNoIdsWithErrorInViewCrea
 		self assert: (anErrroViewData includesKey: 'errorDetails') ].
 				
 	^ mainView
+]
+
+{ #category : #examples }
+GtLDataViewWithErrorExamples >> onForwardToForwardWithErrorAtObjectCreation [
+	<gtExample>
+	| forwardView dataBlock |
+	
+	forwardView := GtLDataView empty 
+		on: GtLObjectWithErrorViewsForExamples new 
+		perform: #forwardToWorwardObjectCreationErrorFor:.
+		
+	self assert: forwardView class equals: GtLForwardObjectDataView.
+	
+	self assert: forwardView title equals: 'Error in forwarded view object computation'.
+	self assert: forwardView dataKey equals: nil.
+	
+	dataBlock := forwardView serializeToLlmPrimiteData.
+	self 
+		assertErrorMessageBlock: dataBlock 
+		errorWithClass: 'ZeroDivide' 
+		message: 'ZeroDivide' 
+		reason: 'Error computing target object for object forwarded data view'.
+		
+	^ forwardView
+]
+
+{ #category : #examples }
+GtLDataViewWithErrorExamples >> onForwardToJsonViewWithObjectCreationError [
+	<gtExample>
+	| forwardView dataBlock |
+	
+	forwardView := GtLDataView empty 
+		on: GtLObjectWithErrorViewsForExamples new 
+		perform: #forwardToJsonViewWithObjectCreationErrorViewFor:.
+		
+	self assert: forwardView class equals: GtLForwardObjectDataView.
+	
+	self assert: forwardView title equals: 'Error in forwarded json computation'.
+	self assert: forwardView dataKey equals: nil.
+	
+	dataBlock := forwardView serializeToLlmPrimiteData.
+	self 
+		assertErrorMessageBlock: dataBlock 
+		errorWithClass: 'ZeroDivide' 
+		message: 'ZeroDivide' 
+		reason: 'Error computing target JSON object'.
+		
+	^ forwardView
+]
+
+{ #category : #examples }
+GtLDataViewWithErrorExamples >> onForwardWithErrorAtObjectCreation [
+	<gtExample>
+	| forwardView dataBlock |
+	
+	forwardView := GtLDataView empty 
+		on: GtLObjectWithErrorViewsForExamples new 
+		perform: #forwardWithObjectCreationErrorAndUnknowViewFor:.
+		
+	self assert: forwardView class equals: GtLForwardObjectDataView.
+	
+	self assert: forwardView title equals: 'Error in object computation'.
+	self assert: forwardView dataKey equals: nil.
+	
+	dataBlock := forwardView serializeToLlmPrimiteData.
+	self 
+		assertErrorMessageBlock: dataBlock 
+		errorWithClass: 'ZeroDivide' 
+		message: 'ZeroDivide' 
+		reason: 'Error computing target object for object forwarded data view'.
+		
+	^ forwardView
+]
+
+{ #category : #examples }
+GtLDataViewWithErrorExamples >> onJsonViewWithObjectCreationError [
+	<gtExample>
+	| jsonView dataBlock |
+	
+	jsonView := GtLDataView empty 
+		on: GtLObjectWithErrorViewsForExamples new 
+		perform: #jsonWithObjectCreationErrorFor:.
+		
+	self assert: jsonView class equals: GtLJsonDataView.
+	
+	self assert: jsonView title equals: 'Error in json data computation'.
+	self assert: jsonView dataKey equals: nil.
+	
+	dataBlock := jsonView serializeToLlmPrimiteData.
+	self 
+		assertErrorMessageBlock: dataBlock 
+		errorWithClass: 'ZeroDivide' 
+		message: 'ZeroDivide' 
+		reason: 'Error computing target JSON object'.
+		
+	^ jsonView
 ]
 
 { #category : #examples }

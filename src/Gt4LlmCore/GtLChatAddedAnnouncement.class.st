@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'chat'
 	],
-	#category : #'Gt4LlmCore-Announcements'
+	#category : 'Gt4LlmCore-Announcements'
 }
 
 { #category : #accessing }

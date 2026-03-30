@@ -10,7 +10,7 @@ Class {
 		'exception',
 		'packageTagName'
 	],
-	#category : #'Gt4LlmCore-Domain Objects'
+	#category : 'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #accessing }

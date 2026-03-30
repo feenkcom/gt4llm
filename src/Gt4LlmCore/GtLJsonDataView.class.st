@@ -64,8 +64,15 @@ GtLJsonDataView >> object: aBlockClosure [
 
 { #category : #serialization }
 GtLJsonDataView >> serializeToLlmPrimiteDataOn: aBuilder [
+	| currentData |
+	self 
+		performComputation: [currentData := self llmJsonData ]
+		onErrorDataDo: [ :anErrorData | ^ anErrorData ]
+		withReason: 'Error computing target JSON object'
+		withBuilder: aBuilder.
+	
 	aBuilder 
-		addJsonDataBlockFor: self llmJsonData
+		addJsonDataBlockFor: currentData
 		dataKey: self dataKey
 		from: self
 ]

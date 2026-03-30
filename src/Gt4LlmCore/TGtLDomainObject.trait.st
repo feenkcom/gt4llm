@@ -1,6 +1,6 @@
 Trait {
 	#name : #TGtLDomainObject,
-	#category : #'Gt4LlmCore-Domain Objects'
+	#category : 'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #'api - testing' }
