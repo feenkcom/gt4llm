@@ -24,21 +24,31 @@ GtLClassReferencesExamples >> classReferencesCreation [
 ]
 
 { #category : #examples }
-GtLClassReferencesExamples >> classReferencesSerialization [
+GtLClassReferencesExamples >> classReferencesDataViewSerialization [
 	<gtExample>
-	| domainObject jsonObject expected referenceJson |
+	<return: #GtLCompositeDataBlock>
+	| domainObject compositeView dataBlock jsonData expectedJson |
+	
 	domainObject := self classReferencesCreation.
-	jsonObject := GtMagritteJSONDataExporter exportObject: domainObject.
-	referenceJson := NeoJSONObject new
-		at: 'methodName' put: 'name';
-		at: 'methodClassName' put: 'GtLMagritteToolForClassReferences';
-		at: 'classSide' put: false;
-		yourself.
-	expected := NeoJSONObject new
-		at: 'givenClassName' put: 'GtLMagritteToolForClassReferences';
-		at: 'references' put: (NeoJSONArray with: referenceJson);
-		at: 'mayHaveMore' put: true;
-		yourself.
-	self assert: jsonObject equals: expected.
-	^ jsonObject
+	compositeView := domainObject llmDataViewsFor: GtLDataView new.
+	self assert: compositeView dataViews size equals: 1.
+	
+	dataBlock := compositeView serializeToLlmPrimiteData.
+	self assert: dataBlock isNotNil.
+	self assert: dataBlock dataBlocks size equals: 1.
+	self assert: dataBlock imageDataBlocks isEmpty.
+	
+	jsonData := dataBlock compositeJsonData.
+	expectedJson := {
+		#givenClassName -> 'GtLMagritteToolForClassReferences'.
+		#references -> (NeoJSONArray with: (NeoJSONObject new
+			at: #methodClassName put: 'GtLMagritteToolForClassReferences';
+			at: #methodName put: 'name';
+			at: #classSide put: false;
+			yourself)).
+		#mayHaveMore -> true
+	} asDictionary.
+	self assert: jsonData equals: expectedJson.
+	
+	^ dataBlock
 ]
