@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'encodedBytes'
 	],
-	#category : 'Gt4LlmCore-Domain Objects'
+	#category : #'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #private }

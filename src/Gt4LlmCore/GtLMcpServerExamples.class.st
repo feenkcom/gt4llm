@@ -1,16 +1,28 @@
 Class {
 	#name : #GtLMcpServerExamples,
 	#superclass : #Object,
-	#category : 'Gt4LlmCore-Mcp'
+	#category : #'Gt4LlmCore-Mcp'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #utils }
+GtLMcpServerExamples >> createBadRequestWithMessage: aMessage for: aRequest [
+	|message|
+	message := String streamContents: [ :out |
+		out << 'Bad Request '; << aRequest method; space.
+		aRequest uri printPathQueryFragmentOn: out.
+		out << ('; ', aMessage) ].
+	^ZnResponse 
+			badRequest: aRequest
+			entity: (ZnEntity textCRLF: message).
+]
+
+{ #category : #examples }
 GtLMcpServerExamples >> serverRequestWithEntity: anObject [
 	^ (ZnRequest post: '/')
 		entity: (ZnEntity json: (STONJSON toString: anObject))
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #examples }
 GtLMcpServerExamples >> serverWithPrompt [
 	<gtExample>
 	| server request response messageData |
@@ -36,7 +48,11 @@ GtLMcpServerExamples >> serverWithPrompt [
 					'params' -> {'invalid' -> 1} asDictionary} asDictionary.
 	response := server handleRequest: request.
 
-	self assert: response equals: (ZnResponse badRequest: request).
+	self 
+		assert: response 
+		equals: (self
+				createBadRequestWithMessage: 'KeyNotFound: key ''name'' not found in Dictionary'
+				for: request).
 
 	request := self
 			serverRequestWithEntity: {'jsonrpc' -> '2.0'.
@@ -44,7 +60,11 @@ GtLMcpServerExamples >> serverWithPrompt [
 					'params' -> {'name' -> 'notFound'} asDictionary} asDictionary.
 	response := server handleRequest: request.
 
-	self assert: response equals: (ZnResponse badRequest: request).
+	self 
+		assert: response 
+		equals: (self
+				createBadRequestWithMessage: 'NotFound: [ :aResource | aResource name = (aJsonRpc params at: ''name'') ] not found in OrderedCollection'
+				for: request).
 
 
 	request := self
@@ -70,7 +90,7 @@ GtLMcpServerExamples >> serverWithPrompt [
 	^ server
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #examples }
 GtLMcpServerExamples >> serverWithResource [
 	<gtExample>
 	| server request response |
@@ -95,7 +115,11 @@ GtLMcpServerExamples >> serverWithResource [
 					'params' -> {'invalid' -> 1} asDictionary} asDictionary.
 	response := server handleRequest: request.
 
-	self assert: response equals: (ZnResponse badRequest: request).
+	self 
+		assert: response 
+		equals: (self
+				createBadRequestWithMessage: 'KeyNotFound: key ''uri'' not found in Dictionary'
+				for: request).
 
 	request := self
 			serverRequestWithEntity: {'jsonrpc' -> '2.0'.
@@ -103,7 +127,11 @@ GtLMcpServerExamples >> serverWithResource [
 					'params' -> {'uri' -> 'notFound'} asDictionary} asDictionary.
 	response := server handleRequest: request.
 
-	self assert: response equals: (ZnResponse badRequest: request).
+	self 
+		assert: response 
+		equals: (self
+				createBadRequestWithMessage: 'NotFound: [ :aResource | aResource uri = (aJsonRpc params at: ''uri'') ] not found in OrderedCollection'
+				for: request).
 
 
 	request := self
@@ -122,7 +150,7 @@ GtLMcpServerExamples >> serverWithResource [
 	^ server
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #examples }
 GtLMcpServerExamples >> serverWithTool [
 	<gtExample>
 	| server |
@@ -132,7 +160,7 @@ GtLMcpServerExamples >> serverWithTool [
 	^ server
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #examples }
 GtLMcpServerExamples >> serverWithToolWithBadRequestAndResponse [
 	<gtExample>
 	| server request response |
@@ -143,19 +171,27 @@ GtLMcpServerExamples >> serverWithToolWithBadRequestAndResponse [
 					'method' -> 'tools/call'.
 					'params' -> {'invalid' -> 1} asDictionary} asDictionary.
 	response := server handleRequest: request.
-	self assert: response equals: (ZnResponse badRequest: request).
+	self 
+		assert: response 
+		equals: (self
+				createBadRequestWithMessage: 'KeyNotFound: key ''name'' not found in Dictionary'
+				for: request).
 
 	request := self
 			serverRequestWithEntity: {'jsonrpc' -> '2.0'.
 					'method' -> 'tools/call'.
 					'params' -> {'name' -> 'notFound'} asDictionary} asDictionary.
 	response := server handleRequest: request.
-	self assert: response equals: (ZnResponse badRequest: request).
+	self 
+		assert: response 
+		equals: (self
+				createBadRequestWithMessage: 'NotFound: Could not locate tool notFound'
+				for: request).
 
 	^ server
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #examples }
 GtLMcpServerExamples >> serverWithToolWithSuccessfulRequestAndResponse [
 	<gtExample>
 	| server request response jsonResultContent jsonResultTools |
@@ -191,7 +227,7 @@ GtLMcpServerExamples >> serverWithToolWithSuccessfulRequestAndResponse [
 	^ server
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #examples }
 GtLMcpServerExamples >> simpleServer [
 	<gtExample>
 	| server simpleRequest |
@@ -203,12 +239,14 @@ GtLMcpServerExamples >> simpleServer [
 	simpleRequest := self simpleServerRequest.
 	self
 		assert: (server handleRequest: simpleRequest)
-		equals: (ZnResponse badRequest: simpleRequest).
+		equals: (self
+				createBadRequestWithMessage: 'KeyNotFound: key ''jsonrpc'' not found in Dictionary'
+				for: simpleRequest).
 
 	^ server
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #examples }
 GtLMcpServerExamples >> simpleServerPrompt [
 	<gtExample>
 	^ GtLMcpPrompt new
@@ -219,13 +257,13 @@ GtLMcpServerExamples >> simpleServerPrompt [
 			markdown: (arguments at: 'argument')} ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #examples }
 GtLMcpServerExamples >> simpleServerRequest [
 	<gtExample>
 	^ self serverRequestWithEntity: {} asDictionary
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #examples }
 GtLMcpServerExamples >> simpleServerResource [
 	<gtExample>
 	^ GtLMcpResource new
@@ -236,7 +274,7 @@ GtLMcpServerExamples >> simpleServerResource [
 		contentsBlock: [ 'hello from resource' ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #examples }
 GtLMcpServerExamples >> simpleServerTool [
 	<gtExample>
 	^ GtLFunctionTool new
