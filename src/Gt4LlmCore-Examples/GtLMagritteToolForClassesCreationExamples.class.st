@@ -4,6 +4,8 @@ Examples for GtLMagritteToolForClassesCreation.
 Class {
 	#name : #GtLMagritteToolForClassesCreationExamples,
 	#superclass : #Object,
+	#traits : 'TGtLInvalidInputDataAssertions',
+	#classTraits : 'TGtLInvalidInputDataAssertions classTrait',
 	#instVars : [
 		'environment'
 	],
@@ -19,119 +21,229 @@ GtLMagritteToolForClassesCreationExamples >> cleanUpEnvironment [
 GtLMagritteToolForClassesCreationExamples >> createClassesThatAlreadyExist [
 	<gtExample>
 	<after: #cleanUpEnvironment>
-	| tool call result model className aDummyClass |
-	tool := GtLMagritteToolForClassesCreation new.
+	| className |
 	environment := GtPharoDummyEnvironment withPackages: 1 classes: 1.
-	aDummyClass := environment anyDummyClass.
-	className := aDummyClass className.
-	[ call := GtLFunctionToolCall new.
-	call
-		rawArguments: {'classes'
+	className := environment anyDummyClass className.
+	[
+		| tool call result targetObject |
+		tool := GtLMagritteToolForClassesCreation new.
+		call := GtLFunctionToolCall new.
+		call
+			rawArguments: {'classes'
 					-> {{'targetClassName' -> className.
 								'superclassName' -> #Object.
 								'package' -> 'Gt4LlmCoreNewPackage'} asDictionary} asArray.
 				'traits' -> {}} asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteBasedModel).
-	model := result model.
-	self assert: model classes first isErrorDomainObject.
-	self assert: model classes first objectName equals: className ] ensure: [  ].
-	^ call
+		result := tool performToolCall: call.
+		self assert: call tool == tool.
+		self assert: (result isKindOf: GTLDataViewWrapperModel).
+		
+		targetObject := result targetObject.
+		self assert: (targetObject isKindOf: GtLClassesCreationResult).
+		self assert: targetObject classes first isErrorDomainObject.
+		self
+			assertUnexpectedObject: targetObject classes first
+			withObjectName: className asString
+			errorMessage: className asString, ' already exists'.
+		call
+	] ensure: [  ]
 ]
 
 { #category : #examples }
 GtLMagritteToolForClassesCreationExamples >> createClassesWithInstanceVariables [
 	<gtExample>
-	| tool call result model classNames createdClasses |
-	[ tool := GtLMagritteToolForClassesCreation new.
+	| classNames |
 	classNames := {
 		#GtLMagritteToolForClassesCreationExamplesGenerated1.
 		#GtLMagritteToolForClassesCreationExamplesGenerated2 }.
 	classNames do: [ :className | self removeClassNamedIfPresent: className ].
-	call := GtLFunctionToolCall new.
-	call rawArguments: {
-		'classes' -> {
-			{ 'targetClassName' -> classNames first.
-			  'superclassName' -> #Object.
-			  'instanceVariables' -> 'firstSlot secondSlot'.
-			  'package' -> 'Gt4LlmCoreNewPackage' } asDictionary.
-			{ 'targetClassName' -> classNames second.
-			  'superclassName' -> #Object.
-			  'instanceVariables' -> 'value'.
-			  'package' -> 'Gt4LlmCoreNewPackage' } asDictionary
-		} asArray.
-		'traits' -> {}
-	} asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteBasedModel).
-	model := result model.
-	self assert: (model isKindOf: GtLClassesCreationResult).
-	self assert: model classes size equals: 2.
-	createdClasses := classNames collect: [ :each |
-		Smalltalk globals at: each ifAbsent: [ nil ] ].
-	self assert: (createdClasses allSatisfy: #notNil).
-	self assert: (createdClasses first instanceVariables collect: #name) = #('firstSlot' 'secondSlot').
-	self assert: (createdClasses second instanceVariables collect: #name) = #('value') ]
-	ensure: [ classNames do: [ :each | self removeClassNamedIfPresent: each ] ].
-	^ call
+	[
+		| tool call result targetObject createdClasses |
+		tool := GtLMagritteToolForClassesCreation new.
+		call := GtLFunctionToolCall new.
+		call rawArguments: {
+			'classes' -> {
+				{ 'targetClassName' -> classNames first.
+				  'superclassName' -> #Object.
+				  'instanceVariables' -> 'firstSlot secondSlot'.
+				  'package' -> 'Gt4LlmCoreNewPackage' } asDictionary.
+				{ 'targetClassName' -> classNames second.
+				  'superclassName' -> #Object.
+				  'instanceVariables' -> 'value'.
+				  'package' -> 'Gt4LlmCoreNewPackage' } asDictionary
+			} asArray.
+			'traits' -> {}
+		} asDictionary.
+		result := tool performToolCall: call.
+		self assert: call tool == tool.
+		self assert: (result isKindOf: GTLDataViewWrapperModel).
+		
+		targetObject := result targetObject.
+		self assert: (targetObject isKindOf: GtLClassesCreationResult).
+		self assert: targetObject classes size equals: 2.
+		createdClasses := classNames collect: [ :each |
+			Smalltalk globals at: each ifAbsent: [ nil ] ].
+		self assert: (createdClasses allSatisfy: #notNil).
+		self assert: (createdClasses first instanceVariables collect: #name) equals: #('firstSlot' 'secondSlot').
+		self assert: (createdClasses second instanceVariables collect: #name) equals: #('value').
+		call
+	] ensure: [ classNames do: [ :each | self removeClassNamedIfPresent: each ] ]
 ]
 
 { #category : #examples }
 GtLMagritteToolForClassesCreationExamples >> createClassesWithMissingArguments [
 	<gtExample>
-	| tool call result model |
+	| tool call result targetObject |
 	tool := GtLMagritteToolForClassesCreation new.
 	call := GtLFunctionToolCall new.
 	call rawArguments: Dictionary new.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteBasedModel).
-	model := result model.
-	self assert: model isErrorDomainObject.
-	self assert: model class equals: GtLMissingRequiredPropertiesDomainObject.
-	self assert: model missingPropertyNames equals: #('classes' 'traits').
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	
+	targetObject := result targetObject.
+	self
+		assertMissingRequiredProperties: targetObject
+		withPropertyNames: #('classes' 'traits')
+		path: #(nil)
+		errorMessage: 'required properties missing [classes, traits]'.
+	^ call
+]
+
+{ #category : #examples }
+GtLMagritteToolForClassesCreationExamples >> createClassesWithNilClasses [
+	<gtExample>
+	| tool call result targetObject |
+	tool := GtLMagritteToolForClassesCreation new.
+	call := GtLFunctionToolCall new.
+	call rawArguments: {
+		'classes' -> nil.
+		'traits' -> {}
+	} asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	
+	targetObject := result targetObject.
+	self
+		assertJSONSchemaValidationError: targetObject
+		withPath: #('classes')
+		errorMessage: '@[classes] array expected'.
+	^ call
+]
+
+{ #category : #examples }
+GtLMagritteToolForClassesCreationExamples >> createClassesWithNilTraits [
+	<gtExample>
+	| tool call result targetObject |
+	tool := GtLMagritteToolForClassesCreation new.
+	call := GtLFunctionToolCall new.
+	call rawArguments: {
+		'classes' -> {}.
+		'traits' -> nil
+	} asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	
+	targetObject := result targetObject.
+	self
+		assertJSONSchemaValidationError: targetObject
+		withPath: #('traits')
+		errorMessage: '@[traits] array expected'.
 	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForClassesCreationExamples >> createClassesWithUnknownSuperclass [
 	<gtExample>
-	| tool call result model className |
-	[ tool := GtLMagritteToolForClassesCreation new.
+	| className |
 	className := #GtLMagritteToolForClassesCreationExamplesUnknownSuperclass.
 	self removeClassNamedIfPresent: className.
-	call := GtLFunctionToolCall new.
-	call
-		rawArguments: {'classes'
+	[
+		| tool call result targetObject |
+		tool := GtLMagritteToolForClassesCreation new.
+		call := GtLFunctionToolCall new.
+		call
+			rawArguments: {'classes'
 					-> {{'targetClassName' -> className.
 								'superclassName' -> 'ClassThatDoesNotExistForClassesCreation'.
 								'package' -> 'Gt4LlmCoreNewPackage'} asDictionary} asArray.
 				'traits' -> {}} asDictionary.
+		result := tool performToolCall: call.
+		self assert: call tool == tool.
+		self assert: (result isKindOf: GTLDataViewWrapperModel).
+		
+		targetObject := result targetObject.
+		self assert: (targetObject isKindOf: GtLClassesCreationResult).
+		self assert: targetObject classes first isErrorDomainObject.
+		self
+			assertMissingObject: targetObject classes first
+			withObjectName: 'ClassThatDoesNotExistForClassesCreation'
+			errorMessage: 'ClassThatDoesNotExistForClassesCreation is not found'.
+		call
+	] ensure: [ self removeClassNamedIfPresent: className ]
+]
+
+{ #category : #examples }
+GtLMagritteToolForClassesCreationExamples >> createClassWithMissingTargetClassName [
+	<gtExample>
+	| tool call result targetObject |
+	tool := GtLMagritteToolForClassesCreation new.
+	call := GtLFunctionToolCall new.
+	call rawArguments: {
+		'classes' -> {
+			{ 'superclassName' -> #Object.
+			  'package' -> 'Gt4LlmCoreNewPackage' } asDictionary
+		} asArray.
+		'traits' -> {}
+	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteBasedModel).
-	model := result model.
-	self assert: model classes first isErrorDomainObject.
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	
+	targetObject := result targetObject.
 	self
-		assert: model classes first objectName
-		equals: 'ClassThatDoesNotExistForClassesCreation' ]
-		ensure: [ self removeClassNamedIfPresent: className ].
+		assertMissingRequiredProperties: targetObject
+		withPropertyNames: #('targetClassName')
+		path: #(#classes 1)
+		errorMessage: '@[classes/1] required properties missing [targetClassName]'.
+	^ call
+]
+
+{ #category : #examples }
+GtLMagritteToolForClassesCreationExamples >> createEmptyClassesAndTraits [
+	<gtExample>
+	| tool call result targetObject |
+	tool := GtLMagritteToolForClassesCreation new.
+	call := GtLFunctionToolCall new.
+	call rawArguments: {
+		'classes' -> {}.
+		'traits' -> {}
+	} asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	
+	targetObject := result targetObject.
+	self assert: (targetObject isKindOf: GtLClassesCreationResult).
+	self assert: targetObject classes isEmpty.
 	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForClassesCreationExamples >> createTraitsWithInstanceVariables [
 	<gtExample>
-	| tool call result model traitsNames createdTraits |
-	[ tool := GtLMagritteToolForClassesCreation new.
+	| traitsNames |
 	traitsNames := {#TGtLMagritteToolForClassesCreationExamplesGeneratedTrait1.
 			#TGtLMagritteToolForClassesCreationExamplesGeneratedTrait2}.
 	traitsNames do: [ :traitName | self removeClassNamedIfPresent: traitName ].
-	call := GtLFunctionToolCall new.
-	call
-		rawArguments: {'classes' -> {}.
+	[
+		| tool call result targetObject createdTraits |
+		tool := GtLMagritteToolForClassesCreation new.
+		call := GtLFunctionToolCall new.
+		call
+			rawArguments: {'classes' -> {}.
 				'traits'
 					-> {{'targetTraitName' -> traitsNames first.
 								'instanceVariables' -> 'firstSlot secondSlot'.
@@ -142,28 +254,56 @@ GtLMagritteToolForClassesCreationExamples >> createTraitsWithInstanceVariables [
 								'classInstanceVariables' -> 'classValue'.
 								'package' -> 'Gt4LlmCoreNewPackage'.
 								'packageTag' -> 'TagTwo'} asDictionary} asArray} asDictionary.
+		result := tool performToolCall: call.
+		self assert: call tool == tool.
+		self assert: (result isKindOf: GTLDataViewWrapperModel).
+		
+		targetObject := result targetObject.
+		self assert: (targetObject isKindOf: GtLClassesCreationResult).
+		self assert: targetObject classes size equals: 2.
+		createdTraits := traitsNames
+				collect: [ :each | Smalltalk globals at: each ifAbsent: [ nil ] ].
+		self assert: (createdTraits allSatisfy: #notNil).
+		self assert: (createdTraits allSatisfy: #isTrait).
+		self
+			assert: (createdTraits first instanceVariables collect: #name)
+			equals: #('firstSlot' 'secondSlot').
+		self
+			assert: (createdTraits second instanceVariables collect: #name)
+			equals: #('value').
+		self
+			assert: (createdTraits second classSide instanceVariables collect: #name as: Array)
+			equals: #('classValue').
+		self assert: createdTraits first package name equals: 'Gt4LlmCoreNewPackage'.
+		self assert: createdTraits second package name equals: 'Gt4LlmCoreNewPackage'.
+		self assert: createdTraits second packageTag name equals: 'TagTwo'.
+		call
+	] ensure: [ traitsNames do: [ :each | self removeClassNamedIfPresent: each ] ]
+]
+
+{ #category : #examples }
+GtLMagritteToolForClassesCreationExamples >> createTraitWithMissingTargetTraitName [
+	<gtExample>
+	| tool call result targetObject |
+	tool := GtLMagritteToolForClassesCreation new.
+	call := GtLFunctionToolCall new.
+	call rawArguments: {
+		'classes' -> {}.
+		'traits' -> {
+			{ 'instanceVariables' -> 'value'.
+			  'package' -> 'Gt4LlmCoreNewPackage' } asDictionary
+		} asArray
+	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteBasedModel).
-	model := result model.
-	self assert: (model isKindOf: GtLClassesCreationResult).
-	self assert: model classes size equals: 2.
-	createdTraits := traitsNames
-			collect: [ :each | Smalltalk globals at: each ifAbsent: [ nil ] ].
-	self assert: (createdTraits allSatisfy: #notNil).
-	self assert: (createdTraits allSatisfy: #isTrait).
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	
+	targetObject := result targetObject.
 	self
-		assert: (createdTraits first instanceVariables collect: #name)
-				= #('firstSlot' 'secondSlot').
-	self
-		assert: (createdTraits second instanceVariables collect: #name) = #('value').
-	self
-		assert: (createdTraits second classSide instanceVariables collect: #name as: Array)
-		equals: #('classValue').
-	self assert: createdTraits first package name equals: 'Gt4LlmCoreNewPackage'.
-	self assert: createdTraits second package name equals: 'Gt4LlmCoreNewPackage'.
-	self assert: createdTraits second packageTag name equals: 'TagTwo' ]
-		ensure: [ traitsNames do: [ :each | self removeClassNamedIfPresent: each ] ].
+		assertMissingRequiredProperties: targetObject
+		withPropertyNames: #('targetTraitName')
+		path: #(#traits 1)
+		errorMessage: '@[traits/1] required properties missing [targetTraitName]'.
 	^ call
 ]
 

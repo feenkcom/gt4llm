@@ -46,6 +46,11 @@ Example JSON response:
 }'
 ]
 
+{ #category : #testing }
+GtLMagritteToolForClassesCreation >> isUsingDataViews [
+	^true
+]
+
 { #category : #accessing }
 GtLMagritteToolForClassesCreation >> name [
 	^ 'createClassesAndTraits'
