@@ -10,18 +10,25 @@ Class {
 	#category : 'Gt4LlmCore-Magritte Objects'
 }
 
+{ #category : #accessing }
+GtLClassCommentChangeResult >> changedClassName [
+	^ self updatedClass name
+]
+
 { #category : #magritte }
 GtLClassCommentChangeResult >> changedClassNameDescription [
 	<magritteDescription>
 	^ MAStringDescription new
 		label: 'Class name';
-		accessor: #className;
+		accessor: #changedClassName;
 		beRequired
 ]
 
-{ #category : #accessing }
-GtLClassCommentChangeResult >> className [
-	^ self updatedClass name
+{ #category : #'llm - views' }
+GtLClassCommentChangeResult >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
 ]
 
 { #category : #accessing }
