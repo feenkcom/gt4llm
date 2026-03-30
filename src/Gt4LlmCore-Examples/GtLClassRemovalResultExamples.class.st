@@ -21,15 +21,25 @@ GtLClassRemovalResultExamples >> classRemovalResultCreation [
 ]
 
 { #category : #examples }
-GtLClassRemovalResultExamples >> classRemovalResultSerialization [
+GtLClassRemovalResultExamples >> classRemovalResultDataViewSerialization [
 	<gtExample>
-	| result jsonObject expected |
+	<return: #GtLCompositeDataBlock>
+	| result compositeView dataBlock jsonData expectedJson |
 	result := self classRemovalResultCreation.
-	jsonObject := GtMagritteJSONDataExporter exportObject: result.
-	expected := NeoJSONObject new
-		at: 'removedClassName' put: 'MyTestClass';
-		at: 'status' put: 'removed';
-		yourself.
-	self assert: jsonObject equals: expected.
-	^ jsonObject
+	compositeView := result llmDataViewsFor: GtLDataView new.
+	self assert: compositeView dataViews size equals: 1.
+	
+	dataBlock := compositeView serializeToLlmPrimiteData.
+	self assert: dataBlock isNotNil.
+	self assert: dataBlock dataBlocks size equals: 1.
+	self assert: dataBlock imageDataBlocks isEmpty.
+	
+	jsonData := dataBlock compositeJsonData.
+	expectedJson := {
+		#removedClassName -> 'MyTestClass'.
+		#status -> 'removed'
+	} asDictionary.
+	self assert: jsonData equals: expectedJson.
+	
+	^ dataBlock
 ]
