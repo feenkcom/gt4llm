@@ -54,6 +54,13 @@ GtLClassReferences >> gtReferencesFor: aView [
 		column: 'Method' text: [ :each | each methodSignature ]
 ]
 
+{ #category : #'llm views' }
+GtLClassReferences >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
+]
+
 { #category : #accessing }
 GtLClassReferences >> mayHaveMore [
 	^ mayHaveMore ifNil: [ false ]

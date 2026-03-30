@@ -48,6 +48,11 @@ Example JSON response:
 }'
 ]
 
+{ #category : #testing }
+GtLMagritteToolForClassReferences >> isUsingDataViews [
+	^ true
+]
+
 { #category : #accessing }
 GtLMagritteToolForClassReferences >> name [
 	^ 'classReferences'
