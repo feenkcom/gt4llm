@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLClassCommentChangeResultExamples,
 	#superclass : #Object,
-	#category : 'Gt4LlmCore-Examples-Magritte Objects'
+	#category : #'Gt4LlmCore-Examples-Magritte Objects'
 }
 
 { #category : #examples }
@@ -25,7 +25,7 @@ GtLClassCommentChangeResultExamples >> basicClassCommentChangeResult [
 { #category : #examples }
 GtLClassCommentChangeResultExamples >> classCommentChangeDataViewSerialization [
 	<gtExample>
-	<return: #GtLCompositeDataBlock>
+	<return: #GtLPrimitiveMessageDataBlock>
 	| result compositeView dataBlock jsonData expectedJson |
 	
 	result := self basicClassCommentChangeResult.

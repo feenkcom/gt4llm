@@ -4,13 +4,13 @@ Examples for GtLClassesSearchResult.
 Class {
 	#name : #GtLClassesSearchResultExamples,
 	#superclass : #GtLMagritteDomainObjectExamples,
-	#category : 'Gt4LlmCore-Examples-Domain Objects'
+	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #examples }
 GtLClassesSearchResultExamples >> classesSearchResultDataViewSerialization [
 	<gtExample>
-	<return: #GtLCompositeDataBlock>
+	<return: #GtLPrimitiveMessageDataBlock>
 	| domainObject compositeView dataBlock jsonData expectedJson |
 	domainObject := self classesSearchResultWithMatches.
 	compositeView := domainObject llmDataViewsFor: GtLDataView new.

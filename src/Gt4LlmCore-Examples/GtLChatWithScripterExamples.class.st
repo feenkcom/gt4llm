@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLChatWithScripterExamples,
 	#superclass : #Object,
-	#category : 'Gt4LlmCore-Examples-UI'
+	#category : #'Gt4LlmCore-Examples-UI'
 }
 
 { #category : #examples }
@@ -117,7 +117,7 @@ GtLChatWithScripterExamples >> chatElementWithEmptyReplyMessage_toolMessage [
 	scripter := self chatElementWithEmptyReplyMessage.
 	chat := scripter model.
 
-	call := GtLToolForClassSearchExamples new searchClassesWithMatches.
+	call := GtLMagritteToolForClassSearchExamples new searchClassesWithMatches.
 	tool := GtLToolMessage new toolCall: call.
 
 	scripter do

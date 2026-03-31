@@ -6,13 +6,13 @@ Class {
 	#superclass : #Object,
 	#traits : 'TGtLInvalidInputDataAssertions',
 	#classTraits : 'TGtLInvalidInputDataAssertions classTrait',
-	#category : 'Gt4LlmCore-Examples-Tools'
+	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #examples }
 GtLMagritteToolForClassSubclassesExamples >> classSubclassesDataViewSerialization [
 	<gtExample>
-	<return: #GtLCompositeDataBlock>
+	<return: #GtLPrimitiveMessageDataBlock>
 	| domainObject compositeView dataBlock jsonData |
 	domainObject := self classSubclassesForExistingClass.
 	compositeView := domainObject llmDataViewsFor: GtLDataView new.

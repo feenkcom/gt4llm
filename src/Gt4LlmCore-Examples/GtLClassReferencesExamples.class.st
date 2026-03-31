@@ -4,7 +4,7 @@ Examples for GtLClassReferences.
 Class {
 	#name : #GtLClassReferencesExamples,
 	#superclass : #GtLMagritteDomainObjectExamples,
-	#category : 'Gt4LlmCore-Examples-Domain Objects'
+	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #examples }
@@ -26,7 +26,7 @@ GtLClassReferencesExamples >> classReferencesCreation [
 { #category : #examples }
 GtLClassReferencesExamples >> classReferencesDataViewSerialization [
 	<gtExample>
-	<return: #GtLCompositeDataBlock>
+	<return: #GtLPrimitiveMessageDataBlock>
 	| domainObject compositeView dataBlock jsonData expectedJson |
 	
 	domainObject := self classReferencesCreation.

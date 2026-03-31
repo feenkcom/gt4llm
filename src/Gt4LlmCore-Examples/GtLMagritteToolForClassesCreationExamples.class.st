@@ -9,12 +9,38 @@ Class {
 	#instVars : [
 		'environment'
 	],
-	#category : 'Gt4LlmCore-Examples-Tools'
+	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #private }
 GtLMagritteToolForClassesCreationExamples >> cleanUpEnvironment [
 	environment ifNotNil: [ :anEnvironment | anEnvironment removeFromSystem ]
+]
+
+{ #category : #examples }
+GtLMagritteToolForClassesCreationExamples >> createClassWithMissingTargetClassName [
+	<gtExample>
+	| tool call result targetObject |
+	tool := GtLMagritteToolForClassesCreation new.
+	call := GtLFunctionToolCall new.
+	call rawArguments: {
+		'classes' -> {
+			{ 'superclassName' -> #Object.
+			  'package' -> 'Gt4LlmCoreNewPackage' } asDictionary
+		} asArray.
+		'traits' -> {}
+	} asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	
+	targetObject := result targetObject.
+	self
+		assertMissingRequiredProperties: targetObject
+		withPropertyNames: #('targetClassName')
+		path: #(#classes 1)
+		errorMessage: '@[classes/1] required properties missing [targetClassName]'.
+	^ call
 ]
 
 { #category : #examples }
@@ -186,32 +212,6 @@ GtLMagritteToolForClassesCreationExamples >> createClassesWithUnknownSuperclass 
 ]
 
 { #category : #examples }
-GtLMagritteToolForClassesCreationExamples >> createClassWithMissingTargetClassName [
-	<gtExample>
-	| tool call result targetObject |
-	tool := GtLMagritteToolForClassesCreation new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: {
-		'classes' -> {
-			{ 'superclassName' -> #Object.
-			  'package' -> 'Gt4LlmCoreNewPackage' } asDictionary
-		} asArray.
-		'traits' -> {}
-	} asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	
-	targetObject := result targetObject.
-	self
-		assertMissingRequiredProperties: targetObject
-		withPropertyNames: #('targetClassName')
-		path: #(#classes 1)
-		errorMessage: '@[classes/1] required properties missing [targetClassName]'.
-	^ call
-]
-
-{ #category : #examples }
 GtLMagritteToolForClassesCreationExamples >> createEmptyClassesAndTraits [
 	<gtExample>
 	| tool call result targetObject |
@@ -228,6 +228,32 @@ GtLMagritteToolForClassesCreationExamples >> createEmptyClassesAndTraits [
 	targetObject := result targetObject.
 	self assert: (targetObject isKindOf: GtLClassesCreationResult).
 	self assert: targetObject classes isEmpty.
+	^ call
+]
+
+{ #category : #examples }
+GtLMagritteToolForClassesCreationExamples >> createTraitWithMissingTargetTraitName [
+	<gtExample>
+	| tool call result targetObject |
+	tool := GtLMagritteToolForClassesCreation new.
+	call := GtLFunctionToolCall new.
+	call rawArguments: {
+		'classes' -> {}.
+		'traits' -> {
+			{ 'instanceVariables' -> 'value'.
+			  'package' -> 'Gt4LlmCoreNewPackage' } asDictionary
+		} asArray
+	} asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	
+	targetObject := result targetObject.
+	self
+		assertMissingRequiredProperties: targetObject
+		withPropertyNames: #('targetTraitName')
+		path: #(#traits 1)
+		errorMessage: '@[traits/1] required properties missing [targetTraitName]'.
 	^ call
 ]
 
@@ -279,32 +305,6 @@ GtLMagritteToolForClassesCreationExamples >> createTraitsWithInstanceVariables [
 		self assert: createdTraits second packageTag name equals: 'TagTwo'.
 		call
 	] ensure: [ traitsNames do: [ :each | self removeClassNamedIfPresent: each ] ]
-]
-
-{ #category : #examples }
-GtLMagritteToolForClassesCreationExamples >> createTraitWithMissingTargetTraitName [
-	<gtExample>
-	| tool call result targetObject |
-	tool := GtLMagritteToolForClassesCreation new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: {
-		'classes' -> {}.
-		'traits' -> {
-			{ 'instanceVariables' -> 'value'.
-			  'package' -> 'Gt4LlmCoreNewPackage' } asDictionary
-		} asArray
-	} asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	
-	targetObject := result targetObject.
-	self
-		assertMissingRequiredProperties: targetObject
-		withPropertyNames: #('targetTraitName')
-		path: #(#traits 1)
-		errorMessage: '@[traits/1] required properties missing [targetTraitName]'.
-	^ call
 ]
 
 { #category : #private }

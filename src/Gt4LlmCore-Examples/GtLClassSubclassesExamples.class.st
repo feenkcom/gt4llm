@@ -4,13 +4,13 @@ Examples for GtLClassSubclasses.
 Class {
 	#name : #GtLClassSubclassesExamples,
 	#superclass : #GtLMagritteDomainObjectExamples,
-	#category : 'Gt4LlmCore-Examples-Domain Objects'
+	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #examples }
 GtLClassSubclassesExamples >> classSubclassesDataViewSerialization [
 	<gtExample>
-	<return: #GtLCompositeDataBlock>
+	<return: #GtLPrimitiveMessageDataBlock>
 	| domainObject compositeView dataBlock jsonData expectedJson |
 	domainObject := self classSubclassesDomainObject.
 	compositeView := domainObject llmDataViewsFor: GtLDataView new.

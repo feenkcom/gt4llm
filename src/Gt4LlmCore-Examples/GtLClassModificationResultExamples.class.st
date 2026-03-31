@@ -4,7 +4,7 @@ Examples for GtLClassModificationResult domain object.
 Class {
 	#name : #GtLClassModificationResultExamples,
 	#superclass : #GtLMagritteDomainObjectExamples,
-	#category : 'Gt4LlmCore-Examples-Domain Objects'
+	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #examples }
@@ -76,7 +76,7 @@ GtLClassModificationResultExamples >> classModificationResultFromRealClass [
 { #category : #examples }
 GtLClassModificationResultExamples >> classModificationResultSerialization [
 	<gtExample>
-	<return: #GtLCompositeDataBlock>
+	<return: #GtLPrimitiveMessageDataBlock>
 	| result compositeView dataBlock jsonData expectedJson |
 	result := self classModificationResultCreation.
 	
@@ -107,7 +107,7 @@ GtLClassModificationResultExamples >> classModificationResultSerialization [
 { #category : #examples }
 GtLClassModificationResultExamples >> classModificationResultSerializationWithoutOriginal [
 	<gtExample>
-	<return: #GtLCompositeDataBlock>
+	<return: #GtLPrimitiveMessageDataBlock>
 	"Verify serialization works when originalClass is nil"
 	| result compositeView dataBlock jsonData expectedJson |
 	result := self classModificationResultWithoutOriginal.

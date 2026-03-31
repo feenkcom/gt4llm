@@ -4,7 +4,7 @@ Examples for GtLClassDescription.
 Class {
 	#name : #GtLClassDescriptionExamples,
 	#superclass : #GtLMagritteDomainObjectExamples,
-	#category : 'Gt4LlmCore-Examples-Domain Objects'
+	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #examples }
@@ -35,7 +35,7 @@ GtLClassDescriptionExamples >> classDescriptionCreation [
 { #category : #examples }
 GtLClassDescriptionExamples >> classDescriptionSerialization [
 	<gtExample>
-	<return: #GtLCompositeDataBlock>
+	<return: #GtLPrimitiveMessageDataBlock>
 	| description compositeView dataBlock jsonData expectedJson |
 	description := GtLClassDescription new
 		currentClassName: 'SampleClass';
