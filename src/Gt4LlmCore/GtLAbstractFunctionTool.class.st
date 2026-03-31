@@ -74,7 +74,7 @@ GtLAbstractFunctionTool >> performToolCall: aToolCall inContext: anExecutionCont
 		inContext: anExecutionContext.
 	
 	"Temporary check to enble the new LLM views if used"
-	self class shouldEnableDataViews ifTrue: [
+	self isUsingDataViews ifTrue: [
 		(domainObject llmDataViewsInContext: GtLDataViewContext new)
 			ifNotEmpty: [ :llmViews |
 				| resultObject |
