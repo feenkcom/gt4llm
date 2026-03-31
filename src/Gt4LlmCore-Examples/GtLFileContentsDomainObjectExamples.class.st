@@ -1,0 +1,62 @@
+Class {
+	#name : #GtLFileContentsDomainObjectExamples,
+	#superclass : #Object,
+	#category : 'Gt4LlmCore-Examples-Domain Objects'
+}
+
+{ #category : #examples }
+GtLFileContentsDomainObjectExamples >> emptyFileContents [
+	<gtExample>
+	<return: #GtLFileContentsDomainObject>
+	| domainObject compositeView dataBlock jsonData expectedJson |
+	
+	domainObject := GtLFileContentsDomainObject new.
+	self assert: domainObject path isNil.
+	self assert: domainObject contents isNil.
+	
+	compositeView := domainObject llmDataViewsFor: GtLDataView new.
+	self assert: compositeView dataViews size equals: 1.
+	
+	dataBlock := compositeView serializeToLlmPrimiteData.
+	self assert: dataBlock dataBlocks size equals: 1.
+	self assert: dataBlock imageDataBlocks isEmpty.
+	
+	jsonData := dataBlock compositeJsonData.
+	expectedJson := {
+		#path -> nil.
+		#contents -> nil
+	} asDictionary.
+	self assert: jsonData equals: expectedJson.
+	
+	^ domainObject
+]
+
+{ #category : #examples }
+GtLFileContentsDomainObjectExamples >> fileContentsWithData [
+	<gtExample>
+	<return: #GtLFileContentsDomainObject>
+	| domainObject compositeView dataBlock jsonData expectedJson encodedContents |
+	
+	encodedContents := 'Hello World' asByteArray base64Encoded.
+	domainObject := GtLFileContentsDomainObject new
+		path: '/tmp/test.txt';
+		contents: encodedContents.
+	self assert: domainObject path equals: '/tmp/test.txt'.
+	self assert: domainObject contents equals: encodedContents.
+	
+	compositeView := domainObject llmDataViewsFor: GtLDataView new.
+	self assert: compositeView dataViews size equals: 1.
+	
+	dataBlock := compositeView serializeToLlmPrimiteData.
+	self assert: dataBlock dataBlocks size equals: 1.
+	self assert: dataBlock imageDataBlocks isEmpty.
+	
+	jsonData := dataBlock compositeJsonData.
+	expectedJson := {
+		#path -> '/tmp/test.txt'.
+		#contents -> encodedContents
+	} asDictionary.
+	self assert: jsonData equals: expectedJson.
+	
+	^ domainObject
+]

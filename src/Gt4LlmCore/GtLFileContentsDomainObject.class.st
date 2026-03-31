@@ -44,6 +44,13 @@ GtLFileContentsDomainObject >> gtDisplayOn: stream [
 	stream nextPutAll: self path
 ]
 
+{ #category : #'llm views' }
+GtLFileContentsDomainObject >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
+]
+
 { #category : #'as yet unclassified' }
 GtLFileContentsDomainObject >> path [
 	^ path

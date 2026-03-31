@@ -8,6 +8,28 @@ Class {
 }
 
 { #category : #examples }
+GtLFilesInformationDomainObjectExamples >> filesInformationDataViewSerialization [
+	<gtExample>
+	<return: #GtLPrimitiveMessageDataBlock>
+	| domainObject compositeView dataBlock jsonData |
+	domainObject := self filesInformationForExistingFiles.
+	
+	compositeView := domainObject llmDataViewsFor: GtLDataView new.
+	self assert: compositeView dataViews size equals: 1.
+	
+	dataBlock := compositeView serializeToLlmPrimiteData.
+	self assert: dataBlock dataBlocks size equals: 1.
+	self assert: dataBlock imageDataBlocks isEmpty.
+	
+	jsonData := dataBlock compositeJsonData.
+	self assert: (jsonData at: #files) size equals: 2.
+	self assert: ((jsonData at: #files) first at: #path) equals: domainObject files first path.
+	self assert: ((jsonData at: #files) second at: #path) equals: domainObject files second path.
+	
+	^ dataBlock
+]
+
+{ #category : #examples }
 GtLFilesInformationDomainObjectExamples >> filesInformationForExistingFiles [
 	<gtExample>
 	| fileOne fileTwo domainObject |

@@ -35,6 +35,11 @@ GtLMagritteToolForFilesWrite >> filesDescription [
 		beRequired
 ]
 
+{ #category : #testing }
+GtLMagritteToolForFilesWrite >> isUsingDataViews [
+	^ true
+]
+
 { #category : #accessing }
 GtLMagritteToolForFilesWrite >> name [
 	^ 'writeFiles'

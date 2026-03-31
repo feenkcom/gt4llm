@@ -8,6 +8,35 @@ Class {
 }
 
 { #category : #examples }
+GtLFileInformationDomainObjectExamples >> fileInformationDataViewSerialization [
+	<gtExample>
+	<return: #GtLPrimitiveMessageDataBlock>
+	| domainObject compositeView dataBlock jsonData expectedJson |
+	domainObject := self fileInformationForExistingFile.
+	
+	compositeView := domainObject llmDataViewsFor: GtLDataView new.
+	self assert: compositeView dataViews size equals: 1.
+	
+	dataBlock := compositeView serializeToLlmPrimiteData.
+	self assert: dataBlock dataBlocks size equals: 1.
+	self assert: dataBlock imageDataBlocks isEmpty.
+	
+	jsonData := dataBlock compositeJsonData.
+	expectedJson := {
+		#path -> domainObject path.
+		#size -> domainObject size.
+		#creationTime -> domainObject creationTime asIso8601.
+		#modificationTime -> domainObject modificationTime asIso8601.
+		#accessTime -> domainObject accessTime asIso8601.
+		#type -> domainObject type.
+		#permissions -> domainObject permissions
+	} asDictionary.
+	self assert: jsonData equals: expectedJson.
+	
+	^ dataBlock
+]
+
+{ #category : #examples }
 GtLFileInformationDomainObjectExamples >> fileInformationForExistingFile [
 	<gtExample>
 	| fileReference domainObject |
