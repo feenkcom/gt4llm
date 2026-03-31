@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLForwardDataView,
-	#superclass : #GtLDataView,
+	#superclass : #GtLDataViewDecorator,
 	#instVars : [
 		'objectComputation',
 		'computedTargetObject',
@@ -9,6 +9,11 @@ Class {
 	],
 	#category : #Gt4LlmCore
 }
+
+{ #category : #testing }
+GtLForwardDataView class >> isAbstract [
+	^ self name = #GtLForwardDataView 
+]
 
 { #category : #accessing }
 GtLForwardDataView >> computeForwardedViewFor: anObjectComputation [
