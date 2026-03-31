@@ -105,6 +105,13 @@ GtLIncorrectArgumentTypeDomainObject >> expectedArgumentValueKindNameDescription
 			beRequired
 ]
 
+{ #category : #'llm views' }
+GtLIncorrectArgumentTypeDomainObject >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
+]
+
 { #category : #'api - accessing' }
 GtLIncorrectArgumentTypeDomainObject >> messageText [
 	"Return an error message"

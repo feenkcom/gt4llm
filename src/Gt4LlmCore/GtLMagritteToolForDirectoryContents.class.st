@@ -55,6 +55,11 @@ GtLMagritteToolForDirectoryContents >> directoryPathDescription [
 		beRequired
 ]
 
+{ #category : #testing }
+GtLMagritteToolForDirectoryContents >> isUsingDataViews [
+	^ true
+]
+
 { #category : #accessing }
 GtLMagritteToolForDirectoryContents >> name [
 	^ 'getDirectoryContents'

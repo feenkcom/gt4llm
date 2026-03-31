@@ -61,6 +61,13 @@ GtLFilePathReference >> isFile [
 	^ self fileReference isFile
 ]
 
+{ #category : #'llm views' }
+GtLFilePathReference >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
+]
+
 { #category : #accessing }
 GtLFilePathReference >> pathString [
 	^ pathString

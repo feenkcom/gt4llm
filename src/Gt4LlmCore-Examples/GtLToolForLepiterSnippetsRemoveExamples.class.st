@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLToolForLepiterSnippetsRemoveExamples,
 	#superclass : #Object,
-	#category : #'Gt4LlmCore-Examples-Tools'
+	#category : 'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #'examples - empty values' }
@@ -133,6 +133,23 @@ GtLToolForLepiterSnippetsRemoveExamples >> missingSnippetPageUid [
 ]
 
 { #category : #examples }
+GtLToolForLepiterSnippetsRemoveExamples >> missingSnippets [
+	<gtExample>
+	| tool call result model |
+	tool := GtLToolForLepiterSnippetsRemove new.
+	call := GtLFunctionToolCall new.
+	call rawArguments: {} asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GtLMagritteBasedModel).
+	model := result model.
+	self assert: (model isKindOf: GtLMissingRequiredPropertiesDomainObject).
+	self assert: model missingPropertyNames equals: #('snippets').
+	self assert: model path asArray equals: #(nil).
+	^ call
+]
+
+{ #category : #examples }
 GtLToolForLepiterSnippetsRemoveExamples >> missingSnippetUid [
 	<gtExample>
 	| tool call result model |
@@ -151,23 +168,6 @@ GtLToolForLepiterSnippetsRemoveExamples >> missingSnippetUid [
 	self assert: (model isKindOf: GtLMissingRequiredPropertiesDomainObject).
 	self assert: model missingPropertyNames equals: #('snippetUid').
 	self assert: model path equals: #('snippets' 1).
-	^ call
-]
-
-{ #category : #examples }
-GtLToolForLepiterSnippetsRemoveExamples >> missingSnippets [
-	<gtExample>
-	| tool call result model |
-	tool := GtLToolForLepiterSnippetsRemove new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: {} asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteBasedModel).
-	model := result model.
-	self assert: (model isKindOf: GtLMissingRequiredPropertiesDomainObject).
-	self assert: model missingPropertyNames equals: #('snippets').
-	self assert: model path asArray equals: #(nil).
 	^ call
 ]
 

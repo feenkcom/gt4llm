@@ -97,3 +97,10 @@ GtLDirectoryContents >> gtFilesFor: aView [
 		items: [ self files ];
 		column: 'Path' text: [ :each | each pathString ]
 ]
+
+{ #category : #'llm views' }
+GtLDirectoryContents >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
+]
