@@ -4,7 +4,7 @@ Examples for GtLMethodIsNotExampleDomainObject data views.
 Class {
 	#name : #GtLMethodIsNotExampleDomainObjectExamples,
 	#superclass : #GtLErroneousConditionDomainObjectExamples,
-	#category : #'Gt4LlmCore-Examples-Domain Objects'
+	#category : 'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #examples }

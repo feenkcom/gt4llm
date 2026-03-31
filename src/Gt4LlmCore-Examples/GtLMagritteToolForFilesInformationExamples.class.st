@@ -4,7 +4,7 @@ Examples for the files information magritte tool.
 Class {
 	#name : #GtLMagritteToolForFilesInformationExamples,
 	#superclass : #Object,
-	#category : #'Gt4LlmCore-Examples-Tools'
+	#category : 'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #examples }

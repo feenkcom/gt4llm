@@ -1,29 +1,17 @@
 Class {
-	#name : #GtLProblemDomainObjectExamples,
-	#superclass : #GtLErroneousConditionDomainObjectExamples,
+	#name : #GtLFilePathReferenceExamples,
+	#superclass : #Object,
 	#category : 'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #examples }
-GtLProblemDomainObjectExamples >> basicProblemDomainObject [
+GtLFilePathReferenceExamples >> emptyFilePathReference [
 	<gtExample>
-	<return: #GtLProblemDomainObject>
-	| domainObject |
-	domainObject := GtLProblemDomainObject new
-		errorMessage: 'Something went wrong during operation';
-		yourself.
-	self assert: domainObject errorMessage equals: 'Something went wrong during operation'.
-	^ domainObject
-]
-
-{ #category : #examples }
-GtLProblemDomainObjectExamples >> emptyProblemDomainObject [
-	<gtExample>
-	<return: #GtLProblemDomainObject>
+	<return: #GtLFilePathReference>
 	| domainObject compositeView dataBlock jsonData expectedJson |
 	
-	domainObject := GtLProblemDomainObject new.
-	self assert: domainObject errorMessage isNil.
+	domainObject := GtLFilePathReference new.
+	self assert: domainObject pathString isNil.
 	
 	compositeView := domainObject llmDataViewsFor: GtLDataView new.
 	self assert: compositeView dataViews size equals: 1.
@@ -34,7 +22,7 @@ GtLProblemDomainObjectExamples >> emptyProblemDomainObject [
 	
 	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
-		#errorMessage -> nil
+		#pathString -> nil
 	} asDictionary.
 	self assert: jsonData equals: expectedJson.
 	
@@ -42,38 +30,40 @@ GtLProblemDomainObjectExamples >> emptyProblemDomainObject [
 ]
 
 { #category : #examples }
-GtLProblemDomainObjectExamples >> problemDataViewSerialization [
+GtLFilePathReferenceExamples >> filePathReferenceForDirectory [
 	<gtExample>
-	<return: #Dictionary>
-	| domainObject compositeView dataBlock jsonData expectedJson |
+	<return: #GtLFilePathReference>
+	| domainObject compositeView dataBlock jsonData expectedJson pathString |
 	
-	domainObject := self basicProblemDomainObject.
+	pathString := '/tmp/example-dir'.
+	domainObject := GtLFilePathReference new pathString: pathString.
+	self assert: domainObject pathString equals: pathString.
+	
 	compositeView := domainObject llmDataViewsFor: GtLDataView new.
 	self assert: compositeView dataViews size equals: 1.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock isNotNil.
 	self assert: dataBlock dataBlocks size equals: 1.
 	self assert: dataBlock imageDataBlocks isEmpty.
 	
 	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
-		#errorMessage -> 'Something went wrong during operation'
+		#pathString -> pathString
 	} asDictionary.
 	self assert: jsonData equals: expectedJson.
 	
-	^ dataBlock
+	^ domainObject
 ]
 
 { #category : #examples }
-GtLProblemDomainObjectExamples >> problemWithEmptyErrorMessage [
+GtLFilePathReferenceExamples >> filePathReferenceForFile [
 	<gtExample>
-	<return: #GtLProblemDomainObject>
-	| domainObject compositeView dataBlock jsonData expectedJson |
+	<return: #GtLFilePathReference>
+	| domainObject compositeView dataBlock jsonData expectedJson pathString |
 	
-	domainObject := GtLProblemDomainObject new
-		errorMessage: ''.
-	self assert: domainObject errorMessage equals: ''.
+	pathString := '/tmp/example.txt'.
+	domainObject := GtLFilePathReference new pathString: pathString.
+	self assert: domainObject pathString equals: pathString.
 	
 	compositeView := domainObject llmDataViewsFor: GtLDataView new.
 	self assert: compositeView dataViews size equals: 1.
@@ -84,7 +74,7 @@ GtLProblemDomainObjectExamples >> problemWithEmptyErrorMessage [
 	
 	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
-		#errorMessage -> ''
+		#pathString -> pathString
 	} asDictionary.
 	self assert: jsonData equals: expectedJson.
 	

@@ -3,8 +3,19 @@ Trait providing assertion methods for testing erroneous condition domain objects
 "
 Trait {
 	#name : #TGtLInvalidInputDataAssertions,
-	#category : #'Gt4LlmCore-Examples-Support'
+	#category : 'Gt4LlmCore-Examples-Support'
 }
+
+{ #category : #assertions }
+TGtLInvalidInputDataAssertions >> assertIncorrectArgumentType: aDomainObject withArgumentName: anArgumentName argumentValue: anArgumentValue expectedKind: aClass [
+	"Assert that the domain object is a GtLIncorrectArgumentTypeDomainObject with expected values."
+	
+	self assert: aDomainObject isErrorDomainObject.
+	self assert: (aDomainObject isKindOf: GtLIncorrectArgumentTypeDomainObject).
+	self assert: aDomainObject argumentName equals: anArgumentName.
+	self assert: aDomainObject argumentValue equals: anArgumentValue.
+	self assert: aDomainObject expectedArgumentValueKind equals: aClass
+]
 
 { #category : #assertions }
 TGtLInvalidInputDataAssertions >> assertJSONSchemaValidationError: aDomainObject withPath: aPath errorMessage: anErrorMessage [

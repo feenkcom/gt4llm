@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLChatStep,
 	#superclass : #BlDevScripterToolActionStep,
-	#category : #'Gt4LlmCore-Examples-Scripter'
+	#category : 'Gt4LlmCore-Examples-Scripter'
 }
 
 { #category : #'steps - checks' }
