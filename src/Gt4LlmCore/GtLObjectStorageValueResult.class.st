@@ -20,20 +20,6 @@ GtLObjectStorageValueResult class >> forObject: anObject withId: anObjectId [
 		objectId: anObjectId
 ]
 
-{ #category : #'gt-extensions' }
-GtLObjectStorageValueResult >> gtObjectFor: aView [
-	<gtView>
-	<gtLlmView>
-	^ aView explicit
-		title: 'Object';
-		priority: 9;
-		stencil: [ ((self object gtViewsFor: GtPhlowEmptyView new) asElement
-			margin: (BlInsets all: 10);
-			background: Color white;
-			addAptitude: BrShadowAptitude;
-			matchParent) ]
-]
-
 { #category : #'llm views' }
 GtLObjectStorageValueResult >> llmRawDataViewFor: aDataView [
 	<gtLlmDataView>
