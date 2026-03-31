@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLCompositeDataView,
-	#superclass : #GtLDataView,
+	#superclass : #GtLDataViewDecorator,
 	#instVars : [
 		'dataViews',
 		'serializationType'

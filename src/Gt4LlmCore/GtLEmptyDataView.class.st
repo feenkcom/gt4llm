@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLEmptyDataView,
-	#superclass : #GtLDataView,
+	#superclass : #GtLDataViewDecorator,
 	#category : #Gt4LlmCore
 }
 

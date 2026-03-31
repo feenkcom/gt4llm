@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLMagritteDataView,
-	#superclass : #GtLDataView,
+	#superclass : #GtLDataViewDecorator,
 	#instVars : [
 		'objectComputation',
 		'computedTargetObject',

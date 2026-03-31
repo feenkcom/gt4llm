@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLImageDataView,
-	#superclass : #GtLDataView,
+	#superclass : #GtLDataViewDecorator,
 	#instVars : [
 		'imageType',
 		'imageBytesComputation',

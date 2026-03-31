@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'title',
 		'buildContext',
-		'dataKey'
+		'dataKey',
+		'definingMethod'
 	],
 	#category : #Gt4LlmCore
 }
@@ -23,6 +24,11 @@ GtLDataView class >> handledExceptions [
 	https://github.com/feenkcom/gtoolkit/issues/4383"
 	
 	^ Error ", Halt, Warning"
+]
+
+{ #category : #testing }
+GtLDataView class >> isAbstract [
+	^ self name = #GtLDataView 
 ]
 
 { #category : #'message performing' }
@@ -57,6 +63,8 @@ GtLDataView >> buildContext: aBuildContext [
 { #category : #decorating }
 GtLDataView >> compositeData [
 	^ GtLCompositeDataView new
+			originalView: self;
+			definingMethod: (GtPhlowDefiningMethodsCollector forContext: thisContext) collect
 ]
 
 { #category : #accessing }
@@ -69,9 +77,21 @@ GtLDataView >> dataKey: anObject [
 	dataKey := anObject
 ]
 
+{ #category : #accessing }
+GtLDataView >> definingMethod [
+	^definingMethod
+]
+
+{ #category : #accessing }
+GtLDataView >> definingMethod: anObject [
+	definingMethod := anObject
+]
+
 { #category : #decorating }
 GtLDataView >> emptyData [
 	^ GtLEmptyDataView new
+			originalView: self;
+			definingMethod: (GtPhlowDefiningMethodsCollector forContext: thisContext) collect
 ]
 
 { #category : #'message performing' }
@@ -110,12 +130,24 @@ GtLDataView >> errorViewWithException: anException reason: anExceptionReason isF
 { #category : #decorating }
 GtLDataView >> forwardObject [
 	^ GtLForwardObjectDataView new
+			originalView: self;
+			definingMethod: (GtPhlowDefiningMethodsCollector forContext: thisContext) collect
 ]
 
 { #category : #decorating }
 GtLDataView >> forwardObject: aBlockClosure [
 	^ self forwardObject
 		object: aBlockClosure
+]
+
+{ #category : #views }
+GtLDataView >> gtDefiningMethodFor: aView [
+	<gtView>
+	^(aView forward)
+		title: 'Defining Method';
+		priority: 40;
+		object: [definingMethod];
+		view: #gtSourceFor:
 ]
 
 { #category : #'gt - extensions' }
@@ -161,7 +193,9 @@ GtLDataView >> gtViewSerializationObjectsFor: aView [
 
 { #category : #decorating }
 GtLDataView >> imageData [
-	^ GtLImageDataView new
+	^GtLImageDataView new
+			originalView: self;
+			definingMethod: (GtPhlowDefiningMethodsCollector forContext: thisContext) collect
 ]
 
 { #category : #testing }
@@ -172,6 +206,8 @@ GtLDataView >> isErrorView [
 { #category : #decorating }
 GtLDataView >> jsonData [
 	^ GtLJsonDataView new
+			originalView: self;
+			definingMethod: (GtPhlowDefiningMethodsCollector forContext: thisContext) collect
 ]
 
 { #category : #decorating }
@@ -189,6 +225,8 @@ GtLDataView >> jsonObject: aBlock [
 { #category : #decorating }
 GtLDataView >> magritteObject [
 	^ GtLMagritteDataView new
+			originalView: self;
+			definingMethod: (GtPhlowDefiningMethodsCollector forContext: thisContext) collect
 ]
 
 { #category : #decorating }
