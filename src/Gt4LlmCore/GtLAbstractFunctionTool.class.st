@@ -80,7 +80,7 @@ GtLAbstractFunctionTool >> performToolCall: aToolCall inContext: anExecutionCont
 				| resultObject |
 				resultObject := GTLDataViewWrapperModel new 
 					targetObject:  domainObject;
-					targetDataView:  llmViews.
+					targetDataViews:  llmViews.
 				aToolCall result: resultObject.
 
 				^ resultObject	] ].

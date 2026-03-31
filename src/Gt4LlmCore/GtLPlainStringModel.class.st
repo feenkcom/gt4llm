@@ -22,8 +22,4 @@ GtLPlainStringModel >> addContentTo: aDictionary [
 { #category : #'as yet unclassified' }
 GtLPlainStringModel >> addInstructionsTo: aMessageInstructions [
 
-	aMessageInstructions
-		addSection: (GtLInstructionSection new
-				title: self name;
-				body: '')
 ]

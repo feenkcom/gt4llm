@@ -22,9 +22,9 @@ TGtLWithInputModelsAPI >> addInputModel: aModel [
 
 { #category : #'api - message' }
 TGtLWithInputModelsAPI >> addPlainInputObject: anObject named: aString [
-	self addInputModel: (GtLPlainObjectModel new
-		name: aString;
-		model: anObject)
+	self addInputModel: (GtLPlainObjectModel 
+		forObject:  anObject
+		named: aString)
 ]
 
 { #category : #accessing }
