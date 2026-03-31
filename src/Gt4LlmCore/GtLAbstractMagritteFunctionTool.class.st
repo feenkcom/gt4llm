@@ -83,7 +83,7 @@ GtLAbstractMagritteFunctionTool >> resultObjectFromDomainObject: domainObject [
 			ifNotEmpty: [ :llmViews |
 				^GTLDataViewWrapperModel new 
 					targetObject:  domainObject;
-					targetDataView:  llmViews ] ].
+					targetDataViews:  llmViews ] ].
 		
 	^((domainObject isKindOf: GtLDomainObject) not or: [
 			domainObject wasMovedToMagritteDescriptions ])

@@ -53,7 +53,7 @@ GTLDataViewWrapperModel >> serializeToOpenAIResponseOutput [
 ]
 
 { #category : #accessing }
-GTLDataViewWrapperModel >> targetDataView: aCollection [
+GTLDataViewWrapperModel >> targetDataViews: aCollection [
 	self mainDataView: (GtLCompositeDataView new 
 		title: 'Object views';
 		addDataViews: aCollection)

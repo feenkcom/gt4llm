@@ -30,10 +30,9 @@ Object >> gtActionObjectChatFor: anAction [
 			sendWith: [ :m | 
 				m
 					markdown: 'Describe the object';
-					addInputMagritteObject: (GtLObjectStorageValueResult new
-								objectId: storedObjectId;
-								object: self;
-								objectValue: (GtLSerializedObjectValue fromObject: self))
+					addPlainInputObject: (GtLObjectStorageValueResult 
+								forObject: self
+								withId: storedObjectId)
 						named: 'Initial object' ].
 		c ].
 	^ anAction button
