@@ -60,6 +60,13 @@ GtLMethodWithSource >> isClassSide [
 	^ self methodReference isClassSide
 ]
 
+{ #category : #'llm views' }
+GtLMethodWithSource >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
+]
+
 { #category : #accessing }
 GtLMethodWithSource >> methodClass [
 	^ self methodReference methodClass
