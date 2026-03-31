@@ -5,7 +5,7 @@ Class {
 		'title',
 		'buildContext',
 		'dataKey',
-		'definingMethod'
+		'definingMethodProvider'
 	],
 	#category : #Gt4LlmCore
 }
@@ -29,6 +29,16 @@ GtLDataView class >> handledExceptions [
 { #category : #testing }
 GtLDataView class >> isAbstract [
 	^ self name = #GtLDataView 
+]
+
+{ #category : #accessing }
+GtLDataView >> allDefiningMethods [
+	"I return an object that understands #gtSourceFor:.
+	I return all methods that are involved in a view definition."
+	
+	^ self definingMethodProvider 
+		ifNotNil: [ :aMethodProvider | 
+			aMethodProvider allDefiningMethods  ].
 ]
 
 { #category : #'message performing' }
@@ -79,12 +89,25 @@ GtLDataView >> dataKey: anObject [
 
 { #category : #accessing }
 GtLDataView >> definingMethod [
-	^definingMethod
+	^ self definingMethodProvider 
+		ifNotNil: [ :aMethodProvider | 
+			aMethodProvider definingMethod  ].
 ]
 
 { #category : #accessing }
 GtLDataView >> definingMethod: anObject [
-	definingMethod := anObject
+	definingMethodProvider := GtPhlowConcreteDefiningMethodProvider new
+		definingMethod: anObject
+]
+
+{ #category : #accessing }
+GtLDataView >> definingMethodProvider [
+	^definingMethodProvider
+]
+
+{ #category : #accessing }
+GtLDataView >> definingMethodProvider: anObject [
+	definingMethodProvider := anObject
 ]
 
 { #category : #decorating }
@@ -146,7 +169,7 @@ GtLDataView >> gtDefiningMethodFor: aView [
 	^(aView forward)
 		title: 'Defining Method';
 		priority: 40;
-		object: [definingMethod];
+		object: [definingMethodProvider allDefiningMethods];
 		view: #gtSourceFor:
 ]
 
@@ -307,6 +330,12 @@ GtLDataView >> on: anObject perform: aMessageSymbol withSomeArguments: aCollecti
 		on: anObject 
 		perform: aMessageSymbol 
 		withArguments: newCollectionOfArguments
+]
+
+{ #category : #accessing }
+GtLDataView >> originMethodsInto: aStream [
+	self definingMethod ifNotNil: [ :aMethod | 
+		aMethod gtOriginMethodsInto: aStream ]
 ]
 
 { #category : #'message performing' }
