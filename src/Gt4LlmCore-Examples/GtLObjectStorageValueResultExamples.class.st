@@ -357,7 +357,7 @@ GtLObjectStorageValueResultExamples >> objectStorageValueResultForObjectStorageV
 	
 	self 
 		assertObjectValueJson: objectValueJson 
-		includesPhlowViews: #('gtObjectFor:' 'gtRawFor:' 'gtPrintFor:' 'gtMetaFor:').
+		includesPhlowViews: #('gtMagritteFor:' 'gtRawFor:' 'gtPrintFor:' 'gtMetaFor:').
 	
 	^ domainObject
 ]
