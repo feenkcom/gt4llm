@@ -17,3 +17,19 @@ GtLForwardObjectDataView >> computeTargetView [
 	targetView addDataView: self computeForwardedView.
 	^targetView
 ]
+
+{ #category : #accessing }
+GtLForwardObjectDataView >> definingMethod: aMethod [
+	definingMethodProvider := GtPhlowForwardViewDefiningMethodProvider new
+		phlowForwardView: self;
+		definingMethod: aMethod
+]
+
+{ #category : #accessing }
+GtLForwardObjectDataView >> originMethodsInto: aStream [
+	super originMethodsInto: aStream.
+
+	self computeTargetView
+		ifNotNil: [ :aPhlowView | 
+			aPhlowView dataViews do: [ :each | each originMethodsInto: aStream ] ]
+]
