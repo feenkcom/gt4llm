@@ -42,6 +42,11 @@ GtLMagritteToolForFilesContents >> filePathsDescription [
 		beRequired
 ]
 
+{ #category : #testing }
+GtLMagritteToolForFilesContents >> isUsingDataViews [
+	^ true
+]
+
 { #category : #accessing }
 GtLMagritteToolForFilesContents >> name [
 	^ 'getFilesContents'
