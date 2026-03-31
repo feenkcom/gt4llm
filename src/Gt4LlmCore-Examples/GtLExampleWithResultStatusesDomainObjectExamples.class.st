@@ -4,7 +4,7 @@ Examples for GtLExampleWithResultStatusesDomainObject domain object and data vie
 Class {
 	#name : #GtLExampleWithResultStatusesDomainObjectExamples,
 	#superclass : #Object,
-	#category : 'Gt4LlmCore-Examples-Domain Objects'
+	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #assertions }

@@ -6,13 +6,13 @@ Class {
 	#superclass : #Object,
 	#traits : 'TGtLInvalidInputDataAssertions',
 	#classTraits : 'TGtLInvalidInputDataAssertions classTrait',
-	#category : 'Gt4LlmCore-Examples-Tools'
+	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #examples }
 GtLMagritteToolForClassSearchExamples >> searchClassesDataViewSerialization [
 	<gtExample>
-	<return: #GtLCompositeDataBlock>
+	<return: #GtLPrimitiveMessageDataBlock>
 	| domainObject compositeView dataBlock jsonData |
 	domainObject := self searchClassesWithMatches.
 	compositeView := domainObject llmDataViewsFor: GtLDataView new.

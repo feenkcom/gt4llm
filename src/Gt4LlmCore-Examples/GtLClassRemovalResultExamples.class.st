@@ -4,7 +4,7 @@ Examples for GtLClassRemovalResult domain object.
 Class {
 	#name : #GtLClassRemovalResultExamples,
 	#superclass : #GtLMagritteDomainObjectExamples,
-	#category : 'Gt4LlmCore-Examples-Domain Objects'
+	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #examples }
@@ -23,7 +23,7 @@ GtLClassRemovalResultExamples >> classRemovalResultCreation [
 { #category : #examples }
 GtLClassRemovalResultExamples >> classRemovalResultDataViewSerialization [
 	<gtExample>
-	<return: #GtLCompositeDataBlock>
+	<return: #GtLPrimitiveMessageDataBlock>
 	| result compositeView dataBlock jsonData expectedJson |
 	result := self classRemovalResultCreation.
 	compositeView := result llmDataViewsFor: GtLDataView new.

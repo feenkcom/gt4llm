@@ -6,7 +6,7 @@ Class {
 	#superclass : #Object,
 	#traits : 'TGtLInvalidInputDataAssertions',
 	#classTraits : 'TGtLInvalidInputDataAssertions classTrait',
-	#category : 'Gt4LlmCore-Examples-Tools'
+	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #private }
@@ -125,7 +125,7 @@ GtLMagritteToolForClassRemovalExamples >> removeExistingClass [
 { #category : #examples }
 GtLMagritteToolForClassRemovalExamples >> removeExistingClassDataViewSerialization [
 	<gtExample>
-	<return: #GtLCompositeDataBlock>
+	<return: #GtLPrimitiveMessageDataBlock>
 	| domainObject compositeView dataBlock jsonData expectedJson |
 	domainObject := self removeExistingClass.
 	compositeView := domainObject llmDataViewsFor: GtLDataView new.

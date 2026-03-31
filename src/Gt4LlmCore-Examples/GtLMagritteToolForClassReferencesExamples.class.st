@@ -6,14 +6,14 @@ Class {
 	#superclass : #Object,
 	#traits : 'TGtLInvalidInputDataAssertions',
 	#classTraits : 'TGtLInvalidInputDataAssertions classTrait',
-	#category : 'Gt4LlmCore-Examples-Tools'
+	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #examples }
 GtLMagritteToolForClassReferencesExamples >> classReferencesDataViewSerialization [
 	<gtExample>
-	<return: #GtLCompositeDataBlock>
-	| domainObject compositeView dataBlock jsonData expectedJson |
+	<return: #GtLPrimitiveMessageDataBlock>
+	| domainObject compositeView dataBlock jsonData |
 	domainObject := self classReferencesForExistingClass.
 	compositeView := domainObject llmDataViewsFor: GtLDataView new.
 	self assert: compositeView dataViews size equals: 1.

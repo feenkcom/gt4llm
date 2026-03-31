@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLUnexpectedDomainObjectExamples,
 	#superclass : #GtLErroneousConditionDomainObjectExamples,
-	#category : 'Gt4LlmCore-Examples-Domain Objects'
+	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #examples }
@@ -48,7 +48,7 @@ GtLUnexpectedDomainObjectExamples >> emptyUnexpectedDomainObject [
 { #category : #examples }
 GtLUnexpectedDomainObjectExamples >> unexpectedDomainObjectDataViewSerialization [
 	<gtExample>
-	<return: #GtLCompositeDataBlock>
+	<return: #GtLPrimitiveMessageDataBlock>
 	| domainObject compositeView dataBlock jsonData expectedJson |
 	
 	domainObject := self basicUnexpectedDomainObject.

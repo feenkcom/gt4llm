@@ -4,7 +4,7 @@ Examples for GtLClassesCreationResult domain object.
 Class {
 	#name : #GtLClassesCreationResultExamples,
 	#superclass : #GtLMagritteDomainObjectExamples,
-	#category : 'Gt4LlmCore-Examples-Domain Objects'
+	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #'examples - support' }
@@ -31,7 +31,7 @@ GtLClassesCreationResultExamples >> anotherClassModificationResult [
 { #category : #'examples - serialization' }
 GtLClassesCreationResultExamples >> creationResultSerializationWithMixedResults [
 	<gtExample>
-	<return: #GtLCompositeDataBlock>
+	<return: #GtLPrimitiveMessageDataBlock>
 	| result compositeView dataBlock jsonData classesJson |
 	result := self creationResultWithMixedResults.
 	
@@ -72,7 +72,7 @@ GtLClassesCreationResultExamples >> creationResultSerializationWithMixedResults 
 { #category : #'examples - serialization' }
 GtLClassesCreationResultExamples >> creationResultSerializationWithMultipleClasses [
 	<gtExample>
-	<return: #GtLCompositeDataBlock>
+	<return: #GtLPrimitiveMessageDataBlock>
 	| result compositeView dataBlock jsonData firstClassJson secondClassJson expectedJson |
 	result := self creationResultWithMultipleClasses.
 	
@@ -117,7 +117,7 @@ GtLClassesCreationResultExamples >> creationResultSerializationWithMultipleClass
 { #category : #'examples - serialization' }
 GtLClassesCreationResultExamples >> creationResultSerializationWithSingleClass [
 	<gtExample>
-	<return: #GtLCompositeDataBlock>
+	<return: #GtLPrimitiveMessageDataBlock>
 	| result compositeView dataBlock jsonData expectedClassJson expectedJson |
 	result := self creationResultWithSingleClass.
 	
@@ -221,7 +221,7 @@ GtLClassesCreationResultExamples >> emptyCreationResult [
 { #category : #'examples - serialization' }
 GtLClassesCreationResultExamples >> emptyCreationResultSerialization [
 	<gtExample>
-	<return: #GtLCompositeDataBlock>
+	<return: #GtLPrimitiveMessageDataBlock>
 	| result compositeView dataBlock jsonData expectedJson |
 	result := self emptyCreationResult.
 	

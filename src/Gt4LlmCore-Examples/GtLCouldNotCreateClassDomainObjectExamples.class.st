@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLCouldNotCreateClassDomainObjectExamples,
 	#superclass : #GtLErroneousConditionDomainObjectExamples,
-	#category : 'Gt4LlmCore-Examples-Domain Objects'
+	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #examples }
@@ -32,7 +32,7 @@ GtLCouldNotCreateClassDomainObjectExamples >> basicCouldNotCreateClassDomainObje
 { #category : #examples }
 GtLCouldNotCreateClassDomainObjectExamples >> couldNotCreateClassDataViewSerialization [
 	<gtExample>
-	<return: #GtLCompositeDataBlock>
+	<return: #GtLPrimitiveMessageDataBlock>
 	| domainObject compositeView dataBlock jsonData expectedJson |
 	
 	domainObject := self basicCouldNotCreateClassDomainObject.
