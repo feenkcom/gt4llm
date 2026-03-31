@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLJsonDataView,
-	#superclass : #GtLDataView,
+	#superclass : #GtLDataViewDecorator,
 	#instVars : [
 		'jsonDataComputationBlock',
 		'computedJsonData'

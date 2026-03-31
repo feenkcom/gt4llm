@@ -1,5 +1,5 @@
 Class {
 	#name : #GtLDocumentDataView,
-	#superclass : #GtLDataView,
+	#superclass : #GtLDataViewDecorator,
 	#category : #Gt4LlmCore
 }

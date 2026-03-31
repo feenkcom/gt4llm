@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLCompositeDataView,
-	#superclass : #GtLDataView,
+	#superclass : #GtLDataViewDecorator,
 	#instVars : [
 		'dataViews',
 		'serializationType'
@@ -51,7 +51,6 @@ GtLCompositeDataView >> gtPhlowTreeChildren [
 { #category : #'gt - extensions' }
 GtLCompositeDataView >> gtViewContentDataBlocksFor: aView [
 	<gtView>
-	<gtLlmMessageView>
 	
 	dataViews ifNil: [^aView empty].
 	^(aView forward)
@@ -65,7 +64,6 @@ GtLCompositeDataView >> gtViewContentDataBlocksFor: aView [
 { #category : #'gt - extensions' }
 GtLCompositeDataView >> gtViewContentJsonDataFor: aView [
 	<gtView>
-	<gtLlmMessageView>
 	
 	dataViews ifNil: [^aView empty].
 	^(aView forward)
@@ -79,7 +77,6 @@ GtLCompositeDataView >> gtViewContentJsonDataFor: aView [
 { #category : #'gt - extensions' }
 GtLCompositeDataView >> gtViewContentJsonStringFor: aView [
 	<gtView>
-	<gtLlmMessageView>
 	
 	dataViews ifNil: [^aView empty].
 	^(aView forward)
