@@ -5,6 +5,29 @@ Class {
 }
 
 { #category : #examples }
+GtLMethodWithSourceExamples >> methodWithSourceDataViewSerialization [
+	<gtExample>
+	<return: #GtLPrimitiveMessageDataBlock>
+	| domainObject compositeView dataBlock jsonData |
+	domainObject := self methodWithSourceObjectFromCompiledMethodClassSide.
+	
+	compositeView := domainObject llmDataViewsFor: GtLDataView new.
+	self assert: compositeView dataViews size equals: 1.
+	
+	dataBlock := compositeView serializeToLlmPrimiteData.
+	self assert: dataBlock dataBlocks size equals: 1.
+	self assert: dataBlock imageDataBlocks isEmpty.
+	
+	jsonData := dataBlock compositeJsonData.
+	self assert: ((jsonData at: #methodReference) at: #methodName) equals: 'fromCompiledMethod:'.
+	self assert: ((jsonData at: #methodReference) at: #methodClassName) equals: 'GtLMethodReference'.
+	self assert: ((jsonData at: #methodReference) at: #classSide) equals: true.
+	self assert: (jsonData at: #sourceCode) equals: (GtLMethodReference class >> #fromCompiledMethod:) sourceCode.
+	
+	^ dataBlock
+]
+
+{ #category : #examples }
 GtLMethodWithSourceExamples >> methodWithSourceObjectFromCompiledMethodClassSide [
 	<gtExample>
 	| methodObject |

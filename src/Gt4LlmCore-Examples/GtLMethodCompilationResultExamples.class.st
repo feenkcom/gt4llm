@@ -39,6 +39,29 @@ GtLMethodCompilationResultExamples >> methodCompilationResultCreation [
 ]
 
 { #category : #examples }
+GtLMethodCompilationResultExamples >> methodCompilationResultDataViewSerialization [
+	<gtExample>
+	<return: #GtLPrimitiveMessageDataBlock>
+	| domainObject compositeView dataBlock jsonData expectedJson |
+	domainObject := self methodCompilationResultCreation.
+	
+	compositeView := domainObject llmDataViewsFor: GtLDataView new.
+	self assert: compositeView dataViews size equals: 1.
+	
+	dataBlock := compositeView serializeToLlmPrimiteData.
+	self assert: dataBlock dataBlocks size equals: 1.
+	self assert: dataBlock imageDataBlocks isEmpty.
+	
+	jsonData := dataBlock compositeJsonData.
+	expectedJson := {
+		#status -> 'compiled'
+	} asDictionary.
+	self assert: jsonData equals: expectedJson.
+	
+	^ dataBlock
+]
+
+{ #category : #examples }
 GtLMethodCompilationResultExamples >> methodCompilationResultSerialization [
 	<gtExample>
 	| result jsonObject expected |

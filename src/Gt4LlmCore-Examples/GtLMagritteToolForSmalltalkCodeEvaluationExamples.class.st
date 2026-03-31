@@ -4,8 +4,8 @@ Examples for GtLMagritteToolForSmalltalkCodeEvaluation.
 Class {
 	#name : #GtLMagritteToolForSmalltalkCodeEvaluationExamples,
 	#superclass : #Object,
-	#traits : 'TGtLInvalidInputDataAssertions',
-	#classTraits : 'TGtLInvalidInputDataAssertions classTrait',
+	#traits : 'TGtLInvalidInputDataAssertions + TGtLExceptionDomainObjectAssertions',
+	#classTraits : 'TGtLInvalidInputDataAssertions classTrait + TGtLExceptionDomainObjectAssertions classTrait',
 	#category : 'Gt4LlmCore-Examples-Tools'
 }
 
@@ -13,13 +13,13 @@ Class {
 GtLMagritteToolForSmalltalkCodeEvaluationExamples >> assertSmalltalkCodeEvaluationException: aDomainObject withCode: aCodeString exceptionClass: anExceptionClass messageSubstring: aMessageSubstring [
 	"Assert that the domain object is a GtLSmalltalkCodeEvaluationExceptionDomainObject with expected values."
 	
-	self assert: aDomainObject isErrorDomainObject.
 	self assert: (aDomainObject isKindOf: GtLSmalltalkCodeEvaluationExceptionDomainObject).
 	self assert: aDomainObject code equals: aCodeString.
 	self assert: aDomainObject errorReason equals: 'Error while evaluating smalltalk code'.
-	self assert: aDomainObject exception isNotNil.
-	self assert: aDomainObject exception class equals: anExceptionClass.
-	self assert: (aDomainObject messageText includesSubstring: aMessageSubstring)
+	self 
+		assertExceptionDomainObject: aDomainObject 
+		withExceptionClass: anExceptionClass 
+		messageSubstring: aMessageSubstring
 ]
 
 { #category : #'examples - errors' }
