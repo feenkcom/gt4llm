@@ -117,7 +117,7 @@ GtLChatWithScripterExamples >> chatElementWithEmptyReplyMessage_toolMessage [
 	scripter := self chatElementWithEmptyReplyMessage.
 	chat := scripter model.
 
-	call := GtLToolForClassSearchExamples new searchClassesWithMatches.
+	call := GtLMagritteToolForClassSearchExamples new searchClassesWithMatches.
 	tool := GtLToolMessage new toolCall: call.
 
 	scripter do

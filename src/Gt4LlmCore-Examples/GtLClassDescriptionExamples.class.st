@@ -35,7 +35,8 @@ GtLClassDescriptionExamples >> classDescriptionCreation [
 { #category : #examples }
 GtLClassDescriptionExamples >> classDescriptionSerialization [
 	<gtExample>
-	| description jsonObject expected |
+	<return: #GtLPrimitiveMessageDataBlock>
+	| description compositeView dataBlock jsonData expectedJson |
 	description := GtLClassDescription new
 		currentClassName: 'SampleClass';
 		superclassName: 'Object';
@@ -44,26 +45,33 @@ GtLClassDescriptionExamples >> classDescriptionSerialization [
 		packageTagName: 'SampleTag';
 		instanceSlotNames: #('a' 'b');
 		classSlotNames: #('c');
-		allInstanceMethodNames: #(foo bar:);
-		allClassMethodNames: #(baz);
+		allInstanceMethodNames: #('foo' 'bar:');
+		allClassMethodNames: #('baz');
 		yourself.
 
-	jsonObject := GtMagritteJSONDataExporter exportObject: description.
-	expected := NeoJSONObject new
-		at: 'currentClassName' put: description currentClassName;
-		at: 'superclassName' put: description superclassName;
-		at: 'comment' put: description comment;
-		at: 'packageName' put: description packageName;
-		at: 'packageTagName' put: description packageTagName;
-		at: 'instanceSlotNames' put: (NeoJSONArray withAll: description instanceSlotNames asArray);
-		at: 'classSlotNames' put: (NeoJSONArray withAll: description classSlotNames asArray);
-		at: 'allInstanceMethodNames'
-			put: (NeoJSONArray withAll: description allInstanceMethodNames asArray);
-		at: 'allClassMethodNames'
-			put: (NeoJSONArray withAll: description allClassMethodNames asArray);
-		yourself.
-	self assert: jsonObject equals: expected.
-	^ jsonObject
+	compositeView := description llmDataViewsFor: GtLDataView new.
+	self assert: compositeView dataViews size equals: 1.
+	
+	dataBlock := compositeView serializeToLlmPrimiteData.
+	self assert: dataBlock isNotNil.
+	self assert: dataBlock dataBlocks size equals: 1.
+	self assert: dataBlock imageDataBlocks isEmpty.
+	
+	jsonData := dataBlock compositeJsonData.
+	expectedJson := {
+		#currentClassName -> 'SampleClass'.
+		#superclassName -> 'Object'.
+		#comment -> 'Sample'.
+		#packageName -> 'Samples'.
+		#packageTagName -> 'SampleTag'.
+		#instanceSlotNames -> (NeoJSONArray withAll: #('a' 'b')).
+		#classSlotNames -> (NeoJSONArray withAll: #('c')).
+		#allInstanceMethodNames -> (NeoJSONArray withAll: #('foo' 'bar:')).
+		#allClassMethodNames -> (NeoJSONArray withAll: #('baz'))
+	} asDictionary.
+	self assert: jsonData equals: expectedJson.
+	
+	^ dataBlock
 ]
 
 { #category : #examples }

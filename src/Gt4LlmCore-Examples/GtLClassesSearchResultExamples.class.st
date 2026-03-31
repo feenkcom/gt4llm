@@ -8,18 +8,27 @@ Class {
 }
 
 { #category : #examples }
-GtLClassesSearchResultExamples >> classesSearchResultSerialization [
+GtLClassesSearchResultExamples >> classesSearchResultDataViewSerialization [
 	<gtExample>
-	| domainObject jsonObject expected |
+	<return: #GtLPrimitiveMessageDataBlock>
+	| domainObject compositeView dataBlock jsonData expectedJson |
 	domainObject := self classesSearchResultWithMatches.
-	jsonObject := GtMagritteJSONDataExporter exportObject: domainObject.
-	expected := NeoJSONObject new
-		at: 'foundClassNames'
-			put: (NeoJSONArray withAll: #('Object' 'String'));
-		at: 'mayHaveMore' put: false;
-		yourself.
-	self assert: jsonObject equals: expected.
-	^ jsonObject
+	compositeView := domainObject llmDataViewsFor: GtLDataView new.
+	self assert: compositeView dataViews size equals: 1.
+	
+	dataBlock := compositeView serializeToLlmPrimiteData.
+	self assert: dataBlock isNotNil.
+	self assert: dataBlock dataBlocks size equals: 1.
+	self assert: dataBlock imageDataBlocks isEmpty.
+	
+	jsonData := dataBlock compositeJsonData.
+	expectedJson := {
+		#foundClassNames -> (NeoJSONArray withAll: #('Object' 'String')).
+		#mayHaveMore -> false
+	} asDictionary.
+	self assert: jsonData equals: expectedJson.
+	
+	^ dataBlock
 ]
 
 { #category : #examples }
