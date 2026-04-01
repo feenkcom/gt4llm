@@ -6,7 +6,7 @@ Class {
 		'classSide',
 		'methodClassName'
 	],
-	#category : 'Gt4LlmCore-Magritte Objects'
+	#category : #'Gt4LlmCore-Magritte Objects'
 }
 
 { #category : #'instance creation' }
@@ -84,6 +84,13 @@ GtLMethodReference >> isClassSide [
 	^ classSide 
 		ifNil: [ false ]
 		ifNotNil: [ :aValue | #(true 'true' 't') includes: aValue ]
+]
+
+{ #category : #'llm views' }
+GtLMethodReference >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
 ]
 
 { #category : #accessing }

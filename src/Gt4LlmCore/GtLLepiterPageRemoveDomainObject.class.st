@@ -8,7 +8,7 @@ Class {
 		'databaseId',
 		'page'
 	],
-	#category : 'Gt4LlmCore-Magritte Objects'
+	#category : #'Gt4LlmCore-Magritte Objects'
 }
 
 { #category : #accessing }
@@ -40,6 +40,13 @@ GtLLepiterPageRemoveDomainObject >> gtPageFor: aView [
 		priority: 1;
 		object: [ page ];
 		view: #gtLiveFor:
+]
+
+{ #category : #'llm views' }
+GtLLepiterPageRemoveDomainObject >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
 ]
 
 { #category : #accessing }

@@ -7,7 +7,7 @@ Class {
 		'pageCount',
 		'storeLocation'
 	],
-	#category : 'Gt4LlmCore-Magritte Objects'
+	#category : #'Gt4LlmCore-Magritte Objects'
 }
 
 { #category : #'instance creation' }
@@ -42,6 +42,13 @@ GtLLepiterKnowledgeBase >> databaseNameDescription [
 { #category : #printing }
 GtLLepiterKnowledgeBase >> gtDisplayOn: aStream [
 	aStream nextPutAll: (self databaseName ifNil: [ 'Unnamed' ])
+]
+
+{ #category : #'llm views' }
+GtLLepiterKnowledgeBase >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
 ]
 
 { #category : #accessing }

@@ -12,7 +12,7 @@ Class {
 		'classInstVarA',
 		'classInstVarB'
 	],
-	#category : 'Gt4LlmCore-Examples-Support'
+	#category : #'Gt4LlmCore-Examples-Support'
 }
 
 { #category : #accessing }

@@ -1,9 +1,7 @@
 Class {
 	#name : #GtLDomainObject,
 	#superclass : #Object,
-	#traits : 'TGtLDomainObject',
-	#classTraits : 'TGtLDomainObject classTrait',
-	#category : 'Gt4LlmCore-Domain Objects'
+	#category : #'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #'gt - extensions' }

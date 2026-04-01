@@ -5,7 +5,7 @@ Class {
 		'addedExecutionMessages',
 		'removedExecutionMessages'
 	],
-	#category : 'Gt4LlmCore-Announcements'
+	#category : #'Gt4LlmCore-Announcements'
 }
 
 { #category : #accessing }

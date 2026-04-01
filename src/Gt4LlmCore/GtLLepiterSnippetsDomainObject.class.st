@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'snippets'
 	],
-	#category : 'Gt4LlmCore-Magritte Objects'
+	#category : #'Gt4LlmCore-Magritte Objects'
 }
 
 { #category : #'gt-views' }
@@ -19,6 +19,13 @@ GtLLepiterSnippetsDomainObject >> gtSnippetsFor: aView [
 		column: 'Status' text: [ :each | each status ] width: 80;
 		column: 'Page uid' text: [ :each | each pageUid ] width: 160;
 		column: 'Snippet uid' text: [ :each | each snippetUid ] width: 160
+]
+
+{ #category : #'llm views' }
+GtLLepiterSnippetsDomainObject >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
 ]
 
 { #category : #accessing }

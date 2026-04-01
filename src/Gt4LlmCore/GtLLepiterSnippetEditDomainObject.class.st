@@ -4,8 +4,15 @@ Class {
 	#instVars : [
 		'oldText'
 	],
-	#category : 'Gt4LlmCore-Magritte Objects'
+	#category : #'Gt4LlmCore-Magritte Objects'
 }
+
+{ #category : #'llm views' }
+GtLLepiterSnippetEditDomainObject >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
+]
 
 { #category : #accessing }
 GtLLepiterSnippetEditDomainObject >> oldText [

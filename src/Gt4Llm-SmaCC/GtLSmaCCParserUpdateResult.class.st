@@ -45,6 +45,18 @@ GtLSmaCCParserUpdateResult >> gtOldGrammarFor: aView [
 		view: #gtLiveFor:
 ]
 
+{ #category : #testing }
+GtLSmaCCParserUpdateResult >> isErrorDomainObject [
+	^ false
+]
+
+{ #category : #'llm views' }
+GtLSmaCCParserUpdateResult >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
+]
+
 { #category : #accessing }
 GtLSmaCCParserUpdateResult >> newGrammar [
 	^ newGrammar

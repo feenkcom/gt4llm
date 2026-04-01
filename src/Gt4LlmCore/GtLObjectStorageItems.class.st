@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'items'
 	],
-	#category : 'Gt4LlmCore-Magritte Objects'
+	#category : #'Gt4LlmCore-Magritte Objects'
 }
 
 { #category : #'gt views' }
@@ -40,4 +40,11 @@ GtLObjectStorageItems >> itemsDescription [
 		accessor: #items;
 		classes: { GtLObjectStorageItem };
 		beRequired
+]
+
+{ #category : #'llm views' }
+GtLObjectStorageItems >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
 ]

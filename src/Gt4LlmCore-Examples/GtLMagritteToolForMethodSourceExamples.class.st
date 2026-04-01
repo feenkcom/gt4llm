@@ -1,13 +1,15 @@
 Class {
 	#name : #GtLMagritteToolForMethodSourceExamples,
 	#superclass : #Object,
-	#category : 'Gt4LlmCore-Examples-Tools'
+	#traits : 'TGtLInvalidInputDataAssertions',
+	#classTraits : 'TGtLInvalidInputDataAssertions classTrait',
+	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #examples }
 GtLMagritteToolForMethodSourceExamples >> methodSourceForExistingClassSideMethod [
 	<gtExample>
-	| tool call result model |
+	| tool call result domainObject |
 	tool := GtLMagritteToolForMethodSource new.
 	call := GtLFunctionToolCall new.
 	call rawArguments: {
@@ -24,30 +26,30 @@ GtLMagritteToolForMethodSourceExamples >> methodSourceForExistingClassSideMethod
 	self
 		assert: ((call arguments at: 'methodDescriptor') isKindOf: GtLMethodReference).
 		
-	model := result model.
-	self assert: (result isKindOf: GtLMagritteBasedModel).
-	self assert: (model isKindOf: GtLMethodWithSource).
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	domainObject := result targetObject.
+	self assert: (domainObject isKindOf: GtLMethodWithSource).
 	
 	self
-		assert: model sourceCode
+		assert: domainObject sourceCode
 		equals: (Collection class>>#withAll:) sourceCode.
 	self
-		assert: model methodReference methodClassName
+		assert: domainObject methodReference methodClassName
 		equals: #Collection.
 	self
-		assert: model methodReference methodName
+		assert: domainObject methodReference methodName
 		equals: 'withAll:'.
 	self
-		assert: model methodReference classSide
+		assert: domainObject methodReference classSide
 		equals: true.
 		
-	^ call
+	^ domainObject
 ]
 
 { #category : #examples }
 GtLMagritteToolForMethodSourceExamples >> methodSourceForExistingInstanceSideMethod [
 	<gtExample>
-	| tool call result model |
+	| tool call result domainObject |
 	tool := GtLMagritteToolForMethodSource new.
 	call := GtLFunctionToolCall new.
 	call rawArguments: {
@@ -63,30 +65,30 @@ GtLMagritteToolForMethodSourceExamples >> methodSourceForExistingInstanceSideMet
 	self
 		assert: ((call arguments at: 'methodDescriptor') isKindOf: GtLMethodReference).
 		
-	self assert: (result isKindOf: GtLMagritteBasedModel).
-	model := result model.
-	self assert: (model isKindOf: GtLMethodWithSource).
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	domainObject := result targetObject.
+	self assert: (domainObject isKindOf: GtLMethodWithSource).
 	
 	self
-		assert: model sourceCode
+		assert: domainObject sourceCode
 		equals: (GtLMagritteToolForMethodSourceExamples>>#methodSourceForExistingInstanceSideMethod) sourceCode.
 	self
-		assert: model methodReference methodClassName
+		assert: domainObject methodReference methodClassName
 		equals: #GtLMagritteToolForMethodSourceExamples.
 	self
-		assert: model methodReference methodName
+		assert: domainObject methodReference methodName
 		equals: 'methodSourceForExistingInstanceSideMethod'.
 	self
-		assert: model methodReference classSide
+		assert: domainObject methodReference classSide
 		equals: false.
 		
-	^ call
+	^ domainObject
 ]
 
-{ #category : #examples }
+{ #category : #'examples - error conditions' }
 GtLMagritteToolForMethodSourceExamples >> methodSourceForMissingArguments [
 	<gtExample>
-	| tool call result model |
+	| tool call result domainObject |
 		
 	tool := GtLMagritteToolForMethodSource new.
 	call := GtLFunctionToolCall new.
@@ -95,20 +97,22 @@ GtLMagritteToolForMethodSourceExamples >> methodSourceForMissingArguments [
 		
 	self assert: call tool == tool.
 	self assert: call arguments size equals: 0.
-	self assert: (result isKindOf: GtLMagritteBasedModel).
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
 		
-	model := result model.
-	self assert: model isErrorDomainObject.
-	self assert: (model isKindOf: GtLMissingRequiredPropertiesDomainObject).
-	self assert: model missingPropertyNames equals: #('methodDescriptor').
+	domainObject := result targetObject.
+	self 
+		assertMissingRequiredProperties: domainObject 
+		withPropertyNames: #('methodDescriptor') 
+		path: #(nil) 
+		errorMessage: 'required properties missing [methodDescriptor]'.
 		
-	^ call
+	^ domainObject
 ]
 
-{ #category : #examples }
+{ #category : #'examples - error conditions' }
 GtLMagritteToolForMethodSourceExamples >> methodSourceForMissingClassSide [
 	<gtExample>
-	| tool call result model |
+	| tool call result domainObject |
 		
 	tool := GtLMagritteToolForMethodSource new.
 	call := GtLFunctionToolCall new.
@@ -121,20 +125,21 @@ GtLMagritteToolForMethodSourceExamples >> methodSourceForMissingClassSide [
 		
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteBasedModel).
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
 		
-	model := result model.
-	self assert: model isErrorDomainObject.
-	self assert: (model isKindOf: GtLMissingRequiredPropertiesDomainObject).
-	self assert: model missingPropertyNames equals: #('classSide').
-	self assert: model path asArray equals: #('methodDescriptor').
-	^ call
+	domainObject := result targetObject.
+	self 
+		assertMissingRequiredProperties: domainObject 
+		withPropertyNames: #('classSide') 
+		path: #(#methodDescriptor) 
+		errorMessage: '@[methodDescriptor] required properties missing [classSide]'.
+	^ domainObject
 ]
 
-{ #category : #examples }
+{ #category : #'examples - error conditions' }
 GtLMagritteToolForMethodSourceExamples >> methodSourceForMissingMethodClassName [
 	<gtExample>
-	| tool call result model |
+	| tool call result domainObject |
 	tool := GtLMagritteToolForMethodSource new.
 	call := GtLFunctionToolCall new.
 	call rawArguments: {
@@ -146,20 +151,21 @@ GtLMagritteToolForMethodSourceExamples >> methodSourceForMissingMethodClassName 
 	result := tool performToolCall: call.
 	
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteBasedModel).
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
 	
-	model := result model.
-	self assert: model isErrorDomainObject.
-	self assert: (model isKindOf: GtLMissingRequiredPropertiesDomainObject).
-	self assert: model missingPropertyNames equals: #('methodClassName').
-	self assert: model path asArray equals: #('methodDescriptor').
-	^ call
+	domainObject := result targetObject.
+	self 
+		assertMissingRequiredProperties: domainObject 
+		withPropertyNames: #('methodClassName') 
+		path: #(#methodDescriptor) 
+		errorMessage: '@[methodDescriptor] required properties missing [methodClassName]'.
+	^ domainObject
 ]
 
-{ #category : #examples }
+{ #category : #'examples - error conditions' }
 GtLMagritteToolForMethodSourceExamples >> methodSourceForMissingMethodName [
 	<gtExample>
-	| tool call result model |
+	| tool call result domainObject |
 		
 	tool := GtLMagritteToolForMethodSource new.
 	call := GtLFunctionToolCall new.
@@ -172,21 +178,22 @@ GtLMagritteToolForMethodSourceExamples >> methodSourceForMissingMethodName [
 	result := tool performToolCall: call.
 		
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteBasedModel).
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
 		
-	model := result model.
-	self assert: model isErrorDomainObject.
-	self assert: (model isKindOf: GtLMissingRequiredPropertiesDomainObject).
-	self assert: model missingPropertyNames equals: #('methodName').
-	self assert: model path asArray equals: #('methodDescriptor').
+	domainObject := result targetObject.
+	self 
+		assertMissingRequiredProperties: domainObject 
+		withPropertyNames: #('methodName') 
+		path: #(#methodDescriptor) 
+		errorMessage: '@[methodDescriptor] required properties missing [methodName]'.
 		
-	^ call
+	^ domainObject
 ]
 
-{ #category : #examples }
+{ #category : #'examples - error conditions' }
 GtLMagritteToolForMethodSourceExamples >> methodSourceForUnknownClass [
 	<gtExample>
-	| tool call result model |
+	| tool call result domainObject |
 	
 	tool := GtLMagritteToolForMethodSource new.
 	call := GtLFunctionToolCall new.
@@ -204,23 +211,25 @@ GtLMagritteToolForMethodSourceExamples >> methodSourceForUnknownClass [
 	self
 		assert: ((call arguments at: 'methodDescriptor') isKindOf: GtLMethodReference).
 		
-	self assert: (result isKindOf: GtLMagritteBasedModel).
-	model := result model.
-	self assert: model isErrorDomainObject.
-	self assert: model objectName equals: 'ClassThatDoesNotExist'.
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	domainObject := result targetObject.
+	self 
+		assertMissingObject: domainObject 
+		withObjectName: 'ClassThatDoesNotExist' 
+		errorMessage: 'ClassThatDoesNotExist is not found'.
 	
-	^ call
+	^ domainObject
 ]
 
-{ #category : #examples }
+{ #category : #'examples - error conditions' }
 GtLMagritteToolForMethodSourceExamples >> methodSourceForUnknownClassSideMethod [
 	<gtExample>
-	| tool call result model |
+	| tool call result domainObject expectedSignature |
 	tool := GtLMagritteToolForMethodSource new.
 	call := GtLFunctionToolCall new.
 	call rawArguments: {
 		'methodDescriptor' -> {
-			'methodClassName' -> GtLToolForMethodImplementors name.
+			'methodClassName' -> GtLMagritteToolForMethodImplementors name.
 			'methodName' -> 'unknownSelector42'.
 			'classSide' -> true
 		} asDictionary
@@ -231,24 +240,25 @@ GtLMagritteToolForMethodSourceExamples >> methodSourceForUnknownClassSideMethod 
 	self
 		assert: ((call arguments at: 'methodDescriptor') isKindOf: GtLMethodReference).
 	
-	self assert: (result isKindOf: GtLMagritteBasedModel).
-	model := result model.
-	self assert: model isErrorDomainObject.
-	self
-		assert: model objectName
-		equals: GtLToolForMethodImplementors name, ' class>>#unknownSelector42'.
-	^ call
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	domainObject := result targetObject.
+	expectedSignature := GtLMagritteToolForMethodImplementors name, ' class>>#unknownSelector42'.
+	self 
+		assertMissingObject: domainObject 
+		withObjectName: expectedSignature 
+		errorMessage: expectedSignature, ' is not found'.
+	^ domainObject
 ]
 
-{ #category : #examples }
+{ #category : #'examples - error conditions' }
 GtLMagritteToolForMethodSourceExamples >> methodSourceForUnknownInstanceSideMethod [
 	<gtExample>
-	| tool call result model |
+	| tool call result domainObject expectedSignature |
 	tool := GtLMagritteToolForMethodSource new.
 	call := GtLFunctionToolCall new.
 	call rawArguments: {
 		'methodDescriptor' -> {
-			'methodClassName' -> GtLToolForMethodImplementors name.
+			'methodClassName' -> GtLMagritteToolForMethodImplementors name.
 			'methodName' -> 'unknownSelector42'.
 			'classSide' -> false
 		} asDictionary
@@ -259,23 +269,21 @@ GtLMagritteToolForMethodSourceExamples >> methodSourceForUnknownInstanceSideMeth
 	self
 		assert: ((call arguments at: 'methodDescriptor') isKindOf: GtLMethodReference).
 		
-	self assert: (result isKindOf: GtLMagritteBasedModel).
-	model := result model.
-	self assert: model isErrorDomainObject.
-	self
-		assert: model missingObjectName
-		equals: GtLToolForMethodImplementors name, '>>#unknownSelector42'.
-	self
-		assert: model errorMessage
-		equals: 'GtLToolForMethodImplementors>>#unknownSelector42 is not found'.
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	domainObject := result targetObject.
+	expectedSignature := GtLMagritteToolForMethodImplementors name, '>>#unknownSelector42'.
+	self 
+		assertMissingObject: domainObject 
+		withObjectName: expectedSignature 
+		errorMessage: expectedSignature, ' is not found'.
 		
-	^ call
+	^ domainObject
 ]
 
-{ #category : #examples }
+{ #category : #'examples - error conditions' }
 GtLMagritteToolForMethodSourceExamples >> methodSourceWithEmptyMethodClassName [
 	<gtExample>
-	| tool call result model |
+	| tool call result domainObject |
 	tool := GtLMagritteToolForMethodSource new.
 	call := GtLFunctionToolCall new.
 	call rawArguments: {
@@ -287,17 +295,16 @@ GtLMagritteToolForMethodSourceExamples >> methodSourceWithEmptyMethodClassName [
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteBasedModel).
-	model := result model.
-	self assert: model isErrorDomainObject.
-	self assert: model class equals: GtLMissingDomainObject.
-	^ call
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	domainObject := result targetObject.
+	self assert: (domainObject isKindOf: GtLMissingDomainObject).
+	^ domainObject
 ]
 
-{ #category : #examples }
+{ #category : #'examples - error conditions' }
 GtLMagritteToolForMethodSourceExamples >> methodSourceWithEmptyMethodName [
 	<gtExample>
-	| tool call result model |
+	| tool call result domainObject |
 	tool := GtLMagritteToolForMethodSource new.
 	call := GtLFunctionToolCall new.
 	call rawArguments: {
@@ -309,35 +316,34 @@ GtLMagritteToolForMethodSourceExamples >> methodSourceWithEmptyMethodName [
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteBasedModel).
-	model := result model.
-	self assert: model isErrorDomainObject.
-	self assert: model class equals: GtLMissingDomainObject.
-	^ call
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	domainObject := result targetObject.
+	self assert: (domainObject isKindOf: GtLMissingDomainObject).
+	^ domainObject
 ]
 
-{ #category : #examples }
+{ #category : #'examples - error conditions' }
 GtLMagritteToolForMethodSourceExamples >> methodSourceWithNilDescriptor [
 	<gtExample>
-	| tool call result model |
+	| tool call result domainObject |
 	tool := GtLMagritteToolForMethodSource new.
 	call := GtLFunctionToolCall new.
 	call rawArguments: { 'methodDescriptor' -> nil } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteBasedModel).
-	model := result model.
-	self assert: model isErrorDomainObject.
-	self assert: (model isKindOf: GtLJSONSchemaValidationErrorDomainObject).
-	self assert: model path asArray equals: #('methodDescriptor').
-	self assert: model errorMessage equals: '@[methodDescriptor] object expected'.
-	^ call
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	domainObject := result targetObject.
+	self 
+		assertJSONSchemaValidationError: domainObject 
+		withPath: #('methodDescriptor') 
+		errorMessage: '@[methodDescriptor] object expected'.
+	^ domainObject
 ]
 
-{ #category : #examples }
+{ #category : #'examples - error conditions' }
 GtLMagritteToolForMethodSourceExamples >> methodSourceWithNilMethodClassName [
 	<gtExample>
-	| tool call result model |
+	| tool call result domainObject |
 	tool := GtLMagritteToolForMethodSource new.
 	call := GtLFunctionToolCall new.
 	call rawArguments: {
@@ -349,19 +355,19 @@ GtLMagritteToolForMethodSourceExamples >> methodSourceWithNilMethodClassName [
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteBasedModel).
-	model := result model.
-	self assert: model isErrorDomainObject.
-	self assert: model class equals: GtLJSONSchemaValidationErrorDomainObject.
-	self assert: model path asArray equals: #('methodDescriptor' 'methodClassName').
-	self assert: model messageText equals: '@[methodDescriptor/methodClassName] string expected'.
-	^ call
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	domainObject := result targetObject.
+	self 
+		assertJSONSchemaValidationError: domainObject 
+		withPath: #('methodDescriptor' 'methodClassName') 
+		errorMessage: '@[methodDescriptor/methodClassName] string expected'.
+	^ domainObject
 ]
 
-{ #category : #examples }
+{ #category : #'examples - error conditions' }
 GtLMagritteToolForMethodSourceExamples >> methodSourceWithNilMethodName [
 	<gtExample>
-	| tool call result model |
+	| tool call result domainObject |
 	tool := GtLMagritteToolForMethodSource new.
 	call := GtLFunctionToolCall new.
 	call rawArguments: {
@@ -373,11 +379,11 @@ GtLMagritteToolForMethodSourceExamples >> methodSourceWithNilMethodName [
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteBasedModel).
-	model := result model.
-	self assert: model isErrorDomainObject.
-	self assert: model class equals: GtLJSONSchemaValidationErrorDomainObject.
-	self assert: model path asArray equals: #('methodDescriptor' 'methodName').
-	self assert: model messageText equals: '@[methodDescriptor/methodName] string expected'.
-	^ call
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	domainObject := result targetObject.
+	self 
+		assertJSONSchemaValidationError: domainObject 
+		withPath: #('methodDescriptor' 'methodName') 
+		errorMessage: '@[methodDescriptor/methodName] string expected'.
+	^ domainObject
 ]

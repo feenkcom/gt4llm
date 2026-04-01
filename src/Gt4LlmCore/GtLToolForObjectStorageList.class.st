@@ -1,12 +1,17 @@
 Class {
 	#name : #GtLToolForObjectStorageList,
 	#superclass : #GtLAbstractMagritteFunctionTool,
-	#category : 'Gt4LlmCore-Tools'
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }
 GtLToolForObjectStorageList >> description [
 	^ 'Lists the objects in the object storage of a chat.'
+]
+
+{ #category : #accessing }
+GtLToolForObjectStorageList >> isUsingDataViews [
+	^ true
 ]
 
 { #category : #accessing }

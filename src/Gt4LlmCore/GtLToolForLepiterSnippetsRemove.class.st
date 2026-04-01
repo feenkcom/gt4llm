@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'database'
 	],
-	#category : 'Gt4LlmCore-Tools'
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }
@@ -42,6 +42,11 @@ Example JSON response:
 GtLToolForLepiterSnippetsRemove >> initialize [
 	super initialize.
 	database := LeDatabasesRegistry defaultLogicalDatabase
+]
+
+{ #category : #'api - testing' }
+GtLToolForLepiterSnippetsRemove >> isUsingDataViews [
+	^ true
 ]
 
 { #category : #accessing }
@@ -124,7 +129,7 @@ GtLToolForLepiterSnippetsRemove >> removeSnippetFrom: snippetArguments [
 			
 	^ GtLLepiterSnippetDomainObject new
 		status: 'removed';
-		pageUid: pageUid;
+		pageUid: pageUid asString;
 		snippetUid: snippetUid uidString;
 		snippet: nil
 ]

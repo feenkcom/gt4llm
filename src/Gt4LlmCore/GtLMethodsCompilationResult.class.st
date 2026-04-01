@@ -7,7 +7,7 @@ Class {
 	#instVars : [
 		'methods'
 	],
-	#category : 'Gt4LlmCore-Magritte Objects'
+	#category : #'Gt4LlmCore-Magritte Objects'
 }
 
 { #category : #views }
@@ -49,6 +49,13 @@ GtLMethodsCompilationResult >> gtMethodsListFor: aView [
 		column: 'State'
 			text: [ :each | each hasOldSourceCode ifTrue: [ 'Modified' ] ifFalse: [ 'New' ] ]
 			width: 60
+]
+
+{ #category : #'llm views' }
+GtLMethodsCompilationResult >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
 ]
 
 { #category : #accessing }

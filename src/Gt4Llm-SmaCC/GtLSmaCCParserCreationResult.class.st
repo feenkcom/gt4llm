@@ -51,6 +51,18 @@ GtLSmaCCParserCreationResult >> gtGrammarFor: aView [
 		view: #gtLiveFor:
 ]
 
+{ #category : #testing }
+GtLSmaCCParserCreationResult >> isErrorDomainObject [
+	^ false
+]
+
+{ #category : #'llm views' }
+GtLSmaCCParserCreationResult >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
+]
+
 { #category : #accessing }
 GtLSmaCCParserCreationResult >> parserClass [
 	^ parserClass

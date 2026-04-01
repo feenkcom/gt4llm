@@ -4,7 +4,7 @@ Magritte-based tool for removing a method from a class.
 Class {
 	#name : #GtLMagritteToolForMethodRemoval,
 	#superclass : #GtLAbstractMagritteFunctionTool,
-	#category : 'Gt4LlmCore-Tools'
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }
@@ -27,6 +27,11 @@ Example JSON response:
 {
   "status": "removed"
 }'
+]
+
+{ #category : #accessing }
+GtLMagritteToolForMethodRemoval >> isUsingDataViews [
+	^ true
 ]
 
 { #category : #magritte }

@@ -6,7 +6,7 @@ Class {
 		'objectValue',
 		'reason'
 	],
-	#category : 'Gt4LlmCore-Magritte Objects'
+	#category : #'Gt4LlmCore-Magritte Objects'
 }
 
 { #category : #'gt views' }
@@ -20,6 +20,13 @@ GtLObjectStorageItem >> gtValueFor: aView [
 		column: 'Object Id' text: [ :each | each objectId ];
 		column: 'Object' text: [ :each | each objectValueString ];
 		column: 'Reason' text: [ :each | each reasonString ]
+]
+
+{ #category : #'llm views' }
+GtLObjectStorageItem >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
 ]
 
 { #category : #accessing }
