@@ -42,6 +42,13 @@ GtLLepiterPageCreateDomainObject >> gtPageFor: aView [
 		view: #gtLiveFor:
 ]
 
+{ #category : #'llm views' }
+GtLLepiterPageCreateDomainObject >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
+]
+
 { #category : #accessing }
 GtLLepiterPageCreateDomainObject >> page [
 	^ page

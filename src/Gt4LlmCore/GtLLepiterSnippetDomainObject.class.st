@@ -21,6 +21,13 @@ GtLLepiterSnippetDomainObject >> gtSnippetFor: aView [
 		view: #gtLiveFor:
 ]
 
+{ #category : #'llm views' }
+GtLLepiterSnippetDomainObject >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
+]
+
 { #category : #accessing }
 GtLLepiterSnippetDomainObject >> pageUid [
 	^ pageUid

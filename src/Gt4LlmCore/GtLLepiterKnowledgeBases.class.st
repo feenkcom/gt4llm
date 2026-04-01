@@ -39,3 +39,10 @@ GtLLepiterKnowledgeBases >> knowledgeBasesDescription [
 		classes: {GtLLepiterKnowledgeBase};
 		beRequired
 ]
+
+{ #category : #'llm views' }
+GtLLepiterKnowledgeBases >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
+]

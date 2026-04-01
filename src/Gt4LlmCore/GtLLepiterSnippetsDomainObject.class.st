@@ -21,6 +21,13 @@ GtLLepiterSnippetsDomainObject >> gtSnippetsFor: aView [
 		column: 'Snippet uid' text: [ :each | each snippetUid ] width: 160
 ]
 
+{ #category : #'llm views' }
+GtLLepiterSnippetsDomainObject >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
+]
+
 { #category : #accessing }
 GtLLepiterSnippetsDomainObject >> snippets [
 	^ snippets

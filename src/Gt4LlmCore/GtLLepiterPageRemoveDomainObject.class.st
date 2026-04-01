@@ -42,6 +42,13 @@ GtLLepiterPageRemoveDomainObject >> gtPageFor: aView [
 		view: #gtLiveFor:
 ]
 
+{ #category : #'llm views' }
+GtLLepiterPageRemoveDomainObject >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
+]
+
 { #category : #accessing }
 GtLLepiterPageRemoveDomainObject >> page [
 	^ page
