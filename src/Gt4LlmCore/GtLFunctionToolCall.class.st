@@ -271,7 +271,6 @@ GtLFunctionToolCall >> responseInputForOpenAIResponsesAPI [
 
 { #category : #accessing }
 GtLFunctionToolCall >> result [
-	<return: #TGtLDomainObject>
 	^ result
 ]
 

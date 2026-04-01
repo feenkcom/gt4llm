@@ -171,7 +171,6 @@ GtLToolMessage >> notifyExecutionStateChanged [
 
 { #category : #accessing }
 GtLToolMessage >> output [
-	<return: #TGtLDomainObject>
 	^ output
 ]
 
