@@ -1,7 +1,9 @@
 Class {
 	#name : #GtLSmaCCToolForParserUpdatesExamples,
 	#superclass : #Object,
-	#category : #'Gt4Llm-SmaCC-Examples'
+	#traits : 'TGtLInvalidInputDataAssertions',
+	#classTraits : 'TGtLInvalidInputDataAssertions classTrait',
+	#category : 'Gt4Llm-SmaCC-Examples'
 }
 
 { #category : #private }
@@ -19,7 +21,7 @@ Expression: Expression "+" <number>;'.
 { #category : #examples }
 GtLSmaCCToolForParserUpdatesExamples >> invalidParserClass [
 	<gtExample>
-	| tool call result model |
+	| model tool call result domainObject |
 	model := self expressionParserModel.
 	tool := GtLSmaCCToolForParserUpdates new model: model.
 	call := GtLFunctionToolCall new.
@@ -42,17 +44,18 @@ GtLSmaCCToolForParserUpdatesExamples >> invalidParserClass [
 							asDictionary} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteBasedModel).
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
 	self assert: call arguments size equals: 1.
 	self assert: (call arguments anyOne isKindOf: GtLSmaCCUpdateParser).
-	self assert: result model isErrorDomainObject.
+	domainObject := result targetObject.
+	self assert: domainObject isErrorDomainObject.
 	^ call
 ]
 
 { #category : #examples }
 GtLSmaCCToolForParserUpdatesExamples >> performUpdates [
 	<gtExample>
-	| tool call result model |
+	| model tool call result domainObject |
 	model := self expressionParserModel.
 	tool := GtLSmaCCToolForParserUpdates new model: model.
 	call := GtLFunctionToolCall new.
@@ -72,33 +75,34 @@ GtLSmaCCToolForParserUpdatesExamples >> performUpdates [
 											}
 											asDictionary.
 										{'type' -> 'modify'.
-											'oldSource' -> 'Expression: Expression "+" <number>;'.
+											'oldSource' -> ('Expression: Expression "+" <number>;' copyReplaceAll: String lf with: String cr).
 											'newSource' -> 'Expression : Multiplication;'} asDictionary}}
 							asDictionary} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteBasedModel).
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
 	self assert: call arguments size equals: 1.
 	self assert: (call arguments anyOne isKindOf: GtLSmaCCUpdateParser).
-	self assert: (result model isKindOf: GtLSmaCCParserUpdateResult).
-	self assert: result model parserClass equals: #ExpressionParser.
+	domainObject := result targetObject.
+	self assert: (domainObject isKindOf: GtLSmaCCParserUpdateResult).
+	self assert: domainObject parserClass equals: #ExpressionParser.
 	self
-		assert: result model oldGrammar source
-		equals: '<number> : \d+;
-Expression: Expression "+" <number>;'.
+		assert: domainObject oldGrammar source
+		equals: ('<number> : \d+;
+Expression: Expression "+" <number>;' copyReplaceAll: String lf with: String cr).
 	self
-		assert: result model newGrammar source
-		equals: '<number> : \d+;
+		assert: domainObject newGrammar source
+		equals: ('<number> : \d+;
 Expression : Multiplication;
 Multiplication : Multiplication "*" Addition | Addition;
-Addition : Addition "+" <number> | <number>;'.
+Addition : Addition "+" <number> | <number>;' copyReplaceAll: String lf with: String cr).
 
 	self
 		assert: (model grammarFor: #ExpressionParser) source
-		equals: '<number> : \d+;
+		equals: ('<number> : \d+;
 Expression : Multiplication;
 Multiplication : Multiplication "*" Addition | Addition;
-Addition : Addition "+" <number> | <number>;'.
+Addition : Addition "+" <number> | <number>;' copyReplaceAll: String lf with: String cr).
 
 	call := GtLFunctionToolCall new.
 	call
@@ -113,10 +117,30 @@ Addition : Addition "+" <number> | <number>;'.
 
 	self
 		assert: (model grammarFor: #ExpressionParser) source
-		equals: '<number> : \d+;
+		equals: ('<number> : \d+;
 
 Multiplication : Multiplication "*" Addition | Addition;
-Addition : Addition "+" <number> | <number>;'.
+Addition : Addition "+" <number> | <number>;' copyReplaceAll: String lf with: String cr).
 
 	^ model grammarFor: #ExpressionParser
+]
+
+{ #category : #examples }
+GtLSmaCCToolForParserUpdatesExamples >> updatesForMissingParserUpdateArgument [
+	<gtExample>
+	| model tool call result domainObject |
+	model := self expressionParserModel.
+	tool := GtLSmaCCToolForParserUpdates new model: model.
+	call := GtLFunctionToolCall new.
+	call rawArguments: {} asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	domainObject := result targetObject.
+	self 
+		assertMissingRequiredProperties: domainObject 
+		withPropertyNames: #('parserUpdate') 
+		path: {nil} 
+		errorMessage: 'required properties missing [parserUpdate]'.
+	^ call
 ]

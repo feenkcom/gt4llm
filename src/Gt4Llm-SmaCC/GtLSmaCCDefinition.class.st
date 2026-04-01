@@ -7,7 +7,7 @@ Class {
 		'scannerClass',
 		'package'
 	],
-	#category : #'Gt4Llm-SmaCC-Domain Objects'
+	#category : 'Gt4Llm-SmaCC-Domain Objects'
 }
 
 { #category : #accessing }
@@ -48,6 +48,18 @@ GtLSmaCCDefinition >> gtClassCoderViewFor: aView [
 						background: Color white;
 						addAptitude: BrShadowAptitude).
 			container ]
+]
+
+{ #category : #testing }
+GtLSmaCCDefinition >> isErrorDomainObject [
+	^ false
+]
+
+{ #category : #'llm views' }
+GtLSmaCCDefinition >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
 ]
 
 { #category : #accessing }
