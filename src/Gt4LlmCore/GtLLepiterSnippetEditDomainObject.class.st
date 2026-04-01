@@ -7,6 +7,13 @@ Class {
 	#category : #'Gt4LlmCore-Magritte Objects'
 }
 
+{ #category : #'llm views' }
+GtLLepiterSnippetEditDomainObject >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
+]
+
 { #category : #accessing }
 GtLLepiterSnippetEditDomainObject >> oldText [
 	^ oldText

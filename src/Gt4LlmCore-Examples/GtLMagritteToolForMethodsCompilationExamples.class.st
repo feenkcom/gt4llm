@@ -4,13 +4,15 @@ Examples for GtLMagritteToolForMethodsCompilation.
 Class {
 	#name : #GtLMagritteToolForMethodsCompilationExamples,
 	#superclass : #Object,
+	#traits : 'TGtLInvalidInputDataAssertions',
+	#classTraits : 'TGtLInvalidInputDataAssertions classTrait',
 	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #examples }
 GtLMagritteToolForMethodsCompilationExamples >> compileInstanceSideMethods [
 	<gtExample>
-	| tool call result targetClass selectorOne selectorTwo |
+	| tool call result domainObject targetClass selectorOne selectorTwo |
 	tool := GtLMagritteToolForMethodsCompilation new.
 	targetClass := GtLMagritteToolForMethodsCompilationExamples.
 	selectorOne := #gtMagritteCompiledExampleInstanceOne.
@@ -39,29 +41,30 @@ GtLMagritteToolForMethodsCompilationExamples >> compileInstanceSideMethods [
 		} asDictionary.
 		result := tool performToolCall: call.
 		self assert: call tool == tool.
-		self assert: (result isKindOf: GtLMagritteBasedModel).
-		self assert: (result model isKindOf: GtLMethodsCompilationResult).
-		self assert: result model methods size equals: 2.
+		self assert: (result isKindOf: GTLDataViewWrapperModel).
+		domainObject := result targetObject.
+		self assert: (domainObject isKindOf: GtLMethodsCompilationResult).
+		self assert: domainObject methods size equals: 2.
 		self assert: (targetClass includesSelector: selectorOne).
 		self assert: (targetClass includesSelector: selectorTwo).
-		self assert: result model methods first status equals: 'compiled'.
-		self assert: result model methods second status equals: 'compiled'.
-		self assert: result model methods first oldMethod isNil.
-		self assert: result model methods second oldMethod isNil.
-		self assert: result model methods first newMethod sourceCode equals: 'gtMagritteCompiledExampleInstanceOne ^ 1'.
-		self assert: result model methods second newMethod sourceCode equals: 'gtMagritteCompiledExampleInstanceTwo ^ 2'
+		self assert: domainObject methods first status equals: 'compiled'.
+		self assert: domainObject methods second status equals: 'compiled'.
+		self assert: domainObject methods first oldMethod isNil.
+		self assert: domainObject methods second oldMethod isNil.
+		self assert: domainObject methods first newMethod sourceCode equals: 'gtMagritteCompiledExampleInstanceOne ^ 1'.
+		self assert: domainObject methods second newMethod sourceCode equals: 'gtMagritteCompiledExampleInstanceTwo ^ 2'
 	] ensure: [
 		(targetClass includesSelector: selectorOne)
 			ifTrue: [ targetClass removeSelector: selectorOne ].
 		(targetClass includesSelector: selectorTwo)
 			ifTrue: [ targetClass removeSelector: selectorTwo ] ].
-	^ call
+	^ domainObject
 ]
 
 { #category : #examples }
 GtLMagritteToolForMethodsCompilationExamples >> compileInstanceSideMethodsWithExistingSources [
 	<gtExample>
-	| tool call result targetClass selectorOne selectorTwo sourceBeforeOne sourceBeforeTwo |
+	| tool call result domainObject targetClass selectorOne selectorTwo sourceBeforeOne sourceBeforeTwo |
 	tool := GtLMagritteToolForMethodsCompilation new.
 	targetClass := GtLMagritteToolForMethodsCompilationExamples.
 	selectorOne := #gtMagritteCompiledExampleExistingOne.
@@ -90,25 +93,26 @@ GtLMagritteToolForMethodsCompilationExamples >> compileInstanceSideMethodsWithEx
 		} asDictionary.
 		result := tool performToolCall: call.
 		self assert: call tool == tool.
-		self assert: (result isKindOf: GtLMagritteBasedModel).
-		self assert: (result model isKindOf: GtLMethodsCompilationResult).
-		self assert: result model methods size equals: 2.
-		self assert: result model methods first oldMethod sourceCode equals: sourceBeforeOne.
-		self assert: result model methods second oldMethod sourceCode equals: sourceBeforeTwo.
-		self assert: result model methods first newMethod sourceCode equals: 'gtMagritteCompiledExampleExistingOne ^ 11'.
-		self assert: result model methods second newMethod sourceCode equals: 'gtMagritteCompiledExampleExistingTwo ^ 21'
+		self assert: (result isKindOf: GTLDataViewWrapperModel).
+		domainObject := result targetObject.
+		self assert: (domainObject isKindOf: GtLMethodsCompilationResult).
+		self assert: domainObject methods size equals: 2.
+		self assert: domainObject methods first oldMethod sourceCode equals: sourceBeforeOne.
+		self assert: domainObject methods second oldMethod sourceCode equals: sourceBeforeTwo.
+		self assert: domainObject methods first newMethod sourceCode equals: 'gtMagritteCompiledExampleExistingOne ^ 11'.
+		self assert: domainObject methods second newMethod sourceCode equals: 'gtMagritteCompiledExampleExistingTwo ^ 21'
 	] ensure: [
 		(targetClass includesSelector: selectorOne)
 			ifTrue: [ targetClass removeSelector: selectorOne ].
 		(targetClass includesSelector: selectorTwo)
 			ifTrue: [ targetClass removeSelector: selectorTwo ] ].
-	^ call
+	^ domainObject
 ]
 
-{ #category : #examples }
+{ #category : #'examples - error conditions' }
 GtLMagritteToolForMethodsCompilationExamples >> compileMethodsForUnknownClass [
 	<gtExample>
-	| tool call result targetClass selector |
+	| tool call result domainObject targetClass selector |
 	tool := GtLMagritteToolForMethodsCompilation new.
 	targetClass := GtLMagritteToolForMethodsCompilationExamples.
 	selector := #gtMagritteCompiledExampleKnown.
@@ -132,38 +136,44 @@ GtLMagritteToolForMethodsCompilationExamples >> compileMethodsForUnknownClass [
 		} asDictionary.
 		result := tool performToolCall: call.
 		self assert: call tool == tool.
-		self assert: (result isKindOf: GtLMagritteBasedModel).
-		self assert: (result model isKindOf: GtLMethodsCompilationResult).
-		self assert: result model methods size equals: 2.
-		self assert: (result model methods first isKindOf: GtLMissingDomainObject).
-		self assert: result model methods first objectName equals: 'ClassThatDoesNotExist'.
-		self assert: (result model methods second isKindOf: GtLMethodCompilationResult).
-		self assert: result model methods second oldMethod isNil.
-		self assert: result model methods second newMethod sourceCode equals: 'gtMagritteCompiledExampleKnown ^ 2'
+		self assert: (result isKindOf: GTLDataViewWrapperModel).
+		domainObject := result targetObject.
+		self assert: (domainObject isKindOf: GtLMethodsCompilationResult).
+		self assert: domainObject methods size equals: 2.
+		self assert: (domainObject methods first isKindOf: GtLMissingDomainObject).
+		self assert: domainObject methods first objectName equals: 'ClassThatDoesNotExist'.
+		self assert: (domainObject methods second isKindOf: GtLMethodCompilationResult).
+		self assert: domainObject methods second oldMethod isNil.
+		self assert: domainObject methods second newMethod sourceCode equals: 'gtMagritteCompiledExampleKnown ^ 2'
 	] ensure: [
 		(targetClass includesSelector: selector)
 			ifTrue: [ targetClass removeSelector: selector ] ].
-	^ call
+	^ domainObject
 ]
 
-{ #category : #examples }
+{ #category : #'examples - error conditions' }
 GtLMagritteToolForMethodsCompilationExamples >> compileMethodsMissingArgument [
 	<gtExample>
-	| tool call result |
+	| tool call result domainObject |
 	tool := GtLMagritteToolForMethodsCompilation new.
 	call := GtLFunctionToolCall new.
 	call rawArguments: Dictionary new.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteBasedModel).
-	self assert: (result model isKindOf: GtLMissingRequiredPropertiesDomainObject).
-	^ call
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	domainObject := result targetObject.
+	self 
+		assertMissingRequiredProperties: domainObject 
+		withPropertyNames: #('methods') 
+		path: #(nil) 
+		errorMessage: 'required properties missing [methods]'.
+	^ domainObject
 ]
 
-{ #category : #examples }
+{ #category : #'examples - error conditions' }
 GtLMagritteToolForMethodsCompilationExamples >> compileMethodsWithSyntaxError [
 	<gtExample>
-	| tool call result targetClass selector |
+	| tool call result domainObject targetClass selector |
 	tool := GtLMagritteToolForMethodsCompilation new.
 	targetClass := GtLMagritteToolForMethodsCompilationExamples.
 	selector := #gtMagritteCompiledExampleSyntaxOkay.
@@ -189,19 +199,20 @@ GtLMagritteToolForMethodsCompilationExamples >> compileMethodsWithSyntaxError [
 		} asDictionary.
 		result := tool performToolCall: call.
 		self assert: call tool == tool.
-		self assert: (result isKindOf: GtLMagritteBasedModel).
-		self assert: (result model isKindOf: GtLMethodsCompilationResult).
-		self assert: result model methods size equals: 2.
-		self assert: (result model methods first isKindOf: GtLMethodCompilationExceptionDomainObject).
-		self assert: (result model methods first description beginsWith: 'Syntax error').
-		self assert: (result model methods second isKindOf: GtLMethodCompilationResult).
+		self assert: (result isKindOf: GTLDataViewWrapperModel).
+		domainObject := result targetObject.
+		self assert: (domainObject isKindOf: GtLMethodsCompilationResult).
+		self assert: domainObject methods size equals: 2.
+		self assert: (domainObject methods first isKindOf: GtLMethodCompilationExceptionDomainObject).
+		self assert: (domainObject methods first description beginsWith: 'Syntax error').
+		self assert: (domainObject methods second isKindOf: GtLMethodCompilationResult).
 		self assert: (targetClass includesSelector: selector).
-		self assert: result model methods second oldMethod isNil.
-		self assert: result model methods second newMethod sourceCode equals: 'gtMagritteCompiledExampleSyntaxOkay ^ 3'
+		self assert: domainObject methods second oldMethod isNil.
+		self assert: domainObject methods second newMethod sourceCode equals: 'gtMagritteCompiledExampleSyntaxOkay ^ 3'
 	] ensure: [
 		(targetClass includesSelector: #gtMagritteCompiledExampleSyntaxError)
 			ifTrue: [ targetClass removeSelector: #gtMagritteCompiledExampleSyntaxError ].
 		(targetClass includesSelector: selector)
 			ifTrue: [ targetClass removeSelector: selector ] ].
-	^ call
+	^ domainObject
 ]

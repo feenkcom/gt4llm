@@ -4,14 +4,14 @@ Class {
 	#category : #'Gt4LlmCore-Tools'
 }
 
-{ #category : #visiting }
-GtLToolForLepiterKnowledgeBases >> acceptVisitor: aVisitor [
-	^ aVisitor visitGtLlmToolForLepiterKnowledgeBases: self
-]
-
 { #category : #accessing }
 GtLToolForLepiterKnowledgeBases >> description [
 	^ 'Retrieve the registered Lepiter knowledge bases.'
+]
+
+{ #category : #'api - testing' }
+GtLToolForLepiterKnowledgeBases >> isUsingDataViews [
+	^ true
 ]
 
 { #category : #accessing }

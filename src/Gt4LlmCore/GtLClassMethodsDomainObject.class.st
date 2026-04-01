@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLClassMethodsDomainObject,
-	#superclass : #GtLDomainObject,
+	#superclass : #Object,
 	#instVars : [
 		'targetClass',
 		'methods'
@@ -29,6 +29,19 @@ GtLClassMethodsDomainObject >> gtMethodsFor: aView [
 		column: 'Value' text: [ :each | each gtDisplayString ]
 ]
 
+{ #category : #'llm views' }
+GtLClassMethodsDomainObject >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView jsonObject: [ :json |
+		json
+			at: 'className' put: self targetClass name;
+			at: 'methods' put: (self methods
+				collect: [ :eachMethod | 
+					eachMethod methodClass name asString, '>>#', eachMethod selector ]
+				as: Array) ]
+]
+
 { #category : #accessing }
 GtLClassMethodsDomainObject >> methods [
 	^ methods ifNil: [ #() ]
@@ -37,20 +50,6 @@ GtLClassMethodsDomainObject >> methods [
 { #category : #accessing }
 GtLClassMethodsDomainObject >> methods: anObject [
 	methods := anObject
-]
-
-{ #category : #'api - serializing' }
-GtLClassMethodsDomainObject >> serializeToLlmJsonObject [
-	"Return a JSON dictionary that represents the domain object."
-
-	<return: #NeoJSONObject>
-	^ NeoJSONObject new
-		at: 'className' put: self targetClass name;
-		at: 'methods'
-			put: (self methods
-					collect: [ :eachMethod | eachMethod methodClass name asString , '>>#' , eachMethod selector ]
-					as: Array);
-		yourself
 ]
 
 { #category : #accessing }

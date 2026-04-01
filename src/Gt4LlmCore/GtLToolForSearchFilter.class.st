@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLToolForSearchFilter,
-	#superclass : #GtLAbstractPlainSchemaFunctionTool,
+	#superclass : #GtLAbstractMagritteFunctionTool,
 	#category : #'Gt4LlmCore-Tools'
 }
 
@@ -10,23 +10,18 @@ GtLToolForSearchFilter class >> maximumResultItemCount [
 ]
 
 { #category : #accessing }
-GtLToolForSearchFilter >> acceptVisitor: aVisitor [
-	^ aVisitor visitGtLlmToolForSearchFilter: self
-]
-
-{ #category : #accessing }
 GtLToolForSearchFilter >> description [
 	^ 'Use GT filters to find methods'
 ]
 
 { #category : #accessing }
-GtLToolForSearchFilter >> name [
-	^ 'gtSearchFilter'
+GtLToolForSearchFilter >> isUsingDataViews [
+	^ true
 ]
 
 { #category : #accessing }
-GtLToolForSearchFilter >> parametersDescription [
-	^ #('query')
+GtLToolForSearchFilter >> name [
+	^ 'gtSearchFilter'
 ]
 
 { #category : #accessing }
@@ -56,4 +51,14 @@ GtLToolForSearchFilter >> privatePerformToolCall: aToolCall inContext: anExecuti
 			GtLExceptionDomainObject new
 				freeze: error;
 				errorReason: 'There was an error when evaluating the query: ' , error printString ]
+]
+
+{ #category : #accessing }
+GtLToolForSearchFilter >> queryDescription [
+	<magritteDescription>
+
+	^ MAStringDescription new
+		label: 'Query';
+		accessor: #query;
+		beRequired
 ]

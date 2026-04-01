@@ -10,6 +10,11 @@ GtLToolForObjectStorageList >> description [
 ]
 
 { #category : #accessing }
+GtLToolForObjectStorageList >> isUsingDataViews [
+	^ true
+]
+
+{ #category : #accessing }
 GtLToolForObjectStorageList >> name [
 	^ 'listObjectStorage'
 ]

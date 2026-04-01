@@ -25,32 +25,38 @@ GtLMethodsWithSourceExamples >> methodsWithSourceObjectFromCompiledMethods [
 	^ methodsWithSourceObject
 ]
 
-{ #category : #examples }
-GtLMethodsWithSourceExamples >> methodsWithSourceObjectFromCompiledMethodsJsonExport [
+{ #category : #'examples - data view' }
+GtLMethodsWithSourceExamples >> methodsWithSourceObjectFromCompiledMethodsDataViewSerialization [
 	<gtExample>
-	| methodsWithSourceObject jsonObject |
-	methodsWithSourceObject := self methodsWithSourceObjectFromCompiledMethods.
-	jsonObject := GtMagritteJSONDataExporter exportObject: methodsWithSourceObject.
-
-	self
-		assert: (jsonObject at: 'methods') size
-		equals: 2.
-	self
-		assert: ((jsonObject at: 'methods') first at: 'methodReference')
-		equals: ((NeoJSONObject new)
-			at: 'methodName' put: 'fromCompiledMethod:';
-			at: 'methodClassName' put: 'GtLMethodReference';
-			at: 'classSide' put: true;
-			yourself).
-	self
-		assert: ((jsonObject at: 'methods') second at: 'methodReference')
-		equals: ((NeoJSONObject new)
-			at: 'methodName' put: 'methods:';
-			at: 'methodClassName' put: 'GtLMethodsWithSource';
-			at: 'classSide' put: false;
-			yourself).
-
-	^ jsonObject
+	<return: #GtLPrimitiveMessageDataBlock>
+	| domainObject compositeView dataBlock jsonData methodRefOne methodRefTwo |
+	domainObject := self methodsWithSourceObjectFromCompiledMethods.
+	compositeView := domainObject llmDataViewsFor: GtLDataView new.
+	self assert: compositeView dataViews size equals: 1.
+	
+	dataBlock := compositeView serializeToLlmPrimiteData.
+	self assert: dataBlock isNotNil.
+	self assert: dataBlock dataBlocks size equals: 1.
+	self assert: dataBlock imageDataBlocks isEmpty.
+	
+	jsonData := dataBlock compositeJsonData.
+	self assert: (jsonData at: #methods) size equals: 2.
+	
+	methodRefOne := NeoJSONObject new
+		at: #methodName put: 'fromCompiledMethod:';
+		at: #methodClassName put: 'GtLMethodReference';
+		at: #classSide put: true;
+		yourself.
+	self assert: ((jsonData at: #methods) first at: #methodReference) equals: methodRefOne.
+	
+	methodRefTwo := NeoJSONObject new
+		at: #methodName put: 'methods:';
+		at: #methodClassName put: 'GtLMethodsWithSource';
+		at: #classSide put: false;
+		yourself.
+	self assert: ((jsonData at: #methods) second at: #methodReference) equals: methodRefTwo.
+	
+	^ dataBlock
 ]
 
 { #category : #examples }
@@ -92,28 +98,31 @@ GtLMethodsWithSourceExamples >> methodsWithSourceObjectWithMissingEntries [
 	^ methodsWithSourceObject
 ]
 
-{ #category : #examples }
-GtLMethodsWithSourceExamples >> methodsWithSourceObjectWithMissingEntriesJsonExport [
+{ #category : #'examples - data view' }
+GtLMethodsWithSourceExamples >> methodsWithSourceObjectWithMissingEntriesDataViewSerialization [
 	<gtExample>
-	| methodsWithSourceObject jsonObject |
-	methodsWithSourceObject := self methodsWithSourceObjectWithMissingEntries.
-	jsonObject := GtMagritteJSONDataExporter exportObject: methodsWithSourceObject.
-	self
-		assert: (jsonObject at: 'methods') size
-		equals: 3.
-	self
-		assert: ((jsonObject at: 'methods') first at: 'methodReference')
-		equals: ((NeoJSONObject new)
-			at: 'methodName' put: 'methods:';
-			at: 'methodClassName' put: 'GtLMethodsWithSource';
-			at: 'classSide' put: false;
-			yourself).
-	self
-		assert: ((jsonObject at: 'methods') second at: 'missingObjectName')
-		equals: 'MissingMethod'.
-	self
-		assert: ((jsonObject at: 'methods') third at: 'missingArgument')
-		equals: 'methodDescriptors'.
-
-	^ jsonObject
+	<return: #GtLPrimitiveMessageDataBlock>
+	| domainObject compositeView dataBlock jsonData methodRef |
+	domainObject := self methodsWithSourceObjectWithMissingEntries.
+	compositeView := domainObject llmDataViewsFor: GtLDataView new.
+	self assert: compositeView dataViews size equals: 1.
+	
+	dataBlock := compositeView serializeToLlmPrimiteData.
+	self assert: dataBlock isNotNil.
+	self assert: dataBlock dataBlocks size equals: 1.
+	self assert: dataBlock imageDataBlocks isEmpty.
+	
+	jsonData := dataBlock compositeJsonData.
+	self assert: (jsonData at: #methods) size equals: 3.
+	
+	methodRef := NeoJSONObject new
+		at: #methodName put: 'methods:';
+		at: #methodClassName put: 'GtLMethodsWithSource';
+		at: #classSide put: false;
+		yourself.
+	self assert: ((jsonData at: #methods) first at: #methodReference) equals: methodRef.
+	self assert: ((jsonData at: #methods) second at: #missingObjectName) equals: 'MissingMethod'.
+	self assert: ((jsonData at: #methods) third at: #missingArgument) equals: 'methodDescriptors'.
+	
+	^ dataBlock
 ]

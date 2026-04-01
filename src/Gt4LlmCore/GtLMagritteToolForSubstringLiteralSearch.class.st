@@ -37,6 +37,11 @@ Example JSON response:
 ]
 
 { #category : #accessing }
+GtLMagritteToolForSubstringLiteralSearch >> isUsingDataViews [
+	^ true
+]
+
+{ #category : #accessing }
 GtLMagritteToolForSubstringLiteralSearch >> name [
 	^ 'substringLiteralSearch'
 ]

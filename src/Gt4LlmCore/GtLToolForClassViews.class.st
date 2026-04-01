@@ -1,12 +1,17 @@
 Class {
 	#name : #GtLToolForClassViews,
-	#superclass : #GtLAbstractPlainSchemaFunctionTool,
+	#superclass : #GtLAbstractMagritteFunctionTool,
 	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }
-GtLToolForClassViews >> acceptVisitor: aVisitor [
-	^ aVisitor visitGtLlmToolForClassViews: self
+GtLToolForClassViews >> classNameDescription [
+	<magritteDescription>
+
+	^ MAStringDescription new
+		label: 'Class name';
+		accessor: #className;
+		beRequired
 ]
 
 { #category : #accessing }
@@ -15,25 +20,21 @@ GtLToolForClassViews >> description [
 ]
 
 { #category : #accessing }
+GtLToolForClassViews >> isUsingDataViews [
+	^ true
+]
+
+{ #category : #accessing }
 GtLToolForClassViews >> name [
 	^ 'getClassViews'
 ]
 
 { #category : #accessing }
-GtLToolForClassViews >> parametersDescription [
-	^ #('className')
-]
-
-{ #category : #accessing }
 GtLToolForClassViews >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| className targetClass pragmas |
-	className := aToolCall anyArgument.
-	targetClass := className
-			ifNil: [ ^ GtLMissingArgumentDomainObject new
-					arguments: aToolCall arguments;
-					missingArgument: 'className' ]
-			ifNotNil: [ className
-					asClassIfAbsent: [ ^ GtLMissingDomainObject new objectName: className ] ].
+	className := aToolCall arguments at: 'className'.
+	targetClass :=  className
+			asClassIfAbsent: [ ^ GtLMissingDomainObject new objectName: className ].
 
 	pragmas := Pragma
 			allNamed: #gtView

@@ -11,7 +11,7 @@ Class {
 GtLMethodsSearchResultExamples >> methodsSearchResultCreation [
 	<gtExample>
 	| references result |
-	references := { GtLToolForMethodReferences >> #name }.
+	references := { GtLMagritteToolForMethodReferences >> #name }.
 	result := GtLMethodsSearchResult fromReferences: references.
 	self assert: result foundMethods size equals: 1.
 	self assert: result foundMethods first methodName equals: #name.
@@ -19,21 +19,31 @@ GtLMethodsSearchResultExamples >> methodsSearchResultCreation [
 	^ result
 ]
 
-{ #category : #examples }
-GtLMethodsSearchResultExamples >> methodsSearchResultSerialization [
+{ #category : #'examples - data view' }
+GtLMethodsSearchResultExamples >> methodsSearchResultDataViewSerialization [
 	<gtExample>
-	| domainObject jsonObject expected referenceJson |
+	<return: #GtLPrimitiveMessageDataBlock>
+	| domainObject compositeView dataBlock jsonData referenceJson expected |
 	domainObject := self methodsSearchResultCreation.
-	jsonObject := GtMagritteJSONDataExporter exportObject: domainObject.
+	compositeView := domainObject llmDataViewsFor: GtLDataView new.
+	self assert: compositeView dataViews size equals: 1.
+	
+	dataBlock := compositeView serializeToLlmPrimiteData.
+	self assert: dataBlock isNotNil.
+	self assert: dataBlock dataBlocks size equals: 1.
+	self assert: dataBlock imageDataBlocks isEmpty.
+	
+	jsonData := dataBlock compositeJsonData.
 	referenceJson := NeoJSONObject new
-		at: 'methodName' put: 'name';
-		at: 'methodClassName' put: 'GtLToolForMethodReferences';
-		at: 'classSide' put: false;
+		at: #classSide put: false;
+		at: #methodClassName put: 'GtLMagritteToolForMethodReferences';
+		at: #methodName put: 'name';
 		yourself.
-	expected := NeoJSONObject new
-		at: 'foundMethods' put: (NeoJSONArray with: referenceJson);
-		at: 'mayHaveMore' put: false;
+	expected := Dictionary new
+		at: #foundMethods put: (NeoJSONArray with: referenceJson);
+		at: #mayHaveMore put: false;
 		yourself.
-	self assert: jsonObject equals: expected.
-	^ jsonObject
+	self assert: jsonData equals: expected.
+	
+	^ dataBlock
 ]

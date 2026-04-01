@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLLepiterPageDomainObject,
-	#superclass : #GtLDomainObject,
+	#superclass : #Object,
 	#instVars : [
 		'foundPage'
 	],
@@ -28,10 +28,14 @@ GtLLepiterPageDomainObject >> gtLepiterPageViewFor: aView [
 		view: #gtLiveFor:
 ]
 
-{ #category : #'api - serializing' }
-GtLLepiterPageDomainObject >> serializeToLlmJsonObject [
-	"Return a JSON dictionary that represents the domain object."
-
-	<return: #NeoJSONObject>
-	^ LeJsonV4 uniqueInstance serializePretty: self foundPage
+{ #category : #'llm views' }
+GtLLepiterPageDomainObject >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView 
+		title: 'Page Contents';
+		jsonData: [ 
+			| serializedString |
+			serializedString := LeJsonV4 uniqueInstance serializePretty: self foundPage.
+			NeoJSONReader fromString: serializedString ]
 ]

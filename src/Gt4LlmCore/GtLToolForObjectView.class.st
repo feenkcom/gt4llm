@@ -3,7 +3,7 @@ I return the remote phlow view specification for a stored object and view select
 "
 Class {
 	#name : #GtLToolForObjectView,
-	#superclass : #GtLAbstractPlainSchemaFunctionTool,
+	#superclass : #GtLAbstractMagritteFunctionTool,
 	#category : #'Gt4LlmCore-Tools'
 }
 
@@ -13,13 +13,23 @@ GtLToolForObjectView >> description [
 ]
 
 { #category : #accessing }
+GtLToolForObjectView >> isUsingDataViews [
+	^ true
+]
+
+{ #category : #accessing }
 GtLToolForObjectView >> name [
 	^ 'getViewContent'
 ]
 
-{ #category : #magritte }
-GtLToolForObjectView >> parametersDescription [
-	^ #('objectId' 'viewSelector')
+{ #category : #accessing }
+GtLToolForObjectView >> objectIdDescription [
+	<magritteDescription>
+
+	^ MAStringDescription new
+		label: 'Object Id';
+		accessor: #objectId;
+		beRequired
 ]
 
 { #category : #private }
@@ -27,17 +37,8 @@ GtLToolForObjectView >> privatePerformToolCall: aToolCall inContext: anExecution
 	| arguments objectId viewSelector object phlowView method |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 
-	objectId := arguments
-			at: 'objectId'
-			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-					arguments: arguments;
-					missingArgument: 'objectId' ].
-	viewSelector := arguments
-			at: 'viewSelector'
-			ifPresent: [ :each | each asSymbol ]
-			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-					arguments: arguments;
-					missingArgument: 'viewSelector' ].
+	objectId := arguments at: 'objectId'.
+	viewSelector := (arguments at: 'viewSelector') asSymbol.
 
 	anExecutionContext objectStorage
 		ifNil: [ ^ GtLMissingInformationDomainObject new 
@@ -57,10 +58,21 @@ GtLToolForObjectView >> privatePerformToolCall: aToolCall inContext: anExecution
 		on: Error
 		do: [ :r | ^ GtLExceptionDomainObject freeze: r ].
 
-	method ifNil: [ ^ GtLMissingDomainObject new objectName: viewSelector ].
+	method ifNil: [ 
+		^ GtLMissingDomainObject new objectName: viewSelector ].
 	
 	^ GtLPhlowViewDomainObject
-		phlowView: phlowView
-		viewMethodClassName: method methodClass name
-		viewMethodSourceCode: method sourceCode
+			phlowView: phlowView
+			viewMethodClassName: method methodClass name
+			viewMethodSourceCode: method sourceCode
+]
+
+{ #category : #accessing }
+GtLToolForObjectView >> viewSelectorDescription [
+	<magritteDescription>
+
+	^ MAStringDescription new
+		label: 'View Selector';
+		accessor: #viewSelector;
+		beRequired
 ]

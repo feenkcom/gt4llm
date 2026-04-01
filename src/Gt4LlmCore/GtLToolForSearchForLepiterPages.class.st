@@ -1,13 +1,8 @@
 Class {
 	#name : #GtLToolForSearchForLepiterPages,
-	#superclass : #GtLAbstractPlainSchemaFunctionTool,
+	#superclass : #GtLAbstractMagritteFunctionTool,
 	#category : #'Gt4LlmCore-Tools'
 }
-
-{ #category : #accessing }
-GtLToolForSearchForLepiterPages >> acceptVisitor: aVisitor [
-	^ aVisitor visitGtLlmToolForDocumentationLookup: self
-]
 
 { #category : #accessing }
 GtLToolForSearchForLepiterPages >> description [
@@ -15,24 +10,31 @@ GtLToolForSearchForLepiterPages >> description [
 ]
 
 { #category : #accessing }
-GtLToolForSearchForLepiterPages >> name [
-	^ 'searchForLepiterPages'
+GtLToolForSearchForLepiterPages >> isUsingDataViews [
+	^ true
 ]
 
 { #category : #accessing }
-GtLToolForSearchForLepiterPages >> parametersDescription [
-	^ #('query' 'knowledgeBases')
+GtLToolForSearchForLepiterPages >> knowledgeBasesDescription [
+	<magritteDescription>
+
+	^ MAToManyScalarRelationDescription new
+		label: 'Knowledge bases';
+		accessor: #knowledgeBases;
+		classes: { String };
+		beRequired
+]
+
+{ #category : #accessing }
+GtLToolForSearchForLepiterPages >> name [
+	^ 'searchForLepiterPages'
 ]
 
 { #category : #private }
 GtLToolForSearchForLepiterPages >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments query baseIds bases pages logicalDatabase missingIds |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
-	query := arguments
-			at: 'query'
-			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-					arguments: arguments;
-					missingArgument: 'query' ].
+	query := arguments at: 'query'.
 	baseIds := arguments at: 'knowledgeBases' ifAbsent: [ nil ].
 	logicalDatabase := LeDatabasesRegistry defaultLogicalDatabase.
 	missingIds := OrderedCollection new.
@@ -62,4 +64,14 @@ GtLToolForSearchForLepiterPages >> privatePerformToolCall: aToolCall inContext: 
 			collected asArray ].
 
 	^ GtLLepiterPagesDomainObject new pages: pages
+]
+
+{ #category : #accessing }
+GtLToolForSearchForLepiterPages >> queryDescription [
+	<magritteDescription>
+
+	^ MAStringDescription new
+		label: 'Query';
+		accessor: #query;
+		beRequired
 ]

@@ -398,7 +398,7 @@ GtLObjectStorageValueResultExamples >> objectStorageValueResultForString [
 GtLObjectStorageValueResultExamples >> objectStorageValueResultForTestObject [
 	<gtExample>
 	<return: #GtLObjectStorageValueResult>
-	| testObject domainObject compositeView dataBlock jsonData expectedPhlowViews expectedSlots expectedObjectValue expectedJsonOne expectedJsonTwo |
+	| testObject domainObject compositeView dataBlock jsonData expectedPhlowViews expectedSlots expectedObjectValue expectedJsonOne expectedJsonTwo|
 	
 	testObject := GtLSerializedObjectValueTestObject exampleInstance.
 	self assert: testObject name equals: 'TestObject'.
@@ -443,11 +443,10 @@ GtLObjectStorageValueResultExamples >> objectStorageValueResultForTestObject [
 		at: 'superclassName' put: 'Object';
 		yourself.
 	
-
 	expectedJsonOne := Dictionary new
-		at: 'objectDetails' put: Dictionary new;
-		at: 'objectId' put: 'test-object-id-789';
-		at: 'objectValue' put: expectedObjectValue;
+		at: #objectDetails put: Dictionary new;
+		at: #objectId put: 'test-object-id-789';
+		at: #objectValue put: expectedObjectValue;
 		yourself.
 	expectedJsonTwo := Dictionary new
 		at: 'objectDetails' put: Dictionary new;

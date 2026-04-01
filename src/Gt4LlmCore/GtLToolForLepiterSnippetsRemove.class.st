@@ -44,6 +44,11 @@ GtLToolForLepiterSnippetsRemove >> initialize [
 	database := LeDatabasesRegistry defaultLogicalDatabase
 ]
 
+{ #category : #'api - testing' }
+GtLToolForLepiterSnippetsRemove >> isUsingDataViews [
+	^ true
+]
+
 { #category : #accessing }
 GtLToolForLepiterSnippetsRemove >> name [
 	^ 'removeLepiterSnippets'
@@ -124,7 +129,7 @@ GtLToolForLepiterSnippetsRemove >> removeSnippetFrom: snippetArguments [
 			
 	^ GtLLepiterSnippetDomainObject new
 		status: 'removed';
-		pageUid: pageUid;
+		pageUid: pageUid asString;
 		snippetUid: snippetUid uidString;
 		snippet: nil
 ]

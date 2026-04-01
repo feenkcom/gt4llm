@@ -30,6 +30,11 @@ GtLSmaCCTool >> grammarIn: anObject do: aBlock onError: errorBlock [
 		do: [ :error | ^ errorBlock value: (GtLExceptionDomainObject new freeze: error) ]
 ]
 
+{ #category : #testing }
+GtLSmaCCTool >> isUsingDataViews [
+	^ true
+]
+
 { #category : #accessing }
 GtLSmaCCTool >> model [
 	^ model

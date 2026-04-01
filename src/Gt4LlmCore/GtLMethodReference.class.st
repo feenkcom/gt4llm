@@ -86,6 +86,13 @@ GtLMethodReference >> isClassSide [
 		ifNotNil: [ :aValue | #(true 'true' 't') includes: aValue ]
 ]
 
+{ #category : #'llm views' }
+GtLMethodReference >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
+]
+
 { #category : #accessing }
 GtLMethodReference >> methodClass [
 	| targetClass |
