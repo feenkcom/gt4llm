@@ -10,11 +10,6 @@ Class {
 	#category : 'Gt4LlmCore-Tools'
 }
 
-{ #category : #visiting }
-GtLFunctionTool >> acceptVisitor: aVisitor [
-	^ aVisitor visitGtLlmFunctionTool: self
-]
-
 { #category : #accessing }
 GtLFunctionTool >> block [
 	^ block

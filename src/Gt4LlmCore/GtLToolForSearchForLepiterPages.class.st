@@ -5,11 +5,6 @@ Class {
 }
 
 { #category : #accessing }
-GtLToolForSearchForLepiterPages >> acceptVisitor: aVisitor [
-	^ aVisitor visitGtLlmToolForDocumentationLookup: self
-]
-
-{ #category : #accessing }
 GtLToolForSearchForLepiterPages >> description [
 	^ 'Searches for Lepiter pages by name matching the query substring (case-insensitive).'
 ]

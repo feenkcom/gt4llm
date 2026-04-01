@@ -10,11 +10,6 @@ GtLToolForSearchFilter class >> maximumResultItemCount [
 ]
 
 { #category : #accessing }
-GtLToolForSearchFilter >> acceptVisitor: aVisitor [
-	^ aVisitor visitGtLlmToolForSearchFilter: self
-]
-
-{ #category : #accessing }
 GtLToolForSearchFilter >> description [
 	^ 'Use GT filters to find methods'
 ]

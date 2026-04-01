@@ -8,11 +8,6 @@ Class {
 }
 
 { #category : #accessing }
-GtLToolForLepiterPageContents >> acceptVisitor: aVisitor [
-	^ aVisitor visitGtLlmToolForLepiterPageSerialization: self
-]
-
-{ #category : #accessing }
 GtLToolForLepiterPageContents >> database [
 	^ logicalDatabase
 ]
