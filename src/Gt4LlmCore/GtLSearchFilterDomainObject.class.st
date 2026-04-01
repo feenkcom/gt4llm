@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLSearchFilterDomainObject,
-	#superclass : #GtLDomainObject,
+	#superclass : #Object,
 	#instVars : [
 		'query',
 		'filter',
@@ -31,6 +31,11 @@ GtLSearchFilterDomainObject >> gtItemsFor: aView [
 		column: 'Value' text: [ :each | each gtDisplayString ]
 ]
 
+{ #category : #testing }
+GtLSearchFilterDomainObject >> isErrorDomainObject [
+	^ false
+]
+
 { #category : #accessing }
 GtLSearchFilterDomainObject >> items [
 	^ items ifNil: [ items := #() ]
@@ -39,6 +44,28 @@ GtLSearchFilterDomainObject >> items [
 { #category : #accessing }
 GtLSearchFilterDomainObject >> items: anObject [
 	items := anObject
+]
+
+{ #category : #accessing }
+GtLSearchFilterDomainObject >> itemsAsPrintStrings [
+	^ self items collect: #printString as: Array
+]
+
+{ #category : #magritte }
+GtLSearchFilterDomainObject >> itemsDescription [
+	<magritteDescription>
+
+	^ MAToManyScalarRelationDescription new
+		label: 'Items';
+		accessor: #itemsAsPrintStrings;
+		beRequired
+]
+
+{ #category : #'llm views' }
+GtLSearchFilterDomainObject >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
 ]
 
 { #category : #accessing }
@@ -51,6 +78,16 @@ GtLSearchFilterDomainObject >> mayHaveMore: aBoolean [
 	mayHaveMore := aBoolean
 ]
 
+{ #category : #magritte }
+GtLSearchFilterDomainObject >> mayHaveMoreDescription [
+	<magritteDescription>
+
+	^ MABooleanDescription new
+		label: 'May have more items';
+		accessor: #mayHaveMore;
+		beRequired
+]
+
 { #category : #accessing }
 GtLSearchFilterDomainObject >> query [
 	^ query
@@ -61,14 +98,12 @@ GtLSearchFilterDomainObject >> query: anObject [
 	query := anObject
 ]
 
-{ #category : #'api - serializing' }
-GtLSearchFilterDomainObject >> serializeToLlmJsonObject [
-	"Return a JSON dictionary that represents the domain object."
+{ #category : #magritte }
+GtLSearchFilterDomainObject >> queryDescription [
+	<magritteDescription>
 
-	<return: #NeoJSONObject>
-	^ NeoJSONObject new
-		at: 'items' put: (self items collect: #printString as: Array);
-		at: 'query' put: self query;
-		at: 'mayHaveMoreItems' put: self mayHaveMore;
-		yourself
+	^ MAStringDescription new
+		label: 'Query';
+		accessor: #query;
+		beRequired
 ]
