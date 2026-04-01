@@ -33,22 +33,31 @@ GtLNotSourceSearchableMethodExamples >> methodWithNotSearchableSourceObjectFromC
 	^ methodObject
 ]
 
-{ #category : #examples }
-GtLNotSourceSearchableMethodExamples >> methodWithNotSearchableSourceObjectFromCompiledMethodClassSideJsonExport [
+{ #category : #'examples - data view' }
+GtLNotSourceSearchableMethodExamples >> methodWithNotSearchableSourceObjectFromCompiledMethodClassSideDataViewSerialization [
 	<gtExample>
-	| methodObject jsonObject |
-	methodObject := self methodWithNotSearchableSourceObjectFromCompiledMethodClassSide.
-	jsonObject := GtMagritteJSONDataExporter exportObject: methodObject.
-	self
-		assert: jsonObject
-		equals: ((NeoJSONObject new)
-			at: 'methodReference' put: ((NeoJSONObject new)
-				at: 'methodName' put: 'fromCompiledMethod:';
-				at: 'methodClassName' put: 'GtLMethodReference';
-				at: 'classSide' put: true;
-				yourself);
-			at: 'sourceCode' put: '<not searchable method>';
-			yourself).
-
-	^ jsonObject
+	<return: #GtLPrimitiveMessageDataBlock>
+	| domainObject compositeView dataBlock jsonData expected methodRefJson |
+	domainObject := self methodWithNotSearchableSourceObjectFromCompiledMethodClassSide.
+	compositeView := domainObject llmDataViewsFor: GtLDataView new.
+	self assert: compositeView dataViews size equals: 1.
+	
+	dataBlock := compositeView serializeToLlmPrimiteData.
+	self assert: dataBlock isNotNil.
+	self assert: dataBlock dataBlocks size equals: 1.
+	self assert: dataBlock imageDataBlocks isEmpty.
+	
+	jsonData := dataBlock compositeJsonData.
+	methodRefJson := NeoJSONObject new
+		at: #methodName put: 'fromCompiledMethod:';
+		at: #methodClassName put: 'GtLMethodReference';
+		at: #classSide put: true;
+		yourself.
+	expected := Dictionary new
+		at: #methodReference put: methodRefJson;
+		at: #sourceCode put: '<not searchable method>';
+		yourself.
+	self assert: jsonData equals: expected.
+	
+	^ dataBlock
 ]

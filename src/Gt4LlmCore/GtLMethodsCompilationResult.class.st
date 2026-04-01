@@ -51,6 +51,13 @@ GtLMethodsCompilationResult >> gtMethodsListFor: aView [
 			width: 60
 ]
 
+{ #category : #'llm views' }
+GtLMethodsCompilationResult >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
+]
+
 { #category : #accessing }
 GtLMethodsCompilationResult >> methods [
 	^ methods ifNil: [ #() ]

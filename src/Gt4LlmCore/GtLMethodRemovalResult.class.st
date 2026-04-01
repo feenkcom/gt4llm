@@ -26,6 +26,13 @@ GtLMethodRemovalResult >> gtDetailsFor: aView [
 		send: [ :assoc | assoc value ]
 ]
 
+{ #category : #'llm views' }
+GtLMethodRemovalResult >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
+]
+
 { #category : #printing }
 GtLMethodRemovalResult >> printOn: aStream [
 	super printOn: aStream.
