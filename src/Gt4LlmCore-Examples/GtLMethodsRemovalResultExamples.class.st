@@ -42,17 +42,27 @@ GtLMethodsRemovalResultExamples >> methodsRemovalResultCreation [
 	^ result
 ]
 
-{ #category : #examples }
-GtLMethodsRemovalResultExamples >> methodsRemovalResultSerialization [
+{ #category : #'examples - data view' }
+GtLMethodsRemovalResultExamples >> methodsRemovalResultDataViewSerialization [
 	<gtExample>
-	| result jsonObject expected |
-	result := self methodsRemovalResultCreation.
-	jsonObject := GtMagritteJSONDataExporter exportObject: result.
-	expected := NeoJSONObject new
-		at: 'methods' put: (NeoJSONArray withAll: {
-			NeoJSONObject new at: 'status' put: 'removed'; yourself.
-			NeoJSONObject new at: 'status' put: 'removed'; yourself });
+	<return: #GtLPrimitiveMessageDataBlock>
+	| domainObject compositeView dataBlock jsonData expected |
+	domainObject := self methodsRemovalResultCreation.
+	compositeView := domainObject llmDataViewsFor: GtLDataView new.
+	self assert: compositeView dataViews size equals: 1.
+	
+	dataBlock := compositeView serializeToLlmPrimiteData.
+	self assert: dataBlock isNotNil.
+	self assert: dataBlock dataBlocks size equals: 1.
+	self assert: dataBlock imageDataBlocks isEmpty.
+	
+	jsonData := dataBlock compositeJsonData.
+	expected := Dictionary new
+		at: #methods put: (NeoJSONArray withAll: {
+			NeoJSONObject new at: #status put: 'removed'; yourself.
+			NeoJSONObject new at: #status put: 'removed'; yourself });
 		yourself.
-	self assert: jsonObject equals: expected.
-	^ jsonObject
+	self assert: jsonData equals: expected.
+	
+	^ dataBlock
 ]

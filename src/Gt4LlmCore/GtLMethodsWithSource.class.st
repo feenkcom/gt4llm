@@ -31,6 +31,13 @@ GtLMethodsWithSource >> gtViewMethodsListFor: aView [
 		view: #gtItemsFor:
 ]
 
+{ #category : #'llm views' }
+GtLMethodsWithSource >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
+]
+
 { #category : #accessing }
 GtLMethodsWithSource >> methods [
 	^ methods

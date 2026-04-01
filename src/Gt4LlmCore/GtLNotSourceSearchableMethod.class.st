@@ -40,6 +40,13 @@ GtLNotSourceSearchableMethod >> isClassSide [
 	^ self methodReference isClassSide
 ]
 
+{ #category : #'llm views' }
+GtLNotSourceSearchableMethod >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
+]
+
 { #category : #accessing }
 GtLNotSourceSearchableMethod >> methodClass [
 	^ self methodReference methodClass

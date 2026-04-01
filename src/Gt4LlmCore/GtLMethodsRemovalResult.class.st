@@ -23,6 +23,13 @@ GtLMethodsRemovalResult >> gtMethodsFor: aView [
 				ifFalse: [ each removedMethod methodReference methodSignature , ' — ' , each status ] ]
 ]
 
+{ #category : #'llm views' }
+GtLMethodsRemovalResult >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
+]
+
 { #category : #accessing }
 GtLMethodsRemovalResult >> methods [
 	^ methods

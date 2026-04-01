@@ -20,6 +20,11 @@ Example JSON response:
 }'
 ]
 
+{ #category : #accessing }
+GtLMagritteToolForMethodSource >> isUsingDataViews [
+	^ true
+]
+
 { #category : #descriptions }
 GtLMagritteToolForMethodSource >> methodDescriptorDescription [
 	<magritteDescription>
