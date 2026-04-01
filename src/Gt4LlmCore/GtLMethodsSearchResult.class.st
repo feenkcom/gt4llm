@@ -55,6 +55,13 @@ GtLMethodsSearchResult >> gtFoundMethodsFor: aView [
 		column: 'Method' text: [ :each | each methodName ]
 ]
 
+{ #category : #'llm views' }
+GtLMethodsSearchResult >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
+]
+
 { #category : #accessing }
 GtLMethodsSearchResult >> mayHaveMore [
 	^ mayHaveMore ifNil: [ false ]
