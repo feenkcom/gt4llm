@@ -9,14 +9,14 @@ GtWardleyMapRemoveNodeChangeSpecification class >> jsonSchemaLabel [
 	^ 'WardleyMapRemoveNode'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #changes }
 GtWardleyMapRemoveNodeChangeSpecification >> asChangeIn: aWardleyMapModel [
 	^ (GtWardleyMapRemoveNodeChange onMap: aWardleyMapModel)
 		node: (self nodeWithId: nodeId in: aWardleyMapModel);
 		yourself
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #changes }
 GtWardleyMapRemoveNodeChangeSpecification >> proposeModificationsIn: aWardleyMapModel [
 	| change proposition |
 	change := self asChangeIn: aWardleyMapModel.
