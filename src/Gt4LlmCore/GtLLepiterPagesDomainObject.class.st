@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLLepiterPagesDomainObject,
-	#superclass : #GtLDomainObject,
+	#superclass : #Object,
 	#instVars : [
 		'pages'
 	],
@@ -21,6 +21,21 @@ GtLLepiterPagesDomainObject >> gtPagesFor: aView [
 		column: 'Database' text: [ :each | each database databaseName ] width: 100
 ]
 
+{ #category : #'llm views' }
+GtLLepiterPagesDomainObject >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView jsonObject: [ :json |
+		json
+			at: #pages
+			put: (self pages collect: [ :eachPage | 
+				Dictionary new
+					at: #pageTitle put: eachPage title;
+					at: #pageUid put: eachPage uid asString36;
+					at: #databaseId put: eachPage database uuidString;
+					yourself ]) ]
+]
+
 { #category : #accessing }
 GtLLepiterPagesDomainObject >> pages [
 	^ pages ifNil: [ #() ]
@@ -29,20 +44,4 @@ GtLLepiterPagesDomainObject >> pages [
 { #category : #accessing }
 GtLLepiterPagesDomainObject >> pages: anObject [
 	pages := anObject
-]
-
-{ #category : #'api - serializing' }
-GtLLepiterPagesDomainObject >> serializeToLlmJsonObject [
-	"Return a JSON dictionary that represents the domain object."
-
-	<return: #NeoJSONObject>
-	^ NeoJSONObject new
-		at: #pages
-			put: (self pages
-					collect: [ :eachPage | 
-						NeoJSONObject new
-							at: #pageTitle put: eachPage title;
-							at: #uuid put: eachPage uid asString36;
-							yourself ]);
-		yourself
 ]
