@@ -22,6 +22,13 @@ GtLObjectStorageItem >> gtValueFor: aView [
 		column: 'Reason' text: [ :each | each reasonString ]
 ]
 
+{ #category : #'llm views' }
+GtLObjectStorageItem >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
+]
+
 { #category : #accessing }
 GtLObjectStorageItem >> objectId [
 	^ objectId
