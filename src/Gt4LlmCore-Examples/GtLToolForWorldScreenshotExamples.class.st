@@ -1,40 +1,40 @@
 Class {
 	#name : #GtLToolForWorldScreenshotExamples,
 	#superclass : #Object,
+	#traits : 'TGtLInvalidInputDataAssertions',
+	#classTraits : 'TGtLInvalidInputDataAssertions classTrait',
 	#category : 'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #examples }
 GtLToolForWorldScreenshotExamples >> worldScreenshotSerialization [
 	<gtExample>
-	| stubElement tool call result encoded |
+	| stubElement tool call result domainObject |
 	stubElement := BlElement new
-			size: 50 @ 50;
-			background: Color red.
+		size: 50 @ 50;
+		background: Color red.
 	tool := GtLToolForWorldScreenshot new worldElementProvider: [ stubElement ].
 	call := GtLFunctionToolCall new.
-	call
-		function: {'name' -> tool name.
-				'arguments' -> Dictionary new} asDictionary.
+	call rawArguments: Dictionary new.
 	result := tool performToolCall: call.
-	self assert: result isErrorDomainObject not.
-	encoded := result encodedBytes.
-	self assert: encoded size > 0.
-	^ call
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	domainObject := result targetObject.
+	self assert: (domainObject isKindOf: GtLWorldScreenshotDataDomainObject).
+	self assert: domainObject encodedBytes size > 0.
+	^ domainObject
 ]
 
 { #category : #examples }
 GtLToolForWorldScreenshotExamples >> worldScreenshotWithoutFocusedWorld [
 	<gtExample>
-	| tool call result |
+	| tool call result domainObject |
 	tool := GtLToolForWorldScreenshot new worldElementProvider: [ nil ].
 	call := GtLFunctionToolCall new.
-	call function: {'name' -> tool name.
-			'arguments' -> Dictionary new} asDictionary.
+	call rawArguments: Dictionary new.
 	result := tool performToolCall: call.
-	self assert: result isErrorDomainObject.
-	self
-		assert: ((result serializeToLlmJsonObject at: #errorMessage)
-				includesSubstring: 'No focused GtWorldElement').
-	^ call
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	domainObject := result targetObject.
+	self assert: domainObject isErrorDomainObject.
+	self assert: (domainObject description includesSubstring: 'No focused GtWorldElement').
+	^ domainObject
 ]
