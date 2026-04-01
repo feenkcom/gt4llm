@@ -14,7 +14,7 @@ GtWardleyMapUpdateMapChangeSpecification class >> jsonSchemaLabel [
 	^ 'WardleyMapUpdateMap'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #changes }
 GtWardleyMapUpdateMapChangeSpecification >> asChangeIn: aWardleyMapModel [
 	^ (GtWardleyMapUpdateMapChange onMap: aWardleyMapModel)
 		isEvolutionAxisVisible: isEvolutionAxisVisible;
