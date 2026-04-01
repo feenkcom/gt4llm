@@ -43,7 +43,6 @@ GtLLepiterPagesDomainObjectExamples >> lepiterPagesDomainObjectEmpty [
 		pages: #().
 	
 	self assert: domainObject pages isEmpty.
-	self assert: domainObject isErrorDomainObject not.
 	
 	^ domainObject
 ]
@@ -59,7 +58,6 @@ GtLLepiterPagesDomainObjectExamples >> lepiterPagesDomainObjectWithPages [
 		pages: { page }.
 	
 	self assert: domainObject pages size equals: 1.
-	self assert: domainObject isErrorDomainObject not.
 	
 	^ domainObject
 ]

@@ -24,7 +24,7 @@ GtLMagritteToolForClassSubclassesExamples >> classSubclassesDataViewSerializatio
 	self assert: dataBlock imageDataBlocks isEmpty.
 	
 	jsonData := dataBlock compositeJsonData.
-	self assert: (jsonData at: #givenClassName) equals: 'GtLAbstractPlainSchemaFunctionTool'.
+	self assert: (jsonData at: #givenClassName) equals: 'GtLAbstractMagritteFunctionTool'.
 	self assert: (jsonData at: #subclassNames) isNotEmpty.
 	self assert: (jsonData at: #mayHaveMore) not.
 	
@@ -75,14 +75,14 @@ GtLMagritteToolForClassSubclassesExamples >> classSubclassesForExistingClass [
 	| tool call result domainObject |
 	tool := GtLMagritteToolForClassSubclasses new.
 	call := GtLFunctionToolCall new.
-	call rawArguments: { 'className' -> 'GtLAbstractPlainSchemaFunctionTool' } asDictionary.
+	call rawArguments: { 'className' -> 'GtLAbstractMagritteFunctionTool' } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
 	self assert: call arguments size equals: 1.
 	self assert: (result isKindOf: GTLDataViewWrapperModel).
 	domainObject := result targetObject.
 	self assert: (domainObject isKindOf: GtLClassSubclasses).
-	self assert: domainObject givenClassName equals: 'GtLAbstractPlainSchemaFunctionTool'.
+	self assert: domainObject givenClassName equals: 'GtLAbstractMagritteFunctionTool'.
 	self assert: domainObject subclassNames isNotEmpty.
 	self assert: (domainObject subclassNames anySatisfy: [ :each | each includesSubstring: 'GtLToolForClass' ]).
 	self assert: domainObject mayHaveMore not.
