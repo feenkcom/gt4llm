@@ -5,11 +5,6 @@ Class {
 }
 
 { #category : #'llm-generated' }
-GtLToolForTestClassesRun >> acceptVisitor: aVisitor [
-	^ aVisitor visitGtLlmToolForSUnitClassesRun: self
-]
-
-{ #category : #'llm-generated' }
 GtLToolForTestClassesRun >> description [
 	^ 'Execute SUnit test classes and report the aggregated results. The argument `classNames` is mandatory and it must not be empty.
 
