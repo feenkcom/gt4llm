@@ -2,7 +2,8 @@ Class {
 	#name : #GtLLepiterEditWardleyMapSnippetTransformationSpecification,
 	#superclass : #GtLLepiterEditSnippetTransformationSpecification,
 	#instVars : [
-		'changes'
+		'changes',
+		'originalMap'
 	],
 	#category : #'Gt4Llm-WardleyMap'
 }
@@ -21,20 +22,16 @@ GtLLepiterEditWardleyMapSnippetTransformationSpecification class >> jsonSchemaLa
 GtLLepiterEditWardleyMapSnippetTransformationSpecification >> asRefactoringIn: aNamespace [
 	self changes ifNil: [ ^ nil ].
 	self wardleyMap
-		ifNotNil: [ :wm | aNamespace changes addChange: (self changeObjectIn: wm) ].
+		ifNotNil: [ :wm | aNamespace changes addChange: self changeObject ].
 	^ nil
 ]
 
 { #category : #accessing }
 GtLLepiterEditWardleyMapSnippetTransformationSpecification >> changeObject [
-	^ self changeObjectIn: self wardleyMap
-]
-
-{ #category : #accessing }
-GtLLepiterEditWardleyMapSnippetTransformationSpecification >> changeObjectIn: aWardleyMap [
 	^ GtWardleyMapCompositeChange new
-		map: aWardleyMap;
-		changes: (self changes collect: [ :each | each asChangeIn: aWardleyMap ]);
+		map: self wardleyMap;
+		originalMap: self originalMap;
+		changes: (self changes collect: [ :each | each asChangeIn: self wardleyMap ]);
 		yourself
 ]
 
@@ -77,6 +74,22 @@ GtLLepiterEditWardleyMapSnippetTransformationSpecification >> gtDisplayOn: strea
 ]
 
 { #category : #accessing }
+GtLLepiterEditWardleyMapSnippetTransformationSpecification >> originalMap [
+	^ originalMap ifNil: [ originalMap := self wardleyMap copy ]
+]
+
+{ #category : #accessing }
+GtLLepiterEditWardleyMapSnippetTransformationSpecification >> originalMap: anObject [
+	originalMap := anObject
+]
+
+{ #category : #accessing }
+GtLLepiterEditWardleyMapSnippetTransformationSpecification >> pageUidString: anUid [
+	super pageUidString: anUid.
+	self resetOriginalMap
+]
+
+{ #category : #accessing }
 GtLLepiterEditWardleyMapSnippetTransformationSpecification >> previewMap [
 	^ self changeObject previewMap
 ]
@@ -84,10 +97,24 @@ GtLLepiterEditWardleyMapSnippetTransformationSpecification >> previewMap [
 { #category : #accessing }
 GtLLepiterEditWardleyMapSnippetTransformationSpecification >> proposedModificationsInPreview [
 	| map |
-	map := self wardleyMap copy.
+	map := self originalMap copy.
 	self changes ifNil: [ ^ map ].
 	self changes do: [ :each | each proposeModificationsIn: map ].
 	^ map
+]
+
+{ #category : #initialization }
+GtLLepiterEditWardleyMapSnippetTransformationSpecification >> resetOriginalMap [
+	originalMap := nil.
+	self snippetUid ifNil: [ ^ self ].
+	self pageUidString isEmptyOrNil ifTrue: [ ^ self ].
+	originalMap := self wardleyMap copy
+]
+
+{ #category : #'as yet unclassified' }
+GtLLepiterEditWardleyMapSnippetTransformationSpecification >> snippetUid: anUid [
+	super snippetUid: anUid.
+	self resetOriginalMap
 ]
 
 { #category : #accessing }
