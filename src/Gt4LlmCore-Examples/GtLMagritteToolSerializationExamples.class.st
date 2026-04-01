@@ -4,10 +4,10 @@ Class {
 	#category : #'Gt4LlmCore-Examples'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #examples }
 GtLMagritteToolSerializationExamples >> toolCallWithJsonDeserializationError [
 	<gtExample>
-	| tool call result |
+	| tool call result domainObject |
 	tool := GtLMagritteToolForMethodsSource new.
 	call := GtLFunctionToolCall new.
 	call rawArguments: '{
@@ -27,7 +27,9 @@ GtLMagritteToolSerializationExamples >> toolCallWithJsonDeserializationError [
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
 
-	self assert: result isErrorDomainObject.
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	domainObject := result targetObject.
+	self assert: domainObject isErrorDomainObject.
 
 	^ call
 ]
