@@ -1,63 +1,81 @@
 Class {
 	#name : #GtLToolForClassActionsExamples,
 	#superclass : #Object,
+	#traits : 'TGtLInvalidInputDataAssertions',
+	#classTraits : 'TGtLInvalidInputDataAssertions classTrait',
 	#category : 'Gt4LlmCore-Examples-Tools'
 }
 
-{ #category : #'llm-generated' }
+{ #category : #examples }
+GtLToolForClassActionsExamples >> classActionsDataViewSerialization [
+	<gtExample>
+	<return: #GtLPrimitiveMessageDataBlock>
+	| domainObject compositeView dataBlock jsonData |
+	domainObject := self classActionsForExistingClass.
+	compositeView := domainObject llmDataViewsFor: GtLDataView new.
+	self assert: compositeView dataViews size equals: 1.
+	
+	dataBlock := compositeView serializeToLlmPrimiteData.
+	self assert: dataBlock isNotNil.
+	self assert: dataBlock dataBlocks size equals: 1.
+	self assert: dataBlock imageDataBlocks isEmpty.
+	
+	jsonData := dataBlock compositeJsonData.
+	self assert: (jsonData at: 'className') equals: 'GtLudoRecordingGame'.
+	self assert: (jsonData at: 'methods') isNotEmpty.
+	self assert: ((jsonData at: 'methods') anySatisfy: [ :m | m includesSubstring: 'gtAutoplayAction:' ]).
+	
+	^ dataBlock
+]
+
+{ #category : #examples }
 GtLToolForClassActionsExamples >> classActionsForClassWithNoActions [
 	<gtExample>
-	| tool call result |
+	| tool call result domainObject |
 	tool := GtLToolForClassActions new.
 	call := GtLFunctionToolCall new.
-	call
-		function: {'name' -> tool name.
-				'arguments'
-					-> {'className' -> 'GtLToolForClassActionsExamples'} asDictionary}
-				asDictionary.
+	call rawArguments: { 'className' -> 'GtLToolForClassActionsExamples' } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-
-	self assert: result isErrorDomainObject not.
-	self assert: result targetClass equals: GtLToolForClassActionsExamples.
-	self assert: result methods equals: #().
-	^ call
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	domainObject := result targetObject.
+	self assert: (domainObject isKindOf: GtLClassMethodsDomainObject).
+	self assert: domainObject targetClass equals: GtLToolForClassActionsExamples.
+	self assert: domainObject methods equals: #().
+	^ domainObject
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #examples }
 GtLToolForClassActionsExamples >> classActionsForExistingClass [
 	<gtExample>
-	| tool call result |
+	| tool call result domainObject |
 	tool := GtLToolForClassActions new.
 	call := GtLFunctionToolCall new.
-	call
-		function: {'name' -> tool name.
-				'arguments' -> {'className' -> 'GtLudoRecordingGame'} asDictionary}
-				asDictionary.
+	call rawArguments: { 'className' -> 'GtLudoRecordingGame' } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: result isErrorDomainObject not.
-	self assert: result methods isNotEmpty.
-	self
-		assert: (result methods
-				anySatisfy: [ :eachMethod | eachMethod selector = 'gtAutoplayAction:' ]).
-	^ call
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	domainObject := result targetObject.
+	self assert: (domainObject isKindOf: GtLClassMethodsDomainObject).
+	self assert: domainObject methods isNotEmpty.
+	self assert: (domainObject methods anySatisfy: [ :eachMethod | eachMethod selector = #gtAutoplayAction: ]).
+	^ domainObject
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #examples }
 GtLToolForClassActionsExamples >> classActionsForUnknownClass [
 	<gtExample>
-	| tool call result |
+	| tool call result domainObject |
 	tool := GtLToolForClassActions new.
 	call := GtLFunctionToolCall new.
-	call
-		function: {'name' -> tool name.
-				'arguments' -> {'className' -> 'NonExistingClassName'} asDictionary}
-				asDictionary.
+	call rawArguments: { 'className' -> 'NonExistingClassName' } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-
-	self assert: result isErrorDomainObject.
-	self assert: result objectName equals: 'NonExistingClassName'.
-	^ call
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	domainObject := result targetObject.
+	self 
+		assertMissingObject: domainObject 
+		withObjectName: 'NonExistingClassName' 
+		errorMessage: 'NonExistingClassName is not found'.
+	^ domainObject
 ]
