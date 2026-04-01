@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'parserClass'
 	],
-	#category : #'Gt4Llm-SmaCC-Domain Objects'
+	#category : 'Gt4Llm-SmaCC-Domain Objects'
 }
 
 { #category : #'as yet unclassified' }
@@ -26,6 +26,18 @@ GtLSmaCCParserReference >> gtClassCoderViewFor: aView [
 						background: Color white;
 						addAptitude: BrShadowAptitude).
 			container ]
+]
+
+{ #category : #testing }
+GtLSmaCCParserReference >> isErrorDomainObject [
+	^ false
+]
+
+{ #category : #'llm views' }
+GtLSmaCCParserReference >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
 ]
 
 { #category : #accessing }

@@ -7,7 +7,7 @@ Class {
 		'package',
 		'definition'
 	],
-	#category : #'Gt4Llm-SmaCC-Domain Objects'
+	#category : 'Gt4Llm-SmaCC-Domain Objects'
 }
 
 { #category : #executing }

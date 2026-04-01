@@ -1,13 +1,15 @@
 Class {
 	#name : #GtLSmaCCToolForParserTestExamples,
 	#superclass : #Object,
-	#category : #'Gt4Llm-SmaCC-Examples'
+	#traits : 'TGtLInvalidInputDataAssertions',
+	#classTraits : 'TGtLInvalidInputDataAssertions classTrait',
+	#category : 'Gt4Llm-SmaCC-Examples'
 }
 
 { #category : #examples }
 GtLSmaCCToolForParserTestExamples >> failJSParser [
 	<gtExample>
-	| tool call result model |
+	| tool call result domainObject |
 	tool := GtLSmaCCToolForParserTest new model: GtLSmaCCModel new.
 	call := GtLFunctionToolCall new.
 	call
@@ -17,21 +19,40 @@ GtLSmaCCToolForParserTestExamples >> failJSParser [
 							'startingState' -> '' } asDictionary} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteBasedModel).
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
 	self assert: call arguments size equals: 1.
-	self assert: result model isErrorDomainObject.
+	domainObject := result targetObject.
+	self assert: domainObject isErrorDomainObject.
 	
-	model := result model.
-	self assert: (model isKindOf: GtLProblemDomainObject).
-	self assert: model errorMessage equals: 'An error occurred during parsing near line: 1, column: 14'.
+	self assert: (domainObject isKindOf: GtLProblemDomainObject).
+	self assert: domainObject errorMessage equals: 'An error occurred during parsing near line: 1, column: 14'.
 	
+	^ call
+]
+
+{ #category : #examples }
+GtLSmaCCToolForParserTestExamples >> testForMissingTestParseArgument [
+	<gtExample>
+	| tool call result domainObject |
+	tool := GtLSmaCCToolForParserTest new model: GtLSmaCCModel new.
+	call := GtLFunctionToolCall new.
+	call rawArguments: {} asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	domainObject := result targetObject.
+	self 
+		assertMissingRequiredProperties: domainObject 
+		withPropertyNames: #('testParse') 
+		path: {nil} 
+		errorMessage: 'required properties missing [testParse]'.
 	^ call
 ]
 
 { #category : #examples }
 GtLSmaCCToolForParserTestExamples >> testJSParser [
 	<gtExample>
-	| tool call result |
+	| tool call result domainObject |
 	tool := GtLSmaCCToolForParserTest new model: GtLSmaCCModel new.
 	call := GtLFunctionToolCall new.
 	call
@@ -41,9 +62,10 @@ GtLSmaCCToolForParserTestExamples >> testJSParser [
 							'startingState' -> '' } asDictionary} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteBasedModel).
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
 	self assert: call arguments size equals: 1.
 	self assert: (call arguments anyOne isKindOf: GtLSmaCCParserTest).
-	self assert: result model class equals: GtLSmaCCSuccess.
-	^ call
+	domainObject := result targetObject.
+	self assert: domainObject class equals: GtLSmaCCSuccess.
+	^ domainObject
 ]

@@ -4,8 +4,20 @@ Class {
 	#instVars : [
 		'message'
 	],
-	#category : #'Gt4Llm-SmaCC-Domain Objects'
+	#category : 'Gt4Llm-SmaCC-Domain Objects'
 }
+
+{ #category : #testing }
+GtLSmaCCSuccess >> isErrorDomainObject [
+	^ false
+]
+
+{ #category : #'llm views' }
+GtLSmaCCSuccess >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
+]
 
 { #category : #accessing }
 GtLSmaCCSuccess >> message [
