@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLPhlowViewDomainObject,
-	#superclass : #GtLDomainObject,
+	#superclass : #Object,
 	#instVars : [
 		'phlowView',
 		'viewMethodClassName',
@@ -65,27 +65,29 @@ GtLPhlowViewDomainObject >> gtLivePhlowViewFor: aView [
 ]
 
 { #category : #'llm views' }
-GtLPhlowViewDomainObject >> llmDataViewFor: aDataView [
+GtLPhlowViewDomainObject >> llmImageViewFor: aDataView [
 	<gtLlmDataView>
 	
-	^aDataView jsonData: [ 
+	^ aDataView imageData
+		title: 'Visual View';
+		png: [ ByteArray
+			streamContents: [ :out | 
+				PNGReadWriter putForm: phlowViewForm onStream: out ] ]
+]
+
+{ #category : #'llm views' }
+GtLPhlowViewDomainObject >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView 
+		title: 'Phlow View Details';
+		jsonData: [ 
 			NeoJSONObject new
 				at: #viewTitle put: phlowView title;
 				at: #priority put: phlowView priority;
 				at: #viewMethodClass put: viewMethodClassName;
 				at: #viewMethodSourceCode put: viewMethodSourceCode;
-				yourself  ]
-]
-
-{ #category : #'llm views' }
-GtLPhlowViewDomainObject >> llmImageViewFor: aDataView [
-	<gtLlmDataView>
-	
-	^aDataView imageData
-			title: 'Visual View' ;
-			png: [ ByteArray
-				streamContents: [ :out | 
-						PNGReadWriter putForm: phlowViewForm onStream: out ] ]
+				yourself ]
 ]
 
 { #category : #accessing }
@@ -113,55 +115,6 @@ GtLPhlowViewDomainObject >> printOn: aStream [
 		nextPut: $(;
 		nextPutAll: self phlowView title asString;
 		nextPut: $)
-]
-
-{ #category : #'api - serializing' }
-GtLPhlowViewDomainObject >> serializeToAnthropicResponseOutput [
-	^ super serializeToAnthropicResponseOutput
-		, (self serializeToLlmResponseImages collect: [ :anPrimitiveImage |
-				anPrimitiveImage serializeToAnthropicResponseOutput ]).
-]
-
-{ #category : #serialization }
-GtLPhlowViewDomainObject >> serializeToLlmJsonObject [
-	"Return a JSON dictionary that represents the domain object."
-	<return: #NeoJSONObject>
-	| data |
-	
-	data := NeoJSONObject new
-		at: #viewTitle put: phlowView title;
-		at: #priority put: phlowView priority;
-		yourself.
-	
-	viewMethodClassName ifNotNil: [ 
-		data at: #viewMethodClass put: viewMethodClassName ].
-	viewMethodSourceCode ifNotNil: [ 
-		data at: #viewMethodSourceCode put: viewMethodSourceCode ].
-	
-	^ data
-]
-
-{ #category : #'api - serializing' }
-GtLPhlowViewDomainObject >> serializeToLlmResponseImages [
-	^ {GtLPrimitiveImageData
-			png: (ByteArray
-					streamContents: [ :out | 
-						PNGReadWriter putForm: phlowViewForm onStream: out ])}
-]
-
-{ #category : #'api - serializing' }
-GtLPhlowViewDomainObject >> serializeToOpenAIResponseImages [
-	^ {GtLPrimitiveImageData
-			png: (ByteArray
-					streamContents: [ :out | 
-						PNGReadWriter putForm: phlowViewForm onStream: out ])}
-]
-
-{ #category : #'api - serializing' }
-GtLPhlowViewDomainObject >> serializeToOpenAIResponseOutput [
-	^ super serializeToOpenAIResponseOutput
-		, (self serializeToLlmResponseImages collect: [ :anPrimitiveImage |
-				anPrimitiveImage serializeToOpenAIResponseOutput ])
 ]
 
 { #category : #accessing }
