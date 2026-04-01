@@ -41,3 +41,10 @@ GtLObjectStorageItems >> itemsDescription [
 		classes: { GtLObjectStorageItem };
 		beRequired
 ]
+
+{ #category : #'llm views' }
+GtLObjectStorageItems >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
+]
