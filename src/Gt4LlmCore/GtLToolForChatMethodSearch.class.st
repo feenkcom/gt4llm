@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLToolForChatMethodSearch,
-	#superclass : #GtLAbstractPlainSchemaFunctionTool,
+	#superclass : #GtLAbstractMagritteFunctionTool,
 	#instVars : [
 		'provider'
 	],
@@ -33,17 +33,17 @@ methods that are annotated with `gtView` pragmas
 ```'
 ]
 
+{ #category : #accessing }
+GtLToolForChatMethodSearch >> isUsingDataViews [
+	^ true
+]
+
 { #category : #'as yet unclassified' }
 GtLToolForChatMethodSearch >> name [
 	^ 'promptedMethodSearch'
 ]
 
-{ #category : #'as yet unclassified' }
-GtLToolForChatMethodSearch >> parametersDescription [
-	^ #('searchPrompt')
-]
-
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 GtLToolForChatMethodSearch >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| argument chat semaphore timeout |
 	argument := aToolCall arguments anyOne.
@@ -70,9 +70,7 @@ GtLToolForChatMethodSearch >> privatePerformToolCall: aToolCall inContext: anExe
 	promise := filter result toArray
 			await: GtLSettings futureExecutionConfiguration.
 	result := promise wait.
-	^ GtLMethodsDomainObject new
-		methods: (result first: (100 min: result size));
-		mayHaveMore: result size > 100 ]
+	^ GtLMethodsSearchResult fromReferences: (result first: (100 min: result size)) ]
 		on: Error
 		do: [ :anException | ^ GtLExceptionDomainObject freeze: anException ]
 ]
@@ -81,4 +79,14 @@ GtLToolForChatMethodSearch >> privatePerformToolCall: aToolCall inContext: anExe
 GtLToolForChatMethodSearch >> provider: aProvider [ 
 	"useful for stubbing purposes"
 	provider := aProvider
+]
+
+{ #category : #'as yet unclassified' }
+GtLToolForChatMethodSearch >> searchPromptDescription [
+	<magritteDescription>
+
+	^ MAStringDescription new
+		label: 'Search prompt';
+		accessor: #searchPrompt;
+		beRequired
 ]
