@@ -4,7 +4,7 @@ Examples for GtLMethodsSearchResult.
 Class {
 	#name : #GtLMethodsSearchResultExamples,
 	#superclass : #GtLMagritteDomainObjectExamples,
-	#category : 'Gt4LlmCore-Examples-Domain Objects'
+	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #examples }
@@ -36,7 +36,7 @@ GtLMethodsSearchResultExamples >> methodsSearchResultDataViewSerialization [
 	jsonData := dataBlock compositeJsonData.
 	referenceJson := NeoJSONObject new
 		at: #classSide put: false;
-		at: #methodClassName put: 'GtLToolForMethodReferences';
+		at: #methodClassName put: 'GtLMagritteToolForMethodReferences';
 		at: #methodName put: 'name';
 		yourself.
 	expected := Dictionary new

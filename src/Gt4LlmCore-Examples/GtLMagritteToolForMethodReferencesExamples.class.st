@@ -6,7 +6,7 @@ Class {
 	#superclass : #Object,
 	#traits : 'TGtLInvalidInputDataAssertions',
 	#classTraits : 'TGtLInvalidInputDataAssertions classTrait',
-	#category : 'Gt4LlmCore-Examples-Tools'
+	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #examples }
@@ -26,7 +26,7 @@ GtLMagritteToolForMethodReferencesExamples >> methodReferencesForExistingSelecto
 	self assert: domainObject foundMethods isNotEmpty.
 	self
 		assert: (domainObject foundMethods anySatisfy: [ :each |
-			each methodSignature includesSubstring: 'GtLToolForMethodReferencesExamples>>#methodReferencesForExistingSelector' ]).
+			each methodSignature includesSubstring: 'GtLMagritteToolForMethodReferencesExamples>>#methodReferencesForExistingSelector' ]).
 	self assert: domainObject mayHaveMore not.
 	^ domainObject
 ]

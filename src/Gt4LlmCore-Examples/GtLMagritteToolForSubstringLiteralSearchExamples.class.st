@@ -6,7 +6,7 @@ Class {
 	#superclass : #Object,
 	#traits : 'TGtLInvalidInputDataAssertions',
 	#classTraits : 'TGtLInvalidInputDataAssertions classTrait',
-	#category : 'Gt4LlmCore-Examples-Tools'
+	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #'examples - error conditions' }
@@ -44,7 +44,7 @@ GtLMagritteToolForSubstringLiteralSearchExamples >> searchWithMatches [
 	self assert: (domainObject isKindOf: GtLMethodsSearchResult).
 	self
 		assert: (domainObject foundMethods anySatisfy: [ :each |
-			each methodSignature = 'GtLToolForSubstringLiteralSearchExamples>>#searchWithMatches' ]).
+			each methodSignature = 'GtLMagritteToolForSubstringLiteralSearchExamples>>#searchWithMatches' ]).
 	self assert: domainObject mayHaveMore not.
 	^ domainObject
 ]
