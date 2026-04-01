@@ -134,7 +134,7 @@ GtLMagritteToolForMethodsSourceExamples >> methodSourcesForUnknownMethod [
 	call := GtLFunctionToolCall new.
 	call rawArguments: {
 		'methodDescriptors' -> {
-			{'methodClassName' -> GtLToolForMethodImplementors name.
+			{'methodClassName' -> GtLMagritteToolForMethodImplementors name.
 				'methodName' -> 'unknownSelector42'.
 				'classSide' -> false} asDictionary.
 			{'methodClassName' -> 'Collection'.
@@ -154,7 +154,7 @@ GtLMagritteToolForMethodsSourceExamples >> methodSourcesForUnknownMethod [
 	self assert: domainObject methods size equals: 2.
 	self assert: domainObject methods first isErrorDomainObject.
 	self assert: (domainObject methods second isKindOf: GtLMethodWithSource).
-	expectedSignature := GtLToolForMethodImplementors name, '>>#unknownSelector42'.
+	expectedSignature := GtLMagritteToolForMethodImplementors name, '>>#unknownSelector42'.
 	self assert: domainObject methods first objectName equals: expectedSignature.
 	^ domainObject
 ]

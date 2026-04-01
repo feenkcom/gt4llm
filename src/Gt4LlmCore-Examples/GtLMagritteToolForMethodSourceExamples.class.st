@@ -229,7 +229,7 @@ GtLMagritteToolForMethodSourceExamples >> methodSourceForUnknownClassSideMethod 
 	call := GtLFunctionToolCall new.
 	call rawArguments: {
 		'methodDescriptor' -> {
-			'methodClassName' -> GtLToolForMethodImplementors name.
+			'methodClassName' -> GtLMagritteToolForMethodImplementors name.
 			'methodName' -> 'unknownSelector42'.
 			'classSide' -> true
 		} asDictionary
@@ -242,7 +242,7 @@ GtLMagritteToolForMethodSourceExamples >> methodSourceForUnknownClassSideMethod 
 	
 	self assert: (result isKindOf: GTLDataViewWrapperModel).
 	domainObject := result targetObject.
-	expectedSignature := GtLToolForMethodImplementors name, ' class>>#unknownSelector42'.
+	expectedSignature := GtLMagritteToolForMethodImplementors name, ' class>>#unknownSelector42'.
 	self 
 		assertMissingObject: domainObject 
 		withObjectName: expectedSignature 
@@ -258,7 +258,7 @@ GtLMagritteToolForMethodSourceExamples >> methodSourceForUnknownInstanceSideMeth
 	call := GtLFunctionToolCall new.
 	call rawArguments: {
 		'methodDescriptor' -> {
-			'methodClassName' -> GtLToolForMethodImplementors name.
+			'methodClassName' -> GtLMagritteToolForMethodImplementors name.
 			'methodName' -> 'unknownSelector42'.
 			'classSide' -> false
 		} asDictionary
@@ -271,7 +271,7 @@ GtLMagritteToolForMethodSourceExamples >> methodSourceForUnknownInstanceSideMeth
 		
 	self assert: (result isKindOf: GTLDataViewWrapperModel).
 	domainObject := result targetObject.
-	expectedSignature := GtLToolForMethodImplementors name, '>>#unknownSelector42'.
+	expectedSignature := GtLMagritteToolForMethodImplementors name, '>>#unknownSelector42'.
 	self 
 		assertMissingObject: domainObject 
 		withObjectName: expectedSignature 
