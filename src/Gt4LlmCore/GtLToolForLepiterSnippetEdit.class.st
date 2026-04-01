@@ -28,6 +28,11 @@ GtLToolForLepiterSnippetEdit >> initialize [
 	database := LeDatabasesRegistry defaultLogicalDatabase
 ]
 
+{ #category : #'api - testing' }
+GtLToolForLepiterSnippetEdit >> isUsingDataViews [
+	^ true
+]
+
 { #category : #accessing }
 GtLToolForLepiterSnippetEdit >> name [
 	^ 'editLepiterSnippet'

@@ -51,6 +51,11 @@ GtLToolForLepiterPageCreate >> initialize [
 	logicalDatabase := LeDatabasesRegistry defaultLogicalDatabase
 ]
 
+{ #category : #'api - testing' }
+GtLToolForLepiterPageCreate >> isUsingDataViews [
+	^ true
+]
+
 { #category : #accessing }
 GtLToolForLepiterPageCreate >> name [
 	^ 'createLepiterPage'

@@ -14,6 +14,11 @@ GtLToolForLepiterKnowledgeBases >> description [
 	^ 'Retrieve the registered Lepiter knowledge bases.'
 ]
 
+{ #category : #'api - testing' }
+GtLToolForLepiterKnowledgeBases >> isUsingDataViews [
+	^ true
+]
+
 { #category : #accessing }
 GtLToolForLepiterKnowledgeBases >> name [
 	^ 'lepiterKnowledgeBases'

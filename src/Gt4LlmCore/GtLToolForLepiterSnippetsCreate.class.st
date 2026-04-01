@@ -82,6 +82,11 @@ GtLToolForLepiterSnippetsCreate >> initialize [
 	database := LeDatabasesRegistry defaultLogicalDatabase
 ]
 
+{ #category : #'api - testing' }
+GtLToolForLepiterSnippetsCreate >> isUsingDataViews [
+	^ true
+]
+
 { #category : #accessing }
 GtLToolForLepiterSnippetsCreate >> name [
 	^ 'createLepiterSnippets'
