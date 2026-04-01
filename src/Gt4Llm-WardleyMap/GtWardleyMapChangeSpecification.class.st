@@ -48,3 +48,7 @@ GtWardleyMapChangeSpecification >> noteWithId: aString in: aWardleyMapModel [
 GtWardleyMapChangeSpecification >> proposeModificationsIn: aWardleyMapModel [
 	
 ]
+
+{ #category : #private }
+GtWardleyMapChangeSpecification >> updateNewUidsUsing: aDictionary [
+]

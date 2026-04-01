@@ -7,7 +7,7 @@ Class {
 	#category : #'Gt4Llm-WardleyMap'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtWardleyMapEditTool >> changesDescription [
 	<magritteDescription>
 	^ MAToManyRelationDescription new
@@ -28,23 +28,23 @@ GtWardleyMapEditTool >> database: anObject [
 	database := anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtWardleyMapEditTool >> description [
 	^ 'Edits a Lepiter Wardley Map snippet identified by page and snippet ids, updating the nodes, edges and notes.'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 GtWardleyMapEditTool >> initialize [
 	super initialize.
 	database := LeDatabasesRegistry defaultLogicalDatabase
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtWardleyMapEditTool >> name [
 	^ 'editLepiterWardleyMapSnippet'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #magritte }
 GtWardleyMapEditTool >> pageUidDescription [
 	<magritteDescription>
 	^ MAStringDescription new
@@ -53,7 +53,7 @@ GtWardleyMapEditTool >> pageUidDescription [
 		beRequired
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #execution }
 GtWardleyMapEditTool >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments changes pageUidString snippetUidString pageUid snippetUid snippets snippet map |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
@@ -95,9 +95,13 @@ GtWardleyMapEditTool >> privatePerformToolCall: aToolCall inContext: anExecution
 						description: 'Could not locate snippet with id ' , snippetUid uidString ] ]
 		ifAbsent: [ ^ GtLProblemDomainObject new
 				description: 'Could not locate page with id ' , pageUid asString ].
-	[ snippet := snippets anyOne.
+	[ | idMap |
+	idMap := Dictionary new.
+	snippet := snippets anyOne.
 	map := snippet wardleyMap.
-	changes do: [ :each | each proposeModificationsIn: map ] ]
+	changes do: [ :each | each updateNewUidsUsing: idMap ].
+	changes do: [ :each | each proposeModificationsIn: map ].
+	map ensureAllProposition ]
 		on: Error
 		do: [ :error | 
 			^ GtLExceptionDomainObject new
@@ -110,7 +114,7 @@ GtWardleyMapEditTool >> privatePerformToolCall: aToolCall inContext: anExecution
 		snippet: snippet
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #magritte }
 GtWardleyMapEditTool >> snippetUidDescription [
 	<magritteDescription>
 	^ MAStringDescription new

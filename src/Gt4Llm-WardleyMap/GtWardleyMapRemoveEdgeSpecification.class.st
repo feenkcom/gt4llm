@@ -9,7 +9,7 @@ GtWardleyMapRemoveEdgeSpecification class >> jsonSchemaLabel [
 	^ 'WardleyMapRemoveEdge'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #changes }
 GtWardleyMapRemoveEdgeSpecification >> asChangeIn: aWardleyMapModel [
 	^ (GtWardleyMapRemoveEdgeChange onMap: aWardleyMapModel)
 		edge: (self
@@ -19,7 +19,7 @@ GtWardleyMapRemoveEdgeSpecification >> asChangeIn: aWardleyMapModel [
 		yourself
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #changes }
 GtWardleyMapRemoveEdgeSpecification >> proposeModificationsIn: aWardleyMapModel [
 	| change proposition |
 	change := self asChangeIn: aWardleyMapModel.

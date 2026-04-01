@@ -22,3 +22,12 @@ GtWardleyMapAddNoteChangeSpecification >> proposeModificationsIn: aWardleyMapMod
 	proposition := GtWardleyMapAddProposition new.
 	change newNote addWardleyMapDecoratorModel: proposition
 ]
+
+{ #category : #private }
+GtWardleyMapAddNoteChangeSpecification >> updateNewUidsUsing: aDictionary [
+	| newId |
+	super updateNewUidsUsing: aDictionary.
+	newId := UUID new printString.
+	aDictionary at: noteId put: newId.
+	noteId := newId
+]
