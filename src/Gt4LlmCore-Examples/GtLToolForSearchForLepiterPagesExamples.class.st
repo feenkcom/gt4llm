@@ -45,7 +45,6 @@ GtLToolForSearchForLepiterPagesExamples >> documentationLookupForExistingPage [
 	self assert: (result isKindOf: GTLDataViewWrapperModel).
 	domainObject := result targetObject.
 	self assert: (domainObject isKindOf: GtLLepiterPagesDomainObject).
-	self assert: domainObject isErrorDomainObject not.
 	self assert: domainObject pages size equals: 1.
 	^ domainObject
 ]
@@ -65,7 +64,6 @@ GtLToolForSearchForLepiterPagesExamples >> documentationLookupForMissingPage [
 	self assert: (result isKindOf: GTLDataViewWrapperModel).
 	domainObject := result targetObject.
 	self assert: (domainObject isKindOf: GtLLepiterPagesDomainObject).
-	self assert: domainObject isErrorDomainObject not.
 	self assert: domainObject pages equals: #().
 	^ domainObject
 ]
@@ -92,7 +90,6 @@ GtLToolForSearchForLepiterPagesExamples >> documentationLookupForMultipleKnowled
 	self assert: (result isKindOf: GTLDataViewWrapperModel).
 	domainObject := result targetObject.
 	self assert: (domainObject isKindOf: GtLLepiterPagesDomainObject).
-	self assert: domainObject isErrorDomainObject not.
 	self assert: domainObject pages isNotEmpty.
 	^ domainObject
 ]

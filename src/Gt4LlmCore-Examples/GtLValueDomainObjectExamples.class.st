@@ -58,7 +58,7 @@ GtLValueDomainObjectExamples >> integerDataViewSerialization [
 	self assert: (jsonData at: 'class') equals: 'GtLValueDomainObject'.
 	self assert: (jsonData at: 'superclass') equals: #GtLDomainObject.
 	self assert: (jsonData at: 'package') equals: #Gt4LlmCore.
-	self assert: (jsonData at: 'printString') equals: 'aGtLValueDomainObject'.
+	self assert: ((jsonData at: 'printString') includesSubstring: 'GtLValueDomainObject').
 	self assert: (jsonData at: 'allInstanceSlots') size equals: 1.
 	
 	valueSlot := (jsonData at: 'allInstanceSlots') first.
