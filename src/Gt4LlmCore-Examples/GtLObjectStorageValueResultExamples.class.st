@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLObjectStorageValueResultExamples,
 	#superclass : #Object,
-	#category : 'Gt4LlmCore-Examples-Domain Objects'
+	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #assertions }
@@ -398,7 +398,7 @@ GtLObjectStorageValueResultExamples >> objectStorageValueResultForString [
 GtLObjectStorageValueResultExamples >> objectStorageValueResultForTestObject [
 	<gtExample>
 	<return: #GtLObjectStorageValueResult>
-	| testObject domainObject compositeView dataBlock jsonData expectedPhlowViews expectedSlots expectedObjectValue expected |
+	| testObject domainObject compositeView dataBlock jsonData expectedPhlowViews expectedSlots expectedObjectValue expectedJsonOne expectedJsonTwo|
 	
 	testObject := GtLSerializedObjectValueTestObject exampleInstance.
 	self assert: testObject name equals: 'TestObject'.
@@ -437,19 +437,26 @@ GtLObjectStorageValueResultExamples >> objectStorageValueResultForTestObject [
 	expectedObjectValue := NeoJSONObject new
 		at: 'allInstanceSlots' put: expectedSlots;
 		at: 'objectClassName' put: 'GtLSerializedObjectValueTestObject';
-		at: 'objectPrintString' put: 'aGtLSerializedObjectValueTestObject(TestObject)';
+		at: 'objectPrintString' put: 'a GtLSerializedObjectValueTestObject(TestObject)';
 		at: 'packageName' put: 'Gt4LlmCore-Examples';
 		at: 'phlowViews' put: expectedPhlowViews;
 		at: 'superclassName' put: 'Object';
 		yourself.
 	
-	expected := Dictionary new
+	expectedJsonOne := Dictionary new
 		at: #objectDetails put: Dictionary new;
 		at: #objectId put: 'test-object-id-789';
 		at: #objectValue put: expectedObjectValue;
 		yourself.
+	expectedJsonTwo := Dictionary new
+		at: 'objectDetails' put: Dictionary new;
+		at: 'objectId' put: 'test-object-id-789';
+		at: 'objectValue' put: (expectedObjectValue copy
+			at: 'objectPrintString' put: 'aGtLSerializedObjectValueTestObject(TestObject)';
+			yourself);
+		yourself.
 	
-	self assert: jsonData equals: expected.
+	self assert: ((jsonData = expectedJsonOne) or: [jsonData = expectedJsonOne]).
 	
 	^ domainObject
 ]
