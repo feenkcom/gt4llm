@@ -1,57 +1,81 @@
 Class {
 	#name : #GtLToolForClassViewsExamples,
 	#superclass : #Object,
-	#category : 'Gt4LlmCore-Examples-Tools'
+	#traits : 'TGtLInvalidInputDataAssertions',
+	#classTraits : 'TGtLInvalidInputDataAssertions classTrait',
+	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
-{ #category : #'llm-generated' }
+{ #category : #examples }
+GtLToolForClassViewsExamples >> classViewsDataViewSerialization [
+	<gtExample>
+	<return: #GtLPrimitiveMessageDataBlock>
+	| domainObject compositeView dataBlock jsonData |
+	domainObject := self classViewsForExistingClass.
+	compositeView := domainObject llmDataViewsFor: GtLDataView new.
+	self assert: compositeView dataViews size equals: 1.
+	
+	dataBlock := compositeView serializeToLlmPrimiteData.
+	self assert: dataBlock isNotNil.
+	self assert: dataBlock dataBlocks size equals: 1.
+	self assert: dataBlock imageDataBlocks isEmpty.
+	
+	jsonData := dataBlock compositeJsonData.
+	self assert: (jsonData at: 'className') equals: 'GtABAddressBook'.
+	self assert: (jsonData at: 'methods') isNotEmpty.
+	self assert: ((jsonData at: 'methods') anySatisfy: [ :m | m includesSubstring: 'gtViewContactsListOn:' ]).
+	
+	^ dataBlock
+]
+
+{ #category : #examples }
 GtLToolForClassViewsExamples >> classViewsForClassWithNoViews [
 	<gtExample>
-	| tool call result |
+	| tool call result domainObject |
 	tool := GtLToolForClassViews new.
 	call := GtLFunctionToolCall new.
-	call function: {
-		'name' -> tool name.
-		'arguments' -> {'className' -> 'GtLToolForClassViewsExamples'} asDictionary
-	} asDictionary.
+	call rawArguments: { 'className' -> 'GtLToolForClassViewsExamples' } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: result isErrorDomainObject not.
-	self assert: result targetClass equals: GtLToolForClassViewsExamples.
-	self assert: result methods equals: #().
-	^ call
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	domainObject := result targetObject.
+	self assert: (domainObject isKindOf: GtLClassMethodsDomainObject).
+	self assert: domainObject targetClass equals: GtLToolForClassViewsExamples.
+	self assert: domainObject methods equals: #().
+	^ domainObject
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #examples }
 GtLToolForClassViewsExamples >> classViewsForExistingClass [
 	<gtExample>
-	| tool call result |
+	| tool call result domainObject |
 	tool := GtLToolForClassViews new.
 	call := GtLFunctionToolCall new.
-	call function: {
-		'name' -> tool name.
-		'arguments' -> {'className' -> 'GtABAddressBook'} asDictionary
-	} asDictionary.
+	call rawArguments: { 'className' -> 'GtABAddressBook' } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: result isErrorDomainObject not.
-	self assert: (result serializeToLlmJsonString includesSubstring: 'gtViewContactsListOn:').
-	^ call
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	domainObject := result targetObject.
+	self assert: (domainObject isKindOf: GtLClassMethodsDomainObject).
+	self assert: domainObject methods isNotEmpty.
+	self assert: (domainObject methods anySatisfy: [ :m | m selector = #gtViewContactsListOn: ]).
+	^ domainObject
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #examples }
 GtLToolForClassViewsExamples >> classViewsForUnknownClass [
 	<gtExample>
-	| tool call result |
+	| tool call result domainObject |
 	tool := GtLToolForClassViews new.
 	call := GtLFunctionToolCall new.
-	call function: {
-		'name' -> tool name.
-		'arguments' -> {'className' -> 'NonExistingClassName'} asDictionary
-	} asDictionary.
+	call rawArguments: { 'className' -> 'NonExistingClassName' } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: result isErrorDomainObject.
-	self assert: result objectName equals: 'NonExistingClassName'.
-	^ call
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	domainObject := result targetObject.
+	self 
+		assertMissingObject: domainObject 
+		withObjectName: 'NonExistingClassName' 
+		errorMessage: 'NonExistingClassName is not found'.
+	^ domainObject
 ]

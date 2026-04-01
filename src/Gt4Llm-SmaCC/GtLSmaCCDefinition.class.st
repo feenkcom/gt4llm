@@ -50,6 +50,18 @@ GtLSmaCCDefinition >> gtClassCoderViewFor: aView [
 			container ]
 ]
 
+{ #category : #testing }
+GtLSmaCCDefinition >> isErrorDomainObject [
+	^ false
+]
+
+{ #category : #'llm views' }
+GtLSmaCCDefinition >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
+]
+
 { #category : #accessing }
 GtLSmaCCDefinition >> package [
 	^ package

@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'methods'
 	],
-	#category : 'Gt4LlmCore-Magritte Objects'
+	#category : #'Gt4LlmCore-Magritte Objects'
 }
 
 { #category : #views }
@@ -29,6 +29,13 @@ GtLMethodsWithSource >> gtViewMethodsListFor: aView [
 		priority: 2;
 		object: [ methods ];
 		view: #gtItemsFor:
+]
+
+{ #category : #'llm views' }
+GtLMethodsWithSource >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
 ]
 
 { #category : #accessing }

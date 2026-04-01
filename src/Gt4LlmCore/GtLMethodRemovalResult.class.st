@@ -8,7 +8,7 @@ Class {
 		'removedMethod',
 		'status'
 	],
-	#category : 'Gt4LlmCore-Magritte Objects'
+	#category : #'Gt4LlmCore-Magritte Objects'
 }
 
 { #category : #views }
@@ -24,6 +24,13 @@ GtLMethodRemovalResult >> gtDetailsFor: aView [
 		column: 'Property' text: [ :assoc | assoc key ];
 		column: 'Value' text: [ :assoc | assoc value ];
 		send: [ :assoc | assoc value ]
+]
+
+{ #category : #'llm views' }
+GtLMethodRemovalResult >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
 ]
 
 { #category : #printing }

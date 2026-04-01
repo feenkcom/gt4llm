@@ -1,13 +1,15 @@
 Class {
 	#name : #GtLSmaCCToolForParserCreationExamples,
 	#superclass : #Object,
+	#traits : 'TGtLInvalidInputDataAssertions',
+	#classTraits : 'TGtLInvalidInputDataAssertions classTrait',
 	#category : #'Gt4Llm-SmaCC-Examples'
 }
 
 { #category : #examples }
 GtLSmaCCToolForParserCreationExamples >> createOverExisting [
 	<gtExample>
-	| tool call result model grammar definition |
+	| model tool call result domainObject definition grammar |
 	model := GtLSmaCCModel new.
 	model grammarFor: #GtPharoParser.
 	tool := GtLSmaCCToolForParserCreation new model: model.
@@ -22,12 +24,13 @@ Foo: <number>+;'.
 							'definition' -> definition} asDictionary} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteBasedModel).
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
 	self assert: call arguments size equals: 1.
 	self assert: (call arguments anyOne isKindOf: GtLSmaCCCreateParser).
-	self assert: (result model isKindOf: GtLSmaCCParserCreationResult).
-	self assert: result model parserClass equals: #GtPharoParser.
-	self assert: result model createGrammar source equals: definition.
+	domainObject := result targetObject.
+	self assert: (domainObject isKindOf: GtLSmaCCParserCreationResult).
+	self assert: domainObject parserClass equals: #GtPharoParser.
+	self assert: domainObject createGrammar source equals: definition.
 
 	grammar := model grammarFor: #GtPharoParser.
 	self assert: grammar source equals: definition.
@@ -40,8 +43,7 @@ Foo: <number>+;'.
 { #category : #examples }
 GtLSmaCCToolForParserCreationExamples >> createParser [
 	<gtExample>
-	| tool call result model grammar definition |
-	
+	| model tool call result domainObject definition |
 	model := GtLSmaCCModel new.
 	tool := GtLSmaCCToolForParserCreation new model: model.
 	call := GtLFunctionToolCall new.
@@ -53,30 +55,49 @@ Foo: <number>+;'.
 							'scannerClass' -> 'ExpScanner'.
 							'package' -> 'TestPackage'.
 							'definition' -> definition} asDictionary} asDictionary.
-	
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
 	self assert: call arguments size equals: 1.
 	self assert: (call arguments anyOne isKindOf: GtLSmaCCCreateParser).
 	
-	self assert: (result isKindOf: GtLMagritteBasedModel).
-	self assert: (result model isKindOf: GtLSmaCCParserCreationResult).
-	self assert: result model parserClass equals: #ExpParser.
-	self assert: result model createGrammar source equals: definition.
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	domainObject := result targetObject.
+	self assert: (domainObject isKindOf: GtLSmaCCParserCreationResult).
+	self assert: domainObject parserClass equals: #ExpParser.
+	self assert: domainObject createGrammar source equals: definition.
 
-	grammar := model grammarFor: #ExpParser.
-	self assert: grammar source equals: definition.
-	self assert: grammar parserClassName equals: #ExpParser.
-	self assert: grammar scannerClassName equals: #ExpScanner.
-	self assert: grammar package equals: 'TestPackage'.
+	self assert: (model grammarFor: #ExpParser) source equals: definition.
+	self assert: (model grammarFor: #ExpParser) parserClassName equals: #ExpParser.
+	self assert: (model grammarFor: #ExpParser) scannerClassName equals: #ExpScanner.
+	self assert: (model grammarFor: #ExpParser) package equals: 'TestPackage'.
 	
-	^ grammar
+	^ domainObject
+]
+
+{ #category : #examples }
+GtLSmaCCToolForParserCreationExamples >> creationForMissingParserCreationArgument [
+	<gtExample>
+	| model tool call result domainObject |
+	model := GtLSmaCCModel new.
+	tool := GtLSmaCCToolForParserCreation new model: model.
+	call := GtLFunctionToolCall new.
+	call rawArguments: {} asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	domainObject := result targetObject.
+	self 
+		assertMissingRequiredProperties: domainObject 
+		withPropertyNames: #('parserCreation') 
+		path: {nil} 
+		errorMessage: 'required properties missing [parserCreation]'.
+	^ call
 ]
 
 { #category : #examples }
 GtLSmaCCToolForParserCreationExamples >> invalidClassName [
 	<gtExample>
-	| tool call result model |
+	| model tool call result domainObject |
 	model := GtLSmaCCModel new.
 	tool := GtLSmaCCToolForParserCreation new model: model.
 	call := GtLFunctionToolCall new.
@@ -88,22 +109,21 @@ GtLSmaCCToolForParserCreationExamples >> invalidClassName [
 							'definition'
 								-> '<number>: \d+;
 Foo: <number>;'} asDictionary} asDictionary.
-	
 	result := tool performToolCall: call.
-	
-	self assert: call tool == tool. 
+	self assert: call tool == tool.
 	self assert: call arguments size equals: 1.
 	self assert: (call arguments anyOne isKindOf: GtLSmaCCCreateParser).
 	
-	self assert: (result isKindOf: GtLMagritteBasedModel).
-	self assert: result model isErrorDomainObject.
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	domainObject := result targetObject.
+	self assert: domainObject isErrorDomainObject.
 	^ call
 ]
 
 { #category : #examples }
 GtLSmaCCToolForParserCreationExamples >> invalidDefinition [
 	<gtExample>
-	| tool call result model |
+	| model tool call result domainObject |
 	model := GtLSmaCCModel new.
 	tool := GtLSmaCCToolForParserCreation new model: model.
 	call := GtLFunctionToolCall new.
@@ -121,7 +141,8 @@ Foo: <number> #missing ;'} asDictionary} asDictionary.
 	self assert: call arguments size equals: 1.
 	self assert: (call arguments anyOne isKindOf: GtLSmaCCCreateParser).
 	
-	self assert: (result isKindOf: GtLMagritteBasedModel).
-	self assert: result model isErrorDomainObject.
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	domainObject := result targetObject.
+	self assert: domainObject isErrorDomainObject.
 	^ call
 ]

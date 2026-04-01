@@ -4,7 +4,7 @@ I am an abstract superclass for data view examples. I provide common utilities f
 Class {
 	#name : #GtLDataViewExamples,
 	#superclass : #Object,
-	#category : 'Gt4LlmCore-Examples-Data Views'
+	#category : #'Gt4LlmCore-Examples-Data Views'
 }
 
 { #category : #assertions }
@@ -23,6 +23,16 @@ GtLDataViewExamples >> assertCompositeView: aCompositeView hasInnerCompositeWith
 ]
 
 { #category : #assertions }
+GtLDataViewExamples >> assertCompositeView: aCompositeView hasJsonDataViewWithDataKey: aDataKey [
+	"Assert that there is a view in the given composite that is a json view with the given dataKey."
+	
+	self assert: (aCompositeView dataViews  
+		anySatisfy: [:aView |
+			aView class = GtLJsonDataView and: [
+				aView dataKey = aDataKey]])
+]
+
+{ #category : #assertions }
 GtLDataViewExamples >> assertCompositeView: aCompositeView hasJsonDataViewsWithDataKeys: anArray [ 
 	self assert: aCompositeView dataViews size equals: anArray size.
 	
@@ -32,16 +42,6 @@ GtLDataViewExamples >> assertCompositeView: aCompositeView hasJsonDataViewsWithD
 		assert: (aCompositeView dataViews 
 			collect: [ :each  | each dataKey ])  asSet
 		equals: anArray asSet.
-]
-
-{ #category : #assertions }
-GtLDataViewExamples >> assertCompositeView: aCompositeView hasJsonDataViewWithDataKey: aDataKey [
-	"Assert that there is a view in the given composite that is a json view with the given dataKey."
-	
-	self assert: (aCompositeView dataViews  
-		anySatisfy: [:aView |
-			aView class = GtLJsonDataView and: [
-				aView dataKey = aDataKey]])
 ]
 
 { #category : #assertions }

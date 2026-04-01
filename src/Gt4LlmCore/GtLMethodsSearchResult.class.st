@@ -8,7 +8,7 @@ Class {
 		'foundMethods',
 		'mayHaveMore'
 	],
-	#category : 'Gt4LlmCore-Magritte Objects'
+	#category : #'Gt4LlmCore-Magritte Objects'
 }
 
 { #category : #'instance creation' }
@@ -53,6 +53,13 @@ GtLMethodsSearchResult >> gtFoundMethodsFor: aView [
 		items: [ self foundMethods ];
 		column: 'Class' text: [ :each | each methodClass name ] width: 200;
 		column: 'Method' text: [ :each | each methodName ]
+]
+
+{ #category : #'llm views' }
+GtLMethodsSearchResult >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
 ]
 
 { #category : #accessing }

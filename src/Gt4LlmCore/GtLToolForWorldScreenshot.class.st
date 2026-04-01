@@ -1,11 +1,11 @@
 Class {
 	#name : #GtLToolForWorldScreenshot,
-	#superclass : #GtLAbstractPlainSchemaFunctionTool,
+	#superclass : #GtLAbstractMagritteFunctionTool,
 	#instVars : [
 		'worldElementProvider',
 		'pngDataProvider'
 	],
-	#category : 'Gt4LlmCore-Tools'
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }
@@ -21,13 +21,13 @@ GtLToolForWorldScreenshot >> focusedWorldElement [
 ]
 
 { #category : #accessing }
-GtLToolForWorldScreenshot >> name [
-	^ 'worldScreenshot'
+GtLToolForWorldScreenshot >> isUsingDataViews [
+	^ true
 ]
 
 { #category : #accessing }
-GtLToolForWorldScreenshot >> parametersDescription [
-	^ #()
+GtLToolForWorldScreenshot >> name [
+	^ 'worldScreenshot'
 ]
 
 { #category : #private }

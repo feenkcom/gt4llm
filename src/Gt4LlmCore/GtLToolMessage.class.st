@@ -7,7 +7,7 @@ Class {
 		'executionState',
 		'requestResponse'
 	],
-	#category : 'Gt4LlmCore-Core'
+	#category : #'Gt4LlmCore-Core'
 }
 
 { #category : #accessing }
@@ -171,7 +171,6 @@ GtLToolMessage >> notifyExecutionStateChanged [
 
 { #category : #accessing }
 GtLToolMessage >> output [
-	<return: #TGtLDomainObject>
 	^ output
 ]
 

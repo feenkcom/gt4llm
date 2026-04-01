@@ -7,7 +7,7 @@ Class {
 	#instVars : [
 		'methods'
 	],
-	#category : 'Gt4LlmCore-Magritte Objects'
+	#category : #'Gt4LlmCore-Magritte Objects'
 }
 
 { #category : #views }
@@ -21,6 +21,13 @@ GtLMethodsRemovalResult >> gtMethodsFor: aView [
 			each isErrorDomainObject
 				ifTrue: [ each printString ]
 				ifFalse: [ each removedMethod methodReference methodSignature , ' — ' , each status ] ]
+]
+
+{ #category : #'llm views' }
+GtLMethodsRemovalResult >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
 ]
 
 { #category : #accessing }

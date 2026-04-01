@@ -28,6 +28,18 @@ GtLSmaCCParserReference >> gtClassCoderViewFor: aView [
 			container ]
 ]
 
+{ #category : #testing }
+GtLSmaCCParserReference >> isErrorDomainObject [
+	^ false
+]
+
+{ #category : #'llm views' }
+GtLSmaCCParserReference >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
+]
+
 { #category : #accessing }
 GtLSmaCCParserReference >> parserClass [
 	^ parserClass

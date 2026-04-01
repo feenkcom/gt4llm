@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'knowledgeBases'
 	],
-	#category : 'Gt4LlmCore-Magritte Objects'
+	#category : #'Gt4LlmCore-Magritte Objects'
 }
 
 { #category : #'gt-views' }
@@ -38,4 +38,11 @@ GtLLepiterKnowledgeBases >> knowledgeBasesDescription [
 		accessor: #knowledgeBases;
 		classes: {GtLLepiterKnowledgeBase};
 		beRequired
+]
+
+{ #category : #'llm views' }
+GtLLepiterKnowledgeBases >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
 ]

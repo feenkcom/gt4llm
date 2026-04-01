@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'database'
 	],
-	#category : 'Gt4LlmCore-Tools'
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }
@@ -26,6 +26,11 @@ GtLToolForLepiterSnippetEdit >> description [
 GtLToolForLepiterSnippetEdit >> initialize [
 	super initialize.
 	database := LeDatabasesRegistry defaultLogicalDatabase
+]
+
+{ #category : #'api - testing' }
+GtLToolForLepiterSnippetEdit >> isUsingDataViews [
+	^ true
 ]
 
 { #category : #accessing }

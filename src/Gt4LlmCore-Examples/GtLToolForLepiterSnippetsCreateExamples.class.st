@@ -1,17 +1,19 @@
 Class {
 	#name : #GtLToolForLepiterSnippetsCreateExamples,
 	#superclass : #Object,
+	#traits : 'TGtLInvalidInputDataAssertions',
+	#classTraits : 'TGtLInvalidInputDataAssertions classTrait',
 	#instVars : [
 		'logicalDatabase'
 	],
-	#category : 'Gt4LlmCore-Examples-Tools'
+	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
-{ #category : #'examples - mixed errors' }
+{ #category : #'examples - errors' }
 GtLToolForLepiterSnippetsCreateExamples >> allSnippetsWithErrors [
 	<gtExample>
 	"Creates multiple snippets where all fail with different errors"
-	| tool call result page model |
+	| tool call result page domainObject |
 	tool := self toolOnLogicalDatabase.
 	page := self pageInLogicalDatabase.
 	call := GtLFunctionToolCall new.
@@ -47,17 +49,17 @@ GtLToolForLepiterSnippetsCreateExamples >> allSnippetsWithErrors [
 				yourself } } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteBasedModel).
-	model := result model.
-	self assert: model snippets size equals: 4.
-	self assert: (model snippets allSatisfy: [ :each | each isKindOf: GtLMissingArgumentDomainObject ]).
-	^ call
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	domainObject := result targetObject.
+	self assert: domainObject snippets size equals: 4.
+	self assert: (domainObject snippets allSatisfy: [ :each | each isKindOf: GtLMissingArgumentDomainObject ]).
+	^ domainObject
 ]
 
-{ #category : #'examples - nil and empty' }
+{ #category : #'examples - errors' }
 GtLToolForLepiterSnippetsCreateExamples >> emptyExampleClassName [
 	<gtExample>
-	| tool call result page model |
+	| tool call result page domainObject |
 	tool := self toolOnLogicalDatabase.
 	page := self pageInLogicalDatabase.
 	call := GtLFunctionToolCall new.
@@ -73,16 +75,19 @@ GtLToolForLepiterSnippetsCreateExamples >> emptyExampleClassName [
 				yourself } } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteBasedModel).
-	model := result model.
-	self assert: model snippets first missingArgument equals: 'exampleClassName'.
-	^ call
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	domainObject := result targetObject.
+	self
+		assertMissingArgument: domainObject snippets first
+		withArgumentName: 'exampleClassName'
+		errorMessage: 'Missing argument called exampleClassName'.
+	^ domainObject
 ]
 
-{ #category : #'examples - nil and empty' }
+{ #category : #'examples - errors' }
 GtLToolForLepiterSnippetsCreateExamples >> emptyExampleMethodName [
 	<gtExample>
-	| tool call result page model |
+	| tool call result page domainObject |
 	tool := self toolOnLogicalDatabase.
 	page := self pageInLogicalDatabase.
 	call := GtLFunctionToolCall new.
@@ -98,16 +103,19 @@ GtLToolForLepiterSnippetsCreateExamples >> emptyExampleMethodName [
 				yourself } } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteBasedModel).
-	model := result model.
-	self assert: model snippets first missingArgument equals: 'exampleMethodName'.
-	^ call
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	domainObject := result targetObject.
+	self
+		assertMissingArgument: domainObject snippets first
+		withArgumentName: 'exampleMethodName'
+		errorMessage: 'Missing argument called exampleMethodName'.
+	^ domainObject
 ]
 
-{ #category : #'examples - nil and empty' }
+{ #category : #'examples - errors' }
 GtLToolForLepiterSnippetsCreateExamples >> emptyPharoCode [
 	<gtExample>
-	| tool call result page model |
+	| tool call result page domainObject |
 	tool := self toolOnLogicalDatabase.
 	page := self pageInLogicalDatabase.
 	call := GtLFunctionToolCall new.
@@ -122,16 +130,19 @@ GtLToolForLepiterSnippetsCreateExamples >> emptyPharoCode [
 				yourself } } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteBasedModel).
-	model := result model.
-	self assert: model snippets first missingArgument equals: 'snippetText'.
-	^ call
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	domainObject := result targetObject.
+	self
+		assertMissingArgument: domainObject snippets first
+		withArgumentName: 'snippetText'
+		errorMessage: 'Missing argument called snippetText'.
+	^ domainObject
 ]
 
-{ #category : #'examples - nil and empty' }
+{ #category : #'examples - errors' }
 GtLToolForLepiterSnippetsCreateExamples >> emptyPythonCode [
 	<gtExample>
-	| tool call result page model |
+	| tool call result page domainObject |
 	tool := self toolOnLogicalDatabase.
 	page := self pageInLogicalDatabase.
 	call := GtLFunctionToolCall new.
@@ -146,16 +157,19 @@ GtLToolForLepiterSnippetsCreateExamples >> emptyPythonCode [
 				yourself } } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteBasedModel).
-	model := result model.
-	self assert: model snippets first missingArgument equals: 'snippetText'.
-	^ call
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	domainObject := result targetObject.
+	self
+		assertMissingArgument: domainObject snippets first
+		withArgumentName: 'snippetText'
+		errorMessage: 'Missing argument called snippetText'.
+	^ domainObject
 ]
 
-{ #category : #'examples - nil and empty' }
+{ #category : #'examples - errors' }
 GtLToolForLepiterSnippetsCreateExamples >> emptyShellCode [
 	<gtExample>
-	| tool call result page model |
+	| tool call result page domainObject |
 	tool := self toolOnLogicalDatabase.
 	page := self pageInLogicalDatabase.
 	call := GtLFunctionToolCall new.
@@ -170,10 +184,13 @@ GtLToolForLepiterSnippetsCreateExamples >> emptyShellCode [
 				yourself } } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteBasedModel).
-	model := result model.
-	self assert: model snippets first missingArgument equals: 'snippetText'.
-	^ call
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	domainObject := result targetObject.
+	self
+		assertMissingArgument: domainObject snippets first
+		withArgumentName: 'snippetText'
+		errorMessage: 'Missing argument called snippetText'.
+	^ domainObject
 ]
 
 { #category : #examples }
@@ -187,10 +204,10 @@ GtLToolForLepiterSnippetsCreateExamples >> logicalDatabase [
 			logicalDatabase ]
 ]
 
-{ #category : #examples }
+{ #category : #'examples - errors' }
 GtLToolForLepiterSnippetsCreateExamples >> missingSnippetPageUid [
 	<gtExample>
-	| tool call result model |
+	| tool call result domainObject |
 	tool := self toolOnLogicalDatabase.
 	call := GtLFunctionToolCall new.
 	call rawArguments: {
@@ -204,35 +221,19 @@ GtLToolForLepiterSnippetsCreateExamples >> missingSnippetPageUid [
 				yourself } } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteBasedModel).
-	model := result model.
-	self assert: model snippets first missingArgument equals: 'pageUid'.
-	^ call
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	domainObject := result targetObject.
+	self
+		assertMissingArgument: domainObject snippets first
+		withArgumentName: 'pageUid'
+		errorMessage: 'Missing argument called pageUid'.
+	^ domainObject
 ]
 
-{ #category : #examples }
-GtLToolForLepiterSnippetsCreateExamples >> missingSnippets [
-	<gtExample>
-	| tool call result model |
-	tool := GtLToolForLepiterSnippetsCreate new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: {} asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteBasedModel).
-	
-	model := result model.
-	self assert: (model isKindOf: GtLMissingRequiredPropertiesDomainObject).
-	self assert: model missingPropertyNames equals: #('snippets').
-	self assert: model path equals: #(nil).
-	
-	^ call
-]
-
-{ #category : #examples }
+{ #category : #'examples - errors' }
 GtLToolForLepiterSnippetsCreateExamples >> missingSnippetText [
 	<gtExample>
-	| tool call result model page |
+	| tool call result page domainObject |
 	tool := self toolOnLogicalDatabase.
 	page := self pageInLogicalDatabase.
 	call := GtLFunctionToolCall new.
@@ -247,17 +248,41 @@ GtLToolForLepiterSnippetsCreateExamples >> missingSnippetText [
 				yourself } } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteBasedModel).
-	model := result model.
-	self assert: model snippets first missingArgument equals: 'snippetText'.
-	^ call
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	domainObject := result targetObject.
+	self
+		assertMissingArgument: domainObject snippets first
+		withArgumentName: 'snippetText'
+		errorMessage: 'Missing argument called snippetText'.
+	^ domainObject
 ]
 
-{ #category : #'examples - mixed errors' }
+{ #category : #'examples - errors' }
+GtLToolForLepiterSnippetsCreateExamples >> missingSnippets [
+	<gtExample>
+	| tool call result domainObject |
+	tool := GtLToolForLepiterSnippetsCreate new.
+	call := GtLFunctionToolCall new.
+	call rawArguments: {} asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	
+	domainObject := result targetObject.
+	self
+		assertMissingRequiredProperties: domainObject
+		withPropertyNames: #('snippets')
+		path: #(nil)
+		errorMessage: 'required properties missing [snippets]'.
+	
+	^ domainObject
+]
+
+{ #category : #'examples - errors' }
 GtLToolForLepiterSnippetsCreateExamples >> mixedSuccessAndErrorSnippets [
 	<gtExample>
 	"Creates multiple snippets where some succeed and some fail due to empty content"
-	| tool call result page model |
+	| tool call result page domainObject |
 	tool := self toolOnLogicalDatabase.
 	page := self pageInLogicalDatabase.
 	call := GtLFunctionToolCall new.
@@ -286,20 +311,20 @@ GtLToolForLepiterSnippetsCreateExamples >> mixedSuccessAndErrorSnippets [
 				yourself } } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteBasedModel).
-	model := result model.
-	self assert: model snippets size equals: 3.
-	self assert: model snippets first status equals: 'created'.
-	self assert: model snippets second missingArgument equals: 'snippetText'.
-	self assert: model snippets third status equals: 'created'.
-	^ call
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	domainObject := result targetObject.
+	self assert: domainObject snippets size equals: 3.
+	self assert: domainObject snippets first status equals: 'created'.
+	self assert: domainObject snippets second missingArgument equals: 'snippetText'.
+	self assert: domainObject snippets third status equals: 'created'.
+	^ domainObject
 ]
 
-{ #category : #'examples - mixed errors' }
+{ #category : #'examples - errors' }
 GtLToolForLepiterSnippetsCreateExamples >> multipleSnippetsWithDifferentErrors [
 	<gtExample>
 	"Creates multiple snippets with different types of errors"
-	| tool call result page model |
+	| tool call result page domainObject |
 	tool := self toolOnLogicalDatabase.
 	page := self pageInLogicalDatabase.
 	call := GtLFunctionToolCall new.
@@ -329,20 +354,20 @@ GtLToolForLepiterSnippetsCreateExamples >> multipleSnippetsWithDifferentErrors [
 				yourself } } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteBasedModel).
-	model := result model.
-	self assert: model snippets size equals: 3.
-	self assert: model snippets first missingArgument equals: 'pageUid'.
-	self assert: model snippets second missingArgument equals: 'snippetText'.
-	self assert: model snippets third missingArgument equals: 'exampleClassName'.
-	^ call
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	domainObject := result targetObject.
+	self assert: domainObject snippets size equals: 3.
+	self assert: domainObject snippets first missingArgument equals: 'pageUid'.
+	self assert: domainObject snippets second missingArgument equals: 'snippetText'.
+	self assert: domainObject snippets third missingArgument equals: 'exampleClassName'.
+	^ domainObject
 ]
 
-{ #category : #examples }
+{ #category : #'examples - errors' }
 GtLToolForLepiterSnippetsCreateExamples >> nilPageUidInTextSnippet [
 	<gtExample>
 	"Test that a null pageUid is caught by JSON schema validation."
-	| tool call result model |
+	| tool call result domainObject |
 	tool := self toolOnLogicalDatabase.
 	call := GtLFunctionToolCall new.
 	call rawArguments: {
@@ -356,18 +381,18 @@ GtLToolForLepiterSnippetsCreateExamples >> nilPageUidInTextSnippet [
 				yourself } } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteBasedModel).
-	model := result model.
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	domainObject := result targetObject.
 	"JSON schema validation returns an error for null in string slot"
-	self assert: (model isKindOf: GtLJSONSchemaValidationErrorDomainObject).
-	^ call
+	self assert: (domainObject isKindOf: GtLJSONSchemaValidationErrorDomainObject).
+	^ domainObject
 ]
 
-{ #category : #examples }
+{ #category : #'examples - errors' }
 GtLToolForLepiterSnippetsCreateExamples >> nilSnippetTextInTextSnippet [
 	<gtExample>
 	"Test that a null snippetText is caught by JSON schema validation."
-	| tool call result model page |
+	| tool call result page domainObject |
 	tool := self toolOnLogicalDatabase.
 	page := self pageInLogicalDatabase.
 	call := GtLFunctionToolCall new.
@@ -382,11 +407,11 @@ GtLToolForLepiterSnippetsCreateExamples >> nilSnippetTextInTextSnippet [
 				yourself } } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteBasedModel).
-	model := result model.
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	domainObject := result targetObject.
 	"JSON schema validation returns an error for null in required string slot"
-	self assert: (model isKindOf: GtLJSONSchemaValidationErrorDomainObject).
-	^ call
+	self assert: (domainObject isKindOf: GtLJSONSchemaValidationErrorDomainObject).
+	^ domainObject
 ]
 
 { #category : #examples }
@@ -399,11 +424,11 @@ GtLToolForLepiterSnippetsCreateExamples >> pageInLogicalDatabase [
 	^ page
 ]
 
-{ #category : #'examples - multiple types' }
+{ #category : #examples }
 GtLToolForLepiterSnippetsCreateExamples >> successfulAllSnippetTypesCreate [
 	<gtExample>
 	"Creates all supported snippet types including ExampleSnippet"
-	| tool call result page model |
+	| tool call result page domainObject |
 	tool := self toolOnLogicalDatabase.
 	page := self pageInLogicalDatabase.
 	call := GtLFunctionToolCall new.
@@ -447,17 +472,17 @@ GtLToolForLepiterSnippetsCreateExamples >> successfulAllSnippetTypesCreate [
 				yourself } } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteBasedModel).
-	model := result model.
-	self assert: model snippets size equals: 5.
-	self assert: (model snippets allSatisfy: [ :each | each status = 'created' ]).
-	^ call
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	domainObject := result targetObject.
+	self assert: domainObject snippets size equals: 5.
+	self assert: (domainObject snippets allSatisfy: [ :each | each status = 'created' ]).
+	^ domainObject
 ]
 
 { #category : #examples }
 GtLToolForLepiterSnippetsCreateExamples >> successfulExampleSnippetCreate [
 	<gtExample>
-	| tool call result page |
+	| tool call result page domainObject |
 	tool := self toolOnLogicalDatabase.
 	page := self pageInLogicalDatabase.
 	call := GtLFunctionToolCall new.
@@ -475,15 +500,17 @@ GtLToolForLepiterSnippetsCreateExamples >> successfulExampleSnippetCreate [
 				yourself } } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteBasedModel).
-	^ call
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	domainObject := result targetObject.
+	self assert: (domainObject isKindOf: GtLLepiterSnippetsDomainObject).
+	^ domainObject
 ]
 
-{ #category : #'examples - multiple types' }
+{ #category : #examples }
 GtLToolForLepiterSnippetsCreateExamples >> successfulMultipleSnippetTypesCreate [
 	<gtExample>
 	"Creates multiple snippets of different types: Text, Pharo, Python, Shell"
-	| tool call result page model |
+	| tool call result page domainObject |
 	tool := self toolOnLogicalDatabase.
 	page := self pageInLogicalDatabase.
 	call := GtLFunctionToolCall new.
@@ -519,17 +546,17 @@ GtLToolForLepiterSnippetsCreateExamples >> successfulMultipleSnippetTypesCreate 
 				yourself } } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteBasedModel).
-	model := result model.
-	self assert: model snippets size equals: 4.
-	self assert: (model snippets allSatisfy: [ :each | each status = 'created' ]).
-	^ call
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	domainObject := result targetObject.
+	self assert: domainObject snippets size equals: 4.
+	self assert: (domainObject snippets allSatisfy: [ :each | each status = 'created' ]).
+	^ domainObject
 ]
 
 { #category : #examples }
 GtLToolForLepiterSnippetsCreateExamples >> successfulPharoSnippetCreate [
 	<gtExample>
-	| tool call result page |
+	| tool call result page domainObject |
 	tool := self toolOnLogicalDatabase.
 	page := self pageInLogicalDatabase.
 	call := GtLFunctionToolCall new.
@@ -544,14 +571,16 @@ GtLToolForLepiterSnippetsCreateExamples >> successfulPharoSnippetCreate [
 				yourself } } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteBasedModel).
-	^ call
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	domainObject := result targetObject.
+	self assert: (domainObject isKindOf: GtLLepiterSnippetsDomainObject).
+	^ domainObject
 ]
 
 { #category : #examples }
 GtLToolForLepiterSnippetsCreateExamples >> successfulPythonSnippetCreate [
 	<gtExample>
-	| tool call result page |
+	| tool call result page domainObject |
 	tool := self toolOnLogicalDatabase.
 	page := self pageInLogicalDatabase.
 	call := GtLFunctionToolCall new.
@@ -566,14 +595,16 @@ GtLToolForLepiterSnippetsCreateExamples >> successfulPythonSnippetCreate [
 				yourself } } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteBasedModel).
-	^ call
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	domainObject := result targetObject.
+	self assert: (domainObject isKindOf: GtLLepiterSnippetsDomainObject).
+	^ domainObject
 ]
 
 { #category : #examples }
 GtLToolForLepiterSnippetsCreateExamples >> successfulShellSnippetCreate [
 	<gtExample>
-	| tool call result page |
+	| tool call result page domainObject |
 	tool := self toolOnLogicalDatabase.
 	page := self pageInLogicalDatabase.
 	call := GtLFunctionToolCall new.
@@ -588,14 +619,16 @@ GtLToolForLepiterSnippetsCreateExamples >> successfulShellSnippetCreate [
 				yourself } } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteBasedModel).
-	^ call
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	domainObject := result targetObject.
+	self assert: (domainObject isKindOf: GtLLepiterSnippetsDomainObject).
+	^ domainObject
 ]
 
 { #category : #examples }
 GtLToolForLepiterSnippetsCreateExamples >> successfulSnippetCreate [
 	<gtExample>
-	| tool call result page |
+	| tool call result page domainObject |
 	tool := self toolOnLogicalDatabase.
 	page := self pageInLogicalDatabase.
 	call := GtLFunctionToolCall new.
@@ -610,14 +643,16 @@ GtLToolForLepiterSnippetsCreateExamples >> successfulSnippetCreate [
 				yourself } } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteBasedModel).
-	^ call
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	domainObject := result targetObject.
+	self assert: (domainObject isKindOf: GtLLepiterSnippetsDomainObject).
+	^ domainObject
 ]
 
 { #category : #examples }
 GtLToolForLepiterSnippetsCreateExamples >> successfulSnippetsCreateMultiple [
 	<gtExample>
-	| tool call result page |
+	| tool call result page domainObject |
 	tool := self toolOnLogicalDatabase.
 	page := self pageInLogicalDatabase.
 	call := GtLFunctionToolCall new.
@@ -639,14 +674,16 @@ GtLToolForLepiterSnippetsCreateExamples >> successfulSnippetsCreateMultiple [
 				yourself } } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteBasedModel).
-	^ call
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	domainObject := result targetObject.
+	self assert: (domainObject isKindOf: GtLLepiterSnippetsDomainObject).
+	^ domainObject
 ]
 
 { #category : #examples }
 GtLToolForLepiterSnippetsCreateExamples >> successfulTextSnippetCreate [
 	<gtExample>
-	| tool call result page |
+	| tool call result domainObject page |
 	tool := self toolOnLogicalDatabase.
 	page := self pageInLogicalDatabase.
 	call := GtLFunctionToolCall new.
@@ -661,8 +698,10 @@ GtLToolForLepiterSnippetsCreateExamples >> successfulTextSnippetCreate [
 				yourself } } asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteBasedModel).
-	^ call
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	domainObject := result targetObject.
+	self assert: (domainObject isKindOf: GtLLepiterSnippetsDomainObject).
+	^ domainObject
 ]
 
 { #category : #examples }

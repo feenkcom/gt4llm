@@ -7,7 +7,7 @@ Class {
 		'snippetUid',
 		'snippet'
 	],
-	#category : 'Gt4LlmCore-Magritte Objects'
+	#category : #'Gt4LlmCore-Magritte Objects'
 }
 
 { #category : #'gt-views' }
@@ -19,6 +19,13 @@ GtLLepiterSnippetDomainObject >> gtSnippetFor: aView [
 		priority: 1;
 		object: [ snippet ];
 		view: #gtLiveFor:
+]
+
+{ #category : #'llm views' }
+GtLLepiterSnippetDomainObject >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
 ]
 
 { #category : #accessing }

@@ -10,7 +10,7 @@ Class {
 		'runtimeValues',
 		'rawArguments'
 	],
-	#category : 'Gt4LlmCore-Core'
+	#category : #'Gt4LlmCore-Core'
 }
 
 { #category : #accessing }
@@ -271,7 +271,6 @@ GtLFunctionToolCall >> responseInputForOpenAIResponsesAPI [
 
 { #category : #accessing }
 GtLFunctionToolCall >> result [
-	<return: #TGtLDomainObject>
 	^ result
 ]
 

@@ -1,6 +1,8 @@
 Class {
 	#name : #GtLSmaCCToolForParserCompilationExamples,
 	#superclass : #Object,
+	#traits : 'TGtLInvalidInputDataAssertions',
+	#classTraits : 'TGtLInvalidInputDataAssertions classTrait',
 	#category : #'Gt4Llm-SmaCC-Examples'
 }
 
@@ -11,10 +13,30 @@ GtLSmaCCToolForParserCompilationExamples >> cleanUp [
 ]
 
 { #category : #examples }
+GtLSmaCCToolForParserCompilationExamples >> compilationForMissingCompileParserArgument [
+	<gtExample>
+	| model tool call result domainObject |
+	model := self expressionParserModel.
+	tool := GtLSmaCCToolForParserCompilation new model: model.
+	call := GtLFunctionToolCall new.
+	call rawArguments: {} asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	domainObject := result targetObject.
+	self 
+		assertMissingRequiredProperties: domainObject 
+		withPropertyNames: #('compileParser') 
+		path: {nil} 
+		errorMessage: 'required properties missing [compileParser]'.
+	^ call
+]
+
+{ #category : #examples }
 GtLSmaCCToolForParserCompilationExamples >> compile [
 	<gtExample>
 	<after: #cleanUp>
-	| tool call result model |
+	| model tool call result domainObject |
 	model := self expressionParserModel.
 	tool := GtLSmaCCToolForParserCompilation new model: model.
 	call := GtLFunctionToolCall new.
@@ -23,15 +45,16 @@ GtLSmaCCToolForParserCompilationExamples >> compile [
 				asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteBasedModel).
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
 	self assert: call arguments size equals: 1.
 	self assert: (call arguments anyOne isKindOf: GtLSmaCCParserReference).
-	self assert: (result model isKindOf: GtLSmaCCParserReference).
-	self assert: result model parserClass equals: #TemporaryExpressionParser.
+	domainObject := result targetObject.
+	self assert: (domainObject isKindOf: GtLSmaCCParserReference).
+	self assert: domainObject parserClass equals: #TemporaryExpressionParser.
 
 	self assert: (Smalltalk globals includesKey: #TemporaryExpressionParser).
 	self assert: (Smalltalk globals includesKey: #TemporaryExpressionScanner).
-	^ call
+	^ domainObject
 ]
 
 { #category : #private }
@@ -53,7 +76,7 @@ Expression: Expression "+" <number>;')
 { #category : #examples }
 GtLSmaCCToolForParserCompilationExamples >> invalidParserClass [
 	<gtExample>
-	| tool call result model |
+	| model tool call result domainObject |
 	model := self expressionParserModel.
 	tool := GtLSmaCCToolForParserCompilation new model: model.
 	call := GtLFunctionToolCall new.
@@ -61,9 +84,10 @@ GtLSmaCCToolForParserCompilationExamples >> invalidParserClass [
 		rawArguments: {'compileParser' -> {'parserClass' -> 'AbcParser'} asDictionary} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result isKindOf: GtLMagritteBasedModel).
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
 	self assert: call arguments size equals: 1.
 	self assert: (call arguments anyOne isKindOf: GtLSmaCCParserReference).
-	self assert: result model isErrorDomainObject.
+	domainObject := result targetObject.
+	self assert: domainObject isErrorDomainObject.
 	^ call
 ]
