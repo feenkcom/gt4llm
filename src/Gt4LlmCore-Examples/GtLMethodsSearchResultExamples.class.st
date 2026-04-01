@@ -11,7 +11,7 @@ Class {
 GtLMethodsSearchResultExamples >> methodsSearchResultCreation [
 	<gtExample>
 	| references result |
-	references := { GtLToolForMethodReferences >> #name }.
+	references := { GtLMagritteToolForMethodReferences >> #name }.
 	result := GtLMethodsSearchResult fromReferences: references.
 	self assert: result foundMethods size equals: 1.
 	self assert: result foundMethods first methodName equals: #name.
