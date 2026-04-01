@@ -94,6 +94,13 @@ GtLFileInformation >> initializeFromFileReference: aFileReference [
 	permissions := aFileReference permissions printString
 ]
 
+{ #category : #'llm views' }
+GtLFileInformation >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
+]
+
 { #category : #accessing }
 GtLFileInformation >> modificationTime [
 	^ modificationTime

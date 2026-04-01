@@ -44,3 +44,10 @@ GtLFilesInformation >> gtFilesFor: aView [
 		column: 'Size' text: [ :each | each size printString ];
 		column: 'Permissions' text: [ :each | each permissions ]
 ]
+
+{ #category : #'llm views' }
+GtLFilesInformation >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
+]

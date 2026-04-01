@@ -39,3 +39,10 @@ GtLFilesContents >> gtFilesFor: aView [
 		column: 'Content' text: [ :each | 
 			(each contents first: (100 min: each contents size)) ]
 ]
+
+{ #category : #'llm views' }
+GtLFilesContents >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
+]

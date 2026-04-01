@@ -66,6 +66,13 @@ GtLMethodCompilationResult >> isErrorDomainObject [
 	^false
 ]
 
+{ #category : #'llm views' }
+GtLMethodCompilationResult >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
+]
+
 { #category : #accessing }
 GtLMethodCompilationResult >> newCompiledMethod [
 	^ newMethod compiledMethod
