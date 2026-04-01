@@ -25,3 +25,9 @@ GtWardleyMapNodeChangeSpecification >> nodeIdDescription [
 		  accessor: #nodeId;
 		  withUUIDFormatCommentWith: 'The id of the node'
 ]
+
+{ #category : #private }
+GtWardleyMapNodeChangeSpecification >> updateNewUidsUsing: aDictionary [
+	super updateNewUidsUsing: aDictionary.
+	aDictionary at: nodeId ifPresent: [ :id | nodeId := id ]
+]

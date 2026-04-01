@@ -45,7 +45,10 @@ GtLLepiterEditWardleyMapSnippetTransformationSpecification >> changes [
 
 { #category : #accessing }
 GtLLepiterEditWardleyMapSnippetTransformationSpecification >> changes: anObject [
-	changes := anObject
+	| idMap |
+	changes := anObject.
+	idMap := Dictionary new.
+	changes do: [ :each | each updateNewUidsUsing: idMap ]
 ]
 
 { #category : #accessing }

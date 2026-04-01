@@ -25,3 +25,9 @@ GtWardleyMapNoteChangeSpecification >> noteIdDescription [
 		  accessor: #noteId;
 		  withUUIDFormatCommentWith: 'The id of the note'
 ]
+
+{ #category : #private }
+GtWardleyMapNoteChangeSpecification >> updateNewUidsUsing: aDictionary [
+	super updateNewUidsUsing: aDictionary.
+	aDictionary at: noteId ifPresent: [ :id | noteId := id ]
+]

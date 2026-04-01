@@ -44,3 +44,10 @@ GtWardleyMapEdgeChangeSpecification >> toNodeIdDescription [
 		accessor: #toNodeId;
 		withUUIDFormatCommentWith: 'The id of the to node for the edge'
 ]
+
+{ #category : #private }
+GtWardleyMapEdgeChangeSpecification >> updateNewUidsUsing: aDictionary [
+	super updateNewUidsUsing: aDictionary.
+	aDictionary at: fromNodeId ifPresent: [ :id | fromNodeId := id ].
+	aDictionary at: toNodeId ifPresent: [ :id | toNodeId := id ]
+]
