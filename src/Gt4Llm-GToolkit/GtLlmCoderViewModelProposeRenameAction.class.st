@@ -38,7 +38,8 @@ GtLlmCoderViewModelProposeRenameAction >> addRenameAttributes [
 						add: (self pharoSourceCoderViewModel
 								addTextAttribute: attribute
 								from: each first
-								to: each last) ].
+								to: each last
+								documentId: documentId) ].
 			cursorInLocation := true ]
 ]
 

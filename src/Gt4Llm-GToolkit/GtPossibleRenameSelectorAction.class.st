@@ -68,11 +68,11 @@ GtPossibleRenameSelectorAction >> addRenameAttributes [
 						coordinateFocus: true;
 						styler: styler.
 				index := index + 1.
-
 				self pharoSourceCoderViewModel
 					addTextAttribute: attribute
 					from: each first
-					to: each last ].
+					to: each last
+					documentId: documentId ].
 
 	renameAttributes := coderAttributes
 			flatCollect: [ :eachCoderAttribute | eachCoderAttribute textAttributes ].
@@ -91,7 +91,8 @@ GtPossibleRenameSelectorAction >> addRenameAttributes [
 						original: original;
 						possibilities: self possibilities)
 				from: originalLocations last last
-				to: originalLocations last last)
+				to: originalLocations last last
+				documentId: documentId)
 ]
 
 { #category : #accessing }
