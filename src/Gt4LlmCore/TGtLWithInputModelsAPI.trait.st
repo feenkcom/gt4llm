@@ -1,6 +1,6 @@
 Trait {
 	#name : #TGtLWithInputModelsAPI,
-	#category : #'Gt4LlmCore-Core'
+	#category : 'Gt4LlmCore-Core'
 }
 
 { #category : #'api - message' }
@@ -22,9 +22,9 @@ TGtLWithInputModelsAPI >> addInputModel: aModel [
 
 { #category : #'api - message' }
 TGtLWithInputModelsAPI >> addPlainInputObject: anObject named: aString [
-	self addInputModel: (GtLPlainObjectModel 
-		forObject:  anObject
-		named: aString)
+	self addInputModel: (GtLPlainObjectModel new
+		model: anObject;
+		name: aString)
 ]
 
 { #category : #accessing }

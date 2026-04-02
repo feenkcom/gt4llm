@@ -8,7 +8,7 @@ Class {
 		'outputMessage',
 		'anotherProcessedMessage'
 	],
-	#category : #'Gt4Llm-OpenAI-Model'
+	#category : 'Gt4Llm-OpenAI-Model'
 }
 
 { #category : #accessing }

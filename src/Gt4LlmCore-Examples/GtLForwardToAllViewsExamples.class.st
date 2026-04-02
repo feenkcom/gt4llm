@@ -4,7 +4,7 @@ I provide examples for GtLForwardDataView forwarding to all views of an object.
 Class {
 	#name : #GtLForwardToAllViewsExamples,
 	#superclass : #GtLForwardObjectDataViewExamples,
-	#category : #'Gt4LlmCore-Examples-Data Views'
+	#category : 'Gt4LlmCore-Examples-Data Views'
 }
 
 { #category : #examples }

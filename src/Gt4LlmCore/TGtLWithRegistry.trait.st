@@ -3,7 +3,7 @@ Trait {
 	#instVars : [
 		'registry'
 	],
-	#category : #'Gt4LlmCore-Registry - Model'
+	#category : 'Gt4LlmCore-Registry - Model'
 }
 
 { #category : #'private - hooks' }

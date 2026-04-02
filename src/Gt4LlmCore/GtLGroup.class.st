@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'items'
 	],
-	#category : #'Gt4LlmCore-Core'
+	#category : 'Gt4LlmCore-Core'
 }
 
 { #category : #'as yet unclassified' }
@@ -365,15 +365,15 @@ GtLGroup >> removeLast [
 	self items removeLast
 ]
 
-{ #category : #accessing }
-GtLGroup >> reverseDo: aBlock [
-	^ self items reverseDo: aBlock
-]
-
 { #category : #enumerating }
 GtLGroup >> reversed [
 	^ self species 
 		withAll: (self items reversed)
+]
+
+{ #category : #accessing }
+GtLGroup >> reverseDo: aBlock [
+	^ self items reverseDo: aBlock
 ]
 
 { #category : #enumerating }

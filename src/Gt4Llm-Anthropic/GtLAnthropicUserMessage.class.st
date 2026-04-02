@@ -1,17 +1,16 @@
 Class {
 	#name : #GtLAnthropicUserMessage,
 	#superclass : #GtLChatMessage,
-	#traits : 'TGtLWithInstructionSectionAPI + TGtLWithInputModelsAPI',
-	#classTraits : 'TGtLWithInstructionSectionAPI classTrait + TGtLWithInputModelsAPI classTrait',
+	#traits : 'TGtLWithInstructionSectionAPI + TGtLWithInputModelsAPI + TGtLWithInputDataBlocks',
+	#classTraits : 'TGtLWithInstructionSectionAPI classTrait + TGtLWithInputModelsAPI classTrait + TGtLWithInputDataBlocks classTrait',
 	#instVars : [
 		'inputModels',
-		'content',
 		'attachments',
 		'requestResponse',
 		'executionStrategy',
 		'contentOneLineSummary'
 	],
-	#category : #'Gt4Llm-Anthropic-Client'
+	#category : 'Gt4Llm-Anthropic-Client'
 }
 
 { #category : #serialization }
@@ -42,27 +41,17 @@ GtLAnthropicUserMessage >> attachments: aCollection [
 GtLAnthropicUserMessage >> chat: aChat [
 	super chat: aChat.
 	self updateDataFromChat: aChat.
-	content := self computeContentFromInputModels.
+	contentDataBlock := self computeContentBlockFromInputModels.
 	contentOneLineSummary := self computeContentOneLineSummaryFromInputModels
 ]
 
 { #category : #'private - initialization' }
-GtLAnthropicUserMessage >> computeContentFromInputModels [
-	| object |
-	
-	object := NeoJSONObject new.
-	inputModels do: [ :each |
-		each addContentTo: object ].
-	
-	^ NeoJSONWriter toStringPretty: object
-]
-
-{ #category : #'private - initialization' }
 GtLAnthropicUserMessage >> computeContentOneLineSummaryFromInputModels [
-	^ String
-		streamContents: [ :aStream | 
-			inputModels
-				do: [ :each | each addContentOneLineSummaryTo: (ZnIgnoreNewLineWriterStream on: aStream) ]
+	^ String streamContents: [ :aStream | 
+			inputModels 
+				do: [ :each | 
+					each addContentOneLineSummaryTo: (ZnIgnoreNewLineWriterStream 
+						on: aStream) ]
 				separatedBy: [ aStream space ] ]
 ]
 
@@ -71,25 +60,21 @@ GtLAnthropicUserMessage >> configureWithCompactionExecution [
 	executionStrategy := GtLOpenAIMessageCompactionExecutionStrategy new
 ]
 
-{ #category : #'as yet unclassified' }
-GtLAnthropicUserMessage >> content [
-	^ content ifNil: [ self computeContentFromInputModels ]
-]
-
 { #category : #accessing }
 GtLAnthropicUserMessage >> contentOneLineMultiLabelSummaryWith: aBuilder [
-	inputModels do: [ :each | each contentOneLineMultiLabelSummaryWith: aBuilder ]
+	inputModels do: [ :each | 
+		each contentOneLineMultiLabelSummaryWith: aBuilder ]
 ]
 
 { #category : #'api - ui' }
 GtLAnthropicUserMessage >> contentOneLineSummary [
 	<return: #String>
-	^ contentOneLineSummary ifNil: [ self content ]
+	^ contentOneLineSummary ifNil: [ self contentText ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLAnthropicUserMessage >> contentText [
-	^ self content
+	^ NeoJSONWriter toStringPretty: self contentDataBlock llmJsonData
 ]
 
 { #category : #accessing }
@@ -127,7 +112,7 @@ GtLAnthropicUserMessage >> gtInstructionsFor: aView [
 	instructions ifNil: [ ^ aView empty ].
 	^ aView forward
 		title: 'Instructions';
-		priority: 40;
+		priority: 45;
 		object: [ instructions ];
 		view: #gtInstructionFor:
 ]
@@ -140,6 +125,50 @@ GtLAnthropicUserMessage >> gtToolsFor: aView [
 		priority: 30;
 		object: [ tools ];
 		view: #gtItemsFor:
+]
+
+{ #category : #ui }
+GtLAnthropicUserMessage >> gtViewMessageDataFor: aView [
+	<gtView>
+	<gtLlmView>
+	
+	^ aView forward
+		title: 'Message Data';
+		priority: 41;
+		object: [ self serializeForAnthropicMessagesAPI  ];
+		view: #gtItemsFor:;
+		actionButtonIcon: BrGlamorousVectorIcons inspect 
+			label: 'JSON' 
+			tooltip: 'Inspect message data'
+			action: [ :aButton |
+				aButton phlow spawnObject:   self serializeForAnthropicMessagesAPI ];
+		actionButtonIcon: BrGlamorousVectorIcons inspect 
+			label: 'Block' 
+			tooltip: 'Inspect Block data'
+			action: [ :aButton |
+				aButton phlow spawnObject:   self contentDataBlock]
+]
+
+{ #category : #ui }
+GtLAnthropicUserMessage >> gtViewMessageJsonFor: aView [
+	<gtView>
+	<gtLlmView>
+	
+	^ aView forward
+		title: 'Message JSON';
+		priority: 40;
+		object: [ self serializeForAnthropicMessagesAPI asGtJson ];
+		view: #gtJsonStringFor:;
+		actionButtonIcon: BrGlamorousVectorIcons inspect 
+			label: 'JSON' 
+			tooltip: 'Inspect JSON data'
+			action: [ :aButton |
+				aButton phlow spawnObject:   self serializeForAnthropicMessagesAPI asGtJson];
+		actionButtonIcon: BrGlamorousVectorIcons inspect 
+			label: 'Block' 
+			tooltip: 'Inspect Block data'
+			action: [ :aButton |
+				aButton phlow spawnObject:   self contentDataBlock]
 ]
 
 { #category : #initialization }
@@ -193,10 +222,15 @@ GtLAnthropicUserMessage >> role [
 
 { #category : #serialization }
 GtLAnthropicUserMessage >> serializeForAnthropicMessagesAPI [
-	^ {'content'
-			-> ({{'type' -> 'text'.
-						'text' -> self contentText} asDictionary}
-					, (self attachments
+	^ {'content' -> ({
+			{
+				'type' -> 'text'.
+				'text' -> self contentText
+			} asDictionary}
+			, (self contentDataBlock secondaryDataBlocks 
+					flatCollect: [:aDataBlock |
+						aDataBlock serializeForBedrockConverse ])
+			, (self attachments
 							collect: [ :each | each serializeToAnthropicResponseOutput ])).
 		'role' -> self role} asDictionary
 ]
