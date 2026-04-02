@@ -9,7 +9,7 @@ Class {
 
 { #category : #accessing }
 GtLLepiterSnippetTransformationSpecification >> pageUid [
-	^ UUID fromString: self pageUidString 
+	^ UUID gtFromString: self pageUidString 
 ]
 
 { #category : #accessing }

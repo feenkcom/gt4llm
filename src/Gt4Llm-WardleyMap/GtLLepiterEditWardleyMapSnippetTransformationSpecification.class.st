@@ -119,5 +119,5 @@ GtLLepiterEditWardleyMapSnippetTransformationSpecification >> snippetUid: anUid 
 
 { #category : #accessing }
 GtLLepiterEditWardleyMapSnippetTransformationSpecification >> wardleyMap [
-	^ self targetSnippet wardleyMap
+	^ [ self targetSnippet wardleyMap ] on: Error do: [ :ex | ex return: nil ]
 ]
