@@ -213,8 +213,8 @@ GtLOpenAIUserMessage >> serializeForOpenAIResponsesAPI [
 			} asDictionary}
 			, (self contentDataBlock secondaryDataBlocks 
 					flatCollect: [:aDataBlock |
-						aDataBlock serializeForBedrockConverse ])
+						aDataBlock serializeForOpenAI ])
 			, (self attachments
-							collect: [ :each | each serializeToAnthropicResponseOutput ])).
+							collect: [ :each | each serializeToOpenAIResponseOutput ])).
 		#role -> self role} asDictionary
 ]
