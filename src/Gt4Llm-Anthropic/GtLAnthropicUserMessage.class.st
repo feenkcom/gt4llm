@@ -10,7 +10,7 @@ Class {
 		'executionStrategy',
 		'contentOneLineSummary'
 	],
-	#category : 'Gt4Llm-Anthropic-Client'
+	#category : #'Gt4Llm-Anthropic-Client'
 }
 
 { #category : #serialization }
@@ -229,7 +229,7 @@ GtLAnthropicUserMessage >> serializeForAnthropicMessagesAPI [
 			} asDictionary}
 			, (self contentDataBlock secondaryDataBlocks 
 					flatCollect: [:aDataBlock |
-						aDataBlock serializeForBedrockConverse ])
+						aDataBlock serializeForAnthropic ])
 			, (self attachments
 							collect: [ :each | each serializeToAnthropicResponseOutput ])).
 		'role' -> self role} asDictionary
