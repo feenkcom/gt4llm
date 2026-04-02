@@ -11,7 +11,7 @@ Class {
 		'packageTag',
 		'classInstanceVariables'
 	],
-	#category : #'Gt4LlmCore-Magritte Objects'
+	#category : 'Gt4LlmCore-Magritte Objects'
 }
 
 { #category : #accessing }

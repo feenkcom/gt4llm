@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'content'
 	],
-	#category : #'Gt4LlmCore-Formats'
+	#category : 'Gt4LlmCore-Formats'
 }
 
 { #category : #'instance creation' }
@@ -125,4 +125,11 @@ GtLMarkdown >> gtMarkdownFor: aView [
 			tooltip: 'Copy contens to clipboard'
 			action: [ :b | 
 				GtClipboard clipboardText: content ]
+]
+
+{ #category : #'llm views' }
+GtLMarkdown >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
 ]

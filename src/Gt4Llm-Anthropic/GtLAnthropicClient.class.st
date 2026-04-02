@@ -10,7 +10,7 @@ Class {
 	#classVars : [
 		'ApiKeyFile'
 	],
-	#category : #'Gt4Llm-Anthropic-Client'
+	#category : 'Gt4Llm-Anthropic-Client'
 }
 
 { #category : #'as yet unclassified' }

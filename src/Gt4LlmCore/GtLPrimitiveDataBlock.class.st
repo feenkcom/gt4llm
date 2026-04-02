@@ -42,17 +42,22 @@ GtLPrimitiveDataBlock >> gtViewSerializationJSONFor: aView [
 				allNamed: #llmSerialization:
 				from: self class
 				to: Object) collect: [ :eachPragma |
-						eachPragma arguments first -> eachPragma methodSelector ] ];
+							eachPragma arguments first ->
+							([self perform: eachPragma methodSelector] 
+								on: Error do: [ :each | GtSystemUtility freeze: each]) ] ];
 			column: 'LLM' text: [ :assoc | assoc key ];
-			send: [ :assoc | [
-					(self perform: assoc value)  asGtJson] 
-							on: Error do: [ :each | GtSystemUtility freeze: each] ]
+			column: 'Object count' text: [ :assoc | 
+				assoc value isCollection ifTrue: [ assoc value size ] ifFalse: ['-'] ] width: 200;
+
+			send: [ :assoc | 
+				assoc value isCollection 
+					ifTrue: [(assoc value)  asGtJson]
+					ifFalse: [assoc value] ]
 ]
 
 { #category : #views }
 GtLPrimitiveDataBlock >> gtViewSerializationObjectsFor: aView [
 	<gtView>
-	<gtLlmMessageView>
 	
 	^ aView columnedList
 			title: 'LLM Objects';

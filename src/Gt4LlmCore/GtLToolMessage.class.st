@@ -7,18 +7,12 @@ Class {
 		'executionState',
 		'requestResponse'
 	],
-	#category : #'Gt4LlmCore-Core'
+	#category : 'Gt4LlmCore-Core'
 }
 
 { #category : #accessing }
 GtLToolMessage class >> leJsonV4Name [
 	^ #gtLToolMessage
-]
-
-{ #category : #visiting }
-GtLToolMessage >> acceptVisitor: aVisitor [
-
-	^ aVisitor visitGtLToolMessage: self
 ]
 
 { #category : #accessing }

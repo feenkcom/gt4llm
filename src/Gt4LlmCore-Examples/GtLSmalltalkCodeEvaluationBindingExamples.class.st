@@ -4,7 +4,7 @@ Examples for GtLSmalltalkCodeEvaluationBinding domain object.
 Class {
 	#name : #GtLSmalltalkCodeEvaluationBindingExamples,
 	#superclass : #GtLMagritteDomainObjectExamples,
-	#category : #'Gt4LlmCore-Examples-Domain Objects'
+	#category : 'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #examples }

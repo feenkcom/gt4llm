@@ -11,15 +11,3 @@ GtLPlainStringModel >> addContentOneLineSummaryTo: aWriteStream [
 		nextPutAll: 'String: ';
 		nextPutAll: model
 ]
-
-{ #category : #'as yet unclassified' }
-GtLPlainStringModel >> addContentTo: aDictionary [
-	aDictionary
-		at: name
-		put: model
-]
-
-{ #category : #'as yet unclassified' }
-GtLPlainStringModel >> addInstructionsTo: aMessageInstructions [
-
-]
