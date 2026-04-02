@@ -5,6 +5,9 @@ GtHomeMultiCardGetStartedSection >> gtLlmCard [
 	<gtSectionCard>
 	<gtExample>
 	<noTest>
+	GtLConnectionRegistry instance hasConnectableDefaultConnection
+		ifFalse: [ ^ GtHomeCard empty ].
+
 	^ GtHomeCard explicit
 		priority: 50;
 		stencil: [ | anElement |
