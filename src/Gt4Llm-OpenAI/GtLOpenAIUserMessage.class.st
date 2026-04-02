@@ -1,11 +1,10 @@
 Class {
 	#name : #GtLOpenAIUserMessage,
 	#superclass : #GtLChatMessage,
-	#traits : 'TGtLWithInstructionSectionAPI + TGtLWithInputModelsAPI',
-	#classTraits : 'TGtLWithInstructionSectionAPI classTrait + TGtLWithInputModelsAPI classTrait',
+	#traits : 'TGtLWithInstructionSectionAPI + TGtLWithInputModelsAPI + TGtLWithInputDataBlocks',
+	#classTraits : 'TGtLWithInstructionSectionAPI classTrait + TGtLWithInputModelsAPI classTrait + TGtLWithInputDataBlocks classTrait',
 	#instVars : [
 		'inputModels',
-		'content',
 		'attachments',
 		'requestResponse',
 		'executionStrategy',
@@ -13,11 +12,6 @@ Class {
 	],
 	#category : #'Gt4Llm-OpenAI'
 }
-
-{ #category : #serialization }
-GtLOpenAIUserMessage class >> leJsonV4Name [
-	^ #gtLOpenAIUserMessage
-]
 
 { #category : #'as yet unclassified' }
 GtLOpenAIUserMessage >> asTokenizableString [
@@ -42,19 +36,8 @@ GtLOpenAIUserMessage >> attachments: aCollection [
 GtLOpenAIUserMessage >> chat: aChat [
 	super chat: aChat.
 	self updateDataFromChat: aChat.
-	content := self computeContentFromInputModels.
+	contentDataBlock := self computeContentBlockFromInputModels.
 	contentOneLineSummary := self computeContentOneLineSummaryFromInputModels
-]
-
-{ #category : #'private - initialization' }
-GtLOpenAIUserMessage >> computeContentFromInputModels [
-	| object |
-	
-	object := NeoJSONObject new.
-	inputModels do: [ :each |
-		each addContentTo: object ].
-	
-	^ NeoJSONWriter toStringPretty: object
 ]
 
 { #category : #'private - initialization' }
@@ -71,11 +54,6 @@ GtLOpenAIUserMessage >> configureWithCompactionExecution [
 	executionStrategy := GtLOpenAIMessageCompactionExecutionStrategy new
 ]
 
-{ #category : #'as yet unclassified' }
-GtLOpenAIUserMessage >> content [
-	^ content ifNil: [ self computeContentFromInputModels ]
-]
-
 { #category : #accessing }
 GtLOpenAIUserMessage >> contentOneLineMultiLabelSummaryWith: aBuilder [
 	inputModels do: [ :each | each contentOneLineMultiLabelSummaryWith: aBuilder ]
@@ -84,12 +62,12 @@ GtLOpenAIUserMessage >> contentOneLineMultiLabelSummaryWith: aBuilder [
 { #category : #'api - ui' }
 GtLOpenAIUserMessage >> contentOneLineSummary [
 	<return: #String>
-	^ contentOneLineSummary ifNil: [ self content ]
+	^ contentOneLineSummary ifNil: [ self contentText ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLOpenAIUserMessage >> contentText [
-	^ self content
+	^ NeoJSONWriter toStringPretty: self contentDataBlock llmJsonData
 ]
 
 { #category : #accessing }
@@ -127,7 +105,7 @@ GtLOpenAIUserMessage >> gtInstructionsFor: aView [
 	instructions ifNil: [ ^ aView empty ].
 	^ aView forward
 		title: 'Instructions';
-		priority: 40;
+		priority: 45;
 		object: [ instructions ];
 		view: #gtInstructionFor:
 ]
@@ -140,6 +118,40 @@ GtLOpenAIUserMessage >> gtToolsFor: aView [
 		priority: 30;
 		object: [ tools ];
 		view: #gtItemsFor:
+]
+
+{ #category : #views }
+GtLOpenAIUserMessage >> gtViewMessageDataFor: aView [
+	<gtView>
+	<gtLlmView>
+	
+	^ aView forward
+		title: 'Message Data';
+		priority: 41;
+		object: [ self serializeForOpenAIResponsesAPI  ];
+		view: #gtItemsFor:;
+		actionButtonIcon: BrGlamorousVectorIcons inspect 
+			label: 'JSON' 
+			tooltip: 'Inspect message data'
+			action: [ :aButton |
+				aButton phlow spawnObject:   self serializeForOpenAIResponsesAPI ]
+]
+
+{ #category : #views }
+GtLOpenAIUserMessage >> gtViewMessageJsonFor: aView [
+	<gtView>
+	<gtLlmView>
+	
+	^ aView forward
+		title: 'Message JSON';
+		priority: 40;
+		object: [ self serializeForOpenAIResponsesAPI asGtJson ];
+		view: #gtJsonStringFor:;
+		actionButtonIcon: BrGlamorousVectorIcons inspect 
+			label: 'JSON' 
+			tooltip: 'Inspect JSON data'
+			action: [ :aButton |
+				aButton phlow spawnObject:   self serializeForOpenAIResponsesAPI asGtJson]
 ]
 
 { #category : #initialization }
@@ -194,9 +206,15 @@ GtLOpenAIUserMessage >> role [
 { #category : #serialization }
 GtLOpenAIUserMessage >> serializeForOpenAIResponsesAPI [
 	^ {#content
-			-> ({{'type' -> 'input_text'.
-						'text' -> self contentText} asDictionary}
+			-> ({
+			{
+				'type' -> 'input_text'.
+				'text' -> self contentText
+			} asDictionary}
+			, (self contentDataBlock secondaryDataBlocks 
+					flatCollect: [:aDataBlock |
+						aDataBlock serializeForOpenAI ])
 			, (self attachments
-					collect: [ :each | each serializeToOpenAIResponseOutput ])).
+							collect: [ :each | each serializeToOpenAIResponseOutput ])).
 		#role -> self role} asDictionary
 ]

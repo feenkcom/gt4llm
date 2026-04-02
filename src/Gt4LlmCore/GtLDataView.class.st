@@ -205,7 +205,6 @@ GtLDataView >> gtViewSerializationJSONFor: aView [
 { #category : #'gt - extensions' }
 GtLDataView >> gtViewSerializationObjectsFor: aView [
 	<gtView>
-	<gtLlmMessageView>
 	
 	^ aView forward
 			title: 'LLM Objects';

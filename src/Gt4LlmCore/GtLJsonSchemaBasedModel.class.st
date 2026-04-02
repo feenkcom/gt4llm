@@ -19,11 +19,6 @@ GtLJsonSchemaBasedModel >> addContentOneLineSummaryTo: aWriteStream [
 ]
 
 { #category : #adding }
-GtLJsonSchemaBasedModel >> addContentTo: aDictionary [
-	aDictionary at: name put: model  
-]
-
-{ #category : #adding }
 GtLJsonSchemaBasedModel >> addInstructionsTo: aMessageInstructions [
 
 	aMessageInstructions

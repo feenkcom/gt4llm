@@ -126,3 +126,10 @@ GtLMarkdown >> gtMarkdownFor: aView [
 			action: [ :b | 
 				GtClipboard clipboardText: content ]
 ]
+
+{ #category : #'llm views' }
+GtLMarkdown >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
+]
