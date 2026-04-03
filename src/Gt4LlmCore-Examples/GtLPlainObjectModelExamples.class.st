@@ -5,21 +5,6 @@ Class {
 }
 
 { #category : #assertions }
-GtLPlainObjectModelExamples >> assertCompositeDataView: aDataView hasTitle: aTitle dataKey: aDataKey viewsCount: aCount [
-	"Assert that the data view is a composite view with the expected title, data key and number of contained views"
-	self assert: aDataView class equals: GtLCompositeDataView.
-	self assert: aDataView title equals: aTitle.
-	self assert: aDataView dataKey equals: aDataKey.
-	self assert: aDataView dataViews size equals: aCount
-]
-
-{ #category : #assertions }
-GtLPlainObjectModelExamples >> assertCompositeDataView: aDataView hasTitle: aTitle viewsCount: aCount [
-	"Assert that the data view is a composite view with the expected title, nil data key and number of contained views"
-	self assertCompositeDataView: aDataView hasTitle: aTitle dataKey: nil viewsCount: aCount
-]
-
-{ #category : #assertions }
 GtLPlainObjectModelExamples >> assertDataBlockHasOnlyJsonData: dataBlock [
 	"Assert that the data block is valid and contains only JSON data (no images or secondary blocks)"
 	self assert: dataBlock isNotNil.
@@ -28,27 +13,6 @@ GtLPlainObjectModelExamples >> assertDataBlockHasOnlyJsonData: dataBlock [
 	self assert: dataBlock secondaryDataBlocks isEmpty.
 	self assert: dataBlock dataBlocks size equals: 1.
 	self assert: dataBlock dataBlocks first == dataBlock compositeJsonDataBlock
-]
-
-{ #category : #assertions }
-GtLPlainObjectModelExamples >> assertForwardObjectDataView: aDataView hasDataKey: aDataKey targetObject: anObject [
-	"Assert that the data view is a forward object data view with the expected data key, target object and default view symbol"
-	self assertForwardObjectDataView: aDataView hasDataKey: aDataKey targetObject: anObject viewSymbol: #llmDataViewsFor:
-]
-
-{ #category : #assertions }
-GtLPlainObjectModelExamples >> assertForwardObjectDataView: aDataView hasDataKey: aDataKey targetObject: anObject viewSymbol: aSymbol [
-	"Assert that the data view is a forward object data view with the expected data key, target object and view symbol"
-	self assert: aDataView class equals: GtLForwardObjectDataView.
-	self assert: aDataView dataKey equals: aDataKey.
-	self assert: aDataView targetObject equals: anObject.
-	self assert: aDataView viewSymbol equals: aSymbol
-]
-
-{ #category : #assertions }
-GtLPlainObjectModelExamples >> assertForwardObjectDataView: aDataView hasTargetObject: anObject [
-	"Assert that the data view is a forward object data view with no data key and the expected target object"
-	self assertForwardObjectDataView: aDataView hasDataKey: nil targetObject: anObject
 ]
 
 { #category : #'examples - support' }
@@ -74,17 +38,36 @@ GtLPlainObjectModelExamples >> objectWithJsonView [
 	^ testObject
 ]
 
-{ #category : #'examples - views' }
+{ #category : #'examples - support' }
+GtLPlainObjectModelExamples >> objectWithTwoJsonViews [
+	<gtExample>
+	<return: #GtLObjectWithJsonViewsForExamples>
+	| testObject |
+	testObject := GtLObjectWithJsonViewsForExamples new.
+	testObject firstValue: 42.
+	testObject secondValue: 99.
+	testObject firstJsonViewEnabled: true.
+	testObject secondJsonViewEnabled: true.
+	testObject firstJsonViewDataKey: 'firstKey'.
+	testObject secondJsonViewDataKey: 'secondKey'.
+	^ testObject
+]
+
+{ #category : #examples }
 GtLPlainObjectModelExamples >> plainObjectModelWithJsonViewMainDataView [
 	<gtExample>
 	<return: #GtLCompositeDataView>
-	| plainObjectModel mainDataView |
+	| plainObjectModel mainDataView forwardedView |
 	plainObjectModel := self plainObjectModelWithObjectWithJsonView.
 	mainDataView := plainObjectModel mainDataView.
 	
 	self assertCompositeDataView: mainDataView hasTitle: 'Object views' dataKey: 'testObject' viewsCount: 1.
 	self assertForwardObjectDataView: mainDataView dataViews first hasTargetObject: plainObjectModel model.
-	self assertCompositeDataView: mainDataView dataViews first computeForwardedView hasTitle: 'Object views' viewsCount: 2.
+	
+	forwardedView := mainDataView dataViews first computeForwardedView.
+	self assertCompositeDataView: forwardedView hasTitle: 'Object views' viewsCount: 2.
+	self assertCompositeView: forwardedView hasJsonDataViewWithDataKey: nil.
+	self assertCompositeView: forwardedView hasEmptyDataViewWithDataKey: nil.
 	
 	^ mainDataView
 ]
@@ -127,17 +110,20 @@ GtLPlainObjectModelExamples >> plainObjectModelWithMarkdown [
 	^ plainObjectModel
 ]
 
-{ #category : #'examples - views' }
+{ #category : #examples }
 GtLPlainObjectModelExamples >> plainObjectModelWithMarkdownMainDataView [
 	<gtExample>
 	<return: #GtLCompositeDataView>
-	| plainObjectModel mainDataView |
+	| plainObjectModel mainDataView forwardedView |
 	plainObjectModel := self plainObjectModelWithMarkdown.
 	mainDataView := plainObjectModel mainDataView.
 	
 	self assertCompositeDataView: mainDataView hasTitle: 'Object views' dataKey: 'testMarkdown' viewsCount: 1.
 	self assertForwardObjectDataView: mainDataView dataViews first hasTargetObject: plainObjectModel model.
-	self assertCompositeDataView: mainDataView dataViews first computeForwardedView hasTitle: 'Object views' viewsCount: 1.
+	
+	forwardedView := mainDataView dataViews first computeForwardedView.
+	self assertCompositeDataView: forwardedView hasTitle: 'Object views' viewsCount: 1.
+	self assertCompositeView: forwardedView hasMagritteDataViewWithDataKey: nil.
 	
 	^ mainDataView
 ]
@@ -177,4 +163,65 @@ GtLPlainObjectModelExamples >> plainObjectModelWithObjectWithJsonView [
 	self assert: plainObjectModel targetObject equals: plainObjectModel model.
 	
 	^ plainObjectModel
+]
+
+{ #category : #'examples - support' }
+GtLPlainObjectModelExamples >> plainObjectModelWithTwoJsonViews [
+	<gtExample>
+	<return: #GtLPlainObjectModel>
+	| plainObjectModel |
+	plainObjectModel := GtLPlainObjectModel new
+		name: 'testTwoViews';
+		model: self objectWithTwoJsonViews.
+	
+	self assert: plainObjectModel name equals: 'testTwoViews'.
+	self assert: plainObjectModel model class equals: GtLObjectWithJsonViewsForExamples.
+	
+	^ plainObjectModel
+]
+
+{ #category : #'examples - views' }
+GtLPlainObjectModelExamples >> plainObjectModelWithTwoJsonViewsMainDataView [
+	<gtExample>
+	<return: #GtLCompositeDataView>
+	| plainObjectModel mainDataView forwardedView |
+	plainObjectModel := self plainObjectModelWithTwoJsonViews.
+	mainDataView := plainObjectModel mainDataView.
+	
+	self assertCompositeDataView: mainDataView hasTitle: 'Object views' dataKey: 'testTwoViews' viewsCount: 1.
+	self assertForwardObjectDataView: mainDataView dataViews first hasTargetObject: plainObjectModel model.
+	
+	forwardedView := mainDataView dataViews first computeForwardedView.
+	self assertCompositeDataView: forwardedView hasTitle: 'Object views' viewsCount: 2.
+	self assertCompositeView: forwardedView hasJsonDataViewWithDataKey: 'firstKey'.
+	self assertCompositeView: forwardedView hasJsonDataViewWithDataKey: 'secondKey'.
+	
+	^ mainDataView
+]
+
+{ #category : #'examples - serialization' }
+GtLPlainObjectModelExamples >> plainObjectModelWithTwoJsonViewsSerialization [
+	<gtExample>
+	<return: #GtLPrimitiveMessageDataBlock>
+	| mainDataView dataBlock jsonData innerData |
+	mainDataView := self plainObjectModelWithTwoJsonViewsMainDataView.
+	dataBlock := mainDataView serializeToLlmPrimiteData.
+	
+	self assertDataBlockHasOnlyJsonData: dataBlock.
+	
+	jsonData := dataBlock llmJsonData.
+	self assert: jsonData keys asSet equals: #('testTwoViews') asSet.
+	
+	innerData := jsonData at: 'testTwoViews'.
+	self assert: innerData keys asSet equals: #('firstKey' 'secondKey') asSet.
+	self assert: (innerData at: 'firstKey') equals: (NeoJSONObject new
+		at: 'type' put: 'first';
+		at: 'value' put: 42;
+		yourself).
+	self assert: (innerData at: 'secondKey') equals: (NeoJSONObject new
+		at: 'type' put: 'second';
+		at: 'value' put: 99;
+		yourself).
+	
+	^ dataBlock
 ]
