@@ -12,7 +12,7 @@ GtWardleyMapRemoveNoteChangeSpecification class >> jsonSchemaLabel [
 { #category : #changes }
 GtWardleyMapRemoveNoteChangeSpecification >> asChangeIn: aWardleyMapModel [
 	^ (GtWardleyMapRemoveNoteChange onMap: aWardleyMapModel)
-		note: (self noteWithId: noteId in: aWardleyMapModel);
+		noteId: noteId;
 		yourself
 ]
 
