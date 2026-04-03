@@ -15,26 +15,14 @@ GtLLepiterPageModel class >> forPage: aPage [
 GtLLepiterPageModel >> addContentOneLineSummaryTo: aWriteStream [
 	aWriteStream
 		nextPutAll: 'Page: ';
-		nextPutAll: (model ifNotNil: [ :aPage | aPage title asString ] ifNil: [ '<missing page>' ])
-]
-
-{ #category : #adding }
-GtLLepiterPageModel >> addContentTo: aDictionary [
-	aDictionary 
-		at: name
-		put: (LeJsonV4 uniqueInstance serializePretty: model)
-]
-
-{ #category : #adding }
-GtLLepiterPageModel >> addInstructionsTo: aMessageInstructions [
-	"No instructions now for a Lepiter page"
+		nextPutAll: (model 
+			ifNil: [ '<missing page>' ]
+			ifNotNil: [ :aPage | aPage title asString ])
 ]
 
 { #category : #printing }
 GtLLepiterPageModel >> printOn: aStream [
-
-	super printOn: aStream.
-	
-	aStream parenthesize: [
-		aStream << model title ]
+	aStream 
+			<< 'Page title: ';
+			<< model title 
 ]

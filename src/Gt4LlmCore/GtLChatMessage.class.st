@@ -14,48 +14,8 @@ Class {
 }
 
 { #category : #accessing }
-GtLChatMessage class >> deSerializeAllImplementorsInstances [
-	"Answer a collection of instances to be tested for serialisation / deserialisation"
-
-	^ self name = #GtLChatMessage
-		ifTrue: [ #() ]
-		ifFalse: [ { self new } ]
-]
-
-{ #category : #accessing }
-GtLChatMessage class >> leJsonV4AttributeMapping [
-
-	^ OrderedCollection new 
-		"add: #rawData -> #rawData;
-		add: #client -> #client;"
-		add: #contentText -> #content;
-		add: #role -> #role;
-		add: #id -> #id;
-		add: #createdAt -> #createdAt;
-"		add: #images -> #imageStrings;"
-		yourself.
-]
-
-{ #category : #'instance creation' }
-GtLChatMessage class >> rolesToClasses [
-	^ {('tool' -> GtLToolMessage)} asDictionary
-]
-
-{ #category : #visiting }
-GtLChatMessage >> acceptVisitor: aVisitor [
-
-	^ aVisitor visitGtLChatMessage: self
-]
-
-{ #category : #accessing }
 GtLChatMessage >> addResponseFormat: aFormatDescription [
 	formatDescriptions addResponseFormat: aFormatDescription
-]
-
-{ #category : #accessing }
-GtLChatMessage >> addResponseFormatForMagrite: aClass named: aString [
-	self deprecated: 'use addResponseFormatForMagritte:named:' transformWith: '`@rcv addResponseFormatForMagrite: `@arg1 named: `@arg2' -> '`@rcv addResponseFormatForMagritte: `@arg1 named: `@arg2'.
-	^ self addResponseFormatForMagritte: aClass named: aString.
 ]
 
 { #category : #accessing }
@@ -125,11 +85,6 @@ GtLChatMessage >> contentOneLineSummary [
 { #category : #accessing }
 GtLChatMessage >> contentText [
 	^ self subclassResponsibility
-]
-
-{ #category : #accessing }
-GtLChatMessage >> contentText: aString [
-	"do nothing by default. here for automatic serialization compatibility"
 ]
 
 { #category : #accessing }
@@ -316,7 +271,7 @@ GtLChatMessage >> id: anId [
 GtLChatMessage >> initialize [
 	super initialize.
 	
-	id := self uuidClass new.
+	id := UUID new.
 	createdAt := DateAndTime now.
 	
 	formatDescriptions := GtLResponseCompositeFormat new.
@@ -475,12 +430,6 @@ GtLChatMessage >> updateDataFromMessage: aPreviousMessage [
 	formatDescriptions hasSchemaDescriptors ifFalse: [
 		formatDescriptions addCompositeFormat: aPreviousMessage formatDescriptions ].
 	(tools isNil or: [tools isEmpty]) ifTrue: [ tools := aPreviousMessage tools ]
-]
-
-{ #category : #accessing }
-GtLChatMessage >> uuidClass [
-	"This is in a separate method in an extension package to be able to compile the base class to Gemstone"
-	^ UUID
 ]
 
 { #category : #'api - converting' }

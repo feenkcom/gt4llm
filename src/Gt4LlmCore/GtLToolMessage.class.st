@@ -11,17 +11,6 @@ Class {
 }
 
 { #category : #accessing }
-GtLToolMessage class >> leJsonV4Name [
-	^ #gtLToolMessage
-]
-
-{ #category : #visiting }
-GtLToolMessage >> acceptVisitor: aVisitor [
-
-	^ aVisitor visitGtLToolMessage: self
-]
-
-{ #category : #accessing }
 GtLToolMessage >> action [
 	^ self toolCall humanReadable
 ]

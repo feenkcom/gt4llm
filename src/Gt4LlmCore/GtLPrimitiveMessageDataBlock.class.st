@@ -52,7 +52,7 @@ GtLPrimitiveMessageDataBlock >> gtPhlowTreeChildren [
 GtLPrimitiveMessageDataBlock >> gtViewCondensedJsonDataFor: aView [
 	<gtView>
 	^(aView forward)
-		title: 'Condensed JSON Data';
+		title: 'JSON Data';
 		priority: 15;
 		object: [self compositeJsonDataBlock];
 		view: #gtViewJsonDataFor:
@@ -62,7 +62,7 @@ GtLPrimitiveMessageDataBlock >> gtViewCondensedJsonDataFor: aView [
 GtLPrimitiveMessageDataBlock >> gtViewCondensedJsonStringFor: aView [
 	<gtView>
 	^(aView forward)
-		title: 'Condensed JSON String';
+		title: 'JSON String';
 		priority: 15.1;
 		object: [self compositeJsonDataBlock];
 		view: #gtViewJsonStringFor:
@@ -91,6 +91,19 @@ GtLPrimitiveMessageDataBlock >> initialize [
 	
 	compositeJsonDataBlock := GtLPrimitiveCompositeJsonGenericDataBlock new.
 	imageDataBlocks := OrderedCollection new.
+]
+
+{ #category : #utils }
+GtLPrimitiveMessageDataBlock >> llmJsonData [
+	^compositeJsonDataBlock llmJsonData
+]
+
+{ #category : #accessing }
+GtLPrimitiveMessageDataBlock >> secondaryDataBlocks [
+	| blocks |
+	blocks := OrderedCollection new.
+	blocks addAll: imageDataBlocks.
+	^ blocks
 ]
 
 { #category : #serialization }

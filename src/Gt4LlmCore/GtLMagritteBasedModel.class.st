@@ -13,14 +13,6 @@ GtLMagritteBasedModel >> addContentOneLineSummaryTo: aStringStream [
 ]
 
 { #category : #adding }
-GtLMagritteBasedModel >> addContentTo: aDictionary [
-	| exporter dict |
-	exporter := GtMagritteJSONDataExporter forObject: model.
-	dict := exporter exportObject asDictionary.
-	aDictionary at: name put: dict
-]
-
-{ #category : #adding }
 GtLMagritteBasedModel >> addInstructionsTo: aMessageInstructions [
 	| exporter |
 	exporter := GtMagritteJSONSchemaExporter
@@ -33,20 +25,15 @@ GtLMagritteBasedModel >> addInstructionsTo: aMessageInstructions [
 ]
 
 { #category : #views }
-GtLMagritteBasedModel >> gtSpawnModelFor: anAction [
-	<gtAction>
-	^ anAction button
-		icon: BrGlamorousVectorIcons inspect;
-		label: 'Model';
-		tooltip: 'Spawn the model';
-		action: [ :button | button phlow spawnObject: model ]
+GtLMagritteBasedModel >> llmModelDataViewsFor: aDataView [
+	<gtLlmDataView>
+	
+	^aDataView magritteObject: [ self model]
 ]
 
 { #category : #printing }
 GtLMagritteBasedModel >> printOn: aStream [
-
-	super printOn: aStream.
-	
-	aStream parenthesize: [
-		aStream print: model ]
+	aStream 
+		<< 'Magritte Model: ';
+		print: model 
 ]
