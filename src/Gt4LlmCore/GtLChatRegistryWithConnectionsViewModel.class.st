@@ -7,7 +7,7 @@ Class {
 		'selectedConnection',
 		'selectedDescription'
 	],
-	#category : 'Gt4LlmCore-UI - View Models'
+	#category : #'Gt4LlmCore-UI - View Models'
 }
 
 { #category : #'as yet unclassified' }

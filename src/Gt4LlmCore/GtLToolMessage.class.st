@@ -7,13 +7,8 @@ Class {
 		'executionState',
 		'requestResponse'
 	],
-	#category : 'Gt4LlmCore-Core'
+	#category : #'Gt4LlmCore-Core'
 }
-
-{ #category : #accessing }
-GtLToolMessage class >> leJsonV4Name [
-	^ #gtLToolMessage
-]
 
 { #category : #accessing }
 GtLToolMessage >> action [

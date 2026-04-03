@@ -12,7 +12,7 @@ Class {
 		'traitCompositionString',
 		'packageTagName'
 	],
-	#category : 'Gt4LlmCore-Magritte Objects'
+	#category : #'Gt4LlmCore-Magritte Objects'
 }
 
 { #category : #'instance creation' }

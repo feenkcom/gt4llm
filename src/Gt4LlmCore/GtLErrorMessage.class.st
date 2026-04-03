@@ -6,17 +6,12 @@ Class {
 		'otherExceptions',
 		'inputMessage'
 	],
-	#category : 'Gt4LlmCore-Core'
+	#category : #'Gt4LlmCore-Core'
 }
 
 { #category : #'instance creation' }
 GtLErrorMessage class >> freeze: anError [ 
 	^ self new freeze: anError
-]
-
-{ #category : #accessing }
-GtLErrorMessage class >> leJsonV4Name [
-	^ #gtLErrorMessage
 ]
 
 { #category : #accessing }
