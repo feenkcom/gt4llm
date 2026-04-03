@@ -1,11 +1,11 @@
 Class {
-	#name : #GtLPlainObjectModelExamples,
+	#name : #GtLWrappedObjectModelExamples,
 	#superclass : #GtLWrappedModelExamples,
 	#category : #'Gt4LlmCore-Examples'
 }
 
 { #category : #assertions }
-GtLPlainObjectModelExamples >> assertDataBlockHasOnlyJsonData: dataBlock [
+GtLWrappedObjectModelExamples >> assertDataBlockHasOnlyJsonData: dataBlock [
 	"Assert that the data block is valid and contains only JSON data (no images or secondary blocks)"
 	self assert: dataBlock isNotNil.
 	self assert: dataBlock class equals: GtLPrimitiveMessageDataBlock.
@@ -16,7 +16,7 @@ GtLPlainObjectModelExamples >> assertDataBlockHasOnlyJsonData: dataBlock [
 ]
 
 { #category : #'examples - support' }
-GtLPlainObjectModelExamples >> markdownObject [
+GtLWrappedObjectModelExamples >> markdownObject [
 	<gtExample>
 	<return: #GtLMarkdown>
 	| markdown |
@@ -26,7 +26,7 @@ GtLPlainObjectModelExamples >> markdownObject [
 ]
 
 { #category : #'examples - support' }
-GtLPlainObjectModelExamples >> objectWithJsonView [
+GtLWrappedObjectModelExamples >> objectWithJsonView [
 	<gtExample>
 	<return: #GtLObjectWithJsonViewsForExamples>
 	| testObject |
@@ -39,7 +39,7 @@ GtLPlainObjectModelExamples >> objectWithJsonView [
 ]
 
 { #category : #'examples - support' }
-GtLPlainObjectModelExamples >> objectWithTwoJsonViews [
+GtLWrappedObjectModelExamples >> objectWithTwoJsonViews [
 	<gtExample>
 	<return: #GtLObjectWithJsonViewsForExamples>
 	| testObject |
@@ -53,16 +53,16 @@ GtLPlainObjectModelExamples >> objectWithTwoJsonViews [
 	^ testObject
 ]
 
-{ #category : #examples }
-GtLPlainObjectModelExamples >> plainObjectModelWithJsonViewMainDataView [
+{ #category : #'examples - views' }
+GtLWrappedObjectModelExamples >> wrappedObjectModelWithJsonViewMainDataView [
 	<gtExample>
 	<return: #GtLCompositeDataView>
-	| plainObjectModel mainDataView forwardedView |
-	plainObjectModel := self plainObjectModelWithObjectWithJsonView.
-	mainDataView := plainObjectModel mainDataView.
+	| wrappedObjectModel mainDataView forwardedView |
+	wrappedObjectModel := self wrappedObjectModelWithObjectWithJsonView.
+	mainDataView := wrappedObjectModel mainDataView.
 	
 	self assertCompositeDataView: mainDataView hasTitle: 'Object views' dataKey: 'testObject' viewsCount: 1.
-	self assertForwardObjectDataView: mainDataView dataViews first hasTargetObject: plainObjectModel model.
+	self assertForwardObjectDataView: mainDataView dataViews first hasTargetObject: wrappedObjectModel model.
 	
 	forwardedView := mainDataView dataViews first computeForwardedView.
 	self assertCompositeDataView: forwardedView hasTitle: 'Object views' viewsCount: 2.
@@ -73,11 +73,11 @@ GtLPlainObjectModelExamples >> plainObjectModelWithJsonViewMainDataView [
 ]
 
 { #category : #'examples - serialization' }
-GtLPlainObjectModelExamples >> plainObjectModelWithJsonViewSerialization [
+GtLWrappedObjectModelExamples >> wrappedObjectModelWithJsonViewSerialization [
 	<gtExample>
 	<return: #GtLPrimitiveMessageDataBlock>
 	| mainDataView dataBlock jsonData expectedJsonData |
-	mainDataView := self plainObjectModelWithJsonViewMainDataView.
+	mainDataView := self wrappedObjectModelWithJsonViewMainDataView.
 	dataBlock := mainDataView serializeToLlmPrimiteData.
 	
 	self assertDataBlockHasOnlyJsonData: dataBlock.
@@ -94,32 +94,32 @@ GtLPlainObjectModelExamples >> plainObjectModelWithJsonViewSerialization [
 	^ dataBlock
 ]
 
-{ #category : #examples }
-GtLPlainObjectModelExamples >> plainObjectModelWithMarkdown [
+{ #category : #'examples - support' }
+GtLWrappedObjectModelExamples >> wrappedObjectModelWithMarkdown [
 	<gtExample>
-	<return: #GtLPlainObjectModel>
-	| plainObjectModel |
-	plainObjectModel := GtLPlainObjectModel new.
-	plainObjectModel name: 'testMarkdown'.
-	plainObjectModel model: self markdownObject.
+	<return: #GtLWrappedObjectModel>
+	| wrappedObjectModel |
+	wrappedObjectModel := GtLWrappedObjectModel new.
+	wrappedObjectModel name: 'testMarkdown'.
+	wrappedObjectModel model: self markdownObject.
 	
-	self assert: plainObjectModel name equals: 'testMarkdown'.
-	self assert: plainObjectModel model class equals: GtLMarkdown.
-	self assert: plainObjectModel targetObject equals: plainObjectModel model.
+	self assert: wrappedObjectModel name equals: 'testMarkdown'.
+	self assert: wrappedObjectModel model class equals: GtLMarkdown.
+	self assert: wrappedObjectModel targetObject equals: wrappedObjectModel model.
 	
-	^ plainObjectModel
+	^ wrappedObjectModel
 ]
 
-{ #category : #examples }
-GtLPlainObjectModelExamples >> plainObjectModelWithMarkdownMainDataView [
+{ #category : #'examples - views' }
+GtLWrappedObjectModelExamples >> wrappedObjectModelWithMarkdownMainDataView [
 	<gtExample>
 	<return: #GtLCompositeDataView>
-	| plainObjectModel mainDataView forwardedView |
-	plainObjectModel := self plainObjectModelWithMarkdown.
-	mainDataView := plainObjectModel mainDataView.
+	| wrappedObjectModel mainDataView forwardedView |
+	wrappedObjectModel := self wrappedObjectModelWithMarkdown.
+	mainDataView := wrappedObjectModel mainDataView.
 	
 	self assertCompositeDataView: mainDataView hasTitle: 'Object views' dataKey: 'testMarkdown' viewsCount: 1.
-	self assertForwardObjectDataView: mainDataView dataViews first hasTargetObject: plainObjectModel model.
+	self assertForwardObjectDataView: mainDataView dataViews first hasTargetObject: wrappedObjectModel model.
 	
 	forwardedView := mainDataView dataViews first computeForwardedView.
 	self assertCompositeDataView: forwardedView hasTitle: 'Object views' viewsCount: 1.
@@ -129,11 +129,11 @@ GtLPlainObjectModelExamples >> plainObjectModelWithMarkdownMainDataView [
 ]
 
 { #category : #'examples - serialization' }
-GtLPlainObjectModelExamples >> plainObjectModelWithMarkdownSerialization [
+GtLWrappedObjectModelExamples >> wrappedObjectModelWithMarkdownSerialization [
 	<gtExample>
 	<return: #GtLPrimitiveMessageDataBlock>
 	| mainDataView dataBlock jsonData expectedJsonData |
-	mainDataView := self plainObjectModelWithMarkdownMainDataView.
+	mainDataView := self wrappedObjectModelWithMarkdownMainDataView.
 	dataBlock := mainDataView serializeToLlmPrimiteData.
 	
 	self assertDataBlockHasOnlyJsonData: dataBlock.
@@ -149,47 +149,47 @@ GtLPlainObjectModelExamples >> plainObjectModelWithMarkdownSerialization [
 	^ dataBlock
 ]
 
-{ #category : #examples }
-GtLPlainObjectModelExamples >> plainObjectModelWithObjectWithJsonView [
+{ #category : #'examples - support' }
+GtLWrappedObjectModelExamples >> wrappedObjectModelWithObjectWithJsonView [
 	<gtExample>
-	<return: #GtLPlainObjectModel>
-	| plainObjectModel |
-	plainObjectModel := GtLPlainObjectModel new.
-	plainObjectModel name: 'testObject'.
-	plainObjectModel model: self objectWithJsonView.
+	<return: #GtLWrappedObjectModel>
+	| wrappedObjectModel |
+	wrappedObjectModel := GtLWrappedObjectModel new.
+	wrappedObjectModel name: 'testObject'.
+	wrappedObjectModel model: self objectWithJsonView.
 	
-	self assert: plainObjectModel name equals: 'testObject'.
-	self assert: plainObjectModel model class equals: GtLObjectWithJsonViewsForExamples.
-	self assert: plainObjectModel targetObject equals: plainObjectModel model.
+	self assert: wrappedObjectModel name equals: 'testObject'.
+	self assert: wrappedObjectModel model class equals: GtLObjectWithJsonViewsForExamples.
+	self assert: wrappedObjectModel targetObject equals: wrappedObjectModel model.
 	
-	^ plainObjectModel
+	^ wrappedObjectModel
 ]
 
 { #category : #'examples - support' }
-GtLPlainObjectModelExamples >> plainObjectModelWithTwoJsonViews [
+GtLWrappedObjectModelExamples >> wrappedObjectModelWithTwoJsonViews [
 	<gtExample>
-	<return: #GtLPlainObjectModel>
-	| plainObjectModel |
-	plainObjectModel := GtLPlainObjectModel new
+	<return: #GtLWrappedObjectModel>
+	| wrappedObjectModel |
+	wrappedObjectModel := GtLWrappedObjectModel new
 		name: 'testTwoViews';
 		model: self objectWithTwoJsonViews.
 	
-	self assert: plainObjectModel name equals: 'testTwoViews'.
-	self assert: plainObjectModel model class equals: GtLObjectWithJsonViewsForExamples.
+	self assert: wrappedObjectModel name equals: 'testTwoViews'.
+	self assert: wrappedObjectModel model class equals: GtLObjectWithJsonViewsForExamples.
 	
-	^ plainObjectModel
+	^ wrappedObjectModel
 ]
 
 { #category : #'examples - views' }
-GtLPlainObjectModelExamples >> plainObjectModelWithTwoJsonViewsMainDataView [
+GtLWrappedObjectModelExamples >> wrappedObjectModelWithTwoJsonViewsMainDataView [
 	<gtExample>
 	<return: #GtLCompositeDataView>
-	| plainObjectModel mainDataView forwardedView |
-	plainObjectModel := self plainObjectModelWithTwoJsonViews.
-	mainDataView := plainObjectModel mainDataView.
+	| wrappedObjectModel mainDataView forwardedView |
+	wrappedObjectModel := self wrappedObjectModelWithTwoJsonViews.
+	mainDataView := wrappedObjectModel mainDataView.
 	
 	self assertCompositeDataView: mainDataView hasTitle: 'Object views' dataKey: 'testTwoViews' viewsCount: 1.
-	self assertForwardObjectDataView: mainDataView dataViews first hasTargetObject: plainObjectModel model.
+	self assertForwardObjectDataView: mainDataView dataViews first hasTargetObject: wrappedObjectModel model.
 	
 	forwardedView := mainDataView dataViews first computeForwardedView.
 	self assertCompositeDataView: forwardedView hasTitle: 'Object views' viewsCount: 2.
@@ -200,11 +200,11 @@ GtLPlainObjectModelExamples >> plainObjectModelWithTwoJsonViewsMainDataView [
 ]
 
 { #category : #'examples - serialization' }
-GtLPlainObjectModelExamples >> plainObjectModelWithTwoJsonViewsSerialization [
+GtLWrappedObjectModelExamples >> wrappedObjectModelWithTwoJsonViewsSerialization [
 	<gtExample>
 	<return: #GtLPrimitiveMessageDataBlock>
 	| mainDataView dataBlock jsonData innerData |
-	mainDataView := self plainObjectModelWithTwoJsonViewsMainDataView.
+	mainDataView := self wrappedObjectModelWithTwoJsonViewsMainDataView.
 	dataBlock := mainDataView serializeToLlmPrimiteData.
 	
 	self assertDataBlockHasOnlyJsonData: dataBlock.
