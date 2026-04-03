@@ -4,7 +4,7 @@ Magritte-based tool for looking up class descriptions.
 Class {
 	#name : #GtLMagritteToolForClassLookup,
 	#superclass : #GtLAbstractMagritteFunctionTool,
-	#category : 'Gt4LlmCore-Tools'
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #magritte }

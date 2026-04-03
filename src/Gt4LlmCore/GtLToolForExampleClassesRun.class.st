@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLToolForExampleClassesRun,
 	#superclass : #GtLAbstractMagritteFunctionTool,
-	#category : 'Gt4LlmCore-Tools'
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #'llm-generated' }

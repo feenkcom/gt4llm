@@ -3,7 +3,7 @@ Trait {
 	#instVars : [
 		'registryViewModel'
 	],
-	#category : 'Gt4LlmCore-UI - View Models'
+	#category : #'Gt4LlmCore-UI - View Models'
 }
 
 { #category : #'private - hooks' }

@@ -13,11 +13,6 @@ Class {
 	#category : #'Gt4Llm-Anthropic-Client'
 }
 
-{ #category : #serialization }
-GtLAnthropicUserMessage class >> leJsonV4Name [
-	^ #gtLAnthropicUserMessage
-]
-
 { #category : #'as yet unclassified' }
 GtLAnthropicUserMessage >> asTokenizableString [
 	^ '<|im_start|>' , 
