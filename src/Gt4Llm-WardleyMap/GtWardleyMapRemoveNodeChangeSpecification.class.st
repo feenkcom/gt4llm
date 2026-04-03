@@ -12,7 +12,7 @@ GtWardleyMapRemoveNodeChangeSpecification class >> jsonSchemaLabel [
 { #category : #changes }
 GtWardleyMapRemoveNodeChangeSpecification >> asChangeIn: aWardleyMapModel [
 	^ (GtWardleyMapRemoveNodeChange onMap: aWardleyMapModel)
-		node: (self nodeWithId: nodeId in: aWardleyMapModel);
+		nodeId: nodeId;
 		yourself
 ]
 

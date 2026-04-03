@@ -17,8 +17,8 @@ GtWardleyMapChangeSpecification >> asChangeIn: aWardleyMapModel [
 { #category : #private }
 GtWardleyMapChangeSpecification >> edgeFrom: fromString to: toString in: aWardleyMapModel [
 	| from to |
-	from := UUID fromString: fromString.
-	to := UUID fromString: toString.
+	from := UUID gtFromString: fromString.
+	to := UUID gtFromString: toString.
 	^ aWardleyMapModel edges
 		detect: [ :each | each fromNode id = from and: [ each toNode id = to ] ]
 		ifNone: [  ]
@@ -27,7 +27,7 @@ GtWardleyMapChangeSpecification >> edgeFrom: fromString to: toString in: aWardle
 { #category : #private }
 GtWardleyMapChangeSpecification >> nodeWithId: aString in: aWardleyMapModel [
 	| id |
-	id := UUID fromString: aString.
+	id := UUID gtFromString: aString.
 	^ aWardleyMapModel
 		nodeWithId: id
 		ifFound: [ :each | each ]
@@ -37,7 +37,7 @@ GtWardleyMapChangeSpecification >> nodeWithId: aString in: aWardleyMapModel [
 { #category : #private }
 GtWardleyMapChangeSpecification >> noteWithId: aString in: aWardleyMapModel [
 	| id |
-	id := UUID fromString: aString.
+	id := UUID gtFromString: aString.
 	^ aWardleyMapModel
 		noteWithId: id
 		ifFound: [ :each | each ]

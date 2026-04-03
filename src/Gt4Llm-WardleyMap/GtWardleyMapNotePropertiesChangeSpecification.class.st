@@ -15,7 +15,7 @@ GtWardleyMapNotePropertiesChangeSpecification >> asChangeIn: aWardleyMapModel [
 	^ (self changeClass onMap: aWardleyMapModel)
 		color: self color;
 		evolution: self evolution;
-		id: (UUID fromString: noteId);
+		id: (UUID gtFromString: noteId);
 		label: self label;
 		visibility: self visibility;
 		yourself
