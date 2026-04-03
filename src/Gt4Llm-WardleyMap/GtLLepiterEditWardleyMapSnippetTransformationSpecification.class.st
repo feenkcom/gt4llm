@@ -3,7 +3,9 @@ Class {
 	#superclass : #GtLLepiterEditSnippetTransformationSpecification,
 	#instVars : [
 		'changes',
-		'originalMap'
+		'originalMap',
+		'idMap',
+		'wardleyMap'
 	],
 	#category : #'Gt4Llm-WardleyMap'
 }
@@ -27,11 +29,33 @@ GtLLepiterEditWardleyMapSnippetTransformationSpecification >> asRefactoringIn: a
 ]
 
 { #category : #accessing }
+GtLLepiterEditWardleyMapSnippetTransformationSpecification >> assignNewIds [
+	idMap ifNotNil: [ ^ self ].
+	idMap := (self wardleyMap
+			ifNotNil: [ :map | 
+				map
+					optionAt: #newIds
+					ifPresent: [ :dict | dict copy ]
+					ifAbsent: [  ] ]) ifNil: [ Dictionary new ].
+	changes do: [ :each | each updateNewUidsUsing: idMap ]
+]
+
+{ #category : #accessing }
 GtLLepiterEditWardleyMapSnippetTransformationSpecification >> changeObject [
+	| changeObjects |
+	self assignNewIds.
+	changeObjects := OrderedCollection
+			withAll: (self changes collect: [ :each | each asChangeIn: self wardleyMap ]).
+	changeObjects
+		add: (GtWardleyMapAddOptionChange new
+				map: self wardleyMap;
+				key: #newIds;
+				value: idMap;
+				yourself).
 	^ GtWardleyMapCompositeChange new
 		map: self wardleyMap;
 		originalMap: self originalMap;
-		changes: (self changes collect: [ :each | each asChangeIn: self wardleyMap ]);
+		changes: changeObjects;
 		yourself
 ]
 
@@ -42,10 +66,7 @@ GtLLepiterEditWardleyMapSnippetTransformationSpecification >> changes [
 
 { #category : #accessing }
 GtLLepiterEditWardleyMapSnippetTransformationSpecification >> changes: anObject [
-	| idMap |
-	changes := anObject.
-	idMap := Dictionary new.
-	changes do: [ :each | each updateNewUidsUsing: idMap ]
+	changes := anObject
 ]
 
 { #category : #accessing }
@@ -71,6 +92,11 @@ GtLLepiterEditWardleyMapSnippetTransformationSpecification >> createProposedModi
 GtLLepiterEditWardleyMapSnippetTransformationSpecification >> gtDisplayOn: stream [
 	stream << 'Wardley map snippet transformations (' << changes size printString
 		<< ' change' << (changes size = 1 ifTrue: [ ')' ] ifFalse: [ 's)' ])
+]
+
+{ #category : #accessing }
+GtLLepiterEditWardleyMapSnippetTransformationSpecification >> highlightedModificationsInPreview [
+	^ self changeObject highlightedModificationsInPreview
 ]
 
 { #category : #accessing }
@@ -119,5 +145,14 @@ GtLLepiterEditWardleyMapSnippetTransformationSpecification >> snippetUid: anUid 
 
 { #category : #accessing }
 GtLLepiterEditWardleyMapSnippetTransformationSpecification >> wardleyMap [
-	^ [ self targetSnippet wardleyMap ] on: Error do: [ :ex | ex return: nil ]
+	wardleyMap ifNotNil: [ ^ wardleyMap ].
+	^ [ wardleyMap := self targetSnippet wardleyMap ]
+		on: Error
+		do: [ :ex | ex return: nil ]
+]
+
+{ #category : #accessing }
+GtLLepiterEditWardleyMapSnippetTransformationSpecification >> wardleyMap: anObject [
+	wardleyMap := anObject.
+	originalMap := wardleyMap copy
 ]

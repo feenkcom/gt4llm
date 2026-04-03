@@ -12,10 +12,8 @@ GtWardleyMapRemoveEdgeSpecification class >> jsonSchemaLabel [
 { #category : #changes }
 GtWardleyMapRemoveEdgeSpecification >> asChangeIn: aWardleyMapModel [
 	^ (GtWardleyMapRemoveEdgeChange onMap: aWardleyMapModel)
-		edge: (self
-				edgeFrom: fromNodeId
-				to: toNodeId
-				in: aWardleyMapModel);
+		fromNodeId: fromNodeId;
+		toNodeId: toNodeId;
 		yourself
 ]
 
