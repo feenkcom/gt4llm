@@ -6,7 +6,10 @@ GtHomeMultiCardGetStartedSection >> gtLlmCard [
 	<gtExample>
 	<noTest>
 	GtLConnectionRegistry instance hasConnectableDefaultConnection
-		ifFalse: [ ^ GtHomeCard empty ].
+		ifFalse: [
+			^ GtHomeCard explicit
+				priority: 50;
+				stencil: [ self llmNoConnectionsCardElement ] ].
 
 	^ GtHomeCard explicit
 		priority: 50;
@@ -63,4 +66,35 @@ GtHomeMultiCardGetStartedSection >> gtLlmCard [
 						ifNone: [  ] ].
 
 			anElement ]
+]
+
+{ #category : #'*Gt4LlmCore' }
+GtHomeMultiCardGetStartedSection >> llmNoConnectionsCardElement [
+	| container label button |
+	container := BrVerticalPane new
+			matchParent;
+			alignCenter;
+			cellSpacing: 10.
+	container
+		padding: (BlInsets all: 20);
+		margin: (BlInsets
+				top: self spaceGap
+				left: 2 * self spaceGap
+				bottom: 2 * self spaceGap
+				right: 2 * self spaceGap);
+		background: Color white;
+		addAptitude: BrShadowAptitude new beLarge;
+		hExact: 350;
+		vExact: 400.
+	label := BrLabel new
+			aptitude: BrGlamorousLabelAptitude;
+			text: 'There are no connections to LLMs' asRopedText.
+	button := BrButton new
+			aptitude: BrGlamorousButtonWithLabelAptitude;
+			label: 'Setup LLM connections';
+			action: [ :aButton | BlSpace spawnPage: (LeDatabase gtBook pageNamed: 'How to setup LLM connections') from: aButton ].
+	container
+		addChild: label;
+		addChild: button.
+	^ container
 ]
