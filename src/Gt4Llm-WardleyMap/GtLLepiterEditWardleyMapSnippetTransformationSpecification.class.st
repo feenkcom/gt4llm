@@ -94,6 +94,15 @@ GtLLepiterEditWardleyMapSnippetTransformationSpecification >> gtDisplayOn: strea
 		<< ' change' << (changes size = 1 ifTrue: [ ')' ] ifFalse: [ 's)' ])
 ]
 
+{ #category : #views }
+GtLLepiterEditWardleyMapSnippetTransformationSpecification >> gtOriginalMapFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'OriginalMap live';
+		object: [ originalMap ];
+		view: #gtLiveFor:
+]
+
 { #category : #accessing }
 GtLLepiterEditWardleyMapSnippetTransformationSpecification >> highlightedModificationsInPreview [
 	^ self changeObject highlightedModificationsInPreview
