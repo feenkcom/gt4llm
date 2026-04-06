@@ -175,6 +175,11 @@ GtLToolForRemoteExampleMethodsRun >> imageChanges [
 		GtRrChangesSync uniqueInstance sessionHistory first
 ]
 
+{ #category : #testing }
+GtLToolForRemoteExampleMethodsRun >> isUsingDataViews [
+	^ true
+]
+
 { #category : #accessing }
 GtLToolForRemoteExampleMethodsRun >> name [
 	^ 'runExampleMethods'
