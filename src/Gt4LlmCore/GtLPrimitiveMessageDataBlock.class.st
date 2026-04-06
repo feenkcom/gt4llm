@@ -3,10 +3,16 @@ Class {
 	#superclass : #GtLPrimitiveDataBlock,
 	#instVars : [
 		'compositeJsonDataBlock',
-		'imageDataBlocks'
+		'imageDataBlocks',
+		'documentDataBlocks'
 	],
 	#category : #Gt4LlmCore
 }
+
+{ #category : #adding }
+GtLPrimitiveMessageDataBlock >> addDocumentDataBlock: aDocumentBlock [
+	documentDataBlocks add: aDocumentBlock
+]
 
 { #category : #adding }
 GtLPrimitiveMessageDataBlock >> addImageDataBlock: anImageBlock [
@@ -40,7 +46,13 @@ GtLPrimitiveMessageDataBlock >> dataBlocks [
 	compositeJsonDataBlock containedJsonDataBlocksCount > 0
 		ifTrue: [ blocks add: compositeJsonDataBlock ].
 	blocks addAll: imageDataBlocks.
+	blocks addAll: documentDataBlocks.
 	^ blocks
+]
+
+{ #category : #accessing }
+GtLPrimitiveMessageDataBlock >> documentDataBlocks [
+	^ documentDataBlocks
 ]
 
 { #category : #views }
@@ -91,6 +103,7 @@ GtLPrimitiveMessageDataBlock >> initialize [
 	
 	compositeJsonDataBlock := GtLPrimitiveCompositeJsonGenericDataBlock new.
 	imageDataBlocks := OrderedCollection new.
+	documentDataBlocks := OrderedCollection new.
 ]
 
 { #category : #utils }

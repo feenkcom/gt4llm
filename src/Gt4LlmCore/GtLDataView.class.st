@@ -110,6 +110,13 @@ GtLDataView >> definingMethodProvider: anObject [
 	definingMethodProvider := anObject
 ]
 
+{ #category : #building }
+GtLDataView >> documentData [
+	^ GtLDocumentDataView new
+		originalView: self;
+		definingMethod: (GtPhlowDefiningMethodsCollector forContext: thisContext) collect
+]
+
 { #category : #decorating }
 GtLDataView >> emptyData [
 	^ GtLEmptyDataView new
