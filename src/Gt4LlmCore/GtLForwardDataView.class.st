@@ -7,7 +7,7 @@ Class {
 		'viewSymbol',
 		'computedTargetView'
 	],
-	#category : #Gt4LlmCore
+	#category : 'Gt4LlmCore-Data Views'
 }
 
 { #category : #testing }

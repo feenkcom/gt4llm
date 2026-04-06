@@ -5,7 +5,7 @@ Class {
 		'sourceDataView',
 		'dataKey'
 	],
-	#category : #Gt4LlmCore
+	#category : 'Gt4LlmCore-Data Views'
 }
 
 { #category : #accessing }

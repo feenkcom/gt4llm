@@ -1,5 +1,5 @@
 Class {
 	#name : #GtLDataViewContext,
 	#superclass : #Object,
-	#category : #Gt4LlmCore
+	#category : 'Gt4LlmCore-Data Views'
 }
