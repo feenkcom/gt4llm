@@ -3,50 +3,17 @@ Represents a successful result for a stored object retrieval with the serialized
 "
 Class {
 	#name : #GtLObjectStorageValueResult,
-	#superclass : #Object,
+	#superclass : #GtLObjectValueResult,
 	#instVars : [
-		'objectValue',
-		'objectId',
-		'object'
+		'objectId'
 	],
 	#category : 'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #'instance creation' }
 GtLObjectStorageValueResult class >> forObject: anObject withId: anObjectId [
-	^ self new 
-		object: anObject;
-		objectValue: (GtLSerializedObjectValue fromObject: anObject);
-		objectId: anObjectId
-]
-
-{ #category : #'llm views' }
-GtLObjectStorageValueResult >> llmRawDataViewFor: aDataView [
-	<gtLlmDataView>
-	
-	^ aDataView magritteObject
-			title: 'Object generic details';
-			object: [ self ]
-]
-
-{ #category : #'llm views' }
-GtLObjectStorageValueResult >> llmSpecificObjectViewFor: aDataView [
-	<gtLlmDataView>
-	
-	^ aDataView forwardObject
-			title: 'Object specific details';
-			dataKey: 'objectDetails';
-			object: [ self object ]
-]
-
-{ #category : #accessing }
-GtLObjectStorageValueResult >> object [
-	^ object
-]
-
-{ #category : #accessing }
-GtLObjectStorageValueResult >> object: anObject [
-	object := anObject
+	^ (self forObject: anObject)
+			objectId: anObjectId
 ]
 
 { #category : #accessing }
@@ -66,26 +33,6 @@ GtLObjectStorageValueResult >> objectIdDescription [
 		label: 'Object id';
 		accessor: #objectId;
 		beOptional
-]
-
-{ #category : #accessing }
-GtLObjectStorageValueResult >> objectValue [
-	^ objectValue
-]
-
-{ #category : #accessing }
-GtLObjectStorageValueResult >> objectValue: aSerializedObjectValue [
-	objectValue := aSerializedObjectValue
-]
-
-{ #category : #descriptions }
-GtLObjectStorageValueResult >> objectValueDescription [
-	<magritteDescription>
-	^ MAToOneRelationDescription new
-		label: 'Object value';
-		accessor: #objectValue;
-		classes: { GtLSerializedObjectValue };
-		beRequired
 ]
 
 { #category : #printing }
