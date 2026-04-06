@@ -116,6 +116,7 @@ GtLPrimitiveMessageDataBlock >> secondaryDataBlocks [
 	| blocks |
 	blocks := OrderedCollection new.
 	blocks addAll: imageDataBlocks.
+	documentDataBlocks ifNotNil: [ blocks addAll: documentDataBlocks ].
 	^ blocks
 ]
 
