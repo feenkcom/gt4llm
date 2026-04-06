@@ -66,9 +66,11 @@ GtLPrimitiveMessageDataBuilder >> forArrayWithDataKey: aDataKey do: aBlock [
 		previousComposite := currentCompositeJsonDataBlock.
 		currentCompositeJsonDataBlock := GtLPrimitiveCompositeJsonArrayDataBlock new
 			dataKey: aDataKey.
-		previousComposite addJsonDataBlock: currentCompositeJsonDataBlock.
+	
+		aBlock value.
 		
-		aBlock value
+		currentCompositeJsonDataBlock containedJsonDataBlocksCount > 0 ifTrue: [
+			previousComposite addJsonDataBlock: currentCompositeJsonDataBlock ].
 	] 
 		ensure: [
 			currentCompositeJsonDataBlock := previousComposite ]
