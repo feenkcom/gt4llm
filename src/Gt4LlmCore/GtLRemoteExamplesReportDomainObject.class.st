@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLRemoteExamplesReportDomainObject,
-	#superclass : #GtLDomainObject,
+	#superclass : #Object,
 	#instVars : [
 		'errorMessages',
 		'results',
@@ -40,6 +40,23 @@ GtLRemoteExamplesReportDomainObject >> freeze: anException [
 	self exception: (GtSystemUtility freeze: anException)
 ]
 
+{ #category : #'gt-llm - serialization' }
+GtLRemoteExamplesReportDomainObject >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView jsonObject: [ :json |
+		self errorMessages
+			ifNotEmpty: [ :aCollection | json at: #errors put: aCollection ].
+		self results ifNotEmpty: [ :aCollection | json at: #results put: aCollection ].
+		self exception
+			ifNotNil: [ json
+					at: #error
+					put: (Dictionary new
+							at: #message put: self exception messageText;
+							at: #stackTrace put: self stackTrace;
+							yourself) ] ]
+]
+
 { #category : #accessing }
 GtLRemoteExamplesReportDomainObject >> results [
 	<return: #Array of: #GtLRemoteExampleReportDomainObject>
@@ -51,31 +68,10 @@ GtLRemoteExamplesReportDomainObject >> results: anObject [
 	results := anObject
 ]
 
-{ #category : #'api - serializing' }
-GtLRemoteExamplesReportDomainObject >> serializeToLlmJsonObject [
-	"Return a JSON dictionary that represents the domain object."
-
-	<return: #NeoJSONObject>
-	| aJson |
-	aJson := NeoJSONObject new.
-	self errorMessages
-		ifNotEmpty: [ :aCollection | aJson at: #errors put: aCollection ].
-	self results ifNotEmpty: [ :aCollection | aJson at: #results put: aCollection ].
-	self exception
-		ifNotNil: [ aJson
-				at: #error
-				put: (NeoJSONObject new
-						at: #message put: self exception messageText;
-						at: #stackTrace put: self stackTrace;
-						yourself) ].
-
-	^ aJson
-]
-
 { #category : #accessing }
 GtLRemoteExamplesReportDomainObject >> stackTrace [
 	self exception ifNil: [ ^ nil ].
 	
 	^ String streamContents: [ :stream |
-		self exception signalerContext errorReportOn: stream ]
+			self exception signalerContext errorReportOn: stream ]
 ]

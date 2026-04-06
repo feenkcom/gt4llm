@@ -589,16 +589,16 @@ GtLToolForRemoteExampleMethodsRunExamples >> exampleRunFailsWithoutCheckNames [
 	"Expect the tool to signal the missing checkNames error"
 
 	<gtExample>
-	| tool call result errorDictionary message |
+	| tool call result model |
 	tool := GtLToolForRemoteExampleMethodsRun new.
 	call := GtLFunctionToolCall new.
 	call
-		function: {'name' -> tool name.
-				'arguments' -> {'changes' -> '[]'} asDictionary} asDictionary.
+		rawArguments: {'changes' -> '[]'} asDictionary.
 	result := tool performToolCall: call.
 
-	self assert: result isErrorDomainObject.
-	self assert: result missingArgument equals: 'checkNames'.
+	model := result targetObject.
+	self assert: model isErrorDomainObject.
+	self assert: model missingArgument equals: 'checkNames'.
 
 	^ call
 ]
@@ -637,9 +637,7 @@ GtLToolForRemoteExampleMethodsRunExamples >> exampleRunNewClassDefinition [
 			<< 'self assert: (self class environment classOrTraitNamed: ';
 			print: exampleClassName;
 			<< ') isNotNil.' ].
-	call function: {
-		'name' -> tool name.
-		'arguments' -> {
+	call rawArguments: {
 			'checkNames' -> (STONJSON toString: {
 				exampleNamePrefix, exampleSelector.
 				}).
@@ -653,8 +651,7 @@ GtLToolForRemoteExampleMethodsRunExamples >> exampleRunNewClassDefinition [
 					'type' -> 'class'.
 					'code' -> exampleClassDefinition.
 				} asDictionary })
-		} asDictionary
-	} asDictionary.
+		} asDictionary.
 	resultObject := tool performToolCall: call.
 	results := resultObject results.
 	self assert: call tool == tool.
@@ -668,16 +665,17 @@ GtLToolForRemoteExampleMethodsRunExamples >> exampleRunRejectsNonArrayCheckNames
 	"checkNames must deserialize to an Array"
 
 	<gtExample>
-	| tool call result |
+	| tool call result model |
 	tool := GtLToolForRemoteExampleMethodsRun new.
 	call := GtLFunctionToolCall new.
 	call
-		function: {'name' -> tool name.
-				'arguments' -> {'checkNames' -> '"not-an-array"'} asDictionary} asDictionary.
+		rawArguments:  {'checkNames' -> '"not-an-array"'} asDictionary.
 	result := tool performToolCall: call.
 	self assert: result isErrorDomainObject.
-	self assert: result argumentName equals: 'checkNames'.
-	self assert: result expectedArgumentValueKind equals: Array.
+	
+	model := result targetObject.
+	self assert: model argumentName equals: 'checkNames'.
+	self assert: model expectedArgumentValueKind equals: Array.
 
 	^ call
 ]
@@ -687,22 +685,21 @@ GtLToolForRemoteExampleMethodsRunExamples >> exampleRunRejectsUnknownChangeType 
 	"Non-method change dictionaries should fail fast"
 
 	<gtExample>
-	| tool call result |
+	| tool call result model |
 	tool := GtLToolForRemoteExampleMethodsRun new.
 	call := GtLFunctionToolCall new.
 	call
-		function: {'name' -> tool name.
-				'arguments'
-					-> {'checkNames'
+		rawArguments: {'checkNames'
 								-> (STONJSON toString: {self class name asString , '>>exampleSuccess'}).
 							'changes'
 								-> (STONJSON
 										toString: {{'type' -> 'junk'.
-													'junk' -> 'rubbish'} asDictionary})} asDictionary} asDictionary.
+													'junk' -> 'rubbish'} asDictionary})} asDictionary.
 	result := tool performToolCall: call.
 
-	self assert: result isErrorDomainObject.
-	self assert: result description equals: 'Unknown type: ''junk'''.
+	model := result targetObject.
+	self assert: model isErrorDomainObject.
+	self assert: model description equals: 'Unknown type: ''junk'''.
 
 	^ call
 ]
@@ -715,9 +712,7 @@ GtLToolForRemoteExampleMethodsRunExamples >> exampleRunReportsDetailsForFailures
     | tool call resultObject results message |
     tool := GtLToolForRemoteExampleMethodsRun new.
     call := GtLFunctionToolCall new.
-    call function: {
-        'name' -> tool name.
-        'arguments' -> {
+    call rawArguments:  {
             'checkNames' -> (STONJSON toString: {
                 self class name asString, '>>exampleSuccess'.
                 self class name asString, '>>exampleFailure'.
@@ -731,8 +726,7 @@ GtLToolForRemoteExampleMethodsRunExamples >> exampleRunReportsDetailsForFailures
     ^ self assert: false'.
                 } asDictionary
             }).
-        } asDictionary
-    } asDictionary.
+        } asDictionary.
 	resultObject := tool performToolCall: call.
 	results := resultObject results.
 	self assert: results size equals: 2.
@@ -750,9 +744,7 @@ GtLToolForRemoteExampleMethodsRunExamples >> exampleRunSuccess [
 	tool := GtLToolForRemoteExampleMethodsRun new.
 	call := GtLFunctionToolCall new.
 	exampleNamePrefix := self class name asString, '>>'.
-	call function: {
-		'name' -> tool name.
-		'arguments' -> {
+	call rawArguments:{
 			'checkNames' -> (STONJSON toString: {
 				exampleNamePrefix, 'exampleSuccess'.
 				exampleNamePrefix, 'exampleFailure'.
@@ -777,8 +769,7 @@ GtLToolForRemoteExampleMethodsRunExamples >> exampleRunSuccess [
 
 	^ self error: ''an error''.'.
 				} asDictionary. }).
-		} asDictionary
-	} asDictionary.
+		} asDictionary.
 	resultObject := tool performToolCall: call.
 	results := resultObject results.
 	self assert: call tool == tool.
@@ -800,15 +791,12 @@ GtLToolForRemoteExampleMethodsRunExamples >> exampleRunSuccessEmptyChanges [
 	tool := GtLToolForRemoteExampleMethodsRun new.
 	call := GtLFunctionToolCall new.
 	exampleNamePrefix := self class name asString, '>>'.
-	call function: {
-		'name' -> tool name.
-		'arguments' -> {
+	call rawArguments:  {
 			'checkNames' -> (STONJSON toString: {
 				exampleNamePrefix, 'exampleSuccess'.
 				}).
 			'changes' -> '[]'.
-		} asDictionary
-	} asDictionary.
+		} asDictionary.
 	resultObject := tool performToolCall: call.
 	results := resultObject results.
 	self assert: call tool == tool.
@@ -828,14 +816,11 @@ GtLToolForRemoteExampleMethodsRunExamples >> exampleRunSuccessNoChanges [
 	tool := GtLToolForRemoteExampleMethodsRun new.
 	call := GtLFunctionToolCall new.
 	exampleNamePrefix := self class name asString, '>>'.
-	call function: {
-		'name' -> tool name.
-		'arguments' -> {
+	call rawArguments:  {
 			'checkNames' -> (STONJSON toString: {
 				exampleNamePrefix, 'exampleSuccess'.
 				}).
-		} asDictionary
-	} asDictionary.
+		} asDictionary.
 
 	resultObject := tool performToolCall: call.
 	results := resultObject results.
@@ -855,14 +840,11 @@ GtLToolForRemoteExampleMethodsRunExamples >> exampleRunWithHashSelectors [
     | tool call resultObject results testResult |
     tool := GtLToolForRemoteExampleMethodsRun new.
     call := GtLFunctionToolCall new.
-    call function: {
-        'name' -> tool name.
-        'arguments' -> {
+    call rawArguments: {
             'checkNames' -> (STONJSON toString: {
                 self class name asString, '>>#exampleSuccess'
             }).
-        } asDictionary
-    } asDictionary.
+        } asDictionary.
 		resultObject := tool performToolCall: call.
 		results := resultObject results.
 		self assert: call tool == tool.
