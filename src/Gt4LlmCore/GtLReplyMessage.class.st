@@ -10,11 +10,6 @@ Class {
 	#category : 'Gt4LlmCore-Core'
 }
 
-{ #category : #accessing }
-GtLReplyMessage class >> leJsonV4Name [
-	^ #gtLReplyMessage
-]
-
 { #category : #'api - message' }
 GtLReplyMessage >> addCompactionMessage: aCompactionMessage [
 	self addExecutionMessage: aCompactionMessage

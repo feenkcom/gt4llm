@@ -20,6 +20,14 @@ GtLLepiterPageModel >> addContentOneLineSummaryTo: aWriteStream [
 			ifNotNil: [ :aPage | aPage title asString ])
 ]
 
+{ #category : #'as yet unclassified' }
+GtLLepiterPageModel >> llmModelDataViewsFor: aDataView [
+	<gtLlmDataView>
+	^ aDataView
+		jsonData: [ NeoJSONReader
+				fromString: (LeJsonV4 uniqueInstance serializePretty: self model) ]
+]
+
 { #category : #printing }
 GtLLepiterPageModel >> printOn: aStream [
 	aStream 

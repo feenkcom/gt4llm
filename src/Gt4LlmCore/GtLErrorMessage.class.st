@@ -15,11 +15,6 @@ GtLErrorMessage class >> freeze: anError [
 ]
 
 { #category : #accessing }
-GtLErrorMessage class >> leJsonV4Name [
-	^ #gtLErrorMessage
-]
-
-{ #category : #accessing }
 GtLErrorMessage >> action [
 	^ nil
 ]

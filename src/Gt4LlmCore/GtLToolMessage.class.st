@@ -11,11 +11,6 @@ Class {
 }
 
 { #category : #accessing }
-GtLToolMessage class >> leJsonV4Name [
-	^ #gtLToolMessage
-]
-
-{ #category : #accessing }
 GtLToolMessage >> action [
 	^ self toolCall humanReadable
 ]
