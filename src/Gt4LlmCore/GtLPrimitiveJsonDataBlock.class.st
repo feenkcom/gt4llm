@@ -54,6 +54,11 @@ GtLPrimitiveJsonDataBlock >> addJsonBlock: anotherJsonBlock disabiguatingKeys: a
 ]
 
 { #category : #accessing }
+GtLPrimitiveJsonDataBlock >> condensedJsonBlock [
+	^self
+]
+
+{ #category : #accessing }
 GtLPrimitiveJsonDataBlock >> containedJsonDataBlocksCount [
 	"Return 1 as this block itself counts as a single json data block."
 	^ 1
