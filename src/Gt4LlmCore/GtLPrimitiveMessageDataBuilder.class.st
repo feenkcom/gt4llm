@@ -43,6 +43,13 @@ GtLPrimitiveMessageDataBuilder >> addJsonDataBlock: aJsonDataBlock [
 
 { #category : #adding }
 GtLPrimitiveMessageDataBuilder >> addJsonDataBlockFor: aJsonData  dataKey: aDataKey from: aDataView [
+	aJsonData isString ifTrue: [
+		self addJsonDataBlock: (GtLPrimitiveJsonBareDataBlock new
+			jsonData: aJsonData;
+			dataKey: aDataKey;
+			sourceDataView: aDataView).
+		^self ].
+	
 	self addJsonDataBlock: (GtLPrimitiveJsonDataBlock new
 		jsonData: aJsonData;
 		dataKey: aDataKey;

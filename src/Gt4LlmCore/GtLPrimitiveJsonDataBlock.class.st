@@ -1,9 +1,6 @@
 Class {
 	#name : #GtLPrimitiveJsonDataBlock,
-	#superclass : #GtLPrimitiveDataBlock,
-	#instVars : [
-		'jsonData'
-	],
+	#superclass : #GtLPrimitiveStandaloneJsonBlock,
 	#category : #Gt4LlmCore
 }
 
@@ -53,17 +50,6 @@ GtLPrimitiveJsonDataBlock >> addJsonBlock: anotherJsonBlock disabiguatingKeys: a
 				put: aValue ] ]
 ]
 
-{ #category : #accessing }
-GtLPrimitiveJsonDataBlock >> condensedJsonBlock [
-	^self
-]
-
-{ #category : #accessing }
-GtLPrimitiveJsonDataBlock >> containedJsonDataBlocksCount [
-	"Return 1 as this block itself counts as a single json data block."
-	^ 1
-]
-
 { #category : #adding }
 GtLPrimitiveJsonDataBlock >> disambiguateKey: aKey in: aJsonDictionary [
 	| newKey index |
@@ -81,43 +67,6 @@ GtLPrimitiveJsonDataBlock >> disambiguateKey: aKey in: aJsonDictionary [
 	^ newKey
 ]
 
-{ #category : #views }
-GtLPrimitiveJsonDataBlock >> gtViewJsonDataFor: aView [
-	<gtView>
-	
-	jsonData ifNil: [ ^ aView empty ].
-	
-	^ aView forward
-		title: 'JSON Data';
-		priority: 10;
-		object: [ self llmJsonData  asGtJson ];
-		view: #gtJsonObjectFor:context:
-]
-
-{ #category : #views }
-GtLPrimitiveJsonDataBlock >> gtViewJsonStringFor: aView [
-	<gtView>
-	
-	jsonData ifNil: [ ^ aView empty ].
-	
-	^ aView textEditor
-		title: 'JSON string';
-		priority: 12;
-		aptitude: BrGlamorousCodeEditorAptitude;
-		styler: JSONParser gtStyler;
-		text: [  self serializedJsonString  ]
-]
-
-{ #category : #accessing }
-GtLPrimitiveJsonDataBlock >> jsonData [
-	^jsonData
-]
-
-{ #category : #accessing }
-GtLPrimitiveJsonDataBlock >> jsonData: anObject [
-	jsonData := anObject
-]
-
 { #category : #accessing }
 GtLPrimitiveJsonDataBlock >> keysForMerge [
 	^self dataKey
@@ -127,43 +76,4 @@ GtLPrimitiveJsonDataBlock >> keysForMerge [
 				ifFalse: [ #() ] ] 
 		ifNotNil: [
 			{self dataKey} ]
-]
-
-{ #category : #accessing }
-GtLPrimitiveJsonDataBlock >> llmJsonData [
-	^self dataKey
-		ifNil: [ self jsonData] 
-		ifNotNil: [
-			Dictionary new 
-				at: self dataKey put: self jsonData;
-				yourself]
-]
-
-{ #category : #accessing }
-GtLPrimitiveJsonDataBlock >> serializedJsonString [
-	"Return a JSON string that represents the domain object."
-	
-	^ NeoJSONWriter toStringPretty: self llmJsonData
-]
-
-{ #category : #serialization }
-GtLPrimitiveJsonDataBlock >> serializeForAnthropic [
-	"Return a JSON that represents tool response output."
-
-	<return: #Array of: #NeoJSONObject>
-	^ {NeoJSONObject new
-			at: 'text' put: self serializedJsonString;
-			at: 'type' put: 'text';
-			yourself}
-]
-
-{ #category : #serialization }
-GtLPrimitiveJsonDataBlock >> serializeForOpenAI [
-	"Return a JSON that represents tool response output."
-
-	<return: #Array of: #NeoJSONObject>
-	^ {NeoJSONObject new
-			at: #text put: self serializedJsonString;
-			at: #type put: #input_text;
-			yourself}
 ]
