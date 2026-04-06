@@ -4,6 +4,8 @@ Examples for GtLExampleWithResultDomainObject data views.
 Class {
 	#name : #GtLExampleWithResultDomainObjectExamples,
 	#superclass : #Object,
+	#traits : 'TGtLExceptionResultAssertions',
+	#classTraits : 'TGtLExceptionResultAssertions classTrait',
 	#category : 'Gt4LlmCore-Examples-Domain Objects'
 }
 
@@ -27,16 +29,7 @@ GtLExampleWithResultDomainObjectExamples >> assertExampleData: jsonData forMetho
 	self assert: (jsonData at: 'exampleStatus') equals: statusString.
 ]
 
-{ #category : #private }
-GtLExampleWithResultDomainObjectExamples >> assertExceptionResult: resultJson errorClass: errorClassName errorMessage: errorMessage stackTraceIncludes: stackTraceSubstrings [
-	self assertJsonData: resultJson hasExpectedKeys: #(#errorClass #errorMessage #stackTrace).
-	self assert: (resultJson at: #errorClass) equals: errorClassName.
-	self assert: ((resultJson at: #errorMessage) includesSubstring: errorMessage).
-	stackTraceSubstrings do: [ :substring |
-		self assert: ((resultJson at: #stackTrace) includesSubstring: substring) ].
-]
-
-{ #category : #private }
+{ #category : #assertions }
 GtLExampleWithResultDomainObjectExamples >> assertJsonData: jsonData hasExpectedKeys: expectedKeys [
 	self assert: jsonData keys sorted equals: expectedKeys sorted
 ]

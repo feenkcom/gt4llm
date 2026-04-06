@@ -41,7 +41,7 @@ GtLToolForTestClassesRun >> normalizedClassNamesFrom: rawValue [
 		each ifNotNil: [
 			(each asString findTokens: Character space)
 				do: [ :token | | trimmed |
-					trimmed := token withBlanksTrimmed.
+					trimmed := token trimBoth.
 					trimmed isEmpty ifFalse: [ result add: trimmed ] ] ] ].
 	^ result asArray
 ]
