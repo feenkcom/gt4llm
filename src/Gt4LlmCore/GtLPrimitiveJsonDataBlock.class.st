@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLPrimitiveJsonDataBlock,
 	#superclass : #GtLPrimitiveStandaloneJsonBlock,
-	#category : #Gt4LlmCore
+	#category : 'Gt4LlmCore-Data Views'
 }
 
 { #category : #adding }

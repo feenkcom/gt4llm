@@ -1,5 +1,5 @@
 Class {
 	#name : #GtLPrimitiveJsonDictionaryDataBlock,
 	#superclass : #GtLPrimitiveJsonDataBlock,
-	#category : #Gt4LlmCore
+	#category : 'Gt4LlmCore-Data Views'
 }
