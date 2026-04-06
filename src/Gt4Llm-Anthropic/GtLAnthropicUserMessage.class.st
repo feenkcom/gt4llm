@@ -13,11 +13,6 @@ Class {
 	#category : 'Gt4Llm-Anthropic-Client'
 }
 
-{ #category : #serialization }
-GtLAnthropicUserMessage class >> leJsonV4Name [
-	^ #gtLAnthropicUserMessage
-]
-
 { #category : #'as yet unclassified' }
 GtLAnthropicUserMessage >> asTokenizableString [
 	^ '<|im_start|>' , 
@@ -229,7 +224,7 @@ GtLAnthropicUserMessage >> serializeForAnthropicMessagesAPI [
 			} asDictionary}
 			, (self contentDataBlock secondaryDataBlocks 
 					flatCollect: [:aDataBlock |
-						aDataBlock serializeForBedrockConverse ])
+						aDataBlock serializeForAnthropic ])
 			, (self attachments
 							collect: [ :each | each serializeToAnthropicResponseOutput ])).
 		'role' -> self role} asDictionary

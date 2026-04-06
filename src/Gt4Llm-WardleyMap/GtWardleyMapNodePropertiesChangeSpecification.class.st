@@ -30,7 +30,7 @@ GtWardleyMapNodePropertiesChangeSpecification >> asChangeIn: aWardleyMapModel [
 		evolvedLabel: self evolvedLabel;
 		evolvedLabelCoordinate: self evolvedLabelCoordinate;
 		evolvedSize: self evolvedSize;
-		id: (UUID fromString: nodeId);
+		id: (UUID gtFromString: nodeId);
 		isEvolveVisible: self isEvolveVisible;
 		isEvolvedLabelVisible: self isEvolvedLabelVisible;
 		isPipelineVisible: self isPipelineVisible;
