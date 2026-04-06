@@ -70,6 +70,11 @@ GtLFunctionTool >> initialize [
 ]
 
 { #category : #accessing }
+GtLFunctionTool >> isUsingDataViews [
+	^ true
+]
+
+{ #category : #accessing }
 GtLFunctionTool >> method [
 	| split class methodName |
 	self name ifNil: [ ^ nil ].
@@ -105,7 +110,7 @@ GtLFunctionTool >> parametersDescription: anObject [
 	parametersDescription := anObject
 ]
 
-{ #category : #accessing }
+{ #category : #performing }
 GtLFunctionTool >> privatePerformToolCall: aGtLFunctionToolCall inContext: anExecutionContext [
 	| result |
 	self
@@ -123,5 +128,5 @@ GtLFunctionTool >> privatePerformToolCall: aGtLFunctionToolCall inContext: anExe
 	(GtLlmFunctionCallPerformedSignal new
 		tool: self;
 		functionCall: aGtLlmFunctionToolCall) emit."
-	^ GtLValueDomainObject new value: result
+	^ GtLObjectValueResult forObject: result
 ]
