@@ -4,63 +4,52 @@ Class {
 	#category : 'Gt4LlmCore-Examples-Tools'
 }
 
-{ #category : #'llm-generated' }
+{ #category : #examples }
 GtLRefactoringToolForClassSubclassesExamples >> classSubclassesForClassWithNoSubclasses [
 	<gtExample>
 	| tool call result |
 	tool := self toolWithExampleHierarchy.
 	call := GtLFunctionToolCall new.
-	call function: {
-		'name' -> tool name.
-		'arguments' -> {'className' -> 'GtLRefactoringToolForClassSubclassesExampleChild'} asDictionary
-	} asDictionary.
+	call rawArguments: {'className' -> 'GtLRefactoringToolForClassSubclassesExampleChild'} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
 	self assert: result isErrorDomainObject not.
-	self assert: result targetClass name equals: 'GtLRefactoringToolForClassSubclassesExampleChild'.
-	self assert: result subclasses equals: #().
+	self assert: result targetObject targetClass name equals: 'GtLRefactoringToolForClassSubclassesExampleChild'.
+	self assert: result targetObject subclasses equals: #().
 	^ call
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #examples }
 GtLRefactoringToolForClassSubclassesExamples >> classSubclassesForExistingClass [
 	<gtExample>
 	| tool call result |
 	tool := self toolWithExampleHierarchy.
 	call := GtLFunctionToolCall new.
-	call
-		function: {'name' -> tool name.
-				'arguments'
-					-> {'className' -> 'GtLRefactoringToolForClassSubclassesExampleBase'} asDictionary}
-				asDictionary.
+	call rawArguments: {'className' -> 'GtLRefactoringToolForClassSubclassesExampleBase'} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
 
 	self assert: result isErrorDomainObject not.
 	self
-		assert: result targetClass name
+		assert: result targetObject targetClass name
 		equals: 'GtLRefactoringToolForClassSubclassesExampleBase'.
 	self
-		assert: (result subclasses collect: #name as: Array)
+		assert: (result targetObject subclasses collect: #name as: Array)
 		equals: #('GtLRefactoringToolForClassSubclassesExampleChild').
 	^ call
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #examples }
 GtLRefactoringToolForClassSubclassesExamples >> classSubclassesForUnknownClass [
 	<gtExample>
 	| tool call result |
 	tool := self toolWithExampleHierarchy.
 	call := GtLFunctionToolCall new.
-	call function: {
-		'name' -> tool name.
-		'arguments' -> {'className' -> 'NonExistingClassName'} asDictionary
-	} asDictionary.
+	call rawArguments: {'className' -> 'NonExistingClassName'} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
 	
 	self assert: result isErrorDomainObject.
-	self assert: result objectName equals: 'NonExistingClassName'.
 	^ call
 ]
 

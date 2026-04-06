@@ -12,6 +12,11 @@ GtLRefactoringToolForMethodSource >> description [
 	^ 'Gets a method by name and returns its source code. The third argument (classSide) should be true if the method is on the class side. It should be false if the method if on the instance side.'
 ]
 
+{ #category : #accessing }
+GtLRefactoringToolForMethodSource >> isUsingDataViews [
+	^ true
+]
+
 { #category : #'llm-generated' }
 GtLRefactoringToolForMethodSource >> model [
 	^ model

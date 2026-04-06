@@ -20,6 +20,26 @@ GtLRefactoringMethodReferencesDomainObject >> gtReferencesFor: aView [
 		column: 'Value' text: [ :each | each gtDisplayString ]
 ]
 
+{ #category : #'gt-llm - serialization' }
+GtLRefactoringMethodReferencesDomainObject >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView jsonObject: [ :json |
+		json
+			at: 'methodName' put: self methodName;
+			at: 'mayHaveMoreReferences' put: self mayHaveMore;
+			at: 'references'
+				put: (self references
+						collect: [ :eachReference | 
+							String
+								streamContents: [ :aStream | 
+									aStream nextPutAll: eachReference modelClass name asString.
+									eachReference modelClass isMeta ifTrue: [ aStream << ' class' ].
+									aStream nextPutAll: '>>#'.
+									aStream nextPutAll: eachReference selector ] ]
+						as: Array) ]
+]
+
 { #category : #accessing }
 GtLRefactoringMethodReferencesDomainObject >> mayHaveMore [
 	^ mayHaveMore ifNil: [ false ]
@@ -54,25 +74,4 @@ GtLRefactoringMethodReferencesDomainObject >> references: aCollection [
 	"Set found references"
 
 	references := aCollection
-]
-
-{ #category : #'api - serializing' }
-GtLRefactoringMethodReferencesDomainObject >> serializeToLlmJsonObject [
-	"Return a JSON dictionary that represents the domain object."
-
-	<return: #NeoJSONObject>
-	^ NeoJSONObject new
-		at: 'methodName' put: self methodName;
-		at: 'mayHaveMoreReferences' put: self mayHaveMore ;
-		at: 'references'
-			put: (self references
-					collect: [ :eachReference | 
-						String
-							streamContents: [ :aStream | 
-								aStream nextPutAll: eachReference modelClass name asString.
-								eachReference modelClass isMeta ifTrue: [ aStream << ' class' ].
-								aStream nextPutAll: '>>#'.
-								aStream nextPutAll: eachReference selector ] ]
-					as: Array);
-		yourself
 ]

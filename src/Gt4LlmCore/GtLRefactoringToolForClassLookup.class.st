@@ -12,6 +12,11 @@ GtLRefactoringToolForClassLookup >> description [
 	^ 'Get the details of a class as JSON.'
 ]
 
+{ #category : #accessing }
+GtLRefactoringToolForClassLookup >> isUsingDataViews [
+	^ true
+]
+
 { #category : #'llm-generated' }
 GtLRefactoringToolForClassLookup >> model [
 	^ model

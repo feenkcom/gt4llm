@@ -32,6 +32,13 @@ GTLDataViewWrapperModel >> gtViewsInContext: aPhlowContext [
 	^ collectedViews
 ]
 
+{ #category : #testing }
+GTLDataViewWrapperModel >> isErrorDomainObject [
+	"Return true if the target domain object represents some kind of failure or exception."
+
+	^ targetObject isErrorDomainObject
+]
+
 { #category : #accessing }
 GTLDataViewWrapperModel >> mainDataView [
 	^mainDataView

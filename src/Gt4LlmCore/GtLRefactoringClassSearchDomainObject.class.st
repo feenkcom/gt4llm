@@ -29,6 +29,16 @@ GtLRefactoringClassSearchDomainObject >> foundClassNames: anObject [
 	foundClassNames := anObject
 ]
 
+{ #category : #'gt-llm - serialization' }
+GtLRefactoringClassSearchDomainObject >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView jsonObject: [ :json |
+		json
+			at: 'query' put: self query;
+			at: 'foundClasses' put: self foundClassNames ]
+]
+
 { #category : #accessing }
 GtLRefactoringClassSearchDomainObject >> query [
 	^ query
@@ -37,15 +47,4 @@ GtLRefactoringClassSearchDomainObject >> query [
 { #category : #accessing }
 GtLRefactoringClassSearchDomainObject >> query: anObject [
 	query := anObject
-]
-
-{ #category : #'api - serializing' }
-GtLRefactoringClassSearchDomainObject >> serializeToLlmJsonObject [
-	"Return a JSON dictionary that represents the domain object."
-
-	<return: #NeoJSONObject>
-	^ NeoJSONObject new
-		at: 'query' put: self query;
-		at: 'foundClasses' put: self foundClassNames;
-		yourself
 ]
