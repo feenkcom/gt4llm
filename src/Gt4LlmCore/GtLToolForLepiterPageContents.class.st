@@ -81,7 +81,7 @@ GtLToolForLepiterPageContents >> privatePerformToolCall: aToolCall inContext: an
 			
 	targetDatabase
 		pageWithID: uuidString
-		ifPresent: [ :page | ^ GtLLepiterPageDomainObject new foundPage: page ]
+		ifPresent: [ :page | ^ GtLLepiterPage new targetPage: page ]
 		ifAbsent: [  ].
 
 	^ GtLMissingDomainObject new objectName: uuidString

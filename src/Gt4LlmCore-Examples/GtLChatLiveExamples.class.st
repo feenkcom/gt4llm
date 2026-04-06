@@ -302,9 +302,7 @@ GtLChatLiveExamples >> messageExample_lepiterPage_improveSingleTextSnippet [
 		sendWith: [ :message |
 			message
 				markdown: 'Improve the content of the first snippet in this page. Use a LepiterTransformation to express the change.';
-				addInputModel: (GtLLepiterPageModel new
-					name: lepiterPage title;
-					model: lepiterPage);
+				pageObject: lepiterPage;
 				addResponseFormat: (GtLResponseMagritteFormat new
 					name: 'LepiterTransformations';
 					modelClass: GtLLepiterTransformations) ].
@@ -327,9 +325,7 @@ GtLChatLiveExamples >> messageExample_lepiterPage_improveSnippets [
 				message
 					tools: GtLTools gtSearch , GtLTools leSearch;
 					markdown: 'Improve the content of the snippets in this lepiter page. Use change transformations to express the changes.';
-					addInputModel: (GtLLepiterPageModel new
-							name: lepiterPage title;
-							model: lepiterPage);
+					pageObject: lepiterPage;
 					addResponseFormat: (GtLResponseMagritteFormat new
 							name: 'ChangeTransformations';
 							modelClass: GtLChangeTransformations) ].
@@ -352,9 +348,7 @@ GtLChatLiveExamples >> messageExample_lepiterPage_improveTextSnippets [
 		sendWith: [ :message |
 			message
 				markdown: 'Improve the content of the text snippets in this lepiter page. Use Lepiter transformations to express the changes.';
-				addInputModel: (GtLLepiterPageModel new
-					name: lepiterPage title;
-					model: lepiterPage);
+				pageObject: lepiterPage;
 				addResponseFormat: (GtLResponseMagritteFormat new
 					name: 'LepiterTransformations';
 					modelClass: GtLLepiterTransformations) ].
@@ -378,9 +372,7 @@ GtLChatLiveExamples >> messageExample_lepiterPage_locatePageUid [
 		sendWith: [ :message |
 			message
 				markdown: 'Return the id of this lepiter page.';
-				addInputModel: (GtLLepiterPageModel new
-					name: lepiterPage title;
-					model: lepiterPage);
+				pageObject: lepiterPage;
 				addResponseFormat: (GtLResponseStringFormat new
 					name: 'uid') ].
 	"Page ID is e203cda7-b896-0d00-8c81-252704a2e9a0"
@@ -404,9 +396,7 @@ GtLChatLiveExamples >> messageExample_lepiterPage_locateSnippetUid [
 		sendWith: [ :message |
 			message
 				markdown: 'Return the uid of the fourth snippet in the page. Take nesting of snippets into account when counting snippets';
-				addInputModel: (GtLLepiterPageModel new
-					name: lepiterPage title;
-					model: lepiterPage);
+				pageObject: lepiterPage;
 				addResponseFormat: (GtLResponseMagritteFormat new
 					name: 'uid';
 					modelClass: LeUID) ].
@@ -431,9 +421,7 @@ GtLChatLiveExamples >> messageExample_lepiterPage_summarize [
 		sendWith: [ :message |
 			message
 				markdown: 'Create a summary of this lepiter page.';
-				addInputModel: (GtLLepiterPageModel new
-					name: lepiterPage title;
-					model: lepiterPage);
+				pageObject: lepiterPage;
 				addResponseFormat: (GtLResponseMagritteFormat new
 					name: 'Summary';
 					modelClass: GtLMarkdown) ].
