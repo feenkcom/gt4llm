@@ -158,6 +158,13 @@ GtLDataView >> errorViewWithException: anException reason: anExceptionReason isF
 ]
 
 { #category : #decorating }
+GtLDataView >> forwardCollection [
+	^ GtLForwardCollectionDataView new
+			originalView: self;
+			definingMethod: (GtPhlowDefiningMethodsCollector forContext: thisContext) collect
+]
+
+{ #category : #decorating }
 GtLDataView >> forwardObject [
 	^ GtLForwardObjectDataView new
 			originalView: self;
