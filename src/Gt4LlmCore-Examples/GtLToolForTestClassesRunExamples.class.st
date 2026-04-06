@@ -18,10 +18,10 @@ GtLToolForTestClassesRunExamples >> runTestsForMultipleClasses [
 	result := tool performToolCall: call.
 	
 	self assert: result isErrorDomainObject not.
-	self assert: result runCount equals: 5.
+	self assert: result runCount equals: 6.
 	self assert: result passedCount equals: 3.
 	self assert: result failureCount equals: 1.
-	self assert: result errorCount equals: 1.
+	self assert: result errorCount equals: 2.
 	self assert: result skippedCount equals: 1.
 	self assert: result expectedDefectCount equals: 1.
 	^ call
