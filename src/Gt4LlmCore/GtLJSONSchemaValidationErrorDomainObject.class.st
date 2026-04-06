@@ -5,7 +5,7 @@ Class {
 		'errorMessage',
 		'path'
 	],
-	#category : #Gt4LlmCore
+	#category : 'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #accessing }

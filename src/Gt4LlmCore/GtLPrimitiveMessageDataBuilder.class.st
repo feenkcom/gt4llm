@@ -9,6 +9,20 @@ Class {
 }
 
 { #category : #adding }
+GtLPrimitiveMessageDataBuilder >> addDocumentBlockFor: aByteArray contentType: aContentType dataKey: aDataKey from: aDataView [
+	self addDocumentDataBlock: (GtLPrimitiveDocumentDataBlock new 
+		documentBytes: aByteArray;
+		contentType: aContentType;
+		dataKey: aDataKey;
+		sourceDataView: aDataView)
+]
+
+{ #category : #adding }
+GtLPrimitiveMessageDataBuilder >> addDocumentDataBlock: aDocumentBlock [
+	messageDataBlock addDocumentDataBlock: aDocumentBlock
+]
+
+{ #category : #adding }
 GtLPrimitiveMessageDataBuilder >> addImageBlockFor: aByteArray type: anImageType dataKey: aDataKey from: aDataView [
 	self addImageDataBlock: (GtLPrimitiveImageDataBlock new 
 		imageBytes: aByteArray;

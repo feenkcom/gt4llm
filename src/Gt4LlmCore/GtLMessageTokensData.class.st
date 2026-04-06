@@ -5,7 +5,7 @@ Class {
 		'inputTokens',
 		'outputTokens'
 	],
-	#category : #Gt4LlmCore
+	#category : 'Gt4LlmCore-Client'
 }
 
 { #category : #serialization }
