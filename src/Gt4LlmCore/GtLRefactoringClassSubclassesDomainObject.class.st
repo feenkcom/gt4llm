@@ -8,18 +8,17 @@ Class {
 	#category : 'Gt4LlmCore-Domain Objects'
 }
 
-{ #category : #'api - serializing' }
-GtLRefactoringClassSubclassesDomainObject >> serializeToLlmJsonObject [
-	"Return a JSON dictionary that represents the domain object."
-
-	<return: #NeoJSONObject>
-	^ NeoJSONObject new
-		at: 'class' put: self targetClass name asString;
-		at: 'subclasses'
-			put: (self subclasses
-					collect: [ :eachSubclass | eachSubclass name asString ]
-					as: Array);
-		yourself
+{ #category : #'gt-llm - serialization' }
+GtLRefactoringClassSubclassesDomainObject >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView jsonObject: [ :json |
+		json
+			at: 'class' put: self targetClass name asString;
+			at: 'subclasses'
+				put: (self subclasses
+						collect: [ :eachSubclass | eachSubclass name asString ]
+						as: Array) ]
 ]
 
 { #category : #accessing }

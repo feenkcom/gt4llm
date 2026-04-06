@@ -12,6 +12,11 @@ GtLRefactoringToolForClassSubclasses >> description [
 	^ 'Retrieve all subclasses of the given class'
 ]
 
+{ #category : #accessing }
+GtLRefactoringToolForClassSubclasses >> isUsingDataViews [
+	^ true
+]
+
 { #category : #'llm-generated' }
 GtLRefactoringToolForClassSubclasses >> model [
 	^ model

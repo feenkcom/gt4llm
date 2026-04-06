@@ -29,6 +29,23 @@ GtLRefactoringMethodImplementorsDomainObject >> implementors: anObject [
 	implementors := anObject
 ]
 
+{ #category : #'gt-llm - serialization' }
+GtLRefactoringMethodImplementorsDomainObject >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView jsonObject: [ :json |
+		json
+			at: 'methodName' put: self methodName;
+			at: 'implementors'
+				put: (self implementors
+						collect: [ :eachImplementor | 
+							String
+								streamContents: [ :aStream | 
+									aStream nextPutAll: eachImplementor name asString.
+									eachImplementor isMeta ifTrue: [ aStream << ' class' ] ] ]
+						as: Array) ]
+]
+
 { #category : #accessing }
 GtLRefactoringMethodImplementorsDomainObject >> methodName [
 	^ methodName
@@ -37,22 +54,4 @@ GtLRefactoringMethodImplementorsDomainObject >> methodName [
 { #category : #accessing }
 GtLRefactoringMethodImplementorsDomainObject >> methodName: anObject [
 	methodName := anObject
-]
-
-{ #category : #'api - serializing' }
-GtLRefactoringMethodImplementorsDomainObject >> serializeToLlmJsonObject [
-	"Return a JSON dictionary that represents the domain object."
-
-	<return: #NeoJSONObject>
-	^ NeoJSONObject new
-		at: 'methodName' put: self methodName;
-		at: 'implementors'
-			put: (self implementors
-					collect: [ :eachImplementor | 
-						String
-							streamContents: [ :aStream | 
-								aStream nextPutAll: eachImplementor name asString.
-								eachImplementor isMeta ifTrue: [ aStream << ' class' ] ] ]
-					as: Array);
-		yourself
 ]

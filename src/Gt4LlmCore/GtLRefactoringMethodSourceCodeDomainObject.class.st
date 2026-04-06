@@ -7,6 +7,17 @@ Class {
 	#category : 'Gt4LlmCore-Domain Objects'
 }
 
+{ #category : #'gt-llm - serialization' }
+GtLRefactoringMethodSourceCodeDomainObject >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView jsonObject: [ :json |
+		json
+			at: 'methodName' put: self methodName;
+			at: 'className' put: self methodClassName;
+			at: 'sourceCode' put: self methodSourceCode ]
+]
+
 { #category : #accessing }
 GtLRefactoringMethodSourceCodeDomainObject >> method [
 	^ method
@@ -30,16 +41,4 @@ GtLRefactoringMethodSourceCodeDomainObject >> methodName [
 { #category : #'api - accessing' }
 GtLRefactoringMethodSourceCodeDomainObject >> methodSourceCode [
 	^ self method source
-]
-
-{ #category : #'api - serializing' }
-GtLRefactoringMethodSourceCodeDomainObject >> serializeToLlmJsonObject [
-	"Return a JSON dictionary that represents the domain object."
-
-	<return: #NeoJSONObject>
-	^ NeoJSONObject new
-		at: 'methodName' put: self methodName;
-		at: 'className' put: self methodClassName;
-		at: 'sourceCode' put: self methodSourceCode;
-		yourself
 ]
