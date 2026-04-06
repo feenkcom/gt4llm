@@ -55,7 +55,7 @@ TGtLWithInputModelsAPI >> gtViewInputModelsFor: aView [
 { #category : #'api - message' }
 TGtLWithInputModelsAPI >> images: aCollection [
 	self addAttachments: (aCollection collect: [ :each | 
-		GtLInputImageFile fileReference: each ])
+		GtLImageFile fileReference: each ])
 ]
 
 { #category : #accessing }
@@ -108,5 +108,5 @@ TGtLWithInputModelsAPI >> pageObject: aLepiterPage [
 { #category : #'api - message' }
 TGtLWithInputModelsAPI >> pdfs: aCollection [
 	self addAttachments: (aCollection collect: [ :each | 
-		GtLInputPdfFile fileReference: each ])
+		GtLPdfFile fileReference: each ])
 ]
