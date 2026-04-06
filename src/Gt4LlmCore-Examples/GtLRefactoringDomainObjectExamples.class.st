@@ -4,7 +4,7 @@ Examples for GtLRefactoringDomainObject subclasses.
 Class {
 	#name : #GtLRefactoringDomainObjectExamples,
 	#superclass : #Object,
-	#category : 'Gt4LlmCore-Examples-Domain Objects'
+	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #'examples - class domain object' }
@@ -296,7 +296,8 @@ GtLRefactoringDomainObjectExamples >> methodSourceCodeDomainObjectDataViewSerial
 	expected := Dictionary new
 		at: 'methodName' put: 'value';
 		at: 'className' put: 'GtLExampleDomainBase';
-		at: 'sourceCode' put: ('value{1}{2}^ value' format: { Character lf. Character tab });
+		at: 'sourceCode' put: ('value
+	^ value' );
 		yourself.
 	self assert: jsonData equals: expected.
 	

@@ -4,7 +4,7 @@ Magritte-based tool for creating a single class.
 Class {
 	#name : #GtLMagritteToolForClassCreation,
 	#superclass : #GtLAbstractMagritteFunctionTool,
-	#category : 'Gt4LlmCore-Tools'
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #magritte }

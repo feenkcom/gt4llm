@@ -5,7 +5,7 @@ Class {
 		'object',
 		'objectValue'
 	],
-	#category : 'Gt4LlmCore-Domain Objects'
+	#category : #'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #'instance creation' }
@@ -70,4 +70,9 @@ GtLObjectValueResult >> objectValueDescription [
 		accessor: #objectValue;
 		classes: { GtLSerializedObjectValue };
 		beRequired
+]
+
+{ #category : #printing }
+GtLObjectValueResult >> printOn: aStream [
+	self object printOn: aStream
 ]

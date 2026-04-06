@@ -3,7 +3,7 @@ Trait providing assertion methods for testing erroneous condition domain objects
 "
 Trait {
 	#name : #TGtLInvalidInputDataAssertions,
-	#category : 'Gt4LlmCore-Examples-Support'
+	#category : #'Gt4LlmCore-Examples-Support'
 }
 
 { #category : #assertions }
