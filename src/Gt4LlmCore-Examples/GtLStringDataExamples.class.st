@@ -2,27 +2,27 @@
 Examples for GtLPlainString testing serialization and data views.
 "
 Class {
-	#name : #GtLPlainStringExamples,
+	#name : #GtLStringDataExamples,
 	#superclass : #GtLObjectExamples,
 	#category : 'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #examples }
-GtLPlainStringExamples >> plainStringWithEmptyString [
+GtLStringDataExamples >> plainStringWithEmptyString [
 	<gtExample>
-	<return: #GtLPlainString>
+	<return: #GtLStringData>
 	| plainString |
 	
-	plainString := GtLPlainString forString: ''.
+	plainString := GtLStringData forString: ''.
 	
-	self assert: plainString string equals: ''.
+	self assert: plainString stringValue equals: ''.
 	self assert: plainString printString equals: ''''''.
 	
 	^ plainString
 ]
 
 { #category : #'examples - views' }
-GtLPlainStringExamples >> plainStringWithEmptyStringMainDataView [
+GtLStringDataExamples >> plainStringWithEmptyStringMainDataView [
 	<gtExample>
 	<return: #GtLCompositeDataView>
 	| plainString mainDataView |
@@ -37,7 +37,7 @@ GtLPlainStringExamples >> plainStringWithEmptyStringMainDataView [
 ]
 
 { #category : #'examples - serialization' }
-GtLPlainStringExamples >> plainStringWithEmptyStringSerialization [
+GtLStringDataExamples >> plainStringWithEmptyStringSerialization [
 	<gtExample>
 	<return: #GtLPrimitiveMessageDataBlock>
 	| mainDataView dataBlock jsonData |
@@ -54,23 +54,23 @@ GtLPlainStringExamples >> plainStringWithEmptyStringSerialization [
 ]
 
 { #category : #examples }
-GtLPlainStringExamples >> plainStringWithMultilineText [
+GtLStringDataExamples >> plainStringWithMultilineText [
 	<gtExample>
-	<return: #GtLPlainString>
+	<return: #GtLStringData>
 	| plainString text |
 	
 	text := 'First line
 Second line
 Third line'.
-	plainString := GtLPlainString forString: text.
+	plainString := GtLStringData forString: text.
 	
-	self assert: plainString string equals: text.
+	self assert: plainString stringValue equals: text.
 	
 	^ plainString
 ]
 
 { #category : #'examples - views' }
-GtLPlainStringExamples >> plainStringWithMultilineTextMainDataView [
+GtLStringDataExamples >> plainStringWithMultilineTextMainDataView [
 	<gtExample>
 	<return: #GtLCompositeDataView>
 	| plainString mainDataView |
@@ -85,7 +85,7 @@ GtLPlainStringExamples >> plainStringWithMultilineTextMainDataView [
 ]
 
 { #category : #'examples - serialization' }
-GtLPlainStringExamples >> plainStringWithMultilineTextSerialization [
+GtLStringDataExamples >> plainStringWithMultilineTextSerialization [
 	<gtExample>
 	<return: #GtLPrimitiveMessageDataBlock>
 	| mainDataView dataBlock jsonData expectedText |
@@ -105,21 +105,21 @@ Third line'.
 ]
 
 { #category : #examples }
-GtLPlainStringExamples >> plainStringWithSimpleText [
+GtLStringDataExamples >> plainStringWithSimpleText [
 	<gtExample>
-	<return: #GtLPlainString>
+	<return: #GtLStringData>
 	| plainString |
 	
-	plainString := GtLPlainString forString: 'hello world'.
+	plainString := GtLStringData forString: 'hello world'.
 	
-	self assert: plainString string equals: 'hello world'.
+	self assert: plainString stringValue equals: 'hello world'.
 	self assert: plainString printString equals: '''hello world'''.
 	
 	^ plainString
 ]
 
 { #category : #'examples - views' }
-GtLPlainStringExamples >> plainStringWithSimpleTextMainDataView [
+GtLStringDataExamples >> plainStringWithSimpleTextMainDataView [
 	<gtExample>
 	<return: #GtLCompositeDataView>
 	| plainString mainDataView |
@@ -134,7 +134,7 @@ GtLPlainStringExamples >> plainStringWithSimpleTextMainDataView [
 ]
 
 { #category : #'examples - serialization' }
-GtLPlainStringExamples >> plainStringWithSimpleTextSerialization [
+GtLStringDataExamples >> plainStringWithSimpleTextSerialization [
 	<gtExample>
 	<return: #GtLPrimitiveMessageDataBlock>
 	| mainDataView dataBlock jsonData |
