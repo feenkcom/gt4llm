@@ -284,7 +284,7 @@ GtLRefactoringDomainObjectExamples >> methodReferencesDomainObjectDataViewSerial
 { #category : #'examples - method source code domain object' }
 GtLRefactoringDomainObjectExamples >> methodSourceCodeDomainObjectDataViewSerialization [
 	<gtExample>
-	| domainObject compositeView dataBlock jsonData expected |
+	| domainObject compositeView dataBlock jsonData |
 	domainObject := self basicMethodSourceCodeDomainObject.
 	compositeView := domainObject llmDataViewsFor: GtLDataView new.
 	self assert: compositeView dataViews size equals: 1.
@@ -293,13 +293,13 @@ GtLRefactoringDomainObjectExamples >> methodSourceCodeDomainObjectDataViewSerial
 	self assert: dataBlock isNotNil.
 	
 	jsonData := dataBlock llmJsonData.
-	expected := Dictionary new
-		at: 'methodName' put: 'value';
-		at: 'className' put: 'GtLExampleDomainBase';
-		at: 'sourceCode' put: ('value
-	^ value' );
-		yourself.
-	self assert: jsonData equals: expected.
+
+	self assert: (jsonData at: 'methodName') equals:  'value'.
+	self assert: (jsonData at: 'className') equals:  'GtLExampleDomainBase'.
+	self 
+		assert: (jsonData at: 'sourceCode') withInternalLineEndings 
+		equals: ('value
+	^ value' ) withInternalLineEndings.
 	
 	^ dataBlock
 ]
