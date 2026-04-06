@@ -43,9 +43,8 @@ GtLTestCaseWithResultDomainObject >> gtViewExampleComparisonFailureDiffImageFor:
 	^(aView forward)
 		title: 'Comparison Image';
 		priority: 6.1;
-		object: [ GtLPrimitiveImageData fromElement:  (self testCaseWithResult result exception
-			gtViewDiffFor: GtPhlowView empty) asElement ];
-		view: #gtImageFor:
+		object: [ self testCaseWithResult result exception ];
+		view: #gtViewDiffFor:
 ]
 
 { #category : #testing }
