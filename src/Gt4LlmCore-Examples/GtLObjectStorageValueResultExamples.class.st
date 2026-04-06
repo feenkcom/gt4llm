@@ -347,8 +347,8 @@ GtLObjectStorageValueResultExamples >> objectStorageValueResultForObjectStorageV
 	
 	objectValueJson := jsonData at: #objectValue.
 	self assert: (objectValueJson at: 'objectClassName') equals: 'GtLObjectStorageValueResult'.
-	self assert: ((objectValueJson at: 'objectPrintString') includesSubstring: 'GtLObjectStorageValueResult(inner-id-123)').
-	self assert: (objectValueJson at: 'superclassName') equals: 'Object'.
+	self assert: ((objectValueJson at: 'objectPrintString') includesSubstring: 'inner-id-123').
+	self assert: (objectValueJson at: 'superclassName') equals: 'GtLObjectValueResult'.
 	self assert: (objectValueJson at: 'packageName') equals: 'Gt4LlmCore'.
 	
 	"Check that the instance slots include objectValue, objectId, object"

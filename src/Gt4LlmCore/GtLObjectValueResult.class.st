@@ -71,3 +71,8 @@ GtLObjectValueResult >> objectValueDescription [
 		classes: { GtLSerializedObjectValue };
 		beRequired
 ]
+
+{ #category : #printing }
+GtLObjectValueResult >> printOn: aStream [
+	self object printOn: aStream
+]

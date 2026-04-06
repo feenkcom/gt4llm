@@ -38,7 +38,7 @@ GtLLepiterPage >> llmRawDataViewFor: aDataView [
 
 { #category : #printing }
 GtLLepiterPage >> printOn: aStream [
-	^ self targetPage printOn: aStream
+	self targetPage printOn: aStream
 ]
 
 { #category : #accessing }
