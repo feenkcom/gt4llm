@@ -15,6 +15,14 @@ GtLObjectValueResult class >> forObject: anObject [
 		objectValue: (GtLSerializedObjectValue fromObject: anObject)
 ]
 
+{ #category : #testing }
+GtLObjectValueResult >> isErrorDomainObject [
+	"Return true if the domain object represents some kind of failure or exception,
+	instead of an expected domain object."
+
+	^ false
+]
+
 { #category : #'llm views' }
 GtLObjectValueResult >> llmRawDataViewFor: aDataView [
 	<gtLlmDataView>
