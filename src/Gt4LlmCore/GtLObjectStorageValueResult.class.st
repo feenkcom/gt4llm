@@ -7,7 +7,7 @@ Class {
 	#instVars : [
 		'objectId'
 	],
-	#category : 'Gt4LlmCore-Domain Objects'
+	#category : #'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #'instance creation' }
@@ -37,9 +37,9 @@ GtLObjectStorageValueResult >> objectIdDescription [
 
 { #category : #printing }
 GtLObjectStorageValueResult >> printOn: aStream [
-	super printOn: aStream.
+	
+	self object printOn: aStream.
 	aStream
-		nextPut: $(;
-		nextPutAll: (self objectId ifNil: [ '' ] ifNotNil: [ self objectId ]);
-		nextPut: $)
+		nextPutAll: '; id=';
+		nextPutAll: (self objectId ifNil: [ '' ] ifNotNil: [ self objectId ])
 ]

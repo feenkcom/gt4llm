@@ -4,7 +4,7 @@ Examples for GtLObjectValueResult testing serialization and data views.
 Class {
 	#name : #GtLObjectValueResultExamples,
 	#superclass : #GtLWrappedModelExamples,
-	#category : 'Gt4LlmCore-Examples-Domain Objects'
+	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #assertions }
@@ -68,9 +68,10 @@ GtLObjectValueResultExamples >> objectValueResultForIntegerMainDataView [
 	self assertCompositeDataView: mainDataView hasTitle: 'Object views' viewsCount: 2.
 	
 	"First view is forward for object specific details"
-	self assertForwardObjectDataView: mainDataView dataViews first hasDataKey: 'objectDetails' targetObject: domainObject object.
+	self assertCompositeView: mainDataView hasJsonForwardDataViewWithDataKey: 'objectDetails' targetObject:  domainObject object.
 	
-	forwardedView := mainDataView dataViews first computeForwardedView.
+	forwardedView := (mainDataView dataViews 
+		detect: [ :each | each class = GtLForwardObjectDataView ]) computeForwardedView.
 	self assertCompositeDataView: forwardedView hasTitle: 'Object views' viewsCount: 0.
 	
 	"Second view is raw data (magritte)"
@@ -132,9 +133,10 @@ GtLObjectValueResultExamples >> objectValueResultForStringMainDataView [
 	self assertCompositeDataView: mainDataView hasTitle: 'Object views' viewsCount: 2.
 	
 	"First view is forward for object specific details"
-	self assertForwardObjectDataView: mainDataView dataViews first hasDataKey: 'objectDetails' targetObject: domainObject object.
+	self assertCompositeView: mainDataView hasJsonForwardDataViewWithDataKey: 'objectDetails' targetObject:  domainObject object.
 	
-	forwardedView := mainDataView dataViews first computeForwardedView.
+	forwardedView := (mainDataView dataViews 
+		detect: [ :each | each class = GtLForwardObjectDataView ]) computeForwardedView.
 	self assertCompositeDataView: forwardedView hasTitle: 'Object views' viewsCount: 0.
 	
 	"Second view is raw data (magritte)"
@@ -194,10 +196,10 @@ GtLObjectValueResultExamples >> objectValueResultForTestObjectMainDataView [
 	
 	self assertCompositeDataView: mainDataView hasTitle: 'Object views' viewsCount: 2.
 	
-	"First view is forward for object specific details"
-	self assertForwardObjectDataView: mainDataView dataViews first hasDataKey: 'objectDetails' targetObject: domainObject object.
+	self assertCompositeView: mainDataView hasJsonForwardDataViewWithDataKey: 'objectDetails' targetObject:  domainObject object.
 	
-	forwardedView := mainDataView dataViews first computeForwardedView.
+	forwardedView := (mainDataView dataViews 
+		detect: [ :each | each class = GtLForwardObjectDataView ]) computeForwardedView.
 	self assertCompositeDataView: forwardedView hasTitle: 'Object views' viewsCount: 0.
 	
 	"Second view is raw data (magritte)"

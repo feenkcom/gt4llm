@@ -5,7 +5,7 @@ Class {
 		'messageDataBlock',
 		'currentCompositeJsonDataBlock'
 	],
-	#category : 'Gt4LlmCore-Data Views'
+	#category : #'Gt4LlmCore-Data Views'
 }
 
 { #category : #adding }

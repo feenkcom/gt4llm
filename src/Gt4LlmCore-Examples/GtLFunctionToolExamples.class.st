@@ -4,7 +4,7 @@ Examples for GtLFunctionTool.
 Class {
 	#name : #GtLFunctionToolExamples,
 	#superclass : #Object,
-	#category : 'Gt4LlmCore-Examples-Tools'
+	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #'examples - tools' }

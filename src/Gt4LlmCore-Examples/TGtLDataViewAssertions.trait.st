@@ -3,7 +3,7 @@ I provide common assertion methods for testing data views in examples.
 "
 Trait {
 	#name : #TGtLDataViewAssertions,
-	#category : 'Gt4LlmCore-Examples-Data Views'
+	#category : #'Gt4LlmCore-Examples-Data Views'
 }
 
 { #category : #'assertions - composite views' }
@@ -47,6 +47,16 @@ TGtLDataViewAssertions >> assertCompositeView: aCompositeView hasInnerCompositeW
 ]
 
 { #category : #'assertions - composite views' }
+TGtLDataViewAssertions >> assertCompositeView: aCompositeView hasJsonDataViewWithDataKey: aDataKey [
+	"Assert that there is a view in the given composite that is a json view with the given dataKey."
+	
+	self assert: (aCompositeView dataViews  
+		anySatisfy: [:aView |
+			aView class = GtLJsonDataView and: [
+				aView dataKey = aDataKey]])
+]
+
+{ #category : #'assertions - composite views' }
 TGtLDataViewAssertions >> assertCompositeView: aCompositeView hasJsonDataViewsWithDataKeys: anArray [
 	"Assert that the composite view contains JSON data views with the given data keys."
 	self assert: aCompositeView dataViews size equals: anArray size.
@@ -60,13 +70,14 @@ TGtLDataViewAssertions >> assertCompositeView: aCompositeView hasJsonDataViewsWi
 ]
 
 { #category : #'assertions - composite views' }
-TGtLDataViewAssertions >> assertCompositeView: aCompositeView hasJsonDataViewWithDataKey: aDataKey [
-	"Assert that there is a view in the given composite that is a json view with the given dataKey."
+TGtLDataViewAssertions >> assertCompositeView: aCompositeView hasJsonForwardDataViewWithDataKey: aDataKey targetObject: anObject [
+	"Assert that there is a view in the given composite that is a forward view with the given dataKey."
 	
 	self assert: (aCompositeView dataViews  
 		anySatisfy: [:aView |
-			aView class = GtLJsonDataView and: [
-				aView dataKey = aDataKey]])
+			aView class = GtLForwardObjectDataView and: [
+				aView dataKey = aDataKey and: [
+					aView targetObject = anObject ]]])
 ]
 
 { #category : #'assertions - composite views' }
