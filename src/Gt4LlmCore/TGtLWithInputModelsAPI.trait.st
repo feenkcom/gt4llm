@@ -119,7 +119,9 @@ TGtLWithInputModelsAPI >> pageId: aPageId [
 
 { #category : #'api - message' }
 TGtLWithInputModelsAPI >> pageObject: aLepiterPage [
-	self addInputModel: (GtLLepiterPageModel forPage: aLepiterPage)
+	self 
+		addWrappedObject: (GtLLepiterPage forPage: aLepiterPage)
+		named: aLepiterPage title
 ]
 
 { #category : #'api - message' }

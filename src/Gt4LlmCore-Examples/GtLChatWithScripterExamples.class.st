@@ -45,9 +45,7 @@ GtLChatWithScripterExamples >> chatElementMarkdownAndLepiterPage [
 		sendWith: [ :message | 
 			message
 				markdown: 'Improve the content of the first snippet in this page. Use a LepiterTransformation to express the change.';
-				addInputModel: (GtLLepiterPageModel new
-						name: lepiterPage title;
-						model: lepiterPage);
+				pageObject: lepiterPage;
 				addResponseFormat: (GtLResponseMagritteFormat new
 						name: 'LepiterTransformations';
 						modelClass: GtLLepiterTransformations) ].
@@ -60,7 +58,7 @@ GtLChatWithScripterExamples >> chatElementMarkdownAndLepiterPage [
 		assertNewMessageStopButtonIsDisabled;
 		assertNumberOfMessageElementsIs: 2;
 		assertMessageElementWithIndex: 1
-			hasHeaderContent: 'Improve the content of the first snippet in this page. Use a LepiterTransformation to express the change. | Page: Releaser';
+			hasHeaderContent: 'Improve the content of the first snippet in this page. Use a LepiterTransformation to express the change. | Object: Named Page: ''Releaser''';
 		play.
 
 	^ scripter
