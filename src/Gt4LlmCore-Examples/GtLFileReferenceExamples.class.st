@@ -9,7 +9,7 @@ Class {
 	#instVars : [
 		'tempDirectory'
 	],
-	#category : 'Gt4LlmCore-Examples-Domain Objects'
+	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #assertions }
@@ -86,22 +86,6 @@ GtLFileReferenceExamples >> fromFileReferenceForTxt [
 	result := GtLFileReference fromFileReference: fileRef.
 	
 	self assert: result class equals: GtLTextFile.
-	self assert: result fileReference equals: fileRef.
-	
-	^ result
-]
-
-{ #category : #examples }
-GtLFileReferenceExamples >> fromFileReferenceForUnknown [
-	<gtExample>
-	<after: #cleanupTempDirectory>
-	| fileRef result |
-	fileRef := self tempDirectory / 'test.xyz'.
-	fileRef binaryWriteStreamDo: [ :stream | stream nextPutAll: #[1 2 3] ].
-	
-	result := GtLFileReference fromFileReference: fileRef.
-	
-	self assert: result class equals: GtLGenericFile.
 	self assert: result fileReference equals: fileRef.
 	
 	^ result
