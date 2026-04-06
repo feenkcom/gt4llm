@@ -30,9 +30,8 @@ Object >> gtActionObjectChatFor: anAction [
 			sendWith: [ :m | 
 				m
 					markdown: 'Describe the object';
-					addPlainInputObject: (GtLObjectStorageValueResult 
-								forObject: self
-								withId: storedObjectId)
+					addPlainInputObject: self
+						withId: storedObjectId
 						named: 'Initial object' ].
 		c ].
 	^ anAction button

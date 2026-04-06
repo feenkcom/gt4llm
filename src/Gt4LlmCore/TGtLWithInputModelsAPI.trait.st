@@ -22,6 +22,23 @@ TGtLWithInputModelsAPI >> addInputModel: aModel [
 
 { #category : #'api - models' }
 TGtLWithInputModelsAPI >> addPlainInputObject: anObject named: aString [
+	self 
+		addWrappedObject: (GtLObjectValueResult 
+			forObject: anObject)
+		named: aString
+]
+
+{ #category : #'api - models' }
+TGtLWithInputModelsAPI >> addPlainInputObject:  anObject withId: aStoredObjectId named: aString [
+	self 
+		addWrappedObject: (GtLObjectStorageValueResult 
+			forObject: anObject
+			withId: aStoredObjectId)
+		named: aString
+]
+
+{ #category : #'api - models' }
+TGtLWithInputModelsAPI >> addWrappedObject: anObject named: aString [
 	self addInputModel: (GtLWrappedObjectModel new
 		model: anObject;
 		name: aString)
