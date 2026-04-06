@@ -6,6 +6,9 @@ Class {
 
 { #category : #accessing }
 GtLPrimitiveCompositeJsonGenericDataBlock >> condensedJsonBlock [
+	jsonDataBlocks size = 1 
+		ifTrue: [ ^jsonDataBlocks first condensedJsonBlock].
+		
 	^jsonDataBlocks 
 		inject: (GtLPrimitiveJsonDataBlock new
 			dataKey: nil; "is nil as we collect the inner data, and it could have same key"
