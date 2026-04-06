@@ -1,11 +1,11 @@
 Class {
-	#name : #GtLInputImageFile,
-	#superclass : #GtLInputAttachment,
-	#category : #Gt4LlmCore
+	#name : #GtLImageFile,
+	#superclass : #GtLFileReference,
+	#category : 'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #accessing }
-GtLInputImageFile >> contentType [
+GtLImageFile >> contentType [
 	 self fileReference extension = 'png'
 	 	ifTrue: [ ^ 'image/png' ].
 	 
@@ -13,7 +13,7 @@ GtLInputImageFile >> contentType [
 ]
 
 { #category : #views }
-GtLInputImageFile >> gtFileReferencePictureFor: aView [
+GtLImageFile >> gtFileReferencePictureFor: aView [
 	<gtView>
 	^ aView forward
 		title: 'Picture';
@@ -21,8 +21,21 @@ GtLInputImageFile >> gtFileReferencePictureFor: aView [
 		view: #gtFigureFor:
 ]
 
+{ #category : #views }
+GtLImageFile >> llmImageDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	| imageType |
+	imageType := self fileReference extension asLowercase.
+	(#('jpg' 'jpeg') includes: imageType) ifTrue: [ imageType := 'jpeg' ].
+	
+	^ aDataView imageData
+		imageBytes: [ self fileReference binaryContents ];
+		imageType: imageType
+]
+
 { #category : #serialization }
-GtLInputImageFile >> serializeToAnthropicResponseOutput [
+GtLImageFile >> serializeToAnthropicResponseOutput [
 	^ {
 		'type' -> 'image'.
 		'source'-> {
@@ -33,7 +46,7 @@ GtLInputImageFile >> serializeToAnthropicResponseOutput [
 ]
 
 { #category : #serialization }
-GtLInputImageFile >> serializeToOpenAIResponseOutput [
+GtLImageFile >> serializeToOpenAIResponseOutput [
 	^ {'type' -> 'input_image'.
 		'image_url' -> ('data:'
 			,self contentType

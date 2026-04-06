@@ -1,16 +1,25 @@
 Class {
-	#name : #GtLInputTextFile,
-	#superclass : #GtLInputAttachment,
-	#category : #Gt4LlmCore
+	#name : #GtLTextFile,
+	#superclass : #GtLFileReference,
+	#category : 'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #serialization }
-GtLInputTextFile >> contentType [
+GtLTextFile >> contentType [
 		^ 'text/plain'
 ]
 
+{ #category : #views }
+GtLTextFile >> llmDocumentDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView documentData
+		document: [ self fileReference binaryContents ];
+		contentType: self contentType
+]
+
 { #category : #serialization }
-GtLInputTextFile >> serializeToAnthropicResponseOutput [
+GtLTextFile >> serializeToAnthropicResponseOutput [
 	^ {
 		'type' -> 'document'.
 		'source'-> {
@@ -21,7 +30,7 @@ GtLInputTextFile >> serializeToAnthropicResponseOutput [
 ]
 
 { #category : #serialization }
-GtLInputTextFile >> serializeToOpenAIResponseOutput [
+GtLTextFile >> serializeToOpenAIResponseOutput [
 	^ {'type' -> 'input_file'.
 		'filename' -> self fileReference basename.
 		'file_data' -> ('data:'
