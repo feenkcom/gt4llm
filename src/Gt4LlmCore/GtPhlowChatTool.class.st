@@ -7,7 +7,7 @@ Class {
 	#instVars : [
 		'chat'
 	],
-	#category : #Gt4LlmCore
+	#category : #'Gt4LlmCore-UI'
 }
 
 { #category : #'instance creation' }

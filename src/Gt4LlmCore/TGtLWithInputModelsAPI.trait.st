@@ -20,9 +20,9 @@ TGtLWithInputModelsAPI >> addInputModel: aModel [
 	self inputModels at: aModel name put: aModel.
 ]
 
-{ #category : #'api - message' }
+{ #category : #'api - models' }
 TGtLWithInputModelsAPI >> addPlainInputObject: anObject named: aString [
-	self addInputModel: (GtLPlainObjectModel new
+	self addInputModel: (GtLWrappedObjectModel new
 		model: anObject;
 		name: aString)
 ]

@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'objectsByUUID'
 	],
-	#category : #'Gt4LlmCore-Core'
+	#category : #'Gt4LlmCore-Object Storage'
 }
 
 { #category : #accessing }

@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'missingPropertyNames'
 	],
-	#category : #Gt4LlmCore
+	#category : #'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #accessing }
