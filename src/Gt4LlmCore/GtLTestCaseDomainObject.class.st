@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLTestCaseDomainObject,
-	#superclass : #GtLDomainObject,
+	#superclass : #Object,
 	#instVars : [
 		'testCase',
 		'result'
