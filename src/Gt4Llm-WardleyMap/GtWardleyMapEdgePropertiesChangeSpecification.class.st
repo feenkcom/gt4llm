@@ -33,8 +33,8 @@ GtWardleyMapEdgePropertiesChangeSpecification >> arrowDescription [
 { #category : #changes }
 GtWardleyMapEdgePropertiesChangeSpecification >> asChangeIn: aWardleyMapModel [
 	^ (self changeClass onMap: aWardleyMapModel)
-		fromNodeId: (UUID gtFromString: fromNodeId);
-		toNodeId: (UUID gtFromString: toNodeId);
+		fromNodeId: fromNodeId;
+		toNodeId: toNodeId;
 		arrow: self arrow;
 		color: self color;
 		isLabelVisible: self isLabelVisible;
