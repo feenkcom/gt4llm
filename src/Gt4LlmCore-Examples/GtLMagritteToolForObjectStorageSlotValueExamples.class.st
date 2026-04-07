@@ -3,10 +3,8 @@ Examples for GtLMagritteToolForObjectStorageSlotValue.
 "
 Class {
 	#name : #GtLMagritteToolForObjectStorageSlotValueExamples,
-	#superclass : #Object,
-	#traits : 'TGtLInvalidInputDataAssertions',
-	#classTraits : 'TGtLInvalidInputDataAssertions classTrait',
-	#category : #'Gt4LlmCore-Examples-Tools'
+	#superclass : #GtLAbstractMagritteFunctionToolExamples,
+	#category : 'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #examples }
