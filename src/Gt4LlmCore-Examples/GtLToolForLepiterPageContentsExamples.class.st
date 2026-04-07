@@ -26,8 +26,8 @@ GtLToolForLepiterPageContentsExamples >> pageSerializationForExistingPage [
 	self assert: call tool == tool.
 	self assert: (result isKindOf: GTLDataViewWrapperModel).
 	domainObject := result targetObject.
-	self assert: (domainObject isKindOf: GtLLepiterPageDomainObject).
-	self assert: domainObject foundPage equals: page.
+	self assert: (domainObject isKindOf: GtLLepiterPage).
+	self assert: domainObject targetPage equals: page.
 	
 	"Test data view serialization"
 	compositeView := domainObject llmDataViewsFor: GtLDataView new.

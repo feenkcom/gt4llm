@@ -1,11 +1,17 @@
 Class {
 	#name : #GtLPrimitiveCompositeJsonGenericDataBlock,
 	#superclass : #GtLPrimitiveCompositeJsonDataBlock,
-	#category : #Gt4LlmCore
+	#category : #'Gt4LlmCore-Data Views'
 }
 
 { #category : #accessing }
 GtLPrimitiveCompositeJsonGenericDataBlock >> condensedJsonBlock [
+	(jsonDataBlocks size = 1 and: [
+		jsonDataBlocks anyOne class = GtLPrimitiveJsonBareDataBlock ])
+			ifTrue: [ 	
+				^jsonDataBlocks anyOne class new
+					jsonData:	jsonDataBlocks anyOne jsonData ].
+
 	^jsonDataBlocks 
 		inject: (GtLPrimitiveJsonDataBlock new
 			dataKey: nil; "is nil as we collect the inner data, and it could have same key"

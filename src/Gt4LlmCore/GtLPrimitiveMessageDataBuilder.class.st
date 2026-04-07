@@ -5,7 +5,7 @@ Class {
 		'messageDataBlock',
 		'currentCompositeJsonDataBlock'
 	],
-	#category : #Gt4LlmCore
+	#category : #'Gt4LlmCore-Data Views'
 }
 
 { #category : #adding }
@@ -43,6 +43,13 @@ GtLPrimitiveMessageDataBuilder >> addJsonDataBlock: aJsonDataBlock [
 
 { #category : #adding }
 GtLPrimitiveMessageDataBuilder >> addJsonDataBlockFor: aJsonData  dataKey: aDataKey from: aDataView [
+	aJsonData isString ifTrue: [
+		self addJsonDataBlock: (GtLPrimitiveJsonBareDataBlock new
+			jsonData: aJsonData;
+			dataKey: aDataKey;
+			sourceDataView: aDataView).
+		^self ].
+	
 	self addJsonDataBlock: (GtLPrimitiveJsonDataBlock new
 		jsonData: aJsonData;
 		dataKey: aDataKey;
@@ -59,9 +66,11 @@ GtLPrimitiveMessageDataBuilder >> forArrayWithDataKey: aDataKey do: aBlock [
 		previousComposite := currentCompositeJsonDataBlock.
 		currentCompositeJsonDataBlock := GtLPrimitiveCompositeJsonArrayDataBlock new
 			dataKey: aDataKey.
-		previousComposite addJsonDataBlock: currentCompositeJsonDataBlock.
+	
+		aBlock value.
 		
-		aBlock value
+		currentCompositeJsonDataBlock containedJsonDataBlocksCount > 0 ifTrue: [
+			previousComposite addJsonDataBlock: currentCompositeJsonDataBlock ].
 	] 
 		ensure: [
 			currentCompositeJsonDataBlock := previousComposite ]

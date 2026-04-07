@@ -8,6 +8,25 @@ Class {
 	#category : #'Gt4LlmCore-Domain Objects'
 }
 
+{ #category : #'gt-llm - serialization' }
+GtLRefactoringClassReferencesDomainObject >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView jsonObject: [ :json |
+		json
+			at: 'class' put: self targetClass name asString;
+			at: 'references'
+				put: (self references
+						collect: [ :eachReference | 
+							String
+								streamContents: [ :aStream | 
+									aStream nextPutAll: eachReference modelClass name.
+									eachReference modelClass isMeta ifTrue: [ aStream nextPutAll: ' class' ].
+									aStream nextPutAll: '>>#'.
+									aStream nextPutAll: eachReference selector ] ]
+						as: Array) ]
+]
+
 { #category : #accessing }
 GtLRefactoringClassReferencesDomainObject >> references [
 	^ references ifNil: [ #() ]
@@ -16,26 +35,6 @@ GtLRefactoringClassReferencesDomainObject >> references [
 { #category : #accessing }
 GtLRefactoringClassReferencesDomainObject >> references: anObject [
 	references := anObject
-]
-
-{ #category : #'api - serializing' }
-GtLRefactoringClassReferencesDomainObject >> serializeToLlmJsonObject [
-	"Return a JSON dictionary that represents the domain object."
-
-	<return: #NeoJSONObject>
-	^ NeoJSONObject new
-		at: 'class' put: self targetClass name asString;
-		at: 'references'
-			put: (self references
-					collect: [ :eachReference | 
-						String
-							streamContents: [ :aStream | 
-								aStream nextPutAll: eachReference modelClass name.
-								eachReference modelClass isMeta ifTrue: [ aStream nextPutAll: ' class' ].
-								aStream nextPutAll: '>>#'.
-								aStream nextPutAll: eachReference selector ] ]
-					as: Array);
-		yourself
 ]
 
 { #category : #accessing }

@@ -6,7 +6,7 @@ Class {
 		'cachedTargetDataView',
 		'errorReason'
 	],
-	#category : #Gt4LlmCore
+	#category : #'Gt4LlmCore-Data Views'
 }
 
 { #category : #'as yet unclassified' }

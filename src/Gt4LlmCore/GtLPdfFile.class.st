@@ -1,16 +1,25 @@
 Class {
-	#name : #GtLInputPdfFile,
-	#superclass : #GtLInputAttachment,
-	#category : #Gt4LlmCore
+	#name : #GtLPdfFile,
+	#superclass : #GtLFileReference,
+	#category : #'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #accessing }
-GtLInputPdfFile >> contentType [
+GtLPdfFile >> contentType [
 		^ 'application/pdf'
 ]
 
+{ #category : #views }
+GtLPdfFile >> llmDocumentDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView documentData
+		document: [ self fileReference binaryContents ];
+		contentType: self contentType
+]
+
 { #category : #serialization }
-GtLInputPdfFile >> serializeToAnthropicResponseOutput [
+GtLPdfFile >> serializeToAnthropicResponseOutput [
 	^ {
 		'type' -> 'document'.
 		'source'-> {
@@ -21,7 +30,7 @@ GtLInputPdfFile >> serializeToAnthropicResponseOutput [
 ]
 
 { #category : #serialization }
-GtLInputPdfFile >> serializeToOpenAIResponseOutput [
+GtLPdfFile >> serializeToOpenAIResponseOutput [
 	^ {'type' -> 'input_file'.
 		'filename' -> self fileReference basename.
 		'file_data' -> ('data:'

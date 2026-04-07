@@ -22,6 +22,23 @@ TGtLWithInputModelsAPI >> addInputModel: aModel [
 
 { #category : #'api - models' }
 TGtLWithInputModelsAPI >> addPlainInputObject: anObject named: aString [
+	self 
+		addWrappedObject: (GtLObjectValueResult 
+			forObject: anObject)
+		named: aString
+]
+
+{ #category : #'api - models' }
+TGtLWithInputModelsAPI >> addPlainInputObject:  anObject withId: aStoredObjectId named: aString [
+	self 
+		addWrappedObject: (GtLObjectStorageValueResult 
+			forObject: anObject
+			withId: aStoredObjectId)
+		named: aString
+]
+
+{ #category : #'api - models' }
+TGtLWithInputModelsAPI >> addWrappedObject: anObject named: aString [
 	self addInputModel: (GtLWrappedObjectModel new
 		model: anObject;
 		name: aString)
@@ -55,7 +72,7 @@ TGtLWithInputModelsAPI >> gtViewInputModelsFor: aView [
 { #category : #'api - message' }
 TGtLWithInputModelsAPI >> images: aCollection [
 	self addAttachments: (aCollection collect: [ :each | 
-		GtLInputImageFile fileReference: each ])
+		GtLImageFile fileReference: each ])
 ]
 
 { #category : #accessing }
@@ -102,11 +119,13 @@ TGtLWithInputModelsAPI >> pageId: aPageId [
 
 { #category : #'api - message' }
 TGtLWithInputModelsAPI >> pageObject: aLepiterPage [
-	self addInputModel: (GtLLepiterPageModel forPage: aLepiterPage)
+	self 
+		addWrappedObject: (GtLLepiterPage forPage: aLepiterPage)
+		named: aLepiterPage title
 ]
 
 { #category : #'api - message' }
 TGtLWithInputModelsAPI >> pdfs: aCollection [
 	self addAttachments: (aCollection collect: [ :each | 
-		GtLInputPdfFile fileReference: each ])
+		GtLPdfFile fileReference: each ])
 ]

@@ -4,24 +4,22 @@ Class {
 	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
-{ #category : #'llm-generated' }
+{ #category : #examples }
 GtLRefactoringToolForMethodReferencesExamples >> methodReferencesForExistingSelector [
 	<gtExample>
 	| tool call result references |
 	tool := self toolWithExampleSenders.
 	call := GtLFunctionToolCall new.
-	call
-		function: {'name' -> tool name.
-				'arguments' -> {'selector' -> 'bar'} asDictionary} asDictionary.
+	call rawArguments: {'selector' -> 'bar'} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
 	self assert: result isErrorDomainObject not.
-	references := result references
+	references := result targetObject references
 			detect: [ :each | 
 				each methodClass name = 'GtLRefactoringMethodReferencesSender'
 					and: [ each selector = 'call' ] ].
 	self assert: references isNotNil.
-	references := result references
+	references := result targetObject references
 			detect: [ :each | 
 				each methodClass name = 'GtLRefactoringMethodReferencesForwarder'
 					and: [ each selector = 'call' ] ].
@@ -29,22 +27,19 @@ GtLRefactoringToolForMethodReferencesExamples >> methodReferencesForExistingSele
 	^ call
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #examples }
 GtLRefactoringToolForMethodReferencesExamples >> methodReferencesForUnknownSelector [
 	<gtExample>
 	| tool call result |
 	tool := self toolWithExampleSenders.
 	call := GtLFunctionToolCall new.
-	call function: {
-		'name' -> tool name.
-		'arguments' -> {'selector' -> 'missingSelector'} asDictionary
-	} asDictionary.
+	call rawArguments: {'selector' -> 'missingSelector'} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
 	
 	self assert: result isErrorDomainObject not.
-	self assert: result methodName equals: 'missingSelector'.
-	self assert: result references equals: #().
+	self assert: result targetObject methodName equals: 'missingSelector'.
+	self assert: result targetObject references equals: #().
 	^ call
 ]
 

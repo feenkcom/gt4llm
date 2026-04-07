@@ -7,7 +7,7 @@ Class {
 		'dataKey',
 		'definingMethodProvider'
 	],
-	#category : #Gt4LlmCore
+	#category : #'Gt4LlmCore-Data Views'
 }
 
 { #category : #'api - views' }
@@ -155,6 +155,13 @@ GtLDataView >> errorViewWithException: anException reason: anExceptionReason isF
 		title: errorName;
 		exception: frozenException;
 		errorReason: anExceptionReason
+]
+
+{ #category : #decorating }
+GtLDataView >> forwardCollection [
+	^ GtLForwardCollectionDataView new
+			originalView: self;
+			definingMethod: (GtPhlowDefiningMethodsCollector forContext: thisContext) collect
 ]
 
 { #category : #decorating }

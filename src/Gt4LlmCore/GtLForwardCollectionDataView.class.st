@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLForwardCollectionDataView,
 	#superclass : #GtLForwardDataView,
-	#category : #Gt4LlmCore
+	#category : #'Gt4LlmCore-Data Views'
 }
 
 { #category : #'api - scripting' }

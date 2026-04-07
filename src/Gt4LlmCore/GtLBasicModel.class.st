@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLBasicModel,
 	#superclass : #Object,
-	#category : #Gt4LlmCore
+	#category : #'Gt4LlmCore-Core'
 }
 
 { #category : #serialization }

@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'jsonDataBlocks'
 	],
-	#category : #Gt4LlmCore
+	#category : #'Gt4LlmCore-Data Views'
 }
 
 { #category : #adding }

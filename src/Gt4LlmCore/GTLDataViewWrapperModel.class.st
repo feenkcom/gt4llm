@@ -5,7 +5,7 @@ Class {
 		'targetObject',
 		'mainDataView'
 	],
-	#category : #Gt4LlmCore
+	#category : #'Gt4LlmCore-Core'
 }
 
 { #category : #'gt - inspector' }
@@ -30,6 +30,13 @@ GTLDataViewWrapperModel >> gtViewsInContext: aPhlowContext [
 	GtPhlowUtility sortByPriority: collectedViews.
 
 	^ collectedViews
+]
+
+{ #category : #testing }
+GTLDataViewWrapperModel >> isErrorDomainObject [
+	"Return true if the target domain object represents some kind of failure or exception."
+
+	^ targetObject isErrorDomainObject
 ]
 
 { #category : #accessing }

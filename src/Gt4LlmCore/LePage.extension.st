@@ -44,8 +44,6 @@ LePage >> gtReviewContentActionFor: anAction [
 					sendWith: [ :message | 
 						message
 							markdown: 'Review the spelling, grammar, content and presentation of this page. Use LepiterTransformations to express proposed changes.';
-							addInputModel: (GtLLepiterPageModel new
-									name: self title;
-									model: self) ].
+							pageObject: self ].
 			aButton phlow spawnObject: chat ]	
 ]

@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLTestCaseWithResultDomainObject,
-	#superclass : #GtLDomainObject,
+	#superclass : #Object,
 	#instVars : [
 		'testCaseWithResult'
 	],
@@ -43,9 +43,13 @@ GtLTestCaseWithResultDomainObject >> gtViewExampleComparisonFailureDiffImageFor:
 	^(aView forward)
 		title: 'Comparison Image';
 		priority: 6.1;
-		object: [ GtLPrimitiveImageData fromElement:  (self testCaseWithResult result exception
-			gtViewDiffFor: GtPhlowView empty) asElement ];
-		view: #gtImageFor:
+		object: [ self testCaseWithResult result exception ];
+		view: #gtViewDiffFor:
+]
+
+{ #category : #testing }
+GtLTestCaseWithResultDomainObject >> isErrorDomainObject [
+	^ false
 ]
 
 { #category : #'api - testing' }
@@ -99,6 +103,34 @@ GtLTestCaseWithResultDomainObject >> isUnexpectedPassResult [
 ]
 
 { #category : #accessing }
+GtLTestCaseWithResultDomainObject >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^aDataView jsonObject: [ :aJson |
+		aJson
+			at: #className put: self testCase class name asString;
+			at: #selector put: (self testCase selector ifNil: [ '' ] ifNotNil: #asString);
+			at: #status put: self statusText;
+			at: #result put: self messageText;
+			at: #shouldPass put: self testCase shouldPass;
+			at: #expectedFailure put: self testCase isExpectedFailure	]
+]
+
+{ #category : #accessing }
+GtLTestCaseWithResultDomainObject >> llmResultExceptionViewFor: aDataView [
+	<gtLlmDataView>
+	
+	(self isErrorResult or: [ self isFailureResult  ]) ifFalse: [
+		^ aDataView emptyData ].
+	
+	^aDataView forwardObject
+			title: 'Exception details';
+			dataKey: #exception;
+			object: [ 
+				self result exception  ]
+]
+
+{ #category : #accessing }
 GtLTestCaseWithResultDomainObject >> messageText [
 	self isSkippedResult ifTrue: [ ^ 'Skipped' ].
 	self isErrorResult ifTrue: [ ^ 'Error' ].
@@ -111,58 +143,6 @@ GtLTestCaseWithResultDomainObject >> messageText [
 { #category : #accessing }
 GtLTestCaseWithResultDomainObject >> result [
 	^ testCaseWithResult result
-]
-
-{ #category : #'api - serializing' }
-GtLTestCaseWithResultDomainObject >> serializeToAnthropicResponseOutput [
-	^ super serializeToAnthropicResponseOutput
-		, (self serializeToLlmResponseImages collect: [ :anPrimitiveImage |
-				anPrimitiveImage serializeToAnthropicResponseOutput ]).
-]
-
-{ #category : #'api - serializing' }
-GtLTestCaseWithResultDomainObject >> serializeToLlmJsonObject [
-	"Return a JSON dictionary that represents the domain object."
-
-	<return: #NeoJSONObject>
-	| data |
-	
-	data := NeoJSONObject new
-		at: #className put: self testCase class name asString;
-		at: #selector put: (self testCase selector ifNil: [ '' ] ifNotNil: #asString);
-		at: #status put: self statusText;
-		at: #result put: self messageText;
-		at: #shouldPass put: self testCase shouldPass;
-		at: #expectedFailure put: self testCase isExpectedFailure;
-		yourself.
-		
-	(self isErrorResult or: [ self isFailureResult ]) ifTrue: [
-		data
-			at: #exception 
-			put: self result exception serializeToOpenAIResponseOutput ].
-		
-	^ data
-]
-
-{ #category : #'api - serializing' }
-GtLTestCaseWithResultDomainObject >> serializeToLlmResponseImages [
-	^ (self isErrorResult or: [ self isFailureResult ])
-		ifFalse: [ #() ]
-		ifTrue: [ self result exception serializeToLlmResponseImages ]. 
-]
-
-{ #category : #'api - serializing' }
-GtLTestCaseWithResultDomainObject >> serializeToOpenAIResponseImages [
-	^ (self isErrorResult or: [ self isFailureResult ])
-		ifFalse: [ #() ]
-		ifTrue: [ self result exception serializeToOpenAIResponseImages ]. 
-]
-
-{ #category : #'api - serializing' }
-GtLTestCaseWithResultDomainObject >> serializeToOpenAIResponseOutput [
-	^ super serializeToOpenAIResponseOutput
-		, (self serializeToLlmResponseImages collect: [ :anPrimitiveImage |
-				anPrimitiveImage serializeToOpenAIResponseOutput ])
 ]
 
 { #category : #accessing }

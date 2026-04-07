@@ -70,6 +70,17 @@ TGtLDataViewAssertions >> assertCompositeView: aCompositeView hasJsonDataViewsWi
 ]
 
 { #category : #'assertions - composite views' }
+TGtLDataViewAssertions >> assertCompositeView: aCompositeView hasJsonForwardDataViewWithDataKey: aDataKey targetObject: anObject [
+	"Assert that there is a view in the given composite that is a forward view with the given dataKey."
+	
+	self assert: (aCompositeView dataViews  
+		anySatisfy: [:aView |
+			aView class = GtLForwardObjectDataView and: [
+				aView dataKey = aDataKey and: [
+					aView targetObject = anObject ]]])
+]
+
+{ #category : #'assertions - composite views' }
 TGtLDataViewAssertions >> assertCompositeView: aCompositeView hasMagritteDataViewWithDataKey: aDataKey [
 	"Assert that there is a view in the given composite that is a magritte view with the given dataKey."
 	

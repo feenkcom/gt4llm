@@ -4,6 +4,15 @@ Class {
 	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
+{ #category : #tests }
+GtLExampleDummyMixedTest >> testComparisonFailure [
+	(GtLExampleDataComparisonException new
+		expectedData: (GtLExampleComparisonWrappedString new
+			targetString: GtExampleComparisonExceptionWithDebuggingViews new expectedStringForTest);
+		actualData: (GtLExampleComparisonWrappedString new
+			targetString: GtExampleComparisonExceptionWithDebuggingViews new computedStringForTest)) signal
+]
+
 { #category : #'llm-generated' }
 GtLExampleDummyMixedTest >> testError [
 	self error: 'Boom'

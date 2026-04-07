@@ -6,7 +6,7 @@ Class {
 		'imageDataBlocks',
 		'documentDataBlocks'
 	],
-	#category : #Gt4LlmCore
+	#category : #'Gt4LlmCore-Data Views'
 }
 
 { #category : #adding }
@@ -116,6 +116,7 @@ GtLPrimitiveMessageDataBlock >> secondaryDataBlocks [
 	| blocks |
 	blocks := OrderedCollection new.
 	blocks addAll: imageDataBlocks.
+	documentDataBlocks ifNotNil: [ blocks addAll: documentDataBlocks ].
 	^ blocks
 ]
 

@@ -4,43 +4,31 @@ Class {
 	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
-{ #category : #'llm-generated' }
+{ #category : #examples }
 GtLRefactoringToolForClassReferencesExamples >> classReferencesForExistingClass [
 	<gtExample>
 	| tool call result |
 	tool := self toolWithExampleReferences.
 	call := GtLFunctionToolCall new.
-	call function: {
-		'name' -> tool name.
-		'arguments' -> {'className' -> 'GtLRefactoringClassReferencesTarget'} asDictionary
-	} asDictionary.
+	call rawArguments: {'className' -> 'GtLRefactoringClassReferencesTarget'} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: (result serializeToLlmJsonString includesSubstring: 'GtLRefactoringClassReferencesHolder').
-	^ tool
+	self assert: result isErrorDomainObject not.
+	self assert: result targetObject references isNotEmpty.
+	^ call
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #examples }
 GtLRefactoringToolForClassReferencesExamples >> classReferencesForUnknownClass [
 	<gtExample>
 	| tool call result |
 	tool := self toolWithExampleReferences.
 	call := GtLFunctionToolCall new.
-	call
-		function: {'name' -> tool name.
-				'arguments' -> {'className' -> 'UnknownClassName'} asDictionary}
-				asDictionary.
+	call rawArguments: {'className' -> 'UnknownClassName'} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
 	self assert: result isErrorDomainObject.
-	self assert: result objectName equals: 'UnknownClassName'.
-	self
-		assert: result serializeToLlmJsonObject
-		equals: ((NeoJSONObject new) 
-			at: 'errorMessage' put: 'UnknownClassName is not found'; 
-			at: 'missingObjectName' put: 'UnknownClassName'; 
-			yourself).
-	^ tool
+	^ call
 ]
 
 { #category : #'llm-generated' }

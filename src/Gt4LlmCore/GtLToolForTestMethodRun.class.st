@@ -1,12 +1,17 @@
 Class {
 	#name : #GtLToolForTestMethodRun,
-	#superclass : #GtLAbstractPlainSchemaFunctionTool,
+	#superclass : #GtLAbstractMagritteFunctionTool,
 	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }
 GtLToolForTestMethodRun >> description [
-	^ 'Execute a single SUnit test method on a subclass of TestCase (or other test classes that understand #isTestCase) and report the resulting status.'
+	^ 'Execute a single SUnit test method on a subclass of TestCase and report the resulting status (success, failure, error, skipped).'
+]
+
+{ #category : #accessing }
+GtLToolForTestMethodRun >> isUsingDataViews [
+	^ true
 ]
 
 { #category : #accessing }
@@ -14,54 +19,44 @@ GtLToolForTestMethodRun >> name [
 	^ 'testMethodRun'
 ]
 
-{ #category : #accessing }
-GtLToolForTestMethodRun >> parametersDescription [
-	^ #('className' 'methodName')
+{ #category : #'private - execution' }
+GtLToolForTestMethodRun >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
+	| arguments testReference |
+	arguments := aToolCall arguments ifNil: [ Dictionary new ].
+	testReference := arguments at: 'testReference'.
+	
+	^ testReference 
+		compiledMethodIfPresent: [ :aMethod :aTestClass | 
+			self 
+				runTest: aMethod 
+				inClass: aTestClass
+				fromReference: testReference ]
+		ifMissing: [ :anErrorResult | anErrorResult ]
 ]
 
-{ #category : #private }
-GtLToolForTestMethodRun >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
-	| arguments rawClassName rawMethodName className methodName testClass testSelector testCase testCaseWithResult |
-	arguments := aToolCall arguments ifNil: [ Dictionary new ].
-
-	rawClassName := arguments
-		at: 'className'
-		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-			arguments: arguments;
-			missingArgument: 'className' ].
-	rawMethodName := arguments
-		at: 'methodName'
-		ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-			arguments: arguments;
-			missingArgument: 'methodName' ].
-
-	className := rawClassName asString.
-	methodName := rawMethodName asString.
-
-	testClass := Smalltalk globals
-		at: className asSymbol
-		ifAbsent: [ ^ GtLMissingDomainObject new objectName: className ].
-
-	(testClass isTestCase)
-		ifFalse: [ ^ GtLIncorrectArgumentTypeDomainObject new
-			argumentName: 'className';
-			argumentValue: className;
-			expectedArgumentValueKind: 'a subclass of LwTestCase' ].
-
-	testSelector := methodName asSymbol.
-	(testClass canUnderstand: testSelector)
-		ifFalse: [ ^ GtLMissingDomainObject new
-			objectName: ('{1}>>#{2}' format: { testClass name. methodName }) ].
-
-	testCase := testClass selector: testSelector.
+{ #category : #'private - execution' }
+GtLToolForTestMethodRun >> runTest: aMethod inClass: aTestClass fromReference: testReference [
+	| testCase testCaseWithResult |
+	
+	testCase := aTestClass selector: aMethod selector.
 	[ testCaseWithResult := testCase gtRunWithExplicitResult ]
 		on: Error
 		do: [ :ex |
 			^ GtLExceptionDomainObject new
 				freeze: ex;
-				errorReason: ('Running test {1}>>#{2} failed' 
-					format: { testClass name. methodName }) ].
+				errorReason: ('Running test {1} failed' 
+					format: { testReference methodSignature }) ].
 	
 	^ GtLTestCaseWithResultDomainObject new
 		testCaseWithResult: testCaseWithResult
+]
+
+{ #category : #'magritte description' }
+GtLToolForTestMethodRun >> testReferenceDescription [
+	<magritteDescription>
+	
+	^ MAToOneRelationDescription new
+		accessor: #testReference;
+		classes: {GtLTestReference};
+		beRequired
 ]

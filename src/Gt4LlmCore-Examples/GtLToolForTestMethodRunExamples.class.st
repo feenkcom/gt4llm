@@ -1,121 +1,300 @@
+"
+Examples for GtLToolForTestMethodRun.
+"
 Class {
 	#name : #GtLToolForTestMethodRunExamples,
 	#superclass : #Object,
-	#instVars : [
-		'environment'
-	],
-	#category : #'Gt4LlmCore-Examples-Tools'
+	#traits : 'TGtLExceptionResultAssertions',
+	#classTraits : 'TGtLExceptionResultAssertions classTrait',
+	#category : #'Gt4LlmCore-Examples'
 }
 
-{ #category : #'tear down' }
-GtLToolForTestMethodRunExamples >> cleanUp [
-	environment ifNotNil: [ :anEnvironment | anEnvironment removeFromSystem ]
+{ #category : #assertions }
+GtLToolForTestMethodRunExamples >> assertJsonData: jsonData hasExpectedKeys: expectedKeys [
+	self assert: jsonData keys sorted equals: expectedKeys sorted
 ]
 
-{ #category : #utils }
-GtLToolForTestMethodRunExamples >> environment [
-	^ environment
-		ifNil: [ environment := GtPharoDummiesGenerator new
-					amountOfPackages: 1;
-					amountOfClasses: 1;
-					amountOfMethods: 0;
-					generate ]
+{ #category : #'examples - comparison failure' }
+GtLToolForTestMethodRunExamples >> exampleRunComparisonFailure [
+	<gtExample>
+	<return: #GtLFunctionToolCall>
+	| tool call result targetObject dataBlock jsonData exceptionData |
+	tool := GtLToolForTestMethodRun new.
+	call := GtLFunctionToolCall new.
+	call rawArguments: {
+		'testReference' -> {
+			'testClassName' -> 'GtLExampleDummyMixedTest'.
+			'methodName' -> 'testComparisonFailure'
+		} asDictionary
+	} asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	self assert: result isErrorDomainObject not.
+	
+	targetObject := result targetObject.
+	self assert: (targetObject isKindOf: GtLTestCaseWithResultDomainObject).
+	self assert: targetObject isErrorResult.
+	self assert: targetObject statusText equals: 'error'.
+	
+	dataBlock := result mainDataView serializeToLlmPrimiteData.
+	self assert: dataBlock dataBlocks size equals: 2.
+	self assert: dataBlock imageDataBlocks size equals: 1.
+	
+	jsonData := dataBlock llmJsonData.
+	self assert: (jsonData at: #className) equals: 'GtLExampleDummyMixedTest'.
+	self assert: (jsonData at: #selector) equals: 'testComparisonFailure'.
+	self assert: (jsonData at: #status) equals: 'error'.
+	self assert: (jsonData at: #result) equals: 'Error'.
+	
+	exceptionData := jsonData at: #exception.
+	self 
+		assertExceptionResult: exceptionData 
+		errorClass: 'GtLExampleDataComparisonException' 
+		errorMessage: 'GtLExampleDataComparisonException' 
+		stackTraceIncludes: #('GtLExampleDummyMixedTest>>testComparisonFailure').
+	
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForTestMethodRunExamples >> exampleRunError [
 	<gtExample>
-	<after: #cleanUp>
-	| tool call result tagetClass |
+	<return: #GtLFunctionToolCall>
+	| tool call result targetObject |
 	tool := GtLToolForTestMethodRun new.
 	call := GtLFunctionToolCall new.
-	
-	tagetClass := self environment anyDummyClass realClass.
-	tagetClass  superclass: TestCase.
-	tagetClass compile: 'testError
-	self error: ''an error'''.
-	
-	call function: {
-		'name' -> tool name.
-		'arguments' -> {
-			'className' -> tagetClass name.
+	call rawArguments: {
+		'testReference' -> {
+			'testClassName' -> 'GtLExampleDummyMixedTest'.
 			'methodName' -> 'testError'
 		} asDictionary
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
 	self assert: result isErrorDomainObject not.
-	self assert: result isErrorResult.
-	self assert: result statusText equals: 'error'.
+	
+	targetObject := result targetObject.
+	self assert: (targetObject isKindOf: GtLTestCaseWithResultDomainObject).
+	self assert: targetObject isErrorResult.
+	self assert: targetObject statusText equals: 'error'.
 	^ call
 ]
 
 { #category : #examples }
 GtLToolForTestMethodRunExamples >> exampleRunFailure [
 	<gtExample>
-	<after: #cleanUp>
-	| tool call result tagetClass |
+	<return: #GtLFunctionToolCall>
+	| tool call result targetObject |
 	tool := GtLToolForTestMethodRun new.
 	call := GtLFunctionToolCall new.
-	
-	tagetClass := self environment anyDummyClass realClass.
-	tagetClass  superclass: TestCase.
-	tagetClass compile: 'testFail
-	self assert: false.'.
-	
-	call function: {
-		'name' -> tool name.
-		'arguments' -> {
-			'className' -> tagetClass name.
-			'methodName' -> 'testFail'
+	call rawArguments: {
+		'testReference' -> {
+			'testClassName' -> 'GtLExampleDummyMixedTest'.
+			'methodName' -> 'testFailure'
 		} asDictionary
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
 	self assert: result isErrorDomainObject not.
-	self assert: result isFailureResult.
-	self assert: result statusText equals: 'failure'.
+	
+	targetObject := result targetObject.
+	self assert: (targetObject isKindOf: GtLTestCaseWithResultDomainObject).
+	self assert: targetObject isFailureResult.
+	self assert: targetObject statusText equals: 'failure'.
 	^ call
 ]
 
-{ #category : #examples }
-GtLToolForTestMethodRunExamples >> exampleRunForNonTestCaseClass [
+{ #category : #'examples - failure' }
+GtLToolForTestMethodRunExamples >> exampleRunFailureWithJsonAssertions [
 	<gtExample>
-	| tool call result |
+	<return: #GtLFunctionToolCall>
+	| tool call result targetObject dataBlock jsonData exceptionData |
 	tool := GtLToolForTestMethodRun new.
 	call := GtLFunctionToolCall new.
-	call function: {
-		'name' -> tool name.
-		'arguments' -> {
-			'className' -> 'Object'.
+	call rawArguments: {
+		'testReference' -> {
+			'testClassName' -> 'GtLExampleDummyMixedTest'.
+			'methodName' -> 'testFailure'
+		} asDictionary
+	} asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	self assert: result isErrorDomainObject not.
+	
+	targetObject := result targetObject.
+	self assert: (targetObject isKindOf: GtLTestCaseWithResultDomainObject).
+	self assert: targetObject isFailureResult.
+	self assert: targetObject statusText equals: 'failure'.
+	
+	dataBlock := result mainDataView serializeToLlmPrimiteData.
+	jsonData := dataBlock llmJsonData.
+	
+	self assert: (jsonData at: #className) equals: 'GtLExampleDummyMixedTest'.
+	self assert: (jsonData at: #selector) equals: 'testFailure'.
+	self assert: (jsonData at: #status) equals: 'failure'.
+	self assert: (jsonData at: #result) equals: 'Failure'.
+	
+	exceptionData := jsonData at: #exception.
+	self 
+		assertExceptionResult: exceptionData 
+		errorClass: 'TestFailure' 
+		errorMessage: 'Assertion failed' 
+		stackTraceIncludes: #('GtLExampleDummyMixedTest>>testFailure').
+	
+	^ call
+]
+
+{ #category : #'examples - errors' }
+GtLToolForTestMethodRunExamples >> exampleRunForNonTestCaseClass [
+	<gtExample>
+	<return: #GtLFunctionToolCall>
+	| tool call result targetObject |
+	tool := GtLToolForTestMethodRun new.
+	call := GtLFunctionToolCall new.
+	call rawArguments: {
+		'testReference' -> {
+			'testClassName' -> 'Object'.
 			'methodName' -> 'printString'
 		} asDictionary
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
 	self assert: result isErrorDomainObject.
-	self assert: result argumentName equals: 'className'.
-	self assert: result expectedArgumentValueKind equals: 'a subclass of LwTestCase'.
+	
+	targetObject := result targetObject.
+	self assert: (targetObject isKindOf: GtLIncorrectArgumentTypeDomainObject).
+	self assert: targetObject argumentName equals: 'testClassName'.
+	self assert: targetObject expectedArgumentValueKind equals: 'a subclass of TestCase'.
+	^ call
+]
+
+{ #category : #'examples - errors' }
+GtLToolForTestMethodRunExamples >> exampleRunForUnknownClass [
+	<gtExample>
+	<return: #GtLFunctionToolCall>
+	| tool call result targetObject |
+	tool := GtLToolForTestMethodRun new.
+	call := GtLFunctionToolCall new.
+	call rawArguments: {
+		'testReference' -> {
+			'testClassName' -> 'UnknownClassXYZ'.
+			'methodName' -> 'testSomething'
+		} asDictionary
+	} asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: result isErrorDomainObject.
+	
+	targetObject := result targetObject.
+	self assert: (targetObject isKindOf: GtLMissingDomainObject).
+	self assert: targetObject objectName equals: 'UnknownClassXYZ'.
+	^ call
+]
+
+{ #category : #'examples - errors' }
+GtLToolForTestMethodRunExamples >> exampleRunForUnknownMethod [
+	<gtExample>
+	<return: #GtLFunctionToolCall>
+	| tool call result targetObject |
+	tool := GtLToolForTestMethodRun new.
+	call := GtLFunctionToolCall new.
+	call rawArguments: {
+		'testReference' -> {
+			'testClassName' -> 'GtLExampleDummyMixedTest'.
+			'methodName' -> 'unknownMethod'
+		} asDictionary
+	} asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: result isErrorDomainObject.
+	
+	targetObject := result targetObject.
+	self assert: (targetObject isKindOf: GtLMissingDomainObject).
+	self assert: targetObject objectName equals: 'GtLExampleDummyMixedTest>>#unknownMethod'.
+	^ call
+]
+
+{ #category : #examples }
+GtLToolForTestMethodRunExamples >> exampleRunSkipped [
+	<gtExample>
+	<return: #GtLFunctionToolCall>
+	| tool call result targetObject |
+	tool := GtLToolForTestMethodRun new.
+	call := GtLFunctionToolCall new.
+	call rawArguments: {
+		'testReference' -> {
+			'testClassName' -> 'GtLExampleDummyMixedTest'.
+			'methodName' -> 'testSkip'
+		} asDictionary
+	} asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	self assert: result isErrorDomainObject not.
+	
+	targetObject := result targetObject.
+	self assert: (targetObject isKindOf: GtLTestCaseWithResultDomainObject).
+	self assert: targetObject isSkippedResult.
+	self assert: targetObject statusText equals: 'skipped'.
 	^ call
 ]
 
 { #category : #examples }
 GtLToolForTestMethodRunExamples >> exampleRunSuccess [
 	<gtExample>
-	| tool call result |
+	<return: #GtLFunctionToolCall>
+	| tool call result targetObject |
 	tool := GtLToolForTestMethodRun new.
 	call := GtLFunctionToolCall new.
-	call function: {
-		'name' -> tool name.
-		'arguments' -> {
-			'className' -> 'GtRrSampleTest'.
+	call rawArguments: {
+		'testReference' -> {
+			'testClassName' -> 'GtLExampleDummyMixedTest'.
 			'methodName' -> 'testPass'
 		} asDictionary
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
+	self assert: (call arguments at: 'testReference') class equals: GtLTestReference.
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
 	self assert: result isErrorDomainObject not.
-	self assert: result isSuccessResult.
-	self assert: result statusText equals: 'success'.
+	
+	targetObject := result targetObject.
+	self assert: (targetObject isKindOf: GtLTestCaseWithResultDomainObject).
+	self assert: targetObject isSuccessResult.
+	self assert: targetObject statusText equals: 'success'.
+	^ call
+]
+
+{ #category : #examples }
+GtLToolForTestMethodRunExamples >> exampleRunSuccessWithDataViewSerialization [
+	<gtExample>
+	<return: #GtLFunctionToolCall>
+	| tool call result dataBlock jsonData |
+	tool := GtLToolForTestMethodRun new.
+	call := GtLFunctionToolCall new.
+	call rawArguments: {
+		'testReference' -> {
+			'testClassName' -> 'GtLExampleDummyMixedTest'.
+			'methodName' -> 'testPass'
+		} asDictionary
+	} asDictionary.
+	result := tool performToolCall: call.
+	
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	dataBlock := result mainDataView serializeToLlmPrimiteData.
+	jsonData := dataBlock llmJsonData.
+	
+	self assert: (jsonData at: #className) equals: 'GtLExampleDummyMixedTest'.
+	self assert: (jsonData at: #selector) equals: 'testPass'.
+	self assert: (jsonData at: #status) equals: 'success'.
+	self assert: (jsonData at: #result) equals: 'Passed'.
+	self assert: (jsonData at: #shouldPass) equals: true.
+	self assert: (jsonData at: #expectedFailure) equals: false.
+	
 	^ call
 ]

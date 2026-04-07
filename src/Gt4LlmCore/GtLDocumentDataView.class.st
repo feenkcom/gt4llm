@@ -6,7 +6,7 @@ Class {
 		'documentBytesComputation',
 		'computedDocumentBytes'
 	],
-	#category : #Gt4LlmCore
+	#category : #'Gt4LlmCore-Data Views'
 }
 
 { #category : #accessing }

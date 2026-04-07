@@ -3,7 +3,7 @@ Trait {
 	#instVars : [
 		'contentDataBlock'
 	],
-	#category : #Gt4LlmCore
+	#category : #'Gt4LlmCore-Core'
 }
 
 { #category : #'private - serialization' }
