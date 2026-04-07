@@ -30,7 +30,7 @@ GtWardleyMapNodePropertiesChangeSpecification >> asChangeIn: aWardleyMapModel [
 		evolvedLabel: self evolvedLabel;
 		evolvedLabelCoordinate: self evolvedLabelCoordinate;
 		evolvedSize: self evolvedSize;
-		id: (UUID gtFromString: nodeId);
+		id: nodeId;
 		isEvolveVisible: self isEvolveVisible;
 		isEvolvedLabelVisible: self isEvolvedLabelVisible;
 		isPipelineVisible: self isPipelineVisible;
@@ -165,24 +165,6 @@ GtWardleyMapNodePropertiesChangeSpecification >> evolvedSizeDescription [
 ]
 
 { #category : #accessing }
-GtWardleyMapNodePropertiesChangeSpecification >> isEvolveVisible [
-	^ isEvolveVisible
-]
-
-{ #category : #accessing }
-GtWardleyMapNodePropertiesChangeSpecification >> isEvolveVisible: anObject [
-	isEvolveVisible := anObject
-]
-
-{ #category : #accessing }
-GtWardleyMapNodePropertiesChangeSpecification >> isEvolveVisibleDescription [
-	<magritteDescription>
-	^ MABooleanDescription new
-		accessor: #isEvolveVisible;
-		comment: 'Is the evolved node visible?'
-]
-
-{ #category : #accessing }
 GtWardleyMapNodePropertiesChangeSpecification >> isEvolvedLabelVisible [
 	^ isEvolvedLabelVisible
 ]
@@ -198,6 +180,24 @@ GtWardleyMapNodePropertiesChangeSpecification >> isEvolvedLabelVisibleDescriptio
 	^ MABooleanDescription new
 		accessor: #isEvolvedLabelVisible;
 		comment: 'Is the evolved node''s label visible?'
+]
+
+{ #category : #accessing }
+GtWardleyMapNodePropertiesChangeSpecification >> isEvolveVisible [
+	^ isEvolveVisible
+]
+
+{ #category : #accessing }
+GtWardleyMapNodePropertiesChangeSpecification >> isEvolveVisible: anObject [
+	isEvolveVisible := anObject
+]
+
+{ #category : #accessing }
+GtWardleyMapNodePropertiesChangeSpecification >> isEvolveVisibleDescription [
+	<magritteDescription>
+	^ MABooleanDescription new
+		accessor: #isEvolveVisible;
+		comment: 'Is the evolved node visible?'
 ]
 
 { #category : #accessing }
