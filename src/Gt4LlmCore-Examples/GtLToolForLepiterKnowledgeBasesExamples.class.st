@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLToolForLepiterKnowledgeBasesExamples,
-	#superclass : #Object,
+	#superclass : #GtLAbstractMagritteFunctionToolExamples,
 	#category : #'Gt4LlmCore-Examples-Tools'
 }
 

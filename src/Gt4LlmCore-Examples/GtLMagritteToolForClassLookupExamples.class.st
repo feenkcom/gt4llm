@@ -3,9 +3,7 @@ Examples for GtLMagritteToolForClassLookup.
 "
 Class {
 	#name : #GtLMagritteToolForClassLookupExamples,
-	#superclass : #Object,
-	#traits : 'TGtLInvalidInputDataAssertions',
-	#classTraits : 'TGtLInvalidInputDataAssertions classTrait',
+	#superclass : #GtLAbstractMagritteFunctionToolExamples,
 	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
