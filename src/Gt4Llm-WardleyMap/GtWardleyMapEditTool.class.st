@@ -96,10 +96,10 @@ GtWardleyMapEditTool >> privatePerformToolCall: aToolCall inContext: anExecution
 		ifAbsent: [ ^ GtLProblemDomainObject new
 				description: 'Could not locate page with id ' , pageUid asString ].
 	[ | idMap |
-	map ensureOptions.
-	idMap := map optionAt: #newIds ifAbsent: [ Dictionary new ].
 	snippet := snippets anyOne.
 	map := snippet wardleyMap.
+	map ensureOptions.
+	idMap := map optionAt: #newIds ifAbsent: [ Dictionary new ].
 	changes do: [ :each | each updateNewUidsUsing: idMap ].
 	changes do: [ :each | each proposeModificationsIn: map ].
 	map optionAt: #newIds put: idMap.
