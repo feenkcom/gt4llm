@@ -3,7 +3,7 @@ Examples for GtLFunctionTool.
 "
 Class {
 	#name : #GtLFunctionToolExamples,
-	#superclass : #Object,
+	#superclass : #GtLAbstractPlainSchemaFunctionToolExamples,
 	#category : #'Gt4LlmCore-Examples-Tools'
 }
 

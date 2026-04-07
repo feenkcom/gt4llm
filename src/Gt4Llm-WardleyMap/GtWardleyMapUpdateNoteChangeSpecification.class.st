@@ -10,13 +10,6 @@ GtWardleyMapUpdateNoteChangeSpecification class >> jsonSchemaLabel [
 ]
 
 { #category : #changes }
-GtWardleyMapUpdateNoteChangeSpecification >> asChangeIn: aWardleyMapModel [
-	^ (super asChangeIn: aWardleyMapModel)
-		note: (self noteWithId: noteId in: aWardleyMapModel);
-		yourself
-]
-
-{ #category : #changes }
 GtWardleyMapUpdateNoteChangeSpecification >> changeClass [
 	^ GtWardleyMapUpdateNoteChange
 ]

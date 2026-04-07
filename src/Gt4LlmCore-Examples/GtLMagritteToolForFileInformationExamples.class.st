@@ -3,9 +3,7 @@ Examples for the file information magritte tool.
 "
 Class {
 	#name : #GtLMagritteToolForFileInformationExamples,
-	#superclass : #Object,
-	#traits : 'TGtLInvalidInputDataAssertions',
-	#classTraits : 'TGtLInvalidInputDataAssertions classTrait',
+	#superclass : #GtLAbstractMagritteFunctionToolExamples,
 	#category : #'Gt4LlmCore-Examples-Tools'
 }
 

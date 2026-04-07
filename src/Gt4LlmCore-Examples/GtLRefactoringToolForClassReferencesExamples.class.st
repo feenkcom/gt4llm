@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLRefactoringToolForClassReferencesExamples,
-	#superclass : #Object,
+	#superclass : #GtLAbstractPlainSchemaFunctionToolExamples,
 	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
