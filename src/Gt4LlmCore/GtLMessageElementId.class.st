@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLMessageElementId,
 	#superclass : #BlElementUniqueId,
-	#category : 'Gt4LlmCore-UI'
+	#category : #'Gt4LlmCore-UI'
 }
 
 { #category : #converting }

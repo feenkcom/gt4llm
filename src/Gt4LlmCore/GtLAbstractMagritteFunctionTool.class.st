@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLAbstractMagritteFunctionTool,
 	#superclass : #GtLAbstractFunctionTool,
-	#category : 'Gt4LlmCore-Tools'
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #testing }

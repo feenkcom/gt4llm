@@ -8,7 +8,7 @@ Class {
 		'testClassName',
 		'methodName'
 	],
-	#category : 'Gt4LlmCore-Magritte Objects'
+	#category : #'Gt4LlmCore-Magritte Objects'
 }
 
 { #category : #accessing }
