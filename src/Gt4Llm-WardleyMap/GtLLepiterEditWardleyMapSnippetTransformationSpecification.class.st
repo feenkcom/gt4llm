@@ -46,12 +46,13 @@ GtLLepiterEditWardleyMapSnippetTransformationSpecification >> changeObject [
 	self assignNewIds.
 	changeObjects := OrderedCollection
 			withAll: (self changes collect: [ :each | each asChangeIn: self wardleyMap ]).
-	changeObjects
-		add: (GtWardleyMapAddOptionChange new
-				map: self wardleyMap;
-				key: #newIds;
-				value: idMap;
-				yourself).
+	idMap notEmpty
+		ifTrue: [ changeObjects
+				add: (GtWardleyMapAddOptionChange new
+						map: self wardleyMap;
+						key: #newIds;
+						value: idMap;
+						yourself) ].
 	^ GtWardleyMapCompositeChange new
 		map: self wardleyMap;
 		originalMap: self originalMap;

@@ -3,9 +3,7 @@ Examples for GtLMagritteToolForClassReferences.
 "
 Class {
 	#name : #GtLMagritteToolForClassReferencesExamples,
-	#superclass : #Object,
-	#traits : 'TGtLInvalidInputDataAssertions',
-	#classTraits : 'TGtLInvalidInputDataAssertions classTrait',
+	#superclass : #GtLAbstractMagritteFunctionToolExamples,
 	#category : #'Gt4LlmCore-Examples-Tools'
 }
 

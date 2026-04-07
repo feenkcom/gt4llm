@@ -3,9 +3,7 @@ Examples for GtLMagritteToolForSubstringLiteralSearch.
 "
 Class {
 	#name : #GtLMagritteToolForSubstringLiteralSearchExamples,
-	#superclass : #Object,
-	#traits : 'TGtLInvalidInputDataAssertions',
-	#classTraits : 'TGtLInvalidInputDataAssertions classTrait',
+	#superclass : #GtLAbstractMagritteFunctionToolExamples,
 	#category : #'Gt4LlmCore-Examples-Tools'
 }
 

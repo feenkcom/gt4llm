@@ -3,7 +3,7 @@ Examples for GtLToolForTestMethodRun.
 "
 Class {
 	#name : #GtLToolForTestMethodRunExamples,
-	#superclass : #Object,
+	#superclass : #GtLAbstractMagritteFunctionToolExamples,
 	#traits : 'TGtLExceptionResultAssertions',
 	#classTraits : 'TGtLExceptionResultAssertions classTrait',
 	#category : #'Gt4LlmCore-Examples'
@@ -148,7 +148,7 @@ GtLToolForTestMethodRunExamples >> exampleRunFailureWithJsonAssertions [
 	^ call
 ]
 
-{ #category : #'examples - errors' }
+{ #category : #'examples - error cases' }
 GtLToolForTestMethodRunExamples >> exampleRunForNonTestCaseClass [
 	<gtExample>
 	<return: #GtLFunctionToolCall>
@@ -164,16 +164,17 @@ GtLToolForTestMethodRunExamples >> exampleRunForNonTestCaseClass [
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
 	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	self assert: result isErrorDomainObject.
 	
 	targetObject := result targetObject.
-	self assert: (targetObject isKindOf: GtLIncorrectArgumentTypeDomainObject).
-	self assert: targetObject argumentName equals: 'testClassName'.
-	self assert: targetObject expectedArgumentValueKind equals: 'a subclass of TestCase'.
+	self
+		assertIncorrectArgumentType: targetObject
+		withArgumentName: 'testClassName'
+		argumentValue: 'Object'
+		expectedKind: 'a subclass of TestCase'.
 	^ call
 ]
 
-{ #category : #'examples - errors' }
+{ #category : #'examples - error cases' }
 GtLToolForTestMethodRunExamples >> exampleRunForUnknownClass [
 	<gtExample>
 	<return: #GtLFunctionToolCall>
@@ -188,15 +189,16 @@ GtLToolForTestMethodRunExamples >> exampleRunForUnknownClass [
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: result isErrorDomainObject.
 	
 	targetObject := result targetObject.
-	self assert: (targetObject isKindOf: GtLMissingDomainObject).
-	self assert: targetObject objectName equals: 'UnknownClassXYZ'.
+	self
+		assertMissingObject: targetObject
+		withObjectName: 'UnknownClassXYZ'
+		errorMessage: 'UnknownClassXYZ is not found'.
 	^ call
 ]
 
-{ #category : #'examples - errors' }
+{ #category : #'examples - error cases' }
 GtLToolForTestMethodRunExamples >> exampleRunForUnknownMethod [
 	<gtExample>
 	<return: #GtLFunctionToolCall>
@@ -211,11 +213,12 @@ GtLToolForTestMethodRunExamples >> exampleRunForUnknownMethod [
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
-	self assert: result isErrorDomainObject.
 	
 	targetObject := result targetObject.
-	self assert: (targetObject isKindOf: GtLMissingDomainObject).
-	self assert: targetObject objectName equals: 'GtLExampleDummyMixedTest>>#unknownMethod'.
+	self
+		assertMissingObject: targetObject
+		withObjectName: 'GtLExampleDummyMixedTest>>#unknownMethod'
+		errorMessage: 'GtLExampleDummyMixedTest>>#unknownMethod is not found'.
 	^ call
 ]
 

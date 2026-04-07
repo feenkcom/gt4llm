@@ -3,9 +3,7 @@ Examples for GtLMagritteToolForMethodRemoval.
 "
 Class {
 	#name : #GtLMagritteToolForMethodRemovalExamples,
-	#superclass : #Object,
-	#traits : 'TGtLInvalidInputDataAssertions',
-	#classTraits : 'TGtLInvalidInputDataAssertions classTrait',
+	#superclass : #GtLAbstractMagritteFunctionToolExamples,
 	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
