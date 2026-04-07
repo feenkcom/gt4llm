@@ -4,7 +4,7 @@ Examples for GtLLepiterSnippetDomainObject and its subclasses.
 Class {
 	#name : #GtLLepiterSnippetDomainObjectExamples,
 	#superclass : #Object,
-	#category : #'Gt4LlmCore-Examples-Magritte Objects'
+	#category : 'Gt4LlmCore-Examples-Magritte Objects'
 }
 
 { #category : #examples }

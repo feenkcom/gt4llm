@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLToolForTestClassesRunExamples,
-	#superclass : #Object,
-	#category : #'Gt4LlmCore-Examples-Tools'
+	#superclass : #GtLAbstractPlainSchemaFunctionToolExamples,
+	#category : 'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #'llm-generated' }
@@ -30,7 +30,7 @@ GtLToolForTestClassesRunExamples >> runTestsForMultipleClasses [
 { #category : #'llm-generated' }
 GtLToolForTestClassesRunExamples >> runTestsForSingleClass [
 	<gtExample>
-	| tool call result data detail |
+	| tool call result detail |
 	tool := GtLToolForTestClassesRun new.
 	call := GtLFunctionToolCall new.
 	call
@@ -51,7 +51,7 @@ GtLToolForTestClassesRunExamples >> runTestsForSingleClass [
 { #category : #'llm-generated' }
 GtLToolForTestClassesRunExamples >> runTestsWithUnknownInputs [
 	<gtExample>
-	| tool call result data |
+	| tool call result |
 	tool := GtLToolForTestClassesRun new.
 	call := GtLFunctionToolCall new.
 	call
