@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'context'
 	],
-	#category : 'Gt4LlmCore-Data Views'
+	#category : #'Gt4LlmCore-Data Views'
 }
 
 { #category : #accessing }

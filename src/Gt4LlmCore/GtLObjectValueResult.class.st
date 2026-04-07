@@ -5,7 +5,7 @@ Class {
 		'object',
 		'objectValue'
 	],
-	#category : 'Gt4LlmCore-Domain Objects'
+	#category : #'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #'instance creation' }

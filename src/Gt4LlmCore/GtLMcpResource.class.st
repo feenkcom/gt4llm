@@ -9,7 +9,7 @@ Class {
 		'contentsBlock',
 		'description'
 	],
-	#category : 'Gt4LlmCore-Mcp'
+	#category : #'Gt4LlmCore-Mcp'
 }
 
 { #category : #'as yet unclassified' }
