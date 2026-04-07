@@ -6,7 +6,7 @@ Class {
 		'model',
 		'cachedMainDataView'
 	],
-	#category : 'Gt4LlmCore-Core'
+	#category : #'Gt4LlmCore-Core'
 }
 
 { #category : #adding }
@@ -161,15 +161,6 @@ GtLWrappedModel >> name: aString [
 { #category : #serialization }
 GtLWrappedModel >> serializeToAnthropicResponseOutput [
 	^ self mainDataView  serializeToAnthropicResponseOutput
-]
-
-{ #category : #serialization }
-GtLWrappedModel >> serializeToLlmJsonObject [
-	| wrapperObject |
-	wrapperObject := NeoJSONObject new.
-	self addContentTo: wrapperObject.
-	
-	^ (wrapperObject at: name)
 ]
 
 { #category : #serialization }

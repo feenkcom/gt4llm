@@ -7,7 +7,7 @@ Class {
 		'serverCapabilities',
 		'transport'
 	],
-	#category : 'Gt4LlmCore-Mcp'
+	#category : #'Gt4LlmCore-Mcp'
 }
 
 { #category : #accessing }
