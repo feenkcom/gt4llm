@@ -26,11 +26,6 @@ Examples:
     {"classNames": "SomeTestCase AnotherTestCase"}'
 ]
 
-{ #category : #accessing }
-GtLToolForTestClassesRun >> isUsingDataViews [
-	^ true
-]
-
 { #category : #'llm-generated' }
 GtLToolForTestClassesRun >> name [
 	^ 'testsInClassesRun'

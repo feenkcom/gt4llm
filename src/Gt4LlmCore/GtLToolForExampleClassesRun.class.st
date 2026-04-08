@@ -135,11 +135,6 @@ GtLToolForExampleClassesRun >> extractExamplesFromPackagesFrom: arguments in: ex
 				ifNotNil: [ package gtExamplesAllContained do: [ :example | examplesSet add: example ] ] ]
 ]
 
-{ #category : #testing }
-GtLToolForExampleClassesRun >> isUsingDataViews [
-	^true
-]
-
 { #category : #'llm-generated' }
 GtLToolForExampleClassesRun >> name [
 	^ 'examplesInClassesRun'

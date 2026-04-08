@@ -70,11 +70,6 @@ Example JSON error response:
 }'
 ]
 
-{ #category : #testing }
-GtLMagritteToolForSmalltalkCodeEvaluation >> isUsingDataViews [
-	^true
-]
-
 { #category : #accessing }
 GtLMagritteToolForSmalltalkCodeEvaluation >> name [
 	^ 'smalltalkCodeEvaluation'

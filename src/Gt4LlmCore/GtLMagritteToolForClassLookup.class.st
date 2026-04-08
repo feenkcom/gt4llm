@@ -51,11 +51,6 @@ Example JSON response:
 }'
 ]
 
-{ #category : #testing }
-GtLMagritteToolForClassLookup >> isUsingDataViews [
-	^ true
-]
-
 { #category : #accessing }
 GtLMagritteToolForClassLookup >> name [
 	^ 'lookupClass'

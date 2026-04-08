@@ -52,11 +52,6 @@ GtLToolForLepiterPageRemove >> initialize [
 	logicalDatabase := LeDatabasesRegistry defaultLogicalDatabase
 ]
 
-{ #category : #'api - testing' }
-GtLToolForLepiterPageRemove >> isUsingDataViews [
-	^ true
-]
-
 { #category : #accessing }
 GtLToolForLepiterPageRemove >> name [
 	^ 'removeLepiterPage'

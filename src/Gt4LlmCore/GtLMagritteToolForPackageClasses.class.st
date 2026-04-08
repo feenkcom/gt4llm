@@ -31,11 +31,6 @@ Example JSON response:
 ]
 
 { #category : #accessing }
-GtLMagritteToolForPackageClasses >> isUsingDataViews [
-	^ true
-]
-
-{ #category : #accessing }
 GtLMagritteToolForPackageClasses >> name [
 	^ 'packageClasses'
 ]

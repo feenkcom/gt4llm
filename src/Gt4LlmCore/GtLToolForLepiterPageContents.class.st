@@ -39,11 +39,6 @@ GtLToolForLepiterPageContents >> initialize [
 ]
 
 { #category : #accessing }
-GtLToolForLepiterPageContents >> isUsingDataViews [
-	^ true
-]
-
-{ #category : #accessing }
 GtLToolForLepiterPageContents >> name [
 	^ 'getLepiterPageContents'
 ]

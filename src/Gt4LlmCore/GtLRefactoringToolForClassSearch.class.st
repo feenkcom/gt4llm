@@ -21,11 +21,6 @@ GtLRefactoringToolForClassSearch >> description [
 	^ 'Searches for classes by name matching the query substring (case-insensitive).'
 ]
 
-{ #category : #accessing }
-GtLRefactoringToolForClassSearch >> isUsingDataViews [
-	^ true
-]
-
 { #category : #'llm-generated' }
 GtLRefactoringToolForClassSearch >> name [
 	^ 'rbSearchForClasses'

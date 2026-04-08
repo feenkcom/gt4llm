@@ -7,7 +7,7 @@ Class {
 		'scannerClass',
 		'package'
 	],
-	#category : #'Gt4Llm-SmaCC-Domain Objects'
+	#category : 'Gt4Llm-SmaCC-Domain Objects'
 }
 
 { #category : #accessing }

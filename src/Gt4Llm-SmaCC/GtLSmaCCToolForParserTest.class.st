@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLSmaCCToolForParserTest,
 	#superclass : #GtLSmaCCTool,
-	#category : #'Gt4Llm-SmaCC-Tools'
+	#category : 'Gt4Llm-SmaCC-Tools'
 }
 
 { #category : #accessing }
