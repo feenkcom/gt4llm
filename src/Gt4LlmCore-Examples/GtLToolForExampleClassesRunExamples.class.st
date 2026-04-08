@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLToolForExampleClassesRunExamples,
 	#superclass : #GtLAbstractMagritteFunctionToolExamples,
-	#category : 'Gt4LlmCore-Examples-Tools'
+	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #assertions }
@@ -31,7 +31,7 @@ GtLToolForExampleClassesRunExamples >> assertExampleStatus: anExampleStatus isSu
 GtLToolForExampleClassesRunExamples >> assertResultStatusesCounts: aDomainObject total: totalCount skipped: skippedCount success: successCount failure: failureCount error: errorCount [
 	"Assert all counts on a GtLExampleWithResultStatusesDomainObject."
 	
-	self assert: (aDomainObject isKindOf: GtLExampleWithResultStatusesDomainObject).
+	self assert: (aDomainObject isKindOf: GtLExampleWithResultStatuses).
 	self assert: aDomainObject totalCount equals: totalCount.
 	self assert: aDomainObject skippedCount equals: skippedCount.
 	self assert: aDomainObject successResultCount equals: successCount.

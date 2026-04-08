@@ -90,8 +90,3 @@ GtLMissingArgumentDomainObject >> serializeToLlmJsonObject [
 	
 	^ GtMagritteJSONDataExporter exportObject: self.
 ]
-
-{ #category : #testing }
-GtLMissingArgumentDomainObject >> wasMovedToMagritteDescriptions [
-	^ true
-]

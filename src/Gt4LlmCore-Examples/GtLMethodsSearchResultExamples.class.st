@@ -4,7 +4,7 @@ Examples for GtLMethodsSearchResult.
 Class {
 	#name : #GtLMethodsSearchResultExamples,
 	#superclass : #GtLMagritteDomainObjectExamples,
-	#category : 'Gt4LlmCore-Examples-Domain Objects'
+	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #examples }

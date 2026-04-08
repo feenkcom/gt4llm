@@ -10,11 +10,6 @@ GtLToolForTestMethodRun >> description [
 ]
 
 { #category : #accessing }
-GtLToolForTestMethodRun >> isUsingDataViews [
-	^ true
-]
-
-{ #category : #accessing }
 GtLToolForTestMethodRun >> name [
 	^ 'testMethodRun'
 ]

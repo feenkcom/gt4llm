@@ -20,11 +20,6 @@ GtLToolForClassViews >> description [
 ]
 
 { #category : #accessing }
-GtLToolForClassViews >> isUsingDataViews [
-	^ true
-]
-
-{ #category : #accessing }
 GtLToolForClassViews >> name [
 	^ 'getClassViews'
 ]

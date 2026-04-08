@@ -6,7 +6,7 @@ Class {
 	#superclass : #Object,
 	#traits : 'TGtLDataViewAssertions',
 	#classTraits : 'TGtLDataViewAssertions classTrait',
-	#category : 'Gt4LlmCore-Examples-Domain Objects'
+	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #assertions }
