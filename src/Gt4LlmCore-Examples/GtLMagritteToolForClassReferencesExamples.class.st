@@ -4,7 +4,7 @@ Examples for GtLMagritteToolForClassReferences.
 Class {
 	#name : #GtLMagritteToolForClassReferencesExamples,
 	#superclass : #GtLAbstractMagritteFunctionToolExamples,
-	#category : 'Gt4LlmCore-Examples-Tools'
+	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #examples }

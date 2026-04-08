@@ -67,8 +67,3 @@ GtLMethodIsNotExampleDomainObject >> serializeToLlmJsonObject [
 	
 	^ GtMagritteJSONDataExporter exportObject: self.
 ]
-
-{ #category : #testing }
-GtLMethodIsNotExampleDomainObject >> wasMovedToMagritteDescriptions [
-	^ true
-]

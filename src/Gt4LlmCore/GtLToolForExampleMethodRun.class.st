@@ -26,11 +26,6 @@ GtLToolForExampleMethodRun >> exampleReferenceDescription [
 		beRequired
 ]
 
-{ #category : #testing }
-GtLToolForExampleMethodRun >> isUsingDataViews [
-	^true
-]
-
 { #category : #accessing }
 GtLToolForExampleMethodRun >> name [
 	^ 'exampleMethodRun'
@@ -84,7 +79,7 @@ GtLToolForExampleMethodRun >> runExample: method fromReference: exampleReference
 			addNewObject: exampleResult returnValue
 			reason: (GtLStoredObjectExampleMethodReason toolCall: aToolCall) ].
 			
-	^ GtLExampleWithResultDomainObject new
+	^ GtLExampleWithResult new
 		exampleWithResult: example;
 		objectId: objectId
 ]

@@ -57,8 +57,3 @@ GtLProblemDomainObject >> serializeToLlmJsonObject [
 	
 	^ GtMagritteJSONDataExporter exportObject: self
 ]
-
-{ #category : #testing }
-GtLProblemDomainObject >> wasMovedToMagritteDescriptions [
-	^ true
-]

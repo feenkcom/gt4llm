@@ -179,8 +179,3 @@ GtLCouldNotCreateClassDomainObject >> targetClassNameDescription [
 		accessor: #targetClassName;
 		beRequired
 ]
-
-{ #category : #testing }
-GtLCouldNotCreateClassDomainObject >> wasMovedToMagritteDescriptions [
-	^ true
-]

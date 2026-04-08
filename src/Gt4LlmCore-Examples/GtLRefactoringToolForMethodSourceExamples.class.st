@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLRefactoringToolForMethodSourceExamples,
-	#superclass : #GtLAbstractPlainSchemaFunctionToolExamples,
-	#category : 'Gt4LlmCore-Examples-Tools'
+	#superclass : #GtLAbstractRefactoringMagritteToolExamples,
+	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #examples }
@@ -11,9 +11,11 @@ GtLRefactoringToolForMethodSourceExamples >> methodSourceForInstanceMethod [
 	tool := self toolWithExampleMethods.
 	call := GtLFunctionToolCall new.
 	call rawArguments: {
-		'className' -> 'GtLRefactoringMethodSourceExample'.
-		'methodName' -> 'example'.
-		'classSide' -> 'false'
+		'methodReference' -> {
+			'methodClassName' -> 'GtLRefactoringMethodSourceExample'.
+			'methodName' -> 'example'.
+			'classSide' -> false
+		} asDictionary
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
@@ -37,9 +39,11 @@ GtLRefactoringToolForMethodSourceExamples >> methodSourceForUnknownMethod [
 	tool := self toolWithExampleMethods.
 	call := GtLFunctionToolCall new.
 	call rawArguments: {
-		'className' -> 'GtLRefactoringMethodSourceExample'.
-		'methodName' -> 'missing'.
-		'classSide' -> false
+		'methodReference' -> {
+			'methodClassName' -> 'GtLRefactoringMethodSourceExample'.
+			'methodName' -> 'missing'.
+			'classSide' -> false
+		} asDictionary
 	} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.

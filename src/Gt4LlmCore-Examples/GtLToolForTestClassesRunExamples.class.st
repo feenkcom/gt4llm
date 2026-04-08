@@ -1,71 +1,177 @@
 Class {
 	#name : #GtLToolForTestClassesRunExamples,
-	#superclass : #GtLAbstractPlainSchemaFunctionToolExamples,
-	#category : 'Gt4LlmCore-Examples-Tools'
+	#superclass : #GtLAbstractMagritteFunctionToolExamples,
+	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
-{ #category : #'llm-generated' }
-GtLToolForTestClassesRunExamples >> runTestsForMultipleClasses [
+{ #category : #private }
+GtLToolForTestClassesRunExamples >> assertResultStatusesCounts: aDomainObject total: totalCount skipped: skippedCount success: successCount failure: failureCount error: errorCount [
+	"Assert all counts on a GtLTestCasesWithResultStatuses."
+	
+	self assert: (aDomainObject isKindOf: GtLTestCasesWithResultStatuses).
+	self assert: aDomainObject runCount equals: (successCount + failureCount + errorCount).
+	self assert: aDomainObject skippedCount equals: skippedCount.
+	self assert: aDomainObject passedCount equals: successCount.
+	self assert: aDomainObject failureCount equals: failureCount.
+	self assert: aDomainObject errorCount equals: errorCount.
+	self assert: aDomainObject testCases size equals: totalCount.
+]
+
+{ #category : #examples }
+GtLToolForTestClassesRunExamples >> runTestsForEmptyClassNames [
 	<gtExample>
-	| tool call result |
+	| tool call result targetObject |
 	tool := GtLToolForTestClassesRun new.
 	call := GtLFunctionToolCall new.
-	call
-		function: {'name' -> tool name.
-				'arguments'
-					-> {'classNames' -> 'GtLExampleDummyPassingTest GtLExampleDummyMixedTest'}
-							asDictionary} asDictionary.
+	call rawArguments: {'classNames' -> {}} asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	
+	targetObject := result targetObject.
+	self
+		assertResultStatusesCounts: targetObject
+		total: 0
+		skipped: 0
+		success: 0
+		failure: 0
+		error: 0.
+	self assert: targetObject notFoundClassNames isEmpty.
+	self assert: targetObject notTestCaseClasses isEmpty.
+	^ call
+]
+
+{ #category : #examples }
+GtLToolForTestClassesRunExamples >> runTestsForMissingClassNames [
+	<gtExample>
+	| tool call result targetObject |
+	tool := GtLToolForTestClassesRun new.
+	call := GtLFunctionToolCall new.
+	call rawArguments: Dictionary new.
 	result := tool performToolCall: call.
 	
-	self assert: result isErrorDomainObject not.
-	self assert: result runCount equals: 6.
-	self assert: result passedCount equals: 3.
-	self assert: result failureCount equals: 1.
-	self assert: result errorCount equals: 2.
-	self assert: result skippedCount equals: 1.
-	self assert: result expectedDefectCount equals: 1.
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	
+	targetObject := result targetObject.
+	self
+		assertMissingRequiredProperties: targetObject
+		withPropertyNames: #('classNames')
+		path: #(nil)
+		errorMessage: 'required properties missing [classNames]'.
 	^ call
 ]
 
-{ #category : #'llm-generated' }
+{ #category : #examples }
+GtLToolForTestClassesRunExamples >> runTestsForMultipleClasses [
+	<gtExample>
+	| tool call result targetObject |
+	tool := GtLToolForTestClassesRun new.
+	call := GtLFunctionToolCall new.
+	call rawArguments: {'classNames' -> {'GtLExampleDummyPassingTest'. 'GtLExampleDummyMixedTest'}} asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	
+	targetObject := result targetObject.
+	self
+		assertResultStatusesCounts: targetObject
+		total: 7
+		skipped: 1
+		success: 2
+		failure: 2
+		error: 2.
+	^ call
+]
+
+{ #category : #examples }
+GtLToolForTestClassesRunExamples >> runTestsForNilClassNames [
+	<gtExample>
+	| tool call result targetObject |
+	tool := GtLToolForTestClassesRun new.
+	call := GtLFunctionToolCall new.
+	call rawArguments: {'classNames' -> nil} asDictionary.
+	result := tool performToolCall: call.
+	
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	
+	targetObject := result targetObject.
+	self
+		assertJSONSchemaValidationError: targetObject
+		withPath: #('classNames')
+		errorMessage: '@[classNames] array expected'.
+	^ call
+]
+
+{ #category : #examples }
 GtLToolForTestClassesRunExamples >> runTestsForSingleClass [
 	<gtExample>
-	| tool call result detail |
+	| tool call result targetObject |
 	tool := GtLToolForTestClassesRun new.
 	call := GtLFunctionToolCall new.
-	call
-		function: {'name' -> tool name.
-				'arguments' -> {'classNames' -> 'GtLlmExampleDummyPassingTest'} asDictionary}
-				asDictionary.
+	call rawArguments: {'classNames' -> {'GtLExampleDummyPassingTest'}} asDictionary.
 	result := tool performToolCall: call.
-
-	self assert: result isErrorDomainObject not.
-	self assert: result runCount equals: 1.
-	self assert: result passedCount equals: 1.
-	self assert: result testCases size equals: 1.
-	detail := result testCases anyOne.
-	self assert: detail statusText equals: 'success'.
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	
+	targetObject := result targetObject.
+	self
+		assertResultStatusesCounts: targetObject
+		total: 1
+		skipped: 0
+		success: 1
+		failure: 0
+		error: 0.
 	^ call
 ]
 
-{ #category : #'llm-generated' }
-GtLToolForTestClassesRunExamples >> runTestsWithUnknownInputs [
+{ #category : #examples }
+GtLToolForTestClassesRunExamples >> runTestsWithMixedExistingAndNonExistingClasses [
 	<gtExample>
-	| tool call result |
+	| tool call result targetObject |
 	tool := GtLToolForTestClassesRun new.
 	call := GtLFunctionToolCall new.
-	call
-		function: {'name' -> tool name.
-				'arguments' -> {'classNames' -> 'NonExistingSUnitClass Object'} asDictionary}
-				asDictionary.
+	call rawArguments: {'classNames' -> {'GtLExampleDummyPassingTest'. 'NonExistingClass123'}} asDictionary.
 	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	
+	targetObject := result targetObject.
+	self
+		assertResultStatusesCounts: targetObject
+		total: 1
+		skipped: 0
+		success: 1
+		failure: 0
+		error: 0.
+	self assert: targetObject notFoundClassNames size equals: 1.
+	self assert: (targetObject notFoundClassNames includes: 'NonExistingClass123').
+	^ call
+]
 
-	self assert: result isErrorDomainObject not.
-	self assert: result runCount equals: 0.
-	self assert: result testCases size equals: 0.
-	self assert: result notFoundClassNames size equals: 1.
-	self assert: result notFoundClassNames anyOne equals: 'NonExistingSUnitClass'.
-	self assert: result notTestCaseClasses size equals: 1.
-	self assert: result notTestCaseClasses anyOne equals: Object.
+{ #category : #examples }
+GtLToolForTestClassesRunExamples >> runTestsWithUnknownInputs [
+	<gtExample>
+	| tool call result targetObject |
+	tool := GtLToolForTestClassesRun new.
+	call := GtLFunctionToolCall new.
+	call rawArguments: {'classNames' -> {'NonExistingSUnitClass'. 'Object'}} asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	
+	targetObject := result targetObject.
+	self
+		assertResultStatusesCounts: targetObject
+		total: 0
+		skipped: 0
+		success: 0
+		failure: 0
+		error: 0.
+	self assert: targetObject notFoundClassNames size equals: 1.
+	self assert: targetObject notFoundClassNames anyOne equals: 'NonExistingSUnitClass'.
+	self assert: targetObject notTestCaseClasses size equals: 1.
+	self assert: targetObject notTestCaseClasses anyOne equals: Object.
 	^ call
 ]

@@ -4,7 +4,7 @@ Examples for GtLFunctionTool.
 Class {
 	#name : #GtLFunctionToolExamples,
 	#superclass : #GtLAbstractPlainSchemaFunctionToolExamples,
-	#category : 'Gt4LlmCore-Examples-Tools'
+	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #'examples - tools' }
@@ -24,7 +24,6 @@ GtLFunctionToolExamples >> additionTool [
 	
 	self assert: tool name equals: 'add'.
 	self assert: tool description equals: 'Adds two numbers'.
-	self assert: tool isUsingDataViews.
 	
 	^ tool
 ]

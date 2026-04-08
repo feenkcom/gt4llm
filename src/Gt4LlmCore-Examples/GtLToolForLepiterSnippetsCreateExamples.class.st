@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'logicalDatabase'
 	],
-	#category : 'Gt4LlmCore-Examples-Tools'
+	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #'examples - errors' }
@@ -229,27 +229,6 @@ GtLToolForLepiterSnippetsCreateExamples >> missingSnippetPageUid [
 ]
 
 { #category : #'examples - errors' }
-GtLToolForLepiterSnippetsCreateExamples >> missingSnippets [
-	<gtExample>
-	| tool call result domainObject |
-	tool := GtLToolForLepiterSnippetsCreate new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: {} asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	
-	domainObject := result targetObject.
-	self
-		assertMissingRequiredProperties: domainObject
-		withPropertyNames: #('snippets')
-		path: #(nil)
-		errorMessage: 'required properties missing [snippets]'.
-	
-	^ domainObject
-]
-
-{ #category : #'examples - errors' }
 GtLToolForLepiterSnippetsCreateExamples >> missingSnippetText [
 	<gtExample>
 	| tool call result page domainObject |
@@ -273,6 +252,27 @@ GtLToolForLepiterSnippetsCreateExamples >> missingSnippetText [
 		assertMissingArgument: domainObject snippets first
 		withArgumentName: 'snippetText'
 		errorMessage: 'Missing argument called snippetText'.
+	^ domainObject
+]
+
+{ #category : #'examples - errors' }
+GtLToolForLepiterSnippetsCreateExamples >> missingSnippets [
+	<gtExample>
+	| tool call result domainObject |
+	tool := GtLToolForLepiterSnippetsCreate new.
+	call := GtLFunctionToolCall new.
+	call rawArguments: {} asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	
+	domainObject := result targetObject.
+	self
+		assertMissingRequiredProperties: domainObject
+		withPropertyNames: #('snippets')
+		path: #(nil)
+		errorMessage: 'required properties missing [snippets]'.
+	
 	^ domainObject
 ]
 

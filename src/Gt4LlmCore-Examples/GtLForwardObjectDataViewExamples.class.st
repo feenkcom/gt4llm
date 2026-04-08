@@ -4,5 +4,5 @@ I am an abstract superclass for examples that test GtLForwardDataView. Subclasse
 Class {
 	#name : #GtLForwardObjectDataViewExamples,
 	#superclass : #GtLDataViewExamples,
-	#category : 'Gt4LlmCore-Examples-Data Views'
+	#category : #'Gt4LlmCore-Examples-Data Views'
 }

@@ -78,8 +78,3 @@ GtLJSONSchemaValidationErrorDomainObject >> serializeToLlmJsonObject [
 
 	^ GtMagritteJSONDataExporter exportObject: self
 ]
-
-{ #category : #accessing }
-GtLJSONSchemaValidationErrorDomainObject >> wasMovedToMagritteDescriptions [
-	^ true
-]
