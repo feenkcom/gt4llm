@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'model'
 	],
-	#category : #'Gt4Llm-SmaCC-Tools'
+	#category : 'Gt4Llm-SmaCC-Tools'
 }
 
 { #category : #testing }
@@ -28,11 +28,6 @@ GtLSmaCCTool >> grammarIn: anObject do: aBlock onError: errorBlock [
 	^ [ aBlock value: grammar ]
 		on: Error
 		do: [ :error | ^ errorBlock value: (GtLExceptionDomainObject new freeze: error) ]
-]
-
-{ #category : #testing }
-GtLSmaCCTool >> isUsingDataViews [
-	^ true
 ]
 
 { #category : #accessing }

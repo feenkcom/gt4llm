@@ -21,11 +21,6 @@ GtLToolForWorldScreenshot >> focusedWorldElement [
 ]
 
 { #category : #accessing }
-GtLToolForWorldScreenshot >> isUsingDataViews [
-	^ true
-]
-
-{ #category : #accessing }
 GtLToolForWorldScreenshot >> name [
 	^ 'worldScreenshot'
 ]

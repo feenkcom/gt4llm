@@ -13,11 +13,6 @@ GtLMagritteToolForObjectStorageValue >> description [
 ]
 
 { #category : #accessing }
-GtLMagritteToolForObjectStorageValue >> isUsingDataViews [
-	^ true
-]
-
-{ #category : #accessing }
 GtLMagritteToolForObjectStorageValue >> name [
 	^ 'getObjectStorageValue'
 ]

@@ -10,11 +10,6 @@ GtLToolForSearchForLepiterPages >> description [
 ]
 
 { #category : #accessing }
-GtLToolForSearchForLepiterPages >> isUsingDataViews [
-	^ true
-]
-
-{ #category : #accessing }
 GtLToolForSearchForLepiterPages >> knowledgeBasesDescription [
 	<magritteDescription>
 

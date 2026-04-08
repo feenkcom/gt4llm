@@ -33,11 +33,6 @@ methods that are annotated with `gtView` pragmas
 ```'
 ]
 
-{ #category : #accessing }
-GtLToolForChatMethodSearch >> isUsingDataViews [
-	^ true
-]
-
 { #category : #'as yet unclassified' }
 GtLToolForChatMethodSearch >> name [
 	^ 'promptedMethodSearch'

@@ -26,11 +26,6 @@ GtLToolForExampleMethodRun >> exampleReferenceDescription [
 		beRequired
 ]
 
-{ #category : #testing }
-GtLToolForExampleMethodRun >> isUsingDataViews [
-	^true
-]
-
 { #category : #accessing }
 GtLToolForExampleMethodRun >> name [
 	^ 'exampleMethodRun'

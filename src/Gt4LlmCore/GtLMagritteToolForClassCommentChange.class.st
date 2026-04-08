@@ -43,11 +43,6 @@ Example JSON response:
 }'
 ]
 
-{ #category : #testing }
-GtLMagritteToolForClassCommentChange >> isUsingDataViews [
-	^true
-]
-
 { #category : #magritte }
 GtLMagritteToolForClassCommentChange >> name [
 	^ 'changeClassOrTraitComment'

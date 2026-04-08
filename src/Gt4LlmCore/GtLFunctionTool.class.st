@@ -70,11 +70,6 @@ GtLFunctionTool >> initialize [
 ]
 
 { #category : #accessing }
-GtLFunctionTool >> isUsingDataViews [
-	^ true
-]
-
-{ #category : #accessing }
 GtLFunctionTool >> method [
 	| split class methodName |
 	self name ifNil: [ ^ nil ].
