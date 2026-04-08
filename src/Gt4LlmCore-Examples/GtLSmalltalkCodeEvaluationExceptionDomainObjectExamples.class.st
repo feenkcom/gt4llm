@@ -78,21 +78,3 @@ GtLSmalltalkCodeEvaluationExceptionDomainObjectExamples >> simpleExceptionDomain
 	
 	^ domainObject
 ]
-
-{ #category : #examples }
-GtLSmalltalkCodeEvaluationExceptionDomainObjectExamples >> simpleExceptionDomainObjectSerialization [
-	<gtExample>
-	<return: #Dictionary>
-	| domainObject jsonData |
-	domainObject := self simpleExceptionDomainObject.
-	
-	jsonData := domainObject serializeToLlmJsonObject.
-	
-	self assert: jsonData keys sorted equals: #('code' 'error' 'errorClass' 'stackTrace' 'whatFailed').
-	self assert: (jsonData at: 'code') equals: '1 / 0'.
-	self assert: (jsonData at: 'errorClass') equals: 'ZeroDivide'.
-	self assert: (jsonData at: 'whatFailed') equals: 'Error while evaluating smalltalk code'.
-	self assert: ((jsonData at: 'stackTrace') includesSubstring: 'ZeroDivide').
-	
-	^ jsonData
-]

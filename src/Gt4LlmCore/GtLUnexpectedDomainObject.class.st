@@ -50,14 +50,3 @@ GtLUnexpectedDomainObject >> objectNameDescription [
 		accessor: #objectName;
 		beRequired
 ]
-
-{ #category : #'api - serializing' }
-GtLUnexpectedDomainObject >> serializeToLlmJsonObject [
-	"Return a JSON dictionary that represents the domain object."
-
-	<return: #NeoJSONObject>
-	^ NeoJSONObject new
-		at: #error put: self messageText;
-		at: #unexpectedObject put: self objectName;
-		yourself
-]
