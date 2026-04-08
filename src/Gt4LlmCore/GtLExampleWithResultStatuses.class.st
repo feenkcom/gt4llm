@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLExampleWithResultStatusesDomainObject,
+	#name : #GtLExampleWithResultStatuses,
 	#superclass : #Object,
 	#instVars : [
 		'notFoundClassNames',
@@ -9,28 +9,28 @@ Class {
 }
 
 { #category : #'api - accessing' }
-GtLExampleWithResultStatusesDomainObject >> errorResultCount [
+GtLExampleWithResultStatuses >> errorResultCount [
 	^ self exampleWithStatuses count: #isErrorResult
 ]
 
 { #category : #accessing }
-GtLExampleWithResultStatusesDomainObject >> exampleWithStatuses [
-	<return: #Collection of: #GtLExampleWithResultStatusDomainObject>
+GtLExampleWithResultStatuses >> exampleWithStatuses [
+	<return: #Collection of: #GtLExampleWithResultStatus>
 	^ exampleWithStatuses ifNil: [ #() ]
 ]
 
 { #category : #accessing }
-GtLExampleWithResultStatusesDomainObject >> exampleWithStatuses: aCollection [
+GtLExampleWithResultStatuses >> exampleWithStatuses: aCollection [
 	exampleWithStatuses := aCollection
 ]
 
 { #category : #'api - accessing' }
-GtLExampleWithResultStatusesDomainObject >> failureResultCount [
+GtLExampleWithResultStatuses >> failureResultCount [
 	^ self exampleWithStatuses count: #isFailureResult
 ]
 
 { #category : #'gt - extensions' }
-GtLExampleWithResultStatusesDomainObject >> gtExampleWithStatusesFor: aView [
+GtLExampleWithResultStatuses >> gtExampleWithStatusesFor: aView [
 	<gtView>
 	<gtLlmView>
 	
@@ -45,7 +45,7 @@ GtLExampleWithResultStatusesDomainObject >> gtExampleWithStatusesFor: aView [
 ]
 
 { #category : #accessing }
-GtLExampleWithResultStatusesDomainObject >> llmJsonObject [
+GtLExampleWithResultStatuses >> llmJsonObject [
 	"Return a JSON dictionary that represents the domain object."
 
 	<return: #NeoJSONObject>
@@ -64,7 +64,7 @@ GtLExampleWithResultStatusesDomainObject >> llmJsonObject [
 ]
 
 { #category : #accessing }
-GtLExampleWithResultStatusesDomainObject >> llmRawDataViewFor: aDataView [
+GtLExampleWithResultStatuses >> llmRawDataViewFor: aDataView [
 	<gtLlmDataView>
 	
 	^ aDataView 
@@ -73,26 +73,26 @@ GtLExampleWithResultStatusesDomainObject >> llmRawDataViewFor: aDataView [
 ]
 
 { #category : #accessing }
-GtLExampleWithResultStatusesDomainObject >> notFoundClassNames [
+GtLExampleWithResultStatuses >> notFoundClassNames [
 	^ notFoundClassNames ifNil: [ #() ]
 ]
 
 { #category : #accessing }
-GtLExampleWithResultStatusesDomainObject >> notFoundClassNames: anObject [
+GtLExampleWithResultStatuses >> notFoundClassNames: anObject [
 	notFoundClassNames := anObject
 ]
 
 { #category : #'api - accessing' }
-GtLExampleWithResultStatusesDomainObject >> skippedCount [
+GtLExampleWithResultStatuses >> skippedCount [
 	^ self exampleWithStatuses count: #isSkippedResult
 ]
 
 { #category : #'api - accessing' }
-GtLExampleWithResultStatusesDomainObject >> successResultCount [
+GtLExampleWithResultStatuses >> successResultCount [
 	^ self exampleWithStatuses count: #isSuccessResult
 ]
 
 { #category : #'api - accessing' }
-GtLExampleWithResultStatusesDomainObject >> totalCount [
+GtLExampleWithResultStatuses >> totalCount [
 	^ self exampleWithStatuses size
 ]
