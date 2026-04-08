@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLRefactoringToolForClassLookupExamples,
-	#superclass : #GtLAbstractPlainSchemaFunctionToolExamples,
+	#superclass : #GtLAbstractRefactoringMagritteToolExamples,
 	#category : 'Gt4LlmCore-Examples-Tools'
 }
 
@@ -10,7 +10,7 @@ GtLRefactoringToolForClassLookupExamples >> classLookupForExistingClass [
 	| tool call result |
 	tool := self toolWithExampleClass.
 	call := GtLFunctionToolCall new.
-	call rawArguments: {'className' -> 'GtLRefactoringToolForClassLookupExampleClass'} asDictionary.
+	call rawArguments: {'targetClassName' -> 'GtLRefactoringToolForClassLookupExampleClass'} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
 	self assert: result isErrorDomainObject not.
@@ -24,7 +24,7 @@ GtLRefactoringToolForClassLookupExamples >> classLookupForUnknownClass [
 	| tool call result |
 	tool := self toolWithExampleClass.
 	call := GtLFunctionToolCall new.
-	call rawArguments: {'className' -> 'NonExistentClass'} asDictionary.
+	call rawArguments: {'targetClassName' -> 'NonExistentClass'} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
 	self assert: result isErrorDomainObject.
