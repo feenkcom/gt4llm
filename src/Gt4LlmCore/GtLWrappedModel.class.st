@@ -164,15 +164,6 @@ GtLWrappedModel >> serializeToAnthropicResponseOutput [
 ]
 
 { #category : #serialization }
-GtLWrappedModel >> serializeToLlmJsonObject [
-	| wrapperObject |
-	wrapperObject := NeoJSONObject new.
-	self addContentTo: wrapperObject.
-	
-	^ (wrapperObject at: name)
-]
-
-{ #category : #serialization }
 GtLWrappedModel >> serializeToOpenAIResponseOutput [
 	^ self mainDataView  serializeToOpenAIResponseOutput
 ]

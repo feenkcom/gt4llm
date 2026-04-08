@@ -15,11 +15,6 @@ GtLToolForSearchFilter >> description [
 ]
 
 { #category : #accessing }
-GtLToolForSearchFilter >> isUsingDataViews [
-	^ true
-]
-
-{ #category : #accessing }
 GtLToolForSearchFilter >> name [
 	^ 'gtSearchFilter'
 ]

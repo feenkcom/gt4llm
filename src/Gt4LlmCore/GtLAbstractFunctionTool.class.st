@@ -46,11 +46,6 @@ GtLAbstractFunctionTool >> functionOpenAI [
 		'parameters' -> self parametersJsonSchemaDictionary} asDictionary
 ]
 
-{ #category : #testing }
-GtLAbstractFunctionTool >> isUsingDataViews [
-	^false
-]
-
 { #category : #'api - responses' }
 GtLAbstractFunctionTool >> parametersJsonSchemaDictionary [
 	| parametersFormat |
@@ -67,31 +62,31 @@ GtLAbstractFunctionTool >> performToolCall: aToolCall [
 
 { #category : #execution }
 GtLAbstractFunctionTool >> performToolCall: aToolCall inContext: anExecutionContext [
-	| domainObject |
+	| domainObject resultObject |
+	
 	aToolCall performedByTool: self.
+	
 	domainObject := self 
 		privatePerformToolCall: aToolCall 
 		inContext: anExecutionContext.
+	resultObject := self resultObjectFromDomainObject: domainObject.
 	
-	"Temporary check to enble the new LLM views if used"
-	self isUsingDataViews ifTrue: [
-		(domainObject llmDataViewsInContext: GtLDataViewContext new)
-			ifNotEmpty: [ :llmViews |
-				| resultObject |
-				resultObject := GTLDataViewWrapperModel new 
-					targetObject:  domainObject;
-					targetDataViews:  llmViews.
-				aToolCall result: resultObject.
-
-				^ resultObject	] ].
-		
-	aToolCall result: domainObject.
+	aToolCall result: resultObject.
 	^ domainObject
 ]
 
 { #category : #execution }
 GtLAbstractFunctionTool >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	^ self subclassResponsibility
+]
+
+{ #category : #utils }
+GtLAbstractFunctionTool >> resultObjectFromDomainObject: domainObject [ 
+
+	^GTLDataViewWrapperModel new 
+			targetObject:  domainObject;
+			targetDataViews:  (domainObject 
+				llmDataViewsInContext: GtLDataViewContext new)
 ]
 
 { #category : #accessing }

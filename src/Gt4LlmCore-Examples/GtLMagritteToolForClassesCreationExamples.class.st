@@ -3,9 +3,7 @@ Examples for GtLMagritteToolForClassesCreation.
 "
 Class {
 	#name : #GtLMagritteToolForClassesCreationExamples,
-	#superclass : #Object,
-	#traits : 'TGtLInvalidInputDataAssertions',
-	#classTraits : 'TGtLInvalidInputDataAssertions classTrait',
+	#superclass : #GtLAbstractMagritteFunctionToolExamples,
 	#instVars : [
 		'environment'
 	],

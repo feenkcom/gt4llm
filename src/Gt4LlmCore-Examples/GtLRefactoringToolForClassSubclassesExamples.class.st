@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLRefactoringToolForClassSubclassesExamples,
-	#superclass : #Object,
+	#superclass : #GtLAbstractRefactoringMagritteToolExamples,
 	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
@@ -10,7 +10,7 @@ GtLRefactoringToolForClassSubclassesExamples >> classSubclassesForClassWithNoSub
 	| tool call result |
 	tool := self toolWithExampleHierarchy.
 	call := GtLFunctionToolCall new.
-	call rawArguments: {'className' -> 'GtLRefactoringToolForClassSubclassesExampleChild'} asDictionary.
+	call rawArguments: {'targetClassName' -> 'GtLRefactoringToolForClassSubclassesExampleChild'} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
 	self assert: result isErrorDomainObject not.
@@ -25,7 +25,7 @@ GtLRefactoringToolForClassSubclassesExamples >> classSubclassesForExistingClass 
 	| tool call result |
 	tool := self toolWithExampleHierarchy.
 	call := GtLFunctionToolCall new.
-	call rawArguments: {'className' -> 'GtLRefactoringToolForClassSubclassesExampleBase'} asDictionary.
+	call rawArguments: {'targetClassName' -> 'GtLRefactoringToolForClassSubclassesExampleBase'} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
 
@@ -45,7 +45,7 @@ GtLRefactoringToolForClassSubclassesExamples >> classSubclassesForUnknownClass [
 	| tool call result |
 	tool := self toolWithExampleHierarchy.
 	call := GtLFunctionToolCall new.
-	call rawArguments: {'className' -> 'NonExistingClassName'} asDictionary.
+	call rawArguments: {'targetClassName' -> 'NonExistingClassName'} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
 	

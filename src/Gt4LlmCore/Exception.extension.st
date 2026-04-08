@@ -76,24 +76,3 @@ Exception >> llmDataViewFor: aDataView [
 				GtLValueSerializer new
 					serializeException: self  ]
 ]
-
-{ #category : #'*Gt4LlmCore' }
-Exception >> serializeToLlmJsonObject [
-	^ GtLValueSerializer new
-			serializeException: self
-]
-
-{ #category : #'*Gt4LlmCore' }
-Exception >> serializeToLlmResponseImages [
-	^{}
-]
-
-{ #category : #'*Gt4LlmCore' }
-Exception >> serializeToOpenAIResponseImages [
-	^{}
-]
-
-{ #category : #'*Gt4LlmCore' }
-Exception >> serializeToOpenAIResponseOutput [
-	^ self serializeToLlmJsonObject
-]

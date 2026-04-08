@@ -81,22 +81,15 @@ GtLExceptionDomainObject >> llmExceptionViewFor: aDataView [
 ]
 
 { #category : #'llm views' }
-GtLExceptionDomainObject >> llmJsonObject [
-	"Return a JSON dictionary that represents the domain object."
-	<return: #NeoJSONObject>
-	
-	^ NeoJSONObject new
-		at: 'errorReason' put: self description;
-		yourself
-]
-
-{ #category : #'llm views' }
 GtLExceptionDomainObject >> llmRawDataViewFor: aDataView [
 	<gtLlmDataView>
 	
 	^ aDataView 
 			title: 'Exception generic details';
-			jsonData: [ self llmJsonObject ]
+			jsonData: [ 
+				NeoJSONObject new
+					at: 'errorReason' put: self description;
+					yourself ]
 ]
 
 { #category : #'api - accessing' }
@@ -104,19 +97,6 @@ GtLExceptionDomainObject >> messageText [
 	"Return an error message"
 
 	^ '{1}' format: {self exception}
-]
-
-{ #category : #'api - serializing' }
-GtLExceptionDomainObject >> serializeToLlmJsonObject [
-	"Return a JSON dictionary that represents the domain object."
-
-	<return: #NeoJSONObject>
-	^ NeoJSONObject new
-		at: #error put: self messageText;
-		at: #errorClass put: self exception className;
-		at: #whatFailed put: self errorReason;
-		at: #stackTrace put: self stackTrace;
-		yourself
 ]
 
 { #category : #'api - accessing' }

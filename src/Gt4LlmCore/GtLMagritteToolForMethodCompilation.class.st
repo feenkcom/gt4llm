@@ -68,11 +68,6 @@ Example JSON response:
 }'
 ]
 
-{ #category : #testing }
-GtLMagritteToolForMethodCompilation >> isUsingDataViews [
-	^ true
-]
-
 { #category : #magritte }
 GtLMagritteToolForMethodCompilation >> methodRequestDescription [
 	<magritteDescription>

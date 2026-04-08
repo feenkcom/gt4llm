@@ -1,8 +1,19 @@
 Class {
 	#name : #GtLToolForTestClassesRun,
-	#superclass : #GtLAbstractPlainSchemaFunctionTool,
+	#superclass : #GtLAbstractMagritteFunctionTool,
 	#category : #'Gt4LlmCore-Tools'
 }
+
+{ #category : #magritte }
+GtLToolForTestClassesRun >> classNamesDescription [
+	<magritteDescription>
+
+	^ MAToManyScalarRelationDescription new
+		label: 'Class names';
+		accessor: #classNames;
+		classes: { String };
+		beRequired
+]
 
 { #category : #'llm-generated' }
 GtLToolForTestClassesRun >> description [
@@ -16,72 +27,36 @@ Examples:
 ]
 
 { #category : #'llm-generated' }
-GtLToolForTestClassesRun >> detailForTest: aTest inResult: aResult [
-	^ GtLTestCaseDomainObject new
-		testCase: aTest;
-		result: aResult
-]
-
-{ #category : #'llm-generated' }
 GtLToolForTestClassesRun >> name [
 	^ 'testsInClassesRun'
 ]
 
-{ #category : #'llm-generated' }
-GtLToolForTestClassesRun >> normalizedClassNamesFrom: rawValue [
-	| items result |
-	rawValue ifNil: [ ^ #() ].
-	items := (rawValue isString or: [ rawValue isSymbol ])
-		ifTrue: [ { rawValue } ]
-		ifFalse: [ rawValue isCollection
-			ifTrue: [ rawValue asArray ]
-			ifFalse: [ { rawValue } ] ].
-	result := OrderedCollection new.
-	items do: [ :each |
-		each ifNotNil: [
-			(each asString findTokens: Character space)
-				do: [ :token | | trimmed |
-					trimmed := token trimBoth.
-					trimmed isEmpty ifFalse: [ result add: trimmed ] ] ] ].
-	^ result asArray
-]
-
-{ #category : #'llm-generated' }
-GtLToolForTestClassesRun >> parametersDescription [
-	^ #('classNames')
-]
-
-{ #category : #'llm-generated' }
+{ #category : #private }
 GtLToolForTestClassesRun >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
-	| arguments rawClassNames classNames details notFound notTestCase |
+	| arguments classNames details notFound notTestCase |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
-	rawClassNames := arguments
-			at: 'classNames'
-			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-					arguments: arguments;
-					missingArgument: 'classNames' ].
-	classNames := rawClassNames findTokens: String space.
-	classNames isEmpty
-		ifTrue: [ ^ GtLMissingArgumentDomainObject new
-				arguments: arguments;
-				missingArgument: 'classNames' ].
+	classNames := arguments at: 'classNames'.
+	
 	details := OrderedCollection new.
 	notFound := OrderedCollection new.
 	notTestCase := OrderedCollection new.
+	
 	classNames
 		do: [ :className | 
 			Smalltalk globals
-				at: className asSymbol
+				at: className asString asSymbol
 				ifPresent: [ :class | 
 					(class isTestCase)
 						ifFalse: [ notTestCase add: class ]
-						ifTrue: [ | result |
-							result := class suite run.
-							result tests
-								do: [ :test | details add: (self detailForTest: test inResult: result) ] ] ]
-				ifAbsent: [ notFound add: className ] ].
+						ifTrue: [ | results |
+							results := class suite tests collect: [ :aTest | 
+								aTest gtRunWithExplicitResult ].
+							results do: [ :aTestWithResult | details add: 							
+								(GtLTestCaseWithResultStatus new
+									testCaseWithResult: aTestWithResult) ] ] ]
+				ifAbsent: [ notFound add: className asString ] ].
 
-	^ GtLTestCasesDomainObject new
+	^ GtLTestCasesWithResultStatuses new
 		testCases: details asArray;
 		notFoundClassNames: notFound asArray;
 		notTestCaseClasses: notTestCase asArray

@@ -15,7 +15,7 @@ GtWardleyMapRemoveInnerNodeSpecification class >> jsonSchemaLabel [
 { #category : #changes }
 GtWardleyMapRemoveInnerNodeSpecification >> asChangeIn: aWardleyMapModel [
 	^ (GtWardleyMapRemoveInnerNodeChange onMap: aWardleyMapModel)
-		innerNode: (self nodeWithId: innerNodeId in: aWardleyMapModel);
+		innerNodeId: innerNodeId;
 		yourself
 ]
 

@@ -13,11 +13,6 @@ GtLToolForObjectView >> description [
 ]
 
 { #category : #accessing }
-GtLToolForObjectView >> isUsingDataViews [
-	^ true
-]
-
-{ #category : #accessing }
 GtLToolForObjectView >> name [
 	^ 'getViewContent'
 ]

@@ -1,8 +1,6 @@
 Class {
 	#name : #GtLToolForLepiterSnippetsCreateExamples,
-	#superclass : #Object,
-	#traits : 'TGtLInvalidInputDataAssertions',
-	#classTraits : 'TGtLInvalidInputDataAssertions classTrait',
+	#superclass : #GtLAbstractMagritteFunctionToolExamples,
 	#instVars : [
 		'logicalDatabase'
 	],

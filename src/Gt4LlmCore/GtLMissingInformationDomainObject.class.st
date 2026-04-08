@@ -70,15 +70,3 @@ GtLMissingInformationDomainObject >> missingModelNameDescription [
 			accessor: #missingModelName;
 			beRequired
 ]
-
-{ #category : #'api - serializing' }
-GtLMissingInformationDomainObject >> serializeToLlmJsonObject [
-	"Return a JSON dictionary that represents the domain object."
-	
-	^ GtMagritteJSONDataExporter exportObject: self
-]
-
-{ #category : #testing }
-GtLMissingInformationDomainObject >> wasMovedToMagritteDescriptions [
-	^ true
-]

@@ -20,6 +20,16 @@ GtLIncorrectArgumentArrayItemDomainObject >> argumentName: anObject [
 	argumentName := anObject
 ]
 
+{ #category : #magritte }
+GtLIncorrectArgumentArrayItemDomainObject >> argumentNameDescription [
+	<magritteDescription>
+
+	^ MAStringDescription new
+			label: 'Argument name';
+			accessor: #argumentName;
+			beRequired
+]
+
 { #category : #accessing }
 GtLIncorrectArgumentArrayItemDomainObject >> argumentValue [
 	^ argumentValue
@@ -28,6 +38,26 @@ GtLIncorrectArgumentArrayItemDomainObject >> argumentValue [
 { #category : #accessing }
 GtLIncorrectArgumentArrayItemDomainObject >> argumentValue: anObject [
 	argumentValue := anObject
+]
+
+{ #category : #magritte }
+GtLIncorrectArgumentArrayItemDomainObject >> argumentValueDescription [
+	<magritteDescription>
+
+	^ MAStringDescription new
+			label: 'Argument value';
+			accessor: #argumentValue;
+			beRequired
+]
+
+{ #category : #magritte }
+GtLIncorrectArgumentArrayItemDomainObject >> errorMessageDescription [
+	<magritteDescription>
+
+	^ MAStringDescription new
+			label: 'Error message';
+			accessor: #messageText;
+			beRequired
 ]
 
 { #category : #accessing }
@@ -41,6 +71,21 @@ GtLIncorrectArgumentArrayItemDomainObject >> expectedItemKind: anObject [
 ]
 
 { #category : #accessing }
+GtLIncorrectArgumentArrayItemDomainObject >> expectedItemKindName [
+	^ self expectedItemKind ifNotNil: [ :each | each name ]
+]
+
+{ #category : #magritte }
+GtLIncorrectArgumentArrayItemDomainObject >> expectedItemKindNameDescription [
+	<magritteDescription>
+
+	^ MAStringDescription new
+			label: 'Expected item kind name';
+			accessor: #expectedItemKindName;
+			beRequired
+]
+
+{ #category : #accessing }
 GtLIncorrectArgumentArrayItemDomainObject >> incorrectItems [
 	^ incorrectItems
 ]
@@ -48,6 +93,23 @@ GtLIncorrectArgumentArrayItemDomainObject >> incorrectItems [
 { #category : #accessing }
 GtLIncorrectArgumentArrayItemDomainObject >> incorrectItems: anObject [
 	incorrectItems := anObject
+]
+
+{ #category : #magritte }
+GtLIncorrectArgumentArrayItemDomainObject >> incorrectItemsDescription [
+	<magritteDescription>
+
+	^ MAStringDescription new
+			label: 'Incorrect items';
+			accessor: #incorrectItems;
+			beRequired
+]
+
+{ #category : #views }
+GtLIncorrectArgumentArrayItemDomainObject >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
 ]
 
 { #category : #'api - accessing' }
@@ -58,18 +120,4 @@ GtLIncorrectArgumentArrayItemDomainObject >> messageText [
 		format: {self argumentName.
 				self expectedItemKind.
 				self incorrectItems anyOne class}
-]
-
-{ #category : #'api - serializing' }
-GtLIncorrectArgumentArrayItemDomainObject >> serializeToLlmJsonObject [
-	"Return a JSON dictionary that represents the domain object."
-
-	<return: #NeoJSONObject>
-	^ NeoJSONObject new
-		at: #error put: self messageText;
-		at: #argumentName put: self argumentName;
-		at: #argumentValue put: self argumentValue;
-		at: #incorrectItems put: self incorrectItems;
-		at: #expectedItemKind put: self expectedItemKind;
-		yourself
 ]
