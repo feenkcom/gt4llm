@@ -1,9 +1,9 @@
+"
+Magritte-based tool for retrieving class references in a GtRBNamespace model.
+"
 Class {
 	#name : #GtLRefactoringToolForClassReferences,
-	#superclass : #GtLAbstractPlainSchemaFunctionTool,
-	#instVars : [
-		'model'
-	],
+	#superclass : #GtLAbstractRefactoringMagritteTool,
 	#category : #'Gt4LlmCore-Tools'
 }
 
@@ -18,39 +18,20 @@ GtLRefactoringToolForClassReferences >> isUsingDataViews [
 ]
 
 { #category : #'llm-generated' }
-GtLRefactoringToolForClassReferences >> model [
-	^ model
-]
-
-{ #category : #'llm-generated' }
-GtLRefactoringToolForClassReferences >> model: aModel [
-	model := aModel
-]
-
-{ #category : #'llm-generated' }
 GtLRefactoringToolForClassReferences >> name [
 	^ 'rbClassReferences'
 ]
 
-{ #category : #'llm-generated' }
-GtLRefactoringToolForClassReferences >> parametersDescription [
-	^ #('className')
-]
-
-{ #category : #'llm-generated' }
+{ #category : #executing }
 GtLRefactoringToolForClassReferences >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
-	| arguments className targetClass references |
+	| arguments targetClassName targetClass references |
 	self model
 		ifNil: [ ^ GtLMissingInformationDomainObject new
 				missingModelName: 'model' ].
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
-	className := arguments
-			at: 'className'
-			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-					arguments: arguments;
-					missingArgument: 'className' ].
-	targetClass := self model classNamed: className.
-	targetClass ifNil: [ ^ GtLMissingDomainObject new objectName: className ].
+	targetClassName := arguments at: 'targetClassName'.
+	targetClass := self model classNamed: targetClassName.
+	targetClass ifNil: [ ^ GtLMissingDomainObject new objectName: targetClassName ].
 	references := Array
 		streamContents: [ :stream | 
 			self model
@@ -61,4 +42,13 @@ GtLRefactoringToolForClassReferences >> privatePerformToolCall: aToolCall inCont
 		model: self model;
 		targetClass: targetClass;
 		references: references.
+]
+
+{ #category : #magritte }
+GtLRefactoringToolForClassReferences >> targetClassNameDescription [
+	<magritteDescription>
+	^ MAStringDescription new
+		label: 'Target class name';
+		accessor: #targetClassName;
+		beRequired
 ]
