@@ -62,17 +62,39 @@ GtLExampleWithResultStatusDomainObject >> isSuccessResult [
 	^ self exampleWithResult isSuccess
 ]
 
-{ #category : #'llm views' }
+{ #category : #serialization }
 GtLExampleWithResultStatusDomainObject >> llmJsonObject [
 	"Return a JSON dictionary that represents the domain object."
 	<return: #NeoJSONObject>
+	| data |
 	
-	^ NeoJSONObject new
+	data := NeoJSONObject new
 		at: #className put: self exampleWithResult methodClass name asString;
 		at: #selector put: self exampleWithResult selector asString;
 		at: #status put: self statusText;
 		at: #objectId put: self objectId;
-		yourself
+		yourself.
+		
+	(self isErrorResult or: [ self isFailureResult ]) ifTrue: [
+		data at: #errorDetails put: (NeoJSONObject new
+			at: #errorMessage put: self normalizedErrorMessage;
+			at: #errorClass put: self exampleWithResult returnValue class name asString;
+			yourself) ].
+		
+	^ data
+]
+
+{ #category : #private }
+GtLExampleWithResultStatusDomainObject >> normalizedErrorMessage [
+	"Return the exception description with the class name prefix stripped if present
+	to allow for cases when #description is overriden to remove the class name."
+	| description exceptionClassName prefix |
+	description := self exampleWithResult returnValue description.
+	exceptionClassName := self exampleWithResult returnValue class name asString.
+	prefix := exceptionClassName, ': '.
+	(description beginsWith: prefix)
+		ifTrue: [ ^ description allButFirst: prefix size ].
+	^ description
 ]
 
 { #category : #accessing }
