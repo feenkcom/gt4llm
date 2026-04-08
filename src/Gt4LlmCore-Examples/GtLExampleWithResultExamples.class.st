@@ -2,7 +2,7 @@
 Examples for GtLExampleWithResultDomainObject data views.
 "
 Class {
-	#name : #GtLExampleWithResultDomainObjectExamples,
+	#name : #GtLExampleWithResultExamples,
 	#superclass : #Object,
 	#traits : 'TGtLExceptionResultAssertions',
 	#classTraits : 'TGtLExceptionResultAssertions classTrait',
@@ -10,7 +10,7 @@ Class {
 }
 
 { #category : #private }
-GtLExampleWithResultDomainObjectExamples >> assertDomainObject: domainObject isSuccess: isSuccess statusText: statusText className: className selector: selector objectId: objectId [
+GtLExampleWithResultExamples >> assertDomainObject: domainObject isSuccess: isSuccess statusText: statusText className: className selector: selector objectId: objectId [
 	self assert: domainObject isSuccessResult equals: isSuccess.
 	self assert: domainObject statusText equals: statusText.
 	self assert: domainObject exampleWithResult methodClass name equals: className.
@@ -19,7 +19,7 @@ GtLExampleWithResultDomainObjectExamples >> assertDomainObject: domainObject isS
 ]
 
 { #category : #private }
-GtLExampleWithResultDomainObjectExamples >> assertExampleData: jsonData forMethod: aCompiledMethod status: statusString [
+GtLExampleWithResultExamples >> assertExampleData: jsonData forMethod: aCompiledMethod status: statusString [
 	| exampleRefJson |
 	self assertJsonData: jsonData hasExpectedKeys: #('exampleReference' 'exampleStatus' #result).
 	exampleRefJson := jsonData at: 'exampleReference'.
@@ -30,12 +30,12 @@ GtLExampleWithResultDomainObjectExamples >> assertExampleData: jsonData forMetho
 ]
 
 { #category : #assertions }
-GtLExampleWithResultDomainObjectExamples >> assertJsonData: jsonData hasExpectedKeys: expectedKeys [
+GtLExampleWithResultExamples >> assertJsonData: jsonData hasExpectedKeys: expectedKeys [
 	self assert: jsonData keys sorted equals: expectedKeys sorted
 ]
 
 { #category : #private }
-GtLExampleWithResultDomainObjectExamples >> assertObjectValue: objectValueJson className: className printString: printString superclassName: superclassName packageName: packageName instanceSlots: instanceSlots [
+GtLExampleWithResultExamples >> assertObjectValue: objectValueJson className: className printString: printString superclassName: superclassName packageName: packageName instanceSlots: instanceSlots [
 	self assert: (objectValueJson at: 'objectClassName') equals: className.
 	self 
 		assert: ((objectValueJson at: 'objectPrintString') copyWithoutAll: ' ') 
@@ -46,7 +46,7 @@ GtLExampleWithResultDomainObjectExamples >> assertObjectValue: objectValueJson c
 ]
 
 { #category : #private }
-GtLExampleWithResultDomainObjectExamples >> assertObjectValue: objectValueJson hasPhlowViews: expectedPhlowViews [
+GtLExampleWithResultExamples >> assertObjectValue: objectValueJson hasPhlowViews: expectedPhlowViews [
 	| actualPhlowViews |
 	actualPhlowViews := (objectValueJson at: 'phlowViews') collect: [ :each |
 		{ 'title' -> (each at: 'title'). 'methodName' -> (each at: 'methodName') } asDictionary ].
@@ -54,20 +54,20 @@ GtLExampleWithResultDomainObjectExamples >> assertObjectValue: objectValueJson h
 ]
 
 { #category : #private }
-GtLExampleWithResultDomainObjectExamples >> assertSuccessResult: resultJson objectId: objectId objectDetails: expectedObjectDetails [
+GtLExampleWithResultExamples >> assertSuccessResult: resultJson objectId: objectId objectDetails: expectedObjectDetails [
 	self assertJsonData: resultJson hasExpectedKeys: #('objectDetails' #objectId #objectValue).
 	self assert: (resultJson at: #objectId) equals: objectId.
 	self assert: (resultJson at: 'objectDetails') equals: expectedObjectDetails.
 ]
 
 { #category : #examples }
-GtLExampleWithResultDomainObjectExamples >> exampleWithResultForComparisonFailure [
+GtLExampleWithResultExamples >> exampleWithResultForComparisonFailure [
 	<gtExample>
-	<return: #GtLExampleWithResultDomainObject>
+	<return: #GtLExampleWithResult>
 	| method domainObject compositeView dataBlock jsonData resultJson |
 	
 	method := GtLExampleRunDummyExamples >> #failingExampleWithComparisonFailures.
-	domainObject := GtLExampleWithResultDomainObject new
+	domainObject := GtLExampleWithResult new
 		exampleWithResult: (self runExampleMethod: method);
 		objectId: nil.
 	
@@ -101,13 +101,13 @@ GtLExampleWithResultDomainObjectExamples >> exampleWithResultForComparisonFailur
 ]
 
 { #category : #examples }
-GtLExampleWithResultDomainObjectExamples >> exampleWithResultForFailingExample [
+GtLExampleWithResultExamples >> exampleWithResultForFailingExample [
 	<gtExample>
-	<return: #GtLExampleWithResultDomainObject>
+	<return: #GtLExampleWithResult>
 	| method domainObject compositeView dataBlock jsonData resultJson |
 	
 	method := GtLExampleRunDummyExamples >> #failingExample.
-	domainObject := GtLExampleWithResultDomainObject new
+	domainObject := GtLExampleWithResult new
 		exampleWithResult: (self runExampleMethod: method);
 		objectId: nil.
 	
@@ -140,13 +140,13 @@ GtLExampleWithResultDomainObjectExamples >> exampleWithResultForFailingExample [
 ]
 
 { #category : #examples }
-GtLExampleWithResultDomainObjectExamples >> exampleWithResultForSuccessfulExample [
+GtLExampleWithResultExamples >> exampleWithResultForSuccessfulExample [
 	<gtExample>
-	<return: #GtLExampleWithResultDomainObject>
+	<return: #GtLExampleWithResult>
 	| method domainObject compositeView dataBlock jsonData resultJson objectValueJson expectedPhlowViews |
 	
 	method := GtLExampleRunDummyExamples >> #successfulExample.
-	domainObject := GtLExampleWithResultDomainObject new
+	domainObject := GtLExampleWithResult new
 		exampleWithResult: (self runExampleMethod: method);
 		objectId: 'test-object-id'.
 	
@@ -193,13 +193,13 @@ GtLExampleWithResultDomainObjectExamples >> exampleWithResultForSuccessfulExampl
 ]
 
 { #category : #examples }
-GtLExampleWithResultDomainObjectExamples >> exampleWithResultForSuccessfulExampleWithDataJsonView [
+GtLExampleWithResultExamples >> exampleWithResultForSuccessfulExampleWithDataJsonView [
 	<gtExample>
-	<return: #GtLExampleWithResultDomainObject>
+	<return: #GtLExampleWithResult>
 	| method domainObject compositeView dataBlock jsonData resultJson objectValueJson expectedObjectDetails expectedInstanceSlots expectedPhlowViews |
 	
 	method := GtLExampleRunDummyExamples >> #successfulExampleWithObjectWithADataJsonView.
-	domainObject := GtLExampleWithResultDomainObject new
+	domainObject := GtLExampleWithResult new
 		exampleWithResult: (self runExampleMethod: method);
 		objectId: 'test-object-id'.
 	
@@ -252,7 +252,7 @@ GtLExampleWithResultDomainObjectExamples >> exampleWithResultForSuccessfulExampl
 ]
 
 { #category : #private }
-GtLExampleWithResultDomainObjectExamples >> runExampleMethod: aCompiledMethod [
+GtLExampleWithResultExamples >> runExampleMethod: aCompiledMethod [
 	"Run the given example method and return the example with result."
 	| example |
 	example := aCompiledMethod gtExample asExampleWithResult.

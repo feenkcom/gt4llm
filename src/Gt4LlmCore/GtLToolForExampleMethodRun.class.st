@@ -4,7 +4,7 @@ Magritte-based tool for executing a gtExample method and reporting the result.
 Class {
 	#name : #GtLToolForExampleMethodRun,
 	#superclass : #GtLAbstractMagritteFunctionTool,
-	#category : 'Gt4LlmCore-Tools'
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }
@@ -24,11 +24,6 @@ GtLToolForExampleMethodRun >> exampleReferenceDescription [
 		accessor: #exampleReference;
 		classes: {GtLExampleReference};
 		beRequired
-]
-
-{ #category : #testing }
-GtLToolForExampleMethodRun >> isUsingDataViews [
-	^true
 ]
 
 { #category : #accessing }
@@ -84,7 +79,7 @@ GtLToolForExampleMethodRun >> runExample: method fromReference: exampleReference
 			addNewObject: exampleResult returnValue
 			reason: (GtLStoredObjectExampleMethodReason toolCall: aToolCall) ].
 			
-	^ GtLExampleWithResultDomainObject new
+	^ GtLExampleWithResult new
 		exampleWithResult: example;
 		objectId: objectId
 ]

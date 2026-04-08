@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLRefactoringToolForClassReferencesExamples,
-	#superclass : #GtLAbstractPlainSchemaFunctionToolExamples,
+	#superclass : #GtLAbstractRefactoringMagritteToolExamples,
 	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
@@ -10,7 +10,7 @@ GtLRefactoringToolForClassReferencesExamples >> classReferencesForExistingClass 
 	| tool call result |
 	tool := self toolWithExampleReferences.
 	call := GtLFunctionToolCall new.
-	call rawArguments: {'className' -> 'GtLRefactoringClassReferencesTarget'} asDictionary.
+	call rawArguments: {'targetClassName' -> 'GtLRefactoringClassReferencesTarget'} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
 	self assert: result isErrorDomainObject not.
@@ -24,7 +24,7 @@ GtLRefactoringToolForClassReferencesExamples >> classReferencesForUnknownClass [
 	| tool call result |
 	tool := self toolWithExampleReferences.
 	call := GtLFunctionToolCall new.
-	call rawArguments: {'className' -> 'UnknownClassName'} asDictionary.
+	call rawArguments: {'targetClassName' -> 'UnknownClassName'} asDictionary.
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
 	self assert: result isErrorDomainObject.

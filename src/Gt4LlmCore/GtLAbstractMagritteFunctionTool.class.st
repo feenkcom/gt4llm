@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLAbstractMagritteFunctionTool,
 	#superclass : #GtLAbstractFunctionTool,
-	#category : 'Gt4LlmCore-Tools'
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #testing }
@@ -77,20 +77,8 @@ GtLAbstractMagritteFunctionTool >> performToolCall: aToolCall inContext: anExecu
 { #category : #utils }
 GtLAbstractMagritteFunctionTool >> resultObjectFromDomainObject: domainObject [ 
 
-	"Temporary check to enble the new LLM views if used"
-	self isUsingDataViews ifTrue: [
-		(domainObject llmDataViewsInContext: GtLDataViewContext new)
-			ifNotEmpty: [ :llmViews |
-				^GTLDataViewWrapperModel new 
-					targetObject:  domainObject;
-					targetDataViews:  llmViews ] ].
-		
-	^((domainObject isKindOf: GtLDomainObject) not or: [
-			domainObject wasMovedToMagritteDescriptions ])
-		ifTrue: [
-			GtLMagritteBasedModel new
-				name: 'Response';
-				model: domainObject]
-		ifFalse: [ 
-			domainObject ].
+	^GTLDataViewWrapperModel new 
+			targetObject:  domainObject;
+			targetDataViews:  (domainObject 
+				llmDataViewsInContext: GtLDataViewContext new)
 ]

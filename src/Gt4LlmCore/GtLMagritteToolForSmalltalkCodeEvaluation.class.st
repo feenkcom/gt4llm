@@ -4,7 +4,7 @@ Magritte-based tool for evaluating Smalltalk code and returning serialized resul
 Class {
 	#name : #GtLMagritteToolForSmalltalkCodeEvaluation,
 	#superclass : #GtLAbstractMagritteFunctionTool,
-	#category : 'Gt4LlmCore-Tools'
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #magritte }
@@ -68,11 +68,6 @@ Example JSON error response:
   "whatFailed": "Error while evaluating smalltalk code",
   "stackTrace": "..."
 }'
-]
-
-{ #category : #testing }
-GtLMagritteToolForSmalltalkCodeEvaluation >> isUsingDataViews [
-	^true
 ]
 
 { #category : #accessing }

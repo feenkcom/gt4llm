@@ -7,7 +7,7 @@ Class {
 		'expectedArgumentValueKind',
 		'errorMessage'
 	],
-	#category : 'Gt4LlmCore-Domain Objects'
+	#category : #'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #accessing }
@@ -117,16 +117,4 @@ GtLIncorrectArgumentTypeDomainObject >> messageText [
 	"Return an error message"
 
 	^ self errorMessage
-]
-
-{ #category : #'api - serializing' }
-GtLIncorrectArgumentTypeDomainObject >> serializeToLlmJsonObject [
-	"Return a JSON dictionary that represents the domain object."
-	
-	^ GtMagritteJSONDataExporter exportObject: self.
-]
-
-{ #category : #testing }
-GtLIncorrectArgumentTypeDomainObject >> wasMovedToMagritteDescriptions [
-	^ true
 ]

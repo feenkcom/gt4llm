@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLMagritteToolForFilesContents,
 	#superclass : #GtLAbstractMagritteFunctionTool,
-	#category : 'Gt4LlmCore-Tools'
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }
@@ -40,11 +40,6 @@ GtLMagritteToolForFilesContents >> filePathsDescription [
 		accessor: #filePaths;
 		classes: {GtLFilePathReference};
 		beRequired
-]
-
-{ #category : #testing }
-GtLMagritteToolForFilesContents >> isUsingDataViews [
-	^ true
 ]
 
 { #category : #accessing }

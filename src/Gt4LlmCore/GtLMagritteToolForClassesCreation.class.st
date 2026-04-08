@@ -4,7 +4,7 @@ Magritte-based tool for creating multiple classes in a single request.
 Class {
 	#name : #GtLMagritteToolForClassesCreation,
 	#superclass : #GtLAbstractMagritteFunctionTool,
-	#category : 'Gt4LlmCore-Tools'
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #'magritte-description' }
@@ -44,11 +44,6 @@ Example JSON response:
     {"currentTraitName": "TMyTraitTwo", "packageName": "MyPackage", "instanceSlotNames": ["value"], "classSlotNames": ["valueTwo"], "traitCompositionString": "{TMyTrait}"}
   ]
 }'
-]
-
-{ #category : #testing }
-GtLMagritteToolForClassesCreation >> isUsingDataViews [
-	^true
 ]
 
 { #category : #accessing }

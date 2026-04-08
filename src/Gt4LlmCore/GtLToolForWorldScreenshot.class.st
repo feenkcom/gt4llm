@@ -5,7 +5,7 @@ Class {
 		'worldElementProvider',
 		'pngDataProvider'
 	],
-	#category : 'Gt4LlmCore-Tools'
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }
@@ -18,11 +18,6 @@ GtLToolForWorldScreenshot >> focusedWorldElement [
 	^ self worldElementProvider
 		ifNotNil: [ :provider | provider value ]
 		ifNil: [ GtWorldElement allInstances detect: [ :each | true ] ifNone: [ nil ] ]
-]
-
-{ #category : #accessing }
-GtLToolForWorldScreenshot >> isUsingDataViews [
-	^ true
 ]
 
 { #category : #accessing }

@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLMagritteToolForDirectoryContents,
 	#superclass : #GtLAbstractMagritteFunctionTool,
-	#category : 'Gt4LlmCore-Tools'
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }
@@ -53,11 +53,6 @@ GtLMagritteToolForDirectoryContents >> directoryPathDescription [
 		label: 'Directory';
 		accessor: #directoryPath;
 		beRequired
-]
-
-{ #category : #testing }
-GtLMagritteToolForDirectoryContents >> isUsingDataViews [
-	^ true
 ]
 
 { #category : #accessing }

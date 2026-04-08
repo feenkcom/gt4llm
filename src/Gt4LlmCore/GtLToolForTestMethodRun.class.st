@@ -1,17 +1,12 @@
 Class {
 	#name : #GtLToolForTestMethodRun,
 	#superclass : #GtLAbstractMagritteFunctionTool,
-	#category : 'Gt4LlmCore-Tools'
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }
 GtLToolForTestMethodRun >> description [
 	^ 'Execute a single SUnit test method on a subclass of TestCase and report the resulting status (success, failure, error, skipped).'
-]
-
-{ #category : #accessing }
-GtLToolForTestMethodRun >> isUsingDataViews [
-	^ true
 ]
 
 { #category : #accessing }

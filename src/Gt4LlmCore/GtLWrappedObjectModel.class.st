@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLWrappedObjectModel,
 	#superclass : #GtLWrappedModel,
-	#category : 'Gt4LlmCore-Core'
+	#category : #'Gt4LlmCore-Core'
 }
 
 { #category : #accessing }

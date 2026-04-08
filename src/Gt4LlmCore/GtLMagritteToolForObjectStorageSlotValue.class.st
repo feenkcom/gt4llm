@@ -4,17 +4,12 @@ Magritte-based tool for retrieving the serialized value of a named slot from an 
 Class {
 	#name : #GtLMagritteToolForObjectStorageSlotValue,
 	#superclass : #GtLAbstractMagritteFunctionTool,
-	#category : 'Gt4LlmCore-Tools'
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }
 GtLMagritteToolForObjectStorageSlotValue >> description [
 	^ 'Retrieves the value of a named slot from an object in the object storage and returns a serialized object value result for that slot value.'
-]
-
-{ #category : #accessing }
-GtLMagritteToolForObjectStorageSlotValue >> isUsingDataViews [
-	^ true
 ]
 
 { #category : #accessing }

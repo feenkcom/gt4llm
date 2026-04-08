@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'method'
 	],
-	#category : 'Gt4LlmCore-Domain Objects'
+	#category : #'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #'api - accessing' }
@@ -59,16 +59,4 @@ GtLMethodIsNotExampleDomainObject >> methodNameDescription [
 			label: 'Method name';
 			accessor: #methodName;
 			beRequired
-]
-
-{ #category : #'api - serializing' }
-GtLMethodIsNotExampleDomainObject >> serializeToLlmJsonObject [
-	"Return a JSON dictionary that represents the domain object."
-	
-	^ GtMagritteJSONDataExporter exportObject: self.
-]
-
-{ #category : #testing }
-GtLMethodIsNotExampleDomainObject >> wasMovedToMagritteDescriptions [
-	^ true
 ]

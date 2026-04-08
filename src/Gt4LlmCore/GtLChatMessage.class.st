@@ -10,7 +10,7 @@ Class {
 		'announcer',
 		'formatDescriptions'
 	],
-	#category : 'Gt4LlmCore-Core'
+	#category : #'Gt4LlmCore-Core'
 }
 
 { #category : #accessing }
@@ -177,6 +177,7 @@ GtLChatMessage >> gtActionInspectFor: anAction [
 
 { #category : #'as yet unclassified' }
 GtLChatMessage >> gtDisplayOn: stream [
+	stream nextPutAll: 'Message: '.
 	stream nextPutAll: self contentOneLineSummary
 ]
 

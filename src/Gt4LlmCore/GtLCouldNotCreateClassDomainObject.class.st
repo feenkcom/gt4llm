@@ -10,7 +10,7 @@ Class {
 		'exception',
 		'packageTagName'
 	],
-	#category : 'Gt4LlmCore-Domain Objects'
+	#category : #'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #accessing }
@@ -130,13 +130,6 @@ GtLCouldNotCreateClassDomainObject >> packageTagNameDescription [
 		beRequired
 ]
 
-{ #category : #serialization }
-GtLCouldNotCreateClassDomainObject >> serializeToLlmJsonObject [
-	"Return a JSON dictionary that represents the domain object."
-	
-	^ GtMagritteJSONDataExporter exportObject: self
-]
-
 { #category : #accessing }
 GtLCouldNotCreateClassDomainObject >> superclass [
 	^ superclass
@@ -178,9 +171,4 @@ GtLCouldNotCreateClassDomainObject >> targetClassNameDescription [
 		label: 'Target class name';
 		accessor: #targetClassName;
 		beRequired
-]
-
-{ #category : #testing }
-GtLCouldNotCreateClassDomainObject >> wasMovedToMagritteDescriptions [
-	^ true
 ]

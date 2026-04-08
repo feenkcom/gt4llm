@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLMagritteToolForMethodsSource,
 	#superclass : #GtLAbstractMagritteFunctionTool,
-	#category : 'Gt4LlmCore-Tools'
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }
@@ -23,11 +23,6 @@ Example JSON response:
     {"methodReference": {"methodName": "privatePerformToolCall:", "methodClassName": "GtLToolForMethodImplementors", "classSide": false}, "sourceCode": "..."}
   ]
 }'
-]
-
-{ #category : #accessing }
-GtLMagritteToolForMethodsSource >> isUsingDataViews [
-	^ true
 ]
 
 { #category : #descriptions }
