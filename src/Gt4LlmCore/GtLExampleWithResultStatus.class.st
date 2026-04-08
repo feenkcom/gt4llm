@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLExampleWithResultStatusDomainObject,
+	#name : #GtLExampleWithResultStatus,
 	#superclass : #Object,
 	#instVars : [
 		'exampleWithResult',
@@ -9,19 +9,19 @@ Class {
 }
 
 { #category : #accessing }
-GtLExampleWithResultStatusDomainObject >> exampleWithResult [
+GtLExampleWithResultStatus >> exampleWithResult [
 	^ exampleWithResult
 ]
 
 { #category : #accessing }
-GtLExampleWithResultStatusDomainObject >> exampleWithResult: anObject [
+GtLExampleWithResultStatus >> exampleWithResult: anObject [
 	self assert: [ anObject isKindOf: GtExampleWithResult ].
 
 	exampleWithResult := anObject
 ]
 
 { #category : #views }
-GtLExampleWithResultStatusDomainObject >> gtExampleSourceFor: aView [
+GtLExampleWithResultStatus >> gtExampleSourceFor: aView [
 	<gtView>
 	<gtLlmView>
 	^ aView forward
@@ -32,7 +32,7 @@ GtLExampleWithResultStatusDomainObject >> gtExampleSourceFor: aView [
 ]
 
 { #category : #views }
-GtLExampleWithResultStatusDomainObject >> gtExampleWithResultFor: aView [
+GtLExampleWithResultStatus >> gtExampleWithResultFor: aView [
 	<gtView>
 	<gtLlmView>
 	^ aView forward
@@ -43,27 +43,27 @@ GtLExampleWithResultStatusDomainObject >> gtExampleWithResultFor: aView [
 ]
 
 { #category : #'api - testing' }
-GtLExampleWithResultStatusDomainObject >> isErrorResult [
+GtLExampleWithResultStatus >> isErrorResult [
 	^ self exampleWithResult isError
 ]
 
 { #category : #'api - testing' }
-GtLExampleWithResultStatusDomainObject >> isFailureResult [
+GtLExampleWithResultStatus >> isFailureResult [
 	^ self exampleWithResult isFailure
 ]
 
 { #category : #'api - testing' }
-GtLExampleWithResultStatusDomainObject >> isSkippedResult [
+GtLExampleWithResultStatus >> isSkippedResult [
 	^ self exampleWithResult isSkipped
 ]
 
 { #category : #'api - testing' }
-GtLExampleWithResultStatusDomainObject >> isSuccessResult [
+GtLExampleWithResultStatus >> isSuccessResult [
 	^ self exampleWithResult isSuccess
 ]
 
 { #category : #serialization }
-GtLExampleWithResultStatusDomainObject >> llmJsonObject [
+GtLExampleWithResultStatus >> llmJsonObject [
 	"Return a JSON dictionary that represents the domain object."
 	<return: #NeoJSONObject>
 	| data |
@@ -85,7 +85,7 @@ GtLExampleWithResultStatusDomainObject >> llmJsonObject [
 ]
 
 { #category : #private }
-GtLExampleWithResultStatusDomainObject >> normalizedErrorMessage [
+GtLExampleWithResultStatus >> normalizedErrorMessage [
 	"Return the exception description with the class name prefix stripped if present
 	to allow for cases when #description is overriden to remove the class name."
 	| description exceptionClassName prefix |
@@ -98,17 +98,17 @@ GtLExampleWithResultStatusDomainObject >> normalizedErrorMessage [
 ]
 
 { #category : #accessing }
-GtLExampleWithResultStatusDomainObject >> objectId [
+GtLExampleWithResultStatus >> objectId [
 	^ objectId
 ]
 
 { #category : #accessing }
-GtLExampleWithResultStatusDomainObject >> objectId: anObject [
+GtLExampleWithResultStatus >> objectId: anObject [
 	objectId := anObject
 ]
 
 { #category : #accessing }
-GtLExampleWithResultStatusDomainObject >> statusText [
+GtLExampleWithResultStatus >> statusText [
 	self exampleWithResult isSkipped ifTrue: [ ^ 'skipped' ].
 	^ self exampleWithResult statusText asString asLowercase
 ]

@@ -84,7 +84,7 @@ GtLToolForExampleMethodRun >> runExample: method fromReference: exampleReference
 			addNewObject: exampleResult returnValue
 			reason: (GtLStoredObjectExampleMethodReason toolCall: aToolCall) ].
 			
-	^ GtLExampleWithResultDomainObject new
+	^ GtLExampleWithResult new
 		exampleWithResult: example;
 		objectId: objectId
 ]
