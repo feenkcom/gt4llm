@@ -4,7 +4,7 @@ Examples for GtLMagritteToolForMethodRemoval.
 Class {
 	#name : #GtLMagritteToolForMethodRemovalExamples,
 	#superclass : #GtLAbstractMagritteFunctionToolExamples,
-	#category : 'Gt4LlmCore-Examples-Tools'
+	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #private }
@@ -27,15 +27,14 @@ GtLMagritteToolForMethodRemovalExamples >> removeClassNamedIfPresent: aSymbol [
 { #category : #examples }
 GtLMagritteToolForMethodRemovalExamples >> removeClassSideMethod [
 	<gtExample>
-	| tool domainObject |
+	| call |
 	[
-		| class methodSelector |
+		| class methodSelector targetObject |
 		class := self createSubjectClass.
 		methodSelector := #temporaryClassMethod.
 		class class compile: 'temporaryClassMethod ^ 21'.
-		tool := GtLMagritteToolForMethodRemoval new.
-		domainObject := self
-			executeTool: tool
+		call := self
+			executeTool: GtLMagritteToolForMethodRemoval new
 			withArguments: {
 				'methodDescriptor' -> {
 					'methodClassName' -> class name asString.
@@ -43,27 +42,27 @@ GtLMagritteToolForMethodRemovalExamples >> removeClassSideMethod [
 					'classSide' -> true
 				} asDictionary
 			} asDictionary.
-		self assert: (domainObject isKindOf: GtLMethodRemovalResult).
-		self assert: domainObject status equals: 'removed'.
-		self assert: domainObject removedMethod methodName equals: methodSelector asString.
-		self assert: domainObject removedMethod isClassSide.
+		targetObject := call result targetObject.
+		self assert: (targetObject isKindOf: GtLMethodRemovalResult).
+		self assert: targetObject status equals: 'removed'.
+		self assert: targetObject removedMethod methodName equals: methodSelector asString.
+		self assert: targetObject removedMethod isClassSide.
 		self assert: (class class includesSelector: methodSelector) not
 	] ensure: [ self removeClassNamedIfPresent: self subjectClassName ].
-	^ domainObject
+	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForMethodRemovalExamples >> removeInstanceMethod [
 	<gtExample>
-	| tool domainObject |
+	| call |
 	[
-		| class methodSelector |
+		| class methodSelector targetObject |
 		class := self createSubjectClass.
 		methodSelector := #temporaryInstanceMethod.
 		class compile: 'temporaryInstanceMethod ^ 42'.
-		tool := GtLMagritteToolForMethodRemoval new.
-		domainObject := self
-			executeTool: tool
+		call := self
+			executeTool: GtLMagritteToolForMethodRemoval new
 			withArguments: {
 				'methodDescriptor' -> {
 					'methodClassName' -> class name asString.
@@ -71,22 +70,22 @@ GtLMagritteToolForMethodRemovalExamples >> removeInstanceMethod [
 					'classSide' -> false
 				} asDictionary
 			} asDictionary.
-		self assert: (domainObject isKindOf: GtLMethodRemovalResult).
-		self assert: domainObject status equals: 'removed'.
-		self assert: domainObject removedMethod methodName equals: methodSelector asString.
-		self assert: domainObject removedMethod methodClassName equals: class name asString.
+		targetObject := call result targetObject.
+		self assert: (targetObject isKindOf: GtLMethodRemovalResult).
+		self assert: targetObject status equals: 'removed'.
+		self assert: targetObject removedMethod methodName equals: methodSelector asString.
+		self assert: targetObject removedMethod methodClassName equals: class name asString.
 		self assert: (class includesSelector: methodSelector) not
 	] ensure: [ self removeClassNamedIfPresent: self subjectClassName ].
-	^ domainObject
+	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForMethodRemovalExamples >> removeMethodFromUnknownClass [
 	<gtExample>
-	| tool domainObject |
-	tool := GtLMagritteToolForMethodRemoval new.
-	domainObject := self
-		executeTool: tool
+	| call |
+	call := self
+		executeTool: GtLMagritteToolForMethodRemoval new
 		withArguments: {
 			'methodDescriptor' -> {
 				'methodClassName' -> 'NonExistingClassName42'.
@@ -95,39 +94,37 @@ GtLMagritteToolForMethodRemovalExamples >> removeMethodFromUnknownClass [
 			} asDictionary
 		} asDictionary.
 	self 
-		assertMissingObject: domainObject 
+		assertMissingObject: call result targetObject 
 		withObjectName: 'NonExistingClassName42' 
 		errorMessage: 'NonExistingClassName42 is not found'.
-	^ domainObject
+	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForMethodRemovalExamples >> removeMethodMissingArgument [
 	<gtExample>
-	| tool domainObject |
-	tool := GtLMagritteToolForMethodRemoval new.
-	domainObject := self
-		executeTool: tool
+	| call |
+	call := self
+		executeTool: GtLMagritteToolForMethodRemoval new
 		withArguments: Dictionary new.
 	self 
-		assertMissingRequiredProperties: domainObject 
+		assertMissingRequiredProperties: call result targetObject 
 		withPropertyNames: #('methodDescriptor') 
 		path: #(nil) 
 		errorMessage: 'required properties missing [methodDescriptor]'.
-	^ domainObject
+	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForMethodRemovalExamples >> removeUnknownMethod [
 	<gtExample>
-	| tool domainObject |
+	| call |
 	[
 		| class methodSelector expectedSignature |
 		class := self createSubjectClass.
 		methodSelector := #methodThatDoesNotExist.
-		tool := GtLMagritteToolForMethodRemoval new.
-		domainObject := self
-			executeTool: tool
+		call := self
+			executeTool: GtLMagritteToolForMethodRemoval new
 			withArguments: {
 				'methodDescriptor' -> {
 					'methodClassName' -> class name asString.
@@ -137,11 +134,11 @@ GtLMagritteToolForMethodRemovalExamples >> removeUnknownMethod [
 			} asDictionary.
 		expectedSignature := class name asString , '>>#' , methodSelector asString.
 		self 
-			assertMissingObject: domainObject 
+			assertMissingObject: call result targetObject 
 			withObjectName: expectedSignature 
 			errorMessage: expectedSignature , ' is not found'
 	] ensure: [ self removeClassNamedIfPresent: self subjectClassName ].
-	^ domainObject
+	^ call
 ]
 
 { #category : #private }

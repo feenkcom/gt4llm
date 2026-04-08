@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLToolForTestClassesRunExamples,
 	#superclass : #GtLAbstractMagritteFunctionToolExamples,
-	#category : 'Gt4LlmCore-Examples-Tools'
+	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #private }
@@ -20,13 +20,14 @@ GtLToolForTestClassesRunExamples >> assertResultStatusesCounts: aDomainObject to
 { #category : #examples }
 GtLToolForTestClassesRunExamples >> runTestsForEmptyClassNames [
 	<gtExample>
-	| targetObject |
+	| call targetObject |
 	
-	targetObject := self
+	call := self
 		executeTool: GtLToolForTestClassesRun new
 		withArguments: {
 			'classNames' -> {}
 		} asDictionary.
+	targetObject := call result targetObject.
 	
 	self
 		assertResultStatusesCounts: targetObject
@@ -38,37 +39,35 @@ GtLToolForTestClassesRunExamples >> runTestsForEmptyClassNames [
 	self assert: targetObject notFoundClassNames isEmpty.
 	self assert: targetObject notTestCaseClasses isEmpty.
 	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForTestClassesRunExamples >> runTestsForMissingClassNames [
 	<gtExample>
-	| targetObject |
-	
-	targetObject := self
+	| call |
+	call := self
 		executeTool: GtLToolForTestClassesRun new
 		withArguments: Dictionary new.
-	
 	self
-		assertMissingRequiredProperties: targetObject
+		assertMissingRequiredProperties: call result targetObject
 		withPropertyNames: #('classNames')
 		path: #(nil)
 		errorMessage: 'required properties missing [classNames]'.
-	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForTestClassesRunExamples >> runTestsForMultipleClasses [
 	<gtExample>
-	| targetObject |
+	| call targetObject |
 	
-	targetObject := self
+	call := self
 		executeTool: GtLToolForTestClassesRun new
 		withArguments: {
 			'classNames' -> {'GtLExampleDummyPassingTest'. 'GtLExampleDummyMixedTest'}
 		} asDictionary.
+	targetObject := call result targetObject.
 	
 	self
 		assertResultStatusesCounts: targetObject
@@ -78,38 +77,36 @@ GtLToolForTestClassesRunExamples >> runTestsForMultipleClasses [
 		failure: 2
 		error: 2.
 	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForTestClassesRunExamples >> runTestsForNilClassNames [
 	<gtExample>
-	| targetObject |
-	
-	targetObject := self
+	| call |
+	call := self
 		executeTool: GtLToolForTestClassesRun new
 		withArguments: {
 			'classNames' -> nil
 		} asDictionary.
-	
 	self
-		assertJSONSchemaValidationError: targetObject
+		assertJSONSchemaValidationError: call result targetObject
 		withPath: #('classNames')
 		errorMessage: '@[classNames] array expected'.
-	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForTestClassesRunExamples >> runTestsForSingleClass [
 	<gtExample>
-	| targetObject |
+	| call targetObject |
 	
-	targetObject := self
+	call := self
 		executeTool: GtLToolForTestClassesRun new
 		withArguments: {
 			'classNames' -> {'GtLExampleDummyPassingTest'}
 		} asDictionary.
+	targetObject := call result targetObject.
 	
 	self
 		assertResultStatusesCounts: targetObject
@@ -119,19 +116,20 @@ GtLToolForTestClassesRunExamples >> runTestsForSingleClass [
 		failure: 0
 		error: 0.
 	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForTestClassesRunExamples >> runTestsWithMixedExistingAndNonExistingClasses [
 	<gtExample>
-	| targetObject |
+	| call targetObject |
 	
-	targetObject := self
+	call := self
 		executeTool: GtLToolForTestClassesRun new
 		withArguments: {
 			'classNames' -> {'GtLExampleDummyPassingTest'. 'NonExistingClass123'}
 		} asDictionary.
+	targetObject := call result targetObject.
 	
 	self
 		assertResultStatusesCounts: targetObject
@@ -143,19 +141,20 @@ GtLToolForTestClassesRunExamples >> runTestsWithMixedExistingAndNonExistingClass
 	self assert: targetObject notFoundClassNames size equals: 1.
 	self assert: (targetObject notFoundClassNames includes: 'NonExistingClass123').
 	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForTestClassesRunExamples >> runTestsWithUnknownInputs [
 	<gtExample>
-	| targetObject |
+	| call targetObject |
 	
-	targetObject := self
+	call := self
 		executeTool: GtLToolForTestClassesRun new
 		withArguments: {
 			'classNames' -> {'NonExistingSUnitClass'. 'Object'}
 		} asDictionary.
+	targetObject := call result targetObject.
 	
 	self
 		assertResultStatusesCounts: targetObject
@@ -169,5 +168,5 @@ GtLToolForTestClassesRunExamples >> runTestsWithUnknownInputs [
 	self assert: targetObject notTestCaseClasses size equals: 1.
 	self assert: targetObject notTestCaseClasses anyOne equals: Object.
 	
-	^ targetObject
+	^ call
 ]

@@ -1,16 +1,15 @@
 Class {
 	#name : #GtLMagritteToolForMethodsSourceExamples,
 	#superclass : #GtLAbstractMagritteFunctionToolExamples,
-	#category : 'Gt4LlmCore-Examples-Tools'
+	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #examples }
 GtLMagritteToolForMethodsSourceExamples >> methodSourcesForExistingMethods [
 	<gtExample>
-	| tool domainObject |
-	tool := GtLMagritteToolForMethodsSource new.
-	domainObject := self
-		executeTool: tool
+	| call targetObject |
+	call := self
+		executeTool: GtLMagritteToolForMethodsSource new
 		withArguments: {
 			'methodDescriptors' -> {
 				{'methodClassName' -> 'Collection'.
@@ -21,40 +20,39 @@ GtLMagritteToolForMethodsSourceExamples >> methodSourcesForExistingMethods [
 					'classSide' -> false} asDictionary
 			} asArray
 		} asDictionary.
-	self assert: (domainObject isKindOf: GtLMethodsWithSource).
-	self assert: domainObject methods size equals: 2.
+	targetObject := call result targetObject.
+	self assert: (targetObject isKindOf: GtLMethodsWithSource).
+	self assert: targetObject methods size equals: 2.
 	self
-		assert: domainObject methods first sourceCode
+		assert: targetObject methods first sourceCode
 		equals: (Collection class>>#withAll:) sourceCode.
 	self
-		assert: domainObject methods second sourceCode
+		assert: targetObject methods second sourceCode
 		equals: (GtLMagritteToolForMethodsSourceExamples>>#methodSourcesForExistingMethods) sourceCode.
-	^ domainObject
+	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForMethodsSourceExamples >> methodSourcesForMissingArguments [
 	<gtExample>
-	| tool domainObject |
-	tool := GtLMagritteToolForMethodsSource new.
-	domainObject := self
-		executeTool: tool
+	| call |
+	call := self
+		executeTool: GtLMagritteToolForMethodsSource new
 		withArguments: Dictionary new.
 	self 
-		assertMissingRequiredProperties: domainObject 
+		assertMissingRequiredProperties: call result targetObject 
 		withPropertyNames: #('methodDescriptors') 
 		path: #(nil) 
 		errorMessage: 'required properties missing [methodDescriptors]'.
-	^ domainObject
+	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForMethodsSourceExamples >> methodSourcesForMissingMethodArguments [
 	<gtExample>
-	| tool domainObject |
-	tool := GtLMagritteToolForMethodsSource new.
-	domainObject := self
-		executeTool: tool
+	| call |
+	call := self
+		executeTool: GtLMagritteToolForMethodsSource new
 		withArguments: {
 			'methodDescriptors' -> {
 				{'methodClassName' -> 'Collection'.
@@ -67,20 +65,19 @@ GtLMagritteToolForMethodsSourceExamples >> methodSourcesForMissingMethodArgument
 			} asArray
 		} asDictionary.
 	self 
-		assertMissingRequiredProperties: domainObject 
+		assertMissingRequiredProperties: call result targetObject 
 		withPropertyNames: #('methodName') 
 		path: #('methodDescriptors' 1) 
 		errorMessage: '@[methodDescriptors/1] required properties missing [methodName]'.
-	^ domainObject
+	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForMethodsSourceExamples >> methodSourcesForUnknownClass [
 	<gtExample>
-	| tool domainObject |
-	tool := GtLMagritteToolForMethodsSource new.
-	domainObject := self
-		executeTool: tool
+	| call |
+	call := self
+		executeTool: GtLMagritteToolForMethodsSource new
 		withArguments: {
 			'methodDescriptors' -> {
 				{'methodClassName' -> 'ClassThatDoesNotExist'.
@@ -91,21 +88,20 @@ GtLMagritteToolForMethodsSourceExamples >> methodSourcesForUnknownClass [
 					'classSide' -> true} asDictionary
 			} asArray
 		} asDictionary.
-	self assert: (domainObject isKindOf: GtLMethodsWithSource).
-	self assert: domainObject methods size equals: 2.
-	self assert: domainObject methods first isErrorDomainObject.
-	self assert: (domainObject methods second isKindOf: GtLMethodWithSource).
-	self assert: domainObject methods first objectName equals: 'ClassThatDoesNotExist'.
-	^ domainObject
+	self assert: (call result targetObject isKindOf: GtLMethodsWithSource).
+	self assert: call result targetObject methods size equals: 2.
+	self assert: call result targetObject methods first isErrorDomainObject.
+	self assert: (call result targetObject methods second isKindOf: GtLMethodWithSource).
+	self assert: call result targetObject methods first objectName equals: 'ClassThatDoesNotExist'.
+	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForMethodsSourceExamples >> methodSourcesForUnknownMethod [
 	<gtExample>
-	| tool domainObject expectedSignature |
-	tool := GtLMagritteToolForMethodsSource new.
-	domainObject := self
-		executeTool: tool
+	| call expectedSignature |
+	call := self
+		executeTool: GtLMagritteToolForMethodsSource new
 		withArguments: {
 			'methodDescriptors' -> {
 				{'methodClassName' -> GtLMagritteToolForMethodImplementors name.
@@ -116,22 +112,21 @@ GtLMagritteToolForMethodsSourceExamples >> methodSourcesForUnknownMethod [
 					'classSide' -> true} asDictionary
 			} asArray
 		} asDictionary.
-	self assert: (domainObject isKindOf: GtLMethodsWithSource).
-	self assert: domainObject methods size equals: 2.
-	self assert: domainObject methods first isErrorDomainObject.
-	self assert: (domainObject methods second isKindOf: GtLMethodWithSource).
+	self assert: (call result targetObject isKindOf: GtLMethodsWithSource).
+	self assert: call result targetObject methods size equals: 2.
+	self assert: call result targetObject methods first isErrorDomainObject.
+	self assert: (call result targetObject methods second isKindOf: GtLMethodWithSource).
 	expectedSignature := GtLMagritteToolForMethodImplementors name, '>>#unknownSelector42'.
-	self assert: domainObject methods first objectName equals: expectedSignature.
-	^ domainObject
+	self assert: call result targetObject methods first objectName equals: expectedSignature.
+	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForMethodsSourceExamples >> methodSourcesWithEmptyMethodClassName [
 	<gtExample>
-	| tool domainObject |
-	tool := GtLMagritteToolForMethodsSource new.
-	domainObject := self
-		executeTool: tool
+	| call |
+	call := self
+		executeTool: GtLMagritteToolForMethodsSource new
 		withArguments: {
 			'methodDescriptors' -> {
 				{'methodClassName' -> ''.
@@ -139,19 +134,18 @@ GtLMagritteToolForMethodsSourceExamples >> methodSourcesWithEmptyMethodClassName
 					'classSide' -> true} asDictionary
 			} asArray
 		} asDictionary.
-	self assert: (domainObject isKindOf: GtLMethodsWithSource).
-	self assert: domainObject methods size equals: 1.
-	self assert: (domainObject methods first isKindOf: GtLMissingDomainObject).
-	^ domainObject
+	self assert: (call result targetObject isKindOf: GtLMethodsWithSource).
+	self assert: call result targetObject methods size equals: 1.
+	self assert: (call result targetObject methods first isKindOf: GtLMissingDomainObject).
+	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForMethodsSourceExamples >> methodSourcesWithEmptyMethodName [
 	<gtExample>
-	| tool domainObject |
-	tool := GtLMagritteToolForMethodsSource new.
-	domainObject := self
-		executeTool: tool
+	| call |
+	call := self
+		executeTool: GtLMagritteToolForMethodsSource new
 		withArguments: {
 			'methodDescriptors' -> {
 				{'methodClassName' -> 'Collection'.
@@ -159,34 +153,32 @@ GtLMagritteToolForMethodsSourceExamples >> methodSourcesWithEmptyMethodName [
 					'classSide' -> true} asDictionary
 			} asArray
 		} asDictionary.
-	self assert: (domainObject isKindOf: GtLMethodsWithSource).
-	self assert: domainObject methods size equals: 1.
-	self assert: (domainObject methods first isKindOf: GtLMissingDomainObject).
-	^ domainObject
+	self assert: (call result targetObject isKindOf: GtLMethodsWithSource).
+	self assert: call result targetObject methods size equals: 1.
+	self assert: (call result targetObject methods first isKindOf: GtLMissingDomainObject).
+	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForMethodsSourceExamples >> methodSourcesWithNilDescriptor [
 	<gtExample>
-	| tool domainObject |
-	tool := GtLMagritteToolForMethodsSource new.
-	domainObject := self
-		executeTool: tool
+	| call |
+	call := self
+		executeTool: GtLMagritteToolForMethodsSource new
 		withArguments: { 'methodDescriptors' -> { nil } asArray } asDictionary.
 	self 
-		assertJSONSchemaValidationError: domainObject 
+		assertJSONSchemaValidationError: call result targetObject 
 		withPath: #('methodDescriptors' 1) 
 		errorMessage: '@[methodDescriptors/1] object expected'.
-	^ domainObject
+	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForMethodsSourceExamples >> methodSourcesWithNilMethodClassName [
 	<gtExample>
-	| tool domainObject |
-	tool := GtLMagritteToolForMethodsSource new.
-	domainObject := self
-		executeTool: tool
+	| call |
+	call := self
+		executeTool: GtLMagritteToolForMethodsSource new
 		withArguments: {
 			'methodDescriptors' -> {
 				{'methodClassName' -> nil.
@@ -195,19 +187,18 @@ GtLMagritteToolForMethodsSourceExamples >> methodSourcesWithNilMethodClassName [
 			} asArray
 		} asDictionary.
 	self 
-		assertJSONSchemaValidationError: domainObject 
+		assertJSONSchemaValidationError: call result targetObject 
 		withPath: #('methodDescriptors' 1 'methodClassName') 
 		errorMessage: '@[methodDescriptors/1/methodClassName] string expected'.
-	^ domainObject
+	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForMethodsSourceExamples >> methodSourcesWithNilMethodName [
 	<gtExample>
-	| tool domainObject |
-	tool := GtLMagritteToolForMethodsSource new.
-	domainObject := self
-		executeTool: tool
+	| call |
+	call := self
+		executeTool: GtLMagritteToolForMethodsSource new
 		withArguments: {
 			'methodDescriptors' -> {
 				{'methodClassName' -> 'Collection'.
@@ -216,8 +207,8 @@ GtLMagritteToolForMethodsSourceExamples >> methodSourcesWithNilMethodName [
 			} asArray
 		} asDictionary.
 	self 
-		assertJSONSchemaValidationError: domainObject 
+		assertJSONSchemaValidationError: call result targetObject 
 		withPath: #('methodDescriptors' 1 'methodName') 
 		errorMessage: '@[methodDescriptors/1/methodName] string expected'.
-	^ domainObject
+	^ call
 ]

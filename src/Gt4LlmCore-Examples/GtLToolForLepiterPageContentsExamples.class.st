@@ -4,119 +4,101 @@ Examples for GtLToolForLepiterPageContents demonstrating data views serializatio
 Class {
 	#name : #GtLToolForLepiterPageContentsExamples,
 	#superclass : #GtLAbstractMagritteFunctionToolExamples,
-	#category : 'Gt4LlmCore-Examples-Tools'
+	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #examples }
 GtLToolForLepiterPageContentsExamples >> pageSerializationForExistingPage [
 	<gtExample>
-	| targetObject database page compositeView dataBlock jsonData expected |
+	| call database page compositeView dataBlock jsonData expected |
 	database := LeDatabase gtBook.
 	page := database pageNamed: 'Warmup: understanding the Money classes'.
-	
-	targetObject := self
+	call := self
 		executeTool: GtLToolForLepiterPageContents new
 		withArguments: {
 			'pageUid' -> page uidString.
 			'databaseId' -> database uuidString
 		} asDictionary.
-	
-	self assert: (targetObject isKindOf: GtLLepiterPage).
-	self assert: targetObject targetPage equals: page.
-	
-	"Test data view serialization"
-	compositeView := targetObject llmDataViewsFor: GtLDataView new.
+	self assert: (call result targetObject isKindOf: GtLLepiterPage).
+	self assert: call result targetObject targetPage equals: page.
+	compositeView := call result targetObject llmDataViewsFor: GtLDataView new.
 	self assert: compositeView dataViews size equals: 1.
 	dataBlock := compositeView serializeToLlmPrimiteData.
 	self assert: dataBlock dataBlocks size equals: 1.
 	self assert: dataBlock imageDataBlocks isEmpty.
-	
 	jsonData := dataBlock compositeJsonData.
 	expected := NeoJSONReader fromString: (LeJsonV4 uniqueInstance serializePretty: page).
 	self assert: jsonData equals: expected.
-	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForLepiterPageContentsExamples >> pageSerializationForMissingKnowledgeBase [
 	<gtExample>
-	| targetObject unknownDbId |
+	| call unknownDbId |
 	unknownDbId := 'missing-uuid-42'.
-	
-	targetObject := self
+	call := self
 		executeTool: GtLToolForLepiterPageContents new
 		withArguments: {
 			'pageUid' -> UUID new asString36.
 			'databaseId' -> unknownDbId
 		} asDictionary.
-	
-	self assert: targetObject isErrorDomainObject.
-	self assert: (targetObject isKindOf: GtLProblemDomainObject).
-	self assert: (targetObject description includesSubstring: unknownDbId).
-	
-	^ targetObject
+	self assert: call result targetObject isErrorDomainObject.
+	self assert: (call result targetObject isKindOf: GtLProblemDomainObject).
+	self assert: (call result targetObject description includesSubstring: unknownDbId).
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForLepiterPageContentsExamples >> pageSerializationForUnknownPage [
 	<gtExample>
-	| targetObject database unknownUid |
+	| call database unknownUid |
 	database := LeDatabase gtBook.
 	unknownUid := UUID new asString36.
-	
-	targetObject := self
+	call := self
 		executeTool: GtLToolForLepiterPageContents new
 		withArguments: {
 			'pageUid' -> unknownUid.
 			'databaseId' -> database uuidString
 		} asDictionary.
-	
 	self
-		assertMissingObject: targetObject
+		assertMissingObject: call result targetObject
 		withObjectName: unknownUid
 		errorMessage: unknownUid, ' is not found'.
-	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForLepiterPageContentsExamples >> pageSerializationWithMissingDatabaseId [
 	<gtExample>
-	| targetObject |
-	
-	targetObject := self
+	| call |
+	call := self
 		executeTool: GtLToolForLepiterPageContents new
 		withArguments: {
 			'pageUid' -> UUID new asString36
 		} asDictionary.
-	
 	self
-		assertMissingRequiredProperties: targetObject
+		assertMissingRequiredProperties: call result targetObject
 		withPropertyNames: #('databaseId')
 		path: #(nil)
 		errorMessage: 'required properties missing [databaseId]'.
-	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForLepiterPageContentsExamples >> pageSerializationWithMissingPageUid [
 	<gtExample>
-	| targetObject database |
+	| call database |
 	database := LeDatabase gtBook.
-	
-	targetObject := self
+	call := self
 		executeTool: GtLToolForLepiterPageContents new
 		withArguments: {
 			'databaseId' -> database uuidString
 		} asDictionary.
-	
 	self
-		assertMissingRequiredProperties: targetObject
+		assertMissingRequiredProperties: call result targetObject
 		withPropertyNames: #('pageUid')
 		path: #(nil)
 		errorMessage: 'required properties missing [pageUid]'.
-	
-	^ targetObject
+	^ call
 ]

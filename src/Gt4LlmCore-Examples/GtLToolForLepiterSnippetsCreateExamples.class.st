@@ -4,18 +4,18 @@ Class {
 	#instVars : [
 		'logicalDatabase'
 	],
-	#category : 'Gt4LlmCore-Examples-Tools'
+	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #examples }
 GtLToolForLepiterSnippetsCreateExamples >> allSnippetsWithErrors [
 	<gtExample>
 	"Creates multiple snippets where all fail with different errors"
-	| targetObject tool page |
+	| call targetObject tool page |
 	tool := self toolOnLogicalDatabase.
 	page := self pageInLogicalDatabase.
 	
-	targetObject := self
+	call := self
 		executeTool: tool
 		withArguments: {
 			'snippets' -> {
@@ -49,21 +49,22 @@ GtLToolForLepiterSnippetsCreateExamples >> allSnippetsWithErrors [
 					yourself
 			}
 		} asDictionary.
+	targetObject := call result targetObject.
 	
 	self assert: targetObject snippets size equals: 4.
 	self assert: (targetObject snippets allSatisfy: [ :each | each isKindOf: GtLMissingArgumentDomainObject ]).
 	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForLepiterSnippetsCreateExamples >> emptyExampleClassName [
 	<gtExample>
-	| targetObject tool page |
+	| call targetObject tool page |
 	tool := self toolOnLogicalDatabase.
 	page := self pageInLogicalDatabase.
 	
-	targetObject := self
+	call := self
 		executeTool: tool
 		withArguments: {
 			'snippets' -> {
@@ -77,23 +78,24 @@ GtLToolForLepiterSnippetsCreateExamples >> emptyExampleClassName [
 					yourself
 			}
 		} asDictionary.
+	targetObject := call result targetObject.
 	
 	self
 		assertMissingArgument: targetObject snippets first
 		withArgumentName: 'exampleClassName'
 		errorMessage: 'Missing argument called exampleClassName'.
 	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForLepiterSnippetsCreateExamples >> emptyExampleMethodName [
 	<gtExample>
-	| targetObject tool page |
+	| call targetObject tool page |
 	tool := self toolOnLogicalDatabase.
 	page := self pageInLogicalDatabase.
 	
-	targetObject := self
+	call := self
 		executeTool: tool
 		withArguments: {
 			'snippets' -> {
@@ -107,23 +109,24 @@ GtLToolForLepiterSnippetsCreateExamples >> emptyExampleMethodName [
 					yourself
 			}
 		} asDictionary.
+	targetObject := call result targetObject.
 	
 	self
 		assertMissingArgument: targetObject snippets first
 		withArgumentName: 'exampleMethodName'
 		errorMessage: 'Missing argument called exampleMethodName'.
 	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForLepiterSnippetsCreateExamples >> emptyPharoCode [
 	<gtExample>
-	| targetObject tool page |
+	| call targetObject tool page |
 	tool := self toolOnLogicalDatabase.
 	page := self pageInLogicalDatabase.
 	
-	targetObject := self
+	call := self
 		executeTool: tool
 		withArguments: {
 			'snippets' -> {
@@ -136,23 +139,24 @@ GtLToolForLepiterSnippetsCreateExamples >> emptyPharoCode [
 					yourself
 			}
 		} asDictionary.
+	targetObject := call result targetObject.
 	
 	self
 		assertMissingArgument: targetObject snippets first
 		withArgumentName: 'snippetText'
 		errorMessage: 'Missing argument called snippetText'.
 	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForLepiterSnippetsCreateExamples >> emptyPythonCode [
 	<gtExample>
-	| targetObject tool page |
+	| call targetObject tool page |
 	tool := self toolOnLogicalDatabase.
 	page := self pageInLogicalDatabase.
 	
-	targetObject := self
+	call := self
 		executeTool: tool
 		withArguments: {
 			'snippets' -> {
@@ -165,23 +169,24 @@ GtLToolForLepiterSnippetsCreateExamples >> emptyPythonCode [
 					yourself
 			}
 		} asDictionary.
+	targetObject := call result targetObject.
 	
 	self
 		assertMissingArgument: targetObject snippets first
 		withArgumentName: 'snippetText'
 		errorMessage: 'Missing argument called snippetText'.
 	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForLepiterSnippetsCreateExamples >> emptyShellCode [
 	<gtExample>
-	| targetObject tool page |
+	| call targetObject tool page |
 	tool := self toolOnLogicalDatabase.
 	page := self pageInLogicalDatabase.
 	
-	targetObject := self
+	call := self
 		executeTool: tool
 		withArguments: {
 			'snippets' -> {
@@ -194,13 +199,14 @@ GtLToolForLepiterSnippetsCreateExamples >> emptyShellCode [
 					yourself
 			}
 		} asDictionary.
+	targetObject := call result targetObject.
 	
 	self
 		assertMissingArgument: targetObject snippets first
 		withArgumentName: 'snippetText'
 		errorMessage: 'Missing argument called snippetText'.
 	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
@@ -217,10 +223,10 @@ GtLToolForLepiterSnippetsCreateExamples >> logicalDatabase [
 { #category : #examples }
 GtLToolForLepiterSnippetsCreateExamples >> missingSnippetPageUid [
 	<gtExample>
-	| targetObject tool |
+	| call targetObject tool |
 	tool := self toolOnLogicalDatabase.
 	
-	targetObject := self
+	call := self
 		executeTool: tool
 		withArguments: {
 			'snippets' -> {
@@ -233,41 +239,24 @@ GtLToolForLepiterSnippetsCreateExamples >> missingSnippetPageUid [
 					yourself
 			}
 		} asDictionary.
+	targetObject := call result targetObject.
 	
 	self
 		assertMissingArgument: targetObject snippets first
 		withArgumentName: 'pageUid'
 		errorMessage: 'Missing argument called pageUid'.
 	
-	^ targetObject
-]
-
-{ #category : #examples }
-GtLToolForLepiterSnippetsCreateExamples >> missingSnippets [
-	<gtExample>
-	| targetObject |
-	
-	targetObject := self
-		executeTool: GtLToolForLepiterSnippetsCreate new
-		withArguments: Dictionary new.
-	
-	self
-		assertMissingRequiredProperties: targetObject
-		withPropertyNames: #('snippets')
-		path: #(nil)
-		errorMessage: 'required properties missing [snippets]'.
-	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForLepiterSnippetsCreateExamples >> missingSnippetText [
 	<gtExample>
-	| targetObject tool page |
+	| call targetObject tool page |
 	tool := self toolOnLogicalDatabase.
 	page := self pageInLogicalDatabase.
 	
-	targetObject := self
+	call := self
 		executeTool: tool
 		withArguments: {
 			'snippets' -> {
@@ -280,24 +269,40 @@ GtLToolForLepiterSnippetsCreateExamples >> missingSnippetText [
 					yourself
 			}
 		} asDictionary.
+	targetObject := call result targetObject.
 	
 	self
 		assertMissingArgument: targetObject snippets first
 		withArgumentName: 'snippetText'
 		errorMessage: 'Missing argument called snippetText'.
 	
-	^ targetObject
+	^ call
+]
+
+{ #category : #examples }
+GtLToolForLepiterSnippetsCreateExamples >> missingSnippets [
+	<gtExample>
+	| call |
+	call := self
+		executeTool: GtLToolForLepiterSnippetsCreate new
+		withArguments: Dictionary new.
+	self
+		assertMissingRequiredProperties: call result targetObject
+		withPropertyNames: #('snippets')
+		path: #(nil)
+		errorMessage: 'required properties missing [snippets]'.
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForLepiterSnippetsCreateExamples >> mixedSuccessAndErrorSnippets [
 	<gtExample>
 	"Creates multiple snippets where some succeed and some fail due to empty content"
-	| targetObject tool page |
+	| call targetObject tool page |
 	tool := self toolOnLogicalDatabase.
 	page := self pageInLogicalDatabase.
 	
-	targetObject := self
+	call := self
 		executeTool: tool
 		withArguments: {
 			'snippets' -> {
@@ -324,24 +329,25 @@ GtLToolForLepiterSnippetsCreateExamples >> mixedSuccessAndErrorSnippets [
 					yourself
 			}
 		} asDictionary.
+	targetObject := call result targetObject.
 	
 	self assert: targetObject snippets size equals: 3.
 	self assert: targetObject snippets first status equals: 'created'.
 	self assert: targetObject snippets second missingArgument equals: 'snippetText'.
 	self assert: targetObject snippets third status equals: 'created'.
 	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForLepiterSnippetsCreateExamples >> multipleSnippetsWithDifferentErrors [
 	<gtExample>
 	"Creates multiple snippets with different types of errors"
-	| targetObject tool page |
+	| call targetObject tool page |
 	tool := self toolOnLogicalDatabase.
 	page := self pageInLogicalDatabase.
 	
-	targetObject := self
+	call := self
 		executeTool: tool
 		withArguments: {
 			'snippets' -> {
@@ -369,23 +375,24 @@ GtLToolForLepiterSnippetsCreateExamples >> multipleSnippetsWithDifferentErrors [
 					yourself
 			}
 		} asDictionary.
+	targetObject := call result targetObject.
 	
 	self assert: targetObject snippets size equals: 3.
 	self assert: targetObject snippets first missingArgument equals: 'pageUid'.
 	self assert: targetObject snippets second missingArgument equals: 'snippetText'.
 	self assert: targetObject snippets third missingArgument equals: 'exampleClassName'.
 	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForLepiterSnippetsCreateExamples >> nilPageUidInTextSnippet [
 	<gtExample>
 	"Test that a null pageUid is caught by JSON schema validation."
-	| targetObject tool |
+	| call targetObject tool |
 	tool := self toolOnLogicalDatabase.
 	
-	targetObject := self
+	call := self
 		executeTool: tool
 		withArguments: {
 			'snippets' -> {
@@ -398,22 +405,23 @@ GtLToolForLepiterSnippetsCreateExamples >> nilPageUidInTextSnippet [
 					yourself
 			}
 		} asDictionary.
+	targetObject := call result targetObject.
 	
 	"JSON schema validation returns an error for null in string slot"
 	self assert: (targetObject isKindOf: GtLJSONSchemaValidationErrorDomainObject).
 	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForLepiterSnippetsCreateExamples >> nilSnippetTextInTextSnippet [
 	<gtExample>
 	"Test that a null snippetText is caught by JSON schema validation."
-	| targetObject tool page |
+	| call targetObject tool page |
 	tool := self toolOnLogicalDatabase.
 	page := self pageInLogicalDatabase.
 	
-	targetObject := self
+	call := self
 		executeTool: tool
 		withArguments: {
 			'snippets' -> {
@@ -426,11 +434,12 @@ GtLToolForLepiterSnippetsCreateExamples >> nilSnippetTextInTextSnippet [
 					yourself
 			}
 		} asDictionary.
+	targetObject := call result targetObject.
 	
 	"JSON schema validation returns an error for null in required string slot"
 	self assert: (targetObject isKindOf: GtLJSONSchemaValidationErrorDomainObject).
 	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
@@ -447,11 +456,11 @@ GtLToolForLepiterSnippetsCreateExamples >> pageInLogicalDatabase [
 GtLToolForLepiterSnippetsCreateExamples >> successfulAllSnippetTypesCreate [
 	<gtExample>
 	"Creates all supported snippet types including ExampleSnippet"
-	| targetObject tool page |
+	| call targetObject tool page |
 	tool := self toolOnLogicalDatabase.
 	page := self pageInLogicalDatabase.
 	
-	targetObject := self
+	call := self
 		executeTool: tool
 		withArguments: {
 			'snippets' -> {
@@ -493,21 +502,22 @@ GtLToolForLepiterSnippetsCreateExamples >> successfulAllSnippetTypesCreate [
 					yourself
 			}
 		} asDictionary.
+	targetObject := call result targetObject.
 	
 	self assert: targetObject snippets size equals: 5.
 	self assert: (targetObject snippets allSatisfy: [ :each | each status = 'created' ]).
 	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForLepiterSnippetsCreateExamples >> successfulExampleSnippetCreate [
 	<gtExample>
-	| targetObject tool page |
+	| call targetObject tool page |
 	tool := self toolOnLogicalDatabase.
 	page := self pageInLogicalDatabase.
 	
-	targetObject := self
+	call := self
 		executeTool: tool
 		withArguments: {
 			'snippets' -> {
@@ -521,21 +531,22 @@ GtLToolForLepiterSnippetsCreateExamples >> successfulExampleSnippetCreate [
 					yourself
 			}
 		} asDictionary.
+	targetObject := call result targetObject.
 	
 	self assert: (targetObject isKindOf: GtLLepiterSnippetsDomainObject).
 	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForLepiterSnippetsCreateExamples >> successfulMultipleSnippetTypesCreate [
 	<gtExample>
 	"Creates multiple snippets of different types: Text, Pharo, Python, Shell"
-	| targetObject tool page |
+	| call targetObject tool page |
 	tool := self toolOnLogicalDatabase.
 	page := self pageInLogicalDatabase.
 	
-	targetObject := self
+	call := self
 		executeTool: tool
 		withArguments: {
 			'snippets' -> {
@@ -569,21 +580,22 @@ GtLToolForLepiterSnippetsCreateExamples >> successfulMultipleSnippetTypesCreate 
 					yourself
 			}
 		} asDictionary.
+	targetObject := call result targetObject.
 	
 	self assert: targetObject snippets size equals: 4.
 	self assert: (targetObject snippets allSatisfy: [ :each | each status = 'created' ]).
 	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForLepiterSnippetsCreateExamples >> successfulPharoSnippetCreate [
 	<gtExample>
-	| targetObject tool page |
+	| call targetObject tool page |
 	tool := self toolOnLogicalDatabase.
 	page := self pageInLogicalDatabase.
 	
-	targetObject := self
+	call := self
 		executeTool: tool
 		withArguments: {
 			'snippets' -> {
@@ -596,20 +608,21 @@ GtLToolForLepiterSnippetsCreateExamples >> successfulPharoSnippetCreate [
 					yourself
 			}
 		} asDictionary.
+	targetObject := call result targetObject.
 	
 	self assert: (targetObject isKindOf: GtLLepiterSnippetsDomainObject).
 	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForLepiterSnippetsCreateExamples >> successfulPythonSnippetCreate [
 	<gtExample>
-	| targetObject tool page |
+	| call targetObject tool page |
 	tool := self toolOnLogicalDatabase.
 	page := self pageInLogicalDatabase.
 	
-	targetObject := self
+	call := self
 		executeTool: tool
 		withArguments: {
 			'snippets' -> {
@@ -622,20 +635,21 @@ GtLToolForLepiterSnippetsCreateExamples >> successfulPythonSnippetCreate [
 					yourself
 			}
 		} asDictionary.
+	targetObject := call result targetObject.
 	
 	self assert: (targetObject isKindOf: GtLLepiterSnippetsDomainObject).
 	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForLepiterSnippetsCreateExamples >> successfulShellSnippetCreate [
 	<gtExample>
-	| targetObject tool page |
+	| call targetObject tool page |
 	tool := self toolOnLogicalDatabase.
 	page := self pageInLogicalDatabase.
 	
-	targetObject := self
+	call := self
 		executeTool: tool
 		withArguments: {
 			'snippets' -> {
@@ -648,20 +662,21 @@ GtLToolForLepiterSnippetsCreateExamples >> successfulShellSnippetCreate [
 					yourself
 			}
 		} asDictionary.
+	targetObject := call result targetObject.
 	
 	self assert: (targetObject isKindOf: GtLLepiterSnippetsDomainObject).
 	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForLepiterSnippetsCreateExamples >> successfulSnippetCreate [
 	<gtExample>
-	| targetObject tool page |
+	| call targetObject tool page |
 	tool := self toolOnLogicalDatabase.
 	page := self pageInLogicalDatabase.
 	
-	targetObject := self
+	call := self
 		executeTool: tool
 		withArguments: {
 			'snippets' -> {
@@ -674,20 +689,21 @@ GtLToolForLepiterSnippetsCreateExamples >> successfulSnippetCreate [
 					yourself
 			}
 		} asDictionary.
+	targetObject := call result targetObject.
 	
 	self assert: (targetObject isKindOf: GtLLepiterSnippetsDomainObject).
 	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForLepiterSnippetsCreateExamples >> successfulSnippetsCreateMultiple [
 	<gtExample>
-	| targetObject tool page |
+	| call targetObject tool page |
 	tool := self toolOnLogicalDatabase.
 	page := self pageInLogicalDatabase.
 	
-	targetObject := self
+	call := self
 		executeTool: tool
 		withArguments: {
 			'snippets' -> {
@@ -707,20 +723,21 @@ GtLToolForLepiterSnippetsCreateExamples >> successfulSnippetsCreateMultiple [
 					yourself
 			}
 		} asDictionary.
+	targetObject := call result targetObject.
 	
 	self assert: (targetObject isKindOf: GtLLepiterSnippetsDomainObject).
 	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForLepiterSnippetsCreateExamples >> successfulTextSnippetCreate [
 	<gtExample>
-	| targetObject tool page |
+	| call targetObject tool page |
 	tool := self toolOnLogicalDatabase.
 	page := self pageInLogicalDatabase.
 	
-	targetObject := self
+	call := self
 		executeTool: tool
 		withArguments: {
 			'snippets' -> {
@@ -733,10 +750,11 @@ GtLToolForLepiterSnippetsCreateExamples >> successfulTextSnippetCreate [
 					yourself
 			}
 		} asDictionary.
+	targetObject := call result targetObject.
 	
 	self assert: (targetObject isKindOf: GtLLepiterSnippetsDomainObject).
 	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }

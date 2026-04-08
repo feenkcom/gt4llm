@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLToolForExampleClassesRunExamples,
 	#superclass : #GtLAbstractMagritteFunctionToolExamples,
-	#category : 'Gt4LlmCore-Examples-Tools'
+	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #assertions }
@@ -84,65 +84,56 @@ GtLToolForExampleClassesRunExamples >> findExampleStatusFor: aSelector in: aResu
 { #category : #examples }
 GtLToolForExampleClassesRunExamples >> runExamplesForClass [
 	<gtExample>
-	| targetObject |
-	
-	targetObject := self
+	| call |
+	call := self
 		executeTool: GtLToolForExampleClassesRun new
 		withArguments: {
 			'classNames' -> {'GtLlmExampleRunDummyExamples'}
 		} asDictionary.
-	
 	self
-		assertResultStatusesCounts: targetObject
+		assertResultStatusesCounts: call result targetObject
 		total: 3
 		skipped: 3
 		success: 0
 		failure: 0
 		error: 0.
-	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForExampleClassesRunExamples >> runExamplesForClassWithNoTestPragma [
 	<gtExample>
 	"GtLExampleRunDummyExamples has examples annotated with <noTest>, which should be reported as skipped"
-	| targetObject |
-	
-	targetObject := self
+	| call |
+	call := self
 		executeTool: GtLToolForExampleClassesRun new
 		withArguments: {
 			'classNames' -> {'GtLExampleRunDummyExamples'}
 		} asDictionary.
-	
 	self
-		assertResultStatusesCounts: targetObject
+		assertResultStatusesCounts: call result targetObject
 		total: 5
 		skipped: 5
 		success: 0
 		failure: 0
 		error: 0.
-	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForExampleClassesRunExamples >> runExamplesForDynamicallyCreatedClass [
 	<gtExample>
-	| testClass targetObject |
-	
+	| testClass call |
 	[
-		| successExample failureExample errorExample skippedExample className |
+		| successExample failureExample errorExample skippedExample className targetObject |
 		testClass := self createDynamicExampleClass.
 		className := testClass name asString.
-		
-		"Run examples using the tool"
-		targetObject := self
+		call := self
 			executeTool: GtLToolForExampleClassesRun new
 			withArguments: {
 				'classNames' -> {className}
 			} asDictionary.
-		
+		targetObject := call result targetObject.
 		self
 			assertResultStatusesCounts: targetObject
 			total: 4
@@ -150,78 +141,64 @@ GtLToolForExampleClassesRunExamples >> runExamplesForDynamicallyCreatedClass [
 			success: 1
 			failure: 1
 			error: 1.
-		
-		"Assert individual example results - state flags and llmJsonObject properties"
 		successExample := self findExampleStatusFor: #successfulExample in: targetObject.
 		self assertExampleStatus: successExample isSuccess: true isFailure: false isError: false isSkipped: false.
 		self assertExampleStatus: successExample hasClassName: className selector: 'successfulExample' status: 'success' objectIdExpected: false.
-		
 		failureExample := self findExampleStatusFor: #failingExample in: targetObject.
 		self assertExampleStatus: failureExample isSuccess: false isFailure: true isError: false isSkipped: false.
 		self assertExampleStatus: failureExample hasClassName: className selector: 'failingExample' status: 'failure' objectIdExpected: false.
-		
 		errorExample := self findExampleStatusFor: #errorExample in: targetObject.
 		self assertExampleStatus: errorExample isSuccess: false isFailure: false isError: true isSkipped: false.
 		self assertExampleStatus: errorExample hasClassName: className selector: 'errorExample' status: 'error' objectIdExpected: false.
-		
 		skippedExample := self findExampleStatusFor: #skippedExample in: targetObject.
 		self assertExampleStatus: skippedExample isSuccess: false isFailure: false isError: false isSkipped: true.
 		self assertExampleStatus: skippedExample hasClassName: className selector: 'skippedExample' status: 'skipped' objectIdExpected: false.
 	] ensure: [
-		"Clean up: remove the temporary class"
 		testClass ifNotNil: [ testClass removeFromSystem ]
 	].
-	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForExampleClassesRunExamples >> runExamplesForEmptyClassNames [
 	<gtExample>
-	| targetObject |
-	
-	targetObject := self
+	| call |
+	call := self
 		executeTool: GtLToolForExampleClassesRun new
 		withArguments: {
 			'classNames' -> {}
 		} asDictionary.
-	
 	self
-		assertResultStatusesCounts: targetObject
+		assertResultStatusesCounts: call result targetObject
 		total: 0
 		skipped: 0
 		success: 0
 		failure: 0
 		error: 0.
-	self assert: targetObject notFoundClassNames isEmpty.
-	
-	^ targetObject
+	self assert: call result targetObject notFoundClassNames isEmpty.
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForExampleClassesRunExamples >> runExamplesForMissingClassNames [
 	<gtExample>
-	| targetObject |
-	
-	targetObject := self
+	| call |
+	call := self
 		executeTool: GtLToolForExampleClassesRun new
 		withArguments: Dictionary new.
-	
 	self
-		assertMissingRequiredProperties: targetObject
+		assertMissingRequiredProperties: call result targetObject
 		withPropertyNames: #('classNames')
 		path: #(nil)
 		errorMessage: 'required properties missing [classNames]'.
-	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForExampleClassesRunExamples >> runExamplesForMultipleClasses [
 	<gtExample>
-	| targetObject |
-	
-	targetObject := self
+	| call targetObject |
+	call := self
 		executeTool: GtLToolForExampleClassesRun new
 		withArguments: {
 			'classNames' -> {
@@ -229,7 +206,7 @@ GtLToolForExampleClassesRunExamples >> runExamplesForMultipleClasses [
 				'GtLToolForExampleMethodRunExamples'
 			}
 		} asDictionary.
-	
+	targetObject := call result targetObject.
 	self
 		assertResultStatusesCounts: targetObject
 		total: 17
@@ -237,27 +214,23 @@ GtLToolForExampleClassesRunExamples >> runExamplesForMultipleClasses [
 		success: 12
 		failure: 0
 		error: 0.
-	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForExampleClassesRunExamples >> runExamplesForNilClassNames [
 	<gtExample>
-	| targetObject |
-	
-	targetObject := self
+	| call |
+	call := self
 		executeTool: GtLToolForExampleClassesRun new
 		withArguments: {
 			'classNames' -> nil
 		} asDictionary.
-	
 	self
-		assertJSONSchemaValidationError: targetObject
+		assertJSONSchemaValidationError: call result targetObject
 		withPath: #('classNames')
 		errorMessage: '@[classNames] array expected'.
-	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
@@ -265,74 +238,65 @@ GtLToolForExampleClassesRunExamples >> runExamplesStoresObjectIds [
 	<gtExample>
 	"Examples with <noTest> pragma are now skipped and not stored in object storage.
 	GtLlmExampleRunDummyExamples has 3 examples all with <noTest>, so all are skipped."
-	| objectStorage targetObject |
+	| objectStorage call |
 	objectStorage := GtLObjectStorage new.
-	
-	targetObject := self
+	call := self
 		executeTool: GtLToolForExampleClassesRun new
 		withArguments: {
 			'classNames' -> {'GtLlmExampleRunDummyExamples'}
 		} asDictionary
 		inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
-	
 	self
-		assertResultStatusesCounts: targetObject
+		assertResultStatusesCounts: call result targetObject
 		total: 3
 		skipped: 3
 		success: 0
 		failure: 0
 		error: 0.
-	targetObject exampleWithStatuses do: [ :exampleStatus |
+	call result targetObject exampleWithStatuses do: [ :exampleStatus |
 		exampleStatus objectId ifNotNil: [ :objectId |
 			self assert: (objectStorage storedObjectAt: objectId) reason class equals: GtLStoredObjectExampleMethodReason ] ].
-	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForExampleClassesRunExamples >> runExamplesWithMixedExistingAndNonExistingClasses [
 	<gtExample>
-	| targetObject |
-	
-	targetObject := self
+	| call |
+	call := self
 		executeTool: GtLToolForExampleClassesRun new
 		withArguments: {
 			'classNames' -> {'GtLlmExampleRunDummyExamples'. 'NonExistingClass123'}
 		} asDictionary.
-	
 	self
-		assertResultStatusesCounts: targetObject
+		assertResultStatusesCounts: call result targetObject
 		total: 3
 		skipped: 3
 		success: 0
 		failure: 0
 		error: 0.
-	self assert: targetObject notFoundClassNames size equals: 1.
-	self assert: (targetObject notFoundClassNames includes: 'NonExistingClass123').
-	
-	^ targetObject
+	self assert: call result targetObject notFoundClassNames size equals: 1.
+	self assert: (call result targetObject notFoundClassNames includes: 'NonExistingClass123').
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForExampleClassesRunExamples >> runExamplesWithUnknownInputs [
 	<gtExample>
-	| targetObject |
-	
-	targetObject := self
+	| call |
+	call := self
 		executeTool: GtLToolForExampleClassesRun new
 		withArguments: {
 			'classNames' -> {'NonExistingExampleClass'}
 		} asDictionary.
-	
 	self
-		assertResultStatusesCounts: targetObject
+		assertResultStatusesCounts: call result targetObject
 		total: 0
 		skipped: 0
 		success: 0
 		failure: 0
 		error: 0.
-	self assert: targetObject notFoundClassNames size equals: 1.
-	self assert: targetObject notFoundClassNames anyOne equals: 'NonExistingExampleClass'.
-	
-	^ targetObject
+	self assert: call result targetObject notFoundClassNames size equals: 1.
+	self assert: call result targetObject notFoundClassNames anyOne equals: 'NonExistingExampleClass'.
+	^ call
 ]

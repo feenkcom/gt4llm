@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLToolForLepiterSnippetsRemoveExamples,
 	#superclass : #GtLAbstractMagritteFunctionToolExamples,
-	#category : 'Gt4LlmCore-Examples-Tools'
+	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #examples }
@@ -9,9 +9,9 @@ GtLToolForLepiterSnippetsRemoveExamples >> emptyKnowledgeBaseUid [
 	<gtExample>
 	"Test behavior when knowledgeBaseUid is an empty string.
 	The schema accepts empty strings, but the tool logic validates it."
-	| targetObject |
+	| call targetObject |
 	
-	targetObject := self
+	call := self
 		executeTool: GtLToolForLepiterSnippetsRemove new
 		withArguments: {
 			'snippets' -> {
@@ -22,6 +22,7 @@ GtLToolForLepiterSnippetsRemoveExamples >> emptyKnowledgeBaseUid [
 					yourself
 			}
 		} asDictionary.
+	targetObject := call result targetObject.
 	
 	"Empty string passes schema validation, tool proceeds to handle it"
 	self assert: (targetObject isKindOf: GtLLepiterSnippetsDomainObject).
@@ -32,7 +33,7 @@ GtLToolForLepiterSnippetsRemoveExamples >> emptyKnowledgeBaseUid [
 		withArgumentName: 'knowledgeBaseUid'
 		errorMessage: 'Missing argument called knowledgeBaseUid'.
 	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
@@ -40,9 +41,9 @@ GtLToolForLepiterSnippetsRemoveExamples >> emptyPageUid [
 	<gtExample>
 	"Test behavior when pageUid is an empty string.
 	The schema accepts empty strings, but the tool logic validates it."
-	| targetObject |
+	| call targetObject |
 	
-	targetObject := self
+	call := self
 		executeTool: GtLToolForLepiterSnippetsRemove new
 		withArguments: {
 			'snippets' -> {
@@ -53,6 +54,7 @@ GtLToolForLepiterSnippetsRemoveExamples >> emptyPageUid [
 					yourself
 			}
 		} asDictionary.
+	targetObject := call result targetObject.
 	
 	"Empty string passes schema validation, tool proceeds to handle it"
 	self assert: (targetObject isKindOf: GtLLepiterSnippetsDomainObject).
@@ -63,7 +65,7 @@ GtLToolForLepiterSnippetsRemoveExamples >> emptyPageUid [
 		withArgumentName: 'pageUid'
 		errorMessage: 'Missing argument called pageUid'.
 	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
@@ -71,9 +73,9 @@ GtLToolForLepiterSnippetsRemoveExamples >> emptySnippetUid [
 	<gtExample>
 	"Test behavior when snippetUid is an empty string.
 	The schema accepts empty strings, but the tool logic validates it."
-	| targetObject |
+	| call targetObject |
 	
-	targetObject := self
+	call := self
 		executeTool: GtLToolForLepiterSnippetsRemove new
 		withArguments: {
 			'snippets' -> {
@@ -84,6 +86,7 @@ GtLToolForLepiterSnippetsRemoveExamples >> emptySnippetUid [
 					yourself
 			}
 		} asDictionary.
+	targetObject := call result targetObject.
 	
 	"Empty string passes schema validation, tool proceeds to handle it"
 	self assert: (targetObject isKindOf: GtLLepiterSnippetsDomainObject).
@@ -94,15 +97,15 @@ GtLToolForLepiterSnippetsRemoveExamples >> emptySnippetUid [
 		withArgumentName: 'snippetUid'
 		errorMessage: 'Missing argument called snippetUid'.
 	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForLepiterSnippetsRemoveExamples >> missingSnippetKnowledgeBaseUid [
 	<gtExample>
-	| targetObject |
+	| call targetObject |
 	
-	targetObject := self
+	call := self
 		executeTool: GtLToolForLepiterSnippetsRemove new
 		withArguments: {
 			'snippets' -> {
@@ -112,6 +115,7 @@ GtLToolForLepiterSnippetsRemoveExamples >> missingSnippetKnowledgeBaseUid [
 					yourself
 			}
 		} asDictionary.
+	targetObject := call result targetObject.
 	
 	self
 		assertMissingRequiredProperties: targetObject
@@ -119,15 +123,15 @@ GtLToolForLepiterSnippetsRemoveExamples >> missingSnippetKnowledgeBaseUid [
 		path: #(#snippets 1)
 		errorMessage: '@[snippets/1] required properties missing [knowledgeBaseUid]'.
 	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForLepiterSnippetsRemoveExamples >> missingSnippetPageUid [
 	<gtExample>
-	| targetObject |
+	| call targetObject |
 	
-	targetObject := self
+	call := self
 		executeTool: GtLToolForLepiterSnippetsRemove new
 		withArguments: {
 			'snippets' -> {
@@ -137,6 +141,7 @@ GtLToolForLepiterSnippetsRemoveExamples >> missingSnippetPageUid [
 					yourself
 			}
 		} asDictionary.
+	targetObject := call result targetObject.
 	
 	self
 		assertMissingRequiredProperties: targetObject
@@ -144,33 +149,15 @@ GtLToolForLepiterSnippetsRemoveExamples >> missingSnippetPageUid [
 		path: #(#snippets 1)
 		errorMessage: '@[snippets/1] required properties missing [pageUid]'.
 	
-	^ targetObject
-]
-
-{ #category : #examples }
-GtLToolForLepiterSnippetsRemoveExamples >> missingSnippets [
-	<gtExample>
-	| targetObject |
-	
-	targetObject := self
-		executeTool: GtLToolForLepiterSnippetsRemove new
-		withArguments: Dictionary new.
-	
-	self
-		assertMissingRequiredProperties: targetObject
-		withPropertyNames: #('snippets')
-		path: #(nil)
-		errorMessage: 'required properties missing [snippets]'.
-	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForLepiterSnippetsRemoveExamples >> missingSnippetUid [
 	<gtExample>
-	| targetObject |
+	| call targetObject |
 	
-	targetObject := self
+	call := self
 		executeTool: GtLToolForLepiterSnippetsRemove new
 		withArguments: {
 			'snippets' -> {
@@ -180,6 +167,7 @@ GtLToolForLepiterSnippetsRemoveExamples >> missingSnippetUid [
 					yourself
 			}
 		} asDictionary.
+	targetObject := call result targetObject.
 	
 	self
 		assertMissingRequiredProperties: targetObject
@@ -187,7 +175,22 @@ GtLToolForLepiterSnippetsRemoveExamples >> missingSnippetUid [
 		path: #(#snippets 1)
 		errorMessage: '@[snippets/1] required properties missing [snippetUid]'.
 	
-	^ targetObject
+	^ call
+]
+
+{ #category : #examples }
+GtLToolForLepiterSnippetsRemoveExamples >> missingSnippets [
+	<gtExample>
+	| call |
+	call := self
+		executeTool: GtLToolForLepiterSnippetsRemove new
+		withArguments: Dictionary new.
+	self
+		assertMissingRequiredProperties: call result targetObject
+		withPropertyNames: #('snippets')
+		path: #(nil)
+		errorMessage: 'required properties missing [snippets]'.
+	^ call
 ]
 
 { #category : #examples }
@@ -196,7 +199,7 @@ GtLToolForLepiterSnippetsRemoveExamples >> multipleSnippetRemoval [
 	| contentExamples database |
 	contentExamples := LeContentExamples new.
 	database := contentExamples basicDatabaseWithMonitor.
-	[ | targetObject tool pageOne pageTwo snippetOne snippetTwo |
+	[ | call targetObject tool pageOne pageTwo snippetOne snippetTwo |
 		pageOne := database pageBuilder
 			title: 'one';
 			add.
@@ -211,8 +214,7 @@ GtLToolForLepiterSnippetsRemoveExamples >> multipleSnippetRemoval [
 			add.
 		tool := GtLToolForLepiterSnippetsRemove new.
 		tool database: database.
-		
-		targetObject := self
+		call := self
 			executeTool: tool
 			withArguments: {
 				'snippets' -> {
@@ -228,14 +230,13 @@ GtLToolForLepiterSnippetsRemoveExamples >> multipleSnippetRemoval [
 						yourself
 				}
 			} asDictionary.
-		
+		targetObject := call result targetObject.
 		self assert: targetObject snippets size equals: 2.
 		self assert: targetObject snippets first status equals: 'removed'.
 		self assert: targetObject snippets second status equals: 'removed'.
 		self assert: pageOne children isEmpty.
 		self assert: pageTwo children isEmpty.
-		
-		^ targetObject ]
+		^ call ]
 		ensure: [ contentExamples stopDatabaseMonitor ]
 ]
 
@@ -243,9 +244,9 @@ GtLToolForLepiterSnippetsRemoveExamples >> multipleSnippetRemoval [
 GtLToolForLepiterSnippetsRemoveExamples >> nilKnowledgeBaseUid [
 	<gtExample>
 	"Test that a null knowledgeBaseUid is caught by JSON schema validation."
-	| targetObject |
+	| call targetObject |
 	
-	targetObject := self
+	call := self
 		executeTool: GtLToolForLepiterSnippetsRemove new
 		withArguments: {
 			'snippets' -> {
@@ -256,20 +257,21 @@ GtLToolForLepiterSnippetsRemoveExamples >> nilKnowledgeBaseUid [
 					yourself
 			}
 		} asDictionary.
+	targetObject := call result targetObject.
 	
 	"JSON schema validation returns an error for null in required string slot"
 	self assert: (targetObject isKindOf: GtLJSONSchemaValidationErrorDomainObject).
 	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForLepiterSnippetsRemoveExamples >> nilPageUid [
 	<gtExample>
 	"Test that a null pageUid is caught by JSON schema validation."
-	| targetObject |
+	| call targetObject |
 	
-	targetObject := self
+	call := self
 		executeTool: GtLToolForLepiterSnippetsRemove new
 		withArguments: {
 			'snippets' -> {
@@ -280,20 +282,21 @@ GtLToolForLepiterSnippetsRemoveExamples >> nilPageUid [
 					yourself
 			}
 		} asDictionary.
+	targetObject := call result targetObject.
 	
 	"JSON schema validation returns an error for null in required string slot"
 	self assert: (targetObject isKindOf: GtLJSONSchemaValidationErrorDomainObject).
 	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForLepiterSnippetsRemoveExamples >> nilSnippetUid [
 	<gtExample>
 	"Test that a null snippetUid is caught by JSON schema validation."
-	| targetObject |
+	| call targetObject |
 	
-	targetObject := self
+	call := self
 		executeTool: GtLToolForLepiterSnippetsRemove new
 		withArguments: {
 			'snippets' -> {
@@ -304,11 +307,12 @@ GtLToolForLepiterSnippetsRemoveExamples >> nilSnippetUid [
 					yourself
 			}
 		} asDictionary.
+	targetObject := call result targetObject.
 	
 	"JSON schema validation returns an error for null in required string slot"
 	self assert: (targetObject isKindOf: GtLJSONSchemaValidationErrorDomainObject).
 	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
@@ -317,7 +321,7 @@ GtLToolForLepiterSnippetsRemoveExamples >> successfulSnippetRemoval [
 	| contentExamples database |
 	contentExamples := LeContentExamples new.
 	database := contentExamples basicDatabaseWithMonitor.
-	[ | targetObject tool page snippet |
+	[ | call targetObject tool page snippet |
 		page := database pageBuilder
 			title: 'one';
 			add.
@@ -326,8 +330,7 @@ GtLToolForLepiterSnippetsRemoveExamples >> successfulSnippetRemoval [
 			add.
 		tool := GtLToolForLepiterSnippetsRemove new.
 		tool database: database.
-		
-		targetObject := self
+		call := self
 			executeTool: tool
 			withArguments: {
 				'snippets' -> {
@@ -338,12 +341,11 @@ GtLToolForLepiterSnippetsRemoveExamples >> successfulSnippetRemoval [
 						yourself
 				}
 			} asDictionary.
-		
+		targetObject := call result targetObject.
 		self assert: (targetObject isKindOf: GtLLepiterSnippetsDomainObject).
 		self assert: targetObject snippets size equals: 1.
 		self assert: targetObject snippets first status equals: 'removed'.
 		self assert: page children isEmpty.
-		
-		^ targetObject ]
+		^ call ]
 		ensure: [ contentExamples stopDatabaseMonitor ]
 ]

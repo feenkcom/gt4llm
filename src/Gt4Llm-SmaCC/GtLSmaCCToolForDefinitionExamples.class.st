@@ -3,7 +3,7 @@ Class {
 	#superclass : #GtLAbstractMagritteFunctionToolExamples,
 	#traits : 'TGtLInvalidInputDataAssertions',
 	#classTraits : 'TGtLInvalidInputDataAssertions classTrait',
-	#category : 'Gt4Llm-SmaCC-Examples'
+	#category : #'Gt4Llm-SmaCC-Examples'
 }
 
 { #category : #examples }
@@ -42,11 +42,12 @@ GtLSmaCCToolForDefinitionExamples >> definitionForNilArguments [
 	tool := GtLSmaCCToolForDefinition new model: GtLSmaCCModel new.
 	call := self
 		executeTool: tool
-		withArguments: nil.
+		withArguments: Dictionary new.
 	self
-		assertJSONSchemaValidationError: call result targetObject
-		withPath: {nil}
-		errorMessage: 'object expected'.
+		assertMissingRequiredProperties: call result targetObject
+		withPropertyNames: #('parserDefinition')
+		path: {nil}
+		errorMessage: 'required properties missing [parserDefinition]'.
 	^ call
 ]
 

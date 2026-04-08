@@ -4,15 +4,14 @@ Examples for GtLMagritteToolForExampleMethodRun.
 Class {
 	#name : #GtLToolForExampleMethodRunExamples,
 	#superclass : #GtLAbstractMagritteFunctionToolExamples,
-	#category : 'Gt4LlmCore-Examples-Tools'
+	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #examples }
 GtLToolForExampleMethodRunExamples >> exampleRunError [
 	<gtExample>
-	| targetObject |
-	
-	targetObject := self
+	| call targetObject |
+	call := self
 		executeTool: GtLToolForExampleMethodRun new
 		withArguments: {
 			'exampleReference' -> {
@@ -21,19 +20,17 @@ GtLToolForExampleMethodRunExamples >> exampleRunError [
 				'classSide' -> false
 			} asDictionary
 		} asDictionary.
-	
+	targetObject := call result targetObject.
 	self assert: (targetObject isKindOf: GtLExampleWithResult).
 	self assert: targetObject isErrorResult.
-	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForExampleMethodRunExamples >> exampleRunFailure [
 	<gtExample>
-	| targetObject |
-	
-	targetObject := self
+	| call targetObject |
+	call := self
 		executeTool: GtLToolForExampleMethodRun new
 		withArguments: {
 			'exampleReference' -> {
@@ -42,19 +39,17 @@ GtLToolForExampleMethodRunExamples >> exampleRunFailure [
 				'classSide' -> false
 			} asDictionary
 		} asDictionary.
-	
+	targetObject := call result targetObject.
 	self assert: (targetObject isKindOf: GtLExampleWithResult).
 	self assert: targetObject isFailureResult.
-	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForExampleMethodRunExamples >> exampleRunForMissingExampleClassName [
 	<gtExample>
-	| targetObject |
-	
-	targetObject := self
+	| call |
+	call := self
 		executeTool: GtLToolForExampleMethodRun new
 		withArguments: {
 			'exampleReference' -> {
@@ -62,40 +57,34 @@ GtLToolForExampleMethodRunExamples >> exampleRunForMissingExampleClassName [
 				'classSide' -> false
 			} asDictionary
 		} asDictionary.
-	
 	self
-		assertMissingRequiredProperties: targetObject
+		assertMissingRequiredProperties: call result targetObject
 		withPropertyNames: #('exampleClassName')
 		path: #('exampleReference')
 		errorMessage: '@[exampleReference] required properties missing [exampleClassName]'.
-	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForExampleMethodRunExamples >> exampleRunForMissingExampleReference [
 	<gtExample>
-	| targetObject |
-	
-	targetObject := self
+	| call |
+	call := self
 		executeTool: GtLToolForExampleMethodRun new
 		withArguments: Dictionary new.
-	
 	self
-		assertMissingRequiredProperties: targetObject
+		assertMissingRequiredProperties: call result targetObject
 		withPropertyNames: #('exampleReference')
 		path: #(nil)
 		errorMessage: 'required properties missing [exampleReference]'.
-	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForExampleMethodRunExamples >> exampleRunForMissingMethodName [
 	<gtExample>
-	| targetObject |
-	
-	targetObject := self
+	| call |
+	call := self
 		executeTool: GtLToolForExampleMethodRun new
 		withArguments: {
 			'exampleReference' -> {
@@ -103,22 +92,19 @@ GtLToolForExampleMethodRunExamples >> exampleRunForMissingMethodName [
 				'classSide' -> false
 			} asDictionary
 		} asDictionary.
-	
 	self
-		assertMissingRequiredProperties: targetObject
+		assertMissingRequiredProperties: call result targetObject
 		withPropertyNames: #('methodName')
 		path: #('exampleReference')
 		errorMessage: '@[exampleReference] required properties missing [methodName]'.
-	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForExampleMethodRunExamples >> exampleRunForNilExampleClassName [
 	<gtExample>
-	| targetObject |
-	
-	targetObject := self
+	| call |
+	call := self
 		executeTool: GtLToolForExampleMethodRun new
 		withArguments: {
 			'exampleReference' -> {
@@ -127,21 +113,18 @@ GtLToolForExampleMethodRunExamples >> exampleRunForNilExampleClassName [
 				'classSide' -> false
 			} asDictionary
 		} asDictionary.
-	
 	self
-		assertJSONSchemaValidationError: targetObject
+		assertJSONSchemaValidationError: call result targetObject
 		withPath: #('exampleReference' 'exampleClassName')
 		errorMessage: '@[exampleReference/exampleClassName] string expected'.
-	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForExampleMethodRunExamples >> exampleRunForNilMethodName [
 	<gtExample>
-	| targetObject |
-	
-	targetObject := self
+	| call |
+	call := self
 		executeTool: GtLToolForExampleMethodRun new
 		withArguments: {
 			'exampleReference' -> {
@@ -150,21 +133,18 @@ GtLToolForExampleMethodRunExamples >> exampleRunForNilMethodName [
 				'classSide' -> false
 			} asDictionary
 		} asDictionary.
-	
 	self
-		assertJSONSchemaValidationError: targetObject
+		assertJSONSchemaValidationError: call result targetObject
 		withPath: #('exampleReference' 'methodName')
 		errorMessage: '@[exampleReference/methodName] string expected'.
-	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForExampleMethodRunExamples >> exampleRunForNonExampleMethod [
 	<gtExample>
-	| targetObject |
-	
-	targetObject := self
+	| call targetObject |
+	call := self
 		executeTool: GtLToolForExampleMethodRun new
 		withArguments: {
 			'exampleReference' -> {
@@ -173,19 +153,17 @@ GtLToolForExampleMethodRunExamples >> exampleRunForNonExampleMethod [
 				'classSide' -> false
 			} asDictionary
 		} asDictionary.
-	
+	targetObject := call result targetObject.
 	self assert: (targetObject isKindOf: GtLMethodIsNotExampleDomainObject).
 	self assert: targetObject method name equals: 'GtLExampleRunDummyExamples>>#regularMethod'.
-	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForExampleMethodRunExamples >> exampleRunForUnknownClass [
 	<gtExample>
-	| targetObject |
-	
-	targetObject := self
+	| call |
+	call := self
 		executeTool: GtLToolForExampleMethodRun new
 		withArguments: {
 			'exampleReference' -> {
@@ -194,21 +172,18 @@ GtLToolForExampleMethodRunExamples >> exampleRunForUnknownClass [
 				'classSide' -> false
 			} asDictionary
 		} asDictionary.
-	
 	self
-		assertMissingObject: targetObject
+		assertMissingObject: call result targetObject
 		withObjectName: 'NonExistentClassXYZ123'
 		errorMessage: 'NonExistentClassXYZ123 is not found'.
-	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForExampleMethodRunExamples >> exampleRunForUnknownMethod [
 	<gtExample>
-	| targetObject |
-	
-	targetObject := self
+	| call |
+	call := self
 		executeTool: GtLToolForExampleMethodRun new
 		withArguments: {
 			'exampleReference' -> {
@@ -217,21 +192,18 @@ GtLToolForExampleMethodRunExamples >> exampleRunForUnknownMethod [
 				'classSide' -> false
 			} asDictionary
 		} asDictionary.
-	
 	self
-		assertMissingObject: targetObject
+		assertMissingObject: call result targetObject
 		withObjectName: 'GtTMoneyExamples>>#nonExistentMethodXYZ123'
 		errorMessage: 'GtTMoneyExamples>>#nonExistentMethodXYZ123 is not found'.
-	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForExampleMethodRunExamples >> exampleRunSuccess [
 	<gtExample>
-	| targetObject |
-	
-	targetObject := self
+	| call targetObject |
+	call := self
 		executeTool: GtLToolForExampleMethodRun new
 		withArguments: {
 			'exampleReference' -> {
@@ -240,21 +212,19 @@ GtLToolForExampleMethodRunExamples >> exampleRunSuccess [
 				'classSide' -> false
 			} asDictionary
 		} asDictionary.
-	
+	targetObject := call result targetObject.
 	self assert: (targetObject isKindOf: GtLExampleWithResult).
 	self assert: targetObject isSuccessResult.
 	self assert: targetObject objectId isNil.
-	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForExampleMethodRunExamples >> exampleRunSuccessStoresObjectId [
 	<gtExample>
-	| objectStorage targetObject objectId storedObject |
+	| objectStorage call targetObject objectId storedObject |
 	objectStorage := GtLObjectStorage new.
-	
-	targetObject := self
+	call := self
 		executeTool: GtLToolForExampleMethodRun new
 		withArguments: {
 			'exampleReference' -> {
@@ -264,7 +234,7 @@ GtLToolForExampleMethodRunExamples >> exampleRunSuccessStoresObjectId [
 			} asDictionary
 		} asDictionary
 		inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
-	
+	targetObject := call result targetObject.
 	self assert: (targetObject isKindOf: GtLExampleWithResult).
 	self assert: targetObject isSuccessResult.
 	objectId := targetObject objectId.
@@ -272,6 +242,5 @@ GtLToolForExampleMethodRunExamples >> exampleRunSuccessStoresObjectId [
 	self assert: (objectStorage objectAt: objectId) equals: 42.
 	storedObject := objectStorage storedObjectAt: objectId.
 	self assert: storedObject reason class equals: GtLStoredObjectExampleMethodReason.
-	
-	^ targetObject
+	^ call
 ]

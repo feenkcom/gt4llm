@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLSmaCCSuccessExamples,
 	#superclass : #Object,
-	#category : 'Gt4Llm-SmaCC-Examples'
+	#category : #'Gt4Llm-SmaCC-Examples'
 }
 
 { #category : #examples }

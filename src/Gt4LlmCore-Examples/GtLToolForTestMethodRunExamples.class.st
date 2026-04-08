@@ -18,9 +18,9 @@ GtLToolForTestMethodRunExamples >> assertJsonData: jsonData hasExpectedKeys: exp
 GtLToolForTestMethodRunExamples >> exampleRunComparisonFailure [
 	<gtExample>
 	<return: #GtLTestCaseWithResultDomainObject>
-	| targetObject dataBlock jsonData exceptionData compositeView |
+	| call targetObject dataBlock jsonData exceptionData compositeView |
 	
-	targetObject := self
+	call := self
 		executeTool: GtLToolForTestMethodRun new
 		withArguments: {
 			'testReference' -> {
@@ -28,6 +28,7 @@ GtLToolForTestMethodRunExamples >> exampleRunComparisonFailure [
 				'methodName' -> 'testComparisonFailure'
 			} asDictionary
 		} asDictionary.
+	targetObject := call result targetObject.
 	
 	self assert: (targetObject isKindOf: GtLTestCaseWithResultDomainObject).
 	self assert: targetObject isErrorResult.
@@ -51,16 +52,16 @@ GtLToolForTestMethodRunExamples >> exampleRunComparisonFailure [
 		errorMessage: 'GtLExampleDataComparisonException'
 		stackTraceIncludes: #('GtLExampleDummyMixedTest>>testComparisonFailure').
 	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForTestMethodRunExamples >> exampleRunError [
 	<gtExample>
 	<return: #GtLTestCaseWithResultDomainObject>
-	| targetObject |
+	| call targetObject |
 	
-	targetObject := self
+	call := self
 		executeTool: GtLToolForTestMethodRun new
 		withArguments: {
 			'testReference' -> {
@@ -68,21 +69,22 @@ GtLToolForTestMethodRunExamples >> exampleRunError [
 				'methodName' -> 'testError'
 			} asDictionary
 		} asDictionary.
+	targetObject := call result targetObject.
 	
 	self assert: (targetObject isKindOf: GtLTestCaseWithResultDomainObject).
 	self assert: targetObject isErrorResult.
 	self assert: targetObject statusText equals: 'error'.
 	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForTestMethodRunExamples >> exampleRunFailure [
 	<gtExample>
 	<return: #GtLTestCaseWithResultDomainObject>
-	| targetObject |
+	| call targetObject |
 	
-	targetObject := self
+	call := self
 		executeTool: GtLToolForTestMethodRun new
 		withArguments: {
 			'testReference' -> {
@@ -90,21 +92,22 @@ GtLToolForTestMethodRunExamples >> exampleRunFailure [
 				'methodName' -> 'testFailure'
 			} asDictionary
 		} asDictionary.
+	targetObject := call result targetObject.
 	
 	self assert: (targetObject isKindOf: GtLTestCaseWithResultDomainObject).
 	self assert: targetObject isFailureResult.
 	self assert: targetObject statusText equals: 'failure'.
 	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForTestMethodRunExamples >> exampleRunFailureWithJsonAssertions [
 	<gtExample>
 	<return: #GtLTestCaseWithResultDomainObject>
-	| targetObject dataBlock jsonData exceptionData compositeView |
+	| call targetObject dataBlock jsonData exceptionData compositeView |
 	
-	targetObject := self
+	call := self
 		executeTool: GtLToolForTestMethodRun new
 		withArguments: {
 			'testReference' -> {
@@ -112,6 +115,7 @@ GtLToolForTestMethodRunExamples >> exampleRunFailureWithJsonAssertions [
 				'methodName' -> 'testFailure'
 			} asDictionary
 		} asDictionary.
+	targetObject := call result targetObject.
 	
 	self assert: (targetObject isKindOf: GtLTestCaseWithResultDomainObject).
 	self assert: targetObject isFailureResult.
@@ -133,16 +137,15 @@ GtLToolForTestMethodRunExamples >> exampleRunFailureWithJsonAssertions [
 		errorMessage: 'Assertion failed'
 		stackTraceIncludes: #('GtLExampleDummyMixedTest>>testFailure').
 	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForTestMethodRunExamples >> exampleRunForNonTestCaseClass [
 	<gtExample>
 	<return: #GtLIncorrectArgumentTypeDomainObject>
-	| targetObject |
-	
-	targetObject := self
+	| call |
+	call := self
 		executeTool: GtLToolForTestMethodRun new
 		withArguments: {
 			'testReference' -> {
@@ -150,23 +153,20 @@ GtLToolForTestMethodRunExamples >> exampleRunForNonTestCaseClass [
 				'methodName' -> 'printString'
 			} asDictionary
 		} asDictionary.
-	
 	self
-		assertIncorrectArgumentType: targetObject
+		assertIncorrectArgumentType: call result targetObject
 		withArgumentName: 'testClassName'
 		argumentValue: 'Object'
 		expectedKind: 'a subclass of TestCase'.
-	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForTestMethodRunExamples >> exampleRunForUnknownClass [
 	<gtExample>
 	<return: #GtLMissingObjectDomainObject>
-	| targetObject |
-	
-	targetObject := self
+	| call |
+	call := self
 		executeTool: GtLToolForTestMethodRun new
 		withArguments: {
 			'testReference' -> {
@@ -174,22 +174,19 @@ GtLToolForTestMethodRunExamples >> exampleRunForUnknownClass [
 				'methodName' -> 'testSomething'
 			} asDictionary
 		} asDictionary.
-	
 	self
-		assertMissingObject: targetObject
+		assertMissingObject: call result targetObject
 		withObjectName: 'UnknownClassXYZ'
 		errorMessage: 'UnknownClassXYZ is not found'.
-	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForTestMethodRunExamples >> exampleRunForUnknownMethod [
 	<gtExample>
 	<return: #GtLMissingObjectDomainObject>
-	| targetObject |
-	
-	targetObject := self
+	| call |
+	call := self
 		executeTool: GtLToolForTestMethodRun new
 		withArguments: {
 			'testReference' -> {
@@ -197,22 +194,20 @@ GtLToolForTestMethodRunExamples >> exampleRunForUnknownMethod [
 				'methodName' -> 'unknownMethod'
 			} asDictionary
 		} asDictionary.
-	
 	self
-		assertMissingObject: targetObject
+		assertMissingObject: call result targetObject
 		withObjectName: 'GtLExampleDummyMixedTest>>#unknownMethod'
 		errorMessage: 'GtLExampleDummyMixedTest>>#unknownMethod is not found'.
-	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForTestMethodRunExamples >> exampleRunSkipped [
 	<gtExample>
 	<return: #GtLTestCaseWithResultDomainObject>
-	| targetObject |
+	| call targetObject |
 	
-	targetObject := self
+	call := self
 		executeTool: GtLToolForTestMethodRun new
 		withArguments: {
 			'testReference' -> {
@@ -220,21 +215,22 @@ GtLToolForTestMethodRunExamples >> exampleRunSkipped [
 				'methodName' -> 'testSkip'
 			} asDictionary
 		} asDictionary.
+	targetObject := call result targetObject.
 	
 	self assert: (targetObject isKindOf: GtLTestCaseWithResultDomainObject).
 	self assert: targetObject isSkippedResult.
 	self assert: targetObject statusText equals: 'skipped'.
 	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForTestMethodRunExamples >> exampleRunSuccess [
 	<gtExample>
 	<return: #GtLTestCaseWithResultDomainObject>
-	| targetObject |
+	| call targetObject |
 	
-	targetObject := self
+	call := self
 		executeTool: GtLToolForTestMethodRun new
 		withArguments: {
 			'testReference' -> {
@@ -242,21 +238,21 @@ GtLToolForTestMethodRunExamples >> exampleRunSuccess [
 				'methodName' -> 'testPass'
 			} asDictionary
 		} asDictionary.
+	targetObject := call result targetObject.
 	
 	self assert: (targetObject isKindOf: GtLTestCaseWithResultDomainObject).
 	self assert: targetObject isSuccessResult.
 	self assert: targetObject statusText equals: 'success'.
 	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForTestMethodRunExamples >> exampleRunSuccessWithDataViewSerialization [
 	<gtExample>
 	<return: #GtLTestCaseWithResultDomainObject>
-	| targetObject dataBlock jsonData compositeView |
-	
-	targetObject := self
+	| call targetObject dataBlock jsonData compositeView |
+	call := self
 		executeTool: GtLToolForTestMethodRun new
 		withArguments: {
 			'testReference' -> {
@@ -264,17 +260,15 @@ GtLToolForTestMethodRunExamples >> exampleRunSuccessWithDataViewSerialization [
 				'methodName' -> 'testPass'
 			} asDictionary
 		} asDictionary.
-	
+	targetObject := call result targetObject.
 	compositeView := targetObject llmDataViewsFor: GtLDataView new.
 	dataBlock := compositeView serializeToLlmPrimiteData.
 	jsonData := dataBlock llmJsonData.
-	
 	self assert: (jsonData at: #className) equals: 'GtLExampleDummyMixedTest'.
 	self assert: (jsonData at: #selector) equals: 'testPass'.
 	self assert: (jsonData at: #status) equals: 'success'.
 	self assert: (jsonData at: #result) equals: 'Passed'.
 	self assert: (jsonData at: #shouldPass) equals: true.
 	self assert: (jsonData at: #expectedFailure) equals: false.
-	
-	^ targetObject
+	^ call
 ]
