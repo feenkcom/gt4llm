@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLRefactoringToolForClassSearchExamples,
-	#superclass : #GtLAbstractPlainSchemaFunctionToolExamples,
+	#superclass : #GtLAbstractRefactoringMagritteToolExamples,
 	#category : #'Gt4LlmCore-Examples-Tools'
 }
 

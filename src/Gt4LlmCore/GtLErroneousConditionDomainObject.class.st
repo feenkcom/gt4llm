@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLErroneousConditionDomainObject,
-	#superclass : #GtLDomainObject,
-	#category : 'Gt4LlmCore-Domain Objects'
+	#superclass : #Object,
+	#category : #'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #testing }

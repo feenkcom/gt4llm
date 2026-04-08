@@ -4,7 +4,7 @@ Searches for classes by name matching the query substring (case-insensitive).
 Class {
 	#name : #GtLMagritteToolForClassSearch,
 	#superclass : #GtLAbstractMagritteFunctionTool,
-	#category : 'Gt4LlmCore-Tools'
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }
@@ -28,11 +28,6 @@ Example JSON response:
   "foundClassNames": ["Collection", "CollectionSequence"],
   "mayHaveMore": false
 }'
-]
-
-{ #category : #testing }
-GtLMagritteToolForClassSearch >> isUsingDataViews [
-	^ true
 ]
 
 { #category : #accessing }

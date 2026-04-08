@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'errorMessage'
 	],
-	#category : 'Gt4LlmCore-Domain Objects'
+	#category : #'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #accessing }
@@ -49,16 +49,4 @@ GtLProblemDomainObject >> messageText [
 	"Return an error message"
 
 	^ self errorMessage
-]
-
-{ #category : #'api - serializing' }
-GtLProblemDomainObject >> serializeToLlmJsonObject [
-	"Return a JSON dictionary that represents the domain object."
-	
-	^ GtMagritteJSONDataExporter exportObject: self
-]
-
-{ #category : #testing }
-GtLProblemDomainObject >> wasMovedToMagritteDescriptions [
-	^ true
 ]

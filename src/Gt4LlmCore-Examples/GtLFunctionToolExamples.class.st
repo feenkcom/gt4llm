@@ -24,7 +24,6 @@ GtLFunctionToolExamples >> additionTool [
 	
 	self assert: tool name equals: 'add'.
 	self assert: tool description equals: 'Adds two numbers'.
-	self assert: tool isUsingDataViews.
 	
 	^ tool
 ]

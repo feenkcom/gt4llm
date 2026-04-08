@@ -4,17 +4,12 @@ I return the remote phlow view specification for a stored object and view select
 Class {
 	#name : #GtLToolForObjectView,
 	#superclass : #GtLAbstractMagritteFunctionTool,
-	#category : 'Gt4LlmCore-Tools'
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }
 GtLToolForObjectView >> description [
 	^ 'Returns a phlow view for an object given an object id and a method name'
-]
-
-{ #category : #accessing }
-GtLToolForObjectView >> isUsingDataViews [
-	^ true
 ]
 
 { #category : #accessing }

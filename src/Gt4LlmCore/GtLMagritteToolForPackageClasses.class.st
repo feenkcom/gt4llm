@@ -4,7 +4,7 @@ Magritte-based tool for retrieving package classes.
 Class {
 	#name : #GtLMagritteToolForPackageClasses,
 	#superclass : #GtLAbstractMagritteFunctionTool,
-	#category : 'Gt4LlmCore-Tools'
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }
@@ -28,11 +28,6 @@ Example JSON response:
   "foundClassNames": ["BlElement", "BlSpace"],
   "mayHaveMore": true
 }'
-]
-
-{ #category : #accessing }
-GtLMagritteToolForPackageClasses >> isUsingDataViews [
-	^ true
 ]
 
 { #category : #accessing }

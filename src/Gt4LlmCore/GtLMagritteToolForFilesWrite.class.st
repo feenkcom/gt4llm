@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLMagritteToolForFilesWrite,
 	#superclass : #GtLAbstractMagritteFunctionTool,
-	#category : 'Gt4LlmCore-Tools'
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }
@@ -33,11 +33,6 @@ GtLMagritteToolForFilesWrite >> filesDescription [
 		accessor: #files;
 		classes: {GtLFileContentsDomainObject};
 		beRequired
-]
-
-{ #category : #testing }
-GtLMagritteToolForFilesWrite >> isUsingDataViews [
-	^ true
 ]
 
 { #category : #accessing }

@@ -1,17 +1,12 @@
 Class {
 	#name : #GtLToolForLepiterKnowledgeBases,
 	#superclass : #GtLAbstractMagritteFunctionTool,
-	#category : 'Gt4LlmCore-Tools'
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }
 GtLToolForLepiterKnowledgeBases >> description [
 	^ 'Retrieve the registered Lepiter knowledge bases.'
-]
-
-{ #category : #'api - testing' }
-GtLToolForLepiterKnowledgeBases >> isUsingDataViews [
-	^ true
 ]
 
 { #category : #accessing }

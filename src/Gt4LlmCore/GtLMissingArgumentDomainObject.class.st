@@ -6,7 +6,7 @@ Class {
 		'missingArgument',
 		'errorMessage'
 	],
-	#category : 'Gt4LlmCore-Domain Objects'
+	#category : #'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #accessing }
@@ -82,16 +82,4 @@ GtLMissingArgumentDomainObject >> missingArgumentDescription [
 			label: 'Missing argument';
 			accessor: #missingArgument;
 			beRequired
-]
-
-{ #category : #'api - serializing' }
-GtLMissingArgumentDomainObject >> serializeToLlmJsonObject [
-	"Return a JSON dictionary that represents the domain object."
-	
-	^ GtMagritteJSONDataExporter exportObject: self.
-]
-
-{ #category : #testing }
-GtLMissingArgumentDomainObject >> wasMovedToMagritteDescriptions [
-	^ true
 ]

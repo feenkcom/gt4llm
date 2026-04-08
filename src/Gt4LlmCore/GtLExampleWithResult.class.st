@@ -1,15 +1,15 @@
 Class {
-	#name : #GtLExampleWithResultDomainObject,
+	#name : #GtLExampleWithResult,
 	#superclass : #Object,
 	#instVars : [
 		'exampleWithResult',
 		'objectId'
 	],
-	#category : 'Gt4LlmCore-Domain Objects'
+	#category : #'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #accessing }
-GtLExampleWithResultDomainObject >> exampleReference [
+GtLExampleWithResult >> exampleReference [
 	^ GtLExampleReference new 
 			methodName: self exampleWithResult selector asString;
 			exampleClassName: self exampleWithResult methodClass name asString;
@@ -17,19 +17,19 @@ GtLExampleWithResultDomainObject >> exampleReference [
 ]
 
 { #category : #accessing }
-GtLExampleWithResultDomainObject >> exampleWithResult [
+GtLExampleWithResult >> exampleWithResult [
 	^ exampleWithResult
 ]
 
 { #category : #accessing }
-GtLExampleWithResultDomainObject >> exampleWithResult: anObject [
+GtLExampleWithResult >> exampleWithResult: anObject [
 	self assert: [ anObject isKindOf: GtExampleWithResult ].
 
 	exampleWithResult := anObject
 ]
 
 { #category : #views }
-GtLExampleWithResultDomainObject >> gtExampleSourceFor: aView [
+GtLExampleWithResult >> gtExampleSourceFor: aView [
 	<gtView>
 	<gtLlmView>
 	^ aView forward
@@ -40,7 +40,7 @@ GtLExampleWithResultDomainObject >> gtExampleSourceFor: aView [
 ]
 
 { #category : #views }
-GtLExampleWithResultDomainObject >> gtExampleWithResultFor: aView [
+GtLExampleWithResult >> gtExampleWithResultFor: aView [
 	<gtView>
 	<gtLlmView>
 	^ aView forward
@@ -51,27 +51,27 @@ GtLExampleWithResultDomainObject >> gtExampleWithResultFor: aView [
 ]
 
 { #category : #'api - testing' }
-GtLExampleWithResultDomainObject >> isErrorResult [
+GtLExampleWithResult >> isErrorResult [
 	^ self exampleWithResult isError
 ]
 
 { #category : #'api - testing' }
-GtLExampleWithResultDomainObject >> isFailureResult [
+GtLExampleWithResult >> isFailureResult [
 	^ self exampleWithResult isFailure
 ]
 
 { #category : #'api - testing' }
-GtLExampleWithResultDomainObject >> isSkippedResult [
+GtLExampleWithResult >> isSkippedResult [
 	^ self exampleWithResult isSkipped
 ]
 
 { #category : #'api - testing' }
-GtLExampleWithResultDomainObject >> isSuccessResult [
+GtLExampleWithResult >> isSuccessResult [
 	^ self exampleWithResult isSuccess
 ]
 
 { #category : #'llm views' }
-GtLExampleWithResultDomainObject >> llmRawDataViewFor: aDataView [
+GtLExampleWithResult >> llmRawDataViewFor: aDataView [
 	<gtLlmDataView>
 	
 	^aDataView compositeData
@@ -85,7 +85,7 @@ GtLExampleWithResultDomainObject >> llmRawDataViewFor: aDataView [
 ]
 
 { #category : #'llm views' }
-GtLExampleWithResultDomainObject >> llmResultExceptionViewFor: aDataView [
+GtLExampleWithResult >> llmResultExceptionViewFor: aDataView [
 	<gtLlmDataView>
 	
 	(self isErrorResult not and: [ self isFailureResult not ]) ifTrue: [
@@ -99,7 +99,7 @@ GtLExampleWithResultDomainObject >> llmResultExceptionViewFor: aDataView [
 ]
 
 { #category : #'llm views' }
-GtLExampleWithResultDomainObject >> llmResultObjectViewFor: aDataView [
+GtLExampleWithResult >> llmResultObjectViewFor: aDataView [
 	<gtLlmDataView>
 	
 	(self isErrorResult or: [ self isFailureResult ]) ifTrue: [
@@ -115,17 +115,17 @@ GtLExampleWithResultDomainObject >> llmResultObjectViewFor: aDataView [
 ]
 
 { #category : #accessing }
-GtLExampleWithResultDomainObject >> objectId [
+GtLExampleWithResult >> objectId [
 	^ objectId
 ]
 
 { #category : #accessing }
-GtLExampleWithResultDomainObject >> objectId: anObject [
+GtLExampleWithResult >> objectId: anObject [
 	objectId := anObject
 ]
 
 { #category : #accessing }
-GtLExampleWithResultDomainObject >> statusText [
+GtLExampleWithResult >> statusText [
 	self isSkippedResult ifTrue: [ ^ 'skipped' ].
 	^ self exampleWithResult statusText asString asLowercase
 ]

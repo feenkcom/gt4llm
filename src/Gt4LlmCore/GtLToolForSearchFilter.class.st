@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLToolForSearchFilter,
 	#superclass : #GtLAbstractMagritteFunctionTool,
-	#category : 'Gt4LlmCore-Tools'
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }
@@ -12,11 +12,6 @@ GtLToolForSearchFilter class >> maximumResultItemCount [
 { #category : #accessing }
 GtLToolForSearchFilter >> description [
 	^ 'Use GT filters to find methods'
-]
-
-{ #category : #accessing }
-GtLToolForSearchFilter >> isUsingDataViews [
-	^ true
 ]
 
 { #category : #accessing }

@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLToolForRemoteExampleMethodsRun,
 	#superclass : #GtLAbstractPlainSchemaFunctionTool,
-	#category : 'Gt4LlmCore-Tools'
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #private }
@@ -173,11 +173,6 @@ GtLToolForRemoteExampleMethodsRun >> imageChanges [
 
 	^ GtRrChangesSync uniqueInstance changesFrom:
 		GtRrChangesSync uniqueInstance sessionHistory first
-]
-
-{ #category : #testing }
-GtLToolForRemoteExampleMethodsRun >> isUsingDataViews [
-	^ true
 ]
 
 { #category : #accessing }

@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLToolForClassActions,
 	#superclass : #GtLAbstractMagritteFunctionTool,
-	#category : 'Gt4LlmCore-Tools'
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }
@@ -17,11 +17,6 @@ GtLToolForClassActions >> classNameDescription [
 { #category : #accessing }
 GtLToolForClassActions >> description [
 	^ 'Gets a class by name and returns a list of its actions.'
-]
-
-{ #category : #accessing }
-GtLToolForClassActions >> isUsingDataViews [
-	^ true
 ]
 
 { #category : #accessing }

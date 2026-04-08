@@ -5,7 +5,7 @@ Class {
 		'errorMessage',
 		'path'
 	],
-	#category : 'Gt4LlmCore-Domain Objects'
+	#category : #'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #accessing }
@@ -70,16 +70,4 @@ GtLJSONSchemaValidationErrorDomainObject >> printOn: aStream [
 	
 	aStream parenthesize: [
 		aStream << self messageText ]
-]
-
-{ #category : #accessing }
-GtLJSONSchemaValidationErrorDomainObject >> serializeToLlmJsonObject [
-	"Return a JSON dictionary that represents the domain object."
-
-	^ GtMagritteJSONDataExporter exportObject: self
-]
-
-{ #category : #accessing }
-GtLJSONSchemaValidationErrorDomainObject >> wasMovedToMagritteDescriptions [
-	^ true
 ]

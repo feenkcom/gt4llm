@@ -1,17 +1,12 @@
 Class {
 	#name : #GtLToolForSearchForLepiterPages,
 	#superclass : #GtLAbstractMagritteFunctionTool,
-	#category : 'Gt4LlmCore-Tools'
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }
 GtLToolForSearchForLepiterPages >> description [
 	^ 'Searches for Lepiter pages by name matching the query substring (case-insensitive).'
-]
-
-{ #category : #accessing }
-GtLToolForSearchForLepiterPages >> isUsingDataViews [
-	^ true
 ]
 
 { #category : #accessing }

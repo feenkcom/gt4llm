@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLProviderScheduledState,
 	#superclass : #GtLProviderState,
-	#category : 'Gt4LlmCore-Provider - Support'
+	#category : #'Gt4LlmCore-Provider - Support'
 }
 
 { #category : #'api - testing' }

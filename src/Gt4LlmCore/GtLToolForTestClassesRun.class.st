@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLToolForTestClassesRun,
 	#superclass : #GtLAbstractMagritteFunctionTool,
-	#category : 'Gt4LlmCore-Tools'
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #magritte }
@@ -24,11 +24,6 @@ Examples:
     {"classNames": "SomeTestCase"}
 - Run multiple classes:
     {"classNames": "SomeTestCase AnotherTestCase"}'
-]
-
-{ #category : #accessing }
-GtLToolForTestClassesRun >> isUsingDataViews [
-	^ true
 ]
 
 { #category : #'llm-generated' }

@@ -7,7 +7,7 @@ Class {
 		'name',
 		'parametersDescription'
 	],
-	#category : 'Gt4LlmCore-Tools'
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }
@@ -67,11 +67,6 @@ GtLFunctionTool >> initialize [
 	name := ''.
 	parametersDescription := {}.
 	description := ''
-]
-
-{ #category : #accessing }
-GtLFunctionTool >> isUsingDataViews [
-	^ true
 ]
 
 { #category : #accessing }

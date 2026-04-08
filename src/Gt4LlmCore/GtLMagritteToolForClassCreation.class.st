@@ -4,7 +4,7 @@ Magritte-based tool for creating a single class.
 Class {
 	#name : #GtLMagritteToolForClassCreation,
 	#superclass : #GtLAbstractMagritteFunctionTool,
-	#category : 'Gt4LlmCore-Tools'
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #magritte }
@@ -95,11 +95,6 @@ Example JSON response:
   "traitCompositionString": "{}",
   "comment": "A description of the class"
 }'
-]
-
-{ #category : #testing }
-GtLMagritteToolForClassCreation >> isUsingDataViews [
-	^true
 ]
 
 { #category : #accessing }

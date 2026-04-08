@@ -1,10 +1,10 @@
+"
+Magritte-based tool for looking up class details in a GtRBNamespace model.
+"
 Class {
 	#name : #GtLRefactoringToolForClassLookup,
-	#superclass : #GtLAbstractPlainSchemaFunctionTool,
-	#instVars : [
-		'model'
-	],
-	#category : 'Gt4LlmCore-Tools'
+	#superclass : #GtLAbstractRefactoringMagritteTool,
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #'llm-generated' }
@@ -12,46 +12,31 @@ GtLRefactoringToolForClassLookup >> description [
 	^ 'Get the details of a class as JSON.'
 ]
 
-{ #category : #accessing }
-GtLRefactoringToolForClassLookup >> isUsingDataViews [
-	^ true
-]
-
-{ #category : #'llm-generated' }
-GtLRefactoringToolForClassLookup >> model [
-	^ model
-]
-
-{ #category : #'llm-generated' }
-GtLRefactoringToolForClassLookup >> model: aModel [
-	model := aModel
-]
-
 { #category : #'llm-generated' }
 GtLRefactoringToolForClassLookup >> name [
 	^ 'rbLookupClass'
 ]
 
-{ #category : #'llm-generated' }
-GtLRefactoringToolForClassLookup >> parametersDescription [
-	^ #('className')
-]
-
-{ #category : #'llm-generated' }
+{ #category : #executing }
 GtLRefactoringToolForClassLookup >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
-	| arguments className targetClass |
+	| arguments targetClassName targetClass |
 	self model
 		ifNil: [ ^ GtLMissingInformationDomainObject new
 				missingModelName: 'model' ].
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
-	className := arguments
-			at: 'className'
-			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-					arguments: arguments;
-					missingArgument: 'className' ].
-	targetClass := self model classNamed: className.
-	targetClass ifNil: [ ^ GtLMissingDomainObject new objectName: className ].
+	targetClassName := arguments at: 'targetClassName'.
+	targetClass := self model classNamed: targetClassName.
+	targetClass ifNil: [ ^ GtLMissingDomainObject new objectName: targetClassName ].
 	^ GtLRefactoringClassDomainObject new
 		model: self model;
 		targetClass: targetClass
+]
+
+{ #category : #magritte }
+GtLRefactoringToolForClassLookup >> targetClassNameDescription [
+	<magritteDescription>
+	^ MAStringDescription new
+		label: 'Target class name';
+		accessor: #targetClassName;
+		beRequired
 ]

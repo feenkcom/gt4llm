@@ -4,17 +4,12 @@ Magritte-based tool for retrieving an object from the object storage and returni
 Class {
 	#name : #GtLMagritteToolForObjectStorageValue,
 	#superclass : #GtLAbstractMagritteFunctionTool,
-	#category : 'Gt4LlmCore-Tools'
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }
 GtLMagritteToolForObjectStorageValue >> description [
 	^ 'Retrieves an object from the object storage and returns its serialized value, equivalent to inspecting it in the Smalltalk code evaluation tool.'
-]
-
-{ #category : #accessing }
-GtLMagritteToolForObjectStorageValue >> isUsingDataViews [
-	^ true
 ]
 
 { #category : #accessing }

@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'logicalDatabase'
 	],
-	#category : 'Gt4LlmCore-Tools'
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }
@@ -36,11 +36,6 @@ GtLToolForLepiterPageContents >> description [
 GtLToolForLepiterPageContents >> initialize [
 	super initialize.
 	logicalDatabase := LeDatabasesRegistry defaultLogicalDatabase
-]
-
-{ #category : #accessing }
-GtLToolForLepiterPageContents >> isUsingDataViews [
-	^ true
 ]
 
 { #category : #accessing }

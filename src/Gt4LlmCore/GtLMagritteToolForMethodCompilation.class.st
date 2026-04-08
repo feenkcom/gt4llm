@@ -4,7 +4,7 @@ Magritte-based tool for compiling a method into a class.
 Class {
 	#name : #GtLMagritteToolForMethodCompilation,
 	#superclass : #GtLAbstractMagritteFunctionTool,
-	#category : 'Gt4LlmCore-Tools'
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #private }
@@ -66,11 +66,6 @@ Example JSON response:
 {
   "status": "compiled"
 }'
-]
-
-{ #category : #testing }
-GtLMagritteToolForMethodCompilation >> isUsingDataViews [
-	^ true
 ]
 
 { #category : #magritte }

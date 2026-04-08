@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'content'
 	],
-	#category : 'Gt4LlmCore-Formats'
+	#category : #'Gt4LlmCore-Formats'
 }
 
 { #category : #'instance creation' }
@@ -122,7 +122,7 @@ GtLMarkdown >> gtMarkdownFor: aView [
 				b phlow
 					spawnObject: (LeDatabasesRegistry defaultPrimaryDatabase addPage: (LePage new addSnippet: (LeTextSnippet new string: content); yourself)) ];
 		actionButtonIcon: BrGlamorousVectorIcons clipboard
-			tooltip: 'Copy contens to clipboard'
+			tooltip: 'Copy contents to clipboard'
 			action: [ :b | 
 				GtClipboard clipboardText: content ]
 ]

@@ -2,13 +2,13 @@
 Examples for GtLExampleWithResultStatusesDomainObject domain object and data views.
 "
 Class {
-	#name : #GtLExampleWithResultStatusesDomainObjectExamples,
+	#name : #GtLExampleWithResultStatusesExamples,
 	#superclass : #Object,
 	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #assertions }
-GtLExampleWithResultStatusesDomainObjectExamples >> assertDetailJson: detailJson hasClassName: className selector: selector status: status objectId: objectId [
+GtLExampleWithResultStatusesExamples >> assertDetailJson: detailJson hasClassName: className selector: selector status: status objectId: objectId [
 	"Assert the JSON detail structure from llmJsonObject details."
 	
 	self assert: (detailJson at: #className) equals: className.
@@ -18,7 +18,7 @@ GtLExampleWithResultStatusesDomainObjectExamples >> assertDetailJson: detailJson
 ]
 
 { #category : #assertions }
-GtLExampleWithResultStatusesDomainObjectExamples >> assertExampleStatus: anExampleStatus hasClassName: aClassName selector: aSelector status: aStatusText objectId: expectedObjectId [
+GtLExampleWithResultStatusesExamples >> assertExampleStatus: anExampleStatus hasClassName: aClassName selector: aSelector status: aStatusText objectId: expectedObjectId [
 	"Assert the properties from llmJsonObject."
 	
 	self assert: anExampleStatus exampleWithResult methodClass name asString equals: aClassName.
@@ -28,7 +28,7 @@ GtLExampleWithResultStatusesDomainObjectExamples >> assertExampleStatus: anExamp
 ]
 
 { #category : #assertions }
-GtLExampleWithResultStatusesDomainObjectExamples >> assertExampleStatus: anExampleStatus isSuccess: isSuccess isFailure: isFailure isError: isError isSkipped: isSkipped [
+GtLExampleWithResultStatusesExamples >> assertExampleStatus: anExampleStatus isSuccess: isSuccess isFailure: isFailure isError: isError isSkipped: isSkipped [
 	"Assert the boolean state flags of an example status."
 	
 	self assert: anExampleStatus isSuccessResult equals: isSuccess.
@@ -38,7 +38,7 @@ GtLExampleWithResultStatusesDomainObjectExamples >> assertExampleStatus: anExamp
 ]
 
 { #category : #assertions }
-GtLExampleWithResultStatusesDomainObjectExamples >> assertLlmJsonObject: jsonData hasTotal: totalCount successes: successCount failures: failureCount errors: errorCount skips: skippedCount notFound: notFoundClassNames detailsCount: detailsCount [
+GtLExampleWithResultStatusesExamples >> assertLlmJsonObject: jsonData hasTotal: totalCount successes: successCount failures: failureCount errors: errorCount skips: skippedCount notFound: notFoundClassNames detailsCount: detailsCount [
 	"Assert the JSON object representation."
 	
 	self assert: (jsonData at: #total) equals: totalCount.
@@ -51,10 +51,10 @@ GtLExampleWithResultStatusesDomainObjectExamples >> assertLlmJsonObject: jsonDat
 ]
 
 { #category : #assertions }
-GtLExampleWithResultStatusesDomainObjectExamples >> assertStatusesDomainObject: aDomainObject total: totalCount skipped: skippedCount success: successCount failure: failureCount error: errorCount notFound: notFoundClassNames [
+GtLExampleWithResultStatusesExamples >> assertStatusesDomainObject: aDomainObject total: totalCount skipped: skippedCount success: successCount failure: failureCount error: errorCount notFound: notFoundClassNames [
 	"Assert all counts and properties on a GtLExampleWithResultStatusesDomainObject."
 	
-	self assert: (aDomainObject isKindOf: GtLExampleWithResultStatusesDomainObject).
+	self assert: (aDomainObject isKindOf: GtLExampleWithResultStatuses).
 	self assert: aDomainObject totalCount equals: totalCount.
 	self assert: aDomainObject skippedCount equals: skippedCount.
 	self assert: aDomainObject successResultCount equals: successCount.
@@ -65,39 +65,28 @@ GtLExampleWithResultStatusesDomainObjectExamples >> assertStatusesDomainObject: 
 ]
 
 { #category : #private }
-GtLExampleWithResultStatusesDomainObjectExamples >> createExampleStatusFor: aCompiledMethod withObjectId: anObjectIdOrNil [
+GtLExampleWithResultStatusesExamples >> createExampleStatusFor: aCompiledMethod withObjectId: anObjectIdOrNil [
 	"Create an example status domain object for the given method."
-	^ GtLExampleWithResultStatusDomainObject new
+	^ GtLExampleWithResultStatus new
 		exampleWithResult: (self runExampleMethod: aCompiledMethod);
 		objectId: anObjectIdOrNil
 ]
 
 { #category : #private }
-GtLExampleWithResultStatusesDomainObjectExamples >> createSkippedExampleStatusFor: aCompiledMethod withObjectId: anObjectIdOrNil [
+GtLExampleWithResultStatusesExamples >> createSkippedExampleStatusFor: aCompiledMethod withObjectId: anObjectIdOrNil [
 	"Create an example status domain object for a skipped example (not run)."
 	| example |
 	example := aCompiledMethod gtExample asExampleWithResult.
 	"Don't run the example - it will be in skipped state"
-	^ GtLExampleWithResultStatusDomainObject new
+	^ GtLExampleWithResultStatus new
 		exampleWithResult: example;
 		objectId: anObjectIdOrNil
 ]
 
-{ #category : #private }
-GtLExampleWithResultStatusesDomainObjectExamples >> detailJsonForClassName: className selector: selector status: status objectId: objectId [
-	"Create a detail JSON object."
-	^ NeoJSONObject new
-		at: #className put: className;
-		at: #selector put: selector;
-		at: #status put: status;
-		at: #objectId put: objectId;
-		yourself
-]
-
 { #category : #'examples - data views' }
-GtLExampleWithResultStatusesDomainObjectExamples >> domainObjectDataViews [
+GtLExampleWithResultStatusesExamples >> domainObjectDataViews [
 	<gtExample>
-	<return: #GtLExampleWithResultStatusesDomainObject>
+	<return: #GtLExampleWithResultStatuses>
 	| domainObject compositeView dataBlock jsonData |
 	
 	domainObject := self domainObjectWithMixedStatuses.
@@ -117,12 +106,12 @@ GtLExampleWithResultStatusesDomainObjectExamples >> domainObjectDataViews [
 ]
 
 { #category : #examples }
-GtLExampleWithResultStatusesDomainObjectExamples >> domainObjectWithEmptyStatuses [
+GtLExampleWithResultStatusesExamples >> domainObjectWithEmptyStatuses [
 	<gtExample>
-	<return: #GtLExampleWithResultStatusesDomainObject>
+	<return: #GtLExampleWithResultStatuses>
 	| domainObject |
 	
-	domainObject := GtLExampleWithResultStatusesDomainObject new
+	domainObject := GtLExampleWithResultStatuses new
 		exampleWithStatuses: #();
 		notFoundClassNames: #().
 	
@@ -139,14 +128,14 @@ GtLExampleWithResultStatusesDomainObjectExamples >> domainObjectWithEmptyStatuse
 ]
 
 { #category : #examples }
-GtLExampleWithResultStatusesDomainObjectExamples >> domainObjectWithErrorExample [
+GtLExampleWithResultStatusesExamples >> domainObjectWithErrorExample [
 	<gtExample>
-	<return: #GtLExampleWithResultStatusesDomainObject>
+	<return: #GtLExampleWithResultStatuses>
 	| domainObject errorStatus jsonData |
 	
 	errorStatus := self createExampleStatusFor: (GtLExampleRunDummyExamples >> #errorExample) withObjectId: nil.
 	
-	domainObject := GtLExampleWithResultStatusesDomainObject new
+	domainObject := GtLExampleWithResultStatuses new
 		exampleWithStatuses: { errorStatus };
 		notFoundClassNames: #().
 	
@@ -188,14 +177,14 @@ GtLExampleWithResultStatusesDomainObjectExamples >> domainObjectWithErrorExample
 ]
 
 { #category : #examples }
-GtLExampleWithResultStatusesDomainObjectExamples >> domainObjectWithFailingExample [
+GtLExampleWithResultStatusesExamples >> domainObjectWithFailingExample [
 	<gtExample>
-	<return: #GtLExampleWithResultStatusesDomainObject>
+	<return: #GtLExampleWithResultStatuses>
 	| domainObject failureStatus jsonData |
 	
 	failureStatus := self createExampleStatusFor: (GtLExampleRunDummyExamples >> #failingExample) withObjectId: nil.
 	
-	domainObject := GtLExampleWithResultStatusesDomainObject new
+	domainObject := GtLExampleWithResultStatuses new
 		exampleWithStatuses: { failureStatus };
 		notFoundClassNames: #().
 	
@@ -237,9 +226,9 @@ GtLExampleWithResultStatusesDomainObjectExamples >> domainObjectWithFailingExamp
 ]
 
 { #category : #examples }
-GtLExampleWithResultStatusesDomainObjectExamples >> domainObjectWithMixedStatuses [
+GtLExampleWithResultStatusesExamples >> domainObjectWithMixedStatuses [
 	<gtExample>
-	<return: #GtLExampleWithResultStatusesDomainObject>
+	<return: #GtLExampleWithResultStatuses>
 	| domainObject successStatus failureStatus errorStatus skippedStatus jsonData |
 	
 	successStatus := self createExampleStatusFor: (GtLExampleRunDummyExamples >> #successfulExample) withObjectId: 'success-id'.
@@ -247,7 +236,7 @@ GtLExampleWithResultStatusesDomainObjectExamples >> domainObjectWithMixedStatuse
 	errorStatus := self createExampleStatusFor: (GtLExampleRunDummyExamples >> #errorExample) withObjectId: nil.
 	skippedStatus := self createSkippedExampleStatusFor: (GtLExampleRunDummyExamples >> #successfulExampleWithObjectWithADataJsonView) withObjectId: nil.
 	
-	domainObject := GtLExampleWithResultStatusesDomainObject new
+	domainObject := GtLExampleWithResultStatuses new
 		exampleWithStatuses: { successStatus. failureStatus. errorStatus. skippedStatus };
 		notFoundClassNames: #().
 	
@@ -281,15 +270,15 @@ GtLExampleWithResultStatusesDomainObjectExamples >> domainObjectWithMixedStatuse
 ]
 
 { #category : #examples }
-GtLExampleWithResultStatusesDomainObjectExamples >> domainObjectWithNotFoundClasses [
+GtLExampleWithResultStatusesExamples >> domainObjectWithNotFoundClasses [
 	<gtExample>
-	<return: #GtLExampleWithResultStatusesDomainObject>
+	<return: #GtLExampleWithResultStatuses>
 	| domainObject successStatus jsonData notFoundClasses |
 	
 	successStatus := self createExampleStatusFor: (GtLExampleRunDummyExamples >> #successfulExample) withObjectId: 'test-id'.
 	notFoundClasses := #('NonExistentClass1' 'NonExistentClass2').
 	
-	domainObject := GtLExampleWithResultStatusesDomainObject new
+	domainObject := GtLExampleWithResultStatuses new
 		exampleWithStatuses: { successStatus };
 		notFoundClassNames: notFoundClasses.
 	
@@ -317,14 +306,14 @@ GtLExampleWithResultStatusesDomainObjectExamples >> domainObjectWithNotFoundClas
 ]
 
 { #category : #examples }
-GtLExampleWithResultStatusesDomainObjectExamples >> domainObjectWithSkippedExample [
+GtLExampleWithResultStatusesExamples >> domainObjectWithSkippedExample [
 	<gtExample>
-	<return: #GtLExampleWithResultStatusesDomainObject>
+	<return: #GtLExampleWithResultStatuses>
 	| domainObject skippedStatus jsonData |
 	
 	skippedStatus := self createSkippedExampleStatusFor: (GtLExampleRunDummyExamples >> #successfulExample) withObjectId: nil.
 	
-	domainObject := GtLExampleWithResultStatusesDomainObject new
+	domainObject := GtLExampleWithResultStatuses new
 		exampleWithStatuses: { skippedStatus };
 		notFoundClassNames: #().
 	
@@ -366,14 +355,14 @@ GtLExampleWithResultStatusesDomainObjectExamples >> domainObjectWithSkippedExamp
 ]
 
 { #category : #examples }
-GtLExampleWithResultStatusesDomainObjectExamples >> domainObjectWithSuccessfulExample [
+GtLExampleWithResultStatusesExamples >> domainObjectWithSuccessfulExample [
 	<gtExample>
-	<return: #GtLExampleWithResultStatusesDomainObject>
+	<return: #GtLExampleWithResultStatuses>
 	| domainObject successStatus jsonData |
 	
 	successStatus := self createExampleStatusFor: (GtLExampleRunDummyExamples >> #successfulExample) withObjectId: 'test-obj-id'.
 	
-	domainObject := GtLExampleWithResultStatusesDomainObject new
+	domainObject := GtLExampleWithResultStatuses new
 		exampleWithStatuses: { successStatus };
 		notFoundClassNames: #().
 	
@@ -416,14 +405,14 @@ GtLExampleWithResultStatusesDomainObjectExamples >> domainObjectWithSuccessfulEx
 ]
 
 { #category : #private }
-GtLExampleWithResultStatusesDomainObjectExamples >> findExampleStatusFor: aSelector in: aDomainObject [
+GtLExampleWithResultStatusesExamples >> findExampleStatusFor: aSelector in: aDomainObject [
 	"Find an example status by selector in the domain object."
 	^ aDomainObject exampleWithStatuses 
 		detect: [ :es | es exampleWithResult example method selector = aSelector ]
 ]
 
 { #category : #'examples - json' }
-GtLExampleWithResultStatusesDomainObjectExamples >> jsonSerializationForEmptyStatuses [
+GtLExampleWithResultStatusesExamples >> jsonSerializationForEmptyStatuses [
 	<gtExample>
 	<return: #NeoJSONObject>
 	| domainObject jsonData expectedJson |
@@ -446,20 +435,27 @@ GtLExampleWithResultStatusesDomainObjectExamples >> jsonSerializationForEmptySta
 	^ jsonData
 ]
 
-{ #category : #'examples - json' }
-GtLExampleWithResultStatusesDomainObjectExamples >> jsonSerializationForErrorExample [
+{ #category : #'examples - json serialization' }
+GtLExampleWithResultStatusesExamples >> jsonSerializationForErrorExample [
 	<gtExample>
 	<return: #NeoJSONObject>
-	| domainObject jsonData expectedJson expectedDetail |
+	| domainObject jsonData expectedJson expectedDetail errorDetails |
 	
 	domainObject := self domainObjectWithErrorExample.
 	jsonData := domainObject llmJsonObject.
 	
-	expectedDetail := self 
-		detailJsonForClassName: 'GtLExampleRunDummyExamples' 
-		selector: 'errorExample' 
-		status: 'error' 
-		objectId: nil.
+	errorDetails := NeoJSONObject new
+		at: #errorMessage put: 'Intentional example error';
+		at: #errorClass put: 'Error';
+		yourself.
+	
+	expectedDetail := NeoJSONObject new
+		at: #className put: 'GtLExampleRunDummyExamples';
+		at: #selector put: 'errorExample';
+		at: #status put: 'error';
+		at: #objectId put: nil;
+		at: #errorDetails put: errorDetails;
+		yourself.
 	
 	expectedJson := NeoJSONObject new
 		at: #total put: 1;
@@ -476,20 +472,27 @@ GtLExampleWithResultStatusesDomainObjectExamples >> jsonSerializationForErrorExa
 	^ jsonData
 ]
 
-{ #category : #'examples - json' }
-GtLExampleWithResultStatusesDomainObjectExamples >> jsonSerializationForFailingExample [
+{ #category : #'examples - json serialization' }
+GtLExampleWithResultStatusesExamples >> jsonSerializationForFailingExample [
 	<gtExample>
 	<return: #NeoJSONObject>
-	| domainObject jsonData expectedJson expectedDetail |
+	| domainObject jsonData expectedJson expectedDetail errorDetails |
 	
 	domainObject := self domainObjectWithFailingExample.
 	jsonData := domainObject llmJsonObject.
 	
-	expectedDetail := self 
-		detailJsonForClassName: 'GtLExampleRunDummyExamples' 
-		selector: 'failingExample' 
-		status: 'failure' 
-		objectId: nil.
+	errorDetails := NeoJSONObject new
+		at: #errorMessage put: 'Assertion failed';
+		at: #errorClass put: 'AssertionFailure';
+		yourself.
+	
+	expectedDetail := NeoJSONObject new
+		at: #className put: 'GtLExampleRunDummyExamples';
+		at: #selector put: 'failingExample';
+		at: #status put: 'failure';
+		at: #objectId put: nil;
+		at: #errorDetails put: errorDetails;
+		yourself.
 	
 	expectedJson := NeoJSONObject new
 		at: #total put: 1;
@@ -506,14 +509,54 @@ GtLExampleWithResultStatusesDomainObjectExamples >> jsonSerializationForFailingE
 	^ jsonData
 ]
 
-{ #category : #'examples - json' }
-GtLExampleWithResultStatusesDomainObjectExamples >> jsonSerializationForMixedStatuses [
+{ #category : #'examples - json serialization' }
+GtLExampleWithResultStatusesExamples >> jsonSerializationForMixedStatuses [
 	<gtExample>
 	<return: #NeoJSONObject>
-	| domainObject jsonData expectedJson |
+	| domainObject jsonData expectedJson successDetail failureDetail errorDetail skippedDetail failureErrorDetails errorErrorDetails |
 	
 	domainObject := self domainObjectWithMixedStatuses.
 	jsonData := domainObject llmJsonObject.
+	
+	successDetail := NeoJSONObject new
+		at: #className put: 'GtLExampleRunDummyExamples';
+		at: #selector put: 'successfulExample';
+		at: #status put: 'success';
+		at: #objectId put: 'success-id';
+		yourself.
+	
+	failureErrorDetails := NeoJSONObject new
+		at: #errorMessage put: 'Assertion failed';
+		at: #errorClass put: 'AssertionFailure';
+		yourself.
+	
+	failureDetail := NeoJSONObject new
+		at: #className put: 'GtLExampleRunDummyExamples';
+		at: #selector put: 'failingExample';
+		at: #status put: 'failure';
+		at: #objectId put: nil;
+		at: #errorDetails put: failureErrorDetails;
+		yourself.
+	
+	errorErrorDetails := NeoJSONObject new
+		at: #errorMessage put: 'Intentional example error';
+		at: #errorClass put: 'Error';
+		yourself.
+	
+	errorDetail := NeoJSONObject new
+		at: #className put: 'GtLExampleRunDummyExamples';
+		at: #selector put: 'errorExample';
+		at: #status put: 'error';
+		at: #objectId put: nil;
+		at: #errorDetails put: errorErrorDetails;
+		yourself.
+	
+	skippedDetail := NeoJSONObject new
+		at: #className put: 'GtLExampleRunDummyExamples';
+		at: #selector put: 'successfulExampleWithObjectWithADataJsonView';
+		at: #status put: 'skipped';
+		at: #objectId put: nil;
+		yourself.
 	
 	expectedJson := NeoJSONObject new
 		at: #total put: 4;
@@ -522,12 +565,7 @@ GtLExampleWithResultStatusesDomainObjectExamples >> jsonSerializationForMixedSta
 		at: #errors put: 1;
 		at: #skips put: 1;
 		at: #notFound put: #();
-		at: #details put: {
-			self detailJsonForClassName: 'GtLExampleRunDummyExamples' selector: 'successfulExample' status: 'success' objectId: 'success-id'.
-			self detailJsonForClassName: 'GtLExampleRunDummyExamples' selector: 'failingExample' status: 'failure' objectId: nil.
-			self detailJsonForClassName: 'GtLExampleRunDummyExamples' selector: 'errorExample' status: 'error' objectId: nil.
-			self detailJsonForClassName: 'GtLExampleRunDummyExamples' selector: 'successfulExampleWithObjectWithADataJsonView' status: 'skipped' objectId: nil
-		};
+		at: #details put: { successDetail. failureDetail. errorDetail. skippedDetail };
 		yourself.
 	
 	self assert: jsonData equals: expectedJson.
@@ -535,8 +573,8 @@ GtLExampleWithResultStatusesDomainObjectExamples >> jsonSerializationForMixedSta
 	^ jsonData
 ]
 
-{ #category : #'examples - json' }
-GtLExampleWithResultStatusesDomainObjectExamples >> jsonSerializationForNotFoundClasses [
+{ #category : #'examples - json serialization' }
+GtLExampleWithResultStatusesExamples >> jsonSerializationForNotFoundClasses [
 	<gtExample>
 	<return: #NeoJSONObject>
 	| domainObject jsonData expectedJson expectedDetail |
@@ -544,11 +582,12 @@ GtLExampleWithResultStatusesDomainObjectExamples >> jsonSerializationForNotFound
 	domainObject := self domainObjectWithNotFoundClasses.
 	jsonData := domainObject llmJsonObject.
 	
-	expectedDetail := self 
-		detailJsonForClassName: 'GtLExampleRunDummyExamples' 
-		selector: 'successfulExample' 
-		status: 'success' 
-		objectId: 'test-id'.
+	expectedDetail := NeoJSONObject new
+		at: #className put: 'GtLExampleRunDummyExamples';
+		at: #selector put: 'successfulExample';
+		at: #status put: 'success';
+		at: #objectId put: 'test-id';
+		yourself.
 	
 	expectedJson := NeoJSONObject new
 		at: #total put: 1;
@@ -565,8 +604,8 @@ GtLExampleWithResultStatusesDomainObjectExamples >> jsonSerializationForNotFound
 	^ jsonData
 ]
 
-{ #category : #'examples - json' }
-GtLExampleWithResultStatusesDomainObjectExamples >> jsonSerializationForSkippedExample [
+{ #category : #'examples - json serialization' }
+GtLExampleWithResultStatusesExamples >> jsonSerializationForSkippedExample [
 	<gtExample>
 	<return: #NeoJSONObject>
 	| domainObject jsonData expectedJson expectedDetail |
@@ -574,11 +613,12 @@ GtLExampleWithResultStatusesDomainObjectExamples >> jsonSerializationForSkippedE
 	domainObject := self domainObjectWithSkippedExample.
 	jsonData := domainObject llmJsonObject.
 	
-	expectedDetail := self 
-		detailJsonForClassName: 'GtLExampleRunDummyExamples' 
-		selector: 'successfulExample' 
-		status: 'skipped' 
-		objectId: nil.
+	expectedDetail := NeoJSONObject new
+		at: #className put: 'GtLExampleRunDummyExamples';
+		at: #selector put: 'successfulExample';
+		at: #status put: 'skipped';
+		at: #objectId put: nil;
+		yourself.
 	
 	expectedJson := NeoJSONObject new
 		at: #total put: 1;
@@ -595,8 +635,8 @@ GtLExampleWithResultStatusesDomainObjectExamples >> jsonSerializationForSkippedE
 	^ jsonData
 ]
 
-{ #category : #'examples - json' }
-GtLExampleWithResultStatusesDomainObjectExamples >> jsonSerializationForSuccessfulExample [
+{ #category : #'examples - json serialization' }
+GtLExampleWithResultStatusesExamples >> jsonSerializationForSuccessfulExample [
 	<gtExample>
 	<return: #NeoJSONObject>
 	| domainObject jsonData expectedJson expectedDetail |
@@ -604,11 +644,12 @@ GtLExampleWithResultStatusesDomainObjectExamples >> jsonSerializationForSuccessf
 	domainObject := self domainObjectWithSuccessfulExample.
 	jsonData := domainObject llmJsonObject.
 	
-	expectedDetail := self 
-		detailJsonForClassName: 'GtLExampleRunDummyExamples' 
-		selector: 'successfulExample' 
-		status: 'success' 
-		objectId: 'test-obj-id'.
+	expectedDetail := NeoJSONObject new
+		at: #className put: 'GtLExampleRunDummyExamples';
+		at: #selector put: 'successfulExample';
+		at: #status put: 'success';
+		at: #objectId put: 'test-obj-id';
+		yourself.
 	
 	expectedJson := NeoJSONObject new
 		at: #total put: 1;
@@ -626,7 +667,7 @@ GtLExampleWithResultStatusesDomainObjectExamples >> jsonSerializationForSuccessf
 ]
 
 { #category : #private }
-GtLExampleWithResultStatusesDomainObjectExamples >> runExampleMethod: aCompiledMethod [
+GtLExampleWithResultStatusesExamples >> runExampleMethod: aCompiledMethod [
 	"Run the given example method and return the example with result."
 	| example |
 	example := aCompiledMethod gtExample asExampleWithResult.

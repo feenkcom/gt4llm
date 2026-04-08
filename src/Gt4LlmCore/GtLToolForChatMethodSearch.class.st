@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'provider'
 	],
-	#category : 'Gt4LlmCore-Tools'
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #'as yet unclassified' }
@@ -31,11 +31,6 @@ methods that are in {{gtClass:BlElement}} and also refer to `assert:description:
 ```
 methods that are annotated with `gtView` pragmas
 ```'
-]
-
-{ #category : #accessing }
-GtLToolForChatMethodSearch >> isUsingDataViews [
-	^ true
 ]
 
 { #category : #'as yet unclassified' }

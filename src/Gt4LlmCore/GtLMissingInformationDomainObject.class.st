@@ -5,7 +5,7 @@ Class {
 		'missingModelName',
 		'errorMessage'
 	],
-	#category : 'Gt4LlmCore-Domain Objects'
+	#category : #'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #accessing }
@@ -69,16 +69,4 @@ GtLMissingInformationDomainObject >> missingModelNameDescription [
 			label: 'Missing model name';
 			accessor: #missingModelName;
 			beRequired
-]
-
-{ #category : #'api - serializing' }
-GtLMissingInformationDomainObject >> serializeToLlmJsonObject [
-	"Return a JSON dictionary that represents the domain object."
-	
-	^ GtMagritteJSONDataExporter exportObject: self
-]
-
-{ #category : #testing }
-GtLMissingInformationDomainObject >> wasMovedToMagritteDescriptions [
-	^ true
 ]

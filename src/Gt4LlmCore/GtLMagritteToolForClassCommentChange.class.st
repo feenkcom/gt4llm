@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLMagritteToolForClassCommentChange,
 	#superclass : #GtLAbstractMagritteFunctionTool,
-	#category : 'Gt4LlmCore-Tools'
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #magritte }
@@ -41,11 +41,6 @@ Example JSON response:
   "className": "MyClass",
   "status": "changed"
 }'
-]
-
-{ #category : #testing }
-GtLMagritteToolForClassCommentChange >> isUsingDataViews [
-	^true
 ]
 
 { #category : #magritte }

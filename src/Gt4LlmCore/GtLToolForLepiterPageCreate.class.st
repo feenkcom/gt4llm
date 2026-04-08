@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'logicalDatabase'
 	],
-	#category : 'Gt4LlmCore-Tools'
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }
@@ -49,11 +49,6 @@ Example JSON response:
 GtLToolForLepiterPageCreate >> initialize [
 	super initialize.
 	logicalDatabase := LeDatabasesRegistry defaultLogicalDatabase
-]
-
-{ #category : #'api - testing' }
-GtLToolForLepiterPageCreate >> isUsingDataViews [
-	^ true
 ]
 
 { #category : #accessing }

@@ -6,17 +6,8 @@ Class {
 		'protocolName',
 		'sourceCode'
 	],
-	#category : 'Gt4LlmCore-Domain Objects'
+	#category : #'Gt4LlmCore-Domain Objects'
 }
-
-{ #category : #magritte }
-GtLMethodCompilationExceptionDomainObject >> descriptionDescription [
-	<magritteDescription>
-	^ MAStringDescription new
-		label: 'Description';
-		accessor: #description;
-		beRequired
-]
 
 { #category : #views }
 GtLMethodCompilationExceptionDomainObject >> gtSourceCodeFor: aView [
@@ -29,13 +20,17 @@ GtLMethodCompilationExceptionDomainObject >> gtSourceCodeFor: aView [
 		text: [ sourceCode ]
 ]
 
-{ #category : #'llm views' }
-GtLMethodCompilationExceptionDomainObject >> llmJsonObject [
-	^super llmJsonObject
-		at: 'methodClass' put: self targetClass name asString;
-		at: 'methodProtocol' put: self protocolName asString;
-		at: 'sourceCode' put: self sourceCode;
-		yourself
+{ #category : #accessing }
+GtLMethodCompilationExceptionDomainObject >> llmRawDataViewFor: aDataView [
+	^ aDataView 
+			title: 'Exception generic details';
+			jsonData: [ 
+				NeoJSONObject new
+					at: 'errorReason' put: self description;
+					at: 'methodClass' put: self targetClassName asString;
+					at: 'methodProtocol' put: self protocolName asString;
+					at: 'sourceCode' put: self sourceCode;
+					yourself ]
 ]
 
 { #category : #accessing }
@@ -48,28 +43,6 @@ GtLMethodCompilationExceptionDomainObject >> protocolName: anObject [
 	protocolName := anObject
 ]
 
-{ #category : #magritte }
-GtLMethodCompilationExceptionDomainObject >> protocolNameDescription [
-	<magritteDescription>
-	^ MAStringDescription new
-		label: 'Protocol';
-		accessor: #protocolName;
-		name: #methodProtocol;
-		beRequired
-]
-
-{ #category : #serialization }
-GtLMethodCompilationExceptionDomainObject >> serializeToLlmJsonObject [
-	"Return a JSON dictionary that represents the domain object."
-
-	<return: #NeoJSONObject>
-	^ super serializeToLlmJsonObject
-		at: #methodClass put: self targetClass name asString;
-		at: #methodProtocol put: self protocolName asString;
-		at: #sourceCode put: self sourceCode;
-		yourself
-]
-
 { #category : #accessing }
 GtLMethodCompilationExceptionDomainObject >> sourceCode [
 	^ sourceCode
@@ -78,24 +51,6 @@ GtLMethodCompilationExceptionDomainObject >> sourceCode [
 { #category : #accessing }
 GtLMethodCompilationExceptionDomainObject >> sourceCode: anObject [
 	sourceCode := anObject
-]
-
-{ #category : #magritte }
-GtLMethodCompilationExceptionDomainObject >> sourceCodeDescription [
-	<magritteDescription>
-	^ MAStringDescription new
-		label: 'Source code';
-		accessor: #sourceCode;
-		beRequired
-]
-
-{ #category : #magritte }
-GtLMethodCompilationExceptionDomainObject >> stackTraceDescription [
-	<magritteDescription>
-	^ MAStringDescription new
-		label: 'Stack trace';
-		accessor: #stackTrace;
-		beRequired
 ]
 
 { #category : #accessing }
@@ -111,13 +66,4 @@ GtLMethodCompilationExceptionDomainObject >> targetClass: anObject [
 { #category : #accessing }
 GtLMethodCompilationExceptionDomainObject >> targetClassName [
 	^ targetClass name
-]
-
-{ #category : #magritte }
-GtLMethodCompilationExceptionDomainObject >> targetClassNameDescription [
-	<magritteDescription>
-	^ MAStringDescription new
-		label: 'Target class';
-		accessor: #targetClassName;
-		beRequired
 ]

@@ -7,7 +7,7 @@ Class {
 	#instVars : [
 		'code'
 	],
-	#category : 'Gt4LlmCore-Domain Objects'
+	#category : #'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #accessing }
@@ -49,19 +49,13 @@ GtLSmalltalkCodeEvaluationExceptionDomainObject >> gtCodeFor: aView [
 						hMatchParent) ]
 ]
 
-{ #category : #'llm views' }
-GtLSmalltalkCodeEvaluationExceptionDomainObject >> llmJsonObject [
-	^super llmJsonObject
-		at: 'code' put: self code;
-		yourself
-]
-
-{ #category : #serialization }
-GtLSmalltalkCodeEvaluationExceptionDomainObject >> serializeToLlmJsonObject [
-	"Return a JSON dictionary that represents the domain object."
-
-	<return: #NeoJSONObject>
-	^ super serializeToLlmJsonObject
-		at: 'code' put: self code;
-		yourself
+{ #category : #accessing }
+GtLSmalltalkCodeEvaluationExceptionDomainObject >> llmRawDataViewFor: aDataView [
+	^ aDataView 
+			title: 'Exception generic details';
+			jsonData: [ 
+				NeoJSONObject new
+					at: 'errorReason' put: self description;
+					at: 'code' put: self code;
+					yourself ]
 ]
