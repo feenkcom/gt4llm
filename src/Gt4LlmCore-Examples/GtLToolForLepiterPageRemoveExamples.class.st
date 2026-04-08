@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLToolForLepiterPageRemoveExamples,
 	#superclass : #GtLAbstractMagritteFunctionToolExamples,
-	#category : 'Gt4LlmCore-Examples-Tools'
+	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #'examples - errors' }

@@ -4,7 +4,7 @@ Examples for GtLToolForObjectView demonstrating data views serialization and err
 Class {
 	#name : #GtLToolForObjectViewExamples,
 	#superclass : #GtLAbstractMagritteFunctionToolExamples,
-	#category : 'Gt4LlmCore-Examples-Tools'
+	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #examples }

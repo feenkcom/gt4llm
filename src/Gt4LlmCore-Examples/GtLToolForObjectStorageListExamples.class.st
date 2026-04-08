@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLToolForObjectStorageListExamples,
 	#superclass : #GtLAbstractMagritteFunctionToolExamples,
-	#category : 'Gt4LlmCore-Examples-Tools'
+	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #examples }
@@ -20,24 +20,6 @@ GtLToolForObjectStorageListExamples >> listEmptyObjectStorage [
 	domainObject := result targetObject.
 	self assert: (domainObject isKindOf: GtLObjectStorageItems).
 	self assert: domainObject items isEmpty.
-	^ domainObject
-]
-
-{ #category : #examples }
-GtLToolForObjectStorageListExamples >> listObjectsWithoutStorage [
-	<gtExample>
-	| tool call result domainObject |
-	tool := GtLToolForObjectStorageList new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: Dictionary new.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self
-		assertMissingInformation: domainObject
-		withModelName: 'objectStorage'
-		errorMessage: 'Missing objectStorage'.
 	^ domainObject
 ]
 
@@ -64,5 +46,23 @@ GtLToolForObjectStorageListExamples >> listObjectsWithStorage [
 	twoItem := domainObject items detect: [ :each | each objectValue = 2 ].
 	self assert: oneItem reasonString equals: 'first string'.
 	self assert: twoItem reasonString equals: 'second number'.
+	^ domainObject
+]
+
+{ #category : #examples }
+GtLToolForObjectStorageListExamples >> listObjectsWithoutStorage [
+	<gtExample>
+	| tool call result domainObject |
+	tool := GtLToolForObjectStorageList new.
+	call := GtLFunctionToolCall new.
+	call rawArguments: Dictionary new.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	domainObject := result targetObject.
+	self
+		assertMissingInformation: domainObject
+		withModelName: 'objectStorage'
+		errorMessage: 'Missing objectStorage'.
 	^ domainObject
 ]
