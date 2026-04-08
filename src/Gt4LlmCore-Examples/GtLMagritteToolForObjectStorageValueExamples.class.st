@@ -10,19 +10,15 @@ Class {
 { #category : #examples }
 GtLMagritteToolForObjectStorageValueExamples >> retrieveMissingStoredObjectValue [
 	<gtExample>
-	| objectStorage tool call result domainObject |
+	| objectStorage tool domainObject |
 	objectStorage := GtLObjectStorage new.
 	tool := GtLMagritteToolForObjectStorageValue new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: {
-		'objectId' -> 'missing-object-id'
-	} asDictionary.
-	result := tool
-		performToolCall: call
+	domainObject := self
+		executeTool: tool
+		withArguments: {
+			'objectId' -> 'missing-object-id'
+		} asDictionary
 		inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
 	self
 		assertMissingObject: domainObject
 		withObjectName: 'missing-object-id'
@@ -33,20 +29,16 @@ GtLMagritteToolForObjectStorageValueExamples >> retrieveMissingStoredObjectValue
 { #category : #examples }
 GtLMagritteToolForObjectStorageValueExamples >> retrieveStoredObjectValue [
 	<gtExample>
-	| objectStorage storedObjectId tool call result domainObject |
+	| objectStorage storedObjectId tool domainObject |
 	objectStorage := GtLObjectStorage new.
 	storedObjectId := objectStorage addNewObject: GtLSerializedObjectValueTestObject exampleInstance reason: 'example object'.
 	tool := GtLMagritteToolForObjectStorageValue new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: {
-		'objectId' -> storedObjectId
-	} asDictionary.
-	result := tool
-		performToolCall: call
+	domainObject := self
+		executeTool: tool
+		withArguments: {
+			'objectId' -> storedObjectId
+		} asDictionary
 		inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
 	self assert: (domainObject isKindOf: GtLObjectStorageValueResult).
 	self assert: domainObject object == (objectStorage objectAt: storedObjectId).
 	self assert: domainObject objectId equals: storedObjectId.
@@ -59,17 +51,13 @@ GtLMagritteToolForObjectStorageValueExamples >> retrieveStoredObjectValue [
 { #category : #examples }
 GtLMagritteToolForObjectStorageValueExamples >> retrieveStoredObjectValueWithEmptyObjectId [
 	<gtExample>
-	| objectStorage tool call result domainObject |
+	| objectStorage tool domainObject |
 	objectStorage := GtLObjectStorage new.
 	tool := GtLMagritteToolForObjectStorageValue new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: { 'objectId' -> '   ' } asDictionary.
-	result := tool
-		performToolCall: call
+	domainObject := self
+		executeTool: tool
+		withArguments: { 'objectId' -> '   ' } asDictionary
 		inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
 	self
 		assertMissingArgument: domainObject
 		withArgumentName: 'objectId'
@@ -80,17 +68,13 @@ GtLMagritteToolForObjectStorageValueExamples >> retrieveStoredObjectValueWithEmp
 { #category : #examples }
 GtLMagritteToolForObjectStorageValueExamples >> retrieveStoredObjectValueWithMissingObjectId [
 	<gtExample>
-	| objectStorage tool call result domainObject |
+	| objectStorage tool domainObject |
 	objectStorage := GtLObjectStorage new.
 	tool := GtLMagritteToolForObjectStorageValue new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: Dictionary new.
-	result := tool
-		performToolCall: call
+	domainObject := self
+		executeTool: tool
+		withArguments: Dictionary new
 		inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
 	self
 		assertMissingRequiredProperties: domainObject
 		withPropertyNames: #('objectId')
@@ -102,16 +86,13 @@ GtLMagritteToolForObjectStorageValueExamples >> retrieveStoredObjectValueWithMis
 { #category : #examples }
 GtLMagritteToolForObjectStorageValueExamples >> retrieveStoredObjectValueWithoutStorage [
 	<gtExample>
-	| tool call result domainObject |
+	| tool domainObject |
 	tool := GtLMagritteToolForObjectStorageValue new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: {
-		'objectId' -> 'missing'
-	} asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
+	domainObject := self
+		executeTool: tool
+		withArguments: {
+			'objectId' -> 'missing'
+		} asDictionary.
 	self
 		assertMissingInformation: domainObject
 		withModelName: 'objectStorage'

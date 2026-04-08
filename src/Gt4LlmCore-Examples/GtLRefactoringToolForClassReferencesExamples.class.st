@@ -7,27 +7,26 @@ Class {
 { #category : #examples }
 GtLRefactoringToolForClassReferencesExamples >> classReferencesForExistingClass [
 	<gtExample>
-	| tool call result |
+	| tool call targetObject |
 	tool := self toolWithExampleReferences.
-	call := GtLFunctionToolCall new.
-	call rawArguments: {'targetClassName' -> 'GtLRefactoringClassReferencesTarget'} asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: result isErrorDomainObject not.
-	self assert: result targetObject references isNotEmpty.
+	call := self
+		executeTool: tool
+		withArguments: {'targetClassName' -> 'GtLRefactoringClassReferencesTarget'} asDictionary.
+	targetObject := call result targetObject.
+	self assert: targetObject isErrorDomainObject not.
+	self assert: targetObject references isNotEmpty.
 	^ call
 ]
 
 { #category : #examples }
 GtLRefactoringToolForClassReferencesExamples >> classReferencesForUnknownClass [
 	<gtExample>
-	| tool call result |
+	| tool call |
 	tool := self toolWithExampleReferences.
-	call := GtLFunctionToolCall new.
-	call rawArguments: {'targetClassName' -> 'UnknownClassName'} asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: result isErrorDomainObject.
+	call := self
+		executeTool: tool
+		withArguments: {'targetClassName' -> 'UnknownClassName'} asDictionary.
+	self assert: call result targetObject isErrorDomainObject.
 	^ call
 ]
 

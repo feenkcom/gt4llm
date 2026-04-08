@@ -7,27 +7,26 @@ Class {
 { #category : #examples }
 GtLRefactoringToolForClassLookupExamples >> classLookupForExistingClass [
 	<gtExample>
-	| tool call result |
+	| tool call targetObject |
 	tool := self toolWithExampleClass.
-	call := GtLFunctionToolCall new.
-	call rawArguments: {'targetClassName' -> 'GtLRefactoringToolForClassLookupExampleClass'} asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: result isErrorDomainObject not.
-	self assert: result targetObject targetClass name equals: 'GtLRefactoringToolForClassLookupExampleClass'.
+	call := self
+		executeTool: tool
+		withArguments: {'targetClassName' -> 'GtLRefactoringToolForClassLookupExampleClass'} asDictionary.
+	targetObject := call result targetObject.
+	self assert: targetObject isErrorDomainObject not.
+	self assert: targetObject targetClass name equals: 'GtLRefactoringToolForClassLookupExampleClass'.
 	^ call
 ]
 
 { #category : #examples }
 GtLRefactoringToolForClassLookupExamples >> classLookupForUnknownClass [
 	<gtExample>
-	| tool call result |
+	| tool call |
 	tool := self toolWithExampleClass.
-	call := GtLFunctionToolCall new.
-	call rawArguments: {'targetClassName' -> 'NonExistentClass'} asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: result isErrorDomainObject.
+	call := self
+		executeTool: tool
+		withArguments: {'targetClassName' -> 'NonExistentClass'} asDictionary.
+	self assert: call result targetObject isErrorDomainObject.
 	^ call
 ]
 

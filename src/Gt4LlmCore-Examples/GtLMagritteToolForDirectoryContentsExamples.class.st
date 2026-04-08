@@ -8,8 +8,9 @@ Class {
 GtLMagritteToolForDirectoryContentsExamples >> directoryContentsDataViewSerialization [
 	<gtExample>
 	<return: #GtLPrimitiveMessageDataBlock>
-	| domainObject compositeView dataBlock jsonData |
-	domainObject := self directoryContentsForExistingDirectory.
+	| call domainObject compositeView dataBlock jsonData |
+	call := self directoryContentsForExistingDirectory.
+	domainObject := call result targetObject.
 	compositeView := domainObject llmDataViewsFor: GtLDataView new.
 	self assert: compositeView dataViews size equals: 1.
 	
@@ -34,19 +35,18 @@ GtLMagritteToolForDirectoryContentsExamples >> directoryContentsForDirectoryWith
 	root := tempDirectory reference.
 	fileOne := root / 'one.txt'.
 	fileTwo := root / 'two.md'.
-	[ | tool call result domainObject |
+	[ | tool call targetObject |
 		fileOne writeStreamDo: [ :stream | stream nextPutAll: 'First' ].
 		fileTwo writeStreamDo: [ :stream | stream nextPutAll: 'Second' ].
 		tool := GtLMagritteToolForDirectoryContents new.
-		call := GtLFunctionToolCall new.
-		call rawArguments: { 'directoryPath' -> root pathString } asDictionary.
-		result := tool performToolCall: call.
-		self assert: (result isKindOf: GTLDataViewWrapperModel).
-		domainObject := result targetObject.
-		self assert: (domainObject isKindOf: GtLDirectoryContents).
-		self assert: domainObject files size equals: 2.
-		self assert: domainObject directories isEmpty.
-		^ domainObject ]
+		call := self
+			executeTool: tool
+			withArguments: { 'directoryPath' -> root pathString } asDictionary.
+		targetObject := call result targetObject.
+		self assert: (targetObject isKindOf: GtLDirectoryContents).
+		self assert: targetObject files size equals: 2.
+		self assert: targetObject directories isEmpty.
+		^ call ]
 		ensure: [
 			fileOne exists ifTrue: [ fileOne delete ].
 			fileTwo exists ifTrue: [ fileTwo delete ].
@@ -61,19 +61,18 @@ GtLMagritteToolForDirectoryContentsExamples >> directoryContentsForDirectoryWith
 	root := tempDirectory reference.
 	subDirOne := root / 'dirA'.
 	subDirTwo := root / 'dirB'.
-	[ | tool call result domainObject |
+	[ | tool call targetObject |
 		subDirOne ensureCreateDirectory.
 		subDirTwo ensureCreateDirectory.
 		tool := GtLMagritteToolForDirectoryContents new.
-		call := GtLFunctionToolCall new.
-		call rawArguments: { 'directoryPath' -> root pathString } asDictionary.
-		result := tool performToolCall: call.
-		self assert: (result isKindOf: GTLDataViewWrapperModel).
-		domainObject := result targetObject.
-		self assert: (domainObject isKindOf: GtLDirectoryContents).
-		self assert: domainObject files isEmpty.
-		self assert: domainObject directories size equals: 2.
-		^ domainObject ]
+		call := self
+			executeTool: tool
+			withArguments: { 'directoryPath' -> root pathString } asDictionary.
+		targetObject := call result targetObject.
+		self assert: (targetObject isKindOf: GtLDirectoryContents).
+		self assert: targetObject files isEmpty.
+		self assert: targetObject directories size equals: 2.
+		^ call ]
 		ensure: [
 			subDirOne exists ifTrue: [ subDirOne delete ].
 			subDirTwo exists ifTrue: [ subDirTwo delete ].
@@ -86,19 +85,17 @@ GtLMagritteToolForDirectoryContentsExamples >> directoryContentsForEmptyDirector
 	| tempDirectory root |
 	tempDirectory := GtTemporaryDirectory new.
 	root := tempDirectory reference.
-	[ | tool call result domainObject |
+	[ | tool call targetObject |
 		tool := GtLMagritteToolForDirectoryContents new.
-		call := GtLFunctionToolCall new.
-		call rawArguments: { 'directoryPath' -> root pathString } asDictionary.
-		result := tool performToolCall: call.
-		self assert: call tool == tool.
-		self assert: (result isKindOf: GTLDataViewWrapperModel).
-		domainObject := result targetObject.
-		self assert: (domainObject isKindOf: GtLDirectoryContents).
-		self assert: domainObject directoryPath equals: root pathString.
-		self assert: domainObject files isEmpty.
-		self assert: domainObject directories isEmpty.
-		^ domainObject ]
+		call := self
+			executeTool: tool
+			withArguments: { 'directoryPath' -> root pathString } asDictionary.
+		targetObject := call result targetObject.
+		self assert: (targetObject isKindOf: GtLDirectoryContents).
+		self assert: targetObject directoryPath equals: root pathString.
+		self assert: targetObject files isEmpty.
+		self assert: targetObject directories isEmpty.
+		^ call ]
 		ensure: [ root exists ifTrue: [ root delete ] ]
 ]
 
@@ -111,26 +108,24 @@ GtLMagritteToolForDirectoryContentsExamples >> directoryContentsForExistingDirec
 	fileOne := root / 'one.txt'.
 	fileTwo := root / 'two.txt'.
 	subDirectory := root / 'sub'.
-	[ | tool call result domainObject |
+	[ | tool call targetObject |
 		fileOne writeStreamDo: [ :stream | stream nextPutAll: 'First file' ].
 		fileTwo writeStreamDo: [ :stream | stream nextPutAll: 'Second file' ].
 		subDirectory ensureCreateDirectory.
 		tool := GtLMagritteToolForDirectoryContents new.
-		call := GtLFunctionToolCall new.
-		call rawArguments: { 'directoryPath' -> root pathString } asDictionary.
-		result := tool performToolCall: call.
-		self assert: call tool == tool.
-		self assert: (result isKindOf: GTLDataViewWrapperModel).
-		domainObject := result targetObject.
-		self assert: (domainObject isKindOf: GtLDirectoryContents).
-		self assert: domainObject directoryPath equals: root pathString.
-		self assert: domainObject files size equals: 2.
-		self assert: (domainObject files allSatisfy: [ :each | each isFile ]).
-		self assert: (domainObject files collect: #pathString) asSet equals: {fileOne pathString. fileTwo pathString} asSet.
-		self assert: domainObject directories size equals: 1.
-		self assert: (domainObject directories allSatisfy: [ :each | each isDirectory ]).
-		self assert: domainObject directories first pathString equals: subDirectory pathString.
-		^ domainObject ]
+		call := self
+			executeTool: tool
+			withArguments: { 'directoryPath' -> root pathString } asDictionary.
+		targetObject := call result targetObject.
+		self assert: (targetObject isKindOf: GtLDirectoryContents).
+		self assert: targetObject directoryPath equals: root pathString.
+		self assert: targetObject files size equals: 2.
+		self assert: (targetObject files allSatisfy: [ :each | each isFile ]).
+		self assert: (targetObject files collect: #pathString) asSet equals: {fileOne pathString. fileTwo pathString} asSet.
+		self assert: targetObject directories size equals: 1.
+		self assert: (targetObject directories allSatisfy: [ :each | each isDirectory ]).
+		self assert: targetObject directories first pathString equals: subDirectory pathString.
+		^ call ]
 		ensure: [
 			fileOne exists ifTrue: [ fileOne delete ].
 			fileTwo exists ifTrue: [ fileTwo delete ].
@@ -143,94 +138,79 @@ GtLMagritteToolForDirectoryContentsExamples >> directoryContentsForFilePath [
 	<gtExample>
 	| fileReference |
 	fileReference := FileReference newTempFilePrefix: 'gt-llm-directory' suffix: '.txt'.
-	[ | tool call result domainObject |
+	[ | tool call |
 		fileReference writeStreamDo: [ :stream | stream nextPutAll: 'Not a directory' ].
 		tool := GtLMagritteToolForDirectoryContents new.
-		call := GtLFunctionToolCall new.
-		call rawArguments: { 'directoryPath' -> fileReference pathString } asDictionary.
-		result := tool performToolCall: call.
-		self assert: call tool == tool.
-		self assert: (result isKindOf: GTLDataViewWrapperModel).
-		domainObject := result targetObject.
+		call := self
+			executeTool: tool
+			withArguments: { 'directoryPath' -> fileReference pathString } asDictionary.
 		self 
-			assertIncorrectArgumentType: domainObject 
+			assertIncorrectArgumentType: call result targetObject 
 			withArgumentName: 'directoryPath' 
 			argumentValue: fileReference pathString 
 			expectedKind: AbstractFileReference.
-		^ domainObject ]
+		^ call ]
 		ensure: [ fileReference exists ifTrue: [ fileReference delete ] ]
 ]
 
 { #category : #examples }
 GtLMagritteToolForDirectoryContentsExamples >> directoryContentsForMissingDirectory [
 	<gtExample>
-	| tool call result domainObject missingPath |
+	| tool call missingPath |
 	missingPath := (FileLocator temp / 'gt-llm-missing-directory') pathString.
 	tool := GtLMagritteToolForDirectoryContents new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: { 'directoryPath' -> missingPath } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
+	call := self
+		executeTool: tool
+		withArguments: { 'directoryPath' -> missingPath } asDictionary.
 	self 
-		assertMissingObject: domainObject 
+		assertMissingObject: call result targetObject 
 		withObjectName: missingPath 
 		errorMessage: missingPath, ' is not found'.
-	^ domainObject
+	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForDirectoryContentsExamples >> directoryContentsWithEmptyPath [
 	<gtExample>
-	| tool call result domainObject |
+	| tool call |
 	tool := GtLMagritteToolForDirectoryContents new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: { 'directoryPath' -> '' } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
+	call := self
+		executeTool: tool
+		withArguments: { 'directoryPath' -> '' } asDictionary.
 	self 
-		assertMissingObject: domainObject 
+		assertMissingObject: call result targetObject 
 		withObjectName: '' 
 		errorMessage: ' is not found'.
-	^ domainObject
+	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForDirectoryContentsExamples >> directoryContentsWithNilPath [
 	<gtExample>
-	| tool call result domainObject |
+	| tool call |
 	tool := GtLMagritteToolForDirectoryContents new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: { 'directoryPath' -> nil } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
+	call := self
+		executeTool: tool
+		withArguments: { 'directoryPath' -> nil } asDictionary.
 	self 
-		assertJSONSchemaValidationError: domainObject 
+		assertJSONSchemaValidationError: call result targetObject 
 		withPath: #('directoryPath') 
 		errorMessage: '@[directoryPath] string expected'.
-	^ domainObject
+	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForDirectoryContentsExamples >> directoryContentsWithoutPath [
 	<gtExample>
-	| tool call result domainObject |
+	| tool call |
 	tool := GtLMagritteToolForDirectoryContents new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: Dictionary new.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
+	call := self
+		executeTool: tool
+		withArguments: Dictionary new.
 	self 
-		assertMissingRequiredProperties: domainObject 
+		assertMissingRequiredProperties: call result targetObject 
 		withPropertyNames: #('directoryPath') 
 		path: #(nil) 
 		errorMessage: 'required properties missing [directoryPath]'.
-	^ domainObject
+	^ call
 ]

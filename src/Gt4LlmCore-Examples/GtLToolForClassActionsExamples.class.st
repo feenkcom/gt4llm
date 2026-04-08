@@ -29,51 +29,54 @@ GtLToolForClassActionsExamples >> classActionsDataViewSerialization [
 { #category : #examples }
 GtLToolForClassActionsExamples >> classActionsForClassWithNoActions [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLToolForClassActions new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: { 'className' -> 'GtLToolForClassActionsExamples' } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self assert: (domainObject isKindOf: GtLClassMethodsDomainObject).
-	self assert: domainObject targetClass equals: GtLToolForClassActionsExamples.
-	self assert: domainObject methods equals: #().
-	^ domainObject
+	| targetObject |
+	
+	targetObject := self
+		executeTool: GtLToolForClassActions new
+		withArguments: {
+			'className' -> 'GtLToolForClassActionsExamples'
+		} asDictionary.
+	
+	self assert: (targetObject isKindOf: GtLClassMethodsDomainObject).
+	self assert: targetObject targetClass equals: GtLToolForClassActionsExamples.
+	self assert: targetObject methods equals: #().
+	
+	^ targetObject
 ]
 
 { #category : #examples }
 GtLToolForClassActionsExamples >> classActionsForExistingClass [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLToolForClassActions new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: { 'className' -> 'GtLudoRecordingGame' } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self assert: (domainObject isKindOf: GtLClassMethodsDomainObject).
-	self assert: domainObject methods isNotEmpty.
-	self assert: (domainObject methods anySatisfy: [ :eachMethod | eachMethod selector = #gtAutoplayAction: ]).
-	^ domainObject
+	| targetObject |
+	
+	targetObject := self
+		executeTool: GtLToolForClassActions new
+		withArguments: {
+			'className' -> 'GtLudoRecordingGame'
+		} asDictionary.
+	
+	self assert: (targetObject isKindOf: GtLClassMethodsDomainObject).
+	self assert: targetObject methods isNotEmpty.
+	self assert: (targetObject methods anySatisfy: [ :eachMethod | eachMethod selector = #gtAutoplayAction: ]).
+	
+	^ targetObject
 ]
 
 { #category : #examples }
 GtLToolForClassActionsExamples >> classActionsForUnknownClass [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLToolForClassActions new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: { 'className' -> 'NonExistingClassName' } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self 
-		assertMissingObject: domainObject 
-		withObjectName: 'NonExistingClassName' 
+	| targetObject |
+	
+	targetObject := self
+		executeTool: GtLToolForClassActions new
+		withArguments: {
+			'className' -> 'NonExistingClassName'
+		} asDictionary.
+	
+	self
+		assertMissingObject: targetObject
+		withObjectName: 'NonExistingClassName'
 		errorMessage: 'NonExistingClassName is not found'.
-	^ domainObject
+	
+	^ targetObject
 ]
