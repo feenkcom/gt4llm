@@ -11,8 +11,9 @@ Class {
 GtLMagritteToolForClassReferencesExamples >> classReferencesDataViewSerialization [
 	<gtExample>
 	<return: #GtLPrimitiveMessageDataBlock>
-	| domainObject compositeView dataBlock jsonData |
-	domainObject := self classReferencesForExistingClass.
+	| call domainObject compositeView dataBlock jsonData |
+	call := self classReferencesForExistingClass.
+	domainObject := call result targetObject.
 	compositeView := domainObject llmDataViewsFor: GtLDataView new.
 	self assert: compositeView dataViews size equals: 1.
 	
@@ -35,170 +36,175 @@ GtLMagritteToolForClassReferencesExamples >> classReferencesDataViewSerializatio
 { #category : #examples }
 GtLMagritteToolForClassReferencesExamples >> classReferencesForClassWithNoReferences [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLMagritteToolForClassReferences new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: { 'className' -> 'GtLClassReferencesExamples' } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: call arguments size equals: 1.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self assert: (domainObject isKindOf: GtLClassReferences).
-	self assert: domainObject givenClassName equals: 'GtLClassReferencesExamples'.
-	self assert: domainObject references isEmpty.
-	self assert: domainObject mayHaveMore not.
-	^ domainObject
+	| call targetObject |
+	
+	call := self
+		executeTool: GtLMagritteToolForClassReferences new
+		withArguments: {
+			'className' -> 'GtLClassReferencesExamples'
+		} asDictionary.
+	targetObject := call result targetObject.
+	
+	self assert: (targetObject isKindOf: GtLClassReferences).
+	self assert: targetObject givenClassName equals: 'GtLClassReferencesExamples'.
+	self assert: targetObject references isEmpty.
+	self assert: targetObject mayHaveMore not.
+		
+	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForClassReferencesExamples >> classReferencesForExistingClass [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLMagritteToolForClassReferences new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: { 'className' -> 'GtLMagritteToolForClassReferences' } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: call arguments size equals: 1.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self assert: (domainObject isKindOf: GtLClassReferences).
-	self assert: domainObject givenClassName equals: 'GtLMagritteToolForClassReferences'.
-	self assert: domainObject references isNotEmpty.
-	self
-		assert: (domainObject references anySatisfy: [ :each |
-			each methodClassName = 'GtLMagritteToolForClassReferencesExamples' ]).
-	self assert: domainObject mayHaveMore not.
-	^ domainObject
+	| call targetObject |
+	
+	call := self
+		executeTool: GtLMagritteToolForClassReferences new
+		withArguments: {
+			'className' -> 'GtLMagritteToolForClassReferences'
+		} asDictionary.
+	targetObject := call result targetObject.
+	
+	self assert: (targetObject isKindOf: GtLClassReferences).
+	self assert: targetObject givenClassName equals: 'GtLMagritteToolForClassReferences'.
+	self assert: targetObject references isNotEmpty.
+	self assert: (targetObject references anySatisfy: [ :each |
+		each methodClassName = 'GtLMagritteToolForClassReferencesExamples' ]).
+	self assert: targetObject mayHaveMore not.
+		
+	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForClassReferencesExamples >> classReferencesForTrait [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLMagritteToolForClassReferences new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: { 'className' -> 'TGtLInvalidInputDataAssertions' } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: call arguments size equals: 1.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self assert: (domainObject isKindOf: GtLClassReferences).
-	self assert: domainObject givenClassName equals: 'TGtLInvalidInputDataAssertions'.
-	self assert: domainObject references isNotEmpty.
-	self assert: domainObject mayHaveMore not.
-	^ domainObject
+	| call targetObject |
+	
+	call := self
+		executeTool: GtLMagritteToolForClassReferences new
+		withArguments: {
+			'className' -> 'TGtLInvalidInputDataAssertions'
+		} asDictionary.
+	targetObject := call result targetObject.
+	
+	self assert: (targetObject isKindOf: GtLClassReferences).
+	self assert: targetObject givenClassName equals: 'TGtLInvalidInputDataAssertions'.
+	self assert: targetObject references isNotEmpty.
+	self assert: targetObject mayHaveMore not.
+		
+	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForClassReferencesExamples >> classReferencesForUnknownClass [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLMagritteToolForClassReferences new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: { 'className' -> 'NonExistingClassName' } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: call arguments size equals: 1.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self 
-		assertMissingObject: domainObject 
-		withObjectName: 'NonExistingClassName' 
+	| call |
+	
+	call := self
+		executeTool: GtLMagritteToolForClassReferences new
+		withArguments: {
+			'className' -> 'NonExistingClassName'
+		} asDictionary.
+	
+	self
+		assertMissingObject: call result targetObject
+		withObjectName: 'NonExistingClassName'
 		errorMessage: 'NonExistingClassName is not found'.
-	^ domainObject
+		
+	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForClassReferencesExamples >> classReferencesWithEmptyClassName [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLMagritteToolForClassReferences new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: { 'className' -> '' } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self 
-		assertMissingArgument: domainObject 
-		withArgumentName: 'className' 
+	| call |
+	
+	call := self
+		executeTool: GtLMagritteToolForClassReferences new
+		withArguments: {
+			'className' -> ''
+		} asDictionary.
+	
+	self
+		assertMissingArgument: call result targetObject
+		withArgumentName: 'className'
 		errorMessage: 'Missing argument called className'.
-	^ domainObject
+		
+	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForClassReferencesExamples >> classReferencesWithMissingClassName [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLMagritteToolForClassReferences new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: {} asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self 
-		assertMissingRequiredProperties: domainObject 
-		withPropertyNames: #('className') 
-		path: #(nil) 
+	| call |
+	
+	call := self
+		executeTool: GtLMagritteToolForClassReferences new
+		withArguments: {} asDictionary.
+	
+	self
+		assertMissingRequiredProperties: call result targetObject
+		withPropertyNames: #('className')
+		path: #(nil)
 		errorMessage: 'required properties missing [className]'.
-	^ domainObject
+		
+	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForClassReferencesExamples >> classReferencesWithMoreThan200Results [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLMagritteToolForClassReferences new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: { 'className' -> 'Object' } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: call arguments size equals: 1.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self assert: (domainObject isKindOf: GtLClassReferences).
-	self assert: domainObject givenClassName equals: 'Object'.
-	self assert: domainObject references size equals: 200.
-	self assert: domainObject mayHaveMore.
-	^ domainObject
+	| call targetObject |
+	
+	call := self
+		executeTool: GtLMagritteToolForClassReferences new
+		withArguments: {
+			'className' -> 'Object'
+		} asDictionary.
+	targetObject := call result targetObject.
+	
+	self assert: (targetObject isKindOf: GtLClassReferences).
+	self assert: targetObject givenClassName equals: 'Object'.
+	self assert: targetObject references size equals: 200.
+	self assert: targetObject mayHaveMore.
+		
+	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForClassReferencesExamples >> classReferencesWithNilClassName [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLMagritteToolForClassReferences new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: { 'className' -> nil } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self 
-		assertJSONSchemaValidationError: domainObject 
-		withPath: #('className') 
+	| call |
+	
+	call := self
+		executeTool: GtLMagritteToolForClassReferences new
+		withArguments: {
+			'className' -> nil
+		} asDictionary.
+	
+	self
+		assertJSONSchemaValidationError: call result targetObject
+		withPath: #('className')
 		errorMessage: '@[className] string expected'.
-	^ domainObject
+		
+	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForClassReferencesExamples >> classReferencesWithWhitespaceOnlyClassName [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLMagritteToolForClassReferences new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: { 'className' -> '   ' } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self 
-		assertMissingArgument: domainObject 
-		withArgumentName: 'className' 
+	| call |
+	
+	call := self
+		executeTool: GtLMagritteToolForClassReferences new
+		withArguments: {
+			'className' -> '   '
+		} asDictionary.
+	
+	self
+		assertMissingArgument: call result targetObject
+		withArgumentName: 'className'
 		errorMessage: 'Missing argument called className'.
-	^ domainObject
+		
+	^ call
 ]

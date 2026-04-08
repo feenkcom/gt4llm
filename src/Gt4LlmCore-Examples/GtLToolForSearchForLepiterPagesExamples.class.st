@@ -31,84 +31,80 @@ GtLToolForSearchForLepiterPagesExamples >> documentationLookupDataViewSerializat
 { #category : #examples }
 GtLToolForSearchForLepiterPagesExamples >> documentationLookupForExistingPage [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLToolForSearchForLepiterPages new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: {
-		'query' -> 'Warmup: understanding the Money classes'.
-		'knowledgeBases' -> { LeDatabase gtBook uuidString }
-	} asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self assert: (domainObject isKindOf: GtLLepiterPagesDomainObject).
-	self assert: domainObject pages size equals: 1.
-	^ domainObject
+	| targetObject |
+	
+	targetObject := self
+		executeTool: GtLToolForSearchForLepiterPages new
+		withArguments: {
+			'query' -> 'Warmup: understanding the Money classes'.
+			'knowledgeBases' -> { LeDatabase gtBook uuidString }
+		} asDictionary.
+	
+	self assert: (targetObject isKindOf: GtLLepiterPagesDomainObject).
+	self assert: targetObject pages size equals: 1.
+	
+	^ targetObject
 ]
 
 { #category : #examples }
 GtLToolForSearchForLepiterPagesExamples >> documentationLookupForMissingPage [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLToolForSearchForLepiterPages new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: {
-		'query' -> 'NonExistingDocumentationPage42'.
-		'knowledgeBases' -> { LeDatabase gtBook uuidString }
-	} asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self assert: (domainObject isKindOf: GtLLepiterPagesDomainObject).
-	self assert: domainObject pages equals: #().
-	^ domainObject
+	| targetObject |
+	
+	targetObject := self
+		executeTool: GtLToolForSearchForLepiterPages new
+		withArguments: {
+			'query' -> 'NonExistingDocumentationPage42'.
+			'knowledgeBases' -> { LeDatabase gtBook uuidString }
+		} asDictionary.
+	
+	self assert: (targetObject isKindOf: GtLLepiterPagesDomainObject).
+	self assert: targetObject pages equals: #().
+	
+	^ targetObject
 ]
 
 { #category : #examples }
 GtLToolForSearchForLepiterPagesExamples >> documentationLookupForMultipleKnowledgeBases [
 	<gtExample>
-	| tool call result domainObject logicalDatabase defaultDatabase |
-	tool := GtLToolForSearchForLepiterPages new.
+	| targetObject logicalDatabase defaultDatabase |
 	logicalDatabase := LeDatabasesRegistry defaultLogicalDatabase.
 	defaultDatabase := logicalDatabase databases
 		detect: [ :each | each databaseName = 'default' ]
 		ifNone: [ LeDatabase gtBook ].
-	call := GtLFunctionToolCall new.
-	call rawArguments: {
-		'query' -> 'Warmup: understanding the Money classes'.
-		'knowledgeBases' -> {
-			defaultDatabase uuidString.
-			LeDatabase gtBook uuidString
-		}
-	} asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self assert: (domainObject isKindOf: GtLLepiterPagesDomainObject).
-	self assert: domainObject pages isNotEmpty.
-	^ domainObject
+	
+	targetObject := self
+		executeTool: GtLToolForSearchForLepiterPages new
+		withArguments: {
+			'query' -> 'Warmup: understanding the Money classes'.
+			'knowledgeBases' -> {
+				defaultDatabase uuidString.
+				LeDatabase gtBook uuidString
+			}
+		} asDictionary.
+	
+	self assert: (targetObject isKindOf: GtLLepiterPagesDomainObject).
+	self assert: targetObject pages isNotEmpty.
+	
+	^ targetObject
 ]
 
 { #category : #examples }
 GtLToolForSearchForLepiterPagesExamples >> documentationLookupForWrongKnowledgeBaseId [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLToolForSearchForLepiterPages new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: {
-		'query' -> 'Warmup: understanding the Money classes'.
-		'knowledgeBases' -> { 'missing-uuid-42' }
-	} asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self 
-		assertMissingObject: domainObject 
-		withObjectName: 'missing-uuid-42' 
+	| targetObject |
+	
+	targetObject := self
+		executeTool: GtLToolForSearchForLepiterPages new
+		withArguments: {
+			'query' -> 'Warmup: understanding the Money classes'.
+			'knowledgeBases' -> { 'missing-uuid-42' }
+		} asDictionary.
+	
+	self
+		assertMissingObject: targetObject
+		withObjectName: 'missing-uuid-42'
 		errorMessage: 'missing-uuid-42 is not found'.
-	^ domainObject
+	
+	^ targetObject
 ]

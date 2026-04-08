@@ -10,64 +10,61 @@ Class {
 { #category : #examples }
 GtLMagritteToolForClassDefinitionChangeExamples >> changeClassInstanceVariables [
 	<gtExample>
-	| className |
+	| className call |
+	
 	className := #GtLMagritteToolForClassSignatureChangeExamplesWithIvars.
 	self removeClassNamedIfPresent: className.
 	[
-		| tool call result targetObject targetClass |
+		| targetClass targetObject |
 		targetClass := (Object << className
 			slots: { 'first' };
 			classSlots: {};
 			package: 'Gt4LlmCoreNewPackage') install.
-		tool := GtLMagritteToolForClassDefinitionChange new.
-		call := GtLFunctionToolCall new.
-		call rawArguments: {
-			'classChangeRequest' -> {
-				'targetClassName' -> className.
-				'superclassName' -> #Object.
-				'instanceVariables' -> #('alpha' 'beta').
-				'classVariables' -> #().
-				'package' -> 'Gt4LlmCoreNewPackage'
-			} asDictionary
-		} asDictionary.
-		result := tool performToolCall: call.
-		self assert: call tool == tool.
-		self assert: (result isKindOf: GTLDataViewWrapperModel).
+		call := self
+			executeTool: GtLMagritteToolForClassDefinitionChange new
+			withArguments: {
+				'classChangeRequest' -> {
+					'targetClassName' -> className.
+					'superclassName' -> #Object.
+					'instanceVariables' -> #('alpha' 'beta').
+					'classVariables' -> #().
+					'package' -> 'Gt4LlmCoreNewPackage'
+				} asDictionary
+			} asDictionary.
+		targetObject := call result targetObject.
 		
-		targetObject := result targetObject.
 		self assert: (targetObject isKindOf: GtLClassModificationResult).
 		self assert: (targetClass instanceVariables collect: #name) equals: #('alpha' 'beta').
-		self assert: targetObject instanceSlotNames asArray equals: #('alpha' 'beta').
-		call
-	] ensure: [ self removeClassNamedIfPresent: className ]
+		self assert: targetObject instanceSlotNames asArray equals: #('alpha' 'beta')
+	] ensure: [ self removeClassNamedIfPresent: className ].
+		
+	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForClassDefinitionChangeExamples >> changeClassVariablesWithPartialArguments [
 	<gtExample>
-	| className |
+	| className call |
+	
 	className := #GtLMagritteToolForClassSignatureChangeExamplesPartialCvars.
 	self removeClassNamedIfPresent: className.
 	[
-		| tool call result targetObject targetClass |
+		| targetClass targetObject |
 		targetClass := Object
 			subclass: className
 			instanceVariableNames: 'first second'
 			classVariableNames: 'OldShared'
 			package: 'Gt4LlmCoreNewPackage'.
-		tool := GtLMagritteToolForClassDefinitionChange new.
-		call := GtLFunctionToolCall new.
-		call rawArguments: {
-			'classChangeRequest' -> {
-				'targetClassName' -> className.
-				'classVariables' -> #('NewShared' 'AnotherShared')
-			} asDictionary
-		} asDictionary.
-		result := tool performToolCall: call.
-		self assert: call tool == tool.
-		self assert: (result isKindOf: GTLDataViewWrapperModel).
+		call := self
+			executeTool: GtLMagritteToolForClassDefinitionChange new
+			withArguments: {
+				'classChangeRequest' -> {
+					'targetClassName' -> className.
+					'classVariables' -> #('NewShared' 'AnotherShared')
+				} asDictionary
+			} asDictionary.
+		targetObject := call result targetObject.
 		
-		targetObject := result targetObject.
 		self assert: (targetObject isKindOf: GtLClassModificationResult).
 		self assert: (targetClass instanceVariables collect: #name) equals: #('first' 'second').
 		self assert: (targetClass classVariables collect: #name) asSet equals: #('NewShared' 'AnotherShared') asSet.
@@ -76,37 +73,36 @@ GtLMagritteToolForClassDefinitionChangeExamples >> changeClassVariablesWithParti
 		self assert: targetObject instanceSlotNames asArray equals: #('first' 'second').
 		self assert: targetObject classVariableNames asSet equals: #('NewShared' 'AnotherShared') asSet.
 		self assert: targetObject superclassName equals: 'Object'.
-		self assert: targetObject packageName equals: 'Gt4LlmCoreNewPackage'.
-		call
-	] ensure: [ self removeClassNamedIfPresent: className ]
+		self assert: targetObject packageName equals: 'Gt4LlmCoreNewPackage'
+	] ensure: [ self removeClassNamedIfPresent: className ].
+		
+	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForClassDefinitionChangeExamples >> changeInstanceVariablesWithPartialArguments [
 	<gtExample>
-	| className |
+	| className call |
+	
 	className := #GtLMagritteToolForClassSignatureChangeExamplesPartial.
 	self removeClassNamedIfPresent: className.
 	[
-		| tool call result targetObject targetClass |
+		| targetClass targetObject |
 		targetClass := Object
 			subclass: className
 			instanceVariableNames: 'first second'
 			classVariableNames: 'SharedValue'
 			package: 'Gt4LlmCoreNewPackage'.
-		tool := GtLMagritteToolForClassDefinitionChange new.
-		call := GtLFunctionToolCall new.
-		call rawArguments: {
-			'classChangeRequest' -> {
-				'targetClassName' -> className.
-				'instanceVariables' -> #('alpha' 'beta')
-			} asDictionary
-		} asDictionary.
-		result := tool performToolCall: call.
-		self assert: call tool == tool.
-		self assert: (result isKindOf: GTLDataViewWrapperModel).
+		call := self
+			executeTool: GtLMagritteToolForClassDefinitionChange new
+			withArguments: {
+				'classChangeRequest' -> {
+					'targetClassName' -> className.
+					'instanceVariables' -> #('alpha' 'beta')
+				} asDictionary
+			} asDictionary.
+		targetObject := call result targetObject.
 		
-		targetObject := result targetObject.
 		self assert: (targetObject isKindOf: GtLClassModificationResult).
 		self assert: (targetClass instanceVariables collect: #name) equals: #('alpha' 'beta').
 		self assert: (targetClass classVariables collect: #name) equals: #('SharedValue').
@@ -115,37 +111,36 @@ GtLMagritteToolForClassDefinitionChangeExamples >> changeInstanceVariablesWithPa
 		self assert: targetObject instanceSlotNames asArray equals: #('alpha' 'beta').
 		self assert: targetObject classVariableNames asArray equals: #('SharedValue').
 		self assert: targetObject superclassName equals: 'Object'.
-		self assert: targetObject packageName equals: 'Gt4LlmCoreNewPackage'.
-		call
-	] ensure: [ self removeClassNamedIfPresent: className ]
+		self assert: targetObject packageName equals: 'Gt4LlmCoreNewPackage'
+	] ensure: [ self removeClassNamedIfPresent: className ].
+		
+	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForClassDefinitionChangeExamples >> changePackageWithPartialArguments [
 	<gtExample>
-	| className |
+	| className call |
+	
 	className := #GtLMagritteToolForClassSignatureChangeExamplesPartialPkg.
 	self removeClassNamedIfPresent: className.
 	[
-		| tool call result targetObject targetClass |
+		| targetClass targetObject |
 		targetClass := Object
 			subclass: className
 			instanceVariableNames: 'first second'
 			classVariableNames: 'SharedValue'
 			package: 'Gt4LlmCoreNewPackage'.
-		tool := GtLMagritteToolForClassDefinitionChange new.
-		call := GtLFunctionToolCall new.
-		call rawArguments: {
-			'classChangeRequest' -> {
-				'targetClassName' -> className.
-				'package' -> 'Gt4LlmCoreNewPackage2'
-			} asDictionary
-		} asDictionary.
-		result := tool performToolCall: call.
-		self assert: call tool == tool.
-		self assert: (result isKindOf: GTLDataViewWrapperModel).
+		call := self
+			executeTool: GtLMagritteToolForClassDefinitionChange new
+			withArguments: {
+				'classChangeRequest' -> {
+					'targetClassName' -> className.
+					'package' -> 'Gt4LlmCoreNewPackage2'
+				} asDictionary
+			} asDictionary.
+		targetObject := call result targetObject.
 		
-		targetObject := result targetObject.
 		self assert: (targetObject isKindOf: GtLClassModificationResult).
 		self assert: (targetClass instanceVariables collect: #name) equals: #('first' 'second').
 		self assert: (targetClass classVariables collect: #name) equals: #('SharedValue').
@@ -154,37 +149,36 @@ GtLMagritteToolForClassDefinitionChangeExamples >> changePackageWithPartialArgum
 		self assert: targetObject instanceSlotNames asArray equals: #('first' 'second').
 		self assert: targetObject classVariableNames asArray equals: #('SharedValue').
 		self assert: targetObject superclassName equals: 'Object'.
-		self assert: targetObject packageName equals: 'Gt4LlmCoreNewPackage2'.
-		call
-	] ensure: [ self removeClassNamedIfPresent: className ]
+		self assert: targetObject packageName equals: 'Gt4LlmCoreNewPackage2'
+	] ensure: [ self removeClassNamedIfPresent: className ].
+		
+	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForClassDefinitionChangeExamples >> changeSuperclassWithPartialArguments [
 	<gtExample>
-	| className |
+	| className call |
+	
 	className := #GtLMagritteToolForClassSignatureChangeExamplesPartialSuper.
 	self removeClassNamedIfPresent: className.
 	[
-		| tool call result targetObject targetClass |
+		| targetClass targetObject |
 		targetClass := Object
 			subclass: className
 			instanceVariableNames: 'first second'
 			classVariableNames: 'SharedValue'
 			package: 'Gt4LlmCoreNewPackage'.
-		tool := GtLMagritteToolForClassDefinitionChange new.
-		call := GtLFunctionToolCall new.
-		call rawArguments: {
-			'classChangeRequest' -> {
-				'targetClassName' -> className.
-				'superclassName' -> 'Exception'
-			} asDictionary
-		} asDictionary.
-		result := tool performToolCall: call.
-		self assert: call tool == tool.
-		self assert: (result isKindOf: GTLDataViewWrapperModel).
+		call := self
+			executeTool: GtLMagritteToolForClassDefinitionChange new
+			withArguments: {
+				'classChangeRequest' -> {
+					'targetClassName' -> className.
+					'superclassName' -> 'Exception'
+				} asDictionary
+			} asDictionary.
+		targetObject := call result targetObject.
 		
-		targetObject := result targetObject.
 		self assert: (targetObject isKindOf: GtLClassModificationResult).
 		self assert: (targetClass instanceVariables collect: #name) equals: #('first' 'second').
 		self assert: (targetClass classVariables collect: #name) equals: #('SharedValue').
@@ -193,163 +187,152 @@ GtLMagritteToolForClassDefinitionChangeExamples >> changeSuperclassWithPartialAr
 		self assert: targetObject instanceSlotNames asArray equals: #('first' 'second').
 		self assert: targetObject classVariableNames asArray equals: #('SharedValue').
 		self assert: targetObject superclassName equals: 'Exception'.
-		self assert: targetObject packageName equals: 'Gt4LlmCoreNewPackage'.
-		call
-	] ensure: [ self removeClassNamedIfPresent: className ]
+		self assert: targetObject packageName equals: 'Gt4LlmCoreNewPackage'
+	] ensure: [ self removeClassNamedIfPresent: className ].
+		
+	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForClassDefinitionChangeExamples >> changeUnknownClass [
 	<gtExample>
-	| tool call result targetObject className |
+	| call className |
+	
 	className := #GtLMagritteToolForClassSignatureChangeExamplesMissing.
 	self removeClassNamedIfPresent: className.
-	tool := GtLMagritteToolForClassDefinitionChange new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: {
-		'classChangeRequest' -> {
-			'targetClassName' -> className.
-			'superclassName' -> #Object.
-			'instanceVariables' -> #().
-			'classVariables' -> #().
-			'package' -> 'Gt4LlmCoreNewPackage'
-		} asDictionary
-	} asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	call := self
+		executeTool: GtLMagritteToolForClassDefinitionChange new
+		withArguments: {
+			'classChangeRequest' -> {
+				'targetClassName' -> className.
+				'superclassName' -> #Object.
+				'instanceVariables' -> #().
+				'classVariables' -> #().
+				'package' -> 'Gt4LlmCoreNewPackage'
+			} asDictionary
+		} asDictionary.
 	
-	targetObject := result targetObject.
 	self
-		assertMissingObject: targetObject
+		assertMissingObject: call result targetObject
 		withObjectName: className asString
 		errorMessage: className asString, ' is not found'.
+		
 	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForClassDefinitionChangeExamples >> changeWithMissingClassChangeRequest [
 	<gtExample>
-	| tool call result targetObject |
-	tool := GtLMagritteToolForClassDefinitionChange new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: Dictionary new.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	| call |
 	
-	targetObject := result targetObject.
+	call := self
+		executeTool: GtLMagritteToolForClassDefinitionChange new
+		withArguments: Dictionary new.
+	
 	self
-		assertMissingRequiredProperties: targetObject
+		assertMissingRequiredProperties: call result targetObject
 		withPropertyNames: #('classChangeRequest')
 		path: #(nil)
 		errorMessage: 'required properties missing [classChangeRequest]'.
+		
 	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForClassDefinitionChangeExamples >> changeWithMissingTargetClassName [
 	<gtExample>
-	| tool call result targetObject |
-	tool := GtLMagritteToolForClassDefinitionChange new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: {
-		'classChangeRequest' -> {
-			'superclassName' -> 'Object'.
-			'package' -> 'SomePackage'
-		} asDictionary
-	} asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	| call |
 	
-	targetObject := result targetObject.
+	call := self
+		executeTool: GtLMagritteToolForClassDefinitionChange new
+		withArguments: {
+			'classChangeRequest' -> {
+				'superclassName' -> 'Object'.
+				'package' -> 'SomePackage'
+			} asDictionary
+		} asDictionary.
+	
 	self
-		assertMissingRequiredProperties: targetObject
+		assertMissingRequiredProperties: call result targetObject
 		withPropertyNames: #('targetClassName')
 		path: #('classChangeRequest')
 		errorMessage: '@[classChangeRequest] required properties missing [targetClassName]'.
+		
 	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForClassDefinitionChangeExamples >> changeWithNilClassChangeRequest [
 	<gtExample>
-	| tool call result targetObject |
-	tool := GtLMagritteToolForClassDefinitionChange new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: {
-		'classChangeRequest' -> nil
-	} asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	| call |
 	
-	targetObject := result targetObject.
+	call := self
+		executeTool: GtLMagritteToolForClassDefinitionChange new
+		withArguments: {
+			'classChangeRequest' -> nil
+		} asDictionary.
+	
 	self
-		assertJSONSchemaValidationError: targetObject
+		assertJSONSchemaValidationError: call result targetObject
 		withPath: #('classChangeRequest')
 		errorMessage: '@[classChangeRequest] object expected'.
+		
 	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForClassDefinitionChangeExamples >> changeWithNilTargetClassName [
 	<gtExample>
-	| tool call result targetObject |
-	tool := GtLMagritteToolForClassDefinitionChange new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: {
-		'classChangeRequest' -> {
-			'targetClassName' -> nil.
-			'superclassName' -> 'Object'.
-			'package' -> 'SomePackage'
-		} asDictionary
-	} asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	| call |
 	
-	targetObject := result targetObject.
+	call := self
+		executeTool: GtLMagritteToolForClassDefinitionChange new
+		withArguments: {
+			'classChangeRequest' -> {
+				'targetClassName' -> nil.
+				'superclassName' -> 'Object'.
+				'package' -> 'SomePackage'
+			} asDictionary
+		} asDictionary.
+	
 	self
-		assertJSONSchemaValidationError: targetObject
+		assertJSONSchemaValidationError: call result targetObject
 		withPath: #(#classChangeRequest #targetClassName)
 		errorMessage: '@[classChangeRequest/targetClassName] string expected'.
+		
 	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForClassDefinitionChangeExamples >> changeWithUnknownSuperclass [
 	<gtExample>
-	| className |
+	| className call |
+	
 	className := #GtLMagritteToolForClassSignatureChangeExamplesUnknownSuper.
 	self removeClassNamedIfPresent: className.
 	[
-		| tool call result targetObject targetClass |
+		| targetClass |
 		targetClass := Object
 			subclass: className
 			instanceVariableNames: ''
 			classVariableNames: ''
 			package: 'Gt4LlmCoreNewPackage'.
-		tool := GtLMagritteToolForClassDefinitionChange new.
-		call := GtLFunctionToolCall new.
-		call rawArguments: {
-			'classChangeRequest' -> {
-				'targetClassName' -> className.
-				'superclassName' -> 'NonExistentSuperclass42'
-			} asDictionary
-		} asDictionary.
-		result := tool performToolCall: call.
-		self assert: call tool == tool.
-		self assert: (result isKindOf: GTLDataViewWrapperModel).
+		call := self
+			executeTool: GtLMagritteToolForClassDefinitionChange new
+			withArguments: {
+				'classChangeRequest' -> {
+					'targetClassName' -> className.
+					'superclassName' -> 'NonExistentSuperclass42'
+				} asDictionary
+			} asDictionary.
 		
-		targetObject := result targetObject.
 		self
-			assertMissingObject: targetObject
+			assertMissingObject: call result targetObject
 			withObjectName: 'NonExistentSuperclass42'
-			errorMessage: 'NonExistentSuperclass42 is not found'.
-		call
-	] ensure: [ self removeClassNamedIfPresent: className ]
+			errorMessage: 'NonExistentSuperclass42 is not found'
+	] ensure: [ self removeClassNamedIfPresent: className ].
+		
+	^ call
 ]
 
 { #category : #private }

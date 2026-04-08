@@ -20,38 +20,38 @@ GtLMagritteToolForClassRemovalExamples >> ensureClassNamed: aSymbol [
 { #category : #examples }
 GtLMagritteToolForClassRemovalExamples >> removeClassEmptyClassName [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLMagritteToolForClassRemoval new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: { 'className' -> '' } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self 
-		assertMissingObject: domainObject 
-		withObjectName: '' 
+	| call |
+	
+	call := self
+		executeTool: GtLMagritteToolForClassRemoval new
+		withArguments: {
+			'className' -> ''
+		} asDictionary.
+	
+	self
+		assertMissingObject: call result targetObject
+		withObjectName: ''
 		errorMessage: ' is not found'.
-	^ domainObject
+		
+	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForClassRemovalExamples >> removeClassMissingArgument [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLMagritteToolForClassRemoval new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: Dictionary new.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self 
-		assertMissingRequiredProperties: domainObject 
-		withPropertyNames: #('className') 
-		path: #(nil) 
+	| call |
+	
+	call := self
+		executeTool: GtLMagritteToolForClassRemoval new
+		withArguments: Dictionary new.
+	
+	self
+		assertMissingRequiredProperties: call result targetObject
+		withPropertyNames: #('className')
+		path: #(nil)
 		errorMessage: 'required properties missing [className]'.
-	^ domainObject
+		
+	^ call
 ]
 
 { #category : #private }
@@ -64,68 +64,73 @@ GtLMagritteToolForClassRemovalExamples >> removeClassNamedIfPresent: aSymbol [
 { #category : #examples }
 GtLMagritteToolForClassRemovalExamples >> removeClassNilClassName [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLMagritteToolForClassRemoval new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: { 'className' -> nil } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self 
-		assertJSONSchemaValidationError: domainObject 
-		withPath: #('className') 
+	| call |
+	
+	call := self
+		executeTool: GtLMagritteToolForClassRemoval new
+		withArguments: {
+			'className' -> nil
+		} asDictionary.
+	
+	self
+		assertJSONSchemaValidationError: call result targetObject
+		withPath: #('className')
 		errorMessage: '@[className] string expected'.
-	^ domainObject
+		
+	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForClassRemovalExamples >> removeClassWhitespaceOnlyClassName [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLMagritteToolForClassRemoval new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: { 'className' -> '   ' } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self 
-		assertMissingObject: domainObject 
-		withObjectName: '   ' 
+	| call |
+	
+	call := self
+		executeTool: GtLMagritteToolForClassRemoval new
+		withArguments: {
+			'className' -> '   '
+		} asDictionary.
+	
+	self
+		assertMissingObject: call result targetObject
+		withObjectName: '   '
 		errorMessage: '    is not found'.
-	^ domainObject
+		
+	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForClassRemovalExamples >> removeExistingClass [
 	<gtExample>
-	| className domainObject |
+	| className call |
+	
 	className := #GtLMagritteToolForClassRemovalExamplesTemporary.
 	[
-		| tool call result |
+		| targetObject |
 		self ensureClassNamed: className.
-		tool := GtLMagritteToolForClassRemoval new.
-		call := GtLFunctionToolCall new.
-		call rawArguments: { 'className' -> className asString } asDictionary.
-		result := tool performToolCall: call.
-		self assert: call tool == tool.
-		self assert: (result isKindOf: GTLDataViewWrapperModel).
-		domainObject := result targetObject.
-		self assert: (domainObject isKindOf: GtLClassRemovalResult).
-		self assert: domainObject removedClassName equals: className asString.
-		self assert: domainObject status equals: 'removed'.
+		call := self
+			executeTool: GtLMagritteToolForClassRemoval new
+			withArguments: {
+				'className' -> className asString
+			} asDictionary.
+		targetObject := call result targetObject.
+		
+		self assert: (targetObject isKindOf: GtLClassRemovalResult).
+		self assert: targetObject removedClassName equals: className asString.
+		self assert: targetObject status equals: 'removed'.
 		self assert: (Smalltalk globals includesKey: className) not
 	] ensure: [ self removeClassNamedIfPresent: className ].
-	^ domainObject
+		
+	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForClassRemovalExamples >> removeExistingClassDataViewSerialization [
 	<gtExample>
 	<return: #GtLPrimitiveMessageDataBlock>
-	| domainObject compositeView dataBlock jsonData expectedJson |
-	domainObject := self removeExistingClass.
+	| call domainObject compositeView dataBlock jsonData expectedJson |
+	call := self removeExistingClass.
+	domainObject := call result targetObject.
 	compositeView := domainObject llmDataViewsFor: GtLDataView new.
 	self assert: compositeView dataViews size equals: 1.
 	
@@ -147,18 +152,19 @@ GtLMagritteToolForClassRemovalExamples >> removeExistingClassDataViewSerializati
 { #category : #examples }
 GtLMagritteToolForClassRemovalExamples >> removeUnknownClass [
 	<gtExample>
-	| tool call result domainObject className |
+	| call className |
+	
 	className := 'GtLMagritteToolForClassRemovalExamplesDoesNotExist'.
-	tool := GtLMagritteToolForClassRemoval new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: { 'className' -> className } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self 
-		assertMissingObject: domainObject 
-		withObjectName: className 
+	call := self
+		executeTool: GtLMagritteToolForClassRemoval new
+		withArguments: {
+			'className' -> className
+		} asDictionary.
+	
+	self
+		assertMissingObject: call result targetObject
+		withObjectName: className
 		errorMessage: className, ' is not found'.
-	^ domainObject
+		
+	^ call
 ]

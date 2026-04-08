@@ -4,206 +4,203 @@ Class {
 	#category : 'Gt4LlmCore-Examples-Tools'
 }
 
-{ #category : #'examples - errors' }
+{ #category : #examples }
 GtLToolForLepiterSnippetEditExamples >> emptyPageUid [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLToolForLepiterSnippetEdit new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: {
-		'pageUid' -> ''.
-		'snippetUid' -> 'someSnippetUid'.
-		'updatedText' -> 'Updated text' } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	| targetObject |
 	
-	domainObject := result targetObject.
+	targetObject := self
+		executeTool: GtLToolForLepiterSnippetEdit new
+		withArguments: {
+			'pageUid' -> ''.
+			'snippetUid' -> 'someSnippetUid'.
+			'updatedText' -> 'Updated text'
+		} asDictionary.
+	
 	self
-		assertMissingArgument: domainObject
+		assertMissingArgument: targetObject
 		withArgumentName: 'pageUid'
 		errorMessage: 'Missing argument called pageUid'.
-	^ domainObject
+	
+	^ targetObject
 ]
 
-{ #category : #'examples - errors' }
+{ #category : #examples }
 GtLToolForLepiterSnippetEditExamples >> emptySnippetUid [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLToolForLepiterSnippetEdit new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: {
-		'pageUid' -> (UUID new asString).
-		'snippetUid' -> ''.
-		'updatedText' -> 'Updated text' } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	| targetObject |
 	
-	domainObject := result targetObject.
+	targetObject := self
+		executeTool: GtLToolForLepiterSnippetEdit new
+		withArguments: {
+			'pageUid' -> UUID new asString.
+			'snippetUid' -> ''.
+			'updatedText' -> 'Updated text'
+		} asDictionary.
+	
 	self
-		assertMissingArgument: domainObject
+		assertMissingArgument: targetObject
 		withArgumentName: 'snippetUid'
 		errorMessage: 'Missing argument called snippetUid'.
-	^ domainObject
+	
+	^ targetObject
 ]
 
-{ #category : #'examples - errors' }
+{ #category : #examples }
 GtLToolForLepiterSnippetEditExamples >> emptyUpdatedText [
 	<gtExample>
-	| tool call result domainObject pageUid snippetUid |
-	tool := GtLToolForLepiterSnippetEdit new.
+	| targetObject pageUid snippetUid |
 	pageUid := UUID new asString.
-	snippetUid := (LeUID new uidString: (UUID new asString); uidString).
-	call := GtLFunctionToolCall new.
-	call rawArguments: {
-		'pageUid' -> pageUid.
-		'snippetUid' -> snippetUid.
-		'updatedText' -> '' } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	snippetUid := LeUID new uidString: UUID new asString; uidString.
 	
-	domainObject := result targetObject.
+	targetObject := self
+		executeTool: GtLToolForLepiterSnippetEdit new
+		withArguments: {
+			'pageUid' -> pageUid.
+			'snippetUid' -> snippetUid.
+			'updatedText' -> ''
+		} asDictionary.
+	
 	self
-		assertMissingArgument: domainObject
+		assertMissingArgument: targetObject
 		withArgumentName: 'updatedText'
 		errorMessage: 'Missing argument called updatedText'.
-	^ domainObject
+	
+	^ targetObject
 ]
 
-{ #category : #'examples - errors' }
+{ #category : #examples }
 GtLToolForLepiterSnippetEditExamples >> missingPageUid [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLToolForLepiterSnippetEdit new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: {
-		'snippetUid' -> 'invalid'.
-		'updatedText' -> 'Updated text' } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	| targetObject |
 	
-	domainObject := result targetObject.
+	targetObject := self
+		executeTool: GtLToolForLepiterSnippetEdit new
+		withArguments: {
+			'snippetUid' -> 'invalid'.
+			'updatedText' -> 'Updated text'
+		} asDictionary.
+	
 	self
-		assertMissingRequiredProperties: domainObject
+		assertMissingRequiredProperties: targetObject
 		withPropertyNames: #('pageUid')
 		path: #(nil)
 		errorMessage: 'required properties missing [pageUid]'.
 	
-	^ domainObject
+	^ targetObject
 ]
 
-{ #category : #'examples - errors' }
+{ #category : #examples }
 GtLToolForLepiterSnippetEditExamples >> missingSnippetUid [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLToolForLepiterSnippetEdit new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: {
-		'pageUid' -> (UUID new asString).
-		'updatedText' -> 'Updated text' } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	| targetObject |
 	
-	domainObject := result targetObject.
+	targetObject := self
+		executeTool: GtLToolForLepiterSnippetEdit new
+		withArguments: {
+			'pageUid' -> UUID new asString.
+			'updatedText' -> 'Updated text'
+		} asDictionary.
+	
 	self
-		assertMissingRequiredProperties: domainObject
+		assertMissingRequiredProperties: targetObject
 		withPropertyNames: #('snippetUid')
 		path: #(nil)
 		errorMessage: 'required properties missing [snippetUid]'.
 	
-	^ domainObject
+	^ targetObject
 ]
 
-{ #category : #'examples - errors' }
+{ #category : #examples }
 GtLToolForLepiterSnippetEditExamples >> missingUpdatedText [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLToolForLepiterSnippetEdit new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: {
-		'pageUid' -> (UUID new asString).
-		'snippetUid' -> (LeUID new uidString: (UUID new asString); uidString) } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-
-	domainObject := result targetObject.
+	| targetObject snippetUid |
+	snippetUid := LeUID new uidString: UUID new asString; uidString.
+	
+	targetObject := self
+		executeTool: GtLToolForLepiterSnippetEdit new
+		withArguments: {
+			'pageUid' -> UUID new asString.
+			'snippetUid' -> snippetUid
+		} asDictionary.
+	
 	self
-		assertMissingRequiredProperties: domainObject
+		assertMissingRequiredProperties: targetObject
 		withPropertyNames: #('updatedText')
 		path: #(nil)
 		errorMessage: 'required properties missing [updatedText]'.
 	
-	^ domainObject
+	^ targetObject
 ]
 
-{ #category : #'examples - errors' }
+{ #category : #examples }
 GtLToolForLepiterSnippetEditExamples >> nilPageUid [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLToolForLepiterSnippetEdit new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: '{"pageUid": null, "snippetUid": "someSnippetUid", "updatedText": "Updated text"}'.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	| targetObject |
 	
-	domainObject := result targetObject.
+	targetObject := self
+		executeTool: GtLToolForLepiterSnippetEdit new
+		withArguments: {
+			'pageUid' -> nil.
+			'snippetUid' -> 'someSnippetUid'.
+			'updatedText' -> 'Updated text'
+		} asDictionary.
+	
 	self
-		assertJSONSchemaValidationError: domainObject
+		assertJSONSchemaValidationError: targetObject
 		withPath: #('pageUid')
 		errorMessage: '@[pageUid] string expected'.
-	^ domainObject
+	
+	^ targetObject
 ]
 
-{ #category : #'examples - errors' }
+{ #category : #examples }
 GtLToolForLepiterSnippetEditExamples >> nilSnippetUid [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLToolForLepiterSnippetEdit new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: '{"pageUid": "', (UUID new asString), '", "snippetUid": null, "updatedText": "Updated text"}'.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	| targetObject |
 	
-	domainObject := result targetObject.
+	targetObject := self
+		executeTool: GtLToolForLepiterSnippetEdit new
+		withArguments: {
+			'pageUid' -> UUID new asString.
+			'snippetUid' -> nil.
+			'updatedText' -> 'Updated text'
+		} asDictionary.
+	
 	self
-		assertJSONSchemaValidationError: domainObject
+		assertJSONSchemaValidationError: targetObject
 		withPath: #('snippetUid')
 		errorMessage: '@[snippetUid] string expected'.
-	^ domainObject
+	
+	^ targetObject
 ]
 
-{ #category : #'examples - errors' }
+{ #category : #examples }
 GtLToolForLepiterSnippetEditExamples >> nilUpdatedText [
 	<gtExample>
-	| tool call result domainObject pageUid snippetUid |
-	tool := GtLToolForLepiterSnippetEdit new.
-	pageUid := UUID new asString.
-	snippetUid := (LeUID new uidString: (UUID new asString); uidString).
-	call := GtLFunctionToolCall new.
-	call rawArguments: '{"pageUid": "', pageUid, '", "snippetUid": "', snippetUid, '", "updatedText": null}'.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	| targetObject snippetUid |
+	snippetUid := LeUID new uidString: UUID new asString; uidString.
 	
-	domainObject := result targetObject.
+	targetObject := self
+		executeTool: GtLToolForLepiterSnippetEdit new
+		withArguments: {
+			'pageUid' -> UUID new asString.
+			'snippetUid' -> snippetUid.
+			'updatedText' -> nil
+		} asDictionary.
+	
 	self
-		assertJSONSchemaValidationError: domainObject
+		assertJSONSchemaValidationError: targetObject
 		withPath: #('updatedText')
 		errorMessage: '@[updatedText] string expected'.
-	^ domainObject
+	
+	^ targetObject
 ]
 
 { #category : #examples }
 GtLToolForLepiterSnippetEditExamples >> successfulSnippetEdit [
 	<gtExample>
-	| database page snippet updatedText tool call result domainObject |
+	| targetObject database page snippet updatedText tool |
 	database := LeContentExamples new basicDatabase.
 	page := database pageBuilder
 		title: 'one';
@@ -214,18 +211,19 @@ GtLToolForLepiterSnippetEditExamples >> successfulSnippetEdit [
 	updatedText := 'Updated snippet text'.
 	tool := GtLToolForLepiterSnippetEdit new.
 	tool database: database.
-	call := GtLFunctionToolCall new.
-	call rawArguments: {
-		'pageUid' -> page uidString.
-		'snippetUid' -> snippet uidString.
-		'updatedText' -> updatedText } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self assert: (domainObject isKindOf: GtLLepiterSnippetEditDomainObject).
-	self assert: domainObject status equals: 'updated'.
-	self assert: domainObject oldText equals: 'one > one'.
+	
+	targetObject := self
+		executeTool: tool
+		withArguments: {
+			'pageUid' -> page uidString.
+			'snippetUid' -> snippet uidString.
+			'updatedText' -> updatedText
+		} asDictionary.
+	
+	self assert: (targetObject isKindOf: GtLLepiterSnippetEditDomainObject).
+	self assert: targetObject status equals: 'updated'.
+	self assert: targetObject oldText equals: 'one > one'.
 	self assert: snippet string equals: updatedText.
-	^ domainObject
+	
+	^ targetObject
 ]

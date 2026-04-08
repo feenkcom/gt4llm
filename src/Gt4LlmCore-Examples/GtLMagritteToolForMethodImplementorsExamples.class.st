@@ -10,58 +10,57 @@ Class {
 { #category : #examples }
 GtLMagritteToolForMethodImplementorsExamples >> implementorsForExistingMethodName [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLMagritteToolForMethodImplementors new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: { 'methodName' -> 'performToolCall:' } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: call arguments size equals: 1.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self assert: (domainObject isKindOf: GtLMethodsSearchResult).
-	self assert: domainObject foundMethods isNotEmpty.
-	self
-		assert: (domainObject foundMethods anySatisfy: [ :each |
-			each methodSignature = 'GtLAbstractFunctionTool>>#performToolCall:' ]).
-	self assert: domainObject mayHaveMore not.
-	^ domainObject
+	| targetObject |
+	
+	targetObject := self
+		executeTool: GtLMagritteToolForMethodImplementors new
+		withArguments: {
+			'methodName' -> 'performToolCall:'
+		} asDictionary.
+	
+	self assert: (targetObject isKindOf: GtLMethodsSearchResult).
+	self assert: targetObject foundMethods isNotEmpty.
+	self assert: (targetObject foundMethods anySatisfy: [ :each |
+		each methodSignature = 'GtLAbstractFunctionTool>>#performToolCall:' ]).
+	self assert: targetObject mayHaveMore not.
+	
+	^ targetObject
 ]
 
 { #category : #examples }
 GtLMagritteToolForMethodImplementorsExamples >> implementorsForGtDisplayOnReturns200 [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLMagritteToolForMethodImplementors new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: { 'methodName' -> 'gtDisplayOn:' } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: call arguments size equals: 1.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self assert: (domainObject isKindOf: GtLMethodsSearchResult).
-	self assert: domainObject foundMethods size equals: 200.
-	self assert: domainObject mayHaveMore.
-	^ domainObject
+	| targetObject |
+	
+	targetObject := self
+		executeTool: GtLMagritteToolForMethodImplementors new
+		withArguments: {
+			'methodName' -> 'gtDisplayOn:'
+		} asDictionary.
+	
+	self assert: (targetObject isKindOf: GtLMethodsSearchResult).
+	self assert: targetObject foundMethods size equals: 200.
+	self assert: targetObject mayHaveMore.
+	
+	^ targetObject
 ]
 
 { #category : #examples }
 GtLMagritteToolForMethodImplementorsExamples >> implementorsForUnknownMethodName [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLMagritteToolForMethodImplementors new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: { 'methodName' -> 'unknownMethodName42' } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: call arguments size equals: 1.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self assert: (domainObject isKindOf: GtLMethodsSearchResult).
-	self assert: domainObject foundMethods equals: #().
-	self assert: domainObject mayHaveMore not.
-	^ domainObject
+	| targetObject |
+	
+	targetObject := self
+		executeTool: GtLMagritteToolForMethodImplementors new
+		withArguments: {
+			'methodName' -> 'unknownMethodName42'
+		} asDictionary.
+	
+	self assert: (targetObject isKindOf: GtLMethodsSearchResult).
+	self assert: targetObject foundMethods equals: #().
+	self assert: targetObject mayHaveMore not.
+	
+	^ targetObject
 ]
 
 { #category : #examples }
@@ -88,59 +87,58 @@ GtLMagritteToolForMethodImplementorsExamples >> implementorsForUnknownMethodName
 	^ dataBlock
 ]
 
-{ #category : #'examples - error conditions' }
+{ #category : #examples }
 GtLMagritteToolForMethodImplementorsExamples >> implementorsWithEmptyMethodName [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLMagritteToolForMethodImplementors new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: { 'methodName' -> '' } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: call arguments size equals: 1.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self 
-		assertMissingArgument: domainObject 
-		withArgumentName: 'methodName' 
+	| targetObject |
+	
+	targetObject := self
+		executeTool: GtLMagritteToolForMethodImplementors new
+		withArguments: {
+			'methodName' -> ''
+		} asDictionary.
+	
+	self
+		assertMissingArgument: targetObject
+		withArgumentName: 'methodName'
 		errorMessage: 'Missing argument called methodName'.
-	^ domainObject
+	
+	^ targetObject
 ]
 
-{ #category : #'examples - error conditions' }
+{ #category : #examples }
 GtLMagritteToolForMethodImplementorsExamples >> implementorsWithMissingMethodName [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLMagritteToolForMethodImplementors new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: {} asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: call arguments size equals: 0.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self 
-		assertMissingRequiredProperties: domainObject 
-		withPropertyNames: #('methodName') 
-		path: #(nil) 
+	| targetObject |
+	
+	targetObject := self
+		executeTool: GtLMagritteToolForMethodImplementors new
+		withArguments: Dictionary new.
+	
+	self
+		assertMissingRequiredProperties: targetObject
+		withPropertyNames: #('methodName')
+		path: #(nil)
 		errorMessage: 'required properties missing [methodName]'.
-	^ domainObject
+	
+	^ targetObject
 ]
 
-{ #category : #'examples - error conditions' }
+{ #category : #examples }
 GtLMagritteToolForMethodImplementorsExamples >> implementorsWithNilMethodName [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLMagritteToolForMethodImplementors new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: { 'methodName' -> nil } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self 
-		assertJSONSchemaValidationError: domainObject 
-		withPath: #('methodName') 
+	| targetObject |
+	
+	targetObject := self
+		executeTool: GtLMagritteToolForMethodImplementors new
+		withArguments: {
+			'methodName' -> nil
+		} asDictionary.
+	
+	self
+		assertJSONSchemaValidationError: targetObject
+		withPath: #('methodName')
 		errorMessage: '@[methodName] string expected'.
-	^ domainObject
+	
+	^ targetObject
 ]

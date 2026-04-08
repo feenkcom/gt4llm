@@ -7,17 +7,16 @@ Class {
 { #category : #examples }
 GtLToolForLepiterKnowledgeBasesExamples >> knowledgeBasesLookup [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLToolForLepiterKnowledgeBases new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: Dictionary new.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self assert: (domainObject isKindOf: GtLLepiterKnowledgeBases).
-	self assert: domainObject knowledgeBases isNotEmpty.
-	self assert: (domainObject knowledgeBases allSatisfy: [ :each | each uuidString isNotEmpty ]).
-	self assert: (domainObject knowledgeBases allSatisfy: [ :each | each pageCount isNumber ]).
-	^ domainObject
+	| targetObject |
+	
+	targetObject := self
+		executeTool: GtLToolForLepiterKnowledgeBases new
+		withArguments: Dictionary new.
+	
+	self assert: (targetObject isKindOf: GtLLepiterKnowledgeBases).
+	self assert: targetObject knowledgeBases isNotEmpty.
+	self assert: (targetObject knowledgeBases allSatisfy: [ :each | each uuidString isNotEmpty ]).
+	self assert: (targetObject knowledgeBases allSatisfy: [ :each | each pageCount isNumber ]).
+	
+	^ targetObject
 ]

@@ -11,8 +11,9 @@ Class {
 GtLMagritteToolForClassSearchExamples >> searchClassesDataViewSerialization [
 	<gtExample>
 	<return: #GtLPrimitiveMessageDataBlock>
-	| domainObject compositeView dataBlock jsonData |
-	domainObject := self searchClassesWithMatches.
+	| call domainObject compositeView dataBlock jsonData |
+	call := self searchClassesWithMatches.
+	domainObject := call result targetObject.
 	compositeView := domainObject llmDataViewsFor: GtLDataView new.
 	self assert: compositeView dataViews size equals: 1.
 	
@@ -31,110 +32,115 @@ GtLMagritteToolForClassSearchExamples >> searchClassesDataViewSerialization [
 { #category : #examples }
 GtLMagritteToolForClassSearchExamples >> searchClassesWithEmptyQuery [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLMagritteToolForClassSearch new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: { 'query' -> '' } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self assert: (domainObject isKindOf: GtLClassesSearchResult).
-	self assert: domainObject foundClassNames isEmpty.
-	self assert: domainObject mayHaveMore not.
-	^ domainObject
+	| call targetObject |
+	
+	call := self
+		executeTool: GtLMagritteToolForClassSearch new
+		withArguments: {
+			'query' -> ''
+		} asDictionary.
+	targetObject := call result targetObject.
+	
+	self assert: (targetObject isKindOf: GtLClassesSearchResult).
+	self assert: targetObject foundClassNames isEmpty.
+	self assert: targetObject mayHaveMore not.
+		
+	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForClassSearchExamples >> searchClassesWithMatches [
 	<gtExample>
-	| tool call result domainObject queryLower |
-	tool := GtLMagritteToolForClassSearch new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: { 'query' -> 'GtLToolForClass' } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: call arguments size equals: 1.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self assert: (domainObject isKindOf: GtLClassesSearchResult).
-	self assert: domainObject foundClassNames isNotEmpty.
+	| call targetObject queryLower |
+	
+	call := self
+		executeTool: GtLMagritteToolForClassSearch new
+		withArguments: {
+			'query' -> 'GtLToolForClass'
+		} asDictionary.
+	targetObject := call result targetObject.
+	
+	self assert: (targetObject isKindOf: GtLClassesSearchResult).
+	self assert: targetObject foundClassNames isNotEmpty.
 	queryLower := 'GtLToolForClass' asLowercase.
-	self assert: (domainObject foundClassNames anySatisfy: [ :each | each asLowercase includesSubstring: queryLower ]).
-	self assert: domainObject mayHaveMore not.
-	^ domainObject
+	self assert: (targetObject foundClassNames anySatisfy: [ :each | each asLowercase includesSubstring: queryLower ]).
+	self assert: targetObject mayHaveMore not.
+		
+	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForClassSearchExamples >> searchClassesWithMissingQuery [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLMagritteToolForClassSearch new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: {} asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self 
-		assertMissingRequiredProperties: domainObject 
-		withPropertyNames: #('query') 
-		path: #(nil) 
+	| call |
+	
+	call := self
+		executeTool: GtLMagritteToolForClassSearch new
+		withArguments: {} asDictionary.
+	
+	self
+		assertMissingRequiredProperties: call result targetObject
+		withPropertyNames: #('query')
+		path: #(nil)
 		errorMessage: 'required properties missing [query]'.
-	^ domainObject
+		
+	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForClassSearchExamples >> searchClassesWithMoreThan200Matches [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLMagritteToolForClassSearch new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: { 'query' -> 'Object' } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: call arguments size equals: 1.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self assert: (domainObject isKindOf: GtLClassesSearchResult).
-	self assert: domainObject foundClassNames size equals: 200.
-	self assert: (domainObject foundClassNames allSatisfy: [ :each | each includesSubstring: 'Object' ]).
-	self assert: domainObject mayHaveMore.
-	^ domainObject
+	| call targetObject |
+	
+	call := self
+		executeTool: GtLMagritteToolForClassSearch new
+		withArguments: {
+			'query' -> 'Object'
+		} asDictionary.
+	targetObject := call result targetObject.
+	
+	self assert: (targetObject isKindOf: GtLClassesSearchResult).
+	self assert: targetObject foundClassNames size equals: 200.
+	self assert: (targetObject foundClassNames allSatisfy: [ :each | each includesSubstring: 'Object' ]).
+	self assert: targetObject mayHaveMore.
+		
+	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForClassSearchExamples >> searchClassesWithNilQuery [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLMagritteToolForClassSearch new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: { 'query' -> nil } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self 
-		assertJSONSchemaValidationError: domainObject 
-		withPath: #('query') 
+	| call |
+	
+	call := self
+		executeTool: GtLMagritteToolForClassSearch new
+		withArguments: {
+			'query' -> nil
+		} asDictionary.
+	
+	self
+		assertJSONSchemaValidationError: call result targetObject
+		withPath: #('query')
 		errorMessage: '@[query] string expected'.
-	^ domainObject
+		
+	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForClassSearchExamples >> searchClassesWithNoMatches [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLMagritteToolForClassSearch new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: { 'query' -> 'ClassNameThatDoesNotExist42' } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: call arguments size equals: 1.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self assert: (domainObject isKindOf: GtLClassesSearchResult).
-	self assert: domainObject foundClassNames isEmpty.
-	self assert: domainObject mayHaveMore not.
-	^ domainObject
+	| call targetObject |
+	
+	call := self
+		executeTool: GtLMagritteToolForClassSearch new
+		withArguments: {
+			'query' -> 'ClassNameThatDoesNotExist42'
+		} asDictionary.
+	targetObject := call result targetObject.
+	
+	self assert: (targetObject isKindOf: GtLClassesSearchResult).
+	self assert: targetObject foundClassNames isEmpty.
+	self assert: targetObject mayHaveMore not.
+		
+	^ call
 ]

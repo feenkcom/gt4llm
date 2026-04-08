@@ -30,57 +30,56 @@ GtLToolForSearchFilterExamples >> searchFilterDataViewSerialization [
 { #category : #examples }
 GtLToolForSearchFilterExamples >> searchFilterForExampleMethods [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLToolForSearchFilter new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: {
-		'query' -> 'GtLToolForSearchFilterExamples gtMethodsInClass & #gtExample gtPragmas'
-	} asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self assert: (domainObject isKindOf: GtLSearchFilterDomainObject).
-	self assert: domainObject isErrorDomainObject not.
-	self assert: domainObject items isNotEmpty.
-	self assert: (domainObject items anySatisfy: [ :eachMethod | 
+	| targetObject |
+	
+	targetObject := self
+		executeTool: GtLToolForSearchFilter new
+		withArguments: {
+			'query' -> 'GtLToolForSearchFilterExamples gtMethodsInClass & #gtExample gtPragmas'
+		} asDictionary.
+	
+	self assert: (targetObject isKindOf: GtLSearchFilterDomainObject).
+	self assert: targetObject isErrorDomainObject not.
+	self assert: targetObject items isNotEmpty.
+	self assert: (targetObject items anySatisfy: [ :eachMethod |
 		eachMethod methodClass = GtLToolForSearchFilterExamples
 			and: [ eachMethod selector = #searchFilterForExampleMethods ] ]).
-	^ domainObject
+	
+	^ targetObject
 ]
 
 { #category : #examples }
 GtLToolForSearchFilterExamples >> searchFilterWithError [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLToolForSearchFilter new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: { 'query' -> 'self error: ''boom''' } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self assert: domainObject isErrorDomainObject.
-	self assert: (domainObject description beginsWith: 'There was an error when evaluating the query: ').
-	self assert: (domainObject description includesSubstring: 'boom').
-	^ domainObject
+	| targetObject |
+	
+	targetObject := self
+		executeTool: GtLToolForSearchFilter new
+		withArguments: {
+			'query' -> 'self error: ''boom'''
+		} asDictionary.
+	
+	self assert: targetObject isErrorDomainObject.
+	self assert: (targetObject description beginsWith: 'There was an error when evaluating the query: ').
+	self assert: (targetObject description includesSubstring: 'boom').
+	
+	^ targetObject
 ]
 
 { #category : #examples }
 GtLToolForSearchFilterExamples >> searchFilterWithMissingQuery [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLToolForSearchFilter new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: Dictionary new.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self 
-		assertMissingRequiredProperties: domainObject 
-		withPropertyNames: #('query') 
+	| targetObject |
+	
+	targetObject := self
+		executeTool: GtLToolForSearchFilter new
+		withArguments: Dictionary new.
+	
+	self
+		assertMissingRequiredProperties: targetObject
+		withPropertyNames: #('query')
 		path: #(nil)
 		errorMessage: 'required properties missing [query]'.
-	^ domainObject
+	
+	^ targetObject
 ]

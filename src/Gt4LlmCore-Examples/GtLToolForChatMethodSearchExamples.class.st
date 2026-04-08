@@ -28,36 +28,38 @@ GtLToolForChatMethodSearchExamples >> methodSearchDataViewSerialization [
 { #category : #examples }
 GtLToolForChatMethodSearchExamples >> methodSearchHandlesError [
 	<gtExample>
-	| tool call result domainObject providerWithStubData |
+	| targetObject providerWithStubData |
 	providerWithStubData := self providerWithStubDataForQuery: '1/0'.
-	tool := GtLToolForChatMethodSearch new provider: providerWithStubData.
-	call := GtLFunctionToolCall new.
-	call rawArguments: { 'searchPrompt' -> 'methods that trigger failures' } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self assert: domainObject isErrorDomainObject.
-	^ domainObject
+	
+	targetObject := self
+		executeTool: (GtLToolForChatMethodSearch new provider: providerWithStubData)
+		withArguments: {
+			'searchPrompt' -> 'methods that trigger failures'
+		} asDictionary.
+	
+	self assert: targetObject isErrorDomainObject.
+	
+	^ targetObject
 ]
 
 { #category : #examples }
 GtLToolForChatMethodSearchExamples >> methodSearchReturnsMatches [
 	<gtExample>
-	| tool call result domainObject providerWithStubData |
+	| targetObject providerWithStubData |
 	providerWithStubData := self
-			providerWithStubDataForQuery: 'GtLToolForChatMethodSearch gtReferences'.
-	tool := GtLToolForChatMethodSearch new provider: providerWithStubData.
-	call := GtLFunctionToolCall new.
-	call rawArguments: { 'searchPrompt' -> 'methods referencing BlElement' } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self assert: (domainObject isKindOf: GtLMethodsSearchResult).
-	self assert: (domainObject foundMethods anySatisfy: [ :each | 
+		providerWithStubDataForQuery: 'GtLToolForChatMethodSearch gtReferences'.
+	
+	targetObject := self
+		executeTool: (GtLToolForChatMethodSearch new provider: providerWithStubData)
+		withArguments: {
+			'searchPrompt' -> 'methods referencing BlElement'
+		} asDictionary.
+	
+	self assert: (targetObject isKindOf: GtLMethodsSearchResult).
+	self assert: (targetObject foundMethods anySatisfy: [ :each |
 		each methodClassName = #GtLToolForChatMethodSearchExamples ]).
-	^ domainObject
+	
+	^ targetObject
 ]
 
 { #category : #examples }

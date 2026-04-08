@@ -10,23 +10,17 @@ Class {
 { #category : #examples }
 GtLToolForObjectViewExamples >> viewContentForExistingObjectAndView [
 	<gtExample>
-	| objectStorage objectId tool call result domainObject compositeView dataBlock jsonData imageBlock |
+	| objectStorage objectId tool domainObject compositeView dataBlock jsonData imageBlock |
 	objectStorage := GtLObjectStorage new.
 	objectId := objectStorage addNewObject: 'Hello'.
 	tool := GtLToolForObjectView new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: {
-		'objectId' -> objectId.
-		'viewSelector' -> 'gtStringFor:'
-	} asDictionary.
-	result := tool
-		performToolCall: call
-		inContext: (GtLToolExecutionContext new 
-			objectStorage: objectStorage).
-		
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
+	domainObject := self
+		executeTool: tool
+		withArguments: {
+			'objectId' -> objectId.
+			'viewSelector' -> 'gtStringFor:'
+		} asDictionary
+		inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
 	self assert: (domainObject isKindOf: GtLPhlowViewDomainObject).
 	self assert: domainObject phlowView notNil.
 	self assert: domainObject phlowView title equals: 'String'.
@@ -45,23 +39,19 @@ GtLToolForObjectViewExamples >> viewContentForExistingObjectAndView [
 	imageBlock := dataBlock imageDataBlocks first.
 	self assert: imageBlock imageType equals: 'png'.
 	self assert: imageBlock imageBytes isNotEmpty.
-	
 	^ domainObject
 ]
 
-{ #category : #'examples - errors' }
+{ #category : #examples }
 GtLToolForObjectViewExamples >> viewContentForMissingObjectId [
 	<gtExample>
-	| tool call result domainObject |
+	| tool domainObject |
 	tool := GtLToolForObjectView new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: {
-		'viewSelector' -> 'gtStringFor:'
-	} asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
+	domainObject := self
+		executeTool: tool
+		withArguments: {
+			'viewSelector' -> 'gtStringFor:'
+		} asDictionary.
 	self
 		assertMissingRequiredProperties: domainObject
 		withPropertyNames: #('objectId')
@@ -70,20 +60,17 @@ GtLToolForObjectViewExamples >> viewContentForMissingObjectId [
 	^ domainObject
 ]
 
-{ #category : #'examples - errors' }
+{ #category : #examples }
 GtLToolForObjectViewExamples >> viewContentForMissingObjectStorage [
 	<gtExample>
-	| tool call result domainObject |
+	| tool domainObject |
 	tool := GtLToolForObjectView new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: {
-		'objectId' -> 'missing'.
-		'viewSelector' -> 'gtStringFor:'
-	} asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
+	domainObject := self
+		executeTool: tool
+		withArguments: {
+			'objectId' -> 'missing'.
+			'viewSelector' -> 'gtStringFor:'
+		} asDictionary.
 	self
 		assertMissingInformation: domainObject
 		withModelName: 'objectStorage'
@@ -91,19 +78,16 @@ GtLToolForObjectViewExamples >> viewContentForMissingObjectStorage [
 	^ domainObject
 ]
 
-{ #category : #'examples - errors' }
+{ #category : #examples }
 GtLToolForObjectViewExamples >> viewContentForMissingViewSelector [
 	<gtExample>
-	| tool call result domainObject |
+	| tool domainObject |
 	tool := GtLToolForObjectView new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: {
-		'objectId' -> 'missing'
-	} asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
+	domainObject := self
+		executeTool: tool
+		withArguments: {
+			'objectId' -> 'missing'
+		} asDictionary.
 	self
 		assertMissingRequiredProperties: domainObject
 		withPropertyNames: #('viewSelector')
@@ -112,25 +96,21 @@ GtLToolForObjectViewExamples >> viewContentForMissingViewSelector [
 	^ domainObject
 ]
 
-{ #category : #'examples - errors' }
+{ #category : #examples }
 GtLToolForObjectViewExamples >> viewContentForNonExistentViewSelector [
 	<gtExample>
-	| objectStorage objectId tool call result domainObject viewSelector |
+	| objectStorage objectId tool domainObject viewSelector |
 	objectStorage := GtLObjectStorage new.
 	objectId := objectStorage addNewObject: 'Hello'.
 	viewSelector := 'nonExistentViewFor:'.
 	tool := GtLToolForObjectView new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: {
-		'objectId' -> objectId.
-		'viewSelector' -> viewSelector
-	} asDictionary.
-	result := tool
-		performToolCall: call
+	domainObject := self
+		executeTool: tool
+		withArguments: {
+			'objectId' -> objectId.
+			'viewSelector' -> viewSelector
+		} asDictionary
 		inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
 	self
 		assertMissingObject: domainObject
 		withObjectName: viewSelector
@@ -138,25 +118,21 @@ GtLToolForObjectViewExamples >> viewContentForNonExistentViewSelector [
 	^ domainObject
 ]
 
-{ #category : #'examples - errors' }
+{ #category : #examples }
 GtLToolForObjectViewExamples >> viewContentForUnknownObjectId [
 	<gtExample>
-	| objectStorage objectId tool call result domainObject |
+	| objectStorage objectId tool domainObject |
 	objectStorage := GtLObjectStorage new.
 	objectId := objectStorage addNewObject: 1.
 	objectStorage clearCache.
 	tool := GtLToolForObjectView new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: {
-		'objectId' -> objectId.
-		'viewSelector' -> 'gtStringFor:'
-	} asDictionary.
-	result := tool
-		performToolCall: call
+	domainObject := self
+		executeTool: tool
+		withArguments: {
+			'objectId' -> objectId.
+			'viewSelector' -> 'gtStringFor:'
+		} asDictionary
 		inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
 	self
 		assertMissingObject: domainObject
 		withObjectName: objectId
@@ -167,22 +143,17 @@ GtLToolForObjectViewExamples >> viewContentForUnknownObjectId [
 { #category : #examples }
 GtLToolForObjectViewExamples >> viewContentForViewWithExceptionAtCreation [
 	<gtExample>
-	| objectStorage objectId tool call result domainObject compositeView dataBlock jsonData |
+	| objectStorage objectId tool domainObject compositeView dataBlock jsonData |
 	objectStorage := GtLObjectStorage new.
 	objectId := objectStorage addNewObject: GtInspectorSampleWithExceptionsInExtensions new.
 	tool := GtLToolForObjectView new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: {
-		'objectId' -> objectId.
-		'viewSelector' -> 'gtViewWithExceptionAtCreationFor:'
-	} asDictionary.
-	result := tool
-		performToolCall: call
-		inContext: (GtLToolExecutionContext new 
-			objectStorage: objectStorage).
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
+	domainObject := self
+		executeTool: tool
+		withArguments: {
+			'objectId' -> objectId.
+			'viewSelector' -> 'gtViewWithExceptionAtCreationFor:'
+		} asDictionary
+		inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
 	self assert: (domainObject isKindOf: GtLPhlowViewDomainObject).
 	self assert: domainObject phlowView notNil.
 	self assert: domainObject phlowView title equals: 'Error'.
@@ -195,29 +166,23 @@ GtLToolForObjectViewExamples >> viewContentForViewWithExceptionAtCreation [
 	jsonData := dataBlock compositeJsonData.
 	self assert: (jsonData at: #viewMethodClass) equals: GtInspectorSampleWithExceptionsInExtensions name.
 	self assert: (jsonData at: #viewMethodSourceCode) equals: (GtInspectorSampleWithExceptionsInExtensions >> #gtViewWithExceptionAtCreationFor:) sourceCode.
-	
 	^ domainObject
 ]
 
 { #category : #examples }
 GtLToolForObjectViewExamples >> viewContentForViewWithExceptionInStencil [
 	<gtExample>
-	| objectStorage objectId tool call result domainObject compositeView dataBlock jsonData |
+	| objectStorage objectId tool domainObject compositeView dataBlock jsonData |
 	objectStorage := GtLObjectStorage new.
 	objectId := objectStorage addNewObject: GtInspectorSampleWithExceptionsInExtensions new.
 	tool := GtLToolForObjectView new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: {
-		'objectId' -> objectId.
-		'viewSelector' -> 'gtViewWithExceptionInStencilFor:'
-	} asDictionary.
-	result := tool
-		performToolCall: call
-		inContext: (GtLToolExecutionContext new 
-			objectStorage: objectStorage).
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
+	domainObject := self
+		executeTool: tool
+		withArguments: {
+			'objectId' -> objectId.
+			'viewSelector' -> 'gtViewWithExceptionInStencilFor:'
+		} asDictionary
+		inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
 	self assert: (domainObject isKindOf: GtLPhlowViewDomainObject).
 	self assert: domainObject phlowView notNil.
 	self assert: domainObject phlowView title equals: 'With error in stencil'.
@@ -230,6 +195,5 @@ GtLToolForObjectViewExamples >> viewContentForViewWithExceptionInStencil [
 	jsonData := dataBlock compositeJsonData.
 	self assert: (jsonData at: #viewMethodClass) equals: GtInspectorSampleWithExceptionsInExtensions name.
 	self assert: (jsonData at: #viewMethodSourceCode) equals: (GtInspectorSampleWithExceptionsInExtensions >> #gtViewWithExceptionInStencilFor:) sourceCode.
-	
 	^ domainObject
 ]

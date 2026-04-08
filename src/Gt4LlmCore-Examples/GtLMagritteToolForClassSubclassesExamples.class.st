@@ -11,8 +11,9 @@ Class {
 GtLMagritteToolForClassSubclassesExamples >> classSubclassesDataViewSerialization [
 	<gtExample>
 	<return: #GtLPrimitiveMessageDataBlock>
-	| domainObject compositeView dataBlock jsonData |
-	domainObject := self classSubclassesForExistingClass.
+	| call domainObject compositeView dataBlock jsonData |
+	call := self classSubclassesForExistingClass.
+	domainObject := call result targetObject.
 	compositeView := domainObject llmDataViewsFor: GtLDataView new.
 	self assert: compositeView dataViews size equals: 1.
 	
@@ -32,131 +33,135 @@ GtLMagritteToolForClassSubclassesExamples >> classSubclassesDataViewSerializatio
 { #category : #examples }
 GtLMagritteToolForClassSubclassesExamples >> classSubclassesForBlElement [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLMagritteToolForClassSubclasses new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: { 'className' -> 'BlElement' } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: call arguments size equals: 1.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self assert: (domainObject isKindOf: GtLClassSubclasses).
-	self assert: domainObject givenClassName equals: 'BlElement'.
-	self assert: domainObject subclassNames size equals: 200.
-	self assert: domainObject mayHaveMore.
-	^ domainObject
+	| call targetObject |
+	
+	call := self
+		executeTool: GtLMagritteToolForClassSubclasses new
+		withArguments: {
+			'className' -> 'BlElement'
+		} asDictionary.
+	targetObject := call result targetObject.
+	
+	self assert: (targetObject isKindOf: GtLClassSubclasses).
+	self assert: targetObject givenClassName equals: 'BlElement'.
+	self assert: targetObject subclassNames size equals: 200.
+	self assert: targetObject mayHaveMore.
+	
+	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForClassSubclassesExamples >> classSubclassesForClassWithNoSubclasses [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLMagritteToolForClassSubclasses new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: { 'className' -> 'GtLlmToolForClassSubclasses' } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: call arguments size equals: 1.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self assert: (domainObject isKindOf: GtLClassSubclasses).
-	self assert: domainObject givenClassName equals: 'GtLlmToolForClassSubclasses'.
-	self assert: domainObject subclassNames isEmpty.
-	self assert: domainObject mayHaveMore not.
-	^ domainObject
+	| call targetObject |
+	
+	call := self
+		executeTool: GtLMagritteToolForClassSubclasses new
+		withArguments: {
+			'className' -> 'GtLlmToolForClassSubclasses'
+		} asDictionary.
+	targetObject := call result targetObject.
+	
+	self assert: (targetObject isKindOf: GtLClassSubclasses).
+	self assert: targetObject givenClassName equals: 'GtLlmToolForClassSubclasses'.
+	self assert: targetObject subclassNames isEmpty.
+	self assert: targetObject mayHaveMore not.
+	
+	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForClassSubclassesExamples >> classSubclassesForExistingClass [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLMagritteToolForClassSubclasses new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: { 'className' -> 'GtLAbstractMagritteFunctionTool' } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: call arguments size equals: 1.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self assert: (domainObject isKindOf: GtLClassSubclasses).
-	self assert: domainObject givenClassName equals: 'GtLAbstractMagritteFunctionTool'.
-	self assert: domainObject subclassNames isNotEmpty.
-	self assert: (domainObject subclassNames anySatisfy: [ :each | each includesSubstring: 'GtLToolForClass' ]).
-	self assert: domainObject mayHaveMore not.
-	^ domainObject
+	| call targetObject |
+	
+	call := self
+		executeTool: GtLMagritteToolForClassSubclasses new
+		withArguments: {
+			'className' -> 'GtLAbstractMagritteFunctionTool'
+		} asDictionary.
+	targetObject := call result targetObject.
+	
+	self assert: (targetObject isKindOf: GtLClassSubclasses).
+	self assert: targetObject givenClassName equals: 'GtLAbstractMagritteFunctionTool'.
+	self assert: targetObject subclassNames isNotEmpty.
+	self assert: (targetObject subclassNames anySatisfy: [ :each | each includesSubstring: 'GtLToolForClass' ]).
+	self assert: targetObject mayHaveMore not.
+	
+	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForClassSubclassesExamples >> classSubclassesForUnknownClass [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLMagritteToolForClassSubclasses new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: { 'className' -> 'NonExistingClassName' } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: call arguments size equals: 1.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self 
-		assertMissingObject: domainObject 
-		withObjectName: 'NonExistingClassName' 
+	| call |
+	
+	call := self
+		executeTool: GtLMagritteToolForClassSubclasses new
+		withArguments: {
+			'className' -> 'NonExistingClassName'
+		} asDictionary.
+	
+	self
+		assertMissingObject: call result targetObject
+		withObjectName: 'NonExistingClassName'
 		errorMessage: 'NonExistingClassName is not found'.
-	^ domainObject
+	
+	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForClassSubclassesExamples >> classSubclassesWithEmptyClassName [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLMagritteToolForClassSubclasses new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: { 'className' -> '' } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self 
-		assertMissingArgument: domainObject 
-		withArgumentName: 'className' 
+	| call |
+	
+	call := self
+		executeTool: GtLMagritteToolForClassSubclasses new
+		withArguments: {
+			'className' -> ''
+		} asDictionary.
+	
+	self
+		assertMissingArgument: call result targetObject
+		withArgumentName: 'className'
 		errorMessage: 'Missing argument called className'.
-	^ domainObject
+	
+	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForClassSubclassesExamples >> classSubclassesWithMissingClassName [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLMagritteToolForClassSubclasses new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: {} asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self 
-		assertMissingRequiredProperties: domainObject 
-		withPropertyNames: #('className') 
-		path: #(nil) 
+	| call |
+	
+	call := self
+		executeTool: GtLMagritteToolForClassSubclasses new
+		withArguments: Dictionary new.
+	
+	self
+		assertMissingRequiredProperties: call result targetObject
+		withPropertyNames: #('className')
+		path: #(nil)
 		errorMessage: 'required properties missing [className]'.
-	^ domainObject
+	
+	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForClassSubclassesExamples >> classSubclassesWithNilClassName [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLMagritteToolForClassSubclasses new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: { 'className' -> nil } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self 
-		assertJSONSchemaValidationError: domainObject 
-		withPath: #('className') 
+	| call |
+	
+	call := self
+		executeTool: GtLMagritteToolForClassSubclasses new
+		withArguments: {
+			'className' -> nil
+		} asDictionary.
+	
+	self
+		assertJSONSchemaValidationError: call result targetObject
+		withPath: #('className')
 		errorMessage: '@[className] string expected'.
-	^ domainObject
+	
+	^ call
 ]

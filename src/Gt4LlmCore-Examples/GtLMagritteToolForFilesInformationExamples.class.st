@@ -12,21 +12,19 @@ GtLMagritteToolForFilesInformationExamples >> filesInformationForDirectory [
 	<gtExample>
 	| directory |
 	directory := FileLocator temp / 'gt-llm-files-information'.
-	[ | tool call result domainObject |
+	[ | tool call targetObject |
 		directory exists ifFalse: [ directory ensureCreateDirectory ].
 		tool := GtLMagritteToolForFilesInformation new.
-		call := GtLFunctionToolCall new.
-		call rawArguments: {
-			'filePaths' -> { {'pathString' -> directory pathString} asDictionary } asArray
-		} asDictionary.
-		result := tool performToolCall: call.
-		self assert: call tool == tool.
-		self assert: (result isKindOf: GTLDataViewWrapperModel).
-		domainObject := result targetObject.
-		self assert: domainObject files size equals: 1.
-		self assert: domainObject files first path equals: directory pathString.
-		self assert: domainObject files first type equals: 'directory'.
-		^ domainObject ]
+		call := self
+			executeTool: tool
+			withArguments: {
+				'filePaths' -> { {'pathString' -> directory pathString} asDictionary } asArray
+			} asDictionary.
+		targetObject := call result targetObject.
+		self assert: targetObject files size equals: 1.
+		self assert: targetObject files first path equals: directory pathString.
+		self assert: targetObject files first type equals: 'directory'.
+		^ call ]
 		ensure: [ directory exists ifTrue: [ directory delete ] ]
 ]
 
@@ -36,27 +34,25 @@ GtLMagritteToolForFilesInformationExamples >> filesInformationForDirectoryAndFil
 	| directory fileReference |
 	directory := FileLocator temp / 'gt-llm-files-information-mixed'.
 	fileReference := FileReference newTempFilePrefix: 'GtLMagritteToolForFilesInformation' suffix: '.txt'.
-	[ | tool call result domainObject |
+	[ | tool call targetObject |
 		directory exists ifFalse: [ directory ensureCreateDirectory ].
 		fileReference writeStreamDo: [ :stream | stream nextPutAll: 'Mixed' ].
 		tool := GtLMagritteToolForFilesInformation new.
-		call := GtLFunctionToolCall new.
-		call rawArguments: {
-			'filePaths' -> {
-				{ 'pathString' -> directory pathString } asDictionary.
-				{ 'pathString' -> fileReference pathString } asDictionary
-			} asArray
-		} asDictionary.
-		result := tool performToolCall: call.
-		self assert: call tool == tool.
-		self assert: (result isKindOf: GTLDataViewWrapperModel).
-		domainObject := result targetObject.
-		self assert: domainObject files size equals: 2.
-		self assert: domainObject files first path equals: directory pathString.
-		self assert: domainObject files first type equals: 'directory'.
-		self assert: domainObject files second path equals: fileReference pathString.
-		self assert: domainObject files second type equals: 'file'.
-		^ domainObject ]
+		call := self
+			executeTool: tool
+			withArguments: {
+				'filePaths' -> {
+					{ 'pathString' -> directory pathString } asDictionary.
+					{ 'pathString' -> fileReference pathString } asDictionary
+				} asArray
+			} asDictionary.
+		targetObject := call result targetObject.
+		self assert: targetObject files size equals: 2.
+		self assert: targetObject files first path equals: directory pathString.
+		self assert: targetObject files first type equals: 'directory'.
+		self assert: targetObject files second path equals: fileReference pathString.
+		self assert: targetObject files second type equals: 'file'.
+		^ call ]
 		ensure: [
 			directory exists ifTrue: [ directory delete ].
 			fileReference exists ifTrue: [ fileReference delete ] ]
@@ -68,25 +64,21 @@ GtLMagritteToolForFilesInformationExamples >> filesInformationForExistingFiles [
 	| fileOne fileTwo |
 	fileOne := FileReference newTempFilePrefix: 'GtLMagritteToolForFilesInformation' suffix: '.txt'.
 	fileTwo := FileReference newTempFilePrefix: 'GtLMagritteToolForFilesInformation' suffix: '.txt'.
-	[ | tool call result domainObject |
+	[ | tool call targetObject |
 		fileOne writeStreamDo: [ :stream | stream nextPutAll: 'First file' ].
 		fileTwo writeStreamDo: [ :stream | stream nextPutAll: 'Second file' ].
 		tool := GtLMagritteToolForFilesInformation new.
-		call := GtLFunctionToolCall new.
-		call rawArguments: {
-			'filePaths' -> { 
-				{'pathString' -> fileOne pathString} asDictionary.
-				{'pathString' -> fileTwo pathString} asDictionary } asArray } asDictionary.
-		result := tool performToolCall: call.
-		self assert: call tool == tool.
-		self assert: (result isKindOf: GTLDataViewWrapperModel).
-		self assert: call arguments size equals: 1.
-		self assert: (call arguments anyOne allSatisfy: [ :each | each isKindOf: GtLFilePathReference ]).
-		domainObject := result targetObject.
-		self assert: domainObject files size equals: 2.
-		self assert: domainObject files first path equals: fileOne pathString.
-		self assert: domainObject files second path equals: fileTwo pathString.
-		^ domainObject ]
+		call := self
+			executeTool: tool
+			withArguments: {
+				'filePaths' -> { 
+					{'pathString' -> fileOne pathString} asDictionary.
+					{'pathString' -> fileTwo pathString} asDictionary } asArray } asDictionary.
+		targetObject := call result targetObject.
+		self assert: targetObject files size equals: 2.
+		self assert: targetObject files first path equals: fileOne pathString.
+		self assert: targetObject files second path equals: fileTwo pathString.
+		^ call ]
 		ensure: [
 			fileOne exists ifTrue: [ fileOne delete ].
 			fileTwo exists ifTrue: [ fileTwo delete ] ]
@@ -98,77 +90,65 @@ GtLMagritteToolForFilesInformationExamples >> filesInformationForMissingFile [
 	| missingPath existingFile |
 	missingPath := (FileLocator temp / 'gt-llm-missing-file-info.txt') pathString.
 	existingFile := FileReference newTempFilePrefix: 'GtLMagritteToolForFilesInformation' suffix: '.txt'.
-	[ | tool call result domainObject |
+	[ | tool call targetObject |
 		existingFile writeStreamDo: [ :stream | stream nextPutAll: 'Existing file' ].
 		tool := GtLMagritteToolForFilesInformation new.
-		call := GtLFunctionToolCall new.
-		call rawArguments: { 'filePaths' -> { {'pathString' -> missingPath} asDictionary.
-			{'pathString' -> existingFile pathString} asDictionary } asArray } asDictionary.
-		result := tool performToolCall: call.
-		self assert: call tool == tool.
-		self assert: call arguments size equals: 1.
-		self assert: (result isKindOf: GTLDataViewWrapperModel).
-		domainObject := result targetObject.
-		self assert: domainObject files size equals: 2.
-		self assert: domainObject files first isErrorDomainObject.
-		self assert: domainObject files first objectName equals: missingPath.
-		self assert: domainObject files second path equals: existingFile pathString.
-		^ domainObject ]
+		call := self
+			executeTool: tool
+			withArguments: { 'filePaths' -> { {'pathString' -> missingPath} asDictionary.
+				{'pathString' -> existingFile pathString} asDictionary } asArray } asDictionary.
+		targetObject := call result targetObject.
+		self assert: targetObject files size equals: 2.
+		self assert: targetObject files first isErrorDomainObject.
+		self assert: targetObject files first objectName equals: missingPath.
+		self assert: targetObject files second path equals: existingFile pathString.
+		^ call ]
 		ensure: [ existingFile exists ifTrue: [ existingFile delete ] ]
 ]
 
 { #category : #examples }
 GtLMagritteToolForFilesInformationExamples >> filesInformationWithEmptyPath [
 	<gtExample>
-	| tool call result domainObject |
+	| tool call targetObject |
 	tool := GtLMagritteToolForFilesInformation new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: { 'filePaths' -> { { 'pathString' -> '' } asDictionary } asArray } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self assert: domainObject files size equals: 1.
-	self assert: domainObject files first isErrorDomainObject.
-	self assert: (domainObject files first isKindOf: GtLMissingDomainObject).
-	self assert: domainObject files first objectName equals: ''.
-	^ domainObject
+	call := self
+		executeTool: tool
+		withArguments: { 'filePaths' -> { { 'pathString' -> '' } asDictionary } asArray } asDictionary.
+	targetObject := call result targetObject.
+	self assert: targetObject files size equals: 1.
+	self assert: targetObject files first isErrorDomainObject.
+	self assert: (targetObject files first isKindOf: GtLMissingDomainObject).
+	self assert: targetObject files first objectName equals: ''.
+	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForFilesInformationExamples >> filesInformationWithNilPath [
 	<gtExample>
-	| tool call result domainObject |
+	| tool call |
 	tool := GtLMagritteToolForFilesInformation new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: { 'filePaths' -> { nil } asArray } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
+	call := self
+		executeTool: tool
+		withArguments: { 'filePaths' -> { nil } asArray } asDictionary.
 	self 
-		assertJSONSchemaValidationError: domainObject 
+		assertJSONSchemaValidationError: call result targetObject 
 		withPath: #('filePaths' 1) 
 		errorMessage: '@[filePaths/1] object expected'.
-	^ domainObject
+	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForFilesInformationExamples >> filesInformationWithoutPaths [
 	<gtExample>
-	| tool call result domainObject |
+	| tool call |
 	tool := GtLMagritteToolForFilesInformation new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: Dictionary new.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: call arguments size equals: 0.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
+	call := self
+		executeTool: tool
+		withArguments: Dictionary new.
 	self 
-		assertMissingRequiredProperties: domainObject 
+		assertMissingRequiredProperties: call result targetObject 
 		withPropertyNames: #('filePaths') 
 		path: #(nil) 
 		errorMessage: 'required properties missing [filePaths]'.
-	^ domainObject
+	^ call
 ]

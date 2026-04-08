@@ -10,117 +10,118 @@ Class {
 { #category : #examples }
 GtLMagritteToolForPackageClassesExamples >> packageClassesForBlocReturns200 [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLMagritteToolForPackageClasses new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: { 'packageName' -> 'Bloc' } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: call arguments size equals: 1.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self assert: (domainObject isKindOf: GtLClassesSearchResult).
-	self assert: domainObject foundClassNames size equals: 200.
-	self assert: domainObject mayHaveMore.
-	^ domainObject
+	| targetObject |
+	
+	targetObject := self
+		executeTool: GtLMagritteToolForPackageClasses new
+		withArguments: {
+			'packageName' -> 'Bloc'
+		} asDictionary.
+	
+	self assert: (targetObject isKindOf: GtLClassesSearchResult).
+	self assert: targetObject foundClassNames size equals: 200.
+	self assert: targetObject mayHaveMore.
+	
+	^ targetObject
 ]
 
 { #category : #examples }
 GtLMagritteToolForPackageClassesExamples >> packageClassesForExistingPackage [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLMagritteToolForPackageClasses new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: { 'packageName' -> 'GToolkit-Boxer' } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: call arguments size equals: 1.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self assert: (domainObject isKindOf: GtLClassesSearchResult).
-	self assert: (domainObject foundClassNames includes: 'GtArrayBox').
-	self assert: domainObject mayHaveMore not.
-	^ domainObject
+	| targetObject |
+	
+	targetObject := self
+		executeTool: GtLMagritteToolForPackageClasses new
+		withArguments: {
+			'packageName' -> 'GToolkit-Boxer'
+		} asDictionary.
+	
+	self assert: (targetObject isKindOf: GtLClassesSearchResult).
+	self assert: (targetObject foundClassNames includes: 'GtArrayBox').
+	self assert: targetObject mayHaveMore not.
+	
+	^ targetObject
 ]
 
 { #category : #examples }
 GtLMagritteToolForPackageClassesExamples >> packageClassesForPackageWithNoClasses [
 	<gtExample>
-	| tool call result domainObject organizer packageName |
-	tool := GtLMagritteToolForPackageClasses new.
+	| targetObject organizer packageName |
 	organizer := PackageOrganizer packageOrganizer.
 	packageName := 'EmptyPackageWithNoClasses'.
 	organizer ensurePackage: packageName asSymbol.
 	[
-		call := GtLFunctionToolCall new.
-		call rawArguments: { 'packageName' -> packageName } asDictionary.
-		result := tool performToolCall: call.
-		self assert: call tool == tool.
-		self assert: (result isKindOf: GTLDataViewWrapperModel).
-		domainObject := result targetObject.
-		self assert: (domainObject isKindOf: GtLClassesSearchResult).
-		self assert: domainObject foundClassNames equals: #().
-		self assert: domainObject mayHaveMore not
+		targetObject := self
+			executeTool: GtLMagritteToolForPackageClasses new
+			withArguments: {
+				'packageName' -> packageName
+			} asDictionary.
+		
+		self assert: (targetObject isKindOf: GtLClassesSearchResult).
+		self assert: targetObject foundClassNames equals: #().
+		self assert: targetObject mayHaveMore not
 	] ensure: [
 		| package |
 		package := organizer packageNamed: packageName asSymbol ifAbsent: [ nil ].
 		package ifNotNil: [ organizer unregisterPackage: package ]
 	].
-	^ domainObject
+	
+	^ targetObject
 ]
 
-{ #category : #'examples - error conditions' }
+{ #category : #examples }
 GtLMagritteToolForPackageClassesExamples >> packageClassesForUnknownPackage [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLMagritteToolForPackageClasses new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: { 'packageName' -> 'NonExistingPackageName42' } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: call arguments size equals: 1.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self 
-		assertMissingObject: domainObject 
-		withObjectName: 'NonExistingPackageName42' 
+	| targetObject |
+	
+	targetObject := self
+		executeTool: GtLMagritteToolForPackageClasses new
+		withArguments: {
+			'packageName' -> 'NonExistingPackageName42'
+		} asDictionary.
+	
+	self
+		assertMissingObject: targetObject
+		withObjectName: 'NonExistingPackageName42'
 		errorMessage: 'NonExistingPackageName42 is not found'.
-	^ domainObject
+	
+	^ targetObject
 ]
 
-{ #category : #'examples - error conditions' }
+{ #category : #examples }
 GtLMagritteToolForPackageClassesExamples >> packageClassesWithEmptyPackageName [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLMagritteToolForPackageClasses new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: { 'packageName' -> '' } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: call arguments size equals: 1.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self 
-		assertMissingArgument: domainObject 
-		withArgumentName: 'packageName' 
+	| targetObject |
+	
+	targetObject := self
+		executeTool: GtLMagritteToolForPackageClasses new
+		withArguments: {
+			'packageName' -> ''
+		} asDictionary.
+	
+	self
+		assertMissingArgument: targetObject
+		withArgumentName: 'packageName'
 		errorMessage: 'Missing argument called packageName'.
-	^ domainObject
+	
+	^ targetObject
 ]
 
-{ #category : #'examples - error conditions' }
+{ #category : #examples }
 GtLMagritteToolForPackageClassesExamples >> packageClassesWithNilPackageName [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLMagritteToolForPackageClasses new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: { 'packageName' -> nil } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self 
-		assertJSONSchemaValidationError: domainObject 
-		withPath: #('packageName') 
+	| targetObject |
+	
+	targetObject := self
+		executeTool: GtLMagritteToolForPackageClasses new
+		withArguments: {
+			'packageName' -> nil
+		} asDictionary.
+	
+	self
+		assertJSONSchemaValidationError: targetObject
+		withPath: #('packageName')
 		errorMessage: '@[packageName] string expected'.
-	^ domainObject
+	
+	^ targetObject
 ]

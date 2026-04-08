@@ -12,105 +12,86 @@ GtLMagritteToolForFileInformationExamples >> fileInformationForExistingFile [
 	<gtExample>
 	| fileReference |
 	fileReference := FileReference newTempFilePrefix: 'GtLMagritteToolForFileInformation' suffix: '.txt'.
-	[ | tool call result domainObject |
+	[ | tool call targetObject |
 		fileReference writeStreamDo: [ :stream | stream nextPutAll: 'Metadata' ].
 		tool := GtLMagritteToolForFileInformation new.
-		call := GtLFunctionToolCall new.
-		call rawArguments: {
-			'filePath' -> { 'pathString' -> fileReference pathString } asDictionary
-		} asDictionary.
-		result := tool performToolCall: call.
-		self assert: call tool == tool.
-		self assert: call arguments size equals: 1.
-		self assert: ((call arguments at: 'filePath') isKindOf: GtLFilePathReference).
-		self assert: (result isKindOf: GTLDataViewWrapperModel).
-		domainObject := result targetObject.
-		self assert: (domainObject isKindOf: GtLFileInformation).
-		self assert: domainObject path equals: fileReference pathString.
-		self assert: domainObject size equals: fileReference size.
-		self assert: domainObject type equals: 'file'.
-		self assert: domainObject permissions equals: fileReference permissions printString.
-		^ domainObject ]
+		call := self
+			executeTool: tool
+			withArguments: {
+				'filePath' -> { 'pathString' -> fileReference pathString } asDictionary
+			} asDictionary.
+		targetObject := call result targetObject.
+		self assert: (targetObject isKindOf: GtLFileInformation).
+		self assert: targetObject path equals: fileReference pathString.
+		self assert: targetObject size equals: fileReference size.
+		self assert: targetObject type equals: 'file'.
+		self assert: targetObject permissions equals: fileReference permissions printString.
+		^ call ]
 		ensure: [ fileReference exists ifTrue: [ fileReference delete ] ]
 ]
 
 { #category : #examples }
 GtLMagritteToolForFileInformationExamples >> fileInformationForMissingFile [
 	<gtExample>
-	| missingPath tool call result domainObject |
+	| missingPath tool call |
 	missingPath := (FileLocator temp / 'gt-llm-missing-file-info.txt') pathString.
 	tool := GtLMagritteToolForFileInformation new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: {
-		'filePath' -> { 'pathString' -> missingPath } asDictionary
-	} asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: call arguments size equals: 1.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
+	call := self
+		executeTool: tool
+		withArguments: {
+			'filePath' -> { 'pathString' -> missingPath } asDictionary
+		} asDictionary.
 	self 
-		assertMissingObject: domainObject 
+		assertMissingObject: call result targetObject 
 		withObjectName: missingPath 
 		errorMessage: missingPath, ' is not found'.
-	^ domainObject
+	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForFileInformationExamples >> fileInformationWithEmptyPath [
 	<gtExample>
-	| tool call result domainObject |
+	| tool call |
 	tool := GtLMagritteToolForFileInformation new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: {
-		'filePath' -> { 'pathString' -> '' } asDictionary
-	} asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: call arguments size equals: 1.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
+	call := self
+		executeTool: tool
+		withArguments: {
+			'filePath' -> { 'pathString' -> '' } asDictionary
+		} asDictionary.
 	self 
-		assertMissingObject: domainObject 
+		assertMissingObject: call result targetObject 
 		withObjectName: '' 
 		errorMessage: ' is not found'.
-	^ domainObject
+	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForFileInformationExamples >> fileInformationWithNilPath [
 	<gtExample>
-	| tool call result domainObject |
+	| tool call |
 	tool := GtLMagritteToolForFileInformation new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: { 'filePath' -> nil } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
+	call := self
+		executeTool: tool
+		withArguments: { 'filePath' -> nil } asDictionary.
 	self 
-		assertJSONSchemaValidationError: domainObject 
+		assertJSONSchemaValidationError: call result targetObject 
 		withPath: #('filePath') 
 		errorMessage: '@[filePath] object expected'.
-	^ domainObject
+	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForFileInformationExamples >> fileInformationWithoutPath [
 	<gtExample>
-	| tool call result domainObject |
+	| tool call |
 	tool := GtLMagritteToolForFileInformation new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: Dictionary new.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: call arguments size equals: 0.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
+	call := self
+		executeTool: tool
+		withArguments: Dictionary new.
 	self 
-		assertMissingRequiredProperties: domainObject 
+		assertMissingRequiredProperties: call result targetObject 
 		withPropertyNames: #('filePath') 
 		path: #(nil) 
 		errorMessage: 'required properties missing [filePath]'.
-	^ domainObject
+	^ call
 ]

@@ -7,48 +7,44 @@ Class {
 { #category : #examples }
 GtLRefactoringToolForMethodSourceExamples >> methodSourceForInstanceMethod [
 	<gtExample>
-	| tool call result |
+	| tool call targetObject |
 	tool := self toolWithExampleMethods.
-	call := GtLFunctionToolCall new.
-	call rawArguments: {
-		'methodReference' -> {
-			'methodClassName' -> 'GtLRefactoringMethodSourceExample'.
-			'methodName' -> 'example'.
-			'classSide' -> false
-		} asDictionary
-	} asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-
-	self assert: result isErrorDomainObject not.
-	self assert: result targetObject methodName equals: 'example'.
-	self assert: result targetObject methodClassName equals: 'GtLRefactoringMethodSourceExample'.
+	call := self
+		executeTool: tool
+		withArguments: {
+			'methodReference' -> {
+				'methodClassName' -> 'GtLRefactoringMethodSourceExample'.
+				'methodName' -> 'example'.
+				'classSide' -> false
+			} asDictionary
+		} asDictionary.
+	targetObject := call result targetObject.
+	self assert: targetObject isErrorDomainObject not.
+	self assert: targetObject methodName equals: 'example'.
+	self assert: targetObject methodClassName equals: 'GtLRefactoringMethodSourceExample'.
 	self
-		assert: result targetObject methodSourceCode
+		assert: targetObject methodSourceCode
 		equals: ('example{1}{2}^ 42'
 				format: {Character cr.
 						Character tab}).
-
 	^ call
 ]
 
 { #category : #examples }
 GtLRefactoringToolForMethodSourceExamples >> methodSourceForUnknownMethod [
 	<gtExample>
-	| tool call result |
+	| tool call |
 	tool := self toolWithExampleMethods.
-	call := GtLFunctionToolCall new.
-	call rawArguments: {
-		'methodReference' -> {
-			'methodClassName' -> 'GtLRefactoringMethodSourceExample'.
-			'methodName' -> 'missing'.
-			'classSide' -> false
-		} asDictionary
-	} asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-
-	self assert: result isErrorDomainObject.
+	call := self
+		executeTool: tool
+		withArguments: {
+			'methodReference' -> {
+				'methodClassName' -> 'GtLRefactoringMethodSourceExample'.
+				'methodName' -> 'missing'.
+				'classSide' -> false
+			} asDictionary
+		} asDictionary.
+	self assert: call result targetObject isErrorDomainObject.
 	^ call
 ]
 

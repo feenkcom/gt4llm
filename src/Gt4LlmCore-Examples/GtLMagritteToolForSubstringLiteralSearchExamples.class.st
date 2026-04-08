@@ -7,118 +7,116 @@ Class {
 	#category : 'Gt4LlmCore-Examples-Tools'
 }
 
-{ #category : #'examples - error conditions' }
+{ #category : #examples }
 GtLMagritteToolForSubstringLiteralSearchExamples >> searchWithEmptyQuery [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLMagritteToolForSubstringLiteralSearch new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: { 'query' -> '' } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: call arguments size equals: 1.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self 
-		assertMissingArgument: domainObject 
-		withArgumentName: 'query' 
+	| targetObject |
+	
+	targetObject := self
+		executeTool: GtLMagritteToolForSubstringLiteralSearch new
+		withArguments: {
+			'query' -> ''
+		} asDictionary.
+	
+	self
+		assertMissingArgument: targetObject
+		withArgumentName: 'query'
 		errorMessage: 'Missing argument called query'.
-	^ domainObject
+	
+	^ targetObject
 ]
 
 { #category : #examples }
 GtLMagritteToolForSubstringLiteralSearchExamples >> searchWithMatches [
 	<gtExample>
-	| tool call result domainObject query |
+	| targetObject query |
 	query := 'substringLiteralSearchExampleUnique'.
-	tool := GtLMagritteToolForSubstringLiteralSearch new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: { 'query' -> query } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: call arguments size equals: 1.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self assert: (domainObject isKindOf: GtLMethodsSearchResult).
-	self
-		assert: (domainObject foundMethods anySatisfy: [ :each |
-			each methodSignature = 'GtLMagritteToolForSubstringLiteralSearchExamples>>#searchWithMatches' ]).
-	self assert: domainObject mayHaveMore not.
-	^ domainObject
+	
+	targetObject := self
+		executeTool: GtLMagritteToolForSubstringLiteralSearch new
+		withArguments: {
+			'query' -> query
+		} asDictionary.
+	
+	self assert: (targetObject isKindOf: GtLMethodsSearchResult).
+	self assert: (targetObject foundMethods anySatisfy: [ :each |
+		each methodSignature = 'GtLMagritteToolForSubstringLiteralSearchExamples>>#searchWithMatches' ]).
+	self assert: targetObject mayHaveMore not.
+	
+	^ targetObject
 ]
 
-{ #category : #'examples - error conditions' }
+{ #category : #examples }
 GtLMagritteToolForSubstringLiteralSearchExamples >> searchWithMissingQuery [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLMagritteToolForSubstringLiteralSearch new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: {} asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: call arguments size equals: 0.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self 
-		assertMissingRequiredProperties: domainObject 
-		withPropertyNames: #('query') 
-		path: #(nil) 
+	| targetObject |
+	
+	targetObject := self
+		executeTool: GtLMagritteToolForSubstringLiteralSearch new
+		withArguments: Dictionary new.
+	
+	self
+		assertMissingRequiredProperties: targetObject
+		withPropertyNames: #('query')
+		path: #(nil)
 		errorMessage: 'required properties missing [query]'.
-	^ domainObject
+	
+	^ targetObject
 ]
 
 { #category : #examples }
 GtLMagritteToolForSubstringLiteralSearchExamples >> searchWithMoreThan200Matches [
 	<gtExample>
-	| tool call result domainObject query |
+	| targetObject query |
 	query := 'gt'.
-	tool := GtLMagritteToolForSubstringLiteralSearch new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: { 'query' -> query } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: call arguments size equals: 1.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self assert: (domainObject isKindOf: GtLMethodsSearchResult).
-	self assert: domainObject foundMethods size equals: 200.
-	self assert: domainObject mayHaveMore.
-	^ domainObject
+	
+	targetObject := self
+		executeTool: GtLMagritteToolForSubstringLiteralSearch new
+		withArguments: {
+			'query' -> query
+		} asDictionary.
+	
+	self assert: (targetObject isKindOf: GtLMethodsSearchResult).
+	self assert: targetObject foundMethods size equals: 200.
+	self assert: targetObject mayHaveMore.
+	
+	^ targetObject
 ]
 
-{ #category : #'examples - error conditions' }
+{ #category : #examples }
 GtLMagritteToolForSubstringLiteralSearchExamples >> searchWithNilQuery [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLMagritteToolForSubstringLiteralSearch new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: { 'query' -> nil } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self 
-		assertJSONSchemaValidationError: domainObject 
-		withPath: #('query') 
+	| targetObject |
+	
+	targetObject := self
+		executeTool: GtLMagritteToolForSubstringLiteralSearch new
+		withArguments: {
+			'query' -> nil
+		} asDictionary.
+	
+	self
+		assertJSONSchemaValidationError: targetObject
+		withPath: #('query')
 		errorMessage: '@[query] string expected'.
-	^ domainObject
+	
+	^ targetObject
 ]
 
 { #category : #examples }
 GtLMagritteToolForSubstringLiteralSearchExamples >> searchWithNoMatches [
 	<gtExample>
-	| tool call result domainObject query |
+	| targetObject query |
 	query := 'noLiteralMatchString', 'ForSearch' , '42'.
-	tool := GtLMagritteToolForSubstringLiteralSearch new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: { 'query' -> query } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: call arguments size equals: 1.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self assert: (domainObject isKindOf: GtLMethodsSearchResult).
-	self assert: domainObject foundMethods isEmpty.
-	self assert: domainObject mayHaveMore not.
-	^ domainObject
+	
+	targetObject := self
+		executeTool: GtLMagritteToolForSubstringLiteralSearch new
+		withArguments: {
+			'query' -> query
+		} asDictionary.
+	
+	self assert: (targetObject isKindOf: GtLMethodsSearchResult).
+	self assert: targetObject foundMethods isEmpty.
+	self assert: targetObject mayHaveMore not.
+	
+	^ targetObject
 ]

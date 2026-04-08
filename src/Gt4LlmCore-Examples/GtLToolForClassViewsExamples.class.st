@@ -29,51 +29,54 @@ GtLToolForClassViewsExamples >> classViewsDataViewSerialization [
 { #category : #examples }
 GtLToolForClassViewsExamples >> classViewsForClassWithNoViews [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLToolForClassViews new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: { 'className' -> 'GtLToolForClassViewsExamples' } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self assert: (domainObject isKindOf: GtLClassMethodsDomainObject).
-	self assert: domainObject targetClass equals: GtLToolForClassViewsExamples.
-	self assert: domainObject methods equals: #().
-	^ domainObject
+	| targetObject |
+	
+	targetObject := self
+		executeTool: GtLToolForClassViews new
+		withArguments: {
+			'className' -> 'GtLToolForClassViewsExamples'
+		} asDictionary.
+	
+	self assert: (targetObject isKindOf: GtLClassMethodsDomainObject).
+	self assert: targetObject targetClass equals: GtLToolForClassViewsExamples.
+	self assert: targetObject methods equals: #().
+	
+	^ targetObject
 ]
 
 { #category : #examples }
 GtLToolForClassViewsExamples >> classViewsForExistingClass [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLToolForClassViews new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: { 'className' -> 'GtABAddressBook' } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self assert: (domainObject isKindOf: GtLClassMethodsDomainObject).
-	self assert: domainObject methods isNotEmpty.
-	self assert: (domainObject methods anySatisfy: [ :m | m selector = #gtViewContactsListOn: ]).
-	^ domainObject
+	| targetObject |
+	
+	targetObject := self
+		executeTool: GtLToolForClassViews new
+		withArguments: {
+			'className' -> 'GtABAddressBook'
+		} asDictionary.
+	
+	self assert: (targetObject isKindOf: GtLClassMethodsDomainObject).
+	self assert: targetObject methods isNotEmpty.
+	self assert: (targetObject methods anySatisfy: [ :m | m selector = #gtViewContactsListOn: ]).
+	
+	^ targetObject
 ]
 
 { #category : #examples }
 GtLToolForClassViewsExamples >> classViewsForUnknownClass [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLToolForClassViews new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: { 'className' -> 'NonExistingClassName' } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self 
-		assertMissingObject: domainObject 
-		withObjectName: 'NonExistingClassName' 
+	| targetObject |
+	
+	targetObject := self
+		executeTool: GtLToolForClassViews new
+		withArguments: {
+			'className' -> 'NonExistingClassName'
+		} asDictionary.
+	
+	self
+		assertMissingObject: targetObject
+		withObjectName: 'NonExistingClassName'
 		errorMessage: 'NonExistingClassName is not found'.
-	^ domainObject
+	
+	^ targetObject
 ]
