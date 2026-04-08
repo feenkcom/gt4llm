@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLDomainObject,
 	#superclass : #Object,
-	#category : #'Gt4LlmCore-Domain Objects'
+	#category : 'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #'gt - extensions' }

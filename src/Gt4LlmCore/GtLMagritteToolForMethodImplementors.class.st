@@ -4,7 +4,7 @@ Magritte-based tool for retrieving method implementors.
 Class {
 	#name : #GtLMagritteToolForMethodImplementors,
 	#superclass : #GtLAbstractMagritteFunctionTool,
-	#category : #'Gt4LlmCore-Tools'
+	#category : 'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }

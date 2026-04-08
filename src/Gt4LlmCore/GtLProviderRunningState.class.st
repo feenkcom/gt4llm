@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLProviderRunningState,
 	#superclass : #GtLProviderState,
-	#category : #'Gt4LlmCore-Provider - Support'
+	#category : 'Gt4LlmCore-Provider - Support'
 }
 
 { #category : #'api - changes' }

@@ -4,5 +4,5 @@ Abstract superclass for examples testing GtLAbstractMagritteFunctionTool and its
 Class {
 	#name : #GtLAbstractMagritteFunctionToolExamples,
 	#superclass : #GtLAbstractFunctionToolExamples,
-	#category : #'Gt4LlmCore-Examples-Tools'
+	#category : 'Gt4LlmCore-Examples-Tools'
 }

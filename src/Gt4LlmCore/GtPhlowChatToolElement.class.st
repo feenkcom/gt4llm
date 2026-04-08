@@ -7,7 +7,7 @@ Class {
 	#instVars : [
 		'chat'
 	],
-	#category : #'Gt4LlmCore-UI'
+	#category : 'Gt4LlmCore-UI'
 }
 
 { #category : #private }

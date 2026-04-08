@@ -5,7 +5,7 @@ Class {
 		'notFoundClassNames',
 		'exampleWithStatuses'
 	],
-	#category : #'Gt4LlmCore-Domain Objects'
+	#category : 'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #'api - accessing' }
@@ -44,32 +44,23 @@ GtLExampleWithResultStatusesDomainObject >> gtExampleWithStatusesFor: aView [
 		column: 'Status' text: [ :each | each statusText ]
 ]
 
-{ #category : #'llm views' }
-GtLExampleWithResultStatusesDomainObject >> llmJsonObject [
-	"Return a JSON dictionary that represents the domain object."
-
-	<return: #NeoJSONObject>
-	
-	^ NeoJSONObject new
-		at: #total put: self totalCount;
-		at: #successes put: self successResultCount;
-		at: #failures put: self failureResultCount;
-		at: #errors put: self errorResultCount;
-		at: #skips put: self skippedCount;
-		at: #notFound put: self notFoundClassNames;
-		at: #details
-			put: (self exampleWithStatuses 
-				collect: [ :each | each llmJsonObject ] as: Array);
-		yourself
-]
-
 { #category : #accessing }
 GtLExampleWithResultStatusesDomainObject >> llmRawDataViewFor: aDataView [
 	<gtLlmDataView>
 	
 	^ aDataView 
 			title: 'Example results';
-			jsonData: [ self llmJsonObject ]
+			jsonObject: [ :json |
+				json 
+					at: #total put: self totalCount;
+					at: #successes put: self successResultCount;
+					at: #failures put: self failureResultCount;
+					at: #errors put: self errorResultCount;
+					at: #skips put: self skippedCount;
+					at: #notFound put: self notFoundClassNames;
+					at: #details
+						put: (self exampleWithStatuses 
+							collect: [ :each | each llmJsonObject ] as: Array) ]
 ]
 
 { #category : #accessing }

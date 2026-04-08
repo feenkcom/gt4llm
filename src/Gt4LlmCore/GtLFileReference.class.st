@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'fileReference'
 	],
-	#category : #'Gt4LlmCore-Domain Objects'
+	#category : 'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #'instance creation' }
