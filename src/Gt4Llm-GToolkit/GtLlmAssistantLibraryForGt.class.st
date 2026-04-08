@@ -5,7 +5,7 @@ Class {
 		'gtChat',
 		'gtAssistant'
 	],
-	#category : #'Gt4Llm-GToolkit-UI'
+	#category : 'Gt4Llm-GToolkit-UI'
 }
 
 { #category : #formats }

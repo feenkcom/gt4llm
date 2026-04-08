@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLlmLepiterContentExporterExamples,
 	#superclass : #Object,
-	#category : #'Gt4Llm-GToolkit-Examples'
+	#category : 'Gt4Llm-GToolkit-Examples'
 }
 
 { #category : #'llm-generated' }

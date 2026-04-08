@@ -6,7 +6,7 @@ Class {
 		'bytesList',
 		'editor'
 	],
-	#category : #'Gt4Llm-GToolkit-Tokenization'
+	#category : 'Gt4Llm-GToolkit-Tokenization'
 }
 
 { #category : #accessing }

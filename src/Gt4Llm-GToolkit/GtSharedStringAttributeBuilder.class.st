@@ -7,17 +7,17 @@ Class {
 		'string',
 		'announcer'
 	],
-	#category : #'Gt4Llm-GToolkit-UI'
+	#category : 'Gt4Llm-GToolkit-UI'
 }
-
-{ #category : #'as yet unclassified' }
-GtSharedStringAttributeBuilder >> announceStringUpdate [
-	self announce: (GtSharedStringUpdated new string: self string)
-]
 
 { #category : #announcer }
 GtSharedStringAttributeBuilder >> announcer [
 	^ announcer ifNil: [ announcer := Announcer new ]
+]
+
+{ #category : #'as yet unclassified' }
+GtSharedStringAttributeBuilder >> announceStringUpdate [
+	self announce: (GtSharedStringUpdated new string: self string)
 ]
 
 { #category : #'as yet unclassified' }

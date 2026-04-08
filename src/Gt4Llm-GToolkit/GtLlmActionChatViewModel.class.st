@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLlmActionChatViewModel,
 	#superclass : #GtLlmChatViewModel,
-	#category : #'Gt4Llm-GToolkit-UI'
+	#category : 'Gt4Llm-GToolkit-UI'
 }
 
 { #category : #'as yet unclassified' }

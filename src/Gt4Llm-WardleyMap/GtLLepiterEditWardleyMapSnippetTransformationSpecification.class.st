@@ -31,12 +31,9 @@ GtLLepiterEditWardleyMapSnippetTransformationSpecification >> asRefactoringIn: a
 { #category : #accessing }
 GtLLepiterEditWardleyMapSnippetTransformationSpecification >> assignNewIds [
 	idMap ifNotNil: [ ^ self ].
-	idMap := (self wardleyMap
-			ifNotNil: [ :map | 
-				map
-					optionAt: #newIds
-					ifPresent: [ :dict | dict copy ]
-					ifAbsent: [  ] ]) ifNil: [ Dictionary new ].
+	idMap := self wardleyMap
+			ifNotNil: [ :map | map newIdMap ]
+			ifNil: [ Dictionary new ].
 	changes do: [ :each | each updateNewUidsUsing: idMap ]
 ]
 

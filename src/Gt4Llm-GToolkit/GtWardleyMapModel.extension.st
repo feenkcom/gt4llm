@@ -58,6 +58,11 @@ GtWardleyMapModel >> menuItemReviewMapButton [
 ]
 
 { #category : #'*Gt4Llm-GToolkit' }
+GtWardleyMapModel >> newIdMap [
+	^ self optionAt: #newIds ifAbsent: [ Dictionary new ]
+]
+
+{ #category : #'*Gt4Llm-GToolkit' }
 GtWardleyMapModel >> openAIWardleyMapCreator: aCreator [
 	^ self optionAt: #openAIWardleyMapCreator put: aCreator
 ]
