@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'jsonValue'
 	],
-	#category : 'Gt4LlmCore-Domain Objects'
+	#category : #'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #'instance creation' }

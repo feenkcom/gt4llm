@@ -7,7 +7,7 @@ Class {
 		'dataKey',
 		'definingMethodProvider'
 	],
-	#category : 'Gt4LlmCore-Data Views'
+	#category : #'Gt4LlmCore-Data Views'
 }
 
 { #category : #'api - views' }
