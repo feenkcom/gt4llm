@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLlmNewActionThreadMessageViewModel,
 	#superclass : #GtLlmNewThreadMessageViewModel,
-	#category : #'Gt4Llm-GToolkit-UI'
+	#category : 'Gt4Llm-GToolkit-UI'
 }
 
 { #category : #accessing }

@@ -1,7 +1,7 @@
 Class {
 	#name : #GtMcpServerExamples,
 	#superclass : #Object,
-	#category : #'Gt4Llm-GToolkit-Mcp'
+	#category : 'Gt4Llm-GToolkit-Mcp'
 }
 
 { #category : #'as yet unclassified' }

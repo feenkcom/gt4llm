@@ -177,6 +177,7 @@ GtLChatMessage >> gtActionInspectFor: anAction [
 
 { #category : #'as yet unclassified' }
 GtLChatMessage >> gtDisplayOn: stream [
+	stream nextPutAll: 'Message: '.
 	stream nextPutAll: self contentOneLineSummary
 ]
 

@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLlmAssistantActionExamples,
 	#superclass : #Object,
-	#category : #'Gt4Llm-GToolkit-Examples'
+	#category : 'Gt4Llm-GToolkit-Examples'
 }
 
 { #category : #'as yet unclassified' }

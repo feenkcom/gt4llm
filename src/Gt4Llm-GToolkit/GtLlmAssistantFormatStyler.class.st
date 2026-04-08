@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'formatReferences'
 	],
-	#category : #'Gt4Llm-GToolkit-UI'
+	#category : 'Gt4Llm-GToolkit-UI'
 }
 
 { #category : #'as yet unclassified' }

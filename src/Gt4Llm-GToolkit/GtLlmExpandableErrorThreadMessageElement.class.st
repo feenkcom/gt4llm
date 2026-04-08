@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLlmExpandableErrorThreadMessageElement,
 	#superclass : #GtLlmExpandableThreadMessageElement,
-	#category : #'Gt4Llm-GToolkit-UI'
+	#category : 'Gt4Llm-GToolkit-UI'
 }
 
 { #category : #'as yet unclassified' }

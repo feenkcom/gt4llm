@@ -5,7 +5,7 @@ Class {
 		'input',
 		'model'
 	],
-	#category : #'Gt4Llm-GToolkit-Tokenization'
+	#category : 'Gt4Llm-GToolkit-Tokenization'
 }
 
 { #category : #accessing }

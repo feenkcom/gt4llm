@@ -1,5 +1,5 @@
 Class {
 	#name : #GtLlmFunctionCallAboutToBePerformedSignal,
 	#superclass : #GtLlmFunctionCallSignal,
-	#category : #'Gt4Llm-GToolkit-UI'
+	#category : 'Gt4Llm-GToolkit-UI'
 }

@@ -6,7 +6,7 @@ Class {
 		'header',
 		'updater'
 	],
-	#category : #'Gt4Llm-GToolkit-UI'
+	#category : 'Gt4Llm-GToolkit-UI'
 }
 
 { #category : #accessing }
@@ -110,14 +110,6 @@ GtLlmThreadMessageContentHolder >> updateViews [
 ]
 
 { #category : #accessing }
-GtLlmThreadMessageContentHolder >> viewUpdater [
-	^ updater
-		ifNil: [ updater := BrElementUpdater new.
-			updater element: self selector: #updateViews.
-			updater postponedDuration: 300 milliseconds ]
-]
-
-{ #category : #accessing }
 GtLlmThreadMessageContentHolder >> views: aCollectionOfViews [
 	| views |
 	self removeChildNamed: #'message-tabs'.
@@ -191,4 +183,12 @@ GtLlmThreadMessageContentHolder >> viewsToTabGroup: aCollectionOfViews [
 	aTabGroup userData at: GtPhlowChangeMethodSystemAnnouncerListener put: aListener.
 
 	^ aTabGroup
+]
+
+{ #category : #accessing }
+GtLlmThreadMessageContentHolder >> viewUpdater [
+	^ updater
+		ifNil: [ updater := BrElementUpdater new.
+			updater element: self selector: #updateViews.
+			updater postponedDuration: 300 milliseconds ]
 ]

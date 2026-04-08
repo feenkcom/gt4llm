@@ -98,8 +98,7 @@ GtWardleyMapEditTool >> privatePerformToolCall: aToolCall inContext: anExecution
 	[ | idMap |
 	snippet := snippets anyOne.
 	map := snippet wardleyMap.
-	map ensureOptions.
-	idMap := map optionAt: #newIds ifAbsent: [ Dictionary new ].
+	idMap := map newIdMap.
 	changes do: [ :each | each updateNewUidsUsing: idMap ].
 	changes do: [ :each | each proposeModificationsIn: map ].
 	map optionAt: #newIds put: idMap.

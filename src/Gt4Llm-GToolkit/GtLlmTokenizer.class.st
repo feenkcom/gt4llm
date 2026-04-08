@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLlmTokenizer,
 	#superclass : #Object,
-	#category : #'Gt4Llm-GToolkit-Tokenization'
+	#category : 'Gt4Llm-GToolkit-Tokenization'
 }
 
 { #category : #accessing }

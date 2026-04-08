@@ -72,7 +72,7 @@ GtLAbstractFunctionTool >> performToolCall: aToolCall inContext: anExecutionCont
 	resultObject := self resultObjectFromDomainObject: domainObject.
 	
 	aToolCall result: resultObject.
-	^ domainObject
+	^ resultObject
 ]
 
 { #category : #execution }
