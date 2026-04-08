@@ -164,7 +164,6 @@ GtLToolForTestMethodRunExamples >> exampleRunForNonTestCaseClass [
 { #category : #examples }
 GtLToolForTestMethodRunExamples >> exampleRunForUnknownClass [
 	<gtExample>
-	<return: #GtLMissingObjectDomainObject>
 	| call |
 	call := self
 		executeTool: GtLToolForTestMethodRun new
@@ -184,7 +183,6 @@ GtLToolForTestMethodRunExamples >> exampleRunForUnknownClass [
 { #category : #examples }
 GtLToolForTestMethodRunExamples >> exampleRunForUnknownMethod [
 	<gtExample>
-	<return: #GtLMissingObjectDomainObject>
 	| call |
 	call := self
 		executeTool: GtLToolForTestMethodRun new
