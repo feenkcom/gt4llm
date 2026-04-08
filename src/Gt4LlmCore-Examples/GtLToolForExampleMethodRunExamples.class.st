@@ -3,9 +3,7 @@ Examples for GtLMagritteToolForExampleMethodRun.
 "
 Class {
 	#name : #GtLToolForExampleMethodRunExamples,
-	#superclass : #Object,
-	#traits : 'TGtLInvalidInputDataAssertions',
-	#classTraits : 'TGtLInvalidInputDataAssertions classTrait',
+	#superclass : #GtLAbstractMagritteFunctionToolExamples,
 	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
@@ -26,7 +24,7 @@ GtLToolForExampleMethodRunExamples >> exampleRunError [
 	self assert: call tool == tool.
 	self assert: (result isKindOf: GTLDataViewWrapperModel).
 	targetObject := result targetObject.
-	self assert: (targetObject isKindOf: GtLExampleWithResultDomainObject).
+	self assert: (targetObject isKindOf: GtLExampleWithResult).
 	self assert: targetObject isErrorResult.
 	^ call
 ]
@@ -49,7 +47,7 @@ GtLToolForExampleMethodRunExamples >> exampleRunFailure [
 	self assert: (result isKindOf: GTLDataViewWrapperModel).
 	
 	targetObject := result targetObject.
-	self assert: (targetObject isKindOf: GtLExampleWithResultDomainObject).
+	self assert: (targetObject isKindOf: GtLExampleWithResult).
 	self assert: targetObject isFailureResult.
 	^ call
 ]
@@ -281,7 +279,7 @@ GtLToolForExampleMethodRunExamples >> exampleRunSuccess [
 	self assert: (result isKindOf: GTLDataViewWrapperModel).
 	
 	targetObject := result targetObject.
-	self assert: (targetObject isKindOf: GtLExampleWithResultDomainObject).
+	self assert: (targetObject isKindOf: GtLExampleWithResult).
 	self assert: targetObject isSuccessResult.
 	self assert: targetObject objectId isNil.
 	^ call
@@ -308,7 +306,7 @@ GtLToolForExampleMethodRunExamples >> exampleRunSuccessStoresObjectId [
 	self assert: (result isKindOf: GTLDataViewWrapperModel).
 	targetObject := result targetObject.
 	
-	self assert: (targetObject isKindOf: GtLExampleWithResultDomainObject).
+	self assert: (targetObject isKindOf: GtLExampleWithResult).
 	self assert: targetObject isSuccessResult.
 	objectId := targetObject objectId.
 	self assert: objectId isString.

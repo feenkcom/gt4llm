@@ -79,11 +79,6 @@ GtLMagritteToolForFilesInformation >> informationForFilePath: aFilePathReference
 		do: [ :error | GtLExceptionDomainObject freeze: error ]
 ]
 
-{ #category : #testing }
-GtLMagritteToolForFilesInformation >> isUsingDataViews [
-	^ true
-]
-
 { #category : #accessing }
 GtLMagritteToolForFilesInformation >> name [
 	^ 'getFilesInformation'

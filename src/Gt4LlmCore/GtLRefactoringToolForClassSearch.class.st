@@ -1,9 +1,9 @@
+"
+Magritte-based tool for searching classes in a GtRBNamespace model.
+"
 Class {
 	#name : #GtLRefactoringToolForClassSearch,
-	#superclass : #GtLAbstractPlainSchemaFunctionTool,
-	#instVars : [
-		'model'
-	],
+	#superclass : #GtLAbstractRefactoringMagritteTool,
 	#category : #'Gt4LlmCore-Tools'
 }
 
@@ -21,43 +21,19 @@ GtLRefactoringToolForClassSearch >> description [
 	^ 'Searches for classes by name matching the query substring (case-insensitive).'
 ]
 
-{ #category : #accessing }
-GtLRefactoringToolForClassSearch >> isUsingDataViews [
-	^ true
-]
-
-{ #category : #'llm-generated' }
-GtLRefactoringToolForClassSearch >> model [
-	^ model
-]
-
-{ #category : #'llm-generated' }
-GtLRefactoringToolForClassSearch >> model: aModel [
-	model := aModel
-]
-
 { #category : #'llm-generated' }
 GtLRefactoringToolForClassSearch >> name [
 	^ 'rbSearchForClasses'
 ]
 
-{ #category : #'llm-generated' }
-GtLRefactoringToolForClassSearch >> parametersDescription [
-	^ #('query')
-]
-
-{ #category : #'llm-generated' }
+{ #category : #executing }
 GtLRefactoringToolForClassSearch >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments query promise result allClassNames |
 	self model
 		ifNil: [ ^ GtLMissingInformationDomainObject new
 				missingModelName: 'model' ].
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
-	query := arguments
-			at: 'query'
-			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-					arguments: arguments;
-					missingArgument: 'query' ].
+	query := arguments at: 'query'.
 	allClassNames := self classNames.
 	promise := (GtSpotterSubstringsFilter new
 			withWordsSplitter;
@@ -72,4 +48,13 @@ GtLRefactoringToolForClassSearch >> privatePerformToolCall: aToolCall inContext:
 		query: query;
 		allClassNames: allClassNames;
 		foundClassNames: result
+]
+
+{ #category : #magritte }
+GtLRefactoringToolForClassSearch >> queryDescription [
+	<magritteDescription>
+	^ MAStringDescription new
+		label: 'Query';
+		accessor: #query;
+		beRequired
 ]

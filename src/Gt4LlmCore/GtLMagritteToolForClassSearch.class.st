@@ -30,11 +30,6 @@ Example JSON response:
 }'
 ]
 
-{ #category : #testing }
-GtLMagritteToolForClassSearch >> isUsingDataViews [
-	^ true
-]
-
 { #category : #accessing }
 GtLMagritteToolForClassSearch >> name [
 	^ 'searchForClasses'

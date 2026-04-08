@@ -3,9 +3,9 @@ Examples for GtLMagritteToolForSmalltalkCodeEvaluation.
 "
 Class {
 	#name : #GtLMagritteToolForSmalltalkCodeEvaluationExamples,
-	#superclass : #Object,
-	#traits : 'TGtLInvalidInputDataAssertions + TGtLExceptionDomainObjectAssertions',
-	#classTraits : 'TGtLInvalidInputDataAssertions classTrait + TGtLExceptionDomainObjectAssertions classTrait',
+	#superclass : #GtLAbstractMagritteFunctionToolExamples,
+	#traits : 'TGtLExceptionDomainObjectAssertions',
+	#classTraits : 'TGtLExceptionDomainObjectAssertions classTrait',
 	#category : #'Gt4LlmCore-Examples-Tools'
 }
 

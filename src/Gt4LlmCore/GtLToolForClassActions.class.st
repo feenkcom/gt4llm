@@ -20,11 +20,6 @@ GtLToolForClassActions >> description [
 ]
 
 { #category : #accessing }
-GtLToolForClassActions >> isUsingDataViews [
-	^ true
-]
-
-{ #category : #accessing }
 GtLToolForClassActions >> name [
 	^ 'getClassActions'
 ]

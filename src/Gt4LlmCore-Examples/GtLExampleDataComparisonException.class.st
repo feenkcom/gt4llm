@@ -52,8 +52,3 @@ GtLExampleDataComparisonException >> llmDiffImageViewFor: aDataView [
 			element: [ (self 
 				gtViewDiffFor: GtPhlowView empty) asElement ]
 ]
-
-{ #category : #serialization }
-GtLExampleDataComparisonException >> serializeToOpenAIResponseImages [
-	^ self serializeToLlmResponseImages
-]
