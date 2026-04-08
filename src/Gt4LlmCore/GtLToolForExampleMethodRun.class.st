@@ -4,7 +4,7 @@ Magritte-based tool for executing a gtExample method and reporting the result.
 Class {
 	#name : #GtLToolForExampleMethodRun,
 	#superclass : #GtLAbstractMagritteFunctionTool,
-	#category : #'Gt4LlmCore-Tools'
+	#category : 'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }

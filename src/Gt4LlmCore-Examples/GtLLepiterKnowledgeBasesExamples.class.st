@@ -4,7 +4,7 @@ Examples for GtLLepiterKnowledgeBases and GtLLepiterKnowledgeBase.
 Class {
 	#name : #GtLLepiterKnowledgeBasesExamples,
 	#superclass : #Object,
-	#category : #'Gt4LlmCore-Examples-Magritte Objects'
+	#category : 'Gt4LlmCore-Examples-Magritte Objects'
 }
 
 { #category : #examples }

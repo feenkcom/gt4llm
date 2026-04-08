@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLEmptyDataView,
 	#superclass : #GtLDataViewDecorator,
-	#category : #'Gt4LlmCore-Data Views'
+	#category : 'Gt4LlmCore-Data Views'
 }
 
 { #category : #serialization }

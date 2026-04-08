@@ -1,15 +1,14 @@
 Class {
-	#name : #GtLTestCaseDomainObject,
+	#name : #GtLTestCaseWithResultStatus,
 	#superclass : #Object,
 	#instVars : [
-		'testCase',
-		'result'
+		'testCaseWithResult'
 	],
-	#category : #'Gt4LlmCore-Domain Objects'
+	#category : 'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #'gt - extensions' }
-GtLTestCaseDomainObject >> gtTestCaseFor: aView [
+GtLTestCaseWithResultStatus >> gtTestCaseFor: aView [
 	<gtView>
 	<gtLlmView>
 	self testCase ifNil: [ ^ aView empty ].
@@ -21,57 +20,57 @@ GtLTestCaseDomainObject >> gtTestCaseFor: aView [
 ]
 
 { #category : #'api - testing' }
-GtLTestCaseDomainObject >> isErrorResult [
-	^ self result isError: self testCase
+GtLTestCaseWithResultStatus >> isErrorResult [
+	^ self result isError
 ]
 
 { #category : #'api - testing' }
-GtLTestCaseDomainObject >> isExpectedDefectResult [
-	^ self result expectedDefects includes: self testCase
+GtLTestCaseWithResultStatus >> isExpectedDefectResult [
+	^ self result isExpectedDefect
 ]
 
 { #category : #'api - testing' }
-GtLTestCaseDomainObject >> isExpectedPassResult [
+GtLTestCaseWithResultStatus >> isExpectedPassResult [
 	^ self isPassedResult and: [ self testCase shouldPass ]
 ]
 
 { #category : #'api - testing' }
-GtLTestCaseDomainObject >> isFailureResult [
-	^ self result isFailure: self testCase
+GtLTestCaseWithResultStatus >> isFailureResult [
+	^ self result isFailure
 ]
 
 { #category : #'api - testing' }
-GtLTestCaseDomainObject >> isPassedResult [
-	^ self result isPassed: self testCase
+GtLTestCaseWithResultStatus >> isPassedResult [
+	^ self result isPassed
 ]
 
 { #category : #'api - testing' }
-GtLTestCaseDomainObject >> isSkippedResult [
-	^ self result skipped includes: self testCase
+GtLTestCaseWithResultStatus >> isSkippedResult [
+	^ self result isSkipped
 ]
 
 { #category : #'api - testing' }
-GtLTestCaseDomainObject >> isSuccessResult [
+GtLTestCaseWithResultStatus >> isSuccessResult [
 	^ self isPassedResult
 ]
 
 { #category : #'api - testing' }
-GtLTestCaseDomainObject >> isUnexpectedErrorResult [
+GtLTestCaseWithResultStatus >> isUnexpectedErrorResult [
 	^ self isErrorResult and: [ self testCase shouldPass ]
 ]
 
 { #category : #'api - testing' }
-GtLTestCaseDomainObject >> isUnexpectedFailureResult [
+GtLTestCaseWithResultStatus >> isUnexpectedFailureResult [
 	^ self isFailureResult and: [ self testCase shouldPass ]
 ]
 
 { #category : #'api - testing' }
-GtLTestCaseDomainObject >> isUnexpectedPassResult [
+GtLTestCaseWithResultStatus >> isUnexpectedPassResult [
 	^ self isPassedResult and: [ self testCase shouldPass not ]
 ]
 
 { #category : #accessing }
-GtLTestCaseDomainObject >> messageText [
+GtLTestCaseWithResultStatus >> messageText [
 	self isSkippedResult ifTrue: [ ^ 'Skipped' ].
 	self isErrorResult ifTrue: [ ^ 'Error' ].
 	self isFailureResult ifTrue: [ ^ 'Failure' ].
@@ -81,34 +80,33 @@ GtLTestCaseDomainObject >> messageText [
 ]
 
 { #category : #accessing }
-GtLTestCaseDomainObject >> result [
-	^ result
-]
-
-{ #category : #accessing }
-GtLTestCaseDomainObject >> result: anObject [
-	result := anObject
+GtLTestCaseWithResultStatus >> result [
+	^ testCaseWithResult result
 ]
 
 { #category : #'api - serializing' }
-GtLTestCaseDomainObject >> serializeToLlmJsonObject [
+GtLTestCaseWithResultStatus >> serializeToLlmJsonObject [
 	"Return a JSON dictionary that represents the domain object."
 
 	<return: #NeoJSONObject>
-	result := NeoJSONObject new
+	| data |
+	data := NeoJSONObject new
 		at: #className put: self testCase class name asString;
 		at: #selector put: (self testCase selector ifNil: [ '' ] ifNotNil: #asString);
 		at: #status put: self statusText;
 		at: #result put: self messageText;
 		at: #shouldPass put: self testCase shouldPass;
-		at: #expectedFailure put: self testCase isExpectedFailure.
-	"(self isErrorResult or: [ self isFailureResult ]) ifTrue: [
-		result at: #stackTrace put: self stackTrace ]."
-	^ result
+		at: #expectedFailure put: self testCase isExpectedFailure;
+		yourself.
+		
+	(self isErrorResult or: [ self isFailureResult ]) ifTrue: [
+		data at: #errorDescription put: self result exception description ].
+		
+	^data
 ]
 
 { #category : #accessing }
-GtLTestCaseDomainObject >> statusText [
+GtLTestCaseWithResultStatus >> statusText [
 	self isSkippedResult ifTrue: [ ^ 'skipped' ].
 	self isErrorResult ifTrue: [ ^ 'error' ].
 	self isFailureResult ifTrue: [ ^ 'failure' ].
@@ -118,11 +116,16 @@ GtLTestCaseDomainObject >> statusText [
 ]
 
 { #category : #accessing }
-GtLTestCaseDomainObject >> testCase [
-	^ testCase
+GtLTestCaseWithResultStatus >> testCase [
+	^ testCaseWithResult testCase
 ]
 
 { #category : #accessing }
-GtLTestCaseDomainObject >> testCase: anObject [
-	testCase := anObject
+GtLTestCaseWithResultStatus >> testCaseWithResult [
+	^testCaseWithResult
+]
+
+{ #category : #accessing }
+GtLTestCaseWithResultStatus >> testCaseWithResult: anObject [
+	testCaseWithResult := anObject
 ]

@@ -5,7 +5,7 @@ Class {
 		'arrayOfBooleans',
 		'arrayOfStrings'
 	],
-	#category : #'Gt4LlmCore-Examples-Magritte'
+	#category : 'Gt4LlmCore-Examples-Magritte'
 }
 
 { #category : #comparison }

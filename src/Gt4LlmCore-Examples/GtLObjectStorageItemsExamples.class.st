@@ -4,7 +4,7 @@ Examples for GtLObjectStorageItems and GtLObjectStorageItem, including data view
 Class {
 	#name : #GtLObjectStorageItemsExamples,
 	#superclass : #Object,
-	#category : #'Gt4LlmCore-Examples-Magritte Objects'
+	#category : 'Gt4LlmCore-Examples-Magritte Objects'
 }
 
 { #category : #examples }

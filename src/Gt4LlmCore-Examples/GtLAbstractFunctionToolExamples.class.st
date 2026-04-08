@@ -6,5 +6,5 @@ Class {
 	#superclass : #Object,
 	#traits : 'TGtLInvalidInputDataAssertions',
 	#classTraits : 'TGtLInvalidInputDataAssertions classTrait',
-	#category : #'Gt4LlmCore-Examples-Tools'
+	#category : 'Gt4LlmCore-Examples-Tools'
 }

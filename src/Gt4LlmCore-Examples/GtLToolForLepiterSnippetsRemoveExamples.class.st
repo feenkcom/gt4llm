@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLToolForLepiterSnippetsRemoveExamples,
 	#superclass : #GtLAbstractMagritteFunctionToolExamples,
-	#category : #'Gt4LlmCore-Examples-Tools'
+	#category : 'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #'examples - errors' }
@@ -143,6 +143,25 @@ GtLToolForLepiterSnippetsRemoveExamples >> missingSnippetPageUid [
 ]
 
 { #category : #'examples - errors' }
+GtLToolForLepiterSnippetsRemoveExamples >> missingSnippets [
+	<gtExample>
+	| tool call result domainObject |
+	tool := GtLToolForLepiterSnippetsRemove new.
+	call := GtLFunctionToolCall new.
+	call rawArguments: {} asDictionary.
+	result := tool performToolCall: call.
+	self assert: call tool == tool.
+	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	domainObject := result targetObject.
+	self
+		assertMissingRequiredProperties: domainObject
+		withPropertyNames: #('snippets')
+		path: #(nil)
+		errorMessage: 'required properties missing [snippets]'.
+	^ domainObject
+]
+
+{ #category : #'examples - errors' }
 GtLToolForLepiterSnippetsRemoveExamples >> missingSnippetUid [
 	<gtExample>
 	| tool call result domainObject |
@@ -163,25 +182,6 @@ GtLToolForLepiterSnippetsRemoveExamples >> missingSnippetUid [
 		withPropertyNames: #('snippetUid')
 		path: #(#snippets 1)
 		errorMessage: '@[snippets/1] required properties missing [snippetUid]'.
-	^ domainObject
-]
-
-{ #category : #'examples - errors' }
-GtLToolForLepiterSnippetsRemoveExamples >> missingSnippets [
-	<gtExample>
-	| tool call result domainObject |
-	tool := GtLToolForLepiterSnippetsRemove new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: {} asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self
-		assertMissingRequiredProperties: domainObject
-		withPropertyNames: #('snippets')
-		path: #(nil)
-		errorMessage: 'required properties missing [snippets]'.
 	^ domainObject
 ]
 

@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLChatCompactedSummary,
 	#superclass : #GtLMarkdown,
-	#category : #'Gt4LlmCore-Formats'
+	#category : 'Gt4LlmCore-Formats'
 }
 
 { #category : #'instance creation' }
