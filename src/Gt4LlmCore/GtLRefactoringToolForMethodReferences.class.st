@@ -1,9 +1,9 @@
+"
+Magritte-based tool for finding method references (senders) in a GtRBNamespace model.
+"
 Class {
 	#name : #GtLRefactoringToolForMethodReferences,
-	#superclass : #GtLAbstractPlainSchemaFunctionTool,
-	#instVars : [
-		'model'
-	],
+	#superclass : #GtLAbstractRefactoringMagritteTool,
 	#category : 'Gt4LlmCore-Tools'
 }
 
@@ -18,39 +18,29 @@ GtLRefactoringToolForMethodReferences >> isUsingDataViews [
 ]
 
 { #category : #'llm-generated' }
-GtLRefactoringToolForMethodReferences >> model [
-	^ model
-]
-
-{ #category : #'llm-generated' }
-GtLRefactoringToolForMethodReferences >> model: aModel [
-	model := aModel
-]
-
-{ #category : #'llm-generated' }
 GtLRefactoringToolForMethodReferences >> name [
 	^ 'rbMethodReferences'
 ]
 
-{ #category : #'llm-generated' }
-GtLRefactoringToolForMethodReferences >> parametersDescription [
-	^ #('selector')
-]
-
-{ #category : #'llm-generated' }
+{ #category : #executing }
 GtLRefactoringToolForMethodReferences >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments selector |
 	self model
 		ifNil: [ ^ GtLMissingInformationDomainObject new
 				missingModelName: 'model' ].
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
-	selector := arguments
-			at: 'selector'
-			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-					arguments: arguments;
-					missingArgument: 'selector' ].
+	selector := arguments at: 'selector'.
 	
 	^ self sendersOf: selector
+]
+
+{ #category : #magritte }
+GtLRefactoringToolForMethodReferences >> selectorDescription [
+	<magritteDescription>
+	^ MAStringDescription new
+		label: 'Selector';
+		accessor: #selector;
+		beRequired
 ]
 
 { #category : #'llm-generated' }
