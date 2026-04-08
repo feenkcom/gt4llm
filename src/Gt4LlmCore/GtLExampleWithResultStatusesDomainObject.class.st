@@ -45,22 +45,31 @@ GtLExampleWithResultStatusesDomainObject >> gtExampleWithStatusesFor: aView [
 ]
 
 { #category : #accessing }
+GtLExampleWithResultStatusesDomainObject >> llmJsonObject [
+	"Return a JSON dictionary that represents the domain object."
+
+	<return: #NeoJSONObject>
+	
+	^ NeoJSONObject new
+		at: #total put: self totalCount;
+		at: #successes put: self successResultCount;
+		at: #failures put: self failureResultCount;
+		at: #errors put: self errorResultCount;
+		at: #skips put: self skippedCount;
+		at: #notFound put: self notFoundClassNames;
+		at: #details
+			put: (self exampleWithStatuses 
+				collect: [ :each | each llmJsonObject ] as: Array);
+		yourself
+]
+
+{ #category : #accessing }
 GtLExampleWithResultStatusesDomainObject >> llmRawDataViewFor: aDataView [
 	<gtLlmDataView>
 	
 	^ aDataView 
 			title: 'Example results';
-			jsonObject: [ :json |
-				json 
-					at: #total put: self totalCount;
-					at: #successes put: self successResultCount;
-					at: #failures put: self failureResultCount;
-					at: #errors put: self errorResultCount;
-					at: #skips put: self skippedCount;
-					at: #notFound put: self notFoundClassNames;
-					at: #details
-						put: (self exampleWithStatuses 
-							collect: [ :each | each llmJsonObject ] as: Array) ]
+			jsonData: [ self llmJsonObject ]
 ]
 
 { #category : #accessing }

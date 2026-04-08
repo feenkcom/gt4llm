@@ -353,10 +353,15 @@ GtLTestCasesWithResultStatusesDomainObjectExamples >> jsonSerializationForEmptyS
 GtLTestCasesWithResultStatusesDomainObjectExamples >> jsonSerializationForErrorTest [
 	<gtExample>
 	<return: #NeoJSONObject>
-	| domainObject jsonData expectedJsonOne expectedJsonTwo expectedDetail |
+	| domainObject jsonData expectedJson expectedDetail errorDetails |
 	
 	domainObject := self domainObjectWithErrorTest.
 	jsonData := (domainObject llmDataViewsFor: GtLDataView new) serializeToLlmPrimiteData compositeJsonData.
+	
+	errorDetails := NeoJSONObject new
+		at: #errorMessage put: 'Boom';
+		at: #errorClass put: 'Error';
+		yourself.
 	
 	expectedDetail := NeoJSONObject new
 		at: #className put: 'GtLExampleDummyMixedTest';
@@ -365,10 +370,10 @@ GtLTestCasesWithResultStatusesDomainObjectExamples >> jsonSerializationForErrorT
 		at: #result put: 'Error';
 		at: #shouldPass put: true;
 		at: #expectedFailure put: false;
-		at: #errorDescription put: 'Boom';
+		at: #errorDetails put: errorDetails;
 		yourself.
 	
-	expectedJsonOne := Dictionary new
+	expectedJson := Dictionary new
 		at: #runCount put: 1;
 		at: #successes put: 0;
 		at: #failures put: 0;
@@ -384,12 +389,7 @@ GtLTestCasesWithResultStatusesDomainObjectExamples >> jsonSerializationForErrorT
 		at: #details put: { expectedDetail };
 		yourself.
 	
-	expectedJsonTwo := expectedJsonOne copy.
-	expectedJsonTwo at: 'details' put: { expectedDetail copy }.
-	(expectedJsonTwo at: 'details')  first at: 'errorDescription' put: 'Error: Boom'.
-	
-	self assert: ((jsonData = expectedJsonOne) or: [
-		jsonData = expectedJsonTwo]).
+	self assert: jsonData equals: expectedJson.
 	
 	^ jsonData
 ]
@@ -398,7 +398,7 @@ GtLTestCasesWithResultStatusesDomainObjectExamples >> jsonSerializationForErrorT
 GtLTestCasesWithResultStatusesDomainObjectExamples >> jsonSerializationForExpectedFailure [
 	<gtExample>
 	<return: #NeoJSONObject>
-	| domainObject jsonData expectedJsonOne expectedJsonTwo expectedDetail testStatus |
+	| domainObject jsonData expectedJson expectedDetail testStatus errorDetails |
 	
 	testStatus := self createTestStatusFor: (GtLExampleDummyMixedTest >> #testExpectedFailure).
 	
@@ -409,6 +409,11 @@ GtLTestCasesWithResultStatusesDomainObjectExamples >> jsonSerializationForExpect
 	
 	jsonData := (domainObject llmDataViewsFor: GtLDataView new) serializeToLlmPrimiteData compositeJsonData.
 	
+	errorDetails := NeoJSONObject new
+		at: #errorMessage put: 'Assertion failed';
+		at: #errorClass put: 'TestFailure';
+		yourself.
+	
 	expectedDetail := NeoJSONObject new
 		at: #className put: 'GtLExampleDummyMixedTest';
 		at: #selector put: 'testExpectedFailure';
@@ -416,10 +421,10 @@ GtLTestCasesWithResultStatusesDomainObjectExamples >> jsonSerializationForExpect
 		at: #result put: 'Failure';
 		at: #shouldPass put: false;
 		at: #expectedFailure put: true;
-		at: #errorDescription put: 'Assertion failed';
+		at: #errorDetails put: errorDetails;
 		yourself.
 	
-	expectedJsonOne := Dictionary new
+	expectedJson := Dictionary new
 		at: #runCount put: 1;
 		at: #successes put: 0;
 		at: #failures put: 1;
@@ -434,12 +439,8 @@ GtLTestCasesWithResultStatusesDomainObjectExamples >> jsonSerializationForExpect
 		at: #notTestCaseClasses put: #();
 		at: #details put: { expectedDetail };
 		yourself.
-		
-	expectedJsonTwo := expectedJsonOne copy.
-	expectedJsonTwo at: 'details' put: { expectedDetail copy }.
-	(expectedJsonTwo at: 'details')  first at: 'errorDescription' put: 'TestFailure: Assertion failed'.
 	
-	self assert: ((jsonData = expectedJsonOne) or: [jsonData = expectedJsonTwo]).
+	self assert: jsonData equals: expectedJson.
 	
 	^ jsonData
 ]
@@ -448,10 +449,15 @@ GtLTestCasesWithResultStatusesDomainObjectExamples >> jsonSerializationForExpect
 GtLTestCasesWithResultStatusesDomainObjectExamples >> jsonSerializationForFailingTest [
 	<gtExample>
 	<return: #NeoJSONObject>
-	| domainObject jsonData expectedJsonOne expectedJsonTwo expectedDetail |
+	| domainObject jsonData expectedJson expectedDetail errorDetails |
 	
 	domainObject := self domainObjectWithFailingTest.
 	jsonData := (domainObject llmDataViewsFor: GtLDataView new) serializeToLlmPrimiteData compositeJsonData.
+	
+	errorDetails := NeoJSONObject new
+		at: #errorMessage put: 'Assertion failed';
+		at: #errorClass put: 'TestFailure';
+		yourself.
 	
 	expectedDetail := NeoJSONObject new
 		at: #className put: 'GtLExampleDummyMixedTest';
@@ -460,10 +466,10 @@ GtLTestCasesWithResultStatusesDomainObjectExamples >> jsonSerializationForFailin
 		at: #result put: 'Failure';
 		at: #shouldPass put: true;
 		at: #expectedFailure put: false;
-		at: #errorDescription put: 'Assertion failed';
+		at: #errorDetails put: errorDetails;
 		yourself.
 	
-	expectedJsonOne := Dictionary new
+	expectedJson := Dictionary new
 		at: #runCount put: 1;
 		at: #successes put: 0;
 		at: #failures put: 1;
@@ -479,12 +485,7 @@ GtLTestCasesWithResultStatusesDomainObjectExamples >> jsonSerializationForFailin
 		at: #details put: { expectedDetail };
 		yourself.
 	
-	expectedJsonTwo := expectedJsonOne copy.
-	expectedJsonTwo at: 'details' put: { expectedDetail copy }.
-	(expectedJsonTwo at: 'details')  first at: 'errorDescription' put: 'TestFailure: Assertion failed'.
-	
-	self assert: ((jsonData = expectedJsonOne) or: [jsonData = expectedJsonTwo]).
-	
+	self assert: jsonData equals: expectedJson.
 	
 	^ jsonData
 ]
@@ -493,7 +494,7 @@ GtLTestCasesWithResultStatusesDomainObjectExamples >> jsonSerializationForFailin
 GtLTestCasesWithResultStatusesDomainObjectExamples >> jsonSerializationForMixedStatuses [
 	<gtExample>
 	<return: #NeoJSONObject>
-	| domainObject jsonData expectedJsonOne expectedJsonTwo successDetail failureDetail errorDetail skippedDetail |
+	| domainObject jsonData expectedJson successDetail failureDetail errorDetail skippedDetail failureErrorDetails errorErrorDetails |
 	
 	domainObject := self domainObjectWithMixedStatuses.
 	jsonData := (domainObject llmDataViewsFor: GtLDataView new) serializeToLlmPrimiteData compositeJsonData.
@@ -507,6 +508,11 @@ GtLTestCasesWithResultStatusesDomainObjectExamples >> jsonSerializationForMixedS
 		at: #expectedFailure put: false;
 		yourself.
 	
+	failureErrorDetails := NeoJSONObject new
+		at: #errorMessage put: 'Assertion failed';
+		at: #errorClass put: 'TestFailure';
+		yourself.
+	
 	failureDetail := NeoJSONObject new
 		at: #className put: 'GtLExampleDummyMixedTest';
 		at: #selector put: 'testFailure';
@@ -514,7 +520,12 @@ GtLTestCasesWithResultStatusesDomainObjectExamples >> jsonSerializationForMixedS
 		at: #result put: 'Failure';
 		at: #shouldPass put: true;
 		at: #expectedFailure put: false;
-		at: #errorDescription put: 'Assertion failed';
+		at: #errorDetails put: failureErrorDetails;
+		yourself.
+	
+	errorErrorDetails := NeoJSONObject new
+		at: #errorMessage put: 'Boom';
+		at: #errorClass put: 'Error';
 		yourself.
 	
 	errorDetail := NeoJSONObject new
@@ -524,7 +535,7 @@ GtLTestCasesWithResultStatusesDomainObjectExamples >> jsonSerializationForMixedS
 		at: #result put: 'Error';
 		at: #shouldPass put: true;
 		at: #expectedFailure put: false;
-		at: #errorDescription put: 'Boom';
+		at: #errorDetails put: errorErrorDetails;
 		yourself.
 	
 	skippedDetail := NeoJSONObject new
@@ -536,7 +547,7 @@ GtLTestCasesWithResultStatusesDomainObjectExamples >> jsonSerializationForMixedS
 		at: #expectedFailure put: false;
 		yourself.
 	
-	expectedJsonOne := Dictionary new
+	expectedJson := Dictionary new
 		at: #runCount put: 3;
 		at: #successes put: 1;
 		at: #failures put: 1;
@@ -552,15 +563,7 @@ GtLTestCasesWithResultStatusesDomainObjectExamples >> jsonSerializationForMixedS
 		at: #details put: { successDetail. failureDetail. errorDetail. skippedDetail };
 		yourself.
 	
-	expectedJsonTwo := expectedJsonOne copy.
-	expectedJsonTwo at: 'details' put: ({  
-		successDetail. failureDetail. errorDetail. skippedDetail  } collect: [ :each | each copy ]).
-	(expectedJsonTwo at: 'details')  second 
-		at: 'errorDescription' put: 'TestFailure: Assertion failed'.
-	(expectedJsonTwo at: 'details')  third 
-		at: 'errorDescription' put: 'Error: Boom'.
-	
-	self assert: ((jsonData = expectedJsonOne) or: [jsonData = expectedJsonTwo]).
+	self assert: jsonData equals: expectedJson.
 	
 	^ jsonData
 ]
