@@ -26,7 +26,6 @@ GtWardleyMapAddNoteChangeSpecification >> proposeModificationsIn: aWardleyMapMod
 { #category : #private }
 GtWardleyMapAddNoteChangeSpecification >> updateNewUidsUsing: aDictionary [
 	| newId |
-	super updateNewUidsUsing: aDictionary.
 	newId := UUID new printString.
 	aDictionary at: noteId put: newId.
 	noteId := newId

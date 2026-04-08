@@ -13,15 +13,7 @@ GtLLepiterEditWardleyMapSnippetTransformationSpecificationExamples >> addEdge [
 	spec := GtLLepiterEditWardleyMapSnippetTransformationSpecification new.
 	spec
 		wardleyMap: map;
-		changes: {GtWardleyMapAddNodeChangeSpecification new
-					nodeId: self node2Id;
-					label: 'Node2';
-					evolution: 0.375;
-					visibility: 0.5.
-				GtWardleyMapAddEdgeChangeSpecification new
-					fromNodeId: self node1Id;
-					toNodeId: self node2Id;
-					label: 'Edge'}.
+		changes: self changesToAddEdge.
 	spec changeObject execute.
 	self assert: map nodes size equals: 2.
 	self assert: map edges size equals: 1.
@@ -37,6 +29,22 @@ GtLLepiterEditWardleyMapSnippetTransformationSpecificationExamples >> addEdge [
 	self assert: edge fromNode equals: node1.
 	self assert: edge toNode equals: node2.
 	^ spec
+]
+
+{ #category : #examples }
+GtLLepiterEditWardleyMapSnippetTransformationSpecificationExamples >> addEdgeHighlightedModificationsInPreview [
+	<gtExample>
+	| map spec preview |
+	spec := self addEdge.
+	map := spec wardleyMap.
+	preview := spec highlightedModificationsInPreview.
+	self assert: preview nodes size equals: map nodes size.
+	self assert: preview edges size equals: map edges size.
+	self assert: preview notes size equals: map notes size.
+	self assert: preview nodes first wardleyMapDecoratorModels size equals: 0.
+	self assert: preview nodes last wardleyMapDecoratorModels size equals: 1.
+	self assert: preview edges first wardleyMapDecoratorModels size equals: 1.
+	^ preview
 ]
 
 { #category : #examples }
@@ -56,6 +64,68 @@ GtLLepiterEditWardleyMapSnippetTransformationSpecificationExamples >> addEdgePro
 ]
 
 { #category : #examples }
+GtLLepiterEditWardleyMapSnippetTransformationSpecificationExamples >> addInnerNode [
+	<gtExample>
+	| map spec previous node2 node1 |
+	previous := self addNode.
+	map := previous wardleyMap.
+	spec := GtLLepiterEditWardleyMapSnippetTransformationSpecification new.
+	spec
+		wardleyMap: map;
+		changes: {GtWardleyMapAddNodeChangeSpecification new
+					nodeId: self node2Id;
+					label: 'Node2';
+					evolution: 0.375;
+					visibility: 0.5.
+				GtWardleyMapAddInnerNodeSpecification new
+					outerNodeId: self node1Id;
+					innerNodeId: self node2Id}.
+	spec changeObject execute.
+	self assert: map nodes size equals: 2.
+	self assert: map edges size equals: 0.
+	self assert: map notes size equals: 0.
+	node1 := map nodes first.
+	self assert: node1 id ~= (UUID gtFromString: self node1Id).
+	self assert: node1 label equals: 'Node1'.
+	self assert: node1 evolution equals: 0.125.
+	self assert: node1 visibility equals: 0.25.
+	node2 := map nodes last.
+	self assert: node2 id ~= (UUID gtFromString: self node2Id).
+	self assert: node2 label equals: 'Node2'.
+	self assert: node2 evolution equals: 0.375.
+	^ spec
+]
+
+{ #category : #examples }
+GtLLepiterEditWardleyMapSnippetTransformationSpecificationExamples >> addInnerNodeHighlightedModificationsInPreview [
+	<gtExample>
+	| map spec preview |
+	spec := self addInnerNode.
+	map := spec wardleyMap.
+	preview := spec highlightedModificationsInPreview.
+	self assert: preview nodes size equals: 2.
+	self assert: preview edges size equals: 0.
+	self assert: preview notes size equals: 0.
+	self assert: preview nodes first wardleyMapDecoratorModels notEmpty.
+	self assert: preview nodes last wardleyMapDecoratorModels notEmpty.
+	^ preview
+]
+
+{ #category : #examples }
+GtLLepiterEditWardleyMapSnippetTransformationSpecificationExamples >> addInnerNodeProposedModificationsPreview [
+	<gtExample>
+	| map spec preview |
+	spec := self addInnerNode.
+	map := spec wardleyMap.
+	preview := spec proposedModificationsInPreview.
+	self assert: preview nodes size equals: 2.
+	self assert: preview edges size equals: 0.
+	self assert: preview notes size equals: 0.
+	self assert: preview nodes last wardleyMapDecoratorModels notEmpty.
+	^ preview
+]
+
+{ #category : #examples }
 GtLLepiterEditWardleyMapSnippetTransformationSpecificationExamples >> addNode [
 	<gtExample>
 	| map spec node1 |
@@ -63,11 +133,7 @@ GtLLepiterEditWardleyMapSnippetTransformationSpecificationExamples >> addNode [
 	spec := GtLLepiterEditWardleyMapSnippetTransformationSpecification new.
 	spec
 		wardleyMap: map;
-		changes: {GtWardleyMapAddNodeChangeSpecification new
-					nodeId: self node1Id;
-					label: 'Node1';
-					evolution: 0.125;
-					visibility: 0.25}.
+		changes: self changesToAddNode1.
 	spec changeObject execute.
 	self assert: map nodes size equals: 1.
 	self assert: map edges size equals: 0.
@@ -78,6 +144,20 @@ GtLLepiterEditWardleyMapSnippetTransformationSpecificationExamples >> addNode [
 	self assert: node1 evolution equals: 0.125.
 	self assert: node1 visibility equals: 0.25.
 	^ spec
+]
+
+{ #category : #examples }
+GtLLepiterEditWardleyMapSnippetTransformationSpecificationExamples >> addNodeHighlightedModificationsInPreview [
+	<gtExample>
+	| map spec preview |
+	spec := self addNode.
+	map := spec wardleyMap.
+	preview := spec highlightedModificationsInPreview.
+	self assert: preview nodes size equals: map nodes size.
+	self assert: preview edges size equals: map edges size.
+	self assert: preview notes size equals: map notes size.
+	self assert: preview nodes first wardleyMapDecoratorModels size equals: 1.
+	^ preview
 ]
 
 { #category : #examples }
@@ -103,11 +183,7 @@ GtLLepiterEditWardleyMapSnippetTransformationSpecificationExamples >> addNote [
 	spec := GtLLepiterEditWardleyMapSnippetTransformationSpecification new.
 	spec
 		wardleyMap: map;
-		changes: {GtWardleyMapAddNoteChangeSpecification new
-					noteId: self noteId;
-					label: 'Some note';
-					evolution: 0.5;
-					visibility: 0.75}.
+		changes: self changesToAddNote.
 	spec changeObject execute.
 	self assert: map nodes size equals: 1.
 	self assert: map edges size equals: 0.
@@ -117,6 +193,20 @@ GtLLepiterEditWardleyMapSnippetTransformationSpecificationExamples >> addNote [
 	self assert: note evolution equals: 0.5.
 	self assert: note visibility equals: 0.75.
 	^ spec
+]
+
+{ #category : #examples }
+GtLLepiterEditWardleyMapSnippetTransformationSpecificationExamples >> addNoteHighlightedModificationsInPreview [
+	<gtExample>
+	| map spec preview |
+	spec := self addNote.
+	map := spec wardleyMap.
+	preview := spec highlightedModificationsInPreview.
+	self assert: preview nodes size equals: map nodes size.
+	self assert: preview edges size equals: map edges size.
+	self assert: preview notes size equals: map notes size.
+	self assert: preview notes first wardleyMapDecoratorModels size equals: 1.
+	^ preview
 ]
 
 { #category : #examples }
@@ -133,17 +223,107 @@ GtLLepiterEditWardleyMapSnippetTransformationSpecificationExamples >> addNotePro
 	^ preview
 ]
 
+{ #category : #private }
+GtLLepiterEditWardleyMapSnippetTransformationSpecificationExamples >> changesToAddEdge [
+	^ {GtWardleyMapAddNodeChangeSpecification new
+			nodeId: self node2Id;
+			label: 'Node2';
+			evolution: 0.375;
+			visibility: 0.5.
+		GtWardleyMapAddEdgeChangeSpecification new
+			fromNodeId: self node1Id;
+			toNodeId: self node2Id;
+			label: 'Edge'}
+]
+
+{ #category : #private }
+GtLLepiterEditWardleyMapSnippetTransformationSpecificationExamples >> changesToAddNode1 [
+	^ {GtWardleyMapAddNodeChangeSpecification new
+			nodeId: self node1Id;
+			label: 'Node1';
+			evolution: 0.125;
+			visibility: 0.25}
+]
+
+{ #category : #private }
+GtLLepiterEditWardleyMapSnippetTransformationSpecificationExamples >> changesToAddNote [
+	^ {GtWardleyMapAddNoteChangeSpecification new
+			noteId: self noteId;
+			label: 'Some note';
+			evolution: 0.5;
+			visibility: 0.75}
+]
+
 { #category : #examples }
+GtLLepiterEditWardleyMapSnippetTransformationSpecificationExamples >> deleteAndAddWithSameIds [
+	<gtExample>
+	| map spec previous node1 node2 edge note |
+	previous := self addNote.
+	map := previous wardleyMap.
+	map nodes do: [ :each | each removeFromMap ].
+	map notes do: [ :each | each removeFromMap ].
+	spec := GtLLepiterEditWardleyMapSnippetTransformationSpecification new.
+	spec
+		wardleyMap: map;
+		changes: self changesToAddNode1 , self changesToAddEdge , self changesToAddNote.
+	spec changeObject execute.
+	self assert: map nodes size equals: 2.
+	self assert: map edges size equals: 1.
+	self assert: map notes size equals: 1.
+	node1 := map nodes first.
+	node2 := map nodes last.
+	self assert: node2 id ~= (UUID gtFromString: self node2Id).
+	self assert: node2 label equals: 'Node2'.
+	self assert: node2 evolution equals: 0.375.
+	self assert: node2 visibility equals: 0.5.
+	edge := map edges first.
+	self assert: edge label equals: 'Edge'.
+	self assert: edge fromNode equals: node1.
+	self assert: edge toNode equals: node2.
+	note := map notes first.
+	self assert: note label equals: 'Some note'.
+	self assert: note evolution equals: 0.5.
+	self assert: note visibility equals: 0.75.
+	^ spec
+]
+
+{ #category : #examples }
+GtLLepiterEditWardleyMapSnippetTransformationSpecificationExamples >> deleteAndAddWithSameIdsHighlightedModificationsInPreview [
+	<gtExample>
+	| map spec preview |
+	spec := self deleteAndAddWithSameIds.
+	map := spec wardleyMap.
+	preview := spec highlightedModificationsInPreview.
+	self assert: preview nodes size equals: map nodes size.
+	self assert: preview edges size equals: map edges size.
+	self assert: preview notes size equals: map notes size.
+	^ preview
+]
+
+{ #category : #examples }
+GtLLepiterEditWardleyMapSnippetTransformationSpecificationExamples >> deleteAndAddWithSameIdsProposedModificationsInPreview [
+	<gtExample>
+	| map spec preview |
+	spec := self deleteAndAddWithSameIds.
+	map := spec wardleyMap.
+	preview := spec proposedModificationsInPreview.
+	self assert: preview nodes size equals: map nodes size.
+	self assert: preview edges size equals: map edges size.
+	self assert: preview notes size equals: map notes size.
+	^ preview
+]
+
+{ #category : #private }
 GtLLepiterEditWardleyMapSnippetTransformationSpecificationExamples >> node1Id [
 	^ String new: 24 withAll: $1
 ]
 
-{ #category : #examples }
+{ #category : #private }
 GtLLepiterEditWardleyMapSnippetTransformationSpecificationExamples >> node2Id [
 	^ '11111111-2222-3333-4444-555555555555'
 ]
 
-{ #category : #examples }
+{ #category : #private }
 GtLLepiterEditWardleyMapSnippetTransformationSpecificationExamples >> noteId [
 	^ String new: 26 withAll: $9
 ]
@@ -167,6 +347,17 @@ GtLLepiterEditWardleyMapSnippetTransformationSpecificationExamples >> removeEdge
 ]
 
 { #category : #examples }
+GtLLepiterEditWardleyMapSnippetTransformationSpecificationExamples >> removeEdgeHighlightedModificationsInPreview [
+	<gtExample>
+	| map spec preview |
+	spec := self removeEdge.
+	map := spec wardleyMap.
+	preview := spec highlightedModificationsInPreview.
+	self assert: preview edges first wardleyMapDecoratorModels size equals: 1.
+	^ preview
+]
+
+{ #category : #examples }
 GtLLepiterEditWardleyMapSnippetTransformationSpecificationExamples >> removeEdgeProposedModificationsPreview [
 	<gtExample>
 	| map spec preview |
@@ -174,6 +365,45 @@ GtLLepiterEditWardleyMapSnippetTransformationSpecificationExamples >> removeEdge
 	map := spec wardleyMap.
 	preview := spec proposedModificationsInPreview.
 	self assert: preview edges first wardleyMapDecoratorModels size equals: 1.
+	^ preview
+]
+
+{ #category : #examples }
+GtLLepiterEditWardleyMapSnippetTransformationSpecificationExamples >> removeInnerNode [
+	<gtExample>
+	| map spec previous |
+	previous := self addInnerNode.
+	map := previous wardleyMap.
+	spec := GtLLepiterEditWardleyMapSnippetTransformationSpecification new.
+	spec
+		wardleyMap: map;
+		changes: {GtWardleyMapRemoveInnerNodeSpecification new innerNodeId: self node2Id}.
+	spec changeObject execute.
+	self assert: map nodes size equals: 2.
+	self assert: map edges size equals: 0.
+	map nodes do: [ :each | self assert: each innerNodes isEmpty ].
+	^ spec
+]
+
+{ #category : #examples }
+GtLLepiterEditWardleyMapSnippetTransformationSpecificationExamples >> removeInnerNodeHighlightedModificationsInPreview [
+	<gtExample>
+	| map spec preview |
+	spec := self removeInnerNode.
+	map := spec wardleyMap.
+	preview := spec highlightedModificationsInPreview.
+	self assert: preview nodes first wardleyMapDecoratorModels size equals: 1.
+	self assert: preview nodes last wardleyMapDecoratorModels size equals: 1.
+	^ preview
+]
+
+{ #category : #examples }
+GtLLepiterEditWardleyMapSnippetTransformationSpecificationExamples >> removeInnerNodeProposedModificationsPreview [
+	<gtExample>
+	| map spec preview |
+	spec := self removeInnerNode.
+	map := spec wardleyMap.
+	preview := spec proposedModificationsInPreview.
 	^ preview
 ]
 
@@ -191,6 +421,17 @@ GtLLepiterEditWardleyMapSnippetTransformationSpecificationExamples >> removeNode
 	self assert: map nodes size equals: 1.
 	self assert: map edges size equals: 0.
 	^ spec
+]
+
+{ #category : #examples }
+GtLLepiterEditWardleyMapSnippetTransformationSpecificationExamples >> removeNodeHighlightedModificationsInPreview [
+	<gtExample>
+	| map spec preview |
+	spec := self removeNode.
+	map := spec wardleyMap.
+	preview := spec highlightedModificationsInPreview.
+	self assert: preview nodes first wardleyMapDecoratorModels size equals: 1.
+	^ preview
 ]
 
 { #category : #examples }
@@ -220,6 +461,20 @@ GtLLepiterEditWardleyMapSnippetTransformationSpecificationExamples >> removeNote
 ]
 
 { #category : #examples }
+GtLLepiterEditWardleyMapSnippetTransformationSpecificationExamples >> removeNoteHighlightedModificationsInPreview [
+	<gtExample>
+	| map spec preview |
+	spec := self removeNote.
+	map := spec wardleyMap.
+	preview := spec highlightedModificationsInPreview.
+	self assert: preview nodes size equals: map nodes size.
+	self assert: preview edges size equals: map edges size.
+	self assert: preview notes size equals: 1.
+	self assert: preview notes first wardleyMapDecoratorModels size equals: 1.
+	^ preview
+]
+
+{ #category : #examples }
 GtLLepiterEditWardleyMapSnippetTransformationSpecificationExamples >> removeNoteProposedModificationsPreview [
 	<gtExample>
 	| map spec preview |
@@ -236,7 +491,7 @@ GtLLepiterEditWardleyMapSnippetTransformationSpecificationExamples >> removeNote
 { #category : #examples }
 GtLLepiterEditWardleyMapSnippetTransformationSpecificationExamples >> updateEdgeAndNodes [
 	<gtExample>
-	| map spec previous node1 node2 edge preview |
+	| map spec previous node1 node2 edge |
 	previous := self addEdge.
 	map := previous wardleyMap.
 	spec := GtLLepiterEditWardleyMapSnippetTransformationSpecification new.
@@ -265,6 +520,15 @@ GtLLepiterEditWardleyMapSnippetTransformationSpecificationExamples >> updateEdge
 	self assert: edge label equals: '1-2 Edge'.
 	self assert: edge fromNode equals: node1.
 	self assert: edge toNode equals: node2.
+	^ spec
+]
+
+{ #category : #examples }
+GtLLepiterEditWardleyMapSnippetTransformationSpecificationExamples >> updateEdgeAndNodesHighlightedModificationsInPreview [
+	<gtExample>
+	| map spec preview |
+	spec := self updateEdgeAndNodes.
+	map := spec wardleyMap.
 	preview := spec highlightedModificationsInPreview.
 	self assert: preview nodes size equals: map nodes size.
 	self assert: preview edges size equals: map edges size.
@@ -272,13 +536,13 @@ GtLLepiterEditWardleyMapSnippetTransformationSpecificationExamples >> updateEdge
 	preview nodes
 		do: [ :each | self assert: each wardleyMapDecoratorModels size equals: 1 ].
 	self assert: preview edges first wardleyMapDecoratorModels size equals: 1.
-	^ spec
+	^ preview
 ]
 
 { #category : #examples }
 GtLLepiterEditWardleyMapSnippetTransformationSpecificationExamples >> updateNote [
 	<gtExample>
-	| map spec previous preview note |
+	| map spec previous note |
 	previous := self addNote.
 	map := previous wardleyMap.
 	spec := GtLLepiterEditWardleyMapSnippetTransformationSpecification new.
@@ -292,10 +556,19 @@ GtLLepiterEditWardleyMapSnippetTransformationSpecificationExamples >> updateNote
 	self assert: note label equals: '1 - Note'.
 	self assert: note evolution equals: 0.5.
 	self assert: note visibility equals: 0.75.
+	^ spec
+]
+
+{ #category : #examples }
+GtLLepiterEditWardleyMapSnippetTransformationSpecificationExamples >> updateNoteHighlightedModificationsInPreview [
+	<gtExample>
+	| map spec preview |
+	spec := self updateNote.
+	map := spec wardleyMap.
 	preview := spec highlightedModificationsInPreview.
 	self assert: preview nodes size equals: map nodes size.
 	self assert: preview edges size equals: map edges size.
 	self assert: preview notes size equals: map notes size.
 	self assert: preview notes first wardleyMapDecoratorModels size equals: 1.
-	^ spec
+	^ preview
 ]
