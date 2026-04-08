@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLErroneousConditionDomainObject,
-	#superclass : #GtLDomainObject,
+	#superclass : #Object,
 	#category : 'Gt4LlmCore-Domain Objects'
 }
 
