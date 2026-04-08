@@ -118,10 +118,3 @@ GtLIncorrectArgumentTypeDomainObject >> messageText [
 
 	^ self errorMessage
 ]
-
-{ #category : #'api - serializing' }
-GtLIncorrectArgumentTypeDomainObject >> serializeToLlmJsonObject [
-	"Return a JSON dictionary that represents the domain object."
-	
-	^ GtMagritteJSONDataExporter exportObject: self.
-]

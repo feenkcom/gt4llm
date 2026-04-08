@@ -83,10 +83,3 @@ GtLMissingArgumentDomainObject >> missingArgumentDescription [
 			accessor: #missingArgument;
 			beRequired
 ]
-
-{ #category : #'api - serializing' }
-GtLMissingArgumentDomainObject >> serializeToLlmJsonObject [
-	"Return a JSON dictionary that represents the domain object."
-	
-	^ GtMagritteJSONDataExporter exportObject: self.
-]

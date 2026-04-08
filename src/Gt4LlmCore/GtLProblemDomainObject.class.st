@@ -50,10 +50,3 @@ GtLProblemDomainObject >> messageText [
 
 	^ self errorMessage
 ]
-
-{ #category : #'api - serializing' }
-GtLProblemDomainObject >> serializeToLlmJsonObject [
-	"Return a JSON dictionary that represents the domain object."
-	
-	^ GtMagritteJSONDataExporter exportObject: self
-]

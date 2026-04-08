@@ -130,13 +130,6 @@ GtLCouldNotCreateClassDomainObject >> packageTagNameDescription [
 		beRequired
 ]
 
-{ #category : #serialization }
-GtLCouldNotCreateClassDomainObject >> serializeToLlmJsonObject [
-	"Return a JSON dictionary that represents the domain object."
-	
-	^ GtMagritteJSONDataExporter exportObject: self
-]
-
 { #category : #accessing }
 GtLCouldNotCreateClassDomainObject >> superclass [
 	^ superclass
