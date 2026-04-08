@@ -61,8 +61,3 @@ GtLUnexpectedDomainObject >> serializeToLlmJsonObject [
 		at: #unexpectedObject put: self objectName;
 		yourself
 ]
-
-{ #category : #testing }
-GtLUnexpectedDomainObject >> wasMovedToMagritteDescriptions [
-	^ true
-]

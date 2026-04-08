@@ -62,8 +62,3 @@ GtLDomainObject >> serializeToOpenAIResponseOutput [
 			at: #type put: #input_text;
 			yourself}
 ]
-
-{ #category : #testing }
-GtLDomainObject >> wasMovedToMagritteDescriptions [
-	^ false
-]

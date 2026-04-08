@@ -125,8 +125,3 @@ GtLIncorrectArgumentTypeDomainObject >> serializeToLlmJsonObject [
 	
 	^ GtMagritteJSONDataExporter exportObject: self.
 ]
-
-{ #category : #testing }
-GtLIncorrectArgumentTypeDomainObject >> wasMovedToMagritteDescriptions [
-	^ true
-]
