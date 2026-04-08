@@ -4,7 +4,7 @@ I provide examples for GtLDocumentDataView.
 Class {
 	#name : #GtLDocumentDataViewExamples,
 	#superclass : #GtLDataViewExamples,
-	#category : 'Gt4LlmCore-Examples-Data Views'
+	#category : #'Gt4LlmCore-Examples-Data Views'
 }
 
 { #category : #'examples - support' }
@@ -28,6 +28,24 @@ startxref
 	self assert: pdfBytes isNotEmpty.
 	
 	^ pdfBytes
+]
+
+{ #category : #examples }
+GtLDocumentDataViewExamples >> standaloneDocumentDataViewWithPdf [
+	<gtExample>
+	| basicView documentBytes |
+	
+	documentBytes := self samplePdfBytes.
+	
+	basicView := GtLDocumentDataView new
+		pdf: [ documentBytes ].
+	
+	self assert: basicView title isNil.
+	self assert: basicView dataKey isNil.
+	self assert: basicView contentType equals: 'application/pdf'.
+	self assert: basicView computedDocumentBytes equals: documentBytes.
+	
+	^ basicView
 ]
 
 { #category : #examples }
@@ -71,22 +89,4 @@ GtLDocumentDataViewExamples >> standaloneDocumentDataViewWithoutDataKey_serializ
 	self assert: documentDataBlock encodedBytes equals: documentBytes base64Encoded.
 	
 	^ dataBlock
-]
-
-{ #category : #examples }
-GtLDocumentDataViewExamples >> standaloneDocumentDataViewWithPdf [
-	<gtExample>
-	| basicView documentBytes |
-	
-	documentBytes := self samplePdfBytes.
-	
-	basicView := GtLDocumentDataView new
-		pdf: [ documentBytes ].
-	
-	self assert: basicView title isNil.
-	self assert: basicView dataKey isNil.
-	self assert: basicView contentType equals: 'application/pdf'.
-	self assert: basicView computedDocumentBytes equals: documentBytes.
-	
-	^ basicView
 ]

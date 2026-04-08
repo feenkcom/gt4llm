@@ -1,15 +1,16 @@
 Class {
 	#name : #GtLToolForSearchFilterExamples,
 	#superclass : #GtLAbstractMagritteFunctionToolExamples,
-	#category : 'Gt4LlmCore-Examples-Tools'
+	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #examples }
 GtLToolForSearchFilterExamples >> searchFilterDataViewSerialization [
 	<gtExample>
 	<return: #GtLPrimitiveMessageDataBlock>
-	| domainObject compositeView dataBlock jsonData |
-	domainObject := self searchFilterForExampleMethods.
+	| call domainObject compositeView dataBlock jsonData |
+	call := self searchFilterForExampleMethods.
+	domainObject := call result targetObject.
 	compositeView := domainObject llmDataViewsFor: GtLDataView new.
 	self assert: compositeView dataViews size equals: 1.
 	
@@ -30,56 +31,49 @@ GtLToolForSearchFilterExamples >> searchFilterDataViewSerialization [
 { #category : #examples }
 GtLToolForSearchFilterExamples >> searchFilterForExampleMethods [
 	<gtExample>
-	| targetObject |
-	
-	targetObject := self
+	| call targetObject |
+	call := self
 		executeTool: GtLToolForSearchFilter new
 		withArguments: {
 			'query' -> 'GtLToolForSearchFilterExamples gtMethodsInClass & #gtExample gtPragmas'
 		} asDictionary.
-	
+	targetObject := call result targetObject.
 	self assert: (targetObject isKindOf: GtLSearchFilterDomainObject).
 	self assert: targetObject isErrorDomainObject not.
 	self assert: targetObject items isNotEmpty.
 	self assert: (targetObject items anySatisfy: [ :eachMethod |
 		eachMethod methodClass = GtLToolForSearchFilterExamples
 			and: [ eachMethod selector = #searchFilterForExampleMethods ] ]).
-	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForSearchFilterExamples >> searchFilterWithError [
 	<gtExample>
-	| targetObject |
-	
-	targetObject := self
+	| call targetObject |
+	call := self
 		executeTool: GtLToolForSearchFilter new
 		withArguments: {
 			'query' -> 'self error: ''boom'''
 		} asDictionary.
-	
+	targetObject := call result targetObject.
 	self assert: targetObject isErrorDomainObject.
 	self assert: (targetObject description beginsWith: 'There was an error when evaluating the query: ').
 	self assert: (targetObject description includesSubstring: 'boom').
-	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForSearchFilterExamples >> searchFilterWithMissingQuery [
 	<gtExample>
-	| targetObject |
-	
-	targetObject := self
+	| call |
+	call := self
 		executeTool: GtLToolForSearchFilter new
 		withArguments: Dictionary new.
-	
 	self
-		assertMissingRequiredProperties: targetObject
+		assertMissingRequiredProperties: call result targetObject
 		withPropertyNames: #('query')
 		path: #(nil)
 		errorMessage: 'required properties missing [query]'.
-	
-	^ targetObject
+	^ call
 ]

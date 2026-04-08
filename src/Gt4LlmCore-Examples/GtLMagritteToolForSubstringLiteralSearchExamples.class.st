@@ -4,119 +4,101 @@ Examples for GtLMagritteToolForSubstringLiteralSearch.
 Class {
 	#name : #GtLMagritteToolForSubstringLiteralSearchExamples,
 	#superclass : #GtLAbstractMagritteFunctionToolExamples,
-	#category : 'Gt4LlmCore-Examples-Tools'
+	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #examples }
 GtLMagritteToolForSubstringLiteralSearchExamples >> searchWithEmptyQuery [
 	<gtExample>
-	| targetObject |
-	
-	targetObject := self
+	| call |
+	call := self
 		executeTool: GtLMagritteToolForSubstringLiteralSearch new
 		withArguments: {
 			'query' -> ''
 		} asDictionary.
-	
 	self
-		assertMissingArgument: targetObject
+		assertMissingArgument: call result targetObject
 		withArgumentName: 'query'
 		errorMessage: 'Missing argument called query'.
-	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForSubstringLiteralSearchExamples >> searchWithMatches [
 	<gtExample>
-	| targetObject query |
+	| call query |
 	query := 'substringLiteralSearchExampleUnique'.
-	
-	targetObject := self
+	call := self
 		executeTool: GtLMagritteToolForSubstringLiteralSearch new
 		withArguments: {
 			'query' -> query
 		} asDictionary.
-	
-	self assert: (targetObject isKindOf: GtLMethodsSearchResult).
-	self assert: (targetObject foundMethods anySatisfy: [ :each |
+	self assert: (call result targetObject isKindOf: GtLMethodsSearchResult).
+	self assert: (call result targetObject foundMethods anySatisfy: [ :each |
 		each methodSignature = 'GtLMagritteToolForSubstringLiteralSearchExamples>>#searchWithMatches' ]).
-	self assert: targetObject mayHaveMore not.
-	
-	^ targetObject
+	self assert: call result targetObject mayHaveMore not.
+	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForSubstringLiteralSearchExamples >> searchWithMissingQuery [
 	<gtExample>
-	| targetObject |
-	
-	targetObject := self
+	| call |
+	call := self
 		executeTool: GtLMagritteToolForSubstringLiteralSearch new
 		withArguments: Dictionary new.
-	
 	self
-		assertMissingRequiredProperties: targetObject
+		assertMissingRequiredProperties: call result targetObject
 		withPropertyNames: #('query')
 		path: #(nil)
 		errorMessage: 'required properties missing [query]'.
-	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForSubstringLiteralSearchExamples >> searchWithMoreThan200Matches [
 	<gtExample>
-	| targetObject query |
+	| call query |
 	query := 'gt'.
-	
-	targetObject := self
+	call := self
 		executeTool: GtLMagritteToolForSubstringLiteralSearch new
 		withArguments: {
 			'query' -> query
 		} asDictionary.
-	
-	self assert: (targetObject isKindOf: GtLMethodsSearchResult).
-	self assert: targetObject foundMethods size equals: 200.
-	self assert: targetObject mayHaveMore.
-	
-	^ targetObject
+	self assert: (call result targetObject isKindOf: GtLMethodsSearchResult).
+	self assert: call result targetObject foundMethods size equals: 200.
+	self assert: call result targetObject mayHaveMore.
+	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForSubstringLiteralSearchExamples >> searchWithNilQuery [
 	<gtExample>
-	| targetObject |
-	
-	targetObject := self
+	| call |
+	call := self
 		executeTool: GtLMagritteToolForSubstringLiteralSearch new
 		withArguments: {
 			'query' -> nil
 		} asDictionary.
-	
 	self
-		assertJSONSchemaValidationError: targetObject
+		assertJSONSchemaValidationError: call result targetObject
 		withPath: #('query')
 		errorMessage: '@[query] string expected'.
-	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForSubstringLiteralSearchExamples >> searchWithNoMatches [
 	<gtExample>
-	| targetObject query |
+	| call query |
 	query := 'noLiteralMatchString', 'ForSearch' , '42'.
-	
-	targetObject := self
+	call := self
 		executeTool: GtLMagritteToolForSubstringLiteralSearch new
 		withArguments: {
 			'query' -> query
 		} asDictionary.
-	
-	self assert: (targetObject isKindOf: GtLMethodsSearchResult).
-	self assert: targetObject foundMethods isEmpty.
-	self assert: targetObject mayHaveMore not.
-	
-	^ targetObject
+	self assert: (call result targetObject isKindOf: GtLMethodsSearchResult).
+	self assert: call result targetObject foundMethods isEmpty.
+	self assert: call result targetObject mayHaveMore not.
+	^ call
 ]

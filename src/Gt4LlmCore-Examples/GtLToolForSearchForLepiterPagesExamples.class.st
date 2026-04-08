@@ -1,15 +1,16 @@
 Class {
 	#name : #GtLToolForSearchForLepiterPagesExamples,
 	#superclass : #GtLAbstractMagritteFunctionToolExamples,
-	#category : 'Gt4LlmCore-Examples-Tools'
+	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #examples }
 GtLToolForSearchForLepiterPagesExamples >> documentationLookupDataViewSerialization [
 	<gtExample>
 	<return: #GtLPrimitiveMessageDataBlock>
-	| domainObject compositeView dataBlock jsonData pagesData |
-	domainObject := self documentationLookupForExistingPage.
+	| call domainObject compositeView dataBlock jsonData pagesData |
+	call := self documentationLookupForExistingPage.
+	domainObject := call result targetObject.
 	compositeView := domainObject llmDataViewsFor: GtLDataView new.
 	self assert: compositeView dataViews size equals: 1.
 	
@@ -31,49 +32,51 @@ GtLToolForSearchForLepiterPagesExamples >> documentationLookupDataViewSerializat
 { #category : #examples }
 GtLToolForSearchForLepiterPagesExamples >> documentationLookupForExistingPage [
 	<gtExample>
-	| targetObject |
+	| call targetObject |
 	
-	targetObject := self
+	call := self
 		executeTool: GtLToolForSearchForLepiterPages new
 		withArguments: {
 			'query' -> 'Warmup: understanding the Money classes'.
 			'knowledgeBases' -> { LeDatabase gtBook uuidString }
 		} asDictionary.
+	targetObject := call result targetObject.
 	
 	self assert: (targetObject isKindOf: GtLLepiterPagesDomainObject).
 	self assert: targetObject pages size equals: 1.
 	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForSearchForLepiterPagesExamples >> documentationLookupForMissingPage [
 	<gtExample>
-	| targetObject |
+	| call targetObject |
 	
-	targetObject := self
+	call := self
 		executeTool: GtLToolForSearchForLepiterPages new
 		withArguments: {
 			'query' -> 'NonExistingDocumentationPage42'.
 			'knowledgeBases' -> { LeDatabase gtBook uuidString }
 		} asDictionary.
+	targetObject := call result targetObject.
 	
 	self assert: (targetObject isKindOf: GtLLepiterPagesDomainObject).
 	self assert: targetObject pages equals: #().
 	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForSearchForLepiterPagesExamples >> documentationLookupForMultipleKnowledgeBases [
 	<gtExample>
-	| targetObject logicalDatabase defaultDatabase |
+	| call targetObject logicalDatabase defaultDatabase |
 	logicalDatabase := LeDatabasesRegistry defaultLogicalDatabase.
 	defaultDatabase := logicalDatabase databases
 		detect: [ :each | each databaseName = 'default' ]
 		ifNone: [ LeDatabase gtBook ].
 	
-	targetObject := self
+	call := self
 		executeTool: GtLToolForSearchForLepiterPages new
 		withArguments: {
 			'query' -> 'Warmup: understanding the Money classes'.
@@ -82,29 +85,27 @@ GtLToolForSearchForLepiterPagesExamples >> documentationLookupForMultipleKnowled
 				LeDatabase gtBook uuidString
 			}
 		} asDictionary.
+	targetObject := call result targetObject.
 	
 	self assert: (targetObject isKindOf: GtLLepiterPagesDomainObject).
 	self assert: targetObject pages isNotEmpty.
 	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForSearchForLepiterPagesExamples >> documentationLookupForWrongKnowledgeBaseId [
 	<gtExample>
-	| targetObject |
-	
-	targetObject := self
+	| call |
+	call := self
 		executeTool: GtLToolForSearchForLepiterPages new
 		withArguments: {
 			'query' -> 'Warmup: understanding the Money classes'.
 			'knowledgeBases' -> { 'missing-uuid-42' }
 		} asDictionary.
-	
 	self
-		assertMissingObject: targetObject
+		assertMissingObject: call result targetObject
 		withObjectName: 'missing-uuid-42'
 		errorMessage: 'missing-uuid-42 is not found'.
-	
-	^ targetObject
+	^ call
 ]

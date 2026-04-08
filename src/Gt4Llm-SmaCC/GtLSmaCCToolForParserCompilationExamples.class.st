@@ -3,7 +3,7 @@ Class {
 	#superclass : #GtLAbstractMagritteFunctionToolExamples,
 	#traits : 'TGtLInvalidInputDataAssertions',
 	#classTraits : 'TGtLInvalidInputDataAssertions classTrait',
-	#category : 'Gt4Llm-SmaCC-Examples'
+	#category : #'Gt4Llm-SmaCC-Examples'
 }
 
 { #category : #private }

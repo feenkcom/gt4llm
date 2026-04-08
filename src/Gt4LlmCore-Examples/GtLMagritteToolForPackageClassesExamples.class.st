@@ -4,124 +4,109 @@ Examples for GtLMagritteToolForPackageClasses.
 Class {
 	#name : #GtLMagritteToolForPackageClassesExamples,
 	#superclass : #GtLAbstractMagritteFunctionToolExamples,
-	#category : 'Gt4LlmCore-Examples-Tools'
+	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #examples }
 GtLMagritteToolForPackageClassesExamples >> packageClassesForBlocReturns200 [
 	<gtExample>
-	| targetObject |
-	
-	targetObject := self
+	| call targetObject |
+	call := self
 		executeTool: GtLMagritteToolForPackageClasses new
 		withArguments: {
 			'packageName' -> 'Bloc'
 		} asDictionary.
-	
+	targetObject := call result targetObject.
 	self assert: (targetObject isKindOf: GtLClassesSearchResult).
 	self assert: targetObject foundClassNames size equals: 200.
 	self assert: targetObject mayHaveMore.
-	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForPackageClassesExamples >> packageClassesForExistingPackage [
 	<gtExample>
-	| targetObject |
-	
-	targetObject := self
+	| call targetObject |
+	call := self
 		executeTool: GtLMagritteToolForPackageClasses new
 		withArguments: {
 			'packageName' -> 'GToolkit-Boxer'
 		} asDictionary.
-	
+	targetObject := call result targetObject.
 	self assert: (targetObject isKindOf: GtLClassesSearchResult).
 	self assert: (targetObject foundClassNames includes: 'GtArrayBox').
 	self assert: targetObject mayHaveMore not.
-	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForPackageClassesExamples >> packageClassesForPackageWithNoClasses [
 	<gtExample>
-	| targetObject organizer packageName |
+	| call organizer packageName |
 	organizer := PackageOrganizer packageOrganizer.
 	packageName := 'EmptyPackageWithNoClasses'.
 	organizer ensurePackage: packageName asSymbol.
 	[
-		targetObject := self
+		call := self
 			executeTool: GtLMagritteToolForPackageClasses new
 			withArguments: {
 				'packageName' -> packageName
 			} asDictionary.
-		
-		self assert: (targetObject isKindOf: GtLClassesSearchResult).
-		self assert: targetObject foundClassNames equals: #().
-		self assert: targetObject mayHaveMore not
+		self assert: (call result targetObject isKindOf: GtLClassesSearchResult).
+		self assert: call result targetObject foundClassNames equals: #().
+		self assert: call result targetObject mayHaveMore not
 	] ensure: [
 		| package |
 		package := organizer packageNamed: packageName asSymbol ifAbsent: [ nil ].
 		package ifNotNil: [ organizer unregisterPackage: package ]
 	].
-	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForPackageClassesExamples >> packageClassesForUnknownPackage [
 	<gtExample>
-	| targetObject |
-	
-	targetObject := self
+	| call |
+	call := self
 		executeTool: GtLMagritteToolForPackageClasses new
 		withArguments: {
 			'packageName' -> 'NonExistingPackageName42'
 		} asDictionary.
-	
 	self
-		assertMissingObject: targetObject
+		assertMissingObject: call result targetObject
 		withObjectName: 'NonExistingPackageName42'
 		errorMessage: 'NonExistingPackageName42 is not found'.
-	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForPackageClassesExamples >> packageClassesWithEmptyPackageName [
 	<gtExample>
-	| targetObject |
-	
-	targetObject := self
+	| call |
+	call := self
 		executeTool: GtLMagritteToolForPackageClasses new
 		withArguments: {
 			'packageName' -> ''
 		} asDictionary.
-	
 	self
-		assertMissingArgument: targetObject
+		assertMissingArgument: call result targetObject
 		withArgumentName: 'packageName'
 		errorMessage: 'Missing argument called packageName'.
-	
-	^ targetObject
+	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForPackageClassesExamples >> packageClassesWithNilPackageName [
 	<gtExample>
-	| targetObject |
-	
-	targetObject := self
+	| call |
+	call := self
 		executeTool: GtLMagritteToolForPackageClasses new
 		withArguments: {
 			'packageName' -> nil
 		} asDictionary.
-	
 	self
-		assertJSONSchemaValidationError: targetObject
+		assertJSONSchemaValidationError: call result targetObject
 		withPath: #('packageName')
 		errorMessage: '@[packageName] string expected'.
-	
-	^ targetObject
+	^ call
 ]

@@ -4,7 +4,7 @@ Examples for GtLClassesCreationResult domain object.
 Class {
 	#name : #GtLClassesCreationResultExamples,
 	#superclass : #GtLMagritteDomainObjectExamples,
-	#category : 'Gt4LlmCore-Examples-Domain Objects'
+	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #'examples - support' }
