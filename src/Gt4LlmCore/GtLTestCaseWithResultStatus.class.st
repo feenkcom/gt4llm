@@ -79,12 +79,25 @@ GtLTestCaseWithResultStatus >> messageText [
 	^ 'Unknown status'
 ]
 
+{ #category : #private }
+GtLTestCaseWithResultStatus >> normalizedErrorMessage [
+	"Return the exception description with the class name prefix stripped if present
+	to allow for cases when #description is overriden to remove the class name."
+	| description exceptionClassName prefix |
+	description := self result exception description.
+	exceptionClassName := self result exception className.
+	prefix := exceptionClassName, ': '.
+	(description beginsWith: prefix)
+		ifTrue: [ ^ description allButFirst: prefix size ].
+	^ description
+]
+
 { #category : #accessing }
 GtLTestCaseWithResultStatus >> result [
 	^ testCaseWithResult result
 ]
 
-{ #category : #'api - serializing' }
+{ #category : #serialization }
 GtLTestCaseWithResultStatus >> serializeToLlmJsonObject [
 	"Return a JSON dictionary that represents the domain object."
 
@@ -100,7 +113,10 @@ GtLTestCaseWithResultStatus >> serializeToLlmJsonObject [
 		yourself.
 		
 	(self isErrorResult or: [ self isFailureResult ]) ifTrue: [
-		data at: #errorDescription put: self result exception description ].
+		data at: #errorDetails put: (NeoJSONObject new
+			at: #errorMessage put: (self normalizedErrorMessage);
+			at: #errorClass put: self result exception className;
+			yourself) ].
 		
 	^data
 ]
