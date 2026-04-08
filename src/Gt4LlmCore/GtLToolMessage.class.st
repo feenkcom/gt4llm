@@ -166,9 +166,8 @@ GtLToolMessage >> output [
 { #category : #accessing }
 GtLToolMessage >> output: anObject [
 	self assert: [ 
-		(anObject isKindOf: GtLDomainObject) or: [
 			(anObject isKindOf: GtLWrappedModel) or: [
-				anObject isKindOf: GTLDataViewWrapperModel]] ].
+				anObject isKindOf: GTLDataViewWrapperModel] ] .
 	output := anObject
 ]
 
