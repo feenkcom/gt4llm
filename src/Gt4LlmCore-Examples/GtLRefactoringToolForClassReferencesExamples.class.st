@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLRefactoringToolForClassReferencesExamples,
 	#superclass : #GtLAbstractPlainSchemaFunctionToolExamples,
-	#category : 'Gt4LlmCore-Examples-Tools'
+	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #examples }

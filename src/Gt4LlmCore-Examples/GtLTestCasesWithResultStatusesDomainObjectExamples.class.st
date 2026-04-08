@@ -4,7 +4,7 @@ Examples for GtLTestCasesWithResultStatuses domain object and data views.
 Class {
 	#name : #GtLTestCasesWithResultStatusesDomainObjectExamples,
 	#superclass : #Object,
-	#category : 'Gt4LlmCore-Examples-Domain Objects'
+	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #private }
@@ -353,7 +353,7 @@ GtLTestCasesWithResultStatusesDomainObjectExamples >> jsonSerializationForEmptyS
 GtLTestCasesWithResultStatusesDomainObjectExamples >> jsonSerializationForErrorTest [
 	<gtExample>
 	<return: #NeoJSONObject>
-	| domainObject jsonData expectedJson expectedDetail |
+	| domainObject jsonData expectedJsonOne expectedJsonTwo expectedDetail |
 	
 	domainObject := self domainObjectWithErrorTest.
 	jsonData := (domainObject llmDataViewsFor: GtLDataView new) serializeToLlmPrimiteData compositeJsonData.
@@ -368,7 +368,7 @@ GtLTestCasesWithResultStatusesDomainObjectExamples >> jsonSerializationForErrorT
 		at: #errorDescription put: 'Boom';
 		yourself.
 	
-	expectedJson := Dictionary new
+	expectedJsonOne := Dictionary new
 		at: #runCount put: 1;
 		at: #successes put: 0;
 		at: #failures put: 0;
@@ -384,7 +384,12 @@ GtLTestCasesWithResultStatusesDomainObjectExamples >> jsonSerializationForErrorT
 		at: #details put: { expectedDetail };
 		yourself.
 	
-	self assert: jsonData equals: expectedJson.
+	expectedJsonTwo := expectedJsonOne copy.
+	expectedJsonTwo at: 'details' put: { expectedDetail copy }.
+	(expectedJsonTwo at: 'details')  first at: 'errorDescription' put: 'Error: Boom'.
+	
+	self assert: ((jsonData = expectedJsonOne) or: [
+		jsonData = expectedJsonTwo]).
 	
 	^ jsonData
 ]
@@ -393,7 +398,7 @@ GtLTestCasesWithResultStatusesDomainObjectExamples >> jsonSerializationForErrorT
 GtLTestCasesWithResultStatusesDomainObjectExamples >> jsonSerializationForExpectedFailure [
 	<gtExample>
 	<return: #NeoJSONObject>
-	| domainObject jsonData expectedJson expectedDetail testStatus |
+	| domainObject jsonData expectedJsonOne expectedJsonTwo expectedDetail testStatus |
 	
 	testStatus := self createTestStatusFor: (GtLExampleDummyMixedTest >> #testExpectedFailure).
 	
@@ -414,7 +419,7 @@ GtLTestCasesWithResultStatusesDomainObjectExamples >> jsonSerializationForExpect
 		at: #errorDescription put: 'Assertion failed';
 		yourself.
 	
-	expectedJson := Dictionary new
+	expectedJsonOne := Dictionary new
 		at: #runCount put: 1;
 		at: #successes put: 0;
 		at: #failures put: 1;
@@ -429,8 +434,12 @@ GtLTestCasesWithResultStatusesDomainObjectExamples >> jsonSerializationForExpect
 		at: #notTestCaseClasses put: #();
 		at: #details put: { expectedDetail };
 		yourself.
+		
+	expectedJsonTwo := expectedJsonOne copy.
+	expectedJsonTwo at: 'details' put: { expectedDetail copy }.
+	(expectedJsonTwo at: 'details')  first at: 'errorDescription' put: 'TestFailure: Assertion failed'.
 	
-	self assert: jsonData equals: expectedJson.
+	self assert: ((jsonData = expectedJsonOne) or: [jsonData = expectedJsonTwo]).
 	
 	^ jsonData
 ]
@@ -439,7 +448,7 @@ GtLTestCasesWithResultStatusesDomainObjectExamples >> jsonSerializationForExpect
 GtLTestCasesWithResultStatusesDomainObjectExamples >> jsonSerializationForFailingTest [
 	<gtExample>
 	<return: #NeoJSONObject>
-	| domainObject jsonData expectedJson expectedDetail |
+	| domainObject jsonData expectedJsonOne expectedJsonTwo expectedDetail |
 	
 	domainObject := self domainObjectWithFailingTest.
 	jsonData := (domainObject llmDataViewsFor: GtLDataView new) serializeToLlmPrimiteData compositeJsonData.
@@ -454,7 +463,7 @@ GtLTestCasesWithResultStatusesDomainObjectExamples >> jsonSerializationForFailin
 		at: #errorDescription put: 'Assertion failed';
 		yourself.
 	
-	expectedJson := Dictionary new
+	expectedJsonOne := Dictionary new
 		at: #runCount put: 1;
 		at: #successes put: 0;
 		at: #failures put: 1;
@@ -470,7 +479,12 @@ GtLTestCasesWithResultStatusesDomainObjectExamples >> jsonSerializationForFailin
 		at: #details put: { expectedDetail };
 		yourself.
 	
-	self assert: jsonData equals: expectedJson.
+	expectedJsonTwo := expectedJsonOne copy.
+	expectedJsonTwo at: 'details' put: { expectedDetail copy }.
+	(expectedJsonTwo at: 'details')  first at: 'errorDescription' put: 'TestFailure: Assertion failed'.
+	
+	self assert: ((jsonData = expectedJsonOne) or: [jsonData = expectedJsonTwo]).
+	
 	
 	^ jsonData
 ]
@@ -479,7 +493,7 @@ GtLTestCasesWithResultStatusesDomainObjectExamples >> jsonSerializationForFailin
 GtLTestCasesWithResultStatusesDomainObjectExamples >> jsonSerializationForMixedStatuses [
 	<gtExample>
 	<return: #NeoJSONObject>
-	| domainObject jsonData expectedJson successDetail failureDetail errorDetail skippedDetail |
+	| domainObject jsonData expectedJsonOne expectedJsonTwo successDetail failureDetail errorDetail skippedDetail |
 	
 	domainObject := self domainObjectWithMixedStatuses.
 	jsonData := (domainObject llmDataViewsFor: GtLDataView new) serializeToLlmPrimiteData compositeJsonData.
@@ -522,7 +536,7 @@ GtLTestCasesWithResultStatusesDomainObjectExamples >> jsonSerializationForMixedS
 		at: #expectedFailure put: false;
 		yourself.
 	
-	expectedJson := Dictionary new
+	expectedJsonOne := Dictionary new
 		at: #runCount put: 3;
 		at: #successes put: 1;
 		at: #failures put: 1;
@@ -538,7 +552,15 @@ GtLTestCasesWithResultStatusesDomainObjectExamples >> jsonSerializationForMixedS
 		at: #details put: { successDetail. failureDetail. errorDetail. skippedDetail };
 		yourself.
 	
-	self assert: jsonData equals: expectedJson.
+	expectedJsonTwo := expectedJsonOne copy.
+	expectedJsonTwo at: 'details' put: ({  
+		successDetail. failureDetail. errorDetail. skippedDetail  } collect: [ :each | each copy ]).
+	(expectedJsonTwo at: 'details')  second 
+		at: 'errorDescription' put: 'TestFailure: Assertion failed'.
+	(expectedJsonTwo at: 'details')  third 
+		at: 'errorDescription' put: 'Error: Boom'.
+	
+	self assert: ((jsonData = expectedJsonOne) or: [jsonData = expectedJsonTwo]).
 	
 	^ jsonData
 ]

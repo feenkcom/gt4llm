@@ -4,7 +4,7 @@ Examples for GtLMissingRequiredPropertiesDomainObject testing state and serializ
 Class {
 	#name : #GtLMissingRequiredPropertiesDomainObjectExamples,
 	#superclass : #GtLErroneousConditionDomainObjectExamples,
-	#category : 'Gt4LlmCore-Examples-Domain Objects'
+	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #examples }
