@@ -7,62 +7,50 @@ Class {
 { #category : #examples }
 GtLToolForObjectStorageListExamples >> listEmptyObjectStorage [
 	<gtExample>
-	| objectStorage tool call result domainObject |
+	| objectStorage call targetObject |
 	objectStorage := GtLObjectStorage new.
-	tool := GtLToolForObjectStorageList new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: Dictionary new.
-	result := tool
-		performToolCall: call
+	call := self
+		executeTool: GtLToolForObjectStorageList new
+		withArguments: Dictionary new
 		inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self assert: (domainObject isKindOf: GtLObjectStorageItems).
-	self assert: domainObject items isEmpty.
-	^ domainObject
+	targetObject := call result targetObject.
+	self assert: (targetObject isKindOf: GtLObjectStorageItems).
+	self assert: targetObject items isEmpty.
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForObjectStorageListExamples >> listObjectsWithStorage [
 	<gtExample>
-	| objectStorage tool call result domainObject oneItem twoItem |
+	| objectStorage call targetObject oneItem twoItem |
 	objectStorage := GtLObjectStorage new.
 	objectStorage addNewObject: 'One' reason: (GtLStoredObjectStringReason text: 'first string').
 	objectStorage addNewObject: 2 reason: (GtLStoredObjectStringReason text: 'second number').
-	tool := GtLToolForObjectStorageList new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: Dictionary new.
-	result := tool
-		performToolCall: call
+	call := self
+		executeTool: GtLToolForObjectStorageList new
+		withArguments: Dictionary new
 		inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self assert: (domainObject isKindOf: GtLObjectStorageItems).
-	self assert: domainObject items size equals: 2.
-	self assert: (domainObject items collect: #objectValue) asSet equals: (Set with: 'One' with: 2).
-	oneItem := domainObject items detect: [ :each | each objectValue = 'One' ].
-	twoItem := domainObject items detect: [ :each | each objectValue = 2 ].
+	targetObject := call result targetObject.
+	self assert: (targetObject isKindOf: GtLObjectStorageItems).
+	self assert: targetObject items size equals: 2.
+	self assert: (targetObject items collect: #objectValue) asSet equals: (Set with: 'One' with: 2).
+	oneItem := targetObject items detect: [ :each | each objectValue = 'One' ].
+	twoItem := targetObject items detect: [ :each | each objectValue = 2 ].
 	self assert: oneItem reasonString equals: 'first string'.
 	self assert: twoItem reasonString equals: 'second number'.
-	^ domainObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForObjectStorageListExamples >> listObjectsWithoutStorage [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLToolForObjectStorageList new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: Dictionary new.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
+	| call |
+	call := self
+		executeTool: GtLToolForObjectStorageList new
+		withArguments: Dictionary new.
 	self
-		assertMissingInformation: domainObject
+		assertMissingInformation: call result targetObject
 		withModelName: 'objectStorage'
 		errorMessage: 'Missing objectStorage'.
-	^ domainObject
+	^ call
 ]

@@ -84,15 +84,3 @@ GtLMissingDomainObject >> objectName: anObject [
 
 	self missingObjectName: anObject
 ]
-
-{ #category : #'api - serializing' }
-GtLMissingDomainObject >> serializeToLlmJsonObject [
-	"Return a JSON dictionary that represents the domain object."
-	
-	^ GtMagritteJSONDataExporter exportObject: self
-]
-
-{ #category : #testing }
-GtLMissingDomainObject >> wasMovedToMagritteDescriptions [
-	^ true
-]

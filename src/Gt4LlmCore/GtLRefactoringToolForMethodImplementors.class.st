@@ -12,11 +12,6 @@ GtLRefactoringToolForMethodImplementors >> description [
 	^ 'Gets a method by name and returns a list of methods that implement it.'
 ]
 
-{ #category : #accessing }
-GtLRefactoringToolForMethodImplementors >> isUsingDataViews [
-	^ true
-]
-
 { #category : #magritte }
 GtLRefactoringToolForMethodImplementors >> methodNameDescription [
 	<magritteDescription>

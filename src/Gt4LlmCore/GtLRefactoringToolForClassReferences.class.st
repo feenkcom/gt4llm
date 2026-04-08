@@ -12,11 +12,6 @@ GtLRefactoringToolForClassReferences >> description [
 	^ 'Search the image for the references to the given class'
 ]
 
-{ #category : #accessing }
-GtLRefactoringToolForClassReferences >> isUsingDataViews [
-	^ true
-]
-
 { #category : #'llm-generated' }
 GtLRefactoringToolForClassReferences >> name [
 	^ 'rbClassReferences'

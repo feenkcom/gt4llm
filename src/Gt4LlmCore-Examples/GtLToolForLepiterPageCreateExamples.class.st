@@ -4,172 +4,155 @@ Class {
 	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
-{ #category : #'examples - errors' }
+{ #category : #examples }
 GtLToolForLepiterPageCreateExamples >> emptyDatabaseId [
 	<gtExample>
-	| tool call result db logicalDB domainObject |
+	| call db logicalDB tool |
 	db := LeExplicitlyAttachedLinksExamples new primaryDatabase.
 	logicalDB := LeLogicalDatabase new primaryDB: db.
 	tool := GtLToolForLepiterPageCreate new.
 	tool database: logicalDB.
-	call := GtLFunctionToolCall new.
-	call rawArguments: {
-		'title' -> 'New Page'.
-		'databaseId' -> ''.
-	} asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	
-	domainObject := result targetObject.
+	call := self
+		executeTool: tool
+		withArguments: {
+			'title' -> 'New Page'.
+			'databaseId' -> ''
+		} asDictionary.
 	self
-		assertMissingArgument: domainObject
+		assertMissingArgument: call result targetObject
 		withArgumentName: 'databaseId'
 		errorMessage: 'Missing argument called databaseId'.
-	^ domainObject
+	^ call
 ]
 
-{ #category : #'examples - errors' }
+{ #category : #examples }
 GtLToolForLepiterPageCreateExamples >> emptyTitle [
 	<gtExample>
-	| tool call result db logicalDB domainObject |
+	| call db logicalDB tool |
 	db := LeExplicitlyAttachedLinksExamples new primaryDatabase.
 	logicalDB := LeLogicalDatabase new primaryDB: db.
 	tool := GtLToolForLepiterPageCreate new.
 	tool database: logicalDB.
-	call := GtLFunctionToolCall new.
-	call rawArguments: {
-		'title' -> ''.
-		'databaseId' -> db uuidString.
-	} asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	
-	domainObject := result targetObject.
+	call := self
+		executeTool: tool
+		withArguments: {
+			'title' -> ''.
+			'databaseId' -> db uuidString
+		} asDictionary.
 	self
-		assertMissingArgument: domainObject
+		assertMissingArgument: call result targetObject
 		withArgumentName: 'title'
 		errorMessage: 'Missing argument called title'.
-	^ domainObject
+	^ call
 ]
 
-{ #category : #'examples - errors' }
+{ #category : #examples }
 GtLToolForLepiterPageCreateExamples >> missingDatabaseId [
 	<gtExample>
-	| tool call result db logicalDB domainObject |
+	| call db logicalDB tool |
 	db := LeExplicitlyAttachedLinksExamples new primaryDatabase.
 	logicalDB := LeLogicalDatabase new primaryDB: db.
 	tool := GtLToolForLepiterPageCreate new.
 	tool database: logicalDB.
-	call := GtLFunctionToolCall new.
-	call rawArguments: { 'title' -> 'New Page' } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	
-	domainObject := result targetObject.
+	call := self
+		executeTool: tool
+		withArguments: {
+			'title' -> 'New Page'
+		} asDictionary.
 	self
-		assertMissingRequiredProperties: domainObject
+		assertMissingRequiredProperties: call result targetObject
 		withPropertyNames: #('databaseId')
 		path: #(nil)
 		errorMessage: 'required properties missing [databaseId]'.
-	^ domainObject
+	^ call
 ]
 
-{ #category : #'examples - errors' }
+{ #category : #examples }
 GtLToolForLepiterPageCreateExamples >> missingTitle [
 	<gtExample>
-	| tool call result db logicalDB domainObject |
+	| call db logicalDB tool |
 	db := LeExplicitlyAttachedLinksExamples new primaryDatabase.
 	logicalDB := LeLogicalDatabase new primaryDB: db.
 	tool := GtLToolForLepiterPageCreate new.
 	tool database: logicalDB.
-	call := GtLFunctionToolCall new.
-	call rawArguments: { 'databaseId' -> db uuidString } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	
-	domainObject := result targetObject.
+	call := self
+		executeTool: tool
+		withArguments: {
+			'databaseId' -> db uuidString
+		} asDictionary.
 	self
-		assertMissingRequiredProperties: domainObject
+		assertMissingRequiredProperties: call result targetObject
 		withPropertyNames: #('title')
 		path: #(nil)
 		errorMessage: 'required properties missing [title]'.
-	
-	^ domainObject
+	^ call
 ]
 
-{ #category : #'examples - errors' }
+{ #category : #examples }
 GtLToolForLepiterPageCreateExamples >> nilDatabaseId [
 	<gtExample>
-	| tool call result db logicalDB domainObject |
+	| call db logicalDB tool |
 	db := LeExplicitlyAttachedLinksExamples new primaryDatabase.
 	logicalDB := LeLogicalDatabase new primaryDB: db.
 	tool := GtLToolForLepiterPageCreate new.
 	tool database: logicalDB.
-	call := GtLFunctionToolCall new.
-	call rawArguments: '{"title": "New Page", "databaseId": null}'.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	
-	domainObject := result targetObject.
+	call := self
+		executeTool: tool
+		withArguments: {
+			'title' -> 'New Page'.
+			'databaseId' -> nil
+		} asDictionary.
 	self
-		assertJSONSchemaValidationError: domainObject
+		assertJSONSchemaValidationError: call result targetObject
 		withPath: #('databaseId')
 		errorMessage: '@[databaseId] string expected'.
-	^ domainObject
+	^ call
 ]
 
-{ #category : #'examples - errors' }
+{ #category : #examples }
 GtLToolForLepiterPageCreateExamples >> nilTitle [
 	<gtExample>
-	| tool call result db logicalDB domainObject |
+	| call db logicalDB tool |
 	db := LeExplicitlyAttachedLinksExamples new primaryDatabase.
 	logicalDB := LeLogicalDatabase new primaryDB: db.
 	tool := GtLToolForLepiterPageCreate new.
 	tool database: logicalDB.
-	call := GtLFunctionToolCall new.
-	call rawArguments: '{"title": null, "databaseId": "', db uuidString, '"}'.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	
-	domainObject := result targetObject.
+	call := self
+		executeTool: tool
+		withArguments: {
+			'title' -> nil.
+			'databaseId' -> db uuidString
+		} asDictionary.
 	self
-		assertJSONSchemaValidationError: domainObject
+		assertJSONSchemaValidationError: call result targetObject
 		withPath: #('title')
 		errorMessage: '@[title] string expected'.
-	^ domainObject
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForLepiterPageCreateExamples >> successfulPageCreate [
 	<gtExample>
-	| db logicalDB tool call result domainObject pageUid page |
+	| call db logicalDB tool pageUid page targetObject |
 	db := LeExplicitlyAttachedLinksExamples new primaryDatabase.
 	logicalDB := LeLogicalDatabase new primaryDB: db.
 	tool := GtLToolForLepiterPageCreate new.
 	tool database: logicalDB.
-	call := GtLFunctionToolCall new.
-	call rawArguments: {
-		'title' -> 'New Page'.
-		'databaseId' -> db uuidString.
-	} asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self assert: (domainObject isKindOf: GtLLepiterPageCreateDomainObject).
-	self assert: domainObject status equals: 'created'.
-	self assert: domainObject databaseId equals: db uuidString.
-	pageUid := domainObject pageUid.
+	call := self
+		executeTool: tool
+		withArguments: {
+			'title' -> 'New Page'.
+			'databaseId' -> db uuidString
+		} asDictionary.
+	targetObject := call result targetObject.
+	self assert: (targetObject isKindOf: GtLLepiterPageCreateDomainObject).
+	self assert: targetObject status equals: 'created'.
+	self assert: targetObject databaseId equals: db uuidString.
+	pageUid := targetObject pageUid.
 	page := logicalDB pageWithID: (UUID fromString36: pageUid) ifAbsent: [ nil ].
 	self assert: page notNil.
-	self assert: domainObject page == page.
+	self assert: targetObject page == page.
 	self assert: page title equals: 'New Page'.
 	self assert: page children isEmpty.
-	^ domainObject
+	^ call
 ]

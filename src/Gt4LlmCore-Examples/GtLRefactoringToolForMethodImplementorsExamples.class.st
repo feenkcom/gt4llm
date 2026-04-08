@@ -7,17 +7,17 @@ Class {
 { #category : #examples }
 GtLRefactoringToolForMethodImplementorsExamples >> methodImplementorsForExistingSelector [
 	<gtExample>
-	| tool call result implementor |
+	| tool call targetObject implementor |
 	tool := self toolWithExampleHierarchy.
-	call := GtLFunctionToolCall new.
-	call rawArguments: {'methodName' -> 'example'} asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: result isErrorDomainObject not.
-	implementor := result targetObject implementors
+	call := self
+		executeTool: tool
+		withArguments: {'methodName' -> 'example'} asDictionary.
+	targetObject := call result targetObject.
+	self assert: targetObject isErrorDomainObject not.
+	implementor := targetObject implementors
 			detect: [ :each | each name = 'GtLRefactoringMethodImplementorsBase' ].
 	self assert: implementor isNotNil.
-	implementor := result targetObject implementors
+	implementor := targetObject implementors
 			detect: [ :each | each name = 'GtLRefactoringMethodImplementorsChild' ].
 	self assert: implementor isNotNil.
 	^ call
@@ -26,15 +26,15 @@ GtLRefactoringToolForMethodImplementorsExamples >> methodImplementorsForExisting
 { #category : #examples }
 GtLRefactoringToolForMethodImplementorsExamples >> methodImplementorsForUnknownSelector [
 	<gtExample>
-	| tool call result |
+	| tool call targetObject |
 	tool := self toolWithExampleHierarchy.
-	call := GtLFunctionToolCall new.
-	call rawArguments: {'methodName' -> 'missingSelector'} asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: result isErrorDomainObject not.
-	self assert: result targetObject methodName equals: 'missingSelector'.
-	self assert: result targetObject implementors equals: #().
+	call := self
+		executeTool: tool
+		withArguments: {'methodName' -> 'missingSelector'} asDictionary.
+	targetObject := call result targetObject.
+	self assert: targetObject isErrorDomainObject not.
+	self assert: targetObject methodName equals: 'missingSelector'.
+	self assert: targetObject implementors equals: #().
 	^ call
 ]
 

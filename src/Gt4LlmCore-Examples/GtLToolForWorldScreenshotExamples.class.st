@@ -7,32 +7,29 @@ Class {
 { #category : #examples }
 GtLToolForWorldScreenshotExamples >> worldScreenshotSerialization [
 	<gtExample>
-	| stubElement tool call result domainObject |
+	| stubElement tool call targetObject |
 	stubElement := BlElement new
 		size: 50 @ 50;
 		background: Color red.
 	tool := GtLToolForWorldScreenshot new worldElementProvider: [ stubElement ].
-	call := GtLFunctionToolCall new.
-	call rawArguments: Dictionary new.
-	result := tool performToolCall: call.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self assert: (domainObject isKindOf: GtLWorldScreenshotDataDomainObject).
-	self assert: domainObject encodedBytes size > 0.
-	^ domainObject
+	call := self
+		executeTool: tool
+		withArguments: Dictionary new.
+	targetObject := call result targetObject.
+	self assert: (targetObject isKindOf: GtLWorldScreenshotDataDomainObject).
+	self assert: targetObject encodedBytes size > 0.
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForWorldScreenshotExamples >> worldScreenshotWithoutFocusedWorld [
 	<gtExample>
-	| tool call result domainObject |
+	| tool call |
 	tool := GtLToolForWorldScreenshot new worldElementProvider: [ nil ].
-	call := GtLFunctionToolCall new.
-	call rawArguments: Dictionary new.
-	result := tool performToolCall: call.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self assert: domainObject isErrorDomainObject.
-	self assert: (domainObject description includesSubstring: 'No focused GtWorldElement').
-	^ domainObject
+	call := self
+		executeTool: tool
+		withArguments: Dictionary new.
+	self assert: call result targetObject isErrorDomainObject.
+	self assert: (call result targetObject description includesSubstring: 'No focused GtWorldElement').
+	^ call
 ]

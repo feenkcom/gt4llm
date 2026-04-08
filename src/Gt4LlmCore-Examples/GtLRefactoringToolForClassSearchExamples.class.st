@@ -7,28 +7,28 @@ Class {
 { #category : #examples }
 GtLRefactoringToolForClassSearchExamples >> classSearchForEmptyQuery [
 	<gtExample>
-	| tool call result |
+	| tool call targetObject |
 	tool := self toolWithExampleClasses.
-	call := GtLFunctionToolCall new.
-	call rawArguments: {'query' -> 'NonExistentClassPattern123456'} asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: result isErrorDomainObject not.
-	self assert: result targetObject foundClassNames isEmpty.
+	call := self
+		executeTool: tool
+		withArguments: {'query' -> 'NonExistentClassPattern123456'} asDictionary.
+	targetObject := call result targetObject.
+	self assert: targetObject isErrorDomainObject not.
+	self assert: targetObject foundClassNames isEmpty.
 	^ call
 ]
 
 { #category : #examples }
 GtLRefactoringToolForClassSearchExamples >> classSearchForQuery [
 	<gtExample>
-	| tool call result |
+	| tool call targetObject |
 	tool := self toolWithExampleClasses.
-	call := GtLFunctionToolCall new.
-	call rawArguments: {'query' -> 'SearchExample'} asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: result isErrorDomainObject not.
-	self assert: result targetObject foundClassNames size >= 2.
+	call := self
+		executeTool: tool
+		withArguments: {'query' -> 'SearchExample'} asDictionary.
+	targetObject := call result targetObject.
+	self assert: targetObject isErrorDomainObject not.
+	self assert: targetObject foundClassNames size >= 2.
 	^ call
 ]
 

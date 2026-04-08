@@ -27,124 +27,110 @@ GtLMagritteToolForMethodsRemovalExamples >> removeClassNamedIfPresent: aSymbol [
 { #category : #examples }
 GtLMagritteToolForMethodsRemovalExamples >> removeClassSideAndInstanceMethod [
 	<gtExample>
-	| tool call result domainObject |
+	| call |
 	[
-		| class instanceSelector classSelector |
+		| class instanceSelector classSelector targetObject |
 		class := self createSubjectClass.
 		instanceSelector := #temporaryMixedInstance.
 		classSelector := #temporaryMixedClass.
 		class compile: 'temporaryMixedInstance ^ 9'.
 		class class compile: 'temporaryMixedClass ^ 10'.
-		tool := GtLMagritteToolForMethodsRemoval new.
-		call := GtLFunctionToolCall new.
-		call rawArguments: {
-			'methods' -> {
-				{'methodClassName' -> class name asString.
-				 'methodName' -> instanceSelector asString.
-				 'classSide' -> false} asDictionary.
-				{'methodClassName' -> class name asString.
-				 'methodName' -> classSelector asString.
-				 'classSide' -> true} asDictionary
-			} asArray
-		} asDictionary.
-		result := tool performToolCall: call.
-		self assert: call tool == tool.
-		self assert: (result isKindOf: GTLDataViewWrapperModel).
-		domainObject := result targetObject.
-		self assert: (domainObject isKindOf: GtLMethodsRemovalResult).
-		self assert: domainObject methods size equals: 2.
+		call := self
+			executeTool: GtLMagritteToolForMethodsRemoval new
+			withArguments: {
+				'methods' -> {
+					{'methodClassName' -> class name asString.
+					 'methodName' -> instanceSelector asString.
+					 'classSide' -> false} asDictionary.
+					{'methodClassName' -> class name asString.
+					 'methodName' -> classSelector asString.
+					 'classSide' -> true} asDictionary
+				} asArray
+			} asDictionary.
+		targetObject := call result targetObject.
+		self assert: (targetObject isKindOf: GtLMethodsRemovalResult).
+		self assert: targetObject methods size equals: 2.
 		self assert: (class includesSelector: instanceSelector) not.
 		self assert: (class class includesSelector: classSelector) not.
-		self assert: domainObject methods first status equals: 'removed'.
-		self assert: domainObject methods second status equals: 'removed'
+		self assert: targetObject methods first status equals: 'removed'.
+		self assert: targetObject methods second status equals: 'removed'
 	] ensure: [ self removeClassNamedIfPresent: self subjectClassName ].
-	^ domainObject
+	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForMethodsRemovalExamples >> removeInstanceSideMethods [
 	<gtExample>
-	| tool call result domainObject |
+	| call |
 	[
-		| class methodSelectorOne methodSelectorTwo |
+		| class methodSelectorOne methodSelectorTwo targetObject |
 		class := self createSubjectClass.
 		methodSelectorOne := #temporaryInstanceMethodOne.
 		methodSelectorTwo := #temporaryInstanceMethodTwo.
 		class compile: 'temporaryInstanceMethodOne ^ 1'.
 		class compile: 'temporaryInstanceMethodTwo ^ 2'.
-		tool := GtLMagritteToolForMethodsRemoval new.
-		call := GtLFunctionToolCall new.
-		call rawArguments: {
-			'methods' -> {
-				{'methodClassName' -> class name asString.
-				 'methodName' -> methodSelectorOne asString.
-				 'classSide' -> false} asDictionary.
-				{'methodClassName' -> class name asString.
-				 'methodName' -> methodSelectorTwo asString.
-				 'classSide' -> false} asDictionary
-			} asArray
-		} asDictionary.
-		result := tool performToolCall: call.
-		self assert: call tool == tool.
-		self assert: (result isKindOf: GTLDataViewWrapperModel).
-		domainObject := result targetObject.
-		self assert: (domainObject isKindOf: GtLMethodsRemovalResult).
-		self assert: domainObject methods size equals: 2.
+		call := self
+			executeTool: GtLMagritteToolForMethodsRemoval new
+			withArguments: {
+				'methods' -> {
+					{'methodClassName' -> class name asString.
+					 'methodName' -> methodSelectorOne asString.
+					 'classSide' -> false} asDictionary.
+					{'methodClassName' -> class name asString.
+					 'methodName' -> methodSelectorTwo asString.
+					 'classSide' -> false} asDictionary
+				} asArray
+			} asDictionary.
+		targetObject := call result targetObject.
+		self assert: (targetObject isKindOf: GtLMethodsRemovalResult).
+		self assert: targetObject methods size equals: 2.
 		self assert: (class includesSelector: methodSelectorOne) not.
 		self assert: (class includesSelector: methodSelectorTwo) not.
-		self assert: domainObject methods first status equals: 'removed'.
-		self assert: domainObject methods second status equals: 'removed'
+		self assert: targetObject methods first status equals: 'removed'.
+		self assert: targetObject methods second status equals: 'removed'
 	] ensure: [ self removeClassNamedIfPresent: self subjectClassName ].
-	^ domainObject
+	^ call
 ]
 
-{ #category : #'examples - error conditions' }
+{ #category : #examples }
 GtLMagritteToolForMethodsRemovalExamples >> removeMethodsMissingArgument [
 	<gtExample>
-	| tool call result domainObject |
-	tool := GtLMagritteToolForMethodsRemoval new.
-	call := GtLFunctionToolCall new.
-	call rawArguments: Dictionary new.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
+	| call |
+	call := self
+		executeTool: GtLMagritteToolForMethodsRemoval new
+		withArguments: Dictionary new.
 	self 
-		assertMissingRequiredProperties: domainObject 
+		assertMissingRequiredProperties: call result targetObject 
 		withPropertyNames: #('methods') 
 		path: #(nil) 
 		errorMessage: 'required properties missing [methods]'.
-	^ domainObject
+	^ call
 ]
 
-{ #category : #'examples - error conditions' }
+{ #category : #examples }
 GtLMagritteToolForMethodsRemovalExamples >> removeUnknownMethod [
 	<gtExample>
-	| tool call result domainObject |
+	| call |
 	[
 		| class methodSelector expectedSignature |
 		class := self createSubjectClass.
 		methodSelector := #missingMethod.
-		tool := GtLMagritteToolForMethodsRemoval new.
-		call := GtLFunctionToolCall new.
-		call rawArguments: {
-			'methods' -> {
-				{'methodClassName' -> class name asString.
-				 'methodName' -> methodSelector asString.
-				 'classSide' -> false} asDictionary
-			} asArray
-		} asDictionary.
-		result := tool performToolCall: call.
-		self assert: call tool == tool.
-		self assert: (result isKindOf: GTLDataViewWrapperModel).
-		domainObject := result targetObject.
-		self assert: (domainObject isKindOf: GtLMethodsRemovalResult).
-		self assert: domainObject methods size equals: 1.
-		self assert: domainObject methods first isErrorDomainObject.
+		call := self
+			executeTool: GtLMagritteToolForMethodsRemoval new
+			withArguments: {
+				'methods' -> {
+					{'methodClassName' -> class name asString.
+					 'methodName' -> methodSelector asString.
+					 'classSide' -> false} asDictionary
+				} asArray
+			} asDictionary.
+		self assert: (call result targetObject isKindOf: GtLMethodsRemovalResult).
+		self assert: call result targetObject methods size equals: 1.
+		self assert: call result targetObject methods first isErrorDomainObject.
 		expectedSignature := class name asString , '>>#' , methodSelector asString.
-		self assert: domainObject methods first objectName equals: expectedSignature
+		self assert: call result targetObject methods first objectName equals: expectedSignature
 	] ensure: [ self removeClassNamedIfPresent: self subjectClassName ].
-	^ domainObject
+	^ call
 ]
 
 { #category : #private }

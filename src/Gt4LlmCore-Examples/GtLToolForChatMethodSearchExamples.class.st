@@ -8,56 +8,50 @@ Class {
 GtLToolForChatMethodSearchExamples >> methodSearchDataViewSerialization [
 	<gtExample>
 	<return: #GtLPrimitiveMessageDataBlock>
-	| domainObject compositeView dataBlock jsonData |
-	domainObject := self methodSearchReturnsMatches.
-	compositeView := domainObject llmDataViewsFor: GtLDataView new.
+	| call compositeView dataBlock jsonData |
+	call := self methodSearchReturnsMatches.
+	compositeView := call result targetObject llmDataViewsFor: GtLDataView new.
 	self assert: compositeView dataViews size equals: 1.
-	
 	dataBlock := compositeView serializeToLlmPrimiteData.
 	self assert: dataBlock isNotNil.
 	self assert: dataBlock dataBlocks size equals: 1.
 	self assert: dataBlock imageDataBlocks isEmpty.
-	
 	jsonData := dataBlock compositeJsonData.
 	self assert: (jsonData at: #foundMethods) isNotEmpty.
 	self assert: (jsonData includesKey: #mayHaveMore).
-	
 	^ dataBlock
 ]
 
 { #category : #examples }
 GtLToolForChatMethodSearchExamples >> methodSearchHandlesError [
 	<gtExample>
-	| tool call result domainObject providerWithStubData |
+	| call providerWithStubData |
 	providerWithStubData := self providerWithStubDataForQuery: '1/0'.
-	tool := GtLToolForChatMethodSearch new provider: providerWithStubData.
-	call := GtLFunctionToolCall new.
-	call rawArguments: { 'searchPrompt' -> 'methods that trigger failures' } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self assert: domainObject isErrorDomainObject.
-	^ domainObject
+	call := self
+		executeTool: (GtLToolForChatMethodSearch new provider: providerWithStubData)
+		withArguments: {
+			'searchPrompt' -> 'methods that trigger failures'
+		} asDictionary.
+	self assert: call result targetObject isErrorDomainObject.
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForChatMethodSearchExamples >> methodSearchReturnsMatches [
 	<gtExample>
-	| tool call result domainObject providerWithStubData |
+	| call providerWithStubData targetObject |
 	providerWithStubData := self
-			providerWithStubDataForQuery: 'GtLToolForChatMethodSearch gtReferences'.
-	tool := GtLToolForChatMethodSearch new provider: providerWithStubData.
-	call := GtLFunctionToolCall new.
-	call rawArguments: { 'searchPrompt' -> 'methods referencing BlElement' } asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
-	domainObject := result targetObject.
-	self assert: (domainObject isKindOf: GtLMethodsSearchResult).
-	self assert: (domainObject foundMethods anySatisfy: [ :each | 
+		providerWithStubDataForQuery: 'GtLToolForChatMethodSearch gtReferences'.
+	call := self
+		executeTool: (GtLToolForChatMethodSearch new provider: providerWithStubData)
+		withArguments: {
+			'searchPrompt' -> 'methods referencing BlElement'
+		} asDictionary.
+	targetObject := call result targetObject.
+	self assert: (targetObject isKindOf: GtLMethodsSearchResult).
+	self assert: (targetObject foundMethods anySatisfy: [ :each |
 		each methodClassName = #GtLToolForChatMethodSearchExamples ]).
-	^ domainObject
+	^ call
 ]
 
 { #category : #examples }

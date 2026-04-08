@@ -7,19 +7,19 @@ Class {
 { #category : #examples }
 GtLRefactoringToolForMethodReferencesExamples >> methodReferencesForExistingSelector [
 	<gtExample>
-	| tool call result references |
+	| tool call targetObject references |
 	tool := self toolWithExampleSenders.
-	call := GtLFunctionToolCall new.
-	call rawArguments: {'selector' -> 'bar'} asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	self assert: result isErrorDomainObject not.
-	references := result targetObject references
+	call := self
+		executeTool: tool
+		withArguments: {'selector' -> 'bar'} asDictionary.
+	targetObject := call result targetObject.
+	self assert: targetObject isErrorDomainObject not.
+	references := targetObject references
 			detect: [ :each | 
 				each methodClass name = 'GtLRefactoringMethodReferencesSender'
 					and: [ each selector = 'call' ] ].
 	self assert: references isNotNil.
-	references := result targetObject references
+	references := targetObject references
 			detect: [ :each | 
 				each methodClass name = 'GtLRefactoringMethodReferencesForwarder'
 					and: [ each selector = 'call' ] ].
@@ -30,16 +30,15 @@ GtLRefactoringToolForMethodReferencesExamples >> methodReferencesForExistingSele
 { #category : #examples }
 GtLRefactoringToolForMethodReferencesExamples >> methodReferencesForUnknownSelector [
 	<gtExample>
-	| tool call result |
+	| tool call targetObject |
 	tool := self toolWithExampleSenders.
-	call := GtLFunctionToolCall new.
-	call rawArguments: {'selector' -> 'missingSelector'} asDictionary.
-	result := tool performToolCall: call.
-	self assert: call tool == tool.
-	
-	self assert: result isErrorDomainObject not.
-	self assert: result targetObject methodName equals: 'missingSelector'.
-	self assert: result targetObject references equals: #().
+	call := self
+		executeTool: tool
+		withArguments: {'selector' -> 'missingSelector'} asDictionary.
+	targetObject := call result targetObject.
+	self assert: targetObject isErrorDomainObject not.
+	self assert: targetObject methodName equals: 'missingSelector'.
+	self assert: targetObject references equals: #().
 	^ call
 ]
 
