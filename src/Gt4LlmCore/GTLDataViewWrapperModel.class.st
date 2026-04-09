@@ -5,7 +5,7 @@ Class {
 		'targetObject',
 		'mainDataView'
 	],
-	#category : 'Gt4LlmCore-Core'
+	#category : #'Gt4LlmCore-Core'
 }
 
 { #category : #'gt - inspector' }
@@ -47,6 +47,11 @@ GTLDataViewWrapperModel >> mainDataView [
 { #category : #accessing }
 GTLDataViewWrapperModel >> mainDataView: anObject [
 	mainDataView := anObject
+]
+
+{ #category : #accessing }
+GTLDataViewWrapperModel >> model [
+	^targetObject
 ]
 
 { #category : #serialization }

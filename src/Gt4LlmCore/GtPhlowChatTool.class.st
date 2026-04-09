@@ -7,7 +7,7 @@ Class {
 	#instVars : [
 		'chat'
 	],
-	#category : 'Gt4LlmCore-UI'
+	#category : #'Gt4LlmCore-UI'
 }
 
 { #category : #'instance creation' }
@@ -32,14 +32,6 @@ GtPhlowChatTool >> chat [
 { #category : #accessing }
 GtPhlowChatTool >> chat: aChat [
 	chat := aChat
-]
-
-{ #category : #private }
-GtPhlowChatTool >> collectToolViews [
-	^ GtPhlowViewsCollector new
-		pragmaName: #gtLlmView;
-		fromObject: self chat;
-		collect
 ]
 
 { #category : #accessing }

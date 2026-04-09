@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLMessagesGroup,
 	#superclass : #GtLGroup,
-	#category : 'Gt4LlmCore-Core'
+	#category : #'Gt4LlmCore-Core'
 }
 
 { #category : #accessing }
@@ -50,6 +50,28 @@ GtLMessagesGroup >> copyForIndependentRequest [
 GtLMessagesGroup >> copyForNew [
 ]
 
+{ #category : #inspector }
+GtLMessagesGroup >> gtInspectorTargetModels [
+	^ self relevantMessageSummarizers
+]
+
+{ #category : #'gt views' }
+GtLMessagesGroup >> gtMessageSummariesFor: aView [
+	<gtView>
+	^ aView columnedList
+		title: 'Message summarizers';
+		priority: 30;
+		items: [ self messageSummarizers ];
+		column: 'Summary' 
+			text: [ :each | each title ];
+		column: 'Details' text: [ :each | 
+			each summaryText ];
+		column: 'Has data' 
+			text: [ :each | 
+				each hasSummaryData ifTrue: [ 'yes' ] ifFalse: [ 'no' ] ]
+			width: 100
+]
+
 { #category : #accessing }
 GtLMessagesGroup >> gtMessagesFor: aView [
 	<gtView>
@@ -63,16 +85,22 @@ GtLMessagesGroup >> gtMessagesFor: aView [
 		column: 'Message' text: [ :item | item contentText ]
 ]
 
-{ #category : #'llm-generated' }
-GtLMessagesGroup >> gtViewToolMessagesGroupedByTypeFor: aView [
-	<gtView>
+{ #category : #inspector }
+GtLMessagesGroup >> gtViewsInContext: aPhlowContext [
+	| collectedViews |
+	collectedViews := Array
+		streamContents: [ :aStream |
+			aStream nextPutAll: (super gtViewsInContext: aPhlowContext).
+			self gtInspectorTargetModels do: [ :eachTargetModel |
+				aStream nextPutAll: (GtPhlowViewsCollector new
+					fromObject: eachTargetModel;
+					pragmaNames: GtLSettings messageViewPragmaNames;
+					context: aPhlowContext;
+					collect) ] ].
 
-	^ aView columnedList
-		title: 'Tool messages by type';
-		priority: 20;
-		items: [ self toolMessagesByType associations ];
-		column: 'Type' text: [ :each | each key asString ];
-		column: 'Value' text: [ :each | each value asString ]
+	GtPhlowUtility sortByPriority: collectedViews.
+
+	^ collectedViews
 ]
 
 { #category : #accessing }
@@ -96,6 +124,12 @@ GtLMessagesGroup >> lastUserMessageIfPresent: aPresentBlock ifAbsent: anAbsentBl
 		each isUserRole ifTrue: [ ^ aPresentBlock cull: each ] ].
 		
 	^ anAbsentBlock value
+]
+
+{ #category : #summaries }
+GtLMessagesGroup >> messageSummarizers [
+	^ GtLMessageSummarizer currentSummarizers collect: [ :each |
+			each initializeWithMessages: self ]
 ]
 
 { #category : #enumerating }
@@ -141,16 +175,19 @@ GtLMessagesGroup >> messagesWithAndAfter: aMessage [
 		found ].
 ]
 
+{ #category : #summaries }
+GtLMessagesGroup >> relevantMessageSummarizers [
+	^ self messageSummarizers select: #isRelevant
+]
+
 { #category : #accessing }
 GtLMessagesGroup >> serialize [
 	^ {'messages' -> (self items collect: [ :each | 
 			each serializeForOpenAIResponsesAPI])} asDictionary
 ]
 
-{ #category : #accessing }
-GtLMessagesGroup >> toolMessagesByType [
-
-	^ (items select: [ :each | each isToolMessage ])
-		groupedBy: [ :each |
-			each toolCall tool ]
+{ #category : #enumerating }
+GtLMessagesGroup >> toolMessages [
+	^ self messagesSelect: [ :aMessage |
+			aMessage isToolMessage ]
 ]

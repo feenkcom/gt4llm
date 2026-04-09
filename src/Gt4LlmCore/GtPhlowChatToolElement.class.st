@@ -7,7 +7,7 @@ Class {
 	#instVars : [
 		'chat'
 	],
-	#category : 'Gt4LlmCore-UI'
+	#category : #'Gt4LlmCore-UI'
 }
 
 { #category : #private }
@@ -58,10 +58,24 @@ GtPhlowChatToolElement >> chat: aChat [
 
 { #category : #private }
 GtPhlowChatToolElement >> collectToolViews [
-	^ GtPhlowViewsCollector new
-		pragmaName: #gtLlmView;
-		fromObject: self chat;
-		collect
+	| collectedViews |
+	collectedViews := Array
+		streamContents: [ :aStream |
+
+			self gtInspectorTargetModels do: [ :eachTargetModel |
+				aStream nextPutAll: (GtPhlowViewsCollector new
+					fromObject: eachTargetModel;
+					pragmaNames: GtLSettings messageViewPragmaNames;
+					collect) ] ].
+
+	GtPhlowUtility sortByPriority: collectedViews.
+
+	^ collectedViews
+]
+
+{ #category : #private }
+GtPhlowChatToolElement >> gtInspectorTargetModels [
+	^ {self chat}, self chat gtInspectorTargetModels
 ]
 
 { #category : #initialization }
