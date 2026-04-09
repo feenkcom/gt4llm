@@ -9,13 +9,22 @@ Class {
 		'methodName',
 		'classSide'
 	],
-	#category : 'Gt4LlmCore-Magritte Objects'
+	#category : #'Gt4LlmCore-Magritte Objects'
 }
 
 { #category : #'instance creation' }
 GtLExampleReference class >> fromCompiledMethod: aMethod [ 
 	^ self new 
 		initializeFromCompiledMethod: aMethod
+]
+
+{ #category : #comparing }
+GtLExampleReference >> = anObject [
+	self == anObject ifTrue: [ ^ true ].
+	self class = anObject class ifFalse: [ ^ false ].
+	^ self exampleClassName = anObject exampleClassName
+		and: [ self methodName = anObject methodName
+		and: [ self classSide = anObject classSide ] ]
 ]
 
 { #category : #accessing }
@@ -92,6 +101,12 @@ GtLExampleReference >> exampleClassNameDescription [
 		label: 'Example class name';
 		accessor: #exampleClassName;
 		beRequired
+]
+
+{ #category : #comparing }
+GtLExampleReference >> hash [
+	^ (self exampleClassName hash bitXor: self methodName hash)
+		bitXor: self classSide hash
 ]
 
 { #category : #initialization }

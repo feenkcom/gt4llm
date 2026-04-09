@@ -7,7 +7,7 @@ Class {
 		'executionMessages',
 		'finishedAt'
 	],
-	#category : 'Gt4LlmCore-Core'
+	#category : #'Gt4LlmCore-Core'
 }
 
 { #category : #'api - message' }
@@ -218,7 +218,8 @@ GtLReplyMessage >> gtGroupedToolsFor: aView [
 	^ aView columnedList
 		title: 'Grouped executed tools';
 		priority: 19;
-		items: [ (self executionMessages groupedBy: [ :each | each toolCall tool ]) associations ];
+		items: [ (self executionMessages 
+			groupedBy: [ :each | each toolCall tool ]) associations ];
 		column: 'Key' text: [ :each | each key name ] width: 150;
 		column: 'Amount' text: [ :each | each value size ] width: 100;
 		column: 'Details' text: [ :each | ', ' join: (each value collect: [:m | m toolCall argumentsDisplayString ]) ];
