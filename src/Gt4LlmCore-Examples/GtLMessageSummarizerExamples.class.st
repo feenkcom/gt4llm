@@ -27,10 +27,7 @@ GtLMessageSummarizerExamples >> messagesGroupWithToolAndExampleSummaries [
 			yourself);
 		yourself.
 
-	exampleWithResult := GtLExampleWithResult new.
-	exampleWithResult
-		instVarNamed: 'exampleWithResult' put: (exampleMethod gtExample asExampleWithResult);
-		objectId: nil.
+	exampleWithResult := exampleMethod gtExample asExampleWithResult.
 
 	singleStatus := GtLExampleWithResultStatus new.
 	singleStatus
