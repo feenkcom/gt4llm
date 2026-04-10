@@ -30,6 +30,11 @@ GtLMessageState class >> skipped [
 	^ Skipped ifNil: [ Skipped := GtLMessageSkippedState new ]
 ]
 
+{ #category : #testing }
+GtLMessageState >> isFinished [
+	^ false
+]
+
 { #category : #'api - accessing' }
 GtLMessageState >> messageExecutionStateLabel [
 	^ ((self className copyWithout: 'GtLMessage') copyWithout: 'State') asLowercase

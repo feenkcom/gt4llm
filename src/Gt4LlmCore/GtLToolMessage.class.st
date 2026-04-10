@@ -140,6 +140,11 @@ GtLToolMessage >> initialize [
 	executionState := GtLMessageState created
 ]
 
+{ #category : #'api - execution' }
+GtLToolMessage >> isExecutionStateFinished [
+	^ self executionState isFinished
+]
+
 { #category : #testing }
 GtLToolMessage >> isToolMessage [
 
