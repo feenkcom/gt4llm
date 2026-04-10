@@ -34,14 +34,6 @@ GtPhlowChatTool >> chat: aChat [
 	chat := aChat
 ]
 
-{ #category : #private }
-GtPhlowChatTool >> collectToolViews [
-	^ GtPhlowViewsCollector new
-		pragmaName: #gtLlmView;
-		fromObject: self chat;
-		collect
-]
-
 { #category : #accessing }
 GtPhlowChatTool >> icon [
 	^ BrGlamorousVectorIcons chat

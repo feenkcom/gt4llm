@@ -334,6 +334,11 @@ GtLChat >> gtFormatFor: aView [
 			action: [ :aButton | aButton phlow spawnObject: self format ]
 ]
 
+{ #category : #'gt-inspector' }
+GtLChat >> gtInspectorTargetModels [
+	^ (self messages messageSummarizers ifNil: [ #()])
+]
+
 { #category : #views }
 GtLChat >> gtInstructionsFor: aView [
 	<gtView>
@@ -454,12 +459,31 @@ GtLChat >> gtViewObjectStorageFor: aView [
 		view: #gtObjectsByUUIDFor:
 ]
 
+{ #category : #'gt - extensions' }
+GtLChat >> gtViewsInContext: aPhlowContext [
+	| collectedViews |
+	collectedViews := Array
+		streamContents: [ :aStream |
+			aStream nextPutAll: (super gtViewsInContext: aPhlowContext).
+			self gtInspectorTargetModels do: [ :eachTargetModel |
+				aStream nextPutAll: (GtPhlowViewsCollector new
+					fromObject: eachTargetModel;
+					pragmaNames: GtLSettings messageViewPragmaNames;
+					context: aPhlowContext;
+					collect) ] ].
+
+	GtPhlowUtility sortByPriority: collectedViews.
+
+	^ collectedViews
+]
+
 { #category : #initialization }
 GtLChat >> initialize [
 	super initialize.
 	
 	self initializeMessages.
 	self initializeTools.
+	
 	responseFormat := GtLResponseCompositeFormat new.
 	objectStorage := GtLObjectStorage new.
 	instructions := GtLInstructionComposite new.
@@ -469,7 +493,7 @@ GtLChat >> initialize [
 
 { #category : #accessing }
 GtLChat >> initializeMessages [
-	messages := GtLMessagesGroup new
+	messages := GtLMessagesGroup new.
 ]
 
 { #category : #accessing }

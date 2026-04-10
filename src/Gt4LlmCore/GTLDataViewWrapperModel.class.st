@@ -49,6 +49,11 @@ GTLDataViewWrapperModel >> mainDataView: anObject [
 	mainDataView := anObject
 ]
 
+{ #category : #accessing }
+GTLDataViewWrapperModel >> model [
+	^targetObject
+]
+
 { #category : #serialization }
 GTLDataViewWrapperModel >> serializeToAnthropicResponseOutput [
 	^ mainDataView  serializeToAnthropicResponseOutput

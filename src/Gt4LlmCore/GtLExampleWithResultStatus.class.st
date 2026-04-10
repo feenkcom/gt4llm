@@ -9,6 +9,14 @@ Class {
 }
 
 { #category : #accessing }
+GtLExampleWithResultStatus >> exampleReference [
+	^ GtLExampleReference new
+		methodName: self exampleWithResult selector asString;
+		exampleClassName: self exampleWithResult methodClass name asString;
+		classSide: self exampleWithResult methodClass isClassSide
+]
+
+{ #category : #accessing }
 GtLExampleWithResultStatus >> exampleWithResult [
 	^ exampleWithResult
 ]
@@ -18,6 +26,11 @@ GtLExampleWithResultStatus >> exampleWithResult: anObject [
 	self assert: [ anObject isKindOf: GtExampleWithResult ].
 
 	exampleWithResult := anObject
+]
+
+{ #category : #printing }
+GtLExampleWithResultStatus >> gtDisplayOn: stream [
+	self exampleWithResult gtDisplayOn: stream
 ]
 
 { #category : #views }
