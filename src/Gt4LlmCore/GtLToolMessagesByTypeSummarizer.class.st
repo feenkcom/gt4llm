@@ -25,8 +25,9 @@ GtLToolMessagesByTypeSummarizer >> gtGroupedToolsFor: aView [
 		title: 'Grouped tool messages';
 		priority: 20;
 		items: [ self groupedMessages associations ];
-		column: 'Tool' text: [ :each | each key name ];
-		column: 'Number of Calls' text: [ :each | each value size ] width: 250;
+		column: 'Tool' text: [ :each | each key name ] width: 150;
+		column: 'Calls' text: [ :each | each value size ] width: 100;
+		column: 'Details' text: [ :each | ', ' join: (each value collect: [:m | m toolCall argumentsDisplayString ]) ];
 		actionButtonIcon: BrGlamorousVectorIcons inspect 
 			tooltip: 'Inspect summarizer'
 			action: [ :aButton |

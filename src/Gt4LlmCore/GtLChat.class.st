@@ -12,8 +12,7 @@ Class {
 		'instructions',
 		'userMessageClass',
 		'responseFormat',
-		'objectStorage',
-		'messageSummarizers'
+		'objectStorage'
 	],
 	#category : #'Gt4LlmCore-Core'
 }
@@ -337,7 +336,7 @@ GtLChat >> gtFormatFor: aView [
 
 { #category : #'gt-inspector' }
 GtLChat >> gtInspectorTargetModels [
-	^ (messageSummarizers ifNil: [ #()])
+	^ (self messages messageSummarizers ifNil: [ #()])
 ]
 
 { #category : #views }
@@ -495,7 +494,6 @@ GtLChat >> initialize [
 { #category : #accessing }
 GtLChat >> initializeMessages [
 	messages := GtLMessagesGroup new.
-	messageSummarizers := messages messageSummarizers.
 ]
 
 { #category : #accessing }
