@@ -304,6 +304,11 @@ GtLChatMessage >> isCompactionRequest [
 	^false
 ]
 
+{ #category : #'api - execution' }
+GtLChatMessage >> isExecutionStateFinished [
+	^ false
+]
+
 { #category : #'api - testing' }
 GtLChatMessage >> isFailure [
 	"Return true if the message is a result of an error, while receiving a message."

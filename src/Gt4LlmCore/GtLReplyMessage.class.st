@@ -5,7 +5,8 @@ Class {
 		'userMessage',
 		'finalMessage',
 		'executionMessages',
-		'finishedAt'
+		'finishedAt',
+		'executionState'
 	],
 	#category : #'Gt4LlmCore-Core'
 }
@@ -147,12 +148,28 @@ GtLReplyMessage >> executionMessages: newCollection [
 
 { #category : #accessing }
 GtLReplyMessage >> executionMessagesLock: aBlock [
+	"TODO: do not use this method, to be removed."
+
 	^ executionMessages lock: aBlock
 ]
 
 { #category : #accessing }
 GtLReplyMessage >> executionMessagesStream [
 	^ GtLAsyncExecutionMessageStream forReplyMessage: self
+]
+
+{ #category : #accessing }
+GtLReplyMessage >> executionState [
+	<return: #GtLMessageState>
+	^ executionState ifNil: [ executionState := GtLMessageState finished ]
+]
+
+{ #category : #accessing }
+GtLReplyMessage >> executionState: aState [
+	executionState = aState ifTrue: [ ^ self ].
+	
+	executionState := aState.
+	self notifyExecutionStateChanged.
 ]
 
 { #category : #accessing }
@@ -176,6 +193,8 @@ GtLReplyMessage >> finalMessage: aMessage [
 				when: GtLMessageAnnouncement
 				send: #onInnerMessageAnnouncement:
 				to: self.
+	
+	self executionState: GtLMessageState finished.
 	
 	self notifyReplyMessageChanged
 ]
@@ -291,12 +310,18 @@ GtLReplyMessage >> gtViewsInContext: aPhlowContext [
 { #category : #initialization }
 GtLReplyMessage >> initialize [
 	super initialize.
-	executionMessages := AsyncMutex for: #()
+	executionMessages := AsyncMutex for: #().
+	executionState := GtLMessageState created
 ]
 
 { #category : #'api - testing' }
 GtLReplyMessage >> isAssistantRole [
 	^ self currentMessageDo: #isAssistantRole ifAbsent: [ false ]
+]
+
+{ #category : #testing }
+GtLReplyMessage >> isExecutionStateFinished [
+	^ self executionState isFinished
 ]
 
 { #category : #testing }
@@ -309,11 +334,9 @@ GtLReplyMessage >> isSuccess [
 	^ finalMessage notNil
 ]
 
-{ #category : #'api - execution' }
+{ #category : #accessing }
 GtLReplyMessage >> messageExecutionStateLabel [
-	^ self
-		currentMessageDo: #messageExecutionStateLabel
-		ifAbsent: [ super messageExecutionStateLabel ]
+	^ self executionState messageExecutionStateLabel
 ]
 
 { #category : #'api - message' }
@@ -347,6 +370,13 @@ GtLReplyMessage >> notifyExecutionMessagesRemoved: removedMessages added: addedM
 				message: self;
 				removedExecutionMessages: removedMessages;
 				addedExecutionMessages: addedMessages)
+]
+
+{ #category : #'private - notifying' }
+GtLReplyMessage >> notifyExecutionStateChanged [
+	self announce: (GtLMessageExecutionStateChanged new
+		message: self;
+		executionState: executionState)
 ]
 
 { #category : #'private - notifying' }
@@ -400,7 +430,9 @@ GtLReplyMessage >> userMessage [
 
 { #category : #accessing }
 GtLReplyMessage >> userMessage: aMessage [
-	userMessage := aMessage
+	userMessage := aMessage.
+	
+	self executionState: GtLMessageState running
 ]
 
 { #category : #accessing }

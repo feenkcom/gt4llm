@@ -70,6 +70,13 @@ GtLMessageViewModel >> elementClass [
 	^ self class elementClass ifNil: [ self defaultElementClass ]
 ]
 
+{ #category : #'api - message model' }
+GtLMessageViewModel >> isExecutionStateFinished [
+	^ self message
+		ifNotNil: [ :aMessage | aMessage isExecutionStateFinished ]
+		ifNil: [ false ]
+]
+
 { #category : #accessing }
 GtLMessageViewModel >> isExpanded [
 	^ isExpanded ifNil: [ isExpanded := true ]

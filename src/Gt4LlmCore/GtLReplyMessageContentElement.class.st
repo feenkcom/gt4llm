@@ -92,7 +92,9 @@ GtLReplyMessageContentElement >> initializeStyling [
 	self
 		addAptitude: BlGlamorousExpanderShadowAptitude new;
 		addAptitude: (BrLazyStyleCommonAptitude new
-				when: BlElementState hovered | BlElementState focused
+				when: GtLElementMessageUnfinishedExecutionState uniqueInstance 
+					| BlElementState hovered 
+					| BlElementState focused
 				style: [ :aStyle :aTheme | 
 					aStyle
 						do: [ :aWidget | 
@@ -178,6 +180,13 @@ GtLReplyMessageContentElement >> onMessageViewModelContentsChanged: anAnnounceme
 ]
 
 { #category : #'private - event handling' }
+GtLReplyMessageContentElement >> onMessageViewModelExecutionChangedChanged: anAnnouncement [
+	self messageViewModel = anAnnouncement messageViewModel ifFalse: [ ^ self ].
+
+	BlTaskAction enqueueElement: self action: [ self updateExecutionStateElement ]
+]
+
+{ #category : #'private - event handling' }
 GtLReplyMessageContentElement >> onMessageViewModelExpansionChanged: anAnnouncement [
 	self messageViewModel = anAnnouncement messageViewModel ifFalse: [ ^ self ].
 
@@ -244,7 +253,7 @@ GtLReplyMessageContentElement >> onToolsExpanderResized: anEvent [
 	self messageViewModel toolsContentsHeight: toolsContentsElement height
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'private - hooks' }
 GtLReplyMessageContentElement >> subscribeToMessageViewModel [
 	super subscribeToMessageViewModel.
 
@@ -254,6 +263,9 @@ GtLReplyMessageContentElement >> subscribeToMessageViewModel [
 			to: self;
 		when: GtLMessageViewModelExpansionChanged
 			send: #onMessageViewModelExpansionChanged:
+			to: self;
+		when: GtLMessageViewModelExecutionStateChanged
+			send: #onMessageViewModelExecutionChangedChanged:
 			to: self
 ]
 
@@ -275,6 +287,16 @@ GtLReplyMessageContentElement >> updateElement [
 	self updateToolsContentsElement.
 	self updateContentsExpanderElement.
 	self updateContentsElement.
+	self updateExecutionStateElement.
+]
+
+{ #category : #'private - updating' }
+GtLReplyMessageContentElement >> updateExecutionStateElement [
+	self messageViewModel isExecutionStateFinished
+		ifTrue: [ self states
+				removeState: GtLElementMessageUnfinishedExecutionState uniqueInstance ]
+		ifFalse: [ self states
+				addState: GtLElementMessageUnfinishedExecutionState uniqueInstance ]
 ]
 
 { #category : #'private - updating' }
