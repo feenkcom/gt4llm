@@ -21,8 +21,9 @@ GtLOllamaEndpointClient >> client: anObject [
 GtLOllamaEndpointClient >> perform [
 	| result |
 	result := self request.
-	^ (self serializationClass from: result)
+	^ (self serializationClass from: result result)
 		client: self client;
+		requestResponse: result;
 		yourself
 ]
 

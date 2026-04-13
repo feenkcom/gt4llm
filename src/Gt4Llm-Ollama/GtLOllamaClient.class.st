@@ -13,6 +13,12 @@ GtLOllamaClient class >> defaultBaseUrl [
 	^ 'http://localhost:11434/api' asZnUrl
 ]
 
+{ #category : #private }
+GtLOllamaClient >> addHistoryRequestResponse: aClient [
+	<return: #GtLRequestResponse>
+	^ history addRequest: aClient request response: aClient response
+]
+
 { #category : #accessing }
 GtLOllamaClient >> baseUrl [
 	^ baseUrl
@@ -44,12 +50,13 @@ GtLOllamaClient >> completeChatWithModel: aString andMessages: aCollection andFo
 
 { #category : #private }
 GtLOllamaClient >> get: aString [
-	| aClient response |
+	| aClient result requestResponse |
 	aClient := self initializeClient beOneShot.
 	aClient url: self baseUrl / aString.
-	response := aClient get.
-	history add: (aClient request -> aClient response).
-	^ response
+	result := aClient get.
+	requestResponse := self addHistoryRequestResponse: aClient.
+	requestResponse result: result.
+	^ requestResponse
 ]
 
 { #category : #accessing }
@@ -75,11 +82,13 @@ GtLOllamaClient >> initializeClient [
 
 { #category : #private }
 GtLOllamaClient >> post: aString withEntity: anEntity [
-	| aClient response |
+	<return: #GtLRequestResponse>
+	| aClient result requestResponse |
 	aClient := self initializeClient beOneShot.
 	aClient url: self baseUrl / aString.
 	aClient contents: anEntity.
-	response := aClient post.
-	history add: (aClient request -> aClient response).
-	^ response
+	result := aClient post.
+	requestResponse := self addHistoryRequestResponse: aClient.
+	requestResponse result: result.
+	^ requestResponse
 ]

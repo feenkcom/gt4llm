@@ -48,7 +48,7 @@ GtLOllamaProvider >> clientGenerateModelResponse: anInputMessage messages: someM
 	^ self client
 		completeChatWithModel: self modelName
 		andMessages: someMessages
-		andFormat: nil
+		andFormat: 'json'
 		andTools: anInputMessage tools
 		andInstructions: anInputMessage instructions
 ]

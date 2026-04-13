@@ -8,7 +8,7 @@ Class {
 GtLOllamaProviderExamples >> assistantMessage [
 	<gtExample>
 	| message result |
-	result := GtLOllamaThreadMessage from: {
+	result := GtLOllamaClientMessage from: {
 		'model' -> 'llama3.2'.
 		'message' -> {
 			'role' -> 'assistant'.

@@ -8,5 +8,6 @@ Class {
 GtLOllamaSettings class >> futureExecutionConfiguration [
 	^ AsyncFutureExecutionConfiguration new
 		customGroup: #Ollama;
+		errorHandler: AsyncPassExceptionHandler new;
 		lowPriority
 ]
