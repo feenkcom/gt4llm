@@ -20,6 +20,13 @@ TGtLWithInputModelsAPI >> addInputModel: aModel [
 	self inputModels at: aModel name put: aModel.
 ]
 
+{ #category : #'api - message' }
+TGtLWithInputModelsAPI >> addInputPlainText: anObject named: aString [
+	self addInputModel: (GtLPlainTextBasedModel new
+		name: aString;
+		model: anObject)
+]
+
 { #category : #'api - models' }
 TGtLWithInputModelsAPI >> addPlainInputObject: anObject named: aString [
 	self 
