@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLOllamaThreadMessage,
+	#name : #GtLOllamaClientMessage,
 	#superclass : #Object,
 	#instVars : [
 		'rawData',
@@ -20,48 +20,48 @@ Class {
 }
 
 { #category : #serialization }
-GtLOllamaThreadMessage class >> from: aDictionary [
+GtLOllamaClientMessage class >> from: aDictionary [
 	(aDictionary isKindOf: self) ifTrue: [ ^ aDictionary ].
 	^ self new from: aDictionary; yourself
 ]
 
 { #category : #accessing }
-GtLOllamaThreadMessage >> client [
+GtLOllamaClientMessage >> client [
 	^ client
 ]
 
 { #category : #accessing }
-GtLOllamaThreadMessage >> client: anObject [
+GtLOllamaClientMessage >> client: anObject [
 	client := anObject
 ]
 
 { #category : #accessing }
-GtLOllamaThreadMessage >> content [
+GtLOllamaClientMessage >> content [
 	^ self message at: 'content' ifAbsent: [ '' ]
 ]
 
 { #category : #accessing }
-GtLOllamaThreadMessage >> createdAt [
+GtLOllamaClientMessage >> createdAt [
 	^ createdAt
 ]
 
 { #category : #accessing }
-GtLOllamaThreadMessage >> doneReason [
+GtLOllamaClientMessage >> doneReason [
 	^ doneReason
 ]
 
 { #category : #accessing }
-GtLOllamaThreadMessage >> evalCount [
+GtLOllamaClientMessage >> evalCount [
 	^ evalCount
 ]
 
 { #category : #accessing }
-GtLOllamaThreadMessage >> evalDuration [
+GtLOllamaClientMessage >> evalDuration [
 	^ evalDuration
 ]
 
 { #category : #initialization }
-GtLOllamaThreadMessage >> from: aDictionary [
+GtLOllamaClientMessage >> from: aDictionary [
 	rawData := aDictionary.
 	message := aDictionary at: 'message' ifAbsent: [ Dictionary new ].
 	model := aDictionary at: 'model' ifAbsent: [ nil ].
@@ -76,52 +76,52 @@ GtLOllamaThreadMessage >> from: aDictionary [
 ]
 
 { #category : #testing }
-GtLOllamaThreadMessage >> hasToolCalls [
+GtLOllamaClientMessage >> hasToolCalls [
 	^ self toolCalls isNotEmpty
 ]
 
 { #category : #accessing }
-GtLOllamaThreadMessage >> loadDuration [
+GtLOllamaClientMessage >> loadDuration [
 	^ loadDuration
 ]
 
 { #category : #accessing }
-GtLOllamaThreadMessage >> message [
+GtLOllamaClientMessage >> message [
 	^ message
 ]
 
 { #category : #accessing }
-GtLOllamaThreadMessage >> model [
+GtLOllamaClientMessage >> model [
 	^ model
 ]
 
 { #category : #accessing }
-GtLOllamaThreadMessage >> promptEvalCount [
+GtLOllamaClientMessage >> promptEvalCount [
 	^ promptEvalCount
 ]
 
 { #category : #accessing }
-GtLOllamaThreadMessage >> promptEvalDuration [
+GtLOllamaClientMessage >> promptEvalDuration [
 	^ promptEvalDuration
 ]
 
 { #category : #accessing }
-GtLOllamaThreadMessage >> rawData [
+GtLOllamaClientMessage >> rawData [
 	^ rawData
 ]
 
 { #category : #accessing }
-GtLOllamaThreadMessage >> requestResponse [
+GtLOllamaClientMessage >> requestResponse [
 	^ requestResponse
 ]
 
 { #category : #accessing }
-GtLOllamaThreadMessage >> requestResponse: anObject [
+GtLOllamaClientMessage >> requestResponse: anObject [
 	requestResponse := anObject
 ]
 
 { #category : #accessing }
-GtLOllamaThreadMessage >> toolCalls [
+GtLOllamaClientMessage >> toolCalls [
 	^ (self message at: 'tool_calls' ifAbsent: [ #() ])
 		collect: [ :each |
 			| function |
@@ -135,6 +135,6 @@ GtLOllamaThreadMessage >> toolCalls [
 ]
 
 { #category : #accessing }
-GtLOllamaThreadMessage >> totalDuration [
+GtLOllamaClientMessage >> totalDuration [
 	^ totalDuration
 ]

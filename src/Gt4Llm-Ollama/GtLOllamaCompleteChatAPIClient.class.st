@@ -23,8 +23,8 @@ GtLOllamaCompleteChatAPIClient >> entity [
 			'model' -> self model.
 			'messages' -> someMessages} asDictionary.
 	self format ifNotNil: [ entity at: 'format' put: self format ].
-	self tools
-		ifNotNil: [ entity at: 'tools' put: (self tools collect: [ :aTool | aTool schema ]) ].
+	(self tools isNotNil and: [ self tools isNotEmpty ])
+		ifTrue: [ entity at: 'tools' put: (self tools collect: [ :aTool | aTool schema ]) ].
 	self instructions
 		ifNotNil: [ (entity at: 'messages')
 				addFirst: {'role' -> 'system'.
@@ -74,20 +74,13 @@ GtLOllamaCompleteChatAPIClient >> model: anObject [
 
 { #category : #api }
 GtLOllamaCompleteChatAPIClient >> request [
-	| response result requestResponse |
-	response := self client post: '/chat' withEntity: self entity.
-	result := self serializationClass from: response.
-	requestResponse := GtLRequestResponse new
-		request: self entity;
-		response: response;
-		result: result.
-	result requestResponse: requestResponse.
-	^ result
+	<return: #GtLRequestResponse>
+	^ self client post: '/chat' withEntity: self entity
 ]
 
 { #category : #api }
 GtLOllamaCompleteChatAPIClient >> serializationClass [
-	^ GtLOllamaThreadMessage
+	^ GtLOllamaClientMessage
 ]
 
 { #category : #accessing }
