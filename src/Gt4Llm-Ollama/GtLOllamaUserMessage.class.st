@@ -83,6 +83,15 @@ GtLOllamaUserMessage >> isCompactionRequest [
 		each name = 'Compaction' ]
 ]
 
+{ #category : #'api - message' }
+GtLOllamaUserMessage >> plain: aString [
+	"A simple string message."
+
+	self
+		addInputPlainText: (GtLPlainText new content: aString)
+		named: 'Plain Text'
+]
+
 { #category : #accessing }
 GtLOllamaUserMessage >> requestResponse [
 	<return: #GtLRequestResponse>
