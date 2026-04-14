@@ -27,6 +27,13 @@ GtLAsyncExecutionMessageStream >> onMessageExecutionMessagesChanged: anAnnouncem
 			waker wakeUp ]
 ]
 
+{ #category : #'private - event handling' }
+GtLAsyncExecutionMessageStream >> onMessageExecutionStateChanged: anAnnouncement [
+	anAnnouncement executionState isFinished ifFalse: [ ^ self ].
+
+	executionMessages lock: [ :theExecutionMessages | waker wakeUp ]
+]
+
 { #category : #'api - stream' }
 GtLAsyncExecutionMessageStream >> pollNext: anAsynchronousContext [
 	"Attempt to pull out the next value of this stream, registering the current task for wakeup if the value is not yet available, and returning None if the stream is exhausted.
@@ -40,8 +47,11 @@ GtLAsyncExecutionMessageStream >> pollNext: anAsynchronousContext [
 		lock: [ :theMessages | 
 			theMessages
 				ifEmpty: [ 
-					waker register: anAsynchronousContext waker.
-					AsyncPoll indefinitelyPending ]
+					replyMessage isExecutionStateFinished 
+						ifTrue: [ AsyncPoll ready: AsyncOptionalValue none ]
+						ifFalse: [
+							waker register: anAsynchronousContext waker.
+							AsyncPoll indefinitelyPending ] ]
 				ifNotEmpty: [ 
 					AsyncPoll ready: (AsyncOptionalValue some: theMessages removeFirst) ] ]
 ]
@@ -63,5 +73,8 @@ GtLAsyncExecutionMessageStream >> replyMessage: aReplyMessage [
 		replyMessage announcer weak
 			when: GtLMessageExecutionMessagesChanged
 			send: #onMessageExecutionMessagesChanged:
-			to: self ]
+			to: self;
+			when: GtLMessageExecutionStateChanged
+			send: #onMessageExecutionStateChanged:
+			to: self. ]
 ]
