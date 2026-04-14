@@ -624,8 +624,11 @@ GtLChat >> sendMessage: aMessage [
 
 { #category : #'api - communication' }
 GtLChat >> sendPlainMessage: aString [
-	self deprecated: 'use sendMarkdown: instead'.
-	self sendMarkdown: aString
+	| newMessage |
+	self assert: aString isString.
+	newMessage := self createUserMessage.
+	newMessage plain: aString.
+	self sendMessage: newMessage
 ]
 
 { #category : #'api - communication' }

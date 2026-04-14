@@ -372,6 +372,19 @@ GtLDataView >> performComputation: aBlockClosure onErrorView: anErrorBlock [
 				isFrozen: false) ].
 ]
 
+{ #category : #decorating }
+GtLDataView >> plainText [
+	^ GtLPlainTextDataView new
+			originalView: self;
+			definingMethod: (GtPhlowDefiningMethodsCollector forContext: thisContext) collect
+]
+
+{ #category : #decorating }
+GtLDataView >> plainText: aBlockClosure [
+	^ self plainText	
+			object: aBlockClosure
+]
+
 { #category : #printing }
 GtLDataView >> printOn: aStream [
 	super printOn: aStream.
