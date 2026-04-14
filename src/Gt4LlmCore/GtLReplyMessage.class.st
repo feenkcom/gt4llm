@@ -227,29 +227,11 @@ GtLReplyMessage >> gtActionStopFor: anAction [
 		ifIdle: [ anAction noAction ]
 ]
 
-{ #category : #views }
-GtLReplyMessage >> gtGroupedToolsFor: aView [
-	<gtView>
-	<gtLlmView>
-	executionMessages ifNil: [ ^ aView empty ].
-	self executionMessages ifEmpty: [ ^ aView empty ].
-	
-	^ aView columnedList
-		title: 'Grouped executed tools';
-		priority: 19;
-		items: [ (self executionMessages 
-			groupedBy: [ :each | each toolCall tool ]) associations ];
-		column: 'Key' text: [ :each | each key name ] width: 150;
-		column: 'Amount' text: [ :each | each value size ] width: 100;
-		column: 'Details' text: [ :each | ', ' join: (each value collect: [:m | m toolCall argumentsDisplayString ]) ];
-		send: [ :each | each value ]
-]
-
 { #category : #'gt - inspector' }
 GtLReplyMessage >> gtInspectorTargetModels [
-	^ self
-		currentMessageDo: [ :aMessage | aMessage gtInspectorTargetModels ]
-		ifAbsent: [ super gtInspectorTargetModels ]
+	^(self
+			currentMessageDo: [ :aMessage | aMessage gtInspectorTargetModels ]
+			ifAbsent: [ super gtInspectorTargetModels ]), self relevantToolCallsSummarizers
 ]
 
 { #category : #'gt - extensions' }
@@ -390,6 +372,11 @@ GtLReplyMessage >> onInnerMessageAnnouncement: anAnnouncement [
 ]
 
 { #category : #accessing }
+GtLReplyMessage >> relevantToolCallsSummarizers [
+	^ self toolCallsSummarizers select: [ :each | each isRelevant ]
+]
+
+{ #category : #accessing }
 GtLReplyMessage >> role [
 	^ self currentMessageDo: #role ifAbsent: [ #waiting ]
 ]
@@ -410,6 +397,12 @@ GtLReplyMessage >> senderText2 [
 						ifNotNil: [ :aModel | GtLConnectionRegistry uniqueInstance labelForModel: aModel ] ]
 				ifNil: [ 'Assistant' ] ]
 		ifNil: [ 'Assistant' ]
+]
+
+{ #category : #accessing }
+GtLReplyMessage >> toolCallsSummarizers [
+	^ GtLToolCallsSummarizer currentSummarizers collect: [ :each |
+		each initializeWithMessages: {self} ]
 ]
 
 { #category : #'private - updating' }

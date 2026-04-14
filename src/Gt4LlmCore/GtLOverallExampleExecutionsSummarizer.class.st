@@ -1,13 +1,13 @@
 "
-Summarizes overall example executions found in tool messages, keeping the latest status for each example.
+Summarizes overall example executions found in tool calls, keeping the latest status for each example.
 "
 Class {
 	#name : #GtLOverallExampleExecutionsSummarizer,
-	#superclass : #GtLMessageSummarizer,
+	#superclass : #GtLToolCallsSummarizer,
 	#instVars : [
 		'latestStatusesByExample',
 		'runsByExample',
-		'relevantMessages'
+		'relevantToolCalls'
 	],
 	#category : #'Gt4LlmCore-Summaries'
 }
@@ -28,38 +28,23 @@ GtLOverallExampleExecutionsSummarizer >> exampleRunSummaries [
 ]
 
 { #category : #private }
-GtLOverallExampleExecutionsSummarizer >> exampleStatusesFrom: aMessage do: aBlock [
-	| model |
-	model := aMessage output model.
-	model ifNil: [ ^ self ].
-	model class = GtLExampleWithResultStatus ifTrue: [ ^ aBlock value: model ].
-	model class = GtLExampleWithResultStatuses ifTrue: [ ^ model exampleWithStatuses do: aBlock ]
+GtLOverallExampleExecutionsSummarizer >> exampleStatusesFromModel: aModel do: aBlock [
+	aModel ifNil: [ ^ self ].
+	aModel class = GtLExampleWithResultStatus ifTrue: [ ^ aBlock value: aModel ].
+	aModel class = GtLExampleWithResultStatuses ifTrue: [ ^ aModel exampleWithStatuses do: aBlock ]
 ]
 
-{ #category : #'gt-views' }
-GtLOverallExampleExecutionsSummarizer >> gtExampleMessagesFor: aView [
-	<gtView>
-	self relevantMessages ifEmpty: [ ^ aView empty ].
-	^ aView columnedList
-		title: 'Example messages';
-		priority: 31;
-		items: [ self relevantMessages ];
-		column: 'Tool' text: [ :each | each toolName ] width: 140;
-		column: 'Arguments' text: [ :each | each toolCall argumentsDisplayString ];
-		column: 'State' text: [ :each | each messageExecutionStateLabel ] width: 80
-]
-
-{ #category : #'gt-views' }
+{ #category : #'gt-extensions' }
 GtLOverallExampleExecutionsSummarizer >> gtExampleRunCountsFor: aView [
 	<gtView>
 	self hasSummaryData ifFalse: [ ^ aView empty ].
 	^ aView columnedList
-		title: 'Example run counts';
+		title: 'Runs by examples';
 		priority: 35;
 		items: [ self exampleRunSummaries ];
 		column: 'Class' text: [ :each | (each at: #exampleReference) exampleClassName ];
 		column: 'Method' text: [ :each | (each at: #exampleReference) methodName ];
-		column: 'Runs' text: [ :each | (each at: #runs) asString ] width: 60;
+		column: 'Runs' text: [ :each | (each at: #runs) size ] width: 60;
 		column: 'Passes' text: [ :each | (each at: #passes) size asString ] width: 60;
 		column: 'Failures' text: [ :each | (each at: #failures) size asString ] width: 70;
 		column: 'Errors' text: [ :each | (each at: #errors) size asString ] width: 60;
@@ -67,12 +52,12 @@ GtLOverallExampleExecutionsSummarizer >> gtExampleRunCountsFor: aView [
 		send: [ :each | each at: #runs ]
 ]
 
-{ #category : #'gt-views' }
+{ #category : #'gt-extensions' }
 GtLOverallExampleExecutionsSummarizer >> gtLatestStatusesFor: aView [
 	<gtView>
-	self hasSummaryData ifFalse: [ ^ aView empty ].
+		self hasSummaryData ifFalse: [ ^ aView empty ].
 	^ aView columnedList
-		title: 'Latest example statuses';
+		title: 'Latest example runs';
 		priority: 32;
 		items: [ self latestStatuses ];
 		column: 'Class' text: [ :each | each exampleReference exampleClassName ];
@@ -81,17 +66,17 @@ GtLOverallExampleExecutionsSummarizer >> gtLatestStatusesFor: aView [
 		send: [ :each | each exampleWithResult ]
 ]
 
-{ #category : #'gt-views' }
+{ #category : #'gt-extensions' }
 GtLOverallExampleExecutionsSummarizer >> gtOverallStatusSummaryFor: aView [
 	<gtView>
-	<gtLlmMessageView>
+	<gtLlmView>
 	self hasSummaryData ifFalse: [ ^ aView empty ].
 	^ aView columnedList
-		title: 'Overall executed examples';
-		priority: 23;
+		title: 'Overall status summary';
+		priority: 5;
 		items: [ self overallSummaryEntries ];
-		column: 'Property' text: [ :each | each at: #label ];
-		column: 'Value' text: [ :each | (each at: #value) asString ] width: 250;
+		column: 'Label' text: [ :each | each at: #label ];
+		column: 'Value' text: [ :each | (each at: #value) asString ] width: 100;
 		send: [ :each | (each at: #object) value ];
 		actionButtonIcon: BrGlamorousVectorIcons inspect 
 			tooltip: 'Inspect summarizer'
@@ -100,30 +85,20 @@ GtLOverallExampleExecutionsSummarizer >> gtOverallStatusSummaryFor: aView [
 		actionUpdateButton
 ]
 
-{ #category : #testing }
-GtLOverallExampleExecutionsSummarizer >> hasSummaryData [
-	^ runsByExample isNotEmpty
-]
-
 { #category : #initialization }
 GtLOverallExampleExecutionsSummarizer >> initialize [
 	super initialize.
 	latestStatusesByExample := Dictionary new.
 	runsByExample := Dictionary new.
-	relevantMessages := GtLMessagesGroup new
+	relevantToolCalls := OrderedCollection new
 ]
 
 { #category : #initialization }
 GtLOverallExampleExecutionsSummarizer >> initializeWithMessages: aCollection [
 	super initializeWithMessages: aCollection.
-	relevantMessages := self messagesSelect: [ :each |
-		each isToolMessage and: [ self isExampleToolMessage: each ] ].
+	relevantToolCalls := self toolCallsSelect: [ :each |
+		#(exampleMethodRun examplesInClassesRun) includes: each name asSymbol ].
 	self rebuildLatestStatuses
-]
-
-{ #category : #private }
-GtLOverallExampleExecutionsSummarizer >> isExampleToolMessage: aMessage [
-	^ #(exampleMethodRun examplesInClassesRun) includes: aMessage toolName asSymbol
 ]
 
 { #category : #accessing }
@@ -138,18 +113,8 @@ GtLOverallExampleExecutionsSummarizer >> numberOfExamples [
 
 { #category : #accessing }
 GtLOverallExampleExecutionsSummarizer >> overallStatusSummaries [
-	^ self statusCounts associations collect: [ :eachAssociation |
-		| statusText matchingRuns |
-		statusText := eachAssociation key.
-		matchingRuns := OrderedCollection new.
-		runsByExample valuesDo: [ :eachStatuses |
-			eachStatuses do: [ :eachStatus |
-				eachStatus statusText = statusText ifTrue: [ matchingRuns add: eachStatus ] ] ].
-		{ 
-			#statusText -> statusText.
-			#count -> eachAssociation value.
-			#runs -> matchingRuns
-		} asDictionary ]
+	^ self statusCounts associations
+		asSortedCollection: [ :a :b | a key asString <= b key asString ]
 ]
 
 { #category : #accessing }
@@ -185,26 +150,26 @@ GtLOverallExampleExecutionsSummarizer >> overallSummaryEntries [
 ]
 
 { #category : #private }
-GtLOverallExampleExecutionsSummarizer >> processMessage: aMessage [
-	self exampleStatusesFrom: aMessage do: [ :eachStatus |
+GtLOverallExampleExecutionsSummarizer >> processToolCall: aToolCall [
+	| model |
+	model := aToolCall result ifNotNil: [ :aResult | aResult model ].
+	self exampleStatusesFromModel: model do: [ :eachStatus |
 		| exampleReference |
 		exampleReference := eachStatus exampleReference.
-		(runsByExample
-			at: exampleReference
-			ifAbsentPut: [ OrderedCollection new ]) add: eachStatus.
+		(runsByExample at: exampleReference ifAbsentPut: [ OrderedCollection new ]) add: eachStatus.
 		latestStatusesByExample at: exampleReference put: eachStatus ]
 ]
 
 { #category : #private }
 GtLOverallExampleExecutionsSummarizer >> rebuildLatestStatuses [
-	latestStatusesByExample := OrderedDictionary new.
-	runsByExample := OrderedDictionary new.
-	self relevantMessages do: [ :eachMessage | self processMessage: eachMessage ]
+	latestStatusesByExample := Dictionary new.
+	runsByExample := Dictionary new.
+	self relevantToolCalls do: [ :each | self processToolCall: each ]
 ]
 
 { #category : #accessing }
-GtLOverallExampleExecutionsSummarizer >> relevantMessages [
-	^ relevantMessages ifNil: [ GtLMessagesGroup new ]
+GtLOverallExampleExecutionsSummarizer >> relevantToolCalls [
+	^ relevantToolCalls ifNil: [ #() ]
 ]
 
 { #category : #accessing }

@@ -1,20 +1,20 @@
 "
-Examples for message summarizers.
+Examples for tool call summarizers.
 "
 Class {
-	#name : #GtLMessageSummarizerExamples,
+	#name : #GtLToolCallsSummarizerExamples,
 	#superclass : #Object,
 	#category : #'Gt4LlmCore-Examples-Summarizers'
 }
 
-{ #category : #'examples - support' }
-GtLMessageSummarizerExamples >> exampleStatusSuccess [
+{ #category : #examples }
+GtLToolCallsSummarizerExamples >> exampleStatusSuccess [
 	<gtExample>
 	^ 42
 ]
 
 { #category : #examples }
-GtLMessageSummarizerExamples >> messagesGroupWithToolAndExampleSummaries [
+GtLToolCallsSummarizerExamples >> messagesGroupWithToolAndExampleSummaries [
 	<gtExample>
 	| group toolCall toolMessage exampleWithResult singleStatus wrappedSingle exampleMethod |
 	group := GtLMessagesGroup new.
@@ -23,7 +23,7 @@ GtLMessageSummarizerExamples >> messagesGroupWithToolAndExampleSummaries [
 	toolCall := GtLFunctionToolCall new
 		name: 'exampleMethodRun';
 		arguments: (Dictionary new
-			at: 'exampleReference' put: 'GtLMessageSummarizerExamples>>exampleStatusSuccess';
+			at: 'exampleReference' put: 'GtLToolCallsSummarizerExamples>>exampleStatusSuccess';
 			yourself);
 		yourself.
 
@@ -39,6 +39,7 @@ GtLMessageSummarizerExamples >> messagesGroupWithToolAndExampleSummaries [
 		model: singleStatus;
 		yourself.
 
+	toolCall result: wrappedSingle.
 	toolMessage := GtLToolMessage new
 		toolCall: toolCall;
 		output: wrappedSingle;
@@ -53,6 +54,7 @@ GtLMessageSummarizerExamples >> messagesGroupWithToolAndExampleSummaries [
 		output: wrappedSingle;
 		yourself).
 
-	self assert: group relevantMessageSummarizers size equals: 2.
+	self assert: group relevantToolCallsSummarizers size equals: 2.
+	self assert: (group toolCallsSummarizers allSatisfy: [ :each | each class inheritsFrom: GtLToolCallsSummarizer ]).
 	^ group
 ]
