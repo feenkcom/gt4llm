@@ -73,7 +73,7 @@ GtLOverallExampleExecutionsSummarizer >> gtOverallStatusSummaryFor: aView [
 	self hasSummaryData ifFalse: [ ^ aView empty ].
 	^ aView columnedList
 		title: 'Overall status summary';
-		priority: 5;
+		priority: 20;
 		items: [ self overallSummaryEntries ];
 		column: 'Label' text: [ :each | each at: #label ];
 		column: 'Value' text: [ :each | (each at: #value) asString ] width: 100;
