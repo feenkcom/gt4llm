@@ -3,8 +3,8 @@ Examples for GtLLepiterPage testing serialization and data views.
 "
 Class {
 	#name : #GtLLepiterPageExamples,
-	#superclass : #GtLObjectExamples,
-	#category : #'Gt4LlmCore-Examples-Domain Objects'
+	#superclass : #GtLDomainObjectExamples,
+	#category : 'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #'examples - pages' }

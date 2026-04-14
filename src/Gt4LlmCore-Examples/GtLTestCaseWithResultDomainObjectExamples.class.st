@@ -3,10 +3,10 @@ Examples for GtLTestCaseWithResultDomainObject data views.
 "
 Class {
 	#name : #GtLTestCaseWithResultDomainObjectExamples,
-	#superclass : #Object,
+	#superclass : #GtLDomainObjectExamples,
 	#traits : 'TGtLExceptionResultAssertions',
 	#classTraits : 'TGtLExceptionResultAssertions classTrait',
-	#category : #'Gt4LlmCore-Examples-Domain Objects'
+	#category : 'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #assertions }

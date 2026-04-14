@@ -3,13 +3,13 @@ I provide common example infrastructure for GtLFileReference subclass examples.
 "
 Class {
 	#name : #GtLFileReferenceExamples,
-	#superclass : #Object,
+	#superclass : #GtLDomainObjectExamples,
 	#traits : 'TGtLDataViewAssertions',
 	#classTraits : 'TGtLDataViewAssertions classTrait',
 	#instVars : [
 		'tempDirectory'
 	],
-	#category : #'Gt4LlmCore-Examples-Domain Objects'
+	#category : 'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #assertions }

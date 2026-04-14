@@ -1,5 +1,5 @@
 Class {
 	#name : #GtLMagritteDomainObjectExamples,
-	#superclass : #Object,
-	#category : #'Gt4LlmCore-Examples-Domain Objects'
+	#superclass : #GtLDomainObjectExamples,
+	#category : 'Gt4LlmCore-Examples-Domain Objects'
 }

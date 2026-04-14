@@ -3,8 +3,8 @@ Examples for GtLLepiterPageCreateDomainObject and GtLLepiterPageRemoveDomainObje
 "
 Class {
 	#name : #GtLLepiterPageDomainObjectExamples,
-	#superclass : #Object,
-	#category : #'Gt4LlmCore-Examples-Magritte Objects'
+	#superclass : #GtLDomainObjectExamples,
+	#category : 'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #examples }
