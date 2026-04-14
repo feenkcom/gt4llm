@@ -336,7 +336,7 @@ GtLChat >> gtFormatFor: aView [
 
 { #category : #'gt-inspector' }
 GtLChat >> gtInspectorTargetModels [
-	^ (self messages messageSummarizers ifNil: [ #()])
+	^ (self messages toolCallsSummarizers ifNil: [ #()])
 ]
 
 { #category : #views }

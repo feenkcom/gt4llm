@@ -50,18 +50,13 @@ GtLMessagesGroup >> copyForIndependentRequest [
 GtLMessagesGroup >> copyForNew [
 ]
 
-{ #category : #inspector }
-GtLMessagesGroup >> gtInspectorTargetModels [
-	^ self relevantMessageSummarizers
-]
-
-{ #category : #'gt views' }
-GtLMessagesGroup >> gtMessageSummariesFor: aView [
+{ #category : #'gt-extensions' }
+GtLMessagesGroup >> gToolCallsSummariesFor: aView [
 	<gtView>
 	^ aView columnedList
-		title: 'Message summarizers';
+		title: 'Tool call summarizers';
 		priority: 30;
-		items: [ self messageSummarizers ];
+		items: [ self toolCallsSummarizers ];
 		column: 'Summary' 
 			text: [ :each | each title ];
 		column: 'Details' text: [ :each | 
@@ -70,6 +65,11 @@ GtLMessagesGroup >> gtMessageSummariesFor: aView [
 			text: [ :each | 
 				each hasSummaryData ifTrue: [ 'yes' ] ifFalse: [ 'no' ] ]
 			width: 100
+]
+
+{ #category : #inspector }
+GtLMessagesGroup >> gtInspectorTargetModels [
+	^ self relevantToolCallsSummarizers
 ]
 
 { #category : #accessing }
@@ -126,12 +126,6 @@ GtLMessagesGroup >> lastUserMessageIfPresent: aPresentBlock ifAbsent: anAbsentBl
 	^ anAbsentBlock value
 ]
 
-{ #category : #summaries }
-GtLMessagesGroup >> messageSummarizers [
-	^ GtLMessageSummarizer currentSummarizers collect: [ :each |
-			each initializeWithMessages: self ]
-]
-
 { #category : #enumerating }
 GtLMessagesGroup >> messagesBeforeMatching: aBlock andAllWithAndAfter: aMessage [
 	| found |
@@ -176,14 +170,20 @@ GtLMessagesGroup >> messagesWithAndAfter: aMessage [
 ]
 
 { #category : #summaries }
-GtLMessagesGroup >> relevantMessageSummarizers [
-	^ self messageSummarizers select: #isRelevant
+GtLMessagesGroup >> relevantToolCallsSummarizers [
+	^ self toolCallsSummarizers select: [ :each | each isRelevant ]
 ]
 
 { #category : #accessing }
 GtLMessagesGroup >> serialize [
 	^ {'messages' -> (self items collect: [ :each | 
 			each serializeForOpenAIResponsesAPI])} asDictionary
+]
+
+{ #category : #summaries }
+GtLMessagesGroup >> toolCallsSummarizers [
+	^ GtLToolCallsSummarizer currentSummarizers collect: [ :each |
+		each initializeWithMessages: self ]
 ]
 
 { #category : #enumerating }
