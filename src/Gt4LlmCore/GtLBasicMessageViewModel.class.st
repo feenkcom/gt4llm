@@ -143,7 +143,7 @@ GtLBasicMessageViewModel >> messageViewsInto: aStream [
 						pragmaNames: self messageViewPragmas;
 						collect).
 
-			self message currentMessage gtInspectorTargetModels
+			self message gtInspectorTargetModels
 				do: [ :eachResponseModel | 
 					aStream
 						nextPutAll: (GtPhlowViewsCollector new
