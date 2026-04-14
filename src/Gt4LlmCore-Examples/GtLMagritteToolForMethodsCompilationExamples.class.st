@@ -19,6 +19,7 @@ GtLMagritteToolForMethodsCompilationExamples >> compileInstanceSideMethods [
 	(targetClass includesSelector: selectorTwo)
 		ifTrue: [ targetClass removeSelector: selectorTwo ].
 	[
+		| compilationResult methodCompilationResults |
 		call := self
 			executeTool: GtLMagritteToolForMethodsCompilation new
 			withArguments: {
@@ -37,16 +38,21 @@ GtLMagritteToolForMethodsCompilationExamples >> compileInstanceSideMethods [
 					} asDictionary
 				}
 			} asDictionary.
-		self assert: (call result targetObject isKindOf: GtLMethodsCompilationResult).
-		self assert: call result targetObject methods size equals: 2.
+			
 		self assert: (targetClass includesSelector: selectorOne).
 		self assert: (targetClass includesSelector: selectorTwo).
-		self assert: call result targetObject methods first status equals: 'compiled'.
-		self assert: call result targetObject methods second status equals: 'compiled'.
-		self assert: call result targetObject methods first oldMethod isNil.
-		self assert: call result targetObject methods second oldMethod isNil.
-		self assert: call result targetObject methods first newMethod sourceCode equals: 'gtMagritteCompiledExampleInstanceOne ^ 1'.
-		self assert: call result targetObject methods second newMethod sourceCode equals: 'gtMagritteCompiledExampleInstanceTwo ^ 2'
+		
+		compilationResult := call result targetObject.
+		methodCompilationResults := compilationResult methodCompilationResults.
+		self assert: (compilationResult isKindOf: GtLMethodsCompilationResult).
+		self assert: methodCompilationResults size equals: 2.
+		self assert: methodCompilationResults first status equals: 'compiled'.
+		self assert: methodCompilationResults second status equals: 'compiled'.
+		self assert: methodCompilationResults first oldMethod isNil.
+		self assert: methodCompilationResults second oldMethod isNil.
+		self assert: methodCompilationResults first newMethod sourceCode equals: 'gtMagritteCompiledExampleInstanceOne ^ 1'.
+		self assert: methodCompilationResults second newMethod sourceCode equals: 'gtMagritteCompiledExampleInstanceTwo ^ 2'
+		
 	] ensure: [
 		(targetClass includesSelector: selectorOne)
 			ifTrue: [ targetClass removeSelector: selectorOne ].

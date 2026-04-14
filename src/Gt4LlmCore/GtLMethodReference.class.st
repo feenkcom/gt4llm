@@ -72,6 +72,13 @@ GtLMethodReference >> compiledMethodIfPresent: aPresentBlock ifMissing: anErrorB
 	^ aPresentBlock value: method
 ]
 
+{ #category : #testing }
+GtLMethodReference >> existsInImage [
+	^ self 
+			compiledMethodIfPresent: [ :each | true ] 
+			ifMissing: [ :each | false ]
+]
+
 { #category : #initialization }
 GtLMethodReference >> initializeFromCompiledMethod: aMethod [ 
 	methodClassName := aMethod methodClass instanceSide name.
