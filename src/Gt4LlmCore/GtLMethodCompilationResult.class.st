@@ -7,7 +7,8 @@ Class {
 	#instVars : [
 		'oldMethod',
 		'newMethod',
-		'status'
+		'status',
+		'targetMethodReference'
 	],
 	#category : #'Gt4LlmCore-Magritte Objects'
 }
@@ -131,4 +132,25 @@ GtLMethodCompilationResult >> statusDescription [
 		label: 'Status';
 		accessor: #status;
 		beRequired
+]
+
+{ #category : #accessing }
+GtLMethodCompilationResult >> targetMethodReference [
+	^ targetMethodReference
+]
+
+{ #category : #accessing }
+GtLMethodCompilationResult >> targetMethodReference: anObject [
+	targetMethodReference := anObject
+]
+
+{ #category : #accessing }
+GtLMethodCompilationResult >> targetMethodReferenceDescription [
+	<magritteDescription>
+	
+	^ MAToOneRelationDescription new
+			accessor: #targetMethodReference;
+			classes: {
+				GtLMethodCompilationRequest };
+			beRequired
 ]
