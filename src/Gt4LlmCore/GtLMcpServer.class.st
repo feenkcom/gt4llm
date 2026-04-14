@@ -239,30 +239,6 @@ GtLMcpServer >> gtResourcesFor: aView [
 ]
 
 { #category : #views }
-GtLMcpServer >> gtScopesFor: aView [
-	<gtView>
-	^ aView columnedList
-		title: 'Scopes';
-		priority: 60;
-		items: [self class availableScopes];
-		column: 'Scope' text: [:each | each displayString];
-		column: 'Status' text: [:each | (self class selectedScopes includes: each) ifTrue: ['Active'] ifFalse: ['']] width: 80;
-		column: '' do: [:aColumn |
-			aColumn
-				width: 80;
-				cellStencil: [BrButton new aptitude: BrGlamorousButtonWithLabelAptitude];
-				dataBinder: [:aButton :aScope |
-					aButton
-						label: ((self class selectedScopes includes: aScope) ifTrue: ['Remove'] ifFalse: ['Add']);
-						action: [
-							(self class selectedScopes includes: aScope)
-								ifTrue: [self class removeScope: aScope]
-								ifFalse: [self class addScope: aScope].
-							aButton phlow fireViewUpdateWish]]];
-		actionUpdateButtonTooltip: 'Refresh scopes'
-]
-
-{ #category : #views }
 GtLMcpServer >> gtToolsFor: aView [
 	<gtView>
 	tools ifEmpty: [ ^ aView empty ].
