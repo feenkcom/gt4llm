@@ -88,6 +88,7 @@ GtLMethodReferenceExamples >> methodReferenceObjectFromCompiledMethodInstanceSid
 	self
 		assert: methodReferenceObject compiledMethod
 		equals: (GtLMethodReferenceExamples>>#methodReferenceObjectFromCompiledMethodInstanceSide).
+	self assert: methodReferenceObject existsInImage.
 
 	^ methodReferenceObject
 ]
@@ -115,4 +116,22 @@ GtLMethodReferenceExamples >> methodReferenceObjectFromCompiledMethodInstanceSid
 	self assert: jsonData equals: expected.
 	
 	^ dataBlock
+]
+
+{ #category : #examples }
+GtLMethodReferenceExamples >> nonExistingMethodReference [
+	<gtExample>
+	| methodReferenceObject |
+	methodReferenceObject := GtLMethodReference new
+		methodClassName: #GtLMethodReferenceExamples;
+		methodName: #nonExistingSelector;
+		classSide: false;
+		yourself.
+
+	self
+		assert: methodReferenceObject methodSignature
+		equals: 'GtLMethodReferenceExamples>>#nonExistingSelector'.
+	self assert: methodReferenceObject existsInImage equals: false.
+
+	^ methodReferenceObject
 ]

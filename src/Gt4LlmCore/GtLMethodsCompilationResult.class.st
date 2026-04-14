@@ -5,32 +5,56 @@ Class {
 	#name : #GtLMethodsCompilationResult,
 	#superclass : #Object,
 	#instVars : [
-		'methods'
+		'methodCompilationResults'
 	],
 	#category : #'Gt4LlmCore-Magritte Objects'
 }
 
+{ #category : #accessing }
+GtLMethodsCompilationResult >> compilationResultsForExistingMethods [
+	^ self successfulMethodCompilationResults 
+		select: [ :each |
+			each existsInImage ]
+]
+
 { #category : #views }
-GtLMethodsCompilationResult >> gtMethodsFor: aView [
+GtLMethodsCompilationResult >> gtCurrentMethodsFor: aView [
 	<gtView>
 	<gtLlmView>
-	(self methods anySatisfy: [:each | each isKindOf: GtLMethodCompilationExceptionDomainObject]) ifTrue: [ ^ aView empty ].
+	
 	^ aView forward
 		title: 'Methods';
 		priority: 1;
-		object: [ GtSearchFixedMethodsFilter new methods: (self methods collect: [:each | each newCompiledMethod]) ];
+		object: [ 
+			GtSearchFixedMethodsFilter new 
+				methods: (self compilationResultsForExistingMethods 
+					collect: [:aMethodCompilationResult | 
+						aMethodCompilationResult newCompiledMethod ]) ];
 		view: #gtItemsFor:
 ]
 
 { #category : #views }
+GtLMethodsCompilationResult >> gtMethodCompilationResults1For: aView [
+	<gtView>
+	methodCompilationResults ifNil: [ ^ aView empty ].
+	
+	^ aView columnedList
+		priority: 40;
+		title: 'Compilation results';
+		items: [ methodCompilationResults ];
+		column: 'Result' text: [ :each | each ]
+]
+
+{ #category : #accessing }
 GtLMethodsCompilationResult >> gtMethodsListFor: aView [
 	<gtView>
 	<gtLlmView>
-	methods ifNil: [ ^ aView empty ].
+	methodCompilationResults ifNil: [ ^ aView empty ].
+	
 	^ aView columnedList
 		title: 'Method list';
 		priority: 2;
-		items: [ methods ];
+		items: [ self compilationResultsForExistingMethods ];
 		column: 'Class'
 			stencil: [ :each | 
 				BrExpander new
@@ -55,30 +79,29 @@ GtLMethodsCompilationResult >> gtMethodsListFor: aView [
 GtLMethodsCompilationResult >> llmRawDataViewFor: aDataView [
 	<gtLlmDataView>
 	
-	^ aDataView magritteObject: [ self ]
+	^ aDataView forwardCollection
+			dataKey: 'methodCompilationResults';
+			collection: [ self methodCompilationResults ]
+]
+
+{ #category : #accessing }
+GtLMethodsCompilationResult >> methodCompilationResults [
+	^ methodCompilationResults
+]
+
+{ #category : #accessing }
+GtLMethodsCompilationResult >> methodCompilationResults: aCollection [
+	methodCompilationResults := aCollection
 ]
 
 { #category : #accessing }
 GtLMethodsCompilationResult >> methods [
-	^ methods ifNil: [ #() ]
+	^ self methodCompilationResults
 ]
 
 { #category : #accessing }
 GtLMethodsCompilationResult >> methods: aCollection [
-	methods := aCollection
-]
-
-{ #category : #magritte }
-GtLMethodsCompilationResult >> methodsDescription [
-	<magritteDescription>
-	^ MAToManyRelationDescription new
-		accessor: #methods;
-		classes: {
-			GtLMethodCompilationResult.
-			GtLMethodCompilationExceptionDomainObject.
-			GtLMissingDomainObject.
-			GtLMissingArgumentDomainObject };
-		beRequired
+	self methodCompilationResults: aCollection
 ]
 
 { #category : #printing }
@@ -86,6 +109,13 @@ GtLMethodsCompilationResult >> printOn: aStream [
 	super printOn: aStream.
 	aStream parenthesize: [
 		aStream
-			print: self methods size;
-			nextPutAll: ' methods' ]
+			print: self methodCompilationResults size;
+			nextPutAll: ' method compilation results' ]
+]
+
+{ #category : #views }
+GtLMethodsCompilationResult >> successfulMethodCompilationResults [
+	^ (self methodCompilationResults
+			reject: [:aMethodCompilationResult | 
+				aMethodCompilationResult isErrorDomainObject ]) 
 ]
