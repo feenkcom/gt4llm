@@ -24,10 +24,17 @@ GtLMethodWithSource >> compiledMethod [
 	^ self methodReference compiledMethod
 ]
 
+{ #category : #testing }
+GtLMethodWithSource >> existsInImage [
+	^ self methodReference existsInImage
+]
+
 { #category : #'gt - extensions' }
 GtLMethodWithSource >> gtClassCoderViewFor: aView [
 	<gtView>
 	<gtLlmView>
+	
+	self existsInImage ifFalse: [ ^ aView empty ].
 	^ aView explicit
 		title: 'Coder';
 		priority: 1;
@@ -55,7 +62,7 @@ GtLMethodWithSource >> initializeFromCompiledMethod: aMethod [
 	sourceCode := aMethod sourceCode
 ]
 
-{ #category : #accessing }
+{ #category : #testing }
 GtLMethodWithSource >> isClassSide [
 	^ self methodReference isClassSide
 ]
