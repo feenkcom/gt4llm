@@ -4,7 +4,7 @@ Examples for GtLMagritteToolForExampleMethodRun.
 Class {
 	#name : #GtLToolForExampleMethodRunExamples,
 	#superclass : #GtLAbstractMagritteFunctionToolExamples,
-	#category : #'Gt4LlmCore-Examples-Tools'
+	#category : 'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #examples }
