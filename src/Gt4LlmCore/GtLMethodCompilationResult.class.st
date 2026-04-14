@@ -7,7 +7,8 @@ Class {
 	#instVars : [
 		'oldMethod',
 		'newMethod',
-		'status'
+		'status',
+		'targetMethodReference'
 	],
 	#category : #'Gt4LlmCore-Magritte Objects'
 }
@@ -15,20 +16,26 @@ Class {
 { #category : #views }
 GtLMethodCompilationResult >> asDiffElement [
 	| newSource oldSource |
-	oldSource := self oldMethod ifNil: [ '' ] ifNotNil: #sourceCode.
-	newSource := self newMethod ifNil: [ '' ] ifNotNil: #sourceCode.
+	oldSource := self oldMethod ifNil: [ '' ] ifNotNil: [ :each | each sourceCode ].
+	newSource := self newMethod ifNil: [ '' ] ifNotNil: [ :each | each sourceCode ].
 	^ GtDiffElementWithLabelStencil new
 		fromLabelText: 'Old from '
 				, (self newMethod
-						ifNotNil: [ :m | String space , m methodReference methodClass name ]);
+						ifNotNil: [ :m | String space , m methodReference methodClassName ]);
 		toLabelText: 'New in '
 				, (self newMethod
-						ifNotNil: [ :m | String space , m methodReference methodClass name ]);
+						ifNotNil: [ :m | String space , m methodReference methodClassName ]);
 		change: (GtDiffBuilder
 				computeDifferencesFrom: oldSource
 				to: newSource
 				using: GtSmaCCDiffSplitter forPharo);
 		asElement
+]
+
+{ #category : #testing }
+GtLMethodCompilationResult >> existsInImage [
+	^ self newMethod notNil and: [
+		self newMethod existsInImage ]
 ]
 
 { #category : #views }
@@ -61,7 +68,7 @@ GtLMethodCompilationResult >> hasOldSourceCode [
 	^ oldMethod notNil
 ]
 
-{ #category : #accessing }
+{ #category : #testing }
 GtLMethodCompilationResult >> isErrorDomainObject [
 	^false
 ]
@@ -125,4 +132,25 @@ GtLMethodCompilationResult >> statusDescription [
 		label: 'Status';
 		accessor: #status;
 		beRequired
+]
+
+{ #category : #accessing }
+GtLMethodCompilationResult >> targetMethodReference [
+	^ targetMethodReference
+]
+
+{ #category : #accessing }
+GtLMethodCompilationResult >> targetMethodReference: anObject [
+	targetMethodReference := anObject
+]
+
+{ #category : #accessing }
+GtLMethodCompilationResult >> targetMethodReferenceDescription [
+	<magritteDescription>
+	
+	^ MAToOneRelationDescription new
+			accessor: #targetMethodReference;
+			classes: {
+				GtLMethodCompilationRequest };
+			beRequired
 ]
