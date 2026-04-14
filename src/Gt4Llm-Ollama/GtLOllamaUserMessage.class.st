@@ -25,6 +25,17 @@ GtLOllamaUserMessage >> computeContentBlockFromInputModels [
 ]
 
 { #category : #accessing }
+GtLOllamaUserMessage >> contentOneLineMultiLabelSummaryWith: aBuilder [
+	inputModels do: [ :each | each contentOneLineMultiLabelSummaryWith: aBuilder ]
+]
+
+{ #category : #accessing }
+GtLOllamaUserMessage >> contentOneLineSummary [
+	<return: #String>
+	^ contentOneLineSummary ifNil: [ self contentText ]
+]
+
+{ #category : #accessing }
 GtLOllamaUserMessage >> contentText [
 	^ NeoJSONWriter toStringPretty: self contentDataBlock llmJsonData
 ]
@@ -70,6 +81,15 @@ GtLOllamaUserMessage >> instructions [
 GtLOllamaUserMessage >> isCompactionRequest [
 	^ formatDescriptions schemaDescriptions anySatisfy: [ :each |
 		each name = 'Compaction' ]
+]
+
+{ #category : #'api - message' }
+GtLOllamaUserMessage >> plain: aString [
+	"A simple string message."
+
+	self
+		addInputPlainText: (GtLPlainText new content: aString)
+		named: 'Plain Text'
 ]
 
 { #category : #accessing }
