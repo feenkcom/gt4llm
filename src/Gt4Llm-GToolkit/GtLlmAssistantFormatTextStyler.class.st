@@ -6,7 +6,7 @@ Class {
 	#instVars : [
 		'assistant'
 	],
-	#category : 'Gt4Llm-GToolkit-UI'
+	#category : #'Gt4Llm-GToolkit-UI'
 }
 
 { #category : #accessing }
@@ -31,10 +31,13 @@ GtLlmAssistantFormatTextStyler >> privateStyle: aText [
 
 { #category : #'as yet unclassified' }
 GtLlmAssistantFormatTextStyler >> styleUnknownFormatComponent: aCodeNode [
+	"TODO: it is broken, because BlMouseEnterEvent cannot depend on a text,
+	it must use editor API to modify text at run time."
+
 	| location hoverMarker hoverAttribute buttonAttribute |
 	location := aCodeNode stopPosition.
 	hoverMarker := GtFixItMarkerAttribute new.
-	hoverAttribute := BlTextHighlightAttribute
+	hoverAttribute := BlTextUnderlayAttribute
 			paint: BrGlamorousColors paleErrorBackgroundColor.
 	buttonAttribute := GtButtonAttribute new
 			beAppend;
