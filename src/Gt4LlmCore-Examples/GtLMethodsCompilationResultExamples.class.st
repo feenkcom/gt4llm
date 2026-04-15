@@ -4,6 +4,8 @@ Examples for GtLMethodsCompilationResult domain object.
 Class {
 	#name : #GtLMethodsCompilationResultExamples,
 	#superclass : #GtLDomainObjectExamples,
+	#traits : 'TGtLExceptionResultAssertions',
+	#classTraits : 'TGtLExceptionResultAssertions classTrait',
 	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
@@ -117,7 +119,7 @@ GtLMethodsCompilationResultExamples >> methodsCompilationResultWithMixedOutcomes
 GtLMethodsCompilationResultExamples >> methodsCompilationResultWithMixedOutcomesDataViewSerialization [
 	<gtExample>
 	<return: #GtLPrimitiveMessageDataBlock>
-	| domainObject compositeView dataBlock jsonData results exceptionDetails firstTarget secondTarget |
+	| domainObject compositeView dataBlock jsonData results firstResult secondResult thirdResult fifthResult sixthResult |
 	domainObject := self methodsCompilationResultWithMixedOutcomes.
 	compositeView := domainObject llmDataViewsFor: GtLDataView new.
 	self assert: compositeView dataViews size equals: 1.
@@ -128,25 +130,52 @@ GtLMethodsCompilationResultExamples >> methodsCompilationResultWithMixedOutcomes
 	jsonData := dataBlock compositeJsonData.
 	results := jsonData at: 'methodCompilationResults'.
 	self assert: results size equals: 6.
-	self assert: (results first at: 'status') equals: 'compiled'.
-	firstTarget := results first at: 'targetMethodReference'.
-	self assert: (firstTarget at: 'methodName') equals: 'addedMethod'.
-	self assert: (firstTarget at: 'methodClassName') equals: 'SampleClass'.
-	self assert: (firstTarget at: 'classSide') equals: false.
-	self assert: (results second at: 'status') equals: 'failed'.
-	secondTarget := results second at: 'targetMethodReference'.
-	self assert: (secondTarget at: 'methodName') equals: 'failedMethod'.
-	self assert: (secondTarget at: 'methodClassName') equals: 'SampleClass'.
-	self assert: (secondTarget at: 'classSide') equals: false.
-	self assert: (results third at: 'errorReason') equals: 'Syntax error while compiling'.
-	exceptionDetails := results fourth at: 'errorDetails'.
-	self assert: (exceptionDetails at: #errorClass) equals: 'ZeroDivide'.
-	self assert: (exceptionDetails at: #errorMessage) equals: 'ZeroDivide'.
-	self assert: ((exceptionDetails at: #stackTrace) includesSubstring: 'ZeroDivide').
-	self assert: (results fifth at: 'errorMessage') equals: 'Missing object: UnknownClass>>missingMethod'.
-	self assert: (results fifth at: 'missingObjectName') equals: 'UnknownClass>>missingMethod'.
-	self assert: (results sixth at: 'errorMessage') equals: 'Missing required argument: requiredParam'.
-	self assert: (results sixth at: 'missingArgument') equals: 'requiredParam'.
+
+	firstResult := NeoJSONObject new
+		at: 'status' put: 'compiled';
+		at: 'targetMethodReference' put: (NeoJSONObject new
+			at: 'classSide' put: false;
+			at: 'methodClassName' put: 'SampleClass';
+			at: 'methodName' put: 'addedMethod';
+			yourself);
+		yourself.
+	self assert: results first equals: firstResult.
+
+	secondResult := NeoJSONObject new
+		at: 'status' put: 'failed';
+		at: 'targetMethodReference' put: (NeoJSONObject new
+			at: 'classSide' put: false;
+			at: 'methodClassName' put: 'SampleClass';
+			at: 'methodName' put: 'failedMethod';
+			yourself);
+		yourself.
+	self assert: results second equals: secondResult.
+
+	thirdResult := NeoJSONObject new
+		at: 'errorReason' put: 'Syntax error while compiling';
+		at: 'methodClass' put: 'Object';
+		at: 'methodProtocol' put: 'testing';
+		at: 'sourceCode' put: 'badMethod ^';
+		yourself.
+	self assert: results third equals: thirdResult.
+
+	self
+		assertExceptionResult: (results fourth at: 'errorDetails')
+		errorClass: 'ZeroDivide'
+		errorMessage: 'ZeroDivide'
+		stackTraceIncludes: #('ZeroDivide').
+
+	fifthResult := NeoJSONObject new
+		at: 'errorMessage' put: 'Missing object: UnknownClass>>missingMethod';
+		at: 'missingObjectName' put: 'UnknownClass>>missingMethod';
+		yourself.
+	self assert: results fifth equals: fifthResult.
+
+	sixthResult := NeoJSONObject new
+		at: 'errorMessage' put: 'Missing required argument: requiredParam';
+		at: 'missingArgument' put: 'requiredParam';
+		yourself.
+	self assert: results sixth equals: sixthResult.
 
 	^ dataBlock
 ]
