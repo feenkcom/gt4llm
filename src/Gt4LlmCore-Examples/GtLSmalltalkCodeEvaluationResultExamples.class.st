@@ -3,7 +3,7 @@ Examples for GtLSmalltalkCodeEvaluationResult and related domain objects.
 "
 Class {
 	#name : #GtLSmalltalkCodeEvaluationResultExamples,
-	#superclass : #GtLMagritteDomainObjectExamples,
+	#superclass : #GtLDomainObjectExamples,
 	#category : 'Gt4LlmCore-Examples-Domain Objects'
 }
 

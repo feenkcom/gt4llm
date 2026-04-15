@@ -3,7 +3,7 @@ Examples for GtLMethodsRemovalResult domain object.
 "
 Class {
 	#name : #GtLMethodsRemovalResultExamples,
-	#superclass : #GtLMagritteDomainObjectExamples,
+	#superclass : #GtLDomainObjectExamples,
 	#category : 'Gt4LlmCore-Examples-Domain Objects'
 }
 
