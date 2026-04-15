@@ -3,7 +3,7 @@ Examples for GtLTestCasesWithResultStatuses domain object and data views.
 "
 Class {
 	#name : #GtLTestCasesWithResultStatusesDomainObjectExamples,
-	#superclass : #Object,
+	#superclass : #GtLDomainObjectExamples,
 	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 

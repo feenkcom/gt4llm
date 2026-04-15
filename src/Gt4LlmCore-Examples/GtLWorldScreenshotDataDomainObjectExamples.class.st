@@ -3,7 +3,7 @@ Examples for GtLWorldScreenshotDataDomainObject, including data view serializati
 "
 Class {
 	#name : #GtLWorldScreenshotDataDomainObjectExamples,
-	#superclass : #Object,
+	#superclass : #GtLDomainObjectExamples,
 	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 

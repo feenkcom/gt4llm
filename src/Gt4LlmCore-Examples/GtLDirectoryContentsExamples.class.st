@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLDirectoryContentsExamples,
-	#superclass : #Object,
+	#superclass : #GtLDomainObjectExamples,
 	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 

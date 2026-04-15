@@ -3,7 +3,7 @@ Examples for GtLExampleWithResultDomainObject data views.
 "
 Class {
 	#name : #GtLExampleWithResultExamples,
-	#superclass : #Object,
+	#superclass : #GtLDomainObjectExamples,
 	#traits : 'TGtLExceptionResultAssertions',
 	#classTraits : 'TGtLExceptionResultAssertions classTrait',
 	#category : #'Gt4LlmCore-Examples-Domain Objects'

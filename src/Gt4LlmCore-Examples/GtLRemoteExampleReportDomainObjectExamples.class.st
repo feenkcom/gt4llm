@@ -3,7 +3,7 @@ Examples for GtLRemoteExamplesReportDomainObject and GtLRemoteExampleReportDomai
 "
 Class {
 	#name : #GtLRemoteExampleReportDomainObjectExamples,
-	#superclass : #Object,
+	#superclass : #GtLDomainObjectExamples,
 	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 

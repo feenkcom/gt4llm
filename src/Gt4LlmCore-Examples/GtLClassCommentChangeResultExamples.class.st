@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLClassCommentChangeResultExamples,
-	#superclass : #Object,
-	#category : #'Gt4LlmCore-Examples-Magritte Objects'
+	#superclass : #GtLDomainObjectExamples,
+	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #examples }
