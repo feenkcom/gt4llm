@@ -65,7 +65,7 @@ GtLOverallExampleExecutionsToolCallsSummarizer >> gtOverallStatusSummaryFor: aVi
 	<gtView>
 	<gtLlmView>
 	^ aView columnedList
-		title: 'Overall status summary';
+		title: 'Examples summary';
 		priority: 22;
 		items: [ self overallSummaryEntries ];
 		column: 'Label' text: [ :each | each at: #label ];
