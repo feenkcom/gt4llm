@@ -5,7 +5,7 @@ Class {
 		'object',
 		'stringStream'
 	],
-	#category : #'Gt4LlmCore-Core'
+	#category : 'Gt4LlmCore-Core'
 }
 
 { #category : #exporting }

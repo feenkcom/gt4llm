@@ -6,7 +6,7 @@ Class {
 		'computedTargetObject',
 		'cachedTargetDataView'
 	],
-	#category : #'Gt4LlmCore-Data Views'
+	#category : 'Gt4LlmCore-Data Views'
 }
 
 { #category : #accessing }

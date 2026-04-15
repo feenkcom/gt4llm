@@ -10,7 +10,7 @@ Class {
 		'status',
 		'targetMethodReference'
 	],
-	#category : #'Gt4LlmCore-Magritte Objects'
+	#category : 'Gt4LlmCore-Magritte Objects'
 }
 
 { #category : #views }

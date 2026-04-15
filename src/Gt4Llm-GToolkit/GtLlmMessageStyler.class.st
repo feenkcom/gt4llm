@@ -689,7 +689,7 @@ GtLlmMessageStyler >> visitCodeBlock: aCodeNode [
 	(self text
 		from: aCodeNode beginWithLanguageStopPosition + 1
 		to: aCodeNode end startPosition - 1)
-		attributes: {BlTextHighlightAttribute paint: BrGlamorousColors neutralBackgroundColor}.
+		attributes: {BlTextUnderlayAttribute paint: BrGlamorousColors neutralBackgroundColor}.
 	aCodeNode isForSmalltalk
 		ifTrue: [ self styleCodeBlockWithSmalltalkSnippet: aCodeNode ].
 	aCodeNode language value = 'smalltalk-method'
