@@ -12,8 +12,8 @@ GtPharoMethodCoder >> addRenameMethodMenuForAst: anAst to: coderAddOns from: aCo
 			(coderAddOns
 				addContextMenuItem: 'Propose method renames' asRopedText
 				group: BrMenuItemGroupConfiguration llm
-				hover: (self highlightNodeBlock: node)
-				leave: self removeHighlightBlock
+				hover: (self highlightNodeBlock: node documentId: aDocumentId)
+				leave: self removeHighlightsBlock
 				action: [ :model :element | 
 					model llmChat
 						sendAction: (GtLlmActionCall action: 'Rename method')
