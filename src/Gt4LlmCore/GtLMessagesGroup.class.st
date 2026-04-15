@@ -160,6 +160,12 @@ GtLMessagesGroup >> messagesSelect: aBlock [
 	^ all
 ]
 
+{ #category : #summaries }
+GtLMessagesGroup >> messageSummarizers [
+	^ GtLToolCallsSummarizer currentSummarizers collect: [ :each |
+		each initializeWithMessages: self ]
+]
+
 { #category : #enumerating }
 GtLMessagesGroup >> messagesWithAndAfter: aMessage [
 	| found |
@@ -167,6 +173,11 @@ GtLMessagesGroup >> messagesWithAndAfter: aMessage [
 	^ self messagesSelect: [ :eachMessage | 
 		(eachMessage = aMessage) ifTrue: [ found := true ].
 		found ].
+]
+
+{ #category : #summaries }
+GtLMessagesGroup >> relevantMessageSummarizers [
+	^ self messageSummarizers select: #isRelevant
 ]
 
 { #category : #summaries }

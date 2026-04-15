@@ -12,6 +12,25 @@ Class {
 }
 
 { #category : #views }
+GtLMethodRemovalResult >> asDiffElement [
+	| newSource oldSource |
+	oldSource := self removedMethod ifNil: [ '' ] ifNotNil: [ :each | each sourceCode ].
+	newSource := ''.
+	^ GtDiffElementWithLabelStencil new
+		fromLabelText: 'Old from '
+				, (self removedMethod
+						ifNotNil: [ :m | String space , m methodReference methodClassName ]);
+		toLabelText: 'New in '
+				, (self removedMethod
+						ifNotNil: [ :m | String space , m methodReference methodClassName ]);
+		change: (GtDiffBuilder
+				computeDifferencesFrom: oldSource
+				to: newSource
+				using: GtSmaCCDiffSplitter forPharo);
+		asElement
+]
+
+{ #category : #views }
 GtLMethodRemovalResult >> gtDetailsFor: aView [
 	<gtView>
 	^ aView columnedList
@@ -24,6 +43,15 @@ GtLMethodRemovalResult >> gtDetailsFor: aView [
 		column: 'Property' text: [ :assoc | assoc key ];
 		column: 'Value' text: [ :assoc | assoc value ];
 		send: [ :assoc | assoc value ]
+]
+
+{ #category : #views }
+GtLMethodRemovalResult >> gtDiffFor: aView [
+	<gtView>
+	^ aView explicit
+		title: 'Diff';
+		priority: 5;
+		stencil: [ self asDiffElement ]
 ]
 
 { #category : #'llm views' }
