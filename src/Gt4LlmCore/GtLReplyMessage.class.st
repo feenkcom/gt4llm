@@ -259,7 +259,7 @@ GtLReplyMessage >> gtJsonFor: aView [
 { #category : #'gt - extensions' }
 GtLReplyMessage >> gtToolViewMessagesFor: aView [
 	<gtView>
-	<gtLlmView>
+
 	self executionMessages ifEmpty: [ ^ aView empty ].
 
 	^ aView columnedList
