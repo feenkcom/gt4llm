@@ -28,19 +28,18 @@ GtLForwardToMagritteViewExamples >> forwardToMagritteViewWithBothDataKeys [
 	^ dataView
 ]
 
-{ #category : #examples }
+{ #category : #'examples - serialization' }
 GtLForwardToMagritteViewExamples >> forwardToMagritteViewWithBothDataKeys_serialization [
 	<gtExample>
 	"Test serialization when both inner view and forward view have data keys.
 	Note: Only the forward view's dataKey wraps the data since the Magritte view's dataKey is set on the inner JSON view."
-	| dataView dataBlock actualData expectedData |
+	| dataView dataBlock expectedData |
 	dataView := self forwardToMagritteViewWithBothDataKeys.
 	dataBlock := dataView serializeToLlmPrimiteData.
 	
 	self assert: dataBlock dataBlocks size equals: 1.
 	self assert: dataBlock compositeJsonDataBlock containedJsonDataBlocksCount equals: 1.
 	
-	actualData := dataBlock compositeJsonDataBlock llmJsonData.
 	expectedData := Dictionary new
 		at: #outerKey put: (Dictionary new
 			at: 'itemData' put: (NeoJSONObject new
@@ -49,7 +48,7 @@ GtLForwardToMagritteViewExamples >> forwardToMagritteViewWithBothDataKeys_serial
 				yourself);
 			yourself);
 		yourself.
-	self assert: actualData equals: expectedData.
+	self assertDataBlock: dataBlock hasLlmJsonData: expectedData.
 	
 	^ dataBlock
 ]
@@ -73,26 +72,25 @@ GtLForwardToMagritteViewExamples >> forwardToMagritteViewWithDataKey [
 	^ dataView
 ]
 
-{ #category : #examples }
+{ #category : #'examples - serialization' }
 GtLForwardToMagritteViewExamples >> forwardToMagritteViewWithDataKey_serialization [
 	<gtExample>
 	"Test serialization when the inner Magritte view has a data key.
 	Note: The Magritte view's dataKey does NOT wrap the data - the inner JSON view gets the dataKey."
-	| dataView dataBlock actualData expectedData |
+	| dataView dataBlock expectedData |
 	dataView := self forwardToMagritteViewWithDataKey.
 	dataBlock := dataView serializeToLlmPrimiteData.
 	
 	self assert: dataBlock dataBlocks size equals: 1.
 	self assert: dataBlock compositeJsonDataBlock containedJsonDataBlocksCount equals: 1.
 	
-	actualData := dataBlock compositeJsonDataBlock llmJsonData.
 	expectedData := Dictionary new 
 		at: 'itemData' put: (NeoJSONObject new
 			at: #name put: 'Example Item';
 			at: #amount put: 42;
 			yourself);
 		yourself.
-	self assert: actualData equals: expectedData.
+	self assertDataBlock: dataBlock hasLlmJsonData: expectedData.
 	
 	^ dataBlock
 ]
@@ -118,25 +116,24 @@ GtLForwardToMagritteViewExamples >> forwardToMagritteViewWithForwardDataKey [
 	^ dataView
 ]
 
-{ #category : #examples }
+{ #category : #'examples - serialization' }
 GtLForwardToMagritteViewExamples >> forwardToMagritteViewWithForwardDataKey_serialization [
 	<gtExample>
 	"Test serialization when the forward view has its own data key."
-	| dataView dataBlock actualData expectedData |
+	| dataView dataBlock expectedData |
 	dataView := self forwardToMagritteViewWithForwardDataKey.
 	dataBlock := dataView serializeToLlmPrimiteData.
 	
 	self assert: dataBlock dataBlocks size equals: 1.
 	self assert: dataBlock compositeJsonDataBlock containedJsonDataBlocksCount equals: 1.
 	
-	actualData := dataBlock compositeJsonDataBlock llmJsonData.
 	expectedData := Dictionary new
 		at: #forwardedMagritte put: (Dictionary new
 			at: #name put: 'Example Item';
 			at: #amount put: 42;
 			yourself);
 		yourself.
-	self assert: actualData equals: expectedData.
+	self assertDataBlock: dataBlock hasLlmJsonData: expectedData.
 	
 	^ dataBlock
 ]
@@ -159,22 +156,21 @@ GtLForwardToMagritteViewExamples >> forwardToMagritteViewWithoutDataKey [
 	^ dataView
 ]
 
-{ #category : #examples }
+{ #category : #'examples - serialization' }
 GtLForwardToMagritteViewExamples >> forwardToMagritteViewWithoutDataKey_serialization [
 	<gtExample>
-	| dataView dataBlock actualData expectedData |
+	| dataView dataBlock expectedData |
 	dataView := self forwardToMagritteViewWithoutDataKey.
 	dataBlock := dataView serializeToLlmPrimiteData.
 	
 	self assert: dataBlock dataBlocks size equals: 1.
 	self assert: dataBlock compositeJsonDataBlock containedJsonDataBlocksCount equals: 1.
 	
-	actualData := dataBlock compositeJsonDataBlock llmJsonData.
 	expectedData := Dictionary new
 		at: #name put: 'Example Item';
 		at: #amount put: 42;
 		yourself.
-	self assert: actualData equals: expectedData.
+	self assertDataBlock: dataBlock hasLlmJsonData: expectedData.
 	
 	^ dataBlock
 ]

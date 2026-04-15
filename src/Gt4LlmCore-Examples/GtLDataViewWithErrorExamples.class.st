@@ -29,7 +29,7 @@ GtLDataViewWithErrorExamples >> assertErrorData: anErrorData withClass: anErrorC
 		assert: ((errorDetails at: 'stackTrace') includesSubstring:anErrorClassName)
 ]
 
-{ #category : #assertions }
+{ #category : #private }
 GtLDataViewWithErrorExamples >> assertErrorMessageBlock: dataBlock at: aDataKey errorWithClass: anErrorClassName message: anErrorMessage reason: anErrorReason [
 	<gtExample>
 	| actualData exceptionData |
@@ -37,7 +37,7 @@ GtLDataViewWithErrorExamples >> assertErrorMessageBlock: dataBlock at: aDataKey 
 	self assert: dataBlock dataBlocks size equals: 1.
 	self assert: dataBlock containedJsonDataBlocksCount equals: 2.
 
-	actualData := dataBlock compositeJsonDataBlock llmJsonData.
+	actualData := dataBlock llmJsonData.
 	self assert: (actualData includesKey: aDataKey).
 	exceptionData := actualData at: aDataKey.
 	
@@ -49,7 +49,7 @@ GtLDataViewWithErrorExamples >> assertErrorMessageBlock: dataBlock at: aDataKey 
 		reason: anErrorReason.
 ]
 
-{ #category : #assertions }
+{ #category : #private }
 GtLDataViewWithErrorExamples >> assertErrorMessageBlock: dataBlock errorWithClass: anErrorClassName message: anErrorMessage reason: anErrorReason [
 	<gtExample>
 	|  actualData |
@@ -57,7 +57,7 @@ GtLDataViewWithErrorExamples >> assertErrorMessageBlock: dataBlock errorWithClas
 	self assert: dataBlock dataBlocks size equals: 1.
 	self assert: dataBlock containedJsonDataBlocksCount equals: 2.
 
-	actualData := dataBlock compositeJsonDataBlock llmJsonData.
+	actualData := dataBlock llmJsonData.
 	self assert: (actualData includesKey: 'dataViewError').
 	self 
 		assertErrorData: (actualData at: 'dataViewError') 
@@ -94,7 +94,7 @@ GtLDataViewWithErrorExamples >> dataViewWithDataKey_serialization [
 	self assert: dataBlock dataBlocks size equals: 1.
 	self assert: dataBlock containedJsonDataBlocksCount equals: 2.
 
-	actualData := dataBlock compositeJsonDataBlock llmJsonData.
+	actualData := dataBlock llmJsonData.
 	self assert: (actualData includesKey: 'currentError').
 	self 
 		assertErrorData: (actualData at: 'currentError') 
@@ -132,7 +132,7 @@ GtLDataViewWithErrorExamples >> dataViewWithoutExplicitDataKey_serialization [
 	self assert: dataBlock dataBlocks size equals: 1.
 	self assert: dataBlock containedJsonDataBlocksCount equals: 2.
 
-	actualData := dataBlock compositeJsonDataBlock llmJsonData.
+	actualData := dataBlock llmJsonData.
 	self assert: (actualData includesKey: 'dataViewError').
 	self 
 		assertErrorData: (actualData at: 'dataViewError') 
@@ -163,7 +163,7 @@ GtLDataViewWithErrorExamples >> onCollectObjectViewsWithNoIdsWithErrorInViewCrea
 	self assert: dataBlock dataBlocks size equals: 1.
 	self assert: dataBlock containedJsonDataBlocksCount equals: 8.
 	
-	jsonData := dataBlock compositeJsonDataBlock llmJsonData.
+	jsonData := dataBlock llmJsonData.
 	self 
 		assert: (jsonData keys asSet) 
 		equals: #('dataViewError' 'dataViewError_1' 'dataViewError_2' 'dataViewError_3') asSet.
