@@ -3,7 +3,7 @@ Examples for tool call summarizers.
 "
 Class {
 	#name : #GtLToolCallsSummarizerExamples,
-	#superclass : #Object,
+	#superclass : #GtLToolCallsSummarizerExamplesBase,
 	#category : 'Gt4LlmCore-Examples-Summarizers'
 }
 
@@ -34,7 +34,7 @@ GtLToolCallsSummarizerExamples >> messagesGroupWithToolAndExampleSummaries [
 		instVarNamed: 'exampleWithResult' put: exampleWithResult;
 		objectId: nil.
 
-	wrappedSingle := GtLWrappedModel new
+	wrappedSingle := GtLWrappedObjectModel new
 		name: 'example';
 		model: singleStatus;
 		yourself.
@@ -54,7 +54,7 @@ GtLToolCallsSummarizerExamples >> messagesGroupWithToolAndExampleSummaries [
 		output: wrappedSingle;
 		yourself).
 
-	self assert: group relevantToolCallsSummarizers size equals: 2.
-	self assert: (group toolCallsSummarizers allSatisfy: [ :each | each class inheritsFrom: GtLToolCallsSummarizer ]).
+	self assert: group relevantMessageSummarizers size equals: 2.
+	self assert: (group messageSummarizers allSatisfy: [ :each | each class inheritsFrom: GtLToolCallsSummarizer ]).
 	^ group
 ]

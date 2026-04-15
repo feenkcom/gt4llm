@@ -21,7 +21,7 @@ GtLToolCallsByTypeSummarizer >> gtGroupedToolsFor: aView [
 	<gtLlmView>
 	^ aView columnedList
 		title: 'Grouped tools';
-		priority: 10;
+		priority: 21;
 		items: [ self groupedToolCalls associations ];
 		column: 'Tool' text: [ :each | each key name ];
 		column: 'Count' text: [ :each | each value size ] width: 100;
