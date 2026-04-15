@@ -118,8 +118,7 @@ GtLExampleWithResultExamples >> exampleWithResultForFailingExample [
 	self assert: compositeView dataViews size equals: 3.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	jsonData := dataBlock compositeJsonData.
 	self assertExampleData: jsonData forMethod: method status: 'failure'.
@@ -157,8 +156,7 @@ GtLExampleWithResultExamples >> exampleWithResultForSuccessfulExample [
 	self assert: compositeView dataViews size equals: 3.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	jsonData := dataBlock compositeJsonData.
 	self assertExampleData: jsonData forMethod: method status: 'success'.
@@ -210,8 +208,7 @@ GtLExampleWithResultExamples >> exampleWithResultForSuccessfulExampleWithDataJso
 	self assert: compositeView dataViews size equals: 3.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	jsonData := dataBlock compositeJsonData.
 	self assertExampleData: jsonData forMethod: method status: 'success'.

@@ -53,9 +53,7 @@ GtLClassDescriptionExamples >> classDescriptionSerialization [
 	self assert: compositeView dataViews size equals: 1.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock isNotNil.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	expectedJson := {
 		#currentClassName -> 'SampleClass'.

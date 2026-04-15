@@ -14,9 +14,7 @@ GtLSearchFilterDomainObjectExamples >> searchFilterDomainObjectDataViewSerializa
 	self assert: compositeView dataViews size equals: 1.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock isNotNil.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	jsonData := dataBlock compositeJsonData.
 	self assert: (jsonData at: #query) equals: 'GtLSearchFilterDomainObjectExamples gtMethodsInClass'.
@@ -80,9 +78,7 @@ GtLSearchFilterDomainObjectExamples >> searchFilterDomainObjectWithMayHaveMoreDa
 	self assert: compositeView dataViews size equals: 1.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock isNotNil.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	jsonData := dataBlock compositeJsonData.
 	self assert: (jsonData at: #query) equals: 'Object gtMethodsInClass'.

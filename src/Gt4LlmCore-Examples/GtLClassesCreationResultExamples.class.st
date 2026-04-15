@@ -39,9 +39,7 @@ GtLClassesCreationResultExamples >> creationResultSerializationWithMixedResults 
 	self assert: compositeView dataViews size equals: 1.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock isNotNil.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	jsonData := dataBlock compositeJsonData.
 	self assert: (jsonData includesKey: #classes).
@@ -80,9 +78,7 @@ GtLClassesCreationResultExamples >> creationResultSerializationWithMultipleClass
 	self assert: compositeView dataViews size equals: 1.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock isNotNil.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	firstClassJson := NeoJSONObject new
 		at: #currentClassName put: 'SampleCreatedClass';
@@ -123,9 +119,7 @@ GtLClassesCreationResultExamples >> creationResultSerializationWithSingleClass [
 	self assert: compositeView dataViews size equals: 1.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock isNotNil.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	expectedClassJson := NeoJSONObject new
 		at: #currentClassName put: 'SampleCreatedClass';
@@ -225,9 +219,7 @@ GtLClassesCreationResultExamples >> emptyCreationResultSerialization [
 	self assert: compositeView dataViews size equals: 1.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock isNotNil.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	expectedJson := {
 		#classes -> NeoJSONArray new

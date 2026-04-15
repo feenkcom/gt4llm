@@ -50,9 +50,7 @@ GtLMissingRequiredPropertiesDomainObjectExamples >> missingRequiredPropertiesDat
 	self assert: compositeView dataViews size equals: 1.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock isNotNil.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	expectedJson := {
 		#errorMessage -> 'Missing required properties'.
@@ -111,8 +109,7 @@ GtLMissingRequiredPropertiesDomainObjectExamples >> missingRequiredPropertiesWit
 	self assert: compositeView dataViews size equals: 1.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	expectedJson := {
 		#errorMessage -> 'No properties missing'.

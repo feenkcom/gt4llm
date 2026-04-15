@@ -74,9 +74,7 @@ GtLLepiterSnippetDomainObjectExamples >> snippetDomainObjectDataViewSerializatio
 	self assert: compositeView dataViews size equals: 1.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock isNotNil.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	expected := Dictionary new
 		at: #status put: 'created';
@@ -97,9 +95,7 @@ GtLLepiterSnippetDomainObjectExamples >> snippetEditDomainObjectDataViewSerializ
 	self assert: compositeView dataViews size equals: 1.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock isNotNil.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	expected := Dictionary new
 		at: #status put: 'updated';
@@ -121,9 +117,7 @@ GtLLepiterSnippetDomainObjectExamples >> snippetsDomainObjectDataViewSerializati
 	self assert: compositeView dataViews size equals: 1.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock isNotNil.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	expected := Dictionary new
 		at: #snippets put: (NeoJSONArray withAll: {

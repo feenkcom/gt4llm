@@ -52,7 +52,7 @@ GtLTestCasesWithResultStatusesDomainObjectExamples >> createTestStatusFor: aComp
 		testCaseWithResult: testResult
 ]
 
-{ #category : #'examples - data views' }
+{ #category : #examples }
 GtLTestCasesWithResultStatusesDomainObjectExamples >> domainObjectDataViews [
 	<gtExample>
 	<return: #GtLTestCasesWithResultStatuses>
@@ -64,8 +64,7 @@ GtLTestCasesWithResultStatusesDomainObjectExamples >> domainObjectDataViews [
 	self assert: compositeView dataViews size equals: 1.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	jsonData := dataBlock compositeJsonData.
 	self assert: (jsonData at: #runCount) equals: 3.

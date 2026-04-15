@@ -86,8 +86,7 @@ GtLObjectStorageValueResultExamples >> objectStorageValueResultForCollection [
 	self assert: compositeView dataViews size equals: 2.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	jsonData := dataBlock compositeJsonData.
 	self assertObjectStorageValueResultJsonDataKeys: jsonData.
@@ -186,8 +185,7 @@ GtLObjectStorageValueResultExamples >> objectStorageValueResultForException [
 	self assert: compositeView dataViews size equals: 2.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	jsonData := dataBlock compositeJsonData.
 	self assertObjectStorageValueResultJsonDataKeys: jsonData.
@@ -228,8 +226,7 @@ GtLObjectStorageValueResultExamples >> objectStorageValueResultForInteger [
 	self assert: compositeView dataViews size equals: 2.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	jsonData := dataBlock compositeJsonData.
 	self assert: (jsonData at: #objectId) equals: 'test-id-123'.
@@ -284,8 +281,7 @@ GtLObjectStorageValueResultExamples >> objectStorageValueResultForIntegerFullSer
 	self assert: compositeView dataViews size equals: 2.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	jsonData := dataBlock compositeJsonData.
 	
@@ -333,8 +329,7 @@ GtLObjectStorageValueResultExamples >> objectStorageValueResultForObjectStorageV
 	self assert: compositeView dataViews size equals: 2.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	jsonData := dataBlock compositeJsonData.
 	self assertObjectStorageValueResultJsonDataKeys: jsonData.
@@ -371,8 +366,7 @@ GtLObjectStorageValueResultExamples >> objectStorageValueResultForString [
 	self assert: compositeView dataViews size equals: 2.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	jsonData := dataBlock compositeJsonData.
 	self assertObjectStorageValueResultJsonDataKeys: jsonData.
@@ -408,8 +402,7 @@ GtLObjectStorageValueResultExamples >> objectStorageValueResultForTestObject [
 	self assert: compositeView dataViews size equals: 2.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	jsonData := dataBlock compositeJsonData.
 	
