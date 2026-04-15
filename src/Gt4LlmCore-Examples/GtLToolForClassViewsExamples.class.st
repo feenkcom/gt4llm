@@ -4,7 +4,7 @@ Class {
 	#category : 'Gt4LlmCore-Examples-Tools'
 }
 
-{ #category : #examples }
+{ #category : #'examples - data views' }
 GtLToolForClassViewsExamples >> classViewsDataViewSerialization [
 	<gtExample>
 	<return: #GtLPrimitiveMessageDataBlock>
@@ -12,14 +12,15 @@ GtLToolForClassViewsExamples >> classViewsDataViewSerialization [
 	call := self classViewsForExistingClass.
 	compositeView := call result targetObject llmDataViewsFor: GtLDataView new.
 	self assert: compositeView dataViews size equals: 1.
+	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock isNotNil.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
-	jsonData := dataBlock compositeJsonData.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
+	
+	jsonData := dataBlock llmJsonData.
 	self assert: (jsonData at: 'className') equals: 'GtABAddressBook'.
 	self assert: (jsonData at: 'methods') isNotEmpty.
 	self assert: ((jsonData at: 'methods') anySatisfy: [ :m | m includesSubstring: 'gtViewContactsListOn:' ]).
+	
 	^ dataBlock
 ]
 

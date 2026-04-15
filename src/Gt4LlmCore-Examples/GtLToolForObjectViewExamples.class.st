@@ -29,7 +29,7 @@ GtLToolForObjectViewExamples >> viewContentForExistingObjectAndView [
 	compositeView := targetObject llmDataViewsFor: GtLDataView new.
 	self assert: compositeView dataViews size equals: 2.
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	jsonData := dataBlock compositeJsonData.
+	jsonData := dataBlock llmJsonData.
 	self assert: (jsonData at: #viewMethodClass) equals: String name.
 	self assert: (jsonData at: #viewMethodSourceCode) equals: (String >> #gtStringFor:) sourceCode.
 	self assert: (jsonData at: #viewTitle) equals: 'String'.
@@ -156,7 +156,7 @@ GtLToolForObjectViewExamples >> viewContentForViewWithExceptionAtCreation [
 	"Test data view serialization"
 	compositeView := targetObject llmDataViewsFor: GtLDataView new.
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	jsonData := dataBlock compositeJsonData.
+	jsonData := dataBlock llmJsonData.
 	self assert: (jsonData at: #viewMethodClass) equals: GtInspectorSampleWithExceptionsInExtensions name.
 	self assert: (jsonData at: #viewMethodSourceCode) equals: (GtInspectorSampleWithExceptionsInExtensions >> #gtViewWithExceptionAtCreationFor:) sourceCode.
 	^ call
@@ -186,7 +186,7 @@ GtLToolForObjectViewExamples >> viewContentForViewWithExceptionInStencil [
 	"Test data view serialization"
 	compositeView := targetObject llmDataViewsFor: GtLDataView new.
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	jsonData := dataBlock compositeJsonData.
+	jsonData := dataBlock llmJsonData.
 	self assert: (jsonData at: #viewMethodClass) equals: GtInspectorSampleWithExceptionsInExtensions name.
 	self assert: (jsonData at: #viewMethodSourceCode) equals: (GtInspectorSampleWithExceptionsInExtensions >> #gtViewWithExceptionInStencilFor:) sourceCode.
 	^ call
