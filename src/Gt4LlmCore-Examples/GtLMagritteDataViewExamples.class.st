@@ -51,18 +51,17 @@ GtLMagritteDataViewExamples >> magritteDataViewWithDataKey [
 { #category : #'examples - serialization' }
 GtLMagritteDataViewExamples >> magritteDataViewWithDataKey_serialization [
 	<gtExample>
-	| aDataView aDataBlock actualData expectedData |
+	| aDataView aDataBlock expectedData |
 	aDataView := self magritteDataViewWithDataKey.
 	aDataBlock := aDataView serializeToLlmPrimiteData.
 
 	self assert: aDataBlock dataBlocks size equals: 1.
 	self assert: aDataBlock compositeJsonDataBlock containedJsonDataBlocksCount equals: 1.
 
-	actualData := aDataBlock compositeJsonDataBlock llmJsonData.
 	expectedData := Dictionary new
 		at: #mathReasoning put: self expectedMathReasoningJsonData;
 		yourself.
-	self assert: actualData equals: expectedData.
+	self assertDataBlock: aDataBlock hasLlmJsonData: expectedData.
 
 	^ aDataBlock
 ]
@@ -87,16 +86,15 @@ GtLMagritteDataViewExamples >> magritteDataViewWithoutDataKey [
 { #category : #'examples - serialization' }
 GtLMagritteDataViewExamples >> magritteDataViewWithoutDataKey_serialization [
 	<gtExample>
-	| aDataView aDataBlock actualData expectedData |
+	| aDataView aDataBlock expectedData |
 	aDataView := self magritteDataViewWithoutDataKey.
 	aDataBlock := aDataView serializeToLlmPrimiteData.
 
 	self assert: aDataBlock dataBlocks size equals: 1.
 	self assert: aDataBlock compositeJsonDataBlock containedJsonDataBlocksCount equals: 1.
 
-	actualData := aDataBlock compositeJsonDataBlock llmJsonData.
 	expectedData := self expectedMathReasoningJsonData asDictionary.
-	self assert: actualData equals: expectedData.
+	self assertDataBlock: aDataBlock hasLlmJsonData: expectedData.
 
 	^ aDataBlock
 ]

@@ -25,11 +25,11 @@ GtLForwardCollectionToJsonViewExamples >> forwardToJsonViewWithInnerDataKeys [
 	^ dataView
 ]
 
-{ #category : #'examples - with inner data keys' }
+{ #category : #'examples - serialization' }
 GtLForwardCollectionToJsonViewExamples >> forwardToJsonViewWithInnerDataKeys_serialization [
 	<gtExample>
 	"When forwarding to JSON views with their own data keys, those data keys are preserved."
-	| dataView dataBlock actualData expectedData |
+	| dataView dataBlock expectedData |
 	dataView := self forwardToJsonViewWithInnerDataKeys.
 	
 	dataBlock := dataView serializeToLlmPrimiteData.
@@ -37,7 +37,6 @@ GtLForwardCollectionToJsonViewExamples >> forwardToJsonViewWithInnerDataKeys_ser
 	self assert: dataBlock dataBlocks size equals: 1.
 	self assert: dataBlock compositeJsonDataBlock containedJsonDataBlocksCount equals: 3.
 	
-	actualData := dataBlock compositeJsonDataBlock llmJsonData.
 	expectedData := Dictionary new
 		at: #data put: {
 			Dictionary new
@@ -59,7 +58,7 @@ GtLForwardCollectionToJsonViewExamples >> forwardToJsonViewWithInnerDataKeys_ser
 					yourself);
 				yourself};
 		yourself.
-	self assert: actualData equals: expectedData.
+	self assertDataBlock: dataBlock hasLlmJsonData: expectedData.
 	
 	^ dataBlock
 ]
@@ -85,12 +84,12 @@ GtLForwardCollectionToJsonViewExamples >> forwardToJsonViewWithMixedDataKeys [
 	^ dataView
 ]
 
-{ #category : #'examples - with mixed data keys' }
+{ #category : #'examples - serialization' }
 GtLForwardCollectionToJsonViewExamples >> forwardToJsonViewWithMixedDataKeys_serialization [
 	<gtExample>
 	"When forwarding to JSON views with mixed data keys, each item serializes according to its own data key.
 	Items with data keys get wrapped, items without data keys are serialized directly."
-	| dataView dataBlock actualData expectedData |
+	| dataView dataBlock expectedData |
 	dataView := self forwardToJsonViewWithMixedDataKeys.
 	
 	dataBlock := dataView serializeToLlmPrimiteData.
@@ -98,7 +97,6 @@ GtLForwardCollectionToJsonViewExamples >> forwardToJsonViewWithMixedDataKeys_ser
 	self assert: dataBlock dataBlocks size equals: 1.
 	self assert: dataBlock compositeJsonDataBlock containedJsonDataBlocksCount equals: 3.
 	
-	actualData := dataBlock compositeJsonDataBlock llmJsonData.
 	expectedData := Dictionary new
 		at: #data put: {
 			"First item - has data key #jsonContent"
@@ -121,7 +119,7 @@ GtLForwardCollectionToJsonViewExamples >> forwardToJsonViewWithMixedDataKeys_ser
 					yourself);
 				yourself};
 		yourself.
-	self assert: actualData equals: expectedData.
+	self assertDataBlock: dataBlock hasLlmJsonData: expectedData.
 	
 	^ dataBlock
 ]
@@ -146,17 +144,16 @@ GtLForwardCollectionToJsonViewExamples >> forwardToJsonViewWithoutDataKeys [
 	^ dataView targetDataView
 ]
 
-{ #category : #examples }
+{ #category : #'examples - serialization' }
 GtLForwardCollectionToJsonViewExamples >> forwardToJsonViewWithoutDataKeys_serialization [
 	<gtExample>
-	| forwardDataView dataBlock actualData expectedData |
+	| forwardDataView dataBlock expectedData |
 	forwardDataView := self forwardToJsonViewWithoutDataKeys.
 	dataBlock := forwardDataView serializeToLlmPrimiteData.
 	
 	self assert: dataBlock dataBlocks size equals: 1.
 	self assert: dataBlock compositeJsonDataBlock containedJsonDataBlocksCount equals: 3.
 	
-	actualData := dataBlock compositeJsonDataBlock llmJsonData.
 	expectedData := Dictionary new
 		at: #data put: {
 			NeoJSONObject new
@@ -172,7 +169,7 @@ GtLForwardCollectionToJsonViewExamples >> forwardToJsonViewWithoutDataKeys_seria
 				at: #value put: 30;
 				yourself};
 		yourself.
-	self assert: actualData equals: expectedData.
+	self assertDataBlock: dataBlock hasLlmJsonData: expectedData.
 	
 	^ dataBlock
 ]
