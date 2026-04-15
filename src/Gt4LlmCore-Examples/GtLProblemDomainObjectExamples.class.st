@@ -45,7 +45,7 @@ GtLProblemDomainObjectExamples >> emptyProblemDomainObject [
 GtLProblemDomainObjectExamples >> problemDataViewSerialization [
 	<gtExample>
 	<return: #Dictionary>
-	| domainObject compositeView dataBlock jsonData expectedJson |
+	| domainObject compositeView dataBlock expectedJson |
 	
 	domainObject := self basicProblemDomainObject.
 	compositeView := domainObject llmDataViewsFor: GtLDataView new.
@@ -56,11 +56,10 @@ GtLProblemDomainObjectExamples >> problemDataViewSerialization [
 	self assert: dataBlock dataBlocks size equals: 1.
 	self assert: dataBlock imageDataBlocks isEmpty.
 	
-	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
 		#errorMessage -> 'Something went wrong during operation'
 	} asDictionary.
-	self assert: jsonData equals: expectedJson.
+	self assertDataBlock: dataBlock hasLlmJsonData: expectedJson.
 	
 	^ dataBlock
 ]

@@ -77,7 +77,7 @@ GtLClassModificationResultExamples >> classModificationResultFromRealClass [
 GtLClassModificationResultExamples >> classModificationResultSerialization [
 	<gtExample>
 	<return: #GtLPrimitiveMessageDataBlock>
-	| result compositeView dataBlock jsonData expectedJson |
+	| result compositeView dataBlock expectedJson |
 	result := self classModificationResultCreation.
 	
 	compositeView := result llmDataViewsFor: GtLDataView new.
@@ -88,7 +88,6 @@ GtLClassModificationResultExamples >> classModificationResultSerialization [
 	self assert: dataBlock dataBlocks size equals: 1.
 	self assert: dataBlock imageDataBlocks isEmpty.
 	
-	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
 		#currentClassName -> 'MyExampleClass'.
 		#superclassName -> 'Exception'.
@@ -99,7 +98,7 @@ GtLClassModificationResultExamples >> classModificationResultSerialization [
 		#classVariableNames -> (NeoJSONArray withAll: #('SharedVar')).
 		#traitCompositionString -> '{}'
 	} asDictionary.
-	self assert: jsonData equals: expectedJson.
+	self assertDataBlock: dataBlock hasLlmJsonData: expectedJson.
 	
 	^ dataBlock
 ]
@@ -109,7 +108,7 @@ GtLClassModificationResultExamples >> classModificationResultSerializationWithou
 	<gtExample>
 	<return: #GtLPrimitiveMessageDataBlock>
 	"Verify serialization works when originalClass is nil"
-	| result compositeView dataBlock jsonData expectedJson |
+	| result compositeView dataBlock expectedJson |
 	result := self classModificationResultWithoutOriginal.
 	
 	compositeView := result llmDataViewsFor: GtLDataView new.
@@ -120,7 +119,6 @@ GtLClassModificationResultExamples >> classModificationResultSerializationWithou
 	self assert: dataBlock dataBlocks size equals: 1.
 	self assert: dataBlock imageDataBlocks isEmpty.
 	
-	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
 		#currentClassName -> 'MyExampleClass'.
 		#superclassName -> 'Exception'.
@@ -131,7 +129,7 @@ GtLClassModificationResultExamples >> classModificationResultSerializationWithou
 		#classVariableNames -> (NeoJSONArray withAll: #('SharedVar')).
 		#traitCompositionString -> '{}'
 	} asDictionary.
-	self assert: jsonData equals: expectedJson.
+	self assertDataBlock: dataBlock hasLlmJsonData: expectedJson.
 	
 	^ dataBlock
 ]

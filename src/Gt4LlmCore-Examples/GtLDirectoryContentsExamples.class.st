@@ -8,7 +8,7 @@ Class {
 GtLDirectoryContentsExamples >> directoryContentsWithFilesAndDirectories [
 	<gtExample>
 	<return: #GtLDirectoryContents>
-	| domainObject compositeView dataBlock jsonData expectedJson file1 file2 dir1 |
+	| domainObject compositeView dataBlock expectedJson file1 file2 dir1 |
 	
 	file1 := GtLFilePathReference new pathString: '/tmp/test/file1.txt'.
 	file2 := GtLFilePathReference new pathString: '/tmp/test/file2.txt'.
@@ -29,7 +29,6 @@ GtLDirectoryContentsExamples >> directoryContentsWithFilesAndDirectories [
 	self assert: dataBlock dataBlocks size equals: 1.
 	self assert: dataBlock imageDataBlocks isEmpty.
 	
-	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
 		#directoryPath -> '/tmp/test'.
 		#files -> (NeoJSONArray withAll: {
@@ -40,7 +39,7 @@ GtLDirectoryContentsExamples >> directoryContentsWithFilesAndDirectories [
 			NeoJSONObject new at: #pathString put: '/tmp/test/subdir'; yourself
 		})
 	} asDictionary.
-	self assert: jsonData equals: expectedJson.
+	self assertDataBlock: dataBlock hasLlmJsonData: expectedJson.
 	
 	^ domainObject
 ]

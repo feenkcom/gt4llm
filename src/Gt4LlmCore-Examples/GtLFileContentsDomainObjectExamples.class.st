@@ -35,7 +35,7 @@ GtLFileContentsDomainObjectExamples >> emptyFileContents [
 GtLFileContentsDomainObjectExamples >> fileContentsWithData [
 	<gtExample>
 	<return: #GtLFileContentsDomainObject>
-	| domainObject compositeView dataBlock jsonData expectedJson encodedContents |
+	| domainObject compositeView dataBlock expectedJson encodedContents |
 	
 	encodedContents := 'Hello World' asByteArray base64Encoded.
 	domainObject := GtLFileContentsDomainObject new
@@ -51,12 +51,11 @@ GtLFileContentsDomainObjectExamples >> fileContentsWithData [
 	self assert: dataBlock dataBlocks size equals: 1.
 	self assert: dataBlock imageDataBlocks isEmpty.
 	
-	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
 		#path -> '/tmp/test.txt'.
 		#contents -> encodedContents
 	} asDictionary.
-	self assert: jsonData equals: expectedJson.
+	self assertDataBlock: dataBlock hasLlmJsonData: expectedJson.
 	
 	^ domainObject
 ]

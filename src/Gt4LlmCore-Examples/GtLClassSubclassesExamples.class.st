@@ -11,7 +11,7 @@ Class {
 GtLClassSubclassesExamples >> classSubclassesDataViewSerialization [
 	<gtExample>
 	<return: #GtLPrimitiveMessageDataBlock>
-	| domainObject compositeView dataBlock jsonData expectedJson |
+	| domainObject compositeView dataBlock expectedJson |
 	domainObject := self classSubclassesDomainObject.
 	compositeView := domainObject llmDataViewsFor: GtLDataView new.
 	self assert: compositeView dataViews size equals: 1.
@@ -21,13 +21,12 @@ GtLClassSubclassesExamples >> classSubclassesDataViewSerialization [
 	self assert: dataBlock dataBlocks size equals: 1.
 	self assert: dataBlock imageDataBlocks isEmpty.
 	
-	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
 		#givenClassName -> 'SampleClass'.
 		#subclassNames -> (NeoJSONArray with: 'A' with: 'B').
 		#mayHaveMore -> true
 	} asDictionary.
-	self assert: jsonData equals: expectedJson.
+	self assertDataBlock: dataBlock hasLlmJsonData: expectedJson.
 	
 	^ dataBlock
 ]

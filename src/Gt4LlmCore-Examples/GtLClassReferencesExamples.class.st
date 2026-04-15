@@ -27,7 +27,7 @@ GtLClassReferencesExamples >> classReferencesCreation [
 GtLClassReferencesExamples >> classReferencesDataViewSerialization [
 	<gtExample>
 	<return: #GtLPrimitiveMessageDataBlock>
-	| domainObject compositeView dataBlock jsonData expectedJson |
+	| domainObject compositeView dataBlock expectedJson |
 	
 	domainObject := self classReferencesCreation.
 	compositeView := domainObject llmDataViewsFor: GtLDataView new.
@@ -38,7 +38,6 @@ GtLClassReferencesExamples >> classReferencesDataViewSerialization [
 	self assert: dataBlock dataBlocks size equals: 1.
 	self assert: dataBlock imageDataBlocks isEmpty.
 	
-	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
 		#givenClassName -> 'GtLMagritteToolForClassReferences'.
 		#references -> (NeoJSONArray with: (NeoJSONObject new
@@ -48,7 +47,7 @@ GtLClassReferencesExamples >> classReferencesDataViewSerialization [
 			yourself)).
 		#mayHaveMore -> true
 	} asDictionary.
-	self assert: jsonData equals: expectedJson.
+	self assertDataBlock: dataBlock hasLlmJsonData: expectedJson.
 	
 	^ dataBlock
 ]

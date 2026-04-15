@@ -42,11 +42,11 @@ GtLMethodsRemovalResultExamples >> methodsRemovalResultCreation [
 	^ result
 ]
 
-{ #category : #'examples - data view' }
+{ #category : #examples }
 GtLMethodsRemovalResultExamples >> methodsRemovalResultDataViewSerialization [
 	<gtExample>
 	<return: #GtLPrimitiveMessageDataBlock>
-	| domainObject compositeView dataBlock jsonData expected |
+	| domainObject compositeView dataBlock expected |
 	domainObject := self methodsRemovalResultCreation.
 	compositeView := domainObject llmDataViewsFor: GtLDataView new.
 	self assert: compositeView dataViews size equals: 1.
@@ -56,13 +56,12 @@ GtLMethodsRemovalResultExamples >> methodsRemovalResultDataViewSerialization [
 	self assert: dataBlock dataBlocks size equals: 1.
 	self assert: dataBlock imageDataBlocks isEmpty.
 	
-	jsonData := dataBlock compositeJsonData.
 	expected := Dictionary new
 		at: #methods put: (NeoJSONArray withAll: {
 			NeoJSONObject new at: #status put: 'removed'; yourself.
 			NeoJSONObject new at: #status put: 'removed'; yourself });
 		yourself.
-	self assert: jsonData equals: expected.
+	self assertDataBlock: dataBlock hasLlmJsonData: expected.
 	
 	^ dataBlock
 ]

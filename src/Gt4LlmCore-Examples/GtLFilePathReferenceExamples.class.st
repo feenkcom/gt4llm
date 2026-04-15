@@ -59,7 +59,7 @@ GtLFilePathReferenceExamples >> filePathReferenceForDirectory [
 GtLFilePathReferenceExamples >> filePathReferenceForFile [
 	<gtExample>
 	<return: #GtLFilePathReference>
-	| domainObject compositeView dataBlock jsonData expectedJson pathString |
+	| domainObject compositeView dataBlock expectedJson pathString |
 	
 	pathString := '/tmp/example.txt'.
 	domainObject := GtLFilePathReference new pathString: pathString.
@@ -72,11 +72,10 @@ GtLFilePathReferenceExamples >> filePathReferenceForFile [
 	self assert: dataBlock dataBlocks size equals: 1.
 	self assert: dataBlock imageDataBlocks isEmpty.
 	
-	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
 		#pathString -> pathString
 	} asDictionary.
-	self assert: jsonData equals: expectedJson.
+	self assertDataBlock: dataBlock hasLlmJsonData: expectedJson.
 	
 	^ domainObject
 ]

@@ -69,11 +69,11 @@ GtLClassesCreationResultExamples >> creationResultSerializationWithMixedResults 
 	^ dataBlock
 ]
 
-{ #category : #'examples - serialization' }
+{ #category : #examples }
 GtLClassesCreationResultExamples >> creationResultSerializationWithMultipleClasses [
 	<gtExample>
 	<return: #GtLPrimitiveMessageDataBlock>
-	| result compositeView dataBlock jsonData firstClassJson secondClassJson expectedJson |
+	| result compositeView dataBlock firstClassJson secondClassJson expectedJson |
 	result := self creationResultWithMultipleClasses.
 	
 	compositeView := result llmDataViewsFor: GtLDataView new.
@@ -83,8 +83,6 @@ GtLClassesCreationResultExamples >> creationResultSerializationWithMultipleClass
 	self assert: dataBlock isNotNil.
 	self assert: dataBlock dataBlocks size equals: 1.
 	self assert: dataBlock imageDataBlocks isEmpty.
-	
-	jsonData := dataBlock compositeJsonData.
 	
 	firstClassJson := NeoJSONObject new
 		at: #currentClassName put: 'SampleCreatedClass';
@@ -109,16 +107,16 @@ GtLClassesCreationResultExamples >> creationResultSerializationWithMultipleClass
 	expectedJson := {
 		#classes -> (NeoJSONArray with: firstClassJson with: secondClassJson)
 	} asDictionary.
-	self assert: jsonData equals: expectedJson.
+	self assertDataBlock: dataBlock hasLlmJsonData: expectedJson.
 	
 	^ dataBlock
 ]
 
-{ #category : #'examples - serialization' }
+{ #category : #examples }
 GtLClassesCreationResultExamples >> creationResultSerializationWithSingleClass [
 	<gtExample>
 	<return: #GtLPrimitiveMessageDataBlock>
-	| result compositeView dataBlock jsonData expectedClassJson expectedJson |
+	| result compositeView dataBlock expectedClassJson expectedJson |
 	result := self creationResultWithSingleClass.
 	
 	compositeView := result llmDataViewsFor: GtLDataView new.
@@ -128,8 +126,6 @@ GtLClassesCreationResultExamples >> creationResultSerializationWithSingleClass [
 	self assert: dataBlock isNotNil.
 	self assert: dataBlock dataBlocks size equals: 1.
 	self assert: dataBlock imageDataBlocks isEmpty.
-	
-	jsonData := dataBlock compositeJsonData.
 	
 	expectedClassJson := NeoJSONObject new
 		at: #currentClassName put: 'SampleCreatedClass';
@@ -144,7 +140,7 @@ GtLClassesCreationResultExamples >> creationResultSerializationWithSingleClass [
 	expectedJson := {
 		#classes -> (NeoJSONArray with: expectedClassJson)
 	} asDictionary.
-	self assert: jsonData equals: expectedJson.
+	self assertDataBlock: dataBlock hasLlmJsonData: expectedJson.
 	
 	^ dataBlock
 ]
@@ -218,11 +214,11 @@ GtLClassesCreationResultExamples >> emptyCreationResult [
 	^ result
 ]
 
-{ #category : #'examples - serialization' }
+{ #category : #examples }
 GtLClassesCreationResultExamples >> emptyCreationResultSerialization [
 	<gtExample>
 	<return: #GtLPrimitiveMessageDataBlock>
-	| result compositeView dataBlock jsonData expectedJson |
+	| result compositeView dataBlock expectedJson |
 	result := self emptyCreationResult.
 	
 	compositeView := result llmDataViewsFor: GtLDataView new.
@@ -233,11 +229,10 @@ GtLClassesCreationResultExamples >> emptyCreationResultSerialization [
 	self assert: dataBlock dataBlocks size equals: 1.
 	self assert: dataBlock imageDataBlocks isEmpty.
 	
-	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
 		#classes -> NeoJSONArray new
 	} asDictionary.
-	self assert: jsonData equals: expectedJson.
+	self assertDataBlock: dataBlock hasLlmJsonData: expectedJson.
 	
 	^ dataBlock
 ]

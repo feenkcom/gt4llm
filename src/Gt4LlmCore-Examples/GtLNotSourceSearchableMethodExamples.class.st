@@ -33,11 +33,11 @@ GtLNotSourceSearchableMethodExamples >> methodWithNotSearchableSourceObjectFromC
 	^ methodObject
 ]
 
-{ #category : #'examples - data view' }
+{ #category : #examples }
 GtLNotSourceSearchableMethodExamples >> methodWithNotSearchableSourceObjectFromCompiledMethodClassSideDataViewSerialization [
 	<gtExample>
 	<return: #GtLPrimitiveMessageDataBlock>
-	| domainObject compositeView dataBlock jsonData expected methodRefJson |
+	| domainObject compositeView dataBlock expected methodRefJson |
 	domainObject := self methodWithNotSearchableSourceObjectFromCompiledMethodClassSide.
 	compositeView := domainObject llmDataViewsFor: GtLDataView new.
 	self assert: compositeView dataViews size equals: 1.
@@ -47,7 +47,6 @@ GtLNotSourceSearchableMethodExamples >> methodWithNotSearchableSourceObjectFromC
 	self assert: dataBlock dataBlocks size equals: 1.
 	self assert: dataBlock imageDataBlocks isEmpty.
 	
-	jsonData := dataBlock compositeJsonData.
 	methodRefJson := NeoJSONObject new
 		at: #methodName put: 'fromCompiledMethod:';
 		at: #methodClassName put: 'GtLMethodReference';
@@ -57,7 +56,7 @@ GtLNotSourceSearchableMethodExamples >> methodWithNotSearchableSourceObjectFromC
 		at: #methodReference put: methodRefJson;
 		at: #sourceCode put: '<not searchable method>';
 		yourself.
-	self assert: jsonData equals: expected.
+	self assertDataBlock: dataBlock hasLlmJsonData: expected.
 	
 	^ dataBlock
 ]

@@ -21,11 +21,11 @@ GtLRemoteExampleReportDomainObjectExamples >> basicExamplesReport [
 	^ report
 ]
 
-{ #category : #'examples - report' }
+{ #category : #examples }
 GtLRemoteExampleReportDomainObjectExamples >> emptyExamplesReportDataViewSerialization [
 	"Verify data view serialization for empty report"
 	<gtExample>
-	| report compositeView dataBlock jsonData |
+	| report compositeView dataBlock |
 	report := self basicExamplesReport.
 	
 	compositeView := report llmDataViewsFor: GtLDataView new.
@@ -34,8 +34,7 @@ GtLRemoteExampleReportDomainObjectExamples >> emptyExamplesReportDataViewSeriali
 	dataBlock := compositeView serializeToLlmPrimiteData.
 	self assert: dataBlock isNotNil.
 	
-	jsonData := dataBlock llmJsonData.
-	self assert: jsonData equals: Dictionary new.
+	self assertDataBlock: dataBlock hasLlmJsonData: Dictionary new.
 	
 	^ dataBlock
 ]
@@ -54,11 +53,11 @@ GtLRemoteExampleReportDomainObjectExamples >> examplesReportWithErrors [
 	^ report
 ]
 
-{ #category : #'examples - report' }
+{ #category : #examples }
 GtLRemoteExampleReportDomainObjectExamples >> examplesReportWithErrorsDataViewSerialization [
 	"Verify data view serialization for report with errors"
 	<gtExample>
-	| report compositeView dataBlock jsonData expected |
+	| report compositeView dataBlock expected |
 	report := self examplesReportWithErrors.
 	
 	compositeView := report llmDataViewsFor: GtLDataView new.
@@ -67,11 +66,10 @@ GtLRemoteExampleReportDomainObjectExamples >> examplesReportWithErrorsDataViewSe
 	dataBlock := compositeView serializeToLlmPrimiteData.
 	self assert: dataBlock isNotNil.
 	
-	jsonData := dataBlock llmJsonData.
 	expected := Dictionary new
 		at: #errors put: #('Error 1' 'Error 2');
 		yourself.
-	self assert: jsonData equals: expected.
+	self assertDataBlock: dataBlock hasLlmJsonData: expected.
 	
 	^ dataBlock
 ]

@@ -26,7 +26,7 @@ GtLClassCommentChangeResultExamples >> basicClassCommentChangeResult [
 GtLClassCommentChangeResultExamples >> classCommentChangeDataViewSerialization [
 	<gtExample>
 	<return: #GtLPrimitiveMessageDataBlock>
-	| result compositeView dataBlock jsonData expectedJson |
+	| result compositeView dataBlock expectedJson |
 	
 	result := self basicClassCommentChangeResult.
 	compositeView := result llmDataViewsFor: GtLDataView new.
@@ -37,12 +37,11 @@ GtLClassCommentChangeResultExamples >> classCommentChangeDataViewSerialization [
 	self assert: dataBlock dataBlocks size equals: 1.
 	self assert: dataBlock imageDataBlocks isEmpty.
 	
-	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
 		#changedClassName -> #Object.
 		#status -> 'changed'
 	} asDictionary.
-	self assert: jsonData equals: expectedJson.
+	self assertDataBlock: dataBlock hasLlmJsonData: expectedJson.
 	
 	^ dataBlock
 ]
