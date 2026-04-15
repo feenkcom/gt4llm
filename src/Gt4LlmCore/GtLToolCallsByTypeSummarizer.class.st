@@ -18,7 +18,7 @@ GtLToolCallsByTypeSummarizer >> groupedToolCalls [
 { #category : #'gt-extensions' }
 GtLToolCallsByTypeSummarizer >> gtGroupedToolsFor: aView [
 	<gtView>
-	<gtLlmView>
+
 	^ aView columnedList
 		title: 'Grouped tools';
 		priority: 21;
