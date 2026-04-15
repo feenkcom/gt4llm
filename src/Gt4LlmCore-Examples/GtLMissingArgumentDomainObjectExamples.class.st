@@ -51,7 +51,7 @@ GtLMissingArgumentDomainObjectExamples >> emptyMissingArgumentDomainObject [
 GtLMissingArgumentDomainObjectExamples >> missingArgumentDataViewSerialization [
 	<gtExample>
 	<return: #Dictionary>
-	| domainObject compositeView dataBlock jsonData expectedJson |
+	| domainObject compositeView dataBlock expectedJson |
 	
 	domainObject := self basicMissingArgumentDomainObject.
 	compositeView := domainObject llmDataViewsFor: GtLDataView new.
@@ -62,14 +62,13 @@ GtLMissingArgumentDomainObjectExamples >> missingArgumentDataViewSerialization [
 	self assert: dataBlock dataBlocks size equals: 1.
 	self assert: dataBlock imageDataBlocks isEmpty.
 	
-	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
 		#missingArgument -> 'requiredParam'.
 		#errorMessage -> 'Missing required argument: requiredParam'
 	} asDictionary.
-	self assert: jsonData equals: expectedJson.
+	self assertDataBlock: dataBlock hasLlmJsonData: expectedJson.
 	
-	^ jsonData
+	^ dataBlock llmJsonData
 ]
 
 { #category : #examples }

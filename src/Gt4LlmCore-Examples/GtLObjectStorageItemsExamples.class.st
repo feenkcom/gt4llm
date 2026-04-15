@@ -41,7 +41,7 @@ GtLObjectStorageItemsExamples >> basicStorageItems [
 { #category : #examples }
 GtLObjectStorageItemsExamples >> storageItemDataViewSerialization [
 	<gtExample>
-	| item compositeView dataBlock jsonData expected |
+	| item compositeView dataBlock expected |
 	item := self basicStorageItem.
 	compositeView := item llmDataViewsFor: GtLDataView new.
 	self assert: compositeView dataViews size equals: 1.
@@ -51,13 +51,12 @@ GtLObjectStorageItemsExamples >> storageItemDataViewSerialization [
 	self assert: dataBlock dataBlocks size equals: 1.
 	self assert: dataBlock imageDataBlocks isEmpty.
 	
-	jsonData := dataBlock compositeJsonData.
 	expected := Dictionary new
 		at: #objectId put: 'abc123def456';
 		at: #objectValueString put: '42';
 		at: #reasonString put: 'test reason';
 		yourself.
-	self assert: jsonData equals: expected.
+	self assertDataBlock: dataBlock hasLlmJsonData: expected.
 	
 	^ dataBlock
 ]
@@ -65,7 +64,7 @@ GtLObjectStorageItemsExamples >> storageItemDataViewSerialization [
 { #category : #examples }
 GtLObjectStorageItemsExamples >> storageItemsDataViewSerialization [
 	<gtExample>
-	| items compositeView dataBlock jsonData expected |
+	| items compositeView dataBlock expected |
 	items := self basicStorageItems.
 	compositeView := items llmDataViewsFor: GtLDataView new.
 	self assert: compositeView dataViews size equals: 1.
@@ -75,7 +74,6 @@ GtLObjectStorageItemsExamples >> storageItemsDataViewSerialization [
 	self assert: dataBlock dataBlocks size equals: 1.
 	self assert: dataBlock imageDataBlocks isEmpty.
 	
-	jsonData := dataBlock compositeJsonData.
 	expected := Dictionary new
 		at: #items put: (NeoJSONArray with: (NeoJSONObject new
 			at: #objectId put: 'abc123def456';
@@ -83,7 +81,7 @@ GtLObjectStorageItemsExamples >> storageItemsDataViewSerialization [
 			at: #reasonString put: 'test reason';
 			yourself));
 		yourself.
-	self assert: jsonData equals: expected.
+	self assertDataBlock: dataBlock hasLlmJsonData: expected.
 	
 	^ dataBlock
 ]

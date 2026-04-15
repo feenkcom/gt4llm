@@ -40,7 +40,7 @@ GtLJSONSchemaValidationErrorDomainObjectExamples >> emptyValidationError [
 GtLJSONSchemaValidationErrorDomainObjectExamples >> validationErrorDataViewSerialization [
 	<gtExample>
 	<return: #Dictionary>
-	| domainObject compositeView dataBlock jsonData expectedJson |
+	| domainObject compositeView dataBlock expectedJson |
 	domainObject := self basicValidationError.
 	
 	compositeView := domainObject llmDataViewsFor: GtLDataView new.
@@ -51,14 +51,13 @@ GtLJSONSchemaValidationErrorDomainObjectExamples >> validationErrorDataViewSeria
 	self assert: dataBlock dataBlocks size equals: 1.
 	self assert: dataBlock imageDataBlocks isEmpty.
 	
-	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
 		#errorMessage -> 'Invalid type: expected string, got number'.
 		#path -> (NeoJSONArray withAll: #('root' 'items' '0' 'name'))
 	} asDictionary.
-	self assert: jsonData equals: expectedJson.
+	self assertDataBlock: dataBlock hasLlmJsonData: expectedJson.
 	
-	^ jsonData
+	^ dataBlock llmJsonData
 ]
 
 { #category : #examples }
@@ -81,7 +80,7 @@ GtLJSONSchemaValidationErrorDomainObjectExamples >> validationErrorWithEmptyPath
 GtLJSONSchemaValidationErrorDomainObjectExamples >> validationErrorWithEmptyPathSerialization [
 	<gtExample>
 	<return: #Dictionary>
-	| domainObject compositeView dataBlock jsonData expectedJson |
+	| domainObject compositeView dataBlock expectedJson |
 	domainObject := self validationErrorWithEmptyPath.
 	
 	compositeView := domainObject llmDataViewsFor: GtLDataView new.
@@ -91,12 +90,11 @@ GtLJSONSchemaValidationErrorDomainObjectExamples >> validationErrorWithEmptyPath
 	self assert: dataBlock dataBlocks size equals: 1.
 	self assert: dataBlock imageDataBlocks isEmpty.
 	
-	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
 		#errorMessage -> 'Root object is invalid'.
 		#path -> NeoJSONArray new
 	} asDictionary.
-	self assert: jsonData equals: expectedJson.
+	self assertDataBlock: dataBlock hasLlmJsonData: expectedJson.
 	
-	^ jsonData
+	^ dataBlock llmJsonData
 ]

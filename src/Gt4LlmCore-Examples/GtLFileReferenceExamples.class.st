@@ -4,8 +4,6 @@ I provide common example infrastructure for GtLFileReference subclass examples.
 Class {
 	#name : #GtLFileReferenceExamples,
 	#superclass : #GtLDomainObjectExamples,
-	#traits : 'TGtLDataViewAssertions',
-	#classTraits : 'TGtLDataViewAssertions classTrait',
 	#instVars : [
 		'tempDirectory'
 	],

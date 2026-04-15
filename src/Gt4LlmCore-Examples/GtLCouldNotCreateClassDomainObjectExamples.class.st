@@ -33,7 +33,7 @@ GtLCouldNotCreateClassDomainObjectExamples >> basicCouldNotCreateClassDomainObje
 GtLCouldNotCreateClassDomainObjectExamples >> couldNotCreateClassDataViewSerialization [
 	<gtExample>
 	<return: #GtLPrimitiveMessageDataBlock>
-	| domainObject compositeView dataBlock jsonData expectedJson |
+	| domainObject compositeView dataBlock expectedJson |
 	
 	domainObject := self basicCouldNotCreateClassDomainObject.
 	compositeView := domainObject llmDataViewsFor: GtLDataView new.
@@ -44,7 +44,6 @@ GtLCouldNotCreateClassDomainObjectExamples >> couldNotCreateClassDataViewSeriali
 	self assert: dataBlock dataBlocks size equals: 1.
 	self assert: dataBlock imageDataBlocks isEmpty.
 	
-	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
 		#targetClassName -> 'MyNewClass'.
 		#superclassName -> #Object.
@@ -54,7 +53,7 @@ GtLCouldNotCreateClassDomainObjectExamples >> couldNotCreateClassDataViewSeriali
 		#classVariableNames -> 'SharedVar'.
 		#messageText -> 'Class creation error: Superclass not found'
 	} asDictionary.
-	self assert: jsonData equals: expectedJson.
+	self assertDataBlock: dataBlock hasLlmJsonData: expectedJson.
 	
 	^ dataBlock
 ]

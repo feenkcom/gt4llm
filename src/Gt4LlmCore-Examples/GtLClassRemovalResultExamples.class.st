@@ -24,7 +24,7 @@ GtLClassRemovalResultExamples >> classRemovalResultCreation [
 GtLClassRemovalResultExamples >> classRemovalResultDataViewSerialization [
 	<gtExample>
 	<return: #GtLPrimitiveMessageDataBlock>
-	| result compositeView dataBlock jsonData expectedJson |
+	| result compositeView dataBlock expectedJson |
 	result := self classRemovalResultCreation.
 	compositeView := result llmDataViewsFor: GtLDataView new.
 	self assert: compositeView dataViews size equals: 1.
@@ -34,12 +34,11 @@ GtLClassRemovalResultExamples >> classRemovalResultDataViewSerialization [
 	self assert: dataBlock dataBlocks size equals: 1.
 	self assert: dataBlock imageDataBlocks isEmpty.
 	
-	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
 		#removedClassName -> 'MyTestClass'.
 		#status -> 'removed'
 	} asDictionary.
-	self assert: jsonData equals: expectedJson.
+	self assertDataBlock: dataBlock hasLlmJsonData: expectedJson.
 	
 	^ dataBlock
 ]

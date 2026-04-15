@@ -43,7 +43,7 @@ GtLMissingRequiredPropertiesDomainObjectExamples >> emptyMissingRequiredProperti
 GtLMissingRequiredPropertiesDomainObjectExamples >> missingRequiredPropertiesDataViewSerialization [
 	<gtExample>
 	<return: #Dictionary>
-	| domainObject compositeView dataBlock jsonData expectedJson |
+	| domainObject compositeView dataBlock expectedJson |
 	domainObject := self basicMissingRequiredProperties.
 	
 	compositeView := domainObject llmDataViewsFor: GtLDataView new.
@@ -54,15 +54,14 @@ GtLMissingRequiredPropertiesDomainObjectExamples >> missingRequiredPropertiesDat
 	self assert: dataBlock dataBlocks size equals: 1.
 	self assert: dataBlock imageDataBlocks isEmpty.
 	
-	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
 		#errorMessage -> 'Missing required properties'.
 		#missingPropertyNames -> (NeoJSONArray withAll: #('name' 'version' 'author')).
 		#path -> (NeoJSONArray withAll: #('root' 'config'))
 	} asDictionary.
-	self assert: jsonData equals: expectedJson.
+	self assertDataBlock: dataBlock hasLlmJsonData: expectedJson.
 	
-	^ jsonData
+	^ dataBlock llmJsonData
 ]
 
 { #category : #examples }
@@ -105,7 +104,7 @@ GtLMissingRequiredPropertiesDomainObjectExamples >> missingRequiredPropertiesWit
 GtLMissingRequiredPropertiesDomainObjectExamples >> missingRequiredPropertiesWithEmptyArraysSerialization [
 	<gtExample>
 	<return: #Dictionary>
-	| domainObject compositeView dataBlock jsonData expectedJson |
+	| domainObject compositeView dataBlock expectedJson |
 	domainObject := self missingRequiredPropertiesWithEmptyArrays.
 	
 	compositeView := domainObject llmDataViewsFor: GtLDataView new.
@@ -115,13 +114,12 @@ GtLMissingRequiredPropertiesDomainObjectExamples >> missingRequiredPropertiesWit
 	self assert: dataBlock dataBlocks size equals: 1.
 	self assert: dataBlock imageDataBlocks isEmpty.
 	
-	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
 		#errorMessage -> 'No properties missing'.
 		#missingPropertyNames -> NeoJSONArray new.
 		#path -> NeoJSONArray new
 	} asDictionary.
-	self assert: jsonData equals: expectedJson.
+	self assertDataBlock: dataBlock hasLlmJsonData: expectedJson.
 	
-	^ jsonData
+	^ dataBlock llmJsonData
 ]
