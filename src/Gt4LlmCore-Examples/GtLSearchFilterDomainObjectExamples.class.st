@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLSearchFilterDomainObjectExamples,
-	#superclass : #Object,
+	#superclass : #GtLDomainObjectExamples,
 	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 

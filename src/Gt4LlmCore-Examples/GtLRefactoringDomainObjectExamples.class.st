@@ -3,7 +3,7 @@ Examples for GtLRefactoringDomainObject subclasses.
 "
 Class {
 	#name : #GtLRefactoringDomainObjectExamples,
-	#superclass : #Object,
+	#superclass : #GtLDomainObjectExamples,
 	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 

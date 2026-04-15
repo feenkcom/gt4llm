@@ -3,7 +3,7 @@ Examples for GtLPlainString testing serialization and data views.
 "
 Class {
 	#name : #GtLStringDataExamples,
-	#superclass : #GtLObjectExamples,
+	#superclass : #GtLDomainObjectExamples,
 	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 

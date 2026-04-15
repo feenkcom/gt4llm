@@ -3,20 +3,9 @@ Examples for GtLObjectValueResult testing serialization and data views.
 "
 Class {
 	#name : #GtLObjectValueResultExamples,
-	#superclass : #GtLWrappedModelExamples,
+	#superclass : #GtLDomainObjectExamples,
 	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
-
-{ #category : #assertions }
-GtLObjectValueResultExamples >> assertDataBlockHasOnlyJsonData: dataBlock [
-	"Assert that the data block is valid and contains only JSON data (no images or secondary blocks)"
-	self assert: dataBlock isNotNil.
-	self assert: dataBlock class equals: GtLPrimitiveMessageDataBlock.
-	self assert: dataBlock imageDataBlocks isEmpty.
-	self assert: dataBlock secondaryDataBlocks isEmpty.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock dataBlocks first == dataBlock compositeJsonDataBlock
-]
 
 { #category : #assertions }
 GtLObjectValueResultExamples >> assertObjectValueJson: objectValueJson includesPhlowViews: expectedMethodNames [
