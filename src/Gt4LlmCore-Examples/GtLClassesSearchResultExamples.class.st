@@ -3,7 +3,7 @@ Examples for GtLClassesSearchResult.
 "
 Class {
 	#name : #GtLClassesSearchResultExamples,
-	#superclass : #GtLMagritteDomainObjectExamples,
+	#superclass : #GtLDomainObjectExamples,
 	#category : 'Gt4LlmCore-Examples-Domain Objects'
 }
 

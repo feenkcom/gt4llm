@@ -3,7 +3,7 @@ Examples for GtLSerializedViewInfo domain object.
 "
 Class {
 	#name : #GtLSerializedViewInfoExamples,
-	#superclass : #GtLMagritteDomainObjectExamples,
+	#superclass : #GtLDomainObjectExamples,
 	#category : 'Gt4LlmCore-Examples-Domain Objects'
 }
 

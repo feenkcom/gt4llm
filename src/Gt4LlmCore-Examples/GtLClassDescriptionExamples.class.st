@@ -3,7 +3,7 @@ Examples for GtLClassDescription.
 "
 Class {
 	#name : #GtLClassDescriptionExamples,
-	#superclass : #GtLMagritteDomainObjectExamples,
+	#superclass : #GtLDomainObjectExamples,
 	#category : 'Gt4LlmCore-Examples-Domain Objects'
 }
 

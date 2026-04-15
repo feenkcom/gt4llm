@@ -3,7 +3,7 @@ Examples for files information domain object.
 "
 Class {
 	#name : #GtLFilesInformationDomainObjectExamples,
-	#superclass : #GtLMagritteDomainObjectExamples,
+	#superclass : #GtLDomainObjectExamples,
 	#category : 'Gt4LlmCore-Examples-Domain Objects'
 }
 

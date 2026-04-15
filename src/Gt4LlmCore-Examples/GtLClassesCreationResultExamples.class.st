@@ -3,7 +3,7 @@ Examples for GtLClassesCreationResult domain object.
 "
 Class {
 	#name : #GtLClassesCreationResultExamples,
-	#superclass : #GtLMagritteDomainObjectExamples,
+	#superclass : #GtLDomainObjectExamples,
 	#category : 'Gt4LlmCore-Examples-Domain Objects'
 }
 

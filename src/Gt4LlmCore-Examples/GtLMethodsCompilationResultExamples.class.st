@@ -3,7 +3,7 @@ Examples for GtLMethodsCompilationResult domain object.
 "
 Class {
 	#name : #GtLMethodsCompilationResultExamples,
-	#superclass : #GtLMagritteDomainObjectExamples,
+	#superclass : #GtLDomainObjectExamples,
 	#category : 'Gt4LlmCore-Examples-Domain Objects'
 }
 

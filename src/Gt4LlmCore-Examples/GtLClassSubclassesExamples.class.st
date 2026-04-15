@@ -3,7 +3,7 @@ Examples for GtLClassSubclasses.
 "
 Class {
 	#name : #GtLClassSubclassesExamples,
-	#superclass : #GtLMagritteDomainObjectExamples,
+	#superclass : #GtLDomainObjectExamples,
 	#category : 'Gt4LlmCore-Examples-Domain Objects'
 }
 

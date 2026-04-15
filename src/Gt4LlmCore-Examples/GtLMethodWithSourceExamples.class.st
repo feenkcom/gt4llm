@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLMethodWithSourceExamples,
-	#superclass : #GtLMagritteDomainObjectExamples,
+	#superclass : #GtLDomainObjectExamples,
 	#category : 'Gt4LlmCore-Examples-Domain Objects'
 }
 
