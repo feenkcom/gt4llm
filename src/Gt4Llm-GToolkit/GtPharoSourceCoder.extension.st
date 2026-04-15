@@ -3,6 +3,8 @@ Extension { #name : #GtPharoSourceCoder }
 { #category : #'*Gt4Llm-GToolkit' }
 GtPharoSourceCoder >> addAssistantFormatMenuItemsFor: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns>
+	| aDocumentId |
+	aDocumentId := aCoderViewModel documentId.
 	(aCoderViewModel behavior includesBehavior: GtLlmAssistant) ifFalse: [ ^ self ].
 	(self nodeFrom: aCoderViewModel)
 		ifNotNil: [ :node | 
@@ -13,8 +15,8 @@ GtPharoSourceCoder >> addAssistantFormatMenuItemsFor: anAst to: coderAddOns from
 								createLabel: 'Rename Format'
 								description: node literalValue)
 						group: BrMenuItemGroupConfiguration llm
-						hover: (self highlightNodeBlock: node)
-						leave: self removeHighlightBlock
+						hover: (self highlightNodeBlock: node documentId: aDocumentId)
+						leave: self removeHighlightsBlock
 						action: [ :aTextualViewModel :element | 
 							self
 								renameFormatComponent: node
