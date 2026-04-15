@@ -4,7 +4,7 @@ Class {
 	#category : 'Gt4LlmCore-Examples-Tools'
 }
 
-{ #category : #examples }
+{ #category : #'examples - data views' }
 GtLToolForChatMethodSearchExamples >> methodSearchDataViewSerialization [
 	<gtExample>
 	<return: #GtLPrimitiveMessageDataBlock>
@@ -12,13 +12,14 @@ GtLToolForChatMethodSearchExamples >> methodSearchDataViewSerialization [
 	call := self methodSearchReturnsMatches.
 	compositeView := call result targetObject llmDataViewsFor: GtLDataView new.
 	self assert: compositeView dataViews size equals: 1.
+	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock isNotNil.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
-	jsonData := dataBlock compositeJsonData.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
+	
+	jsonData := dataBlock llmJsonData.
 	self assert: (jsonData at: #foundMethods) isNotEmpty.
 	self assert: (jsonData includesKey: #mayHaveMore).
+	
 	^ dataBlock
 ]
 

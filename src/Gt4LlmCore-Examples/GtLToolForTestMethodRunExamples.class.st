@@ -9,11 +9,6 @@ Class {
 	#category : 'Gt4LlmCore-Examples-Tools'
 }
 
-{ #category : #assertions }
-GtLToolForTestMethodRunExamples >> assertJsonData: jsonData hasExpectedKeys: expectedKeys [
-	self assert: jsonData keys sorted equals: expectedKeys sorted
-]
-
 { #category : #examples }
 GtLToolForTestMethodRunExamples >> exampleRunComparisonFailure [
 	<gtExample>

@@ -4,7 +4,7 @@ Class {
 	#category : 'Gt4LlmCore-Examples-Tools'
 }
 
-{ #category : #examples }
+{ #category : #'examples - data views' }
 GtLToolForSearchForLepiterPagesExamples >> documentationLookupDataViewSerialization [
 	<gtExample>
 	<return: #GtLPrimitiveMessageDataBlock>
@@ -15,11 +15,9 @@ GtLToolForSearchForLepiterPagesExamples >> documentationLookupDataViewSerializat
 	self assert: compositeView dataViews size equals: 1.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock isNotNil.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
-	jsonData := dataBlock compositeJsonData.
+	jsonData := dataBlock llmJsonData.
 	self assert: (jsonData at: #pages) isNotEmpty.
 	pagesData := jsonData at: #pages.
 	self assert: ((pagesData first at: #pageTitle) includesSubstring: 'Warmup: understanding the Money classes').

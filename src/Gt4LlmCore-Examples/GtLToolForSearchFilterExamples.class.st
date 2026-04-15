@@ -4,7 +4,7 @@ Class {
 	#category : 'Gt4LlmCore-Examples-Tools'
 }
 
-{ #category : #examples }
+{ #category : #'examples - data views' }
 GtLToolForSearchFilterExamples >> searchFilterDataViewSerialization [
 	<gtExample>
 	<return: #GtLPrimitiveMessageDataBlock>
@@ -15,11 +15,9 @@ GtLToolForSearchFilterExamples >> searchFilterDataViewSerialization [
 	self assert: compositeView dataViews size equals: 1.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock isNotNil.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
-	jsonData := dataBlock compositeJsonData.
+	jsonData := dataBlock llmJsonData.
 	self assert: (jsonData at: #query) equals: 'GtLToolForSearchFilterExamples gtMethodsInClass & #gtExample gtPragmas'.
 	self assert: (jsonData at: #itemsAsPrintStrings) isNotEmpty.
 	self assert: ((jsonData at: #itemsAsPrintStrings) anySatisfy: [ :item | 
