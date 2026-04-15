@@ -9,11 +9,6 @@ Class {
 	#category : 'Gt4LlmCore-Examples-Domain Objects'
 }
 
-{ #category : #assertions }
-GtLTestCaseWithResultDomainObjectExamples >> assertJsonData: jsonData hasExpectedKeys: expectedKeys [
-	self assert: jsonData keys sorted equals: expectedKeys sorted
-]
-
 { #category : #private }
 GtLTestCaseWithResultDomainObjectExamples >> runTestMethod: aCompiledMethod [
 	"Run the given test method and return the test case with result."

@@ -29,11 +29,6 @@ GtLExampleWithResultExamples >> assertExampleData: jsonData forMethod: aCompiled
 	self assert: (jsonData at: 'exampleStatus') equals: statusString.
 ]
 
-{ #category : #assertions }
-GtLExampleWithResultExamples >> assertJsonData: jsonData hasExpectedKeys: expectedKeys [
-	self assert: jsonData keys sorted equals: expectedKeys sorted
-]
-
 { #category : #private }
 GtLExampleWithResultExamples >> assertObjectValue: objectValueJson className: className printString: printString superclassName: superclassName packageName: packageName instanceSlots: instanceSlots [
 	self assert: (objectValueJson at: 'objectClassName') equals: className.
