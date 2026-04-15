@@ -1,8 +1,45 @@
 Class {
 	#name : #GtLMethodReferenceExamples,
 	#superclass : #GtLDomainObjectExamples,
-	#category : 'Gt4LlmCore-Examples-Domain Objects'
+	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
+
+{ #category : #examples }
+GtLMethodReferenceExamples >> differentMethodReferences [
+	<gtExample>
+	| first second |
+	first := GtLMethodReference new
+		methodClassName: 'Object';
+		methodName: 'printString';
+		classSide: false;
+		yourself.
+	second := GtLMethodReference new
+		methodClassName: 'Object';
+		methodName: 'yourself';
+		classSide: false;
+		yourself.
+	self assert: first ~= second.
+	^ first
+]
+
+{ #category : #examples }
+GtLMethodReferenceExamples >> equalMethodReferences [
+	<gtExample>
+	| first second |
+	first := GtLMethodReference new
+		methodClassName: 'Object';
+		methodName: 'printString';
+		classSide: false;
+		yourself.
+	second := GtLMethodReference new
+		methodClassName: 'Object';
+		methodName: 'printString';
+		classSide: false;
+		yourself.
+	self assert: first equals: second.
+	self assert: first hash equals: second hash.
+	^ first
+]
 
 { #category : #examples }
 GtLMethodReferenceExamples >> methodReferenceObjectFromCompiledMethodClassSide [

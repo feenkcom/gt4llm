@@ -8,12 +8,12 @@ Class {
 		'relevantToolCalls',
 		'codeChanges'
 	],
-	#category : 'Gt4LlmCore-Summaries'
+	#category : #'Gt4LlmCore-Summaries'
 }
 
 { #category : #private }
 GtLCodeChangesToolCallsSummarizer >> addCodeChanges: aCollection [
-	codeChanges addAll: aCollection
+	self codeChanges addAll: aCollection
 ]
 
 { #category : #private }
@@ -84,7 +84,7 @@ GtLCodeChangesToolCallsSummarizer >> codeChangeEntryLabel: aLabel object: anObje
 
 { #category : #accessing }
 GtLCodeChangesToolCallsSummarizer >> codeChanges [
-	^ codeChanges ifNil: [ #() ]
+	^ codeChanges ifNil: [ codeChanges := GtLSummarizerCodeChangesGroup new ]
 ]
 
 { #category : #'gt-extensions' }
@@ -92,7 +92,7 @@ GtLCodeChangesToolCallsSummarizer >> gtChangesByToolFor: aView [
 	<gtView>
 	^ aView columnedList
 		title: 'Changes by tool';
-		priority: 15;
+		priority: 40;
 		items: [ (self codeChanges groupedBy: [ :each | each toolCall name ]) associations ];
 		column: 'Tool' text: [ :each | each key asString ];
 		column: 'Changes' text: [ :each | each value size asString ] width: 100;
@@ -103,15 +103,27 @@ GtLCodeChangesToolCallsSummarizer >> gtChangesByToolFor: aView [
 GtLCodeChangesToolCallsSummarizer >> gtCodeChangesFor: aView [
 	<gtView>
 	<gtLlmView>
-	self hasSummaryData ifFalse: [ ^ aView empty ].
-	^ aView columnedList
+	^ aView forward
 		title: 'Code changes';
-		priority: 20;
-		items: [ self codeChanges ];
-		"column: 'Change' text: [ :each | each label ];"
-		column: 'Tool' text: [ :each | each toolCall name asString ] width: 250;
-		column: 'Object' text: [ :each | each changeResult gtDisplayString ];
-		send: [ :each | each changeResult ];
+		priority: 21.1;
+		object: [ self codeChanges ];
+		view: #gtCodeChangesFor:;
+		actionButtonIcon: BrGlamorousVectorIcons inspect 
+			tooltip: 'Inspect summarizer'
+			action: [ :aButton |
+				aButton phlow spawnObject: self ];
+		actionUpdateButton
+]
+
+{ #category : #'gt-extensions' }
+GtLCodeChangesToolCallsSummarizer >> gtMethodChangeHistoriesFor: aView [
+	<gtView>
+	<gtLlmView>
+	^ aView forward 	
+			title: 'Code changes by method';
+			priority: 21.5;
+			object: [ self methodChangeHistories ];
+			view: #gtViewHistoriesFor:;
 		actionButtonIcon: BrGlamorousVectorIcons inspect 
 			tooltip: 'Inspect summarizer'
 			action: [ :aButton |
@@ -121,14 +133,14 @@ GtLCodeChangesToolCallsSummarizer >> gtCodeChangesFor: aView [
 
 { #category : #testing }
 GtLCodeChangesToolCallsSummarizer >> hasSummaryData [
-	^ self codeChanges notEmpty
+	^ self codeChanges isEmpty not
 ]
 
 { #category : #initialization }
 GtLCodeChangesToolCallsSummarizer >> initialize [
 	super initialize.
 	relevantToolCalls := OrderedCollection new.
-	codeChanges := OrderedCollection new
+	codeChanges := GtLSummarizerCodeChangesGroup new
 ]
 
 { #category : #initialization }
@@ -144,9 +156,28 @@ GtLCodeChangesToolCallsSummarizer >> isCodeChangeToolCall: aToolCall [
 		includes: aToolCall name asSymbol
 ]
 
+{ #category : #accessing }
+GtLCodeChangesToolCallsSummarizer >> methodChangeHistories [
+	| historiesByReference group |
+	historiesByReference := Dictionary new.
+	(self codeChanges select: #isMethodChangeResult) do: [ :each |
+		| changeResult methodReference history |
+		changeResult := each changeResult.
+		methodReference := changeResult targetMethodReference.
+		history := historiesByReference
+			at: methodReference
+			ifAbsentPut: [ GtLMethodChangeHistory new
+				methodReference: methodReference;
+				yourself ].
+		history addChange: each ].
+	group := GtLMethodChangeHistoriesGroup new.
+	historiesByReference valuesDo: [ :each | group addHistory: each ].
+	^ group
+]
+
 { #category : #private }
 GtLCodeChangesToolCallsSummarizer >> rebuildCodeChanges [
-	codeChanges := OrderedCollection new.
+	codeChanges := GtLSummarizerCodeChangesGroup new.
 	self relevantToolCalls do: [ :each | self addCodeChangesFrom: each ]
 ]
 

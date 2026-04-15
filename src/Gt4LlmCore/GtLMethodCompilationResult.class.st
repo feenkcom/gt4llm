@@ -3,34 +3,14 @@ Result of a successful method compilation operation.
 "
 Class {
 	#name : #GtLMethodCompilationResult,
-	#superclass : #Object,
+	#superclass : #GtLMethodChangeResult,
 	#instVars : [
 		'oldMethod',
 		'newMethod',
-		'status',
-		'targetMethodReference'
+		'status'
 	],
-	#category : 'Gt4LlmCore-Magritte Objects'
+	#category : #'Gt4LlmCore-Magritte Objects'
 }
-
-{ #category : #views }
-GtLMethodCompilationResult >> asDiffElement [
-	| newSource oldSource |
-	oldSource := self oldMethod ifNil: [ '' ] ifNotNil: [ :each | each sourceCode ].
-	newSource := self newMethod ifNil: [ '' ] ifNotNil: [ :each | each sourceCode ].
-	^ GtDiffElementWithLabelStencil new
-		fromLabelText: 'Old from '
-				, (self newMethod
-						ifNotNil: [ :m | String space , m methodReference methodClassName ]);
-		toLabelText: 'New in '
-				, (self newMethod
-						ifNotNil: [ :m | String space , m methodReference methodClassName ]);
-		change: (GtDiffBuilder
-				computeDifferencesFrom: oldSource
-				to: newSource
-				using: GtSmaCCDiffSplitter forPharo);
-		asElement
-]
 
 { #category : #testing }
 GtLMethodCompilationResult >> existsInImage [
@@ -41,6 +21,7 @@ GtLMethodCompilationResult >> existsInImage [
 { #category : #views }
 GtLMethodCompilationResult >> gtDetailsFor: aView [
 	<gtView>
+	<gtCodeChangeView>
 	^ aView columnedList
 		title: 'Details';
 		priority: 10;
@@ -55,12 +36,10 @@ GtLMethodCompilationResult >> gtDetailsFor: aView [
 ]
 
 { #category : #views }
-GtLMethodCompilationResult >> gtDiffFor: aView [
-	<gtView>
-	^ aView explicit
-		title: 'Diff';
-		priority: 5;
-		stencil: [ self asDiffElement ]
+GtLMethodCompilationResult >> gtViewChangeIcon [
+	self isMethodAdditionResult
+		ifTrue: [ ^ self class additionIcon ].
+	^ self class modificationIcon
 ]
 
 { #category : #testing }
@@ -71,6 +50,16 @@ GtLMethodCompilationResult >> hasOldSourceCode [
 { #category : #testing }
 GtLMethodCompilationResult >> isErrorDomainObject [
 	^false
+]
+
+{ #category : #testing }
+GtLMethodCompilationResult >> isMethodAdditionResult [
+	^ self oldMethod isNil
+]
+
+{ #category : #testing }
+GtLMethodCompilationResult >> isMethodModificationResult [
+	^ self oldMethod notNil
 ]
 
 { #category : #'llm views' }
@@ -96,6 +85,13 @@ GtLMethodCompilationResult >> newMethod: aGtLMethodWithSource [
 ]
 
 { #category : #accessing }
+GtLMethodCompilationResult >> newStateMethodSourceCode [
+	^ self newMethod
+			ifNil: [ '' ]
+			ifNotNil: [ :aMethod | aMethod sourceCode ]
+]
+
+{ #category : #accessing }
 GtLMethodCompilationResult >> oldMethod [
 	^ oldMethod
 ]
@@ -103,6 +99,13 @@ GtLMethodCompilationResult >> oldMethod [
 { #category : #accessing }
 GtLMethodCompilationResult >> oldMethod: aGtLMethodWithSource [
 	oldMethod := aGtLMethodWithSource
+]
+
+{ #category : #accessing }
+GtLMethodCompilationResult >> oldStateMethodSourceCode [
+	^ self oldMethod
+			ifNil: [ '' ]
+			ifNotNil: [ :aMethod | aMethod sourceCode ]
 ]
 
 { #category : #printing }
@@ -135,13 +138,8 @@ GtLMethodCompilationResult >> statusDescription [
 ]
 
 { #category : #accessing }
-GtLMethodCompilationResult >> targetMethodReference [
-	^ targetMethodReference
-]
-
-{ #category : #accessing }
-GtLMethodCompilationResult >> targetMethodReference: anObject [
-	targetMethodReference := anObject
+GtLMethodCompilationResult >> targetMethod [
+	^ self newMethod 
 ]
 
 { #category : #accessing }
@@ -153,4 +151,10 @@ GtLMethodCompilationResult >> targetMethodReferenceDescription [
 			classes: {
 				GtLMethodCompilationRequest };
 			beRequired
+]
+
+{ #category : #accessing }
+GtLMethodCompilationResult >> targetMethodSourceCode [
+
+	^ self targetMethod sourceCode 
 ]

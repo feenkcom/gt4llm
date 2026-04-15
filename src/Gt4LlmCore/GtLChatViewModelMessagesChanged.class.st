@@ -1,5 +1,5 @@
 Class {
 	#name : #GtLChatViewModelMessagesChanged,
 	#superclass : #GtLChatViewModelAnnouncement,
-	#category : 'Gt4LlmCore-Announcements'
+	#category : #'Gt4LlmCore-Announcements'
 }

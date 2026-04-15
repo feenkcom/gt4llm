@@ -4,7 +4,7 @@ Examples for GtLMethodCompilationResult domain object.
 Class {
 	#name : #GtLMethodCompilationResultExamples,
 	#superclass : #GtLDomainObjectExamples,
-	#category : 'Gt4LlmCore-Examples-Domain Objects'
+	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #examples }
@@ -36,7 +36,6 @@ GtLMethodCompilationResultExamples >> methodCompilationResultCreation [
 		oldMethod: oldMethod;
 		newMethod: newMethod;
 		status: 'compiled';
-		targetMethodReference: targetMethodReference;
 		yourself.
 	self assert: result status equals: 'compiled'.
 	self assert: result oldMethod sourceCode equals: 'sampleMethod ^ 1'.
@@ -95,7 +94,6 @@ GtLMethodCompilationResultExamples >> methodCompilationResultMethodAddition [
 		oldMethod: nil;
 		newMethod: newMethod;
 		status: 'compiled';
-		targetMethodReference: targetMethodReference;
 		yourself.
 	self assert: result oldMethod isNil.
 	self assert: result newMethod sourceCode equals: 'addedMethod ^ 42'.

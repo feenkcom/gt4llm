@@ -3,32 +3,13 @@ Result of a successful method removal operation.
 "
 Class {
 	#name : #GtLMethodRemovalResult,
-	#superclass : #Object,
+	#superclass : #GtLMethodChangeResult,
 	#instVars : [
 		'removedMethod',
 		'status'
 	],
-	#category : 'Gt4LlmCore-Magritte Objects'
+	#category : #'Gt4LlmCore-Magritte Objects'
 }
-
-{ #category : #views }
-GtLMethodRemovalResult >> asDiffElement [
-	| newSource oldSource |
-	oldSource := self removedMethod ifNil: [ '' ] ifNotNil: [ :each | each sourceCode ].
-	newSource := ''.
-	^ GtDiffElementWithLabelStencil new
-		fromLabelText: 'Old from '
-				, (self removedMethod
-						ifNotNil: [ :m | String space , m methodReference methodClassName ]);
-		toLabelText: 'New in '
-				, (self removedMethod
-						ifNotNil: [ :m | String space , m methodReference methodClassName ]);
-		change: (GtDiffBuilder
-				computeDifferencesFrom: oldSource
-				to: newSource
-				using: GtSmaCCDiffSplitter forPharo);
-		asElement
-]
 
 { #category : #views }
 GtLMethodRemovalResult >> gtDetailsFor: aView [
@@ -46,12 +27,13 @@ GtLMethodRemovalResult >> gtDetailsFor: aView [
 ]
 
 { #category : #views }
-GtLMethodRemovalResult >> gtDiffFor: aView [
-	<gtView>
-	^ aView explicit
-		title: 'Diff';
-		priority: 5;
-		stencil: [ self asDiffElement ]
+GtLMethodRemovalResult >> gtViewChangeIcon [
+	^ self class removalIcon
+]
+
+{ #category : #testing }
+GtLMethodRemovalResult >> isMethodRemovalResult [
+	^ true
 ]
 
 { #category : #'llm views' }
@@ -59,6 +41,18 @@ GtLMethodRemovalResult >> llmRawDataViewFor: aDataView [
 	<gtLlmDataView>
 	
 	^ aDataView magritteObject: [ self ]
+]
+
+{ #category : #accessing }
+GtLMethodRemovalResult >> newStateMethodSourceCode [
+	^ ''
+]
+
+{ #category : #accessing }
+GtLMethodRemovalResult >> oldStateMethodSourceCode [
+	^ self removedMethod
+			ifNil: [ '' ]
+			ifNotNil: [ :aMethod | aMethod sourceCode ]
 ]
 
 { #category : #printing }
@@ -98,4 +92,16 @@ GtLMethodRemovalResult >> statusDescription [
 		label: 'Status';
 		accessor: #status;
 		beRequired
+]
+
+{ #category : #accessing }
+GtLMethodRemovalResult >> targetMethod [
+
+	^ self removedMethod 
+]
+
+{ #category : #accessing }
+GtLMethodRemovalResult >> targetMethodSourceCode [
+
+	^ self targetMethod sourceCode 
 ]
