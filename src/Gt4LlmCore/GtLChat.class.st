@@ -14,7 +14,7 @@ Class {
 		'responseFormat',
 		'objectStorage'
 	],
-	#category : #'Gt4LlmCore-Core'
+	#category : 'Gt4LlmCore-Core'
 }
 
 { #category : #accessing }

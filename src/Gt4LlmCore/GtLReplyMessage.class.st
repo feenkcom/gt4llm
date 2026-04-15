@@ -8,7 +8,7 @@ Class {
 		'finishedAt',
 		'executionState'
 	],
-	#category : #'Gt4LlmCore-Core'
+	#category : 'Gt4LlmCore-Core'
 }
 
 { #category : #'api - message' }

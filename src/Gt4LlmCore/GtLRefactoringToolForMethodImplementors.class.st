@@ -4,7 +4,7 @@ Magritte-based tool for finding method implementors in a GtRBNamespace model.
 Class {
 	#name : #GtLRefactoringToolForMethodImplementors,
 	#superclass : #GtLAbstractRefactoringMagritteTool,
-	#category : #'Gt4LlmCore-Tools'
+	#category : 'Gt4LlmCore-Tools'
 }
 
 { #category : #'llm-generated' }

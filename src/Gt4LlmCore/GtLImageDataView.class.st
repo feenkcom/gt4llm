@@ -6,7 +6,7 @@ Class {
 		'imageBytesComputation',
 		'computedImageBytes'
 	],
-	#category : #'Gt4LlmCore-Data Views'
+	#category : 'Gt4LlmCore-Data Views'
 }
 
 { #category : #'instance creation' }

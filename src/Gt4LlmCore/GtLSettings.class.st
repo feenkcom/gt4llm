@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLSettings,
 	#superclass : #Object,
-	#category : #'Gt4LlmCore-Support'
+	#category : 'Gt4LlmCore-Support'
 }
 
 { #category : #settings }
