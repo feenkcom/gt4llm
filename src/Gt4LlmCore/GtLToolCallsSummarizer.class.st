@@ -14,7 +14,8 @@ Class {
 GtLToolCallsSummarizer class >> currentSummarizers [
 	^ { 
 		GtLToolCallsByTypeSummarizer new.
-		GtLOverallExampleExecutionsSummarizer new }
+		GtLOverallExampleExecutionsToolCallsSummarizer new.
+		GtLCodeChangesToolCallsSummarizer new }
 ]
 
 { #category : #'instance creation' }
