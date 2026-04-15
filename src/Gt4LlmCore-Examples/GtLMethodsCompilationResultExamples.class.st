@@ -4,7 +4,7 @@ Examples for GtLMethodsCompilationResult domain object.
 Class {
 	#name : #GtLMethodsCompilationResultExamples,
 	#superclass : #GtLDomainObjectExamples,
-	#category : 'Gt4LlmCore-Examples-Domain Objects'
+	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #examples }
@@ -88,11 +88,6 @@ GtLMethodsCompilationResultExamples >> methodsCompilationResultWithMixedOutcomes
 			sourceCode: 'failedMethod ^';
 			yourself);
 		status: 'failed';
-		targetMethodReference: (GtLMethodReference new
-			methodClassName: 'SampleClass';
-			methodName: 'failedMethod';
-			classSide: false;
-			yourself);
 		yourself.
 	exceptionResult := GtLMethodCompilationExceptionDomainObjectExamples new basicMethodCompilationException.
 	missingMethodResult := GtLMissingDomainObject new

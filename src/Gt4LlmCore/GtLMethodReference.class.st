@@ -6,13 +6,22 @@ Class {
 		'classSide',
 		'methodClassName'
 	],
-	#category : 'Gt4LlmCore-Magritte Objects'
+	#category : #'Gt4LlmCore-Magritte Objects'
 }
 
 { #category : #'instance creation' }
 GtLMethodReference class >> fromCompiledMethod: aMethod [ 
 	^ self new 
 			initializeFromCompiledMethod: aMethod 
+]
+
+{ #category : #comparing }
+GtLMethodReference >> = anObject [
+	self == anObject ifTrue: [ ^ true ].
+	(self class = anObject class) ifFalse: [ ^ false ].
+	^ self methodClassName = anObject methodClassName
+		and: [ self methodName = anObject methodName
+		and: [ self classSide = anObject classSide ] ]
 ]
 
 { #category : #accessing }
@@ -77,6 +86,12 @@ GtLMethodReference >> existsInImage [
 	^ self 
 			compiledMethodIfPresent: [ :each | true ] 
 			ifMissing: [ :each | false ]
+]
+
+{ #category : #comparing }
+GtLMethodReference >> hash [
+	^ (self methodClassName hash bitXor: self methodName hash)
+		bitXor: self classSide hash
 ]
 
 { #category : #initialization }

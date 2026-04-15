@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLPlainTextBasedModel,
 	#superclass : #GtLWrappedModel,
-	#category : 'Gt4LlmCore-Core'
+	#category : #'Gt4LlmCore-Core'
 }
 
 { #category : #adding }

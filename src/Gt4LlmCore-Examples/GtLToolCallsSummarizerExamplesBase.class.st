@@ -4,7 +4,7 @@ Common superclass for summarizer examples, providing utility methods for constru
 Class {
 	#name : #GtLToolCallsSummarizerExamplesBase,
 	#superclass : #Object,
-	#category : 'Gt4LlmCore-Examples-Summarizers'
+	#category : #'Gt4LlmCore-Examples-Summarizers'
 }
 
 { #category : #utilities }

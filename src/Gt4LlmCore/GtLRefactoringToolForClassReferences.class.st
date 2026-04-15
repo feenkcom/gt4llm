@@ -4,7 +4,7 @@ Magritte-based tool for retrieving class references in a GtRBNamespace model.
 Class {
 	#name : #GtLRefactoringToolForClassReferences,
 	#superclass : #GtLAbstractRefactoringMagritteTool,
-	#category : 'Gt4LlmCore-Tools'
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #'llm-generated' }

@@ -1,11 +1,11 @@
 Class {
 	#name : #GtLClassModificationResult,
-	#superclass : #Object,
+	#superclass : #GtLClassChangeResult,
 	#instVars : [
 		'originalClass',
 		'updatedClass'
 	],
-	#category : 'Gt4LlmCore-Magritte Objects'
+	#category : #'Gt4LlmCore-Magritte Objects'
 }
 
 { #category : #'accessing - delegated' }
@@ -91,6 +91,7 @@ GtLClassModificationResult >> currentClassNameDescription [
 GtLClassModificationResult >> gtClassCoderViewFor: aView [
 	<gtView>
 	<gtLlmView>
+	<gtCodeChangeView>
 	| aClass |
 	aClass := self currentClassName asClassIfAbsent: [ ^ aView empty ].
 	^ aView explicit
@@ -114,6 +115,7 @@ GtLClassModificationResult >> gtClassCoderViewFor: aView [
 GtLClassModificationResult >> gtDetailsFor: aView [
 	<gtView>
 	<gtLlmView>
+	<gtCodeChangeView>
 	^ aView columnedList
 		title: 'Details';
 		priority: 2;
@@ -143,6 +145,13 @@ GtLClassModificationResult >> gtDiffFor: aView [
 		to: [ self updatedClass asDefinitionString ]
 ]
 
+{ #category : #views }
+GtLClassModificationResult >> gtViewChangeIcon [
+	self isClassAdditionResult
+		ifTrue: [ ^ self class additionIcon ].
+	^ self class modificationIcon
+]
+
 { #category : #'accessing - delegated' }
 GtLClassModificationResult >> instanceSlotNames [
 	^ self updatedClass instanceSlotNames
@@ -161,6 +170,11 @@ GtLClassModificationResult >> instanceSlotNamesDescription [
 		accessor: #instanceSlotNames;
 		classes: { String };
 		yourself
+]
+
+{ #category : #'as yet unclassified' }
+GtLClassModificationResult >> isClassAdditionResult [
+	^ self originalClass isNil
 ]
 
 { #category : #accessing }
@@ -238,6 +252,11 @@ GtLClassModificationResult >> superclassNameDescription [
 		label: 'Superclass';
 		accessor: #superclassName;
 		yourself
+]
+
+{ #category : #'accessing - delegated' }
+GtLClassModificationResult >> targetClassName [
+	^ self currentClassName
 ]
 
 { #category : #'accessing - delegated' }

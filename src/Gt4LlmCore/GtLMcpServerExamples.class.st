@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLMcpServerExamples,
 	#superclass : #Object,
-	#category : 'Gt4LlmCore-Mcp'
+	#category : #'Gt4LlmCore-Mcp'
 }
 
 { #category : #utils }

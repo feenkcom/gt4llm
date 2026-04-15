@@ -9,7 +9,7 @@ Class {
 		'changeResult',
 		'toolCall'
 	],
-	#category : 'Gt4LlmCore-Summaries'
+	#category : #'Gt4LlmCore-Summaries'
 }
 
 { #category : #accessing }
@@ -28,6 +28,75 @@ GtLSummarizerCodeChange >> gtDisplayOn: aStream [
 		nextPutAll: self label;
 		nextPutAll: ': ';
 		nextPutAll: self changeResult gtDisplayString
+]
+
+{ #category : #'gt-view' }
+GtLSummarizerCodeChange >> gtViewChangeDescriptionElement [
+	^ self changeResult gtViewChangeDescriptionElement
+]
+
+{ #category : #'gt-view' }
+GtLSummarizerCodeChange >> gtViewChangeEditTime [
+	^ DateAndTime now
+]
+
+{ #category : #'gt-view' }
+GtLSummarizerCodeChange >> gtViewChangeHistoryChildren [
+	^ #()
+]
+
+{ #category : #'gt-view' }
+GtLSummarizerCodeChange >> gtViewChangeIcon [
+	^ self changeResult gtViewChangeIcon
+]
+
+{ #category : #'gt-view' }
+GtLSummarizerCodeChange >> gtViewChangesCount [
+	^ 0
+]
+
+{ #category : #'gt-view' }
+GtLSummarizerCodeChange >> gtViewsInContext: aPhlowContext [
+	| collectedViews |
+	collectedViews := Array
+			streamContents: [ :aStream | 
+				aStream nextPutAll: (super gtViewsInContext: aPhlowContext).
+				changeResult
+					ifNotNil: [ :aModel | 
+						aStream
+							nextPutAll: (GtPhlowViewsCollector new
+									fromObject: aModel;
+									pragmaNames: #(gtCodeChangeView);
+									collect) ] ].
+
+	GtPhlowUtility sortByPriority: collectedViews.
+
+	^ collectedViews
+]
+
+{ #category : #testing }
+GtLSummarizerCodeChange >> isClassChangeResult [
+	^ self changeResult isClassChangeResult
+]
+
+{ #category : #testing }
+GtLSummarizerCodeChange >> isMethodAdditionResult [
+	^ self changeResult isMethodAdditionResult
+]
+
+{ #category : #testing }
+GtLSummarizerCodeChange >> isMethodChangeResult [
+	^ self changeResult isMethodChangeResult
+]
+
+{ #category : #testing }
+GtLSummarizerCodeChange >> isMethodModificationResult [
+	^ self changeResult isMethodModificationResult
+]
+
+{ #category : #testing }
+GtLSummarizerCodeChange >> isMethodRemovalResult [
+	^ self changeResult isMethodRemovalResult
 ]
 
 { #category : #accessing }
