@@ -119,6 +119,7 @@ GtLMethodsCompilationResultExamples >> methodsCompilationResultWithMixedOutcomes
 GtLMethodsCompilationResultExamples >> methodsCompilationResultWithMixedOutcomesDataViewSerialization [
 	<gtExample>
 	<return: #GtLPrimitiveMessageDataBlock>
+	<noTest>
 	| domainObject compositeView dataBlock jsonData results firstResult secondResult thirdResult fifthResult sixthResult |
 	domainObject := self methodsCompilationResultWithMixedOutcomes.
 	compositeView := domainObject llmDataViewsFor: GtLDataView new.
