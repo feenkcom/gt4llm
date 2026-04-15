@@ -121,7 +121,7 @@ GtLCodeChangesToolCallsSummarizer >> gtMethodChangeHistoriesFor: aView [
 	<gtLlmView>
 	^ aView forward 	
 			title: 'Code changes by method';
-			priority: 21.5;
+			priority: 10;
 			object: [ self methodChangeHistories ];
 			view: #gtViewHistoriesFor:;
 		actionButtonIcon: BrGlamorousVectorIcons inspect 
