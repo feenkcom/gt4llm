@@ -14,9 +14,3 @@ TGtLExceptionResultAssertions >> assertExceptionResult: resultJson errorClass: e
 	stackTraceSubstrings do: [ :substring |
 		self assert: ((resultJson at: #stackTrace) includesSubstring: substring) ].
 ]
-
-{ #category : #requirements }
-TGtLExceptionResultAssertions >> assertJsonData: jsonData hasExpectedKeys: expectedKeys [
-	"Subclasses should implement this method to assert JSON data has expected keys."
-	self explicitRequirement
-]

@@ -16,3 +16,8 @@ GtLDomainObjectExamples >> assertDataBlockHasOnlyJsonData: dataBlock [
 	self assert: dataBlock dataBlocks size equals: 1.
 	self assert: dataBlock dataBlocks first == dataBlock compositeJsonDataBlock
 ]
+
+{ #category : #assertions }
+GtLDomainObjectExamples >> assertJsonData: jsonData hasExpectedKeys: expectedKeys [
+	self assert: jsonData keys sorted equals: expectedKeys sorted
+]

@@ -5,11 +5,6 @@ Class {
 }
 
 { #category : #assertions }
-GtLObjectStorageValueResultExamples >> assertJsonData: jsonData hasExpectedKeys: expectedKeys [
-	self assert: jsonData keys sorted equals: expectedKeys sorted
-]
-
-{ #category : #assertions }
 GtLObjectStorageValueResultExamples >> assertObjectDetailsJson: objectDetailsJson hasErrorMessage: expectedErrorMessage errorClass: expectedErrorClass stackTraceIncludes: expectedStackTraceStrings [
 	"Assert that the objectDetails JSON contains the expected exception data."
 	
