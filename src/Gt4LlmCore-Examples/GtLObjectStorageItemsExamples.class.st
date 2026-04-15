@@ -47,9 +47,7 @@ GtLObjectStorageItemsExamples >> storageItemDataViewSerialization [
 	self assert: compositeView dataViews size equals: 1.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock isNotNil.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	expected := Dictionary new
 		at: #objectId put: 'abc123def456';
@@ -70,9 +68,7 @@ GtLObjectStorageItemsExamples >> storageItemsDataViewSerialization [
 	self assert: compositeView dataViews size equals: 1.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock isNotNil.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	expected := Dictionary new
 		at: #items put: (NeoJSONArray with: (NeoJSONObject new

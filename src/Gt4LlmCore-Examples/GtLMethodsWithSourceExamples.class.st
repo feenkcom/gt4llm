@@ -35,9 +35,7 @@ GtLMethodsWithSourceExamples >> methodsWithSourceObjectFromCompiledMethodsDataVi
 	self assert: compositeView dataViews size equals: 1.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock isNotNil.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	jsonData := dataBlock compositeJsonData.
 	self assert: (jsonData at: #methods) size equals: 2.
@@ -108,9 +106,7 @@ GtLMethodsWithSourceExamples >> methodsWithSourceObjectWithMissingEntriesDataVie
 	self assert: compositeView dataViews size equals: 1.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock isNotNil.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	jsonData := dataBlock compositeJsonData.
 	self assert: (jsonData at: #methods) size equals: 3.

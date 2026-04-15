@@ -40,9 +40,7 @@ GtLCouldNotCreateClassDomainObjectExamples >> couldNotCreateClassDataViewSeriali
 	self assert: compositeView dataViews size equals: 1.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock isNotNil.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	expectedJson := {
 		#targetClassName -> 'MyNewClass'.
@@ -74,8 +72,7 @@ GtLCouldNotCreateClassDomainObjectExamples >> emptyCouldNotCreateClassDomainObje
 	self assert: compositeView dataViews size equals: 1.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	jsonData := dataBlock compositeJsonData.
 	expectedJson := {

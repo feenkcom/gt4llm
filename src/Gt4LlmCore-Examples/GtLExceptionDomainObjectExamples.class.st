@@ -94,8 +94,7 @@ GtLExceptionDomainObjectExamples >> emptyExceptionDataViewSerialization [
 	self assert: compositeView dataViews size equals: 2.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	jsonData := dataBlock compositeJsonData.
 	"When exception is nil, only errorReason key is present (from llmJsonObject)"
@@ -145,8 +144,7 @@ GtLExceptionDomainObjectExamples >> exceptionWithDescriptionDataViewSerializatio
 	self assert: compositeView dataViews size equals: 2.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	jsonData := dataBlock compositeJsonData.
 	self assert: (jsonData at: 'errorReason') equals: 'Error while evaluating code'.
@@ -205,9 +203,7 @@ GtLExceptionDomainObjectExamples >> zeroDivideExceptionDataViewSerialization [
 	self assert: compositeView dataViews size equals: 2.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock isNotNil.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	jsonData := dataBlock compositeJsonData.
 	self assert: jsonData keys sorted equals: #('errorDetails' 'errorReason').

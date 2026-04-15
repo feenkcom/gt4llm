@@ -4,7 +4,7 @@ Abstract superclass for examples testing GtLAbstractFunctionTool and its subclas
 Class {
 	#name : #GtLAbstractFunctionToolExamples,
 	#superclass : #Object,
-	#traits : 'TGtLInvalidInputDataAssertions',
-	#classTraits : 'TGtLInvalidInputDataAssertions classTrait',
+	#traits : 'TGtLDataBlockSerializationAssertions + TGtLDataViewAssertions + TGtLInvalidInputDataAssertions',
+	#classTraits : 'TGtLDataBlockSerializationAssertions classTrait + TGtLDataViewAssertions classTrait + TGtLInvalidInputDataAssertions classTrait',
 	#category : 'Gt4LlmCore-Examples-Tools'
 }
