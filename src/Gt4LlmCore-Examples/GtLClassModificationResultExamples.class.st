@@ -3,7 +3,7 @@ Examples for GtLClassModificationResult domain object.
 "
 Class {
 	#name : #GtLClassModificationResultExamples,
-	#superclass : #GtLDomainObjectExamples,
+	#superclass : #GtLClassChangeResultExamples,
 	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
@@ -16,11 +16,8 @@ GtLClassModificationResultExamples >> classModificationResultCreation [
 		updatedClass: self updatedClassDefinition;
 		yourself.
 	
-	"Verify the stored objects"
 	self assert: result originalClass isNotNil.
 	self assert: result updatedClass isNotNil.
-	
-	"Verify delegation to updatedClass"
 	self assert: result currentClassName equals: 'MyExampleClass'.
 	self assert: result superclassName equals: 'Exception'.
 	self assert: result packageName equals: 'NewPackage'.
@@ -29,12 +26,11 @@ GtLClassModificationResultExamples >> classModificationResultCreation [
 	self assert: result classSlotNames equals: #('classSlot').
 	self assert: result classVariableNames equals: #('SharedVar').
 	self assert: result traitCompositionString equals: '{}'.
-	
-	"Verify original is preserved"
 	self assert: result originalClass superclassName equals: 'Object'.
 	self assert: result originalClass packageName equals: 'OriginalPackage'.
 	self assert: result originalClass instanceSlotNames equals: #('slot1').
-	
+	self assertResultIsClass: result.
+	self assertResultIsClassModification: result.
 	^ result
 ]
 
@@ -142,11 +138,10 @@ GtLClassModificationResultExamples >> classModificationResultWithoutOriginal [
 	
 	self assert: result originalClass isNil.
 	self assert: result updatedClass isNotNil.
-	
-	"Delegation still works"
 	self assert: result currentClassName equals: 'MyExampleClass'.
 	self assert: result superclassName equals: 'Exception'.
-	
+	self assertResultIsClass: result.
+	self assertResultIsClassAddition: result.
 	^ result
 ]
 

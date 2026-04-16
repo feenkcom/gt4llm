@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLClassCommentChangeResultExamples,
-	#superclass : #GtLDomainObjectExamples,
+	#superclass : #GtLClassChangeResultExamples,
 	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
@@ -19,6 +19,8 @@ GtLClassCommentChangeResultExamples >> basicClassCommentChangeResult [
 	self assert: result status equals: 'changed'.
 	self assert: result oldClassComment equals: 'Old class comment'.
 	self assert: result newClassComment equals: 'New class comment'.
+	self assertResultIsClass: result.
+	self assertResultIsClassCommentChange: result.
 	^ result
 ]
 
@@ -48,7 +50,7 @@ GtLClassCommentChangeResultExamples >> classCommentChangeDataViewSerialization [
 GtLClassCommentChangeResultExamples >> classCommentChangeResultWithNilOldComment [
 	<gtExample>
 	<return: #GtLClassCommentChangeResult>
-	| result compositeView dataBlock jsonData expectedJson |
+	| result |
 	
 	result := GtLClassCommentChangeResult new
 		updatedClass: Object;
@@ -57,7 +59,19 @@ GtLClassCommentChangeResultExamples >> classCommentChangeResultWithNilOldComment
 		newClassComment: 'First comment'.
 	self assert: result oldClassComment isNil.
 	self assert: result newClassComment equals: 'First comment'.
+	self assertResultIsClass: result.
+	self assertResultIsClassCommentChange: result.
 	
+	^ result
+]
+
+{ #category : #examples }
+GtLClassCommentChangeResultExamples >> classCommentChangeResultWithNilOldCommentDataViewSerialization [
+	<gtExample>
+	<return: #GtLPrimitiveMessageDataBlock>
+	| result compositeView dataBlock jsonData expectedJson |
+	
+	result := self classCommentChangeResultWithNilOldComment.
 	compositeView := result llmDataViewsFor: GtLDataView new.
 	self assert: compositeView dataViews size equals: 1.
 	
@@ -71,14 +85,37 @@ GtLClassCommentChangeResultExamples >> classCommentChangeResultWithNilOldComment
 	} asDictionary.
 	self assert: jsonData equals: expectedJson.
 	
-	^ result
+	^ dataBlock
+]
+
+{ #category : #examples }
+GtLClassCommentChangeResultExamples >> emptyClassCommentChangeDataViewSerialization [
+	<gtExample>
+	<return: #GtLPrimitiveMessageDataBlock>
+	| result compositeView dataBlock jsonData expectedJson |
+	
+	result := self emptyClassCommentChangeResult.
+	compositeView := result llmDataViewsFor: GtLDataView new.
+	self assert: compositeView dataViews size equals: 1.
+	
+	dataBlock := compositeView serializeToLlmPrimiteData.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
+	
+	jsonData := dataBlock compositeJsonData.
+	expectedJson := {
+		#changedClassName -> #Object.
+		#status -> 'changed'
+	} asDictionary.
+	self assert: jsonData equals: expectedJson.
+	
+	^ dataBlock
 ]
 
 { #category : #examples }
 GtLClassCommentChangeResultExamples >> emptyClassCommentChangeResult [
 	<gtExample>
 	<return: #GtLClassCommentChangeResult>
-	| result compositeView dataBlock jsonData expectedJson |
+	| result |
 	
 	result := GtLClassCommentChangeResult new
 		updatedClass: Object;
@@ -87,19 +124,8 @@ GtLClassCommentChangeResultExamples >> emptyClassCommentChangeResult [
 		newClassComment: 'A new comment'.
 	self assert: result oldClassComment equals: ''.
 	self assert: result newClassComment equals: 'A new comment'.
-	
-	compositeView := result llmDataViewsFor: GtLDataView new.
-	self assert: compositeView dataViews size equals: 1.
-	
-	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assertDataBlockHasOnlyJsonData: dataBlock.
-	
-	jsonData := dataBlock compositeJsonData.
-	expectedJson := {
-		#changedClassName -> #Object.
-		#status -> 'changed'
-	} asDictionary.
-	self assert: jsonData equals: expectedJson.
+	self assertResultIsClass: result.
+	self assertResultIsClassCommentChange: result.
 	
 	^ result
 ]

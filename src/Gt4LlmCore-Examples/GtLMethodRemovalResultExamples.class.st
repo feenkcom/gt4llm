@@ -3,14 +3,14 @@ Examples for GtLMethodRemovalResult domain object.
 "
 Class {
 	#name : #GtLMethodRemovalResultExamples,
-	#superclass : #GtLDomainObjectExamples,
+	#superclass : #GtLMethodChangeResultExamples,
 	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #examples }
 GtLMethodRemovalResultExamples >> methodRemovalResultCreation [
 	<gtExample>
-	| methodWithSource result |
+	| methodWithSource targetMethodReference result |
 	methodWithSource := GtLMethodWithSource new
 		methodReference: (GtLMethodReference new
 			methodClassName: 'SampleClass';
@@ -18,6 +18,11 @@ GtLMethodRemovalResultExamples >> methodRemovalResultCreation [
 			classSide: false;
 			yourself);
 		sourceCode: 'sampleMethod ^ 42';
+		yourself.
+	targetMethodReference := GtLMethodReference new
+		methodClassName: 'SampleClass';
+		methodName: 'sampleMethod';
+		classSide: false;
 		yourself.
 	result := GtLMethodRemovalResult new
 		removedMethod: methodWithSource;
@@ -27,6 +32,9 @@ GtLMethodRemovalResultExamples >> methodRemovalResultCreation [
 	self assert: result removedMethod methodName equals: 'sampleMethod'.
 	self assert: result removedMethod methodClassName equals: 'SampleClass'.
 	self assert: result removedMethod sourceCode equals: 'sampleMethod ^ 42'.
+	self assert: result targetMethodReference equals: targetMethodReference.
+	self assertResultIsMethod: result.
+	self assertResultIsMethodRemoval: result.
 	^ result
 ]
 
