@@ -43,6 +43,19 @@ GtLSmaCCRewritePropertyDefinitionSpecification >> commentDescription [
 ]
 
 { #category : #accessing }
+GtLSmaCCRewritePropertyDefinitionSpecification >> errorMessage [
+	self localProperties
+		do: [ :each | 
+			(RBScanner isVariable: each)
+				ifFalse: [ '`' , each , '` is an invalid property name' ] ].
+	self globalProperties
+		do: [ :each | 
+			(RBScanner isVariable: each)
+				ifFalse: [ '`' , each , '` is an invalid property name' ] ].
+	^ true
+]
+
+{ #category : #accessing }
 GtLSmaCCRewritePropertyDefinitionSpecification >> globalProperties [
 	^ globalProperties
 ]
@@ -59,12 +72,6 @@ GtLSmaCCRewritePropertyDefinitionSpecification >> globalPropertiesDescription [
 		label: 'Global globalProperties (keeps value from previous runs)';
 		accessor: #globalProperties;
 		classes: {String}
-]
-
-{ #category : #testing }
-GtLSmaCCRewritePropertyDefinitionSpecification >> isValid [
-	^ (self localProperties allSatisfy: [ :each | RBScanner isVariable: each ])
-		and: [ self globalProperties allSatisfy: [ :each | RBScanner isVariable: each ] ]
 ]
 
 { #category : #accessing }

@@ -8,6 +8,13 @@ Class {
 }
 
 { #category : #accessing }
+GtLSmaCCTransformationModel >> addFile: aFileSpec [
+	| ref |
+	ref := aFileSpec filename asFileReference.
+	^ files at: ref put: aFileSpec
+]
+
+{ #category : #accessing }
 GtLSmaCCTransformationModel >> files [
 	^ files
 ]

@@ -4,7 +4,7 @@ Class {
 	#category : #'Gt4Llm-SmaCC-Transformations-Tools'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLSmaCCTransformationRunnerTool >> description [
 	^ 'Runs a rewrite file on a sample source file and returns the transformed file.
 	
@@ -22,12 +22,12 @@ Example JSON response:
 '
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLSmaCCTransformationRunnerTool >> name [
 	^ 'runSmaCCRewrites'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #execution }
 GtLSmaCCTransformationRunnerTool >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments runner |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
@@ -40,7 +40,7 @@ GtLSmaCCTransformationRunnerTool >> privatePerformToolCall: aToolCall inContext:
 	^ runner runRewrites
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLSmaCCTransformationRunnerTool >> runnerDescription [
 	<magritteDescription>
 	^ MAToOneRelationDescription new

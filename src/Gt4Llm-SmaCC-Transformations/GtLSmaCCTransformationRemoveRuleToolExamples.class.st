@@ -4,7 +4,7 @@ Class {
 	#category : #'Gt4Llm-SmaCC-Transformations-Examples'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #examples }
 GtLSmaCCTransformationRemoveRuleToolExamples >> removeRewrite [
 	<gtExample>
 	| model file call tool targetObject size oldRewrite |
