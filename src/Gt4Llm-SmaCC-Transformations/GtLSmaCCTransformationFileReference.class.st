@@ -9,6 +9,11 @@ Class {
 }
 
 { #category : #accessing }
+GtLSmaCCTransformationFileReference >> errorMessage [
+	^ nil
+]
+
+{ #category : #accessing }
 GtLSmaCCTransformationFileReference >> filename [
 	^ filename
 ]
@@ -26,12 +31,7 @@ GtLSmaCCTransformationFileReference >> filenameDescription [
 		comment: 'Filename for the rules'
 ]
 
-{ #category : #testing }
-GtLSmaCCTransformationFileReference >> isValid [
-	^ model notNil
-]
-
-{ #category : #'as yet unclassified' }
+{ #category : #'llm views' }
 GtLSmaCCTransformationFileReference >> llmRawDataViewFor: aDataView [
 	<gtLlmDataView>
 	^ aDataView magritteObject: [ self ]

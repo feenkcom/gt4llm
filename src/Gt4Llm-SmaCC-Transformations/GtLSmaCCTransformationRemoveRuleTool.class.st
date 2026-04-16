@@ -8,7 +8,7 @@ Class {
 	#category : #'Gt4Llm-SmaCC-Transformations-Tools'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLSmaCCTransformationRemoveRuleTool >> description [
 	^ 'Removes the rewrite with id from a file.
 	
@@ -27,27 +27,27 @@ Example JSON response:
 '
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLSmaCCTransformationRemoveRuleTool >> name [
 	^ 'removeSmaCCRewrite'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #execution }
 GtLSmaCCTransformationRemoveRuleTool >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
-	| arguments rewriteReferenceCall |
+	| arguments removeRuleCall |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
-	rewriteReferenceCall := arguments
+	removeRuleCall := arguments
 			at: 'rewriteReference'
 			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
 					arguments: arguments;
 					missingArgument: 'rewriteReference' ].
-	rewriteReferenceCall model: model.
-	rewriteReferenceCall isValid
-		ifFalse: [ ^ GtLMissingDomainObject new objectName: 'id' ].
-	^ rewriteReferenceCall removeRewrite
+	removeRuleCall model: model.
+	removeRuleCall errorMessage
+		ifNotNil: [ :msg | ^ GtLProblemDomainObject new errorMessage: msg ].
+	^ removeRuleCall removeRewrite
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLSmaCCTransformationRemoveRuleTool >> rewriteFileDescription [
 	<magritteDescription>
 	^ MAToOneRelationDescription new

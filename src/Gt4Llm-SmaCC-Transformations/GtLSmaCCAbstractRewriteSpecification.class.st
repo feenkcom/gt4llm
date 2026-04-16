@@ -12,7 +12,12 @@ GtLSmaCCAbstractRewriteSpecification >> asSmaCCRewriteIn: aModel [
 	self subclassResponsibility
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
+GtLSmaCCAbstractRewriteSpecification >> errorMessage [
+	^ nil
+]
+
+{ #category : #actions }
 GtLSmaCCAbstractRewriteSpecification >> generateNewId [
 	id := UUID new asString
 ]
@@ -39,7 +44,7 @@ GtLSmaCCAbstractRewriteSpecification >> idDescription [
 		beRequired
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 GtLSmaCCAbstractRewriteSpecification >> initialize [
 	super initialize.
 	self generateNewId
@@ -48,11 +53,6 @@ GtLSmaCCAbstractRewriteSpecification >> initialize [
 { #category : #testing }
 GtLSmaCCAbstractRewriteSpecification >> isRewriteFile [
 	^ false
-]
-
-{ #category : #testing }
-GtLSmaCCAbstractRewriteSpecification >> isValid [
-	^ true
 ]
 
 { #category : #'llm views' }

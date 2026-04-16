@@ -19,10 +19,10 @@ GtSmaCCRewriteCodeTransformationSpecification >> asSmaCCTransformation [
 		yourself
 ]
 
-{ #category : #testing }
-GtSmaCCRewriteCodeTransformationSpecification >> isValid [
+{ #category : #accessing }
+GtSmaCCRewriteCodeTransformationSpecification >> errorMessage [
 	^ [ RBParser parseExpression: self source.
-	true ] on: Error do: [ :ex | ex return: false ]
+	nil ] on: Error do: [ :ex | ex return: 'Invalid transformation expression (' , ex messageText , ')' ]
 ]
 
 { #category : #accessing }

@@ -33,24 +33,34 @@ GtLSmaCCTransformationRunner >> rewriteRulesFile [
 
 { #category : #actions }
 GtLSmaCCTransformationRunner >> runRewrites [
-	| result processor parser |
+	| result processor parser transformationModel |
 	parser := self smaccParser.
 	parser
 		ifNil: [ ^ GtLProblemDomainObject new
 				description: 'Unknown parser: ' , self parserClass ].
-	result := SmaCCRewriteCompleteResult model: self.
+	transformationModel := SmaCCTransformationToolkitModel new.
+	transformationModel rewrites: self rewriteRulesFile.
+	transformationModel inputParserClass: parser.
+	result := SmaCCRewriteCompleteResult model: transformationModel.
 	processor := SmaCCRewriteProcessor new.
-	processor rules: self rewriteRulesFile.
+	processor rules: transformationModel rewrites.
 	processor parserClass: parser.
 	processor processFile: self sourceFile usingResult: result.
 	result outputSource
-		ifNil: [ | fileSpec id |
-			fileSpec := model specificationFor: result transformation parent filename.
-			(fileSpec rules
-				at: (result transformation parent rewrites identityIndexOf: result transformation)
-				ifAbsent: [  ]) ifNotNil: [ :spec | id := spec id ].
+		ifNil: [ | fileSpec id errorMessage |
+			errorMessage := result errorString.
+			result transformation
+				ifNotNil: [ :transformation | 
+					fileSpec := model specificationFor: transformation parent filename.
+					(fileSpec rules
+						at: (transformation parent rewrites identityIndexOf: transformation)
+						ifAbsent: [  ]) ifNotNil: [ :spec | id := spec id ] ].
+			id
+				ifNil: [ [ parser parse: self source ]
+						on: Error
+						do: [ :ex | errorMessage := 'Syntax error in input source to transform' ] ].
 			^ GtLSmaCCTransformationRunnerException new
-				message: result errorString;
+				message: errorMessage;
 				rewriteId: id;
 				line: result startLine;
 				column: result startColumn;
