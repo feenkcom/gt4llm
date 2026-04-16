@@ -3,7 +3,7 @@ Examples for GtLClassRemovalResult domain object.
 "
 Class {
 	#name : #GtLClassRemovalResultExamples,
-	#superclass : #GtLDomainObjectExamples,
+	#superclass : #GtLClassChangeResultExamples,
 	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
@@ -17,6 +17,8 @@ GtLClassRemovalResultExamples >> classRemovalResultCreation [
 		yourself.
 	self assert: result removedClassName equals: 'MyTestClass'.
 	self assert: result status equals: 'removed'.
+	self assertResultIsClass: result.
+	self assertResultIsClassRemoval: result.
 	^ result
 ]
 
