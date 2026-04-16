@@ -3,7 +3,7 @@ Examples for GtLMethodsRemovalResult domain object.
 "
 Class {
 	#name : #GtLMethodsRemovalResultExamples,
-	#superclass : #GtLMagritteDomainObjectExamples,
+	#superclass : #GtLDomainObjectExamples,
 	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
@@ -42,27 +42,24 @@ GtLMethodsRemovalResultExamples >> methodsRemovalResultCreation [
 	^ result
 ]
 
-{ #category : #'examples - data view' }
+{ #category : #examples }
 GtLMethodsRemovalResultExamples >> methodsRemovalResultDataViewSerialization [
 	<gtExample>
 	<return: #GtLPrimitiveMessageDataBlock>
-	| domainObject compositeView dataBlock jsonData expected |
+	| domainObject compositeView dataBlock expected |
 	domainObject := self methodsRemovalResultCreation.
 	compositeView := domainObject llmDataViewsFor: GtLDataView new.
 	self assert: compositeView dataViews size equals: 1.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock isNotNil.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
-	jsonData := dataBlock compositeJsonData.
 	expected := Dictionary new
 		at: #methods put: (NeoJSONArray withAll: {
 			NeoJSONObject new at: #status put: 'removed'; yourself.
 			NeoJSONObject new at: #status put: 'removed'; yourself });
 		yourself.
-	self assert: jsonData equals: expected.
+	self assertDataBlock: dataBlock hasLlmJsonData: expected.
 	
 	^ dataBlock
 ]

@@ -18,8 +18,7 @@ GtLSmalltalkCodeEvaluationExceptionDomainObjectExamples >> exceptionDomainObject
 	self assert: compositeView dataViews size equals: 2.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	jsonData := dataBlock compositeJsonData.
 	self assert: jsonData keys sorted equals: #('code' 'errorDetails' 'errorReason').

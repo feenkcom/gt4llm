@@ -3,8 +3,8 @@ Examples for GtLLepiterSnippetDomainObject and its subclasses.
 "
 Class {
 	#name : #GtLLepiterSnippetDomainObjectExamples,
-	#superclass : #Object,
-	#category : #'Gt4LlmCore-Examples-Magritte Objects'
+	#superclass : #GtLDomainObjectExamples,
+	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #examples }
@@ -65,69 +65,60 @@ GtLLepiterSnippetDomainObjectExamples >> basicSnippetsDomainObject [
 	^ domainObject
 ]
 
-{ #category : #'examples - serialization' }
+{ #category : #examples }
 GtLLepiterSnippetDomainObjectExamples >> snippetDomainObjectDataViewSerialization [
 	<gtExample>
-	| domainObject compositeView dataBlock jsonData expected |
+	| domainObject compositeView dataBlock expected |
 	domainObject := self basicSnippetDomainObject.
 	compositeView := domainObject llmDataViewsFor: GtLDataView new.
 	self assert: compositeView dataViews size equals: 1.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock isNotNil.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
-	jsonData := dataBlock compositeJsonData.
 	expected := Dictionary new
 		at: #status put: 'created';
 		at: #pageUid put: 'test-page-uid';
 		at: #snippetUid put: 'test-snippet-uid';
 		yourself.
-	self assert: jsonData equals: expected.
+	self assertDataBlock: dataBlock hasLlmJsonData: expected.
 	
 	^ dataBlock
 ]
 
-{ #category : #'examples - serialization' }
+{ #category : #examples }
 GtLLepiterSnippetDomainObjectExamples >> snippetEditDomainObjectDataViewSerialization [
 	<gtExample>
-	| domainObject compositeView dataBlock jsonData expected |
+	| domainObject compositeView dataBlock expected |
 	domainObject := self basicSnippetEditDomainObject.
 	compositeView := domainObject llmDataViewsFor: GtLDataView new.
 	self assert: compositeView dataViews size equals: 1.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock isNotNil.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
-	jsonData := dataBlock compositeJsonData.
 	expected := Dictionary new
 		at: #status put: 'updated';
 		at: #pageUid put: 'test-page-uid';
 		at: #snippetUid put: 'test-snippet-uid';
 		at: #oldText put: 'Old content';
 		yourself.
-	self assert: jsonData equals: expected.
+	self assertDataBlock: dataBlock hasLlmJsonData: expected.
 	
 	^ dataBlock
 ]
 
-{ #category : #'examples - serialization' }
+{ #category : #examples }
 GtLLepiterSnippetDomainObjectExamples >> snippetsDomainObjectDataViewSerialization [
 	<gtExample>
-	| domainObject compositeView dataBlock jsonData expected |
+	| domainObject compositeView dataBlock expected |
 	domainObject := self basicSnippetsDomainObject.
 	compositeView := domainObject llmDataViewsFor: GtLDataView new.
 	self assert: compositeView dataViews size equals: 1.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock isNotNil.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
-	jsonData := dataBlock compositeJsonData.
 	expected := Dictionary new
 		at: #snippets put: (NeoJSONArray withAll: {
 			NeoJSONObject new
@@ -141,7 +132,7 @@ GtLLepiterSnippetDomainObjectExamples >> snippetsDomainObjectDataViewSerializati
 				at: #snippetUid put: 'snippet-uid-2';
 				yourself });
 		yourself.
-	self assert: jsonData equals: expected.
+	self assertDataBlock: dataBlock hasLlmJsonData: expected.
 	
 	^ dataBlock
 ]

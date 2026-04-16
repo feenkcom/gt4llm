@@ -3,7 +3,7 @@ Examples for GtLClassesCreationResult domain object.
 "
 Class {
 	#name : #GtLClassesCreationResultExamples,
-	#superclass : #GtLMagritteDomainObjectExamples,
+	#superclass : #GtLDomainObjectExamples,
 	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
@@ -39,9 +39,7 @@ GtLClassesCreationResultExamples >> creationResultSerializationWithMixedResults 
 	self assert: compositeView dataViews size equals: 1.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock isNotNil.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	jsonData := dataBlock compositeJsonData.
 	self assert: (jsonData includesKey: #classes).
@@ -69,22 +67,18 @@ GtLClassesCreationResultExamples >> creationResultSerializationWithMixedResults 
 	^ dataBlock
 ]
 
-{ #category : #'examples - serialization' }
+{ #category : #examples }
 GtLClassesCreationResultExamples >> creationResultSerializationWithMultipleClasses [
 	<gtExample>
 	<return: #GtLPrimitiveMessageDataBlock>
-	| result compositeView dataBlock jsonData firstClassJson secondClassJson expectedJson |
+	| result compositeView dataBlock firstClassJson secondClassJson expectedJson |
 	result := self creationResultWithMultipleClasses.
 	
 	compositeView := result llmDataViewsFor: GtLDataView new.
 	self assert: compositeView dataViews size equals: 1.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock isNotNil.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
-	
-	jsonData := dataBlock compositeJsonData.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	firstClassJson := NeoJSONObject new
 		at: #currentClassName put: 'SampleCreatedClass';
@@ -109,27 +103,23 @@ GtLClassesCreationResultExamples >> creationResultSerializationWithMultipleClass
 	expectedJson := {
 		#classes -> (NeoJSONArray with: firstClassJson with: secondClassJson)
 	} asDictionary.
-	self assert: jsonData equals: expectedJson.
+	self assertDataBlock: dataBlock hasLlmJsonData: expectedJson.
 	
 	^ dataBlock
 ]
 
-{ #category : #'examples - serialization' }
+{ #category : #examples }
 GtLClassesCreationResultExamples >> creationResultSerializationWithSingleClass [
 	<gtExample>
 	<return: #GtLPrimitiveMessageDataBlock>
-	| result compositeView dataBlock jsonData expectedClassJson expectedJson |
+	| result compositeView dataBlock expectedClassJson expectedJson |
 	result := self creationResultWithSingleClass.
 	
 	compositeView := result llmDataViewsFor: GtLDataView new.
 	self assert: compositeView dataViews size equals: 1.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock isNotNil.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
-	
-	jsonData := dataBlock compositeJsonData.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	expectedClassJson := NeoJSONObject new
 		at: #currentClassName put: 'SampleCreatedClass';
@@ -144,7 +134,7 @@ GtLClassesCreationResultExamples >> creationResultSerializationWithSingleClass [
 	expectedJson := {
 		#classes -> (NeoJSONArray with: expectedClassJson)
 	} asDictionary.
-	self assert: jsonData equals: expectedJson.
+	self assertDataBlock: dataBlock hasLlmJsonData: expectedJson.
 	
 	^ dataBlock
 ]
@@ -218,26 +208,23 @@ GtLClassesCreationResultExamples >> emptyCreationResult [
 	^ result
 ]
 
-{ #category : #'examples - serialization' }
+{ #category : #examples }
 GtLClassesCreationResultExamples >> emptyCreationResultSerialization [
 	<gtExample>
 	<return: #GtLPrimitiveMessageDataBlock>
-	| result compositeView dataBlock jsonData expectedJson |
+	| result compositeView dataBlock expectedJson |
 	result := self emptyCreationResult.
 	
 	compositeView := result llmDataViewsFor: GtLDataView new.
 	self assert: compositeView dataViews size equals: 1.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock isNotNil.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
-	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
 		#classes -> NeoJSONArray new
 	} asDictionary.
-	self assert: jsonData equals: expectedJson.
+	self assertDataBlock: dataBlock hasLlmJsonData: expectedJson.
 	
 	^ dataBlock
 ]

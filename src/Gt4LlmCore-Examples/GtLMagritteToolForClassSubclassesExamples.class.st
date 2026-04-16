@@ -7,7 +7,7 @@ Class {
 	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
-{ #category : #examples }
+{ #category : #'examples - data views' }
 GtLMagritteToolForClassSubclassesExamples >> classSubclassesDataViewSerialization [
 	<gtExample>
 	<return: #GtLPrimitiveMessageDataBlock>
@@ -18,11 +18,9 @@ GtLMagritteToolForClassSubclassesExamples >> classSubclassesDataViewSerializatio
 	self assert: compositeView dataViews size equals: 1.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock isNotNil.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
-	jsonData := dataBlock compositeJsonData.
+	jsonData := dataBlock llmJsonData.
 	self assert: (jsonData at: #givenClassName) equals: 'GtLAbstractMagritteFunctionTool'.
 	self assert: (jsonData at: #subclassNames) isNotEmpty.
 	self assert: (jsonData at: #mayHaveMore) not.

@@ -7,10 +7,10 @@ Class {
 	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
-{ #category : #examples }
+{ #category : #'examples - data views' }
 GtLToolForLepiterPageContentsExamples >> pageSerializationForExistingPage [
 	<gtExample>
-	| call database page compositeView dataBlock jsonData expected |
+	| call database page compositeView dataBlock expected |
 	database := LeDatabase gtBook.
 	page := database pageNamed: 'Warmup: understanding the Money classes'.
 	call := self
@@ -23,12 +23,13 @@ GtLToolForLepiterPageContentsExamples >> pageSerializationForExistingPage [
 	self assert: call result targetObject targetPage equals: page.
 	compositeView := call result targetObject llmDataViewsFor: GtLDataView new.
 	self assert: compositeView dataViews size equals: 1.
+	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
-	jsonData := dataBlock compositeJsonData.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
+	
 	expected := NeoJSONReader fromString: (LeJsonV4 uniqueInstance serializePretty: page).
-	self assert: jsonData equals: expected.
+	self assertDataBlock: dataBlock hasLlmJsonData: expected.
+	
 	^ call
 ]
 

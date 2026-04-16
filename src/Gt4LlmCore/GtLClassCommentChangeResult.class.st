@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLClassCommentChangeResult,
-	#superclass : #Object,
+	#superclass : #GtLClassChangeResult,
 	#instVars : [
 		'updatedClass',
 		'status',
@@ -9,6 +9,21 @@ Class {
 	],
 	#category : #'Gt4LlmCore-Magritte Objects'
 }
+
+{ #category : #views }
+GtLClassCommentChangeResult >> asDiffElement [
+	| newSource oldSource |
+	oldSource := self oldClassComment.
+	newSource := self newClassComment.
+	^ GtDiffElementWithLabelStencil new
+		fromLabelText: 'Old comment for ', (self changedClassName);
+		toLabelText: 'New comment for '	, (self changedClassName);
+		change: (GtDiffBuilder
+				computeDifferencesFrom: oldSource
+				to: newSource
+				using: GtSmaCCDiffSplitter forPharo);
+		asElement
+]
 
 { #category : #accessing }
 GtLClassCommentChangeResult >> changedClassName [
@@ -22,6 +37,28 @@ GtLClassCommentChangeResult >> changedClassNameDescription [
 		label: 'Class name';
 		accessor: #changedClassName;
 		beRequired
+]
+
+{ #category : #views }
+GtLClassCommentChangeResult >> gtDiffFor: aView [
+	<gtView>
+	<gtCodeChangeView>
+	^ aView explicit
+		title: 'Diff';
+		priority: 5;
+		stencil: [ self asDiffElement ]
+]
+
+{ #category : #'as yet unclassified' }
+GtLClassCommentChangeResult >> gtViewChangeDescriptionElement [
+	^ GtLClassCommentChangeDescriptionElement new
+		updateForChangeObject: self;
+		yourself
+]
+
+{ #category : #views }
+GtLClassCommentChangeResult >> gtViewChangeIcon [
+	^ self class modificationIcon
 ]
 
 { #category : #'llm - views' }
@@ -68,6 +105,11 @@ GtLClassCommentChangeResult >> statusDescription [
 		label: 'Status';
 		accessor: #status;
 		beRequired
+]
+
+{ #category : #accessing }
+GtLClassCommentChangeResult >> targetClassName [
+	^ self changedClassName
 ]
 
 { #category : #accessing }

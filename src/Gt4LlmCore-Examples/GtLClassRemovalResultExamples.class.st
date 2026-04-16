@@ -3,7 +3,7 @@ Examples for GtLClassRemovalResult domain object.
 "
 Class {
 	#name : #GtLClassRemovalResultExamples,
-	#superclass : #GtLMagritteDomainObjectExamples,
+	#superclass : #GtLClassChangeResultExamples,
 	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
@@ -17,6 +17,8 @@ GtLClassRemovalResultExamples >> classRemovalResultCreation [
 		yourself.
 	self assert: result removedClassName equals: 'MyTestClass'.
 	self assert: result status equals: 'removed'.
+	self assertResultIsClass: result.
+	self assertResultIsClassRemoval: result.
 	^ result
 ]
 
@@ -24,22 +26,19 @@ GtLClassRemovalResultExamples >> classRemovalResultCreation [
 GtLClassRemovalResultExamples >> classRemovalResultDataViewSerialization [
 	<gtExample>
 	<return: #GtLPrimitiveMessageDataBlock>
-	| result compositeView dataBlock jsonData expectedJson |
+	| result compositeView dataBlock expectedJson |
 	result := self classRemovalResultCreation.
 	compositeView := result llmDataViewsFor: GtLDataView new.
 	self assert: compositeView dataViews size equals: 1.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock isNotNil.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
-	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
 		#removedClassName -> 'MyTestClass'.
 		#status -> 'removed'
 	} asDictionary.
-	self assert: jsonData equals: expectedJson.
+	self assertDataBlock: dataBlock hasLlmJsonData: expectedJson.
 	
 	^ dataBlock
 ]

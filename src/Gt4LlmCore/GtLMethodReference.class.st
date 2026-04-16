@@ -15,6 +15,15 @@ GtLMethodReference class >> fromCompiledMethod: aMethod [
 			initializeFromCompiledMethod: aMethod 
 ]
 
+{ #category : #comparing }
+GtLMethodReference >> = anObject [
+	self == anObject ifTrue: [ ^ true ].
+	(self class = anObject class) ifFalse: [ ^ false ].
+	^ self methodClassName = anObject methodClassName
+		and: [ self methodName = anObject methodName
+		and: [ self classSide = anObject classSide ] ]
+]
+
 { #category : #accessing }
 GtLMethodReference >> classSide [
 	^ classSide 
@@ -70,6 +79,19 @@ GtLMethodReference >> compiledMethodIfPresent: aPresentBlock ifMissing: anErrorB
 				objectName: self methodSignature) ].
 						
 	^ aPresentBlock value: method
+]
+
+{ #category : #testing }
+GtLMethodReference >> existsInImage [
+	^ self 
+			compiledMethodIfPresent: [ :each | true ] 
+			ifMissing: [ :each | false ]
+]
+
+{ #category : #comparing }
+GtLMethodReference >> hash [
+	^ (self methodClassName hash bitXor: self methodName hash)
+		bitXor: self classSide hash
 ]
 
 { #category : #initialization }

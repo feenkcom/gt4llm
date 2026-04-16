@@ -3,7 +3,7 @@ Examples for GtLSmalltalkCodeEvaluationResult and related domain objects.
 "
 Class {
 	#name : #GtLSmalltalkCodeEvaluationResultExamples,
-	#superclass : #GtLMagritteDomainObjectExamples,
+	#superclass : #GtLDomainObjectExamples,
 	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
@@ -44,8 +44,7 @@ GtLSmalltalkCodeEvaluationResultExamples >> simpleResultDataViewSerialization [
 	self assert: compositeView dataViews size equals: 2.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	jsonData := dataBlock compositeJsonData.
 	

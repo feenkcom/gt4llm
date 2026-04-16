@@ -3,16 +3,17 @@ Extension { #name : #GtPharoMethodCoder }
 { #category : #'*Gt4Llm-GToolkit' }
 GtPharoMethodCoder >> addRenameMethodMenuForAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns>
+	| aDocumentId |
+	aDocumentId := aCoderViewModel documentId.
 	GtLlmFeatures isEnabledInCoder ifFalse: [ ^ self ].
-
 	(self nodeFrom: aCoderViewModel)
 		ifNotNil: [ :node | 
 			node isMethodPattern ifFalse: [ ^ self ].
 			(coderAddOns
 				addContextMenuItem: 'Propose method renames' asRopedText
 				group: BrMenuItemGroupConfiguration llm
-				hover: (self highlightNodeBlock: node)
-				leave: self removeHighlightBlock
+				hover: (self highlightNodeBlock: node documentId: aDocumentId)
+				leave: self removeHighlightsBlock
 				action: [ :model :element | 
 					model llmChat
 						sendAction: (GtLlmActionCall action: 'Rename method')
@@ -28,6 +29,8 @@ GtPharoMethodCoder >> addRenameMethodMenuForAst: anAst to: coderAddOns from: aCo
 { #category : #'*Gt4Llm-GToolkit' }
 GtPharoMethodCoder >> addReviewMethodMenuForAst: anAst to: coderAddOns from: aCoderViewModel [
 	<gtCoderContextMenuAddOns>
+	| aDocumentId |
+	aDocumentId := aCoderViewModel documentId.
 	GtLlmFeatures isEnabledInCoder ifFalse: [ ^ self ].
 	(coderAddOns
 		addContextMenuItem: 'Review method' asRopedText

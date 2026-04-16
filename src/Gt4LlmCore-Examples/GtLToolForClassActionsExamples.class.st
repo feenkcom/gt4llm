@@ -4,7 +4,7 @@ Class {
 	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
-{ #category : #examples }
+{ #category : #'examples - data views' }
 GtLToolForClassActionsExamples >> classActionsDataViewSerialization [
 	<gtExample>
 	<return: #GtLPrimitiveMessageDataBlock>
@@ -12,14 +12,15 @@ GtLToolForClassActionsExamples >> classActionsDataViewSerialization [
 	call := self classActionsForExistingClass.
 	compositeView := call result targetObject llmDataViewsFor: GtLDataView new.
 	self assert: compositeView dataViews size equals: 1.
+	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock isNotNil.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
-	jsonData := dataBlock compositeJsonData.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
+	
+	jsonData := dataBlock llmJsonData.
 	self assert: (jsonData at: 'className') equals: 'GtLudoRecordingGame'.
 	self assert: (jsonData at: 'methods') isNotEmpty.
 	self assert: ((jsonData at: 'methods') anySatisfy: [ :m | m includesSubstring: 'gtAutoplayAction:' ]).
+	
 	^ dataBlock
 ]
 

@@ -3,14 +3,14 @@ Examples for GtLMethodRemovalResult domain object.
 "
 Class {
 	#name : #GtLMethodRemovalResultExamples,
-	#superclass : #GtLMagritteDomainObjectExamples,
+	#superclass : #GtLMethodChangeResultExamples,
 	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #examples }
 GtLMethodRemovalResultExamples >> methodRemovalResultCreation [
 	<gtExample>
-	| methodWithSource result |
+	| methodWithSource targetMethodReference result |
 	methodWithSource := GtLMethodWithSource new
 		methodReference: (GtLMethodReference new
 			methodClassName: 'SampleClass';
@@ -18,6 +18,11 @@ GtLMethodRemovalResultExamples >> methodRemovalResultCreation [
 			classSide: false;
 			yourself);
 		sourceCode: 'sampleMethod ^ 42';
+		yourself.
+	targetMethodReference := GtLMethodReference new
+		methodClassName: 'SampleClass';
+		methodName: 'sampleMethod';
+		classSide: false;
 		yourself.
 	result := GtLMethodRemovalResult new
 		removedMethod: methodWithSource;
@@ -27,28 +32,28 @@ GtLMethodRemovalResultExamples >> methodRemovalResultCreation [
 	self assert: result removedMethod methodName equals: 'sampleMethod'.
 	self assert: result removedMethod methodClassName equals: 'SampleClass'.
 	self assert: result removedMethod sourceCode equals: 'sampleMethod ^ 42'.
+	self assert: result targetMethodReference equals: targetMethodReference.
+	self assertResultIsMethod: result.
+	self assertResultIsMethodRemoval: result.
 	^ result
 ]
 
-{ #category : #'examples - data view' }
+{ #category : #examples }
 GtLMethodRemovalResultExamples >> methodRemovalResultDataViewSerialization [
 	<gtExample>
 	<return: #GtLPrimitiveMessageDataBlock>
-	| domainObject compositeView dataBlock jsonData expected |
+	| domainObject compositeView dataBlock expected |
 	domainObject := self methodRemovalResultCreation.
 	compositeView := domainObject llmDataViewsFor: GtLDataView new.
 	self assert: compositeView dataViews size equals: 1.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock isNotNil.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
-	jsonData := dataBlock compositeJsonData.
 	expected := Dictionary new
 		at: #status put: 'removed';
 		yourself.
-	self assert: jsonData equals: expected.
+	self assertDataBlock: dataBlock hasLlmJsonData: expected.
 	
 	^ dataBlock
 ]

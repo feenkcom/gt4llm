@@ -3,7 +3,7 @@ Examples for GtLPhlowViewDomainObject demonstrating data view serialization.
 "
 Class {
 	#name : #GtLPhlowViewDomainObjectExamples,
-	#superclass : #Object,
+	#superclass : #GtLDomainObjectExamples,
 	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 

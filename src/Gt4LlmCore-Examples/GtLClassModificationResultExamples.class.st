@@ -3,7 +3,7 @@ Examples for GtLClassModificationResult domain object.
 "
 Class {
 	#name : #GtLClassModificationResultExamples,
-	#superclass : #GtLMagritteDomainObjectExamples,
+	#superclass : #GtLClassChangeResultExamples,
 	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
@@ -16,11 +16,8 @@ GtLClassModificationResultExamples >> classModificationResultCreation [
 		updatedClass: self updatedClassDefinition;
 		yourself.
 	
-	"Verify the stored objects"
 	self assert: result originalClass isNotNil.
 	self assert: result updatedClass isNotNil.
-	
-	"Verify delegation to updatedClass"
 	self assert: result currentClassName equals: 'MyExampleClass'.
 	self assert: result superclassName equals: 'Exception'.
 	self assert: result packageName equals: 'NewPackage'.
@@ -29,12 +26,11 @@ GtLClassModificationResultExamples >> classModificationResultCreation [
 	self assert: result classSlotNames equals: #('classSlot').
 	self assert: result classVariableNames equals: #('SharedVar').
 	self assert: result traitCompositionString equals: '{}'.
-	
-	"Verify original is preserved"
 	self assert: result originalClass superclassName equals: 'Object'.
 	self assert: result originalClass packageName equals: 'OriginalPackage'.
 	self assert: result originalClass instanceSlotNames equals: #('slot1').
-	
+	self assertResultIsClass: result.
+	self assertResultIsClassModification: result.
 	^ result
 ]
 
@@ -77,18 +73,15 @@ GtLClassModificationResultExamples >> classModificationResultFromRealClass [
 GtLClassModificationResultExamples >> classModificationResultSerialization [
 	<gtExample>
 	<return: #GtLPrimitiveMessageDataBlock>
-	| result compositeView dataBlock jsonData expectedJson |
+	| result compositeView dataBlock expectedJson |
 	result := self classModificationResultCreation.
 	
 	compositeView := result llmDataViewsFor: GtLDataView new.
 	self assert: compositeView dataViews size equals: 1.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock isNotNil.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
-	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
 		#currentClassName -> 'MyExampleClass'.
 		#superclassName -> 'Exception'.
@@ -99,7 +92,7 @@ GtLClassModificationResultExamples >> classModificationResultSerialization [
 		#classVariableNames -> (NeoJSONArray withAll: #('SharedVar')).
 		#traitCompositionString -> '{}'
 	} asDictionary.
-	self assert: jsonData equals: expectedJson.
+	self assertDataBlock: dataBlock hasLlmJsonData: expectedJson.
 	
 	^ dataBlock
 ]
@@ -109,18 +102,15 @@ GtLClassModificationResultExamples >> classModificationResultSerializationWithou
 	<gtExample>
 	<return: #GtLPrimitiveMessageDataBlock>
 	"Verify serialization works when originalClass is nil"
-	| result compositeView dataBlock jsonData expectedJson |
+	| result compositeView dataBlock expectedJson |
 	result := self classModificationResultWithoutOriginal.
 	
 	compositeView := result llmDataViewsFor: GtLDataView new.
 	self assert: compositeView dataViews size equals: 1.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock isNotNil.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
-	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
 		#currentClassName -> 'MyExampleClass'.
 		#superclassName -> 'Exception'.
@@ -131,7 +121,7 @@ GtLClassModificationResultExamples >> classModificationResultSerializationWithou
 		#classVariableNames -> (NeoJSONArray withAll: #('SharedVar')).
 		#traitCompositionString -> '{}'
 	} asDictionary.
-	self assert: jsonData equals: expectedJson.
+	self assertDataBlock: dataBlock hasLlmJsonData: expectedJson.
 	
 	^ dataBlock
 ]
@@ -148,11 +138,10 @@ GtLClassModificationResultExamples >> classModificationResultWithoutOriginal [
 	
 	self assert: result originalClass isNil.
 	self assert: result updatedClass isNotNil.
-	
-	"Delegation still works"
 	self assert: result currentClassName equals: 'MyExampleClass'.
 	self assert: result superclassName equals: 'Exception'.
-	
+	self assertResultIsClass: result.
+	self assertResultIsClassAddition: result.
 	^ result
 ]
 

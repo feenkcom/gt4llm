@@ -29,7 +29,7 @@ GtLJsonDataViewExamples >> standaloneJsonDataViewWithDataKey [
 	^basicView
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'examples - serialization' }
 GtLJsonDataViewExamples >> standaloneJsonDataViewWithDataKey_serialization [
 	<gtExample>
 	| basicView dataBlock compositeJsonDataBlock concreteJsonDataBlock |
@@ -48,7 +48,7 @@ GtLJsonDataViewExamples >> standaloneJsonDataViewWithDataKey_serialization [
 	self assert: compositeJsonDataBlock dataKey isNil.
 	self assert: compositeJsonDataBlock jsonDataBlocks size equals: 1.
 	self
-		assert: compositeJsonDataBlock llmJsonData
+		assert: dataBlock llmJsonData
 		equals: {'data' -> {
 				'one' -> 1.
 				'two' -> 2
@@ -91,7 +91,7 @@ GtLJsonDataViewExamples >> standaloneJsonDataViewWithoutDataKey [
 	^basicView
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'examples - serialization' }
 GtLJsonDataViewExamples >> standaloneJsonDataViewWithoutDataKey_serialization [
 	<gtExample>
 	| basicView dataBlock compositeJsonDataBlock concreteJsonDataBlock|
@@ -110,7 +110,7 @@ GtLJsonDataViewExamples >> standaloneJsonDataViewWithoutDataKey_serialization [
 	self assert: compositeJsonDataBlock dataKey isNil.
 	self assert: compositeJsonDataBlock jsonDataBlocks size equals: 1.
 	self
-		assert: compositeJsonDataBlock llmJsonData
+		assert: dataBlock llmJsonData
 		equals: {
 				'one' -> 1.
 				'two' -> 2

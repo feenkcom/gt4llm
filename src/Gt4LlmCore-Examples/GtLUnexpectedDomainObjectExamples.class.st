@@ -32,8 +32,7 @@ GtLUnexpectedDomainObjectExamples >> emptyUnexpectedDomainObject [
 	self assert: compositeView dataViews size equals: 1.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
@@ -49,23 +48,20 @@ GtLUnexpectedDomainObjectExamples >> emptyUnexpectedDomainObject [
 GtLUnexpectedDomainObjectExamples >> unexpectedDomainObjectDataViewSerialization [
 	<gtExample>
 	<return: #GtLPrimitiveMessageDataBlock>
-	| domainObject compositeView dataBlock jsonData expectedJson |
+	| domainObject compositeView dataBlock expectedJson |
 	
 	domainObject := self basicUnexpectedDomainObject.
 	compositeView := domainObject llmDataViewsFor: GtLDataView new.
 	self assert: compositeView dataViews size equals: 1.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock isNotNil.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
-	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
 		#objectName -> 'ExistingClass'.
 		#messageText -> 'ExistingClass already exists'
 	} asDictionary.
-	self assert: jsonData equals: expectedJson.
+	self assertDataBlock: dataBlock hasLlmJsonData: expectedJson.
 	
 	^ dataBlock
 ]

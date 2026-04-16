@@ -3,16 +3,11 @@ Examples for GtLTestCaseWithResultDomainObject data views.
 "
 Class {
 	#name : #GtLTestCaseWithResultDomainObjectExamples,
-	#superclass : #Object,
+	#superclass : #GtLDomainObjectExamples,
 	#traits : 'TGtLExceptionResultAssertions',
 	#classTraits : 'TGtLExceptionResultAssertions classTrait',
 	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
-
-{ #category : #assertions }
-GtLTestCaseWithResultDomainObjectExamples >> assertJsonData: jsonData hasExpectedKeys: expectedKeys [
-	self assert: jsonData keys sorted equals: expectedKeys sorted
-]
 
 { #category : #private }
 GtLTestCaseWithResultDomainObjectExamples >> runTestMethod: aCompiledMethod [
@@ -155,7 +150,7 @@ GtLTestCaseWithResultDomainObjectExamples >> testCaseWithResultForFailingTest [
 	^ domainObject
 ]
 
-{ #category : #'examples - success' }
+{ #category : #examples }
 GtLTestCaseWithResultDomainObjectExamples >> testCaseWithResultForPassingTest [
 	<gtExample>
 	<return: #GtLTestCaseWithResultDomainObject>
@@ -175,8 +170,7 @@ GtLTestCaseWithResultDomainObjectExamples >> testCaseWithResultForPassingTest [
 	self assert: compositeView dataViews size equals: 2.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	jsonData := dataBlock llmJsonData.
 	expectedJson := {

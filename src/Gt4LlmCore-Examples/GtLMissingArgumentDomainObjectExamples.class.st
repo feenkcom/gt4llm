@@ -34,8 +34,7 @@ GtLMissingArgumentDomainObjectExamples >> emptyMissingArgumentDomainObject [
 	self assert: compositeView dataViews size equals: 1.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
@@ -51,25 +50,22 @@ GtLMissingArgumentDomainObjectExamples >> emptyMissingArgumentDomainObject [
 GtLMissingArgumentDomainObjectExamples >> missingArgumentDataViewSerialization [
 	<gtExample>
 	<return: #Dictionary>
-	| domainObject compositeView dataBlock jsonData expectedJson |
+	| domainObject compositeView dataBlock expectedJson |
 	
 	domainObject := self basicMissingArgumentDomainObject.
 	compositeView := domainObject llmDataViewsFor: GtLDataView new.
 	self assert: compositeView dataViews size equals: 1.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock isNotNil.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
-	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
 		#missingArgument -> 'requiredParam'.
 		#errorMessage -> 'Missing required argument: requiredParam'
 	} asDictionary.
-	self assert: jsonData equals: expectedJson.
+	self assertDataBlock: dataBlock hasLlmJsonData: expectedJson.
 	
-	^ jsonData
+	^ dataBlock llmJsonData
 ]
 
 { #category : #examples }
@@ -88,8 +84,7 @@ GtLMissingArgumentDomainObjectExamples >> missingArgumentWithEmptyArguments [
 	self assert: compositeView dataViews size equals: 1.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
@@ -116,8 +111,7 @@ GtLMissingArgumentDomainObjectExamples >> missingArgumentWithoutErrorMessage [
 	self assert: compositeView dataViews size equals: 1.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	jsonData := dataBlock compositeJsonData.
 	expectedJson := {

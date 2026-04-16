@@ -56,24 +56,24 @@ GtLMagritteToolForMethodImplementorsExamples >> implementorsForUnknownMethodName
 	^ call
 ]
 
-{ #category : #examples }
+{ #category : #'examples - data views' }
 GtLMagritteToolForMethodImplementorsExamples >> implementorsForUnknownMethodNameDataViewSerialization [
 	<gtExample>
 	<return: #GtLPrimitiveMessageDataBlock>
-	| call compositeView dataBlock jsonData expected |
+	| call compositeView dataBlock expectedJson |
 	call := self implementorsForUnknownMethodName.
 	compositeView := call result targetObject llmDataViewsFor: GtLDataView new.
 	self assert: compositeView dataViews size equals: 1.
+	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock isNotNil.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
-	jsonData := dataBlock compositeJsonData.
-	expected := Dictionary new
+	self assertDataBlockHasOnlyJsonData: dataBlock.
+	
+	expectedJson := Dictionary new
 		at: #foundMethods put: NeoJSONArray new;
 		at: #mayHaveMore put: false;
 		yourself.
-	self assert: jsonData equals: expected.
+	self assertDataBlock: dataBlock hasLlmJsonData: expectedJson.
+	
 	^ dataBlock
 ]
 

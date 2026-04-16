@@ -206,6 +206,23 @@ GtLReplyMessage >> finishedAt [
 ]
 
 { #category : #'gt - extensions' }
+GtLReplyMessage >> gToolCallsSummariesFor: aView [
+	<gtView>
+	^ aView columnedList
+		title: 'Tool call summarizers';
+		priority: 30;
+		items: [ self toolCallsSummarizers ];
+		column: 'Summary' 
+			text: [ :each | each title ];
+		column: 'Details' text: [ :each | 
+			each summaryText ];
+		column: 'Has data' 
+			text: [ :each | 
+				each hasSummaryData ifTrue: [ 'yes' ] ifFalse: [ 'no' ] ]
+			width: 100
+]
+
+{ #category : #'gt - extensions' }
 GtLReplyMessage >> gtActionStopFor: anAction [
 	<gtAction>
 	<gtLlmAction>
@@ -242,7 +259,7 @@ GtLReplyMessage >> gtJsonFor: aView [
 { #category : #'gt - extensions' }
 GtLReplyMessage >> gtToolViewMessagesFor: aView [
 	<gtView>
-	<gtLlmView>
+
 	self executionMessages ifEmpty: [ ^ aView empty ].
 
 	^ aView columnedList

@@ -52,17 +52,16 @@ GtLForwardToAllViewsExamples >> forwardToBothJsonViewsWithDataKey [
 	^ forwardDataView
 ]
 
-{ #category : #examples }
+{ #category : #'examples - serialization' }
 GtLForwardToAllViewsExamples >> forwardToBothJsonViewsWithDataKey_serialization [
 	<gtExample>
-	| forwardDataView dataBlock actualData expectedData |
+	| forwardDataView dataBlock expectedData |
 	forwardDataView := self forwardToBothJsonViewsWithDataKey.
 	dataBlock := forwardDataView serializeToLlmPrimiteData.
 	
 	self assert: dataBlock dataBlocks size equals: 1.
 	self assert: dataBlock compositeJsonDataBlock containedJsonDataBlocksCount equals: 2.
 	
-	actualData := dataBlock compositeJsonDataBlock llmJsonData.
 	expectedData := Dictionary new
 		at: #allJsonViews put: (Dictionary new
 			at: #first put: (NeoJSONObject new
@@ -75,22 +74,21 @@ GtLForwardToAllViewsExamples >> forwardToBothJsonViewsWithDataKey_serialization 
 				yourself);
 			yourself);
 		yourself.
-	self assert: actualData equals: expectedData.
+	self assertDataBlock: dataBlock hasLlmJsonData: expectedData.
 	
 	^ dataBlock
 ]
 
-{ #category : #examples }
+{ #category : #'examples - serialization' }
 GtLForwardToAllViewsExamples >> forwardToBothJsonViews_serialization [
 	<gtExample>
-	| forwardDataView dataBlock actualData expectedData |
+	| forwardDataView dataBlock expectedData |
 	forwardDataView := self forwardToBothJsonViews.
 	dataBlock := forwardDataView serializeToLlmPrimiteData.
 	
 	self assert: dataBlock dataBlocks size equals: 1.
 	self assert: dataBlock compositeJsonDataBlock containedJsonDataBlocksCount equals: 2.
 	
-	actualData := dataBlock compositeJsonDataBlock llmJsonData.
 	expectedData := Dictionary new
 		at: #first put: (NeoJSONObject new
 			at: #type put: 'first';
@@ -101,7 +99,7 @@ GtLForwardToAllViewsExamples >> forwardToBothJsonViews_serialization [
 			at: #value put: 200;
 			yourself);
 		yourself.
-	self assert: actualData equals: expectedData.
+	self assertDataBlock: dataBlock hasLlmJsonData: expectedData.
 	
 	^ dataBlock
 ]
@@ -156,11 +154,11 @@ GtLForwardToAllViewsExamples >> forwardToMultipleViewsWithDataKey [
 	^ forwardDataView
 ]
 
-{ #category : #examples }
+{ #category : #'examples - serialization' }
 GtLForwardToAllViewsExamples >> forwardToMultipleViewsWithDataKey_serialization [
 	<gtExample>
 	"Test serialization when the forward view has a data key."
-	| forwardDataView dataBlock actualData expectedData |
+	| forwardDataView dataBlock expectedData |
 	forwardDataView := self forwardToMultipleViewsWithDataKey.
 	dataBlock := forwardDataView serializeToLlmPrimiteData.
 	
@@ -168,7 +166,6 @@ GtLForwardToAllViewsExamples >> forwardToMultipleViewsWithDataKey_serialization 
 	self assert: dataBlock compositeJsonDataBlock containedJsonDataBlocksCount equals: 2.
 	
 	"Magritte view data is flat (not wrapped), JSON view data is wrapped under its dataKey"
-	actualData := dataBlock compositeJsonDataBlock llmJsonData.
 	expectedData := Dictionary new
 		at: #allViews put: (Dictionary new
 			at: #jsonData put: (NeoJSONObject new
@@ -181,15 +178,15 @@ GtLForwardToAllViewsExamples >> forwardToMultipleViewsWithDataKey_serialization 
 				yourself);
 			yourself);
 		yourself.
-	self assert: actualData equals: expectedData.
+	self assertDataBlock: dataBlock hasLlmJsonData: expectedData.
 	
 	^ dataBlock
 ]
 
-{ #category : #examples }
+{ #category : #'examples - serialization' }
 GtLForwardToAllViewsExamples >> forwardToMultipleViews_serialization [
 	<gtExample>
-	| forwardDataView dataBlock actualData expectedData |
+	| forwardDataView dataBlock expectedData |
 	forwardDataView := self forwardToMultipleViews.
 	dataBlock := forwardDataView serializeToLlmPrimiteData.
 	
@@ -197,7 +194,6 @@ GtLForwardToAllViewsExamples >> forwardToMultipleViews_serialization [
 	self assert: dataBlock compositeJsonDataBlock containedJsonDataBlocksCount equals: 2.
 	
 	"Magritte view data is flat (not wrapped), JSON view data is wrapped under its dataKey"
-	actualData := dataBlock compositeJsonDataBlock llmJsonData.
 	expectedData := Dictionary new
 		at: #jsonData put: (NeoJSONObject new
 			at: #itemName put: 'Multi-View Item';
@@ -208,7 +204,7 @@ GtLForwardToAllViewsExamples >> forwardToMultipleViews_serialization [
 			at: #amount put: 99;
 			yourself);
 		yourself.
-	self assert: actualData equals: expectedData.
+	self assertDataBlock: dataBlock hasLlmJsonData: expectedData.
 	
 	^ dataBlock
 ]

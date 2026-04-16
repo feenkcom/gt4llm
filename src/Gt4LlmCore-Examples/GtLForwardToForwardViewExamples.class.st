@@ -104,21 +104,20 @@ GtLForwardToForwardViewExamples >> forwardToChainOfForwardersWithDataKeys_serial
 	<gtExample>
 	"When forwarding through a chain, each forward overrides the next.
 	Since the outermost forward has no dataKey, only the final JSON view's dataKey is preserved."
-	| forwardDataView dataBlock actualData expectedData |
+	| forwardDataView dataBlock expectedData |
 	forwardDataView := self forwardToChainOfForwardersWithDataKeys.
 	dataBlock := forwardDataView serializeToLlmPrimiteData.
 	
 	self assert: dataBlock dataBlocks size equals: 1.
 	self assert: dataBlock compositeJsonDataBlock containedJsonDataBlocksCount equals: 1.
 	
-	actualData := dataBlock compositeJsonDataBlock llmJsonData.
 	expectedData := Dictionary new
 		at: #jsonContent put: (NeoJSONObject new
 			at: #type put: 'first';
 			at: #value put: 100;
 			yourself);
 		yourself.
-	self assert: actualData equals: expectedData.
+	self assertDataBlock: dataBlock hasLlmJsonData: expectedData.
 	
 	^ dataBlock
 ]
@@ -148,14 +147,13 @@ GtLForwardToForwardViewExamples >> forwardToChainOfForwardersWithOuterDataKey_se
 	"When the outer forward has a dataKey, it wraps the final result.
 	All intermediate forward dataKeys (level3, level2, level1) are overridden.
 	Only the outer dataKey (#topLevel) and the final JSON view's dataKey (#jsonContent) are preserved."
-	| forwardDataView dataBlock actualData expectedData |
+	| forwardDataView dataBlock expectedData |
 	forwardDataView := self forwardToChainOfForwardersWithOuterDataKey.
 	dataBlock := forwardDataView serializeToLlmPrimiteData.
 	
 	self assert: dataBlock dataBlocks size equals: 1.
 	self assert: dataBlock compositeJsonDataBlock containedJsonDataBlocksCount equals: 1.
 	
-	actualData := dataBlock compositeJsonDataBlock llmJsonData.
 	expectedData := Dictionary new
 		at: #topLevel put: (Dictionary new
 			at: #jsonContent put: (NeoJSONObject new
@@ -164,29 +162,28 @@ GtLForwardToForwardViewExamples >> forwardToChainOfForwardersWithOuterDataKey_se
 				yourself);
 			yourself);
 		yourself.
-	self assert: actualData equals: expectedData.
+	self assertDataBlock: dataBlock hasLlmJsonData: expectedData.
 	
 	^ dataBlock
 ]
 
-{ #category : #examples }
+{ #category : #'examples - serialization' }
 GtLForwardToForwardViewExamples >> forwardToChainOfForwarders_serialization [
 	<gtExample>
-	| forwardDataView dataBlock actualData expectedData |
+	| forwardDataView dataBlock expectedData |
 	forwardDataView := self forwardToChainOfForwarders.
 	dataBlock := forwardDataView serializeToLlmPrimiteData.
 	
 	self assert: dataBlock dataBlocks size equals: 1.
 	self assert: dataBlock compositeJsonDataBlock containedJsonDataBlocksCount equals: 1.
 	
-	actualData := dataBlock compositeJsonDataBlock llmJsonData.
 	expectedData := Dictionary new
 		at: #jsonContent put: (NeoJSONObject new
 			at: #type put: 'first';
 			at: #value put: 100;
 			yourself);
 		yourself.
-	self assert: actualData equals: expectedData.
+	self assertDataBlock: dataBlock hasLlmJsonData: expectedData.
 	
 	^ dataBlock
 ]
@@ -218,14 +215,13 @@ GtLForwardToForwardViewExamples >> forwardToForwardViewWithBothDataKeys_serializ
 	"When the outer forward has a dataKey, it wraps the final result.
 	The inner forwarder's dataKey (#forwardedJson) is overridden.
 	Only the outer dataKey and the final JSON view's dataKey are preserved."
-	| forwardDataView dataBlock actualData expectedData |
+	| forwardDataView dataBlock expectedData |
 	forwardDataView := self forwardToForwardViewWithBothDataKeys.
 	dataBlock := forwardDataView serializeToLlmPrimiteData.
 	
 	self assert: dataBlock dataBlocks size equals: 1.
 	self assert: dataBlock compositeJsonDataBlock containedJsonDataBlocksCount equals: 1.
 	
-	actualData := dataBlock compositeJsonDataBlock llmJsonData.
 	expectedData := Dictionary new
 		at: #outerKey put: (Dictionary new
 			at: #jsonContent put: (NeoJSONObject new
@@ -234,7 +230,7 @@ GtLForwardToForwardViewExamples >> forwardToForwardViewWithBothDataKeys_serializ
 				yourself);
 			yourself);
 		yourself.
-	self assert: actualData equals: expectedData.
+	self assertDataBlock: dataBlock hasLlmJsonData: expectedData.
 	
 	^ dataBlock
 ]
@@ -261,21 +257,20 @@ GtLForwardToForwardViewExamples >> forwardToForwardViewWithInnerDataKey_serializ
 	<gtExample>
 	"When forwarding to a forward view, the outer forward overrides the inner data key.
 	Since the outer forward has no dataKey, only the final JSON view's dataKey is preserved."
-	| forwardDataView dataBlock actualData expectedData |
+	| forwardDataView dataBlock expectedData |
 	forwardDataView := self forwardToForwardViewWithInnerDataKey.
 	dataBlock := forwardDataView serializeToLlmPrimiteData.
 	
 	self assert: dataBlock dataBlocks size equals: 1.
 	self assert: dataBlock compositeJsonDataBlock containedJsonDataBlocksCount equals: 1.
 	
-	actualData := dataBlock compositeJsonDataBlock llmJsonData.
 	expectedData := Dictionary new
 		at: #jsonContent put: (NeoJSONObject new
 			at: #type put: 'first';
 			at: #value put: 100;
 			yourself);
 		yourself.
-	self assert: actualData equals: expectedData.
+	self assertDataBlock: dataBlock hasLlmJsonData: expectedData.
 	
 	^ dataBlock
 ]
@@ -298,17 +293,16 @@ GtLForwardToForwardViewExamples >> forwardToForwardViewWithOuterDataKey [
 	^ forwardDataView
 ]
 
-{ #category : #examples }
+{ #category : #'examples - serialization' }
 GtLForwardToForwardViewExamples >> forwardToForwardViewWithOuterDataKey_serialization [
 	<gtExample>
-	| forwardDataView dataBlock actualData expectedData |
+	| forwardDataView dataBlock expectedData |
 	forwardDataView := self forwardToForwardViewWithOuterDataKey.
 	dataBlock := forwardDataView serializeToLlmPrimiteData.
 	
 	self assert: dataBlock dataBlocks size equals: 1.
 	self assert: dataBlock compositeJsonDataBlock containedJsonDataBlocksCount equals: 1.
 	
-	actualData := dataBlock compositeJsonDataBlock llmJsonData.
 	expectedData := Dictionary new
 		at: #outerForward put: (Dictionary new
 			at: #jsonContent put: (NeoJSONObject new
@@ -317,7 +311,7 @@ GtLForwardToForwardViewExamples >> forwardToForwardViewWithOuterDataKey_serializ
 				yourself);
 			yourself);
 		yourself.
-	self assert: actualData equals: expectedData.
+	self assertDataBlock: dataBlock hasLlmJsonData: expectedData.
 	
 	^ dataBlock
 ]
@@ -343,24 +337,23 @@ GtLForwardToForwardViewExamples >> forwardToForwardViewWithoutDataKey [
 	^ forwardDataView
 ]
 
-{ #category : #examples }
+{ #category : #'examples - serialization' }
 GtLForwardToForwardViewExamples >> forwardToForwardViewWithoutDataKey_serialization [
 	<gtExample>
-	| forwardDataView dataBlock actualData expectedData |
+	| forwardDataView dataBlock expectedData |
 	forwardDataView := self forwardToForwardViewWithoutDataKey.
 	dataBlock := forwardDataView serializeToLlmPrimiteData.
 	
 	self assert: dataBlock dataBlocks size equals: 1.
 	self assert: dataBlock compositeJsonDataBlock containedJsonDataBlocksCount equals: 1.
 	
-	actualData := dataBlock compositeJsonDataBlock llmJsonData.
 	expectedData := Dictionary new
 		at: #jsonContent put: (NeoJSONObject new
 			at: #type put: 'first';
 			at: #value put: 100;
 			yourself);
 		yourself.
-	self assert: actualData equals: expectedData.
+	self assertDataBlock: dataBlock hasLlmJsonData: expectedData.
 	
 	^ dataBlock
 ]

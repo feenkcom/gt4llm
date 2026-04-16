@@ -3,7 +3,7 @@ Examples for GtLExampleWithResultDomainObject data views.
 "
 Class {
 	#name : #GtLExampleWithResultExamples,
-	#superclass : #Object,
+	#superclass : #GtLDomainObjectExamples,
 	#traits : 'TGtLExceptionResultAssertions',
 	#classTraits : 'TGtLExceptionResultAssertions classTrait',
 	#category : #'Gt4LlmCore-Examples-Domain Objects'
@@ -27,11 +27,6 @@ GtLExampleWithResultExamples >> assertExampleData: jsonData forMethod: aCompiled
 	self assert: (exampleRefJson at: 'methodName') equals: aCompiledMethod selector asString.
 	self assert: (exampleRefJson at: 'classSide') equals: aCompiledMethod methodClass isClassSide.
 	self assert: (jsonData at: 'exampleStatus') equals: statusString.
-]
-
-{ #category : #assertions }
-GtLExampleWithResultExamples >> assertJsonData: jsonData hasExpectedKeys: expectedKeys [
-	self assert: jsonData keys sorted equals: expectedKeys sorted
 ]
 
 { #category : #private }
@@ -123,8 +118,7 @@ GtLExampleWithResultExamples >> exampleWithResultForFailingExample [
 	self assert: compositeView dataViews size equals: 3.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	jsonData := dataBlock compositeJsonData.
 	self assertExampleData: jsonData forMethod: method status: 'failure'.
@@ -162,8 +156,7 @@ GtLExampleWithResultExamples >> exampleWithResultForSuccessfulExample [
 	self assert: compositeView dataViews size equals: 3.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	jsonData := dataBlock compositeJsonData.
 	self assertExampleData: jsonData forMethod: method status: 'success'.
@@ -215,8 +208,7 @@ GtLExampleWithResultExamples >> exampleWithResultForSuccessfulExampleWithDataJso
 	self assert: compositeView dataViews size equals: 3.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	jsonData := dataBlock compositeJsonData.
 	self assertExampleData: jsonData forMethod: method status: 'success'.

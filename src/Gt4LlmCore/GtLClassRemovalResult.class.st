@@ -3,7 +3,7 @@ Result of a successful class removal operation.
 "
 Class {
 	#name : #GtLClassRemovalResult,
-	#superclass : #Object,
+	#superclass : #GtLClassChangeResult,
 	#instVars : [
 		'removedClassName',
 		'status'
@@ -23,6 +23,11 @@ GtLClassRemovalResult >> gtDetailsFor: aView [
 		column: 'Property' text: [ :assoc | assoc key ];
 		column: 'Value' text: [ :assoc | assoc value ];
 		send: [ :assoc | assoc value ]
+]
+
+{ #category : #views }
+GtLClassRemovalResult >> gtViewChangeIcon [
+	^ self class removalIcon
 ]
 
 { #category : #'llm views' }
@@ -77,4 +82,9 @@ GtLClassRemovalResult >> statusDescription [
 		label: 'Status';
 		accessor: #status;
 		beRequired
+]
+
+{ #category : #accessing }
+GtLClassRemovalResult >> targetClassName [
+	^ self removedClassName
 ]

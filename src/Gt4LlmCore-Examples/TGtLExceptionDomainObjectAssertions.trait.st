@@ -1,6 +1,6 @@
 Trait {
 	#name : #TGtLExceptionDomainObjectAssertions,
-	#category : #'Gt4LlmCore-Examples-Support'
+	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #assertions }

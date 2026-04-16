@@ -1,19 +1,10 @@
 Class {
 	#name : #GtLWrappedObjectModelExamples,
 	#superclass : #GtLWrappedModelExamples,
+	#traits : 'TGtLDataBlockSerializationAssertions + TGtLDataViewAssertions',
+	#classTraits : 'TGtLDataBlockSerializationAssertions classTrait + TGtLDataViewAssertions classTrait',
 	#category : #'Gt4LlmCore-Examples'
 }
-
-{ #category : #assertions }
-GtLWrappedObjectModelExamples >> assertDataBlockHasOnlyJsonData: dataBlock [
-	"Assert that the data block is valid and contains only JSON data (no images or secondary blocks)"
-	self assert: dataBlock isNotNil.
-	self assert: dataBlock class equals: GtLPrimitiveMessageDataBlock.
-	self assert: dataBlock imageDataBlocks isEmpty.
-	self assert: dataBlock secondaryDataBlocks isEmpty.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock dataBlocks first == dataBlock compositeJsonDataBlock
-]
 
 { #category : #'examples - support' }
 GtLWrappedObjectModelExamples >> markdownObject [

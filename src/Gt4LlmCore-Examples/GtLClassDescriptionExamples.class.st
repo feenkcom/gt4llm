@@ -3,7 +3,7 @@ Examples for GtLClassDescription.
 "
 Class {
 	#name : #GtLClassDescriptionExamples,
-	#superclass : #GtLMagritteDomainObjectExamples,
+	#superclass : #GtLDomainObjectExamples,
 	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
@@ -36,7 +36,7 @@ GtLClassDescriptionExamples >> classDescriptionCreation [
 GtLClassDescriptionExamples >> classDescriptionSerialization [
 	<gtExample>
 	<return: #GtLPrimitiveMessageDataBlock>
-	| description compositeView dataBlock jsonData expectedJson |
+	| description compositeView dataBlock expectedJson |
 	description := GtLClassDescription new
 		currentClassName: 'SampleClass';
 		superclassName: 'Object';
@@ -53,11 +53,8 @@ GtLClassDescriptionExamples >> classDescriptionSerialization [
 	self assert: compositeView dataViews size equals: 1.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock isNotNil.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
-	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
 		#currentClassName -> 'SampleClass'.
 		#superclassName -> 'Object'.
@@ -69,7 +66,7 @@ GtLClassDescriptionExamples >> classDescriptionSerialization [
 		#allInstanceMethodNames -> (NeoJSONArray withAll: #('foo' 'bar:')).
 		#allClassMethodNames -> (NeoJSONArray withAll: #('baz'))
 	} asDictionary.
-	self assert: jsonData equals: expectedJson.
+	self assertDataBlock: dataBlock hasLlmJsonData: expectedJson.
 	
 	^ dataBlock
 ]

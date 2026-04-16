@@ -3,8 +3,8 @@ Examples for GtLLepiterKnowledgeBases and GtLLepiterKnowledgeBase.
 "
 Class {
 	#name : #GtLLepiterKnowledgeBasesExamples,
-	#superclass : #Object,
-	#category : #'Gt4LlmCore-Examples-Magritte Objects'
+	#superclass : #GtLDomainObjectExamples,
+	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #examples }
@@ -38,45 +38,39 @@ GtLLepiterKnowledgeBasesExamples >> basicKnowledgeBases [
 	^ knowledgeBases
 ]
 
-{ #category : #'examples - serialization' }
+{ #category : #examples }
 GtLLepiterKnowledgeBasesExamples >> knowledgeBaseDataViewSerialization [
 	<gtExample>
-	| knowledgeBase compositeView dataBlock jsonData expected |
+	| knowledgeBase compositeView dataBlock expected |
 	knowledgeBase := self basicKnowledgeBase.
 	compositeView := knowledgeBase llmDataViewsFor: GtLDataView new.
 	self assert: compositeView dataViews size equals: 1.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock isNotNil.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
-	jsonData := dataBlock compositeJsonData.
 	expected := Dictionary new
 		at: #databaseName put: 'TestDatabase';
 		at: #uuidString put: '12345678-1234-1234-1234-123456789abc';
 		at: #pageCount put: 42;
 		at: #storeLocation put: '/path/to/store';
 		yourself.
-	self assert: jsonData equals: expected.
+	self assertDataBlock: dataBlock hasLlmJsonData: expected.
 	
 	^ dataBlock
 ]
 
-{ #category : #'examples - serialization' }
+{ #category : #examples }
 GtLLepiterKnowledgeBasesExamples >> knowledgeBasesDataViewSerialization [
 	<gtExample>
-	| knowledgeBases compositeView dataBlock jsonData expected |
+	| knowledgeBases compositeView dataBlock expected |
 	knowledgeBases := self basicKnowledgeBases.
 	compositeView := knowledgeBases llmDataViewsFor: GtLDataView new.
 	self assert: compositeView dataViews size equals: 1.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock isNotNil.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
-	jsonData := dataBlock compositeJsonData.
 	expected := Dictionary new
 		at: #knowledgeBases put: (NeoJSONArray with: (NeoJSONObject new
 			at: #databaseName put: 'TestDatabase';
@@ -85,7 +79,7 @@ GtLLepiterKnowledgeBasesExamples >> knowledgeBasesDataViewSerialization [
 			at: #storeLocation put: '/path/to/store';
 			yourself));
 		yourself.
-	self assert: jsonData equals: expected.
+	self assertDataBlock: dataBlock hasLlmJsonData: expected.
 	
 	^ dataBlock
 ]

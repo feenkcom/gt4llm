@@ -3,9 +3,7 @@ I provide common example infrastructure for GtLFileReference subclass examples.
 "
 Class {
 	#name : #GtLFileReferenceExamples,
-	#superclass : #Object,
-	#traits : 'TGtLDataViewAssertions',
-	#classTraits : 'TGtLDataViewAssertions classTrait',
+	#superclass : #GtLDomainObjectExamples,
 	#instVars : [
 		'tempDirectory'
 	],

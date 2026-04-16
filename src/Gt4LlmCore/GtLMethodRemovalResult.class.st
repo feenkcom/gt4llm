@@ -3,7 +3,7 @@ Result of a successful method removal operation.
 "
 Class {
 	#name : #GtLMethodRemovalResult,
-	#superclass : #Object,
+	#superclass : #GtLMethodChangeResult,
 	#instVars : [
 		'removedMethod',
 		'status'
@@ -26,11 +26,33 @@ GtLMethodRemovalResult >> gtDetailsFor: aView [
 		send: [ :assoc | assoc value ]
 ]
 
+{ #category : #views }
+GtLMethodRemovalResult >> gtViewChangeIcon [
+	^ self class removalIcon
+]
+
+{ #category : #testing }
+GtLMethodRemovalResult >> isMethodRemovalResult [
+	^ true
+]
+
 { #category : #'llm views' }
 GtLMethodRemovalResult >> llmRawDataViewFor: aDataView [
 	<gtLlmDataView>
 	
 	^ aDataView magritteObject: [ self ]
+]
+
+{ #category : #accessing }
+GtLMethodRemovalResult >> newStateMethodSourceCode [
+	^ ''
+]
+
+{ #category : #accessing }
+GtLMethodRemovalResult >> oldStateMethodSourceCode [
+	^ self removedMethod
+			ifNil: [ '' ]
+			ifNotNil: [ :aMethod | aMethod sourceCode ]
 ]
 
 { #category : #printing }
@@ -70,4 +92,16 @@ GtLMethodRemovalResult >> statusDescription [
 		label: 'Status';
 		accessor: #status;
 		beRequired
+]
+
+{ #category : #accessing }
+GtLMethodRemovalResult >> targetMethod [
+
+	^ self removedMethod 
+]
+
+{ #category : #accessing }
+GtLMethodRemovalResult >> targetMethodSourceCode [
+
+	^ self targetMethod sourceCode 
 ]

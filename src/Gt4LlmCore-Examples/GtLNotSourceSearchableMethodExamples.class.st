@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLNotSourceSearchableMethodExamples,
-	#superclass : #GtLMagritteDomainObjectExamples,
+	#superclass : #GtLDomainObjectExamples,
 	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
@@ -33,21 +33,18 @@ GtLNotSourceSearchableMethodExamples >> methodWithNotSearchableSourceObjectFromC
 	^ methodObject
 ]
 
-{ #category : #'examples - data view' }
+{ #category : #examples }
 GtLNotSourceSearchableMethodExamples >> methodWithNotSearchableSourceObjectFromCompiledMethodClassSideDataViewSerialization [
 	<gtExample>
 	<return: #GtLPrimitiveMessageDataBlock>
-	| domainObject compositeView dataBlock jsonData expected methodRefJson |
+	| domainObject compositeView dataBlock expected methodRefJson |
 	domainObject := self methodWithNotSearchableSourceObjectFromCompiledMethodClassSide.
 	compositeView := domainObject llmDataViewsFor: GtLDataView new.
 	self assert: compositeView dataViews size equals: 1.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock isNotNil.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
-	jsonData := dataBlock compositeJsonData.
 	methodRefJson := NeoJSONObject new
 		at: #methodName put: 'fromCompiledMethod:';
 		at: #methodClassName put: 'GtLMethodReference';
@@ -57,7 +54,7 @@ GtLNotSourceSearchableMethodExamples >> methodWithNotSearchableSourceObjectFromC
 		at: #methodReference put: methodRefJson;
 		at: #sourceCode put: '<not searchable method>';
 		yourself.
-	self assert: jsonData equals: expected.
+	self assertDataBlock: dataBlock hasLlmJsonData: expected.
 	
 	^ dataBlock
 ]

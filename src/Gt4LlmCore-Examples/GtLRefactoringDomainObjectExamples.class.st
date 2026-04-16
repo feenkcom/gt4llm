@@ -3,7 +3,7 @@ Examples for GtLRefactoringDomainObject subclasses.
 "
 Class {
 	#name : #GtLRefactoringDomainObjectExamples,
-	#superclass : #Object,
+	#superclass : #GtLDomainObjectExamples,
 	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
@@ -174,10 +174,10 @@ GtLRefactoringDomainObjectExamples >> classReferencesDomainObjectDataViewSeriali
 	^ dataBlock
 ]
 
-{ #category : #'examples - class search domain object' }
+{ #category : #examples }
 GtLRefactoringDomainObjectExamples >> classSearchDomainObjectDataViewSerialization [
 	<gtExample>
-	| domainObject compositeView dataBlock jsonData expected |
+	| domainObject compositeView dataBlock expected |
 	domainObject := self basicClassSearchDomainObject.
 	compositeView := domainObject llmDataViewsFor: GtLDataView new.
 	self assert: compositeView dataViews size equals: 1.
@@ -185,20 +185,19 @@ GtLRefactoringDomainObjectExamples >> classSearchDomainObjectDataViewSerializati
 	dataBlock := compositeView serializeToLlmPrimiteData.
 	self assert: dataBlock isNotNil.
 	
-	jsonData := dataBlock llmJsonData.
 	expected := Dictionary new
 		at: 'query' put: 'Domain';
 		at: 'foundClasses' put: #('GtLExampleDomainBase' 'GtLExampleDomainChild');
 		yourself.
-	self assert: jsonData equals: expected.
+	self assertDataBlock: dataBlock hasLlmJsonData: expected.
 	
 	^ dataBlock
 ]
 
-{ #category : #'examples - class subclasses domain object' }
+{ #category : #examples }
 GtLRefactoringDomainObjectExamples >> classSubclassesDomainObjectDataViewSerialization [
 	<gtExample>
-	| domainObject compositeView dataBlock jsonData expected |
+	| domainObject compositeView dataBlock expected |
 	domainObject := self basicClassSubclassesDomainObject.
 	compositeView := domainObject llmDataViewsFor: GtLDataView new.
 	self assert: compositeView dataViews size equals: 1.
@@ -206,12 +205,11 @@ GtLRefactoringDomainObjectExamples >> classSubclassesDomainObjectDataViewSeriali
 	dataBlock := compositeView serializeToLlmPrimiteData.
 	self assert: dataBlock isNotNil.
 	
-	jsonData := dataBlock llmJsonData.
 	expected := Dictionary new
 		at: 'class' put: 'GtLExampleDomainBase';
 		at: 'subclasses' put: #('GtLExampleDomainChild');
 		yourself.
-	self assert: jsonData equals: expected.
+	self assertDataBlock: dataBlock hasLlmJsonData: expected.
 	
 	^ dataBlock
 ]

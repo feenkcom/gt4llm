@@ -124,27 +124,24 @@ GtLMagritteToolForClassRemovalExamples >> removeExistingClass [
 	^ call
 ]
 
-{ #category : #examples }
+{ #category : #'examples - data views' }
 GtLMagritteToolForClassRemovalExamples >> removeExistingClassDataViewSerialization [
 	<gtExample>
 	<return: #GtLPrimitiveMessageDataBlock>
-	| call domainObject compositeView dataBlock jsonData expectedJson |
+	| call domainObject compositeView dataBlock expectedJson |
 	call := self removeExistingClass.
 	domainObject := call result targetObject.
 	compositeView := domainObject llmDataViewsFor: GtLDataView new.
 	self assert: compositeView dataViews size equals: 1.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	self assert: dataBlock isNotNil.
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock imageDataBlocks isEmpty.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
-	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
 		#removedClassName -> 'GtLMagritteToolForClassRemovalExamplesTemporary'.
 		#status -> 'removed'
 	} asDictionary.
-	self assert: jsonData equals: expectedJson.
+	self assertDataBlock: dataBlock hasLlmJsonData: expectedJson.
 	
 	^ dataBlock
 ]

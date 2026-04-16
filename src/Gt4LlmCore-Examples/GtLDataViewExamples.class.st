@@ -4,7 +4,7 @@ I am an abstract superclass for data view examples. I provide common utilities f
 Class {
 	#name : #GtLDataViewExamples,
 	#superclass : #Object,
-	#traits : 'TGtLDataViewAssertions',
-	#classTraits : 'TGtLDataViewAssertions classTrait',
+	#traits : 'TGtLDataViewAssertions + TGtLDataBlockSerializationAssertions',
+	#classTraits : 'TGtLDataViewAssertions classTrait + TGtLDataBlockSerializationAssertions classTrait',
 	#category : #'Gt4LlmCore-Examples-Data Views'
 }

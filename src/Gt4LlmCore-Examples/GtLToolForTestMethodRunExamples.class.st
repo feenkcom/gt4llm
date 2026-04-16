@@ -6,13 +6,8 @@ Class {
 	#superclass : #GtLAbstractMagritteFunctionToolExamples,
 	#traits : 'TGtLExceptionResultAssertions',
 	#classTraits : 'TGtLExceptionResultAssertions classTrait',
-	#category : #'Gt4LlmCore-Examples'
+	#category : #'Gt4LlmCore-Examples-Tools'
 }
-
-{ #category : #assertions }
-GtLToolForTestMethodRunExamples >> assertJsonData: jsonData hasExpectedKeys: expectedKeys [
-	self assert: jsonData keys sorted equals: expectedKeys sorted
-]
 
 { #category : #examples }
 GtLToolForTestMethodRunExamples >> exampleRunComparisonFailure [
