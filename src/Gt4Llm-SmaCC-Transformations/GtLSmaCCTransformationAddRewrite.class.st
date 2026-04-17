@@ -43,9 +43,9 @@ GtLSmaCCTransformationAddRewrite >> afterIdDescription [
 		withUUIDFormatCommentWith: 'The id of an existing rewrite where the new rewrite should be inserted into the file. If it is an empty string, then the rule is added at the beginning.'
 ]
 
-{ #category : #testing }
-GtLSmaCCTransformationAddRewrite >> isValid [
-	^ super isValid and: [ self rewrite isValid ]
+{ #category : #accessing }
+GtLSmaCCTransformationAddRewrite >> errorMessage [
+	^ self rewrite errorMessage
 ]
 
 { #category : #accessing }

@@ -21,11 +21,14 @@ GtSmaCCRewriteTypeMatchSpecification >> asSmaCCMatch [
 		yourself
 ]
 
-{ #category : #testing }
-GtSmaCCRewriteTypeMatchSpecification >> isValid [
-	^ (Smalltalk globals includesKey: self nodeClass asSymbol)
-		and: [ [ RBParser parseExpression: self source.
-			true ] on: Error do: [ :ex | ex return: false ] ]
+{ #category : #accessing }
+GtSmaCCRewriteTypeMatchSpecification >> errorMessage [
+	(Smalltalk globals includesKey: self nodeClass asSymbol)
+		ifFalse: [ ^ '`' , self nodeClass , '` is not a valid program node class name' ].
+	^ [ RBParser parseExpression: self source.
+	nil ]
+		on: Error
+		do: [ :ex | ex return: 'Invalid match expression (' , ex messageText , ')' ]
 ]
 
 { #category : #accessing }

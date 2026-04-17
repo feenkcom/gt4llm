@@ -41,9 +41,10 @@ GtLSmaCCRewriteSpecification >> commentDescription [
 		comment: 'An optional comment for the rule. It is used for a label when displayed.'
 ]
 
-{ #category : #testing }
-GtLSmaCCRewriteSpecification >> isValid [
-	^ self match isValid and: [ self transformation isValid ]
+{ #category : #accessing }
+GtLSmaCCRewriteSpecification >> errorMessage [
+	self match errorMessage ifNotNil: [ :msg | ^ msg ].
+	^ self transformation errorMessage
 ]
 
 { #category : #accessing }

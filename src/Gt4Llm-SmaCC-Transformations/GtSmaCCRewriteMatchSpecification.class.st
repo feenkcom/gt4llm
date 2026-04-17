@@ -9,9 +9,9 @@ GtSmaCCRewriteMatchSpecification >> asSmaCCMatch [
 	self subclassResponsibility
 ]
 
-{ #category : #testing }
-GtSmaCCRewriteMatchSpecification >> isValid [
-	^ true
+{ #category : #accessing }
+GtSmaCCRewriteMatchSpecification >> errorMessage [
+	^ nil
 ]
 
 { #category : #'llm views' }

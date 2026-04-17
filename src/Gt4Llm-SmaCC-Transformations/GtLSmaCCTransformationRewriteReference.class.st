@@ -8,6 +8,12 @@ Class {
 }
 
 { #category : #accessing }
+GtLSmaCCTransformationRewriteReference >> errorMessage [
+	^ self rewrite isNil
+		ifTrue: [ 'Could not find rewrite with id: `' , self id , '`' ]
+]
+
+{ #category : #accessing }
 GtLSmaCCTransformationRewriteReference >> id [
 	^ id
 ]
@@ -23,11 +29,6 @@ GtLSmaCCTransformationRewriteReference >> idDescription [
 	^ MAStringDescription new
 		accessor: #id;
 		withUUIDFormatCommentWith: 'The UUID of the rewrite rule.'
-]
-
-{ #category : #testing }
-GtLSmaCCTransformationRewriteReference >> isValid [
-	^ super isValid and: [ self rewrite notNil ]
 ]
 
 { #category : #actions }

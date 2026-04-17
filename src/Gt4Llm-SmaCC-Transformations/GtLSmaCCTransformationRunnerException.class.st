@@ -46,7 +46,7 @@ GtLSmaCCTransformationRunnerException >> lineDescription [
 		comment: 'The line of the node that was matched where the error occurred.'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'llm views' }
 GtLSmaCCTransformationRunnerException >> llmRawDataViewFor: aDataView [
 	<gtLlmDataView>
 	^ aDataView magritteObject: [ self ]

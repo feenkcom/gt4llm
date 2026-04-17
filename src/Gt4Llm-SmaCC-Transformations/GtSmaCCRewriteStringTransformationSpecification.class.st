@@ -19,10 +19,10 @@ GtSmaCCRewriteStringTransformationSpecification >> asSmaCCTransformation [
 		yourself
 ]
 
-{ #category : #testing }
-GtSmaCCRewriteStringTransformationSpecification >> isValid [
+{ #category : #accessing }
+GtSmaCCRewriteStringTransformationSpecification >> errorMessage [
 	^ [ SmaCCReplaceExpressionParser parse: self pattern.
-	true ] on: Error do: [ :ex | ex return: false ]
+	nil ] on: Error do: [ :ex | ex return: 'Invalid transformation pattern (' , ex messageText , ')' ]
 ]
 
 { #category : #accessing }
