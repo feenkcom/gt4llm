@@ -28,6 +28,12 @@ GtLSmaCCRewriteFileSpecification >> asSmaCCRewriteIn: aModel [
 	^ file
 ]
 
+{ #category : #accessing }
+GtLSmaCCRewriteFileSpecification >> errorMessage [
+	self rules do: [ :each | each errorMessage ifNotNil: [ :msg | ^ msg ] ].
+	^ nil
+]
+
 { #category : #initialization }
 GtLSmaCCRewriteFileSpecification >> initialize [
 	super initialize.
@@ -37,11 +43,6 @@ GtLSmaCCRewriteFileSpecification >> initialize [
 { #category : #testing }
 GtLSmaCCRewriteFileSpecification >> isRewriteFile [
 	^ true
-]
-
-{ #category : #testing }
-GtLSmaCCRewriteFileSpecification >> isValid [
-	^ self rules allSatisfy: #isValid
 ]
 
 { #category : #accessing }

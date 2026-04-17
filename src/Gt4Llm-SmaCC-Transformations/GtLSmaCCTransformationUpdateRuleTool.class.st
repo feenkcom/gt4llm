@@ -4,7 +4,7 @@ Class {
 	#category : #'Gt4Llm-SmaCC-Transformations-Tools'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLSmaCCTransformationUpdateRuleTool >> description [
 	^ 'Updates a rewrite in a file. The `id` should contain the UUID of the rewrite rule that is to be updated obtained from the existing rule to modify. The `id` argument must be that existing rule''s UUID. Do not pass the nil UUID `00000000-0000-0000-0000-000000000000` as the id. Once the rewrite has been updated, it returns the newRewriteId of the updated rule that can be used in future calls to update or remove the rule in the future.
 	
@@ -27,12 +27,12 @@ Example JSON response:
 '
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLSmaCCTransformationUpdateRuleTool >> name [
 	^ 'updateSmaCCRewrite'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #execution }
 GtLSmaCCTransformationUpdateRuleTool >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments updateRewriteCall |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
@@ -42,12 +42,12 @@ GtLSmaCCTransformationUpdateRuleTool >> privatePerformToolCall: aToolCall inCont
 					arguments: arguments;
 					missingArgument: 'updateRewrite' ].
 	updateRewriteCall model: model.
-	updateRewriteCall isValid
-		ifFalse: [ ^ GtLMissingDomainObject new objectName: 'rewrite' ].
+	updateRewriteCall errorMessage
+		ifNotNil: [ :msg | ^ GtLProblemDomainObject new errorMessage: msg ].
 	^ updateRewriteCall updateRewrite
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLSmaCCTransformationUpdateRuleTool >> updateRewriteDescription [
 	<magritteDescription>
 	^ MAToOneRelationDescription new

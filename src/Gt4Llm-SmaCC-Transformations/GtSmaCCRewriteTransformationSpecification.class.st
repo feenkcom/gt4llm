@@ -9,9 +9,9 @@ GtSmaCCRewriteTransformationSpecification >> asSmaCCTransformation [
 	self subclassResponsibility
 ]
 
-{ #category : #testing }
-GtSmaCCRewriteTransformationSpecification >> isValid [
-	^ true
+{ #category : #accessing }
+GtSmaCCRewriteTransformationSpecification >> errorMessage [
+	^ nil
 ]
 
 { #category : #'llm views' }

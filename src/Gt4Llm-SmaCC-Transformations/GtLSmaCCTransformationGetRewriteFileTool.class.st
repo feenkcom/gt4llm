@@ -4,7 +4,7 @@ Class {
 	#category : #'Gt4Llm-SmaCC-Transformations-Tools'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLSmaCCTransformationGetRewriteFileTool >> description [
 	^ 'Returns the rewrites in a file. Each rule will contain an id that can be used to directly reference the rule in add, remove, or update operations. The rules are listed in order that they occur in the file.
 	
@@ -24,12 +24,12 @@ Example JSON response:
 '
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLSmaCCTransformationGetRewriteFileTool >> name [
 	^ 'getSmaCCRewriteFile'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #execution }
 GtLSmaCCTransformationGetRewriteFileTool >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| arguments rewriteFileCall |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
@@ -44,7 +44,7 @@ GtLSmaCCTransformationGetRewriteFileTool >> privatePerformToolCall: aToolCall in
 		yourself
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLSmaCCTransformationGetRewriteFileTool >> rewriteFileDescription [
 	<magritteDescription>
 	^ MAToOneRelationDescription new

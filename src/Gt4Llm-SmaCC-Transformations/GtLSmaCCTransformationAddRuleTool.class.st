@@ -51,7 +51,7 @@ GtLSmaCCTransformationAddRuleTool >> privatePerformToolCall: aToolCall inContext
 					arguments: arguments;
 					missingArgument: 'addRewrite' ].
 	addRewriteCall model: model.
-	addRewriteCall isValid
-		ifFalse: [ ^ GtLMissingDomainObject new objectName: 'rewrite' ].
+	addRewriteCall errorMessage
+		ifNotNil: [ :msg | ^ GtLProblemDomainObject new errorMessage: msg ].
 	^ addRewriteCall addRewrite
 ]

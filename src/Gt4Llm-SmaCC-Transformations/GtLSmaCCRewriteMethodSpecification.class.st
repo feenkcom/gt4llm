@@ -39,10 +39,12 @@ GtLSmaCCRewriteMethodSpecification >> commentDescription [
 		comment: 'An optional comment for the rule. It is used for a label when displayed.'
 ]
 
-{ #category : #testing }
-GtLSmaCCRewriteMethodSpecification >> isValid [
+{ #category : #accessing }
+GtLSmaCCRewriteMethodSpecification >> errorMessage [
 	^ [ RBParser parseMethod: self source.
-	true ] on: Error do: [ :ex | ex return: false ]
+	nil ]
+		on: Error
+		do: [ :ex | ex return: 'Invalid method source (' , ex messageText , ')' ]
 ]
 
 { #category : #accessing }
@@ -60,5 +62,5 @@ GtLSmaCCRewriteMethodSpecification >> sourceDescription [
 	<magritteDescription>
 	^ MAStringDescription new
 		accessor: #source;
-		comment: 'The source of a Smalltalk method to create.'
+		comment: 'The source of a Smalltalk method to create. Only the source for a single method should be provided.'
 ]

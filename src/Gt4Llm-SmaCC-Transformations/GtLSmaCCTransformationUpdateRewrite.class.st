@@ -9,6 +9,11 @@ Class {
 }
 
 { #category : #accessing }
+GtLSmaCCTransformationUpdateRewrite >> errorMessage [
+	^ self rewrite errorMessage
+]
+
+{ #category : #accessing }
 GtLSmaCCTransformationUpdateRewrite >> id [
 	^ id
 ]
@@ -24,11 +29,6 @@ GtLSmaCCTransformationUpdateRewrite >> idDescription [
 	^ MAStringDescription new
 		accessor: #id;
 		withUUIDFormatCommentWith: 'The UUID of the rewrite to be updated.'
-]
-
-{ #category : #testing }
-GtLSmaCCTransformationUpdateRewrite >> isValid [
-	^ super isValid and: [ self rewrite isValid ]
 ]
 
 { #category : #accessing }
