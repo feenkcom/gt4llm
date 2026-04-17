@@ -79,7 +79,7 @@ GtLMagritteToolForClassCommentChange >> privatePerformToolCall: aToolCall inCont
 	oldClassComment := class comment.
 	class comment: classComment.
 	^ GtLClassCommentChangeResult new
-		updatedClass: class;
+		updatedClass: (GtLClassDefinitionDescription fromClass: class);
 		status: 'changed';
 		oldClassComment: oldClassComment;
 		newClassComment: classComment
