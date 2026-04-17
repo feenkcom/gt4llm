@@ -27,7 +27,7 @@ GtLClassCommentChangeResult >> asDiffElement [
 
 { #category : #accessing }
 GtLClassCommentChangeResult >> changedClassName [
-	^ self updatedClass name
+	^ self updatedClass currentClassName
 ]
 
 { #category : #magritte }
