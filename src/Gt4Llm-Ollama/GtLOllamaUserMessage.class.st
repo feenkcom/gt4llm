@@ -108,7 +108,7 @@ GtLOllamaUserMessage >> prompt: aString [
 	"A simple string message."
 
 	self
-		addWrappedObject: (GtLStringData forString: aString)
+		addWrappedObject: (GtLString forString: aString)
 		named: 'prompt'
 ]
 
