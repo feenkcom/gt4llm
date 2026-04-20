@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLAbstractFunctionTool,
 	#superclass : #GtLTool,
-	#category : #'Gt4LlmCore-Tools'
+	#category : 'Gt4LlmCore-Tools'
 }
 
 { #category : #testiung }
@@ -58,21 +58,6 @@ GtLAbstractFunctionTool >> performToolCall: aToolCall [
 	^ self 
 			performToolCall: aToolCall 
 			inContext: (GtLToolExecutionContext new)
-]
-
-{ #category : #execution }
-GtLAbstractFunctionTool >> performToolCall: aToolCall inContext: anExecutionContext [
-	| domainObject resultObject |
-	
-	aToolCall performedByTool: self.
-	
-	domainObject := self 
-		privatePerformToolCall: aToolCall 
-		inContext: anExecutionContext.
-	resultObject := self resultObjectFromDomainObject: domainObject.
-	
-	aToolCall result: resultObject.
-	^ resultObject
 ]
 
 { #category : #execution }

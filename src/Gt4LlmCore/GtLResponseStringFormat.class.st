@@ -4,48 +4,13 @@ Class {
 	#instVars : [
 		'schema'
 	],
-	#category : #'Gt4LlmCore-Core'
+	#category : 'Gt4LlmCore-Core'
 }
 
 { #category : #'instance creation' }
 GtLResponseStringFormat class >> named: aName [
 	^ self new 
 		name: aName
-]
-
-{ #category : #accessing }
-GtLResponseStringFormat >> asJsonSchemaDictionary [
-	^ schema raw
-]
-
-{ #category : #views }
-GtLResponseStringFormat >> gtViewDetailsSchemaFor: aView [
-	<gtView>
-	^ aView forward
-		title: 'Schema Details';
-		priority: 5;
-		object: [ schema ];
-		view: #gtViewDetailsIn:
-]
-
-{ #category : #views }
-GtLResponseStringFormat >> gtViewSchemaJsonFor: aView [
-	<gtView>
-	^ aView forward
-		title: 'Raw JSON';
-		priority: 40;
-		object: [ schema ];
-		view: #gtViewRawJsonIn:
-]
-
-{ #category : #views }
-GtLResponseStringFormat >> gtViewSchemaPropertiesFor: aView [
-	<gtView>
-	^ aView forward
-		title: 'Schema Properties';
-		priority: 10;
-		object: [ schema ];
-		view: #gtViewPropertiesIn:
 ]
 
 { #category : #initialization }
@@ -58,6 +23,13 @@ GtLResponseStringFormat >> initialize [
 							{
 			"type" : "string"
 		}')
+]
+
+{ #category : #'neo json' }
+GtLResponseStringFormat >> nextEntryFromNeoJsonReader: jsonReader [
+	| string |
+	string := super nextEntryFromNeoJsonReader: jsonReader.
+	^GtLString forString: string
 ]
 
 { #category : #printing }
@@ -73,11 +45,6 @@ GtLResponseStringFormat >> printOn: aStream [
 { #category : #accessing }
 GtLResponseStringFormat >> schema [
 	^ schema
-]
-
-{ #category : #accessing }
-GtLResponseStringFormat >> schema: aSchema [
-	schema := aSchema
 ]
 
 { #category : #accessing }

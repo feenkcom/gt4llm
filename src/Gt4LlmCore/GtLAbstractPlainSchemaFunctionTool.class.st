@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLAbstractPlainSchemaFunctionTool,
 	#superclass : #GtLAbstractFunctionTool,
-	#category : #'Gt4LlmCore-Tools'
+	#category : 'Gt4LlmCore-Tools'
 }
 
 { #category : #testing }
@@ -17,7 +17,7 @@ GtLAbstractPlainSchemaFunctionTool >> computeParametersCompositeFormatFrom: anAr
 	anArrayOfDescriptions do: [ :aParameterFormatOrString | 
 		| parameterFormat |
 		parameterFormat := aParameterFormatOrString isString
-			ifTrue: [ GtLResponseStringFormat named: aParameterFormatOrString  ] 
+			ifTrue: [ GtLResponsePlainStringFormat named: aParameterFormatOrString  ] 
 			ifFalse: [ aParameterFormatOrString ].
 		parametersFormat addSchemaDescription: parameterFormat ].
 	

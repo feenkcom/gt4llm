@@ -4,7 +4,7 @@ Magritte-based tool for retrieving method source code in a GtRBNamespace model. 
 Class {
 	#name : #GtLRefactoringToolForMethodSource,
 	#superclass : #GtLAbstractRefactoringMagritteTool,
-	#category : #'Gt4LlmCore-Tools'
+	#category : 'Gt4LlmCore-Tools'
 }
 
 { #category : #'llm-generated' }

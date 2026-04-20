@@ -4,7 +4,7 @@ I provide examples for GtLImageFile.
 Class {
 	#name : #GtLImageFileExamples,
 	#superclass : #GtLFileReferenceExamples,
-	#category : #'Gt4LlmCore-Examples-Domain Objects'
+	#category : 'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #examples }

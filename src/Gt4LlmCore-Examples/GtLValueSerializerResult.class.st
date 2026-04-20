@@ -8,7 +8,7 @@ Class {
 		'inputViewStencilBuilder',
 		'outputViewStencilBuilder'
 	],
-	#category : #'Gt4LlmCore-Examples-Support'
+	#category : 'Gt4LlmCore-Examples-Support'
 }
 
 { #category : #'gt - extensions' }

@@ -6,5 +6,5 @@ Class {
 	#superclass : #GtLGroup,
 	#traits : 'TGtGroupWithItems',
 	#classTraits : 'TGtGroupWithItems classTrait',
-	#category : #'Gt4LlmCore-Summaries'
+	#category : 'Gt4LlmCore-Summaries'
 }

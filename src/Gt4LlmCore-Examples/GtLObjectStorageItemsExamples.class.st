@@ -4,7 +4,7 @@ Examples for GtLObjectStorageItems and GtLObjectStorageItem, including data view
 Class {
 	#name : #GtLObjectStorageItemsExamples,
 	#superclass : #GtLDomainObjectExamples,
-	#category : #'Gt4LlmCore-Examples-Domain Objects'
+	#category : 'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #examples }

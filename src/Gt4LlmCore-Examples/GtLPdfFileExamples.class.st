@@ -4,7 +4,7 @@ I provide examples for GtLPdfFile.
 Class {
 	#name : #GtLPdfFileExamples,
 	#superclass : #GtLFileReferenceExamples,
-	#category : #'Gt4LlmCore-Examples-Domain Objects'
+	#category : 'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #examples }
