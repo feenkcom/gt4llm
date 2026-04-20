@@ -11,14 +11,36 @@ Class {
 	#category : #'Gt4Llm-Ollama-Model'
 }
 
+{ #category : #'as yet unclassified' }
+GtLOllamaAssistantMessage >> canExtractResponseModels [
+	rawData ifNil: [ ^ false ].
+	self chat ifNil: [ ^ false ].
+	self formatDescriptions 
+		hasSchemaDescriptors ifFalse: [ ^ false ].
+	
+	^ true
+]
+
+{ #category : #'as yet unclassified' }
+GtLOllamaAssistantMessage >> chat: aChat [
+	super chat: aChat.
+	chat
+		previousUserMessageIfPresent: [ :msg | self updateDataFromMessage: msg ] 
+		ifAbsent: [ self updateDataFromChat: aChat].
+	self canExtractResponseModels ifTrue: [
+		responseModels := self computeResponseModelsByFormat]
+]
+
 { #category : #reading }
 GtLOllamaAssistantMessage >> computeResponseModelsByFormat [
 	| responseText |
-	self formatDescriptions hasSchemaDescriptors ifFalse: [ ^ {} ].
+	
+	^ { 'string' -> self contentText } asDictionary
+	"self formatDescriptions hasSchemaDescriptors ifFalse: [ ^ {} ].
 	responseText := self contentText.
 	^ [ self formatDescriptions readDomainObjectsFrom: responseText ]
 		on: NeoJSONParseError
-		do: [ :e | ^ {} ]
+		do: [ :e | ^ {} ]"
 ]
 
 { #category : #accessing }
@@ -29,9 +51,8 @@ GtLOllamaAssistantMessage >> contentOneLineSummary [
 
 { #category : #accessing }
 GtLOllamaAssistantMessage >> contentText [
-	^ (self rawData at: 'message' ifAbsent: [ Dictionary new ])
-		at: 'content'
-		ifAbsent: [ '' ]
+
+	^ self rawData at: 'response'
 ]
 
 { #category : #views }
@@ -43,6 +64,18 @@ GtLOllamaAssistantMessage >> gtContentFor: aView [
 		title: 'Content';
 		priority: 7;
 		text: [ self contentText ]
+]
+
+{ #category : #views }
+GtLOllamaAssistantMessage >> gtThoughtProcessFor: aView [
+	<gtView>
+	<gtLlmView>
+
+	self thoughtText ifEmpty: [ ^ aView empty ].
+	^ aView textEditor
+		title: 'Thought process';
+		priority: 7;
+		text: [ self thoughtText ]
 ]
 
 { #category : #views }
@@ -139,4 +172,14 @@ GtLOllamaAssistantMessage >> role [
 { #category : #accessing }
 GtLOllamaAssistantMessage >> senderText [
 	^ modelName ifNil: [ 'Assistant' ] ifNotNil: [ modelName ]
+]
+
+{ #category : #accessing }
+GtLOllamaAssistantMessage >> thoughtText [
+	| text |
+
+	text := (self rawData at: 'message' ifAbsent: [ Dictionary new ])
+		at: 'thinking'
+		ifAbsent: [ '' ].
+	^ text
 ]

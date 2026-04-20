@@ -164,6 +164,11 @@ GtLWrappedModel >> serializeToAnthropicResponseOutput [
 ]
 
 { #category : #serialization }
+GtLWrappedModel >> serializeToOllamaResponseOutput [
+	^ self mainDataView  serializeToOllamaResponseOutput
+]
+
+{ #category : #serialization }
 GtLWrappedModel >> serializeToOpenAIResponseOutput [
 	^ self mainDataView  serializeToOpenAIResponseOutput
 ]

@@ -46,6 +46,21 @@ GtLImageFile >> serializeToAnthropicResponseOutput [
 ]
 
 { #category : #serialization }
+GtLImageFile >> serializeToOllamaOpenAIResponseOutput [
+	^ {'type' -> 'image_url'.
+		'image_url' -> ('data:'
+			,self contentType
+			,';base64,' 
+			, self base64EncodedContent)}
+				asDictionary
+]
+
+{ #category : #serialization }
+GtLImageFile >> serializeToOllamaResponseOutput [
+	^ self base64EncodedContent
+]
+
+{ #category : #serialization }
 GtLImageFile >> serializeToOpenAIResponseOutput [
 	^ {'type' -> 'input_image'.
 		'image_url' -> ('data:'
