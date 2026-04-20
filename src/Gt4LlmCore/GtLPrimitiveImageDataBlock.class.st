@@ -62,6 +62,17 @@ GtLPrimitiveImageDataBlock >> serializeForAnthropic [
 ]
 
 { #category : #serialization }
+GtLPrimitiveImageDataBlock >> serializeForOllama [
+	<return: #Array of: #NeoJSONObject>
+
+	^ {NeoJSONObject new
+			at: 'image_url' put: ('data:image/'
+				,self imageType,';base64,' , self encodedBytes);
+			at: 'type' put: 'input_image';
+			yourself}
+]
+
+{ #category : #serialization }
 GtLPrimitiveImageDataBlock >> serializeForOpenAI [
 	<return: #Array of: #NeoJSONObject>
 	

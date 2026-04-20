@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLOllamaEndpointClient,
+	#name : #GtLOllamaEndpointCommand,
 	#superclass : #Object,
 	#instVars : [
 		'client'
@@ -8,17 +8,17 @@ Class {
 }
 
 { #category : #accessing }
-GtLOllamaEndpointClient >> client [
+GtLOllamaEndpointCommand >> client [
 	^ client
 ]
 
 { #category : #accessing }
-GtLOllamaEndpointClient >> client: anObject [
+GtLOllamaEndpointCommand >> client: anObject [
 	client := anObject
 ]
 
 { #category : #api }
-GtLOllamaEndpointClient >> perform [
+GtLOllamaEndpointCommand >> perform [
 	| result |
 	result := self request.
 	^ (self serializationClass from: result result)
@@ -28,11 +28,11 @@ GtLOllamaEndpointClient >> perform [
 ]
 
 { #category : #api }
-GtLOllamaEndpointClient >> request [
+GtLOllamaEndpointCommand >> request [
 	^ self subclassResponsibility
 ]
 
 { #category : #api }
-GtLOllamaEndpointClient >> serializationClass [
+GtLOllamaEndpointCommand >> serializationClass [
 	^ self subclassResponsibility
 ]

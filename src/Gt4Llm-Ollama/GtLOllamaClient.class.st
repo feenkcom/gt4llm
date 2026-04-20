@@ -19,6 +19,18 @@ GtLOllamaClient >> addHistoryRequestResponse: aClient [
 	^ history addRequest: aClient request response: aClient response
 ]
 
+{ #category : #api }
+GtLOllamaClient >> apiClientWithModel: aString andMessages: aCollection andFormat: aFormat andTools: someTools andInstructions: aStringOrNil [
+
+	^ GtLOllamaCompleteChatAPICommand new
+		client: self;
+		model: aString;
+		messages: aCollection;
+		format: aFormat;
+		tools: someTools;
+		instructions: aStringOrNil
+]
+
 { #category : #accessing }
 GtLOllamaClient >> baseUrl [
 	^ baseUrl
@@ -38,14 +50,14 @@ GtLOllamaClient >> checkForErrors: aResponse [
 
 { #category : #api }
 GtLOllamaClient >> completeChatWithModel: aString andMessages: aCollection andFormat: aFormat andTools: someTools andInstructions: aStringOrNil [
-	^ GtLOllamaCompleteChatAPIClient new
-		client: self;
-		model: aString;
-		messages: aCollection;
-		format: aFormat;
-		tools: someTools;
-		instructions: aStringOrNil;
-		perform
+
+	^ (self 
+		apiClientWithModel: aString 
+		andMessages: aCollection 
+		andFormat: aFormat 
+		andTools: someTools 
+		andInstructions: aStringOrNil)
+			perform
 ]
 
 { #category : #private }
