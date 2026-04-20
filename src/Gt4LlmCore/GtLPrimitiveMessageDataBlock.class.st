@@ -129,6 +129,14 @@ GtLPrimitiveMessageDataBlock >> serializeForAnthropic [
 ]
 
 { #category : #serialization }
+GtLPrimitiveMessageDataBlock >> serializeForOllama [
+	^ self dataBlocks 
+			flatCollect: [ :each |
+				each serializeForOllama ] 
+			as: Array
+]
+
+{ #category : #serialization }
 GtLPrimitiveMessageDataBlock >> serializeForOpenAI [
 	^ self dataBlocks 
 			flatCollect: [ :each |
