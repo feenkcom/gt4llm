@@ -56,23 +56,33 @@ GtLPrimitiveDataBlock >> gtViewSerializationJSONFor: aView [
 ]
 
 { #category : #views }
+GtLPrimitiveDataBlock >> gtViewSerializationObjects [
+	^ (Pragma
+		allNamed: #llmSerialization:
+		from: self class
+		to: Object)
+		collect: [ :eachPragma | 
+			eachPragma arguments first
+				-> ([ self perform: eachPragma methodSelector ]
+						on: Error
+						do: [ :each | GtSystemUtility freeze: each ]) ]
+]
+
+{ #category : #views }
 GtLPrimitiveDataBlock >> gtViewSerializationObjectsFor: aView [
 	<gtView>
-	
 	^ aView columnedList
-			title: 'LLM Objects';
-			priority: 60;
-			items: [ (Pragma
-				allNamed: #llmSerialization:
-				from: self class
-				to: Object) collect: [ :eachPragma |
-						eachPragma arguments first -> ([self perform: eachPragma methodSelector] 
-								on: Error do: [ :each | GtSystemUtility freeze: each]) ] ];
-			column: 'LLM' text: [ :assoc | assoc key ] width: 200;
-			column: 'Object count' text: [ :assoc | 
-				assoc value isCollection ifTrue: [ assoc value size ] ifFalse: ['-'] ] width: 100;
-			column: 'Value' text: [ :assoc | assoc value gtDisplayString ];
-			send: [ :assoc | assoc value ]
+		title: 'LLM Objects';
+		priority: 60;
+		items: [ self gtViewSerializationObjects ];
+		column: 'LLM'
+			text: [ :assoc | assoc key ]
+			width: 200;
+		column: 'Object count'
+			text: [ :assoc | assoc value isCollection ifTrue: [ assoc value size ] ifFalse: [ '-' ] ]
+			width: 100;
+		column: 'Value' text: [ :assoc | assoc value gtDisplayString ];
+		send: [ :assoc | assoc value ]
 ]
 
 { #category : #printing }
@@ -85,6 +95,12 @@ GtLPrimitiveDataBlock >> printOn: aStream [
 { #category : #serialization }
 GtLPrimitiveDataBlock >> serializeForAnthropic [
 	<llmSerialization: 'Anthropic'>
+	self subclassResponsibility
+]
+
+{ #category : #serialization }
+GtLPrimitiveDataBlock >> serializeForOllama [
+	<llmSerialization: 'Ollama'>
 	self subclassResponsibility
 ]
 

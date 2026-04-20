@@ -19,9 +19,29 @@ GtLOllamaUserMessage >> attachments [
 	^ attachments
 ]
 
+{ #category : #'as yet unclassified' }
+GtLOllamaUserMessage >> chat: aChat [
+	super chat: aChat.
+	self updateDataFromChat: aChat.
+	"contentDataBlock := self computeContentBlockFromInputModels.
+	contentOneLineSummary := self computeContentOneLineSummaryFromInputModels"
+]
+
 { #category : #private }
 GtLOllamaUserMessage >> computeContentBlockFromInputModels [
 	^ self computeContentDataViewFromInputModels serializeToLlmPrimiteData
+]
+
+{ #category : #'private - serialization' }
+GtLOllamaUserMessage >> computeContentDataViewFromInputModels [
+	| dataView |
+	
+	dataView := GtLCompositeDataView new.
+	self inputModels do: [ :anInputModel |
+		dataView addDataView: ((anInputModel llmDataViewsFor: GtLDataView new)
+			dataKey: anInputModel name) ].
+	
+	^ dataView.
 ]
 
 { #category : #accessing }
@@ -83,6 +103,15 @@ GtLOllamaUserMessage >> isCompactionRequest [
 		each name = 'Compaction' ]
 ]
 
+{ #category : #'api - message' }
+GtLOllamaUserMessage >> prompt: aString [
+	"A simple string message."
+
+	self
+		addWrappedObject: (GtLStringData forString: aString)
+		named: 'prompt'
+]
+
 { #category : #accessing }
 GtLOllamaUserMessage >> requestResponse [
 	<return: #GtLRequestResponse>
@@ -100,14 +129,40 @@ GtLOllamaUserMessage >> role [
 ]
 
 { #category : #api }
-GtLOllamaUserMessage >> serializeForAnthropicMessagesAPI [
-	^ self serializeForOllamaMessagesAPI
+GtLOllamaUserMessage >> serializeForOllamaGenerateMessagesAPI [
+	| dict |
+
+	dict := Dictionary new.
+	dict addAll: self contentDataBlock llmJsonData.
+	dict at: 'images' put:
+		(self attachments collect: [ :attachment |
+			attachment serializeToOllamaResponseOutput ]
+				as: Array).
+	^ dict
 ]
 
 { #category : #api }
-GtLOllamaUserMessage >> serializeForOllamaMessagesAPI [
-	^ {
-		'content' -> self contentText.
-		'role' -> self role
-	} asDictionary
+GtLOllamaUserMessage >> serializeForOllamaOpenAiMessagesAPI [
+
+	^ {#content
+			-> ({
+			{
+				'type' -> 'text'.
+				'text' -> (self contentDataBlock llmJsonData at: 'prompt').
+			} asDictionary}
+			, (self contentDataBlock secondaryDataBlocks 
+					flatCollect: [:aDataBlock |
+						aDataBlock serializeForOpenAI ])
+			, (self attachments
+							collect: [ :each | each serializeToOllamaOpenAIResponseOutput ])).
+		#role -> self role} asDictionary
+]
+
+{ #category : #'api - message' }
+GtLOllamaUserMessage >> string: aString [
+	"A simple string message."
+
+	self
+		addWrappedObject: (GtLStringData forString: aString)
+		named: 'prompt'
 ]
