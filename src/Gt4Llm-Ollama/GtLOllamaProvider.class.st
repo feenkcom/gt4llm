@@ -21,6 +21,14 @@ GtLOllamaProvider class >> isConnectable [
 	^ true
 ]
 
+{ #category : #'instance creation' }
+GtLOllamaProvider class >> openAiCompatibility [
+
+	^ self new 
+		configureForOpenAiCompatibility;
+		modelName: 'llama3.2'
+]
+
 { #category : #accessing }
 GtLOllamaProvider class >> providerName [
 	^ 'Ollama'
@@ -48,14 +56,22 @@ GtLOllamaProvider >> clientGenerateModelResponse: anInputMessage messages: someM
 	^ self client
 		completeChatWithModel: self modelName
 		andMessages: someMessages
-		andFormat: 'json'
+		andFormat: (anInputMessage hasFormats
+				ifTrue: [ anInputMessage formatDescriptionsJsonSchemaWithAllRequired ]
+				ifFalse: [ nil ])
 		andTools: anInputMessage tools
 		andInstructions: anInputMessage instructions
 ]
 
+{ #category : #'as yet unclassified' }
+GtLOllamaProvider >> configureForOpenAiCompatibility [
+
+	client := GtLOllamaOpenAiClient new.
+]
+
 { #category : #accessing }
 GtLOllamaProvider >> defaultAssistantMessageClass [
-	^ GtLOllamaAssistantMessage
+	^ client assistantMessageClass
 ]
 
 { #category : #accessing }

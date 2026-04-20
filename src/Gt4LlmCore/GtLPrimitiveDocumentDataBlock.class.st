@@ -83,6 +83,17 @@ GtLPrimitiveDocumentDataBlock >> serializeForBedrockConverse [
 ]
 
 { #category : #serialization }
+GtLPrimitiveDocumentDataBlock >> serializeForOllama [
+	<return: #Array of: #NeoJSONObject>
+	<llmSerialization: #Ollama>
+
+	^ {NeoJSONObject new
+		at: 'type' put: 'input_file';
+		at: 'file_data' put: ('data:', self contentType, ';base64,', self encodedBytes);
+		yourself}
+]
+
+{ #category : #serialization }
 GtLPrimitiveDocumentDataBlock >> serializeForOpenAI [
 	<return: #Array of: #NeoJSONObject>
 	<llmSerialization: #OpenAI>
