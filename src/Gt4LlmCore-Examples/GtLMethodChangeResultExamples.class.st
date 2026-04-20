@@ -4,7 +4,7 @@ Common assertions for method change result examples.
 Class {
 	#name : #GtLMethodChangeResultExamples,
 	#superclass : #GtLDomainObjectExamples,
-	#category : #'Gt4LlmCore-Examples-Domain Objects'
+	#category : 'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #asserting }

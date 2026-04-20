@@ -6,7 +6,7 @@ Class {
 	#superclass : #GtLAbstractMagritteFunctionToolExamples,
 	#traits : 'TGtLExceptionResultAssertions',
 	#classTraits : 'TGtLExceptionResultAssertions classTrait',
-	#category : #'Gt4LlmCore-Examples-Tools'
+	#category : 'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #examples }

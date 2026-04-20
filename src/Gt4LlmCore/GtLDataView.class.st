@@ -7,7 +7,7 @@ Class {
 		'dataKey',
 		'definingMethodProvider'
 	],
-	#category : #'Gt4LlmCore-Data Views'
+	#category : 'Gt4LlmCore-Data Views'
 }
 
 { #category : #'api - views' }
@@ -370,19 +370,6 @@ GtLDataView >> performComputation: aBlockClosure onErrorView: anErrorBlock [
 				errorViewWithException: anError 
 				reason: nil
 				isFrozen: false) ].
-]
-
-{ #category : #decorating }
-GtLDataView >> plainText [
-	^ GtLPlainTextDataView new
-			originalView: self;
-			definingMethod: (GtPhlowDefiningMethodsCollector forContext: thisContext) collect
-]
-
-{ #category : #decorating }
-GtLDataView >> plainText: aBlockClosure [
-	^ self plainText	
-			object: aBlockClosure
 ]
 
 { #category : #printing }

@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLMissingInformationDomainObjectExamples,
 	#superclass : #GtLErroneousConditionDomainObjectExamples,
-	#category : #'Gt4LlmCore-Examples-Domain Objects'
+	#category : 'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #examples }

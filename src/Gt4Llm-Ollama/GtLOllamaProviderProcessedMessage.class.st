@@ -7,7 +7,7 @@ Class {
 		'outputMessage',
 		'anotherProcessedMessage'
 	],
-	#category : #'Gt4Llm-Ollama-Model'
+	#category : 'Gt4Llm-Ollama-Model'
 }
 
 { #category : #accessing }

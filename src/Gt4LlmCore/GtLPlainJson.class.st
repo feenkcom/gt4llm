@@ -1,30 +1,30 @@
 Class {
-	#name : #GtLJsonData,
+	#name : #GtLPlainJson,
 	#superclass : #GtLPlainData,
 	#instVars : [
 		'jsonValue'
 	],
-	#category : #'Gt4LlmCore-Domain Objects'
+	#category : 'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #'instance creation' }
-GtLJsonData class >> forString: aString [ 
+GtLPlainJson class >> forString: aString [ 
 	^ self new 
 		jsonValue: aString
 ]
 
 { #category : #accessing }
-GtLJsonData >> jsonValue [
+GtLPlainJson >> jsonValue [
 	^jsonValue
 ]
 
 { #category : #accessing }
-GtLJsonData >> jsonValue: anObject [
+GtLPlainJson >> jsonValue: anObject [
 	jsonValue := anObject
 ]
 
 { #category : #'llm views' }
-GtLJsonData >> llmRawDataViewFor: aDataView [
+GtLPlainJson >> llmRawDataViewFor: aDataView [
 	<gtLlmDataView>
 	
 	^ aDataView jsonData
@@ -32,7 +32,7 @@ GtLJsonData >> llmRawDataViewFor: aDataView [
 ]
 
 { #category : #printing }
-GtLJsonData >> printOn: aStream [
+GtLPlainJson >> printOn: aStream [
 	aStream 
 		print: self jsonValue 
 ]

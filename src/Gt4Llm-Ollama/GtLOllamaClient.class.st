@@ -5,7 +5,7 @@ Class {
 		'baseUrl',
 		'history'
 	],
-	#category : #'Gt4Llm-Ollama-Client'
+	#category : 'Gt4Llm-Ollama-Client'
 }
 
 { #category : #defaults }

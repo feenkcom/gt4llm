@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLFilesContentsDomainObjectExamples,
 	#superclass : #GtLDomainObjectExamples,
-	#category : #'Gt4LlmCore-Examples-Domain Objects'
+	#category : 'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #examples }

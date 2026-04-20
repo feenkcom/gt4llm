@@ -3,5 +3,5 @@ Class {
 	#superclass : #BlElement,
 	#traits : 'TGtLWithChatViewModel + TBrLayoutResizable',
 	#classTraits : 'TGtLWithChatViewModel classTrait + TBrLayoutResizable classTrait',
-	#category : #'Gt4LlmCore-UI - Elements'
+	#category : 'Gt4LlmCore-UI - Elements'
 }

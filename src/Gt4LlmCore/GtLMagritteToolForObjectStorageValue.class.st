@@ -4,7 +4,7 @@ Magritte-based tool for retrieving an object from the object storage and returni
 Class {
 	#name : #GtLMagritteToolForObjectStorageValue,
 	#superclass : #GtLAbstractMagritteFunctionTool,
-	#category : #'Gt4LlmCore-Tools'
+	#category : 'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }

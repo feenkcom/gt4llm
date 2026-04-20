@@ -11,7 +11,7 @@ Class {
 		'contentOneLineSummary',
 		'contentDataBlock'
 	],
-	#category : #'Gt4Llm-Ollama-Model'
+	#category : 'Gt4Llm-Ollama-Model'
 }
 
 { #category : #accessing }
@@ -81,15 +81,6 @@ GtLOllamaUserMessage >> instructions [
 GtLOllamaUserMessage >> isCompactionRequest [
 	^ formatDescriptions schemaDescriptions anySatisfy: [ :each |
 		each name = 'Compaction' ]
-]
-
-{ #category : #'api - message' }
-GtLOllamaUserMessage >> plain: aString [
-	"A simple string message."
-
-	self
-		addInputPlainText: (GtLPlainText new content: aString)
-		named: 'Plain Text'
 ]
 
 { #category : #accessing }

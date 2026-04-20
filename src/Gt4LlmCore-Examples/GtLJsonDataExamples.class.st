@@ -4,17 +4,17 @@ Examples for GtLJsonData testing serialization and data views.
 Class {
 	#name : #GtLJsonDataExamples,
 	#superclass : #GtLDomainObjectExamples,
-	#category : #'Gt4LlmCore-Examples-Domain Objects'
+	#category : 'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #'examples - basic' }
 GtLJsonDataExamples >> jsonDataWithArray [
 	<gtExample>
-	<return: #GtLJsonData>
+	<return: #GtLPlainJson>
 	| jsonData value |
 	
 	value := {'one'. 'two'. 'three'}.
-	jsonData := GtLJsonData forString: value.
+	jsonData := GtLPlainJson forString: value.
 	
 	self assert: jsonData jsonValue equals: value.
 	
@@ -57,10 +57,10 @@ GtLJsonDataExamples >> jsonDataWithArraySerialization [
 { #category : #'examples - basic' }
 GtLJsonDataExamples >> jsonDataWithEmptyObject [
 	<gtExample>
-	<return: #GtLJsonData>
+	<return: #GtLPlainJson>
 	| jsonData |
 	
-	jsonData := GtLJsonData forString: Dictionary new.
+	jsonData := GtLPlainJson forString: Dictionary new.
 	
 	self assert: jsonData jsonValue equals: Dictionary new.
 	
@@ -102,11 +102,11 @@ GtLJsonDataExamples >> jsonDataWithEmptyObjectSerialization [
 { #category : #'examples - basic' }
 GtLJsonDataExamples >> jsonDataWithSimpleObject [
 	<gtExample>
-	<return: #GtLJsonData>
+	<return: #GtLPlainJson>
 	| jsonData value |
 	
 	value := {'name' -> 'test'. 'count' -> 42} asDictionary.
-	jsonData := GtLJsonData forString: value.
+	jsonData := GtLPlainJson forString: value.
 	
 	self assert: jsonData jsonValue equals: value.
 	

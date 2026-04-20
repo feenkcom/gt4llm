@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLAbstractMagritteFunctionTool,
 	#superclass : #GtLAbstractFunctionTool,
-	#category : #'Gt4LlmCore-Tools'
+	#category : 'Gt4LlmCore-Tools'
 }
 
 { #category : #testing }
@@ -37,41 +37,6 @@ GtLAbstractMagritteFunctionTool >> parametersDescription [
 	^ GtLResponseMagritteFormat new
 			name: 'Parameters';
 			modelClass: self class
-]
-
-{ #category : #utils }
-GtLAbstractMagritteFunctionTool >> performToolCall: aToolCall inContext: anExecutionContext [
-	| domainObject resultObject |
-	
-	aToolCall performedByTool: self.
-	[
-		| arguments |
-		
-		(self jsonSchemaArgumentValidationErrorsFor: aToolCall) 
-			ifNotEmpty: [ :aCollectionOfErrors |
-				resultObject := self resultObjectFromDomainObject: aCollectionOfErrors first.
-			aToolCall result: resultObject.
-			^ resultObject ].
-		
-		arguments := self parametersDescription
-				readGenericDomainObjectsFrom: aToolCall rawArgumentsJsonString.
-		aToolCall arguments: arguments 
-	]
-		on: NeoJSONParseError
-		do: [ :anException | 
-			aToolCall result: (self  
-				resultObjectFromDomainObject:(GtLExceptionDomainObject 
-					freeze: anException )).
-			^ aToolCall result ].
-	
-	domainObject := self 
-		privatePerformToolCall: aToolCall 
-		inContext: anExecutionContext.
-	resultObject := self resultObjectFromDomainObject: domainObject.
-				
-	aToolCall result: resultObject.
-
-	^ resultObject
 ]
 
 { #category : #utils }
