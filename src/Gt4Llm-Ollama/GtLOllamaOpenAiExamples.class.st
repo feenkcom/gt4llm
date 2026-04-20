@@ -82,7 +82,7 @@ GtLOllamaOpenAiExamples >> userMessagePlainImageEncoding [
 	chat := self chatWithProvider.
 	message := chat createUserMessage.
 	message prompt: 'Hi!'.
-	message images: { '/home/alistair/tmp/notes.png' asFileReference}.
+	message images: { GtLOllamaGenerateExamples jpgImage}.
 	message chat: chat.
 	chat addUserMessage: message.
 	provider := chat provider.
