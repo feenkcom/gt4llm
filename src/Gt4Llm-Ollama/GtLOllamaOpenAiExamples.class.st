@@ -86,6 +86,7 @@ GtLOllamaOpenAiExamples >> userMessagePlainImageEncoding [
 	message chat: chat.
 	chat addUserMessage: message.
 	provider := chat provider.
+	provider configureForGenerateApi.
 	provider privateExecutionState: provider state scheduled running.
 	messages := provider relevantChatMessages.
 	apiClient := provider client
