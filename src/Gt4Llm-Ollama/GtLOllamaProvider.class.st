@@ -64,6 +64,12 @@ GtLOllamaProvider >> clientGenerateModelResponse: anInputMessage messages: someM
 ]
 
 { #category : #'as yet unclassified' }
+GtLOllamaProvider >> configureForGenerateApi [
+
+	client := GtLOllamaGenerateClient new.
+]
+
+{ #category : #'as yet unclassified' }
 GtLOllamaProvider >> configureForOpenAiCompatibility [
 
 	client := GtLOllamaOpenAiClient new.
@@ -133,7 +139,7 @@ GtLOllamaProvider >> initialize [
 
 { #category : #initialization }
 GtLOllamaProvider >> initializeClient [
-	client := GtLOllamaClient new
+	client := GtLOllamaOpenAiClient new
 ]
 
 { #category : #accessing }
