@@ -4,6 +4,17 @@ Class {
 	#category : #'Gt4Llm-Ollama-Examples'
 }
 
+{ #category : #accessing }
+GtLOllamaGenerateExamples class >> jpgImage [
+	| jpg |
+	
+	jpg := FileSystem memory root / 'image.jpg'.
+	PluginBasedJPEGReadWriter 
+		putForm: (Smalltalk ui icons iconNamed: 'arrowUp') 
+		onFileNamed: jpg.
+	^ jpg.
+]
+
 { #category : #examples }
 GtLOllamaGenerateExamples >> assistantMessage [
 	<gtExample>
@@ -78,7 +89,7 @@ GtLOllamaGenerateExamples >> userMessagePlainImageEncoding [
 	chat := self chatWithProvider.
 	message := chat createUserMessage.
 	message prompt: 'Hi!'.
-	message images: { '/home/alistair/tmp/notes.png' asFileReference}.
+	message images: { self class jpgImage}.
 	message chat: chat.
 	chat addUserMessage: message.
 	provider := chat provider.
