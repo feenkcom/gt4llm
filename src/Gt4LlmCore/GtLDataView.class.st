@@ -386,16 +386,6 @@ GtLDataView >> priority [
 ]
 
 { #category : #serialization }
-GtLDataView >> serializeForMCPResponseOutput [
-	^self serializeToLlmPrimiteData serializeForMCP
-]
-
-{ #category : #serialization }
-GtLDataView >> serializeToAnthropicResponseOutput [
-	^self serializeToLlmPrimiteData serializeForAnthropic
-]
-
-{ #category : #serialization }
 GtLDataView >> serializeToLlmPrimiteData [
 	| dataBuilder |
 	
@@ -409,11 +399,6 @@ GtLDataView >> serializeToLlmPrimiteData [
 { #category : #serialization }
 GtLDataView >> serializeToLlmPrimiteDataOn: aBuilder [
 	self subclassResponsibility
-]
-
-{ #category : #serialization }
-GtLDataView >> serializeToOpenAIResponseOutput [
-	^self serializeToLlmPrimiteData serializeForOpenAI
 ]
 
 { #category : #accessing }
