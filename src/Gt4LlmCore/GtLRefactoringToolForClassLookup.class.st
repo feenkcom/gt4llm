@@ -4,7 +4,7 @@ Magritte-based tool for looking up class details in a GtRBNamespace model.
 Class {
 	#name : #GtLRefactoringToolForClassLookup,
 	#superclass : #GtLAbstractRefactoringMagritteTool,
-	#category : 'Gt4LlmCore-Tools'
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #'llm-generated' }

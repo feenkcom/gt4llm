@@ -61,7 +61,7 @@ GtLOllamaOpenAiExamples >> userMessagePlainEncoding [
 		andTools: message tools 
 		andInstructions: message instructions.
 	entity := apiClient entity.
-	self assert: entity size equals: 4.
+	self assert: entity size equals: 5.
 	self assert: (entity at: 'model') equals: 'gemma4'.
 	self assert: (entity at: 'stream') equals: false.
 	self assert: (entity at: 'reasoning_effort') equals: #none.

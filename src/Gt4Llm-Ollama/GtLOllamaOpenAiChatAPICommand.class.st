@@ -31,7 +31,7 @@ GtLOllamaOpenAiChatAPICommand >> entity [
 		ifNotNil: [ entity
 				at: 'response_format'
 				put: {'type' -> 'json_schema'.
-							'json_schema' -> format} asDictionary ].
+							'json_schema' -> { 'schema' -> format } asDictionary } asDictionary ].
 
 	"tools isEmptyOrNil
 		ifFalse: [ entity

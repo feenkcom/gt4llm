@@ -134,6 +134,14 @@ GtOllamaProvider >> model [
 	^ model
 ]
 
+{ #category : #accessing }
+GtOllamaProvider >> model: anObject [
+	model := anObject.
+	
+	"ignore pulling errors that occur on local models. worst case is we’ll get an issue later when trying to chat"
+	[ self client pullModel: model ] on: Error do: [  ]
+]
+
 { #category : #'as yet unclassified' }
 GtOllamaProvider >> modelName [
 	^ self model

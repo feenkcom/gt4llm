@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLTextFile,
 	#superclass : #GtLFileReference,
-	#category : 'Gt4LlmCore-Domain Objects'
+	#category : #'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #serialization }
