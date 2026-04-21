@@ -159,7 +159,7 @@ GtLOpenAIUserMessage >> initialize [
 	super initialize.
 
 	attachments := OrderedCollection new.
-	inputModels := OrderedDictionary new.
+	inputModels := OrderedCollection new.
 ]
 
 { #category : #accessing }

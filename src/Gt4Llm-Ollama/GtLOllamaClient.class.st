@@ -6,7 +6,7 @@ Class {
 		'history',
 		'reasoningEffort'
 	],
-	#category : 'Gt4Llm-Ollama-Client'
+	#category : #'Gt4Llm-Ollama-Client'
 }
 
 { #category : #defaults }
