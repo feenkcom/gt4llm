@@ -11,7 +11,7 @@ Class {
 		'contentOneLineSummary',
 		'contentDataBlock'
 	],
-	#category : 'Gt4Llm-Ollama-Model'
+	#category : #'Gt4Llm-Ollama-Model'
 }
 
 { #category : #accessing }
@@ -75,7 +75,7 @@ GtLOllamaUserMessage >> initialize [
 	super initialize.
 
 	attachments := OrderedCollection new.
-	inputModels := OrderedDictionary new
+	inputModels := OrderedCollection new
 ]
 
 { #category : #accessing }
@@ -148,7 +148,7 @@ GtLOllamaUserMessage >> serializeForOllamaOpenAiMessagesAPI [
 			-> ({
 			{
 				'type' -> 'text'.
-				'text' -> (self contentDataBlock llmJsonData at: 'prompt').
+				'text' -> (self contentDataBlock llmJsonData).
 			} asDictionary}
 			, (self contentDataBlock secondaryDataBlocks 
 					flatCollect: [:aDataBlock |
@@ -156,13 +156,4 @@ GtLOllamaUserMessage >> serializeForOllamaOpenAiMessagesAPI [
 			, (self attachments
 							collect: [ :each | each serializeToOllamaOpenAIResponseOutput ])).
 		#role -> self role} asDictionary
-]
-
-{ #category : #'api - message' }
-GtLOllamaUserMessage >> string: aString [
-	"A simple string message."
-
-	self
-		addWrappedObject: (GtLStringData forString: aString)
-		named: 'prompt'
 ]

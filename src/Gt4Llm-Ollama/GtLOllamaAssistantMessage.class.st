@@ -8,7 +8,7 @@ Class {
 		'requestResponse',
 		'hasCompactionResponse'
 	],
-	#category : 'Gt4Llm-Ollama-Model'
+	#category : #'Gt4Llm-Ollama-Model'
 }
 
 { #category : #'as yet unclassified' }
@@ -35,12 +35,12 @@ GtLOllamaAssistantMessage >> chat: aChat [
 GtLOllamaAssistantMessage >> computeResponseModelsByFormat [
 	| responseText |
 	
-	^ { 'string' -> self contentText } asDictionary
-	"self formatDescriptions hasSchemaDescriptors ifFalse: [ ^ {} ].
+	self formatDescriptions hasSchemaDescriptors ifFalse: 
+		[ ^ { 'Content' -> (GtLString forString: self contentText) } asDictionary ].
 	responseText := self contentText.
 	^ [ self formatDescriptions readDomainObjectsFrom: responseText ]
 		on: NeoJSONParseError
-		do: [ :e | ^ {} ]"
+		do: [ :e | ^ {} ]
 ]
 
 { #category : #accessing }

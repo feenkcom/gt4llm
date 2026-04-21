@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLOllamaGenerateClient,
 	#superclass : #GtLOllamaClient,
-	#category : 'Gt4Llm-Ollama-Client'
+	#category : #'Gt4Llm-Ollama-Client'
 }
 
 { #category : #'as yet unclassified' }

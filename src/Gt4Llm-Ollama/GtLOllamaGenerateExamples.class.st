@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLOllamaGenerateExamples,
 	#superclass : #Object,
-	#category : 'Gt4Llm-Ollama-Examples'
+	#category : #'Gt4Llm-Ollama-Examples'
 }
 
 { #category : #accessing }
