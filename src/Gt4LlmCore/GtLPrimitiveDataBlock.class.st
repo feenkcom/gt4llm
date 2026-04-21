@@ -99,6 +99,12 @@ GtLPrimitiveDataBlock >> serializeForAnthropic [
 ]
 
 { #category : #serialization }
+GtLPrimitiveDataBlock >> serializeForMCP [
+	<llmSerialization: 'MCP'>
+	self subclassResponsibility
+]
+
+{ #category : #serialization }
 GtLPrimitiveDataBlock >> serializeForOllama [
 	<llmSerialization: 'Ollama'>
 	self subclassResponsibility

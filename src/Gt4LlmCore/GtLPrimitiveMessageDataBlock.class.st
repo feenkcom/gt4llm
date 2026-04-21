@@ -129,6 +129,14 @@ GtLPrimitiveMessageDataBlock >> serializeForAnthropic [
 ]
 
 { #category : #serialization }
+GtLPrimitiveMessageDataBlock >> serializeForMCP [
+	^ self dataBlocks 
+			flatCollect: [ :each |
+				each serializeForMCP ] 
+			as: Array
+]
+
+{ #category : #serialization }
 GtLPrimitiveMessageDataBlock >> serializeForOllama [
 	^ self dataBlocks 
 			flatCollect: [ :each |

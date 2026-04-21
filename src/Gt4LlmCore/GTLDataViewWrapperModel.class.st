@@ -55,13 +55,18 @@ GTLDataViewWrapperModel >> model [
 ]
 
 { #category : #serialization }
+GTLDataViewWrapperModel >> serializeForMCPResponseOutput [
+	^ self mainDataView  serializeForMCPResponseOutput
+]
+
+{ #category : #serialization }
 GTLDataViewWrapperModel >> serializeToAnthropicResponseOutput [
-	^ mainDataView  serializeToAnthropicResponseOutput
+	^ self mainDataView  serializeToAnthropicResponseOutput
 ]
 
 { #category : #serialization }
 GTLDataViewWrapperModel >> serializeToOpenAIResponseOutput [
-	^ mainDataView  serializeToOpenAIResponseOutput
+	^ self mainDataView  serializeToOpenAIResponseOutput
 ]
 
 { #category : #accessing }
