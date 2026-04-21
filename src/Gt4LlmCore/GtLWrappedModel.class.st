@@ -175,12 +175,12 @@ GtLWrappedModel >> serializeToLlmPrimiteData [
 
 { #category : #serialization }
 GtLWrappedModel >> serializeToOllamaGenerateResponseOutput [
-	^ self mainDataView  serializeForOllamaGenerate
+	^ self serializeToLlmPrimiteData  serializeForOllamaGenerate
 ]
 
 { #category : #serialization }
 GtLWrappedModel >> serializeToOllamaOpenAiResponseOutput [
-	^ self mainDataView  serializeForOllamaOpenAi
+	^ self serializeToLlmPrimiteData  serializeForOllamaOpenAi
 ]
 
 { #category : #serialization }

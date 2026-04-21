@@ -133,9 +133,8 @@ GtLOllamaUserMessage >> serializeForOllamaGenerateMessagesAPI [
 
 { #category : #api }
 GtLOllamaUserMessage >> serializeForOllamaOpenAiMessagesAPI [
-
-	^ {#content
-			-> (self contentDataBlock dataBlocks flatCollect: [ :dataBlock |
-				dataBlock serializeForOllamaOpenAi ] as: Array).
-		#role -> self role} asDictionary
+	^ {
+			#content	-> (self contentDataBlock serializeForOllamaOpenAi ).
+			#role -> self role
+		} asDictionary
 ]
