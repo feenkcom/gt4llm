@@ -14,11 +14,6 @@ Class {
 	#category : #'Gt4Llm-Ollama-Model'
 }
 
-{ #category : #accessing }
-GtLOllamaUserMessage >> attachments [
-	^ attachments
-]
-
 { #category : #'as yet unclassified' }
 GtLOllamaUserMessage >> chat: aChat [
 	super chat: aChat.
@@ -70,11 +65,44 @@ GtLOllamaUserMessage >> executionStrategy: anObject [
 	executionStrategy := anObject
 ]
 
+{ #category : #'as yet unclassified' }
+GtLOllamaUserMessage >> gtViewMessageDataFor: aView [
+	<gtView>
+	<gtLlmView>
+	
+	^ aView forward
+		title: 'Message Data';
+		priority: 41;
+		object: [ self serializeForOllamaGenerateMessagesAPI  ];
+		view: #gtItemsFor:;
+		actionButtonIcon: BrGlamorousVectorIcons inspect 
+			label: 'JSON' 
+			tooltip: 'Inspect message data'
+			action: [ :aButton |
+				aButton phlow spawnObject:   self serializeForOllamaGenerateMessagesAPI ]
+]
+
+{ #category : #'as yet unclassified' }
+GtLOllamaUserMessage >> gtViewMessageJsonFor: aView [
+	<gtView>
+	<gtLlmView>
+	
+	^ aView forward
+		title: 'Message JSON';
+		priority: 40;
+		object: [ self serializeForOllamaOpenAiMessagesAPI asGtJson ];
+		view: #gtJsonStringFor:;
+		actionButtonIcon: BrGlamorousVectorIcons inspect 
+			label: 'JSON' 
+			tooltip: 'Inspect JSON data'
+			action: [ :aButton |
+				aButton phlow spawnObject:   self serializeForOllamaOpenAiMessagesAPI asGtJson]
+]
+
 { #category : #initialization }
 GtLOllamaUserMessage >> initialize [
 	super initialize.
 
-	attachments := OrderedCollection new.
 	inputModels := OrderedCollection new
 ]
 
@@ -124,10 +152,11 @@ GtLOllamaUserMessage >> serializeForOllamaGenerateMessagesAPI [
 	| dict |
 
 	dict := Dictionary new.
-	dict addAll: self contentDataBlock llmJsonData.
+	self contentDataBlock compositeJsonDataBlock serializeForOllamaGenerate do: [ :assoc |
+		dict addAll: assoc ].
 	dict at: 'images' put:
-		(self attachments collect: [ :attachment |
-			attachment serializeToOllamaResponseOutput ]
+		(self contentDataBlock imageDataBlocks flatCollect: [ :imageDataBlock |
+			imageDataBlock serializeForOllamaGenerate ]
 				as: Array).
 	^ dict
 ]
@@ -136,15 +165,7 @@ GtLOllamaUserMessage >> serializeForOllamaGenerateMessagesAPI [
 GtLOllamaUserMessage >> serializeForOllamaOpenAiMessagesAPI [
 
 	^ {#content
-			-> ({
-			{
-				'type' -> 'text'.
-				'text' -> (self contentDataBlock llmJsonData).
-			} asDictionary}
-			, (self contentDataBlock secondaryDataBlocks 
-					flatCollect: [:aDataBlock |
-						aDataBlock serializeForOpenAI ])
-			, (self attachments
-							collect: [ :each | each serializeToOllamaOpenAIResponseOutput ])).
+			-> (self contentDataBlock dataBlocks flatCollect: [ :dataBlock |
+				dataBlock serializeForOllamaOpenAi ] as: Array).
 		#role -> self role} asDictionary
 ]

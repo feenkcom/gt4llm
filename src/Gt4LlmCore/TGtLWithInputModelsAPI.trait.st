@@ -4,11 +4,6 @@ Trait {
 }
 
 { #category : #'api - message' }
-TGtLWithInputModelsAPI >> addAttachments: aCollectionOfAttachments [
-	self attachments addAll: aCollectionOfAttachments
-]
-
-{ #category : #'api - message' }
 TGtLWithInputModelsAPI >> addInputMagritteObject: anObject named: aString [
 	self addInputModel: (GtLMagritteBasedModel new
 		name: aString;
@@ -50,9 +45,11 @@ TGtLWithInputModelsAPI >> addWrappedObject: anObject named: aString [
 		name: aString)
 ]
 
-{ #category : #accessing }
-TGtLWithInputModelsAPI >> attachments [
-	self explicitRequirement
+{ #category : #'api - message' }
+TGtLWithInputModelsAPI >> addWrappedObjects: aCollectionOfObjects [
+
+	aCollectionOfObjects do: [ :object |
+		self addWrappedObject: object ].
 ]
 
 { #category : #'api - message' }
@@ -76,13 +73,8 @@ TGtLWithInputModelsAPI >> gtViewInputModelsFor: aView [
 
 { #category : #'api - message' }
 TGtLWithInputModelsAPI >> images: aCollection [
-	self addAttachments: (aCollection collect: [ :each | 
+	self addWrappedObjects: (aCollection collect: [ :each | 
 		GtLImageFile fileReference: each ])
-]
-
-{ #category : #accessing }
-TGtLWithInputModelsAPI >> inputModels [
-	self explicitRequirement
 ]
 
 { #category : #'api - message' }
@@ -131,7 +123,7 @@ TGtLWithInputModelsAPI >> pageObject: aLepiterPage [
 
 { #category : #'api - message' }
 TGtLWithInputModelsAPI >> pdfs: aCollection [
-	self addAttachments: (aCollection collect: [ :each | 
+	self addWrappedObjects: (aCollection collect: [ :each | 
 		GtLPdfFile fileReference: each ])
 ]
 

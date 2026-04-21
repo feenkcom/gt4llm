@@ -10,7 +10,7 @@ Class {
 		'executionStrategy',
 		'contentOneLineSummary'
 	],
-	#category : 'Gt4Llm-Anthropic-Client'
+	#category : #'Gt4Llm-Anthropic-Client'
 }
 
 { #category : #'as yet unclassified' }
@@ -20,16 +20,6 @@ GtLAnthropicUserMessage >> asTokenizableString [
 	'<|im_sep|>' , 
 	(self contentText), 
 	'<|im_end|>'
-]
-
-{ #category : #accessing }
-GtLAnthropicUserMessage >> attachments [
-	^ attachments
-]
-
-{ #category : #accessing }
-GtLAnthropicUserMessage >> attachments: aCollection [
-	attachments := aCollection
 ]
 
 { #category : #accessing }
@@ -80,17 +70,6 @@ GtLAnthropicUserMessage >> executionStrategy [
 { #category : #accessing }
 GtLAnthropicUserMessage >> executionStrategy: anObject [
 	executionStrategy := anObject
-]
-
-{ #category : #ui }
-GtLAnthropicUserMessage >> gtAttachmentsFor: aView [
-	<gtView>
-	<gtLlmView>
-	attachments ifEmpty: [ ^ aView empty ].
-	^ aView columnedList
-		title: 'Attachments';
-		items: [ attachments ];
-		column: 'Value' text: [ :each | each gtDisplayString ]
 ]
 
 { #category : #ui }
@@ -170,7 +149,6 @@ GtLAnthropicUserMessage >> gtViewMessageJsonFor: aView [
 GtLAnthropicUserMessage >> initialize [
 	super initialize.
 
-	attachments := OrderedCollection new.
 	inputModels := OrderedCollection new.
 ]
 
@@ -224,8 +202,6 @@ GtLAnthropicUserMessage >> serializeForAnthropicMessagesAPI [
 			} asDictionary}
 			, (self contentDataBlock secondaryDataBlocks 
 					flatCollect: [:aDataBlock |
-						aDataBlock serializeForAnthropic ])
-			, (self attachments
-							collect: [ :each | each serializeToAnthropicResponseOutput ])).
+						aDataBlock serializeForAnthropic ])).
 		'role' -> self role} asDictionary
 ]

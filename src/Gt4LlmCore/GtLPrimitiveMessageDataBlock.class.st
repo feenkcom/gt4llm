@@ -137,10 +137,18 @@ GtLPrimitiveMessageDataBlock >> serializeForMCP [
 ]
 
 { #category : #serialization }
-GtLPrimitiveMessageDataBlock >> serializeForOllama [
+GtLPrimitiveMessageDataBlock >> serializeForOllamaGenerate [
 	^ self dataBlocks 
 			flatCollect: [ :each |
-				each serializeForOllama ] 
+				each serializeForOllamaGenerate ] 
+			as: Array
+]
+
+{ #category : #serialization }
+GtLPrimitiveMessageDataBlock >> serializeForOllamaOpenAi [
+	^ self dataBlocks 
+			flatCollect: [ :each |
+				each serializeForOllamaOpenAi ] 
 			as: Array
 ]
 

@@ -57,7 +57,7 @@ GtLOllamaGenerateExamples >> userMessagePlainEncoding [
 	
 	chat := self chatWithProvider.
 	message := chat createUserMessage.
-	message prompt: 'Hi!'.
+	message string: 'Hi!'.
 	message chat: chat.
 	chat addUserMessage: message.
 	provider := chat provider.
@@ -74,7 +74,7 @@ GtLOllamaGenerateExamples >> userMessagePlainEncoding [
 	self assert: entity size equals: 5.
 	self assert: (entity at: 'model') equals: 'gemma4'.
 	self assert: (entity at: 'stream') equals: false.
-	self assert: (entity at: 'prompt') equals: 'Hi!'.
+	self assert: (entity at: 'prompt') equals: '"Hi!"'.
 	self assert: (entity at: 'system')
 		equals: message instructions instructionString.
 	
@@ -88,7 +88,7 @@ GtLOllamaGenerateExamples >> userMessagePlainImageEncoding [
 	
 	chat := self chatWithProvider.
 	message := chat createUserMessage.
-	message prompt: 'Hi!'.
+	message string: 'Hi!'.
 	message images: { self class jpgImage}.
 	message chat: chat.
 	chat addUserMessage: message.
@@ -106,7 +106,7 @@ GtLOllamaGenerateExamples >> userMessagePlainImageEncoding [
 	self assert: entity size equals: 5.
 	self assert: (entity at: 'model') equals: 'gemma4'.
 	self assert: (entity at: 'stream') equals: false.
-	self assert: (entity at: 'prompt') equals: 'Hi!'.
+	self assert: (entity at: 'prompt') equals: '"Hi!"'.
 	images := entity at: 'images'.
 	self assert: images isArray.
 	self assert: images size equals: 1.

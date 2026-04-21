@@ -73,13 +73,20 @@ GtLPrimitiveImageDataBlock >> serializeForMCP [
 ]
 
 { #category : #serialization }
-GtLPrimitiveImageDataBlock >> serializeForOllama [
+GtLPrimitiveImageDataBlock >> serializeForOllamaGenerate [
+	<return: #Array of: #NeoJSONObject>
+
+	^ { self encodedBytes }
+]
+
+{ #category : #serialization }
+GtLPrimitiveImageDataBlock >> serializeForOllamaOpenAi [
 	<return: #Array of: #NeoJSONObject>
 
 	^ {NeoJSONObject new
 			at: 'image_url' put: ('data:image/'
 				,self imageType,';base64,' , self encodedBytes);
-			at: 'type' put: 'input_image';
+			at: 'type' put: 'image_url';
 			yourself}
 ]
 
