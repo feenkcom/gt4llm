@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLAbstractFunctionTool,
 	#superclass : #GtLTool,
-	#category : #'Gt4LlmCore-Tools'
+	#category : 'Gt4LlmCore-Tools'
 }
 
 { #category : #testiung }
@@ -92,10 +92,8 @@ GtLAbstractFunctionTool >> privatePerformToolCall: aToolCall inContext: anExecut
 { #category : #utils }
 GtLAbstractFunctionTool >> resultObjectFromDomainObject: domainObject [ 
 
-	^GTLDataViewWrapperModel new 
-			targetObject:  domainObject;
-			targetDataViews:  (domainObject 
-				llmDataViewsInContext: GtLDataViewContext new)
+	^GtLWrappedObjectModel new 
+			model:  domainObject
 ]
 
 { #category : #accessing }

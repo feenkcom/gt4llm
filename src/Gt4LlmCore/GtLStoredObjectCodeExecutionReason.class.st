@@ -7,7 +7,7 @@ Class {
 	#instVars : [
 		'tool'
 	],
-	#category : #'Gt4LlmCore-Object Storage'
+	#category : 'Gt4LlmCore-Object Storage'
 }
 
 { #category : #'instance creation' }

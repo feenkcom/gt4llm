@@ -5,7 +5,7 @@ Class {
 		'provider',
 		'compactionCondition'
 	],
-	#category : #'Gt4LlmCore-Compaction'
+	#category : 'Gt4LlmCore-Compaction'
 }
 
 { #category : #'instance creation' }

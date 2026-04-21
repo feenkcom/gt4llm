@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'parent'
 	],
-	#category : #'Gt4LlmCore-Instructions'
+	#category : 'Gt4LlmCore-Instructions'
 }
 
 { #category : #accessing }

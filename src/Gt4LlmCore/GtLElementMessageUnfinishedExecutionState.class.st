@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLElementMessageUnfinishedExecutionState,
 	#superclass : #BlElementUniqueState,
-	#category : #'Gt4LlmCore-UI - Elements'
+	#category : 'Gt4LlmCore-UI - Elements'
 }
 
 { #category : #printing }
