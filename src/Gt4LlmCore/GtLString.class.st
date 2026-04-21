@@ -16,7 +16,7 @@ GtLString class >> forString: aString [
 { #category : #views }
 GtLString >> gtStringValueFor: aView [
 	<gtView>
-	<gtLlmMessageView>
+	<gtLlmView>
 	^(aView forward)
 		title: 'String';
 		priority: 1;
