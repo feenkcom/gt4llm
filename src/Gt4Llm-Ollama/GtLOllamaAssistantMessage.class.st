@@ -66,6 +66,11 @@ GtLOllamaAssistantMessage >> gtContentFor: aView [
 		text: [ self contentText ]
 ]
 
+{ #category : #accessing }
+GtLOllamaAssistantMessage >> gtInspectorTargetModels [
+	^ self responseModels asArray
+]
+
 { #category : #views }
 GtLOllamaAssistantMessage >> gtThoughtProcessFor: aView [
 	<gtView>
