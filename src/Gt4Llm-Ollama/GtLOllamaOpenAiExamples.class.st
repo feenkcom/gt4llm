@@ -46,6 +46,7 @@ GtLOllamaOpenAiExamples >> userMessagePlainEncoding [
 	
 	chat := self chatWithProvider.
 	chat provider configureForOpenAiCompatibility.
+	chat provider reasoningEffort: #none.
 	message := chat createUserMessage.
 	message string: 'Hi!'.
 	message chat: chat.
@@ -60,9 +61,10 @@ GtLOllamaOpenAiExamples >> userMessagePlainEncoding [
 		andTools: message tools 
 		andInstructions: message instructions.
 	entity := apiClient entity.
-	self assert: entity size equals: 3.
+	self assert: entity size equals: 4.
 	self assert: (entity at: 'model') equals: 'gemma4'.
 	self assert: (entity at: 'stream') equals: false.
+	self assert: (entity at: 'reasoning_effort') equals: #none.
 	entityMessages := entity at: 'messages'.
 	self assert: entityMessages size equals: 1.
 	entityMessage := entityMessages first.
