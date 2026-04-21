@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLOllamaSettings,
 	#superclass : #Object,
-	#category : #'Gt4Llm-Ollama-Support'
+	#category : 'Gt4Llm-Ollama-Support'
 }
 
 { #category : #accessing }

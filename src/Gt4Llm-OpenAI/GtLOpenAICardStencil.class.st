@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLOpenAICardStencil,
 	#superclass : #BlStencil,
-	#category : #'Gt4Llm-OpenAI-UI'
+	#category : 'Gt4Llm-OpenAI-UI'
 }
 
 { #category : #'as yet unclassified' }

@@ -5,7 +5,6 @@ Class {
 	#classTraits : 'TGtLWithInstructionSectionAPI classTrait + TGtLWithInputModelsAPI classTrait + TGtLWithInputDataBlocks classTrait',
 	#instVars : [
 		'inputModels',
-		'attachments',
 		'requestResponse',
 		'contentOneLineSummary'
 	],
