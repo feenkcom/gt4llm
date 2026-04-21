@@ -381,13 +381,13 @@ GtLMcpServer >> handleToolsCall: aJsonRpc [
 	toolMessage output: result.
 	^
 	{'isError' -> false.
-	'content' -> result serializeToAnthropicResponseOutput}
+	'content' -> result serializeForMCPResponseOutput}
 			asDictionary
 ]
 
 { #category : #handling }
 GtLMcpServer >> handleToolsList: aJsonRpc [
-	^{'tools' -> (tools collect: [:aTool | aTool functionAnthropic]) asArray}
+	^{'tools' -> (tools collect: [:aTool | aTool functionMCP]) asArray}
 		asDictionary
 ]
 
