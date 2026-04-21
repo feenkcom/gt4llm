@@ -178,13 +178,8 @@ GtLAnthropicUserMessage >> role [
 
 { #category : #serialization }
 GtLAnthropicUserMessage >> serializeForAnthropicMessagesAPI [
-	^ {'content' -> ({
-			{
-				'type' -> 'text'.
-				'text' -> self contentText
-			} asDictionary}
-			, (self contentDataBlock secondaryDataBlocks 
-					flatCollect: [:aDataBlock |
-						aDataBlock serializeForAnthropic ])).
-		'role' -> self role} asDictionary
+	^ {
+			'content' -> (self contentDataBlock serializeForAnthropic ).
+			'role' -> self role
+		} asDictionary
 ]

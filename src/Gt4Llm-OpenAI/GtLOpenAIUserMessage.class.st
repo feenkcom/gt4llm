@@ -183,8 +183,8 @@ GtLOpenAIUserMessage >> role [
 { #category : #serialization }
 GtLOpenAIUserMessage >> serializeForOpenAIResponsesAPI [
 
-	^ {#content
-			-> (self contentDataBlock dataBlocks flatCollect: [ :dataBlock |
-				dataBlock serializeForOpenAI ] as: Array).
-		#role -> self role} asDictionary
+	^ {
+			#content	-> (self contentDataBlock serializeForOpenAI).
+			#role -> self role
+		} asDictionary
 ]
