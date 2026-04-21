@@ -160,20 +160,30 @@ GtLWrappedModel >> name: aString [
 
 { #category : #serialization }
 GtLWrappedModel >> serializeForMCPResponseOutput [
-	^ self mainDataView  serializeForMCPResponseOutput
+	^ self serializeToLlmPrimiteData  serializeForMCP
 ]
 
 { #category : #serialization }
 GtLWrappedModel >> serializeToAnthropicResponseOutput [
-	^ self mainDataView  serializeToAnthropicResponseOutput
+	^ self serializeToLlmPrimiteData  serializeForAnthropic
 ]
 
 { #category : #serialization }
-GtLWrappedModel >> serializeToOllamaResponseOutput [
-	^ self mainDataView  serializeToOllamaResponseOutput
+GtLWrappedModel >> serializeToLlmPrimiteData [
+	^ self mainDataView  serializeToLlmPrimiteData
+]
+
+{ #category : #serialization }
+GtLWrappedModel >> serializeToOllamaGenerateResponseOutput [
+	^ self mainDataView  serializeForOllamaGenerate
+]
+
+{ #category : #serialization }
+GtLWrappedModel >> serializeToOllamaOpenAiResponseOutput [
+	^ self mainDataView  serializeForOllamaOpenAi
 ]
 
 { #category : #serialization }
 GtLWrappedModel >> serializeToOpenAIResponseOutput [
-	^ self mainDataView  serializeToOpenAIResponseOutput
+	^ self serializeToLlmPrimiteData  serializeForOpenAI
 ]
