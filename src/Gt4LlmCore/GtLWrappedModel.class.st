@@ -1,12 +1,12 @@
 Class {
 	#name : #GtLWrappedModel,
-	#superclass : #GtLBasicModel,
+	#superclass : #Object,
 	#instVars : [
 		'name',
 		'model',
 		'cachedMainDataView'
 	],
-	#category : #'Gt4LlmCore-Core'
+	#category : 'Gt4LlmCore-Core'
 }
 
 { #category : #adding }

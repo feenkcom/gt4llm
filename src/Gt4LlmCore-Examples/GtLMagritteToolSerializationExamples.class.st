@@ -27,7 +27,7 @@ GtLMagritteToolSerializationExamples >> toolCallWithJsonDeserializationError [
 	result := tool performToolCall: call.
 	self assert: call tool == tool.
 
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	self assert: (result isKindOf: GtLWrappedObjectModel).
 	domainObject := result targetObject.
 	self assert: domainObject isErrorDomainObject.
 

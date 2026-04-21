@@ -3,7 +3,7 @@ Class {
 	#superclass : #Object,
 	#traits : 'TGtGroupWithItems',
 	#classTraits : 'TGtGroupWithItems classTrait',
-	#category : #'Gt4LlmCore-UI - Registry'
+	#category : 'Gt4LlmCore-UI - Registry'
 }
 
 { #category : #'gt - extensions' }
