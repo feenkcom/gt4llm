@@ -103,15 +103,6 @@ GtLOllamaUserMessage >> isCompactionRequest [
 		each name = 'Compaction' ]
 ]
 
-{ #category : #'api - message' }
-GtLOllamaUserMessage >> prompt: aString [
-	"A simple string message."
-
-	self
-		addWrappedObject: (GtLString forString: aString)
-		named: 'prompt'
-]
-
 { #category : #accessing }
 GtLOllamaUserMessage >> requestResponse [
 	<return: #GtLRequestResponse>
