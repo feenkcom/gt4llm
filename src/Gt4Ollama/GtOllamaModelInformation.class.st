@@ -95,16 +95,6 @@ GtOllamaModelInformation >> license: anObject [
 ]
 
 { #category : #accessing }
-GtOllamaModelInformation >> modelfile [
-	^ modelfile
-]
-
-{ #category : #accessing }
-GtOllamaModelInformation >> modelfile: anObject [
-	modelfile := anObject
-]
-
-{ #category : #accessing }
 GtOllamaModelInformation >> modelInfo [
 	^ modelInfo
 ]
@@ -112,6 +102,16 @@ GtOllamaModelInformation >> modelInfo [
 { #category : #accessing }
 GtOllamaModelInformation >> modelInfo: anObject [
 	modelInfo := anObject
+]
+
+{ #category : #accessing }
+GtOllamaModelInformation >> modelfile [
+	^ modelfile
+]
+
+{ #category : #accessing }
+GtOllamaModelInformation >> modelfile: anObject [
+	modelfile := anObject
 ]
 
 { #category : #accessing }

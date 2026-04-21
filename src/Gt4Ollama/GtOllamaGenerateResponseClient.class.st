@@ -21,6 +21,24 @@ Class {
 }
 
 { #category : #accessing }
+GtOllamaGenerateResponseClient >> entity [
+	| entity |
+
+	entity := Dictionary new.
+	entity
+		at: 'model' put: model;
+		at: 'prompt' put: prompt.
+	format ifNotNil: [ entity at: 'format' put: format ].
+	images ifNotNil: [ entity at: 'images' put: images ].
+	keep_alive ifNotNil: [ entity at: 'keep_alive' put: keep_alive ].
+	options ifNotNil: [ entity at: 'options' put: options ].
+	suffix ifNotNil: [ entity at: 'suffix' put: suffix ].
+	system ifNotNil: [ entity at: 'system' put: system ].
+	template ifNotNil: [ entity at: 'template' put: template ].
+	^ entity
+]
+
+{ #category : #accessing }
 GtOllamaGenerateResponseClient >> format [
 	"The format to return a response in. Format can be json or a JSON schema"
 
@@ -110,6 +128,11 @@ GtOllamaGenerateResponseClient >> request [
 	^ self stream 
 		ifTrue: [ self client postStreaming: '/generate' withEntity: self entity ]
 		ifFalse: [ self client post: '/generate' withEntity: self entity ]
+]
+
+{ #category : #accessing }
+GtOllamaGenerateResponseClient >> serializationClass [
+	^ GtOllamaResponseMessage
 ]
 
 { #category : #accessing }

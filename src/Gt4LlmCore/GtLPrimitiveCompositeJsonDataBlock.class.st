@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'jsonDataBlocks'
 	],
-	#category : 'Gt4LlmCore-Data Views'
+	#category : #'Gt4LlmCore-Data Views'
 }
 
 { #category : #adding }
@@ -86,13 +86,6 @@ GtLPrimitiveCompositeJsonDataBlock >> llmJsonData [
 				yourself]
 ]
 
-{ #category : #accessing }
-GtLPrimitiveCompositeJsonDataBlock >> serializedJsonString [
-	"Return a JSON string that represents the domain object."
-	
-	^ NeoJSONWriter toStringPretty: self llmJsonData
-]
-
 { #category : #serialization }
 GtLPrimitiveCompositeJsonDataBlock >> serializeForAnthropic [
 	^ self condensedJsonBlock serializeForAnthropic 
@@ -111,4 +104,11 @@ GtLPrimitiveCompositeJsonDataBlock >> serializeForOllama [
 { #category : #serialization }
 GtLPrimitiveCompositeJsonDataBlock >> serializeForOpenAI [
 	^ self condensedJsonBlock serializeForOpenAI 
+]
+
+{ #category : #accessing }
+GtLPrimitiveCompositeJsonDataBlock >> serializedJsonString [
+	"Return a JSON string that represents the domain object."
+	
+	^ NeoJSONWriter toStringPretty: self llmJsonData
 ]

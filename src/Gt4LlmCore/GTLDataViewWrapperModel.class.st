@@ -5,7 +5,7 @@ Class {
 		'targetObject',
 		'mainDataView'
 	],
-	#category : 'Gt4LlmCore-Core'
+	#category : #'Gt4LlmCore-Core'
 }
 
 { #category : #'gt - inspector' }
