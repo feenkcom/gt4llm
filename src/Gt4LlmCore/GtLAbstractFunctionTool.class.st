@@ -39,6 +39,15 @@ GtLAbstractFunctionTool >> functionGemini [
 ]
 
 { #category : #'api - responses' }
+GtLAbstractFunctionTool >> functionMCP [
+	^
+	{'name' -> self name.
+	'description' -> self description.
+	'inputSchema' -> self parametersJsonSchemaDictionary}
+			asDictionary
+]
+
+{ #category : #'api - responses' }
 GtLAbstractFunctionTool >> functionOpenAI [
 	^ {'name' -> self name.
 		'type' -> self type.

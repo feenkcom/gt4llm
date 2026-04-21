@@ -39,6 +39,13 @@ GtLTool >> functionAnthropic [
 ]
 
 { #category : #'api - responses' }
+GtLTool >> functionMCP [
+	^
+	{'type' -> self type.
+	'name' -> self name} asDictionary
+]
+
+{ #category : #'api - responses' }
 GtLTool >> functionOpenAI [
 	^ {'type' -> self type} asDictionary
 ]
