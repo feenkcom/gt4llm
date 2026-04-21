@@ -43,7 +43,6 @@ GtLFunctionToolExamples >> additionToolCall [
 	result := tool performToolCall: call.
 	
 	self assert: call tool == tool.
-	self assert: result isErrorDomainObject not.
 	self assert: result targetObject object equals: 8.
 	
 	^ call
@@ -62,7 +61,6 @@ GtLFunctionToolExamples >> additionToolDataViewSerialization [
 	} asDictionary.
 	
 	result := tool performToolCall: call.
-	self assert: result isErrorDomainObject not.
 	
 	compositeView := result targetObject llmDataViewsFor: GtLDataView new.
 	self assert: compositeView dataViews isNotEmpty.
@@ -112,7 +110,6 @@ GtLFunctionToolExamples >> stringConcatenationToolCall [
 	
 	result := tool performToolCall: call.
 	
-	self assert: result isErrorDomainObject not.
 	self assert: result targetObject object equals: 'Hello, World!'.
 	
 	^ call

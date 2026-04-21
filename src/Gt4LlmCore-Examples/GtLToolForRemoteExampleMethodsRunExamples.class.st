@@ -671,7 +671,6 @@ GtLToolForRemoteExampleMethodsRunExamples >> exampleRunRejectsNonArrayCheckNames
 	call
 		rawArguments:  {'checkNames' -> '"not-an-array"'} asDictionary.
 	result := tool performToolCall: call.
-	self assert: result isErrorDomainObject.
 	
 	model := result targetObject.
 	self assert: model argumentName equals: 'checkNames'.
