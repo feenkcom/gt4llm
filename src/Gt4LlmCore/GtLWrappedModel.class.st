@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLWrappedModel,
-	#superclass : #GtLBasicModel,
+	#superclass : #Object,
 	#instVars : [
 		'name',
 		'model',
@@ -159,16 +159,31 @@ GtLWrappedModel >> name: aString [
 ]
 
 { #category : #serialization }
-GtLWrappedModel >> serializeToAnthropicResponseOutput [
-	^ self mainDataView  serializeToAnthropicResponseOutput
+GtLWrappedModel >> serializeForMCPResponseOutput [
+	^ self serializeToLlmPrimiteData  serializeForMCP
 ]
 
 { #category : #serialization }
-GtLWrappedModel >> serializeToOllamaResponseOutput [
-	^ self mainDataView  serializeToOllamaResponseOutput
+GtLWrappedModel >> serializeToAnthropicResponseOutput [
+	^ self serializeToLlmPrimiteData  serializeForAnthropic
+]
+
+{ #category : #serialization }
+GtLWrappedModel >> serializeToLlmPrimiteData [
+	^ self mainDataView  serializeToLlmPrimiteData
+]
+
+{ #category : #serialization }
+GtLWrappedModel >> serializeToOllamaGenerateResponseOutput [
+	^ self serializeToLlmPrimiteData  serializeForOllamaGenerate
+]
+
+{ #category : #serialization }
+GtLWrappedModel >> serializeToOllamaOpenAiResponseOutput [
+	^ self serializeToLlmPrimiteData  serializeForOllamaOpenAi
 ]
 
 { #category : #serialization }
 GtLWrappedModel >> serializeToOpenAIResponseOutput [
-	^ self mainDataView  serializeToOpenAIResponseOutput
+	^ self serializeToLlmPrimiteData  serializeForOpenAI
 ]

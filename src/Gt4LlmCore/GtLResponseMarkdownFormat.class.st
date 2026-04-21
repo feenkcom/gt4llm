@@ -7,41 +7,6 @@ Class {
 	#category : #'Gt4LlmCore-Core'
 }
 
-{ #category : #accessing }
-GtLResponseMarkdownFormat >> asJsonSchemaDictionary [
-	^ schema raw
-]
-
-{ #category : #views }
-GtLResponseMarkdownFormat >> gtViewDetailsSchemaFor: aView [
-	<gtView>
-	^ aView forward
-		title: 'Schema details';
-		priority: 5;
-		object: [ schema ];
-		view: #gtViewDetailsIn:
-]
-
-{ #category : #views }
-GtLResponseMarkdownFormat >> gtViewSchemaJsonFor: aView [
-	<gtView>
-	^ aView forward
-		title: 'Raw JSON';
-		priority: 40;
-		object: [ schema ];
-		view: #gtViewRawJsonIn:
-]
-
-{ #category : #views }
-GtLResponseMarkdownFormat >> gtViewSchemaPropertiesFor: aView [
-	<gtView>
-	^ aView forward
-		title: 'Schema Properties';
-		priority: 10;
-		object: [ schema ];
-		view: #gtViewPropertiesIn:
-]
-
 { #category : #initialization }
 GtLResponseMarkdownFormat >> initialize [
 	super initialize.
@@ -115,6 +80,11 @@ GtLResponseMarkdownFormat >> printOn: aStream [
 { #category : #accessing }
 GtLResponseMarkdownFormat >> propertyNames [
 	^ #()
+]
+
+{ #category : #accessing }
+GtLResponseMarkdownFormat >> schema [
+	^schema
 ]
 
 { #category : #accessing }

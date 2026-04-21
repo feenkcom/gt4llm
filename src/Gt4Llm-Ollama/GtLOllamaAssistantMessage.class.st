@@ -35,12 +35,12 @@ GtLOllamaAssistantMessage >> chat: aChat [
 GtLOllamaAssistantMessage >> computeResponseModelsByFormat [
 	| responseText |
 	
-	^ { 'string' -> self contentText } asDictionary
-	"self formatDescriptions hasSchemaDescriptors ifFalse: [ ^ {} ].
+	self formatDescriptions hasSchemaDescriptors ifFalse: 
+		[ ^ { 'Content' -> (GtLString forString: self contentText) } asDictionary ].
 	responseText := self contentText.
 	^ [ self formatDescriptions readDomainObjectsFrom: responseText ]
 		on: NeoJSONParseError
-		do: [ :e | ^ {} ]"
+		do: [ :e | ^ {} ]
 ]
 
 { #category : #accessing }
@@ -74,7 +74,7 @@ GtLOllamaAssistantMessage >> gtThoughtProcessFor: aView [
 	self thoughtText ifEmpty: [ ^ aView empty ].
 	^ aView textEditor
 		title: 'Thought process';
-		priority: 7;
+		priority: 10;
 		text: [ self thoughtText ]
 ]
 

@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLImageData,
+	#name : #GtLPlainImage,
 	#superclass : #GtLPlainData,
 	#instVars : [
 		'imageType',
@@ -9,7 +9,7 @@ Class {
 }
 
 { #category : #'instance creation' }
-GtLImageData class >> fromElement: anElement [
+GtLPlainImage class >> fromElement: anElement [
 	| rootElement form |
 	rootElement := BlScripter new
 			element: anElement;
@@ -23,18 +23,18 @@ GtLImageData class >> fromElement: anElement [
 ]
 
 { #category : #'instance creation' }
-GtLImageData class >> png: aByteArray [
+GtLPlainImage class >> png: aByteArray [
 	^ self new 
 		 initializeWithPngBytes: aByteArray
 ]
 
 { #category : #accessing }
-GtLImageData >> encodedBytes [
+GtLPlainImage >> encodedBytes [
 	^ imageBytes base64Encoded
 ]
 
 { #category : #'gt - extensions' }
-GtLImageData >> gtImageFor: aView [
+GtLPlainImage >> gtImageFor: aView [
 	<gtView>
 	^ aView forward
 		title: 'Image';
@@ -44,28 +44,28 @@ GtLImageData >> gtImageFor: aView [
 ]
 
 { #category : #accessing }
-GtLImageData >> imageBytes: anObject [
+GtLPlainImage >> imageBytes: anObject [
 	imageBytes := anObject
 ]
 
 { #category : #accessing }
-GtLImageData >> imageType [
+GtLPlainImage >> imageType [
 	^ imageType
 ]
 
 { #category : #accessing }
-GtLImageData >> imageType: anObject [
+GtLPlainImage >> imageType: anObject [
 	imageType := anObject
 ]
 
 { #category : #initialization }
-GtLImageData >> initializeWithPngBytes: aByteArray [
+GtLPlainImage >> initializeWithPngBytes: aByteArray [
 	self imageBytes: aByteArray.
 	self imageType: 'png'.
 ]
 
 { #category : #accessing }
-GtLImageData >> llmImageDataViewFor: aDataView [
+GtLPlainImage >> llmImageDataViewFor: aDataView [
 	<gtLlmDataView>
 	
 	^ aDataView imageData
@@ -74,12 +74,12 @@ GtLImageData >> llmImageDataViewFor: aDataView [
 ]
 
 { #category : #printing }
-GtLImageData >> printOn: aStream [ 
+GtLPlainImage >> printOn: aStream [ 
 	aStream << ('data:image/',self imageType,';base64') 
 ]
 
 { #category : #'gt - extensions' }
-GtLImageData >> skiaImage [
+GtLPlainImage >> skiaImage [
 	^SkiaImage
 		fromBuffer: imageBytes
 		start: 0

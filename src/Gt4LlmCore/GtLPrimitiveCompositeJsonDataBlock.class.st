@@ -92,8 +92,18 @@ GtLPrimitiveCompositeJsonDataBlock >> serializeForAnthropic [
 ]
 
 { #category : #serialization }
-GtLPrimitiveCompositeJsonDataBlock >> serializeForOllama [
-	^ self condensedJsonBlock serializeForOllama
+GtLPrimitiveCompositeJsonDataBlock >> serializeForMCP [
+	^ self condensedJsonBlock serializeForMCP 
+]
+
+{ #category : #serialization }
+GtLPrimitiveCompositeJsonDataBlock >> serializeForOllamaGenerate [
+	^ self condensedJsonBlock serializeForOllamaGenerate
+]
+
+{ #category : #serialization }
+GtLPrimitiveCompositeJsonDataBlock >> serializeForOllamaOpenAi [
+	^ self condensedJsonBlock serializeForOllamaOpenAi
 ]
 
 { #category : #serialization }

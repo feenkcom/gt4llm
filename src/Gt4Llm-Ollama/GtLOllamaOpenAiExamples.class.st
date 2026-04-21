@@ -46,6 +46,7 @@ GtLOllamaOpenAiExamples >> userMessagePlainEncoding [
 	
 	chat := self chatWithProvider.
 	chat provider configureForOpenAiCompatibility.
+	chat provider reasoningEffort: #none.
 	message := chat createUserMessage.
 	message string: 'Hi!'.
 	message chat: chat.
@@ -60,9 +61,10 @@ GtLOllamaOpenAiExamples >> userMessagePlainEncoding [
 		andTools: message tools 
 		andInstructions: message instructions.
 	entity := apiClient entity.
-	self assert: entity size equals: 3.
+	self assert: entity size equals: 5.
 	self assert: (entity at: 'model') equals: 'gemma4'.
 	self assert: (entity at: 'stream') equals: false.
+	self assert: (entity at: 'reasoning_effort') equals: #none.
 	entityMessages := entity at: 'messages'.
 	self assert: entityMessages size equals: 1.
 	entityMessage := entityMessages first.
@@ -81,11 +83,12 @@ GtLOllamaOpenAiExamples >> userMessagePlainImageEncoding [
 	
 	chat := self chatWithProvider.
 	message := chat createUserMessage.
-	message prompt: 'Hi!'.
-	message images: { '/home/alistair/tmp/notes.png' asFileReference}.
+	message string: 'Hi!'.
+	message images: { GtLOllamaGenerateExamples jpgImage}.
 	message chat: chat.
 	chat addUserMessage: message.
 	provider := chat provider.
+	provider configureForGenerateApi.
 	provider privateExecutionState: provider state scheduled running.
 	messages := provider relevantChatMessages.
 	apiClient := provider client
@@ -98,7 +101,7 @@ GtLOllamaOpenAiExamples >> userMessagePlainImageEncoding [
 	self assert: entity size equals: 5.
 	self assert: (entity at: 'model') equals: 'gemma4'.
 	self assert: (entity at: 'stream') equals: false.
-	self assert: (entity at: 'prompt') equals: 'Hi!'.
+	self assert: (entity at: 'prompt') equals: '"Hi!"'.
 	images := entity at: 'images'.
 	self assert: images isArray.
 	self assert: images size equals: 1.

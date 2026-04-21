@@ -3,7 +3,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'baseUrl',
-		'history'
+		'history',
+		'reasoningEffort'
 	],
 	#category : #'Gt4Llm-Ollama-Client'
 }
@@ -17,6 +18,14 @@ GtLOllamaClient class >> defaultBaseUrl [
 GtLOllamaClient >> addHistoryRequestResponse: aClient [
 	<return: #GtLRequestResponse>
 	^ history addRequest: aClient request response: aClient response
+]
+
+{ #category : #api }
+GtLOllamaClient >> addThinkingTo: anEntity [
+	"Add the receiver's configured reasoning effort to the supplied entity dictionary."
+
+	reasoningEffort ifNil: [ ^ self ].
+	anEntity at: 'reasoning_effort' put: reasoningEffort.
 ]
 
 { #category : #api }
@@ -103,4 +112,19 @@ GtLOllamaClient >> post: aString withEntity: anEntity [
 	requestResponse := self addHistoryRequestResponse: aClient.
 	requestResponse result: result.
 	^ requestResponse
+]
+
+{ #category : #accessing }
+GtLOllamaClient >> reasoningEffort [
+	^ reasoningEffort
+]
+
+{ #category : #accessing }
+GtLOllamaClient >> reasoningEffort: aSymbol [
+	| namedLevels |
+	
+	namedLevels := #(nil #none #low #medium #high).
+	(namedLevels includes: aSymbol) ifFalse:
+		[ self error: 'Reasoning effort must be one of ', namedLevels printString, ', not ', aSymbol printString ].
+	reasoningEffort := aSymbol
 ]

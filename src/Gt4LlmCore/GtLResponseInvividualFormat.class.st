@@ -14,12 +14,42 @@ GtLResponseInvividualFormat >> appendNeoJsonMappingTo: mapper [
 
 { #category : #converting }
 GtLResponseInvividualFormat >> asJsonSchemaDictionary [
-	^ self subclassResponsibility
+	^ self schema raw
 ]
 
 { #category : #converting }
 GtLResponseInvividualFormat >> asJsonSchemaDictionaryWithAllRequired [ 
 	^ self asJsonSchemaDictionary
+]
+
+{ #category : #views }
+GtLResponseInvividualFormat >> gtViewDetailsSchemaFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Schema details';
+		priority: 5;
+		object: [ self schema ];
+		view: #gtViewDetailsIn:
+]
+
+{ #category : #views }
+GtLResponseInvividualFormat >> gtViewSchemaJsonFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Raw JSON';
+		priority: 40;
+		object: [ self schema ];
+		view: #gtViewRawJsonIn:
+]
+
+{ #category : #views }
+GtLResponseInvividualFormat >> gtViewSchemaPropertiesFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Schema properties';
+		priority: 10;
+		object: [ self schema ];
+		view: #gtViewPropertiesIn:
 ]
 
 { #category : #accessing }
@@ -50,4 +80,9 @@ GtLResponseInvividualFormat >> readDomainObjectsFrom: aString [
 { #category : #'neo json' }
 GtLResponseInvividualFormat >> readGenericDomainObjectsFrom: aString [
 	^ self readDomainObjectsFrom: aString
+]
+
+{ #category : #accessing }
+GtLResponseInvividualFormat >> schema [
+	^ self subclassResponsibility
 ]

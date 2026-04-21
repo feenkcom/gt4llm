@@ -372,19 +372,6 @@ GtLDataView >> performComputation: aBlockClosure onErrorView: anErrorBlock [
 				isFrozen: false) ].
 ]
 
-{ #category : #decorating }
-GtLDataView >> plainText [
-	^ GtLPlainTextDataView new
-			originalView: self;
-			definingMethod: (GtPhlowDefiningMethodsCollector forContext: thisContext) collect
-]
-
-{ #category : #decorating }
-GtLDataView >> plainText: aBlockClosure [
-	^ self plainText	
-			object: aBlockClosure
-]
-
 { #category : #printing }
 GtLDataView >> printOn: aStream [
 	super printOn: aStream.
@@ -396,11 +383,6 @@ GtLDataView >> printOn: aStream [
 { #category : #accessing }
 GtLDataView >> priority [
 	^ 1000
-]
-
-{ #category : #serialization }
-GtLDataView >> serializeToAnthropicResponseOutput [
-	^self serializeToLlmPrimiteData serializeForAnthropic
 ]
 
 { #category : #serialization }
@@ -417,11 +399,6 @@ GtLDataView >> serializeToLlmPrimiteData [
 { #category : #serialization }
 GtLDataView >> serializeToLlmPrimiteDataOn: aBuilder [
 	self subclassResponsibility
-]
-
-{ #category : #serialization }
-GtLDataView >> serializeToOpenAIResponseOutput [
-	^self serializeToLlmPrimiteData serializeForOpenAI
 ]
 
 { #category : #accessing }
