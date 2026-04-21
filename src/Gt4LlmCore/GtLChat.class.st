@@ -452,6 +452,7 @@ GtLChat >> gtToolsFor: aView [
 { #category : #views }
 GtLChat >> gtViewObjectStorageFor: aView [
 	<gtView>
+	<gtLlmView>
 	^ aView forward
 		title: 'Object storage';
 		priority: 40;
