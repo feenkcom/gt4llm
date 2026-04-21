@@ -7,10 +7,9 @@ Class {
 		'inputModels',
 		'attachments',
 		'requestResponse',
-		'executionStrategy',
 		'contentOneLineSummary'
 	],
-	#category : #'Gt4Llm-Anthropic-Client'
+	#category : 'Gt4Llm-Anthropic-Client'
 }
 
 { #category : #'as yet unclassified' }
@@ -41,11 +40,6 @@ GtLAnthropicUserMessage >> computeContentOneLineSummaryFromInputModels [
 ]
 
 { #category : #accessing }
-GtLAnthropicUserMessage >> configureWithCompactionExecution [
-	executionStrategy := GtLOpenAIMessageCompactionExecutionStrategy new
-]
-
-{ #category : #accessing }
 GtLAnthropicUserMessage >> contentOneLineMultiLabelSummaryWith: aBuilder [
 	inputModels do: [ :each | 
 		each contentOneLineMultiLabelSummaryWith: aBuilder ]
@@ -60,16 +54,6 @@ GtLAnthropicUserMessage >> contentOneLineSummary [
 { #category : #accessing }
 GtLAnthropicUserMessage >> contentText [
 	^ NeoJSONWriter toStringPretty: self contentDataBlock llmJsonData
-]
-
-{ #category : #accessing }
-GtLAnthropicUserMessage >> executionStrategy [
-	^executionStrategy
-]
-
-{ #category : #accessing }
-GtLAnthropicUserMessage >> executionStrategy: anObject [
-	executionStrategy := anObject
 ]
 
 { #category : #ui }
