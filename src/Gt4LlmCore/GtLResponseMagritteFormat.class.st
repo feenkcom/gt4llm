@@ -23,11 +23,6 @@ GtLResponseMagritteFormat >> appendNeoJsonMappingTo: neoJsonMapper [
 ]
 
 { #category : #accessing }
-GtLResponseMagritteFormat >> asJsonSchemaDictionary [
-	^ self schema raw
-]
-
-{ #category : #accessing }
 GtLResponseMagritteFormat >> asJsonSchemaDictionaryWithAllRequired [
 	^ self computeSchemaWithAllRequired raw
 ]
@@ -45,36 +40,6 @@ GtLResponseMagritteFormat >> computeSchemaWithAllRequired [
 	exporter := GtMagritteJSONSchemaExporter forModelClass: modelClass.
 	exporter markAllAsRequired.
 	^ exporter exportSchema.
-]
-
-{ #category : #views }
-GtLResponseMagritteFormat >> gtViewDetailsSchemaFor: aView [
-	<gtView>
-	^ aView forward
-		title: 'Schema details';
-		priority: 5;
-		object: [ self schema ];
-		view: #gtViewDetailsIn:
-]
-
-{ #category : #views }
-GtLResponseMagritteFormat >> gtViewSchemaJsonFor: aView [
-	<gtView>
-	^ aView forward
-		title: 'Raw JSON';
-		priority: 40;
-		object: [ self schema ];
-		view: #gtViewRawJsonIn:
-]
-
-{ #category : #views }
-GtLResponseMagritteFormat >> gtViewSchemaPropertiesFor: aView [
-	<gtView>
-	^ aView forward
-		title: 'Schema properties';
-		priority: 10;
-		object: [ self schema ];
-		view: #gtViewPropertiesIn:
 ]
 
 { #category : #accessing }

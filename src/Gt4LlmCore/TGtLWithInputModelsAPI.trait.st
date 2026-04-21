@@ -4,11 +4,6 @@ Trait {
 }
 
 { #category : #'api - message' }
-TGtLWithInputModelsAPI >> addAttachments: aCollectionOfAttachments [
-	self attachments addAll: aCollectionOfAttachments
-]
-
-{ #category : #'api - message' }
 TGtLWithInputModelsAPI >> addInputMagritteObject: anObject named: aString [
 	self addInputModel: (GtLMagritteBasedModel new
 		name: aString;
@@ -17,14 +12,7 @@ TGtLWithInputModelsAPI >> addInputMagritteObject: anObject named: aString [
 
 { #category : #'api - message' }
 TGtLWithInputModelsAPI >> addInputModel: aModel [
-	self inputModels at: aModel name put: aModel.
-]
-
-{ #category : #'api - message' }
-TGtLWithInputModelsAPI >> addInputPlainText: anObject named: aString [
-	self addInputModel: (GtLPlainTextBasedModel new
-		name: aString;
-		model: anObject)
+	self inputModels add: aModel.
 ]
 
 { #category : #'api - models' }
@@ -45,15 +33,23 @@ TGtLWithInputModelsAPI >> addPlainInputObject:  anObject withId: aStoredObjectId
 ]
 
 { #category : #'api - models' }
+TGtLWithInputModelsAPI >> addWrappedObject: anObject [
+	self addInputModel: (GtLWrappedObjectModel new
+		model: anObject)
+]
+
+{ #category : #'api - models' }
 TGtLWithInputModelsAPI >> addWrappedObject: anObject named: aString [
 	self addInputModel: (GtLWrappedObjectModel new
 		model: anObject;
 		name: aString)
 ]
 
-{ #category : #accessing }
-TGtLWithInputModelsAPI >> attachments [
-	self explicitRequirement
+{ #category : #'api - message' }
+TGtLWithInputModelsAPI >> addWrappedObjects: aCollectionOfObjects [
+
+	aCollectionOfObjects do: [ :object |
+		self addWrappedObject: object ].
 ]
 
 { #category : #'api - message' }
@@ -70,21 +66,15 @@ TGtLWithInputModelsAPI >> gtViewInputModelsFor: aView [
 	^ aView columnedList
 		title: 'Input models';
 		priority: 10;
-		items: [ self inputModels associations ];
-		column: 'Name' text: [ :each | each key ] width: 200;
-		column: 'Object' text: [ :each | each value description ];
-		send: [ :each | each value ]
+		items: [ self inputModels ];
+		column: 'Name' text: [ :each | each name ifNil: [ '-' ] ] width: 200;
+		column: 'Object' text: [ :each | each value description ]
 ]
 
 { #category : #'api - message' }
 TGtLWithInputModelsAPI >> images: aCollection [
-	self addAttachments: (aCollection collect: [ :each | 
+	self addWrappedObjects: (aCollection collect: [ :each | 
 		GtLImageFile fileReference: each ])
-]
-
-{ #category : #accessing }
-TGtLWithInputModelsAPI >> inputModels [
-	self explicitRequirement
 ]
 
 { #category : #'api - message' }
@@ -133,6 +123,19 @@ TGtLWithInputModelsAPI >> pageObject: aLepiterPage [
 
 { #category : #'api - message' }
 TGtLWithInputModelsAPI >> pdfs: aCollection [
-	self addAttachments: (aCollection collect: [ :each | 
+	self addWrappedObjects: (aCollection collect: [ :each | 
 		GtLPdfFile fileReference: each ])
+]
+
+{ #category : #printing }
+TGtLWithInputModelsAPI >> string: aString [
+	self
+		addWrappedObject: (GtLString forString: aString)
+]
+
+{ #category : #printing }
+TGtLWithInputModelsAPI >> string: aString named: aName [
+	self
+		addWrappedObject: (GtLString forString: aString)
+		named: aName
 ]

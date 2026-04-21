@@ -17,7 +17,7 @@ GtLAbstractPlainSchemaFunctionTool >> computeParametersCompositeFormatFrom: anAr
 	anArrayOfDescriptions do: [ :aParameterFormatOrString | 
 		| parameterFormat |
 		parameterFormat := aParameterFormatOrString isString
-			ifTrue: [ GtLResponseStringFormat named: aParameterFormatOrString  ] 
+			ifTrue: [ GtLResponsePlainStringFormat named: aParameterFormatOrString  ] 
 			ifFalse: [ aParameterFormatOrString ].
 		parametersFormat addSchemaDescription: parameterFormat ].
 	

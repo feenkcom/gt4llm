@@ -4,6 +4,17 @@ Class {
 	#category : #'Gt4Llm-Ollama-Examples'
 }
 
+{ #category : #accessing }
+GtLOllamaGenerateExamples class >> jpgImage [
+	| jpg |
+	
+	jpg := FileSystem memory root / 'image.jpg'.
+	PluginBasedJPEGReadWriter 
+		putForm: (Smalltalk ui icons iconNamed: 'arrowUp') 
+		onFileNamed: jpg.
+	^ jpg.
+]
+
 { #category : #examples }
 GtLOllamaGenerateExamples >> assistantMessage [
 	<gtExample>
@@ -46,10 +57,11 @@ GtLOllamaGenerateExamples >> userMessagePlainEncoding [
 	
 	chat := self chatWithProvider.
 	message := chat createUserMessage.
-	message prompt: 'Hi!'.
+	message string: 'Hi!'.
 	message chat: chat.
 	chat addUserMessage: message.
 	provider := chat provider.
+	provider configureForGenerateApi.
 	provider privateExecutionState: provider state scheduled running.
 	messages := provider relevantChatMessages.
 	apiClient := provider client
@@ -62,7 +74,7 @@ GtLOllamaGenerateExamples >> userMessagePlainEncoding [
 	self assert: entity size equals: 5.
 	self assert: (entity at: 'model') equals: 'gemma4'.
 	self assert: (entity at: 'stream') equals: false.
-	self assert: (entity at: 'prompt') equals: 'Hi!'.
+	self assert: (entity at: 'prompt') equals: '"Hi!"'.
 	self assert: (entity at: 'system')
 		equals: message instructions instructionString.
 	
@@ -76,11 +88,12 @@ GtLOllamaGenerateExamples >> userMessagePlainImageEncoding [
 	
 	chat := self chatWithProvider.
 	message := chat createUserMessage.
-	message prompt: 'Hi!'.
-	message images: { '/home/alistair/tmp/notes.png' asFileReference}.
+	message string: 'Hi!'.
+	message images: { self class jpgImage}.
 	message chat: chat.
 	chat addUserMessage: message.
 	provider := chat provider.
+	provider configureForGenerateApi.
 	provider privateExecutionState: provider state scheduled running.
 	messages := provider relevantChatMessages.
 	apiClient := provider client
@@ -93,7 +106,7 @@ GtLOllamaGenerateExamples >> userMessagePlainImageEncoding [
 	self assert: entity size equals: 5.
 	self assert: (entity at: 'model') equals: 'gemma4'.
 	self assert: (entity at: 'stream') equals: false.
-	self assert: (entity at: 'prompt') equals: 'Hi!'.
+	self assert: (entity at: 'prompt') equals: '"Hi!"'.
 	images := entity at: 'images'.
 	self assert: images isArray.
 	self assert: images size equals: 1.

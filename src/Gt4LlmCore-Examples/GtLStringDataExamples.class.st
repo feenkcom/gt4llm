@@ -10,10 +10,10 @@ Class {
 { #category : #examples }
 GtLStringDataExamples >> plainStringWithEmptyString [
 	<gtExample>
-	<return: #GtLStringData>
+	<return: #GtLString>
 	| plainString |
 	
-	plainString := GtLStringData forString: ''.
+	plainString := GtLString forString: ''.
 	
 	self assert: plainString stringValue equals: ''.
 	self assert: plainString printString equals: ''''''.
@@ -56,13 +56,13 @@ GtLStringDataExamples >> plainStringWithEmptyStringSerialization [
 { #category : #examples }
 GtLStringDataExamples >> plainStringWithMultilineText [
 	<gtExample>
-	<return: #GtLStringData>
+	<return: #GtLString>
 	| plainString text |
 	
 	text := 'First line
 Second line
 Third line'.
-	plainString := GtLStringData forString: text.
+	plainString := GtLString forString: text.
 	
 	self assert: plainString stringValue equals: text.
 	
@@ -107,10 +107,10 @@ Third line'.
 { #category : #examples }
 GtLStringDataExamples >> plainStringWithSimpleText [
 	<gtExample>
-	<return: #GtLStringData>
+	<return: #GtLString>
 	| plainString |
 	
-	plainString := GtLStringData forString: 'hello world'.
+	plainString := GtLString forString: 'hello world'.
 	
 	self assert: plainString stringValue equals: 'hello world'.
 	self assert: plainString printString equals: '''hello world'''.

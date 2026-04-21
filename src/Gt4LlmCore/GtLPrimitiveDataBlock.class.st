@@ -99,8 +99,20 @@ GtLPrimitiveDataBlock >> serializeForAnthropic [
 ]
 
 { #category : #serialization }
-GtLPrimitiveDataBlock >> serializeForOllama [
-	<llmSerialization: 'Ollama'>
+GtLPrimitiveDataBlock >> serializeForMCP [
+	<llmSerialization: 'MCP'>
+	self subclassResponsibility
+]
+
+{ #category : #serialization }
+GtLPrimitiveDataBlock >> serializeForOllamaGenerate [
+	<llmSerialization: 'Ollama (Generate)'>
+	self subclassResponsibility
+]
+
+{ #category : #serialization }
+GtLPrimitiveDataBlock >> serializeForOllamaOpenAi [
+	<llmSerialization: 'Ollama (OpenAI)'>
 	self subclassResponsibility
 ]
 

@@ -14,7 +14,7 @@ LePage >> gtProposeATitleFor: anAction [
 		action: [ :aButton | 
 			| chat |
 			chat := GtLChat new
-					addResponseFormat: (GtLResponseStringFormat new name: 'String');
+					addResponseFormat: (GtLResponsePlainStringFormat new name: 'String');
 					sendWith: [ :m | 
 						m
 							pageObject: self;

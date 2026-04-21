@@ -5,12 +5,10 @@ Class {
 	#classTraits : 'TGtLWithInstructionSectionAPI classTrait + TGtLWithInputModelsAPI classTrait + TGtLWithInputDataBlocks classTrait',
 	#instVars : [
 		'inputModels',
-		'attachments',
 		'requestResponse',
-		'executionStrategy',
 		'contentOneLineSummary'
 	],
-	#category : 'Gt4Llm-Anthropic-Client'
+	#category : #'Gt4Llm-Anthropic-Client'
 }
 
 { #category : #'as yet unclassified' }
@@ -20,16 +18,6 @@ GtLAnthropicUserMessage >> asTokenizableString [
 	'<|im_sep|>' , 
 	(self contentText), 
 	'<|im_end|>'
-]
-
-{ #category : #accessing }
-GtLAnthropicUserMessage >> attachments [
-	^ attachments
-]
-
-{ #category : #accessing }
-GtLAnthropicUserMessage >> attachments: aCollection [
-	attachments := aCollection
 ]
 
 { #category : #accessing }
@@ -51,11 +39,6 @@ GtLAnthropicUserMessage >> computeContentOneLineSummaryFromInputModels [
 ]
 
 { #category : #accessing }
-GtLAnthropicUserMessage >> configureWithCompactionExecution [
-	executionStrategy := GtLOpenAIMessageCompactionExecutionStrategy new
-]
-
-{ #category : #accessing }
 GtLAnthropicUserMessage >> contentOneLineMultiLabelSummaryWith: aBuilder [
 	inputModels do: [ :each | 
 		each contentOneLineMultiLabelSummaryWith: aBuilder ]
@@ -70,27 +53,6 @@ GtLAnthropicUserMessage >> contentOneLineSummary [
 { #category : #accessing }
 GtLAnthropicUserMessage >> contentText [
 	^ NeoJSONWriter toStringPretty: self contentDataBlock llmJsonData
-]
-
-{ #category : #accessing }
-GtLAnthropicUserMessage >> executionStrategy [
-	^executionStrategy
-]
-
-{ #category : #accessing }
-GtLAnthropicUserMessage >> executionStrategy: anObject [
-	executionStrategy := anObject
-]
-
-{ #category : #ui }
-GtLAnthropicUserMessage >> gtAttachmentsFor: aView [
-	<gtView>
-	<gtLlmView>
-	attachments ifEmpty: [ ^ aView empty ].
-	^ aView columnedList
-		title: 'Attachments';
-		items: [ attachments ];
-		column: 'Value' text: [ :each | each gtDisplayString ]
 ]
 
 { #category : #ui }
@@ -170,8 +132,7 @@ GtLAnthropicUserMessage >> gtViewMessageJsonFor: aView [
 GtLAnthropicUserMessage >> initialize [
 	super initialize.
 
-	attachments := OrderedCollection new.
-	inputModels := OrderedDictionary new.
+	inputModels := OrderedCollection new.
 ]
 
 { #category : #accessing }
@@ -217,15 +178,8 @@ GtLAnthropicUserMessage >> role [
 
 { #category : #serialization }
 GtLAnthropicUserMessage >> serializeForAnthropicMessagesAPI [
-	^ {'content' -> ({
-			{
-				'type' -> 'text'.
-				'text' -> self contentText
-			} asDictionary}
-			, (self contentDataBlock secondaryDataBlocks 
-					flatCollect: [:aDataBlock |
-						aDataBlock serializeForAnthropic ])
-			, (self attachments
-							collect: [ :each | each serializeToAnthropicResponseOutput ])).
-		'role' -> self role} asDictionary
+	^ {
+			'content' -> (self contentDataBlock serializeForAnthropic ).
+			'role' -> self role
+		} asDictionary
 ]

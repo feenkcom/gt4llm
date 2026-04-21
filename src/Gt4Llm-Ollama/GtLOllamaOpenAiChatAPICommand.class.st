@@ -25,13 +25,13 @@ GtLOllamaOpenAiChatAPICommand >> entity [
 	entity := {'model' -> self model.
 			'stream' -> false.
 			'messages' -> input asArray} asDictionary.
+	client addThinkingTo: entity.
 
-	"format appears to be ignored by Ollama, to be investigated further.
 	format
 		ifNotNil: [ entity
 				at: 'response_format'
 				put: {'type' -> 'json_schema'.
-							'json_schema' -> format} asDictionary ]."
+							'json_schema' -> { 'schema' -> format } asDictionary } asDictionary ].
 
 	"tools isEmptyOrNil
 		ifFalse: [ entity

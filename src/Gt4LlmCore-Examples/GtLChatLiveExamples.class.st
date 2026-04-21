@@ -224,7 +224,7 @@ GtLChatLiveExamples >> howAreYouCallExample_withStringSchema [
 			sendWith: [ :message | 
 				message
 					markdown: 'How are you?';
-					addResponseFormat: (GtLResponseStringFormat new name: 'Response') ].
+					addResponseFormat: (GtLResponsePlainStringFormat new name: 'Response') ].
 
 	self
 		waitForChatRunIsDoneThen: [ self assert: self currentChat messages size equals: 2 ].
@@ -373,7 +373,7 @@ GtLChatLiveExamples >> messageExample_lepiterPage_locatePageUid [
 			message
 				markdown: 'Return the id of this lepiter page.';
 				pageObject: lepiterPage;
-				addResponseFormat: (GtLResponseStringFormat new
+				addResponseFormat: (GtLResponsePlainStringFormat new
 					name: 'uid') ].
 	"Page ID is e203cda7-b896-0d00-8c81-252704a2e9a0"
 	
