@@ -74,7 +74,7 @@ GtLOllamaAssistantMessage >> gtThoughtProcessFor: aView [
 	self thoughtText ifEmpty: [ ^ aView empty ].
 	^ aView textEditor
 		title: 'Thought process';
-		priority: 7;
+		priority: 10;
 		text: [ self thoughtText ]
 ]
 

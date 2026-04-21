@@ -223,6 +223,19 @@ GtLOllamaProvider >> processNextMessage: anInputMessage [
 		outputMessage: outputMessage
 ]
 
+{ #category : #accessing }
+GtLOllamaProvider >> reasoningEffort [
+	<return: #Symbol or: nil>
+
+	^ client reasoningEffort
+]
+
+{ #category : #accessing }
+GtLOllamaProvider >> reasoningEffort: aSymbol [
+
+	client reasoningEffort: aSymbol.
+]
+
 { #category : #private }
 GtLOllamaProvider >> relevantChatMessages [
 	^ self chat messages

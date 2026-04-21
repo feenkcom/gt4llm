@@ -12,7 +12,8 @@ Class {
 		'instructions',
 		'userMessageClass',
 		'responseFormat',
-		'objectStorage'
+		'objectStorage',
+		'reasoningEffort'
 	],
 	#category : 'Gt4LlmCore-Core'
 }
