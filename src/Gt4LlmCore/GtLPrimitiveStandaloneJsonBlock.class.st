@@ -84,7 +84,17 @@ GtLPrimitiveStandaloneJsonBlock >> serializeForMCP [
 ]
 
 { #category : #serialization }
-GtLPrimitiveStandaloneJsonBlock >> serializeForOllama [
+GtLPrimitiveStandaloneJsonBlock >> serializeForOllamaGenerate [
+	"Return a JSON that represents tool response output."
+	<return: #Array of: #NeoJSONObject>
+	
+	^ {NeoJSONObject new
+			at: #prompt put: self serializedJsonString;
+			yourself}
+]
+
+{ #category : #serialization }
+GtLPrimitiveStandaloneJsonBlock >> serializeForOllamaOpenAi [
 	"Return a JSON that represents tool response output."
 	<return: #Array of: #NeoJSONObject>
 	

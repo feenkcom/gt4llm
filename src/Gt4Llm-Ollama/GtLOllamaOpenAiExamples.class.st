@@ -83,7 +83,7 @@ GtLOllamaOpenAiExamples >> userMessagePlainImageEncoding [
 	
 	chat := self chatWithProvider.
 	message := chat createUserMessage.
-	message prompt: 'Hi!'.
+	message string: 'Hi!'.
 	message images: { GtLOllamaGenerateExamples jpgImage}.
 	message chat: chat.
 	chat addUserMessage: message.
@@ -101,7 +101,7 @@ GtLOllamaOpenAiExamples >> userMessagePlainImageEncoding [
 	self assert: entity size equals: 5.
 	self assert: (entity at: 'model') equals: 'gemma4'.
 	self assert: (entity at: 'stream') equals: false.
-	self assert: (entity at: 'prompt') equals: 'Hi!'.
+	self assert: (entity at: 'prompt') equals: '"Hi!"'.
 	images := entity at: 'images'.
 	self assert: images isArray.
 	self assert: images size equals: 1.

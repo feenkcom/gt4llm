@@ -94,11 +94,21 @@ GtLPrimitiveDocumentDataBlock >> serializeForMCP [
 ]
 
 { #category : #serialization }
-GtLPrimitiveDocumentDataBlock >> serializeForOllama [
+GtLPrimitiveDocumentDataBlock >> serializeForOllamaGenerate [
 	<return: #Array of: #NeoJSONObject>
 
 	^ {NeoJSONObject new
 		at: 'type' put: 'input_file';
+		at: 'file_data' put: ('data:', self contentType, ';base64,', self encodedBytes);
+		yourself}
+]
+
+{ #category : #serialization }
+GtLPrimitiveDocumentDataBlock >> serializeForOllamaOpenAi [
+	<return: #Array of: #NeoJSONObject>
+
+	^ {NeoJSONObject new
+		at: 'type' put: 'file_data';
 		at: 'file_data' put: ('data:', self contentType, ';base64,', self encodedBytes);
 		yourself}
 ]
