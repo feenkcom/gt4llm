@@ -8,7 +8,7 @@ Class {
 		'modelName',
 		'instructions'
 	],
-	#category : #'Gt4Llm-Ollama-Provider'
+	#category : 'Gt4Llm-Ollama-Provider'
 }
 
 { #category : #'instance creation' }

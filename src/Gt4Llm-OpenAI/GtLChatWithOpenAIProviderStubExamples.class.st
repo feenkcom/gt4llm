@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLChatWithOpenAIProviderStubExamples,
 	#superclass : #Object,
-	#category : #'Gt4Llm-OpenAI-Examples'
+	#category : 'Gt4Llm-OpenAI-Examples'
 }
 
 { #category : #'as yet unclassified' }

@@ -5,13 +5,10 @@ Class {
 	#classTraits : 'TGtLWithInstructionSectionAPI classTrait + TGtLWithInputModelsAPI classTrait + TGtLWithInputDataBlocks classTrait',
 	#instVars : [
 		'inputModels',
-		'attachments',
 		'requestResponse',
-		'executionStrategy',
-		'contentOneLineSummary',
-		'contentDataBlock'
+		'contentOneLineSummary'
 	],
-	#category : #'Gt4Llm-Ollama-Model'
+	#category : 'Gt4Llm-Ollama-Model'
 }
 
 { #category : #'as yet unclassified' }
@@ -20,23 +17,6 @@ GtLOllamaUserMessage >> chat: aChat [
 	self updateDataFromChat: aChat.
 	"contentDataBlock := self computeContentBlockFromInputModels.
 	contentOneLineSummary := self computeContentOneLineSummaryFromInputModels"
-]
-
-{ #category : #private }
-GtLOllamaUserMessage >> computeContentBlockFromInputModels [
-	^ self computeContentDataViewFromInputModels serializeToLlmPrimiteData
-]
-
-{ #category : #'private - serialization' }
-GtLOllamaUserMessage >> computeContentDataViewFromInputModels [
-	| dataView |
-	
-	dataView := GtLCompositeDataView new.
-	self inputModels do: [ :anInputModel |
-		dataView addDataView: ((anInputModel llmDataViewsFor: GtLDataView new)
-			dataKey: anInputModel name) ].
-	
-	^ dataView.
 ]
 
 { #category : #accessing }
@@ -53,16 +33,6 @@ GtLOllamaUserMessage >> contentOneLineSummary [
 { #category : #accessing }
 GtLOllamaUserMessage >> contentText [
 	^ NeoJSONWriter toStringPretty: self contentDataBlock llmJsonData
-]
-
-{ #category : #accessing }
-GtLOllamaUserMessage >> executionStrategy [
-	^ executionStrategy
-]
-
-{ #category : #accessing }
-GtLOllamaUserMessage >> executionStrategy: anObject [
-	executionStrategy := anObject
 ]
 
 { #category : #'as yet unclassified' }

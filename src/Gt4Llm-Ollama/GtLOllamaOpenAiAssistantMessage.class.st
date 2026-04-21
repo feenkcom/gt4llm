@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLOllamaOpenAiAssistantMessage,
 	#superclass : #GtLOllamaAssistantMessage,
-	#category : #'Gt4Llm-Ollama-Model'
+	#category : 'Gt4Llm-Ollama-Model'
 }
 
 { #category : #'as yet unclassified' }
