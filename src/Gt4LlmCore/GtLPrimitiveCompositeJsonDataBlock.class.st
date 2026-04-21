@@ -99,6 +99,11 @@ GtLPrimitiveCompositeJsonDataBlock >> serializeForAnthropic [
 ]
 
 { #category : #serialization }
+GtLPrimitiveCompositeJsonDataBlock >> serializeForMCP [
+	^ self condensedJsonBlock serializeForMCP 
+]
+
+{ #category : #serialization }
 GtLPrimitiveCompositeJsonDataBlock >> serializeForOllama [
 	^ self condensedJsonBlock serializeForOllama
 ]

@@ -62,6 +62,17 @@ GtLPrimitiveImageDataBlock >> serializeForAnthropic [
 ]
 
 { #category : #serialization }
+GtLPrimitiveImageDataBlock >> serializeForMCP [
+	<return: #Array of: #NeoJSONObject>
+	
+	^{NeoJSONObject new
+			at: 'type' put: 'image';
+			at: 'data' put: self encodedBytes;
+			at: 'mimeType' put: 'image/png';
+			yourself}
+]
+
+{ #category : #serialization }
 GtLPrimitiveImageDataBlock >> serializeForOllama [
 	<return: #Array of: #NeoJSONObject>
 

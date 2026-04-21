@@ -386,6 +386,11 @@ GtLDataView >> priority [
 ]
 
 { #category : #serialization }
+GtLDataView >> serializeForMCPResponseOutput [
+	^self serializeToLlmPrimiteData serializeForMCP
+]
+
+{ #category : #serialization }
 GtLDataView >> serializeToAnthropicResponseOutput [
 	^self serializeToLlmPrimiteData serializeForAnthropic
 ]

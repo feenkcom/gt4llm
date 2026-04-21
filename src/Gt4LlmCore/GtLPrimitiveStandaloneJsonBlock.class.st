@@ -79,6 +79,18 @@ GtLPrimitiveStandaloneJsonBlock >> serializeForAnthropic [
 ]
 
 { #category : #serialization }
+GtLPrimitiveStandaloneJsonBlock >> serializeForMCP [
+	"Return a JSON that represents tool response output."
+
+	<return: #Array of: #NeoJSONObject>
+	
+	^ {NeoJSONObject new
+			at: 'type' put: 'text';
+			at: 'text' put: self serializedJsonString;
+			yourself}
+]
+
+{ #category : #serialization }
 GtLPrimitiveStandaloneJsonBlock >> serializeForOllama [
 	"Return a JSON that represents tool response output."
 	<return: #Array of: #NeoJSONObject>

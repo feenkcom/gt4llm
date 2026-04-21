@@ -159,6 +159,11 @@ GtLWrappedModel >> name: aString [
 ]
 
 { #category : #serialization }
+GtLWrappedModel >> serializeForMCPResponseOutput [
+	^ self mainDataView  serializeForMCPResponseOutput
+]
+
+{ #category : #serialization }
 GtLWrappedModel >> serializeToAnthropicResponseOutput [
 	^ self mainDataView  serializeToAnthropicResponseOutput
 ]
