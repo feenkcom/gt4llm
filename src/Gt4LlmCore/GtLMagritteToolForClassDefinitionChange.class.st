@@ -4,7 +4,7 @@ Magritte-based tool for changing a class signature (superclass, instance variabl
 Class {
 	#name : #GtLMagritteToolForClassDefinitionChange,
 	#superclass : #GtLAbstractMagritteFunctionTool,
-	#category : 'Gt4LlmCore-Tools'
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #'private - change' }

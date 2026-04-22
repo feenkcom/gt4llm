@@ -4,7 +4,7 @@ Examples for GtLToolForLepiterPageContents demonstrating data views serializatio
 Class {
 	#name : #GtLToolForLepiterPageContentsExamples,
 	#superclass : #GtLAbstractMagritteFunctionToolExamples,
-	#category : 'Gt4LlmCore-Examples-Tools'
+	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #'examples - data views' }
