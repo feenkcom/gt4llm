@@ -6,7 +6,7 @@ Class {
 	#superclass : #GtLDomainObjectExamples,
 	#traits : 'TGtLExceptionResultAssertions',
 	#classTraits : 'TGtLExceptionResultAssertions classTrait',
-	#category : 'Gt4LlmCore-Examples-Domain Objects'
+	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #private }
@@ -236,7 +236,8 @@ GtLExampleWithResultExamples >> exampleWithResultForSuccessfulExampleWithDataJso
 	expectedPhlowViews := {
 		{ 'title' -> 'Raw'. 'methodName' -> 'gtRawFor:' } asDictionary.
 		{ 'title' -> 'Print'. 'methodName' -> 'gtPrintFor:' } asDictionary.
-		{ 'title' -> 'Meta'. 'methodName' -> 'gtMetaFor:' } asDictionary
+		{ 'title' -> 'LLM views'. 'methodName' -> 'gtViewDefinedLlmDataViewsFor:' } asDictionary.
+		{ 'title' -> 'Meta'. 'methodName' -> 'gtMetaFor:' } asDictionary.
 	}.
 	self assertObjectValue: objectValueJson hasPhlowViews: expectedPhlowViews.
 	

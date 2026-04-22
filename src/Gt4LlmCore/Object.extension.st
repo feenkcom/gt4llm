@@ -58,7 +58,7 @@ Object >> gtViewDefinedLlmDataViewsFor: aView [
 			ifFalse: [ ^ aView empty ].
 	
 	^ aView columnedList
-			title: 'LLM data views';
+			title: 'LLM views';
 			priority: 120;
 			items: [ self llmDataViewsInContext:  GtLDataViewContext new ];
 			column: 'Title' text: [ :aDataView | aDataView title ifNil: [ 'Untitled' ] ];

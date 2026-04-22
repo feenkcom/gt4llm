@@ -4,7 +4,7 @@ Magritte-based tool for creating multiple classes in a single request.
 Class {
 	#name : #GtLMagritteToolForClassesCreation,
 	#superclass : #GtLAbstractMagritteFunctionTool,
-	#category : 'Gt4LlmCore-Tools'
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #'magritte-description' }
