@@ -7,7 +7,7 @@ Class {
 	#instVars : [
 		'methodCompilationResults'
 	],
-	#category : #'Gt4LlmCore-Magritte Objects'
+	#category : 'Gt4LlmCore-Magritte Objects'
 }
 
 { #category : #accessing }
@@ -113,9 +113,9 @@ GtLMethodsCompilationResult >> printOn: aStream [
 			nextPutAll: ' method compilation results' ]
 ]
 
-{ #category : #views }
+{ #category : #accessing }
 GtLMethodsCompilationResult >> successfulMethodCompilationResults [
-	^ (self methodCompilationResults
+	^ self methodCompilationResults
 			reject: [:aMethodCompilationResult | 
-				aMethodCompilationResult isErrorDomainObject ]) 
+				aMethodCompilationResult isErrorDomainObject ]
 ]

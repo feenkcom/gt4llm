@@ -8,7 +8,7 @@ Class {
 		'relevantToolCalls',
 		'codeChanges'
 	],
-	#category : #'Gt4LlmCore-Summaries'
+	#category : 'Gt4LlmCore-Summaries'
 }
 
 { #category : #private }
@@ -30,7 +30,7 @@ GtLCodeChangesToolCallsSummarizer >> addCodeChangesFromModel: aModel toolCall: a
 	(aModel isKindOf: GtLClassesCreationResult) ifTrue: [
 		^ self 
 			addCodeChangesLabeled: 'Created class/trait' 
-			from: aModel classes 
+			from: aModel successfulClassCreationResults 
 			toolCall: aToolCall ].
 		
 	(aModel isKindOf: GtLClassModificationResult) ifTrue: [
@@ -58,13 +58,22 @@ GtLCodeChangesToolCallsSummarizer >> addCodeChangesFromModel: aModel toolCall: a
 				toolCall: aToolCall } ].
 		
 	(aModel isKindOf: GtLMethodsCompilationResult) ifTrue: [
-		^ self addCodeChangesLabeled: 'Compiled method' from: aModel methods toolCall: aToolCall ].
+		^ self 
+				addCodeChangesLabeled: 'Compiled method' 
+				from: aModel methods 
+				toolCall: aToolCall ].
 		
 	(aModel isKindOf: GtLMethodRemovalResult) ifTrue: [
-		^ self addCodeChanges: { self codeChangeEntryLabel: 'Removed method' object: aModel toolCall: aToolCall } ].
+		^ self 
+			addCodeChanges: { self codeChangeEntryLabel: 'Removed method' 
+			object: aModel 
+			toolCall: aToolCall } ].
 		
 	(aModel isKindOf: GtLMethodsRemovalResult) ifTrue: [
-		^ self addCodeChangesLabeled: 'Removed method' from: aModel methods toolCall: aToolCall ]
+		^ self 
+				addCodeChangesLabeled: 'Removed method' 
+				from: aModel successfulMethodsRemovalResult 
+				toolCall: aToolCall ]
 ]
 
 { #category : #private }
@@ -146,7 +155,8 @@ GtLCodeChangesToolCallsSummarizer >> initialize [
 { #category : #initialization }
 GtLCodeChangesToolCallsSummarizer >> initializeWithMessages: aCollection [
 	super initializeWithMessages: aCollection.
-	relevantToolCalls := self toolCallsSelect: [ :each | self isCodeChangeToolCall: each ].
+	relevantToolCalls := self toolCallsSelect: [ :each | 
+		self isCodeChangeToolCall: each ].
 	self rebuildCodeChanges
 ]
 
@@ -178,7 +188,8 @@ GtLCodeChangesToolCallsSummarizer >> methodChangeHistories [
 { #category : #private }
 GtLCodeChangesToolCallsSummarizer >> rebuildCodeChanges [
 	codeChanges := GtLSummarizerCodeChangesGroup new.
-	self relevantToolCalls do: [ :each | self addCodeChangesFrom: each ]
+	self relevantToolCalls do: [ :each | 
+		self addCodeChangesFrom: each ]
 ]
 
 { #category : #accessing }

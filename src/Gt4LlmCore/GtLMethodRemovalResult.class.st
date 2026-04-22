@@ -8,8 +8,22 @@ Class {
 		'removedMethod',
 		'status'
 	],
-	#category : #'Gt4LlmCore-Magritte Objects'
+	#category : 'Gt4LlmCore-Magritte Objects'
 }
+
+{ #category : #accessing }
+GtLMethodRemovalResult >> currentMethodSourceCode [
+	^self existsInImage
+		ifTrue: [ 
+			self removedMethod  compiledMethod sourceCode ] 
+		ifFalse: ['']
+]
+
+{ #category : #testing }
+GtLMethodRemovalResult >> existsInImage [
+	^ self removedMethod notNil and: [
+			self removedMethod existsInImage ]
+]
 
 { #category : #views }
 GtLMethodRemovalResult >> gtDetailsFor: aView [

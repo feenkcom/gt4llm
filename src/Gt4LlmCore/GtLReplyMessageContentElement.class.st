@@ -20,7 +20,7 @@ Class {
 		'toolsCounter',
 		'toolsPeek'
 	],
-	#category : #'Gt4LlmCore-UI - Elements'
+	#category : 'Gt4LlmCore-UI - Elements'
 }
 
 { #category : #'instance creation' }

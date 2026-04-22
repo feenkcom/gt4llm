@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLToolForObjectStorageListExamples,
 	#superclass : #GtLAbstractMagritteFunctionToolExamples,
-	#category : #'Gt4LlmCore-Examples-Tools'
+	#category : 'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #examples }
@@ -16,6 +16,20 @@ GtLToolForObjectStorageListExamples >> listEmptyObjectStorage [
 	targetObject := call result targetObject.
 	self assert: (targetObject isKindOf: GtLObjectStorageItems).
 	self assert: targetObject items isEmpty.
+	^ call
+]
+
+{ #category : #examples }
+GtLToolForObjectStorageListExamples >> listObjectsWithoutStorage [
+	<gtExample>
+	| call |
+	call := self
+		executeTool: GtLToolForObjectStorageList new
+		withArguments: Dictionary new.
+	self
+		assertMissingInformation: call result targetObject
+		withModelName: 'objectStorage'
+		errorMessage: 'Missing objectStorage'.
 	^ call
 ]
 
@@ -38,19 +52,5 @@ GtLToolForObjectStorageListExamples >> listObjectsWithStorage [
 	twoItem := targetObject items detect: [ :each | each objectValue = 2 ].
 	self assert: oneItem reasonString equals: 'first string'.
 	self assert: twoItem reasonString equals: 'second number'.
-	^ call
-]
-
-{ #category : #examples }
-GtLToolForObjectStorageListExamples >> listObjectsWithoutStorage [
-	<gtExample>
-	| call |
-	call := self
-		executeTool: GtLToolForObjectStorageList new
-		withArguments: Dictionary new.
-	self
-		assertMissingInformation: call result targetObject
-		withModelName: 'objectStorage'
-		errorMessage: 'Missing objectStorage'.
 	^ call
 ]

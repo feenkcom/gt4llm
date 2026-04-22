@@ -4,7 +4,7 @@ Examples for tool call summarizers.
 Class {
 	#name : #GtLToolCallsSummarizerExamples,
 	#superclass : #GtLToolCallsSummarizerExamplesBase,
-	#category : #'Gt4LlmCore-Examples-Summarizers'
+	#category : 'Gt4LlmCore-Examples-Summarizers'
 }
 
 { #category : #examples }

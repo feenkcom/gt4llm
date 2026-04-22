@@ -9,7 +9,7 @@ Class {
 		'targetViewSymbol',
 		'forwardViewDataKey'
 	],
-	#category : #'Gt4LlmCore-Examples-Data Views'
+	#category : 'Gt4LlmCore-Examples-Data Views'
 }
 
 { #category : #accessing }

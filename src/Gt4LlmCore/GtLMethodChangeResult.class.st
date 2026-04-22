@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLMethodChangeResult,
 	#superclass : #GtLCodeChangeResult,
-	#category : #'Gt4LlmCore-Magritte Objects'
+	#category : 'Gt4LlmCore-Magritte Objects'
 }
 
 { #category : #'gt-view' }
@@ -10,10 +10,10 @@ GtLMethodChangeResult >> asDiffElement [
 	oldSource := self oldStateMethodSourceCode.
 	newSource := self newStateMethodSourceCode.
 	^ GtDiffElementWithLabelStencil new
-		fromLabelText: 'Old from '
+		fromLabelText: 'Old content in'
 				, (self targetMethod
 						ifNotNil: [ :m | String space , m methodReference methodClassName ]);
-		toLabelText: 'New in '
+		toLabelText: 'New content in '
 				, (self targetMethod
 						ifNotNil: [ :m | String space , m methodReference methodClassName ]);
 		change: (GtDiffBuilder
@@ -24,6 +24,32 @@ GtLMethodChangeResult >> asDiffElement [
 ]
 
 { #category : #'gt-view' }
+GtLMethodChangeResult >> asDiffWithCurrentVersionElement [
+	| currentContent changedContent change styler |
+	currentContent := self currentMethodSourceCode.
+	changedContent := self newStateMethodSourceCode.
+	
+	change := GtDiffBuilder
+			computeDifferencesFrom: currentContent
+			to: changedContent
+			using: GtSmaCCDiffSplitter forPharo.
+	styler := GtCodeDiffRBTextStyler new.
+	
+	^ GtEpiceaDiffElementWithLabelStencil new
+		fromLabelText: 'Image content:';
+		toLabelText: 'Change content:';
+		ombuEntry: self;
+		shouldHideDiff: false;
+		change: change;
+		styler: styler
+]
+
+{ #category : #'as yet unclassified' }
+GtLMethodChangeResult >> currentMethodSourceCode [
+	^self subclassResponsibility
+]
+
+{ #category : #'gt-view' }
 GtLMethodChangeResult >> gtDiffFor: aView [
 	<gtView>
 	<gtCodeChangeView>
@@ -31,6 +57,16 @@ GtLMethodChangeResult >> gtDiffFor: aView [
 		title: 'Diff';
 		priority: 5;
 		stencil: [ self asDiffElement ]
+]
+
+{ #category : #'gt-view' }
+GtLMethodChangeResult >> gtDiffWithCurrentVersionFor: aView [
+	<gtView>
+	<gtCodeChangeView>
+	^ aView explicit
+		title: 'Diff (with current)';
+		priority: 9;
+		stencil: [ self asDiffWithCurrentVersionElement ]
 ]
 
 { #category : #'gt-view' }
