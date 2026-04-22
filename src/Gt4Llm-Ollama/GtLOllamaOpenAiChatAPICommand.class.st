@@ -43,10 +43,10 @@ GtLOllamaOpenAiChatAPICommand >> entity [
 				put: {'type' -> 'json_schema'.
 							'json_schema' -> { 'schema' -> format } asDictionary } asDictionary ].
 
-	"tools isEmptyOrNil
+	tools isEmptyOrNil
 		ifFalse: [ entity
 				at: 'tools'
-				put: (self tools collect: [ :aTool | aTool functionOpenAI ]) ]."
+				put: (self tools collect: [ :aTool | aTool functionOpenAI ]) ].
 
 	^ entity
 ]

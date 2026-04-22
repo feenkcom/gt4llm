@@ -69,6 +69,22 @@ GtLOllamaUserMessage >> gtViewMessageJsonFor: aView [
 				aButton phlow spawnObject:   self serializeForOllamaOpenAiMessagesAPI asGtJson]
 ]
 
+{ #category : #'private - serialization' }
+GtLOllamaUserMessage >> gtViewToolsFor: aView [
+	<gtView>
+
+	^ aView forward
+		title: 'Tools';
+		priority: 49;
+		object: [ tools  ];
+		view: #gtItemsFor:;
+		actionButtonIcon: BrGlamorousVectorIcons inspect 
+			label: 'View'
+			tooltip: 'Inspect tools'
+			action: [ :aButton |
+				aButton phlow spawnObject: tools ]
+]
+
 { #category : #initialization }
 GtLOllamaUserMessage >> initialize [
 	super initialize.
