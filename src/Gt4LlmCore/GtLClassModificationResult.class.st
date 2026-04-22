@@ -5,7 +5,7 @@ Class {
 		'originalClass',
 		'updatedClass'
 	],
-	#category : #'Gt4LlmCore-Magritte Objects'
+	#category : 'Gt4LlmCore-Magritte Objects'
 }
 
 { #category : #'accessing - delegated' }
@@ -137,6 +137,7 @@ GtLClassModificationResult >> gtDetailsFor: aView [
 GtLClassModificationResult >> gtDiffFor: aView [
 	<gtView>
 	<gtLlmView>
+	<gtCodeChangeView>
 	(self originalClass isNil or: [ self updatedClass isNil ]) ifTrue: [ ^ aView empty ].
 	^ aView diff
 		title: 'Diff';

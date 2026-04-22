@@ -9,7 +9,7 @@ Class {
 		'runsByExample',
 		'relevantToolCalls'
 	],
-	#category : #'Gt4LlmCore-Summaries'
+	#category : 'Gt4LlmCore-Summaries'
 }
 
 { #category : #accessing }

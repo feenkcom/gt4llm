@@ -4,7 +4,7 @@ I provide examples for GtLForwardDataView forwarding to another forward view (ch
 Class {
 	#name : #GtLForwardToForwardViewExamples,
 	#superclass : #GtLForwardObjectDataViewExamples,
-	#category : #'Gt4LlmCore-Examples-Data Views'
+	#category : 'Gt4LlmCore-Examples-Data Views'
 }
 
 { #category : #'examples - fixtures' }
@@ -60,6 +60,37 @@ GtLForwardToForwardViewExamples >> chainOfThreeForwardersWithDataKeys [
 	self assert: forwarder1 forwardViewDataKey equals: #level1.
 	
 	^ forwarder3
+]
+
+{ #category : #'examples - fixtures' }
+GtLForwardToForwardViewExamples >> forwarderToJsonView [
+	<gtExample>
+	"An object that forwards to a JSON view object."
+	| jsonObject forwarder |
+	jsonObject := self jsonViewObject.
+	
+	forwarder := GtLObjectWithForwardViewForExamples new.
+	forwarder targetObject: jsonObject.
+	forwarder targetViewSymbol: #gtLlmFirstJsonViewFor:.
+	
+	self assert: forwarder targetObject equals: jsonObject.
+	self assert: forwarder targetViewSymbol equals: #gtLlmFirstJsonViewFor:.
+	self assert: forwarder forwardViewDataKey isNil.
+	
+	^ forwarder
+]
+
+{ #category : #'examples - fixtures' }
+GtLForwardToForwardViewExamples >> forwarderToJsonViewWithDataKey [
+	<gtExample>
+	"An object that forwards to a JSON view object with a data key."
+	| forwarder |
+	forwarder := self forwarderToJsonView.
+	forwarder forwardViewDataKey: #forwardedJson.
+	
+	self assert: forwarder forwardViewDataKey equals: #forwardedJson.
+	
+	^ forwarder
 ]
 
 { #category : #examples }
@@ -276,47 +307,6 @@ GtLForwardToForwardViewExamples >> forwardToForwardViewWithInnerDataKey_serializ
 ]
 
 { #category : #examples }
-GtLForwardToForwardViewExamples >> forwardToForwardViewWithOuterDataKey [
-	<gtExample>
-	"Test forwarding to a forward view with a data key on the outer forward."
-	| forwarder forwardDataView |
-	forwarder := self forwarderToJsonView.
-	
-	forwardDataView := GtLForwardObjectDataView new
-		object: [ forwarder ];
-		view: #gtLlmForwardViewFor:;
-		dataKey: #outerForward.
-	
-	self assert: forwardDataView targetObject equals: forwarder.
-	self assert: forwardDataView dataKey equals: #outerForward.
-	
-	^ forwardDataView
-]
-
-{ #category : #'examples - serialization' }
-GtLForwardToForwardViewExamples >> forwardToForwardViewWithOuterDataKey_serialization [
-	<gtExample>
-	| forwardDataView dataBlock expectedData |
-	forwardDataView := self forwardToForwardViewWithOuterDataKey.
-	dataBlock := forwardDataView serializeToLlmPrimiteData.
-	
-	self assert: dataBlock dataBlocks size equals: 1.
-	self assert: dataBlock compositeJsonDataBlock containedJsonDataBlocksCount equals: 1.
-	
-	expectedData := Dictionary new
-		at: #outerForward put: (Dictionary new
-			at: #jsonContent put: (NeoJSONObject new
-				at: #type put: 'first';
-				at: #value put: 100;
-				yourself);
-			yourself);
-		yourself.
-	self assertDataBlock: dataBlock hasLlmJsonData: expectedData.
-	
-	^ dataBlock
-]
-
-{ #category : #examples }
 GtLForwardToForwardViewExamples >> forwardToForwardViewWithoutDataKey [
 	<gtExample>
 	"Test forwarding to another forward view without any data keys."
@@ -358,35 +348,45 @@ GtLForwardToForwardViewExamples >> forwardToForwardViewWithoutDataKey_serializat
 	^ dataBlock
 ]
 
-{ #category : #'examples - fixtures' }
-GtLForwardToForwardViewExamples >> forwarderToJsonView [
+{ #category : #examples }
+GtLForwardToForwardViewExamples >> forwardToForwardViewWithOuterDataKey [
 	<gtExample>
-	"An object that forwards to a JSON view object."
-	| jsonObject forwarder |
-	jsonObject := self jsonViewObject.
+	"Test forwarding to a forward view with a data key on the outer forward."
+	| forwarder forwardDataView |
+	forwarder := self forwarderToJsonView.
 	
-	forwarder := GtLObjectWithForwardViewForExamples new.
-	forwarder targetObject: jsonObject.
-	forwarder targetViewSymbol: #gtLlmFirstJsonViewFor:.
+	forwardDataView := GtLForwardObjectDataView new
+		object: [ forwarder ];
+		view: #gtLlmForwardViewFor:;
+		dataKey: #outerForward.
 	
-	self assert: forwarder targetObject equals: jsonObject.
-	self assert: forwarder targetViewSymbol equals: #gtLlmFirstJsonViewFor:.
-	self assert: forwarder forwardViewDataKey isNil.
+	self assert: forwardDataView targetObject equals: forwarder.
+	self assert: forwardDataView dataKey equals: #outerForward.
 	
-	^ forwarder
+	^ forwardDataView
 ]
 
-{ #category : #'examples - fixtures' }
-GtLForwardToForwardViewExamples >> forwarderToJsonViewWithDataKey [
+{ #category : #'examples - serialization' }
+GtLForwardToForwardViewExamples >> forwardToForwardViewWithOuterDataKey_serialization [
 	<gtExample>
-	"An object that forwards to a JSON view object with a data key."
-	| forwarder |
-	forwarder := self forwarderToJsonView.
-	forwarder forwardViewDataKey: #forwardedJson.
+	| forwardDataView dataBlock expectedData |
+	forwardDataView := self forwardToForwardViewWithOuterDataKey.
+	dataBlock := forwardDataView serializeToLlmPrimiteData.
 	
-	self assert: forwarder forwardViewDataKey equals: #forwardedJson.
+	self assert: dataBlock dataBlocks size equals: 1.
+	self assert: dataBlock compositeJsonDataBlock containedJsonDataBlocksCount equals: 1.
 	
-	^ forwarder
+	expectedData := Dictionary new
+		at: #outerForward put: (Dictionary new
+			at: #jsonContent put: (NeoJSONObject new
+				at: #type put: 'first';
+				at: #value put: 100;
+				yourself);
+			yourself);
+		yourself.
+	self assertDataBlock: dataBlock hasLlmJsonData: expectedData.
+	
+	^ dataBlock
 ]
 
 { #category : #'examples - fixtures' }

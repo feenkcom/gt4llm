@@ -6,7 +6,7 @@ Class {
 		'classSide',
 		'methodClassName'
 	],
-	#category : #'Gt4LlmCore-Magritte Objects'
+	#category : 'Gt4LlmCore-Magritte Objects'
 }
 
 { #category : #'instance creation' }
@@ -86,6 +86,51 @@ GtLMethodReference >> existsInImage [
 	^ self 
 			compiledMethodIfPresent: [ :each | true ] 
 			ifMissing: [ :each | false ]
+]
+
+{ #category : #'gt - views' }
+GtLMethodReference >> gtActionBrowseEntryFor: anAction [
+	<gtAction>
+	
+	self existsInImage ifFalse: [ ^ anAction noAction ].
+	
+	^ anAction button
+			label: 'Browse';
+			priority: 3;
+			tooltip: 'Browse current version of this method';
+			action: [ :aButton | 
+				aButton phlow spawnTool: (GtMethodCoderTool compiledMethod:
+						self compiledMethod)  ] 
+]
+
+{ #category : #views }
+GtLMethodReference >> gtClassCoderViewFor: aView [
+	<gtView>
+	<gtCodeChangeView>
+	
+	self existsInImage ifFalse: [ ^ aView empty ].
+	
+	^ aView explicit
+		title: 'Coder';
+		priority: 20;
+		stencil: [ (GtCoderElement forMethod: self compiledMethod) disablePlayPage ]
+]
+
+{ #category : #'gt - views' }
+GtLMethodReference >> gtDetailsFor: aView [
+	<gtView>
+	^ aView columnedList
+		title: 'Details';
+		priority: 2;
+		items: [ {
+			'Method class' -> self methodClassName.
+			'Method name' -> self methodName.
+			'Class side' -> self classSide.
+			'Signature' -> self methodSignature.
+			'Exists in image' -> self existsInImage } ];
+		column: 'Property' text: [ :assoc | assoc key ] width: 250;
+		column: 'Value' text: [ :assoc | assoc value ];
+		send: [ :assoc | assoc value ]
 ]
 
 { #category : #comparing }

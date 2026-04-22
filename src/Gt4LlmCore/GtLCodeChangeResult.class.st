@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLCodeChangeResult,
 	#superclass : #Object,
-	#category : #'Gt4LlmCore-Magritte Objects'
+	#category : 'Gt4LlmCore-Magritte Objects'
 }
 
 { #category : #'accessing - icons' }

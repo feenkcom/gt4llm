@@ -6,7 +6,7 @@ Class {
 	#superclass : #GtLDomainObjectExamples,
 	#traits : 'TGtLExceptionResultAssertions',
 	#classTraits : 'TGtLExceptionResultAssertions classTrait',
-	#category : #'Gt4LlmCore-Examples-Domain Objects'
+	#category : 'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #examples }

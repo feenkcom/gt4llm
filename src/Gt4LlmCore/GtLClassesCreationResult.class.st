@@ -4,8 +4,13 @@ Class {
 	#instVars : [
 		'classes'
 	],
-	#category : #'Gt4LlmCore-Magritte Objects'
+	#category : 'Gt4LlmCore-Magritte Objects'
 }
+
+{ #category : #accessing }
+GtLClassesCreationResult >> classCreationResults [
+	^ self classes
+]
 
 { #category : #accessing }
 GtLClassesCreationResult >> classes [
@@ -59,4 +64,10 @@ GtLClassesCreationResult >> printOn: aStream [
 		nextPutAll: ' (';
 		print: self classes size;
 		nextPutAll: ' classes)'
+]
+
+{ #category : #accessing }
+GtLClassesCreationResult >> successfulClassCreationResults [
+	^ self classCreationResults reject: [ :aClassCreationResult |
+			aClassCreationResult isErrorDomainObject ]
 ]

@@ -4,7 +4,7 @@ Examples for GtLLepiterKnowledgeBases and GtLLepiterKnowledgeBase.
 Class {
 	#name : #GtLLepiterKnowledgeBasesExamples,
 	#superclass : #GtLDomainObjectExamples,
-	#category : #'Gt4LlmCore-Examples-Domain Objects'
+	#category : 'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #examples }
