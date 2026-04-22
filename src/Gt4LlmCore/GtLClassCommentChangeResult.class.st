@@ -9,21 +9,6 @@ Class {
 	#category : 'Gt4LlmCore-Magritte Objects'
 }
 
-{ #category : #views }
-GtLClassCommentChangeResult >> asDiffElement [
-	| newSource oldSource |
-	oldSource := self oldClassComment.
-	newSource := self newClassComment.
-	^ GtDiffElementWithLabelStencil new
-		fromLabelText: 'Old comment for ', (self changedClassName);
-		toLabelText: 'New comment for '	, (self changedClassName);
-		change: (GtDiffBuilder
-				computeDifferencesFrom: oldSource
-				to: newSource
-				using: GtSmaCCDiffSplitter forPharo);
-		asElement
-]
-
 { #category : #accessing }
 GtLClassCommentChangeResult >> changedClassName [
 	^ self updatedClass currentClassName
@@ -38,14 +23,17 @@ GtLClassCommentChangeResult >> changedClassNameDescription [
 		beRequired
 ]
 
-{ #category : #views }
+{ #category : #'gt - extensions' }
 GtLClassCommentChangeResult >> gtDiffFor: aView [
 	<gtView>
 	<gtCodeChangeView>
-	^ aView explicit
+	^ aView diff
 		title: 'Diff';
 		priority: 5;
-		stencil: [ self asDiffElement ]
+		from: [ self oldClassComment ];
+		to: [ self newClassComment ];
+		fromLabel: 'Old comment:';
+		toLabel: 'New comment:'
 ]
 
 { #category : #'gt - extensions' }

@@ -32,25 +32,6 @@ GtLClassChangeHistory >> addMethodHistory: aMethodHistory [
 	methodHistories addHistory: aMethodHistory
 ]
 
-{ #category : #views }
-GtLClassChangeHistory >> asDefinitionDiffElement [ 
-	| previousContent newContent change styler |
-	previousContent := self initialBehaviourChange changeResult originalDefinitionWithCommentString.
-	newContent := self latestBehaviourChange changeResult updatedDefinitionWithCommentString.
-
-	change := GtDiffBuilder
-			computeDifferencesFrom: previousContent
-			to: newContent
-			using: GtSmaCCDiffSplitter forPharo.
-	styler := GtCodeDiffRBTextStyler new.
-	
-	^ (GtDiffElementWithLabelStencil new
-		fromLabelText: 'First Change:';
-		toLabelText: 'Last Change:';
-		change: change;
-		styler: styler) asElement
-]
-
 { #category : #accessing }
 GtLClassChangeHistory >> behaviourChanges [
 	^ behaviourChanges ifNil: [ behaviourChanges := GtLSummarizerCodeChangesGroup new ]
@@ -186,13 +167,19 @@ GtLClassChangeHistory >> gtViewChangesCount [
 	^ methodChangesCount + self behaviourChanges size
 ]
 
-{ #category : #views }
+{ #category : #'gt - extensions' }
 GtLClassChangeHistory >> gtViewDefinitionDiffFor: aView [
 	<gtView>
-	^ aView explicit
+	self hasBehaviourChanges ifFalse: [ ^ aView empty ].
+	
+	^ aView diff
 		title: 'Definition diff';
 		priority: 10;
-		stencil: [ self asDefinitionDiffElement ]
+		from: [ self initialBehaviourChange changeResult originalDefinitionWithCommentString ];
+		to: [ self latestBehaviourChange changeResult updatedDefinitionWithCommentString ];
+		fromLabel: 'First Change:';
+		toLabel: 'Last Change:';
+		styler: GtCodeDiffRBTextStyler new
 ]
 
 { #category : #testing }

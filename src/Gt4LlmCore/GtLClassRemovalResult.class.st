@@ -25,6 +25,19 @@ GtLClassRemovalResult >> gtDetailsFor: aView [
 		send: [ :assoc | assoc value ]
 ]
 
+{ #category : #accessing }
+GtLClassRemovalResult >> gtDiffFor: aView [
+	<gtView>
+	<gtCodeChangeView>
+	^ aView diff
+		title: 'Diff';
+		priority: 5;
+		from: [ self originalDefinitionWithCommentString ];
+		to: [ '' ];
+		fromLabel: 'Old comment:';
+		toLabel: 'New comment:'
+]
+
 { #category : #views }
 GtLClassRemovalResult >> gtViewChangeIcon [
 	^ self class removalIcon
@@ -45,6 +58,14 @@ GtLClassRemovalResult >> llmRawDataViewFor: aDataView [
 	<gtLlmDataView>
 	
 	^ aDataView magritteObject: [ self ]
+]
+
+{ #category : #accessing }
+GtLClassRemovalResult >> originalDefinitionWithCommentString [
+	^self removedClass 
+		ifNil: [ '' ]
+		ifNotNil: [ :each |
+			each asDefinitionWithCommentString ] 
 ]
 
 { #category : #printing }

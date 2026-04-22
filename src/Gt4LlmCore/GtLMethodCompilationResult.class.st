@@ -12,6 +12,23 @@ Class {
 	#category : 'Gt4LlmCore-Magritte Objects'
 }
 
+{ #category : #converting }
+GtLMethodCompilationResult >> asDiffElement [
+	"Used by GtLMethodsCompilationResult>>gtMethodsListFor:"
+	| oldSource newSource |
+	oldSource := self oldStateMethodSourceCode.
+	newSource := self newStateMethodSourceCode.
+	^ GtDiffElementWithLabelStencil new
+		fromLabelText: 'Old content:';
+		toLabelText: 'New content:';
+		change: (GtDiffBuilder
+				computeDifferencesFrom: oldSource
+				to: newSource
+				using: GtSmaCCDiffSplitter forPharo);
+		styler: GtCodeDiffRBTextStyler new;
+		asElement
+]
+
 { #category : #accessing }
 GtLMethodCompilationResult >> currentMethodSourceCode [
 	^self existsInImage
