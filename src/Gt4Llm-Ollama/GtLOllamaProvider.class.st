@@ -60,7 +60,7 @@ GtLOllamaProvider >> clientGenerateModelResponse: anInputMessage messages: someM
 				ifTrue: [ anInputMessage formatDescriptionsJsonSchemaWithAllRequired ]
 				ifFalse: [ nil ])
 		andTools: anInputMessage tools
-		andInstructions: anInputMessage instructions
+		andInstructions: anInputMessage instructions instructionString
 ]
 
 { #category : #'as yet unclassified' }

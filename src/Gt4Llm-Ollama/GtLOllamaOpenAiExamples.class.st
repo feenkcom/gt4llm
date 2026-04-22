@@ -51,6 +51,10 @@ GtLOllamaOpenAiExamples >> userMessagePlainEncoding [
 	message string: 'Hi!'.
 	message chat: chat.
 	chat addUserMessage: message.
+	chat instructions
+		sectionNamed: 'xyz123'
+		ifAbsent: [ :aSection |
+			aSection addString: 'abc123' ].
 	provider := chat provider.
 	provider privateExecutionState: provider state scheduled running.
 	messages := provider relevantChatMessages.
@@ -66,12 +70,17 @@ GtLOllamaOpenAiExamples >> userMessagePlainEncoding [
 	self assert: (entity at: 'stream') equals: false.
 	self assert: (entity at: 'reasoning_effort') equals: #none.
 	entityMessages := entity at: 'messages'.
-	self assert: entityMessages size equals: 1.
+	self assert: entityMessages size equals: 2.
 	entityMessage := entityMessages first.
 	self assert: (entityMessage at: 'role') equals: 'user'.
 	entityContent := (entityMessage at: 'content') first.
 	self assert: (entityContent at: 'type')
 		equals: 'text'.
+
+	entityMessage := entityMessages second.
+	self assert: (entityMessage at: 'role') equals: 'system'.
+	entityContent := (entityMessage at: 'content').
+	self assert: entityContent class equals: GtLInstructionComposite.
 
 	^ entity
 ]
