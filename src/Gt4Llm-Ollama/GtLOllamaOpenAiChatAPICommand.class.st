@@ -12,6 +12,15 @@ Class {
 }
 
 { #category : #api }
+GtLOllamaOpenAiChatAPICommand >> addInstructionsTo: input [ 
+
+	input add: {
+		'content' -> instructions.
+		'role' -> 'system'.
+		} asDictionary.
+]
+
+{ #category : #api }
 GtLOllamaOpenAiChatAPICommand >> entity [
 	| entity input |
 	input := OrderedCollection new.
@@ -22,6 +31,7 @@ GtLOllamaOpenAiChatAPICommand >> entity [
 						ifTrue: [ input add: aMessage toolCall responseInputForOpenAIResponsesAPI.
 							input add: aMessage serializeForOllamaOpenAiMessagesAPI ] ]
 				ifFalse: [ input add: aMessage serializeForOllamaOpenAiMessagesAPI ] ].
+	self addInstructionsTo: input.
 	entity := {'model' -> self model.
 			'stream' -> false.
 			'messages' -> input asArray} asDictionary.
@@ -36,9 +46,7 @@ GtLOllamaOpenAiChatAPICommand >> entity [
 	"tools isEmptyOrNil
 		ifFalse: [ entity
 				at: 'tools'
-				put: (self tools collect: [ :aTool | aTool functionOpenAI ]) ].
-
-	instructions ifNotNil: [ entity at: 'instructions' put: instructions ]."
+				put: (self tools collect: [ :aTool | aTool functionOpenAI ]) ]."
 
 	^ entity
 ]

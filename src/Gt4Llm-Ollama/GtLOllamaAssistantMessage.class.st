@@ -84,6 +84,20 @@ GtLOllamaAssistantMessage >> gtThoughtProcessFor: aView [
 ]
 
 { #category : #views }
+GtLOllamaAssistantMessage >> gtViewErrorsFor: aView [
+	<gtView>
+	<gtLlmView>
+	
+	(rawData isEmpty or: [ (rawData includesKey: 'error') not ]) ifTrue: [ ^ aView empty ].
+
+	^aView forward
+		title: 'Response Error';
+		priority: 10;
+		object: [ rawData at: 'error' ];
+		view: #gtLiveFor:
+]
+
+{ #category : #views }
 GtLOllamaAssistantMessage >> gtViewResponseModelsFor: aView [
 	<gtView>
 	<gtLlmView>
