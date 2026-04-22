@@ -187,7 +187,6 @@ GtLCodeChangesToolCallsSummarizer >> gtClassChangeHistoriesFor: aView [
 { #category : #'gt-extensions' }
 GtLCodeChangesToolCallsSummarizer >> gtCodeChangesFor: aView [
 	<gtView>
-	<gtLlmView>
 	^ aView forward
 		title: 'Code changes';
 		priority: 21.1;

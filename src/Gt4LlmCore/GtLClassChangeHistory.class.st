@@ -17,7 +17,7 @@ Class {
 	#superclass : #GtLClassBasicChangeHistory,
 	#instVars : [
 		'methodHistories',
-		'behaviourChanges'
+		'behaviourChangeHistory'
 	],
 	#category : 'Gt4LlmCore-Summaries'
 }
@@ -33,13 +33,16 @@ GtLClassChangeHistory >> addMethodHistory: aMethodHistory [
 ]
 
 { #category : #accessing }
-GtLClassChangeHistory >> behaviourChanges [
-	^ behaviourChanges ifNil: [ behaviourChanges := GtLSummarizerCodeChangesGroup new ]
+GtLClassChangeHistory >> behaviourChangeHistory [
+	^ behaviourChangeHistory ifNil: [ 
+			behaviourChangeHistory := GtLClassDefinitionChangeHistory new
+				targetClassName: self targetClassName;
+				yourself].
 ]
 
 { #category : #accessing }
-GtLClassChangeHistory >> behaviourChanges: aGtLSummarizerCodeChangesGroup [
-	behaviourChanges := aGtLSummarizerCodeChangesGroup
+GtLClassChangeHistory >> behaviourChanges [
+	^ self behaviourChangeHistory changes
 ]
 
 { #category : #accessing }
@@ -53,24 +56,13 @@ GtLClassChangeHistory >> changes [
 	^ allChanges
 ]
 
-{ #category : #accessing }
-GtLClassChangeHistory >> definitionChangeHistory [
-	| history |
-	history := GtLClassDefinitionChangeHistory new
-		targetClassName: self targetClassName;
-		yourself.
-	self behaviourChanges 
-		do: [ :each | history addChange: each ].
-	^ history
-]
-
 { #category : #views }
 GtLClassChangeHistory >> gtBehaviourChangesFor: aView [
 	<gtView>
 	^(aView forward)
 		title: 'Behaviour changes';
 		priority: 40;
-		object: [behaviourChanges];
+		object: [behaviourChangeHistory];
 		view: #gtCodeChangesFor:
 ]
 
@@ -134,8 +126,8 @@ GtLClassChangeHistory >> gtViewChangeHistoryChildren [
 	"Return definition/comment histories and method histories as children for tree view"
 	| children |
 	children := OrderedCollection new.
-	self definitionChangeHistory changes ifNotEmpty: [
-		children add: self definitionChangeHistory ].
+	self behaviourChangeHistory changes ifNotEmpty: [
+		children add: self behaviourChangeHistory ].
 	children addAll: self methodHistories items.
 	^ children
 ]
@@ -206,7 +198,7 @@ GtLClassChangeHistory >> hasOnlyMethodChanges [
 
 { #category : #accessing }
 GtLClassChangeHistory >> initialBehaviourChange [ 
-	^ self behaviourChanges initialChange 
+	^ behaviourChangeHistory initialChange 
 ]
 
 { #category : #initialization }
@@ -217,36 +209,20 @@ GtLClassChangeHistory >> initialize [
 
 { #category : #testing }
 GtLClassChangeHistory >> isInitialDefinitionChangeAddition [
-		| initialChange |
-	self behaviourChanges ifEmpty: [ ^ false ].
-	initialChange := self initialBehaviourChange.
-	^ initialChange changeResult isClassAdditionResult
+	^ behaviourChangeHistory isInitialChangeAddition
 ]
 
 { #category : #testing }
 GtLClassChangeHistory >> isLatestDefinitionChangeRemoval [
-		| initialChange |
-	self behaviourChanges ifEmpty: [ ^ false ].
-	initialChange := self latestBehaviourChange.
-	^ initialChange changeResult isClassRemovalResult
+	^ behaviourChangeHistory isLatestChangeRemoval
 ]
 
 { #category : #accessing }
 GtLClassChangeHistory >> latestBehaviourChange [ 
-	^ self behaviourChanges latestChange 
+	^ behaviourChangeHistory latestChange 
 ]
 
 { #category : #accessing }
 GtLClassChangeHistory >> methodHistories [
 	^ methodHistories
-]
-
-{ #category : #accessing }
-GtLClassChangeHistory >> targetClassName [
-	^ targetClassName
-]
-
-{ #category : #accessing }
-GtLClassChangeHistory >> targetClassName: aString [
-	targetClassName := aString
 ]
