@@ -48,3 +48,24 @@ Object >> gtActionObjectChatFor: anAction [
 					showFrom: aButton ]
 			mouseCursor: BlCopyCursor new
 ]
+
+{ #category : #'*Gt4LlmCore' }
+Object >> gtViewDefinedLlmDataViewsFor: aView [
+	<gtView>
+	
+	(GtLDataViewsCollector defaultPragmaNames anySatisfy: [ :pragmaName |
+		(Pragma allNamed: pragmaName from: self class to: ProtoObject) notEmpty ])
+			ifFalse: [ ^ aView empty ].
+	
+	^ aView columnedList
+			title: 'LLM data views';
+			priority: 120;
+			items: [ self llmDataViewsInContext:  GtLDataViewContext new ];
+			column: 'Title' text: [ :aDataView | aDataView title ifNil: [ 'Untitled' ] ];
+			column: 'Priority' 
+				text: [ :aDataView | aDataView priority ifNil: [ '-' ] ]
+				width: 200;
+			column: 'Type'
+			 	text: [ :aDataView | aDataView class name ]
+			 	width: 200
+]
