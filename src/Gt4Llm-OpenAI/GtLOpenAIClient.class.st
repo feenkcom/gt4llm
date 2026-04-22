@@ -72,6 +72,19 @@ GtLOpenAIClient >> addMessage: aMessage toThread: aThreadId [
 ]
 
 { #category : #'as yet unclassified' }
+GtLOpenAIClient >> apiClientWithModel: aString messages: aCollection instructions: anInstruction tools: aCollectionOfTools andFormat: aFormat isStreaming: aBoolean [
+
+	^ GtLOpenAIGenerateResponseAPICommand new
+		client: self;
+		model: aString;
+		messages: aCollection;
+		instructions: anInstruction;
+		tools: aCollectionOfTools;
+		format: aFormat;
+		isStreaming: aBoolean
+]
+
+{ #category : #'as yet unclassified' }
 GtLOpenAIClient >> apiKey [
 	^ apiKey
 ]
@@ -259,14 +272,8 @@ GtLOpenAIClient >> generateResponseWithModel: aString messages: aCollection inst
 
 { #category : #'as yet unclassified' }
 GtLOpenAIClient >> generateResponseWithModel: aString messages: aCollection instructions: anInstruction tools: aCollectionOfTools andFormat: aFormat isStreaming: aBoolean [
-	^ GtLOpenAIGenerateResponseAPICommand new
-		client: self;
-		model: aString;
-		messages: aCollection;
-		instructions: anInstruction;
-		tools: aCollectionOfTools;
-		format: aFormat;
-		isStreaming: aBoolean;
+
+	^ (self apiClientWithModel: aString messages: aCollection instructions: anInstruction tools: aCollectionOfTools andFormat: aFormat isStreaming: aBoolean)
 		perform 
 ]
 
