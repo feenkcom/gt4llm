@@ -4,7 +4,7 @@ Group of summarizer code changes with dedicated views.
 Class {
 	#name : #GtLSummarizerCodeChangesGroup,
 	#superclass : #GtBasicGroup,
-	#category : 'Gt4LlmCore-Summaries'
+	#category : #'Gt4LlmCore-Summaries'
 }
 
 { #category : #'gt-extensions' }

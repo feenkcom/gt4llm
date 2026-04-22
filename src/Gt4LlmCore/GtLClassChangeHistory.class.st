@@ -1,16 +1,5 @@
 "
 I track changes to a single class, including its methods.
-
-Instance variables:
-- `targetClassName` - the target class name
-- `behaviourChanges` - a {{gtClass:GtLSummarizerCodeChangesGroup}} of class-level changes (definition and comment)
-- `methodHistories` - a {{gtClass:GtLMethodChangeHistoriesGroup}} with method changes
-
-Computed accessors:
-- `definitionChangeHistory` - returns a {{gtClass:GtLClassDefinitionChangeHistory}} filtered from behaviourChanges
-- `commentChangeHistory` - returns a {{gtClass:GtLClassCommentChangeHistory}} filtered from behaviourChanges
-
-`#changes` returns all changes (behaviour + method) combined.
 "
 Class {
 	#name : #GtLClassChangeHistory,
@@ -19,7 +8,7 @@ Class {
 		'methodHistories',
 		'behaviourChangeHistory'
 	],
-	#category : 'Gt4LlmCore-Summaries'
+	#category : #'Gt4LlmCore-Summaries'
 }
 
 { #category : #adding }

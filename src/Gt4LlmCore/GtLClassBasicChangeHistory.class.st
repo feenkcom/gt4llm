@@ -1,9 +1,5 @@
 "
 I am an abstract class for tracking class-level data changes (definition or comment).
-
-Subclasses:
-- {{gtClass:GtLClassDefinitionChangeHistory}} - for class definition changes
-- {{gtClass:GtLClassCommentChangeHistory}} - for class comment changes
 "
 Class {
 	#name : #GtLClassBasicChangeHistory,
@@ -11,7 +7,7 @@ Class {
 	#instVars : [
 		'targetClassName'
 	],
-	#category : 'Gt4LlmCore-Summaries'
+	#category : #'Gt4LlmCore-Summaries'
 }
 
 { #category : #testing }

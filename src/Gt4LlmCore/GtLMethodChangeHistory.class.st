@@ -12,7 +12,7 @@ Class {
 		'methodReference',
 		'changes'
 	],
-	#category : 'Gt4LlmCore-Summaries'
+	#category : #'Gt4LlmCore-Summaries'
 }
 
 { #category : #accessing }
