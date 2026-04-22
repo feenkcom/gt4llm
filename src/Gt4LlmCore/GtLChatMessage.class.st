@@ -423,7 +423,7 @@ GtLChatMessage >> unsubscribe: anObject [
 
 { #category : #updating }
 GtLChatMessage >> updateDataFromChat: aChat [ 
-	instructions isEmpty ifTrue: [ instructions := aChat instructions copy ].
+	(instructions isNil or: [ instructions isEmpty ]) ifTrue: [ instructions := aChat instructions copy ].
 	formatDescriptions hasSchemaDescriptors ifFalse: [
 		formatDescriptions addCompositeFormat: aChat currentFormat ].
 	tools isEmpty ifTrue: [ tools addAll: aChat currentTools ]

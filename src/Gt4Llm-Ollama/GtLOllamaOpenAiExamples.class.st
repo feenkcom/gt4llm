@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLOllamaOpenAiExamples,
 	#superclass : #Object,
-	#category : #'Gt4Llm-Ollama-Examples'
+	#category : 'Gt4Llm-Ollama-Examples'
 }
 
 { #category : #examples }

@@ -8,7 +8,7 @@ Class {
 		'requestResponse',
 		'contentOneLineSummary'
 	],
-	#category : #'Gt4Llm-Ollama-Model'
+	#category : 'Gt4Llm-Ollama-Model'
 }
 
 { #category : #'as yet unclassified' }
@@ -67,6 +67,22 @@ GtLOllamaUserMessage >> gtViewMessageJsonFor: aView [
 			tooltip: 'Inspect JSON data'
 			action: [ :aButton |
 				aButton phlow spawnObject:   self serializeForOllamaOpenAiMessagesAPI asGtJson]
+]
+
+{ #category : #'private - serialization' }
+GtLOllamaUserMessage >> gtViewToolsFor: aView [
+	<gtView>
+
+	^ aView forward
+		title: 'Tools';
+		priority: 49;
+		object: [ tools  ];
+		view: #gtItemsFor:;
+		actionButtonIcon: BrGlamorousVectorIcons inspect 
+			label: 'View'
+			tooltip: 'Inspect tools'
+			action: [ :aButton |
+				aButton phlow spawnObject: tools ]
 ]
 
 { #category : #initialization }

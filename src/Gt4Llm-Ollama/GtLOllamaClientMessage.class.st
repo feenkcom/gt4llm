@@ -16,7 +16,7 @@ Class {
 		'totalDuration',
 		'requestResponse'
 	],
-	#category : #'Gt4Llm-Ollama-Model'
+	#category : 'Gt4Llm-Ollama-Model'
 }
 
 { #category : #serialization }
@@ -75,6 +75,18 @@ GtLOllamaClientMessage >> from: aDictionary [
 	totalDuration := aDictionary at: 'total_duration' ifAbsent: [ nil ]
 ]
 
+{ #category : #ui }
+GtLOllamaClientMessage >> gtRawJsonFor: aView [
+	<gtView>
+	
+	rawData ifNil: [ ^ aView empty ].
+	^ aView forward
+		title: 'JSON';
+		priority: 30;
+		object: [ rawData ];
+		view: #gtJsonFor:
+]
+
 { #category : #testing }
 GtLOllamaClientMessage >> hasToolCalls [
 	^ self toolCalls isNotEmpty
@@ -122,16 +134,31 @@ GtLOllamaClientMessage >> requestResponse: anObject [
 
 { #category : #accessing }
 GtLOllamaClientMessage >> toolCalls [
-	^ (self message at: 'tool_calls' ifAbsent: [ #() ])
-		collect: [ :each |
-			| function |
-			function := each at: 'function' ifAbsent: [ Dictionary new ].
+	| toolCalls |
+
+	rawData at: 'choices' ifPresent: [ :choices |
+		choices detect: [ :choice |
+			choice at: 'message'
+				ifPresent: [ :aMessage |
+					aMessage at: 'tool_calls'
+						ifPresent: [ :anArray | 
+							toolCalls := anArray.
+							true. ]
+						ifAbsent: [ false ] ]
+				ifAbsent: [ false ] ]
+			ifNone: [] ].
+	toolCalls ifNil: [ ^ #() ].
+	^ toolCalls collect: [ :aToolCall | | function rawArguments |
+			function := aToolCall at: 'function' 
+									ifAbsent: [ Dictionary new ].
+			rawArguments := NeoJSONReader fromString: (function at: 'arguments' ifAbsent: [ '{}' ]).
 			GtLFunctionToolCall new
-				id: (each at: 'id' ifAbsent: [ UUID new asString ]);
+				id: (aToolCall at: 'id' ifAbsent: [ UUID new asString ]);
 				name: (function at: 'name' ifAbsent: [ '' ]);
-				rawArguments: (function at: 'arguments' ifAbsent: [ Dictionary new ]);
-				arguments: (function at: 'arguments' ifAbsent: [ Dictionary new ]);
+				rawArguments: rawArguments;
+				arguments: rawArguments;
 				yourself ]
+			as: Array.
 ]
 
 { #category : #accessing }
