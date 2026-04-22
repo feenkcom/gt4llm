@@ -160,7 +160,7 @@ GtLCodeChangesToolCallsSummarizer >> codeChanges [
 GtLCodeChangesToolCallsSummarizer >> gtChangesByToolFor: aView [
 	<gtView>
 	^ aView columnedList
-		title: 'Changes by tool';
+		title: 'By tool';
 		priority: 40;
 		items: [ (self codeChanges groupedBy: [ :each | each toolCall name ]) associations ];
 		column: 'Tool' text: [ :each | each key asString ];
@@ -173,7 +173,7 @@ GtLCodeChangesToolCallsSummarizer >> gtClassChangeHistoriesFor: aView [
 	<gtView>
 	<gtLlmView>
 	^ aView forward 	
-		title: 'Code changes by class';
+		title: 'By class';
 		priority: 15;
 		object: [ self classChangeHistories ];
 		view: #gtViewHistoriesFor:;
@@ -203,7 +203,7 @@ GtLCodeChangesToolCallsSummarizer >> gtCodeChangesFor: aView [
 GtLCodeChangesToolCallsSummarizer >> gtMethodChangeHistoriesFor: aView [
 	<gtView>
 	^ aView forward 	
-			title: 'Code changes by method';
+			title: 'By method';
 			priority: 10;
 			object: [ self methodChangeHistories ];
 			view: #gtViewHistoriesFor:;
