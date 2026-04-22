@@ -20,27 +20,6 @@ GtLMethodWithSource >> acceptVisitor: aVisitor [
 ]
 
 { #category : #'gt - extensions' }
-GtLMethodWithSource >> asDiffWithCurrentVersionElement [
-	| currentContent changedContent change styler |
-	currentContent := self compiledMethod sourceCode.
-	changedContent := self sourceCode.
-	
-	change := GtDiffBuilder
-			computeDifferencesFrom: currentContent
-			to: changedContent
-			using: GtSmaCCDiffSplitter forPharo.
-	styler := GtCodeDiffRBTextStyler new.
-	
-	^ GtEpiceaDiffElementWithLabelStencil new
-		fromLabelText: 'Image content:';
-		toLabelText: 'Method content:';
-		ombuEntry: self;
-		shouldHideDiff: false;
-		change: change;
-		styler: styler
-]
-
-{ #category : #'gt - extensions' }
 GtLMethodWithSource >> compiledMethod [
 	^ self methodReference compiledMethod
 ]
@@ -75,10 +54,14 @@ GtLMethodWithSource >> gtClassCoderViewFor: aView [
 GtLMethodWithSource >> gtDiffWithCurrentVersionFor: aView [
 	<gtView>
 	<gtCodeChangeView>
-	^ aView explicit
+	^ aView diff
 		title: 'Diff (with current)';
 		priority: 9;
-		stencil: [ self asDiffWithCurrentVersionElement ]
+		from: [ self compiledMethod sourceCode ];
+		to: [ self sourceCode ];
+		fromLabel: 'Image content:';
+		toLabel: 'Method content:';
+		styler: GtCodeDiffRBTextStyler new
 ]
 
 { #category : #accessing }

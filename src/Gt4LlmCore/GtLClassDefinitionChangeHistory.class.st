@@ -15,46 +15,6 @@ GtLClassDefinitionChangeHistory >> addChange: aCodeChange [
 	self changes add: aCodeChange
 ]
 
-{ #category : #'gt - extensions' }
-GtLClassDefinitionChangeHistory >> asDiffElement [
-	| previousContent newContent change styler |
-	previousContent := self initialChange 
-		changeResult originalDefinitionWithCommentString.
-	newContent := self latestChange 
-		changeResult updatedDefinitionWithCommentString.
-
-	change := GtDiffBuilder
-			computeDifferencesFrom: previousContent
-			to: newContent
-			using: GtSmaCCDiffSplitter forPharo.
-	styler := GtCodeDiffRBTextStyler new.
-	
-	^ (GtDiffElementWithLabelStencil new
-		fromLabelText: 'First Change:';
-		toLabelText: 'Last Change:';
-		change: change;
-		styler: styler) asElement
-]
-
-{ #category : #'gt - extensions' }
-GtLClassDefinitionChangeHistory >> asDiffWithCurrentVersionElement [
-	| currentContent changedContent change styler|
-	currentContent := self currentClassDefinitionWithCommentString.
-	changedContent := self latestChange changeResult updatedDefinitionWithCommentString.
-
-	change := GtDiffBuilder
-			computeDifferencesFrom: currentContent
-			to: changedContent
-			using: GtSmaCCDiffSplitter forPharo.
-	styler := GtCodeDiffRBTextStyler new.
-	
-	^ (GtDiffElementWithLabelStencil new
-		fromLabelText: 'Image content:';
-		toLabelText: 'Change content:';
-		change: change;
-		styler: styler) asElement
-]
-
 { #category : #accessing }
 GtLClassDefinitionChangeHistory >> changes [
 	^ changes ifNil: [ changes := GtLSummarizerCodeChangesGroup new ]
@@ -75,19 +35,27 @@ GtLClassDefinitionChangeHistory >> currentClassDefinitionWithCommentString [
 { #category : #'gt - extensions' }
 GtLClassDefinitionChangeHistory >> gtDiffFor: aView [
 	<gtView>
-	^ aView explicit
+	^ aView diff
 		title: 'Diff';
 		priority: 5;
-		stencil: [ self asDiffElement ]
+		from: [ self initialChange changeResult originalDefinitionWithCommentString ];
+		to: [ self latestChange changeResult updatedDefinitionWithCommentString ];
+		fromLabel: 'First Change:';
+		toLabel: 'Last Change:';
+		styler: GtCodeDiffRBTextStyler new
 ]
 
 { #category : #'gt - extensions' }
 GtLClassDefinitionChangeHistory >> gtDiffWithCurrentVersionFor: aView [
 	<gtView>
-	^ aView explicit
+	^ aView diff
 		title: 'Diff (with current)';
 		priority: 10;
-		stencil: [ self asDiffWithCurrentVersionElement ]
+		from: [ self currentClassDefinitionWithCommentString ];
+		to: [ self latestChange changeResult updatedDefinitionWithCommentString ];
+		fromLabel: 'Image content:';
+		toLabel: 'Change content:';
+		styler: GtCodeDiffRBTextStyler new
 ]
 
 { #category : #'gt - extensions' }

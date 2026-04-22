@@ -20,46 +20,6 @@ GtLMethodChangeHistory >> addChange: aCodeChange [
 	self changes add: aCodeChange
 ]
 
-{ #category : #'gt-extensions' }
-GtLMethodChangeHistory >> asDiffElement [
-	| previousContent newContent change styler |
-	previousContent := self initialChange changeResult oldStateMethodSourceCode.
-	newContent := self latestChange changeResult newStateMethodSourceCode.
-
-	change := GtDiffBuilder
-			computeDifferencesFrom: previousContent
-			to: newContent
-			using: GtSmaCCDiffSplitter forPharo.
-	styler := GtCodeDiffRBTextStyler new.
-	
-	^ (GtDiffElementWithLabelStencil new
-		fromLabelText: 'First Change:';
-		toLabelText: 'Last Change:';
-		change: change;
-		styler: styler) asElement
-]
-
-{ #category : #'gt-extensions' }
-GtLMethodChangeHistory >> asDiffWithCurrentVersionElement [
-	| currentContent changedContent change styler |
-	currentContent := self currentMethodSourceCode.
-	changedContent := self latestChange changeResult newStateMethodSourceCode.
-	
-	change := GtDiffBuilder
-			computeDifferencesFrom: currentContent
-			to: changedContent
-			using: GtSmaCCDiffSplitter forPharo.
-	styler := GtCodeDiffRBTextStyler new.
-	
-	^ GtEpiceaDiffElementWithLabelStencil new
-		fromLabelText: 'Image content:';
-		toLabelText: 'Change content:';
-		ombuEntry: self;
-		shouldHideDiff: false;
-		change: change;
-		styler: styler
-]
-
 { #category : #accessing }
 GtLMethodChangeHistory >> changes [
 	^ changes ifNil: [ changes := GtLSummarizerCodeChangesGroup new ]
@@ -106,22 +66,34 @@ GtLMethodChangeHistory >> gtClassCoderViewFor: aView [
 		view: #gtClassCoderViewFor:
 ]
 
-{ #category : #'gt-extensions' }
+{ #category : #'gt - extensions' }
 GtLMethodChangeHistory >> gtDiffFor: aView [
 	<gtView>
-	^ aView explicit
+	^ aView diff
 		title: 'Diff';
 		priority: 5;
-		stencil: [ self asDiffElement ]
+		from: [ 
+			self initialChange changeResult oldStateMethodSourceCode ];
+		to: [ 
+			self latestChange changeResult newStateMethodSourceCode ];
+		fromLabel: 'First Change:';
+		toLabel: 'Last Change:';
+		styler: GtCodeDiffRBTextStyler new
 ]
 
-{ #category : #'gt-extensions' }
+{ #category : #'gt - extensions' }
 GtLMethodChangeHistory >> gtDiffWithCurrentVersionFor: aView [
 	<gtView>
-	^ aView explicit
+	^ aView diff
 		title: 'Diff (with current)';
 		priority: 10;
-		stencil: [ self asDiffWithCurrentVersionElement ]
+		from: [ 
+			self currentMethodSourceCode ];
+		to: [ 
+			self latestChange changeResult newStateMethodSourceCode ];
+		fromLabel: 'Image content:';
+		toLabel: 'Change content:';
+		styler: GtCodeDiffRBTextStyler new
 ]
 
 { #category : #printing }
