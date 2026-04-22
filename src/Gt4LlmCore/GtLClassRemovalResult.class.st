@@ -5,8 +5,8 @@ Class {
 	#name : #GtLClassRemovalResult,
 	#superclass : #GtLClassChangeResult,
 	#instVars : [
-		'removedClassName',
-		'status'
+		'status',
+		'removedClass'
 	],
 	#category : 'Gt4LlmCore-Magritte Objects'
 }
@@ -30,6 +30,16 @@ GtLClassRemovalResult >> gtViewChangeIcon [
 	^ self class removalIcon
 ]
 
+{ #category : #testing }
+GtLClassRemovalResult >> isClassDefinitionChangeResult [
+	^ true
+]
+
+{ #category : #testing }
+GtLClassRemovalResult >> isClassRemovalResult [
+	^ true
+]
+
 { #category : #'llm views' }
 GtLClassRemovalResult >> llmRawDataViewFor: aDataView [
 	<gtLlmDataView>
@@ -47,13 +57,18 @@ GtLClassRemovalResult >> printOn: aStream [
 ]
 
 { #category : #accessing }
-GtLClassRemovalResult >> removedClassName [
-	^ removedClassName
+GtLClassRemovalResult >> removedClass [
+	^removedClass
 ]
 
 { #category : #accessing }
-GtLClassRemovalResult >> removedClassName: aString [
-	removedClassName := aString
+GtLClassRemovalResult >> removedClass: anObject [
+	removedClass := anObject
+]
+
+{ #category : #accessing }
+GtLClassRemovalResult >> removedClassName [
+	^ removedClass currentClassName
 ]
 
 { #category : #magritte }
@@ -87,4 +102,9 @@ GtLClassRemovalResult >> statusDescription [
 { #category : #accessing }
 GtLClassRemovalResult >> targetClassName [
 	^ self removedClassName
+]
+
+{ #category : #accessing }
+GtLClassRemovalResult >> updatedDefinitionWithCommentString [
+	^ ''
 ]

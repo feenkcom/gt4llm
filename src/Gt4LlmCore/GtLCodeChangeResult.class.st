@@ -25,6 +25,16 @@ GtLCodeChangeResult >> isClassChangeResult [
 ]
 
 { #category : #testing }
+GtLCodeChangeResult >> isClassRemovalResult [
+	^ false
+]
+
+{ #category : #testing }
+GtLCodeChangeResult >> isErrorDomainObject [
+	^ false
+]
+
+{ #category : #testing }
 GtLCodeChangeResult >> isMethodChangeResult [
 	^ false
 ]

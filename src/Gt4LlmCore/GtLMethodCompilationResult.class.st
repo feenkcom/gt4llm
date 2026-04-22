@@ -41,7 +41,7 @@ GtLMethodCompilationResult >> gtClassCoderViewFor: aView [
 	
 	self existsInImage ifFalse: [ ^ aView empty ].
 	^ aView forward
-		title: 'Coder';
+		title: 'Curent coder';
 		priority: 15;
 		object: [ self newMethod ];
 		view: #gtClassCoderViewFor:
@@ -74,11 +74,6 @@ GtLMethodCompilationResult >> gtViewChangeIcon [
 { #category : #testing }
 GtLMethodCompilationResult >> hasOldSourceCode [
 	^ oldMethod notNil
-]
-
-{ #category : #testing }
-GtLMethodCompilationResult >> isErrorDomainObject [
-	^false
 ]
 
 { #category : #testing }

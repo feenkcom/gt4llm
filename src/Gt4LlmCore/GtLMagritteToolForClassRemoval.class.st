@@ -39,15 +39,14 @@ GtLMagritteToolForClassRemoval >> name [
 
 { #category : #'tool api' }
 GtLMagritteToolForClassRemoval >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
-	| className class |
+	| className class classDescription |
 	
 	className := aToolCall arguments at: 'className'.
-	className trimBoth isEmpty
-		ifTrue: [ ^ GtLMissingDomainObject new 
+	class := className asClassIfAbsent: [
+		 ^ GtLMissingDomainObject new 
 			objectName: className ].
-	class := className asClassIfAbsent: [ ^ GtLMissingDomainObject new 
-		objectName: className ].
 	
+	classDescription := GtLClassDefinitionDescription fromClass: class.
 	[ class removeFromSystem ]
 		on: Error
 		do: [ :ex |
@@ -57,7 +56,6 @@ GtLMagritteToolForClassRemoval >> privatePerformToolCall: aToolCall inContext: a
 				yourself ].
 				
 	^ GtLClassRemovalResult new
-		removedClassName: className;
-		status: 'removed';
-		yourself
+		removedClass: classDescription;
+		status: 'removed'
 ]

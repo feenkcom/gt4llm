@@ -50,37 +50,26 @@ GtLMagritteToolForClassCommentChange >> name [
 
 { #category : #private }
 GtLMagritteToolForClassCommentChange >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
-	| arguments className class classComment oldClassComment |
+	| arguments className class classComment originalDescription |
 	arguments := aToolCall arguments.
-
-	className := arguments at: 'className'.
-	class := className
-			asClassIfAbsent: [ ^ GtLMissingDomainObject new objectName: className ].
 
 	className := arguments
 			at: 'className'
-			ifPresent: [ :aString | aString trimBoth ]
-			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-					arguments: arguments;
-					missingArgument: 'className' ].
+			ifPresent: [ :aString | aString trimBoth ].
 	class := className
 			asClassIfAbsent: [ ^ GtLMissingDomainObject new objectName: className ].
 
 	classComment := arguments
 			at: 'classComment'
-			ifPresent: [ :aString | aString trimBoth ]
-			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
-					arguments: arguments;
-					missingArgument: 'classComment' ].
-	classComment isString
-		ifFalse: [ ^ GtLProblemDomainObject new 
-			errorMessage: 'Class comment must be a string' ].
+			ifPresent: [ :aString | aString trimBoth ].
+			
+	originalDescription := GtLClassDefinitionDescription
+		fromClass: class.
 
-	oldClassComment := class comment.
 	class comment: classComment.
+	
 	^ GtLClassCommentChangeResult new
 		updatedClass: (GtLClassDefinitionDescription fromClass: class);
-		status: 'changed';
-		oldClassComment: oldClassComment;
-		newClassComment: classComment
+		originalClass: originalDescription;
+		status: 'changed'
 ]

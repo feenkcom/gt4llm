@@ -18,5 +18,15 @@ GtLSummarizerCodeChangesGroup >> gtCodeChangesFor: aView [
 			aColumn
 				cellStencil: [ GtLCodeChangesDetailsElement new ];
 				dataBinder: [ :anElement :aCodeChange | anElement codeChange: aCodeChange ] ];
-		column: 'Tool' text: [ :each | each toolCall name asString ] width: 180
+		column: 'Tool' text: [ :each | each toolCall name asString ] width: 200
+]
+
+{ #category : #accessing }
+GtLSummarizerCodeChangesGroup >> initialChange [
+	^self first
+]
+
+{ #category : #accessing }
+GtLSummarizerCodeChangesGroup >> latestChange [
+	^self last
 ]

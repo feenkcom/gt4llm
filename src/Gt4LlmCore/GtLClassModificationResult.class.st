@@ -95,8 +95,8 @@ GtLClassModificationResult >> gtClassCoderViewFor: aView [
 	| aClass |
 	aClass := self currentClassName asClassIfAbsent: [ ^ aView empty ].
 	^ aView explicit
-		title: 'Class';
-		priority: 0;
+		title: 'Current class';
+		priority: 5;
 		stencil: [ | container |
 			container := BrVerticalPane new
 					matchParent;
@@ -138,12 +138,19 @@ GtLClassModificationResult >> gtDiffFor: aView [
 	<gtView>
 	<gtLlmView>
 	<gtCodeChangeView>
-	(self originalClass isNil or: [ self updatedClass isNil ]) ifTrue: [ ^ aView empty ].
+
 	^ aView diff
 		title: 'Diff';
 		priority: 1;
-		from: [ self originalClass asDefinitionString ];
-		to: [ self updatedClass asDefinitionString ]
+		from: [ self originalClass 
+			ifNil: [ '' ]
+			ifNotNil: [ :each | each asDefinitionWithCommentString ] ];
+		to: [ self updatedClass 
+			ifNil: [ '' ]
+			ifNotNil: [ :each | each asDefinitionWithCommentString ] ];
+		fromLabel: 'Old content:';
+		toLabel: 'New content:';
+		styler: GtCodeDiffRBTextStyler new.
 ]
 
 { #category : #views }
@@ -178,9 +185,9 @@ GtLClassModificationResult >> isClassAdditionResult [
 	^ self originalClass isNil
 ]
 
-{ #category : #accessing }
-GtLClassModificationResult >> isErrorDomainObject [
-	^false
+{ #category : #testing }
+GtLClassModificationResult >> isClassDefinitionChangeResult [
+	^ true
 ]
 
 { #category : #'llm views' }
@@ -198,6 +205,22 @@ GtLClassModificationResult >> originalClass [
 { #category : #accessing }
 GtLClassModificationResult >> originalClass: aGtLClassDefinitionDescription [
 	originalClass := aGtLClassDefinitionDescription
+]
+
+{ #category : #accessing }
+GtLClassModificationResult >> originalDefinitionString [
+	^self originalClass 
+		ifNil: [ '' ]
+		ifNotNil: [ :each |
+			each asDefinitionString ] 
+]
+
+{ #category : #accessing }
+GtLClassModificationResult >> originalDefinitionWithCommentString [
+	^self originalClass 
+		ifNil: [ '' ]
+		ifNotNil: [ :each |
+			each asDefinitionWithCommentString ] 
 ]
 
 { #category : #'accessing - delegated' }
@@ -287,4 +310,20 @@ GtLClassModificationResult >> updatedClass [
 { #category : #accessing }
 GtLClassModificationResult >> updatedClass: aGtLClassDefinitionDescription [
 	updatedClass := aGtLClassDefinitionDescription
+]
+
+{ #category : #accessing }
+GtLClassModificationResult >> updatedDefinitionString [
+	^self updatedClass 
+		ifNil: [ '' ]
+		ifNotNil: [ :each |
+			each asDefinitionString ] 
+]
+
+{ #category : #accessing }
+GtLClassModificationResult >> updatedDefinitionWithCommentString [
+	^self updatedClass 
+		ifNil: [ '' ]
+		ifNotNil: [ :each |
+			each asDefinitionWithCommentString ] 
 ]
