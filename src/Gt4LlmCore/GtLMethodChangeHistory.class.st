@@ -1,11 +1,16 @@
 "
-History of code changes for a single method, grouped by target method reference.
+I track changes to a single method.
+
+Instance variables:
+- `methodReference` - the target method
+- `changes` - a {{gtClass:GtLSummarizerCodeChangesGroup}} of changes
 "
 Class {
 	#name : #GtLMethodChangeHistory,
 	#superclass : #GtLEntityChangeHistory,
 	#instVars : [
-		'methodReference'
+		'methodReference',
+		'changes'
 	],
 	#category : 'Gt4LlmCore-Summaries'
 }
@@ -27,13 +32,11 @@ GtLMethodChangeHistory >> asDiffElement [
 			using: GtSmaCCDiffSplitter forPharo.
 	styler := GtCodeDiffRBTextStyler new.
 	
-	^ GtEpiceaDiffElementWithLabelStencil new
+	^ (GtDiffElementWithLabelStencil new
 		fromLabelText: 'First Change:';
 		toLabelText: 'Last Change:';
-		ombuEntry: self;
-		shouldHideDiff: previousContent = newContent;
 		change: change;
-		styler: styler
+		styler: styler) asElement
 ]
 
 { #category : #'gt-extensions' }
@@ -97,20 +100,10 @@ GtLMethodChangeHistory >> gtClassCoderViewFor: aView [
 	self methodReference existsInImage ifFalse: [ ^ aView empty ].
 	
 	^ aView forward
-		title: 'Current Coder';
+		title: 'Current coder';
 		priority: 25;
 		object: [ self methodReference ];
 		view: #gtClassCoderViewFor:
-]
-
-{ #category : #'gt-extensions' }
-GtLMethodChangeHistory >> gtCodeChangesFor: aView [
-	<gtView>
-	^ aView forward
-		title: 'Code changes';
-		priority: 15;
-		object: [ self changes ];
-		view: #gtCodeChangesFor:
 ]
 
 { #category : #'gt-extensions' }
@@ -136,7 +129,7 @@ GtLMethodChangeHistory >> gtDisplayOn: aStream [
 	aStream nextPutAll: self methodReference methodSignature
 ]
 
-{ #category : #printing }
+{ #category : #'gt-extensions' }
 GtLMethodChangeHistory >> gtViewChangeDescriptionElement [
 	^ self latestChange gtViewChangeDescriptionElement
 ]

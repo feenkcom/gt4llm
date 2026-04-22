@@ -4,8 +4,7 @@ Class {
 	#instVars : [
 		'updatedClass',
 		'status',
-		'oldClassComment',
-		'newClassComment'
+		'originalClass'
 	],
 	#category : 'Gt4LlmCore-Magritte Objects'
 }
@@ -49,7 +48,7 @@ GtLClassCommentChangeResult >> gtDiffFor: aView [
 		stencil: [ self asDiffElement ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'gt - extensions' }
 GtLClassCommentChangeResult >> gtViewChangeDescriptionElement [
 	^ GtLClassCommentChangeDescriptionElement new
 		updateForChangeObject: self;
@@ -61,6 +60,11 @@ GtLClassCommentChangeResult >> gtViewChangeIcon [
 	^ self class modificationIcon
 ]
 
+{ #category : #testing }
+GtLClassCommentChangeResult >> isClassCommentChangeResult [
+	^ true
+]
+
 { #category : #'llm - views' }
 GtLClassCommentChangeResult >> llmRawDataViewFor: aDataView [
 	<gtLlmDataView>
@@ -70,22 +74,30 @@ GtLClassCommentChangeResult >> llmRawDataViewFor: aDataView [
 
 { #category : #accessing }
 GtLClassCommentChangeResult >> newClassComment [
-	^ newClassComment
-]
-
-{ #category : #accessing }
-GtLClassCommentChangeResult >> newClassComment: anObject [
-	newClassComment := anObject
+	^ updatedClass comment
 ]
 
 { #category : #accessing }
 GtLClassCommentChangeResult >> oldClassComment [
-	^ oldClassComment
+	^ originalClass comment
 ]
 
 { #category : #accessing }
-GtLClassCommentChangeResult >> oldClassComment: anObject [
-	oldClassComment := anObject
+GtLClassCommentChangeResult >> originalClass [
+	^originalClass
+]
+
+{ #category : #accessing }
+GtLClassCommentChangeResult >> originalClass: anObject [
+	originalClass := anObject
+]
+
+{ #category : #accessing }
+GtLClassCommentChangeResult >> originalDefinitionWithCommentString [
+	^self originalClass 
+		ifNil: [ '' ]
+		ifNotNil: [ :each |
+			each asDefinitionWithCommentString ] 
 ]
 
 { #category : #accessing }
@@ -120,4 +132,12 @@ GtLClassCommentChangeResult >> updatedClass [
 { #category : #accessing }
 GtLClassCommentChangeResult >> updatedClass: aClass [
 	updatedClass := aClass
+]
+
+{ #category : #accessing }
+GtLClassCommentChangeResult >> updatedDefinitionWithCommentString [
+	^self updatedClass 
+		ifNil: [ '' ]
+		ifNotNil: [ :each |
+			each asDefinitionWithCommentString ] 
 ]

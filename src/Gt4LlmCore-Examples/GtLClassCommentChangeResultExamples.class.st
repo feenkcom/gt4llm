@@ -8,14 +8,18 @@ Class {
 GtLClassCommentChangeResultExamples >> basicClassCommentChangeResult [
 	<gtExample>
 	<return: #GtLClassCommentChangeResult>
-	| result updatedClass |
-	updatedClass := self objectClassDefinitionDescription.
+	| result originalClass updatedClass |
+	originalClass := self objectClassDefinitionDescriptionWithComment:'Old class comment'.
+	updatedClass := self objectClassDefinitionDescriptionWithComment: 'New class comment'.
 	result := GtLClassCommentChangeResult new
+		originalClass: originalClass;
 		updatedClass: updatedClass;
 		status: 'changed';
-		oldClassComment: 'Old class comment';
-		newClassComment: 'New class comment';
 		yourself.
+		
+	self assert: result originalClass currentClassName equals: 'Object'.
+	self assert: result originalClass packageName equals: 'Kernel'.
+	self assert: result originalClass packageTagName equals: 'Objects'.
 	self assert: result updatedClass currentClassName equals: 'Object'.
 	self assert: result updatedClass packageName equals: 'Kernel'.
 	self assert: result updatedClass packageTagName equals: 'Objects'.
@@ -25,6 +29,7 @@ GtLClassCommentChangeResultExamples >> basicClassCommentChangeResult [
 	self assert: result newClassComment equals: 'New class comment'.
 	self assertResultIsClass: result.
 	self assertResultIsClassCommentChange: result.
+	
 	^ result
 ]
 
@@ -54,14 +59,15 @@ GtLClassCommentChangeResultExamples >> classCommentChangeDataViewSerialization [
 GtLClassCommentChangeResultExamples >> classCommentChangeResultWithNilOldComment [
 	<gtExample>
 	<return: #GtLClassCommentChangeResult>
-	| result updatedClass |
+	| result originalClass updatedClass |
 	
-	updatedClass := self objectClassDefinitionDescription.
+	originalClass := self objectClassDefinitionDescriptionWithComment: nil.
+	updatedClass := self objectClassDefinitionDescriptionWithComment:'First comment' .
 	result := GtLClassCommentChangeResult new
+		originalClass: originalClass;
 		updatedClass: updatedClass;
-		status: 'changed';
-		oldClassComment: nil;
-		newClassComment: 'First comment'.
+		status: 'changed'.
+		
 	self assert: result updatedClass currentClassName equals: 'Object'.
 	self assert: result updatedClass packageName equals: 'Kernel'.
 	self assert: result updatedClass packageTagName equals: 'Objects'.
@@ -123,14 +129,15 @@ GtLClassCommentChangeResultExamples >> emptyClassCommentChangeDataViewSerializat
 GtLClassCommentChangeResultExamples >> emptyClassCommentChangeResult [
 	<gtExample>
 	<return: #GtLClassCommentChangeResult>
-	| result updatedClass |
+	| result originalClass updatedClass |
 	
-	updatedClass := self objectClassDefinitionDescription.
+	originalClass := self objectClassDefinitionDescriptionWithComment: ''.
+	updatedClass := self objectClassDefinitionDescriptionWithComment:'A new comment' .
 	result := GtLClassCommentChangeResult new
+		originalClass:originalClass;
 		updatedClass: updatedClass;
-		status: 'changed';
-		oldClassComment: '';
-		newClassComment: 'A new comment'.
+		status: 'changed'.
+		
 	self assert: result updatedClass currentClassName equals: 'Object'.
 	self assert: result updatedClass packageName equals: 'Kernel'.
 	self assert: result updatedClass packageTagName equals: 'Objects'.
@@ -145,4 +152,10 @@ GtLClassCommentChangeResultExamples >> emptyClassCommentChangeResult [
 { #category : #private }
 GtLClassCommentChangeResultExamples >> objectClassDefinitionDescription [
 	^ GtLClassDefinitionDescription fromClass: Object
+]
+
+{ #category : #private }
+GtLClassCommentChangeResultExamples >> objectClassDefinitionDescriptionWithComment: aComment [
+	^ (GtLClassDefinitionDescription fromClass: Object)
+			comment: aComment
 ]

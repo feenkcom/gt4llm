@@ -43,6 +43,18 @@ GtLClassDefinitionDescription >> asDefinitionString [
 		stream store: self packageName ]
 ]
 
+{ #category : #converting }
+GtLClassDefinitionDescription >> asDefinitionWithCommentString [
+	^String streamContents: [ :aStream |
+			aStream << self asDefinitionString.
+			self comment ifNotNil: [ 
+				aStream cr;cr.
+				aStream 
+					nextPutAll: '"';
+					<< self comment;
+					nextPutAll: '"'  ] ]
+]
+
 { #category : #accessing }
 GtLClassDefinitionDescription >> classSlotNames [
 	^ classSlotNames ifNil: [ #() ]
@@ -167,6 +179,17 @@ GtLClassDefinitionDescription >> gtDetailsFor: aView [
 		} ];
 		column: 'Field' text: [ :each | each first ];
 		column: 'Value' text: [ :each | each second printString ]
+]
+
+{ #category : #views }
+GtLClassDefinitionDescription >> gtViewDefinitionFor: aView [
+	<gtView>
+	
+	^(aView forward)
+		title: 'Definition';
+		priority: 30;
+		object: [self asDefinitionString];
+		view: #gtStringFor:
 ]
 
 { #category : #initialization }
