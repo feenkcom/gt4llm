@@ -8,7 +8,7 @@ Class {
 		'modelName',
 		'instructions'
 	],
-	#category : #'Gt4Llm-Ollama-Provider'
+	#category : 'Gt4Llm-Ollama-Provider'
 }
 
 { #category : #'instance creation' }
@@ -166,7 +166,7 @@ GtLOllamaProvider >> modelName: aString [
 GtLOllamaProvider >> performToolCallsIn: result with: activeTools [
 	| toolMessages |
 
-	toolMessages := result toolCalls asArray
+	toolMessages := result toolCalls
 		withIndexCollect: [ :aToolCall :anIndex |
 			| toolMessage domainObject |
 			toolMessage := GtLToolMessage new
