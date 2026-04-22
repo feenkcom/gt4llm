@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLMethodChangeResult,
 	#superclass : #GtLCodeChangeResult,
-	#category : 'Gt4LlmCore-Magritte Objects'
+	#category : #'Gt4LlmCore-Magritte Objects'
 }
 
 { #category : #'as yet unclassified' }

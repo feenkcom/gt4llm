@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'jsonData'
 	],
-	#category : 'Gt4LlmCore-Data Views'
+	#category : #'Gt4LlmCore-Data Views'
 }
 
 { #category : #accessing }
@@ -60,13 +60,6 @@ GtLPrimitiveStandaloneJsonBlock >> llmJsonData [
 				yourself]
 ]
 
-{ #category : #accessing }
-GtLPrimitiveStandaloneJsonBlock >> serializedJsonString [
-	"Return a JSON string that represents the domain object."
-	
-	^ NeoJSONWriter toStringPretty: self llmJsonData
-]
-
 { #category : #serialization }
 GtLPrimitiveStandaloneJsonBlock >> serializeForAnthropic [
 	"Return a JSON that represents tool response output."
@@ -120,4 +113,11 @@ GtLPrimitiveStandaloneJsonBlock >> serializeForOpenAI [
 			at: #text put: self serializedJsonString;
 			at: #type put: #input_text;
 			yourself}
+]
+
+{ #category : #accessing }
+GtLPrimitiveStandaloneJsonBlock >> serializedJsonString [
+	"Return a JSON string that represents the domain object."
+	
+	^ NeoJSONWriter toStringPretty: self llmJsonData
 ]
