@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLMessagesGroup,
 	#superclass : #GtLGroup,
-	#category : #'Gt4LlmCore-Core'
+	#category : 'Gt4LlmCore-Core'
 }
 
 { #category : #accessing }
@@ -50,23 +50,6 @@ GtLMessagesGroup >> copyForIndependentRequest [
 GtLMessagesGroup >> copyForNew [
 ]
 
-{ #category : #'gt-extensions' }
-GtLMessagesGroup >> gToolCallsSummariesFor: aView [
-	<gtView>
-	^ aView columnedList
-		title: 'Tool call summarizers';
-		priority: 30;
-		items: [ self toolCallsSummarizers ];
-		column: 'Summary' 
-			text: [ :each | each title ];
-		column: 'Details' text: [ :each | 
-			each summaryText ];
-		column: 'Has data' 
-			text: [ :each | 
-				each hasSummaryData ifTrue: [ 'yes' ] ifFalse: [ 'no' ] ]
-			width: 100
-]
-
 { #category : #inspector }
 GtLMessagesGroup >> gtInspectorTargetModels [
 	^ self relevantToolCallsSummarizers
@@ -83,6 +66,23 @@ GtLMessagesGroup >> gtMessagesFor: aView [
 			text: [ :item | item role ]
 			width: 100;
 		column: 'Message' text: [ :item | item contentText ]
+]
+
+{ #category : #'gt-extensions' }
+GtLMessagesGroup >> gToolCallsSummariesFor: aView [
+	<gtView>
+	^ aView columnedList
+		title: 'Tool call summarizers';
+		priority: 30;
+		items: [ self toolCallsSummarizers ];
+		column: 'Summary' 
+			text: [ :each | each title ];
+		column: 'Details' text: [ :each | 
+			each summaryText ];
+		column: 'Has data' 
+			text: [ :each | 
+				each hasSummaryData ifTrue: [ 'yes' ] ifFalse: [ 'no' ] ]
+			width: 100
 ]
 
 { #category : #inspector }
@@ -126,12 +126,6 @@ GtLMessagesGroup >> lastUserMessageIfPresent: aPresentBlock ifAbsent: anAbsentBl
 	^ anAbsentBlock value
 ]
 
-{ #category : #summaries }
-GtLMessagesGroup >> messageSummarizers [
-	^ GtLToolCallsSummarizer currentSummarizers collect: [ :each |
-		each initializeWithMessages: self ]
-]
-
 { #category : #enumerating }
 GtLMessagesGroup >> messagesBeforeMatching: aBlock andAllWithAndAfter: aMessage [
 	| found |
@@ -164,6 +158,12 @@ GtLMessagesGroup >> messagesSelect: aBlock [
 	self messagesDo: [ :eachMessage | 
 		(aBlock value: eachMessage) ifTrue: [ all add: eachMessage ] ].
 	^ all
+]
+
+{ #category : #summaries }
+GtLMessagesGroup >> messageSummarizers [
+	^ GtLToolCallsSummarizer currentSummarizers collect: [ :each |
+		each initializeWithMessages: self ]
 ]
 
 { #category : #enumerating }
