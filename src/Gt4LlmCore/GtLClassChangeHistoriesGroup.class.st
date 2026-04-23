@@ -15,6 +15,7 @@ GtLClassChangeHistoriesGroup >> addHistory: aHistory [
 { #category : #views }
 GtLClassChangeHistoriesGroup >> gtViewHistoriesFor: aView [
 	<gtView>
+	
 	^ aView columnedTree 
 		title: 'By class';
 		priority: 20;
