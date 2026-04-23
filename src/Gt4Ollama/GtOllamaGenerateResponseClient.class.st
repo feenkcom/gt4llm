@@ -20,7 +20,7 @@ Class {
 	#category : #Gt4Ollama
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtOllamaGenerateResponseClient >> entity [
 	| entity |
 
@@ -130,7 +130,7 @@ GtOllamaGenerateResponseClient >> request [
 		ifFalse: [ self client post: '/generate' withEntity: self entity ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtOllamaGenerateResponseClient >> serializationClass [
 	^ GtOllamaResponseMessage
 ]

@@ -39,6 +39,15 @@ GtLAbstractFunctionTool >> functionGemini [
 ]
 
 { #category : #'api - responses' }
+GtLAbstractFunctionTool >> functionMCP [
+	^
+	{'name' -> self name.
+	'description' -> self description.
+	'inputSchema' -> self parametersJsonSchemaDictionary}
+			asDictionary
+]
+
+{ #category : #'api - responses' }
 GtLAbstractFunctionTool >> functionOpenAI [
 	^ {'name' -> self name.
 		'type' -> self type.
@@ -60,7 +69,7 @@ GtLAbstractFunctionTool >> performToolCall: aToolCall [
 			inContext: (GtLToolExecutionContext new)
 ]
 
-{ #category : #execution }
+{ #category : #executing }
 GtLAbstractFunctionTool >> performToolCall: aToolCall inContext: anExecutionContext [
 	| domainObject resultObject |
 	
@@ -83,10 +92,8 @@ GtLAbstractFunctionTool >> privatePerformToolCall: aToolCall inContext: anExecut
 { #category : #utils }
 GtLAbstractFunctionTool >> resultObjectFromDomainObject: domainObject [ 
 
-	^GTLDataViewWrapperModel new 
-			targetObject:  domainObject;
-			targetDataViews:  (domainObject 
-				llmDataViewsInContext: GtLDataViewContext new)
+	^GtLWrappedObjectModel new 
+			model:  domainObject
 ]
 
 { #category : #accessing }

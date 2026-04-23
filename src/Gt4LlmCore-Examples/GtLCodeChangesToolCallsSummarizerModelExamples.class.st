@@ -14,10 +14,12 @@ GtLCodeChangesToolCallsSummarizerModelExamples >> messagesGroupWithCodeChangesSu
 	group := GtLMessagesGroup new.
 
 	classResult := GtLClassCommentChangeResult new
-		updatedClass: Object;
+		originalClass: ((GtLClassDefinitionDescription fromClass: Object)
+			comment: '');
+		updatedClass: ((GtLClassDefinitionDescription fromClass: Object)
+			comment: 'Updated comment');
 		status: 'changed';
-		oldClassComment: '';
-		newClassComment: 'Updated comment';
+		
 		yourself.
 	classToolCall := GtLFunctionToolCall new
 		name: 'changeClassOrTraitComment';

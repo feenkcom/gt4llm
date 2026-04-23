@@ -4,33 +4,37 @@ Class {
 	#category : #'Gt4LlmCore-Magritte Objects'
 }
 
-{ #category : #'gt-view' }
-GtLMethodChangeResult >> asDiffElement [
-	| newSource oldSource |
-	oldSource := self oldStateMethodSourceCode.
-	newSource := self newStateMethodSourceCode.
-	^ GtDiffElementWithLabelStencil new
-		fromLabelText: 'Old from '
-				, (self targetMethod
-						ifNotNil: [ :m | String space , m methodReference methodClassName ]);
-		toLabelText: 'New in '
-				, (self targetMethod
-						ifNotNil: [ :m | String space , m methodReference methodClassName ]);
-		change: (GtDiffBuilder
-				computeDifferencesFrom: oldSource
-				to: newSource
-				using: GtSmaCCDiffSplitter forPharo);
-		asElement
+{ #category : #'as yet unclassified' }
+GtLMethodChangeResult >> currentMethodSourceCode [
+	^self subclassResponsibility
 ]
 
-{ #category : #'gt-view' }
+{ #category : #'gt - extensions' }
 GtLMethodChangeResult >> gtDiffFor: aView [
 	<gtView>
 	<gtCodeChangeView>
-	^ aView explicit
+	^ aView diff
 		title: 'Diff';
 		priority: 5;
-		stencil: [ self asDiffElement ]
+		from: [ self oldStateMethodSourceCode ];
+		to: [ self newStateMethodSourceCode ];
+		fromLabel: 'Old content:';
+		toLabel: 'New content:';
+		styler: GtCodeDiffRBTextStyler new
+]
+
+{ #category : #'gt - extensions' }
+GtLMethodChangeResult >> gtDiffWithCurrentVersionFor: aView [
+	<gtView>
+	<gtCodeChangeView>
+	^ aView diff
+		title: 'Diff (with current)';
+		priority: 9;
+		from: [ self currentMethodSourceCode ];
+		to: [ self newStateMethodSourceCode ];
+		fromLabel: 'Image content:';
+		toLabel: 'Change content:';
+		styler: GtCodeDiffRBTextStyler new
 ]
 
 { #category : #'gt-view' }

@@ -35,12 +35,12 @@ GtLOllamaAssistantMessage >> chat: aChat [
 GtLOllamaAssistantMessage >> computeResponseModelsByFormat [
 	| responseText |
 	
-	^ { 'string' -> self contentText } asDictionary
-	"self formatDescriptions hasSchemaDescriptors ifFalse: [ ^ {} ].
+	self formatDescriptions hasSchemaDescriptors ifFalse: 
+		[ ^ { 'Content' -> (GtLString forString: self contentText) } asDictionary ].
 	responseText := self contentText.
 	^ [ self formatDescriptions readDomainObjectsFrom: responseText ]
 		on: NeoJSONParseError
-		do: [ :e | ^ {} ]"
+		do: [ :e | ^ {} ]
 ]
 
 { #category : #accessing }
@@ -66,6 +66,11 @@ GtLOllamaAssistantMessage >> gtContentFor: aView [
 		text: [ self contentText ]
 ]
 
+{ #category : #accessing }
+GtLOllamaAssistantMessage >> gtInspectorTargetModels [
+	^ self responseModels asArray
+]
+
 { #category : #views }
 GtLOllamaAssistantMessage >> gtThoughtProcessFor: aView [
 	<gtView>
@@ -74,8 +79,22 @@ GtLOllamaAssistantMessage >> gtThoughtProcessFor: aView [
 	self thoughtText ifEmpty: [ ^ aView empty ].
 	^ aView textEditor
 		title: 'Thought process';
-		priority: 7;
+		priority: 10;
 		text: [ self thoughtText ]
+]
+
+{ #category : #views }
+GtLOllamaAssistantMessage >> gtViewErrorsFor: aView [
+	<gtView>
+	<gtLlmView>
+	
+	(rawData isEmpty or: [ (rawData includesKey: 'error') not ]) ifTrue: [ ^ aView empty ].
+
+	^aView forward
+		title: 'Response Error';
+		priority: 10;
+		object: [ rawData at: 'error' ];
+		view: #gtLiveFor:
 ]
 
 { #category : #views }

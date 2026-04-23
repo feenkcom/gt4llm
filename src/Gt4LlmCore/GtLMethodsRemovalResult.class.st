@@ -53,6 +53,11 @@ GtLMethodsRemovalResult >> methodsDescription [
 		beRequired
 ]
 
+{ #category : #accessing }
+GtLMethodsRemovalResult >> methodsRemovalResult [
+	^ self methods
+]
+
 { #category : #printing }
 GtLMethodsRemovalResult >> printOn: aStream [
 	super printOn: aStream.
@@ -60,4 +65,10 @@ GtLMethodsRemovalResult >> printOn: aStream [
 		aStream
 			print: self methods size;
 			nextPutAll: ' methods' ]
+]
+
+{ #category : #accessing }
+GtLMethodsRemovalResult >> successfulMethodsRemovalResult [
+	^ self methodsRemovalResult reject: [ :aMethodRemovalResult |
+			aMethodRemovalResult isErrorDomainObject ]
 ]

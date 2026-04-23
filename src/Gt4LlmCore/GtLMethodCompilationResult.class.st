@@ -12,10 +12,56 @@ Class {
 	#category : #'Gt4LlmCore-Magritte Objects'
 }
 
+{ #category : #converting }
+GtLMethodCompilationResult >> asDiffElement [
+	"Used by GtLMethodsCompilationResult>>gtMethodsListFor:"
+	| oldSource newSource |
+	oldSource := self oldStateMethodSourceCode.
+	newSource := self newStateMethodSourceCode.
+	^ GtDiffElementWithLabelStencil new
+		fromLabelText: 'Old content:';
+		toLabelText: 'New content:';
+		change: (GtDiffBuilder
+				computeDifferencesFrom: oldSource
+				to: newSource
+				using: GtSmaCCDiffSplitter forPharo);
+		styler: GtCodeDiffRBTextStyler new;
+		asElement
+]
+
+{ #category : #accessing }
+GtLMethodCompilationResult >> currentMethodSourceCode [
+	^self existsInImage
+		ifTrue: [ self newMethod  compiledMethod sourceCode ] 
+		ifFalse: ['']
+]
+
 { #category : #testing }
 GtLMethodCompilationResult >> existsInImage [
 	^ self newMethod notNil and: [
 		self newMethod existsInImage ]
+]
+
+{ #category : #views }
+GtLMethodCompilationResult >> gtActionBrowseEntryFor: anAction [
+	<gtAction>
+	
+	self newMethod existsInImage ifFalse: [ ^ anAction noAction ].
+	
+	^ self newMethod gtActionBrowseEntryFor: anAction
+]
+
+{ #category : #views }
+GtLMethodCompilationResult >> gtClassCoderViewFor: aView [
+	<gtView>
+	<gtCodeChangeView>
+	
+	self existsInImage ifFalse: [ ^ aView empty ].
+	^ aView forward
+		title: 'Curent coder';
+		priority: 15;
+		object: [ self newMethod ];
+		view: #gtClassCoderViewFor:
 ]
 
 { #category : #views }
@@ -30,7 +76,7 @@ GtLMethodCompilationResult >> gtDetailsFor: aView [
 			 'Status' -> self status.
 			 'Old source' -> (self oldMethod ifNotNil: #sourceCode).
 			 'New source' -> (self newMethod ifNotNil: #sourceCode)} ];
-		column: 'Property' text: [ :assoc | assoc key ];
+		column: 'Property' text: [ :assoc | assoc key ] width: 250;
 		column: 'Value' text: [ :assoc | assoc value ];
 		send: [ :assoc | assoc value ]
 ]
@@ -48,11 +94,6 @@ GtLMethodCompilationResult >> hasOldSourceCode [
 ]
 
 { #category : #testing }
-GtLMethodCompilationResult >> isErrorDomainObject [
-	^false
-]
-
-{ #category : #testing }
 GtLMethodCompilationResult >> isMethodAdditionResult [
 	^ self oldMethod isNil
 ]
@@ -66,7 +107,9 @@ GtLMethodCompilationResult >> isMethodModificationResult [
 GtLMethodCompilationResult >> llmRawDataViewFor: aDataView [
 	<gtLlmDataView>
 	
-	^ aDataView magritteObject: [ self ]
+	^ aDataView magritteObject
+			title: 'Method Data';
+			object: [ self ]
 ]
 
 { #category : #accessing }

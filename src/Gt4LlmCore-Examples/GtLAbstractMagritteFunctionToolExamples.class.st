@@ -18,7 +18,7 @@ GtLAbstractMagritteFunctionToolExamples >> executeTool: aTool withArguments: aDi
 	result := aTool performToolCall: call.
 	
 	self assert: call tool == aTool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	self assert: (result isKindOf: GtLWrappedObjectModel).
 	self assert: call arguments size equals: aDictionary size.
 	
 	^ call
@@ -35,7 +35,7 @@ GtLAbstractMagritteFunctionToolExamples >> executeTool: aTool withArguments: aDi
 	result := aTool performToolCall: call inContext: aContext.
 	
 	self assert: call tool == aTool.
-	self assert: (result isKindOf: GTLDataViewWrapperModel).
+	self assert: (result isKindOf: GtLWrappedObjectModel).
 	self assert: call arguments size equals: aDictionary size.
 	
 	^ call

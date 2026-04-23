@@ -9,6 +9,13 @@ Class {
 }
 
 { #category : #accessing }
+GtLOpenAICompleteChatAPICommand >> entity [
+	^ {'model' -> self model.
+		'messages' -> (self messages collect: [ :aMessage | aMessage serialize ])}
+		asDictionary
+]
+
+{ #category : #accessing }
 GtLOpenAICompleteChatAPICommand >> messages [
 	^ messages
 ]
@@ -30,10 +37,7 @@ GtLOpenAICompleteChatAPICommand >> model: anObject [
 
 { #category : #accessing }
 GtLOpenAICompleteChatAPICommand >> request [
-	^ self client
-		post: '/chat/completions'
-		withEntity: {'model' -> self model.
-				'messages' -> (self messages collect: [:aMessage | aMessage serialize ])} asDictionary
+	^ self client post: '/chat/completions' withEntity: self entity
 ]
 
 { #category : #accessing }

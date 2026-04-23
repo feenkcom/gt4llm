@@ -46,12 +46,12 @@ GtLObjectWithJsonViewsForExamples >> gtLlmFirstJsonViewFor: aDataView [
 	self firstJsonViewEnabled ifFalse: [ ^ aDataView emptyData ].
 	
 	^ aDataView jsonData
-		data: [ 
-			NeoJSONObject new
-				at: 'type' put: 'first';
-				at: 'value' put: firstValue;
-				yourself ];
-		dataKey: self firstJsonViewDataKey
+			data: [ 
+				NeoJSONObject new
+					at: 'type' put: 'first';
+					at: 'value' put: firstValue;
+					yourself ];
+			dataKey: self firstJsonViewDataKey
 ]
 
 { #category : #views }

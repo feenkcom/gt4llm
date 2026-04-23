@@ -12,7 +12,8 @@ Class {
 		'instructions',
 		'userMessageClass',
 		'responseFormat',
-		'objectStorage'
+		'objectStorage',
+		'reasoningEffort'
 	],
 	#category : #'Gt4LlmCore-Core'
 }
@@ -452,6 +453,7 @@ GtLChat >> gtToolsFor: aView [
 { #category : #views }
 GtLChat >> gtViewObjectStorageFor: aView [
 	<gtView>
+	<gtLlmView>
 	^ aView forward
 		title: 'Object storage';
 		priority: 40;
@@ -578,6 +580,12 @@ GtLChat >> objectStorage [
 	^ objectStorage
 ]
 
+{ #category : #'api - communication' }
+GtLChat >> plainStringResponse [
+	self addResponseFormat: (GtLResponsePlainStringFormat new
+			name: 'String')
+]
+
 { #category : #accessing }
 GtLChat >> previousUserMessageIfPresent: aPresentBlock ifAbsent: anAbsentBlock [
 	^ messages lastUserMessageIfPresent: aPresentBlock ifAbsent: anAbsentBlock
@@ -623,11 +631,11 @@ GtLChat >> sendMessage: aMessage [
 ]
 
 { #category : #'api - communication' }
-GtLChat >> sendPlainMessage: aString [
+GtLChat >> sendString: aString [
 	| newMessage |
 	self assert: aString isString.
 	newMessage := self createUserMessage.
-	newMessage plain: aString.
+	newMessage string: aString.
 	self sendMessage: newMessage
 ]
 
@@ -685,6 +693,12 @@ GtLChat >> status [
 { #category : #'api - execution' }
 GtLChat >> stopOngoingExecution [
 	self provider stopOngoingMessageExecution
+]
+
+{ #category : #'api - communication' }
+GtLChat >> stringResponse [
+	self addResponseFormat: (GtLResponseStringFormat new
+			name: 'String')
 ]
 
 { #category : #accessing }

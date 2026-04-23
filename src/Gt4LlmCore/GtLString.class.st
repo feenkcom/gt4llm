@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLStringData,
+	#name : #GtLString,
 	#superclass : #GtLPlainData,
 	#instVars : [
 		'stringValue'
@@ -8,13 +8,24 @@ Class {
 }
 
 { #category : #'instance creation' }
-GtLStringData class >> forString: aString [ 
+GtLString class >> forString: aString [ 
 	^ self new 
 		stringValue: aString
 ]
 
+{ #category : #views }
+GtLString >> gtStringValueFor: aView [
+	<gtView>
+	<gtLlmView>
+	^(aView forward)
+		title: 'String';
+		priority: 1;
+		object: [stringValue];
+		view: #gtStringFor:
+]
+
 { #category : #'llm views' }
-GtLStringData >> llmRawDataViewFor: aDataView [
+GtLString >> llmRawDataViewFor: aDataView [
 	<gtLlmDataView>
 	
 	^ aDataView jsonData
@@ -22,17 +33,17 @@ GtLStringData >> llmRawDataViewFor: aDataView [
 ]
 
 { #category : #printing }
-GtLStringData >> printOn: aStream [
+GtLString >> printOn: aStream [
 	aStream 
 		print: self stringValue 
 ]
 
 { #category : #accessing }
-GtLStringData >> stringValue [
+GtLString >> stringValue [
 	^stringValue
 ]
 
 { #category : #accessing }
-GtLStringData >> stringValue: anObject [
+GtLString >> stringValue: anObject [
 	stringValue := anObject
 ]

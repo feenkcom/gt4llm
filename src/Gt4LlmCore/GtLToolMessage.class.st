@@ -170,9 +170,7 @@ GtLToolMessage >> output [
 
 { #category : #accessing }
 GtLToolMessage >> output: anObject [
-	self assert: [ 
-			(anObject isKindOf: GtLWrappedModel) or: [
-				anObject isKindOf: GTLDataViewWrapperModel] ] .
+	self assert: [ anObject isKindOf: GtLWrappedModel ] .
 	output := anObject
 ]
 
@@ -223,6 +221,31 @@ GtLToolMessage >> serializeForAnthropicMessagesAPI [
 				'tool_use_id' -> toolCall id.
 				'content' -> anOutput} asDictionary}.
 		'role' -> 'user' }asDictionary 
+]
+
+{ #category : #'as yet unclassified' }
+GtLToolMessage >> serializeForOllamaOpenAiMessagesAPI [
+	"Output should be defined using tools.
+	Available output values:
+		- array of objects of type:
+			- 'input_text' (with 'text' containing value), 
+			- 'input_image', 
+			- 'output_text', 
+			- 'refusal', 
+			- 'input_file', 
+			- 'computer_screenshot', and 
+			- 'summary_text'
+		- string
+	Documentation: https://platform.openai.com/docs/guides/function-calling#formatting-results"
+
+	| anOutput | 
+	self flag: #todo.
+	anOutput := self output ifNotNil: [ :each | 
+		each serializeToOpenAIResponseOutput ].
+
+	^ {'type' -> 'function_call_output'.
+		'call_id' -> toolCall id.
+		'output' -> anOutput} asDictionary
 ]
 
 { #category : #'as yet unclassified' }

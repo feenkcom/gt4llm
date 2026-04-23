@@ -8,6 +8,11 @@ Class {
 }
 
 { #category : #accessing }
+GtLClassesCreationResult >> classCreationResults [
+	^ self classes
+]
+
+{ #category : #accessing }
 GtLClassesCreationResult >> classes [
 	^ classes ifNil: [ #() ]
 ]
@@ -59,4 +64,10 @@ GtLClassesCreationResult >> printOn: aStream [
 		nextPutAll: ' (';
 		print: self classes size;
 		nextPutAll: ' classes)'
+]
+
+{ #category : #accessing }
+GtLClassesCreationResult >> successfulClassCreationResults [
+	^ self classCreationResults reject: [ :aClassCreationResult |
+			aClassCreationResult isErrorDomainObject ]
 ]

@@ -4,7 +4,7 @@ Class {
 	#category : #'Gt4LlmCore-Magritte Objects'
 }
 
-{ #category : #'magritte-description' }
+{ #category : #'gt - extensions' }
 GtLClassChangeResult >> gtViewChangeDescriptionElement [
 	^ GtLClassDefinitionChangeDescriptionElement new
 		updateForChangeObject: self;
@@ -19,6 +19,16 @@ GtLClassChangeResult >> isClassAdditionResult [
 { #category : #testing }
 GtLClassChangeResult >> isClassChangeResult [
 	^ true
+]
+
+{ #category : #testing }
+GtLClassChangeResult >> isClassCommentChangeResult [
+	^ false
+]
+
+{ #category : #testing }
+GtLClassChangeResult >> isClassDefinitionChangeResult [
+	^ false
 ]
 
 { #category : #accessing }

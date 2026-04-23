@@ -9,7 +9,7 @@ Class {
 
 { #category : #testing }
 GtLLepiterAddCodeSnippetTransformationSpecification class >> isConcrete [
-	^ true
+	^ false
 ]
 
 { #category : #accessing }

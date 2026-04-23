@@ -58,7 +58,6 @@ GtLPrimitiveDocumentDataBlock >> encodedBytes [
 { #category : #serialization }
 GtLPrimitiveDocumentDataBlock >> serializeForAnthropic [
 	<return: #Array of: #NeoJSONObject>
-	<llmSerialization: #Anthropic>
 	
 	^ {NeoJSONObject new
 		at: 'type' put: 'document';
@@ -73,7 +72,6 @@ GtLPrimitiveDocumentDataBlock >> serializeForAnthropic [
 GtLPrimitiveDocumentDataBlock >> serializeForBedrockConverse [
 	"Return a JSON that represents tool response output."
 	<sys_ext>
-	<llmSerialization: #BedrockConverse>
 	
 	^ {{
 		'document' -> {
@@ -83,9 +81,21 @@ GtLPrimitiveDocumentDataBlock >> serializeForBedrockConverse [
 ]
 
 { #category : #serialization }
-GtLPrimitiveDocumentDataBlock >> serializeForOllama [
+GtLPrimitiveDocumentDataBlock >> serializeForMCP [
 	<return: #Array of: #NeoJSONObject>
-	<llmSerialization: #Ollama>
+	
+	^ {NeoJSONObject new
+		at: 'type' put: 'resource';
+		at: 'resource' put: {
+			'mimeType' -> self contentType.
+			'uri' -> ('mcp://resources/',self identityHash asString).
+			'blob' -> self encodedBytes } asDictionary;
+		yourself}
+]
+
+{ #category : #serialization }
+GtLPrimitiveDocumentDataBlock >> serializeForOllamaGenerate [
+	<return: #Array of: #NeoJSONObject>
 
 	^ {NeoJSONObject new
 		at: 'type' put: 'input_file';
@@ -94,9 +104,18 @@ GtLPrimitiveDocumentDataBlock >> serializeForOllama [
 ]
 
 { #category : #serialization }
+GtLPrimitiveDocumentDataBlock >> serializeForOllamaOpenAi [
+	<return: #Array of: #NeoJSONObject>
+
+	^ {NeoJSONObject new
+		at: 'type' put: 'file_data';
+		at: 'file_data' put: ('data:', self contentType, ';base64,', self encodedBytes);
+		yourself}
+]
+
+{ #category : #serialization }
 GtLPrimitiveDocumentDataBlock >> serializeForOpenAI [
 	<return: #Array of: #NeoJSONObject>
-	<llmSerialization: #OpenAI>
 	
 	^ {NeoJSONObject new
 		at: 'type' put: 'input_file';

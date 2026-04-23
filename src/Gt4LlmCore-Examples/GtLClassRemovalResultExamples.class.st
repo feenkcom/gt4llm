@@ -12,7 +12,8 @@ GtLClassRemovalResultExamples >> classRemovalResultCreation [
 	<gtExample>
 	| result |
 	result := GtLClassRemovalResult new
-		removedClassName: 'MyTestClass';
+		removedClass: (GtLClassDefinitionDescription new 
+			currentClassName: 'MyTestClass');
 		status: 'removed';
 		yourself.
 	self assert: result removedClassName equals: 'MyTestClass'.

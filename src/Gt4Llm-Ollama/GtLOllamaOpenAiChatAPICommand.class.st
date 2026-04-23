@@ -12,6 +12,15 @@ Class {
 }
 
 { #category : #api }
+GtLOllamaOpenAiChatAPICommand >> addInstructionsTo: input [ 
+
+	input add: {
+		'content' -> instructions.
+		'role' -> 'system'.
+		} asDictionary.
+]
+
+{ #category : #api }
 GtLOllamaOpenAiChatAPICommand >> entity [
 	| entity input |
 	input := OrderedCollection new.
@@ -22,23 +31,22 @@ GtLOllamaOpenAiChatAPICommand >> entity [
 						ifTrue: [ input add: aMessage toolCall responseInputForOpenAIResponsesAPI.
 							input add: aMessage serializeForOllamaOpenAiMessagesAPI ] ]
 				ifFalse: [ input add: aMessage serializeForOllamaOpenAiMessagesAPI ] ].
+	self addInstructionsTo: input.
 	entity := {'model' -> self model.
 			'stream' -> false.
 			'messages' -> input asArray} asDictionary.
+	client addThinkingTo: entity.
 
-	"format appears to be ignored by Ollama, to be investigated further.
 	format
 		ifNotNil: [ entity
 				at: 'response_format'
 				put: {'type' -> 'json_schema'.
-							'json_schema' -> format} asDictionary ]."
+							'json_schema' -> { 'schema' -> format } asDictionary } asDictionary ].
 
-	"tools isEmptyOrNil
+	tools isEmptyOrNil
 		ifFalse: [ entity
 				at: 'tools'
 				put: (self tools collect: [ :aTool | aTool functionOpenAI ]) ].
-
-	instructions ifNotNil: [ entity at: 'instructions' put: instructions ]."
 
 	^ entity
 ]

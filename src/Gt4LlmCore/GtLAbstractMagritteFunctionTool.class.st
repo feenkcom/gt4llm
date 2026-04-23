@@ -77,8 +77,6 @@ GtLAbstractMagritteFunctionTool >> performToolCall: aToolCall inContext: anExecu
 { #category : #utils }
 GtLAbstractMagritteFunctionTool >> resultObjectFromDomainObject: domainObject [ 
 
-	^GTLDataViewWrapperModel new 
-			targetObject:  domainObject;
-			targetDataViews:  (domainObject 
-				llmDataViewsInContext: GtLDataViewContext new)
+	^GtLWrappedObjectModel new 
+			model:  domainObject
 ]

@@ -1,11 +1,16 @@
 "
-History of code changes for a single method, grouped by target method reference.
+I track changes to a single method.
+
+Instance variables:
+- `methodReference` - the target method
+- `changes` - a {{gtClass:GtLSummarizerCodeChangesGroup}} of changes
 "
 Class {
 	#name : #GtLMethodChangeHistory,
 	#superclass : #GtLEntityChangeHistory,
 	#instVars : [
-		'methodReference'
+		'methodReference',
+		'changes'
 	],
 	#category : #'Gt4LlmCore-Summaries'
 }
@@ -13,27 +18,6 @@ Class {
 { #category : #accessing }
 GtLMethodChangeHistory >> addChange: aCodeChange [
 	self changes add: aCodeChange
-]
-
-{ #category : #'gt-extensions' }
-GtLMethodChangeHistory >> asDiffElement [
-	| previousContent newContent change styler |
-	previousContent := self initialChange changeResult oldStateMethodSourceCode.
-	newContent := self latestChange changeResult newStateMethodSourceCode.
-
-	change := GtDiffBuilder
-			computeDifferencesFrom: previousContent
-			to: newContent
-			using: GtSmaCCDiffSplitter forPharo.
-	styler := GtCodeDiffRBTextStyler new.
-	
-	^ GtEpiceaDiffElementWithLabelStencil new
-		fromLabelText: 'First Change:';
-		toLabelText: 'Last Change:';
-		ombuEntry: self;
-		shouldHideDiff: previousContent = newContent;
-		change: change;
-		styler: styler
 ]
 
 { #category : #accessing }
@@ -46,23 +30,70 @@ GtLMethodChangeHistory >> changes: aCollection [
 	changes := aCollection
 ]
 
-{ #category : #'gt-extensions' }
-GtLMethodChangeHistory >> gtCodeChangesFor: aView [
-	<gtView>
-	^ aView forward
-		title: 'Code changes';
-		priority: 10;
-		object: [ self changes ];
-		view: #gtCodeChangesFor:
+{ #category : #accessing }
+GtLMethodChangeHistory >> currentMethodSourceCode [
+	^self methodReference existsInImage
+		ifTrue: [ self methodReference  compiledMethod sourceCode ] 
+		ifFalse: ['']
 ]
 
 { #category : #'gt-extensions' }
+GtLMethodChangeHistory >> gtActionBrowseEntryFor: anAction [
+	<gtAction>
+	
+	self methodReference existsInImage ifFalse: [ ^ anAction noAction ].
+	
+	^ anAction button
+			label: 'Browse';
+			priority: 3;
+			tooltip: 'Browse current version of this method';
+			action: [ :aButton | 
+				aButton phlow spawnTool: (GtMethodCoderTool compiledMethod:
+						self methodReference compiledMethod)  ] 
+]
+
+{ #category : #'gt-extensions' }
+GtLMethodChangeHistory >> gtClassCoderViewFor: aView [
+	<gtView>
+	<gtCodeChangeView>
+	
+	self methodReference existsInImage ifFalse: [ ^ aView empty ].
+	
+	^ aView forward
+		title: 'Current coder';
+		priority: 25;
+		object: [ self methodReference ];
+		view: #gtClassCoderViewFor:
+]
+
+{ #category : #'gt - extensions' }
 GtLMethodChangeHistory >> gtDiffFor: aView [
 	<gtView>
-	^ aView explicit
+	^ aView diff
 		title: 'Diff';
 		priority: 5;
-		stencil: [ self asDiffElement ]
+		from: [ 
+			self initialChange changeResult oldStateMethodSourceCode ];
+		to: [ 
+			self latestChange changeResult newStateMethodSourceCode ];
+		fromLabel: 'First Change:';
+		toLabel: 'Last Change:';
+		styler: GtCodeDiffRBTextStyler new
+]
+
+{ #category : #'gt - extensions' }
+GtLMethodChangeHistory >> gtDiffWithCurrentVersionFor: aView [
+	<gtView>
+	^ aView diff
+		title: 'Diff (with current)';
+		priority: 10;
+		from: [ 
+			self currentMethodSourceCode ];
+		to: [ 
+			self latestChange changeResult newStateMethodSourceCode ];
+		fromLabel: 'Image content:';
+		toLabel: 'Change content:';
+		styler: GtCodeDiffRBTextStyler new
 ]
 
 { #category : #printing }
@@ -70,7 +101,7 @@ GtLMethodChangeHistory >> gtDisplayOn: aStream [
 	aStream nextPutAll: self methodReference methodSignature
 ]
 
-{ #category : #printing }
+{ #category : #'gt-extensions' }
 GtLMethodChangeHistory >> gtViewChangeDescriptionElement [
 	^ self latestChange gtViewChangeDescriptionElement
 ]

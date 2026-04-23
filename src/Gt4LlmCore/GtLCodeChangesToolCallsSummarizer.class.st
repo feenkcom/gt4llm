@@ -30,7 +30,7 @@ GtLCodeChangesToolCallsSummarizer >> addCodeChangesFromModel: aModel toolCall: a
 	(aModel isKindOf: GtLClassesCreationResult) ifTrue: [
 		^ self 
 			addCodeChangesLabeled: 'Created class/trait' 
-			from: aModel classes 
+			from: aModel successfulClassCreationResults 
 			toolCall: aToolCall ].
 		
 	(aModel isKindOf: GtLClassModificationResult) ifTrue: [
@@ -58,19 +58,88 @@ GtLCodeChangesToolCallsSummarizer >> addCodeChangesFromModel: aModel toolCall: a
 				toolCall: aToolCall } ].
 		
 	(aModel isKindOf: GtLMethodsCompilationResult) ifTrue: [
-		^ self addCodeChangesLabeled: 'Compiled method' from: aModel methods toolCall: aToolCall ].
+		^ self 
+				addCodeChangesLabeled: 'Compiled method' 
+				from: aModel successfulMethodCompilationResults 
+				toolCall: aToolCall ].
 		
 	(aModel isKindOf: GtLMethodRemovalResult) ifTrue: [
-		^ self addCodeChanges: { self codeChangeEntryLabel: 'Removed method' object: aModel toolCall: aToolCall } ].
+		^ self 
+			addCodeChanges: { self codeChangeEntryLabel: 'Removed method' 
+			object: aModel 
+			toolCall: aToolCall } ].
 		
 	(aModel isKindOf: GtLMethodsRemovalResult) ifTrue: [
-		^ self addCodeChangesLabeled: 'Removed method' from: aModel methods toolCall: aToolCall ]
+		^ self 
+				addCodeChangesLabeled: 'Removed method' 
+				from: aModel successfulMethodsRemovalResult 
+				toolCall: aToolCall ]
 ]
 
 { #category : #private }
 GtLCodeChangesToolCallsSummarizer >> addCodeChangesLabeled: aLabel from: aCollection toolCall: aToolCall [
 	self addCodeChanges: (aCollection collect: [ :each |
 		self codeChangeEntryLabel: aLabel object: each toolCall: aToolCall ])
+]
+
+{ #category : #accessing }
+GtLCodeChangesToolCallsSummarizer >> classChangeHistories [
+	"Group code changes by class name, including both method and class-level changes"
+	| historiesByClassName methodHistoriesByReference group |
+	historiesByClassName := Dictionary new.
+	methodHistoriesByReference := Dictionary new.
+	
+	"Process method changes"
+	self methodChangeResults do: [ :each |
+		| changeResult methodReference methodHistory className classHistory |
+		changeResult := each changeResult.
+		methodReference := changeResult targetMethodReference.
+		className := methodReference methodClassName.
+		
+		"Get or create class history"
+		classHistory := historiesByClassName
+			at: className
+			ifAbsentPut: [ GtLClassChangeHistory new
+				targetClassName: className;
+				yourself ].
+		
+		"Get or create method history within the class"
+		methodHistory := methodHistoriesByReference
+			at: methodReference
+			ifAbsentPut: [ 
+				| newHistory |
+				newHistory := GtLMethodChangeHistory new
+					methodReference: methodReference;
+					yourself.
+				classHistory addMethodHistory: newHistory.
+				newHistory ].
+		methodHistory addChange: each ].
+	
+	"Process class definition changes (additions, modifications, removals) and comment changes"
+	(self classChangeResults) 
+		do: [ :each |
+			| changeResult className classHistory |
+			changeResult := each changeResult.
+			className := changeResult targetClassName asString.
+		
+			"Get or create class history"
+			classHistory := historiesByClassName
+				at: className
+				ifAbsentPut: [ GtLClassChangeHistory new
+					targetClassName: className;
+					yourself ].
+		
+			"Add as a definition change"
+			classHistory addBehaviourChange: each ].
+	
+	group := GtLClassChangeHistoriesGroup new.
+	historiesByClassName valuesDo: [ :each | group addHistory: each ].
+	^ group
+]
+
+{ #category : #accessing }
+GtLCodeChangesToolCallsSummarizer >> classChangeResults [
+	^ self codeChanges select: [ :each | each isClassChangeResult ]
 ]
 
 { #category : #private }
@@ -91,7 +160,7 @@ GtLCodeChangesToolCallsSummarizer >> codeChanges [
 GtLCodeChangesToolCallsSummarizer >> gtChangesByToolFor: aView [
 	<gtView>
 	^ aView columnedList
-		title: 'Changes by tool';
+		title: 'By tool';
 		priority: 40;
 		items: [ (self codeChanges groupedBy: [ :each | each toolCall name ]) associations ];
 		column: 'Tool' text: [ :each | each key asString ];
@@ -99,10 +168,25 @@ GtLCodeChangesToolCallsSummarizer >> gtChangesByToolFor: aView [
 		send: [ :each | each value collect: [ :entry | entry changeResult ] ]
 ]
 
+{ #category : #views }
+GtLCodeChangesToolCallsSummarizer >> gtClassChangeHistoriesFor: aView [
+	<gtView>
+	<gtLlmView>
+	^ aView forward 	
+		title: 'By class';
+		priority: 15;
+		object: [ self classChangeHistories ];
+		view: #gtViewHistoriesFor:;
+		actionButtonIcon: BrGlamorousVectorIcons inspect 
+			tooltip: 'Inspect summarizer'
+			action: [ :aButton |
+				aButton phlow spawnObject: self ];
+		actionUpdateButton
+]
+
 { #category : #'gt-extensions' }
 GtLCodeChangesToolCallsSummarizer >> gtCodeChangesFor: aView [
 	<gtView>
-	<gtLlmView>
 	^ aView forward
 		title: 'Code changes';
 		priority: 21.1;
@@ -118,9 +202,8 @@ GtLCodeChangesToolCallsSummarizer >> gtCodeChangesFor: aView [
 { #category : #'gt-extensions' }
 GtLCodeChangesToolCallsSummarizer >> gtMethodChangeHistoriesFor: aView [
 	<gtView>
-	<gtLlmView>
 	^ aView forward 	
-			title: 'Code changes by method';
+			title: 'By method';
 			priority: 10;
 			object: [ self methodChangeHistories ];
 			view: #gtViewHistoriesFor:;
@@ -146,7 +229,8 @@ GtLCodeChangesToolCallsSummarizer >> initialize [
 { #category : #initialization }
 GtLCodeChangesToolCallsSummarizer >> initializeWithMessages: aCollection [
 	super initializeWithMessages: aCollection.
-	relevantToolCalls := self toolCallsSelect: [ :each | self isCodeChangeToolCall: each ].
+	relevantToolCalls := self toolCallsSelect: [ :each | 
+		self isCodeChangeToolCall: each ].
 	self rebuildCodeChanges
 ]
 
@@ -160,7 +244,7 @@ GtLCodeChangesToolCallsSummarizer >> isCodeChangeToolCall: aToolCall [
 GtLCodeChangesToolCallsSummarizer >> methodChangeHistories [
 	| historiesByReference group |
 	historiesByReference := Dictionary new.
-	(self codeChanges select: #isMethodChangeResult) do: [ :each |
+	(self methodChangeResults) do: [ :each |
 		| changeResult methodReference history |
 		changeResult := each changeResult.
 		methodReference := changeResult targetMethodReference.
@@ -175,10 +259,16 @@ GtLCodeChangesToolCallsSummarizer >> methodChangeHistories [
 	^ group
 ]
 
+{ #category : #accessing }
+GtLCodeChangesToolCallsSummarizer >> methodChangeResults [
+	^ self codeChanges select: [ :each | each isMethodChangeResult ]
+]
+
 { #category : #private }
 GtLCodeChangesToolCallsSummarizer >> rebuildCodeChanges [
 	codeChanges := GtLSummarizerCodeChangesGroup new.
-	self relevantToolCalls do: [ :each | self addCodeChangesFrom: each ]
+	self relevantToolCalls do: [ :each | 
+		self addCodeChangesFrom: each ]
 ]
 
 { #category : #accessing }

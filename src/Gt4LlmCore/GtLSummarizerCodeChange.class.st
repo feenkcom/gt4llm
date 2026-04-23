@@ -80,6 +80,16 @@ GtLSummarizerCodeChange >> isClassChangeResult [
 ]
 
 { #category : #testing }
+GtLSummarizerCodeChange >> isClassCommentChangeResult [
+	^ self changeResult isClassCommentChangeResult
+]
+
+{ #category : #testing }
+GtLSummarizerCodeChange >> isClassDefinitionChangeResult [
+	^ self changeResult isClassDefinitionChangeResult
+]
+
+{ #category : #testing }
 GtLSummarizerCodeChange >> isMethodAdditionResult [
 	^ self changeResult isMethodAdditionResult
 ]

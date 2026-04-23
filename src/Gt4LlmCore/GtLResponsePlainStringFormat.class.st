@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLResponseStringFormat,
+	#name : #GtLResponsePlainStringFormat,
 	#superclass : #GtLResponseInvividualFormat,
 	#instVars : [
 		'schema'
@@ -8,13 +8,13 @@ Class {
 }
 
 { #category : #'instance creation' }
-GtLResponseStringFormat class >> named: aName [
+GtLResponsePlainStringFormat class >> named: aName [
 	^ self new 
 		name: aName
 ]
 
 { #category : #initialization }
-GtLResponseStringFormat >> initialize [
+GtLResponsePlainStringFormat >> initialize [
 	super initialize.
 	
 	schema := NeoJSONSchema new
@@ -25,15 +25,8 @@ GtLResponseStringFormat >> initialize [
 		}')
 ]
 
-{ #category : #'neo json' }
-GtLResponseStringFormat >> nextEntryFromNeoJsonReader: jsonReader [
-	| string |
-	string := super nextEntryFromNeoJsonReader: jsonReader.
-	^GtLString forString: string
-]
-
 { #category : #printing }
-GtLResponseStringFormat >> printOn: aStream [
+GtLResponsePlainStringFormat >> printOn: aStream [
 	super printOn: aStream.
 	
 	aStream parenthesize: [
@@ -43,11 +36,11 @@ GtLResponseStringFormat >> printOn: aStream [
 ]
 
 { #category : #accessing }
-GtLResponseStringFormat >> schema [
+GtLResponsePlainStringFormat >> schema [
 	^ schema
 ]
 
 { #category : #accessing }
-GtLResponseStringFormat >> type [
+GtLResponsePlainStringFormat >> type [
 	^ schema type
 ]

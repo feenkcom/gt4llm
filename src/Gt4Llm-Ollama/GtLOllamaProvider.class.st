@@ -60,7 +60,7 @@ GtLOllamaProvider >> clientGenerateModelResponse: anInputMessage messages: someM
 				ifTrue: [ anInputMessage formatDescriptionsJsonSchemaWithAllRequired ]
 				ifFalse: [ nil ])
 		andTools: anInputMessage tools
-		andInstructions: anInputMessage instructions
+		andInstructions: anInputMessage instructions instructionString
 ]
 
 { #category : #'as yet unclassified' }
@@ -166,7 +166,7 @@ GtLOllamaProvider >> modelName: aString [
 GtLOllamaProvider >> performToolCallsIn: result with: activeTools [
 	| toolMessages |
 
-	toolMessages := result toolCalls asArray
+	toolMessages := result toolCalls
 		withIndexCollect: [ :aToolCall :anIndex |
 			| toolMessage domainObject |
 			toolMessage := GtLToolMessage new
@@ -221,6 +221,19 @@ GtLOllamaProvider >> processNextMessage: anInputMessage [
 		result: result;
 		anotherProcessedMessage: anotherMessage;
 		outputMessage: outputMessage
+]
+
+{ #category : #accessing }
+GtLOllamaProvider >> reasoningEffort [
+	<return: #Symbol or: nil>
+
+	^ client reasoningEffort
+]
+
+{ #category : #accessing }
+GtLOllamaProvider >> reasoningEffort: aSymbol [
+
+	client reasoningEffort: aSymbol.
 ]
 
 { #category : #private }

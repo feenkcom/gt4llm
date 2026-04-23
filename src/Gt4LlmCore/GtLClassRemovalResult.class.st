@@ -5,8 +5,8 @@ Class {
 	#name : #GtLClassRemovalResult,
 	#superclass : #GtLClassChangeResult,
 	#instVars : [
-		'removedClassName',
-		'status'
+		'status',
+		'removedClass'
 	],
 	#category : #'Gt4LlmCore-Magritte Objects'
 }
@@ -25,9 +25,32 @@ GtLClassRemovalResult >> gtDetailsFor: aView [
 		send: [ :assoc | assoc value ]
 ]
 
+{ #category : #accessing }
+GtLClassRemovalResult >> gtDiffFor: aView [
+	<gtView>
+	<gtCodeChangeView>
+	^ aView diff
+		title: 'Diff';
+		priority: 5;
+		from: [ self originalDefinitionWithCommentString ];
+		to: [ '' ];
+		fromLabel: 'Old comment:';
+		toLabel: 'New comment:'
+]
+
 { #category : #views }
 GtLClassRemovalResult >> gtViewChangeIcon [
 	^ self class removalIcon
+]
+
+{ #category : #testing }
+GtLClassRemovalResult >> isClassDefinitionChangeResult [
+	^ true
+]
+
+{ #category : #testing }
+GtLClassRemovalResult >> isClassRemovalResult [
+	^ true
 ]
 
 { #category : #'llm views' }
@@ -35,6 +58,14 @@ GtLClassRemovalResult >> llmRawDataViewFor: aDataView [
 	<gtLlmDataView>
 	
 	^ aDataView magritteObject: [ self ]
+]
+
+{ #category : #accessing }
+GtLClassRemovalResult >> originalDefinitionWithCommentString [
+	^self removedClass 
+		ifNil: [ '' ]
+		ifNotNil: [ :each |
+			each asDefinitionWithCommentString ] 
 ]
 
 { #category : #printing }
@@ -47,13 +78,18 @@ GtLClassRemovalResult >> printOn: aStream [
 ]
 
 { #category : #accessing }
-GtLClassRemovalResult >> removedClassName [
-	^ removedClassName
+GtLClassRemovalResult >> removedClass [
+	^removedClass
 ]
 
 { #category : #accessing }
-GtLClassRemovalResult >> removedClassName: aString [
-	removedClassName := aString
+GtLClassRemovalResult >> removedClass: anObject [
+	removedClass := anObject
+]
+
+{ #category : #accessing }
+GtLClassRemovalResult >> removedClassName [
+	^ removedClass currentClassName
 ]
 
 { #category : #magritte }
@@ -87,4 +123,9 @@ GtLClassRemovalResult >> statusDescription [
 { #category : #accessing }
 GtLClassRemovalResult >> targetClassName [
 	^ self removedClassName
+]
+
+{ #category : #accessing }
+GtLClassRemovalResult >> updatedDefinitionWithCommentString [
+	^ ''
 ]

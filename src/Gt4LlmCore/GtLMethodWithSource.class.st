@@ -29,6 +29,15 @@ GtLMethodWithSource >> existsInImage [
 	^ self methodReference existsInImage
 ]
 
+{ #category : #views }
+GtLMethodWithSource >> gtActionBrowseEntryFor: anAction [
+	<gtAction>
+	
+	self methodReference existsInImage ifFalse: [ ^ anAction noAction ].
+	
+	^ self methodReference gtActionBrowseEntryFor: anAction
+]
+
 { #category : #'gt - extensions' }
 GtLMethodWithSource >> gtClassCoderViewFor: aView [
 	<gtView>
@@ -36,9 +45,23 @@ GtLMethodWithSource >> gtClassCoderViewFor: aView [
 	
 	self existsInImage ifFalse: [ ^ aView empty ].
 	^ aView explicit
-		title: 'Coder';
+		title: 'Current coder';
 		priority: 1;
 		stencil: [ (GtCoderElement forMethod: self compiledMethod) disablePlayPage ]
+]
+
+{ #category : #'gt - extensions' }
+GtLMethodWithSource >> gtDiffWithCurrentVersionFor: aView [
+	<gtView>
+	<gtCodeChangeView>
+	^ aView diff
+		title: 'Diff (with current)';
+		priority: 9;
+		from: [ self compiledMethod sourceCode ];
+		to: [ self sourceCode ];
+		fromLabel: 'Image content:';
+		toLabel: 'Method content:';
+		styler: GtCodeDiffRBTextStyler new
 ]
 
 { #category : #accessing }
@@ -51,7 +74,7 @@ GtLMethodWithSource >> gtViewPlainSourceCodeFor: aView [
 	<gtView>
 	^ aView forward
 		title: 'Plain source code';
-		priority: 40;
+		priority: 5;
 		object: [ sourceCode ];
 		view: #gtStringFor:
 ]
@@ -71,7 +94,9 @@ GtLMethodWithSource >> isClassSide [
 GtLMethodWithSource >> llmRawDataViewFor: aDataView [
 	<gtLlmDataView>
 	
-	^ aDataView magritteObject: [ self ]
+	^ aDataView magritteObject
+			title: 'Method Data';
+			object: [ self ]
 ]
 
 { #category : #accessing }

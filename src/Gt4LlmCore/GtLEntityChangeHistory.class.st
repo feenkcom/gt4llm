@@ -1,12 +1,15 @@
 "
-Abstract history of changes for a single entity.
+I am an abstract base class for tracking code change history of a single entity.
+
+Subclasses:
+- {{gtClass:GtLMethodChangeHistory}} - for methods
+- {{gtClass:GtLClassChangeHistory}} - for classes
+
+Subclasses must implement `#changes` returning a {{gtClass:GtLSummarizerCodeChangesGroup}}.
 "
 Class {
 	#name : #GtLEntityChangeHistory,
 	#superclass : #Object,
-	#instVars : [
-		'changes'
-	],
 	#category : #'Gt4LlmCore-Summaries'
 }
 
@@ -17,12 +20,18 @@ GtLEntityChangeHistory >> addChange: aCodeChange [
 
 { #category : #accessing }
 GtLEntityChangeHistory >> changes [
-	^ changes ifNil: [ changes := OrderedCollection new ]
+	"Return the collection of changes. Subclasses must implement."
+	^ self subclassResponsibility
 ]
 
-{ #category : #accessing }
-GtLEntityChangeHistory >> changes: aCollection [
-	changes := aCollection
+{ #category : #views }
+GtLEntityChangeHistory >> gtCodeChangesFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Code changes';
+		priority: 20;
+		object: [ self changes ];
+		view: #gtCodeChangesFor:
 ]
 
 { #category : #accessing }
