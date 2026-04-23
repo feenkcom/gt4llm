@@ -2,7 +2,8 @@ Class {
 	#name : #GtLObjectStorage,
 	#superclass : #Object,
 	#instVars : [
-		'objectsByUUID'
+		'objectsByUUID',
+		'announcer'
 	],
 	#category : #'Gt4LlmCore-Object Storage'
 }
@@ -23,13 +24,21 @@ GtLObjectStorage >> addNewObject: anObject reason: aReason [
 			value: anObject
 			reason: aReason.
 	objectsByUUID at: newUUID put: storedObject.
+	
+	self notifyObjectAdded: storedObject.
 
 	^ newUUID asString36
+]
+
+{ #category : #accessing }
+GtLObjectStorage >> announcer [
+	^announcer
 ]
 
 { #category : #'api - cleaning' }
 GtLObjectStorage >> clearCache [
 	objectsByUUID := Dictionary new.
+	self notifyStorageContentChanges.
 ]
 
 { #category : #utils }
@@ -53,6 +62,7 @@ GtLObjectStorage >> gtObjectsByUUIDFor: aView [
 		column: 'Key' text: [ :each | each id asString36 ] width: 200;
 		column: 'Value' text: [ :each | each value ];
 		column: 'Reason' text: [ :each | each reason asReasonString ];
+		updateWhen: GtLObjectStorageContentChangeAnnouncement in: self announcer;
 		send: [ :each | each value ]
 ]
 
@@ -67,7 +77,21 @@ GtLObjectStorage >> includesObjectWithId: anObjectId [
 GtLObjectStorage >> initialize [
 	super initialize.
 	
+	announcer := Announcer new.
 	self clearCache.
+]
+
+{ #category : #notifications }
+GtLObjectStorage >> notifyObjectAdded: aStoredObject [
+	announcer announce: (GtLObjectStorageObjectAddedAnnouncement new
+		objectStorage: self;
+		storedObject: aStoredObject).
+]
+
+{ #category : #notifications }
+GtLObjectStorage >> notifyStorageContentChanges [
+	announcer announce: (GtLObjectStorageContentChangeAnnouncement new
+		objectStorage: self).
 ]
 
 { #category : #accessing }
