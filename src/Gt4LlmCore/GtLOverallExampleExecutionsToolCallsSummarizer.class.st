@@ -70,7 +70,11 @@ GtLOverallExampleExecutionsToolCallsSummarizer >> gtOverallStatusSummaryFor: aVi
 		items: [ self overallSummaryEntries ];
 		column: 'Label' text: [ :each | each at: #label ];
 		column: 'Value' text: [ :each | (each at: #value) asString ] width: 100;
-		send: [ :each | (each at: #object) value ]
+		send: [ :each | (each at: #object) value ];
+		actionButtonIcon: BrGlamorousVectorIcons inspect 
+			tooltip: 'Inspect examples summary'
+			action: [ :aButton |
+				aButton phlow spawnObject: self ]
 ]
 
 { #category : #initialization }

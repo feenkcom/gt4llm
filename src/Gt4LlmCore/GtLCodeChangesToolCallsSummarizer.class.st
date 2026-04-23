@@ -172,16 +172,16 @@ GtLCodeChangesToolCallsSummarizer >> gtChangesByToolFor: aView [
 GtLCodeChangesToolCallsSummarizer >> gtClassChangeHistoriesFor: aView [
 	<gtView>
 	<gtLlmView>
+	
 	^ aView forward 	
-		title: 'By class';
+		title: 'Changes by class';
 		priority: 15;
 		object: [ self classChangeHistories ];
 		view: #gtViewHistoriesFor:;
 		actionButtonIcon: BrGlamorousVectorIcons inspect 
 			tooltip: 'Inspect summarizer'
 			action: [ :aButton |
-				aButton phlow spawnObject: self ];
-		actionUpdateButton
+				aButton phlow spawnObject: self ]
 ]
 
 { #category : #'gt-extensions' }
@@ -203,15 +203,14 @@ GtLCodeChangesToolCallsSummarizer >> gtCodeChangesFor: aView [
 GtLCodeChangesToolCallsSummarizer >> gtMethodChangeHistoriesFor: aView [
 	<gtView>
 	^ aView forward 	
-			title: 'By method';
+			title: 'Changes by method';
 			priority: 10;
 			object: [ self methodChangeHistories ];
 			view: #gtViewHistoriesFor:;
 		actionButtonIcon: BrGlamorousVectorIcons inspect 
 			tooltip: 'Inspect summarizer'
 			action: [ :aButton |
-				aButton phlow spawnObject: self ];
-		actionUpdateButton
+				aButton phlow spawnObject: self ]
 ]
 
 { #category : #testing }
