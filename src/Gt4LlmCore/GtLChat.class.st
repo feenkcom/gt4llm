@@ -458,7 +458,11 @@ GtLChat >> gtViewObjectStorageFor: aView [
 		title: 'Object storage';
 		priority: 40;
 		object: [ objectStorage ];
-		view: #gtObjectsByUUIDFor:
+		view: #gtObjectsByUUIDFor:;
+		actionButtonIcon: BrGlamorousVectorIcons inspect 
+			tooltip: 'Inspect storage'
+			action: [ :aButton |
+				aButton phlow spawnObject: objectStorage ]
 ]
 
 { #category : #'gt - extensions' }

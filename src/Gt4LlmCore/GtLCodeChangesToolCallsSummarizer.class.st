@@ -172,6 +172,7 @@ GtLCodeChangesToolCallsSummarizer >> gtChangesByToolFor: aView [
 GtLCodeChangesToolCallsSummarizer >> gtClassChangeHistoriesFor: aView [
 	<gtView>
 	<gtLlmView>
+	
 	^ aView forward 	
 		title: 'Changes by class';
 		priority: 15;
