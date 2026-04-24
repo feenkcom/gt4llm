@@ -7266,7 +7266,7 @@ serializationClass
 
 !		Instance methods for 'GtOllamaGenerateResponseClient'
 
-category: 'as yet unclassified'
+category: 'accessing'
 method: GtOllamaGenerateResponseClient
 entity
 	| entity |
@@ -7392,7 +7392,7 @@ request
 		ifFalse: [ self client post: '/generate' withEntity: self entity ]
 %
 
-category: 'as yet unclassified'
+category: 'accessing'
 method: GtOllamaGenerateResponseClient
 serializationClass
 	^ GtOllamaResponseMessage
@@ -11748,6 +11748,12 @@ createdAt: anObject
 
 category: 'accessing'
 method: GtOpenAIFile
+deleteFile
+	^ client deleteFile: self id
+%
+
+category: 'accessing'
+method: GtOpenAIFile
 filename
 	^ filename
 %
@@ -14582,7 +14588,7 @@ gtItemsFor: aView
 		title: 'Tools';
 		items: [ items ];
 		column: 'Name' text: [ :each | each name ];
-		column: 'Parameters' text: [ :each | ', ' join: each parameters ];
+		column: 'Parameters' text: [ :each | each parametersDescription ];
 		column: 'Description' text: [ :each | each description ]
 %
 
@@ -15158,7 +15164,7 @@ new
 category: 'accessing'
 method: GtLlmInstructionList
 addItem: anItem
-	items add: (anItem asInstructionPiece parent: self)
+	items add: (anItem asGtLInstructionPiece parent: self)
 %
 
 category: 'accessing'
@@ -19321,6 +19327,16 @@ gtModelsFor: aView
 		view: #gtViewModelsFor:
 %
 
+category: 'views'
+method: GtOpenAIClient
+gtUploadedFilesFor: aView
+	<gtView>
+	^ aView forward
+		title: 'Uploaded files';
+		object: [ self listFiles ];
+		view: #gtFilesFor:
+%
+
 category: 'accessing'
 method: GtOpenAIClient
 initialize
@@ -19947,24 +19963,6 @@ category: 'accessing'
 classmethod: GtOpenAIFilesGroup
 itemClass
 	^ GtOpenAIFile
-%
-
-!		Instance methods for 'GtOpenAIFilesGroup'
-
-category: 'accessing'
-method: GtOpenAIFilesGroup
-gtFilesFor: aView
-	<gtView>
-	^ aView columnedList
-		title: 'Files';
-		priority: 1;
-		items: [self items];
-		column: 'ID' text: #id;
-		column: 'Filename' text: #filename;
-		column: 'Size' text: #bytes weight: 0.5;
-		column: 'Created at' text: #createdAt weight: 0.5;
-		column: 'Purpose' text: #purpose weight: 0.5;
-		column: 'Status' text: #status weight: 0.5
 %
 
 ! Class implementation for 'GtOpenAIFineTuningCheckpointsGroup'
@@ -20718,12 +20716,6 @@ executeWait
 ! Class extensions for 'String'
 
 !		Instance methods for 'String'
-
-category: '*Gt4Llm'
-method: String
-asInstructionPiece
-	^ GtLlmInstructionString new string: self
-%
 
 category: '*Gt4Llm'
 method: String
