@@ -61,8 +61,7 @@ GtLClassDefinitionChangeHistory >> gtDiffWithCurrentVersionFor: aView [
 { #category : #'gt - extensions' }
 GtLClassDefinitionChangeHistory >> gtViewChangeDescriptionElement [
 	^ GtLClassDefinitionChangeDescriptionElement new
-		updateForChangeObject: self;
-		yourself
+		updateForChangeObject: self
 ]
 
 { #category : #'gt - extensions' }
