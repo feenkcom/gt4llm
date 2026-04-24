@@ -7,14 +7,17 @@ Class {
 	#category : 'Gt4LlmCore-Tools'
 }
 
-{ #category : #private }
+{ #category : #'tool execution' }
 GtLMagritteToolForMethodCompilation >> compileMethodFromRequest: request [
-	| extractor selector compiledMethod newMethodWithSource |
+	| extractor selector compiledMethod newMethodWithSource classDescription |
 	
 	extractor := GtLMethodCompilationDataExtractor new.
 	extractor request: request.
 	
 	extractor extractAllIfError: [ :error | ^ error ].
+	
+	"Capture class description before compilation"
+	classDescription := GtLClassDefinitionDescription fromClass: extractor targetClass.
 	
 	selector := [ [ extractor targetClass 
 			compile: extractor sourceCode classified: extractor protocol ]
@@ -39,6 +42,7 @@ GtLMagritteToolForMethodCompilation >> compileMethodFromRequest: request [
 	newMethodWithSource := GtLMethodWithSource fromCompiledMethod: compiledMethod.
 	
 	^ GtLMethodCompilationResult new
+		targetClass: classDescription;
 		oldMethod: extractor oldMethodWithSource;
 		newMethod: newMethodWithSource;
 		status: 'compiled';

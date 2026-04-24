@@ -62,9 +62,10 @@ GtLMagritteToolForMethodsRemoval >> privatePerformToolCall: aToolCall inContext:
 GtLMagritteToolForMethodsRemoval >> removeMethodFromDescriptor: methodDescriptor [
 	^ methodDescriptor
 		compiledMethodIfPresent: [ :compiledMethod |
-			| methodWithSource behavior |
+			| methodWithSource behavior classDescription |
 			methodWithSource := GtLMethodWithSource fromCompiledMethod: compiledMethod.
 			behavior := compiledMethod methodClass.
+			classDescription := GtLClassDefinitionDescription fromClass: behavior.
 			[ behavior removeSelector: compiledMethod selector ]
 				on: Error
 				do: [ :ex |
@@ -72,6 +73,7 @@ GtLMagritteToolForMethodsRemoval >> removeMethodFromDescriptor: methodDescriptor
 						freeze: ex;
 						errorReason: 'Error while removing method' ].
 			GtLMethodRemovalResult new
+				targetClass: classDescription;
 				removedMethod: methodWithSource;
 				status: 'removed';
 				yourself ]
