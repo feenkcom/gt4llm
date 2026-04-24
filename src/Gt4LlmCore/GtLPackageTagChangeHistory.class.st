@@ -58,7 +58,12 @@ GtLPackageTagChangeHistory >> gtViewChangeDescriptionElement [
 
 { #category : #views }
 GtLPackageTagChangeHistory >> gtViewChangeEditTime [
-	^ nil
+	"Return the latest edit time across all class changes"
+	| times |
+	times := OrderedCollection new.
+	self classHistories items do: [ :each | 
+		each gtViewChangeEditTime ifNotNil: [ :t | times add: t ] ].
+	^ times ifEmpty: [ nil ] ifNotEmpty: [ times max ]
 ]
 
 { #category : #views }
