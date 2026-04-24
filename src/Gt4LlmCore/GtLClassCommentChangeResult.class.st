@@ -44,8 +44,7 @@ GtLClassCommentChangeResult >> gtDiffFor: aView [
 { #category : #'gt - extensions' }
 GtLClassCommentChangeResult >> gtViewChangeDescriptionElement [
 	^ GtLClassCommentChangeDescriptionElement new
-		updateForChangeObject: self;
-		yourself
+		updateForChangeObject: self
 ]
 
 { #category : #views }

@@ -61,13 +61,8 @@ GtLPackageChangeHistory >> gtDisplayOn: aStream [
 
 { #category : #views }
 GtLPackageChangeHistory >> gtViewChangeDescriptionElement [
-	^ BlTextElement new 
-		padding: (BlInsets all: 0);
-		constraintsDo: [ :c | 
-			c linear vertical alignCenter ];
-		text: (self targetPackageName asRopedText 
-			bold; 
-			glamorousRegularFont)
+	^ GtLLabeledChangeDescriptionElement new
+			updateForString: self targetPackageName
 ]
 
 { #category : #views }

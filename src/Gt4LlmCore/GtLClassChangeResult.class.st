@@ -27,8 +27,7 @@ GtLClassChangeResult >> affectedPackageTagName [
 { #category : #'gt - extensions' }
 GtLClassChangeResult >> gtViewChangeDescriptionElement [
 	^ GtLClassDefinitionChangeDescriptionElement new
-		updateForChangeObject: self;
-		yourself
+		updateForChangeObject: self
 ]
 
 { #category : #testing }

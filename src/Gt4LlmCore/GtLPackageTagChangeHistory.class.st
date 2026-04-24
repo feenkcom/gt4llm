@@ -52,9 +52,8 @@ GtLPackageTagChangeHistory >> gtDisplayOn: aStream [
 
 { #category : #views }
 GtLPackageTagChangeHistory >> gtViewChangeDescriptionElement [
-	^ BrLabel new
-		aptitude: BrGlamorousLabelAptitude;
-		text: self targetPackageTagName
+	^ GtLLabeledChangeDescriptionElement new
+			updateForString: self targetPackageTagName
 ]
 
 { #category : #views }
