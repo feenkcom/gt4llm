@@ -4,7 +4,7 @@ Magritte-based tool for finding method references (senders) in a GtRBNamespace m
 Class {
 	#name : #GtLRefactoringToolForMethodReferences,
 	#superclass : #GtLAbstractRefactoringMagritteTool,
-	#category : 'Gt4LlmCore-Tools'
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #'llm-generated' }

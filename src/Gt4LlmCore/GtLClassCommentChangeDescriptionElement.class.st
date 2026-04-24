@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'classNameLabel'
 	],
-	#category : 'Gt4LlmCore-Summaries'
+	#category : #'Gt4LlmCore-Summaries'
 }
 
 { #category : #initialization }
@@ -26,5 +26,5 @@ GtLClassCommentChangeDescriptionElement >> initialize [
 { #category : #updating }
 GtLClassCommentChangeDescriptionElement >> updateForChangeObject: aChangeResult [
 	classNameLabel text: (aChangeResult targetClassName)
-		asRopedText bold.
+		asRopedText "bold".
 ]

@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLRefactoringToolForClassSubclassesExamples,
 	#superclass : #GtLAbstractRefactoringMagritteToolExamples,
-	#category : 'Gt4LlmCore-Examples-Tools'
+	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #examples }

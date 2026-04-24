@@ -4,7 +4,7 @@ Examples for GtLObjectValueResult testing serialization and data views.
 Class {
 	#name : #GtLObjectValueResultExamples,
 	#superclass : #GtLDomainObjectExamples,
-	#category : 'Gt4LlmCore-Examples-Domain Objects'
+	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #assertions }

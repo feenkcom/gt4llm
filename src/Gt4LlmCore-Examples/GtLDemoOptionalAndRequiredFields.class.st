@@ -6,7 +6,7 @@ Class {
 		'requiedFiel',
 		'defaultField'
 	],
-	#category : 'Gt4LlmCore-Examples-Magritte'
+	#category : #'Gt4LlmCore-Examples-Magritte'
 }
 
 { #category : #'magritte-description' }

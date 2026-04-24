@@ -4,7 +4,7 @@ Examples for GtLClassesCreationResult domain object.
 Class {
 	#name : #GtLClassesCreationResultExamples,
 	#superclass : #GtLDomainObjectExamples,
-	#category : 'Gt4LlmCore-Examples-Domain Objects'
+	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #'examples - support' }
@@ -179,6 +179,38 @@ GtLClassesCreationResultExamples >> creationResultWithMultipleClasses [
 	self assert: result classes first currentClassName equals: 'SampleCreatedClass'.
 	self assert: result classes second currentClassName equals: 'AnotherCreatedClass'.
 	
+	^ result
+]
+
+{ #category : #'gt-examples' }
+GtLClassesCreationResultExamples >> creationResultWithMultiplePackages [
+	<gtExample>
+	| result |
+	result := GtLClassesCreationResult new
+		classes: {
+			GtLClassModificationResult new
+				originalClass: nil;
+				updatedClass: (GtLClassDefinitionDescription new
+					currentClassName: 'SampleCreatedClass';
+					superclassName: 'Object';
+					comment: 'A sample class';
+					packageName: 'SamplePackage';
+					instanceSlotNames: #('slot1');
+					classSlotNames: #();
+					classVariableNames: #();
+					traitCompositionString: '{}';
+					yourself);
+				yourself.
+			GtLCouldNotCreateClassDomainObject new
+				targetClassName: 'FailedTrait';
+				packageName: 'TraitsPackage';
+				yourself };
+		yourself.
+
+	self assert: result classes size equals: 2.
+	self assert: result classes first packageName equals: 'SamplePackage'.
+	self assert: result classes second packageName equals: 'TraitsPackage'.
+
 	^ result
 ]
 

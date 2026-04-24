@@ -9,7 +9,7 @@ Class {
 		'value',
 		'reason'
 	],
-	#category : 'Gt4LlmCore-Object Storage'
+	#category : #'Gt4LlmCore-Object Storage'
 }
 
 { #category : #'instance creation' }

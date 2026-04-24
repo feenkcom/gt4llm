@@ -4,7 +4,7 @@ Request for creating a shell snippet.
 Class {
 	#name : #GtLLepiterShellSnippetCreationRequest,
 	#superclass : #GtLLepiterTextualSnippetCreationRequest,
-	#category : 'Gt4LlmCore-Magritte Objects'
+	#category : #'Gt4LlmCore-Magritte Objects'
 }
 
 { #category : #'json schema' }

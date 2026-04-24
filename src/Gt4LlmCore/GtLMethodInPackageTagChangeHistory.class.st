@@ -15,7 +15,7 @@ Class {
 		'targetPackageName',
 		'targetPackageTagName'
 	],
-	#category : 'Gt4LlmCore-Summaries'
+	#category : #'Gt4LlmCore-Summaries'
 }
 
 { #category : #testing }
