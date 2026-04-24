@@ -10,11 +10,47 @@ Class {
 	#category : 'Gt4LlmCore-Examples-Summarizers'
 }
 
+{ #category : #'examples - package histories' }
+GtLCodeChangesToolCallsSummarizerExamples >> classInPackageHistory [
+	<gtExample>
+	| packageHistory classHistory |
+	
+	packageHistory := self packageHistory.
+	
+	classHistory := packageHistory classHistories items first.
+	
+	self assert: classHistory class equals: GtLClassInPackageChangeHistory.
+	self assert: classHistory targetClassName equals: 'GtLTemporarySummarizerExampleClass'.
+	self assert: classHistory targetPackageName equals: 'Gt4LlmCore-Examples'.
+	self assert: classHistory behaviourChanges size equals: 2.
+	self assert: classHistory isInitialDefinitionChangeAddition.
+	self assert: classHistory isLatestDefinitionChangeRemoval.
+	self assert: classHistory hasNoEffect.
+	
+	^ classHistory
+]
+
 { #category : #private }
 GtLCodeChangesToolCallsSummarizerExamples >> cleanupCreatedClasses [
 	createdClasses ifNil: [ ^ self ].
 	createdClasses do: [ :eachClassName | self removeClassNamedIfPresent: eachClassName ].
 	createdClasses removeAll
+]
+
+{ #category : #'examples - package histories' }
+GtLCodeChangesToolCallsSummarizerExamples >> emptyPackageChangeHistory [
+	<gtExample>
+	| history |
+	
+	history := GtLPackageChangeHistory new.
+	history targetPackageName: 'TestPackage'.
+	
+	self assert: history targetPackageName equals: 'TestPackage'.
+	self assert: history classHistories isEmpty.
+	self assert: history gtViewChangesCount equals: 0.
+	self assert: history hasNoEffect.
+	
+	^ history
 ]
 
 { #category : #initialization }
@@ -72,6 +108,35 @@ GtLCodeChangesToolCallsSummarizerExamples >> messagesGroupWithExecutedClassCreat
 	^ group
 ]
 
+{ #category : #'examples - package move' }
+GtLCodeChangesToolCallsSummarizerExamples >> messagesGroupWithExecutedClassPackageMove [
+	<gtExample>
+	<after: #cleanupCreatedClasses>
+	| group className createToolCall moveToolCall summarizer |
+	
+	group := GtLMessagesGroup new.
+	className := 'GtLTemporarySummarizerPackageMoveClass'.
+	self removeClassNamedIfPresent: className.
+	
+	"Create class in package A"
+	createToolCall := self performTrackedClassCreationNamed: className.
+	group add: (self toolMessageFrom: createToolCall).
+	
+	"Move class to package B"
+	moveToolCall := self performClassPackageChangeFor: className toPackage: 'Gt4LlmCore-Examples-Temp'.
+	group add: (self toolMessageFrom: moveToolCall).
+	
+	summarizer := group messageSummarizers 
+		detect: [ :each | each class = GtLCodeChangesToolCallsSummarizer ].
+	
+	self assert: summarizer codeChanges size equals: 2.
+	
+	"Clean up"
+	self removeClassNamedIfPresent: className.
+	
+	^ group
+]
+
 { #category : #examples }
 GtLCodeChangesToolCallsSummarizerExamples >> messagesGroupWithExecutedMethodCompilation [
 	<gtExample>
@@ -115,6 +180,153 @@ GtLCodeChangesToolCallsSummarizerExamples >> messagesGroupWithExecutedMethodComp
 	self assert: summarizer codeChanges size equals: 2.
 	
 	^ group
+]
+
+{ #category : #'examples - builder' }
+GtLCodeChangesToolCallsSummarizerExamples >> packageChangeHistoriesBuilder [
+	<gtExample>
+	| builder |
+	
+	builder := GtLPackageChangeHistoriesBuilder forCodeChanges: GtLSummarizerCodeChangesGroup new.
+	
+	self assert: builder codeChanges isEmpty.
+	
+	^ builder
+]
+
+{ #category : #'examples - builder' }
+GtLCodeChangesToolCallsSummarizerExamples >> packageChangeHistoriesBuilderWithChanges [
+	<gtExample>
+	<after: #cleanupCreatedClasses>
+	| group summarizer builder packageHistories |
+	
+	group := self messagesGroupWithExecutedClassCreationAndRemoval.
+	summarizer := group messageSummarizers 
+		detect: [ :each | each class = GtLCodeChangesToolCallsSummarizer ].
+	
+	builder := GtLPackageChangeHistoriesBuilder forCodeChanges: summarizer codeChanges.
+	
+	self assert: builder codeChanges isNotEmpty.
+	
+	packageHistories := builder buildHistory.
+	
+	self assert: packageHistories isNotEmpty.
+	self assert: packageHistories size equals: 1.
+	
+	^ builder
+]
+
+{ #category : #'examples - package histories' }
+GtLCodeChangesToolCallsSummarizerExamples >> packageChangeHistoriesForClassCreationAndRemoval [
+	<gtExample>
+	<after: #cleanupCreatedClasses>
+	| group summarizer packageHistories classHistory |
+	
+	group := self messagesGroupWithExecutedClassCreationAndRemoval.
+	summarizer := group messageSummarizers 
+		detect: [ :each | each class = GtLCodeChangesToolCallsSummarizer ].
+	
+	packageHistories := summarizer packageChangeHistories.
+	
+	self assert: packageHistories isNotEmpty.
+	
+	"Find the package containing the temporary class"
+	classHistory := packageHistories classHistories items 
+		detect: [ :ch | ch targetClassName = 'GtLTemporarySummarizerExampleClass' ] 
+		ifNone: [ nil ].
+	self assert: classHistory isNotNil.
+	self assert: classHistory hasNoEffect description: 'Class was created and then removed, so it should have no effect'.
+	
+	^ packageHistories
+]
+
+{ #category : #'examples - package move' }
+GtLCodeChangesToolCallsSummarizerExamples >> packageChangeHistoriesForClassPackageMove [
+	<gtExample>
+	<after: #cleanupCreatedClasses>
+	| group summarizer packageHistories sourcePackageHistory destPackageHistory sourceClassHistory destClassHistory |
+	
+	group := self messagesGroupWithExecutedClassPackageMove.
+	summarizer := group messageSummarizers 
+		detect: [ :each | each class = GtLCodeChangesToolCallsSummarizer ].
+	
+	packageHistories := summarizer packageChangeHistories.
+	
+	"Should have 2 packages: source and destination"
+	self assert: packageHistories size equals: 2.
+	
+	"Find source package (Gt4LlmCore-Examples)"
+	sourcePackageHistory := packageHistories items 
+		detect: [ :ph | ph targetPackageName = 'Gt4LlmCore-Examples' ]
+		ifNone: [ nil ].
+	self assert: sourcePackageHistory notNil.
+	
+	"Find destination package (Gt4LlmCore-Examples-Temp)"
+	destPackageHistory := packageHistories items 
+		detect: [ :ph | ph targetPackageName = 'Gt4LlmCore-Examples-Temp' ]
+		ifNone: [ nil ].
+	self assert: destPackageHistory notNil.
+	
+	"Source package should have the class with hasNoEffect (created then moved out)"
+	sourceClassHistory := sourcePackageHistory classHistories items first.
+	self assert: sourceClassHistory isInitialDefinitionChangeAddition description: 'Class was initially added to source package'.
+	self assert: sourceClassHistory isLatestDefinitionChangeRemoval description: 'Class was moved out of source package'.
+	self assert: sourceClassHistory hasNoEffect description: 'Net effect on source package is zero (added then moved out)'.
+	
+	"Destination package should have the class that was moved in"
+	destClassHistory := destPackageHistory classHistories items first.
+	self assert: destClassHistory isInitialDefinitionChangeAddition description: 'Class was moved into destination package'.
+	self assert: destClassHistory isLatestDefinitionChangeRemoval not description: 'Class is still in destination package'.
+	
+	^ packageHistories
+]
+
+{ #category : #'examples - package histories' }
+GtLCodeChangesToolCallsSummarizerExamples >> packageChangeHistoriesForMethodCompilation [
+	<gtExample>
+	| group summarizer packageHistories |
+	
+	group := self messagesGroupWithExecutedMethodCompilation.
+	summarizer := group messageSummarizers 
+		detect: [ :each | each class = GtLCodeChangesToolCallsSummarizer ].
+	
+	packageHistories := summarizer packageChangeHistories.
+	
+	self assert: packageHistories isNotEmpty.
+	"Note: the method might be removed already so the package may be 'Unknown'"
+	self assert: packageHistories size equals: 1.
+	
+	^ packageHistories
+]
+
+{ #category : #'examples - package histories' }
+GtLCodeChangesToolCallsSummarizerExamples >> packageChangeHistoriesGroup [
+	<gtExample>
+	| group |
+	
+	group := GtLPackageChangeHistoriesGroup new.
+	
+	self assert: group isEmpty.
+	self assert: group items isEmpty.
+	
+	^ group
+]
+
+{ #category : #'examples - package histories' }
+GtLCodeChangesToolCallsSummarizerExamples >> packageHistory [
+	<gtExample>
+	| packageHistories packageHistory |
+	
+	packageHistories := self packageChangeHistoriesForClassCreationAndRemoval.
+	
+	packageHistory := packageHistories items first.
+	
+	self assert: packageHistory targetPackageName equals: 'Gt4LlmCore-Examples'.
+	self assert: packageHistory classHistories items size equals: 1.
+	self assert: packageHistory gtViewChangesCount equals: 2.
+	self assert: packageHistory hasNoEffect.
+	
+	^ packageHistory
 ]
 
 { #category : #utilities }

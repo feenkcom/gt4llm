@@ -76,7 +76,9 @@ GtLSerializedObjectValue >> initializeFromObject: anObject [
 		on: Error 
 		do: [ :e | 'Error printing object' ]).
 	self phlowViews: ((anObject gtViewsInCurrentContext
-		reject: [ :aView | aView isKindOf: GtPhlowEmptyView ])
+		reject: [ :aView | 
+			(aView isKindOf: GtPhlowEmptyView) or: [
+				(aView isKindOf: GtPhlowView) not	] ])
 		collect: [ :aView | GtLSerializedViewInfo fromView: aView ]) asArray.
 	self allInstanceSlots: (anObject class allSlots collect: [ :aSlot |
 		GtLSerializedSlotInfo fromSlot: aSlot ofObject: anObject ]) asArray

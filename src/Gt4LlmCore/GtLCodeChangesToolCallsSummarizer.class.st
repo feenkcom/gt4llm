@@ -213,6 +213,21 @@ GtLCodeChangesToolCallsSummarizer >> gtMethodChangeHistoriesFor: aView [
 				aButton phlow spawnObject: self ]
 ]
 
+{ #category : #views }
+GtLCodeChangesToolCallsSummarizer >> gtPackageChangeHistoriesFor: aView [
+	<gtView>
+	
+	^ aView forward 	
+		title: 'Changes by package';
+		priority: 20;
+		object: [ self packageChangeHistories ];
+		view: #gtViewHistoriesFor:;
+		actionButtonIcon: BrGlamorousVectorIcons inspect 
+			tooltip: 'Inspect summarizer'
+			action: [ :aButton |
+				aButton phlow spawnObject: self ]
+]
+
 { #category : #testing }
 GtLCodeChangesToolCallsSummarizer >> hasSummaryData [
 	^ self codeChanges isEmpty not
@@ -261,6 +276,13 @@ GtLCodeChangesToolCallsSummarizer >> methodChangeHistories [
 { #category : #accessing }
 GtLCodeChangesToolCallsSummarizer >> methodChangeResults [
 	^ self codeChanges select: [ :each | each isMethodChangeResult ]
+]
+
+{ #category : #accessing }
+GtLCodeChangesToolCallsSummarizer >> packageChangeHistories [
+	"Group code changes by package name, including both method and class-level changes.
+	For package move operations, the change is added to BOTH the source and destination packages."
+	^ GtLPackageChangeHistoriesBuilder buildHistoryForCodeChanges: self codeChanges
 ]
 
 { #category : #private }

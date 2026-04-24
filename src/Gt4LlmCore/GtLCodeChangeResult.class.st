@@ -25,6 +25,11 @@ GtLCodeChangeResult >> isClassChangeResult [
 ]
 
 { #category : #testing }
+GtLCodeChangeResult >> isClassModificationResult [
+	^ false
+]
+
+{ #category : #testing }
 GtLCodeChangeResult >> isClassRemovalResult [
 	^ false
 ]

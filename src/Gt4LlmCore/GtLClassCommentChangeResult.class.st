@@ -10,6 +10,11 @@ Class {
 }
 
 { #category : #accessing }
+GtLClassCommentChangeResult >> affectedBehaviour [
+	^ updatedClass
+]
+
+{ #category : #accessing }
 GtLClassCommentChangeResult >> changedClassName [
 	^ self updatedClass currentClassName
 ]

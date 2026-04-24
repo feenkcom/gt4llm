@@ -4,7 +4,13 @@ Class {
 	#category : 'Gt4LlmCore-Magritte Objects'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
+GtLMethodChangeResult >> affectedMethod [
+
+	^ self subclassResponsibility
+]
+
+{ #category : #accessing }
 GtLMethodChangeResult >> currentMethodSourceCode [
 	^self subclassResponsibility
 ]
@@ -64,12 +70,12 @@ GtLMethodChangeResult >> isMethodRemovalResult [
 	^ false
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLMethodChangeResult >> newStateMethodSourceCode [
 	self subclassResponsibility
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLMethodChangeResult >> oldStateMethodSourceCode [
 	self subclassResponsibility
 ]
