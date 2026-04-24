@@ -1,7 +1,7 @@
 Class {
 	#name : #GtOpenAIMessageForGT,
 	#superclass : #GtOpenAIActionMessage,
-	#category : #'Gt4OpenAI-GToolkit-Coder'
+	#category : 'Gt4OpenAI-GToolkit-Coder'
 }
 
 { #category : #accessing }

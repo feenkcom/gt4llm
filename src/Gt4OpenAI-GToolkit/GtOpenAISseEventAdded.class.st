@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'event'
 	],
-	#category : #'Gt4OpenAI-GToolkit-Sse'
+	#category : 'Gt4OpenAI-GToolkit-Sse'
 }
 
 { #category : #accessing }

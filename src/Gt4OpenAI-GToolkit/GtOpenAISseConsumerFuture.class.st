@@ -7,7 +7,7 @@ Class {
 		'stream',
 		'delay'
 	],
-	#category : #'Gt4OpenAI-GToolkit-Sse'
+	#category : 'Gt4OpenAI-GToolkit-Sse'
 }
 
 { #category : #'as yet unclassified' }
