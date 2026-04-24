@@ -29,33 +29,17 @@ GtLPackageChangeHistoriesBuilder class >> forCodeChanges: aCodeChangesCollection
 		codeChanges: aCodeChangesCollection
 ]
 
-{ #category : #'building - private' }
-GtLPackageChangeHistoriesBuilder >> addChangeFor: aCodeChange toGroups: groupedByPackageName [
-	"Add a code change to the appropriate package groups.
-	Method changes go to their method's package.
-	Class changes may go to multiple packages (for moves)."
-	
-	aCodeChange isMethodChangeResult ifTrue: [
-		self 
-			addMethodChange: aCodeChange
-			toGroups: groupedByPackageName.
-		^ self ].
-	
-	aCodeChange isClassChangeResult ifTrue: [
-		self 
-			addClassChange: aCodeChange
-			toGroups: groupedByPackageName.
-		^ self ]
-]
-
 { #category : #'private - building' }
-GtLPackageChangeHistoriesBuilder >> addClassChange: aCodeChange toGroups: groupedByPackageName [
-	"Add a class change to the appropriate package group."
+GtLPackageChangeHistoriesBuilder >> addChangeFor: aCodeChange toGroups: groupedByPackageName [
+	"Add a code change to its affected package group."
+	| changeResult |
 	
-	self 
-		addCodeChange: aCodeChange
-		toPackageNamed: aCodeChange changeResult affectedPackageName
-		inGroups: groupedByPackageName
+	changeResult := aCodeChange changeResult.
+	(changeResult isMethodChangeResult or: [ changeResult isClassChangeResult ]) ifTrue: [
+		self 
+			addCodeChange: aCodeChange
+			toPackageNamed: changeResult affectedPackageName
+			inGroups: groupedByPackageName ]
 ]
 
 { #category : #'building - private' }
@@ -84,25 +68,6 @@ GtLPackageChangeHistoriesBuilder >> addExtraChangeForPackageMoveFor: aCodeChange
 	self 
 		addCodeChange: aCodeChange
 		toPackageNamed: changeResult originalPackageName
-		inGroups: groupedByPackageName
-]
-
-{ #category : #'building - private' }
-GtLPackageChangeHistoriesBuilder >> addMethodChange: aCodeChange toGroups: groupedByPackageName [
-	"Add a method change to its package group"
-	| packageName changeResult methodReference |
-	
-	changeResult := aCodeChange changeResult.
-	methodReference := changeResult targetMethodReference.
-	
-	"Get package name from the compiled method if it exists"
-	packageName := methodReference 
-		compiledMethodIfPresent: [ :cm | cm package packageName ]
-		ifMissing: [ :error | 'Unknown' ].
-	
-	self 
-		addCodeChange: aCodeChange
-		toPackageNamed: packageName
 		inGroups: groupedByPackageName
 ]
 

@@ -1,13 +1,21 @@
 Class {
 	#name : #GtLMethodChangeResult,
 	#superclass : #GtLCodeChangeResult,
+	#instVars : [
+		'targetClass'
+	],
 	#category : 'Gt4LlmCore-Magritte Objects'
 }
 
 { #category : #accessing }
-GtLMethodChangeResult >> affectedMethod [
+GtLMethodChangeResult >> affectedBehaviour [
+	^targetClass
+]
 
-	^ self subclassResponsibility
+{ #category : #accessing }
+GtLMethodChangeResult >> affectedPackageName [
+	"Return the package name of the class containing this method."
+	^ self affectedBehaviour ifNotNil: [ :cls | cls packageName ]
 ]
 
 { #category : #accessing }
@@ -78,6 +86,16 @@ GtLMethodChangeResult >> newStateMethodSourceCode [
 { #category : #accessing }
 GtLMethodChangeResult >> oldStateMethodSourceCode [
 	self subclassResponsibility
+]
+
+{ #category : #accessing }
+GtLMethodChangeResult >> targetClass [
+	^targetClass
+]
+
+{ #category : #accessing }
+GtLMethodChangeResult >> targetClass: anObject [
+	targetClass := anObject
 ]
 
 { #category : #accessing }
