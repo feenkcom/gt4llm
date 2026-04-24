@@ -7,7 +7,7 @@ Class {
 	#instVars : [
 		'changes'
 	],
-	#category : 'Gt4LlmCore-Summaries'
+	#category : #'Gt4LlmCore-Summaries'
 }
 
 { #category : #adding }

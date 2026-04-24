@@ -19,7 +19,7 @@ Class {
 		'targetPackageName',
 		'packageTagHistories'
 	],
-	#category : 'Gt4LlmCore-Summaries'
+	#category : #'Gt4LlmCore-Summaries'
 }
 
 { #category : #adding }

@@ -8,7 +8,7 @@ Class {
 		'methodHistories',
 		'behaviourChangeHistory'
 	],
-	#category : 'Gt4LlmCore-Summaries'
+	#category : #'Gt4LlmCore-Summaries'
 }
 
 { #category : #adding }
@@ -83,7 +83,7 @@ GtLClassChangeHistory >> gtViewChangeDescriptionElements [
 		constraintsDo: [ :c | 
 			c linear vertical alignCenter ];
 		text: (self targetClassName asRopedText 
-			bold; 
+			"bold"; 
 			glamorousRegularFont)}
 ]
 

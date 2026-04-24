@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLForwardObjectDataView,
 	#superclass : #GtLForwardDataView,
-	#category : 'Gt4LlmCore-Data Views'
+	#category : #'Gt4LlmCore-Data Views'
 }
 
 { #category : #accessing }

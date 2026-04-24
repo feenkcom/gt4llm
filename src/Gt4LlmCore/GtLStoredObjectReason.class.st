@@ -4,7 +4,7 @@ Abstract explicit reason for why an object was stored in GtLObjectStorage.
 Class {
 	#name : #GtLStoredObjectReason,
 	#superclass : #Object,
-	#category : 'Gt4LlmCore-Object Storage'
+	#category : #'Gt4LlmCore-Object Storage'
 }
 
 { #category : #printing }

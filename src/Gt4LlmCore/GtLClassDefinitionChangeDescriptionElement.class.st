@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'classNameLabel'
 	],
-	#category : 'Gt4LlmCore-Summaries'
+	#category : #'Gt4LlmCore-Summaries'
 }
 
 { #category : #initialization }
@@ -20,13 +20,13 @@ GtLClassDefinitionChangeDescriptionElement >> initialize [
 ]
 
 { #category : #updating }
-GtLClassDefinitionChangeDescriptionElement >> updateForChangeHistort: aClassHistory [
+GtLClassDefinitionChangeDescriptionElement >> updateForChangeHistory: aClassHistory [
 	classNameLabel text: (aClassHistory targetClassName)
-		asRopedText bold.
+		asRopedText "bold".
 ]
 
 { #category : #updating }
 GtLClassDefinitionChangeDescriptionElement >> updateForChangeObject: aChangeResult [
 	classNameLabel text: (aChangeResult targetClassName)
-		asRopedText bold.
+		asRopedText "bold".
 ]

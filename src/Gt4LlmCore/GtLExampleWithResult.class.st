@@ -5,7 +5,7 @@ Class {
 		'exampleWithResult',
 		'objectId'
 	],
-	#category : 'Gt4LlmCore-Domain Objects'
+	#category : #'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #accessing }
@@ -29,25 +29,28 @@ GtLExampleWithResult >> exampleWithResult: anObject [
 ]
 
 { #category : #views }
-GtLExampleWithResult >> gtExampleSourceFor: aView [
+GtLExampleWithResult >> gtExampleSourceAndResultFor: aView [
 	<gtView>
 	<gtLlmView>
-	^ aView forward
-		title: 'Example source';
-		priority: 1;
-		object: [ exampleWithResult ];
-		view: #gtSourceFor:
-]
-
-{ #category : #views }
-GtLExampleWithResult >> gtExampleWithResultFor: aView [
-	<gtView>
-	<gtLlmView>
-	^ aView forward
-		title: 'Example result';
-		priority: 2;
-		object: [ exampleWithResult ];
-		view: #gtLiveFor:
+	^ aView explicit
+		title: 'Code and object';
+		priority: 9;
+		stencil: [ | container |
+			container := BrVerticalPane new.
+			container matchParent
+				addAptitude: (BrLayoutResizerAptitude new common: [ container children ]);
+				background: BrGlamorousColors backdropColor;
+				addChild: ((GtPharoMethodCoder forExample: exampleWithResult) asExpandedOnlyElement
+						margin: (BlInsets all: 10);
+						background: Color white;
+						addAptitude: BrShadowAptitude;
+						vFitContentLimited);
+				addChild: (exampleWithResult returnValue gtDefaultInspectorTool asElement
+						margin: (BlInsets all: 10);
+						background: Color white;
+						addAptitude: BrShadowAptitude;
+						vFitContentLimited;
+						hMatchParent) ]
 ]
 
 { #category : #'api - testing' }

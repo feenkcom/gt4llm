@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'nameLabel'
 	],
-	#category : 'Gt4LlmCore-Summaries'
+	#category : #'Gt4LlmCore-Summaries'
 }
 
 { #category : #initialization }
@@ -22,5 +22,5 @@ GtLLabeledChangeDescriptionElement >> initialize [
 { #category : #updating }
 GtLLabeledChangeDescriptionElement >> updateForString: aString [
 	nameLabel text: aString
-		asRopedText bold.
+		asRopedText "bold".
 ]

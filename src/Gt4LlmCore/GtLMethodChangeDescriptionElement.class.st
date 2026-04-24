@@ -8,7 +8,7 @@ Class {
 		'classNameLabel',
 		'methodNameLabel'
 	],
-	#category : 'Gt4LlmCore-Summaries'
+	#category : #'Gt4LlmCore-Summaries'
 }
 
 { #category : #accessing }
@@ -42,6 +42,6 @@ GtLMethodChangeDescriptionElement >> initialize [
 { #category : #updating }
 GtLMethodChangeDescriptionElement >> updateForChangeObject: aChangeResult [
 	classNameLabel text: (aChangeResult targetMethodReference methodClassName)
-		asRopedText bold.
+		asRopedText "bold".
 	methodNameLabel text: (aChangeResult targetMethodReference methodName)
 ]

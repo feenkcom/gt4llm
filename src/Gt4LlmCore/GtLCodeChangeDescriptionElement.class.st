@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLCodeChangeDescriptionElement,
 	#superclass : #BrHorizontalPane,
-	#category : 'Gt4LlmCore-Summaries'
+	#category : #'Gt4LlmCore-Summaries'
 }
 
 { #category : #accessing }

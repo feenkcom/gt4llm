@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'registryElement'
 	],
-	#category : 'Gt4LlmCore-UI - Support'
+	#category : #'Gt4LlmCore-UI - Support'
 }
 
 { #category : #'private - event handling' }

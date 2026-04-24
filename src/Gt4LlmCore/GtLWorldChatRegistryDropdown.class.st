@@ -11,7 +11,7 @@ Class {
 		'listElement',
 		'contentUpdater'
 	],
-	#category : 'Gt4LlmCore-UI - Registry'
+	#category : #'Gt4LlmCore-UI - Registry'
 }
 
 { #category : #callbacks }

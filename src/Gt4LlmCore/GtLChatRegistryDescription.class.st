@@ -7,7 +7,7 @@ Class {
 		'definingMethod',
 		'chatCreationBlock'
 	],
-	#category : 'Gt4LlmCore-Registry - Model'
+	#category : #'Gt4LlmCore-Registry - Model'
 }
 
 { #category : #accessing }
