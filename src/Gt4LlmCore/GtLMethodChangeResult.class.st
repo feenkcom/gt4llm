@@ -19,6 +19,12 @@ GtLMethodChangeResult >> affectedPackageName [
 ]
 
 { #category : #accessing }
+GtLMethodChangeResult >> affectedPackageTagName [
+	"Return the package tag name of the class containing this method."
+	^ self affectedBehaviour ifNotNil: [ :cls | cls packageTagName ]
+]
+
+{ #category : #accessing }
 GtLMethodChangeResult >> currentMethodSourceCode [
 	^self subclassResponsibility
 ]

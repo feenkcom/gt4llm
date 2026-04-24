@@ -82,6 +82,11 @@ GtLClassDefinitionChangeHistory >> gtViewChangeIcon [
 	^ Smalltalk ui icons iconNamed: #changeUpdateIcon
 ]
 
+{ #category : #accessing }
+GtLClassDefinitionChangeHistory >> gtViewChangesCount [
+	^ self changes size
+]
+
 { #category : #testing }
 GtLClassDefinitionChangeHistory >> hasNoEffect [
 	^ self isInitialChangeAddition and: [ self isLatestChangeRemoval ]
@@ -106,9 +111,4 @@ GtLClassDefinitionChangeHistory >> isLatestChangeRemoval [
 	self changes ifEmpty: [ ^ false ].
 	latestChange := self changes latestChange.
 	^ latestChange changeResult isClassRemovalResult
-]
-
-{ #category : #accessing }
-GtLClassDefinitionChangeHistory >> latestChange [
-	^ self changes ifEmpty: [ nil ] ifNotEmpty: [ self changes last ]
 ]

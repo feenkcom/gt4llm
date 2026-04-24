@@ -12,6 +12,11 @@ Class {
 	#category : 'Gt4LlmCore-Summaries'
 }
 
+{ #category : #'gt-view' }
+GtLSummarizerCodeChange >> asDiffElement [
+	^ changeResult asDiffElement
+]
+
 { #category : #accessing }
 GtLSummarizerCodeChange >> changeResult [
 	^ changeResult

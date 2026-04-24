@@ -120,6 +120,11 @@ GtLMethodChangeHistory >> gtViewChangeIcon [
 	^ self latestChange gtViewChangeIcon
 ]
 
+{ #category : #printing }
+GtLMethodChangeHistory >> gtViewChangesCount [
+	^ self changes size
+]
+
 { #category : #testing }
 GtLMethodChangeHistory >> hasNoEffect [
 	^ self isInitialChangeAddition and: [ 

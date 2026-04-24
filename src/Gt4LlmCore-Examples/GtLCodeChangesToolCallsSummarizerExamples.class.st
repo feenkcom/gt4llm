@@ -10,7 +10,7 @@ Class {
 	#category : 'Gt4LlmCore-Examples-Summarizers'
 }
 
-{ #category : #'examples - package histories' }
+{ #category : #examples }
 GtLCodeChangesToolCallsSummarizerExamples >> classInPackageHistory [
 	<gtExample>
 	| packageHistory classHistory |
@@ -19,7 +19,7 @@ GtLCodeChangesToolCallsSummarizerExamples >> classInPackageHistory [
 	
 	classHistory := packageHistory classHistories items first.
 	
-	self assert: classHistory class equals: GtLClassInPackageChangeHistory.
+	self assert: classHistory class equals: GtLClassInPackageTagChangeHistory.
 	self assert: classHistory targetClassName equals: 'GtLTemporarySummarizerExampleClass'.
 	self assert: classHistory targetPackageName equals: 'Gt4LlmCore-Examples'.
 	self assert: classHistory behaviourChanges size equals: 2.

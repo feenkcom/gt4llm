@@ -22,7 +22,8 @@ GtLCodeChangesDetailsElement >> codeChange: aCodeChange [
 GtLCodeChangesDetailsElement >> initialize [
 	super initialize.
 	
-	self fitContent.
+	self hMatchParent.
+	self vFitContent.
 	self alignCenter.
 	
 	self initializeIconContainer.
@@ -35,8 +36,8 @@ GtLCodeChangesDetailsElement >> initialize [
 { #category : #initialization }
 GtLCodeChangesDetailsElement >> initializeDescriptionContainer [
 	descriptionContainerElement := BrHorizontalPane new
-		hFitContent;
-		vExact: 26
+		hMatchParent;
+		vFitContent
 ]
 
 { #category : #initialization }

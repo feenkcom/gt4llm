@@ -19,6 +19,11 @@ GtLClassChangeResult >> affectedPackageName [
 	^ self affectedBehaviour packageName
 ]
 
+{ #category : #accessing }
+GtLClassChangeResult >> affectedPackageTagName [
+	^ self affectedBehaviour packageTagName
+]
+
 { #category : #'gt - extensions' }
 GtLClassChangeResult >> gtViewChangeDescriptionElement [
 	^ GtLClassDefinitionChangeDescriptionElement new

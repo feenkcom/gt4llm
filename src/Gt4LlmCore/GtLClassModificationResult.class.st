@@ -14,6 +14,11 @@ GtLClassModificationResult >> affectedBehaviour [
 ]
 
 { #category : #'accessing - delegated' }
+GtLClassModificationResult >> asDiffElement [
+	^ (self gtDiffFor: GtPhlowView empty) asElement
+]
+
+{ #category : #'accessing - delegated' }
 GtLClassModificationResult >> classSlotNames [
 	^ self updatedClass classSlotNames
 ]
