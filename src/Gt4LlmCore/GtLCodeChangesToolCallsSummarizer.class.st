@@ -188,7 +188,7 @@ GtLCodeChangesToolCallsSummarizer >> gtClassChangeHistoriesFor: aView [
 GtLCodeChangesToolCallsSummarizer >> gtCodeChangesFor: aView [
 	<gtView>
 	^ aView forward
-		title: 'Code changes (list)';
+		title: 'Code changes';
 		priority: 21.1;
 		object: [ self codeChanges ];
 		view: #gtCodeChangesFor:;
@@ -204,7 +204,7 @@ GtLCodeChangesToolCallsSummarizer >> gtCodeChangesListFor: aView [
 	<gtView>
 	^ aView forward
 		title: 'Code changes (list)';
-		priority: 21.1;
+		priority: 21.4;
 		object: [ self codeChanges ];
 		view: #gtCodeChangesFor:;
 		actionButtonIcon: BrGlamorousVectorIcons inspect 
