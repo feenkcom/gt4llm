@@ -8,6 +8,11 @@ Class {
 	#category : 'Gt4LlmCore-Magritte Objects'
 }
 
+{ #category : #accessing }
+GtLClassModificationResult >> affectedBehaviour [
+	^ updatedClass
+]
+
 { #category : #'accessing - delegated' }
 GtLClassModificationResult >> classSlotNames [
 	^ self updatedClass classSlotNames
@@ -186,8 +191,9 @@ GtLClassModificationResult >> isClassAdditionResult [
 ]
 
 { #category : #testing }
-GtLClassModificationResult >> isClassDefinitionChangeResult [
-	^ true
+GtLClassModificationResult >> isClassModificationResult [
+	"Return true if this is a class modification (not an addition)"
+	^ self originalClass notNil
 ]
 
 { #category : #'llm views' }
@@ -221,6 +227,12 @@ GtLClassModificationResult >> originalDefinitionWithCommentString [
 		ifNil: [ '' ]
 		ifNotNil: [ :each |
 			each asDefinitionWithCommentString ] 
+]
+
+{ #category : #accessing }
+GtLClassModificationResult >> originalPackageName [
+	"Return the package name before the modification, if available"
+	^ self originalClass ifNotNil: [ :c | c packageName ]
 ]
 
 { #category : #'accessing - delegated' }

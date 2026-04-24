@@ -4,6 +4,21 @@ Class {
 	#category : 'Gt4LlmCore-Magritte Objects'
 }
 
+{ #category : #accessing }
+GtLClassChangeResult >> affectedBehaviour [
+	^ self subclassResponsibility
+]
+
+{ #category : #accessing }
+GtLClassChangeResult >> affectedBehaviourName [
+	^ self affectedBehaviour currentClassName
+]
+
+{ #category : #accessing }
+GtLClassChangeResult >> affectedPackageName [
+	^ self affectedBehaviour packageName
+]
+
 { #category : #'gt - extensions' }
 GtLClassChangeResult >> gtViewChangeDescriptionElement [
 	^ GtLClassDefinitionChangeDescriptionElement new
@@ -27,7 +42,8 @@ GtLClassChangeResult >> isClassCommentChangeResult [
 ]
 
 { #category : #testing }
-GtLClassChangeResult >> isClassDefinitionChangeResult [
+GtLClassChangeResult >> isClassModificationResult [
+	"Return true if this is a class modification (not an addition)"
 	^ false
 ]
 

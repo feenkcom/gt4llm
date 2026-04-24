@@ -32,6 +32,17 @@ GtLToolCallsSummarizerExamplesBase >> performClassCreationNamed: aClassName [
 		yourself)
 ]
 
+{ #category : #'tool execution' }
+GtLToolCallsSummarizerExamplesBase >> performClassPackageChangeFor: aClassName toPackage: aPackageName [
+	"Change the package of an existing class"
+	^ self performTool: GtLMagritteToolForClassDefinitionChange new withArguments: (Dictionary new
+		at: 'classChangeRequest' put: (Dictionary new
+			at: 'targetClassName' put: aClassName;
+			at: 'package' put: aPackageName;
+			yourself);
+		yourself)
+]
+
 { #category : #utilities }
 GtLToolCallsSummarizerExamplesBase >> performClassRemovalNamed: aClassName [
 	^ self performTool: GtLMagritteToolForClassRemoval new withArguments: (Dictionary new
