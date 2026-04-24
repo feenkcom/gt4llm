@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLlmObjectAssistant,
 	#superclass : #GtLlmAssistant,
-	#category : #'Gt4OpenAI-GToolkit-Coder'
+	#category : 'Gt4OpenAI-GToolkit-Coder'
 }
 
 { #category : #actions }
