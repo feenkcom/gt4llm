@@ -13,9 +13,9 @@ Class {
 	#category : 'Gt4LlmCore-Summaries'
 }
 
-{ #category : #accessing }
-GtLEntityChangeHistory >> addChange: aCodeChange [
-	self changes add: aCodeChange
+{ #category : #testing }
+GtLEntityChangeHistory class >> isAbstract [
+	^self name = #GtLEntityChangeHistory
 ]
 
 { #category : #accessing }
@@ -34,6 +34,16 @@ GtLEntityChangeHistory >> gtCodeChangesFor: aView [
 		view: #gtCodeChangesFor:
 ]
 
+{ #category : #views }
+GtLEntityChangeHistory >> gtCodeChangesListFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Code changes (list)';
+		priority: 20.5;
+		object: [ self changes ];
+		view: #gtCodeChangesListFor:
+]
+
 { #category : #accessing }
 GtLEntityChangeHistory >> gtViewChangeEditTime [ 
 	^ self latestChange  gtViewChangeEditTime
@@ -46,7 +56,7 @@ GtLEntityChangeHistory >> gtViewChangeHistoryChildren [
 
 { #category : #accessing }
 GtLEntityChangeHistory >> gtViewChangesCount [
-	^ self changes size
+	^ self subclassResponsibility
 ]
 
 { #category : #accessing }

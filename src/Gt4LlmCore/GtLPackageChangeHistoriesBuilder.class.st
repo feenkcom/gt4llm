@@ -71,8 +71,8 @@ GtLPackageChangeHistoriesBuilder >> addExtraChangeForPackageMoveFor: aCodeChange
 		inGroups: groupedByPackageName
 ]
 
-{ #category : #'building - private' }
-GtLPackageChangeHistoriesBuilder >> buildClassHistoriesFor: aCollectionOfChanges forPackageNamed: aPackageName [
+{ #category : #'private - building' }
+GtLPackageChangeHistoriesBuilder >> buildClassHistoriesFor: aCollectionOfChanges forPackageNamed: aPackageName forPackageTagNamed: aPackageTagName [
 	"Build class histories from the given changes, grouped by class name"
 	| classHistoriesByClassName methodHistoriesByReference histories |
 	
@@ -90,9 +90,10 @@ GtLPackageChangeHistoriesBuilder >> buildClassHistoriesFor: aCollectionOfChanges
 		classHistory := classHistoriesByClassName
 			at: className
 			ifAbsentPut: [ 
-				GtLClassInPackageChangeHistory new
+				GtLClassInPackageTagChangeHistory new
 					targetClassName: className;
 					targetPackageName: aPackageName;
+					targetPackageTagName: aPackageTagName;
 					yourself ].
 		
 		"Get or create method history"
@@ -100,9 +101,10 @@ GtLPackageChangeHistoriesBuilder >> buildClassHistoriesFor: aCollectionOfChanges
 			at: methodReference
 			ifAbsentPut: [ 
 				| newHistory |
-				newHistory := GtLMethodInPackageChangeHistory new
+				newHistory := GtLMethodInPackageTagChangeHistory new
 					methodReference: methodReference;
 					targetPackageName: aPackageName;
+					targetPackageTagName: aPackageTagName;
 					yourself.
 				classHistory addMethodHistory: newHistory.
 				newHistory ].
@@ -118,9 +120,10 @@ GtLPackageChangeHistoriesBuilder >> buildClassHistoriesFor: aCollectionOfChanges
 		classHistory := classHistoriesByClassName
 			at: className
 			ifAbsentPut: [ 
-				GtLClassInPackageChangeHistory new
+				GtLClassInPackageTagChangeHistory new
 					targetClassName: className;
 					targetPackageName: aPackageName;
+					targetPackageTagName: aPackageTagName;
 					yourself ].
 		
 		classHistory addBehaviourChange: each ].
@@ -144,6 +147,30 @@ GtLPackageChangeHistoriesBuilder >> buildHistory [
 	^ packagesHistory
 ]
 
+{ #category : #'private - building' }
+GtLPackageChangeHistoriesBuilder >> buildPackageTagHistoriesFor: aCollectionOfChanges forPackageNamed: aPackageName [
+	"Build package tag histories from the given changes, grouped by package tag name"
+	| groupedByTagName histories |
+	
+	groupedByTagName := Dictionary new.
+	
+	"Group changes by package tag"
+	aCollectionOfChanges do: [ :each |
+		| tagName |
+		tagName := each changeResult affectedPackageTagName.
+		tagName ifNil: [ tagName := 'Unclassified' ].
+		tagName ifEmpty: [ tagName := 'Unclassified' ].
+		(groupedByTagName at: tagName ifAbsentPut: [ OrderedCollection new ]) add: each ].
+	
+	histories := GtLPackageTagChangeHistoriesGroup new.
+	groupedByTagName keysAndValuesDo: [ :tagName :tagChanges |
+		histories addHistory: (self 
+			createHistoryForPackageTagNamed: tagName
+			inPackageNamed: aPackageName
+			fromChanges: tagChanges) ].
+	^ histories
+]
+
 { #category : #accessing }
 GtLPackageChangeHistoriesBuilder >> codeChanges [
 	^ codeChanges
@@ -154,14 +181,25 @@ GtLPackageChangeHistoriesBuilder >> codeChanges: aCollection [
 	codeChanges := aCollection
 ]
 
-{ #category : #'building - private' }
+{ #category : #'private - building' }
 GtLPackageChangeHistoriesBuilder >> createHistoryForPackageNamed: aPackageName fromChanges: aListOfChanges [
-	"Create a package history with class histories from the given changes"
+	"Create a package history with package tag histories from the given changes"
 	^ GtLPackageChangeHistory new
 		targetPackageName: aPackageName;
+		addPackageTagHistories: (self 
+			buildPackageTagHistoriesFor: aListOfChanges
+			forPackageNamed: aPackageName)
+]
+
+{ #category : #'private - building' }
+GtLPackageChangeHistoriesBuilder >> createHistoryForPackageTagNamed: aTagName inPackageNamed: aPackageName fromChanges: aListOfChanges [
+	"Create a package tag history with class histories from the given changes"
+	^ GtLPackageTagChangeHistory new
+		targetPackageTagName: aTagName;
 		addClassHistories: (self 
 			buildClassHistoriesFor: aListOfChanges
-			forPackageNamed: aPackageName)
+			forPackageNamed: aPackageName
+			forPackageTagNamed: aTagName)
 ]
 
 { #category : #'private - building' }
