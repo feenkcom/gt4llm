@@ -4,9 +4,6 @@ I track method changes within a specific package tag context.
 Instance variables:
 - `targetPackageName` - the name of the package this method belongs to
 - `targetPackageTagName` - the name of the package tag this method belongs to
-
-See also:
-- {{gtClass:GtLMethodInPackageChangeHistory}} - similar but at package level
 "
 Class {
 	#name : #GtLMethodInPackageTagChangeHistory,
