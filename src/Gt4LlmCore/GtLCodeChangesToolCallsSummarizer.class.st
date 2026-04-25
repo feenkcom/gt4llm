@@ -200,6 +200,21 @@ GtLCodeChangesToolCallsSummarizer >> gtCodeChangesFor: aView [
 ]
 
 { #category : #'gt-extensions' }
+GtLCodeChangesToolCallsSummarizer >> gtCodeChangesListFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Code changes (list)';
+		priority: 21.4;
+		object: [ self codeChanges ];
+		view: #gtCodeChangesFor:;
+		actionButtonIcon: BrGlamorousVectorIcons inspect 
+			tooltip: 'Inspect summarizer'
+			action: [ :aButton |
+				aButton phlow spawnObject: self ];
+		actionUpdateButton
+]
+
+{ #category : #'gt-extensions' }
 GtLCodeChangesToolCallsSummarizer >> gtMethodChangeHistoriesFor: aView [
 	<gtView>
 	^ aView forward 	
@@ -207,6 +222,22 @@ GtLCodeChangesToolCallsSummarizer >> gtMethodChangeHistoriesFor: aView [
 			priority: 10;
 			object: [ self methodChangeHistories ];
 			view: #gtViewHistoriesFor:;
+		actionButtonIcon: BrGlamorousVectorIcons inspect 
+			tooltip: 'Inspect summarizer'
+			action: [ :aButton |
+				aButton phlow spawnObject: self ]
+]
+
+{ #category : #views }
+GtLCodeChangesToolCallsSummarizer >> gtPackageChangeHistoriesFor: aView [
+	<gtView>
+	<gtLlmView>
+	
+	^ aView forward 	
+		title: 'Changes by package';
+		priority: 20;
+		object: [ self packageChangeHistories ];
+		view: #gtViewHistoriesFor:;
 		actionButtonIcon: BrGlamorousVectorIcons inspect 
 			tooltip: 'Inspect summarizer'
 			action: [ :aButton |
@@ -261,6 +292,13 @@ GtLCodeChangesToolCallsSummarizer >> methodChangeHistories [
 { #category : #accessing }
 GtLCodeChangesToolCallsSummarizer >> methodChangeResults [
 	^ self codeChanges select: [ :each | each isMethodChangeResult ]
+]
+
+{ #category : #accessing }
+GtLCodeChangesToolCallsSummarizer >> packageChangeHistories [
+	"Group code changes by package name, including both method and class-level changes.
+	For package move operations, the change is added to BOTH the source and destination packages."
+	^ GtLPackageChangeHistoriesBuilder buildHistoryForCodeChanges: self codeChanges
 ]
 
 { #category : #private }

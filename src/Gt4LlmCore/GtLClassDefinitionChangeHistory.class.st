@@ -61,8 +61,7 @@ GtLClassDefinitionChangeHistory >> gtDiffWithCurrentVersionFor: aView [
 { #category : #'gt - extensions' }
 GtLClassDefinitionChangeHistory >> gtViewChangeDescriptionElement [
 	^ GtLClassDefinitionChangeDescriptionElement new
-		updateForChangeObject: self;
-		yourself
+		updateForChangeObject: self
 ]
 
 { #category : #'gt - extensions' }
@@ -80,6 +79,11 @@ GtLClassDefinitionChangeHistory >> gtViewChangeIcon [
 		^ Smalltalk ui icons iconNamed: #changeAddIcon ].
 		
 	^ Smalltalk ui icons iconNamed: #changeUpdateIcon
+]
+
+{ #category : #accessing }
+GtLClassDefinitionChangeHistory >> gtViewChangesCount [
+	^ self changes size
 ]
 
 { #category : #testing }
@@ -106,9 +110,4 @@ GtLClassDefinitionChangeHistory >> isLatestChangeRemoval [
 	self changes ifEmpty: [ ^ false ].
 	latestChange := self changes latestChange.
 	^ latestChange changeResult isClassRemovalResult
-]
-
-{ #category : #accessing }
-GtLClassDefinitionChangeHistory >> latestChange [
-	^ self changes ifEmpty: [ nil ] ifNotEmpty: [ self changes last ]
 ]

@@ -26,5 +26,5 @@ GtLClassCommentChangeDescriptionElement >> initialize [
 { #category : #updating }
 GtLClassCommentChangeDescriptionElement >> updateForChangeObject: aChangeResult [
 	classNameLabel text: (aChangeResult targetClassName)
-		asRopedText bold.
+		asRopedText "bold".
 ]

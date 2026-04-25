@@ -1,10 +1,30 @@
 Class {
 	#name : #GtLMethodChangeResult,
 	#superclass : #GtLCodeChangeResult,
+	#instVars : [
+		'targetClass'
+	],
 	#category : #'Gt4LlmCore-Magritte Objects'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
+GtLMethodChangeResult >> affectedBehaviour [
+	^targetClass
+]
+
+{ #category : #accessing }
+GtLMethodChangeResult >> affectedPackageName [
+	"Return the package name of the class containing this method."
+	^ self affectedBehaviour ifNotNil: [ :cls | cls packageName ]
+]
+
+{ #category : #accessing }
+GtLMethodChangeResult >> affectedPackageTagName [
+	"Return the package tag name of the class containing this method."
+	^ self affectedBehaviour ifNotNil: [ :cls | cls packageTagName ]
+]
+
+{ #category : #accessing }
 GtLMethodChangeResult >> currentMethodSourceCode [
 	^self subclassResponsibility
 ]
@@ -64,14 +84,24 @@ GtLMethodChangeResult >> isMethodRemovalResult [
 	^ false
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLMethodChangeResult >> newStateMethodSourceCode [
 	self subclassResponsibility
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLMethodChangeResult >> oldStateMethodSourceCode [
 	self subclassResponsibility
+]
+
+{ #category : #accessing }
+GtLMethodChangeResult >> targetClass [
+	^targetClass
+]
+
+{ #category : #accessing }
+GtLMethodChangeResult >> targetClass: anObject [
+	targetClass := anObject
 ]
 
 { #category : #accessing }

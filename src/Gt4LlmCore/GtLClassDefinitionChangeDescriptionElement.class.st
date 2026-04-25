@@ -20,7 +20,13 @@ GtLClassDefinitionChangeDescriptionElement >> initialize [
 ]
 
 { #category : #updating }
+GtLClassDefinitionChangeDescriptionElement >> updateForChangeHistory: aClassHistory [
+	classNameLabel text: (aClassHistory targetClassName)
+		asRopedText "bold".
+]
+
+{ #category : #updating }
 GtLClassDefinitionChangeDescriptionElement >> updateForChangeObject: aChangeResult [
 	classNameLabel text: (aChangeResult targetClassName)
-		asRopedText bold.
+		asRopedText "bold".
 ]

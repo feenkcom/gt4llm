@@ -36,18 +36,20 @@ GtLClassesCreationResult >> classesDescription [
 		beRequired
 ]
 
-{ #category : #views }
+{ #category : #'gt-extensions' }
 GtLClassesCreationResult >> gtClassesFor: aView [
 	<gtView>
 	<gtLlmView>
-	^ aView list
+	^ aView columnedList
 		title: 'Classes';
 		priority: 1;
 		items: [ self classes ];
-		itemText: [ :each | 
-			each isErrorDomainObject
-				ifTrue: [ each printString ]
-				ifFalse: [ each currentClassName ] ]
+		column: 'Class'
+			text: [ :each | 
+				each isErrorDomainObject
+					ifTrue: [ each printString ]
+					ifFalse: [ each currentClassName ] ];
+		column: 'Package' text: [ :each | each packageName ]
 ]
 
 { #category : #'llm - views' }

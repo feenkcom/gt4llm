@@ -12,6 +12,11 @@ Class {
 	#category : #'Gt4LlmCore-Summaries'
 }
 
+{ #category : #'gt-view' }
+GtLSummarizerCodeChange >> asDiffElement [
+	^ changeResult asDiffElement
+]
+
 { #category : #accessing }
 GtLSummarizerCodeChange >> changeResult [
 	^ changeResult
@@ -82,11 +87,6 @@ GtLSummarizerCodeChange >> isClassChangeResult [
 { #category : #testing }
 GtLSummarizerCodeChange >> isClassCommentChangeResult [
 	^ self changeResult isClassCommentChangeResult
-]
-
-{ #category : #testing }
-GtLSummarizerCodeChange >> isClassDefinitionChangeResult [
-	^ self changeResult isClassDefinitionChangeResult
 ]
 
 { #category : #testing }

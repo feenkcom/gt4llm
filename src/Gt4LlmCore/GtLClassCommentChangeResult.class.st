@@ -10,6 +10,11 @@ Class {
 }
 
 { #category : #accessing }
+GtLClassCommentChangeResult >> affectedBehaviour [
+	^ updatedClass
+]
+
+{ #category : #accessing }
 GtLClassCommentChangeResult >> changedClassName [
 	^ self updatedClass currentClassName
 ]
@@ -39,8 +44,7 @@ GtLClassCommentChangeResult >> gtDiffFor: aView [
 { #category : #'gt - extensions' }
 GtLClassCommentChangeResult >> gtViewChangeDescriptionElement [
 	^ GtLClassCommentChangeDescriptionElement new
-		updateForChangeObject: self;
-		yourself
+		updateForChangeObject: self
 ]
 
 { #category : #views }

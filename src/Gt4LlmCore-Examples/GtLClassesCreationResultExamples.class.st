@@ -182,6 +182,38 @@ GtLClassesCreationResultExamples >> creationResultWithMultipleClasses [
 	^ result
 ]
 
+{ #category : #'gt-examples' }
+GtLClassesCreationResultExamples >> creationResultWithMultiplePackages [
+	<gtExample>
+	| result |
+	result := GtLClassesCreationResult new
+		classes: {
+			GtLClassModificationResult new
+				originalClass: nil;
+				updatedClass: (GtLClassDefinitionDescription new
+					currentClassName: 'SampleCreatedClass';
+					superclassName: 'Object';
+					comment: 'A sample class';
+					packageName: 'SamplePackage';
+					instanceSlotNames: #('slot1');
+					classSlotNames: #();
+					classVariableNames: #();
+					traitCompositionString: '{}';
+					yourself);
+				yourself.
+			GtLCouldNotCreateClassDomainObject new
+				targetClassName: 'FailedTrait';
+				packageName: 'TraitsPackage';
+				yourself };
+		yourself.
+
+	self assert: result classes size equals: 2.
+	self assert: result classes first packageName equals: 'SamplePackage'.
+	self assert: result classes second packageName equals: 'TraitsPackage'.
+
+	^ result
+]
+
 { #category : #examples }
 GtLClassesCreationResultExamples >> creationResultWithSingleClass [
 	<gtExample>

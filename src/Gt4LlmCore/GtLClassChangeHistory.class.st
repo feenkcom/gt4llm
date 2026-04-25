@@ -72,14 +72,8 @@ GtLClassChangeHistory >> gtMethodHistoriesFor: aView [
 
 { #category : #views }
 GtLClassChangeHistory >> gtViewChangeDescriptionElement [
-	"Return description element for display in tree"
-	^ BlTextElement new 
-		padding: (BlInsets all: 0);
-		constraintsDo: [ :c | 
-			c linear vertical alignCenter ];
-		text: (self targetClassName asRopedText 
-			bold; 
-			glamorousRegularFont)
+	^GtLClassDefinitionChangeDescriptionElement new
+		updateForChangeObject: self
 ]
 
 { #category : #views }
@@ -89,7 +83,7 @@ GtLClassChangeHistory >> gtViewChangeDescriptionElements [
 		constraintsDo: [ :c | 
 			c linear vertical alignCenter ];
 		text: (self targetClassName asRopedText 
-			bold; 
+			"bold"; 
 			glamorousRegularFont)}
 ]
 

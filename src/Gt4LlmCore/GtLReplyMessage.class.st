@@ -264,7 +264,7 @@ GtLReplyMessage >> gtToolViewMessagesFor: aView [
 
 	^ aView columnedList
 		title: 'Executed tools';
-		priority: 18;
+		priority: 10;
 		items: [ self executionMessages select: [:each |
 			each isToolMessage ] ];
 		column: 'Tool' text: #toolName;

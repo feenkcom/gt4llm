@@ -11,6 +11,11 @@ Class {
 	#category : #'Gt4LlmCore-Magritte Objects'
 }
 
+{ #category : #accessing }
+GtLClassRemovalResult >> affectedBehaviour [
+	^removedClass
+]
+
 { #category : #views }
 GtLClassRemovalResult >> gtDetailsFor: aView [
 	<gtView>
@@ -41,11 +46,6 @@ GtLClassRemovalResult >> gtDiffFor: aView [
 { #category : #views }
 GtLClassRemovalResult >> gtViewChangeIcon [
 	^ self class removalIcon
-]
-
-{ #category : #testing }
-GtLClassRemovalResult >> isClassDefinitionChangeResult [
-	^ true
 ]
 
 { #category : #testing }
