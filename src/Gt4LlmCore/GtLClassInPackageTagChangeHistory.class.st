@@ -6,7 +6,6 @@ Instance variables:
 - `targetPackageTagName` - the name of the package tag this class belongs to
 
 See also:
-- {{gtClass:GtLClassInPackageChangeHistory}} - similar but at package level
 - {{gtClass:GtEpiceaClassInPackageHistory}} - similar concept in Epicea
 "
 Class {
