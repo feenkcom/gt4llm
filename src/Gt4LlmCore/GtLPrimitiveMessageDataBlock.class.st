@@ -9,6 +9,12 @@ Class {
 	#category : #'Gt4LlmCore-Data Views'
 }
 
+{ #category : #visiting }
+GtLPrimitiveMessageDataBlock >> acceptVisitor: aVisitor [
+
+	^ aVisitor visitGtLPrimitiveMessageDataBlock: self
+]
+
 { #category : #adding }
 GtLPrimitiveMessageDataBlock >> addDocumentDataBlock: aDocumentBlock [
 	documentDataBlocks add: aDocumentBlock

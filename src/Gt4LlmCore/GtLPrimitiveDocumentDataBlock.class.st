@@ -12,6 +12,12 @@ Class {
 	#category : #'Gt4LlmCore-Data Views'
 }
 
+{ #category : #visiting }
+GtLPrimitiveDocumentDataBlock >> acceptVisitor: aVisitor [
+
+	^ aVisitor visitGtLPrimitiveDocumentDataBlock: self
+]
+
 { #category : #accessing }
 GtLPrimitiveDocumentDataBlock >> contentType [
 	^ contentType

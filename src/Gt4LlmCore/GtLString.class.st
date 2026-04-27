@@ -13,6 +13,12 @@ GtLString class >> forString: aString [
 		stringValue: aString
 ]
 
+{ #category : #visiting }
+GtLString >> acceptVisitor: aVisitor [
+
+	aVisitor visitGtLString: self
+]
+
 { #category : #views }
 GtLString >> gtStringValueFor: aView [
 	<gtView>
