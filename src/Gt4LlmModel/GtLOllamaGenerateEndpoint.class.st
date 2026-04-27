@@ -8,14 +8,6 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-GtLOllamaGenerateEndpoint >> assistantContentTextFrom: aGtLModelAssistantMessage [
-	| rawData |
-	self halt.
-	rawData := aGtLModelAssistantMessage rawData.
-	^ rawData atPath: { 'choices'. 1. 'message'. 'content' }.
-]
-
-{ #category : #'as yet unclassified' }
 GtLOllamaGenerateEndpoint >> assistantMessageAccessor [
 
 	^ GtLOllamaGenerateAssistantMessageAccessor new
