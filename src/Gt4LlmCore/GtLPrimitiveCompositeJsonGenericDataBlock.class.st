@@ -4,6 +4,12 @@ Class {
 	#category : #'Gt4LlmCore-Data Views'
 }
 
+{ #category : #visiting }
+GtLPrimitiveCompositeJsonGenericDataBlock >> acceptVisitor: aVisitor [
+
+	^ aVisitor visitGtLPrimitiveCompositeJsonGenericDataBlock: self
+]
+
 { #category : #accessing }
 GtLPrimitiveCompositeJsonGenericDataBlock >> condensedJsonBlock [
 	(jsonDataBlocks size = 1 and: [

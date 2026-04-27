@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLOllamaOpenAiClient,
 	#superclass : #GtLOllamaClient,
-	#category : 'Gt4Llm-Ollama-Client'
+	#category : #'Gt4Llm-Ollama-Client'
 }
 
 { #category : #'as yet unclassified' }
@@ -25,13 +25,4 @@ GtLOllamaOpenAiClient >> apiClientWithModel: aString andMessages: aCollection an
 GtLOllamaOpenAiClient >> assistantMessageClass [
 
 	^ GtLOllamaOpenAiAssistantMessage
-]
-
-{ #category : #views }
-GtLOllamaOpenAiClient >> gtCallsFor: aView [
-	<gtView>
-	^ aView forward
-		title: 'History calls';
-		object: [ history ];
-		view: #gtCallsFor:
 ]

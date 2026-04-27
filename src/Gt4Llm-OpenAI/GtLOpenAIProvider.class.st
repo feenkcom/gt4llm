@@ -4,7 +4,6 @@ Class {
 	#instVars : [
 		'client',
 		'executions',
-		'tools',
 		'modelName',
 		'compactionStrategy'
 	],
@@ -212,27 +211,6 @@ GtLOpenAIProvider >> gtViewCallsWithTokensFor: aView [
 		priority: 1;
 		object: [client];
 		view: #gtViewCallsWithTokensFor:
-]
-
-{ #category : #'private - execution' }
-GtLOpenAIProvider >> handleToolCall: aToolCall [
-	| toolMessage |
-	chat removeLastMessage.
-	toolMessage := GtLToolMessage new 
-		toolCall: aToolCall.
-	toolMessage chat: chat.
-	toolMessage beRunningExecutionState.
-	[ |domainObject|
-		domainObject := tools performToolCall: aToolCall.
-		toolMessage output: domainObject ]
-			ensure: [ toolMessage beFinishedExecutionState ].
-	self chat signalRunHasUpdated.
-	
-	"Let's review this when isStreaming works (is used).
-	Do we need to call #executeAsyncMessage: 
-	or can we call #processNextMessage:?"
-	self flag: #todo.
-	self executeAsyncMessage: toolMessage
 ]
 
 { #category : #initialization }
