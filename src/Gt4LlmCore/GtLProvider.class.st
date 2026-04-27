@@ -4,7 +4,6 @@ Class {
 	#instVars : [
 		'chat',
 		'assistantMessageClass',
-		'providerWorking',
 		'executionState'
 	],
 	#category : #'Gt4LlmCore-Core'
