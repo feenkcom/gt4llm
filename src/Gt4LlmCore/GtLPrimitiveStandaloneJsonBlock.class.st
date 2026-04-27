@@ -7,6 +7,12 @@ Class {
 	#category : #'Gt4LlmCore-Data Views'
 }
 
+{ #category : #visiting }
+GtLPrimitiveStandaloneJsonBlock >> acceptVisitor: aVisitor [
+
+	^ aVisitor visitGtLPrimitiveStandaloneJsonBlock: self
+]
+
 { #category : #accessing }
 GtLPrimitiveStandaloneJsonBlock >> containedJsonDataBlocksCount [
 	"Return 1 as this block itself counts as a single json data block."

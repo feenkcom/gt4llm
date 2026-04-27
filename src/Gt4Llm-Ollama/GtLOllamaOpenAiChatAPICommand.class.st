@@ -8,7 +8,7 @@ Class {
 		'tools',
 		'instructions'
 	],
-	#category : 'Gt4Llm-Ollama-Client'
+	#category : #'Gt4Llm-Ollama-Client'
 }
 
 { #category : #api }
@@ -100,7 +100,7 @@ GtLOllamaOpenAiChatAPICommand >> request [
 
 { #category : #api }
 GtLOllamaOpenAiChatAPICommand >> serializationClass [
-	^ GtLOllamaClientMessage
+	^ GtLOllamaResponse
 ]
 
 { #category : #accessing }

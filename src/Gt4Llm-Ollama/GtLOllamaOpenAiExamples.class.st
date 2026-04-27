@@ -1,14 +1,14 @@
 Class {
 	#name : #GtLOllamaOpenAiExamples,
 	#superclass : #Object,
-	#category : 'Gt4Llm-Ollama-Examples'
+	#category : #'Gt4Llm-Ollama-Examples'
 }
 
 { #category : #examples }
 GtLOllamaOpenAiExamples >> assistantMessage [
 	<gtExample>
 	| message result |
-	result := GtLOllamaClientMessage from: {
+	result := GtLOllamaResponse from: {
 		'model' -> 'llama3.2'.
 		'response' -> 'Hello'
 		} asDictionary.

@@ -3,9 +3,7 @@ Class {
 	#superclass : #GtLProvider,
 	#instVars : [
 		'client',
-		'tools',
 		'maxTokens',
-		'instructions',
 		'executions',
 		'modelName',
 		'compactionStrategy'
@@ -49,11 +47,6 @@ GtLAnthropicProvider >> addBrowseTool [
 		addTool: (GtLlmTool new
 				type: 'web_search_20250305';
 				name: 'web_search')
-]
-
-{ #category : #'as yet unclassified' }
-GtLAnthropicProvider >> addTool: aTool [
-	tools add: aTool
 ]
 
 { #category : #'as yet unclassified' }
@@ -189,16 +182,6 @@ GtLAnthropicProvider >> gtExecutionsFor: aView [
 ]
 
 { #category : #'as yet unclassified' }
-GtLAnthropicProvider >> gtToolsFor: aView [
-	<gtView>
-	^ aView forward
-		title: 'Tools';
-		priority: 5;
-		object: [ tools ];
-		view: #gtItemsFor:
-]
-
-{ #category : #'as yet unclassified' }
 GtLAnthropicProvider >> gtTriggerAssistantActionFor: anAction [
 	<gtAction>
 	^ anAction button
@@ -236,16 +219,6 @@ GtLAnthropicProvider >> initializeClient [
 	client := GtLAnthropicClient new
 ]
 
-{ #category : #'as yet unclassified' }
-GtLAnthropicProvider >> instructions [
-	^ instructions
-]
-
-{ #category : #'as yet unclassified' }
-GtLAnthropicProvider >> instructions: aString [
-	instructions := aString
-]
-
 { #category : #accessing }
 GtLAnthropicProvider >> maxTokens [
 	^ maxTokens
@@ -264,18 +237,6 @@ GtLAnthropicProvider >> modelName [
 { #category : #accessing }
 GtLAnthropicProvider >> modelName: anObject [
 	modelName := anObject
-]
-
-{ #category : #'as yet unclassified' }
-GtLAnthropicProvider >> performToolCallsFor: aResult [
-	aResult toolCalls
-		do: [ :aToolCall | 
-			| toolOutput |
-			toolOutput := tools performToolCall: aToolCall.
-			chat
-				addMessage: (GtAnthropicToolMessage new
-						id: aToolCall id;
-						contentText: toolOutput) ]
 ]
 
 { #category : #'private - execution' }
@@ -410,14 +371,4 @@ GtLAnthropicProvider >> sendFiles: aListOfFileReferences withMessage: aString [
 										asDictionary ]);
 				role: 'user';
 				chat: self)
-]
-
-{ #category : #accessing }
-GtLAnthropicProvider >> tools [
-	^ tools
-]
-
-{ #category : #accessing }
-GtLAnthropicProvider >> tools: anObject [
-	tools := anObject
 ]
