@@ -26,16 +26,22 @@ GtLOllamaMigrationExamples >> gemma4Chat [
 GtLOllamaMigrationExamples >> gemma4ChatInstructions [
 	"Check that instructions are passed through to the Ollama Completions endpoint."
 	<gtExample>
-	| model chat message entity messages |
+	| model chat message entity messages command |
 	
 	model := GtLModelFactory new ollama_gemma4.
 	chat := model provider chat.
 	chat instruction: 'the instructions' titled: 'heading'.
-	message := GtLModelUserMessage new chat: self.
+	message := GtLModelUserMessage new chat: chat.
 	message string: 'message'.
 	message chat: chat.
 	chat addUserMessage: message.
-	entity := model userMessageEndpoint entityFromContext: model newEndpointContext.
+	command := model client
+		apiClientWithModel: model
+		andMessages: chat messages
+		andFormat: nil
+		andTools: chat tools
+		andInstructions: chat instructions.
+	entity := model userMessageEndpoint entityFromContext: (model newEndpointContext command: command).
 	messages := entity at: 'messages'.
 	self assert: (messages anySatisfy: [ :dict |
 		(dict at: 'role') = 'system' and:
@@ -105,20 +111,28 @@ GtLOllamaMigrationExamples >> gemma4ToolChoice [
 GtLOllamaMigrationExamples >> gemma4Tools [
 	"Check that instructions are passed through to the Ollama Completions endpoint."
 	<gtExample>
-	| model chat message entity tools tool |
+	| model chat message entity tools tool command function |
 	
 	model := GtLModelFactory new ollama_gemma4.
 	chat := model provider chat.
 	chat tools: (GtLTools withAll: { GtLMagritteToolForMethodSource new. }).
-	message := GtLModelUserMessage new chat: self.
+	message := GtLModelUserMessage new chat: chat.
 	message string: 'message'.
 	message chat: chat.
 	chat addUserMessage: message.
-	entity := model userMessageEndpoint entityFromContext: model newEndpointContext.
+	command := model client
+		apiClientWithModel: model
+		andMessages: chat messages
+		andFormat: nil
+		andTools: chat tools
+		andInstructions: chat instructions.
+	entity := model userMessageEndpoint entityFromContext: (model newEndpointContext command: command).
 	tools := entity at: 'tools'.
 	self assert: tools size equals: 1.
 	tool := tools first.
-	self assert: tool keys asSet equals: #('description' 'parameters' 'type' 'name') asSet.
+	self assert: tool keys asSet equals: #('function' 'type') asSet.
+	function := tool at: 'function'.
+	self assert: function keys asSet equals: #('description' 'parameters' 'type' 'name') asSet.
 
 	^ entity
 ]
@@ -148,7 +162,7 @@ GtLOllamaMigrationExamples >> llama3ChatInstructions [
 	model := GtLModelFactory new ollama_llama3_2.
 	chat := model provider chat.
 	chat instruction: 'the instructions' titled: 'heading'.
-	message := GtLModelUserMessage new chat: self.
+	message := GtLModelUserMessage new chat: chat.
 	message string: 'message'.
 	message chat: chat.
 	chat addUserMessage: message.
