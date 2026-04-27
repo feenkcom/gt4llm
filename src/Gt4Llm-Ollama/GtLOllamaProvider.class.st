@@ -4,9 +4,7 @@ Class {
 	#instVars : [
 		'client',
 		'executions',
-		'tools',
-		'modelName',
-		'instructions'
+		'modelName'
 	],
 	#category : #'Gt4Llm-Ollama-Provider'
 }
@@ -32,11 +30,6 @@ GtLOllamaProvider class >> openAiCompatibility [
 { #category : #accessing }
 GtLOllamaProvider class >> providerName [
 	^ 'Ollama'
-]
-
-{ #category : #accessing }
-GtLOllamaProvider >> addTool: aTool [
-	tools := self tools copyWith: aTool
 ]
 
 { #category : #accessing }
@@ -133,23 +126,11 @@ GtLOllamaProvider >> initialize [
 	modelName := nil.
 	self initializeClient.
 	executions := OrderedCollection new.
-	tools := #().
-	instructions := ''
 ]
 
 { #category : #initialization }
 GtLOllamaProvider >> initializeClient [
 	client := GtLOllamaOpenAiClient new
-]
-
-{ #category : #accessing }
-GtLOllamaProvider >> instructions [
-	^ instructions ifNil: [ '' ]
-]
-
-{ #category : #accessing }
-GtLOllamaProvider >> instructions: aString [
-	instructions := aString
 ]
 
 { #category : #accessing }
@@ -251,14 +232,4 @@ GtLOllamaProvider >> responseTypeForResult: aResult fromInputMessage: anInputMes
 	anInputMessage isCompactionRequest ifTrue: [
 		newMessage markWithCompactionResponse ].
 	^ newMessage
-]
-
-{ #category : #accessing }
-GtLOllamaProvider >> tools [
-	^ tools ifNil: [ #() ]
-]
-
-{ #category : #accessing }
-GtLOllamaProvider >> tools: aCollection [
-	tools := aCollection
 ]
