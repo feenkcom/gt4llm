@@ -8,6 +8,15 @@ Class {
 }
 
 { #category : #accessing }
+GtLLepiterSnippetTransformationSpecification >> page [
+	^ LeDatabasesRegistry defaultLogicalDatabase
+		pageWithID: self pageUid
+		ifPresent: [ :aPage | aPage ]
+		ifAbsent: [ Error
+				signal: 'Could not locate page with id ' , self pageUid asString ]
+]
+
+{ #category : #accessing }
 GtLLepiterSnippetTransformationSpecification >> pageUid [
 	^ UUID gtFromString: self pageUidString 
 ]

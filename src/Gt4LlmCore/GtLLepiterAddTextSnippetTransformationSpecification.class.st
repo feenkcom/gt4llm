@@ -17,6 +17,13 @@ GtLLepiterAddTextSnippetTransformationSpecification class >> jsonSchemaLabel [
 	^ 'AddTextSnippet'
 ]
 
+{ #category : #'as yet unclassified' }
+GtLLepiterAddTextSnippetTransformationSpecification >> asRefactoringIn: aNamespace [
+	aNamespace changes
+		addChange: (LeAddSnippetChange text: newSnippetText in: self page).
+	^ nil
+]
+
 { #category : #views }
 GtLLepiterAddTextSnippetTransformationSpecification >> gtNewSnippetTextFor: aView [
 	<gtView>
