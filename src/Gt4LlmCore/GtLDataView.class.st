@@ -31,6 +31,13 @@ GtLDataView class >> isAbstract [
 	^ self name = #GtLDataView 
 ]
 
+{ #category : #'as yet unclassified' }
+GtLDataView >> acceptVisitor: aVisitor [
+
+	^ aVisitor perform: ('visit', self class name asString, ':') asSymbol
+		withArguments: { self }
+]
+
 { #category : #accessing }
 GtLDataView >> allDefiningMethods [
 	"I return an object that understands #gtSourceFor:.

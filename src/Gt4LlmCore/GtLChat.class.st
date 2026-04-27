@@ -509,8 +509,11 @@ GtLChat >> initializeTools [
 
 { #category : #'as yet unclassified' }
 GtLChat >> instruction: instructionString titled: title [
-	self instructions
-		addSection: (GtLInstructionSection new
+	| explanationSection |
+	
+	explanationSection := self instructions ensureSectionNamed: 'Explanations'.
+	explanationSection body
+		addItem: (GtLInstructionSection new
 				title: title;
 				body: instructionString)
 ]
@@ -604,6 +607,16 @@ GtLChat >> provider [
 GtLChat >> provider: anObject [
 	provider := anObject.
 	provider chat: self
+]
+
+{ #category : #accessing }
+GtLChat >> reasoningEffort [
+	^ reasoningEffort
+]
+
+{ #category : #accessing }
+GtLChat >> reasoningEffort: anObject [
+	reasoningEffort := anObject
 ]
 
 { #category : #actions }

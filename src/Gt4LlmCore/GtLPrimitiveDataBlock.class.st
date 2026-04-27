@@ -8,6 +8,12 @@ Class {
 	#category : #'Gt4LlmCore-Data Views'
 }
 
+{ #category : #visiting }
+GtLPrimitiveDataBlock >> acceptVisitor: aVisitor [
+
+	^ aVisitor visitGtLPrimitiveDataBlock: self
+]
+
 { #category : #accessing }
 GtLPrimitiveDataBlock >> dataKey [
 	^dataKey

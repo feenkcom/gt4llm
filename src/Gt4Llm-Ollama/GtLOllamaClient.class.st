@@ -52,16 +52,18 @@ GtLOllamaClient >> baseUrl: anObject [
 
 { #category : #private }
 GtLOllamaClient >> checkForErrors: aResponse [
-	(aResponse isDictionary and: [ aResponse includesKey: 'error' ])
-		ifTrue: [ GtLOllamaError signal: (aResponse at: 'error') ].
+
+	aResponse isDictionary ifFalse: [ ^ aResponse ].
+	aResponse at: 'error' ifPresent: [ :errorDetails |
+		GtLOllamaError signal: errorDetails ].
 	^ aResponse
 ]
 
 { #category : #api }
-GtLOllamaClient >> completeChatWithModel: aString andMessages: aCollection andFormat: aFormat andTools: someTools andInstructions: aStringOrNil [
+GtLOllamaClient >> completeChatWithModel: aGtLModel andMessages: aCollection andFormat: aFormat andTools: someTools andInstructions: aStringOrNil [
 
 	^ (self 
-		apiClientWithModel: aString 
+		apiClientWithModel: aGtLModel 
 		andMessages: aCollection 
 		andFormat: aFormat 
 		andTools: someTools 
@@ -78,6 +80,15 @@ GtLOllamaClient >> get: aString [
 	requestResponse := self addHistoryRequestResponse: aClient.
 	requestResponse result: result.
 	^ requestResponse
+]
+
+{ #category : #views }
+GtLOllamaClient >> gtCallsFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'History calls';
+		object: [ history ];
+		view: #gtCallsFor:
 ]
 
 { #category : #accessing }
@@ -111,6 +122,7 @@ GtLOllamaClient >> post: aString withEntity: anEntity [
 	result := aClient post.
 	requestResponse := self addHistoryRequestResponse: aClient.
 	requestResponse result: result.
+	self checkForErrors: result.
 	^ requestResponse
 ]
 

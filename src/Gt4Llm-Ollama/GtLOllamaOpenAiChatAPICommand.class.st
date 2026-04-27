@@ -100,7 +100,7 @@ GtLOllamaOpenAiChatAPICommand >> request [
 
 { #category : #api }
 GtLOllamaOpenAiChatAPICommand >> serializationClass [
-	^ GtLOllamaClientMessage
+	^ GtLOllamaResponse
 ]
 
 { #category : #accessing }
