@@ -73,6 +73,46 @@ GtLReplyMessage >> copyForIndependentRequest [
 	^ copy
 ]
 
+{ #category : #copying }
+GtLReplyMessage >> copyForIndependentRequestInChat: aChat [
+	^ self 
+			copyForIndependentRequestInChat: aChat 
+			withUserMessage: (userMessage copyForIndependentRequestInChat: aChat)
+			upTo: (finalMessage ifNil: [
+				self executionMessages
+					ifEmpty: [nil] 
+					ifNotEmpty: [ :aCollection | aCollection last]]) 
+]
+
+{ #category : #copying }
+GtLReplyMessage >> copyForIndependentRequestInChat: aChat withUserMessage: aUserMessage upTo: aLastMessage [
+	| newCopy indexOfMessage messagesToCopy |
+	
+	newCopy := self copy.
+	newCopy postCopyForIndependentRequestInChat: aChat.
+	newCopy userMessage: aUserMessage.
+	
+	indexOfMessage := self executionMessages 
+		indexOf: aLastMessage ifAbsent: [ nil ].
+	
+	messagesToCopy := indexOfMessage 
+		ifNil: [ self executionMessages  copy ] 
+		ifNotNil: [ self executionMessages first: indexOfMessage ].
+	
+	newCopy executionMessages: (messagesToCopy collect: [ :each |
+		each copyForIndependentRequestInChat: aChat ]).
+	
+	indexOfMessage ifNotNil: [ 
+		"If the message to stop is an execution message do not copy the final message."
+		^ newCopy ].
+	
+	finalMessage ifNotNil: [
+		newCopy finalMessage: (finalMessage copyForIndependentRequestInChat: aChat).
+		newCopy finishedAt: self finishedAt ].
+	
+	^ newCopy
+]
+
 { #category : #'api - message' }
 GtLReplyMessage >> currentMessage [
 	"Return a last message that should be used
@@ -187,7 +227,7 @@ GtLReplyMessage >> finalMessage: aMessage [
 
 	finalMessage ifNotNil: [ :oldMessage | oldMessage unsubscribe: self ].
 	finalMessage := aMessage.
-	finishedAt := DateAndTime now.
+	self finishedAt: DateAndTime now.
 
 	aMessage
 				when: GtLMessageAnnouncement
@@ -203,6 +243,11 @@ GtLReplyMessage >> finalMessage: aMessage [
 GtLReplyMessage >> finishedAt [
 	<return: #DateAndTime or: nil>
 	^ finishedAt
+]
+
+{ #category : #accessing }
+GtLReplyMessage >> finishedAt: aDateAndTime [
+	finishedAt := aDateAndTime
 ]
 
 { #category : #'gt - extensions' }
@@ -306,6 +351,12 @@ GtLReplyMessage >> gtViewsInContext: aPhlowContext [
 	^ collectedViews
 ]
 
+{ #category : #testing }
+GtLReplyMessage >> includesMessage: aMessage [
+	^ (self executionMessages anySatisfy: [:each | each = aMessage]) or: [
+		finalMessage = aMessage ]
+]
+
 { #category : #initialization }
 GtLReplyMessage >> initialize [
 	super initialize.
@@ -392,12 +443,9 @@ GtLReplyMessage >> onInnerMessageAnnouncement: anAnnouncement [
 GtLReplyMessage >> postCopyForIndependentRequestInChat: aChat [
 	super postCopyForIndependentRequestInChat: aChat.
 	
-	self executionMessages: (self executionMessages collect: [ :each |
-		each copyForIndependentRequestInChat: aChat ] ).
-		
-	self userMessage:(userMessage copyForIndependentRequestInChat: aChat).
-	finalMessage ifNotNil: [
-		self finalMessage: (finalMessage copyForIndependentRequestInChat: aChat) ].
+	executionMessages := AsyncMutex for: self executionMessages.
+	finalMessage := nil.
+	finishedAt := nil.
 ]
 
 { #category : #accessing }
