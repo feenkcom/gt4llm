@@ -168,7 +168,8 @@ GtLOpenAIProvider >> executeNextMessage: anInputMessage [
 GtLOpenAIProvider >> executeNextPromtCompactionMessage: anInputMessage [
 	| relevantMessages result |
 
-	relevantMessages := self relevantChatMessages copyForIndependentRequest.
+	relevantMessages := self relevantChatMessages 
+		copyForIndependentRequestInChat: self chat.
 	relevantMessages addLastExecutionMessage: anInputMessage.
 		
 	result := self 
@@ -267,6 +268,15 @@ GtLOpenAIProvider >> performToolCallsIn: result with: activeTools [
 	See: `GtLOpenAIGenerateResponseAPICommand>>#buildEntity`."
 	toolMessages ifEmpty: [ ^ nil ].
 	^ self processNextMessage: toolMessages last.
+]
+
+{ #category : #copying }
+GtLOpenAIProvider >> postCopyForIndependentRequest [
+	super postCopyForIndependentRequest.
+	
+	client := client copy.
+	compactionStrategy := compactionStrategy copy.
+	executions := OrderedCollection new.
 ]
 
 { #category : #printing }

@@ -135,6 +135,13 @@ GtLResponseCompositeFormat >> nextEntryFromNeoJsonReader: jsonReader [
 	^ jsonReader nextAs: #CompositeResponse
 ]
 
+{ #category : #copying }
+GtLResponseCompositeFormat >> postCopy [
+	super postCopy.
+	
+	schemaDescriptions := schemaDescriptions copy.
+]
+
 { #category : #reading }
 GtLResponseCompositeFormat >> readDomainObjectsFrom: aString [
 	| neoJsonMapper |

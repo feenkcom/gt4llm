@@ -151,6 +151,13 @@ GtLTools >> performToolCall: aToolCall inContext: anExecutionContext [
 	^ tool performToolCall: aToolCall inContext: anExecutionContext
 ]
 
+{ #category : #copying }
+GtLTools >> postCopy [
+	super postCopy.
+	
+	items := items copy.
+]
+
 { #category : #accessing }
 GtLTools >> serialize [
 	^ Character cr join: (self items collect: [ :aTool | '- ' , aTool serialize ])
