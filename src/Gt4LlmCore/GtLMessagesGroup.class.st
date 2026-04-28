@@ -49,12 +49,32 @@ GtLMessagesGroup >> copyForIndependentRequest [
 
 { #category : #copying }
 GtLMessagesGroup >> copyForIndependentRequestInChat: aChat [
+	self isEmpty ifTrue: [ ^ self class withAll: #() ].
+	^ self copyForIndependentRequestInChat: aChat upTo: self last
+]
+
+{ #category : #copying }
+GtLMessagesGroup >> copyForIndependentRequestInChat: aChat upTo: aLastMessage [
 	| copiedItems |
 	
-	copiedItems := items  
-		collect: [ :each |
-			each copyForIndependentRequestInChat: aChat ].
-			
+	copiedItems := OrderedCollection new.
+	
+	items doWithIndex: [ :currentMessage :index | 
+			| shouldStop |
+			shouldStop := currentMessage = aLastMessage.
+			copiedItems add: (currentMessage isReplyMessage
+				ifTrue: [ 
+					shouldStop := shouldStop or: [
+						currentMessage includesMessage: aLastMessage  ].
+					currentMessage 
+						copyForIndependentRequestInChat: aChat 
+						withUserMessage: (copiedItems at: index - 1)
+						upTo: aLastMessage. ] 
+				ifFalse: [ 
+					currentMessage copyForIndependentRequestInChat: aChat ]).
+			shouldStop ifTrue: [
+				^ self class withAll: copiedItems ] ].
+	
 	^ self class withAll: copiedItems
 ]
 

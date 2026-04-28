@@ -35,7 +35,7 @@ GtLOllamaCompleteChatAPICommand >> entity [
 		ifTrue: [ entity at: 'tools' put: (self tools collect: [ :aTool | aTool schema ]) ]."
 	self instructions ifNotNil: 
 		[ entity at: 'system' put: 
-			self instructions instructionString ].
+			self instructions  ].
 	^ entity
 ]
 
