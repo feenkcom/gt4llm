@@ -7,7 +7,7 @@ Class {
 { #category : #api }
 GtLOllamaGenerateUserMessageVisitor >> userMessageWith: aMessage [
 
-	^ aMessage computeContentBlockFromInputModels acceptVisitor: self.
+	^ self visitNode: aMessage computeContentBlockFromInputModels.
 ]
 
 { #category : #visiting }
@@ -34,4 +34,10 @@ GtLOllamaGenerateUserMessageVisitor >> visitGtLPrimitiveJsonBareDataBlock: aData
 GtLOllamaGenerateUserMessageVisitor >> visitGtLPrimitiveMessageDataBlock: aDataBlock [
 
 	^ aDataBlock compositeJsonDataBlock acceptVisitor: self.
+]
+
+{ #category : #visiting }
+GtLOllamaGenerateUserMessageVisitor >> visitNode: aUserMessage [
+
+	^ aUserMessage acceptVisitor: self
 ]

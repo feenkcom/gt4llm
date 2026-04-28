@@ -8,7 +8,7 @@ Class {
 GtLOllamaCompletionsGemma4UserMessageVisitor >> userMessageWith: aMessage [
 	| content |
 	
-	content := aMessage computeContentBlockFromInputModels acceptVisitor: self.
+	content := self visitNode: aMessage computeContentBlockFromInputModels.
 	^ {
 		'role' -> 'user'.
 		'content' -> content.
@@ -68,4 +68,10 @@ GtLOllamaCompletionsGemma4UserMessageVisitor >> visitGtLPrimitiveMessageDataBloc
 			'image_url' -> ('data:image/', dataBlock imageType, ';base64,', dataBlock encodedBytes).
 			} asDictionary. ].
 	^ content asArray.
+]
+
+{ #category : #visiting }
+GtLOllamaCompletionsGemma4UserMessageVisitor >> visitNode: aUserMessage [
+
+	^ aUserMessage acceptVisitor: self
 ]
