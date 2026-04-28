@@ -168,8 +168,9 @@ GtLOpenAIProviderCopyChatExamples >> copyChatWithUserAndReplyWithTwoToolMessages
 	self assert: copiedToolMessages first chat == copiedChat.
 	self assert: copiedToolMessages second chat == copiedChat.
 	self assert: copiedReply finalMessage class equals: GtLOpenAIAssistantMessage.
-	self assert: (copiedReply executionMessages at: 1) == (originalReply executionMessages at: 1).
-	self assert: (copiedReply executionMessages at: 2) == (originalReply executionMessages at: 2).
+	
+	self assert: (copiedReply executionMessages at: 1) ~~ (originalReply executionMessages at: 1).
+	self assert: (copiedReply executionMessages at: 2) ~~ (originalReply executionMessages at: 2).
 	self assert: (copiedReply executionMessages at: 1) == (copiedToolMessages at: 1).
 	self assert: (copiedReply executionMessages at: 2) == (copiedToolMessages at: 2).
 	
@@ -290,12 +291,12 @@ GtLOpenAIProviderCopyChatExamples >> copyReplyMessageWithToolAndOpenAIAssistantM
 	self assertCopiedChatMessage: copiedToolMessages first isCopyOf: firstToolMessage forChat: newChat.
 	self assertCopiedChatMessage: copiedToolMessages second isCopyOf: secondToolMessage forChat: newChat.
 	self assertCopiedChatMessage: copiedToolMessages third isCopyOf: thirdToolMessage forChat: newChat.
-	self assert: copiedToolMessages first == (replyMessage executionMessages at: 1).
-	self assert: copiedToolMessages second == (replyMessage executionMessages at: 2).
-	self assert: copiedToolMessages third == (replyMessage executionMessages at: 3).
-	self assert: replyMessage userMessage chat == originalChat.
-	self assert: replyMessage finalMessage chat == originalChat.
-	self assert: ((replyMessage executionMessages collect: [ :each | each chat ]) asArray allSatisfy: [ :each | each == newChat ]).
+	self assert: copiedToolMessages first ~~ (replyMessage executionMessages at: 1).
+	self assert: copiedToolMessages second ~~ (replyMessage executionMessages at: 2).
+	self assert: copiedToolMessages third ~~ (replyMessage executionMessages at: 3).
+	self assert: copiedReply userMessage chat == newChat.
+	self assert: copiedReply finalMessage chat == newChat.
+	self assert: ((copiedReply executionMessages collect: [ :each | each chat ]) asArray allSatisfy: [ :each | each == newChat ]).
 	
 	^ copiedReply
 ]
