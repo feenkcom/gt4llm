@@ -9,6 +9,12 @@ Class {
 	#category : #'Gt4LlmCore-Data Views'
 }
 
+{ #category : #visiting }
+GtLPrimitiveImageDataBlock >> acceptVisitor: aVisitor [
+
+	^ aVisitor visitGtLPrimitiveImageDataBlock: self
+]
+
 { #category : #accessing }
 GtLPrimitiveImageDataBlock >> encodedBytes [
 	^encodedBytes

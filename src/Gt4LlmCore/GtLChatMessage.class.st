@@ -87,6 +87,16 @@ GtLChatMessage >> contentText [
 	^ self subclassResponsibility
 ]
 
+{ #category : #copying }
+GtLChatMessage >> copyForIndependentRequestInChat: aChat [
+	| newCopy |
+	
+	newCopy := self copy.
+	newCopy postCopyForIndependentRequestInChat: aChat.
+	
+	^ newCopy
+]
+
 { #category : #accessing }
 GtLChatMessage >> createdAt [
 	^ createdAt
@@ -380,6 +390,15 @@ GtLChatMessage >> messagesReverseDo: aBlock [
 	Note that some messages may be a composition of other messages"
 
 	aBlock value: self
+]
+
+{ #category : #copying }
+GtLChatMessage >> postCopyForIndependentRequestInChat: aChat [
+	announcer := Announcer new.
+	aChat ifNotNil: [
+		chat := aChat ].
+	formatDescriptions := formatDescriptions copy.
+	tools := tools copy.
 ]
 
 { #category : #accessing }

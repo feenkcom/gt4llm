@@ -4,6 +4,12 @@ Class {
 	#category : #'Gt4LlmCore-Core'
 }
 
+{ #category : #visiting }
+GtLWrappedObjectModel >> acceptVisitor: aVisitor [
+
+	aVisitor visitWrappedObjectModel: self
+]
+
 { #category : #accessing }
 GtLWrappedObjectModel >> addContentOneLineSummaryTo: aWriteStream [
 	| aString |

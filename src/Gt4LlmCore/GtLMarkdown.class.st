@@ -79,6 +79,7 @@ GtLMarkdown >> content [
 
 { #category : #accessing }
 GtLMarkdown >> content: anObject [
+
 	content := anObject
 ]
 

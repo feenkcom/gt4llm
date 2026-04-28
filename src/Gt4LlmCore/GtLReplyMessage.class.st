@@ -388,6 +388,18 @@ GtLReplyMessage >> onInnerMessageAnnouncement: anAnnouncement [
 	self announce: (anAnnouncement copy message: self)
 ]
 
+{ #category : #copying }
+GtLReplyMessage >> postCopyForIndependentRequestInChat: aChat [
+	super postCopyForIndependentRequestInChat: aChat.
+	
+	self executionMessages: (self executionMessages collect: [ :each |
+		each copyForIndependentRequestInChat: aChat ] ).
+		
+	self userMessage:(userMessage copyForIndependentRequestInChat: aChat).
+	finalMessage ifNotNil: [
+		self finalMessage: (finalMessage copyForIndependentRequestInChat: aChat) ].
+]
+
 { #category : #accessing }
 GtLReplyMessage >> relevantToolCallsSummarizers [
 	^ self toolCallsSummarizers select: [ :each | each isRelevant ]

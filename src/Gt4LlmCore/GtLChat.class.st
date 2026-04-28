@@ -212,6 +212,14 @@ GtLChat >> compact [
 	self provider sendPromptCompactionMessage
 ]
 
+{ #category : #actions }
+GtLChat >> copyForIndependentRequest [
+	| newCopy |
+	newCopy := self copy.
+	newCopy postCopyForIndependentRequest.
+	^ newCopy
+]
+
 { #category : #copying }
 GtLChat >> copyLepiterSerialisationToClipboard [
 	| snippet serialization |
@@ -509,8 +517,11 @@ GtLChat >> initializeTools [
 
 { #category : #'as yet unclassified' }
 GtLChat >> instruction: instructionString titled: title [
-	self instructions
-		addSection: (GtLInstructionSection new
+	| explanationSection |
+	
+	explanationSection := self instructions ensureSectionNamed: 'Explanations'.
+	explanationSection body
+		addItem: (GtLInstructionSection new
 				title: title;
 				body: instructionString)
 ]
@@ -590,6 +601,20 @@ GtLChat >> plainStringResponse [
 			name: 'String')
 ]
 
+{ #category : #actions }
+GtLChat >> postCopyForIndependentRequest [
+	announcer := Announcer new.
+	
+	messages := messages copyForIndependentRequestInChat: self.
+	provider := provider copyForIndependentRequest.
+	provider chat: self.
+	
+	instructions := instructions copy.
+	objectStorage := objectStorage copy.
+	responseFormat := responseFormat copy.
+	tools := tools copy.
+]
+
 { #category : #accessing }
 GtLChat >> previousUserMessageIfPresent: aPresentBlock ifAbsent: anAbsentBlock [
 	^ messages lastUserMessageIfPresent: aPresentBlock ifAbsent: anAbsentBlock
@@ -604,6 +629,16 @@ GtLChat >> provider [
 GtLChat >> provider: anObject [
 	provider := anObject.
 	provider chat: self
+]
+
+{ #category : #accessing }
+GtLChat >> reasoningEffort [
+	^ reasoningEffort
+]
+
+{ #category : #accessing }
+GtLChat >> reasoningEffort: anObject [
+	reasoningEffort := anObject
 ]
 
 { #category : #actions }

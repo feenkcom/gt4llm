@@ -4,7 +4,6 @@ Class {
 	#instVars : [
 		'chat',
 		'assistantMessageClass',
-		'providerWorking',
 		'executionState'
 	],
 	#category : #'Gt4LlmCore-Core'
@@ -54,6 +53,14 @@ GtLProvider >> compactionPrompt [
 - Essential lessons and decisions
 - Open questions
 - Next steps'
+]
+
+{ #category : #copying }
+GtLProvider >> copyForIndependentRequest [
+	| newCopy |
+	newCopy := self copy.
+	newCopy postCopyForIndependentRequest.
+	^ newCopy
 ]
 
 { #category : #utils }
@@ -110,6 +117,11 @@ GtLProvider >> initialize [
 { #category : #'private - notifying' }
 GtLProvider >> notifyProviderStateChanged [
 	self chat ifNotNil: [ :aChat | aChat signalExecutionStateChanged ]
+]
+
+{ #category : #copying }
+GtLProvider >> postCopyForIndependentRequest [
+	executionState := GtLProviderState idle .
 ]
 
 { #category : #'private - execution' }
