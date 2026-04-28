@@ -26,12 +26,3 @@ GtLOllamaOpenAiClient >> assistantMessageClass [
 
 	^ GtLOllamaOpenAiAssistantMessage
 ]
-
-{ #category : #views }
-GtLOllamaOpenAiClient >> gtCallsFor: aView [
-	<gtView>
-	^ aView forward
-		title: 'History calls';
-		object: [ history ];
-		view: #gtCallsFor:
-]

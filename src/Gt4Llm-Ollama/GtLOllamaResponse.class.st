@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLOllamaClientMessage,
+	#name : #GtLOllamaResponse,
 	#superclass : #Object,
 	#instVars : [
 		'rawData',
@@ -20,48 +20,48 @@ Class {
 }
 
 { #category : #serialization }
-GtLOllamaClientMessage class >> from: aDictionary [
+GtLOllamaResponse class >> from: aDictionary [
 	(aDictionary isKindOf: self) ifTrue: [ ^ aDictionary ].
 	^ self new from: aDictionary; yourself
 ]
 
 { #category : #accessing }
-GtLOllamaClientMessage >> client [
+GtLOllamaResponse >> client [
 	^ client
 ]
 
 { #category : #accessing }
-GtLOllamaClientMessage >> client: anObject [
+GtLOllamaResponse >> client: anObject [
 	client := anObject
 ]
 
 { #category : #accessing }
-GtLOllamaClientMessage >> content [
+GtLOllamaResponse >> content [
 	^ self message at: 'content' ifAbsent: [ '' ]
 ]
 
 { #category : #accessing }
-GtLOllamaClientMessage >> createdAt [
+GtLOllamaResponse >> createdAt [
 	^ createdAt
 ]
 
 { #category : #accessing }
-GtLOllamaClientMessage >> doneReason [
+GtLOllamaResponse >> doneReason [
 	^ doneReason
 ]
 
 { #category : #accessing }
-GtLOllamaClientMessage >> evalCount [
+GtLOllamaResponse >> evalCount [
 	^ evalCount
 ]
 
 { #category : #accessing }
-GtLOllamaClientMessage >> evalDuration [
+GtLOllamaResponse >> evalDuration [
 	^ evalDuration
 ]
 
 { #category : #initialization }
-GtLOllamaClientMessage >> from: aDictionary [
+GtLOllamaResponse >> from: aDictionary [
 	rawData := aDictionary.
 	message := aDictionary at: 'message' ifAbsent: [ Dictionary new ].
 	model := aDictionary at: 'model' ifAbsent: [ nil ].
@@ -76,7 +76,7 @@ GtLOllamaClientMessage >> from: aDictionary [
 ]
 
 { #category : #ui }
-GtLOllamaClientMessage >> gtRawJsonFor: aView [
+GtLOllamaResponse >> gtRawJsonFor: aView [
 	<gtView>
 	
 	rawData ifNil: [ ^ aView empty ].
@@ -88,52 +88,52 @@ GtLOllamaClientMessage >> gtRawJsonFor: aView [
 ]
 
 { #category : #testing }
-GtLOllamaClientMessage >> hasToolCalls [
+GtLOllamaResponse >> hasToolCalls [
 	^ self toolCalls isNotEmpty
 ]
 
 { #category : #accessing }
-GtLOllamaClientMessage >> loadDuration [
+GtLOllamaResponse >> loadDuration [
 	^ loadDuration
 ]
 
 { #category : #accessing }
-GtLOllamaClientMessage >> message [
+GtLOllamaResponse >> message [
 	^ message
 ]
 
 { #category : #accessing }
-GtLOllamaClientMessage >> model [
+GtLOllamaResponse >> model [
 	^ model
 ]
 
 { #category : #accessing }
-GtLOllamaClientMessage >> promptEvalCount [
+GtLOllamaResponse >> promptEvalCount [
 	^ promptEvalCount
 ]
 
 { #category : #accessing }
-GtLOllamaClientMessage >> promptEvalDuration [
+GtLOllamaResponse >> promptEvalDuration [
 	^ promptEvalDuration
 ]
 
 { #category : #accessing }
-GtLOllamaClientMessage >> rawData [
+GtLOllamaResponse >> rawData [
 	^ rawData
 ]
 
 { #category : #accessing }
-GtLOllamaClientMessage >> requestResponse [
+GtLOllamaResponse >> requestResponse [
 	^ requestResponse
 ]
 
 { #category : #accessing }
-GtLOllamaClientMessage >> requestResponse: anObject [
+GtLOllamaResponse >> requestResponse: anObject [
 	requestResponse := anObject
 ]
 
 { #category : #accessing }
-GtLOllamaClientMessage >> toolCalls [
+GtLOllamaResponse >> toolCalls [
 	| toolCalls |
 
 	rawData at: 'choices' ifPresent: [ :choices |
@@ -162,6 +162,6 @@ GtLOllamaClientMessage >> toolCalls [
 ]
 
 { #category : #accessing }
-GtLOllamaClientMessage >> totalDuration [
+GtLOllamaResponse >> totalDuration [
 	^ totalDuration
 ]
