@@ -156,7 +156,8 @@ GtLAnthropicProvider >> executeNextMessage: anInputMessage [
 GtLAnthropicProvider >> executeNextPromtCompactionMessage: anInputMessage [
 	| relevantMessages result |
 
-	relevantMessages := self relevantChatMessages copyForIndependentRequest.
+	relevantMessages := self relevantChatMessages 
+		copyForIndependentRequestInChat: self chat.
 	relevantMessages addLastExecutionMessage: anInputMessage.
 		
 	result := self 

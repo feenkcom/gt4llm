@@ -212,6 +212,14 @@ GtLChat >> compact [
 	self provider sendPromptCompactionMessage
 ]
 
+{ #category : #actions }
+GtLChat >> copyForIndependentRequest [
+	| newCopy |
+	newCopy := self copy.
+	newCopy postCopyForIndependentRequest.
+	^ newCopy
+]
+
 { #category : #copying }
 GtLChat >> copyLepiterSerialisationToClipboard [
 	| snippet serialization |
@@ -588,6 +596,20 @@ GtLChat >> objectStorage [
 GtLChat >> plainStringResponse [
 	self addResponseFormat: (GtLResponsePlainStringFormat new
 			name: 'String')
+]
+
+{ #category : #actions }
+GtLChat >> postCopyForIndependentRequest [
+	announcer := Announcer new.
+	
+	messages := messages copyForIndependentRequestInChat: self.
+	provider := provider copyForIndependentRequest.
+	provider chat: self.
+	
+	instructions := instructions copy.
+	objectStorage := objectStorage copy.
+	responseFormat := responseFormat copy.
+	tools := tools copy.
 ]
 
 { #category : #accessing }

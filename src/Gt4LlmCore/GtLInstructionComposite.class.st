@@ -7,11 +7,6 @@ Class {
 	#category : #'Gt4LlmCore-Instructions'
 }
 
-{ #category : #other }
-GtLInstructionComposite class >> new [
-	^ self basicNew initialize
-]
-
 { #category : #accessing }
 GtLInstructionComposite >> addItem: anItem [
 	items add: (anItem asGtLInstructionPiece parent: self)
@@ -66,6 +61,7 @@ GtLInstructionComposite >> items: anObject [
 
 { #category : #'as yet unclassified' }
 GtLInstructionComposite >> postCopy [
+	super postCopy.
 	items := items copy.
 ]
 
@@ -83,7 +79,7 @@ GtLInstructionComposite >> sectionNamed: aSectionTitle ifAbsent: aBlock [
 				newSection ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLInstructionComposite >> size [
 	^ items size
 ]

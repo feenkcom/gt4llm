@@ -55,6 +55,14 @@ GtLProvider >> compactionPrompt [
 - Next steps'
 ]
 
+{ #category : #copying }
+GtLProvider >> copyForIndependentRequest [
+	| newCopy |
+	newCopy := self copy.
+	newCopy postCopyForIndependentRequest.
+	^ newCopy
+]
+
 { #category : #utils }
 GtLProvider >> createPromptCompactionMessage [
 	| message |
@@ -109,6 +117,11 @@ GtLProvider >> initialize [
 { #category : #'private - notifying' }
 GtLProvider >> notifyProviderStateChanged [
 	self chat ifNotNil: [ :aChat | aChat signalExecutionStateChanged ]
+]
+
+{ #category : #copying }
+GtLProvider >> postCopyForIndependentRequest [
+	executionState := GtLProviderState idle .
 ]
 
 { #category : #'private - execution' }

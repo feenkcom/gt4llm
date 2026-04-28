@@ -450,6 +450,13 @@ GtLOpenAIClient >> post: aString withEntity: anEntity [
 	^ requestResponse
 ]
 
+{ #category : #copying }
+GtLOpenAIClient >> postCopy [
+	super postCopy.
+	
+	history := history class new addAll: history.
+]
+
 { #category : #accessing }
 GtLOpenAIClient >> postFile: aString withEntity: anEntity [
 	<return: #GtLRequestResponse>
