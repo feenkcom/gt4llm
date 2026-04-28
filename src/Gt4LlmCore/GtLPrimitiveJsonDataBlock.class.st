@@ -4,6 +4,12 @@ Class {
 	#category : #'Gt4LlmCore-Data Views'
 }
 
+{ #category : #visiting }
+GtLPrimitiveJsonDataBlock >> acceptVisitor: aVisitor [
+
+	^ aVisitor visitGtLPrimitiveJsonDataBlock: self
+]
+
 { #category : #adding }
 GtLPrimitiveJsonDataBlock >> addJsonBlock: anotherJsonBlock [
 	| commonKeys |

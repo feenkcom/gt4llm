@@ -9,6 +9,12 @@ Class {
 	#category : #'Gt4LlmCore-Core'
 }
 
+{ #category : #visiting }
+GtLWrappedModel >> acceptVisitor: aVisitor [
+
+	aVisitor visitWrappedModel: self
+]
+
 { #category : #adding }
 GtLWrappedModel >> addContentOneLineSummaryTo: aStringStream [
 	self subclassResponsibility

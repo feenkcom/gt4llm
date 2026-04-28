@@ -88,7 +88,7 @@ GtLOllamaCompleteChatAPICommand >> request [
 
 { #category : #api }
 GtLOllamaCompleteChatAPICommand >> serializationClass [
-	^ GtLOllamaClientMessage
+	^ GtLOllamaResponse
 ]
 
 { #category : #accessing }

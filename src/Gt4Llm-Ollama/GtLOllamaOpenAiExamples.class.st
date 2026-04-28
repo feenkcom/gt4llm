@@ -8,7 +8,7 @@ Class {
 GtLOllamaOpenAiExamples >> assistantMessage [
 	<gtExample>
 	| message result |
-	result := GtLOllamaClientMessage from: {
+	result := GtLOllamaResponse from: {
 		'model' -> 'llama3.2'.
 		'response' -> 'Hello'
 		} asDictionary.
