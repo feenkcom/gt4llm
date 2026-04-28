@@ -419,8 +419,8 @@ GtLChat >> gtMessagesFor: aView [
 		column: 'Created' text: [ :item | item createdAt asStringYMDHMS ] width: 150;
 		contextItemLabel: 'Fork at this message' 
 			action: [ :anElement :aNode  |
-				anElement phlow spawnObject: (self forkAtMessage:  aNode value) ] 
-			if: [ :aNode | aNode value isUserMessage not ];
+				anElement phlow spawnObject: (self forkAtMessage:  aNode value) ] "
+			if: [ :aNode | aNode value isUserMessage not ]";
 		updateWhen: GtLlmThreadRunAnnouncement in: self announcer;
 		expandAll
 ]
