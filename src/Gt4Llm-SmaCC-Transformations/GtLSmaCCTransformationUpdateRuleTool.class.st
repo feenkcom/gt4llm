@@ -6,7 +6,7 @@ Class {
 
 { #category : #accessing }
 GtLSmaCCTransformationUpdateRuleTool >> description [
-	^ 'Updates a rewrite in a file. The `id` should contain the UUID of the rewrite rule that is to be updated obtained from the existing rule to modify. The `id` argument must be that existing rule''s UUID. Do not pass the nil UUID `00000000-0000-0000-0000-000000000000` as the id. Once the rewrite has been updated, it returns the newRewriteId of the updated rule that can be used in future calls to update or remove the rule in the future.
+	^ 'Updates a rewrite in a file. The `id` should contain the UUID of the rewrite rule that is to be updated obtained from the existing rule to modify. The `id` argument must be that existing rule''s UUID. Do not pass the nil UUID `00000000-0000-0000-0000-000000000000` as the id. Once the rewrite has been updated, it returns the newRewriteId of the updated rule that can be used in future calls to update or remove the rule in the future. When updating methods, only a single method can be updated at a time. If you wish to update multiple methods, you must perform the update rewrite once for each method to be updated.
 	
 Example JSON arguments:
 {
