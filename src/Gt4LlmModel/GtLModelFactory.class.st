@@ -28,7 +28,7 @@ GtLModelFactory >> ollama [
 
 	provider := GtLModelProvider new.
 	client := GtLModelClient new.
-	model := GtLModel new
+	model := GtLLlmModel new
 		provider: provider;
 		client: client.
 	model

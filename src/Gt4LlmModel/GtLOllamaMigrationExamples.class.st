@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLOllamaMigrationExamples,
-	#superclass : #GtLOllamaVersionEndpoint,
+	#superclass : #Object,
 	#traits : 'TAssertable',
 	#classTraits : 'TAssertable classTrait',
 	#category : #'Gt4LlmModel-Examples'
