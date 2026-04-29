@@ -62,5 +62,5 @@ GtLSmaCCRewriteMethodSpecification >> sourceDescription [
 	<magritteDescription>
 	^ MAStringDescription new
 		accessor: #source;
-		comment: 'The source of a Smalltalk method to create. Only the source for a single method should be provided.'
+		comment: 'The source of a Smalltalk method to create. Only the source for a single method should be provided. If multiple methods are needed, multiple calls to add new SmaCC rewrites should be made.'
 ]
