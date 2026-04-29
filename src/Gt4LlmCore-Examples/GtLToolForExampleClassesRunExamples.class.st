@@ -49,11 +49,9 @@ GtLToolForExampleClassesRunExamples >> createDynamicExampleClass [
 	suffix := 'Test', (UUID new asString36 copyFrom: 1 to: 8).
 	className := ('ExampleRunDummyExamples_', suffix) asSymbol.
 	
-	testClass := Object
-		subclass: className
-		instanceVariableNames: ''
-		classVariableNames: ''
-		package: 'Gt4LlmCore-Examples-Temporary'.
+	testClass := ((Object << className)
+		slots: {};
+		package: 'Gt4LlmCore-Examples-Temporary') install.
 	
 	"Add example methods without <noTest> pragma"
 	testClass compile: 'successfulExample
