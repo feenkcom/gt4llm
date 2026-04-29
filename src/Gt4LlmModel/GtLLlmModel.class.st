@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLModel,
+	#name : #GtLLlmModel,
 	#superclass : #Object,
 	#instVars : [
 		'name',
@@ -13,7 +13,7 @@ Class {
 }
 
 { #category : #accessing }
-GtLModel >> availableModels [
+GtLLlmModel >> availableModels [
 
 	^ (((self endpointAt: 'availableModels')
 		resultWithClient: client model: self)
@@ -22,53 +22,53 @@ GtLModel >> availableModels [
 ]
 
 { #category : #accessing }
-GtLModel >> client [
+GtLLlmModel >> client [
 	^ client
 ]
 
 { #category : #accessing }
-GtLModel >> client: anObject [
+GtLLlmModel >> client: anObject [
 	client := anObject
 ]
 
 { #category : #accessing }
-GtLModel >> endpointAt: endpointName [
+GtLLlmModel >> endpointAt: endpointName [
 
 	^ endpoints at: endpointName
 ]
 
 { #category : #accessing }
-GtLModel >> endpointAt: endpointName put: endpoint [
+GtLLlmModel >> endpointAt: endpointName put: endpoint [
 
 	endpoints at: endpointName put: endpoint
 ]
 
 { #category : #initialization }
-GtLModel >> initialize [
+GtLLlmModel >> initialize [
 
 	super initialize.
 	endpoints := Dictionary new.
 ]
 
 { #category : #accessing }
-GtLModel >> modelDetails [
+GtLLlmModel >> modelDetails [
 
 	^ (self endpointAt: 'modelDetails')
 		resultWithClient: client model: self
 ]
 
 { #category : #accessing }
-GtLModel >> name [
+GtLLlmModel >> name [
 	^ name
 ]
 
 { #category : #accessing }
-GtLModel >> name: anObject [
+GtLLlmModel >> name: anObject [
 	name := anObject
 ]
 
 { #category : #accessing }
-GtLModel >> newEndpointContext [
+GtLLlmModel >> newEndpointContext [
 
 	^ GtLEndpointContext new
 		model: self;
@@ -77,33 +77,33 @@ GtLModel >> newEndpointContext [
 ]
 
 { #category : #accessing }
-GtLModel >> provider [
+GtLLlmModel >> provider [
 	^ provider
 ]
 
 { #category : #accessing }
-GtLModel >> provider: aGtLModelProvider [
+GtLLlmModel >> provider: aGtLModelProvider [
 
 	provider := aGtLModelProvider.
 	provider model: self.
 ]
 
 { #category : #accessing }
-GtLModel >> providerVersion [
+GtLLlmModel >> providerVersion [
 
 	^ (self endpointAt: 'providerVersion')
 		resultWithClient: client
 ]
 
 { #category : #accessing }
-GtLModel >> runningModels [
+GtLLlmModel >> runningModels [
 
 	^ (self endpointAt: 'runningModels')
 		resultWithClient: client model: self
 ]
 
 { #category : #accessing }
-GtLModel >> userMessageEndpoint [
+GtLLlmModel >> userMessageEndpoint [
 
 	^ userMessageEndpoint ifNil: [ userMessageEndpoint := self endpointAt: 'userMessage' ]
 ]
