@@ -214,9 +214,15 @@ GtLChat >> compact [
 
 { #category : #actions }
 GtLChat >> copyForIndependentRequest [
+	^ self copyForIndependentRequestAtMessage: (self messages  isEmpty
+		ifTrue: [nil] ifFalse: [self messages lastMessage ])
+]
+
+{ #category : #actions }
+GtLChat >> copyForIndependentRequestAtMessage: aMessage [
 	| newCopy |
 	newCopy := self copy.
-	newCopy postCopyForIndependentRequest.
+	newCopy postCopyForIndependentRequestAt: aMessage.
 	^ newCopy
 ]
 
@@ -284,6 +290,11 @@ GtLChat >> firstMessage [
 	^ self messages
 		ifNotNil: [ :aCollection | aCollection ifNotEmpty: #first ifEmpty: [ nil ] ]
 		ifNil: [ nil ]
+]
+
+{ #category : #actions }
+GtLChat >> forkAtMessage: aMessage [
+	^ self copyForIndependentRequestAtMessage:aMessage
 ]
 
 { #category : #accessing }
@@ -406,6 +417,10 @@ GtLChat >> gtMessagesFor: aView [
 			width: 70;
 		column: 'Content' text: [ :item | item contentOneLineSummary ];
 		column: 'Created' text: [ :item | item createdAt asStringYMDHMS ] width: 150;
+		contextItemLabel: 'Fork at this message' 
+			action: [ :anElement :aNode  |
+				anElement phlow spawnObject: (self forkAtMessage:  aNode value) ] "
+			if: [ :aNode | aNode value isUserMessage not ]";
 		updateWhen: GtLlmThreadRunAnnouncement in: self announcer;
 		expandAll
 ]
@@ -602,10 +617,11 @@ GtLChat >> plainStringResponse [
 ]
 
 { #category : #actions }
-GtLChat >> postCopyForIndependentRequest [
+GtLChat >> postCopyForIndependentRequestAt: aMessage [
 	announcer := Announcer new.
 	
-	messages := messages copyForIndependentRequestInChat: self.
+	messages := messages 
+		copyForIndependentRequestInChat: self upTo: aMessage.
 	provider := provider copyForIndependentRequest.
 	provider chat: self.
 	

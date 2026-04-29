@@ -8,7 +8,7 @@ Class {
 		'assistantClassName',
 		'assistantSuperClass'
 	],
-	#category : 'Gt4Llm-GToolkit-UI'
+	#category : #'Gt4Llm-GToolkit-UI'
 }
 
 { #category : #'as yet unclassified' }
@@ -62,13 +62,13 @@ GtLlmReificationForm >> assistantNameDescription [
 ]
 
 { #category : #accessing }
-GtLlmReificationForm >> assistantSuperclass [
-	^ assistantSuperClass
+GtLlmReificationForm >> assistantSuperClass: anObject [
+	assistantSuperClass := anObject
 ]
 
 { #category : #accessing }
-GtLlmReificationForm >> assistantSuperClass: anObject [
-	assistantSuperClass := anObject
+GtLlmReificationForm >> assistantSuperclass [
+	^ assistantSuperClass
 ]
 
 { #category : #'as yet unclassified' }
