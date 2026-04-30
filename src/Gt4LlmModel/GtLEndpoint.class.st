@@ -10,6 +10,13 @@ GtLEndpoint >> entityFromContext: aGtLContext [
 	^ self subclassResponsibility
 ]
 
+{ #category : #api }
+GtLEndpoint >> newContextForModel: model [
+
+	^ GtLEndpointContext new
+		model: model.
+]
+
 { #category : #accessing }
 GtLEndpoint >> path [
 	^ self subclassResponsibility

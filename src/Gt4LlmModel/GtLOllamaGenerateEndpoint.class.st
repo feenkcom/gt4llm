@@ -39,6 +39,15 @@ GtLOllamaGenerateEndpoint >> entityFromContext: aGtLContext [
 	^ entity
 ]
 
+{ #category : #accessing }
+GtLOllamaGenerateEndpoint >> newContextForModel: aGtLLlmModel [
+
+	^ GtLEndpointContext new
+		model: aGtLLlmModel;
+		provider: aGtLLlmModel provider;
+		chat: aGtLLlmModel provider chat.
+]
+
 { #category : #'private - accessing' }
 GtLOllamaGenerateEndpoint >> newUserMessageVisitor [
 
@@ -59,6 +68,14 @@ GtLOllamaGenerateEndpoint >> reasoningValidator [
 { #category : #accessing }
 GtLOllamaGenerateEndpoint >> reasoningValidator: anObject [
 	reasoningValidator := anObject
+]
+
+{ #category : #accessing }
+GtLOllamaGenerateEndpoint >> resultFrom: requestResponse context: context [
+
+	^ (GtLOllamaResponse from: requestResponse result)
+		client: context client;
+		requestResponse: requestResponse
 ]
 
 { #category : #validation }

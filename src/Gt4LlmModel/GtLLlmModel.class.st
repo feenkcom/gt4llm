@@ -13,15 +13,6 @@ Class {
 }
 
 { #category : #accessing }
-GtLLlmModel >> availableModels [
-
-	^ (((self endpointAt: 'availableModels')
-		resultWithClient: client model: self)
-			at: 'models')
-				groupedBy: [ :model | model at: 'name' ]
-]
-
-{ #category : #accessing }
 GtLLlmModel >> client [
 	^ client
 ]
@@ -51,13 +42,6 @@ GtLLlmModel >> initialize [
 ]
 
 { #category : #accessing }
-GtLLlmModel >> modelDetails [
-
-	^ (self endpointAt: 'modelDetails')
-		resultWithClient: client model: self
-]
-
-{ #category : #accessing }
 GtLLlmModel >> name [
 	^ name
 ]
@@ -65,15 +49,6 @@ GtLLlmModel >> name [
 { #category : #accessing }
 GtLLlmModel >> name: anObject [
 	name := anObject
-]
-
-{ #category : #accessing }
-GtLLlmModel >> newEndpointContext [
-
-	^ GtLEndpointContext new
-		model: self;
-		provider: provider;
-		chat: provider chat.
 ]
 
 { #category : #accessing }
@@ -86,20 +61,6 @@ GtLLlmModel >> provider: aGtLModelProvider [
 
 	provider := aGtLModelProvider.
 	provider model: self.
-]
-
-{ #category : #accessing }
-GtLLlmModel >> providerVersion [
-
-	^ (self endpointAt: 'providerVersion')
-		resultWithClient: client
-]
-
-{ #category : #accessing }
-GtLLlmModel >> runningModels [
-
-	^ (self endpointAt: 'runningModels')
-		resultWithClient: client model: self
 ]
 
 { #category : #accessing }
