@@ -43,36 +43,25 @@ GtLModelFactory >> ollama [
 ]
 
 { #category : #'base models' }
-GtLModelFactory >> ollama_gemma4 [
+GtLModelFactory >> ollama_completions [
 	| model chatEndpoint |
 
 	model := self ollama.
-	chatEndpoint := GtLOllamaCompletionsGemma4Endpoint new
+	chatEndpoint := GtLOllamaCompletionsEndpoint new
 		reasoningValidator: self defaultOllamaCompletionsReasoningValidator.
 	model endpointAt: 'userMessage' put: chatEndpoint.
 	^ model.
 ]
 
-{ #category : #'specific models' }
-GtLModelFactory >> ollama_gemma4_31b [
-	| model |
+{ #category : #'base models' }
+GtLModelFactory >> ollama_completions: modelName [
 
-	model := self ollama_gemma4.
-	model name: 'gemma4:31b'.
-	^ model.
-]
-
-{ #category : #'specific models' }
-GtLModelFactory >> ollama_gemma4_31b_native [
-	| model |
-
-	model := self ollama_gemma4_native.
-	model name: 'gemma4:31b'.
-	^ model.
+	^ self ollama_completions
+		name: modelName.
 ]
 
 { #category : #'base models' }
-GtLModelFactory >> ollama_gemma4_native [
+GtLModelFactory >> ollama_generate [
 	| model chatEndpoint |
 
 	model := self ollama.
@@ -82,28 +71,15 @@ GtLModelFactory >> ollama_gemma4_native [
 	^ model.
 ]
 
-{ #category : #'specific models' }
-GtLModelFactory >> ollama_llama3_2 [
-	| model |
+{ #category : #'base models' }
+GtLModelFactory >> ollama_generate: modelName [
 
-	model := self ollama.
-	model 
-		name: 'llama3.2';
-		endpointAt: 'userMessage' put: (GtLOllamaGenerateEndpoint new
-			reasoningValidator: self defaultOllamaGenerateReasoningValidator).
-	^ model.
+	^ self ollama_generate
+		name: modelName
 ]
 
-{ #category : #'base models' }
-GtLModelFactory >> ollama_qwen3_6 [
-	| model chatEndpoint |
+{ #category : #'specific models' }
+GtLModelFactory >> ollama_llama3_2 [
 
-	model := self ollama.
-	chatEndpoint := GtLOllamaCompletionsGemma4Endpoint new
-		reasoningValidator: self defaultOllamaCompletionsReasoningValidator.
-	model 
-		name: 'qwen3.6';
-		endpointAt: 'userMessage' put: chatEndpoint.
-
-	^ model.
+	^ self ollama_generate: 'llama3.2'
 ]

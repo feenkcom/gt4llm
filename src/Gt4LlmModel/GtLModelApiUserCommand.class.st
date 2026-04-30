@@ -42,15 +42,9 @@ GtLModelApiUserCommand >> messages: anObject [
 
 { #category : #'as yet unclassified' }
 GtLModelApiUserCommand >> request [
-	<return: #GtLRequestResponse>
-	| chatEndpoint context |
-
-	chatEndpoint := model userMessageEndpoint.
-	context := model newEndpointContext.
-	context command: self.
-	^ self client 
-		post: chatEndpoint path
-		withEntity: (chatEndpoint entityFromContext: context)
+	"Superseeded in #perform"
+	
+	self shouldNotImplement.
 ]
 
 { #category : #accessing }
