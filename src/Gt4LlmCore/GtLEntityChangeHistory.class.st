@@ -10,7 +10,7 @@ Subclasses must implement `#changes` returning a {{gtClass:GtLSummarizerCodeChan
 Class {
 	#name : #GtLEntityChangeHistory,
 	#superclass : #Object,
-	#category : #'Gt4LlmCore-Summaries'
+	#category : 'Gt4LlmCore-Summaries'
 }
 
 { #category : #testing }

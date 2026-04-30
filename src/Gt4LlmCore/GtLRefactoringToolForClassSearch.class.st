@@ -4,7 +4,7 @@ Magritte-based tool for searching classes in a GtRBNamespace model.
 Class {
 	#name : #GtLRefactoringToolForClassSearch,
 	#superclass : #GtLAbstractRefactoringMagritteTool,
-	#category : #'Gt4LlmCore-Tools'
+	#category : 'Gt4LlmCore-Tools'
 }
 
 { #category : #'llm-generated' }

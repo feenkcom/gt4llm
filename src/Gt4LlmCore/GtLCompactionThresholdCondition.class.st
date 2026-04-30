@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLCompactionThresholdCondition,
 	#superclass : #Object,
-	#category : #'Gt4LlmCore-Compaction'
+	#category : 'Gt4LlmCore-Compaction'
 }
 
 { #category : #testing }

@@ -8,7 +8,7 @@ See also:
 Class {
 	#name : #GtLPackageChangeHistoriesGroup,
 	#superclass : #GtLChangeHistoriesGroup,
-	#category : #'Gt4LlmCore-Summaries'
+	#category : 'Gt4LlmCore-Summaries'
 }
 
 { #category : #adding }

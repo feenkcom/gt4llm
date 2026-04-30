@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'storedObject'
 	],
-	#category : #'Gt4LlmCore-Object Storage'
+	#category : 'Gt4LlmCore-Object Storage'
 }
 
 { #category : #accessing }

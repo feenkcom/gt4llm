@@ -3,7 +3,7 @@ I provide assertion methods for verifying data block serialization in examples.
 "
 Trait {
 	#name : #TGtLDataBlockSerializationAssertions,
-	#category : #'Gt4LlmCore-Examples-Data Views'
+	#category : 'Gt4LlmCore-Examples-Data Views'
 }
 
 { #category : #assertions }

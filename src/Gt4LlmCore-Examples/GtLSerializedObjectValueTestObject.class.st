@@ -9,7 +9,7 @@ Class {
 		'count',
 		'items'
 	],
-	#category : #'Gt4LlmCore-Examples-Domain Objects'
+	#category : 'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #'instance creation' }

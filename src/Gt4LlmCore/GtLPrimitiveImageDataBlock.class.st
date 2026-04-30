@@ -4,15 +4,26 @@ Class {
 	#instVars : [
 		'imageBytes',
 		'imageType',
-		'encodedBytes'
+		'encodedBytes',
+		'contentLabel'
 	],
-	#category : #'Gt4LlmCore-Data Views'
+	#category : 'Gt4LlmCore-Data Views'
 }
 
 { #category : #visiting }
 GtLPrimitiveImageDataBlock >> acceptVisitor: aVisitor [
 
 	^ aVisitor visitGtLPrimitiveImageDataBlock: self
+]
+
+{ #category : #accessing }
+GtLPrimitiveImageDataBlock >> contentLabel [
+	^contentLabel
+]
+
+{ #category : #accessing }
+GtLPrimitiveImageDataBlock >> contentLabel: anObject [
+	contentLabel := anObject
 ]
 
 { #category : #accessing }

@@ -4,7 +4,7 @@ I provide examples for GtLTextFile.
 Class {
 	#name : #GtLTextFileExamples,
 	#superclass : #GtLFileReferenceExamples,
-	#category : #'Gt4LlmCore-Examples-Domain Objects'
+	#category : 'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #'examples - support' }
@@ -57,6 +57,24 @@ GtLTextFileExamples >> textFileSerialization [
 	self assert: dataBlock isNotNil.
 	self assert: dataBlock dataBlocks size equals: 1.
 	self assertDataBlock: dataBlock hasDocumentWithContentType: 'text/plain'.
+	
+	^ dataBlock
+]
+
+{ #category : #examples }
+GtLTextFileExamples >> textFileSerialization_contentLabel [
+	<gtExample>
+	<after: #cleanupTempDirectory>
+	| mainDataView dataBlock documentDataBlock |
+	mainDataView := self textFileMainDataView.
+	dataBlock := mainDataView serializeToLlmPrimiteData.
+	
+	self assert: dataBlock isNotNil.
+	self assert: dataBlock dataBlocks size equals: 1.
+	self assertDataBlock: dataBlock hasDocumentWithContentType: 'text/plain'.
+	
+	documentDataBlock := dataBlock documentDataBlocks first.
+	self assert: documentDataBlock contentLabel equals: 'sample.txt'.
 	
 	^ dataBlock
 ]

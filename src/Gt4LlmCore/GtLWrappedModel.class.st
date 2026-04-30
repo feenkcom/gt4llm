@@ -6,7 +6,7 @@ Class {
 		'model',
 		'cachedMainDataView'
 	],
-	#category : #'Gt4LlmCore-Core'
+	#category : 'Gt4LlmCore-Core'
 }
 
 { #category : #visiting }

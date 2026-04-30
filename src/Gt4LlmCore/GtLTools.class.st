@@ -3,7 +3,7 @@ Class {
 	#superclass : #Object,
 	#traits : 'TGtGroupWithItems',
 	#classTraits : 'TGtGroupWithItems classTrait',
-	#category : #'Gt4LlmCore-Tools'
+	#category : 'Gt4LlmCore-Tools'
 }
 
 { #category : #defaults }
@@ -85,17 +85,17 @@ GtLTools class >> leChange [
 ]
 
 { #category : #defaults }
+GtLTools class >> lepiter [
+	^ self leSearch
+		, self leChange
+]
+
+{ #category : #defaults }
 GtLTools class >> leSearch [
 	^ self
 		withAll: {GtLToolForLepiterKnowledgeBases new.
 				GtLToolForSearchForLepiterPages new.
 				GtLToolForLepiterPageContents new.} asOrderedCollection
-]
-
-{ #category : #defaults }
-GtLTools class >> lepiter [
-	^ self leSearch
-		, self leChange
 ]
 
 { #category : #defaults }

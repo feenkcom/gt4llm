@@ -7,36 +7,12 @@ Class {
 	#instVars : [
 		'environment'
 	],
-	#category : #'Gt4LlmCore-Examples-Tools'
+	#category : 'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #private }
 GtLMagritteToolForClassesCreationExamples >> cleanUpEnvironment [
 	environment ifNotNil: [ :anEnvironment | anEnvironment removeFromSystem ]
-]
-
-{ #category : #examples }
-GtLMagritteToolForClassesCreationExamples >> createClassWithMissingTargetClassName [
-	<gtExample>
-	| call |
-	
-	call := self
-		executeTool: GtLMagritteToolForClassesCreation new
-		withArguments: {
-			'classes' -> {
-				{ 'superclassName' -> #Object.
-				  'package' -> 'Gt4LlmCoreNewPackage' } asDictionary
-			} asArray.
-			'traits' -> {}
-		} asDictionary.
-	
-	self
-		assertMissingRequiredProperties: call result targetObject
-		withPropertyNames: #('targetClassName')
-		path: #(#classes 1)
-		errorMessage: '@[classes/1] required properties missing [targetClassName]'.
-		
-	^ call
 ]
 
 { #category : #examples }
@@ -203,6 +179,30 @@ GtLMagritteToolForClassesCreationExamples >> createClassesWithUnknownSuperclass 
 ]
 
 { #category : #examples }
+GtLMagritteToolForClassesCreationExamples >> createClassWithMissingTargetClassName [
+	<gtExample>
+	| call |
+	
+	call := self
+		executeTool: GtLMagritteToolForClassesCreation new
+		withArguments: {
+			'classes' -> {
+				{ 'superclassName' -> #Object.
+				  'package' -> 'Gt4LlmCoreNewPackage' } asDictionary
+			} asArray.
+			'traits' -> {}
+		} asDictionary.
+	
+	self
+		assertMissingRequiredProperties: call result targetObject
+		withPropertyNames: #('targetClassName')
+		path: #(#classes 1)
+		errorMessage: '@[classes/1] required properties missing [targetClassName]'.
+		
+	^ call
+]
+
+{ #category : #examples }
 GtLMagritteToolForClassesCreationExamples >> createEmptyClassesAndTraits [
 	<gtExample>
 	| call targetObject |
@@ -217,30 +217,6 @@ GtLMagritteToolForClassesCreationExamples >> createEmptyClassesAndTraits [
 	
 	self assert: (targetObject isKindOf: GtLClassesCreationResult).
 	self assert: targetObject classes isEmpty.
-		
-	^ call
-]
-
-{ #category : #examples }
-GtLMagritteToolForClassesCreationExamples >> createTraitWithMissingTargetTraitName [
-	<gtExample>
-	| call |
-	
-	call := self
-		executeTool: GtLMagritteToolForClassesCreation new
-		withArguments: {
-			'classes' -> {}.
-			'traits' -> {
-				{ 'instanceVariables' -> 'value'.
-				  'package' -> 'Gt4LlmCoreNewPackage' } asDictionary
-			} asArray
-		} asDictionary.
-	
-	self
-		assertMissingRequiredProperties: call result targetObject
-		withPropertyNames: #('targetTraitName')
-		path: #(#traits 1)
-		errorMessage: '@[traits/1] required properties missing [targetTraitName]'.
 		
 	^ call
 ]
@@ -287,6 +263,30 @@ GtLMagritteToolForClassesCreationExamples >> createTraitsWithInstanceVariables [
 		self assert: createdTraits second package name equals: 'Gt4LlmCoreNewPackage'.
 		self assert: createdTraits second packageTag name equals: 'TagTwo'
 	] ensure: [ traitsNames do: [ :each | self removeClassNamedIfPresent: each ] ].
+		
+	^ call
+]
+
+{ #category : #examples }
+GtLMagritteToolForClassesCreationExamples >> createTraitWithMissingTargetTraitName [
+	<gtExample>
+	| call |
+	
+	call := self
+		executeTool: GtLMagritteToolForClassesCreation new
+		withArguments: {
+			'classes' -> {}.
+			'traits' -> {
+				{ 'instanceVariables' -> 'value'.
+				  'package' -> 'Gt4LlmCoreNewPackage' } asDictionary
+			} asArray
+		} asDictionary.
+	
+	self
+		assertMissingRequiredProperties: call result targetObject
+		withPropertyNames: #('targetTraitName')
+		path: #(#traits 1)
+		errorMessage: '@[traits/1] required properties missing [targetTraitName]'.
 		
 	^ call
 ]

@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'logicalDatabase'
 	],
-	#category : #'Gt4LlmCore-Examples-Tools'
+	#category : 'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #examples }
@@ -250,6 +250,21 @@ GtLToolForLepiterSnippetsCreateExamples >> missingSnippetPageUid [
 ]
 
 { #category : #examples }
+GtLToolForLepiterSnippetsCreateExamples >> missingSnippets [
+	<gtExample>
+	| call |
+	call := self
+		executeTool: GtLToolForLepiterSnippetsCreate new
+		withArguments: Dictionary new.
+	self
+		assertMissingRequiredProperties: call result targetObject
+		withPropertyNames: #('snippets')
+		path: #(nil)
+		errorMessage: 'required properties missing [snippets]'.
+	^ call
+]
+
+{ #category : #examples }
 GtLToolForLepiterSnippetsCreateExamples >> missingSnippetText [
 	<gtExample>
 	| call targetObject tool page |
@@ -276,21 +291,6 @@ GtLToolForLepiterSnippetsCreateExamples >> missingSnippetText [
 		withArgumentName: 'snippetText'
 		errorMessage: 'Missing argument called snippetText'.
 	
-	^ call
-]
-
-{ #category : #examples }
-GtLToolForLepiterSnippetsCreateExamples >> missingSnippets [
-	<gtExample>
-	| call |
-	call := self
-		executeTool: GtLToolForLepiterSnippetsCreate new
-		withArguments: Dictionary new.
-	self
-		assertMissingRequiredProperties: call result targetObject
-		withPropertyNames: #('snippets')
-		path: #(nil)
-		errorMessage: 'required properties missing [snippets]'.
 	^ call
 ]
 

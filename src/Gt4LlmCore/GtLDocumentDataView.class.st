@@ -4,15 +4,27 @@ Class {
 	#instVars : [
 		'contentType',
 		'documentBytesComputation',
-		'computedDocumentBytes'
+		'computedDocumentBytes',
+		'contentLabelComputation'
 	],
-	#category : #'Gt4LlmCore-Data Views'
+	#category : 'Gt4LlmCore-Data Views'
 }
+
+{ #category : #accessing }
+GtLDocumentDataView >> computeContentLabel [
+	^contentLabelComputation ifNotNil: [ :aComputation |
+			aComputation value ]
+]
 
 { #category : #accessing }
 GtLDocumentDataView >> computedDocumentBytes [
 	^ computedDocumentBytes ifNil: [
 		computedDocumentBytes := documentBytesComputation value ]
+]
+
+{ #category : #accessing }
+GtLDocumentDataView >> contentLabel: aBlockClosure [
+	contentLabelComputation := aBlockClosure
 ]
 
 { #category : #accessing }
@@ -61,6 +73,7 @@ GtLDocumentDataView >> serializeToLlmPrimiteDataOn: aBuilder [
 	aBuilder 
 		addDocumentBlockFor: self computedDocumentBytes
 		contentType: self contentType
+		label: self computeContentLabel
 		dataKey: self dataKey
 		from: self
 ]

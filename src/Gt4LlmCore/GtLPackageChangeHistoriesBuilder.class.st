@@ -15,7 +15,7 @@ Class {
 	#instVars : [
 		'codeChanges'
 	],
-	#category : #'Gt4LlmCore-Summaries'
+	#category : 'Gt4LlmCore-Summaries'
 }
 
 { #category : #'instance creation' }

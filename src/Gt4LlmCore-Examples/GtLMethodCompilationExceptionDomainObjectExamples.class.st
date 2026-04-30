@@ -3,7 +3,7 @@ Class {
 	#superclass : #GtLErroneousConditionDomainObjectExamples,
 	#traits : 'TGtLExceptionDomainObjectAssertions',
 	#classTraits : 'TGtLExceptionDomainObjectAssertions classTrait',
-	#category : #'Gt4LlmCore-Examples-Domain Objects'
+	#category : 'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #examples }

@@ -4,7 +4,7 @@ Class {
 	#classInstVars : [
 		'UseCoder'
 	],
-	#category : #'Gt4LlmCore-Core'
+	#category : 'Gt4LlmCore-Core'
 }
 
 { #category : #'as yet unclassified' }
