@@ -18,7 +18,8 @@ GtLSmaCCRewriteFileSpecification >> asSmaCCRewriteIn: aModel [
 	| file |
 	file := SmaCCRewriteFile new.
 	file filename: self filename.
-	file parserClass: (Smalltalk at: self parserClass ifAbsent: [ SmaCCParseNode ]).
+	file
+		parserClass: (Smalltalk at: self parserClass asSymbol ifAbsent: [ SmaCCParser ]).
 	file
 		rewrites: (self rules
 				collect: [ :each | 
@@ -60,7 +61,7 @@ GtLSmaCCRewriteFileSpecification >> parserClassDescription [
 	<magritteDescription>
 	^ MAStringDescription new
 		accessor: #parserClass;
-		comment: 'The parser to use to parse the search patterns'
+		comment: 'The parser class to use to parse the search patterns.'
 ]
 
 { #category : #accessing }

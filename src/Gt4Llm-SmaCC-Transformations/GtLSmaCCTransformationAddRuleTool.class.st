@@ -15,7 +15,7 @@ GtLSmaCCTransformationAddRuleTool >> addRewriteDescription [
 
 { #category : #accessing }
 GtLSmaCCTransformationAddRuleTool >> description [
-	^ 'Adds a rewrite to a file. It returns a reference to the new rewrite with its UUID. If the afterId is empty or a nil UUID, then it inserts the rule at the beginning.
+	^ 'Adds a rewrite to a file. It returns a reference to the new rewrite with its UUID. If the afterId is empty or a nil UUID, then it inserts the rule at the beginning. When adding methods, only a single method can be added at a time. If you wish to add multiple methods, you must perform the add rewrite once for each method to be inserted.
 	
 Example JSON arguments:
 {
