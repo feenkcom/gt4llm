@@ -3,6 +3,9 @@ Class {
 	#superclass : #Object,
 	#traits : 'TAssertable',
 	#classTraits : 'TAssertable classTrait',
+	#instVars : [
+		'semaphore'
+	],
 	#category : #'Gt4LlmModel-Examples'
 }
 
@@ -14,40 +17,15 @@ GtLOllamaMigrationExamples >> gemma4Chat [
 	<noTest>
 	| model chat |
 	
-	model := GtLModelFactory new ollama_gemma4_31b.
-	chat := model provider chat.
-	chat 
+	semaphore := Semaphore new.
+	model := GtLModelFactory new ollama_completions: 'gemma4:e4b'.
+	chat := self newChatFromModel: model.
+	chat
 		reasoningEffort: #none;
 		sendString: 'Hi, who are you?'.
-	^ { model. chat. }
-]
+	self waitTimeoutSeconds: 60.
 
-{ #category : #examples }
-GtLOllamaMigrationExamples >> gemma4ChatInstructions [
-	"Check that instructions are passed through to the Ollama Completions endpoint."
-	<gtExample>
-	| model chat message entity messages command |
-	
-	model := GtLModelFactory new ollama_gemma4.
-	chat := model provider chat.
-	chat instruction: 'the instructions' titled: 'heading'.
-	message := GtLModelUserMessage new chat: chat.
-	message string: 'message'.
-	message chat: chat.
-	chat addUserMessage: message.
-	command := model client
-		apiClientWithModel: model
-		andMessages: chat messages
-		andFormat: nil
-		andTools: chat tools
-		andInstructions: chat instructions.
-	entity := model userMessageEndpoint entityFromContext: (model newEndpointContext command: command).
-	messages := entity at: 'messages'.
-	self assert: (messages anySatisfy: [ :dict |
-		(dict at: 'role') = 'system' and:
-		[ (dict at: 'content') beginsWith: '# Explanations' ] ])
-		description: 'entity missing system role (instructions) attribute'.
-	^ entity
+	^ { model. chat. }
 ]
 
 { #category : #examples }
@@ -58,13 +36,15 @@ GtLOllamaMigrationExamples >> gemma4Image [
 	<noTest>
 	| image model chat msg |
 	
-	image := '/path/to/image.jpg' asFileReference.
-	model := GtLModelFactory new ollama_gemma4_31b.
-	chat := model provider chat.
+	semaphore := Semaphore new.
+	image := '/home/alistair/tmp/Photos/alistair/Photos/2025/08/25-08-02 17-43-26 1276.jpg' asFileReference.
+	model := GtLModelFactory new ollama_completions: 'gemma4:e4b'.
+	chat := self newChatFromModel: model.
 	msg := chat createUserMessage.
 	msg string: 'Please describe the attached image.'.
 	msg images: { image }.
 	chat sendMessage: msg.
+	self waitTimeoutSeconds: 60.
 
 	^ { model. chat. }
 ]
@@ -77,23 +57,27 @@ GtLOllamaMigrationExamples >> gemma4Instructions [
 	<noTest>
 	| model chat |
 	
-	model := GtLModelFactory new ollama_gemma4_31b.
-	chat := model provider chat.
+	semaphore := Semaphore new.
+	model := GtLModelFactory new ollama_completions: 'gemma4:e4b'.
+	chat := self newChatFromModel: model.
 	chat gtPageExplanation: 'Examples by example'.
 	chat 
 		reasoningEffort: #none;
-		sendString: 'Hi, who are you?'.
+		sendString: 'What is an example method?'.
+	self waitTimeoutSeconds: 60.
+
 	^ { model. chat. }
 ]
 
 { #category : #examples }
 GtLOllamaMigrationExamples >> gemma4ToolChoice [
-	"Check that instructions are passed through to the Ollama Completions endpoint."
+	"Check that instructions are passed through to the Ollama Completions endpoint.
+	To be fixed."
 	<gtExample>
 	<noTest>
 	| model chat message |
 	
-	model := GtLModelFactory new ollama_gemma4_31b.
+	model := GtLModelFactory new ollama_completions: 'gemma4:e4b'.
 	chat := model provider chat.
 	chat tools: (GtLTools withAll: { GtLMagritteToolForMotd new. }).
 	message := GtLModelUserMessage new chat: self.
@@ -111,9 +95,9 @@ GtLOllamaMigrationExamples >> gemma4ToolChoice [
 GtLOllamaMigrationExamples >> gemma4Tools [
 	"Check that instructions are passed through to the Ollama Completions endpoint."
 	<gtExample>
-	| model chat message entity tools tool command function |
+	| model chat message entity tools tool command function endpoint context |
 	
-	model := GtLModelFactory new ollama_gemma4.
+	model := GtLModelFactory new ollama_completions.
 	chat := model provider chat.
 	chat tools: (GtLTools withAll: { GtLMagritteToolForMethodSource new. }).
 	message := GtLModelUserMessage new chat: chat.
@@ -126,7 +110,11 @@ GtLOllamaMigrationExamples >> gemma4Tools [
 		andFormat: nil
 		andTools: chat tools
 		andInstructions: chat instructions.
-	entity := model userMessageEndpoint entityFromContext: (model newEndpointContext command: command).
+	endpoint := model userMessageEndpoint.
+	context := (endpoint newContextForModel: model)
+		chat: chat;
+		command: command.
+	entity := endpoint entityFromContext: context.
 	tools := entity at: 'tools'.
 	self assert: tools size equals: 1.
 	tool := tools first.
@@ -145,11 +133,13 @@ GtLOllamaMigrationExamples >> llama3Chat [
 	<noTest>
 	| model chat |
 	
+	semaphore := Semaphore new.
 	model := GtLModelFactory new ollama_llama3_2.
-	chat := model provider chat.
+	chat := self newChatFromModel: model.
 	chat 
 		reasoningEffort: false;
 		sendString: 'Hi, who are you?'.
+	self waitTimeoutSeconds: 60.
 	^ { model. chat. }
 ]
 
@@ -157,7 +147,7 @@ GtLOllamaMigrationExamples >> llama3Chat [
 GtLOllamaMigrationExamples >> llama3ChatInstructions [
 	"Check that instructions are passed through to the Ollama Generate endpoint."
 	<gtExample>
-	| model chat message entity |
+	| model chat message entity endpoint context|
 	
 	model := GtLModelFactory new ollama_llama3_2.
 	chat := model provider chat.
@@ -166,7 +156,10 @@ GtLOllamaMigrationExamples >> llama3ChatInstructions [
 	message string: 'message'.
 	message chat: chat.
 	chat addUserMessage: message.
-	entity := model userMessageEndpoint entityFromContext: model newEndpointContext.
+	endpoint := model userMessageEndpoint.
+	context := (endpoint newContextForModel: model)
+		chat: chat.
+	entity := endpoint entityFromContext: context.
 	self assert: (entity includesKey: 'system')
 		description: 'entity missing system (instructions) attribute'.
 	self assert: ((entity at: 'system') beginsWith: '# Explanations')
@@ -176,20 +169,20 @@ GtLOllamaMigrationExamples >> llama3ChatInstructions [
 
 { #category : #examples }
 GtLOllamaMigrationExamples >> llama3PageInstructions [
-	"Answer model and chat for a simple question for Llama 3.2.
-	noTest as this assumes a local Ollama installation with llama 3.2 available."
+	"Answer model and chat for a simple question for Llama 3.2."
 	<gtExample>
-	<noTest>
-	| model chat message entity |
+	| model chat message entity endpoint context |
 	
 	model := GtLModelFactory new ollama_llama3_2.
 	chat := model provider chat.
 	chat gtPageExplanation: 'Examples by example'.
-	message := GtLModelUserMessage new chat: self.
+	message := GtLModelUserMessage new chat: chat.
 	message string: 'message'.
 	message chat: chat.
 	chat addUserMessage: message.
-	entity := model userMessageEndpoint entityFromContext: model newEndpointContext.
+	endpoint := model userMessageEndpoint.
+	context := endpoint newContextForModel: model.
+	entity := endpoint entityFromContext: context.
 	self assert: (entity includesKey: 'system')
 		description: 'entity missing system (instructions) attribute'.
 	self assert: ((entity at: 'system') beginsWith: '# Explanations')
@@ -206,7 +199,7 @@ GtLOllamaMigrationExamples >> modelDetails [
 	| model |
 	
 	model := GtLModelFactory new ollama_llama3_2.
-	^ model modelDetails.
+	^ model provider modelDetails.
 ]
 
 { #category : #examples }
@@ -218,7 +211,53 @@ GtLOllamaMigrationExamples >> modelNames [
 	| model |
 	
 	model := GtLModelFactory new ollama.
-	^ model availableModels keys.
+	^ model provider availableModels keys.
+]
+
+{ #category : #private }
+GtLOllamaMigrationExamples >> newChatFromModel: model [
+	"Answer a new chat configured and signal the receiver's semaphore when it goes idle."
+	| chat |
+	
+	chat := model provider chat.
+	chat
+		when: GtLChatExecutionStateChanged
+		send: #signalSemaphoreOnFinished:
+		to: self.
+	^ chat
+]
+
+{ #category : #examples }
+GtLOllamaMigrationExamples >> ollamaCompletionsChatInstructions [
+	"Check that instructions are passed through to the Ollama Completions endpoint."
+	<gtExample>
+	| model chat message entity messages command endpoint context |
+	
+	model := GtLModelFactory new ollama_completions.
+	chat := model provider chat.
+	chat instruction: 'the instructions' titled: 'heading'.
+	message := GtLModelUserMessage new chat: chat.
+	message string: 'message'.
+	message chat: chat.
+	chat addUserMessage: message.
+	command := model client
+		apiClientWithModel: model
+		andMessages: chat messages
+		andFormat: nil
+		andTools: chat tools
+		andInstructions: chat instructions.
+	endpoint := model userMessageEndpoint.
+	context := endpoint newContextForModel: model.
+	context 
+		chat: chat;
+		command: command.
+	entity := endpoint entityFromContext: context.
+	messages := entity at: 'messages'.
+	self assert: (messages anySatisfy: [ :dict |
+		(dict at: 'role') = 'system' and:
+		[ (dict at: 'content') beginsWith: '# Explanations' ] ])
+		description: 'entity missing system role (instructions) attribute'.
+	^ entity
 ]
 
 { #category : #examples }
@@ -227,11 +266,13 @@ GtLOllamaMigrationExamples >> ollamaCompletionsInvalidReasonsing [
 	<gtExample>
 	| model chat |
 	
-	model := GtLModelFactory new ollama_gemma4_31b.
+	model := GtLModelFactory new ollama_completions: 'gemma4:e4b'.
 	chat := model provider chat.
 	self
 		should: [ chat reasoningEffort: #fail ]
-		raise: Error.
+		raise: Error
+		withExceptionDo: [ :ex |
+			self assert: (ex messageText beginsWith: 'Invalid reasoning value') ].
 ]
 
 { #category : #examples }
@@ -244,7 +285,9 @@ GtLOllamaMigrationExamples >> ollamaGenerateInvalidReasonsing [
 	chat := model provider chat.
 	self
 		should: [ chat reasoningEffort: #fail ]
-		raise: Error.
+		raise: Error
+		withExceptionDo: [ :ex |
+			self assert: (ex messageText beginsWith: 'Invalid reasoning value') ].
 ]
 
 { #category : #examples }
@@ -256,60 +299,7 @@ GtLOllamaMigrationExamples >> providerVersion [
 	| model |
 	
 	model := GtLModelFactory new ollama_llama3_2.
-	^ model providerVersion.
-]
-
-{ #category : #examples }
-GtLOllamaMigrationExamples >> qwen36Chat [
-	"Answer the model details of the running system.
-	noTest as this assumes a local Ollama installation with llama 3.2 available."
-	<gtExample>
-	<noTest>
-	| model chat |
-	
-	model := GtLModelFactory new ollama_qwen3_6.
-	chat := model provider chat.
-	chat sendString: 'Hi, who are you?'.
-	^ { model. chat. }
-]
-
-{ #category : #examples }
-GtLOllamaMigrationExamples >> qwen36ToolChoice [
-	"Check that instructions are passed through to the Ollama Completions endpoint."
-	<gtExample>
-	<noTest>
-	| model chat message |
-	
-	model := GtLModelFactory new ollama_qwen3_6.
-	chat := model provider chat.
-	chat tools: (GtLTools withAll: { GtLMagritteToolForMethodSource new. }).
-	message := GtLModelUserMessage new chat: self.
-	message string: 'Use the getCodeOfMethod tool to retrieve the source code for {{gtClass:GtLOllamaMigrationExamples>>llama3Chat}}.'.
-	message parameters at: 'tool_choice' put:
-		{
-		    'type' -> 'function'.
-		    'function' -> { 'name' -> 'getCodeOfMethod' } asDictionary
-	  } asDictionary.
-	chat sendMessage: message.
-	^ chat
-]
-
-{ #category : #examples }
-GtLOllamaMigrationExamples >> qwen3_6Image [
-	"Answer the model and chat for a query and image with Gemma4:31b.
-	noTest as this assumes a local Ollama installation with gemma4:31b available."
-	<gtExample>
-	<noTest>
-	| model chat msg |
-	
-	model := GtLModelFactory new ollama_qwen3_6.
-	chat := model provider chat.
-	msg := chat createUserMessage.
-	msg string: 'Please describe the attached image.'.
-	msg images: { '/home/alistair/tmp/Photos/alistair/Photos/2025/08/25-08-02 17-43-10 1274.jpg' asFileReference }.
-	chat sendMessage: msg.
-
-	^ { model. chat. }
+	^ model provider providerVersion.
 ]
 
 { #category : #examples }
@@ -321,5 +311,29 @@ GtLOllamaMigrationExamples >> runningModels [
 	| model |
 	
 	model := GtLModelFactory new ollama.
-	^ model runningModels.
+	^ model provider runningModels.
+]
+
+{ #category : #private }
+GtLOllamaMigrationExamples >> signalSemaphore [
+
+	semaphore signal.
+]
+
+{ #category : #private }
+GtLOllamaMigrationExamples >> signalSemaphoreOnFinished: aStateChange [
+
+	aStateChange state
+		ifCanStop: [] 
+		ifStopping: [] 
+		ifIdle: [ semaphore signal ].
+]
+
+{ #category : #examples }
+GtLOllamaMigrationExamples >> waitTimeoutSeconds: anInteger [
+	"Wait on the receiver's semaphore for the specified number of seconds.
+	Raise an error on timeout."
+
+	(semaphore waitTimeoutSeconds: 60) ifTrue:
+		[ self error: 'The chat didn''t go idle within ', anInteger asString, ' seconds' ].
 ]
