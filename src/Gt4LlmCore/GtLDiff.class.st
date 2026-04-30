@@ -7,7 +7,7 @@ Class {
 	#instVars : [
 		'diffs'
 	],
-	#category : #'Gt4LlmCore-Formats'
+	#category : 'Gt4LlmCore-Formats'
 }
 
 { #category : #'instance creation' }

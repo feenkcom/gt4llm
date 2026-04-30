@@ -4,5 +4,5 @@ I am a base class for example objects used to test data views. Subclasses provid
 Class {
 	#name : #GtLObjectWithViewsForExamples,
 	#superclass : #Object,
-	#category : #'Gt4LlmCore-Examples-Data Views'
+	#category : 'Gt4LlmCore-Examples-Data Views'
 }

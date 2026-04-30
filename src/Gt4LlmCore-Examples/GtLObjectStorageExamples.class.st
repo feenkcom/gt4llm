@@ -50,25 +50,6 @@ GtLObjectStorageExamples >> accessingObjectThatIsMissingReturnsMissing [
 ]
 
 { #category : #examples }
-GtLObjectStorageExamples >> addObjectAnswersId [
-	<gtExample>
-	<return: #GtLObjectStorage>
-	| objectStorage objectId storedObject reason |
-	
-	reason := GtLStoredObjectStringReason text: 'test object'.
-	objectStorage := self newObjectStorage.
-	objectId := objectStorage addNewObject: Object new reason: reason.
-	storedObject := objectStorage storedObjectAt: objectId.
-	self assert: objectId isString.
-	self assert: (objectStorage includesObjectWithId: objectId).
-	self assert: storedObject id equals: (UUID fromString36: objectId).
-	self assert: storedObject reason == reason.
-	self assert: storedObject reason asReasonString equals: 'test object'.
-	
-	^ objectStorage
-]
-
-{ #category : #examples }
 GtLObjectStorageExamples >> addingSameObjectTwiceAddsTwoObjects [
 	<gtExample>
 	<return: #GtLObjectStorage>
@@ -86,6 +67,25 @@ GtLObjectStorageExamples >> addingSameObjectTwiceAddsTwoObjects [
 	self assert: (objectStorage objectAt: objectIdTwo) == object.
 	self assert: (objectStorage storedObjectAt: objectIdOne) reason == firstReason.
 	self assert: (objectStorage storedObjectAt: objectIdTwo) reason == secondReason.
+	^ objectStorage
+]
+
+{ #category : #examples }
+GtLObjectStorageExamples >> addObjectAnswersId [
+	<gtExample>
+	<return: #GtLObjectStorage>
+	| objectStorage objectId storedObject reason |
+	
+	reason := GtLStoredObjectStringReason text: 'test object'.
+	objectStorage := self newObjectStorage.
+	objectId := objectStorage addNewObject: Object new reason: reason.
+	storedObject := objectStorage storedObjectAt: objectId.
+	self assert: objectId isString.
+	self assert: (objectStorage includesObjectWithId: objectId).
+	self assert: storedObject id equals: (UUID fromString36: objectId).
+	self assert: storedObject reason == reason.
+	self assert: storedObject reason asReasonString equals: 'test object'.
+	
 	^ objectStorage
 ]
 

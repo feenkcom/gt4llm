@@ -4,7 +4,7 @@ I provide examples for GtLPdfFile.
 Class {
 	#name : #GtLPdfFileExamples,
 	#superclass : #GtLFileReferenceExamples,
-	#category : #'Gt4LlmCore-Examples-Domain Objects'
+	#category : 'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #examples }
@@ -44,6 +44,24 @@ GtLPdfFileExamples >> pdfFileSerialization [
 	self assert: dataBlock isNotNil.
 	self assert: dataBlock dataBlocks size equals: 1.
 	self assertDataBlock: dataBlock hasDocumentWithContentType: 'application/pdf'.
+	
+	^ dataBlock
+]
+
+{ #category : #examples }
+GtLPdfFileExamples >> pdfFileSerialization_contentLabel [
+	<gtExample>
+	<after: #cleanupTempDirectory>
+	| mainDataView dataBlock documentDataBlock |
+	mainDataView := self pdfFileMainDataView.
+	dataBlock := mainDataView serializeToLlmPrimiteData.
+	
+	self assert: dataBlock isNotNil.
+	self assert: dataBlock dataBlocks size equals: 1.
+	self assertDataBlock: dataBlock hasDocumentWithContentType: 'application/pdf'.
+	
+	documentDataBlock := dataBlock documentDataBlocks first.
+	self assert: documentDataBlock contentLabel equals: 'sample.pdf'.
 	
 	^ dataBlock
 ]

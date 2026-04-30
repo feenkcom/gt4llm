@@ -4,7 +4,7 @@ Magritte-based tool for substring literal search.
 Class {
 	#name : #GtLMagritteToolForSubstringLiteralSearch,
 	#superclass : #GtLAbstractMagritteFunctionTool,
-	#category : #'Gt4LlmCore-Tools'
+	#category : 'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }

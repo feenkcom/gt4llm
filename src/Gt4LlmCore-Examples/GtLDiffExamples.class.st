@@ -4,7 +4,7 @@ Examples for string and composite diffs.
 Class {
 	#name : #GtLDiffExamples,
 	#superclass : #Object,
-	#category : #'Gt4LlmCore-Examples-Formats'
+	#category : 'Gt4LlmCore-Examples-Formats'
 }
 
 { #category : #examples }

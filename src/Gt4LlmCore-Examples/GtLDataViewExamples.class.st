@@ -6,5 +6,5 @@ Class {
 	#superclass : #Object,
 	#traits : 'TGtLDataViewAssertions + TGtLDataBlockSerializationAssertions',
 	#classTraits : 'TGtLDataViewAssertions classTrait + TGtLDataBlockSerializationAssertions classTrait',
-	#category : #'Gt4LlmCore-Examples-Data Views'
+	#category : 'Gt4LlmCore-Examples-Data Views'
 }

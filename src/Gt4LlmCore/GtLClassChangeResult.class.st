@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLClassChangeResult,
 	#superclass : #GtLCodeChangeResult,
-	#category : #'Gt4LlmCore-Magritte Objects'
+	#category : 'Gt4LlmCore-Magritte Objects'
 }
 
 { #category : #accessing }

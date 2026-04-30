@@ -5,14 +5,15 @@ Class {
 		'messageDataBlock',
 		'currentCompositeJsonDataBlock'
 	],
-	#category : #'Gt4LlmCore-Data Views'
+	#category : 'Gt4LlmCore-Data Views'
 }
 
 { #category : #adding }
-GtLPrimitiveMessageDataBuilder >> addDocumentBlockFor: aByteArray contentType: aContentType dataKey: aDataKey from: aDataView [
+GtLPrimitiveMessageDataBuilder >> addDocumentBlockFor: aByteArray contentType: aContentType label: aLabel dataKey: aDataKey from: aDataView [
 	self addDocumentDataBlock: (GtLPrimitiveDocumentDataBlock new 
 		documentBytes: aByteArray;
 		contentType: aContentType;
+		contentLabel: aLabel;
 		dataKey: aDataKey;
 		sourceDataView: aDataView)
 ]
@@ -23,10 +24,11 @@ GtLPrimitiveMessageDataBuilder >> addDocumentDataBlock: aDocumentBlock [
 ]
 
 { #category : #adding }
-GtLPrimitiveMessageDataBuilder >> addImageBlockFor: aByteArray type: anImageType dataKey: aDataKey from: aDataView [
+GtLPrimitiveMessageDataBuilder >> addImageBlockFor: aByteArray type: anImageType label: aLabel dataKey: aDataKey from: aDataView [
 	self addImageDataBlock: (GtLPrimitiveImageDataBlock new 
 		imageBytes: aByteArray;
 		imageType: anImageType;
+		contentLabel: aLabel;
 		dataKey: aDataKey;
 		sourceDataView: aDataView)
 ]

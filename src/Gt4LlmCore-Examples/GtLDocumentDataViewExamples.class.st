@@ -4,7 +4,7 @@ I provide examples for GtLDocumentDataView.
 Class {
 	#name : #GtLDocumentDataViewExamples,
 	#superclass : #GtLDataViewExamples,
-	#category : #'Gt4LlmCore-Examples-Data Views'
+	#category : 'Gt4LlmCore-Examples-Data Views'
 }
 
 { #category : #'examples - support' }
@@ -31,21 +31,49 @@ startxref
 ]
 
 { #category : #examples }
-GtLDocumentDataViewExamples >> standaloneDocumentDataViewWithPdf [
+GtLDocumentDataViewExamples >> standaloneDocumentDataViewWithContentLabel [
 	<gtExample>
 	| basicView documentBytes |
 	
 	documentBytes := self samplePdfBytes.
 	
 	basicView := GtLDocumentDataView new
-		pdf: [ documentBytes ].
+		document: [ documentBytes ];
+		contentType: 'application/pdf';
+		contentLabel: [ 'test-document.pdf' ].
 	
 	self assert: basicView title isNil.
 	self assert: basicView dataKey isNil.
 	self assert: basicView contentType equals: 'application/pdf'.
 	self assert: basicView computedDocumentBytes equals: documentBytes.
+	self assert: basicView computeContentLabel equals: 'test-document.pdf'.
 	
 	^ basicView
+]
+
+{ #category : #examples }
+GtLDocumentDataViewExamples >> standaloneDocumentDataViewWithContentLabel_serialization [
+	<gtExample>
+	| basicView dataBlock documentDataBlock documentBytes |
+	
+	documentBytes := self samplePdfBytes.
+	basicView := self standaloneDocumentDataViewWithContentLabel.
+	dataBlock := basicView serializeToLlmPrimiteData.
+	
+	self assert: dataBlock sourceDataView equals: basicView.
+	self assert: dataBlock dataKey isNil.
+	self assert: dataBlock dataBlocks size equals: 1.
+	self assert: dataBlock documentDataBlocks size equals: 1.
+	
+	documentDataBlock := dataBlock documentDataBlocks first.
+	self assert: documentDataBlock sourceDataView equals: basicView.
+	self assert: documentDataBlock dataKey isNil.
+	self assert: documentDataBlock documentBytes equals: documentBytes.
+	self assert: documentDataBlock contentType equals: 'application/pdf'.
+	self assert: documentDataBlock encodedBytes equals: documentBytes base64Encoded.
+	self assert: documentDataBlock contentLabel equals: 'test-document.pdf'.
+	
+	^ dataBlock
 ]
 
 { #category : #examples }
@@ -89,4 +117,22 @@ GtLDocumentDataViewExamples >> standaloneDocumentDataViewWithoutDataKey_serializ
 	self assert: documentDataBlock encodedBytes equals: documentBytes base64Encoded.
 	
 	^ dataBlock
+]
+
+{ #category : #examples }
+GtLDocumentDataViewExamples >> standaloneDocumentDataViewWithPdf [
+	<gtExample>
+	| basicView documentBytes |
+	
+	documentBytes := self samplePdfBytes.
+	
+	basicView := GtLDocumentDataView new
+		pdf: [ documentBytes ].
+	
+	self assert: basicView title isNil.
+	self assert: basicView dataKey isNil.
+	self assert: basicView contentType equals: 'application/pdf'.
+	self assert: basicView computedDocumentBytes equals: documentBytes.
+	
+	^ basicView
 ]

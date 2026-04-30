@@ -4,7 +4,7 @@ I provide examples for GtLPrimitiveDocumentDataBlock.
 Class {
 	#name : #GtLPrimitiveDocumentDataBlockExamples,
 	#superclass : #GtLPrimitiveDataBlockExamples,
-	#category : #'Gt4LlmCore-Examples-Data Views'
+	#category : 'Gt4LlmCore-Examples-Data Views'
 }
 
 { #category : #examples }
@@ -34,6 +34,28 @@ GtLPrimitiveDocumentDataBlockExamples >> documentDataBlockWithBytesAndType [
 	self assert: block encodedBytes equals: documentBytes base64Encoded.
 	self assert: block contentType equals: 'application/pdf'.
 	self assert: block documentFormat equals: 'pdf'.
+	self assert: block dataKey isNil.
+	self assertSerializationForDataBlockWithOneDataPart: block.
+	
+	^ block
+]
+
+{ #category : #examples }
+GtLPrimitiveDocumentDataBlockExamples >> documentDataBlockWithContentLabel [
+	<gtExample>
+	| block documentBytes |
+	documentBytes := self samplePdfBytes.
+	
+	block := self basicDocumentDataBlock.
+	block documentBytes: documentBytes.
+	block contentType: 'application/pdf'.
+	block contentLabel: 'sample-document.pdf'.
+	
+	self assert: block documentBytes equals: documentBytes.
+	self assert: block encodedBytes equals: documentBytes base64Encoded.
+	self assert: block contentType equals: 'application/pdf'.
+	self assert: block documentFormat equals: 'pdf'.
+	self assert: block contentLabel equals: 'sample-document.pdf'.
 	self assert: block dataKey isNil.
 	self assertSerializationForDataBlockWithOneDataPart: block.
 	

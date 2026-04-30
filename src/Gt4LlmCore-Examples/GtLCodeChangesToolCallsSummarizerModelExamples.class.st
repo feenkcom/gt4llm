@@ -4,7 +4,7 @@ Examples for code changes tool call summarizer that build the domain objects dir
 Class {
 	#name : #GtLCodeChangesToolCallsSummarizerModelExamples,
 	#superclass : #GtLToolCallsSummarizerExamplesBase,
-	#category : #'Gt4LlmCore-Examples-Summarizers'
+	#category : 'Gt4LlmCore-Examples-Summarizers'
 }
 
 { #category : #examples }

@@ -9,7 +9,7 @@ Class {
 		'changeResult',
 		'toolCall'
 	],
-	#category : #'Gt4LlmCore-Summaries'
+	#category : 'Gt4LlmCore-Summaries'
 }
 
 { #category : #'gt-view' }
