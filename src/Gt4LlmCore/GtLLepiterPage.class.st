@@ -28,12 +28,10 @@ GtLLepiterPage >> gtLepiterPageViewFor: aView [
 GtLLepiterPage >> llmRawDataViewFor: aDataView [
 	<gtLlmDataView>
 	
-	^ aDataView 
-		title: 'Page Contents';
-		jsonData: [ 
-			| serializedString |
-			serializedString := LeJsonV4 uniqueInstance serializePretty: self targetPage.
-			NeoJSONReader fromString: serializedString ]
+	^aDataView 
+			title: 'Page Contents';
+			jsonData: [ 
+				LeJsonV4 uniqueInstance serializePretty: self targetPage ]
 ]
 
 { #category : #printing }
