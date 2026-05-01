@@ -233,7 +233,9 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithBindingEmptyName
 	self
 		assertSmalltalkCodeEvaluationException: call result targetObject
 		withCode: 'value + 2'
-		exceptionClass: CodeError
+		exceptionClass: (self 
+			forPharo13AndNewer: [#OCCodeError asClass] 
+			forOlder: [CodeError])
 		messageSubstring: 'Undeclared variable'.
 	^ call
 ]
