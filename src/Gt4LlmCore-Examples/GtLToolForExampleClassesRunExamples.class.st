@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLToolForExampleClassesRunExamples,
 	#superclass : #GtLAbstractMagritteFunctionToolExamples,
-	#category : 'Gt4LlmCore-Examples-Tools'
+	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #assertions }
