@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLPrimitiveJsonDataBlockExamples,
 	#superclass : #GtLPrimitiveDataBlockExamples,
-	#category : 'Gt4LlmCore-Examples-Data Views'
+	#category : #'Gt4LlmCore-Examples-Data Views'
 }
 
 { #category : #examples }

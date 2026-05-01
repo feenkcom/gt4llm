@@ -4,7 +4,7 @@ I provide examples for GtLTextFile.
 Class {
 	#name : #GtLTextFileExamples,
 	#superclass : #GtLFileReferenceExamples,
-	#category : 'Gt4LlmCore-Examples-Domain Objects'
+	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #'examples - support' }

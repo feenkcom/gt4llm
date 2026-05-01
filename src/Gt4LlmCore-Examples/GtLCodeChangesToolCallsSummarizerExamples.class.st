@@ -7,7 +7,7 @@ Class {
 	#instVars : [
 		'createdClasses'
 	],
-	#category : 'Gt4LlmCore-Examples-Summarizers'
+	#category : #'Gt4LlmCore-Examples-Summarizers'
 }
 
 { #category : #examples }

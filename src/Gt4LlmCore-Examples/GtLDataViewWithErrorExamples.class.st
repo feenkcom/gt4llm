@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLDataViewWithErrorExamples,
 	#superclass : #GtLDataViewExamples,
-	#category : 'Gt4LlmCore-Examples-Data Views'
+	#category : #'Gt4LlmCore-Examples-Data Views'
 }
 
 { #category : #assertions }
