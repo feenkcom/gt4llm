@@ -6,7 +6,7 @@ Class {
 		'history',
 		'reasoningEffort'
 	],
-	#category : #'Gt4Llm-Ollama-Client'
+	#category : 'Gt4Llm-Ollama-Client'
 }
 
 { #category : #defaults }
@@ -139,4 +139,9 @@ GtLOllamaClient >> reasoningEffort: aSymbol [
 	(namedLevels includes: aSymbol) ifFalse:
 		[ self error: 'Reasoning effort must be one of ', namedLevels printString, ', not ', aSymbol printString ].
 	reasoningEffort := aSymbol
+]
+
+{ #category : #accessing }
+GtLOllamaClient >> serializeToolMessageForResponse: aToolMessage [
+	self subclassResponsibility
 ]
