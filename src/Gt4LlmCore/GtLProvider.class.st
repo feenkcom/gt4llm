@@ -142,6 +142,11 @@ GtLProvider >> sendPromptCompactionMessage [
 	^self chat sendMessage: self createPromptCompactionMessage
 ]
 
+{ #category : #accessing }
+GtLProvider >> serializeToolMessageForResponse: aToolMessage [
+	^ nil
+]
+
 { #category : #'api - execution' }
 GtLProvider >> state [
 	"Provide an information in which state this provider is, e.g, idle, working."

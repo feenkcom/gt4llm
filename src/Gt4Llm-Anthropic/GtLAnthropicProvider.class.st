@@ -8,7 +8,7 @@ Class {
 		'modelName',
 		'compactionStrategy'
 	],
-	#category : #'Gt4Llm-Anthropic-Provider'
+	#category : 'Gt4Llm-Anthropic-Provider'
 }
 
 { #category : #'as yet unclassified' }
@@ -372,4 +372,9 @@ GtLAnthropicProvider >> sendFiles: aListOfFileReferences withMessage: aString [
 										asDictionary ]);
 				role: 'user';
 				chat: self)
+]
+
+{ #category : #accessing }
+GtLAnthropicProvider >> serializeToolMessageForResponse: aToolMessage [
+	^ aToolMessage serializeForAnthropicMessagesAPI
 ]

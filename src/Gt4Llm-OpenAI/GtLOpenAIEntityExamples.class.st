@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLOpenAIEntityExamples,
 	#superclass : #Object,
-	#category : #'Gt4Llm-OpenAI-Examples'
+	#category : 'Gt4Llm-OpenAI-Examples'
 }
 
 { #category : #examples }

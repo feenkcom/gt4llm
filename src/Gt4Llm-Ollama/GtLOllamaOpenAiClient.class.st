@@ -1,15 +1,15 @@
 Class {
 	#name : #GtLOllamaOpenAiClient,
 	#superclass : #GtLOllamaClient,
-	#category : #'Gt4Llm-Ollama-Client'
+	#category : 'Gt4Llm-Ollama-Client'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLOllamaOpenAiClient class >> defaultBaseUrl [
 	^ 'http://localhost:11434/v1' asZnUrl
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #api }
 GtLOllamaOpenAiClient >> apiClientWithModel: aString andMessages: aCollection andFormat: aFormat andTools: someTools andInstructions: aStringOrNil [
 
 	^ GtLOllamaOpenAiChatAPICommand new
@@ -21,8 +21,13 @@ GtLOllamaOpenAiClient >> apiClientWithModel: aString andMessages: aCollection an
 		instructions: aStringOrNil
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLOllamaOpenAiClient >> assistantMessageClass [
 
 	^ GtLOllamaOpenAiAssistantMessage
+]
+
+{ #category : #serialization }
+GtLOllamaOpenAiClient >> serializeToolMessageForResponse: aToolMessage [
+	^aToolMessage serializeForOllamaOpenAiMessagesAPI
 ]

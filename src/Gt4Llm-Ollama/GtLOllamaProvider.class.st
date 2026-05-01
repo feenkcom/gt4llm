@@ -6,7 +6,7 @@ Class {
 		'executions',
 		'modelName'
 	],
-	#category : #'Gt4Llm-Ollama-Provider'
+	#category : 'Gt4Llm-Ollama-Provider'
 }
 
 { #category : #'instance creation' }
@@ -232,4 +232,9 @@ GtLOllamaProvider >> responseTypeForResult: aResult fromInputMessage: anInputMes
 	anInputMessage isCompactionRequest ifTrue: [
 		newMessage markWithCompactionResponse ].
 	^ newMessage
+]
+
+{ #category : #accessing }
+GtLOllamaProvider >> serializeToolMessageForResponse: aToolMessage [
+	^ self client serializeToolMessageForResponse: aToolMessage
 ]

@@ -8,7 +8,7 @@ Class {
 		'requestResponse',
 		'hasCompactionResponse'
 	],
-	#category : #'Gt4Llm-Anthropic-Client'
+	#category : 'Gt4Llm-Anthropic-Client'
 }
 
 { #category : #testing }
@@ -77,6 +77,40 @@ GtLAnthropicAssistantMessage >> gtContentFor: aView [
 { #category : #accessing }
 GtLAnthropicAssistantMessage >> gtInspectorTargetModels [
 	^ self responseModels asArray
+]
+
+{ #category : #accessing }
+GtLAnthropicAssistantMessage >> gtViewMessageDataFor: aView [
+	<gtView>
+	<gtLlmView>
+	
+	^ aView forward
+		title: 'Message Data';
+		priority: 41;
+		object: [ self serializeForAnthropicMessagesAPI  ];
+		view: #gtItemsFor:;
+		actionButtonIcon: BrGlamorousVectorIcons inspect 
+			label: 'JSON' 
+			tooltip: 'Inspect message data'
+			action: [ :aButton |
+				aButton phlow spawnObject:   self serializeForAnthropicMessagesAPI ]
+]
+
+{ #category : #accessing }
+GtLAnthropicAssistantMessage >> gtViewMessageJsonFor: aView [
+	<gtView>
+	<gtLlmView>
+	
+	^ aView forward
+		title: 'Message JSON';
+		priority: 40;
+		object: [ self serializeForAnthropicMessagesAPI asGtJson ];
+		view: #gtJsonStringFor:;
+		actionButtonIcon: BrGlamorousVectorIcons inspect 
+			label: 'JSON' 
+			tooltip: 'Inspect JSON data'
+			action: [ :aButton |
+				aButton phlow spawnObject:   self serializeForAnthropicMessagesAPI asGtJson]
 ]
 
 { #category : #accessing }
