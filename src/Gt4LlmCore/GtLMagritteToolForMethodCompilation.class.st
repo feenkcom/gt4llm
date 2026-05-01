@@ -4,7 +4,7 @@ Magritte-based tool for compiling a method into a class.
 Class {
 	#name : #GtLMagritteToolForMethodCompilation,
 	#superclass : #GtLAbstractMagritteFunctionTool,
-	#category : 'Gt4LlmCore-Tools'
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #'tool execution' }
@@ -21,7 +21,7 @@ GtLMagritteToolForMethodCompilation >> compileMethodFromRequest: request [
 	
 	selector := [ [ extractor targetClass 
 			compile: extractor sourceCode classified: extractor protocol ]
-		on: CodeError
+		on: RBParser gtParseErrorClass
 		do: [ :notification |
 			^ GtLMethodCompilationExceptionDomainObject new
 				freeze: notification;

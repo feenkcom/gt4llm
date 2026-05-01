@@ -10,7 +10,7 @@ Class {
 		'encodedBytes',
 		'contentLabel'
 	],
-	#category : 'Gt4LlmCore-Data Views'
+	#category : #'Gt4LlmCore-Data Views'
 }
 
 { #category : #visiting }

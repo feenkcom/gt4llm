@@ -7,7 +7,7 @@ Class {
 		'computedImageBytes',
 		'contentLabelComputation'
 	],
-	#category : 'Gt4LlmCore-Data Views'
+	#category : #'Gt4LlmCore-Data Views'
 }
 
 { #category : #'instance creation' }
