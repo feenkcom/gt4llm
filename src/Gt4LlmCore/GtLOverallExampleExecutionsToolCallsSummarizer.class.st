@@ -12,6 +12,11 @@ Class {
 	#category : 'Gt4LlmCore-Summaries'
 }
 
+{ #category : #testing }
+GtLOverallExampleExecutionsToolCallsSummarizer class >> isActive [ 
+	^true
+]
+
 { #category : #accessing }
 GtLOverallExampleExecutionsToolCallsSummarizer >> exampleRunSummaries [
 	^ runsByExample associations collect: [ :eachAssociation |
