@@ -12,10 +12,8 @@ Class {
 
 { #category : #'instance creation' }
 GtLToolCallsSummarizer class >> currentSummarizers [
-	^ { 
-		GtLToolCallsByTypeSummarizer new.
-		GtLOverallExampleExecutionsToolCallsSummarizer new.
-		GtLCodeChangesToolCallsSummarizer new }
+	^ self allSubclasses reject: [ :each |
+			each isAbstract or: [ each isActive  not ] ]
 ]
 
 { #category : #'instance creation' }
@@ -23,6 +21,16 @@ GtLToolCallsSummarizer class >> forMessages: aCollection [
 	^ self new
 		initializeWithMessages: aCollection;
 		yourself
+]
+
+{ #category : #testing }
+GtLToolCallsSummarizer class >> isAbstract [
+	^ self name = #GtLToolCallsSummarizer
+]
+
+{ #category : #testing }
+GtLToolCallsSummarizer class >> isActive [ 
+	^false
 ]
 
 { #category : #printing }

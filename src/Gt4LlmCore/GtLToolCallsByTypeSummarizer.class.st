@@ -10,6 +10,11 @@ Class {
 	#category : 'Gt4LlmCore-Summaries'
 }
 
+{ #category : #testing }
+GtLToolCallsByTypeSummarizer class >> isActive [ 
+	^true
+]
+
 { #category : #accessing }
 GtLToolCallsByTypeSummarizer >> groupedToolCalls [
 	^ self relevantToolCalls groupedBy: [ :each | each tool ]
