@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'imageType',
 		'imageBytesComputation',
-		'computedImageBytes'
+		'computedImageBytes',
+		'contentLabelComputation'
 	],
 	#category : #'Gt4LlmCore-Data Views'
 }
@@ -29,9 +30,20 @@ GtLImageDataView class >> png: aBlockClosure [
 ]
 
 { #category : #accessing }
+GtLImageDataView >> computeContentLabel [
+	^contentLabelComputation ifNotNil: [ :aComputation |
+			aComputation value ]
+]
+
+{ #category : #accessing }
 GtLImageDataView >> computedImageBytes [
 	^computedImageBytes ifNil: [
 		computedImageBytes := imageBytesComputation value ]
+]
+
+{ #category : #accessing }
+GtLImageDataView >> contentLabel: aBlockClosure [
+	contentLabelComputation := aBlockClosure
 ]
 
 { #category : #accessing }
@@ -113,6 +125,7 @@ GtLImageDataView >> serializeToLlmPrimiteDataOn: aBuilder [
 	aBuilder 
 		addImageBlockFor: self computedImageBytes
 		type: self imageType
+		label: self computeContentLabel
 		dataKey: self dataKey
 		from: self
 ]

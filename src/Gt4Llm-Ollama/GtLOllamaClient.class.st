@@ -140,3 +140,8 @@ GtLOllamaClient >> reasoningEffort: aSymbol [
 		[ self error: 'Reasoning effort must be one of ', namedLevels printString, ', not ', aSymbol printString ].
 	reasoningEffort := aSymbol
 ]
+
+{ #category : #accessing }
+GtLOllamaClient >> serializeToolMessageForResponse: aToolMessage [
+	self subclassResponsibility
+]

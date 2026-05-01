@@ -233,3 +233,8 @@ GtLOllamaProvider >> responseTypeForResult: aResult fromInputMessage: anInputMes
 		newMessage markWithCompactionResponse ].
 	^ newMessage
 ]
+
+{ #category : #accessing }
+GtLOllamaProvider >> serializeToolMessageForResponse: aToolMessage [
+	^ self client serializeToolMessageForResponse: aToolMessage
+]
