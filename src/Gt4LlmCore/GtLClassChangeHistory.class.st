@@ -73,18 +73,7 @@ GtLClassChangeHistory >> gtMethodHistoriesFor: aView [
 { #category : #views }
 GtLClassChangeHistory >> gtViewChangeDescriptionElement [
 	^GtLClassDefinitionChangeDescriptionElement new
-		updateForChangeObject: self
-]
-
-{ #category : #views }
-GtLClassChangeHistory >> gtViewChangeDescriptionElements [
-	^ {BlTextElement new 
-		padding: (BlInsets all: 0);
-		constraintsDo: [ :c | 
-			c linear vertical alignCenter ];
-		text: (self targetClassName asRopedText 
-			"bold"; 
-			glamorousRegularFont)}
+		updateForChangeHistory: self
 ]
 
 { #category : #views }
@@ -152,8 +141,8 @@ GtLClassChangeHistory >> gtViewDefinitionDiffFor: aView [
 		priority: 10;
 		from: [ self initialBehaviourChange changeResult originalDefinitionWithCommentString ];
 		to: [ self latestBehaviourChange changeResult updatedDefinitionWithCommentString ];
-		fromLabel: 'First Change:';
-		toLabel: 'Last Change:';
+		fromLabel: 'Initial version:';
+		toLabel: 'Changed version: ';
 		styler: GtCodeDiffRBTextStyler new
 ]
 

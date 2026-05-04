@@ -13,12 +13,12 @@ GtLClassChangeHistoriesGroup >> addHistory: aHistory [
 ]
 
 { #category : #views }
-GtLClassChangeHistoriesGroup >> gtViewHistoriesFor: aView [
+GtLClassChangeHistoriesGroup >> gtViewDetailedHistoriesFor: aView [
 	<gtView>
 	
 	^ aView columnedTree 
-		title: 'By class';
-		priority: 20;
+		title: 'By class (detailed)';
+		priority: 50;
 		items: [ self items ];
 		children: [ :anEntry | anEntry gtViewChangeHistoryChildren ];
 		column: 'Change' do: [ :aColumn |
@@ -39,6 +39,22 @@ GtLClassChangeHistoriesGroup >> gtViewHistoriesFor: aView [
 				ifNil: ['']
 				ifNotNil: [ :aDateAndTime | 
 					aDateAndTime printToSeconds ]  ] width: 150
+]
+
+{ #category : #views }
+GtLClassChangeHistoriesGroup >> gtViewHistoriesFor: aView [
+	<gtView>
+	
+	^ aView columnedTree 
+		title: 'By class';
+		priority: 20;
+		items: [ self items ];
+		expandAll;
+		children: [ :anEntry | anEntry gtViewChangeHistoryChildren ];
+		column: 'Change' do: [ :aColumn |
+			aColumn
+				cellStencil: [ GtLCodeChangesDetailsElement new ];
+				dataBinder: [ :anElement :aCodeChange | anElement codeChange: aCodeChange ] ]
 ]
 
 { #category : #accessing }

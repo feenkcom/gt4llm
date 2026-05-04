@@ -25,12 +25,12 @@ GtLPackageChangeHistoriesGroup >> classHistories [
 ]
 
 { #category : #views }
-GtLPackageChangeHistoriesGroup >> gtViewHistoriesFor: aView [
+GtLPackageChangeHistoriesGroup >> gtViewDetailedHistoriesFor: aView [
 	<gtView>
 	
 	^ aView columnedTree 
-		title: 'By package';
-		priority: 20;
+		title: 'By package (detailed)';
+		priority: 50;
 		items: [ self items ];
 		children: [ :anEntry | anEntry gtViewChangeHistoryChildren ];
 		expandUpTo: 2;
@@ -52,6 +52,22 @@ GtLPackageChangeHistoriesGroup >> gtViewHistoriesFor: aView [
 				ifNil: ['']
 				ifNotNil: [ :aDateAndTime | 
 					aDateAndTime printToSeconds ]  ] width: 150
+]
+
+{ #category : #views }
+GtLPackageChangeHistoriesGroup >> gtViewHistoriesFor: aView [
+	<gtView>
+	
+	^ aView columnedTree 
+		title: 'By package';
+		priority: 20;
+		items: [ self items ];
+		children: [ :anEntry | anEntry gtViewChangeHistoryChildren ];
+		expandUpTo: 2;
+		column: 'Change' do: [ :aColumn |
+			aColumn
+				cellStencil: [ GtLCodeChangesDetailsElement new ];
+				dataBinder: [ :anElement :aCodeChange | anElement codeChange: aCodeChange ] ]
 ]
 
 { #category : #accessing }
