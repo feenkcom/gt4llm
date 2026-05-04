@@ -11,6 +11,11 @@ Class {
 	#category : #'Gt4LlmCore-Summaries'
 }
 
+{ #category : #testing }
+GtLCodeChangesToolCallsSummarizer class >> isActive [ 
+	^true
+]
+
 { #category : #private }
 GtLCodeChangesToolCallsSummarizer >> addCodeChanges: aCollection [
 	self codeChanges addAll: aCollection
