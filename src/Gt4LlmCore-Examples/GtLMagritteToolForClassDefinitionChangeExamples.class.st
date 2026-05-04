@@ -50,11 +50,11 @@ GtLMagritteToolForClassDefinitionChangeExamples >> changeClassVariablesWithParti
 	self removeClassNamedIfPresent: className.
 	[
 		| targetClass targetObject |
-		targetClass := Object
-			subclass: className
-			instanceVariableNames: 'first second'
-			classVariableNames: 'OldShared'
-			package: 'Gt4LlmCoreNewPackage'.
+		targetClass := ((Object
+			<< className)
+			slots: { #first . #second };
+			sharedVariables: { #OldShared };
+			package: 'Gt4LlmCoreNewPackage') install.
 		call := self
 			executeTool: GtLMagritteToolForClassDefinitionChange new
 			withArguments: {
@@ -88,11 +88,11 @@ GtLMagritteToolForClassDefinitionChangeExamples >> changeInstanceVariablesWithPa
 	self removeClassNamedIfPresent: className.
 	[
 		| targetClass targetObject |
-		targetClass := Object
-			subclass: className
-			instanceVariableNames: 'first second'
-			classVariableNames: 'SharedValue'
-			package: 'Gt4LlmCoreNewPackage'.
+		targetClass := ((Object
+			<< className)
+			slots: { #first . #second };
+			sharedVariables: { #SharedValue };
+			package: 'Gt4LlmCoreNewPackage') install.
 		call := self
 			executeTool: GtLMagritteToolForClassDefinitionChange new
 			withArguments: {
@@ -126,11 +126,11 @@ GtLMagritteToolForClassDefinitionChangeExamples >> changePackageWithPartialArgum
 	self removeClassNamedIfPresent: className.
 	[
 		| targetClass targetObject |
-		targetClass := Object
-			subclass: className
-			instanceVariableNames: 'first second'
-			classVariableNames: 'SharedValue'
-			package: 'Gt4LlmCoreNewPackage'.
+		targetClass := ((Object
+			<< className)
+			slots: { #first . #second };
+			sharedVariables: { #SharedValue };
+			package: 'Gt4LlmCoreNewPackage') install.
 		call := self
 			executeTool: GtLMagritteToolForClassDefinitionChange new
 			withArguments: {
@@ -164,11 +164,11 @@ GtLMagritteToolForClassDefinitionChangeExamples >> changeSuperclassWithPartialAr
 	self removeClassNamedIfPresent: className.
 	[
 		| targetClass targetObject |
-		targetClass := Object
-			subclass: className
-			instanceVariableNames: 'first second'
-			classVariableNames: 'SharedValue'
-			package: 'Gt4LlmCoreNewPackage'.
+		targetClass := ((Object
+			<< className)
+			slots: { #first . #second };
+			sharedVariables: { #SharedValue };
+			package: 'Gt4LlmCoreNewPackage') install.
 		call := self
 			executeTool: GtLMagritteToolForClassDefinitionChange new
 			withArguments: {
@@ -312,11 +312,10 @@ GtLMagritteToolForClassDefinitionChangeExamples >> changeWithUnknownSuperclass [
 	self removeClassNamedIfPresent: className.
 	[
 		| targetClass |
-		targetClass := Object
-			subclass: className
-			instanceVariableNames: ''
-			classVariableNames: ''
-			package: 'Gt4LlmCoreNewPackage'.
+		targetClass := ((Object
+			<< className)
+			slots: {};
+			package: 'Gt4LlmCoreNewPackage') install.
 		call := self
 			executeTool: GtLMagritteToolForClassDefinitionChange new
 			withArguments: {

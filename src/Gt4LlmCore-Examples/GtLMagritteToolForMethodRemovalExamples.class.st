@@ -10,11 +10,9 @@ Class {
 { #category : #private }
 GtLMagritteToolForMethodRemovalExamples >> createSubjectClass [
 	self removeClassNamedIfPresent: self subjectClassName.
-	^ Object
-		subclass: self subjectClassName
-		instanceVariableNames: ''
-		classVariableNames: ''
-		package: 'Gt4LlmCore-Examples'
+	^ ((Object << self subjectClassName)
+		slots: {};
+		package: 'Gt4LlmCore-Examples') install
 ]
 
 { #category : #private }

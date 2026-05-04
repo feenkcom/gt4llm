@@ -49,6 +49,25 @@ GtLImageFileExamples >> imageFileSerialization [
 	^ dataBlock
 ]
 
+{ #category : #examples }
+GtLImageFileExamples >> imageFileSerialization_contentLabel [
+	<gtExample>
+	<after: #cleanupTempDirectory>
+	| mainDataView dataBlock imageDataBlock |
+	mainDataView := self imageFileMainDataView.
+	dataBlock := mainDataView serializeToLlmPrimiteData.
+	
+	self assert: dataBlock isNotNil.
+	self assert: dataBlock dataBlocks size equals: 1.
+	self assert: dataBlock imageDataBlocks size equals: 1.
+	self assert: dataBlock imageDataBlocks first imageType equals: 'png'.
+	
+	imageDataBlock := dataBlock imageDataBlocks first.
+	self assert: imageDataBlock contentLabel equals: 'sample.png'.
+	
+	^ dataBlock
+]
+
 { #category : #'examples - support' }
 GtLImageFileExamples >> samplePngFileReference [
 	<gtExample>

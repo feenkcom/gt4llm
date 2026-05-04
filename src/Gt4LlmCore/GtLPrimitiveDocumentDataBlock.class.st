@@ -7,7 +7,8 @@ Class {
 	#instVars : [
 		'documentBytes',
 		'contentType',
-		'encodedBytes'
+		'encodedBytes',
+		'contentLabel'
 	],
 	#category : #'Gt4LlmCore-Data Views'
 }
@@ -16,6 +17,16 @@ Class {
 GtLPrimitiveDocumentDataBlock >> acceptVisitor: aVisitor [
 
 	^ aVisitor visitGtLPrimitiveDocumentDataBlock: self
+]
+
+{ #category : #accessing }
+GtLPrimitiveDocumentDataBlock >> contentLabel [
+	^contentLabel
+]
+
+{ #category : #accessing }
+GtLPrimitiveDocumentDataBlock >> contentLabel: anObject [
+	contentLabel := anObject
 ]
 
 { #category : #accessing }
@@ -75,18 +86,6 @@ GtLPrimitiveDocumentDataBlock >> serializeForAnthropic [
 ]
 
 { #category : #serialization }
-GtLPrimitiveDocumentDataBlock >> serializeForBedrockConverse [
-	"Return a JSON that represents tool response output."
-	<sys_ext>
-	
-	^ {{
-		'document' -> {
-			'format' -> self documentFormat.
-			'source' -> {'bytes' -> self encodedBytes} asDictionary } asDictionary}
-			asDictionary}
-]
-
-{ #category : #serialization }
 GtLPrimitiveDocumentDataBlock >> serializeForMCP [
 	<return: #Array of: #NeoJSONObject>
 	
@@ -114,17 +113,26 @@ GtLPrimitiveDocumentDataBlock >> serializeForOllamaOpenAi [
 	<return: #Array of: #NeoJSONObject>
 
 	^ {NeoJSONObject new
-		at: 'type' put: 'file_data';
-		at: 'file_data' put: ('data:', self contentType, ';base64,', self encodedBytes);
+			at: 'type' put: 'file_data';
+			at: 'file_data' put: ('data:', self contentType, ';base64,', self encodedBytes);
 		yourself}
 ]
 
 { #category : #serialization }
 GtLPrimitiveDocumentDataBlock >> serializeForOpenAI [
 	<return: #Array of: #NeoJSONObject>
+	| resultData  |
 	
-	^ {NeoJSONObject new
-		at: 'type' put: 'input_file';
-		at: 'file_data' put: ('data:', self contentType, ';base64,', self encodedBytes);
-		yourself}
+	resultData := NeoJSONObject new
+			at: 'type' put: 'input_file';
+			at: 'file_data' 
+				put: ('data:', self contentType, ';base64,', self encodedBytes);
+		yourself.
+		
+	self contentLabel ifNotNil: [ :aValue |
+		resultData
+			at: 'filename' 
+			put: (self contentLabel ifNil: [ 'document' ])].
+	
+	^ {resultData}
 ]

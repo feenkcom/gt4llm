@@ -134,6 +134,50 @@ GtLToolMessage >> gtToolCallFor: anAction [
 		action: [ :button | button phlow spawnObject: self toolCall ]
 ]
 
+{ #category : #printing }
+GtLToolMessage >> gtViewMessageDataFor: aView [
+	<gtView>
+	<gtLlmView>
+	
+	^ aView forward
+		title: 'Message Data';
+		priority: 41;
+		object: [ self chat provider serializeToolMessageForResponse: self  ];
+		view: #gtItemsFor:;
+		actionButtonIcon: BrGlamorousVectorIcons inspect 
+			label: 'JSON' 
+			tooltip: 'Inspect message data'
+			action: [ :aButton |
+				aButton phlow spawnObject:   self serializeForAnthropicMessagesAPI ];
+		actionButtonIcon: BrGlamorousVectorIcons inspect 
+			label: 'Block' 
+			tooltip: 'Inspect Block data'
+			action: [ :aButton |
+				aButton phlow spawnObject:   self output serializeToLlmPrimiteData ]
+]
+
+{ #category : #printing }
+GtLToolMessage >> gtViewMessageJsonFor: aView [
+	<gtView>
+	<gtLlmView>
+	
+	^ aView forward
+		title: 'Message JSON';
+		priority: 40;
+		object: [ (self chat provider serializeToolMessageForResponse: self) asGtJson ];
+		view: #gtJsonStringFor:;
+		actionButtonIcon: BrGlamorousVectorIcons inspect 
+			label: 'JSON' 
+			tooltip: 'Inspect JSON data'
+			action: [ :aButton |
+				aButton phlow spawnObject:   self serializeForAnthropicMessagesAPI asGtJson];
+		actionButtonIcon: BrGlamorousVectorIcons inspect 
+			label: 'Block' 
+			tooltip: 'Inspect Block data'
+			action: [ :aButton |
+				aButton phlow spawnObject:   self output serializeToLlmPrimiteData ]
+]
+
 { #category : #initialization }
 GtLToolMessage >> initialize [
 	super initialize.

@@ -129,14 +129,14 @@ GtLOpenAIProviderCopyChatExamples >> copyChatWithTwoMessages [
 	copiedMessages := copiedChat messages asArray.
 	
 	self assert: copiedChat ~~ originalChat.
+	self assert: originalMessages size equals: 2.
 	self assert: copiedMessages size equals: originalMessages size.
+	self assert: originalChat messages size equals: 2.
 	self assert: (copiedMessages allSatisfy: [ :each | each chat == copiedChat ]).
 	self assert: (copiedMessages first ~~ originalMessages first).
 	self assert: (copiedMessages second ~~ originalMessages second).
-	
 	self assert: (copiedMessages second userMessage ~~ originalMessages second userMessage).
 	self assert: (copiedMessages second finalMessage ~~ originalMessages second finalMessage).
-
 	self assert: copiedMessages second userMessage chat == copiedChat.
 	self assert: copiedMessages second finalMessage chat == copiedChat.
 	
@@ -159,7 +159,9 @@ GtLOpenAIProviderCopyChatExamples >> copyChatWithUserAndReplyWithTwoToolMessages
 	copiedToolMessages := copiedReply executionMessages asArray.
 	
 	self assert: copiedChat ~~ originalChat.
+	self assert: originalMessages size equals: 2.
 	self assert: copiedMessages size equals: originalMessages size.
+	self assert: originalChat messages size equals: 2.
 	self assert: (copiedMessages allSatisfy: [ :each | each chat == copiedChat ]).
 	self assertCopiedChatMessage: copiedMessages first isCopyOf: originalMessages first forChat: copiedChat.
 	self assertCopiedReplyMessage: copiedReply isCopyOf: originalReply forChat: copiedChat.
@@ -168,8 +170,8 @@ GtLOpenAIProviderCopyChatExamples >> copyChatWithUserAndReplyWithTwoToolMessages
 	self assert: copiedToolMessages first chat == copiedChat.
 	self assert: copiedToolMessages second chat == copiedChat.
 	self assert: copiedReply finalMessage class equals: GtLOpenAIAssistantMessage.
-	self assert: (copiedReply executionMessages at: 1) == (originalReply executionMessages at: 1).
-	self assert: (copiedReply executionMessages at: 2) == (originalReply executionMessages at: 2).
+	self assert: (copiedReply executionMessages at: 1) ~~ (originalReply executionMessages at: 1).
+	self assert: (copiedReply executionMessages at: 2) ~~ (originalReply executionMessages at: 2).
 	self assert: (copiedReply executionMessages at: 1) == (copiedToolMessages at: 1).
 	self assert: (copiedReply executionMessages at: 2) == (copiedToolMessages at: 2).
 	
@@ -290,12 +292,12 @@ GtLOpenAIProviderCopyChatExamples >> copyReplyMessageWithToolAndOpenAIAssistantM
 	self assertCopiedChatMessage: copiedToolMessages first isCopyOf: firstToolMessage forChat: newChat.
 	self assertCopiedChatMessage: copiedToolMessages second isCopyOf: secondToolMessage forChat: newChat.
 	self assertCopiedChatMessage: copiedToolMessages third isCopyOf: thirdToolMessage forChat: newChat.
-	self assert: copiedToolMessages first == (replyMessage executionMessages at: 1).
-	self assert: copiedToolMessages second == (replyMessage executionMessages at: 2).
-	self assert: copiedToolMessages third == (replyMessage executionMessages at: 3).
-	self assert: replyMessage userMessage chat == originalChat.
-	self assert: replyMessage finalMessage chat == originalChat.
-	self assert: ((replyMessage executionMessages collect: [ :each | each chat ]) asArray allSatisfy: [ :each | each == newChat ]).
+	self assert: copiedToolMessages first ~~ (replyMessage executionMessages at: 1).
+	self assert: copiedToolMessages second ~~ (replyMessage executionMessages at: 2).
+	self assert: copiedToolMessages third ~~ (replyMessage executionMessages at: 3).
+	self assert: copiedReply userMessage chat == newChat.
+	self assert: copiedReply finalMessage chat == newChat.
+	self assert: ((copiedReply executionMessages collect: [ :each | each chat ]) asArray allSatisfy: [ :each | each == newChat ]).
 	
 	^ copiedReply
 ]
@@ -310,6 +312,7 @@ GtLOpenAIProviderCopyChatExamples >> forkChatAtEntireReplyMessage [
 	replyMessage := originalChat messages asArray second.
 	forkedChat := originalChat forkAtMessage: replyMessage.
 	
+	self assert: originalChat messages size equals: 2.
 	self
 		assertForkedChat: forkedChat
 		from: originalChat
@@ -329,6 +332,7 @@ GtLOpenAIProviderCopyChatExamples >> forkChatAtFinalAssistantMessage [
 	replyMessage := originalChat messages asArray second.
 	forkedChat := originalChat forkAtMessage: replyMessage finalMessage.
 	
+	self assert: originalChat messages size equals: 2.
 	self
 		assertForkedChat: forkedChat
 		from: originalChat
@@ -348,6 +352,7 @@ GtLOpenAIProviderCopyChatExamples >> forkChatAtFirstToolMessage [
 	replyMessage := originalChat messages asArray second.
 	forkedChat := originalChat forkAtMessage: replyMessage executionMessages first.
 	
+	self assert: originalChat messages size equals: 2.
 	self
 		assertForkedChat: forkedChat
 		from: originalChat
@@ -367,6 +372,7 @@ GtLOpenAIProviderCopyChatExamples >> forkChatAtSecondToolMessage [
 	replyMessage := originalChat messages asArray second.
 	forkedChat := originalChat forkAtMessage: replyMessage executionMessages second.
 	
+	self assert: originalChat messages size equals: 2.
 	self
 		assertForkedChat: forkedChat
 		from: originalChat

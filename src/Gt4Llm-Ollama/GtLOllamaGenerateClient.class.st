@@ -9,3 +9,8 @@ GtLOllamaGenerateClient >> assistantMessageClass [
 
 	^ GtLOllamaGenerateAssistantMessage
 ]
+
+{ #category : #'as yet unclassified' }
+GtLOllamaGenerateClient >> serializeToolMessageForResponse: aToolMessage [
+	^aToolMessage serializeForOllamaGenerateMessagesAPI
+]

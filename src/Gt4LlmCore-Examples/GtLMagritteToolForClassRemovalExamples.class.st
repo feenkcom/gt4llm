@@ -10,11 +10,9 @@ Class {
 { #category : #private }
 GtLMagritteToolForClassRemovalExamples >> ensureClassNamed: aSymbol [
 	self removeClassNamedIfPresent: aSymbol.
-	^ Object
-		subclass: aSymbol
-		instanceVariableNames: ''
-		classVariableNames: ''
-		package: 'Gt4LlmCore-Examples'
+	^ ((Object << aSymbol)
+		slots: {};
+		package: 'Gt4LlmCore-Examples') install
 ]
 
 { #category : #examples }

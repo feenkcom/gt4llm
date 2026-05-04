@@ -48,6 +48,24 @@ GtLPdfFileExamples >> pdfFileSerialization [
 	^ dataBlock
 ]
 
+{ #category : #examples }
+GtLPdfFileExamples >> pdfFileSerialization_contentLabel [
+	<gtExample>
+	<after: #cleanupTempDirectory>
+	| mainDataView dataBlock documentDataBlock |
+	mainDataView := self pdfFileMainDataView.
+	dataBlock := mainDataView serializeToLlmPrimiteData.
+	
+	self assert: dataBlock isNotNil.
+	self assert: dataBlock dataBlocks size equals: 1.
+	self assertDataBlock: dataBlock hasDocumentWithContentType: 'application/pdf'.
+	
+	documentDataBlock := dataBlock documentDataBlocks first.
+	self assert: documentDataBlock contentLabel equals: 'sample.pdf'.
+	
+	^ dataBlock
+]
+
 { #category : #'examples - support' }
 GtLPdfFileExamples >> samplePdfContent [
 	"Return sample PDF content for testing"

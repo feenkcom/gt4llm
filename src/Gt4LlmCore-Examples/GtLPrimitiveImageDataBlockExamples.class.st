@@ -70,6 +70,27 @@ GtLPrimitiveImageDataBlockExamples >> imageDataBlockWithBytesAndType [
 ]
 
 { #category : #examples }
+GtLPrimitiveImageDataBlockExamples >> imageDataBlockWithContentLabel [
+	<gtExample>
+	| block imageBytes |
+	imageBytes := self sampleImageBytes.
+	
+	block := self basicImageDataBlock.
+	block imageBytes: imageBytes.
+	block imageType: 'png'.
+	block contentLabel: 'sample-image.png'.
+	
+	self assert: block imageBytes equals: imageBytes.
+	self assert: block encodedBytes equals: imageBytes base64Encoded.
+	self assert: block imageType equals: 'png'.
+	self assert: block contentLabel equals: 'sample-image.png'.
+	self assert: block dataKey isNil.
+	self assertSerializationForDataBlockWithOneDataPart: block.
+	
+	^ block
+]
+
+{ #category : #examples }
 GtLPrimitiveImageDataBlockExamples >> imageDataBlockWithDataKey [
 	<gtExample>
 	| block imageBytes |

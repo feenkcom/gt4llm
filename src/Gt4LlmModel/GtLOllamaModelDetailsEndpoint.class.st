@@ -25,19 +25,7 @@ GtLOllamaModelDetailsEndpoint >> path [
 ]
 
 { #category : #api }
-GtLOllamaModelDetailsEndpoint >> resultWithClient: aClient [
+GtLOllamaModelDetailsEndpoint >> resultFrom: aRequestResponse context: aGtLContext [
 
-	^ (aClient
-		post: self path
-		withEntity: (self entityFromContext: aClient model))
-			response
-]
-
-{ #category : #api }
-GtLOllamaModelDetailsEndpoint >> resultWithClient: aClient model: aGtLModel [
-
-	^ (aClient
-		post: self path
-		withEntity: (self entityFromContext: aGtLModel newEndpointContext))
-			result
+	^ NeoJSONReader fromString: aRequestResponse response contents
 ]

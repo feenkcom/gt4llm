@@ -20,6 +20,16 @@ GtLModelProvider >> authentication: anObject [
 ]
 
 { #category : #accessing }
+GtLModelProvider >> availableModels [
+	| endpoint modelsArray |
+
+	endpoint := model endpointAt: 'availableModels'.
+	modelsArray := (self client get: endpoint path) result at: 'models'.
+	^ modelsArray groupedBy: 
+		[ :modelDetails | modelDetails at: 'name' ].
+]
+
+{ #category : #accessing }
 GtLModelProvider >> baseUrl [
 	^ baseUrl
 ]
@@ -109,6 +119,21 @@ GtLModelProvider >> model: anObject [
 ]
 
 { #category : #accessing }
+GtLModelProvider >> modelDetails [
+	| endpoint context requestResponse |
+
+	endpoint := model endpointAt: 'modelDetails'.
+	context := endpoint newContextForModel: model.
+	context
+		model: model;
+		provider: self.
+	requestResponse := self client
+		post: endpoint path
+		withEntity: (endpoint entityFromContext: context).
+	^ endpoint resultFrom: requestResponse context: context.
+]
+
+{ #category : #accessing }
 GtLModelProvider >> modelName [
 
 	^ model name
@@ -174,6 +199,14 @@ GtLModelProvider >> processNextMessage: anInputMessage [
 		outputMessage: outputMessage
 ]
 
+{ #category : #accessing }
+GtLModelProvider >> providerVersion [
+	| endpoint |
+
+	endpoint := model endpointAt: 'providerVersion'.
+	^ (self client get: endpoint path) result at: 'version'.
+]
+
 { #category : #'private - accessing' }
 GtLModelProvider >> relevantChatMessages [
 	^ self chat messages
@@ -189,4 +222,12 @@ GtLModelProvider >> responseTypeForResult: aResult fromInputMessage: anInputMess
 	anInputMessage isCompactionRequest ifTrue: [
 		newMessage markWithCompactionResponse ].
 	^ newMessage
+]
+
+{ #category : #accessing }
+GtLModelProvider >> runningModels [
+	| endpoint |
+
+	endpoint := model endpointAt: 'runningModels'.
+	^ (self client get: endpoint path) result at: 'models'.
 ]

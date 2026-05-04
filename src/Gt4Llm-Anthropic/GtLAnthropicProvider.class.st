@@ -373,3 +373,8 @@ GtLAnthropicProvider >> sendFiles: aListOfFileReferences withMessage: aString [
 				role: 'user';
 				chat: self)
 ]
+
+{ #category : #accessing }
+GtLAnthropicProvider >> serializeToolMessageForResponse: aToolMessage [
+	^ aToolMessage serializeForAnthropicMessagesAPI
+]

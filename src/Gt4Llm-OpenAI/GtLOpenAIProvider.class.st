@@ -348,3 +348,8 @@ GtLOpenAIProvider >> responseTypeForResult: aResult fromInputMessage: anInputMes
 GtLOpenAIProvider >> sendAPICompactionMessage [  
 	^self chat sendMessage:  self createAPICompactionMessage
 ]
+
+{ #category : #accessing }
+GtLOpenAIProvider >> serializeToolMessageForResponse: aToolMessage [
+	^ aToolMessage serializeForOpenAIResponsesAPI
+]
