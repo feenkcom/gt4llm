@@ -14,6 +14,21 @@ GtLClassCommentChangeResult >> affectedBehaviour [
 	^ updatedClass
 ]
 
+{ #category : #'gt - extensions' }
+GtLClassCommentChangeResult >> asDiffElement [
+	| newSource oldSource |
+	oldSource := self oldClassComment.
+	newSource := self newClassComment.
+	^ GtDiffElementWithLabelStencil new
+		fromLabelText: 'Old comment for ', (self changedClassName);
+		toLabelText: 'New comment for '	, (self changedClassName);
+		change: (GtDiffBuilder
+				computeDifferencesFrom: oldSource
+				to: newSource
+				using: GtSmaCCDiffSplitter forPharo);
+		asElement
+]
+
 { #category : #accessing }
 GtLClassCommentChangeResult >> changedClassName [
 	^ self updatedClass currentClassName

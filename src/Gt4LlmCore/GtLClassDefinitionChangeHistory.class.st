@@ -40,8 +40,8 @@ GtLClassDefinitionChangeHistory >> gtDiffFor: aView [
 		priority: 5;
 		from: [ self initialChange changeResult originalDefinitionWithCommentString ];
 		to: [ self latestChange changeResult updatedDefinitionWithCommentString ];
-		fromLabel: 'First Change:';
-		toLabel: 'Last Change:';
+		fromLabel: 'Initial version:';
+		toLabel: 'Changed version:';
 		styler: GtCodeDiffRBTextStyler new
 ]
 
@@ -61,7 +61,12 @@ GtLClassDefinitionChangeHistory >> gtDiffWithCurrentVersionFor: aView [
 { #category : #'gt - extensions' }
 GtLClassDefinitionChangeHistory >> gtViewChangeDescriptionElement [
 	^ GtLClassDefinitionChangeDescriptionElement new
-		updateForChangeObject: self
+		updateForClassDefinitionChangeHistory: self
+]
+
+{ #category : #'gt - extensions' }
+GtLClassDefinitionChangeHistory >> gtViewChangeHistoryChildren [
+	^ #()
 ]
 
 { #category : #'gt - extensions' }
