@@ -21,7 +21,7 @@ GtLMagritteToolForMethodCompilation >> compileMethodFromRequest: request [
 	
 	selector := [ [ extractor targetClass 
 			compile: extractor sourceCode classified: extractor protocol ]
-		on: CodeError
+		on: RBParser gtParseErrorClass
 		do: [ :notification |
 			^ GtLMethodCompilationExceptionDomainObject new
 				freeze: notification;

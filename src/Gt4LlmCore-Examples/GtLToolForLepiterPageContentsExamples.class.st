@@ -27,7 +27,7 @@ GtLToolForLepiterPageContentsExamples >> pageSerializationForExistingPage [
 	dataBlock := compositeView serializeToLlmPrimiteData.
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
-	expected := NeoJSONReader fromString: (LeJsonV4 uniqueInstance serializePretty: page).
+	expected := (LeJsonV4 uniqueInstance serializePretty: page).
 	self assertDataBlock: dataBlock hasLlmJsonData: expected.
 	
 	^ call
