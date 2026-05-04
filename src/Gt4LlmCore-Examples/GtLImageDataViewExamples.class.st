@@ -26,6 +26,51 @@ GtLImageDataViewExamples >> sampleImageBytes [
 ]
 
 { #category : #examples }
+GtLImageDataViewExamples >> standaloneImageDataViewWithContentLabel [
+	<gtExample>
+	| basicView imageBytes |
+	
+	imageBytes := self sampleImageBytes.
+	
+	basicView := GtLImageDataView new
+		png: [ imageBytes ];
+		contentLabel: [ 'test-image.png' ].
+	
+	self assert: basicView title isNil.
+	self assert: basicView dataKey isNil.
+	self assert: basicView imageType equals: 'png'.
+	self assert: basicView computedImageBytes equals: imageBytes.
+	self assert: basicView computeContentLabel equals: 'test-image.png'.
+	
+	^ basicView
+]
+
+{ #category : #examples }
+GtLImageDataViewExamples >> standaloneImageDataViewWithContentLabel_serialization [
+	<gtExample>
+	| basicView dataBlock imageDataBlock imageBytes |
+	
+	imageBytes := self sampleImageBytes.
+	basicView := self standaloneImageDataViewWithContentLabel.
+	dataBlock := basicView serializeToLlmPrimiteData.
+	
+	self assert: dataBlock sourceDataView equals: basicView.
+	self assert: dataBlock dataKey isNil.
+	self assert: dataBlock dataBlocks size equals: 1.
+	self assert: dataBlock imageDataBlocks size equals: 1.
+	
+	imageDataBlock := dataBlock imageDataBlocks first.
+	self assert: imageDataBlock sourceDataView equals: basicView.
+	self assert: imageDataBlock dataKey isNil.
+	self assert: imageDataBlock imageBytes equals: imageBytes.
+	self assert: imageDataBlock imageType equals: 'png'.
+	self assert: imageDataBlock encodedBytes equals: imageBytes base64Encoded.
+	self assert: imageDataBlock contentLabel equals: 'test-image.png'.
+	
+	^ dataBlock
+]
+
+{ #category : #examples }
 GtLImageDataViewExamples >> standaloneImageDataViewWithoutDataKey [
 	<gtExample>
 	| basicView imageBytes |

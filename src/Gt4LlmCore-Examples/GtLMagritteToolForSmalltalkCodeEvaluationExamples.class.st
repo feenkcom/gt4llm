@@ -233,7 +233,7 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithBindingEmptyName
 	self
 		assertSmalltalkCodeEvaluationException: call result targetObject
 		withCode: 'value + 2'
-		exceptionClass: CodeError
+		exceptionClass: RBParser gtParseErrorClass
 		messageSubstring: 'Undeclared variable'.
 	^ call
 ]

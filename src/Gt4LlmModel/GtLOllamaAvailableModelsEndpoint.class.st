@@ -9,9 +9,3 @@ GtLOllamaAvailableModelsEndpoint >> path [
 
 	^ '/api/tags'
 ]
-
-{ #category : #api }
-GtLOllamaAvailableModelsEndpoint >> resultWithClient: aClient model: aGtLModel [
-
-	^ (aClient get: self path) result
-]

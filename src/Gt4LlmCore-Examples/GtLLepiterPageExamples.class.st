@@ -54,15 +54,17 @@ GtLLepiterPageExamples >> lepiterPageWithEmptyPageMainDataView [
 GtLLepiterPageExamples >> lepiterPageWithEmptyPageSerialization [
 	<gtExample>
 	<return: #GtLPrimitiveMessageDataBlock>
-	| mainDataView dataBlock jsonData children |
+	| mainDataView dataBlock jsonData children jsonString |
 	
 	mainDataView := self lepiterPageWithEmptyPageMainDataView.
 	dataBlock := mainDataView serializeToLlmPrimiteData.
 	
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
-	jsonData := dataBlock llmJsonData.
-	self assert: jsonData isDictionary.
+	jsonString := dataBlock llmJsonData.
+	self assert: jsonString isString.
+	
+	jsonData := STONJSON fromString: jsonString.
 	self assert: (jsonData at: '__type') equals: 'page'.
 	
 	children := jsonData at: 'children'.
@@ -105,15 +107,18 @@ GtLLepiterPageExamples >> lepiterPageWithSimplePageMainDataView [
 GtLLepiterPageExamples >> lepiterPageWithSimplePageSerialization [
 	<gtExample>
 	<return: #GtLPrimitiveMessageDataBlock>
-	| mainDataView dataBlock jsonData |
+	| mainDataView dataBlock jsonData jsonString |
 	
 	mainDataView := self lepiterPageWithSimplePageMainDataView.
 	dataBlock := mainDataView serializeToLlmPrimiteData.
 	
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
-	jsonData := dataBlock llmJsonData.
-	self assert: jsonData isDictionary.
+	jsonString := dataBlock llmJsonData.
+	self assert: jsonString isString.
+	
+	jsonData := STONJSON fromString: jsonString.
+	
 	self assert: (jsonData at: '__type') equals: 'page'.
 	self assert: (jsonData at: 'pageType' ifAbsent: [ nil ]) isNotNil.
 	self assert: (jsonData at: 'uid') isNotNil.
@@ -155,15 +160,18 @@ GtLLepiterPageExamples >> lepiterPageWithTextSnippetMainDataView [
 GtLLepiterPageExamples >> lepiterPageWithTextSnippetSerialization [
 	<gtExample>
 	<return: #GtLPrimitiveMessageDataBlock>
-	| mainDataView dataBlock jsonData children items |
+	| mainDataView dataBlock jsonData jsonString children items |
 	
 	mainDataView := self lepiterPageWithTextSnippetMainDataView.
 	dataBlock := mainDataView serializeToLlmPrimiteData.
 	
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
-	jsonData := dataBlock llmJsonData.
-	self assert: jsonData isDictionary.
+	jsonString := dataBlock llmJsonData.
+	self assert: jsonString isString.
+	
+	jsonData := STONJSON fromString: jsonString.
+	
 	self assert: (jsonData at: '__type') equals: 'page'.
 	
 	children := jsonData at: 'children'.
