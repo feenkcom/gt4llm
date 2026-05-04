@@ -4,7 +4,7 @@ Group of method change histories.
 Class {
 	#name : #GtLMethodChangeHistoriesGroup,
 	#superclass : #GtLChangeHistoriesGroup,
-	#category : 'Gt4LlmCore-Summaries'
+	#category : #'Gt4LlmCore-Summaries'
 }
 
 { #category : #accessing }

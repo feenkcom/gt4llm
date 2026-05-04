@@ -4,7 +4,7 @@ Group of package tag change histories.
 Class {
 	#name : #GtLPackageTagChangeHistoriesGroup,
 	#superclass : #GtLChangeHistoriesGroup,
-	#category : 'Gt4LlmCore-Summaries'
+	#category : #'Gt4LlmCore-Summaries'
 }
 
 { #category : #adding }

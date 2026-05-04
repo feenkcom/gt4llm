@@ -4,7 +4,7 @@ Group of class change histories.
 Class {
 	#name : #GtLClassChangeHistoriesGroup,
 	#superclass : #GtLChangeHistoriesGroup,
-	#category : 'Gt4LlmCore-Summaries'
+	#category : #'Gt4LlmCore-Summaries'
 }
 
 { #category : #accessing }

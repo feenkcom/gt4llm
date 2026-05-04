@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'nameLabel'
 	],
-	#category : 'Gt4LlmCore-Summaries'
+	#category : #'Gt4LlmCore-Summaries'
 }
 
 { #category : #initialization }

@@ -4,7 +4,7 @@ Magritte-based tool for retrieving subclasses of a class in a GtRBNamespace mode
 Class {
 	#name : #GtLRefactoringToolForClassSubclasses,
 	#superclass : #GtLAbstractRefactoringMagritteTool,
-	#category : 'Gt4LlmCore-Tools'
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #'llm-generated' }

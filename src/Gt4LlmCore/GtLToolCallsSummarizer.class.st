@@ -7,13 +7,14 @@ Class {
 	#instVars : [
 		'originalToolCalls'
 	],
-	#category : 'Gt4LlmCore-Summaries'
+	#category : #'Gt4LlmCore-Summaries'
 }
 
 { #category : #'instance creation' }
 GtLToolCallsSummarizer class >> currentSummarizers [
-	^ self allSubclasses reject: [ :each |
-			each isAbstract or: [ each isActive  not ] ]
+	^ (self allSubclasses reject: [ :each |
+			each isAbstract or: [ each isActive  not ] ])
+		collect: [ :each | each new ]
 ]
 
 { #category : #'instance creation' }

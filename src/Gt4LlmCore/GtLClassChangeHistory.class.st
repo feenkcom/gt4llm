@@ -8,7 +8,7 @@ Class {
 		'methodHistories',
 		'behaviourChangeHistory'
 	],
-	#category : 'Gt4LlmCore-Summaries'
+	#category : #'Gt4LlmCore-Summaries'
 }
 
 { #category : #adding }

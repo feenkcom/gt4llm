@@ -7,7 +7,7 @@ Class {
 	#instVars : [
 		'targetClassName'
 	],
-	#category : 'Gt4LlmCore-Summaries'
+	#category : #'Gt4LlmCore-Summaries'
 }
 
 { #category : #testing }
