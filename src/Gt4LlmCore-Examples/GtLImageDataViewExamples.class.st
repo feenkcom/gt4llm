@@ -4,7 +4,7 @@ I provide examples for GtLImageDataView.
 Class {
 	#name : #GtLImageDataViewExamples,
 	#superclass : #GtLDataViewExamples,
-	#category : 'Gt4LlmCore-Examples-Data Views'
+	#category : #'Gt4LlmCore-Examples-Data Views'
 }
 
 { #category : #'examples - support' }

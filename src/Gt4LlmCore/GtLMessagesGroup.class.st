@@ -158,12 +158,6 @@ GtLMessagesGroup >> lastUserMessageIfPresent: aPresentBlock ifAbsent: anAbsentBl
 	^ anAbsentBlock value
 ]
 
-{ #category : #summaries }
-GtLMessagesGroup >> messageSummarizers [
-	^ GtLToolCallsSummarizer currentSummarizers collect: [ :each |
-		each initializeWithMessages: self ]
-]
-
 { #category : #enumerating }
 GtLMessagesGroup >> messagesBeforeMatching: aBlock andAllWithAndAfter: aMessage [
 	| found |
@@ -209,7 +203,7 @@ GtLMessagesGroup >> messagesWithAndAfter: aMessage [
 
 { #category : #summaries }
 GtLMessagesGroup >> relevantMessageSummarizers [
-	^ self messageSummarizers select: #isRelevant
+	^ self toolCallsSummarizers select: [ :each | each isRelevant ]
 ]
 
 { #category : #summaries }

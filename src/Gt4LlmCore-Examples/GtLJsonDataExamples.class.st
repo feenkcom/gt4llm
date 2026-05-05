@@ -4,7 +4,7 @@ Examples for GtLJsonData testing serialization and data views.
 Class {
 	#name : #GtLJsonDataExamples,
 	#superclass : #GtLDomainObjectExamples,
-	#category : 'Gt4LlmCore-Examples-Domain Objects'
+	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #'examples - basic' }

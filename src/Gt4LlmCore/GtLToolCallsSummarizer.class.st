@@ -5,7 +5,8 @@ Class {
 	#name : #GtLToolCallsSummarizer,
 	#superclass : #Object,
 	#instVars : [
-		'originalToolCalls'
+		'originalToolCalls',
+		'summarizerSpecification'
 	],
 	#category : #'Gt4LlmCore-Summaries'
 }
@@ -76,6 +77,16 @@ GtLToolCallsSummarizer >> originalToolCalls: aCollection [
 { #category : #accessing }
 GtLToolCallsSummarizer >> relevantToolCalls [
 	^ #()
+]
+
+{ #category : #accessing }
+GtLToolCallsSummarizer >> summarizerSpecification [
+	^ summarizerSpecification
+]
+
+{ #category : #accessing }
+GtLToolCallsSummarizer >> summarizerSpecification: aSummarizerSpecification [
+	summarizerSpecification := aSummarizerSpecification
 ]
 
 { #category : #accessing }

@@ -6,7 +6,7 @@ Class {
 		'context',
 		'object'
 	],
-	#category : 'Gt4LlmCore-Examples-Support'
+	#category : #'Gt4LlmCore-Examples-Support'
 }
 
 { #category : #'api - instantiation' }

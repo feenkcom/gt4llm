@@ -4,7 +4,7 @@ Examples for GtLMagritteToolForMethodsRemoval.
 Class {
 	#name : #GtLMagritteToolForMethodsRemovalExamples,
 	#superclass : #GtLAbstractMagritteFunctionToolExamples,
-	#category : 'Gt4LlmCore-Examples-Tools'
+	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #private }

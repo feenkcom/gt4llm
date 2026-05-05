@@ -4,5 +4,5 @@ Abstract superclass for examples testing GtLAbstractPlainSchemaFunctionTool and 
 Class {
 	#name : #GtLAbstractPlainSchemaFunctionToolExamples,
 	#superclass : #GtLAbstractFunctionToolExamples,
-	#category : 'Gt4LlmCore-Examples-Tools'
+	#category : #'Gt4LlmCore-Examples-Tools'
 }

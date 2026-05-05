@@ -4,7 +4,7 @@ Examples for GtLMagritteToolForObjectStorageSlotValue.
 Class {
 	#name : #GtLMagritteToolForObjectStorageSlotValueExamples,
 	#superclass : #GtLAbstractMagritteFunctionToolExamples,
-	#category : 'Gt4LlmCore-Examples-Tools'
+	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #examples }

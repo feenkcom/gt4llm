@@ -4,7 +4,7 @@ Examples for tool call summarizers.
 Class {
 	#name : #GtLToolCallsSummarizerExamples,
 	#superclass : #GtLToolCallsSummarizerExamplesBase,
-	#category : 'Gt4LlmCore-Examples-Summarizers'
+	#category : #'Gt4LlmCore-Examples-Summarizers'
 }
 
 { #category : #examples }
@@ -55,6 +55,6 @@ GtLToolCallsSummarizerExamples >> messagesGroupWithToolAndExampleSummaries [
 		yourself).
 
 	self assert: group relevantMessageSummarizers size equals: 2.
-	self assert: (group messageSummarizers allSatisfy: [ :each | each class inheritsFrom: GtLToolCallsSummarizer ]).
+	self assert: (group toolCallsSummarizers allSatisfy: [ :each | each class inheritsFrom: GtLToolCallsSummarizer ]).
 	^ group
 ]

@@ -4,7 +4,7 @@ Common assertions for class change result examples.
 Class {
 	#name : #GtLClassChangeResultExamples,
 	#superclass : #GtLDomainObjectExamples,
-	#category : 'Gt4LlmCore-Examples-Domain Objects'
+	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #asserting }

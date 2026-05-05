@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'output'
 	],
-	#category : 'Gt4LlmCore-Examples-Magritte'
+	#category : #'Gt4LlmCore-Examples-Magritte'
 }
 
 { #category : #accessing }

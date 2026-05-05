@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLValueSerializerExamples,
 	#superclass : #Object,
-	#category : 'Gt4LlmCore-Examples-Support'
+	#category : #'Gt4LlmCore-Examples-Support'
 }
 
 { #category : #examples }

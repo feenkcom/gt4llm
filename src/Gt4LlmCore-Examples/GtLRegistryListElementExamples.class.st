@@ -4,7 +4,7 @@ I contain examples for GtLRegistryListElement.
 Class {
 	#name : #GtLRegistryListElementExamples,
 	#superclass : #Object,
-	#category : 'Gt4LlmCore-Examples-UI'
+	#category : #'Gt4LlmCore-Examples-UI'
 }
 
 { #category : #examples }

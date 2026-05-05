@@ -4,7 +4,7 @@ Examples for GtLMagritteToolForClassLookup.
 Class {
 	#name : #GtLMagritteToolForClassLookupExamples,
 	#superclass : #GtLAbstractMagritteFunctionToolExamples,
-	#category : 'Gt4LlmCore-Examples-Tools'
+	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
 { #category : #examples }

@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLPrimitiveCompositeJsonDataBlockExamples,
 	#superclass : #GtLPrimitiveDataBlockExamples,
-	#category : 'Gt4LlmCore-Examples-Data Views'
+	#category : #'Gt4LlmCore-Examples-Data Views'
 }
 
 { #category : #examples }
@@ -722,44 +722,6 @@ GtLPrimitiveCompositeJsonDataBlockExamples >> nestedCompositeWithMultipleInnerCo
 ]
 
 { #category : #examples }
-GtLPrimitiveCompositeJsonDataBlockExamples >> nestedCompositeWithoutDataKeys [
-	<gtExample>
-	| outerComposite innerComposite block1 block2 expectedJsonData |
-	innerComposite := GtLPrimitiveCompositeJsonGenericDataBlock new.
-	
-	block1 := GtLPrimitiveJsonDataBlock new
-		jsonData: (Dictionary new
-			at: 'city' put: 'New York';
-			yourself).
-	
-	block2 := GtLPrimitiveJsonDataBlock new
-		jsonData: (Dictionary new
-			at: 'zip' put: '10001';
-			yourself).
-	
-	innerComposite addJsonDataBlock: block1.
-	innerComposite addJsonDataBlock: block2.
-	
-	outerComposite := GtLPrimitiveCompositeJsonGenericDataBlock new.
-	outerComposite addJsonDataBlock: (GtLPrimitiveJsonDataBlock new
-		jsonData: (Dictionary new
-			at: 'name' put: 'John';
-			yourself)).
-	outerComposite addJsonDataBlock: innerComposite.
-	
-	expectedJsonData := Dictionary new
-		at: 'name' put: 'John';
-		at: 'city' put: 'New York';
-		at: 'zip' put: '10001';
-		yourself.
-	
-	self assert: outerComposite llmJsonData equals: expectedJsonData.
-	self assertSerializationForDataBlockWithOneDataPart: outerComposite.
-	
-	^ outerComposite
-]
-
-{ #category : #examples }
 GtLPrimitiveCompositeJsonDataBlockExamples >> nestedCompositeWithOuterDataKey [
 	<gtExample>
 	| outerComposite innerComposite block1 block2 expectedJsonData |
@@ -796,6 +758,44 @@ GtLPrimitiveCompositeJsonDataBlockExamples >> nestedCompositeWithOuterDataKey [
 	
 	self assert: outerComposite llmJsonData equals: expectedJsonData.
 	self assert: outerComposite condensedJsonBlock dataKey equals: nil.
+	self assertSerializationForDataBlockWithOneDataPart: outerComposite.
+	
+	^ outerComposite
+]
+
+{ #category : #examples }
+GtLPrimitiveCompositeJsonDataBlockExamples >> nestedCompositeWithoutDataKeys [
+	<gtExample>
+	| outerComposite innerComposite block1 block2 expectedJsonData |
+	innerComposite := GtLPrimitiveCompositeJsonGenericDataBlock new.
+	
+	block1 := GtLPrimitiveJsonDataBlock new
+		jsonData: (Dictionary new
+			at: 'city' put: 'New York';
+			yourself).
+	
+	block2 := GtLPrimitiveJsonDataBlock new
+		jsonData: (Dictionary new
+			at: 'zip' put: '10001';
+			yourself).
+	
+	innerComposite addJsonDataBlock: block1.
+	innerComposite addJsonDataBlock: block2.
+	
+	outerComposite := GtLPrimitiveCompositeJsonGenericDataBlock new.
+	outerComposite addJsonDataBlock: (GtLPrimitiveJsonDataBlock new
+		jsonData: (Dictionary new
+			at: 'name' put: 'John';
+			yourself)).
+	outerComposite addJsonDataBlock: innerComposite.
+	
+	expectedJsonData := Dictionary new
+		at: 'name' put: 'John';
+		at: 'city' put: 'New York';
+		at: 'zip' put: '10001';
+		yourself.
+	
+	self assert: outerComposite llmJsonData equals: expectedJsonData.
 	self assertSerializationForDataBlockWithOneDataPart: outerComposite.
 	
 	^ outerComposite

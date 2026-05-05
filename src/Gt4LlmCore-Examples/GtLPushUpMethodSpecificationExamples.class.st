@@ -3,7 +3,7 @@ Class {
 	#superclass : #Object,
 	#traits : 'TGtExampleAssertable',
 	#classTraits : 'TGtExampleAssertable classTrait',
-	#category : 'Gt4LlmCore-Examples-Formats'
+	#category : #'Gt4LlmCore-Examples-Formats'
 }
 
 { #category : #'as yet unclassified' }
