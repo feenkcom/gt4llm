@@ -87,8 +87,9 @@ GtLToolCallSummarizersRegistry >> initialize [
 { #category : #copying }
 GtLToolCallSummarizersRegistry >> postCopy [
 	super postCopy.
-	specifications := GtLToolCallSummarizerSpecificationsGroup new.
-	specifications addAll: specifications.
+	specifications := GtLToolCallSummarizerSpecificationsGroup new
+		addAll: specifications;
+		yourself.
 	currentSummarizers := #()
 ]
 

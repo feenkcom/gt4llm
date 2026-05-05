@@ -15,7 +15,7 @@ GtLToolCallSummarizersRegistryExamples >> copiedRegistry [
 	copy := registry copy.
 	self assert: copy ~~ registry.
 	self assert: copy specifications ~~ registry specifications.
-	self assert: copy specifications size equals: 0.
+	self assert: copy specifications size equals: registry specifications size.
 	self assert: copy currentSummarizers isEmpty.
 	^ copy
 ]
