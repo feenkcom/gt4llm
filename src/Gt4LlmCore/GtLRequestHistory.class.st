@@ -32,8 +32,8 @@ GtLRequestHistory >> gtCallsFor: aView [
 					streamContents: [ :out | aRequestResponse response statusLine writeOn: out ] ]
 			width: 150;
 		actionButtonIcon: BrGlamorousVectorIcons clipboard
-			tooltip: 'Copy responses to the clipboard as a store string'
-			action: [ :anElement | Clipboard clipboardText: self responseStoreString ]
+			tooltip: 'Copy server responses to the clipboard'
+			action: [ :anElement | Clipboard clipboardText: self responseByteArrays ]
 ]
 
 { #category : #ui }
@@ -46,6 +46,15 @@ GtLRequestHistory >> gtClearHistoryActionFor: anAction [
 		action: [ :aButton :aTab | 
 			self removeAll.
 			aTab viewContentElement phlow update ]
+]
+
+{ #category : #'api - serializing' }
+GtLRequestHistory >> responseByteArrays [
+
+	^ (self simplifiedResponses collect: [ :znResponse |
+		(ByteArray new: 1024 streamContents: [ :stream |
+			znResponse writeOn: stream ]) ]) storeString
+
 ]
 
 { #category : #'api - serializing' }
@@ -62,10 +71,12 @@ GtLRequestHistory >> simplifiedResponseCopyFrom: aZnResponse [
 	aCopy := aZnResponse copy.
 	aHeaders := aCopy headers.
 
+	aHeaders removeKey: 'Server' ifAbsent: [  ].
+	aHeaders at: 'Openai-Organization' ifPresent:
+		[ aHeaders at: 'Openai-Organization' put: 'stub-organization'].
+	aHeaders at: 'Opeanai-Project' ifPresent:
+		[ aHeaders at: 'Opeanai-Project' put: 'proj_1' ].
 	aHeaders
-		removeKey: 'Server' ifAbsent: [  ];
-		at: 'Openai-Organization' put: 'stub-organization';
-		at: 'Opeanai-Project' put: 'proj_1';
 		removeKey: 'Set-Cookie' ifAbsent: [  ];
 		removeKey: 'Cf-Ray' ifAbsent: [  ];
 		removeKey: 'Alt-Svc' ifAbsent: [  ].
