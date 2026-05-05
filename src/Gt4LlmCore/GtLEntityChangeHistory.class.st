@@ -55,6 +55,11 @@ GtLEntityChangeHistory >> gtViewChangeHistoryChildren [
 ]
 
 { #category : #accessing }
+GtLEntityChangeHistory >> gtViewChangeHistoryDetailedChildren [
+	^ self gtViewChangeHistoryChildren
+]
+
+{ #category : #accessing }
 GtLEntityChangeHistory >> gtViewChangesCount [
 	^ self subclassResponsibility
 ]

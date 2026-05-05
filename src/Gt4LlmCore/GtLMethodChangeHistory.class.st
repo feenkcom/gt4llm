@@ -76,8 +76,8 @@ GtLMethodChangeHistory >> gtDiffFor: aView [
 			self initialChange changeResult oldStateMethodSourceCode ];
 		to: [ 
 			self latestChange changeResult newStateMethodSourceCode ];
-		fromLabel: 'First Change:';
-		toLabel: 'Last Change:';
+		fromLabel: 'Initial version:';
+		toLabel: 'Changed version:';
 		styler: GtCodeDiffRBTextStyler new
 ]
 
@@ -104,6 +104,11 @@ GtLMethodChangeHistory >> gtDisplayOn: aStream [
 { #category : #'gt-extensions' }
 GtLMethodChangeHistory >> gtViewChangeDescriptionElement [
 	^ self latestChange gtViewChangeDescriptionElement
+]
+
+{ #category : #'gt-extensions' }
+GtLMethodChangeHistory >> gtViewChangeHistoryChildren [
+	^ #()
 ]
 
 { #category : #printing }

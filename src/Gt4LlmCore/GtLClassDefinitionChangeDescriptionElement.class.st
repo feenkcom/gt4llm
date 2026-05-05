@@ -2,7 +2,8 @@ Class {
 	#name : #GtLClassDefinitionChangeDescriptionElement,
 	#superclass : #GtLCodeChangeDescriptionElement,
 	#instVars : [
-		'classNameLabel'
+		'classNameLabel',
+		'detailsLabel'
 	],
 	#category : #'Gt4LlmCore-Summaries'
 }
@@ -16,17 +17,27 @@ GtLClassDefinitionChangeDescriptionElement >> initialize [
 	self alignCenterLeft.
 
 	self addChild: (classNameLabel := self buildNewLabel).
+	self
+		addChild: (detailsLabel := self buildNewLabel
+			text: '').
 	
 ]
 
 { #category : #updating }
 GtLClassDefinitionChangeDescriptionElement >> updateForChangeHistory: aClassHistory [
 	classNameLabel text: (aClassHistory targetClassName)
-		asRopedText "bold".
+		asRopedText
 ]
 
 { #category : #updating }
 GtLClassDefinitionChangeDescriptionElement >> updateForChangeObject: aChangeResult [
 	classNameLabel text: (aChangeResult targetClassName)
-		asRopedText "bold".
+		asRopedText
+]
+
+{ #category : #updating }
+GtLClassDefinitionChangeDescriptionElement >> updateForClassDefinitionChangeHistory: aClassHistory [
+	classNameLabel text: (aClassHistory targetClassName) asRopedText.
+	detailsLabel text: ('definition' asRopedText
+					foreground: (Smalltalk ui theme textColor mixed: 0.1 with: Color gray))
 ]
