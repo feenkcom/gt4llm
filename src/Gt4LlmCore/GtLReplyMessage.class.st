@@ -352,6 +352,11 @@ GtLReplyMessage >> gtViewsInContext: aPhlowContext [
 ]
 
 { #category : #testing }
+GtLReplyMessage >> hasResponse [
+	^ false
+]
+
+{ #category : #testing }
 GtLReplyMessage >> includesMessage: aMessage [
 	^ (self executionMessages anySatisfy: [:each | each = aMessage]) or: [
 		finalMessage = aMessage ]
