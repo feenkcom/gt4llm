@@ -4,7 +4,7 @@ I provide examples for GtLPrimitiveDocumentDataBlock.
 Class {
 	#name : #GtLPrimitiveDocumentDataBlockExamples,
 	#superclass : #GtLPrimitiveDataBlockExamples,
-	#category : 'Gt4LlmCore-Examples-Data Views'
+	#category : #'Gt4LlmCore-Examples-Data Views'
 }
 
 { #category : #examples }

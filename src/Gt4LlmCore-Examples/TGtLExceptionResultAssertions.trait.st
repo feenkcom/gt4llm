@@ -3,7 +3,7 @@ Trait providing assertion methods for exception result JSON data in examples.
 "
 Trait {
 	#name : #TGtLExceptionResultAssertions,
-	#category : 'Gt4LlmCore-Examples-Domain Objects'
+	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
 { #category : #assertions }

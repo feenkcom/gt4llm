@@ -13,7 +13,8 @@ Class {
 		'userMessageClass',
 		'responseFormat',
 		'objectStorage',
-		'reasoningEffort'
+		'reasoningEffort',
+		'summarizersRegistry'
 	],
 	#category : #'Gt4LlmCore-Core'
 }
@@ -61,6 +62,11 @@ GtLChat >> addCompactionMessage: aMessage [
 	aMessage chat: self.
 	aReplyMessage := self ensureReplyMessage.
 	aReplyMessage addCompactionMessage: aMessage
+]
+
+{ #category : #initialization }
+GtLChat >> addDefaultSummarizerSpecifications [
+	summarizersRegistry addDefaultSpecifications
 ]
 
 { #category : #'api - message' }
@@ -354,9 +360,10 @@ GtLChat >> gtFormatFor: aView [
 			action: [ :aButton | aButton phlow spawnObject: self format ]
 ]
 
-{ #category : #'gt-inspector' }
+{ #category : #inspecting }
 GtLChat >> gtInspectorTargetModels [
-	^ (self messages toolCallsSummarizers ifNil: [ #()])
+	^ (self summarizersRegistry summarizersForMessages: self messages)
+		ifNil: [ #() ]
 ]
 
 { #category : #views }
@@ -516,6 +523,7 @@ GtLChat >> initialize [
 	responseFormat := GtLResponseCompositeFormat new.
 	objectStorage := GtLObjectStorage new.
 	instructions := GtLInstructionComposite new.
+	summarizersRegistry := GtLToolCallSummarizersRegistry new.
 	
 	self updateLastUpdate
 ]
@@ -616,7 +624,7 @@ GtLChat >> plainStringResponse [
 			name: 'String')
 ]
 
-{ #category : #actions }
+{ #category : #copying }
 GtLChat >> postCopyForIndependentRequestAt: aMessage [
 	announcer := Announcer new.
 	
@@ -629,6 +637,7 @@ GtLChat >> postCopyForIndependentRequestAt: aMessage [
 	objectStorage := objectStorage copy.
 	responseFormat := responseFormat copy.
 	tools := tools copy.
+	summarizersRegistry := summarizersRegistry copy
 ]
 
 { #category : #accessing }
@@ -754,6 +763,16 @@ GtLChat >> stopOngoingExecution [
 GtLChat >> stringResponse [
 	self addResponseFormat: (GtLResponseStringFormat new
 			name: 'String')
+]
+
+{ #category : #accessing }
+GtLChat >> summarizersRegistry [
+	^ summarizersRegistry
+]
+
+{ #category : #accessing }
+GtLChat >> summarizersRegistry: aRegistry [
+	summarizersRegistry := aRegistry
 ]
 
 { #category : #accessing }

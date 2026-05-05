@@ -147,10 +147,11 @@ GtLChatRegistry >> newGtChatDescription [
 		chat: [ :aProvider | self newGtChatWithProvider: aProvider ]
 ]
 
-{ #category : #accessing }
+{ #category : #private }
 GtLChatRegistry >> newGtChatWithProvider: aProviderOrNil [
 	| chat |
 	chat := GtLChat new.
+	chat addDefaultSummarizerSpecifications.
 	aProviderOrNil ifNotNil: [ chat provider: aProviderOrNil ].
 	chat
 		tools: GtLTools gt;
