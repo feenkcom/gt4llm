@@ -64,6 +64,11 @@ GtLModelProvider >> clientGenerateModelResponse: anInputMessage messages: someMe
 		andInstructions: anInputMessage instructions instructionString
 ]
 
+{ #category : #api }
+GtLModelProvider >> createEmbeddings: aStringOrCollection [
+
+]
+
 { #category : #'as yet unclassified' }
 GtLModelProvider >> defaultAssistantMessageClass [
 	^ model client assistantMessageClass
@@ -134,7 +139,7 @@ GtLModelProvider >> model: anObject [
 	model := anObject
 ]
 
-{ #category : #accessing }
+{ #category : #api }
 GtLModelProvider >> modelDetails [
 	| endpoint context requestResponse |
 
@@ -215,7 +220,7 @@ GtLModelProvider >> processNextMessage: anInputMessage [
 		outputMessage: outputMessage
 ]
 
-{ #category : #accessing }
+{ #category : #api }
 GtLModelProvider >> providerVersion [
 	| endpoint |
 
@@ -255,7 +260,7 @@ GtLModelProvider >> responseTypeForResult: aResult fromInputMessage: anInputMess
 	^ newMessage
 ]
 
-{ #category : #accessing }
+{ #category : #api }
 GtLModelProvider >> runningModels [
 	| endpoint |
 

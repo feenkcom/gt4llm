@@ -1,0 +1,22 @@
+Class {
+	#name : #GtLOllamaCreateEmbeddingsCommand,
+	#superclass : #GtLModelApiCommand,
+	#category : #'Gt4Llm-Ollama-Commands'
+}
+
+{ #category : #'private - accessing' }
+GtLOllamaCreateEmbeddingsCommand >> newContext [
+
+	^ GtLOllamaCreateEmbeddingsContext new
+]
+
+{ #category : #'as yet unclassified' }
+GtLOllamaCreateEmbeddingsCommand >> perform [
+	| requestResponse endpoint |
+
+	endpoint := context endpoint.
+	requestResponse := self client
+		post: endpoint path
+		withEntity: (endpoint entityFromContext: context).
+	^ endpoint resultFrom: requestResponse context: context.
+]
