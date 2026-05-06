@@ -14,7 +14,7 @@ GtLOpenAIProviderCopyChatExamples >> assertCopiedChatMessage: aCopiedMessage isC
 	self assert: aCopiedMessage tools ~~ anOriginalMessage tools.
 ]
 
-{ #category : #asserting }
+{ #category : #'examples - assertions' }
 GtLOpenAIProviderCopyChatExamples >> assertCopiedReplyMessage: aCopiedReply isCopyOf: anOriginalReply forChat: aChat [
 	self assertCopiedChatMessage: aCopiedReply isCopyOf: anOriginalReply forChat: aChat.
 	self assert: aCopiedReply userMessage ~~ anOriginalReply userMessage.
@@ -23,9 +23,12 @@ GtLOpenAIProviderCopyChatExamples >> assertCopiedReplyMessage: aCopiedReply isCo
 	self assert: (aCopiedReply executionMessages allSatisfy: [ :each | each chat == aChat ]).
 	self assertCopiedChatMessage: aCopiedReply userMessage isCopyOf: anOriginalReply userMessage forChat: aChat.
 	self assertCopiedChatMessage: aCopiedReply finalMessage isCopyOf: anOriginalReply finalMessage forChat: aChat.
+	self assert: aCopiedReply summarizersRegistry ~~ anOriginalReply summarizersRegistry.
+	self assert: aCopiedReply summarizersRegistry specifications size equals: anOriginalReply summarizersRegistry specifications size.
+	self assert: aCopiedReply summarizersRegistry currentSummarizers isEmpty.
 ]
 
-{ #category : #asserting }
+{ #category : #'examples - assertions' }
 GtLOpenAIProviderCopyChatExamples >> assertForkedChat: aForkedChat from: anOriginalChat hasReplyWithExecutionMessagesCount: anInteger hasFinalMessage: aBoolean [
 	| originalMessages forkedMessages originalReply forkedReply |
 	
@@ -43,6 +46,9 @@ GtLOpenAIProviderCopyChatExamples >> assertForkedChat: aForkedChat from: anOrigi
 	self assert: forkedReply userMessage == forkedMessages first.
 	self assert: forkedReply executionMessages size equals: anInteger.
 	self assert: (forkedReply executionMessages allSatisfy: [ :each | each chat == aForkedChat ]).
+	self assert: forkedReply summarizersRegistry ~~ originalReply summarizersRegistry.
+	self assert: forkedReply summarizersRegistry specifications size equals: originalReply summarizersRegistry specifications size.
+	self assert: forkedReply summarizersRegistry currentSummarizers isEmpty.
 	aBoolean
 		ifTrue: [
 			self assert: forkedReply finalMessage notNil.
@@ -82,7 +88,7 @@ GtLOpenAIProviderCopyChatExamples >> chatWithTwoMessages [
 GtLOpenAIProviderCopyChatExamples >> chatWithUserAndReplyWithTwoToolMessages [
 	<gtExample>
 	<return: #GtLChat>
-	| chat userMessage firstToolMessage secondToolMessage assistantMessage replyMessage messages |
+	| chat userMessage firstToolMessage secondToolMessage assistantMessage replyMessage messages originalRegistry |
 	
 	chat := GtLChat new.
 	chat provider: GtLOpenAIProvider new.
@@ -103,6 +109,8 @@ GtLOpenAIProviderCopyChatExamples >> chatWithUserAndReplyWithTwoToolMessages [
 	replyMessage addToolMessage: firstToolMessage.
 	replyMessage addToolMessage: secondToolMessage.
 	replyMessage finalMessage: assistantMessage.
+	originalRegistry := replyMessage summarizersRegistry.
+	originalRegistry instVarNamed: 'currentSummarizers' put: { Object new }.
 	
 	self assert: messages size equals: 2.
 	self assert: messages first == userMessage.
@@ -112,6 +120,7 @@ GtLOpenAIProviderCopyChatExamples >> chatWithUserAndReplyWithTwoToolMessages [
 	self assert: replyMessage finalMessage == assistantMessage.
 	self assert: (replyMessage executionMessages allSatisfy: [ :each | each chat == chat ]).
 	self assert: assistantMessage chat == chat.
+	self assert: replyMessage summarizersRegistry currentSummarizers size equals: 1.
 	
 	^ chat
 ]
@@ -253,7 +262,7 @@ GtLOpenAIProviderCopyChatExamples >> copyOpenAIUserMessage [
 GtLOpenAIProviderCopyChatExamples >> copyReplyMessageWithToolAndOpenAIAssistantMessage [
 	<gtExample>
 	<return: #GtLReplyMessage>
-	| originalChat newChat userMessage firstToolMessage secondToolMessage thirdToolMessage assistantMessage replyMessage copiedReply copiedToolMessages |
+	| originalChat newChat userMessage firstToolMessage secondToolMessage thirdToolMessage assistantMessage replyMessage copiedReply copiedToolMessages originalRegistry |
 	
 	originalChat := GtLChat new.
 	originalChat provider: GtLOpenAIProvider new.
@@ -285,6 +294,9 @@ GtLOpenAIProviderCopyChatExamples >> copyReplyMessageWithToolAndOpenAIAssistantM
 	replyMessage addToolMessage: secondToolMessage.
 	replyMessage addToolMessage: thirdToolMessage.
 	replyMessage finalMessage: assistantMessage.
+	originalRegistry := GtLToolCallSummarizersRegistry new.
+	originalRegistry instVarNamed: 'currentSummarizers' put: { Object new }.
+	replyMessage summarizersRegistry: originalRegistry.
 	
 	copiedReply := replyMessage copyForIndependentRequestInChat: newChat.
 	copiedToolMessages := copiedReply executionMessages asArray.

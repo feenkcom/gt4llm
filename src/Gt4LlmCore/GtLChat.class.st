@@ -276,6 +276,7 @@ GtLChat >> currentTools [
 { #category : #'api - message' }
 GtLChat >> ensureReplyMessage [
 	| aReplyMessage |
+	
 	messages
 		reverseDo: [ :eachMessage | 
 			eachMessage isReplyMessage ifTrue: [
@@ -283,12 +284,15 @@ GtLChat >> ensureReplyMessage [
 
 			eachMessage isUserMessage ifTrue: [ 
 				aReplyMessage := GtLReplyMessage new
+					summarizersRegistry: self summarizersRegistry copy;
 					userMessage: eachMessage.
 				self addMessage: aReplyMessage.
 				^ aReplyMessage ] ].
 
 	aReplyMessage := GtLReplyMessage new.
+	aReplyMessage summarizersRegistry: self summarizersRegistry copy.
 	self addMessage: aReplyMessage.
+	
 	^ aReplyMessage
 ]
 
