@@ -6,7 +6,8 @@ Class {
 		'finalMessage',
 		'executionMessages',
 		'finishedAt',
-		'executionState'
+		'executionState',
+		'summarizersRegistry'
 	],
 	#category : #'Gt4LlmCore-Core'
 }
@@ -81,6 +82,9 @@ GtLReplyMessage >> copyForIndependentRequestInChat: aChat withUserMessage: aUser
 	newCopy := self copy.
 	newCopy postCopyForIndependentRequestInChat: aChat.
 	newCopy userMessage: aUserMessage.
+	
+	summarizersRegistry ifNotNil: [
+		newCopy summarizersRegistry: summarizersRegistry copy ].
 	
 	indexOfMessage := self executionMessages 
 		indexOf: aLastMessage ifAbsent: [ nil ].
@@ -472,9 +476,18 @@ GtLReplyMessage >> senderText2 [
 ]
 
 { #category : #accessing }
+GtLReplyMessage >> summarizersRegistry [
+	^ summarizersRegistry
+]
+
+{ #category : #accessing }
+GtLReplyMessage >> summarizersRegistry: anObject [
+	summarizersRegistry := anObject
+]
+
+{ #category : #accessing }
 GtLReplyMessage >> toolCallsSummarizers [
-	^ GtLToolCallsSummarizer currentSummarizers collect: [ :each |
-		each initializeWithMessages: {self} ]
+	^ self summarizersRegistry summarizersForMessages: {self}
 ]
 
 { #category : #'private - updating' }
