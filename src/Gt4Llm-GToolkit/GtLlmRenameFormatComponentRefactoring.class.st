@@ -17,14 +17,15 @@ GtLlmRenameFormatComponentRefactoring class >> model: aModel rename: anOldName t
 		yourself
 ]
 
+{ #category : #'as yet unclassified' }
+GtLlmRenameFormatComponentRefactoring >> applicabilityPreconditions [
+	^ self
+		applicabilityPreconditionsFor: {RBCondition withBlock: [ newName isNotEmpty ] errorString: 'New name is empty'}
+]
+
 { #category : #transforming }
 GtLlmRenameFormatComponentRefactoring >> basicTransform [
 	self renameComponentReferences
-]
-
-{ #category : #'as yet unclassified' }
-GtLlmRenameFormatComponentRefactoring >> preconditions [
-	^ RBCondition withBlock: [ newName isNotEmpty ]
 ]
 
 { #category : #transforming }

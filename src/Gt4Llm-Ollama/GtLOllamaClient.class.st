@@ -14,8 +14,3 @@ GtLOllamaClient >> initializeClient [
 
 	^ super initializeClient beOneShot
 ]
-
-{ #category : #accessing }
-GtLOllamaClient >> serializeToolMessageForResponse: aToolMessage [
-	self subclassResponsibility
-]
