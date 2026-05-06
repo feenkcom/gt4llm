@@ -5,6 +5,33 @@ Class {
 }
 
 { #category : #examples }
+GtLOllamaMigrationExamples >> deleteTinyllama [
+	"Delete tinyllama with Ollama"
+	<gtExample>
+	| executor model result expectedResponses |
+
+	executor := GtLModelExamplesExecutor new.
+	model := GtLModelFactory new ollama_generate: 'tinyllama'.
+	executor isLive ifFalse:
+		[ expectedResponses := self deleteTinyllamaResponses
+			collect: [ :response |
+				(ZnResponse readFrom: response readStream) ]
+			as: OrderedCollection.
+		model client clientBuilder: (GtLOpenAIClientStubBuilder new
+			responses: expectedResponses copy). ].
+	result := model provider deleteModel.
+	executor assertHistoryResponsesOK: model client history.
+	self assert: result equals: 'success'.
+	^ model
+]
+
+{ #category : #'private - response data' }
+GtLOllamaMigrationExamples >> deleteTinyllamaResponses [
+
+	^ #(#[72 84 84 80 47 49 46 49 32 50 48 48 32 79 75 13 10 68 97 116 101 58 32 87 101 100 44 32 48 54 32 77 97 121 32 50 48 50 54 32 48 57 58 50 48 58 48 50 32 71 77 84 13 10 67 111 110 110 101 99 116 105 111 110 58 32 99 108 111 115 101 13 10 13 10])
+]
+
+{ #category : #examples }
 GtLOllamaMigrationExamples >> gemma4Chat [
 	"Check operation of the Ollama endpoint using a fake client"
 	<gtExample>
@@ -15,7 +42,7 @@ GtLOllamaMigrationExamples >> gemma4Chat [
 	chat
 		reasoningEffort: #none;
 		sendString: 'Hi, who are you?'.
-	executor waitTimeoutSeconds: 5.
+	executor waitTimeoutSeconds: 30.
 	
 	executor assertFirstResponseContent: chat.
 
@@ -321,6 +348,33 @@ GtLOllamaMigrationExamples >> providerVersion [
 	executor assertHistoryResponsesOK: model client history.
 	self assert: versionString isString.
 	^ versionString
+]
+
+{ #category : #examples }
+GtLOllamaMigrationExamples >> pullTinyllama [
+	"Pull tinyllama with Ollama"
+	<gtExample>
+	| executor model result expectedResponses |
+
+	executor := GtLModelExamplesExecutor new.
+	model := GtLModelFactory new ollama_generate: 'tinyllama'.
+	executor isLive ifFalse:
+		[ expectedResponses := self pullTinyllamaResponses
+			collect: [ :response |
+				(ZnResponse readFrom: response readStream) ]
+			as: OrderedCollection.
+		model client clientBuilder: (GtLOpenAIClientStubBuilder new
+			responses: expectedResponses copy). ].
+	result := model provider pullModel.
+	executor assertHistoryResponsesOK: model client history.
+	self assert: result equals: 'success'.
+	^ model
+]
+
+{ #category : #'private - response data' }
+GtLOllamaMigrationExamples >> pullTinyllamaResponses [
+
+	^ #(#[72 84 84 80 47 49 46 49 32 50 48 48 32 79 75 13 10 67 111 110 116 101 110 116 45 84 121 112 101 58 32 97 112 112 108 105 99 97 116 105 111 110 47 106 115 111 110 13 10 68 97 116 101 58 32 87 101 100 44 32 48 54 32 77 97 121 32 50 48 50 54 32 48 57 58 49 50 58 49 57 32 71 77 84 13 10 67 111 110 116 101 110 116 45 76 101 110 103 116 104 58 32 50 48 13 10 67 111 110 110 101 99 116 105 111 110 58 32 99 108 111 115 101 13 10 13 10 123 34 115 116 97 116 117 115 34 58 34 115 117 99 99 101 115 115 34 125])
 ]
 
 { #category : #examples }

@@ -64,9 +64,30 @@ GtLModelProvider >> clientGenerateModelResponse: anInputMessage messages: someMe
 		andInstructions: anInputMessage instructions instructionString
 ]
 
+{ #category : #api }
+GtLModelProvider >> createEmbeddings: aStringOrCollection [
+
+]
+
 { #category : #'as yet unclassified' }
 GtLModelProvider >> defaultAssistantMessageClass [
 	^ model client assistantMessageClass
+]
+
+{ #category : #api }
+GtLModelProvider >> deleteModel [
+	| endpoint context requestResponse |
+
+	endpoint := model endpointAt: 'deleteModel'.
+	context := endpoint newContextForModel: model.
+	context
+		model: model;
+		provider: self.
+	requestResponse := self client
+		delete: endpoint path
+		withEntity: (endpoint entityFromContext: context)
+		decodeResponse: false.
+	^ endpoint resultFrom: requestResponse context: context.
 ]
 
 { #category : #'as yet unclassified' }
@@ -118,7 +139,7 @@ GtLModelProvider >> model: anObject [
 	model := anObject
 ]
 
-{ #category : #accessing }
+{ #category : #api }
 GtLModelProvider >> modelDetails [
 	| endpoint context requestResponse |
 
@@ -199,12 +220,27 @@ GtLModelProvider >> processNextMessage: anInputMessage [
 		outputMessage: outputMessage
 ]
 
-{ #category : #accessing }
+{ #category : #api }
 GtLModelProvider >> providerVersion [
 	| endpoint |
 
 	endpoint := model endpointAt: 'providerVersion'.
 	^ (self client get: endpoint path) result at: 'version'.
+]
+
+{ #category : #api }
+GtLModelProvider >> pullModel [
+	| endpoint context requestResponse |
+
+	endpoint := model endpointAt: 'pullModel'.
+	context := endpoint newContextForModel: model.
+	context
+		model: model;
+		provider: self.
+	requestResponse := self client
+		post: endpoint path
+		withEntity: (endpoint entityFromContext: context).
+	^ endpoint resultFrom: requestResponse context: context.
 ]
 
 { #category : #'private - accessing' }
@@ -224,7 +260,7 @@ GtLModelProvider >> responseTypeForResult: aResult fromInputMessage: anInputMess
 	^ newMessage
 ]
 
-{ #category : #accessing }
+{ #category : #api }
 GtLModelProvider >> runningModels [
 	| endpoint |
 

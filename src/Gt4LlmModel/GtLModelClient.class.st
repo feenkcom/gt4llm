@@ -82,6 +82,31 @@ GtLModelClient >> completeChatWithModel: aGtLModel andMessages: aCollection andF
 ]
 
 { #category : #api }
+GtLModelClient >> delete: aString withEntity: anEntity [
+	<return: #GtLRequestResponse>
+
+	^ self delete: aString withEntity: anEntity decodeResponse: true
+]
+
+{ #category : #api }
+GtLModelClient >> delete: aString withEntity: anEntity decodeResponse: aBoolean [
+	<return: #GtLRequestResponse>
+	| aClient result requestResponse |
+	aClient := self initializeClient.
+	aClient url: self baseUrl / aString.
+	aBoolean ifFalse:
+		[ aClient contentReader: nil ].
+	result := aClient 
+		method: #DELETE;
+		contents: anEntity;
+		execute.
+	requestResponse := self addHistoryRequestResponse: aClient.
+	requestResponse result: result.
+	self checkForErrors: result.
+	^ requestResponse
+]
+
+{ #category : #api }
 GtLModelClient >> get: aString [
 	| aClient result requestResponse |
 	aClient := self initializeClient beOneShot.
