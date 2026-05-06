@@ -69,6 +69,22 @@ GtLModelProvider >> defaultAssistantMessageClass [
 	^ model client assistantMessageClass
 ]
 
+{ #category : #api }
+GtLModelProvider >> deleteModel [
+	| endpoint context requestResponse |
+
+	endpoint := model endpointAt: 'deleteModel'.
+	context := endpoint newContextForModel: model.
+	context
+		model: model;
+		provider: self.
+	requestResponse := self client
+		delete: endpoint path
+		withEntity: (endpoint entityFromContext: context)
+		decodeResponse: false.
+	^ endpoint resultFrom: requestResponse context: context.
+]
+
 { #category : #'as yet unclassified' }
 GtLModelProvider >> executeAsyncMessage: anInputMessage [
 	<return: #TAsyncPromise>
@@ -205,6 +221,21 @@ GtLModelProvider >> providerVersion [
 
 	endpoint := model endpointAt: 'providerVersion'.
 	^ (self client get: endpoint path) result at: 'version'.
+]
+
+{ #category : #api }
+GtLModelProvider >> pullModel [
+	| endpoint context requestResponse |
+
+	endpoint := model endpointAt: 'pullModel'.
+	context := endpoint newContextForModel: model.
+	context
+		model: model;
+		provider: self.
+	requestResponse := self client
+		post: endpoint path
+		withEntity: (endpoint entityFromContext: context).
+	^ endpoint resultFrom: requestResponse context: context.
 ]
 
 { #category : #'private - accessing' }
