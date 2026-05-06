@@ -202,8 +202,8 @@ GtLMessagesGroup >> serialize [
 
 { #category : #summaries }
 GtLMessagesGroup >> toolCallsSummarizers [
-	^ GtLToolCallsSummarizer currentSummarizers collect: [ :each |
-		each initializeWithMessages: self ]
+	^ GtLToolCallSummarizersRegistry defaultSpecifications collect: [ :each |
+			each buildForMessages: self ]
 ]
 
 { #category : #enumerating }
