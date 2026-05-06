@@ -54,7 +54,7 @@ GtLToolCallsSummarizerExamples >> messagesGroupWithToolAndExampleSummaries [
 		output: wrappedSingle;
 		yourself).
 
-	self assert: group relevantMessageSummarizers size equals: 2.
+	self assert: group relevantToolCallsSummarizers size equals: 2.
 	self assert: (group toolCallsSummarizers allSatisfy: [ :each | each class inheritsFrom: GtLToolCallsSummarizer ]).
 	^ group
 ]

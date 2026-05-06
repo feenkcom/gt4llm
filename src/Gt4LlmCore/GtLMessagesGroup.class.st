@@ -190,11 +190,6 @@ GtLMessagesGroup >> messagesWithAndAfter: aMessage [
 ]
 
 { #category : #summaries }
-GtLMessagesGroup >> relevantMessageSummarizers [
-	^ self toolCallsSummarizers select: [ :each | each isRelevant ]
-]
-
-{ #category : #summaries }
 GtLMessagesGroup >> relevantToolCallsSummarizers [
 	^ self toolCallsSummarizers select: [ :each | each isRelevant ]
 ]
