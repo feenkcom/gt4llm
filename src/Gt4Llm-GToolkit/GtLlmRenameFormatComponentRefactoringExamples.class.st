@@ -180,6 +180,23 @@ GtLlmRenameFormatComponentRefactoringExamples >> exampleClassRefactored [
 ]
 
 { #category : #'as yet unclassified' }
+GtLlmRenameFormatComponentRefactoringExamples >> failExampleClassRefactored [
+	<gtExample>
+	| class refactoring |
+	class := self exampleClass.
+
+	refactoring := GtLlmRenameFormatComponentRefactoring
+			model: class model
+			rename: 'Example'
+			to: ''
+			in: class.
+	[ refactoring primitiveExecute ]
+		on: RBRefactoringError
+		do: [ :ex | ^ ex copy freeze ].
+	self error: 'Refactoring did not throw an error'
+]
+
+{ #category : #'as yet unclassified' }
 GtLlmRenameFormatComponentRefactoringExamples >> formatSource [
 	^ 'gtExampleFormat
 	<gtLlmAssistantFormat>
