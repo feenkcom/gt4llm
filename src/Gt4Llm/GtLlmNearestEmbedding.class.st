@@ -32,3 +32,15 @@ GtLlmNearestEmbedding >> embedding: anObject [
 GtLlmNearestEmbedding >> input [
 	^ self embedding input
 ]
+
+{ #category : #printing }
+GtLlmNearestEmbedding >> printOn: aStream [
+
+	super printOn: aStream.
+	aStream parenthesize:
+		[ distance ifNotNil:
+			[ aStream print: distance ].
+		aStream << ': '.
+		self input ifNotNil:
+			[ aStream << self input asString ] ]
+]

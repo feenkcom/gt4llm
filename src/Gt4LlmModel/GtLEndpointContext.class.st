@@ -6,7 +6,8 @@ Class {
 		'model',
 		'chat',
 		'response',
-		'command'
+		'command',
+		'endpoint'
 	],
 	#category : #'Gt4LlmModel-Model'
 }
@@ -34,6 +35,16 @@ GtLEndpointContext >> command [
 { #category : #accessing }
 GtLEndpointContext >> command: anObject [
 	command := anObject
+]
+
+{ #category : #accessing }
+GtLEndpointContext >> endpoint [
+	^ endpoint
+]
+
+{ #category : #accessing }
+GtLEndpointContext >> endpoint: anObject [
+	endpoint := anObject
 ]
 
 { #category : #accessing }
