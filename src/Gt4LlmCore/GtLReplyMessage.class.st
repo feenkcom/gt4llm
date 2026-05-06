@@ -64,16 +64,6 @@ GtLReplyMessage >> contentText [
 ]
 
 { #category : #copying }
-GtLReplyMessage >> copyForIndependentRequest [
-	| copy |
-	
-	copy := self copy .
-	copy executionMessages: copy executionMessages copy.
-	
-	^ copy
-]
-
-{ #category : #copying }
 GtLReplyMessage >> copyForIndependentRequestInChat: aChat [
 	^ self 
 			copyForIndependentRequestInChat: aChat 

@@ -221,7 +221,8 @@ GtLChat >> compact [
 { #category : #actions }
 GtLChat >> copyForIndependentRequest [
 	^ self copyForIndependentRequestAtMessage: (self messages  isEmpty
-		ifTrue: [nil] ifFalse: [self messages lastMessage ])
+			ifTrue: [nil] 
+			ifFalse: [self messages lastMessage ])
 ]
 
 { #category : #actions }
