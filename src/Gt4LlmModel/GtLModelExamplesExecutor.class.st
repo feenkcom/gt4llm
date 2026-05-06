@@ -109,6 +109,6 @@ GtLModelExamplesExecutor >> waitTimeoutSeconds: anInteger [
 	"Wait on the receiver's semaphore for the specified number of seconds.
 	Raise an error on timeout."
 
-	(semaphore waitTimeoutSeconds: 60) ifTrue:
+	(semaphore waitTimeoutSeconds: anInteger) ifTrue:
 		[ self error: 'The chat didn''t go idle within ', anInteger asString, ' seconds' ].
 ]
