@@ -36,18 +36,6 @@ GtLMessagesGroup >> asJson [
 ]
 
 { #category : #copying }
-GtLMessagesGroup >> copyForIndependentRequest [
-	"Old version. To remove after it has no more users."
-	| copiedItems |
-	copiedItems := items copy 
-		collect: [ :each |
-			each isReplyMessage
-				ifTrue: [ each copyForIndependentRequest ]
-				ifFalse: [ each ] ].
-	^ self class withAll: copiedItems
-]
-
-{ #category : #copying }
 GtLMessagesGroup >> copyForIndependentRequestInChat: aChat [
 	self isEmpty ifTrue: [ ^ self class withAll: #() ].
 	^ self copyForIndependentRequestInChat: aChat upTo: self last
