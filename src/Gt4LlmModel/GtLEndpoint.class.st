@@ -14,7 +14,8 @@ GtLEndpoint >> entityFromContext: aGtLContext [
 GtLEndpoint >> newContextForModel: model [
 
 	^ GtLEndpointContext new
-		model: model.
+		model: model;
+		provider: model provider.
 ]
 
 { #category : #accessing }

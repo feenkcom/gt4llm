@@ -5,12 +5,6 @@ Class {
 }
 
 { #category : #'encoding - decoding' }
-GtLOllamaModelDetailsEndpoint >> decodeContext: aGtL2Context [
-
-	^ aGtL2Context response
-]
-
-{ #category : #'encoding - decoding' }
 GtLOllamaModelDetailsEndpoint >> entityFromContext: aGtLContext [
 
 	^ {
