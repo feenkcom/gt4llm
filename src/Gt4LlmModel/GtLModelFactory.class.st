@@ -27,7 +27,7 @@ GtLModelFactory >> ollama [
 	| model provider chat client |
 
 	provider := GtLModelProvider new.
-	client := GtLModelClient new.
+	client := GtLOllamaClient new.
 	model := GtLLlmModel new
 		provider: provider;
 		client: client.

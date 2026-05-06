@@ -49,6 +49,6 @@ GtLCodeChangesToolCallsSummarizerModelExamples >> messagesGroupWithCodeChangesSu
 		output: methodToolCall result;
 		yourself).
 
-	self assert: ((group messageSummarizers detect: [ :each | each class = GtLCodeChangesToolCallsSummarizer ]) codeChanges size) equals: 2.
+	self assert: ((group toolCallsSummarizers detect: [ :each | each class = GtLCodeChangesToolCallsSummarizer ]) codeChanges size) equals: 2.
 	^ group
 ]

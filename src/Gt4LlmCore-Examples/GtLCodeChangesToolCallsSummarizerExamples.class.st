@@ -78,7 +78,7 @@ GtLCodeChangesToolCallsSummarizerExamples >> messagesGroupWithExecutedClassComme
 	removeToolCall := self performClassRemovalNamed: className.
 	group add: (self toolMessageFrom: removeToolCall).
 	
-	summarizer := group messageSummarizers 
+	summarizer := group toolCallsSummarizers 
 		detect: [ :each | each class = GtLCodeChangesToolCallsSummarizer ].
 	self assert: summarizer codeChanges size equals: 3.
 	
@@ -101,7 +101,7 @@ GtLCodeChangesToolCallsSummarizerExamples >> messagesGroupWithExecutedClassCreat
 	removeToolCall := self performClassRemovalNamed: className.
 	group add: (self toolMessageFrom: removeToolCall).
 	
-	summarizer := group messageSummarizers 
+	summarizer := group toolCallsSummarizers 
 		detect: [ :each | each class = GtLCodeChangesToolCallsSummarizer ].
 	self assert: summarizer codeChanges size equals: 2.
 	
@@ -126,7 +126,7 @@ GtLCodeChangesToolCallsSummarizerExamples >> messagesGroupWithExecutedClassPacka
 	moveToolCall := self performClassPackageChangeFor: className toPackage: 'Gt4LlmCore-Examples-Temp'.
 	group add: (self toolMessageFrom: moveToolCall).
 	
-	summarizer := group messageSummarizers 
+	summarizer := group toolCallsSummarizers 
 		detect: [ :each | each class = GtLCodeChangesToolCallsSummarizer ].
 	
 	self assert: summarizer codeChanges size equals: 2.
@@ -150,7 +150,7 @@ GtLCodeChangesToolCallsSummarizerExamples >> messagesGroupWithExecutedMethodComp
 	toolCall := self performMethodCompilationFor: self class selector: selector source: source protocol: 'examples-temp'.
 	group add: (self toolMessageFrom: toolCall).
 	
-	summarizer := group messageSummarizers 
+	summarizer := group toolCallsSummarizers 
 		detect: [ :each | each class = GtLCodeChangesToolCallsSummarizer ].
 	self assert: summarizer codeChanges size equals: 1.
 	self removeSelector: selector fromClass: self class.
@@ -175,7 +175,7 @@ GtLCodeChangesToolCallsSummarizerExamples >> messagesGroupWithExecutedMethodComp
 	removeToolCall := self performMethodRemovalFor: self class selector: selector.
 	group add: (self toolMessageFrom: removeToolCall).
 	
-	summarizer := group messageSummarizers 
+	summarizer := group toolCallsSummarizers 
 		detect: [ :each | each class = GtLCodeChangesToolCallsSummarizer ].
 	self assert: summarizer codeChanges size equals: 2.
 	
@@ -201,7 +201,7 @@ GtLCodeChangesToolCallsSummarizerExamples >> packageChangeHistoriesBuilderWithCh
 	| group summarizer builder packageHistories |
 	
 	group := self messagesGroupWithExecutedClassCreationAndRemoval.
-	summarizer := group messageSummarizers 
+	summarizer := group toolCallsSummarizers 
 		detect: [ :each | each class = GtLCodeChangesToolCallsSummarizer ].
 	
 	builder := GtLPackageChangeHistoriesBuilder forCodeChanges: summarizer codeChanges.
@@ -223,7 +223,7 @@ GtLCodeChangesToolCallsSummarizerExamples >> packageChangeHistoriesForClassCreat
 	| group summarizer packageHistories classHistory |
 	
 	group := self messagesGroupWithExecutedClassCreationAndRemoval.
-	summarizer := group messageSummarizers 
+	summarizer := group toolCallsSummarizers 
 		detect: [ :each | each class = GtLCodeChangesToolCallsSummarizer ].
 	
 	packageHistories := summarizer packageChangeHistories.
@@ -247,7 +247,7 @@ GtLCodeChangesToolCallsSummarizerExamples >> packageChangeHistoriesForClassPacka
 	| group summarizer packageHistories sourcePackageHistory destPackageHistory sourceClassHistory destClassHistory |
 	
 	group := self messagesGroupWithExecutedClassPackageMove.
-	summarizer := group messageSummarizers 
+	summarizer := group toolCallsSummarizers 
 		detect: [ :each | each class = GtLCodeChangesToolCallsSummarizer ].
 	
 	packageHistories := summarizer packageChangeHistories.
@@ -287,7 +287,7 @@ GtLCodeChangesToolCallsSummarizerExamples >> packageChangeHistoriesForMethodComp
 	| group summarizer packageHistories |
 	
 	group := self messagesGroupWithExecutedMethodCompilation.
-	summarizer := group messageSummarizers 
+	summarizer := group toolCallsSummarizers 
 		detect: [ :each | each class = GtLCodeChangesToolCallsSummarizer ].
 	
 	packageHistories := summarizer packageChangeHistories.
