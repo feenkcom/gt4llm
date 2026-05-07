@@ -65,6 +65,20 @@ GtLLlmModel >> newCreateEmbeddingsCommand [
 	^ command
 ]
 
+{ #category : #'as yet unclassified' }
+GtLLlmModel >> newCreateModelCommand [
+	| endpoint command |
+
+	endpoint := self endpointAt: 'createModel'.
+	command := endpoint commandClass new.
+	command context
+		model: self;
+		provider: provider;
+		endpoint: endpoint;
+		command: command.
+	^ command
+]
+
 { #category : #accessing }
 GtLLlmModel >> provider [
 	^ provider
