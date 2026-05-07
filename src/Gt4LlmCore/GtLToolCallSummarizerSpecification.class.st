@@ -73,7 +73,7 @@ GtLToolCallSummarizerSpecification >> isActive [
 { #category : #testing }
 GtLToolCallSummarizerSpecification >> isApplicableToMessages: aMessagesGroup [
 	^ self isActive and: [
-		self class environment hasClassOrTraitNamed: self summarizerClassName ]
+			self class environment hasClassOrTraitNamed: self summarizerClassName ]
 ]
 
 { #category : #testing }

@@ -116,7 +116,7 @@ GtLProvider >> initialize [
 
 { #category : #'private - notifying' }
 GtLProvider >> notifyProviderStateChanged [
-	self chat ifNotNil: [ :aChat | aChat signalExecutionStateChanged ]
+	self chat ifNotNil: [ :aChat | aChat notifyExecutionStateChanged ]
 ]
 
 { #category : #copying }

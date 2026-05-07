@@ -14,7 +14,7 @@ Class {
 
 { #category : #testing }
 GtLOverallExampleExecutionsSummarizer class >> isActive [ 
-	^false
+	^true
 ]
 
 { #category : #accessing }
@@ -35,7 +35,7 @@ GtLOverallExampleExecutionsSummarizer >> exampleRunSummaries [
 { #category : #private }
 GtLOverallExampleExecutionsSummarizer >> exampleStatusesFromModel: aModel do: aBlock [
 	aModel ifNil: [ ^ self ].
-	aModel class = GtLExampleWithResultStatus ifTrue: [ ^ aBlock value: aModel ].
+	aModel class = GtLExampleWithResult ifTrue: [ ^ aBlock value: aModel ].
 	aModel class = GtLExampleWithResultStatuses ifTrue: [ ^ aModel exampleWithStatuses do: aBlock ]
 ]
 

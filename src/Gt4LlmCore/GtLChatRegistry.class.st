@@ -151,7 +151,7 @@ GtLChatRegistry >> newGtChatDescription [
 GtLChatRegistry >> newGtChatWithProvider: aProviderOrNil [
 	| chat |
 	chat := GtLChat new.
-	chat addDefaultSummarizerSpecifications.
+	chat withDefaultSummarizers.
 	aProviderOrNil ifNotNil: [ chat provider: aProviderOrNil ].
 	chat
 		tools: GtLTools gt;
