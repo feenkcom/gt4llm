@@ -94,7 +94,7 @@ GtLChat >> addMessage: aMessage [
 	self notifyMessageAdded: aMessage
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #adding }
 GtLChat >> addNewObject: anObject reasonString: aString [ 
 	^ self objectStorage addNewObject: anObject reason: (GtLStoredObjectStringReason text: aString)
 ]
@@ -367,7 +367,7 @@ GtLChat >> gtFormatFor: aView [
 
 { #category : #inspecting }
 GtLChat >> gtInspectorTargetModels [
-	^ self summarizersRegistry currentSummarizers
+	^ self summarizersRegistry relevantCurrentSummarizers
 ]
 
 { #category : #views }
@@ -528,7 +528,6 @@ GtLChat >> initialize [
 	objectStorage := GtLObjectStorage new.
 	instructions := GtLInstructionComposite new.
 	summarizersRegistry := GtLToolCallSummarizersRegistry new.
-	summarizersRegistry updateSummarizersForMessages: self messages.
 	
 	self updateLastUpdate.
 ]
@@ -804,7 +803,8 @@ GtLChat >> updateLastUpdate [
 
 { #category : #updating }
 GtLChat >> updateToolSummarizers [
-		summarizersRegistry updateSummarizersForMessages: self messages
+	self provider state = GtLProviderState idle  ifTrue: [
+		summarizersRegistry updateSummarizersForMessages: self messages ]
 ]
 
 { #category : #accessing }
@@ -835,4 +835,10 @@ GtLChat >> when: anAnnouncementClass send: aSelector to: anObject [
 { #category : #ui }
 GtLChat >> whenReadyFuture [
 	^ GtLlmChatReadyFuture new chat: self
+]
+
+{ #category : #configuring }
+GtLChat >> withDefaultSummarizers [
+	self addDefaultSummarizerSpecifications.
+	summarizersRegistry updateSummarizersForMessages: self messages.
 ]
