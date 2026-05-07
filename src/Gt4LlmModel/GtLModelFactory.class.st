@@ -38,7 +38,8 @@ GtLModelFactory >> ollama [
 		endpointAt: 'runningModels' put: GtLOllamaPsEndpoint new;
 		endpointAt: 'deleteModel' put: GtLOllamaDeleteEndpoint new;
 		endpointAt: 'pullModel' put: GtLOllamaPullEndpoint new;
-		endpointAt: 'createEmbeddings' put: GtLOllamaCreateEmbeddingsEndpoint new.
+		endpointAt: 'createEmbeddings' put: GtLOllamaCreateEmbeddingsEndpoint new;
+		endpointAt: 'createModel' put: GtLOllamaCreateModelEndpoint new.
 	chat := GtLModelChat new
 		model: model.
 	provider chat: chat.
