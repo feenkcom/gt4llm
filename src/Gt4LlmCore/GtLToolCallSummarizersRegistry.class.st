@@ -3,7 +3,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'specifications',
-		'currentSummarizers'
+		'currentSummarizers',
+		'announcer'
 	],
 	#category : #'Gt4LlmCore-Summaries'
 }
@@ -41,6 +42,17 @@ GtLToolCallSummarizersRegistry >> addSpecification: aSpecification [
 { #category : #accessing }
 GtLToolCallSummarizersRegistry >> addSpecifications: aCollection [
 	specifications addAll: aCollection
+]
+
+{ #category : #accessing }
+GtLToolCallSummarizersRegistry >> announcer [
+	^ announcer
+]
+
+{ #category : #building }
+GtLToolCallSummarizersRegistry >> applicableSpecificationsForMessages: aMessagesGroup [
+	^ specifications select: [ :each |
+			each isApplicableToMessages: aMessagesGroup ]
 ]
 
 { #category : #building }
@@ -81,7 +93,16 @@ GtLToolCallSummarizersRegistry >> gtSpecificationsFor: aView [
 GtLToolCallSummarizersRegistry >> initialize [
 	super initialize.
 	specifications := GtLToolCallSummarizerSpecificationsGroup new.
-	currentSummarizers := #()
+	currentSummarizers := #().
+	
+	announcer := Announcer new.
+]
+
+{ #category : #notifications }
+GtLToolCallSummarizersRegistry >> notifySummarizersChanged [
+	announcer announce: (GtLToolCallSummarizersChanged  new
+		summarizersRegistry: self;
+		newSummarizers:currentSummarizers)
 ]
 
 { #category : #copying }
@@ -106,12 +127,6 @@ GtLToolCallSummarizersRegistry >> resetToDefaultSpecifications [
 	currentSummarizers := #()
 ]
 
-{ #category : #building }
-GtLToolCallSummarizersRegistry >> sortedApplicableSpecificationsForMessages: aMessagesGroup [
-	^ specifications select: [ :each |
-		each isApplicableToMessages: aMessagesGroup ]
-]
-
 { #category : #accessing }
 GtLToolCallSummarizersRegistry >> specifications [
 	^ specifications
@@ -125,8 +140,9 @@ GtLToolCallSummarizersRegistry >> summarizersForMessages: aMessagesGroup [
 
 { #category : #building }
 GtLToolCallSummarizersRegistry >> updateSummarizersForMessages: aMessagesGroup [
-	currentSummarizers := (self sortedApplicableSpecificationsForMessages: aMessagesGroup)
+	currentSummarizers := (self applicableSpecificationsForMessages: aMessagesGroup)
 		collect: [ :eachSpecification |
 			eachSpecification buildForMessages: aMessagesGroup ].
-	^ currentSummarizers
+	
+	self notifySummarizersChanged.
 ]

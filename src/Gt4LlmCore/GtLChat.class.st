@@ -276,6 +276,7 @@ GtLChat >> currentTools [
 { #category : #'api - message' }
 GtLChat >> ensureReplyMessage [
 	| aReplyMessage |
+	
 	messages
 		reverseDo: [ :eachMessage | 
 			eachMessage isReplyMessage ifTrue: [
@@ -283,12 +284,15 @@ GtLChat >> ensureReplyMessage [
 
 			eachMessage isUserMessage ifTrue: [ 
 				aReplyMessage := GtLReplyMessage new
+					summarizersRegistry: self summarizersRegistry copy;
 					userMessage: eachMessage.
 				self addMessage: aReplyMessage.
 				^ aReplyMessage ] ].
 
 	aReplyMessage := GtLReplyMessage new.
+	aReplyMessage summarizersRegistry: self summarizersRegistry copy.
 	self addMessage: aReplyMessage.
+	
 	^ aReplyMessage
 ]
 
@@ -363,8 +367,7 @@ GtLChat >> gtFormatFor: aView [
 
 { #category : #inspecting }
 GtLChat >> gtInspectorTargetModels [
-	^ (self summarizersRegistry summarizersForMessages: self messages)
-		ifNil: [ #() ]
+	^ self summarizersRegistry currentSummarizers
 ]
 
 { #category : #views }
@@ -525,8 +528,9 @@ GtLChat >> initialize [
 	objectStorage := GtLObjectStorage new.
 	instructions := GtLInstructionComposite new.
 	summarizersRegistry := GtLToolCallSummarizersRegistry new.
+	summarizersRegistry updateSummarizersForMessages: self messages.
 	
-	self updateLastUpdate
+	self updateLastUpdate.
 ]
 
 { #category : #accessing }
@@ -603,6 +607,13 @@ GtLChat >> messages: anObject [
 	messages := anObject.
 
 	messages do: [ :aMessage | aMessage chat: self ]
+]
+
+{ #category : #announcing }
+GtLChat >> notifyExecutionStateChanged [
+	self updateToolSummarizers.
+	
+	self signalExecutionStateChanged
 ]
 
 { #category : #'private - notifying' }
@@ -789,6 +800,11 @@ GtLChat >> tools: anObject [
 { #category : #accessing }
 GtLChat >> updateLastUpdate [
 	lastUpdate := DateAndTime now
+]
+
+{ #category : #updating }
+GtLChat >> updateToolSummarizers [
+		summarizersRegistry updateSummarizersForMessages: self messages
 ]
 
 { #category : #accessing }
