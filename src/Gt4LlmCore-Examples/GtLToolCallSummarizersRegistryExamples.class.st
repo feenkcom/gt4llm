@@ -42,7 +42,7 @@ GtLToolCallSummarizersRegistryExamples >> defaultSpecifications [
 	| registry |
 	registry := GtLToolCallSummarizersRegistry new.
 	registry addSpecifications: GtLToolCallSummarizersRegistry defaultSpecifications.
-	self assert: registry specifications size equals: 4.
+	self assert: registry specifications size equals: 3.
 	self assert: registry currentSummarizers isEmpty.
 	^ registry
 ]
