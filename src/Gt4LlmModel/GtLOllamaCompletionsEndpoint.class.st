@@ -30,7 +30,7 @@ GtLOllamaCompletionsEndpoint >> assistantContentTextFrom: aGtLModelAssistantMess
 { #category : #'as yet unclassified' }
 GtLOllamaCompletionsEndpoint >> assistantMessageAccessor [
 
-	^ GtLOllamaCompletionsGemma4AssistantMessageAccessor new
+	^ GtLOllamaCompletionsAssistantMessageAccessor new
 ]
 
 { #category : #'private - accessing' }
@@ -90,7 +90,7 @@ GtLOllamaCompletionsEndpoint >> finishedToolCallResponseFor: aToolCall [
 { #category : #'private - accessing' }
 GtLOllamaCompletionsEndpoint >> newUserMessageVisitor [
 
-	^ GtLOllamaCompletionsGemma4UserMessageVisitor new
+	^ GtLOllamaCompletionsUserMessageVisitor new
 ]
 
 { #category : #accessing }
