@@ -1,35 +1,35 @@
 Class {
-	#name : #GtLOllamaCompletionsGemma4AssistantMessageAccessor,
+	#name : #GtLOllamaCompletionsAssistantMessageAccessor,
 	#superclass : #GtLModelAssistantMessageAccessor,
 	#category : #'Gt4LlmModel-MessageAccessors'
 }
 
 { #category : #accessing }
-GtLOllamaCompletionsGemma4AssistantMessageAccessor >> choices [
+GtLOllamaCompletionsAssistantMessageAccessor >> choices [
 
 	^ self rawData at: 'choices'
 ]
 
 { #category : #accessing }
-GtLOllamaCompletionsGemma4AssistantMessageAccessor >> content [
+GtLOllamaCompletionsAssistantMessageAccessor >> content [
 
 	^ self message at: 'content'
 ]
 
 { #category : #accessing }
-GtLOllamaCompletionsGemma4AssistantMessageAccessor >> message [
+GtLOllamaCompletionsAssistantMessageAccessor >> message [
 
 	^ self choices first at: 'message'
 ]
 
 { #category : #accessing }
-GtLOllamaCompletionsGemma4AssistantMessageAccessor >> reasoning [
+GtLOllamaCompletionsAssistantMessageAccessor >> reasoning [
 
 	^ self message at: 'reasoning'
 ]
 
 { #category : #accessing }
-GtLOllamaCompletionsGemma4AssistantMessageAccessor >> role [
+GtLOllamaCompletionsAssistantMessageAccessor >> role [
 
 	^ self message at: 'role'
 ]
