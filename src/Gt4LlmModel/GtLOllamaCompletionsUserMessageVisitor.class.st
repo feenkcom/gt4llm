@@ -1,11 +1,11 @@
 Class {
-	#name : #GtLOllamaCompletionsGemma4UserMessageVisitor,
+	#name : #GtLOllamaCompletionsUserMessageVisitor,
 	#superclass : #Object,
 	#category : #'Gt4LlmModel-Visitors'
 }
 
 { #category : #api }
-GtLOllamaCompletionsGemma4UserMessageVisitor >> userMessageWith: aMessage [
+GtLOllamaCompletionsUserMessageVisitor >> userMessageWith: aMessage [
 	| content |
 	
 	content := self visitNode: aMessage computeContentBlockFromInputModels.
@@ -16,7 +16,7 @@ GtLOllamaCompletionsGemma4UserMessageVisitor >> userMessageWith: aMessage [
 ]
 
 { #category : #visiting }
-GtLOllamaCompletionsGemma4UserMessageVisitor >> visitGtLPrimitiveCompositeJsonGenericDataBlock: aDataBlock [
+GtLOllamaCompletionsUserMessageVisitor >> visitGtLPrimitiveCompositeJsonGenericDataBlock: aDataBlock [
 	| content |
 
 	content := aDataBlock jsonDataBlocks 
@@ -31,7 +31,7 @@ GtLOllamaCompletionsGemma4UserMessageVisitor >> visitGtLPrimitiveCompositeJsonGe
 ]
 
 { #category : #visiting }
-GtLOllamaCompletionsGemma4UserMessageVisitor >> visitGtLPrimitiveJsonBareDataBlock: aDataBlock [
+GtLOllamaCompletionsUserMessageVisitor >> visitGtLPrimitiveJsonBareDataBlock: aDataBlock [
 	| string |
 
 	string := aDataBlock jsonData.
@@ -40,27 +40,29 @@ GtLOllamaCompletionsGemma4UserMessageVisitor >> visitGtLPrimitiveJsonBareDataBlo
 ]
 
 { #category : #visiting }
-GtLOllamaCompletionsGemma4UserMessageVisitor >> visitGtLPrimitiveJsonDataBlock: aDataBlock [
-	| string |
+GtLOllamaCompletionsUserMessageVisitor >> visitGtLPrimitiveJsonDataBlock: aDataBlock [
+	"This is a bit of a hack at the moment.
+	If the data block is just content, assume that the message is a simple string and just answer the content, otherwise answer the string serialisation."
 
-	string := aDataBlock jsonData at: 'content'.
-	self assert: string isString.
-	"^ {
-		'type' -> 'text'.
-		'text' -> string.
-		} asDictionary"
-	^ string
+	^ aDataBlock jsonData 
+		at: 'content'
+		ifPresent: [ :string |
+			self assert: string isString.
+			string ]
+		ifAbsent:
+			[ NeoJSONWriter toStringPretty: aDataBlock jsonData ].
 ]
 
 { #category : #visiting }
-GtLOllamaCompletionsGemma4UserMessageVisitor >> visitGtLPrimitiveMessageDataBlock: aDataBlock [
+GtLOllamaCompletionsUserMessageVisitor >> visitGtLPrimitiveMessageDataBlock: aDataBlock [
 	| content text |
 
 	content := OrderedCollection new.
-	text := aDataBlock compositeJsonDataBlock acceptVisitor: self.
+	text := String crlf join: 
+(aDataBlock compositeJsonDataBlock acceptVisitor: self).
 	content add: {
 		'type' -> 'text'.
-		'text' -> (NeoJSONWriter toStringPretty: text first)
+		'text' -> (NeoJSONWriter toStringPretty: text)
 		} asDictionary.
 	aDataBlock imageDataBlocks do: [ :dataBlock |
 		content add: {
@@ -71,7 +73,7 @@ GtLOllamaCompletionsGemma4UserMessageVisitor >> visitGtLPrimitiveMessageDataBloc
 ]
 
 { #category : #visiting }
-GtLOllamaCompletionsGemma4UserMessageVisitor >> visitNode: aUserMessage [
+GtLOllamaCompletionsUserMessageVisitor >> visitNode: aUserMessage [
 
 	^ aUserMessage acceptVisitor: self
 ]
