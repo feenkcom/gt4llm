@@ -55,13 +55,6 @@ GtLToolCallSummarizersRegistry >> applicableSpecificationsForMessages: aMessages
 			each isApplicableToMessages: aMessagesGroup ]
 ]
 
-{ #category : #building }
-GtLToolCallSummarizersRegistry >> currentSummarizerMatching: aSpecification [
-	^ currentSummarizers
-		detect: [ :each | aSpecification matchesSummarizer: each ]
-		ifNone: [ nil ]
-]
-
 { #category : #accessing }
 GtLToolCallSummarizersRegistry >> currentSummarizers [
 	^ currentSummarizers
@@ -92,9 +85,10 @@ GtLToolCallSummarizersRegistry >> gtSpecificationsFor: aView [
 { #category : #initialization }
 GtLToolCallSummarizersRegistry >> initialize [
 	super initialize.
-	specifications := GtLToolCallSummarizerSpecificationsGroup new.
-	currentSummarizers := #().
 	
+	specifications := GtLToolCallSummarizerSpecificationsGroup new.
+	
+	currentSummarizers := #().
 	announcer := Announcer new.
 ]
 
@@ -111,7 +105,13 @@ GtLToolCallSummarizersRegistry >> postCopy [
 	specifications := GtLToolCallSummarizerSpecificationsGroup new
 		addAll: specifications;
 		yourself.
-	currentSummarizers := #()
+	currentSummarizers := #().
+	announcer := Announcer new
+]
+
+{ #category : #accessing }
+GtLToolCallSummarizersRegistry >> relevantCurrentSummarizers [
+	^ self currentSummarizers select: [ :each | each isRelevant ]
 ]
 
 { #category : #building }
@@ -143,6 +143,5 @@ GtLToolCallSummarizersRegistry >> updateSummarizersForMessages: aMessagesGroup [
 	currentSummarizers := (self applicableSpecificationsForMessages: aMessagesGroup)
 		collect: [ :eachSpecification |
 			eachSpecification buildForMessages: aMessagesGroup ].
-	
 	self notifySummarizersChanged.
 ]

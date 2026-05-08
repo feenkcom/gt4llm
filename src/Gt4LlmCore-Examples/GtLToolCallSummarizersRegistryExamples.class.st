@@ -17,6 +17,7 @@ GtLToolCallSummarizersRegistryExamples >> copiedRegistry [
 	self assert: copy specifications ~~ registry specifications.
 	self assert: copy specifications size equals: registry specifications size.
 	self assert: copy currentSummarizers isEmpty.
+	self assert: copy announcer ~~ registry announcer.
 	^ copy
 ]
 
@@ -30,7 +31,7 @@ GtLToolCallSummarizersRegistryExamples >> customSpecificationIsUsed [
 	summarizers := registry
 		addSpecification: specification;
 		summarizersForMessages: self messagesGroupWithToolAndExampleSummaries.
-	self assert: (summarizers anySatisfy: [ :each | each class = GtLOverallExampleExecutionsToolCallsSummarizer ]).
+	self assert: (summarizers anySatisfy: [ :each | each class = GtLOverallExampleExecutionsSummarizer ]).
 	self assert: (summarizers anySatisfy: [ :each | each class = GtLToolCallsByTypeSummarizer ]).
 	^ registry
 ]
@@ -41,7 +42,7 @@ GtLToolCallSummarizersRegistryExamples >> defaultSpecifications [
 	| registry |
 	registry := GtLToolCallSummarizersRegistry new.
 	registry addSpecifications: GtLToolCallSummarizersRegistry defaultSpecifications.
-	self assert: registry specifications size equals: 4.
+	self assert: registry specifications size equals: 3.
 	self assert: registry currentSummarizers isEmpty.
 	^ registry
 ]
