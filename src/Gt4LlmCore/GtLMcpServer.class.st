@@ -198,7 +198,9 @@ GtLMcpServer >> gtErrorsFor: aView [
 { #category : #views }
 GtLMcpServer >> gtHistoryFor: aView [
 	<gtView>
+	
 	history ifNil: [^aView empty].
+	
 	^(aView columnedList)
 		title: 'Logs';
 		items: [history reverse];
@@ -413,6 +415,12 @@ GtLMcpServer >> isAsynchronous [
 { #category : #testing }
 GtLMcpServer >> isDebug [
 	^ debug
+]
+
+{ #category : #testing }
+GtLMcpServer >> isRunning [ 
+	^ server notNil and: [
+			server isRunning ]
 ]
 
 { #category : #accessing }

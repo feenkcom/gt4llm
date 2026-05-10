@@ -73,13 +73,36 @@ GtLToolCallSummarizersRegistry >> gtCurrentSummarizersFor: aView [
 ]
 
 { #category : #'gt-views' }
+GtLToolCallSummarizersRegistry >> gtInspectorTargetModels [
+	^ {self}, self relevantCurrentSummarizers
+]
+
+{ #category : #'gt-views' }
 GtLToolCallSummarizersRegistry >> gtSpecificationsFor: aView [
 	<gtView>
 	^ aView forward
 		title: 'Specifications';
-		priority: 10;
+		priority: 80;
 		object: [ self specifications ];
 		view: #gtItemsFor:
+]
+
+{ #category : #'gt-views' }
+GtLToolCallSummarizersRegistry >> gtViewsInContext: aPhlowContext [
+	| collectedViews |
+	collectedViews := Array
+		streamContents: [ :aStream |
+			aStream nextPutAll: (super gtViewsInContext: aPhlowContext).
+			self gtInspectorTargetModels do: [ :eachTargetModel |
+				aStream nextPutAll: (GtPhlowViewsCollector new
+					fromObject: eachTargetModel;
+					pragmaNames: GtLSettings messageViewPragmaNames;
+					context: aPhlowContext;
+					collect) ] ].
+
+	GtPhlowUtility sortByPriority: collectedViews.
+
+	^ collectedViews
 ]
 
 { #category : #initialization }
