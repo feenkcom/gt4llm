@@ -31,7 +31,7 @@ GtLDataView class >> isAbstract [
 	^ self name = #GtLDataView 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visitor }
 GtLDataView >> acceptVisitor: aVisitor [
 
 	^ aVisitor perform: ('visit', self class name asString, ':') asSymbol

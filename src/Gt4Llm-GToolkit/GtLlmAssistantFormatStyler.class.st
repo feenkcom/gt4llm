@@ -28,17 +28,14 @@ GtLlmAssistantFormatStyler >> visitStringLiteral: aStringLiteralNode [
 	super visitStringLiteral: aStringLiteralNode.
 
 	(self formatReferences includesKey: aStringLiteralNode string)
-		ifTrue: [ | anExpanderAttribute |
-			anExpanderAttribute := BrGlamorousTriangleExpanderTextAttribute new
-					id: GtSourceCoderEmbeddedExpanderToggleId;
-					attributesCreatingBlock: [ BrTextAdornmentDynamicAttribute new
-							beAppend;
-							stencil: [ ((GtPharoMethodCoder
-									forMethod: (self formatReferences at: aStringLiteralNode string) definingMethod)
-									asCoderViewModel expanded: true) asElement ] ].
+		ifFalse: [ ^ self ].
 
-			self
-				attribute: anExpanderAttribute
-				from: aStringLiteralNode value stopPosition
-				to: aStringLiteralNode value stopPosition ]
+
+	(self
+		from: aStringLiteralNode value stopPosition
+		to: aStringLiteralNode value stopPosition)
+		expanded: false
+		adornment: [ ((GtPharoMethodCoder
+				forMethod: (self formatReferences at: aStringLiteralNode string) definingMethod)
+				asCoderViewModel expanded: true) asElement ]
 ]

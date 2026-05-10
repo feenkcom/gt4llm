@@ -1,22 +1,38 @@
 Class {
-	#name : #GtLOllamaCompletionsUserMessageVisitor,
+	#name : #GtLOllamaCompletionsMessageVisitor,
 	#superclass : #Object,
 	#category : #'Gt4LlmModel-Visitors'
 }
 
 { #category : #api }
-GtLOllamaCompletionsUserMessageVisitor >> userMessageWith: aMessage [
+GtLOllamaCompletionsMessageVisitor >> chatMessage: aMessage [
 	| content |
 	
-	content := self visitNode: aMessage computeContentBlockFromInputModels.
+	content := self visitNode: aMessage "computeContentBlockFromInputModels".
 	^ {
-		'role' -> 'user'.
+		'role' -> aMessage role.
 		'content' -> content.
 	} asDictionary.
 ]
 
 { #category : #visiting }
-GtLOllamaCompletionsUserMessageVisitor >> visitGtLPrimitiveCompositeJsonGenericDataBlock: aDataBlock [
+GtLOllamaCompletionsMessageVisitor >> visitGtLModelAssistantMessage: anAssistantMessage [
+
+	^ { {
+		'type' -> 'text'.
+		'text' -> anAssistantMessage contentText 
+		} asDictionary.
+		}
+]
+
+{ #category : #visiting }
+GtLOllamaCompletionsMessageVisitor >> visitGtLModelUserMessage: aUserMessage [
+
+	^ aUserMessage computeContentBlockFromInputModels acceptVisitor: self
+]
+
+{ #category : #visiting }
+GtLOllamaCompletionsMessageVisitor >> visitGtLPrimitiveCompositeJsonGenericDataBlock: aDataBlock [
 	| content |
 
 	content := aDataBlock jsonDataBlocks 
@@ -31,7 +47,7 @@ GtLOllamaCompletionsUserMessageVisitor >> visitGtLPrimitiveCompositeJsonGenericD
 ]
 
 { #category : #visiting }
-GtLOllamaCompletionsUserMessageVisitor >> visitGtLPrimitiveJsonBareDataBlock: aDataBlock [
+GtLOllamaCompletionsMessageVisitor >> visitGtLPrimitiveJsonBareDataBlock: aDataBlock [
 	| string |
 
 	string := aDataBlock jsonData.
@@ -40,7 +56,7 @@ GtLOllamaCompletionsUserMessageVisitor >> visitGtLPrimitiveJsonBareDataBlock: aD
 ]
 
 { #category : #visiting }
-GtLOllamaCompletionsUserMessageVisitor >> visitGtLPrimitiveJsonDataBlock: aDataBlock [
+GtLOllamaCompletionsMessageVisitor >> visitGtLPrimitiveJsonDataBlock: aDataBlock [
 	"This is a bit of a hack at the moment.
 	If the data block is just content, assume that the message is a simple string and just answer the content, otherwise answer the string serialisation."
 
@@ -54,7 +70,7 @@ GtLOllamaCompletionsUserMessageVisitor >> visitGtLPrimitiveJsonDataBlock: aDataB
 ]
 
 { #category : #visiting }
-GtLOllamaCompletionsUserMessageVisitor >> visitGtLPrimitiveMessageDataBlock: aDataBlock [
+GtLOllamaCompletionsMessageVisitor >> visitGtLPrimitiveMessageDataBlock: aDataBlock [
 	| content text |
 
 	content := OrderedCollection new.
@@ -73,7 +89,7 @@ GtLOllamaCompletionsUserMessageVisitor >> visitGtLPrimitiveMessageDataBlock: aDa
 ]
 
 { #category : #visiting }
-GtLOllamaCompletionsUserMessageVisitor >> visitNode: aUserMessage [
+GtLOllamaCompletionsMessageVisitor >> visitNode: aUserMessage [
 
 	^ aUserMessage acceptVisitor: self
 ]
