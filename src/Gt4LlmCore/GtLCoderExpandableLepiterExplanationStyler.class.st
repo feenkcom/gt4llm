@@ -20,30 +20,24 @@ GtLCoderExpandableLepiterExplanationStyler >> stylePageNameInStringMessage: aMes
 
 	self
 		attribute: (GtCompletionStrategyAttribute new
-				strategy: (GtLLepiterPagesCompletionStrategy new
-						database: aLepiterBase))
+				strategy: (GtLLepiterPagesCompletionStrategy new database: aLepiterBase))
 		from: pageName value startPosition
 		to: pageName value stopPosition.
 
-	(aLepiterBase hasPageNamed: pageName literalValue asString)
-		ifFalse: [ ^ self ].
+	(aLepiterBase hasPageNamed: pageName literalValue asString) ifFalse: [ ^ self ].
 
-	anExpanderAttribute := BrGlamorousTriangleExpanderTextAttributeV2 new
-			id: GtSourceCoderEmbeddedExpanderToggleId;
-			stencil: [ | page |
-					page := aLepiterBase pageNamed: pageName literalValue asString.
-					LePageToolContentTreeElement new
-						pageViewModel: page asContentUIModel;
-						hMatchParent;
-						vExact: 300;
-						addAptitude: BrShadowAptitude new + BrGlamorousWithVerticalResizerAptitude new beBottom;
-						background: Color white;
-						margin: (BlInsets all: 10) ].
-
-	self
-		attribute: anExpanderAttribute
-		from: pageName value stopPosition
-		to: pageName value stopPosition
+	(self from: pageName value stopPosition to: pageName value stopPosition)
+		expanded: false
+		adornment: [ | page |
+			page := aLepiterBase pageNamed: pageName literalValue asString.
+			LePageToolContentTreeElement new
+				pageViewModel: page asContentUIModel;
+				hMatchParent;
+				vExact: 300;
+				addAptitude: BrShadowAptitude new + BrGlamorousWithVerticalResizerAptitude new beBottom;
+				background: Color white;
+				margin: (BlInsets all: 10) ]
+		id: GtSourceCoderEmbeddedExpanderToggleId
 ]
 
 { #category : #private }
