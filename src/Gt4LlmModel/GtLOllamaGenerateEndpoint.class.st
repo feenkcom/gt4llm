@@ -24,7 +24,7 @@ GtLOllamaGenerateEndpoint >> entityFromContext: aGtLContext [
 	self assert: (messages items count: #isUserMessage) = 1
 		description: 'Only a single message is currently supported'.
 	userMessage := (messages select: #isUserMessage) first.
-	input := self newUserMessageVisitor userMessageWith: userMessage.
+	input := self newMessageVisitor chatMessage: userMessage.
 	entity := {
 		'model' -> aGtLContext model name.
 		'stream' -> false.
@@ -49,7 +49,7 @@ GtLOllamaGenerateEndpoint >> newContextForModel: aGtLLlmModel [
 ]
 
 { #category : #'private - accessing' }
-GtLOllamaGenerateEndpoint >> newUserMessageVisitor [
+GtLOllamaGenerateEndpoint >> newMessageVisitor [
 
 	^ GtLOllamaGenerateUserMessageVisitor new
 ]
