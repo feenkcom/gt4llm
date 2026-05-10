@@ -1,20 +1,20 @@
 Class {
-	#name : #GtLOllamaAvailableModelsEndpoint,
+	#name : #GtLOpenAiV1AvailableModelsEndpoint,
 	#superclass : #GtLEndpoint,
 	#category : #'Gt4LlmModel-Model'
 }
 
 { #category : #accessing }
-GtLOllamaAvailableModelsEndpoint >> path [
+GtLOpenAiV1AvailableModelsEndpoint >> path [
 
-	^ '/api/tags'
+	^ '/api/v1/models'
 ]
 
 { #category : #'as yet unclassified' }
-GtLOllamaAvailableModelsEndpoint >> resultFrom: aResponse [
+GtLOpenAiV1AvailableModelsEndpoint >> resultFrom: aResponse [
 	| modelsArray |
 
 	modelsArray := aResponse result at: 'models'.
 	^ modelsArray groupedBy: 
-		[ :modelDetails | modelDetails at: 'name' ].
+		[ :modelDetails | modelDetails at: 'display_name' ].
 ]

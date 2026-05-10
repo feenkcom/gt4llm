@@ -21,12 +21,10 @@ GtLModelProvider >> authentication: anObject [
 
 { #category : #accessing }
 GtLModelProvider >> availableModels [
-	| endpoint modelsArray |
+	| endpoint response |
 
 	endpoint := model endpointAt: 'availableModels'.
-	modelsArray := (self client get: endpoint path) result at: 'models'.
-	^ modelsArray groupedBy: 
-		[ :modelDetails | modelDetails at: 'name' ].
+	^ endpoint resultFrom: (self client get: endpoint path).
 ]
 
 { #category : #accessing }
