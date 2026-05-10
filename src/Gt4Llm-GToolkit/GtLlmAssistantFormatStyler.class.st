@@ -29,13 +29,11 @@ GtLlmAssistantFormatStyler >> visitStringLiteral: aStringLiteralNode [
 
 	(self formatReferences includesKey: aStringLiteralNode string)
 		ifTrue: [ | anExpanderAttribute |
-			anExpanderAttribute := BrGlamorousTriangleExpanderTextAttribute new
+			anExpanderAttribute := BrGlamorousTriangleExpanderTextAttributeV2 new
 					id: GtSourceCoderEmbeddedExpanderToggleId;
-					attributesCreatingBlock: [ BrTextAdornmentDynamicAttribute new
-							beAppend;
-							stencil: [ ((GtPharoMethodCoder
+					stencil: [ ((GtPharoMethodCoder
 									forMethod: (self formatReferences at: aStringLiteralNode string) definingMethod)
-									asCoderViewModel expanded: true) asElement ] ].
+									asCoderViewModel expanded: true) asElement ].
 
 			self
 				attribute: anExpanderAttribute

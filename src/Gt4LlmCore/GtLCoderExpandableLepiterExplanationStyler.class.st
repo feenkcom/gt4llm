@@ -28,19 +28,17 @@ GtLCoderExpandableLepiterExplanationStyler >> stylePageNameInStringMessage: aMes
 	(aLepiterBase hasPageNamed: pageName literalValue asString)
 		ifFalse: [ ^ self ].
 
-	anExpanderAttribute := BrGlamorousTriangleExpanderTextAttribute new
+	anExpanderAttribute := BrGlamorousTriangleExpanderTextAttributeV2 new
 			id: GtSourceCoderEmbeddedExpanderToggleId;
-			attributesCreatingBlock: [ BrTextAdornmentDynamicAttribute new
-					beAppend;
-					stencil: [ | page |
-						page := aLepiterBase pageNamed: pageName literalValue asString.
-						LePageToolContentTreeElement new
-							pageViewModel: page asContentUIModel;
-							hMatchParent;
-							vExact: 300;
-							addAptitude: BrShadowAptitude new + BrGlamorousWithVerticalResizerAptitude new beBottom;
-							background: Color white;
-							margin: (BlInsets all: 10) ] ].
+			stencil: [ | page |
+					page := aLepiterBase pageNamed: pageName literalValue asString.
+					LePageToolContentTreeElement new
+						pageViewModel: page asContentUIModel;
+						hMatchParent;
+						vExact: 300;
+						addAptitude: BrShadowAptitude new + BrGlamorousWithVerticalResizerAptitude new beBottom;
+						background: Color white;
+						margin: (BlInsets all: 10) ].
 
 	self
 		attribute: anExpanderAttribute
