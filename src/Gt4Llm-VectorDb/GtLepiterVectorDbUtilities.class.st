@@ -9,7 +9,7 @@ Class {
 		'splitter',
 		'lepiterDbName'
 	],
-	#category : #'GtLlm-VectorDb-Support'
+	#category : #'Gt4Llm-VectorDb-Support'
 }
 
 { #category : #'instance creation' }
