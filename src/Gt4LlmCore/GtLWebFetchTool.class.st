@@ -75,12 +75,28 @@ GtLWebFetchTool >> privatePerformToolCall: aToolCall inContext: anExecutionConte
 	| url |
 
 	url := aToolCall arguments at: 'url'
-		ifAbsent: [ aToolCall rawArguments at: 'url' ].
+		ifAbsent: [ | rawArgs |
+			rawArgs := aToolCall rawArguments.
+			rawArgs isString ifTrue:
+				[ rawArgs := NeoJSONReader fromString: rawArgs ].
+				rawArgs at: 'url' ifAbsent: [ ] ].
+	url ifNil: [ ^ 'No url argument found.  The arguments should be of the form { "url": "https://..." }' ].
 	^ self get: url.
 ]
 
 { #category : #'as yet unclassified' }
 GtLWebFetchTool >> titleIn: doc [
 
-	^ (doc allElementsNamed: 'title') first contentString
+	^ (doc allElementsNamed: 'title') first 
+		ifNil: [ 'no title' ]
+		ifNotNil: #contentString
+]
+
+{ #category : #magritte }
+GtLWebFetchTool >> urlDescription [
+	<magritteDescription>
+	^ MAStringDescription new
+		label: 'URL to fetch';
+		accessor: #url;
+		beRequired
 ]
