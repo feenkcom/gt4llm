@@ -1,8 +1,8 @@
 Class {
 	#name : #GtLModelUserMessage,
 	#superclass : #GtLModelMessage,
-	#traits : 'TGtLWithInputModelsAPI + TGtLWithInputDataBlocks',
-	#classTraits : 'TGtLWithInputModelsAPI classTrait + TGtLWithInputDataBlocks classTrait',
+	#traits : 'TGtLWithInputModelsAPI + TGtLWithInputDataBlocks + TGtLWithInstructionSectionAPI',
+	#classTraits : 'TGtLWithInputModelsAPI classTrait + TGtLWithInputDataBlocks classTrait + TGtLWithInstructionSectionAPI classTrait',
 	#instVars : [
 		'inputModels',
 		'parameters',
