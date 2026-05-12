@@ -47,7 +47,7 @@ GtLOllamaCompletionsEndpoint >> entityFromContext: aGtLContext [
 			input add: (self serializeToolCall: message toolCall) ] ]
 		ifFalse:
 			[ input add:
-				(self newUserMessageVisitor userMessageWith: message) ] ].
+				(self newMessageVisitor chatMessage: message) ] ].
 	self addInstructionsTo: input from: chat.
 	entity := {
 		'model' -> model name.
@@ -84,13 +84,14 @@ GtLOllamaCompletionsEndpoint >> finishedToolCallResponseFor: aToolCall [
 		'name' -> aToolCall name.
 		'arguments' -> aToolCall rawArgumentsJsonString.
 		'content' -> 'function_call details'.
+		'role' -> 'tool'.
 		} asDictionary
 ]
 
 { #category : #'private - accessing' }
-GtLOllamaCompletionsEndpoint >> newUserMessageVisitor [
+GtLOllamaCompletionsEndpoint >> newMessageVisitor [
 
-	^ GtLOllamaCompletionsUserMessageVisitor new
+	^ GtLOllamaCompletionsMessageVisitor new
 ]
 
 { #category : #accessing }
