@@ -12,8 +12,10 @@ GtLToolForExampleMethodRun >> description [
 	^ 'Execute a gtExample method and report:
 - status: Succeess, Error, Failure, Skipped.
 - result: 
-if it succeeds, it gets the resulting object. 
-if there is a failure or error it gets the exception object and the stack trace.'
+if it succeeds, it gets the resulting object
+if there is a failure or error it gets the exception object and the stack trace
+
+The result, both the resulting object and the exception, is serialized with one or more JSON or image entries, each representing a view of the result. Look at all of them to interpret the result.'
 ]
 
 { #category : #magritte }

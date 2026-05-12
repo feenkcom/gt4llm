@@ -28,7 +28,9 @@ GtLMagritteToolForSmalltalkCodeEvaluation >> codeDescription [
 
 { #category : #accessing }
 GtLMagritteToolForSmalltalkCodeEvaluation >> description [
-	^ 'Executes the provided Smalltalk code and returns the serialized result as JSON. Do not compile code using this tool. Do not delete files using this tool. Use this tool only as a last resort to investigate objects.
+	^ 'Executes the provided Smalltalk code. It returns the result as multiple JSON or image entries, each representing a view of the resulting object. Look at all of them to interpret the result.
+	
+Do not compile code using this tool. Do not delete files using this tool. Use this tool only as a last resort to investigate objects.
 
 Arguments:
 - code: string
