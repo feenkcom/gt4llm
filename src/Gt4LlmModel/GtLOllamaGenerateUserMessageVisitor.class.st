@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : #api }
-GtLOllamaGenerateUserMessageVisitor >> userMessageWith: aMessage [
+GtLOllamaGenerateUserMessageVisitor >> chatMessage: aMessage [
 
 	^ self visitNode: aMessage computeContentBlockFromInputModels.
 ]

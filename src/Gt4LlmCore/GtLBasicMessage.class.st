@@ -4,6 +4,13 @@ Class {
 	#category : #'Gt4LlmCore-Core'
 }
 
+{ #category : #visitor }
+GtLBasicMessage >> acceptVisitor: aVisitor [
+
+	^ aVisitor perform: ('visit', self class name asString, ':') asSymbol
+		withArguments: { self }
+]
+
 { #category : #'api - converting' }
 GtLBasicMessage >> asElement [
 	^ self asViewModel asElement
