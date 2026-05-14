@@ -50,11 +50,18 @@ GtLRequestHistory >> gtClearHistoryActionFor: anAction [
 
 { #category : #'api - serializing' }
 GtLRequestHistory >> responseByteArrays [
-
-	^ (self simplifiedResponses collect: [ :znResponse |
+	| contents fr |
+	
+	contents := (self simplifiedResponses collect: [ :znResponse |
 		(ByteArray new: 1024 streamContents: [ :stream |
-			znResponse writeOn: stream ]) ]) storeString
-
+			znResponse writeOn: stream ]) ]) storeString.
+	"Save the contents in a file as it can be expensive to generate
+	(calls to the LLM may be several dollars per call)"
+	fr := 'responseByteArrays.storeString.txt' asFileReference.
+	fr ensureDelete.
+	fr writeStreamDo: [ :stream |
+		stream nextPutAll: contents ].
+	^ contents
 ]
 
 { #category : #'api - serializing' }

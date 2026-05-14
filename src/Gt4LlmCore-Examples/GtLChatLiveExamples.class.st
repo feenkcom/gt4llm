@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'theChat',
 		'isSynchronous',
-		'isLive'
+		'isLive',
+		'semaphore'
 	],
 	#classVars : [
 		'IsLive',
@@ -88,9 +89,9 @@ GtLChatLiveExamples class >> reset [
 { #category : #'examples - calls' }
 GtLChatLiveExamples >> chatWithSeveralToolCalls [
 	"Ready for stub execution"
-
 	<gtExample>
 	| messageString |
+	
 	messageString := 'Explain how {{gtClass:BlElement}} handles keyboad shortucts. Explain where shortcuts are handled, how they are executed, and how can users add and remove shortcuts'.
 	self stubResponses: [ self chatWithSeveralToolCalls_stub_responses ].
 
@@ -138,6 +139,11 @@ GtLChatLiveExamples >> createChat [
 
 	provider := self createProvider.
 	newChat provider: provider.
+	semaphore := Semaphore new.
+	newChat announcer weak
+		when: GtLlmThreadRunIsDoneAnnouncement
+		send: #signal
+		to: semaphore.
 
 	^ newChat
 ]
@@ -811,13 +817,7 @@ GtLChatLiveExamples >> waitForChatCompletion: anInteger then: aBlock [
 
 { #category : #utils }
 GtLChatLiveExamples >> waitForChatRunIsDone [
-	| semaphore timeout |
-	semaphore := Semaphore new.
-
-	self currentChat announcer weak
-		when: GtLlmThreadRunIsDoneAnnouncement
-		send: #signal
-		to: semaphore.
+	| timeout |
 
 	timeout := semaphore waitTimeoutSeconds: 120.
 
