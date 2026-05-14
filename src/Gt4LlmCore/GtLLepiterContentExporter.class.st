@@ -5,7 +5,9 @@ Class {
 		'stream',
 		'level',
 		'toExport',
-		'startHeaderLevel'
+		'startHeaderLevel',
+		'strictMode',
+		'errorPages'
 	],
 	#category : #'Gt4LlmCore-Exporter'
 }
@@ -30,11 +32,23 @@ GtLLepiterContentExporter >> content: aLepiterContent [
 	toExport add: aLepiterContent
 ]
 
+{ #category : #accessing }
+GtLLepiterContentExporter >> errorPages [
+	^ errorPages ifNil: [ errorPages := OrderedCollection new ].
+]
+
 { #category : #'as yet unclassified' }
 GtLLepiterContentExporter >> export [
 	stream := WriteStream on: ''.
 	level := 0.
-	toExport do: [ :each | self visit: each ].
+	toExport do: [ :each | 
+		[ self visit: each ]
+			on: Error
+			do: [ :ex |
+				strictMode ifTrue:
+					[ ex pass ]
+				ifFalse:
+					[ self errorPages add: each -> ex freeze ] ] ].
 	^ stream contents
 ]
 
@@ -55,6 +69,7 @@ GtLLepiterContentExporter >> initialize [
 	super initialize.
 	toExport := OrderedCollection new.
 	startHeaderLevel := 1.
+	strictMode := true.
 ]
 
 { #category : #'as yet unclassified' }
@@ -77,6 +92,16 @@ GtLLepiterContentExporter >> startHeaderLevel [
 { #category : #accessing }
 GtLLepiterContentExporter >> startHeaderLevel: anObject [
 	startHeaderLevel := anObject
+]
+
+{ #category : #accessing }
+GtLLepiterContentExporter >> strictMode [
+	^ strictMode
+]
+
+{ #category : #accessing }
+GtLLepiterContentExporter >> strictMode: anObject [
+	strictMode := anObject
 ]
 
 { #category : #'as yet unclassified' }

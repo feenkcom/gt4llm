@@ -5,7 +5,8 @@ Class {
 		'baseUrl',
 		'apiKey',
 		'version',
-		'history'
+		'history',
+		'clientBuilder'
 	],
 	#classVars : [
 		'ApiKeyFile'
@@ -77,6 +78,16 @@ GtLAnthropicClient >> checkForErrors: aResponse [
 		ifTrue: [ ^ (GtAnthropicError from: (aResponse at: 'error')) signal ].
 
 	^ aResponse
+]
+
+{ #category : #accessing }
+GtLAnthropicClient >> clientBuilder [
+	^ clientBuilder
+]
+
+{ #category : #accessing }
+GtLAnthropicClient >> clientBuilder: anObject [
+	clientBuilder := anObject
 ]
 
 { #category : #'as yet unclassified' }
@@ -176,19 +187,17 @@ GtLAnthropicClient >> initialize [
 	self baseUrl: self defaultBaseUrl.
 	self version: self defaultVersion.
 	
-	history := GtLRequestHistory new
+	history := GtLRequestHistory new.
+	clientBuilder := GtLAnthropicClientZincBuilder new.
 ]
 
 { #category : #'as yet unclassified' }
 GtLAnthropicClient >> initializeClient [
-	| aClient |
-	aClient := ZnClient new.
-	aClient forJsonREST.
-	aClient timeout: 600.
-	aClient headerAt: 'x-api-key' put: apiKey.
-	aClient headerAt: 'anthropic-version' put: self version.
-	aClient headerAt: 'anthropic-beta' put: 'structured-outputs-2025-11-13'.
-	^ aClient
+
+	^ clientBuilder
+		apiKey: apiKey;
+		version: version;
+		create
 ]
 
 { #category : #'as yet unclassified' }
