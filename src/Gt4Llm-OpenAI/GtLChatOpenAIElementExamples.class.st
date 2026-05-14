@@ -31,6 +31,7 @@ GtLChatOpenAIElementExamples >> chatWithSeveralToolCalls [
 { #category : #examples }
 GtLChatOpenAIElementExamples >> chatWithTwoBasicMessages [
 	<gtExample>
+	<noTest>
 	<return: #GtLChat>
 	^ GtLChatOpenAILiveExamples new chatWithTwoBasicMessages
 ]
@@ -175,6 +176,7 @@ GtLChatOpenAIElementExamples >> replyMessageElement [
 { #category : #examples }
 GtLChatOpenAIElementExamples >> userMessageElement [
 	<gtExample>
+	<noTest>
 	<return: #GtLUserMessageContentElement>
 	| aChat aMessage aViewModel anElement |
 	aChat := self chatWithTwoBasicMessages.
