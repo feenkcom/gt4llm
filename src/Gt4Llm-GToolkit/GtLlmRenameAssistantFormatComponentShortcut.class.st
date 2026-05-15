@@ -14,9 +14,8 @@ GtLlmRenameAssistantFormatComponentShortcut >> initialize [
 { #category : #'as yet unclassified' }
 GtLlmRenameAssistantFormatComponentShortcut >> performOnEditor: aBrTextEditor element: aBrEditorElement coderViewModel: aSourceCoderViewModel dueTo: aShortcutEvent [
 	| position |
-	self
-		forEditor: aBrTextEditor
-		selectionIntervalDo: [ :aSelectionInterval | position := aSelectionInterval last ]
+	aBrEditorElement
+		selectedStringDo: [ :aSelectedString :aSelectionInterval | position := aSelectionInterval last ]
 		orCursorStringPositionDo: [ :aCursorTextPosition | position := aCursorTextPosition ].
 	position notNil
 		ifTrue: [ (aSourceCoderViewModel coder
