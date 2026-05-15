@@ -5,7 +5,7 @@ GtLModelFactory >> lmstudio [
 	"LM Studio provides Open AI /v1/completions compatibility that is similar enough to Ollama that we are just using the Ollama configuration for now."
 	| model provider client chat |
 
-	provider := GtLModelProvider new.
+	provider := GtLLmStudioProvider new.
 	client := GtLOllamaClient new.
 	model := GtLLlmModel new
 		provider: provider;
@@ -13,9 +13,8 @@ GtLModelFactory >> lmstudio [
 	model client baseUrl: 'http://localhost:1234' asZnUrl.
 	model
 		endpointAt: 'availableModels' put: GtLOpenAiV1AvailableModelsEndpoint new.
-	chat := GtLModelChat new
-		model: model.
-	provider chat: chat.
+	chat := GtLChat new
+		provider: provider.
 	^ model
 ]
 
