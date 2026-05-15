@@ -26,7 +26,7 @@ GtLModelFactory >> ollama [
 	Details of the LLM model to be added by the caller."
 	| model provider chat client |
 
-	provider := GtLModelProvider new.
+	provider := GtLOllamaProvider new.
 	client := GtLOllamaClient new.
 	model := GtLLlmModel new
 		provider: provider;
@@ -40,9 +40,8 @@ GtLModelFactory >> ollama [
 		endpointAt: 'pullModel' put: GtLOllamaPullEndpoint new;
 		endpointAt: 'createEmbeddings' put: GtLOllamaCreateEmbeddingsEndpoint new;
 		endpointAt: 'createModel' put: GtLOllamaCreateModelEndpoint new.
-	chat := GtLModelChat new
-		model: model.
-	provider chat: chat.
+	chat := GtLChat new
+		provider: provider.
 	^ model.
 ]
 

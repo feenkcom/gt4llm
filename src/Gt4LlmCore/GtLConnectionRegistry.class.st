@@ -176,7 +176,8 @@ GtLConnectionRegistry >> initialize [
 
 { #category : #accessing }
 GtLConnectionRegistry >> knownConnectors [
-	^ {GtLConnection new
+	^ {
+		GtLConnection new
 			providerClass: GtLAnthropicProvider;
 			label: 'Claude Opus 4.5';
 			model: 'claude-opus-4-5'.
@@ -199,7 +200,24 @@ GtLConnectionRegistry >> knownConnectors [
 		GtLConnection new
 			providerClass: GtLOpenAIProvider;
 			label: 'GPT 5.3';
-			model: 'gpt-5.3'.}
+			model: 'gpt-5.3'.
+		},
+		self knownOllamaConnectors
+]
+
+{ #category : #'private - accessing' }
+GtLConnectionRegistry >> knownOllamaConnectors [
+	| provider names |
+
+	provider := GtLModelFactory new ollama provider.
+	names := [ provider availableModels keys ]
+		on: ConnectionClosed
+		do: [ :ex | #() ].
+	^ names collect: [ :name |
+		GtLConnection new
+			providerClass: GtLOllamaProvider;
+			label: name;
+			model: name. ]
 ]
 
 { #category : #utils }
@@ -213,8 +231,7 @@ GtLConnectionRegistry >> labelForModel: aModel [
 { #category : #accessing }
 GtLConnectionRegistry >> standardDefaultConnection [
 	^ GtLConnection new
-		providerClass: GtLOpenAIProvider;
-		label: 'GPT 5.4';
-		model: 'gpt-5.4'";
-		addOption: 'isStreaming' withValue: false"
+			providerClass: GtLOllamaProvider;
+			label: 'Qwen 3.5';
+			model: 'qwen3.5:9b'
 ]

@@ -80,11 +80,10 @@ GtLChatRegistry >> descriptions [
 							return: nil ] ]
 			thenReject: #isNil.
 
-	someDescriptions
-		ifEmpty: [ someDescriptions := {GtLChatRegistryDescription new
+	someDescriptions := someDescriptions copyWith: ( GtLChatRegistryDescription new
 						label: 'Basic Chat';
-						priority: 50;
-						chat: [ :aProvider | self newChatWithProvider: aProvider ]} ].
+						priority: 100;
+						chat: [ :aProvider | self newChatWithProvider: aProvider ]).
 
 	GtPhlowUtility sortByPriority: someDescriptions.
 

@@ -47,7 +47,7 @@ GtLChatRegistryWithConnectionsViewModel >> connectableConnections [
 GtLChatRegistryWithConnectionsViewModel >> connectionRegistry [
 	<return: #GtLConnectionRegistry>
 	^ connectionRegistry
-		ifNil: [ connectionRegistry := GtLConnectionRegistry default ]
+		ifNil: ["self halt."  connectionRegistry := GtLConnectionRegistry default ]
 ]
 
 { #category : #accessing }

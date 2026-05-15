@@ -9,6 +9,18 @@ Class {
 	#category : #'Gt4LlmModel-Model'
 }
 
+{ #category : #testing }
+GtLModelProvider class >> isConnectable [
+
+	^ true
+]
+
+{ #category : #'instance creation' }
+GtLModelProvider class >> withDefaultSetup [
+
+	^ self new
+]
+
 { #category : #accessing }
 GtLModelProvider >> authentication [
 	^ authentication
@@ -156,6 +168,12 @@ GtLModelProvider >> modelDetails [
 GtLModelProvider >> modelName [
 
 	^ model name
+]
+
+{ #category : #accessing }
+GtLModelProvider >> modelName: aString [
+
+	^ self subclassResponsibility
 ]
 
 { #category : #'as yet unclassified' }

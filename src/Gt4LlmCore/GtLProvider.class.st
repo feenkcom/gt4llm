@@ -114,6 +114,12 @@ GtLProvider >> initialize [
 	executionState := GtLProviderState idle 
 ]
 
+{ #category : #'as yet unclassified' }
+GtLProvider >> model [
+
+	^ nil
+]
+
 { #category : #'private - notifying' }
 GtLProvider >> notifyProviderStateChanged [
 	self chat ifNotNil: [ :aChat | aChat notifyExecutionStateChanged ]

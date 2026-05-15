@@ -608,6 +608,14 @@ GtLChat >> messages: anObject [
 	messages do: [ :aMessage | aMessage chat: self ]
 ]
 
+{ #category : #accessing }
+GtLChat >> model [
+	"Answer the receiver's model.
+	This is currently only valid when the provider also uses a GtLLlmModel."
+
+	^ provider model
+]
+
 { #category : #announcing }
 GtLChat >> notifyExecutionStateChanged [
 	self updateToolSummarizers.
@@ -673,8 +681,11 @@ GtLChat >> reasoningEffort [
 ]
 
 { #category : #accessing }
-GtLChat >> reasoningEffort: anObject [
-	reasoningEffort := anObject
+GtLChat >> reasoningEffort: aValue [
+
+	self model ifNotNil: [ :model |
+		model userMessageEndpoint validateReasoning: aValue ].
+	reasoningEffort := aValue.
 ]
 
 { #category : #actions }
