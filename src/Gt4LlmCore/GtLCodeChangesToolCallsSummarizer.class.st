@@ -240,7 +240,7 @@ GtLCodeChangesToolCallsSummarizer >> gtPackageChangeHistoriesFor: aView [
 	
 	^ aView forward 	
 		title: 'Changes by package';
-		priority: 20;
+		priority: 16;
 		object: [ self packageChangeHistories ];
 		view: #gtViewHistoriesFor:;
 		actionButtonIcon: BrGlamorousVectorIcons inspect 
