@@ -245,6 +245,7 @@ GtLChat >> copyLepiterSerialisationToClipboard [
 { #category : #accessing }
 GtLChat >> createUserMessage [
 	^ self userMessageClass new
+		chat: self
 ]
 
 { #category : #accessing }
