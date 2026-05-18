@@ -17,8 +17,7 @@ Class {
 GtSimpleInMemoryVectorDatabase >> addDocument: aString key: keyObject [
 	"Generate the embeddings for aString and store the embedding / key pair in a dictionary with the embedding as the dictionaries key"
 	| embedding |
-	embedding := self embeddingFor: aString.
-	embedding key: keyObject.
+	embedding := self embeddingFor: aString key: keyObject.
 	embeddings add: embedding.
 	^ keyObject
 ]
@@ -37,6 +36,15 @@ GtSimpleInMemoryVectorDatabase >> embeddingFor: aString [
 	^ GtLVectorDbEmbedding new
 		embedding: newEmbeddings embeddings first;
 		yourself
+]
+
+{ #category : #api }
+GtSimpleInMemoryVectorDatabase >> embeddingFor: aString key: keyObject [
+	"Generate the embedding for the supplied aString and key"
+	| embedding |
+	embedding := self embeddingFor: aString.
+	embedding key: keyObject.
+	^ embedding
 ]
 
 { #category : #'private - accessing' }
@@ -69,6 +77,12 @@ GtSimpleInMemoryVectorDatabase >> query: queryString maxMatches: anInteger [
 		usingMetric: distanceMetric.
 	sorted := nearestEmbeddings sorted: [ :a :b | a distance < b distance ].
 	^ sorted first: (anInteger min: sorted size)
+]
+
+{ #category : #accessing }
+GtSimpleInMemoryVectorDatabase >> removeEmbedding: anEmbedding [
+
+	embeddings remove: anEmbedding.
 ]
 
 { #category : #saving }

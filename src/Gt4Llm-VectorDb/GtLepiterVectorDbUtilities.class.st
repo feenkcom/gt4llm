@@ -50,12 +50,6 @@ GtLepiterVectorDbUtilities >> createVectorDb [
 	^ vectorDb
 ]
 
-{ #category : #'as yet unclassified' }
-GtLepiterVectorDbUtilities >> databaseName [
-
-	^ LeDatabase gtBookName.
-]
-
 { #category : #ui }
 GtLepiterVectorDbUtilities >> gtSummaryFor: aView [
 	<gtView>
@@ -82,6 +76,12 @@ GtLepiterVectorDbUtilities >> initialize [
 ]
 
 { #category : #accessing }
+GtLepiterVectorDbUtilities >> lepiterDb [
+
+	^ LeDatabasesRegistry default defaultLogicalDatabase databaseNamed: self lepiterDbName
+]
+
+{ #category : #accessing }
 GtLepiterVectorDbUtilities >> lepiterDbName [
 	^ lepiterDbName ifNil: [ lepiterDbName := LeDatabase gtBookName ].
 ]
@@ -96,7 +96,7 @@ GtLepiterVectorDbUtilities >> loadLepiterPage: aPage [
 	| dbKey serialisedPage documents |
 
 	dbKey := GtVectorDbLepiterKey new
-			lepiterDbName: self databaseName;
+			lepiterDbName: self lepiterDbName;
 			lepiterPageName: aPage title;
 			lepiterSnippetUid: nil.
 	serialisedPage := GtLLepiterContentExporter new
@@ -114,10 +114,12 @@ GtLepiterVectorDbUtilities >> loadLepiterPage: aPage [
 
 { #category : #private }
 GtLepiterVectorDbUtilities >> loadLepiterPageBySnippet: aPage [
+	"Index every snippet, regardless of size.
+	This hasn't worked well since small snippets tend to get a lot of false positives."
 
 	aPage allChildrenDepthFirstDo: [ :snippet | | dbKey serialisedSnippet documents |
 		dbKey := GtVectorDbLepiterKey new
-			lepiterDbName: self databaseName;
+			lepiterDbName: self lepiterDbName;
 			lepiterPageName: aPage title;
 			lepiterSnippetUid: snippet uid.
 		serialisedSnippet := (GtLLepiterContentExporter new
@@ -141,6 +143,13 @@ GtLepiterVectorDbUtilities >> pageNamesFor: aString maxCount: anInteger [
 	^ matchingEmbeddings collect: [ :each | each embedding key lepiterPageName ]
 ]
 
+{ #category : #private }
+GtLepiterVectorDbUtilities >> removeEmbeddingKeysFrom: updatedEmbeddings [ 
+
+	updatedEmbeddings do: [ :embedding |
+		vectorDb removeEmbedding: embedding ].
+]
+
 { #category : #ui }
 GtLepiterVectorDbUtilities >> summaryAttributes [
 	| pageNamesIndexed |
@@ -153,6 +162,32 @@ GtLepiterVectorDbUtilities >> summaryAttributes [
 		{ 'Number of pages indexed'. pageNamesIndexed size }.
 		{ 'Vector size'. vectorDb embeddings first embedding size. }.
 		}.
+]
+
+{ #category : #api }
+GtLepiterVectorDbUtilities >> updateVectorDb [
+	"Replace database entries for all pages modified after the DB modified time"
+	| dbModifiedTime |
+
+	dbModifiedTime := nil.
+]
+
+{ #category : #api }
+GtLepiterVectorDbUtilities >> updateVectorDbSince: dbModifiedTime [
+	"Replace database entries for all pages modified after the DB modified time"
+	| embeddingsByPageName updatedPages superseededEmbeddings |
+
+	embeddingsByPageName := self vectorDb embeddings groupedBy: [ :embedding |
+		embedding key lepiterPageName ].
+	updatedPages := self lepiterDb pages select: [ :lepiterPage |
+		lepiterPage latestEditTime time >= dbModifiedTime ].
+	superseededEmbeddings := updatedPages flatCollect: [ :page |
+		embeddingsByPageName at: page title ifAbsent: [ #() ] ].
+
+	self removeEmbeddingKeysFrom: superseededEmbeddings.
+
+	updatedPages do: [ :page |
+		self loadLepiterPage: page ].
 ]
 
 { #category : #accessing }
