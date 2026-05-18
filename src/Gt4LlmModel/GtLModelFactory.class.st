@@ -86,3 +86,28 @@ GtLModelFactory >> ollama_llama3_2 [
 
 	^ self ollama_generate: 'llama3.2'
 ]
+
+{ #category : #providers }
+GtLModelFactory >> openAi [
+	"Answer a partially configured Open AI model.
+	Details of the LLM model to be added by the caller."
+	| model provider chat client |
+
+	provider := GtLOpenAiResponsesProvider new.
+	client := GtLOllamaClient new.
+	model := GtLLlmModel new
+		provider: provider;
+		client: client.
+	model
+		endpointAt: 'providerVersion' put: GtLOllamaVersionEndpoint new;
+		endpointAt: 'modelDetails' put: GtLOllamaModelDetailsEndpoint new;
+		endpointAt: 'availableModels' put: GtLOllamaAvailableModelsEndpoint new;
+		endpointAt: 'runningModels' put: GtLOllamaPsEndpoint new;
+		endpointAt: 'deleteModel' put: GtLOllamaDeleteEndpoint new;
+		endpointAt: 'pullModel' put: GtLOllamaPullEndpoint new;
+		endpointAt: 'createEmbeddings' put: GtLOllamaCreateEmbeddingsEndpoint new;
+		endpointAt: 'createModel' put: GtLOllamaCreateModelEndpoint new.
+	chat := GtLChat new
+		provider: provider.
+	^ model.
+]

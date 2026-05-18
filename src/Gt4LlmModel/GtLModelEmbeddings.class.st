@@ -7,7 +7,7 @@ Class {
 		'rawData',
 		'model'
 	],
-	#category : #Gt4LlmModel
+	#category : #'Gt4LlmModel-Embeddings'
 }
 
 { #category : #accessing }
