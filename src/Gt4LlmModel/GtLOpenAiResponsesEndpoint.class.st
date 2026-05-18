@@ -26,7 +26,8 @@ GtLOpenAiResponsesEndpoint >> assistantContentTextFrom: aGtLModelAssistantMessag
 
 { #category : #'as yet unclassified' }
 GtLOpenAiResponsesEndpoint >> assistantMessageAccessor [
-self halt.
+
+	self notYetImplemented.
 	^ GtLOllamaCompletionsAssistantMessageAccessor new
 ]
 
@@ -110,7 +111,8 @@ GtLOpenAiResponsesEndpoint >> resultFrom: requestResponse context: context [
 	"Deserialise the provided response.
 	This currently uses GtLOllamaResponse, which is also used by the Generate endpoint.
 	Since they have different response formats this doesn't really make sense.  The parsing should be done here and a generic response object used, which can then be subclassed if different endpoints require specialisation."
-self halt.
+
+	self notYetImplemented.
 	^ (GtLOllamaResponse from: requestResponse result)
 		client: context model client;
 		requestResponse: requestResponse
