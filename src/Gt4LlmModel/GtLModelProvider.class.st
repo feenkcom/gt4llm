@@ -33,7 +33,7 @@ GtLModelProvider >> authentication: anObject [
 
 { #category : #accessing }
 GtLModelProvider >> availableModels [
-	| endpoint response |
+	| endpoint |
 
 	endpoint := model endpointAt: 'availableModels'.
 	^ endpoint resultFrom: (self client get: endpoint path).

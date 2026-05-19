@@ -26,6 +26,17 @@ GtLOllamaProvider >> defaultUserMessageClass [
 	^ GtLModelUserMessage
 ]
 
+{ #category : #views }
+GtLOllamaProvider >> gtAvailableModelsFor: aView [
+	<gtView>
+	^ aView columnedList
+		title: 'Available models';
+		items: [ [ self availableModels ] value associations ];
+		column: 'Key' text: [ :each | each key gtDisplayString ];
+		column: 'Value' text: [ :each | each value gtDisplayString ];
+		send: [ :each | each value ]
+]
+
 { #category : #accessing }
 GtLOllamaProvider >> modelName: aString [
 	| newModel |
