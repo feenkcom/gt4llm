@@ -245,6 +245,7 @@ GtLChat >> copyLepiterSerialisationToClipboard [
 { #category : #accessing }
 GtLChat >> createUserMessage [
 	^ self userMessageClass new
+		chat: self
 ]
 
 { #category : #accessing }
@@ -356,7 +357,7 @@ GtLChat >> gtFormatFor: aView [
 	
 	^ aView textEditor
 		title: 'Output format JSON schema';
-		priority: 5; 
+		priority: 45; 
 		text: [ NeoJSONWriter toStringPretty: self currentFormat  asJsonSchemaDictionary ];
 		aptitude: BrGlamorousCodeEditorAptitude;
 		styler: JSONParser gtStyler;
@@ -377,6 +378,7 @@ GtLChat >> gtInstructionsFor: aView [
 	instructions ifNil: [ ^ aView empty].
 	^ aView forward
 		title: 'Instructions';
+		priority: 40;
 		object: [ instructions ];
 		view: #gtInstructionFor:
 ]
@@ -476,10 +478,22 @@ GtLChat >> gtRegistryRemoveChatActionFor: anAction context: aPhlowContext [
 ]
 
 { #category : #views }
+GtLChat >> gtSummarizersRegistryFor: aView [
+	<gtView>
+	<gtLlmView>
+	^ aView forward
+		title: 'Summarizers';
+		priority: 42;
+		object: [ summarizersRegistry ];
+		view: #gtCurrentSummarizersFor:
+]
+
+{ #category : #views }
 GtLChat >> gtToolsFor: aView [
 	<gtView>
 	^ aView forward
 		title: 'Defined tools';
+		priority: 41;
 		object: [ tools ];
 		view: #gtItemsFor:
 ]
@@ -608,6 +622,14 @@ GtLChat >> messages: anObject [
 	messages do: [ :aMessage | aMessage chat: self ]
 ]
 
+{ #category : #accessing }
+GtLChat >> model [
+	"Answer the receiver's model.
+	This is currently only valid when the provider also uses a GtLLlmModel."
+
+	^ provider model
+]
+
 { #category : #announcing }
 GtLChat >> notifyExecutionStateChanged [
 	self updateToolSummarizers.
@@ -673,8 +695,11 @@ GtLChat >> reasoningEffort [
 ]
 
 { #category : #accessing }
-GtLChat >> reasoningEffort: anObject [
-	reasoningEffort := anObject
+GtLChat >> reasoningEffort: aValue [
+
+	self model ifNotNil: [ :model |
+		model userMessageEndpoint validateReasoning: aValue ].
+	reasoningEffort := aValue.
 ]
 
 { #category : #actions }

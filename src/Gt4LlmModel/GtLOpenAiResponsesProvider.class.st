@@ -1,11 +1,11 @@
 Class {
-	#name : #GtLOllamaProvider,
+	#name : #GtLOpenAiResponsesProvider,
 	#superclass : #GtLModelProvider,
-	#category : #'Gt4Llm-Ollama-Provider'
+	#category : #'Gt4LlmModel-Provider'
 }
 
 { #category : #testing }
-GtLOllamaProvider class >> isConnectable [
+GtLOpenAiResponsesProvider class >> isConnectable [
 	| model provider |
 
 	model := GtLModelFactory new ollama.
@@ -16,18 +16,18 @@ GtLOllamaProvider class >> isConnectable [
 ]
 
 { #category : #accessing }
-GtLOllamaProvider class >> providerName [
+GtLOpenAiResponsesProvider class >> providerName [
 	^ 'Ollama'
 ]
 
 { #category : #accessing }
-GtLOllamaProvider >> defaultUserMessageClass [
+GtLOpenAiResponsesProvider >> defaultUserMessageClass [
 
 	^ GtLModelUserMessage
 ]
 
 { #category : #accessing }
-GtLOllamaProvider >> modelName: aString [
+GtLOpenAiResponsesProvider >> modelName: aString [
 	| newModel |
 
 	newModel := GtLModelFactory new ollama_completions: aString.

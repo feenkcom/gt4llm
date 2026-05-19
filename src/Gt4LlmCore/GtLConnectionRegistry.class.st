@@ -48,18 +48,6 @@ GtLConnectionRegistry class >> gtInstanceButtonFor: anAction [
 		action: [ :aButton | aButton phlow spawnObject: self uniqueInstance]
 ]
 
-{ #category : #views }
-GtLConnectionRegistry class >> gtViewFor: aView [
-	<gtView>
-	<gtClassView>
-
-	^ aView forward
-		title: 'Connections';
-		priority: 10;
-		object: [ self default ];
-		view: #gtConnectionsFor:
-]
-
 { #category : #testing }
 GtLConnectionRegistry class >> hasUniqueInstance [
 
@@ -176,7 +164,8 @@ GtLConnectionRegistry >> initialize [
 
 { #category : #accessing }
 GtLConnectionRegistry >> knownConnectors [
-	^ {GtLConnection new
+	^ {
+		GtLConnection new
 			providerClass: GtLAnthropicProvider;
 			label: 'Claude Opus 4.5';
 			model: 'claude-opus-4-5'.
@@ -184,6 +173,10 @@ GtLConnectionRegistry >> knownConnectors [
 			providerClass: GtLAnthropicProvider;
 			label: 'Claude Opus 4.6';
 			model: 'claude-opus-4-6'.
+		GtLConnection new
+			providerClass: GtLAnthropicProvider;
+			label: 'Claude Opus 4.7';
+			model: 'claude-opus-4-7'.
 		GtLConnection new
 			providerClass: GtLOpenAIProvider;
 			label: 'GPT 5.2';
@@ -199,7 +192,28 @@ GtLConnectionRegistry >> knownConnectors [
 		GtLConnection new
 			providerClass: GtLOpenAIProvider;
 			label: 'GPT 5.3';
-			model: 'gpt-5.3'.}
+			model: 'gpt-5.3'.
+		GtLConnection new
+			providerClass: GtLOpenAIProvider;
+			label: 'GPT 5.5';
+			model: 'gpt-5.5'.
+		} ",
+		self knownOllamaConnectors"
+]
+
+{ #category : #'private - accessing' }
+GtLConnectionRegistry >> knownOllamaConnectors [
+	| provider names |
+
+	provider := GtLModelFactory new ollama provider.
+	names := [ provider availableModels keys ]
+		on: ConnectionClosed
+		do: [ :ex | #() ].
+	^ names collect: [ :name |
+		GtLConnection new
+			providerClass: GtLOllamaProvider;
+			label: name;
+			model: name. ]
 ]
 
 { #category : #utils }
@@ -215,6 +229,5 @@ GtLConnectionRegistry >> standardDefaultConnection [
 	^ GtLConnection new
 		providerClass: GtLOpenAIProvider;
 		label: 'GPT 5.4';
-		model: 'gpt-5.4'";
-		addOption: 'isStreaming' withValue: false"
+		model: 'gpt-5.4'
 ]
