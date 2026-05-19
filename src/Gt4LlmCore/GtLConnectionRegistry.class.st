@@ -197,8 +197,8 @@ GtLConnectionRegistry >> knownConnectors [
 			providerClass: GtLOpenAIProvider;
 			label: 'GPT 5.5';
 			model: 'gpt-5.5'.
-		},
-		self knownOllamaConnectors
+		} ",
+		self knownOllamaConnectors"
 ]
 
 { #category : #'private - accessing' }
