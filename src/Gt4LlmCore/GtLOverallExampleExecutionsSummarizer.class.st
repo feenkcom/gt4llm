@@ -118,7 +118,6 @@ GtLOverallExampleExecutionsSummarizer >> gtLatestStatusesFor: aView [
 { #category : #'gt-extensions' }
 GtLOverallExampleExecutionsSummarizer >> gtOverallStatusSummaryFor: aView [
 	<gtView>
-	<gtLlmView>
 	self hasSummaryData ifFalse: [ ^ aView empty ].
 	^ aView columnedList
 		title: 'Example runs overview';
@@ -137,12 +136,13 @@ GtLOverallExampleExecutionsSummarizer >> gtOverallStatusSummaryFor: aView [
 { #category : #'gt-extensions' }
 GtLOverallExampleExecutionsSummarizer >> gtRunsAndExamplesFor: aView [
 	<gtView>
+	<gtLlmView>
 	self hasSummaryData ifFalse: [ ^ aView empty ].
 	^ aView columnedList
 		title: 'Runs & examples';
 		priority: 33;
 		items: [ relevantToolCalls ];
-		column: 'Total'
+		column: 'Total examples'
 			text: [ :each | each result model totalCount ]
 			width: 90;
 		column: 'Successes'
@@ -193,7 +193,7 @@ GtLOverallExampleExecutionsSummarizer >> gtRunsAndExamplesFor: aView [
 						each result model skippedCount isZero
 							ifTrue: [ Color transparent ]
 							ifFalse: [ BrGlamorousColors neutralBackgroundColor ] ] ];
-		send: [ :each | each at: #runs ]
+			send: [ :each | each result model ]
 ]
 
 { #category : #initialization }

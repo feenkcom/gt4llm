@@ -176,7 +176,7 @@ GtLCodeChangesToolCallsSummarizer >> gtChangesByToolFor: aView [
 { #category : #views }
 GtLCodeChangesToolCallsSummarizer >> gtClassChangeHistoriesFor: aView [
 	<gtView>
-	<gtLlmView>
+"	<gtLlmView>"
 	
 	^ aView forward 	
 		title: 'Changes by class';
