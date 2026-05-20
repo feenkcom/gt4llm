@@ -87,7 +87,7 @@ GtLModelExamplesExecutor >> newChatFromModel [
 	"Answer a new chat configured and signal the receiver's semaphore when it goes idle."
 	| chat |
 	
-	chat := model provider chat.
+	chat := GtLChat new provider: model provider.
 	chat
 		when: GtLChatExecutionStateChanged
 		send: #signalSemaphoreOnFinished:
