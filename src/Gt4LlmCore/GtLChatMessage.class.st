@@ -9,14 +9,14 @@ Class {
 		'tools',
 		'announcer',
 		'formatDescriptions',
-		'forkedMessages'
+		'forkingMessages'
 	],
 	#category : #'Gt4LlmCore-Core'
 }
 
 { #category : #'as yet unclassified' }
-GtLChatMessage >> addForkedMessage: aMessage [ 
-	self forkedMessages add: aMessage
+GtLChatMessage >> addForkingMessage: aMessage [ 
+	self forkingMessages add: aMessage
 ]
 
 { #category : #accessing }
@@ -165,8 +165,8 @@ GtLChatMessage >> executionStrategy [
 ]
 
 { #category : #'as yet unclassified' }
-GtLChatMessage >> forkedMessages [
-	^ forkedMessages ifNil: [ forkedMessages := OrderedCollection new ]
+GtLChatMessage >> forkingMessages [
+	^ forkingMessages ifNil: [ forkingMessages := OrderedCollection new ]
 ]
 
 { #category : #accessing }
