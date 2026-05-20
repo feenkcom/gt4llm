@@ -325,7 +325,8 @@ GtLOpenAIProviderCopyChatExamples >> forkChatAtEntireReplyMessage [
 	originalChat := self chatWithUserAndReplyWithTwoToolMessages.
 	replyMessage := originalChat messages asArray second.
 	forkedChat := originalChat forkAtMessage: replyMessage.
-	self assert: replyMessage forkedMessages size equals: 1.
+	self assert: replyMessage forkingMessages size equals: 1.
+	self assert: replyMessage forkingMessages first forkingMessages isEmpty.
 	self assert: originalChat messages size equals: 2.
 	self assert: forkedChat summarizersRegistry ~~ originalChat summarizersRegistry.
 	self
@@ -346,7 +347,7 @@ GtLOpenAIProviderCopyChatExamples >> forkChatAtFinalAssistantMessage [
 	originalChat := self chatWithUserAndReplyWithTwoToolMessages.
 	replyMessage := originalChat messages asArray second.
 	forkedChat := originalChat forkAtMessage: replyMessage finalMessage.
-	self assert: replyMessage finalMessage forkedMessages size equals: 1.
+	self assert: replyMessage finalMessage forkingMessages size equals: 1.
 	self assert: originalChat messages size equals: 2.
 	self assert: forkedChat summarizersRegistry ~~ originalChat summarizersRegistry.
 	self
@@ -367,7 +368,7 @@ GtLOpenAIProviderCopyChatExamples >> forkChatAtFirstToolMessage [
 	originalChat := self chatWithUserAndReplyWithTwoToolMessages.
 	replyMessage := originalChat messages asArray second.
 	forkedChat := originalChat forkAtMessage: replyMessage executionMessages first.
-	self assert: replyMessage executionMessages first forkedMessages size equals: 1.
+	self assert: replyMessage executionMessages first forkingMessages size equals: 1.
 	self assert: originalChat messages size equals: 2.
 	self assert: forkedChat summarizersRegistry ~~ originalChat summarizersRegistry.
 	self
@@ -388,7 +389,7 @@ GtLOpenAIProviderCopyChatExamples >> forkChatAtSecondToolMessage [
 	originalChat := self chatWithUserAndReplyWithTwoToolMessages.
 	replyMessage := originalChat messages asArray second.
 	forkedChat := originalChat forkAtMessage: replyMessage executionMessages second.
-	self assert: replyMessage executionMessages second forkedMessages size equals: 1.	
+	self assert: replyMessage executionMessages second forkingMessages size equals: 1.	
 	self assert: originalChat messages size equals: 2.
 	self assert: forkedChat summarizersRegistry ~~ originalChat summarizersRegistry.
 	self
@@ -398,6 +399,23 @@ GtLOpenAIProviderCopyChatExamples >> forkChatAtSecondToolMessage [
 		hasFinalMessage: false.
 	
 	^ forkedChat
+]
+
+{ #category : #examples }
+GtLOpenAIProviderCopyChatExamples >> forkChatAtUserMessage [
+	<gtExample>
+	<return: #GtLChat>
+	| originalChat userMessage forkedChat |
+	
+	originalChat := self chatWithUserAndReplyWithTwoToolMessages.
+	userMessage := originalChat messages asArray first.
+	forkedChat := originalChat forkAtMessage: userMessage.
+	self assert: userMessage forkingMessages size equals: 1.
+	self assert: userMessage forkingMessages first forkingMessages isEmpty.
+	self assert: originalChat messages size equals: 2.
+	self assert: forkedChat summarizersRegistry ~~ originalChat summarizersRegistry.
+	
+	^ originalChat
 ]
 
 { #category : #private }
