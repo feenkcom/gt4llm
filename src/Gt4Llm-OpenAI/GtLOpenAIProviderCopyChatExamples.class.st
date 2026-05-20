@@ -412,6 +412,7 @@ GtLOpenAIProviderCopyChatExamples >> forkChatAtUserMessage [
 	forkedChat := originalChat forkAtMessage: userMessage.
 	self assert: userMessage forkingMessages size equals: 1.
 	self assert: userMessage forkingMessages first forkingMessages isEmpty.
+	self assert: forkedChat messages size equals: 1.
 	self assert: originalChat messages size equals: 2.
 	self assert: forkedChat summarizersRegistry ~~ originalChat summarizersRegistry.
 	
