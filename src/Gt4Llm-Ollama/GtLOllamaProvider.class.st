@@ -1,18 +1,41 @@
 Class {
 	#name : #GtLOllamaProvider,
 	#superclass : #GtLModelProvider,
+	#classVars : [
+		'IsConnectable'
+	],
 	#category : #'Gt4Llm-Ollama-Provider'
 }
 
+{ #category : #ui }
+GtLOllamaProvider class >> gtToggleEnabledActionFor: anAction [
+	<gtClassAction>
+	
+	^ anAction button
+		tooltip: (IsConnectable ifTrue: [ 'Disable' ] ifFalse: [ 'Enable' ]);
+		icon: BrGlamorousVectorIcons shutdown;
+		action: [ :aButton | IsConnectable := IsConnectable not ]
+]
+
+{ #category : #initialization }
+GtLOllamaProvider class >> initialize [
+
+	IsConnectable := false
+]
+
 { #category : #testing }
 GtLOllamaProvider class >> isConnectable [
-	| model provider |
+	^ IsConnectable
+]
 
-	model := GtLModelFactory new ollama.
-	provider := model provider.
-	^ [ provider availableModels isNotEmpty ]
-		on: Error
-		do: [ :ex | false ].
+{ #category : #api }
+GtLOllamaProvider class >> markConnectable [
+	IsConnectable := true
+]
+
+{ #category : #api }
+GtLOllamaProvider class >> markNonconnectable [
+	IsConnectable := false
 ]
 
 { #category : #accessing }

@@ -158,8 +158,7 @@ GtLConnectionRegistry >> hasConnectableDefaultConnection [
 GtLConnectionRegistry >> initialize [
 	super initialize.
 	
-	connections := OrderedCollection withAll: self knownConnectors.
-	self defaultConnection: self standardDefaultConnection
+	self updateConnections.
 ]
 
 { #category : #accessing }
@@ -197,19 +196,23 @@ GtLConnectionRegistry >> knownConnectors [
 			providerClass: GtLOpenAIProvider;
 			label: 'GPT 5.5';
 			model: 'gpt-5.5'.
-		} ",
-		self knownOllamaConnectors"
+		},
+		self knownOllamaConnectors
 ]
 
 { #category : #'private - accessing' }
 GtLConnectionRegistry >> knownOllamaConnectors [
+	"If enabled, answer the list of known Ollama connectors.
+	This makes a request to the Ollama server to retrieve the list of available models."
 	| provider names |
+
+	GtLOllamaProvider isConnectable ifFalse: [ ^ #() ].
 
 	provider := GtLModelFactory new ollama provider.
 	names := [ provider availableModels keys ]
 		on: ConnectionClosed
 		do: [ :ex | #() ].
-	^ names collect: [ :name |
+	^ names sorted collect: [ :name |
 		GtLConnection new
 			providerClass: GtLOllamaProvider;
 			label: name;
@@ -230,4 +233,12 @@ GtLConnectionRegistry >> standardDefaultConnection [
 		providerClass: GtLOpenAIProvider;
 		label: 'GPT 5.4';
 		model: 'gpt-5.4'
+]
+
+{ #category : #initialization }
+GtLConnectionRegistry >> updateConnections [
+	"Update the list of connections"
+
+	connections := OrderedCollection withAll: self knownConnectors.
+	self defaultConnection: self standardDefaultConnection
 ]
