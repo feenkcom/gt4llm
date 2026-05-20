@@ -22,6 +22,11 @@ GtLReplyMessage >> addExecutionMessage: aMessage [
 	self executionMessages: (self executionMessages copyWith: aMessage)
 ]
 
+{ #category : #'as yet unclassified' }
+GtLReplyMessage >> addForkedChat: aGtLChat [ 
+	self shouldBeImplemented.
+]
+
 { #category : #'api - message' }
 GtLReplyMessage >> addToolMessage: aToolMessage [
 	self addExecutionMessage: aToolMessage
