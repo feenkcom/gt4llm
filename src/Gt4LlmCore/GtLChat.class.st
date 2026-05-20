@@ -230,6 +230,7 @@ GtLChat >> copyForIndependentRequestAtMessage: aMessage [
 	| newCopy |
 	newCopy := self copy.
 	newCopy postCopyForIndependentRequestAt: aMessage.
+	aMessage addForkedMessage: newCopy messages last.
 	^ newCopy
 ]
 
@@ -429,11 +430,15 @@ GtLChat >> gtMessagesFor: aView [
 			text: [ :item | item role ]
 			width: 70;
 		column: 'Content' text: [ :item | item contentOneLineSummary ];
-		column: 'Created' text: [ :item | item createdAt asStringYMDHMS ] width: 150;
+		column: 'Forks' text: [ :item | item forkedMessages isEmpty ifTrue: [ '' ] ifFalse: [ item forkedMessages size ] ] width: 50;
+		column: 'Created' text: [ :item | item createdAt asStringYMDHMS ] width: 120;
 		contextItemLabel: 'Fork at this message' 
 			action: [ :anElement :aNode  |
-				anElement phlow spawnObject: (self forkAtMessage:  aNode value) ] "
-			if: [ :aNode | aNode value isUserMessage not ]";
+				anElement phlow spawnObject: (self forkAtMessage:  aNode value) ];
+		contextItemLabel: 'Browse forks' 
+			action: [ :anElement :aNode  |
+				anElement phlow spawnObject: (aNode value forkedMessages collect: #chat) ] 
+			if: [ :aNode | aNode value forkedMessages notEmpty ];
 		updateWhen: GtLlmThreadRunAnnouncement in: self announcer;
 		expandAll
 ]

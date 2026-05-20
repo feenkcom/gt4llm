@@ -8,10 +8,16 @@ Class {
 		'instructions',
 		'tools',
 		'announcer',
-		'formatDescriptions'
+		'formatDescriptions',
+		'forkedMessages'
 	],
 	#category : #'Gt4LlmCore-Core'
 }
+
+{ #category : #'as yet unclassified' }
+GtLChatMessage >> addForkedMessage: aMessage [ 
+	self forkedMessages add: aMessage
+]
 
 { #category : #accessing }
 GtLChatMessage >> addResponseFormat: aFormatDescription [
@@ -156,6 +162,11 @@ GtLChatMessage >> deserializeTime: anObject [
 { #category : #accessing }
 GtLChatMessage >> executionStrategy [
 	^nil
+]
+
+{ #category : #'as yet unclassified' }
+GtLChatMessage >> forkedMessages [
+	^ forkedMessages ifNil: [ forkedMessages := OrderedCollection new ]
 ]
 
 { #category : #accessing }
