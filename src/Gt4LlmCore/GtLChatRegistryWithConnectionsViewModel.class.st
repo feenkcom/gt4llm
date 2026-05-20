@@ -97,3 +97,9 @@ GtLChatRegistryWithConnectionsViewModel >> selectedDescription [
 GtLChatRegistryWithConnectionsViewModel >> selectedDescription: aDescription source: aSource [
 	selectedDescription := aDescription
 ]
+
+{ #category : #actions }
+GtLChatRegistryWithConnectionsViewModel >> updateConnections [
+
+	connectionRegistry updateConnections
+]

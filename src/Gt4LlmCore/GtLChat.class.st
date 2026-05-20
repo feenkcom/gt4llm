@@ -230,7 +230,7 @@ GtLChat >> copyForIndependentRequestAtMessage: aMessage [
 	| newCopy |
 	newCopy := self copy.
 	newCopy postCopyForIndependentRequestAt: aMessage.
-	aMessage addForkedMessage: newCopy messages last.
+	aMessage addForkingMessage: newCopy messages last.
 	^ newCopy
 ]
 
@@ -431,7 +431,7 @@ GtLChat >> gtMessagesFor: aView [
 			width: 70;
 		column: 'Content' text: [ :item | item contentOneLineSummary ];
 		column: 'Forks'
-			text: [ :item | item forkedMessages isEmpty ifTrue: [ '' ] ifFalse: [ item forkedMessages size ] ]
+			text: [ :item | item forkingMessages isEmpty ifTrue: [ '' ] ifFalse: [ item forkingMessages size ] ]
 			width: 50;
 		column: 'Created'
 			text: [ :item | item createdAt asStringYMDHMS ]
@@ -442,8 +442,8 @@ GtLChat >> gtMessagesFor: aView [
 					spawnObject: (self forkAtMessage: aNode value);
 					fireViewUpdateWish ];
 		contextItemLabel: 'Browse forks'
-			action: [ :anElement :aNode | anElement phlow spawnObject: (aNode value forkedMessages collect: #chat) ]
-			if: [ :aNode | aNode value forkedMessages notEmpty ];
+			action: [ :anElement :aNode | anElement phlow spawnObject: (aNode value forkingMessages collect: #chat) ]
+			if: [ :aNode | aNode value forkingMessages notEmpty ];
 		updateWhen: GtLlmThreadRunAnnouncement in: self announcer;
 		expandAll
 ]
@@ -694,8 +694,9 @@ GtLChat >> provider [
 ]
 
 { #category : #accessing }
-GtLChat >> provider: anObject [
-	provider := anObject.
+GtLChat >> provider: aGtLProvider [
+
+	provider := aGtLProvider.
 	provider chat: self
 ]
 

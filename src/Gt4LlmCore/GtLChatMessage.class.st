@@ -9,14 +9,14 @@ Class {
 		'tools',
 		'announcer',
 		'formatDescriptions',
-		'forkedMessages'
+		'forkingMessages'
 	],
 	#category : #'Gt4LlmCore-Core'
 }
 
 { #category : #'as yet unclassified' }
-GtLChatMessage >> addForkedMessage: aMessage [ 
-	self forkedMessages add: aMessage
+GtLChatMessage >> addForkingMessage: aMessage [ 
+	self forkingMessages add: aMessage
 ]
 
 { #category : #accessing }
@@ -165,8 +165,8 @@ GtLChatMessage >> executionStrategy [
 ]
 
 { #category : #'as yet unclassified' }
-GtLChatMessage >> forkedMessages [
-	^ forkedMessages ifNil: [ forkedMessages := OrderedCollection new ]
+GtLChatMessage >> forkingMessages [
+	^ forkingMessages ifNil: [ forkingMessages := OrderedCollection new ]
 ]
 
 { #category : #accessing }
@@ -291,13 +291,19 @@ GtLChatMessage >> id: anId [
 { #category : #initialization }
 GtLChatMessage >> initialize [
 	super initialize.
-	
+
 	id := UUID new.
 	createdAt := DateAndTime now.
-	
+
 	formatDescriptions := GtLResponseCompositeFormat new.
 	tools := GtLTools new.
 	instructions := GtLInstructionComposite new.
+	self initializeForkingMessages
+]
+
+{ #category : #initialization }
+GtLChatMessage >> initializeForkingMessages [
+	forkingMessages := OrderedCollection new
 ]
 
 { #category : #accessing }
@@ -410,6 +416,7 @@ GtLChatMessage >> postCopyForIndependentRequestInChat: aChat [
 		chat := aChat ].
 	formatDescriptions := formatDescriptions copy.
 	tools := tools copy.
+	self initializeForkingMessages
 ]
 
 { #category : #accessing }
