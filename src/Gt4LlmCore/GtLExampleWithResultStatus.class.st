@@ -28,6 +28,31 @@ GtLExampleWithResultStatus >> exampleWithResult: anObject [
 	exampleWithResult := anObject
 ]
 
+{ #category : #'as yet unclassified' }
+GtLExampleWithResultStatus >> gtCodeAndResultFor: aView [
+	<gtView>
+	<gtLlmView>
+	^ aView explicit
+		title: 'Example & result';
+		priority: 1;
+		stencil: [ | container |
+			container := BrVerticalPane new.
+			container matchParent
+				addAptitude: (BrLayoutResizerAptitude new common: [ container children ]);
+				background: BrGlamorousColors backdropColor;
+				addChild: (( (GtPharoMethodCoder forExample: exampleWithResult) asExpandedOnlyElement vFitContentLimited )
+						margin: (BlInsets all: 10);
+						background: Color white;
+						addAptitude: BrShadowAptitude;
+						vFitContentLimited);
+				addChild: ((exampleWithResult returnValue gtDefaultInspectorTool) asElement
+						margin: (BlInsets all: 10);
+						background: Color white;
+						addAptitude: BrShadowAptitude;
+						vFitContentLimited;
+						hMatchParent) ]
+]
+
 { #category : #printing }
 GtLExampleWithResultStatus >> gtDisplayOn: stream [
 	self exampleWithResult gtDisplayOn: stream
@@ -36,10 +61,9 @@ GtLExampleWithResultStatus >> gtDisplayOn: stream [
 { #category : #views }
 GtLExampleWithResultStatus >> gtExampleSourceFor: aView [
 	<gtView>
-	<gtLlmView>
 	^ aView forward
 		title: 'Example source';
-		priority: 1;
+		priority: 20;
 		object: [ exampleWithResult ];
 		view: #gtSourceFor:
 ]
@@ -47,10 +71,9 @@ GtLExampleWithResultStatus >> gtExampleSourceFor: aView [
 { #category : #views }
 GtLExampleWithResultStatus >> gtExampleWithResultFor: aView [
 	<gtView>
-	<gtLlmView>
 	^ aView forward
 		title: 'Example result';
-		priority: 2;
+		priority: 21;
 		object: [ exampleWithResult ];
 		view: #gtLiveFor:
 ]
