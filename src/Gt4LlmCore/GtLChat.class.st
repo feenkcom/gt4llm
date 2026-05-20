@@ -694,8 +694,9 @@ GtLChat >> provider [
 ]
 
 { #category : #accessing }
-GtLChat >> provider: anObject [
-	provider := anObject.
+GtLChat >> provider: aGtLProvider [
+
+	provider := aGtLProvider.
 	provider chat: self
 ]
 

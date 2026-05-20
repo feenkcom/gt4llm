@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'connectionElement',
 		'chatsElement',
-		'addChatElement'
+		'addChatElement',
+		'updateConnectionsElement'
 	],
 	#category : #'Gt4LlmCore-UI - Registry'
 }
@@ -37,11 +38,13 @@ GtLChatRegistryAddNewChatElement >> initialize [
 	self initializeChatDescriptionsElement.
 	self initializeConnectionElement.
 	self initializeAddChatElement.
+	self initializeUpdateConnectionsElement.
 
 	self addChild: chatsElement.
 	self addChild: (self newLabelWithText: 'with').
 	self addChild: connectionElement.
 	self addChild: addChatElement.
+	self addChild: updateConnectionsElement.
 
 	self fitContent
 ]
@@ -88,6 +91,15 @@ GtLChatRegistryAddNewChatElement >> initializeConnectionElement [
 							label: self connectionLabel)
 							removeAptitude: BrGlamorousButtonExteriorAptitude ]
 					menu: [ self newAvailableConnectionsMenuModel ])
+]
+
+{ #category : #initialization }
+GtLChatRegistryAddNewChatElement >> initializeUpdateConnectionsElement [
+	updateConnectionsElement := BrButton new
+			aptitude: BrGlamorousButtonWithIconAptitude;
+			icon: BrGlamorousVectorIcons refresh;
+			label: 'Update Connections';
+			action: [ :aButtonElement :aButtonModel :anEvent | self updateConnectionsFrom: anEvent ]
 ]
 
 { #category : #initialization }
@@ -182,6 +194,13 @@ GtLChatRegistryAddNewChatElement >> registryViewModel: anObject [
 { #category : #'private - updating' }
 GtLChatRegistryAddNewChatElement >> updateConnectionElement [
 	connectionElement label: self connectionLabel
+]
+
+{ #category : #initialization }
+GtLChatRegistryAddNewChatElement >> updateConnectionsFrom: anEvent [
+
+	self registryViewModel ifNil: [ ^ self ].
+	self registryViewModel updateConnections.
 ]
 
 { #category : #'private - updating' }
