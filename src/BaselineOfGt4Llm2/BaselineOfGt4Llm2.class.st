@@ -19,5 +19,6 @@ BaselineOfGt4Llm2 >> baseline: spec [
 			spec package: 'Gt4Llm-Ollama' with: [ spec requires: #('Gt4LlmCore' 'Gt4LlmModel') ].
 			spec package: 'Gt4Llm-OpenAI' with: [ spec requires: #('Gt4LlmCore') ].
 			spec package: 'Gt4Llm-SmaCC' with: [ spec requires: #('Gt4LlmCore') ].
-			spec package: 'Gt4Llm-WardleyMap' with: [ spec requires: #('Gt4LlmCore') ] ]
+			spec package: 'Gt4Llm-WardleyMap' with: [ spec requires: #('Gt4LlmCore') ].
+			spec package: 'Gt4Llm-VectorDb' with: [ spec requires: #('Gt4LlmCore' 'Gt4LlmModel') ]. ].
 ]
