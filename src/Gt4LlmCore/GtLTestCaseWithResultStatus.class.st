@@ -16,7 +16,7 @@ GtLTestCaseWithResultStatus >> gtTestCaseFor: aView [
 	^ aView forward
 		title: 'Method';
 		object: [ self testCase ];
-		view: #gtTestMethodFor:
+		view: #gtSourceCodeFor:
 ]
 
 { #category : #'api - testing' }
