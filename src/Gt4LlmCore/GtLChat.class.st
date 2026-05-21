@@ -694,9 +694,22 @@ GtLChat >> provider [
 ]
 
 { #category : #accessing }
-GtLChat >> provider: anObject [
-	provider := anObject.
+GtLChat >> provider: aGtLProvider [
+
+	provider := aGtLProvider.
 	provider chat: self
+]
+
+{ #category : #'api - communication' }
+GtLChat >> queryMarkdown: aString withRag: aGtRag [
+
+	self assert: aString isString
+		description: [ 'aString must be a string, not a ', aString class name ].
+	^ self sendWith: [ :message |
+		message 
+			markdown: aString;
+			addContextFromRag: aGtRag;
+			yourself ].
 ]
 
 { #category : #accessing }
