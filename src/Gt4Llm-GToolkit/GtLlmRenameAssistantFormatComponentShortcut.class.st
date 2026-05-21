@@ -15,8 +15,8 @@ GtLlmRenameAssistantFormatComponentShortcut >> initialize [
 GtLlmRenameAssistantFormatComponentShortcut >> performOnEditor: aBrTextEditor element: aBrEditorElement coderViewModel: aSourceCoderViewModel dueTo: aShortcutEvent [
 	| position |
 	aBrEditorElement
-		selectedStringDo: [ :aSelectedString :aSelectionInterval | position := aSelectionInterval last ]
-		orCursorStringPositionDo: [ :aCursorTextPosition | position := aCursorTextPosition ].
+		selectedStringAndIntervalDo: [ :aSelectedString :aSelectionInterval | position := aSelectionInterval last ]
+		orCursorPositionDo: [ :aCursorTextPosition | position := aCursorTextPosition ].
 	position notNil
 		ifTrue: [ (aSourceCoderViewModel coder
 				renameFormatComponentAt: position
