@@ -13,6 +13,17 @@ Class {
 	#category : #'Gt4Llm-VectorDb-Model'
 }
 
+{ #category : #initialization }
+GtSimpleInMemoryVectorDatabase class >> defaultDistanceMetric [
+	^ GtLlmCosineDistanceMetric new
+]
+
+{ #category : #accessing }
+GtSimpleInMemoryVectorDatabase class >> defaultEmbeddingModelName [
+
+	^ 'qwen3-embedding:8b'
+]
+
 { #category : #api }
 GtSimpleInMemoryVectorDatabase >> addDocument: aString key: keyObject [
 	"Generate the embeddings for aString and store the embedding / key pair in a dictionary with the embedding as the dictionaries key"
@@ -56,9 +67,10 @@ GtSimpleInMemoryVectorDatabase >> embeddings [
 { #category : #initialization }
 GtSimpleInMemoryVectorDatabase >> initialize [
 	super initialize.
-	model := GtLModelFactory new ollama_generate: 'qwen3-embedding:8b' "'nomic-embed-text-v2-moe'".
-	distanceMetric := GtLlmCosineDistanceMetric new.
-	embeddings := OrderedCollection new.
+	model := GtLModelFactory new
+			ollama_generate: self class defaultEmbeddingModelName.
+	distanceMetric := self class defaultDistanceMetric.
+	embeddings := OrderedCollection new
 ]
 
 { #category : #accessing }

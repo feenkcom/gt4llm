@@ -1,5 +1,7 @@
 "
-Create a Vector Db loaded with the GT Book.
+Create a Vector Db loaded on the specified lepiter knowledge base.
+
+GtLepiterVectorDbUtilities assumes that lepiter pages are generally fairly short, so naively splits text in to chunks of a fixed length as specified in {{gtMethod:GtLepiterVectorDbUtilities>>#initialize}} for indexing, however the entire lepiter page is always included as the context.
 "
 Class {
 	#name : #GtLepiterVectorDbUtilities,
@@ -16,6 +18,20 @@ Class {
 GtLepiterVectorDbUtilities class >> createVectorDb [
 
 	^ self new vectorDb
+]
+
+{ #category : #accessing }
+GtLepiterVectorDbUtilities class >> defaultChunkOverlap [
+	"Answer the default number of characters to overlap between chunks"
+	
+	^ 300
+]
+
+{ #category : #accessing }
+GtLepiterVectorDbUtilities class >> defaultChunkSize [
+	"Answer the default size of text to index"
+	
+	^ 1200
 ]
 
 { #category : #'instance creation' }
@@ -41,11 +57,6 @@ GtLepiterVectorDbUtilities >> createVectorDb [
 	vectorDb := GtSimpleInMemoryVectorDatabase new.
 	pages := (LeDatabasesRegistry defaultLogicalDatabase databaseNamed: self lepiterDbName) pages.
 	pages doWithIndex: [ :aPage :index |
-		Stdio stdout
-			print: index;
-			<< ': ';
-			<< aPage title asString;
-			lf; flush.
 		self loadLepiterPage: aPage ].
 	^ vectorDb
 ]
@@ -69,8 +80,8 @@ GtLepiterVectorDbUtilities >> initialize [
 	super initialize.
 	splitter := GtRecursiveCharacterTextSplitter new.
 	splitter
-		chunkSize: 1200;
-		chunkOverlap: 300;
+		chunkSize: self class defaultChunkSize;
+		chunkOverlap: self class defaultChunkOverlap;
 		separators: { String lf , String lf . ' ' . '' };
 		beDropSeparator.
 ]
@@ -103,7 +114,7 @@ GtLepiterVectorDbUtilities >> loadLepiterPage: aPage [
 					strictMode: false;
 					page: aPage;
 					export.
-	documents := serialisedPage size > 1200 ifTrue:
+	documents := serialisedPage size > splitter chunkSize ifTrue:
 			[ splitter splitText: serialisedPage ]
 	ifFalse:
 			[ { serialisedPage } ].
