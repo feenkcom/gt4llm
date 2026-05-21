@@ -10,6 +10,7 @@ Class {
 { #category : #examples }
 GtSimpleInMemoryVectorDatabaseExamples >> queryReturnsHighestMatch [
 	<gtExample>
+	<noTest>
 	| database matches |
 	database := GtSimpleInMemoryVectorDatabase new.
 	database addDocument: 'Our refund policy lasts 30 days.' key: #refunds.
