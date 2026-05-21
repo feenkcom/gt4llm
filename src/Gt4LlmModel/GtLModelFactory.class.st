@@ -24,7 +24,7 @@ GtLModelFactory >> defaultOllamaGenerateReasoningValidator [
 GtLModelFactory >> ollama [
 	"Answer a partially configured Ollama model.
 	Details of the LLM model to be added by the caller."
-	| model provider chat client |
+	| model provider client |
 
 	provider := GtLOllamaProvider new.
 	client := GtLOllamaClient new.
@@ -40,8 +40,6 @@ GtLModelFactory >> ollama [
 		endpointAt: 'pullModel' put: GtLOllamaPullEndpoint new;
 		endpointAt: 'createEmbeddings' put: GtLOllamaCreateEmbeddingsEndpoint new;
 		endpointAt: 'createModel' put: GtLOllamaCreateModelEndpoint new.
-	chat := GtLChat new
-		provider: provider.
 	^ model.
 ]
 
@@ -90,7 +88,8 @@ GtLModelFactory >> ollama_llama3_2 [
 { #category : #providers }
 GtLModelFactory >> openAi [
 	"Answer a partially configured Open AI model.
-	Details of the LLM model to be added by the caller."
+	Details of the LLM model to be added by the caller.
+	This is a WIP being developed against the Ollama implementation for now."
 	| model provider chat client |
 
 	provider := GtLOpenAiResponsesProvider new.
@@ -110,4 +109,8 @@ GtLModelFactory >> openAi [
 	chat := GtLChat new
 		provider: provider.
 	^ model.
+]
+
+{ #category : #'as yet unclassified' }
+GtLModelFactory >> openAi_responses [
 ]
