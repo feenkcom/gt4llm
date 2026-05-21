@@ -48,18 +48,6 @@ GtLConnectionRegistry class >> gtInstanceButtonFor: anAction [
 		action: [ :aButton | aButton phlow spawnObject: self uniqueInstance]
 ]
 
-{ #category : #views }
-GtLConnectionRegistry class >> gtViewFor: aView [
-	<gtView>
-	<gtClassView>
-
-	^ aView forward
-		title: 'Connections';
-		priority: 10;
-		object: [ self default ];
-		view: #gtConnectionsFor:
-]
-
 { #category : #testing }
 GtLConnectionRegistry class >> hasUniqueInstance [
 
@@ -170,8 +158,7 @@ GtLConnectionRegistry >> hasConnectableDefaultConnection [
 GtLConnectionRegistry >> initialize [
 	super initialize.
 	
-	connections := OrderedCollection withAll: self knownConnectors.
-	self defaultConnection: self standardDefaultConnection
+	self updateConnections.
 ]
 
 { #category : #accessing }
@@ -185,6 +172,10 @@ GtLConnectionRegistry >> knownConnectors [
 			providerClass: GtLAnthropicProvider;
 			label: 'Claude Opus 4.6';
 			model: 'claude-opus-4-6'.
+		GtLConnection new
+			providerClass: GtLAnthropicProvider;
+			label: 'Claude Opus 4.7';
+			model: 'claude-opus-4-7'.
 		GtLConnection new
 			providerClass: GtLOpenAIProvider;
 			label: 'GPT 5.2';
@@ -201,19 +192,27 @@ GtLConnectionRegistry >> knownConnectors [
 			providerClass: GtLOpenAIProvider;
 			label: 'GPT 5.3';
 			model: 'gpt-5.3'.
+		GtLConnection new
+			providerClass: GtLOpenAIProvider;
+			label: 'GPT 5.5';
+			model: 'gpt-5.5'.
 		},
 		self knownOllamaConnectors
 ]
 
 { #category : #'private - accessing' }
 GtLConnectionRegistry >> knownOllamaConnectors [
+	"If enabled, answer the list of known Ollama connectors.
+	This makes a request to the Ollama server to retrieve the list of available models."
 	| provider names |
+
+	GtLOllamaProvider isConnectable ifFalse: [ ^ #() ].
 
 	provider := GtLModelFactory new ollama provider.
 	names := [ provider availableModels keys ]
 		on: ConnectionClosed
 		do: [ :ex | #() ].
-	^ names collect: [ :name |
+	^ names sorted collect: [ :name |
 		GtLConnection new
 			providerClass: GtLOllamaProvider;
 			label: name;
@@ -231,7 +230,15 @@ GtLConnectionRegistry >> labelForModel: aModel [
 { #category : #accessing }
 GtLConnectionRegistry >> standardDefaultConnection [
 	^ GtLConnection new
-			providerClass: GtLOllamaProvider;
-			label: 'Qwen 3.5';
-			model: 'qwen3.5:9b'
+		providerClass: GtLOpenAIProvider;
+		label: 'GPT 5.4';
+		model: 'gpt-5.4'
+]
+
+{ #category : #initialization }
+GtLConnectionRegistry >> updateConnections [
+	"Update the list of connections"
+
+	connections := OrderedCollection withAll: self knownConnectors.
+	self defaultConnection: self standardDefaultConnection
 ]

@@ -103,7 +103,7 @@ GtLOllamaMigrationExamples >> gemma4Tools [
 	| model chat message entity tools tool command function endpoint context |
 	
 	model := GtLModelFactory new ollama_completions.
-	chat := model provider chat.
+	chat := GtLChat new provider: model provider.
 	chat tools: (GtLTools withAll: { GtLMagritteToolForMethodSource new. }).
 	message := GtLModelUserMessage new chat: chat.
 	message string: 'message'.
@@ -154,7 +154,7 @@ GtLOllamaMigrationExamples >> llama3ChatInstructions [
 	| model chat message entity endpoint context|
 	
 	model := GtLModelFactory new ollama_llama3_2.
-	chat := model provider chat.
+	chat := GtLChat new provider: model provider.
 	chat instruction: 'the instructions' titled: 'heading'.
 	message := GtLModelUserMessage new chat: chat.
 	message string: 'message'.
@@ -184,7 +184,7 @@ GtLOllamaMigrationExamples >> llama3PageInstructions [
 	| model chat message entity endpoint context |
 	
 	model := GtLModelFactory new ollama_llama3_2.
-	chat := model provider chat.
+	chat := GtLChat new provider: model provider.
 	chat gtPageExplanation: 'Examples by example'.
 	message := GtLModelUserMessage new chat: chat.
 	message string: 'message'.
@@ -254,7 +254,7 @@ GtLOllamaMigrationExamples >> ollamaCompletionsChatInstructions [
 	| model chat message entity messages command endpoint context |
 	
 	model := GtLModelFactory new ollama_completions.
-	chat := model provider chat.
+	chat := GtLChat new provider: model provider.
 	chat instruction: 'the instructions' titled: 'heading'.
 	message := GtLModelUserMessage new chat: chat.
 	message string: 'message'.
@@ -287,7 +287,7 @@ GtLOllamaMigrationExamples >> ollamaCompletionsInvalidReasonsing [
 	| model chat |
 	
 	model := GtLModelFactory new ollama_completions: 'gemma4:e4b'.
-	chat := model provider chat.
+	chat := GtLChat new provider: model provider.
 	self
 		should: [ chat reasoningEffort: #fail ]
 		raise: Error
@@ -314,7 +314,7 @@ GtLOllamaMigrationExamples >> ollamaGenerateInvalidReasonsing [
 	| model chat |
 	
 	model := GtLModelFactory new ollama_llama3_2.
-	chat := model provider chat.
+	chat := GtLChat new provider: model provider.
 	self
 		should: [ chat reasoningEffort: #fail ]
 		raise: Error

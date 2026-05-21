@@ -13,12 +13,22 @@ Class {
 	#category : #'Gt4Llm-VectorDb-Model'
 }
 
+{ #category : #initialization }
+GtSimpleInMemoryVectorDatabase class >> defaultDistanceMetric [
+	^ GtLlmCosineDistanceMetric new
+]
+
+{ #category : #accessing }
+GtSimpleInMemoryVectorDatabase class >> defaultEmbeddingModelName [
+
+	^ 'qwen3-embedding:8b'
+]
+
 { #category : #api }
 GtSimpleInMemoryVectorDatabase >> addDocument: aString key: keyObject [
 	"Generate the embeddings for aString and store the embedding / key pair in a dictionary with the embedding as the dictionaries key"
 	| embedding |
-	embedding := self embeddingFor: aString.
-	embedding key: keyObject.
+	embedding := self embeddingFor: aString key: keyObject.
 	embeddings add: embedding.
 	^ keyObject
 ]
@@ -39,6 +49,15 @@ GtSimpleInMemoryVectorDatabase >> embeddingFor: aString [
 		yourself
 ]
 
+{ #category : #api }
+GtSimpleInMemoryVectorDatabase >> embeddingFor: aString key: keyObject [
+	"Generate the embedding for the supplied aString and key"
+	| embedding |
+	embedding := self embeddingFor: aString.
+	embedding key: keyObject.
+	^ embedding
+]
+
 { #category : #'private - accessing' }
 GtSimpleInMemoryVectorDatabase >> embeddings [
 
@@ -48,9 +67,10 @@ GtSimpleInMemoryVectorDatabase >> embeddings [
 { #category : #initialization }
 GtSimpleInMemoryVectorDatabase >> initialize [
 	super initialize.
-	model := GtLModelFactory new ollama_generate: 'qwen3-embedding:8b' "'nomic-embed-text-v2-moe'".
-	distanceMetric := GtLlmCosineDistanceMetric new.
-	embeddings := OrderedCollection new.
+	model := GtLModelFactory new
+			ollama_generate: self class defaultEmbeddingModelName.
+	distanceMetric := self class defaultDistanceMetric.
+	embeddings := OrderedCollection new
 ]
 
 { #category : #accessing }
@@ -69,6 +89,12 @@ GtSimpleInMemoryVectorDatabase >> query: queryString maxMatches: anInteger [
 		usingMetric: distanceMetric.
 	sorted := nearestEmbeddings sorted: [ :a :b | a distance < b distance ].
 	^ sorted first: (anInteger min: sorted size)
+]
+
+{ #category : #accessing }
+GtSimpleInMemoryVectorDatabase >> removeEmbedding: anEmbedding [
+
+	embeddings remove: anEmbedding.
 ]
 
 { #category : #saving }

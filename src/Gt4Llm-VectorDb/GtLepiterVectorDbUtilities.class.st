@@ -1,5 +1,7 @@
 "
-Create a Vector Db loaded with the GT Book.
+Create a Vector Db loaded on the specified lepiter knowledge base.
+
+GtLepiterVectorDbUtilities assumes that lepiter pages are generally fairly short, so naively splits text in to chunks of a fixed length as specified in {{gtMethod:GtLepiterVectorDbUtilities>>#initialize}} for indexing, however the entire lepiter page is always included as the context.
 "
 Class {
 	#name : #GtLepiterVectorDbUtilities,
@@ -16,6 +18,20 @@ Class {
 GtLepiterVectorDbUtilities class >> createVectorDb [
 
 	^ self new vectorDb
+]
+
+{ #category : #accessing }
+GtLepiterVectorDbUtilities class >> defaultChunkOverlap [
+	"Answer the default number of characters to overlap between chunks"
+	
+	^ 300
+]
+
+{ #category : #accessing }
+GtLepiterVectorDbUtilities class >> defaultChunkSize [
+	"Answer the default size of text to index"
+	
+	^ 1200
 ]
 
 { #category : #'instance creation' }
@@ -41,19 +57,8 @@ GtLepiterVectorDbUtilities >> createVectorDb [
 	vectorDb := GtSimpleInMemoryVectorDatabase new.
 	pages := (LeDatabasesRegistry defaultLogicalDatabase databaseNamed: self lepiterDbName) pages.
 	pages doWithIndex: [ :aPage :index |
-		Stdio stdout
-			print: index;
-			<< ': ';
-			<< aPage title asString;
-			lf; flush.
 		self loadLepiterPage: aPage ].
 	^ vectorDb
-]
-
-{ #category : #'as yet unclassified' }
-GtLepiterVectorDbUtilities >> databaseName [
-
-	^ LeDatabase gtBookName.
 ]
 
 { #category : #ui }
@@ -75,10 +80,16 @@ GtLepiterVectorDbUtilities >> initialize [
 	super initialize.
 	splitter := GtRecursiveCharacterTextSplitter new.
 	splitter
-		chunkSize: 1200;
-		chunkOverlap: 300;
+		chunkSize: self class defaultChunkSize;
+		chunkOverlap: self class defaultChunkOverlap;
 		separators: { String lf , String lf . ' ' . '' };
 		beDropSeparator.
+]
+
+{ #category : #accessing }
+GtLepiterVectorDbUtilities >> lepiterDb [
+
+	^ LeDatabasesRegistry default defaultLogicalDatabase databaseNamed: self lepiterDbName
 ]
 
 { #category : #accessing }
@@ -96,14 +107,14 @@ GtLepiterVectorDbUtilities >> loadLepiterPage: aPage [
 	| dbKey serialisedPage documents |
 
 	dbKey := GtVectorDbLepiterKey new
-			lepiterDbName: self databaseName;
+			lepiterDbName: self lepiterDbName;
 			lepiterPageName: aPage title;
 			lepiterSnippetUid: nil.
 	serialisedPage := GtLLepiterContentExporter new
 					strictMode: false;
 					page: aPage;
 					export.
-	documents := serialisedPage size > 1200 ifTrue:
+	documents := serialisedPage size > splitter chunkSize ifTrue:
 			[ splitter splitText: serialisedPage ]
 	ifFalse:
 			[ { serialisedPage } ].
@@ -114,10 +125,12 @@ GtLepiterVectorDbUtilities >> loadLepiterPage: aPage [
 
 { #category : #private }
 GtLepiterVectorDbUtilities >> loadLepiterPageBySnippet: aPage [
+	"Index every snippet, regardless of size.
+	This hasn't worked well since small snippets tend to get a lot of false positives."
 
 	aPage allChildrenDepthFirstDo: [ :snippet | | dbKey serialisedSnippet documents |
 		dbKey := GtVectorDbLepiterKey new
-			lepiterDbName: self databaseName;
+			lepiterDbName: self lepiterDbName;
 			lepiterPageName: aPage title;
 			lepiterSnippetUid: snippet uid.
 		serialisedSnippet := (GtLLepiterContentExporter new
@@ -141,6 +154,13 @@ GtLepiterVectorDbUtilities >> pageNamesFor: aString maxCount: anInteger [
 	^ matchingEmbeddings collect: [ :each | each embedding key lepiterPageName ]
 ]
 
+{ #category : #private }
+GtLepiterVectorDbUtilities >> removeEmbeddingKeysFrom: updatedEmbeddings [ 
+
+	updatedEmbeddings do: [ :embedding |
+		vectorDb removeEmbedding: embedding ].
+]
+
 { #category : #ui }
 GtLepiterVectorDbUtilities >> summaryAttributes [
 	| pageNamesIndexed |
@@ -153,6 +173,32 @@ GtLepiterVectorDbUtilities >> summaryAttributes [
 		{ 'Number of pages indexed'. pageNamesIndexed size }.
 		{ 'Vector size'. vectorDb embeddings first embedding size. }.
 		}.
+]
+
+{ #category : #api }
+GtLepiterVectorDbUtilities >> updateVectorDb [
+	"Replace database entries for all pages modified after the DB modified time"
+	| dbModifiedTime |
+
+	dbModifiedTime := nil.
+]
+
+{ #category : #api }
+GtLepiterVectorDbUtilities >> updateVectorDbSince: dbModifiedTime [
+	"Replace database entries for all pages modified after the DB modified time"
+	| embeddingsByPageName updatedPages superseededEmbeddings |
+
+	embeddingsByPageName := self vectorDb embeddings groupedBy: [ :embedding |
+		embedding key lepiterPageName ].
+	updatedPages := self lepiterDb pages select: [ :lepiterPage |
+		lepiterPage latestEditTime time >= dbModifiedTime ].
+	superseededEmbeddings := updatedPages flatCollect: [ :page |
+		embeddingsByPageName at: page title ifAbsent: [ #() ] ].
+
+	self removeEmbeddingKeysFrom: superseededEmbeddings.
+
+	updatedPages do: [ :page |
+		self loadLepiterPage: page ].
 ]
 
 { #category : #accessing }

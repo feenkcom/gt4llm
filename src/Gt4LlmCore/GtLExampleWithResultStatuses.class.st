@@ -39,9 +39,8 @@ GtLExampleWithResultStatuses >> gtExampleWithStatusesFor: aView [
 		title: 'Examples';
 		priority: 1;
 		items: [ self exampleWithStatuses ];
-		column: 'Class' text: [ :each | each exampleWithResult methodClass ];
-		column: 'Method' text: [ :each | each exampleWithResult selector ];
-		column: 'Status' text: [ :each | each statusText ]
+		column: 'Status' stencil: [ :each | BlElement new background: each exampleWithResult color; size: 16@16 ] width: 50;		column: 'Class' text: [ :each | each exampleWithResult methodClass ];
+		column: 'Method' text: [ :each | each exampleWithResult selector ]
 ]
 
 { #category : #accessing }

@@ -230,6 +230,7 @@ GtLChat >> copyForIndependentRequestAtMessage: aMessage [
 	| newCopy |
 	newCopy := self copy.
 	newCopy postCopyForIndependentRequestAt: aMessage.
+	aMessage addForkingMessage: newCopy messages last.
 	^ newCopy
 ]
 
@@ -245,6 +246,7 @@ GtLChat >> copyLepiterSerialisationToClipboard [
 { #category : #accessing }
 GtLChat >> createUserMessage [
 	^ self userMessageClass new
+		chat: self
 ]
 
 { #category : #accessing }
@@ -356,7 +358,7 @@ GtLChat >> gtFormatFor: aView [
 	
 	^ aView textEditor
 		title: 'Output format JSON schema';
-		priority: 5; 
+		priority: 45; 
 		text: [ NeoJSONWriter toStringPretty: self currentFormat  asJsonSchemaDictionary ];
 		aptitude: BrGlamorousCodeEditorAptitude;
 		styler: JSONParser gtStyler;
@@ -377,6 +379,7 @@ GtLChat >> gtInstructionsFor: aView [
 	instructions ifNil: [ ^ aView empty].
 	^ aView forward
 		title: 'Instructions';
+		priority: 40;
 		object: [ instructions ];
 		view: #gtInstructionFor:
 ]
@@ -427,11 +430,20 @@ GtLChat >> gtMessagesFor: aView [
 			text: [ :item | item role ]
 			width: 70;
 		column: 'Content' text: [ :item | item contentOneLineSummary ];
-		column: 'Created' text: [ :item | item createdAt asStringYMDHMS ] width: 150;
-		contextItemLabel: 'Fork at this message' 
-			action: [ :anElement :aNode  |
-				anElement phlow spawnObject: (self forkAtMessage:  aNode value) ] "
-			if: [ :aNode | aNode value isUserMessage not ]";
+		column: 'Forks'
+			text: [ :item | item forkingMessages isEmpty ifTrue: [ '' ] ifFalse: [ item forkingMessages size ] ]
+			width: 50;
+		column: 'Created'
+			text: [ :item | item createdAt asStringYMDHMS ]
+			width: 120;
+		contextItemLabel: 'Fork at this message'
+			action: [ :anElement :aNode | 
+				anElement phlow
+					spawnObject: (self forkAtMessage: aNode value);
+					fireViewUpdateWish ];
+		contextItemLabel: 'Browse forks'
+			action: [ :anElement :aNode | anElement phlow spawnObject: (aNode value forkingMessages collect: #chat) ]
+			if: [ :aNode | aNode value forkingMessages notEmpty ];
 		updateWhen: GtLlmThreadRunAnnouncement in: self announcer;
 		expandAll
 ]
@@ -476,10 +488,22 @@ GtLChat >> gtRegistryRemoveChatActionFor: anAction context: aPhlowContext [
 ]
 
 { #category : #views }
+GtLChat >> gtSummarizersRegistryFor: aView [
+	<gtView>
+	<gtLlmView>
+	^ aView forward
+		title: 'Summarizers';
+		priority: 42;
+		object: [ summarizersRegistry ];
+		view: #gtCurrentSummarizersFor:
+]
+
+{ #category : #views }
 GtLChat >> gtToolsFor: aView [
 	<gtView>
 	^ aView forward
 		title: 'Defined tools';
+		priority: 41;
 		object: [ tools ];
 		view: #gtItemsFor:
 ]
@@ -670,9 +694,22 @@ GtLChat >> provider [
 ]
 
 { #category : #accessing }
-GtLChat >> provider: anObject [
-	provider := anObject.
+GtLChat >> provider: aGtLProvider [
+
+	provider := aGtLProvider.
 	provider chat: self
+]
+
+{ #category : #'api - communication' }
+GtLChat >> queryMarkdown: aString withRag: aGtRag [
+
+	self assert: aString isString
+		description: [ 'aString must be a string, not a ', aString class name ].
+	^ self sendWith: [ :message |
+		message 
+			markdown: aString;
+			addContextFromRag: aGtRag;
+			yourself ].
 ]
 
 { #category : #accessing }

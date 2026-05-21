@@ -175,6 +175,13 @@ GtLLepiterContentExporter >> visitJavaScriptSnippet: aLeJavaScriptSnippet [
 ]
 
 { #category : #'as yet unclassified' }
+GtLLepiterContentExporter >> visitLlmChatMessageSnippet: aChatMessageSnippet [
+
+	stream nextPutAll: aChatMessageSnippet contentAsString.
+	self visitChildren: aChatMessageSnippet.
+]
+
+{ #category : #'as yet unclassified' }
 GtLLepiterContentExporter >> visitPage: aLePage [
 	"stream nextPutAll: (self heading: aLePage title level: startHeaderLevel).
 

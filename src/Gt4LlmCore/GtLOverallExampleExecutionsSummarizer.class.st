@@ -44,16 +44,60 @@ GtLOverallExampleExecutionsSummarizer >> gtExampleRunCountsFor: aView [
 	<gtView>
 	self hasSummaryData ifFalse: [ ^ aView empty ].
 	^ aView columnedList
-		title: 'Runs by examples';
+		title: 'Examples & runs';
 		priority: 35;
 		items: [ self exampleRunSummaries ];
 		column: 'Class' text: [ :each | (each at: #exampleReference) exampleClassName ];
 		column: 'Method' text: [ :each | (each at: #exampleReference) methodName ];
 		column: 'Runs' text: [ :each | (each at: #runs) size ] width: 60;
-		column: 'Passes' text: [ :each | (each at: #passes) size asString ] width: 60;
-		column: 'Failures' text: [ :each | (each at: #failures) size asString ] width: 70;
-		column: 'Errors' text: [ :each | (each at: #errors) size asString ] width: 60;
-		column: 'Skipped' text: [ :each | (each at: #skipped) size asString ] width: 70;
+		column: 'Successes'
+			textDo: [ :aColumn | 
+				aColumn
+					format: [ :each | 
+						(each at: #passes) size isZero
+							ifTrue: [ '' ]
+							ifFalse: [ (each at: #passes) size  ] ];
+					width: 80;
+					background: [ :each | 
+						(each at: #passes) size isZero
+							ifTrue: [ Color transparent ]
+							ifFalse: [ BrGlamorousColors successBackgroundColor ] ] ];
+		column: 'Failures'
+			textDo: [ :aColumn | 
+				aColumn
+					format: [ :each | 
+						(each at: #failures) size isZero
+							ifTrue: [ '' ]
+							ifFalse: [ (each at: #failures) size  ] ];
+					width: 80;
+					background: [ :each | 
+						(each at: #failures) size isZero
+							ifTrue: [ Color transparent ]
+							ifFalse: [ BrGlamorousColors failureBackgroundColor ] ] ];
+		column: 'Errors'
+			textDo: [ :aColumn | 
+				aColumn
+					format: [ :each | 
+						(each at: #errors) size isZero
+							ifTrue: [ '' ]
+							ifFalse: [ (each at: #errors) size  ] ];
+					width: 80;
+					background: [ :each | 
+						(each at: #errors) size isZero
+							ifTrue: [ Color transparent ]
+							ifFalse: [ BrGlamorousColors errorBackgroundColor ] ] ];
+		column: 'Skipped'
+			textDo: [ :aColumn | 
+				aColumn
+					format: [ :each | 
+						(each at: #skipped) size isZero
+							ifTrue: [ '' ]
+							ifFalse: [ (each at: #skipped) size  ] ];
+					width: 80;
+					background: [ :each | 
+						(each at: #skipped) size isZero
+							ifTrue: [ Color transparent ]
+							ifFalse: [ BrGlamorousColors errorBackgroundColor ] ] ];
 		send: [ :each | each at: #runs ]
 ]
 
@@ -62,7 +106,7 @@ GtLOverallExampleExecutionsSummarizer >> gtLatestStatusesFor: aView [
 	<gtView>
 		self hasSummaryData ifFalse: [ ^ aView empty ].
 	^ aView columnedList
-		title: 'Latest example runs';
+		title: 'Last examples status';
 		priority: 32;
 		items: [ self latestStatuses ];
 		column: 'Class' text: [ :each | each exampleReference exampleClassName ];
@@ -74,10 +118,9 @@ GtLOverallExampleExecutionsSummarizer >> gtLatestStatusesFor: aView [
 { #category : #'gt-extensions' }
 GtLOverallExampleExecutionsSummarizer >> gtOverallStatusSummaryFor: aView [
 	<gtView>
-	<gtLlmView>
 	self hasSummaryData ifFalse: [ ^ aView empty ].
 	^ aView columnedList
-		title: 'Overall status summary';
+		title: 'Example runs overview';
 		priority: 20;
 		items: [ self overallSummaryEntries ];
 		column: 'Label' text: [ :each | each at: #label ];
@@ -88,6 +131,69 @@ GtLOverallExampleExecutionsSummarizer >> gtOverallStatusSummaryFor: aView [
 			action: [ :aButton |
 				aButton phlow spawnObject: self ];
 		actionUpdateButton
+]
+
+{ #category : #'gt-extensions' }
+GtLOverallExampleExecutionsSummarizer >> gtRunsAndExamplesFor: aView [
+	<gtView>
+	<gtLlmView>
+	self hasSummaryData ifFalse: [ ^ aView empty ].
+	^ aView columnedList
+		title: 'Runs & examples';
+		priority: 33;
+		items: [ relevantToolCalls ];
+		column: 'Total examples'
+			text: [ :each | each result model totalCount ]
+			width: 90;
+		column: 'Successes'
+			textDo: [ :aColumn | 
+				aColumn
+					format: [ :each | 
+						each result model successResultCount isZero
+							ifTrue: [ '' ]
+							ifFalse: [ each result model successResultCount ] ];
+					width: 80;
+					background: [ :each | 
+						each result model successResultCount isZero
+							ifTrue: [ Color transparent ]
+							ifFalse: [ BrGlamorousColors successBackgroundColor ] ] ];
+		column: 'Failures'
+			textDo: [ :aColumn | 
+				aColumn
+					format: [ :each | 
+						each result model failureResultCount isZero
+							ifTrue: [ '' ]
+							ifFalse: [ each result model failureResultCount ] ];
+					width: 80;
+					background: [ :each | 
+						each result model failureResultCount isZero
+							ifTrue: [ Color transparent ]
+							ifFalse: [ BrGlamorousColors failureBackgroundColor ] ] ];
+		column: 'Errors'
+			textDo: [ :aColumn | 
+				aColumn
+					format: [ :each | 
+						each result model errorResultCount isZero
+							ifTrue: [ '' ]
+							ifFalse: [ each result model errorResultCount ] ];
+					width: 80;
+					background: [ :each | 
+						each result model errorResultCount isZero
+							ifTrue: [ Color transparent ]
+							ifFalse: [ BrGlamorousColors errorBackgroundColor ] ] ];
+		column: 'Skipped'
+			textDo: [ :aColumn | 
+				aColumn
+					format: [ :each | 
+						each result model skippedCount isZero
+							ifTrue: [ '' ]
+							ifFalse: [ each result model skippedCount ] ];
+					width: 80;
+					background: [ :each | 
+						each result model skippedCount isZero
+							ifTrue: [ Color transparent ]
+							ifFalse: [ BrGlamorousColors neutralBackgroundColor ] ] ];
+			send: [ :each | each result model ]
 ]
 
 { #category : #initialization }
