@@ -1,10 +1,10 @@
 Extension { #name : #GtLModelUserMessage }
 
 { #category : #'*Gt4Llm-VectorDb' }
-GtLModelUserMessage >> addGtBookContextPages [
+GtLModelUserMessage >> addContextFromRag: aGtRag [
 	| contextPageNames |
 
-	contextPageNames := GtLGtBookExperimentalRag uniqueInstance query: self contentText.
+	contextPageNames := aGtRag query: self contentText.
 	contextPageNames do: [ :pageName |
-		self pageExplanation: pageName ].
+		self pageObjectExplanation: (aGtRag pageNamed: pageName) ].
 ]

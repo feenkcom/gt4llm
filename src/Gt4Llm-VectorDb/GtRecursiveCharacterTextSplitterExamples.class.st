@@ -1,5 +1,5 @@
 "
-Examples for {{gtClass:LcRecursiveCharacterTextSplitter}}.
+Examples for {{gtClass:GtRecursiveCharacterTextSplitter}}.
 "
 Class {
 	#name : #GtRecursiveCharacterTextSplitterExamples,
