@@ -66,6 +66,4 @@ GtLOllamaProvider >> modelName: aString [
 
 	newModel := GtLModelFactory new ollama_completions: aString.
 	newModel provider: self.
-	chat := GtLChat new
-		provider: self.
 ]
