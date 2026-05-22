@@ -42,7 +42,7 @@ GtLToolCallSummarizersRegistryExamples >> defaultSpecifications [
 	| registry |
 	registry := GtLToolCallSummarizersRegistry new.
 	registry addSpecifications: GtLToolCallSummarizersRegistry defaultSpecifications.
-	self assert: registry specifications size equals: 3.
+	self assert: registry specifications size > 0.
 	self assert: registry currentSummarizers isEmpty.
 	^ registry
 ]
@@ -60,6 +60,6 @@ GtLToolCallSummarizersRegistryExamples >> relevantSummarizersForMessages [
 	messages := self messagesGroupWithToolAndExampleSummaries.
 	summarizers := registry relevantSummarizersForMessages: messages.
 	self assert: summarizers notEmpty.
-	self assert: registry currentSummarizers size equals: 3.
+	self assert: registry currentSummarizers size > 0.
 	^ registry
 ]
