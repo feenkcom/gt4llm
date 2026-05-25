@@ -12,6 +12,11 @@ Class {
 }
 
 { #category : #'instance creation' }
+GtLToolCallsSummarizer class >> asSpecification [
+	^ GtLToolCallSummarizerSpecification forSummarizerClass: self
+]
+
+{ #category : #'instance creation' }
 GtLToolCallsSummarizer class >> currentSummarizers [
 	^ (self allSubclasses reject: [ :each |
 			each isAbstract or: [ each isActive  not ] ])

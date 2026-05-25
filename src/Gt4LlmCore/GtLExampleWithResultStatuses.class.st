@@ -8,9 +8,24 @@ Class {
 	#category : #'Gt4LlmCore-Domain Objects'
 }
 
+{ #category : #'as yet unclassified' }
+GtLExampleWithResultStatuses >> asExampleExecutionSummary [
+	^ GtLExampleExecutionSummary new
+		successes: self successResults;
+		failures: self failureResults;
+		errors: self errorResults;
+		skipped: self skippedResults;
+		result: self
+]
+
 { #category : #'api - accessing' }
 GtLExampleWithResultStatuses >> errorResultCount [
 	^ self exampleWithStatuses count: #isErrorResult
+]
+
+{ #category : #'api - accessing' }
+GtLExampleWithResultStatuses >> errorResults [
+	^ self exampleWithStatuses select: #isErrorResult
 ]
 
 { #category : #accessing }
@@ -27,6 +42,11 @@ GtLExampleWithResultStatuses >> exampleWithStatuses: aCollection [
 { #category : #'api - accessing' }
 GtLExampleWithResultStatuses >> failureResultCount [
 	^ self exampleWithStatuses count: #isFailureResult
+]
+
+{ #category : #'api - accessing' }
+GtLExampleWithResultStatuses >> failureResults [
+	^ self exampleWithStatuses select: #isFailureResult
 ]
 
 { #category : #'gt - extensions' }
@@ -87,8 +107,18 @@ GtLExampleWithResultStatuses >> skippedCount [
 ]
 
 { #category : #'api - accessing' }
+GtLExampleWithResultStatuses >> skippedResults [
+	^ self exampleWithStatuses select: #isSkippedResult
+]
+
+{ #category : #'api - accessing' }
 GtLExampleWithResultStatuses >> successResultCount [
 	^ self exampleWithStatuses count: #isSuccessResult
+]
+
+{ #category : #'api - accessing' }
+GtLExampleWithResultStatuses >> successResults [
+	^ self exampleWithStatuses select: #isSuccessResult
 ]
 
 { #category : #'api - accessing' }
