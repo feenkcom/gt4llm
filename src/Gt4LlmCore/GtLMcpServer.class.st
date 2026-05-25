@@ -263,6 +263,15 @@ GtLMcpServer >> gtResourcesFor: aView [
 ]
 
 { #category : #views }
+GtLMcpServer >> gtSummarizersRegistryFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Summarizers';
+		object: [ summarizersRegistry ];
+		view: #gtCurrentSummarizersFor:
+]
+
+{ #category : #views }
 GtLMcpServer >> gtToolsFor: aView [
 	<gtView>
 	tools ifEmpty: [ ^ aView empty ].
