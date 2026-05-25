@@ -150,11 +150,7 @@ GtLMcpClient >> llmFunctionTools [
 
 { #category : #'as yet unclassified' }
 GtLMcpClient >> messagesFromPrompt: aPromptName withArguments: anArgsDictionary [
-	^ ((self getPrompt: aPromptName withArguments: anArgsDictionary) at: 'messages')
-		collect: [ :aMessage | 
-			GtLlmChatMessage new
-				role: (aMessage at: 'role');
-				content: (aMessage at: 'content' at: 'text') ]
+	^ (self getPrompt: aPromptName withArguments: anArgsDictionary) at: 'messages'
 ]
 
 { #category : #'as yet unclassified' }
