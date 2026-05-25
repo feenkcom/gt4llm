@@ -67,8 +67,8 @@ GtLToolCallSummarizersRegistry >> gtCurrentSummarizersFor: aView [
 		title: 'Summarizers';
 		priority: 5;
 		items: [ self currentSummarizers ];
-		column: 'Summarizer Type' text: [ :each | each class name ];
-		column: 'Decription' text: [ :each | each summaryText ]
+		column: 'Summarizer type' text: [ :each | each class name ];
+		column: 'Description' text: [ :each | each summaryText ]
 ]
 
 { #category : #'gt-views' }
