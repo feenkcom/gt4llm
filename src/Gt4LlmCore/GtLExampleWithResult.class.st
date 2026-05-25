@@ -8,6 +8,16 @@ Class {
 	#category : #'Gt4LlmCore-Domain Objects'
 }
 
+{ #category : #'as yet unclassified' }
+GtLExampleWithResult >> asExampleExecutionSummary [
+	^ GtLExampleExecutionSummary new
+		successes: (self isSuccessResult ifTrue: [ {self} ] ifFalse: [ {} ]);
+		failures: (self isFailureResult ifTrue: [ {self} ] ifFalse: [ {} ]);
+		errors: (self isErrorResult ifTrue: [ {self} ] ifFalse: [ {} ]);
+		skipped: (self isSkippedResult ifTrue: [ {self} ] ifFalse: [ {} ]);
+		result: self
+]
+
 { #category : #accessing }
 GtLExampleWithResult >> exampleReference [
 	^ GtLExampleReference new 

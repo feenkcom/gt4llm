@@ -14,8 +14,7 @@ GtLToolCallSummarizersRegistry class >> defaultSpecifications [
 	^ GtLToolCallSummarizerSpecificationsGroup withAll: (
 		(GtLToolCallsSummarizer allSubclasses
 			reject: [ :each | each isAbstract ])
-			collect: [ :each |
-				GtLToolCallSummarizerSpecification forSummarizerClass: each ])
+			collect: [ :each | each asSpecification ])
 ]
 
 { #category : #'gt-views' }

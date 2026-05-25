@@ -12,7 +12,8 @@ Class {
 		'debug',
 		'asynchronous',
 		'currentAsyncExecution',
-		'objectStorage'
+		'objectStorage',
+		'summarizersRegistry'
 	],
 	#classVars : [
 		'Current'
@@ -43,6 +44,27 @@ GtLMcpServer >> addPrompt: aPrompt [
 { #category : #adding }
 GtLMcpServer >> addResource: aResource [
 	resources add: aResource
+]
+
+{ #category : #'as yet unclassified' }
+GtLMcpServer >> addSummarizerClass: aClass [
+	self addSummarizerSpecifications: {aClass asSpecification}
+]
+
+{ #category : #'as yet unclassified' }
+GtLMcpServer >> addSummarizerClasses: aCollection [
+	self
+		addSummarizerSpecifications: (aCollection collect: [ :each | each asSpecification ])
+]
+
+{ #category : #'as yet unclassified' }
+GtLMcpServer >> addSummarizerSpecification: aSpecification [
+	summarizersRegistry addSpecification: aSpecification
+]
+
+{ #category : #'as yet unclassified' }
+GtLMcpServer >> addSummarizerSpecifications: aSpecification [
+	summarizersRegistry addSpecifications: aSpecification
 ]
 
 { #category : #adding }
@@ -202,7 +224,7 @@ GtLMcpServer >> gtHistoryFor: aView [
 	history ifNil: [^aView empty].
 	
 	^(aView columnedList)
-		title: 'Logs';
+		title: 'Executed tools';
 		items: [history reverse];
 		priority: 1;
 		column: 'Role'
@@ -245,7 +267,7 @@ GtLMcpServer >> gtToolsFor: aView [
 	<gtView>
 	tools ifEmpty: [ ^ aView empty ].
 	^ aView forward
-		title: 'Tools';
+		title: 'Defined tools';
 		priority: 50;
 		object: [ tools ];
 		view: #gtItemsFor:
@@ -405,6 +427,7 @@ GtLMcpServer >> initialize [
 	history := OrderedCollection new.
 	errors := OrderedCollection new.
 	objectStorage := GtLObjectStorage new.
+	summarizersRegistry := GtLToolCallSummarizersRegistry new.
 ]
 
 { #category : #testing }

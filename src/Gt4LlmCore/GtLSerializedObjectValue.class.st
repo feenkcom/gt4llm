@@ -67,21 +67,21 @@ GtLSerializedObjectValue >> hash [
 { #category : #initialization }
 GtLSerializedObjectValue >> initializeFromObject: anObject [
 	"Initialize from an object by extracting class info, views, and slots."
-	self objectClassName: anObject class name asString.
-	self superclassName: (anObject class superclass 
-		ifNil: [ '' ] 
-		ifNotNil: [ :s | s name asString ]).
-	self packageName: anObject class package name asString.
-	self objectPrintString: ([ (anObject printString escapeCharacter: $') ]
-		on: Error 
-		do: [ :e | 'Error printing object' ]).
-	self phlowViews: ((anObject gtViewsInCurrentContext
-		reject: [ :aView | 
-			(aView isKindOf: GtPhlowEmptyView) or: [
-				(aView isKindOf: GtPhlowView) not	] ])
-		collect: [ :aView | GtLSerializedViewInfo fromView: aView ]) asArray.
-	self allInstanceSlots: (anObject class allSlots collect: [ :aSlot |
-		GtLSerializedSlotInfo fromSlot: aSlot ofObject: anObject ]) asArray
+
+	objectClassName := anObject class name asString.
+	superclassName := anObject class superclass
+			ifNil: [ '' ]
+			ifNotNil: [ :s | s name asString ].
+	packageName := anObject class package name asString.
+	objectPrintString := [ anObject printString escapeCharacter: $' ]
+			on: Error
+			do: [ :e | 'Error printing object' ].
+	phlowViews := ((anObject gtViewsInCurrentContext
+			reject: [ :aView | (aView isKindOf: GtPhlowEmptyView) or: [ (aView isKindOf: GtPhlowView) not ] ])
+			collect: [ :aView | GtLSerializedViewInfo fromView: aView ]) asArray.
+	allInstanceSlots := (anObject class allSlots
+			collect: [ :aSlot | GtLSerializedSlotInfo fromSlot: aSlot ofObject: anObject ])
+			asArray
 ]
 
 { #category : #accessing }
