@@ -50,7 +50,7 @@ GtLExampleWithResultExamples >> assertObjectValue: objectValueJson hasPhlowViews
 
 { #category : #private }
 GtLExampleWithResultExamples >> assertSuccessResult: resultJson objectId: objectId objectDetails: expectedObjectDetails [
-	self assertJsonData: resultJson hasExpectedKeys: #('objectDetails' #objectId #objectValue).
+	self assertJsonData: resultJson hasExpectedKeys: #('objectDetails' #objectId #objectValue #playgroundPageReference).
 	self assert: (resultJson at: #objectId) equals: objectId.
 	self assert: (resultJson at: 'objectDetails') equals: expectedObjectDetails.
 ]
