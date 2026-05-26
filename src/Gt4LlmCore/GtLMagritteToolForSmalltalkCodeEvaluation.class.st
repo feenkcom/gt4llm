@@ -4,6 +4,9 @@ Magritte-based tool for evaluating Smalltalk code and returning serialized resul
 Class {
 	#name : #GtLMagritteToolForSmalltalkCodeEvaluation,
 	#superclass : #GtLAbstractMagritteFunctionTool,
+	#instVars : [
+		'lepiterDatabase'
+	],
 	#category : #'Gt4LlmCore-Tools'
 }
 
@@ -24,6 +27,16 @@ GtLMagritteToolForSmalltalkCodeEvaluation >> codeDescription [
 		label: 'Code';
 		accessor: #code;
 		beRequired
+]
+
+{ #category : #accessing }
+GtLMagritteToolForSmalltalkCodeEvaluation >> database [
+	^ lepiterDatabase
+]
+
+{ #category : #accessing }
+GtLMagritteToolForSmalltalkCodeEvaluation >> database: aDatabase [
+	lepiterDatabase := aDatabase
 ]
 
 { #category : #accessing }
@@ -70,6 +83,13 @@ Example JSON error response:
   "whatFailed": "Error while evaluating smalltalk code",
   "stackTrace": "..."
 }'
+]
+
+{ #category : #initialization }
+GtLMagritteToolForSmalltalkCodeEvaluation >> initialize [
+	super initialize.
+	
+	lepiterDatabase := LeDatabasesRegistry defaultLogicalDatabase
 ]
 
 { #category : #accessing }
@@ -124,8 +144,10 @@ GtLMagritteToolForSmalltalkCodeEvaluation >> privatePerformToolCall: aToolCall i
 					addNewObject: object
 					reason: (GtLStoredObjectCodeExecutionReason toolCall: aToolCall) ].
 
-	^ GtLSmalltalkCodeEvaluationResult
+	^ (GtLSmalltalkCodeEvaluationResult
 		forObject: object
 		withId: (objectId ifNil: [ '' ])
-		andCode: code
+		andCode: code)
+			updatelaygroupdPageReferenceForDatabase: self database;
+			yourself
 ]

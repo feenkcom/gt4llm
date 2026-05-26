@@ -27,6 +27,19 @@ GtLLepiterPageReference >> databaseIdDescription [
 		accessor: #databaseId
 ]
 
+{ #category : #'gt-views' }
+GtLLepiterPageReference >> gtPageFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Page';
+		priority: 10;
+		object: [ page ];
+		actionButtonIcon: BrGlamorousVectorIcons inspect
+			tooltip: 'Inspect page'
+			action: [ :aButton | aButton phlow spawnObject: page ];
+		view: #gtLiveFor:
+]
+
 { #category : #accessing }
 GtLLepiterPageReference >> page [
 	^ page
@@ -55,4 +68,13 @@ GtLLepiterPageReference >> pageIdDescription [
 	^ MAStringDescription new 
 		label: 'PageId';
 		accessor: #pageId
+]
+
+{ #category : #printing }
+GtLLepiterPageReference >> printOn: aStream [
+	aStream
+		nextPutAll: 'pageId=';
+		nextPutAll: pageId asString;
+		nextPutAll: ', databaseId=';
+		nextPutAll: databaseId asString
 ]
