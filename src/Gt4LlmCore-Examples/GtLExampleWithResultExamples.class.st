@@ -6,6 +6,9 @@ Class {
 	#superclass : #GtLDomainObjectExamples,
 	#traits : 'TGtLExceptionResultAssertions',
 	#classTraits : 'TGtLExceptionResultAssertions classTrait',
+	#instVars : [
+		'theDatabase'
+	],
 	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
@@ -48,11 +51,34 @@ GtLExampleWithResultExamples >> assertObjectValue: objectValueJson hasPhlowViews
 	self assert: actualPhlowViews asArray equals: expectedPhlowViews.
 ]
 
-{ #category : #private }
+{ #category : #asserting }
 GtLExampleWithResultExamples >> assertSuccessResult: resultJson objectId: objectId objectDetails: expectedObjectDetails [
-	self assertJsonData: resultJson hasExpectedKeys: #('objectDetails' #objectId #objectValue #playgroundPageReference).
+	self
+		assertSuccessResult: resultJson
+		objectId: objectId
+		objectDetails: expectedObjectDetails
+		hasPlaygroundPageReference: true
+]
+
+{ #category : #asserting }
+GtLExampleWithResultExamples >> assertSuccessResult: resultJson objectId: objectId objectDetails: expectedObjectDetails hasPlaygroundPageReference: aBoolean [
+	| expectedKeys |
+	expectedKeys := #('objectDetails' #objectId #objectValue).
+	aBoolean ifTrue: [ expectedKeys := expectedKeys copyWith: #playgroundPageReference ].
+	self assertJsonData: resultJson hasExpectedKeys: expectedKeys.
 	self assert: (resultJson at: #objectId) equals: objectId.
 	self assert: (resultJson at: 'objectDetails') equals: expectedObjectDetails.
+]
+
+{ #category : #private }
+GtLExampleWithResultExamples >> ensureLepiterPageForObject: anObject withSnippetCode: aString [
+	| page snippet |
+	page := LePage pharoClassName: anObject class name.
+	snippet := LePharoSnippet new.
+	snippet code: aString.
+	page addSnippet: snippet.
+	self theDatabase addPage: page.
+	self assert: page children size equals: 1
 ]
 
 { #category : #examples }
@@ -140,9 +166,11 @@ GtLExampleWithResultExamples >> exampleWithResultForSuccessfulExample [
 	| method domainObject compositeView dataBlock jsonData resultJson objectValueJson expectedPhlowViews |
 	
 	method := GtLExampleRunDummyExamples >> #successfulExample.
+	self ensureLepiterPageForObject: 42 withSnippetCode: 'GtLExampleRunDummyExamples new successfulExample'.
 	domainObject := GtLExampleWithResult new
 		exampleWithResult: (self runExampleMethod: method);
-		objectId: 'test-object-id'.
+		objectId: 'test-object-id';
+		updatelaygroupdPageReferenceForDatabase: self theDatabase.
 	
 	self 
 		assertDomainObject: domainObject 
@@ -151,6 +179,10 @@ GtLExampleWithResultExamples >> exampleWithResultForSuccessfulExample [
 		className: #GtLExampleRunDummyExamples 
 		selector: #successfulExample 
 		objectId: 'test-object-id'.
+		
+	self assert: domainObject playgroundPageReference notNil.
+	self assert: domainObject playgroundPageReference databaseId equals: self theDatabase primaryDB uuidString.
+	self assert: domainObject playgroundPageReference pageId equals: self theDatabase pages first uid asString36.
 	
 	compositeView := domainObject llmDataViewsFor: GtLDataView new.
 	self assert: compositeView dataViews size equals: 3.
@@ -163,6 +195,10 @@ GtLExampleWithResultExamples >> exampleWithResultForSuccessfulExample [
 	
 	resultJson := jsonData at: #result.
 	self assertSuccessResult: resultJson objectId: 'test-object-id' objectDetails: Dictionary new.
+	self assert: (resultJson at: #playgroundPageReference) equals: (NeoJSONObject new
+		at: 'databaseId' put: self theDatabase primaryDB uuidString;
+		at: 'pageId' put: self theDatabase pages first uid asString36;
+		yourself).
 	
 	objectValueJson := resultJson at: #objectValue.
 	self 
@@ -244,6 +280,68 @@ GtLExampleWithResultExamples >> exampleWithResultForSuccessfulExampleWithDataJso
 	^ domainObject
 ]
 
+{ #category : #examples }
+GtLExampleWithResultExamples >> exampleWithResultForSuccessfulExampleWithoutLepiterPage [
+	<gtExample>
+	<return: #GtLExampleWithResult>
+	| method domainObject compositeView dataBlock jsonData resultJson objectValueJson expectedPhlowViews |
+	
+	method := GtLExampleRunDummyExamples >> #successfulExample.
+	domainObject := GtLExampleWithResult new
+		exampleWithResult: (self runExampleMethod: method);
+		objectId: 'test-object-id';
+		updatelaygroupdPageReferenceForDatabase: self theDatabase.
+	
+	self 
+		assertDomainObject: domainObject 
+		isSuccess: true 
+		statusText: 'success' 
+		className: #GtLExampleRunDummyExamples 
+		selector: #successfulExample 
+		objectId: 'test-object-id'.
+		
+	self assert: domainObject playgroundPageReference isNil.
+	
+	compositeView := domainObject llmDataViewsFor: GtLDataView new.
+	self assert: compositeView dataViews size equals: 3.
+	
+	dataBlock := compositeView serializeToLlmPrimiteData.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
+	
+	jsonData := dataBlock compositeJsonData.
+	self assertExampleData: jsonData forMethod: method status: 'success'.
+	
+	resultJson := jsonData at: #result.
+	self assertSuccessResult: resultJson objectId: 'test-object-id' objectDetails: Dictionary new.
+	self assert: (resultJson at: #playgroundPageReference) isNil.
+	
+	objectValueJson := resultJson at: #objectValue.
+	self 
+		assertObjectValue: objectValueJson 
+		className: 'SmallInteger' 
+		printString: '42' 
+		superclassName: 'Integer' 
+		packageName: 'Kernel' 
+		instanceSlots: #().
+	
+	expectedPhlowViews := {
+		{ 'title' -> 'Preview'. 'methodName' -> 'gtPreviewFor:' } asDictionary.
+		{ 'title' -> 'Integer'. 'methodName' -> 'gtIntegerFor:' } asDictionary.
+		{ 'title' -> 'Raw'. 'methodName' -> 'gtRawFor:' } asDictionary.
+		{ 'title' -> 'Print'. 'methodName' -> 'gtPrintFor:' } asDictionary.
+		{ 'title' -> 'Meta'. 'methodName' -> 'gtMetaFor:' } asDictionary
+	}.
+	self assertObjectValue: objectValueJson hasPhlowViews: expectedPhlowViews.
+	
+	^ domainObject
+]
+
+{ #category : #initialization }
+GtLExampleWithResultExamples >> initialize [
+	super initialize.
+	theDatabase := nil
+]
+
 { #category : #private }
 GtLExampleWithResultExamples >> runExampleMethod: aCompiledMethod [
 	"Run the given example method and return the example with result."
@@ -251,4 +349,12 @@ GtLExampleWithResultExamples >> runExampleMethod: aCompiledMethod [
 	example := aCompiledMethod gtExample asExampleWithResult.
 	example run.
 	^ example
+]
+
+{ #category : #accessing }
+GtLExampleWithResultExamples >> theDatabase [
+	^ theDatabase ifNil: [
+		| db |
+		db := LeExplicitlyAttachedLinksExamples new emptyDatabase.
+		theDatabase := LeLogicalDatabase new primaryDB: db ]
 ]
