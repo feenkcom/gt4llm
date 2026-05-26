@@ -1,10 +1,18 @@
 "
-Create a Vector Db loaded on the specified lepiter knowledge base.
+GtLLepiterRagDb provides RAG queries on a lepiter knowledgebase and implements the RAG strategy:
 
-GtLepiterVectorDbUtilities assumes that lepiter pages are generally fairly short, so naively splits text in to chunks of a fixed length as specified in {{gtMethod:GtLepiterVectorDbUtilities>>#initialize}} for indexing, however the entire lepiter page is always included as the context.
+How to chunk the documents.  The current strategy is to create documents of 1200 characters with a 300 character overlap.
+
+What to return on matches.  The current strategy is to return an entire page, since pages are typically short, and accept as many pages as fit in the context character limit.
+
+The vector database is created and provided indepedently as the assumption is that the {{gtClass:GtSimpleInMemoryVectorDatabase}} will soon be replaced by an external, scalable database.
+
+GtLLepiterRagDb assumes that lepiter pages are generally fairly short and topic specific, so naively splits text in to chunks of a fixed length as specified in {{gtMethod:GtLLepiterRagDb class>>#defaultChunkSize}} for indexing, however the entire lepiter page is always included as the context.
+
+
 "
 Class {
-	#name : #GtLepiterVectorDbUtilities,
+	#name : #GtLLepiterRagDb,
 	#superclass : #Object,
 	#instVars : [
 		'vectorDb',
@@ -15,33 +23,33 @@ Class {
 }
 
 { #category : #'instance creation' }
-GtLepiterVectorDbUtilities class >> createVectorDb [
+GtLLepiterRagDb class >> createVectorDb [
 
 	^ self new vectorDb
 ]
 
 { #category : #accessing }
-GtLepiterVectorDbUtilities class >> defaultChunkOverlap [
+GtLLepiterRagDb class >> defaultChunkOverlap [
 	"Answer the default number of characters to overlap between chunks"
 	
 	^ 300
 ]
 
 { #category : #accessing }
-GtLepiterVectorDbUtilities class >> defaultChunkSize [
+GtLLepiterRagDb class >> defaultChunkSize [
 	"Answer the default size of text to index"
 	
 	^ 1200
 ]
 
 { #category : #'instance creation' }
-GtLepiterVectorDbUtilities class >> loadDefault [
+GtLLepiterRagDb class >> loadDefault [
 
 	^ self loadFrom: 'gt-book.vectordb.ston'
 ]
 
 { #category : #'instance creation' }
-GtLepiterVectorDbUtilities class >> loadFrom: aFileReference [
+GtLLepiterRagDb class >> loadFrom: aFileReference [
 	| vectorDb |
 
 	vectorDb := aFileReference asFileReference readStreamDo: [ :stream |
@@ -50,19 +58,8 @@ GtLepiterVectorDbUtilities class >> loadFrom: aFileReference [
 		vectorDb: vectorDb.
 ]
 
-{ #category : #api }
-GtLepiterVectorDbUtilities >> createVectorDb [
-	| pages |
-	
-	vectorDb := GtSimpleInMemoryVectorDatabase new.
-	pages := (LeDatabasesRegistry defaultLogicalDatabase databaseNamed: self lepiterDbName) pages.
-	pages doWithIndex: [ :aPage :index |
-		self loadLepiterPage: aPage ].
-	^ vectorDb
-]
-
 { #category : #ui }
-GtLepiterVectorDbUtilities >> gtSummaryFor: aView [
+GtLLepiterRagDb >> gtSummaryFor: aView [
 	<gtView>
 
 	^ aView columnedList
@@ -74,8 +71,14 @@ GtLepiterVectorDbUtilities >> gtSummaryFor: aView [
 		  send: #last.
 ]
 
+{ #category : #testing }
+GtLLepiterRagDb >> hasVectorDb [
+
+	^ vectorDb isNotNil
+]
+
 { #category : #api }
-GtLepiterVectorDbUtilities >> initialize [
+GtLLepiterRagDb >> initialize [
 
 	super initialize.
 	splitter := GtRecursiveCharacterTextSplitter new.
@@ -87,23 +90,23 @@ GtLepiterVectorDbUtilities >> initialize [
 ]
 
 { #category : #accessing }
-GtLepiterVectorDbUtilities >> lepiterDb [
+GtLLepiterRagDb >> lepiterDb [
 
 	^ LeDatabasesRegistry default defaultLogicalDatabase databaseNamed: self lepiterDbName
 ]
 
 { #category : #accessing }
-GtLepiterVectorDbUtilities >> lepiterDbName [
+GtLLepiterRagDb >> lepiterDbName [
 	^ lepiterDbName ifNil: [ lepiterDbName := LeDatabase gtBookName ].
 ]
 
 { #category : #accessing }
-GtLepiterVectorDbUtilities >> lepiterDbName: anObject [
+GtLLepiterRagDb >> lepiterDbName: anObject [
 	lepiterDbName := anObject
 ]
 
 { #category : #private }
-GtLepiterVectorDbUtilities >> loadLepiterPage: aPage [
+GtLLepiterRagDb >> loadLepiterPage: aPage [
 	| dbKey serialisedPage documents |
 
 	dbKey := GtVectorDbLepiterKey new
@@ -124,8 +127,9 @@ GtLepiterVectorDbUtilities >> loadLepiterPage: aPage [
 ]
 
 { #category : #private }
-GtLepiterVectorDbUtilities >> loadLepiterPageBySnippet: aPage [
-	"Index every snippet, regardless of size.
+GtLLepiterRagDb >> loadLepiterPageBySnippet: aPage [
+	"Not used.
+	Index every snippet, regardless of size.
 	This hasn't worked well since small snippets tend to get a lot of false positives."
 
 	aPage allChildrenDepthFirstDo: [ :snippet | | dbKey serialisedSnippet documents |
@@ -145,24 +149,56 @@ GtLepiterVectorDbUtilities >> loadLepiterPageBySnippet: aPage [
 				[ vectorDb addDocument: document key: dbKey. ] ] ].
 ]
 
-{ #category : #querying }
-GtLepiterVectorDbUtilities >> pageNamesFor: aString maxCount: anInteger [
-	"Answer the page names that semantically match the supplied string"
-	| matchingEmbeddings |
+{ #category : #'as yet unclassified' }
+GtLLepiterRagDb >> query: aLepiterRagContext [
+	"Answer the pages to include as context for the supplied query using a simple bi-encoder"
+	| groupedEmbeddings candidatePages contextPages totalLength matchingEmbeddings sortedPages index |
 
-	matchingEmbeddings := vectorDb query: aString maxMatches: anInteger.
-	^ matchingEmbeddings collect: [ :each | each embedding key lepiterPageName ]
+	aLepiterRagContext lepiterRagDb: self.
+	matchingEmbeddings := vectorDb 
+		query: aLepiterRagContext queryString 
+		maxMatches: 20.
+	groupedEmbeddings := matchingEmbeddings groupedBy: [ :each |
+		each embedding key ].
+	candidatePages := groupedEmbeddings collect: [ :each |
+		GtLLepiterRagPage new
+			pageKey: (each first embedding key);
+			embeddingDistances: (each collect: [ :embeddingDistance | embeddingDistance distance ]) ].
+
+	sortedPages := candidatePages sorted:
+		[ :each | each embeddingDistances first ] ascending.
+	aLepiterRagContext candidatePageEntries: sortedPages.
+	
+	"Limit the length of the context"
+	contextPages := OrderedCollection new.
+	contextPages add: sortedPages first.
+	totalLength := (GtLLepiterContentExporter new
+					page: sortedPages first page;
+					export) size.
+	index := 2.
+	[ index <= sortedPages size and: [ totalLength < aLepiterRagContext maxContextLength ] ] whileTrue:
+		[ | ragPage pageLength |
+		ragPage := sortedPages at: index.
+		pageLength := (GtLLepiterContentExporter new
+					page: ragPage page;
+					export) size.
+		totalLength + pageLength < aLepiterRagContext maxContextLength
+				ifTrue: [ contextPages add: ragPage ].
+		totalLength := totalLength + pageLength.
+		index := index + 1. ].
+	aLepiterRagContext contextPageEntries: contextPages.
+	^ contextPages
 ]
 
 { #category : #private }
-GtLepiterVectorDbUtilities >> removeEmbeddingKeysFrom: updatedEmbeddings [ 
+GtLLepiterRagDb >> removeEmbeddingKeysFrom: updatedEmbeddings [ 
 
 	updatedEmbeddings do: [ :embedding |
 		vectorDb removeEmbedding: embedding ].
 ]
 
 { #category : #ui }
-GtLepiterVectorDbUtilities >> summaryAttributes [
+GtLLepiterRagDb >> summaryAttributes [
 	| pageNamesIndexed |
 	
 	pageNamesIndexed := vectorDb embeddings
@@ -176,7 +212,7 @@ GtLepiterVectorDbUtilities >> summaryAttributes [
 ]
 
 { #category : #api }
-GtLepiterVectorDbUtilities >> updateVectorDb [
+GtLLepiterRagDb >> updateVectorDb [
 	"Replace database entries for all pages modified after the DB modified time"
 	| dbModifiedTime |
 
@@ -184,7 +220,7 @@ GtLepiterVectorDbUtilities >> updateVectorDb [
 ]
 
 { #category : #api }
-GtLepiterVectorDbUtilities >> updateVectorDbSince: dbModifiedTime [
+GtLLepiterRagDb >> updateVectorDbSince: dbModifiedTime [
 	"Replace database entries for all pages modified after the DB modified time"
 	| embeddingsByPageName updatedPages superseededEmbeddings |
 
@@ -202,11 +238,12 @@ GtLepiterVectorDbUtilities >> updateVectorDbSince: dbModifiedTime [
 ]
 
 { #category : #accessing }
-GtLepiterVectorDbUtilities >> vectorDb [
-	^ vectorDb ifNil: [ self createVectorDb ]
+GtLLepiterRagDb >> vectorDb [
+	^ vectorDb
 ]
 
 { #category : #accessing }
-GtLepiterVectorDbUtilities >> vectorDb: anObject [
-	vectorDb := anObject
+GtLLepiterRagDb >> vectorDb: aVectorDatabase [
+
+	vectorDb := aVectorDatabase
 ]
