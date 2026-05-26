@@ -82,46 +82,50 @@ GtLMagritteToolForSmalltalkCodeEvaluation >> privatePerformToolCall: aToolCall i
 	| arguments code bindings bindingsDictionary object objectId |
 	arguments := aToolCall arguments.
 	code := arguments at: 'code'.
-	(code isNil or: [ code isString and: [ code trimBoth isEmpty ] ]) ifTrue: [ 
-		^ GtLMissingArgumentDomainObject new
-			arguments: arguments;
-			missingArgument: 'code' ].
+	(code isNil or: [ code isString and: [ code trimBoth isEmpty ] ])
+		ifTrue: [ ^ GtLMissingArgumentDomainObject new
+				arguments: arguments;
+				missingArgument: 'code' ].
 	bindings := arguments at: 'bindings' ifAbsent: [ #() ].
 	bindingsDictionary := nil.
-	bindings ifNotEmpty: [
-		anExecutionContext objectStorage
-			ifNil: [ ^ GtLMissingInformationDomainObject new
-				missingModelName: 'objectStorage' ].
-		bindingsDictionary := Dictionary new.
-		bindings do: [ :each |
-			| bindingName bindingObjectId bindingObject |
-			bindingName := each name.
-			bindingObjectId := each objectId.
-			(bindingObjectId isNil or: [ bindingObjectId isEmpty ])
-				ifTrue: [ ^ GtLMissingDomainObject new objectName: (bindingObjectId ifNil: [ 'nil' ]) ].
-			bindingObject := anExecutionContext objectStorage
-				objectAt: bindingObjectId
-				ifPresent: [ :storedObject | storedObject ]
-				ifAbsent: [ ^ GtLMissingDomainObject new objectName: bindingObjectId ].
-			bindingsDictionary at: (bindingName ifNil: [ '' ]) asSymbol put: bindingObject ] ].
-			
+	bindings
+		ifNotEmpty: [ anExecutionContext objectStorage
+				ifNil: [ ^ GtLMissingInformationDomainObject new missingModelName: 'objectStorage' ].
+			bindingsDictionary := Dictionary new.
+			bindings
+				do: [ :each | 
+					| bindingName bindingObjectId bindingObject |
+					bindingName := each name.
+					bindingObjectId := each objectId.
+					(bindingObjectId isNil or: [ bindingObjectId isEmpty ])
+						ifTrue: [ ^ GtLMissingDomainObject new objectName: (bindingObjectId ifNil: [ 'nil' ]) ].
+					bindingObject := anExecutionContext objectStorage
+							objectAt: bindingObjectId
+							ifPresent: [ :storedObject | storedObject ]
+							ifAbsent: [ ^ GtLMissingDomainObject new objectName: bindingObjectId ].
+					bindingsDictionary
+						at: (bindingName ifNil: [ '' ]) asSymbol
+						put: bindingObject ] ].
+
 	object := [ | compiler |
 		compiler := OpalCompiler new.
 		bindingsDictionary ifNotNil: [ compiler bindings: bindingsDictionary ].
 		compiler evaluate: code ]
-		on: Error
-		do: [ :ex |
-			^ GtLSmalltalkCodeEvaluationExceptionDomainObject new
-				freeze: ex;
-				errorReason: 'Error while evaluating smalltalk code';
-				code: code ].
-				
-	objectId := anExecutionContext objectStorage ifNotNil: [ :aStorage |
-		aStorage addNewObject: object reason: (GtLStoredObjectCodeExecutionReason toolCall: aToolCall) ].
-		
-	^ GtLSmalltalkCodeEvaluationResult new
-		code: code;
-		object: object;
-		objectValue: (GtLSerializedObjectValue fromObject: object);
-		objectId: (objectId ifNil: [ '' ])
+			on: Error
+			do: [ :ex | 
+				^ GtLSmalltalkCodeEvaluationExceptionDomainObject new
+					freeze: ex;
+					errorReason: 'Error while evaluating smalltalk code';
+					code: code ].
+
+	objectId := anExecutionContext objectStorage
+			ifNotNil: [ :aStorage | 
+				aStorage
+					addNewObject: object
+					reason: (GtLStoredObjectCodeExecutionReason toolCall: aToolCall) ].
+
+	^ GtLSmalltalkCodeEvaluationResult
+		forObject: object
+		withId: (objectId ifNil: [ '' ])
+		andCode: code
 ]
