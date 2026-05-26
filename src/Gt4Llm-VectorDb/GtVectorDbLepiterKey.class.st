@@ -18,6 +18,32 @@ GtVectorDbLepiterKey >> = anObject [
 		and: [ self lepiterSnippetUid = anObject lepiterSnippetUid ] ]
 ]
 
+{ #category : #ui }
+GtVectorDbLepiterKey >> gtLepiterPageFor: aView [
+	<gtView>
+	
+	(lepiterDbName isNil or: [ lepiterPageName isNil ]) ifTrue:
+		[ ^ aView empty ].
+	^ aView forward
+		title: 'Page';
+		priority: 20;
+		object: [ self lepiterPage ];
+		view: #gtLiveFor:
+]
+
+{ #category : #ui }
+GtVectorDbLepiterKey >> gtSummaryFor: aView [
+	<gtView>
+
+	^ aView columnedList
+		  title: 'Summary';
+		  priority: 10;
+		  items: [ self summaryAttributes ];
+		  column: #Attribute text: [ :item | item first ];
+		  column: #Value text: [ :item | item second ];
+		  send: #last.
+]
+
 { #category : #'llm-generated' }
 GtVectorDbLepiterKey >> hash [
 	^ {
@@ -38,9 +64,17 @@ GtVectorDbLepiterKey >> lepiterDbName: anObject [
 
 { #category : #accessing }
 GtVectorDbLepiterKey >> lepiterPage [
+	| lepiterDb |
 
-	^ (LeDatabasesRegistry defaultLogicalDatabase databaseNamed: self lepiterDbName)
-		pageNamed: self lepiterPageName.
+	lepiterDb := LeDatabasesRegistry defaultLogicalDatabase databaseNamed: lepiterDbName.
+	lepiterDb
+		pageNamed: lepiterPageName 
+		ifPresent: [ :page | ^ page ]
+		ifAbsent:
+			[ lepiterDb unnamedPagesDo: [ :page |
+				page title = lepiterPageName ifTrue:
+					[ ^ page ] ] ].
+	KeyNotFound signalFor: lepiterPageName.
 ]
 
 { #category : #accessing }
@@ -61,4 +95,13 @@ GtVectorDbLepiterKey >> lepiterSnippetUid [
 { #category : #accessing }
 GtVectorDbLepiterKey >> lepiterSnippetUid: anObject [
 	lepiterSnippetUid := anObject
+]
+
+{ #category : #ui }
+GtVectorDbLepiterKey >> summaryAttributes [
+
+	^ {
+		{ 'Lepiter DB'. lepiterDbName. }.
+		{ 'Page name'. lepiterPageName }.
+		}
 ]

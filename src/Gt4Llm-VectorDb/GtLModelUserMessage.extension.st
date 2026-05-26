@@ -2,9 +2,11 @@ Extension { #name : #GtLModelUserMessage }
 
 { #category : #'*Gt4Llm-VectorDb' }
 GtLModelUserMessage >> addContextFromRag: aGtRag [
-	| contextPageNames |
+	| ragContext ragPages |
 
-	contextPageNames := aGtRag query: self contentText.
-	contextPageNames do: [ :pageName |
-		self pageObjectExplanation: (aGtRag pageNamed: pageName) ].
+	ragContext := GtLLepiterRagQueryContext new
+		queryString: self contentText.
+	ragPages := aGtRag query: ragContext.
+	ragPages do: [ :ragPage |
+		self pageObjectExplanation: ragPage page ].
 ]
