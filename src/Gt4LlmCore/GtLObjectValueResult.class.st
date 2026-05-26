@@ -3,16 +3,25 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'object',
-		'objectValue'
+		'objectValue',
+		'playgroundPageReference'
 	],
 	#category : #'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #'instance creation' }
-GtLObjectValueResult class >> forObject: anObject [ 
-	^ self new 
-		object: anObject;
-		objectValue: (GtLSerializedObjectValue fromObject: anObject)
+GtLObjectValueResult class >> forObject: anObject [
+	| result |
+	result := self new
+			object: anObject;
+			objectValue: (GtLSerializedObjectValue fromObject: anObject).
+	anObject gtPlaygroundPageStrategy
+		playgroundPageInDatabase: LeDatabasesRegistry defaultLogicalDatabase
+				playgroundDB
+		forObject: anObject
+		ifPresent: [ :p | result playgroundPageReference: (GtLLepiterPageReference new page: p) ]
+		ifAbsent: [ nil ].
+	^ result
 ]
 
 { #category : #testing }
@@ -70,6 +79,26 @@ GtLObjectValueResult >> objectValueDescription [
 		accessor: #objectValue;
 		classes: { GtLSerializedObjectValue };
 		beRequired
+]
+
+{ #category : #accessing }
+GtLObjectValueResult >> playgroundPageReference [
+	^ playgroundPageReference
+]
+
+{ #category : #'instance creation' }
+GtLObjectValueResult >> playgroundPageReference: aPageReference [
+	playgroundPageReference := aPageReference
+]
+
+{ #category : #descriptions }
+GtLObjectValueResult >> playgroundPageReferenceDescription [
+	<magritteDescription>
+	^ MAToOneRelationDescription new
+		accessor: #playgroundPageReference;
+		comment: 'The reference to the playground Lepiter page with snippets specific to the object';
+		classes: { GtLLepiterPageReference};
+		beOptional
 ]
 
 { #category : #printing }

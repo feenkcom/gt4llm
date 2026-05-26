@@ -10,6 +10,11 @@ Class {
 	#category : #'Gt4LlmCore-Magritte Objects'
 }
 
+{ #category : #'as yet unclassified' }
+GtLSmalltalkCodeEvaluationResult class >> forObject: anObject withId: anId andCode: aString [
+	^ (self forObject: anObject withId: anId) code: aString
+]
+
 { #category : #accessing }
 GtLSmalltalkCodeEvaluationResult >> code [
 	^ code
