@@ -10,18 +10,10 @@ Class {
 }
 
 { #category : #'instance creation' }
-GtLObjectValueResult class >> forObject: anObject [
-	| result |
-	result := self new
-			object: anObject;
-			objectValue: (GtLSerializedObjectValue fromObject: anObject).
-	anObject gtPlaygroundPageStrategy
-		playgroundPageInDatabase: LeDatabasesRegistry defaultLogicalDatabase
-				playgroundDB
-		forObject: anObject
-		ifPresent: [ :p | result playgroundPageReference: (GtLLepiterPageReference new page: p) ]
-		ifAbsent: [ nil ].
-	^ result
+GtLObjectValueResult class >> forObject: anObject [ 
+	^self new 
+		object: anObject;
+		objectValue: (GtLSerializedObjectValue fromObject: anObject)
 ]
 
 { #category : #testing }
@@ -104,4 +96,18 @@ GtLObjectValueResult >> playgroundPageReferenceDescription [
 { #category : #printing }
 GtLObjectValueResult >> printOn: aStream [
 	self object printOn: aStream
+]
+
+{ #category : #updating }
+GtLObjectValueResult >> updatelaygroupdPageReferenceForDatabase: aDatabase [
+	self 
+		assert: [ object notNil ] 
+		description: 'The object must be initialized before updating the lepiter page'. 
+	
+	object gtPlaygroundPageStrategy
+		detectPlaygroundPageInDatabase: aDatabase
+		forObject: object
+		ifPresent: [ :aPage | 
+			self playgroundPageReference: (GtLLepiterPageReference new page:aPage) ]
+		ifAbsent: [ "We ignore the case when the page is not present" ].
 ]

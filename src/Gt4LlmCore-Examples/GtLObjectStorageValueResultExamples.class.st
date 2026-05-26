@@ -1,6 +1,9 @@
 Class {
 	#name : #GtLObjectStorageValueResultExamples,
 	#superclass : #GtLDomainObjectExamples,
+	#instVars : [
+		'theDatabase'
+	],
 	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
@@ -15,10 +18,10 @@ GtLObjectStorageValueResultExamples >> assertObjectDetailsJson: objectDetailsJso
 		self assert: ((objectDetailsJson at: 'stackTrace') includesSubstring: expectedString) ]
 ]
 
-{ #category : #assertions }
+{ #category : #asserting }
 GtLObjectStorageValueResultExamples >> assertObjectStorageValueResultJsonDataKeys: jsonData [
 	| expectedKeys expectedObjectValueKeys objectValueJson |
-	expectedKeys := #('objectDetails' #objectId #objectValue).
+	expectedKeys := #('objectDetails' #objectId #objectValue #playgroundPageReference).
 	self assertJsonData: jsonData hasExpectedKeys: expectedKeys.
 	
 	objectValueJson := jsonData at: #objectValue.
@@ -36,13 +39,130 @@ GtLObjectStorageValueResultExamples >> assertObjectValueJson: objectValueJson in
 		self assert: (phlowViewMethodNames includes: methodName) ]
 ]
 
+{ #category : #private }
+GtLObjectStorageValueResultExamples >> expectedPlaygroundPageReferenceForBlElement [
+	^ self expectedPlaygroundPageReferenceForObjectClassName: 'BlElement'
+]
+
+{ #category : #private }
+GtLObjectStorageValueResultExamples >> expectedPlaygroundPageReferenceForCollection [
+	^ self expectedPlaygroundPageReferenceForObjectClassName: 'Array'
+]
+
+{ #category : #private }
+GtLObjectStorageValueResultExamples >> expectedPlaygroundPageReferenceForDataComparisonException [
+	^ self expectedPlaygroundPageReferenceForObjectClassName: 'GtLExampleDataComparisonException'
+]
+
+{ #category : #private }
+GtLObjectStorageValueResultExamples >> expectedPlaygroundPageReferenceForException [
+	^ self expectedPlaygroundPageReferenceForObjectClassName: 'ZeroDivide'
+]
+
+{ #category : #private }
+GtLObjectStorageValueResultExamples >> expectedPlaygroundPageReferenceForInteger [
+	^ self expectedPlaygroundPageReferenceForObjectClassName: 'SmallInteger'
+]
+
+{ #category : #private }
+GtLObjectStorageValueResultExamples >> expectedPlaygroundPageReferenceForObjectClassName: aClassName [
+	| page expectedTitle |
+	expectedTitle := aClassName , ' Page'.
+	page := self theDatabase pages detect: [ :each | each title = expectedTitle ].
+	^ NeoJSONObject new
+		at: 'databaseId' put: self theDatabase primaryDB uuidString;
+		at: 'pageId' put: page uid asString36;
+		yourself
+]
+
+{ #category : #private }
+GtLObjectStorageValueResultExamples >> expectedPlaygroundPageReferenceForObjectStorageValueResult [
+	^ self expectedPlaygroundPageReferenceForObjectClassName: 'GtLObjectStorageValueResult'
+]
+
+{ #category : #private }
+GtLObjectStorageValueResultExamples >> expectedPlaygroundPageReferenceForString [
+	^ self expectedPlaygroundPageReferenceForObjectClassName: 'ByteString'
+]
+
+{ #category : #initialization }
+GtLObjectStorageValueResultExamples >> initialize [
+	super initialize.
+	theDatabase := nil
+]
+
+{ #category : #private }
+GtLObjectStorageValueResultExamples >> lepiterPageReferenceForBlElement: anObject [
+	^ self
+		lepiterPageReferenceForObject: anObject
+		withSnippetCode: 'BlElement new'
+]
+
+{ #category : #private }
+GtLObjectStorageValueResultExamples >> lepiterPageReferenceForCollection: anObject [
+	^ self
+		lepiterPageReferenceForObject: anObject
+		withSnippetCode: '#(1 2 3)'
+]
+
+{ #category : #private }
+GtLObjectStorageValueResultExamples >> lepiterPageReferenceForDataComparisonException: anObject [
+	^ self
+		lepiterPageReferenceForObject: anObject
+		withSnippetCode: 'GtLExampleDataComparisonException new'
+]
+
+{ #category : #private }
+GtLObjectStorageValueResultExamples >> lepiterPageReferenceForException: anObject [
+	^ self
+		lepiterPageReferenceForObject: anObject
+		withSnippetCode: '[ 1 / 0 ] on: ZeroDivide do: [ :ex | GtSystemUtility freeze: ex ]'
+]
+
+{ #category : #private }
+GtLObjectStorageValueResultExamples >> lepiterPageReferenceForInteger: anObject [
+	^ self
+		lepiterPageReferenceForObject: anObject
+		withSnippetCode: '42'
+]
+
+{ #category : #private }
+GtLObjectStorageValueResultExamples >> lepiterPageReferenceForObject: anObject withSnippetCode: aString [
+	| page snippet |
+	page := LePage pharoClassName: anObject class name.
+	snippet := LePharoSnippet new.
+	snippet code: aString.
+	page addSnippet: snippet.
+	self theDatabase addPage: page.
+	self assert: page children size equals: 1.
+	^ GtLLepiterPageReference new
+		page: page;
+		yourself
+]
+
+{ #category : #private }
+GtLObjectStorageValueResultExamples >> lepiterPageReferenceForObjectStorageValueResult: anObject [
+	^ self
+		lepiterPageReferenceForObject: anObject
+		withSnippetCode: 'GtLObjectStorageValueResult forObject: 42 withId: ''inner-id-123'''
+]
+
+{ #category : #private }
+GtLObjectStorageValueResultExamples >> lepiterPageReferenceForString: anObject [
+	^ self
+		lepiterPageReferenceForObject: anObject
+		withSnippetCode: '''hello world'''
+]
+
 { #category : #examples }
 GtLObjectStorageValueResultExamples >> objectStorageValueResultForBlElement [
 	<gtExample>
 	<return: #GtLObjectStorageValueResult>
-	| domainObject compositeView dataBlock jsonData objectValueJson imageBlock |
+	| domainObject compositeView dataBlock jsonData objectValueJson imageBlock object |
 	
-	domainObject := GtLObjectStorageValueResult forObject: BlElement new withId: 'element-id-001'.
+	object := BlElement new.
+	domainObject := GtLObjectStorageValueResult forObject: object withId: 'element-id-001'.
+	domainObject playgroundPageReference: (self lepiterPageReferenceForBlElement: object).
 	self assert: domainObject object class equals: BlElement.
 	self assert: domainObject objectId equals: 'element-id-001'.
 	
@@ -61,6 +181,7 @@ GtLObjectStorageValueResultExamples >> objectStorageValueResultForBlElement [
 	self assertObjectStorageValueResultJsonDataKeys: jsonData.
 	self assert: (jsonData at: #objectId) equals: 'element-id-001'.
 	self assert: (jsonData at: 'objectDetails') isEmpty.
+	self assert: (jsonData at: #playgroundPageReference) equals: self expectedPlaygroundPageReferenceForBlElement.
 	
 	objectValueJson := jsonData at: #objectValue.
 	self assert: (objectValueJson at: 'objectClassName') equals: 'BlElement'.
@@ -76,10 +197,12 @@ GtLObjectStorageValueResultExamples >> objectStorageValueResultForBlElement [
 GtLObjectStorageValueResultExamples >> objectStorageValueResultForCollection [
 	<gtExample>
 	<return: #GtLObjectStorageValueResult>
-	| domainObject compositeView dataBlock jsonData objectValueJson |
+	| domainObject compositeView dataBlock jsonData objectValueJson object |
 	
-	domainObject := GtLObjectStorageValueResult forObject: #(1 2 3) withId: 'array-id-789'.
-	self assert: domainObject object equals: #(1 2 3).
+	object := #(1 2 3).
+	domainObject := GtLObjectStorageValueResult forObject: object withId: 'array-id-789'.
+	domainObject playgroundPageReference: (self lepiterPageReferenceForCollection: object).
+	self assert: domainObject object equals: object.
 	self assert: domainObject objectId equals: 'array-id-789'.
 	
 	compositeView := domainObject llmDataViewsFor: GtLDataView new.
@@ -92,6 +215,7 @@ GtLObjectStorageValueResultExamples >> objectStorageValueResultForCollection [
 	self assertObjectStorageValueResultJsonDataKeys: jsonData.
 	self assert: (jsonData at: #objectId) equals: 'array-id-789'.
 	self assert: (jsonData at: 'objectDetails') isEmpty.
+	self assert: (jsonData at: #playgroundPageReference) equals: self expectedPlaygroundPageReferenceForCollection.
 	
 	objectValueJson := jsonData at: #objectValue.
 	self assert: (objectValueJson at: 'objectClassName') equals: 'Array'.
@@ -109,7 +233,6 @@ GtLObjectStorageValueResultExamples >> objectStorageValueResultForDataComparison
 	<return: #GtLObjectStorageValueResult>
 	| exception domainObject compositeView dataBlock jsonData objectValueJson objectDetailsJson imageBlock |
 	
-	"Create the exception by catching it from signal and freezing it"
 	exception := [ 
 		(GtLExampleDataComparisonException new
 			expectedData: (GtLExampleComparisonWrappedString new
@@ -121,6 +244,7 @@ GtLObjectStorageValueResultExamples >> objectStorageValueResultForDataComparison
 	self assert: exception class equals: GtLExampleDataComparisonException.
 	
 	domainObject := GtLObjectStorageValueResult forObject: exception withId: 'comparison-exception-id'.
+	domainObject playgroundPageReference: (self lepiterPageReferenceForDataComparisonException: exception).
 	self assert: domainObject object equals: exception.
 	self assert: domainObject objectId equals: 'comparison-exception-id'.
 	self assert: domainObject objectValue class equals: GtLSerializedObjectValue.
@@ -129,11 +253,9 @@ GtLObjectStorageValueResultExamples >> objectStorageValueResultForDataComparison
 	self assert: compositeView dataViews size equals: 2.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
-	"This exception produces image data for the diff view"
 	self assert: dataBlock dataBlocks size equals: 2.
 	self assert: dataBlock imageDataBlocks size equals: 1.
 	
-	"Assert the image block has correct type and content"
 	imageBlock := dataBlock imageDataBlocks first.
 	self assert: imageBlock imageBytes isNotEmpty.
 	self assert: imageBlock imageType equals: 'png'.
@@ -141,8 +263,8 @@ GtLObjectStorageValueResultExamples >> objectStorageValueResultForDataComparison
 	jsonData := dataBlock compositeJsonData.
 	self assertObjectStorageValueResultJsonDataKeys: jsonData.
 	self assert: (jsonData at: #objectId) equals: 'comparison-exception-id'.
+	self assert: (jsonData at: #playgroundPageReference) equals: self expectedPlaygroundPageReferenceForDataComparisonException.
 	
-	"Assert exception details"
 	objectDetailsJson := jsonData at: 'objectDetails'.
 	self 
 		assertObjectDetailsJson: objectDetailsJson 
@@ -154,12 +276,8 @@ GtLObjectStorageValueResultExamples >> objectStorageValueResultForDataComparison
 	self assert: (objectValueJson at: 'objectClassName') equals: 'GtLExampleDataComparisonException'.
 	self assert: (objectValueJson at: 'superclassName') equals: 'Error'.
 	self assert: (objectValueJson at: 'packageName') equals: 'Gt4LlmCore-Examples'.
-	
-	"Check that instance slots include expectedData and actualData"
 	self assert: ((objectValueJson at: 'allInstanceSlots') collect: [ :each | each at: 'name' ]) asSet
 		equals: #('messageText' 'tag' 'signaler' 'signalContext' 'handlerContext' 'outerContext' 'expectedData' 'actualData') asSet.
-	
-	"Check expected phlow views"
 	self 
 		assertObjectValueJson: objectValueJson 
 		includesPhlowViews: #('gtViewDiffFor:' 'gtRawFor:' 'gtPrintFor:' 'gtMetaFor:').
@@ -177,6 +295,7 @@ GtLObjectStorageValueResultExamples >> objectStorageValueResultForException [
 	self assert: exception class equals: ZeroDivide.
 	
 	domainObject := GtLObjectStorageValueResult forObject: exception withId: 'exception-id-123'.
+	domainObject playgroundPageReference: (self lepiterPageReferenceForException: exception).
 	self assert: domainObject object equals: exception.
 	self assert: domainObject objectId equals: 'exception-id-123'.
 	self assert: domainObject objectValue class equals: GtLSerializedObjectValue.
@@ -190,14 +309,14 @@ GtLObjectStorageValueResultExamples >> objectStorageValueResultForException [
 	jsonData := dataBlock compositeJsonData.
 	self assertObjectStorageValueResultJsonDataKeys: jsonData.
 	self assert: (jsonData at: #objectId) equals: 'exception-id-123'.
+	self assert: (jsonData at: #playgroundPageReference) equals: self expectedPlaygroundPageReferenceForException.
 	
-	"Assert exception details"
 	objectDetailsJson := jsonData at: 'objectDetails'.
 	self 
 		assertObjectDetailsJson: objectDetailsJson 
 		hasErrorMessage: 'ZeroDivide' 
 		errorClass: 'ZeroDivide' 
-		stackTraceIncludes: #('ZeroDivide' 'SmallInteger>>/') .
+		stackTraceIncludes: #('ZeroDivide' 'SmallInteger>>/').
 	
 	objectValueJson := jsonData at: #objectValue.
 	self assert: (objectValueJson at: 'objectClassName') equals: 'ZeroDivide'.
@@ -218,6 +337,7 @@ GtLObjectStorageValueResultExamples >> objectStorageValueResultForInteger [
 	| domainObject compositeView dataBlock jsonData objectValueJson expectedPhlowViews actualPhlowViews |
 	
 	domainObject := GtLObjectStorageValueResult forObject: 42 withId: 'test-id-123'.
+	domainObject playgroundPageReference: (self lepiterPageReferenceForInteger: 42).
 	self assert: domainObject object equals: 42.
 	self assert: domainObject objectId equals: 'test-id-123'.
 	self assert: domainObject objectValue class equals: GtLSerializedObjectValue.
@@ -231,6 +351,7 @@ GtLObjectStorageValueResultExamples >> objectStorageValueResultForInteger [
 	jsonData := dataBlock compositeJsonData.
 	self assert: (jsonData at: #objectId) equals: 'test-id-123'.
 	self assert: (jsonData at: 'objectDetails') equals: Dictionary new.
+	self assert: (jsonData at: #playgroundPageReference) equals: self expectedPlaygroundPageReferenceForInteger.
 	
 	objectValueJson := jsonData at: #objectValue.
 	self assert: (objectValueJson at: 'objectClassName') equals: 'SmallInteger'.
@@ -275,6 +396,7 @@ GtLObjectStorageValueResultExamples >> objectStorageValueResultForIntegerFullSer
 		object: 42;
 		objectValue: objectValue;
 		objectId: 'test-id-123';
+		playgroundPageReference: (self lepiterPageReferenceForInteger: 42);
 		yourself.
 	
 	compositeView := domainObject llmDataViewsFor: GtLDataView new.
@@ -303,6 +425,7 @@ GtLObjectStorageValueResultExamples >> objectStorageValueResultForIntegerFullSer
 		at: #objectId put: 'test-id-123';
 		at: 'objectDetails' put: Dictionary new;
 		at: #objectValue put: expectedObjectValue;
+		at: #playgroundPageReference put: self expectedPlaygroundPageReferenceForInteger;
 		yourself.
 	
 	self assert: jsonData equals: expectedJson.
@@ -316,11 +439,9 @@ GtLObjectStorageValueResultExamples >> objectStorageValueResultForObjectStorageV
 	<return: #GtLObjectStorageValueResult>
 	| innerResult domainObject compositeView dataBlock jsonData objectValueJson |
 	
-	"Create an inner GtLObjectStorageValueResult wrapping an integer"
 	innerResult := GtLObjectStorageValueResult forObject: 42 withId: 'inner-id-123'.
-	
-	"Create a meta GtLObjectStorageValueResult wrapping the inner result"
 	domainObject := GtLObjectStorageValueResult forObject: innerResult withId: 'outer-id-456'.
+	domainObject playgroundPageReference: (self lepiterPageReferenceForObjectStorageValueResult: innerResult).
 	self assert: domainObject object equals: innerResult.
 	self assert: domainObject objectId equals: 'outer-id-456'.
 	self assert: domainObject objectValue class equals: GtLSerializedObjectValue.
@@ -334,17 +455,15 @@ GtLObjectStorageValueResultExamples >> objectStorageValueResultForObjectStorageV
 	jsonData := dataBlock compositeJsonData.
 	self assertObjectStorageValueResultJsonDataKeys: jsonData.
 	self assert: (jsonData at: #objectId) equals: 'outer-id-456'.
+	self assert: (jsonData at: #playgroundPageReference) equals: self expectedPlaygroundPageReferenceForObjectStorageValueResult.
 	
 	objectValueJson := jsonData at: #objectValue.
 	self assert: (objectValueJson at: 'objectClassName') equals: 'GtLObjectStorageValueResult'.
 	self assert: ((objectValueJson at: 'objectPrintString') includesSubstring: 'inner-id-123').
 	self assert: (objectValueJson at: 'superclassName') equals: 'GtLObjectValueResult'.
 	self assert: (objectValueJson at: 'packageName') equals: 'Gt4LlmCore'.
-	
-	"Check that the instance slots include objectValue, objectId, object"
 	self assert: ((objectValueJson at: 'allInstanceSlots') collect: [ :each | each at: 'name' ]) asSet 
-		equals: #('objectValue' 'objectId' 'object') asSet.
-	
+		equals: #('playgroundPageReference' 'objectValue' 'objectId' 'object') asSet.
 	self 
 		assertObjectValueJson: objectValueJson 
 		includesPhlowViews: #('gtMagritteFor:' 'gtRawFor:' 'gtPrintFor:' 'gtMetaFor:').
@@ -356,10 +475,12 @@ GtLObjectStorageValueResultExamples >> objectStorageValueResultForObjectStorageV
 GtLObjectStorageValueResultExamples >> objectStorageValueResultForString [
 	<gtExample>
 	<return: #GtLObjectStorageValueResult>
-	| domainObject compositeView dataBlock jsonData objectValueJson |
+	| domainObject compositeView dataBlock jsonData objectValueJson object |
 	
-	domainObject := GtLObjectStorageValueResult forObject: 'hello world' withId: 'string-id-456'.
-	self assert: domainObject object equals: 'hello world'.
+	object := 'hello world'.
+	domainObject := GtLObjectStorageValueResult forObject: object withId: 'string-id-456'.
+	domainObject playgroundPageReference: (self lepiterPageReferenceForString: object).
+	self assert: domainObject object equals: object.
 	self assert: domainObject objectId equals: 'string-id-456'.
 	
 	compositeView := domainObject llmDataViewsFor: GtLDataView new.
@@ -372,6 +493,7 @@ GtLObjectStorageValueResultExamples >> objectStorageValueResultForString [
 	self assertObjectStorageValueResultJsonDataKeys: jsonData.
 	self assert: (jsonData at: #objectId) equals: 'string-id-456'.
 	self assert: (jsonData at: 'objectDetails') isEmpty.
+	self assert: (jsonData at: #playgroundPageReference) equals: self expectedPlaygroundPageReferenceForString.
 	
 	objectValueJson := jsonData at: #objectValue.
 	self assert: (objectValueJson at: 'objectClassName') equals: 'ByteString'.
@@ -435,6 +557,7 @@ GtLObjectStorageValueResultExamples >> objectStorageValueResultForTestObject [
 		at: #objectDetails put: Dictionary new;
 		at: #objectId put: 'test-object-id-789';
 		at: #objectValue put: expectedObjectValue;
+		at: #playgroundPageReference put: nil;
 		yourself.
 	expectedJsonTwo := Dictionary new
 		at: 'objectDetails' put: Dictionary new;
@@ -442,9 +565,18 @@ GtLObjectStorageValueResultExamples >> objectStorageValueResultForTestObject [
 		at: 'objectValue' put: (expectedObjectValue copy
 			at: 'objectPrintString' put: 'aGtLSerializedObjectValueTestObject(TestObject)';
 			yourself);
+		at: #playgroundPageReference put: nil;
 		yourself.
 	
 	self assert: ((jsonData = expectedJsonOne) or: [jsonData = expectedJsonOne]).
 	
 	^ domainObject
+]
+
+{ #category : #accessing }
+GtLObjectStorageValueResultExamples >> theDatabase [
+	^ theDatabase ifNil: [
+		| db |
+		db := LeExplicitlyAttachedLinksExamples new emptyDatabase.
+		theDatabase := LeLogicalDatabase new primaryDB: db ]
 ]
