@@ -3,7 +3,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'exampleWithResult',
-		'objectId'
+		'objectId',
+		'playgroundPageReference'
 	],
 	#category : #'Gt4LlmCore-Domain Objects'
 }
@@ -111,20 +112,22 @@ GtLExampleWithResult >> llmResultExceptionViewFor: aDataView [
 				self exampleWithResult returnValue  ]
 ]
 
-{ #category : #'llm views' }
+{ #category : #views }
 GtLExampleWithResult >> llmResultObjectViewFor: aDataView [
 	<gtLlmDataView>
 	
 	(self isErrorResult or: [ self isFailureResult ]) ifTrue: [
 		^ aDataView emptyData ].
 	
-	^aDataView forwardObject
+	^ aDataView forwardObject
 			title: 'Object details';
 			dataKey: #result;
 			object: [ 
-					GtLObjectStorageValueResult 
+					(GtLObjectStorageValueResult 
 						forObject: self exampleWithResult returnValue
-						withId: self objectId  ]
+						withId: self objectId)
+							playgroundPageReference: self playgroundPageReference;
+							yourself ]
 ]
 
 { #category : #accessing }
@@ -138,7 +141,31 @@ GtLExampleWithResult >> objectId: anObject [
 ]
 
 { #category : #accessing }
+GtLExampleWithResult >> playgroundPageReference [
+	^ playgroundPageReference
+]
+
+{ #category : #accessing }
+GtLExampleWithResult >> playgroundPageReference: aPageReference [
+	playgroundPageReference := aPageReference
+]
+
+{ #category : #accessing }
 GtLExampleWithResult >> statusText [
 	self isSkippedResult ifTrue: [ ^ 'skipped' ].
 	^ self exampleWithResult statusText asString asLowercase
+]
+
+{ #category : #private }
+GtLExampleWithResult >> updatelaygroupdPageReferenceForDatabase: aDatabase [
+	| returnValue |
+	(self isErrorResult or: [ self isFailureResult ]) ifTrue: [ ^ self ].
+	returnValue := self exampleWithResult returnValue.
+	returnValue ifNil: [ ^ self ].
+	returnValue gtPlaygroundPageStrategy
+		detectPlaygroundPageInDatabase: aDatabase
+		forObject: returnValue
+		ifPresent: [ :aPage | 
+			self playgroundPageReference: (GtLLepiterPageReference new page: aPage) ]
+		ifAbsent: [ ]
 ]
