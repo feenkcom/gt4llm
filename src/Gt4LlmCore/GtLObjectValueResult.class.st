@@ -100,10 +100,8 @@ GtLObjectValueResult >> printOn: aStream [
 
 { #category : #updating }
 GtLObjectValueResult >> updatelaygroupdPageReferenceForDatabase: aDatabase [
-	self 
-		assert: [ object notNil ] 
-		description: 'The object must be initialized before updating the lepiter page'. 
-	
+	object ifNil: [ ^ self ].
+
 	object gtPlaygroundPageStrategy
 		detectPlaygroundPageInDatabase: aDatabase
 		forObject: object
