@@ -83,7 +83,7 @@ GtSimpleInMemoryVectorDatabase >> query: queryString maxMatches: anInteger [
 	"Generates the embedding for the supplied string and return a collection of keyObjects sorted by embedding distance"
 	| queryEmbedding nearestEmbeddings sorted |
 	queryEmbedding := self embeddingFor: queryString.
-	nearestEmbeddings := GtLlmEmbeddingsUtilities
+	nearestEmbeddings := GtLEmbeddingsUtilities
 		distancesFromEmbeddings: embeddings
 		to: queryEmbedding
 		usingMetric: distanceMetric.

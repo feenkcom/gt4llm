@@ -10,6 +10,18 @@ Class {
 	#category : #'Gt4LlmCore-Magritte Objects'
 }
 
+{ #category : #'as yet unclassified' }
+GtLSmalltalkCodeEvaluationResult class >> forObject: anObject withId: anId andCode: aString [
+	^ self forObject: anObject withId: anId code: aString playgroundPageReference: nil
+]
+
+{ #category : #'as yet unclassified' }
+GtLSmalltalkCodeEvaluationResult class >> forObject: anObject withId: anId code: aString playgroundPageReference: aLepiterPageReference [
+	^ (self forObject: anObject withId: anId) 
+			code: aString;
+			playgroundPageReference: aLepiterPageReference
+]
+
 { #category : #accessing }
 GtLSmalltalkCodeEvaluationResult >> code [
 	^ code

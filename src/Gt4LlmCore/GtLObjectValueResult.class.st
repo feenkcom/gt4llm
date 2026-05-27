@@ -3,14 +3,15 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'object',
-		'objectValue'
+		'objectValue',
+		'playgroundPageReference'
 	],
 	#category : #'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #'instance creation' }
 GtLObjectValueResult class >> forObject: anObject [ 
-	^ self new 
+	^self new 
 		object: anObject;
 		objectValue: (GtLSerializedObjectValue fromObject: anObject)
 ]
@@ -72,7 +73,41 @@ GtLObjectValueResult >> objectValueDescription [
 		beRequired
 ]
 
+{ #category : #accessing }
+GtLObjectValueResult >> playgroundPageReference [
+	^ playgroundPageReference
+]
+
+{ #category : #'instance creation' }
+GtLObjectValueResult >> playgroundPageReference: aPageReference [
+	playgroundPageReference := aPageReference
+]
+
+{ #category : #descriptions }
+GtLObjectValueResult >> playgroundPageReferenceDescription [
+	<magritteDescription>
+	^ MAToOneRelationDescription new
+		accessor: #playgroundPageReference;
+		comment: 'The reference to the playground Lepiter page with snippets specific to the object';
+		classes: { GtLLepiterPageReference};
+		beOptional
+]
+
 { #category : #printing }
 GtLObjectValueResult >> printOn: aStream [
 	self object printOn: aStream
+]
+
+{ #category : #updating }
+GtLObjectValueResult >> updatelaygroupdPageReferenceForDatabase: aDatabase [
+	self 
+		assert: [ object notNil ] 
+		description: 'The object must be initialized before updating the lepiter page'. 
+	
+	object gtPlaygroundPageStrategy
+		detectPlaygroundPageInDatabase: aDatabase
+		forObject: object
+		ifPresent: [ :aPage | 
+			self playgroundPageReference: (GtLLepiterPageReference new page:aPage) ]
+		ifAbsent: [ "We ignore the case when the page is not present" ].
 ]

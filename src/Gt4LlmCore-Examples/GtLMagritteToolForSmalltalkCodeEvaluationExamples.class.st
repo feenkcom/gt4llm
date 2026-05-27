@@ -4,10 +4,17 @@ Examples for GtLMagritteToolForSmalltalkCodeEvaluation.
 Class {
 	#name : #GtLMagritteToolForSmalltalkCodeEvaluationExamples,
 	#superclass : #GtLAbstractMagritteFunctionToolExamples,
-	#traits : 'TGtLExceptionDomainObjectAssertions',
-	#classTraits : 'TGtLExceptionDomainObjectAssertions classTrait',
+	#instVars : [
+		'theDatabase'
+	],
 	#category : #'Gt4LlmCore-Examples-Tools'
 }
+
+{ #category : #asserting }
+GtLMagritteToolForSmalltalkCodeEvaluationExamples >> assertExceptionDomainObject: aDomainObject withExceptionClass: anExceptionClass messageSubstring: aMessageSubstring [
+	self assert: aDomainObject exception class equals: anExceptionClass.
+	self assert: (aDomainObject messageText includesSubstring: aMessageSubstring).
+]
 
 { #category : #assertions }
 GtLMagritteToolForSmalltalkCodeEvaluationExamples >> assertSmalltalkCodeEvaluationException: aDomainObject withCode: aCodeString exceptionClass: anExceptionClass messageSubstring: aMessageSubstring [
@@ -41,15 +48,23 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> emptyCodeArgument [
 	^ call
 ]
 
+{ #category : #private }
+GtLMagritteToolForSmalltalkCodeEvaluationExamples >> ensureLepiterPageForObject: anObject withSnippetCode: aString [
+	self lepiterPageReferenceForObject: anObject withSnippetCode: aString
+]
+
 { #category : #examples }
 GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeReturningBlElement [
 	<gtExample>
 	<return: #GtLFunctionToolCall>
 	"Test execution that returns a BlElement, which has image views."
-	| objectStorage call targetObject objectValue |
+	| objectStorage tool call targetObject objectValue |
 	objectStorage := GtLObjectStorage new.
+	self ensureLepiterPageForObject: BlElement new withSnippetCode: 'BlElement new'.
+	tool := GtLMagritteToolForSmalltalkCodeEvaluation new.
+	tool database: self theDatabase.
 	call := self
-		executeTool: GtLMagritteToolForSmalltalkCodeEvaluation new
+		executeTool: tool
 		withArguments: {
 			'code' -> 'BlElement new'.
 			'bindings' -> #()
@@ -59,6 +74,9 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeReturningBlElement [
 	self assert: (targetObject isKindOf: GtLSmalltalkCodeEvaluationResult).
 	self assert: (targetObject object isKindOf: BlElement).
 	self assert: targetObject code equals: 'BlElement new'.
+	self assert: targetObject playgroundPageReference notNil.
+	self assert: targetObject playgroundPageReference databaseId equals: self theDatabase primaryDB uuidString.
+	self assert: targetObject playgroundPageReference pageId equals: self theDatabase pages first uid asString36.
 	objectValue := targetObject objectValue.
 	self assert: objectValue objectClassName equals: 'BlElement'.
 	self assert: objectValue superclassName equals: 'Object'.
@@ -77,10 +95,13 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeReturningBlElement [
 GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeReturningObjectWithSlots [
 	<gtExample>
 	"Test execution that returns an object with slots and views."
-	| objectStorage call targetObject objectValue storedResult |
+	| objectStorage tool call targetObject objectValue storedResult |
 	objectStorage := GtLObjectStorage new.
+	self ensureLepiterPageForObject: GtLSerializedObjectValueTestObject exampleInstance withSnippetCode: 'GtLSerializedObjectValueTestObject exampleInstance'.
+	tool := GtLMagritteToolForSmalltalkCodeEvaluation new.
+	tool database: self theDatabase.
 	call := self
-		executeTool: GtLMagritteToolForSmalltalkCodeEvaluation new
+		executeTool: tool
 		withArguments: {
 			'code' -> 'GtLSerializedObjectValueTestObject exampleInstance'.
 			'bindings' -> #()
@@ -92,6 +113,9 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeReturningObjectWithS
 	self assert: targetObject object name equals: 'TestObject'.
 	self assert: targetObject object count equals: 42.
 	self assert: targetObject object items equals: #('apple' 'banana' 'cherry').
+	self assert: targetObject playgroundPageReference notNil.
+	self assert: targetObject playgroundPageReference databaseId equals: self theDatabase primaryDB uuidString.
+	self assert: targetObject playgroundPageReference pageId equals: self theDatabase pages first uid asString36.
 	objectValue := targetObject objectValue.
 	self assert: objectValue objectClassName equals: 'GtLSerializedObjectValueTestObject'.
 	self assert: objectValue superclassName equals: 'Object'.
@@ -117,11 +141,14 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeReturningObjectWithS
 GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeReturningObjectWithSlotsSerialization [
 	<gtExample>
 	"Test that the result serializes correctly to JSON."
-	| call jsonObject objectValue slots |
+	| call jsonObject objectValue slots pageReference |
 	call := self executeReturningObjectWithSlots.
 	jsonObject := GtMagritteJSONDataExporter exportObject: call result targetObject.
 	self assert: (jsonObject at: 'code') equals: 'GtLSerializedObjectValueTestObject exampleInstance'.
 	self assert: (jsonObject at: 'objectId') isNotEmpty.
+	pageReference := jsonObject at: 'playgroundPageReference'.
+	self assert: (pageReference at: 'databaseId') equals: self theDatabase primaryDB uuidString.
+	self assert: (pageReference at: 'pageId') isNotEmpty.
 	objectValue := jsonObject at: 'objectValue'.
 	self assert: (objectValue at: 'objectClassName') equals: 'GtLSerializedObjectValueTestObject'.
 	self assert: (objectValue at: 'superclassName') equals: 'Object'.
@@ -145,10 +172,13 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeReturningObjectWithS
 { #category : #examples }
 GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeSimpleDoIt [
 	<gtExample>
-	| objectStorage call targetObject storedResult |
+	| objectStorage tool call targetObject storedResult |
 	objectStorage := GtLObjectStorage new.
+	self ensureLepiterPageForObject: 3 withSnippetCode: '1 + 2'.
+	tool := GtLMagritteToolForSmalltalkCodeEvaluation new.
+	tool database: self theDatabase.
 	call := self
-		executeTool: GtLMagritteToolForSmalltalkCodeEvaluation new
+		executeTool: tool
 		withArguments: {
 			'code' -> '1 + 2'.
 			'bindings' -> #()
@@ -161,6 +191,9 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeSimpleDoIt [
 	self assert: targetObject objectValue objectClassName equals: 'SmallInteger'.
 	self assert: targetObject objectValue objectPrintString equals: '3'.
 	self assert: targetObject objectId isNotEmpty.
+	self assert: targetObject playgroundPageReference notNil.
+	self assert: targetObject playgroundPageReference databaseId equals: self theDatabase primaryDB uuidString.
+	self assert: targetObject playgroundPageReference pageId equals: self theDatabase pages first uid asString36.
 	self assert: objectStorage objectCount equals: 1.
 	self assert: (objectStorage objectAt: objectStorage objectIds first) equals: 3.
 	storedResult := objectStorage storedObjectAt: targetObject objectId.
@@ -172,10 +205,13 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeSimpleDoIt [
 { #category : #examples }
 GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeSimpleDoItWithNoBindingKey [
 	<gtExample>
-	| objectStorage call targetObject storedResult |
+	| objectStorage tool call targetObject storedResult |
 	objectStorage := GtLObjectStorage new.
+	self ensureLepiterPageForObject: 3 withSnippetCode: '1 + 2'.
+	tool := GtLMagritteToolForSmalltalkCodeEvaluation new.
+	tool database: self theDatabase.
 	call := self
-		executeTool: GtLMagritteToolForSmalltalkCodeEvaluation new
+		executeTool: tool
 		withArguments: {
 			'code' -> '1 + 2'.
 		} asDictionary
@@ -187,11 +223,35 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeSimpleDoItWithNoBind
 	self assert: targetObject objectValue objectClassName equals: 'SmallInteger'.
 	self assert: targetObject objectValue objectPrintString equals: '3'.
 	self assert: targetObject objectId isNotEmpty.
+	self assert: targetObject playgroundPageReference notNil.
+	self assert: targetObject playgroundPageReference databaseId equals: self theDatabase primaryDB uuidString.
+	self assert: targetObject playgroundPageReference pageId equals: self theDatabase pages first uid asString36.
 	self assert: objectStorage objectCount equals: 1.
 	self assert: (objectStorage objectAt: objectStorage objectIds first) equals: 3.
 	storedResult := objectStorage storedObjectAt: targetObject objectId.
 	self assert: storedResult reason class equals: GtLStoredObjectCodeExecutionReason.
 	self assert: storedResult reason asReasonString equals: '1 + 2'.
+	^ call
+]
+
+{ #category : #examples }
+GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeSimpleDoItWithoutLepiterPage [
+	<gtExample>
+	| objectStorage tool call targetObject |
+	objectStorage := GtLObjectStorage new.
+	tool := GtLMagritteToolForSmalltalkCodeEvaluation new.
+	tool database: self theDatabase.
+	call := self
+		executeTool: tool
+		withArguments: {
+			'code' -> 'LePage new'.
+			'bindings' -> #()
+		} asDictionary
+		inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
+	targetObject := call result targetObject.
+	self assert: (targetObject isKindOf: GtLSmalltalkCodeEvaluationResult).
+	self assert: (targetObject object isKindOf: LePage).
+	self assert: targetObject playgroundPageReference isNil.
 	^ call
 ]
 
@@ -361,11 +421,14 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithBindingNilObject
 { #category : #examples }
 GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithBindings [
 	<gtExample>
-	| objectStorage call targetObject bindingObjectId resultObjectId storedResult |
+	| objectStorage tool call targetObject bindingObjectId resultObjectId storedResult |
 	objectStorage := GtLObjectStorage new.
 	bindingObjectId := objectStorage addNewObject: 40.
+	self ensureLepiterPageForObject: 42 withSnippetCode: 'value + 2'.
+	tool := GtLMagritteToolForSmalltalkCodeEvaluation new.
+	tool database: self theDatabase.
 	call := self
-		executeTool: GtLMagritteToolForSmalltalkCodeEvaluation new
+		executeTool: tool
 		withArguments: {
 			'code' -> 'value + 2'.
 			'bindings' -> {
@@ -376,6 +439,9 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithBindings [
 	targetObject := call result targetObject.
 	self assert: (targetObject isKindOf: GtLSmalltalkCodeEvaluationResult).
 	self assert: targetObject object equals: 42.
+	self assert: targetObject playgroundPageReference notNil.
+	self assert: targetObject playgroundPageReference databaseId equals: self theDatabase primaryDB uuidString.
+	self assert: targetObject playgroundPageReference pageId equals: self theDatabase pages first uid asString36.
 	resultObjectId := targetObject objectId.
 	self assert: resultObjectId isNotEmpty.
 	self assert: resultObjectId ~= bindingObjectId.
@@ -426,6 +492,37 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithError [
 	^ call
 ]
 
+{ #category : #private }
+GtLMagritteToolForSmalltalkCodeEvaluationExamples >> expectedPlaygroundPageReferenceForObjectClassName: aClassName [
+	| page expectedTitle |
+	expectedTitle := aClassName , ' Page'.
+	page := self theDatabase pages detect: [ :each | each title = expectedTitle ].
+	^ NeoJSONObject new
+		at: 'databaseId' put: self theDatabase primaryDB uuidString;
+		at: 'pageId' put: page uid asString36;
+		yourself
+]
+
+{ #category : #initialization }
+GtLMagritteToolForSmalltalkCodeEvaluationExamples >> initialize [
+	super initialize.
+	theDatabase := nil
+]
+
+{ #category : #private }
+GtLMagritteToolForSmalltalkCodeEvaluationExamples >> lepiterPageReferenceForObject: anObject withSnippetCode: aString [
+	| page snippet |
+	page := LePage pharoClassName: anObject class name.
+	snippet := LePharoSnippet new.
+	snippet code: aString.
+	page addSnippet: snippet.
+	self theDatabase addPage: page.
+	self assert: page children size equals: 1.
+	^ GtLLepiterPageReference new
+		page: page;
+		yourself
+]
+
 { #category : #examples }
 GtLMagritteToolForSmalltalkCodeEvaluationExamples >> missingCodeArgument [
 	<gtExample>
@@ -443,4 +540,12 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> missingCodeArgument [
 		path: #(nil)
 		errorMessage: 'required properties missing [code]'.
 	^ call
+]
+
+{ #category : #accessing }
+GtLMagritteToolForSmalltalkCodeEvaluationExamples >> theDatabase [
+	^ theDatabase ifNil: [
+		| db |
+		db := LeExplicitlyAttachedLinksExamples new emptyDatabase.
+		theDatabase := LeLogicalDatabase new primaryDB: db ]
 ]

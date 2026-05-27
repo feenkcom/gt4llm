@@ -4,15 +4,31 @@ Examples for GtLMagritteToolForExampleMethodRun.
 Class {
 	#name : #GtLToolForExampleMethodRunExamples,
 	#superclass : #GtLAbstractMagritteFunctionToolExamples,
+	#instVars : [
+		'theDatabase'
+	],
 	#category : #'Gt4LlmCore-Examples-Tools'
 }
+
+{ #category : #private }
+GtLToolForExampleMethodRunExamples >> ensureLepiterPageForObject: anObject withSnippetCode: aString [
+	| page snippet |
+	page := LePage pharoClassName: anObject class name.
+	snippet := LePharoSnippet new.
+	snippet code: aString.
+	page addSnippet: snippet.
+	self theDatabase addPage: page.
+	self assert: page children size equals: 1
+]
 
 { #category : #examples }
 GtLToolForExampleMethodRunExamples >> exampleRunError [
 	<gtExample>
-	| call targetObject |
+	| tool call targetObject |
+	tool := GtLToolForExampleMethodRun new.
+	tool database: self theDatabase.
 	call := self
-		executeTool: GtLToolForExampleMethodRun new
+		executeTool: tool
 		withArguments: {
 			'exampleReference' -> {
 				'exampleClassName' -> 'GtLExampleRunDummyExamples'.
@@ -23,15 +39,18 @@ GtLToolForExampleMethodRunExamples >> exampleRunError [
 	targetObject := call result targetObject.
 	self assert: (targetObject isKindOf: GtLExampleWithResult).
 	self assert: targetObject isErrorResult.
+	self assert: targetObject playgroundPageReference isNil.
 	^ call
 ]
 
 { #category : #examples }
 GtLToolForExampleMethodRunExamples >> exampleRunFailure [
 	<gtExample>
-	| call targetObject |
+	| tool call targetObject |
+	tool := GtLToolForExampleMethodRun new.
+	tool database: self theDatabase.
 	call := self
-		executeTool: GtLToolForExampleMethodRun new
+		executeTool: tool
 		withArguments: {
 			'exampleReference' -> {
 				'exampleClassName' -> 'GtLExampleRunDummyExamples'.
@@ -42,6 +61,7 @@ GtLToolForExampleMethodRunExamples >> exampleRunFailure [
 	targetObject := call result targetObject.
 	self assert: (targetObject isKindOf: GtLExampleWithResult).
 	self assert: targetObject isFailureResult.
+	self assert: targetObject playgroundPageReference isNil.
 	^ call
 ]
 
@@ -202,9 +222,13 @@ GtLToolForExampleMethodRunExamples >> exampleRunForUnknownMethod [
 { #category : #examples }
 GtLToolForExampleMethodRunExamples >> exampleRunSuccess [
 	<gtExample>
-	| call targetObject |
+	| tool call targetObject resultObject |
+	resultObject := GtTMoneyExamples new fortyTwoEuros.
+	self ensureLepiterPageForObject: resultObject withSnippetCode: 'GtTMoneyExamples new fortyTwoEuros'.
+	tool := GtLToolForExampleMethodRun new.
+	tool database: self theDatabase.
 	call := self
-		executeTool: GtLToolForExampleMethodRun new
+		executeTool: tool
 		withArguments: {
 			'exampleReference' -> {
 				'exampleClassName' -> 'GtTMoneyExamples'.
@@ -216,16 +240,23 @@ GtLToolForExampleMethodRunExamples >> exampleRunSuccess [
 	self assert: (targetObject isKindOf: GtLExampleWithResult).
 	self assert: targetObject isSuccessResult.
 	self assert: targetObject objectId isNil.
+	self assert: targetObject playgroundPageReference notNil.
+	self assert: targetObject playgroundPageReference databaseId equals: self theDatabase primaryDB uuidString.
+	self assert: targetObject playgroundPageReference pageId equals: self theDatabase pages first uid asString36.
 	^ call
 ]
 
 { #category : #examples }
 GtLToolForExampleMethodRunExamples >> exampleRunSuccessStoresObjectId [
 	<gtExample>
-	| objectStorage call targetObject objectId storedObject |
+	| objectStorage tool call targetObject objectId storedObject resultObject |
+	resultObject := GtLExampleRunDummyExamples new successfulExample.
+	self ensureLepiterPageForObject: resultObject withSnippetCode: 'GtLExampleRunDummyExamples new successfulExample'.
 	objectStorage := GtLObjectStorage new.
+	tool := GtLToolForExampleMethodRun new.
+	tool database: self theDatabase.
 	call := self
-		executeTool: GtLToolForExampleMethodRun new
+		executeTool: tool
 		withArguments: {
 			'exampleReference' -> {
 				'exampleClassName' -> 'GtLExampleRunDummyExamples'.
@@ -237,10 +268,21 @@ GtLToolForExampleMethodRunExamples >> exampleRunSuccessStoresObjectId [
 	targetObject := call result targetObject.
 	self assert: (targetObject isKindOf: GtLExampleWithResult).
 	self assert: targetObject isSuccessResult.
+	self assert: targetObject playgroundPageReference notNil.
+	self assert: targetObject playgroundPageReference databaseId equals: self theDatabase primaryDB uuidString.
+	self assert: targetObject playgroundPageReference pageId equals: self theDatabase pages first uid asString36.
 	objectId := targetObject objectId.
 	self assert: objectId isString.
 	self assert: (objectStorage objectAt: objectId) equals: 42.
 	storedObject := objectStorage storedObjectAt: objectId.
 	self assert: storedObject reason class equals: GtLStoredObjectExampleMethodReason.
 	^ call
+]
+
+{ #category : #accessing }
+GtLToolForExampleMethodRunExamples >> theDatabase [
+	^ theDatabase ifNil: [
+		| db |
+		db := LeExplicitlyAttachedLinksExamples new emptyDatabase.
+		theDatabase := LeLogicalDatabase new primaryDB: db ]
 ]

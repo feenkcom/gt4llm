@@ -65,5 +65,6 @@ GtLOllamaProvider >> modelName: aString [
 	| newModel |
 
 	newModel := GtLModelFactory new ollama_completions: aString.
+	"Setting the provider in the model will update the receiver's model"
 	newModel provider: self.
 ]
