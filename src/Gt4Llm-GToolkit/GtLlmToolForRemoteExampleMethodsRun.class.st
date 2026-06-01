@@ -124,6 +124,16 @@ GtLlmToolForRemoteExampleMethodsRun >> addRemoveMethod: changeDictionary to: eve
 ]
 
 { #category : #api }
+GtLlmToolForRemoteExampleMethodsRun >> addWorkersFromRunner: runner to: report [ 
+	| workerAttributes |
+
+	workerAttributes := Array streamContents: [ :stream |
+		runner registeredWorkersDo: [ :worker |
+			stream nextPut: worker attributes asDictionary ] ].
+	report at: 'workerAttributes' put: workerAttributes.
+]
+
+{ #category : #api }
 GtLlmToolForRemoteExampleMethodsRun >> allChangesFromLocal: customChanges image: imageChanges [
 
 	^ GtRrImageSyncEvents new
@@ -265,11 +275,13 @@ GtLlmToolForRemoteExampleMethodsRun >> privatePerformToolCall: aToolCall [
 			self
 				addErrorMessage: 'Timeout before result received'
 				to: report.
+			self addWorkersFromRunner: runner to: report.
 			^ STONJSON toString: report ].
-	(job hasErrors and: [ job errorDetails isNotNil ])
-		ifTrue: [ self
+	(job hasErrors and: [ job errorDetails isNotNil ]) ifTrue: 
+		[ self
 				addErrorMessage: 'Job completed with errors: ' , job errorDetails asString
-				to: report ].
+				to: report.
+		self addWorkersFromRunner: runner to: report. ].
 	results := job results ifNil: [ #() ].
 	results isEmpty
 		ifTrue: [ self addErrorMessage: 'Job completed, but has no results' to: report ]
