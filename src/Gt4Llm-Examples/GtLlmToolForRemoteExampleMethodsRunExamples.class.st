@@ -201,12 +201,12 @@ GtLlmToolForRemoteExampleMethodsRunExamples >> exampleRunNewClassDefinition [
 	result := STONJSON fromString: resultString.
 	self assert: call tool == tool.
 	self assert: result class name equals: #Dictionary.
-	self assert: result size equals: 1.
 	results := result at: 'results' ifAbsent:
 		[ self error: '''results'' not found in: ', (STONJSON toStringPretty: result) ].
-	self assert: results size equals: 1.
+	self assert: result size equals: 1.
 	resultDictionary := results first at: 'result' ifAbsent:
 		[ self error: '''result'' not found in: ', (STONJSON toStringPretty: resultDictionary) ].
+	self assert: results size equals: 1.
 	self assert: resultDictionary equals: 'pass'.
 	^ tool
 ]
@@ -341,14 +341,14 @@ GtLlmToolForRemoteExampleMethodsRunExamples >> exampleRunSuccess [
 	result := STONJSON fromString: resultString.
 	self assert: call tool == tool.
 	self assert: result class name equals: #Dictionary.
-	self assert: result size equals: 1.
 	results := result at: 'results' ifAbsent:
 		[ self error: '''results'' not found in: ', (STONJSON toStringPretty: result) ].
-	self assert: results size equals: 3.
+	self assert: result size equals: 1.
 	self assert: (results collect: [ :resultDictionary |
 		resultDictionary at: 'result' ifAbsent:
 			[ self error: '''result'' not found in: ', (STONJSON toStringPretty: resultDictionary) ] ] as: Set) equals:
 		#('pass' 'failure' 'error') asSet.
+	self assert: results size equals: 3.
 	^ tool
 ]
 
@@ -375,13 +375,13 @@ GtLlmToolForRemoteExampleMethodsRunExamples >> exampleRunSuccessEmptyChanges [
 	result := STONJSON fromString: resultString.
 	self assert: call tool == tool.
 	self assert: result class name equals: #Dictionary.
-	self assert: result size equals: 1.
 	results := result at: 'results' ifAbsent:
 		[ self error: '''results'' not found in: ', (STONJSON toStringPretty: result) ].
-	self assert: results size equals: 1.
+	self assert: result size equals: 1.
 	testResult := results first at: 'result' ifAbsent:
 		[ self error: '''result'' not found in: ', (STONJSON toStringPretty: testResult)].
 	self assert: testResult equals: 'pass'.
+	self assert: results size equals: 1.
 	^ tool
 ]
 
@@ -407,11 +407,11 @@ GtLlmToolForRemoteExampleMethodsRunExamples >> exampleRunSuccessNoChanges [
 	result := STONJSON fromString: resultString.
 	self assert: call tool == tool.
 	self assert: result class name equals: #Dictionary.
-	self assert: result size equals: 1.
 	results := result at: 'results' ifAbsent:
 		[ self error: '''results'' not found in: ', (STONJSON toStringPretty: result) ].
-	self assert: results size equals: 1.
+	self assert: result size equals: 1.
 	self assert: (results first at: 'result') equals: 'pass'.
+	self assert: results size equals: 1.
 	^ tool
 ]
 
