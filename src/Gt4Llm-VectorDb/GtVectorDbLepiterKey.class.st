@@ -18,6 +18,14 @@ GtVectorDbLepiterKey >> = anObject [
 		and: [ self lepiterSnippetUid = anObject lepiterSnippetUid ] ]
 ]
 
+{ #category : #printing }
+GtVectorDbLepiterKey >> gtDisplayOn: aStream [
+
+	lepiterPageName ifNil:
+		[ ^ super gtDisplayOn: aStream ].
+	aStream << lepiterPageName asString
+]
+
 { #category : #ui }
 GtVectorDbLepiterKey >> gtLepiterPageFor: aView [
 	<gtView>

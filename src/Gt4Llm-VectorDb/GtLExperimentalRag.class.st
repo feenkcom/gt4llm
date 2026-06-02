@@ -6,7 +6,6 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'maxContextLength',
-		'vectorDbFile',
 		'lepiterRagDb',
 		'lepiterDbName'
 	],
@@ -31,6 +30,13 @@ GtLExperimentalRag class >> default [
 	^ uniqueInstance
 ]
 
+{ #category : #accesing }
+GtLExperimentalRag class >> defaultVectorDbFile [
+	"Answer the file reference for the ston file used to store the in-memory vector db.
+	Not used by the Chroma DB."
+	^ FileLocator temp / 'gt-book.vectordb.ston'
+]
+
 { #category : #factory }
 GtLExperimentalRag class >> forLepiterDbName: aString [
 
@@ -41,6 +47,7 @@ GtLExperimentalRag class >> forLepiterDbName: aString [
 
 { #category : #factory }
 GtLExperimentalRag class >> gtBook [
+	<gtExample>
 
 	^ self forLepiterDbName: 'Glamorous Toolkit Book'.
 ]
@@ -49,6 +56,20 @@ GtLExperimentalRag class >> gtBook [
 GtLExperimentalRag class >> instances [
 
 	^ Instances ifNil: [ Instances := Dictionary new ]
+]
+
+{ #category : #converting }
+GtLExperimentalRag >> asRag [
+
+	^ self
+]
+
+{ #category : #converting }
+GtLExperimentalRag >> asRagQueryContext [
+	"Answer a Rag Query context that can be used with the receiver"
+
+	^ GtLLepiterRagQueryContext new
+		rag: self
 ]
 
 { #category : #ui }
@@ -85,32 +106,52 @@ GtLExperimentalRag >> lepiterDbName: anObject [
 { #category : #accessing }
 GtLExperimentalRag >> lepiterRagDb [
 
-	^ lepiterRagDb ifNil:
-		[ lepiterRagDb := self loadLepiterRagDb ].
+	^ lepiterRagDb.
 ]
 
 { #category : #'private - accessing' }
-GtLExperimentalRag >> loadLepiterRagDb [
-	"Answer a new instance of GtLLepiterRagDb"
-	| ragDb vectorDb |
+GtLExperimentalRag >> loadChromaDbLepiterRagDb [
+	"Answer a new instance of GtLLepiterRagDb using ChromaDb"
+	| vectorDb |
 
-	ragDb := GtLLepiterRagDb new
+	lepiterRagDb := GtLLepiterRagDb new
+		lepiterDbName: self lepiterDbName.
+	vectorDb := LeChromaDb new
+		collectionName: (self lepiterDbName
+			copyReplaceAll: ' ' with: '_').
+	lepiterRagDb vectorDb: vectorDb.
+
+	"If there are records in the collection, the db is already populated"
+	vectorDb size > 0 ifTrue: [ ^ lepiterRagDb ].
+
+	self lepiterDb pages do: [ :aPage |
+		lepiterRagDb loadLepiterPage: aPage ].
+
+	^ lepiterRagDb
+]
+
+{ #category : #'private - accessing' }
+GtLExperimentalRag >> loadInMemoryLepiterRagDb: aFileReference [
+	"Answer a new instance of GtLLepiterRagDb using the simple in-memory db"
+	| vectorDb |
+
+	lepiterRagDb := GtLLepiterRagDb new
 		lepiterDbName: self lepiterDbName.
 
 	"If the DB has been saved to disk, load it from there"
-	self vectorDbFile exists ifTrue: 
-		[ ragDb vectorDb: (self vectorDbFile 
+	aFileReference exists ifTrue: 
+		[ lepiterRagDb vectorDb: (aFileReference
 			readStreamDo: [ :stream | STON fromStream: stream ]).
-		^ ragDb ].
+		^ lepiterRagDb ].
 
 	"Otherwise, generate a new vector db"
 	vectorDb := GtSimpleInMemoryVectorDatabase new.
-	ragDb vectorDb: vectorDb.
+	lepiterRagDb vectorDb: vectorDb.
 	self lepiterDb pages do: [ :aPage |
-		ragDb loadLepiterPage: aPage ].
-	self saveVectorDb: vectorDb.
+		lepiterRagDb loadLepiterPage: aPage ].
+	vectorDb stonTo: aFileReference.
 
-	^ ragDb
+	^ lepiterRagDb
 ]
 
 { #category : #api }
@@ -120,16 +161,11 @@ GtLExperimentalRag >> query: aLepiterRagQueryContext [
 	^ self lepiterRagDb query: aLepiterRagQueryContext.
 ]
 
-{ #category : #private }
-GtLExperimentalRag >> saveVectorDb: vectorDb [
-	vectorDb stonTo: self vectorDbFile
-]
-
 { #category : #ui }
 GtLExperimentalRag >> summaryAttributes [
 
 	^ {
-		{ 'Default max. explanation length'. self class defaultMaxContextLength. self class class >> #defaultMaxContextLength. }.
+		{ 'Default max. explanation length'. GtLLepiterRagQueryContext defaultMaxContextLength. GtLLepiterRagQueryContext class >> #defaultMaxContextLength. }.
 		{ 'Default embedding model'. GtSimpleInMemoryVectorDatabase  defaultEmbeddingModelName.  GtSimpleInMemoryVectorDatabase  class >> #defaultEmbeddingModelName.}.
 		{ 'Default chunk size'. GtLLepiterRagDb defaultChunkSize. GtLLepiterRagDb  class >> #defaultChunkSize. }.
 		{ 'Default chunk overlap'. GtLLepiterRagDb defaultChunkOverlap. GtLLepiterRagDb  class >> #defaultChunkOverlap. }.
@@ -142,33 +178,4 @@ GtLExperimentalRag >> updateVectorDb [
 
 	self lepiterRagDb updateVectorDbSince: self vectorDbFile modificationTime.
 	self saveVectorDb: self lepiterRagDb vectorDb.
-]
-
-{ #category : #'private - accessing' }
-GtLExperimentalRag >> vectorDb [
-	| vectorDb |
-	
-	self vectorDbFile exists
-		ifTrue: [ ^ self vectorDbFile readStreamDo: [ :stream | STON fromStream: stream ] ].
-
-	"Generate a new vector db"
-	vectorDb := GtLLepiterRagDb new
-			lepiterDbName: self lepiterDbName;
-			createVectorDb.
-	utilities := GtLLepiterRagDb new vectorDb: vectorDb.
-	self saveVectorDb: vectorDb.
-	^ vectorDb
-]
-
-{ #category : #'private - accessing' }
-GtLExperimentalRag >> vectorDbFile [
-
-	^ vectorDbFile ifNil:
-		[ vectorDbFile := FileLocator temp / 'gt-book.vectordb.ston' ]
-]
-
-{ #category : #accessing }
-GtLExperimentalRag >> vectorDbFile: aFileReference [
-
-	vectorDbFile := aFileReference
 ]

@@ -6,7 +6,10 @@ Class {
 		'lepiterRagDb',
 		'contextPageEntries',
 		'candidatePageEntries',
-		'maxContextLength'
+		'maxContextLength',
+		'rankings',
+		'options',
+		'rag'
 	],
 	#category : #'Gt4Llm-VectorDb-Support'
 }
@@ -15,6 +18,24 @@ Class {
 GtLLepiterRagQueryContext class >> defaultMaxContextLength [
 
 	^ 10000
+]
+
+{ #category : #accessing }
+GtLLepiterRagQueryContext >> addRanking: aCollection [
+
+	rankings add: aCollection
+]
+
+{ #category : #converting }
+GtLLepiterRagQueryContext >> asRag [
+
+	^ rag
+]
+
+{ #category : #converting }
+GtLLepiterRagQueryContext >> asRagQueryContext [
+
+	^ self
 ]
 
 { #category : #accessing }
@@ -60,6 +81,18 @@ GtLLepiterRagQueryContext >> gtContextPageEntriesFor: aView [
 ]
 
 { #category : #views }
+GtLLepiterRagQueryContext >> gtOptionsFor: aView [
+	<gtView>
+	options ifNil: [ ^ aView empty ].
+	^ aView columnedList
+		title: 'Options';
+		items: [ options associations ];
+		column: 'Key' text: [ :each | each key gtDisplayString ];
+		column: 'Value' text: [ :each | each value gtDisplayString ];
+		send: [ :each | each value ]
+]
+
+{ #category : #views }
 GtLLepiterRagQueryContext >> gtQueryStringFor: aView [
 	<gtView>
 	queryString ifNil: [ ^ aView empty ].
@@ -67,6 +100,16 @@ GtLLepiterRagQueryContext >> gtQueryStringFor: aView [
 		title: 'QueryString';
 		priority: 10;
 		text: [ queryString ]
+]
+
+{ #category : #views }
+GtLLepiterRagQueryContext >> gtRankingsFor: aView [
+	<gtView>
+	rankings ifNil: [ ^ aView empty ].
+	^ aView columnedList
+		title: 'Rankings';
+		items: [ rankings ];
+		column: 'Value' text: [ :each | each gtDisplayString ]
 ]
 
 { #category : #ui }
@@ -80,6 +123,13 @@ GtLLepiterRagQueryContext >> gtSummaryFor: aView [
 		  column: #Attribute text: [ :item | item first ];
 		  column: #Value text: [ :item | item second ];
 		  send: #last.
+]
+
+{ #category : #'as yet unclassified' }
+GtLLepiterRagQueryContext >> initialize [
+
+	super initialize.
+	rankings := OrderedCollection new.
 ]
 
 { #category : #accessing }
@@ -102,6 +152,44 @@ GtLLepiterRagQueryContext >> maxContextLength: anObject [
 	maxContextLength := anObject
 ]
 
+{ #category : #options }
+GtLLepiterRagQueryContext >> optionAt: aSymbol [
+
+	^ self options
+		at: aSymbol
+]
+
+{ #category : #options }
+GtLLepiterRagQueryContext >> optionAt: aSymbol ifPresent: presentBlock [
+
+	^ self options
+		at: aSymbol
+		ifPresent: presentBlock
+]
+
+{ #category : #options }
+GtLLepiterRagQueryContext >> optionAt: aSymbol ifPresent: presentBlock ifAbsent: absentBlock [
+
+	^ self options
+		at: aSymbol
+		ifPresent: presentBlock
+		ifAbsent: absentBlock
+]
+
+{ #category : #options }
+GtLLepiterRagQueryContext >> optionAt: aSymbol put: anObject [
+
+	^ self options
+		at: aSymbol
+		put: anObject
+]
+
+{ #category : #accessing }
+GtLLepiterRagQueryContext >> options [
+
+	^ options ifNil: [ options := Dictionary new ]
+]
+
 { #category : #accessing }
 GtLLepiterRagQueryContext >> queryString [
 	^ queryString
@@ -112,6 +200,16 @@ GtLLepiterRagQueryContext >> queryString: anObject [
 	queryString := anObject
 ]
 
+{ #category : #accessing }
+GtLLepiterRagQueryContext >> rag [
+	^ rag
+]
+
+{ #category : #accessing }
+GtLLepiterRagQueryContext >> rag: anObject [
+	rag := anObject
+]
+
 { #category : #ui }
 GtLLepiterRagQueryContext >> summaryAttributes [
 	| attributes |
@@ -120,7 +218,5 @@ GtLLepiterRagQueryContext >> summaryAttributes [
 		{ 'Lepiter DB'. lepiterRagDb ifNotNil: #lepiterDbName. }.
 		{ 'Max. context length'. self maxContextLength. }.
 		}.
-	lepiterRagDb ifNotNil:
-		[ attributes := attributes, lepiterRagDb summaryAttributes ].
 	^ attributes
 ]
