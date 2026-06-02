@@ -23,7 +23,7 @@ TGtLWithInstructionSectionAPI >> addToExplanationSectionLepiterPage: aLepiterPag
 TGtLWithInstructionSectionAPI >> addToExplanationSectionNamed: aTitle withContent: aContentString [
 
 	(self instructions ensureSectionNamed: 'Explanations')
-		addSection: (GtLlmInstructionSection new
+		addSection: (GtLInstructionSection new
 				title: aTitle;
 				body: aContentString).
 ]
