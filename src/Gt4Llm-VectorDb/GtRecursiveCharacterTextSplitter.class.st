@@ -126,37 +126,34 @@ GtRecursiveCharacterTextSplitter >> keepSeparator: aSymbolOrBoolean [
 ]
 
 { #category : #private }
-GtRecursiveCharacterTextSplitter >> lengthOf: aString [
-	^ aString size
-]
-
-{ #category : #private }
 GtRecursiveCharacterTextSplitter >> mergeSplits: splits separator: separator [
 	| separatorLength docs currentDoc total |
-	separatorLength := self lengthOf: separator.
+	separatorLength := separator size.
 	docs := OrderedCollection new.
 	currentDoc := OrderedCollection new.
 	total := 0.
 	splits do: [ :each |
 		| len |
-		len := self lengthOf: each.
+		len := each size.
 		(total + len + (currentDoc isEmpty ifTrue: [ 0 ] ifFalse: [ separatorLength ]) > self chunkSize)
 			ifTrue: [
 				currentDoc ifNotEmpty: [
 					| doc |
 					doc := self joinDocs: currentDoc separator: separator.
-					doc ifNotNil: [ docs add: doc ].
+					doc ifNotNil: [ doc trimBoth ifNotEmpty: [ :trimmedDoc |
+							docs add: trimmedDoc ]].
 					[ total > self chunkOverlap
 						or: [ total + len + (currentDoc isEmpty ifTrue: [ 0 ] ifFalse: [ separatorLength ]) > self chunkSize
 							and: [ total > 0 ] ] ] whileTrue: [
-						total := total - (self lengthOf: currentDoc first) - (currentDoc size > 1 ifTrue: [ separatorLength ] ifFalse: [ 0 ]).
+						total := total - (currentDoc first size) - (currentDoc size > 1 ifTrue: [ separatorLength ] ifFalse: [ 0 ]).
 						currentDoc removeFirst ] ] ].
 		currentDoc add: each.
 		total := total + len + (currentDoc size > 1 ifTrue: [ separatorLength ] ifFalse: [ 0 ]) ].
 	currentDoc ifNotEmpty: [
 		| doc |
 		doc := self joinDocs: currentDoc separator: separator.
-		doc ifNotNil: [ docs add: doc ] ].
+		doc ifNotNil: [ doc trimBoth ifNotEmpty: [ :trimmedDoc |
+			docs add: trimmedDoc ] ] ].
 	^ docs asArray
 ]
 
@@ -189,7 +186,7 @@ GtRecursiveCharacterTextSplitter >> splitText: aString [
 
 { #category : #splitting }
 GtRecursiveCharacterTextSplitter >> splitText: aString separators: separatorList [
-	| finalChunks separator newSeparators splits goodSplits mergeSeparator |
+	| finalChunks separator newSeparators |
 	finalChunks := OrderedCollection new.
 	separator := separatorList last.
 	newSeparators := #().
@@ -245,7 +242,7 @@ GtRecursiveCharacterTextSplitter >> splitUsingSeparator: separator remainingSepa
 		ifTrue: [ separator ]
 		ifFalse: [ '' ].
 	splits do: [ :each |
-		(self lengthOf: each) < self chunkSize
+		(each size) < self chunkSize
 			ifTrue: [ goodSplits add: each ]
 			ifFalse: [
 				goodSplits ifNotEmpty: [

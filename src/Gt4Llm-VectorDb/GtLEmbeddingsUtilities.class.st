@@ -34,6 +34,7 @@ GtLEmbeddingsUtilities class >> distancesFromEmbeddings: listOfEmbeddings to: aQ
 						to: aQueryEmbedding embedding
 						usingMetric: aMetric);
 				embedding: anEmbedding ]
+		as: GtLNearestEmbeddingGroup
 ]
 
 { #category : #view }

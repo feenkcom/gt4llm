@@ -239,10 +239,15 @@ GtLLepiterContentExporter >> visitSnippet: aSnippet [
 
 { #category : #'as yet unclassified' }
 GtLLepiterContentExporter >> visitTextSnippet: aLeTextSnippet [
-	stream
-		nextPutAll: (GtLTextSnippetExporter new
-				startHeaderLevel: startHeaderLevel;
-				exportAst: aLeTextSnippet ast).
+	stream nextPutAll: ([ GtLTextSnippetExporter new
+		startHeaderLevel: startHeaderLevel;
+		exportAst: aLeTextSnippet ast ]
+			on: Error
+			do: [ :ex |
+				strictMode ifTrue:
+					[ ex pass ]
+				ifFalse:
+					[ aLeTextSnippet contentAsString ] ]).
 
 	self visitChildren: aLeTextSnippet
 ]
