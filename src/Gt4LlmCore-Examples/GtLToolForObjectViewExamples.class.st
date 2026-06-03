@@ -8,6 +8,60 @@ Class {
 }
 
 { #category : #examples }
+GtLToolForObjectViewExamples >> viewContentForEmptyObjectId [
+	<gtExample>
+	| call |
+	call := self
+		executeTool: GtLToolForObjectView new
+		withArguments: {
+			'objectId' -> '   '.
+			'viewSelector' -> 'gtStringFor:'
+		} asDictionary.
+	self
+		assertMissingObject: call result targetObject
+		withObjectName: 'objectId'
+		errorMessage: 'objectId is not found'.
+	^ call
+]
+
+{ #category : #examples }
+GtLToolForObjectViewExamples >> viewContentForEmptyObjectIdAndViewSelector [
+	<gtExample>
+	| call |
+	call := self
+		executeTool: GtLToolForObjectView new
+		withArguments: {
+			'objectId' -> ''.
+			'viewSelector' -> '   '
+		} asDictionary.
+	self
+		assertMissingObject: call result targetObject
+		withObjectName: 'objectId'
+		errorMessage: 'objectId is not found'.
+	^ call
+]
+
+{ #category : #examples }
+GtLToolForObjectViewExamples >> viewContentForEmptyViewSelector [
+	<gtExample>
+	| objectStorage objectId call |
+	objectStorage := GtLObjectStorage new.
+	objectId := objectStorage addNewObject: 'Hello'.
+	call := self
+		executeTool: GtLToolForObjectView new
+		withArguments: {
+			'objectId' -> objectId.
+			'viewSelector' -> '   '
+		} asDictionary
+		inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
+	self
+		assertMissingObject: call result targetObject
+		withObjectName: 'viewSelector'
+		errorMessage: 'viewSelector is not found'.
+	^ call
+]
+
+{ #category : #examples }
 GtLToolForObjectViewExamples >> viewContentForExistingObjectAndView [
 	<gtExample>
 	| objectStorage objectId call targetObject compositeView dataBlock jsonData imageBlock |

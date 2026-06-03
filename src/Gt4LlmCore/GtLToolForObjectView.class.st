@@ -32,8 +32,13 @@ GtLToolForObjectView >> privatePerformToolCall: aToolCall inContext: anExecution
 	| arguments objectId viewSelector object phlowView method |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 
-	objectId := arguments at: 'objectId'.
-	viewSelector := (arguments at: 'viewSelector') asSymbol.
+	objectId := (arguments at: 'objectId') trimBoth.
+	objectId ifEmpty: [ 
+		^ GtLMissingDomainObject new objectName: 'objectId' ].
+	
+	viewSelector := (arguments at: 'viewSelector') trimBoth asSymbol.
+	viewSelector ifEmpty: [ 
+		^ GtLMissingDomainObject new objectName: 'viewSelector' ].
 
 	anExecutionContext objectStorage
 		ifNil: [ ^ GtLMissingInformationDomainObject new 
