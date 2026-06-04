@@ -31,6 +31,13 @@ GtLChatRegistryAddNewChatElement >> defaultLayout [
 		cellSpacing: 5
 ]
 
+{ #category : #'private - accessing' }
+GtLChatRegistryAddNewChatElement >> groupedConnections [
+
+	^ self registryViewModel connectableConnections groupedBy: [ :connection |
+		connection providerClass providerName ]
+]
+
 { #category : #initialization }
 GtLChatRegistryAddNewChatElement >> initialize [
 	super initialize.
@@ -102,21 +109,29 @@ GtLChatRegistryAddNewChatElement >> initializeUpdateConnectionsElement [
 			action: [ :aButtonElement :aButtonModel :anEvent | self updateConnectionsFrom: anEvent ]
 ]
 
-{ #category : #initialization }
+{ #category : #'private - menu models' }
 GtLChatRegistryAddNewChatElement >> newAvailableConnectionsMenuModel [
-	| someConnections aMenuItems |
-	someConnections := self registryViewModel connectableConnections.
-	someConnections ifEmpty: [ ^ nil ].
+	| groupedConnections aMenuItems |
+	groupedConnections := self groupedConnections.
+	groupedConnections ifEmpty: [ ^ nil ].
 
 	aMenuItems := BrMenuItems new.
-	someConnections
-		do: [ :eachConnection | 
-			| anItem |
-			anItem := BrMenuActionItem new
-					label: [ eachConnection label ];
-					action: [ :anElement :aButtonModel :anEvent | 
-						self onSelectConnection: eachConnection ].
-			aMenuItems addItem: anItem ].
+	aMenuItems beGroupedElementType.
+	(groupedConnections associations
+		asSortedCollection: [ :a :b | a key <= b key ])
+		doWithIndex: [ :eachAssociation :index |
+			| aGroupName someConnections |
+			aGroupName := eachAssociation key.
+			someConnections := eachAssociation value.
+			someConnections
+				do: [ :eachConnection |
+					| anItem |
+					anItem := BrMenuActionItem new
+						label: [ eachConnection label ];
+						groupId: aGroupName asSymbol priority: index;
+						action: [ :anElement :aButtonModel :anEvent |
+							self onSelectConnection: eachConnection ].
+					aMenuItems addItem: anItem ] ].
 
 	^ aMenuItems
 ]
