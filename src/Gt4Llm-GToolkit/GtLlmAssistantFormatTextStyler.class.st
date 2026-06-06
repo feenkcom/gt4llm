@@ -36,7 +36,7 @@ GtLlmAssistantFormatTextStyler >> styleUnknownFormatComponent: aCodeNode [
 
 	| location hoverMarker hoverAttribute buttonAttribute |
 	location := aCodeNode stopPosition.
-	hoverMarker := GtFixItMarkerAttribute new.
+	hoverMarker := GtFixItMarkerAttribute new purpose: #'fix-it'.
 	hoverAttribute := BlTextUnderlayAttribute
 			paint: BrGlamorousColors paleErrorBackgroundColor.
 	buttonAttribute := GtButtonAttribute new
