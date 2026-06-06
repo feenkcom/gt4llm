@@ -4,9 +4,9 @@ Extension { #name : #GtLModelUserMessage }
 GtLModelUserMessage >> addContextFromRag: aGtRag [
 	| ragContext ragPages |
 
-	ragContext := GtLLepiterRagQueryContext new
+	ragContext := aGtRag asRagQueryContext
 		queryString: self contentText.
-	ragPages := aGtRag query: ragContext.
+	ragPages := aGtRag asRag query: ragContext.
 	ragPages do: [ :ragPage |
 		self pageObjectExplanation: ragPage page ].
 ]

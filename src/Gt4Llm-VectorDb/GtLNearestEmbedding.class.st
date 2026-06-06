@@ -3,7 +3,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'distance',
-		'embedding'
+		'embedding',
+		'document'
 	],
 	#category : #'Gt4Llm-VectorDb-Support'
 }
@@ -16,6 +17,16 @@ GtLNearestEmbedding >> distance [
 { #category : #accessing }
 GtLNearestEmbedding >> distance: anObject [
 	distance := anObject
+]
+
+{ #category : #accessing }
+GtLNearestEmbedding >> document [
+	^ document
+]
+
+{ #category : #accessing }
+GtLNearestEmbedding >> document: anObject [
+	document := anObject
 ]
 
 { #category : #accessing }

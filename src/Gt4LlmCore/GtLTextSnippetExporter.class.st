@@ -111,6 +111,11 @@ GtLTextSnippetExporter >> visitExampleAnnotation: aLeExampleAnnotationNode [
 ]
 
 { #category : #'as yet unclassified' }
+GtLTextSnippetExporter >> visitExternalImageLink: aNode [
+	"No action"
+]
+
+{ #category : #'as yet unclassified' }
 GtLTextSnippetExporter >> visitExternalLabelUrlLink: aLeExternalLabelUrlLinkNode [ 
 	stream nextPutAll: aLeExternalLabelUrlLinkNode source
 ]

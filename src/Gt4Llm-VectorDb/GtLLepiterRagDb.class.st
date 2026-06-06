@@ -62,13 +62,11 @@ GtLLepiterRagDb class >> loadFrom: aFileReference [
 GtLLepiterRagDb >> gtSummaryFor: aView [
 	<gtView>
 
-	^ aView columnedList
-		  title: 'Summary';
+	^ aView forward
+		  title: 'VectorDb';
 		  priority: 5;
-		  items: [ self summaryAttributes ];
-		  column: #Attribute text: [ :item | item first ];
-		  column: #Value text: [ :item | item second ];
-		  send: #last.
+		  object: [ vectorDb ];
+		  view: #gtSummaryFor:.
 ]
 
 { #category : #testing }
@@ -105,9 +103,36 @@ GtLLepiterRagDb >> lepiterDbName: anObject [
 	lepiterDbName := anObject
 ]
 
+{ #category : #'as yet unclassified' }
+GtLLepiterRagDb >> limitLength: aLepiterRagContext pages: sortedPages [
+	| contextPages index totalLength |
+	contextPages := OrderedCollection new.
+	contextPages add: sortedPages first.
+	totalLength := (GtLLepiterContentExporter new
+			page: sortedPages first page;
+			export) size.
+	index := 2.
+	[ index <= sortedPages size
+		and: [ totalLength < aLepiterRagContext maxContextLength ] ]
+		whileTrue: [ | ragPage pageLength |
+			ragPage := sortedPages at: index.
+			pageLength := (GtLLepiterContentExporter new
+					strictMode: false;
+					page: ragPage page;
+					export) size.
+			totalLength + pageLength < aLepiterRagContext maxContextLength
+				ifTrue: [ contextPages add: ragPage ].
+			totalLength := totalLength + pageLength.
+			index := index + 1 ].
+	^ contextPages
+]
+
 { #category : #private }
 GtLLepiterRagDb >> loadLepiterPage: aPage [
 	| dbKey serialisedPage documents |
+
+	aPage isEmpty ifTrue: [ ^ self ].
+	aPage type isPharoClassPageType ifTrue: [ ^ self ].
 
 	dbKey := GtVectorDbLepiterKey new
 			lepiterDbName: self lepiterDbName;
@@ -117,13 +142,15 @@ GtLLepiterRagDb >> loadLepiterPage: aPage [
 					strictMode: false;
 					page: aPage;
 					export.
+	serialisedPage ifEmpty: 
+		[ self error: 'Unexpectedly empty page' ].
 	documents := serialisedPage size > splitter chunkSize ifTrue:
 			[ splitter splitText: serialisedPage ]
 	ifFalse:
 			[ { serialisedPage } ].
-	documents do: [ :document |
-		document ifNotEmpty:
-			[ vectorDb addDocument: document key: dbKey. ] ].
+	vectorDb 
+		addDocuments: documents
+		keys: (Array new: documents size withAll: dbKey).
 ]
 
 { #category : #private }
@@ -152,40 +179,29 @@ GtLLepiterRagDb >> loadLepiterPageBySnippet: aPage [
 { #category : #'as yet unclassified' }
 GtLLepiterRagDb >> query: aLepiterRagContext [
 	"Answer the pages to include as context for the supplied query using a simple bi-encoder"
-	| groupedEmbeddings candidatePages contextPages totalLength matchingEmbeddings sortedPages index |
 
-	aLepiterRagContext lepiterRagDb: self.
-	matchingEmbeddings := vectorDb 
-		query: aLepiterRagContext queryString 
-		maxMatches: 20.
-	groupedEmbeddings := matchingEmbeddings groupedBy: [ :each |
-		each embedding key ].
-	candidatePages := groupedEmbeddings collect: [ :each |
-		GtLLepiterRagPage new
-			pageKey: (each first embedding key);
-			embeddingDistances: (each collect: [ :embeddingDistance | embeddingDistance distance ]) ].
-
-	sortedPages := candidatePages sorted:
-		[ :each | each embeddingDistances first ] ascending.
-	aLepiterRagContext candidatePageEntries: sortedPages.
-	
+	| groupedEmbeddings candidatePages contextPages matchingEmbeddings sortedPages |
 	"Limit the length of the context"
-	contextPages := OrderedCollection new.
-	contextPages add: sortedPages first.
-	totalLength := (GtLLepiterContentExporter new
-					page: sortedPages first page;
-					export) size.
-	index := 2.
-	[ index <= sortedPages size and: [ totalLength < aLepiterRagContext maxContextLength ] ] whileTrue:
-		[ | ragPage pageLength |
-		ragPage := sortedPages at: index.
-		pageLength := (GtLLepiterContentExporter new
-					page: ragPage page;
-					export) size.
-		totalLength + pageLength < aLepiterRagContext maxContextLength
-				ifTrue: [ contextPages add: ragPage ].
-		totalLength := totalLength + pageLength.
-		index := index + 1. ].
+	aLepiterRagContext lepiterRagDb: self.
+	matchingEmbeddings := vectorDb
+			query: aLepiterRagContext queryString
+			maxMatches: 25.
+	aLepiterRagContext addRanking: matchingEmbeddings.
+	aLepiterRagContext
+		optionAt: #reRank
+		ifPresent: [ :ranker | 
+			matchingEmbeddings := ranker reRank: matchingEmbeddings in: aLepiterRagContext.
+			aLepiterRagContext addRanking: matchingEmbeddings ].
+	groupedEmbeddings := matchingEmbeddings
+			groupedBy: [ :each | each embedding key ].
+	candidatePages := groupedEmbeddings collect: [ :each | 
+				GtLLepiterRagPage new
+					pageKey: each first embedding key;
+					embeddingDistances: (each collect: [ :embeddingDistance | embeddingDistance distance ]) ].
+	sortedPages := candidatePages
+			sorted: [ :each | each embeddingDistances first ] ascending.
+	aLepiterRagContext candidatePageEntries: sortedPages.
+	contextPages := self limitLength: aLepiterRagContext pages: sortedPages.
 	aLepiterRagContext contextPageEntries: contextPages.
 	^ contextPages
 ]
@@ -195,20 +211,6 @@ GtLLepiterRagDb >> removeEmbeddingKeysFrom: updatedEmbeddings [
 
 	updatedEmbeddings do: [ :embedding |
 		vectorDb removeEmbedding: embedding ].
-]
-
-{ #category : #ui }
-GtLLepiterRagDb >> summaryAttributes [
-	| pageNamesIndexed |
-	
-	pageNamesIndexed := vectorDb embeddings
-		collect: [ :embedding | embedding key lepiterPageName ] 
-		as: Set.
-	^ {
-		{ 'Number of index entries'. vectorDb embeddings size. }.
-		{ 'Number of pages indexed'. pageNamesIndexed size }.
-		{ 'Vector size'. vectorDb embeddings first embedding size. }.
-		}.
 ]
 
 { #category : #api }
