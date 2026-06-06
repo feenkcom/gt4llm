@@ -63,7 +63,6 @@ GtLBasicTransformations >> gtRefactoringsFor: aView [
 { #category : #views }
 GtLBasicTransformations >> gtViewTransformationsFor: aView [
 	<gtView>
-	<gtLlmView>
 	transformations ifNil: [ ^ aView empty ].
 	^ aView columnedList
 		title: 'Transformation specifications';
