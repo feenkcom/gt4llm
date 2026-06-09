@@ -17,13 +17,14 @@ GtLToolForExampleMethodRun >> database: aDatabase [
 
 { #category : #accessing }
 GtLToolForExampleMethodRun >> description [
-	^ 'Execute a gtExample method and report:
+	^ 'Execute a gtExample method. It returns:
 - status: Succeess, Error, Failure, Skipped.
-- result: 
-if it succeeds, it gets the resulting object
-if there is a failure or error it gets the exception object and the stack trace
-
-The result, both the resulting object and the exception, is serialized with one or more JSON or image entries, each representing a view of the result. Look at all of them to interpret the result.'
+- and the result:
+  1. if it succeeds: 
+    - the resulting object as one or more JSON or image entries, each representing a view of the resulting object. Look at all of them to interpret the result.
+    - the object id that you can use as reference for other tool calls.
+    - the playgroundPageReference to the contextual playground page. Use that page to look for object specific snippets and explanations.
+  2. if there is an exception, it gets the errorDetails (errorMessage, stackTrace, errorClass). It can also get other JSON or image entries each representing a view of the exception. Look at all of them to interpret the result.'
 ]
 
 { #category : #magritte }
