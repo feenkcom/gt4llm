@@ -41,8 +41,13 @@ GtLMagritteToolForSmalltalkCodeEvaluation >> database: aDatabase [
 
 { #category : #accessing }
 GtLMagritteToolForSmalltalkCodeEvaluation >> description [
-	^ 'Executes the provided Smalltalk code. It returns the result as multiple JSON or image entries, each representing a view of the resulting object. Look at all of them to interpret the result.
-	
+	^ 'Executes the provided Smalltalk code. It returns
+1. if it succeeds: 
+- the resulting object as one or more JSON or image entries, each representing a view of the resulting object. Look at all of them to interpret the result.
+- the object id that you can use as reference for other tool calls.
+- the playgroundPageReference to the contextual playground page. Use that page to look for object specific snippets and explanations.
+2. if there is an exception, it gets the errorDetails (errorMessage, stackTrace, errorClass). It can also get other JSON or image entries each representing a view of the exception. Look at all of them to interpret the result.
+
 Do not compile code using this tool. Do not delete files using this tool. Use this tool only as a last resort to investigate objects.
 
 Arguments:
@@ -72,16 +77,22 @@ Example JSON response:
     "phlowViews": [{"methodName": "gtPrintFor:", "title": "Print"}],
     "allInstanceSlots": []
   },
-  "objectId": "uuid-or-empty"
+  "objectId": "uuid-or-empty",
+  "playgroundPageReference" : {
+		"databaseId" : "auhvwh3wo4eisu1kci9jdew92",
+		"pageId" : "9fxzw74ztlk895vquuwasakr"
+	}
 }
 
 Example JSON error response:
 {
-  "code": "1 / 0",
-  "errorMessage": "ZeroDivide",
-  "errorClassName": "ZeroDivide",
-  "whatFailed": "Error while evaluating smalltalk code",
-  "stackTrace": "..."
+	"errorReason" : "Error while evaluating smalltalk code",
+	"errorDetails" : {
+		"stackTrace" : "...",
+		"errorClass" : "ZeroDivide",
+		"errorMessage" : "ZeroDivide"
+	},
+	"code" : "1 / 0"
 }'
 ]
 
