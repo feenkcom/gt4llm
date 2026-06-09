@@ -25,14 +25,14 @@ Object >> gtActionObjectChatFor: anAction [
 			pageObjectExplanation: (LePage new
 					title: 'Objects';
 					addSnippet: (LeTextSnippet
-							string: 'Relate the conversation primarily to the initial object, also attached to the first message.');
-					yourself);
+							string: 'Relate the conversation primarily to the initial object with id ',storedObjectId);
+					yourself)";
 			sendWith: [ :m | 
 				m
 					markdown: 'Describe the object';
 					addPlainInputObject: self
 						withId: storedObjectId
-						named: 'Initial object' ].
+						named: 'Initial object' ]".
 		c ].
 	^ anAction button
 		icon: BrGlamorousVectorIcons chat;
