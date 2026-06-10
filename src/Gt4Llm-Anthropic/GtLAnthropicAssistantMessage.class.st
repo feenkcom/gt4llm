@@ -61,7 +61,7 @@ GtLAnthropicAssistantMessage >> contentOneLineSummary [
 
 { #category : #accessing }
 GtLAnthropicAssistantMessage >> contentText [
-	^ '' join: (self rawData collect: [:each | each at: 'text' ])
+	^ '' join: ((self rawData select: [:each | (each at: 'type') = 'text']) collect: [:each | each at: 'text' ])
 ]
 
 { #category : #views }
