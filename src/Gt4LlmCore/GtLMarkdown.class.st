@@ -111,7 +111,7 @@ GtLMarkdown >> gtDisplayOn: aStream [
 GtLMarkdown >> gtMarkdownFor: aView [
 	<gtView>
 	<gtLlmView>
-	content isEmptyOrNil ifTrue: [ ^ aView empty ].
+	content isNil ifTrue: [ ^ aView empty ].
 	^ aView textEditor
 		title: 'Markdown';
 		priority: 1;
