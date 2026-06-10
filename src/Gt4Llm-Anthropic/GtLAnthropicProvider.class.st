@@ -97,7 +97,7 @@ GtLAnthropicProvider >> defaultAssistantMessageClass [
 
 { #category : #'as yet unclassified' }
 GtLAnthropicProvider >> defaultMaxTokens [
-	^ 4096
+	^ 5 * 4096
 ]
 
 { #category : #'as yet unclassified' }
