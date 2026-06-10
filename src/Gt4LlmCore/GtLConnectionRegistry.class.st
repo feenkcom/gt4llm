@@ -177,6 +177,14 @@ GtLConnectionRegistry >> knownConnectors [
 			label: 'Claude Opus 4.7';
 			model: 'claude-opus-4-7'.
 		GtLConnection new
+			providerClass: GtLAnthropicProvider;
+			label: 'Claude Opus 4.8';
+			model: 'claude-opus-4-8'.
+		GtLConnection new
+			providerClass: GtLAnthropicProvider;
+			label: 'Claude Fable 5';
+			model: 'claude-fable-5'.
+		GtLConnection new
 			providerClass: GtLOpenAIProvider;
 			label: 'GPT 5.2';
 			model: 'gpt-5.2'.
