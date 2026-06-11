@@ -73,7 +73,7 @@ GtHomeMultiCardGetStartedSection >> llmNoConnectionsCardElement [
 	| container label button |
 	container := BrVerticalPane new
 			matchParent;
-			alignCenter;
+			alignCenterLeft;
 			cellSpacing: 10.
 	container
 		padding: (BlInsets all: 20);
@@ -90,7 +90,7 @@ GtHomeMultiCardGetStartedSection >> llmNoConnectionsCardElement [
 			aptitude: BrGlamorousRegularEditorAptitude;
 			vFitContent;
 			hMatchParent;
-			text: 'To work with the moldable AI agent, you need connections to LLMs. There are no connections just yet.' asRopedText.
+			text: 'To work with the moldable AI agent, you need connections to LLMs. There aren''t any just yet.' asRopedText.
 	button := BrButton new
 			aptitude: BrGlamorousButtonWithLabelAptitude;
 			label: 'Setup LLM connections';
