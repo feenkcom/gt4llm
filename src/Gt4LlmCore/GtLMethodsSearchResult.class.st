@@ -55,6 +55,19 @@ GtLMethodsSearchResult >> gtFoundMethodsFor: aView [
 		column: 'Method' text: [ :each | each methodName ]
 ]
 
+{ #category : #views }
+GtLMethodsSearchResult >> gtMethodsFor: aView [
+	<gtView>
+	<gtLlmView>
+	(self foundMethods anySatisfy: [:each | each isKindOf: GtLMissingDomainObject]) ifTrue: [ ^ aView empty ].
+	^ aView forward
+		title: 'Methods';
+		priority: 1;
+		object: [ GtSearchFixedMethodsFilter new methods: (self foundMethods 
+			collect: [ :each | each compiledMethod ]) ];
+		view: #gtItemsFor:
+]
+
 { #category : #'llm views' }
 GtLMethodsSearchResult >> llmRawDataViewFor: aDataView [
 	<gtLlmDataView>
