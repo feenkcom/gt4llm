@@ -76,7 +76,7 @@ GtLAgentExecutionResult >> gtAgentExecutionFor: aView [
 		title: 'Agent chat';
 		priority: 10.5;
 		object: [ agentExecution ];
-		view: #gtAgentChatFor:
+		view: #gtViewAgentFor:
 ]
 
 { #category : #views }
@@ -91,13 +91,20 @@ GtLAgentExecutionResult >> gtContentFor: aView [
 		view: #gtMarkdownFor:
 ]
 
+{ #category : #llm }
+GtLAgentExecutionResult >> llmRawDataViewFor: aDataView [
+	<gtLlmDataView>
+	
+	^ aDataView magritteObject: [ self ]
+]
+
 { #category : #accessing }
-GtLAgentExecutionResult >> parentChat [
+GtLAgentExecutionResult >> parentAgent [
 	^ parentChat
 ]
 
 { #category : #accessing }
-GtLAgentExecutionResult >> parentChat: anObject [
+GtLAgentExecutionResult >> parentAgent: anObject [
 	parentChat := anObject
 ]
 

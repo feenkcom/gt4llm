@@ -3,11 +3,10 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'agent',
-		'agentChat',
 		'initialRequest',
 		'terminationSemaphore',
 		'executionId',
-		'parentChat'
+		'parentAgent'
 	],
 	#category : #'Gt4LlmCore-Agents'
 }
@@ -18,18 +17,8 @@ GtLAgentExecution >> agent [
 ]
 
 { #category : #accessing }
-GtLAgentExecution >> agent: anObject [
-	agent := anObject
-]
-
-{ #category : #accessing }
-GtLAgentExecution >> agentChat [
-	^ agentChat
-]
-
-{ #category : #accessing }
-GtLAgentExecution >> agentChat: anObject [
-	agentChat := anObject
+GtLAgentExecution >> agent: anAgent [
+	agent := anAgent
 ]
 
 { #category : #execution }
@@ -41,7 +30,7 @@ GtLAgentExecution >> createAgentResponse [
 		^ GtLProblemDomainObject new
 				description: 'No response message detected in agent chat.' ].
 				
-	responseContent := self agent extractResponseFromMessage: responseMessage.
+	responseContent := responseMessage responseModels at: 'Markdown' ifAbsent: [ nil ].
 	responseMessage ifNil: [ 
 		^ GtLProblemDomainObject new
 				description: 'Missing response in response message' ].
@@ -49,7 +38,7 @@ GtLAgentExecution >> createAgentResponse [
 	^ GtLAgentExecutionResult new
 		agentExecutionId: self executionId;
 		agentExecution: self;
-		parentChat: self parentChat;
+		parentAgent: self parentAgent;
 		request: initialRequest;
 		content: responseContent;
 		"totalDurationMs: 0;
@@ -69,12 +58,12 @@ GtLAgentExecution >> executionId: anObject [
 ]
 
 { #category : #views }
-GtLAgentExecution >> gtAgentChatFor: aView [
+GtLAgentExecution >> gtViewAgentFor: aView [
 	<gtView>
 	^ aView forward
-		title: 'Agent chat';
+		title: 'Agent';
 		priority: 20;
-		object: [ agentChat ];
+		object: [ agent ];
 		view: #gtLiveChatFor:
 ]
 
@@ -99,27 +88,27 @@ GtLAgentExecution >> initialRequest: anObject [
 ]
 
 { #category : #accessing }
-GtLAgentExecution >> parentChat [
-	^ parentChat
+GtLAgentExecution >> parentAgent [
+	^ parentAgent
 ]
 
 { #category : #accessing }
-GtLAgentExecution >> parentChat: anObject [
-	parentChat := anObject
+GtLAgentExecution >> parentAgent: anAgent [
+	parentAgent := anAgent
 ]
 
 { #category : #execution }
 GtLAgentExecution >> registerTerminationSignal [
 	terminationSemaphore := Semaphore new.
-	agentChat announcer
+	agent announcer
 		when: GtLlmThreadRunIsDoneAnnouncement
 		send: #signal
 		to: terminationSemaphore.
 ]
 
-{ #category : #execution }
+{ #category : #accessing }
 GtLAgentExecution >> responseMessage [
-	^ self agentChat messages
+	^ self agent messages
 		ifEmpty: [ nil ] 
 		ifNotEmpty: [ :aMessagGroup |
 			aMessagGroup last isReplyMessage 
@@ -133,7 +122,7 @@ GtLAgentExecution >> waitUntilCompletionOrTimeout [
 		
 	timeout := terminationSemaphore waitTimeoutSeconds: 1200.
 	
-	agentChat announcer unsubscribe: terminationSemaphore.
+	agent announcer unsubscribe: terminationSemaphore.
 	timeout ifTrue: [ 
 		^ GtLProblemDomainObject new
 				description: 'Agent did not finish in time' ].
