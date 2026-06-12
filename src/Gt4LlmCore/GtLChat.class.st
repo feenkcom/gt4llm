@@ -14,8 +14,7 @@ Class {
 		'responseFormat',
 		'objectStorage',
 		'reasoningEffort',
-		'summarizersRegistry',
-		'agents'
+		'summarizersRegistry'
 	],
 	#category : #'Gt4LlmCore-Core'
 }
@@ -146,16 +145,6 @@ GtLChat >> addTools: aCollection [
 GtLChat >> addUserMessage: aMessage [
 	self addMessage: aMessage.
 	self ensureReplyMessage.
-]
-
-{ #category : #accessing }
-GtLChat >> agents [
-	^ agents
-]
-
-{ #category : #accessing }
-GtLChat >> agents: aGroup [
-	agents := aGroup
 ]
 
 { #category : #'api - message' }
@@ -329,16 +318,6 @@ GtLChat >> format [
 { #category : #accessing }
 GtLChat >> format: anObject [
 	responseFormat := anObject
-]
-
-{ #category : #views }
-GtLChat >> gtAgentsFor: aView [
-	<gtView>
-	^ aView forward
-		title: 'Defined agents';
-		priority: 41.1;
-		object: [ agents ];
-		view: #gtItemsFor:
 ]
 
 { #category : #'gt - extensions' }
@@ -569,7 +548,6 @@ GtLChat >> initialize [
 	
 	self initializeMessages.
 	self initializeTools.
-	self initializeAgents.
 	
 	responseFormat := GtLResponseCompositeFormat new.
 	objectStorage := GtLObjectStorage new.
@@ -577,11 +555,6 @@ GtLChat >> initialize [
 	summarizersRegistry := GtLToolCallSummarizersRegistry new.
 	
 	self updateLastUpdate.
-]
-
-{ #category : #accessing }
-GtLChat >> initializeAgents [
-	agents := GtLAgents new.
 ]
 
 { #category : #accessing }
@@ -708,7 +681,6 @@ GtLChat >> postCopyForIndependentRequestAt: aMessage [
 	objectStorage := objectStorage copy.
 	responseFormat := responseFormat copy.
 	tools := tools copy.
-	agents := agents copy.
 	summarizersRegistry := summarizersRegistry copy
 ]
 

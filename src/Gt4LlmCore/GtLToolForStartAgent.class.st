@@ -14,8 +14,8 @@ Example JSON arguments:
     "agentName": "Explore",
     "description": "Agent for investigating the current system",
     "prompt": "Explore the code relevant to the current request.",
-    "model": "gpt-4.1",
-    "inheritCurrentHistory": true
+    "modelName": "gpt-4.1",
+    "shouldForkCurrentAgent": true
   }
 }
 
@@ -24,16 +24,9 @@ Example JSON response:
   "agentName": "Explore",
   "description": "Agent for investigating the current system",
   "prompt": "Explore the code relevant to the current request.",
-  "model": "gpt-4.1",
-  "inheritCurrentHistory": true
+  "modelName": "gpt-4.1",
+  "shouldForkCurrentAgent": true
 }'
-]
-
-{ #category : #private }
-GtLToolForStartAgent >> findAgentNamed: aString inChat: aChat [
-	^aChat agents
-		detect: [ :each | each hasName: aString ]
-		ifNone: [ nil ]
 ]
 
 { #category : #accessing }
@@ -43,20 +36,20 @@ GtLToolForStartAgent >> name [
 
 { #category : #private }
 GtLToolForStartAgent >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
-	| request currentChat agent agentExecution executionError |
+	| request currentAgent executionBuilder agentExecution executionError |
 	
 	request := aToolCall arguments at: 'startAgentRequest'.
 	
-	currentChat := anExecutionContext currentChat.
-	currentChat ifNil: [ ^ GtLMissingDomainObject new objectName: 'chat' ].
-	
+	currentAgent := anExecutionContext currentChat.
+	currentAgent ifNil: [ ^ GtLMissingDomainObject new objectName: 'chat' ].
 	self validateRequest: request onError: [ :anError | ^ anError ].
+
+	executionBuilder := GtLAgentExecutionBuilder forAgentCreationRequest:  request.
+	executionBuilder validateExecutionIfErrorDo: [ :anError | ^ anError ].
 	
-	agent := self findAgentNamed: request agentName inChat: currentChat.
-	agent ifNil: [ ^ GtLMissingDomainObject new objectName: request agentName ].
-	
-	agentExecution := agent startFromChat: currentChat fromRequest: request inContext: anExecutionContext.
-	aToolCall at: #innerChat putRuntimeValue: agentExecution agentChat.
+	agentExecution := executionBuilder 
+		startFromParentAgent: currentAgent inContext: anExecutionContext.
+	aToolCall at: #innerChat putRuntimeValue: agentExecution agent.
 	
 	executionError := agentExecution waitUntilCompletionOrTimeout.
 	executionError ifNotNil: [ ^ executionError ].
