@@ -8,7 +8,9 @@ Class {
 		'tenant',
 		'databaseName',
 		'collectionName',
-		'database'
+		'database',
+		'dbMetadataFile',
+		'dbMetadata'
 	],
 	#category : #'Gt4Llm-ChromaDb-Model'
 }
@@ -17,6 +19,12 @@ Class {
 LeChromaDb class >> defaultEmbeddingModelName [
 
 	^ 'qwen3-embedding:8b'
+]
+
+{ #category : #accessing }
+LeChromaDb class >> lastUpdateTimeKey [
+
+	^ 'lastUpdateTime'
 ]
 
 { #category : #api }
@@ -77,6 +85,26 @@ LeChromaDb >> databaseName: anObject [
 	databaseName := anObject
 ]
 
+{ #category : #accessing }
+LeChromaDb >> dbMetadata [
+
+	^ dbMetadata ifNil: [ dbMetadata := Dictionary new ].
+]
+
+{ #category : #accessing }
+LeChromaDb >> dbMetadataFile [
+	"The dbMetadataFile holds metadata about the db as a whole
+	(as opposed to record level metadata in the metadatas)."
+
+	^ dbMetadataFile
+]
+
+{ #category : #accessing }
+LeChromaDb >> dbMetadataFile: aFileReference [
+
+	dbMetadataFile := aFileReference
+]
+
 { #category : #private }
 LeChromaDb >> embeddingFor: aString [
 	| command newEmbeddings |
@@ -98,6 +126,21 @@ LeChromaDb >> initialize [
 
 	super initialize.
 	client := GtChromaDbClient new.
+]
+
+{ #category : #accessing }
+LeChromaDb >> lastUpdateTime [
+
+	^ self dbMetadata at: self class lastUpdateTimeKey
+]
+
+{ #category : #actions }
+LeChromaDb >> load [
+
+	dbMetadataFile exists ifFalse:
+		[ self error: 'Unable to load metadata' ].
+	dbMetadataFile readStreamDo: [ :stream |
+		dbMetadata := STON fromStream: stream ]
 ]
 
 { #category : #private }
@@ -145,6 +188,80 @@ LeChromaDb >> query: queryString maxMatches: anInteger [
 ]
 
 { #category : #accessing }
+LeChromaDb >> records [
+
+	^ client
+		post: GtChromaDbGetRecordsEndpoint new
+		parameters: {
+			'tenant' -> collection tenant.
+			'database' -> collection databaseName.
+			'collectionId' -> collection id.
+			} asDictionary
+		entity: {
+			'include' -> { 'metadatas' }.
+			} asDictionary.
+]
+
+{ #category : #api }
+LeChromaDb >> removeKey: aGtVectorDbLepiterKey [
+	"Remove records that have metadata page matching the supplied key"
+	| metadata records entity count ids |
+
+	"Fist retrieve all the records with matching page name"
+	metadata := {
+		'title' -> aGtVectorDbLepiterKey lepiterPageName.
+		} asDictionary.
+	entity := {
+		'include' -> { 'metadatas'. }.
+		'where' -> metadata.
+		} asDictionary.
+	records := client 
+		post: GtChromaDbGetRecordsEndpoint new
+		parameters: {
+			'tenant' -> collection tenant.
+			'database' -> collection databaseName.
+			'collectionId' -> collection id.
+			} asDictionary
+		entity: entity.
+
+	records ifEmpty: [ ^ self ].
+
+	"ChromaDb only seems to allow a single metadata attribute on search,
+	which is the page name.  Ensure the lepiter db is correct for all records."
+	self assert: (records allSatisfy: [ :each | (each metadata at: 'db') = aGtVectorDbLepiterKey lepiterDbName ]).
+
+	ids := records collect: #id.
+	"Remove the list of ids"
+	entity := {
+		'include' -> { 'metadatas'. }.
+		'ids' -> ids.
+		} asDictionary.
+	count := client 
+		post: GtChromaDbDeleteRecordsEndpoint new
+		parameters: {
+			'tenant' -> collection tenant.
+			'database' -> collection databaseName.
+			'collectionId' -> collection id.
+			} asDictionary
+		entity: entity.
+	
+	self assert: count = ids size.
+
+	^ aGtVectorDbLepiterKey
+]
+
+{ #category : #actions }
+LeChromaDb >> save [
+	"Save the receiver's metadata"
+
+	self updateMetadataTime.
+	dbMetadataFile writeStreamDo: [ :stream |
+		STON
+			put: self dbMetadata
+			onStreamPretty: stream ].
+]
+
+{ #category : #accessing }
 LeChromaDb >> size [
 	"Answer the number of records in the receiver's collection"
 
@@ -159,4 +276,12 @@ LeChromaDb >> tenant [
 { #category : #accessing }
 LeChromaDb >> tenant: anObject [
 	tenant := anObject
+]
+
+{ #category : #private }
+LeChromaDb >> updateMetadataTime [
+
+	self dbMetadata
+		at: self class lastUpdateTimeKey
+		put: DateAndTime now.
 ]

@@ -30,7 +30,7 @@ GtLSentenceTransformerCrossEncoder class >> shutDown: isQuitting [
 { #category : #'start-stop' }
 GtLSentenceTransformerCrossEncoder >> immportSentenceTransformer [
 
-	pbApplication newCommandStringFactory
+	self pbApplication newCommandStringFactory
 		script:
 'from sentence_transformers import CrossEncoder
 import json';
@@ -41,7 +41,16 @@ import json';
 { #category : #installation }
 GtLSentenceTransformerCrossEncoder >> installSentenceTransformers [
 
-	pbApplication installModule: 'sentence_transformers'
+	self pbApplication installModule: 'sentence_transformers'
+]
+
+{ #category : #accessing }
+GtLSentenceTransformerCrossEncoder >> pbApplication [
+
+	^ pbApplication ifNil:
+		[ pbApplication := PBApplication new.
+		pbApplication start.
+		pbApplication. ].
 ]
 
 { #category : #api }
@@ -68,8 +77,6 @@ results = [[int(item[''corpus_id'']), float(item[''score''])] for item in ranks]
 GtLSentenceTransformerCrossEncoder >> start [
 
 	(pbApplication isNotNil and: [ pbApplication isRunning ]) ifTrue: [ ^ self ].
-	pbApplication := PBApplication new.
-	pbApplication start.
 	self immportSentenceTransformer
 ]
 
