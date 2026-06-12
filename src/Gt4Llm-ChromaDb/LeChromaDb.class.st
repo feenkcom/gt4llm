@@ -137,6 +137,8 @@ LeChromaDb >> lastUpdateTime [
 { #category : #actions }
 LeChromaDb >> load [
 
+	dbMetadataFile exists ifFalse:
+		[ self error: 'Unable to load metadata' ].
 	dbMetadataFile readStreamDo: [ :stream |
 		dbMetadata := STON fromStream: stream ]
 ]
