@@ -76,7 +76,8 @@ GtLProvider >> createPromptCompactionMessage [
 { #category : #'private - execution' }
 GtLProvider >> createToolExecutionContext [
 	^ GtLToolExecutionContext new 
-			objectStorage: self chat objectStorage
+			objectStorage: self chat objectStorage;
+			currentChat: self chat
 ]
 
 { #category : #accessing }
@@ -128,6 +129,7 @@ GtLProvider >> notifyProviderStateChanged [
 { #category : #copying }
 GtLProvider >> postCopyForIndependentRequest [
 	executionState := GtLProviderState idle .
+	chat := nil
 ]
 
 { #category : #'private - execution' }
