@@ -55,6 +55,11 @@ GtLGroup >> allButLast [
 ]
 
 { #category : #accessing }
+GtLGroup >> allSatisfy: aBlock [
+	^ self items allSatisfy: aBlock
+]
+
+{ #category : #accessing }
 GtLGroup >> anyOne [
 	^ self items anyOne
 ]

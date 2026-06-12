@@ -1,3 +1,6 @@
+"
+API documentation is at: https://api.trychroma.com:8000/openapi.json
+"
 Class {
 	#name : #GtChromaDbClient,
 	#superclass : #Object,

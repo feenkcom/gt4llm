@@ -76,6 +76,32 @@ GtChromaDbLiveExamples >> clientCreateCollection [
 ]
 
 { #category : #examples }
+GtChromaDbLiveExamples >> clientDeleteRecordsWithId [
+	"Delete records with the specified ids"
+	<gtExample>
+	| records client result collection entity |
+
+	self isLive ifFalse: [ ^ self ].
+	collection := self clientAddToCollection.
+	records := self clientGetRecords.
+	client := GtChromaDbClient new.
+	entity := {
+		'include' -> { 'metadatas'. }.
+		'ids' -> (records collect: #id).
+		} asDictionary.
+	result := client 
+		post: GtChromaDbDeleteRecordsEndpoint new
+		parameters: {
+			'tenant' -> collection tenant.
+			'database' -> collection databaseName.
+			'collectionId' -> collection id.
+			} asDictionary
+		entity: entity.
+	self assert: result equals: 1.
+	^ result
+]
+
+{ #category : #examples }
 GtChromaDbLiveExamples >> clientGetCollection [
 	<gtExample>
 	| client result collection |
@@ -176,6 +202,34 @@ GtChromaDbLiveExamples >> clientGetIdentity [
 	client := GtChromaDbClient new.
 	result := client get: GtChromaDbGetIdentityEndpoint new.
 	self assert: result rawData keys asSet equals: #('user_id' 'tenant' 'databases') asSet.
+	^ result
+]
+
+{ #category : #examples }
+GtChromaDbLiveExamples >> clientGetRecords [
+	"Retrieve records matching the specified metadata"
+	<gtExample>
+	| client result collection entity |
+
+	self isLive ifFalse: [ ^ self ].
+	collection := self clientAddToCollection.
+	client := GtChromaDbClient new.
+	entity := {
+		'include' -> { 'metadatas'. }.
+		'where' -> {
+			'page' -> 'Page 2'.
+			} asDictionary.
+		} asDictionary.
+	result := client 
+		post: GtChromaDbGetRecordsEndpoint new
+		parameters: {
+			'tenant' -> collection tenant.
+			'database' -> collection databaseName.
+			'collectionId' -> collection id.
+			} asDictionary
+		entity: entity.
+	self assert: result size equals: 1.
+	self assert: (result first metadata at: 'page') equals: 'Page 2'.
 	^ result
 ]
 

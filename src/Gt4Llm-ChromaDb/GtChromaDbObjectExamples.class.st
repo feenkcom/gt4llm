@@ -107,7 +107,7 @@ GtChromaDbObjectExamples >> collection [
 	self assert: collection metadata equals: nil.
 	self assert: collection dimension equals: 384.
 	self assert: collection tenant equals: 'default_tenant'.
-	self assert: collection database equals: 'default_database'.
+	self assert: collection databaseName equals: 'default_database'.
 	self assert: collection logPosition equals: 0.
 	self assert: collection version equals: 0.
 	^ collection

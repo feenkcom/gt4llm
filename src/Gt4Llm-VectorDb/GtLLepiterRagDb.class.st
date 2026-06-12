@@ -213,30 +213,37 @@ GtLLepiterRagDb >> removeEmbeddingKeysFrom: updatedEmbeddings [
 		vectorDb removeEmbedding: embedding ].
 ]
 
+{ #category : #private }
+GtLLepiterRagDb >> removeRecordsForPage: aPage [
+	| dbKey |
+
+	dbKey := GtVectorDbLepiterKey new
+			lepiterDbName: self lepiterDbName;
+			lepiterPageName: aPage title;
+			lepiterSnippetUid: nil.
+	vectorDb removeKey: dbKey.
+]
+
 { #category : #api }
 GtLLepiterRagDb >> updateVectorDb [
 	"Replace database entries for all pages modified after the DB modified time"
-	| dbModifiedTime |
 
-	dbModifiedTime := nil.
+	self updateVectorDbSince: vectorDb lastUpdateTime.
 ]
 
 { #category : #api }
 GtLLepiterRagDb >> updateVectorDbSince: dbModifiedTime [
 	"Replace database entries for all pages modified after the DB modified time"
-	| embeddingsByPageName updatedPages superseededEmbeddings |
+	| updatedPages |
 
-	embeddingsByPageName := self vectorDb embeddings groupedBy: [ :embedding |
-		embedding key lepiterPageName ].
 	updatedPages := self lepiterDb pages select: [ :lepiterPage |
 		lepiterPage latestEditTime time >= dbModifiedTime ].
-	superseededEmbeddings := updatedPages flatCollect: [ :page |
-		embeddingsByPageName at: page title ifAbsent: [ #() ] ].
-
-	self removeEmbeddingKeysFrom: superseededEmbeddings.
 
 	updatedPages do: [ :page |
+		self removeRecordsForPage: page.
 		self loadLepiterPage: page ].
+
+	vectorDb save.
 ]
 
 { #category : #accessing }
