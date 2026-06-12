@@ -10,7 +10,8 @@ Class {
 		'lepiterDbName'
 	],
 	#classVars : [
-		'Instances'
+		'Instances',
+		'LocalStore'
 	],
 	#category : #'Gt4Llm-VectorDb-RAG'
 }
@@ -21,20 +22,22 @@ GtLExperimentalRag class >> cleanUp [
 	Instances := nil.
 ]
 
-{ #category : #accessing }
-GtLExperimentalRag class >> default [
+{ #category : #accesing }
+GtLExperimentalRag class >> defaultLocalStore [
+	"Answer the default file reference for the directory where local files are stored.
+	See {{gtMethod:GtLExperimentalRag class>>#localStore}}."
 
-	self hasUniqueInstance ifFalse:
-		[ self error: 'Please load the Vector DB first' ].
-
-	^ uniqueInstance
+	^ (FileLocator localDirectory / 'rag') ensureCreateDirectory
 ]
 
-{ #category : #accesing }
-GtLExperimentalRag class >> defaultVectorDbFile [
-	"Answer the file reference for the ston file used to store the in-memory vector db.
-	Not used by the Chroma DB."
-	^ FileLocator temp / 'gt-book.vectordb.ston'
+{ #category : #factory }
+GtLExperimentalRag class >> exampleGtBook [
+	<gtExample>
+	| dbName |
+
+	dbName := 'Glamorous Toolkit Book'.
+	^ self instances at: dbName ifAbsent: 
+		[ self new lepiterDbName: dbName ].
 ]
 
 { #category : #factory }
@@ -47,15 +50,56 @@ GtLExperimentalRag class >> forLepiterDbName: aString [
 
 { #category : #factory }
 GtLExperimentalRag class >> gtBook [
-	<gtExample>
+	^ self instances at: 'Glamorous Toolkit Book'
+]
 
-	^ self forLepiterDbName: 'Glamorous Toolkit Book'.
+{ #category : #accessing }
+GtLExperimentalRag class >> gtBookBasename [
+
+	^ 'gt-book.vectordb.ston'
+]
+
+{ #category : #factory }
+GtLExperimentalRag class >> gtBookChromaDb [
+	| dbName |
+
+	dbName := 'Glamorous Toolkit Book'.
+	^ self instances at: dbName ifAbsentPut: 
+		[ self new 
+			lepiterDbName: dbName;
+			loadChromaDbLepiterRagDb ].
+]
+
+{ #category : #factory }
+GtLExperimentalRag class >> gtBookInMemory [
+	| dbName |
+
+	dbName := 'Glamorous Toolkit Book'.
+	^ self instances at: dbName ifAbsentPut: 
+		[ self new 
+			lepiterDbName: dbName;
+			loadInMemoryLepiterRagDb: self localStore / self gtBookBasename ].
 ]
 
 { #category : #accessing }
 GtLExperimentalRag class >> instances [
 
 	^ Instances ifNil: [ Instances := Dictionary new ]
+]
+
+{ #category : #accessing }
+GtLExperimentalRag class >> localStore [
+	"Answer the file reference for the directory where local files are stored.
+	For the in-memory database this will be the location of the db file.
+	For the chroma database this will be the location of the metadata store."
+
+	^ LocalStore ifNil: [ LocalStore := self defaultLocalStore ]
+]
+
+{ #category : #accessing }
+GtLExperimentalRag class >> localStore: aFileReference [
+
+	LocalStore := aFileReference
 ]
 
 { #category : #converting }
@@ -111,28 +155,36 @@ GtLExperimentalRag >> lepiterRagDb [
 
 { #category : #'private - accessing' }
 GtLExperimentalRag >> loadChromaDbLepiterRagDb [
-	"Answer a new instance of GtLLepiterRagDb using ChromaDb"
-	| vectorDb |
+	"Load the receiver's GtLLepiterRagDb using ChromaDb"
+	| collectionName dbMetadataFile vectorDb |
 
 	lepiterRagDb := GtLLepiterRagDb new
 		lepiterDbName: self lepiterDbName.
+	collectionName := self lepiterDbName
+			copyReplaceAll: ' ' with: '_'.
+	dbMetadataFile := self class localStore / (collectionName, '.ston').
 	vectorDb := LeChromaDb new
-		collectionName: (self lepiterDbName
-			copyReplaceAll: ' ' with: '_').
+		collectionName: collectionName;
+		dbMetadataFile: dbMetadataFile.
+	vectorDb load.
 	lepiterRagDb vectorDb: vectorDb.
 
 	"If there are records in the collection, the db is already populated"
-	vectorDb size > 0 ifTrue: [ ^ lepiterRagDb ].
+	vectorDb size > 0 ifTrue: [ ^ self ].
 
 	self lepiterDb pages do: [ :aPage |
 		lepiterRagDb loadLepiterPage: aPage ].
+]
 
-	^ lepiterRagDb
+{ #category : #'as yet unclassified' }
+GtLExperimentalRag >> loadInMemoryLepiterRagDb [
+
+	^ self loadInMemoryLepiterRagDb: self class defaultVectorDbFile
 ]
 
 { #category : #'private - accessing' }
 GtLExperimentalRag >> loadInMemoryLepiterRagDb: aFileReference [
-	"Answer a new instance of GtLLepiterRagDb using the simple in-memory db"
+	"Load the receiver's GtLLepiterRagDb using the simple in-memory db"
 	| vectorDb |
 
 	lepiterRagDb := GtLLepiterRagDb new
@@ -140,18 +192,17 @@ GtLExperimentalRag >> loadInMemoryLepiterRagDb: aFileReference [
 
 	"If the DB has been saved to disk, load it from there"
 	aFileReference exists ifTrue: 
-		[ lepiterRagDb vectorDb: (aFileReference
-			readStreamDo: [ :stream | STON fromStream: stream ]).
-		^ lepiterRagDb ].
+		[ lepiterRagDb vectorDb: (LeInMemoryVectorDb new
+			stonFile: aFileReference;
+			load).
+		^ self ].
 
 	"Otherwise, generate a new vector db"
-	vectorDb := GtSimpleInMemoryVectorDatabase new.
+	vectorDb := LeInMemoryVectorDb new vectorDb: (GtSimpleInMemoryVectorDatabase new).
 	lepiterRagDb vectorDb: vectorDb.
 	self lepiterDb pages do: [ :aPage |
-		lepiterRagDb loadLepiterPage: aPage ].
-	vectorDb stonTo: aFileReference.
-
-	^ lepiterRagDb
+		lepiterRagDb vectorDb loadLepiterPage: aPage ].
+	lepiterRagDb vectorDb save.
 ]
 
 { #category : #api }
@@ -176,6 +227,5 @@ GtLExperimentalRag >> summaryAttributes [
 { #category : #api }
 GtLExperimentalRag >> updateVectorDb [
 
-	self lepiterRagDb updateVectorDbSince: self vectorDbFile modificationTime.
-	self saveVectorDb: self lepiterRagDb vectorDb.
+	self lepiterRagDb updateVectorDb.
 ]
