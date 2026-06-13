@@ -29,7 +29,7 @@ GtLToolForObjectView >> objectIdDescription [
 
 { #category : #private }
 GtLToolForObjectView >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
-	| arguments objectId viewSelector object phlowView method |
+	| arguments objectId viewSelector object |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 
 	objectId := (arguments at: 'objectId') trimBoth.
@@ -47,24 +47,12 @@ GtLToolForObjectView >> privatePerformToolCall: aToolCall inContext: anExecution
 	object := anExecutionContext objectStorage
 			objectAt: objectId
 			ifPresent: [ :storedObject | storedObject ]
-			ifAbsent: [ ^ GtLMissingDomainObject new objectName: objectId ].
+			ifAbsent: [ 
+				^ GtLMissingDomainObject new objectName: objectId ].
 
-	[ GtProcessStackOverflowChecker currentCheckerClass
-		checkDuring: [ phlowView := GtPhlowView empty
-					on: object
-					perform: viewSelector
-					withContext: GtPhlowContext new ].
-	method := object class lookupSelector: viewSelector ]
-		on: Error
-		do: [ :r | ^ GtLExceptionDomainObject freeze: r ].
-
-	method ifNil: [ 
-		^ GtLMissingDomainObject new objectName: viewSelector ].
-	
-	^ GtLPhlowViewDomainObject
-			phlowView: phlowView
-			viewMethodClassName: method methodClass name
-			viewMethodSourceCode: method sourceCode
+	^ (object gtLlmPhlowViewExtractor
+			viewSelector: viewSelector)
+				phlowViewDomainObjectOnError: [ :anError | anError ]
 ]
 
 { #category : #accessing }
