@@ -20,7 +20,8 @@ GtLOpenAIClient class >> apiKeyFile [
 
 { #category : #accessing }
 GtLOpenAIClient class >> apiKeyFile: aFile [
-	ApiKeyFile := aFile
+	ApiKeyFile := aFile.
+	GtLOpenAIProvider notifyProviderConnectabilityChanged.
 ]
 
 { #category : #accessing }
