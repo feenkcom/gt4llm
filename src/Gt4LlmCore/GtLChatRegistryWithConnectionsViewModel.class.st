@@ -68,6 +68,9 @@ GtLChatRegistryWithConnectionsViewModel >> connectionRegistry: aConnectionRegist
 			to: self;
 		when: GtLConnectionRegistryConnectionAdded
 			send: #onGtLConnectionRegistryConnectionAdded:
+			to: self;
+		when: GtLConnectionRegistryUniqueInstanceRemoved
+			send: #onGtLConnectionRegistryUniqueInstanceRemoved:
 			to: self
 ]
 
@@ -106,6 +109,16 @@ GtLChatRegistryWithConnectionsViewModel >> onGtLConnectionRegistryConnectionsCha
 		announce: (GtLConnectionRegistryViewModelConnectionsChanged new
 				registryViewModel: self;
 				connections: anAnnouncement connections)
+]
+
+{ #category : #'private - event handling' }
+GtLChatRegistryWithConnectionsViewModel >> onGtLConnectionRegistryUniqueInstanceRemoved: anAnnouncement [
+	anAnnouncement connectionRegistry = connectionRegistry ifFalse: [ ^ self ].
+
+	self connectionRegistry: anAnnouncement newConnectionRegistry.
+
+	self announcer
+		announce: (GtLConnectionRegistryViewModelUniqueInstanceRemoved new registryViewModel: self)
 ]
 
 { #category : #accessing }
