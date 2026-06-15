@@ -7,7 +7,7 @@ Class {
 	#instVars : [
 		'code'
 	],
-	#category : #'Gt4LlmCore-Magritte Objects'
+	#category : #'Gt4LlmCore-Domain Objects'
 }
 
 { #category : #'as yet unclassified' }
@@ -45,6 +45,7 @@ GtLSmalltalkCodeEvaluationResult >> codeDescription [
 GtLSmalltalkCodeEvaluationResult >> gtCodeFor: aView [
 	<gtView>
 	<gtLlmView>
+	
 	^ aView explicit
 		title: 'Code and object';
 		priority: 9;
@@ -72,5 +73,6 @@ GtLSmalltalkCodeEvaluationResult >> gtCodeFor: aView [
 { #category : #printing }
 GtLSmalltalkCodeEvaluationResult >> printOn: aStream [
 	super printOn: aStream.
+	
 	aStream nextPutAll: ' code: '; nextPutAll: self code
 ]

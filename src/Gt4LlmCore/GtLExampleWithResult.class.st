@@ -98,26 +98,9 @@ GtLExampleWithResult >> llmRawDataViewFor: aDataView [
 				at: 'exampleStatus' put: self statusText	])
 ]
 
-{ #category : #'llm views' }
-GtLExampleWithResult >> llmResultExceptionViewFor: aDataView [
-	<gtLlmDataView>
-	
-	(self isErrorResult not and: [ self isFailureResult not ]) ifTrue: [
-		^ aDataView emptyData ].
-	
-	^aDataView forwardObject
-			title: 'Exception details';
-			dataKey: #result;
-			object: [ 
-				self exampleWithResult returnValue  ]
-]
-
 { #category : #views }
 GtLExampleWithResult >> llmResultObjectViewFor: aDataView [
 	<gtLlmDataView>
-	
-	(self isErrorResult or: [ self isFailureResult ]) ifTrue: [
-		^ aDataView emptyData ].
 	
 	^ aDataView forwardObject
 			title: 'Object details';
@@ -157,11 +140,12 @@ GtLExampleWithResult >> statusText [
 ]
 
 { #category : #private }
-GtLExampleWithResult >> updatelaygroupdPageReferenceForDatabase: aDatabase [
+GtLExampleWithResult >> updatePlaygroundPageReferenceForDatabase: aDatabase [
 	| returnValue |
-	(self isErrorResult or: [ self isFailureResult ]) ifTrue: [ ^ self ].
+	
 	returnValue := self exampleWithResult returnValue.
 	returnValue ifNil: [ ^ self ].
+	
 	returnValue gtPlaygroundPageStrategy
 		detectPlaygroundPageInDatabase: aDatabase
 		forObject: returnValue

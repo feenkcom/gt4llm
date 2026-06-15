@@ -39,7 +39,7 @@ GtLObjectValueResult >> llmSpecificObjectViewFor: aDataView [
 	
 	^ aDataView forwardObject
 			title: 'Object specific details';
-			dataKey: 'objectDetails';
+			dataKey: self specificObjectPropertiesKey;
 			object: [ self object ]
 ]
 
@@ -98,9 +98,20 @@ GtLObjectValueResult >> printOn: aStream [
 	self object printOn: aStream
 ]
 
+{ #category : #accessing }
+GtLObjectValueResult >> specificObjectPropertiesKey [
+	^ 'objectDetails'
+]
+
 { #category : #updating }
-GtLObjectValueResult >> updatelaygroupdPageReferenceForDatabase: aDatabase [
+GtLObjectValueResult >> updateForToolCall: aToolCall withExecutionContext: anExecutionContext [ 
+	self updatePlaygroundPageReferenceForDatabase: anExecutionContext lepiterDatabase
+]
+
+{ #category : #updating }
+GtLObjectValueResult >> updatePlaygroundPageReferenceForDatabase: aDatabase [
 	object ifNil: [ ^ self ].
+	aDatabase ifNil: [ ^ self ].
 
 	object gtPlaygroundPageStrategy
 		detectPlaygroundPageInDatabase: aDatabase
