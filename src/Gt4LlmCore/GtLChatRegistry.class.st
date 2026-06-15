@@ -34,7 +34,9 @@ GtLChatRegistry >> announcer [
 
 { #category : #'api - converting' }
 GtLChatRegistry >> asViewModel [
-	^ GtLChatRegistryViewModel new registry: self
+	^ GtLChatRegistryViewModel new
+		connectionRegistry: GtLConnectionRegistry default;
+		registry: self
 ]
 
 { #category : #accessing }
