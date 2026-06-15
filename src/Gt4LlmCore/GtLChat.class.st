@@ -567,7 +567,7 @@ GtLChat >> initializeTools [
 	tools := GtLTools new.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'api - instructions' }
 GtLChat >> instruction: instructionString titled: title [
 	| explanationSection |
 	
@@ -588,7 +588,7 @@ GtLChat >> instructions: anObject [
 	instructions := anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 GtLChat >> isFinishedSuccesss [
 	^ self messages last isReplyMessage and: [ self messages last isSuccess ]
 ]

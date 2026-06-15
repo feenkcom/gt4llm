@@ -225,7 +225,7 @@ GtLChatRegistryAddNewChatElement >> onSelectDescription: aDescription [
 
 { #category : #accessing }
 GtLChatRegistryAddNewChatElement >> registryViewModel: anObject [
-	super registryViewModel: anObject asChatRegistryWithConnectionsViewModel
+	super registryViewModel: anObject
 ]
 
 { #category : #'private - hooks' }

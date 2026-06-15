@@ -103,7 +103,7 @@ GtLChatRegistryElement >> onRegistryViewModelChanged [
 
 { #category : #accessing }
 GtLChatRegistryElement >> registryViewModel: anObject [
-	super registryViewModel: anObject asChatRegistryWithConnectionsViewModel
+	super registryViewModel: anObject
 ]
 
 { #category : #'private - hooks' }
