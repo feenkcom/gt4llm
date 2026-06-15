@@ -53,14 +53,7 @@ GtLPhlowViewDomainObject >> gtLivePhlowViewFor: aView [
 			container matchParent
 				addAptitude: (BrLayoutResizerAptitude new common: [ container children ]);
 				background: BrGlamorousColors backdropColor;
-				addChild: ((GtPharoMethodCoder new
-						forMethod: self phlowView definingMethod compiledMethod;
-						subscribeToSystem;
-						asExpandedOnlyElement)
-						margin: (BlInsets all: 10);
-						background: Color white;
-						addAptitude: BrShadowAptitude;
-						vFitContentLimited);
+				addChild: self phlowViewSourceCoder;
 				addChild: viewParent ]
 ]
 
@@ -103,6 +96,18 @@ GtLPhlowViewDomainObject >> phlowView: anObject [
 { #category : #'instance creation' }
 GtLPhlowViewDomainObject >> phlowViewForm: aForm [ 
 	phlowViewForm := aForm
+]
+
+{ #category : #views }
+GtLPhlowViewDomainObject >> phlowViewSourceCoder [
+	^ (GtPharoMethodCoder new
+				forMethod: self phlowView definingMethod compiledMethod;
+				subscribeToSystem;
+				asExpandedOnlyElement)
+				margin: (BlInsets all: 10);
+				background: Color white;
+				addAptitude: BrShadowAptitude;
+				vFitContentLimited
 ]
 
 { #category : #printing }

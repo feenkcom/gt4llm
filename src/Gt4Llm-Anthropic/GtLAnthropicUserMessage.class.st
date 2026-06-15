@@ -151,15 +151,7 @@ GtLAnthropicUserMessage >> instructions [
 						ifAbsent: [ :aSection | 
 							aSection addString: 'The inputs provided follow the descriptions below'.
 							self inputModels
-								do: [ :anInputModel | anInputModel addInstructionsTo: aSection ] ] ].
-								
-			self chat agents isNotEmpty
-				ifTrue: [ instructions
-						sectionNamed: 'Agents descriptions'
-						ifAbsent: [ :aSection | 
-							aSection addString: 'The available agents follow the descriptions below'.
-							self chat agents
-								do: [ :anAgent | anAgent addInstructionsTo: aSection ] ] ] ].
+								do: [ :anInputModel | anInputModel addInstructionsTo: aSection ] ] ] ].
 	^ instructions
 ]
 
