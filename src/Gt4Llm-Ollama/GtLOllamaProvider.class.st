@@ -10,11 +10,17 @@ Class {
 { #category : #ui }
 GtLOllamaProvider class >> gtToggleEnabledActionFor: anAction [
 	<gtClassAction>
-	
 	^ anAction button
-		tooltip: (IsConnectable ifTrue: [ 'Disable' ] ifFalse: [ 'Enable' ]);
-		icon: BrGlamorousVectorIcons shutdown;
-		action: [ :aButton | IsConnectable := IsConnectable not ]
+		tooltip: (self isConnectable ifTrue: [ 'Disable' ] ifFalse: [ 'Enable' ]);
+		icon: (self isConnectable
+				ifTrue: [ BrGlamorousVectorIcons shutdown ]
+				ifFalse: [ BrGlamorousVectorIcons play ]);
+		action: [ :aButton | 
+			self isConnectable
+				ifTrue: [ self markNonconnectable.
+					aButton icon: BrGlamorousVectorIcons play ]
+				ifFalse: [ self markConnectable.
+					aButton icon: BrGlamorousVectorIcons shutdown ] ]
 ]
 
 { #category : #initialization }
@@ -30,12 +36,14 @@ GtLOllamaProvider class >> isConnectable [
 
 { #category : #api }
 GtLOllamaProvider class >> markConnectable [
-	IsConnectable := true
+	IsConnectable := true.
+	GtLOllamaProvider notifyProviderConnectabilityChanged
 ]
 
 { #category : #api }
 GtLOllamaProvider class >> markNonconnectable [
-	IsConnectable := false
+	IsConnectable := false.
+	GtLOllamaProvider notifyProviderConnectabilityChanged
 ]
 
 { #category : #accessing }

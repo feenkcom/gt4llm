@@ -55,6 +55,12 @@ GtLConnectionRegistry class >> hasUniqueInstance [
 	^ uniqueInstance isNotNil
 ]
 
+{ #category : #'class initialization' }
+GtLConnectionRegistry class >> initialize [
+	SessionManager default
+		registerUserClassNamed: self name
+]
+
 { #category : #accessing }
 GtLConnectionRegistry class >> instance [
 	<gtExample>
@@ -64,11 +70,23 @@ GtLConnectionRegistry class >> instance [
 { #category : #'private - hooks' }
 GtLConnectionRegistry class >> onRemoveUniqueInstance: anInstance [
 	"Classes may perform some activities on a singleton that is about to be released"
+
+	anInstance onRemovedAsUniqueInstance
+]
+
+{ #category : #'system startup' }
+GtLConnectionRegistry class >> startUp: resuming [
+	resuming ifFalse: [ ^ self ].
+
+	self cleanUniqueInstance
 ]
 
 { #category : #accessing }
 GtLConnectionRegistry class >> uniqueInstance [
-	^ uniqueInstance ifNil: [ uniqueInstance := self new ]
+	^ uniqueInstance
+		ifNil: [ uniqueInstance := self new
+					subscribeToSystem;
+					yourself ]
 ]
 
 { #category : #adding }
@@ -268,12 +286,39 @@ GtLConnectionRegistry >> labelForModel: aModel [
 				ifNone: [ aModel ] ]
 ]
 
+{ #category : #subscriptions }
+GtLConnectionRegistry >> onGtLProviderFactoryConnectabilityChanged: anObject1 [
+]
+
+{ #category : #'api - hooks' }
+GtLConnectionRegistry >> onRemovedAsUniqueInstance [
+	self unsubscribeFromSystem.
+
+	announcer
+		announce: (GtLConnectionRegistryUniqueInstanceRemoved new
+				connectionRegistry: self;
+				newConnectionRegistry: self class uniqueInstance)
+]
+
 { #category : #accessing }
 GtLConnectionRegistry >> standardDefaultConnection [
 	^ GtLConnection new
 		providerClass: GtLOpenAIProvider;
 		label: 'GPT 5.4';
 		model: 'gpt-5.4'
+]
+
+{ #category : #subscriptions }
+GtLConnectionRegistry >> subscribeToSystem [
+	SystemAnnouncer uniqueInstance weak
+		when: GtLProviderFactoryConnectabilityChanged
+		send: #onGtLProviderFactoryConnectabilityChanged:
+		to: self
+]
+
+{ #category : #subscriptions }
+GtLConnectionRegistry >> unsubscribeFromSystem [
+	SystemAnnouncer uniqueInstance unsubscribe: self
 ]
 
 { #category : #initialization }

@@ -69,6 +69,7 @@ GtLChatRegistryElement >> newLabelWithText: aString [
 { #category : #'private - hooks' }
 GtLChatRegistryElement >> onGtLConnectionRegistryViewModelConnectionAdded: anAnnouncement [
 	anAnnouncement registryViewModel = self registryViewModel ifFalse: [ ^ self ].
+	self registryViewModel ifNil: [ ^ self ].
 
 	BlTaskAction enqueueElement: self action: [ self updateElement ]
 ]
@@ -76,8 +77,17 @@ GtLChatRegistryElement >> onGtLConnectionRegistryViewModelConnectionAdded: anAnn
 { #category : #'private - hooks' }
 GtLChatRegistryElement >> onGtLConnectionRegistryViewModelConnectionsChanged: anAnnouncement [
 	anAnnouncement registryViewModel = self registryViewModel ifFalse: [ ^ self ].
+	self registryViewModel ifNil: [ ^ self ].
 
 	BlTaskAction enqueueElement: self action: [ self updateElement ]
+]
+
+{ #category : #'private - hooks' }
+GtLChatRegistryElement >> onGtLConnectionRegistryViewModelUniqueInstanceRemoved: anAnnouncement [
+	anAnnouncement registryViewModel = self registryViewModel ifFalse: [ ^ self ].
+	self registryViewModel ifNil: [ ^ self ].
+	
+	BlTaskAction enqueueElement: self action: [ self updateConnectionsAndElement ]
 ]
 
 { #category : #updating }
@@ -106,6 +116,9 @@ GtLChatRegistryElement >> subscribeToRegistryViewModel [
 			to: self;
 		when: GtLConnectionRegistryViewModelConnectionAdded
 			send: #onGtLConnectionRegistryViewModelConnectionAdded:
+			to: self;
+		when: GtLConnectionRegistryViewModelUniqueInstanceRemoved
+			send: #onGtLConnectionRegistryViewModelUniqueInstanceRemoved:
 			to: self
 ]
 
@@ -114,6 +127,12 @@ GtLChatRegistryElement >> unsubscribeFromRegistryViewModel [
 	super unsubscribeFromRegistryViewModel.
 
 	self registryViewModel announcer unsubscribe: self
+]
+
+{ #category : #'private - updating' }
+GtLChatRegistryElement >> updateConnectionsAndElement [
+	self registryViewModel updateConnections.
+	self updateElement
 ]
 
 { #category : #'private - updating' }
