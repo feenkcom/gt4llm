@@ -19,6 +19,12 @@ GtAnthropicClient class >> apiKeyFile [
 ]
 
 { #category : #'as yet unclassified' }
+GtAnthropicClient class >> apiKeyFile: aFile [
+	ApiKeyFile := aFile.
+	GtLAnthropicProvider notifyProviderConnectabilityChanged.
+]
+
+{ #category : #'as yet unclassified' }
 GtAnthropicClient class >> apiKeyFileContents [
 	^ ApiKeyFile contents trimBoth
 ]
