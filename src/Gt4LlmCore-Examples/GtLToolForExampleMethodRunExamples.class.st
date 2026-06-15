@@ -26,16 +26,17 @@ GtLToolForExampleMethodRunExamples >> exampleRunError [
 	<gtExample>
 	| tool call targetObject |
 	tool := GtLToolForExampleMethodRun new.
-	tool database: self theDatabase.
 	call := self
 		executeTool: tool
 		withArguments: {
 			'exampleReference' -> {
-				'exampleClassName' -> 'GtLExampleRunDummyExamples'.
-				'methodName' -> 'errorExample'.
-				'classSide' -> false
+					'exampleClassName' -> 'GtLExampleRunDummyExamples'.
+					'methodName' -> 'errorExample'.
+					'classSide' -> false
+				} asDictionary
 			} asDictionary
-		} asDictionary.
+		inContext: (GtLToolExecutionContext new 
+			lepiterDatabase: self theDatabase).
 	targetObject := call result targetObject.
 	self assert: (targetObject isKindOf: GtLExampleWithResult).
 	self assert: targetObject isErrorResult.
@@ -48,16 +49,17 @@ GtLToolForExampleMethodRunExamples >> exampleRunFailure [
 	<gtExample>
 	| tool call targetObject |
 	tool := GtLToolForExampleMethodRun new.
-	tool database: self theDatabase.
 	call := self
 		executeTool: tool
 		withArguments: {
 			'exampleReference' -> {
-				'exampleClassName' -> 'GtLExampleRunDummyExamples'.
-				'methodName' -> 'failingExample'.
-				'classSide' -> false
+					'exampleClassName' -> 'GtLExampleRunDummyExamples'.
+					'methodName' -> 'failingExample'.
+					'classSide' -> false
+				} asDictionary
 			} asDictionary
-		} asDictionary.
+		inContext: (GtLToolExecutionContext new 
+			lepiterDatabase: self theDatabase).
 	targetObject := call result targetObject.
 	self assert: (targetObject isKindOf: GtLExampleWithResult).
 	self assert: targetObject isFailureResult.
@@ -226,16 +228,17 @@ GtLToolForExampleMethodRunExamples >> exampleRunSuccess [
 	resultObject := GtTMoneyExamples new fortyTwoEuros.
 	self ensureLepiterPageForObject: resultObject withSnippetCode: 'GtTMoneyExamples new fortyTwoEuros'.
 	tool := GtLToolForExampleMethodRun new.
-	tool database: self theDatabase.
 	call := self
 		executeTool: tool
 		withArguments: {
 			'exampleReference' -> {
-				'exampleClassName' -> 'GtTMoneyExamples'.
-				'methodName' -> 'fortyTwoEuros'.
-				'classSide' -> false
+					'exampleClassName' -> 'GtTMoneyExamples'.
+					'methodName' -> 'fortyTwoEuros'.
+					'classSide' -> false
+				} asDictionary
 			} asDictionary
-		} asDictionary.
+		inContext: (GtLToolExecutionContext new 
+			lepiterDatabase: self theDatabase).
 	targetObject := call result targetObject.
 	self assert: (targetObject isKindOf: GtLExampleWithResult).
 	self assert: targetObject isSuccessResult.
@@ -254,7 +257,6 @@ GtLToolForExampleMethodRunExamples >> exampleRunSuccessStoresObjectId [
 	self ensureLepiterPageForObject: resultObject withSnippetCode: 'GtLExampleRunDummyExamples new successfulExample'.
 	objectStorage := GtLObjectStorage new.
 	tool := GtLToolForExampleMethodRun new.
-	tool database: self theDatabase.
 	call := self
 		executeTool: tool
 		withArguments: {
@@ -264,7 +266,9 @@ GtLToolForExampleMethodRunExamples >> exampleRunSuccessStoresObjectId [
 				'classSide' -> false
 			} asDictionary
 		} asDictionary
-		inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
+		inContext: (GtLToolExecutionContext new 
+			objectStorage: objectStorage;
+			lepiterDatabase: self theDatabase).
 	targetObject := call result targetObject.
 	self assert: (targetObject isKindOf: GtLExampleWithResult).
 	self assert: targetObject isSuccessResult.

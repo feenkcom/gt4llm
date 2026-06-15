@@ -43,3 +43,15 @@ GtLObjectStorageValueResult >> printOn: aStream [
 		nextPutAll: '; id=';
 		nextPutAll: (self objectId ifNil: [ '' ] ifNotNil: [ self objectId ])
 ]
+
+{ #category : #updating }
+GtLObjectStorageValueResult >> updateForToolCall: aToolCall withExecutionContext: anExecutionContext [ 
+	| newId |
+	super updateForToolCall: aToolCall withExecutionContext: anExecutionContext .
+	
+ newId := (anExecutionContext objectStorage ifNotNil: [ :aStorage | 
+			aStorage
+					addNewObject: object
+					reason: (GtLStoredObjectCodeExecutionReason toolCall: aToolCall)]).
+	self objectId: (newId ifNil: [ '' ])
+]

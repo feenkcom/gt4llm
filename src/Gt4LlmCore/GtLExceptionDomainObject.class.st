@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLExceptionDomainObject,
-	#superclass : #GtLErroneousConditionDomainObject,
+	#superclass : #GtLObjectStorageValueResult,
 	#instVars : [
 		'exception',
 		'errorReason'
@@ -38,26 +38,37 @@ GtLExceptionDomainObject >> errorReason: aString [
 	errorReason := aString
 ]
 
+{ #category : #descriptions }
+GtLExceptionDomainObject >> errorReasonDescription [
+	<magritteDescription>
+	^ MAStringDescription new
+		label: 'Error Reason';
+		accessor: #errorReason;
+		comment: 'An explicit reason for the error, when available';
+		beOptional
+]
+
 { #category : #accessing }
 GtLExceptionDomainObject >> exception [
-	^ exception
+	^ self object
 ]
 
 { #category : #accessing }
 GtLExceptionDomainObject >> exception: anObject [
-	exception := anObject
+	self object: anObject
 ]
 
 { #category : #accessing }
 GtLExceptionDomainObject >> freeze: anException [
-	self exception: (GtSystemUtility freeze: anException)
+	self exception: (GtSystemUtility freeze: anException).
+	self objectValue: (GtLSerializedObjectValue fromObject: anException)
 ]
 
 { #category : #'gt - extensions' }
 GtLExceptionDomainObject >> gtExceptionStackFor: aView [
 	<gtView>
 	<gtLlmView>
-	exception ifNil: [ ^ aView empty ].
+	self exception ifNil: [ ^ aView empty ].
 
 	^ aView forward
 		title: 'Exception stack';
@@ -68,28 +79,9 @@ GtLExceptionDomainObject >> gtExceptionStackFor: aView [
 			action: [ [ self exception debug ] fork ]
 ]
 
-{ #category : #'llm views' }
-GtLExceptionDomainObject >> llmExceptionViewFor: aDataView [
-	<gtLlmDataView>
-	
-	self exception ifNil: [ ^ aDataView emptyData ].
-	
-	^ aDataView forwardObject
-			title: 'Exception specific details';
-			dataKey: 'errorDetails';
-			object: [ self exception ]
-]
-
-{ #category : #'llm views' }
-GtLExceptionDomainObject >> llmRawDataViewFor: aDataView [
-	<gtLlmDataView>
-	
-	^ aDataView 
-			title: 'Exception generic details';
-			jsonData: [ 
-				NeoJSONObject new
-					at: 'errorReason' put: self description;
-					yourself ]
+{ #category : #testing }
+GtLExceptionDomainObject >> isErrorDomainObject [
+	^ true
 ]
 
 { #category : #'api - accessing' }
@@ -99,11 +91,7 @@ GtLExceptionDomainObject >> messageText [
 	^ '{1}' format: {self exception}
 ]
 
-{ #category : #'api - accessing' }
-GtLExceptionDomainObject >> stackTrace [
-	^ self exception signalerContext
-		ifNotNil: [ :anInterruptedContext | String lf join: ((anInterruptedContext stackOfSize: 30) collect: #gtDisplayString) ]
-		ifNil: [ | stackString |
-			stackString := self exception stackString.
-			stackString first: (1000 min: stackString size) ]
+{ #category : #accessing }
+GtLExceptionDomainObject >> specificObjectPropertiesKey [
+	^ 'errorDetails'
 ]
