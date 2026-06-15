@@ -20,17 +20,15 @@ GtLMethodCompilationExceptionDomainObject >> gtSourceCodeFor: aView [
 		text: [ sourceCode ]
 ]
 
-{ #category : #accessing }
-GtLMethodCompilationExceptionDomainObject >> llmRawDataViewFor: aDataView [
-	^ aDataView 
-			title: 'Exception generic details';
-			jsonData: [ 
-				NeoJSONObject new
-					at: 'errorReason' put: self description;
-					at: 'methodClass' put: self targetClassName asString;
-					at: 'methodProtocol' put: self protocolName asString;
-					at: 'sourceCode' put: self sourceCode;
-					yourself ]
+{ #category : #descriptions }
+GtLMethodCompilationExceptionDomainObject >> methodProtocolDescription [
+	<magritteDescription>
+	
+	^ MAStringDescription new
+		label: 'Method protocol name';
+		accessor: #protocolName;
+		comment: 'The protocol of the method being compiled';
+		beRequired
 ]
 
 { #category : #accessing }
@@ -53,6 +51,17 @@ GtLMethodCompilationExceptionDomainObject >> sourceCode: anObject [
 	sourceCode := anObject
 ]
 
+{ #category : #descriptions }
+GtLMethodCompilationExceptionDomainObject >> sourceCodeDescription [
+	<magritteDescription>
+	
+	^ MAStringDescription new
+		label: 'Source code';
+		accessor: #sourceCode;
+		comment: 'The Smalltalk source code that triggered the error when compiled';
+		beRequired
+]
+
 { #category : #accessing }
 GtLMethodCompilationExceptionDomainObject >> targetClass [
 	^ targetClass
@@ -66,4 +75,15 @@ GtLMethodCompilationExceptionDomainObject >> targetClass: anObject [
 { #category : #accessing }
 GtLMethodCompilationExceptionDomainObject >> targetClassName [
 	^ targetClass name
+]
+
+{ #category : #descriptions }
+GtLMethodCompilationExceptionDomainObject >> targetClassNameDescription [
+	<magritteDescription>
+	
+	^ MAStringDescription new
+		label: 'Target class name';
+		accessor: #targetClassName;
+		comment: 'The class where the method was attempted to be compiled';
+		beRequired
 ]

@@ -4,8 +4,8 @@ Examples for GtLExampleWithResultDomainObject data views.
 Class {
 	#name : #GtLExampleWithResultExamples,
 	#superclass : #GtLDomainObjectExamples,
-	#traits : 'TGtLExceptionResultAssertions',
-	#classTraits : 'TGtLExceptionResultAssertions classTrait',
+	#traits : 'TGtLExceptionResultSerializationAssertions',
+	#classTraits : 'TGtLExceptionResultSerializationAssertions classTrait',
 	#instVars : [
 		'theDatabase'
 	],
@@ -102,7 +102,7 @@ GtLExampleWithResultExamples >> exampleWithResultForComparisonFailure [
 	self assert: domainObject isErrorResult.
 	
 	compositeView := domainObject llmDataViewsFor: GtLDataView new.
-	self assert: compositeView dataViews size equals: 3.
+	self assert: compositeView dataViews size equals: 2.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
 	self assert: dataBlock dataBlocks size equals: 2.
@@ -113,7 +113,7 @@ GtLExampleWithResultExamples >> exampleWithResultForComparisonFailure [
 	
 	resultJson := jsonData at: #result.
 	self 
-		assertExceptionResult: resultJson 
+		assertExceptionResult: (resultJson at: 'objectDetails') 
 		errorClass: 'GtLExampleDataComparisonException' 
 		errorMessage: 'GtLExampleDataComparisonException' 
 		stackTraceIncludes: #('GtLExampleRunDummyExamples>>failingExampleWithComparisonFailures').
@@ -141,7 +141,7 @@ GtLExampleWithResultExamples >> exampleWithResultForFailingExample [
 		objectId: nil.
 	
 	compositeView := domainObject llmDataViewsFor: GtLDataView new.
-	self assert: compositeView dataViews size equals: 3.
+	self assert: compositeView dataViews size equals: 2.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
 	self assertDataBlockHasOnlyJsonData: dataBlock.
@@ -151,7 +151,7 @@ GtLExampleWithResultExamples >> exampleWithResultForFailingExample [
 	
 	resultJson := jsonData at: #result.
 	self 
-		assertExceptionResult: resultJson 
+		assertExceptionResult: (resultJson at: 'objectDetails') 
 		errorClass: 'AssertionFailure' 
 		errorMessage: 'Assertion failed' 
 		stackTraceIncludes: #('GtLExampleRunDummyExamples>>failingExample' 'AssertionFailure').
@@ -170,7 +170,7 @@ GtLExampleWithResultExamples >> exampleWithResultForSuccessfulExample [
 	domainObject := GtLExampleWithResult new
 		exampleWithResult: (self runExampleMethod: method);
 		objectId: 'test-object-id';
-		updatelaygroupdPageReferenceForDatabase: self theDatabase.
+		updatePlaygroundPageReferenceForDatabase: self theDatabase.
 	
 	self 
 		assertDomainObject: domainObject 
@@ -185,7 +185,7 @@ GtLExampleWithResultExamples >> exampleWithResultForSuccessfulExample [
 	self assert: domainObject playgroundPageReference pageId equals: self theDatabase pages first uid asString36.
 	
 	compositeView := domainObject llmDataViewsFor: GtLDataView new.
-	self assert: compositeView dataViews size equals: 3.
+	self assert: compositeView dataViews size equals: 2.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
 	self assertDataBlockHasOnlyJsonData: dataBlock.
@@ -241,7 +241,7 @@ GtLExampleWithResultExamples >> exampleWithResultForSuccessfulExampleWithDataJso
 		objectId: 'test-object-id'.
 	
 	compositeView := domainObject llmDataViewsFor: GtLDataView new.
-	self assert: compositeView dataViews size equals: 3.
+	self assert: compositeView dataViews size equals: 2.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
 	self assertDataBlockHasOnlyJsonData: dataBlock.
@@ -290,7 +290,7 @@ GtLExampleWithResultExamples >> exampleWithResultForSuccessfulExampleWithoutLepi
 	domainObject := GtLExampleWithResult new
 		exampleWithResult: (self runExampleMethod: method);
 		objectId: 'test-object-id';
-		updatelaygroupdPageReferenceForDatabase: self theDatabase.
+		updatePlaygroundPageReferenceForDatabase: self theDatabase.
 	
 	self 
 		assertDomainObject: domainObject 
@@ -303,7 +303,7 @@ GtLExampleWithResultExamples >> exampleWithResultForSuccessfulExampleWithoutLepi
 	self assert: domainObject playgroundPageReference isNil.
 	
 	compositeView := domainObject llmDataViewsFor: GtLDataView new.
-	self assert: compositeView dataViews size equals: 3.
+	self assert: compositeView dataViews size equals: 2.
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
 	self assertDataBlockHasOnlyJsonData: dataBlock.

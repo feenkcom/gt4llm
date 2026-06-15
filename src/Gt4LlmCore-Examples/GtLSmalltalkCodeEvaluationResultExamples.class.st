@@ -4,9 +4,8 @@ Examples for GtLSmalltalkCodeEvaluationResult and related domain objects.
 Class {
 	#name : #GtLSmalltalkCodeEvaluationResultExamples,
 	#superclass : #GtLDomainObjectExamples,
-	#instVars : [
-		'theDatabase'
-	],
+	#traits : 'TGtLWithLepiterPageReferenceForDomainObjectExamples',
+	#classTraits : 'TGtLWithLepiterPageReferenceForDomainObjectExamples classTrait',
 	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
@@ -37,18 +36,10 @@ GtLSmalltalkCodeEvaluationResultExamples >> expectedSimpleResultJsonData [
 		yourself
 ]
 
-{ #category : #private }
-GtLSmalltalkCodeEvaluationResultExamples >> lepiterPageReferenceForObject: anObject withSnippetCode: aString [
-	| page snippet |
-	page := LePage pharoClassName: anObject class name.
-	snippet := LePharoSnippet new.
-	snippet code: aString.
-	page addSnippet: snippet.
-	self theDatabase addPage: page.
-	self assert: page children size equals: 1.
-	^ GtLLepiterPageReference new
-		page: page;
-		yourself
+{ #category : #initialization }
+GtLSmalltalkCodeEvaluationResultExamples >> initialize [
+	super initialize.
+	theDatabase := nil
 ]
 
 { #category : #examples }
@@ -143,12 +134,4 @@ GtLSmalltalkCodeEvaluationResultExamples >> simpleResultDataViewSerialization [
 	self assert: jsonData equals: expectedJson.
 	
 	^ jsonData
-]
-
-{ #category : #accessing }
-GtLSmalltalkCodeEvaluationResultExamples >> theDatabase [
-	^ theDatabase ifNil: [
-		| db |
-		db := LeExplicitlyAttachedLinksExamples new emptyDatabase.
-		theDatabase := LeLogicalDatabase new primaryDB: db ]
 ]

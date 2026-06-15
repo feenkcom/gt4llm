@@ -4,8 +4,8 @@ Examples for GtLTestCaseWithResultDomainObject data views.
 Class {
 	#name : #GtLTestCaseWithResultDomainObjectExamples,
 	#superclass : #GtLDomainObjectExamples,
-	#traits : 'TGtLExceptionResultAssertions',
-	#classTraits : 'TGtLExceptionResultAssertions classTrait',
+	#traits : 'TGtLExceptionResultSerializationAssertions',
+	#classTraits : 'TGtLExceptionResultSerializationAssertions classTrait',
 	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 

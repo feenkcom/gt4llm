@@ -4,9 +4,6 @@ Magritte-based tool for evaluating Smalltalk code and returning serialized resul
 Class {
 	#name : #GtLMagritteToolForSmalltalkCodeEvaluation,
 	#superclass : #GtLAbstractMagritteFunctionTool,
-	#instVars : [
-		'lepiterDatabase'
-	],
 	#category : #'Gt4LlmCore-Tools'
 }
 
@@ -27,16 +24,6 @@ GtLMagritteToolForSmalltalkCodeEvaluation >> codeDescription [
 		label: 'Code';
 		accessor: #code;
 		beRequired
-]
-
-{ #category : #accessing }
-GtLMagritteToolForSmalltalkCodeEvaluation >> database [
-	^ lepiterDatabase
-]
-
-{ #category : #accessing }
-GtLMagritteToolForSmalltalkCodeEvaluation >> database: aDatabase [
-	lepiterDatabase := aDatabase
 ]
 
 { #category : #accessing }
@@ -96,13 +83,6 @@ Example JSON error response:
 }'
 ]
 
-{ #category : #initialization }
-GtLMagritteToolForSmalltalkCodeEvaluation >> initialize [
-	super initialize.
-	
-	lepiterDatabase := LeDatabasesRegistry defaultLogicalDatabase
-]
-
 { #category : #accessing }
 GtLMagritteToolForSmalltalkCodeEvaluation >> name [
 	^ 'smalltalkCodeEvaluation'
@@ -110,7 +90,7 @@ GtLMagritteToolForSmalltalkCodeEvaluation >> name [
 
 { #category : #private }
 GtLMagritteToolForSmalltalkCodeEvaluation >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
-	| arguments code bindings bindingsDictionary object objectId |
+	| arguments code bindings bindingsDictionary object |
 	arguments := aToolCall arguments.
 	code := arguments at: 'code'.
 	(code isNil or: [ code isString and: [ code trimBoth isEmpty ] ])
@@ -144,21 +124,14 @@ GtLMagritteToolForSmalltalkCodeEvaluation >> privatePerformToolCall: aToolCall i
 		compiler evaluate: code ]
 			on: Error
 			do: [ :ex | 
-				^ GtLSmalltalkCodeEvaluationExceptionDomainObject new
-					freeze: ex;
-					errorReason: 'Error while evaluating smalltalk code';
-					code: code ].
-
-	objectId := anExecutionContext objectStorage
-			ifNotNil: [ :aStorage | 
-				aStorage
-					addNewObject: object
-					reason: (GtLStoredObjectCodeExecutionReason toolCall: aToolCall) ].
-
-	^ (GtLSmalltalkCodeEvaluationResult
-		forObject: object
-		withId: (objectId ifNil: [ '' ])
-		andCode: code)
-			updatelaygroupdPageReferenceForDatabase: self database;
+				^(GtLSmalltalkCodeEvaluationExceptionDomainObject freeze: ex)
+							errorReason: 'Error while evaluating smalltalk code';
+							code: code;
+							updateForToolCall: aToolCall withExecutionContext: anExecutionContext;
+							yourself ].
+	
+	^ (GtLSmalltalkCodeEvaluationResult forObject: object)
+			code: code;
+			updateForToolCall: aToolCall withExecutionContext: anExecutionContext;
 			yourself
 ]

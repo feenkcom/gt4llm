@@ -16,6 +16,26 @@ GtLObjectStorageValueResult class >> forObject: anObject withId: anObjectId [
 			objectId: anObjectId
 ]
 
+{ #category : #'as yet unclassified' }
+GtLObjectStorageValueResult >> gtObjectFor: aView [
+	<gtView>
+	<gtLlmView>
+	^ aView explicit
+		title: 'Object';
+		priority: 9;
+		stencil: [ | container |
+			container := BrVerticalPane new.
+			container matchParent
+				addAptitude: (BrLayoutResizerAptitude new common: [ container children ]);
+				background: BrGlamorousColors backdropColor;
+				addChild: ((object gtDefaultInspectorTool) asElement
+						margin: (BlInsets all: 10);
+						background: Color white;
+						addAptitude: BrShadowAptitude;
+						vFitContentLimited;
+						hMatchParent) ]
+]
+
 { #category : #accessing }
 GtLObjectStorageValueResult >> objectId [
 	^ objectId
@@ -42,4 +62,16 @@ GtLObjectStorageValueResult >> printOn: aStream [
 	aStream
 		nextPutAll: '; id=';
 		nextPutAll: (self objectId ifNil: [ '' ] ifNotNil: [ self objectId ])
+]
+
+{ #category : #updating }
+GtLObjectStorageValueResult >> updateForToolCall: aToolCall withExecutionContext: anExecutionContext [ 
+	| newId |
+	super updateForToolCall: aToolCall withExecutionContext: anExecutionContext .
+	
+ newId := (anExecutionContext objectStorage ifNotNil: [ :aStorage | 
+			aStorage
+					addNewObject: object
+					reason: (GtLStoredObjectCodeExecutionReason toolCall: aToolCall)]).
+	self objectId: (newId ifNil: [ '' ])
 ]

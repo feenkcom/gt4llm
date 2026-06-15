@@ -4,16 +4,8 @@ Magritte-based tool for executing a gtExample method and reporting the result.
 Class {
 	#name : #GtLToolForExampleMethodRun,
 	#superclass : #GtLAbstractMagritteFunctionTool,
-	#instVars : [
-		'database'
-	],
 	#category : #'Gt4LlmCore-Tools'
 }
-
-{ #category : #accessing }
-GtLToolForExampleMethodRun >> database: aDatabase [
-	database := aDatabase
-]
 
 { #category : #accessing }
 GtLToolForExampleMethodRun >> description [
@@ -35,13 +27,6 @@ GtLToolForExampleMethodRun >> exampleReferenceDescription [
 		accessor: #exampleReference;
 		classes: {GtLExampleReference};
 		beRequired
-]
-
-{ #category : #initialization }
-GtLToolForExampleMethodRun >> initialize [
-	super initialize.
-	
-	database := LeDatabasesRegistry defaultLogicalDatabase
 ]
 
 { #category : #accessing }
@@ -100,6 +85,6 @@ GtLToolForExampleMethodRun >> runExample: method fromReference: exampleReference
 	^ GtLExampleWithResult new
 		exampleWithResult: example;
 		objectId: objectId;
-		updatelaygroupdPageReferenceForDatabase: database;
+		updatePlaygroundPageReferenceForDatabase: anExecutionContext lepiterDatabase;
 		yourself
 ]
