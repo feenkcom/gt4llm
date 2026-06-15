@@ -1,6 +1,11 @@
 Extension { #name : #ProtoObject }
 
 { #category : #'*Gt4LlmCore' }
+ProtoObject >> gtLlmPhlowViewExtractor [
+	^ GtLObjectPhlowViewExtractor forTargetObject: self
+]
+
+{ #category : #'*Gt4LlmCore' }
 ProtoObject >> llmDataViewsFor: aDataView [
 	"This is the default entry method for retrieving the wrapper view containing all views"
 	^ self llmDataViewsFor: aDataView inContext: GtLDataViewContext new
