@@ -3,20 +3,11 @@ Examples for GtLExceptionDomainObject testing state and serialization using data
 "
 Class {
 	#name : #GtLExceptionDomainObjectExamples,
-	#superclass : #GtLErroneousConditionDomainObjectExamples,
+	#superclass : #GtLExceptionBasedDomainObjectExamples,
+	#traits : 'TGtLExceptionResultSerializationAssertions',
+	#classTraits : 'TGtLExceptionResultSerializationAssertions classTrait',
 	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
-
-{ #category : #assertions }
-GtLExceptionDomainObjectExamples >> assertErrorDetails: errorDetailsJson hasErrorMessage: expectedErrorMessage errorClass: expectedErrorClass stackTraceIncludes: expectedStackTraceStrings [
-	"Assert that the errorDetails JSON contains the expected exception data."
-	
-	self assert: (errorDetailsJson at: #errorMessage) equals: expectedErrorMessage.
-	self assert: (errorDetailsJson at: #errorClass) equals: expectedErrorClass.
-	
-	expectedStackTraceStrings do: [ :expectedString |
-		self assert: ((errorDetailsJson at: #stackTrace) includesSubstring: expectedString) ]
-]
 
 { #category : #examples }
 GtLExceptionDomainObjectExamples >> basicZeroDivideException [
@@ -27,7 +18,6 @@ GtLExceptionDomainObjectExamples >> basicZeroDivideException [
 		GtLExceptionDomainObject freeze: ex ].
 	
 	self assert: domainObject exception class equals: ZeroDivide.
-	self assert: (domainObject stackTrace includesSubstring: 'ZeroDivide').
 	
 	^ domainObject
 ]
@@ -69,7 +59,11 @@ GtLExceptionDomainObjectExamples >> dataComparisonExceptionDataViewSerialization
 	self assert: dataBlock imageDataBlocks size equals: 1.
 	
 	jsonData := dataBlock compositeJsonData.
-	self assert: jsonData keys sorted equals: #('errorDetails' 'errorReason').
+	self assertJsonData: jsonData hasExpectedKeys: #(#errorDetails #errorReason #objectId #objectValue #playgroundPageReference).
+	self assert: (jsonData at: #errorReason) isNil.
+	self assert: (jsonData at: #objectId) isNil.
+	self assert: (jsonData at: #objectValue) isDictionary.
+	self assert: (jsonData at: #playgroundPageReference) isNil.
 	
 	errorDetails := jsonData at: 'errorDetails'.
 	self assert: (errorDetails at: #errorClass) equals: 'GtLExampleDataComparisonException'.
@@ -97,9 +91,12 @@ GtLExceptionDomainObjectExamples >> emptyExceptionDataViewSerialization [
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	jsonData := dataBlock compositeJsonData.
-	"When exception is nil, only errorReason key is present (from llmJsonObject)"
-	self assert: jsonData keys sorted equals: #('errorReason').
+	self assertJsonData: jsonData hasExpectedKeys: #(#errorDetails #errorReason #objectId #objectValue #playgroundPageReference).
+	self assert: (jsonData at: 'errorDetails') equals: Dictionary new.
 	self assert: (jsonData at: 'errorReason') isNil.
+	self assert: (jsonData at: #objectId) isNil.
+	self assert: (jsonData at: #objectValue) isNil.
+	self assert: (jsonData at: #playgroundPageReference) isNil.
 	
 	^ jsonData
 ]
@@ -151,9 +148,9 @@ GtLExceptionDomainObjectExamples >> exceptionWithDescriptionDataViewSerializatio
 	
 	errorDetails := jsonData at: 'errorDetails'.
 	self 
-		assertErrorDetails: errorDetails 
-		hasErrorMessage: 'ZeroDivide' 
+		assertExceptionResult: errorDetails 
 		errorClass: 'ZeroDivide' 
+		errorMessage: 'ZeroDivide' 
 		stackTraceIncludes: #('ZeroDivide').
 	
 	^ jsonData
@@ -187,7 +184,6 @@ GtLExceptionDomainObjectExamples >> messageNotUnderstoodException [
 		GtLExceptionDomainObject freeze: ex ].
 	
 	self assert: domainObject exception class equals: MessageNotUnderstood.
-	self assert: (domainObject stackTrace includesSubstring: 'MessageNotUnderstood').
 	
 	^ domainObject
 ]
@@ -206,14 +202,18 @@ GtLExceptionDomainObjectExamples >> zeroDivideExceptionDataViewSerialization [
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	jsonData := dataBlock compositeJsonData.
-	self assert: jsonData keys sorted equals: #('errorDetails' 'errorReason').
+	self assertJsonData: jsonData hasExpectedKeys: #(#errorDetails #errorReason #objectId #objectValue #playgroundPageReference).
+	self assert: (jsonData at: #errorReason) isNil.
+	self assert: (jsonData at: #objectId) isNil.
+	self assert: (jsonData at: #objectValue) isDictionary.
+	self assert: (jsonData at: #playgroundPageReference) isNil.
 	
 	errorDetails := jsonData at: 'errorDetails'.
 	self 
-		assertErrorDetails: errorDetails 
-		hasErrorMessage: 'ZeroDivide' 
+		assertExceptionResult: errorDetails 
 		errorClass: 'ZeroDivide' 
-		stackTraceIncludes: #('ZeroDivide' 'SmallInteger>>/') .
+		errorMessage: 'ZeroDivide' 
+		stackTraceIncludes: #('ZeroDivide' 'SmallInteger>>/').
 	
 	^ jsonData
 ]

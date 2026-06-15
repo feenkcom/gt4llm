@@ -4,9 +4,8 @@ Examples for GtLMagritteToolForSmalltalkCodeEvaluation.
 Class {
 	#name : #GtLMagritteToolForSmalltalkCodeEvaluationExamples,
 	#superclass : #GtLAbstractMagritteFunctionToolExamples,
-	#instVars : [
-		'theDatabase'
-	],
+	#traits : 'TGtLWithLepiterPageReferenceForDomainObjectExamples',
+	#classTraits : 'TGtLWithLepiterPageReferenceForDomainObjectExamples classTrait',
 	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
@@ -14,6 +13,14 @@ Class {
 GtLMagritteToolForSmalltalkCodeEvaluationExamples >> assertExceptionDomainObject: aDomainObject withExceptionClass: anExceptionClass messageSubstring: aMessageSubstring [
 	self assert: aDomainObject exception class equals: anExceptionClass.
 	self assert: (aDomainObject messageText includesSubstring: aMessageSubstring).
+]
+
+{ #category : #asserting }
+GtLMagritteToolForSmalltalkCodeEvaluationExamples >> assertPlaygroundPageReference: aPlaygroundPageReference [ 
+	self assert: aPlaygroundPageReference notNil.
+	
+	self assert: aPlaygroundPageReference databaseId equals: self theDatabase primaryDB uuidString.
+	self assert: aPlaygroundPageReference pageId equals: self theDatabase pages first uid asString36.
 ]
 
 { #category : #assertions }
@@ -40,7 +47,9 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> emptyCodeArgument [
 		withArguments: {
 			'code' -> '   '.
 			'bindings' -> #()
-		} asDictionary.
+			} asDictionary
+		inContext: (GtLToolExecutionContext new 
+			lepiterDatabase: self theDatabase).
 	self
 		assertMissingArgument: call result targetObject
 		withArgumentName: 'code'
@@ -62,14 +71,15 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeReturningBlElement [
 	objectStorage := GtLObjectStorage new.
 	self ensureLepiterPageForObject: BlElement new withSnippetCode: 'BlElement new'.
 	tool := GtLMagritteToolForSmalltalkCodeEvaluation new.
-	tool database: self theDatabase.
 	call := self
 		executeTool: tool
 		withArguments: {
 			'code' -> 'BlElement new'.
 			'bindings' -> #()
 		} asDictionary
-		inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
+		inContext: (GtLToolExecutionContext new 
+			objectStorage: objectStorage;
+			lepiterDatabase: self theDatabase).
 	targetObject := call result targetObject.
 	self assert: (targetObject isKindOf: GtLSmalltalkCodeEvaluationResult).
 	self assert: (targetObject object isKindOf: BlElement).
@@ -99,14 +109,15 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeReturningObjectWithS
 	objectStorage := GtLObjectStorage new.
 	self ensureLepiterPageForObject: GtLSerializedObjectValueTestObject exampleInstance withSnippetCode: 'GtLSerializedObjectValueTestObject exampleInstance'.
 	tool := GtLMagritteToolForSmalltalkCodeEvaluation new.
-	tool database: self theDatabase.
 	call := self
 		executeTool: tool
 		withArguments: {
 			'code' -> 'GtLSerializedObjectValueTestObject exampleInstance'.
 			'bindings' -> #()
 		} asDictionary
-		inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
+		inContext: (GtLToolExecutionContext new 
+			objectStorage: objectStorage;
+			lepiterDatabase: self theDatabase).
 	targetObject := call result targetObject.
 	self assert: (targetObject isKindOf: GtLSmalltalkCodeEvaluationResult).
 	self assert: (targetObject object isKindOf: GtLSerializedObjectValueTestObject).
@@ -176,29 +187,31 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeSimpleDoIt [
 	objectStorage := GtLObjectStorage new.
 	self ensureLepiterPageForObject: 3 withSnippetCode: '1 + 2'.
 	tool := GtLMagritteToolForSmalltalkCodeEvaluation new.
-	tool database: self theDatabase.
 	call := self
 		executeTool: tool
 		withArguments: {
 			'code' -> '1 + 2'.
 			'bindings' -> #()
 		} asDictionary
-		inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
+		inContext: (GtLToolExecutionContext new 
+			objectStorage: objectStorage;
+			lepiterDatabase: self theDatabase).
 	targetObject := call result targetObject.
 	self assert: (targetObject isKindOf: GtLSmalltalkCodeEvaluationResult).
 	self assert: targetObject object equals: 3.
 	self assert: targetObject code equals: '1 + 2'.
+	
 	self assert: targetObject objectValue objectClassName equals: 'SmallInteger'.
 	self assert: targetObject objectValue objectPrintString equals: '3'.
+	self assertPlaygroundPageReference: targetObject playgroundPageReference.
+	
 	self assert: targetObject objectId isNotEmpty.
-	self assert: targetObject playgroundPageReference notNil.
-	self assert: targetObject playgroundPageReference databaseId equals: self theDatabase primaryDB uuidString.
-	self assert: targetObject playgroundPageReference pageId equals: self theDatabase pages first uid asString36.
 	self assert: objectStorage objectCount equals: 1.
 	self assert: (objectStorage objectAt: objectStorage objectIds first) equals: 3.
 	storedResult := objectStorage storedObjectAt: targetObject objectId.
 	self assert: storedResult reason class equals: GtLStoredObjectCodeExecutionReason.
 	self assert: storedResult reason asReasonString equals: '1 + 2'.
+	
 	^ call
 ]
 
@@ -209,13 +222,14 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeSimpleDoItWithNoBind
 	objectStorage := GtLObjectStorage new.
 	self ensureLepiterPageForObject: 3 withSnippetCode: '1 + 2'.
 	tool := GtLMagritteToolForSmalltalkCodeEvaluation new.
-	tool database: self theDatabase.
 	call := self
 		executeTool: tool
 		withArguments: {
 			'code' -> '1 + 2'.
 		} asDictionary
-		inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
+		inContext: (GtLToolExecutionContext new 
+			objectStorage: objectStorage;
+			lepiterDatabase: self theDatabase).
 	targetObject := call result targetObject.
 	self assert: (targetObject isKindOf: GtLSmalltalkCodeEvaluationResult).
 	self assert: targetObject object equals: 3.
@@ -240,14 +254,15 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeSimpleDoItWithoutLep
 	| objectStorage tool call targetObject |
 	objectStorage := GtLObjectStorage new.
 	tool := GtLMagritteToolForSmalltalkCodeEvaluation new.
-	tool database: self theDatabase.
 	call := self
 		executeTool: tool
 		withArguments: {
 			'code' -> 'LePage new'.
 			'bindings' -> #()
 		} asDictionary
-		inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
+		inContext: (GtLToolExecutionContext new 
+			objectStorage: objectStorage;
+			lepiterDatabase: self theDatabase).
 	targetObject := call result targetObject.
 	self assert: (targetObject isKindOf: GtLSmalltalkCodeEvaluationResult).
 	self assert: (targetObject object isKindOf: LePage).
@@ -260,12 +275,16 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeSimpleDoItWithoutObj
 	<gtExample>
 	| tool call |
 	tool := GtLMagritteToolForSmalltalkCodeEvaluation new.
+	
 	call := self
 		executeTool: tool
 		withArguments: {
 			'code' -> '1 + 2'.
 			'bindings' -> #()
-		} asDictionary.
+			} asDictionary
+		inContext: (GtLToolExecutionContext new 
+			lepiterDatabase: self theDatabase).
+			
 	self assert: (call result targetObject isKindOf: GtLSmalltalkCodeEvaluationResult).
 	self assert: call result targetObject object equals: 3.
 	self assert: call result targetObject code equals: '1 + 2'.
@@ -289,7 +308,9 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithBindingEmptyName
 				{ 'name' -> ''. 'objectId' -> bindingObjectId } asDictionary
 			} asArray
 		} asDictionary
-		inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
+		inContext: (GtLToolExecutionContext new 
+			objectStorage: objectStorage;
+			lepiterDatabase: self theDatabase).
 	self
 		assertSmalltalkCodeEvaluationException: call result targetObject
 		withCode: 'value + 2'
@@ -313,7 +334,9 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithBindingEmptyObje
 				{ 'name' -> 'value'. 'objectId' -> '' } asDictionary
 			} asArray
 		} asDictionary
-		inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
+		inContext: (GtLToolExecutionContext new 
+			objectStorage: objectStorage;
+			lepiterDatabase: self theDatabase).
 	self
 		assertMissingObject: call result targetObject
 		withObjectName: ''
@@ -337,7 +360,9 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithBindingMissingNa
 				{ 'objectId' -> bindingObjectId } asDictionary
 			} asArray
 		} asDictionary
-		inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
+		inContext: (GtLToolExecutionContext new 
+			objectStorage: objectStorage;
+			lepiterDatabase: self theDatabase).
 	self
 		assertMissingRequiredProperties: call result targetObject
 		withPropertyNames: #('name')
@@ -361,7 +386,9 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithBindingMissingOb
 				{ 'name' -> 'value' } asDictionary
 			} asArray
 		} asDictionary
-		inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
+		inContext: (GtLToolExecutionContext new 
+			objectStorage: objectStorage;
+			lepiterDatabase: self theDatabase).
 	self
 		assertMissingRequiredProperties: call result targetObject
 		withPropertyNames: #('objectId')
@@ -386,7 +413,9 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithBindingNilName [
 				{ 'name' -> nil. 'objectId' -> bindingObjectId } asDictionary
 			} asArray
 		} asDictionary
-		inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
+		inContext: (GtLToolExecutionContext new 
+			objectStorage: objectStorage;
+			lepiterDatabase: self theDatabase).
 	self
 		assertJSONSchemaValidationError: call result targetObject
 		withPath: #(#bindings 1 #name)
@@ -410,7 +439,9 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithBindingNilObject
 				{ 'name' -> 'value'. 'objectId' -> nil } asDictionary
 			} asArray
 		} asDictionary
-		inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
+		inContext: (GtLToolExecutionContext new 
+			objectStorage: objectStorage;
+			lepiterDatabase: self theDatabase).
 	self
 		assertJSONSchemaValidationError: call result targetObject
 		withPath: #(#bindings 1 #objectId)
@@ -426,7 +457,6 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithBindings [
 	bindingObjectId := objectStorage addNewObject: 40.
 	self ensureLepiterPageForObject: 42 withSnippetCode: 'value + 2'.
 	tool := GtLMagritteToolForSmalltalkCodeEvaluation new.
-	tool database: self theDatabase.
 	call := self
 		executeTool: tool
 		withArguments: {
@@ -435,7 +465,9 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithBindings [
 				{ 'name' -> 'value'. 'objectId' -> bindingObjectId } asDictionary
 			} asArray
 		} asDictionary
-		inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
+		inContext: (GtLToolExecutionContext new 
+			objectStorage: objectStorage;
+			lepiterDatabase: self theDatabase).
 	targetObject := call result targetObject.
 	self assert: (targetObject isKindOf: GtLSmalltalkCodeEvaluationResult).
 	self assert: targetObject object equals: 42.
@@ -465,7 +497,9 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithBindingsMissingO
 			'bindings' -> {
 				{ 'name' -> 'value'. 'objectId' -> 'missing' } asDictionary
 			} asArray
-		} asDictionary.
+			} asDictionary
+		inContext: (GtLToolExecutionContext new 
+			lepiterDatabase: self theDatabase).
 	self
 		assertMissingInformation: call result targetObject
 		withModelName: 'objectStorage'
@@ -476,51 +510,96 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithBindingsMissingO
 { #category : #examples }
 GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithError [
 	<gtExample>
-	<return: #GtLFunctionToolCall>
-	| call |
+	| objectStorage tool call targetObject storedResult |
+	objectStorage := GtLObjectStorage new.
+	self ensureLepiterPageForObject: ZeroDivide new withSnippetCode: '1 / 0'.
+	tool := GtLMagritteToolForSmalltalkCodeEvaluation new.
 	call := self
-		executeTool: GtLMagritteToolForSmalltalkCodeEvaluation new
+		executeTool: tool
 		withArguments: {
 			'code' -> '1 / 0'.
 			'bindings' -> #()
-		} asDictionary.
+		} asDictionary
+		inContext: (GtLToolExecutionContext new 
+			objectStorage: objectStorage;
+			lepiterDatabase: self theDatabase).
+	targetObject := call result targetObject.
 	self
-		assertSmalltalkCodeEvaluationException: call result targetObject
+		assertSmalltalkCodeEvaluationException: targetObject
 		withCode: '1 / 0'
 		exceptionClass: ZeroDivide
 		messageSubstring: 'ZeroDivide'.
+		
+	self assert: targetObject objectValue notNil.
+	self assert: targetObject objectValue objectClassName equals: 'ZeroDivide'.
+	self assert: targetObject objectValue objectPrintString equals: 'ZeroDivide'.
+	self assertPlaygroundPageReference: targetObject playgroundPageReference.
+	
+	self assert: targetObject objectId isNotEmpty.
+	self assert: objectStorage objectCount equals: 1.
+	self assert: ((objectStorage objectAt: objectStorage objectIds first) isKindOf: ZeroDivide).
+	
+	storedResult := objectStorage storedObjectAt: targetObject objectId.
+	self assert: storedResult reason class equals: GtLStoredObjectCodeExecutionReason.
+	self assert: storedResult reason asReasonString equals: '1 / 0'.
+	
 	^ call
 ]
 
-{ #category : #private }
-GtLMagritteToolForSmalltalkCodeEvaluationExamples >> expectedPlaygroundPageReferenceForObjectClassName: aClassName [
-	| page expectedTitle |
-	expectedTitle := aClassName , ' Page'.
-	page := self theDatabase pages detect: [ :each | each title = expectedTitle ].
-	^ NeoJSONObject new
-		at: 'databaseId' put: self theDatabase primaryDB uuidString;
-		at: 'pageId' put: page uid asString36;
-		yourself
+{ #category : #examples }
+GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithErrorWithoutLepiterPage [
+	<gtExample>
+	| objectStorage tool call targetObject |
+	objectStorage := GtLObjectStorage new.
+	tool := GtLMagritteToolForSmalltalkCodeEvaluation new.
+	call := self
+		executeTool: tool
+		withArguments: {
+			'code' -> 'LePage new error: ''boom'''.
+			'bindings' -> #()
+		} asDictionary
+		inContext: (GtLToolExecutionContext new 
+			objectStorage: objectStorage;
+			lepiterDatabase: self theDatabase).
+	targetObject := call result targetObject.
+	self
+		assertSmalltalkCodeEvaluationException: targetObject
+		withCode: 'LePage new error: ''boom'''
+		exceptionClass: Error
+		messageSubstring: 'boom'.
+	self assert: targetObject objectValue notNil.
+	self assert: targetObject objectValue objectClassName equals: 'Error'.
+	self assert: targetObject objectId isNotEmpty.
+	self assert: targetObject playgroundPageReference isNil.
+	^ call
 ]
 
-{ #category : #initialization }
-GtLMagritteToolForSmalltalkCodeEvaluationExamples >> initialize [
-	super initialize.
-	theDatabase := nil
-]
-
-{ #category : #private }
-GtLMagritteToolForSmalltalkCodeEvaluationExamples >> lepiterPageReferenceForObject: anObject withSnippetCode: aString [
-	| page snippet |
-	page := LePage pharoClassName: anObject class name.
-	snippet := LePharoSnippet new.
-	snippet code: aString.
-	page addSnippet: snippet.
-	self theDatabase addPage: page.
-	self assert: page children size equals: 1.
-	^ GtLLepiterPageReference new
-		page: page;
-		yourself
+{ #category : #examples }
+GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithErrorWithoutObjectStorage [
+	<gtExample>
+	| tool call targetObject |
+	tool := GtLMagritteToolForSmalltalkCodeEvaluation new.
+	call := self
+		executeTool: tool
+		withArguments: {
+					'code' -> '1 / 0'.
+			'bindings' -> #()
+			} asDictionary
+		inContext: (GtLToolExecutionContext new 
+			lepiterDatabase: self theDatabase).
+	targetObject := call result targetObject.
+	self
+		assertSmalltalkCodeEvaluationException: targetObject
+		withCode: '1 / 0'
+		exceptionClass: ZeroDivide
+		messageSubstring: 'ZeroDivide'.
+		
+	self assert: targetObject objectValue notNil.
+	self assert: targetObject objectValue objectClassName equals: 'ZeroDivide'.
+	self assert: targetObject objectValue objectPrintString equals: 'ZeroDivide'.
+	self assert: targetObject objectId equals: ''.
+	
+	^ call
 ]
 
 { #category : #examples }
@@ -533,19 +612,13 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> missingCodeArgument [
 		executeTool: tool
 		withArguments: {
 			'bindings' -> #()
-		} asDictionary.
+			} asDictionary
+		inContext: (GtLToolExecutionContext new 
+			lepiterDatabase: self theDatabase).
 	self
 		assertMissingRequiredProperties: call result targetObject
 		withPropertyNames: #('code')
 		path: #(nil)
 		errorMessage: 'required properties missing [code]'.
 	^ call
-]
-
-{ #category : #accessing }
-GtLMagritteToolForSmalltalkCodeEvaluationExamples >> theDatabase [
-	^ theDatabase ifNil: [
-		| db |
-		db := LeExplicitlyAttachedLinksExamples new emptyDatabase.
-		theDatabase := LeLogicalDatabase new primaryDB: db ]
 ]

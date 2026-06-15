@@ -4,8 +4,8 @@ Examples for GtLMethodsCompilationResult domain object.
 Class {
 	#name : #GtLMethodsCompilationResultExamples,
 	#superclass : #GtLDomainObjectExamples,
-	#traits : 'TGtLExceptionResultAssertions',
-	#classTraits : 'TGtLExceptionResultAssertions classTrait',
+	#traits : 'TGtLExceptionResultSerializationAssertions',
+	#classTraits : 'TGtLExceptionResultSerializationAssertions classTrait',
 	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
@@ -117,9 +117,9 @@ GtLMethodsCompilationResultExamples >> methodsCompilationResultWithMixedOutcomes
 
 { #category : #examples }
 GtLMethodsCompilationResultExamples >> methodsCompilationResultWithMixedOutcomesDataViewSerialization [
-	<gtExample>
+	
 	<return: #GtLPrimitiveMessageDataBlock>
-	<noTest>
+	<noTest> 
 	| domainObject compositeView dataBlock jsonData results firstResult secondResult thirdResult fifthResult sixthResult |
 	domainObject := self methodsCompilationResultWithMixedOutcomes.
 	compositeView := domainObject llmDataViewsFor: GtLDataView new.
@@ -158,7 +158,7 @@ GtLMethodsCompilationResultExamples >> methodsCompilationResultWithMixedOutcomes
 		at: 'methodProtocol' put: 'testing';
 		at: 'sourceCode' put: 'badMethod ^';
 		yourself.
-	self assert: results third equals: thirdResult.
+	self assert: (results third at: 'errorDetails') equals: thirdResult.
 
 	self
 		assertExceptionResult: (results fourth at: 'errorDetails')

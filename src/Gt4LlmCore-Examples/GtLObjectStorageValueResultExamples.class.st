@@ -1,9 +1,8 @@
 Class {
 	#name : #GtLObjectStorageValueResultExamples,
 	#superclass : #GtLDomainObjectExamples,
-	#instVars : [
-		'theDatabase'
-	],
+	#traits : 'TGtLWithLepiterPageReferenceForDomainObjectExamples',
+	#classTraits : 'TGtLWithLepiterPageReferenceForDomainObjectExamples classTrait',
 	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
@@ -65,17 +64,6 @@ GtLObjectStorageValueResultExamples >> expectedPlaygroundPageReferenceForInteger
 ]
 
 { #category : #private }
-GtLObjectStorageValueResultExamples >> expectedPlaygroundPageReferenceForObjectClassName: aClassName [
-	| page expectedTitle |
-	expectedTitle := aClassName , ' Page'.
-	page := self theDatabase pages detect: [ :each | each title = expectedTitle ].
-	^ NeoJSONObject new
-		at: 'databaseId' put: self theDatabase primaryDB uuidString;
-		at: 'pageId' put: page uid asString36;
-		yourself
-]
-
-{ #category : #private }
 GtLObjectStorageValueResultExamples >> expectedPlaygroundPageReferenceForObjectStorageValueResult [
 	^ self expectedPlaygroundPageReferenceForObjectClassName: 'GtLObjectStorageValueResult'
 ]
@@ -83,12 +71,6 @@ GtLObjectStorageValueResultExamples >> expectedPlaygroundPageReferenceForObjectS
 { #category : #private }
 GtLObjectStorageValueResultExamples >> expectedPlaygroundPageReferenceForString [
 	^ self expectedPlaygroundPageReferenceForObjectClassName: 'ByteString'
-]
-
-{ #category : #initialization }
-GtLObjectStorageValueResultExamples >> initialize [
-	super initialize.
-	theDatabase := nil
 ]
 
 { #category : #private }
@@ -124,20 +106,6 @@ GtLObjectStorageValueResultExamples >> lepiterPageReferenceForInteger: anObject 
 	^ self
 		lepiterPageReferenceForObject: anObject
 		withSnippetCode: '42'
-]
-
-{ #category : #private }
-GtLObjectStorageValueResultExamples >> lepiterPageReferenceForObject: anObject withSnippetCode: aString [
-	| page snippet |
-	page := LePage pharoClassName: anObject class name.
-	snippet := LePharoSnippet new.
-	snippet code: aString.
-	page addSnippet: snippet.
-	self theDatabase addPage: page.
-	self assert: page children size equals: 1.
-	^ GtLLepiterPageReference new
-		page: page;
-		yourself
 ]
 
 { #category : #private }
@@ -571,12 +539,4 @@ GtLObjectStorageValueResultExamples >> objectStorageValueResultForTestObject [
 	self assert: ((jsonData = expectedJsonOne) or: [jsonData = expectedJsonOne]).
 	
 	^ domainObject
-]
-
-{ #category : #accessing }
-GtLObjectStorageValueResultExamples >> theDatabase [
-	^ theDatabase ifNil: [
-		| db |
-		db := LeExplicitlyAttachedLinksExamples new emptyDatabase.
-		theDatabase := LeLogicalDatabase new primaryDB: db ]
 ]
