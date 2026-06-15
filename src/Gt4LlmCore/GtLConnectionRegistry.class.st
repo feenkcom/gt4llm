@@ -3,7 +3,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'connections',
-		'defaultConnection'
+		'defaultConnection',
+		'announcer'
 	],
 	#classInstVars : [
 		'uniqueInstance'
@@ -72,13 +73,36 @@ GtLConnectionRegistry class >> uniqueInstance [
 
 { #category : #adding }
 GtLConnectionRegistry >> addConnection: aConnection [
-	(connections includes: aConnection) ifTrue: [ ^ self ].
-	connections add: aConnection
+	| allConnections |
+	connections
+		lock: [ :aCollection | 
+			(aCollection includes: aConnection) ifTrue: [ ^ self ].
+			aCollection add: aConnection.
+			allConnections := aCollection copy ].
+
+	announcer
+		announce: (GtLConnectionRegistryConnectionAdded new
+				connectionRegistry: self;
+				connection: aConnection;
+				connections: allConnections)
+]
+
+{ #category : #accessing }
+GtLConnectionRegistry >> announcer [
+	^ announcer ifNil: [ announcer := Announcer new ]
 ]
 
 { #category : #cleanup }
 GtLConnectionRegistry >> clearConnections [
-	connections removeAll
+	connections
+		lock: [ :aCollection | 
+			aCollection removeAll.
+			defaultConnection := nil ].
+
+	announcer
+		announce: (GtLConnectionRegistryConnectionsChanged new
+				connectionRegistry: self;
+				connections: #())
 ]
 
 { #category : #accessing }
@@ -89,15 +113,17 @@ GtLConnectionRegistry >> connectableConnections [
 { #category : #utils }
 GtLConnectionRegistry >> connectionFor: aProvider [
 	^ connections
-		detect: [ :aConnection | 
-			aConnection providerClass = aProvider class
-				and: [ aConnection model = aProvider modelName ] ]
-		ifNone: [ nil ]
+		lock: [ :aCollection | 
+			aCollection
+				detect: [ :aConnection | 
+					aConnection providerClass = aProvider class
+						and: [ aConnection model = aProvider modelName ] ]
+				ifNone: [ nil ] ]
 ]
 
 { #category : #accessing }
 GtLConnectionRegistry >> connections [
-	^ connections
+	^ connections value
 ]
 
 { #category : #accessing }
@@ -111,9 +137,10 @@ GtLConnectionRegistry >> defaultConnection [
 
 { #category : #accessing }
 GtLConnectionRegistry >> defaultConnection: aConnection [
-	defaultConnection := aConnection.
-
-	(connections includes: aConnection) ifFalse: [ connections add: aConnection ]
+	connections
+		lock: [ :aCollection | 
+			defaultConnection := aConnection.
+			self addConnection: aConnection ]
 ]
 
 { #category : #'gt - extensions' }
@@ -122,7 +149,7 @@ GtLConnectionRegistry >> gtConnectionsFor: aView [
 	^ aView columnedList
 		title: 'Connections';
 		priority: 1;
-		items: [ connections ];
+		items: [ connections ifNotNil: #value ];
 		column: 'Label' text: #label;
 		column: 'Provider' text: #providerName;
 		column: 'Model' text: #model;
@@ -141,7 +168,8 @@ GtLConnectionRegistry >> gtConnectionsFor: aView [
 		contextItemLabel: 'Make default'
 			action: [ :anItem :aConnection | 
 				self defaultConnection: aConnection.
-				anItem anchor phlow fireViewUpdateWish ]
+				anItem anchor phlow fireViewUpdateWish ];
+		updateWhen: GtLConnectionRegistryAnnouncement in: [ announcer ]
 ]
 
 { #category : #testing }
@@ -157,6 +185,9 @@ GtLConnectionRegistry >> hasConnectableDefaultConnection [
 { #category : #initialization }
 GtLConnectionRegistry >> initialize [
 	super initialize.
+	
+	announcer := Announcer new.
+	connections := AsyncMutex for: OrderedCollection new.
 	
 	self updateConnections.
 ]
@@ -230,9 +261,11 @@ GtLConnectionRegistry >> knownOllamaConnectors [
 { #category : #utils }
 GtLConnectionRegistry >> labelForModel: aModel [
 	^ connections
-		detect: [ :aConnection | aConnection model = aModel ]
-		ifFound: [ :aConnection | aConnection label ifNil: [ aModel ] ]
-		ifNone: [ aModel ]
+		lock: [ :aCollection | 
+			aCollection
+				detect: [ :aConnection | aConnection model = aModel ]
+				ifFound: [ :aConnection | aConnection label ifNil: [ aModel ] ]
+				ifNone: [ aModel ] ]
 ]
 
 { #category : #accessing }
@@ -247,6 +280,19 @@ GtLConnectionRegistry >> standardDefaultConnection [
 GtLConnectionRegistry >> updateConnections [
 	"Update the list of connections"
 
-	connections := OrderedCollection withAll: self knownConnectors.
-	self defaultConnection: self standardDefaultConnection
+	| newConnections |
+	newConnections := #().
+	connections
+		lock: [ :aCollection | 
+			aCollection
+				removeAll;
+				addAll: self knownConnectors.
+			self defaultConnection: self standardDefaultConnection.
+
+			newConnections := aCollection copy ].
+
+	announcer
+		announce: (GtLConnectionRegistryConnectionsChanged new
+				connectionRegistry: self;
+				connections: newConnections)
 ]

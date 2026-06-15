@@ -46,13 +46,29 @@ GtLChatRegistryWithConnectionsViewModel >> connectableConnections [
 { #category : #accessing }
 GtLChatRegistryWithConnectionsViewModel >> connectionRegistry [
 	<return: #GtLConnectionRegistry>
+	connectionRegistry
+		ifNil: [ self connectionRegistry: GtLConnectionRegistry default ].
 	^ connectionRegistry
-		ifNil: ["self halt."  connectionRegistry := GtLConnectionRegistry default ]
 ]
 
-{ #category : #accessing }
+{ #category : #'api - initialization' }
 GtLChatRegistryWithConnectionsViewModel >> connectionRegistry: aConnectionRegistry [
-	connectionRegistry := aConnectionRegistry
+	self assert: [ aConnectionRegistry isNotNil ].
+
+	connectionRegistry = aConnectionRegistry ifTrue: [ ^ self ].
+
+	connectionRegistry
+		ifNotNil: [ :anOldConnectionRegistry | anOldConnectionRegistry announcer unsubscribe: self ].
+
+	connectionRegistry := aConnectionRegistry.
+
+	connectionRegistry announcer weak
+		when: GtLConnectionRegistryConnectionsChanged
+			send: #onGtLConnectionRegistryConnectionsChanged:
+			to: self;
+		when: GtLConnectionRegistryConnectionAdded
+			send: #onGtLConnectionRegistryConnectionAdded:
+			to: self
 ]
 
 { #category : #accessing }
@@ -66,6 +82,32 @@ GtLChatRegistryWithConnectionsViewModel >> defaultConnectionRegistry [
 	^ self connectionRegistry defaultConnection
 ]
 
+{ #category : #testing }
+GtLChatRegistryWithConnectionsViewModel >> hasConnectableDefaultConnection [
+	^ self connectionRegistry hasConnectableDefaultConnection
+]
+
+{ #category : #'private - event handling' }
+GtLChatRegistryWithConnectionsViewModel >> onGtLConnectionRegistryConnectionAdded: anAnnouncement [
+	anAnnouncement connectionRegistry = connectionRegistry ifFalse: [ ^ self ].
+
+	self announcer
+		announce: (GtLConnectionRegistryViewModelConnectionAdded new
+				registryViewModel: self;
+				connections: anAnnouncement connections;
+				connection: anAnnouncement connection)
+]
+
+{ #category : #'private - event handling' }
+GtLChatRegistryWithConnectionsViewModel >> onGtLConnectionRegistryConnectionsChanged: anAnnouncement [
+	anAnnouncement connectionRegistry = connectionRegistry ifFalse: [ ^ self ].
+
+	self announcer
+		announce: (GtLConnectionRegistryViewModelConnectionsChanged new
+				registryViewModel: self;
+				connections: anAnnouncement connections)
+]
+
 { #category : #accessing }
 GtLChatRegistryWithConnectionsViewModel >> registryViewModel [
 	^ registryViewModel
@@ -73,7 +115,8 @@ GtLChatRegistryWithConnectionsViewModel >> registryViewModel [
 
 { #category : #accessing }
 GtLChatRegistryWithConnectionsViewModel >> registryViewModel: anObject [
-	registryViewModel := anObject
+	registryViewModel := anObject.
+	self connectionRegistry: GtLConnectionRegistry default
 ]
 
 { #category : #accessing }
