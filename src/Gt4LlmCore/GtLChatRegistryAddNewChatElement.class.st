@@ -181,6 +181,28 @@ GtLChatRegistryAddNewChatElement >> onAddChat: anEvent [
 ]
 
 { #category : #'private - hooks' }
+GtLChatRegistryAddNewChatElement >> onGtLConnectionRegistryViewModelConnectionAdded: anAnnouncement [
+	anAnnouncement registryViewModel = self registryViewModel ifFalse: [ ^ self ].
+
+	BlTaskAction enqueueElement: self action: [ self updateConnectionElement ]
+]
+
+{ #category : #'private - hooks' }
+GtLChatRegistryAddNewChatElement >> onGtLConnectionRegistryViewModelConnectionsChanged: anAnnouncement [
+	anAnnouncement registryViewModel = self registryViewModel ifFalse: [ ^ self ].
+
+	BlTaskAction enqueueElement: self action: [ 
+		self updateConnectionElement ]
+]
+
+{ #category : #'private - hooks' }
+GtLChatRegistryAddNewChatElement >> onGtLConnectionRegistryViewModelUniqueInstanceRemoved: anAnnouncement [
+	anAnnouncement registryViewModel = self registryViewModel ifFalse: [ ^ self ].
+
+	BlTaskAction enqueueElement: self action: [ self updateConnectionElement ]
+]
+
+{ #category : #'private - hooks' }
 GtLChatRegistryAddNewChatElement >> onRegistryViewModelChanged [
 	super onRegistryViewModelChanged.
 	
@@ -204,6 +226,29 @@ GtLChatRegistryAddNewChatElement >> onSelectDescription: aDescription [
 { #category : #accessing }
 GtLChatRegistryAddNewChatElement >> registryViewModel: anObject [
 	super registryViewModel: anObject asChatRegistryWithConnectionsViewModel
+]
+
+{ #category : #'private - hooks' }
+GtLChatRegistryAddNewChatElement >> subscribeToRegistryViewModel [
+	super subscribeToRegistryViewModel.
+
+	self registryViewModel announcer weak
+		when: GtLConnectionRegistryViewModelConnectionsChanged
+			send: #onGtLConnectionRegistryViewModelConnectionsChanged:
+			to: self;
+		when: GtLConnectionRegistryViewModelConnectionAdded
+			send: #onGtLConnectionRegistryViewModelConnectionAdded:
+			to: self;
+		when: GtLConnectionRegistryViewModelUniqueInstanceRemoved
+			send: #onGtLConnectionRegistryViewModelUniqueInstanceRemoved:
+			to: self
+]
+
+{ #category : #'private - hooks' }
+GtLChatRegistryAddNewChatElement >> unsubscribeFromRegistryViewModel [
+	super unsubscribeFromRegistryViewModel.
+
+	self registryViewModel announcer unsubscribe: self
 ]
 
 { #category : #'private - updating' }

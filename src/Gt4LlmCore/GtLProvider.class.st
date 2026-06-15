@@ -20,6 +20,14 @@ GtLProvider class >> isConnectable [
 	^ false
 ]
 
+{ #category : #'api - notifying' }
+GtLProvider class >> notifyProviderConnectabilityChanged [
+	SystemAnnouncer uniqueInstance
+		announce: (GtLProviderFactoryConnectabilityChanged new
+				providerClass: self;
+				isConnectable: self isConnectable)
+]
+
 { #category : #accessing }
 GtLProvider >> assistantMessageClass [
 	^ assistantMessageClass
