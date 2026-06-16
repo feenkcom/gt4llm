@@ -137,7 +137,8 @@ GtLChatRegistryElement >> updateConnectionsAndElement [
 
 { #category : #'private - updating' }
 GtLChatRegistryElement >> updateElement [
-	self registryViewModel hasConnectableDefaultConnection
+	(self registryViewModel hasConnectableDefaultConnection
+		or: [ self registryViewModel chatViewModels isNotEmpty ])
 		ifTrue: [ emptyConnectionsElement visibility: BlVisibility gone.
 			listElement visibility: BlVisibility visible.
 			addNewChatElement visibility: BlVisibility visible ]
