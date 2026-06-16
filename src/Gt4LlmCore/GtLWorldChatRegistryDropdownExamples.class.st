@@ -39,18 +39,18 @@ GtLWorldChatRegistryDropdownExamples >> dropdownUpdatesAfterAddingChat [
 		play.
 
 	scripter assert
-		label: 'Assert ipdated chat list element has two children';
-		value: [ :aScollable | aScollable childrenCount ] equals: 2;
-		onSpaceRoot;
-		// BrColumnedList;
-		/ #scrollable;
-		play.
-
-	scripter assert
 		label: 'Assert updated chat list has two items';
 		value: [ :aList | aList items size ] equals: 2;
 		onSpaceRoot;
 		// BrColumnedList;
+		play.
+
+	scripter assert
+		label: 'Assert updated chat list element has two children';
+		value: [ :aScollable | aScollable childrenCount ] equals: 2;
+		onSpaceRoot;
+		// BrColumnedList;
+		/ #scrollable;
 		play.
 
 	^ scripter
