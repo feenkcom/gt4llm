@@ -4,8 +4,8 @@ Examples for GtLToolForTestMethodRun.
 Class {
 	#name : #GtLToolForTestMethodRunExamples,
 	#superclass : #GtLAbstractMagritteFunctionToolExamples,
-	#traits : 'TGtLExceptionResultAssertions',
-	#classTraits : 'TGtLExceptionResultAssertions classTrait',
+	#traits : 'TGtLExceptionResultSerializationAssertions',
+	#classTraits : 'TGtLExceptionResultSerializationAssertions classTrait',
 	#category : #'Gt4LlmCore-Examples-Tools'
 }
 

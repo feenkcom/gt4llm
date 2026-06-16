@@ -4,9 +4,8 @@ Examples for GtLObjectValueResult testing serialization and data views.
 Class {
 	#name : #GtLObjectValueResultExamples,
 	#superclass : #GtLDomainObjectExamples,
-	#instVars : [
-		'theDatabase'
-	],
+	#traits : 'TGtLWithLepiterPageReferenceForDomainObjectExamples',
+	#classTraits : 'TGtLWithLepiterPageReferenceForDomainObjectExamples classTrait',
 	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
@@ -39,17 +38,6 @@ GtLObjectValueResultExamples >> expectedPlaygroundPageReferenceForInteger [
 ]
 
 { #category : #private }
-GtLObjectValueResultExamples >> expectedPlaygroundPageReferenceForObjectClassName: aClassName [
-	| page expectedTitle |
-	expectedTitle := aClassName , ' Page'.
-	page := self theDatabase pages detect: [ :each | each title = expectedTitle ].
-	^ NeoJSONObject new
-		at: 'databaseId' put: self theDatabase primaryDB uuidString;
-		at: 'pageId' put: page uid asString36;
-		yourself
-]
-
-{ #category : #private }
 GtLObjectValueResultExamples >> expectedPlaygroundPageReferenceForString [
 	^ self expectedPlaygroundPageReferenceForObjectClassName: 'ByteString'
 ]
@@ -59,31 +47,11 @@ GtLObjectValueResultExamples >> expectedPlaygroundPageReferenceForTestObject [
 	^ self expectedPlaygroundPageReferenceForObjectClassName: GtLSerializedObjectValueTestObject name
 ]
 
-{ #category : #initialization }
-GtLObjectValueResultExamples >> initialize [
-	super initialize.
-	theDatabase := nil
-]
-
 { #category : #private }
 GtLObjectValueResultExamples >> lepiterPageReferenceForInteger: anObject [
 	^ self
 		lepiterPageReferenceForObject: anObject
 		withSnippetCode: '42'
-]
-
-{ #category : #private }
-GtLObjectValueResultExamples >> lepiterPageReferenceForObject: anObject withSnippetCode: aString [
-	| page snippet |
-	page := LePage pharoClassName: anObject class name.
-	snippet := LePharoSnippet new.
-	snippet code: aString.
-	page addSnippet: snippet.
-	self theDatabase addPage: page.
-	self assert: page children size equals: 1.
-	^ GtLLepiterPageReference new
-		page: page;
-		yourself
 ]
 
 { #category : #private }
@@ -302,12 +270,4 @@ GtLObjectValueResultExamples >> objectValueResultForTestObjectSerialization [
 	self assertObjectValueJson: objectValueJson includesPhlowViews: #('gtDetailsFor:' 'gtItemsFor:' 'gtRawFor:' 'gtPrintFor:').
 	
 	^ dataBlock
-]
-
-{ #category : #accessing }
-GtLObjectValueResultExamples >> theDatabase [
-	^ theDatabase ifNil: [
-		| db |
-		db := LeExplicitlyAttachedLinksExamples new emptyDatabase.
-		theDatabase := LeLogicalDatabase new primaryDB: db ]
 ]

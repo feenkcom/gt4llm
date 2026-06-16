@@ -20,6 +20,17 @@ GtLSmalltalkCodeEvaluationExceptionDomainObject >> code: aString [
 	code := aString
 ]
 
+{ #category : #accessing }
+GtLSmalltalkCodeEvaluationExceptionDomainObject >> codeDescription [
+	<magritteDescription>
+	
+	^ MAStringDescription new
+		label: 'Code';
+		accessor: #code;
+		comment: 'The Smalltalk code that when executed triggered this error';
+		beRequired
+]
+
 { #category : #'gt-views' }
 GtLSmalltalkCodeEvaluationExceptionDomainObject >> gtCodeFor: aView [
 	<gtView>
@@ -41,21 +52,10 @@ GtLSmalltalkCodeEvaluationExceptionDomainObject >> gtCodeFor: aView [
 						background: Color white;
 						addAptitude: BrShadowAptitude;
 						vFitContentLimited);
-				addChild: ((exception gtViewsFor: GtPhlowEmptyView new) asElement
+				addChild: ((self exception gtViewsFor: GtPhlowEmptyView new) asElement
 						margin: (BlInsets all: 10);
 						background: Color white;
 						addAptitude: BrShadowAptitude;
 						vFitContentLimited;
 						hMatchParent) ]
-]
-
-{ #category : #accessing }
-GtLSmalltalkCodeEvaluationExceptionDomainObject >> llmRawDataViewFor: aDataView [
-	^ aDataView 
-			title: 'Exception generic details';
-			jsonData: [ 
-				NeoJSONObject new
-					at: 'errorReason' put: self description;
-					at: 'code' put: self code;
-					yourself ]
 ]
