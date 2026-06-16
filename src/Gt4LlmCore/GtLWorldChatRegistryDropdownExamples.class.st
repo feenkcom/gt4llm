@@ -14,10 +14,12 @@ GtLWorldChatRegistryDropdownExamples >> dropdownUpdatesAfterAddingChat [
 	| registry dropdown scripter |
 	registry := GtLChatRegistry new.
 	registry newChatWithProvider: GtLOpenAIProviderStub new.
-	dropdown := GtLWorldChatRegistryDropdown new registry: registry; yourself.
+	dropdown := GtLWorldChatRegistryDropdown new
+			registry: registry;
+			yourself.
 	scripter := BlScripter new
-		model: registry;
-		element: dropdown.
+			model: registry;
+			element: dropdown.
 
 	scripter click
 		label: 'Open chats dropdown';
@@ -25,22 +27,27 @@ GtLWorldChatRegistryDropdownExamples >> dropdownUpdatesAfterAddingChat [
 		play.
 
 	scripter assert
-		label: 'List starts with one chat';
+		label: 'Assert chat list starts with one chat';
 		value: [ :aList | aList items size ] equals: 1;
 		onSpaceRoot;
 		// BrColumnedList;
 		play.
 
 	scripter do
+		label: 'Add new chat';
 		block: [ registry newChatWithProvider: GtLOpenAIProviderStub new ];
 		play.
 
-	self 
-		assert: (scripter space root query // BrColumnedList / #scrollable ) anyOne childrenCount
-		equals: 2.
-	
 	scripter assert
-		label: 'List updates to two chats';
+		label: 'Assert ipdated chat list element has two children';
+		value: [ :aScollable | aScollable childrenCount ] equals: 2;
+		onSpaceRoot;
+		// BrColumnedList;
+		/ #scrollable;
+		play.
+
+	scripter assert
+		label: 'Assert updated chat list has two items';
 		value: [ :aList | aList items size ] equals: 2;
 		onSpaceRoot;
 		// BrColumnedList;
