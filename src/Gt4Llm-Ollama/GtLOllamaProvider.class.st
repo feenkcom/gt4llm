@@ -36,12 +36,16 @@ GtLOllamaProvider class >> isConnectable [
 
 { #category : #api }
 GtLOllamaProvider class >> markConnectable [
+	IsConnectable = true ifTrue: [ ^ self ].
+	
 	IsConnectable := true.
 	GtLOllamaProvider notifyProviderConnectabilityChanged
 ]
 
 { #category : #api }
 GtLOllamaProvider class >> markNonconnectable [
+	IsConnectable = false ifTrue: [ ^ self ].
+
 	IsConnectable := false.
 	GtLOllamaProvider notifyProviderConnectabilityChanged
 ]
