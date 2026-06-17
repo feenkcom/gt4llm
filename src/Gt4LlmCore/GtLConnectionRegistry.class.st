@@ -287,7 +287,8 @@ GtLConnectionRegistry >> labelForModel: aModel [
 ]
 
 { #category : #subscriptions }
-GtLConnectionRegistry >> onGtLProviderFactoryConnectabilityChanged: anObject1 [
+GtLConnectionRegistry >> onGtLProviderFactoryConnectabilityChanged: anAnnouncement [
+	self updateConnections
 ]
 
 { #category : #'api - hooks' }
