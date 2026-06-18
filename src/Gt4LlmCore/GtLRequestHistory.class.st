@@ -49,6 +49,22 @@ GtLRequestHistory >> gtClearHistoryActionFor: anAction [
 ]
 
 { #category : #'api - serializing' }
+GtLRequestHistory >> requestByteArrays [
+	| contents fr |
+	
+	contents := (self simplifiedRequests collect: [ :znRequest |
+		(ByteArray new: 1024 streamContents: [ :stream |
+			znRequest writeOn: stream ]) ]) storeString.
+	"Save the contents in a file as it can be expensive to generate
+	(calls to the LLM may be several dollars per call)"
+	fr := 'requestByteArrays.storeString.txt' asFileReference.
+	fr ensureDelete.
+	fr writeStreamDo: [ :stream |
+		stream nextPutAll: contents ].
+	^ contents
+]
+
+{ #category : #'api - serializing' }
 GtLRequestHistory >> responseByteArrays [
 	| contents fr |
 	
@@ -70,6 +86,32 @@ GtLRequestHistory >> responseStoreString [
 	someCopies := self simplifiedResponses.
 
 	^ someCopies storeString
+]
+
+{ #category : #'private - serialization' }
+GtLRequestHistory >> simplifiedRequestCopyFrom: aZnRequest [
+	| aCopy aHeaders |
+	aCopy := aZnRequest copy.
+	aHeaders := aCopy headers.
+
+	aHeaders removeKey: 'Server' ifAbsent: [  ].
+	aHeaders at: 'Openai-Organization' ifPresent:
+		[ aHeaders at: 'Openai-Organization' put: 'stub-organization'].
+	aHeaders at: 'Opeanai-Project' ifPresent:
+		[ aHeaders at: 'Opeanai-Project' put: 'proj_1' ].
+	aHeaders
+		removeKey: 'Set-Cookie' ifAbsent: [  ];
+		removeKey: 'Cf-Ray' ifAbsent: [  ];
+		removeKey: 'Alt-Svc' ifAbsent: [  ].
+
+	^ aCopy
+]
+
+{ #category : #'api - serializing' }
+GtLRequestHistory >> simplifiedRequests [
+	^ self
+		collect: [ :each | self simplifiedRequestCopyFrom: each request ]
+		as: Array
 ]
 
 { #category : #'private - serialization' }
