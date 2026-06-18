@@ -4,14 +4,52 @@ Class {
 	#instVars : [
 		'baseUrl',
 		'history',
-		'clientBuilder'
+		'clientBuilder',
+		'apiKey'
+	],
+	#classInstVars : [
+		'apiKeyFile'
 	],
 	#category : #'Gt4LlmModel-Client'
 }
 
 { #category : #accessing }
+GtLModelClient class >> apiKeyFile [
+	^ apiKeyFile ifNil: [ self defaultApiKeyFile ]
+]
+
+{ #category : #accessing }
+GtLModelClient class >> apiKeyFile: anObject [
+	apiKeyFile := anObject
+]
+
+{ #category : #accessing }
+GtLModelClient class >> apiKeyFileContents [
+
+	^ self apiKeyFile exists 
+		ifTrue: [ self apiKeyFile contents trimBoth ] 
+		ifFalse: [ '' ]
+]
+
+{ #category : #accessing }
+GtLModelClient class >> defaultApiKeyFile [
+	^ self subclassResponsibility
+]
+
+{ #category : #accessing }
 GtLModelClient class >> defaultBaseUrl [
 	^ self subclassResponsibility
+]
+
+{ #category : #'instance creation' }
+GtLModelClient class >> withApiKeyFromClipboard [
+
+	^ self new loadApiKeyFromClipboard
+]
+
+{ #category : #'instance creation' }
+GtLModelClient class >> withApiKeyFromFile [
+	^ self new loadApiKeyFromFile
 ]
 
 { #category : #private }
@@ -31,6 +69,16 @@ GtLModelClient >> apiClientWithModel: aGtLModel andMessages: aCollection andForm
 		format: aFormat;
 		tools: someTools;
 		instructions: aStringOrNil
+]
+
+{ #category : #accessing }
+GtLModelClient >> apiKey [
+	^ apiKey
+]
+
+{ #category : #accessing }
+GtLModelClient >> apiKey: anObject [
+	apiKey := anObject
 ]
 
 { #category : #accessing }
@@ -142,7 +190,21 @@ GtLModelClient >> initialize [
 { #category : #initialization }
 GtLModelClient >> initializeClient [
 
-	^ clientBuilder create
+	^ clientBuilder
+		apiKey: apiKey;
+		create
+]
+
+{ #category : #initialization }
+GtLModelClient >> loadApiKeyFromClipboard [
+
+	self apiKey: Clipboard clipboardText
+]
+
+{ #category : #initialization }
+GtLModelClient >> loadApiKeyFromFile [
+
+	self apiKey: self class apiKeyFileContents
 ]
 
 { #category : #api }
