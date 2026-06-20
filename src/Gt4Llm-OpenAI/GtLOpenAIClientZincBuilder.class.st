@@ -24,7 +24,7 @@ GtLOpenAIClientZincBuilder >> create [
 	| aClient |
 	aClient := self newBasicClient.
 	aClient forJsonREST.
-	aClient headerAt: 'OpenAI-Beta' put: 'assistants=v2'.
+	"aClient headerAt: 'OpenAI-Beta' put: 'assistants=v2'."
 	aClient timeout: 1200.
 	aClient setBearerAuthentication: apiKey.
 	^ aClient
