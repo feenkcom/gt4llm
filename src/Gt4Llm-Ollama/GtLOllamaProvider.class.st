@@ -61,6 +61,19 @@ GtLOllamaProvider >> defaultUserMessageClass [
 	^ GtLModelUserMessage
 ]
 
+{ #category : #initialization }
+GtLOllamaProvider >> endpoint: aSymbol [
+	"Replace the receiver's endpoint with the one specified."
+	| newModel |
+
+	(#(#generate #completions #responses) includes: aSymbol) ifFalse:
+		[ self error: 'Unrecognised endpoint: ', aSymbol asString ].
+	newModel := GtLModelFactory new 
+		perform: ('ollama_', aSymbol, ':') asSymbol
+		withArguments: { model name }.
+	newModel provider: self.
+]
+
 { #category : #views }
 GtLOllamaProvider >> gtAvailableModelsFor: aView [
 	<gtView>

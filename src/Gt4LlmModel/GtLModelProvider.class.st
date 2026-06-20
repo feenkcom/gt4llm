@@ -45,8 +45,10 @@ GtLModelProvider >> baseUrl [
 ]
 
 { #category : #accessing }
-GtLModelProvider >> baseUrl: anObject [
-	baseUrl := anObject
+GtLModelProvider >> baseUrl: aZnUrl [
+
+	baseUrl := aZnUrl.
+	self client baseUrl: baseUrl.
 ]
 
 { #category : #accessing }
@@ -137,6 +139,18 @@ GtLModelProvider >> executeNextMessage: anInputMessage [
 			aMessageExecutionStrategy executeMessage: anInputMessage with: self ].
 	anInputMessage requestResponse: result requestResponse.
 	^ result
+]
+
+{ #category : #initialization }
+GtLModelProvider >> loadApiKeyFromClipboard [
+
+	self client loadApiKeyFromClipboard
+]
+
+{ #category : #initialization }
+GtLModelProvider >> loadApiKeyFromFile [
+
+	self client loadApiKeyFromFile
 ]
 
 { #category : #accessing }
