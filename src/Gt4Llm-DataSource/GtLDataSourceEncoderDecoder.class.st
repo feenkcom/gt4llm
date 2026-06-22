@@ -15,9 +15,18 @@ GtLDataSourceEncoderDecoder class >> loadClientHistoryFrom: aFileReference [
 
 	encoder := self new.
 	aFileReference asFileReference readStreamDo: [ :stream |
-		history := GtLRequestHistory streamContents: [ :aStream |
-			[ stream atEnd ] whileFalse:
-				[ aStream nextPut: (encoder decodeRequestResponseOn: stream) ] ] ].
+		self loadClientHistoryFromStream: stream ].
+	^ history
+]
+
+{ #category : #'encoding - decoding' }
+GtLDataSourceEncoderDecoder class >> loadClientHistoryFromStream: aReadStream [
+	| encoder history |
+
+	encoder := self new.
+	history := GtLRequestHistory streamContents: [ :aStream |
+		[ aReadStream atEnd ] whileFalse:
+				[ aStream nextPut: (encoder decodeRequestResponseOn: aReadStream) ] ].
 	^ history
 ]
 
