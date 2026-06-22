@@ -226,6 +226,15 @@ GtLOpenAIProvider >> initialize [
 ]
 
 { #category : #accessing }
+GtLOpenAIProvider >> model [
+	"Answer a model matching the receiver's characteristics"
+	<return: #GtLLlmModel>
+
+	^ GtLModelFactory new openAi_responses
+		name: modelName
+]
+
+{ #category : #accessing }
 GtLOpenAIProvider >> modelName [
 	^ modelName
 ]

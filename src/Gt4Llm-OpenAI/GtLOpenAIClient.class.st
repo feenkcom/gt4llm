@@ -394,6 +394,12 @@ GtLOpenAIClient >> gtViewCallsWithTokensFor: aView [
 ]
 
 { #category : #accessing }
+GtLOpenAIClient >> history [
+
+	^ history
+]
+
+{ #category : #accessing }
 GtLOpenAIClient >> initialize [
 	super initialize.
 	history := GtLRequestHistory new.
