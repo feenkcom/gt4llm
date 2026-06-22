@@ -7,7 +7,8 @@ Class {
 		'endpoints',
 		'namedEndpoints',
 		'client',
-		'userMessageEndpoint'
+		'userMessageEndpoint',
+		'options'
 	],
 	#category : #'Gt4LlmModel-Model'
 }
@@ -39,6 +40,7 @@ GtLLlmModel >> initialize [
 
 	super initialize.
 	endpoints := Dictionary new.
+	options := Dictionary new.
 ]
 
 { #category : #accessing }
@@ -77,6 +79,18 @@ GtLLlmModel >> newCreateModelCommand [
 		endpoint: endpoint;
 		command: command.
 	^ command
+]
+
+{ #category : #accessing }
+GtLLlmModel >> optionAt: optionName [
+
+	^ options at: optionName
+]
+
+{ #category : #accessing }
+GtLLlmModel >> optionAt: optionName put: anObject [
+
+	options at: optionName put: anObject
 ]
 
 { #category : #accessing }

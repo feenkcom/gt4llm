@@ -51,6 +51,10 @@ GtLModelFactory >> ollama_completions [
 	chatEndpoint := GtLOllamaCompletionsEndpoint new
 		reasoningValidator: self defaultOllamaCompletionsReasoningValidator.
 	model endpointAt: 'userMessage' put: chatEndpoint.
+	
+	model
+		optionAt: 'dataSourceRequestParser' put: GtLDataSourceOpenAiCompletionsRequestParser new;
+		optionAt: 'dataSourceResponseParser' put: GtLDataSourceOpenAiCompletionsResponseParser new.
 	^ model.
 ]
 
@@ -102,10 +106,7 @@ GtLModelFactory >> openAi [
 		endpointAt: 'modelDetails' put: GtLOllamaModelDetailsEndpoint new;
 		endpointAt: 'availableModels' put: GtLOllamaAvailableModelsEndpoint new;
 		endpointAt: 'runningModels' put: GtLOllamaPsEndpoint new;
-		endpointAt: 'deleteModel' put: GtLOllamaDeleteEndpoint new;
-		endpointAt: 'pullModel' put: GtLOllamaPullEndpoint new;
-		endpointAt: 'createEmbeddings' put: GtLOllamaCreateEmbeddingsEndpoint new;
-		endpointAt: 'createModel' put: GtLOllamaCreateModelEndpoint new.
+		endpointAt: 'createEmbeddings' put: GtLOllamaCreateEmbeddingsEndpoint new.
 	chat := GtLChat new
 		provider: provider.
 	^ model.
@@ -113,4 +114,15 @@ GtLModelFactory >> openAi [
 
 { #category : #'as yet unclassified' }
 GtLModelFactory >> openAi_responses [
+	"Answer a partially configured OpenAI model.
+	This is a WIP"
+	| model |
+
+	model := self openAi.
+	
+	model
+		optionAt: 'dataSourceRequestParser' put: GtLDataSourceOpenAiResponsesRequestParser new;
+		optionAt: 'dataSourceResponseParser' put: GtLDataSourceOpenAiResponsesResponseParser new.
+		
+	^ model
 ]
