@@ -23,6 +23,11 @@ GtLResponseInvividualFormat >> asJsonSchemaDictionaryWithAllRequired [
 ]
 
 { #category : #views }
+GtLResponseInvividualFormat >> formatDescription [
+	^ ''
+]
+
+{ #category : #views }
 GtLResponseInvividualFormat >> gtViewDetailsSchemaFor: aView [
 	<gtView>
 	^ aView forward

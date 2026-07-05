@@ -105,7 +105,8 @@ GtLResponseCompositeFormat >> gtViewSchemaDescriptionsFor: aView [
 		priority: 10;
 		items: [ schemaDescriptions ];
 		column: 'Value' text: [ :each | each name ] width: 200;
-		column: 'Type' text: [ :each | each type ] width: 200
+		column: 'Type' text: [ :each | each type ] width: 200;
+		column: 'Description' text: [ :each | each formatDescription ] width: 200
 ]
 
 { #category : #views }
