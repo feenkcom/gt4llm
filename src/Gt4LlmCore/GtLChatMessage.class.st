@@ -226,6 +226,7 @@ GtLChatMessage >> gtInspectorTargetModels [
 { #category : #ui }
 GtLChatMessage >> gtViewSchemaDescriptionsFor: aView [
 	<gtView>
+	<gtLlmView>
 	formatDescriptions ifNil: [ ^ aView empty ].
 	formatDescriptions hasSchemaDescriptors ifFalse: [ ^ aView empty ].
 
