@@ -55,6 +55,16 @@ GtLAbstractFunctionTool >> functionOpenAI [
 		'parameters' -> self parametersJsonSchemaDictionary} asDictionary
 ]
 
+{ #category : #views }
+GtLAbstractFunctionTool >> gtViewDescriptionFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Description';
+		priority: 5;
+		object: [ GtLMarkdown new content: self description ];
+		view: #gtMarkdownFor:
+]
+
 { #category : #accessing }
 GtLAbstractFunctionTool >> name [
 
