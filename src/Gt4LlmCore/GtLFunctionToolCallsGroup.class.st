@@ -8,7 +8,7 @@ Class {
 GtLFunctionToolCallsGroup >> averageExecutionDuration [
 	| durations totalDuration | 
 	
-	durations := (self collect: [ :each | each executionDuration ])
+	durations := (self collect: [ :each | each totalExecutionDuration ])
 		reject: [ :each | each isNil ].
 	totalDuration := durations  
 		inject: 0 seconds 
@@ -18,10 +18,12 @@ GtLFunctionToolCallsGroup >> averageExecutionDuration [
 	^ totalDuration / durations size
 ]
 
-{ #category : #accessing }
-GtLFunctionToolCallsGroup >> executionDuration [
-	^ self sumDurations: [ :aToolCall | 
-			aToolCall executionDuration ifNil: [ 0 seconds ] ]
+{ #category : #private }
+GtLFunctionToolCallsGroup >> durationTextFor: aDuration [
+	^ aDuration
+		ifNil: [ '' ]
+		ifNotNil: [ :theDuration |
+			theDuration gtPreciseHumanReadableString ]
 ]
 
 { #category : #views }
@@ -41,11 +43,12 @@ GtLFunctionToolCallsGroup >> gtItemsFor: aView [
 					String
 						streamContents: [ :s | aDateAndTime asLocal 
 							printSeparateDateAndTimeOn: s ] ] ];
-		column: 'Duration' text: [ :each | 
-			each executionDuration 
-				ifNil: [ '' ] 
-				ifNotNil: [ :aDuration | 
-					aDuration gtPreciseHumanReadableString ] ]
+		column: 'Total duration' text: [ :each | 
+			self durationTextFor: each totalExecutionDuration ];
+		column: 'Duration (without GC)' text: [ :each | 
+			self durationTextFor: each executionDurationWithoutGc ];
+		column: 'GC duration' text: [ :each | 
+			self durationTextFor: each gcExecutionDuration ]
 ]
 
 { #category : #accessing }
@@ -60,14 +63,14 @@ GtLFunctionToolCallsGroup >> lastExecutionDuration [
 	^ self lastExecution 
 			ifNil: [ nil ] 
 			ifNotNil: [ :aToolExecution |
-				aToolExecution executionDuration ]
+				aToolExecution totalExecutionDuration ]
 ]
 
 { #category : #accessing }
 GtLFunctionToolCallsGroup >> longestExecutionDuration [
 	| durations | 
 	
-	durations := (self collect: [ :each | each executionDuration ])
+	durations := (self collect: [ :each | each totalExecutionDuration ])
 		reject: [ :each | each isNil ].
 	durations ifEmpty: [ ^ nil ].
 	
@@ -80,4 +83,16 @@ GtLFunctionToolCallsGroup >> sumDurations: aBlock [
 		inject: 0 seconds 
 		into: [ :total  :anEventsGrouper | 
 			total + (aBlock value: anEventsGrouper) ]
+]
+
+{ #category : #accessing }
+GtLFunctionToolCallsGroup >> totalExecutionDuration [
+	^ self sumDurations: [ :aToolCall | 
+			aToolCall totalExecutionDuration ifNil: [ 0 seconds ] ]
+]
+
+{ #category : #accessing }
+GtLFunctionToolCallsGroup >> totalGcExecutionDuration [
+	^ self sumDurations: [ :aToolCall | 
+			aToolCall gcExecutionDuration ifNil: [ 0 seconds ] ]
 ]
