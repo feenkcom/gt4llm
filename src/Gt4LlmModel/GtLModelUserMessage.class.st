@@ -129,9 +129,3 @@ GtLModelUserMessage >> role [
 
 	^ 'user'
 ]
-
-{ #category : #accessing }
-GtLModelUserMessage >> tools [
-
-	^ chat tools
-]
