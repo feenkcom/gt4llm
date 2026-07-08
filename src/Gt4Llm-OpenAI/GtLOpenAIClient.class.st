@@ -443,6 +443,12 @@ GtLOpenAIClient >> listVectorStores [
 		perform
 ]
 
+{ #category : #'api - initialization' }
+GtLOpenAIClient >> loadApiKeyFromFile [
+
+	self apiKey: self class apiKeyFileContents
+]
+
 { #category : #accessing }
 GtLOpenAIClient >> post: aString withEntity: anEntity [
 	<return: #GtLRequestResponse>

@@ -8,8 +8,26 @@ Class {
 }
 
 { #category : #accessing }
+GtLOpenAiToolEntity >> description [
+
+	^ self rawData at: 'description'
+]
+
+{ #category : #accessing }
 GtLOpenAiToolEntity >> function [
 	^ self rawData at: 'function'
+]
+
+{ #category : #accessing }
+GtLOpenAiToolEntity >> name [
+
+	^ self rawData at: 'name'
+]
+
+{ #category : #accessing }
+GtLOpenAiToolEntity >> parameters [
+
+	^ self rawData at: 'parameters'
 ]
 
 { #category : #accessing }

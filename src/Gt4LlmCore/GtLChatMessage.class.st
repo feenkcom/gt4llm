@@ -450,8 +450,9 @@ GtLChatMessage >> tools [
 ]
 
 { #category : #accessing }
-GtLChatMessage >> tools: anObject [
-	tools := anObject
+GtLChatMessage >> tools: aGtLTools [
+
+	tools := aGtLTools
 ]
 
 { #category : #'announcer - subscription' }
