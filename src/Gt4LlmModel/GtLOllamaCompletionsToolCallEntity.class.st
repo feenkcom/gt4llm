@@ -8,6 +8,12 @@ Class {
 }
 
 { #category : #accessing }
+GtLOllamaCompletionsToolCallEntity >> description [
+
+	^ self function description
+]
+
+{ #category : #accessing }
 GtLOllamaCompletionsToolCallEntity >> function [
 	^ GtLFunctionCallEntity rawData: (self rawData at: 'function')
 ]
@@ -20,6 +26,18 @@ GtLOllamaCompletionsToolCallEntity >> id [
 { #category : #accessing }
 GtLOllamaCompletionsToolCallEntity >> index [
 	^ self rawData at: 'index'
+]
+
+{ #category : #accessing }
+GtLOllamaCompletionsToolCallEntity >> name [
+
+	^ self function name
+]
+
+{ #category : #accessing }
+GtLOllamaCompletionsToolCallEntity >> parameters [
+
+	^ self function parameters
 ]
 
 { #category : #accessing }

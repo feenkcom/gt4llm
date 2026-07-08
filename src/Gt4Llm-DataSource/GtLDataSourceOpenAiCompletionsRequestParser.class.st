@@ -23,6 +23,7 @@ GtLDataSourceOpenAiCompletionsRequestParser >> parseRequest: requestResponse at:
 		[ self error: 'Unknown role: ', role asString ].
 	request tools ifNotNil: [ :toolsEntity |
 		aMessageConstructor addToolsFrom: toolsEntity to: message ].
+	^ message
 ]
 
 { #category : #private }
@@ -33,7 +34,7 @@ GtLDataSourceOpenAiCompletionsRequestParser >> parseUserRequest: requestResponse
 	contentEntity := messagesEntity content first.
 	type := contentEntity type.
 	type = 'text' ifFalse: [ self error: 'Unknown type: ', type asString ].
-	message := GtLModelUserMessage new 
+	message := chat provider userMessageClass new 
 			string: contentEntity text;
 			requestResponse: requestResponse.
 	chat addUserMessage: message.

@@ -35,6 +35,12 @@ GtLApiEntity >> gtRawDataFor: aView [
 		send: [ :each | each value ]
 ]
 
+{ #category : #testing }
+GtLApiEntity >> hasRole [
+
+	^ self rawData includesKey: 'role'
+]
+
 { #category : #accessing }
 GtLApiEntity >> rawData [
 	^ rawData

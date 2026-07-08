@@ -39,5 +39,5 @@ GtLOpenAiCompletionsRequestEntity >> stream [
 
 { #category : #accessing }
 GtLOpenAiCompletionsRequestEntity >> tools [
-	^ (self rawData at: 'tools') collect: [ :each | GtLOpenAiToolEntity new rawData: each ]
+	^ (self rawData at: 'tools') collect: [ :each | GtLOllamaCompletionsToolCallEntity new rawData: each ]
 ]

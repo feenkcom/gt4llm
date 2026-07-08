@@ -13,6 +13,22 @@ GtLFunctionCallEntity >> arguments [
 ]
 
 { #category : #accessing }
+GtLFunctionCallEntity >> callId [
+
+	^ self rawData at: 'call_id'
+]
+
+{ #category : #accessing }
+GtLFunctionCallEntity >> description [
+	^ self rawData at: 'description'
+]
+
+{ #category : #accessing }
 GtLFunctionCallEntity >> name [
 	^ self rawData at: 'name'
+]
+
+{ #category : #accessing }
+GtLFunctionCallEntity >> parameters [
+	^ self rawData at: 'parameters'
 ]
