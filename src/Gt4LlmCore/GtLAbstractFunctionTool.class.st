@@ -89,14 +89,15 @@ GtLAbstractFunctionTool >> performToolCall: aToolCall [
 GtLAbstractFunctionTool >> performToolCall: aToolCall inContext: anExecutionContext [
 	| domainObject resultObject |
 	
-	aToolCall performedByTool: self.
+	aToolCall markAsStartedByTool: self.
 	
 	domainObject := self 
 		privatePerformToolCall: aToolCall 
 		inContext: anExecutionContext.
 	resultObject := self resultObjectFromDomainObject: domainObject.
 	
-	aToolCall result: resultObject.
+	aToolCall updateResult: resultObject.
+	
 	^ resultObject
 ]
 

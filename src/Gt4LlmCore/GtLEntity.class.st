@@ -40,12 +40,6 @@ GtLEntity class >> serializationProperties [
 	^ #()
 ]
 
-{ #category : #visiting }
-GtLEntity >> acceptVisitor: aVisitor [
-
-	^ aVisitor visitGtLEntity: self
-]
-
 { #category : #accessing }
 GtLEntity >> client [
 	^ client

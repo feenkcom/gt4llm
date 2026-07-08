@@ -15,9 +15,30 @@ GtLToolCallsByTypeSummarizer class >> isActive [
 	^true
 ]
 
+{ #category : #private }
+GtLToolCallsByTypeSummarizer >> durationTextFor: aDuration [
+	^ aDuration
+		ifNil: [ '' ]
+		ifNotNil: [ :theDuration |
+			theDuration gtPreciseHumanReadableString ]
+]
+
+{ #category : #accessing }
+GtLToolCallsByTypeSummarizer >> executionDuration [
+	^ self relevantToolCalls
+		inject: 0 seconds 
+		into: [ :total  :each | 
+			total + (each executionDuration 
+				ifNil: [ 0 seconds ]) ]
+]
+
 { #category : #accessing }
 GtLToolCallsByTypeSummarizer >> groupedToolCalls [
-	^ self relevantToolCalls groupedBy: [ :each | each tool ]
+	^ ((self relevantToolCalls 
+			groupedBy: [ :each | each tool ]) associations
+				collect: [ :assoc |
+					assoc key -> (GtLFunctionToolCallsGroup withAll: assoc value ) ])
+			 asDictionary
 ]
 
 { #category : #'gt-extensions' }
@@ -27,10 +48,19 @@ GtLToolCallsByTypeSummarizer >> gtGroupedToolsFor: aView [
 	^ aView columnedList
 		title: 'Grouped tools';
 		priority: 21;
-		items: [ self groupedToolCalls associations ];
-		column: 'Tool' text: [ :each | each key name ];
-		column: 'Count' text: [ :each | each value size ] width: 100;
-		send: [ :each | each value ];
+		items: [ self groupedToolCalls associations
+			sorted: [ :each | each value size ] descending ];
+		column: 'Tool' text: [ :assoc | assoc key name ];
+		column: 'Count' text: [ :assoc | assoc value size ] width: 100;
+		column: 'Total duration' text: [ :assoc | 
+			self durationTextFor: assoc value executionDuration ];
+		column: 'Aveage duration' text: [ :assoc | 
+			self durationTextFor: assoc value averageExecutionDuration ];
+		column: 'Longest run' text: [ :assoc | 
+			self durationTextFor: assoc value longestExecutionDuration ];
+		column: 'Last call duration' text: [ :assoc | 
+			self durationTextFor: assoc value lastExecutionDuration ];
+		send: [ :assoc | assoc value ];
 		actionButtonIcon: BrGlamorousVectorIcons inspect 
 			tooltip: 'Inspect summarizer'
 			action: [ :aButton |
@@ -58,7 +88,10 @@ GtLToolCallsByTypeSummarizer >> relevantToolCalls [
 { #category : #accessing }
 GtLToolCallsByTypeSummarizer >> summaryText [
 	^ self hasSummaryData
-		ifTrue: [ '{1} tool types, {2} tool calls' format: { self groupedToolCalls size. self relevantToolCalls size } ]
+		ifTrue: [ '{1} tool types, {2} tool calls, {3} total duration' format: { 
+			self groupedToolCalls size. 
+			self relevantToolCalls size.
+			(self durationTextFor: self executionDuration) } ]
 		ifFalse: [ 'No tool calls' ]
 ]
 

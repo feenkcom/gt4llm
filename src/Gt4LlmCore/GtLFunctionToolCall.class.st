@@ -8,7 +8,8 @@ Class {
 		'tool',
 		'result',
 		'runtimeValues',
-		'rawArguments'
+		'rawArguments',
+		'executionDetails'
 	],
 	#category : #'Gt4LlmCore-Core'
 }
@@ -23,12 +24,6 @@ GtLFunctionToolCall class >> leJsonV4Name [
 GtLFunctionToolCall class >> serializationProperties [
 	^ {#id -> #id.
 		#function -> #function}
-]
-
-{ #category : #visiting }
-GtLFunctionToolCall >> acceptVisitor: aVisitor [
-
-	^ aVisitor visitGtLFunctionToolCall: self
 ]
 
 { #category : #accessing }
@@ -64,6 +59,24 @@ GtLFunctionToolCall >> at: aString putRuntimeValue: anObject [
 { #category : #accessing }
 GtLFunctionToolCall >> description [
 	^ tool ifNotNil: #description ifNil: [ '' ]
+]
+
+{ #category : #accessing }
+GtLFunctionToolCall >> executionDuration [
+	^ executionDetails 
+			ifNil: [ nil ] 
+			ifNotNil: [ :anExecutionDetails |
+				anExecutionDetails duration ]
+]
+
+{ #category : #accessing }
+GtLFunctionToolCall >> executionEndTime [
+	^ executionDetails endTime
+]
+
+{ #category : #accessing }
+GtLFunctionToolCall >> executionStartTime [
+	^ executionDetails startTime
 ]
 
 { #category : #accessing }
@@ -190,12 +203,20 @@ GtLFunctionToolCall >> id: anObject [
 { #category : #initialization }
 GtLFunctionToolCall >> initialize [
 	super initialize.
+	
 	runtimeValues := Dictionary new.
+	executionDetails := GtLFunctionToolCallExecutionDetails new.
 ]
 
 { #category : #testing }
 GtLFunctionToolCall >> isFinished [
 	^ result notNil
+]
+
+{ #category : #actions }
+GtLFunctionToolCall >> markAsStartedByTool: aTool [
+	self performedByTool: aTool.
+	self updateStartTime.
 ]
 
 { #category : #accessing }
@@ -282,4 +303,20 @@ GtLFunctionToolCall >> result: aToolResult [
 { #category : #accessing }
 GtLFunctionToolCall >> tool [
 	^ tool
+]
+
+{ #category : #updating }
+GtLFunctionToolCall >> updateEndTime [
+	executionDetails updateEndTime
+]
+
+{ #category : #accessing }
+GtLFunctionToolCall >> updateResult: aToolResult [
+	result := aToolResult.
+	self updateEndTime.
+]
+
+{ #category : #updating }
+GtLFunctionToolCall >> updateStartTime [
+	executionDetails updateStartTime
 ]
