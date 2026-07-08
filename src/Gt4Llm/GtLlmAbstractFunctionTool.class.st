@@ -69,9 +69,9 @@ GtLlmAbstractFunctionTool >> parameters [
 { #category : #'llm-generated' }
 GtLlmAbstractFunctionTool >> performToolCall: aToolCall [
 	| result |
-	aToolCall markAsStartedByTool: self.
+	aToolCall performedByTool: self.
 	result := self privatePerformToolCall: aToolCall.
-	aToolCall updateResult: result.
+	aToolCall result: result.
 	^ result
 ]
 
