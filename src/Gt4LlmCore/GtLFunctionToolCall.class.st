@@ -62,11 +62,8 @@ GtLFunctionToolCall >> description [
 ]
 
 { #category : #accessing }
-GtLFunctionToolCall >> executionDuration [
-	^ executionDetails 
-			ifNil: [ nil ] 
-			ifNotNil: [ :anExecutionDetails |
-				anExecutionDetails duration ]
+GtLFunctionToolCall >> executionDurationWithoutGc [
+	^ executionDetails durationWithoutGc
 ]
 
 { #category : #accessing }
@@ -92,6 +89,11 @@ GtLFunctionToolCall >> function: aDict [
 
 	(arguments isKindOf: String)
 		ifTrue: [ arguments := STONJSON fromString: arguments ]
+]
+
+{ #category : #accessing }
+GtLFunctionToolCall >> gcExecutionDuration [
+	^ executionDetails gcDuration
 ]
 
 { #category : #views }
@@ -216,7 +218,7 @@ GtLFunctionToolCall >> isFinished [
 { #category : #actions }
 GtLFunctionToolCall >> markAsStartedByTool: aTool [
 	self performedByTool: aTool.
-	self updateStartTime.
+	self updateExecutionDetailsAtStart.
 ]
 
 { #category : #accessing }
@@ -305,18 +307,26 @@ GtLFunctionToolCall >> tool [
 	^ tool
 ]
 
+{ #category : #accessing }
+GtLFunctionToolCall >> totalExecutionDuration [
+	^ executionDetails 
+			ifNil: [ nil ] 
+			ifNotNil: [ :anExecutionDetails |
+				anExecutionDetails durationWithGc ]
+]
+
 { #category : #updating }
-GtLFunctionToolCall >> updateEndTime [
-	executionDetails updateEndTime
+GtLFunctionToolCall >> updateExecutionDetailsAtStart [
+	executionDetails updateExecutionStarted
+]
+
+{ #category : #updating }
+GtLFunctionToolCall >> updateExecutionDetailsAtTermination [
+	executionDetails updateExecutionTerminated
 ]
 
 { #category : #accessing }
 GtLFunctionToolCall >> updateResult: aToolResult [
 	result := aToolResult.
-	self updateEndTime.
-]
-
-{ #category : #updating }
-GtLFunctionToolCall >> updateStartTime [
-	executionDetails updateStartTime
+	self updateExecutionDetailsAtTermination.
 ]
