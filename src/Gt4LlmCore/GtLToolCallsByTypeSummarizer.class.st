@@ -28,13 +28,13 @@ GtLToolCallsByTypeSummarizer >> groupedToolCalls [
 	^ ((self relevantToolCalls 
 			groupedBy: [ :each | each tool ]) associations
 				collect: [ :assoc |
-					assoc key -> (GtLFunctionToolCallsGroup withAll: assoc value ) ])
+					assoc key -> (GtLFunctionToolCallGroup withAll: assoc value ) ])
 			 asDictionary
 ]
 
 { #category : #accessing }
 GtLToolCallsByTypeSummarizer >> groupedToolCallsForToolNamed: aToolName [
-	^ GtLFunctionToolCallsGroup withAll: (self relevantToolCalls
+	^ GtLFunctionToolCallGroup withAll: (self relevantToolCalls
 		select: [ :each | each name = aToolName ])
 ]
 
@@ -99,8 +99,8 @@ GtLToolCallsByTypeSummarizer >> initialize [
 ]
 
 { #category : #initialization }
-GtLToolCallsByTypeSummarizer >> initializeWithMessages: aCollection [
-	super initializeWithMessages: aCollection.
+GtLToolCallsByTypeSummarizer >> initializeWithToolCalls: aCollection [
+	super initializeWithToolCalls: aCollection.
 	relevantToolCalls := self toolCallsSelect: [ :each | true ]
 ]
 

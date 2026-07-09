@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : #api }
-GtLDataSourceOpenAiCompletionsRequestParser >> parseRequest: requestResponse at: index for: aMessageConstructor [
+GtLDataSourceOpenAiCompletionsRequestParser >> parseRequest: requestResponse for: aMessageConstructor [
 
 	| jsonRequest request messagesEntity role message chat |
 
@@ -14,10 +14,10 @@ GtLDataSourceOpenAiCompletionsRequestParser >> parseRequest: requestResponse at:
 	request := GtLOpenAiCompletionsRequestEntity rawData: jsonRequest.
 	chat provider model ifNil:
 		[ chat provider modelName: request model ].
-	messagesEntity := request messages at: index.
+	messagesEntity := request messages last.
 	role := messagesEntity role.
 	role = 'user' ifTrue:
-		[ message := self parseUserRequest: requestResponse at: index messagesEntity: messagesEntity for: aMessageConstructor ].
+		[ message := self parseUserRequest: requestResponse messagesEntity: messagesEntity for: aMessageConstructor ].
 	role = 'tool' ifTrue: [ ^ nil ].
 	message ifNil:
 		[ self error: 'Unknown role: ', role asString ].
@@ -27,7 +27,7 @@ GtLDataSourceOpenAiCompletionsRequestParser >> parseRequest: requestResponse at:
 ]
 
 { #category : #private }
-GtLDataSourceOpenAiCompletionsRequestParser >> parseUserRequest: requestResponse at: index messagesEntity: messagesEntity for: aMessageConstructor [
+GtLDataSourceOpenAiCompletionsRequestParser >> parseUserRequest: requestResponse messagesEntity: messagesEntity for: aMessageConstructor [
 	| contentEntity type message chat |
 	
 	chat := aMessageConstructor chat.

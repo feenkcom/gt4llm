@@ -33,11 +33,11 @@ GtLOpenAIAssistantMessage >> chat: aChat [
 { #category : #reading }
 GtLOpenAIAssistantMessage >> computeResponseModelsByFormat [
 	| responseText |
-	self formatDescriptions hasSchemaDescriptors ifFalse: [ ^ {} ].
+	self formatDescriptions hasSchemaDescriptors ifFalse: [ ^ Dictionary new ].
 	responseText := self contentText.
 	^ [ self formatDescriptions readDomainObjectsFrom: responseText ]
 		on: NeoJSONParseError
-		do: [ :e | ^ {} ]
+		do: [ :e | ^ Dictionary new ]
 ]
 
 { #category : #'api - ui' }
@@ -97,6 +97,12 @@ GtLOpenAIAssistantMessage >> gtViewResponseModelsFor: aView [
 { #category : #testing }
 GtLOpenAIAssistantMessage >> hasResponse [
 	^ self contentText isNotEmpty
+]
+
+{ #category : #'as yet unclassified' }
+GtLOpenAIAssistantMessage >> initialize [
+
+	super initialize.
 ]
 
 { #category : #initialization }

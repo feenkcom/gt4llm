@@ -27,6 +27,18 @@ GtLJsonPlaceholderTool >> entity: anObject [
 	entity := anObject
 ]
 
+{ #category : #ui }
+GtLJsonPlaceholderTool >> gtViewRawDataFor: aView [
+	<gtView>
+	entity ifNil: [^ aView empty ].
+
+	^ aView forward
+		title: 'Raw data';
+		priority: 20;
+		object: [ entity rawData ];
+		view: #gtTreeFor:
+]
+
 { #category : #accessing }
 GtLJsonPlaceholderTool >> name [
 

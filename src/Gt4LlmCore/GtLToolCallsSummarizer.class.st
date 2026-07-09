@@ -54,14 +54,30 @@ GtLToolCallsSummarizer >> gtSummaryFor: aView [
 		text: [ self summaryText asRopedText ]
 ]
 
+{ #category : #views }
+GtLToolCallsSummarizer >> gtViewRelevantToolCallsFor: aView [
+	<gtView>
+	
+	^ aView forward
+		title: 'Relevant calls';
+		priority: 55;
+		object: [ self relevantToolCalls ];
+		view: #gtItemsFor:
+]
+
 { #category : #testing }
 GtLToolCallsSummarizer >> hasSummaryData [
 	^ self relevantToolCalls notEmpty
 ]
 
 { #category : #initialization }
-GtLToolCallsSummarizer >> initializeWithMessages: aCollection [
-	self originalToolCalls: (self toolCallsFromMessages: aCollection)
+GtLToolCallsSummarizer >> initializeWithMessages: aMessageGroup [
+	self initializeWithToolCalls: (self toolCallsFromMessages: aMessageGroup)
+]
+
+{ #category : #initialization }
+GtLToolCallsSummarizer >> initializeWithToolCalls: aToolCallGroup [
+	self originalToolCalls: aToolCallGroup
 ]
 
 { #category : #testing }
@@ -110,12 +126,12 @@ GtLToolCallsSummarizer >> toolCallsDo: aBlock [
 ]
 
 { #category : #private }
-GtLToolCallsSummarizer >> toolCallsFromMessages: aCollection [
+GtLToolCallsSummarizer >> toolCallsFromMessages: aMessageGroup [
 	| toolCalls |
-	toolCalls := OrderedCollection new.
-	aCollection do: [ :each |
-		each messagesDo: [ :aMessage |
-			aMessage isToolMessage ifTrue: [ toolCalls add: aMessage toolCall ] ] ].
+	toolCalls := GtLFunctionToolCallGroup new.
+	aMessageGroup do: [ :aMessage |
+		aMessage messagesDo: [ :currentMessage |
+			currentMessage isToolMessage ifTrue: [ toolCalls add: currentMessage toolCall ] ] ].
 	^ toolCalls
 ]
 

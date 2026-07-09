@@ -50,8 +50,7 @@ GtLToolCallSummarizersRegistry >> announcer [
 
 { #category : #building }
 GtLToolCallSummarizersRegistry >> applicableSpecificationsForMessages: aMessagesGroup [
-	^ specifications select: [ :each |
-			each isApplicableToMessages: aMessagesGroup ]
+	^ specifications selectApplicableToMessages: aMessagesGroup
 ]
 
 { #category : #accessing }
@@ -163,7 +162,7 @@ GtLToolCallSummarizersRegistry >> summarizersForMessages: aMessagesGroup [
 { #category : #building }
 GtLToolCallSummarizersRegistry >> updateSummarizersForMessages: aMessagesGroup [
 	currentSummarizers := (self applicableSpecificationsForMessages: aMessagesGroup)
-		collect: [ :eachSpecification |
-			eachSpecification buildForMessages: aMessagesGroup ].
+		buildForMessages: aMessagesGroup.
+		
 	self notifySummarizersChanged.
 ]

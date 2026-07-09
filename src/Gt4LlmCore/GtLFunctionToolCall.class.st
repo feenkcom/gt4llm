@@ -126,14 +126,14 @@ GtLFunctionToolCall >> gtActionForToolFor: anAction [
 { #category : #'gt - extensions' }
 GtLFunctionToolCall >> gtArgumentsFor: aView [
 	<gtView>
+	
 	arguments ifNil: [ ^ aView empty ].
-	^ aView columnedList
+	
+	^ aView forward
 		title: 'Arguments';
 		priority: 9;
-		items: [ self arguments associations ];
-		column: 'Name' text: #key width: 150;
-		column: 'Value' text: #value;
-		send: #value
+		object: [ self arguments ];
+		view: #gtTreeFor:
 ]
 
 { #category : #views }
