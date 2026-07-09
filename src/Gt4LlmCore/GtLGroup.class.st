@@ -330,6 +330,12 @@ GtLGroup >> last: aCount [
 		withAll: (self items last: aCount)
 ]
 
+{ #category : #testing }
+GtLGroup >> notEmpty [
+
+	^ self isNotEmpty
+]
+
 { #category : #accessing }
 GtLGroup >> overlappingPairsDo: aBlock [
 	^ self items overlappingPairsDo: aBlock

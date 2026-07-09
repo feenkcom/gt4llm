@@ -29,8 +29,9 @@ GtLFunctionToolCallGroup >> durationTextFor: aDuration [
 { #category : #views }
 GtLFunctionToolCallGroup >> gToolCallsSummariesFor: aView [
 	<gtView>
+	
 	^ aView columnedList
-		title: 'Tool call summarizers';
+		title: 'Tool summarizers';
 		priority: 30;
 		items: [ self toolCallsSummarizers ];
 		column: 'Summary' 
@@ -51,6 +52,7 @@ GtLFunctionToolCallGroup >> gtItemsFor: aView [
 	^ aView columnedList
 		title: 'Items';
 		items: [ items ];
+		priority: 5;
 		column: 'Tool name' text: [ :each | each name ];
 		column: 'Start time' text: [ :each | 
 			each executionStartTime
@@ -106,7 +108,7 @@ GtLFunctionToolCallGroup >> toolCallsSummarizers [
 	^ (GtLToolCallSummarizersRegistry defaultSpecifications
 			select: [ :each | each isApplicableToMessages: self ])
 			collect: [ :each |
-				each buildForMessages: self ]
+				each buildForToolCalls: self ]
 ]
 
 { #category : #accessing }

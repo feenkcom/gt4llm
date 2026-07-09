@@ -193,8 +193,9 @@ GtLOverallExampleExecutionsSummarizer >> initialize [
 ]
 
 { #category : #initialization }
-GtLOverallExampleExecutionsSummarizer >> initializeWithMessages: aCollection [
-	super initializeWithMessages: aCollection.
+GtLOverallExampleExecutionsSummarizer >> initializeWithToolCalls: aToolCallGroup [
+	super initializeWithToolCalls: aToolCallGroup.
+	
 	relevantToolCalls := self toolCallsSelect: [ :each |
 		#(exampleMethodRun examplesInClassesRun) includes: each name asSymbol ].
 	self rebuildLatestStatuses
