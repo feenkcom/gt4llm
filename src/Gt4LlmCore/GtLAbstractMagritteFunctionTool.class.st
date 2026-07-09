@@ -43,7 +43,8 @@ GtLAbstractMagritteFunctionTool >> parametersDescription [
 GtLAbstractMagritteFunctionTool >> performToolCall: aToolCall inContext: anExecutionContext [
 	| domainObject resultObject |
 	
-	aToolCall performedByTool: self.
+	aToolCall markAsStartedByTool: self.
+	
 	[
 		| arguments |
 		
@@ -68,8 +69,8 @@ GtLAbstractMagritteFunctionTool >> performToolCall: aToolCall inContext: anExecu
 		privatePerformToolCall: aToolCall 
 		inContext: anExecutionContext.
 	resultObject := self resultObjectFromDomainObject: domainObject.
-				
-	aToolCall result: resultObject.
+		
+	aToolCall updateResult: resultObject.
 
 	^ resultObject
 ]

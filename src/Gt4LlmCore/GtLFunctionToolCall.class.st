@@ -8,7 +8,8 @@ Class {
 		'tool',
 		'result',
 		'runtimeValues',
-		'rawArguments'
+		'rawArguments',
+		'executionDetails'
 	],
 	#category : #'Gt4LlmCore-Core'
 }
@@ -23,12 +24,6 @@ GtLFunctionToolCall class >> leJsonV4Name [
 GtLFunctionToolCall class >> serializationProperties [
 	^ {#id -> #id.
 		#function -> #function}
-]
-
-{ #category : #visiting }
-GtLFunctionToolCall >> acceptVisitor: aVisitor [
-
-	^ aVisitor visitGtLFunctionToolCall: self
 ]
 
 { #category : #accessing }
@@ -67,6 +62,21 @@ GtLFunctionToolCall >> description [
 ]
 
 { #category : #accessing }
+GtLFunctionToolCall >> executionDurationWithoutGc [
+	^ executionDetails durationWithoutGc
+]
+
+{ #category : #accessing }
+GtLFunctionToolCall >> executionEndTime [
+	^ executionDetails endTime
+]
+
+{ #category : #accessing }
+GtLFunctionToolCall >> executionStartTime [
+	^ executionDetails startTime
+]
+
+{ #category : #accessing }
 GtLFunctionToolCall >> function [
 	^ {'name' -> name.
 		'arguments' -> (STONJSON toString: arguments)} asDictionary
@@ -79,6 +89,11 @@ GtLFunctionToolCall >> function: aDict [
 
 	(arguments isKindOf: String)
 		ifTrue: [ arguments := STONJSON fromString: arguments ]
+]
+
+{ #category : #accessing }
+GtLFunctionToolCall >> gcExecutionDuration [
+	^ executionDetails gcDuration
 ]
 
 { #category : #views }
@@ -190,12 +205,20 @@ GtLFunctionToolCall >> id: anObject [
 { #category : #initialization }
 GtLFunctionToolCall >> initialize [
 	super initialize.
+	
 	runtimeValues := Dictionary new.
+	executionDetails := GtLFunctionToolCallExecutionDetails new.
 ]
 
 { #category : #testing }
 GtLFunctionToolCall >> isFinished [
 	^ result notNil
+]
+
+{ #category : #actions }
+GtLFunctionToolCall >> markAsStartedByTool: aTool [
+	self performedByTool: aTool.
+	self updateExecutionDetailsAtStart.
 ]
 
 { #category : #accessing }
@@ -282,4 +305,28 @@ GtLFunctionToolCall >> result: aToolResult [
 { #category : #accessing }
 GtLFunctionToolCall >> tool [
 	^ tool
+]
+
+{ #category : #accessing }
+GtLFunctionToolCall >> totalExecutionDuration [
+	^ executionDetails 
+			ifNil: [ nil ] 
+			ifNotNil: [ :anExecutionDetails |
+				anExecutionDetails durationWithGc ]
+]
+
+{ #category : #updating }
+GtLFunctionToolCall >> updateExecutionDetailsAtStart [
+	executionDetails updateExecutionStarted
+]
+
+{ #category : #updating }
+GtLFunctionToolCall >> updateExecutionDetailsAtTermination [
+	executionDetails updateExecutionTerminated
+]
+
+{ #category : #accessing }
+GtLFunctionToolCall >> updateResult: aToolResult [
+	result := aToolResult.
+	self updateExecutionDetailsAtTermination.
 ]
