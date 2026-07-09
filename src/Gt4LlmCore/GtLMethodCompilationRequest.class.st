@@ -32,6 +32,19 @@ GtLMethodCompilationRequest >> classSideDescription [
 		beRequired
 ]
 
+{ #category : #views }
+GtLMethodCompilationRequest >> gtSourceCodeFor: aView [
+	<gtView>
+	sourceCode ifNil: [ ^ aView empty ].
+	
+	^ aView textEditor
+		title: 'Source code';
+		priority: 10;
+		text: [ sourceCode ];
+		aptitude: BrGlamorousCodeEditorAptitude;
+		styler: [ BrRBTextStyler new ]
+]
+
 { #category : #testing }
 GtLMethodCompilationRequest >> isClassSide [
 	^ classSide
