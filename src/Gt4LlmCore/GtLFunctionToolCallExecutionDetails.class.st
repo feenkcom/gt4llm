@@ -106,6 +106,11 @@ GtLFunctionToolCallExecutionDetails >> summaryDetails [
 ]
 
 { #category : #accessing }
+GtLFunctionToolCallExecutionDetails >> telemetryPing: aTelemetryPing [
+	telemetryPing := aTelemetryPing
+]
+
+{ #category : #accessing }
 GtLFunctionToolCallExecutionDetails >> totalDuration [
 	^ self durationWithGc
 ]
