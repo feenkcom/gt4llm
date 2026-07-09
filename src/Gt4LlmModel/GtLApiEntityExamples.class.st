@@ -71,7 +71,7 @@ Example JSON response:
 	self assert: message content size equals: 1.
 	content := message content first.
 	self assert: content class equals: GtLOpenAiContentEntity.
-	self assert: content text equals: '"Show me the result of calling the WebFetch tool with url https://example.com"'.
+	self assert: content text equals: 'Show me the result of calling the WebFetch tool with url https://example.com'.
 	self assert: content type equals: 'text'.
 	self assert: entity stream equals: false.
 	self assert: entity reasoningEffort equals: 'low'.
