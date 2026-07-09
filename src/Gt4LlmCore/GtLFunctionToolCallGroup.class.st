@@ -106,9 +106,8 @@ GtLFunctionToolCallGroup >> sumDurations: aBlock [
 { #category : #accessing }
 GtLFunctionToolCallGroup >> toolCallsSummarizers [
 	^ (GtLToolCallSummarizersRegistry defaultSpecifications
-			select: [ :each | each isApplicableToMessages: self ])
-			collect: [ :each |
-				each buildForToolCalls: self ]
+			selectApplicableToToolCalls: self)
+			buildForToolCalls: self
 ]
 
 { #category : #accessing }
