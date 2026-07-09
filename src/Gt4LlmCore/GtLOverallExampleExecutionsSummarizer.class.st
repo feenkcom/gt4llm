@@ -177,6 +177,10 @@ GtLOverallExampleExecutionsSummarizer >> gtRunsAndExamplesFor: aView [
 						each skippedCount isZero
 							ifTrue: [ Color transparent ]
 							ifFalse: [ BrGlamorousColors neutralBackgroundColor ] ] ];
+		actionButtonIcon: BrGlamorousVectorIcons inspect 
+			tooltip: 'Inspect summarizer'
+			action: [ :aButton |
+				aButton phlow spawnObject: self ];
 		send: [ :each | each result ]
 ]
 
