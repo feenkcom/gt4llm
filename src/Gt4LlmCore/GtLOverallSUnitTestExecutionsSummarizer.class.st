@@ -183,8 +183,9 @@ GtLOverallSUnitTestExecutionsSummarizer >> initialize [
 ]
 
 { #category : #initialization }
-GtLOverallSUnitTestExecutionsSummarizer >> initializeWithMessages: aCollection [
-	super initializeWithMessages: aCollection.
+GtLOverallSUnitTestExecutionsSummarizer >> initializeWithToolCalls: aToolCallGroup [
+	super initializeWithToolCalls: aToolCallGroup.
+	
 	relevantToolCalls := self toolCallsSelect: [ :each |
 		#(testsInClassesRun) includes: each name asSymbol ].
 	self rebuildLatestStatuses

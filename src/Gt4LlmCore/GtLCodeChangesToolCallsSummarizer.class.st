@@ -262,8 +262,9 @@ GtLCodeChangesToolCallsSummarizer >> initialize [
 ]
 
 { #category : #initialization }
-GtLCodeChangesToolCallsSummarizer >> initializeWithMessages: aCollection [
-	super initializeWithMessages: aCollection.
+GtLCodeChangesToolCallsSummarizer >> initializeWithToolCalls: aToolCallGroup [
+	super initializeWithToolCalls: aToolCallGroup.
+	
 	relevantToolCalls := self toolCallsSelect: [ :each | 
 		self isCodeChangeToolCall: each ].
 	self rebuildCodeChanges

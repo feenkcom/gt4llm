@@ -74,7 +74,7 @@ GtLMessagesGroup >> copyForNew [
 GtLMessagesGroup >> gToolCallsSummariesFor: aView [
 	<gtView>
 	^ aView columnedList
-		title: 'Tool call summarizers';
+		title: 'Tool summarizers';
 		priority: 30;
 		items: [ self toolCallsSummarizers ];
 		column: 'Summary' 

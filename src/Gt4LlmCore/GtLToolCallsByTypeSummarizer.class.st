@@ -99,8 +99,8 @@ GtLToolCallsByTypeSummarizer >> initialize [
 ]
 
 { #category : #initialization }
-GtLToolCallsByTypeSummarizer >> initializeWithMessages: aCollection [
-	super initializeWithMessages: aCollection.
+GtLToolCallsByTypeSummarizer >> initializeWithToolCalls: aCollection [
+	super initializeWithToolCalls: aCollection.
 	relevantToolCalls := self toolCallsSelect: [ :each | true ]
 ]
 
