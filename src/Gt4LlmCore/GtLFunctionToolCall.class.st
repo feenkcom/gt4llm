@@ -62,6 +62,11 @@ GtLFunctionToolCall >> description [
 ]
 
 { #category : #accessing }
+GtLFunctionToolCall >> executionDetails: anExecutionDetailsObject [
+	executionDetails := anExecutionDetailsObject
+]
+
+{ #category : #accessing }
 GtLFunctionToolCall >> executionDurationWithoutGc [
 	^ executionDetails durationWithoutGc
 ]

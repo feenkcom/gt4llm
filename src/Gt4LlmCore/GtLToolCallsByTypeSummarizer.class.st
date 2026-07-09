@@ -20,7 +20,7 @@ GtLToolCallsByTypeSummarizer >> durationTextFor: aDuration [
 	^ aDuration
 		ifNil: [ '' ]
 		ifNotNil: [ :theDuration |
-			theDuration gtPreciseHumanReadableString ]
+			theDuration gtHumanReadableStringUpToMilliseconds ]
 ]
 
 { #category : #accessing }
@@ -30,6 +30,12 @@ GtLToolCallsByTypeSummarizer >> groupedToolCalls [
 				collect: [ :assoc |
 					assoc key -> (GtLFunctionToolCallsGroup withAll: assoc value ) ])
 			 asDictionary
+]
+
+{ #category : #accessing }
+GtLToolCallsByTypeSummarizer >> groupedToolCallsForToolNamed: aToolName [
+	^ GtLFunctionToolCallsGroup withAll: (self relevantToolCalls
+		select: [ :each | each name = aToolName ])
 ]
 
 { #category : #'gt-extensions' }
