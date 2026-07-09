@@ -50,7 +50,7 @@ GtLToolCallsSummarizer >> gtSummaryFor: aView [
 	<gtView>
 	^ aView textEditor
 		title: 'Summary';
-		priority: 5;
+		priority: 50;
 		text: [ self summaryText asRopedText ]
 ]
 

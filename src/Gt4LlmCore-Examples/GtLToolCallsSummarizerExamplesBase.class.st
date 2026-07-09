@@ -7,6 +7,16 @@ Class {
 	#category : #'Gt4LlmCore-Examples-Summarizers'
 }
 
+{ #category : #private }
+GtLToolCallsSummarizerExamplesBase >> fixedExecutionDetailsFrom: aStartDateAndTime to: anEndDateAndTime [
+	| details |
+	details := GtLFunctionToolCallExecutionDetails new.
+	details
+		startTime: aStartDateAndTime;
+		endTime: anEndDateAndTime.
+	^ details
+]
+
 { #category : #utilities }
 GtLToolCallsSummarizerExamplesBase >> performClassCommentChangeFor: aClass to: aCommentString [
 	^ self performTool: GtLMagritteToolForClassCommentChange new withArguments: (Dictionary new
@@ -89,7 +99,7 @@ GtLToolCallsSummarizerExamplesBase >> removeSelector: aSelector fromClass: aClas
 	(aClass includesSelector: aSelector) ifTrue: [ aClass removeSelector: aSelector ]
 ]
 
-{ #category : #utilities }
+{ #category : #private }
 GtLToolCallsSummarizerExamplesBase >> toolCallNamed: aName arguments: aDictionary [
 	^ GtLFunctionToolCall new
 		name: aName;
@@ -97,7 +107,14 @@ GtLToolCallsSummarizerExamplesBase >> toolCallNamed: aName arguments: aDictionar
 		yourself
 ]
 
-{ #category : #utilities }
+{ #category : #private }
+GtLToolCallsSummarizerExamplesBase >> toolCallNamed: aName arguments: aDictionary executionDetails: anExecutionDetails [
+	^ (self toolCallNamed: aName arguments: aDictionary)
+		executionDetails: anExecutionDetails;
+		yourself
+]
+
+{ #category : #private }
 GtLToolCallsSummarizerExamplesBase >> toolMessageFrom: aToolCall [
 	^ GtLToolMessage new
 		toolCall: aToolCall;

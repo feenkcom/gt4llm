@@ -23,7 +23,7 @@ GtLFunctionToolCallsGroup >> durationTextFor: aDuration [
 	^ aDuration
 		ifNil: [ '' ]
 		ifNotNil: [ :theDuration |
-			theDuration gtPreciseHumanReadableString ]
+			theDuration gtHumanReadableStringUpToMilliseconds ]
 ]
 
 { #category : #views }
