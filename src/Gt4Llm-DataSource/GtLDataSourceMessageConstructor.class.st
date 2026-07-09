@@ -55,18 +55,19 @@ GtLDataSourceMessageConstructor >> parse [
 	"Parse the supplied requestHistory in to the supplied chat.
 	The chat must be configured with a provider and model that matches the requestHistory (user responsibility at the moment)."
 
-	requestHistory doWithIndex: [ :requestResponse :index |
-		self parseRequestResponse: requestResponse at: index ].
+	requestHistory do: [ :requestResponse |
+		self setChatFormatDescriptionsFrom: requestResponse.
+		self parseRequestResponse: requestResponse ].
 	chat tools: chat messages last tools.
 	^ chat
 ]
 
 { #category : #'as yet unclassified' }
-GtLDataSourceMessageConstructor >> parseRequestResponse: requestResponse at: index [
-	| request |
+GtLDataSourceMessageConstructor >> parseRequestResponse: requestResponse [
+	| message |
 	
-	request := requestParser parseRequest: requestResponse at: index for: self.
-	responseParser parseResponse: requestResponse to: request for: self.
+	message := requestParser parseRequest: requestResponse for: self.
+	responseParser parseResponse: requestResponse message: message for: self.
 ]
 
 { #category : #accessing }
@@ -78,4 +79,16 @@ GtLDataSourceMessageConstructor >> requestHistory [
 GtLDataSourceMessageConstructor >> requestHistory: aGtLRequestHistory [
 
 	requestHistory := aGtLRequestHistory
+]
+
+{ #category : #'as yet unclassified' }
+GtLDataSourceMessageConstructor >> setChatFormatDescriptionsFrom: requestResponse [
+	| content jsonResponse responseEntity |
+
+	jsonResponse := requestResponse response asGtJson jsonObject.
+	responseEntity := GtLOpenAiResponsesResponseEntity rawData: jsonResponse.
+	content := responseEntity content.
+	content isDictionary ifTrue:
+		[ content at: 'Markdown'
+			ifPresent: [ chat markdownResponse ] ].
 ]
