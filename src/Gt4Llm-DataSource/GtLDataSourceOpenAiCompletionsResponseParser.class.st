@@ -18,7 +18,7 @@ GtLDataSourceOpenAiCompletionsResponseParser >> parseAssistantResponse: requestR
 ]
 
 { #category : #api }
-GtLDataSourceOpenAiCompletionsResponseParser >> parseResponse: requestResponse to: request for: aMessageConstructor [
+GtLDataSourceOpenAiCompletionsResponseParser >> parseResponse: requestResponse message: message for: aMessageConstructor [
 	| jsonResponse responseEntity response |
 
 	jsonResponse := requestResponse response asGtJson jsonObject.
@@ -26,10 +26,10 @@ GtLDataSourceOpenAiCompletionsResponseParser >> parseResponse: requestResponse t
 	response := (GtLOllamaResponse from: requestResponse result)
 		requestResponse: requestResponse.
 	response hasToolCalls ifTrue:
-		[ self parseToolResponse: requestResponse to: request response: response for: aMessageConstructor
+		[ self parseToolResponse: requestResponse to: message response: response for: aMessageConstructor
 		"See GtLModelProvider>>#performToolCallsIn:with:" ]
 	ifFalse:
-		[ self parseAssistantResponse: requestResponse to: request response: response for: aMessageConstructor ].
+		[ self parseAssistantResponse: requestResponse to: message response: response for: aMessageConstructor ].
 ]
 
 { #category : #private }

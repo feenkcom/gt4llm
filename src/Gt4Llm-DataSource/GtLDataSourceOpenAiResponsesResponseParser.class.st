@@ -6,8 +6,10 @@ Class {
 
 { #category : #private }
 GtLDataSourceOpenAiResponsesResponseParser >> parseAssistantResponse: requestResponse to: index response: response for: aMessageConstructor [
-	| newMessage chat assistantRawData |
-	
+	| newMessage chat assistantRawData jsonResponse responseEntity |
+
+	jsonResponse := requestResponse response asGtJson jsonObject.
+	responseEntity := GtLOpenAiResponsesResponseEntity rawData: jsonResponse.
 	chat := aMessageConstructor chat.
 	newMessage := chat provider assistantMessageClass new.
 	assistantRawData := (requestResponse result at: 'output') last.
@@ -19,18 +21,16 @@ GtLDataSourceOpenAiResponsesResponseParser >> parseAssistantResponse: requestRes
 ]
 
 { #category : #api }
-GtLDataSourceOpenAiResponsesResponseParser >> parseResponse: requestResponse to: index for: aMessageConstructor [
-	| jsonResponse responseEntity response |
+GtLDataSourceOpenAiResponsesResponseParser >> parseResponse: requestResponse message: message for: aMessageConstructor [
+	| response |
 
-	jsonResponse := requestResponse response asGtJson jsonObject.
-	responseEntity := GtLOpenAiResponsesResponseEntity rawData: jsonResponse.
 	response := (GtLOpenAIResponse from: requestResponse result)
 		requestResponse: requestResponse.
 	response hasToolCalls ifTrue:
-		[ self parseToolResponse: requestResponse to: index response: response for: aMessageConstructor
+		[ self parseToolResponse: requestResponse to: message response: response for: aMessageConstructor
 		"See GtLModelProvider>>#performToolCallsIn:with:" ]
 	ifFalse:
-		[ self parseAssistantResponse: requestResponse to: index response: response for: aMessageConstructor ].
+		[ self parseAssistantResponse: requestResponse to: message response: response for: aMessageConstructor ].
 ]
 
 { #category : #private }

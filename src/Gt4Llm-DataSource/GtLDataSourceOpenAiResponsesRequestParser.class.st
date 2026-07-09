@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : #api }
-GtLDataSourceOpenAiResponsesRequestParser >> parseRequest: requestResponse at: index for: aMessageConstructor [
+GtLDataSourceOpenAiResponsesRequestParser >> parseRequest: requestResponse for: aMessageConstructor [
 
 	| jsonRequest request messagesEntity role message chat |
 
@@ -18,7 +18,7 @@ GtLDataSourceOpenAiResponsesRequestParser >> parseRequest: requestResponse at: i
 	messagesEntity hasRole ifTrue:
 	[ role := messagesEntity role.
 	role = 'user' ifTrue:
-		[ message := self parseUserRequest: requestResponse at: index messagesEntity: messagesEntity for: aMessageConstructor ].
+		[ message := self parseUserRequest: requestResponse messagesEntity: messagesEntity for: aMessageConstructor ].
 	role = 'tool' ifTrue: [ ^ nil ].
 	message ifNil:
 		[ self error: 'Unknown role: ', role asString ].
@@ -26,10 +26,11 @@ GtLDataSourceOpenAiResponsesRequestParser >> parseRequest: requestResponse at: i
 	request tools ifNotNil: [ :toolsEntity |
 		aMessageConstructor addToolsFrom: toolsEntity to: message ].
 ].
+	^ message
 ]
 
 { #category : #private }
-GtLDataSourceOpenAiResponsesRequestParser >> parseUserRequest: requestResponse at: index messagesEntity: messagesEntity for: aMessageConstructor [
+GtLDataSourceOpenAiResponsesRequestParser >> parseUserRequest: requestResponse messagesEntity: messagesEntity for: aMessageConstructor [
 	| contentEntity type message chat |
 	
 	chat := aMessageConstructor chat.
@@ -37,7 +38,7 @@ GtLDataSourceOpenAiResponsesRequestParser >> parseUserRequest: requestResponse a
 	type := contentEntity type.
 	type = 'input_text' ifFalse: [ self error: 'Unknown type: ', type asString ].
 	message := chat provider userMessageClass new 
-			string: contentEntity text;
+			addInputModel: contentEntity textModel;
 			requestResponse: requestResponse.
 	chat addUserMessage: message.
 	^ message

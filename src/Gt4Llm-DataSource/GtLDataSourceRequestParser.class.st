@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : #api }
-GtLDataSourceRequestParser >> parseRequest: requestResponse at: index for: aMessageConstructor [
+GtLDataSourceRequestParser >> parseRequest: requestResponse for: aMessageConstructor [
 
-	self subclassResponsibility
+	^ self subclassResponsibility
 ]

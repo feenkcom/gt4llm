@@ -120,6 +120,13 @@ GtLResponseCompositeFormat >> gtViewSchemaDetailsFor: aView [
 ]
 
 { #category : #testing }
+GtLResponseCompositeFormat >> hasFormatNamed: aString [
+
+	^ schemaDescriptions anySatisfy: [ :schema |
+		schema name = aString ]
+]
+
+{ #category : #testing }
 GtLResponseCompositeFormat >> hasSchemaDescriptors [
 	^ schemaDescriptions notEmpty
 ]
