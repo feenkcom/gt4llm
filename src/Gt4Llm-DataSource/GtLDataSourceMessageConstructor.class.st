@@ -86,7 +86,7 @@ GtLDataSourceMessageConstructor >> setChatFormatDescriptionsFrom: requestRespons
 	| content jsonResponse responseEntity |
 
 	jsonResponse := requestResponse response asGtJson jsonObject.
-	responseEntity := GtLOpenAiResponsesResponseEntity rawData: jsonResponse.
+	responseEntity := GtLApiEntity responseEntityFor: jsonResponse.
 	content := responseEntity content.
 	content isDictionary ifTrue:
 		[ content at: 'Markdown'
