@@ -17,6 +17,28 @@ GtLMcpServerExamples >> createBadRequestWithMessage: aMessage for: aRequest [
 ]
 
 { #category : #examples }
+GtLMcpServerExamples >> jsonRpcNotificationDetection [
+	<gtExample>
+	| notification request |
+	notification := GtLMcpJsonRpc
+			on: {'jsonrpc' -> '2.0'.
+					'method' -> 'tools/list'} asDictionary.
+
+	self assert: notification id isNil.
+	self assert: notification isNotification.
+
+	request := GtLMcpJsonRpc
+			on: {'jsonrpc' -> '2.0'.
+					'id' -> 1.
+					'method' -> 'tools/list'} asDictionary.
+
+	self assert: request id equals: 1.
+	self assert: request isNotification not.
+
+	^ notification
+]
+
+{ #category : #examples }
 GtLMcpServerExamples >> serverRequestWithEntity: anObject [
 	^ (ZnRequest post: '/')
 		entity: (ZnEntity json: (STONJSON toString: anObject))
