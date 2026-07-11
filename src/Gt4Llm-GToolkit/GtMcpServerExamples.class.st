@@ -140,7 +140,7 @@ GtMcpServerExamples >> serverWithInitializedNotification [
 
 	self assert: response statusLine code equals: 202.
 	self assert: response headers contentLength equals: 0.
-	self assert: response entity isNil.
+	self assert: response entity contentLength equals: 0.
 
 	^ server
 ]
