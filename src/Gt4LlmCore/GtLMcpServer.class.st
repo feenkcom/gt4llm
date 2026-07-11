@@ -115,6 +115,7 @@ GtLMcpServer >> createAcceptedResponse [
 				code: 202;
 				reason: 'Accepted';
 				version: 'HTTP/1.1');
+		headers: (ZnHeaders new contentLength: 0);
 		entity: nil;
 		yourself
 ]

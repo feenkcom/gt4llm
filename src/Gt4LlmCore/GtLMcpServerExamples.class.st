@@ -173,6 +173,7 @@ GtLMcpServerExamples >> serverWithInitializedNotification [
 	response := server handleRequest: request.
 
 	self assert: response statusLine code equals: 202.
+	self assert: response headers contentLength equals: 0.
 	self assert: response entity isNil.
 
 	^ server
