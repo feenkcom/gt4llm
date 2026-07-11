@@ -127,6 +127,24 @@ GtMcpServerExamples >> serverWithTool [
 ]
 
 { #category : #'as yet unclassified' }
+GtMcpServerExamples >> serverWithInitializedNotification [
+	<gtExample>
+	| server request response |
+	server := self simpleServer.
+
+	request := self
+			serverRequestWithEntity: {'jsonrpc' -> '2.0'.
+					'method' -> 'notifications/initialized'.
+					'params' -> {} asDictionary} asDictionary.
+	response := server handleRequest: request.
+
+	self assert: response statusLine code equals: 202.
+	self assert: response entity isNil.
+
+	^ server
+]
+
+{ #category : #'as yet unclassified' }
 GtMcpServerExamples >> serverWithToolWithBadRequestAndResponse [
 	<gtExample>
 	| server request response |
