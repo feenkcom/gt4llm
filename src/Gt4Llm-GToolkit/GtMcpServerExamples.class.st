@@ -5,6 +5,28 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
+GtMcpServerExamples >> jsonRpcNotificationDetection [
+	<gtExample>
+	| notification request |
+	notification := GtMcpJsonRpc
+			on: {'jsonrpc' -> '2.0'.
+					'method' -> 'tools/list'} asDictionary.
+
+	self assert: notification id isNil.
+	self assert: notification isNotification.
+
+	request := GtMcpJsonRpc
+			on: {'jsonrpc' -> '2.0'.
+					'id' -> 1.
+					'method' -> 'tools/list'} asDictionary.
+
+	self assert: request id equals: 1.
+	self assert: request isNotification not.
+
+	^ notification
+]
+
+{ #category : #'as yet unclassified' }
 GtMcpServerExamples >> serverRequestWithEntity: anObject [
 	^ (ZnRequest post: '/')
 		entity: (ZnEntity json: (STONJSON toString: anObject))
