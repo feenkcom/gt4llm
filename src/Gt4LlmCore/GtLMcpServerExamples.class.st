@@ -34,6 +34,7 @@ GtLMcpServerExamples >> serverWithPrompt [
 
 	request := self
 			serverRequestWithEntity: {'jsonrpc' -> '2.0'.
+					'id' -> 1.
 					'method' -> 'prompts/list'} asDictionary.
 	response := server handleRequest: request.
 
@@ -44,6 +45,7 @@ GtLMcpServerExamples >> serverWithPrompt [
 
 	request := self
 			serverRequestWithEntity: {'jsonrpc' -> '2.0'.
+					'id' -> 2.
 					'method' -> 'prompts/get'.
 					'params' -> {'invalid' -> 1} asDictionary} asDictionary.
 	response := server handleRequest: request.
@@ -56,6 +58,7 @@ GtLMcpServerExamples >> serverWithPrompt [
 
 	request := self
 			serverRequestWithEntity: {'jsonrpc' -> '2.0'.
+					'id' -> 3.
 					'method' -> 'prompts/get'.
 					'params' -> {'name' -> 'notFound'} asDictionary} asDictionary.
 	response := server handleRequest: request.
@@ -69,6 +72,7 @@ GtLMcpServerExamples >> serverWithPrompt [
 
 	request := self
 			serverRequestWithEntity: {'jsonrpc' -> '2.0'.
+					'id' -> 4.
 					'method' -> 'prompts/get'.
 					'params'
 						-> {'name' -> 'Prompt'.
@@ -102,6 +106,7 @@ GtLMcpServerExamples >> serverWithResource [
 
 	request := self
 			serverRequestWithEntity: {'jsonrpc' -> '2.0'.
+					'id' -> 1.
 					'method' -> 'resources/list'} asDictionary.
 	response := server handleRequest: request.
 
@@ -111,6 +116,7 @@ GtLMcpServerExamples >> serverWithResource [
 
 	request := self
 			serverRequestWithEntity: {'jsonrpc' -> '2.0'.
+					'id' -> 2.
 					'method' -> 'resources/read'.
 					'params' -> {'invalid' -> 1} asDictionary} asDictionary.
 	response := server handleRequest: request.
@@ -123,6 +129,7 @@ GtLMcpServerExamples >> serverWithResource [
 
 	request := self
 			serverRequestWithEntity: {'jsonrpc' -> '2.0'.
+					'id' -> 3.
 					'method' -> 'resources/read'.
 					'params' -> {'uri' -> 'notFound'} asDictionary} asDictionary.
 	response := server handleRequest: request.
@@ -136,6 +143,7 @@ GtLMcpServerExamples >> serverWithResource [
 
 	request := self
 			serverRequestWithEntity: {'jsonrpc' -> '2.0'.
+					'id' -> 4.
 					'method' -> 'resources/read'.
 					'params'
 						-> {'uri' -> 'resource'}
@@ -187,6 +195,7 @@ GtLMcpServerExamples >> serverWithToolWithBadRequestAndResponse [
 
 	request := self
 			serverRequestWithEntity: {'jsonrpc' -> '2.0'.
+					'id' -> 1.
 					'method' -> 'tools/call'.
 					'params' -> {'invalid' -> 1} asDictionary} asDictionary.
 	response := server handleRequest: request.
@@ -198,6 +207,7 @@ GtLMcpServerExamples >> serverWithToolWithBadRequestAndResponse [
 
 	request := self
 			serverRequestWithEntity: {'jsonrpc' -> '2.0'.
+					'id' -> 2.
 					'method' -> 'tools/call'.
 					'params' -> {'name' -> 'notFound'} asDictionary} asDictionary.
 	response := server handleRequest: request.
@@ -218,6 +228,7 @@ GtLMcpServerExamples >> serverWithToolWithSuccessfulRequestAndResponse [
 
 	request := self
 			serverRequestWithEntity: {'jsonrpc' -> '2.0'.
+					'id' -> 1.
 					'method' -> 'tools/list'} asDictionary.
 	response := server handleRequest: request.
 	jsonResultTools := (STONJSON fromString: response entity contents)
@@ -227,6 +238,7 @@ GtLMcpServerExamples >> serverWithToolWithSuccessfulRequestAndResponse [
 
 	request := self
 			serverRequestWithEntity: {'jsonrpc' -> '2.0'.
+					'id' -> 2.
 					'method' -> 'tools/call'.
 					'params'
 						-> {'name' -> 'Tool'.
