@@ -71,15 +71,15 @@ Example JSON response:
 	self assert: message content size equals: 1.
 	content := message content first.
 	self assert: content class equals: GtLOpenAiContentEntity.
-	self assert: content text equals: '"Show me the result of calling the WebFetch tool with url https://example.com"'.
+	self assert: content text equals: 'Show me the result of calling the WebFetch tool with url https://example.com'.
 	self assert: content type equals: 'text'.
 	self assert: entity stream equals: false.
 	self assert: entity reasoningEffort equals: 'low'.
 	self assert: entity model equals: 'qwen3.5:9b'.
 	self assert: entity tools size equals: 1.
 	tool := entity tools first.
-	self assert: tool class equals: GtLOpenAiToolEntity.
+	self assert: tool class equals: GtLOllamaCompletionsToolCallEntity.
 	self assert: tool type equals: 'function'.
-	self assert: (tool function at: 'name') equals: 'WebFetch'.
+	self assert: tool function name equals: 'WebFetch'.
 	^ entity
 ]

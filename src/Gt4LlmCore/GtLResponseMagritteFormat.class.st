@@ -43,6 +43,11 @@ GtLResponseMagritteFormat >> computeSchemaWithAllRequired [
 ]
 
 { #category : #accessing }
+GtLResponseMagritteFormat >> formatDescription [
+	^ 'Magritte Class: ', modelClass name
+]
+
+{ #category : #accessing }
 GtLResponseMagritteFormat >> modelClass [
 	^ modelClass
 ]

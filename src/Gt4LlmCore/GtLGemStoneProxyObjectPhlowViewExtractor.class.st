@@ -5,19 +5,20 @@ Class {
 }
 
 { #category : #'view creation' }
-GtLGemStoneProxyObjectPhlowViewExtractor >> computePhlowView [ 
-	^ targetObject 
-			remoteViewWithSelector: viewSelector 
-			for: GtPhlowView empty 
-			inContext:  GtPhlowContext new 
-			from: targetObject getLocalProxyInspector
+GtLGemStoneProxyObjectPhlowViewExtractor >> computeLocalPhlowViewOnError: anErrorBlock [
+	^ ((GtLObjectPhlowViewExtractor forTargetObject: targetObject)
+			viewSelector: viewSelector)
+				phlowViewDomainObjectOnError: anErrorBlock
 ]
 
 { #category : #'view creation' }
 GtLGemStoneProxyObjectPhlowViewExtractor >> computePhlowViewDomainObjectOnError: anErrorBlock [
 	| phlowView targetMethod viewMethodClassName viewMethodSourceCode |
 	
-	phlowView := self computePhlowView .
+	(targetObject class canUnderstand: viewSelector asSymbol)
+		ifTrue: [ ^ self computeLocalPhlowViewOnError: anErrorBlock].
+		
+	phlowView := self computeRemotePhlowView.
 					
 	targetMethod := phlowView definingMethod asGtBareProxyObject.
 	viewMethodClassName := targetMethod inClass name.
@@ -27,4 +28,13 @@ GtLGemStoneProxyObjectPhlowViewExtractor >> computePhlowViewDomainObjectOnError:
 			phlowView: phlowView
 			viewMethodClassName: viewMethodClassName 
 			viewMethodSourceCode: viewMethodSourceCode 
+]
+
+{ #category : #'view creation' }
+GtLGemStoneProxyObjectPhlowViewExtractor >> computeRemotePhlowView [ 
+	^ targetObject 
+			remoteViewWithSelector: viewSelector 
+			for: GtPhlowView empty 
+			inContext:  GtPhlowContext new 
+			from: targetObject getLocalProxyInspector
 ]

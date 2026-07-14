@@ -52,9 +52,9 @@ GtLModelFactory >> ollama_completions [
 		reasoningValidator: self defaultOllamaCompletionsReasoningValidator.
 	model endpointAt: 'userMessage' put: chatEndpoint.
 	
-	"model
+	model
 		optionAt: 'dataSourceRequestParser' put: GtLDataSourceOpenAiCompletionsRequestParser new;
-		optionAt: 'dataSourceResponseParser' put: GtLDataSourceOpenAiCompletionsResponseParser new."
+		optionAt: 'dataSourceResponseParser' put: GtLDataSourceOpenAiCompletionsResponseParser new.
 	^ model.
 ]
 

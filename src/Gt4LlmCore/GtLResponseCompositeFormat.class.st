@@ -104,8 +104,9 @@ GtLResponseCompositeFormat >> gtViewSchemaDescriptionsFor: aView [
 		title: 'Schemas descriptions';
 		priority: 10;
 		items: [ schemaDescriptions ];
-		column: 'Value' text: [ :each | each name ] width: 200;
-		column: 'Type' text: [ :each | each type ] width: 200
+		column: 'Value' text: [ :each | each name ] width: 150;
+		column: 'Type' text: [ :each | each type ] width: 75;
+		column: 'Description' text: [ :each | each formatDescription ] width: 200
 ]
 
 { #category : #views }
@@ -116,6 +117,13 @@ GtLResponseCompositeFormat >> gtViewSchemaDetailsFor: aView [
 		priority: 25;
 		object: [ self asJsonSchemaDictionary ];
 		view: #gtTreeFor:context:
+]
+
+{ #category : #testing }
+GtLResponseCompositeFormat >> hasFormatNamed: aString [
+
+	^ schemaDescriptions anySatisfy: [ :schema |
+		schema name = aString ]
 ]
 
 { #category : #testing }

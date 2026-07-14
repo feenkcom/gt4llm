@@ -27,6 +27,14 @@ GtLToolCallSummarizerSpecification >> buildForMessages: aMessagesGroup [
 			yourself
 ]
 
+{ #category : #building }
+GtLToolCallSummarizerSpecification >> buildForToolCalls: aToolCallsGroup [
+	^ self summarizerClass new
+			summarizerSpecification: self;
+			initializeWithToolCalls: aToolCallsGroup;
+			yourself
+]
+
 { #category : #'gt-views' }
 GtLToolCallSummarizerSpecification >> gtDetailsFor: aView [
 	<gtView>
@@ -71,9 +79,19 @@ GtLToolCallSummarizerSpecification >> isActive [
 ]
 
 { #category : #testing }
-GtLToolCallSummarizerSpecification >> isApplicableToMessages: aMessagesGroup [
+GtLToolCallSummarizerSpecification >> isApplicableInTheCurrentSystem [
 	^ self isActive and: [
 			self class environment hasClassOrTraitNamed: self summarizerClassName ]
+]
+
+{ #category : #testing }
+GtLToolCallSummarizerSpecification >> isApplicableToMessages: aMessagesGroup [
+	^ self isApplicableInTheCurrentSystem
+]
+
+{ #category : #testing }
+GtLToolCallSummarizerSpecification >> isApplicableToToolCalls: aToolCallsGroup [
+	^ self isApplicableInTheCurrentSystem
 ]
 
 { #category : #testing }

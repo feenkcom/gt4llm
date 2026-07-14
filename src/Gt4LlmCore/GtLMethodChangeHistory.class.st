@@ -61,7 +61,7 @@ GtLMethodChangeHistory >> gtClassCoderViewFor: aView [
 	
 	^ aView forward
 		title: 'Current coder';
-		priority: 25;
+		priority: 15;
 		object: [ self methodReference ];
 		view: #gtClassCoderViewFor:
 ]

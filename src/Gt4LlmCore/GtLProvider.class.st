@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'chat',
 		'assistantMessageClass',
-		'executionState'
+		'executionState',
+		'userMessageClass'
 	],
 	#category : #'Gt4LlmCore-Core'
 }
@@ -183,4 +184,15 @@ GtLProvider >> status [
 { #category : #'api - execution' }
 GtLProvider >> stopOngoingMessageExecution [
 	self privateExecutionState: executionState stop
+]
+
+{ #category : #accessing }
+GtLProvider >> userMessageClass [
+	^ userMessageClass ifNil: 
+		[ userMessageClass := self defaultUserMessageClass ]
+]
+
+{ #category : #accessing }
+GtLProvider >> userMessageClass: anObject [
+	userMessageClass := anObject
 ]
