@@ -53,3 +53,9 @@ GtLString >> stringValue [
 GtLString >> stringValue: anObject [
 	stringValue := anObject
 ]
+
+{ #category : #accessing }
+GtLString >> text [
+
+	^ stringValue
+]

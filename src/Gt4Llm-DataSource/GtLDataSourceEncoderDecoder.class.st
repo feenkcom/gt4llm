@@ -31,13 +31,51 @@ GtLDataSourceEncoderDecoder class >> loadClientHistoryFromStream: aReadStream [
 ]
 
 { #category : #'encoding - decoding' }
-GtLDataSourceEncoderDecoder class >> saveClientHistory: aCollection to: aFileReference [
+GtLDataSourceEncoderDecoder class >> saveClientHistory: aGtLRequestHistory to: aFileReference [
 	| encoder |
 
 	encoder := self new.
 	aFileReference asFileReference writeStreamDo: [ :stream |
-		aCollection do: [ :aGtRequestResponse |
+		aGtLRequestHistory do: [ :aGtRequestResponse |
 			encoder encode: aGtRequestResponse on: stream ] ].
+]
+
+{ #category : #'encoding - decoding' }
+GtLDataSourceEncoderDecoder class >> saveClientHistory: aGtLRequestHistory toStream: aStream [
+	| encoder |
+
+	encoder := self new.
+	aGtLRequestHistory do: [ :aGtRequestResponse |
+			encoder encode: aGtRequestResponse on: aStream ].
+]
+
+{ #category : #'encoding - decoding' }
+GtLDataSourceEncoderDecoder class >> writeClientHistory: aGtLRequestHistory to: aClass selector: aSelector [
+	"Write the supplied history as a compressed data source to the specified selector"
+	| compressedBytes source |
+
+	compressedBytes := ByteArray streamContents: [ :baStream |
+		| utf8Stream encoder |
+		utf8Stream := ZnCharacterWriteStream 
+			on: (GZipWriteStream on: baStream)
+			encoding: 'utf8'.
+		encoder := self new.
+		aGtLRequestHistory do: [ :aGtRequestResponse |
+			encoder encode: aGtRequestResponse on: utf8Stream ].
+		utf8Stream flush; close. ].
+		
+	source := String streamContents: [ :sourceStream |
+		sourceStream
+			<< aSelector; cr;
+			tab; << '"Created from ';
+				<< thisContext method outerCode printString;
+				<< '"'; cr;
+			cr;
+			tab; << '^ '.
+		sourceStream nextPutAll: compressedBytes storeString. ].
+	aClass
+		compile: source
+		classified: #'private - data'.
 ]
 
 { #category : #accessing }

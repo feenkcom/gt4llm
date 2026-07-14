@@ -74,7 +74,7 @@ GtLMessagesGroup >> copyForNew [
 GtLMessagesGroup >> gToolCallsSummariesFor: aView [
 	<gtView>
 	^ aView columnedList
-		title: 'Tool call summarizers';
+		title: 'Tool summarizers';
 		priority: 30;
 		items: [ self toolCallsSummarizers ];
 		column: 'Summary' 
@@ -203,9 +203,8 @@ GtLMessagesGroup >> serialize [
 { #category : #summaries }
 GtLMessagesGroup >> toolCallsSummarizers [
 	^ (GtLToolCallSummarizersRegistry defaultSpecifications
-			select: [ :each | each isApplicableToMessages: self ])
-			collect: [ :each |
-				each buildForMessages: self ]
+			selectApplicableToMessages: self)
+			buildForMessages: self
 ]
 
 { #category : #enumerating }

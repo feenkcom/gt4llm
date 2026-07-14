@@ -25,7 +25,7 @@ GtLClassBasicChangeHistory >> gtClassCoderViewFor: aView [
 	self existsInImage ifFalse: [ ^ aView empty ].
 	^ aView explicit
 		title: 'Current class';
-		priority: 50;
+		priority: 15;
 		stencil: [ | container |
 			container := BrVerticalPane new
 					matchParent;

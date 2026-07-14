@@ -180,7 +180,7 @@ GtLCodeChangesToolCallsSummarizer >> gtClassChangeHistoriesFor: aView [
 	
 	^ aView forward 	
 		title: 'Changes by class';
-		priority: 15;
+		priority: 14;
 		object: [ self classChangeHistories ];
 		view: #gtViewHistoriesFor:;
 		actionButtonIcon: BrGlamorousVectorIcons inspect 
@@ -224,7 +224,7 @@ GtLCodeChangesToolCallsSummarizer >> gtMethodChangeHistoriesFor: aView [
 	<gtView>
 	^ aView forward 	
 			title: 'Changes by method';
-			priority: 10;
+			priority: 15;
 			object: [ self methodChangeHistories ];
 			view: #gtViewHistoriesFor:;
 		actionButtonIcon: BrGlamorousVectorIcons inspect 
@@ -240,7 +240,7 @@ GtLCodeChangesToolCallsSummarizer >> gtPackageChangeHistoriesFor: aView [
 	
 	^ aView forward 	
 		title: 'Changes by package';
-		priority: 16;
+		priority: 10;
 		object: [ self packageChangeHistories ];
 		view: #gtViewHistoriesFor:;
 		actionButtonIcon: BrGlamorousVectorIcons inspect 
@@ -262,8 +262,9 @@ GtLCodeChangesToolCallsSummarizer >> initialize [
 ]
 
 { #category : #initialization }
-GtLCodeChangesToolCallsSummarizer >> initializeWithMessages: aCollection [
-	super initializeWithMessages: aCollection.
+GtLCodeChangesToolCallsSummarizer >> initializeWithToolCalls: aToolCallGroup [
+	super initializeWithToolCalls: aToolCallGroup.
+	
 	relevantToolCalls := self toolCallsSelect: [ :each | 
 		self isCodeChangeToolCall: each ].
 	self rebuildCodeChanges

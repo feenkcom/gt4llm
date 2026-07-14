@@ -253,7 +253,7 @@ GtLReplyMessage >> finishedAt: aDateAndTime [
 GtLReplyMessage >> gToolCallsSummariesFor: aView [
 	<gtView>
 	^ aView columnedList
-		title: 'Tool call summarizers';
+		title: 'Tool summarizers';
 		priority: 30;
 		items: [ self toolCallsSummarizers ];
 		column: 'Summary' 

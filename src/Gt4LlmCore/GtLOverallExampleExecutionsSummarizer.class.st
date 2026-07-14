@@ -177,6 +177,10 @@ GtLOverallExampleExecutionsSummarizer >> gtRunsAndExamplesFor: aView [
 						each skippedCount isZero
 							ifTrue: [ Color transparent ]
 							ifFalse: [ BrGlamorousColors neutralBackgroundColor ] ] ];
+		actionButtonIcon: BrGlamorousVectorIcons inspect 
+			tooltip: 'Inspect summarizer'
+			action: [ :aButton |
+				aButton phlow spawnObject: self ];
 		send: [ :each | each result ]
 ]
 
@@ -189,8 +193,9 @@ GtLOverallExampleExecutionsSummarizer >> initialize [
 ]
 
 { #category : #initialization }
-GtLOverallExampleExecutionsSummarizer >> initializeWithMessages: aCollection [
-	super initializeWithMessages: aCollection.
+GtLOverallExampleExecutionsSummarizer >> initializeWithToolCalls: aToolCallGroup [
+	super initializeWithToolCalls: aToolCallGroup.
+	
 	relevantToolCalls := self toolCallsSelect: [ :each |
 		#(exampleMethodRun examplesInClassesRun) includes: each name asSymbol ].
 	self rebuildLatestStatuses

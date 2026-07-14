@@ -5,35 +5,36 @@ Class {
 }
 
 { #category : #private }
-GtLDataSourceOpenAiResponsesResponseParser >> parseAssistantResponse: requestResponse at: index response: response for: aMessageConstructor [
-	| newMessage chat |
-	
+GtLDataSourceOpenAiResponsesResponseParser >> parseAssistantResponse: requestResponse to: index response: response for: aMessageConstructor [
+	| newMessage chat assistantRawData jsonResponse responseEntity |
+
+	jsonResponse := requestResponse response asGtJson jsonObject.
+	responseEntity := GtLOpenAiResponsesResponseEntity rawData: jsonResponse.
 	chat := aMessageConstructor chat.
 	newMessage := chat provider assistantMessageClass new.
+	assistantRawData := (requestResponse result at: 'output') last.
 	newMessage
 		requestResponse: requestResponse;
-		rawData: requestResponse result.
+		rawData: assistantRawData.
 	chat addAssistantMessage: newMessage.
 	^ newMessage
 ]
 
 { #category : #api }
-GtLDataSourceOpenAiResponsesResponseParser >> parseResponse: requestResponse at: index for: aMessageConstructor [
-	| jsonResponse responseEntity response |
+GtLDataSourceOpenAiResponsesResponseParser >> parseResponse: requestResponse message: message for: aMessageConstructor [
+	| response |
 
-	jsonResponse := requestResponse response asGtJson jsonObject.
-	responseEntity := GtLOllamaCompletionsResponseEntity rawData: jsonResponse.
-	response := (GtLOllamaResponse from: requestResponse result)
+	response := (GtLOpenAIResponse from: requestResponse result)
 		requestResponse: requestResponse.
 	response hasToolCalls ifTrue:
-		[ self parseToolResponse: requestResponse at: index response: response for: aMessageConstructor
+		[ self parseToolResponse: requestResponse to: message response: response for: aMessageConstructor
 		"See GtLModelProvider>>#performToolCallsIn:with:" ]
 	ifFalse:
-		[ self parseAssistantResponse: requestResponse at: index response: response for: aMessageConstructor ].
+		[ self parseAssistantResponse: requestResponse to: message response: response for: aMessageConstructor ].
 ]
 
 { #category : #private }
-GtLDataSourceOpenAiResponsesResponseParser >> parseToolResponse: requestResponse at: index response: response for: aMessageConstructor [
+GtLDataSourceOpenAiResponsesResponseParser >> parseToolResponse: requestResponse to: index response: response for: aMessageConstructor [
 	| toolMessages chat |
 
 	chat := aMessageConstructor chat.

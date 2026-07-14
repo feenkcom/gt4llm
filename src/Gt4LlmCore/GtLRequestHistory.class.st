@@ -100,6 +100,7 @@ GtLRequestHistory >> simplifiedRequestCopyFrom: aZnRequest [
 	aHeaders at: 'Opeanai-Project' ifPresent:
 		[ aHeaders at: 'Opeanai-Project' put: 'proj_1' ].
 	aHeaders
+		removeKey: 'Authorization' ifAbsent: [ ];
 		removeKey: 'Set-Cookie' ifAbsent: [  ];
 		removeKey: 'Cf-Ray' ifAbsent: [  ];
 		removeKey: 'Alt-Svc' ifAbsent: [  ].

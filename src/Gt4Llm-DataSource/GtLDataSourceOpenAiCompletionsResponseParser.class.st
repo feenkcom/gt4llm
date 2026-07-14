@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : #private }
-GtLDataSourceOpenAiCompletionsResponseParser >> parseAssistantResponse: requestResponse at: index response: response for: aMessageConstructor [
+GtLDataSourceOpenAiCompletionsResponseParser >> parseAssistantResponse: requestResponse to: request response: response for: aMessageConstructor [
 	| newMessage chat |
 	
 	chat := aMessageConstructor chat.
@@ -18,7 +18,7 @@ GtLDataSourceOpenAiCompletionsResponseParser >> parseAssistantResponse: requestR
 ]
 
 { #category : #api }
-GtLDataSourceOpenAiCompletionsResponseParser >> parseResponse: requestResponse at: index for: aMessageConstructor [
+GtLDataSourceOpenAiCompletionsResponseParser >> parseResponse: requestResponse message: message for: aMessageConstructor [
 	| jsonResponse responseEntity response |
 
 	jsonResponse := requestResponse response asGtJson jsonObject.
@@ -26,14 +26,14 @@ GtLDataSourceOpenAiCompletionsResponseParser >> parseResponse: requestResponse a
 	response := (GtLOllamaResponse from: requestResponse result)
 		requestResponse: requestResponse.
 	response hasToolCalls ifTrue:
-		[ self parseToolResponse: requestResponse at: index response: response for: aMessageConstructor
+		[ self parseToolResponse: requestResponse to: message response: response for: aMessageConstructor
 		"See GtLModelProvider>>#performToolCallsIn:with:" ]
 	ifFalse:
-		[ self parseAssistantResponse: requestResponse at: index response: response for: aMessageConstructor ].
+		[ self parseAssistantResponse: requestResponse to: message response: response for: aMessageConstructor ].
 ]
 
 { #category : #private }
-GtLDataSourceOpenAiCompletionsResponseParser >> parseToolResponse: requestResponse at: index response: response for: aMessageConstructor [
+GtLDataSourceOpenAiCompletionsResponseParser >> parseToolResponse: requestResponse to: request response: response for: aMessageConstructor [
 	| toolMessages chat |
 
 	chat := aMessageConstructor chat.
@@ -42,9 +42,11 @@ GtLDataSourceOpenAiCompletionsResponseParser >> parseToolResponse: requestRespon
 				| toolMessage |
 				toolMessage := GtLToolMessage new 
 					toolCall: aToolCall;
+					tools: request tools;
 					requestResponse: (GtLToolPreviousRequestResponse new
 						previousRequestResponse: response requestResponse;
 						toolCallIndex: anIndex) ].
 	toolMessages do: [ :toolMessage |
 		chat addToolMessage: toolMessage ].
+	chat messages last tools: request tools.
 ]
