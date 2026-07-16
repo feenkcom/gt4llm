@@ -164,7 +164,7 @@ GtLlmMessageStyler >> styleAutoHiding: leftRange and: rightRange whenOutside: no
 	anAttribute := BrTextAdornmentDynamicAttribute new
 			beReplace;
 			stencil: [ :aTBrTextEditorTextualPiece :anEditorElement | #() ].
-	cursorAttribute := BrTextCursorAttribute new
+	cursorAttribute := BrTextCursorDynamicAttribute new
 			enterAction: [ :aTextEditor | 
 				| left right |
 				aTextEditor text
@@ -219,7 +219,7 @@ GtLlmMessageStyler >> styleAutoHiding: anInterval text: aSubText [
 
 	aSubText attribute: anAttribute.
 
-	cursorAttribute := BrTextCursorAttribute new
+	cursorAttribute := BrTextCursorDynamicAttribute new
 			enterAction: [ :aTextEditor | 
 			"we have a reference to the attribute instance. find its interval dynamically"
 			aTextEditor text
