@@ -88,6 +88,18 @@ GtLMcpServer >> beSynchronous [
 ]
 
 { #category : #public }
+GtLMcpServer >> createAcceptedResponse [
+	^ ZnResponse new
+		statusLine: (ZnStatusLine new
+				code: 202;
+				reason: 'Accepted';
+				version: 'HTTP/1.1');
+		headers: (ZnHeaders new contentLength: 0);
+		entity: (ZnByteArrayEntity bytes: ByteArray new);
+		yourself
+]
+
+{ #category : #public }
 GtLMcpServer >> createBadRequestResponseForError: anError fromRequest: request [
 	| errorMessage |
 	errorMessage := String streamContents: 
@@ -110,9 +122,11 @@ GtLMcpServer >> createBadRequestResponseForError: anError fromRequest: request [
 
 { #category : #public }
 GtLMcpServer >> createResponseForResult: aJsonRpcResult forRpc: aJsonRpc [
-	^((GtLMcpJsonRpc new)
-				id: aJsonRpc id;
-				result: aJsonRpcResult) asZnResponse.
+	aJsonRpc isNotification ifTrue: [ ^ self createAcceptedResponse ].
+
+	^ ((GtLMcpJsonRpc new)
+		id: aJsonRpc id;
+		result: aJsonRpcResult) asZnResponse
 ]
 
 { #category : #utils }
