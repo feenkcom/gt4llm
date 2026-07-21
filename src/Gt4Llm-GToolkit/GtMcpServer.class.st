@@ -30,6 +30,18 @@ GtMcpServer >> addTool: aTool [
 ]
 
 { #category : #'as yet unclassified' }
+GtMcpServer >> createAcceptedResponse [
+	^ ZnResponse new
+		statusLine: (ZnStatusLine new
+				code: 202;
+				reason: 'Accepted';
+				version: 'HTTP/1.1');
+		headers: (ZnHeaders new contentLength: 0);
+		entity: (ZnByteArrayEntity bytes: ByteArray new);
+		yourself
+]
+
+{ #category : #'as yet unclassified' }
 GtMcpServer >> dispatch: jsonRpc [
 	| camelCasedMethod |
 	camelCasedMethod := (jsonRpc method replaceAllRegex: '[^a-zA-Z]' with: ' ')
@@ -66,7 +78,11 @@ GtMcpServer >> gtHistoryFor: aView [
 		priority: 5;
 		items: [ history ];
 		column: 'Request' text: [ :each | each key entity contents ];
-		column: 'Response' text: [ :each | each value entity contents ]
+		column: 'Response'
+			text: [ :each |
+				each value entity
+					ifNil: [ '' ]
+					ifNotNil: [ :anEntity | anEntity contents ] ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -168,9 +184,11 @@ GtMcpServer >> handleRequest: request [
 			self isDebug ifTrue: [ anError signal ].
 			^ ZnResponse badRequest: request ].
 
-	response := (GtMcpJsonRpc new
-			id: jsonRpc id;
-			result: jsonRpcResult) asZnResponse.
+	response := jsonRpc isNotification
+			ifTrue: [ self createAcceptedResponse ]
+			ifFalse: [ (GtMcpJsonRpc new
+					id: jsonRpc id;
+					result: jsonRpcResult) asZnResponse ].
 
 	history add: request -> response.
 
