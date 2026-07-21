@@ -60,6 +60,11 @@ GtLMcpJsonRpc >> initialize [
 	version := '2.0'
 ]
 
+{ #category : #testing }
+GtLMcpJsonRpc >> isNotification [
+	^ self id isNil and: [ self method notNil ]
+]
+
 { #category : #accessing }
 GtLMcpJsonRpc >> method [
 	^ method
