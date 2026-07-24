@@ -33,6 +33,25 @@ GtMcpServerExamples >> serverRequestWithEntity: anObject [
 ]
 
 { #category : #'as yet unclassified' }
+GtMcpServerExamples >> serverWithInitializedNotification [
+	<gtExample>
+	| server request response |
+	server := self simpleServer.
+
+	request := self
+			serverRequestWithEntity: {'jsonrpc' -> '2.0'.
+					'method' -> 'notifications/initialized'.
+					'params' -> {} asDictionary} asDictionary.
+	response := server handleRequest: request.
+
+	self assert: response statusLine code equals: 202.
+	self assert: response headers contentLength equals: 0.
+	self assert: response entity contentLength equals: 0.
+
+	^ server
+]
+
+{ #category : #'as yet unclassified' }
 GtMcpServerExamples >> serverWithPrompt [
 	<gtExample>
 	| server request response |
@@ -153,25 +172,6 @@ GtMcpServerExamples >> serverWithTool [
 	server := self simpleServer.
 	server addTool: self simpleServerTool.
 	self assert: server tools size equals: 1.
-	^ server
-]
-
-{ #category : #'as yet unclassified' }
-GtMcpServerExamples >> serverWithInitializedNotification [
-	<gtExample>
-	| server request response |
-	server := self simpleServer.
-
-	request := self
-			serverRequestWithEntity: {'jsonrpc' -> '2.0'.
-					'method' -> 'notifications/initialized'.
-					'params' -> {} asDictionary} asDictionary.
-	response := server handleRequest: request.
-
-	self assert: response statusLine code equals: 202.
-	self assert: response headers contentLength equals: 0.
-	self assert: response entity contentLength equals: 0.
-
 	^ server
 ]
 
