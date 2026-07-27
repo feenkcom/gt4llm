@@ -63,14 +63,14 @@ GtLOpenAiResponsesEndpoint >> entityFromContext: aGtLContext [
 		} asDictionary.
 	self addInstructionsTo: entity from: chat.
 
-	chat format ifNotNil: 
-		[ | schema |
+	chat format ifNotNil: [ | schema |
 		schema := chat format asJsonSchemaDictionary.
-		(schema at: 'properties' ifAbsent: [ #() ]) ifNotEmpty:
-			[ entity
-				at: 'response_format'
-				put: {'type' -> 'json_schema'.
-							'json_schema' -> { 'schema' -> schema } asDictionary } asDictionary ] ].
+		entity
+			at: 'text'
+			put: {'format'
+				-> {'type' -> 'json_schema'.
+						'name' -> 'JsonSchema'.
+						'schema' -> schema} asDictionary} asDictionary ].
 
 	chat tools isEmptyOrNil
 		ifFalse: [ entity
