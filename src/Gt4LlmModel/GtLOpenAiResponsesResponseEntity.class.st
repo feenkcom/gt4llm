@@ -6,18 +6,21 @@ Class {
 
 { #category : #accessing }
 GtLOpenAiResponsesResponseEntity >> content [
+	"output is an Array, but only a single final message is currently handled"
+	| output contentArray contentDict text |
 
-	^ (self output asArray 
-		select: [ :each | each includesKey: 'content' ])
-		flatCollect: [ :each | 
-			(each at: 'content') collect: [ :item |
-			GtLOpenAiContentEntity new rawData: item ] ]
-]
-
-{ #category : #accessing }
-GtLOpenAiResponsesResponseEntity >> contentText [
-
-	^ '' join: (self content collect: [ :contentEntity | contentEntity text ])
+	output := self output.
+	self assert: output size = 1.
+	contentArray := output first 
+		at: 'content'
+		ifAbsent: [ ^ nil ].
+	self assert: contentArray size = 1.
+	contentDict := contentArray first.
+	self assert: (contentDict at: 'type') = 'output_text'.
+	text := contentDict at: 'text'.
+	^ [ (NeoJSONReader on: text readStream) next ]
+		on: Error
+		do: [ :ex | text ]
 ]
 
 { #category : #accessing }

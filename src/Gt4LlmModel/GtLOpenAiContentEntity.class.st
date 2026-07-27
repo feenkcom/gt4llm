@@ -25,19 +25,13 @@ GtLOpenAiContentEntity >> gtTextModelFor: aView [
 
 { #category : #accessing }
 GtLOpenAiContentEntity >> jsonObject [
-	| text |
-	
-	text := self rawData at: 'text'.
-	^ [ (NeoJSONReader on: text readStream) next ]
-		on: Error
-		do: [ :ex | text ]
+	^ (NeoJSONReader on: (self rawData at: 'text') readStream) next
 ]
 
 { #category : #accessing }
 GtLOpenAiContentEntity >> text [
 
-	^ self rawData at: 'text'.
-	"^ self textModel model text"
+	^ self textModel model text
 ]
 
 { #category : #accessing }
@@ -46,7 +40,6 @@ GtLOpenAiContentEntity >> textModel [
 	This needs a proper conversion process."
 	| jsonObject |
 
-	self error: 'this doesnt do models'.
 	jsonObject := self jsonObject.
 	jsonObject isString ifTrue:
 		[ ^ GtLWrappedObjectModel new

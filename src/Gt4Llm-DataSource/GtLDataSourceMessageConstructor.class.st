@@ -39,19 +39,6 @@ GtLDataSourceMessageConstructor >> chat: aGtLChat [
 	responseParser := self model optionAt: 'dataSourceResponseParser'.
 ]
 
-{ #category : #private }
-GtLDataSourceMessageConstructor >> jsonObjectFrom: aString [
-	| text |
-
-	text := aString isString
-		ifTrue: [ aString ]
-		ifFalse: [ aString text ].
-
-	^ [ (NeoJSONReader on: text readStream) next ]
-		on: Error
-		do: [ :ex | text ]
-]
-
 { #category : #'as yet unclassified' }
 GtLDataSourceMessageConstructor >> messages [
 
@@ -101,9 +88,7 @@ GtLDataSourceMessageConstructor >> setChatFormatDescriptionsFrom: requestRespons
 	jsonResponse := requestResponse response asGtJson jsonObject.
 	responseEntity := GtLApiEntity responseEntityFor: jsonResponse.
 	content := responseEntity content.
-	(content anySatisfy: [ :contentEntity | | jsonObject |
-		jsonObject := self jsonObjectFrom: contentEntity.
-		jsonObject isDictionary and:
-		[ jsonObject includesKey: 'Markdown' ] ])
-			ifTrue: [ chat markdownResponse ].
+	content isDictionary ifTrue:
+		[ content at: 'Markdown'
+			ifPresent: [ chat markdownResponse ] ].
 ]

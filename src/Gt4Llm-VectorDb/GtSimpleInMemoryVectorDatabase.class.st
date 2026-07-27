@@ -66,13 +66,9 @@ GtSimpleInMemoryVectorDatabase >> embeddings [
 
 { #category : #initialization }
 GtSimpleInMemoryVectorDatabase >> initialize [
-	| provider |
-
 	super initialize.
-	provider := GtLOllamaProvider new
-		generate;
-		modelName: self class defaultEmbeddingModelName.
-	model := provider model.
+	model := GtLModelFactory new
+			ollama_generate: self class defaultEmbeddingModelName.
 	distanceMetric := self class defaultDistanceMetric.
 	embeddings := OrderedCollection new
 ]

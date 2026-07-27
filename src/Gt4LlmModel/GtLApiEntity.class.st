@@ -24,8 +24,6 @@ GtLApiEntity class >> responseEntityClassFor: aJsonDictionary [
 		[ ^ GtLOllamaCompletionsResponseEntity ].
 	(aJsonDictionary includesKey: 'output') ifTrue:
 		[ ^ GtLOpenAiResponsesResponseEntity ].
-	(aJsonDictionary includesKey: 'response') ifTrue:
-		[ ^ GtLOllamaGenerateResponseEntity ].
 	self error: 'Unrecognised response entity: ', aJsonDictionary keys asArray storeString.
 ]
 
@@ -42,12 +40,6 @@ GtLApiEntity >> acceptVisitor: aVisitor [
 
 	^ aVisitor perform: ('visit', self class name asString, ':') asSymbol
 		withArguments: { self }
-]
-
-{ #category : #accessing }
-GtLApiEntity >> contentText [
-
-	^ self subclassResponsibility
 ]
 
 { #category : #views }

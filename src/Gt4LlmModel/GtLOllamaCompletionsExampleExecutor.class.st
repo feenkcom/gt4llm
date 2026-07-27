@@ -21,12 +21,8 @@ GtLOllamaCompletionsExampleExecutor >> assertFirstResponseContent: chat [
 
 { #category : #api }
 GtLOllamaCompletionsExampleExecutor >> ollamaCompletionsModel: aString responses: aSelector in: exampleObject [
-	| provider |
-	
-	provider := GtLOllamaProvider new 
-		completions;
-		modelName: aString.
-	model := provider model.
+
+	model := GtLModelFactory new ollama_completions: aString.
 	self configureModelWithResponses: aSelector in: exampleObject.
 	^ self newChatFromModel.
 ]

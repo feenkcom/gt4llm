@@ -27,18 +27,8 @@ GtLOpenAiResponsesEndpoint >> assistantContentTextFrom: aGtLModelAssistantMessag
 { #category : #'as yet unclassified' }
 GtLOpenAiResponsesEndpoint >> assistantMessageAccessor [
 
-	^ GtLOpenAiResponsesAssistantMessageAccessor new
-]
-
-{ #category : #api }
-GtLOpenAiResponsesEndpoint >> createCompactionMessageForChat: aChat [
-	| message |
-	message := aChat createUserMessage.
-	message
-		configureWithCompactionExecution;
-		addResponseFormatForMagritte: GtLChatCompactedData named: 'Compaction';
-		markdown: 'You are performing a CONTEXT CHECKPOINT COMPACTION. Create a handoff summary for another LLM that will resume the task.'.
-	^ message
+	self notYetImplemented.
+	^ GtLOllamaCompletionsAssistantMessageAccessor new
 ]
 
 { #category : #'private - accessing' }
@@ -63,21 +53,19 @@ GtLOpenAiResponsesEndpoint >> entityFromContext: aGtLContext [
 		} asDictionary.
 	self addInstructionsTo: entity from: chat.
 
-	chat format ifNotNil: [ | schema |
+	chat format ifNotNil: 
+		[ | schema |
 		schema := chat format asJsonSchemaDictionary.
-		entity
-			at: 'text'
-			put: {'format'
-				-> {'type' -> 'json_schema'.
-						'name' -> 'JsonSchema'.
-						'schema' -> schema} asDictionary} asDictionary ].
+		(schema at: 'properties' ifAbsent: [ #() ]) ifNotEmpty:
+			[ entity
+				at: 'response_format'
+				put: {'type' -> 'json_schema'.
+							'json_schema' -> { 'schema' -> schema } asDictionary } asDictionary ] ].
 
 	chat tools isEmptyOrNil
 		ifFalse: [ entity
 				at: 'tools'
-				put: (chat tools 
-					collect: [ :aTool | self toolEntityFrom: aTool ]
-					as: Array) ].
+				put: (chat tools collect: [ :aTool | self toolEntityFrom: aTool ]) ].
 
 	^ entity
 ]
@@ -91,13 +79,15 @@ GtLOpenAiResponsesEndpoint >> finishedToolCallResponseFor: aToolCall [
 		'call_id' -> aToolCall id.
 		'name' -> aToolCall name.
 		'arguments' -> aToolCall rawArgumentsJsonString.
+		'content' -> 'function_call details'.
+		'role' -> 'tool'.
 		} asDictionary
 ]
 
 { #category : #'private - accessing' }
 GtLOpenAiResponsesEndpoint >> newMessageVisitor [
 
-	^ GtLOpenAiResponsesMessageVisitor new
+	^ GtLOllamaCompletionsMessageVisitor new
 ]
 
 { #category : #accessing }
@@ -118,50 +108,35 @@ GtLOpenAiResponsesEndpoint >> reasoningValidator: anObject [
 
 { #category : #api }
 GtLOpenAiResponsesEndpoint >> resultFrom: requestResponse context: context [
-	"Deserialise the provided response"
+	"Deserialise the provided response.
+	This currently uses GtLOllamaResponse, which is also used by the Generate endpoint.
+	Since they have different response formats this doesn't really make sense.  The parsing should be done here and a generic response object used, which can then be subclassed if different endpoints require specialisation."
 
-	^ (GtLModelResponse 
-		from: requestResponse result
-		model: context model)
-			client: context model client;
-			requestResponse: requestResponse
+	self notYetImplemented.
+	^ (GtLOllamaResponse from: requestResponse result)
+		client: context model client;
+		requestResponse: requestResponse
 ]
 
 { #category : #'private - accessing' }
 GtLOpenAiResponsesEndpoint >> serializeToolCall: aToolCall [
-	| output |
 
-	output := {
-		'text' -> aToolCall result  mainDataView serializeToLlmPrimiteData compositeJsonDataBlock serializedJsonString.
-		'type' -> 'input_text'.
-		} asDictionary.
-	^ {'type' -> 'function_call_output'.
-		'call_id' -> aToolCall id.
-		'output' -> { output } } asDictionary
-]
-
-{ #category : #'private - accessing' }
-GtLOpenAiResponsesEndpoint >> toolCallsIn: rawData [
-	<return: #Array of: #GtLFunctionToolCall>
-
-	^ (rawData at: 'output')
-		select: [ :aDict | (aDict at: 'type') = 'function_call' ]
-		thenCollect: [ :aDict | 
-			GtLFunctionToolCall new
-					rawData: aDict;
-					id: (aDict at: 'call_id');
-					name: (aDict at: 'name');
-					rawArguments: (aDict at: 'arguments') ]
+	^ {'role' -> 'tool'.
+		'tool_call_id' -> aToolCall id.
+		'content' -> aToolCall result  mainDataView serializeToLlmPrimiteData compositeJsonDataBlock serializedJsonString } asDictionary
 ]
 
 { #category : #'private - accessing' }
 GtLOpenAiResponsesEndpoint >> toolEntityFrom: aTool [
 
 		^ {
-		'description' -> aTool description.
-		'type' -> aTool type.
-		'name' -> aTool name.
-		'parameters' -> aTool parametersJsonSchemaDictionary.
+		'type' -> 'function'.
+		'function' -> {
+			'name' -> aTool name.
+			'type' -> aTool type.
+			'description' -> aTool description.
+			'parameters' -> aTool parametersJsonSchemaDictionary
+			} asDictionary.
 		} asDictionary
 ]
 

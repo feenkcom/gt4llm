@@ -113,7 +113,6 @@ GtLChatLiveExamples >> chatWithSeveralToolCalls_stub_responses [
 
 { #category : #'examples - calls' }
 GtLChatLiveExamples >> chatWithTwoBasicMessages [
-	"NOTE: This example is currently hanging"
 	<gtExample>
 	<noTest>
 	| chat |

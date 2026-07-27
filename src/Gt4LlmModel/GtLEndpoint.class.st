@@ -4,12 +4,6 @@ Class {
 	#category : #'Gt4LlmModel-Model'
 }
 
-{ #category : #api }
-GtLEndpoint >> createCompactionMessageForChat: aChat [
-
-	^ self subclassResponsibility
-]
-
 { #category : #'private - accessing' }
 GtLEndpoint >> entityFromContext: aGtLContext [
 

@@ -100,13 +100,10 @@ GtLModelClient >> baseUrl: aZnUrl [
 
 { #category : #private }
 GtLModelClient >> checkForErrors: aResponse [
-	"Check the supplied response for errors.
-	The Ollama OpenAI Responses endpoint will include the error key but provide a nil value even on success."
-	
+
 	aResponse isDictionary ifFalse: [ ^ aResponse ].
 	aResponse at: 'error' ifPresent: [ :errorDetails |
-		errorDetails ifNotNil:
-			[ GtLOllamaError signal: errorDetails asString ] ].
+		GtLOllamaError signal: errorDetails ].
 	^ aResponse
 ]
 

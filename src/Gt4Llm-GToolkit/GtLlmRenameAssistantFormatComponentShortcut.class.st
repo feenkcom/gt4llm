@@ -4,12 +4,11 @@ Class {
 	#category : #'Gt4Llm-GToolkit-UI'
 }
 
-{ #category : #initialization }
+{ #category : #'as yet unclassified' }
 GtLlmRenameAssistantFormatComponentShortcut >> initialize [
 	super initialize.
 	
-	combination := BlKeyCombination primaryShiftR.
-	self coderShortcutId: GtCoderShortcutIds default llmRenameAssistantFormatComponentShortcutId
+	combination := BlKeyCombination primaryShiftR
 ]
 
 { #category : #'as yet unclassified' }

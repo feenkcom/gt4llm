@@ -3,8 +3,7 @@ Class {
 	#superclass : #GtLModelMessage,
 	#instVars : [
 		'rawData',
-		'responseModels',
-		'responseEntity'
+		'responseModels'
 	],
 	#category : #'Gt4LlmModel-Core'
 }
@@ -40,12 +39,8 @@ GtLModelAssistantMessage >> computeResponseModelsByFormat [
 	self formatDescriptions hasSchemaDescriptors ifFalse: [ ^ {} ].
 	responseText := self contentText.
 	^ [ self formatDescriptions readDomainObjectsFrom: responseText ]
-		on: Error
-		do: [ :ex | 
-			(ex class == NeoJSONParseError or:
-			[ ex messageText beginsWith: 'Schema not found' ])
-				ifTrue: [ {} ]
-				ifFalse: [ ex pass ] ]
+		on: NeoJSONParseError
+		do: [ :e | ^ {} ]
 ]
 
 { #category : #accessing }
@@ -58,7 +53,7 @@ GtLModelAssistantMessage >> content [
 { #category : #accessing }
 GtLModelAssistantMessage >> contentText [
 
-	^ self responseEntity contentText
+	^ self content
 ]
 
 { #category : #ui }
@@ -111,13 +106,6 @@ GtLModelAssistantMessage >> rawData: anObject [
 GtLModelAssistantMessage >> reasoning [
 
 	^ self accessor reasoning
-]
-
-{ #category : #accessing }
-GtLModelAssistantMessage >> responseEntity [
-
-	^ responseEntity ifNil:
-		[ responseEntity := GtLApiEntity responseEntityFor: self rawData ]
 ]
 
 { #category : #accessing }

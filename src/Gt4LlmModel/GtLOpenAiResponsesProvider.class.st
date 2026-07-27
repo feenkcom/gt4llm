@@ -4,23 +4,34 @@ Class {
 	#category : #'Gt4LlmModel-Provider'
 }
 
+{ #category : #testing }
+GtLOpenAiResponsesProvider class >> isConnectable [
+	| model provider |
+
+	model := GtLModelFactory new ollama.
+	provider := model provider.
+	^ [ provider availableModels isNotEmpty ]
+		on: Error
+		do: [ :ex | false ].
+]
+
 { #category : #accessing }
 GtLOpenAiResponsesProvider class >> providerName [
-	^ 'OpenAI'
+	^ 'Ollama'
 ]
 
 { #category : #accessing }
-GtLOpenAiResponsesProvider class >> withDefaultSetup [
+GtLOpenAiResponsesProvider >> defaultUserMessageClass [
 
-	^ self new loadApiKeyFromFile
+	^ GtLModelUserMessage
 ]
 
-{ #category : #initialization }
-GtLOpenAiResponsesProvider >> initialize [
+{ #category : #accessing }
+GtLOpenAiResponsesProvider >> modelName: aString [
+	| newModel |
 
-	super initialize.
-	model
-		provider: self;
-		client: GtLModelOpenAiClient new loadApiKeyFromFile.
-	self responses.
+	newModel := GtLModelFactory new ollama_completions: aString.
+	newModel provider: self.
+	chat := GtLChat new
+		provider: self.
 ]

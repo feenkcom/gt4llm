@@ -4,8 +4,7 @@ Class {
 	#instVars : [
 		'baseUrl',
 		'authentication',
-		'model',
-		'compactionStrategy'
+		'model'
 	],
 	#category : #'Gt4LlmModel-Model'
 }
@@ -20,13 +19,6 @@ GtLModelProvider class >> isConnectable [
 GtLModelProvider class >> withDefaultSetup [
 
 	^ self new
-]
-
-{ #category : #compaction }
-GtLModelProvider >> apiCompactionThreshold: anInteger [
-
-	compactionStrategy := GtLApiCompactionStrategy forProvider: self.
-	compactionStrategy thresholdTokensLimit: anInteger.
 ]
 
 { #category : #accessing }
@@ -84,76 +76,14 @@ GtLModelProvider >> clientGenerateModelResponse: anInputMessage messages: someMe
 		andInstructions: anInputMessage instructions instructionString
 ]
 
-{ #category : #accessing }
-GtLModelProvider >> compactionStrategy [
-	^ compactionStrategy
-]
-
-{ #category : #accessing }
-GtLModelProvider >> compactionStrategy: anObject [
-	compactionStrategy := anObject
-]
-
-{ #category : #endpoints }
-GtLModelProvider >> completions [
-	"Configure the receiver with an OpenAI completions endpoint"
-	| chatEndpoint |
-
-	chatEndpoint := GtLOllamaCompletionsEndpoint new
-		reasoningValidator: self defaultOllamaCompletionsReasoningValidator.
-	model endpointAt: 'userMessage' put: chatEndpoint.
-	
-	model
-		optionAt: 'dataSourceRequestParser' put: (GtLDataSourceOpenAiCompletionsRequestParser new
-			model: model);
-		optionAt: 'dataSourceResponseParser' put: (GtLDataSourceOpenAiCompletionsResponseParser new
-			model: model).
-]
-
-{ #category : #api }
-GtLModelProvider >> createAPICompactionMessage [
-	"Create the compaction message specified by the endpoint"
-
-	^ model userMessageEndpoint createCompactionMessageForChat: self chat
-]
-
 { #category : #api }
 GtLModelProvider >> createEmbeddings: aStringOrCollection [
 
 ]
 
-{ #category : #api }
-GtLModelProvider >> createPromptCompactionMessage [
-	"Create the compaction message specified by the endpoint"
-
-	^ model userMessageEndpoint createCompactionMessageForChat: self chat
-]
-
-{ #category : #accessing }
+{ #category : #'as yet unclassified' }
 GtLModelProvider >> defaultAssistantMessageClass [
 	^ model client assistantMessageClass
-]
-
-{ #category : #validators }
-GtLModelProvider >> defaultOllamaCompletionsReasoningValidator [
-
-	^ GtLModelReasoningValidator new
-		noneValues: #(#none);
-		reasoningValues: #(#low #medium #high).
-]
-
-{ #category : #validators }
-GtLModelProvider >> defaultOllamaGenerateReasoningValidator [
-
-	^ GtLModelReasoningValidator new
-		noneValues: #(false #none);
-		reasoningValues: #(true #low #medium #high).
-]
-
-{ #category : #accessing }
-GtLModelProvider >> defaultUserMessageClass [
-
-	^ GtLModelUserMessage
 ]
 
 { #category : #api }
@@ -172,12 +102,6 @@ GtLModelProvider >> deleteModel [
 	^ endpoint resultFrom: requestResponse context: context.
 ]
 
-{ #category : #'private - execution' }
-GtLModelProvider >> ensureContextCompactionIfNeeded [
-
-	compactionStrategy requestCompactionIfNeeded
-]
-
 { #category : #'as yet unclassified' }
 GtLModelProvider >> executeAsyncMessage: anInputMessage [
 	<return: #TAsyncPromise>
@@ -185,7 +109,6 @@ GtLModelProvider >> executeAsyncMessage: anInputMessage [
 	self privateExecutionState: self state scheduled.
 	aFuture := [
 		self privateExecutionState: self state running.
-		self ensureContextCompactionIfNeeded.
 		self processNextMessage: anInputMessage ] asAsyncFuture.
 	firstPromise := aFuture await: GtLOllamaSettings futureExecutionConfiguration.
 	errorHandlerPromise := firstPromise
@@ -216,25 +139,6 @@ GtLModelProvider >> executeNextMessage: anInputMessage [
 			aMessageExecutionStrategy executeMessage: anInputMessage with: self ].
 	anInputMessage requestResponse: result requestResponse.
 	^ result
-]
-
-{ #category : #endpoints }
-GtLModelProvider >> generate [
-	"Configure the receiver with an Ollama generate endpoint"
-	| chatEndpoint |
-
-	chatEndpoint := GtLOllamaGenerateEndpoint new
-			reasoningValidator: self defaultOllamaGenerateReasoningValidator.
-	model endpointAt: 'userMessage' put: chatEndpoint.
-	^ model.
-]
-
-{ #category : #'as yet unclassified' }
-GtLModelProvider >> initialize [
-
-	super initialize.
-	model := GtLLlmModel new.
-	compactionStrategy := GtLNoCompactionStrategy new.
 ]
 
 { #category : #initialization }
@@ -283,7 +187,7 @@ GtLModelProvider >> modelName [
 { #category : #accessing }
 GtLModelProvider >> modelName: aString [
 
-	model name: aString
+	^ self subclassResponsibility
 ]
 
 { #category : #'as yet unclassified' }
@@ -384,23 +288,6 @@ GtLModelProvider >> responseTypeForResult: aResult fromInputMessage: anInputMess
 	anInputMessage isCompactionRequest ifTrue: [
 		newMessage markWithCompactionResponse ].
 	^ newMessage
-]
-
-{ #category : #endpoints }
-GtLModelProvider >> responses [
-	"Configure the receiver with an OpenAI responses endpoint"
-	| chatEndpoint |
-
-	chatEndpoint := GtLOpenAiResponsesEndpoint new.
-	model endpointAt: 'userMessage' put: chatEndpoint.
-
-	model
-		optionAt: 'dataSourceRequestParser' put: (GtLDataSourceOpenAiResponsesRequestParser new
-			model: model);
-		optionAt: 'dataSourceResponseParser' put: (GtLDataSourceOpenAiResponsesResponseParser new
-			model: model).
-		
-	^ model
 ]
 
 { #category : #api }

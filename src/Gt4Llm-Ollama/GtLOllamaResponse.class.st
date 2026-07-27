@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLModelResponse,
+	#name : #GtLOllamaResponse,
 	#superclass : #Object,
 	#instVars : [
 		'rawData',
@@ -14,65 +14,57 @@ Class {
 		'promptEvalCount',
 		'promptEvalDuration',
 		'totalDuration',
-		'requestResponse',
-		'providerInformation',
-		'modelName'
+		'requestResponse'
 	],
 	#category : #'Gt4Llm-Ollama-Model'
 }
 
 { #category : #serialization }
-GtLModelResponse class >> from: aDictionary [
+GtLOllamaResponse class >> from: aDictionary [
 	(aDictionary isKindOf: self) ifTrue: [ ^ aDictionary ].
 	^ self new from: aDictionary; yourself
 ]
 
-{ #category : #serialization }
-GtLModelResponse class >> from: aDictionary model: aGtLLlmModel [
-
-	^ (self from: aDictionary) model: aGtLLlmModel
-]
-
 { #category : #accessing }
-GtLModelResponse >> client [
+GtLOllamaResponse >> client [
 	^ client
 ]
 
 { #category : #accessing }
-GtLModelResponse >> client: anObject [
+GtLOllamaResponse >> client: anObject [
 	client := anObject
 ]
 
 { #category : #accessing }
-GtLModelResponse >> content [
+GtLOllamaResponse >> content [
 	^ self message at: 'content' ifAbsent: [ '' ]
 ]
 
 { #category : #accessing }
-GtLModelResponse >> createdAt [
+GtLOllamaResponse >> createdAt [
 	^ createdAt
 ]
 
 { #category : #accessing }
-GtLModelResponse >> doneReason [
+GtLOllamaResponse >> doneReason [
 	^ doneReason
 ]
 
 { #category : #accessing }
-GtLModelResponse >> evalCount [
+GtLOllamaResponse >> evalCount [
 	^ evalCount
 ]
 
 { #category : #accessing }
-GtLModelResponse >> evalDuration [
+GtLOllamaResponse >> evalDuration [
 	^ evalDuration
 ]
 
 { #category : #initialization }
-GtLModelResponse >> from: aDictionary [
+GtLOllamaResponse >> from: aDictionary [
 	rawData := aDictionary.
 	message := aDictionary at: 'message' ifAbsent: [ Dictionary new ].
-	modelName := aDictionary at: 'model' ifAbsent: [ nil ].
+	model := aDictionary at: 'model' ifAbsent: [ nil ].
 	createdAt := aDictionary at: 'created_at' ifAbsent: [ nil ].
 	evalCount := aDictionary at: 'eval_count' ifAbsent: [ nil ].
 	evalDuration := aDictionary at: 'eval_duration' ifAbsent: [ nil ].
@@ -84,7 +76,7 @@ GtLModelResponse >> from: aDictionary [
 ]
 
 { #category : #ui }
-GtLModelResponse >> gtRawJsonFor: aView [
+GtLOllamaResponse >> gtRawJsonFor: aView [
 	<gtView>
 	
 	rawData ifNil: [ ^ aView empty ].
@@ -96,77 +88,80 @@ GtLModelResponse >> gtRawJsonFor: aView [
 ]
 
 { #category : #testing }
-GtLModelResponse >> hasToolCalls [
+GtLOllamaResponse >> hasToolCalls [
 	^ self toolCalls isNotEmpty
 ]
 
 { #category : #accessing }
-GtLModelResponse >> loadDuration [
+GtLOllamaResponse >> loadDuration [
 	^ loadDuration
 ]
 
 { #category : #accessing }
-GtLModelResponse >> message [
+GtLOllamaResponse >> message [
 	^ message
 ]
 
 { #category : #accessing }
-GtLModelResponse >> model [
+GtLOllamaResponse >> model [
 	^ model
 ]
 
 { #category : #accessing }
-GtLModelResponse >> model: anObject [
-	model := anObject
-]
-
-{ #category : #accessing }
-GtLModelResponse >> modelName [
-	^ modelName
-]
-
-{ #category : #accessing }
-GtLModelResponse >> promptEvalCount [
+GtLOllamaResponse >> promptEvalCount [
 	^ promptEvalCount
 ]
 
 { #category : #accessing }
-GtLModelResponse >> promptEvalDuration [
+GtLOllamaResponse >> promptEvalDuration [
 	^ promptEvalDuration
 ]
 
 { #category : #accessing }
-GtLModelResponse >> providerInformation [
-	^ providerInformation
-]
-
-{ #category : #accessing }
-GtLModelResponse >> providerInformation: anObject [
-	providerInformation := anObject
-]
-
-{ #category : #accessing }
-GtLModelResponse >> rawData [
+GtLOllamaResponse >> rawData [
 	^ rawData
 ]
 
 { #category : #accessing }
-GtLModelResponse >> requestResponse [
+GtLOllamaResponse >> requestResponse [
 	^ requestResponse
 ]
 
 { #category : #accessing }
-GtLModelResponse >> requestResponse: anObject [
+GtLOllamaResponse >> requestResponse: anObject [
 	requestResponse := anObject
 ]
 
 { #category : #accessing }
-GtLModelResponse >> toolCalls [
+GtLOllamaResponse >> toolCalls [
+	| toolCalls |
 
-	^ model userMessageEndpoint toolCallsIn: rawData.
+	rawData at: 'choices' ifPresent: [ :choices |
+		choices detect: [ :choice |
+			choice at: 'message'
+				ifPresent: [ :aMessage |
+					aMessage at: 'tool_calls'
+						ifPresent: [ :anArray | 
+							toolCalls := anArray.
+							true. ]
+						ifAbsent: [ false ] ]
+				ifAbsent: [ false ] ]
+			ifNone: [] ].
+	toolCalls ifNil: [ ^ #() ].
+	^ toolCalls collect: [ :aToolCall | | function rawArguments |
+			function := aToolCall at: 'function' 
+									ifAbsent: [ Dictionary new ].
+			rawArguments := NeoJSONReader fromString: (function at: 'arguments' ifAbsent: [ '{}' ]).
+			GtLFunctionToolCall new
+				id: (aToolCall at: 'id' ifAbsent: [ UUID new asString ]);
+				name: (function at: 'name' ifAbsent: [ '' ]);
+				rawArguments: rawArguments;
+				arguments: rawArguments;
+				yourself ]
+			as: Array.
 ]
 
 { #category : #accessing }
-GtLModelResponse >> totalDuration [
+GtLOllamaResponse >> totalDuration [
 	^ totalDuration
 ]

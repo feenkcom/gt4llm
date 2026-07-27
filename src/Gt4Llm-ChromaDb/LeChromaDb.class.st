@@ -155,11 +155,8 @@ LeChromaDb >> metadataFrom: key [
 { #category : #private }
 LeChromaDb >> model [
 
-	^ model ifNil: [ | provider |
-		provider := GtLOllamaProvider new
-			generate;
-			modelName: self class defaultEmbeddingModelName.
-		model := provider model ]
+	^ model ifNil: [ model := GtLModelFactory new
+			ollama_generate: self class defaultEmbeddingModelName ]
 ]
 
 { #category : #api }

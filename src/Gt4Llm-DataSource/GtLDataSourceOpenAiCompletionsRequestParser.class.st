@@ -35,7 +35,7 @@ GtLDataSourceOpenAiCompletionsRequestParser >> parseUserRequest: requestResponse
 	type := contentEntity type.
 	type = 'text' ifFalse: [ self error: 'Unknown type: ', type asString ].
 	message := chat provider userMessageClass new 
-			string: contentEntity jsonObject;
+			string: contentEntity text;
 			requestResponse: requestResponse.
 	chat addUserMessage: message.
 	^ message

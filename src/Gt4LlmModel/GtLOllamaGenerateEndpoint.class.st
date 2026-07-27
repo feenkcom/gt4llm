@@ -73,17 +73,9 @@ GtLOllamaGenerateEndpoint >> reasoningValidator: anObject [
 { #category : #accessing }
 GtLOllamaGenerateEndpoint >> resultFrom: requestResponse context: context [
 
-	^ (GtLModelResponse 
-		from: requestResponse result
-		model: context model)
-			client: context client;
-			requestResponse: requestResponse
-]
-
-{ #category : #'private - accessing' }
-GtLOllamaGenerateEndpoint >> toolCallsIn: rawData [
-
-	^ #()
+	^ (GtLOllamaResponse from: requestResponse result)
+		client: context client;
+		requestResponse: requestResponse
 ]
 
 { #category : #validation }
