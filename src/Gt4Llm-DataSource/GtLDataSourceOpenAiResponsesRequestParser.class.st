@@ -31,14 +31,15 @@ GtLDataSourceOpenAiResponsesRequestParser >> parseRequest: requestResponse for: 
 
 { #category : #private }
 GtLDataSourceOpenAiResponsesRequestParser >> parseUserRequest: requestResponse messagesEntity: messagesEntity for: aMessageConstructor [
-	| contentEntity type message chat |
+	| contentEntity type message chat inputModel |
 	
 	chat := aMessageConstructor chat.
 	contentEntity := messagesEntity content first.
 	type := contentEntity type.
 	type = 'input_text' ifFalse: [ self error: 'Unknown type: ', type asString ].
+	inputModel := self inputModelFrom: contentEntity text.
 	message := chat provider userMessageClass new 
-			addInputModel: contentEntity textModel;
+			addInputModel: inputModel;
 			requestResponse: requestResponse.
 	chat addUserMessage: message.
 	^ message

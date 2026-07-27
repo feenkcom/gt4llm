@@ -116,9 +116,11 @@ GtLOllamaCompletionsEndpoint >> resultFrom: requestResponse context: context [
 	This currently uses GtLOllamaResponse, which is also used by the Generate endpoint.
 	Since they have different response formats this doesn't really make sense.  The parsing should be done here and a generic response object used, which can then be subclassed if different endpoints require specialisation."
 
-	^ (GtLOllamaResponse from: requestResponse result)
-		client: context model client;
-		requestResponse: requestResponse
+	^ (GtLModelResponse 
+		from: requestResponse result
+		model: context model)
+			client: context model client;
+			requestResponse: requestResponse
 ]
 
 { #category : #'private - accessing' }
@@ -127,6 +129,35 @@ GtLOllamaCompletionsEndpoint >> serializeToolCall: aToolCall [
 	^ {'role' -> 'tool'.
 		'tool_call_id' -> aToolCall id.
 		'content' -> aToolCall result  mainDataView serializeToLlmPrimiteData compositeJsonDataBlock serializedJsonString } asDictionary
+]
+
+{ #category : #'private - accessing' }
+GtLOllamaCompletionsEndpoint >> toolCallsIn: rawData [
+	| toolCalls |
+
+	rawData at: 'choices' ifPresent: [ :choices |
+		choices detect: [ :choice |
+			choice at: 'message'
+				ifPresent: [ :aMessage |
+					aMessage at: 'tool_calls'
+						ifPresent: [ :anArray | 
+							toolCalls := anArray.
+							true. ]
+						ifAbsent: [ false ] ]
+				ifAbsent: [ false ] ]
+			ifNone: [] ].
+	toolCalls ifNil: [ ^ #() ].
+	^ toolCalls collect: [ :aToolCall | | function rawArguments |
+			function := aToolCall at: 'function' 
+									ifAbsent: [ Dictionary new ].
+			rawArguments := NeoJSONReader fromString: (function at: 'arguments' ifAbsent: [ '{}' ]).
+			GtLFunctionToolCall new
+				id: (aToolCall at: 'id' ifAbsent: [ UUID new asString ]);
+				name: (function at: 'name' ifAbsent: [ '' ]);
+				rawArguments: rawArguments;
+				arguments: rawArguments;
+				yourself ]
+			as: Array.
 ]
 
 { #category : #'private - accessing' }

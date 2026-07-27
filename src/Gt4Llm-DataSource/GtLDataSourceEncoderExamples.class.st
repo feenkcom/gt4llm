@@ -13,6 +13,7 @@ GtLDataSourceEncoderExamples >> basicJsonPlaceholderTool [
 
 	requestHistory := GtLDataSourceEncoderDecoder loadClientHistoryFromStream: self ollamaJsonl1 readStream.
 	chat := GtLChat new provider: (GtLOllamaProvider new
+		completions;
 		modelName: 'qwen3.5:9b').
 	constructor := GtLDataSourceMessageConstructor new
 		requestHistory: requestHistory;
@@ -92,6 +93,7 @@ GtLDataSourceEncoderExamples >> ollamaChat1 [
 
 	requestHistory := GtLDataSourceEncoderDecoder loadClientHistoryFromStream: self ollamaJsonl1 readStream.
 	chat := GtLChat new provider: (GtLOllamaProvider new
+		completions;
 		modelName: 'qwen3.5:9b').
 	constructor := GtLDataSourceMessageConstructor new
 		requestHistory: requestHistory;

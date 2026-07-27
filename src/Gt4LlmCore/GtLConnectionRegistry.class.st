@@ -265,7 +265,7 @@ GtLConnectionRegistry >> knownOllamaConnectors [
 
 	GtLOllamaProvider isConnectable ifFalse: [ ^ #() ].
 
-	provider := GtLModelFactory new ollama provider.
+	provider := GtLOllamaProvider new.
 	names := [ provider availableModels keys ]
 		on: ConnectionClosed
 		do: [ :ex | #() ].
