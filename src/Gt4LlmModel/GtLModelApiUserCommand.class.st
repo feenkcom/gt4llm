@@ -49,7 +49,7 @@ GtLModelApiUserCommand >> request [
 
 { #category : #accessing }
 GtLModelApiUserCommand >> serializationClass [
-	^ GtLOllamaResponse
+	^ GtLModelResponse
 ]
 
 { #category : #accessing }

@@ -89,8 +89,17 @@ GtLModelUserMessage >> inputModels [
 
 { #category : #accessing }
 GtLModelUserMessage >> instructions [
-
-	^ chat instructions
+	instructions
+		ifNil: [  "instructions addItem: self inputDescriptionSection" ]
+		ifNotNil: [ 
+			self inputModels notEmpty
+				ifTrue: [ instructions
+						sectionNamed: 'Input descriptions'
+						ifAbsent: [ :aSection | 
+							aSection addString: 'The inputs provided follow the descriptions below'.
+							self inputModels
+								do: [ :anInputModel | anInputModel addInstructionsTo: aSection ] ] ] ].
+	^ instructions
 ]
 
 { #category : #testing }
