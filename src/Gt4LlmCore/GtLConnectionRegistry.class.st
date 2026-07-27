@@ -257,7 +257,7 @@ GtLConnectionRegistry >> knownConnectors [
 			label: 'GPT 5.5';
 			model: 'gpt-5.5'.
 		},
-		GtLMiniMaxProvider knownConnectors,
+		GtLMiniMaxOpenAIProvider knownConnectors,
 		self knownOllamaConnectors
 ]
 
