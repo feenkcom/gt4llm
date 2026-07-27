@@ -19,8 +19,12 @@ GtLOllamaGenerateExampleExecutor >> assertFirstResponseContent: chat [
 
 { #category : #api }
 GtLOllamaGenerateExampleExecutor >> ollamaGenerateModel: aString responses: aSelector in: exampleObject [
+	| provider |
 
-	model := GtLModelFactory new ollama_generate: aString.
+	provider := GtLOllamaProvider new 
+		generate;
+		modelName: aString.
+	model := provider model.
 	self configureModelWithResponses: aSelector in: exampleObject.
 	^ self newChatFromModel.
 ]

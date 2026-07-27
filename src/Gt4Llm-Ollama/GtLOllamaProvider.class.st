@@ -55,25 +55,6 @@ GtLOllamaProvider class >> providerName [
 	^ 'Ollama'
 ]
 
-{ #category : #accessing }
-GtLOllamaProvider >> defaultUserMessageClass [
-
-	^ GtLModelUserMessage
-]
-
-{ #category : #initialization }
-GtLOllamaProvider >> endpoint: aSymbol [
-	"Replace the receiver's endpoint with the one specified."
-	| newModel |
-
-	(#(#generate #completions #responses) includes: aSymbol) ifFalse:
-		[ self error: 'Unrecognised endpoint: ', aSymbol asString ].
-	newModel := GtLModelFactory new 
-		perform: ('ollama_', aSymbol, ':') asSymbol
-		withArguments: { model name }.
-	newModel provider: self.
-]
-
 { #category : #views }
 GtLOllamaProvider >> gtAvailableModelsFor: aView [
 	<gtView>
@@ -85,11 +66,23 @@ GtLOllamaProvider >> gtAvailableModelsFor: aView [
 		send: [ :each | each value ]
 ]
 
-{ #category : #accessing }
-GtLOllamaProvider >> modelName: aString [
-	| newModel |
+{ #category : #initialization }
+GtLOllamaProvider >> initialize [
+	| client |
 
-	newModel := GtLModelFactory new ollama_completions: aString.
-	"Setting the provider in the model will update the receiver's model"
-	newModel provider: self.
+	super initialize.
+	client := GtLOllamaClient new.
+	model 
+		provider: self;
+		client: client.
+	model
+		endpointAt: 'providerVersion' put: GtLOllamaVersionEndpoint new;
+		endpointAt: 'modelDetails' put: GtLOllamaModelDetailsEndpoint new;
+		endpointAt: 'availableModels' put: GtLOllamaAvailableModelsEndpoint new;
+		endpointAt: 'runningModels' put: GtLOllamaPsEndpoint new;
+		endpointAt: 'deleteModel' put: GtLOllamaDeleteEndpoint new;
+		endpointAt: 'pullModel' put: GtLOllamaPullEndpoint new;
+		endpointAt: 'createEmbeddings' put: GtLOllamaCreateEmbeddingsEndpoint new;
+		endpointAt: 'createModel' put: GtLOllamaCreateModelEndpoint new.
+	self responses.
 ]
