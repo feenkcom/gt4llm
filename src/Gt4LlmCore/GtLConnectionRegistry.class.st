@@ -6,9 +6,6 @@ Class {
 		'defaultConnection',
 		'announcer'
 	],
-	#classVars : [
-		'GtLMiniMaxProvider'
-	],
 	#classInstVars : [
 		'uniqueInstance'
 	],
@@ -257,22 +254,7 @@ GtLConnectionRegistry >> knownConnectors [
 			label: 'GPT 5.5';
 			model: 'gpt-5.5'.
 		},
-		GtLMiniMaxOpenAIProvider knownConnectors,
 		self knownOllamaConnectors
-]
-
-{ #category : #accessing }
-GtLConnectionRegistry >> knownMiniMaxConnectors [
-	^ {
-		GtLConnection new
-			providerClass: GtLMiniMaxOpenAIProvider;
-		label: 'MiniMax-M3';
-			model: 'MiniMax-M3'.
-		GtLConnection new
-			providerClass: GtLMiniMaxOpenAIProvider;
-		label: 'MiniMax-M2.7';
-			model: 'MiniMax-M2.7'.
-		} 
 ]
 
 { #category : #'private - accessing' }
@@ -283,7 +265,7 @@ GtLConnectionRegistry >> knownOllamaConnectors [
 
 	GtLOllamaProvider isConnectable ifFalse: [ ^ #() ].
 
-	provider := GtLModelFactory new ollama provider.
+	provider := GtLOllamaProvider new.
 	names := [ provider availableModels keys ]
 		on: ConnectionClosed
 		do: [ :ex | #() ].

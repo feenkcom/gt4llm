@@ -14,19 +14,19 @@ GtLLmStudioExamples >> lmstudioModelNamesResponse [
 GtLLmStudioExamples >> modelNames [
 	"Answer the provider version of the running system"
 	<gtExample>
-	| model executor expectedResponses modelNames |
+	| provider executor expectedResponses modelNames |
 
 	executor := GtLModelExamplesExecutor new.
-	model := GtLModelFactory new lmstudio.
+	provider := GtLLmStudioProvider new.
 	executor isLive ifFalse:
 		[ expectedResponses := self lmstudioModelNamesResponse
 			collect: [ :response |
 				(ZnResponse readFrom: response readStream) ]
 			as: OrderedCollection.
-		model client clientBuilder: (GtLOpenAIClientStubBuilder new
+		provider client clientBuilder: (GtLOpenAIClientStubBuilder new
 			responses: expectedResponses copy). ].
-	modelNames := model provider availableModels keys.
-	executor assertHistoryResponsesOK: model client history.
+	modelNames := provider availableModels keys.
+	executor assertHistoryResponsesOK: provider client history.
 	self assert: modelNames isNotEmpty
 		description: 'No models found'.
 	self assert: (modelNames allSatisfy: #isString).

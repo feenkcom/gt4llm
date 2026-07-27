@@ -23,8 +23,10 @@ GtLDataSourceOpenAiCompletionsResponseParser >> parseResponse: requestResponse m
 
 	jsonResponse := requestResponse response asGtJson jsonObject.
 	responseEntity := GtLOllamaCompletionsResponseEntity rawData: jsonResponse.
-	response := (GtLOllamaResponse from: requestResponse result)
-		requestResponse: requestResponse.
+	response := (GtLModelResponse 
+		from: requestResponse result
+		model: model)
+			requestResponse: requestResponse.
 	response hasToolCalls ifTrue:
 		[ self parseToolResponse: requestResponse to: message response: response for: aMessageConstructor
 		"See GtLModelProvider>>#performToolCallsIn:with:" ]
