@@ -32,21 +32,23 @@ GtLOllamaMigrationExamples class >> embeddingsSourceFrom: anArray selector: aSym
 GtLOllamaMigrationExamples >> deleteTinyllama [
 	"Delete tinyllama with Ollama"
 	<gtExample>
-	| executor model result expectedResponses |
+	| executor provider result expectedResponses |
 
 	executor := GtLModelExamplesExecutor new.
-	model := GtLModelFactory new ollama_generate: 'tinyllama'.
+	provider := GtLOllamaProvider new
+		generate;
+		modelName: 'tinyllama'.
 	executor isLive ifFalse:
 		[ expectedResponses := self deleteTinyllamaResponses
 			collect: [ :response |
 				(ZnResponse readFrom: response readStream) ]
 			as: OrderedCollection.
-		model client clientBuilder: (GtLOpenAIClientStubBuilder new
+		provider client clientBuilder: (GtLOpenAIClientStubBuilder new
 			responses: expectedResponses copy). ].
-	result := model provider deleteModel.
-	executor assertHistoryResponsesOK: model client history.
+	result := provider deleteModel.
+	executor assertHistoryResponsesOK: provider client history.
 	self assert: result equals: 'success'.
-	^ model
+	^ provider
 ]
 
 { #category : #'private - response data' }
@@ -100,10 +102,11 @@ GtLOllamaMigrationExamples >> gemma4Image [
 GtLOllamaMigrationExamples >> gemma4Tools [
 	"Check that instructions are passed through to the Ollama Completions endpoint."
 	<gtExample>
-	| model chat message entity tools tool command function endpoint context |
+	| model chat message entity tools tool command function endpoint context provider |
 	
-	model := GtLModelFactory new ollama_completions.
-	chat := GtLChat new provider: model provider.
+	provider := GtLOllamaProvider new completions.
+	model := provider model.
+	chat := GtLChat new provider: provider.
 	chat tools: (GtLTools withAll: { GtLMagritteToolForMethodSource new. }).
 	message := GtLModelUserMessage new chat: chat.
 	message string: 'message'.
@@ -151,9 +154,12 @@ GtLOllamaMigrationExamples >> llama3Chat [
 GtLOllamaMigrationExamples >> llama3ChatInstructions [
 	"Check that instructions are passed through to the Ollama Generate endpoint."
 	<gtExample>
-	| model chat message entity endpoint context|
+	| provider model chat message entity endpoint context|
 	
-	model := GtLModelFactory new ollama_llama3_2.
+	provider := GtLOllamaProvider new 
+		generate;
+		modelName: 'llama3.2'.
+	model := provider model.
 	chat := GtLChat new provider: model provider.
 	chat instruction: 'the instructions' titled: 'heading'.
 	message := GtLModelUserMessage new chat: chat.
@@ -181,9 +187,12 @@ GtLOllamaMigrationExamples >> llama3ChatResponse [
 GtLOllamaMigrationExamples >> llama3PageInstructions [
 	"Answer model and chat for a simple question for Llama 3.2."
 	<gtExample>
-	| model chat message entity endpoint context |
+	| provider model chat message entity endpoint context |
 	
-	model := GtLModelFactory new ollama_llama3_2.
+	provider := GtLOllamaProvider new
+		generate;
+		modelName: 'llama3.2'.
+	model := provider model.
 	chat := GtLChat new provider: model provider.
 	chat gtPageExplanation: 'Examples by example'.
 	message := GtLModelUserMessage new chat: chat.
@@ -204,10 +213,13 @@ GtLOllamaMigrationExamples >> llama3PageInstructions [
 GtLOllamaMigrationExamples >> modelDetails [
 	"Answer the model details of the running system."
 	<gtExample>
-	| executor model modelDetails details expectedResponses |
+	| executor provider model modelDetails details expectedResponses |
 
 	executor := GtLModelExamplesExecutor new.
-	model := GtLModelFactory new ollama_llama3_2.
+	provider := GtLOllamaProvider new
+		generate;
+		modelName: 'llama3.2'.
+	model := provider model.
 	executor isLive ifFalse:
 		[ expectedResponses := self ollamaLlama32ModelDetailsResponse
 			collect: [ :response |
@@ -215,7 +227,7 @@ GtLOllamaMigrationExamples >> modelDetails [
 			as: OrderedCollection.
 		model client clientBuilder: (GtLOpenAIClientStubBuilder new
 			responses: expectedResponses copy). ].
-	modelDetails := model provider modelDetails.
+	modelDetails := provider modelDetails.
 	executor assertHistoryResponsesOK: model client history.
 	details := modelDetails at: 'details'
 		ifPresent: [ :dict | dict ]
@@ -228,10 +240,11 @@ GtLOllamaMigrationExamples >> modelDetails [
 GtLOllamaMigrationExamples >> modelNames [
 	"Answer the provider version of the running system"
 	<gtExample>
-	| model executor expectedResponses modelNames |
+	| provider model executor expectedResponses modelNames |
 
 	executor := GtLModelExamplesExecutor new.
-	model := GtLModelFactory new ollama.
+	provider := GtLOllamaProvider new.
+	model := provider model.
 	executor isLive ifFalse:
 		[ expectedResponses := self ollamaModelNamesResponse
 			collect: [ :response |
@@ -251,10 +264,11 @@ GtLOllamaMigrationExamples >> modelNames [
 GtLOllamaMigrationExamples >> ollamaCompletionsChatInstructions [
 	"Check that instructions are passed through to the Ollama Completions endpoint."
 	<gtExample>
-	| model chat message entity messages command endpoint context |
+	| provider model chat message entity messages command endpoint context |
 	
-	model := GtLModelFactory new ollama_completions.
-	chat := GtLChat new provider: model provider.
+	provider := GtLOllamaProvider new completions.
+	model := provider model.
+	chat := GtLChat new provider: provider.
 	chat instruction: 'the instructions' titled: 'heading'.
 	message := GtLModelUserMessage new chat: chat.
 	message string: 'message'.
@@ -284,10 +298,12 @@ GtLOllamaMigrationExamples >> ollamaCompletionsChatInstructions [
 GtLOllamaMigrationExamples >> ollamaCompletionsInvalidReasonsing [
 	"Confirm the model parameter validation rejects an invalid reasoning effort"
 	<gtExample>
-	| model chat |
+	| provider chat |
 	
-	model := GtLModelFactory new ollama_completions: 'gemma4:e4b'.
-	chat := GtLChat new provider: model provider.
+	provider := GtLOllamaProvider new
+		completions;
+		modelName: 'gemma4:e4b'.
+	chat := GtLChat new provider: provider.
 	self
 		should: [ chat reasoningEffort: #fail ]
 		raise: Error
@@ -311,10 +327,12 @@ GtLOllamaMigrationExamples >> ollamaGemma4ImageResponse [
 GtLOllamaMigrationExamples >> ollamaGenerateInvalidReasonsing [
 	"Confirm the model parameter validation rejects an invalid reasoning effort"
 	<gtExample>
-	| model chat |
+	| provider model chat |
 	
-	model := GtLModelFactory new ollama_llama3_2.
-	chat := GtLChat new provider: model provider.
+	provider := GtLOllamaProvider new
+		generate;
+		modelName: 'llama3.2'.
+	chat := GtLChat new provider: provider.
 	self
 		should: [ chat reasoningEffort: #fail ]
 		raise: Error
@@ -338,10 +356,13 @@ GtLOllamaMigrationExamples >> ollamaModelNamesResponse [
 GtLOllamaMigrationExamples >> ollamaNomicEmbeddings [
 	"Generate embeddings to match a query"
 	<gtExample>
-	| executor model command documents embeddings queryEmbeddings queryLlmEmbedding llmEmbeddings distances sorted chosen |
+	| executor provider model command documents embeddings queryEmbeddings queryLlmEmbedding llmEmbeddings distances sorted chosen |
 
 	executor := GtLModelExamplesExecutor new.
-	model := GtLModelFactory new ollama_generate: 'nomic-embed-text-v2-moe'.
+	provider := GtLOllamaProvider new
+		generate;
+		modelName: 'nomic-embed-text-v2-moe'.
+	model := provider model.
 	command := model newCreateEmbeddingsCommand.
 	documents := {
 	  'Our refund policy lasts 30 days.'.
@@ -418,19 +439,21 @@ GtLOllamaMigrationExamples >> providerVersion [
 	"Answer the provider version of the running system.
 	noTest as this assumes a local Ollama installation with llama 3.2 available."
 	<gtExample>
-	| model versionString executor expectedResponses |
+	| provider versionString executor expectedResponses |
 	
 	executor := GtLModelExamplesExecutor new.
-	model := GtLModelFactory new ollama_llama3_2.
+	provider := GtLOllamaProvider new 
+		generate;
+		modelName: 'llama3.2'.
 	executor isLive ifFalse:
 		[ expectedResponses := self ollamaProviderVersionResponse
 			collect: [ :response |
 				(ZnResponse readFrom: response readStream) ]
 			as: OrderedCollection.
-		model client clientBuilder: (GtLOpenAIClientStubBuilder new
+		provider client clientBuilder: (GtLOpenAIClientStubBuilder new
 			responses: expectedResponses copy). ].
-	versionString := model provider providerVersion.
-	executor assertHistoryResponsesOK: model client history.
+	versionString := provider providerVersion.
+	executor assertHistoryResponsesOK: provider client history.
 	self assert: versionString isString.
 	^ versionString
 ]
@@ -439,21 +462,23 @@ GtLOllamaMigrationExamples >> providerVersion [
 GtLOllamaMigrationExamples >> pullTinyllama [
 	"Pull tinyllama with Ollama"
 	<gtExample>
-	| executor model result expectedResponses |
+	| executor provider result expectedResponses |
 
 	executor := GtLModelExamplesExecutor new.
-	model := GtLModelFactory new ollama_generate: 'tinyllama'.
+	provider := GtLOllamaProvider new 
+		generate;
+		modelName: 'tinyllama'.
 	executor isLive ifFalse:
 		[ expectedResponses := self pullTinyllamaResponses
 			collect: [ :response |
 				(ZnResponse readFrom: response readStream) ]
 			as: OrderedCollection.
-		model client clientBuilder: (GtLOpenAIClientStubBuilder new
+		provider client clientBuilder: (GtLOpenAIClientStubBuilder new
 			responses: expectedResponses copy). ].
-	result := model provider pullModel.
-	executor assertHistoryResponsesOK: model client history.
+	result := provider pullModel.
+	executor assertHistoryResponsesOK: provider client history.
 	self assert: result equals: 'success'.
-	^ model
+	^ provider
 ]
 
 { #category : #'private - response data' }
@@ -510,18 +535,18 @@ GtLOllamaMigrationExamples >> qwen35ObjectInspection [
 GtLOllamaMigrationExamples >> runningModels [
 	"Answer the provider version of the running system"
 	<gtExample>
-	| model executor expectedResponses runningModels |
+	| provider executor expectedResponses runningModels |
 	
 	executor := GtLModelExamplesExecutor new.
-	model := GtLModelFactory new ollama.
+	provider := GtLOllamaProvider new.
 	executor isLive ifFalse:
 		[ expectedResponses := self ollamaRunningModelsResponse
 			collect: [ :response |
 				(ZnResponse readFrom: response readStream) ]
 			as: OrderedCollection.
-		model client clientBuilder: (GtLOpenAIClientStubBuilder new
+		provider client clientBuilder: (GtLOpenAIClientStubBuilder new
 			responses: expectedResponses copy). ].
-	runningModels := model provider runningModels.
-	executor assertHistoryResponsesOK: model client history.
+	runningModels := provider runningModels.
+	executor assertHistoryResponsesOK: provider client history.
 	^ runningModels.
 ]
