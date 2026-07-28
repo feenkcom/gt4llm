@@ -26,6 +26,16 @@ GtLOllamaCompletionsMessageVisitor >> visitGtLModelAssistantMessage: anAssistant
 ]
 
 { #category : #visiting }
+GtLOllamaCompletionsMessageVisitor >> visitGtLModelCompactionMessage: anAssistantMessage [
+
+	^ { {
+		'type' -> 'text'.
+		'text' -> anAssistantMessage contentText 
+		} asDictionary.
+		}
+]
+
+{ #category : #visiting }
 GtLOllamaCompletionsMessageVisitor >> visitGtLModelUserMessage: aUserMessage [
 
 	^ aUserMessage computeContentBlockFromInputModels acceptVisitor: self
