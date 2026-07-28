@@ -31,7 +31,7 @@ GtLOpenAiResponsesEndpoint >> assistantMessageAccessor [
 ]
 
 { #category : #api }
-GtLOpenAiResponsesEndpoint >> createCompactionMessageForChat: aChat [
+GtLOpenAiResponsesEndpoint >> createPromptCompactionMessageForChat: aChat [
 	| message |
 	message := aChat createUserMessage.
 	message

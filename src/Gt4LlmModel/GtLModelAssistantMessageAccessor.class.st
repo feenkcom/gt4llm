@@ -18,6 +18,18 @@ GtLModelAssistantMessageAccessor >> assistantMessage: anObject [
 ]
 
 { #category : #accessing }
+GtLModelAssistantMessageAccessor >> content [
+
+	^ self subclassResponsibility
+]
+
+{ #category : #accessing }
+GtLModelAssistantMessageAccessor >> contentText [
+
+	^ self content
+]
+
+{ #category : #accessing }
 GtLModelAssistantMessageAccessor >> rawData [
 
 	^ assistantMessage rawData

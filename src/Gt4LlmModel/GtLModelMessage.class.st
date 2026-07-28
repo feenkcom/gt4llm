@@ -24,10 +24,22 @@ GtLModelMessage >> hasContent [
 	^ self subclassResponsibility
 ]
 
+{ #category : #initialization }
+GtLModelMessage >> initializeFromResult: aResult provider: aModelProvider [
+
+	self requestResponse: aResult requestResponse
+]
+
 { #category : #accessing }
 GtLModelMessage >> model [
 
 	^ chat model
+]
+
+{ #category : #accessing }
+GtLModelMessage >> reasoning [
+
+	^ nil
 ]
 
 { #category : #accessing }

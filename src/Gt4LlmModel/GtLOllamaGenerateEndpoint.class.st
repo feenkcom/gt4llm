@@ -15,7 +15,7 @@ GtLOllamaGenerateEndpoint >> assistantMessageAccessor [
 
 { #category : #'private - accessing' }
 GtLOllamaGenerateEndpoint >> entityFromContext: aGtLContext [
-	| chat model messages userMessage entity input |
+	| chat model messages userMessage entity |
 
 	chat := aGtLContext chat.
 	model := chat model.
@@ -24,18 +24,16 @@ GtLOllamaGenerateEndpoint >> entityFromContext: aGtLContext [
 	self assert: (messages items count: #isUserMessage) = 1
 		description: 'Only a single message is currently supported'.
 	userMessage := (messages select: #isUserMessage) first.
-	input := self newMessageVisitor chatMessage: userMessage.
 	entity := {
 		'model' -> aGtLContext model name.
 		'stream' -> false.
+		'prompt' -> userMessage contentText.
 		} asDictionary.
-	input first associations do:
-		[ :assoc | entity add: assoc ].
 	chat reasoningEffort ifNotNil: [ :effort |
 		entity at: 'think' put: effort ].
 	chat instructions ifNotNil: 
-		[ entity at: 'system' put: 
-			chat instructions instructionString ].
+		[ chat instructions instructionString ifNotEmpty: [ :instString |
+			entity at: 'system' put: instString ] ].
 	^ entity
 ]
 
