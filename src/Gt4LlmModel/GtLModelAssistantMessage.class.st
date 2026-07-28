@@ -97,6 +97,13 @@ GtLModelAssistantMessage >> hasContent [
 	^ rawData isNotNil
 ]
 
+{ #category : #initialization }
+GtLModelAssistantMessage >> initializeFromResult: aResult provider: aModelProvider [
+
+	super initializeFromResult: aResult provider: aModelProvider.
+	self rawData: aResult rawData.
+]
+
 { #category : #accessing }
 GtLModelAssistantMessage >> rawData [
 	^ rawData
