@@ -14,15 +14,18 @@ GtLOllamaCompletionsResponseEntity >> choices [
 
 { #category : #accessing }
 GtLOllamaCompletionsResponseEntity >> content [
-	"choices is an Array, but only a single final message is currently handled"
-	| choices text |
 
-	choices := self choices.
-	self assert: choices size = 1.
-	text := choices first message content.
-	^ [ (NeoJSONReader on: text readStream) next ]
+	^ self choices collect: [ :each |
+		each message content ].
+]
+
+{ #category : #accessing }
+GtLOllamaCompletionsResponseEntity >> contentText [
+
+	^ '' join: (self content collect: [ :text |
+	[ (NeoJSONReader on: text readStream) next ]
 		on: Error
-		do: [ :ex | text ]
+		do: [ :ex | text ] ])
 ]
 
 { #category : #accessing }

@@ -40,7 +40,7 @@ GtLOllamaAssistantMessage >> computeResponseModelsByFormat [
 	responseText := self contentText.
 	^ [ self formatDescriptions readDomainObjectsFrom: responseText ]
 		on: NeoJSONParseError
-		do: [ :e | ^ {} ]
+		do: [ :e | {} ]
 ]
 
 { #category : #accessing }
