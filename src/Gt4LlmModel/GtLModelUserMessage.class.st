@@ -6,7 +6,8 @@ Class {
 	#instVars : [
 		'inputModels',
 		'parameters',
-		'contentOneLineSummary'
+		'contentOneLineSummary',
+		'executionStrategy'
 	],
 	#category : #'Gt4LlmModel-Core'
 }
@@ -28,6 +29,13 @@ GtLModelUserMessage >> computeContentOneLineSummaryFromInputModels [
 				separatedBy: [ aStream space ] ]
 ]
 
+{ #category : #'api - execution' }
+GtLModelUserMessage >> configureWithCompactionExecution [
+	"Configure the receiver to use the compaction execution strategy."
+	
+	executionStrategy := GtLOpenAIMessageCompactionExecutionStrategy new
+]
+
 { #category : #accessing }
 GtLModelUserMessage >> contentText [
 	| visitorResult dataViews result |
@@ -40,6 +48,16 @@ GtLModelUserMessage >> contentText [
 	^ result first value.
 	"visitorResult := GtLDomainObjectVisitor new visitNodes: inputModels.
 	^ visitorResult first."
+]
+
+{ #category : #accessing }
+GtLModelUserMessage >> executionStrategy [
+	^ executionStrategy
+]
+
+{ #category : #accessing }
+GtLModelUserMessage >> executionStrategy: anObject [
+	executionStrategy := anObject
 ]
 
 { #category : #ui }
@@ -100,6 +118,12 @@ GtLModelUserMessage >> instructions [
 							self inputModels
 								do: [ :anInputModel | anInputModel addInstructionsTo: aSection ] ] ] ].
 	^ instructions
+]
+
+{ #category : #testing }
+GtLModelUserMessage >> isCompactionRequest [
+	^ formatDescriptions schemaDescriptions anySatisfy: [ :each |
+		each name = 'Compaction' ]
 ]
 
 { #category : #testing }

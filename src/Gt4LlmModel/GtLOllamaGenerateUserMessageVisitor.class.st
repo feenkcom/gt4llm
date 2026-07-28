@@ -31,6 +31,22 @@ GtLOllamaGenerateUserMessageVisitor >> visitGtLPrimitiveJsonBareDataBlock: aData
 ]
 
 { #category : #visiting }
+GtLOllamaGenerateUserMessageVisitor >> visitGtLPrimitiveJsonDataBlock: aDataBlock [
+	"This is a bit of a hack at the moment.
+	If the data block is just content, assume that the message is a simple string and just answer the content, otherwise answer the string serialisation."
+	| prompt |
+
+	prompt := aDataBlock jsonData 
+		at: 'content'
+		ifPresent: [ :string |
+			self assert: string isString.
+			string ]
+		ifAbsent:
+			[ NeoJSONWriter toStringPretty: aDataBlock jsonData ].
+	^ { 'prompt' -> prompt } asDictionary.
+]
+
+{ #category : #visiting }
 GtLOllamaGenerateUserMessageVisitor >> visitGtLPrimitiveMessageDataBlock: aDataBlock [
 
 	^ aDataBlock compositeJsonDataBlock acceptVisitor: self.
