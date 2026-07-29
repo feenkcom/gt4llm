@@ -36,33 +36,38 @@ GtLMcpServer class >> resetCurrent [
 	Current := nil
 ]
 
+{ #category : #accessing }
+GtLMcpServer >> addDefaultSummarizerSpecifications [
+	^ summarizersRegistry addDefaultSpecifications
+]
+
 { #category : #adding }
 GtLMcpServer >> addPrompt: aPrompt [
 	prompts add: aPrompt
 ]
 
-{ #category : #adding }
+{ #category : #'api - resources' }
 GtLMcpServer >> addResource: aResource [
 	resources add: aResource
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #adding }
 GtLMcpServer >> addSummarizerClass: aClass [
 	self addSummarizerSpecifications: {aClass asSpecification}
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #adding }
 GtLMcpServer >> addSummarizerClasses: aCollection [
 	self
 		addSummarizerSpecifications: (aCollection collect: [ :each | each asSpecification ])
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #adding }
 GtLMcpServer >> addSummarizerSpecification: aSpecification [
 	summarizersRegistry addSpecification: aSpecification
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #adding }
 GtLMcpServer >> addSummarizerSpecifications: aSpecification [
 	summarizersRegistry addSpecifications: aSpecification
 ]
@@ -445,7 +450,7 @@ GtLMcpServer >> initialize [
 	debug := false.
 	asynchronous := true.
 	tools := GtLTools new.
-	resources := GtLOpenAIResourceFilesGroup new.
+	resources := GtLMcpResources new.
 	prompts := GtLMessagesGroup new.
 	history := OrderedCollection new.
 	errors := OrderedCollection new.
@@ -472,6 +477,29 @@ GtLMcpServer >> isRunning [
 { #category : #accessing }
 GtLMcpServer >> objectStorage [
 	^objectStorage
+]
+
+{ #category : #'api - resources' }
+GtLMcpServer >> pageObjectResource: aLepiterPage [
+	| aPageUri aResource |
+	aPageUri := 'lepage://' , aLepiterPage database properties databaseName , ':'
+			, aLepiterPage title.
+
+	aResource := GtLMcpResource new
+			name: aLepiterPage title;
+			uri: aPageUri;
+			mimeType: ZnMimeType textPlain;
+			contentsBlock: [ GtLLepiterContentExporter new
+					page: aLepiterPage;
+					export ].
+
+	self addResource: aResource
+]
+
+{ #category : #'api - resources' }
+GtLMcpServer >> pageResource: aPageName [
+	self
+		pageObjectResource: (LeDatabasesRegistry defaultLogicalDatabase pageNamed: aPageName)
 ]
 
 { #category : #accessing }

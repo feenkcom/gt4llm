@@ -114,7 +114,7 @@ GtLModelProvider >> completions [
 GtLModelProvider >> createAPICompactionMessage [
 	"Create the compaction message specified by the endpoint"
 
-	^ model userMessageEndpoint createCompactionMessageForChat: self chat
+	^ model userMessageEndpoint createApiCompactionMessageForChat: self chat
 ]
 
 { #category : #api }
@@ -126,7 +126,7 @@ GtLModelProvider >> createEmbeddings: aStringOrCollection [
 GtLModelProvider >> createPromptCompactionMessage [
 	"Create the compaction message specified by the endpoint"
 
-	^ model userMessageEndpoint createCompactionMessageForChat: self chat
+	^ model userMessageEndpoint createPromptCompactionMessageForChat: self chat
 ]
 
 { #category : #accessing }
@@ -371,18 +371,28 @@ GtLModelProvider >> pullModel [
 
 { #category : #'private - accessing' }
 GtLModelProvider >> relevantChatMessages [
-	^ self chat messages
+	| relevantMessages |
+	relevantMessages := self chat messages
+			messagesSelect: [:each | each isAssistantRole and: [each hasCompactionResponse]].
+	^relevantMessages isEmpty
+		ifTrue: [self chat messages]
+		ifFalse: [
+			self chat messages 
+				messagesBeforeMatching: [:each | each isUserRole]
+				andAllWithAndAfter: relevantMessages last]
 ]
 
 { #category : #'as yet unclassified' }
 GtLModelProvider >> responseTypeForResult: aResult fromInputMessage: anInputMessage [
 	| newMessage |
-	newMessage := self assistantMessageClass new.
-	newMessage
-		requestResponse: aResult requestResponse;
-		rawData: aResult rawData.
-	anInputMessage isCompactionRequest ifTrue: [
-		newMessage markWithCompactionResponse ].
+	
+	newMessage := anInputMessage isCompactionRequest ifTrue: 
+		[ GtLModelCompactionMessage new ]
+	ifFalse:
+		[ self assistantMessageClass new ].
+
+	newMessage initializeFromResult: aResult provider: self.
+
 	^ newMessage
 ]
 

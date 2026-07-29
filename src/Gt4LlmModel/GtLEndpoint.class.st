@@ -5,9 +5,19 @@ Class {
 }
 
 { #category : #api }
-GtLEndpoint >> createCompactionMessageForChat: aChat [
+GtLEndpoint >> createApiCompactionMessageForChat: aChat [
 
 	^ self subclassResponsibility
+]
+
+{ #category : #api }
+GtLEndpoint >> createPromptCompactionMessageForChat: aChat [
+	| message |
+	message := aChat createUserMessage.
+	message
+		addResponseFormatForMagritte: GtLChatCompactedData named: 'Compaction';
+		markdown: 'You are performing a CONTEXT CHECKPOINT COMPACTION. Create a handoff summary for another LLM that will resume the task.'.
+	^ message
 ]
 
 { #category : #'private - accessing' }
