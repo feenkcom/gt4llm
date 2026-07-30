@@ -21,7 +21,7 @@ GtLMiniMaxOpenAIClient class >> apiKeyFile [
 { #category : #accessing }
 GtLMiniMaxOpenAIClient class >> apiKeyFile: aFile [
 	ApiKeyFile := aFile.
-	GtLOpenAIProvider notifyProviderConnectabilityChanged.
+	GtLMiniMaxOpenAIProvider notifyProviderConnectabilityChanged
 ]
 
 { #category : #accessing }

@@ -15,27 +15,26 @@ GtLMiniMaxOpenAIProvider class >> isConnectable [
 	^ GtLMiniMaxOpenAIClient apiKeyFile exists
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLMiniMaxOpenAIProvider class >> knownConnectors [
-
+	<gtConnection>
 	^ {
 		GtLConnection new
 			providerClass: self;
-		label: 'MiniMax-M3';
+			label: 'MiniMax-M3';
 			model: 'MiniMax-M3'.
 		GtLConnection new
 			providerClass: self;
-		label: 'MiniMax-M2.7';
+			label: 'MiniMax-M2.7';
 			model: 'MiniMax-M2.7'.
 		GtLConnection new
 			providerClass: self;
-		label: 'MiniMax-M2.5';
+			label: 'MiniMax-M2.5';
 			model: 'MiniMax-M2.5'.
-			GtLConnection new
+		GtLConnection new
 			providerClass: self;
-		label: 'MiniMax-M2.1';
-			model: 'MiniMax-M2.1'.
-		} 
+			label: 'MiniMax-M2.1';
+			model: 'MiniMax-M2.1' }
 ]
 
 { #category : #accessing }

@@ -46,11 +46,16 @@ GtLMiniMaxOpenAIClientExamples >> knownMiniMaxConnections [
 	<return: #OrderedCollection>
 	"Assert that the connection registry exposes the MiniMax M3 and M2.7
 	connectors, that they wire up to the MiniMax provider, and that the
-	model ids are spelled the way the live API expects."
-	| connections m3 m2_7 |
-	connections := GtLlmConnectionRegistry uniqueInstance connections
+	model ids are spelled the way the live API expects. Both
+	`GtLConnectionRegistry` and `GtLlmConnectionRegistry` now collect via the
+	`<gtConnection>` pragma, so each registry has the MiniMax entries it
+	asks for."
+	| registry connections m3 m2_7 |
+	registry := GtLConnectionRegistry default.
+	registry updateConnections.
+	connections := registry connections value
 		select: [ :each | each providerClass == GtLMiniMaxOpenAIProvider ].
-	self assert: connections size equals: 2.
+	self assert: connections size equals: 4.
 	m3 := connections detect: [ :each | each model = 'MiniMax-M3' ].
 	m2_7 := connections detect: [ :each | each model = 'MiniMax-M2.7' ].
 	self assert: m3 label equals: 'MiniMax-M3'.
