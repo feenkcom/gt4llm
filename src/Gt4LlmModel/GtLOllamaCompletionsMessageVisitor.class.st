@@ -8,7 +8,7 @@ Class {
 GtLOllamaCompletionsMessageVisitor >> chatMessage: aMessage [
 	| content |
 	
-	content := self visitNode: aMessage "computeContentBlockFromInputModels".
+	content := self visitNode: aMessage.
 	^ {
 		'role' -> aMessage role.
 		'content' -> content.
