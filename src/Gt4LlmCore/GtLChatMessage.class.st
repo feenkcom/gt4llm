@@ -421,6 +421,12 @@ GtLChatMessage >> postCopyForIndependentRequestInChat: aChat [
 ]
 
 { #category : #accessing }
+GtLChatMessage >> provider [
+
+	^ self chat provider
+]
+
+{ #category : #accessing }
 GtLChatMessage >> role [
 	^ self subclassResponsibility
 ]

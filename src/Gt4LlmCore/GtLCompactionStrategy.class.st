@@ -14,13 +14,18 @@ GtLCompactionStrategy class >> forProvider: aProvider [
 		provider: aProvider
 ]
 
+{ #category : #'api - compaction' }
+GtLCompactionStrategy >> addConfigurationTo: entity for: chat [
+	"Subclasses that require additional entity entries will overwrite"
+]
+
 { #category : #accessing }
-GtLCompactionStrategy >> compactionTreshold [
+GtLCompactionStrategy >> compactionThreshold [
 	^compactionCondition
 ]
 
 { #category : #accessing }
-GtLCompactionStrategy >> compactionTreshold: aCompactionTreshold [
+GtLCompactionStrategy >> compactionThreshold: aCompactionTreshold [
 	compactionCondition := aCompactionTreshold
 ]
 
@@ -34,6 +39,12 @@ GtLCompactionStrategy >> isCompactionNeeded [
 	^compactionCondition
 		 aboveTokenCount: self latestInputTokensCount 
 		 forProvider: self provider 
+]
+
+{ #category : #testing }
+GtLCompactionStrategy >> isNoCompaction [
+
+	^ false
 ]
 
 { #category : #accessing }
@@ -58,6 +69,19 @@ GtLCompactionStrategy >> provider [
 { #category : #accessing }
 GtLCompactionStrategy >> provider: anObject [
 	provider := anObject
+]
+
+{ #category : #'api - compaction' }
+GtLCompactionStrategy >> relevantChatMessagesFor: aChat [
+	| relevantMessages |
+	relevantMessages := aChat messages
+			messagesSelect: [:each | each isAssistantRole and: [each hasCompactionResponse]].
+	^relevantMessages isEmpty
+		ifTrue: [aChat messages]
+		ifFalse: [
+			aChat messages 
+				messagesBeforeMatching: [:each | each isUserRole]
+				andAllWithAndAfter: relevantMessages last]
 ]
 
 { #category : #'api - compaction' }

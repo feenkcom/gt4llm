@@ -151,16 +151,19 @@ GtLDataSourceEncoderDecoder >> initializeRequestResponseMapper: aJsonMapper [
 { #category : #initialization }
 GtLDataSourceEncoderDecoder >> initializeZnMessageMapping: mapping [
 
-		mapping mapProperty: #headers
-			getter: [ :znRequest | znRequest headers headers asDictionary ]
-			setter: [ :znRequest :jsonObject | 
-				jsonObject keysAndValuesDo: [ :key :value |
-					znRequest headers at: key put: value ] ].
-		mapping mapProperty: #entity
-			getter: [ :znRequest | 
-				self assert: znRequest entity contentType = ZnMimeType applicationJson.
-				(NeoJSONReader on: znRequest contents readStream) next ]
-			setter: [ :znRequest :jsonObject | 
+	mapping mapProperty: #headers
+		getter: [ :znRequest | znRequest headers headers asDictionary ]
+		setter: [ :znRequest :jsonObject | 
+			jsonObject keysAndValuesDo: [ :key :value |
+				znRequest headers at: key put: value ] ].
+	mapping mapProperty: #entity
+		getter: [ :znRequest | 
+			znRequest entity
+				ifNil: [ nil ]
+				ifNotNil: [ :anEntity |
+					self assert: anEntity contentType sub = ZnMimeType applicationJson sub.
+					(NeoJSONReader on: znRequest contents readStream) next ] ]
+		setter: [ :znRequest :jsonObject | 
 				znRequest entity: (ZnStringEntity json:
 					(NeoJSONWriter toString: jsonObject)) ].
 ]

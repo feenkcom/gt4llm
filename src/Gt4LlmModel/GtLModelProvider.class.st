@@ -29,6 +29,14 @@ GtLModelProvider >> apiCompactionThreshold: anInteger [
 	compactionStrategy thresholdTokensLimit: anInteger.
 ]
 
+{ #category : #testing }
+GtLModelProvider >> assistantMessageHasCompactionResponse: anAssistantMessage [
+	"Answer a boolean indicating whether the provided message contains a compaction response.
+	E.g. OpenAI will include an encrypted_content output for server-side compaction."
+
+	^ false
+]
+
 { #category : #accessing }
 GtLModelProvider >> authentication [
 	^ authentication
@@ -225,8 +233,18 @@ GtLModelProvider >> generate [
 
 	chatEndpoint := GtLOllamaGenerateEndpoint new
 			reasoningValidator: self defaultOllamaGenerateReasoningValidator.
-	model endpointAt: 'userMessage' put: chatEndpoint.
+	model userMessageEndpoint: chatEndpoint.
 	^ model.
+]
+
+{ #category : #ui }
+GtLModelProvider >> gtViewCallsWithTokensFor: aView [
+	<gtView>
+	^(aView forward)
+		title: 'API calls and tokens';
+		priority: 1;
+		object: [ self client];
+		view: #gtViewCallsWithTokensFor:
 ]
 
 { #category : #'as yet unclassified' }
@@ -371,15 +389,8 @@ GtLModelProvider >> pullModel [
 
 { #category : #'private - accessing' }
 GtLModelProvider >> relevantChatMessages [
-	| relevantMessages |
-	relevantMessages := self chat messages
-			messagesSelect: [:each | each isAssistantRole and: [each hasCompactionResponse]].
-	^relevantMessages isEmpty
-		ifTrue: [self chat messages]
-		ifFalse: [
-			self chat messages 
-				messagesBeforeMatching: [:each | each isUserRole]
-				andAllWithAndAfter: relevantMessages last]
+
+	^ compactionStrategy relevantChatMessagesFor: self chat
 ]
 
 { #category : #'as yet unclassified' }

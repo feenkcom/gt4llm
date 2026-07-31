@@ -109,8 +109,9 @@ GtLModelUserMessage >> inputModels [
 GtLModelUserMessage >> instructions [
 	instructions
 		ifNil: [  "instructions addItem: self inputDescriptionSection" ]
-		ifNotNil: [ 
-			self inputModels notEmpty
+		ifNotNil: 
+			[ (self inputModels notEmpty and:
+				[ self inputModels anySatisfy: #hasInstructions ])
 				ifTrue: [ instructions
 						sectionNamed: 'Input descriptions'
 						ifAbsent: [ :aSection | 

@@ -8,6 +8,12 @@ Class {
 GtLNoCompactionStrategy >> executeCompaction [
 ]
 
+{ #category : #testing }
+GtLNoCompactionStrategy >> isNoCompaction [
+
+	^ true
+]
+
 { #category : #'api - compaction' }
 GtLNoCompactionStrategy >> requestCompactionIfNeeded [
 ]

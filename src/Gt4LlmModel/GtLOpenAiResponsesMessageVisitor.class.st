@@ -6,29 +6,56 @@ Class {
 
 { #category : #api }
 GtLOpenAiResponsesMessageVisitor >> chatMessage: aMessage [
-	| content |
+
+	^ self visitNode: aMessage.
+]
+
+{ #category : #visiting }
+GtLOpenAiResponsesMessageVisitor >> compactionOutputFrom: anAssistantMessage [
+	| output |
 	
-	content := self visitNode: aMessage "computeContentBlockFromInputModels".
+	output := anAssistantMessage requestResponse result at: 'output'.
+	^ output reversed detect: [ :jsonObject |
+		(jsonObject at: 'type') = 'compaction' ]
+]
+
+{ #category : #visiting }
+GtLOpenAiResponsesMessageVisitor >> roleAndContentFrom: anAssistantMessage [
+	| content |
+
+	content := { {
+		'type' -> 'output_text'.
+		'text' -> anAssistantMessage contentText 
+		} asDictionary.
+		}.
 	^ {
-		'role' -> aMessage role.
+		'role' -> anAssistantMessage role.
 		'content' -> content.
-	} asDictionary.
+		} asDictionary.
 ]
 
 { #category : #visiting }
 GtLOpenAiResponsesMessageVisitor >> visitGtLModelAssistantMessage: anAssistantMessage [
-
-	^ { {
-		'type' -> 'output_text'.
-		'text' -> anAssistantMessage contentText 
-		} asDictionary.
-		}
+	"If the message includes a compaction output, only supply that output"
+	| provider |
+	
+	provider := anAssistantMessage chat provider.
+	
+	^ (provider assistantMessageHasCompactionResponse: anAssistantMessage) ifTrue:
+		[ self compactionOutputFrom: anAssistantMessage ]
+	ifFalse:
+		[ self roleAndContentFrom: anAssistantMessage ].
 ]
 
 { #category : #visiting }
 GtLOpenAiResponsesMessageVisitor >> visitGtLModelUserMessage: aUserMessage [
-
-	^ aUserMessage computeContentBlockFromInputModels acceptVisitor: self
+	| content |
+	
+	content := aUserMessage contentDataBlock  acceptVisitor: self.
+	^ {
+		'role' -> aUserMessage role.
+		'content' -> content.
+		} asDictionary.
 ]
 
 { #category : #visiting }
@@ -71,15 +98,16 @@ GtLOpenAiResponsesMessageVisitor >> visitGtLPrimitiveJsonDataBlock: aDataBlock [
 
 { #category : #visiting }
 GtLOpenAiResponsesMessageVisitor >> visitGtLPrimitiveMessageDataBlock: aDataBlock [
-	| content text |
+	| content |
 
-	content := OrderedCollection new.
-	text := String crlf join: 
-(aDataBlock compositeJsonDataBlock acceptVisitor: self).
-	content add: {
-		'type' -> 'input_text'.
-		'text' -> (NeoJSONWriter toStringPretty: text)
-		} asDictionary.
+	content := aDataBlock dataBlocks collect:
+		[ :each |
+			NeoJSONObject new
+				at: 'text' put: each serializedJsonString;
+				at: 'type' put: 'input_text';
+				yourself ]
+		as: OrderedCollection.
+
 	aDataBlock imageDataBlocks do: [ :dataBlock |
 		content add: {
 			'type' -> 'image_url'.

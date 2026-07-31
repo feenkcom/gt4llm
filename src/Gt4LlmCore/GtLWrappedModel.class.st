@@ -133,6 +133,12 @@ GtLWrappedModel >> gtViewsInContext: aPhlowContext [
 	^ collectedViews
 ]
 
+{ #category : #testing }
+GtLWrappedModel >> hasInstructions [
+
+	^ false
+]
+
 { #category : #serialization }
 GtLWrappedModel >> llmModelDataViewsFor: aDataView [
 	self subclassResponsibility
