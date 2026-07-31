@@ -1,8 +1,26 @@
 Class {
 	#name : #GtLEndpoint,
 	#superclass : #Object,
+	#instVars : [
+		'additionalEntity'
+	],
 	#category : #'Gt4LlmModel-Model'
 }
+
+{ #category : #private }
+GtLEndpoint >> addAdditionalEntityTo: entity [
+
+	additionalEntity ifNil: [ ^ self ].
+
+	entity addAll: additionalEntity.
+]
+
+{ #category : #accessing }
+GtLEndpoint >> additionalEntity [
+	"Answer a dictionary that is appended to every entity sent to the LLM"
+
+	^ additionalEntity ifNil: [ additionalEntity := Dictionary new ]
+]
 
 { #category : #api }
 GtLEndpoint >> createApiCompactionMessageForChat: aChat [

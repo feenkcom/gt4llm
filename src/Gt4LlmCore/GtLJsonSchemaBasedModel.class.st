@@ -27,6 +27,12 @@ GtLJsonSchemaBasedModel >> addInstructionsTo: aMessageInstructions [
 				body: (NeoJSONWriter toStringPretty: self schema json))
 ]
 
+{ #category : #testing }
+GtLJsonSchemaBasedModel >> hasInstructions [
+
+	^ true
+]
+
 { #category : #accessing }
 GtLJsonSchemaBasedModel >> schema [
 	^ schema

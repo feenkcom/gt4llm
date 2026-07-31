@@ -15,6 +15,17 @@ GtLOpenAiResponsesProvider class >> withDefaultSetup [
 	^ self new loadApiKeyFromFile
 ]
 
+{ #category : #testing }
+GtLOpenAiResponsesProvider >> assistantMessageHasCompactionResponse: anAssistantMessage [
+	"Answer a boolean indicating whether the provided message contains a compaction response.
+	E.g. OpenAI will include an encrypted_content output for server-side compaction."
+	| response |
+	
+	response := anAssistantMessage requestResponse result.
+	^ response output anySatisfy: [ :jsonObject |
+		(jsonObject at: 'type' ifAbsent: []) = 'compaction' ].
+]
+
 { #category : #initialization }
 GtLOpenAiResponsesProvider >> initialize [
 

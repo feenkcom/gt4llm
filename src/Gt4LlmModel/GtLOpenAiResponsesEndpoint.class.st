@@ -8,10 +8,10 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-GtLOpenAiResponsesEndpoint >> addInstructionsTo: entity from: chat [
+GtLOpenAiResponsesEndpoint >> addInstructionsTo: entity from: command [
 	| instructionString |
 
-	instructionString := chat instructions instructionString.
+	instructionString := command instructions.
 	instructionString ifEmpty: [ ^ self ].
 	entity at: 'instructions' put: instructionString.
 ]
@@ -43,10 +43,11 @@ GtLOpenAiResponsesEndpoint >> createPromptCompactionMessageForChat: aChat [
 
 { #category : #'private - accessing' }
 GtLOpenAiResponsesEndpoint >> entityFromContext: aGtLContext [
-	| entity input chat model |
+	| entity input chat model provider |
 
 	chat := aGtLContext chat.
 	model := aGtLContext model.
+	provider := chat provider.
 	input := OrderedCollection new.
 	aGtLContext command messages messagesDo: [ :message |
 		message isToolMessage ifTrue:
@@ -61,16 +62,17 @@ GtLOpenAiResponsesEndpoint >> entityFromContext: aGtLContext [
 		'stream' -> false.
 		'input' -> input asArray
 		} asDictionary.
-	self addInstructionsTo: entity from: chat.
+	self addInstructionsTo: entity from: aGtLContext command.
 
 	chat format ifNotNil: [ | schema |
 		schema := chat format asJsonSchemaDictionary.
-		entity
+		(schema at: 'properties' ifAbsent: [ #() ]) ifNotEmpty:
+		[ entity
 			at: 'text'
 			put: {'format'
 				-> {'type' -> 'json_schema'.
 						'name' -> 'JsonSchema'.
-						'schema' -> schema} asDictionary} asDictionary ].
+						'schema' -> schema} asDictionary} asDictionary ] ].
 
 	chat tools isEmptyOrNil
 		ifFalse: [ entity
@@ -78,6 +80,8 @@ GtLOpenAiResponsesEndpoint >> entityFromContext: aGtLContext [
 				put: (chat tools 
 					collect: [ :aTool | self toolEntityFrom: aTool ]
 					as: Array) ].
+	provider compactionStrategy addConfigurationTo: entity for: chat.
+	self addAdditionalEntityTo: entity.
 
 	^ entity
 ]

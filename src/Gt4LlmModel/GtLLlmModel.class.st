@@ -49,8 +49,9 @@ GtLLlmModel >> name [
 ]
 
 { #category : #accessing }
-GtLLlmModel >> name: anObject [
-	name := anObject
+GtLLlmModel >> name: aString [
+
+	name := aString
 ]
 
 { #category : #'as yet unclassified' }
@@ -109,4 +110,11 @@ GtLLlmModel >> provider: aGtLModelProvider [
 GtLLlmModel >> userMessageEndpoint [
 
 	^ userMessageEndpoint ifNil: [ userMessageEndpoint := self endpointAt: 'userMessage' ]
+]
+
+{ #category : #accessing }
+GtLLlmModel >> userMessageEndpoint: aMessageEndpoint [
+
+	self endpointAt: 'userMessage' put: aMessageEndpoint.
+	userMessageEndpoint := nil.
 ]

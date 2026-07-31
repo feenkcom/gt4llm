@@ -82,13 +82,19 @@ GtLModelAssistantMessage >> gtViewResponseModelsFor: aView [
 	<gtView>
 	<gtLlmView>
 	
-	responseModels ifEmpty: [ ^ aView empty ].
+	self responseModels ifEmpty: [ ^ aView empty ].
 
 	^aView forward
 		title: 'Response models';
 		priority: 8;
 		object: [ self responseModels ];
 		view: #gtItemsFor:
+]
+
+{ #category : #testing }
+GtLModelAssistantMessage >> hasCompactionResponse [
+
+	^ self provider assistantMessageHasCompactionResponse: self
 ]
 
 { #category : #testing }
