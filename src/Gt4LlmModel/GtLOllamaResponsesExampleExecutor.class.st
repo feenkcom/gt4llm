@@ -24,9 +24,7 @@ GtLOllamaResponsesExampleExecutor >> assertRequestStringContent: requestMessage 
 			at: 'content') first.
 	self assert: (requestJson at: 'type') equals: 'input_text'.
 	requestText := requestJson at: 'text'.
-	requestJson := NeoJSONReader fromString: requestText.
-	"At the moment the request text is being json encoded.  Not sure that it is correct."
-	self assert: requestJson isString.
+	self assert: requestText isString.
 ]
 
 { #category : #asserting }
