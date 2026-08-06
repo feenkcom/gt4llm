@@ -72,8 +72,9 @@ GtLOllamaMigrationExamples >> gemma4CompletionsChat [
 		reasoningEffort: #none;
 		sendString: 'Hi, who are you?'.
 	executor waitTimeoutSeconds: 30.
-	
-	executor assertRequestCompletionsStringContent: chat messages first.
+	GtLModelExamples
+		compareShapes: chat messages
+		with: executor expectedHistory.
 	executor assertResponseCompletionsStringContent: chat messages last finalMessage.
 
 	^ chat
@@ -108,7 +109,9 @@ GtLOllamaMigrationExamples >> gemma4Image [
 	msg images: { image }.
 	chat sendMessage: msg.
 	executor waitTimeoutSeconds: 60.
-	executor assertRequestCompletionsStringContent: chat messages first.
+	GtLModelExamples
+		compareShapes: chat messages
+		with: executor expectedHistory.
 	jsonDictionary := NeoJSONReader fromString: chat messages first requestResponse request contents.
 	requestJson := (jsonDictionary at: 'messages') first
 			at: 'content'.
@@ -137,12 +140,15 @@ GtLOllamaMigrationExamples >> gemma4ResponsesStringChat [
 	provider := executor provider.
 	provider modelName: 'gemma4:e4b'.
 	chat := executor chat.
+	chat markdownResponse.
 
 	chat sendString: 'Hi, who are you?'.
 	executor waitTimeoutSeconds: 60.
 
 	executor assertChatResponseOK: chat.
-	executor assertRequestStringContent: chat messages first.
+	GtLModelExamples
+		compareShapes: chat messages
+		with: executor expectedHistory.
 	executor assertResponseStringContent: chat messages last.
 
 	^ chat
@@ -205,8 +211,10 @@ GtLOllamaMigrationExamples >> llama3Chat [
 		reasoningEffort: false;
 		sendString: 'Hi, who are you?'.
 	executor waitTimeoutSeconds: 60.
+	GtLModelExamples
+		compareShapes: chat messages
+		with: executor expectedHistory.
 	executor assertFirstResponseContent: chat.
-	executor assertRequestGenerateStringContent: chat messages first.
 	executor assertResponseGenerateStringContent: chat messages last finalMessage.
 
 	^ chat.
@@ -270,6 +278,11 @@ GtLOllamaMigrationExamples >> llama3PageInstructions [
 	self assert: ((entity at: 'system') beginsWith: '# Explanations')
 		description: [ 'Unexpected instructions: ', (entity at: 'system') printString ].
 	^ entity
+]
+
+{ #category : #examples }
+GtLOllamaMigrationExamples >> messageWithToolCallThenCompactionExample [
+	"No-op... this is handled by GtLOllamaResponsesExamples"
 ]
 
 { #category : #examples }
@@ -565,8 +578,10 @@ GtLOllamaMigrationExamples >> qwen35CompletionsObjectInspection [
 					named: 'Info object';
 				string: 'Describe the stored object named ''Info object''.'. ].
 	executor waitTimeoutSeconds: 60.
+	GtLModelExamples
+		compareShapes: chat messages
+		with: executor expectedHistory.
 	executor assertHistoryResponsesOK: provider client history.
-	executor assertRequestCompletionsStringContent: chat messages first.
 	inputModels := chat messages first inputModels.
 	self assert: inputModels size equals: 2.
 	self assert: inputModels first targetObject object equals: chatObject.
@@ -602,7 +617,9 @@ GtLOllamaMigrationExamples >> qwen35Instructions [
 		sendString: 'What is an example method?'.
 	executor waitTimeoutSeconds: 60.
 	executor assertHistoryResponsesOK: provider client history.
-	executor assertRequestCompletionsStringContent: chat messages first.
+	GtLModelExamples
+		compareShapes: chat messages
+		with: executor expectedHistory.
 	instructions := chat messages first instructions.
 	self assert: instructions size equals: 1.
 	explanations := instructions sectionNamed: 'Explanations' ifAbsent: [ nil ].
@@ -638,7 +655,9 @@ GtLOllamaMigrationExamples >> qwen35ResponsesObjectInspection [
 		sendString: 'Describe the stored object named ''Info object''.'.
 	executor waitTimeoutSeconds: 60.
 	executor assertHistoryResponsesOK: provider client history.
-	executor assertRequestResponsesStringContent: chat messages first.
+	GtLModelExamples
+		compareShapes: chat messages
+		with: executor expectedHistory.
 	objectStorage := chat objectStorage.
 	self assert: objectStorage size equals: 1.
 	self assert: (objectStorage objectAt: storedObjectId) equals: chatObject.

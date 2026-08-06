@@ -30,17 +30,6 @@ GtLOpenAiResponsesEndpoint >> assistantMessageAccessor [
 	^ GtLOpenAiResponsesAssistantMessageAccessor new
 ]
 
-{ #category : #api }
-GtLOpenAiResponsesEndpoint >> createPromptCompactionMessageForChat: aChat [
-	| message |
-	message := aChat createUserMessage.
-	message
-		configureWithCompactionExecution;
-		addResponseFormatForMagritte: GtLChatCompactedData named: 'Compaction';
-		markdown: 'You are performing a CONTEXT CHECKPOINT COMPACTION. Create a handoff summary for another LLM that will resume the task.'.
-	^ message
-]
-
 { #category : #'private - accessing' }
 GtLOpenAiResponsesEndpoint >> entityFromContext: aGtLContext [
 	| entity input chat model provider |

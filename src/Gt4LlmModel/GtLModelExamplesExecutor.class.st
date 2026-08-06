@@ -57,43 +57,6 @@ GtLModelExamplesExecutor >> assertHistoryResponsesOK: history [
 ]
 
 { #category : #asserting }
-GtLModelExamplesExecutor >> assertRequestCompletionsStringContent: requestMessage [
-	| jsonDictionary requestText requestJson |
-
-	jsonDictionary := NeoJSONReader fromString: requestMessage requestResponse request contents.
-	requestJson := ((jsonDictionary at: 'messages') first
-			at: 'content') first.
-	self assert: (requestJson at: 'type') equals: 'text'.
-	requestText := requestJson at: 'text'.
-	self assert: requestText isString.
-]
-
-{ #category : #asserting }
-GtLModelExamplesExecutor >> assertRequestResponsesMarkdownContent: requestMessage [
-	| jsonDictionary requestText requestJson |
-
-	jsonDictionary := NeoJSONReader fromString: requestMessage requestResponse request contents.
-	requestJson := ((jsonDictionary at: 'input') first
-			at: 'content') first.
-	self assert: (requestJson at: 'type') equals: 'input_text'.
-	requestText := requestJson at: 'text'.
-	requestJson := NeoJSONReader fromString: requestText.
-	self assert: ((requestJson at: 'Markdown') at: 'content') isString.
-]
-
-{ #category : #asserting }
-GtLModelExamplesExecutor >> assertRequestResponsesStringContent: requestMessage [
-	| jsonDictionary requestText requestJson |
-
-	jsonDictionary := NeoJSONReader fromString: requestMessage requestResponse request contents.
-	requestJson := ((jsonDictionary at: 'input') first
-			at: 'content') first.
-	self assert: (requestJson at: 'type') equals: 'input_text'.
-	requestText := requestJson at: 'text'.
-	self assert: requestText isString.
-]
-
-{ #category : #asserting }
 GtLModelExamplesExecutor >> assertResponseCompletionsStringContent: responseMessage [
 	| responseContent |
 
@@ -161,6 +124,11 @@ GtLModelExamplesExecutor >> decodeHistory: aCollection [
 
 	^ GtLDataSourceEncoderDecoder loadClientHistoryFromStream:
 		(GZipReadStream on: aCollection) upToEnd utf8Decoded readStream
+]
+
+{ #category : #accessing }
+GtLModelExamplesExecutor >> expectedHistory [
+	^ expectedHistory
 ]
 
 { #category : #initialization }

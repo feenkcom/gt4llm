@@ -16,18 +16,6 @@ GtLOllamaResponsesExampleExecutor >> assertRequest: znRequest isSimilarTo: expec
 ]
 
 { #category : #asserting }
-GtLOllamaResponsesExampleExecutor >> assertRequestStringContent: requestMessage [
-	| jsonDictionary requestText requestJson |
-
-	jsonDictionary := NeoJSONReader fromString: requestMessage requestResponse request contents.
-	requestJson := ((jsonDictionary at: 'input') first
-			at: 'content') first.
-	self assert: (requestJson at: 'type') equals: 'input_text'.
-	requestText := requestJson at: 'text'.
-	self assert: requestText isString.
-]
-
-{ #category : #asserting }
 GtLOllamaResponsesExampleExecutor >> assertResponseStringContent: responseMessage [
 	| responseContent |
 

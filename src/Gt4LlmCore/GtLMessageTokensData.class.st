@@ -11,8 +11,14 @@ Class {
 { #category : #serialization }
 GtLMessageTokensData class >> serializationProperties [
 	^ {
+		"OpenAI"
 		#input_tokens -> #inputTokens.
-		#output_tokens -> #outputTokens}
+		#output_tokens -> #outputTokens.
+		
+		"Ollama"
+		#prompt_tokens -> #inputTokens.
+		#completion_tokens -> #outputTokens.
+		}
 ]
 
 { #category : #accessing }
