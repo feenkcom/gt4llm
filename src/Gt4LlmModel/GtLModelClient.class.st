@@ -183,8 +183,7 @@ GtLModelClient >> gtViewCallsWithTokensFor: aView [
 	^ aView columnedList
 		title: 'Tokens by call';
 		priority: 10;
-		items: [ (history collect: [ :each | each -> each resultUsageDetails ])
-				reject: [ :each | each value isNil ] ];
+		items: [ self usageDetails ];
 		column: 'URL' text: [ :each | each key request url ];
 		column: 'Request'
 			text: [ :each | each key request method ]
@@ -248,4 +247,11 @@ GtLModelClient >> post: aString withEntity: anEntity [
 	requestResponse result: result.
 	self checkForErrors: result.
 	^ requestResponse
+]
+
+{ #category : #ui }
+GtLModelClient >> usageDetails [
+
+	^ (history collect: [ :each | each -> each resultUsageDetails ])
+				reject: [ :each | each value isNil ]
 ]

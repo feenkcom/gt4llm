@@ -34,7 +34,11 @@ GtLEndpoint >> createPromptCompactionMessageForChat: aChat [
 	message := aChat createUserMessage.
 	message
 		addResponseFormatForMagritte: GtLChatCompactedData named: 'Compaction';
-		markdown: 'You are performing a CONTEXT CHECKPOINT COMPACTION. Create a handoff summary for another LLM that will resume the task.'.
+		markdown: 'Compact this chat for later continuation. Summarize:
+- The initial and remaining goals
+- Essential lessons and decisions
+- Open questions
+- Next steps'.
 	^ message
 ]
 

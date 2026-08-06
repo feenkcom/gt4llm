@@ -18,17 +18,6 @@ GtLOllamaGenerateExampleExecutor >> assertFirstResponseContent: chat [
 ]
 
 { #category : #'as yet unclassified' }
-GtLOllamaGenerateExampleExecutor >> assertRequestGenerateStringContent: requestMessage [
-	| jsonDictionary |
-
-	jsonDictionary := NeoJSONReader fromString: requestMessage requestResponse request contents.
-	self assert: (jsonDictionary at: 'model') isString.
-	self assert: (jsonDictionary at: 'prompt') isString.
-	self assert: (jsonDictionary at: 'stream') not.
-	self assert: (jsonDictionary at: 'think') not
-]
-
-{ #category : #'as yet unclassified' }
 GtLOllamaGenerateExampleExecutor >> assertResponseGenerateStringContent: responseMessage [
 	| responseContent |
 

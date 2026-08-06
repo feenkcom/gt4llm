@@ -67,6 +67,14 @@ GtLModelCompactionMessage >> rawData [
 	^ providerData at: currentProvider
 ]
 
+{ #category : #'private - accessing' }
+GtLModelCompactionMessage >> rawData: aRawData for: aModelProvider [
+	"Set the rawData and provider for testing purposes."
+	
+	providerData at: aModelProvider put: aRawData.
+	currentProvider := aModelProvider.
+]
+
 { #category : #accessing }
 GtLModelCompactionMessage >> role [
 	^ 'assistant'
