@@ -1,3 +1,6 @@
+"
+GtLPromptCompactionStrategy is used to enable automatic compaction using prompt compaction.  Even when no compaction strategy has been set, prompt compaction messages may be sent manually and will be correctly handled.
+"
 Class {
 	#name : #GtLPromptCompactionStrategy,
 	#superclass : #GtLCompactionStrategy,
