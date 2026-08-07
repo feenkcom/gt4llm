@@ -56,7 +56,7 @@ GtLMcpServerExamples >> serverAddsToolMessageToHistory [
 		rawArguments: Dictionary new.
 	toolMessage := GtLToolMessage new toolCall: toolCall.
 	server privateAddToolMessage: toolMessage.
-	self assert: (server instVarNamed: 'history') last == toolMessage.
+	self assert: server historySnapshot last == toolMessage.
 	^ toolMessage
 ]
 

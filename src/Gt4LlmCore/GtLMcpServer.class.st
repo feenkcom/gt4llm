@@ -244,25 +244,25 @@ GtLMcpServer >> gtErrorsFor: aView [
 		actionUpdateButton
 ]
 
-{ #category : #views }
+{ #category : #'gt-views' }
 GtLMcpServer >> gtHistoryFor: aView [
 	<gtView>
 	
-	history ifNil: [^aView empty].
+	history ifNil: [ ^ aView empty ].
 	
-	^(aView columnedList)
+	^ (aView columnedList)
 		title: 'Executed tools';
-		items: [history reverse];
+		items: [ self historySnapshot reverse ];
 		priority: 1;
 		column: 'Role'
-			text: [:item | item role]
+			text: [ :item | item role ]
 			width: 70;
-		column: 'Summary' text: [:each | each contentOneLineSummary];
+		column: 'Summary' text: [ :each | each contentOneLineSummary ];
 		column: 'Created'
-			text: [:item | item createdAt asStringYMDHMS]
+			text: [ :item | item createdAt asStringYMDHMS ]
 			width: 130;
 		column: 'Running'
-			text: [:item | item output ifNil: ['Yes'] ifNotNil: ['']]
+			text: [ :item | item output ifNil: [ 'Yes' ] ifNotNil: [ '' ] ]
 			width: 55;
 		updateWhen: GtLMcpServerHistoryItemAddedAnnouncement in: [ announcer ];
 		actionUpdateButton
@@ -452,6 +452,11 @@ GtLMcpServer >> handleToolsList: aJsonRpc [
 		asDictionary
 ]
 
+{ #category : #accessing }
+GtLMcpServer >> historySnapshot [
+	^ history lock: [ :aHistory | aHistory asArray ]
+]
+
 { #category : #initialization }
 GtLMcpServer >> initialize [
 	super initialize.
@@ -461,7 +466,7 @@ GtLMcpServer >> initialize [
 	tools := GtLTools new.
 	resources := GtLMcpResources new.
 	prompts := GtLMessagesGroup new.
-	history := OrderedCollection new.
+	history := AsyncMutex for: OrderedCollection new.
 	errors := OrderedCollection new.
 	objectStorage := GtLObjectStorage new.
 	summarizersRegistry := GtLToolCallSummarizersRegistry new.
@@ -524,11 +529,14 @@ GtLMcpServer >> port: anObject [
 
 { #category : #private }
 GtLMcpServer >> privateAddToolMessage: aToolMessage [
-	history add: aToolMessage.
-	self announce: (GtLMcpServerHistoryItemAddedAnnouncement new
-		mcpServer: self;
-		message: aToolMessage;
-		yourself)
+	| anAnnouncement |
+	history lock: [ :aHistory |
+		aHistory add: aToolMessage.
+		anAnnouncement := GtLMcpServerHistoryItemAddedAnnouncement new
+			mcpServer: self;
+			message: aToolMessage;
+			yourself ].
+	self announce: anAnnouncement
 ]
 
 { #category : #accessing }
