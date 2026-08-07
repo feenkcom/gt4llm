@@ -1,6 +1,9 @@
 Class {
 	#name : #GtLMcpServerExamples,
 	#superclass : #Object,
+	#instVars : [
+		'recordedAnnouncement'
+	],
 	#category : #'Gt4LlmCore-Mcp'
 }
 
@@ -36,6 +39,48 @@ GtLMcpServerExamples >> jsonRpcNotificationDetection [
 	self assert: request isNotification not.
 
 	^ notification
+]
+
+{ #category : #support }
+GtLMcpServerExamples >> recordAnnouncement: anAnnouncement [
+	recordedAnnouncement := anAnnouncement
+]
+
+{ #category : #examples }
+GtLMcpServerExamples >> serverAddsToolMessageToHistory [
+	<gtExample>
+	| server toolMessage toolCall |
+	server := self simpleServer.
+	toolCall := GtLFunctionToolCall new
+		name: 'Tool';
+		rawArguments: Dictionary new.
+	toolMessage := GtLToolMessage new toolCall: toolCall.
+	server privateAddToolMessage: toolMessage.
+	self assert: (server instVarNamed: 'history') last == toolMessage.
+	^ toolMessage
+]
+
+{ #category : #examples }
+GtLMcpServerExamples >> serverAnnouncesHistoryItemAdded [
+	<gtExample>
+	| server toolMessage toolCall |
+	server := self simpleServer.
+	toolCall := GtLFunctionToolCall new
+		name: 'Tool';
+		rawArguments: Dictionary new.
+	toolMessage := GtLToolMessage new toolCall: toolCall.
+	recordedAnnouncement := nil.
+	server
+		when: GtLMcpServerHistoryItemAddedAnnouncement
+		send: #recordAnnouncement:
+		to: self.
+	server privateAddToolMessage: toolMessage.
+	self assert: recordedAnnouncement notNil.
+	self assert: recordedAnnouncement class equals: GtLMcpServerHistoryItemAddedAnnouncement.
+	self assert: recordedAnnouncement mcpServer == server.
+	self assert: recordedAnnouncement message == toolMessage.
+	server unsubscribe: self.
+	^ recordedAnnouncement
 ]
 
 { #category : #examples }
@@ -207,6 +252,36 @@ GtLMcpServerExamples >> serverWithTool [
 	server addTool: self simpleServerTool.
 	self assert: server tools size equals: 1.
 	^ server
+]
+
+{ #category : #examples }
+GtLMcpServerExamples >> serverWithToolCallHistoryAnnouncement [
+	<gtExample>
+	| server request response jsonResultContent |
+	server := self serverWithTool.
+	recordedAnnouncement := nil.
+	server
+		when: GtLMcpServerHistoryItemAddedAnnouncement
+		send: #recordAnnouncement:
+		to: self.
+	request := self
+			serverRequestWithEntity: {'jsonrpc' -> '2.0'.
+					'id' -> 2.
+					'method' -> 'tools/call'.
+					'params'
+						-> {'name' -> 'Tool'.
+								'arguments' -> {'param' -> 'hello from tool'} asDictionary}
+								asDictionary} asDictionary.
+	response := server handleRequest: request.
+	jsonResultContent := (STONJSON fromString: response entity contents)
+		at: 'result'
+		at: 'content'.
+	self assert: recordedAnnouncement notNil.
+	self assert: recordedAnnouncement mcpServer == server.
+	self assert: recordedAnnouncement message isToolMessage.
+	self assert: (jsonResultContent first at: 'type') equals: 'text'.
+	server unsubscribe: self.
+	^ recordedAnnouncement
 ]
 
 { #category : #examples }

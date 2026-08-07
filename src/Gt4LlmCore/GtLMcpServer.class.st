@@ -13,7 +13,8 @@ Class {
 		'asynchronous',
 		'currentAsyncExecution',
 		'objectStorage',
-		'summarizersRegistry'
+		'summarizersRegistry',
+		'announcer'
 	],
 	#classVars : [
 		'Current'
@@ -80,6 +81,13 @@ GtLMcpServer >> addTool: aTool [
 { #category : #adding }
 GtLMcpServer >> addTools: aToolList [
 	tools addAll: aToolList
+]
+
+{ #category : #announcing }
+GtLMcpServer >> announce: anAnnouncement [
+	^ announcer
+		ifNil: [ anAnnouncement ]
+		ifNotNil: [ announcer announce: anAnnouncement ]
 ]
 
 { #category : #configuring }
@@ -256,6 +264,7 @@ GtLMcpServer >> gtHistoryFor: aView [
 		column: 'Running'
 			text: [:item | item output ifNil: ['Yes'] ifNotNil: ['']]
 			width: 55;
+		updateWhen: GtLMcpServerHistoryItemAddedAnnouncement in: [ announcer ];
 		actionUpdateButton
 ]
 
@@ -416,7 +425,7 @@ GtLMcpServer >> handleResourcesTemplatesList: aJsonRpc [
 	^ {'resourceTemplates' -> {}} asDictionary
 ]
 
-{ #category : #handling }
+{ #category : #dispatching }
 GtLMcpServer >> handleToolsCall: aJsonRpc [
 	| tool result toolCall toolMessage |
 	tool := self detectToolNamed: (aJsonRpc params at: 'name').
@@ -425,7 +434,7 @@ GtLMcpServer >> handleToolsCall: aJsonRpc [
 				rawArguments: (aJsonRpc params at: 'arguments').
 	
 	toolMessage := GtLToolMessage new toolCall: toolCall.
-	history add: toolMessage.
+	self privateAddToolMessage: toolMessage.
 	
 	result := tool 
 		performToolCall: toolCall 
@@ -456,6 +465,7 @@ GtLMcpServer >> initialize [
 	errors := OrderedCollection new.
 	objectStorage := GtLObjectStorage new.
 	summarizersRegistry := GtLToolCallSummarizersRegistry new.
+	announcer := nil.
 ]
 
 { #category : #testing }
@@ -512,6 +522,15 @@ GtLMcpServer >> port: anObject [
 	port := anObject
 ]
 
+{ #category : #private }
+GtLMcpServer >> privateAddToolMessage: aToolMessage [
+	history add: aToolMessage.
+	self announce: (GtLMcpServerHistoryItemAddedAnnouncement new
+		mcpServer: self;
+		message: aToolMessage;
+		yourself)
+]
+
 { #category : #accessing }
 GtLMcpServer >> prompts [
 	^ prompts
@@ -564,4 +583,23 @@ GtLMcpServer >> stop [
 { #category : #accessing }
 GtLMcpServer >> tools [
 	^ tools
+]
+
+{ #category : #announcing }
+GtLMcpServer >> unsubscribe: anObject [
+	^ announcer
+		ifNil: [ anObject ]
+		ifNotNil: [ announcer unsubscribe: anObject ]
+]
+
+{ #category : #announcing }
+GtLMcpServer >> when: anAnnouncementClass send: aSelector to: anObject [
+	"Declare that when anAnnouncementClass is raised, anObject should receive the message aSelector.
+    When the message expects one argument (eg #fooAnnouncement:) the announcement is passed as argument.
+    When the message expects two arguments (eg #fooAnnouncement:announcer:) both the announcement and the announcer 
+    are passed as argument"
+	^ (announcer ifNil: [ announcer := Announcer new ])
+		when: anAnnouncementClass
+		send: aSelector
+		to: anObject
 ]
