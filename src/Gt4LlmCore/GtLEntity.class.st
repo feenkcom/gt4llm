@@ -63,9 +63,10 @@ GtLEntity >> from: aDictionary [
 
 	self class serializationProperties
 		do: [ :aPair | 
-			self
-				perform: aPair value asSymbol asMutator
-				withArguments: {aDictionary at: aPair key asString ifAbsent: [ nil ]} ]
+			aDictionary at: aPair key asString ifPresent: [ :value |
+				self
+					perform: aPair value asSymbol asMutator
+					withArguments: { value } ] ]
 ]
 
 { #category : #accessing }

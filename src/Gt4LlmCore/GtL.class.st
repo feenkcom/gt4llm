@@ -35,6 +35,11 @@ GtL class >> gtDevelopmentChat [
 ]
 
 { #category : #'instance creation' }
+GtL class >> lastChat [
+	^ GtLChatRegistry current lastChat
+]
+
+{ #category : #'instance creation' }
 GtL class >> registry [
 	^ GtLChatRegistry current
 ]
