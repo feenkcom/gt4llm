@@ -3,8 +3,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'label',
-		'meta',
-		'providerClass'
+		'providerClass',
+		'configurationOptions'
 	],
 	#category : #'Gt4LlmCore-Core'
 }
@@ -17,8 +17,30 @@ GtLConnection >> = anotherConnection [
 ]
 
 { #category : #adding }
+GtLConnection >> addOption: aConnectionConfigurationOption [
+
+	(configurationOptions anySatisfy: [ :option |
+		option name = aConnectionConfigurationOption name ]) ifTrue:
+			[ self error: 'Duplicate configuration name: ', aConnectionConfigurationOption name asString ].
+
+	configurationOptions add: aConnectionConfigurationOption.
+]
+
+{ #category : #adding }
 GtLConnection >> addOption: anOption withValue: aValue [
-	meta at: anOption put: aValue
+	"Legacy interface - this assumes anOption is the name of a single argument selector"
+
+	self addOption: (GtLConnectionPropertyConfigurationOption
+		name: anOption
+		selector: anOption asSymbol asMutator
+		values: { aValue })
+]
+
+{ #category : #accessing }
+GtLConnection >> applyConfigurationOptionsTo: aProvider [
+
+	configurationOptions do: [ :option |
+		option applyOn: aProvider ].
 ]
 
 { #category : #accessing }
@@ -26,8 +48,7 @@ GtLConnection >> buildBareProvider [
 	"use this for more flexible setup, such as in examples"
 	| aProvider |
 	aProvider := self providerClass new.
-	meta
-		keysAndValuesDo: [ :aKey :aValue | aProvider perform: aKey asSymbol asMutator withArguments: {aValue} ].
+	self applyConfigurationOptionsTo: aProvider.
 	^ aProvider
 ]
 
@@ -35,9 +56,7 @@ GtLConnection >> buildBareProvider [
 GtLConnection >> buildProvider [
 	| aProvider |
 	aProvider := self providerClass withDefaultSetup.
-	meta
-		keysAndValuesDo: [ :aKey :aValue |
-			 aProvider perform: aKey asSymbol asMutator withArguments: {aValue} ].
+	self applyConfigurationOptionsTo: aProvider.
 	^ aProvider
 ]
 
@@ -93,12 +112,10 @@ GtLConnection >> gtDisplayOn: stream [
 { #category : #'gt - extensions' }
 GtLConnection >> gtOptionsFor: aView [
 	<gtView>
-	^ aView columnedList
+	^ aView list
 		title: 'Options';
 		priority: 2;
-		items: [ meta associations ];
-		column: 'Option' text: [ :aMeta | aMeta key ];
-		column: 'Value' text: [ :aMeta | aMeta value ]
+		items: [ configurationOptions ]
 ]
 
 { #category : #comparing }
@@ -111,7 +128,7 @@ GtLConnection >> hash [
 GtLConnection >> initialize [
 	super initialize.
 	
-	meta := Dictionary new
+	configurationOptions := OrderedCollection new
 ]
 
 { #category : #testing }
@@ -131,22 +148,29 @@ GtLConnection >> label: anObject [
 
 { #category : #accessing }
 GtLConnection >> model [
-	^ meta at: #modelName ifAbsent: [ nil ]
+	^ self modelName
 ]
 
 { #category : #accessing }
-GtLConnection >> model: anObject [
-	self addOption: #modelName withValue: anObject
+GtLConnection >> model: aString [
+	self modelName: aString
 ]
 
 { #category : #accessing }
 GtLConnection >> modelName [
-	^ meta at: #modelName ifAbsent: [ nil ]
+	^ (self optionNamed: #modelName) values first
 ]
 
 { #category : #accessing }
 GtLConnection >> modelName: anObject [
 	self addOption: #modelName withValue: anObject
+]
+
+{ #category : #accessing }
+GtLConnection >> optionNamed: aString [
+
+	^ configurationOptions detect: [ :each |
+			each name = aString ]
 ]
 
 { #category : #accessing }
