@@ -351,6 +351,11 @@ GtLMcpServer >> handleNotificationsInitialized: aJsonRpc [
 	^ {} asDictionary
 ]
 
+{ #category : #notifications }
+GtLMcpServer >> handleNotificationsRootsListChanged: aJsonRpc [
+	^ {} asDictionary
+]
+
 { #category : #handling }
 GtLMcpServer >> handlePromptsGet: aJsonRpc [
 	| prompt |
