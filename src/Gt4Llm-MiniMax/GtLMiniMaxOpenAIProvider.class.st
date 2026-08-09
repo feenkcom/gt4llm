@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLOpenAIProvider,
+	#name : #GtLMiniMaxOpenAIProvider,
 	#superclass : #GtLProvider,
 	#instVars : [
 		'client',
@@ -7,89 +7,86 @@ Class {
 		'modelName',
 		'compactionStrategy'
 	],
-	#category : #'Gt4Llm-OpenAI'
+	#category : #'Gt4Llm-MiniMax'
 }
 
 { #category : #testing }
-GtLOpenAIProvider class >> isConnectable [
-	^ GtLOpenAIClient apiKeyFile exists
+GtLMiniMaxOpenAIProvider class >> isConnectable [
+	^ GtLMiniMaxOpenAIClient apiKeyFile exists
 ]
 
-{ #category : #accessing }
-GtLOpenAIProvider class >> knownConnectors [
-	<gtConnection>
+{ #category : #'as yet unclassified' }
+GtLMiniMaxOpenAIProvider class >> knownConnectors [
+    <gtConnection>
 	^ {
 		GtLConnection new
 			providerClass: self;
-			label: 'GPT 5.2';
-			model: 'gpt-5.2'.
+		label: 'MiniMax-M3';
+			model: 'MiniMax-M3'.
 		GtLConnection new
 			providerClass: self;
-			label: 'GPT 5.2 Codex';
-			model: 'gpt-5.2-codex'.
+		label: 'MiniMax-M2.7';
+			model: 'MiniMax-M2.7'.
 		GtLConnection new
 			providerClass: self;
-			label: 'GPT 5.3 Codex';
-			model: 'gpt-5.3-codex'.
-		GtLConnection new
+		label: 'MiniMax-M2.5';
+			model: 'MiniMax-M2.5'.
+			GtLConnection new
 			providerClass: self;
-			label: 'GPT 5.3';
-			model: 'gpt-5.3'.
-		GtLConnection new
-			providerClass: self;
-			label: 'GPT 5.5';
-			model: 'gpt-5.5' }
+		label: 'MiniMax-M2.1';
+			model: 'MiniMax-M2.1'.
+		} 
 ]
 
 { #category : #accessing }
-GtLOpenAIProvider class >> providerName [
-	^ 'OpenAI provider'
+GtLMiniMaxOpenAIProvider class >> providerName [
+	^ 'MiniMax provider'
 ]
 
 { #category : #'instance creation' }
-GtLOpenAIProvider class >> withApiKeyFromClipboard [
+GtLMiniMaxOpenAIProvider class >> withApiKeyFromClipboard [
 	^ self new apiKey: Clipboard clipboardText
 ]
 
 { #category : #'instance creation' }
-GtLOpenAIProvider class >> withApiKeyFromFile [
-	^ self new apiKey: GtLOpenAIClient apiKeyFileContents
+GtLMiniMaxOpenAIProvider class >> withApiKeyFromFile [
+	^ self new apiKey: GtLMiniMaxOpenAIClient apiKeyFileContents
 ]
 
 { #category : #'instance creation' }
-GtLOpenAIProvider class >> withDefaultSetup [
+GtLMiniMaxOpenAIProvider class >> withDefaultSetup [
 	^ self withApiKeyFromFile
 ]
 
 { #category : #accessing }
-GtLOpenAIProvider >> apiKey: aString [
+GtLMiniMaxOpenAIProvider >> apiKey: aString [
 	client apiKey: aString
 ]
 
 { #category : #configuring }
-GtLOpenAIProvider >> beWithApiCompaction [
+GtLMiniMaxOpenAIProvider >> beWithApiCompaction [
 	compactionStrategy := GtLApiCompactionStrategy forProvider: self.
 	compactionStrategy thresholdTokensLimit: self compactionTokensThreshold.
 ]
 
 { #category : #configuring }
-GtLOpenAIProvider >> beWithNoCompaction [
+GtLMiniMaxOpenAIProvider >> beWithNoCompaction [
 	compactionStrategy := GtLNoCompactionStrategy forProvider: self
 ]
 
 { #category : #configuring }
-GtLOpenAIProvider >> beWithPromptCompaction [
+GtLMiniMaxOpenAIProvider >> beWithPromptCompaction [
 	compactionStrategy := GtLPromptCompactionStrategy forProvider: self.
 	compactionStrategy thresholdTokensLimit: self compactionTokensThreshold.
 ]
 
 { #category : #accessing }
-GtLOpenAIProvider >> client [
+GtLMiniMaxOpenAIProvider >> client [
 	^ client
 ]
 
 { #category : #'client calls' }
-GtLOpenAIProvider >> clientGenerateCompactionResponse: anInputMessage [
+GtLMiniMaxOpenAIProvider >> clientGenerateCompactionResponse: anInputMessage [
 	^client 
 				generateCompactResponseWithModel: self modelName 
 				messages: self relevantChatMessages 
@@ -97,14 +94,14 @@ GtLOpenAIProvider >> clientGenerateCompactionResponse: anInputMessage [
 ]
 
 { #category : #'client calls' }
-GtLOpenAIProvider >> clientGenerateModelResponse: anInputMessage [
+GtLMiniMaxOpenAIProvider >> clientGenerateModelResponse: anInputMessage [
 	^self 
 			clientGenerateModelResponse: anInputMessage 
 			messages: self relevantChatMessages
 ]
 
 { #category : #'client calls' }
-GtLOpenAIProvider >> clientGenerateModelResponse: anInputMessage messages: aCollectionOfMessages [
+GtLMiniMaxOpenAIProvider >> clientGenerateModelResponse: anInputMessage messages: aCollectionOfMessages [
 	^client
 			generateResponseWithModel: self modelName
 			messages: aCollectionOfMessages
@@ -117,12 +114,12 @@ GtLOpenAIProvider >> clientGenerateModelResponse: anInputMessage messages: aColl
 ]
 
 { #category : #configuring }
-GtLOpenAIProvider >> compactionTokensThreshold [
+GtLMiniMaxOpenAIProvider >> compactionTokensThreshold [
 	^ 220000
 ]
 
 { #category : #utils }
-GtLOpenAIProvider >> createAPICompactionMessage [  
+GtLMiniMaxOpenAIProvider >> createAPICompactionMessage [  
 	| message |
 	message := self chat createUserMessage.
 	message
@@ -133,22 +130,22 @@ GtLOpenAIProvider >> createAPICompactionMessage [
 ]
 
 { #category : #accessing }
-GtLOpenAIProvider >> defaultAssistantMessageClass [
+GtLMiniMaxOpenAIProvider >> defaultAssistantMessageClass [
 	^ GtLOpenAIAssistantMessage
 ]
 
 { #category : #accessing }
-GtLOpenAIProvider >> defaultUserMessageClass [
+GtLMiniMaxOpenAIProvider >> defaultUserMessageClass [
 	^ GtLOpenAIUserMessage
 ]
 
 { #category : #'private - execution' }
-GtLOpenAIProvider >> ensureContextCompactionIfNeeded [
+GtLMiniMaxOpenAIProvider >> ensureContextCompactionIfNeeded [
 	compactionStrategy requestCompactionIfNeeded.
 ]
 
 { #category : #'private - execution' }
-GtLOpenAIProvider >> executeAsyncMessage: anInputMessage [
+GtLMiniMaxOpenAIProvider >> executeAsyncMessage: anInputMessage [
 	<return: #TAsyncPromise>
 	| anErrorHandlerPromise aFuture aFirstPromise |
 	self privateExecutionState: self state scheduled.
@@ -178,7 +175,7 @@ GtLOpenAIProvider >> executeAsyncMessage: anInputMessage [
 ]
 
 { #category : #'private - execution' }
-GtLOpenAIProvider >> executeNextMessage: anInputMessage [
+GtLMiniMaxOpenAIProvider >> executeNextMessage: anInputMessage [
 	| result |
 
 	result := anInputMessage executionStrategy
@@ -191,7 +188,7 @@ GtLOpenAIProvider >> executeNextMessage: anInputMessage [
 ]
 
 { #category : #'private - execution' }
-GtLOpenAIProvider >> executeNextPromtCompactionMessage: anInputMessage [
+GtLMiniMaxOpenAIProvider >> executeNextPromtCompactionMessage: anInputMessage [
 	| relevantMessages result |
 
 	relevantMessages := self relevantChatMessages 
@@ -207,12 +204,12 @@ GtLOpenAIProvider >> executeNextPromtCompactionMessage: anInputMessage [
 ]
 
 { #category : #accessing }
-GtLOpenAIProvider >> executions [
+GtLMiniMaxOpenAIProvider >> executions [
 	^ executions
 ]
 
 { #category : #views }
-GtLOpenAIProvider >> gtExecutionsFor: aView [
+GtLMiniMaxOpenAIProvider >> gtExecutionsFor: aView [
 	<gtView>
 	^ aView list
 		title: 'Executions';
@@ -221,7 +218,7 @@ GtLOpenAIProvider >> gtExecutionsFor: aView [
 ]
 
 { #category : #views }
-GtLOpenAIProvider >> gtSpawnClientFor: anAction [
+GtLMiniMaxOpenAIProvider >> gtSpawnClientFor: anAction [
 	<gtAction>
 	^ anAction button
 		icon: BrGlamorousVectorIcons inspect;
@@ -231,7 +228,7 @@ GtLOpenAIProvider >> gtSpawnClientFor: anAction [
 ]
 
 { #category : #views }
-GtLOpenAIProvider >> gtViewCallsWithTokensFor: aView [
+GtLMiniMaxOpenAIProvider >> gtViewCallsWithTokensFor: aView [
 	<gtView>
 	^(aView forward)
 		title: 'API calls and tokens';
@@ -241,38 +238,37 @@ GtLOpenAIProvider >> gtViewCallsWithTokensFor: aView [
 ]
 
 { #category : #initialization }
-GtLOpenAIProvider >> initialize [
+GtLMiniMaxOpenAIProvider >> initialize [
 	super initialize.
 	
 	modelName := nil.	"set when the provider is built"
-	client := GtLOpenAIClient new.
+	client := GtLMiniMaxOpenAIClient new.
 	executions := OrderedCollection new.
 	
 	self beWithApiCompaction.
 ]
 
 { #category : #accessing }
-GtLOpenAIProvider >> model [
+GtLMiniMaxOpenAIProvider >> model [
 	"Answer a model matching the receiver's characteristics"
 	<return: #GtLLlmModel>
 
-	^ GtLOpenAiResponsesProvider new 
-		modelName: modelName;
-		model
+	^ GtLModelFactory new openAi_responses
+		name: modelName
 ]
 
 { #category : #accessing }
-GtLOpenAIProvider >> modelName [
+GtLMiniMaxOpenAIProvider >> modelName [
 	^ modelName
 ]
 
 { #category : #accessing }
-GtLOpenAIProvider >> modelName: aString [
+GtLMiniMaxOpenAIProvider >> modelName: aString [
 	modelName := aString
 ]
 
 { #category : #'private - execution' }
-GtLOpenAIProvider >> performToolCallsIn: result with: activeTools [
+GtLMiniMaxOpenAIProvider >> performToolCallsIn: result with: activeTools [
 	<return: #GtLOpenAIProviderProcessedMessage or: nil>
 	| toolMessages |
 	
@@ -307,7 +303,7 @@ GtLOpenAIProvider >> performToolCallsIn: result with: activeTools [
 ]
 
 { #category : #copying }
-GtLOpenAIProvider >> postCopyForIndependentRequest [
+GtLMiniMaxOpenAIProvider >> postCopyForIndependentRequest [
 	super postCopyForIndependentRequest.
 	
 	client := client copy.
@@ -316,7 +312,7 @@ GtLOpenAIProvider >> postCopyForIndependentRequest [
 ]
 
 { #category : #printing }
-GtLOpenAIProvider >> printOn: aStream [
+GtLMiniMaxOpenAIProvider >> printOn: aStream [
 	aStream
 		nextPutAll: self class providerName;
 		nextPut: $(;
@@ -327,7 +323,7 @@ GtLOpenAIProvider >> printOn: aStream [
 ]
 
 { #category : #'private - execution' }
-GtLOpenAIProvider >> processNextMessage: anInputMessage [
+GtLMiniMaxOpenAIProvider >> processNextMessage: anInputMessage [
 	<return: #GtLOpenAIProviderProcessedMessage or: nil>
 	| result outputMessage anotherMessage |
 	self state ifCanContinue: [  ] ifDisabled: [ ^ nil ].
@@ -354,7 +350,7 @@ GtLOpenAIProvider >> processNextMessage: anInputMessage [
 ]
 
 { #category : #'private - execution' }
-GtLOpenAIProvider >> relevantChatMessages [
+GtLMiniMaxOpenAIProvider >> relevantChatMessages [
 	| relevantMessages |
 	relevantMessages := self chat messages
 			messagesSelect: [:each | each isAssistantRole and: [each hasCompactionResponse]].
@@ -367,7 +363,7 @@ GtLOpenAIProvider >> relevantChatMessages [
 ]
 
 { #category : #'private - execution' }
-GtLOpenAIProvider >> responseTypeForResult: aResult fromInputMessage: anInputMessage [ 
+GtLMiniMaxOpenAIProvider >> responseTypeForResult: aResult fromInputMessage: anInputMessage [ 
 	| newMessage |
 	newMessage := ((anInputMessage isCompactionRequest
 		ifTrue: [ GtLOpenAICompactionMessage ]
@@ -381,11 +377,11 @@ GtLOpenAIProvider >> responseTypeForResult: aResult fromInputMessage: anInputMes
 ]
 
 { #category : #utils }
-GtLOpenAIProvider >> sendAPICompactionMessage [  
+GtLMiniMaxOpenAIProvider >> sendAPICompactionMessage [  
 	^self chat sendMessage:  self createAPICompactionMessage
 ]
 
 { #category : #accessing }
-GtLOpenAIProvider >> serializeToolMessageForResponse: aToolMessage [
+GtLMiniMaxOpenAIProvider >> serializeToolMessageForResponse: aToolMessage [
 	^ aToolMessage serializeForOpenAIResponsesAPI
 ]
