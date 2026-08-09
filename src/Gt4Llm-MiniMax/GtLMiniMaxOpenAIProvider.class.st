@@ -17,7 +17,7 @@ GtLMiniMaxOpenAIProvider class >> isConnectable [
 
 { #category : #'as yet unclassified' }
 GtLMiniMaxOpenAIProvider class >> knownConnectors [
-
+    <gtConnection>
 	^ {
 		GtLConnection new
 			providerClass: self;
