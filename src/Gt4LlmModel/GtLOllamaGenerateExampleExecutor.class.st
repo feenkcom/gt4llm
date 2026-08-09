@@ -17,14 +17,23 @@ GtLOllamaGenerateExampleExecutor >> assertFirstResponseContent: chat [
 	self assert: responseMessage equals: (jsonDictionary at: 'response').
 ]
 
-{ #category : #api }
-GtLOllamaGenerateExampleExecutor >> ollamaGenerateModel: aString responses: aSelector in: exampleObject [
-	| provider |
+{ #category : #'as yet unclassified' }
+GtLOllamaGenerateExampleExecutor >> assertResponseGenerateStringContent: responseMessage [
+	| responseContent |
+
+	responseContent := responseMessage requestResponse result.
+	self assert: (responseContent at: 'model') isString.
+	self assert: (responseContent at: 'response') isString.
+	self assert: (responseContent at: 'done').
+]
+
+{ #category : #accessing }
+GtLOllamaGenerateExampleExecutor >> provider [
+
+	provider ifNotNil: [ ^ provider ].
 
 	provider := GtLOllamaProvider new 
 		generate;
-		modelName: aString.
-	model := provider model.
-	self configureModelWithResponses: aSelector in: exampleObject.
-	^ self newChatFromModel.
+		modelName: 'tinyllama'.
+	^ provider.
 ]

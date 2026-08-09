@@ -273,7 +273,7 @@ GtLConnectionRegistry >> knownOllamaConnectors [
 		GtLConnection new
 			providerClass: GtLOllamaProvider;
 			label: name;
-			model: name. ]
+			modelName: name. ]
 ]
 
 { #category : #utils }
@@ -306,7 +306,7 @@ GtLConnectionRegistry >> standardDefaultConnection [
 	^ GtLConnection new
 		providerClass: GtLOpenAIProvider;
 		label: 'GPT 5.4';
-		model: 'gpt-5.4'
+		modelName: 'gpt-5.4'
 ]
 
 { #category : #subscriptions }

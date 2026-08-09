@@ -38,6 +38,7 @@ Object >> gtActionObjectChatFor: anAction [
 		icon: BrGlamorousVectorIcons chat;
 		tooltip: 'Chat about this object';
 		target: GtPhlowObjectContextMenuTarget;
+		addTarget: GtCoderClassTarget;
 		menuItemGroup: BrMenuItemGroupConfiguration default;
 		menuItemPreview: [ self gtDisplayText ];
 		action: [ :button | button phlow spawnObject: chatBlock value ];

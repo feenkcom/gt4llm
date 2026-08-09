@@ -13,7 +13,8 @@ Class {
 		'asynchronous',
 		'currentAsyncExecution',
 		'objectStorage',
-		'summarizersRegistry'
+		'summarizersRegistry',
+		'announcer'
 	],
 	#classVars : [
 		'Current'
@@ -80,6 +81,13 @@ GtLMcpServer >> addTool: aTool [
 { #category : #adding }
 GtLMcpServer >> addTools: aToolList [
 	tools addAll: aToolList
+]
+
+{ #category : #announcing }
+GtLMcpServer >> announce: anAnnouncement [
+	^ announcer
+		ifNil: [ anAnnouncement ]
+		ifNotNil: [ announcer announce: anAnnouncement ]
 ]
 
 { #category : #configuring }
@@ -236,26 +244,27 @@ GtLMcpServer >> gtErrorsFor: aView [
 		actionUpdateButton
 ]
 
-{ #category : #views }
+{ #category : #'gt-views' }
 GtLMcpServer >> gtHistoryFor: aView [
 	<gtView>
 	
-	history ifNil: [^aView empty].
+	history ifNil: [ ^ aView empty ].
 	
-	^(aView columnedList)
+	^ (aView columnedList)
 		title: 'Executed tools';
-		items: [history reverse];
+		items: [ self historySnapshot reverse ];
 		priority: 1;
 		column: 'Role'
-			text: [:item | item role]
+			text: [ :item | item role ]
 			width: 70;
-		column: 'Summary' text: [:each | each contentOneLineSummary];
+		column: 'Summary' text: [ :each | each contentOneLineSummary ];
 		column: 'Created'
-			text: [:item | item createdAt asStringYMDHMS]
+			text: [ :item | item createdAt asStringYMDHMS ]
 			width: 130;
 		column: 'Running'
-			text: [:item | item output ifNil: ['Yes'] ifNotNil: ['']]
+			text: [ :item | item output ifNil: [ 'Yes' ] ifNotNil: [ '' ] ]
 			width: 55;
+		updateWhen: GtLMcpServerHistoryItemAddedAnnouncement in: [ announcer ];
 		actionUpdateButton
 ]
 
@@ -342,6 +351,11 @@ GtLMcpServer >> handleNotificationsInitialized: aJsonRpc [
 	^ {} asDictionary
 ]
 
+{ #category : #notifications }
+GtLMcpServer >> handleNotificationsRootsListChanged: aJsonRpc [
+	^ {} asDictionary
+]
+
 { #category : #handling }
 GtLMcpServer >> handlePromptsGet: aJsonRpc [
 	| prompt |
@@ -416,7 +430,7 @@ GtLMcpServer >> handleResourcesTemplatesList: aJsonRpc [
 	^ {'resourceTemplates' -> {}} asDictionary
 ]
 
-{ #category : #handling }
+{ #category : #dispatching }
 GtLMcpServer >> handleToolsCall: aJsonRpc [
 	| tool result toolCall toolMessage |
 	tool := self detectToolNamed: (aJsonRpc params at: 'name').
@@ -425,7 +439,7 @@ GtLMcpServer >> handleToolsCall: aJsonRpc [
 				rawArguments: (aJsonRpc params at: 'arguments').
 	
 	toolMessage := GtLToolMessage new toolCall: toolCall.
-	history add: toolMessage.
+	self privateAddToolMessage: toolMessage.
 	
 	result := tool 
 		performToolCall: toolCall 
@@ -443,6 +457,11 @@ GtLMcpServer >> handleToolsList: aJsonRpc [
 		asDictionary
 ]
 
+{ #category : #accessing }
+GtLMcpServer >> historySnapshot [
+	^ history lock: [ :aHistory | aHistory asArray ]
+]
+
 { #category : #initialization }
 GtLMcpServer >> initialize [
 	super initialize.
@@ -452,10 +471,11 @@ GtLMcpServer >> initialize [
 	tools := GtLTools new.
 	resources := GtLMcpResources new.
 	prompts := GtLMessagesGroup new.
-	history := OrderedCollection new.
+	history := AsyncMutex for: OrderedCollection new.
 	errors := OrderedCollection new.
 	objectStorage := GtLObjectStorage new.
 	summarizersRegistry := GtLToolCallSummarizersRegistry new.
+	announcer := nil.
 ]
 
 { #category : #testing }
@@ -512,6 +532,18 @@ GtLMcpServer >> port: anObject [
 	port := anObject
 ]
 
+{ #category : #private }
+GtLMcpServer >> privateAddToolMessage: aToolMessage [
+	| anAnnouncement |
+	history lock: [ :aHistory |
+		aHistory add: aToolMessage.
+		anAnnouncement := GtLMcpServerHistoryItemAddedAnnouncement new
+			mcpServer: self;
+			message: aToolMessage;
+			yourself ].
+	self announce: anAnnouncement
+]
+
 { #category : #accessing }
 GtLMcpServer >> prompts [
 	^ prompts
@@ -564,4 +596,23 @@ GtLMcpServer >> stop [
 { #category : #accessing }
 GtLMcpServer >> tools [
 	^ tools
+]
+
+{ #category : #announcing }
+GtLMcpServer >> unsubscribe: anObject [
+	^ announcer
+		ifNil: [ anObject ]
+		ifNotNil: [ announcer unsubscribe: anObject ]
+]
+
+{ #category : #announcing }
+GtLMcpServer >> when: anAnnouncementClass send: aSelector to: anObject [
+	"Declare that when anAnnouncementClass is raised, anObject should receive the message aSelector.
+    When the message expects one argument (eg #fooAnnouncement:) the announcement is passed as argument.
+    When the message expects two arguments (eg #fooAnnouncement:announcer:) both the announcement and the announcer 
+    are passed as argument"
+	^ (announcer ifNil: [ announcer := Announcer new ])
+		when: anAnnouncementClass
+		send: aSelector
+		to: anObject
 ]

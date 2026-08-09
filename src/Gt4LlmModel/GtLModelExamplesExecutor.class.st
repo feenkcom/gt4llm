@@ -5,7 +5,11 @@ Class {
 		'model',
 		'semaphore',
 		'expectedResponses',
-		'isLive'
+		'isLive',
+		'provider',
+		'chat',
+		'expectedHistory',
+		'client'
 	],
 	#classVars : [
 		'IsLive',
@@ -52,21 +56,86 @@ GtLModelExamplesExecutor >> assertHistoryResponsesOK: history [
 		self assert: requestResponse response isSuccess ].
 ]
 
-{ #category : #api }
-GtLModelExamplesExecutor >> configureModelWithResponses: aSelector in: exampleObject [
+{ #category : #asserting }
+GtLModelExamplesExecutor >> assertResponseCompletionsStringContent: responseMessage [
+	| responseContent |
 
-	semaphore := Semaphore new.
+	responseContent := responseMessage requestResponse result.
+	(responseContent at: 'choices') do: [ :jsonObject | | message |
+		message := jsonObject at: 'message'.
+		self assert: (message at: 'role') equals: 'assistant'.
+		self assert: (message at: 'content') isString. ].
+]
+
+{ #category : #asserting }
+GtLModelExamplesExecutor >> assertResponseResponsesMarkdownContent: responseMessage [
+	| responseContent |
+
+	responseContent := responseMessage content.
+	self assert: responseContent size equals: 1.
+	responseContent first do: [ :jsonObject | | text textObject |
+		self assert: (jsonObject at: 'type') equals: 'output_text'.
+		text := jsonObject at: 'text'.
+		self assert: text isString.
+		textObject := responseMessage finalMessage formatDescriptions readDomainObjectsFrom: text.
+		self assert: (textObject at: 'Markdown') content isString. ].
+]
+
+{ #category : #asserting }
+GtLModelExamplesExecutor >> assertResponseResponsesStringContent: responseMessage [
+	| responseContent |
+
+	responseContent := responseMessage content.
+	self assert: responseContent size equals: 1.
+	responseContent first do: [ :jsonObject | | text |
+		self assert: (jsonObject at: 'type') equals: 'output_text'.
+		text := jsonObject at: 'text'.
+		self assert: text isString. ].
+]
+
+{ #category : #accessing }
+GtLModelExamplesExecutor >> chat [
+
+	chat ifNotNil: [ ^ chat ].
+
+	chat := GtLChat new 
+		provider: self provider.
+	chat
+		when: GtLChatExecutionStateChanged
+		send: #signalSemaphoreOnFinished:
+		to: self.
+	^ chat
+]
+
+{ #category : #'as yet unclassified' }
+GtLModelExamplesExecutor >> client [
+	
+	client ifNotNil: [ ^ client ].
+	
+	client := self provider client.
 	self isLive ifFalse:
-		[ | responseData |
-		responseData := aSelector
-			ifNil: [ #() ]
-			ifNotNil: [ exampleObject perform: aSelector ].
-		expectedResponses := responseData 
-			collect: [ :response |
-				(ZnResponse readFrom: response readStream) ]
-			as: OrderedCollection.
-		model client clientBuilder: (GtLOpenAIClientStubBuilder new
+		[ client clientBuilder: (GtLOpenAIClientStubBuilder new
 			responses: expectedResponses copy). ].
+	^ client
+]
+
+{ #category : #'as yet unclassified' }
+GtLModelExamplesExecutor >> decodeHistory: aCollection [
+
+	^ GtLDataSourceEncoderDecoder loadClientHistoryFromStream:
+		(GZipReadStream on: aCollection) upToEnd utf8Decoded readStream
+]
+
+{ #category : #accessing }
+GtLModelExamplesExecutor >> expectedHistory [
+	^ expectedHistory
+]
+
+{ #category : #initialization }
+GtLModelExamplesExecutor >> initialize [
+
+	super initialize.
+	semaphore := Semaphore new.
 ]
 
 { #category : #testing }
@@ -82,17 +151,26 @@ GtLModelExamplesExecutor >> isLive: anObject [
 	isLive := anObject
 ]
 
+{ #category : #'as yet unclassified' }
+GtLModelExamplesExecutor >> loadExpectedHistoryFrom: aByteArray [
+
+	self isLive ifTrue: [ ^ self ].
+	expectedHistory := self decodeHistory: aByteArray.
+	self isLive ifFalse:
+		[ expectedResponses := expectedHistory collect: #response.
+		self client clientBuilder: (GtLOpenAIClientStubBuilder new responses: expectedResponses copy) ].
+]
+
 { #category : #accessing }
-GtLModelExamplesExecutor >> newChatFromModel [
-	"Answer a new chat configured and signal the receiver's semaphore when it goes idle."
-	| chat |
-	
-	chat := GtLChat new provider: model provider.
-	chat
-		when: GtLChatExecutionStateChanged
-		send: #signalSemaphoreOnFinished:
-		to: self.
-	^ chat
+GtLModelExamplesExecutor >> model [
+
+	^ self provider model
+]
+
+{ #category : #accessing }
+GtLModelExamplesExecutor >> provider [
+
+	^ self subclassResponsibility.
 ]
 
 { #category : #private }

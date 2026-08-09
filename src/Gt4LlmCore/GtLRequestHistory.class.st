@@ -64,6 +64,12 @@ GtLRequestHistory >> requestByteArrays [
 	^ contents
 ]
 
+{ #category : #accessing }
+GtLRequestHistory >> requestContentsAt: anInteger [
+
+	^ NeoJSONReader fromString: (self at: anInteger) request contents
+]
+
 { #category : #'api - serializing' }
 GtLRequestHistory >> responseByteArrays [
 	| contents fr |

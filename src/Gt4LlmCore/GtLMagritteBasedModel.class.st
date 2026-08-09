@@ -24,6 +24,12 @@ GtLMagritteBasedModel >> addInstructionsTo: aMessageInstructions [
 				body: (exporter exportSchemaAsJsonString))
 ]
 
+{ #category : #testing }
+GtLMagritteBasedModel >> hasInstructions [
+
+	^ true
+]
+
 { #category : #views }
 GtLMagritteBasedModel >> llmModelDataViewsFor: aDataView [
 	<gtLlmDataView>

@@ -8,6 +8,17 @@ Class {
 }
 
 { #category : #ui }
+GtLModelMessage >> gtContentTextFor: aView [
+	<gtView>
+	
+	self hasContent ifFalse: [ ^ aView empty ].
+	^ aView text
+		title: 'Content Text';
+		priority: 40;
+		text: [ self contentText ]
+]
+
+{ #category : #ui }
 GtLModelMessage >> gtReasoningFor: aView [
 	<gtView>
 	<gtLlmView>

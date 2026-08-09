@@ -177,6 +177,31 @@ GtLModelClient >> gtCallsFor: aView [
 		view: #gtCallsFor:
 ]
 
+{ #category : #ui }
+GtLModelClient >> gtViewCallsWithTokensFor: aView [
+	<gtView>
+	^ aView columnedList
+		title: 'Tokens by call';
+		priority: 10;
+		items: [ self usageDetails ];
+		column: 'URL' text: [ :each | each key request url ];
+		column: 'Request'
+			text: [ :each | each key request method ]
+			width: 100;
+		column: 'Response'
+			text: [ :each | 
+				String
+					streamContents: [ :out | each key response statusLine writeOn: out ] ]
+			width: 150;
+		column: 'Input tokens'
+			text: [ :each | each value inputTokens ]
+			width: 100;
+		column: 'Output tokens'
+			text: [ :each | each value outputTokens ]
+			width: 100;
+		send: #key
+]
+
 { #category : #accessing }
 GtLModelClient >> history [
 	^ history
@@ -222,4 +247,11 @@ GtLModelClient >> post: aString withEntity: anEntity [
 	requestResponse result: result.
 	self checkForErrors: result.
 	^ requestResponse
+]
+
+{ #category : #ui }
+GtLModelClient >> usageDetails [
+
+	^ (history collect: [ :each | each -> each resultUsageDetails ])
+				reject: [ :each | each value isNil ]
 ]

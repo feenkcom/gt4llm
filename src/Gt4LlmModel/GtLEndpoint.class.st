@@ -1,8 +1,26 @@
 Class {
 	#name : #GtLEndpoint,
 	#superclass : #Object,
+	#instVars : [
+		'additionalEntity'
+	],
 	#category : #'Gt4LlmModel-Model'
 }
+
+{ #category : #private }
+GtLEndpoint >> addAdditionalEntityTo: entity [
+
+	additionalEntity ifNil: [ ^ self ].
+
+	entity addAll: additionalEntity.
+]
+
+{ #category : #accessing }
+GtLEndpoint >> additionalEntity [
+	"Answer a dictionary that is appended to every entity sent to the LLM"
+
+	^ additionalEntity ifNil: [ additionalEntity := Dictionary new ]
+]
 
 { #category : #api }
 GtLEndpoint >> createApiCompactionMessageForChat: aChat [
@@ -16,7 +34,11 @@ GtLEndpoint >> createPromptCompactionMessageForChat: aChat [
 	message := aChat createUserMessage.
 	message
 		addResponseFormatForMagritte: GtLChatCompactedData named: 'Compaction';
-		markdown: 'You are performing a CONTEXT CHECKPOINT COMPACTION. Create a handoff summary for another LLM that will resume the task.'.
+		markdown: 'Compact this chat for later continuation. Summarize:
+- The initial and remaining goals
+- Essential lessons and decisions
+- Open questions
+- Next steps'.
 	^ message
 ]
 

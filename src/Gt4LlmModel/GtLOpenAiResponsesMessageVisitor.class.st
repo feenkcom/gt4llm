@@ -6,36 +6,64 @@ Class {
 
 { #category : #api }
 GtLOpenAiResponsesMessageVisitor >> chatMessage: aMessage [
-	| content |
+
+	^ self visitNode: aMessage.
+]
+
+{ #category : #visiting }
+GtLOpenAiResponsesMessageVisitor >> compactionOutputFrom: anAssistantMessage [
+	| output |
 	
-	content := self visitNode: aMessage "computeContentBlockFromInputModels".
+	output := anAssistantMessage requestResponse result at: 'output'.
+	^ output reversed detect: [ :jsonObject |
+		(jsonObject at: 'type') = 'compaction' ]
+]
+
+{ #category : #visiting }
+GtLOpenAiResponsesMessageVisitor >> roleAndContentFrom: anAssistantMessage [
+	| content |
+
+	content := { {
+		'type' -> 'output_text'.
+		'text' -> anAssistantMessage contentText 
+		} asDictionary.
+		}.
 	^ {
-		'role' -> aMessage role.
+		'role' -> anAssistantMessage role.
 		'content' -> content.
-	} asDictionary.
+		} asDictionary.
 ]
 
 { #category : #visiting }
 GtLOpenAiResponsesMessageVisitor >> visitGtLModelAssistantMessage: anAssistantMessage [
-
-	^ { {
-		'type' -> 'output_text'.
-		'text' -> anAssistantMessage contentText 
-		} asDictionary.
-		}
+	"If the message includes a compaction output, only supply that output"
+	| provider |
+	
+	provider := anAssistantMessage chat provider.
+	
+	^ (provider assistantMessageHasCompactionResponse: anAssistantMessage) ifTrue:
+		[ self compactionOutputFrom: anAssistantMessage ]
+	ifFalse:
+		[ self roleAndContentFrom: anAssistantMessage ].
 ]
 
 { #category : #visiting }
 GtLOpenAiResponsesMessageVisitor >> visitGtLModelUserMessage: aUserMessage [
-
-	^ aUserMessage computeContentBlockFromInputModels acceptVisitor: self
+	| content |
+	
+	content := aUserMessage contentDataBlock  acceptVisitor: self.
+	^ {
+		'role' -> aUserMessage role.
+		'content' -> content.
+		} asDictionary.
 ]
 
 { #category : #visiting }
 GtLOpenAiResponsesMessageVisitor >> visitGtLPrimitiveCompositeJsonGenericDataBlock: aDataBlock [
 	| content |
 
-	content := aDataBlock jsonDataBlocks 
+	^ aDataBlock condensedJsonBlock acceptVisitor: self.
+	"content := aDataBlock jsonDataBlocks 
 			collect: [ :dataBlock |
 				dataBlock acceptVisitor: self ]
 			as: Array.
@@ -43,7 +71,17 @@ GtLOpenAiResponsesMessageVisitor >> visitGtLPrimitiveCompositeJsonGenericDataBlo
 	^ aDataBlock dataKey ifNil:
 		[ content ]
 	ifNotNil:
-		[ { aDataBlock dataKey -> content } asDictionary ]
+		[ { aDataBlock dataKey -> content } asDictionary ]"
+]
+
+{ #category : #'as yet unclassified' }
+GtLOpenAiResponsesMessageVisitor >> visitGtLPrimitiveImageDataBlock: aDataBlock [
+
+	^ {NeoJSONObject new
+			at: 'image_url' put: ('data:image/'
+				, aDataBlock imageType,';base64,' , aDataBlock encodedBytes);
+			at: 'type' put: 'input_image';
+			yourself}
 ]
 
 { #category : #visiting }
@@ -52,39 +90,45 @@ GtLOpenAiResponsesMessageVisitor >> visitGtLPrimitiveJsonBareDataBlock: aDataBlo
 
 	string := aDataBlock jsonData.
 	self assert: string isString.
-	^ string
+	^ {NeoJSONObject new
+			at: #text put: string;
+			at: #type put: #input_text;
+			yourself}
 ]
 
 { #category : #visiting }
 GtLOpenAiResponsesMessageVisitor >> visitGtLPrimitiveJsonDataBlock: aDataBlock [
-	"This is a bit of a hack at the moment.
-	If the data block is just content, assume that the message is a simple string and just answer the content, otherwise answer the string serialisation."
 
-	^ aDataBlock jsonData 
-		at: 'content'
-		ifPresent: [ :string |
-			self assert: string isString.
-			string ]
-		ifAbsent:
-			[ NeoJSONWriter toStringPretty: aDataBlock jsonData ].
+	^ {NeoJSONObject new
+			at: #text put: aDataBlock serializedJsonString;
+			at: #type put: #input_text;
+			yourself}
 ]
 
 { #category : #visiting }
 GtLOpenAiResponsesMessageVisitor >> visitGtLPrimitiveMessageDataBlock: aDataBlock [
-	| content text |
+	| content |
 
 	content := OrderedCollection new.
-	text := String crlf join: 
-(aDataBlock compositeJsonDataBlock acceptVisitor: self).
-	content add: {
-		'type' -> 'input_text'.
-		'text' -> (NeoJSONWriter toStringPretty: text)
-		} asDictionary.
+	aDataBlock dataBlocks do: [ :aDataBlockBlock |
+		content addAll: (aDataBlockBlock acceptVisitor: self) ].
+		
+		
+		
+
+	"content := aDataBlock dataBlocks collect:
+		[ :each |
+			NeoJSONObject new
+				at: 'text' put: each serializedJsonString;
+				at: 'type' put: 'input_text';
+				yourself ]
+		as: OrderedCollection.
+
 	aDataBlock imageDataBlocks do: [ :dataBlock |
 		content add: {
 			'type' -> 'image_url'.
 			'image_url' -> ('data:image/', dataBlock imageType, ';base64,', dataBlock encodedBytes).
-			} asDictionary. ].
+			} asDictionary. ]."
 	^ content asArray.
 ]
 
