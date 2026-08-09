@@ -21,6 +21,32 @@ GtLAnthropicProvider class >> isConnectable [
 	^ GtAnthropicClient apiKeyFile exists
 ]
 
+{ #category : #accessing }
+GtLAnthropicProvider class >> knownConnectors [
+	<gtConnection>
+	^ {
+		GtLConnection new
+			providerClass: self;
+			label: 'Claude Opus 4.5';
+			model: 'claude-opus-4-5'.
+		GtLConnection new
+			providerClass: self;
+			label: 'Claude Opus 4.6';
+			model: 'claude-opus-4-6'.
+		GtLConnection new
+			providerClass: self;
+			label: 'Claude Opus 4.7';
+			model: 'claude-opus-4-7'.
+		GtLConnection new
+			providerClass: self;
+			label: 'Claude Opus 4.8';
+			model: 'claude-opus-4-8'.
+		GtLConnection new
+			providerClass: self;
+			label: 'Claude Fable 5';
+			model: 'claude-fable-5' }
+]
+
 { #category : #'as yet unclassified' }
 GtLAnthropicProvider class >> providerName [
 	^ 'Anthropic'

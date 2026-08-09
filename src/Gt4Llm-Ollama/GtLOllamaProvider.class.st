@@ -34,6 +34,26 @@ GtLOllamaProvider class >> isConnectable [
 	^ IsConnectable
 ]
 
+{ #category : #accessing }
+GtLOllamaProvider class >> knownConnectors [
+	<gtConnection>
+	"If enabled, answer the list of known Ollama connectors.
+	This makes a request to the Ollama server to retrieve the list of available models."
+	| provider names |
+
+	self isConnectable ifFalse: [ ^ #() ].
+
+	provider := self new.
+	names := [ provider availableModels keys ]
+		on: ConnectionClosed
+		do: [ :ex | #() ].
+	^ names sorted collect: [ :eaName |
+		GtLConnection new
+			providerClass: self;
+			label: eaName;
+			modelName: eaName ]
+]
+
 { #category : #api }
 GtLOllamaProvider class >> markConnectable [
 	IsConnectable = true ifTrue: [ ^ self ].

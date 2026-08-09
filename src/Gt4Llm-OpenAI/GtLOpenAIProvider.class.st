@@ -16,6 +16,32 @@ GtLOpenAIProvider class >> isConnectable [
 ]
 
 { #category : #accessing }
+GtLOpenAIProvider class >> knownConnectors [
+	<gtConnection>
+	^ {
+		GtLConnection new
+			providerClass: self;
+			label: 'GPT 5.2';
+			model: 'gpt-5.2'.
+		GtLConnection new
+			providerClass: self;
+			label: 'GPT 5.2 Codex';
+			model: 'gpt-5.2-codex'.
+		GtLConnection new
+			providerClass: self;
+			label: 'GPT 5.3 Codex';
+			model: 'gpt-5.3-codex'.
+		GtLConnection new
+			providerClass: self;
+			label: 'GPT 5.3';
+			model: 'gpt-5.3'.
+		GtLConnection new
+			providerClass: self;
+			label: 'GPT 5.5';
+			model: 'gpt-5.5' }
+]
+
+{ #category : #accessing }
 GtLOpenAIProvider class >> providerName [
 	^ 'OpenAI provider'
 ]

@@ -212,49 +212,14 @@ GtLConnectionRegistry >> initialize [
 
 { #category : #accessing }
 GtLConnectionRegistry >> knownConnectors [
-	^ {
-		GtLConnection new
-			providerClass: GtLAnthropicProvider;
-			label: 'Claude Opus 4.5';
-			model: 'claude-opus-4-5'.
-		GtLConnection new
-			providerClass: GtLAnthropicProvider;
-			label: 'Claude Opus 4.6';
-			model: 'claude-opus-4-6'.
-		GtLConnection new
-			providerClass: GtLAnthropicProvider;
-			label: 'Claude Opus 4.7';
-			model: 'claude-opus-4-7'.
-		GtLConnection new
-			providerClass: GtLAnthropicProvider;
-			label: 'Claude Opus 4.8';
-			model: 'claude-opus-4-8'.
-		GtLConnection new
-			providerClass: GtLAnthropicProvider;
-			label: 'Claude Fable 5';
-			model: 'claude-fable-5'.
-		GtLConnection new
-			providerClass: GtLOpenAIProvider;
-			label: 'GPT 5.2';
-			model: 'gpt-5.2'.
-		GtLConnection new
-			providerClass: GtLOpenAIProvider;
-			label: 'GPT 5.2 Codex';
-			model: 'gpt-5.2-codex'.
-		GtLConnection new
-			providerClass: GtLOpenAIProvider;
-			label: 'GPT 5.3 Codex';
-			model: 'gpt-5.3-codex'.
-		GtLConnection new
-			providerClass: GtLOpenAIProvider;
-			label: 'GPT 5.3';
-			model: 'gpt-5.3'.
-		GtLConnection new
-			providerClass: GtLOpenAIProvider;
-			label: 'GPT 5.5';
-			model: 'gpt-5.5'.
-		},
-		self knownOllamaConnectors
+	"Collect the list of known connectors by querying every provider class
+	that exposes a `<gtConnection>` pragma. Providers own their own static or
+	dynamic list of connections, so adding a new provider does not require
+	editing this registry."
+
+	^ (Pragma allNamed: #gtConnection)
+		flatCollect: [ :pragma |
+			pragma methodClass instanceSide perform: pragma methodSelector ]
 ]
 
 { #category : #'private - accessing' }
