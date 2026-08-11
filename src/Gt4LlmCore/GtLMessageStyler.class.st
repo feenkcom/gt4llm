@@ -120,13 +120,6 @@ GtLMessageStyler >> isValidLink: urlString [
 	^ (self resolveUrl: urlString) isValid
 ]
 
-{ #category : #private }
-GtLMessageStyler >> labelForObjectAnnotation: anObjectAnnotation object: anObject [
-	| selector |
-	selector := anObjectAnnotation labelSelector ifNil: ['gtDisplayString'].
-	^[anObject perform: selector asSymbol] on: Error do: [:e | e printString]
-]
-
 { #category : #accessing }
 GtLMessageStyler >> nextUniqueId [
 	lastId := lastId + 1.
@@ -585,57 +578,6 @@ GtLMessageStyler >> styleName: anAnnotation [
 		foreground: aLinkColor
 ]
 
-{ #category : #private }
-GtLMessageStyler >> styleObjectButton: anObjectAnnotation object: anObject [
-	| attribute uuid label |
-	uuid := anObjectAnnotation uuid.
-	uuid ifNil: [^self].
-	label := anObject
-				ifNotNil: [self labelForObjectAnnotation: anObjectAnnotation object: anObject]
-				ifNil: [anObjectAnnotation fallbackLabel ifNil: [uuid]].
-	attribute := (GtButtonAttribute new)
-				beAppend;
-				stencil: 
-						[| button |
-						button := self class
-									textLinkButtonPadding: (BlInsets top: 2)
-									margin: BlInsets empty
-									valid: anObject notNil.
-						button aptitude glamorousCodeFont.
-						button
-							beSmallSize;
-							label: label;
-							action: [:aButton | anObject ifNotNil: [aButton phlow spawnObject: anObject]].
-						button].
-	self text
-		attribute: attribute
-		from: anObjectAnnotation parent startPosition
-		to: anObjectAnnotation parent stopPosition
-]
-
-{ #category : #private }
-GtLMessageStyler >> styleObjectExpanding: anObjectAnnotation object: anObject [
-	| cacheKey attribute isExpanded showSelector height |
-	cacheKey := anObjectAnnotation source.
-	isExpanded := anObjectAnnotation expandedValue ifNil: [false].
-	showSelector := (anObjectAnnotation showSelector ifNil: ['gtViewsFor:'])
-				asSymbol.
-	height := anObjectAnnotation heightValue ifNil: [200].
-	attribute := (GtCachedTextExpandButtonAttribute new)
-				isExpanded: (self expanded at: cacheKey ifAbsentPut: [isExpanded]);
-				attributesCreatingBlock: 
-						[(GtResizablePreviewAttribute new)
-							withCache: self elements key: cacheKey;
-							result: anObject;
-							showSelector: showSelector;
-							height: height];
-				onCachingDo: [:aBoolean :theAttribute | self expanded at: cacheKey put: aBoolean].
-	self text
-		attribute: attribute
-		from: anObjectAnnotation parent startPosition
-		to: anObjectAnnotation parent stopPosition
-]
-
 { #category : #generated }
 GtLMessageStyler >> styleOpenExternalImage: aLink text: aSubText [
 	| anImageURL attribute pictureContainer widget |
@@ -842,7 +784,7 @@ GtLMessageStyler >> visitMethodAnnotation: aMethodAnnotation [
 
 { #category : #visiting }
 GtLMessageStyler >> visitObjectReferenceAnnotation: anObjectAnnotation [
-	| uuid object isValid aLinkColor |
+	| uuid object isValid aLinkColor adapter |
 	uuid := anObjectAnnotation uuid.
 	object := uuid ifNotNil: [self objectForUuid: uuid].
 	isValid := object notNil.
@@ -852,9 +794,14 @@ GtLMessageStyler >> visitObjectReferenceAnnotation: anObjectAnnotation [
 	(self text from: anObjectAnnotation parent startPosition
 		to: anObjectAnnotation parent stopPosition) foreground: aLinkColor.
 	uuid ifNotNil: [self styleAutoHidingAnnotation: anObjectAnnotation].
-	self styleObjectButton: anObjectAnnotation object: object.
+	adapter := LeObjectReferenceAnnotationAdapter
+				annotation: anObjectAnnotation
+				object: object.
+	self styleButton: adapter withTool: [GtInspectorTool forObject: object].
 	isValid
-		ifTrue: [self styleObjectExpanding: anObjectAnnotation object: object]
+		ifTrue: [self 
+			styleExpandingObject: adapter 
+			withDefault: LepiterConstants defaultShowSelector]
 ]
 
 { #category : #accessing }
