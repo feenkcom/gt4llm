@@ -81,6 +81,7 @@ GtLReplyMessageViewModel >> messageViewsInto: aStream [
 				nextPutAll: (GtPhlowViewsCollector new
 						fromObject: self message;
 						pragmaNames: self messageViewPragmas;
+						context: self phlowContext;
 						collect) ]
 ]
 

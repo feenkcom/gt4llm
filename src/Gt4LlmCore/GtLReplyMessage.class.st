@@ -342,6 +342,8 @@ GtLReplyMessage >> gtViewsInContext: aPhlowContext [
 							nextPutAll: (GtPhlowViewsCollector new
 									fromObject: aMessage;
 									pragmaNames: GtLSettings messageViewPragmaNames;
+									context: (GtPhlowContext new 
+											objectRegistry: self chat objectStorage);
 									collect) ]
 					ifAbsent: [  ] ].
 

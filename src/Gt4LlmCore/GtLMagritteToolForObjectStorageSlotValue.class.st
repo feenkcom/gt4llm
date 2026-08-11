@@ -28,7 +28,7 @@ GtLMagritteToolForObjectStorageSlotValue >> objectIdDescription [
 
 { #category : #private }
 GtLMagritteToolForObjectStorageSlotValue >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
-	| arguments objectId slotName object slot slotValue |
+	| arguments objectId slotName object slot slotId slotValue |
 	arguments := aToolCall arguments.
 	objectId := arguments at: 'objectId'.
 	slotName := arguments at: 'slotName'.
@@ -53,9 +53,14 @@ GtLMagritteToolForObjectStorageSlotValue >> privatePerformToolCall: aToolCall in
 	slotValue := [ object readSlotNamed: slot name ]
 		on: Error
 		do: [ :anError | ^ GtLExceptionDomainObject freeze: anError ].
+	
+	slotId := anExecutionContext objectStorage
+			addNewObject:slotValue
+			reason: (GtLStoredObjectExampleMethodReason toolCall: aToolCall).
+			
 	^ GtLObjectStorageValueResult 
 			forObject:  slotValue
-			withId: objectId
+			withId: slotId
 ]
 
 { #category : #descriptions }

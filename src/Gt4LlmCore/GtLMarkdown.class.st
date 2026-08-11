@@ -49,6 +49,7 @@ GtLMarkdown >> commentForSmalltalk [
 	^ 'In plain Markdown text, annotate entities as follows:
 - Smalltalk classes using {{gtClass:ClassName}}, where `ClassName` is the name of the class to be referenced.
 - Smalltalk methods using {{gtMethod:ClassName>>#methodName}}, where `ClassName` is the name of the class and `methodName` is the name of the method.
+- Smalltalk objects using {{gtObject:id=idValue}}, where `idValue` is the value identifying the objects in the current object storage.
 
 For code use three backticks sections. DO NOT annotate entities in code sections.
 
@@ -109,8 +110,6 @@ GtLMarkdown >> gtDisplayOn: aStream [
 
 { #category : #views }
 GtLMarkdown >> gtMarkdownFor: aView [
-	<gtView>
-	<gtLlmView>
 	content isNil ifTrue: [ ^ aView empty ].
 	^ aView textEditor
 		title: 'Markdown';
@@ -126,6 +125,30 @@ GtLMarkdown >> gtMarkdownFor: aView [
 			tooltip: 'Copy contents to clipboard'
 			action: [ :b | 
 				GtClipboard clipboardText: content ]
+]
+
+{ #category : #views }
+GtLMarkdown >> gtMarkdownFor: aView inContext: aPhlowContext [
+	<gtView>
+	<gtLlmView>
+	content isNil ifTrue: [^aView empty].
+	^(aView textEditor)
+		title: 'Markdown';
+		priority: 1;
+		styler: (GtLMessageStyler new 
+			objectRegistry: aPhlowContext objectRegistry);
+		text: [content];
+		actionButtonIcon: LeIcons lepiterIcon
+			tooltip: 'Create page from Markdown'
+			action: 
+				[:b |
+				b phlow spawnObject: (LeDatabasesRegistry defaultPrimaryDatabase
+							addPage: ((LePage new)
+									addSnippet: (LeTextSnippet new string: content);
+									yourself))];
+		actionButtonIcon: BrGlamorousVectorIcons clipboard
+			tooltip: 'Copy contents to clipboard'
+			action: [:b | GtClipboard clipboardText: content]
 ]
 
 { #category : #'llm views' }

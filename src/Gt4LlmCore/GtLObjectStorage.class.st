@@ -81,6 +81,14 @@ GtLObjectStorage >> initialize [
 	self clearCache.
 ]
 
+{ #category : #accessing }
+GtLObjectStorage >> locateIdByIdentityForObject: anObject [
+	objectsByUUID valuesDo: [ :aStoredObject |
+		aStoredObject value == anObject ifTrue: [ ^ aStoredObject id asString36 ] ].
+	
+	NotFound signal: 'Could not find object'  
+]
+
 { #category : #notifications }
 GtLObjectStorage >> notifyObjectAdded: aStoredObject [
 	announcer announce: (GtLObjectStorageObjectAddedAnnouncement new
