@@ -475,7 +475,7 @@ GtLMcpServer >> initialize [
 	errors := OrderedCollection new.
 	objectStorage := GtLObjectStorage new.
 	summarizersRegistry := GtLToolCallSummarizersRegistry new.
-	announcer := nil.
+	announcer := Announcer new.
 ]
 
 { #category : #testing }
