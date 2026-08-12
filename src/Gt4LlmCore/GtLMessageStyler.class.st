@@ -126,19 +126,6 @@ GtLMessageStyler >> nextUniqueId [
 	^ lastId
 ]
 
-{ #category : #private }
-GtLMessageStyler >> objectForUuid: anIdString [
-	| string36 |
-	objectRegistry ifNil: [^nil].
-	string36 := (anIdString includes: $-)
-				ifTrue: [(UUID fromString: anIdString) asString36]
-				ifFalse: [anIdString].
-	^objectRegistry
-		objectAt: string36
-		ifPresent: [:anObject | anObject]
-		ifAbsent: [nil]
-]
-
 { #category : #accessing }
 GtLMessageStyler >> objectRegistry [
 	^objectRegistry
@@ -169,6 +156,20 @@ GtLMessageStyler >> resolveUrl: aUrlString [
 	^ GtUrlStringUtility new
 		rootDirectory: rootDir;
 		urlString: aUrlString.
+]
+
+{ #category : #private }
+GtLMessageStyler >> storedRegistryObjectForId: anIdString ifPresent: aPresentBlock ifAbsent: anAbsentBlock [
+	| string36 |
+	anIdString ifNil: [ ^anAbsentBlock value ].
+	objectRegistry ifNil: [ ^anAbsentBlock value ].
+	string36 := (anIdString includes: $-)
+				ifTrue: [(UUID fromString: anIdString) asString36]
+				ifFalse: [anIdString].
+	^objectRegistry
+		storedObjectAt: string36
+		ifPresent: aPresentBlock
+		ifAbsent: anAbsentBlock
 ]
 
 { #category : #generated }
@@ -784,10 +785,19 @@ GtLMessageStyler >> visitMethodAnnotation: aMethodAnnotation [
 
 { #category : #visiting }
 GtLMessageStyler >> visitObjectReferenceAnnotation: anObjectAnnotation [
-	| uuid object isValid aLinkColor adapter |
+	| uuid storedObject object isValid aLinkColor adapter |
 	uuid := anObjectAnnotation uuid.
-	object := uuid ifNotNil: [self objectForUuid: uuid].
-	isValid := object notNil.
+	self 
+		storedRegistryObjectForId: uuid 
+		ifPresent: [ :aStoredObject |
+			isValid := true. 
+			storedObject := aStoredObject.
+			object := aStoredObject storedValue ] 
+		ifAbsent: [
+			isValid := false. 
+			storedObject := nil.
+			object := nil ].
+	
 	aLinkColor := isValid
 				ifTrue: [BrGlamorousColors textMarkupColor]
 				ifFalse: [BrGlamorousColors linkWithErrorColor].
@@ -797,7 +807,7 @@ GtLMessageStyler >> visitObjectReferenceAnnotation: anObjectAnnotation [
 	adapter := LeObjectReferenceAnnotationAdapter
 				annotation: anObjectAnnotation
 				object: object.
-	self styleButton: adapter withTool: [GtInspectorTool forObject: object].
+	self styleButton: adapter withTool: [GtInspectorTool forObject: storedObject].
 	isValid
 		ifTrue: [self 
 			styleExpandingObject: adapter 
