@@ -7,13 +7,13 @@ Class {
 	#category : #'Gt4LlmCore-Examples'
 }
 
-{ #category : #examples }
+{ #category : #'examples - gtObject' }
 GtLMessageStylerExamples >> gtObjectStylingWithFallbackLabel [
 	<gtExample>
 	<return: #BlText>
 	| storage text styler range foregroundAttr |
 	storage := GtLObjectStorage new.
-	text := '{{gtObject:id=0000000000000000000000000|fallbackLabel=#missingWidget}}'
+	text := '{{gtObject:id=0000000000000000000000000|fallbackLabelString=''missing Widget''}}'
 				asRopedText.
 	styler := GtLMessageStyler new objectRegistry: storage.
 	styler privateStyle: text.

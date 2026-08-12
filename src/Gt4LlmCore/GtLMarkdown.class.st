@@ -49,7 +49,7 @@ GtLMarkdown >> commentForSmalltalk [
 	^ 'In plain Markdown text, annotate entities as follows:
 - Smalltalk classes using {{gtClass:ClassName}}, where `ClassName` is the name of the class to be referenced.
 - Smalltalk methods using {{gtMethod:ClassName>>#methodName}}, where `ClassName` is the name of the class and `methodName` is the name of the method.
-- Smalltalk objects using {{gtObject:id=idValue}}, where `idValue` is the value identifying the objects in the current object storage.
+- Smalltalk objects using {{gtObject:id=idValue|fallbackLabelString=''fallback message''}}, where `idValue` is the value identifying the objects in the current object storage, and `''fallback message''` is an optional short message describing the object for the case when the object is remvoed from the storage, . 
 
 For code use three backticks sections. DO NOT annotate entities in code sections.
 
