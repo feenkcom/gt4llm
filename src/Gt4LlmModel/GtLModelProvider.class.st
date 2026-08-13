@@ -107,8 +107,10 @@ GtLModelProvider >> compactionStrategy [
 ]
 
 { #category : #accessing }
-GtLModelProvider >> compactionStrategy: anObject [
-	compactionStrategy := anObject
+GtLModelProvider >> compactionStrategy: aCompactionStrategy [
+
+	compactionStrategy := aCompactionStrategy.
+	compactionStrategy provider: self.
 ]
 
 { #category : #endpoints }

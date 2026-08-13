@@ -3,18 +3,18 @@ Class {
 	#superclass : #GtLConnectionConfigurationOption,
 	#instVars : [
 		'selector',
-		'values'
+		'valueGenerator'
 	],
 	#category : #'Gt4LlmCore-Core'
 }
 
 { #category : #'instance creation' }
-GtLConnectionPropertyConfigurationOption class >> name: aString selector: aSymbol values: anArray [
+GtLConnectionPropertyConfigurationOption class >> name: aString selector: aSymbol valueGenerator: aValuable [
 
 	^ self new
 		name: aString;
 		selector: aSymbol;
-		values: anArray
+		valueGenerator: aValuable
 ]
 
 { #category : #api }
@@ -22,7 +22,7 @@ GtLConnectionPropertyConfigurationOption >> applyOn: aProvider [
 
 	aProvider
 		perform: selector
-		withArguments: values
+		withArguments: self values
 ]
 
 { #category : #printing }
@@ -35,7 +35,7 @@ GtLConnectionPropertyConfigurationOption >> gtDisplayOn: aStream [
 			aStream
 				<< selector asString;
 				space.
-			values
+			self values
 				do: [ :value | aStream << value asString ]
 				separatedBy: [ aStream << ', ' ] ].
 ]
@@ -52,12 +52,20 @@ GtLConnectionPropertyConfigurationOption >> selector: aSymbol [
 ]
 
 { #category : #accessing }
-GtLConnectionPropertyConfigurationOption >> values [
-	^ values
+GtLConnectionPropertyConfigurationOption >> valueGenerator [
+	"Set the valueGenerator to an object that answers the array of arguments when sent #value"
+	
+	^ valueGenerator
 ]
 
 { #category : #accessing }
-GtLConnectionPropertyConfigurationOption >> values: anArray [
+GtLConnectionPropertyConfigurationOption >> valueGenerator: aValuable [
+	"Set the valueGenerator to an object that answers the array of arguments when sent #value"
 
-	values := anArray
+	valueGenerator := aValuable
+]
+
+{ #category : #accessing }
+GtLConnectionPropertyConfigurationOption >> values [
+	^ valueGenerator value
 ]
