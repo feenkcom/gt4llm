@@ -146,7 +146,7 @@ GtLOpenAICompactionMessage >> responseModels [
 
 { #category : #accessing }
 GtLOpenAICompactionMessage >> role [
-	^ 'assistant'
+	^ 'compaction'
 ]
 
 { #category : #accessing }
