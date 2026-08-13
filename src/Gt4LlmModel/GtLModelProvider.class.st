@@ -32,7 +32,8 @@ GtLModelProvider >> apiCompactionThreshold: anInteger [
 { #category : #testing }
 GtLModelProvider >> assistantMessageHasCompactionResponse: anAssistantMessage [
 	"Answer a boolean indicating whether the provided message contains a compaction response.
-	E.g. OpenAI will include an encrypted_content output for server-side compaction."
+	E.g. OpenAI will include an encrypted_content output for server-side compaction.
+	To be removed."
 
 	^ false
 ]
@@ -45,6 +46,14 @@ GtLModelProvider >> authentication [
 { #category : #accessing }
 GtLModelProvider >> authentication: anObject [
 	authentication := anObject
+]
+
+{ #category : #'as yet unclassified' }
+GtLModelProvider >> automaticCompactionMessagesFrom: aResult inputMessage: anInputMessage [
+	"Answer automatic compaction messages produced by a provider response.
+	By default, providers do not produce automatic compaction output."
+
+	^ #()
 ]
 
 { #category : #accessing }
@@ -341,17 +350,28 @@ GtLModelProvider >> performToolCallsIn: result with: activeTools [
 
 { #category : #'as yet unclassified' }
 GtLModelProvider >> processNextMessage: anInputMessage [
-	| result outputMessage anotherMessage |
-	
+	| result outputMessage anotherMessage compactionMessages |
+
 	self state ifCanContinue: [ ] ifDisabled: [ ^ nil ].
 
 	outputMessage := nil.
 	anotherMessage := nil.
 	result := self executeNextMessage: anInputMessage.
+
+	compactionMessages := self
+		automaticCompactionMessagesFrom: result
+		inputMessage: anInputMessage.
+	compactionMessages do: [ :each |
+		each updateDataFromMessage: anInputMessage.
+		self chat addCompactionMessage: each ].
+
 	result hasToolCalls
-		ifTrue: [ anotherMessage := self performToolCallsIn: result with: anInputMessage tools ]
-		ifFalse: 
-			[ outputMessage := self
+		ifTrue: [
+			anotherMessage := self
+				performToolCallsIn: result
+				with: anInputMessage tools ]
+		ifFalse: [
+			outputMessage := self
 				responseTypeForResult: result
 				fromInputMessage: anInputMessage.
 			self chat addAssistantMessage: outputMessage.

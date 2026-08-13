@@ -21,16 +21,6 @@ GtLOpenAiServerSideCompactionStrategy >> executeCompaction [
 	self error: 'OpenAI server-side compaction doesn''t use compaction messages'.
 ]
 
-{ #category : #'private - testing' }
-GtLOpenAiServerSideCompactionStrategy >> hasCompactionResponse: aMessage [
-
-	^ aMessage isAssistantRole and:
-		[ | response |
-		response := aMessage requestResponse result.
-		response output anySatisfy: [ :jsonObject |
-			(jsonObject at: 'type' ifAbsent: []) = 'compaction' ] ].
-]
-
 { #category : #testing }
 GtLOpenAiServerSideCompactionStrategy >> isCompactionNeeded [
 	"Answer a boolean if a compaction message should be sent.
@@ -41,16 +31,14 @@ GtLOpenAiServerSideCompactionStrategy >> isCompactionNeeded [
 
 { #category : #'api - compaction' }
 GtLOpenAiServerSideCompactionStrategy >> relevantChatMessagesFor: aChat [
-	"The OpenAI documentation is a little unclear about which messages to include.
-	Currently including the latest compaction output and all following messages."
-	| relevantMessages |
-	
-	relevantMessages := aChat messages messagesSelect: 
-		[ :each | self hasCompactionResponse: each ].
-	^relevantMessages isEmpty
-		ifTrue: [aChat messages]
-		ifFalse: [
-			aChat messages 
-				messagesBeforeMatching: [:each | false ]
-				andAllWithAndAfter: relevantMessages last]
+	"Include the latest first-class compaction message and all flattened
+	messages following it. If there is no compaction, include all messages."
+	| compactionMessages |
+
+	compactionMessages := aChat messages messagesSelect: [ :each |
+		each isCompactionMessage ].
+
+	compactionMessages ifEmpty: [ ^ aChat messages ].
+
+	^ aChat messages messagesWithAndAfter: compactionMessages last
 ]
