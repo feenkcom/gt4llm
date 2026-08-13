@@ -100,6 +100,17 @@ GtLChat >> addNewObject: anObject reasonString: aString [
 ]
 
 { #category : #adding }
+GtLChat >> addPostExecutionMessage: aMessage [
+	"Add a message that occurred after the final assistant message."
+
+	| replyMessage |
+	self updateLastUpdate.
+	aMessage chat: self.
+	replyMessage := self ensureReplyMessage.
+	replyMessage addPostExecutionMessage: aMessage
+]
+
+{ #category : #adding }
 GtLChat >> addResponseFormat: aResponseFormat [
 	responseFormat addResponseFormat: aResponseFormat
 ]

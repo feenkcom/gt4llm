@@ -313,6 +313,16 @@ GtLModelProvider >> modelName: aString [
 	model name: aString
 ]
 
+{ #category : #private }
+GtLModelProvider >> partitionAutomaticCompactionMessages: compactionMessages from: aResult inputMessage: anInputMessage [
+	"Answer the automatic compaction messages split around the assistant output.
+	The first element contains messages before the assistant output and the second
+	contains messages after it. Providers whose responses do not expose this
+	ordering keep all compaction messages before the assistant by default."
+
+	^ { compactionMessages. #() }
+]
+
 { #category : #'as yet unclassified' }
 GtLModelProvider >> performToolCallsIn: result with: activeTools [
 	<return: #GtLOpenAIProviderProcessedMessage or: nil>
@@ -348,9 +358,9 @@ GtLModelProvider >> performToolCallsIn: result with: activeTools [
 	^ self processNextMessage: toolMessages last.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 GtLModelProvider >> processNextMessage: anInputMessage [
-	| result outputMessage anotherMessage compactionMessages |
+	| result outputMessage anotherMessage compactionMessages partitionedCompactionMessages preExecutionCompactionMessages postExecutionCompactionMessages |
 
 	self state ifCanContinue: [ ] ifDisabled: [ ^ nil ].
 
@@ -361,7 +371,13 @@ GtLModelProvider >> processNextMessage: anInputMessage [
 	compactionMessages := self
 		automaticCompactionMessagesFrom: result
 		inputMessage: anInputMessage.
-	compactionMessages do: [ :each |
+	partitionedCompactionMessages := self
+		partitionAutomaticCompactionMessages: compactionMessages
+		from: result
+		inputMessage: anInputMessage.
+	preExecutionCompactionMessages := partitionedCompactionMessages first.
+	postExecutionCompactionMessages := partitionedCompactionMessages second.
+	preExecutionCompactionMessages do: [ :each |
 		each updateDataFromMessage: anInputMessage.
 		self chat addCompactionMessage: each ].
 
@@ -375,6 +391,9 @@ GtLModelProvider >> processNextMessage: anInputMessage [
 				responseTypeForResult: result
 				fromInputMessage: anInputMessage.
 			self chat addAssistantMessage: outputMessage.
+			postExecutionCompactionMessages do: [ :each |
+				each updateDataFromMessage: anInputMessage.
+				self chat addPostExecutionMessage: each ].
 			self chat signalRunIsDone ].
 
 	^ GtLOllamaProviderProcessedMessage new

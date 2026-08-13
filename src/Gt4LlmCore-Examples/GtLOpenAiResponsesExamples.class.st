@@ -41,6 +41,43 @@ GtLOpenAiResponsesExamples >> automaticCompactionMessagesFromResponse [
 	^ messages
 ]
 
+{ #category : #'examples - compaction' }
+GtLOpenAiResponsesExamples >> automaticCompactionMessagesPartitionedAroundAssistantMessage [
+	<gtExample>
+	| provider input result firstOutput secondOutput messages partition |
+
+	provider := GtLOpenAiResponsesProvider new.
+	input := GtLModelUserMessage new.
+	firstOutput := {
+		'type' -> 'compaction'.
+		'encrypted_content' -> 'first'
+	} asDictionary.
+	secondOutput := {
+		'type' -> 'compaction'.
+		'encrypted_content' -> 'second'
+	} asDictionary.
+	result := GtLModelResponse from: {
+		'output' -> {
+			firstOutput.
+			{ 'type' -> 'message' } asDictionary.
+			secondOutput }
+	} asDictionary.
+
+	messages := provider
+		automaticCompactionMessagesFrom: result
+		inputMessage: input.
+	partition := provider
+		partitionAutomaticCompactionMessages: messages
+		from: result
+		inputMessage: input.
+
+	self assert: partition first size equals: 1.
+	self assert: partition first first rawData == firstOutput.
+	self assert: partition second size equals: 1.
+	self assert: partition second first rawData == secondOutput.
+	^ partition
+]
+
 { #category : #examples }
 GtLOpenAiResponsesExamples >> copyOpenAICompactionMessage [
 	<gtExample>
@@ -177,7 +214,7 @@ GtLOpenAiResponsesExamples >> openAiServerSideCompaction [
 	"Have a conversation with ChatGPT with server-side compaction."
 	<gtExample>
 	"noTest as compaction messages are currently incorrectly grouped before the final assistant message."
-	<noTest>
+	"<noTest>"
 	| executor provider chat message entity |
 
 	executor := GtLOpenAiResponsesExampleExecutor new.
