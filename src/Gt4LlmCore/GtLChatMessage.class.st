@@ -263,6 +263,9 @@ GtLChatMessage >> gtViewsInContext: aPhlowContext [
 
 { #category : #testing }
 GtLChatMessage >> hasCompactionResponse [
+	"Answer a boolean indicating whether the receiver includes a compaction response.
+	For assistant messages with some providers this may be true or false."
+	
 	^false
 ]
 
@@ -326,6 +329,13 @@ GtLChatMessage >> isAssistantRole [
 
 	<return: #Boolean>
 	^ self role = 'assistant'
+]
+
+{ #category : #testing }
+GtLChatMessage >> isCompactionMessage [
+	"Answer a boolean indicating whether the receiver is a compaction response."
+	
+	^false
 ]
 
 { #category : #testing }
