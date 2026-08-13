@@ -61,7 +61,8 @@ GtLChat >> addCompactionMessage: aMessage [
 
 	aMessage chat: self.
 	aReplyMessage := self ensureReplyMessage.
-	aReplyMessage addCompactionMessage: aMessage
+	aReplyMessage addCompactionMessage: aMessage.
+	objectStorage purgeRedundantObjectsForChat: self.
 ]
 
 { #category : #initialization }

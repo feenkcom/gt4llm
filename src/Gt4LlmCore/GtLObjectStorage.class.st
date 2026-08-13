@@ -139,6 +139,14 @@ GtLObjectStorage >> printOn: aStream [
 ]
 
 { #category : #'as yet unclassified' }
+GtLObjectStorage >> purgeRedundantObjectsForChat: aGtLChat [
+	"This is currently only called when compaction has been performed.
+	Assume that the summary doesn't reference objects, so all can be discarded."
+
+	self clearCache.
+]
+
+{ #category : #'as yet unclassified' }
 GtLObjectStorage >> size [
 	^ objectsByUUID size
 ]

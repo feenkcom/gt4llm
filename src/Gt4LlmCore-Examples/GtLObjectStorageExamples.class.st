@@ -4,7 +4,9 @@ Examples for GtLObjectCache
 Class {
 	#name : #GtLObjectStorageExamples,
 	#superclass : #Object,
-	#category : #'Gt4LlmCore-Examples'
+	#traits : 'TAssertable',
+	#classTraits : 'TAssertable classTrait',
+	#category : #'Gt4LlmCore-Examples-Object Storage'
 }
 
 { #category : #examples }
@@ -129,6 +131,28 @@ GtLObjectStorageExamples >> objectCountTracksAddedObjects [
 	objectStorage addNewObject: Object new reason: (GtLStoredObjectStringReason text: 'second object').
 	self assert: objectStorage objectCount equals: 2.
 	
+	^ objectStorage
+]
+
+{ #category : #examples }
+GtLObjectStorageExamples >> purgingRedundantObjectsRemovesAllObjects [
+	<gtExample>
+	<return: #GtLObjectStorage>
+	| objectStorage chat firstId secondId |
+
+	objectStorage := self newObjectStorage.
+	chat := GtLChat new.
+	firstId := objectStorage addNewObject: Object new.
+	secondId := objectStorage addNewObject: Object new.
+
+	self assert: objectStorage objectCount equals: 2.
+
+	objectStorage purgeRedundantObjectsForChat: chat.
+
+	self assert: objectStorage objectCount equals: 0.
+	self deny: (objectStorage includesObjectWithId: firstId).
+	self deny: (objectStorage includesObjectWithId: secondId).
+
 	^ objectStorage
 ]
 
