@@ -71,17 +71,26 @@ GtLCompactionStrategy >> provider: anObject [
 	provider := anObject
 ]
 
-{ #category : #'api - compaction' }
+{ #category : #accessing }
 GtLCompactionStrategy >> relevantChatMessagesFor: aChat [
-	| relevantMessages |
-	relevantMessages := aChat messages
-			messagesSelect: [:each | each isAssistantRole and: [each hasCompactionResponse]].
-	^relevantMessages isEmpty
-		ifTrue: [aChat messages]
+	| serializableMessages relevantMessages |
+
+	serializableMessages := aChat messages messagesSelect: [ :each |
+		each isCompactionMessage
+			ifTrue: [
+				(each respondsTo: #canSerializeFor:)
+					ifTrue: [ each canSerializeFor: self provider ]
+					ifFalse: [ true ] ]
+			ifFalse: [ true ] ].
+	relevantMessages := serializableMessages messagesSelect: [ :each |
+		(each isAssistantRole and: [ each hasCompactionResponse ])
+			or: [ each isCompactionMessage ] ].
+	^ relevantMessages isEmpty
+		ifTrue: [ serializableMessages ]
 		ifFalse: [
-			aChat messages 
-				messagesBeforeMatching: [:each | each isUserRole]
-				andAllWithAndAfter: relevantMessages last]
+			serializableMessages
+				messagesBeforeMatching: [ :each | each isUserRole ]
+				andAllWithAndAfter: relevantMessages last ]
 ]
 
 { #category : #'api - compaction' }

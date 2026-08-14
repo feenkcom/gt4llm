@@ -140,6 +140,20 @@ GtLConnectionRegistry >> connectionFor: aProvider [
 ]
 
 { #category : #accessing }
+GtLConnectionRegistry >> connectionWithLabel: aString [
+
+	^ self connections detect: [ :connection |
+		connection label = aString ]
+]
+
+{ #category : #accessing }
+GtLConnectionRegistry >> connectionWithModelName: aString [
+
+	^ self connections detect: [ :connection |
+		connection modelName = aString ]
+]
+
+{ #category : #accessing }
 GtLConnectionRegistry >> connections [
 	^ connections value
 ]

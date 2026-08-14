@@ -29,16 +29,22 @@ GtLOpenAiServerSideCompactionStrategy >> isCompactionNeeded [
 	^ false
 ]
 
-{ #category : #'api - compaction' }
+{ #category : #accessing }
 GtLOpenAiServerSideCompactionStrategy >> relevantChatMessagesFor: aChat [
-	"Include the latest first-class compaction message and all flattened
-	messages following it. If there is no compaction, include all messages."
-	| compactionMessages |
+	"Only a compaction reusable by this provider may become a history boundary.
+	Incompatible opaque compactions are omitted while the earlier source history
+	remains available."
 
-	compactionMessages := aChat messages messagesSelect: [ :each |
+	| serializableMessages compactionMessages |
+	serializableMessages := aChat messages messagesSelect: [ :each |
+		each isCompactionMessage
+			ifTrue: [
+				(each respondsTo: #canSerializeFor:)
+					ifTrue: [ each canSerializeFor: self provider ]
+					ifFalse: [ false ] ]
+			ifFalse: [ true ] ].
+	compactionMessages := serializableMessages messagesSelect: [ :each |
 		each isCompactionMessage ].
-
-	compactionMessages ifEmpty: [ ^ aChat messages ].
-
-	^ aChat messages messagesWithAndAfter: compactionMessages last
+	compactionMessages ifEmpty: [ ^ serializableMessages ].
+	^ serializableMessages messagesWithAndAfter: compactionMessages last
 ]

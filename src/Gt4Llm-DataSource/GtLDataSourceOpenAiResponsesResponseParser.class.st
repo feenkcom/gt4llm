@@ -5,18 +5,33 @@ Class {
 }
 
 { #category : #private }
-GtLDataSourceOpenAiResponsesResponseParser >> parseAssistantResponse: requestResponse to: index response: response for: aMessageConstructor [
-	| newMessage chat assistantRawData jsonResponse responseEntity |
+GtLDataSourceOpenAiResponsesResponseParser >> parseAssistantResponse: requestResponse to: inputMessage response: response for: aMessageConstructor [
+	| newMessage chat assistantRawData result compactionMessages partitionedCompactionMessages |
 
-	jsonResponse := requestResponse response asGtJson jsonObject.
-	responseEntity := GtLOpenAiResponsesResponseEntity rawData: jsonResponse.
 	chat := aMessageConstructor chat.
+	assistantRawData := requestResponse result.
+	result := (GtLModelResponse from: assistantRawData)
+		requestResponse: requestResponse.
+	compactionMessages := chat provider
+		automaticCompactionMessagesFrom: result
+		inputMessage: inputMessage.
+	partitionedCompactionMessages := chat provider
+		partitionAutomaticCompactionMessages: compactionMessages
+		from: result
+		inputMessage: inputMessage.
+	partitionedCompactionMessages first do: [ :each |
+		inputMessage ifNotNil: [ each updateDataFromMessage: inputMessage ].
+		chat addCompactionMessage: each ].
+
 	newMessage := chat provider assistantMessageClass new.
-	assistantRawData := (requestResponse result at: 'output') last.
 	newMessage
 		requestResponse: requestResponse;
 		rawData: assistantRawData.
 	chat addAssistantMessage: newMessage.
+
+	partitionedCompactionMessages second do: [ :each |
+		inputMessage ifNotNil: [ each updateDataFromMessage: inputMessage ].
+		chat addPostExecutionMessage: each ].
 	^ newMessage
 ]
 

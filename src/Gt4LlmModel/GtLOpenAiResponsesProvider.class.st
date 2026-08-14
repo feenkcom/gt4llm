@@ -27,14 +27,17 @@ GtLOpenAiResponsesProvider >> assistantMessageHasCompactionResponse: anAssistant
 		(jsonObject at: 'type' ifAbsent: []) = 'compaction' ].
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 GtLOpenAiResponsesProvider >> automaticCompactionMessagesFrom: aResult inputMessage: anInputMessage [
 	"Answer one message per automatic compaction output, preserving response order.
-	Explicit compaction requests are classified through the normal response path."
+	Explicit compaction requests are classified through the normal response path.
+	During history reconstruction tool continuation requests have no reconstructed
+	input message, and are still eligible to contain automatic compaction output."
 
 	| outputItems |
 
-	anInputMessage isCompactionRequest ifTrue: [ ^ #() ].
+	(anInputMessage notNil and: [ anInputMessage isCompactionRequest ])
+		ifTrue: [ ^ #() ].
 
 	outputItems := aResult rawData
 		at: 'output'

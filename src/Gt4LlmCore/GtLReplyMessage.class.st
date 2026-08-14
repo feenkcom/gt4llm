@@ -141,9 +141,9 @@ GtLReplyMessage >> currentMessageDo: aBlock ifAbsent: anAbsentBlock [
 	"Return the last message that should be used to receive an LLM server response."
 
 	<return: #GtLChatMessage>
+	finalMessage ifNotNil: [ ^ aBlock value: finalMessage ].
 	self postExecutionMessages
 		ifNotEmpty: [ :messages | ^ aBlock value: messages last ].
-	finalMessage ifNotNil: [ ^ aBlock value: finalMessage ].
 	executionMessages value
 		ifNotEmpty: [ :messages | ^ aBlock value: messages last ].
 	^ anAbsentBlock value

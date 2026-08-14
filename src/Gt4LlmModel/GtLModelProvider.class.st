@@ -101,6 +101,14 @@ GtLModelProvider >> clientGenerateModelResponse: anInputMessage messages: someMe
 		andInstructions: anInputMessage instructions instructionString
 ]
 
+{ #category : #compaction }
+GtLModelProvider >> compactionRepresentationKey [
+	"Answer the protocol dialect used to serialize compaction data. Provider
+	instances configured with the same endpoint intentionally share a key."
+
+	^ self model userMessageEndpoint class name
+]
+
 { #category : #accessing }
 GtLModelProvider >> compactionStrategy [
 	^ compactionStrategy

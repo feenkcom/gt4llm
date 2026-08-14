@@ -3,8 +3,8 @@ Class {
 	#superclass : #GtLModelMessage,
 	#instVars : [
 		'providerData',
-		'rawData',
-		'currentProvider'
+		'currentProvider',
+		'portableContentText'
 	],
 	#category : #'Gt4LlmModel-Core'
 }
@@ -16,6 +16,12 @@ GtLModelCompactionMessage >> accessor [
 
 	^ currentProvider model userMessageEndpoint
 		assistantMessageAccessor assistantMessage: self
+]
+
+{ #category : #testing }
+GtLModelCompactionMessage >> canSerializeFor: aModelProvider [
+	 ^ (self isServerSideCompactionOutputFor: aModelProvider)
+    or: [ self hasPortableContent ]
 ]
 
 { #category : #accessing }
@@ -39,7 +45,7 @@ GtLModelCompactionMessage >> currentProvider [
 
 { #category : #accessing }
 GtLModelCompactionMessage >> currentProvider: aModelProvider [
-	(providerData includesKey: aModelProvider)
+	(self hasProviderDataFor: aModelProvider)
 		ifFalse: [
 			self error: 'Cannot select a provider for which this compaction message has no data' ].
 
@@ -64,6 +70,16 @@ GtLModelCompactionMessage >> hasContent [
 	^ messageContent notNil and: [ messageContent isNotEmpty ]
 ]
 
+{ #category : #testing }
+GtLModelCompactionMessage >> hasPortableContent [
+	^ portableContentText notNil
+]
+
+{ #category : #'provider data' }
+GtLModelCompactionMessage >> hasProviderDataFor: aModelProvider [
+	^ providerData includesKey: (self providerKeyFor: aModelProvider)
+]
+
 { #category : #accessing }
 GtLModelCompactionMessage >> hasResponse [
 	^ (self rawDataIfAbsent: [ nil ]) isNotNil
@@ -71,9 +87,8 @@ GtLModelCompactionMessage >> hasResponse [
 
 { #category : #initialization }
 GtLModelCompactionMessage >> initialize [
-
 	super initialize.
-	providerData := IdentityDictionary new.
+	providerData := Dictionary new
 ]
 
 { #category : #initialization }
@@ -89,12 +104,14 @@ GtLModelCompactionMessage >> initializeFromCompactionOutput: aCompactionOutput r
 
 { #category : #initialization }
 GtLModelCompactionMessage >> initializeFromResult: aResult provider: aModelProvider [
-	"Initialize an explicit prompt/API compaction response. Such responses
-	retain the complete provider response for accessor-based content handling."
+	"Initialize explicit prompt/API compaction and preserve canonical text so
+	that another provider can serialize the summary without interpreting the
+	originating provider's response shape."
 
 	super initializeFromResult: aResult provider: aModelProvider.
 	self providerData: aResult rawData for: aModelProvider.
-	self currentProvider: aModelProvider
+	self currentProvider: aModelProvider.
+	self portableContentText: self accessor contentText
 ]
 
 { #category : #testing }
@@ -114,26 +131,67 @@ GtLModelCompactionMessage >> isServerSideCompactionOutput [
 	^ (data at: 'type' ifAbsent: [ nil ]) = 'compaction'
 ]
 
+{ #category : #'provider data' }
+GtLModelCompactionMessage >> isServerSideCompactionOutputFor: aModelProvider [
+	"Answer a boolean indicating whether the receiver has server-side compaction for the supplied provider.
+	This was developed against OpenAI's server-side compaction and should be reviewed when adding support for other providers."
+	| data |
+
+	data := self rawDataFor: aModelProvider ifAbsent: [ ^ false ].
+	(data respondsTo: #at:ifAbsent:) ifFalse: [ ^ false ].
+
+	^ (data at: 'type' ifAbsent: [ nil ]) = 'compaction'
+]
+
+{ #category : #accessing }
+GtLModelCompactionMessage >> portableContentText [
+	^ portableContentText
+]
+
+{ #category : #accessing }
+GtLModelCompactionMessage >> portableContentText: aString [
+	portableContentText := (aString notNil and: [ aString isEmpty ])
+		ifTrue: [ nil ]
+		ifFalse: [ aString ]
+]
+
 { #category : #copying }
 GtLModelCompactionMessage >> postCopyForIndependentRequestInChat: aChat [
 	super postCopyForIndependentRequestInChat: aChat.
-	"IdentityDictionary>>copy creates an independent dictionary while
-	preserving the provider keys by identity. The current provider remains
-	the originating provider."
-	providerData := providerData copy
+	providerData := providerData copy.
+	"Provider data is keyed by stable dialect. Keep the origin only for legacy
+	inspection; request serialization no longer depends on it."
+	portableContentText := portableContentText copy
 ]
 
-{ #category : #initialization }
+{ #category : #'provider data' }
 GtLModelCompactionMessage >> providerData: anObject for: aModelProvider [
-	"Store provider-specific data without implicitly changing the provider
-	used to interpret the message."
+	"Store provider-specific data by serialization dialect rather than provider
+	identity, allowing an equivalent provider instance to reuse it."
 
-	providerData at: aModelProvider put: anObject
+	providerData at: (self providerKeyFor: aModelProvider) put: anObject
 ]
 
-{ #category : #initialization }
+{ #category : #'provider data' }
 GtLModelCompactionMessage >> providerDataFor: aModelProvider ifAbsent: anAbsentBlock [
-	^ providerData at: aModelProvider ifAbsent: anAbsentBlock
+	^ providerData
+		at: (self providerKeyFor: aModelProvider)
+		ifAbsent: anAbsentBlock
+]
+
+{ #category : #'provider data' }
+GtLModelCompactionMessage >> providerForSerialization [
+	"Answer the destination provider while serializing a chat. Fall back to the
+	originating provider for detached messages and legacy inspector use."
+
+	^ chat
+		ifNil: [ currentProvider ]
+		ifNotNil: [ chat provider ]
+]
+
+{ #category : #'provider data' }
+GtLModelCompactionMessage >> providerKeyFor: aModelProvider [
+	^ aModelProvider compactionRepresentationKey
 ]
 
 { #category : #accessing }
@@ -156,6 +214,11 @@ GtLModelCompactionMessage >> rawData: anObject for: aModelProvider [
 
 	self providerData: anObject for: aModelProvider.
 	self currentProvider: aModelProvider
+]
+
+{ #category : #'provider data' }
+GtLModelCompactionMessage >> rawDataFor: aModelProvider ifAbsent: anAbsentBlock [
+	^ self providerDataFor: aModelProvider ifAbsent: anAbsentBlock
 ]
 
 { #category : #accessing }

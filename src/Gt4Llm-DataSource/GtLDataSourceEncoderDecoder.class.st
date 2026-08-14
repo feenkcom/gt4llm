@@ -11,23 +11,48 @@ Class {
 
 { #category : #'encoding - decoding' }
 GtLDataSourceEncoderDecoder class >> loadClientHistoryFrom: aFileReference [
-	| encoder history |
 
-	encoder := self new.
-	aFileReference asFileReference readStreamDo: [ :stream |
+	^ aFileReference asFileReference readStreamDo: [ :stream |
 		self loadClientHistoryFromStream: stream ].
-	^ history
 ]
 
 { #category : #'encoding - decoding' }
 GtLDataSourceEncoderDecoder class >> loadClientHistoryFromStream: aReadStream [
-	| encoder history |
+	| encoder |
 
 	encoder := self new.
-	history := GtLRequestHistory streamContents: [ :aStream |
+	^ GtLRequestHistory streamContents: [ :aStream |
 		[ aReadStream atEnd ] whileFalse:
 				[ aStream nextPut: (encoder decodeRequestResponseOn: aReadStream) ] ].
-	^ history
+]
+
+{ #category : #'encoding - decoding' }
+GtLDataSourceEncoderDecoder class >> recreateChatFrom: aFileReference connectionLabel: aString [
+	"Recreate the chat from the request history in aFileReference, using the GT provider labelled aString in the connection registry"
+	
+	^ self recreateChatFrom: aFileReference provider:
+		(GtLConnectionRegistry default connectionWithLabel: aString) buildProvider
+]
+
+{ #category : #'encoding - decoding' }
+GtLDataSourceEncoderDecoder class >> recreateChatFrom: aFileReference provider: aModelProvider [
+
+	^ aFileReference asFileReference readStreamDo: [ :stream |
+		self recreateChatFromStream: stream provider: aModelProvider ]
+]
+
+{ #category : #'encoding - decoding' }
+GtLDataSourceEncoderDecoder class >> recreateChatFromStream: aStream provider: aModelProvider [
+	| chat |
+
+	chat := GtLChat new 
+		markdownResponse;
+		provider: aModelProvider.
+	GtLDataSourceMessageConstructor new
+		requestHistory: (self loadClientHistoryFromStream: aStream);
+		chat: chat;
+		parse.
+	^ chat
 ]
 
 { #category : #'encoding - decoding' }

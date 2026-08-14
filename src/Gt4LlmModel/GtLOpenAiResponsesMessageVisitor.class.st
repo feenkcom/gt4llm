@@ -33,16 +33,28 @@ GtLOpenAiResponsesMessageVisitor >> visitGtLModelAssistantMessage: anAssistantMe
 	^ self roleAndContentFrom: anAssistantMessage
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 GtLOpenAiResponsesMessageVisitor >> visitGtLModelCompactionMessage: aCompactionMessage [
-	"Automatic OpenAI compaction output is already in the representation
-	expected by the Responses API. Explicit prompt-compaction responses still
-	serialize as ordinary assistant content."
+	| provider |
 
-	aCompactionMessage isServerSideCompactionOutput
-		ifTrue: [ ^ aCompactionMessage rawData ].
+	provider := aCompactionMessage providerForSerialization.
+	(provider notNil and: [
+		aCompactionMessage isServerSideCompactionOutputFor: provider ])
+		ifTrue: [
+			^ aCompactionMessage
+				rawDataFor: provider
+				ifAbsent: [ self error: 'Missing native compaction data' ] ].
 
-	^ self roleAndContentFrom: aCompactionMessage
+	aCompactionMessage hasPortableContent ifFalse: [
+		self error: 'This opaque compaction cannot be serialized for the current provider' ].
+
+	^ {
+		'role' -> 'assistant'.
+		'content' -> { {
+			'type' -> 'output_text'.
+			'text' -> aCompactionMessage portableContentText
+		} asDictionary }
+	} asDictionary
 ]
 
 { #category : #visiting }
