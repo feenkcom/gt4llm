@@ -3,7 +3,6 @@ Class {
 	#superclass : #GtLModelMessage,
 	#instVars : [
 		'providerData',
-		'currentProvider',
 		'portableContentText'
 	],
 	#category : #'Gt4LlmModel-Core'
@@ -11,10 +10,17 @@ Class {
 
 { #category : #accessing }
 GtLModelCompactionMessage >> accessor [
-	currentProvider ifNil: [
-		self error: 'The compaction message has no current provider' ].
+	| activeProvider |
 
-	^ currentProvider model userMessageEndpoint
+	activeProvider := self providerForSerialization.
+	activeProvider ifNil: [
+		self error: 'The compaction message is not attached to a chat' ].
+	^ self accessorFor: activeProvider
+]
+
+{ #category : #accessing }
+GtLModelCompactionMessage >> accessorFor: aModelProvider [
+	^ aModelProvider model userMessageEndpoint
 		assistantMessageAccessor assistantMessage: self
 ]
 
@@ -36,20 +42,6 @@ GtLModelCompactionMessage >> contentText [
 	self isServerSideCompactionOutput ifTrue: [ ^ '' ].
 
 	^ self accessor contentText
-]
-
-{ #category : #accessing }
-GtLModelCompactionMessage >> currentProvider [
-	^ currentProvider
-]
-
-{ #category : #accessing }
-GtLModelCompactionMessage >> currentProvider: aModelProvider [
-	(self hasProviderDataFor: aModelProvider)
-		ifFalse: [
-			self error: 'Cannot select a provider for which this compaction message has no data' ].
-
-	currentProvider := aModelProvider
 ]
 
 { #category : #testing }
@@ -80,8 +72,11 @@ GtLModelCompactionMessage >> hasProviderDataFor: aModelProvider [
 	^ providerData includesKey: (self providerKeyFor: aModelProvider)
 ]
 
-{ #category : #accessing }
+{ #category : #testing }
 GtLModelCompactionMessage >> hasResponse [
+	"Answer whether the receiver has provider data for the active provider. For a
+	detached message, answer based on its sole unambiguous representation."
+
 	^ (self rawDataIfAbsent: [ nil ]) isNotNil
 ]
 
@@ -98,8 +93,7 @@ GtLModelCompactionMessage >> initializeFromCompactionOutput: aCompactionOutput r
 	provenance."
 
 	super initializeFromResult: aResult provider: aModelProvider.
-	self providerData: aCompactionOutput for: aModelProvider.
-	self currentProvider: aModelProvider
+	self providerData: aCompactionOutput for: aModelProvider
 ]
 
 { #category : #initialization }
@@ -110,8 +104,7 @@ GtLModelCompactionMessage >> initializeFromResult: aResult provider: aModelProvi
 
 	super initializeFromResult: aResult provider: aModelProvider.
 	self providerData: aResult rawData for: aModelProvider.
-	self currentProvider: aModelProvider.
-	self portableContentText: self accessor contentText
+	self portableContentText: ((self accessorFor: aModelProvider) contentText)
 ]
 
 { #category : #testing }
@@ -121,13 +114,12 @@ GtLModelCompactionMessage >> isCompactionMessage [
 	^ true
 ]
 
-{ #category : #'testing - server side' }
+{ #category : #testing }
 GtLModelCompactionMessage >> isServerSideCompactionOutput [
 	| data |
 
 	data := self rawDataIfAbsent: [ ^ false ].
 	(data respondsTo: #at:ifAbsent:) ifFalse: [ ^ false ].
-
 	^ (data at: 'type' ifAbsent: [ nil ]) = 'compaction'
 ]
 
@@ -159,8 +151,6 @@ GtLModelCompactionMessage >> portableContentText: aString [
 GtLModelCompactionMessage >> postCopyForIndependentRequestInChat: aChat [
 	super postCopyForIndependentRequestInChat: aChat.
 	providerData := providerData copy.
-	"Provider data is keyed by stable dialect. Keep the origin only for legacy
-	inspection; request serialization no longer depends on it."
 	portableContentText := portableContentText copy
 ]
 
@@ -179,13 +169,12 @@ GtLModelCompactionMessage >> providerDataFor: aModelProvider ifAbsent: anAbsentB
 		ifAbsent: anAbsentBlock
 ]
 
-{ #category : #'provider data' }
+{ #category : #accessing }
 GtLModelCompactionMessage >> providerForSerialization [
-	"Answer the destination provider while serializing a chat. Fall back to the
-	originating provider for detached messages and legacy inspector use."
+	"Answer the provider currently selected by the owning chat."
 
 	^ chat
-		ifNil: [ currentProvider ]
+		ifNil: [ nil ]
 		ifNotNil: [ chat provider ]
 ]
 
@@ -204,16 +193,15 @@ GtLModelCompactionMessage >> rawContent [
 { #category : #accessing }
 GtLModelCompactionMessage >> rawData [
 	^ self rawDataIfAbsent: [
-		self error: 'The compaction message has no data for its current provider' ]
+		self error: 'The compaction message has no data for the chat provider' ]
 ]
 
-{ #category : #'private - accessing' }
+{ #category : #accessing }
 GtLModelCompactionMessage >> rawData: anObject for: aModelProvider [
-	"Set provider data and select that provider. This method is retained as
-	a convenience and compatibility API, primarily for examples."
+	"Store data for the supplied provider dialect. The active provider is always
+	determined by the owning chat."
 
-	self providerData: anObject for: aModelProvider.
-	self currentProvider: aModelProvider
+	self providerData: anObject for: aModelProvider
 ]
 
 { #category : #'provider data' }
@@ -223,11 +211,13 @@ GtLModelCompactionMessage >> rawDataFor: aModelProvider ifAbsent: anAbsentBlock 
 
 { #category : #accessing }
 GtLModelCompactionMessage >> rawDataIfAbsent: anAbsentBlock [
-	currentProvider ifNil: [ ^ anAbsentBlock value ].
+	| activeProvider |
 
-	^ self
-		providerDataFor: currentProvider
-		ifAbsent: anAbsentBlock
+	activeProvider := self providerForSerialization.
+	activeProvider ifNotNil: [
+		^ self providerDataFor: activeProvider ifAbsent: anAbsentBlock ].
+	providerData size = 1 ifTrue: [ ^ providerData values anyOne ].
+	^ anAbsentBlock value
 ]
 
 { #category : #accessing }
