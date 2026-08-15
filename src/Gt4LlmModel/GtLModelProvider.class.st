@@ -33,9 +33,9 @@ GtLModelProvider >> apiCompactionThreshold: anInteger [
 GtLModelProvider >> assistantMessageHasCompactionResponse: anAssistantMessage [
 	"Answer a boolean indicating whether the provided message contains a compaction response.
 	E.g. OpenAI will include an encrypted_content output for server-side compaction.
-	To be removed."
+	This can be used to check whether an LLM response contains server-side copmaction, however the compaction will always be modelled as a separate compaction message, not as part of the assistant message."
 
-	^ false
+	^ self subclassResponsibility
 ]
 
 { #category : #accessing }

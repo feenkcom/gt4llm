@@ -5,6 +5,35 @@ Class {
 }
 
 { #category : #'examples - compaction' }
+GtLOpenAiResponsesExamples >> assistantMessageIgnoresAutomaticCompactionResponse [
+	<gtExample>
+	| provider input result assistant compactionMessages |
+
+	provider := GtLOpenAiResponsesProvider new.
+	input := GtLModelUserMessage new.
+	result := GtLModelResponse from: {
+		'output' -> {
+			{
+				'type' -> 'compaction'.
+				'encrypted_content' -> 'automatic' } asDictionary.
+			{ 'type' -> 'message' } asDictionary }
+	} asDictionary.
+
+	assistant := provider
+		responseTypeForResult: result
+		fromInputMessage: input.
+	compactionMessages := provider
+		automaticCompactionMessagesFrom: result
+		inputMessage: input.
+
+	self deny: assistant hasCompactionResponse.
+	self assert: compactionMessages size equals: 1.
+	self assert: compactionMessages first hasCompactionResponse.
+
+	^ assistant
+]
+
+{ #category : #'examples - compaction' }
 GtLOpenAiResponsesExamples >> automaticCompactionMessagesFromResponse [
 	<gtExample>
 	| provider input result firstOutput secondOutput messages |

@@ -92,14 +92,6 @@ GtLModelAssistantMessage >> gtViewResponseModelsFor: aView [
 ]
 
 { #category : #testing }
-GtLModelAssistantMessage >> hasCompactionResponse [
-	"Answer a boolean indicating whether the receiver includes a compaction response.
-	For assistant messages with some providers this may be true or false."
-	
-	^ self provider assistantMessageHasCompactionResponse: self
-]
-
-{ #category : #testing }
 GtLModelAssistantMessage >> hasContent [
 
 	^ rawData isNotNil
