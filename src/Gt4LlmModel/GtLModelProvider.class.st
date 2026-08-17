@@ -271,7 +271,7 @@ GtLModelProvider >> initialize [
 
 	super initialize.
 	model := GtLLlmModel new.
-	compactionStrategy := GtLNoCompactionStrategy new.
+	compactionStrategy := GtLNoCompactionStrategy forProvider: self.
 ]
 
 { #category : #initialization }
