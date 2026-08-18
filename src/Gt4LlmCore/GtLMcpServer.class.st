@@ -347,6 +347,11 @@ GtLMcpServer >> handleInitialize: aJsonRpc [
 ]
 
 { #category : #handling }
+GtLMcpServer >> handleNotificationsCancelled: aJsonRpc [
+	^ {} asDictionary
+]
+
+{ #category : #handling }
 GtLMcpServer >> handleNotificationsInitialized: aJsonRpc [
 	^ {} asDictionary
 ]
@@ -438,7 +443,9 @@ GtLMcpServer >> handleToolsCall: aJsonRpc [
 				name: (aJsonRpc params at: 'name');
 				rawArguments: (aJsonRpc params at: 'arguments').
 	
-	toolMessage := GtLToolMessage new toolCall: toolCall.
+	toolMessage := GtLToolMessage new 
+		chat: (GtLMcpChatAdapter new server: self);
+		toolCall: toolCall.
 	self privateAddToolMessage: toolMessage.
 	
 	result := tool 
