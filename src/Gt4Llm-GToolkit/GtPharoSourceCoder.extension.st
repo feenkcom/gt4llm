@@ -46,7 +46,8 @@ GtPharoSourceCoder >> renameFormatComponent: node in: aTextualViewModel for: anE
 	(GtLlmRenameFormatComponentInMethodController new
 		sourceCoderViewModel: aTextualViewModel;
 		assistantClass: aTextualViewModel behavior;
-		originalNode: node) executeIn: anElement
+		originalNode: node;
+		documentId: aTextualViewModel documentId) executeIn: anElement
 ]
 
 { #category : #'*Gt4Llm-GToolkit' }

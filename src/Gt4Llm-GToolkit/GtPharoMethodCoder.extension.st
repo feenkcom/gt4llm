@@ -22,7 +22,8 @@ GtPharoMethodCoder >> addRenameMethodMenuForAst: anAst to: coderAddOns from: aCo
 								possibilities: (anAnswer codeBlock
 										collect: [ :aCodeBlock | (GtPharoParser parse: (aCodeBlock at: 'code')) selector ]);
 								originalNode: node;
-								sourceCoderViewModel: model) executeIn: element ] ])
+								sourceCoderViewModel: model;
+								documentId: aDocumentId) executeIn: element ] ])
 				ifNotNil: [ :anAction | anAction priority: 216 ] ]
 ]
 
