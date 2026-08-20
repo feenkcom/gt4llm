@@ -160,7 +160,7 @@ GtLMcpServer >> createMethodNotFoundResponseForJsonRpc: aJsonRpc [
 					'id' -> aJsonRpc id.
 					'error'
 						-> {'code' -> -32601.
-							'message' -> ('Method not found: ', aJsonRpc method)} asDictionary}
+							'message' -> ('Method not found: ', aJsonRpc method asString)} asDictionary}
 					asDictionary))
 ]
 
@@ -193,14 +193,15 @@ GtLMcpServer >> detectToolNamed: aToolName [
 { #category : #dispatching }
 GtLMcpServer >> dispatch: jsonRpc [
 	| camelCasedMethod selector |
-	camelCasedMethod := (jsonRpc method replaceAllRegex: '[^a-zA-Z]' with: ' ')
-			asCamelCase asSymbol asMutator.
+	camelCasedMethod := (jsonRpc method
+			ifNotNil: [ :aString | aString replaceAllRegex: '[^a-zA-Z]' with: ' ' ]
+			ifNil: [ '' ]) asCamelCase asSymbol asMutator.
 	selector := (#handle , camelCasedMethod) asSymbol.
-	(self respondsTo: selector) ifFalse: [
-		^ (GtLMcpUnknownMethodError new)
-			rpcMethod: jsonRpc method;
-			handleSelector: selector;
-			signal ].
+	(self respondsTo: selector)
+		ifFalse: [ ^ GtLMcpUnknownMethodError new
+				rpcMethod: jsonRpc method;
+				handleSelector: selector;
+				signal ].
 	^ self perform: selector withArguments: {jsonRpc}
 ]
 
@@ -274,20 +275,8 @@ GtLMcpServer >> finalize [
 	super finalize
 ]
 
-{ #category : #accessing }
-GtLMcpServer >> getCapabilities [
-	| capabilities |
-	capabilities := {} asDictionary.
-
-	tools ifNotEmpty: [ capabilities at: 'tools' put: {} asDictionary ].
-	resources ifNotEmpty: [ capabilities at: 'resources' put: {} asDictionary ].
-	prompts ifNotEmpty: [ capabilities at: 'prompts' put: {} asDictionary ].
-
-	^ capabilities
-]
-
 { #category : #private }
-GtLMcpServer >> getCapabilitiesWithCompletions [
+GtLMcpServer >> getCapabilities [
 	| capabilities |
 	capabilities := {} asDictionary.
 
@@ -517,7 +506,7 @@ GtLMcpServer >> handleResourcesTemplatesList: aJsonRpc [
 GtLMcpServer >> handleServerDiscover: aJsonRpc [
 	^ {'resultType' -> 'complete'.
 		'supportedVersions' -> #('2025-11-25' '2025-06-18').
-		'capabilities' -> self getCapabilitiesWithCompletions.
+		'capabilities' -> self getCapabilities.
 		'_meta' -> {'io.modelcontextprotocol/serverInfo' -> self serverInfoForDiscovery} asDictionary.
 		'instructions' -> ''} asDictionary
 ]
