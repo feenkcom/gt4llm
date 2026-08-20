@@ -47,7 +47,10 @@ GtLMcpServerErrorRecord >> gtExceptionFor: aView [
 		title: 'Exception';
 		priority: 1;
 		object: [ self exception ];
-		view: #gtLiveFor:
+		view: #gtLiveFor:;
+		actionButtonIcon: BrGlamorousVectorIcons inspect
+			tooltip: 'Inspect response'
+			action: [ :anElement | anElement phlow spawnObject: self exception ]
 ]
 
 { #category : #view }
@@ -58,7 +61,10 @@ GtLMcpServerErrorRecord >> gtRequestFor: aView [
 		title: 'Request';
 		priority: 2;
 		object: [ self request ];
-		view: #gtLiveFor:
+		view: #gtJsonFor:;
+		actionButtonIcon: BrGlamorousVectorIcons inspect
+			tooltip: 'Inspect request'
+			action: [ :anElement | anElement phlow spawnObject: self request ]
 ]
 
 { #category : #view }
@@ -67,9 +73,12 @@ GtLMcpServerErrorRecord >> gtResponseFor: aView [
 	self response ifNil: [ ^ aView empty ].
 	^ aView forward
 		title: 'Response';
-		priority: 3;
+		priority: 4;
 		object: [ self response ];
-		view: #gtLiveFor:
+		view: #gtTextContentsFor:;
+		actionButtonIcon: BrGlamorousVectorIcons inspect
+			tooltip: 'Inspect response'
+			action: [ :anElement | anElement phlow spawnObject: self response ]
 ]
 
 { #category : #initialization }

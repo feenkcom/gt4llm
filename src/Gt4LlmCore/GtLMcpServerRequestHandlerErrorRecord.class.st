@@ -26,9 +26,12 @@ GtLMcpServerRequestHandlerErrorRecord >> gtJsonRpcFor: aView [
 	self jsonRpc ifNil: [ ^ aView empty ].
 	^ aView forward
 		title: 'JSON-RPC';
-		priority: 0;
+		priority: 3;
 		object: [ self jsonRpc ];
-		view: #gtLiveFor:
+		view: #gtRawFor:;
+		actionButtonIcon: BrGlamorousVectorIcons inspect
+			tooltip: 'Inspect JSON RPC object'
+			action: [ :anElement | anElement phlow spawnObject: self jsonRpc ]
 ]
 
 { #category : #accessing }
