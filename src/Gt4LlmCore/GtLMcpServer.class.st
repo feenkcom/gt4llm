@@ -211,6 +211,31 @@ GtLMcpServer >> createParseErrorResponseForError: anError [
 					asDictionary))
 ]
 
+{ #category : #private }
+GtLMcpServer >> createParseErrorResponseForNilContents [
+	"Answers a JSON-RPC 2.0 'Parse error' response (-32700) for the case where the
+	request has no body at all (aRequest contents is nil) - e.g. a bare GET/HEAD probe
+	sent to the MCP endpoint with no JSON-RPC payload, as happens for connectivity
+	checks such as 'claude mcp list'. There is nothing to parse, so this is treated the
+	same as a Parse error rather than an Invalid Request (which assumes a JSON document
+	was actually received). id is null since no request could be parsed. Per JSON-RPC
+	2.0 (https://www.jsonrpc.org/specification#error_object) and MCP's Base Protocol,
+	which uses the standard JSON-RPC 2.0 codes -32700/-32600..-32603 for general
+	protocol failures
+	(https://modelcontextprotocol.io/specification/2026-07-28/basic/index#error-codes)."
+	^ ZnResponse
+		ok: (ZnStringEntity
+			json: (NeoJSONWriter toString:
+				{'jsonrpc' -> '2.0'.
+					'id' -> nil.
+					'error'
+						-> {'code' -> -32700.
+							'message' -> 'Parse error'.
+							'data' -> {'reason' -> 'Request body is empty'} asDictionary}
+							asDictionary}
+					asDictionary))
+]
+
 { #category : #public }
 GtLMcpServer >> createResponseForResult: aJsonRpcResult forRpc: aJsonRpc [
 	aJsonRpc isNotification ifTrue: [ ^ self createAcceptedResponse ].
@@ -528,10 +553,24 @@ GtLMcpServer >> handleRequest: aRequest [
 	turn answer -32601 Method not found for a well-formed request naming an unknown
 	method (#createMethodNotFoundResponseForJsonRpc:), or the existing generic Bad
 	Request for any other in-handler error."
+
 	| parsedBody jsonRpc response |
-	[ parsedBody := STONJSON fromString: (aRequest contents ifNil: [ '{}' ]) ]
+	[ | aContents |
+	aRequest method = #GET ifTrue: [ ^ ZnResponse methodNotAllowed: aRequest ].
+	aRequest method = #DELETE ifTrue: [ ^ ZnResponse methodNotAllowed: aRequest ].
+	aRequest method = #POST ifFalse: [ ^ ZnResponse methodNotAllowed: aRequest ].
+
+	aContents := aRequest contents.
+	aContents
+		ifNil: [ response := self createParseErrorResponseForNilContents.
+			self
+				privateAddErrorRecord: (GtLMcpServerEmptyRequestContentsErrorRecord
+						forRequest: aRequest
+						response: response).
+			^ response ].
+	parsedBody := STONJSON fromString: aContents ]
 		on: Error
-		do: [ :anError |
+		do: [ :anError | 
 			response := self createParseErrorResponseForError: anError.
 			self
 				privateAddErrorRecord: (GtLMcpServerRpcErrorRecord
@@ -542,7 +581,7 @@ GtLMcpServer >> handleRequest: aRequest [
 
 	[ jsonRpc := GtLMcpJsonRpc on: parsedBody ]
 		on: Error
-		do: [ :anError |
+		do: [ :anError | 
 			response := self createInvalidRequestResponseForError: anError.
 			self
 				privateAddErrorRecord: (GtLMcpServerRpcErrorRecord

@@ -20,6 +20,23 @@ GtLMcpServerExamples >> createBadRequestWithMessage: aMessage for: aRequest [
 ]
 
 { #category : #examples }
+GtLMcpServerExamples >> deleteServerRequest [
+	"A bare DELETE on the MCP endpoint. Per MCP's Streamable HTTP transport, DELETE is a
+	request to terminate a session, not a JSON-RPC message."
+	<gtExample>
+	^ ZnRequest delete: '/'
+]
+
+{ #category : #examples }
+GtLMcpServerExamples >> getServerRequest [
+	"A bare GET on the MCP endpoint, as sent e.g. by 'claude mcp list' to check
+	reachability. Per MCP's Streamable HTTP transport, GET is a request to open an SSE
+	stream for server-initiated messages, not a JSON-RPC message."
+	<gtExample>
+	^ ZnRequest get: '/'
+]
+
+{ #category : #examples }
 GtLMcpServerExamples >> handleInitializeEchoesSupportedProtocolVersion [
 	<gtExample>
 	| server jsonRpc result |
@@ -139,6 +156,25 @@ GtLMcpServerExamples >> handleRequestRecordsParseError [
 ]
 
 { #category : #examples }
+GtLMcpServerExamples >> handleRequestRecordsParseErrorForNilContents [
+	<gtExample>
+	| server request response record json |
+	server := self simpleServer.
+	request := self nilContentsServerRequest.
+	response := server handleRequest: request.
+	self assert: response statusLine code equals: 200.
+	json := STONJSON fromString: response entity contents.
+	self assert: ((json at: 'error') at: 'code') equals: -32700.
+	self assert: ((json at: 'error') at: 'message') equals: 'Parse error'.
+	record := server errorsSnapshot last.
+	self assert: record class equals: GtLMcpServerEmptyRequestContentsErrorRecord.
+	self assert: record request equals: request.
+	self assert: record response equals: response.
+	self assert: record errorReason equals: 'Request body is empty'.
+	^ record
+]
+
+{ #category : #examples }
 GtLMcpServerExamples >> handleRequestRecordsUnknownMethodFailureAsynchronously [
 	<gtExample>
 	| server request response record json |
@@ -185,6 +221,44 @@ GtLMcpServerExamples >> handleRequestRecordsUnknownMethodFailureSynchronously [
 ]
 
 { #category : #examples }
+GtLMcpServerExamples >> handleRequestRejectsDeleteWithMethodNotAllowed [
+	"Per MCP's Streamable HTTP transport, DELETE asks the server to terminate a
+	session. This server does not support session termination, so per spec it must
+	answer 405 Method Not Allowed. No error record is added: this is a plain
+	HTTP-level rejection, not a malformed JSON-RPC request."
+	<gtExample>
+	| server request response errorsCountBefore |
+	server := self simpleServer.
+	errorsCountBefore := server errorsSnapshot size.
+	request := self deleteServerRequest.
+	response := server handleRequest: request.
+	self assert: response statusLine code equals: 405.
+	self assert: (response entity contents includesSubstring: 'Method Not Allowed').
+	self assert: server errorsSnapshot size equals: errorsCountBefore.
+	^ response
+]
+
+{ #category : #examples }
+GtLMcpServerExamples >> handleRequestRejectsGetWithMethodNotAllowed [
+	"Per MCP's Streamable HTTP transport, a GET on the endpoint asks to open an SSE
+	stream for server-initiated messages - it carries no JSON-RPC message at all. This
+	server does not offer that stream, so per spec it must answer 405 Method Not
+	Allowed rather than manufacture a JSON-RPC error for a message that was never
+	sent. No error record is added: this is a plain HTTP-level rejection, not a
+	malformed JSON-RPC request."
+	<gtExample>
+	| server request response errorsCountBefore |
+	server := self simpleServer.
+	errorsCountBefore := server errorsSnapshot size.
+	request := self getServerRequest.
+	response := server handleRequest: request.
+	self assert: response statusLine code equals: 405.
+	self assert: (response entity contents includesSubstring: 'Method Not Allowed').
+	self assert: server errorsSnapshot size equals: errorsCountBefore.
+	^ response
+]
+
+{ #category : #examples }
 GtLMcpServerExamples >> jsonRpcNotificationDetection [
 	<gtExample>
 	| notification request |
@@ -210,6 +284,16 @@ GtLMcpServerExamples >> jsonRpcNotificationDetection [
 GtLMcpServerExamples >> malformedJsonServerRequest [
 	<gtExample>
 	^ (ZnRequest post: '/') entity: (ZnEntity json: 'not valid json {')
+]
+
+{ #category : #examples }
+GtLMcpServerExamples >> nilContentsServerRequest [
+	"A POST request with no entity at all, e.g. a client that sends no body - see
+	GtLMcpServer>>#createParseErrorResponseForNilContents for why this is treated as a
+	JSON-RPC Parse error. A bodyless GET is a different, legitimate use of the MCP
+	Streamable HTTP endpoint - see #getServerRequest instead."
+	<gtExample>
+	^ ZnRequest post: '/'
 ]
 
 { #category : #support }
