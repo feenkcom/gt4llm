@@ -445,9 +445,21 @@ GtLMcpServer >> handleCompletionComplete: aJsonRpc [
 					'hasMore' -> false} asDictionary} asDictionary
 ]
 
-{ #category : #handling }
+{ #category : #'handling requests' }
 GtLMcpServer >> handleInitialize: aJsonRpc [
-	^ {'protocolVersion' -> (aJsonRpc params at: 'protocolVersion').
+	"Negotiates the protocol version per MCP's Version Negotiation
+	(https://modelcontextprotocol.io/specification/2025-06-18/basic/lifecycle#version-negotiation):
+	if the client's requested 'protocolVersion' is one #supportedProtocolVersions lists,
+	the response MUST echo that same version back; otherwise the response MUST offer
+	another version this server supports, which SHOULD be (and here is) the server's
+	latest. This is not an error — the client decides whether to accept the offered
+	version or disconnect."
+	| requestedVersion negotiatedVersion |
+	requestedVersion := aJsonRpc params at: 'protocolVersion'.
+	negotiatedVersion := (self supportedProtocolVersions includes: requestedVersion)
+		ifTrue: [ requestedVersion ]
+		ifFalse: [ self supportedProtocolVersions first ].
+	^ {'protocolVersion' -> negotiatedVersion.
 		'capabilities' -> self getCapabilities.
 		'serverInfo'
 			-> {'name' -> 'Glamorous Toolkit'.
@@ -577,7 +589,7 @@ GtLMcpServer >> handleResourcesTemplatesList: aJsonRpc [
 { #category : #'handling requests' }
 GtLMcpServer >> handleServerDiscover: aJsonRpc [
 	^ {'resultType' -> 'complete'.
-		'supportedVersions' -> #('2025-11-25' '2025-06-18').
+		'supportedVersions' -> self supportedProtocolVersions.
 		'capabilities' -> self getCapabilities.
 		'_meta' -> {'io.modelcontextprotocol/serverInfo' -> self serverInfoForDiscovery} asDictionary.
 		'instructions' -> ''} asDictionary
@@ -765,6 +777,15 @@ GtLMcpServer >> stop [
 	server
 		ifNotNil: [server stop.
 			server := nil]
+]
+
+{ #category : #private }
+GtLMcpServer >> supportedProtocolVersions [
+	"Answers the MCP protocol versions this server implements, newest first. Single
+	source of truth shared by #handleInitialize: (version negotiation) and
+	#handleServerDiscover: (supportedVersions). See
+	https://modelcontextprotocol.io/specification/2025-06-18/basic/lifecycle#version-negotiation."
+	^ #('2025-11-25' '2025-06-18')
 ]
 
 { #category : #accessing }

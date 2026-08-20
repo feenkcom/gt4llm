@@ -20,6 +20,38 @@ GtLMcpServerExamples >> createBadRequestWithMessage: aMessage for: aRequest [
 ]
 
 { #category : #examples }
+GtLMcpServerExamples >> handleInitializeEchoesSupportedProtocolVersion [
+	<gtExample>
+	| server jsonRpc result |
+	server := GtLMcpServer new.
+	jsonRpc := GtLMcpJsonRpc
+		on: {'jsonrpc' -> '2.0'.
+				'id' -> 1.
+				'method' -> 'initialize'.
+				'params' -> {'protocolVersion' -> '2025-06-18'} asDictionary} asDictionary.
+	result := server handleInitialize: jsonRpc.
+	self assert: (result at: 'protocolVersion') equals: '2025-06-18'.
+	^ result
+]
+
+{ #category : #examples }
+GtLMcpServerExamples >> handleInitializeNegotiatesUnsupportedProtocolVersion [
+	<gtExample>
+	| server jsonRpc result |
+	server := GtLMcpServer new.
+	jsonRpc := GtLMcpJsonRpc
+		on: {'jsonrpc' -> '2.0'.
+				'id' -> 1.
+				'method' -> 'initialize'.
+				'params' -> {'protocolVersion' -> '1999-01-01'} asDictionary} asDictionary.
+	result := server handleInitialize: jsonRpc.
+	self
+		assert: (result at: 'protocolVersion')
+		equals: server supportedProtocolVersions first.
+	^ result
+]
+
+{ #category : #examples }
 GtLMcpServerExamples >> handleRequestRecordsDispatchFailureAsynchronously [
 	<gtExample>
 	| server request response record |
