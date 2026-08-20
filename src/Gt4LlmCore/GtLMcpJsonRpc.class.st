@@ -14,10 +14,10 @@ Class {
 { #category : #'as yet unclassified' }
 GtLMcpJsonRpc class >> on: aDict [
 	^ self new
-		version: (aDict at: 'jsonrpc');
-		id: (aDict at: 'id' ifAbsent: [nil]);
-		method: (aDict at: 'method');
-		params: (aDict at: 'params' ifAbsent: [nil])
+		version: (aDict at: 'jsonrpc' ifAbsent: [ nil ]);
+		id: (aDict at: 'id' ifAbsent: [ nil ]);
+		method: (aDict at: 'method' ifAbsent: [ nil ]);
+		params: (aDict at: 'params' ifAbsent: [ nil ])
 ]
 
 { #category : #'as yet unclassified' }

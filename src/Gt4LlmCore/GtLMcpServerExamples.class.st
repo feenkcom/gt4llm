@@ -20,6 +20,76 @@ GtLMcpServerExamples >> createBadRequestWithMessage: aMessage for: aRequest [
 ]
 
 { #category : #examples }
+GtLMcpServerExamples >> handleRequestRecordsDispatchFailureAsynchronously [
+	<gtExample>
+	| server request response record |
+	server := self serverWithTool.
+	self assert: server isAsynchronous.
+	request := self
+			serverRequestWithEntity: {'jsonrpc' -> '2.0'.
+					'id' -> 1.
+					'method' -> 'tools/call'.
+					'params' -> {'invalid' -> 1} asDictionary} asDictionary.
+	response := server handleRequest: request.
+	self
+		assert: response
+		equals: (self
+				createBadRequestWithMessage: 'KeyNotFound: key ''name'' not found in Dictionary'
+				for: request).
+	record := server errorsSnapshot last.
+	self assert: record class equals: GtLMcpServerRequestHandlerErrorRecord.
+	self assert: record request equals: request.
+	self assert: record response equals: response.
+	self assert: record rpcMethodDescription equals: 'tools/call'.
+	^ record
+]
+
+{ #category : #examples }
+GtLMcpServerExamples >> handleRequestRecordsDispatchFailureSynchronously [
+	<gtExample>
+	| server request response record |
+	server := self serverWithTool.
+	server beSynchronous.
+	request := self
+			serverRequestWithEntity: {'jsonrpc' -> '2.0'.
+					'id' -> 1.
+					'method' -> 'tools/call'.
+					'params' -> {'invalid' -> 1} asDictionary} asDictionary.
+	response := server handleRequest: request.
+	self
+		assert: response
+		equals: (self
+				createBadRequestWithMessage: 'KeyNotFound: key ''name'' not found in Dictionary'
+				for: request).
+	record := server errorsSnapshot last.
+	self assert: record class equals: GtLMcpServerRequestHandlerErrorRecord.
+	self assert: record request equals: request.
+	self assert: record response equals: response.
+	self assert: record rpcMethodDescription equals: 'tools/call'.
+	^ record
+]
+
+{ #category : #examples }
+GtLMcpServerExamples >> handleRequestRecordsParseFailure [
+	<gtExample>
+	| server request response record |
+	server := self simpleServer.
+	request := self simpleServerRequest.
+	response := server handleRequest: request.
+	self
+		assert: response
+		equals: (self
+				createBadRequestWithMessage: 'KeyNotFound: key ''jsonrpc'' not found in Dictionary'
+				for: request).
+	record := server errorsSnapshot last.
+	self assert: record class equals: GtLMcpServerRpcErrorRecord.
+	self assert: record request equals: request.
+	self assert: record response equals: response.
+	self assert: record rpcMethodDescription isNil.
+	^ record
+]
+
+{ #category : #examples }
 GtLMcpServerExamples >> jsonRpcNotificationDetection [
 	<gtExample>
 	| notification request |
@@ -47,6 +117,17 @@ GtLMcpServerExamples >> recordAnnouncement: anAnnouncement [
 ]
 
 { #category : #examples }
+GtLMcpServerExamples >> serverAddsErrorRecordToErrors [
+	<gtExample>
+	| server errorRecord |
+	server := self simpleServer.
+	errorRecord := GtLMcpServerRpcErrorRecordExamples new recordForParseFailure.
+	server privateAddErrorRecord: errorRecord.
+	self assert: server errorsSnapshot last == errorRecord.
+	^ errorRecord
+]
+
+{ #category : #examples }
 GtLMcpServerExamples >> serverAddsToolMessageToHistory [
 	<gtExample>
 	| server toolMessage toolCall |
@@ -58,6 +139,26 @@ GtLMcpServerExamples >> serverAddsToolMessageToHistory [
 	server privateAddToolMessage: toolMessage.
 	self assert: server historySnapshot last == toolMessage.
 	^ toolMessage
+]
+
+{ #category : #examples }
+GtLMcpServerExamples >> serverAnnouncesErrorRecordAdded [
+	<gtExample>
+	| server errorRecord |
+	server := self simpleServer.
+	errorRecord := GtLMcpServerRequestHandlerErrorRecordExamples new recordForDispatchError.
+	recordedAnnouncement := nil.
+	server
+		when: GtLMcpServerErrorRecordAddedAnnouncement
+		send: #recordAnnouncement:
+		to: self.
+	server privateAddErrorRecord: errorRecord.
+	self assert: recordedAnnouncement notNil.
+	self assert: recordedAnnouncement class equals: GtLMcpServerErrorRecordAddedAnnouncement.
+	self assert: recordedAnnouncement mcpServer == server.
+	self assert: recordedAnnouncement errorRecord == errorRecord.
+	server unsubscribe: self.
+	^ recordedAnnouncement
 ]
 
 { #category : #examples }

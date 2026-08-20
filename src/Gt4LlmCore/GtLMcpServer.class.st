@@ -167,7 +167,12 @@ GtLMcpServer >> dispatch: jsonRpc [
 	^ self perform: (#handle , camelCasedMethod) asSymbol withArguments: {jsonRpc}
 ]
 
-{ #category : #public }
+{ #category : #accessing }
+GtLMcpServer >> errorsSnapshot [
+	^ errors lock: [ :aCollection | aCollection asArray ]
+]
+
+{ #category : #requests }
 GtLMcpServer >> executeAsyncRpc: aJsonRpc fromRequest: request [
 	<return: #TAsyncPromise>
 	| futureConfiguration futureComputation computationPromise errorHandlerPromise |
@@ -185,32 +190,39 @@ GtLMcpServer >> executeAsyncRpc: aJsonRpc fromRequest: request [
 			then: [ :aJsonRpcResult |
 				self createResponseForResult: aJsonRpcResult forRpc: aJsonRpc ]
 			otherwise: [ :anError |
-				errors add: anError.
-				self 
-					createBadRequestResponseForError:  anError 
-					fromRequest: request  ].
-					
+				| errorResponse |
+				errorResponse := self createBadRequestResponseForError: anError fromRequest: request.
+				self privateAddErrorRecord: (GtLMcpServerRequestHandlerErrorRecord
+					forException: anError
+					jsonRpc: aJsonRpc
+					request: request
+					response: errorResponse).
+				errorResponse ].
+			 
 	currentAsyncExecution := errorHandlerPromise.
 			 
 	^errorHandlerPromise wait
 ]
 
-{ #category : #public }
+{ #category : #requests }
 GtLMcpServer >> executeSyncronouslyRpc: aJsonRpc fromRequest: request [
 	<return: #TAsyncPromise>
 	| jsonRpcResult response |
-	
-	[jsonRpcResult := self dispatch: aJsonRpc] on: Error
-		do: 
-			[:anError |
-			errors add: anError freeze.
-			self isDebug ifTrue: [anError signal].
-			^ self 
-					createBadRequestResponseForError:  anError 
-					fromRequest: request ].
-			
+	[ jsonRpcResult := self dispatch: aJsonRpc ]
+		on: Error
+		do: [ :anError | 
+			| errorResponse |
+			errorResponse := self createBadRequestResponseForError: anError fromRequest: request.
+			self privateAddErrorRecord: (GtLMcpServerRequestHandlerErrorRecord
+				forException: anError
+				jsonRpc: aJsonRpc
+				request: request
+				response: errorResponse).
+			self isDebug ifTrue: [ anError signal ].
+			^ errorResponse ].
+
 	response := self createResponseForResult: jsonRpcResult forRpc: aJsonRpc.
-	^response
+	^ response
 ]
 
 { #category : #finalization }
@@ -232,15 +244,22 @@ GtLMcpServer >> getCapabilities [
 	^ capabilities
 ]
 
-{ #category : #views }
+{ #category : #view }
 GtLMcpServer >> gtErrorsFor: aView [
 	<gtView>
-	errors ifNil: [^aView empty].
-	^(aView columnedList)
+	errors ifNil: [ ^ aView empty ].
+	^ aView columnedList
 		title: 'Errors';
 		priority: 20;
-		items: [errors];
-		column: 'Value' text: [:each | each gtDisplayString];
+		items: [ self errorsSnapshot reverse ];
+		column: 'Created'
+			text: [ :each | each createdAt asStringYMDHMS ]
+			width: 130;
+		column: 'Method' text: [ :each | each rpcMethodDescription ifNil: [ '' ] ];
+		column: 'Error'
+			text: [ :each | each errorReason ]
+			weight: 3;
+		updateWhen: GtLMcpServerErrorRecordAddedAnnouncement in: [ announcer ];
 		actionUpdateButton
 ]
 
@@ -389,19 +408,23 @@ GtLMcpServer >> handlePromptsList: aJsonRpc [
 		asDictionary
 ]
 
-{ #category : #public }
+{ #category : #requests }
 GtLMcpServer >> handleRequest: aRequest [
-	| jsonRpc |
-	
-	[jsonRpc := GtLMcpJsonRpc on: (STONJSON fromString: aRequest entity contents)]
+	| jsonRpc response |
+	[ jsonRpc := GtLMcpJsonRpc
+			on: (STONJSON fromString: (aRequest contents ifNil: [ '{}' ])) ]
 		on: Error
-		do: [ :anError |
-			^self 
-					createBadRequestResponseForError:  anError 
-					fromRequest: aRequest ].
-	
-	^self isAsynchronous 
-		ifTrue: [ self executeAsyncRpc: jsonRpc fromRequest: aRequest ] 
+		do: [ :anError | 
+			response := self createBadRequestResponseForError: anError fromRequest: aRequest.
+			self
+				privateAddErrorRecord: (GtLMcpServerRpcErrorRecord
+						forException: anError
+						request: aRequest
+						response: response).
+			^ response ].
+
+	^ self isAsynchronous
+		ifTrue: [ self executeAsyncRpc: jsonRpc fromRequest: aRequest ]
 		ifFalse: [ self executeSyncronouslyRpc: jsonRpc fromRequest: aRequest ]
 ]
 
@@ -479,7 +502,7 @@ GtLMcpServer >> initialize [
 	resources := GtLMcpResources new.
 	prompts := GtLMessagesGroup new.
 	history := AsyncMutex for: OrderedCollection new.
-	errors := OrderedCollection new.
+	errors := AsyncMutex for: OrderedCollection new.
 	objectStorage := GtLObjectStorage new.
 	summarizersRegistry := GtLToolCallSummarizersRegistry new.
 	announcer := Announcer new.
@@ -537,6 +560,18 @@ GtLMcpServer >> port [
 { #category : #accessing }
 GtLMcpServer >> port: anObject [
 	port := anObject
+]
+
+{ #category : #private }
+GtLMcpServer >> privateAddErrorRecord: anErrorRecord [
+	| anAnnouncement |
+	errors lock: [ :aCollection |
+		aCollection add: anErrorRecord.
+		anAnnouncement := GtLMcpServerErrorRecordAddedAnnouncement new
+			mcpServer: self;
+			errorRecord: anErrorRecord;
+			yourself ].
+	self announce: anAnnouncement
 ]
 
 { #category : #private }
