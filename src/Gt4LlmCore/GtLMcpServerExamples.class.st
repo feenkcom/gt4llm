@@ -70,22 +70,85 @@ GtLMcpServerExamples >> handleRequestRecordsDispatchFailureSynchronously [
 ]
 
 { #category : #examples }
-GtLMcpServerExamples >> handleRequestRecordsParseFailure [
+GtLMcpServerExamples >> handleRequestRecordsInvalidRequestFailure [
 	<gtExample>
-	| server request response record |
+	| server request response record json |
 	server := self simpleServer.
 	request := self simpleServerRequest.
 	response := server handleRequest: request.
-	self
-		assert: response
-		equals: (self
-				createBadRequestWithMessage: 'KeyNotFound: key ''jsonrpc'' not found in Dictionary'
-				for: request).
+	self assert: response statusLine code equals: 200.
+	json := STONJSON fromString: response entity contents.
+	self assert: ((json at: 'error') at: 'code') equals: -32600.
+	self assert: ((json at: 'error') at: 'message') equals: 'Invalid Request'.
 	record := server errorsSnapshot last.
 	self assert: record class equals: GtLMcpServerRpcErrorRecord.
 	self assert: record request equals: request.
 	self assert: record response equals: response.
 	self assert: record rpcMethodDescription isNil.
+	^ record
+]
+
+{ #category : #examples }
+GtLMcpServerExamples >> handleRequestRecordsParseError [
+	<gtExample>
+	| server request response record json |
+	server := self simpleServer.
+	request := self malformedJsonServerRequest.
+	response := server handleRequest: request.
+	self assert: response statusLine code equals: 200.
+	json := STONJSON fromString: response entity contents.
+	self assert: ((json at: 'error') at: 'code') equals: -32700.
+	self assert: ((json at: 'error') at: 'message') equals: 'Parse error'.
+	record := server errorsSnapshot last.
+	self assert: record class equals: GtLMcpServerRpcErrorRecord.
+	self assert: record request equals: request.
+	self assert: record response equals: response.
+	^ record
+]
+
+{ #category : #examples }
+GtLMcpServerExamples >> handleRequestRecordsUnknownMethodFailureAsynchronously [
+	<gtExample>
+	| server request response record json |
+	server := self simpleServer.
+	self assert: server isAsynchronous.
+	request := self
+		serverRequestWithEntity: {'jsonrpc' -> '2.0'.
+				'id' -> 1.
+				'method' -> 'foo/bar'} asDictionary.
+	response := server handleRequest: request.
+	self assert: response statusLine code equals: 200.
+	json := STONJSON fromString: response entity contents.
+	self assert: ((json at: 'error') at: 'code') equals: -32601.
+	self assert: ((json at: 'error') at: 'message') equals: 'Method not found: foo/bar'.
+	record := server errorsSnapshot last.
+	self assert: record class equals: GtLMcpServerRequestHandlerErrorRecord.
+	self assert: record request equals: request.
+	self assert: record response equals: response.
+	self assert: record rpcMethodDescription equals: 'foo/bar'.
+	^ record
+]
+
+{ #category : #examples }
+GtLMcpServerExamples >> handleRequestRecordsUnknownMethodFailureSynchronously [
+	<gtExample>
+	| server request response record json |
+	server := self simpleServer.
+	server beSynchronous.
+	request := self
+		serverRequestWithEntity: {'jsonrpc' -> '2.0'.
+				'id' -> 1.
+				'method' -> 'foo/bar'} asDictionary.
+	response := server handleRequest: request.
+	self assert: response statusLine code equals: 200.
+	json := STONJSON fromString: response entity contents.
+	self assert: ((json at: 'error') at: 'code') equals: -32601.
+	self assert: ((json at: 'error') at: 'message') equals: 'Method not found: foo/bar'.
+	record := server errorsSnapshot last.
+	self assert: record class equals: GtLMcpServerRequestHandlerErrorRecord.
+	self assert: record request equals: request.
+	self assert: record response equals: response.
+	self assert: record rpcMethodDescription equals: 'foo/bar'.
 	^ record
 ]
 
@@ -109,6 +172,12 @@ GtLMcpServerExamples >> jsonRpcNotificationDetection [
 	self assert: request isNotification not.
 
 	^ notification
+]
+
+{ #category : #examples }
+GtLMcpServerExamples >> malformedJsonServerRequest [
+	<gtExample>
+	^ (ZnRequest post: '/') entity: (ZnEntity json: 'not valid json {')
 ]
 
 { #category : #support }
@@ -188,6 +257,28 @@ GtLMcpServerExamples >> serverAnnouncesHistoryItemAdded [
 GtLMcpServerExamples >> serverRequestWithEntity: anObject [
 	^ (ZnRequest post: '/')
 		entity: (ZnEntity json: (STONJSON toString: anObject))
+]
+
+{ #category : #examples }
+GtLMcpServerExamples >> serverRespondsToServerDiscoverRequest [
+	<gtExample>
+	| server request response json result capabilities meta |
+	server := self simpleServer.
+	request := self
+		serverRequestWithEntity: {'jsonrpc' -> '2.0'.
+				'id' -> 1.
+				'method' -> 'server/discover'} asDictionary.
+	response := server handleRequest: request.
+	self assert: response statusLine code equals: 200.
+	json := STONJSON fromString: response entity contents.
+	result := json at: 'result'.
+	self assert: (result at: 'resultType') equals: 'complete'.
+	self assert: (result at: 'supportedVersions') equals: #('2025-11-25' '2025-06-18').
+	capabilities := result at: 'capabilities'.
+	self assert: (capabilities includesKey: 'completions').
+	meta := (result at: '_meta') at: 'io.modelcontextprotocol/serverInfo'.
+	self assert: (meta at: 'name') equals: 'Glamorous Toolkit'.
+	^ server
 ]
 
 { #category : #examples }
@@ -459,18 +550,21 @@ GtLMcpServerExamples >> serverWithToolWithSuccessfulRequestAndResponse [
 { #category : #examples }
 GtLMcpServerExamples >> simpleServer [
 	<gtExample>
-	| server simpleRequest |
+	| server simpleRequest response json |
 	server := GtLMcpServer new.
 
 	self assert: server port equals: 0.
 	self assert: server isDebug not.
 
 	simpleRequest := self simpleServerRequest.
+	response := server handleRequest: simpleRequest.
+	self assert: response statusLine code equals: 200.
+	json := STONJSON fromString: response entity contents.
+	self assert: ((json at: 'error') at: 'code') equals: -32600.
+	self assert: ((json at: 'error') at: 'message') equals: 'Invalid Request'.
 	self
-		assert: (server handleRequest: simpleRequest)
-		equals: (self
-				createBadRequestWithMessage: 'KeyNotFound: key ''jsonrpc'' not found in Dictionary'
-				for: simpleRequest).
+		assert: (((json at: 'error') at: 'data') at: 'reason')
+		equals: 'missing required field: jsonrpc'.
 
 	^ server
 ]

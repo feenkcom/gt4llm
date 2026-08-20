@@ -134,6 +134,33 @@ GtLMcpServer >> createBadRequestResponseForError: anError fromRequest: request [
 ]
 
 { #category : #private }
+GtLMcpServer >> createInvalidRequestResponseForError: anError [
+	"Answers a JSON-RPC 2.0 'Invalid Request' response (-32600): the request body parsed
+	as JSON but is not a valid Request object (e.g. missing the required 'jsonrpc' or
+	'method' field). id is null since no valid request id could be determined. Per
+	JSON-RPC 2.0 (https://www.jsonrpc.org/specification#error_object) and MCP's Base
+	Protocol error codes
+	(https://modelcontextprotocol.io/specification/2026-07-28/basic/index#error-codes)."
+	| reason |
+	reason := (anError isKindOf: KeyNotFound)
+		ifTrue: [ 'missing required field: ', anError key ]
+		ifFalse: [ anError messageText ].
+	reason ifNil: [ anError printString ].
+	reason ifEmpty: [ anError printString ].
+	^ ZnResponse
+		ok: (ZnStringEntity
+			json: (NeoJSONWriter toString:
+				{'jsonrpc' -> '2.0'.
+					'id' -> nil.
+					'error'
+						-> {'code' -> -32600.
+							'message' -> 'Invalid Request'.
+							'data' -> {'reason' -> reason} asDictionary}
+							asDictionary}
+					asDictionary))
+]
+
+{ #category : #private }
 GtLMcpServer >> createMethodNotFoundResponseForJsonRpc: aJsonRpc [
 	"Answers a JSON-RPC 2.0 error response using the standard 'Method not found' error
 	code (-32601) for aJsonRpc, whose method name had no matching handler in
@@ -161,6 +188,26 @@ GtLMcpServer >> createMethodNotFoundResponseForJsonRpc: aJsonRpc [
 					'error'
 						-> {'code' -> -32601.
 							'message' -> ('Method not found: ', aJsonRpc method asString)} asDictionary}
+					asDictionary))
+]
+
+{ #category : #private }
+GtLMcpServer >> createParseErrorResponseForError: anError [
+	"Answers a JSON-RPC 2.0 'Parse error' response (-32700): the request body was not
+	valid JSON at all. id is null since no request could be parsed. Per JSON-RPC 2.0
+	(https://www.jsonrpc.org/specification#error_object) and MCP's Base Protocol, which
+	uses the standard JSON-RPC 2.0 codes -32700/-32600..-32603 for general protocol
+	failures (https://modelcontextprotocol.io/specification/2026-07-28/basic/index#error-codes)."
+	^ ZnResponse
+		ok: (ZnStringEntity
+			json: (NeoJSONWriter toString:
+				{'jsonrpc' -> '2.0'.
+					'id' -> nil.
+					'error'
+						-> {'code' -> -32700.
+							'message' -> 'Parse error'.
+							'data' -> {'reason' -> anError messageText} asDictionary}
+							asDictionary}
 					asDictionary))
 ]
 
@@ -452,14 +499,39 @@ GtLMcpServer >> handlePromptsList: aJsonRpc [
 		asDictionary
 ]
 
-{ #category : #requests }
+{ #category : #'handling requests' }
 GtLMcpServer >> handleRequest: aRequest [
-	| jsonRpc response |
-	[ jsonRpc := GtLMcpJsonRpc
-			on: (STONJSON fromString: (aRequest contents ifNil: [ '{}' ])) ]
+	"Parses aRequest's body and dispatches it, distinguishing two ways a request can be
+	malformed from a genuine handler error. Per MCP's Base Protocol, which uses the
+	standard JSON-RPC 2.0 error codes for general protocol failures
+	(https://modelcontextprotocol.io/specification/2026-07-28/basic/index#error-codes;
+	see also https://www.jsonrpc.org/specification#error_object):
+	- the body isn't valid JSON at all -> -32700 Parse error
+		(#createParseErrorResponseForError:);
+	- the body is valid JSON but not a valid Request object, e.g. missing the required
+		'jsonrpc' or 'method' field -> -32600 Invalid Request
+		(#createInvalidRequestResponseForError:).
+	Once a GtLMcpJsonRpc is successfully built, dispatch continues via
+	#executeAsyncRpc:fromRequest: / #executeSyncronouslyRpc:fromRequest:, which may in
+	turn answer -32601 Method not found for a well-formed request naming an unknown
+	method (#createMethodNotFoundResponseForJsonRpc:), or the existing generic Bad
+	Request for any other in-handler error."
+	| parsedBody jsonRpc response |
+	[ parsedBody := STONJSON fromString: (aRequest contents ifNil: [ '{}' ]) ]
 		on: Error
-		do: [ :anError | 
-			response := self createBadRequestResponseForError: anError fromRequest: aRequest.
+		do: [ :anError |
+			response := self createParseErrorResponseForError: anError.
+			self
+				privateAddErrorRecord: (GtLMcpServerRpcErrorRecord
+						forException: anError
+						request: aRequest
+						response: response).
+			^ response ].
+
+	[ jsonRpc := GtLMcpJsonRpc on: parsedBody ]
+		on: Error
+		do: [ :anError |
+			response := self createInvalidRequestResponseForError: anError.
 			self
 				privateAddErrorRecord: (GtLMcpServerRpcErrorRecord
 						forException: anError
