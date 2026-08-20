@@ -133,6 +133,37 @@ GtLMcpServer >> createBadRequestResponseForError: anError fromRequest: request [
 		entity: (ZnEntity textCRLF: errorMessage)
 ]
 
+{ #category : #private }
+GtLMcpServer >> createMethodNotFoundResponseForJsonRpc: aJsonRpc [
+	"Answers a JSON-RPC 2.0 error response using the standard 'Method not found' error
+	code (-32601) for aJsonRpc, whose method name had no matching handler in
+	#dispatchAllowingUnknownMethod:.
+
+	MCP's Base Protocol requires every message to follow JSON-RPC 2.0
+	(https://modelcontextprotocol.io/specification/2025-06-18/basic/index#messages),
+	which states a response MUST set either 'result' or 'error', never both. -32601 is
+	one of JSON-RPC 2.0's own pre-defined error codes
+	(https://www.jsonrpc.org/specification#error_object); MCP re-exports it verbatim as
+	METHOD_NOT_FOUND in its schema
+	(https://github.com/modelcontextprotocol/specification/blob/main/schema/2025-06-18/schema.ts).
+
+	This response shape also matters for the server/discover backward-compatibility probe
+	(https://modelcontextprotocol.io/specification/2026-07-28/server/discover): a client
+	probing an older/legacy server is expected to recognize this as 'method not supported'
+	and fall back to the legacy initialize handshake, rather than choke on an opaque
+	HTTP-level Bad Request."
+	aJsonRpc isNotification ifTrue: [ ^ self createAcceptedResponse ].
+	^ ZnResponse
+		ok: (ZnStringEntity
+			json: (NeoJSONWriter toString:
+				{'jsonrpc' -> '2.0'.
+					'id' -> aJsonRpc id.
+					'error'
+						-> {'code' -> -32601.
+							'message' -> ('Method not found: ', aJsonRpc method)} asDictionary}
+					asDictionary))
+]
+
 { #category : #public }
 GtLMcpServer >> createResponseForResult: aJsonRpcResult forRpc: aJsonRpc [
 	aJsonRpc isNotification ifTrue: [ ^ self createAcceptedResponse ].
@@ -161,10 +192,16 @@ GtLMcpServer >> detectToolNamed: aToolName [
 
 { #category : #dispatching }
 GtLMcpServer >> dispatch: jsonRpc [
-	| camelCasedMethod |
+	| camelCasedMethod selector |
 	camelCasedMethod := (jsonRpc method replaceAllRegex: '[^a-zA-Z]' with: ' ')
 			asCamelCase asSymbol asMutator.
-	^ self perform: (#handle , camelCasedMethod) asSymbol withArguments: {jsonRpc}
+	selector := (#handle , camelCasedMethod) asSymbol.
+	(self respondsTo: selector) ifFalse: [
+		^ (GtLMcpUnknownMethodError new)
+			rpcMethod: jsonRpc method;
+			handleSelector: selector;
+			signal ].
+	^ self perform: selector withArguments: {jsonRpc}
 ]
 
 { #category : #accessing }
@@ -172,53 +209,58 @@ GtLMcpServer >> errorsSnapshot [
 	^ errors lock: [ :aCollection | aCollection asArray ]
 ]
 
-{ #category : #requests }
+{ #category : #private }
 GtLMcpServer >> executeAsyncRpc: aJsonRpc fromRequest: request [
 	<return: #TAsyncPromise>
 	| futureConfiguration futureComputation computationPromise errorHandlerPromise |
 
-	futureComputation := [ 
+	futureComputation := [
 		self dispatch: aJsonRpc ] asAsyncFuture.
 	futureConfiguration := GtLAnthropicSettings futureExecutionConfiguration.
 	self isDebug ifTrue: [
-		futureComputation errorHandler: AsyncPassExceptionHandler new	].
-	
-	computationPromise := futureComputation 
+		futureComputation errorHandler: AsyncPassExceptionHandler new ].
+
+	computationPromise := futureComputation
 		await: futureConfiguration.
-	
+
 	errorHandlerPromise := computationPromise
 			then: [ :aJsonRpcResult |
 				self createResponseForResult: aJsonRpcResult forRpc: aJsonRpc ]
 			otherwise: [ :anError |
 				| errorResponse |
-				errorResponse := self createBadRequestResponseForError: anError fromRequest: request.
+				errorResponse := (anError isKindOf: GtLMcpUnknownMethodError)
+					ifTrue: [ self createMethodNotFoundResponseForJsonRpc: aJsonRpc ]
+					ifFalse: [ self createBadRequestResponseForError: anError fromRequest: request ].
 				self privateAddErrorRecord: (GtLMcpServerRequestHandlerErrorRecord
 					forException: anError
 					jsonRpc: aJsonRpc
 					request: request
 					response: errorResponse).
 				errorResponse ].
-			 
+
 	currentAsyncExecution := errorHandlerPromise.
-			 
-	^errorHandlerPromise wait
+
+	^ errorHandlerPromise wait
 ]
 
-{ #category : #requests }
+{ #category : #private }
 GtLMcpServer >> executeSyncronouslyRpc: aJsonRpc fromRequest: request [
 	<return: #TAsyncPromise>
 	| jsonRpcResult response |
 	[ jsonRpcResult := self dispatch: aJsonRpc ]
 		on: Error
-		do: [ :anError | 
+		do: [ :anError |
 			| errorResponse |
-			errorResponse := self createBadRequestResponseForError: anError fromRequest: request.
+			errorResponse := (anError isKindOf: GtLMcpUnknownMethodError)
+				ifTrue: [ self createMethodNotFoundResponseForJsonRpc: aJsonRpc ]
+				ifFalse: [ self createBadRequestResponseForError: anError fromRequest: request ].
 			self privateAddErrorRecord: (GtLMcpServerRequestHandlerErrorRecord
 				forException: anError
 				jsonRpc: aJsonRpc
 				request: request
 				response: errorResponse).
-			self isDebug ifTrue: [ anError signal ].
+			(anError isKindOf: GtLMcpUnknownMethodError) ifFalse: [
+				self isDebug ifTrue: [ anError signal ] ].
 			^ errorResponse ].
 
 	response := self createResponseForResult: jsonRpcResult forRpc: aJsonRpc.
@@ -240,6 +282,19 @@ GtLMcpServer >> getCapabilities [
 	tools ifNotEmpty: [ capabilities at: 'tools' put: {} asDictionary ].
 	resources ifNotEmpty: [ capabilities at: 'resources' put: {} asDictionary ].
 	prompts ifNotEmpty: [ capabilities at: 'prompts' put: {} asDictionary ].
+
+	^ capabilities
+]
+
+{ #category : #private }
+GtLMcpServer >> getCapabilitiesWithCompletions [
+	| capabilities |
+	capabilities := {} asDictionary.
+
+	tools ifNotEmpty: [ capabilities at: 'tools' put: {} asDictionary ].
+	resources ifNotEmpty: [ capabilities at: 'resources' put: {} asDictionary ].
+	prompts ifNotEmpty: [ capabilities at: 'prompts' put: {} asDictionary ].
+	capabilities at: 'completions' put: {} asDictionary.
 
 	^ capabilities
 ]
@@ -458,6 +513,15 @@ GtLMcpServer >> handleResourcesTemplatesList: aJsonRpc [
 	^ {'resourceTemplates' -> {}} asDictionary
 ]
 
+{ #category : #'handling requests' }
+GtLMcpServer >> handleServerDiscover: aJsonRpc [
+	^ {'resultType' -> 'complete'.
+		'supportedVersions' -> #('2025-11-25' '2025-06-18').
+		'capabilities' -> self getCapabilitiesWithCompletions.
+		'_meta' -> {'io.modelcontextprotocol/serverInfo' -> self serverInfoForDiscovery} asDictionary.
+		'instructions' -> ''} asDictionary
+]
+
 { #category : #dispatching }
 GtLMcpServer >> handleToolsCall: aJsonRpc [
 	| tool result toolCall toolMessage |
@@ -609,6 +673,13 @@ GtLMcpServer >> resources [
 { #category : #accessing }
 GtLMcpServer >> server [
 	^server
+]
+
+{ #category : #private }
+GtLMcpServer >> serverInfoForDiscovery [
+	^ {'name' -> 'Glamorous Toolkit'.
+		'title' -> 'Glamorous Toolkit MCP Server'.
+		'version' -> '1.0.0'} asDictionary
 ]
 
 { #category : #initialization }
