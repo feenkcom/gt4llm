@@ -21,16 +21,6 @@ GtLOpenAiServerSideCompactionStrategy >> executeCompaction [
 	self error: 'OpenAI server-side compaction doesn''t use compaction messages'.
 ]
 
-{ #category : #'private - testing' }
-GtLOpenAiServerSideCompactionStrategy >> hasCompactionResponse: aMessage [
-
-	^ aMessage isAssistantRole and:
-		[ | response |
-		response := aMessage requestResponse result.
-		response output anySatisfy: [ :jsonObject |
-			(jsonObject at: 'type' ifAbsent: []) = 'compaction' ] ].
-]
-
 { #category : #testing }
 GtLOpenAiServerSideCompactionStrategy >> isCompactionNeeded [
 	"Answer a boolean if a compaction message should be sent.
@@ -39,18 +29,22 @@ GtLOpenAiServerSideCompactionStrategy >> isCompactionNeeded [
 	^ false
 ]
 
-{ #category : #'api - compaction' }
+{ #category : #accessing }
 GtLOpenAiServerSideCompactionStrategy >> relevantChatMessagesFor: aChat [
-	"The OpenAI documentation is a little unclear about which messages to include.
-	Currently including the latest compaction output and all following messages."
-	| relevantMessages |
-	
-	relevantMessages := aChat messages messagesSelect: 
-		[ :each | self hasCompactionResponse: each ].
-	^relevantMessages isEmpty
-		ifTrue: [aChat messages]
-		ifFalse: [
-			aChat messages 
-				messagesBeforeMatching: [:each | false ]
-				andAllWithAndAfter: relevantMessages last]
+	"Only a compaction reusable by this provider may become a history boundary.
+	Incompatible opaque compactions are omitted while the earlier source history
+	remains available."
+
+	| serializableMessages compactionMessages |
+	serializableMessages := aChat messages messagesSelect: [ :each |
+		each isCompactionMessage
+			ifTrue: [
+				(each respondsTo: #canSerializeFor:)
+					ifTrue: [ each canSerializeFor: self provider ]
+					ifFalse: [ false ] ]
+			ifFalse: [ true ] ].
+	compactionMessages := serializableMessages messagesSelect: [ :each |
+		each isCompactionMessage ].
+	compactionMessages ifEmpty: [ ^ serializableMessages ].
+	^ serializableMessages messagesWithAndAfter: compactionMessages last
 ]

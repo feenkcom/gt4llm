@@ -7,7 +7,8 @@ Class {
 		'executionResults',
 		'lastId',
 		'expanded',
-		'elements'
+		'elements',
+		'objectRegistry'
 	],
 	#category : #'Gt4LlmCore-UI'
 }
@@ -126,6 +127,16 @@ GtLMessageStyler >> nextUniqueId [
 ]
 
 { #category : #accessing }
+GtLMessageStyler >> objectRegistry [
+	^objectRegistry
+]
+
+{ #category : #accessing }
+GtLMessageStyler >> objectRegistry: anObjectStorage [
+	objectRegistry := anObjectStorage
+]
+
+{ #category : #accessing }
 GtLMessageStyler >> privateStyle: aText [ 
 	<return: #BlText>
 	| ast |
@@ -145,6 +156,20 @@ GtLMessageStyler >> resolveUrl: aUrlString [
 	^ GtUrlStringUtility new
 		rootDirectory: rootDir;
 		urlString: aUrlString.
+]
+
+{ #category : #private }
+GtLMessageStyler >> storedRegistryObjectForId: anIdString ifPresent: aPresentBlock ifAbsent: anAbsentBlock [
+	| string36 |
+	anIdString ifNil: [ ^anAbsentBlock value ].
+	objectRegistry ifNil: [ ^anAbsentBlock value ].
+	string36 := (anIdString includes: $-)
+				ifTrue: [(UUID fromString: anIdString) asString36]
+				ifFalse: [anIdString].
+	^objectRegistry
+		storedObjectAt: string36
+		ifPresent: aPresentBlock
+		ifAbsent: anAbsentBlock
 ]
 
 { #category : #generated }
@@ -756,6 +781,37 @@ GtLMessageStyler >> visitMethodAnnotation: aMethodAnnotation [
 	self
 		styleExpandingObject: aMethodAnnotation
 		withDefault: LepiterConstants defaultMethodShowSelector
+]
+
+{ #category : #visiting }
+GtLMessageStyler >> visitObjectReferenceAnnotation: anObjectAnnotation [
+	| uuid storedObject object isValid aLinkColor adapter |
+	uuid := anObjectAnnotation uuid.
+	self 
+		storedRegistryObjectForId: uuid 
+		ifPresent: [ :aStoredObject |
+			isValid := true. 
+			storedObject := aStoredObject.
+			object := aStoredObject storedValue ] 
+		ifAbsent: [
+			isValid := false. 
+			storedObject := nil.
+			object := nil ].
+	
+	aLinkColor := isValid
+				ifTrue: [BrGlamorousColors textMarkupColor]
+				ifFalse: [BrGlamorousColors linkWithErrorColor].
+	(self text from: anObjectAnnotation parent startPosition
+		to: anObjectAnnotation parent stopPosition) foreground: aLinkColor.
+	uuid ifNotNil: [self styleAutoHidingAnnotation: anObjectAnnotation].
+	adapter := LeObjectReferenceAnnotationAdapter
+				annotation: anObjectAnnotation
+				object: object.
+	self styleButton: adapter withTool: [GtInspectorTool forObject: storedObject].
+	isValid
+		ifTrue: [self 
+			styleExpandingObject: adapter 
+			withDefault: LepiterConstants defaultShowSelector]
 ]
 
 { #category : #accessing }

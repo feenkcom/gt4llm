@@ -58,7 +58,7 @@ GtLModelExamples >> messageWithToolCallThenCompactionExample [
 	self assert: chat messages size equals: 4.
 	self compareShapes: chat messages with: executor expectedHistory.
 	self assert: chat messages last finalMessage hasCompactionResponse.
-	self assert: chat messages last assistantMessage isAssistantRole.
+	self assert: chat messages last assistantMessage role = 'compaction'.
 	self assert: chat provider relevantChatMessages size equals: 3.
 	
 	^ chat

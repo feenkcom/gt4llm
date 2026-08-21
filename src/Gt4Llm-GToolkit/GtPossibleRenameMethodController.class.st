@@ -41,6 +41,7 @@ GtPossibleRenameMethodController >> installRenamer [
 			message: message
 			textualCoderViewModel: sourceCoderViewModel
 			possibilities: self possibilities.
+	renameAction documentId: documentId.
 	oldAction
 		ifNil: [ renameAction newSelector: message selector ]
 		ifNotNil: [ renameAction newSelector: oldAction newSelector ].

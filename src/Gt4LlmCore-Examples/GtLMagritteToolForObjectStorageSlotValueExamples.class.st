@@ -104,22 +104,30 @@ GtLMagritteToolForObjectStorageSlotValueExamples >> retrieveSlotValueWithMissing
 { #category : #examples }
 GtLMagritteToolForObjectStorageSlotValueExamples >> retrieveStoredObjectSlotValue [
 	<gtExample>
-	| objectStorage storedObjectId call targetObject |
+	| objectStorage storedObjectId call nameObjectId targetObject |
 	objectStorage := GtLObjectStorage new.
-	storedObjectId := objectStorage addNewObject: GtLSerializedObjectValueTestObject exampleInstance reason: 'example object'.
+	targetObject := GtLSerializedObjectValueTestObject exampleInstance.
+	storedObjectId := objectStorage addNewObject: targetObject reason: 'example object'.
 	call := self
 		executeTool: GtLMagritteToolForObjectStorageSlotValue new
 		withArguments: {
 			'objectId' -> storedObjectId.
 			'slotName' -> 'name'
 		} asDictionary
-		inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
+		inContext: (GtLToolExecutionContext new 
+			objectStorage: objectStorage).
+		
+	self assert: objectStorage objectCount equals: 2.
+	nameObjectId := objectStorage locateIdByIdentityForObject: targetObject name.
+	
 	targetObject := call result targetObject.
 	self assert: (targetObject isKindOf: GtLObjectStorageValueResult).
 	self assert: targetObject object equals: 'TestObject'.
-	self assert: targetObject objectId equals: storedObjectId.
+	self assert: targetObject objectId ~= storedObjectId.
+	self assert: targetObject objectId = nameObjectId.
 	self assert: targetObject objectValue objectClassName equals: 'ByteString'.
 	self assert: (targetObject objectValue objectPrintString includesSubstring: 'TestObject').
+	
 	^ call
 ]
 

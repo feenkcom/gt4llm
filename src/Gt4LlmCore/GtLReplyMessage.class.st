@@ -7,7 +7,8 @@ Class {
 		'executionMessages',
 		'finishedAt',
 		'executionState',
-		'summarizersRegistry'
+		'summarizersRegistry',
+		'postExecutionMessages'
 	],
 	#category : #'Gt4LlmCore-Core'
 }
@@ -25,6 +26,11 @@ GtLReplyMessage >> addExecutionMessage: aMessage [
 { #category : #'as yet unclassified' }
 GtLReplyMessage >> addForkedChat: aGtLChat [ 
 	self shouldBeImplemented.
+]
+
+{ #category : #adding }
+GtLReplyMessage >> addPostExecutionMessage: aMessage [
+	self postExecutionMessages: (self postExecutionMessages copyWith: aMessage)
 ]
 
 { #category : #'api - message' }
@@ -71,44 +77,53 @@ GtLReplyMessage >> contentText [
 
 { #category : #copying }
 GtLReplyMessage >> copyForIndependentRequestInChat: aChat [
-	^ self 
-			copyForIndependentRequestInChat: aChat 
-			withUserMessage: (userMessage copyForIndependentRequestInChat: aChat)
-			upTo: (finalMessage ifNil: [
-				self executionMessages
-					ifEmpty: [nil] 
-					ifNotEmpty: [ :aCollection | aCollection last]]) 
+	| lastMessage |
+	lastMessage := self postExecutionMessages
+		ifEmpty: [ finalMessage ifNil: [
+			self executionMessages
+				ifEmpty: [ nil ]
+				ifNotEmpty: [ :messages | messages last ] ] ]
+		ifNotEmpty: [ :messages | messages last ].
+	^ self
+		copyForIndependentRequestInChat: aChat
+		withUserMessage: (userMessage copyForIndependentRequestInChat: aChat)
+		upTo: lastMessage
 ]
 
 { #category : #copying }
 GtLReplyMessage >> copyForIndependentRequestInChat: aChat withUserMessage: aUserMessage upTo: aLastMessage [
-	| newCopy indexOfMessage messagesToCopy |
-	
+	| newCopy indexOfMessage messagesToCopy postMessagesToCopy |
+
 	newCopy := self copy.
 	newCopy postCopyForIndependentRequestInChat: aChat.
 	newCopy userMessage: aUserMessage.
-	
+
 	summarizersRegistry ifNotNil: [
 		newCopy summarizersRegistry: summarizersRegistry copy ].
-	
-	indexOfMessage := self executionMessages 
-		indexOf: aLastMessage ifAbsent: [ nil ].
-	
-	messagesToCopy := indexOfMessage 
-		ifNil: [ self executionMessages  copy ] 
+
+	indexOfMessage := self executionMessages
+		indexOf: aLastMessage
+		ifAbsent: [ nil ].
+	messagesToCopy := indexOfMessage
+		ifNil: [ self executionMessages copy ]
 		ifNotNil: [ self executionMessages first: indexOfMessage ].
-	
 	newCopy executionMessages: (messagesToCopy collect: [ :each |
 		each copyForIndependentRequestInChat: aChat ]).
-	
-	indexOfMessage ifNotNil: [ 
-		"If the message to stop is an execution message do not copy the final message."
-		^ newCopy ].
-	
+	indexOfMessage ifNotNil: [ ^ newCopy ].
+
 	finalMessage ifNotNil: [
 		newCopy finalMessage: (finalMessage copyForIndependentRequestInChat: aChat).
 		newCopy finishedAt: self finishedAt ].
-	
+	finalMessage = aLastMessage ifTrue: [ ^ newCopy ].
+
+	indexOfMessage := self postExecutionMessages
+		indexOf: aLastMessage
+		ifAbsent: [ nil ].
+	postMessagesToCopy := indexOfMessage
+		ifNil: [ self postExecutionMessages copy ]
+		ifNotNil: [ self postExecutionMessages first: indexOfMessage ].
+	newCopy postExecutionMessages: (postMessagesToCopy collect: [ :each |
+		each copyForIndependentRequestInChat: aChat ]).
 	^ newCopy
 ]
 
@@ -121,14 +136,16 @@ GtLReplyMessage >> currentMessage [
 	^ self currentMessageDo: [ :aMessage | aMessage ] ifAbsent: [ self ]
 ]
 
-{ #category : #'api - message' }
+{ #category : #accessing }
 GtLReplyMessage >> currentMessageDo: aBlock ifAbsent: anAbsentBlock [
-	"Return a last message that should be used
-	to receive a LLM server response."
+	"Return the last message that should be used to receive an LLM server response."
 
 	<return: #GtLChatMessage>
 	finalMessage ifNotNil: [ ^ aBlock value: finalMessage ].
-	executionMessages value ifNotEmpty: [ ^ aBlock value: executionMessages value last ].
+	self postExecutionMessages
+		ifNotEmpty: [ :messages | ^ aBlock value: messages last ].
+	executionMessages value
+		ifNotEmpty: [ :messages | ^ aBlock value: messages last ].
 	^ anAbsentBlock value
 ]
 
@@ -342,6 +359,8 @@ GtLReplyMessage >> gtViewsInContext: aPhlowContext [
 							nextPutAll: (GtPhlowViewsCollector new
 									fromObject: aMessage;
 									pragmaNames: GtLSettings messageViewPragmaNames;
+									context: (GtPhlowContext new 
+											objectRegistry: self chat objectStorage);
 									collect) ]
 					ifAbsent: [  ] ].
 
@@ -357,14 +376,16 @@ GtLReplyMessage >> hasResponse [
 
 { #category : #testing }
 GtLReplyMessage >> includesMessage: aMessage [
-	^ (self executionMessages anySatisfy: [:each | each = aMessage]) or: [
-		finalMessage = aMessage ]
+	^ (self executionMessages anySatisfy: [ :each | each = aMessage ])
+		or: [ finalMessage = aMessage
+			or: [ self postExecutionMessages anySatisfy: [ :each | each = aMessage ] ] ]
 ]
 
 { #category : #initialization }
 GtLReplyMessage >> initialize [
 	super initialize.
 	executionMessages := AsyncMutex for: #().
+	postExecutionMessages := Array new.
 	executionState := GtLMessageState created
 ]
 
@@ -402,7 +423,8 @@ GtLReplyMessage >> messagesDo: aBlock [
 	it is a standalone message in the chat messages collection."
 
 	self executionMessages do: aBlock.
-	self finalMessage ifNotNil: aBlock
+	self finalMessage ifNotNil: aBlock.
+	self postExecutionMessages do: aBlock.
 ]
 
 { #category : #'api - message' }
@@ -412,7 +434,7 @@ GtLReplyMessage >> messagesReverseDo: aBlock [
 	
 	In this case, user message is ignored since 
 	it is a standalone message in the chat messages collection."
-
+	self postExecutionMessages reverseDo: aBlock.
 	self finalMessage ifNotNil: aBlock.
 	self executionMessages reverseDo: aBlock.
 ]
@@ -448,8 +470,28 @@ GtLReplyMessage >> postCopyForIndependentRequestInChat: aChat [
 	super postCopyForIndependentRequestInChat: aChat.
 	
 	executionMessages := AsyncMutex for: self executionMessages.
+	postExecutionMessages := postExecutionMessages copy.
 	finalMessage := nil.
 	finishedAt := nil.
+]
+
+{ #category : #accessing }
+GtLReplyMessage >> postExecutionMessages [
+	^ postExecutionMessages
+]
+
+{ #category : #accessing }
+GtLReplyMessage >> postExecutionMessages: newCollection [
+	| oldCollection removedMessages addedMessages |
+	postExecutionMessages = newCollection ifTrue: [ ^ self ].
+
+	oldCollection := postExecutionMessages.
+	postExecutionMessages := newCollection.
+	removedMessages := oldCollection difference: newCollection.
+	addedMessages := newCollection difference: oldCollection.
+	self updateSubscriptionsFrom: removedMessages to: addedMessages.
+	self notifyExecutionMessagesRemoved: removedMessages added: addedMessages.
+	self notifyReplyMessageChanged
 ]
 
 { #category : #accessing }

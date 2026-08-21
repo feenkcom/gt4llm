@@ -69,6 +69,16 @@ GtLStoredObject >> reason: aReason [
 ]
 
 { #category : #accessing }
+GtLStoredObject >> storedValue [
+	^ value
+]
+
+{ #category : #accessing }
+GtLStoredObject >> storedValue: anObject [
+	value := anObject
+]
+
+{ #category : #accessing }
 GtLStoredObject >> value [
 	^ value
 ]

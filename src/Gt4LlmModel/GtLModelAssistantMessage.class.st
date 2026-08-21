@@ -92,12 +92,6 @@ GtLModelAssistantMessage >> gtViewResponseModelsFor: aView [
 ]
 
 { #category : #testing }
-GtLModelAssistantMessage >> hasCompactionResponse [
-
-	^ self provider assistantMessageHasCompactionResponse: self
-]
-
-{ #category : #testing }
 GtLModelAssistantMessage >> hasContent [
 
 	^ rawData isNotNil

@@ -95,7 +95,7 @@ GtLConnectionExamples >> propertyConfigurationOption [
 	option := GtLConnectionPropertyConfigurationOption
 		name: #baseUrl
 		selector: #baseUrl:
-		values: { 'https://example.com' }.
+		valueGenerator: [ { 'https://example.com' } ].
 
 	self assert: option name equals: #baseUrl.
 	self assert: option selector equals: #baseUrl:.
@@ -112,7 +112,7 @@ GtLConnectionExamples >> propertyConfigurationOptionWithMultipleArguments [
 	option := GtLConnectionPropertyConfigurationOption
 		name: #pair
 		selector: #pairFirst:second:
-		values: { #one. #two }.
+		valueGenerator: [ { #one. #two } ].
 
 	provider := GtLConnectionConfigurationProviderStub new.
 	option applyOn: provider.

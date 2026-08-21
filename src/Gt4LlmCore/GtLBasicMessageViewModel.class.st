@@ -134,6 +134,7 @@ GtLBasicMessageViewModel >> messageViewsInto: aStream [
 		nextPutAll: (GtPhlowViewsCollector new
 				fromObject: self;
 				pragmaNames: self messageViewPragmas;
+				context: self phlowContext;
 				collect).
 
 	self hasMessage
@@ -141,6 +142,7 @@ GtLBasicMessageViewModel >> messageViewsInto: aStream [
 				nextPutAll: (GtPhlowViewsCollector new
 						fromObject: self message currentMessage;
 						pragmaNames: self messageViewPragmas;
+						context: self phlowContext;
 						collect).
 
 			self message gtInspectorTargetModels
@@ -149,6 +151,7 @@ GtLBasicMessageViewModel >> messageViewsInto: aStream [
 						nextPutAll: (GtPhlowViewsCollector new
 								fromObject: eachResponseModel;
 								pragmaNames: self messageViewPragmas;
+								context: self phlowContext;
 								collect) ] ]
 ]
 

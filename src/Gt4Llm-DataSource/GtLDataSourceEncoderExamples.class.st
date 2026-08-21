@@ -150,7 +150,7 @@ GtLDataSourceEncoderExamples >> openai52Chat1 [
 	| requestHistory constructor chat message |
 
 	requestHistory := GtLDataSourceEncoderDecoder loadClientHistoryFromStream: self openai52Jsonl1 readStream.
-	chat := GtLChat new provider: (GtLOpenAIProvider new
+	chat := GtLChat new provider: (GtLOpenAiResponsesProvider new
 		modelName: 'gpt-5.2').
 	constructor := GtLDataSourceMessageConstructor new
 		requestHistory: requestHistory;
@@ -159,7 +159,7 @@ GtLDataSourceEncoderExamples >> openai52Chat1 [
 	self assert: chat class identicalTo: GtLChat.
 	self assert: chat messages size equals: 2.
 	message := chat messages at: 1.
-	self assert: message class equals: GtLOpenAIUserMessage.
+	self assert: message class equals: GtLModelUserMessage.
 	self assert: (message contentText beginsWith: '"Show me').
 	
 	message := chat messages at: 2.
@@ -175,7 +175,7 @@ GtLDataSourceEncoderExamples >> openai52Chat2 [
 	| requestHistory constructor chat message model |
 
 	requestHistory := GtLDataSourceEncoderDecoder loadClientHistoryFromStream: self openai52Jsonl2 readStream.
-	chat := GtLChat new provider: (GtLOpenAIProvider new
+	chat := GtLChat new provider: (GtLOpenAiResponsesProvider new
 		modelName: 'gpt-5.2').
 	constructor := GtLDataSourceMessageConstructor new
 		requestHistory: requestHistory;
@@ -184,7 +184,7 @@ GtLDataSourceEncoderExamples >> openai52Chat2 [
 	self assert: chat class identicalTo: GtLChat.
 	self assert: chat messages size equals: 4.
 	message := chat messages at: 1.
-	self assert: message class equals: GtLOpenAIUserMessage.
+	self assert: message class equals: GtLModelUserMessage.
 	model := message inputModels first.
 	self assert: model class identicalTo: GtLMagritteBasedModel.
 	model := model model.
@@ -196,7 +196,7 @@ GtLDataSourceEncoderExamples >> openai52Chat2 [
 	self assert: (message contentText beginsWith: '```json').
 	
 	message := chat messages at: 3.
-	self assert: message class identicalTo: GtLOpenAIUserMessage.
+	self assert: message class identicalTo: GtLModelUserMessage.
 	self assert: message inputModels first model content equals: 'What is the URL of the `Learn more` link?'.
 
 	message := chat messages at: 4.
@@ -212,7 +212,7 @@ GtLDataSourceEncoderExamples >> openai52Hello [
 	| requestHistory constructor chat message models magritteModel markdownModel |
 
 	requestHistory := GtLDataSourceEncoderDecoder loadClientHistoryFromStream: self openai52JsonlHello readStream.
-	chat := GtLChat new provider: (GtLOpenAIProvider new
+	chat := GtLChat new provider: (GtLOpenAiResponsesProvider new
 		modelName: 'gpt-5.2').
 	constructor := GtLDataSourceMessageConstructor new
 		requestHistory: requestHistory;
@@ -221,7 +221,7 @@ GtLDataSourceEncoderExamples >> openai52Hello [
 	self assert: chat class identicalTo: GtLChat.
 	self assert: chat messages size equals: 2.
 	message := chat messages at: 1.
-	self assert: message class equals: GtLOpenAIUserMessage.
+	self assert: message class equals: GtLModelUserMessage.
 	models := message inputModels.
 	self assert: models size equals: 1.
 	magritteModel := models first.

@@ -4,15 +4,18 @@ Class {
 	#category : #'Gt4LlmModel-Visitors'
 }
 
-{ #category : #api }
+{ #category : #accessing }
 GtLOllamaCompletionsMessageVisitor >> chatMessage: aMessage [
-	| content |
-	
+	| content role |
+
 	content := self visitNode: aMessage.
+	role := aMessage isCompactionMessage
+		ifTrue: [ 'assistant' ]
+		ifFalse: [ aMessage role ].
 	^ {
-		'role' -> aMessage role.
-		'content' -> content.
-	} asDictionary.
+		'role' -> role.
+		'content' -> content
+	} asDictionary
 ]
 
 { #category : #visiting }
@@ -26,13 +29,14 @@ GtLOllamaCompletionsMessageVisitor >> visitGtLModelAssistantMessage: anAssistant
 ]
 
 { #category : #visiting }
-GtLOllamaCompletionsMessageVisitor >> visitGtLModelCompactionMessage: anAssistantMessage [
+GtLOllamaCompletionsMessageVisitor >> visitGtLModelCompactionMessage: aCompactionMessage [
+	aCompactionMessage hasPortableContent ifFalse: [
+		self error: 'This opaque compaction cannot be serialized for the current provider' ].
 
 	^ { {
 		'type' -> 'text'.
-		'text' -> anAssistantMessage contentText 
-		} asDictionary.
-		}
+		'text' -> aCompactionMessage portableContentText
+	} asDictionary }
 ]
 
 { #category : #visiting }

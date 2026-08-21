@@ -81,6 +81,14 @@ GtLObjectStorage >> initialize [
 	self clearCache.
 ]
 
+{ #category : #accessing }
+GtLObjectStorage >> locateIdByIdentityForObject: anObject [
+	objectsByUUID valuesDo: [ :aStoredObject |
+		aStoredObject value == anObject ifTrue: [ ^ aStoredObject id asString36 ] ].
+	
+	NotFound signal: 'Could not find object'  
+]
+
 { #category : #notifications }
 GtLObjectStorage >> notifyObjectAdded: aStoredObject [
 	announcer announce: (GtLObjectStorageObjectAddedAnnouncement new
@@ -128,6 +136,14 @@ GtLObjectStorage >> printOn: aStream [
 		<< ' ';
 		<< ('object' asPluralBasedOn: self objectCount);
 		<< ']'
+]
+
+{ #category : #'as yet unclassified' }
+GtLObjectStorage >> purgeRedundantObjectsForChat: aGtLChat [
+	"This is currently only called when compaction has been performed.
+	Assume that the summary doesn't reference objects, so all can be discarded."
+
+	self clearCache.
 ]
 
 { #category : #'as yet unclassified' }

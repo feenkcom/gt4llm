@@ -66,6 +66,8 @@ GtPhlowChatToolElement >> collectToolViews [
 				aStream nextPutAll: (GtPhlowViewsCollector new
 					fromObject: eachTargetModel;
 					pragmaNames: GtLSettings messageViewPragmaNames;
+					context: (GtPhlowContext new 
+							objectRegistry: self chat objectStorage);
 					collect) ] ].
 
 	GtPhlowUtility sortByPriority: collectedViews.

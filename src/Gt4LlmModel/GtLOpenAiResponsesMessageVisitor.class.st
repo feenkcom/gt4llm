@@ -11,15 +11,6 @@ GtLOpenAiResponsesMessageVisitor >> chatMessage: aMessage [
 ]
 
 { #category : #visiting }
-GtLOpenAiResponsesMessageVisitor >> compactionOutputFrom: anAssistantMessage [
-	| output |
-	
-	output := anAssistantMessage requestResponse result at: 'output'.
-	^ output reversed detect: [ :jsonObject |
-		(jsonObject at: 'type') = 'compaction' ]
-]
-
-{ #category : #visiting }
 GtLOpenAiResponsesMessageVisitor >> roleAndContentFrom: anAssistantMessage [
 	| content |
 
@@ -36,15 +27,34 @@ GtLOpenAiResponsesMessageVisitor >> roleAndContentFrom: anAssistantMessage [
 
 { #category : #visiting }
 GtLOpenAiResponsesMessageVisitor >> visitGtLModelAssistantMessage: anAssistantMessage [
-	"If the message includes a compaction output, only supply that output"
+	"Assistant messages always serialize as ordinary assistant content.
+	Server-side compaction is represented by a separate message."
+
+	^ self roleAndContentFrom: anAssistantMessage
+]
+
+{ #category : #visiting }
+GtLOpenAiResponsesMessageVisitor >> visitGtLModelCompactionMessage: aCompactionMessage [
 	| provider |
-	
-	provider := anAssistantMessage chat provider.
-	
-	^ (provider assistantMessageHasCompactionResponse: anAssistantMessage) ifTrue:
-		[ self compactionOutputFrom: anAssistantMessage ]
-	ifFalse:
-		[ self roleAndContentFrom: anAssistantMessage ].
+
+	provider := aCompactionMessage providerForSerialization.
+	(provider notNil and: [
+		aCompactionMessage isServerSideCompactionOutputFor: provider ])
+		ifTrue: [
+			^ aCompactionMessage
+				rawDataFor: provider
+				ifAbsent: [ self error: 'Missing native compaction data' ] ].
+
+	aCompactionMessage hasPortableContent ifFalse: [
+		self error: 'This opaque compaction cannot be serialized for the current provider' ].
+
+	^ {
+		'role' -> 'assistant'.
+		'content' -> { {
+			'type' -> 'output_text'.
+			'text' -> aCompactionMessage portableContentText
+		} asDictionary }
+	} asDictionary
 ]
 
 { #category : #visiting }

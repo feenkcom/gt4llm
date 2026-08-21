@@ -33,7 +33,7 @@ GtLConnection >> addOption: anOption withValue: aValue [
 	self addOption: (GtLConnectionPropertyConfigurationOption
 		name: anOption
 		selector: anOption asSymbol asMutator
-		values: { aValue })
+		valueGenerator: [ { aValue } ])
 ]
 
 { #category : #accessing }
@@ -171,6 +171,14 @@ GtLConnection >> optionNamed: aString [
 
 	^ configurationOptions detect: [ :each |
 			each name = aString ]
+]
+
+{ #category : #accessing }
+GtLConnection >> optionNamed: aString ifAbsent: absentBlock [
+
+	^ configurationOptions 
+		detect: [ :each | each name = aString ]
+		ifNone: absentBlock
 ]
 
 { #category : #accessing }

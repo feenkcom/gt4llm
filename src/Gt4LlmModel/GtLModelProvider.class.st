@@ -32,9 +32,10 @@ GtLModelProvider >> apiCompactionThreshold: anInteger [
 { #category : #testing }
 GtLModelProvider >> assistantMessageHasCompactionResponse: anAssistantMessage [
 	"Answer a boolean indicating whether the provided message contains a compaction response.
-	E.g. OpenAI will include an encrypted_content output for server-side compaction."
+	E.g. OpenAI will include an encrypted_content output for server-side compaction.
+	This can be used to check whether an LLM response contains server-side copmaction, however the compaction will always be modelled as a separate compaction message, not as part of the assistant message."
 
-	^ false
+	^ self subclassResponsibility
 ]
 
 { #category : #accessing }
@@ -45,6 +46,14 @@ GtLModelProvider >> authentication [
 { #category : #accessing }
 GtLModelProvider >> authentication: anObject [
 	authentication := anObject
+]
+
+{ #category : #'as yet unclassified' }
+GtLModelProvider >> automaticCompactionMessagesFrom: aResult inputMessage: anInputMessage [
+	"Answer automatic compaction messages produced by a provider response.
+	By default, providers do not produce automatic compaction output."
+
+	^ #()
 ]
 
 { #category : #accessing }
@@ -92,14 +101,24 @@ GtLModelProvider >> clientGenerateModelResponse: anInputMessage messages: someMe
 		andInstructions: anInputMessage instructions instructionString
 ]
 
+{ #category : #compaction }
+GtLModelProvider >> compactionRepresentationKey [
+	"Answer the protocol dialect used to serialize compaction data. Provider
+	instances configured with the same endpoint intentionally share a key."
+
+	^ self model userMessageEndpoint class name
+]
+
 { #category : #accessing }
 GtLModelProvider >> compactionStrategy [
 	^ compactionStrategy
 ]
 
 { #category : #accessing }
-GtLModelProvider >> compactionStrategy: anObject [
-	compactionStrategy := anObject
+GtLModelProvider >> compactionStrategy: aCompactionStrategy [
+
+	compactionStrategy := aCompactionStrategy.
+	compactionStrategy provider: self.
 ]
 
 { #category : #endpoints }
@@ -252,7 +271,7 @@ GtLModelProvider >> initialize [
 
 	super initialize.
 	model := GtLLlmModel new.
-	compactionStrategy := GtLNoCompactionStrategy new.
+	compactionStrategy := GtLNoCompactionStrategy forProvider: self.
 ]
 
 { #category : #initialization }
@@ -304,6 +323,16 @@ GtLModelProvider >> modelName: aString [
 	model name: aString
 ]
 
+{ #category : #private }
+GtLModelProvider >> partitionAutomaticCompactionMessages: compactionMessages from: aResult inputMessage: anInputMessage [
+	"Answer the automatic compaction messages split around the assistant output.
+	The first element contains messages before the assistant output and the second
+	contains messages after it. Providers whose responses do not expose this
+	ordering keep all compaction messages before the assistant by default."
+
+	^ { compactionMessages. #() }
+]
+
 { #category : #'as yet unclassified' }
 GtLModelProvider >> performToolCallsIn: result with: activeTools [
 	<return: #GtLOpenAIProviderProcessedMessage or: nil>
@@ -339,22 +368,42 @@ GtLModelProvider >> performToolCallsIn: result with: activeTools [
 	^ self processNextMessage: toolMessages last.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 GtLModelProvider >> processNextMessage: anInputMessage [
-	| result outputMessage anotherMessage |
-	
+	| result outputMessage anotherMessage compactionMessages partitionedCompactionMessages preExecutionCompactionMessages postExecutionCompactionMessages |
+
 	self state ifCanContinue: [ ] ifDisabled: [ ^ nil ].
 
 	outputMessage := nil.
 	anotherMessage := nil.
 	result := self executeNextMessage: anInputMessage.
+
+	compactionMessages := self
+		automaticCompactionMessagesFrom: result
+		inputMessage: anInputMessage.
+	partitionedCompactionMessages := self
+		partitionAutomaticCompactionMessages: compactionMessages
+		from: result
+		inputMessage: anInputMessage.
+	preExecutionCompactionMessages := partitionedCompactionMessages first.
+	postExecutionCompactionMessages := partitionedCompactionMessages second.
+	preExecutionCompactionMessages do: [ :each |
+		each updateDataFromMessage: anInputMessage.
+		self chat addCompactionMessage: each ].
+
 	result hasToolCalls
-		ifTrue: [ anotherMessage := self performToolCallsIn: result with: anInputMessage tools ]
-		ifFalse: 
-			[ outputMessage := self
+		ifTrue: [
+			anotherMessage := self
+				performToolCallsIn: result
+				with: anInputMessage tools ]
+		ifFalse: [
+			outputMessage := self
 				responseTypeForResult: result
 				fromInputMessage: anInputMessage.
 			self chat addAssistantMessage: outputMessage.
+			postExecutionCompactionMessages do: [ :each |
+				each updateDataFromMessage: anInputMessage.
+				self chat addPostExecutionMessage: each ].
 			self chat signalRunIsDone ].
 
 	^ GtLOllamaProviderProcessedMessage new

@@ -140,6 +140,20 @@ GtLConnectionRegistry >> connectionFor: aProvider [
 ]
 
 { #category : #accessing }
+GtLConnectionRegistry >> connectionWithLabel: aString [
+
+	^ self connections detect: [ :connection |
+		connection label = aString ]
+]
+
+{ #category : #accessing }
+GtLConnectionRegistry >> connectionWithModelName: aString [
+
+	^ self connections detect: [ :connection |
+		connection modelName = aString ]
+]
+
+{ #category : #accessing }
 GtLConnectionRegistry >> connections [
 	^ connections value
 ]
@@ -235,24 +249,24 @@ GtLConnectionRegistry >> knownConnectors [
 			model: 'claude-fable-5'.
 		GtLConnection new
 			providerClass: GtLOpenAIProvider;
-			label: 'GPT 5.2';
-			model: 'gpt-5.2'.
+			label: 'GPT 5.6 Sol';
+			model: 'gpt-5.6-sol'.
+"		GtLConnection new
+			providerClass: GtLOpenAIProvider;
+			label: 'GPT 5.6 Terra';
+			model: 'gpt-5.6-terra'."
 		GtLConnection new
 			providerClass: GtLOpenAIProvider;
-			label: 'GPT 5.2 Codex';
-			model: 'gpt-5.2-codex'.
-		GtLConnection new
-			providerClass: GtLOpenAIProvider;
-			label: 'GPT 5.3 Codex';
-			model: 'gpt-5.3-codex'.
-		GtLConnection new
-			providerClass: GtLOpenAIProvider;
-			label: 'GPT 5.3';
-			model: 'gpt-5.3'.
+			label: 'GPT 5.6 Luna';
+			model: 'gpt-5.6-luna'.
 		GtLConnection new
 			providerClass: GtLOpenAIProvider;
 			label: 'GPT 5.5';
 			model: 'gpt-5.5'.
+		GtLConnection new
+			providerClass: GtLOpenAIProvider;
+			label: 'GPT 5.4';
+			model: 'gpt-5.4'.
 		},
 		self knownOllamaConnectors
 ]
@@ -305,8 +319,8 @@ GtLConnectionRegistry >> onRemovedAsUniqueInstance [
 GtLConnectionRegistry >> standardDefaultConnection [
 	^ GtLConnection new
 		providerClass: GtLOpenAIProvider;
-		label: 'GPT 5.4';
-		modelName: 'gpt-5.4'
+			label: 'GPT 5.6 Terra';
+			model: 'gpt-5.6-terra'.
 ]
 
 { #category : #subscriptions }

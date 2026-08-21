@@ -61,7 +61,8 @@ GtLChat >> addCompactionMessage: aMessage [
 
 	aMessage chat: self.
 	aReplyMessage := self ensureReplyMessage.
-	aReplyMessage addCompactionMessage: aMessage
+	aReplyMessage addCompactionMessage: aMessage.
+	objectStorage purgeRedundantObjectsForChat: self.
 ]
 
 { #category : #initialization }
@@ -97,6 +98,17 @@ GtLChat >> addMessage: aMessage [
 { #category : #adding }
 GtLChat >> addNewObject: anObject reasonString: aString [ 
 	^ self objectStorage addNewObject: anObject reason: (GtLStoredObjectStringReason text: aString)
+]
+
+{ #category : #adding }
+GtLChat >> addPostExecutionMessage: aMessage [
+	"Add a message that occurred after the final assistant message."
+
+	| replyMessage |
+	self updateLastUpdate.
+	aMessage chat: self.
+	replyMessage := self ensureReplyMessage.
+	replyMessage addPostExecutionMessage: aMessage
 ]
 
 { #category : #adding }

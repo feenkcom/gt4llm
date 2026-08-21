@@ -137,6 +137,12 @@ GtLMessageViewModel >> onMessageExecutionStateChanged: anAnnouncement [
 				executionState: anAnnouncement executionState)
 ]
 
+{ #category : #accessing }
+GtLMessageViewModel >> phlowContext [
+	^GtPhlowContext new 
+			objectRegistry: self message chat objectStorage
+]
+
 { #category : #'private - hooks' }
 GtLMessageViewModel >> subscribeToMessage [
 	self message

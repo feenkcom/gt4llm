@@ -20,6 +20,245 @@ GtLMcpServerExamples >> createBadRequestWithMessage: aMessage for: aRequest [
 ]
 
 { #category : #examples }
+GtLMcpServerExamples >> deleteServerRequest [
+	"A bare DELETE on the MCP endpoint. Per MCP's Streamable HTTP transport, DELETE is a
+	request to terminate a session, not a JSON-RPC message."
+	<gtExample>
+	^ ZnRequest delete: '/'
+]
+
+{ #category : #examples }
+GtLMcpServerExamples >> getServerRequest [
+	"A bare GET on the MCP endpoint, as sent e.g. by 'claude mcp list' to check
+	reachability. Per MCP's Streamable HTTP transport, GET is a request to open an SSE
+	stream for server-initiated messages, not a JSON-RPC message."
+	<gtExample>
+	^ ZnRequest get: '/'
+]
+
+{ #category : #examples }
+GtLMcpServerExamples >> handleInitializeEchoesSupportedProtocolVersion [
+	<gtExample>
+	| server jsonRpc result |
+	server := GtLMcpServer new.
+	jsonRpc := GtLMcpJsonRpc
+		on: {'jsonrpc' -> '2.0'.
+				'id' -> 1.
+				'method' -> 'initialize'.
+				'params' -> {'protocolVersion' -> '2025-06-18'} asDictionary} asDictionary.
+	result := server handleInitialize: jsonRpc.
+	self assert: (result at: 'protocolVersion') equals: '2025-06-18'.
+	^ result
+]
+
+{ #category : #examples }
+GtLMcpServerExamples >> handleInitializeNegotiatesUnsupportedProtocolVersion [
+	<gtExample>
+	| server jsonRpc result |
+	server := GtLMcpServer new.
+	jsonRpc := GtLMcpJsonRpc
+		on: {'jsonrpc' -> '2.0'.
+				'id' -> 1.
+				'method' -> 'initialize'.
+				'params' -> {'protocolVersion' -> '1999-01-01'} asDictionary} asDictionary.
+	result := server handleInitialize: jsonRpc.
+	self
+		assert: (result at: 'protocolVersion')
+		equals: server supportedProtocolVersions first.
+	^ result
+]
+
+{ #category : #examples }
+GtLMcpServerExamples >> handleRequestRecordsDispatchFailureAsynchronously [
+	<gtExample>
+	| server request response record |
+	server := self serverWithTool.
+	self assert: server isAsynchronous.
+	request := self
+			serverRequestWithEntity: {'jsonrpc' -> '2.0'.
+					'id' -> 1.
+					'method' -> 'tools/call'.
+					'params' -> {'invalid' -> 1} asDictionary} asDictionary.
+	response := server handleRequest: request.
+	self
+		assert: response
+		equals: (self
+				createBadRequestWithMessage: 'KeyNotFound: key ''name'' not found in Dictionary'
+				for: request).
+	record := server errorsSnapshot last.
+	self assert: record class equals: GtLMcpServerRequestHandlerErrorRecord.
+	self assert: record request equals: request.
+	self assert: record response equals: response.
+	self assert: record rpcMethodDescription equals: 'tools/call'.
+	^ record
+]
+
+{ #category : #examples }
+GtLMcpServerExamples >> handleRequestRecordsDispatchFailureSynchronously [
+	<gtExample>
+	| server request response record |
+	server := self serverWithTool.
+	server beSynchronous.
+	request := self
+			serverRequestWithEntity: {'jsonrpc' -> '2.0'.
+					'id' -> 1.
+					'method' -> 'tools/call'.
+					'params' -> {'invalid' -> 1} asDictionary} asDictionary.
+	response := server handleRequest: request.
+	self
+		assert: response
+		equals: (self
+				createBadRequestWithMessage: 'KeyNotFound: key ''name'' not found in Dictionary'
+				for: request).
+	record := server errorsSnapshot last.
+	self assert: record class equals: GtLMcpServerRequestHandlerErrorRecord.
+	self assert: record request equals: request.
+	self assert: record response equals: response.
+	self assert: record rpcMethodDescription equals: 'tools/call'.
+	^ record
+]
+
+{ #category : #examples }
+GtLMcpServerExamples >> handleRequestRecordsInvalidRequestFailure [
+	<gtExample>
+	| server request response record json |
+	server := self simpleServer.
+	request := self simpleServerRequest.
+	response := server handleRequest: request.
+	self assert: response statusLine code equals: 200.
+	json := STONJSON fromString: response entity contents.
+	self assert: ((json at: 'error') at: 'code') equals: -32600.
+	self assert: ((json at: 'error') at: 'message') equals: 'Invalid Request'.
+	record := server errorsSnapshot last.
+	self assert: record class equals: GtLMcpServerRpcErrorRecord.
+	self assert: record request equals: request.
+	self assert: record response equals: response.
+	self assert: record rpcMethodDescription isNil.
+	^ record
+]
+
+{ #category : #examples }
+GtLMcpServerExamples >> handleRequestRecordsParseError [
+	<gtExample>
+	| server request response record json |
+	server := self simpleServer.
+	request := self malformedJsonServerRequest.
+	response := server handleRequest: request.
+	self assert: response statusLine code equals: 200.
+	json := STONJSON fromString: response entity contents.
+	self assert: ((json at: 'error') at: 'code') equals: -32700.
+	self assert: ((json at: 'error') at: 'message') equals: 'Parse error'.
+	record := server errorsSnapshot last.
+	self assert: record class equals: GtLMcpServerRpcErrorRecord.
+	self assert: record request equals: request.
+	self assert: record response equals: response.
+	^ record
+]
+
+{ #category : #examples }
+GtLMcpServerExamples >> handleRequestRecordsParseErrorForNilContents [
+	<gtExample>
+	| server request response record json |
+	server := self simpleServer.
+	request := self nilContentsServerRequest.
+	response := server handleRequest: request.
+	self assert: response statusLine code equals: 200.
+	json := STONJSON fromString: response entity contents.
+	self assert: ((json at: 'error') at: 'code') equals: -32700.
+	self assert: ((json at: 'error') at: 'message') equals: 'Parse error'.
+	record := server errorsSnapshot last.
+	self assert: record class equals: GtLMcpServerEmptyRequestContentsErrorRecord.
+	self assert: record request equals: request.
+	self assert: record response equals: response.
+	self assert: record errorReason equals: 'Request body is empty'.
+	^ record
+]
+
+{ #category : #examples }
+GtLMcpServerExamples >> handleRequestRecordsUnknownMethodFailureAsynchronously [
+	<gtExample>
+	| server request response record json |
+	server := self simpleServer.
+	self assert: server isAsynchronous.
+	request := self
+		serverRequestWithEntity: {'jsonrpc' -> '2.0'.
+				'id' -> 1.
+				'method' -> 'foo/bar'} asDictionary.
+	response := server handleRequest: request.
+	self assert: response statusLine code equals: 200.
+	json := STONJSON fromString: response entity contents.
+	self assert: ((json at: 'error') at: 'code') equals: -32601.
+	self assert: ((json at: 'error') at: 'message') equals: 'Method not found: foo/bar'.
+	record := server errorsSnapshot last.
+	self assert: record class equals: GtLMcpServerRequestHandlerErrorRecord.
+	self assert: record request equals: request.
+	self assert: record response equals: response.
+	self assert: record rpcMethodDescription equals: 'foo/bar'.
+	^ record
+]
+
+{ #category : #examples }
+GtLMcpServerExamples >> handleRequestRecordsUnknownMethodFailureSynchronously [
+	<gtExample>
+	| server request response record json |
+	server := self simpleServer.
+	server beSynchronous.
+	request := self
+		serverRequestWithEntity: {'jsonrpc' -> '2.0'.
+				'id' -> 1.
+				'method' -> 'foo/bar'} asDictionary.
+	response := server handleRequest: request.
+	self assert: response statusLine code equals: 200.
+	json := STONJSON fromString: response entity contents.
+	self assert: ((json at: 'error') at: 'code') equals: -32601.
+	self assert: ((json at: 'error') at: 'message') equals: 'Method not found: foo/bar'.
+	record := server errorsSnapshot last.
+	self assert: record class equals: GtLMcpServerRequestHandlerErrorRecord.
+	self assert: record request equals: request.
+	self assert: record response equals: response.
+	self assert: record rpcMethodDescription equals: 'foo/bar'.
+	^ record
+]
+
+{ #category : #examples }
+GtLMcpServerExamples >> handleRequestRejectsDeleteWithMethodNotAllowed [
+	"Per MCP's Streamable HTTP transport, DELETE asks the server to terminate a
+	session. This server does not support session termination, so per spec it must
+	answer 405 Method Not Allowed. No error record is added: this is a plain
+	HTTP-level rejection, not a malformed JSON-RPC request."
+	<gtExample>
+	| server request response errorsCountBefore |
+	server := self simpleServer.
+	errorsCountBefore := server errorsSnapshot size.
+	request := self deleteServerRequest.
+	response := server handleRequest: request.
+	self assert: response statusLine code equals: 405.
+	self assert: (response entity contents includesSubstring: 'Method Not Allowed').
+	self assert: server errorsSnapshot size equals: errorsCountBefore.
+	^ response
+]
+
+{ #category : #examples }
+GtLMcpServerExamples >> handleRequestRejectsGetWithMethodNotAllowed [
+	"Per MCP's Streamable HTTP transport, a GET on the endpoint asks to open an SSE
+	stream for server-initiated messages - it carries no JSON-RPC message at all. This
+	server does not offer that stream, so per spec it must answer 405 Method Not
+	Allowed rather than manufacture a JSON-RPC error for a message that was never
+	sent. No error record is added: this is a plain HTTP-level rejection, not a
+	malformed JSON-RPC request."
+	<gtExample>
+	| server request response errorsCountBefore |
+	server := self simpleServer.
+	errorsCountBefore := server errorsSnapshot size.
+	request := self getServerRequest.
+	response := server handleRequest: request.
+	self assert: response statusLine code equals: 405.
+	self assert: (response entity contents includesSubstring: 'Method Not Allowed').
+	self assert: server errorsSnapshot size equals: errorsCountBefore.
+	^ response
+]
+
+{ #category : #examples }
 GtLMcpServerExamples >> jsonRpcNotificationDetection [
 	<gtExample>
 	| notification request |
@@ -41,9 +280,36 @@ GtLMcpServerExamples >> jsonRpcNotificationDetection [
 	^ notification
 ]
 
+{ #category : #examples }
+GtLMcpServerExamples >> malformedJsonServerRequest [
+	<gtExample>
+	^ (ZnRequest post: '/') entity: (ZnEntity json: 'not valid json {')
+]
+
+{ #category : #examples }
+GtLMcpServerExamples >> nilContentsServerRequest [
+	"A POST request with no entity at all, e.g. a client that sends no body - see
+	GtLMcpServer>>#createParseErrorResponseForNilContents for why this is treated as a
+	JSON-RPC Parse error. A bodyless GET is a different, legitimate use of the MCP
+	Streamable HTTP endpoint - see #getServerRequest instead."
+	<gtExample>
+	^ ZnRequest post: '/'
+]
+
 { #category : #support }
 GtLMcpServerExamples >> recordAnnouncement: anAnnouncement [
 	recordedAnnouncement := anAnnouncement
+]
+
+{ #category : #examples }
+GtLMcpServerExamples >> serverAddsErrorRecordToErrors [
+	<gtExample>
+	| server errorRecord |
+	server := self simpleServer.
+	errorRecord := GtLMcpServerRpcErrorRecordExamples new recordForParseFailure.
+	server privateAddErrorRecord: errorRecord.
+	self assert: server errorsSnapshot last == errorRecord.
+	^ errorRecord
 ]
 
 { #category : #examples }
@@ -58,6 +324,26 @@ GtLMcpServerExamples >> serverAddsToolMessageToHistory [
 	server privateAddToolMessage: toolMessage.
 	self assert: server historySnapshot last == toolMessage.
 	^ toolMessage
+]
+
+{ #category : #examples }
+GtLMcpServerExamples >> serverAnnouncesErrorRecordAdded [
+	<gtExample>
+	| server errorRecord |
+	server := self simpleServer.
+	errorRecord := GtLMcpServerRequestHandlerErrorRecordExamples new recordForDispatchError.
+	recordedAnnouncement := nil.
+	server
+		when: GtLMcpServerErrorRecordAddedAnnouncement
+		send: #recordAnnouncement:
+		to: self.
+	server privateAddErrorRecord: errorRecord.
+	self assert: recordedAnnouncement notNil.
+	self assert: recordedAnnouncement class equals: GtLMcpServerErrorRecordAddedAnnouncement.
+	self assert: recordedAnnouncement mcpServer == server.
+	self assert: recordedAnnouncement errorRecord == errorRecord.
+	server unsubscribe: self.
+	^ recordedAnnouncement
 ]
 
 { #category : #examples }
@@ -87,6 +373,28 @@ GtLMcpServerExamples >> serverAnnouncesHistoryItemAdded [
 GtLMcpServerExamples >> serverRequestWithEntity: anObject [
 	^ (ZnRequest post: '/')
 		entity: (ZnEntity json: (STONJSON toString: anObject))
+]
+
+{ #category : #examples }
+GtLMcpServerExamples >> serverRespondsToServerDiscoverRequest [
+	<gtExample>
+	| server request response json result capabilities meta |
+	server := self simpleServer.
+	request := self
+		serverRequestWithEntity: {'jsonrpc' -> '2.0'.
+				'id' -> 1.
+				'method' -> 'server/discover'} asDictionary.
+	response := server handleRequest: request.
+	self assert: response statusLine code equals: 200.
+	json := STONJSON fromString: response entity contents.
+	result := json at: 'result'.
+	self assert: (result at: 'resultType') equals: 'complete'.
+	self assert: (result at: 'supportedVersions') equals: #('2025-11-25' '2025-06-18').
+	capabilities := result at: 'capabilities'.
+	self assert: (capabilities includesKey: 'completions').
+	meta := (result at: '_meta') at: 'io.modelcontextprotocol/serverInfo'.
+	self assert: (meta at: 'name') equals: 'Glamorous Toolkit'.
+	^ server
 ]
 
 { #category : #examples }
@@ -358,18 +666,21 @@ GtLMcpServerExamples >> serverWithToolWithSuccessfulRequestAndResponse [
 { #category : #examples }
 GtLMcpServerExamples >> simpleServer [
 	<gtExample>
-	| server simpleRequest |
+	| server simpleRequest response json |
 	server := GtLMcpServer new.
 
 	self assert: server port equals: 0.
 	self assert: server isDebug not.
 
 	simpleRequest := self simpleServerRequest.
+	response := server handleRequest: simpleRequest.
+	self assert: response statusLine code equals: 200.
+	json := STONJSON fromString: response entity contents.
+	self assert: ((json at: 'error') at: 'code') equals: -32600.
+	self assert: ((json at: 'error') at: 'message') equals: 'Invalid Request'.
 	self
-		assert: (server handleRequest: simpleRequest)
-		equals: (self
-				createBadRequestWithMessage: 'KeyNotFound: key ''jsonrpc'' not found in Dictionary'
-				for: simpleRequest).
+		assert: (((json at: 'error') at: 'data') at: 'reason')
+		equals: 'missing required field: jsonrpc'.
 
 	^ server
 ]
