@@ -31,6 +31,14 @@ GtLObjectStorage >> addNewObject: anObject reason: aReason [
 ]
 
 { #category : #accessing }
+GtLObjectStorage >> addNewObject: anObject reasonString: aString [
+	"Add an object without checking if it already exists. Return the id of the object"
+
+	^ self addNewObject: anObject reason:
+		(GtLStoredObjectStringReason text: aString asString).
+]
+
+{ #category : #accessing }
 GtLObjectStorage >> announcer [
 	^announcer
 ]
