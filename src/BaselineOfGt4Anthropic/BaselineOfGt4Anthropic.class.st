@@ -10,7 +10,7 @@ BaselineOfGt4Anthropic >> baseline: spec [
 	spec for: #'common' do: [
 		spec
 			baseline: 'Gt4LlmCore' with: [
-				spec repository: 'github://feenkcom/gt4llm:v0.7.291/src' ].
+				spec repository: 'github://feenkcom/gt4llm:v0.7.292/src' ].
 
 		spec package: 'Gt4Anthropic' with: [
 			spec requires: #(#Gt4LlmCore) ].
