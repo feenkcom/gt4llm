@@ -251,7 +251,7 @@ GtLMcpServer >> createToolExecutionContext [
 			objectStorage: self objectStorage
 ]
 
-{ #category : #handling }
+{ #category : #accessing }
 GtLMcpServer >> detectToolNamed: aToolName [ 
 	^tools 
 		detect: [ :aTool | aTool name = aToolName]
@@ -470,7 +470,7 @@ GtLMcpServer >> handleCompletionComplete: aJsonRpc [
 					'hasMore' -> false} asDictionary} asDictionary
 ]
 
-{ #category : #'handling requests' }
+{ #category : #handling }
 GtLMcpServer >> handleInitialize: aJsonRpc [
 	"Negotiates the protocol version per MCP's Version Negotiation
 	(https://modelcontextprotocol.io/specification/2025-06-18/basic/lifecycle#version-negotiation):
@@ -536,7 +536,7 @@ GtLMcpServer >> handlePromptsList: aJsonRpc [
 		asDictionary
 ]
 
-{ #category : #'handling requests' }
+{ #category : #handling }
 GtLMcpServer >> handleRequest: aRequest [
 	"Parses aRequest's body and dispatches it, distinguishing two ways a request can be
 	malformed from a genuine handler error. Per MCP's Base Protocol, which uses the
@@ -625,7 +625,7 @@ GtLMcpServer >> handleResourcesTemplatesList: aJsonRpc [
 	^ {'resourceTemplates' -> {}} asDictionary
 ]
 
-{ #category : #'handling requests' }
+{ #category : #handling }
 GtLMcpServer >> handleServerDiscover: aJsonRpc [
 	^ {'resultType' -> 'complete'.
 		'supportedVersions' -> self supportedProtocolVersions.
