@@ -29,3 +29,12 @@ GtLStoredObjectCodeExecutionReason >> code [
 GtLStoredObjectCodeExecutionReason >> code: aString [
 	code := aString
 ]
+
+{ #category : #'as yet unclassified' }
+GtLStoredObjectCodeExecutionReason >> gtInspectorTargetModels [
+	| collection |
+	collection := {toolCall}.
+	^ (toolCall respondsTo: #gtInspectorTargetModels)
+		ifTrue: [ collection , toolCall gtInspectorTargetModels ]
+		ifFalse: [ collection ]
+]
