@@ -628,6 +628,11 @@ GtLChat >> lastUpdate: anObject [
 ]
 
 { #category : #'api - communication' }
+GtLChat >> m: aString [ 
+	self sendMarkdown: aString.
+]
+
+{ #category : #'api - communication' }
 GtLChat >> markdownResponse [
 
 	(responseFormat hasFormatNamed: 'Markdown') ifTrue: [ ^ self ].
