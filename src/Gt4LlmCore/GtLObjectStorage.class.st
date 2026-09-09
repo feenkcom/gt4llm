@@ -81,7 +81,9 @@ GtLObjectStorage >> gtObjectsByUUIDFor: aView [
 		contextItemLabel: 'Inspect value'
 			action: [ :anElement :each | anElement phlow spawnObject: each value ];
 		contextItemLabel: 'Inspect reason'
-			action: [ :anElement :each | anElement phlow spawnObject: each reason ]
+			action: [ :anElement :each | anElement phlow spawnObject: each reason ];
+		contextItemLabel: 'Remove item'
+			action: [ :anElement :each | self privateRemoveObjectAt: each id ifAbsent: [ ] ]
 ]
 
 { #category : #'api - testing' }
@@ -156,7 +158,15 @@ GtLObjectStorage >> printOn: aStream [
 		<< ']'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
+GtLObjectStorage >> privateRemoveObjectAt: aKey ifAbsent: anAbsentBlock [
+	| aResult |
+	aResult := objectsByUUID removeKey: aKey ifAbsent: anAbsentBlock.
+	self notifyStorageContentChanges.
+	^ aResult
+]
+
+{ #category : #'api - cleaning' }
 GtLObjectStorage >> purgeRedundantObjectsForChat: aGtLChat [
 	"This is currently only called when compaction has been performed.
 	Assume that the summary doesn't reference objects, so all can be discarded."
@@ -164,7 +174,7 @@ GtLObjectStorage >> purgeRedundantObjectsForChat: aGtLChat [
 	self clearCache.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'api - accessing' }
 GtLObjectStorage >> size [
 	^ objectsByUUID size
 ]
