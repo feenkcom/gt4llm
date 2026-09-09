@@ -67,11 +67,21 @@ GtLObjectStorage >> gtObjectsByUUIDFor: aView [
 	^ aView columnedList
 		title: 'Objects by UUID';
 		items: [ objectsByUUID values ];
-		column: 'Key' text: [ :each | each id asString36 ] width: 200;
+		column: 'ID'
+			text: [ :each | each id asString36 ]
+			width: 200;
 		column: 'Value' text: [ :each | each value ];
 		column: 'Reason' text: [ :each | each reason asReasonString ];
 		updateWhen: GtLObjectStorageContentChangeAnnouncement in: self announcer;
-		send: [ :each | each value ]
+		send: [ :each | each value ];
+		contextItemLabel: 'Copy ID'
+			action: [ :anElement :each | Clipboard clipboardText: each id asString36 ];
+		contextItemLabel: 'Inspect ID'
+			action: [ :anElement :each | anElement phlow spawnObject: each id ];
+		contextItemLabel: 'Inspect value'
+			action: [ :anElement :each | anElement phlow spawnObject: each value ];
+		contextItemLabel: 'Inspect reason'
+			action: [ :anElement :each | anElement phlow spawnObject: each reason ]
 ]
 
 { #category : #'api - testing' }
