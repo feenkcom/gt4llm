@@ -438,7 +438,7 @@ GtLChat >> gtMessagesFor: aView [
 					eachMessage
 						messagesDo: [ :otherMessage | eachMessage == otherMessage ifFalse: [ aStream nextPut: otherMessage ] ] ] ];
 		column: 'Role'
-			text: [ :item | item role ]
+			text: [ :item | item roleLabel ]
 			width: 70;
 		column: 'Content' text: [ :item | item contentOneLineSummary ];
 		column: 'Forks'

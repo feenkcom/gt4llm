@@ -440,12 +440,21 @@ GtLChatMessage >> provider [
 
 { #category : #accessing }
 GtLChatMessage >> role [
+	"Answer the receiver's role, as expected by the LLM"
+	
 	^ self subclassResponsibility
 ]
 
 { #category : #accessing }
 GtLChatMessage >> role: aString [
 	"do nothing because subclasses already know. have it here only for making the automatic serialization happy"
+]
+
+{ #category : #accessing }
+GtLChatMessage >> roleLabel [
+	"Answer a short label describing the receiver's role"
+	
+	^ self role
 ]
 
 { #category : #accessing }

@@ -390,7 +390,7 @@ GtLMcpServer >> gtHistoryFor: aView [
 		items: [ self historySnapshot reverse ];
 		priority: 1;
 		column: 'Role'
-			text: [ :item | item role ]
+			text: [ :item | item roleLabel ]
 			width: 70;
 		column: 'Summary' text: [ :each | each contentOneLineSummary ];
 		column: 'Created'

@@ -16,6 +16,6 @@ GtLOpenAIMessagesGroup >> gtMessagesFor: aView [
 		title: 'Messages';
 		priority: 1;
 		items: [ self items ];
-		column: 'Role' text: #role width: 60;
+		column: 'Role' text: #roleLabel width: 60;
 		column: 'Message' text: #content
 ]
