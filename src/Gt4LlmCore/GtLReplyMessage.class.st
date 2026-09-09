@@ -505,6 +505,11 @@ GtLReplyMessage >> role [
 ]
 
 { #category : #accessing }
+GtLReplyMessage >> roleLabel [
+	^ self currentMessageDo: #roleLabel ifAbsent: [ #waiting ]
+]
+
+{ #category : #accessing }
 GtLReplyMessage >> senderText [
 	^ self currentMessageDo: #senderText ifAbsent: [ 'Waiting' ]
 ]
