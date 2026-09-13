@@ -98,33 +98,6 @@ GtLTools class >> lepiter [
 		, self leChange
 ]
 
-{ #category : #accessing }
-GtLTools class >> lwDevelopment [
-	<sys_ext>
-	^self lwSearch , self leSearch , self leChange , self gtObjectsExecution
-		, 
-			{GtLToolForTestMethodRun new.
-			LwToolForTestStart new.
-			LwToolForTestResult new}
-			, self lwCodeChange , 
-				{LwToolForQueryChanges new.
-				LwToolForCoveringTests new.
-				LwToolForClassHierarchy new.
-				LwToolForClassInstanceVariableAccesses new.
-				LwToolForSearchByPragma new.
-				LwToolForClassOverview new.
-				LwToolForAdvancedCoverage new.
-				LwToolForOracleQuery new.
-				LwToolForTestPalette new.
-				LwToolForDebug new.
-				LwToolForListTransformations new.
-				LwToolForPreviewRefactoring new.
-				LwToolForApplyRefactoring new.
-				LwToolForPreviewRewrite new.
-				LwToolForLintCheck new.
-				LwGtLToolForWorldScreenshot new}
-]
-
 { #category : #defaults }
 GtLTools class >> sunitRun [
 	self 
