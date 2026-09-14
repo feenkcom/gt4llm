@@ -82,3 +82,8 @@ GtLOpenAiResponsesProvider >> partitionAutomaticCompactionMessages: compactionMe
 		(outputItems identityIndexOf: each rawData ifAbsent: [ 0 ]) > assistantOutputIndex ].
 	^ { preExecutionMessages. postExecutionMessages }
 ]
+
+{ #category : #'as yet unclassified' }
+GtLOpenAiResponsesProvider >> serializeToolMessageForResponse: aToolMessage [
+	^ aToolMessage serializeForOpenAIResponsesAPI
+]
