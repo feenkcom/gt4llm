@@ -2,7 +2,8 @@ Class {
 	#name : #GtLLepiterSnippetCreationRequest,
 	#superclass : #Object,
 	#instVars : [
-		'pageUid'
+		'pageUid',
+		'parentSnippetUid'
 	],
 	#category : #'Gt4LlmCore-Magritte Objects'
 }
@@ -49,6 +50,27 @@ GtLLepiterSnippetCreationRequest >> pageUidDescription [
 	^ MAStringDescription new
 		label: 'Page uid';
 		accessor: #pageUid
+]
+
+{ #category : #accessing }
+GtLLepiterSnippetCreationRequest >> parentSnippetUid [
+	^ parentSnippetUid
+]
+
+{ #category : #accessing }
+GtLLepiterSnippetCreationRequest >> parentSnippetUid: aString [
+	parentSnippetUid := aString
+]
+
+{ #category : #magritte }
+GtLLepiterSnippetCreationRequest >> parentSnippetUidDescription [
+	<magritteDescription>
+
+	^ MAStringDescription new
+		label: 'Parent snippet uid';
+		comment: 'Optional uid of the parent snippet. If provided, the new snippet is added as a child of that snippet instead of as a top-level page snippet.';
+		accessor: #parentSnippetUid;
+		yourself
 ]
 
 { #category : #validation }
