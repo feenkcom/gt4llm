@@ -482,6 +482,50 @@ GtLOpenAiResponsesExamples >> relevantHistoryStartsAtLatestCompaction [
 	^ relevant
 ]
 
+{ #category : #'examples - schema' }
+GtLOpenAiResponsesExamples >> responseSchemaRequiresAllNestedProperties [
+	<gtExample>
+	| executor provider chat message command endpoint context entity schema changes addInnerNode |
+
+	executor := GtLOpenAiResponsesExampleExecutor new.
+	provider := executor provider.
+	chat := executor chat.
+	chat
+		addResponseFormatForMagritte:
+			GtLLepiterEditWardleyMapSnippetTransformationSpecification
+		named: 'EditWardleyMapSnippet'.
+
+	message := chat createUserMessage.
+	message
+		string: 'Edit the Wardley map';
+		chat: chat.
+	command := GtLModelApiUserCommand new
+		messages: message;
+		instructions: '';
+		tools: #().
+	endpoint := provider model userMessageEndpoint.
+	context := endpoint newContextForModel: provider model.
+	context
+		command: command;
+		chat: chat.
+
+	entity := endpoint entityFromContext: context.
+	schema := ((entity at: 'text') at: 'format') at: 'schema'.
+	changes := (((schema at: 'properties') at: 'EditWardleyMapSnippet')
+		at: 'properties') at: 'changes'.
+	addInnerNode := (((changes at: 'items') at: 'anyOf') first
+		at: 'properties') at: 'WardleyMapAddInnerNode'.
+
+	self
+		assertCollection: (addInnerNode at: 'required')
+		hasSameElements: (addInnerNode at: 'properties') keys.
+	self
+		assertCollection: (addInnerNode at: 'required')
+		hasSameElements: #('innerNodeId' 'outerNodeId').
+
+	^ entity
+]
+
 { #category : #'as yet unclassified' }
 GtLOpenAiResponsesExamples >> responseWithoutAutomaticCompaction [
 	<gtExample>

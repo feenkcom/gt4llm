@@ -44,10 +44,7 @@ GtLModelUserMessage >> contentText [
 	visitorResult := GtLUserMessageDataViewVisitor new visitNodes: { dataViews }.
 	result := visitorResult select: [ :assoc |
 		assoc key = 'content' ].
-	self assert: result size = 1.
 	^ result first value.
-	"visitorResult := GtLDomainObjectVisitor new visitNodes: inputModels.
-	^ visitorResult first."
 ]
 
 { #category : #accessing }
