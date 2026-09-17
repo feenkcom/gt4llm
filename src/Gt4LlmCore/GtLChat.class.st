@@ -756,6 +756,25 @@ GtLChat >> resetMessages [
 	self signalRunIsDone
 ]
 
+{ #category : #convenience }
+GtLChat >> saveToTimestampFile [
+	"Convenience method to save the chat to a timestamped file"
+	| filename now |
+	
+	now := DateAndTime now.
+	filename := (String streamContents: [ :stream |
+		stream
+			<< now asDate iso8601;
+			<< '_';
+			<< now asTime hhmmss24;
+			<< '_chat.jsonl' ])
+				asFileReference.
+	GtLDataSourceEncoderDecoder
+		saveClientHistory: provider client history
+		to: filename.
+	^ filename
+]
+
 { #category : #'api - communication' }
 GtLChat >> sendMarkdown: aString [
 	| newMessage |
