@@ -9,7 +9,7 @@ Class {
 
 { #category : #private }
 GtLToolForLepiterSnippetsCreate >> createSnippetFrom: snippetArguments [
-	| pageUidString pageUid snippet snippetValidation |
+	| pageUidString pageUid snippet snippetValidation parentSnippetUidString parentSnippetUid parentSnippets |
 	pageUidString := snippetArguments pageUid.
 	(pageUidString isNil or: [ pageUidString trimBoth isEmpty ])
 		ifTrue: [ ^ GtLMissingArgumentDomainObject new
@@ -27,7 +27,22 @@ GtLToolForLepiterSnippetsCreate >> createSnippetFrom: snippetArguments [
 				pageWithID: pageUid
 				ifPresent: [ :page | 
 					[ snippet := snippetArguments buildSnippetFor: self.
-					page addSnippet: snippet ]
+					parentSnippetUidString := snippetArguments parentSnippetUid.
+					parentSnippetUidString := parentSnippetUidString ifNil: [ '' ] ifNotNil: [ :string | string asString trimBoth ].
+					parentSnippetUidString isEmpty
+						ifTrue: [ page addSnippet: snippet ]
+						ifFalse: [
+							parentSnippetUid := LeUID new.
+							[ parentSnippetUid uidString: parentSnippetUidString ]
+								on: Error
+								do: [ :error |
+									^ GtLExceptionDomainObject new
+										freeze: error;
+										errorReason: 'Invalid parent snippet uid' ].
+							parentSnippets := page allChildrenSnippetsMatching: [ :each | each uid = parentSnippetUid ].
+							parentSnippets ifEmpty: [ ^ GtLProblemDomainObject new
+								description: 'Could not locate parent snippet with id ' , parentSnippetUid uidString ].
+							parentSnippets anyOne addSnippet: snippet ] ]
 						on: Error
 						do: [ :error | 
 							^ GtLExceptionDomainObject new
