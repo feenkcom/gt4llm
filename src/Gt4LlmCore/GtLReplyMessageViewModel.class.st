@@ -30,7 +30,8 @@ GtLReplyMessageViewModel >> executionMessageViewModelsStream [
 { #category : #'api - accessing' }
 GtLReplyMessageViewModel >> finalMessageViewModel [
 	^ finalMessageViewModel
-		ifNil: [ finalMessageViewModel := self message finalMessage ifNotNil: #asViewModel ]
+		ifNil: [ finalMessageViewModel := self message finalMessage
+					ifNotNil: [ :anObject | anObject asViewModel ] ]
 ]
 
 { #category : #'api - accessing' }

@@ -61,8 +61,7 @@ GtLLepiterRagPage >> pageKey: anObject [
 
 { #category : #accessing }
 GtLLepiterRagPage >> pageName [
-
-	^ pageKey ifNotNil: #lepiterPageName
+	^ pageKey ifNotNil: [ :anObject | anObject lepiterPageName ]
 ]
 
 { #category : #'as yet unclassified' }

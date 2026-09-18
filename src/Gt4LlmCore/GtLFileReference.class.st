@@ -29,7 +29,7 @@ GtLFileReference class >> fromFileReference: aFileReference [
 	(#('txt' 'md' 'json' 'xml' 'html' 'css' 'js' 'st') includes: extension)
 		ifTrue: [ ^ GtLTextFile fileReference: aFileReference ].
 	
-	^ GtLGenericFile fileReference: aFileReference
+	^ GtLFileReference fileReference: aFileReference
 ]
 
 { #category : #accessing }

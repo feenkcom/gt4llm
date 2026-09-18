@@ -213,10 +213,9 @@ GtLLepiterRagQueryContext >> rag: anObject [
 { #category : #ui }
 GtLLepiterRagQueryContext >> summaryAttributes [
 	| attributes |
-
-	attributes := {
-		{ 'Lepiter DB'. lepiterRagDb ifNotNil: #lepiterDbName. }.
-		{ 'Max. context length'. self maxContextLength. }.
-		}.
+	attributes := {{'Lepiter DB'.
+				lepiterRagDb ifNotNil: [ :anObject | anObject lepiterDbName ]}.
+			{'Max. context length'.
+				self maxContextLength}}.
 	^ attributes
 ]

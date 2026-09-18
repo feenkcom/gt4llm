@@ -10,11 +10,6 @@ Class {
 	#category : #'Gt4LlmCore-Object Storage'
 }
 
-{ #category : #'instance creation' }
-GtLStoredObjectCodeExecutionReason class >> code: aString [
-	^ self new code: aString; yourself
-]
-
 { #category : #printing }
 GtLStoredObjectCodeExecutionReason >> asReasonString [
 	^ self code
@@ -23,11 +18,6 @@ GtLStoredObjectCodeExecutionReason >> asReasonString [
 { #category : #accessing }
 GtLStoredObjectCodeExecutionReason >> code [
 	^ self toolCall ifNil: [ '' ] ifNotNil: [ self toolCall arguments at: 'code' ifAbsent: [ '' ] ]
-]
-
-{ #category : #accessing }
-GtLStoredObjectCodeExecutionReason >> code: aString [
-	code := aString
 ]
 
 { #category : #'as yet unclassified' }
