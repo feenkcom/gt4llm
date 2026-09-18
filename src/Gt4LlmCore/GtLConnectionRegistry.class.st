@@ -181,7 +181,7 @@ GtLConnectionRegistry >> gtConnectionsFor: aView [
 	^ aView columnedList
 		title: 'Connections';
 		priority: 1;
-		items: [ connections ifNotNil: #value ];
+		items: [ connections ifNotNil: [ :anObject | anObject value ] ];
 		column: 'Label' text: #label;
 		column: 'Provider' text: #providerName;
 		column: 'Model' text: #model;

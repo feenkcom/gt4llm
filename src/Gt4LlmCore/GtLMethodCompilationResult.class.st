@@ -71,12 +71,16 @@ GtLMethodCompilationResult >> gtDetailsFor: aView [
 	^ aView columnedList
 		title: 'Details';
 		priority: 10;
-		items: [
-			{'Method' -> (self newMethod ifNotNil: [ :m | m methodReference methodSignature ]).
-			 'Status' -> self status.
-			 'Old source' -> (self oldMethod ifNotNil: #sourceCode).
-			 'New source' -> (self newMethod ifNotNil: #sourceCode)} ];
-		column: 'Property' text: [ :assoc | assoc key ] width: 250;
+		items: [ {'Method'
+					-> (self newMethod ifNotNil: [ :m | m methodReference methodSignature ]).
+				'Status' -> self status.
+				'Old source'
+					-> (self oldMethod ifNotNil: [ :anObject | anObject sourceCode ]).
+				'New source'
+					-> (self newMethod ifNotNil: [ :anObject | anObject sourceCode ])} ];
+		column: 'Property'
+			text: [ :assoc | assoc key ]
+			width: 250;
 		column: 'Value' text: [ :assoc | assoc value ];
 		send: [ :assoc | assoc value ]
 ]

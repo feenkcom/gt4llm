@@ -29,24 +29,26 @@ Examples:
 GtLlmToolForSUnitClassesRun >> detailForTest: aTest inResult: aResult [
 	| status message |
 	(aResult skipped includes: aTest)
-		ifTrue: [ status := 'skipped'. message := 'Skipped' ]
-		ifFalse: [
-			(aResult isError: aTest)
-				ifTrue: [ status := 'error'. message := 'Error' ]
-				ifFalse: [
-					(aResult isFailure: aTest)
-						ifTrue: [ status := 'failure'. message := 'Failure' ]
-						ifFalse: [
-							(aResult isPassed: aTest)
-								ifTrue: [ status := 'success'. message := 'Passed' ]
-								ifFalse: [ status := 'unknown'. message := 'Unknown status' ] ] ] ].
-	^ {
-		'className' -> aTest class name asString.
-		'selector' -> (aTest selector ifNil: [ '' ] ifNotNil: #asString).
+		ifTrue: [ status := 'skipped'.
+			message := 'Skipped' ]
+		ifFalse: [ (aResult isError: aTest)
+				ifTrue: [ status := 'error'.
+					message := 'Error' ]
+				ifFalse: [ (aResult isFailure: aTest)
+						ifTrue: [ status := 'failure'.
+							message := 'Failure' ]
+						ifFalse: [ (aResult isPassed: aTest)
+								ifTrue: [ status := 'success'.
+									message := 'Passed' ]
+								ifFalse: [ status := 'unknown'.
+									message := 'Unknown status' ] ] ] ].
+	^ {'className' -> aTest class name asString.
+		'selector'
+			-> (aTest selector ifNil: [ '' ] ifNotNil: [ :anObject | anObject asString ]).
 		'status' -> status.
 		'result' -> message.
 		'shouldPass' -> aTest shouldPass.
-		'expectedFailure' -> aTest isExpectedFailure } asDictionary
+		'expectedFailure' -> aTest isExpectedFailure} asDictionary
 ]
 
 { #category : #'llm-generated' }
