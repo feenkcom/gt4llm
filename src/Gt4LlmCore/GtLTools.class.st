@@ -19,9 +19,19 @@ GtLTools class >> files [
 ]
 
 { #category : #defaults }
+GtLTools class >> gemstoneIfActive [
+
+	((self respondsTo: #gemstone) and:
+	[ GtGemStoneSessionRegistry hasRegistryWithDefaultSession ]) ifFalse:
+		[ ^ OrderedCollection new ].
+	
+	^ self gemstone.
+]
+
+{ #category : #defaults }
 GtLTools class >> gt [
 	^ self gtSearch , self leSearch , self gtCodeChange , self leChange
-		, self gtExamplesRun , self gtObjectsExecution
+		, self gtExamplesRun , self gtObjectsExecution, self gemstoneIfActive
 ]
 
 { #category : #defaults }
