@@ -12,6 +12,17 @@ Class {
 }
 
 { #category : #'instance creation' }
+GtLClassesSearchResult class >> fromClassNames: aCollection [
+	| matchesArray limited |
+	matchesArray := aCollection asArray.
+	limited := matchesArray first: (200 min: matchesArray size).
+	^ self new
+		foundClassNames: limited;
+		mayHaveMore: matchesArray size > 200;
+		yourself
+]
+
+{ #category : #'instance creation' }
 GtLClassesSearchResult class >> fromClasses: aCollection [
 	| matchesArray limited |
 	matchesArray := aCollection asArray.
