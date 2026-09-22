@@ -12,10 +12,16 @@ Class {
 
 { #category : #accessing }
 GtLMcpClient >> callTool: aString withArguments: anObject [
+	^ (self callToolResult: aString withArguments: anObject)
+		at: 'content'
+]
+
+{ #category : #accessing }
+GtLMcpClient >> callToolResult: aString withArguments: anObject [
 	^ (self
 		sendMethod: 'tools/call'
 		withParams: {'name' -> aString.
-				'arguments' -> anObject} asDictionary) at: 'result' at: 'content'
+				'arguments' -> anObject} asDictionary) at: 'result'
 ]
 
 { #category : #accessing }
@@ -138,14 +144,10 @@ GtLMcpClient >> listTools [
 { #category : #accessing }
 GtLMcpClient >> llmFunctionTools [
 	^ self listTools
-		collect: [ :aTool | 
-			GtLlmFunctionTool new
-				name: (aTool at: 'name');
-				parameters: (aTool at: 'inputSchema' at: 'properties') keys;
-				description: (aTool at: 'description');
-				block: [ :functionCall | 
-					STONJSON
-						toString: (self callTool: (aTool at: 'name') withArguments: functionCall arguments) ] ]
+		collect: [ :aTool |
+			GtLMcpFunctionTool new
+				mcpClient: self;
+				toolDefinition: aTool ]
 ]
 
 { #category : #'as yet unclassified' }
