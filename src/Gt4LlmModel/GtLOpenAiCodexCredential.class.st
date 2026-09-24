@@ -20,6 +20,21 @@ GtLOpenAiCodexCredential class >> accessToken: anAccessToken refreshToken: aRefr
 		yourself
 ]
 
+{ #category : #'as yet unclassified' }
+GtLOpenAiCodexCredential class >> fromDefaultCodexFile [
+	| json dict accessToken refreshToken accountId |
+	json := FileLocator home / '.codex' / 'auth.json' contents.
+	dict := STON fromString: json.
+	accessToken := (dict at: 'tokens') at: 'access_token'.
+	refreshToken := (dict at: 'tokens') at: 'refresh_token'.
+	accountId := (dict at: 'tokens') at: 'account_id'.
+	^ GtLOpenAiCodexCredential
+		accessToken: accessToken
+		refreshToken: refreshToken
+		expiresAt: DateAndTime now + 1 hour
+		accountId: accountId
+]
+
 { #category : #accessing }
 GtLOpenAiCodexCredential >> accessToken [
 	^ accessToken
