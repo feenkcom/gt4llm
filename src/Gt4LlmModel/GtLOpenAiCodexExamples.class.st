@@ -44,6 +44,16 @@ GtLOpenAiCodexExamples >> functionCallIsReconstructedFromSseEvents [
 ]
 
 { #category : #examples }
+GtLOpenAiCodexExamples >> jwtExpiryIsReadFromAccessToken [
+	<gtExample>
+	| expiresAt |
+	expiresAt := GtLOpenAiCodexCredential
+		expiresAtFromAccessToken: 'eyJhbGciOiJub25lIn0.eyJleHAiOjE3MDAwMDAwMDB9.signature'.
+	self assert: expiresAt equals: (DateAndTime fromUnixTime: 1700000000).
+	^ expiresAt
+]
+
+{ #category : #examples }
 GtLOpenAiCodexExamples >> outputTextIsReconstructedFromSseEvents [
 	<gtExample>
 	| accumulator response output content |
