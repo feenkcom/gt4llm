@@ -157,7 +157,7 @@ GtLModelExamplesExecutor >> loadExpectedHistoryFrom: aByteArray [
 	self isLive ifTrue: [ ^ self ].
 	expectedHistory := self decodeHistory: aByteArray.
 	self isLive ifFalse:
-		[ expectedResponses := expectedHistory collect: #response.
+		[ expectedResponses := expectedHistory collect: #response as: OrderedCollection.
 		self client clientBuilder: (GtLOpenAIClientStubBuilder new responses: expectedResponses copy) ].
 ]
 
