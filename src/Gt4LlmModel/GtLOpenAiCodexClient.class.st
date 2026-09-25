@@ -25,7 +25,6 @@ GtLOpenAiCodexClient >> credential: aCredential [
 { #category : #private }
 GtLOpenAiCodexClient >> currentCredential [
 	credential ifNil: [ self error: 'No ChatGPT Codex OAuth credential is configured' ].
-	credential isExpired ifTrue: [ self error: 'The ChatGPT Codex OAuth credential has expired' ].
 	^ credential
 ]
 
@@ -51,6 +50,16 @@ GtLOpenAiCodexClient >> newStreamingHttpClient [
 
 { #category : #requests }
 GtLOpenAiCodexClient >> post: aPath withEntity: anEntity [
+	^ [ self postOnce: aPath withEntity: anEntity ]
+		on: ZnHttpUnsuccessful
+		do: [ :error |
+			error response status = 401 ifFalse: [ error pass ].
+			credential := self currentCredential refresh.
+			self postOnce: aPath withEntity: anEntity ]
+]
+
+{ #category : #private }
+GtLOpenAiCodexClient >> postOnce: aPath withEntity: anEntity [
 	| http responseBody accumulator requestResponse |
 	http := self newStreamingHttpClient.
 	http url: self baseUrl / aPath.

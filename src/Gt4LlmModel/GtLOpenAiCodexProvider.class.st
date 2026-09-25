@@ -11,7 +11,7 @@ GtLOpenAiCodexProvider class >> providerName [
 
 { #category : #'instance creation' }
 GtLOpenAiCodexProvider class >> withDefaultSetup [
-	^ self new
+	^ self new credential: GtLOpenAiCodexCredential fromDefaultCodexFile
 ]
 
 { #category : #accessing }
