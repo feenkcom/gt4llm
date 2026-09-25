@@ -45,7 +45,7 @@ GtLlmChatReadyFuture >> initialize [
 { #category : #accessing }
 GtLlmChatReadyFuture >> poll: aContext [
 	| status |
-	status := chat state.
+	status := chat status.
 
 	(status isDone
 		and: [ chat messages size = 0
