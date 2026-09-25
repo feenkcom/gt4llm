@@ -589,6 +589,43 @@ GtLToolForLepiterSnippetsCreateExamples >> successfulMultipleSnippetTypesCreate 
 ]
 
 { #category : #examples }
+GtLToolForLepiterSnippetsCreateExamples >> successfulNestedSnippetCreate [
+	<gtExample>
+	| call targetObject childSnippets tool page parentSnippet childSnippet |
+	tool := self toolOnLogicalDatabase.
+	page := self pageInLogicalDatabase.
+	parentSnippet := page snippetBuilder
+		string: 'Parent snippet text';
+		add.
+	
+	call := self
+		executeTool: tool
+		withArguments: {
+			'snippets' -> {
+				Dictionary new
+					at: 'PharoSnippet'
+					put: (Dictionary new
+						at: 'pageUid' put: page uidString;
+						at: 'parentSnippetUid' put: parentSnippet uidString;
+						at: 'pharoCode' put: 'Transcript show: 1';
+						yourself);
+					yourself
+			}
+		} asDictionary.
+	targetObject := call result targetObject.
+	self assert: (targetObject isKindOf: GtLLepiterSnippetsDomainObject).
+	childSnippets := targetObject snippets.
+	self assert: childSnippets size equals: 1.
+	
+	self assert: page children size equals: 1.
+	self assert: parentSnippet children size equals: 1.
+	childSnippet := parentSnippet children anyOne.
+	self assert: childSnippet uidString equals: childSnippets anyOne snippetUid.
+	
+	^ call
+]
+
+{ #category : #examples }
 GtLToolForLepiterSnippetsCreateExamples >> successfulPharoSnippetCreate [
 	<gtExample>
 	| call targetObject tool page |
