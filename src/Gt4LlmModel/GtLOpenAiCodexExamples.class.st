@@ -54,6 +54,21 @@ GtLOpenAiCodexExamples >> jwtExpiryIsReadFromAccessToken [
 ]
 
 { #category : #examples }
+GtLOpenAiCodexExamples >> onlyKnownExpiryTriggersExpiryCheck [
+	<gtExample>
+	| credential |
+	credential := GtLOpenAiCodexCredential
+		accessToken: 'access'
+		refreshToken: 'refresh'
+		expiresAt: nil
+		accountId: 'account'.
+	self assert: credential isExpired equals: false.
+	credential expiresAt: DateAndTime now - 1 second.
+	self assert: credential isExpired.
+	^ credential
+]
+
+{ #category : #examples }
 GtLOpenAiCodexExamples >> outputTextIsReconstructedFromSseEvents [
 	<gtExample>
 	| accumulator response output content |
