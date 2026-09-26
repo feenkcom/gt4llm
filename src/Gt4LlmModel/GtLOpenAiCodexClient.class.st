@@ -25,6 +25,7 @@ GtLOpenAiCodexClient >> credential: aCredential [
 { #category : #private }
 GtLOpenAiCodexClient >> currentCredential [
 	credential ifNil: [ self error: 'No ChatGPT Codex OAuth credential is configured' ].
+	credential isExpired ifTrue: [ credential := credential refresh ].
 	^ credential
 ]
 
