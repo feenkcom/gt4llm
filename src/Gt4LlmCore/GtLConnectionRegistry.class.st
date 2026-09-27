@@ -225,6 +225,17 @@ GtLConnectionRegistry >> initialize [
 ]
 
 { #category : #accessing }
+GtLConnectionRegistry >> knownCodexConnectors [
+	GtLOpenAiCodexProvider isConnectable ifFalse: [ ^ #() ].
+	
+	^ {GtLConnectionRegistry instance
+	addConnection: (GtLConnection new
+			providerClass: GtLOpenAiCodexProvider;
+			label: 'GPT 5.6 Terra (Codex)';
+			model: 'gpt-5.6-terra')}
+]
+
+{ #category : #accessing }
 GtLConnectionRegistry >> knownConnectors [
 	^ {
 		GtLConnection new
@@ -251,10 +262,6 @@ GtLConnectionRegistry >> knownConnectors [
 			providerClass: GtLOpenAiResponsesProvider;
 			label: 'GPT 5.6 Sol';
 			model: 'gpt-5.6-sol'.
-"		GtLConnection new
-			providerClass: GtLOpenAiResponsesProvider;
-			label: 'GPT 5.6 Terra';
-			model: 'gpt-5.6-terra'."
 		GtLConnection new
 			providerClass: GtLOpenAiResponsesProvider;
 			label: 'GPT 5.6 Luna';
@@ -268,6 +275,7 @@ GtLConnectionRegistry >> knownConnectors [
 			label: 'GPT 5.4';
 			model: 'gpt-5.4'.
 		},
+		self knownCodexConnectors,
 		self knownOllamaConnectors
 ]
 

@@ -4,6 +4,11 @@ Class {
 	#category : #'Gt4LlmModel-Codex'
 }
 
+{ #category : #'as yet unclassified' }
+GtLOpenAiCodexProvider class >> isConnectable [
+	^ GtLOpenAiCodexCredential defaultCodexAuthFileReference exists
+]
+
 { #category : #accessing }
 GtLOpenAiCodexProvider class >> providerName [
 	^ 'OpenAI Codex'
