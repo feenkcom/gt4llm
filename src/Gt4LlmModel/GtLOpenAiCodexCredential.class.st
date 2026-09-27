@@ -21,6 +21,11 @@ GtLOpenAiCodexCredential class >> accessToken: anAccessToken refreshToken: aRefr
 ]
 
 { #category : #'instance creation' }
+GtLOpenAiCodexCredential class >> defaultCodexAuthFileReference [
+	^ FileLocator home / '.codex' / 'auth.json' contents
+]
+
+{ #category : #'instance creation' }
 GtLOpenAiCodexCredential class >> expiresAtFromAccessToken: anAccessToken [
 	| parts encodedPayload paddingCount payload expiresAtSeconds |
 	[ | paddedPayload |
@@ -39,7 +44,7 @@ GtLOpenAiCodexCredential class >> expiresAtFromAccessToken: anAccessToken [
 { #category : #'instance creation' }
 GtLOpenAiCodexCredential class >> fromDefaultCodexFile [
 	| json dict accessToken refreshToken accountId expiry |
-	json := FileLocator home / '.codex' / 'auth.json' contents.
+	json := self defaultCodexAuthFileReference.
 	dict := STON fromString: json.
 	accessToken := (dict at: 'tokens') at: 'access_token'.
 	refreshToken := (dict at: 'tokens') at: 'refresh_token'.
