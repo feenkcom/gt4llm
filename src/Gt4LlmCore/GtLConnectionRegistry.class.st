@@ -227,12 +227,12 @@ GtLConnectionRegistry >> initialize [
 { #category : #accessing }
 GtLConnectionRegistry >> knownCodexConnectors [
 	GtLOpenAiCodexProvider isConnectable ifFalse: [ ^ #() ].
-	
-	^ {GtLConnectionRegistry instance
-	addConnection: (GtLConnection new
-			providerClass: GtLOpenAiCodexProvider;
-			label: 'GPT 5.6 Terra (Codex)';
-			model: 'gpt-5.6-terra')}
+
+	^ {self
+			addConnection: (GtLConnection new
+					providerClass: GtLOpenAiCodexProvider;
+					label: 'GPT 5.6 Terra (Codex)';
+					model: 'gpt-5.6-terra')}
 ]
 
 { #category : #accessing }
