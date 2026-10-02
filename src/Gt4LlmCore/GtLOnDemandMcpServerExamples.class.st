@@ -11,7 +11,7 @@ Class {
 GtLOnDemandMcpServerExamples >> runningServer [
 	<gtExample>
 	| onDemandServer |
-	onDemandServer := GtLOnDemandMcpServer new.
+	onDemandServer := GtLOnDemandMcpServer new start.
 	[ self assert: onDemandServer isRunning.
 	self assert: onDemandServer port > 0.
 	self assert: onDemandServer server tools isEmpty not ]

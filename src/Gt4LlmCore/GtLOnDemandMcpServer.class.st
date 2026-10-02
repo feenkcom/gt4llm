@@ -18,18 +18,28 @@ GtLOnDemandMcpServer class >> onRemoveUniqueInstance: anInstance [
 	anInstance onRemovedAsUniqueInstance
 ]
 
+{ #category : #accessing }
+GtLOnDemandMcpServer class >> uniqueInstance [
+	^ uniqueInstance ifNil: [ uniqueInstance := self new start ]
+]
+
+{ #category : #accessing }
+GtLOnDemandMcpServer class >> uniqueInstanceOnPort: anInteger [
+
+	(self hasUniqueInstance and: [ self uniqueInstance port ~= anInteger ]) ifTrue:
+		[ self error: 'An instance on port ', self uniqueInstance port asString, ' already started' ].
+	^ uniqueInstance ifNil: 
+		[ uniqueInstance := self new
+				port: anInteger;
+				start ]
+]
+
 { #category : #private }
 GtLOnDemandMcpServer >> findAvailablePort [
 	| socket |
 	^ [ socket := Socket newTCP listenOn: 0.
 		socket localPort ]
 		ensure: [ socket ifNotNil: [ socket closeAndDestroy ] ]
-]
-
-{ #category : #initialization }
-GtLOnDemandMcpServer >> initialize [
-	super initialize.
-	self start
 ]
 
 { #category : #testing }
@@ -49,7 +59,12 @@ GtLOnDemandMcpServer >> onRemovedAsUniqueInstance [
 
 { #category : #accessing }
 GtLOnDemandMcpServer >> port [
-	^ port
+	^ port ifNil: [ port := self findAvailablePort ]
+]
+
+{ #category : #accessing }
+GtLOnDemandMcpServer >> port: anInteger [
+	port := anInteger
 ]
 
 { #category : #accessing }
@@ -60,9 +75,8 @@ GtLOnDemandMcpServer >> server [
 { #category : #starting }
 GtLOnDemandMcpServer >> start [
 	self isRunning ifTrue: [ ^ self ].
-	port := self findAvailablePort.
 	server := GtLMcpServer new
-		port: port;
+		port: self port;
 		addTools: GtLTools gt;
 		start.
 	GtLOnDemandMcpServerStartupSignal new
