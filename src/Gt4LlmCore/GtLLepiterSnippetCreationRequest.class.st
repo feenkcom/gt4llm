@@ -13,7 +13,7 @@ GtLLepiterSnippetCreationRequest class >> jsonSchemaLabel [
 	^ "self snippetTypeValue capitalized , 'Snippet'" self subclassResponsibility
 ]
 
-{ #category : #accessing }
+{ #category : #'instance creation' }
 GtLLepiterSnippetCreationRequest class >> requestClassForType: aString [
 	| normalizedType |
 	normalizedType := aString ifNil: [ '' ] ifNotNil: [ aString asString trimBoth ].
@@ -23,7 +23,8 @@ GtLLepiterSnippetCreationRequest class >> requestClassForType: aString [
 		'pharo' -> GtLLepiterPharoSnippetCreationRequest.
 		'python' -> GtLLepiterPythonSnippetCreationRequest.
 		'shell' -> GtLLepiterShellSnippetCreationRequest.
-		'example' -> GtLLepiterExampleSnippetCreationRequest } asDictionary
+		'example' -> GtLLepiterExampleSnippetCreationRequest.
+		'picture' -> GtLLepiterPictureSnippetCreationRequest } asDictionary
 			at: normalizedType
 			ifAbsent: [ self ]
 ]

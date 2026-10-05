@@ -60,7 +60,7 @@ GtChromaDbClient >> checkForErrors: aResponse [
 
 	aResponse isDictionary ifFalse: [ ^ aResponse ].
 	aResponse at: 'error' ifPresent: [ :errorDetails |
-		GtLOllamaError signal: errorDetails ].
+		GtLModelClientError signal: errorDetails ].
 	^ aResponse
 ]
 
