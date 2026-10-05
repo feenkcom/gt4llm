@@ -302,9 +302,12 @@ GtLOpenAiResponsesExamples >> openAiResponsesMarkdownChat [
 
 	chat sendMarkdown: 'Hi, who are you?'.
 	executor waitTimeoutSeconds: 60.
-	self compareShapes: chat messages with: executor expectedHistory.
 	executor assertChatResponseOK: chat.
 	executor assertResponseResponsesMarkdownContent: chat messages last.
+	self compareIfKnownShapes: chat messages
+		with: executor expectedHistory
+		in: chat
+		selector: #openAiResponsesMarkdownChatHistory.
 
 	^ chat
 ]
