@@ -72,10 +72,11 @@ GtLOllamaMigrationExamples >> gemma4CompletionsChat [
 		reasoningEffort: #none;
 		sendString: 'Hi, who are you?'.
 	executor waitTimeoutSeconds: 30.
-	GtLModelExamples
-		compareShapes: chat messages
-		with: executor expectedHistory.
 	executor assertResponseCompletionsStringContent: chat messages last finalMessage.
+	self compareIfKnownShapes: chat messages
+		with: executor expectedHistory
+		in: chat
+		selector: #gemma4CompletionsChatHistory.
 
 	^ chat
 ]
@@ -109,15 +110,16 @@ GtLOllamaMigrationExamples >> gemma4Image [
 	msg images: { image }.
 	chat sendMessage: msg.
 	executor waitTimeoutSeconds: 60.
-	GtLModelExamples
-		compareShapes: chat messages
-		with: executor expectedHistory.
 	jsonDictionary := NeoJSONReader fromString: chat messages first requestResponse request contents.
 	requestJson := (jsonDictionary at: 'messages') first
 			at: 'content'.
 	self assert: (requestJson anySatisfy: [ :aDictionary |
 		(aDictionary includesKey: 'image_url') and:
 		[ (aDictionary at: 'type') = 'image_url' ] ]).
+	self compareIfKnownShapes: chat messages
+		with: executor expectedHistory
+		in: chat
+		selector: #gemma4ImageHistory.
 
 	^ chat
 ]
@@ -146,10 +148,11 @@ GtLOllamaMigrationExamples >> gemma4ResponsesStringChat [
 	executor waitTimeoutSeconds: 60.
 
 	executor assertChatResponseOK: chat.
-	GtLModelExamples
-		compareShapes: chat messages
-		with: executor expectedHistory.
 	executor assertResponseStringContent: chat messages last.
+	self compareIfKnownShapes: chat messages
+		with: executor expectedHistory
+		in: chat
+		selector: #gemma4ResponsesStringChatHistory.
 
 	^ chat
 ]
@@ -211,11 +214,12 @@ GtLOllamaMigrationExamples >> llama3Chat [
 		reasoningEffort: false;
 		sendString: 'Hi, who are you?'.
 	executor waitTimeoutSeconds: 60.
-	GtLModelExamples
-		compareShapes: chat messages
-		with: executor expectedHistory.
 	executor assertFirstResponseContent: chat.
 	executor assertResponseGenerateStringContent: chat messages last finalMessage.
+	self compareIfKnownShapes: chat messages
+		with: executor expectedHistory
+		in: chat
+		selector: #llama3ChatHistory.
 
 	^ chat.
 ]
@@ -578,15 +582,16 @@ GtLOllamaMigrationExamples >> qwen35CompletionsObjectInspection [
 					named: 'Info object';
 				string: 'Describe the stored object named ''Info object''.'. ].
 	executor waitTimeoutSeconds: 60.
-	GtLModelExamples
-		compareShapes: chat messages
-		with: executor expectedHistory.
 	executor assertHistoryResponsesOK: provider client history.
 	inputModels := chat messages first inputModels.
 	self assert: inputModels size equals: 2.
 	self assert: inputModels first targetObject object equals: chatObject.
 	
 	executor assertResponseCompletionsStringContent: chat messages last finalMessage.
+	self compareIfKnownShapes: chat messages
+		with: executor expectedHistory
+		in: chat
+		selector: #qwen35CompletionsObjectInspectionHistory.
 
 	^ chat
 ]
@@ -617,15 +622,16 @@ GtLOllamaMigrationExamples >> qwen35Instructions [
 		sendString: 'What is an example method?'.
 	executor waitTimeoutSeconds: 60.
 	executor assertHistoryResponsesOK: provider client history.
-	GtLModelExamples
-		compareShapes: chat messages
-		with: executor expectedHistory.
 	instructions := chat messages first instructions.
 	self assert: instructions size equals: 1.
 	explanations := instructions sectionNamed: 'Explanations' ifAbsent: [ nil ].
 	self assert: explanations isNotNil.
 	
 	executor assertResponseCompletionsStringContent: chat messages last finalMessage.
+	self compareIfKnownShapes: chat messages
+		with: executor expectedHistory
+		in: chat
+		selector: #qwen35InstructionsHistory.
 	
 	^ chat
 ]
@@ -655,14 +661,15 @@ GtLOllamaMigrationExamples >> qwen35ResponsesObjectInspection [
 		sendString: 'Describe the stored object named ''Info object''.'.
 	executor waitTimeoutSeconds: 60.
 	executor assertHistoryResponsesOK: provider client history.
-	GtLModelExamples
-		compareShapes: chat messages
-		with: executor expectedHistory.
 	objectStorage := chat objectStorage.
 	self assert: objectStorage size equals: 1.
 	self assert: (objectStorage objectAt: storedObjectId) equals: chatObject.
 	
 	executor assertResponseResponsesStringContent: chat messages last finalMessage.
+	self compareIfKnownShapes: chat messages
+		with: executor expectedHistory
+		in: chat
+		selector: #qwen35ResponsesObjectInspectionHistory.
 
 	^ chat
 ]

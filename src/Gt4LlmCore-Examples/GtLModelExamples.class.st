@@ -85,16 +85,19 @@ GtLModelExamples >> messageWithToolCallThenCompactionExample [
 	chat sendMarkdown: 'Use tools and give me a description of the class GtLCompactionStrategy'.
 	executor waitTimeoutSeconds: 60.
 	self assert: chat messages size equals: 2.
-	self compareShapes: chat messages with: executor expectedHistory.
 
 	chat compact.
 	executor waitTimeoutSeconds: 60.
 	self assert: chat messages size equals: 4.
-	self compareShapes: chat messages with: executor expectedHistory.
 	self assert: chat messages last finalMessage hasCompactionResponse.
 	self assert: chat messages last assistantMessage roleLabel = 'compaction'.
 	self assert: chat messages last assistantMessage role = 'assistant'.
 	self assert: chat provider relevantChatMessages size equals: 3.
+
+	self compareIfKnownShapes: chat messages
+		with: executor expectedHistory
+		in: chat
+		selector: #messageWithToolCallThenCompactionExampleHistory.
 	
 	^ chat
 ]
