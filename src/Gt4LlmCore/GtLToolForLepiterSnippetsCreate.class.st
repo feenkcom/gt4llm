@@ -76,11 +76,12 @@ Example JSON arguments:
   "snippets": [
     {"TextSnippet": {"pageUid": "UUID", "snippetText": "Notes"}},
     {"PharoSnippet": {"pageUid": "UUID", "pharoCode": "Transcript show: 1"}},
+    {"PictureSnippet": {"pageUid": "UUID", "urlString": "https://example.com/picture.png", "caption": "Optional caption", "previewHeight": 200}},
     {"ExampleSnippet": {"pageUid": "UUID", "exampleClassName": "MyExamples", "exampleMethodName": "exampleMethod"}}
   ]
 }
 
-Supported snippet types are: text, pharo, python, shell, example.
+Supported snippet types are: text, pharo, python, shell, example, picture.
 
 Example JSON response:
 {
@@ -132,7 +133,8 @@ GtLToolForLepiterSnippetsCreate >> snippetClassForType: snippetType [
 		'pharo' -> LePharoSnippet.
 		'python' -> LePythonSnippet.
 		'shell' -> LeShellScriptSnippet.
-		'example' -> LeExampleSnippet } asDictionary
+		'example' -> LeExampleSnippet.
+		'picture' -> LePictureSnippet } asDictionary
 			at: normalizedType
 			ifAbsent: [ nil ]
 ]
@@ -149,7 +151,8 @@ GtLToolForLepiterSnippetsCreate >> snippetsDescription [
 			GtLLepiterPharoSnippetCreationRequest.
 			GtLLepiterPythonSnippetCreationRequest.
 			GtLLepiterShellSnippetCreationRequest.
-			GtLLepiterExampleSnippetCreationRequest };
+			GtLLepiterExampleSnippetCreationRequest.
+			GtLLepiterPictureSnippetCreationRequest };
 		useExplicitContainerForChildren;
 		beRequired
 ]
