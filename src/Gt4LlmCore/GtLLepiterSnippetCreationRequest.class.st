@@ -2,7 +2,8 @@ Class {
 	#name : #GtLLepiterSnippetCreationRequest,
 	#superclass : #Object,
 	#instVars : [
-		'pageUid'
+		'pageUid',
+		'parentSnippetUid'
 	],
 	#category : #'Gt4LlmCore-Magritte Objects'
 }
@@ -12,7 +13,7 @@ GtLLepiterSnippetCreationRequest class >> jsonSchemaLabel [
 	^ "self snippetTypeValue capitalized , 'Snippet'" self subclassResponsibility
 ]
 
-{ #category : #accessing }
+{ #category : #'instance creation' }
 GtLLepiterSnippetCreationRequest class >> requestClassForType: aString [
 	| normalizedType |
 	normalizedType := aString ifNil: [ '' ] ifNotNil: [ aString asString trimBoth ].
@@ -22,7 +23,8 @@ GtLLepiterSnippetCreationRequest class >> requestClassForType: aString [
 		'pharo' -> GtLLepiterPharoSnippetCreationRequest.
 		'python' -> GtLLepiterPythonSnippetCreationRequest.
 		'shell' -> GtLLepiterShellSnippetCreationRequest.
-		'example' -> GtLLepiterExampleSnippetCreationRequest } asDictionary
+		'example' -> GtLLepiterExampleSnippetCreationRequest.
+		'picture' -> GtLLepiterPictureSnippetCreationRequest } asDictionary
 			at: normalizedType
 			ifAbsent: [ self ]
 ]
@@ -49,6 +51,27 @@ GtLLepiterSnippetCreationRequest >> pageUidDescription [
 	^ MAStringDescription new
 		label: 'Page uid';
 		accessor: #pageUid
+]
+
+{ #category : #accessing }
+GtLLepiterSnippetCreationRequest >> parentSnippetUid [
+	^ parentSnippetUid
+]
+
+{ #category : #accessing }
+GtLLepiterSnippetCreationRequest >> parentSnippetUid: aString [
+	parentSnippetUid := aString
+]
+
+{ #category : #magritte }
+GtLLepiterSnippetCreationRequest >> parentSnippetUidDescription [
+	<magritteDescription>
+
+	^ MAStringDescription new
+		label: 'Parent snippet uid';
+		comment: 'Optional uid of the parent snippet. If provided, the new snippet is added as a child of that snippet instead of as a top-level page snippet.';
+		accessor: #parentSnippetUid;
+		yourself
 ]
 
 { #category : #validation }

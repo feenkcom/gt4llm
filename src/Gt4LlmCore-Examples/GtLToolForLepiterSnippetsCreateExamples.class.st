@@ -210,6 +210,35 @@ GtLToolForLepiterSnippetsCreateExamples >> emptyShellCode [
 ]
 
 { #category : #examples }
+GtLToolForLepiterSnippetsCreateExamples >> existingPictureAttachmentIsNotCopied [
+	<gtExample>
+	| call pictureSnippet targetObject tool page attachmentUrl |
+	tool := self toolOnLogicalDatabase.
+	page := self pageInLogicalDatabase.
+	attachmentUrl := 'attachments/already-stored-picture.png'.
+
+	call := self
+		executeTool: tool
+		withArguments: {
+			'snippets' -> {
+				Dictionary new
+					at: 'PictureSnippet'
+					put: (Dictionary new
+						at: 'pageUid' put: page uidString;
+						at: 'urlString' put: attachmentUrl;
+						yourself);
+					yourself
+			}
+		} asDictionary.
+	targetObject := call result targetObject.
+	pictureSnippet := targetObject snippets first snippet.
+
+	self assert: pictureSnippet urlString equals: attachmentUrl.
+
+	^ call
+]
+
+{ #category : #examples }
 GtLToolForLepiterSnippetsCreateExamples >> logicalDatabase [
 	<gtExample>
 	^ logicalDatabase
@@ -218,6 +247,36 @@ GtLToolForLepiterSnippetsCreateExamples >> logicalDatabase [
 			logicalDatabase := LeLogicalDatabase new primaryDB: db.
 			self assert: logicalDatabase primaryDB equals: db.
 			logicalDatabase ]
+]
+
+{ #category : #examples }
+GtLToolForLepiterSnippetsCreateExamples >> missingPictureUrlString [
+	<gtExample>
+	| call targetObject tool page |
+	tool := self toolOnLogicalDatabase.
+	page := self pageInLogicalDatabase.
+
+	call := self
+		executeTool: tool
+		withArguments: {
+			'snippets' -> {
+				Dictionary new
+					at: 'PictureSnippet'
+					put: (Dictionary new
+						at: 'pageUid' put: page uidString;
+						at: 'urlString' put: '';
+						yourself);
+					yourself
+			}
+		} asDictionary.
+	targetObject := call result targetObject.
+
+	self
+		assertMissingArgument: targetObject snippets first
+		withArgumentName: 'urlString'
+		errorMessage: 'Missing argument called urlString'.
+
+	^ call
 ]
 
 { #category : #examples }
@@ -455,11 +514,11 @@ GtLToolForLepiterSnippetsCreateExamples >> pageInLogicalDatabase [
 { #category : #examples }
 GtLToolForLepiterSnippetsCreateExamples >> successfulAllSnippetTypesCreate [
 	<gtExample>
-	"Creates all supported snippet types including ExampleSnippet"
+	"Creates all supported snippet types including ExampleSnippet and PictureSnippet"
 	| call targetObject tool page |
 	tool := self toolOnLogicalDatabase.
 	page := self pageInLogicalDatabase.
-	
+
 	call := self
 		executeTool: tool
 		withArguments: {
@@ -499,14 +558,23 @@ GtLToolForLepiterSnippetsCreateExamples >> successfulAllSnippetTypesCreate [
 						at: 'exampleClassName' put: self class name;
 						at: 'exampleMethodName' put: #successfulSnippetCreate;
 						yourself);
+					yourself.
+				Dictionary new
+					at: 'PictureSnippet'
+					put: (Dictionary new
+						at: 'pageUid' put: page uidString;
+						at: 'urlString' put: 'https://example.com/picture.png';
+						at: 'caption' put: 'Picture snippet';
+						at: 'previewHeight' put: 200;
+						yourself);
 					yourself
 			}
 		} asDictionary.
 	targetObject := call result targetObject.
-	
-	self assert: targetObject snippets size equals: 5.
+
+	self assert: targetObject snippets size equals: 6.
 	self assert: (targetObject snippets allSatisfy: [ :each | each status = 'created' ]).
-	
+
 	^ call
 ]
 
@@ -589,6 +657,43 @@ GtLToolForLepiterSnippetsCreateExamples >> successfulMultipleSnippetTypesCreate 
 ]
 
 { #category : #examples }
+GtLToolForLepiterSnippetsCreateExamples >> successfulNestedSnippetCreate [
+	<gtExample>
+	| call targetObject childSnippets tool page parentSnippet childSnippet |
+	tool := self toolOnLogicalDatabase.
+	page := self pageInLogicalDatabase.
+	parentSnippet := page snippetBuilder
+		string: 'Parent snippet text';
+		add.
+	
+	call := self
+		executeTool: tool
+		withArguments: {
+			'snippets' -> {
+				Dictionary new
+					at: 'PharoSnippet'
+					put: (Dictionary new
+						at: 'pageUid' put: page uidString;
+						at: 'parentSnippetUid' put: parentSnippet uidString;
+						at: 'pharoCode' put: 'Transcript show: 1';
+						yourself);
+					yourself
+			}
+		} asDictionary.
+	targetObject := call result targetObject.
+	self assert: (targetObject isKindOf: GtLLepiterSnippetsDomainObject).
+	childSnippets := targetObject snippets.
+	self assert: childSnippets size equals: 1.
+	
+	self assert: page children size equals: 1.
+	self assert: parentSnippet children size equals: 1.
+	childSnippet := parentSnippet children anyOne.
+	self assert: childSnippet uidString equals: childSnippets anyOne snippetUid.
+	
+	^ call
+]
+
+{ #category : #examples }
 GtLToolForLepiterSnippetsCreateExamples >> successfulPharoSnippetCreate [
 	<gtExample>
 	| call targetObject tool page |
@@ -612,6 +717,40 @@ GtLToolForLepiterSnippetsCreateExamples >> successfulPharoSnippetCreate [
 	
 	self assert: (targetObject isKindOf: GtLLepiterSnippetsDomainObject).
 	
+	^ call
+]
+
+{ #category : #examples }
+GtLToolForLepiterSnippetsCreateExamples >> successfulPictureSnippetCreate [
+	<gtExample>
+	| call pictureSnippet targetObject tool page |
+	tool := self toolOnLogicalDatabase.
+	page := self pageInLogicalDatabase.
+
+	call := self
+		executeTool: tool
+		withArguments: {
+			'snippets' -> {
+				Dictionary new
+					at: 'PictureSnippet'
+					put: (Dictionary new
+						at: 'pageUid' put: page uidString;
+						at: 'urlString' put: 'https://example.com/picture.png';
+						at: 'caption' put: 'An example picture';
+						at: 'previewHeight' put: 200;
+						yourself);
+					yourself
+			}
+		} asDictionary.
+	targetObject := call result targetObject.
+
+	self assert: targetObject snippets size equals: 1.
+	pictureSnippet := targetObject snippets first snippet.
+	self assert: (pictureSnippet isKindOf: LePictureSnippet).
+	self assert: pictureSnippet urlString equals: 'https://example.com/picture.png'.
+	self assert: pictureSnippet caption equals: 'An example picture'.
+	self assert: pictureSnippet previewHeight equals: 200.
+
 	^ call
 ]
 

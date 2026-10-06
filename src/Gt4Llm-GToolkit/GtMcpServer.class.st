@@ -138,7 +138,7 @@ GtMcpServer >> handleInitialize: aJsonRpc [
 ]
 
 { #category : #'as yet unclassified' }
-GtMcpServer >> handleNotificationsInitialized: _ [
+GtMcpServer >> handleNotificationsInitialized: ignored [
 	^ {} asDictionary
 ]
 
@@ -154,7 +154,7 @@ GtMcpServer >> handlePromptsGet: aJsonRpc [
 ]
 
 { #category : #'as yet unclassified' }
-GtMcpServer >> handlePromptsList: _ [
+GtMcpServer >> handlePromptsList: ignored [
 	^ {'prompts'
 			-> (prompts
 					collect: [ :aPrompt | 
@@ -196,7 +196,7 @@ GtMcpServer >> handleRequest: request [
 ]
 
 { #category : #'as yet unclassified' }
-GtMcpServer >> handleResourcesList: _ [
+GtMcpServer >> handleResourcesList: ignored [
 	^ {'resources'
 			-> (resources
 					collect: [ :aResource | 
@@ -221,7 +221,7 @@ GtMcpServer >> handleResourcesRead: aJsonRpc [
 ]
 
 { #category : #'as yet unclassified' }
-GtMcpServer >> handleResourcesTemplatesList: _ [
+GtMcpServer >> handleResourcesTemplatesList: ignored [
 	^ {'resourceTemplates' -> {}} asDictionary
 ]
 
@@ -241,7 +241,7 @@ GtMcpServer >> handleToolsCall: aJsonRpc [
 ]
 
 { #category : #'as yet unclassified' }
-GtMcpServer >> handleToolsList: _ [
+GtMcpServer >> handleToolsList: ignored [
 	^ {'tools'
 			-> (tools
 					collect: [ :aTool | 

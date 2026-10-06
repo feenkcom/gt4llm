@@ -13,6 +13,17 @@ Class {
 }
 
 { #category : #'instance creation' }
+GtLClassSubclasses class >> fromClassNames: aCollection [
+	| names limited |
+	names := aCollection asArray.
+	limited := names first: (200 min: names size).
+	^ self new
+		subclassNames: limited;
+		mayHaveMore: names size > 200;
+		yourself
+]
+
+{ #category : #'instance creation' }
 GtLClassSubclasses class >> fromClasses: aCollection [
 	| matchesArray limited |
 	matchesArray := aCollection asArray.

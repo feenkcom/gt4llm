@@ -73,5 +73,5 @@ GtLOllamaProviderProcessedMessage >> result: anObject [
 
 { #category : #accessing }
 GtLOllamaProviderProcessedMessage >> toolCalls [
-	^ self result ifNotNil: #toolCalls ifNil: [ #() ]
+	^ self result ifNotNil: [ :anObject | anObject toolCalls ] ifNil: [ #() ]
 ]

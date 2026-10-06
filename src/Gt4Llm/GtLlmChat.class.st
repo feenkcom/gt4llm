@@ -232,6 +232,12 @@ GtLlmChat >> signalRunIsDone [
 ]
 
 { #category : #accessing }
+GtLlmChat >> state [
+
+	^ self status
+]
+
+{ #category : #accessing }
 GtLlmChat >> status [
 	self hasProvider ifFalse: [ ^ GtLlmAssistantChatNotReadyStatus new ].
 

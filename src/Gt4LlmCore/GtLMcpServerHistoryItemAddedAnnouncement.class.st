@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLMcpServerHistoryItemAddedAnnouncement,
-	#superclass : #GtLMcpServerAnnouncement,
+	#superclass : #GtLMcpServerHistoryAnnouncement,
 	#instVars : [
 		'message'
 	],

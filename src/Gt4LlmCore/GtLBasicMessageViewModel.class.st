@@ -42,16 +42,6 @@ GtLBasicMessageViewModel >> asElement [
 	^ self elementClass new messageViewModel: self
 ]
 
-{ #category : #accessing }
-GtLBasicMessageViewModel >> checkerInstance [
-	^ message chat checkerInstance
-]
-
-{ #category : #accessing }
-GtLBasicMessageViewModel >> codeBlocksExecutor [
-	^ message codeBlocksExecutor
-]
-
 { #category : #'api - converting' }
 GtLBasicMessageViewModel >> elementClass [
 	^ self subclassResponsibility

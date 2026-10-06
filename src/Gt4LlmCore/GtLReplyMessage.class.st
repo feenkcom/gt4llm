@@ -156,7 +156,8 @@ GtLReplyMessage >> dateString [
 	<return: #String>
 	| creationDateAndTime finishedDateAndTime |
 	creationDateAndTime := self userMessageCreatedAt asLocal.
-	finishedDateAndTime := self finishedAt ifNotNil: #asLocal.
+	finishedDateAndTime := self finishedAt
+			ifNotNil: [ :anObject | anObject asLocal ].
 
 	^ String
 		streamContents: [ :aStream | 
@@ -505,6 +506,11 @@ GtLReplyMessage >> role [
 ]
 
 { #category : #accessing }
+GtLReplyMessage >> roleLabel [
+	^ self currentMessageDo: #roleLabel ifAbsent: [ #waiting ]
+]
+
+{ #category : #accessing }
 GtLReplyMessage >> senderText [
 	^ self currentMessageDo: #senderText ifAbsent: [ 'Waiting' ]
 ]
@@ -563,7 +569,7 @@ GtLReplyMessage >> userMessage: aMessage [
 { #category : #accessing }
 GtLReplyMessage >> userMessageCreatedAt [
 	<return: #DateAndTime>
-	^ self userMessage ifNotNil: #createdAt ifNil: [ self createdAt ]
+	^ self userMessage ifNotNil: [ :msg | msg createdAt ] ifNil: [ self createdAt ]
 ]
 
 { #category : #'api - converting' }

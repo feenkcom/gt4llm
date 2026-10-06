@@ -13,14 +13,14 @@ Class {
 { #category : #initialization }
 GtLChatRegistryAddNewChatElement >> chatDescriptionLabel [
 	^ self registryViewModel
-		ifNotNil: [ :aViewModel | aViewModel selectedDescription ifNotNil: #label ifNil: [ 'Chat' ] ]
+		ifNotNil: [ :aViewModel | aViewModel selectedDescription ifNotNil: [ :description | description label ] ifNil: [ 'Chat' ] ]
 		ifNil: [ 'Chat' ]
 ]
 
 { #category : #initialization }
 GtLChatRegistryAddNewChatElement >> connectionLabel [
 	^ self registryViewModel
-		ifNotNil: [ :aViewModel | aViewModel selectedConnection ifNotNil: #label ifNil: [ 'Connection' ] ]
+		ifNotNil: [ :aViewModel | aViewModel selectedConnection ifNotNil: [ :connection | connection label ] ifNil: [ 'Connection' ] ]
 		ifNil: [ 'Connection' ]
 ]
 

@@ -100,7 +100,7 @@ GtLMessagesGroup >> gtMessagesFor: aView [
 		priority: 1;
 		items: [ self items ];
 		column: 'Role'
-			text: [ :item | item role ]
+			text: [ :item | item roleLabel ]
 			width: 100;
 		column: 'Message' text: [ :item | item contentText ]
 ]

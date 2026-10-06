@@ -20,6 +20,33 @@ GtLStoredObject class >> id: anId value: anObject reason: aString [
 		reason: aString
 ]
 
+{ #category : #'gt extensions' }
+GtLStoredObject >> gtInspectorTargetModels [
+	| collection |
+	collection := {reason}.
+	^ (reason respondsTo: #gtInspectorTargetModels)
+		ifTrue: [ collection , reason gtInspectorTargetModels ]
+		ifFalse: [ collection ]
+]
+
+{ #category : #'gt extensions' }
+GtLStoredObject >> gtViewsInContext: aPhlowContext [
+	| collectedViews |
+	collectedViews := Array
+		streamContents: [ :aStream |
+			aStream nextPutAll: (super gtViewsInContext: aPhlowContext).
+			self gtInspectorTargetModels do: [ :eachTargetModel |
+				aStream nextPutAll: (GtPhlowViewsCollector new
+					fromObject: eachTargetModel;
+					pragmaNames: GtLSettings messageViewPragmaNames;
+					context: aPhlowContext;
+					collect) ] ].
+
+	GtPhlowUtility sortByPriority: collectedViews.
+
+	^ collectedViews
+]
+
 { #category : #accessing }
 GtLStoredObject >> id [
 	^ id

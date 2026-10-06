@@ -438,7 +438,7 @@ GtLChat >> gtMessagesFor: aView [
 					eachMessage
 						messagesDo: [ :otherMessage | eachMessage == otherMessage ifFalse: [ aStream nextPut: otherMessage ] ] ] ];
 		column: 'Role'
-			text: [ :item | item role ]
+			text: [ :item | item roleLabel ]
 			width: 70;
 		column: 'Content' text: [ :item | item contentOneLineSummary ];
 		column: 'Forks'
@@ -628,6 +628,11 @@ GtLChat >> lastUpdate: anObject [
 ]
 
 { #category : #'api - communication' }
+GtLChat >> m: aString [ 
+	self sendMarkdown: aString.
+]
+
+{ #category : #'api - communication' }
 GtLChat >> markdownResponse [
 
 	(responseFormat hasFormatNamed: 'Markdown') ifTrue: [ ^ self ].
@@ -749,6 +754,25 @@ GtLChat >> reset [
 GtLChat >> resetMessages [
 	self initializeMessages.
 	self signalRunIsDone
+]
+
+{ #category : #convenience }
+GtLChat >> saveToTimestampFile [
+	"Convenience method to save the chat to a timestamped file"
+	| filename now |
+	
+	now := DateAndTime now.
+	filename := (String streamContents: [ :stream |
+		stream
+			<< now asDate iso8601;
+			<< '_';
+			<< now asTime hhmmss24;
+			<< '_chat.jsonl' ])
+				asFileReference.
+	GtLDataSourceEncoderDecoder
+		saveClientHistory: provider client history
+		to: filename.
+	^ filename
 ]
 
 { #category : #'api - communication' }

@@ -23,7 +23,9 @@ GtLlmBasicThreadMessageViewModel >> ancestor [
 
 { #category : #accessing }
 GtLlmBasicThreadMessageViewModel >> annotations [
-	^ threadMessage ifNotNil: #annotations ifNil: [ #() ]
+	^ threadMessage 
+		ifNotNil: [ :anObject | anObject annotations ] 
+		ifNil: [ #() ]
 ]
 
 { #category : #announcer }

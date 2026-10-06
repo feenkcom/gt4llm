@@ -24,7 +24,7 @@ GtLOpenAIUploadFileAPICommand >> fileToEntity [
 	(self file isKindOf: GtLFineTuningFile)
 		ifTrue: [ ^ ZnEntity with: self file contents type: 'application/jsonl' ].
 
-	extension := self file extension ifNil: ''.
+	extension := self file extension ifNil: [ '' ].
 	mimeType := ({'png' -> 'image/png'.
 			'jpg' -> 'image/jpeg'.
 			'jpeg' -> 'image/jpeg'.

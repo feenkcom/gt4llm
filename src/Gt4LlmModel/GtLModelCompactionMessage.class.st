@@ -222,5 +222,10 @@ GtLModelCompactionMessage >> rawDataIfAbsent: anAbsentBlock [
 
 { #category : #accessing }
 GtLModelCompactionMessage >> role [
+	^ 'assistant'
+]
+
+{ #category : #accessing }
+GtLModelCompactionMessage >> roleLabel [
 	^ 'compaction'
 ]

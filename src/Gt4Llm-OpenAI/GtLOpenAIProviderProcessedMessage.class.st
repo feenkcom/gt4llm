@@ -156,5 +156,5 @@ GtLOpenAIProviderProcessedMessage >> result: anObject [
 { #category : #accessing }
 GtLOpenAIProviderProcessedMessage >> toolCalls [
 	<return: #Array of: #GtLFunctionToolCall>
-	^ self result ifNotNil: #toolCalls ifNil: [ #() ]
+	^ self result ifNotNil: [ :anObject | anObject toolCalls ] ifNil: [ #() ]
 ]

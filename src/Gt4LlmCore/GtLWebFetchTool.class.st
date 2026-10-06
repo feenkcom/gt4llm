@@ -86,10 +86,9 @@ GtLWebFetchTool >> privatePerformToolCall: aToolCall inContext: anExecutionConte
 
 { #category : #'as yet unclassified' }
 GtLWebFetchTool >> titleIn: doc [
-
-	^ (doc allElementsNamed: 'title') first 
+	^ (doc allElementsNamed: 'title') first
 		ifNil: [ 'no title' ]
-		ifNotNil: #contentString
+		ifNotNil: [ :anObject | anObject contentString ]
 ]
 
 { #category : #magritte }

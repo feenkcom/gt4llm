@@ -105,15 +105,18 @@ GtLTestCaseWithResultDomainObject >> isUnexpectedPassResult [
 { #category : #accessing }
 GtLTestCaseWithResultDomainObject >> llmRawDataViewFor: aDataView [
 	<gtLlmDataView>
-	
-	^aDataView jsonObject: [ :aJson |
-		aJson
-			at: #className put: self testCase class name asString;
-			at: #selector put: (self testCase selector ifNil: [ '' ] ifNotNil: #asString);
-			at: #status put: self statusText;
-			at: #result put: self messageText;
-			at: #shouldPass put: self testCase shouldPass;
-			at: #expectedFailure put: self testCase isExpectedFailure	]
+	^ aDataView
+		jsonObject: [ :aJson | 
+			aJson
+				at: #className put: self testCase class name asString;
+				at: #selector
+					put: (self testCase selector
+							ifNil: [ '' ]
+							ifNotNil: [ :anObject | anObject asString ]);
+				at: #status put: self statusText;
+				at: #result put: self messageText;
+				at: #shouldPass put: self testCase shouldPass;
+				at: #expectedFailure put: self testCase isExpectedFailure ]
 ]
 
 { #category : #accessing }

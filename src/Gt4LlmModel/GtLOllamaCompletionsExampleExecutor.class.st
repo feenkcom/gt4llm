@@ -5,15 +5,15 @@ Class {
 }
 
 { #category : #asserting }
-GtLOllamaCompletionsExampleExecutor >> assertFirstResponseContent: chat [
+GtLOllamaCompletionsExampleExecutor >> assertFirstResponseContent: aChat [
 	| responseMessage jsonDictionary |
 
-	self assertChatResponseOK: chat.
+	self assertChatResponseOK: aChat.
 
 	self isLive ifTrue: [ ^ self ].
 
 	jsonDictionary := NeoJSONReader fromString: expectedResponses first contents.
-	responseMessage := chat messages last contentText.
+	responseMessage := aChat messages last contentText.
 	self assert: responseMessage equals: (((jsonDictionary at: 'choices') first
 			at: 'message')
 			at: 'content').

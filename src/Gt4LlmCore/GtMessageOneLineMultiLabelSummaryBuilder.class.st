@@ -3,7 +3,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'labelElements',
-		'attributesBuilder'
+		'attributesBuilder',
+		'textStyler'
 	],
 	#category : #'Gt4LlmCore-UI - Support'
 }

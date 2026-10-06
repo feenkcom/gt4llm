@@ -145,5 +145,5 @@ GtLAnthropicProviderProcessedMessage >> result: anObject [
 { #category : #accessing }
 GtLAnthropicProviderProcessedMessage >> toolCalls [
 	<return: #Array of: #GtLFunctionToolCall>
-	^ self result ifNotNil: #toolCalls ifNil: [ #() ]
+	^ self result ifNotNil: [ :anObject | anObject toolCalls ] ifNil: [ #() ]
 ]

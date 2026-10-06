@@ -58,7 +58,7 @@ GtLNewMessageViewModel >> connectionRegistry: anObject [
 GtLNewMessageViewModel >> connectionString [
 	^ (self connectionRegistry connectionFor: self provider)
 		ifNil: [ self provider modelName ]
-		ifNotNil: #connectionString
+		ifNotNil: [ :anObject | anObject connectionString ]
 ]
 
 { #category : #'api - message' }

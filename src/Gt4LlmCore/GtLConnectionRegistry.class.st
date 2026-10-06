@@ -181,7 +181,7 @@ GtLConnectionRegistry >> gtConnectionsFor: aView [
 	^ aView columnedList
 		title: 'Connections';
 		priority: 1;
-		items: [ connections ifNotNil: #value ];
+		items: [ connections ifNotNil: [ :anObject | anObject value ] ];
 		column: 'Label' text: #label;
 		column: 'Provider' text: #providerName;
 		column: 'Model' text: #model;
@@ -225,6 +225,16 @@ GtLConnectionRegistry >> initialize [
 ]
 
 { #category : #accessing }
+GtLConnectionRegistry >> knownCodexConnectors [
+	GtLOpenAiCodexProvider isConnectable ifFalse: [ ^ #() ].
+
+	^ {GtLConnection new
+			providerClass: GtLOpenAiCodexProvider;
+			label: 'GPT 5.6 Terra (Codex)';
+			model: 'gpt-5.6-terra'}
+]
+
+{ #category : #accessing }
 GtLConnectionRegistry >> knownConnectors [
 	^ {
 		GtLConnection new
@@ -248,26 +258,23 @@ GtLConnectionRegistry >> knownConnectors [
 			label: 'Claude Fable 5';
 			model: 'claude-fable-5'.
 		GtLConnection new
-			providerClass: GtLOpenAIProvider;
+			providerClass: GtLOpenAiResponsesProvider;
 			label: 'GPT 5.6 Sol';
 			model: 'gpt-5.6-sol'.
-"		GtLConnection new
-			providerClass: GtLOpenAIProvider;
-			label: 'GPT 5.6 Terra';
-			model: 'gpt-5.6-terra'."
 		GtLConnection new
-			providerClass: GtLOpenAIProvider;
+			providerClass: GtLOpenAiResponsesProvider;
 			label: 'GPT 5.6 Luna';
 			model: 'gpt-5.6-luna'.
 		GtLConnection new
-			providerClass: GtLOpenAIProvider;
+			providerClass: GtLOpenAiResponsesProvider;
 			label: 'GPT 5.5';
 			model: 'gpt-5.5'.
 		GtLConnection new
-			providerClass: GtLOpenAIProvider;
+			providerClass: GtLOpenAiResponsesProvider;
 			label: 'GPT 5.4';
 			model: 'gpt-5.4'.
 		},
+		self knownCodexConnectors,
 		self knownOllamaConnectors
 ]
 
@@ -318,7 +325,7 @@ GtLConnectionRegistry >> onRemovedAsUniqueInstance [
 { #category : #accessing }
 GtLConnectionRegistry >> standardDefaultConnection [
 	^ GtLConnection new
-		providerClass: GtLOpenAIProvider;
+		providerClass: GtLOpenAiResponsesProvider;
 			label: 'GPT 5.6 Terra';
 			model: 'gpt-5.6-terra'.
 ]

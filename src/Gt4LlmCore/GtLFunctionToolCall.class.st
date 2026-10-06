@@ -58,7 +58,7 @@ GtLFunctionToolCall >> at: aString putRuntimeValue: anObject [
 
 { #category : #accessing }
 GtLFunctionToolCall >> description [
-	^ tool ifNotNil: #description ifNil: [ '' ]
+	^ tool ifNotNil: [ :aTool | aTool description ] ifNil: [ '' ]
 ]
 
 { #category : #accessing }

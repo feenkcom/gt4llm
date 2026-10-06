@@ -10,11 +10,6 @@ Class {
 	#category : #'Gt4LlmCore-Object Storage'
 }
 
-{ #category : #'instance creation' }
-GtLStoredObjectExampleMethodReason class >> methodReference: aString [
-	^ self new methodReference: aString; yourself
-]
-
 { #category : #printing }
 GtLStoredObjectExampleMethodReason >> asReasonString [
 	^ self methodReference
@@ -31,9 +26,4 @@ GtLStoredObjectExampleMethodReason >> methodReference [
 		ifTrue: [ targetClass := targetClass classSide ].
 	compiledMethod := targetClass compiledMethodAt: methodName asSymbol ifAbsent: [ ^ '' ].
 	^ compiledMethod gtDisplayString
-]
-
-{ #category : #accessing }
-GtLStoredObjectExampleMethodReason >> methodReference: aString [
-	methodReference := aString
 ]

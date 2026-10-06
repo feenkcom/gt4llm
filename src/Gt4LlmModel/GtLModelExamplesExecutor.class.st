@@ -42,9 +42,9 @@ GtLModelExamplesExecutor class >> isSynchronous: anObject [
 ]
 
 { #category : #asserting }
-GtLModelExamplesExecutor >> assertChatResponseOK: chat [ 
+GtLModelExamplesExecutor >> assertChatResponseOK: aChat [ 
 
-	chat messages do: [ :message |
+	aChat messages do: [ :message |
 		message hasResponse ifTrue:
 			[ self assert: message requestResponse response isSuccess. ] ].
 ]
@@ -157,7 +157,7 @@ GtLModelExamplesExecutor >> loadExpectedHistoryFrom: aByteArray [
 	self isLive ifTrue: [ ^ self ].
 	expectedHistory := self decodeHistory: aByteArray.
 	self isLive ifFalse:
-		[ expectedResponses := expectedHistory collect: #response.
+		[ expectedResponses := expectedHistory collect: #response as: OrderedCollection.
 		self client clientBuilder: (GtLOpenAIClientStubBuilder new responses: expectedResponses copy) ].
 ]
 

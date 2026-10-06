@@ -146,6 +146,11 @@ GtLOpenAICompactionMessage >> responseModels [
 
 { #category : #accessing }
 GtLOpenAICompactionMessage >> role [
+	^ 'assistant'
+]
+
+{ #category : #accessing }
+GtLOpenAICompactionMessage >> roleLabel [
 	^ 'compaction'
 ]
 

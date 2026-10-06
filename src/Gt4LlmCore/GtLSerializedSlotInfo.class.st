@@ -9,12 +9,6 @@ Class {
 		'valueClassName',
 		'valuePrintString'
 	],
-	#classVars : [
-		':parameter>',
-		'</antml',
-		'<parameter',
-		'name="package">Gt4LlmCore'
-	],
 	#category : #'Gt4LlmCore-Magritte Objects'
 }
 

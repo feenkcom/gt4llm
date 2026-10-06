@@ -54,7 +54,7 @@ GtLOpenAiResponsesEndpoint >> entityFromContext: aGtLContext [
 	self addInstructionsTo: entity from: aGtLContext command.
 
 	chat format ifNotNil: [ | schema |
-		schema := chat format asJsonSchemaDictionary.
+		schema := chat format asJsonSchemaDictionaryWithAllRequired.
 		(schema at: 'properties' ifAbsent: [ #() ]) ifNotEmpty:
 		[ entity
 			at: 'text'

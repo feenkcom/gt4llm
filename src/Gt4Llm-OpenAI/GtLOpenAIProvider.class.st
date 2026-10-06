@@ -296,7 +296,7 @@ GtLOpenAIProvider >> printOn: aStream [
 		nextPut: $(;
 		nextPutAll: self modelName;
 		nextPutAll: ', ';
-		nextPutAll: (self state ifNotNil: #label) asString;
+		nextPutAll: (self state ifNotNil: [ :anObject | anObject label ]) asString;
 		nextPut: $)
 ]
 

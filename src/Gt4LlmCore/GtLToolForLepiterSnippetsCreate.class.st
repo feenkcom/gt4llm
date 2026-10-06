@@ -9,7 +9,7 @@ Class {
 
 { #category : #private }
 GtLToolForLepiterSnippetsCreate >> createSnippetFrom: snippetArguments [
-	| pageUidString pageUid snippet snippetValidation |
+	| pageUidString pageUid snippet snippetValidation parentSnippetUidString parentSnippetUid parentSnippets |
 	pageUidString := snippetArguments pageUid.
 	(pageUidString isNil or: [ pageUidString trimBoth isEmpty ])
 		ifTrue: [ ^ GtLMissingArgumentDomainObject new
@@ -27,7 +27,22 @@ GtLToolForLepiterSnippetsCreate >> createSnippetFrom: snippetArguments [
 				pageWithID: pageUid
 				ifPresent: [ :page | 
 					[ snippet := snippetArguments buildSnippetFor: self.
-					page addSnippet: snippet ]
+					parentSnippetUidString := snippetArguments parentSnippetUid.
+					parentSnippetUidString := parentSnippetUidString ifNil: [ '' ] ifNotNil: [ :string | string asString trimBoth ].
+					parentSnippetUidString isEmpty
+						ifTrue: [ page addSnippet: snippet ]
+						ifFalse: [
+							parentSnippetUid := LeUID new.
+							[ parentSnippetUid uidString: parentSnippetUidString ]
+								on: Error
+								do: [ :error |
+									^ GtLExceptionDomainObject new
+										freeze: error;
+										errorReason: 'Invalid parent snippet uid' ].
+							parentSnippets := page allChildrenSnippetsMatching: [ :each | each uid = parentSnippetUid ].
+							parentSnippets ifEmpty: [ ^ GtLProblemDomainObject new
+								description: 'Could not locate parent snippet with id ' , parentSnippetUid uidString ].
+							parentSnippets anyOne addSnippet: snippet ] ]
 						on: Error
 						do: [ :error | 
 							^ GtLExceptionDomainObject new
@@ -61,11 +76,12 @@ Example JSON arguments:
   "snippets": [
     {"TextSnippet": {"pageUid": "UUID", "snippetText": "Notes"}},
     {"PharoSnippet": {"pageUid": "UUID", "pharoCode": "Transcript show: 1"}},
+    {"PictureSnippet": {"pageUid": "UUID", "urlString": "https://example.com/picture.png", "caption": "Optional caption", "previewHeight": 200}},
     {"ExampleSnippet": {"pageUid": "UUID", "exampleClassName": "MyExamples", "exampleMethodName": "exampleMethod"}}
   ]
 }
 
-Supported snippet types are: text, pharo, python, shell, example.
+Supported snippet types are: text, pharo, python, shell, example, picture.
 
 Example JSON response:
 {
@@ -117,7 +133,8 @@ GtLToolForLepiterSnippetsCreate >> snippetClassForType: snippetType [
 		'pharo' -> LePharoSnippet.
 		'python' -> LePythonSnippet.
 		'shell' -> LeShellScriptSnippet.
-		'example' -> LeExampleSnippet } asDictionary
+		'example' -> LeExampleSnippet.
+		'picture' -> LePictureSnippet } asDictionary
 			at: normalizedType
 			ifAbsent: [ nil ]
 ]
@@ -134,7 +151,8 @@ GtLToolForLepiterSnippetsCreate >> snippetsDescription [
 			GtLLepiterPharoSnippetCreationRequest.
 			GtLLepiterPythonSnippetCreationRequest.
 			GtLLepiterShellSnippetCreationRequest.
-			GtLLepiterExampleSnippetCreationRequest };
+			GtLLepiterExampleSnippetCreationRequest.
+			GtLLepiterPictureSnippetCreationRequest };
 		useExplicitContainerForChildren;
 		beRequired
 ]
