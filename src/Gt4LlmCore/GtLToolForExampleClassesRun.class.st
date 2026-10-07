@@ -41,7 +41,7 @@ GtLToolForExampleClassesRun >> extractExamplesFromClassesFrom: classNames in: ex
 					| factory |
 					factory := GtExampleFactory new.
 					factory sourceClass: class.
-					factory gtExamplesContained do: [ :example | examplesSet add: example ] ]
+					factory gtExamplesAllContained do: [ :example | examplesSet add: example ] ]
 				ifAbsent: [ notFound add: className asString ] ]
 ]
 
