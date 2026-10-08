@@ -228,10 +228,16 @@ GtLConnectionRegistry >> initialize [
 GtLConnectionRegistry >> knownCodexConnectors [
 	GtLOpenAiCodexProvider isConnectable ifFalse: [ ^ #() ].
 
-	^ {GtLConnection new
+	^ {
+		GtLConnection new
 			providerClass: GtLOpenAiCodexProvider;
 			label: 'GPT 5.6 Terra (Codex)';
-			model: 'gpt-5.6-terra'}
+			model: 'gpt-5.6-terra'.
+		GtLConnection new
+			providerClass: GtLOpenAiCodexProvider;
+			label: 'GPT 6.1 Sol (Codex)';
+			model: 'gpt-6.1-sol'.
+		}
 ]
 
 { #category : #accessing }
@@ -257,6 +263,18 @@ GtLConnectionRegistry >> knownConnectors [
 			providerClass: GtLAnthropicProvider;
 			label: 'Claude Fable 5';
 			model: 'claude-fable-5'.
+		GtLConnection new
+			providerClass: GtLOpenAiResponsesProvider;
+			label: 'GPT 6.1 Sol';
+			model: 'gpt-6.1-sol'.
+		GtLConnection new
+			providerClass: GtLOpenAiResponsesProvider;
+			label: 'GPT 6 Astra';
+			model: 'gpt-6-astra'.
+		GtLConnection new
+			providerClass: GtLOpenAiResponsesProvider;
+			label: 'GPT 6 Luna';
+			model: 'gpt-6-luna'.
 		GtLConnection new
 			providerClass: GtLOpenAiResponsesProvider;
 			label: 'GPT 5.6 Sol';
