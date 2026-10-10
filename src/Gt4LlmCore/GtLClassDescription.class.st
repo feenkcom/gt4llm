@@ -23,7 +23,7 @@ GtLClassDescription class >> fromClass: aClass [
 	^ self new
 		currentClassName: aClass name;
 		superclassName: (aClass superclass ifNil: [ nil ] ifNotNil: [ :aSuperclass | aSuperclass name ]);
-		comment: aClass instanceSide gtComment;
+		comment: aClass instanceSide comment;
 		packageName: aClass package name;
 		packageTagName: (aClass packageTag isRoot ifTrue: [ nil ] ifFalse: [ aClass packageTag name ]);
 		instanceSlotNames: aClass slotNames;
