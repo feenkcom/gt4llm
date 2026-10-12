@@ -91,7 +91,7 @@ GtLOpenAIThread >> metadata: anObject [
 { #category : #accessing }
 GtLOpenAIThread >> sendMessage: aString [
 	| aMessage |
-	aMessage := GtLlmUserMessage new content: aString.
+	aMessage := GtLOpenAIUserMessage new string: aString.
 
 	self client addMessage: aMessage toThread: self id
 ]

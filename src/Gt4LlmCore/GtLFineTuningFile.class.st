@@ -159,7 +159,7 @@ GtLFineTuningFile >> name: anObject [
 
 { #category : #accessing }
 GtLFineTuningFile >> numberOfTokens [
-	^ (GtLlmTokenizer new
+	^ (GtLTokenizer new
 		tokenizeMessages: (conversations flatCollect: #items)
 		usingModel: self model) tokenCount
 ]
