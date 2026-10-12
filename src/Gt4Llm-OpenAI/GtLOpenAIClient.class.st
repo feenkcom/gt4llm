@@ -127,15 +127,6 @@ GtLOpenAIClient >> clientBuilder: aGtLOpenAIClientStubBuilder [
 	clientBuilder := aGtLOpenAIClientStubBuilder
 ]
 
-{ #category : #'as yet unclassified' }
-GtLOpenAIClient >> completeChatWithModel: aString andMessages: aCollection [
-	^ GtLOpenAICompleteChatAPICommand new
-		client: self;
-		model: aString;
-		messages: aCollection;
-		perform
-]
-
 { #category : #accessing }
 GtLOpenAIClient >> createFineTuningJobOnModel: aModelName withFile: aFileId [
 	^ GtLOpenAICreateFineTuningJobAPICommand new
