@@ -1,7 +1,7 @@
 Extension { #name : #RePullUpInstanceVariableRefactoring }
 
 { #category : #'*Gt4Llm-Refactoring' }
-RePullUpInstanceVariableRefactoring classSide >> llmDescription [
+RePullUpInstanceVariableRefactoring class >> llmDescription [
 	<gtLlmTransformationDescription>
 	^ GtLlmTransformationDescription new
 		name: 'Pull up instance variable';
