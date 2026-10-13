@@ -1,11 +1,8 @@
 Class {
 	#name : #GtLNearestEmbeddingGroup,
-	#superclass : #Object,
+	#superclass : #GtLGroup,
 	#traits : 'TGtGroup',
 	#classTraits : 'TGtGroup classTrait',
-	#instVars : [
-		'items'
-	],
 	#category : #'Gt4Llm-VectorDb-Support'
 }
 

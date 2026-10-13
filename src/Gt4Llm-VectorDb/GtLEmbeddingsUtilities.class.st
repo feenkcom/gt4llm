@@ -26,15 +26,14 @@ GtLEmbeddingsUtilities class >> distancesFromEmbeddings: listOfEmbeddings to: an
 
 { #category : #distances }
 GtLEmbeddingsUtilities class >> distancesFromEmbeddings: listOfEmbeddings to: aQueryEmbedding usingMetric: aMetric [
-	^ listOfEmbeddings
+	^ GtLNearestEmbeddingGroup withAll: (listOfEmbeddings
 		collect: [ :anEmbedding | 
 			GtLNearestEmbedding new
 				distance: (self
 						distanceFrom: anEmbedding embedding
 						to: aQueryEmbedding embedding
 						usingMetric: aMetric);
-				embedding: anEmbedding ]
-		as: GtLNearestEmbeddingGroup
+				embedding: anEmbedding ])
 ]
 
 { #category : #view }
