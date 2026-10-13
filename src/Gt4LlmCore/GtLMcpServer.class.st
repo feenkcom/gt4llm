@@ -100,6 +100,18 @@ GtLMcpServer >> beSynchronous [
 	asynchronous := false
 ]
 
+{ #category : #actions }
+GtLMcpServer >> clearHistory [
+	| anAnnouncement |
+	history
+		lock: [ :aHistory | 
+			anAnnouncement := GtLMcpServerHistoryItemsRemovedAnnouncement new
+					removedItems: aHistory removeAll;
+					yourself ].
+
+	self announce: anAnnouncement
+]
+
 { #category : #public }
 GtLMcpServer >> createAcceptedResponse [
 	^ ZnResponse new
@@ -382,10 +394,9 @@ GtLMcpServer >> gtErrorsFor: aView [
 { #category : #'gt-views' }
 GtLMcpServer >> gtHistoryFor: aView [
 	<gtView>
-	
 	history ifNil: [ ^ aView empty ].
-	
-	^ (aView columnedList)
+
+	^ aView columnedList
 		title: 'Executed tools';
 		items: [ self historySnapshot reverse ];
 		priority: 1;
@@ -399,7 +410,10 @@ GtLMcpServer >> gtHistoryFor: aView [
 		column: 'Running'
 			text: [ :item | item output ifNil: [ 'Yes' ] ifNotNil: [ '' ] ]
 			width: 55;
-		updateWhen: GtLMcpServerHistoryItemAddedAnnouncement in: [ announcer ];
+		updateWhen: GtLMcpServerHistoryAnnouncement in: [ announcer ];
+		actionButtonIcon: BrGlamorousVectorIcons bin
+			tooltip: 'Remove all executed tools'
+			action: [ :aButton :aTab | self clearHistory ];
 		actionUpdateButton
 ]
 

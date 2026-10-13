@@ -142,7 +142,7 @@ GtLChatLiveExamples >> createChat [
 	newChat provider: provider.
 	semaphore := Semaphore new.
 	newChat announcer weak
-		when: GtLlmThreadRunIsDoneAnnouncement
+		when: GtLThreadRunIsDoneAnnouncement
 		send: #signal
 		to: semaphore.
 

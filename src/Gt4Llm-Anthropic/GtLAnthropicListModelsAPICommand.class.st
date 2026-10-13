@@ -11,5 +11,5 @@ GtLAnthropicListModelsAPICommand >> request [
 
 { #category : #'as yet unclassified' }
 GtLAnthropicListModelsAPICommand >> serializationClass [
-	^ GtAnthropicModelsGroup
+	^ GtLAnthropicModelsGroup
 ]

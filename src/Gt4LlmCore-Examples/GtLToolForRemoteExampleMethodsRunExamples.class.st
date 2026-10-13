@@ -256,7 +256,6 @@ GtLToolForRemoteExampleMethodsRunExamples >> addClassToEventFactory [
 
 	<gtExample>
 	| tool eventFactory classDefinition omEntry epClassAddition rgClassAddition |
-	self forPharo12AndNewer: [  ] forPharo11: [ ^ self ].
 
 	tool := GtLToolForRemoteExampleMethodsRun new.
 	eventFactory := GtEpiceaEventFactory new.
@@ -320,7 +319,6 @@ GtLToolForRemoteExampleMethodsRunExamples >> addRemoveClassToEventFactory [
 
 	<gtExample>
 	| tool eventFactory classDefinition omEntry epClassRemoval rgClassRemoval |
-	self forPharo12AndNewer: [  ] forPharo11: [ ^ self ].
 
 	tool := GtLToolForRemoteExampleMethodsRun new.
 	eventFactory := GtEpiceaEventFactory new.

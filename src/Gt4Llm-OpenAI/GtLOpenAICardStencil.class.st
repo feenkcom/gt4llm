@@ -40,6 +40,6 @@ GtLOpenAICardStencil >> openAICard [
 						aptitude: (BrGlamorousRegularEditorAptitude new foreground: Color black);
 						text: 'For working with OpenAI you need an API key. Please point to a text file that has as contents the key for the OpenAI API.');
 				addChild: (GtLApiKeyCardElement new hMatchParent
-						clientClass: GtOpenAIClient;
+						clientClass: GtLOpenAIClient;
 						margin: (BlInsets all: 5)) ]
 ]

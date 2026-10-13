@@ -63,7 +63,7 @@ GtLValueSerializer >> serializeClass: aClass [
 		at: 'class' put: aClass name;
 		at: 'superclass'
 			put: (aClass superclass ifNil: [ nil ] ifNotNil: [ :aSuperclass | aSuperclass name ]);
-		at: 'comment' put: aClass instanceSide gtComment;
+		at: 'comment' put: aClass instanceSide comment;
 		at: 'package' put: aClass package name;
 		at: 'instanceSlots' put: aClass slotNames;
 		at: 'classSlots' put: aClass class slotNames;

@@ -46,7 +46,7 @@ GtLToolForChatMethodSearch >> privatePerformToolCall: aToolCall inContext: anExe
 	aToolCall at: #innerChat putRuntimeValue: chat.
 	semaphore := Semaphore new.
 	chat announcer
-		when: GtLlmThreadRunIsDoneAnnouncement
+		when: GtLThreadRunIsDoneAnnouncement
 		send: #signal
 		to: semaphore.
 	chat

@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLOllamaError,
+	#name : #GtLModelClientError,
 	#superclass : #Error,
 	#category : #'Gt4Llm-Ollama-Model'
 }

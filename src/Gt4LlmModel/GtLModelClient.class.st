@@ -106,7 +106,7 @@ GtLModelClient >> checkForErrors: aResponse [
 	aResponse isDictionary ifFalse: [ ^ aResponse ].
 	aResponse at: 'error' ifPresent: [ :errorDetails |
 		errorDetails ifNotNil:
-			[ GtLOllamaError signal: errorDetails asString ] ].
+			[ GtLModelClientError signal: errorDetails asString ] ].
 	^ aResponse
 ]
 

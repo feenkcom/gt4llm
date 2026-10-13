@@ -113,7 +113,7 @@ GtLMessageSenderAndDateHeaderElement >> showToolbarElement [
 { #category : #'private - hooks' }
 GtLMessageSenderAndDateHeaderElement >> subscribeToMessageViewModel [
 	self messageViewModel weak
-		when: GtLlmThreadMessageViewModelChanged
+		when: GtLThreadMessageViewModelChanged
 			send: #onThreadMessageViewModelChanged:
 			to: self;
 		when: GtLMessageViewModelContentsChanged

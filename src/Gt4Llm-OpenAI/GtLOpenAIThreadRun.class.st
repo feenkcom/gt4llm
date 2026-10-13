@@ -319,7 +319,7 @@ GtLOpenAIThreadRun >> tools [
 
 { #category : #accessing }
 GtLOpenAIThreadRun >> tools: anObject [
-	tools := anObject collect: [ :aValue | GtLlmTool from: aValue ]
+	tools := anObject collect: [ :aValue | GtLTool from: aValue ]
 ]
 
 { #category : #accessing }

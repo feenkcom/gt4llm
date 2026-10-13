@@ -27,7 +27,7 @@ GtLOpenAIAddMessageToThreadAPICommand >> request [
 
 { #category : #accessing }
 GtLOpenAIAddMessageToThreadAPICommand >> serializationClass [
-	^ GtOpenAIMessage
+	^ GtLOpenAIAssistantMessage
 ]
 
 { #category : #accessing }

@@ -76,7 +76,7 @@ GtLMessageContentElement >> onThreadMessageViewModelChanged: anAnnouncement [
 { #category : #'private - hooks' }
 GtLMessageContentElement >> subscribeToMessageViewModel [
 	self messageViewModel weak
-		when: GtLlmThreadMessageViewModelChanged
+		when: GtLThreadMessageViewModelChanged
 			send: #onThreadMessageViewModelChanged:
 			to: self;
 		when: GtLMessageViewModelContentsChanged
@@ -169,7 +169,7 @@ GtLMessageContentElement >> viewsToTabGroup: aCollectionOfViews [
 			object: self threadMessageViewModel threadMessage.
 
 	aListener := GtPhlowChangeMethodSystemAnnouncerListener new
-			interestingPragmas: GtLlmBasicThreadMessageViewModel messageViewPragmas
+			interestingPragmas: GtLBasicMessageViewModel messageViewPragmas
 				andObject: aBuildContext object;
 			onMethodAddedAction: (GtPhlowChangeTabGroupAddTabAction new
 					tabGroup: aTabGroup;
