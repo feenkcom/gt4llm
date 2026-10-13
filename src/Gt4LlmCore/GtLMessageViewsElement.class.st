@@ -96,7 +96,7 @@ GtLMessageViewsElement >> onViewsReady: anElementOrNil [
 GtLMessageViewsElement >> subscribeToMessageViewModel [
 	super subscribeToMessageViewModel.
 	self messageViewModel weak
-		when: GtLlmThreadMessageViewModelChanged
+		when: GtLThreadMessageViewModelChanged
 			send: #onThreadMessageViewModelChanged:
 			to: self;
 		when: GtLMessageViewModelContentsChanged

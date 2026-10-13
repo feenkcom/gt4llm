@@ -101,7 +101,7 @@ GtLAgentExecution >> parentAgent: anAgent [
 GtLAgentExecution >> registerTerminationSignal [
 	terminationSemaphore := Semaphore new.
 	agent announcer
-		when: GtLlmThreadRunIsDoneAnnouncement
+		when: GtLThreadRunIsDoneAnnouncement
 		send: #signal
 		to: terminationSemaphore.
 ]

@@ -60,7 +60,7 @@ GtLActionToolbarMessageElement >> onThreadMessageViewModelChanged: anAnnouncemen
 { #category : #'private - hooks' }
 GtLActionToolbarMessageElement >> subscribeToMessageViewModel [
 	self messageViewModel weak
-		when: GtLlmThreadMessageViewModelChanged
+		when: GtLThreadMessageViewModelChanged
 			send: #onThreadMessageViewModelChanged:
 			to: self;
 		when: GtLMessageViewModelContentsChanged

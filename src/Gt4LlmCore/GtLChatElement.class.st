@@ -73,7 +73,7 @@ GtLChatElement >> subscribeToChatViewModel [
 
 	self flag: #todo.	"Remove this announcement from our new model"
 	self chatViewModel chat weak
-		when: GtLlmThreadRunAnnouncement
+		when: GtLThreadRunAnnouncement
 		send: #onThreadRunAnnouncement:
 		to: self
 ]
