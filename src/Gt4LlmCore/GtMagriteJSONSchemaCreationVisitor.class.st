@@ -137,7 +137,7 @@ GtMagriteJSONSchemaCreationVisitor >> visitPriorityContainer: aContainer [
 		schema at: 'description' put: aContainer comment	].
 
 	(aContainer children
-		sorted: [ :aDescription | aDescription accessor readSelector] ascending)
+		sorted: [ :a :b | a accessor readSelector <= b accessor readSelector ])
 		do: [ :aDescription | 
 			aDescription acceptMagritte: self.
 			propertiesSchema
