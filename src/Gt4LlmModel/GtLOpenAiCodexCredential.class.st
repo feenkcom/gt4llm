@@ -103,14 +103,16 @@ GtLOpenAiCodexCredential >> isExpired [
 
 { #category : #oauth }
 GtLOpenAiCodexCredential >> refresh [
-	| http form responseBody responseJson expiresIn |
+	| http form responseBody responseJson accessToken refreshToken expiresIn |
 	refreshToken ifNil: [ self error: 'No ChatGPT Codex refresh token is configured' ].
 	form := 'grant_type=refresh_token&refresh_token=',
 		(ZnPercentEncoder new encode: refreshToken),
 		'&client_id=app_EMoamEEZ73f0CkXaXp7hrann'.
 	http := ZnClient new.
 	http url: 'https://auth.openai.com/oauth/token' asZnUrl.
-	http entity: (ZnEntity with: form type: ZnMimeType applicationFormUrlEncoded).
+	http entity: (ZnEntity
+		with: form utf8Encoded
+		type: ZnMimeType applicationFormUrlEncoded).
 	responseBody := http post.
 	responseJson := NeoJSONReader fromString: (self class responseStringFrom: responseBody).
 	accessToken := responseJson

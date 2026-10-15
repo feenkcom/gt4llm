@@ -459,13 +459,13 @@ GtLOllamaMigrationExamples >> ollamaNomicEmbeddings [
 				model: model. ].
 
 	llmEmbeddings := (1 to: embeddings input size) collect: [ :i |
-		GtLlmEmbedding new
+		GtLEmbedding new
 			input: (embeddings input at: i);
 			embedding: (embeddings embeddings at: i) ].
-	queryLlmEmbedding := GtLlmEmbedding new
+	queryLlmEmbedding := GtLEmbedding new
 		input: command context input;
 		embedding: queryEmbeddings embeddings first.
-	distances := GtLlmEmbeddingsUtilities
+	distances := GtLEmbeddingsUtilities
 			distancesFromEmbeddings: llmEmbeddings
 			to: queryLlmEmbedding.
 	sorted := distances sorted: #distance ascending.

@@ -6,7 +6,7 @@ Class {
 
 { #category : #accessing }
 GtLEmbeddingsUtilities class >> defaultMetric [
-	^ GtLlmCosineDistanceMetric new
+	^ GtLCosineDistanceMetric new
 ]
 
 { #category : #distances }
@@ -16,7 +16,7 @@ GtLEmbeddingsUtilities class >> distanceFrom: anEmbedding to: aQueryEmbedding us
 
 { #category : #view }
 GtLEmbeddingsUtilities class >> distanceMetrics [
-	^ GtLlmDistanceMetric allSubclasses
+	^ GtLDistanceMetric allSubclasses
 ]
 
 { #category : #distances }
@@ -26,15 +26,14 @@ GtLEmbeddingsUtilities class >> distancesFromEmbeddings: listOfEmbeddings to: an
 
 { #category : #distances }
 GtLEmbeddingsUtilities class >> distancesFromEmbeddings: listOfEmbeddings to: aQueryEmbedding usingMetric: aMetric [
-	^ listOfEmbeddings
+	^ GtLNearestEmbeddingGroup withAll: (listOfEmbeddings
 		collect: [ :anEmbedding | 
 			GtLNearestEmbedding new
 				distance: (self
 						distanceFrom: anEmbedding embedding
 						to: aQueryEmbedding embedding
 						usingMetric: aMetric);
-				embedding: anEmbedding ]
-		as: GtLNearestEmbeddingGroup
+				embedding: anEmbedding ])
 ]
 
 { #category : #view }
