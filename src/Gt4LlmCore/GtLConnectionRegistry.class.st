@@ -224,19 +224,35 @@ GtLConnectionRegistry >> initialize [
 	self updateConnections.
 ]
 
-{ #category : #accessing }
+{ #category : #'private - connectors' }
 GtLConnectionRegistry >> knownCodexConnectors [
 	GtLOpenAiCodexProvider isConnectable ifFalse: [ ^ #() ].
 
 	^ {
 		GtLConnection new
 			providerClass: GtLOpenAiCodexProvider;
+			label: 'GPT 6.1 Sol (Codex)';
+			model: 'gpt-6.1-sol'.
+		GtLConnection new
+			providerClass: GtLOpenAiCodexProvider;
+			label: 'GPT 6 Astra (Codex)';
+			model: 'gpt-6-astra'.
+		GtLConnection new
+			providerClass: GtLOpenAiCodexProvider;
+			label: 'GPT 6 Luna (Codex)';
+			model: 'gpt-6-luna'.
+		GtLConnection new
+			providerClass: GtLOpenAiCodexProvider;
 			label: 'GPT 5.6 Terra (Codex)';
 			model: 'gpt-5.6-terra'.
 		GtLConnection new
 			providerClass: GtLOpenAiCodexProvider;
-			label: 'GPT 6.1 Sol (Codex)';
-			model: 'gpt-6.1-sol'.
+			label: 'GPT 5.6 Sol (Codex)';
+			model: 'gpt-5.6-sol'.
+		GtLConnection new
+			providerClass: GtLOpenAiCodexProvider;
+			label: 'GPT 5.6 Luna (Codex)';
+			model: 'gpt-5.6-luna'.
 		}
 ]
 
