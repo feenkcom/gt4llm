@@ -31,14 +31,14 @@ GtMagriteJSONSchemaNEOJsonMapperVisitor >> addExtraMappingsForDescriptors: targe
 						aResult := targetDescriptions 
 							detect: [ :each | propertyNames = (each children 
 								collect: [ :aProperty |
-									aProperty accessor readSelector ]) asSet  ]
+									aProperty accessor readSelector asString ]) asSet  ]
 							ifFound: [ :each | 
 								jsonReader nextAs: each gtJsonSchemaTypeName]
 							ifNone: [  jsonReader parseValue].
 						aResult ].
 				mapping
 					writer: [ :jsonWriter :object | 
-						self error: 'Writer should not be used!' ] ] 
+						self error: 'Writer should not be used!' ] ]
 ]
 
 { #category : #accessing }

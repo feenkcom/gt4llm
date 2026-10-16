@@ -94,7 +94,7 @@ GtLMagritteToolForMethodSourceExamples >> methodSourceForMissingClassSide [
 	self 
 		assertMissingRequiredProperties: call result targetObject 
 		withPropertyNames: #('classSide') 
-		path: #(#methodDescriptor) 
+		path: #('methodDescriptor') 
 		errorMessage: '@[methodDescriptor] required properties missing [classSide]'.
 	^ call
 ]
@@ -114,7 +114,7 @@ GtLMagritteToolForMethodSourceExamples >> methodSourceForMissingMethodClassName 
 	self 
 		assertMissingRequiredProperties: call result targetObject 
 		withPropertyNames: #('methodClassName') 
-		path: #(#methodDescriptor) 
+		path: #('methodDescriptor') 
 		errorMessage: '@[methodDescriptor] required properties missing [methodClassName]'.
 	^ call
 ]
@@ -134,7 +134,7 @@ GtLMagritteToolForMethodSourceExamples >> methodSourceForMissingMethodName [
 	self 
 		assertMissingRequiredProperties: call result targetObject 
 		withPropertyNames: #('methodName') 
-		path: #(#methodDescriptor) 
+		path: #('methodDescriptor') 
 		errorMessage: '@[methodDescriptor] required properties missing [methodName]'.
 	^ call
 ]
