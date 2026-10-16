@@ -148,23 +148,17 @@ GtLBasicMessageViewModel >> messageViewsInto: aStream [
 { #category : #private }
 GtLBasicMessageViewModel >> newStyler [
 	^ BlCompositeStyler new
-		stylers: {GtLlmMessageStyler new threadMessageViewModel: self.
-				GtLlmThreadMessageStyler new annotations: self annotations}
+		stylers: {GtLMessageStyler new }
 ]
 
 { #category : #'private - announcing' }
 GtLBasicMessageViewModel >> notifyThreadMessageViewModelChanged [
-	self announce: GtLlmThreadMessageViewModelChanged new
+	self announce: GtLThreadMessageViewModelChanged new
 ]
 
 { #category : #'private - hooks' }
 GtLBasicMessageViewModel >> onMessageChanged [
 	self notifyThreadMessageViewModelChanged
-]
-
-{ #category : #accessing }
-GtLBasicMessageViewModel >> requestStyleSourceText [
-	self announce: GtLlmThreadMessageRestyleRequested new
 ]
 
 { #category : #'api - accessing' }

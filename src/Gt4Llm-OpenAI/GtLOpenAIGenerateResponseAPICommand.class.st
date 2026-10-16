@@ -112,7 +112,7 @@ GtLOpenAIGenerateResponseAPICommand >> request [
 { #category : #'gt - extensions' }
 GtLOpenAIGenerateResponseAPICommand >> serializationClass [
 	^ isStreaming
-		ifTrue: [ #GtOpenAIStreamedResponse asClass ]
+		ifTrue: [ self error:'Not supported'  ]
 		ifFalse: [ GtLOpenAIResponse ]
 ]
 

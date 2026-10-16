@@ -15,7 +15,7 @@ Class {
 
 { #category : #initialization }
 GtSimpleInMemoryVectorDatabase class >> defaultDistanceMetric [
-	^ GtLlmCosineDistanceMetric new
+	^ GtLCosineDistanceMetric new
 ]
 
 { #category : #accessing }

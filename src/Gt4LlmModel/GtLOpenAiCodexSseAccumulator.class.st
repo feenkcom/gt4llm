@@ -42,7 +42,12 @@ GtLOpenAiCodexSseAccumulator >> consumeData: aString [
 	(type = 'response.completed' or: [ type = 'response.incomplete' ]) ifTrue: [
 		response := event at: 'response' ifAbsent: [ self error: 'Codex terminal SSE event has no response' ].
 		terminalResponse := response ].
-	type = 'response.failed' ifTrue: [ self error: 'Codex returned a failed response' ].
+	type = 'response.failed' ifTrue: 
+		[ | msg |
+		event at: 'response' ifPresent: [ :aResponse |
+			aResponse at: 'error' ifPresent: [ :anError |
+				msg := anError asString ] ].
+		self error: 'Codex returned a failed response: ', msg asString ].
 	^ self
 ]
 

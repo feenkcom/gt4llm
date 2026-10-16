@@ -110,7 +110,9 @@ GtLOpenAiCodexCredential >> refresh [
 		'&client_id=app_EMoamEEZ73f0CkXaXp7hrann'.
 	http := ZnClient new.
 	http url: 'https://auth.openai.com/oauth/token' asZnUrl.
-	http entity: (ZnEntity with: form type: ZnMimeType applicationFormUrlEncoded).
+	http entity: (ZnEntity
+		with: form utf8Encoded
+		type: ZnMimeType applicationFormUrlEncoded).
 	responseBody := http post.
 	responseJson := NeoJSONReader fromString: (self class responseStringFrom: responseBody).
 	accessToken := responseJson

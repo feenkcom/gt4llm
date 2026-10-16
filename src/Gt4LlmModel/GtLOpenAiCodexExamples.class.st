@@ -104,6 +104,18 @@ GtLOpenAiCodexExamples >> providerWiresTheCodexTransport [
 ]
 
 { #category : #examples }
+GtLOpenAiCodexExamples >> refreshRequestUsesFormContentType [
+	<gtExample>
+	| entity |
+	entity := ZnEntity
+		with: 'grant_type=refresh_token' utf8Encoded
+		type: ZnMimeType applicationFormUrlEncoded.
+	self assert: entity class equals: ZnByteArrayEntity.
+	self assert: entity contentType equals: ZnMimeType applicationFormUrlEncoded.
+	^ entity
+]
+
+{ #category : #examples }
 GtLOpenAiCodexExamples >> requestBodyUsesCodexStreamingOptions [
 	<gtExample>
 	| endpoint entity |

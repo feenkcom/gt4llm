@@ -9,7 +9,6 @@ GtLlmInstructionInPharoCommentStyler >> visitSmaCCParseNode: aSmaCCParseNode [
 	super visitSmaCCParseNode: aSmaCCParseNode.
 	aSmaCCParseNode comments
 		ifNotNil: [ :theComments | 
-			GtLlmStylerSignal emit.
 			theComments
 				do: [ :each | 
 					((aSmaCCParseNode completeSource asString copyFrom: each first to: each second)

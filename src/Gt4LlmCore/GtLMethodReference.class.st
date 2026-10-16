@@ -142,7 +142,7 @@ GtLMethodReference >> hash [
 { #category : #initialization }
 GtLMethodReference >> initializeFromCompiledMethod: aMethod [ 
 	methodClassName := aMethod methodClass instanceSide name.
-	methodName := aMethod selector. 
+	methodName := aMethod selector asString. 
 	classSide := aMethod methodClass isClassSide
 ]
 

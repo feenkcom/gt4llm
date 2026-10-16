@@ -222,7 +222,7 @@ GtLNewMessageElement >> subscribeToMessageViewModel [
 		when: GtLMessageViewModelContentsChanged
 			send: #onMessageViewModelContentsChanged:
 			to: self;
-		when: GtLlmThreadMessageViewModelChanged
+		when: GtLThreadMessageViewModelChanged
 			send: #onThreadMessageViewModelChanged:
 			to: self
 ]

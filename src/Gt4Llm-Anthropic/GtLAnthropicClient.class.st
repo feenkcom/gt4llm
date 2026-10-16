@@ -75,7 +75,7 @@ GtLAnthropicClient >> checkForErrors: aResponse [
 	((aResponse includesKey: 'error')
 		and: [ ((aResponse at: 'error') isKindOf: NeoJSONObject)
 				and: [ (aResponse at: 'error') includesKey: 'message' ] ])
-		ifTrue: [ ^ (GtAnthropicError from: (aResponse at: 'error')) signal ].
+		ifTrue: [ ^ (GtLAnthropicError from: (aResponse at: 'error')) signal ].
 
 	^ aResponse
 ]
@@ -202,7 +202,7 @@ GtLAnthropicClient >> initializeClient [
 
 { #category : #'as yet unclassified' }
 GtLAnthropicClient >> listModels [
-	^ GtAnthropicListModelsAPIClient new
+	^ GtLAnthropicListModelsAPICommand new
 		client: self;
 		perform
 ]

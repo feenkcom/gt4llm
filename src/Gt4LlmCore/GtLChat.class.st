@@ -246,15 +246,6 @@ GtLChat >> copyForIndependentRequestAtMessage: aMessage [
 	^ newCopy
 ]
 
-{ #category : #copying }
-GtLChat >> copyLepiterSerialisationToClipboard [
-	| snippet serialization |
-
-	snippet := GtLlmLeSnippetVisitor new visitNode: self.
-	serialization := LeJsonV4 uniqueInstance serialize: snippet.
-	Clipboard default clipboardText: serialization.
-]
-
 { #category : #accessing }
 GtLChat >> createUserMessage [
 	^ self userMessageClass new
@@ -456,7 +447,7 @@ GtLChat >> gtMessagesFor: aView [
 			action: [ :anElement :aNode | anElement phlow spawnObject: (aNode value forkingMessages 
 				collect: [ :each | each chat ]) ]
 			if: [ :aNode | aNode value forkingMessages notEmpty ];
-		updateWhen: GtLlmThreadRunAnnouncement in: self announcer;
+		updateWhen: GtLThreadRunAnnouncement in: self announcer;
 		expandAll
 ]
 
@@ -819,7 +810,7 @@ GtLChat >> signalExecutionStateChanged [
 { #category : #announcing }
 GtLChat >> signalRunHasStarted [
 	self deprecated: 'Change provider state instead'.
-	self announcer announce: GtLlmThreadRunStartedAnnouncement new
+	self announcer announce: GtLThreadRunStartedAnnouncement new
 ]
 
 { #category : #announcing }
@@ -827,13 +818,13 @@ GtLChat >> signalRunHasUpdated [
 	self
 		deprecated: 'Change provider state instead or other update announcements, e.g., message announcements'.
 
-	self announcer announce: GtOpenAIThreadRunUpdatedAnnouncement new
+	self announcer announce: GtLThreadRunUpdatedAnnouncement new
 ]
 
 { #category : #announcing }
 GtLChat >> signalRunIsDone [
 	self deprecated: 'Change provider state instead'.
-	self announcer announce: GtLlmThreadRunIsDoneAnnouncement new
+	self announcer announce: GtLThreadRunIsDoneAnnouncement new
 ]
 
 { #category : #'api - execution' }
@@ -916,11 +907,6 @@ GtLChat >> when: anAnnouncementClass send: aSelector to: anObject [
     When the message expects two arguments (eg #fooAnnouncement:announcer:) both the announcement and the announcer 
     are passed as argument"
 		^ self announcer when: anAnnouncementClass send: aSelector to: anObject
-]
-
-{ #category : #ui }
-GtLChat >> whenReadyFuture [
-	^ GtLlmChatReadyFuture new chat: self
 ]
 
 { #category : #configuring }

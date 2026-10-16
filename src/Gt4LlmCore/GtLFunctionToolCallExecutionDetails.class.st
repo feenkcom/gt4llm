@@ -73,9 +73,8 @@ GtLFunctionToolCallExecutionDetails >> gtDetailsFor: aView [
 
 { #category : #updating }
 GtLFunctionToolCallExecutionDetails >> startTelemetryPing [
-	| realStart gcTime |
+	| realStart |
 	realStart := Time microsecondClockValue.
-	gcTime := Smalltalk vm totalGCTime.
 	
 	telemetryPing := TelemetryPing new.
 	telemetryPing name: 'LLM Function call'.

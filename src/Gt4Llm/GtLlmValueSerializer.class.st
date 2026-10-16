@@ -18,7 +18,7 @@ GtLlmValueSerializer >> serializeClass: aClass [
 	^ {'class' -> aClass name.
 		'superclass'
 			-> (aClass superclass ifNil: [ nil ] ifNotNil: [ :aSuperclass | aSuperclass name ]).
-		'comment' -> aClass instanceSide gtComment.
+		'comment' -> aClass instanceSide comment.
 		'package' -> aClass package name.
 		'instanceSlots' -> aClass slotNames.
 		'classSlots' -> aClass class slotNames.

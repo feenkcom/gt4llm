@@ -18,7 +18,7 @@ GtLAnthropicProvider class >> default [
 
 { #category : #'as yet unclassified' }
 GtLAnthropicProvider class >> isConnectable [
-	^ GtAnthropicClient apiKeyFile exists
+	^ GtLAnthropicClient apiKeyFile exists
 ]
 
 { #category : #'as yet unclassified' }
@@ -33,20 +33,12 @@ GtLAnthropicProvider class >> withApiKeyFromClipboard [
 
 { #category : #'as yet unclassified' }
 GtLAnthropicProvider class >> withApiKeyFromFile [
-	^ self new apiKey: GtAnthropicClient apiKeyFileContents
+	^ self new apiKey: GtLAnthropicClient apiKeyFileContents
 ]
 
 { #category : #'as yet unclassified' }
 GtLAnthropicProvider class >> withDefaultSetup [
 	^ self withApiKeyFromFile
-]
-
-{ #category : #'as yet unclassified' }
-GtLAnthropicProvider >> addBrowseTool [
-	self
-		addTool: (GtLlmTool new
-				type: 'web_search_20250305';
-				name: 'web_search')
 ]
 
 { #category : #'as yet unclassified' }
@@ -352,7 +344,7 @@ GtLAnthropicProvider >> sendAssistantMessage: aMessage [
 				otherwise: [ :anError | 
 					self privateExecutionState: self state finished.
 					self chat
-						addMessage: (GtLlmErrorThreadMessage new exception: anError freeze).
+						addMessage: (GtLErrorMessage new exception: anError freeze).
 					self chat signalRunIsDone ])
 ]
 
