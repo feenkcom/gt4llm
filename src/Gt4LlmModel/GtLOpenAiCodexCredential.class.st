@@ -103,7 +103,7 @@ GtLOpenAiCodexCredential >> isExpired [
 
 { #category : #oauth }
 GtLOpenAiCodexCredential >> refresh [
-	| http form responseBody responseJson accessToken refreshToken expiresIn |
+	| http form responseBody responseJson expiresIn |
 	refreshToken ifNil: [ self error: 'No ChatGPT Codex refresh token is configured' ].
 	form := 'grant_type=refresh_token&refresh_token=',
 		(ZnPercentEncoder new encode: refreshToken),

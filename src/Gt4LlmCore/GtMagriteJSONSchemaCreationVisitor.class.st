@@ -141,7 +141,7 @@ GtMagriteJSONSchemaCreationVisitor >> visitPriorityContainer: aContainer [
 		do: [ :aDescription | 
 			aDescription acceptMagritte: self.
 			propertiesSchema
-				at: aDescription accessor readSelector
+				at: aDescription accessor readSelector asString
 				put: self currentSchema ].
 			
 	schema at: 'properties' put: propertiesSchema.
@@ -150,14 +150,14 @@ GtMagriteJSONSchemaCreationVisitor >> visitPriorityContainer: aContainer [
 			schema
 				at: 'required'
 				put: (aContainer children
-					collect: [ :aDescription | aDescription accessor readSelector ]
+					collect: [ :aDescription | aDescription accessor readSelector asString ]
 					as: NeoJSONArray) sorted] 
 		ifFalse: [
 			schema
 				at: 'required'
 				put: ((aContainer children
 					select: [:aDescription | aDescription isRequired])
-						collect: [ :aDescription | aDescription accessor readSelector ]
+						collect: [ :aDescription | aDescription accessor readSelector asString ]
 						as: NeoJSONArray) sorted ].
 		schema at: 'additionalProperties' put: false.
 
