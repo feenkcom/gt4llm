@@ -225,6 +225,32 @@ GtLConnectionRegistry >> initialize [
 ]
 
 { #category : #'private - connectors' }
+GtLConnectionRegistry >> knownAnthropicConnectors [
+	^ {
+		GtLConnection new
+			providerClass: GtLAnthropicProvider;
+			label: 'Claude Opus 4.5';
+			model: 'claude-opus-4-5'.
+		GtLConnection new
+			providerClass: GtLAnthropicProvider;
+			label: 'Claude Opus 4.6';
+			model: 'claude-opus-4-6'.
+		GtLConnection new
+			providerClass: GtLAnthropicProvider;
+			label: 'Claude Opus 4.7';
+			model: 'claude-opus-4-7'.
+		GtLConnection new
+			providerClass: GtLAnthropicProvider;
+			label: 'Claude Opus 4.8';
+			model: 'claude-opus-4-8'.
+		GtLConnection new
+			providerClass: GtLAnthropicProvider;
+			label: 'Claude Fable 5';
+			model: 'claude-fable-5'.
+		}
+]
+
+{ #category : #'private - connectors' }
 GtLConnectionRegistry >> knownCodexConnectors [
 	GtLOpenAiCodexProvider isConnectable ifFalse: [ ^ #() ].
 
@@ -258,27 +284,34 @@ GtLConnectionRegistry >> knownCodexConnectors [
 
 { #category : #'private - connectors' }
 GtLConnectionRegistry >> knownConnectors [
+	^ self knownAnthropicConnectors,
+		self knownOpenAiResponsesConnectors,
+		self knownCodexConnectors,
+		self knownOllamaConnectors
+]
+
+{ #category : #'private - accessing' }
+GtLConnectionRegistry >> knownOllamaConnectors [
+	"If enabled, answer the list of known Ollama connectors.
+	This makes a request to the Ollama server to retrieve the list of available models."
+	| provider names |
+
+	GtLOllamaProvider isConnectable ifFalse: [ ^ #() ].
+
+	provider := GtLOllamaProvider new.
+	names := [ provider availableModels keys ]
+		on: ConnectionClosed
+		do: [ :ex | #() ].
+	^ names sorted collect: [ :name |
+		GtLConnection new
+			providerClass: GtLOllamaProvider;
+			label: name;
+			modelName: name. ]
+]
+
+{ #category : #'private - connectors' }
+GtLConnectionRegistry >> knownOpenAiResponsesConnectors [
 	^ {
-		GtLConnection new
-			providerClass: GtLAnthropicProvider;
-			label: 'Claude Opus 4.5';
-			model: 'claude-opus-4-5'.
-		GtLConnection new
-			providerClass: GtLAnthropicProvider;
-			label: 'Claude Opus 4.6';
-			model: 'claude-opus-4-6'.
-		GtLConnection new
-			providerClass: GtLAnthropicProvider;
-			label: 'Claude Opus 4.7';
-			model: 'claude-opus-4-7'.
-		GtLConnection new
-			providerClass: GtLAnthropicProvider;
-			label: 'Claude Opus 4.8';
-			model: 'claude-opus-4-8'.
-		GtLConnection new
-			providerClass: GtLAnthropicProvider;
-			label: 'Claude Fable 5';
-			model: 'claude-fable-5'.
 		GtLConnection new
 			providerClass: GtLOpenAiResponsesProvider;
 			label: 'GPT 6.1 Sol';
@@ -303,28 +336,7 @@ GtLConnectionRegistry >> knownConnectors [
 			providerClass: GtLOpenAiResponsesProvider;
 			label: 'GPT 5.6 Luna';
 			model: 'gpt-5.6-luna'.
-		},
-		self knownCodexConnectors,
-		self knownOllamaConnectors
-]
-
-{ #category : #'private - accessing' }
-GtLConnectionRegistry >> knownOllamaConnectors [
-	"If enabled, answer the list of known Ollama connectors.
-	This makes a request to the Ollama server to retrieve the list of available models."
-	| provider names |
-
-	GtLOllamaProvider isConnectable ifFalse: [ ^ #() ].
-
-	provider := GtLOllamaProvider new.
-	names := [ provider availableModels keys ]
-		on: ConnectionClosed
-		do: [ :ex | #() ].
-	^ names sorted collect: [ :name |
-		GtLConnection new
-			providerClass: GtLOllamaProvider;
-			label: name;
-			modelName: name. ]
+		}
 ]
 
 { #category : #utils }
