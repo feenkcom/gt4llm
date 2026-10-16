@@ -256,7 +256,7 @@ GtLConnectionRegistry >> knownCodexConnectors [
 		}
 ]
 
-{ #category : #accessing }
+{ #category : #'private - connectors' }
 GtLConnectionRegistry >> knownConnectors [
 	^ {
 		GtLConnection new
@@ -293,20 +293,16 @@ GtLConnectionRegistry >> knownConnectors [
 			model: 'gpt-6-luna'.
 		GtLConnection new
 			providerClass: GtLOpenAiResponsesProvider;
+			label: 'GPT 5.6 Terra';
+			model: 'gpt-5.6-terra'.
+		GtLConnection new
+			providerClass: GtLOpenAiResponsesProvider;
 			label: 'GPT 5.6 Sol';
 			model: 'gpt-5.6-sol'.
 		GtLConnection new
 			providerClass: GtLOpenAiResponsesProvider;
 			label: 'GPT 5.6 Luna';
 			model: 'gpt-5.6-luna'.
-		GtLConnection new
-			providerClass: GtLOpenAiResponsesProvider;
-			label: 'GPT 5.5';
-			model: 'gpt-5.5'.
-		GtLConnection new
-			providerClass: GtLOpenAiResponsesProvider;
-			label: 'GPT 5.4';
-			model: 'gpt-5.4'.
 		},
 		self knownCodexConnectors,
 		self knownOllamaConnectors
@@ -356,12 +352,12 @@ GtLConnectionRegistry >> onRemovedAsUniqueInstance [
 				newConnectionRegistry: self class uniqueInstance)
 ]
 
-{ #category : #accessing }
+{ #category : #private }
 GtLConnectionRegistry >> standardDefaultConnection [
 	^ GtLConnection new
 		providerClass: GtLOpenAiResponsesProvider;
-			label: 'GPT 5.6 Terra';
-			model: 'gpt-5.6-terra'.
+		label: 'GPT 6.1 Sol';
+		model: 'gpt-6.1-sol'.
 ]
 
 { #category : #subscriptions }
