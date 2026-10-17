@@ -224,24 +224,8 @@ GtLConnectionRegistry >> initialize [
 	self updateConnections.
 ]
 
-{ #category : #accessing }
-GtLConnectionRegistry >> knownCodexConnectors [
-	GtLOpenAiCodexProvider isConnectable ifFalse: [ ^ #() ].
-
-	^ {
-		GtLConnection new
-			providerClass: GtLOpenAiCodexProvider;
-			label: 'GPT 5.6 Terra (Codex)';
-			model: 'gpt-5.6-terra'.
-		GtLConnection new
-			providerClass: GtLOpenAiCodexProvider;
-			label: 'GPT 6.1 Sol (Codex)';
-			model: 'gpt-6.1-sol'.
-		}
-]
-
-{ #category : #accessing }
-GtLConnectionRegistry >> knownConnectors [
+{ #category : #'private - connectors' }
+GtLConnectionRegistry >> knownAnthropicConnectors [
 	^ {
 		GtLConnection new
 			providerClass: GtLAnthropicProvider;
@@ -263,35 +247,45 @@ GtLConnectionRegistry >> knownConnectors [
 			providerClass: GtLAnthropicProvider;
 			label: 'Claude Fable 5';
 			model: 'claude-fable-5'.
+		}
+]
+
+{ #category : #'private - connectors' }
+GtLConnectionRegistry >> knownCodexConnectors [
+	GtLOpenAiCodexProvider isConnectable ifFalse: [ ^ #() ].
+
+	^ {
 		GtLConnection new
-			providerClass: GtLOpenAiResponsesProvider;
-			label: 'GPT 6.1 Sol';
+			providerClass: GtLOpenAiCodexProvider;
+			label: 'GPT 6.1 Sol (Codex)';
 			model: 'gpt-6.1-sol'.
 		GtLConnection new
-			providerClass: GtLOpenAiResponsesProvider;
-			label: 'GPT 6 Astra';
+			providerClass: GtLOpenAiCodexProvider;
+			label: 'GPT 6 Astra (Codex)';
 			model: 'gpt-6-astra'.
 		GtLConnection new
-			providerClass: GtLOpenAiResponsesProvider;
-			label: 'GPT 6 Luna';
+			providerClass: GtLOpenAiCodexProvider;
+			label: 'GPT 6 Luna (Codex)';
 			model: 'gpt-6-luna'.
 		GtLConnection new
-			providerClass: GtLOpenAiResponsesProvider;
-			label: 'GPT 5.6 Sol';
+			providerClass: GtLOpenAiCodexProvider;
+			label: 'GPT 5.6 Terra (Codex)';
+			model: 'gpt-5.6-terra'.
+		GtLConnection new
+			providerClass: GtLOpenAiCodexProvider;
+			label: 'GPT 5.6 Sol (Codex)';
 			model: 'gpt-5.6-sol'.
 		GtLConnection new
-			providerClass: GtLOpenAiResponsesProvider;
-			label: 'GPT 5.6 Luna';
+			providerClass: GtLOpenAiCodexProvider;
+			label: 'GPT 5.6 Luna (Codex)';
 			model: 'gpt-5.6-luna'.
-		GtLConnection new
-			providerClass: GtLOpenAiResponsesProvider;
-			label: 'GPT 5.5';
-			model: 'gpt-5.5'.
-		GtLConnection new
-			providerClass: GtLOpenAiResponsesProvider;
-			label: 'GPT 5.4';
-			model: 'gpt-5.4'.
-		},
+		}
+]
+
+{ #category : #'private - connectors' }
+GtLConnectionRegistry >> knownConnectors [
+	^ self knownAnthropicConnectors,
+		self knownOpenAiResponsesConnectors,
 		self knownCodexConnectors,
 		self knownOllamaConnectors
 ]
@@ -313,6 +307,36 @@ GtLConnectionRegistry >> knownOllamaConnectors [
 			providerClass: GtLOllamaProvider;
 			label: name;
 			modelName: name. ]
+]
+
+{ #category : #'private - connectors' }
+GtLConnectionRegistry >> knownOpenAiResponsesConnectors [
+	^ {
+		GtLConnection new
+			providerClass: GtLOpenAiResponsesProvider;
+			label: 'GPT 6.1 Sol';
+			model: 'gpt-6.1-sol'.
+		GtLConnection new
+			providerClass: GtLOpenAiResponsesProvider;
+			label: 'GPT 6 Astra';
+			model: 'gpt-6-astra'.
+		GtLConnection new
+			providerClass: GtLOpenAiResponsesProvider;
+			label: 'GPT 6 Luna';
+			model: 'gpt-6-luna'.
+		GtLConnection new
+			providerClass: GtLOpenAiResponsesProvider;
+			label: 'GPT 5.6 Terra';
+			model: 'gpt-5.6-terra'.
+		GtLConnection new
+			providerClass: GtLOpenAiResponsesProvider;
+			label: 'GPT 5.6 Sol';
+			model: 'gpt-5.6-sol'.
+		GtLConnection new
+			providerClass: GtLOpenAiResponsesProvider;
+			label: 'GPT 5.6 Luna';
+			model: 'gpt-5.6-luna'.
+		}
 ]
 
 { #category : #utils }
@@ -340,12 +364,12 @@ GtLConnectionRegistry >> onRemovedAsUniqueInstance [
 				newConnectionRegistry: self class uniqueInstance)
 ]
 
-{ #category : #accessing }
+{ #category : #private }
 GtLConnectionRegistry >> standardDefaultConnection [
 	^ GtLConnection new
 		providerClass: GtLOpenAiResponsesProvider;
-			label: 'GPT 5.6 Terra';
-			model: 'gpt-5.6-terra'.
+		label: 'GPT 6.1 Sol';
+		model: 'gpt-6.1-sol'.
 ]
 
 { #category : #subscriptions }
