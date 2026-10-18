@@ -37,10 +37,12 @@ GtLOpenAiCodexClient >> initialize [
 
 { #category : #private }
 GtLOpenAiCodexClient >> newStreamingHttpClient [
-	| http currentCredential |
+	| currentCredential http |
 	currentCredential := self currentCredential.
 	http := ZnClient new.
-	http timeout: 1200; streaming: true.
+	http
+		timeout: 1200;
+		streaming: true.
 	http setBearerAuthentication: currentCredential accessToken.
 	http headerAt: 'chatgpt-account-id' put: currentCredential accountId.
 	http headerAt: 'originator' put: 'gtoolkit'.
