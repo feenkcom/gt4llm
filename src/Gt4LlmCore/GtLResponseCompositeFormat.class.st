@@ -2,7 +2,8 @@ Class {
 	#name : #GtLResponseCompositeFormat,
 	#superclass : #Object,
 	#instVars : [
-		'schemaDescriptions'
+		'schemaDescriptions',
+		'optionalDescriptions'
 	],
 	#category : #'Gt4LlmCore-Core'
 }
@@ -10,6 +11,14 @@ Class {
 { #category : #adding }
 GtLResponseCompositeFormat >> addCompositeFormat: aCompositeFormat [
 	self addSchemaDescriptions: aCompositeFormat schemaDescriptions
+]
+
+{ #category : #adding }
+GtLResponseCompositeFormat >> addOptionalSchemaDescription: aSchema [
+	"Add aSchema as a parameter the caller may omit. Optionality is tracked by identity, so
+	nothing is sent to aSchema and no parameter name is matched as a string."
+	optionalDescriptions add: aSchema.
+	self addSchemaDescription: aSchema
 ]
 
 { #category : #adding }
@@ -54,14 +63,18 @@ GtLResponseCompositeFormat >> appendNeoJsonMappingTo: neoJsonMapper [
 
 { #category : #'as yet unclassified' }
 GtLResponseCompositeFormat >> asJsonSchemaDictionary [
-	^ NeoJSONObject  new 
-			at: 'type' put: 'object';
-			at: 'properties' put: ((schemaDescriptions collect: [ :aSchema | 
-				aSchema name -> aSchema asJsonSchemaDictionary ])
-						asDictionary);
-			at: 'required' put: (schemaDescriptions collect: [:aFormat | aFormat name ]);
-			at: 'additionalProperties'  put: false;
-			yourself
+	^(NeoJSONObject new)
+		at: 'type' put: 'object';
+		at: 'properties'
+			put: (schemaDescriptions
+					collect: [:aSchema | aSchema name -> aSchema asJsonSchemaDictionary])
+						asDictionary;
+		at: 'required'
+			put: ((self schemaDescriptions
+					reject: [:aSchema | optionalDescriptions includes: aSchema])
+						collect: [:aSchema | aSchema name]);
+		at: 'additionalProperties' put: false;
+		yourself
 ]
 
 { #category : #'as yet unclassified' }
@@ -134,8 +147,8 @@ GtLResponseCompositeFormat >> hasSchemaDescriptors [
 { #category : #initialization }
 GtLResponseCompositeFormat >> initialize [
 	super initialize.
-	
 	schemaDescriptions := OrderedCollection new.
+	optionalDescriptions := IdentitySet new
 ]
 
 { #category : #reading }
