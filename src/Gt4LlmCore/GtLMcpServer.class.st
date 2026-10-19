@@ -101,6 +101,12 @@ GtLMcpServer >> beSynchronous [
 ]
 
 { #category : #actions }
+GtLMcpServer >> clearAll [
+	self clearObjects.
+	self clearHistory.
+]
+
+{ #category : #actions }
 GtLMcpServer >> clearHistory [
 	| anAnnouncement |
 	history
@@ -110,6 +116,11 @@ GtLMcpServer >> clearHistory [
 					yourself ].
 
 	self announce: anAnnouncement
+]
+
+{ #category : #actions }
+GtLMcpServer >> clearObjects [
+	objectStorage clearCache
 ]
 
 { #category : #public }
@@ -462,18 +473,17 @@ GtLMcpServer >> gtToolsFor: aView [
 { #category : #'gt - extensions' }
 GtLMcpServer >> gtViewObjectStorageFor: aView [
 	<gtView>
-	^(aView forward)
+	^ aView forward
 		title: 'Objects';
 		priority: 15;
-		object: [objectStorage];
+		object: [ objectStorage ];
 		view: #gtObjectsByUUIDFor:;
 		actionUpdateButton;
 		actionButtonIcon: BrGlamorousVectorIcons bin
 			tooltip: 'Wipe object storage clean'
-			action: 
-				[:aButton |
-				objectStorage clearCache.
-				aButton phlow fireViewUpdateWish]
+			action: [ :aButton | 
+				self clearObjects.
+				aButton phlow fireViewUpdateWish ]
 ]
 
 { #category : #handling }
