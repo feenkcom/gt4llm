@@ -56,12 +56,12 @@ GtLMagritteToolForClassSubclassesExamples >> classSubclassesForClassWithNoSubcla
 	call := self
 		executeTool: GtLMagritteToolForClassSubclasses new
 		withArguments: {
-			'className' -> 'GtLlmToolForClassSubclasses'
+			'className' -> 'GtLMagritteToolForClassSubclasses'
 		} asDictionary.
 	targetObject := call result targetObject.
 	
 	self assert: (targetObject isKindOf: GtLClassSubclasses).
-	self assert: targetObject givenClassName equals: 'GtLlmToolForClassSubclasses'.
+	self assert: targetObject givenClassName equals: 'GtLMagritteToolForClassSubclasses'.
 	self assert: targetObject subclassNames isEmpty.
 	self assert: targetObject mayHaveMore not.
 	
