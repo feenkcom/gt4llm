@@ -17,9 +17,12 @@ GtLMagritteToolForMethodRemovalExamples >> createSubjectClass [
 
 { #category : #private }
 GtLMagritteToolForMethodRemovalExamples >> removeClassNamedIfPresent: aSymbol [
-	Smalltalk globals
+
+	"Smalltalk globals
 		at: aSymbol asSymbol
-		ifPresent: [ :cls | cls removeFromSystem ]
+		ifPresent: [ :cls | cls removeFromSystem ]"
+	aSymbol asSymbol asClassIfPresent:
+		[ :cls | cls removeFromSystem ].
 ]
 
 { #category : #examples }
