@@ -86,12 +86,12 @@ GtLToolForExampleClassesRunExamples >> runExamplesForClass [
 	call := self
 		executeTool: GtLToolForExampleClassesRun new
 		withArguments: {
-			'classNames' -> {'GtLlmExampleRunDummyExamples'}
+			'classNames' -> {'GtLExampleRunDummyExamples'}
 		} asDictionary.
 	self
 		assertResultStatusesCounts: call result targetObject
-		total: 3
-		skipped: 3
+		total: 5
+		skipped: 5
 		success: 0
 		failure: 0
 		error: 0.
@@ -241,13 +241,13 @@ GtLToolForExampleClassesRunExamples >> runExamplesStoresObjectIds [
 	call := self
 		executeTool: GtLToolForExampleClassesRun new
 		withArguments: {
-			'classNames' -> {'GtLlmExampleRunDummyExamples'}
+			'classNames' -> {'GtLExampleRunDummyExamples'}
 		} asDictionary
 		inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
 	self
 		assertResultStatusesCounts: call result targetObject
-		total: 3
-		skipped: 3
+		total: 5
+		skipped: 5
 		success: 0
 		failure: 0
 		error: 0.
@@ -264,12 +264,12 @@ GtLToolForExampleClassesRunExamples >> runExamplesWithMixedExistingAndNonExistin
 	call := self
 		executeTool: GtLToolForExampleClassesRun new
 		withArguments: {
-			'classNames' -> {'GtLlmExampleRunDummyExamples'. 'NonExistingClass123'}
+			'classNames' -> {'GtLExampleRunDummyExamples'. 'NonExistingClass123'}
 		} asDictionary.
 	self
 		assertResultStatusesCounts: call result targetObject
-		total: 3
-		skipped: 3
+		total: 5
+		skipped: 5
 		success: 0
 		failure: 0
 		error: 0.

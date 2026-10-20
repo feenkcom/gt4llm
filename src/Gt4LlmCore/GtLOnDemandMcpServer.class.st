@@ -34,6 +34,13 @@ GtLOnDemandMcpServer class >> uniqueInstanceOnPort: anInteger [
 				start ]
 ]
 
+{ #category : #accessing }
+GtLOnDemandMcpServer >> addNewObject: anObject reasonString: aString [
+	"Add an object without checking if it already exists. Return the id of the object"
+
+	^ self server objectStorage addNewObject: anObject reasonString: aString
+]
+
 { #category : #private }
 GtLOnDemandMcpServer >> findAvailablePort [
 	| socket |
