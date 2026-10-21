@@ -90,6 +90,12 @@ GtMagriteJSONDataCreationVisitor >> visitToManyScalarRelationDescription: aDescr
 
 { #category : #'visiting-description' }
 GtMagriteJSONDataCreationVisitor >> visitToOneRelationDescription: aDescription [
+	<gsCode: '	| result visitor |
+	result := self currentObject perform: aDescription accessor readSelector.
+	result ifNil: [ ^ jsonResult := nil ].
+	visitor := GtMagriteJSONDataCreationVisitor new currentObject: result.
+	result magritteDescription acceptMagritte: visitor.
+	^ jsonResult := visitor jsonResult'>
 	| result visitor |
 	result := self currentObject perform: aDescription accessor readSelector.
 	visitor := GtMagriteJSONDataCreationVisitor new currentObject: result.

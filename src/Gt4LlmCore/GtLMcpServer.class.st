@@ -24,16 +24,19 @@ Class {
 
 { #category : #accessing }
 GtLMcpServer class >> current [
+	<gsCode: '	^ SessionTemps current at: #GtLMcpServer_current ifAbsent: [ nil ]'>
 	^ Current
 ]
 
 { #category : #accessing }
 GtLMcpServer class >> current: anMcpServer [
+	<gsCode: '	SessionTemps current at: #GtLMcpServer_current put: anMcpServer'>
 	Current := anMcpServer
 ]
 
 { #category : #accessing }
 GtLMcpServer class >> resetCurrent [
+	<gsCode: '	SessionTemps current removeKey: #GtLMcpServer_current ifAbsent: [ ]'>
 	Current := nil
 ]
 
@@ -164,12 +167,16 @@ GtLMcpServer >> createInvalidRequestResponseForError: anError [
 	JSON-RPC 2.0 (https://www.jsonrpc.org/specification#error_object) and MCP's Base
 	Protocol error codes
 	(https://modelcontextprotocol.io/specification/2026-07-28/basic/index#error-codes)."
-	| reason |
-	reason := (anError isKindOf: KeyNotFound)
+	| reason errorClassName |
+
+	errorClassName := self
+		gtDo: [ #KeyNotFound ]
+		gemstoneDo: [ #LookupError ].
+	reason := (anError class name = errorClassName)
 		ifTrue: [ 'missing required field: ', anError key ]
 		ifFalse: [ anError messageText ].
-	reason ifNil: [ anError printString ].
-	reason ifEmpty: [ anError printString ].
+	reason ifNil: [ reason := anError printString ].
+	reason ifEmpty: [ reason := anError printString ].
 	^ ZnResponse
 		ok: (ZnStringEntity
 			json: (NeoJSONWriter toString:
@@ -287,11 +294,29 @@ GtLMcpServer >> detectToolNamed: aToolName [
 
 { #category : #dispatching }
 GtLMcpServer >> dispatch: jsonRpc [
+	<gsCode: '	| selector handlerName capitalize |
+	capitalize := true.
+	handlerName := String streamContents: [ :stream |
+		stream nextPutAll: ''handle''.
+		(jsonRpc method ifNil: [ '''' ]) do: [ :character |
+			((character between: $a and: $z) or: [ character between: $A and: $Z ])
+				ifTrue: [
+					stream nextPut: (capitalize ifTrue: [ character asUppercase ] ifFalse: [ character ]).
+					capitalize := false ]
+				ifFalse: [ capitalize := true ] ].
+		stream nextPut: $: ].
+	selector := handlerName asSymbol.
+	(self respondsTo: selector) ifFalse: [
+		^ GtLMcpUnknownMethodError new
+			rpcMethod: jsonRpc method;
+			handleSelector: selector;
+			signal ].
+	^ self perform: selector withArguments: { jsonRpc }'>
 	| camelCasedMethod selector |
 	camelCasedMethod := (jsonRpc method
 			ifNotNil: [ :aString | aString replaceAllRegex: '[^a-zA-Z]' with: ' ' ]
 			ifNil: [ '' ]) asCamelCase asSymbol asMutator.
-	selector := (#handle , camelCasedMethod) asSymbol.
+	selector := ('handle' , camelCasedMethod asString) asSymbol.
 	(self respondsTo: selector)
 		ifFalse: [ ^ GtLMcpUnknownMethodError new
 				rpcMethod: jsonRpc method;
@@ -697,7 +722,8 @@ GtLMcpServer >> initialize [
 	super initialize.
 	port := 0.
 	debug := false.
-	asynchronous := true.
+	asynchronous := self gtDo: [ true ]
+							gemstoneDo: [ false ].
 	tools := GtLTools new.
 	resources := GtLMcpResources new.
 	prompts := GtLMessagesGroup new.
@@ -826,13 +852,15 @@ GtLMcpServer >> setDebug [
 
 { #category : #actions }
 GtLMcpServer >> start [
+
+	self gtDo: [] gemstoneDo: [ self beSynchronous ].
 	server := ZnMultiThreadedServer new
 		port: port;
 		delegate: (ZnDispatcherDelegate new
 				map: '/'
 				to: [ :request :response | self handleRequest: request ]).
 	server start.
-	self registerForFinalization
+	self gtDo: [] gemstoneDo: [ self registerForFinalization ].
 ]
 
 { #category : #actions }
