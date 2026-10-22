@@ -63,13 +63,16 @@ GtLOpenAiCodexClient >> post: aPath withEntity: anEntity [
 
 { #category : #private }
 GtLOpenAiCodexClient >> postOnce: aPath withEntity: anEntity [
-	| http responseBody accumulator requestResponse |
+	| http responseBody accumulator requestResponse znStringEntity |
 	http := self newStreamingHttpClient.
 	http url: self baseUrl / aPath.
 	http entity: (ZnEntity json: (NeoJSONWriter toString: anEntity)).
 	responseBody := http post.
 	accumulator := GtLOpenAiCodexSseAccumulator new.
 	accumulator consume: (self responseStringFrom: responseBody).
+	"Replace the streaming entity with a string entity containing the response for this post."
+	znStringEntity := ZnStringEntity json: (NeoJSONWriter toString: accumulator result).
+	http response entity: znStringEntity.
 	requestResponse := self addHistoryRequestResponse: http.
 	requestResponse result: accumulator result.
 	^ requestResponse
