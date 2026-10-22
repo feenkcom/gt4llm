@@ -8,6 +8,14 @@ Class {
 	#category : #'Gt4Llm-OpenAI-Examples'
 }
 
+{ #category : #'instance creation' }
+GtLOpenAIProviderStub class >> withDefaultSetup [
+	"Allow the stub to be used as the provider class of a connection,
+	so that examples can create chats without a configured LLM connection."
+
+	^ self new
+]
+
 { #category : #'api - initialization' }
 GtLOpenAIProviderStub >> chat [
 	^ chat
