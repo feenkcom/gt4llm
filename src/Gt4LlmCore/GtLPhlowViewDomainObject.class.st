@@ -15,10 +15,14 @@ GtLPhlowViewDomainObject class >> phlowView: aPhlowView viewMethodClassName: aCl
 	| form |
 	[ aPhlowView
 		asElementDo: [ :anElement | 
-			| rootElement |
+			| rootElement targetExtent |
+			targetExtent := 1600 @ 1200.
 			rootElement := BlScripter new
-					element: anElement;
-					extent: 1600 @ 1200;
+					element: (BrFrame new 
+						border: (BlBorder paint: Color gray);
+						extent: targetExtent;
+						addChild: anElement) ;
+					extent: targetExtent;
 					elementWithoutParent.
 			form := BlExporter png
 					element: rootElement;
