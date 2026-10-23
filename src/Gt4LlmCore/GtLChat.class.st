@@ -766,6 +766,30 @@ GtLChat >> saveToTimestampFile [
 	^ filename
 ]
 
+{ #category : #'api - sending' }
+GtLChat >> sendFiles: aCollectionOfFiles withMessage: aMessageContent [
+	| wrappedFiles |
+	wrappedFiles := aCollectionOfFiles collect: [ :aFile |
+		| mimeType wrapperClass |
+		mimeType := ZnMimeType
+			forFilenameExtension: aFile extension asLowercase
+			ifAbsent: [ self error: 'Unsupported file type: ', aFile basename ].
+		wrapperClass := mimeType main = 'image'
+			ifTrue: [ GtLImageFile ]
+			ifFalse: [
+				(mimeType matches: ZnMimeType applicationPdf)
+					ifTrue: [ GtLPdfFile ]
+					ifFalse: [
+						mimeType isBinary
+							ifTrue: [ self error: 'Unsupported file type: ', aFile basename ]
+							ifFalse: [ GtLTextFile ] ] ].
+		wrapperClass fileReference: aFile ].
+	self sendWith: [ :message |
+		message
+			markdown: aMessageContent;
+			addWrappedObjects: wrappedFiles ]
+]
+
 { #category : #'api - communication' }
 GtLChat >> sendMarkdown: aString [
 	| newMessage |
