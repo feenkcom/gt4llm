@@ -51,7 +51,8 @@ GtLWorldChatRegistryDropdown >> initialize [
 		when: GtPhlowObjectToSpawn 
 		do: [ :anEvent | 
 			anEvent isConsumed ifFalse: [
-					self phlow spawnOrShowObject: anEvent object ] ]
+				anEvent consumed: true.
+				self phlow spawnOrShowObject: anEvent object ] ]
 ]
 
 { #category : #initialization }
