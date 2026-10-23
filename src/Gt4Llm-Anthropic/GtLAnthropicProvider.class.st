@@ -348,24 +348,6 @@ GtLAnthropicProvider >> sendAssistantMessage: aMessage [
 					self chat signalRunIsDone ])
 ]
 
-{ #category : #'as yet unclassified' }
-GtLAnthropicProvider >> sendFiles: aListOfFileReferences withMessage: aString [
-	self
-		sendAssistantMessage: (self userMessageClass new
-				content: {{'type' -> 'text'.
-							'text' -> aString} asDictionary}
-						, (aListOfFileReferences
-								collect: [ :aFileReference | 
-									{'type' -> 'image'.
-										'source'
-											-> {'type' -> 'base64'.
-													'media_type' -> 'image/jpeg'.
-													'data' -> aFileReference binaryContents base64Encoded} asDictionary}
-										asDictionary ]);
-				role: 'user';
-				chat: self)
-]
-
 { #category : #accessing }
 GtLAnthropicProvider >> serializeToolMessageForResponse: aToolMessage [
 	^ aToolMessage serializeForAnthropicMessagesAPI
