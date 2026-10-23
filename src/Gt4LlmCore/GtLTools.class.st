@@ -18,6 +18,24 @@ GtLTools class >> files [
 			GtLMagritteToolForFilesInformation new } asOrderedCollection
 ]
 
+{ #category : #'instance creation' }
+GtLTools class >> gemstoneCodeBrowsing [
+	^ self
+		withAll: {
+				GtGemStoneLlmToolForClassSearch new.
+				GtGemStoneLlmToolForClassLookup new.
+				GtGemStoneLlmToolForClassSubclasses new.
+				GtGemStoneLlmToolForClassReferences new.
+				GtGemStoneLlmToolForMethodImplementors new.
+				GtGemStoneLlmToolForMethodSenders new.
+				GtGemStoneLlmToolForMethodsSource new.
+				GtGemStoneLlmToolForMethodCompilation new.
+				GtGemStoneLlmToolForMethodsCompilation new.
+				GtGemStoneLlmToolForMethodRemoval new.
+				GtGemStoneLlmToolForClassDefinitionChange new.
+		} asOrderedCollection
+]
+
 { #category : #defaults }
 GtLTools class >> gemstoneIfActive [
 
