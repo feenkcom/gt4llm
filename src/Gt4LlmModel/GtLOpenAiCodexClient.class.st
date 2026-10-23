@@ -75,6 +75,7 @@ GtLOpenAiCodexClient >> postOnce: aPath withEntity: anEntity [
 	http response entity: znStringEntity.
 	requestResponse := self addHistoryRequestResponse: http.
 	requestResponse result: accumulator result.
+	http close.
 	^ requestResponse
 ]
 
