@@ -29,6 +29,26 @@ GtLStoredObject >> gtInspectorTargetModels [
 		ifFalse: [ collection ]
 ]
 
+{ #category : #'as yet unclassified' }
+GtLStoredObject >> gtObjectFor: aView [
+	<gtView>
+	<gtLlmView>
+	^ aView explicit
+		title: 'Object';
+		priority: 9;
+		stencil: [ | container |
+			container := BrVerticalPane new.
+			container matchParent
+				addAptitude: (BrLayoutResizerAptitude new common: [ container children ]);
+				background: BrGlamorousColors backdropColor;
+				addChild: ((self storedValue gtDefaultInspectorTool) asElement
+						margin: (BlInsets all: 10);
+						background: Color white;
+						addAptitude: BrShadowAptitude;
+						vFitContentLimited;
+						hMatchParent) ]
+]
+
 { #category : #'gt extensions' }
 GtLStoredObject >> gtViewsInContext: aPhlowContext [
 	| collectedViews |
