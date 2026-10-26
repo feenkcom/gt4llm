@@ -127,6 +127,13 @@ GtLTools class >> lepiter [
 ]
 
 { #category : #defaults }
+GtLTools class >> smacc [
+	| smaccModel |
+	smaccModel := GtLSmaCCModel new.
+	^ GtLSmaCCTool allSubclasses collect: [ :each | each new model: smaccModel ]
+]
+
+{ #category : #defaults }
 GtLTools class >> sunitRun [
 	self 
 		deprecated: 'Please use #testRun instead.'
