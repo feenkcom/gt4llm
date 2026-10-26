@@ -25,6 +25,11 @@ GtLOpenAiResponsesMessageVisitor >> roleAndContentFrom: anAssistantMessage [
 		} asDictionary.
 ]
 
+{ #category : #'as yet unclassified' }
+GtLOpenAiResponsesMessageVisitor >> visitGtLErrorMessage: aMessage [
+	^ {} asDictionary
+]
+
 { #category : #visiting }
 GtLOpenAiResponsesMessageVisitor >> visitGtLModelAssistantMessage: anAssistantMessage [
 	"Assistant messages always serialize as ordinary assistant content.
