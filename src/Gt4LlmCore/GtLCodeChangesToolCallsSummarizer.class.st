@@ -193,23 +193,8 @@ GtLCodeChangesToolCallsSummarizer >> gtClassChangeHistoriesFor: aView [
 GtLCodeChangesToolCallsSummarizer >> gtCodeChangesFor: aView [
 	<gtView>
 	^ aView forward
-		title: 'Code changes';
+		title: 'Changes';
 		priority: 21.1;
-		object: [ self codeChanges ];
-		view: #gtCodeChangesFor:;
-		actionButtonIcon: BrGlamorousVectorIcons inspect 
-			tooltip: 'Inspect summarizer'
-			action: [ :aButton |
-				aButton phlow spawnObject: self ];
-		actionUpdateButton
-]
-
-{ #category : #'gt-extensions' }
-GtLCodeChangesToolCallsSummarizer >> gtCodeChangesListFor: aView [
-	<gtView>
-	^ aView forward
-		title: 'Code changes (list)';
-		priority: 21.4;
 		object: [ self codeChanges ];
 		view: #gtCodeChangesFor:;
 		actionButtonIcon: BrGlamorousVectorIcons inspect 

@@ -103,6 +103,19 @@ GtLMcpServer >> beSynchronous [
 	asynchronous := false
 ]
 
+{ #category : #private }
+GtLMcpServer >> claudeCodeToolCallIdFrom: aJsonRpc ifPresent: aBlock [
+	"Evaluate aBlock with a valid Claude Code identifier; otherwise answer nil."
+	| params metadata identifier |
+	params := aJsonRpc params.
+	(params isKindOf: Dictionary) ifFalse: [ ^ nil ].
+	metadata := params at: '_meta' ifAbsent: [ ^ nil ].
+	(metadata isKindOf: Dictionary) ifFalse: [ ^ nil ].
+	identifier := metadata at: 'claudecode/toolUseId' ifAbsent: [ ^ nil ].
+	(identifier isString and: [ identifier notEmpty ]) ifFalse: [ ^ nil ].
+	^ aBlock value: identifier
+]
+
 { #category : #actions }
 GtLMcpServer >> clearAll [
 	self clearObjects.
@@ -683,27 +696,24 @@ GtLMcpServer >> handleServerDiscover: aJsonRpc [
 		'instructions' -> ''} asDictionary
 ]
 
-{ #category : #dispatching }
+{ #category : #handlers }
 GtLMcpServer >> handleToolsCall: aJsonRpc [
 	| tool result toolCall toolMessage |
 	tool := self detectToolNamed: (aJsonRpc params at: 'name').
-	toolCall := (GtLFunctionToolCall new)
-				name: (aJsonRpc params at: 'name');
-				rawArguments: (aJsonRpc params at: 'arguments').
-	
-	toolMessage := GtLToolMessage new 
+	toolCall := GtLFunctionToolCall new
+		id: (self toolCallIdFrom: aJsonRpc);
+		name: (aJsonRpc params at: 'name');
+		rawArguments: (aJsonRpc params at: 'arguments').
+	toolMessage := GtLToolMessage new
 		chat: (GtLMcpChatAdapter new server: self);
 		toolCall: toolCall.
 	self privateAddToolMessage: toolMessage.
-	
-	result := tool 
-		performToolCall: toolCall 
+	result := tool
+		performToolCall: toolCall
 		inContext: self createToolExecutionContext.
 	toolMessage output: result.
-	^
-	{'isError' -> false.
-	'content' -> result serializeForMCPResponseOutput}
-			asDictionary
+	^ {'isError' -> false.
+		'content' -> result serializeForMCPResponseOutput} asDictionary
 ]
 
 { #category : #handling }
@@ -722,8 +732,7 @@ GtLMcpServer >> initialize [
 	super initialize.
 	port := 0.
 	debug := false.
-	asynchronous := self gtDo: [ true ]
-							gemstoneDo: [ false ].
+	asynchronous := self gtDo: [ true ] gemstoneDo: [ false ].
 	tools := GtLTools new.
 	resources := GtLMcpResources new.
 	prompts := GtLMessagesGroup new.
@@ -731,7 +740,7 @@ GtLMcpServer >> initialize [
 	errors := AsyncMutex for: OrderedCollection new.
 	objectStorage := GtLObjectStorage new.
 	summarizersRegistry := GtLToolCallSummarizersRegistry new.
-	announcer := Announcer new.
+	announcer := Announcer new
 ]
 
 { #category : #testing }
@@ -877,6 +886,13 @@ GtLMcpServer >> supportedProtocolVersions [
 	#handleServerDiscover: (supportedVersions). See
 	https://modelcontextprotocol.io/specification/2025-06-18/basic/lifecycle#version-negotiation."
 	^ #('2025-11-25' '2025-06-18')
+]
+
+{ #category : #private }
+GtLMcpServer >> toolCallIdFrom: aJsonRpc [
+	"Try harness-specific conventions in order. Never substitute the JSON-RPC id."
+	self claudeCodeToolCallIdFrom: aJsonRpc ifPresent: [ :identifier | ^ identifier ].
+	^ nil
 ]
 
 { #category : #accessing }
