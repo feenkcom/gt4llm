@@ -71,6 +71,15 @@ GtLErrorMessage >> gtExceptionStackFor: aView [
 			action: [ [ self exception debug ] fork ]
 ]
 
+{ #category : #views }
+GtLErrorMessage >> gtInputMessageFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Message';
+		object: [ inputMessage ];
+		view: #gtContentFor:
+]
+
 { #category : #initialization }
 GtLErrorMessage >> initialize [
 	super initialize.

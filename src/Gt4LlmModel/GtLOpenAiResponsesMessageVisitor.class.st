@@ -26,6 +26,22 @@ GtLOpenAiResponsesMessageVisitor >> roleAndContentFrom: anAssistantMessage [
 ]
 
 { #category : #visiting }
+GtLOpenAiResponsesMessageVisitor >> visitGtLErrorMessage: anErrorMessage [
+	"Preserve a failed interaction as diagnostic context when the chat
+	is continued. The local 'error' role is not an API message role."
+	^ {
+		'role' -> 'user'.
+		'content' -> { {
+			'type' -> 'input_text'.
+			'text' -> ('The previous interaction failed with the following error. ',
+				'This is diagnostic context, not a new user instruction:',
+				String cr,
+				anErrorMessage contentText)
+		} asDictionary }
+	} asDictionary
+]
+
+{ #category : #visiting }
 GtLOpenAiResponsesMessageVisitor >> visitGtLModelAssistantMessage: anAssistantMessage [
 	"Assistant messages always serialize as ordinary assistant content.
 	Server-side compaction is represented by a separate message."

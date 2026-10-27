@@ -656,6 +656,81 @@ GtLMessageStyler >> styleSmalltalkCodeBlock: aCodeNode [
 				to: aCodeNode code stopPosition)
 ]
 
+{ #category : #tables }
+GtLMessageStyler >> styleTableCellText: aText ast: aCell [
+	"Style an already parsed cell, not a new document."
+	text := aText.
+	self accept: aCell.
+	^ aText
+]
+
+{ #category : #tables }
+GtLMessageStyler >> tableCellTextFor: aCell [
+	"Reuse the grammar-produced AST without reparsing or altering the source
+	tree. A fresh visitor preserves this message visitor's current text."
+	| source cellText localCell tokens offset first last visitor |
+	aCell ifNil: [ ^ '' asRopedText ].
+	source := aCell contentSource.
+	source trimBoth isEmpty ifTrue: [ ^ '' asRopedText ].
+	cellText := source asRopedText.
+	localCell := aCell copy.
+	localCell parent: nil.
+	localCell fixParentPointers.
+	offset := aCell startPosition - 1.
+	tokens := IdentitySet withAll: localCell allTokens.
+	tokens do: [ :token | token startPosition: token startPosition - offset ].
+	localCell withAllNodesDo: [ :node |
+		node removeAttributeNamed: #startPosition; removeAttributeNamed: #stopPosition ].
+	localCell completeSource: source.
+	visitor := self class new objectRegistry: self objectRegistry; yourself.
+	visitor styleTableCellText: cellText ast: localCell.
+	first := 1.
+	last := source size.
+	[ (source at: first) isSeparator ] whileTrue: [ first := first + 1 ].
+	[ (source at: last) isSeparator ] whileTrue: [ last := last - 1 ].
+	^ cellText copyFrom: first to: last
+]
+
+{ #category : #tables }
+GtLMessageStyler >> tableEditorFor: aCell [
+	"An editor materializes annotation adornments and wraps long cell content.
+	The preview is selectable but editing remains in the original Markdown."
+	^ BrEditor new
+		id: #tableCellEditor;
+		aptitude: BrGlamorousRegularEditorAptitude;
+		beReadOnlyWithSelection;
+		hMatchParent;
+		vFitContentLimited;
+		padding: (BlInsets top: 5 bottom: 5);
+		text: (self tableCellTextFor: aCell);
+		yourself
+]
+
+{ #category : #tables }
+GtLMessageStyler >> tableElementFor: aTable [
+	"Use native headers with a shared proportional width policy.
+	Column justification remains in the AST and is not applied here."
+	| list |
+	list := BrColumnedList new.
+	list hMatchParent.
+	list vFitContentLimited.
+	aTable header cells withIndexDo: [ :cell :index |
+		list column
+			title: (self tableCellTextFor: cell);
+			weight: 1;
+			stencil: [ :row |
+				self tableEditorFor: (row cells at: index ifAbsent: [ nil ]) ] ].
+	list items: aTable rows.
+	list withHeaders.
+	^ list
+]
+
+{ #category : #tables }
+GtLMessageStyler >> tableLabelFor: aCell [
+	"Compatibility entry point; table cells now use editors."
+	^ self tableEditorFor: aCell
+]
+
 { #category : #generated }
 GtLMessageStyler >> text [
 	^ text
@@ -851,4 +926,19 @@ GtLMessageStyler >> visitPragmaAnnotation: aPragmaAnnotation [
 	"self
 		styleExpandingObject: aPragmaAnnotation
 		withDefault: LepiterConstants defaultClassShowSelector"
+]
+
+{ #category : #visiting }
+GtLMessageStyler >> visitTable: aTable [
+	"Keep editable Markdown and append a native columned-list preview.
+	Style inline cell nodes only in the preview's local text coordinates."
+	| sourceText |
+	sourceText := text from: aTable startPosition to: aTable stopPosition.
+	sourceText glamorousCodeFont.
+	self styleAutoHiding: aTable sourceInterval text: sourceText.
+	(text from: aTable stopPosition to: aTable stopPosition)
+		attribute: (BrTextAdornmentDynamicAttribute new
+			beAppend;
+			stencil: [ self tableElementFor: aTable ]).
+	^ aTable
 ]
