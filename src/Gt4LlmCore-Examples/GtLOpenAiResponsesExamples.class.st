@@ -492,6 +492,38 @@ GtLOpenAiResponsesExamples >> relevantHistoryStartsAtLatestCompaction [
 	^ relevant
 ]
 
+{ #category : #'examples - errors' }
+GtLOpenAiResponsesExamples >> requestAfterErrorMessage [
+	"Construct a continuation request locally without contacting the provider."
+	<gtExample>
+	| executor provider chat errorMessage message command endpoint context entity input |
+	executor := GtLOpenAiResponsesExampleExecutor new.
+	provider := executor provider.
+	chat := executor chat.
+	errorMessage := GtLErrorMessage new
+		exception: (Error new messageText: 'Example provider failure');
+		chat: chat;
+		yourself.
+	message := chat createUserMessage.
+	message string: 'Please continue'; chat: chat.
+	command := GtLModelApiUserCommand new
+		messages: (GtLMessagesGroup withAll: { errorMessage. message });
+		instructions: '';
+		tools: #().
+	endpoint := provider model userMessageEndpoint.
+	context := endpoint newContextForModel: provider model.
+	context command: command; chat: chat.
+	entity := endpoint entityFromContext: context.
+	input := entity at: 'input'.
+	self assert: input size equals: 2.
+	self assert: input first equals: self serializeErrorMessage.
+	self assert: input second equals:
+		(GtLOpenAiResponsesMessageVisitor new chatMessage: message).
+	self assert: (input allSatisfy: [ :each | (each at: 'role') = 'user' ]).
+	self assert: (((input second at: 'content') first) at: 'text') equals: 'Please continue'.
+	^ entity
+]
+
 { #category : #'examples - schema' }
 GtLOpenAiResponsesExamples >> responseSchemaRequiresAllNestedProperties [
 	<gtExample>
@@ -554,6 +586,42 @@ GtLOpenAiResponsesExamples >> responseWithoutAutomaticCompaction [
 
 	self assert: messages isEmpty.
 	^ messages
+]
+
+{ #category : #'examples - errors' }
+GtLOpenAiResponsesExamples >> serializeErrorMessage [
+	<gtExample>
+	| message serialized content |
+	message := GtLErrorMessage new
+		exception: (Error new messageText: 'Example provider failure');
+		yourself.
+	serialized := GtLOpenAiResponsesMessageVisitor new chatMessage: message.
+	self assert: (serialized at: 'role') equals: 'user'.
+	self assert: (serialized at: 'content') size equals: 1.
+	content := (serialized at: 'content') first.
+	self assert: (content at: 'type') equals: 'input_text'.
+	self assert: (content at: 'text') equals:
+		('The previous interaction failed with the following error. ',
+		'This is diagnostic context, not a new user instruction:',
+		String cr, 'Example provider failure').
+	^ serialized
+]
+
+{ #category : #'examples - errors' }
+GtLOpenAiResponsesExamples >> serializeErrorMessageWithoutException [
+	<gtExample>
+	| serialized content |
+	serialized := GtLOpenAiResponsesMessageVisitor new
+		chatMessage: GtLErrorMessage new.
+	self assert: (serialized at: 'role') equals: 'user'.
+	self assert: (serialized at: 'content') size equals: 1.
+	content := (serialized at: 'content') first.
+	self assert: (content at: 'type') equals: 'input_text'.
+	self assert: (content at: 'text') equals:
+		('The previous interaction failed with the following error. ',
+		'This is diagnostic context, not a new user instruction:',
+		String cr, 'Error').
+	^ serialized
 ]
 
 { #category : #'examples - compaction' }
