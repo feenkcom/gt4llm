@@ -25,11 +25,6 @@ GtLOpenAiResponsesMessageVisitor >> roleAndContentFrom: anAssistantMessage [
 		} asDictionary.
 ]
 
-{ #category : #'as yet unclassified' }
-GtLOpenAiResponsesMessageVisitor >> visitGtLErrorMessage: aMessage [
-	^ {} asDictionary
-]
-
 { #category : #visiting }
 GtLOpenAiResponsesMessageVisitor >> visitGtLErrorMessage: anErrorMessage [
 	"Preserve a failed interaction as diagnostic context when the chat
