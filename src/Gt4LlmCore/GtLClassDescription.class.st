@@ -20,6 +20,17 @@ Class {
 
 { #category : #'instance creation' }
 GtLClassDescription class >> fromClass: aClass [
+	<gsCode: '	^ self new
+		currentClassName: aClass name;
+		superclassName: (aClass superclass ifNil: [ nil ] ifNotNil: [ :aSuperclass | aSuperclass name ]);
+		comment: aClass comment;
+		packageName: aClass category;
+		packageTagName: nil;
+		instanceSlotNames: aClass instVarNames;
+		classSlotNames: aClass class instVarNames;
+		allInstanceMethodNames: aClass selectors asArray;
+		allClassMethodNames: aClass class selectors asArray;
+		yourself'>
 	^ self new
 		currentClassName: aClass name;
 		superclassName: (aClass superclass ifNil: [ nil ] ifNotNil: [ :aSuperclass | aSuperclass name ]);

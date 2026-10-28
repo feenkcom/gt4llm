@@ -40,6 +40,16 @@ GtLClassChangeDataExtractor >> classVariables: aCollection [
 
 { #category : #extraction }
 GtLClassChangeDataExtractor >> extractAllIfError: errorBlock [
+	<gsCode: ' | composition |
+ self extractTargetClassIfError: [ :error | ^ errorBlock value: error ].
+ self extractSuperclassIfError: [ :error | ^ errorBlock value: error ].
+ composition := (request traitCompositionString ifNil: [ '''' ]) asString trimBoth.
+ (composition isEmpty or: [ composition = ''{}'' ]) ifFalse: [
+ ^ errorBlock value: (GtLProblemDomainObject new errorMessage: ''GemStone does not support Trait composition'') ].
+ self extractVariables.
+ traitComposition := ''{}''.
+ self extractPackageIfError: [ :error | ^ errorBlock value: error ].
+ self extractPackageTagIfError: [ :error | ^ errorBlock value: error ]'>
 	"Extract all data from the request.
 	Calls errorBlock for validation errors."
 	
@@ -53,6 +63,8 @@ GtLClassChangeDataExtractor >> extractAllIfError: errorBlock [
 
 { #category : #extraction }
 GtLClassChangeDataExtractor >> extractPackageIfError: errorBlock [
+	<gsCode: ' packageName := request package ifNil: [ targetClass category ] ifNotNil: [ :value | value asString trimBoth ].
+ packageName isEmpty ifTrue: [ ^ errorBlock value: (GtLMissingDomainObject new objectName: ''package'') ]'>
 	"Extract the package name from the request.
 	If not provided, use the current package of the target class."
 	| packageValue |
@@ -70,6 +82,7 @@ GtLClassChangeDataExtractor >> extractPackageIfError: errorBlock [
 
 { #category : #extraction }
 GtLClassChangeDataExtractor >> extractPackageTagIfError: errorBlock [
+	<gsCode: ' packageTagName := nil'>
 	"Extract the package tag name from the request.
 	If not provided, use the current package of the target class."
 
@@ -88,6 +101,14 @@ GtLClassChangeDataExtractor >> extractPackageTagIfError: errorBlock [
 
 { #category : #extraction }
 GtLClassChangeDataExtractor >> extractSuperclassIfError: errorBlock [
+	<gsCode: ' | name |
+ request superclassName ifNil: [ superclass := targetClass superclass. ^ self ].
+ name := request superclassName asString trimBoth.
+ name = ''Trait'' ifTrue: [ ^ errorBlock value: (GtLProblemDomainObject new errorMessage: ''GemStone does not support Trait modification'') ].
+ superclass := GsSession currentSession objectNamed: name asSymbol.
+ superclass ifNil: [ ^ errorBlock value: (GtLMissingDomainObject new objectName: name) ].
+ (superclass isBehavior and: [ superclass isTrait not ]) ifFalse: [
+ ^ errorBlock value: (GtLProblemDomainObject new errorMessage: ''Superclass must be a class; Traits are not supported in GemStone'') ]'>
 	"Extract and validate the superclass from the request.
 	If not provided, use the current superclass of the target class."
 	| superclassValue |
@@ -110,6 +131,14 @@ GtLClassChangeDataExtractor >> extractSuperclassIfError: errorBlock [
 
 { #category : #extraction }
 GtLClassChangeDataExtractor >> extractTargetClassIfError: errorBlock [
+	<gsCode: ' | name |
+ name := (request targetClassName ifNil: [ '''' ]) asString trimBoth.
+ name isEmpty ifTrue: [ ^ errorBlock value: (GtLMissingDomainObject new objectName: ''targetClassName'') ].
+ name = ''Trait'' ifTrue: [ ^ errorBlock value: (GtLProblemDomainObject new errorMessage: ''GemStone does not support Trait modification'') ].
+ targetClass := GsSession currentSession objectNamed: name asSymbol.
+ targetClass ifNil: [ ^ errorBlock value: (GtLMissingDomainObject new objectName: name) ].
+ targetClass isBehavior ifFalse: [ ^ errorBlock value: (GtLProblemDomainObject new errorMessage: ''Target must be a class'') ].
+ targetClass isTrait ifTrue: [ ^ errorBlock value: (GtLProblemDomainObject new errorMessage: ''GemStone does not support Trait modification'') ]'>
 	"Extract and validate the target class from the request."
 	| classNameValue classNameString |
 	
@@ -139,6 +168,15 @@ GtLClassChangeDataExtractor >> extractTraitComposition [
 
 { #category : #extraction }
 GtLClassChangeDataExtractor >> extractVariables [
+	<gsCode: ' instanceVariables := request instanceVariables notEmpty
+ ifTrue: [ request instanceVariables collect: #asString ]
+ ifFalse: [ targetClass instVarNames collect: #asString ].
+ classInstanceVariables := request classInstanceVariables notEmpty
+ ifTrue: [ request classInstanceVariables collect: #asString ]
+ ifFalse: [ targetClass class instVarNames collect: #asString ].
+ classVariables := request classVariables notEmpty
+ ifTrue: [ request classVariables collect: #asString ]
+ ifFalse: [ targetClass classVarNames collect: #asString ]'>
 	"Extract instance and class variables from the request.
 	If not provided, use the current variables of the target class."
 	
