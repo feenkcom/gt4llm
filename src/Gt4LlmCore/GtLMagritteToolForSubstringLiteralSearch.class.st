@@ -43,7 +43,7 @@ GtLMagritteToolForSubstringLiteralSearch >> name [
 
 { #category : #private }
 GtLMagritteToolForSubstringLiteralSearch >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
-	| arguments query filter matches |
+	| arguments query matches |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	query := arguments at: 'query'.
 
@@ -52,9 +52,28 @@ GtLMagritteToolForSubstringLiteralSearch >> privatePerformToolCall: aToolCall in
 				arguments: arguments;
 				missingArgument: 'query' ].
 
-	filter := query asString gtSubstringLiteralMatch.
-	matches := (filter result toArray
-		await: GtLSettings futureExecutionConfiguration) wait.
+	matches := self
+		gtDo: [
+			| filter |
+			filter := query asString gtSubstringLiteralMatch.
+			(filter result toArray
+				await: GtLSettings futureExecutionConfiguration) wait ]
+		gemstoneDo: [
+			| organizer methods matchesLiteral |
+			organizer := ClassOrganizer gtDefault.
+			methods := IdentitySet new.
+			matchesLiteral := [ :literal |
+				(literal isString and: [
+					literal isSymbol not and: [
+						(literal findPatternNoCase: { query asString } startingAt: 1) > 0 ] ])
+					or: [ (literal isKindOf: Array) and: [
+						literal anySatisfy: matchesLiteral ] ] ].
+			organizer classes do: [ :class |
+				{ class. class class } do: [ :behavior |
+					(behavior _fullMethodDictEnv: organizer environmentId) valuesDo: [ :method |
+						(method literals anySatisfy: matchesLiteral)
+							ifTrue: [ methods add: method ] ] ] ].
+			methods asArray ].
 
 	^ GtLMethodsSearchResult fromReferences: matches
 ]

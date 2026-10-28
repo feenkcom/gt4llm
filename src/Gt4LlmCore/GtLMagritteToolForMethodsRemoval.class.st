@@ -60,6 +60,34 @@ GtLMagritteToolForMethodsRemoval >> privatePerformToolCall: aToolCall inContext:
 
 { #category : #private }
 GtLMagritteToolForMethodsRemoval >> removeMethodFromDescriptor: methodDescriptor [
+	<gsCode: ' | className targetClass behavior selector removedMethod classDescription |
+ className := methodDescriptor methodClassName.
+ className = ''Trait'' ifTrue: [
+ ^ GtLProblemDomainObject new errorMessage: ''GemStone does not support Trait modification'' ].
+ targetClass := GsSession currentSession objectNamed: className asSymbol.
+ targetClass ifNil: [ ^ GtLMissingDomainObject new objectName: className ].
+ targetClass isBehavior ifFalse: [ ^ GtLProblemDomainObject new errorMessage: ''Target must be a class'' ].
+ targetClass isTrait ifTrue: [
+ ^ GtLProblemDomainObject new errorMessage: ''GemStone does not support Trait modification'' ].
+ behavior := methodDescriptor isClassSide ifTrue: [ targetClass class ] ifFalse: [ targetClass ].
+ selector := methodDescriptor methodName asSymbol.
+ (behavior includesSelector: selector environmentId: 0) ifFalse: [
+ ^ GtLMissingDomainObject new objectName: methodDescriptor methodSignature ].
+ removedMethod := GtLMethodWithSource new
+ methodReference: methodDescriptor;
+ sourceCode: (behavior compiledMethodAt: selector environmentId: 0) sourceString;
+ yourself.
+ classDescription := GtLClassDefinitionDescription fromClass: targetClass.
+ [ behavior removeSelector: selector environmentId: 0 ]
+ on: Error do: [ :error |
+ ^ GtLExceptionDomainObject new
+ freeze: error;
+ errorReason: ''Error while removing method'' ].
+ ^ GtLMethodRemovalResult new
+ targetClass: classDescription;
+ removedMethod: removedMethod;
+ status: ''removed'';
+ yourself'>
 	^ methodDescriptor
 		compiledMethodIfPresent: [ :compiledMethod |
 			| methodWithSource behavior classDescription |

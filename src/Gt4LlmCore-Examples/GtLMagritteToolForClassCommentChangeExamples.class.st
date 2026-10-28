@@ -81,6 +81,33 @@ GtLMagritteToolForClassCommentChangeExamples >> changeCommentMissingArgument [
 
 { #category : #examples }
 GtLMagritteToolForClassCommentChangeExamples >> changeCommentSuccessful [
+	<gsCode: ' <gtExample>
+ | call className targetClass originalComment newComment targetObject dictionary |
+ className := #GtLClassCommentChangeExampleTemporary.
+ (GsSession currentSession objectNamed: className) ifNotNil: [
+ self error: ''Example class already exists'' ].
+ dictionary := System myUserProfile symbolList first.
+ [
+ targetClass := Object subclass: className
+ instVarNames: #() classVars: #() classInstVars: #()
+ poolDictionaries: #() category: ''Gt4LlmCore-Examples''
+ inDictionary: dictionary options: #().
+ targetClass comment: ''Original example class comment''.
+ originalComment := targetClass comment.
+ newComment := ''Updated example class comment''.
+ call := self executeTool: GtLMagritteToolForClassCommentChange new
+ withArguments: {
+ ''className'' -> className asString.
+ ''classComment'' -> newComment } asDictionary.
+ targetObject := call result targetObject.
+ self assert: (targetObject isKindOf: GtLClassCommentChangeResult).
+ self assert: targetObject changedClassName equals: className asString.
+ self assert: targetObject status equals: ''changed''.
+ self assert: targetObject oldClassComment equals: originalComment.
+ self assert: targetObject newClassComment equals: newComment.
+ self assert: (GsSession currentSession objectNamed: className) comment equals: newComment
+ ] ensure: [ dictionary removeKey: className ifAbsent: [ ] ].
+ ^ call'>
 	<gtExample>
 	| call className environment |
 	

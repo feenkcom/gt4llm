@@ -41,7 +41,9 @@ GtLWrappedObjectModel >> serializeForMCPResponseOutput [
 	<gsCode: '	"Serialize domain models without the Pharo data-view collector."
 	^ {NeoJSONObject new
 		at: ''type'' put: ''text'';
-		at: ''text'' put: (GtMagritteJSONDataExporter forObject: self model) exportObjectAsJsonString;
+		at: ''text'' put: ((self model respondsTo: #llmJsonObject)
+			ifTrue: [ NeoJSONWriter toString: self model llmJsonObject ]
+			ifFalse: [ (GtMagritteJSONDataExporter forObject: self model) exportObjectAsJsonString ]);
 		yourself}'>
 	^ super serializeForMCPResponseOutput
 ]

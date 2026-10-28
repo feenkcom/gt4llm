@@ -21,8 +21,8 @@ GtLMagritteToolForClassSearchExamples >> searchClassesDataViewSerialization [
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	jsonData := dataBlock llmJsonData.
-	self assert: (jsonData at: #foundClassNames) isNotEmpty.
-	self assert: (jsonData at: #mayHaveMore) not.
+	self assert: (jsonData at: 'foundClassNames') isNotEmpty.
+	self assert: (jsonData at: 'mayHaveMore') not.
 	
 	^ dataBlock
 ]

@@ -21,9 +21,9 @@ GtLMagritteToolForClassSubclassesExamples >> classSubclassesDataViewSerializatio
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	jsonData := dataBlock llmJsonData.
-	self assert: (jsonData at: #givenClassName) equals: 'GtLAbstractMagritteFunctionTool'.
-	self assert: (jsonData at: #subclassNames) isNotEmpty.
-	self assert: (jsonData at: #mayHaveMore) not.
+	self assert: (jsonData at: 'givenClassName') equals: 'GtLAbstractMagritteFunctionTool'.
+	self assert: (jsonData at: 'subclassNames') isNotEmpty.
+	self assert: (jsonData at: 'mayHaveMore') not.
 	
 	^ dataBlock
 ]
@@ -31,7 +31,7 @@ GtLMagritteToolForClassSubclassesExamples >> classSubclassesDataViewSerializatio
 { #category : #examples }
 GtLMagritteToolForClassSubclassesExamples >> classSubclassesForBlElement [
 	<gtExample>
-	| call targetObject |
+	| call targetObject subclasses |
 	
 	call := self
 		executeTool: GtLMagritteToolForClassSubclasses new
@@ -42,8 +42,11 @@ GtLMagritteToolForClassSubclassesExamples >> classSubclassesForBlElement [
 	
 	self assert: (targetObject isKindOf: GtLClassSubclasses).
 	self assert: targetObject givenClassName equals: 'BlElement'.
-	self assert: targetObject subclassNames size equals: 200.
-	self assert: targetObject mayHaveMore.
+	subclasses := BlElement subclasses.
+	self assert: targetObject subclassNames size equals: (200 min: subclasses size).
+	self assert: targetObject mayHaveMore equals: (subclasses size > 200).
+	self assert: (targetObject subclassNames allSatisfy: [ :name |
+		subclasses anySatisfy: [ :each | each name = name ] ]).
 	
 	^ call
 ]
@@ -86,6 +89,23 @@ GtLMagritteToolForClassSubclassesExamples >> classSubclassesForExistingClass [
 	self assert: (targetObject subclassNames anySatisfy: [ :each | each includesSubstring: 'GtLToolForClass' ]).
 	self assert: targetObject mayHaveMore not.
 	
+	^ call
+]
+
+{ #category : #examples }
+GtLMagritteToolForClassSubclassesExamples >> classSubclassesForObject [
+	<gtExample>
+	| call targetObject |
+	call := self
+		executeTool: GtLMagritteToolForClassSubclasses new
+		withArguments: { 'className' -> 'Object' } asDictionary.
+	targetObject := call result targetObject.
+	self assert: (targetObject isKindOf: GtLClassSubclasses).
+	self assert: targetObject givenClassName equals: 'Object'.
+	self assert: targetObject subclassNames size equals: 200.
+	self assert: targetObject mayHaveMore.
+	self assert: (targetObject subclassNames allSatisfy: [ :name |
+		name asSymbol asClass superclass == Object ]).
 	^ call
 ]
 

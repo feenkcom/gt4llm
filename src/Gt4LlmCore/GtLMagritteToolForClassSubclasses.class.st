@@ -59,7 +59,11 @@ GtLMagritteToolForClassSubclasses >> privatePerformToolCall: aToolCall inContext
 	class := className asSymbol asClassIfAbsent: [ nil ].
 	class ifNil: [ ^ GtLMissingDomainObject new objectName: className ].
 
-	subclasses := class subclasses.
+	subclasses := self
+		gtDo: [ class subclasses ]
+		gemstoneDo: [
+			(ClassOrganizer gtDefault allSubclassesOf: class)
+				select: [ :each | each superclass == class ] ].
 
 	^ (GtLClassSubclasses fromClasses: subclasses)
 			givenClassName: className;

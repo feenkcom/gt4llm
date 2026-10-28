@@ -22,7 +22,9 @@ GtLToolExecutionContext >> currentChat: anObject [
 { #category : #accessing }
 GtLToolExecutionContext >> lepiterDatabase [
 	^ lepiterDatabase ifNil: [
-			 LeDatabasesRegistry defaultLogicalDatabase ]
+		self
+			gtDo: [ LeDatabasesRegistry defaultLogicalDatabase ]
+			gemstoneDo: [ nil ] ]
 ]
 
 { #category : #accessing }
