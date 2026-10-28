@@ -14,7 +14,7 @@ GtLMagritteToolForPackageClassesExamples >> packageClassesForBlocReturns200 [
 	call := self
 		executeTool: GtLMagritteToolForPackageClasses new
 		withArguments: {
-			'packageName' -> 'Bloc'
+			'packageName' -> (self gtDo: [ 'Bloc' ] gemstoneDo: [ 'Gt4LlmCore' ])
 		} asDictionary.
 	targetObject := call result targetObject.
 	self assert: (targetObject isKindOf: GtLClassesSearchResult).
@@ -30,11 +30,11 @@ GtLMagritteToolForPackageClassesExamples >> packageClassesForExistingPackage [
 	call := self
 		executeTool: GtLMagritteToolForPackageClasses new
 		withArguments: {
-			'packageName' -> 'GToolkit-Boxer'
+			'packageName' -> (self gtDo: [ 'GToolkit-Boxer' ] gemstoneDo: [ String category ])
 		} asDictionary.
 	targetObject := call result targetObject.
 	self assert: (targetObject isKindOf: GtLClassesSearchResult).
-	self assert: (targetObject foundClassNames includes: 'GtArrayBox').
+	self assert: (targetObject foundClassNames includes: (self gtDo: [ 'GtArrayBox' ] gemstoneDo: [ 'String' ])).
 	self assert: targetObject mayHaveMore not.
 	^ call
 ]
@@ -43,6 +43,14 @@ GtLMagritteToolForPackageClassesExamples >> packageClassesForExistingPackage [
 GtLMagritteToolForPackageClassesExamples >> packageClassesForPackageWithNoClasses [
 	<gtExample>
 	| call organizer packageName |
+	self gtDo: [ ] gemstoneDo: [
+		"GemStone categories exist only while they contain classes."
+		call := self executeTool: GtLMagritteToolForPackageClasses new
+			withArguments: { 'packageName' -> 'EmptyPackageWithNoClasses' } asDictionary.
+		self assertMissingObject: call result targetObject
+			withObjectName: 'EmptyPackageWithNoClasses'
+			errorMessage: 'EmptyPackageWithNoClasses is not found'.
+		^ call ].
 	organizer := PackageOrganizer packageOrganizer.
 	packageName := 'EmptyPackageWithNoClasses'.
 	organizer ensurePackage: packageName asSymbol.

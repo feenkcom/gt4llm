@@ -869,7 +869,7 @@ GtLMcpServer >> start [
 				map: '/'
 				to: [ :request :response | self handleRequest: request ]).
 	server start.
-	self gtDo: [] gemstoneDo: [ self registerForFinalization ].
+	self gtDo: [ self registerForFinalization] gemstoneDo: [].
 ]
 
 { #category : #actions }

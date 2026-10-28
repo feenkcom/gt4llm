@@ -50,6 +50,23 @@ GtLMagritteToolForClassCommentChange >> name [
 
 { #category : #private }
 GtLMagritteToolForClassCommentChange >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
+	<gsCode: '	| arguments className class classComment originalDescription |
+ arguments := aToolCall arguments.
+ className := (arguments at: ''className'') trimBoth.
+ className = ''Trait'' ifTrue: [
+ ^ GtLProblemDomainObject new errorMessage: ''GemStone does not support Trait modification'' ].
+ class := GsSession currentSession objectNamed: className asSymbol.
+ class ifNil: [ ^ GtLMissingDomainObject new objectName: className ].
+ class isBehavior ifFalse: [ ^ GtLProblemDomainObject new errorMessage: ''Target must be a class'' ].
+ class isTrait ifTrue: [
+ ^ GtLProblemDomainObject new errorMessage: ''GemStone does not support Trait modification'' ].
+ classComment := (arguments at: ''classComment'') trimBoth.
+ originalDescription := GtLClassDefinitionDescription fromClass: class.
+ class comment: classComment.
+ ^ GtLClassCommentChangeResult new
+ updatedClass: (GtLClassDefinitionDescription fromClass: class);
+ originalClass: originalDescription;
+ status: ''changed'''>
 	| arguments className class classComment originalDescription |
 	arguments := aToolCall arguments.
 

@@ -37,6 +37,18 @@ GtLMagritteToolForClassSearch >> name [
 
 { #category : #private }
 GtLMagritteToolForClassSearch >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
+	<gsCode: '	| arguments query matches |
+	arguments := aToolCall arguments ifNil: [ Dictionary new ].
+	query := arguments at: ''query''.
+	query isEmpty ifTrue: [ ^ GtLClassesSearchResult fromClasses: #() ].
+	matches := IdentitySet new.
+	System myUserProfile symbolList do: [ :dictionary |
+		dictionary valuesDo: [ :each |
+			(each isClass and: [
+				(each name asString findPatternNoCase: { query } startingAt: 1) > 0 ])
+				ifTrue: [ matches add: each ] ] ].
+	^ GtLClassesSearchResult fromClasses:
+		(matches asArray sort: [ :a :b | a name <= b name ])'>
 	| arguments query matches promise |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	query := arguments	at: 'query'.

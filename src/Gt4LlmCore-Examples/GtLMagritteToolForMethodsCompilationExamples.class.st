@@ -63,6 +63,46 @@ GtLMagritteToolForMethodsCompilationExamples >> compileInstanceSideMethods [
 
 { #category : #examples }
 GtLMagritteToolForMethodsCompilationExamples >> compileInstanceSideMethodsWithExistingSources [
+	<gsCode: '	<gtExample>
+	| call targetClass selectorOne selectorTwo sourceBeforeOne sourceBeforeTwo |
+	targetClass := GtLMagritteToolForMethodsCompilationExamples.
+	selectorOne := #gtMagritteCompiledExampleExistingOne.
+	selectorTwo := #gtMagritteCompiledExampleExistingTwo.
+	sourceBeforeOne := ''gtMagritteCompiledExampleExistingOne ^ 10''.
+	sourceBeforeTwo := ''gtMagritteCompiledExampleExistingTwo ^ 20''.
+	targetClass compileMethod: sourceBeforeOne category: ''examples'' environmentId: 0.
+	targetClass compileMethod: sourceBeforeTwo category: ''examples'' environmentId: 0.
+	[
+		call := self
+			executeTool: GtLMagritteToolForMethodsCompilation new
+			withArguments: {
+				''methods'' -> {
+					{
+						''methodClassName'' -> ''GtLMagritteToolForMethodsCompilationExamples''.
+						''sourceCode'' -> ''gtMagritteCompiledExampleExistingOne ^ 11''.
+						''protocol'' -> ''examples''.
+						''classSide'' -> false
+					} asDictionary.
+					{
+						''methodClassName'' -> ''GtLMagritteToolForMethodsCompilationExamples''.
+						''sourceCode'' -> ''gtMagritteCompiledExampleExistingTwo ^ 21''.
+						''protocol'' -> ''examples''.
+						''classSide'' -> false
+					} asDictionary
+				}
+			} asDictionary.
+		self assert: (call result targetObject isKindOf: GtLMethodsCompilationResult).
+		self assert: call result targetObject methods size equals: 2.
+		self assert: call result targetObject methods first oldMethod sourceCode equals: sourceBeforeOne.
+		self assert: call result targetObject methods second oldMethod sourceCode equals: sourceBeforeTwo.
+		self assert: call result targetObject methods first newMethod sourceCode equals: ''gtMagritteCompiledExampleExistingOne ^ 11''.
+		self assert: call result targetObject methods second newMethod sourceCode equals: ''gtMagritteCompiledExampleExistingTwo ^ 21''
+	] ensure: [
+		(targetClass includesSelector: selectorOne)
+			ifTrue: [ targetClass removeSelector: selectorOne ].
+		(targetClass includesSelector: selectorTwo)
+			ifTrue: [ targetClass removeSelector: selectorTwo ] ].
+	^ call'>
 	<gtExample>
 	| call targetClass selectorOne selectorTwo sourceBeforeOne sourceBeforeTwo |
 	targetClass := GtLMagritteToolForMethodsCompilationExamples.
