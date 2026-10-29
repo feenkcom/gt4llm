@@ -12,6 +12,21 @@ GtLACPUserMessage >> activityItems [
  ^ #()
 ]
 
+{ #category : #converting }
+GtLACPUserMessage >> asElement [
+ ^ (GtLACPChatMessageViewModel new message: self; yourself) asElement
+]
+
+{ #category : #converting }
+GtLACPUserMessage >> chatElementClass [
+ ^ GtLACPUserMessageElement
+]
+
+{ #category : #accessing }
+GtLACPUserMessage >> chatLabel [
+ ^ 'You'
+]
+
 { #category : #accessing }
 GtLACPUserMessage >> finalMessages [
  ^ { self }

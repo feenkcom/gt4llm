@@ -1,5 +1,5 @@
 "
-I adapt an explicit GtLACPUserMessage or GtLACPAssistantMessage for the chat. I preserve independent expansion choices for the assistant work, final reply and individual tools.
+I create the element for an explicit user or assistant message. I retain work and reply expansion choices across element recreation, and expose a rendering key so the list can replace an outdated presentation.
 "
 Class {
 	#name : #GtLACPChatMessageViewModel,
@@ -7,9 +7,8 @@ Class {
 	#instVars : [
 		'turn',
 		'message',
-		'role',
-		'expandedTools',
-		'sectionExpansion'
+		'sectionExpansion',
+		'renderingVersion'
 	],
 	#category : #'Gt4Llm-ACP-UI'
 }
@@ -17,6 +16,28 @@ Class {
 { #category : #accessing }
 GtLACPChatMessageViewModel >> activityItems [
  ^ message activityItems
+]
+
+{ #category : #converting }
+GtLACPChatMessageViewModel >> asElement [
+ ^ message chatElementClass new
+  viewModel: self;
+  build;
+  yourself
+]
+
+{ #category : #accessing }
+GtLACPChatMessageViewModel >> dateString [
+ | date |
+ turn ifNil: [ ^ '' ].
+ date := turn startedAt ifNil: [ ^ '' ].
+ date := date asLocal.
+ ^ String streamContents: [ :stream |
+  date asDate printOn: stream format: #(2 1 3 $  3 1 1).
+  stream space.
+  date hour printOn: stream base: 10 length: 2 padded: true.
+  stream nextPut: $:.
+  date minute printOn: stream base: 10 length: 2 padded: true ]
 ]
 
 { #category : #views }
@@ -55,13 +76,8 @@ GtLACPChatMessageViewModel >> isSectionExpanded: aName [
 ]
 
 { #category : #accessing }
-GtLACPChatMessageViewModel >> isToolExpanded: aTool [
- ^ expandedTools notNil and: [ expandedTools includes: aTool ]
-]
-
-{ #category : #accessing }
 GtLACPChatMessageViewModel >> label [
- ^ role = #user ifTrue: [ 'You' ] ifFalse: [ turn session client displayName, ' · ', turn state asString ]
+ ^ message chatLabel
 ]
 
 { #category : #accessing }
@@ -71,7 +87,8 @@ GtLACPChatMessageViewModel >> message [
 
 { #category : #accessing }
 GtLACPChatMessageViewModel >> message: anObject [
- message := anObject
+ message := anObject.
+ renderingVersion := self renderingVersion + 1
 ]
 
 { #category : #accessing }
@@ -80,32 +97,24 @@ GtLACPChatMessageViewModel >> messages [
 ]
 
 { #category : #accessing }
+GtLACPChatMessageViewModel >> renderingKey [
+ ^ { self. self renderingVersion }
+]
+
+{ #category : #accessing }
+GtLACPChatMessageViewModel >> renderingVersion [
+ ^ renderingVersion ifNil: [ 0 ]
+]
+
+{ #category : #accessing }
 GtLACPChatMessageViewModel >> replyMessages [
  ^ message finalMessages
-]
-
-{ #category : #accessing }
-GtLACPChatMessageViewModel >> role [
- ^ role
-]
-
-{ #category : #accessing }
-GtLACPChatMessageViewModel >> role: anObject [
- role := anObject
 ]
 
 { #category : #accessing }
 GtLACPChatMessageViewModel >> section: aName expanded: aBoolean [
  sectionExpansion ifNil: [ sectionExpansion := Dictionary new ].
  sectionExpansion at: aName put: aBoolean
-]
-
-{ #category : #accessing }
-GtLACPChatMessageViewModel >> tool: aTool expanded: aBoolean [
- expandedTools ifNil: [ expandedTools := IdentitySet new ].
- aBoolean
-  ifTrue: [ expandedTools add: aTool ]
-  ifFalse: [ expandedTools remove: aTool ifAbsent: [ ] ]
 ]
 
 { #category : #accessing }

@@ -69,14 +69,14 @@ GtLACPChatViewModel >> messageViewModels [
    turn userMessages do: [ :user |
     | model |
     model := messageCache at: user ifAbsentPut: [
-     GtLACPChatMessageViewModel new turn: turn; role: #user; yourself ].
+     GtLACPChatMessageViewModel new turn: turn; yourself ].
     model message: user.
     stream nextPut: model ].
    ((turn messages anySatisfy: [ :message | message role ~= #user ])
     or: [ turn toolCalls notEmpty or: [ turn isActive or: [ turn state = #failed ] ] ])
     ifTrue: [ | model |
      model := messageCache at: turn ifAbsentPut: [
-      GtLACPChatMessageViewModel new turn: turn; role: #assistant; yourself ].
+      GtLACPChatMessageViewModel new turn: turn; yourself ].
      model message: turn assistantMessage.
      stream nextPut: model ] ] ]
 ]

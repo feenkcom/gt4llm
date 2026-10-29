@@ -17,6 +17,21 @@ GtLACPAssistantMessage >> activityItems [
  ^ items first: items size - self finalMessages size
 ]
 
+{ #category : #converting }
+GtLACPAssistantMessage >> asElement [
+ ^ (GtLACPChatMessageViewModel new turn: turn; message: self; yourself) asElement
+]
+
+{ #category : #converting }
+GtLACPAssistantMessage >> chatElementClass [
+ ^ GtLACPAssistantMessageElement
+]
+
+{ #category : #accessing }
+GtLACPAssistantMessage >> chatLabel [
+ ^ turn session client displayName
+]
+
 { #category : #accessing }
 GtLACPAssistantMessage >> finalMessages [
  | items index |
