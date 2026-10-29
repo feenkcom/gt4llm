@@ -28,6 +28,15 @@ GtLOpenAIModel >> created: anObject [
 	created := self deserializeTime: anObject
 ]
 
+{ #category : #'as yet unclassified' }
+GtLOpenAIModel >> gtDisplayOn: stream [
+	stream
+		nextPutAll: self id;
+		nextPutAll: ' (';
+		nextPutAll: self created asLocalStringYMDHM;
+		nextPutAll: ')'
+]
+
 { #category : #accessing }
 GtLOpenAIModel >> id [
 	^ id

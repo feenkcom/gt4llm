@@ -8,8 +8,7 @@ Class {
 		'viewModel',
 		'listElement',
 		'inputElement',
-		'sendButton',
-		'stopButton',
+		'actionButton',
 		'errorLabel',
 		'listUpdater',
 		'followEndRequested',
@@ -18,35 +17,47 @@ Class {
 	#category : #'Gt4Llm-ACP-UI'
 }
 
+{ #category : #accessing }
+GtLACPChatElement >> actionButton [
+ ^ actionButton
+]
+
 { #category : #ui }
 GtLACPChatElement >> buildComposer [
  | composer toolbar |
  inputElement := BrEditor new
   id: #'acp-input'; aptitude: BrGlamorousRegularEditorAptitude;
-  hMatchParent; vExact: 110;
-  padding: (BlInsets all: 8);
-  border: (BlBorder paint: Color lightGray width: 1);
-  background: (Color r: 0.985 g: 0.985 b: 0.985); yourself.
+  hMatchParent; vExact: 70;
+  padding: (BlInsets all: 5); yourself.
  inputElement editor when: BrTextEditorModifiedEvent do: [ :event |
   viewModel ifNotNil: [ viewModel draft: event text asString. self updateControls ] ].
  inputElement addShortcut: (BrEditorShortcut new
   name: 'Send message'; description: 'Send the prompt to the ACP agent';
   combination: BlKeyCombination primaryReturn;
   performBlock: [ :editor | self sendDraft ]; yourself).
- sendButton := BrButton new id: #'acp-send';
-  aptitude: BrGlamorousButtonWithLabelAptitude; label: 'Send';
-  action: [ self sendDraft ]; disable; yourself.
- stopButton := BrButton new id: #'acp-stop';
-  aptitude: BrGlamorousButtonWithLabelAptitude; label: 'Stop';
-  action: [ self stopTurn ]; disable; yourself.
- toolbar := BrHorizontalPane new hMatchParent; vFitContent; yourself.
- toolbar addChild: sendButton; addChild: stopButton.
- toolbar addChild: (BrLabel new aptitude: BrGlamorousLabelAptitude; text: 'Ctrl/Cmd+Enter to send'; margin: (BlInsets left: 12); yourself).
+ actionButton := BrButton new id: #'acp-action';
+  aptitude: BrGlamorousButtonWithIconAptitude;
+  beSmallSize; label: 'Send'; icon: BrGlamorousVectorIcons accept;
+  action: [ self sendOrStop ]; disable;
+  margin: (BlInsets all: 3); yourself.
+ toolbar := BrHorizontalPane new hMatchParent; vFitContent; addChild: actionButton; yourself.
  composer := BrVerticalPane new hMatchParent; vFitContent;
-  padding: (BlInsets top: 8); yourself.
- composer addChild: (BrLabel new aptitude: BrGlamorousLabelAptitude; text: 'Message'; yourself).
+  padding: (BlInsets all: 5); margin: (BlInsets top: 8 bottom: 4 left: 2 right: 2);
+  background: self theme default contentBackground;
+  addAptitude: BrGlamorousFocusableShadowAptitude new; yourself.
  composer addChild: inputElement; addChild: toolbar.
  ^ composer
+]
+
+{ #category : #ui }
+GtLACPChatElement >> configureMessageList [
+ listElement padding: (BlInsets all: 5).
+ listElement
+  itemId: [ :item :index | item id ];
+  itemType: [ :factory :item :index | factory named: item renderingKey ];
+  itemStencil: [ :type | type name first asElement ];
+  itemDataBinder: [ :element :item :index |
+   element id: ('acp-message-', index asString) asSymbol ]
 ]
 
 { #category : #accessing }
@@ -77,12 +88,8 @@ GtLACPChatElement >> initialize [
   aptitude: BrGlamorousRegularEditorAptitude;
   beReadOnlyWithSelection; hMatchParent; vFitContent;
   visibility: BlVisibility gone; yourself.
- listElement := BrSimpleList vertical
-  hMatchParent; vMatchParent;
-  itemId: [ :item :index | item id ];
-  itemStencil: [ GtLACPChatMessageElement new ];
-  itemDataBinder: [ :element :item :index | element id: ('acp-message-', index asString) asSymbol; viewModel: item ];
-  yourself.
+ listElement := BrSimpleList vertical hMatchParent; vMatchParent; yourself.
+ self configureMessageList.
  self initializeScrollFollowing.
  listUpdater := BrElementUpdater new element: self selector: #updateMessages;
   postponedDuration: 150 milliseconds; yourself.
@@ -144,11 +151,6 @@ GtLACPChatElement >> onSessionChanged: anAnnouncement [
  self enqueueTask: (BlTaskAction new action: [ listUpdater requestUpdate ])
 ]
 
-{ #category : #accessing }
-GtLACPChatElement >> sendButton [
- ^ sendButton
-]
-
 { #category : #actions }
 GtLACPChatElement >> sendDraft [
  | turn |
@@ -160,9 +162,12 @@ GtLACPChatElement >> sendDraft [
  ^ turn
 ]
 
-{ #category : #accessing }
-GtLACPChatElement >> stopButton [
- ^ stopButton
+{ #category : #actions }
+GtLACPChatElement >> sendOrStop [
+ viewModel ifNil: [ ^ self ].
+ viewModel canStop
+  ifTrue: [ self stopTurn ]
+  ifFalse: [ self sendDraft ]
 ]
 
 { #category : #actions }
@@ -174,8 +179,14 @@ GtLACPChatElement >> stopTurn [
 GtLACPChatElement >> updateControls [
  | error |
  viewModel ifNil: [ ^ self ].
- viewModel canSend ifTrue: [ sendButton enable ] ifFalse: [ sendButton disable ].
- viewModel canStop ifTrue: [ stopButton enable ] ifFalse: [ stopButton disable ].
+ viewModel session state = #prompting
+  ifTrue: [
+   actionButton label: (viewModel canStop ifTrue: [ 'Stop' ] ifFalse: [ 'Stopping…' ]);
+    icon: BrGlamorousVectorIcons stop.
+   viewModel canStop ifTrue: [ actionButton enable ] ifFalse: [ actionButton disable ] ]
+  ifFalse: [
+   actionButton label: 'Send'; icon: BrGlamorousVectorIcons accept.
+   viewModel canSend ifTrue: [ actionButton enable ] ifFalse: [ actionButton disable ] ].
  viewModel session state = #closed
   ifTrue: [ inputElement beReadOnlyWithSelection ]
   ifFalse: [ inputElement beEditable ].
