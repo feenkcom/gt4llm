@@ -81,6 +81,13 @@ GtLACPChatViewModel >> messageViewModels [
      stream nextPut: model ] ] ]
 ]
 
+{ #category : #updating }
+GtLACPChatViewModel >> onSessionChanged: anAnnouncement [
+ anAnnouncement message ifNil: [ ^ self ].
+ messageCache valuesDo: [ :model |
+  model message == anAnnouncement message ifTrue: [ model changed ] ]
+]
+
 { #category : #actions }
 GtLACPChatViewModel >> send [
  | turn |
@@ -100,7 +107,11 @@ GtLACPChatViewModel >> session [
 
 { #category : #accessing }
 GtLACPChatViewModel >> session: anObject [
- session := anObject
+ session ifNotNil: [ session announcer unsubscribe: self ].
+ session := anObject.
+ messageCache := IdentityDictionary new.
+ session announcer weak
+  when: GtLACPSessionChanged send: #onSessionChanged: to: self
 ]
 
 { #category : #accessing }

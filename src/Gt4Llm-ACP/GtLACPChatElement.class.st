@@ -1,5 +1,5 @@
 "
-I display an ACP conversation and persistent input area. A virtualized list contains message elements. Weak session announcements and BrElementUpdater refresh streamed content on the UI thread. Send, Stop and the primary+Return shortcut operate on the session.
+I display an ACP conversation and persistent input area. I append new message rows and notify only changed rows of the virtualized list. Unchanged elements retain hover and selection. Session announcements identify affected messages; updates are coalesced onto the UI thread. Message view models retain expansion choices when a changed row is recreated.
 "
 Class {
 	#name : #GtLACPChatElement,
@@ -12,7 +12,7 @@ Class {
 		'errorLabel',
 		'listUpdater',
 		'followEndRequested',
-		'scrollFollowingVersion'
+		'renderedVersions'
 	],
 	#category : #'Gt4Llm-ACP-UI'
 }
@@ -68,7 +68,7 @@ GtLACPChatElement >> errorLabel [
 { #category : #scrolling }
 GtLACPChatElement >> followStreamAfterLayout [
  | viewport lastChild delta |
- followEndRequested == true ifFalse: [ ^ self ].
+ followEndRequested ifFalse: [ ^ self ].
  listElement items isEmpty ifTrue: [ followEndRequested := false. ^ self ].
  viewport := self messageViewport.
  lastChild := viewport layout childAtPosition: listElement items size.
@@ -80,15 +80,18 @@ GtLACPChatElement >> followStreamAfterLayout [
  delta > 0 ifTrue: [ viewport scrollBy: 0 @ delta ]
 ]
 
-{ #category : #ui }
+{ #category : #initialization }
 GtLACPChatElement >> initialize [
  super initialize.
+ renderedVersions := IdentityDictionary new.
+ followEndRequested := false.
  self hMatchParent; vMatchParent; padding: (BlInsets all: 8).
  errorLabel := BrEditor new
   aptitude: BrGlamorousRegularEditorAptitude;
   beReadOnlyWithSelection; hMatchParent; vFitContent;
   visibility: BlVisibility gone; yourself.
- listElement := BrSimpleList vertical hMatchParent; vMatchParent; yourself.
+ listElement := BrSimpleList vertical
+  hMatchParent; vMatchParent; items: OrderedCollection new; yourself.
  self configureMessageList.
  self initializeScrollFollowing.
  listUpdater := BrElementUpdater new element: self selector: #updateMessages;
@@ -98,16 +101,14 @@ GtLACPChatElement >> initialize [
  self addChild: self buildComposer as: #'acp-composer'
 ]
 
-{ #category : #scrolling }
+{ #category : #initialization }
 GtLACPChatElement >> initializeScrollFollowing [
- scrollFollowingVersion = 1 ifTrue: [ ^ self ].
  self messageViewport
   when: BlElementLayoutComputedEvent
   do: [ :event | self followStreamAfterLayout ].
  self messageViewport
   when: BlElementScrolledEvent
-  do: [ :event | event delta y < 0 ifTrue: [ followEndRequested := false ] ].
- scrollFollowingVersion := 1
+  do: [ :event | event delta y < 0 ifTrue: [ followEndRequested := false ] ]
 ]
 
 { #category : #accessing }
@@ -195,15 +196,34 @@ GtLACPChatElement >> updateControls [
  errorLabel visibility: (error isEmpty ifTrue: [ BlVisibility gone ] ifFalse: [ BlVisibility visible ])
 ]
 
-{ #category : #scrolling }
+{ #category : #updating }
 GtLACPChatElement >> updateMessages [
- | items follow |
+ | items previous follow source oldCount changed |
  viewModel ifNil: [ ^ self ].
- self initializeScrollFollowing.
- follow := followEndRequested == true or: [ self isAtStreamEnd ].
+ follow := followEndRequested or: [ self isAtStreamEnd ].
  items := viewModel messageViewModels.
+ previous := listElement items.
+ oldCount := previous size.
+ (oldCount <= items size and: [
+  (1 to: oldCount) allSatisfy: [ :index | (previous at: index) == (items at: index) ] ])
+  ifFalse: [
+   followEndRequested := follow and: [ items notEmpty ].
+   listElement items: items asOrderedCollection.
+   renderedVersions removeAll.
+   items do: [ :item | renderedVersions at: item put: item renderingVersion ].
+   self updateControls.
+   ^ self ].
+ changed := (1 to: oldCount) select: [ :index |
+  | item |
+  item := items at: index.
+  (renderedVersions at: item) ~= item renderingVersion ].
  followEndRequested := follow and: [ items notEmpty ].
- listElement items: items.
+ items do: [ :item | renderedVersions at: item put: item renderingVersion ].
+ source := self messageViewport dataSource.
+ items size > oldCount ifTrue: [
+  previous addAll: (items copyFrom: oldCount + 1 to: items size).
+  source notifyItemsInserted: (oldCount + 1 to: items size) ].
+ changed do: [ :index | source notifyItemsChanged: (index to: index) ].
  self updateControls
 ]
 

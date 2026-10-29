@@ -32,6 +32,11 @@ GtLACPUserMessage >> finalMessages [
  ^ { self }
 ]
 
+{ #category : #testing }
+GtLACPUserMessage >> hasCompletedReply [
+ ^ false
+]
+
 { #category : #accessing }
 GtLACPUserMessage >> initialize [
  super initialize.

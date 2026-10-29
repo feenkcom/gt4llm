@@ -21,6 +21,46 @@ GtLACPChatExamples >> assertNoRenderingErrorsIn: aScripter [
 ]
 
 { #category : #examples }
+GtLACPChatExamples >> assistantHeaderIndicatorDuringStreamingAndCancellation [
+ <gtExample>
+ | scripter session |
+ scripter := self workingAssistantHeader.
+ session := scripter model.
+ scripter doStep: [ :step | step block: [ :element |
+  GtLACPExamples new sendUpdate: { 'sessionUpdate' -> 'agent_message_chunk'.
+   'content' -> { 'type' -> 'text'. 'text' -> 'Inspecting the directory.' } asDictionary } asDictionary to: session ] ].
+ scripter assertStep: [ :step | step id: #'acp-work-indicator'; satisfies: [ :indicator |
+  indicator text asString = 'Working…' and: [
+   indicator parent id asSymbol = #'acp-message-header' ] ] ].
+ scripter doStep: [ :step | step block: [ :element | session cancelTurn ] ].
+ scripter assertStep: [ :step | step id: #'acp-work-indicator'; satisfies: [ :indicator |
+  indicator text asString = 'Stopping…' ] ].
+ scripter doStep: [ :step | step block: [ :element |
+  session connection transport receive: { 'jsonrpc' -> '2.0'. 'id' -> session currentTurn request id.
+   'result' -> { 'stopReason' -> 'cancelled' } asDictionary } asDictionary ] ].
+ scripter assertStep: [ :step | step id: #'acp-work-indicator'; notExists ].
+ self assertNoRenderingErrorsIn: scripter.
+ ^ scripter
+]
+
+{ #category : #examples }
+GtLACPChatExamples >> assistantHeaderIndicatorStopsOnCompletion [
+ <gtExample>
+ | scripter session |
+ scripter := self workingAssistantHeader.
+ session := scripter model.
+ scripter doStep: [ :step | step block: [ :element |
+  GtLACPExamples new sendUpdate: { 'sessionUpdate' -> 'agent_message_chunk'.
+   'content' -> { 'type' -> 'text'. 'text' -> 'The directory contains the project.' } asDictionary } asDictionary to: session.
+  session connection transport receive: { 'jsonrpc' -> '2.0'. 'id' -> session currentTurn request id.
+   'result' -> { 'stopReason' -> 'end_turn' } asDictionary } asDictionary ] ].
+ scripter assertStep: [ :step | step id: #'acp-work-indicator'; notExists ].
+ scripter assertStep: [ :step | step id: #'acp-final-section'; satisfies: #isExpanded ].
+ self assertNoRenderingErrorsIn: scripter.
+ ^ scripter
+]
+
+{ #category : #examples }
 GtLACPChatExamples >> assistantMessageElement [
  <gtExample>
  | turn message element |
@@ -62,18 +102,18 @@ GtLACPChatExamples >> assistantSectionsCollapseIndependently [
  element := self reasoningBetweenToolCalls.
  scripter := BlScripter new model: element viewModel session; element: element; yourself.
  scripter assertStep: [ :step | step id: #'acp-work-section'; satisfies: #isCollapsed ].
- scripter assertStep: [ :step | step id: #'acp-final-preview'; exists ].
+ scripter assertStep: [ :step | step id: #'acp-final-content'; exists ].
  scripter click id: #'acp-work-toggle'; play.
  scripter assertStep: [ :step | step id: #'acp-work-content'; exists ].
- scripter assertStep: [ :step | step id: #'acp-final-section'; satisfies: #isCollapsed ].
- scripter click id: #'acp-final-toggle'; play.
- scripter assertStep: [ :step | step id: #'acp-final-content'; exists ].
- scripter assertStep: [ :step | step id: #'acp-final-preview'; notExists ].
- scripter click id: #'acp-work-toggle'; play.
- scripter assertStep: [ :step | step id: #'acp-work-content'; notExists ].
- scripter assertStep: [ :step | step id: #'acp-final-content'; exists ].
+ scripter assertStep: [ :step | step id: #'acp-final-section'; satisfies: #isExpanded ].
  scripter click id: #'acp-final-toggle'; play.
  scripter assertStep: [ :step | step id: #'acp-final-preview'; exists ].
+ scripter assertStep: [ :step | step id: #'acp-work-content'; exists ].
+ scripter click id: #'acp-work-toggle'; play.
+ scripter assertStep: [ :step | step id: #'acp-work-content'; notExists ].
+ scripter assertStep: [ :step | step id: #'acp-final-preview'; exists ].
+ scripter click id: #'acp-final-toggle'; play.
+ scripter assertStep: [ :step | step id: #'acp-final-content'; exists ].
  ^ scripter
 ]
 
@@ -199,7 +239,6 @@ GtLACPChatExamples >> commentaryRenderedBetweenTools [
  element := self commentaryBetweenToolCalls.
  scripter := BlScripter new model: element viewModel session; element: element; yourself.
  scripter click id: #'acp-work-toggle'; play.
- scripter click id: #'acp-final-toggle'; play.
  scripter assertStep: [ :step |
   step id: #'acp-work-content'; satisfies: [ :pane |
    | children tools commentary |
@@ -221,6 +260,7 @@ GtLACPChatExamples >> compactAssistantHeaders [
  <gtExample>
  | element scripter |
  element := self reasoningBetweenToolCalls.
+ element viewModel messageViewModels last section: #final expanded: false.
  scripter := BlScripter new model: element viewModel session; element: element; yourself.
  scripter assertStep: [ :step | step id: #'acp-work-summary';
   value: [ :label | label text asString ] equals: [ 'Read configuration + 1 other tool' ] ].
@@ -245,6 +285,7 @@ GtLACPChatExamples >> compactFinalPreview [
  session connection transport receive: { 'jsonrpc' -> '2.0'. 'id' -> turn request id.
   'result' -> { 'stopReason' -> 'end_turn' } asDictionary } asDictionary.
  element := session asElement.
+ element viewModel messageViewModels last section: #final expanded: false.
  scripter := BlScripter new model: session; element: element; yourself.
  scripter assertStep: [ :step | step id: #'acp-final-preview'; satisfies: [ :editor |
   editor text asString size <= 181 and: [ editor text asString beginsWith: 'Reply line 1 ' ] ] ].
@@ -263,6 +304,18 @@ GtLACPChatExamples >> completedChat [
  | turn |
  turn := GtLACPExamples new streamedTurn.
  ^ turn session asElement
+]
+
+{ #category : #examples }
+GtLACPChatExamples >> completedReplyStartsExpanded [
+ <gtExample>
+ | chat scripter |
+ chat := self completedChat.
+ scripter := BlScripter new model: chat viewModel session; element: chat; yourself.
+ scripter assertStep: [ :step | step id: #'acp-final-section'; satisfies: #isExpanded ].
+ scripter assertStep: [ :step | step id: #'acp-final-preview'; notExists ].
+ scripter assertStep: [ :step | step id: #'acp-final-content'; exists ].
+ ^ scripter
 ]
 
 { #category : #examples }
@@ -361,6 +414,42 @@ GtLACPChatExamples >> explicitMessageObjects [
 ]
 
 { #category : #examples }
+GtLACPChatExamples >> finalReplyExpandsOnCompletion [
+ <gtExample>
+ | chat session turn scripter |
+ chat := self chatWithToolCalls.
+ session := chat viewModel session.
+ turn := session currentTurn.
+ scripter := BlScripter new model: session; element: chat; yourself.
+ scripter assertStep: [ :step | step id: #'acp-final-section'; satisfies: #isCollapsed ].
+ scripter click id: #'acp-final-toggle'; play.
+ scripter click id: #'acp-final-toggle'; play.
+ scripter doStep: [ :step | step block: [ :element |
+  session connection transport receive: { 'jsonrpc' -> '2.0'. 'id' -> turn request id.
+   'result' -> { 'stopReason' -> 'end_turn' } asDictionary } asDictionary ] ].
+ scripter assertStep: [ :step | step id: #'acp-final-section'; satisfies: #isExpanded ].
+ scripter assertStep: [ :step | step id: #'acp-final-preview'; notExists ].
+ scripter assertStep: [ :step | step id: #'acp-final-content'; satisfies: [ :pane |
+  pane children anySatisfy: [ :child | (child isKindOf: BrEditor) and: [
+   child text asString = turn assistantMessage text ] ] ] ].
+ scripter assertStep: [ :step | step id: #'acp-work-section'; satisfies: #isCollapsed ].
+ self assertNoRenderingErrorsIn: scripter.
+ ^ scripter
+]
+
+{ #category : #examples }
+GtLACPChatExamples >> finalReplyManualCollapsePersists [
+ <gtExample>
+ | scripter |
+ scripter := self finalReplyExpandsOnCompletion.
+ scripter click id: #'acp-final-toggle'; play.
+ scripter doStep: [ :step | step block: [ :chat | chat updateMessages. chat updateMessages ] ].
+ scripter assertStep: [ :step | step id: #'acp-final-section'; satisfies: #isCollapsed ].
+ scripter assertStep: [ :step | step id: #'acp-final-preview'; exists ].
+ ^ scripter
+]
+
+{ #category : #examples }
 GtLACPChatExamples >> keyboardSend [
  <gtExample>
  | scripter |
@@ -392,6 +481,22 @@ GtLACPChatExamples >> longStreamingChat [
  scripter := BlScripter new model: session; element: element; yourself.
  scripter assertStep: [ :step | step satisfies: [ :chat | chat isAtStreamEnd ] ].
  ^ scripter
+]
+
+{ #category : #examples }
+GtLACPChatExamples >> messageAssignmentIsIdempotent [
+ <gtExample>
+ | chat models versions |
+ chat := self chatWithToolCalls.
+ models := chat viewModel messageViewModels.
+ versions := models collect: #renderingVersion.
+ self assert: (chat viewModel messageViewModels collect: #renderingVersion) equals: versions.
+ models do: [ :model | model message: model message ].
+ self assert: (models collect: #renderingVersion) equals: versions.
+ models last changed.
+ self assert: models first renderingVersion equals: versions first.
+ self assert: models last renderingVersion equals: versions last + 1.
+ ^ chat viewModel
 ]
 
 { #category : #examples }
@@ -495,6 +600,26 @@ GtLACPChatExamples >> newTurnPreservesReadingPosition [
 ]
 
 { #category : #examples }
+GtLACPChatExamples >> olderMessageChangeRefreshesOnlyItsRow [
+ <gtExample>
+ | scripter session firstRow secondRow lastRow |
+ scripter := self unchangedRowsSurviveStreamingAndNewTurn.
+ session := scripter model.
+ scripter assertStep: [ :step | step id: #'acp-message-1'; satisfies: [ :row | firstRow := row. true ] ].
+ scripter assertStep: [ :step | step id: #'acp-message-2'; satisfies: [ :row | secondRow := row. true ] ].
+ scripter assertStep: [ :step | step id: #'acp-message-4'; satisfies: [ :row | lastRow := row. true ] ].
+ scripter doStep: [ :step | step block: [ :element |
+  session announceMessageChanged: session turns first assistantMessage.
+  element updateMessages ] ].
+ scripter assertStep: [ :step | step id: #'acp-message-1'; satisfies: [ :row | row == firstRow ] ].
+ scripter assertStep: [ :step | step id: #'acp-message-2'; satisfies: [ :row |
+  row ~~ secondRow and: [ row viewModel == secondRow viewModel ] ] ].
+ scripter assertStep: [ :step | step id: #'acp-message-4'; satisfies: [ :row | row == lastRow ] ].
+ self assertNoRenderingErrorsIn: scripter.
+ ^ scripter
+]
+
+{ #category : #examples }
 GtLACPChatExamples >> permissionButtons [
  <gtExample>
  | element scripter permission |
@@ -556,7 +681,6 @@ GtLACPChatExamples >> reasoningRenderedBetweenTools [
  element := self reasoningBetweenToolCalls.
  scripter := BlScripter new model: element viewModel session; element: element; yourself.
  scripter click id: #'acp-work-toggle'; play.
- scripter click id: #'acp-final-toggle'; play.
  scripter assertStep: [ :step |
   step id: #'acp-work-content'; satisfies: [ :pane |
    | children tools firstThought secondThought |
@@ -620,6 +744,33 @@ GtLACPChatExamples >> scrollingUpCancelsPendingFollow [
 ]
 
 { #category : #examples }
+GtLACPChatExamples >> selectionSurvivesUnrelatedUpdates [
+ <gtExample>
+ | chat session scripter editor |
+ chat := self completedChat.
+ session := chat viewModel session.
+ scripter := BlScripter new extent: 1000 @ 1000; model: session; element: chat; yourself.
+ scripter doStep: [ :step | step id: #'acp-user-preview'; block: [ :element |
+  editor := element.
+  editor selecter from: 0 to: 5; select ] ].
+ scripter assertStep: [ :step | step id: #'acp-user-preview'; satisfies: [ :element |
+  element selection isEmpty not ] ].
+ scripter doStep: [ :step | step block: [ :element |
+  session prompt: 'Continue'.
+  GtLACPExamples new sendUpdate: { 'sessionUpdate' -> 'agent_message_chunk'.
+   'content' -> { 'type' -> 'text'. 'text' -> 'Another answer.' } asDictionary } asDictionary to: session.
+  element updateMessages ] ].
+ scripter assertStep: [ :step | step id: #'acp-message-1'; satisfies: [ :row |
+  | found |
+  found := false.
+  row withAllChildrenBreadthFirstDo: [ :each |
+   each == editor ifTrue: [ found := each selection isEmpty not ] ].
+  found ] ].
+ self assertNoRenderingErrorsIn: scripter.
+ ^ scripter
+]
+
+{ #category : #examples }
 GtLACPChatExamples >> sendAndStop [
  <gtExample>
  | scripter session button |
@@ -636,6 +787,36 @@ GtLACPChatExamples >> sendAndStop [
  self assert: session currentTurn state equals: #cancelling.
  scripter assertStep: [ :step | step id: #'acp-action'; satisfies: [ :action |
   action == button and: [ action isEnabled not and: [ action label asString = 'Stopping…' ] ] ] ].
+ ^ scripter
+]
+
+{ #category : #examples }
+GtLACPChatExamples >> shortToolCallLabels [
+ <gtExample>
+ | permission session tool title input scripter |
+ permission := GtLACPExamples new pendingPermission.
+ session := permission session.
+ tool := permission toolCall.
+ title := 'Read ', (String new: 120 withAll: $x).
+ input := { 'path' -> (String new: 200 withAll: $y) } asDictionary.
+ tool updateFrom: { 'title' -> title. 'rawInput' -> input } asDictionary.
+ GtLACPExamples new sendUpdate: { 'sessionUpdate' -> 'tool_call'.
+  'toolCallId' -> 'tool-2'. 'title' -> 'Another tool'. 'status' -> 'completed' } asDictionary to: session.
+ self assert: tool shortDescription size equals: 80.
+ self assert: (tool shortDescription endsWith: '…').
+ self assert: tool title equals: title.
+ self assert: (tool data at: 'rawInput') equals: input.
+ scripter := BlScripter new model: session; element: session asElement; yourself.
+ scripter assertStep: [ :step | step id: #'acp-work-summary';
+  value: [ :label | label text asString ]
+  equals: [ tool shortDescription, ' + 1 other tool · permission required' ] ].
+ scripter click id: #'acp-work-summary'; play.
+ scripter assertStep: [ :step | step id: #'acp-tool-summary-tool-1';
+  value: [ :label | label text asString ]
+  equals: [ tool summary ] ].
+ self assert: (tool summary beginsWith: tool shortDescription, ' · ').
+ self assert: (tool summary endsWith: 'permission required').
+ self assertNoRenderingErrorsIn: scripter.
  ^ scripter
 ]
 
@@ -810,6 +991,37 @@ GtLACPChatExamples >> toolCallOpensOnRight [
 ]
 
 { #category : #examples }
+GtLACPChatExamples >> toolCallWorkingLabel [
+ <gtExample>
+ | scripter session tool |
+ scripter := self workingAssistantHeader.
+ session := scripter model.
+ tool := session currentTurn toolCalls first.
+ scripter click id: #'acp-work-summary'; play.
+ scripter assertStep: [ :step | step id: #'acp-tool-summary-tool-1';
+  value: [ :label | label text asString ]
+  equals: [ tool shortDescription, ' · permission required' ] ].
+ scripter click id: #'acp-permission-allow'; play.
+ scripter assertStep: [ :step | step id: #'acp-tool-summary-tool-1';
+  value: [ :label | label text asString ] equals: [ tool shortDescription ] ].
+ #('in_progress' 'running') do: [ :status |
+  scripter doStep: [ :step | step block: [ :element |
+   GtLACPExamples new sendUpdate: { 'sessionUpdate' -> 'tool_call_update'.
+    'toolCallId' -> tool id. 'status' -> status } asDictionary to: session ] ].
+  scripter assertStep: [ :step | step id: #'acp-tool-summary-tool-1';
+   value: [ :label | label text asString ]
+   equals: [ tool shortDescription, ' · working' ] ] ].
+ scripter doStep: [ :step | step block: [ :element |
+  GtLACPExamples new sendUpdate: { 'sessionUpdate' -> 'tool_call_update'.
+   'toolCallId' -> tool id. 'status' -> 'completed' } asDictionary to: session ] ].
+ scripter assertStep: [ :step | step id: #'acp-tool-summary-tool-1';
+  value: [ :label | label text asString ] equals: [ tool shortDescription ] ].
+ self assert: tool status equals: 'completed'.
+ self assertNoRenderingErrorsIn: scripter.
+ ^ scripter
+]
+
+{ #category : #examples }
 GtLACPChatExamples >> toolCallsShownAsLines [
  <gtExample>
  | element scripter tool |
@@ -847,6 +1059,38 @@ GtLACPChatExamples >> typedMessage [
 ]
 
 { #category : #examples }
+GtLACPChatExamples >> unchangedRowsSurviveStreamingAndNewTurn [
+ <gtExample>
+ | chat session scripter userRow assistantRow userChildren assistantChildren |
+ chat := self completedChat.
+ session := chat viewModel session.
+ scripter := BlScripter new extent: 1000 @ 1000; model: session; element: chat; yourself.
+ scripter assertStep: [ :step | step id: #'acp-message-1'; satisfies: [ :row |
+  userRow := row. userChildren := row children asArray. true ] ].
+ scripter assertStep: [ :step | step id: #'acp-message-2'; satisfies: [ :row |
+  assistantRow := row. assistantChildren := row children asArray. true ] ].
+ scripter mouseMoveOverStep: [ :step | step id: #'acp-message-2' ].
+ scripter doStep: [ :step | step block: [ :element |
+  session prompt: 'Another question'.
+  element updateMessages ] ].
+ scripter assertStep: [ :step | step id: #'acp-message-1'; satisfies: [ :row |
+  row == userRow and: [ row children asArray = userChildren ] ] ].
+ scripter assertStep: [ :step | step id: #'acp-message-2'; satisfies: [ :row |
+  row == assistantRow and: [ row children asArray = assistantChildren ] ] ].
+ scripter doStep: [ :step | step block: [ :element |
+  GtLACPExamples new sendUpdate: { 'sessionUpdate' -> 'agent_message_chunk'.
+   'content' -> { 'type' -> 'text'. 'text' -> 'Streaming into the new reply.' } asDictionary } asDictionary to: session.
+  element updateMessages ] ].
+ scripter assertStep: [ :step | step id: #'acp-message-1'; satisfies: [ :row | row == userRow ] ].
+ scripter assertStep: [ :step | step id: #'acp-message-2'; satisfies: [ :row |
+  row == assistantRow and: [
+   ((row childNamed: #'acp-message-header') childNamed: #'acp-timestamp') visibility = BlVisibility visible ] ] ].
+ scripter assertStep: [ :step | step id: #'acp-message-4'; exists ].
+ self assertNoRenderingErrorsIn: scripter.
+ ^ scripter
+]
+
+{ #category : #examples }
 GtLACPChatExamples >> userMessageElement [
  <gtExample>
  | turn message element scripter |
@@ -878,6 +1122,25 @@ GtLACPChatExamples >> viewModelCreatesMessageElement [
  scripter := BlScripter new model: model; element: element; yourself.
  scripter assertStep: [ :step | step id: #'acp-final-preview'; exists ].
  self assert: element children asArray equals: originalChildren.
+ self assertNoRenderingErrorsIn: scripter.
+ ^ scripter
+]
+
+{ #category : #examples }
+GtLACPChatExamples >> workingAssistantHeader [
+ <gtExample>
+ | permission session scripter |
+ permission := GtLACPExamples new pendingPermission.
+ session := permission session.
+ scripter := BlScripter new model: session; element: session asElement; yourself.
+ scripter assertStep: [ :step | step id: #'acp-message-1'; satisfies: [ :row |
+  (row childNamed: #'acp-message-header') children noneSatisfy: [ :each |
+   each id asSymbol = #'acp-work-indicator' ] ] ].
+ scripter assertStep: [ :step | step id: #'acp-message-2'; satisfies: [ :row |
+  | header |
+  header := row childNamed: #'acp-message-header'.
+  (header childNamed: #'acp-work-indicator') text asString = 'Working…'
+   and: [ row children size = 2 ] ] ].
  self assertNoRenderingErrorsIn: scripter.
  ^ scripter
 ]

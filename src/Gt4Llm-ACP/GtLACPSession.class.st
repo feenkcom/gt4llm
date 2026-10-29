@@ -22,7 +22,21 @@ Class {
 
 { #category : #announcing }
 GtLACPSession >> announceChanged [
- self announcer announce: (GtLACPSessionChanged new session: self; yourself)
+ self announceMessageChanged: (self currentTurn ifNotNil: #assistantMessage)
+]
+
+{ #category : #announcing }
+GtLACPSession >> announceMessageChanged: aMessage [
+ self announcer announce: (GtLACPSessionChanged new
+  session: self; message: aMessage; yourself)
+]
+
+{ #category : #announcing }
+GtLACPSession >> announcePermissionChanged: aPermission [
+ | turn |
+ turn := turns detect: [ :each | each permissionRequests includes: aPermission ]
+  ifNone: [ nil ].
+ self announceMessageChanged: (turn ifNotNil: #assistantMessage)
 ]
 
 { #category : #accessing }
@@ -278,7 +292,7 @@ GtLACPSession >> prompt: aString [
  ^ self promptContent: { GtLACPContentBlock text: aString }
 ]
 
-{ #category : #announcing }
+{ #category : #operations }
 GtLACPSession >> promptContent: blocks [
  | turn rpc |
  [
@@ -292,11 +306,11 @@ GtLACPSession >> promptContent: blocks [
  rpc := connection newRequest: 'session/prompt' parameters: {
   'sessionId' -> remoteSessionId. 'prompt' -> (blocks collect: #asDictionary) asArray } asDictionary.
  turn request: rpc.
- rpc onSuccess: [ :result | turn complete: (result at: 'stopReason'). state := #ready. self announceChanged ];
-  onFailure: [ :reason | turn fail: reason. state = #closed ifFalse: [ state := (connection state = #ready ifTrue: [ #ready ] ifFalse: [ #failed ]) ]. self announceChanged ].
+ rpc onSuccess: [ :result | turn complete: (result at: 'stopReason'). state := #ready. self announceMessageChanged: turn assistantMessage ];
+  onFailure: [ :reason | turn fail: reason. state = #closed ifFalse: [ state := (connection state = #ready ifTrue: [ #ready ] ifFalse: [ #failed ]) ]. self announceMessageChanged: turn assistantMessage ].
  connection sendRequest: rpc.
  ^ turn
- ] ensure: [ self announceChanged ]
+ ] ensure: [ self announceMessageChanged: (turn ifNotNil: #assistantMessage) ]
 ]
 
 { #category : #accessing }
@@ -326,9 +340,9 @@ GtLACPSession >> receivePermission: params requestId: anId [
  ] ensure: [ self announceChanged ]
 ]
 
-{ #category : #updates }
+{ #category : #receiving }
 GtLACPSession >> receiveUpdate: aDictionary [
-	| kind turn |
+	| kind turn changedMessage |
 	[ 
 	turn := self currentTurn.
  turn ifNotNil: [ turn activity ].
@@ -351,8 +365,11 @@ GtLACPSession >> receiveUpdate: aDictionary [
 					state: #replayed;
 					yourself.
 			turns add: turn ].
-	turn receiveUpdate: aDictionary ] 
-		ensure: [ self announceChanged ]
+	turn receiveUpdate: aDictionary.
+ changedMessage := kind = 'user_message_chunk'
+  ifTrue: [ turn userMessages ifEmpty: [ nil ] ifNotEmpty: #last ]
+  ifFalse: [ turn assistantMessage ] ] 
+		ensure: [ self announceMessageChanged: changedMessage ]
 ]
 
 { #category : #accessing }
