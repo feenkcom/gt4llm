@@ -26,33 +26,23 @@ GtLDataSourceEncoderDecoder class >> loadClientHistoryFromStream: aReadStream [
 				[ aStream nextPut: (encoder decodeRequestResponseOn: aReadStream) ] ].
 ]
 
-{ #category : #'encoding - decoding' }
-GtLDataSourceEncoderDecoder class >> recreateChatFrom: aFileReference connectionLabel: aString [
-	"Recreate the chat from the request history in aFileReference, using the GT provider labelled aString in the connection registry"
-	
-	^ self recreateChatFrom: aFileReference provider:
-		(GtLConnectionRegistry default connectionWithLabel: aString) buildProvider
-]
-
-{ #category : #'encoding - decoding' }
-GtLDataSourceEncoderDecoder class >> recreateChatFrom: aFileReference provider: aModelProvider [
-
+{ #category : #reconstruction }
+GtLDataSourceEncoderDecoder class >> recreateChatFrom: aFileReference chat: aChat [
+	"Populate an empty, configured chat. Live tools and configuration belong to the caller."
+	self assert: aChat messages isEmpty.
 	^ aFileReference asFileReference readStreamDo: [ :stream |
-		self recreateChatFromStream: stream provider: aModelProvider ]
+		self recreateChatFromStream: stream chat: aChat ]
 ]
 
-{ #category : #'encoding - decoding' }
-GtLDataSourceEncoderDecoder class >> recreateChatFromStream: aStream provider: aModelProvider [
-	| chat |
-
-	chat := GtLChat new 
-		markdownResponse;
-		provider: aModelProvider.
-	GtLDataSourceMessageConstructor new
+{ #category : #reconstruction }
+GtLDataSourceEncoderDecoder class >> recreateChatFromStream: aStream chat: aChat [
+	"Replay history without replacing the supplied chat's runtime configuration."
+	self assert: aChat messages isEmpty.
+	^ GtLDataSourceMessageConstructor new
 		requestHistory: (self loadClientHistoryFromStream: aStream);
-		chat: chat;
-		parse.
-	^ chat
+		chat: aChat;
+		preserveChatConfiguration: true;
+		parse
 ]
 
 { #category : #'encoding - decoding' }

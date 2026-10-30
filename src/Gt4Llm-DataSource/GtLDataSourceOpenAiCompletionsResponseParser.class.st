@@ -34,21 +34,18 @@ GtLDataSourceOpenAiCompletionsResponseParser >> parseResponse: requestResponse m
 		[ self parseAssistantResponse: requestResponse to: message response: response for: aMessageConstructor ].
 ]
 
-{ #category : #private }
+{ #category : #parsing }
 GtLDataSourceOpenAiCompletionsResponseParser >> parseToolResponse: requestResponse to: request response: response for: aMessageConstructor [
-	| toolMessages chat |
-
+	| toolMessages chat tools |
 	chat := aMessageConstructor chat.
-	toolMessages := response toolCalls asArray
-			withIndexCollect: [ :aToolCall :anIndex | 
-				| toolMessage |
-				toolMessage := GtLToolMessage new 
-					toolCall: aToolCall;
-					tools: request tools;
-					requestResponse: (GtLToolPreviousRequestResponse new
-						previousRequestResponse: response requestResponse;
-						toolCallIndex: anIndex) ].
-	toolMessages do: [ :toolMessage |
-		chat addToolMessage: toolMessage ].
-	chat messages last tools: request tools.
+	tools := aMessageConstructor recordedTools.
+	toolMessages := response toolCalls asArray withIndexCollect: [ :aToolCall :anIndex |
+		GtLToolMessage new
+			toolCall: aToolCall;
+			tools: tools;
+			requestResponse: (GtLToolPreviousRequestResponse new
+				previousRequestResponse: response requestResponse;
+				toolCallIndex: anIndex) ].
+	toolMessages do: [ :toolMessage | chat addToolMessage: toolMessage ].
+	chat messages last tools: tools
 ]
