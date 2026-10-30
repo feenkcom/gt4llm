@@ -16,24 +16,34 @@ GtLObjectStorageValueResult class >> forObject: anObject withId: anObjectId [
 			objectId: anObjectId
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'gt - extensions' }
 GtLObjectStorageValueResult >> gtObjectFor: aView [
 	<gtView>
 	<gtLlmView>
-	^ aView explicit
-		title: 'Object';
-		priority: 9;
-		stencil: [ | container |
-			container := BrVerticalPane new.
-			container matchParent
-				addAptitude: (BrLayoutResizerAptitude new common: [ container children ]);
-				background: BrGlamorousColors backdropColor;
-				addChild: ((object gtDefaultInspectorTool) asElement
-						margin: (BlInsets all: 10);
-						background: Color white;
-						addAptitude: BrShadowAptitude;
-						vFitContentLimited;
-						hMatchParent) ]
+	^ self
+		gtDo: [ aView explicit
+				title: 'Object';
+				priority: 10;
+				stencil: [ | container |
+					container := BrVerticalPane new.
+					container matchParent
+						addAptitude: (BrLayoutResizerAptitude new common: [ container children ]);
+						background: BrGlamorousColors backdropColor;
+						addChild: (object gtDefaultInspectorTool asElement
+								margin: (BlInsets all: 10);
+								background: Color white;
+								addAptitude: BrShadowAptitude;
+								vFitContentLimited;
+								hMatchParent) ] ]
+		gemstoneDo: [ aView explicit
+				title: 'Object';
+				priority: 10;
+				declarativeStencil: [
+					GtPhlowNamedStencil new
+						stencilClassName: #GtLObjectValueResultGemStoneStencil;
+						stencilData: { #object -> (GtRsrProxyServiceServer object: object) } asDictionary;
+						dataSerializationStrategy: GtPhlowStencilDataSerializationStrategy
+							forMixedProxyDataEncoding ] ]
 ]
 
 { #category : #accessing }

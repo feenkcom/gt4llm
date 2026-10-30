@@ -135,13 +135,14 @@ GtLMagritteToolForSmalltalkCodeEvaluation >> privatePerformToolCall: aToolCall i
 			on: Error
 			do: [ :ex | 
 				^(GtLSmalltalkCodeEvaluationExceptionDomainObject freeze: ex)
-							errorReason: 'Error while evaluating smalltalk code';
-							code: code;
-							updateForToolCall: aToolCall withExecutionContext: anExecutionContext;
-							yourself ].
-	
+						errorReason: 'Error while evaluating smalltalk code';
+						code: code;
+						updateForToolCall: aToolCall withExecutionContext: anExecutionContext;
+						yourself ].
+
 	^ (GtLSmalltalkCodeEvaluationResult forObject: object)
 			code: code;
+			bindings: bindingsDictionary;
 			updateForToolCall: aToolCall withExecutionContext: anExecutionContext;
 			yourself
 ]

@@ -434,8 +434,7 @@ GtLMcpServer >> gtErrorsFor: aView [
 			width: 130;
 		column: 'Method' text: [ :each | each rpcMethodDescription ifNil: [ '' ] ];
 		column: 'Error'
-			text: [ :each | each errorReason ]
-			weight: 3;
+			text: [ :each | each errorReason ];
 		updateWhen: GtLMcpServerErrorRecordAddedAnnouncement in: [ announcer ];
 		actionUpdateButton
 ]
@@ -454,13 +453,14 @@ GtLMcpServer >> gtHistoryFor: aView [
 			width: 70;
 		column: 'Summary' text: [ :each | each contentOneLineSummary ];
 		column: 'Created'
-			text: [ :item | item createdAt asStringYMDHMS ]
+			text: [ :item | item createdAt printString ]
 			width: 130;
 		column: 'Running'
 			text: [ :item | item output ifNil: [ 'Yes' ] ifNotNil: [ '' ] ]
 			width: 55;
 		updateWhen: GtLMcpServerHistoryAnnouncement in: [ announcer ];
-		actionButtonIcon: BrGlamorousVectorIcons bin
+		actionButtonIcon: (GtPhlowGlamorousVectorIconNameStencil new
+				iconName: #bin)
 			tooltip: 'Remove all executed tools'
 			action: [ :aButton :aTab | self clearHistory ];
 		actionUpdateButton
@@ -517,7 +517,8 @@ GtLMcpServer >> gtViewObjectStorageFor: aView [
 		object: [ objectStorage ];
 		view: #gtObjectsByUUIDFor:;
 		actionUpdateButton;
-		actionButtonIcon: BrGlamorousVectorIcons bin
+		actionButtonIcon: (GtPhlowGlamorousVectorIconNameStencil new
+				iconName: #bin)
 			tooltip: 'Wipe object storage clean'
 			action: [ :aButton | 
 				self clearObjects.
