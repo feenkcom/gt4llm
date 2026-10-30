@@ -520,7 +520,8 @@ GtLChat >> gtViewObjectStorageFor: aView [
 		priority: 40;
 		object: [ objectStorage ];
 		view: #gtObjectsByUUIDFor:;
-		actionButtonIcon: BrGlamorousVectorIcons inspect 
+		actionButtonIcon: (GtPhlowGlamorousVectorIconNameStencil new
+				iconName: #inspect) 
 			tooltip: 'Inspect storage'
 			action: [ :aButton |
 				aButton phlow spawnObject: objectStorage ]
