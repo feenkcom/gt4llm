@@ -1,25 +1,11 @@
 "
-Agent Client Protocol v1 integration for Glamorous Toolkit. See GtLACPExamples for executable usage.
+Deterministic executable examples for ACP state, transport, streaming, permissions, failures and inspection. An in-image Smalltalk fixture server exercises the real stdio framing and asynchronous reader without agent installations or external language runtimes. Separate sort command examples exercise native process pipes and shutdown.
 "
 Class {
 	#name : #GtLACPExamples,
 	#superclass : #Object,
 	#category : #'Gt4Llm-ACP-Examples'
 }
-
-{ #category : #examples }
-GtLACPExamples >> allInspectorViews [
- <gtExample>
- | objects |
- objects := self inspectorObjects.
- objects do: [ :each |
-  each class allMethods do: [ :method |
-   ((method pragmaAt: #gtView) notNil and: [ method methodClass package name = 'Gt4Llm-ACP' ])
-    ifTrue: [ | result |
-     result := GtPhlowViewTester new testView: (each perform: method selector with: GtPhlowView empty).
-     self assert: (result isOk or: [ result isEmpty ]) description: each class name, '>>', method selector, ': ', result printString ] ] ].
- ^ objects
-]
 
 { #category : #asserting }
 GtLACPExamples >> assertRaisesError: aBlock raise: aClass [
@@ -107,44 +93,110 @@ GtLACPExamples >> distinctDirectories [
  ^ client
 ]
 
+{ #category : #examples }
+GtLACPExamples >> fixtureCancellation [
+ <gtExample>
+ | session turn |
+ session := self fixtureClient startSessionIn: FileLocator temp.
+ [ turn := session prompt: 'wait'.
+ session cancelTurn.
+ turn waitForSeconds: 1.
+ self assert: turn state equals: #cancelled.
+ self assert: session connection transport agentProcess pendingRequests isEmpty ]
+ ensure: [ session close ].
+ ^ turn
+]
+
 { #category : #fixtures }
-GtLACPExamples >> fixtureSource [
- ^ 'import sys,json,os
-pending={}
-def send(x):
- print(json.dumps(dict(jsonrpc="2.0",**x),ensure_ascii=False),flush=True)
-def update(s,u):
- send(dict(method="session/update",params=dict(sessionId=s,update=u)))
-for line in sys.stdin:
- m=json.loads(line); method=m.get("method",""); p=m.get("params",{}); i=m.get("id")
- if method=="initialize":
-  send(dict(id=i,result=dict(protocolVersion=1,agentCapabilities=dict(loadSession=True),authMethods=[])))
- elif method=="session/new":
-  assert p["cwd"]==os.getcwd()
-  send(dict(id=i,result=dict(sessionId="fixture-session")))
- elif method=="session/load":
-  update(p["sessionId"],dict(sessionUpdate="agent_message_chunk",content=dict(type="text",text="Replayed")))
-  send(dict(id=i,result={}))
- elif method=="session/prompt":
-  s=p["sessionId"]
-  update(s,dict(sessionUpdate="agent_message_chunk",content=dict(type="text",text="Grüezi 🌍")))
-  if p["prompt"][0]["text"]=="permission":
-   pending["permission"]=(i,s)
-   send(dict(id="permission",method="session/request_permission",params=dict(sessionId=s,toolCall=dict(toolCallId="read",title="Read fixture",status="pending"),options=[dict(optionId="allow",name="Allow once",kind="allow_once")])))
-  elif p["prompt"][0]["text"]=="wait":
-   pending["turn"]=(i,s)
-  else:
-   send(dict(id=i,result=dict(stopReason="end_turn")))
- elif method=="session/cancel":
-  for k,(pi,s) in list(pending.items()):
-   send(dict(id=pi,result=dict(stopReason="cancelled"))); del pending[k]
- elif "result" in m and i=="permission":
-  pi,s=pending.pop(i)
-  update(s,dict(sessionUpdate="tool_call_update",toolCallId="read",status="completed"))
-  send(dict(id=pi,result=dict(stopReason="end_turn")))
- else:
-  send(dict(id=i,error=dict(code=-32601,message="Unsupported fixture method")))
-'
+GtLACPExamples >> fixtureClient [
+	^ GtLACPCodexClient new
+		configuration: (GtLACPCodexClientConfiguration new
+				executable: 'in-image ACP fixture';
+				arguments: #();
+				requestTimeout: 5;
+				yourself);
+		transportFactory: [ :configuration :directory | 
+			GtLACPStdioTransport new
+				agentProcess: GtLACPFixtureServer new;
+				yourself ];
+		yourself
+]
+
+{ #category : #examples }
+GtLACPExamples >> fixtureConversation [
+ <gtExample>
+ | session turn server reader newSessionRequest |
+ session := self fixtureClient startSessionIn: FileLocator temp.
+ server := session connection transport agentProcess.
+ reader := session connection transport reader.
+ [ self assert: server isRunning.
+ self assert: server worker ~~ Processor activeProcess.
+ turn := session prompt: 'hello'.
+ turn waitForSeconds: 5.
+ self assert: turn messages last text equals: 'Grüezi 🌍'.
+ self assert: turn state equals: #completed.
+ newSessionRequest := session connection transcript messages detect: [ :each |
+  each direction = #outgoing and: [
+   (each data at: 'method' ifAbsent: [ '' ]) = 'session/new' ] ].
+ self assert: ((newSessionRequest data at: 'params') at: 'cwd') equals: session directory fullName ]
+ ensure: [ session close ].
+ self assert: server isRunning not.
+ self assert: server worker isTerminated.
+ self assert: reader isTerminated.
+ self assert: server failure isNil.
+ ^ session
+]
+
+{ #category : #examples }
+GtLACPExamples >> fixturePermission [
+ <gtExample>
+ | session turn deadline |
+ session := self fixtureClient startSessionIn: FileLocator temp.
+ [ turn := session prompt: 'permission'.
+ deadline := Time millisecondClockValue + 5000.
+ [ turn permissionRequests isEmpty and: [ Time millisecondClockValue < deadline ] ]
+  whileTrue: [ (Delay forMilliseconds: 10) wait ].
+ self assert: turn permissionRequests size equals: 1.
+ self assert: (GtPhlowViewTester new testView:
+  (session connection transport agentProcess gtPendingRequestsFor: GtPhlowView empty)) isOk.
+ turn permissionRequests first options first select.
+ turn waitForSeconds: 5.
+ self assert: turn toolCalls first status equals: 'completed'.
+ self assert: turn state equals: #completed.
+ self assert: session connection transport agentProcess pendingRequests isEmpty ]
+ ensure: [ session close ].
+ ^ turn
+]
+
+{ #category : #examples }
+GtLACPExamples >> fixtureReplay [
+ <gtExample>
+ | session |
+ session := self fixtureClient loadSession: 'saved-session' in: FileLocator temp.
+ [ self assert: session turns first messages first text equals: 'Replayed'.
+ self assert: session turns first state equals: #replayed ]
+ ensure: [ session close ].
+ ^ session
+]
+
+{ #category : #examples }
+GtLACPExamples >> fixtureServer [
+ <gtExample>
+ ^ self fixtureConversation connection transport agentProcess
+]
+
+{ #category : #examples }
+GtLACPExamples >> fixtureUnsupportedRequest [
+	<gtExample>
+	| session |
+	session := self fixtureClient startSessionIn: FileLocator temp.
+	[ self
+		assertRaisesError: [ session connection request: 'fixture/unsupported' parameters: Dictionary new ]
+		raise: Error.
+	self assert: session connection transport agentProcess isRunning.
+	self assert: session connection pendingRequests isEmpty ]
+		ensure: [ session close ].
+	^ session
 ]
 
 { #category : #examples }
@@ -162,22 +214,6 @@ GtLACPExamples >> fragmentedFrames [
  self assert: (rpc result at: 'text') equals: 'Grüezi 🌍'.
  self assert: transport buffer isEmpty.
  ^ connection transcript
-]
-
-{ #category : #examples }
-GtLACPExamples >> inspectorObjects [
- <gtExample>
- | turn permission objects |
- turn := self streamedTurn.
- permission := self pendingPermission.
- objects := { turn userMessages first. turn assistantMessage. turn session client. self claudeClient. turn session client configuration.
-  self claudeClient configuration. turn session. turn. turn messages last.
-  turn messages last content first. permission. permission options first.
-  permission toolCall. permission connection. permission connection capabilities.
-  turn session connection transcript. turn session connection transcript messages first.
-  turn request. turn session updates first.
-  GtLACPProcess new. GtLACPStdioTransport new. self transport }.
- ^ objects
 ]
 
 { #category : #examples }
@@ -200,6 +236,45 @@ GtLACPExamples >> modeSelection [
  self assert: (session modes at: 'currentModeId') equals: 'code'.
  self assertRaisesError: [ session setMode: 'unknown' ] raise: Error.
  ^ session
+]
+
+{ #category : #examples }
+GtLACPExamples >> nativeProcessPipes [
+ <gtExample>
+ | process output deadline configuration |
+ configuration := GtLACPCodexClientConfiguration new
+  executable: 'sort'; arguments: #(); yourself.
+ process := GtLACPProcess new configuration: configuration;
+  directory: FileLocator temp asFileReference asAbsolute; yourself.
+ output := ''.
+ [ process start.
+ process write: 'beta', String lf, 'alpha', String lf.
+ process nativeProcess stdin close.
+ deadline := Time millisecondClockValue + 5000.
+ [ process isRunning and: [ Time millisecondClockValue < deadline ] ] whileTrue: [
+  output := output, process pollStdout.
+  (Delay forMilliseconds: 10) wait ].
+ self assert: process isRunning not.
+ output := output, process pollStdout.
+ self assert: output lines asArray equals: #('alpha' 'beta') ]
+ ensure: [ process stop ].
+ self assert: process exitStatus isSuccess.
+ ^ process
+]
+
+{ #category : #examples }
+GtLACPExamples >> nativeProcessShutdown [
+ <gtExample>
+ | process |
+ process := GtLACPProcess new
+  configuration: (GtLACPCodexClientConfiguration new executable: 'sort'; arguments: #(); yourself);
+  directory: FileLocator temp asFileReference asAbsolute; yourself.
+ [ process start.
+ self assert: process isRunning ]
+ ensure: [ process stop ].
+ self assert: process isRunning not.
+ self assert: process exitStatus isSuccess.
+ ^ process
 ]
 
 { #category : #examples }
@@ -292,72 +367,6 @@ GtLACPExamples >> streamedTurn [
  self assert: session state equals: #ready.
  self assert: session connection pendingRequests isEmpty.
  ^ turn
-]
-
-{ #category : #examples }
-GtLACPExamples >> subprocessCancellation [
- <gtExample>
- | session turn |
- session := self subprocessClient startSessionIn: FileLocator temp.
- [ turn := session prompt: 'wait'.
- session cancelTurn.
- turn waitForSeconds: 5.
- self assert: turn state equals: #cancelled ]
- ensure: [ session close ].
- ^ turn
-]
-
-{ #category : #fixtures }
-GtLACPExamples >> subprocessClient [
- ^ GtLACPCodexClient new
-  configuration: (GtLACPCodexClientConfiguration new
-   executable: '/usr/bin/python3';
-   arguments: { '-u'. '-c'. self fixtureSource };
-   requestTimeout: 5; yourself);
-  yourself
-]
-
-{ #category : #examples }
-GtLACPExamples >> subprocessConversation [
- <gtExample>
- | session turn |
- session := self subprocessClient startSessionIn: FileLocator temp.
- [ turn := session prompt: 'hello'.
- turn waitForSeconds: 5.
- self assert: turn messages last text equals: 'Grüezi 🌍'.
- self assert: turn state equals: #completed.
- self assert: session connection transport agentProcess directory equals: session directory ]
- ensure: [ session close ].
- self assert: session connection transport agentProcess isRunning not.
- ^ session
-]
-
-{ #category : #examples }
-GtLACPExamples >> subprocessPermission [
- <gtExample>
- | session turn deadline |
- session := self subprocessClient startSessionIn: FileLocator temp.
- [ turn := session prompt: 'permission'.
- deadline := Time millisecondClockValue + 5000.
- [ turn permissionRequests isEmpty and: [ Time millisecondClockValue < deadline ] ] whileTrue: [ (Delay forMilliseconds: 10) wait ].
- self assert: turn permissionRequests size equals: 1.
- turn permissionRequests first options first select.
- turn waitForSeconds: 5.
- self assert: turn toolCalls first status equals: 'completed'.
- self assert: turn state equals: #completed ]
- ensure: [ session close ].
- ^ turn
-]
-
-{ #category : #examples }
-GtLACPExamples >> subprocessReplay [
- <gtExample>
- | session |
- session := self subprocessClient loadSession: 'saved-session' in: FileLocator temp.
- [ self assert: session turns first messages first text equals: 'Replayed'.
- self assert: session turns first state equals: #replayed ]
- ensure: [ session close ].
- ^ session
 ]
 
 { #category : #examples }
