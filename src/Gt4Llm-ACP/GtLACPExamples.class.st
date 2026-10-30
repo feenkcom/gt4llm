@@ -180,6 +180,32 @@ GtLACPExamples >> fixtureReplay [
 ]
 
 { #category : #examples }
+GtLACPExamples >> fixtureReplayConversation [
+ <gtExample>
+ | session first second models |
+ session := self fixtureClient loadSession: 'saved-conversation' in: FileLocator temp.
+ [
+ self assert: session turns size equals: 2.
+ first := session turns first.
+ second := session turns second.
+ self assert: first userMessages size equals: 1.
+ self assert: first userMessages first text equals: 'First question'.
+ self assert: first assistantMessage finalMessages first text equals: 'First answer'.
+ self assert: second userMessages first text equals: 'Second question'.
+ self assert: second assistantMessage finalMessages first text equals: 'Second answer'.
+ self assert: first toolCalls isEmpty.
+ self assert: second toolCalls size equals: 1.
+ self assert: second assistantMessage activityItems first text equals: 'Let me check'.
+ self assert: (session turns allSatisfy: [ :turn | turn state = #replayed ]).
+ models := (GtLACPChatViewModel new session: session; yourself) messageViewModels.
+ self assert: models size equals: 4.
+ self assert: (models collect: [ :model | model message ]) equals:
+  { first userMessages first. first assistantMessage. second userMessages first. second assistantMessage }.
+ ] ensure: [ session close ].
+ ^ session
+]
+
+{ #category : #examples }
 GtLACPExamples >> fixtureServer [
  <gtExample>
  ^ self fixtureConversation connection transport agentProcess

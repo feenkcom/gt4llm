@@ -93,11 +93,15 @@ GtLACPFixtureServer >> isRunning [
  ^ state = #running and: [ worker isTerminated not ]
 ]
 
-{ #category : #protocol }
+{ #category : #requests }
 GtLACPFixtureServer >> loadSession: aMessage [
- self updateSession: ((aMessage at: 'params') at: 'sessionId') with: {
-  'sessionUpdate' -> 'agent_message_chunk'.
-  'content' -> { 'type' -> 'text'. 'text' -> 'Replayed' } asDictionary } asDictionary.
+ | sessionId |
+ sessionId := (aMessage at: 'params') at: 'sessionId'.
+ sessionId = 'saved-conversation'
+  ifTrue: [ self replayConversationTo: sessionId ]
+  ifFalse: [ self updateSession: sessionId with: {
+   'sessionUpdate' -> 'agent_message_chunk'.
+   'content' -> { 'type' -> 'text'. 'text' -> 'Replayed' } asDictionary } asDictionary ].
  self replyTo: aMessage result: Dictionary new
 ]
 
@@ -170,6 +174,27 @@ GtLACPFixtureServer >> receivePermissionReply: aMessage [
   self updateSession: ((prompt at: 'params') at: 'sessionId') with: {
    'sessionUpdate' -> 'tool_call_update'. 'toolCallId' -> 'read'. 'status' -> 'completed' } asDictionary ].
  self complete: prompt reason: (outcome = 'selected' ifTrue: [ 'end_turn' ] ifFalse: [ 'cancelled' ])
+]
+
+{ #category : #fixtures }
+GtLACPFixtureServer >> replayConversationTo: aSessionId [
+ #(
+  ('user_message_chunk' 'user-1' 'First ')
+  ('user_message_chunk' 'user-1' 'question')
+  ('agent_message_chunk' 'assistant-1' 'First answer')
+  ('user_message_chunk' 'user-2' 'Second question')
+  ('agent_thought_chunk' 'thought-2' 'Let me check')
+ ) do: [ :specification |
+  self updateSession: aSessionId with: {
+   'sessionUpdate' -> specification first.
+   'messageId' -> specification second.
+   'content' -> { 'type' -> 'text'. 'text' -> specification third } asDictionary } asDictionary ].
+ self updateSession: aSessionId with: {
+  'sessionUpdate' -> 'tool_call'. 'toolCallId' -> 'replayed-tool'.
+  'title' -> 'Read'. 'status' -> 'completed' } asDictionary.
+ self updateSession: aSessionId with: {
+  'sessionUpdate' -> 'agent_message_chunk'. 'messageId' -> 'assistant-2'.
+  'content' -> { 'type' -> 'text'. 'text' -> 'Second answer' } asDictionary } asDictionary
 ]
 
 { #category : #protocol }
