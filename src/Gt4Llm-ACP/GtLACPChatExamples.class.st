@@ -126,10 +126,52 @@ GtLACPChatExamples >> chatInspectorTool [
  self assert: (tool isKindOf: GtPhlowChatTool).
  self assert: tool object == session.
  element := tool asElementDo: [ :widget | widget ].
- self assert: (element isKindOf: GtLACPChatElement).
- self assert: element viewModel session == session.
+ self assert: (element isKindOf: GtLACPChatToolElement).
+ self assert: element chat == session.
+ self assert: ((element childNamed: #header) childNamed: #toolLabel) text asString equals: 'ACP Chat'.
+ self assert: (element collectToolViews anySatisfy: [ :view | view title = 'Live chat' ]).
+ self assert: (element collectToolViews anySatisfy: [ :view | view title = 'Conversation' ]).
  self assert: (GtPhlowViewTester new testView: (session gtChatFor: GtPhlowView empty)) isOk.
  ^ tool
+]
+
+{ #category : #examples }
+GtLACPChatExamples >> chatToolViewSwitching [
+ <gtExample>
+ | scripter |
+ scripter := self chatToolWithViews.
+ scripter clickStep: [ :step |
+  step // BrTabGroup; // #tabbar;
+   onChildFromBlock: [ :bar | bar children detect: [ :tab | tab label asString = 'Conversation' ] ] ].
+ scripter assertStep: [ :step | step id: #'acp-input'; notExists ].
+ scripter assertStep: [ :step |
+  step onPhlowCellWithString: scripter model currentTurn userMessages first printString; exists ].
+ scripter clickStep: [ :step |
+  step // BrTabGroup; // #tabbar;
+   onChildFromBlock: [ :bar | bar children detect: [ :tab | tab label asString = 'Session' ] ] ].
+ scripter assertStep: [ :step | step onPhlowCellWithString: 'Project directory'; exists ].
+ scripter clickStep: [ :step |
+  step // BrTabGroup; // #tabbar;
+   onChildFromBlock: [ :bar | bar children detect: [ :tab | tab label asString = 'Live chat' ] ] ].
+ scripter assertStep: [ :step | step id: #'acp-input'; exists ].
+ self assertNoRenderingErrorsIn: scripter.
+ ^ scripter
+]
+
+{ #category : #examples }
+GtLACPChatExamples >> chatToolWithViews [
+ <gtExample>
+ | session element scripter |
+ session := self chatWithToolCalls viewModel session.
+ element := (GtLACPChatTool forChat: session) asElementDo: [ :widget | widget ].
+ scripter := BlScripter new extent: 1100 @ 800; model: session; element: element; yourself.
+ scripter assertStep: [ :step | step id: #toolLabel;
+  value: [ :label | label text asString ] equals: [ 'ACP Chat' ] ].
+ scripter assertStep: [ :step | step id: #'acp-input'; exists ].
+ scripter assertStep: [ :step | step id: #'acp-message-1'; exists ].
+ scripter assertStep: [ :step | step id: #'acp-message-2'; exists ].
+ self assertNoRenderingErrorsIn: scripter.
+ ^ scripter
 ]
 
 { #category : #examples }

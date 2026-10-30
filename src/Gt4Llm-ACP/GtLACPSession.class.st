@@ -159,6 +159,7 @@ GtLACPSession >> gtCancelFor: anAction [
 { #category : #views }
 GtLACPSession >> gtChatFor: aView [
  <gtView>
+ <gtLlmView>
  ^ aView explicit title: 'Chat'; priority: 0; stencil: [ self asElement ]
 ]
 
@@ -194,6 +195,7 @@ GtLACPSession >> gtComposeFor: aView [
 { #category : #views }
 GtLACPSession >> gtConfigurationOptionsFor: aView [
  <gtView>
+ <gtLlmView>
  ^ aView columnedList title: 'Configuration options'; priority: 25;
   items: [ configOptions ];
   column: 'Option' text: [ :each | each at: 'name' ifAbsent: [ each at: 'id' ] ];
@@ -204,6 +206,7 @@ GtLACPSession >> gtConfigurationOptionsFor: aView [
 { #category : #views }
 GtLACPSession >> gtConversationFor: aView [
  <gtView>
+ <gtLlmView>
  ^ aView list title: 'Conversation'; priority: 5; items: [ turns flatCollect: [ :each | each messages copy ] ]; itemText: #printString; actionUpdateButtonTooltip: 'Refresh conversation'
 ]
 
@@ -218,12 +221,14 @@ GtLACPSession >> gtDefaultInspectorTool [
 { #category : #views }
 GtLACPSession >> gtPermissionsFor: aView [
  <gtView>
+ <gtLlmView>
  ^ aView list title: 'Permissions'; priority: 20; items: [ turns flatCollect: [ :each | each permissionRequests copy ] ]; itemText: #yourself; actionUpdateButtonTooltip: 'Refresh permissions'
 ]
 
 { #category : #views }
 GtLACPSession >> gtSessionFor: aView [
  <gtView>
+ <gtLlmView>
  ^ aView columnedList title: 'Session'; priority: 10;
   items: [ { 'Project directory' -> directory. 'Remote session ID' -> remoteSessionId.
    'Status' -> state. 'Client' -> client. 'Connection' -> connection } ];
@@ -236,12 +241,14 @@ GtLACPSession >> gtSessionFor: aView [
 { #category : #views }
 GtLACPSession >> gtTurnsFor: aView [
  <gtView>
+ <gtLlmView>
  ^ aView list title: 'Turns'; priority: 20; items: [ turns copy ]; itemText: #yourself; actionUpdateButtonTooltip: 'Refresh turns'
 ]
 
 { #category : #views }
 GtLACPSession >> gtUpdatesFor: aView [
  <gtView>
+ <gtLlmView>
  ^ aView list title: 'Updates'; priority: 20; items: [ updates copy ]; itemText: #kind; actionUpdateButtonTooltip: 'Refresh updates'
 ]
 
