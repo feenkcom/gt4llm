@@ -139,6 +139,19 @@ GtLMcpServer >> clearObjects [
 	objectStorage clearCache
 ]
 
+{ #category : #private }
+GtLMcpServer >> codexToolCallIdFrom: aJsonRpc ifPresent: aBlock [
+	"Evaluate aBlock with a valid Codex identifier; otherwise answer nil."
+	| params metadata identifier |
+	params := aJsonRpc params.
+	(params isKindOf: Dictionary) ifFalse: [ ^ nil ].
+	metadata := params at: '_meta' ifAbsent: [ ^ nil ].
+	(metadata isKindOf: Dictionary) ifFalse: [ ^ nil ].
+	identifier := metadata at: 'callId' ifAbsent: [ ^ nil ].
+	(identifier isString and: [ identifier notEmpty ]) ifFalse: [ ^ nil ].
+	^ aBlock value: identifier
+]
+
 { #category : #public }
 GtLMcpServer >> createAcceptedResponse [
 	^ ZnResponse new
@@ -892,6 +905,7 @@ GtLMcpServer >> supportedProtocolVersions [
 GtLMcpServer >> toolCallIdFrom: aJsonRpc [
 	"Try harness-specific conventions in order. Never substitute the JSON-RPC id."
 	self claudeCodeToolCallIdFrom: aJsonRpc ifPresent: [ :identifier | ^ identifier ].
+	self codexToolCallIdFrom: aJsonRpc ifPresent: [ :identifier | ^ identifier ].
 	^ nil
 ]
 

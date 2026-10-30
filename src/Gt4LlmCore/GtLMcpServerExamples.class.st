@@ -30,6 +30,29 @@ GtLMcpServerExamples >> claudeCodeToolCallIdIfPresent [
 	^ server
 ]
 
+{ #category : #examples }
+GtLMcpServerExamples >> codexToolCallIdIfPresent [
+	<gtExample>
+	| server rpc received result |
+	server := GtLMcpServer new.
+	rpc := GtLMcpJsonRpc new params:
+		{'_meta' -> {'callId' -> 'call_example'} asDictionary} asDictionary.
+	result := server codexToolCallIdFrom: rpc ifPresent: [ :identifier |
+		received := identifier.
+		'block result' ].
+	self assert: received equals: 'call_example'.
+	self assert: result equals: 'block result'.
+	{nil. Dictionary new.
+		{'_meta' -> {'callId' -> ''} asDictionary} asDictionary.
+		{'_meta' -> {'callId' -> 17} asDictionary} asDictionary}
+		do: [ :params |
+			rpc params: params.
+			result := server codexToolCallIdFrom: rpc
+				ifPresent: [ :identifier | self error: 'Must not invoke block without a valid identifier' ].
+			self assert: result isNil ].
+	^ server
+]
+
 { #category : #utils }
 GtLMcpServerExamples >> createBadRequestWithMessage: aMessage for: aRequest [
 	|message|
@@ -440,6 +463,25 @@ GtLMcpServerExamples >> serverStoresClaudeCodeToolCallId [
 ]
 
 { #category : #examples }
+GtLMcpServerExamples >> serverStoresCodexToolCallId [
+	<gtExample>
+	| server request response json |
+	server := self serverWithTool.
+	request := self serverRequestWithEntity:
+		{'jsonrpc' -> '2.0'. 'id' -> 42. 'method' -> 'tools/call'.
+		'params' -> {'name' -> 'Tool'.
+			'arguments' -> {'param' -> 'hello'} asDictionary.
+			'_meta' -> {'callId' -> 'call_example'.
+				'progressToken' -> 'progress'} asDictionary} asDictionary} asDictionary.
+	response := server handleRequest: request.
+	json := STONJSON fromString: response entity contents.
+	self assert: (json at: 'id') equals: 42.
+	self assert: ((json at: 'result') at: 'isError') equals: false.
+	self assert: server historySnapshot last toolCall id equals: 'call_example'.
+	^ server
+]
+
+{ #category : #examples }
 GtLMcpServerExamples >> serverWithInitializedNotification [
 	<gtExample>
 	| server request response |
@@ -764,6 +806,21 @@ GtLMcpServerExamples >> simpleServerTool [
 		description: 'A Tool';
 		block: [  :functionCall |
 			functionCall anyArgument ]
+]
+
+{ #category : #examples }
+GtLMcpServerExamples >> toolCallIdPrefersClaudeCodeOverCodex [
+	<gtExample>
+	| server rpc |
+	server := GtLMcpServer new.
+	rpc := GtLMcpJsonRpc new params:
+		{'_meta' -> {'claudecode/toolUseId' -> 'toolu_example'.
+			'callId' -> 'call_example'} asDictionary} asDictionary.
+	self assert: (server toolCallIdFrom: rpc) equals: 'toolu_example'.
+	rpc params: {'_meta' -> {'claudecode/toolUseId' -> ''.
+			'callId' -> 'call_example'} asDictionary} asDictionary.
+	self assert: (server toolCallIdFrom: rpc) equals: 'call_example'.
+	^ server
 ]
 
 { #category : #examples }
