@@ -16,20 +16,20 @@ Class {
 	#category : #'Gt4Llm-ACP-Core'
 }
 
-{ #category : #permissions }
+{ #category : #actions }
 GtLACPPermissionRequest >> abandon [
  [
  state = #pending ifTrue: [ state := #cancelled ]
- ] ensure: [ session ifNotNil: [ session announceChanged ] ]
+ ] ensure: [ session ifNotNil: [ session announcePermissionChanged: self ] ]
 ]
 
-{ #category : #permissions }
+{ #category : #actions }
 GtLACPPermissionRequest >> cancel [
  [
  state = #pending ifFalse: [ ^ self ].
  state := #cancelled.
  connection replyTo: requestId result: { 'outcome' -> { 'outcome' -> 'cancelled' } asDictionary } asDictionary
- ] ensure: [ session ifNotNil: [ session announceChanged ] ]
+ ] ensure: [ session ifNotNil: [ session announcePermissionChanged: self ] ]
 ]
 
 { #category : #accessing }
@@ -117,7 +117,7 @@ GtLACPPermissionRequest >> requestId: anObject [
  requestId := anObject
 ]
 
-{ #category : #permissions }
+{ #category : #actions }
 GtLACPPermissionRequest >> resolve: anOptionId [
  | choice |
  [
@@ -128,7 +128,7 @@ GtLACPPermissionRequest >> resolve: anOptionId [
  state := #selected.
  connection replyTo: requestId result: { 'outcome' -> {
   'outcome' -> 'selected'. 'optionId' -> choice id } asDictionary } asDictionary
- ] ensure: [ session ifNotNil: [ session announceChanged ] ]
+ ] ensure: [ session ifNotNil: [ session announcePermissionChanged: self ] ]
 ]
 
 { #category : #accessing }

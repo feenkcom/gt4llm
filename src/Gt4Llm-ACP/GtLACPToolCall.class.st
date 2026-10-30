@@ -73,20 +73,26 @@ GtLACPToolCall >> permissionRequests: anObject [
 ]
 
 { #category : #accessing }
+GtLACPToolCall >> shortDescription [
+ | text input |
+ text := self title.
+ input := data at: 'rawInput' ifAbsent: [ nil ].
+ input ifNotNil: [ text := text, '(', (STONJSON toString: input), ')' ].
+ text := (text copyReplaceAll: String cr with: ' ') copyReplaceAll: String lf with: ' '.
+ ^ text size > 80 ifTrue: [ (text first: 79), '…' ] ifFalse: [ text ]
+]
+
+{ #category : #accessing }
 GtLACPToolCall >> status [
  ^ data at: 'status' ifAbsent: [ 'pending' ]
 ]
 
 { #category : #accessing }
 GtLACPToolCall >> summary [
- | summary input text |
- summary := self title.
- input := data at: 'rawInput' ifAbsent: [ nil ].
- input ifNotNil: [
-  text := STONJSON toString: input.
-  text := (text copyReplaceAll: String cr with: ' ') copyReplaceAll: String lf with: ' '.
-  summary := summary, '(', (text size > 100 ifTrue: [ (text first: 100), '…' ] ifFalse: [ text ]), ')' ].
- summary := summary, ' · ', self status.
+ | summary |
+ summary := self shortDescription.
+ (#('in_progress' 'running') includes: self status)
+  ifTrue: [ summary := summary, ' · working' ].
  (permissionRequests anySatisfy: [ :request | request state = #pending ])
   ifTrue: [ summary := summary, ' · permission required' ].
  ^ summary

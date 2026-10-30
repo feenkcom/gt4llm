@@ -23,10 +23,24 @@ GtLACPAssistantMessageElement >> buildContent [
     (self textElementFor: self replyPreviewText)
      id: #'acp-final-preview'; vExact: 24; yourself ]
    content: [ self finalContent ]) ].
- (viewModel messages isEmpty and: [ viewModel turn isActive ])
-  ifTrue: [ self addChild: (self textElementFor: 'Working…') ].
  viewModel turn error ifNotNil: [ :error |
   self addChild: (self textElementFor: error printString) ]
+]
+
+{ #category : #ui }
+GtLACPAssistantMessageElement >> buildHeader [
+ | header |
+ header := super buildHeader.
+ viewModel turn isActive ifTrue: [
+  header addChild: (BrLabel new
+   id: #'acp-work-indicator';
+   aptitude: (BrGlamorousLabelAptitude new foreground: BrGlamorousColors disabledButtonTextColor);
+   text: (viewModel turn state = #cancelling
+    ifTrue: [ 'Stopping…' ] ifFalse: [ 'Working…' ]);
+   margin: (BlInsets left: 8);
+   constraintsDo: [ :c | c linear vertical alignCenter ];
+   yourself) at: 2 ].
+ ^ header
 ]
 
 { #category : #ui }

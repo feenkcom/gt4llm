@@ -8,7 +8,8 @@ Class {
 		'turn',
 		'message',
 		'sectionExpansion',
-		'renderingVersion'
+		'renderingVersion',
+		'finalReplyAutoExpanded'
 	],
 	#category : #'Gt4Llm-ACP-UI'
 }
@@ -26,6 +27,13 @@ GtLACPChatMessageViewModel >> asElement [
   yourself
 ]
 
+{ #category : #updating }
+GtLACPChatMessageViewModel >> changed [
+ "Invalidate only this row. Its view model retains presentation state."
+ self expandCompletedFinalReply.
+ renderingVersion := self renderingVersion + 1
+]
+
 { #category : #accessing }
 GtLACPChatMessageViewModel >> dateString [
  | date |
@@ -38,6 +46,14 @@ GtLACPChatMessageViewModel >> dateString [
   date hour printOn: stream base: 10 length: 2 padded: true.
   stream nextPut: $:.
   date minute printOn: stream base: 10 length: 2 padded: true ]
+]
+
+{ #category : #private }
+GtLACPChatMessageViewModel >> expandCompletedFinalReply [
+ finalReplyAutoExpanded ifTrue: [ ^ self ].
+ message hasCompletedReply ifFalse: [ ^ self ].
+ finalReplyAutoExpanded := true.
+ self section: #final expanded: true
 ]
 
 { #category : #views }
@@ -64,6 +80,14 @@ GtLACPChatMessageViewModel >> id [
  ^ message ifNil: [ turn ]
 ]
 
+{ #category : #initialization }
+GtLACPChatMessageViewModel >> initialize [
+ super initialize.
+ sectionExpansion := Dictionary new.
+ renderingVersion := 0.
+ finalReplyAutoExpanded := false
+]
+
 { #category : #accessing }
 GtLACPChatMessageViewModel >> inspectionTarget [
  ^ message
@@ -71,8 +95,7 @@ GtLACPChatMessageViewModel >> inspectionTarget [
 
 { #category : #accessing }
 GtLACPChatMessageViewModel >> isSectionExpanded: aName [
- ^ sectionExpansion ifNil: [ false ] ifNotNil: [
-  sectionExpansion at: aName ifAbsent: [ false ] ]
+ ^ sectionExpansion at: aName ifAbsent: [ false ]
 ]
 
 { #category : #accessing }
@@ -87,8 +110,10 @@ GtLACPChatMessageViewModel >> message [
 
 { #category : #accessing }
 GtLACPChatMessageViewModel >> message: anObject [
+ message == anObject ifTrue: [ ^ self ].
  message := anObject.
- renderingVersion := self renderingVersion + 1
+ finalReplyAutoExpanded := false.
+ self changed
 ]
 
 { #category : #accessing }
@@ -103,7 +128,7 @@ GtLACPChatMessageViewModel >> renderingKey [
 
 { #category : #accessing }
 GtLACPChatMessageViewModel >> renderingVersion [
- ^ renderingVersion ifNil: [ 0 ]
+ ^ renderingVersion
 ]
 
 { #category : #accessing }
@@ -113,7 +138,6 @@ GtLACPChatMessageViewModel >> replyMessages [
 
 { #category : #accessing }
 GtLACPChatMessageViewModel >> section: aName expanded: aBoolean [
- sectionExpansion ifNil: [ sectionExpansion := Dictionary new ].
  sectionExpansion at: aName put: aBoolean
 ]
 

@@ -21,7 +21,7 @@ GtLTools class >> files [
 { #category : #defaults }
 GtLTools class >> gt [
 	^ self gtSearch , self leSearch , self gtCodeChange , self leChange
-		, self gtExamplesRun , self gtObjectsExecution, self gemstoneIfActive
+		, self gtExamplesRun , self gtObjectsExecution
 ]
 
 { #category : #defaults }

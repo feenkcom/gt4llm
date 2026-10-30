@@ -22,7 +22,21 @@ Class {
 
 { #category : #announcing }
 GtLACPSession >> announceChanged [
- self announcer announce: (GtLACPSessionChanged new session: self; yourself)
+ self announceMessageChanged: (self currentTurn ifNotNil: #assistantMessage)
+]
+
+{ #category : #announcing }
+GtLACPSession >> announceMessageChanged: aMessage [
+ self announcer announce: (GtLACPSessionChanged new
+  session: self; message: aMessage; yourself)
+]
+
+{ #category : #announcing }
+GtLACPSession >> announcePermissionChanged: aPermission [
+ | turn |
+ turn := turns detect: [ :each | each permissionRequests includes: aPermission ]
+  ifNone: [ nil ].
+ self announceMessageChanged: (turn ifNotNil: #assistantMessage)
 ]
 
 { #category : #accessing }
@@ -145,6 +159,7 @@ GtLACPSession >> gtCancelFor: anAction [
 { #category : #views }
 GtLACPSession >> gtChatFor: aView [
  <gtView>
+ <gtLlmView>
  ^ aView explicit title: 'Chat'; priority: 0; stencil: [ self asElement ]
 ]
 
@@ -180,6 +195,7 @@ GtLACPSession >> gtComposeFor: aView [
 { #category : #views }
 GtLACPSession >> gtConfigurationOptionsFor: aView [
  <gtView>
+ <gtLlmView>
  ^ aView columnedList title: 'Configuration options'; priority: 25;
   items: [ configOptions ];
   column: 'Option' text: [ :each | each at: 'name' ifAbsent: [ each at: 'id' ] ];
@@ -190,6 +206,7 @@ GtLACPSession >> gtConfigurationOptionsFor: aView [
 { #category : #views }
 GtLACPSession >> gtConversationFor: aView [
  <gtView>
+ <gtLlmView>
  ^ aView list title: 'Conversation'; priority: 5; items: [ turns flatCollect: [ :each | each messages copy ] ]; itemText: #printString; actionUpdateButtonTooltip: 'Refresh conversation'
 ]
 
@@ -204,12 +221,14 @@ GtLACPSession >> gtDefaultInspectorTool [
 { #category : #views }
 GtLACPSession >> gtPermissionsFor: aView [
  <gtView>
+ <gtLlmView>
  ^ aView list title: 'Permissions'; priority: 20; items: [ turns flatCollect: [ :each | each permissionRequests copy ] ]; itemText: #yourself; actionUpdateButtonTooltip: 'Refresh permissions'
 ]
 
 { #category : #views }
 GtLACPSession >> gtSessionFor: aView [
  <gtView>
+ <gtLlmView>
  ^ aView columnedList title: 'Session'; priority: 10;
   items: [ { 'Project directory' -> directory. 'Remote session ID' -> remoteSessionId.
    'Status' -> state. 'Client' -> client. 'Connection' -> connection } ];
@@ -222,12 +241,14 @@ GtLACPSession >> gtSessionFor: aView [
 { #category : #views }
 GtLACPSession >> gtTurnsFor: aView [
  <gtView>
+ <gtLlmView>
  ^ aView list title: 'Turns'; priority: 20; items: [ turns copy ]; itemText: #yourself; actionUpdateButtonTooltip: 'Refresh turns'
 ]
 
 { #category : #views }
 GtLACPSession >> gtUpdatesFor: aView [
  <gtView>
+ <gtLlmView>
  ^ aView list title: 'Updates'; priority: 20; items: [ updates copy ]; itemText: #kind; actionUpdateButtonTooltip: 'Refresh updates'
 ]
 
@@ -278,7 +299,7 @@ GtLACPSession >> prompt: aString [
  ^ self promptContent: { GtLACPContentBlock text: aString }
 ]
 
-{ #category : #announcing }
+{ #category : #operations }
 GtLACPSession >> promptContent: blocks [
  | turn rpc |
  [
@@ -292,11 +313,11 @@ GtLACPSession >> promptContent: blocks [
  rpc := connection newRequest: 'session/prompt' parameters: {
   'sessionId' -> remoteSessionId. 'prompt' -> (blocks collect: #asDictionary) asArray } asDictionary.
  turn request: rpc.
- rpc onSuccess: [ :result | turn complete: (result at: 'stopReason'). state := #ready. self announceChanged ];
-  onFailure: [ :reason | turn fail: reason. state = #closed ifFalse: [ state := (connection state = #ready ifTrue: [ #ready ] ifFalse: [ #failed ]) ]. self announceChanged ].
+ rpc onSuccess: [ :result | turn complete: (result at: 'stopReason'). state := #ready. self announceMessageChanged: turn assistantMessage ];
+  onFailure: [ :reason | turn fail: reason. state = #closed ifFalse: [ state := (connection state = #ready ifTrue: [ #ready ] ifFalse: [ #failed ]) ]. self announceMessageChanged: turn assistantMessage ].
  connection sendRequest: rpc.
  ^ turn
- ] ensure: [ self announceChanged ]
+ ] ensure: [ self announceMessageChanged: (turn ifNotNil: #assistantMessage) ]
 ]
 
 { #category : #accessing }
@@ -326,9 +347,9 @@ GtLACPSession >> receivePermission: params requestId: anId [
  ] ensure: [ self announceChanged ]
 ]
 
-{ #category : #updates }
+{ #category : #receiving }
 GtLACPSession >> receiveUpdate: aDictionary [
-	| kind turn |
+	| kind turn changedMessage |
 	[ 
 	turn := self currentTurn.
  turn ifNotNil: [ turn activity ].
@@ -351,8 +372,11 @@ GtLACPSession >> receiveUpdate: aDictionary [
 					state: #replayed;
 					yourself.
 			turns add: turn ].
-	turn receiveUpdate: aDictionary ] 
-		ensure: [ self announceChanged ]
+	turn receiveUpdate: aDictionary.
+ changedMessage := kind = 'user_message_chunk'
+  ifTrue: [ turn userMessages ifEmpty: [ nil ] ifNotEmpty: #last ]
+  ifFalse: [ turn assistantMessage ] ] 
+		ensure: [ self announceMessageChanged: changedMessage ]
 ]
 
 { #category : #accessing }

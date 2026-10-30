@@ -27,6 +27,12 @@ GtLJsonPlaceholderTool >> entity: anObject [
 	entity := anObject
 ]
 
+{ #category : #serialization }
+GtLJsonPlaceholderTool >> functionOpenAI [
+	"Preserve all recorded fields, including strict and optional schema fields."
+	^ entity rawData
+]
+
 { #category : #ui }
 GtLJsonPlaceholderTool >> gtViewRawDataFor: aView [
 	<gtView>

@@ -73,6 +73,11 @@ GtLACPAssistantMessage >> gtWorkFor: aView [
   actionUpdateButtonTooltip: 'Refresh tools and reasoning'
 ]
 
+{ #category : #testing }
+GtLACPAssistantMessage >> hasCompletedReply [
+ ^ turn state = #completed and: [ self finalMessages notEmpty ]
+]
+
 { #category : #accessing }
 GtLACPAssistantMessage >> messages [
  turn activity.
@@ -116,7 +121,7 @@ GtLACPAssistantMessage >> turn: anObject [
 
 { #category : #accessing }
 GtLACPAssistantMessage >> workSummary [
- | tools tool summary input otherCount |
+ | tools tool summary otherCount |
  tools := self toolCalls.
  tools isEmpty ifTrue: [
   | text |
@@ -125,13 +130,7 @@ GtLACPAssistantMessage >> workSummary [
   ^ text size > 140 ifTrue: [ (text first: 140), '…' ] ifFalse: [ text ] ].
  tool := tools reversed detect: [ :each | #('pending' 'in_progress' 'running') includes: each status ]
   ifNone: [ tools last ].
- summary := tool title.
- input := tool data at: 'rawInput' ifAbsent: [ nil ].
- input ifNotNil: [
-  | text |
-  text := STONJSON toString: input.
-  text := (text copyReplaceAll: String cr with: ' ') copyReplaceAll: String lf with: ' '.
-  summary := summary, '(', (text size > 100 ifTrue: [ (text first: 100), '…' ] ifFalse: [ text ]), ')' ].
+ summary := tool shortDescription.
  otherCount := tools size - 1.
  otherCount > 0 ifTrue: [
   summary := summary, ' + ', otherCount asString, (otherCount = 1 ifTrue: [ ' other tool' ] ifFalse: [ ' other tools' ]) ].
