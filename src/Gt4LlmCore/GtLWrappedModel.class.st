@@ -50,7 +50,8 @@ GtLWrappedModel >> gtExportedJsonFor: aView [
 		priority: 12;
 		object: [ self mainDataView serializeToLlmPrimiteData ];
 		view: #gtViewCondensedJsonStringFor:;
-		actionButtonIcon: BrGlamorousVectorIcons inspect
+		actionButtonIcon: (GtPhlowGlamorousVectorIconNameStencil new
+				iconName: #inspect)
 			label: 'JSON'
 			tooltip: 'Inspect JSON Object'
 			action: [ :aButton | aButton phlow 
@@ -67,7 +68,8 @@ GtLWrappedModel >> gtInspectorTargetModels [
 GtLWrappedModel >> gtSpawnDataBlockFor: anAction [
 	<gtAction>
 	^ anAction button
-		icon: BrGlamorousVectorIcons inspect;
+		icon: (GtPhlowGlamorousVectorIconNameStencil new
+				iconName: #inspect);
 		label: 'Block';
 		tooltip: 'Spawn the data block';
 		action: [ :button | button phlow spawnObject: self mainDataView ]
@@ -77,7 +79,8 @@ GtLWrappedModel >> gtSpawnDataBlockFor: anAction [
 GtLWrappedModel >> gtSpawnDataViewFor: anAction [
 	<gtAction>
 	^ anAction button
-		icon: BrGlamorousVectorIcons inspect;
+		icon: (GtPhlowGlamorousVectorIconNameStencil new
+				iconName: #inspect);
 		label: 'Data';
 		tooltip: 'Spawn the data view';
 		action: [ :button | button phlow spawnObject: self mainDataView ]
@@ -87,7 +90,8 @@ GtLWrappedModel >> gtSpawnDataViewFor: anAction [
 GtLWrappedModel >> gtSpawnModelFor: anAction [
 	<gtAction>
 	^ anAction button
-		icon: BrGlamorousVectorIcons inspect;
+		icon: (GtPhlowGlamorousVectorIconNameStencil new
+				iconName: #inspect);
 		label: 'Model';
 		tooltip: 'Spawn the model';
 		action: [ :button | button phlow spawnObject: model ]

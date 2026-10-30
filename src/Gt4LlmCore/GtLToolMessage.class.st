@@ -128,7 +128,8 @@ GtLToolMessage >> gtRequestResponseToolResultTreeFor: aView [
 GtLToolMessage >> gtToolCallFor: anAction [
 	<gtAction>
 	^ anAction button
-		icon: BrGlamorousVectorIcons inspect;
+		icon: (GtPhlowGlamorousVectorIconNameStencil new
+				iconName: #inspect);
 		label: 'Tool call';
 		tooltip: 'Spawn the tool call';
 		action: [ :button | button phlow spawnObject: self toolCall ]
@@ -144,12 +145,14 @@ GtLToolMessage >> gtViewMessageDataFor: aView [
 		priority: 41;
 		object: [ self chat provider serializeToolMessageForResponse: self  ];
 		view: #gtItemsFor:;
-		actionButtonIcon: BrGlamorousVectorIcons inspect 
+		actionButtonIcon: (GtPhlowGlamorousVectorIconNameStencil new
+				iconName: #inspect) 
 			label: 'JSON' 
 			tooltip: 'Inspect message data'
 			action: [ :aButton |
 				aButton phlow spawnObject:   self serializeForAnthropicMessagesAPI ];
-		actionButtonIcon: BrGlamorousVectorIcons inspect 
+		actionButtonIcon: (GtPhlowGlamorousVectorIconNameStencil new
+				iconName: #inspect)  
 			label: 'Block' 
 			tooltip: 'Inspect Block data'
 			action: [ :aButton |
@@ -166,12 +169,14 @@ GtLToolMessage >> gtViewMessageJsonFor: aView [
 		priority: 40;
 		object: [ (self chat provider serializeToolMessageForResponse: self) asGtJson ];
 		view: #gtJsonStringFor:;
-		actionButtonIcon: BrGlamorousVectorIcons inspect 
+		actionButtonIcon: (GtPhlowGlamorousVectorIconNameStencil new
+				iconName: #inspect)
 			label: 'JSON' 
 			tooltip: 'Inspect JSON data'
 			action: [ :aButton |
 				aButton phlow spawnObject:   self serializeForAnthropicMessagesAPI asGtJson];
-		actionButtonIcon: BrGlamorousVectorIcons inspect 
+		actionButtonIcon: (GtPhlowGlamorousVectorIconNameStencil new
+				iconName: #inspect) 
 			label: 'Block' 
 			tooltip: 'Inspect Block data'
 			action: [ :aButton |
