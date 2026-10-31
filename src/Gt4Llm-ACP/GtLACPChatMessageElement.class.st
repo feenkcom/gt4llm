@@ -12,13 +12,15 @@ Class {
 
 { #category : #ui }
 GtLACPChatMessageElement >> build [
- self addChild: self buildHeader as: #'acp-message-header'.
- self buildContent.
- self addAptitude: (BrLazyStyleCommonAptitude new
-  when: BlElementState hovered
-  style: [ :style :theme |
-   style do: [ :widget | widget showHoverDetails ]
-    after: [ :widget | widget hideHoverDetails ] ])
+	self addChild: self buildHeader as: #'acp-message-header'.
+	self buildContent.
+	self
+		addAptitude: (BrLazyStyleCommonAptitude new
+				when: BlElementState hovered
+				style: [ :style :aTheme | 
+					style
+						do: [ :widget | widget showHoverDetails ]
+						after: [ :widget | widget hideHoverDetails ] ])
 ]
 
 { #category : #ui }
@@ -67,7 +69,11 @@ GtLACPChatMessageElement >> initialize [
 		hMatchParent;
 		vFitContent;
 		padding: (BlInsets all: 5);
-		margin: (BlInsets all: 10);
+		margin: (BlInsets
+				top: 5
+				bottom: 10
+				left: 5
+				right: 5);
 		background: self theme default contentBackground;
 		addAptitude: BlGlamorousExpanderShadowAptitude new
 ]

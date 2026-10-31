@@ -85,7 +85,7 @@ GtLACPChatElement >> initialize [
  super initialize.
  renderedVersions := IdentityDictionary new.
  followEndRequested := false.
- self hMatchParent; vMatchParent; padding: (BlInsets all: 8).
+ self hMatchParent; vMatchParent; padding: (BlInsets all: 3).
  errorLabel := BrEditor new
   aptitude: BrGlamorousRegularEditorAptitude;
   beReadOnlyWithSelection; hMatchParent; vFitContent;
