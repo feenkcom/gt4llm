@@ -65,6 +65,63 @@ GtLACPExamples >> codexClient [
 ]
 
 { #category : #examples }
+GtLACPExamples >> connectionHistory [
+ <gtExample>
+ | permission session connection entries |
+ permission := self selectedPermission.
+ session := permission session.
+ connection := session connection.
+ self sendUpdate: {
+  'sessionUpdate' -> 'agent_message_chunk'.
+  'content' -> { 'type' -> 'text'. 'text' -> 'Done' } asDictionary } asDictionary to: session.
+ connection transport receive: {
+  'jsonrpc' -> '2.0'. 'id' -> session currentTurn request id.
+  'result' -> { 'stopReason' -> 'end_turn' } asDictionary } asDictionary.
+ connection notify: 'fixture/notification' parameters: Dictionary new.
+ connection transport receive: {
+  'jsonrpc' -> '2.0'. 'id' -> 'unsupported-1'.
+  'method' -> 'fixture/unsupported'. 'params' -> Dictionary new } asDictionary.
+ connection transport receive: {
+  'jsonrpc' -> '2.0'. 'id' -> 'orphan-response'.
+  'result' -> Dictionary new } asDictionary.
+ connection transport receive: {
+  'jsonrpc' -> '2.0'. 'method' -> 'session/update'.
+  'params' -> { 'sessionId' -> 'unannounced-child'.
+   'update' -> { 'sessionUpdate' -> 'agent_message_chunk'.
+    'content' -> { 'type' -> 'text'. 'text' -> 'Child output' } asDictionary } asDictionary } asDictionary } asDictionary.
+ entries := connection transcript messages.
+ self assert: entries size equals: 14.
+ self assert: (entries count: [ :each | each direction = #outgoing ]) equals: 6.
+ self assert: (entries count: [ :each | each kind = #request ]) equals: 5.
+ self assert: (entries count: [ :each | each kind = #response ]) equals: 5.
+ self assert: (entries count: [ :each | each kind = #error ]) equals: 1.
+ self assert: (entries count: [ :each | each kind = #notification ]) equals: 3.
+ self assert: entries last sessionId equals: 'unannounced-child'.
+ self assert: entries last operation equals: 'session/update · agent_message_chunk'.
+ self assert: (entries anySatisfy: [ :each | each id = 'orphan-response' ]).
+ ^ connection
+]
+
+{ #category : #examples }
+GtLACPExamples >> connectionHistorySnapshotsPayloads [
+ <gtExample>
+ | connection params message entry |
+ connection := self session connection.
+ params := { 'nested' -> { 'value' -> 'original' } asDictionary } asDictionary.
+ connection notify: 'fixture/snapshot' parameters: params.
+ entry := connection transcript messages last.
+ (params at: 'nested') at: 'value' put: 'changed'.
+ self assert: (((entry data at: 'params') at: 'nested') at: 'value') equals: 'original'.
+ message := { 'jsonrpc' -> '2.0'. 'id' -> 'snapshot-response'.
+  'result' -> { 'value' -> 'received' } asDictionary } asDictionary.
+ connection transport receive: message.
+ entry := connection transcript messages last.
+ (message at: 'result') at: 'value' put: 'changed'.
+ self assert: ((entry data at: 'result') at: 'value') equals: 'received'.
+ ^ connection
+]
+
+{ #category : #examples }
 GtLACPExamples >> disconnectedTurn [
  <gtExample>
  | session turn |

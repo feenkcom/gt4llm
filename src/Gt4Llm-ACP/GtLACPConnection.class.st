@@ -140,7 +140,8 @@ GtLACPConnection >> gtStopFor: anAction [
 { #category : #views }
 GtLACPConnection >> gtTranscriptFor: aView [
  <gtView>
- ^ aView forward title: 'Protocol transcript'; priority: 15; object: [ transcript ]; view: #gtMessagesFor:
+ ^ aView forward title: 'History'; priority: 15;
+  object: [ transcript ]; view: #gtMessagesFor:
 ]
 
 { #category : #accessing }
@@ -240,12 +241,15 @@ GtLACPConnection >> replyTo: anId result: aDictionary [
 
 { #category : #requests }
 GtLACPConnection >> request: aMethod parameters: aDictionary [
- | aRequest |
- aRequest := self newRequest: aMethod parameters: aDictionary.
- self sendRequest: aRequest.
- ^ [ [ aRequest waitForSeconds: requestTimeout ]
-   on: Error do: [ :ex | aRequest fail: ex messageText. ex pass ] ]
-  ensure: [ lock critical: [ pendingRequests removeKey: aRequest id ifAbsent: [ ] ] ]
+	| aRequest |
+	aRequest := self newRequest: aMethod parameters: aDictionary.
+	self sendRequest: aRequest.
+	^ [ [ aRequest waitForSeconds: requestTimeout ]
+		on: Error
+		do: [ :ex | 
+			aRequest fail: ex messageText.
+			ex pass ] ]
+		ensure: [ lock critical: [ pendingRequests removeKey: aRequest id ifAbsent: [  ] ] ]
 ]
 
 { #category : #accessing }
@@ -286,21 +290,30 @@ GtLACPConnection >> sessions: anObject [
 
 { #category : #lifecycle }
 GtLACPConnection >> start [
- | result |
- state = #stopped ifFalse: [ self error: 'Connection has already been started' ].
- state := #initializing.
- transport connection: self.
- [ transport start.
- result := self request: 'initialize' parameters: {
-  'protocolVersion' -> 1.
-  'clientCapabilities' -> Dictionary new.
-  'clientInfo' -> { 'name' -> 'glamorous-toolkit'. 'version' -> '0.1.0' } asDictionary } asDictionary.
- (result at: 'protocolVersion') = 1 ifFalse: [ self error: 'Unsupported ACP protocol version' ].
- capabilities data: (result at: 'agentCapabilities' ifAbsent: [ Dictionary new ]).
- authenticationMethods := result at: 'authMethods' ifAbsent: [ #() ].
- agentInfo := result at: 'agentInfo' ifAbsent: [ Dictionary new ].
- state := #ready ]
- on: Error do: [ :ex | self failed: ex messageText. transport close. ex pass ]
+	| result |
+	state = #stopped ifFalse: [ self error: 'Connection has already been started' ].
+	state := #initializing.
+	transport connection: self.
+	[ transport start.
+	result := self
+			request: 'initialize'
+			parameters: {'protocolVersion' -> 1.
+					'clientCapabilities' -> Dictionary new.
+					'clientInfo'
+						-> {'name' -> 'glamorous-toolkit'.
+								'version' -> '0.1.0'} asDictionary} asDictionary.
+	(result at: 'protocolVersion') = 1
+		ifFalse: [ self error: 'Unsupported ACP protocol version' ].
+	capabilities
+		data: (result at: 'agentCapabilities' ifAbsent: [ Dictionary new ]).
+	authenticationMethods := result at: 'authMethods' ifAbsent: [ #() ].
+	agentInfo := result at: 'agentInfo' ifAbsent: [ Dictionary new ].
+	state := #ready ]
+		on: Error
+		do: [ :ex | 
+			self failed: ex messageText.
+			transport close.
+			ex pass ]
 ]
 
 { #category : #accessing }
