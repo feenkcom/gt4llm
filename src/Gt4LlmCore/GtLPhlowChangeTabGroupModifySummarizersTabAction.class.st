@@ -41,22 +41,22 @@ GtLPhlowChangeTabGroupModifySummarizersTabAction >> contentsBuilder: anObject [
 	addTabActionsByView contentsBuilder: anObject
 ]
 
-{ #category : #private }
-GtLPhlowChangeTabGroupModifySummarizersTabAction >> createAddNewViewsActionsIn: aChangeContext [
-	| newSummarizerViews |
-	newSummarizerViews := self collectSummarizedViewsFor: aChangeContext newRelevantSummarizers.
-
-	addTabActionsByView := newSummarizerViews
-			collect: [ :each | 
-				each -> (GtPhlowChangeTabGroupAddTabAction new 
-					tabGroup: self tabGroup;
-					buildContext: each buildContext) ].
-	^ addTabActionsByView collect: [ :actionByViewAssoc | 
-			| viewDefiningMethod |
-			viewDefiningMethod := actionByViewAssoc key definingMethod.
-			actionByViewAssoc value prepareOn: (GtPhlowChangeActionAffectedMethodContext
-					forAffectedClass: viewDefiningMethod methodClass
-					affectedMethod: viewDefiningMethod) ]
+{ #category : #updating }
+GtLPhlowChangeTabGroupModifySummarizersTabAction >> createAddNewViewsActionsIn: aChangeContext using: contextsByMethod [
+ | newSummarizerViews |
+ newSummarizerViews := self collectSummarizedViewsFor: aChangeContext newRelevantSummarizers.
+ addTabActionsByView := newSummarizerViews collect: [ :view |
+  view -> (GtPhlowChangeTabGroupAddTabAction new
+   tabGroup: self tabGroup;
+   buildContext: view buildContext) ].
+ ^ addTabActionsByView collect: [ :association |
+  | method context |
+  method := association key definingMethod.
+  "Reuse the context in which removal records whether this view was selected."
+  context := contextsByMethod at: method ifAbsentPut: [
+   GtPhlowChangeActionAffectedMethodContext
+    forAffectedClass: method methodClass affectedMethod: method ].
+  association value prepareOn: context ]
 ]
 
 { #category : #private }
@@ -91,19 +91,18 @@ GtLPhlowChangeTabGroupModifySummarizersTabAction >> initialize [
 	removeTabActionsByTab := OrderedCollection new.
 ]
 
-{ #category : #'api - actions' }
+{ #category : #updating }
 GtLPhlowChangeTabGroupModifySummarizersTabAction >> prepareOn: aChangeContext [
-	"Can be called in any process.
-	It returns an action that must be executed in a UI process."
-
-	<return: #TGtPhlowChangeUpdateAction>
-	| removeActions addActions |
-	
-	removeActions := self createRemoveExistingViewsActions.
-	addActions := self createAddNewViewsActionsIn: aChangeContext.
-	
-	^ GtPhlowChangeCompositeUpdateAction new
-		updateActions: removeActions , addActions
+ "Can be called in any process. The returned action executes in the UI process."
+ <return: #TGtPhlowChangeUpdateAction>
+ | removeActions addActions contextsByMethod |
+ removeActions := self createRemoveExistingViewsActions.
+ contextsByMethod := Dictionary new.
+ removeActions do: [ :action |
+  contextsByMethod at: action changeContext affectedMethodDefinition put: action changeContext ].
+ addActions := self createAddNewViewsActionsIn: aChangeContext using: contextsByMethod.
+ ^ GtPhlowChangeCompositeUpdateAction new
+  updateActions: removeActions, addActions
 ]
 
 { #category : #accessing }

@@ -95,28 +95,86 @@ GtLACPSummarizerExamples >> messageWithId: anId [
 
 { #category : #examples }
 GtLACPSummarizerExamples >> refreshPreservesChat [
- <gtExample>
- | session element scripter chat input turn |
- session := self sessionWithSummaries.
- element := (GtLACPChatTool forChat: session) asElementDo: [ :widget | widget ].
- scripter := BlScripter new extent: 1100 @ 800; model: session; element: element; yourself.
- chat := scripter element query // GtLACPChatElement; anyOne.
- input := scripter element query // #'acp-input'; anyOne.
- input text: 'Keep this draft'.
- turn := session prompt: 'Again'.
- session mcpServer privateAddToolMessage: (self messageWithId: 'next').
- self addCallWithId: 'next' to: session.
- self finish: turn in: session.
- scripter assertStep: [ :step | step id: #'acp-input'; value: [ :editor | editor text asString ] equals: [ 'Keep this draft' ] ].
- self assert: (scripter element query // GtLACPChatElement; anyOne) == chat.
- scripter clickStep: [ :step |
-  step // BrTabGroup; // #tabbar;
-   onChildFromBlock: [ :bar | bar children detect: [ :tab | tab label asString = 'Grouped tools' ] ] ].
- scripter assertStep: [ :step | step onPhlowCellWithString: 'lookupClass'; exists ].
- session updateToolSummarizers.
- scripter assertStep: [ :step | step onPhlowCellWithString: 'lookupClass'; exists ].
- GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
- ^ scripter
+	<gtExample>
+	| session element scripter chat input tool |
+	session := self sessionWithSummaries.
+	tool := session mcpToolMessages first toolCall tool.
+	element := (GtLACPChatTool forChat: session) asElementDo: [ :widget | widget ].
+	scripter := BlScripter new
+			extent: 1100 @ 800;
+			model: session;
+			element: element;
+			yourself.
+	chat := scripter element query
+			// GtLACPChatElement;
+			anyOne.
+	input := scripter element query
+			// #'acp-input';
+			anyOne.
+	scripter
+		doStep: [ :step | 
+			step
+				label: 'Refresh while the chat is selected';
+				block: [ | turn message |
+					input text: 'Keep this draft'.
+					turn := session prompt: 'Again'.
+					message := self messageWithId: 'next'.
+					message toolCall performedByTool: tool.
+					session mcpServer privateAddToolMessage: message.
+					self addCallWithId: 'next' to: session.
+					self finish: turn in: session ] ].
+	scripter pulseUntilReady.
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-input';
+				value: [ :editor | editor text asString ] equals: [ 'Keep this draft' ] ].
+	self
+		assert: (scripter element query
+				// GtLACPChatElement;
+				anyOne) == chat.
+	scripter
+		clickStep: [ :step | 
+			step
+				// BrTabGroup;
+				// #tabbar;
+				onChildFromBlock: [ :bar | bar children detect: [ :tab | tab label asString = 'Grouped tools' ] ] ].
+	scripter
+		assertStep: [ :step | 
+			step
+				onPhlowCellWithString: '2';
+				exists ].
+	scripter
+		doStep: [ :step | 
+			step
+				label: 'Refresh while Grouped tools is selected';
+				block: [ | turn message |
+					turn := session prompt: 'A third lookup'.
+					message := self messageWithId: 'third'.
+					message toolCall performedByTool: tool.
+					session mcpServer privateAddToolMessage: message.
+					self addCallWithId: 'third' to: session.
+					self finish: turn in: session ] ].
+	scripter pulseUntilReady.
+	scripter
+		assertStep: [ :step | 
+			step
+				onPhlowCellWithString: '3';
+				exists ].
+	scripter doStep: [ :step | step block: [ session updateToolSummarizers ] ].
+	scripter pulseUntilReady.
+	scripter
+		assertStep: [ :step | 
+			step
+				// BrTabGroup;
+				satisfies: [ :group | group viewModel selectedTab tabLabel text asString = 'Grouped tools' ] ].
+	scripter
+		assertStep: [ :step | 
+			step
+				onPhlowCellWithString: '3';
+				exists ].
+	GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+	^ scripter
 ]
 
 { #category : #examples }
