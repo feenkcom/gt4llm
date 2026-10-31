@@ -10,7 +10,8 @@ Class {
 		'sectionExpansion',
 		'renderingVersion',
 		'finalReplyAutoExpanded',
-		'selectedFinalViewTitle'
+		'selectedFinalViewTitle',
+		'delegatedMessageViewModels'
 	],
 	#category : #'Gt4Llm-ACP-UI'
 }
@@ -47,6 +48,13 @@ GtLACPChatMessageViewModel >> dateString [
   date hour printOn: stream base: 10 length: 2 padded: true.
   stream nextPut: $:.
   date minute printOn: stream base: 10 length: 2 padded: true ]
+]
+
+{ #category : #accessing }
+GtLACPChatMessageViewModel >> delegatedViewModelFor: anAssistantMessage [
+ delegatedMessageViewModels ifNil: [ delegatedMessageViewModels := IdentityDictionary new ].
+ ^ delegatedMessageViewModels at: anAssistantMessage ifAbsentPut: [
+  self class new turn: anAssistantMessage turn; message: anAssistantMessage; yourself ]
 ]
 
 { #category : #private }

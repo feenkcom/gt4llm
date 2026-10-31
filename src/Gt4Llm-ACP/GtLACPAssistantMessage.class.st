@@ -12,9 +12,7 @@ Class {
 
 { #category : #accessing }
 GtLACPAssistantMessage >> activityItems [
- | items |
- items := turn activity copy.
- ^ items first: items size - self finalMessages size
+ ^ self localActivityItems, (self delegatedMessages flatCollect: #activityItems)
 ]
 
 { #category : #converting }
@@ -29,7 +27,14 @@ GtLACPAssistantMessage >> chatElementClass [
 
 { #category : #accessing }
 GtLACPAssistantMessage >> chatLabel [
- ^ turn session client displayName
+ ^ turn session isSubagent
+  ifTrue: [ turn session conversationTitle ]
+  ifFalse: [ turn session client displayName ]
+]
+
+{ #category : #accessing }
+GtLACPAssistantMessage >> delegatedMessages [
+ ^ turn delegatedTurns collect: #assistantMessage
 ]
 
 { #category : #accessing }
@@ -110,7 +115,19 @@ GtLACPAssistantMessage >> gtWorkFor: aView [
 
 { #category : #testing }
 GtLACPAssistantMessage >> hasCompletedReply [
- ^ (#(completed replayed) includes: turn state) and: [ self finalMessages notEmpty ]
+ ^ (#(completed replayed idle) includes: turn state) and: [ self finalMessages notEmpty ]
+]
+
+{ #category : #testing }
+GtLACPAssistantMessage >> hasWork [
+ ^ self localActivityItems notEmpty or: [ self delegatedMessages notEmpty ]
+]
+
+{ #category : #accessing }
+GtLACPAssistantMessage >> localActivityItems [
+ | items |
+ items := turn activity copy.
+ ^ items first: items size - self finalMessages size
 ]
 
 { #category : #summaries }
@@ -151,7 +168,7 @@ GtLACPAssistantMessage >> text [
 
 { #category : #accessing }
 GtLACPAssistantMessage >> toolCalls [
- ^ turn toolCalls copy
+ ^ turn allToolCalls
 ]
 
 { #category : #summaries }
@@ -175,6 +192,8 @@ GtLACPAssistantMessage >> workSummary [
  tools := self toolCalls.
  tools isEmpty ifTrue: [
   | text |
+  (self localActivityItems isEmpty and: [ self delegatedMessages notEmpty ])
+   ifTrue: [ ^ self delegatedMessages last chatLabel ].
   text := self activityItems ifEmpty: [ '' ] ifNotEmpty: [ self activityItems last text ].
   text := (text copyReplaceAll: String cr with: ' ') copyReplaceAll: String lf with: ' '.
   ^ text size > 140 ifTrue: [ (text first: 140), '…' ] ifFalse: [ text ] ].

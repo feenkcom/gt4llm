@@ -176,7 +176,7 @@ GtLACPChatElement >> stopTurn [
  viewModel ifNotNil: [ viewModel stop. self updateControls ]
 ]
 
-{ #category : #ui }
+{ #category : #updating }
 GtLACPChatElement >> updateControls [
  | error |
  viewModel ifNil: [ ^ self ].
@@ -188,9 +188,14 @@ GtLACPChatElement >> updateControls [
   ifFalse: [
    actionButton label: 'Send'; icon: BrGlamorousVectorIcons accept.
    viewModel canSend ifTrue: [ actionButton enable ] ifFalse: [ actionButton disable ] ].
- viewModel session state = #closed
+ (viewModel session isSubagent or: [ viewModel session state = #closed ])
   ifTrue: [ inputElement beReadOnlyWithSelection ]
   ifFalse: [ inputElement beEditable ].
+ actionButton visibility: ((viewModel session isSubagent and: [ viewModel canStop not ])
+  ifTrue: [ BlVisibility gone ] ifFalse: [ BlVisibility visible ]).
+ inputElement visibility: (viewModel session isSubagent ifTrue: [ BlVisibility gone ] ifFalse: [ BlVisibility visible ]).
+ (self childNamed: #'acp-composer') visibility: ((viewModel session isSubagent and: [ viewModel canStop not ])
+  ifTrue: [ BlVisibility gone ] ifFalse: [ BlVisibility visible ]).
  error := viewModel errorText.
  errorLabel text: error.
  errorLabel visibility: (error isEmpty ifTrue: [ BlVisibility gone ] ifFalse: [ BlVisibility visible ])

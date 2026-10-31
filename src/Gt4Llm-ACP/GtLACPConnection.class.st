@@ -16,7 +16,8 @@ Class {
 		'transcript',
 		'lastError',
 		'requestTimeout',
-		'lock'
+		'lock',
+		'announcer'
 	],
 	#category : #'Gt4Llm-ACP-Core'
 }
@@ -29,6 +30,16 @@ GtLACPConnection >> agentInfo [
 { #category : #accessing }
 GtLACPConnection >> agentInfo: anObject [
  agentInfo := anObject
+]
+
+{ #category : #announcing }
+GtLACPConnection >> announceConversationTreeChanged [
+ self announcer announce: GtLACPConversationTreeChanged new
+]
+
+{ #category : #announcing }
+GtLACPConnection >> announcer [
+ ^ announcer ifNil: [ announcer := Announcer new ]
 ]
 
 { #category : #authentication }
@@ -117,6 +128,12 @@ GtLACPConnection >> gtConnectionFor: aView [
   column: 'Value' text: [ :entry | entry value printString ];
   send: #value;
   actionUpdateButtonTooltip: 'Refresh connection'
+]
+
+{ #category : #views }
+GtLACPConnection >> gtConversationTreeFor: aView [
+ <gtView>
+ ^ GtLACPSession conversationTreeFor: aView roots: self rootSessions
 ]
 
 { #category : #views }
@@ -265,6 +282,11 @@ GtLACPConnection >> requestTimeout: anObject [
  requestTimeout := anObject
 ]
 
+{ #category : #accessing }
+GtLACPConnection >> rootSessions [
+ ^ sessions values select: [ :session | session isSubagent not ]
+]
+
 { #category : #requests }
 GtLACPConnection >> send: aDictionary [
  transcript record: aDictionary direction: #outgoing.
@@ -291,7 +313,7 @@ GtLACPConnection >> sessions: anObject [
  sessions := anObject
 ]
 
-{ #category : #lifecycle }
+{ #category : #updating }
 GtLACPConnection >> start [
 	| result |
 	state = #stopped ifFalse: [ self error: 'Connection has already been started' ].
@@ -301,7 +323,7 @@ GtLACPConnection >> start [
 	result := self
 			request: 'initialize'
 			parameters: {'protocolVersion' -> 1.
-					'clientCapabilities' -> Dictionary new.
+					'clientCapabilities' -> { 'subagents' -> Dictionary new } asDictionary.
 					'clientInfo'
 						-> {'name' -> 'glamorous-toolkit'.
 								'version' -> '0.1.0'} asDictionary} asDictionary.

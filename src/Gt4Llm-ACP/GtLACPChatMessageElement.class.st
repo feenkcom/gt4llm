@@ -78,14 +78,21 @@ GtLACPChatMessageElement >> initialize [
 		addAptitude: BlGlamorousExpanderShadowAptitude new
 ]
 
-{ #category : #ui }
+{ #category : #building }
 GtLACPChatMessageElement >> messageSection: aName header: aHeaderBlock content: aBlock [
- | expander model aptitude |
+ ^ self messageSection: aName header: aHeaderBlock content: aBlock
+  aptitude: (BrGlamorousExpanderSubtleAptitude new
+   sidebarExtraPadding: (BlInsets top: (aName = #work ifTrue: [ 6 ] ifFalse: [ 9 ]));
+   yourself)
+]
+
+{ #category : #building }
+GtLACPChatMessageElement >> messageSection: aName header: aHeaderBlock content: aBlock aptitude: anAptitude [
+ | expander model |
  model := viewModel.
- aptitude := BrGlamorousExpanderSubtleAptitude new sidebarExtraPadding: (BlInsets top: (aName = #work ifTrue: [ 6 ] ifFalse: [ 9 ])); yourself.
  expander := BrExpander new.
  expander id: ('acp-', aName asString, '-section') asSymbol;
-  aptitude: aptitude;
+  aptitude: anAptitude;
   hMatchParent; vFitContent; margin: (BlInsets top: 4 bottom: 4);
   header: [ aHeaderBlock value: expander ];
   content: aBlock; yourself.
