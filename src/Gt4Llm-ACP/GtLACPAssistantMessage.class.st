@@ -75,7 +75,7 @@ GtLACPAssistantMessage >> gtWorkFor: aView [
 
 { #category : #testing }
 GtLACPAssistantMessage >> hasCompletedReply [
- ^ turn state = #completed and: [ self finalMessages notEmpty ]
+ ^ (#(completed replayed) includes: turn state) and: [ self finalMessages notEmpty ]
 ]
 
 { #category : #accessing }

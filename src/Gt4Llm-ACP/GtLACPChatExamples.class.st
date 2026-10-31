@@ -135,8 +135,7 @@ GtLACPChatExamples >> chatInspectorTool [
 		assert: (element collectToolViews anySatisfy: [ :view | view title = 'Chat' ]).
 	self
 		assert: (element collectToolViews anySatisfy: [ :view | view title = 'Conversation' ]).
-	self
-		assert: (GtPhlowViewTester new testView: (session gtChatFor: GtPhlowView empty)) isOk.
+	self assertObjectPhlowViewsFor: session.
 	^ tool
 ]
 
@@ -800,6 +799,27 @@ GtLACPChatExamples >> recoveredReasoningOrder [
  self assert: items third == turn toolCalls second.
  self assert: items fourth text equals: 'Now I can explain the result.'.
  ^ element
+]
+
+{ #category : #examples }
+GtLACPChatExamples >> replayedConversationDisplayed [
+ <gtExample>
+ | session chat scripter |
+ session := GtLACPExamples new fixtureReplayConversation.
+ chat := session asElement.
+ scripter := BlScripter new extent: 1000 @ 1000; model: session; element: chat; yourself.
+ 1 to: 4 do: [ :index |
+  scripter assertStep: [ :step | step id: ('acp-message-', index asString) asSymbol; exists ] ].
+ scripter assertStep: [ :step |
+  step id: #'acp-message-2'; id: #'acp-final-content';
+   satisfies: [ :pane | pane children anySatisfy: [ :child |
+    (child isKindOf: BrEditor) and: [ child text asString = 'First answer' ] ] ] ].
+ scripter assertStep: [ :step |
+  step id: #'acp-message-4'; id: #'acp-final-content';
+   satisfies: [ :pane | pane children anySatisfy: [ :child |
+    (child isKindOf: BrEditor) and: [ child text asString = 'Second answer' ] ] ] ].
+ self assertNoRenderingErrorsIn: scripter.
+ ^ scripter
 ]
 
 { #category : #examples }

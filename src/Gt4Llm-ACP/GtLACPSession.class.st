@@ -366,7 +366,9 @@ GtLACPSession >> receiveUpdate: aDictionary [
 	(#('agent_message_chunk' 'agent_thought_chunk' 'user_message_chunk' 'tool_call' 'tool_call_update')
 		includes: kind) ifFalse: [ ^ self ].
 	turn := self currentTurn.
-	(turn isNil or: [ state = #loading and: [ turn state ~= #replayed ] ])
+	(turn isNil or: [ state = #loading and: [
+  turn state ~= #replayed or: [
+   kind = 'user_message_chunk' and: [ turn activity notEmpty ] ] ] ])
 		ifTrue: [ turn := GtLACPPromptTurn new
 					session: self;
 					state: #replayed;
