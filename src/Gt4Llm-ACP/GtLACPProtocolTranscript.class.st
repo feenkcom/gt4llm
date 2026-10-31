@@ -15,7 +15,7 @@ GtLACPProtocolTranscript >> gtMessagesFor: aView [
  <gtView>
  ^ aView columnedList
   title: 'History';
-  priority: 5;
+  priority: 1;
   items: [ messages copy ];
   column: 'Time' text: [ :message | message timestamp asTime printString ] width: 110;
   column: 'Direction' text: #direction width: 85;

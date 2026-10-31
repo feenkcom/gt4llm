@@ -139,9 +139,12 @@ GtLACPConnection >> gtStopFor: anAction [
 
 { #category : #views }
 GtLACPConnection >> gtTranscriptFor: aView [
- <gtView>
- ^ aView forward title: 'History'; priority: 15;
-  object: [ transcript ]; view: #gtMessagesFor:
+	<gtView>
+	^ aView forward
+		title: 'History';
+		priority: 1;
+		object: [ transcript ];
+		view: #gtMessagesFor:
 ]
 
 { #category : #accessing }
