@@ -14,12 +14,14 @@ GtLACPChatToolElement >> buildToolLabel [
 
 { #category : #views }
 GtLACPChatToolElement >> collectToolViews [
- | views |
+ | views context |
+ context := self chat phlowContext.
  views := (GtPhlowViewsCollector new
   fromObject: self chat;
   pragmaNames: GtLSettings messageViewPragmaNames;
+  context: context;
   collect),
-  (self chat summarizerViewsFor: self chat gtInspectorTargetModels inContext: GtPhlowContext new).
+  (self chat summarizerViewsFor: self chat gtInspectorTargetModels inContext: context).
  GtPhlowUtility sortByPriority: views.
  ^ views
 ]

@@ -107,12 +107,12 @@ GtLACPChatMessageElement >> showHoverDetails [
  (header childNamed: #'acp-inspect') visibility: BlVisibility visible
 ]
 
-{ #category : #ui }
+{ #category : #building }
 GtLACPChatMessageElement >> textElementFor: aString [
  ^ BrEditor new
   aptitude: BrGlamorousRegularEditorAptitude;
   beReadOnlyWithSelection; hMatchParent; vFitContentLimited;
-  styler: (GtLMessageStyler new objectRegistry: GtLObjectStorage new; yourself);
+  styler: (GtLMessageStyler new objectRegistry: viewModel phlowContext objectRegistry; yourself);
   text: aString;
   yourself
 ]

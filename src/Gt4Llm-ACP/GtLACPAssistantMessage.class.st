@@ -44,10 +44,35 @@ GtLACPAssistantMessage >> finalMessages [
 ]
 
 { #category : #views }
-GtLACPAssistantMessage >> gtFinalReplyFor: aView [
+GtLACPAssistantMessage >> finalReplyViewsInContext: aContext [
+ | views |
+ views := (GtPhlowViewsCollector new
+  fromObject: self;
+  pragmaNames: GtLSettings messageViewPragmaNames;
+  context: aContext;
+  collect),
+  (turn session summarizerViewsFor: self relevantToolCallsSummarizers inContext: aContext).
+ GtPhlowUtility sortByPriority: views.
+ ^ views
+]
+
+{ #category : #views }
+GtLACPAssistantMessage >> gtFinalReplyFor: aView inContext: aPhlowContext [
  <gtView>
- ^ aView textEditor title: 'Final reply'; priority: 5;
-  text: [ self text ]; actionUpdateButtonTooltip: 'Refresh final reply'
+ <gtLlmView>
+ ^ aView explicit
+  title: 'Markdown';
+  priority: 5;
+  stencil: [
+   BrEditor new
+    id: #'acp-final-text';
+    aptitude: BrGlamorousRegularEditorAptitude;
+    beReadOnlyWithSelection;
+    hMatchParent;
+    vFitContentLimited;
+    styler: (GtLMessageStyler new objectRegistry: aPhlowContext objectRegistry; yourself);
+    text: self text;
+    yourself ]
 ]
 
 { #category : #views }
@@ -60,6 +85,16 @@ GtLACPAssistantMessage >> gtOutcomeFor: aView [
 GtLACPAssistantMessage >> gtToolsFor: aView [
  <gtView>
  ^ aView list title: 'Tool calls'; priority: 15; items: [ self toolCalls ]; itemText: #title
+]
+
+{ #category : #views }
+GtLACPAssistantMessage >> gtViewsInContext: aContext [
+ | views |
+ aContext objectRegistry: turn session objectStorage.
+ views := (super gtViewsInContext: aContext),
+  (turn session summarizerViewsFor: self relevantToolCallsSummarizers inContext: aContext).
+ GtPhlowUtility sortByPriority: views.
+ ^ views
 ]
 
 { #category : #views }
@@ -78,6 +113,11 @@ GtLACPAssistantMessage >> hasCompletedReply [
  ^ (#(completed replayed) includes: turn state) and: [ self finalMessages notEmpty ]
 ]
 
+{ #category : #summaries }
+GtLACPAssistantMessage >> mcpToolMessages [
+ ^ turn session mcpToolMessagesFor: self toolCalls
+]
+
 { #category : #accessing }
 GtLACPAssistantMessage >> messages [
  turn activity.
@@ -87,6 +127,11 @@ GtLACPAssistantMessage >> messages [
 { #category : #printing }
 GtLACPAssistantMessage >> printOn: aStream [
  aStream nextPutAll: 'Assistant response ('; nextPutAll: self state asString; nextPutAll: ')'
+]
+
+{ #category : #summaries }
+GtLACPAssistantMessage >> relevantToolCallsSummarizers [
+ ^ self toolCallsSummarizers select: #isRelevant
 ]
 
 { #category : #accessing }
@@ -107,6 +152,11 @@ GtLACPAssistantMessage >> text [
 { #category : #accessing }
 GtLACPAssistantMessage >> toolCalls [
  ^ turn toolCalls copy
+]
+
+{ #category : #summaries }
+GtLACPAssistantMessage >> toolCallsSummarizers [
+ ^ turn session summarizersRegistry summarizersForMessages: self mcpToolMessages
 ]
 
 { #category : #accessing }

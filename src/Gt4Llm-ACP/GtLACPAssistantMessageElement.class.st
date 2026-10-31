@@ -43,12 +43,20 @@ GtLACPAssistantMessageElement >> buildHeader [
  ^ header
 ]
 
-{ #category : #ui }
+{ #category : #views }
 GtLACPAssistantMessageElement >> finalContent [
- | pane |
- pane := BrVerticalPane new id: #'acp-final-content'; hMatchParent; vFitContent; yourself.
- viewModel replyMessages do: [ :message |
-  pane addChild: (self textElementFor: message text) ].
+ | pane tabs model |
+ model := viewModel.
+ tabs := (GtPhlowCompositeView new
+  views: (model message finalReplyViewsInContext: model phlowContext);
+  asElementDo: [ :element | element hMatchParent; vFitContentLimited ]).
+ tabs id: #'acp-final-tabs'.
+ tabs selectTabWithLabelString: model selectedFinalViewTitle.
+ tabs viewModel when: BrTabSelectedEvent do: [ :event |
+  model selectedFinalViewTitle: event tab tabLabel text asString ].
+ pane := BrVerticalPane new
+  id: #'acp-final-content'; hMatchParent; vFitContentLimited;
+  addChild: tabs; yourself.
  ^ pane
 ]
 

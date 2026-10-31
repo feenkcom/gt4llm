@@ -115,10 +115,15 @@ GtLACPToolCall >> permissionRequests: anObject [
 
 { #category : #accessing }
 GtLACPToolCall >> shortDescription [
- | text input |
- text := self title.
- input := data at: 'rawInput' ifAbsent: [ nil ].
- input ifNotNil: [ text := text, '(', (STONJSON toString: input), ')' ].
+ | text |
+ text := self
+  withMcpToolCallIfPresent: [ :message | message toolCall gtDisplayString ]
+  ifAbsent: [
+   | input description |
+   description := self title.
+   input := data at: 'rawInput' ifAbsent: [ nil ].
+   input ifNotNil: [ description := description, '(', (STONJSON toString: input), ')' ].
+   description ].
  text := (text copyReplaceAll: String cr with: ' ') copyReplaceAll: String lf with: ' '.
  ^ text size > 80 ifTrue: [ (text first: 79), '…' ] ifFalse: [ text ]
 ]

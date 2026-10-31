@@ -281,6 +281,7 @@ GtLACPSession >> gtUpdatesFor: aView [
 { #category : #views }
 GtLACPSession >> gtViewsInContext: aContext [
  | views |
+ aContext objectRegistry: self objectStorage.
  views := (super gtViewsInContext: aContext),
   (self summarizerViewsFor: self gtInspectorTargetModels inContext: aContext).
  GtPhlowUtility sortByPriority: views.
@@ -319,17 +320,26 @@ GtLACPSession >> mcpToolMessages [
 ]
 
 { #category : #summaries }
-GtLACPSession >> mcpToolMessagesIn: aServer [
+GtLACPSession >> mcpToolMessagesFor: toolCalls [
+ ^ self mcpToolMessagesFor: toolCalls in: GtLMcpServer current
+]
+
+{ #category : #summaries }
+GtLACPSession >> mcpToolMessagesFor: toolCalls in: aServer [
  | messages seen |
  messages := GtLMessagesGroup new.
  seen := IdentitySet new.
- turns copy do: [ :turn |
-  turn toolCalls copy do: [ :call |
-   (call mcpToolMessageIn: aServer) ifNotNil: [ :message |
-    (seen includes: message) ifFalse: [
-     seen add: message.
-     messages add: message ] ] ] ].
+ toolCalls do: [ :call |
+  (call mcpToolMessageIn: aServer) ifNotNil: [ :message |
+   (seen includes: message) ifFalse: [
+    seen add: message.
+    messages add: message ] ] ].
  ^ messages
+]
+
+{ #category : #summaries }
+GtLACPSession >> mcpToolMessagesIn: aServer [
+ ^ self mcpToolMessagesFor: (turns copy flatCollect: [ :turn | turn toolCalls copy ]) in: aServer
 ]
 
 { #category : #accessing }
@@ -340,6 +350,16 @@ GtLACPSession >> modes [
 { #category : #accessing }
 GtLACPSession >> modes: anObject [
  modes := anObject
+]
+
+{ #category : #accessing }
+GtLACPSession >> objectStorage [
+ ^ GtLMcpServer current ifNotNil: #objectStorage
+]
+
+{ #category : #views }
+GtLACPSession >> phlowContext [
+ ^ GtPhlowContext new objectRegistry: self objectStorage; yourself
 ]
 
 { #category : #printing }

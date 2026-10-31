@@ -12,7 +12,7 @@ Class {
 
 { #category : #updating }
 GtLACPChangeSummarizersTabAction >> collectSummarizedViewsFor: summarizers [
- ^ session summarizerViewsFor: summarizers inContext: GtPhlowContext new
+ ^ session summarizerViewsFor: summarizers inContext: session phlowContext
 ]
 
 { #category : #accessing }

@@ -9,7 +9,8 @@ Class {
 		'message',
 		'sectionExpansion',
 		'renderingVersion',
-		'finalReplyAutoExpanded'
+		'finalReplyAutoExpanded',
+		'selectedFinalViewTitle'
 	],
 	#category : #'Gt4Llm-ACP-UI'
 }
@@ -121,6 +122,13 @@ GtLACPChatMessageViewModel >> messages [
  ^ message messages
 ]
 
+{ #category : #views }
+GtLACPChatMessageViewModel >> phlowContext [
+ ^ turn
+  ifNil: [ GtPhlowContext new ]
+  ifNotNil: [ turn session phlowContext ]
+]
+
 { #category : #accessing }
 GtLACPChatMessageViewModel >> renderingKey [
  ^ { self. self renderingVersion }
@@ -139,6 +147,16 @@ GtLACPChatMessageViewModel >> replyMessages [
 { #category : #accessing }
 GtLACPChatMessageViewModel >> section: aName expanded: aBoolean [
  sectionExpansion at: aName put: aBoolean
+]
+
+{ #category : #accessing }
+GtLACPChatMessageViewModel >> selectedFinalViewTitle [
+ ^ selectedFinalViewTitle ifNil: [ 'Markdown' ]
+]
+
+{ #category : #accessing }
+GtLACPChatMessageViewModel >> selectedFinalViewTitle: aString [
+ selectedFinalViewTitle := aString
 ]
 
 { #category : #accessing }

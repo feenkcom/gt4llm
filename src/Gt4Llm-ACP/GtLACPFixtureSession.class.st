@@ -24,3 +24,13 @@ GtLACPFixtureSession >> mcpServer: aServer [
 GtLACPFixtureSession >> mcpToolMessages [
  ^ self mcpToolMessagesIn: mcpServer
 ]
+
+{ #category : #summaries }
+GtLACPFixtureSession >> mcpToolMessagesFor: toolCalls [
+ ^ self mcpToolMessagesFor: toolCalls in: mcpServer
+]
+
+{ #category : #accessing }
+GtLACPFixtureSession >> objectStorage [
+ ^ mcpServer objectStorage
+]

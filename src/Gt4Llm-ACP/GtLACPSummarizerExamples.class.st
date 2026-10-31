@@ -17,6 +17,72 @@ GtLACPSummarizerExamples >> addCallWithId: anId to: aSession [
 ]
 
 { #category : #examples }
+GtLACPSummarizerExamples >> assistantSummaryTabs [
+ <gtExample>
+ | session message scripter |
+ session := self twoAssistantMessagesWithSummaries.
+ message := session turns first assistantMessage.
+ scripter := BlScripter new extent: 1000 @ 700; model: message; element: message asElement; yourself.
+ scripter assertStep: [ :step | step id: #'acp-final-text';
+  value: [ :editor | editor text asString ] equals: [ 'First reply' ] ].
+ scripter clickStep: [ :step |
+  step id: #'acp-final-tabs'; // #tabbar;
+   onChildFromBlock: [ :bar | bar children detect: [ :tab | tab label asString = 'Grouped tools' ] ] ].
+ scripter assertStep: [ :step | step onPhlowCellWithString: 'lookupClass'; exists ].
+ scripter assertStep: [ :step | step onPhlowCellWithString: '1'; exists ].
+ GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+ ^ scripter
+]
+
+{ #category : #examples }
+GtLACPSummarizerExamples >> assistantSummaryUsesSessionSpecifications [
+ <gtExample>
+ | session registry message |
+ session := self twoAssistantMessagesWithSummaries.
+ registry := GtLToolCallSummarizersRegistry new.
+ registry addSpecification: GtLToolCallsByTypeSummarizer asSpecification.
+ session summarizersRegistry: registry.
+ message := session currentTurn assistantMessage.
+ self assert: message toolCallsSummarizers size equals: 1.
+ self assert: message relevantToolCallsSummarizers first relevantToolCalls size equals: 1.
+ ^ message
+]
+
+{ #category : #examples }
+GtLACPSummarizerExamples >> assistantTabSurvivesStreaming [
+ <gtExample>
+ | session turn message chat scripter model |
+ session := self session.
+ turn := session prompt: 'Inspect Object'.
+ message := self messageWithId: 'streaming-summary'.
+ session mcpServer privateAddToolMessage: message.
+ self addCallWithId: message toolCall id to: session.
+ session receiveUpdate: { 'sessionUpdate' -> 'agent_message_chunk'.
+  'content' -> { 'type' -> 'text'. 'text' -> 'Partial reply' } asDictionary } asDictionary.
+ chat := session asElement.
+ scripter := BlScripter new extent: 1000 @ 700; model: session; element: chat; yourself.
+ scripter click id: #'acp-final-toggle'; play.
+ scripter clickStep: [ :step |
+  step id: #'acp-final-tabs'; // #tabbar;
+   onChildFromBlock: [ :bar | bar children detect: [ :tab | tab label asString = 'Grouped tools' ] ] ].
+ model := chat viewModel messageViewModels last.
+ self assert: model selectedFinalViewTitle equals: 'Grouped tools'.
+ scripter doStep: [ :step | step block: [
+  session receiveUpdate: { 'sessionUpdate' -> 'agent_message_chunk'.
+   'content' -> { 'type' -> 'text'. 'text' -> ' continued' } asDictionary } asDictionary.
+  chat updateMessages ] ].
+ scripter assertStep: [ :step | step id: #'acp-final-tabs'; satisfies: [ :tabs |
+  tabs viewModel selectedTab tabLabel text asString = 'Grouped tools' ] ].
+ scripter assertStep: [ :step | step onPhlowCellWithString: '1'; exists ].
+ self finish: turn in: session.
+ scripter pulseUntilReady.
+ scripter assertStep: [ :step | step id: #'acp-final-tabs'; satisfies: [ :tabs |
+  tabs viewModel selectedTab tabLabel text asString = 'Grouped tools' ] ].
+ GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+ ^ scripter
+]
+
+{ #category : #examples }
 GtLACPSummarizerExamples >> customRegistry [
  <gtExample>
  | session registry |
@@ -77,6 +143,50 @@ GtLACPSummarizerExamples >> lateMessageRefresh [
  self assert: session mcpToolMessages first == message.
  self assert: session gtInspectorTargetModels notEmpty.
  ^ session
+]
+
+{ #category : #examples }
+GtLACPSummarizerExamples >> markdownUsesProvidedPhlowContext [
+ <gtExample>
+ | message context element scripter |
+ message := self twoAssistantMessagesWithSummaries currentTurn assistantMessage.
+ context := GtPhlowContext new objectRegistry: GtLObjectStorage new; yourself.
+ element := (message gtFinalReplyFor: GtPhlowView empty inContext: context)
+  asElementDo: [ :widget | widget ].
+ scripter := BlScripter new model: message; element: element; yourself.
+ self assert: element styler objectRegistry == context objectRegistry.
+ GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+ ^ scripter
+]
+
+{ #category : #examples }
+GtLACPSummarizerExamples >> markdownUsesSessionObjectRegistry [
+ <gtExample>
+ | session object objectId turn scripter |
+ session := self session.
+ object := Smalltalk globals allClasses size.
+ objectId := session objectStorage addNewObject: object.
+ self assert: session phlowContext objectRegistry == session mcpServer objectStorage.
+ turn := session prompt: 'How many classes does the image contain?'.
+ session receiveUpdate: {
+  'sessionUpdate' -> 'agent_message_chunk'.
+  'content' -> { 'type' -> 'text'.
+   'text' -> ('The image contains {{gtObject:id=', objectId, '}} classes.') } asDictionary } asDictionary.
+ self finish: turn in: session.
+ scripter := BlScripter new extent: 1000 @ 700; model: session; element: session asElement; yourself.
+ scripter pulseUntilReady.
+ scripter assertStep: [ :step | step id: #'acp-final-text'; satisfies: [ :editor |
+  | attributes |
+  attributes := (1 to: editor text size) flatCollect: [ :index | editor text attributesAt: index ].
+  editor styler objectRegistry == session mcpServer objectStorage and: [
+   (editor styler storedRegistryObjectForId: objectId
+    ifPresent: [ :stored | stored storedValue = object ]
+    ifAbsent: [ false ]) and: [
+   (attributes anySatisfy: [ :attribute | attribute isKindOf: GtButtonAttribute ]) and: [
+   (attributes anySatisfy: [ :attribute | attribute isKindOf: GtCachedTextExpandButtonAttribute ]) and: [
+   attributes anySatisfy: [ :attribute | attribute isKindOf: BrTextHideAttribute ] ] ] ] ] ] ].
+ GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+ ^ scripter
 ]
 
 { #category : #fixtures }
@@ -269,4 +379,29 @@ GtLACPSummarizerExamples >> summariesDisplayed [
  scripter assertStep: [ :step | step onPhlowCellWithString: 'lookupClass'; exists ].
  GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
  ^ scripter
+]
+
+{ #category : #examples }
+GtLACPSummarizerExamples >> twoAssistantMessagesWithSummaries [
+ <gtExample>
+ | session first second message |
+ session := self sessionWithSummaries.
+ first := session currentTurn.
+ first receiveUpdate: { 'sessionUpdate' -> 'agent_message_chunk'.
+  'content' -> { 'type' -> 'text'. 'text' -> 'First reply' } asDictionary } asDictionary.
+ second := session prompt: 'Inspect a second object'.
+ message := self messageWithId: 'second-message-call'.
+ session mcpServer privateAddToolMessage: message.
+ self addCallWithId: message toolCall id to: session.
+ session receiveUpdate: { 'sessionUpdate' -> 'agent_message_chunk'.
+  'content' -> { 'type' -> 'text'. 'text' -> 'Second reply' } asDictionary } asDictionary.
+ self finish: second in: session.
+ self assert: first assistantMessage mcpToolMessages size equals: 1.
+ self assert: second assistantMessage mcpToolMessages size equals: 1.
+ self assert: first assistantMessage mcpToolMessages first toolCall id equals: 'summary-call'.
+ self assert: second assistantMessage mcpToolMessages first == message.
+ self assert: first assistantMessage relevantToolCallsSummarizers first relevantToolCalls size equals: 1.
+ self assert: second assistantMessage relevantToolCallsSummarizers first relevantToolCalls first == message toolCall.
+ self assert: session mcpToolMessages size equals: 2.
+ ^ session
 ]
