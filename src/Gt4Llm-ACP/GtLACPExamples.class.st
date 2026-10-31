@@ -254,6 +254,26 @@ GtLACPExamples >> loadedSession [
 ]
 
 { #category : #examples }
+GtLACPExamples >> mcpToolMessageLookup [
+ <gtExample>
+ | server call message unrelated |
+ server := GtLMcpServer new.
+ call := GtLACPToolCall new data: { 'toolCallId' -> 'acp-mcp-example' } asDictionary; yourself.
+ unrelated := GtLToolMessage new
+  toolCall: (GtLFunctionToolCall new id: 'another-call'; name: 'other'; yourself);
+  yourself.
+ message := GtLToolMessage new
+  toolCall: (GtLFunctionToolCall new id: call id; name: 'example'; yourself);
+  yourself.
+ self assert: (call mcpToolMessageIn: server) isNil.
+ server privateAddToolMessage: unrelated.
+ self assert: (call mcpToolMessageIn: server) isNil.
+ server privateAddToolMessage: message.
+ self assert: (call mcpToolMessageIn: server) == message.
+ ^ call
+]
+
+{ #category : #examples }
 GtLACPExamples >> modeSelection [
  <gtExample>
  | session |
@@ -438,6 +458,25 @@ GtLACPExamples >> unknownInboundRequest [
  reply := session connection transport sentMessages last.
  self assert: ((reply at: 'error') at: 'code') equals: -32601.
  ^ session connection transcript
+]
+
+{ #category : #examples }
+GtLACPExamples >> unmatchedMcpToolMessage [
+ <gtExample>
+ | call server |
+ call := GtLACPToolCall new.
+ server := GtLMcpServer new.
+ server privateAddToolMessage: (GtLToolMessage new
+  toolCall: (GtLFunctionToolCall new name: 'without-id'; yourself);
+  yourself).
+ self assert: (call mcpToolMessageIn: server) isNil.
+ self assert: (call mcpToolMessageIn: nil) isNil.
+ self assert: call hasCorrespondingMcpToolCall not.
+ self assert: (call
+  withMcpToolCallIfPresent: [ :message | self error: 'Unexpected matching message' ]
+  ifAbsent: [ #absent ]) equals: #absent.
+ self assert: ((call gtMcpToolMessageFor: GtPhlowView empty) isKindOf: GtPhlowEmptyView).
+ ^ call
 ]
 
 { #category : #examples }
