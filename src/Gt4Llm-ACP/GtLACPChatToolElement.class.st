@@ -12,20 +12,21 @@ GtLACPChatToolElement >> buildToolLabel [
  ^ super buildToolLabel text: 'ACP Chat'; yourself
 ]
 
-{ #category : #updating }
+{ #category : #views }
 GtLACPChatToolElement >> collectToolViews [
  | views |
- views := GtPhlowViewsCollector new
+ views := (GtPhlowViewsCollector new
   fromObject: self chat;
   pragmaNames: GtLSettings messageViewPragmaNames;
-  collect.
+  collect),
+  (self chat summarizerViewsFor: self chat gtInspectorTargetModels inContext: GtPhlowContext new).
  GtPhlowUtility sortByPriority: views.
  ^ views
 ]
 
-{ #category : #accessing }
+{ #category : #views }
 GtLACPChatToolElement >> gtInspectorTargetModels [
- ^ { self chat }
+ ^ { self chat }, self chat gtInspectorTargetModels
 ]
 
 { #category : #initialization }
@@ -39,11 +40,17 @@ GtLACPChatToolElement >> initialize [
 
 { #category : #updating }
 GtLACPChatToolElement >> updateContainedViews [
- | compositeView tabGroup |
+ | compositeView tabGroup listener |
  self chat ifNil: [
   self viewsContainerElement removeChildren.
   ^ self ].
  compositeView := GtPhlowCompositeView new views: self collectToolViews.
  tabGroup := compositeView asElementDo: [ :element | element ].
+ listener := GtLPhlowSummarizersChangedListener
+  installOnCompositeElement: tabGroup forRegistry: self chat summarizersRegistry.
+ listener onSummarizersChangedAction: (GtLACPChangeSummarizersTabAction new
+  tabGroup: tabGroup;
+  session: self chat;
+  yourself).
  self viewsContainerElement removeChildren; addChild: tabGroup
 ]

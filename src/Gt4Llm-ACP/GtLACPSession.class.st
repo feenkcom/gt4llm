@@ -15,7 +15,8 @@ Class {
 		'modes',
 		'configOptions',
 		'promptText',
-		'announcer'
+		'announcer',
+		'summarizersRegistry'
 	],
 	#category : #'Gt4Llm-ACP-Core'
 }
@@ -106,13 +107,13 @@ GtLACPSession >> connection: anObject [
  connection := anObject
 ]
 
-{ #category : #announcing }
+{ #category : #updating }
 GtLACPSession >> connectionClosed: aReason [
  [
  self currentTurn ifNotNil: [ :turn | turn isActive ifTrue: [ turn fail: aReason ].
   turn permissionRequests do: #abandon ].
  state = #closed ifFalse: [ state := #failed ]
- ] ensure: [ self announceChanged ]
+ ] ensure: [ self updateToolSummarizers. self announceChanged ]
 ]
 
 { #category : #announcing }
@@ -219,10 +220,24 @@ GtLACPSession >> gtDefaultInspectorTool [
 ]
 
 { #category : #views }
+GtLACPSession >> gtInspectorTargetModels [
+ ^ self summarizersRegistry relevantCurrentSummarizers
+]
+
+{ #category : #views }
 GtLACPSession >> gtPermissionsFor: aView [
  <gtView>
  <gtLlmView>
  ^ aView list title: 'Permissions'; priority: 20; items: [ turns flatCollect: [ :each | each permissionRequests copy ] ]; itemText: #yourself; actionUpdateButtonTooltip: 'Refresh permissions'
+]
+
+{ #category : #actions }
+GtLACPSession >> gtRefreshSummarizersFor: anAction [
+ <gtAction>
+ ^ anAction button
+  icon: BrGlamorousVectorIcons refresh;
+  tooltip: 'Refresh tool call summaries';
+  action: [ self updateToolSummarizers ]
 ]
 
 { #category : #views }
@@ -239,6 +254,17 @@ GtLACPSession >> gtSessionFor: aView [
 ]
 
 { #category : #views }
+GtLACPSession >> gtSummarizersRegistryFor: aView [
+ <gtView>
+ <gtLlmView>
+ ^ aView forward
+  title: 'Summarizers';
+  priority: 42;
+  object: [ self summarizersRegistry ];
+  view: #gtCurrentSummarizersFor:
+]
+
+{ #category : #views }
 GtLACPSession >> gtTurnsFor: aView [
  <gtView>
  <gtLlmView>
@@ -252,6 +278,15 @@ GtLACPSession >> gtUpdatesFor: aView [
  ^ aView list title: 'Updates'; priority: 20; items: [ updates copy ]; itemText: #kind; actionUpdateButtonTooltip: 'Refresh updates'
 ]
 
+{ #category : #views }
+GtLACPSession >> gtViewsInContext: aContext [
+ | views |
+ views := (super gtViewsInContext: aContext),
+  (self summarizerViewsFor: self gtInspectorTargetModels inContext: aContext).
+ GtPhlowUtility sortByPriority: views.
+ ^ views
+]
+
 { #category : #accessing }
 GtLACPSession >> initialize [
  super initialize.
@@ -263,7 +298,7 @@ GtLACPSession >> initialize [
  promptText := ''
 ]
 
-{ #category : #announcing }
+{ #category : #updating }
 GtLACPSession >> load: anId [
  | params result |
  [
@@ -275,7 +310,26 @@ GtLACPSession >> load: anId [
  [ result := connection request: 'session/load' parameters: params.
  self updateSettingsFrom: result.
  state := #ready ] on: Error do: [ :ex | state := #failed. ex pass ]
- ] ensure: [ self announceChanged ]
+ ] ensure: [ self updateToolSummarizers. self announceChanged ]
+]
+
+{ #category : #summaries }
+GtLACPSession >> mcpToolMessages [
+ ^ self mcpToolMessagesIn: GtLMcpServer current
+]
+
+{ #category : #summaries }
+GtLACPSession >> mcpToolMessagesIn: aServer [
+ | messages seen |
+ messages := GtLMessagesGroup new.
+ seen := IdentitySet new.
+ turns copy do: [ :turn |
+  turn toolCalls copy do: [ :call |
+   (call mcpToolMessageIn: aServer) ifNotNil: [ :message |
+    (seen includes: message) ifFalse: [
+     seen add: message.
+     messages add: message ] ] ] ].
+ ^ messages
 ]
 
 { #category : #accessing }
@@ -299,7 +353,7 @@ GtLACPSession >> prompt: aString [
  ^ self promptContent: { GtLACPContentBlock text: aString }
 ]
 
-{ #category : #operations }
+{ #category : #updating }
 GtLACPSession >> promptContent: blocks [
  | turn rpc |
  [
@@ -313,8 +367,8 @@ GtLACPSession >> promptContent: blocks [
  rpc := connection newRequest: 'session/prompt' parameters: {
   'sessionId' -> remoteSessionId. 'prompt' -> (blocks collect: #asDictionary) asArray } asDictionary.
  turn request: rpc.
- rpc onSuccess: [ :result | turn complete: (result at: 'stopReason'). state := #ready. self announceMessageChanged: turn assistantMessage ];
-  onFailure: [ :reason | turn fail: reason. state = #closed ifFalse: [ state := (connection state = #ready ifTrue: [ #ready ] ifFalse: [ #failed ]) ]. self announceMessageChanged: turn assistantMessage ].
+ rpc onSuccess: [ :result | turn complete: (result at: 'stopReason'). state := #ready. self updateToolSummarizers. self announceMessageChanged: turn assistantMessage ];
+  onFailure: [ :reason | turn fail: reason. state = #closed ifFalse: [ state := (connection state = #ready ifTrue: [ #ready ] ifFalse: [ #failed ]) ]. self updateToolSummarizers. self announceMessageChanged: turn assistantMessage ].
  connection sendRequest: rpc.
  ^ turn
  ] ensure: [ self announceMessageChanged: (turn ifNotNil: #assistantMessage) ]
@@ -426,6 +480,33 @@ GtLACPSession >> state: anObject [
  state := anObject
 ]
 
+{ #category : #views }
+GtLACPSession >> summarizerViewsFor: summarizers inContext: aContext [
+ | views |
+ views := Array streamContents: [ :stream |
+  summarizers do: [ :model |
+   stream nextPutAll: ((GtPhlowViewsCollector new
+    fromObject: model;
+    context: aContext;
+    collect) select: [ :view |
+     view definingMethod methodClass inheritsFrom: GtLToolCallsSummarizer ]) ] ].
+ GtPhlowUtility sortByPriority: views.
+ ^ views
+]
+
+{ #category : #summaries }
+GtLACPSession >> summarizersRegistry [
+ ^ summarizersRegistry ifNil: [
+  summarizersRegistry := GtLToolCallSummarizersRegistry new
+   addDefaultSpecifications;
+   yourself ]
+]
+
+{ #category : #summaries }
+GtLACPSession >> summarizersRegistry: aRegistry [
+ summarizersRegistry := aRegistry
+]
+
 { #category : #accessing }
 GtLACPSession >> turns [
  ^ turns
@@ -440,6 +521,11 @@ GtLACPSession >> turns: anObject [
 GtLACPSession >> updateSettingsFrom: aDictionary [
  modes := aDictionary at: 'modes' ifAbsent: [ modes ].
  configOptions := aDictionary at: 'configOptions' ifAbsent: [ configOptions ]
+]
+
+{ #category : #summaries }
+GtLACPSession >> updateToolSummarizers [
+ self summarizersRegistry updateSummarizersForMessages: self mcpToolMessages
 ]
 
 { #category : #accessing }
