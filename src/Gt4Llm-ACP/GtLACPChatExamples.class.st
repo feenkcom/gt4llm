@@ -558,6 +558,7 @@ GtLACPChatExamples >> longStreamingChat [
   'content' -> { 'type' -> 'text'. 'text' -> text } asDictionary } asDictionary to: session.
  element := session asElement.
  scripter := BlScripter new model: session; element: element; yourself.
+ scripter pulseUntilReady.
  scripter assertStep: [ :step | step satisfies: [ :chat | chat isAtStreamEnd ] ].
  ^ scripter
 ]
