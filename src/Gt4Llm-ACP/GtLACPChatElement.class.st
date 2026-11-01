@@ -23,31 +23,60 @@ GtLACPChatElement >> actionButton [
  ^ actionButton
 ]
 
-{ #category : #ui }
+{ #category : #building }
 GtLACPChatElement >> buildComposer [
- | composer toolbar |
- inputElement := BrEditor new
-  id: #'acp-input'; aptitude: BrGlamorousRegularEditorAptitude;
-  hMatchParent; vExact: 70;
-  padding: (BlInsets all: 5); yourself.
- inputElement editor when: BrTextEditorModifiedEvent do: [ :event |
-  viewModel ifNotNil: [ viewModel draft: event text asString. self updateControls ] ].
- inputElement addShortcut: (BrEditorShortcut new
-  name: 'Send message'; description: 'Send the prompt to the ACP agent';
-  combination: BlKeyCombination primaryReturn;
-  performBlock: [ :editor | self sendDraft ]; yourself).
- actionButton := BrButton new id: #'acp-action';
-  aptitude: BrGlamorousButtonWithIconAptitude;
-  beSmallSize; label: 'Send'; icon: BrGlamorousVectorIcons accept;
-  action: [ self sendOrStop ]; disable;
-  margin: (BlInsets all: 3); yourself.
- toolbar := BrHorizontalPane new hMatchParent; vFitContent; addChild: actionButton; yourself.
- composer := BrVerticalPane new hMatchParent; vFitContent;
-  padding: (BlInsets all: 5); margin: (BlInsets top: 8 bottom: 4 left: 2 right: 2);
-  background: self theme default contentBackground;
-  addAptitude: BrGlamorousFocusableShadowAptitude new; yourself.
- composer addChild: inputElement; addChild: toolbar.
- ^ composer
+	| composer toolbar |
+	inputElement := BrEditor new
+			id: #'acp-input';
+			aptitude: BrGlamorousRegularEditorAptitude;
+			hMatchParent;
+			vFitContentLimited;
+			padding: (BlInsets all: 5);
+			yourself.
+	inputElement editor
+		when: BrTextEditorModifiedEvent
+		do: [ :event | 
+			viewModel
+				ifNotNil: [ viewModel draft: event text asString.
+					self updateControls ] ].
+	inputElement
+		addShortcut: (BrEditorShortcut new
+				name: 'Send message';
+				description: 'Send the prompt to the ACP agent';
+				combination: BlKeyCombination primaryReturn;
+				performBlock: [ :editor | self sendDraft ];
+				yourself).
+	actionButton := BrButton new
+			id: #'acp-action';
+			aptitude: BrGlamorousButtonWithIconAptitude;
+			beSmallSize;
+			label: 'Send';
+			icon: BrGlamorousVectorIcons accept;
+			action: [ self sendOrStop ];
+			disable;
+			margin: (BlInsets all: 3);
+			yourself.
+	toolbar := BrHorizontalPane new
+			hMatchParent;
+			vFitContent;
+			addChild: actionButton;
+			yourself.
+	composer := BrVerticalPane new
+			hMatchParent;
+			vFitContent;
+			padding: (BlInsets all: 5);
+			margin: (BlInsets
+					top: 8
+					bottom: 4
+					left: 2
+					right: 2);
+			background: self theme default contentBackground;
+			addAptitude: BrGlamorousFocusableShadowAptitude new;
+			yourself.
+	composer
+		addChild: inputElement;
+		addChild: toolbar.
+	^ composer
 ]
 
 { #category : #initialization }
