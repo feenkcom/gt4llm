@@ -58,12 +58,27 @@ GtLACPPromptTurn >> assistantMessage [
   assistantMessage := GtLACPAssistantMessage new turn: self; yourself ]
 ]
 
+{ #category : #accessing }
+GtLACPPromptTurn >> childCoordinationMessages [
+ ^ messages select: [ :message |
+  message isInterSessionMessage and: [ message isChildCoordination ] ]
+]
+
 { #category : #lifecycle }
 GtLACPPromptTurn >> complete: aReason [
  stopReason := aReason.
  state := aReason = 'cancelled' ifTrue: [ #cancelled ] ifFalse: [ #completed ].
  finishedAt := DateAndTime now.
  permissionRequests do: #cancel
+]
+
+{ #category : #accessing }
+GtLACPPromptTurn >> conversationTreeItems [
+ | inputs activityItems |
+ inputs := self inputMessages.
+ activityItems := self activity copy.
+ ^ inputs, activityItems, (messages reject: [ :message |
+  (inputs includes: message) or: [ activityItems includes: message ] ])
 ]
 
 { #category : #accessing }
@@ -83,6 +98,17 @@ GtLACPPromptTurn >> fail: aReason [
  state := #failed.
  finishedAt := DateAndTime now.
  permissionRequests do: #abandon
+]
+
+{ #category : #accessing }
+GtLACPPromptTurn >> finalMessage [
+ | candidates explicit |
+ (#(failed cancelled closed disconnected) includes: state) ifTrue: [ ^ nil ].
+ candidates := messages select: [ :message | message role = #agent ].
+ explicit := candidates reversed detect: [ :message | message phase = 'final_answer' ] ifNone: [ nil ].
+ explicit ifNotNil: [ ^ explicit ].
+ (#(completed replayed idle) includes: state) ifFalse: [ ^ nil ].
+ ^ candidates reversed detect: [ :message | message phase ~= 'commentary' ] ifNone: [ nil ]
 ]
 
 { #category : #accessing }
@@ -115,6 +141,19 @@ GtLACPPromptTurn >> gtDelegatedTurnsFor: aView [
   column: 'State' text: #state;
   column: 'Tools' text: [ :each | each allToolCalls size ];
   actionUpdateButtonTooltip: 'Refresh delegated turns'
+]
+
+{ #category : #views }
+GtLACPPromptTurn >> gtMessagePresentationFor: aView [
+ <gtView>
+ ^ aView columnedList title: 'Message presentation'; priority: 8;
+  items: [ messages copy ];
+  column: 'Presentation' text: [ :message | self presentationOf: message ];
+  column: 'Role' text: #role;
+  column: 'Message ID' text: [ :message | message messageId ifNil: [ '' ] ];
+  column: 'Text' text: [ :message | message text first: (message text size min: 140) ];
+  send: #yourself;
+  actionUpdateButtonTooltip: 'Refresh message classification'
 ]
 
 { #category : #views }
@@ -162,7 +201,8 @@ GtLACPPromptTurn >> initialize [
 { #category : #accessing }
 GtLACPPromptTurn >> inputMessages [
  ^ messages select: [ :message |
-  message role = #user or: [ message isInterSessionMessage and: [ message isOutgoing not ] ] ]
+  message role = #user or: [ message isInterSessionMessage and: [
+   message isOutgoing not and: [ message isChildCoordination not ] ] ] ]
 ]
 
 { #category : #accessing }
@@ -204,26 +244,41 @@ GtLACPPromptTurn >> permissionRequests: anObject [
  permissionRequests := anObject
 ]
 
+{ #category : #accessing }
+GtLACPPromptTurn >> presentationOf: aMessage [
+ aMessage == self finalMessage ifTrue: [ ^ #final ].
+ (self childCoordinationMessages includes: aMessage) ifTrue: [ ^ #coordination ].
+ (self inputMessages includes: aMessage) ifTrue: [ ^ #input ].
+ ^ #work
+]
+
 { #category : #printing }
 GtLACPPromptTurn >> printOn: aStream [
  aStream nextPutAll: 'Turn ('; nextPutAll: state asString; nextPutAll: ')'.
  stopReason ifNotNil: [ aStream space; nextPutAll: stopReason ]
 ]
 
-{ #category : #updates }
+{ #category : #updating }
 GtLACPPromptTurn >> receiveUpdate: aDictionary [
  | kind aRole anId message |
  kind := aDictionary at: 'sessionUpdate'.
  (#('tool_call' 'tool_call_update') includes: kind) ifTrue: [ ^ self updateToolCall: aDictionary ].
  aRole := { 'agent_message_chunk' -> #agent. 'agent_thought_chunk' -> #thought. 'user_message_chunk' -> #user } asDictionary at: kind.
  anId := aDictionary at: 'messageId' ifAbsent: [ nil ].
- message := aRole = #user
-  ifTrue: [ messages ifEmpty: [ nil ] ifNotEmpty: [ messages last ] ]
-  ifFalse: [ self activity ifEmpty: [ nil ] ifNotEmpty: [ self activity last ] ].
- (message isNil or: [ (message isKindOf: GtLACPConversationMessage) not or: [
-  message role ~= aRole or: [ message messageId ~= anId ] ] ]) ifTrue: [
-   message := self addMessageWithRole: aRole content: #().
-   message messageId: anId ].
+ anId
+  ifNotNil: [
+   message := messages detect: [ :each | each role = aRole and: [ each messageId = anId ] ] ifNone: [ nil ] ]
+  ifNil: [
+   message := aRole = #user
+    ifTrue: [ messages ifEmpty: [ nil ] ifNotEmpty: [ messages last ] ]
+    ifFalse: [ self activity ifEmpty: [ nil ] ifNotEmpty: [ self activity last ] ].
+   (message notNil and: [ (message isKindOf: GtLACPConversationMessage) not or: [
+    message role ~= aRole or: [ message messageId notNil ] ] ]) ifTrue: [ message := nil ] ].
+ message ifNil: [
+  message := self addMessageWithRole: aRole content: #().
+  message messageId: anId ].
+ (aDictionary at: '_meta' ifAbsent: [ nil ]) ifNotNil: [ :metadata |
+  message protocolMetadata: metadata ].
  message content add: (GtLACPContentBlock new data: (aDictionary at: 'content'); yourself)
 ]
 
@@ -347,4 +402,12 @@ GtLACPPromptTurn >> userMessages [
 GtLACPPromptTurn >> waitForSeconds: seconds [
  request waitForSeconds: seconds.
  ^ self
+]
+
+{ #category : #accessing }
+GtLACPPromptTurn >> workActivity [
+ | answer coordination |
+ answer := self finalMessage.
+ coordination := self childCoordinationMessages.
+ ^ self activity copy reject: [ :item | item == answer or: [ coordination includes: item ] ]
 ]

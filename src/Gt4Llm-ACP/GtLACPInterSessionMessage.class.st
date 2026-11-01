@@ -74,6 +74,13 @@ GtLACPInterSessionMessage >> initialize [
 ]
 
 { #category : #testing }
+GtLACPInterSessionMessage >> isChildCoordination [
+ | otherId |
+ otherId := self isOutgoing ifTrue: [ self recipientSessionId ] ifFalse: [ self senderSessionId ].
+ ^ session childSessions anySatisfy: [ :child | child remoteSessionId = otherId ]
+]
+
+{ #category : #testing }
 GtLACPInterSessionMessage >> isInterSessionMessage [
  ^ true
 ]

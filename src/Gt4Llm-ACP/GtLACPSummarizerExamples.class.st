@@ -58,6 +58,7 @@ GtLACPSummarizerExamples >> assistantTabSurvivesStreaming [
  session mcpServer privateAddToolMessage: message.
  self addCallWithId: message toolCall id to: session.
  session receiveUpdate: { 'sessionUpdate' -> 'agent_message_chunk'.
+  '_meta' -> { 'jetbrains' -> { 'air' -> { 'phase' -> 'final_answer' } asDictionary } asDictionary } asDictionary.
   'content' -> { 'type' -> 'text'. 'text' -> 'Partial reply' } asDictionary } asDictionary.
  chat := session asElement.
  scripter := BlScripter new extent: 1000 @ 700; model: session; element: chat; yourself.

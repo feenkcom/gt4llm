@@ -85,6 +85,7 @@ GtLACPChatExamples >> assistantSectionChoicesSurviveStreaming [
   GtLACPExamples new sendUpdate: { 'sessionUpdate' -> 'agent_thought_chunk'.
    'content' -> { 'type' -> 'text'. 'text' -> 'Reasoning continues.' } asDictionary } asDictionary to: session.
   GtLACPExamples new sendUpdate: { 'sessionUpdate' -> 'agent_message_chunk'.
+   '_meta' -> { 'jetbrains' -> { 'air' -> { 'phase' -> 'final_answer' } asDictionary } asDictionary } asDictionary.
    'content' -> { 'type' -> 'text'. 'text' -> 'A new final reply.' } asDictionary } asDictionary to: session ] ].
  scripter assertStep: [ :step | step id: #'acp-work-section'; satisfies: #isCollapsed ].
  scripter assertStep: [ :step | step id: #'acp-final-section'; satisfies: #isCollapsed ].
@@ -236,14 +237,13 @@ GtLACPChatExamples >> chatWithToolCallsDisplayed [
  self assertNoRenderingErrorsIn: scripter.
  scripter assertStep: [ :step | step id: #'acp-permission-allow'; exists ].
  self assertNoRenderingErrorsIn: scripter.
- scripter click id: #'acp-final-toggle'; play.
- scripter assertStep: [ :step | step id: #'acp-final-content'; satisfies: [ :pane |
+ scripter assertStep: [ :step | step id: #'acp-work-content'; satisfies: [ :pane |
   (self editorsIn: pane) anySatisfy: [ :child | (child isKindOf: BrEditor) and: [
    child text asString = 'I will **inspect the directory** using the following tool.' ] ] ] ].
  self assertNoRenderingErrorsIn: scripter.
  element updateMessages.
  scripter assertStep: [ :step | step id: #'acp-work-section'; satisfies: [ :section | section isExpanded ] ].
- scripter assertStep: [ :step | step id: #'acp-final-section'; satisfies: [ :section | section isExpanded ] ].
+ scripter assertStep: [ :step | step id: #'acp-final-section'; notExists ].
  self assertNoRenderingErrorsIn: scripter.
  ^ scripter
 ]
@@ -254,10 +254,11 @@ GtLACPChatExamples >> chatWithToolCallsStyledLayout [
  | element scripter |
  element := self chatWithToolCalls.
  scripter := BlScripter new model: element viewModel session; element: element; yourself.
+ scripter click id: #'acp-work-toggle'; play.
  #(800 400 1000 300 800) do: [ :width |
   scripter extent: width @ 600.
   self assertNoRenderingErrorsIn: scripter.
-  scripter assertStep: [ :step | step id: #'acp-final-preview'; exists ].
+  scripter assertStep: [ :step | step id: #'acp-work-content'; exists ].
   scripter assertStep: [ :step | step id: #'acp-messages'; satisfies: [ :list |
    (list childNamed: #scrollable) state isStartStep ] ] ].
  ^ scripter
@@ -286,7 +287,7 @@ GtLACPChatExamples >> commentaryBetweenToolCalls [
   'sessionUpdate' -> 'tool_call_update'. 'toolCallId' -> 'first'.
   'rawOutput' -> 'Runtime found' } asDictionary to: session.
  examples sendUpdate: {
-  'sessionUpdate' -> 'agent_message_chunk'. 'messageId' -> 'same-message'.
+  'sessionUpdate' -> 'agent_message_chunk'. 'messageId' -> 'runtime-answer'.
   'content' -> { 'type' -> 'text'. 'text' -> 'The runtime is compatible.' } asDictionary } asDictionary to: session.
  session connection transport receive: { 'jsonrpc' -> '2.0'. 'id' -> turn request id.
   'result' -> { 'stopReason' -> 'end_turn' } asDictionary } asDictionary.
@@ -426,7 +427,8 @@ GtLACPChatExamples >> composerReturnsToSend [
 GtLACPChatExamples >> disclosuresAlignWithText [
  <gtExample>
  | element scripter |
- element := self chatWithToolCalls.
+ element := self reasoningBetweenToolCalls.
+ element viewModel messageViewModels last section: #final expanded: false.
  scripter := BlScripter new model: element viewModel session; element: element; yourself.
  { #prompt -> #'acp-user-preview'. #work -> #'acp-work-summary'. #final -> #'acp-final-preview' } do: [ :pair |
   scripter assertStep: [ :step |
@@ -500,10 +502,11 @@ GtLACPChatExamples >> finalReplyExpandsOnCompletion [
  session := chat viewModel session.
  turn := session currentTurn.
  scripter := BlScripter new model: session; element: chat; yourself.
- scripter assertStep: [ :step | step id: #'acp-final-section'; satisfies: #isCollapsed ].
- scripter click id: #'acp-final-toggle'; play.
- scripter click id: #'acp-final-toggle'; play.
+ scripter assertStep: [ :step | step id: #'acp-final-section'; notExists ].
  scripter doStep: [ :step | step block: [ :element |
+  GtLACPExamples new sendUpdate: { 'sessionUpdate' -> 'agent_message_chunk'.
+   'messageId' -> 'final-reply'.
+   'content' -> { 'type' -> 'text'. 'text' -> 'Directory inspection is complete.' } asDictionary } asDictionary to: session.
   session connection transport receive: { 'jsonrpc' -> '2.0'. 'id' -> turn request id.
    'result' -> { 'stopReason' -> 'end_turn' } asDictionary } asDictionary ] ].
  scripter assertStep: [ :step | step id: #'acp-final-section'; satisfies: #isExpanded ].
@@ -824,7 +827,7 @@ GtLACPChatExamples >> reasoningBetweenToolCalls [
   'sessionUpdate' -> 'tool_call'. 'toolCallId' -> 'two'.
   'title' -> 'Read configuration'. 'status' -> 'completed' } asDictionary to: session.
  examples sendUpdate: {
-  'sessionUpdate' -> 'agent_thought_chunk'. 'messageId' -> 'reasoning'.
+  'sessionUpdate' -> 'agent_thought_chunk'. 'messageId' -> 'reasoning-after-configuration'.
   'content' -> { 'type' -> 'text'. 'text' -> 'Now I can explain the result.' } asDictionary } asDictionary to: session.
  examples sendUpdate: {
   'sessionUpdate' -> 'tool_call_update'. 'toolCallId' -> 'one'.
@@ -1077,7 +1080,6 @@ GtLACPChatExamples >> streamRecreatesMessageElement [
  session := chat viewModel session.
  scripter := BlScripter new extent: 1000 @ 1000; model: session; element: chat; yourself.
  scripter click id: #'acp-work-toggle'; play.
- scripter click id: #'acp-final-toggle'; play.
  scripter assertStep: [ :step | step id: #'acp-message-2'; satisfies: [ :row |
   originalRow := row.
   originalModel := row viewModel.
@@ -1090,8 +1092,8 @@ GtLACPChatExamples >> streamRecreatesMessageElement [
   row ~~ originalRow and: [ row viewModel == originalModel ] ] ].
  scripter assertStep: [ :step | step id: #'acp-work-section'; satisfies: #isExpanded ].
  scripter assertStep: [ :step | step id: #'acp-tool-tool-1'; exists ].
- scripter assertStep: [ :step | step id: #'acp-final-section'; satisfies: #isExpanded ].
- scripter assertStep: [ :step | step id: #'acp-final-content'; satisfies: [ :pane |
+ scripter assertStep: [ :step | step id: #'acp-final-section'; notExists ].
+ scripter assertStep: [ :step | step id: #'acp-work-content'; satisfies: [ :pane |
   (self editorsIn: pane) anySatisfy: [ :child | (child isKindOf: BrEditor) and: [
    child text asString endsWith: ' More progress.' ] ] ] ].
  self assertNoRenderingErrorsIn: scripter.
@@ -1126,17 +1128,19 @@ GtLACPChatExamples >> streamingUpdatesVisibleText [
   GtLACPExamples new sendUpdate: { 'sessionUpdate' -> 'agent_message_chunk'.
    'content' -> { 'type' -> 'text'. 'text' -> 'First ' } asDictionary } asDictionary to: session ] ].
  scripter assertStep: [ :step |
-  step id: #'acp-final-preview'; satisfies: [ :row |
+  step id: #'acp-work-summary'; satisfies: [ :row |
    row text asString = 'First ' ] ].
  scripter doStep: [ :step | step block: [ :element |
   GtLACPExamples new sendUpdate: { 'sessionUpdate' -> 'agent_message_chunk'.
    'content' -> { 'type' -> 'text'. 'text' -> 'second' } asDictionary } asDictionary to: session ] ].
  scripter assertStep: [ :step |
-  step id: #'acp-final-preview'; satisfies: [ :row |
+  step id: #'acp-work-summary'; satisfies: [ :row |
    row text asString = 'First second' ] ].
  scripter doStep: [ :step | step block: [ :element |
   session connection transport receive: { 'jsonrpc' -> '2.0'. 'id' -> turn request id.
    'result' -> { 'stopReason' -> 'end_turn' } asDictionary } asDictionary ] ].
+ scripter assertStep: [ :step | step id: #'acp-final-text';
+  value: [ :editor | editor text asString ] equals: [ 'First second' ] ].
  scripter assertStep: [ :step |
   step id: #'acp-action'; satisfies: [ :button | button isEnabled not ] ].
  ^ scripter
@@ -1312,7 +1316,7 @@ GtLACPChatExamples >> viewModelCreatesMessageElement [
  element viewModel: model.
  self assert: element children asArray equals: originalChildren.
  scripter := BlScripter new model: model; element: element; yourself.
- scripter assertStep: [ :step | step id: #'acp-final-preview'; exists ].
+ scripter assertStep: [ :step | step id: #'acp-work-summary'; exists ].
  self assert: element children asArray equals: originalChildren.
  self assertNoRenderingErrorsIn: scripter.
  ^ scripter

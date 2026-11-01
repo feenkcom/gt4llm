@@ -39,13 +39,7 @@ GtLACPAssistantMessage >> delegatedMessages [
 
 { #category : #accessing }
 GtLACPAssistantMessage >> finalMessages [
- | items index |
- items := turn activity copy.
- index := items size.
- [ index > 0 and: [
-  ((items at: index) isKindOf: GtLACPConversationMessage) and: [
-   (items at: index) role = #agent ] ] ] whileTrue: [ index := index - 1 ].
- ^ items copyFrom: index + 1 to: items size
+ ^ turn finalMessage ifNil: [ #() ] ifNotNil: [ :message | { message } ]
 ]
 
 { #category : #views }
@@ -125,9 +119,7 @@ GtLACPAssistantMessage >> hasWork [
 
 { #category : #accessing }
 GtLACPAssistantMessage >> localActivityItems [
- | items |
- items := turn activity copy.
- ^ items first: items size - self finalMessages size
+ ^ turn workActivity
 ]
 
 { #category : #summaries }
