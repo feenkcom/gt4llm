@@ -7,9 +7,44 @@ Class {
 	#category : #'Gt4Llm-ACP-UI'
 }
 
-{ #category : #ui }
+{ #category : #building }
+GtLACPAssistantMessageElement >> agentWorkElementFor: anAssistantMessage [
+ | sectionName |
+ sectionName := ('agent-', anAssistantMessage turn identityHash asString) asSymbol.
+ ^ self messageSection: sectionName
+  header: [ :expander | | kind name line |
+   kind := BrLabel new
+    id: ('acp-', sectionName, '-kind') asSymbol;
+    aptitude: (BrGlamorousLabelAptitude new foreground: BrGlamorousColors disabledButtonTextColor);
+    beSmallSize; text: 'agent';
+    background: self theme default backdropBackground;
+    geometry: (BlRoundedRectangleGeometry cornerRadius: 2);
+    padding: (BlInsets left: 2 right: 2); margin: (BlInsets right: 6);
+    constraintsDo: [ :c | c linear vertical alignCenter ]; yourself.
+   name := BrLabel new aptitude: BrGlamorousLabelAptitude;
+    text: anAssistantMessage chatLabel; yourself.
+   line := BrHorizontalPane new
+    id: ('acp-', sectionName, '-header') asSymbol;
+    hMatchParent; vFitContent; addChild: kind; addChild: name; yourself.
+   anAssistantMessage turn isActive ifTrue: [
+    line addChild: (self workIndicatorFor: anAssistantMessage turn
+     id: ('acp-', sectionName, '-work-indicator') asSymbol) ].
+   line when: BlClickEvent do: [ :event |
+    event consumed: true. expander toggleExpanded ].
+   line ]
+  content: [ | pane model |
+   pane := self workContentFor: anAssistantMessage.
+   anAssistantMessage finalMessages ifNotEmpty: [
+    model := viewModel delegatedViewModelFor: anAssistantMessage.
+    pane addChild: (self finalContentFor: model idPrefix: 'acp-', sectionName) ].
+   pane ]
+  aptitude: (BrGlamorousExpanderSubtleAptitude new
+   doNotReplaceHeader; sidebarExtraPadding: (BlInsets top: 6); yourself)
+]
+
+{ #category : #building }
 GtLACPAssistantMessageElement >> buildContent [
- viewModel activityItems ifNotEmpty: [
+ viewModel message hasWork ifTrue: [
   self addChild: (self messageSection: #work
    header: [ :expander |
     BrLabel new id: #'acp-work-summary'; aptitude: BrGlamorousLabelAptitude;
@@ -27,28 +62,38 @@ GtLACPAssistantMessageElement >> buildContent [
   self addChild: (self textElementFor: error printString) ]
 ]
 
-{ #category : #ui }
+{ #category : #building }
 GtLACPAssistantMessageElement >> buildHeader [
  | header |
  header := super buildHeader.
  viewModel turn isActive ifTrue: [
-  header addChild: (BrLabel new
-   id: #'acp-work-indicator';
-   aptitude: (BrGlamorousLabelAptitude new foreground: BrGlamorousColors disabledButtonTextColor);
-   text: (viewModel turn state = #cancelling
-    ifTrue: [ 'Stopping…' ] ifFalse: [ 'Working…' ]);
-   margin: (BlInsets left: 8);
-   constraintsDo: [ :c | c linear vertical alignCenter ];
-   yourself) at: 2 ].
+  header addChild: (self workIndicatorFor: viewModel turn id: #'acp-work-indicator') at: 2 ].
  ^ header
 ]
 
-{ #category : #ui }
+{ #category : #building }
 GtLACPAssistantMessageElement >> finalContent [
- | pane |
- pane := BrVerticalPane new id: #'acp-final-content'; hMatchParent; vFitContent; yourself.
- viewModel replyMessages do: [ :message |
-  pane addChild: (self textElementFor: message text) ].
+ ^ self finalContentFor: viewModel
+]
+
+{ #category : #building }
+GtLACPAssistantMessageElement >> finalContentFor: model [
+ ^ self finalContentFor: model idPrefix: 'acp'
+]
+
+{ #category : #building }
+GtLACPAssistantMessageElement >> finalContentFor: model idPrefix: aPrefix [
+ | pane tabs |
+ tabs := (GtPhlowCompositeView new
+  views: (model message finalReplyViewsInContext: model phlowContext);
+  asElementDo: [ :element | element hMatchParent; vFitContentLimited ]).
+ tabs id: (aPrefix, '-final-tabs') asSymbol.
+ tabs selectTabWithLabelString: model selectedFinalViewTitle.
+ tabs viewModel when: BrTabSelectedEvent do: [ :event |
+  model selectedFinalViewTitle: event tab tabLabel text asString ].
+ pane := BrVerticalPane new
+  id: (aPrefix, '-final-content') asSymbol; hMatchParent; vFitContentLimited;
+  addChild: tabs; yourself.
  ^ pane
 ]
 
@@ -106,17 +151,35 @@ GtLACPAssistantMessageElement >> toolElementFor: aTool [
  ^ pane
 ]
 
-{ #category : #ui }
+{ #category : #building }
 GtLACPAssistantMessageElement >> workContent [
+ ^ self workContentFor: viewModel message
+]
+
+{ #category : #building }
+GtLACPAssistantMessageElement >> workContentFor: anAssistantMessage [
  | pane |
- pane := BrVerticalPane new id: #'acp-work-content'; hMatchParent; vFitContent; yourself.
- viewModel activityItems do: [ :item |
+ pane := BrVerticalPane new hMatchParent; vFitContent; yourself.
+ anAssistantMessage == viewModel message ifTrue: [ pane id: #'acp-work-content' ].
+ anAssistantMessage localActivityItems do: [ :item |
   (item isKindOf: GtLACPToolCall)
    ifTrue: [ pane addChild: (self toolElementFor: item) ]
    ifFalse: [
-    item role = #thought ifTrue: [
-     pane addChild: (BrLabel new aptitude: BrGlamorousLabelAptitude;
-      text: 'Thinking'; yourself) ].
+    item isInterSessionMessage ifTrue: [
+     pane addChild: (BrLabel new aptitude: BrGlamorousLabelAptitude; text: item chatLabel; yourself) ].
     pane addChild: (self textElementFor: item text) ] ].
+ anAssistantMessage delegatedMessages do: [ :delegated |
+  pane addChild: (self agentWorkElementFor: delegated) ].
  ^ pane
+]
+
+{ #category : #building }
+GtLACPAssistantMessageElement >> workIndicatorFor: aTurn id: anId [
+ ^ BrLabel new
+  id: anId;
+  aptitude: (BrGlamorousLabelAptitude new foreground: BrGlamorousColors disabledButtonTextColor);
+  text: (aTurn state = #cancelling ifTrue: [ 'Stopping…' ] ifFalse: [ 'Working…' ]);
+  margin: (BlInsets left: 8);
+  constraintsDo: [ :c | c linear vertical alignCenter ];
+  yourself
 ]

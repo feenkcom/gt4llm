@@ -13,7 +13,18 @@ Class {
 { #category : #views }
 GtLACPProtocolTranscript >> gtMessagesFor: aView [
  <gtView>
- ^ aView list title: 'Messages'; priority: 5; items: [ messages copy ]; itemText: #summary; actionUpdateButtonTooltip: 'Refresh messages'
+ ^ aView columnedList
+  title: 'History';
+  priority: 1;
+  items: [ messages copy ];
+  column: 'Time' text: [ :message | message timestamp asTime printString ] width: 110;
+  column: 'Direction' text: #direction width: 85;
+  column: 'Type' text: #kind width: 90;
+  column: 'ID' text: [ :message | message id ifNil: [ '' ] ] width: 90;
+  column: 'Operation' text: #operation;
+  column: 'Session' text: [ :message | message sessionId ifNil: [ '' ] ];
+  send: #yourself;
+  actionUpdateButtonTooltip: 'Refresh connection history'
 ]
 
 { #category : #accessing }
@@ -34,5 +45,9 @@ GtLACPProtocolTranscript >> messages: anObject [
 
 { #category : #recording }
 GtLACPProtocolTranscript >> record: aDictionary direction: aSymbol [
- messages add: (GtLACPProtocolMessage new data: aDictionary; direction: aSymbol; timestamp: DateAndTime now; yourself)
+ messages add: (GtLACPProtocolMessage new
+  data: aDictionary deepCopy;
+  direction: aSymbol;
+  timestamp: DateAndTime now;
+  yourself)
 ]

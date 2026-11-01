@@ -12,15 +12,14 @@ Class {
 	#category : #'Gt4Llm-ACP-UI'
 }
 
-{ #category : #accessing }
+{ #category : #testing }
 GtLACPChatViewModel >> canSend [
- ^ session state = #ready and: [ self draft trimBoth notEmpty ]
+ ^ session canPrompt and: [ self draft trimBoth notEmpty ]
 ]
 
-{ #category : #accessing }
+{ #category : #testing }
 GtLACPChatViewModel >> canStop [
- ^ session state = #prompting and: [
-  session currentTurn notNil and: [ session currentTurn state = #running ] ]
+ ^ session canCancel
 ]
 
 { #category : #accessing }
@@ -66,14 +65,14 @@ GtLACPChatViewModel >> lastError: anObject [
 GtLACPChatViewModel >> messageViewModels [
  ^ Array streamContents: [ :stream |
   session turns copy do: [ :turn |
-   turn userMessages do: [ :user |
+   turn inputMessages do: [ :user |
     | model |
     model := messageCache at: user ifAbsentPut: [
      GtLACPChatMessageViewModel new turn: turn; yourself ].
     model message: user.
     stream nextPut: model ].
-   ((turn messages anySatisfy: [ :message | message role ~= #user ])
-    or: [ turn toolCalls notEmpty or: [ turn isActive or: [ turn state = #failed ] ] ])
+   (turn activity notEmpty
+    or: [ turn assistantMessage hasWork or: [ turn isActive or: [ turn state = #failed ] ] ])
     ifTrue: [ | model |
      model := messageCache at: turn ifAbsentPut: [
       GtLACPChatMessageViewModel new turn: turn; yourself ].

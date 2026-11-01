@@ -12,9 +12,7 @@ Class {
 
 { #category : #accessing }
 GtLACPAssistantMessage >> activityItems [
- | items |
- items := turn activity copy.
- ^ items first: items size - self finalMessages size
+ ^ self localActivityItems, (self delegatedMessages flatCollect: #activityItems)
 ]
 
 { #category : #converting }
@@ -29,7 +27,14 @@ GtLACPAssistantMessage >> chatElementClass [
 
 { #category : #accessing }
 GtLACPAssistantMessage >> chatLabel [
- ^ turn session client displayName
+ ^ turn session isSubagent
+  ifTrue: [ turn session conversationTitle ]
+  ifFalse: [ turn session client displayName ]
+]
+
+{ #category : #accessing }
+GtLACPAssistantMessage >> delegatedMessages [
+ ^ turn delegatedTurns collect: #assistantMessage
 ]
 
 { #category : #accessing }
@@ -44,10 +49,35 @@ GtLACPAssistantMessage >> finalMessages [
 ]
 
 { #category : #views }
-GtLACPAssistantMessage >> gtFinalReplyFor: aView [
+GtLACPAssistantMessage >> finalReplyViewsInContext: aContext [
+ | views |
+ views := (GtPhlowViewsCollector new
+  fromObject: self;
+  pragmaNames: GtLSettings messageViewPragmaNames;
+  context: aContext;
+  collect),
+  (turn session summarizerViewsFor: self relevantToolCallsSummarizers inContext: aContext).
+ GtPhlowUtility sortByPriority: views.
+ ^ views
+]
+
+{ #category : #views }
+GtLACPAssistantMessage >> gtFinalReplyFor: aView inContext: aPhlowContext [
  <gtView>
- ^ aView textEditor title: 'Final reply'; priority: 5;
-  text: [ self text ]; actionUpdateButtonTooltip: 'Refresh final reply'
+ <gtLlmView>
+ ^ aView explicit
+  title: 'Markdown';
+  priority: 5;
+  stencil: [
+   BrEditor new
+    id: #'acp-final-text';
+    aptitude: BrGlamorousRegularEditorAptitude;
+    beReadOnlyWithSelection;
+    hMatchParent;
+    vFitContentLimited;
+    styler: (GtLMessageStyler new objectRegistry: aPhlowContext objectRegistry; yourself);
+    text: self text;
+    yourself ]
 ]
 
 { #category : #views }
@@ -63,6 +93,16 @@ GtLACPAssistantMessage >> gtToolsFor: aView [
 ]
 
 { #category : #views }
+GtLACPAssistantMessage >> gtViewsInContext: aContext [
+ | views |
+ aContext objectRegistry: turn session objectStorage.
+ views := (super gtViewsInContext: aContext),
+  (turn session summarizerViewsFor: self relevantToolCallsSummarizers inContext: aContext).
+ GtPhlowUtility sortByPriority: views.
+ ^ views
+]
+
+{ #category : #views }
 GtLACPAssistantMessage >> gtWorkFor: aView [
  <gtView>
  ^ aView list title: 'Tools and reasoning'; priority: 0;
@@ -75,7 +115,24 @@ GtLACPAssistantMessage >> gtWorkFor: aView [
 
 { #category : #testing }
 GtLACPAssistantMessage >> hasCompletedReply [
- ^ (#(completed replayed) includes: turn state) and: [ self finalMessages notEmpty ]
+ ^ (#(completed replayed idle) includes: turn state) and: [ self finalMessages notEmpty ]
+]
+
+{ #category : #testing }
+GtLACPAssistantMessage >> hasWork [
+ ^ self localActivityItems notEmpty or: [ self delegatedMessages notEmpty ]
+]
+
+{ #category : #accessing }
+GtLACPAssistantMessage >> localActivityItems [
+ | items |
+ items := turn activity copy.
+ ^ items first: items size - self finalMessages size
+]
+
+{ #category : #summaries }
+GtLACPAssistantMessage >> mcpToolMessages [
+ ^ turn session mcpToolMessagesFor: self toolCalls
 ]
 
 { #category : #accessing }
@@ -87,6 +144,11 @@ GtLACPAssistantMessage >> messages [
 { #category : #printing }
 GtLACPAssistantMessage >> printOn: aStream [
  aStream nextPutAll: 'Assistant response ('; nextPutAll: self state asString; nextPutAll: ')'
+]
+
+{ #category : #summaries }
+GtLACPAssistantMessage >> relevantToolCallsSummarizers [
+ ^ self toolCallsSummarizers select: #isRelevant
 ]
 
 { #category : #accessing }
@@ -106,7 +168,12 @@ GtLACPAssistantMessage >> text [
 
 { #category : #accessing }
 GtLACPAssistantMessage >> toolCalls [
- ^ turn toolCalls copy
+ ^ turn allToolCalls
+]
+
+{ #category : #summaries }
+GtLACPAssistantMessage >> toolCallsSummarizers [
+ ^ turn session summarizersRegistry summarizersForMessages: self mcpToolMessages
 ]
 
 { #category : #accessing }
@@ -125,6 +192,8 @@ GtLACPAssistantMessage >> workSummary [
  tools := self toolCalls.
  tools isEmpty ifTrue: [
   | text |
+  (self localActivityItems isEmpty and: [ self delegatedMessages notEmpty ])
+   ifTrue: [ ^ self delegatedMessages last chatLabel ].
   text := self activityItems ifEmpty: [ '' ] ifNotEmpty: [ self activityItems last text ].
   text := (text copyReplaceAll: String cr with: ' ') copyReplaceAll: String lf with: ' '.
   ^ text size > 140 ifTrue: [ (text first: 140), '…' ] ifFalse: [ text ] ].

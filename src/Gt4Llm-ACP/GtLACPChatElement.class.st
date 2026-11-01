@@ -12,7 +12,8 @@ Class {
 		'errorLabel',
 		'listUpdater',
 		'followEndRequested',
-		'renderedVersions'
+		'renderedVersions',
+		'endMarker'
 	],
 	#category : #'Gt4Llm-ACP-UI'
 }
@@ -49,7 +50,7 @@ GtLACPChatElement >> buildComposer [
  ^ composer
 ]
 
-{ #category : #ui }
+{ #category : #initialization }
 GtLACPChatElement >> configureMessageList [
  listElement padding: (BlInsets all: 5).
  listElement
@@ -57,7 +58,12 @@ GtLACPChatElement >> configureMessageList [
   itemType: [ :factory :item :index | factory named: item renderingKey ];
   itemStencil: [ :type | type name first asElement ];
   itemDataBinder: [ :element :item :index |
-   element id: ('acp-message-', index asString) asSymbol ]
+   element id: (item elementIdAt: index) ]
+]
+
+{ #category : #accessing }
+GtLACPChatElement >> endMarker [
+ ^ endMarker ifNil: [ endMarker := GtLACPChatEndMarker new ]
 ]
 
 { #category : #accessing }
@@ -67,48 +73,54 @@ GtLACPChatElement >> errorLabel [
 
 { #category : #scrolling }
 GtLACPChatElement >> followStreamAfterLayout [
- | viewport lastChild delta |
- followEndRequested ifFalse: [ ^ self ].
- listElement items isEmpty ifTrue: [ followEndRequested := false. ^ self ].
- viewport := self messageViewport.
- lastChild := viewport layout childAtPosition: listElement items size.
- lastChild ifNil: [
-  viewport scrollToPosition: listElement items size.
-  ^ self ].
- delta := lastChild bounds inParent bottom - (viewport height - viewport layout paddingBottom).
- followEndRequested := false.
- delta > 0 ifTrue: [ viewport scrollBy: 0 @ delta ]
+ (followEndRequested and: [ self isAtStreamEnd not ]) ifTrue: [
+  listElement scrollToItem: self endMarker ]
 ]
 
 { #category : #initialization }
 GtLACPChatElement >> initialize [
- super initialize.
- renderedVersions := IdentityDictionary new.
- followEndRequested := false.
- self hMatchParent; vMatchParent; padding: (BlInsets all: 8).
- errorLabel := BrEditor new
-  aptitude: BrGlamorousRegularEditorAptitude;
-  beReadOnlyWithSelection; hMatchParent; vFitContent;
-  visibility: BlVisibility gone; yourself.
- listElement := BrSimpleList vertical
-  hMatchParent; vMatchParent; items: OrderedCollection new; yourself.
- self configureMessageList.
- self initializeScrollFollowing.
- listUpdater := BrElementUpdater new element: self selector: #updateMessages;
-  postponedDuration: 150 milliseconds; yourself.
- self addChild: listElement as: #'acp-messages'.
- self addChild: errorLabel as: #'acp-error'.
- self addChild: self buildComposer as: #'acp-composer'
+	super initialize.
+	renderedVersions := IdentityDictionary new.
+	followEndRequested := false.
+	self
+		hMatchParent;
+		vMatchParent;
+		padding: (BlInsets all: 3).
+	errorLabel := BrEditor new
+			aptitude: BrGlamorousRegularEditorAptitude;
+			beReadOnlyWithSelection;
+			hMatchParent;
+			vFitContent;
+			visibility: BlVisibility gone;
+			yourself.
+	listElement := BrSimpleList vertical
+			hMatchParent;
+			vMatchParent;
+			items: OrderedCollection new;
+			yourself.
+	self configureMessageList.
+	self initializeScrollFollowing.
+	listUpdater := BrElementUpdater new
+			element: self selector: #updateMessages;
+			postponedDuration: 150 milliseconds;
+			yourself.
+	self addChild: listElement as: #'acp-messages'.
+	self addChild: errorLabel as: #'acp-error'.
+	self addChild: self buildComposer as: #'acp-composer'
 ]
 
-{ #category : #initialization }
+{ #category : #scrolling }
 GtLACPChatElement >> initializeScrollFollowing [
- self messageViewport
-  when: BlElementLayoutComputedEvent
-  do: [ :event | self followStreamAfterLayout ].
- self messageViewport
-  when: BlElementScrolledEvent
-  do: [ :event | event delta y < 0 ifTrue: [ followEndRequested := false ] ]
+	self messageViewport
+		when: BlElementLayoutComputedEvent
+		do: [ :event | self followStreamAfterLayout ].
+	self messageViewport
+		when: BlElementScrolledEvent
+		do: [ :event | event delta y < 0 ifTrue: [ followEndRequested := false ] ].
+	self messageViewport
+		addEventFilter: (BlEventHandler
+				on: BlMouseDownEvent
+				do: [ :event | followEndRequested := false ])
 ]
 
 { #category : #accessing }
@@ -176,7 +188,7 @@ GtLACPChatElement >> stopTurn [
  viewModel ifNotNil: [ viewModel stop. self updateControls ]
 ]
 
-{ #category : #ui }
+{ #category : #updating }
 GtLACPChatElement >> updateControls [
  | error |
  viewModel ifNil: [ ^ self ].
@@ -188,9 +200,14 @@ GtLACPChatElement >> updateControls [
   ifFalse: [
    actionButton label: 'Send'; icon: BrGlamorousVectorIcons accept.
    viewModel canSend ifTrue: [ actionButton enable ] ifFalse: [ actionButton disable ] ].
- viewModel session state = #closed
+ (viewModel session isSubagent or: [ viewModel session state = #closed ])
   ifTrue: [ inputElement beReadOnlyWithSelection ]
   ifFalse: [ inputElement beEditable ].
+ actionButton visibility: ((viewModel session isSubagent and: [ viewModel canStop not ])
+  ifTrue: [ BlVisibility gone ] ifFalse: [ BlVisibility visible ]).
+ inputElement visibility: (viewModel session isSubagent ifTrue: [ BlVisibility gone ] ifFalse: [ BlVisibility visible ]).
+ (self childNamed: #'acp-composer') visibility: ((viewModel session isSubagent and: [ viewModel canStop not ])
+  ifTrue: [ BlVisibility gone ] ifFalse: [ BlVisibility visible ]).
  error := viewModel errorText.
  errorLabel text: error.
  errorLabel visibility: (error isEmpty ifTrue: [ BlVisibility gone ] ifFalse: [ BlVisibility visible ])
@@ -203,15 +220,18 @@ GtLACPChatElement >> updateMessages [
  follow := followEndRequested or: [ self isAtStreamEnd ].
  items := viewModel messageViewModels.
  previous := listElement items.
- oldCount := previous size.
- (oldCount <= items size and: [
-  (1 to: oldCount) allSatisfy: [ :index | (previous at: index) == (items at: index) ] ])
+ oldCount := previous size - 1.
+ (oldCount >= 0 and: [
+  previous last == self endMarker and: [
+   oldCount <= items size and: [
+    (1 to: oldCount) allSatisfy: [ :index | (previous at: index) == (items at: index) ] ] ] ])
   ifFalse: [
    followEndRequested := follow and: [ items notEmpty ].
-   listElement items: items asOrderedCollection.
+   listElement items: (items asOrderedCollection add: self endMarker; yourself).
    renderedVersions removeAll.
    items do: [ :item | renderedVersions at: item put: item renderingVersion ].
    self updateControls.
+   self followStreamAfterLayout.
    ^ self ].
  changed := (1 to: oldCount) select: [ :index |
   | item |
@@ -221,10 +241,13 @@ GtLACPChatElement >> updateMessages [
  items do: [ :item | renderedVersions at: item put: item renderingVersion ].
  source := self messageViewport dataSource.
  items size > oldCount ifTrue: [
+  previous removeLast.
   previous addAll: (items copyFrom: oldCount + 1 to: items size).
+  previous add: self endMarker.
   source notifyItemsInserted: (oldCount + 1 to: items size) ].
  changed do: [ :index | source notifyItemsChanged: (index to: index) ].
- self updateControls
+ self updateControls.
+ self followStreamAfterLayout
 ]
 
 { #category : #accessing }

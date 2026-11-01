@@ -12,13 +12,15 @@ Class {
 
 { #category : #ui }
 GtLACPChatMessageElement >> build [
- self addChild: self buildHeader as: #'acp-message-header'.
- self buildContent.
- self addAptitude: (BrLazyStyleCommonAptitude new
-  when: BlElementState hovered
-  style: [ :style :theme |
-   style do: [ :widget | widget showHoverDetails ]
-    after: [ :widget | widget hideHoverDetails ] ])
+	self addChild: self buildHeader as: #'acp-message-header'.
+	self buildContent.
+	self
+		addAptitude: (BrLazyStyleCommonAptitude new
+				when: BlElementState hovered
+				style: [ :style :aTheme | 
+					style
+						do: [ :widget | widget showHoverDetails ]
+						after: [ :widget | widget hideHoverDetails ] ])
 ]
 
 { #category : #ui }
@@ -67,19 +69,30 @@ GtLACPChatMessageElement >> initialize [
 		hMatchParent;
 		vFitContent;
 		padding: (BlInsets all: 5);
-		margin: (BlInsets all: 10);
+		margin: (BlInsets
+				top: 5
+				bottom: 10
+				left: 5
+				right: 5);
 		background: self theme default contentBackground;
 		addAptitude: BlGlamorousExpanderShadowAptitude new
 ]
 
-{ #category : #ui }
+{ #category : #building }
 GtLACPChatMessageElement >> messageSection: aName header: aHeaderBlock content: aBlock [
- | expander model aptitude |
+ ^ self messageSection: aName header: aHeaderBlock content: aBlock
+  aptitude: (BrGlamorousExpanderSubtleAptitude new
+   sidebarExtraPadding: (BlInsets top: (aName = #work ifTrue: [ 6 ] ifFalse: [ 9 ]));
+   yourself)
+]
+
+{ #category : #building }
+GtLACPChatMessageElement >> messageSection: aName header: aHeaderBlock content: aBlock aptitude: anAptitude [
+ | expander model |
  model := viewModel.
- aptitude := BrGlamorousExpanderSubtleAptitude new sidebarExtraPadding: (BlInsets top: (aName = #work ifTrue: [ 6 ] ifFalse: [ 9 ])); yourself.
  expander := BrExpander new.
  expander id: ('acp-', aName asString, '-section') asSymbol;
-  aptitude: aptitude;
+  aptitude: anAptitude;
   hMatchParent; vFitContent; margin: (BlInsets top: 4 bottom: 4);
   header: [ aHeaderBlock value: expander ];
   content: aBlock; yourself.
@@ -107,12 +120,12 @@ GtLACPChatMessageElement >> showHoverDetails [
  (header childNamed: #'acp-inspect') visibility: BlVisibility visible
 ]
 
-{ #category : #ui }
+{ #category : #building }
 GtLACPChatMessageElement >> textElementFor: aString [
  ^ BrEditor new
   aptitude: BrGlamorousRegularEditorAptitude;
   beReadOnlyWithSelection; hMatchParent; vFitContentLimited;
-  styler: (GtLMessageStyler new objectRegistry: GtLObjectStorage new; yourself);
+  styler: (GtLMessageStyler new objectRegistry: viewModel phlowContext objectRegistry; yourself);
   text: aString;
   yourself
 ]

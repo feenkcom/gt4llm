@@ -90,7 +90,7 @@ GtLACPChatExamples >> assistantSectionChoicesSurviveStreaming [
  scripter assertStep: [ :step | step id: #'acp-final-section'; satisfies: #isCollapsed ].
  scripter click id: #'acp-final-toggle'; play.
  scripter assertStep: [ :step | step id: #'acp-final-content'; satisfies: [ :pane |
-  pane children anySatisfy: [ :child | (child isKindOf: BrEditor) and: [
+  (self editorsIn: pane) anySatisfy: [ :child | (child isKindOf: BrEditor) and: [
    child text asString = 'A new final reply.' ] ] ] ].
  ^ scripter
 ]
@@ -238,7 +238,7 @@ GtLACPChatExamples >> chatWithToolCallsDisplayed [
  self assertNoRenderingErrorsIn: scripter.
  scripter click id: #'acp-final-toggle'; play.
  scripter assertStep: [ :step | step id: #'acp-final-content'; satisfies: [ :pane |
-  pane children anySatisfy: [ :child | (child isKindOf: BrEditor) and: [
+  (self editorsIn: pane) anySatisfy: [ :child | (child isKindOf: BrEditor) and: [
    child text asString = 'I will **inspect the directory** using the following tool.' ] ] ] ].
  self assertNoRenderingErrorsIn: scripter.
  element updateMessages.
@@ -320,7 +320,7 @@ GtLACPChatExamples >> commentaryRenderedBetweenTools [
     (children indexOf: tools first) < (children indexOf: commentary) and: [
      (children indexOf: commentary) < (children indexOf: tools second) ] ] ] ].
  scripter assertStep: [ :step | step id: #'acp-final-content'; satisfies: [ :pane |
-  pane children anySatisfy: [ :child |
+  (self editorsIn: pane) anySatisfy: [ :child |
    (child isKindOf: BrEditor) and: [ child text asString = 'The runtime is compatible.' ] ] ] ].
  ^ scripter
 ]
@@ -361,7 +361,7 @@ GtLACPChatExamples >> compactFinalPreview [
   editor text asString size <= 181 and: [ editor text asString beginsWith: 'Reply line 1 ' ] ] ].
  scripter click id: #'acp-final-toggle'; play.
  scripter assertStep: [ :step | step id: #'acp-final-content'; satisfies: [ :pane |
-  pane children anySatisfy: [ :child | (child isKindOf: BrEditor) and: [ child text asString = text ] ] ] ].
+  (self editorsIn: pane) anySatisfy: [ :child | (child isKindOf: BrEditor) and: [ child text asString = text ] ] ] ].
  scripter assertStep: [ :step | step id: #'acp-final-preview'; notExists ].
  scripter click id: #'acp-final-toggle'; play.
  scripter assertStep: [ :step | step id: #'acp-final-preview'; exists ].
@@ -454,6 +454,15 @@ GtLACPChatExamples >> draftSurvivesFailure [
  ^ element
 ]
 
+{ #category : #asserting }
+GtLACPChatExamples >> editorsIn: anElement [
+ | editors |
+ editors := OrderedCollection new.
+ anElement withAllChildrenBreadthFirstDo: [ :each |
+  (each isKindOf: BrEditor) ifTrue: [ editors add: each ] ].
+ ^ editors
+]
+
 { #category : #examples }
 GtLACPChatExamples >> emptyChat [
  <gtExample>
@@ -500,7 +509,7 @@ GtLACPChatExamples >> finalReplyExpandsOnCompletion [
  scripter assertStep: [ :step | step id: #'acp-final-section'; satisfies: #isExpanded ].
  scripter assertStep: [ :step | step id: #'acp-final-preview'; notExists ].
  scripter assertStep: [ :step | step id: #'acp-final-content'; satisfies: [ :pane |
-  pane children anySatisfy: [ :child | (child isKindOf: BrEditor) and: [
+  (self editorsIn: pane) anySatisfy: [ :child | (child isKindOf: BrEditor) and: [
    child text asString = turn assistantMessage text ] ] ] ].
  scripter assertStep: [ :step | step id: #'acp-work-section'; satisfies: #isCollapsed ].
  self assertNoRenderingErrorsIn: scripter.
@@ -531,26 +540,118 @@ GtLACPChatExamples >> keyboardSend [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> longStreamingChat [
+GtLACPChatExamples >> lastMessageLayoutKeepsStreamEnd [
  <gtExample>
- | session turn examples text element scripter |
- examples := GtLACPExamples new.
- session := examples session.
- text := String streamContents: [ :stream |
-  1 to: 12 do: [ :index | stream nextPutAll: 'Line '; print: index; nextPutAll: ' of the assistant response.'; lf ] ].
- 1 to: 8 do: [ :index |
-  turn := session prompt: 'Question ', index asString.
-  examples sendUpdate: { 'sessionUpdate' -> 'agent_message_chunk'.
-   'content' -> { 'type' -> 'text'. 'text' -> text } asDictionary } asDictionary to: session.
-  session connection transport receive: { 'jsonrpc' -> '2.0'. 'id' -> turn request id.
-   'result' -> { 'stopReason' -> 'end_turn' } asDictionary } asDictionary ].
- session prompt: 'Keep streaming'.
- examples sendUpdate: { 'sessionUpdate' -> 'agent_message_chunk'.
-  'content' -> { 'type' -> 'text'. 'text' -> text } asDictionary } asDictionary to: session.
- element := session asElement.
- scripter := BlScripter new model: session; element: element; yourself.
- scripter assertStep: [ :step | step satisfies: [ :chat | chat isAtStreamEnd ] ].
+ | scripter |
+ scripter := self longStreamingChat.
+ scripter doStep: [ :step |
+  step label: 'Grow the last row after the initial scroll has completed';
+   block: [ :chat | | last |
+    last := chat messageViewport layout childAtPosition: chat viewModel messageViewModels size.
+    self assert: last notNil.
+    last vExact: last height + 200 ] ].
+ scripter assertStep: [ :step |
+  step label: 'Follow the end after a later layout without another message update';
+   satisfies: [ :chat | chat isAtStreamEnd ] ].
+ self assertNoRenderingErrorsIn: scripter.
  ^ scripter
+]
+
+{ #category : #examples }
+GtLACPChatExamples >> logicalScrollReachesEndOfTallReply [
+ <gtExample>
+ | session turn text chat scripter |
+ session := GtLACPExamples new session.
+ text := String streamContents: [ :stream |
+  1 to: 60 do: [ :index | stream nextPutAll: 'Reply line '; print: index; lf ] ].
+ turn := session prompt: 'Give me a tall reply'.
+ GtLACPExamples new sendUpdate: { 'sessionUpdate' -> 'agent_message_chunk'.
+  'content' -> { 'type' -> 'text'. 'text' -> text } asDictionary } asDictionary to: session.
+ session connection transport receive: { 'jsonrpc' -> '2.0'. 'id' -> turn request id.
+  'result' -> { 'stopReason' -> 'end_turn' } asDictionary } asDictionary.
+ chat := session asElement.
+ scripter := BlScripter new extent: 1000 @ 700; model: session; element: chat; yourself.
+ scripter assertStep: [ :step | step satisfies: [ :element | element isAtStreamEnd ] ].
+ scripter assertStep: [ :step | step id: #'acp-stream-end';
+  satisfies: [ :marker |
+   chat messageViewport bounds inSpace asRectangle containsPoint: marker bounds inSpace center ] ].
+ self assertNoRenderingErrorsIn: scripter.
+ ^ scripter
+]
+
+{ #category : #examples }
+GtLACPChatExamples >> logicalScrollTargetSurvivesNewTurns [
+ <gtExample>
+ | chat session scripter marker items row |
+ chat := self completedChat.
+ session := chat viewModel session.
+ scripter := BlScripter new extent: 1000 @ 800; model: session; element: chat; yourself.
+ marker := chat endMarker.
+ items := chat listElement items.
+ self assert: items size equals: chat viewModel messageViewModels size + 1.
+ self assert: items last == marker.
+ self assert: (chat viewModel messageViewModels includes: marker) not.
+ scripter assertStep: [ :step | step id: #'acp-stream-end'; exists ].
+ scripter assertStep: [ :step | step id: #'acp-message-2';
+  satisfies: [ :element | row := element. true ] ].
+ scripter doStep: [ :step | step block: [
+  session prompt: 'Another question'.
+  chat updateMessages ] ].
+ scripter assertStep: [ :step | step id: #'acp-message-2';
+  satisfies: [ :element | element == row ] ].
+ self assert: chat listElement items == items.
+ self assert: items size equals: chat viewModel messageViewModels size + 1.
+ self assert: items last == marker.
+ self assert: (items count: [ :each | each == marker ]) equals: 1.
+ scripter assertStep: [ :step | step id: #'acp-stream-end'; exists ].
+ self assertNoRenderingErrorsIn: scripter.
+ ^ scripter
+]
+
+{ #category : #examples }
+GtLACPChatExamples >> longStreamingChat [
+	<gtExample>
+	| session turn examples text element scripter |
+	examples := GtLACPExamples new.
+	session := examples session.
+	text := String
+			streamContents: [ :stream | 
+				1
+					to: 12
+					do: [ :index | 
+						stream
+							nextPutAll: 'Line ';
+							print: index;
+							nextPutAll: ' of the assistant response.';
+							lf ] ].
+	1
+		to: 8
+		do: [ :index | 
+			turn := session prompt: 'Question ' , index asString.
+			examples
+				sendUpdate: {'sessionUpdate' -> 'agent_message_chunk'.
+						'content'
+							-> {'type' -> 'text'.
+									'text' -> text} asDictionary} asDictionary
+				to: session.
+			session connection transport
+				receive: {'jsonrpc' -> '2.0'.
+						'id' -> turn request id.
+						'result' -> {'stopReason' -> 'end_turn'} asDictionary} asDictionary ].
+	session prompt: 'Keep streaming'.
+	examples
+		sendUpdate: {'sessionUpdate' -> 'agent_message_chunk'.
+				'content'
+					-> {'type' -> 'text'.
+							'text' -> text} asDictionary} asDictionary
+		to: session.
+	element := session asElement.
+	scripter := BlScripter new
+			model: session;
+			element: element;
+			yourself.
+	scripter assertStep: [ :step | step satisfies: [ :chat | chat isAtStreamEnd ] ].
+	^ scripter
 ]
 
 { #category : #examples }
@@ -642,7 +743,7 @@ GtLACPChatExamples >> newTurnFollowsBottom [
    'result' -> { 'stopReason' -> 'end_turn' } asDictionary } asDictionary.
   session prompt: 'A new question at the end' ] ].
  scripter assertStep: [ :step | step satisfies: [ :chat |
-  chat isAtStreamEnd and: [ chat listElement items size = 20 ] ] ].
+  chat isAtStreamEnd and: [ chat viewModel messageViewModels size = 20 ] ] ].
  ^ scripter
 ]
 
@@ -765,7 +866,7 @@ GtLACPChatExamples >> reasoningRenderedBetweenTools [
      (children indexOf: firstThought) < (children indexOf: tools second) and: [
       (children indexOf: tools second) < (children indexOf: secondThought) ] ] ] ] ].
  scripter assertStep: [ :step | step id: #'acp-final-content'; satisfies: [ :pane |
-  pane children anySatisfy: [ :child |
+  (self editorsIn: pane) anySatisfy: [ :child |
    (child isKindOf: BrEditor) and: [ child text asString beginsWith: 'Finished.' ] ] ] ].
  ^ scripter
 ]
@@ -812,11 +913,11 @@ GtLACPChatExamples >> replayedConversationDisplayed [
   scripter assertStep: [ :step | step id: ('acp-message-', index asString) asSymbol; exists ] ].
  scripter assertStep: [ :step |
   step id: #'acp-message-2'; id: #'acp-final-content';
-   satisfies: [ :pane | pane children anySatisfy: [ :child |
+   satisfies: [ :pane | (self editorsIn: pane) anySatisfy: [ :child |
     (child isKindOf: BrEditor) and: [ child text asString = 'First answer' ] ] ] ].
  scripter assertStep: [ :step |
   step id: #'acp-message-4'; id: #'acp-final-content';
-   satisfies: [ :pane | pane children anySatisfy: [ :child |
+   satisfies: [ :pane | (self editorsIn: pane) anySatisfy: [ :child |
     (child isKindOf: BrEditor) and: [ child text asString = 'Second answer' ] ] ] ].
  self assertNoRenderingErrorsIn: scripter.
  ^ scripter
@@ -991,7 +1092,7 @@ GtLACPChatExamples >> streamRecreatesMessageElement [
  scripter assertStep: [ :step | step id: #'acp-tool-tool-1'; exists ].
  scripter assertStep: [ :step | step id: #'acp-final-section'; satisfies: #isExpanded ].
  scripter assertStep: [ :step | step id: #'acp-final-content'; satisfies: [ :pane |
-  pane children anySatisfy: [ :child | (child isKindOf: BrEditor) and: [
+  (self editorsIn: pane) anySatisfy: [ :child | (child isKindOf: BrEditor) and: [
    child text asString endsWith: ' More progress.' ] ] ] ].
  self assertNoRenderingErrorsIn: scripter.
  ^ scripter

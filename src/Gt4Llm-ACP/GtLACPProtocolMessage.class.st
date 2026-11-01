@@ -33,9 +33,56 @@ GtLACPProtocolMessage >> direction: anObject [
 ]
 
 { #category : #views }
+GtLACPProtocolMessage >> gtDataFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Data';
+		object: [ data ];
+		view: #gtItemsFor:
+]
+
+{ #category : #views }
 GtLACPProtocolMessage >> gtJsonFor: aView [
- <gtView>
- ^ aView textEditor title: 'JSON'; priority: 30; text: [ STONJSON toStringPretty: data ]; actionUpdateButtonTooltip: 'Refresh json'
+	<gtView>
+	^ aView textEditor
+		title: 'JSON';
+		priority: 30;
+		text: [ STONJSON toStringPretty: data ];
+		styler: JSONParser gtStyler;
+		aptitude: BrGlamorousCodeEditorAptitude;
+		actionUpdateButtonTooltip: 'Refresh json'
+]
+
+{ #category : #accessing }
+GtLACPProtocolMessage >> id [
+ ^ data at: 'id' ifAbsent: [ nil ]
+]
+
+{ #category : #accessing }
+GtLACPProtocolMessage >> kind [
+ (data includesKey: 'method') ifTrue: [
+  ^ (data includesKey: 'id') ifTrue: [ #request ] ifFalse: [ #notification ] ].
+ (data includesKey: 'error') ifTrue: [ ^ #error ].
+ (data includesKey: 'result') ifTrue: [ ^ #response ].
+ ^ #unknown
+]
+
+{ #category : #accessing }
+GtLACPProtocolMessage >> operation [
+ | method |
+ method := data at: 'method' ifAbsent: [ ^ '' ].
+ method = 'session/update' ifTrue: [
+  | update |
+  update := (data at: 'params' ifAbsent: [ Dictionary new ])
+   at: 'update' ifAbsent: [ Dictionary new ].
+  ^ method, ' · ', (update at: 'sessionUpdate' ifAbsent: [ '' ]) ].
+ ^ method
+]
+
+{ #category : #accessing }
+GtLACPProtocolMessage >> sessionId [
+ ^ (data at: 'params' ifAbsent: [ Dictionary new ])
+  at: 'sessionId' ifAbsent: [ nil ]
 ]
 
 { #category : #accessing }

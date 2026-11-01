@@ -40,6 +40,11 @@ GtLACPConversationMessage >> initialize [
  content := OrderedCollection new
 ]
 
+{ #category : #testing }
+GtLACPConversationMessage >> isInterSessionMessage [
+ ^ false
+]
+
 { #category : #accessing }
 GtLACPConversationMessage >> messageId [
  ^ messageId

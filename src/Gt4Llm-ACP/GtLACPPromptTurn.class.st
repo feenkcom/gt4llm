@@ -17,7 +17,8 @@ Class {
 		'finishedAt',
 		'activity',
 		'activityVersion',
-		'assistantMessage'
+		'assistantMessage',
+		'parentTurn'
 	],
 	#category : #'Gt4Llm-ACP-Core'
 }
@@ -47,6 +48,11 @@ GtLACPPromptTurn >> addMessageWithRole: aRole content: blocks [
 ]
 
 { #category : #accessing }
+GtLACPPromptTurn >> allToolCalls [
+ ^ toolCalls copy , (self delegatedTurns flatCollect: #allToolCalls)
+]
+
+{ #category : #accessing }
 GtLACPPromptTurn >> assistantMessage [
  ^ assistantMessage ifNil: [
   assistantMessage := GtLACPAssistantMessage new turn: self; yourself ]
@@ -58,6 +64,12 @@ GtLACPPromptTurn >> complete: aReason [
  state := aReason = 'cancelled' ifTrue: [ #cancelled ] ifFalse: [ #completed ].
  finishedAt := DateAndTime now.
  permissionRequests do: #cancel
+]
+
+{ #category : #accessing }
+GtLACPPromptTurn >> delegatedTurns [
+ ^ session childSessions flatCollect: [ :child |
+  child turns copy select: [ :each | each parentTurn == self ] ]
 ]
 
 { #category : #accessing }
@@ -91,6 +103,18 @@ GtLACPPromptTurn >> gtActivityFor: aView [
    ifTrue: [ each title, ' · ', each status ]
    ifFalse: [ (each role = #thought ifTrue: [ 'Thinking: ' ] ifFalse: [ 'Assistant: ' ]), each text ] ];
   actionUpdateButtonTooltip: 'Refresh activity'
+]
+
+{ #category : #views }
+GtLACPPromptTurn >> gtDelegatedTurnsFor: aView [
+ <gtView>
+ self delegatedTurns ifEmpty: [ ^ aView empty ].
+ ^ aView columnedList title: 'Delegated turns'; priority: 21;
+  items: [ self delegatedTurns ];
+  column: 'Worker' text: [ :each | each session conversationTitle ];
+  column: 'State' text: #state;
+  column: 'Tools' text: [ :each | each allToolCalls size ];
+  actionUpdateButtonTooltip: 'Refresh delegated turns'
 ]
 
 { #category : #views }
@@ -136,6 +160,12 @@ GtLACPPromptTurn >> initialize [
 ]
 
 { #category : #accessing }
+GtLACPPromptTurn >> inputMessages [
+ ^ messages select: [ :message |
+  message role = #user or: [ message isInterSessionMessage and: [ message isOutgoing not ] ] ]
+]
+
+{ #category : #accessing }
 GtLACPPromptTurn >> isActive [
  ^ #(running cancelling) includes: state
 ]
@@ -148,6 +178,20 @@ GtLACPPromptTurn >> messages [
 { #category : #accessing }
 GtLACPPromptTurn >> messages: anObject [
  messages := anObject
+]
+
+{ #category : #accessing }
+GtLACPPromptTurn >> parentTurn [
+ parentTurn ifNotNil: [ ^ parentTurn ].
+ session isSubagent ifFalse: [ ^ nil ].
+ parentTurn := session parentSubagent parentSession turns reversed
+  detect: [ :each | each startedAt <= startedAt ] ifNone: [ nil ].
+ ^ parentTurn
+]
+
+{ #category : #accessing }
+GtLACPPromptTurn >> parentTurn: aTurn [
+ parentTurn := aTurn
 ]
 
 { #category : #accessing }

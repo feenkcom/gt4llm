@@ -9,7 +9,9 @@ Class {
 		'message',
 		'sectionExpansion',
 		'renderingVersion',
-		'finalReplyAutoExpanded'
+		'finalReplyAutoExpanded',
+		'selectedFinalViewTitle',
+		'delegatedMessageViewModels'
 	],
 	#category : #'Gt4Llm-ACP-UI'
 }
@@ -46,6 +48,18 @@ GtLACPChatMessageViewModel >> dateString [
   date hour printOn: stream base: 10 length: 2 padded: true.
   stream nextPut: $:.
   date minute printOn: stream base: 10 length: 2 padded: true ]
+]
+
+{ #category : #accessing }
+GtLACPChatMessageViewModel >> delegatedViewModelFor: anAssistantMessage [
+ delegatedMessageViewModels ifNil: [ delegatedMessageViewModels := IdentityDictionary new ].
+ ^ delegatedMessageViewModels at: anAssistantMessage ifAbsentPut: [
+  self class new turn: anAssistantMessage turn; message: anAssistantMessage; yourself ]
+]
+
+{ #category : #accessing }
+GtLACPChatMessageViewModel >> elementIdAt: anIndex [
+ ^ ('acp-message-', anIndex asString) asSymbol
 ]
 
 { #category : #private }
@@ -121,6 +135,13 @@ GtLACPChatMessageViewModel >> messages [
  ^ message messages
 ]
 
+{ #category : #views }
+GtLACPChatMessageViewModel >> phlowContext [
+ ^ turn
+  ifNil: [ GtPhlowContext new ]
+  ifNotNil: [ turn session phlowContext ]
+]
+
 { #category : #accessing }
 GtLACPChatMessageViewModel >> renderingKey [
  ^ { self. self renderingVersion }
@@ -139,6 +160,16 @@ GtLACPChatMessageViewModel >> replyMessages [
 { #category : #accessing }
 GtLACPChatMessageViewModel >> section: aName expanded: aBoolean [
  sectionExpansion at: aName put: aBoolean
+]
+
+{ #category : #accessing }
+GtLACPChatMessageViewModel >> selectedFinalViewTitle [
+ ^ selectedFinalViewTitle ifNil: [ 'Markdown' ]
+]
+
+{ #category : #accessing }
+GtLACPChatMessageViewModel >> selectedFinalViewTitle: aString [
+ selectedFinalViewTitle := aString
 ]
 
 { #category : #accessing }
