@@ -123,27 +123,49 @@ GtLACPAgentMessageElement >> updateContent [
 
 { #category : #updating }
 GtLACPAgentMessageElement >> updateHeader [
- | kind name details |
- agentHeader ifNil: [ ^ self ].
- agentHeader removeChildren.
- kind := BrLabel new id: (messageViewModel elementIdFor: 'kind');
-  aptitude: BrGlamorousLabelAptitude; beSmallSize; text: 'agent';
-  background: self theme default backdropBackground;
-  geometry: (BlRoundedRectangleGeometry cornerRadius: 2);
-  padding: (BlInsets left: 2 right: 2); margin: (BlInsets right: 6);
-  constraintsDo: [ :c | c linear vertical alignCenter ]; yourself.
- name := BrLabel new aptitude: BrGlamorousLabelAptitude;
-  text: messageViewModel message chatLabel; yourself.
- agentHeader addChild: kind; addChild: name.
- messageViewModel turn isActive ifTrue: [
-  agentHeader addChild: (BrLabel new id: (messageViewModel elementIdFor: 'work-indicator');
-   aptitude: (BrGlamorousLabelAptitude new foreground: BrGlamorousColors disabledButtonTextColor);
-   text: (messageViewModel turn state = #cancelling ifTrue: [ 'Stopping…' ] ifFalse: [ 'Working…' ]);
-   margin: (BlInsets left: 8);
-   constraintsDo: [ :c | c linear vertical alignCenter ]; yourself) ].
- details := BrLabel new id: (messageViewModel elementIdFor: 'summary');
-  aptitude: BrGlamorousLabelAptitude; hMatchParent;
-  text: messageViewModel message workSummaryDetails; margin: (BlInsets left: 8);
-  constraintsDo: [ :c | c linear vertical alignCenter ]; yourself.
- agentHeader addChild: details
+	| kind name details |
+	agentHeader ifNil: [ ^ self ].
+	agentHeader removeChildren.
+	kind := BrLabel new
+			id: (messageViewModel elementIdFor: 'kind');
+			aptitude: BrGlamorousLabelAptitude;
+			beSmallSize;
+			text: 'agent';
+			background: self theme default backdropBackground;
+			geometry: (BlRoundedRectangleGeometry cornerRadius: 2);
+			padding: (BlInsets left: 2 right: 2);
+			margin: (BlInsets right: 6);
+			constraintsDo: [ :c | c linear vertical alignCenter ];
+			yourself.
+	name := BrButton new
+			id: (messageViewModel elementIdFor: 'name');
+			aptitude: BrGlamorousButtonWithLabelAptitude - BrGlamorousButtonExteriorAptitude;
+			label: messageViewModel message chatLabel;
+			padding: BlInsets empty;
+			action: [ :button | button phlow spawnObject: messageViewModel turn session ];
+			yourself.
+	agentHeader
+		addChild: kind;
+		addChild: name.
+	messageViewModel turn isActive
+		ifTrue: [ agentHeader
+				addChild: (BrLabel new
+						id: (messageViewModel elementIdFor: 'work-indicator');
+						aptitude: (BrGlamorousLabelAptitude new
+								foreground: BrGlamorousColors disabledButtonTextColor);
+						text: (messageViewModel turn state = #cancelling
+								ifTrue: [ 'Stopping…' ]
+								ifFalse: [ 'Working…' ]);
+						margin: (BlInsets left: 8);
+						constraintsDo: [ :c | c linear vertical alignCenter ];
+						yourself) ].
+	details := BrLabel new
+			id: (messageViewModel elementIdFor: 'summary');
+			aptitude: BrGlamorousLabelAptitude;
+			hMatchParent;
+			text: messageViewModel message workSummaryDetails;
+			margin: (BlInsets left: 8);
+			constraintsDo: [ :c | c linear vertical alignCenter ];
+			yourself.
+	agentHeader addChild: details
 ]

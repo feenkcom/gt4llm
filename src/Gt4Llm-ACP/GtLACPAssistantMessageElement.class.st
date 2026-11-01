@@ -124,26 +124,43 @@ GtLACPAssistantMessageElement >> permissionElementFor: permission [
 
 { #category : #building }
 GtLACPAssistantMessageElement >> toolElementFor: aTool [
- | pane line kind summary |
- kind := self workBadge: 'tool' id: ('acp-tool-kind-', aTool id asString) asSymbol.
- summary := BrLabel new
-  id: ('acp-tool-summary-', aTool id asString) asSymbol;
-  aptitude: BrGlamorousLabelAptitude;
-  hMatchParent; text: aTool summary; yourself.
- line := BrHorizontalPane new
-  id: ('acp-tool-line-', aTool id asString) asSymbol;
-  hMatchParent; vFitContent;
-  addChild: kind; addChild: summary; yourself.
- line when: BlClickEvent do: [ :event |
-  event consumed: true.
-  line phlow spawnObject: aTool ].
- pane := BrVerticalPane new
-  id: ('acp-tool-', aTool id asString) asSymbol;
-  hMatchParent; vFitContent; margin: (BlInsets top: 4 bottom: 4);
-  addChild: line; yourself.
- aTool permissionRequests do: [ :permission |
-  permission state = #pending ifTrue: [ pane addChild: (self permissionElementFor: permission) ] ].
- ^ pane
+	| pane line kind summary |
+	kind := self
+			workBadge: 'tool'
+			id: ('acp-tool-kind-' , aTool id asString) asSymbol.
+	summary := BrButton new
+			id: ('acp-tool-summary-' , aTool id asString) asSymbol;
+			aptitude: BrGlamorousButtonWithLabelAptitude - BrGlamorousButtonExteriorAptitude;
+			hMatchParent;
+			alignCenterLeft;
+			padding: BlInsets empty;
+			label: aTool summary;
+			action: [ :button | button phlow spawnObject: aTool ];
+			yourself.
+	line := BrHorizontalPane new
+			id: ('acp-tool-line-' , aTool id asString) asSymbol;
+			hMatchParent;
+			vFitContent;
+			addChild: kind;
+			addChild: summary;
+			yourself.
+	line
+		when: BlClickEvent
+		do: [ :event | 
+			event consumed: true.
+			line phlow spawnObject: aTool ].
+	pane := BrVerticalPane new
+			id: ('acp-tool-' , aTool id asString) asSymbol;
+			hMatchParent;
+			vFitContent;
+			margin: (BlInsets top: 4 bottom: 4);
+			addChild: line;
+			yourself.
+	aTool permissionRequests
+		do: [ :permission | 
+			permission state = #pending
+				ifTrue: [ pane addChild: (self permissionElementFor: permission) ] ].
+	^ pane
 ]
 
 { #category : #updating }

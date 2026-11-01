@@ -214,49 +214,79 @@ GtLACPSubagentExamples >> childChatDisplayed [
 
 { #category : #examples }
 GtLACPSubagentExamples >> childToolCallsDisplayed [
- <gtExample>
- | root child turn scripter |
- root := GtLACPExamples new session.
- turn := root prompt: 'Delegate the lookup'.
- child := self announce: 'tool-worker' title: 'Lookup worker' in: root.
- self task: 'Find the class' from: root to: child id: 'lookup-task'.
- scripter := BlScripter new extent: 1000 @ 700; model: child; element: child asElement; yourself.
- self update: {
-  'sessionUpdate' -> 'tool_call'. 'toolCallId' -> 'parent-call'.
-  'title' -> 'Parent lookup'. 'status' -> 'completed'
- } asDictionary for: root.
- scripter doStep: [ :step |
-  step label: 'Receive a tool call addressed to the child session';
-   block: [ self update: {
-    'sessionUpdate' -> 'tool_call'. 'toolCallId' -> 'child-call'.
-    'title' -> 'Child lookup'. 'status' -> 'in_progress'
-   } asDictionary for: child ] ].
- scripter pulseUntilReady.
- scripter click id: #'acp-work-toggle'; play.
- scripter assertStep: [ :step |
-  step id: #'acp-tool-summary-child-call';
-   satisfies: [ :label | label text asString includesSubstring: 'Child lookup' ] ].
- scripter doStep: [ :step |
-  step label: 'Finish the child tool call and reply';
-   block: [
-    self update: {
-     'sessionUpdate' -> 'tool_call_update'. 'toolCallId' -> 'child-call'. 'status' -> 'completed'
-    } asDictionary for: child.
-    self reply: 'The class was found.' in: child.
-    self idle: child ] ].
- scripter pulseUntilReady.
- scripter assertStep: [ :step |
-  step id: #'acp-tool-summary-child-call';
-   satisfies: [ :label | label text asString includesSubstring: 'Child lookup' ] ].
- scripter assertStep: [ :step |
-  step id: #'acp-final-text';
-   value: [ :editor | editor text asString ] equals: [ 'The class was found.' ] ].
- self assert: child currentTurn toolCalls size equals: 1.
- self assert: turn toolCalls size equals: 1.
- self assert: turn toolCalls first id equals: 'parent-call'.
- self assert: (turn assistantMessage activityItems includes: turn toolCalls first).
- GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
- ^ scripter
+	<gtExample>
+	| root child turn scripter |
+	root := GtLACPExamples new session.
+	turn := root prompt: 'Delegate the lookup'.
+	child := self
+			announce: 'tool-worker'
+			title: 'Lookup worker'
+			in: root.
+	self
+		task: 'Find the class'
+		from: root
+		to: child
+		id: 'lookup-task'.
+	scripter := BlScripter new
+			extent: 1000 @ 700;
+			model: child;
+			element: child asElement;
+			yourself.
+	self
+		update: {'sessionUpdate' -> 'tool_call'.
+				'toolCallId' -> 'parent-call'.
+				'title' -> 'Parent lookup'.
+				'status' -> 'completed'} asDictionary
+		for: root.
+	scripter
+		doStep: [ :step | 
+			step
+				label: 'Receive a tool call addressed to the child session';
+				block: [ self
+						update: {'sessionUpdate' -> 'tool_call'.
+								'toolCallId' -> 'child-call'.
+								'title' -> 'Child lookup'.
+								'status' -> 'in_progress'} asDictionary
+						for: child ] ].
+	scripter pulseUntilReady.
+	scripter click
+		id: #'acp-work-toggle';
+		play.
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-tool-summary-child-call';
+				satisfies: [ :label | label label asString includesSubstring: 'Child lookup' ] ].
+	scripter
+		doStep: [ :step | 
+			step
+				label: 'Finish the child tool call and reply';
+				block: [ self
+						update: {'sessionUpdate' -> 'tool_call_update'.
+								'toolCallId' -> 'child-call'.
+								'status' -> 'completed'} asDictionary
+						for: child.
+					self reply: 'The class was found.' in: child.
+					self idle: child ] ].
+	scripter pulseUntilReady.
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-tool-summary-child-call';
+				satisfies: [ :label | label label asString includesSubstring: 'Child lookup' ] ].
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-final-text';
+				value: [ :editor | editor text asString ]
+					equals: [ 'The class was found.' ] ].
+	self assert: child currentTurn toolCalls size equals: 1.
+	self assert: turn toolCalls size equals: 1.
+	self assert: turn toolCalls first id equals: 'parent-call'.
+	self
+		assert: (turn assistantMessage activityItems includes: turn toolCalls first).
+	GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+	^ scripter
 ]
 
 { #category : #examples }
