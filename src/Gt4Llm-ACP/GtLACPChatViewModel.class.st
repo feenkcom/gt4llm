@@ -82,6 +82,7 @@ GtLACPChatViewModel >> messageViewModels [
 
 { #category : #updating }
 GtLACPChatViewModel >> onSessionChanged: anAnnouncement [
+ anAnnouncement sourceSession == session ifFalse: [ ^ self ].
  anAnnouncement message ifNil: [ ^ self ].
  messageCache valuesDo: [ :model |
   model message == anAnnouncement message ifTrue: [ model changed ] ]

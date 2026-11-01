@@ -91,12 +91,13 @@ GtLACPChatMessageElement >> messageSection: aName header: aHeaderBlock content: 
  | expander model |
  model := viewModel.
  expander := BrExpander new.
- expander id: ('acp-', aName asString, '-section') asSymbol;
+ expander id: (model elementIdFor: aName asString, '-section');
   aptitude: anAptitude;
   hMatchParent; vFitContent; margin: (BlInsets top: 4 bottom: 4);
   header: [ aHeaderBlock value: expander ];
   content: aBlock; yourself.
- ((expander childNamed: #sidebar) childNamed: #'expander--toggle') id: ('acp-', aName asString, '-toggle') asSymbol.
+ ((expander childNamed: #sidebar) childNamed: #'expander--toggle')
+  id: (model elementIdFor: aName asString, '-toggle').
  expander expanded: (model isSectionExpanded: aName).
  expander whenExpandedDo: [ model section: aName expanded: true ].
  expander whenCollapsedDo: [ model section: aName expanded: false ].

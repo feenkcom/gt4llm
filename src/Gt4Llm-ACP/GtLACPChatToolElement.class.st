@@ -4,12 +4,41 @@ I present an ACP session using the Phlow chat tool structure: a labeled header, 
 Class {
 	#name : #GtLACPChatToolElement,
 	#superclass : #GtPhlowChatToolElement,
+	#instVars : [
+		'closeSessionButton',
+		'closeSessionButtonUpdater'
+	],
 	#category : #'Gt4Llm-ACP-UI'
 }
+
+{ #category : #building }
+GtLACPChatToolElement >> buildHeaderElement [
+ | header |
+ closeSessionButton := BrButton new id: #'acp-close-session';
+  aptitude: BrGlamorousButtonWithLabelAptitude; beSmallSize;
+  label: 'Close session'; visibility: BlVisibility gone;
+  action: [ self chat close. self updateCloseSessionButton ]; yourself.
+ header := BrHorizontalPane new padding: (BlInsets left: 5);
+  hMatchParent; vFitContent;
+  addChild: self buildToolLabel as: #toolLabel;
+  addChild: (BrFrame new hMatchParent; vExact: 0; yourself);
+  addChild: closeSessionButton;
+  yourself.
+ ^ header
+]
 
 { #category : #initialization }
 GtLACPChatToolElement >> buildToolLabel [
  ^ super buildToolLabel text: 'ACP Chat'; yourself
+]
+
+{ #category : #accessing }
+GtLACPChatToolElement >> chat: aSession [
+ chat ifNotNil: [ chat announcer unsubscribe: self ].
+ super chat: aSession.
+ aSession ifNotNil: [
+  aSession announcer weak when: GtLACPSessionChanged send: #onSessionChanged: to: self ].
+ self updateCloseSessionButton
 ]
 
 { #category : #views }
@@ -34,10 +63,24 @@ GtLACPChatToolElement >> gtInspectorTargetModels [
 { #category : #initialization }
 GtLACPChatToolElement >> initialize [
  super initialize.
+ closeSessionButtonUpdater := BrElementUpdater new element: self selector: #updateCloseSessionButton;
+  postponedDuration: 150 milliseconds; yourself.
  self phlow
   accessTool: (GtPhlowToolClassType forClass: GtLACPSession)
   viewModel: #chat
   object: #chat
+]
+
+{ #category : #events }
+GtLACPChatToolElement >> onSessionChanged: anAnnouncement [
+ BlTaskAction enqueueElement: self action: [ closeSessionButtonUpdater requestUpdate ]
+]
+
+{ #category : #updating }
+GtLACPChatToolElement >> updateCloseSessionButton [
+ (chat notNil and: [ chat canClose ])
+  ifTrue: [ closeSessionButton visibility: BlVisibility visible; enable ]
+  ifFalse: [ closeSessionButton visibility: BlVisibility gone; disable ]
 ]
 
 { #category : #updating }

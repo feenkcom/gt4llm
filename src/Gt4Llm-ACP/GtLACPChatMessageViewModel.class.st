@@ -11,7 +11,8 @@ Class {
 		'renderingVersion',
 		'finalReplyAutoExpanded',
 		'selectedFinalViewTitle',
-		'delegatedMessageViewModels'
+		'delegatedMessageViewModels',
+		'elementIdPrefix'
 	],
 	#category : #'Gt4Llm-ACP-UI'
 }
@@ -23,10 +24,10 @@ GtLACPChatMessageViewModel >> activityItems [
 
 { #category : #converting }
 GtLACPChatMessageViewModel >> asElement [
- ^ message chatElementClass new
-  viewModel: self;
-  build;
-  yourself
+	^ message chatElementClass new
+		viewModel: self;
+		build;
+		yourself
 ]
 
 { #category : #updating }
@@ -50,16 +51,33 @@ GtLACPChatMessageViewModel >> dateString [
   date minute printOn: stream base: 10 length: 2 padded: true ]
 ]
 
-{ #category : #accessing }
+{ #category : #updating }
 GtLACPChatMessageViewModel >> delegatedViewModelFor: anAssistantMessage [
  delegatedMessageViewModels ifNil: [ delegatedMessageViewModels := IdentityDictionary new ].
  ^ delegatedMessageViewModels at: anAssistantMessage ifAbsentPut: [
-  self class new turn: anAssistantMessage turn; message: anAssistantMessage; yourself ]
+  self class new turn: anAssistantMessage turn; message: anAssistantMessage;
+   elementIdPrefix: 'acp-agent-', anAssistantMessage turn identityHash asString;
+   subscribeToSession; yourself ]
 ]
 
 { #category : #accessing }
 GtLACPChatMessageViewModel >> elementIdAt: anIndex [
  ^ ('acp-message-', anIndex asString) asSymbol
+]
+
+{ #category : #accessing }
+GtLACPChatMessageViewModel >> elementIdFor: aSuffix [
+ ^ (self elementIdPrefix, '-', aSuffix asString) asSymbol
+]
+
+{ #category : #accessing }
+GtLACPChatMessageViewModel >> elementIdPrefix [
+ ^ elementIdPrefix ifNil: [ 'acp' ]
+]
+
+{ #category : #accessing }
+GtLACPChatMessageViewModel >> elementIdPrefix: aString [
+ elementIdPrefix := aString
 ]
 
 { #category : #private }
@@ -135,6 +153,12 @@ GtLACPChatMessageViewModel >> messages [
  ^ message messages
 ]
 
+{ #category : #updating }
+GtLACPChatMessageViewModel >> onSessionChanged: anAnnouncement [
+ (anAnnouncement sourceSession == turn session
+  and: [ anAnnouncement message == message ]) ifTrue: [ self changed ]
+]
+
 { #category : #views }
 GtLACPChatMessageViewModel >> phlowContext [
  ^ turn
@@ -170,6 +194,12 @@ GtLACPChatMessageViewModel >> selectedFinalViewTitle [
 { #category : #accessing }
 GtLACPChatMessageViewModel >> selectedFinalViewTitle: aString [
  selectedFinalViewTitle := aString
+]
+
+{ #category : #updating }
+GtLACPChatMessageViewModel >> subscribeToSession [
+ turn session announcer weak
+  when: GtLACPSessionChanged send: #onSessionChanged: to: self
 ]
 
 { #category : #accessing }

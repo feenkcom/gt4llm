@@ -6,7 +6,8 @@ Class {
 	#superclass : #Announcement,
 	#instVars : [
 		'session',
-		'message'
+		'message',
+		'sourceSession'
 	],
 	#category : #'Gt4Llm-ACP-UI'
 }
@@ -29,4 +30,14 @@ GtLACPSessionChanged >> session [
 { #category : #accessing }
 GtLACPSessionChanged >> session: anObject [
  session := anObject
+]
+
+{ #category : #accessing }
+GtLACPSessionChanged >> sourceSession [
+ ^ sourceSession ifNil: [ session ]
+]
+
+{ #category : #accessing }
+GtLACPSessionChanged >> sourceSession: aSession [
+ sourceSession := aSession
 ]
