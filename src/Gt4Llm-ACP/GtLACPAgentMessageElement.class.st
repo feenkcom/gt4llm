@@ -123,20 +123,10 @@ GtLACPAgentMessageElement >> updateContent [
 
 { #category : #updating }
 GtLACPAgentMessageElement >> updateHeader [
-	| kind name details |
+	| kind name counts |
 	agentHeader ifNil: [ ^ self ].
 	agentHeader removeChildren.
-	kind := BrLabel new
-			id: (messageViewModel elementIdFor: 'kind');
-			aptitude: BrGlamorousLabelAptitude;
-			beSmallSize;
-			text: 'agent';
-			background: self theme default backdropBackground;
-			geometry: (BlRoundedRectangleGeometry cornerRadius: 2);
-			padding: (BlInsets left: 2 right: 2);
-			margin: (BlInsets right: 6);
-			constraintsDo: [ :c | c linear vertical alignCenter ];
-			yourself.
+	kind := self workBadge: 'agent' id: (messageViewModel elementIdFor: 'kind').
 	name := BrButton new
 			id: (messageViewModel elementIdFor: 'name');
 			aptitude: BrGlamorousButtonWithLabelAptitude - BrGlamorousButtonExteriorAptitude;
@@ -159,13 +149,33 @@ GtLACPAgentMessageElement >> updateHeader [
 						margin: (BlInsets left: 8);
 						constraintsDo: [ :c | c linear vertical alignCenter ];
 						yourself) ].
-	details := BrLabel new
-			id: (messageViewModel elementIdFor: 'summary');
-			aptitude: BrGlamorousLabelAptitude;
-			hMatchParent;
-			text: messageViewModel message workSummaryDetails;
+	counts := BrHorizontalPane new
+			id: (messageViewModel elementIdFor: 'counts');
+			hFitContent;
+			vFitContent;
 			margin: (BlInsets left: 8);
 			constraintsDo: [ :c | c linear vertical alignCenter ];
 			yourself.
-	agentHeader addChild: details
+	messageViewModel message workSummaryCountLabels
+		withIndexDo: [ :text :index | 
+			counts
+				addChild: (self
+						workBadge: text
+						id: (messageViewModel elementIdFor: 'count-' , index asString)) ].
+	agentHeader addChild: counts
+]
+
+{ #category : #building }
+GtLACPAgentMessageElement >> workBadge: aString id: anId [
+	^ BrLabel new
+		id: anId;
+		aptitude: BrGlamorousLabelAptitude;
+		beSmallSize;
+		text: aString;
+		background: self theme default backdropBackground;
+		geometry: (BlRoundedRectangleGeometry cornerRadius: 2);
+		padding: (BlInsets left: 2 right: 2);
+		margin: (BlInsets right: 6);
+		constraintsDo: [ :c | c linear vertical alignCenter ];
+		yourself
 ]

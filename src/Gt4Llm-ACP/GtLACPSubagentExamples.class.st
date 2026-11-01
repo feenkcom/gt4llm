@@ -345,43 +345,99 @@ GtLACPSubagentExamples >> closingRootDetachesChildren [
 
 { #category : #examples }
 GtLACPSubagentExamples >> collapsedAgentRefreshPreservesParent [
- <gtExample>
- | scripter root child sibling prefix siblingPrefix parentRow parentChildren localTool agent siblingHeader version |
- scripter := self runningAgentsChat.
- root := scripter model.
- child := root childSessions first.
- sibling := root childSessions second.
- prefix := 'acp-agent-', child currentTurn identityHash asString.
- siblingPrefix := 'acp-agent-', sibling currentTurn identityHash asString.
- scripter assertStep: [ :step | step id: #'acp-message-2'; satisfies: [ :row |
-  parentRow := row. parentChildren := row children asArray.
-  version := row viewModel renderingVersion. true ] ].
- scripter assertStep: [ :step | step id: #'acp-tool-summary-local-call';
-  satisfies: [ :line | localTool := line. true ] ].
- scripter assertStep: [ :step | step id: (prefix, '-section') asSymbol;
-  satisfies: [ :element | agent := element. element isExpanded not ] ].
- scripter assertStep: [ :step | step id: (siblingPrefix, '-header') asSymbol;
-  satisfies: [ :header | siblingHeader := header. true ] ].
- scripter doStep: [ :step | step label: 'Stream reasoning into a collapsed worker';
-  block: [
-   self update: { 'sessionUpdate' -> 'agent_thought_chunk'.
-    'content' -> { 'type' -> 'text'. 'text' -> 'I am inspecting the worker result.' } asDictionary
-   } asDictionary for: child.
-   self update: { 'sessionUpdate' -> 'usage_update' } asDictionary for: child ] ].
- scripter pulseUntilReady.
- scripter assertStep: [ :step | step id: #'acp-message-2'; satisfies: [ :row |
-  row == parentRow and: [ row children asArray = parentChildren
-   and: [ row viewModel renderingVersion = version ] ] ] ].
- scripter assertStep: [ :step | step id: #'acp-tool-summary-local-call';
-  satisfies: [ :line | line == localTool ] ].
- scripter assertStep: [ :step | step id: (prefix, '-section') asSymbol;
-  satisfies: [ :element | element == agent and: [ element isExpanded not ] ] ].
- scripter assertStep: [ :step | step id: (siblingPrefix, '-header') asSymbol;
-  satisfies: [ :header | header == siblingHeader ] ].
- scripter assertStep: [ :step | step id: (prefix, '-summary') asSymbol;
-  satisfies: [ :label | label text asString includesSubstring: 'I am inspecting the worker result.' ] ].
- GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
- ^ scripter
+	<gtExample>
+	| scripter root child sibling prefix siblingPrefix parentRow parentChildren localTool agent siblingHeader version |
+	scripter := self runningAgentsChat.
+	root := scripter model.
+	child := root childSessions first.
+	sibling := root childSessions second.
+	prefix := 'acp-agent-' , child currentTurn identityHash asString.
+	siblingPrefix := 'acp-agent-' , sibling currentTurn identityHash asString.
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-message-2';
+				satisfies: [ :row | 
+					parentRow := row.
+					parentChildren := row children asArray.
+					version := row viewModel renderingVersion.
+					true ] ].
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-tool-summary-local-call';
+				satisfies: [ :line | 
+					localTool := line.
+					true ] ].
+	scripter
+		assertStep: [ :step | 
+			step
+				id: (prefix , '-section') asSymbol;
+				satisfies: [ :element | 
+					agent := element.
+					element isExpanded not ] ].
+	scripter
+		assertStep: [ :step | 
+			step
+				id: (siblingPrefix , '-header') asSymbol;
+				satisfies: [ :header | 
+					siblingHeader := header.
+					true ] ].
+	scripter
+		doStep: [ :step | 
+			step
+				label: 'Stream reasoning into a collapsed worker';
+				block: [ self
+						update: {'sessionUpdate' -> 'agent_thought_chunk'.
+								'content'
+									-> {'type' -> 'text'.
+											'text' -> 'I am inspecting the worker result.'} asDictionary}
+								asDictionary
+						for: child.
+					self update: {'sessionUpdate' -> 'usage_update'} asDictionary for: child.
+					self
+						update: {'sessionUpdate' -> 'tool_call'.
+								'toolCallId' -> 'additional-nested-call'.
+								'title' -> 'Additional nested lookup'.
+								'status' -> 'in_progress'} asDictionary
+						for: child childSessions first ] ].
+	scripter pulseUntilReady.
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-message-2';
+				satisfies: [ :row | 
+					row == parentRow
+						and: [ row children asArray = parentChildren
+								and: [ row viewModel renderingVersion = version ] ] ] ].
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-tool-summary-local-call';
+				satisfies: [ :line | line == localTool ] ].
+	scripter
+		assertStep: [ :step | 
+			step
+				id: (prefix , '-section') asSymbol;
+				satisfies: [ :element | element == agent and: [ element isExpanded not ] ] ].
+	scripter
+		assertStep: [ :step | 
+			step
+				id: (siblingPrefix , '-header') asSymbol;
+				satisfies: [ :header | header == siblingHeader ] ].
+	scripter
+		assertStep: [ :step | 
+			step
+				id: (prefix , '-summary') asSymbol;
+				notExists ].
+	scripter
+		assertStep: [ :step | 
+			step
+				id: (prefix , '-counts') asSymbol;
+				value: [ :pane | pane children collect: [ :label | label text asString ] as: Array ]
+					equals: [ #('1 agent' '3 tools') ] ].
+	GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+	^ scripter
 ]
 
 { #category : #examples }
