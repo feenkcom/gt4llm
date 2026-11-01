@@ -547,12 +547,63 @@ GtLACPChatExamples >> lastMessageLayoutKeepsStreamEnd [
  scripter doStep: [ :step |
   step label: 'Grow the last row after the initial scroll has completed';
    block: [ :chat | | last |
-    last := chat messageViewport layout childAtPosition: chat listElement items size.
+    last := chat messageViewport layout childAtPosition: chat viewModel messageViewModels size.
     self assert: last notNil.
     last vExact: last height + 200 ] ].
  scripter assertStep: [ :step |
   step label: 'Follow the end after a later layout without another message update';
    satisfies: [ :chat | chat isAtStreamEnd ] ].
+ self assertNoRenderingErrorsIn: scripter.
+ ^ scripter
+]
+
+{ #category : #examples }
+GtLACPChatExamples >> logicalScrollReachesEndOfTallReply [
+ <gtExample>
+ | session turn text chat scripter |
+ session := GtLACPExamples new session.
+ text := String streamContents: [ :stream |
+  1 to: 60 do: [ :index | stream nextPutAll: 'Reply line '; print: index; lf ] ].
+ turn := session prompt: 'Give me a tall reply'.
+ GtLACPExamples new sendUpdate: { 'sessionUpdate' -> 'agent_message_chunk'.
+  'content' -> { 'type' -> 'text'. 'text' -> text } asDictionary } asDictionary to: session.
+ session connection transport receive: { 'jsonrpc' -> '2.0'. 'id' -> turn request id.
+  'result' -> { 'stopReason' -> 'end_turn' } asDictionary } asDictionary.
+ chat := session asElement.
+ scripter := BlScripter new extent: 1000 @ 700; model: session; element: chat; yourself.
+ scripter assertStep: [ :step | step satisfies: [ :element | element isAtStreamEnd ] ].
+ scripter assertStep: [ :step | step id: #'acp-stream-end';
+  satisfies: [ :marker |
+   chat messageViewport bounds inSpace asRectangle containsPoint: marker bounds inSpace center ] ].
+ self assertNoRenderingErrorsIn: scripter.
+ ^ scripter
+]
+
+{ #category : #examples }
+GtLACPChatExamples >> logicalScrollTargetSurvivesNewTurns [
+ <gtExample>
+ | chat session scripter marker items row |
+ chat := self completedChat.
+ session := chat viewModel session.
+ scripter := BlScripter new extent: 1000 @ 800; model: session; element: chat; yourself.
+ marker := chat endMarker.
+ items := chat listElement items.
+ self assert: items size equals: chat viewModel messageViewModels size + 1.
+ self assert: items last == marker.
+ self assert: (chat viewModel messageViewModels includes: marker) not.
+ scripter assertStep: [ :step | step id: #'acp-stream-end'; exists ].
+ scripter assertStep: [ :step | step id: #'acp-message-2';
+  satisfies: [ :element | row := element. true ] ].
+ scripter doStep: [ :step | step block: [
+  session prompt: 'Another question'.
+  chat updateMessages ] ].
+ scripter assertStep: [ :step | step id: #'acp-message-2';
+  satisfies: [ :element | element == row ] ].
+ self assert: chat listElement items == items.
+ self assert: items size equals: chat viewModel messageViewModels size + 1.
+ self assert: items last == marker.
+ self assert: (items count: [ :each | each == marker ]) equals: 1.
+ scripter assertStep: [ :step | step id: #'acp-stream-end'; exists ].
  self assertNoRenderingErrorsIn: scripter.
  ^ scripter
 ]
@@ -692,7 +743,7 @@ GtLACPChatExamples >> newTurnFollowsBottom [
    'result' -> { 'stopReason' -> 'end_turn' } asDictionary } asDictionary.
   session prompt: 'A new question at the end' ] ].
  scripter assertStep: [ :step | step satisfies: [ :chat |
-  chat isAtStreamEnd and: [ chat listElement items size = 20 ] ] ].
+  chat isAtStreamEnd and: [ chat viewModel messageViewModels size = 20 ] ] ].
  ^ scripter
 ]
 

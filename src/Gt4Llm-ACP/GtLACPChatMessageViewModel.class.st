@@ -57,6 +57,11 @@ GtLACPChatMessageViewModel >> delegatedViewModelFor: anAssistantMessage [
   self class new turn: anAssistantMessage turn; message: anAssistantMessage; yourself ]
 ]
 
+{ #category : #accessing }
+GtLACPChatMessageViewModel >> elementIdAt: anIndex [
+ ^ ('acp-message-', anIndex asString) asSymbol
+]
+
 { #category : #private }
 GtLACPChatMessageViewModel >> expandCompletedFinalReply [
  finalReplyAutoExpanded ifTrue: [ ^ self ].
