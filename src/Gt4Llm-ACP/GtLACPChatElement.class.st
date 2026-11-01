@@ -76,39 +76,53 @@ GtLACPChatElement >> followStreamAfterLayout [
   viewport scrollToPosition: listElement items size.
   ^ self ].
  delta := lastChild bounds inParent bottom - (viewport height - viewport layout paddingBottom).
- followEndRequested := false.
  delta > 0 ifTrue: [ viewport scrollBy: 0 @ delta ]
 ]
 
 { #category : #initialization }
 GtLACPChatElement >> initialize [
- super initialize.
- renderedVersions := IdentityDictionary new.
- followEndRequested := false.
- self hMatchParent; vMatchParent; padding: (BlInsets all: 3).
- errorLabel := BrEditor new
-  aptitude: BrGlamorousRegularEditorAptitude;
-  beReadOnlyWithSelection; hMatchParent; vFitContent;
-  visibility: BlVisibility gone; yourself.
- listElement := BrSimpleList vertical
-  hMatchParent; vMatchParent; items: OrderedCollection new; yourself.
- self configureMessageList.
- self initializeScrollFollowing.
- listUpdater := BrElementUpdater new element: self selector: #updateMessages;
-  postponedDuration: 150 milliseconds; yourself.
- self addChild: listElement as: #'acp-messages'.
- self addChild: errorLabel as: #'acp-error'.
- self addChild: self buildComposer as: #'acp-composer'
+	super initialize.
+	renderedVersions := IdentityDictionary new.
+	followEndRequested := false.
+	self
+		hMatchParent;
+		vMatchParent;
+		padding: (BlInsets all: 3).
+	errorLabel := BrEditor new
+			aptitude: BrGlamorousRegularEditorAptitude;
+			beReadOnlyWithSelection;
+			hMatchParent;
+			vFitContent;
+			visibility: BlVisibility gone;
+			yourself.
+	listElement := BrSimpleList vertical
+			hMatchParent;
+			vMatchParent;
+			items: OrderedCollection new;
+			yourself.
+	self configureMessageList.
+	self initializeScrollFollowing.
+	listUpdater := BrElementUpdater new
+			element: self selector: #updateMessages;
+			postponedDuration: 150 milliseconds;
+			yourself.
+	self addChild: listElement as: #'acp-messages'.
+	self addChild: errorLabel as: #'acp-error'.
+	self addChild: self buildComposer as: #'acp-composer'
 ]
 
-{ #category : #initialization }
+{ #category : #scrolling }
 GtLACPChatElement >> initializeScrollFollowing [
- self messageViewport
-  when: BlElementLayoutComputedEvent
-  do: [ :event | self followStreamAfterLayout ].
- self messageViewport
-  when: BlElementScrolledEvent
-  do: [ :event | event delta y < 0 ifTrue: [ followEndRequested := false ] ]
+	self messageViewport
+		when: BlElementLayoutComputedEvent
+		do: [ :event | self followStreamAfterLayout ].
+	self messageViewport
+		when: BlElementScrolledEvent
+		do: [ :event | event delta y < 0 ifTrue: [ followEndRequested := false ] ].
+	self messageViewport
+		addEventFilter: (BlEventHandler
+				on: BlMouseDownEvent
+				do: [ :event | followEndRequested := false ])
 ]
 
 { #category : #accessing }

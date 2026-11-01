@@ -540,27 +540,67 @@ GtLACPChatExamples >> keyboardSend [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> longStreamingChat [
+GtLACPChatExamples >> lastMessageLayoutKeepsStreamEnd [
  <gtExample>
- | session turn examples text element scripter |
- examples := GtLACPExamples new.
- session := examples session.
- text := String streamContents: [ :stream |
-  1 to: 12 do: [ :index | stream nextPutAll: 'Line '; print: index; nextPutAll: ' of the assistant response.'; lf ] ].
- 1 to: 8 do: [ :index |
-  turn := session prompt: 'Question ', index asString.
-  examples sendUpdate: { 'sessionUpdate' -> 'agent_message_chunk'.
-   'content' -> { 'type' -> 'text'. 'text' -> text } asDictionary } asDictionary to: session.
-  session connection transport receive: { 'jsonrpc' -> '2.0'. 'id' -> turn request id.
-   'result' -> { 'stopReason' -> 'end_turn' } asDictionary } asDictionary ].
- session prompt: 'Keep streaming'.
- examples sendUpdate: { 'sessionUpdate' -> 'agent_message_chunk'.
-  'content' -> { 'type' -> 'text'. 'text' -> text } asDictionary } asDictionary to: session.
- element := session asElement.
- scripter := BlScripter new model: session; element: element; yourself.
- scripter pulseUntilReady.
- scripter assertStep: [ :step | step satisfies: [ :chat | chat isAtStreamEnd ] ].
+ | scripter |
+ scripter := self longStreamingChat.
+ scripter doStep: [ :step |
+  step label: 'Grow the last row after the initial scroll has completed';
+   block: [ :chat | | last |
+    last := chat messageViewport layout childAtPosition: chat listElement items size.
+    self assert: last notNil.
+    last vExact: last height + 200 ] ].
+ scripter assertStep: [ :step |
+  step label: 'Follow the end after a later layout without another message update';
+   satisfies: [ :chat | chat isAtStreamEnd ] ].
+ self assertNoRenderingErrorsIn: scripter.
  ^ scripter
+]
+
+{ #category : #examples }
+GtLACPChatExamples >> longStreamingChat [
+	<gtExample>
+	| session turn examples text element scripter |
+	examples := GtLACPExamples new.
+	session := examples session.
+	text := String
+			streamContents: [ :stream | 
+				1
+					to: 12
+					do: [ :index | 
+						stream
+							nextPutAll: 'Line ';
+							print: index;
+							nextPutAll: ' of the assistant response.';
+							lf ] ].
+	1
+		to: 8
+		do: [ :index | 
+			turn := session prompt: 'Question ' , index asString.
+			examples
+				sendUpdate: {'sessionUpdate' -> 'agent_message_chunk'.
+						'content'
+							-> {'type' -> 'text'.
+									'text' -> text} asDictionary} asDictionary
+				to: session.
+			session connection transport
+				receive: {'jsonrpc' -> '2.0'.
+						'id' -> turn request id.
+						'result' -> {'stopReason' -> 'end_turn'} asDictionary} asDictionary ].
+	session prompt: 'Keep streaming'.
+	examples
+		sendUpdate: {'sessionUpdate' -> 'agent_message_chunk'.
+				'content'
+					-> {'type' -> 'text'.
+							'text' -> text} asDictionary} asDictionary
+		to: session.
+	element := session asElement.
+	scripter := BlScripter new
+			model: session;
+			element: element;
+			yourself.
+	scripter assertStep: [ :step | step satisfies: [ :chat | chat isAtStreamEnd ] ].
+	^ scripter
 ]
 
 { #category : #examples }
