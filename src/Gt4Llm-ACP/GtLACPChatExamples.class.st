@@ -334,7 +334,8 @@ GtLACPChatExamples >> compactAssistantHeaders [
  element viewModel messageViewModels last section: #final expanded: false.
  scripter := BlScripter new model: element viewModel session; element: element; yourself.
  scripter assertStep: [ :step | step id: #'acp-work-summary';
-  value: [ :label | label text asString ] equals: [ 'Read configuration + 1 other tool' ] ].
+  value: [ :line | line children collect: [ :label | label text asString ] as: Array ]
+   equals: [ #('2 tools' 'Inspect files') ] ].
  scripter assertStep: [ :step | step id: #'acp-final-preview';
   value: [ :editor | editor text asString ] equals: [ 'Finished. The project configuration is consistent.' ] ].
  scripter assertStep: [ :step | step id: #'acp-work-section'; satisfies: #isCollapsed ].
@@ -997,14 +998,16 @@ GtLACPChatExamples >> shortToolCallLabels [
  tool updateFrom: { 'title' -> title. 'rawInput' -> input } asDictionary.
  GtLACPExamples new sendUpdate: { 'sessionUpdate' -> 'tool_call'.
   'toolCallId' -> 'tool-2'. 'title' -> 'Another tool'. 'status' -> 'completed' } asDictionary to: session.
+ GtLACPExamples new sendUpdate: { 'sessionUpdate' -> 'tool_call_update'.
+  'toolCallId' -> tool id. 'rawInput' -> input } asDictionary to: session.
  self assert: tool shortDescription size equals: 80.
  self assert: (tool shortDescription endsWith: '…').
  self assert: tool title equals: title.
  self assert: (tool data at: 'rawInput') equals: input.
  scripter := BlScripter new model: session; element: session asElement; yourself.
- scripter assertStep: [ :step | step id: #'acp-work-summary';
+ scripter assertStep: [ :step | step id: #'acp-work-summary-text';
   value: [ :label | label text asString ]
-  equals: [ tool shortDescription, ' + 1 other tool · permission required' ] ].
+  equals: [ tool shortDescription, ' · permission required' ] ].
  scripter click id: #'acp-work-summary'; play.
  scripter assertStep: [ :step | step id: #'acp-tool-summary-tool-1';
   value: [ :label | label text asString ]
@@ -1128,13 +1131,13 @@ GtLACPChatExamples >> streamingUpdatesVisibleText [
   GtLACPExamples new sendUpdate: { 'sessionUpdate' -> 'agent_message_chunk'.
    'content' -> { 'type' -> 'text'. 'text' -> 'First ' } asDictionary } asDictionary to: session ] ].
  scripter assertStep: [ :step |
-  step id: #'acp-work-summary'; satisfies: [ :row |
+  step id: #'acp-work-summary-text'; satisfies: [ :row |
    row text asString = 'First ' ] ].
  scripter doStep: [ :step | step block: [ :element |
   GtLACPExamples new sendUpdate: { 'sessionUpdate' -> 'agent_message_chunk'.
    'content' -> { 'type' -> 'text'. 'text' -> 'second' } asDictionary } asDictionary to: session ] ].
  scripter assertStep: [ :step |
-  step id: #'acp-work-summary'; satisfies: [ :row |
+  step id: #'acp-work-summary-text'; satisfies: [ :row |
    row text asString = 'First second' ] ].
  scripter doStep: [ :step | step block: [ :element |
   session connection transport receive: { 'jsonrpc' -> '2.0'. 'id' -> turn request id.

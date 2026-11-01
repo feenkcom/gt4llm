@@ -646,24 +646,35 @@ GtLACPSession >> receivePermission: params requestId: anId [
 
 { #category : #updating }
 GtLACPSession >> receiveSubagentUpdate: aDictionary [
- | childId child association |
- childId := aDictionary at: 'sessionId'.
- (childId isString and: [ childId notEmpty ]) ifFalse: [ self error: 'Invalid child session ID' ].
- childId = remoteSessionId ifTrue: [ self error: 'A session cannot own itself' ].
- child := connection sessions at: childId ifAbsent: [ nil ].
- child ifNotNil: [
-  (child isSubagent and: [ child parentSubagent parentSession == self ])
-   ifFalse: [ self error: 'A child session cannot change parent or form a cycle' ].
-  association := child parentSubagent ] ifNil: [
-  child := client newSessionIn: self directory connection: connection.
-  association := GtLACPSubagent new parentSession: self; session: child; yourself.
-  child parentSubagent: association; remoteSessionId: childId; state: #observing.
-  self subagents add: association.
-  connection sessions at: childId put: child ].
- association updateFrom: aDictionary.
- child announceChanged.
- self announceConversationTreeChanged.
- ^ association
+	| childId child association owner |
+	childId := aDictionary at: 'sessionId'.
+	(childId isString and: [ childId notEmpty ])
+		ifFalse: [ self error: 'Invalid child session ID' ].
+	childId = remoteSessionId ifTrue: [ self error: 'A session cannot own itself' ].
+	child := connection sessions at: childId ifAbsent: [ nil ].
+	child
+		ifNotNil: [ (child isSubagent and: [ child parentSubagent parentSession == self ])
+				ifFalse: [ self error: 'A child session cannot change parent or form a cycle' ].
+			association := child parentSubagent ]
+		ifNil: [ child := client newSessionIn: self directory connection: connection.
+			association := GtLACPSubagent new
+					parentSession: self;
+					session: child;
+					yourself.
+			child
+				parentSubagent: association;
+				remoteSessionId: childId;
+				state: #observing.
+			self subagents add: association.
+			connection sessions at: childId put: child ].
+	association updateFrom: aDictionary.
+	owner := child currentTurn
+			ifNil: [ self currentTurn ]
+			ifNotNil: [ :turn | turn parentTurn ].
+	owner ifNotNil: [ owner registerDelegatedSession: child ].
+	child announceChanged.
+	self announceConversationTreeChanged.
+	^ association
 ]
 
 { #category : #updating }
@@ -828,4 +839,9 @@ GtLACPSession >> updates [
 { #category : #accessing }
 GtLACPSession >> updates: anObject [
  updates := anObject
+]
+
+{ #category : #accessing }
+GtLACPSession >> workSummaryText [
+ ^ self conversationTitle
 ]

@@ -13,14 +13,7 @@ GtLACPAssistantMessageElement >> agentWorkElementFor: anAssistantMessage [
  sectionName := ('agent-', anAssistantMessage turn identityHash asString) asSymbol.
  ^ self messageSection: sectionName
   header: [ :expander | | kind name line |
-   kind := BrLabel new
-    id: ('acp-', sectionName, '-kind') asSymbol;
-    aptitude: (BrGlamorousLabelAptitude new foreground: BrGlamorousColors disabledButtonTextColor);
-    beSmallSize; text: 'agent';
-    background: self theme default backdropBackground;
-    geometry: (BlRoundedRectangleGeometry cornerRadius: 2);
-    padding: (BlInsets left: 2 right: 2); margin: (BlInsets right: 6);
-    constraintsDo: [ :c | c linear vertical alignCenter ]; yourself.
+   kind := self workBadge: 'agent' id: ('acp-', sectionName, '-kind') asSymbol.
    name := BrLabel new aptitude: BrGlamorousLabelAptitude;
     text: anAssistantMessage chatLabel; yourself.
    line := BrHorizontalPane new
@@ -30,7 +23,7 @@ GtLACPAssistantMessageElement >> agentWorkElementFor: anAssistantMessage [
     line addChild: (self workIndicatorFor: anAssistantMessage turn
      id: ('acp-', sectionName, '-work-indicator') asSymbol) ].
    line when: BlClickEvent do: [ :event |
-    event consumed: true. expander toggleExpanded ].
+    event consumed: true. line phlow spawnObject: anAssistantMessage turn session ].
    line ]
   content: [ | pane model |
    pane := self workContentFor: anAssistantMessage.
@@ -46,11 +39,7 @@ GtLACPAssistantMessageElement >> agentWorkElementFor: anAssistantMessage [
 GtLACPAssistantMessageElement >> buildContent [
  viewModel message hasWork ifTrue: [
   self addChild: (self messageSection: #work
-   header: [ :expander |
-    BrLabel new id: #'acp-work-summary'; aptitude: BrGlamorousLabelAptitude;
-     text: viewModel message workSummary;
-     when: BlClickEvent do: [ :event | event consumed: true. expander toggleExpanded ];
-     yourself ]
+   header: [ :expander | self workSummaryElementFor: expander ]
    content: [ self workContent ]) ].
  viewModel replyMessages ifNotEmpty: [
   self addChild: (self messageSection: #final
@@ -120,17 +109,10 @@ GtLACPAssistantMessageElement >> permissionElementFor: permission [
  ^ pane
 ]
 
-{ #category : #ui }
+{ #category : #building }
 GtLACPAssistantMessageElement >> toolElementFor: aTool [
  | pane line kind summary |
- kind := BrLabel new
-  id: ('acp-tool-kind-', aTool id asString) asSymbol;
-  aptitude: (BrGlamorousLabelAptitude new foreground: BrGlamorousColors disabledButtonTextColor);
-  beSmallSize; text: 'tool';
-  background: self theme default backdropBackground;
-  geometry: (BlRoundedRectangleGeometry cornerRadius: 2);
-  padding: (BlInsets left: 2 right: 2); margin: (BlInsets right: 6);
-  constraintsDo: [ :c | c linear vertical alignCenter ]; yourself.
+ kind := self workBadge: 'tool' id: ('acp-tool-kind-', aTool id asString) asSymbol.
  summary := BrLabel new
   id: ('acp-tool-summary-', aTool id asString) asSymbol;
   aptitude: BrGlamorousLabelAptitude;
@@ -149,6 +131,22 @@ GtLACPAssistantMessageElement >> toolElementFor: aTool [
  aTool permissionRequests do: [ :permission |
   permission state = #pending ifTrue: [ pane addChild: (self permissionElementFor: permission) ] ].
  ^ pane
+]
+
+{ #category : #building }
+GtLACPAssistantMessageElement >> workBadge: aString id: anId [
+	^ BrLabel new
+		id: anId;
+		aptitude: (BrGlamorousLabelAptitude new
+				foreground: "BrGlamorousColors disabledButtonTextColor" Color black);
+		beSmallSize;
+		text: aString;
+		background: self theme default backdropBackground;
+		geometry: (BlRoundedRectangleGeometry cornerRadius: 2);
+		padding: (BlInsets left: 2 right: 2);
+		margin: (BlInsets right: 6);
+		constraintsDo: [ :c | c linear vertical alignCenter ];
+		yourself
 ]
 
 { #category : #building }
@@ -182,4 +180,19 @@ GtLACPAssistantMessageElement >> workIndicatorFor: aTurn id: anId [
   margin: (BlInsets left: 8);
   constraintsDo: [ :c | c linear vertical alignCenter ];
   yourself
+]
+
+{ #category : #building }
+GtLACPAssistantMessageElement >> workSummaryElementFor: anExpander [
+ | line |
+ line := BrHorizontalPane new id: #'acp-work-summary'; hMatchParent; vFitContent; yourself.
+ viewModel message workSummaryCountLabels withIndexDo: [ :text :index |
+  line addChild: (self workBadge: text id: ('acp-work-summary-count-', index asString) asSymbol) ].
+ line addChild: (BrLabel new id: #'acp-work-summary-text';
+  aptitude: BrGlamorousLabelAptitude; hMatchParent;
+  text: viewModel message workSummaryDetails;
+  constraintsDo: [ :c | c linear vertical alignCenter ]; yourself).
+ line when: BlClickEvent do: [ :event |
+  event consumed: true. anExpander toggleExpanded ].
+ ^ line
 ]

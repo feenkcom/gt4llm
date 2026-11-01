@@ -8,6 +8,34 @@ Class {
 }
 
 { #category : #examples }
+GtLACPSubagentExamples >> agentHeaderOpensSessionOnRight [
+ <gtExample>
+ | root child chat prefix scripter |
+ root := self conversationTreeWithMessagesAndTools.
+ child := root childSessions first.
+ chat := root asElement.
+ prefix := 'acp-agent-', child currentTurn identityHash asString.
+ scripter := BlScripter new extent: 1600 @ 1000; model: root;
+  element: (GtPagerSettings usedPager createWrappedOn: (GtInspector forObject: chat)); yourself.
+ scripter click id: #'acp-work-toggle'; play.
+ scripter assertStep: [ :step | step id: (prefix, '-section') asSymbol; satisfies: #isCollapsed ].
+ scripter click id: (prefix, '-header') asSymbol; play.
+ scripter assertStep: [ :step |
+  step onPagerPaneWithIndex: 2; // GtLACPChatElement;
+   satisfies: [ :element | element viewModel session == child ] ].
+ scripter assertStep: [ :step | step onPagerPaneWithIndex: 1;
+  id: (prefix, '-section') asSymbol; satisfies: #isCollapsed ].
+ scripter clickStep: [ :step | step onPagerPaneWithIndex: 1; id: (prefix, '-toggle') asSymbol ].
+ scripter assertStep: [ :step | step onPagerPaneWithIndex: 1;
+  id: (prefix, '-section') asSymbol; satisfies: #isExpanded ].
+ scripter clickStep: [ :step | step onPagerPaneWithIndex: 1; id: (prefix, '-header') asSymbol ].
+ scripter assertStep: [ :step | step onPagerPaneWithIndex: 1;
+  id: (prefix, '-section') asSymbol; satisfies: #isExpanded ].
+ GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+ ^ scripter
+]
+
+{ #category : #examples }
 GtLACPSubagentExamples >> agentReplyTabSurvivesRefresh [
  <gtExample>
  | scripter root child grandchild childTabs nestedTabs |
@@ -439,13 +467,13 @@ GtLACPSubagentExamples >> delegatedToolCallsInMainChat [
  self assert: turn assistantMessage toolCalls size equals: 3.
  scripter assertStep: [ :step |
   step id: #'acp-work-summary';
-   satisfies: [ :label | label text asString includesSubstring: '+ 2 other tools' ] ].
+   satisfies: [ :line | ((line children asArray first: 2) collect: [ :label | label text asString ] as: Array) = #('2 agents' '3 tools') ] ].
  scripter click id: #'acp-work-toggle'; play.
  scripter assertStep: [ :step | step id: #'acp-tool-summary-worker-call'; notExists ].
  scripter assertStep: [ :step |
   step id: ('acp-agent-', child currentTurn identityHash asString, '-kind') asSymbol;
    value: [ :label | label text asString ] equals: [ 'agent' ] ].
- scripter click id: ('acp-agent-', child currentTurn identityHash asString, '-header') asSymbol; play.
+ scripter click id: ('acp-agent-', child currentTurn identityHash asString, '-toggle') asSymbol; play.
  scripter assertStep: [ :step | step id: #'acp-tool-summary-nested-call'; notExists ].
  scripter click id: ('acp-agent-', grandchild currentTurn identityHash asString, '-toggle') asSymbol; play.
  #('main-call' 'worker-call' 'nested-call') do: [ :anId |
@@ -489,13 +517,13 @@ GtLACPSubagentExamples >> delegatedToolCallsPreserveExpansion [
  grandchild := child childSessions first.
  childPrefix := 'acp-agent-', child currentTurn identityHash asString.
  nestedPrefix := 'acp-agent-', grandchild currentTurn identityHash asString.
- scripter click id: (childPrefix, '-header') asSymbol; play.
+ scripter click id: (childPrefix, '-toggle') asSymbol; play.
  scripter assertStep: [ :step | step id: #'acp-tool-summary-worker-call'; notExists ].
  scripter assertStep: [ :step | step id: #'acp-tool-summary-nested-call'; notExists ].
  scripter click id: (childPrefix, '-toggle') asSymbol; play.
  scripter assertStep: [ :step | step id: #'acp-tool-summary-worker-call'; exists ].
  scripter assertStep: [ :step | step id: #'acp-tool-summary-nested-call'; exists ].
- scripter click id: (nestedPrefix, '-header') asSymbol; play.
+ scripter click id: (nestedPrefix, '-toggle') asSymbol; play.
  scripter doStep: [ :step |
   step label: 'Refresh the parent message after a tool update';
    block: [ self update: { 'sessionUpdate' -> 'tool_call_update'.
@@ -834,4 +862,110 @@ GtLACPSubagentExamples >> update: update for: aSession [
  aSession connection transport receive: {
   'jsonrpc' -> '2.0'. 'method' -> 'session/update'.
   'params' -> { 'sessionId' -> aSession remoteSessionId. 'update' -> update } asDictionary } asDictionary
+]
+
+{ #category : #examples }
+GtLACPSubagentExamples >> workSummaryCountsReusedAgentsOnce [
+ <gtExample>
+ | root turn child |
+ root := GtLACPExamples new session.
+ turn := root prompt: 'Reuse a worker'.
+ child := self announce: 'summary-reused-worker' title: 'Worker' in: root.
+ self task: 'First assignment' from: root to: child id: 'summary-first-task'.
+ self reply: 'First result' in: child.
+ self idle: child.
+ self task: 'Second assignment' from: root to: child id: 'summary-second-task'.
+ self update: { 'sessionUpdate' -> 'subagent_update'. 'sessionId' -> child remoteSessionId.
+  'state' -> { 'state' -> 'running' } asDictionary } asDictionary for: root.
+ self assert: turn delegatedTurns size equals: 2.
+ self assert: turn allDelegatedSessions size equals: 1.
+ self assert: turn assistantMessage workSummary equals: '1 agent · Worker'.
+ self idle: child.
+ GtLACPMessagePresentationExamples new text: 'Worker tasks are complete' id: 'summary-last-progress' in: root.
+ GtLACPMessagePresentationExamples new text: 'Final answer' id: 'summary-final-answer' in: root.
+ root connection transport receive: { 'jsonrpc' -> '2.0'. 'id' -> turn request id.
+  'result' -> { 'stopReason' -> 'end_turn' } asDictionary } asDictionary.
+ self assert: turn assistantMessage workSummary equals: '1 agent · Worker tasks are complete'.
+ root prompt: 'Independent task'.
+ self assert: root currentTurn allDelegatedSessions isEmpty.
+ self assert: turn allDelegatedSessions size equals: 1.
+ ^ root
+]
+
+{ #category : #examples }
+GtLACPSubagentExamples >> workSummaryDisplayed [
+ <gtExample>
+ | root scripter child nested |
+ root := self workSummaryTracksLatestActivity.
+ scripter := BlScripter new extent: 1100 @ 700; model: root; element: root asElement; yourself.
+ scripter assertStep: [ :step | step id: #'acp-work-summary';
+  value: [ :line | line children collect: [ :label | label text asString ] as: Array ] equals: [ #('3 agents' '2 tools' 'Test worker') ] ].
+ scripter doStep: [ :step | step block: [
+  GtLACPMessagePresentationExamples new text: 'The review is now running' id: 'summary-live-comment' in: root ] ].
+ scripter assertStep: [ :step | step id: #'acp-work-summary';
+  value: [ :line | line children collect: [ :label | label text asString ] as: Array ] equals: [ #('3 agents' '2 tools' 'The review is now running') ] ].
+ child := root childSessions first.
+ scripter doStep: [ :step | step block: [
+  GtLACPMessagePresentationExamples new text: 'The class is ready' id: 'summary-child-comment' in: child ] ].
+ scripter assertStep: [ :step | step id: #'acp-work-summary-text';
+  value: [ :label | label text asString ] equals: [ 'Implementation worker: The class is ready' ] ].
+ nested := child childSessions first.
+ scripter doStep: [ :step | step block: [
+  self update: { 'sessionUpdate' -> 'tool_call'. 'toolCallId' -> 'summary-nested-tool'.
+   'title' -> 'Inspect protocol'. 'status' -> 'in_progress' } asDictionary for: nested ] ].
+ scripter assertStep: [ :step | step id: #'acp-work-summary-text';
+  value: [ :label | label text asString ] equals: [ 'Review worker: Inspect protocol' ] ].
+ scripter assertStep: [ :step | step id: #'acp-work-summary-count-2';
+  value: [ :label | label text asString ] equals: [ '3 tools' ] ].
+ GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+ ^ scripter
+]
+
+{ #category : #examples }
+GtLACPSubagentExamples >> workSummaryNamesDelegatedActivity [
+ <gtExample>
+ | root child nested |
+ root := self workSummaryTracksLatestActivity.
+ child := root childSessions first.
+ nested := child childSessions first.
+ GtLACPMessagePresentationExamples new text: 'Checking the class' id: 'summary-child-check' in: child.
+ self assert: root currentTurn assistantMessage workSummaryDetails equals: 'Implementation worker: Checking the class'.
+ self assert: child currentTurn assistantMessage workSummaryDetails equals: 'Checking the class'.
+ self update: { 'sessionUpdate' -> 'tool_call'. 'toolCallId' -> 'summary-prefixed-tool'.
+  'title' -> 'Inspect protocol'. 'status' -> 'in_progress' } asDictionary for: nested.
+ self assert: root currentTurn assistantMessage workSummaryDetails equals: 'Review worker: Inspect protocol'.
+ self assert: child currentTurn assistantMessage workSummaryDetails equals: 'Review worker: Inspect protocol'.
+ self assert: nested currentTurn assistantMessage workSummaryDetails equals: 'Inspect protocol'.
+ GtLACPMessagePresentationExamples new text: 'Combining the results' id: 'summary-parent-combine' in: root.
+ self assert: root currentTurn assistantMessage workSummaryDetails equals: 'Combining the results'.
+ ^ root
+]
+
+{ #category : #examples }
+GtLACPSubagentExamples >> workSummaryTracksLatestActivity [
+ <gtExample>
+ | root turn child nested |
+ root := GtLACPExamples new session.
+ turn := root prompt: 'Track work'.
+ GtLACPMessagePresentationExamples new text: 'Planning the work' id: 'summary-comment-1' in: root.
+ self assert: turn assistantMessage workSummary equals: 'Planning the work'.
+ child := self announce: 'summary-worker' title: 'Implementation worker' in: root.
+ self assert: turn assistantMessage workSummary equals: '1 agent · Implementation worker'.
+ self update: { 'sessionUpdate' -> 'tool_call'. 'toolCallId' -> 'summary-parent-tool'.
+  'title' -> 'Inspect files'. 'status' -> 'in_progress' } asDictionary for: root.
+ self assert: turn assistantMessage workSummary equals: '1 agent · 1 tool · Inspect files'.
+ self update: { 'sessionUpdate' -> 'tool_call'. 'toolCallId' -> 'summary-child-tool'.
+  'title' -> 'Read class'. 'status' -> 'completed' } asDictionary for: child.
+ self assert: turn assistantMessage workSummary equals: '1 agent · 2 tools · Implementation worker: Read class'.
+ GtLACPMessagePresentationExamples new text: 'The class is ready for review' id: 'summary-comment-2' in: root.
+ self assert: turn assistantMessage workSummary equals: '1 agent · 2 tools · The class is ready for review'.
+ self update: { 'sessionUpdate' -> 'tool_call_update'. 'toolCallId' -> 'summary-parent-tool'.
+  'status' -> 'completed' } asDictionary for: root.
+ self assert: turn assistantMessage workSummary equals: '1 agent · 2 tools · Inspect files'.
+ nested := self announce: 'summary-nested-worker' title: 'Review worker' in: child.
+ self assert: turn assistantMessage workSummary equals: '2 agents · 2 tools · Review worker'.
+ self announce: 'summary-test-worker' title: 'Test worker' in: root.
+ self assert: turn assistantMessage workSummary equals: '3 agents · 2 tools · Test worker'.
+ self assert: nested currentTurn parentTurn == child currentTurn.
+ ^ root
 ]

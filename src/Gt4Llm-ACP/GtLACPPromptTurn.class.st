@@ -18,7 +18,9 @@ Class {
 		'activity',
 		'activityVersion',
 		'assistantMessage',
-		'parentTurn'
+		'parentTurn',
+		'workUpdates',
+		'delegatedSessions'
 	],
 	#category : #'Gt4Llm-ACP-Core'
 }
@@ -45,6 +47,16 @@ GtLACPPromptTurn >> addMessageWithRole: aRole content: blocks [
  (#(thought agent) includes: aRole) ifTrue: [ self activity add: message ].
  messages add: message.
  ^ message
+]
+
+{ #category : #accessing }
+GtLACPPromptTurn >> allDelegatedSessions [
+ | sessions |
+ sessions := self delegatedSessions copy.
+ self delegatedTurns do: [ :each |
+  sessions add: each session.
+  sessions addAll: each allDelegatedSessions ].
+ ^ sessions
 ]
 
 { #category : #accessing }
@@ -79,6 +91,11 @@ GtLACPPromptTurn >> conversationTreeItems [
  activityItems := self activity copy.
  ^ inputs, activityItems, (messages reject: [ :message |
   (inputs includes: message) or: [ activityItems includes: message ] ])
+]
+
+{ #category : #accessing }
+GtLACPPromptTurn >> delegatedSessions [
+ ^ delegatedSessions ifNil: [ delegatedSessions := IdentitySet new ]
 ]
 
 { #category : #accessing }
@@ -279,7 +296,22 @@ GtLACPPromptTurn >> receiveUpdate: aDictionary [
   message messageId: anId ].
  (aDictionary at: '_meta' ifAbsent: [ nil ]) ifNotNil: [ :metadata |
   message protocolMetadata: metadata ].
- message content add: (GtLACPContentBlock new data: (aDictionary at: 'content'); yourself)
+ message content add: (GtLACPContentBlock new data: (aDictionary at: 'content'); yourself).
+ aRole = #user ifFalse: [ self recordWorkItem: message ]
+]
+
+{ #category : #updating }
+GtLACPPromptTurn >> recordWorkItem: anObject [
+ | history |
+ history := self workUpdates.
+ (history isEmpty or: [ history last ~~ anObject ]) ifTrue: [ history add: anObject ].
+ self parentTurn ifNotNil: [ :parent | parent recordWorkItem: anObject ]
+]
+
+{ #category : #updating }
+GtLACPPromptTurn >> registerDelegatedSession: aSession [
+ self delegatedSessions add: aSession.
+ self recordWorkItem: aSession
 ]
 
 { #category : #accessing }
@@ -380,12 +412,21 @@ GtLACPPromptTurn >> toolCalls: anObject [
  toolCalls := anObject
 ]
 
-{ #category : #updates }
+{ #category : #accessing }
+GtLACPPromptTurn >> turnForWorkItem: anObject [
+ ((messages includes: anObject) or: [ toolCalls includes: anObject ]) ifTrue: [ ^ self ].
+ self delegatedTurns do: [ :delegated |
+  (delegated turnForWorkItem: anObject) ifNotNil: [ :owner | ^ owner ] ].
+ ^ nil
+]
+
+{ #category : #updating }
 GtLACPPromptTurn >> updateToolCall: aDictionary [
  | call |
  call := toolCalls detect: [ :each | each id = (aDictionary at: 'toolCallId') ]
   ifNone: [ | created | created := GtLACPToolCall new. self activity add: created. toolCalls add: created. created ].
  call updateFrom: aDictionary.
+ self recordWorkItem: call.
  ^ call
 ]
 
@@ -410,4 +451,9 @@ GtLACPPromptTurn >> workActivity [
  answer := self finalMessage.
  coordination := self childCoordinationMessages.
  ^ self activity copy reject: [ :item | item == answer or: [ coordination includes: item ] ]
+]
+
+{ #category : #accessing }
+GtLACPPromptTurn >> workUpdates [
+ ^ workUpdates ifNil: [ workUpdates := self activity copy ]
 ]

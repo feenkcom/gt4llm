@@ -111,3 +111,8 @@ GtLACPConversationMessage >> role: anObject [
 GtLACPConversationMessage >> text [
  ^ String streamContents: [ :stream | content do: [ :each | stream nextPutAll: each text ] ]
 ]
+
+{ #category : #accessing }
+GtLACPConversationMessage >> workSummaryText [
+ ^ self text
+]
