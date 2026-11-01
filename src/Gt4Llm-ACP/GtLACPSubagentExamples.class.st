@@ -265,6 +265,21 @@ GtLACPSubagentExamples >> conversationTreeAfterPromptResponse: response [
 ]
 
 { #category : #examples }
+GtLACPSubagentExamples >> conversationTreeContentsDisplayed [
+ <gtExample>
+ | root element scripter |
+ root := self conversationTreeWithMessagesAndTools.
+ element := (root gtConversationTreeFor: GtPhlowView empty)
+  asElementDo: [ :widget | widget background: Color white; yourself ].
+ scripter := BlScripter new extent: 1400 @ 900; model: root; element: element; yourself.
+ #('Tree worker' 'Inspect project' 'Inspect class' 'Checking the class protocol'
+  'Class inspection complete' 'Project inspection complete' 'Agent' 'Tool' 'Reasoning') do: [ :text |
+  scripter assertStep: [ :step | step onPhlowCellWithString: text; exists ] ].
+ GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+ ^ scripter
+]
+
+{ #category : #examples }
 GtLACPSubagentExamples >> conversationTreeDisplayed [
  <gtExample>
  | root element scripter |
@@ -305,6 +320,72 @@ GtLACPSubagentExamples >> conversationTreeUpdatesAfterPromptFailure [
  <gtExample>
  ^ self conversationTreeAfterPromptResponse: {
   'error' -> { 'code' -> -32603. 'message' -> 'Example failure' } asDictionary } asDictionary
+]
+
+{ #category : #examples }
+GtLACPSubagentExamples >> conversationTreeUpdatesForMessagesAndTools [
+ <gtExample>
+ | root child element scripter |
+ root := GtLACPExamples new session.
+ child := self announce: 'live-tree-worker' title: 'Live tree worker' in: root.
+ self assert: child currentTurn parentTurn isNil.
+ element := (root gtConversationTreeFor: GtPhlowView empty)
+  asElementDo: [ :widget | widget background: Color white; yourself ].
+ scripter := BlScripter new extent: 1400 @ 900; model: root; element: element; yourself.
+ scripter doStep: [ :step | step block: [
+  self update: { 'sessionUpdate' -> 'tool_call'. 'toolCallId' -> 'live-tree-tool'.
+   'title' -> 'Read live class'. 'status' -> 'in_progress' } asDictionary for: child.
+  GtLACPMessagePresentationExamples new text: 'Inspecting' id: 'live-tree-progress' in: child ] ].
+ scripter pulseUntilReady.
+ #('Read live class' 'Inspecting' 'in_progress') do: [ :text |
+  scripter assertStep: [ :step | step onPhlowCellWithString: text; exists ] ].
+ scripter doStep: [ :step | step block: [
+  self update: { 'sessionUpdate' -> 'tool_call_update'. 'toolCallId' -> 'live-tree-tool'.
+   'status' -> 'completed' } asDictionary for: child.
+  GtLACPMessagePresentationExamples new text: ' the protocol' id: 'live-tree-progress' in: child.
+  GtLACPMessagePresentationExamples new text: 'Live class checked' id: 'live-tree-answer' in: child.
+  self idle: child ] ].
+ scripter pulseUntilReady.
+ #('Inspecting the protocol' 'Live class checked' 'completed' 'final') do: [ :text |
+  scripter assertStep: [ :step | step onPhlowCellWithString: text; exists ] ].
+ GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+ ^ scripter
+]
+
+{ #category : #examples }
+GtLACPSubagentExamples >> conversationTreeWithMessagesAndTools [
+ <gtExample>
+ | root child turn cache rootNode childNode objects |
+ root := GtLACPExamples new session.
+ turn := root prompt: 'Inspect the project'.
+ child := self announce: 'tree-worker' title: 'Tree worker' in: root.
+ self task: 'Inspect the class' from: root to: child id: 'tree-assignment'.
+ self update: { 'sessionUpdate' -> 'tool_call'. 'toolCallId' -> 'tree-parent-tool'.
+  'title' -> 'Inspect project'. 'status' -> 'completed' } asDictionary for: root.
+ self update: { 'sessionUpdate' -> 'tool_call'. 'toolCallId' -> 'tree-child-tool'.
+  'title' -> 'Inspect class'. 'status' -> 'completed' } asDictionary for: child.
+ self update: { 'sessionUpdate' -> 'agent_thought_chunk'. 'messageId' -> 'tree-reasoning'.
+  'content' -> { 'type' -> 'text'. 'text' -> 'Checking the class protocol' } asDictionary
+ } asDictionary for: child.
+ GtLACPMessagePresentationExamples new text: 'Class inspection complete' id: 'tree-child-answer' in: child.
+ self idle: child.
+ GtLACPMessagePresentationExamples new text: 'Project inspection complete' id: 'tree-parent-answer' in: root.
+ root connection transport receive: { 'jsonrpc' -> '2.0'. 'id' -> turn request id.
+  'result' -> { 'stopReason' -> 'end_turn' } asDictionary } asDictionary.
+ cache := IdentityDictionary new.
+ rootNode := root asConversationTreeNode.
+ objects := (rootNode childrenIn: cache) collect: #object.
+ self assert: objects size equals: root childSessions size + turn messages size + turn toolCalls size.
+ self assert: (objects includes: turn messages first).
+ self assert: (objects includes: turn toolCalls first).
+ self assert: (objects includes: turn finalMessage).
+ childNode := (rootNode childrenIn: cache) detect: [ :node | node object == child ].
+ objects := (childNode childrenIn: cache) collect: #object.
+ self assert: (objects includes: child currentTurn toolCalls first).
+ self assert: (objects includes: child currentTurn finalMessage).
+ self assert: ((childNode childrenIn: cache) detect: [ :node | node object == child currentTurn finalMessage ]) state equals: #final.
+ self assert: (rootNode childrenIn: cache) first == childNode.
+ ^ root
 ]
 
 { #category : #examples }
@@ -465,7 +546,8 @@ GtLACPSubagentExamples >> disconnectedChildren [
  self assert: child conversationState equals: #disconnected.
  self assert: child currentTurn state equals: #disconnected.
  self assert: child currentTurn stopReason isNil.
- self assert: child currentTurn assistantMessage text equals: 'Partial output'.
+ self assert: child currentTurn assistantMessage finalMessages isEmpty.
+ self assert: child currentTurn assistantMessage activityItems last text equals: 'Partial output'.
  self assert: child canCancel not.
  ^ root
 ]
@@ -489,7 +571,9 @@ GtLACPSubagentExamples >> lateParentMessagePreservesReply [
   'content' -> { { 'type' -> 'text'. 'text' -> 'A late finding' } asDictionary } } asDictionary for: root.
  self assert: root turns size equals: 2.
  self assert: root turns first assistantMessage text equals: first.
- self assert: root currentTurn inputMessages first text equals: 'A late finding'.
+ self assert: root currentTurn inputMessages isEmpty.
+ self assert: root currentTurn childCoordinationMessages first text equals: 'A late finding'.
+ self assert: root asChatViewModel messageViewModels size equals: 2.
  ^ root
 ]
 

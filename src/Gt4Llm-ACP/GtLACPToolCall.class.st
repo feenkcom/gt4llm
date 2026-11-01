@@ -11,6 +11,11 @@ Class {
 	#category : #'Gt4Llm-ACP-Core'
 }
 
+{ #category : #converting }
+GtLACPToolCall >> asConversationTreeNode [
+ ^ GtLACPToolCallTreeNode new object: self; yourself
+]
+
 { #category : #accessing }
 GtLACPToolCall >> data [
  ^ data

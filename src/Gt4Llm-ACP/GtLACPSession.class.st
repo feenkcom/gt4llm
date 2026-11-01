@@ -25,24 +25,28 @@ Class {
 	#category : #'Gt4Llm-ACP-Core'
 }
 
-{ #category : #updating }
+{ #category : #views }
 GtLACPSession class >> conversationTreeFor: aView roots: roots [
-	| tree |
+	| tree cache |
+	cache := IdentityDictionary new.
 	tree := aView columnedTree
 			title: 'Conversation tree';
 			priority: 4;
-			items: [ roots ];
-			children: #childSessions;
-			column: 'Conversation' text: #conversationTitle;
+			items: [ roots
+					collect: [ :session | cache at: session ifAbsentPut: [ session asConversationTreeNode ] ] ];
+			children: [ :node | node childrenIn: cache ];
+			column: 'Conversation' text: #label;
+			column: 'Kind'
+				text: #kind
+				width: 100;
 			column: 'State'
-				text: #conversationState
+				text: #state
 				width: 110;
 			column: 'Messages'
-				text: [ :session | session turns sum: [ :turn | turn messages size ] ]
-				width: 90;
-			column: 'Directory'
-				text: [ :session | session directory ifNil: [ '' ] ifNotNil: #fullName ];
-			send: #yourself;
+				text: [ :each | each messageCount isZero ifTrue: [ '' ] ifFalse: [ each messageCount ] ]
+				width: 75;
+			column: 'Directory' text: #directory;
+			send: #object;
 			expandAll;
 			actionUpdateButtonTooltip: 'Refresh conversation tree'.
 	roots
@@ -64,17 +68,23 @@ GtLACPSession >> announceChanged [
 ]
 
 { #category : #announcing }
+GtLACPSession >> announceChatMessageChanged: aMessage [
+ self announcer announce: (GtLACPSessionChanged new
+  session: self; message: aMessage; yourself).
+ self currentTurn ifNotNil: [ :turn |
+  turn parentTurn ifNotNil: [ :parent |
+   parent session announceChatMessageChanged: parent assistantMessage ] ]
+]
+
+{ #category : #announcing }
 GtLACPSession >> announceConversationTreeChanged [
  connection ifNotNil: #announceConversationTreeChanged
 ]
 
 { #category : #announcing }
 GtLACPSession >> announceMessageChanged: aMessage [
- self announcer announce: (GtLACPSessionChanged new
-  session: self; message: aMessage; yourself).
- self currentTurn ifNotNil: [ :turn |
-  turn parentTurn ifNotNil: [ :parent |
-   parent session announceMessageChanged: parent assistantMessage ] ]
+ self announceChatMessageChanged: aMessage.
+ self announceConversationTreeChanged
 ]
 
 { #category : #announcing }
@@ -120,6 +130,11 @@ GtLACPSession >> applySubagentWorkState: aSnapshot [
 { #category : #ui }
 GtLACPSession >> asChatViewModel [
  ^ GtLACPChatViewModel new session: self; yourself
+]
+
+{ #category : #converting }
+GtLACPSession >> asConversationTreeNode [
+ ^ GtLACPSessionTreeNode new object: self; yourself
 ]
 
 { #category : #ui }
@@ -286,29 +301,6 @@ GtLACPSession >> gtCloseFor: anAction [
  <gtAction>
  (self isSubagent or: [ state = #closed ]) ifTrue: [ ^ anAction noAction ].
  ^ anAction button label: 'Close session'; priority: 50; action: [ self close ]
-]
-
-{ #category : #updating }
-GtLACPSession >> gtComposeFor: aView [
- <gtView>
- self isSubagent ifTrue: [ ^ aView empty ].
- ^ aView explicit title: 'Compose'; priority: 6;
-  stencil: [
-   | pane editor send |
-   editor := BrEditor new
-    aptitude: BrGlamorousEditorAptitude;
-    text: promptText;
-    hMatchParent; vMatchParent; yourself.
-   send := BrButton new
-    aptitude: BrGlamorousButtonWithLabelAptitude;
-    label: 'Send';
-    action: [
-     promptText := editor text asString.
-     self prompt: promptText ];
-    yourself.
-   pane := BrVerticalPane new hMatchParent; vMatchParent; yourself.
-   pane addChild: editor; addChild: send.
-   pane ]
 ]
 
 { #category : #views }
