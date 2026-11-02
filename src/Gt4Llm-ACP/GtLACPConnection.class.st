@@ -132,8 +132,12 @@ GtLACPConnection >> gtConnectionFor: aView [
 
 { #category : #views }
 GtLACPConnection >> gtConversationTreeFor: aView [
- <gtView>
- ^ GtLACPSession conversationTreeFor: aView roots: self rootSessions
+	<gtView>
+	^ aView forward
+		title: 'Conversation tree';
+		priority: 4;
+		object: [ GtLACPSessionGroup withAll: self rootSessions ];
+		view: #gtConversationTreeFor:
 ]
 
 { #category : #views }

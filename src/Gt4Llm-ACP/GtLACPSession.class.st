@@ -25,37 +25,6 @@ Class {
 	#category : #'Gt4Llm-ACP-Core'
 }
 
-{ #category : #views }
-GtLACPSession class >> conversationTreeFor: aView roots: roots [
-	| tree cache |
-	cache := IdentityDictionary new.
-	tree := aView columnedTree
-			title: 'Conversation tree';
-			priority: 4;
-			items: [ roots
-					collect: [ :session | cache at: session ifAbsentPut: [ session asConversationTreeNode ] ] ];
-			children: [ :node | node childrenIn: cache ];
-			column: 'Conversation' text: #label;
-			column: 'Kind'
-				text: #kind
-				width: 100;
-			column: 'State'
-				text: #state
-				width: 110;
-			column: 'Messages'
-				text: [ :each | each messageCount isZero ifTrue: [ '' ] ifFalse: [ each messageCount ] ]
-				width: 75;
-			column: 'Directory' text: #directory;
-			send: #object;
-			expandAll;
-			actionUpdateButtonTooltip: 'Refresh conversation tree'.
-	roots
-		ifNotEmpty: [ tree
-				updateWhen: GtLACPConversationTreeChanged
-				in: [ roots first connection announcer ] ].
-	^ tree
-]
-
 { #category : #accessing }
 GtLACPSession >> allToolCalls [
  ^ (turns copy flatCollect: [ :turn | turn toolCalls copy ]),
@@ -347,15 +316,18 @@ GtLACPSession >> gtConfigurationOptionsFor: aView [
 { #category : #views }
 GtLACPSession >> gtConversationFor: aView [
  <gtView>
- <gtLlmView>
  ^ aView list title: 'Conversation'; priority: 5; items: [ turns flatCollect: [ :each | each messages copy ] ]; itemText: #printString; actionUpdateButtonTooltip: 'Refresh conversation'
 ]
 
 { #category : #views }
 GtLACPSession >> gtConversationTreeFor: aView [
- <gtView>
- <gtLlmView>
- ^ self class conversationTreeFor: aView roots: { self rootSession }
+	<gtView>
+	<gtLlmView>
+	^ aView forward
+		title: 'Conversation tree';
+		priority: 4;
+		object: [ GtLACPSessionGroup withAll: {self rootSession} ];
+		view: #gtConversationTreeFor:
 ]
 
 { #category : #ui }
@@ -374,7 +346,6 @@ GtLACPSession >> gtInspectorTargetModels [
 { #category : #views }
 GtLACPSession >> gtInterSessionMessagesFor: aView [
  <gtView>
- <gtLlmView>
  self interSessionMessages ifEmpty: [ ^ aView empty ].
  ^ aView columnedList title: 'Session messages'; priority: 7;
   items: [ self interSessionMessages copy ];
