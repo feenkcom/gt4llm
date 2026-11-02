@@ -47,8 +47,16 @@ GtLACPConversationMessage >> gtProtocolFor: aView [
 
 { #category : #views }
 GtLACPConversationMessage >> gtTextFor: aView [
- <gtView>
- ^ aView textEditor title: 'Text'; priority: 20; text: [ self text ]; actionUpdateButtonTooltip: 'Refresh text'
+	<gtView>
+	^ aView textEditor
+		title: 'Text';
+		priority: 1;
+		text: [ | text styler |
+			text := self text asRopedText.
+			styler := GtLMessageStyler new.
+			styler privateStyle: text.
+			text ];
+		actionUpdateButtonTooltip: 'Refresh text'
 ]
 
 { #category : #accessing }
