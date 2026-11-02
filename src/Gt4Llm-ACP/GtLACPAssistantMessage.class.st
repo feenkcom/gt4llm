@@ -107,6 +107,22 @@ GtLACPAssistantMessage >> gtWorkFor: aView [
   actionUpdateButtonTooltip: 'Refresh tools and reasoning'
 ]
 
+{ #category : #views }
+GtLACPAssistantMessage >> gtWorkSummaryFor: aView [
+	<gtView>
+	^ aView columnedList
+		title: 'Work summary';
+		priority: 5;
+		items: [ {'Agents' -> turn allDelegatedSessions asArray.
+				'Tools' -> self toolCalls.
+				'Latest activity' -> self latestWorkItem.
+				'Summary' -> self workSummary} ];
+		column: 'Field' text: #key;
+		column: 'Value' text: [ :entry | entry value gtDisplayString ];
+		send: #value;
+		actionUpdateButtonTooltip: 'Refresh work summary'
+]
+
 { #category : #testing }
 GtLACPAssistantMessage >> hasCompletedReply [
  ^ (#(completed replayed idle) includes: turn state) and: [ self finalMessages notEmpty ]
@@ -115,6 +131,19 @@ GtLACPAssistantMessage >> hasCompletedReply [
 { #category : #testing }
 GtLACPAssistantMessage >> hasWork [
  ^ self localActivityItems notEmpty or: [ self delegatedMessages notEmpty ]
+]
+
+{ #category : #accessing }
+GtLACPAssistantMessage >> latestWorkItem [
+ | items eligible |
+ items := self activityItems.
+ eligible := items asIdentitySet.
+ eligible addAll: turn allDelegatedSessions.
+ ^ turn workUpdates reversed detect: [ :item | eligible includes: item ]
+  ifNone: [
+   items ifEmpty: [
+    self delegatedMessages ifEmpty: [ nil ] ifNotEmpty: [ :messages | messages last turn session ] ]
+   ifNotEmpty: [ items last ] ]
 ]
 
 { #category : #accessing }
@@ -180,22 +209,47 @@ GtLACPAssistantMessage >> turn: anObject [
 
 { #category : #accessing }
 GtLACPAssistantMessage >> workSummary [
- | tools tool summary otherCount |
- tools := self toolCalls.
- tools isEmpty ifTrue: [
-  | text |
-  (self localActivityItems isEmpty and: [ self delegatedMessages notEmpty ])
-   ifTrue: [ ^ self delegatedMessages last chatLabel ].
-  text := self activityItems ifEmpty: [ '' ] ifNotEmpty: [ self activityItems last text ].
-  text := (text copyReplaceAll: String cr with: ' ') copyReplaceAll: String lf with: ' '.
-  ^ text size > 140 ifTrue: [ (text first: 140), '…' ] ifFalse: [ text ] ].
- tool := tools reversed detect: [ :each | #('pending' 'in_progress' 'running') includes: each status ]
-  ifNone: [ tools last ].
- summary := tool shortDescription.
- otherCount := tools size - 1.
- otherCount > 0 ifTrue: [
-  summary := summary, ' + ', otherCount asString, (otherCount = 1 ifTrue: [ ' other tool' ] ifFalse: [ ' other tools' ]) ].
- (turn permissionRequests anySatisfy: [ :each | each state = #pending ])
-  ifTrue: [ summary := summary, ' · permission required' ].
- ^ summary
+	| parts details |
+	parts := self workSummaryCountLabels.
+	details := self workSummaryDetails.
+	details ifNotEmpty: [ parts add: details ].
+	^ String
+		streamContents: [ :stream | 
+			parts
+				do: [ :part | stream nextPutAll: part ]
+				separatedBy: [ stream nextPutAll: ' · ' ] ]
+]
+
+{ #category : #accessing }
+GtLACPAssistantMessage >> workSummaryCountLabels [
+	| labels agentCount toolCount |
+	labels := OrderedCollection new.
+	agentCount := turn allDelegatedSessions size.
+	toolCount := self toolCalls size.
+	agentCount > 0
+		ifTrue: [ labels add: agentCount asString , ' ' , ('agent' asPluralBasedOn: agentCount) ].
+	toolCount > 0
+		ifTrue: [ labels add: toolCount asString , ' ' , ('tool' asPluralBasedOn: toolCount) ].
+	^ labels
+]
+
+{ #category : #accessing }
+GtLACPAssistantMessage >> workSummaryDetails [
+	| latest string owner |
+	latest := self latestWorkItem.
+	string := latest
+			ifNil: [ '' ]
+			ifNotNil: [ string := latest workSummaryText.
+				owner := turn turnForWorkItem: latest.
+				(owner notNil and: [ owner ~~ turn ])
+					ifTrue: [ string := owner session conversationTitle , ': ' , string ].
+				(string copyReplaceAll: String cr with: ' ')
+					copyReplaceAll: String lf
+					with: ' ' ].
+	string size > 140 ifTrue: [ string := (string first: 139) , '…' ].
+	(turn permissionRequests anySatisfy: [ :each | each state = #pending ])
+		ifTrue: [ string := string
+					ifEmpty: [ 'permission required' ]
+					ifNotEmpty: [ string , ' · permission required' ] ].
+	^ string
 ]

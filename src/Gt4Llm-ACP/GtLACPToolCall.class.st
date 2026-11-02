@@ -165,3 +165,8 @@ GtLACPToolCall >> withMcpToolCallIfPresent: aPresentBlock ifAbsent: anAbsentBloc
   ifNotNil: aPresentBlock
   ifNil: anAbsentBlock
 ]
+
+{ #category : #accessing }
+GtLACPToolCall >> workSummaryText [
+ ^ self shortDescription
+]

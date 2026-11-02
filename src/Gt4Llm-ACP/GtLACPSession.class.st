@@ -67,13 +67,27 @@ GtLACPSession >> announceChanged [
  self announceMessageChanged: (self currentTurn ifNotNil: #assistantMessage)
 ]
 
-{ #category : #announcing }
+{ #category : #updating }
 GtLACPSession >> announceChatMessageChanged: aMessage [
- self announcer announce: (GtLACPSessionChanged new
-  session: self; message: aMessage; yourself).
- self currentTurn ifNotNil: [ :turn |
-  turn parentTurn ifNotNil: [ :parent |
-   parent session announceChatMessageChanged: parent assistantMessage ] ]
+ self announceChatMessageChanged: aMessage from: self
+]
+
+{ #category : #updating }
+GtLACPSession >> announceChatMessageChanged: aMessage from: anOriginSession [
+	self announcer
+		announce: (GtLACPSessionChanged new
+				session: self;
+				sourceSession: anOriginSession;
+				message: aMessage;
+				yourself).
+	aMessage ifNil: [ ^ self ].
+	self currentTurn
+		ifNotNil: [ :turn | 
+			turn parentTurn
+				ifNotNil: [ :parent | 
+					parent session
+						announceChatMessageChanged: parent assistantMessage
+						from: anOriginSession ] ]
 ]
 
 { #category : #announcing }
@@ -147,6 +161,11 @@ GtLACPSession >> canCancel [
  ^ self isSubagent
   ifTrue: [ parentSubagent canCancel and: [ self currentTurn isNil or: [ self currentTurn state ~= #cancelling ] ] ]
   ifFalse: [ state = #prompting and: [ self currentTurn notNil and: [ self currentTurn state = #running ] ] ]
+]
+
+{ #category : #testing }
+GtLACPSession >> canClose [
+ ^ self isSubagent not and: [ state ~= #closed ]
 ]
 
 { #category : #testing }
@@ -296,11 +315,14 @@ GtLACPSession >> gtChatFor: aView [
  ^ aView explicit title: 'Chat'; priority: 0; stencil: [ self asElement ]
 ]
 
-{ #category : #updating }
+{ #category : #actions }
 GtLACPSession >> gtCloseFor: anAction [
- <gtAction>
- (self isSubagent or: [ state = #closed ]) ifTrue: [ ^ anAction noAction ].
- ^ anAction button label: 'Close session'; priority: 50; action: [ self close ]
+	<gtAction>
+	self canClose ifFalse: [ ^ anAction noAction ].
+	^ anAction button
+		label: 'Close session';
+		priority: 50;
+		action: [ self close ]
 ]
 
 { #category : #views }
@@ -516,6 +538,8 @@ GtLACPSession >> newObservedTurn [
   state: (self isReplaying ifTrue: [ #replayed ] ifFalse: [ #observed ]); yourself.
  self isSubagent ifTrue: [ turn parentTurn: parentSubagent parentSession currentTurn ].
  turns add: turn.
+ turn parentTurn ifNotNil: [ :parent |
+  parent session announceMessageChanged: parent assistantMessage ].
  ^ turn
 ]
 
@@ -646,24 +670,35 @@ GtLACPSession >> receivePermission: params requestId: anId [
 
 { #category : #updating }
 GtLACPSession >> receiveSubagentUpdate: aDictionary [
- | childId child association |
- childId := aDictionary at: 'sessionId'.
- (childId isString and: [ childId notEmpty ]) ifFalse: [ self error: 'Invalid child session ID' ].
- childId = remoteSessionId ifTrue: [ self error: 'A session cannot own itself' ].
- child := connection sessions at: childId ifAbsent: [ nil ].
- child ifNotNil: [
-  (child isSubagent and: [ child parentSubagent parentSession == self ])
-   ifFalse: [ self error: 'A child session cannot change parent or form a cycle' ].
-  association := child parentSubagent ] ifNil: [
-  child := client newSessionIn: self directory connection: connection.
-  association := GtLACPSubagent new parentSession: self; session: child; yourself.
-  child parentSubagent: association; remoteSessionId: childId; state: #observing.
-  self subagents add: association.
-  connection sessions at: childId put: child ].
- association updateFrom: aDictionary.
- child announceChanged.
- self announceConversationTreeChanged.
- ^ association
+	| childId child association owner |
+	childId := aDictionary at: 'sessionId'.
+	(childId isString and: [ childId notEmpty ])
+		ifFalse: [ self error: 'Invalid child session ID' ].
+	childId = remoteSessionId ifTrue: [ self error: 'A session cannot own itself' ].
+	child := connection sessions at: childId ifAbsent: [ nil ].
+	child
+		ifNotNil: [ (child isSubagent and: [ child parentSubagent parentSession == self ])
+				ifFalse: [ self error: 'A child session cannot change parent or form a cycle' ].
+			association := child parentSubagent ]
+		ifNil: [ child := client newSessionIn: self directory connection: connection.
+			association := GtLACPSubagent new
+					parentSession: self;
+					session: child;
+					yourself.
+			child
+				parentSubagent: association;
+				remoteSessionId: childId;
+				state: #observing.
+			self subagents add: association.
+			connection sessions at: childId put: child ].
+	association updateFrom: aDictionary.
+	owner := child currentTurn
+			ifNil: [ self currentTurn ]
+			ifNotNil: [ :turn | turn parentTurn ].
+	owner ifNotNil: [ owner registerDelegatedSession: child ].
+	child announceChanged.
+	self announceConversationTreeChanged.
+	^ association
 ]
 
 { #category : #updating }
@@ -828,4 +863,9 @@ GtLACPSession >> updates [
 { #category : #accessing }
 GtLACPSession >> updates: anObject [
  updates := anObject
+]
+
+{ #category : #accessing }
+GtLACPSession >> workSummaryText [
+ ^ self conversationTitle
 ]
