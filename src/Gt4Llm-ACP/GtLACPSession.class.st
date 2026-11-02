@@ -156,6 +156,14 @@ GtLACPSession >> asElement [
  ^ GtLACPChatElement new viewModel: self asChatViewModel; yourself
 ]
 
+{ #category : #converting }
+GtLACPSession >> asWorkGraph [
+	^ GtLACPWorkGraph new
+		session: self;
+		refresh;
+		yourself
+]
+
 { #category : #testing }
 GtLACPSession >> canCancel [
  ^ self isSubagent
@@ -438,6 +446,17 @@ GtLACPSession >> gtViewsInContext: aContext [
   (self summarizerViewsFor: self gtInspectorTargetModels inContext: aContext).
  GtPhlowUtility sortByPriority: views.
  ^ views
+]
+
+{ #category : #views }
+GtLACPSession >> gtWorkGraphFor: aView [
+	<gtView>
+	<gtLlmView>
+	^ aView explicit
+		title: 'Work graph';
+		priority: 5;
+		stencil: [ self asWorkGraph asElement ];
+		actionUpdateButtonTooltip: 'Refresh agent work graph'
 ]
 
 { #category : #accessing }
