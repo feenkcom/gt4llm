@@ -626,7 +626,7 @@ GtLChat >> m: aString [
 
 { #category : #'api - communication' }
 GtLChat >> markdownResponse [
-
+	self provider structuredOutputIsAvailable ifFalse: [ ^ self ].
 	(responseFormat hasFormatNamed: 'Markdown') ifTrue: [ ^ self ].
 	self addResponseFormatForMagritte: GtLMarkdown named: 'Markdown'
 ]

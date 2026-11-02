@@ -86,3 +86,10 @@ GtLOllamaProvider >> initialize [
 		endpointAt: 'createModel' put: GtLOllamaCreateModelEndpoint new.
 	self responses.
 ]
+
+{ #category : #testing }
+GtLOllamaProvider >> structuredOutputIsAvailable [
+	"Ollama does not wrap markdown responses as JSON, but returns plain strings."
+
+	^ false
+]
