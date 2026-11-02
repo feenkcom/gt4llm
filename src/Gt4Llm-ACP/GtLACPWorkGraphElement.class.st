@@ -86,12 +86,6 @@ GtLACPWorkGraphElement >> initialize [
 			element: self selector: #updateRows;
 			postponedDuration: 150 milliseconds;
 			yourself.
-	self
-		addChild: (BrLabel new
-				aptitude: BrGlamorousLabelAptitude;
-				text: 'Circles: tools   ·   Connectors: calls and returns';
-				margin: (BlInsets all: 6);
-				yourself).
 	self addChild: listElement
 ]
 
