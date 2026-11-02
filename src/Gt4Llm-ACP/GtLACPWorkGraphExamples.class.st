@@ -194,7 +194,9 @@ GtLACPWorkGraphExamples >> nestedLanesAndReturns [
 	self
 		assert: (replies detect: [ :row | row turn session == nested ]) targetLane
 		equals: (graph laneFor: child).
-	self assert: replies last targetLane equals: graph callerLane.
+	self
+		assert: (replies detect: [ :row | row turn session == graph session ]) targetLane
+		equals: graph callerLane.
 	tools := graph rows select: [ :row | row kind = #tool ].
 	self assert: tools size equals: 4.
 	self
