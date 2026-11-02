@@ -18,38 +18,10 @@ GtLTools class >> files [
 			GtLMagritteToolForFilesInformation new } asOrderedCollection
 ]
 
-{ #category : #'instance creation' }
-GtLTools class >> gemstoneCodeBrowsing [
-	^ self
-		withAll: {
-				GtGemStoneLlmToolForClassSearch new.
-				GtGemStoneLlmToolForClassLookup new.
-				GtGemStoneLlmToolForClassSubclasses new.
-				GtGemStoneLlmToolForClassReferences new.
-				GtGemStoneLlmToolForMethodImplementors new.
-				GtGemStoneLlmToolForMethodSenders new.
-				GtGemStoneLlmToolForMethodsSource new.
-				GtGemStoneLlmToolForMethodCompilation new.
-				GtGemStoneLlmToolForMethodsCompilation new.
-				GtGemStoneLlmToolForMethodRemoval new.
-				GtGemStoneLlmToolForClassDefinitionChange new.
-		} asOrderedCollection
-]
-
-{ #category : #defaults }
-GtLTools class >> gemstoneIfActive [
-
-	((self respondsTo: #gemstone) and:
-	[ GtGemStoneSessionRegistry hasRegistryWithDefaultSession ]) ifFalse:
-		[ ^ OrderedCollection new ].
-	
-	^ self gemstone.
-]
-
 { #category : #defaults }
 GtLTools class >> gt [
 	^ self gtSearch , self leSearch , self gtCodeChange , self leChange
-		, self gtExamplesRun , self gtObjectsExecution, self gemstoneIfActive
+		, self gtExamplesRun , self gtObjectsExecution
 ]
 
 { #category : #defaults }
@@ -124,6 +96,13 @@ GtLTools class >> leSearch [
 GtLTools class >> lepiter [
 	^ self leSearch
 		, self leChange
+]
+
+{ #category : #defaults }
+GtLTools class >> smacc [
+	| smaccModel |
+	smaccModel := GtLSmaCCModel new.
+	^ GtLSmaCCTool allSubclasses collect: [ :each | each new model: smaccModel ]
 ]
 
 { #category : #defaults }

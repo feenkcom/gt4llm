@@ -42,6 +42,23 @@ GtLToolForExampleClassesRunExamples >> assertResultStatusesCounts: aDomainObject
 
 { #category : #private }
 GtLToolForExampleClassesRunExamples >> createDynamicExampleClass [
+	<gsCode: '	| className testClass |
+	className := (''ExampleRunDummyExamples_Test'', (UUID new asString36 copyFrom: 1 to: 8)) asSymbol.
+	testClass := Object subclass: className instVarNames: #() inDictionary: UserGlobals.
+	testClass category: ''Gt4LlmCore-Examples-Temporary''.
+	[ #(''successfulExample
+	<gtExample>
+	^ 42'' ''failingExample
+	<gtExample>
+	self assert: false'' ''errorExample
+	<gtExample>
+	self error: ''''Intentional example error'''''' ''skippedExample
+	<gtExample>
+	<noTest>
+	^ 100'') do: [ :source |
+		testClass compileMethod: source category: #examples environmentId: 0 ] ]
+		on: Error do: [ :ex | UserGlobals removeKey: className. ex pass ].
+	^ testClass'>
 	"Create a dynamic test class with example methods for testing.
 	Returns the created class. Caller is responsible for removing the class."
 	| suffix className testClass |
@@ -77,6 +94,13 @@ GtLToolForExampleClassesRunExamples >> findExampleStatusFor: aSelector in: aResu
 	
 	^ aResultStatusesDomainObject exampleWithStatuses 
 		detect: [ :es | es exampleWithResult selector = aSelector ]
+]
+
+{ #category : #private }
+GtLToolForExampleClassesRunExamples >> removeDynamicExampleClass: testClass [
+	self
+		gtDo: [ testClass removeFromSystem ]
+		gemstoneDo: [ UserGlobals removeKey: testClass name ifAbsent: [ ] ]
 ]
 
 { #category : #examples }
@@ -152,7 +176,7 @@ GtLToolForExampleClassesRunExamples >> runExamplesForDynamicallyCreatedClass [
 		self assertExampleStatus: skippedExample isSuccess: false isFailure: false isError: false isSkipped: true.
 		self assertExampleStatus: skippedExample hasClassName: className selector: 'skippedExample' status: 'skipped' objectIdExpected: false.
 	] ensure: [
-		testClass ifNotNil: [ testClass removeFromSystem ]
+		testClass ifNotNil: [ self removeDynamicExampleClass: testClass ]
 	].
 	^ call
 ]
@@ -207,9 +231,9 @@ GtLToolForExampleClassesRunExamples >> runExamplesForMultipleClasses [
 	targetObject := call result targetObject.
 	self
 		assertResultStatusesCounts: targetObject
-		total: 17
+		total: 18
 		skipped: 5
-		success: 12
+		success: 13
 		failure: 0
 		error: 0.
 	^ call
@@ -228,6 +252,55 @@ GtLToolForExampleClassesRunExamples >> runExamplesForNilClassNames [
 		assertJSONSchemaValidationError: call result targetObject
 		withPath: #('classNames')
 		errorMessage: '@[classNames] array expected'.
+	^ call
+]
+
+{ #category : #examples }
+GtLToolForExampleClassesRunExamples >> runExamplesSerializesForMcp [
+	<gtExample>
+	| call content data |
+	call := self runExamplesStoresExecutedObjectIds.
+	content := call result serializeForMCPResponseOutput.
+	self assert: content size equals: 1.
+	data := NeoJSONReader fromString: (content first at: 'text').
+	self assert: (data at: 'total') equals: 4.
+	#('successes' 'failures' 'errors' 'skips') do: [ :key |
+		self assert: (data at: key) equals: 1 ].
+	self assert: (data at: 'details') size equals: 4.
+	(data at: 'details') do: [ :detail |
+		self assert: detail notNil.
+		self assert: (detail at: 'className') isString.
+		(detail at: 'status') = 'skipped'
+			ifTrue: [ self assert: (detail at: 'objectId') isNil ]
+			ifFalse: [ self assert: (detail at: 'objectId') isString ].
+		(#('failure' 'error') includes: (detail at: 'status')) ifTrue: [
+			self assert: ((detail at: 'errorDetails') at: 'errorMessage') isString.
+			self assert: ((detail at: 'errorDetails') at: 'errorClass') isString ] ].
+	^ call
+]
+
+{ #category : #examples }
+GtLToolForExampleClassesRunExamples >> runExamplesStoresExecutedObjectIds [
+	<gtExample>
+	| testClass call storage target successful skipped |
+	storage := GtLObjectStorage new.
+	[
+		testClass := self createDynamicExampleClass.
+		call := self executeTool: GtLToolForExampleClassesRun new
+			withArguments: { 'classNames' -> { testClass name asString } } asDictionary
+			inContext: (GtLToolExecutionContext new objectStorage: storage).
+		target := call result targetObject.
+		self assertResultStatusesCounts: target total: 4 skipped: 1 success: 1 failure: 1 error: 1.
+		successful := self findExampleStatusFor: #successfulExample in: target.
+		self assert: successful objectId isString.
+		self assert: (storage objectAt: successful objectId) equals: 42.
+		skipped := self findExampleStatusFor: #skippedExample in: target.
+		self assert: skipped objectId isNil.
+		target exampleWithStatuses do: [ :status |
+			status isSkippedResult ifFalse: [
+				self assert: status objectId isString.
+				self assert: (storage storedObjectAt: status objectId) reason class equals: GtLStoredObjectExampleMethodReason ] ]
+	] ensure: [ testClass ifNotNil: [ self removeDynamicExampleClass: testClass ] ].
 	^ call
 ]
 

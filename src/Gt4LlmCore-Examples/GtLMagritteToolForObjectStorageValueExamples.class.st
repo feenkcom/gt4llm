@@ -42,7 +42,9 @@ GtLMagritteToolForObjectStorageValueExamples >> retrieveStoredObjectValue [
 	self assert: targetObject object == (objectStorage objectAt: storedObjectId).
 	self assert: targetObject objectId equals: storedObjectId.
 	self assert: targetObject objectValue objectClassName equals: 'GtLSerializedObjectValueTestObject'.
-	self assert: (targetObject objectValue phlowViews anySatisfy: [ :each | each title = 'Details' ]).
+	self
+		gtDo: [ self assert: (targetObject objectValue phlowViews anySatisfy: [ :each | each title = 'Details' ]) ]
+		gemstoneDo: [ self assert: targetObject objectValue phlowViews isEmpty ].
 	self assert: targetObject objectValue allInstanceSlots size equals: 3.
 	^ call
 ]

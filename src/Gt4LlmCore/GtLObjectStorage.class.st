@@ -191,7 +191,9 @@ GtLObjectStorage >> storedObjectAt: anObjectId [
 GtLObjectStorage >> storedObjectAt: anObjectId ifPresent: aPresentBlock ifAbsent: anAbsentBlock [
 	| internalId |
 	
-	internalId := self convertToInternalId: anObjectId.
+	internalId := [ self convertToInternalId: anObjectId ]
+		on: Error
+		do: [ :anError | ^ anAbsentBlock value ].
 	^ objectsByUUID 
 		at: internalId
 		ifPresent: aPresentBlock

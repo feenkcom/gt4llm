@@ -520,7 +520,8 @@ GtLChat >> gtViewObjectStorageFor: aView [
 		priority: 40;
 		object: [ objectStorage ];
 		view: #gtObjectsByUUIDFor:;
-		actionButtonIcon: BrGlamorousVectorIcons inspect 
+		actionButtonIcon: (GtPhlowGlamorousVectorIconNameStencil new
+				iconName: #inspect) 
 			tooltip: 'Inspect storage'
 			action: [ :aButton |
 				aButton phlow spawnObject: objectStorage ]
@@ -625,7 +626,7 @@ GtLChat >> m: aString [
 
 { #category : #'api - communication' }
 GtLChat >> markdownResponse [
-
+	self provider structuredOutputIsAvailable ifFalse: [ ^ self ].
 	(responseFormat hasFormatNamed: 'Markdown') ifTrue: [ ^ self ].
 	self addResponseFormatForMagritte: GtLMarkdown named: 'Markdown'
 ]

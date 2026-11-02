@@ -32,7 +32,9 @@ GtLMagritteToolForMethodImplementorsExamples >> implementorsForGtDisplayOnReturn
 	call := self
 		executeTool: GtLMagritteToolForMethodImplementors new
 		withArguments: {
-			'methodName' -> 'gtDisplayOn:'
+			'methodName' -> (self
+				gtDo: [ 'gtDisplayOn:' ]
+				gemstoneDo: [ 'printOn:' ])
 		} asDictionary.
 	targetObject := call result targetObject.
 	self assert: (targetObject isKindOf: GtLMethodsSearchResult).
@@ -69,8 +71,8 @@ GtLMagritteToolForMethodImplementorsExamples >> implementorsForUnknownMethodName
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	expectedJson := Dictionary new
-		at: #foundMethods put: NeoJSONArray new;
-		at: #mayHaveMore put: false;
+		at: 'foundMethods' put: NeoJSONArray new;
+		at: 'mayHaveMore' put: false;
 		yourself.
 	self assertDataBlock: dataBlock hasLlmJsonData: expectedJson.
 	

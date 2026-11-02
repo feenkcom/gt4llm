@@ -194,6 +194,16 @@ GtLClassDefinitionDescription >> gtViewDefinitionFor: aView [
 
 { #category : #initialization }
 GtLClassDefinitionDescription >> initializeFromClass: aClass [
+	<gsCode: ' self
+ currentClassName: aClass name asString;
+ superclassName: (aClass superclass ifNil: [ nil ] ifNotNil: [ :each | each name asString ]);
+ comment: aClass comment;
+ packageName: aClass category;
+ packageTagName: nil;
+ instanceSlotNames: (aClass instVarNames collect: #asString);
+ classSlotNames: (aClass class instVarNames collect: #asString);
+ classVariableNames: (aClass classVarNames collect: #asString);
+ traitCompositionString: ''{}'''>
 	self
 		currentClassName: aClass name;
 		superclassName: (aClass superclass 

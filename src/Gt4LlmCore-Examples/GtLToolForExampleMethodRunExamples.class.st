@@ -13,6 +13,7 @@ Class {
 { #category : #private }
 GtLToolForExampleMethodRunExamples >> ensureLepiterPageForObject: anObject withSnippetCode: aString [
 	| page snippet |
+	self gtDo: [ ] gemstoneDo: [ ^ self ].
 	page := LePage pharoClassName: anObject class name.
 	snippet := LePharoSnippet new.
 	snippet code: aString.
@@ -222,18 +223,33 @@ GtLToolForExampleMethodRunExamples >> exampleRunForUnknownMethod [
 ]
 
 { #category : #examples }
+GtLToolForExampleMethodRunExamples >> exampleRunSerializesForMcp [
+	<gtExample>
+	| call data |
+	call := self exampleRunSuccessStoresObjectId.
+	data := NeoJSONReader fromString:
+		(GtMagritteJSONDataExporter forObject: call result targetObject) exportObjectAsJsonString.
+	self assert: (data at: 'statusText') equals: 'success'.
+	self assert: ((data at: 'exampleReference') at: 'methodName') equals: 'successfulExample'.
+	self assert: (data at: 'objectId') isString.
+	self assert: ((data at: 'result') at: 'objectId') equals: (data at: 'objectId').
+	self assert: (((data at: 'result') at: 'objectValue') at: 'objectPrintString') equals: '42'.
+	^ call
+]
+
+{ #category : #examples }
 GtLToolForExampleMethodRunExamples >> exampleRunSuccess [
 	<gtExample>
 	| tool call targetObject resultObject |
-	resultObject := GtTMoneyExamples new fortyTwoEuros.
-	self ensureLepiterPageForObject: resultObject withSnippetCode: 'GtTMoneyExamples new fortyTwoEuros'.
+	resultObject := GtLExampleRunDummyExamples new successfulExample.
+	self ensureLepiterPageForObject: resultObject withSnippetCode: 'GtLExampleRunDummyExamples new successfulExample'.
 	tool := GtLToolForExampleMethodRun new.
 	call := self
 		executeTool: tool
 		withArguments: {
 			'exampleReference' -> {
-					'exampleClassName' -> 'GtTMoneyExamples'.
-					'methodName' -> 'fortyTwoEuros'.
+					'exampleClassName' -> 'GtLExampleRunDummyExamples'.
+					'methodName' -> 'successfulExample'.
 					'classSide' -> false
 				} asDictionary
 			} asDictionary
@@ -243,9 +259,13 @@ GtLToolForExampleMethodRunExamples >> exampleRunSuccess [
 	self assert: (targetObject isKindOf: GtLExampleWithResult).
 	self assert: targetObject isSuccessResult.
 	self assert: targetObject objectId isNil.
+	self
+		gtDo: [
 	self assert: targetObject playgroundPageReference notNil.
 	self assert: targetObject playgroundPageReference databaseId equals: self theDatabase primaryDB uuidString.
 	self assert: targetObject playgroundPageReference pageId equals: self theDatabase pages first uid asString36.
+		]
+		gemstoneDo: [ self assert: targetObject playgroundPageReference isNil ].
 	^ call
 ]
 
@@ -272,9 +292,13 @@ GtLToolForExampleMethodRunExamples >> exampleRunSuccessStoresObjectId [
 	targetObject := call result targetObject.
 	self assert: (targetObject isKindOf: GtLExampleWithResult).
 	self assert: targetObject isSuccessResult.
+	self
+		gtDo: [
 	self assert: targetObject playgroundPageReference notNil.
 	self assert: targetObject playgroundPageReference databaseId equals: self theDatabase primaryDB uuidString.
 	self assert: targetObject playgroundPageReference pageId equals: self theDatabase pages first uid asString36.
+		]
+		gemstoneDo: [ self assert: targetObject playgroundPageReference isNil ].
 	objectId := targetObject objectId.
 	self assert: objectId isString.
 	self assert: (objectStorage objectAt: objectId) equals: 42.
@@ -285,6 +309,7 @@ GtLToolForExampleMethodRunExamples >> exampleRunSuccessStoresObjectId [
 
 { #category : #accessing }
 GtLToolForExampleMethodRunExamples >> theDatabase [
+	self gtDo: [ ] gemstoneDo: [ ^ nil ].
 	^ theDatabase ifNil: [
 		| db |
 		db := LeExplicitlyAttachedLinksExamples new emptyDatabase.

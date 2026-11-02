@@ -28,7 +28,7 @@ GtLMagritteToolForObjectStorageSlotValue >> objectIdDescription [
 
 { #category : #private }
 GtLMagritteToolForObjectStorageSlotValue >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
-	| arguments objectId slotName object slot slotId slotValue |
+	| arguments objectId slotName object slotId slotValue |
 	arguments := aToolCall arguments.
 	objectId := arguments at: 'objectId'.
 	slotName := arguments at: 'slotName'.
@@ -47,12 +47,23 @@ GtLMagritteToolForObjectStorageSlotValue >> privatePerformToolCall: aToolCall in
 		objectAt: objectId
 		ifPresent: [ :storedObject | storedObject ]
 		ifAbsent: [ ^ GtLMissingDomainObject new objectName: objectId ].
-	slot := object class allSlots
-		detect: [ :each | each name asString = slotName asString ]
-		ifNone: [ ^ GtLMissingDomainObject new objectName: slotName ].
-	slotValue := [ object readSlotNamed: slot name ]
-		on: Error
-		do: [ :anError | ^ GtLExceptionDomainObject freeze: anError ].
+	slotValue := self
+		gtDo: [
+			| slot |
+			slot := object class allSlots
+				detect: [ :each | each name asString = slotName asString ]
+				ifNone: [ ^ GtLMissingDomainObject new objectName: slotName ].
+			[ object readSlotNamed: slot name ]
+				on: Error
+				do: [ :anError | ^ GtLExceptionDomainObject freeze: anError ] ]
+		gemstoneDo: [
+			| slotNames slotIndex |
+			slotNames := object class allInstVarNames.
+			slotIndex := slotNames findFirst: [ :each | each asString = slotName asString ].
+			slotIndex = 0 ifTrue: [ ^ GtLMissingDomainObject new objectName: slotName ].
+			[ object instVarAt: slotIndex ]
+				on: Error
+				do: [ :anError | ^ GtLExceptionDomainObject freeze: anError ] ].
 	
 	slotId := anExecutionContext objectStorage
 			addNewObject:slotValue

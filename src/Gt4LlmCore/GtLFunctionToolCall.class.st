@@ -105,7 +105,8 @@ GtLFunctionToolCall >> gcExecutionDuration [
 GtLFunctionToolCall >> gtActionForResultFor: anAction [
 	<gtAction>
 	^ anAction button
-		icon: BrGlamorousVectorIcons inspect;
+		icon: (GtPhlowGlamorousVectorIconNameStencil new
+				iconName: #inspect);
 		label: 'Result';
 		tooltip: 'Spawn the result object';
 		action: [ :button | 
@@ -116,7 +117,8 @@ GtLFunctionToolCall >> gtActionForResultFor: anAction [
 GtLFunctionToolCall >> gtActionForToolFor: anAction [
 	<gtAction>
 	^ anAction button
-		icon: BrGlamorousVectorIcons inspect;
+		icon: (GtPhlowGlamorousVectorIconNameStencil new
+				iconName: #inspect);
 		label: 'Tool';
 		tooltip: 'Spawn the tool object';
 		action: [ :button | 
@@ -140,7 +142,8 @@ GtLFunctionToolCall >> gtArgumentsFor: aView [
 GtLFunctionToolCall >> gtDebugActionFor: anAction [
 	<gtAction>
 	^ anAction button
-		icon: BrGlamorousVectorIcons debug;
+		icon: (GtPhlowGlamorousVectorIconNameStencil new
+				iconName: #debug);
 		debugBlock: [ 
 			| newCall |
 			newCall := self class new.

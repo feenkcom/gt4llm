@@ -1,0 +1,129 @@
+"
+I adapt an ACP session for the chat interface. I cache stable user and assistant row models, retain the shared draft, expose send/stop availability and report errors. Agent execution remains owned by the session.
+"
+Class {
+	#name : #GtLACPChatViewModel,
+	#superclass : #GtLACPObject,
+	#instVars : [
+		'session',
+		'messageCache',
+		'lastError'
+	],
+	#category : #'Gt4Llm-ACP-UI'
+}
+
+{ #category : #testing }
+GtLACPChatViewModel >> canSend [
+ ^ session canPrompt and: [ self draft trimBoth notEmpty ]
+]
+
+{ #category : #testing }
+GtLACPChatViewModel >> canStop [
+ ^ session canCancel
+]
+
+{ #category : #accessing }
+GtLACPChatViewModel >> draft [
+ ^ session promptText
+]
+
+{ #category : #accessing }
+GtLACPChatViewModel >> draft: aString [
+ session promptText: aString
+]
+
+{ #category : #accessing }
+GtLACPChatViewModel >> errorText [
+ lastError ifNotNil: [ ^ lastError ].
+ session currentTurn ifNotNil: [ :turn | turn error ifNotNil: [ :error | ^ error printString ] ].
+ ^ ''
+]
+
+{ #category : #views }
+GtLACPChatViewModel >> gtMessagesFor: aView [
+ <gtView>
+ ^ aView list title: 'Chat messages'; priority: 5; items: [ self messageViewModels ]; itemText: #label
+]
+
+{ #category : #accessing }
+GtLACPChatViewModel >> initialize [
+ super initialize.
+ messageCache := IdentityDictionary new
+]
+
+{ #category : #accessing }
+GtLACPChatViewModel >> lastError [
+ ^ lastError
+]
+
+{ #category : #accessing }
+GtLACPChatViewModel >> lastError: anObject [
+ lastError := anObject
+]
+
+{ #category : #accessing }
+GtLACPChatViewModel >> messageViewModels [
+ ^ Array streamContents: [ :stream |
+  session turns copy do: [ :turn |
+   turn inputMessages do: [ :user |
+    | model |
+    model := messageCache at: user ifAbsentPut: [
+     GtLACPChatMessageViewModel new turn: turn; yourself ].
+    model message: user.
+    stream nextPut: model ].
+   (turn activity notEmpty
+    or: [ turn assistantMessage hasWork or: [ turn isActive or: [ turn state = #failed ] ] ])
+    ifTrue: [ | model |
+     model := messageCache at: turn ifAbsentPut: [
+      GtLACPChatMessageViewModel new turn: turn; yourself ].
+     model message: turn assistantMessage.
+     stream nextPut: model ] ] ]
+]
+
+{ #category : #updating }
+GtLACPChatViewModel >> onSessionChanged: anAnnouncement [
+ anAnnouncement sourceSession == session ifFalse: [ ^ self ].
+ anAnnouncement message ifNil: [ ^ self ].
+ messageCache valuesDo: [ :model |
+  model message == anAnnouncement message ifTrue: [ model changed ] ]
+]
+
+{ #category : #actions }
+GtLACPChatViewModel >> send [
+ | turn |
+ self canSend ifFalse: [ ^ nil ].
+ lastError := nil.
+ [ turn := session prompt: self draft ]
+ on: Error do: [ :ex | lastError := ex messageText. session announceChanged. ^ nil ].
+ self draft: ''.
+ session announceChanged.
+ ^ turn
+]
+
+{ #category : #accessing }
+GtLACPChatViewModel >> session [
+ ^ session
+]
+
+{ #category : #accessing }
+GtLACPChatViewModel >> session: anObject [
+ session ifNotNil: [ session announcer unsubscribe: self ].
+ session := anObject.
+ messageCache := IdentityDictionary new.
+ session announcer weak
+  when: GtLACPSessionChanged send: #onSessionChanged: to: self
+]
+
+{ #category : #accessing }
+GtLACPChatViewModel >> statusText [
+ | pending |
+ pending := session turns sum: [ :turn | turn permissionRequests count: [ :each | each state = #pending ] ].
+ pending > 0 ifTrue: [ ^ session state asString, ' · awaiting permission' ].
+ ^ session state asString
+]
+
+{ #category : #actions }
+GtLACPChatViewModel >> stop [
+ lastError := nil.
+ [ session cancelTurn ] on: Error do: [ :ex | lastError := ex messageText. session announceChanged ]
+]

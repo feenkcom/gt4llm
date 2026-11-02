@@ -66,13 +66,22 @@ GtLSerializedObjectValue >> hash [
 
 { #category : #initialization }
 GtLSerializedObjectValue >> initializeFromObject: anObject [
-	<gsCode: '	"Capture the portable, headless part of an object snapshot."
+	<gsCode: '	| slotNames |
+	"Capture a headless object snapshot, including named instance variables."
 	objectClassName := anObject class name asString.
 	superclassName := anObject class superclass ifNil: [ '''' ] ifNotNil: [ :aClass | aClass name asString ].
 	packageName := anObject class category asString.
 	objectPrintString := [ anObject printString ] on: Error do: [ :error | ''Error printing object'' ].
 	phlowViews := #().
-	allInstanceSlots := #()'>
+	slotNames := anObject class allInstVarNames.
+	allInstanceSlots := (1 to: slotNames size) collect: [ :index |
+		| slotValue |
+		slotValue := [ anObject instVarAt: index ] on: Error do: [ :error | nil ].
+		GtLSerializedSlotInfo new
+			name: (slotNames at: index) asString;
+			valueClassName: slotValue class name asString;
+			valuePrintString: ([ slotValue asString ] on: Error do: [ :error | ''Error converting to string'' ]);
+			yourself ].'>
 	"Initialize from an object by extracting class info, views, and slots."
 
 	objectClassName := anObject class name asString.

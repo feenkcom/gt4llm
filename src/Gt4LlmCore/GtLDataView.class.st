@@ -79,6 +79,7 @@ GtLDataView >> buildContext: aBuildContext [
 
 { #category : #decorating }
 GtLDataView >> compositeData [
+	<gsCode: '	^ GtLCompositeDataView new originalView: self'>
 	^ GtLCompositeDataView new
 			originalView: self;
 			definingMethod: (GtPhlowDefiningMethodsCollector forContext: thisContext) collect
@@ -174,8 +175,8 @@ GtLDataView >> forwardCollection [
 { #category : #decorating }
 GtLDataView >> forwardObject [
 	^ GtLForwardObjectDataView new
-			originalView: self;
-			definingMethod: (GtPhlowDefiningMethodsCollector forContext: thisContext) collect
+		originalView: self;
+		definingMethod: (GtPhlowDefiningMethodsCollector forContext: thisContext) collect
 ]
 
 { #category : #decorating }
@@ -248,6 +249,7 @@ GtLDataView >> isErrorView [
 
 { #category : #decorating }
 GtLDataView >> jsonData [
+	<gsCode: '	^ GtLJsonDataView new originalView: self'>
 	^ GtLJsonDataView new
 			originalView: self;
 			definingMethod: (GtPhlowDefiningMethodsCollector forContext: thisContext) collect
@@ -267,6 +269,7 @@ GtLDataView >> jsonObject: aBlock [
 
 { #category : #decorating }
 GtLDataView >> magritteObject [
+	<gsCode: '	^ GtLMagritteDataView new originalView: self'>
 	^ GtLMagritteDataView new
 			originalView: self;
 			definingMethod: (GtPhlowDefiningMethodsCollector forContext: thisContext) collect

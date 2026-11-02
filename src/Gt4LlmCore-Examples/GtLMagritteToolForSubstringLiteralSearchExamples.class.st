@@ -8,6 +8,24 @@ Class {
 }
 
 { #category : #examples }
+GtLMagritteToolForSubstringLiteralSearchExamples >> searchOnlyStringLiteralsCaseInsensitively [
+	<gtExample>
+	| fixtures call |
+	fixtures := { #('GtLSubstringNestedArrayFixture'). [ 'GtLSubstringBlockFixture' ]. #GtLSubstringSymbolOnlyFixture }.
+	"GtLSubstringCommentOnlyFixture"
+	{ 'gtlsubstringnested', 'arrayfixture'. 'gtlsubstring', 'blockfixture' } do: [ :query |
+		call := self executeTool: GtLMagritteToolForSubstringLiteralSearch new
+			withArguments: { 'query' -> query } asDictionary.
+		self assert: (call result targetObject foundMethods anySatisfy: [ :each |
+			each methodSignature = 'GtLMagritteToolForSubstringLiteralSearchExamples>>#searchOnlyStringLiteralsCaseInsensitively' ]) ].
+	{ 'GtLSubstringSymbol', 'OnlyFixture'. 'GtLSubstringComment', 'OnlyFixture' } do: [ :query |
+		call := self executeTool: GtLMagritteToolForSubstringLiteralSearch new
+			withArguments: { 'query' -> query } asDictionary.
+		self assert: call result targetObject foundMethods isEmpty ].
+	^ call
+]
+
+{ #category : #examples }
 GtLMagritteToolForSubstringLiteralSearchExamples >> searchWithEmptyQuery [
 	<gtExample>
 	| call |

@@ -63,8 +63,10 @@ GtLMagritteToolForMethodReferences >> privatePerformToolCall: aToolCall inContex
 				missingArgument: 'methodName' ].
 
 	selector := methodName asSymbol.
-	references := (selector gtReferences result toArray
-		await: GtLSettings futureExecutionConfiguration) wait.
+	references := self
+		gtDo: [ (selector gtReferences result toArray
+			await: GtLSettings futureExecutionConfiguration) wait ]
+		gemstoneDo: [ (ClassOrganizer gtDefault referencesTo: selector) first ].
 
 	^ GtLMethodsSearchResult fromReferences: references
 ]

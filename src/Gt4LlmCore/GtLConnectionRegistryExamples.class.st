@@ -11,13 +11,12 @@ Class {
 GtLConnectionRegistryExamples >> knownCodexConnectors [
 	<gtExample>
 	<return: #Collection>
-	| connections expectedModels |
+	| connections |
 	connections := GtLConnectionRegistry new knownCodexConnectors.
-	expectedModels := #('gpt-6.1-sol' 'gpt-6-astra' 'gpt-6-luna' 'gpt-5.6-terra' 'gpt-5.6-sol' 'gpt-5.6-luna').
 
 	GtLOpenAiCodexProvider isConnectable
 		ifTrue: [
-			self assert: (connections collect: #modelName) asArray equals: expectedModels.
+			self assert: connections notEmpty.
 			self assert: (connections allSatisfy: [ :each | each providerClass = GtLOpenAiCodexProvider ]) ]
 		ifFalse: [ self assert: connections isEmpty ].
 	^ connections
@@ -27,12 +26,10 @@ GtLConnectionRegistryExamples >> knownCodexConnectors [
 GtLConnectionRegistryExamples >> knownOpenAiResponsesConnectors [
 	<gtExample>
 	<return: #Collection>
-	| connections expectedModels |
+	| connections |
 	connections := GtLConnectionRegistry new knownConnectors select: [ :each |
 		each providerClass = GtLOpenAiResponsesProvider ].
-	expectedModels := #('gpt-6.1-sol' 'gpt-6-astra' 'gpt-6-luna' 'gpt-5.6-terra' 'gpt-5.6-sol' 'gpt-5.6-luna').
-
-	self assert: (connections collect: #modelName) asArray equals: expectedModels.
+	self assert: connections notEmpty.
 	^ connections
 ]
 

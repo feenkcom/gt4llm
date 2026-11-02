@@ -98,6 +98,14 @@ GtLMagritteToolForClassLookupExamples >> lookupClassSuccessfulWithTrait [
 		} asDictionary.
 	targetObject := call result targetObject.
 	
+	self gtDo: [ ] gemstoneDo: [
+		"Traits are flattened into their consumers and are not defined in GemStone."
+		self
+			assertMissingObject: targetObject
+			withObjectName: 'TGtLInvalidInputDataAssertions'
+			errorMessage: 'TGtLInvalidInputDataAssertions is not found'.
+		^ call ].
+	
 	self assert: (targetObject isKindOf: GtLClassDescription).
 	self assert: targetObject currentClassName equals: #TGtLInvalidInputDataAssertions.
 	self assert: targetObject superclassName isNil.

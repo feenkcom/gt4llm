@@ -33,6 +33,14 @@ Examples:
 
 { #category : #'as yet unclassified' }
 GtLToolForExampleClassesRun >> extractExamplesFromClassesFrom: classNames in: examplesSet reportingNotFoundIn: notFound [
+	<gsCode: '	classNames do: [ :className |
+		| targetClass factory |
+		targetClass := GsSession currentSession objectNamed: className asString asSymbol.
+		(targetClass notNil and: [ targetClass isBehavior ])
+			ifTrue: [
+				factory := GtExampleFactory new sourceClass: targetClass.
+				factory gtExamplesAllContained do: [ :example | examplesSet add: example ] ]
+			ifFalse: [ notFound add: className asString ] ]'>
 	classNames
 		do: [ :className | 
 			Smalltalk globals

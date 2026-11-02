@@ -175,6 +175,11 @@ GtLConnectionRegistry >> defaultConnection: aConnection [
 			self addConnection: aConnection ]
 ]
 
+{ #category : #accessing }
+GtLConnectionRegistry >> defaultConnectionWithModelName: aModelName [
+	self defaultConnection: (self connectionWithModelName: aModelName)
+]
+
 { #category : #'gt - extensions' }
 GtLConnectionRegistry >> gtConnectionsFor: aView [
 	<gtView>
@@ -261,6 +266,10 @@ GtLConnectionRegistry >> knownCodexConnectors [
 			model: 'gpt-6.1-sol'.
 		GtLConnection new
 			providerClass: GtLOpenAiCodexProvider;
+			label: 'GPT 6.1 Terra (Codex)';
+			model: 'gpt-6.1-terra'.
+		GtLConnection new
+			providerClass: GtLOpenAiCodexProvider;
 			label: 'GPT 6 Astra (Codex)';
 			model: 'gpt-6-astra'.
 		GtLConnection new
@@ -316,6 +325,10 @@ GtLConnectionRegistry >> knownOpenAiResponsesConnectors [
 			providerClass: GtLOpenAiResponsesProvider;
 			label: 'GPT 6.1 Sol';
 			model: 'gpt-6.1-sol'.
+		GtLConnection new
+			providerClass: GtLOpenAiResponsesProvider;
+			label: 'GPT 6.1 Terra';
+			model: 'gpt-6.1-terra'.
 		GtLConnection new
 			providerClass: GtLOpenAiResponsesProvider;
 			label: 'GPT 6 Astra';

@@ -18,51 +18,83 @@ GtLMagritteToolForMethodsCompilationExamples >> compileInstanceSideMethods [
 		ifTrue: [ targetClass removeSelector: selectorOne ].
 	(targetClass includesSelector: selectorTwo)
 		ifTrue: [ targetClass removeSelector: selectorTwo ].
-	[
-		| compilationResult methodCompilationResults |
-		call := self
+	[ | compilationResult methodCompilationResults |
+	call := self
 			executeTool: GtLMagritteToolForMethodsCompilation new
-			withArguments: {
-				'methods' -> {
-					{
-						'methodClassName' -> 'GtLMagritteToolForMethodsCompilationExamples'.
-						'sourceCode' -> 'gtMagritteCompiledExampleInstanceOne ^ 1'.
-						'protocol' -> 'examples'.
-						'classSide' -> false
-					} asDictionary.
-					{
-						'methodClassName' -> 'GtLMagritteToolForMethodsCompilationExamples'.
-						'sourceCode' -> 'gtMagritteCompiledExampleInstanceTwo ^ 2'.
-						'protocol' -> 'examples'.
-						'classSide' -> false
-					} asDictionary
-				}
-			} asDictionary.
-			
-		self assert: (targetClass includesSelector: selectorOne).
-		self assert: (targetClass includesSelector: selectorTwo).
-		
-		compilationResult := call result targetObject.
-		methodCompilationResults := compilationResult methodCompilationResults.
-		self assert: (compilationResult isKindOf: GtLMethodsCompilationResult).
-		self assert: methodCompilationResults size equals: 2.
-		self assert: methodCompilationResults first status equals: 'compiled'.
-		self assert: methodCompilationResults second status equals: 'compiled'.
-		self assert: methodCompilationResults first oldMethod isNil.
-		self assert: methodCompilationResults second oldMethod isNil.
-		self assert: methodCompilationResults first newMethod sourceCode equals: 'gtMagritteCompiledExampleInstanceOne ^ 1'.
-		self assert: methodCompilationResults second newMethod sourceCode equals: 'gtMagritteCompiledExampleInstanceTwo ^ 2'
-		
-	] ensure: [
-		(targetClass includesSelector: selectorOne)
-			ifTrue: [ targetClass removeSelector: selectorOne ].
-		(targetClass includesSelector: selectorTwo)
-			ifTrue: [ targetClass removeSelector: selectorTwo ] ].
+			withArguments: {'methods'
+						-> {{'methodClassName' -> 'GtLMagritteToolForMethodsCompilationExamples'.
+									'sourceCode' -> 'gtMagritteCompiledExampleInstanceOne ^ 1'.
+									'protocol' -> 'examples'.
+									'classSide' -> false} asDictionary.
+								{'methodClassName' -> 'GtLMagritteToolForMethodsCompilationExamples'.
+									'sourceCode' -> 'gtMagritteCompiledExampleInstanceTwo ^ 2'.
+									'protocol' -> 'examples'.
+									'classSide' -> false} asDictionary}} asDictionary.
+	self assert: (targetClass includesSelector: selectorOne).
+	self assert: (targetClass includesSelector: selectorTwo).
+	compilationResult := call result targetObject.
+	methodCompilationResults := compilationResult methodCompilationResults.
+	self assert: (compilationResult isKindOf: GtLMethodsCompilationResult).
+	self assert: methodCompilationResults size equals: 2.
+	self assert: methodCompilationResults first status equals: 'compiled'.
+	self assert: methodCompilationResults second status equals: 'compiled'.
+	self assert: methodCompilationResults first oldMethod isNil.
+	self assert: methodCompilationResults second oldMethod isNil.
+	self
+		assert: methodCompilationResults first newMethod sourceCode
+		equals: (RBParser parseMethod: 'gtMagritteCompiledExampleInstanceOne ^ 1') formattedCode.
+	self
+		assert: methodCompilationResults second newMethod sourceCode
+		equals: (RBParser parseMethod: 'gtMagritteCompiledExampleInstanceTwo ^ 2') formattedCode ]
+		ensure: [ (targetClass includesSelector: selectorOne)
+				ifTrue: [ targetClass removeSelector: selectorOne ].
+			(targetClass includesSelector: selectorTwo)
+				ifTrue: [ targetClass removeSelector: selectorTwo ] ].
 	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForMethodsCompilationExamples >> compileInstanceSideMethodsWithExistingSources [
+	<gsCode: '	<gtExample>
+	| call targetClass selectorOne selectorTwo sourceBeforeOne sourceBeforeTwo |
+	targetClass := GtLMagritteToolForMethodsCompilationExamples.
+	selectorOne := #gtMagritteCompiledExampleExistingOne.
+	selectorTwo := #gtMagritteCompiledExampleExistingTwo.
+	sourceBeforeOne := ''gtMagritteCompiledExampleExistingOne ^ 10''.
+	sourceBeforeTwo := ''gtMagritteCompiledExampleExistingTwo ^ 20''.
+	targetClass compileMethod: sourceBeforeOne category: ''examples'' environmentId: 0.
+	targetClass compileMethod: sourceBeforeTwo category: ''examples'' environmentId: 0.
+	[
+		call := self
+			executeTool: GtLMagritteToolForMethodsCompilation new
+			withArguments: {
+				''methods'' -> {
+					{
+						''methodClassName'' -> ''GtLMagritteToolForMethodsCompilationExamples''.
+						''sourceCode'' -> ''gtMagritteCompiledExampleExistingOne ^ 11''.
+						''protocol'' -> ''examples''.
+						''classSide'' -> false
+					} asDictionary.
+					{
+						''methodClassName'' -> ''GtLMagritteToolForMethodsCompilationExamples''.
+						''sourceCode'' -> ''gtMagritteCompiledExampleExistingTwo ^ 21''.
+						''protocol'' -> ''examples''.
+						''classSide'' -> false
+					} asDictionary
+				}
+			} asDictionary.
+		self assert: (call result targetObject isKindOf: GtLMethodsCompilationResult).
+		self assert: call result targetObject methods size equals: 2.
+		self assert: call result targetObject methods first oldMethod sourceCode equals: sourceBeforeOne.
+		self assert: call result targetObject methods second oldMethod sourceCode equals: sourceBeforeTwo.
+		self assert: call result targetObject methods first newMethod sourceCode equals: ''gtMagritteCompiledExampleExistingOne ^ 11''.
+		self assert: call result targetObject methods second newMethod sourceCode equals: ''gtMagritteCompiledExampleExistingTwo ^ 21''
+	] ensure: [
+		(targetClass includesSelector: selectorOne)
+			ifTrue: [ targetClass removeSelector: selectorOne ].
+		(targetClass includesSelector: selectorTwo)
+			ifTrue: [ targetClass removeSelector: selectorTwo ] ].
+	^ call'>
 	<gtExample>
 	| call targetClass selectorOne selectorTwo sourceBeforeOne sourceBeforeTwo |
 	targetClass := GtLMagritteToolForMethodsCompilationExamples.
@@ -72,36 +104,37 @@ GtLMagritteToolForMethodsCompilationExamples >> compileInstanceSideMethodsWithEx
 	sourceBeforeTwo := 'gtMagritteCompiledExampleExistingTwo ^ 20'.
 	targetClass compile: sourceBeforeOne classified: 'examples'.
 	targetClass compile: sourceBeforeTwo classified: 'examples'.
-	[
-		call := self
+	[ call := self
 			executeTool: GtLMagritteToolForMethodsCompilation new
-			withArguments: {
-				'methods' -> {
-					{
-						'methodClassName' -> 'GtLMagritteToolForMethodsCompilationExamples'.
-						'sourceCode' -> 'gtMagritteCompiledExampleExistingOne ^ 11'.
-						'protocol' -> 'examples'.
-						'classSide' -> false
-					} asDictionary.
-					{
-						'methodClassName' -> 'GtLMagritteToolForMethodsCompilationExamples'.
-						'sourceCode' -> 'gtMagritteCompiledExampleExistingTwo ^ 21'.
-						'protocol' -> 'examples'.
-						'classSide' -> false
-					} asDictionary
-				}
-			} asDictionary.
-		self assert: (call result targetObject isKindOf: GtLMethodsCompilationResult).
-		self assert: call result targetObject methods size equals: 2.
-		self assert: call result targetObject methods first oldMethod sourceCode equals: sourceBeforeOne.
-		self assert: call result targetObject methods second oldMethod sourceCode equals: sourceBeforeTwo.
-		self assert: call result targetObject methods first newMethod sourceCode equals: 'gtMagritteCompiledExampleExistingOne ^ 11'.
-		self assert: call result targetObject methods second newMethod sourceCode equals: 'gtMagritteCompiledExampleExistingTwo ^ 21'
-	] ensure: [
-		(targetClass includesSelector: selectorOne)
-			ifTrue: [ targetClass removeSelector: selectorOne ].
-		(targetClass includesSelector: selectorTwo)
-			ifTrue: [ targetClass removeSelector: selectorTwo ] ].
+			withArguments: {'methods'
+						-> {{'methodClassName' -> 'GtLMagritteToolForMethodsCompilationExamples'.
+									'sourceCode' -> 'gtMagritteCompiledExampleExistingOne ^ 11'.
+									'protocol' -> 'examples'.
+									'classSide' -> false} asDictionary.
+								{'methodClassName' -> 'GtLMagritteToolForMethodsCompilationExamples'.
+									'sourceCode' -> 'gtMagritteCompiledExampleExistingTwo ^ 21'.
+									'protocol' -> 'examples'.
+									'classSide' -> false} asDictionary}} asDictionary.
+	self assert: (call result targetObject isKindOf: GtLMethodsCompilationResult).
+	self assert: call result targetObject methods size equals: 2.
+	self
+		assert: call result targetObject methods first oldMethod sourceCode
+		equals: sourceBeforeOne.
+	self
+		assert: call result targetObject methods second oldMethod sourceCode
+		equals: sourceBeforeTwo.
+	self
+		assert: call result targetObject methods first newMethod sourceCode
+		equals: (RBParser parseMethod: 'gtMagritteCompiledExampleExistingOne ^ 11')
+				formattedCode.
+	self
+		assert: call result targetObject methods second newMethod sourceCode
+		equals: (RBParser parseMethod: 'gtMagritteCompiledExampleExistingTwo ^ 21')
+				formattedCode ]
+		ensure: [ (targetClass includesSelector: selectorOne)
+				ifTrue: [ targetClass removeSelector: selectorOne ].
+			(targetClass includesSelector: selectorTwo)
+				ifTrue: [ targetClass removeSelector: selectorTwo ] ].
 	^ call
 ]
 
@@ -111,37 +144,32 @@ GtLMagritteToolForMethodsCompilationExamples >> compileMethodsForUnknownClass [
 	| call targetClass selector |
 	targetClass := GtLMagritteToolForMethodsCompilationExamples.
 	selector := #gtMagritteCompiledExampleKnown.
-	[
-		| targetObject |
-		call := self
+	[ | targetObject |
+	call := self
 			executeTool: GtLMagritteToolForMethodsCompilation new
-			withArguments: {
-				'methods' -> {
-					{
-						'methodClassName' -> 'ClassThatDoesNotExist'.
-						'sourceCode' -> 'gtMagritteCompiledExampleUnknown ^ 1'.
-						'protocol' -> 'examples'.
-						'classSide' -> false
-					} asDictionary.
-					{
-						'methodClassName' -> 'GtLMagritteToolForMethodsCompilationExamples'.
-						'sourceCode' -> 'gtMagritteCompiledExampleKnown ^ 2'.
-						'protocol' -> 'examples'.
-						'classSide' -> false
-					} asDictionary
-				}
-			} asDictionary.
-		targetObject := call result targetObject.
-		self assert: (targetObject isKindOf: GtLMethodsCompilationResult).
-		self assert: targetObject methods size equals: 2.
-		self assert: (targetObject methods first isKindOf: GtLMissingDomainObject).
-		self assert: targetObject methods first objectName equals: 'ClassThatDoesNotExist'.
-		self assert: (targetObject methods second isKindOf: GtLMethodCompilationResult).
-		self assert: targetObject methods second oldMethod isNil.
-		self assert: targetObject methods second newMethod sourceCode equals: 'gtMagritteCompiledExampleKnown ^ 2'
-	] ensure: [
-		(targetClass includesSelector: selector)
-			ifTrue: [ targetClass removeSelector: selector ] ].
+			withArguments: {'methods'
+						-> {{'methodClassName' -> 'ClassThatDoesNotExist'.
+									'sourceCode' -> 'gtMagritteCompiledExampleUnknown ^ 1'.
+									'protocol' -> 'examples'.
+									'classSide' -> false} asDictionary.
+								{'methodClassName' -> 'GtLMagritteToolForMethodsCompilationExamples'.
+									'sourceCode' -> 'gtMagritteCompiledExampleKnown ^ 2'.
+									'protocol' -> 'examples'.
+									'classSide' -> false} asDictionary}} asDictionary.
+	targetObject := call result targetObject.
+	self assert: (targetObject isKindOf: GtLMethodsCompilationResult).
+	self assert: targetObject methods size equals: 2.
+	self assert: (targetObject methods first isKindOf: GtLMissingDomainObject).
+	self
+		assert: targetObject methods first objectName
+		equals: 'ClassThatDoesNotExist'.
+	self assert: (targetObject methods second isKindOf: GtLMethodCompilationResult).
+	self assert: targetObject methods second oldMethod isNil.
+	self
+		assert: targetObject methods second newMethod sourceCode
+		equals: (RBParser parseMethod: 'gtMagritteCompiledExampleKnown ^ 2') formattedCode ]
+		ensure: [ (targetClass includesSelector: selector)
+				ifTrue: [ targetClass removeSelector: selector ] ].
 	^ call
 ]
 
@@ -168,37 +196,34 @@ GtLMagritteToolForMethodsCompilationExamples >> compileMethodsWithSyntaxError [
 	selector := #gtMagritteCompiledExampleSyntaxOkay.
 	(targetClass includesSelector: selector)
 		ifTrue: [ targetClass removeSelector: selector ].
-	[
-		call := self
+	[ call := self
 			executeTool: GtLMagritteToolForMethodsCompilation new
-			withArguments: {
-				'methods' -> {
-					{
-						'methodClassName' -> 'GtLMagritteToolForMethodsCompilationExamples'.
-						'sourceCode' -> 'gtMagritteCompiledExampleSyntaxError ^'.
-						'protocol' -> 'examples'.
-						'classSide' -> false
-					} asDictionary.
-					{
-						'methodClassName' -> 'GtLMagritteToolForMethodsCompilationExamples'.
-						'sourceCode' -> 'gtMagritteCompiledExampleSyntaxOkay ^ 3'.
-						'protocol' -> 'examples'.
-						'classSide' -> false
-					} asDictionary
-				}
-			} asDictionary.
-		self assert: (call result targetObject isKindOf: GtLMethodsCompilationResult).
-		self assert: call result targetObject methods size equals: 2.
-		self assert: (call result targetObject methods first isKindOf: GtLMethodCompilationExceptionDomainObject).
-		self assert: (call result targetObject methods first description beginsWith: 'Syntax error').
-		self assert: (call result targetObject methods second isKindOf: GtLMethodCompilationResult).
-		self assert: (targetClass includesSelector: selector).
-		self assert: call result targetObject methods second oldMethod isNil.
-		self assert: call result targetObject methods second newMethod sourceCode equals: 'gtMagritteCompiledExampleSyntaxOkay ^ 3'
-	] ensure: [
-		(targetClass includesSelector: #gtMagritteCompiledExampleSyntaxError)
-			ifTrue: [ targetClass removeSelector: #gtMagritteCompiledExampleSyntaxError ].
-		(targetClass includesSelector: selector)
-			ifTrue: [ targetClass removeSelector: selector ] ].
+			withArguments: {'methods'
+						-> {{'methodClassName' -> 'GtLMagritteToolForMethodsCompilationExamples'.
+									'sourceCode' -> 'gtMagritteCompiledExampleSyntaxError ^'.
+									'protocol' -> 'examples'.
+									'classSide' -> false} asDictionary.
+								{'methodClassName' -> 'GtLMagritteToolForMethodsCompilationExamples'.
+									'sourceCode' -> 'gtMagritteCompiledExampleSyntaxOkay ^ 3'.
+									'protocol' -> 'examples'.
+									'classSide' -> false} asDictionary}} asDictionary.
+	self assert: (call result targetObject isKindOf: GtLMethodsCompilationResult).
+	self assert: call result targetObject methods size equals: 2.
+	self
+		assert: (call result targetObject methods first
+				isKindOf: GtLMethodCompilationExceptionDomainObject).
+	self
+		assert: (call result targetObject methods first description beginsWith: 'Syntax error').
+	self
+		assert: (call result targetObject methods second isKindOf: GtLMethodCompilationResult).
+	self assert: (targetClass includesSelector: selector).
+	self assert: call result targetObject methods second oldMethod isNil.
+	self
+		assert: call result targetObject methods second newMethod sourceCode
+		equals: (RBParser parseMethod: 'gtMagritteCompiledExampleSyntaxOkay ^ 3') formattedCode ]
+		ensure: [ (targetClass includesSelector: #gtMagritteCompiledExampleSyntaxError)
+				ifTrue: [ targetClass removeSelector: #gtMagritteCompiledExampleSyntaxError ].
+			(targetClass includesSelector: selector)
+				ifTrue: [ targetClass removeSelector: selector ] ].
 	^ call
 ]

@@ -64,7 +64,7 @@ GtLToolForExampleMethodRun >> runExample: method fromReference: exampleReference
 GtLToolForExampleMethodRun >> runExample: method fromReference: exampleReference inContext: anExecutionContext toolCall: aToolCall ifError: anErrorBlock [
 	| example exampleResult objectId |
 	
-	(method pragmas anySatisfy: [ :pragma | pragma selector = #gtExample ])
+	method isGTExampleMethod
 		ifFalse: [ ^ GtLMethodIsNotExampleDomainObject new method: method ].
 	example := method gtExample asExampleWithResult.
 	example ifNil: [ ^ anErrorBlock cull: (GtLMethodIsNotExampleDomainObject new

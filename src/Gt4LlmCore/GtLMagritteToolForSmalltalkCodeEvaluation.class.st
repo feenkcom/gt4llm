@@ -102,7 +102,9 @@ GtLMagritteToolForSmalltalkCodeEvaluation >> privatePerformToolCall: aToolCall i
 	bindings
 		ifNotEmpty: [ anExecutionContext objectStorage
 				ifNil: [ ^ GtLMissingInformationDomainObject new missingModelName: 'objectStorage' ].
-			bindingsDictionary := Dictionary new.
+			bindingsDictionary := self
+				gtDo: [ Dictionary new ]
+				gemstoneDo: [ SymbolDictionary new ].
 			bindings
 				do: [ :each | 
 					| bindingName bindingObjectId bindingObject |
@@ -118,20 +120,29 @@ GtLMagritteToolForSmalltalkCodeEvaluation >> privatePerformToolCall: aToolCall i
 						at: (bindingName ifNil: [ '' ]) asSymbol
 						put: bindingObject ] ].
 
-	object := [ | compiler |
-		compiler := OpalCompiler new.
-		bindingsDictionary ifNotNil: [ compiler bindings: bindingsDictionary ].
-		compiler evaluate: code ]
+	object := [ self
+			gtDo: [ | compiler |
+				compiler := OpalCompiler new.
+				bindingsDictionary ifNotNil: [ compiler bindings: bindingsDictionary ].
+				compiler evaluate: code ]
+			gemstoneDo: [ code
+				evaluateInContext: nil
+				symbolList: (bindingsDictionary
+					ifNil: [ GsCurrentSession currentSession symbolList ]
+					ifNotNil: [ GsCurrentSession currentSession symbolList copy
+						insertObject: bindingsDictionary at: 1;
+						yourself ]) ] ]
 			on: Error
 			do: [ :ex | 
 				^(GtLSmalltalkCodeEvaluationExceptionDomainObject freeze: ex)
-							errorReason: 'Error while evaluating smalltalk code';
-							code: code;
-							updateForToolCall: aToolCall withExecutionContext: anExecutionContext;
-							yourself ].
-	
+						errorReason: 'Error while evaluating smalltalk code';
+						code: code;
+						updateForToolCall: aToolCall withExecutionContext: anExecutionContext;
+						yourself ].
+
 	^ (GtLSmalltalkCodeEvaluationResult forObject: object)
 			code: code;
+			bindings: bindingsDictionary;
 			updateForToolCall: aToolCall withExecutionContext: anExecutionContext;
 			yourself
 ]

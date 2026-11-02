@@ -47,7 +47,7 @@ GtLMagritteToolForPackageClasses >> packageNameDescription [
 
 { #category : #private }
 GtLMagritteToolForPackageClasses >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
-	| arguments packageName organizer package |
+	| arguments packageName |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	packageName := arguments at: 'packageName'.
 
@@ -56,10 +56,23 @@ GtLMagritteToolForPackageClasses >> privatePerformToolCall: aToolCall inContext:
 				arguments: arguments;
 				missingArgument: 'packageName' ].
 
-	organizer := PackageOrganizer packageOrganizer.
-	package := organizer
-		packageNamed: packageName asSymbol
-		ifAbsent: [ ^ GtLMissingDomainObject new objectName: packageName ].
-
-	^ GtLClassesSearchResult fromClasses: package classes
+	^ self
+		gtDo: [
+			| organizer package |
+			organizer := PackageOrganizer packageOrganizer.
+			package := organizer
+				packageNamed: packageName asSymbol
+				ifAbsent: [ ^ GtLMissingDomainObject new objectName: packageName ].
+			GtLClassesSearchResult fromClasses: package classes ]
+		gemstoneDo: [
+			| classNames |
+			classNames := ClassOrganizer gtDefault
+				classNamesInClassCategoryNamed: packageName
+				dictionaryName: nil.
+			classNames isEmpty
+				ifTrue: [ ^ GtLMissingDomainObject new objectName: packageName ].
+			GtLClassesSearchResult new
+				foundClassNames: (classNames first: (200 min: classNames size));
+				mayHaveMore: classNames size > 200;
+				yourself ]
 ]

@@ -5,7 +5,8 @@ Class {
 	#name : #GtLSmalltalkCodeEvaluationResult,
 	#superclass : #GtLObjectStorageValueResult,
 	#instVars : [
-		'code'
+		'code',
+		'bindings'
 	],
 	#category : #'Gt4LlmCore-Domain Objects'
 }
@@ -20,6 +21,16 @@ GtLSmalltalkCodeEvaluationResult class >> forObject: anObject withId: anId code:
 	^ (self forObject: anObject withId: anId) 
 			code: aString;
 			playgroundPageReference: aLepiterPageReference
+]
+
+{ #category : #accessing }
+GtLSmalltalkCodeEvaluationResult >> bindings [
+	^ bindings
+]
+
+{ #category : #accessing }
+GtLSmalltalkCodeEvaluationResult >> bindings: aDictionary [
+	bindings := aDictionary
 ]
 
 { #category : #accessing }
@@ -41,33 +52,53 @@ GtLSmalltalkCodeEvaluationResult >> codeDescription [
 		beRequired
 ]
 
-{ #category : #views }
+{ #category : #'gt - extensions' }
 GtLSmalltalkCodeEvaluationResult >> gtCodeFor: aView [
 	<gtView>
 	<gtLlmView>
-	
-	^ aView explicit
-		title: 'Code and object';
-		priority: 9;
-		stencil: [ | container |
-			container := BrVerticalPane new.
-			container matchParent
-				addAptitude: (BrLayoutResizerAptitude new common: [ container children ]);
-				background: BrGlamorousColors backdropColor;
-				addChild: ((GtPharoSnippetCoder new
-						forSource: self code;
-						subscribeToSystem;
-						asExpandedOnlyElement)
-						margin: (BlInsets all: 10);
-						background: Color white;
-						addAptitude: BrShadowAptitude;
-						vFitContentLimited);
-				addChild: ((object gtDefaultInspectorTool) asElement
-						margin: (BlInsets all: 10);
-						background: Color white;
-						addAptitude: BrShadowAptitude;
-						vFitContentLimited;
-						hMatchParent) ]
+	^ self
+		gtDo: [ aView explicit
+				title: 'Code and object';
+				priority: 9;
+				stencil: [ | container |
+					container := BrVerticalPane new.
+					container matchParent
+						addAptitude: (BrLayoutResizerAptitude new common: [ container children ]);
+						background: BrGlamorousColors backdropColor;
+						addChild: ((GtPharoSnippetCoder new
+								forSource: self code;
+								subscribeToSystem;
+								asExpandedOnlyElement)
+								margin: (BlInsets all: 10);
+								background: Color white;
+								addAptitude: BrShadowAptitude;
+								vFitContentLimited);
+						addChild: (object gtDefaultInspectorTool asElement
+								margin: (BlInsets all: 10);
+								background: Color white;
+								addAptitude: BrShadowAptitude;
+								vFitContentLimited;
+								hMatchParent) ] ]
+		gemstoneDo: [ | stencilBindings stencilData |
+			stencilBindings := Dictionary new.
+			bindings ifNotNil: [
+				bindings keysAndValuesDo: [ :k :v |
+					stencilBindings at: k put: (GtRsrProxyServiceServer object: v) ] ].
+			stencilData := Dictionary new
+				at: #code put: self code;
+				at: #object put: (GtRsrProxyServiceServer object: object);
+				yourself.
+			stencilBindings ifNotEmpty: [
+				stencilData at: #bindings put: stencilBindings ].
+			aView explicit
+				title: 'Code and object';
+				priority: 9;
+				declarativeStencil: [
+					GtPhlowNamedStencil new
+						stencilClassName: #GtLSmalltalkCodeEvaluationResultGemStoneStencil;
+						stencilData: stencilData;
+						dataSerializationStrategy: GtPhlowStencilDataSerializationStrategy
+							forMixedProxyDataEncoding ] ]
 ]
 
 { #category : #printing }

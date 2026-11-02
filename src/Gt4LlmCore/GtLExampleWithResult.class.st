@@ -27,6 +27,16 @@ GtLExampleWithResult >> exampleReference [
 			classSide: self exampleWithResult methodClass isClassSide
 ]
 
+{ #category : #magritte }
+GtLExampleWithResult >> exampleReferenceDescription [
+	<magritteDescription>
+	^ MAToOneRelationDescription new
+		label: 'Example reference';
+		accessor: #exampleReference;
+		classes: { GtLExampleReference };
+		beOptional
+]
+
 { #category : #accessing }
 GtLExampleWithResult >> exampleWithResult [
 	^ exampleWithResult
@@ -123,6 +133,15 @@ GtLExampleWithResult >> objectId: anObject [
 	objectId := anObject
 ]
 
+{ #category : #magritte }
+GtLExampleWithResult >> objectIdDescription [
+	<magritteDescription>
+	^ MAStringDescription new
+		label: 'Object id';
+		accessor: #objectId;
+		beOptional
+]
+
 { #category : #accessing }
 GtLExampleWithResult >> playgroundPageReference [
 	^ playgroundPageReference
@@ -134,15 +153,44 @@ GtLExampleWithResult >> playgroundPageReference: aPageReference [
 ]
 
 { #category : #accessing }
+GtLExampleWithResult >> result [
+	^ (GtLObjectStorageValueResult
+		forObject: self exampleWithResult returnValue
+		withId: self objectId)
+		playgroundPageReference: self playgroundPageReference;
+		yourself
+]
+
+{ #category : #magritte }
+GtLExampleWithResult >> resultDescription [
+	<magritteDescription>
+	^ MAToOneRelationDescription new
+		label: 'Result';
+		accessor: #result;
+		classes: { GtLObjectStorageValueResult };
+		beOptional
+]
+
+{ #category : #accessing }
 GtLExampleWithResult >> statusText [
 	self isSkippedResult ifTrue: [ ^ 'skipped' ].
 	^ self exampleWithResult statusText asString asLowercase
+]
+
+{ #category : #magritte }
+GtLExampleWithResult >> statusTextDescription [
+	<magritteDescription>
+	^ MAStringDescription new
+		label: 'Example status';
+		accessor: #statusText;
+		beOptional
 ]
 
 { #category : #private }
 GtLExampleWithResult >> updatePlaygroundPageReferenceForDatabase: aDatabase [
 	| returnValue |
 	
+	aDatabase ifNil: [ ^ self ].
 	returnValue := self exampleWithResult returnValue.
 	returnValue ifNil: [ ^ self ].
 	

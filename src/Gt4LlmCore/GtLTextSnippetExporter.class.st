@@ -1,6 +1,8 @@
 Class {
 	#name : #GtLTextSnippetExporter,
 	#superclass : #Object,
+	#traits : 'TLeContentNodeVisitor',
+	#classTraits : 'TLeContentNodeVisitor classTrait',
 	#instVars : [
 		'stream',
 		'startHeaderLevel'
@@ -203,6 +205,11 @@ GtLTextSnippetExporter >> visitPragmaAnnotation: aLePragmaAnnotationNode [
 { #category : #'as yet unclassified' }
 GtLTextSnippetExporter >> visitString: aLeStringNode [
 	aLeStringNode parts do: [ :aPart | aPart acceptVisitor: self ]
+]
+
+{ #category : #generated }
+GtLTextSnippetExporter >> visitTable: aLeTableNode [
+	stream nextPutAll: aLeTableNode source
 ]
 
 { #category : #'as yet unclassified' }

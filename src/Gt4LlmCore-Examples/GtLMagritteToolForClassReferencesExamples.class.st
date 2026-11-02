@@ -21,12 +21,12 @@ GtLMagritteToolForClassReferencesExamples >> classReferencesDataViewSerializatio
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	jsonData := dataBlock compositeJsonData.
-	self assert: (jsonData at: #givenClassName) equals: 'GtLMagritteToolForClassReferences'.
-	self assert: (jsonData at: #mayHaveMore) not.
-	self assert: (jsonData at: #references) isNotEmpty.
+	self assert: (jsonData at: 'givenClassName') equals: 'GtLMagritteToolForClassReferences'.
+	self assert: (jsonData at: 'mayHaveMore') not.
+	self assert: (jsonData at: 'references') isNotEmpty.
 	self 
-		assert: ((jsonData at: #references) anySatisfy: [ :each |
-			(each at: #methodClassName) = 'GtLMagritteToolForClassReferencesExamples' ]).
+		assert: ((jsonData at: 'references') anySatisfy: [ :each |
+			(each at: 'methodClassName') = 'GtLMagritteToolForClassReferencesExamples' ]).
 	
 	^ dataBlock
 ]
@@ -85,10 +85,16 @@ GtLMagritteToolForClassReferencesExamples >> classReferencesForTrait [
 		} asDictionary.
 	targetObject := call result targetObject.
 	
+	self
+		gtDo: [
 	self assert: (targetObject isKindOf: GtLClassReferences).
 	self assert: targetObject givenClassName equals: 'TGtLInvalidInputDataAssertions'.
 	self assert: targetObject references isNotEmpty.
-	self assert: targetObject mayHaveMore not.
+	self assert: targetObject mayHaveMore not. ]
+		gemstoneDo: [
+			"Traits are flattened when exported to GemStone."
+			self assert: (targetObject isKindOf: GtLMissingDomainObject).
+			self assert: targetObject objectName equals: 'TGtLInvalidInputDataAssertions' ].
 		
 	^ call
 ]
@@ -157,12 +163,12 @@ GtLMagritteToolForClassReferencesExamples >> classReferencesWithMoreThan200Resul
 	call := self
 		executeTool: GtLMagritteToolForClassReferences new
 		withArguments: {
-			'className' -> 'Object'
+			'className' -> 'String'
 		} asDictionary.
 	targetObject := call result targetObject.
 	
 	self assert: (targetObject isKindOf: GtLClassReferences).
-	self assert: targetObject givenClassName equals: 'Object'.
+	self assert: targetObject givenClassName equals: 'String'.
 	self assert: targetObject references size equals: 200.
 	self assert: targetObject mayHaveMore.
 		

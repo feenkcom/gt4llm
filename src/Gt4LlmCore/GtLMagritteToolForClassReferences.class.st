@@ -67,8 +67,10 @@ GtLMagritteToolForClassReferences >> privatePerformToolCall: aToolCall inContext
 	class := className asSymbol asClassIfAbsent: [ nil ].
 	class ifNil: [ ^ GtLMissingDomainObject new objectName: className ].
 
-	references := (class gtReferences result toArray
-		await: GtLSettings futureExecutionConfiguration) wait.
+	references := self
+		gtDo: [ (class gtReferences result toArray
+			await: GtLSettings futureExecutionConfiguration) wait ]
+		gemstoneDo: [ ClassOrganizer gtDefault referencesToObject: class ].
 		
 	^ (GtLClassReferences fromCompiledMethods: references)
 		givenClassName: className;

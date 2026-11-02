@@ -9,6 +9,35 @@ Class {
 
 { #category : #'private - change' }
 GtLMagritteToolForClassDefinitionChange >> applyClassChangeUsing: extractor [
+	<gsCode: ' | oldClass updatedClass originalDescription dictionary |
+ oldClass := extractor targetClass.
+ originalDescription := GtLClassDefinitionDescription fromClass: oldClass.
+ [
+ dictionary := System myUserProfile symbolList detect: [ :each |
+ (each at: oldClass name ifAbsent: [ nil ]) == oldClass ].
+ updatedClass := extractor superclass
+ subclass: oldClass name
+ instVarNames: extractor instanceVariables
+ classVars: extractor classVariables
+ classInstVars: extractor classInstanceVariables
+ poolDictionaries: oldClass sharedPools
+ category: extractor packageName
+ inDictionary: dictionary
+ options: #().
+ updatedClass == oldClass ifFalse: [
+ oldClass selectors do: [ :selector |
+ updatedClass compileMethod: (oldClass compiledMethodAt: selector) sourceString
+ category: (oldClass categoryOfSelector: selector) environmentId: 0 ].
+ oldClass class selectors do: [ :selector |
+ updatedClass class compileMethod: (oldClass class compiledMethodAt: selector) sourceString
+ category: (oldClass class categoryOfSelector: selector) environmentId: 0 ] ].
+ updatedClass comment: oldClass comment.
+ ClassOrganizer gtDefault addClass: updatedClass
+ ] on: Error do: [ :error | ^ GtLProblemDomainObject new errorMessage: error description ].
+ ^ GtLClassModificationResult new
+ originalClass: originalDescription;
+ updatedClass: (GtLClassDefinitionDescription fromClass: updatedClass);
+ yourself'>
 	| updatedClass originalDescription |
 	
 	"Capture original state before modifying"

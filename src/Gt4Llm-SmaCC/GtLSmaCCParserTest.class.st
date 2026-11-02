@@ -28,6 +28,23 @@ GtLSmaCCParserTest >> exampleDescription [
 		beRequired
 ]
 
+{ #category : #printing }
+GtLSmaCCParserTest >> gtDisplayOn: aStream [
+	"Identify the parser, entry point and example input without executing the test."
+	aStream nextPutAll: 'Test: '.
+	aStream nextPutAll: (self parserClass isEmptyOrNil
+		ifTrue: [ '<unspecified parser>' ]
+		ifFalse: [ self parserClass ]).
+	aStream nextPutAll: ' ('.
+	aStream nextPutAll: (self startingState isEmptyOrNil
+		ifTrue: [ 'default' ]
+		ifFalse: [ self startingState ]).
+	aStream nextPut: $).
+	self example ifNotNil: [ :anExample |
+		aStream nextPutAll: ' with: '.
+		anExample printOn: aStream ]
+]
+
 { #category : #accessing }
 GtLSmaCCParserTest >> parserClass [
 	^ parserClass

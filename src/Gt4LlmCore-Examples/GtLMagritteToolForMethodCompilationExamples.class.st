@@ -33,27 +33,26 @@ GtLMagritteToolForMethodCompilationExamples >> compileClassSideMethod [
 	source := 'gtMagritteCompiledExampleClassSideMethod ^ ''class'''.
 	(metaClass includesSelector: selector)
 		ifTrue: [ metaClass removeSelector: selector ].
-	[ | call targetObject |
-		call := self
+	[ | call targetObject formattedSource |
+	call := self
 			executeTool: GtLMagritteToolForMethodCompilation new
-			withArguments: {
-				'methodRequest' -> {
-					'methodClassName' -> targetClass name asString.
-					'sourceCode' -> source.
-					'protocol' -> 'examples'.
-					'classSide' -> true
-				} asDictionary
-			} asDictionary.
-		targetObject := call result targetObject.
-		self assert: (targetObject isKindOf: GtLMethodCompilationResult).
-		self assert: targetObject status equals: 'compiled'.
-		self assert: (metaClass includesSelector: selector).
-		self assert: targetObject newMethod isClassSide.
-		self assert: targetObject oldMethod isNil.
-		^ call
-	] ensure: [
-		(metaClass includesSelector: selector)
-			ifTrue: [ metaClass removeSelector: selector ] ]
+			withArguments: {'methodRequest'
+						-> {'methodClassName' -> targetClass name asString.
+								'sourceCode' -> source.
+								'protocol' -> 'examples'.
+								'classSide' -> true} asDictionary} asDictionary.
+	targetObject := call result targetObject.
+	formattedSource := (RBParser parseMethod: source) formattedCode.
+	self assert: (targetObject isKindOf: GtLMethodCompilationResult).
+	self assert: targetObject status equals: 'compiled'.
+	self assert: (metaClass includesSelector: selector).
+	self assert: targetObject newMethod isClassSide.
+	self assert: targetObject newMethod sourceCode equals: formattedSource.
+	self assert: (metaClass >> selector) sourceCode equals: formattedSource.
+	self assert: targetObject oldMethod isNil.
+	^ call ]
+		ensure: [ (metaClass includesSelector: selector)
+				ifTrue: [ metaClass removeSelector: selector ] ]
 ]
 
 { #category : #examples }
@@ -148,26 +147,24 @@ GtLMagritteToolForMethodCompilationExamples >> compileMethodWithExistingSource [
 	sourceBefore := 'gtMagritteCompiledExampleExisting ^ 1'.
 	sourceAfter := 'gtMagritteCompiledExampleExisting ^ 2'.
 	targetClass compile: sourceBefore classified: 'examples'.
-	[ | call targetObject |
-		call := self
+	[ | call targetObject formattedSource |
+	call := self
 			executeTool: GtLMagritteToolForMethodCompilation new
-			withArguments: {
-				'methodRequest' -> {
-					'methodClassName' -> targetClass name asString.
-					'sourceCode' -> sourceAfter.
-					'protocol' -> 'examples'.
-					'classSide' -> false
-				} asDictionary
-			} asDictionary.
-		targetObject := call result targetObject.
-		self assert: (targetObject isKindOf: GtLMethodCompilationResult).
-		self assert: targetObject status equals: 'compiled'.
-		self assert: targetObject oldMethod sourceCode equals: sourceBefore.
-		self assert: targetObject newMethod sourceCode equals: sourceAfter.
-		^ call
-	] ensure: [
-		(targetClass includesSelector: selector)
-			ifTrue: [ targetClass removeSelector: selector ] ]
+			withArguments: {'methodRequest'
+						-> {'methodClassName' -> targetClass name asString.
+								'sourceCode' -> sourceAfter.
+								'protocol' -> 'examples'.
+								'classSide' -> false} asDictionary} asDictionary.
+	targetObject := call result targetObject.
+	formattedSource := (RBParser parseMethod: sourceAfter) formattedCode.
+	self assert: (targetObject isKindOf: GtLMethodCompilationResult).
+	self assert: targetObject status equals: 'compiled'.
+	self assert: targetObject oldMethod sourceCode equals: sourceBefore.
+	self assert: targetObject newMethod sourceCode equals: formattedSource.
+	self assert: (targetClass >> selector) sourceCode equals: formattedSource.
+	^ call ]
+		ensure: [ (targetClass includesSelector: selector)
+				ifTrue: [ targetClass removeSelector: selector ] ]
 ]
 
 { #category : #examples }

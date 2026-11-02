@@ -125,7 +125,9 @@ GtLMagritteToolForObjectStorageSlotValueExamples >> retrieveStoredObjectSlotValu
 	self assert: targetObject object equals: 'TestObject'.
 	self assert: targetObject objectId ~= storedObjectId.
 	self assert: targetObject objectId = nameObjectId.
-	self assert: targetObject objectValue objectClassName equals: 'ByteString'.
+	self
+		gtDo: [ self assert: targetObject objectValue objectClassName equals: 'ByteString' ]
+		gemstoneDo: [ self assert: targetObject objectValue objectClassName equals: 'String' ].
 	self assert: (targetObject objectValue objectPrintString includesSubstring: 'TestObject').
 	
 	^ call

@@ -63,8 +63,10 @@ GtLMagritteToolForMethodImplementors >> privatePerformToolCall: aToolCall inCont
 				missingArgument: 'methodName' ].
 
 	selector := methodName asSymbol.
-	implementors := (selector gtImplementors result toArray
-		await: GtLSettings futureExecutionConfiguration) wait.
+	implementors := self
+		gtDo: [ (selector gtImplementors result toArray
+			await: GtLSettings futureExecutionConfiguration) wait ]
+		gemstoneDo: [ ClassOrganizer gtDefault implementorsOf: selector ].
 
 	^ GtLMethodsSearchResult fromReferences: implementors
 ]
