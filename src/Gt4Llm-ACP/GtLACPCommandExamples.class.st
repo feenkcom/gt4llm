@@ -15,6 +15,25 @@ GtLACPCommandExamples >> advertise: commands in: aSession [
 		for: aSession
 ]
 
+{ #category : #'examples - arguments' }
+GtLACPCommandExamples >> advertisedArgumentChoices [
+	<gtExample>
+	| session |
+	session := self argumentSession.
+	self
+		assert: (session commandNamed: 'effort') argumentChoices
+		equals: #('low' 'medium' 'high' 'xhigh' 'max' 'auto').
+	self
+		assert: (session commandNamed: 'fast') argumentChoices
+		equals: #('on' 'off').
+	self
+		assert: (session commandNamed: 'design') argumentChoices
+		equals: #('consent' 'revoke').
+	self assert: (session commandNamed: 'model') argumentChoices isEmpty.
+	self assert: (session commandNamed: 'review') argumentChoices isEmpty.
+	^ session commandNamed: 'effort'
+]
+
 { #category : #fixtures }
 GtLACPCommandExamples >> advertisement [
 	^ {{'name' -> 'review'.
@@ -106,6 +125,100 @@ GtLACPCommandExamples >> advertisementsPreserveChatRows [
 	^ scripter
 ]
 
+{ #category : #'examples - arguments' }
+GtLACPCommandExamples >> argumentCompletion [
+	<gtExample>
+	| session strategy actions |
+	session := self argumentSession.
+	strategy := GtLACPInputCompletionStrategy new session: session.
+	actions := strategy argumentCompletionActionsFor: '/effort ' asRopedText at: 8.
+	self
+		assert: (actions collect: #text)
+		equals: #('low' 'medium' 'high' 'xhigh' 'max' 'auto').
+	self
+		assert: ((strategy argumentCompletionActionsFor: '/effort xh suffix' asRopedText at: 10)
+				collect: #text)
+		equals: #('xhigh').
+	self
+		assert: (strategy argumentCompletionActionsFor: '/effort high suffix' asRopedText at: 19)
+				isEmpty.
+	self
+		assert: (strategy argumentCompletionActionsFor: '/model ' asRopedText at: 7) isEmpty.
+	self
+		assert: (strategy argumentCompletionActionsFor: 'hello /effort ' asRopedText at: 14)
+				isEmpty.
+	self advertise: #() in: session.
+	self
+		assert: (strategy argumentCompletionActionsFor: '/effort ' asRopedText at: 8) isEmpty.
+	^ strategy
+]
+
+{ #category : #'examples - arguments' }
+GtLACPCommandExamples >> argumentCompletionPreservesSuffix [
+	<gtExample>
+	| scripter input controller |
+	scripter := self chatWithArgumentCommands.
+	input := scripter element childWithId: #'acp-input'.
+	controller := input userData at: GtCompletionController.
+	scripter requestFocus
+		id: #'acp-input';
+		play.
+	scripter
+		doStep: [ :step | 
+			step
+				block: [ input text: '/effort xh keep this'.
+					input editor moveCursorTo: 10.
+					controller startCompletion ] ].
+	scripter pulseUntilReady.
+	scripter keyPress
+		key: BlKeyboardKey tab;
+		play.
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-input';
+				satisfies: [ :editor | editor text asString = '/effort xhigh keep this' ] ].
+	self assert: scripter model turns isEmpty.
+	^ scripter
+]
+
+{ #category : #'examples - arguments' }
+GtLACPCommandExamples >> argumentSession [
+	<gtExample>
+	| session |
+	session := self session.
+	self
+		advertise: self advertisement
+				, {{'name' -> 'effort'.
+							'description' -> 'Set effort level'.
+							'input' -> {'hint' -> '<low|medium|high|xhigh|max|auto>'} asDictionary}
+							asDictionary.
+						{'name' -> 'fast'.
+							'description' -> 'Toggle fast mode'.
+							'input' -> {'hint' -> '[on|off]'} asDictionary} asDictionary.
+						{'name' -> 'model'.
+							'description' -> 'Set model'.
+							'input' -> {'hint' -> '<model>'} asDictionary} asDictionary.
+						{'name' -> 'design'.
+							'description' -> 'Manage access'.
+							'input' -> {'hint' -> 'consent | revoke'} asDictionary} asDictionary}
+		in: session.
+	^ session
+]
+
+{ #category : #'examples - arguments' }
+GtLACPCommandExamples >> chatWithArgumentCommands [
+	<gtExample>
+	| session scripter |
+	session := self argumentSession.
+	scripter := BlScripter new
+			extent: 1100 @ 700;
+			model: session;
+			element: session asElement;
+			yourself.
+	^ scripter
+]
+
 { #category : #examples }
 GtLACPCommandExamples >> chatWithCommands [
 	<gtExample>
@@ -186,6 +299,74 @@ GtLACPCommandExamples >> commandsInSetupResponse [
 	^ session
 ]
 
+{ #category : #'examples - arguments' }
+GtLACPCommandExamples >> completingEffortInChat [
+	<gtExample>
+	| scripter input controller |
+	scripter := self chatWithArgumentCommands.
+	scripter requestFocus
+		id: #'acp-input';
+		play.
+	scripter typeStep: [ :step | step text: '/eff' ].
+	input := scripter element childWithId: #'acp-input'.
+	controller := input userData at: GtCompletionController.
+	scripter space time wait: GtCompletionController popupDelay.
+	scripter pulseUntilReady.
+	scripter
+		assertStep: [ :step | step satisfies: [ :element | controller isShowingPopup ] ].
+	scripter keyPress
+		key: BlKeyboardKey tab;
+		play.
+	scripter pulseUntilReady.
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-input';
+				satisfies: [ :editor | editor text asString = '/effort ' ] ].
+	scripter
+		assertStep: [ :step | step satisfies: [ :element | controller isShowingPopup ] ].
+	scripter keyPress
+		key: BlKeyboardKey tab;
+		play.
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-input';
+				satisfies: [ :editor | editor text asString = '/effort low' ] ].
+	self assert: scripter model turns isEmpty.
+	self assert: scripter element viewModel draft equals: '/effort low'.
+	GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+	^ scripter
+]
+
+{ #category : #'examples - arguments' }
+GtLACPCommandExamples >> completingEffortPrefix [
+	<gtExample>
+	| scripter controller |
+	scripter := self chatWithArgumentCommands.
+	scripter requestFocus
+		id: #'acp-input';
+		play.
+	scripter typeStep: [ :step | step text: '/effort xh' ].
+	controller := (scripter element childWithId: #'acp-input') userData
+			at: GtCompletionController.
+	scripter space time wait: GtCompletionController popupDelay.
+	scripter pulseUntilReady.
+	scripter
+		assertStep: [ :step | step satisfies: [ :element | controller isShowingPopup ] ].
+	scripter keyPress
+		key: BlKeyboardKey tab;
+		play.
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-input';
+				satisfies: [ :editor | editor text asString = '/effort xhigh' ] ].
+	self assert: scripter model turns isEmpty.
+	GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+	^ scripter
+]
+
 { #category : #'examples - completion' }
 GtLACPCommandExamples >> completingSkillInChat [
 	<gtExample>
@@ -212,6 +393,29 @@ GtLACPCommandExamples >> completingSkillInChat [
 				id: #'acp-input';
 				satisfies: [ :editor | editor text asString = '$explain-code' ] ].
 	self assert: scripter model turns isEmpty.
+	GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+	^ scripter
+]
+
+{ #category : #'examples - arguments' }
+GtLACPCommandExamples >> effortArgumentCompletionPopup [
+	<gtExample>
+	| scripter |
+	scripter := self chatWithArgumentCommands.
+	scripter requestFocus
+		id: #'acp-input';
+		play.
+	scripter typeStep: [ :step | step text: '/effort ' ].
+	scripter space time wait: GtCompletionController popupDelay.
+	scripter pulseUntilReady.
+	scripter
+		assertStep: [ :step | 
+			step
+				onSpaceRoot;
+				id: #'completion-list';
+				satisfies: [ :list | 
+					(list items collect: #text) asArray
+						= #('low' 'medium' 'high' 'xhigh' 'max' 'auto') ] ].
 	GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
 	^ scripter
 ]

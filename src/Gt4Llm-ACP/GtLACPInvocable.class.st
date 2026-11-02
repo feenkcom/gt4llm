@@ -12,6 +12,28 @@ Class {
 }
 
 { #category : #accessing }
+GtLACPInvocable >> argumentChoices [
+	"Recognize literal alternatives in the first argument hint, not a full grammar."
+
+	| hint closing choices |
+	hint := self inputHint trimBoth.
+	hint ifEmpty: [ ^ #() ].
+	(hint first = $< or: [ hint first = $[ ])
+		ifTrue: [ closing := hint indexOf: (hint first = $< ifTrue: [ $> ] ifFalse: [ $] ]).
+			closing = 0 ifTrue: [ ^ #() ].
+			hint := hint copyFrom: 2 to: closing - 1 ].
+	(hint includes: $|) ifFalse: [ ^ #() ].
+	choices := (hint splitOn: '|') collect: #trimBoth.
+	(choices
+		allSatisfy: [ :choice | 
+			choice notEmpty
+				and: [ choice
+						allSatisfy: [ :character | character isAlphaNumeric or: [ '-_.' includes: character ] ] ] ])
+		ifFalse: [ ^ #() ].
+	^ choices asArray
+]
+
+{ #category : #accessing }
 GtLACPInvocable >> data [
 	^ data
 ]
@@ -51,6 +73,7 @@ GtLACPInvocable >> gtInvocationFor: aView [
 				'Invocation' -> self.
 				'Description' -> self description.
 				'Input hint' -> self inputHint.
+				'Argument choices' -> self argumentChoices.
 				'Session' -> session} ];
 		column: 'Property'
 			text: #key

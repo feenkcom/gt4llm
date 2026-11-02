@@ -17,13 +17,16 @@ GtLACPInputStyler >> completionStrategy [
 
 { #category : #styling }
 GtLACPInputStyler >> privateStyle: aText [
-	| token |
+	| token command completionEnd |
 	token := completionStrategy commandTokenIn: aText.
 	token ifEmpty: [ ^ aText ].
-	(aText from: 1 to: token size)
+	command := completionStrategy commandFor: aText.
+	completionEnd := (command notNil and: [ command argumentChoices notEmpty ])
+			ifTrue: [ aText size ]
+			ifFalse: [ token size ].
+	(aText from: 1 to: completionEnd)
 		attribute: (GtCompletionStrategyAttribute new strategy: completionStrategy).
-	(completionStrategy commandsFor: aText at: token size)
-		do: [ :command | command invocation = token ifTrue: [ (aText from: 1 to: token size) bold ] ].
+	command ifNotNil: [ (aText from: 1 to: token size) bold ].
 	^ aText
 ]
 
