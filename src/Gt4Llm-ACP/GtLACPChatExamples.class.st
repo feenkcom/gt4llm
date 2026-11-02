@@ -75,25 +75,55 @@ GtLACPChatExamples >> assistantMessageElement [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> assistantSectionChoicesSurviveStreaming [
- <gtExample>
- | element session scripter |
- element := self chatWithToolCalls.
- session := element viewModel session.
- scripter := BlScripter new model: session; element: element; yourself.
- scripter doStep: [ :step | step block: [ :chat |
-  GtLACPExamples new sendUpdate: { 'sessionUpdate' -> 'agent_thought_chunk'.
-   'content' -> { 'type' -> 'text'. 'text' -> 'Reasoning continues.' } asDictionary } asDictionary to: session.
-  GtLACPExamples new sendUpdate: { 'sessionUpdate' -> 'agent_message_chunk'.
-   '_meta' -> { 'jetbrains' -> { 'air' -> { 'phase' -> 'final_answer' } asDictionary } asDictionary } asDictionary.
-   'content' -> { 'type' -> 'text'. 'text' -> 'A new final reply.' } asDictionary } asDictionary to: session ] ].
- scripter assertStep: [ :step | step id: #'acp-work-section'; satisfies: #isCollapsed ].
- scripter assertStep: [ :step | step id: #'acp-final-section'; satisfies: #isCollapsed ].
- scripter click id: #'acp-final-toggle'; play.
- scripter assertStep: [ :step | step id: #'acp-final-content'; satisfies: [ :pane |
-  (self editorsIn: pane) anySatisfy: [ :child | (child isKindOf: BrEditor) and: [
-   child text asString = 'A new final reply.' ] ] ] ].
- ^ scripter
+GtLACPChatExamples >> assistantSectionChoicesSurviveMessageUpdates [
+	<gtExample>
+	| element session scripter |
+	element := self completedChat.
+	session := element viewModel session.
+	scripter := BlScripter new
+			model: session;
+			element: element;
+			yourself.
+	scripter click
+		id: #'acp-final-toggle';
+		play.
+	scripter
+		doStep: [ :step | 
+			step
+				block: [ :chat | 
+					GtLACPExamples new
+						sendUpdate: {'sessionUpdate' -> 'agent_thought_chunk'.
+								'content'
+									-> {'type' -> 'text'.
+											'text' -> 'Reasoning continues.'} asDictionary} asDictionary
+						to: session.
+					GtLACPExamples new
+						sendUpdate: {'sessionUpdate' -> 'agent_message_chunk'.
+								'content'
+									-> {'type' -> 'text'.
+											'text' -> 'A new final reply.'} asDictionary} asDictionary
+						to: session ] ].
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-work-section';
+				satisfies: #isCollapsed ].
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-final-section';
+				satisfies: #isCollapsed ].
+	scripter click
+		id: #'acp-final-toggle';
+		play.
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-final-content';
+				satisfies: [ :pane | 
+					(self editorsIn: pane)
+						anySatisfy: [ :child | (child isKindOf: BrEditor) and: [ child text asString = 'A new final reply.' ] ] ] ].
+	^ scripter
 ]
 
 { #category : #examples }
@@ -135,7 +165,8 @@ GtLACPChatExamples >> chatInspectorTool [
 	self
 		assert: (element collectToolViews anySatisfy: [ :view | view title = 'Chat' ]).
 	self
-		assert: (element collectToolViews anySatisfy: [ :view | view title = 'Conversation' ]).
+		assert: (element collectToolViews
+				anySatisfy: [ :view | view title = 'Conversation tree' ]).
 	self assertObjectPhlowViewsFor: session.
 	^ tool
 ]
@@ -235,7 +266,7 @@ GtLACPChatExamples >> chatToolViewSwitching [
 			step
 				// BrTabGroup;
 				// #tabbar;
-				onChildFromBlock: [ :bar | bar children detect: [ :tab | tab label asString = 'Conversation' ] ] ].
+				onChildFromBlock: [ :bar | bar children detect: [ :tab | tab label asString = 'Conversation tree' ] ] ].
 	scripter
 		assertStep: [ :step | 
 			step
@@ -244,7 +275,7 @@ GtLACPChatExamples >> chatToolViewSwitching [
 	scripter
 		assertStep: [ :step | 
 			step
-				onPhlowCellWithString: scripter model currentTurn userMessages first printString;
+				onPhlowCellWithString: scripter model currentTurn userMessages first text;
 				exists ].
 	scripter
 		clickStep: [ :step | 

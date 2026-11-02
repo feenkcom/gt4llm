@@ -141,28 +141,6 @@ GtLACPMessagePresentationExamples >> codexCommentaryAndReasoning [
 ]
 
 { #category : #examples }
-GtLACPMessagePresentationExamples >> explicitMessagePhases [
- <gtExample>
- | root message |
- root := GtLACPExamples new session.
- root prompt: 'Use explicit message phases'.
- #('commentary' 'final_answer') do: [ :phase |
-  GtLACPSubagentExamples new update: { 'sessionUpdate' -> 'agent_message_chunk'.
-   'messageId' -> phase.
-   '_meta' -> { 'jetbrains' -> { 'air' -> { 'phase' -> phase } asDictionary } asDictionary } asDictionary.
-   'content' -> { 'type' -> 'text'. 'text' -> phase } asDictionary
-  } asDictionary for: root ].
- self text: ' continued' id: 'final_answer' in: root.
- message := root currentTurn finalMessage.
- self assert: root currentTurn isActive.
- self assert: message phase equals: 'final_answer'.
- self assert: message protocolMetadata notEmpty.
- self assert: root currentTurn assistantMessage text equals: 'final_answer continued'.
- self assert: root currentTurn assistantMessage localActivityItems first phase equals: 'commentary'.
- ^ root
-]
-
-{ #category : #examples }
 GtLACPMessagePresentationExamples >> finishClaudeWork: root [
  | child examples |
  examples := GtLACPSubagentExamples new.
@@ -184,22 +162,41 @@ GtLACPMessagePresentationExamples >> finishClaudeWork: root [
 
 { #category : #examples }
 GtLACPMessagePresentationExamples >> interleavedMessageIdentity [
- <gtExample>
- | root message |
- root := self explicitMessagePhases.
- message := root currentTurn finalMessage.
- GtLACPSubagentExamples new update: { 'sessionUpdate' -> 'tool_call'.
-  'toolCallId' -> 'interleaved-tool'. 'title' -> 'Check result'. 'status' -> 'completed'
- } asDictionary for: root.
- GtLACPSubagentExamples new update: { 'sessionUpdate' -> 'agent_message_chunk'.
-  'messageId' -> 'final_answer'. '_meta' -> nil.
-  'content' -> { 'type' -> 'text'. 'text' -> ' after the tool' } asDictionary
- } asDictionary for: root.
- self assert: root currentTurn finalMessage == message.
- self assert: message phase equals: 'final_answer'.
- self assert: message text equals: 'final_answer continued after the tool'.
- self assert: (root currentTurn messages select: [ :each | each role = #agent ]) size equals: 2.
- ^ root
+	<gtExample>
+	| root turn message |
+	root := GtLACPExamples new session.
+	turn := root prompt: 'Keep message identity across tools'.
+	self
+		text: 'Progress'
+		id: 'progress'
+		in: root.
+	self
+		text: 'Answer'
+		id: 'answer'
+		in: root.
+	message := turn messages last.
+	GtLACPSubagentExamples new
+		update: {'sessionUpdate' -> 'tool_call'.
+				'toolCallId' -> 'interleaved-tool'.
+				'title' -> 'Check result'.
+				'status' -> 'completed'} asDictionary
+		for: root.
+	self
+		text: ' after the tool'
+		id: 'answer'
+		in: root.
+	self assert: turn finalMessage isNil.
+	self assert: turn messages last == message.
+	root connection transport
+		receive: {'jsonrpc' -> '2.0'.
+				'id' -> turn request id.
+				'result' -> {'stopReason' -> 'end_turn'} asDictionary} asDictionary.
+	self assert: turn finalMessage == message.
+	self assert: message text equals: 'Answer after the tool'.
+	self
+		assert: (turn messages select: [ :each | each role = #agent ]) size
+		equals: 2.
+	^ root
 ]
 
 { #category : #examples }

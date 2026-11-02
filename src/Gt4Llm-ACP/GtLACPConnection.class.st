@@ -17,7 +17,8 @@ Class {
 		'lastError',
 		'requestTimeout',
 		'lock',
-		'announcer'
+		'announcer',
+		'pendingCommandAdvertisements'
 	],
 	#category : #'Gt4Llm-ACP-Core'
 }
@@ -69,20 +70,32 @@ GtLACPConnection >> capabilities: anObject [
  capabilities := anObject
 ]
 
-{ #category : #dispatching }
+{ #category : #protocol }
+GtLACPConnection >> clientCapabilities [
+	^ {'subagents' -> Dictionary new} asDictionary
+]
+
+{ #category : #receiving }
 GtLACPConnection >> dispatch: aDictionary [
- | method params aSession |
- method := aDictionary at: 'method'.
- params := aDictionary at: 'params' ifAbsent: [ Dictionary new ].
- aSession := sessions at: (params at: 'sessionId' ifAbsent: [ nil ]) ifAbsent: [ nil ].
- method = 'session/update' ifTrue: [
-  aSession ifNotNil: [ aSession receiveUpdate: (params at: 'update') ].
-  ^ self ].
- (aDictionary includesKey: 'id') ifFalse: [ ^ self ].
- method = 'session/request_permission' ifTrue: [
-  aSession ifNil: [ ^ self replyErrorTo: (aDictionary at: 'id') code: -32602 message: 'Unknown session' ].
-  ^ aSession receivePermission: params requestId: (aDictionary at: 'id') ].
- self replyErrorTo: (aDictionary at: 'id') code: -32601 message: 'Method not supported'
+	| method params aSession |
+	method := aDictionary at: 'method'.
+	params := aDictionary at: 'params' ifAbsent: [ Dictionary new ].
+	method = 'session/update' ifTrue: [ ^ self receiveSessionUpdate: params ].
+	aSession := sessions
+			at: (params at: 'sessionId' ifAbsent: [ nil ])
+			ifAbsent: [ nil ].
+	(aDictionary includesKey: 'id') ifFalse: [ ^ self ].
+	method = 'session/request_permission'
+		ifTrue: [ aSession
+				ifNil: [ ^ self
+						replyErrorTo: (aDictionary at: 'id')
+						code: -32602
+						message: 'Unknown session' ].
+			^ aSession receivePermission: params requestId: (aDictionary at: 'id') ].
+	self
+		replyErrorTo: (aDictionary at: 'id')
+		code: -32601
+		message: 'Method not supported'
 ]
 
 { #category : #lifecycle }
@@ -230,6 +243,12 @@ GtLACPConnection >> notify: aMethod parameters: aDictionary [
 ]
 
 { #category : #accessing }
+GtLACPConnection >> pendingCommandAdvertisements [
+	^ pendingCommandAdvertisements
+		ifNil: [ pendingCommandAdvertisements := Dictionary new ]
+]
+
+{ #category : #accessing }
 GtLACPConnection >> pendingRequests [
  ^ pendingRequests
 ]
@@ -250,6 +269,34 @@ GtLACPConnection >> receive: aDictionary [
  (aDictionary includesKey: 'error')
   ifTrue: [ aRequest fail: (aDictionary at: 'error') ]
   ifFalse: [ aRequest complete: (aDictionary at: 'result') ]
+]
+
+{ #category : #receiving }
+GtLACPConnection >> receiveSessionUpdate: params [
+	| session update sessionId |
+	sessionId := params at: 'sessionId'.
+	update := params at: 'update'.
+	session := lock
+			critical: [ | known |
+				known := sessions at: sessionId ifAbsent: [ nil ].
+				(known isNil
+					and: [ (update at: 'sessionUpdate') = 'available_commands_update' ])
+					ifTrue: [ self pendingCommandAdvertisements at: sessionId put: update deepCopy ].
+				known ].
+	session ifNotNil: [ session receiveUpdate: update ]
+]
+
+{ #category : #sessions }
+GtLACPConnection >> registerSession: aSession [
+	| sessionId |
+	sessionId := aSession remoteSessionId.
+	[ | snapshot |
+	snapshot := lock
+			critical: [ self pendingCommandAdvertisements
+					removeKey: sessionId
+					ifAbsent: [ sessions at: sessionId put: aSession.
+						^ aSession ] ].
+	aSession receiveUpdate: snapshot ] repeat
 ]
 
 { #category : #requests }
@@ -317,7 +364,7 @@ GtLACPConnection >> sessions: anObject [
  sessions := anObject
 ]
 
-{ #category : #updating }
+{ #category : #lifecycle }
 GtLACPConnection >> start [
 	| result |
 	state = #stopped ifFalse: [ self error: 'Connection has already been started' ].
@@ -327,7 +374,7 @@ GtLACPConnection >> start [
 	result := self
 			request: 'initialize'
 			parameters: {'protocolVersion' -> 1.
-					'clientCapabilities' -> { 'subagents' -> Dictionary new } asDictionary.
+					'clientCapabilities' -> self clientCapabilities.
 					'clientInfo'
 						-> {'name' -> 'glamorous-toolkit'.
 								'version' -> '0.1.0'} asDictionary} asDictionary.

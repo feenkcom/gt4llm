@@ -166,8 +166,11 @@ GtLClassChangeDataExtractor >> extractTraitComposition [
 					ifFalse: [ targetClass compiler evaluate: traitCompositionString ] ]
 ]
 
-{ #category : #extraction }
+{ #category : #extracting }
 GtLClassChangeDataExtractor >> extractVariables [
+	"Extract instance and class variables from the request.
+	If not provided, use the current variables of the target class."
+
 	<gsCode: ' instanceVariables := request instanceVariables notEmpty
  ifTrue: [ request instanceVariables collect: #asString ]
  ifFalse: [ targetClass instVarNames collect: #asString ].
@@ -177,20 +180,17 @@ GtLClassChangeDataExtractor >> extractVariables [
  classVariables := request classVariables notEmpty
  ifTrue: [ request classVariables collect: #asString ]
  ifFalse: [ targetClass classVarNames collect: #asString ]'>
-	"Extract instance and class variables from the request.
-	If not provided, use the current variables of the target class."
-	
 	instanceVariables := request instanceVariables notEmpty
-		ifTrue: [ request instanceVariables collect: [ :each | each asSymbol asSlot ] ]
-		ifFalse: [ targetClass localSlots collect: [ :slot | slot copy ] ].
-	
+			ifTrue: [ request instanceVariables collect: [ :each | each asSymbol asSlot ] ]
+			ifFalse: [ targetClass localSlots collect: [ :slot | slot copy ] ].
+
 	classInstanceVariables := request classInstanceVariables notEmpty
-		ifTrue: [ request classInstanceVariables collect: [ :each | each asSymbol asSlot ] ]
-		ifFalse: [ targetClass classSide localSlots collect: [ :slot | slot copy ] ].
-	
+			ifTrue: [ request classInstanceVariables collect: [ :each | each asSymbol asSlot ] ]
+			ifFalse: [ targetClass classSide localSlots collect: [ :slot | slot copy ] ].
+
 	classVariables := request classVariables notEmpty
-		ifTrue: [ request classVariables collect: [ :each | each asSymbol asClassVariable ] ]
-		ifFalse: [ targetClass classVariables collect: [ :var | var copy ] ]
+			ifTrue: [ request classVariables collect: [ :each | each asSymbol asClassVariable ] ]
+			ifFalse: [ targetClass classVariables collect: [ :var | var copy ] ]
 ]
 
 { #category : #views }
