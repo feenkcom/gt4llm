@@ -91,23 +91,39 @@ GtLACPClient >> gtSessionsFor: aView [
  ^ aView list title: 'Sessions'; priority: 20; items: [ sessions ]; itemText: #yourself; actionUpdateButtonTooltip: 'Refresh sessions'
 ]
 
-{ #category : #actions }
+{ #category : #'gt - extensions' }
 GtLACPClient >> gtStartSessionFor: anAction [
- <gtAction>
- ^ anAction button label: 'Start session in directory'; priority: 1;
-  action: [ :button |
-   | directory |
-   directory := UIManager default chooseDirectory: 'Choose agent working directory'.
-   directory ifNotNil: [
-    [ | aSession |
-     aSession := self startSessionIn: directory.
-     button enqueueTask: (BlTaskAction new action: [ button phlow spawnObject: aSession ]) ] fork ] ]
+	<gtAction>
+	^ anAction dropdown
+		label: 'Start session in directory';
+		priority: 1;
+		content: [ :aDropdown | 
+			BrFileSelector new
+				folder: FileLocator home;
+				hExact: 464;
+				vExact: 400;
+				padding: (BlInsets all: 10);
+				buttonLabel: 'Start session';
+				buttonId: #'acp-start-session-button';
+				fileFilterBlock: [ :aFile | aFile isDirectory ];
+				okAction: [ :aDirectory :anOkButton | 
+					anOkButton fireEvent: BrDropdownHideWish new.
+					[ | aSession |
+					aSession := GtLACPSessionRegistry current
+							newSessionWithClient: self
+							in: aDirectory.
+					aDropdown
+						enqueueTask: (BlTaskAction new action: [ aDropdown phlow spawnObject: aSession ]) ]
+						fork ] ]
 ]
 
 { #category : #actions }
 GtLACPClient >> gtStopFor: anAction [
- <gtAction>
- ^ anAction button label: 'Stop'; priority: 50; action: [ self stop ]
+	<gtAction>
+	^ anAction button
+		label: 'Stop all';
+		priority: 50;
+		action: [ self stop ]
 ]
 
 { #category : #accessing }

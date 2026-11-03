@@ -474,16 +474,30 @@ GtLACPExamples >> streamedTurn [
 
 { #category : #examples }
 GtLACPExamples >> toolCallDataView [
- <gtExample>
- | call element scripter |
- call := self updatedToolCall.
- element := (call gtDataFor: GtPhlowView empty) asElementDo: [ :widget |
-  widget background: Color white.
-  widget ].
- scripter := BlScripter new model: call; element: element; yourself.
- scripter assertStep: [ :step | step onPhlowCellWithString: 'rawOutput'; exists ].
- scripter assertStep: [ :step | step onPhlowCellWithString: 'status'; exists ].
- ^ scripter
+	<gtExample>
+	| call view element scripter |
+	call := self updatedToolCall.
+	view := call gtDataFor: GtPhlowView empty.
+	self assert: view class equals: (call data gtItemsFor: GtPhlowView empty) class.
+	element := view
+			asElementDo: [ :widget | 
+				widget background: Color white.
+				widget ].
+	scripter := BlScripter new
+			model: call;
+			element: element;
+			yourself.
+	scripter
+		assertStep: [ :step | 
+			step
+				onPhlowCellWithString: 'rawOutput';
+				exists ].
+	scripter
+		assertStep: [ :step | 
+			step
+				onPhlowCellWithString: 'status';
+				exists ].
+	^ scripter
 ]
 
 { #category : #fixtures }

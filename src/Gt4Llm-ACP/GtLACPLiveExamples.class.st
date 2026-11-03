@@ -26,6 +26,18 @@ GtLACPLiveExamples class >> initialize [
  enabled := false
 ]
 
+{ #category : #examples }
+GtLACPLiveExamples >> claudeCodeRegisteredSession [
+	<gtExample>
+	| registry session |
+	self class enabled ifFalse: [ ^ nil ].
+	registry := GtLACPSessionRegistry new.
+	session := registry newClaudeCodeSessionIn: FileLocator temp.
+	[ self assert: session state equals: #ready.
+	self assert: registry lastSession == session ] ensure: [ session close ].
+	^ registry
+]
+
 { #category : #'live examples' }
 GtLACPLiveExamples >> claudeCodeSession [
  <gtExample>
