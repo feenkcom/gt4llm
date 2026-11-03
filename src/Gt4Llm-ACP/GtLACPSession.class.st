@@ -321,9 +321,12 @@ GtLACPSession >> gtCancelFor: anAction [
 
 { #category : #views }
 GtLACPSession >> gtChatFor: aView [
- <gtView>
- <gtLlmView>
- ^ aView explicit title: 'Chat'; priority: 0; stencil: [ self asElement ]
+	<gtView>
+	<gtLlmView>
+	^ aView explicit
+		title: 'Chat';
+		priority: 0;
+		stencil: [ self asElement ]
 ]
 
 { #category : #actions }
@@ -360,8 +363,13 @@ GtLACPSession >> gtConfigurationOptionsFor: aView [
 
 { #category : #views }
 GtLACPSession >> gtConversationFor: aView [
- <gtView>
- ^ aView list title: 'Conversation'; priority: 5; items: [ turns flatCollect: [ :each | each messages copy ] ]; itemText: #printString; actionUpdateButtonTooltip: 'Refresh conversation'
+	<gtView>
+	^ aView list
+		title: 'Conversation';
+		priority: 5;
+		items: [ turns flatCollect: [ :each | each messages copy ] ];
+		itemText: #printString;
+		actionUpdateButtonTooltip: 'Refresh conversation'
 ]
 
 { #category : #views }
@@ -380,7 +388,7 @@ GtLACPSession >> gtDefaultInspectorTool [
  ^ GtPhlowCompositeTool new
   addTool: (GtLACPChatTool forChat: self);
   addTool: super gtDefaultInspectorTool;
-  name: 'ACP: ', client displayName
+  name: 'ACP: ', client gtDisplayString
 ]
 
 { #category : #views }
@@ -632,8 +640,17 @@ GtLACPSession >> phlowContext [
 
 { #category : #printing }
 GtLACPSession >> printOn: aStream [
- aStream nextPutAll: 'ACP session ('; nextPutAll: state asString; nextPutAll: ')'.
- directory ifNotNil: [ aStream space; nextPutAll: directory fullName ]
+	aStream
+		nextPutAll: 'ACP session - ';
+		nextPutAll: state asString;
+		nextPutAll: ' - ';
+		nextPutAll: turns size asString;
+		nextPutAll: ' turns'.
+
+	directory
+		ifNotNil: [ aStream
+				nextPutAll: ' - ';
+				nextPutAll: directory fullName ]
 ]
 
 { #category : #prompting }
