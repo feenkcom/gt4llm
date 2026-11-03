@@ -62,12 +62,10 @@ GtLACPAssistantMessage >> gtFinalReplyFor: aView inContext: aPhlowContext [
 	^ aView explicit
 		title: 'Markdown';
 		priority: 5;
-		stencil: [ | text styler |
-			text := self text asRopedText.
-			styler := GtLMessageStyler new
+		stencil: [ | text |
+			text := GtLMessageStyler new
 					objectRegistry: aPhlowContext objectRegistry;
-					yourself.
-			styler privateStyle: text.
+					privateStyle: self text asRopedText.
 			BrEditor new
 				id: #'acp-final-text';
 				aptitude: BrGlamorousRegularEditorAptitude;

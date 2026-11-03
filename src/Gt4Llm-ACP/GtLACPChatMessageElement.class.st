@@ -123,12 +123,10 @@ GtLACPChatMessageElement >> showHoverDetails [
 
 { #category : #building }
 GtLACPChatMessageElement >> textElementFor: aString [
-	| text styler |
-	text := aString asRopedText.
-	styler := GtLMessageStyler new
+	| text |
+	text := GtLMessageStyler new
 			objectRegistry: viewModel phlowContext objectRegistry;
-			yourself.
-	styler privateStyle: text.
+			privateStyle: aString asRopedText.
 	^ BrEditor new
 		aptitude: BrGlamorousRegularEditorAptitude;
 		beReadOnlyWithSelection;
