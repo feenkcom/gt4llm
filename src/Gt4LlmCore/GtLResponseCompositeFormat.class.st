@@ -160,6 +160,11 @@ GtLResponseCompositeFormat >> readDomainObjectsFrom: aString [
 	^ self nextEntryFromNeoJsonReader: neoJsonMapper
 ]
 
+{ #category : #accessing }
+GtLResponseCompositeFormat >> removeFormatNamed: formatName [
+	^ self schemaDescriptions removeAllSuchThat: [ :format | format name = formatName ]
+]
+
 { #category : #'as yet unclassified' }
 GtLResponseCompositeFormat >> schemaDescriptions [
 	^ schemaDescriptions
