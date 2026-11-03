@@ -20,41 +20,11 @@ Class {
 		'subagents',
 		'parentSubagent',
 		'interSessionMessages',
-		'conversationTitle'
+		'conversationTitle',
+		'availableCommands'
 	],
 	#category : #'Gt4Llm-ACP-Core'
 }
-
-{ #category : #views }
-GtLACPSession class >> conversationTreeFor: aView roots: roots [
-	| tree cache |
-	cache := IdentityDictionary new.
-	tree := aView columnedTree
-			title: 'Conversation tree';
-			priority: 4;
-			items: [ roots
-					collect: [ :session | cache at: session ifAbsentPut: [ session asConversationTreeNode ] ] ];
-			children: [ :node | node childrenIn: cache ];
-			column: 'Conversation' text: #label;
-			column: 'Kind'
-				text: #kind
-				width: 100;
-			column: 'State'
-				text: #state
-				width: 110;
-			column: 'Messages'
-				text: [ :each | each messageCount isZero ifTrue: [ '' ] ifFalse: [ each messageCount ] ]
-				width: 75;
-			column: 'Directory' text: #directory;
-			send: #object;
-			expandAll;
-			actionUpdateButtonTooltip: 'Refresh conversation tree'.
-	roots
-		ifNotEmpty: [ tree
-				updateWhen: GtLACPConversationTreeChanged
-				in: [ roots first connection announcer ] ].
-	^ tree
-]
 
 { #category : #accessing }
 GtLACPSession >> allToolCalls [
@@ -156,6 +126,32 @@ GtLACPSession >> asElement [
  ^ GtLACPChatElement new viewModel: self asChatViewModel; yourself
 ]
 
+{ #category : #converting }
+GtLACPSession >> asWorkGraph [
+	^ GtLACPWorkGraph new
+		session: self;
+		refresh;
+		yourself
+]
+
+{ #category : #accessing }
+GtLACPSession >> availableCommands [
+	^ availableCommands
+		ifNil: [ | advertisement |
+			availableCommands := GtLACPCommandGroup new
+					session: self;
+					yourself.
+			advertisement := updates reversed
+					detect: [ :update | update kind = 'available_commands_update' ]
+					ifNone: [ nil ].
+			advertisement
+				ifNotNil: [ availableCommands
+						items: ((advertisement data at: 'availableCommands')
+								collect: [ :each | client commandFrom: each for: self ]
+								as: Array) ].
+			availableCommands ]
+]
+
 { #category : #testing }
 GtLACPSession >> canCancel [
  ^ self isSubagent
@@ -220,6 +216,18 @@ GtLACPSession >> closeLocally [
  self announceConversationTreeChanged
 ]
 
+{ #category : #commands }
+GtLACPSession >> commandNamed: aName [
+	^ self availableCommands
+		detect: [ :each | each name = aName or: [ each invocation = aName ] ]
+		ifNone: [ self error: 'Unknown advertised command: ' , aName ]
+]
+
+{ #category : #accessing }
+GtLACPSession >> commands [
+	^ self availableCommands commands
+]
+
 { #category : #accessing }
 GtLACPSession >> configOptions [
  ^ configOptions
@@ -266,19 +274,22 @@ GtLACPSession >> conversationTitle [
  ^ conversationTitle ifNil: [ client ifNil: [ 'ACP chat' ] ifNotNil: [ client displayName ] ]
 ]
 
-{ #category : #updating }
+{ #category : #lifecycle }
 GtLACPSession >> create [
- | result |
- self requireRootSession.
- [
- state := #starting.
- [ result := connection request: 'session/new' parameters: self creationParameters.
- remoteSessionId := result at: 'sessionId'.
- connection sessions at: remoteSessionId put: self.
- self updateSettingsFrom: result.
- state := #ready ]
- on: Error do: [ :ex | state := #failed. ex pass ]
- ] ensure: [ self announceChanged ]
+	| result |
+	self requireRootSession.
+	[ state := #starting.
+	[ result := connection
+			request: 'session/new'
+			parameters: self creationParameters.
+	remoteSessionId := result at: 'sessionId'.
+	connection registerSession: self.
+	self updateSettingsFrom: result.
+	state := #ready ]
+		on: Error
+		do: [ :ex | 
+			state := #failed.
+			ex pass ] ] ensure: [ self announceChanged ]
 ]
 
 { #category : #accessing }
@@ -326,6 +337,17 @@ GtLACPSession >> gtCloseFor: anAction [
 ]
 
 { #category : #views }
+GtLACPSession >> gtCommandsFor: aView [
+	<gtView>
+	<gtLlmView>
+	^ aView forward
+		title: 'Commands';
+		priority: 26;
+		object: [ self availableCommands ];
+		view: #gtCommandsFor:
+]
+
+{ #category : #views }
 GtLACPSession >> gtConfigurationOptionsFor: aView [
  <gtView>
  <gtLlmView>
@@ -339,15 +361,18 @@ GtLACPSession >> gtConfigurationOptionsFor: aView [
 { #category : #views }
 GtLACPSession >> gtConversationFor: aView [
  <gtView>
- <gtLlmView>
  ^ aView list title: 'Conversation'; priority: 5; items: [ turns flatCollect: [ :each | each messages copy ] ]; itemText: #printString; actionUpdateButtonTooltip: 'Refresh conversation'
 ]
 
 { #category : #views }
 GtLACPSession >> gtConversationTreeFor: aView [
- <gtView>
- <gtLlmView>
- ^ self class conversationTreeFor: aView roots: { self rootSession }
+	<gtView>
+	<gtLlmView>
+	^ aView forward
+		title: 'Conversation tree';
+		priority: 4;
+		object: [ GtLACPSessionGroup withAll: {self rootSession} ];
+		view: #gtConversationTreeFor:
 ]
 
 { #category : #ui }
@@ -366,7 +391,6 @@ GtLACPSession >> gtInspectorTargetModels [
 { #category : #views }
 GtLACPSession >> gtInterSessionMessagesFor: aView [
  <gtView>
- <gtLlmView>
  self interSessionMessages ifEmpty: [ ^ aView empty ].
  ^ aView columnedList title: 'Session messages'; priority: 7;
   items: [ self interSessionMessages copy ];
@@ -406,6 +430,17 @@ GtLACPSession >> gtSessionFor: aView [
 ]
 
 { #category : #views }
+GtLACPSession >> gtSkillsFor: aView [
+	<gtView>
+	<gtLlmView>
+	^ aView forward
+		title: 'Skills';
+		priority: 27;
+		object: [ self availableCommands ];
+		view: #gtSkillsFor:
+]
+
+{ #category : #views }
 GtLACPSession >> gtSummarizersRegistryFor: aView [
  <gtView>
  <gtLlmView>
@@ -440,6 +475,17 @@ GtLACPSession >> gtViewsInContext: aContext [
  ^ views
 ]
 
+{ #category : #views }
+GtLACPSession >> gtWorkGraphFor: aView [
+	<gtView>
+	<gtLlmView>
+	^ aView explicit
+		title: 'Work graph';
+		priority: 5;
+		stencil: [ self asWorkGraph asElement ];
+		actionUpdateButtonTooltip: 'Refresh agent work graph'
+]
+
 { #category : #accessing }
 GtLACPSession >> initialize [
  super initialize.
@@ -464,6 +510,18 @@ GtLACPSession >> invalidateSubagentLiveState [
  self childSessions do: #invalidateSubagentLiveState
 ]
 
+{ #category : #commands }
+GtLACPSession >> invokeCommand: aCommand arguments: arguments [
+	(self availableCommands identityIncludes: aCommand)
+		ifFalse: [ self error: 'The command is no longer available in this session' ].
+	^ self prompt: (aCommand promptWith: arguments)
+]
+
+{ #category : #commands }
+GtLACPSession >> invokeCommandNamed: aName arguments: arguments [
+	^ self invokeCommand: (self commandNamed: aName) arguments: arguments
+]
+
 { #category : #testing }
 GtLACPSession >> isReplaying [
  ^ self rootSession state = #loading
@@ -474,21 +532,28 @@ GtLACPSession >> isSubagent [
  ^ parentSubagent notNil
 ]
 
-{ #category : #updating }
+{ #category : #lifecycle }
 GtLACPSession >> load: anId [
- | params result |
- self requireRootSession.
- [
- connection capabilities supportsLoad ifFalse: [ self error: 'Agent does not support loading sessions' ].
- state := #loading.
- self childSessions do: #invalidateSubagentLiveState.
- remoteSessionId := anId.
- connection sessions at: anId put: self.
- params := self creationParameters at: 'sessionId' put: anId; yourself.
- [ result := connection request: 'session/load' parameters: params.
- self updateSettingsFrom: result.
- state := #ready ] on: Error do: [ :ex | state := #failed. ex pass ]
- ] ensure: [ self updateConversationSummarizers. self announceChanged ]
+	| params result |
+	self requireRootSession.
+	[ connection capabilities supportsLoad
+		ifFalse: [ self error: 'Agent does not support loading sessions' ].
+	state := #loading.
+	self childSessions do: #invalidateSubagentLiveState.
+	remoteSessionId := anId.
+	connection registerSession: self.
+	params := self creationParameters
+			at: 'sessionId' put: anId;
+			yourself.
+	[ result := connection request: 'session/load' parameters: params.
+	self updateSettingsFrom: result.
+	state := #ready ]
+		on: Error
+		do: [ :ex | 
+			state := #failed.
+			ex pass ] ]
+		ensure: [ self updateConversationSummarizers.
+			self announceChanged ]
 ]
 
 { #category : #accessing }
@@ -668,7 +733,7 @@ GtLACPSession >> receivePermission: params requestId: anId [
  ] ensure: [ self announceChanged ]
 ]
 
-{ #category : #updating }
+{ #category : #lifecycle }
 GtLACPSession >> receiveSubagentUpdate: aDictionary [
 	| childId child association owner |
 	childId := aDictionary at: 'sessionId'.
@@ -690,7 +755,7 @@ GtLACPSession >> receiveSubagentUpdate: aDictionary [
 				remoteSessionId: childId;
 				state: #observing.
 			self subagents add: association.
-			connection sessions at: childId put: child ].
+			connection registerSession: child ].
 	association updateFrom: aDictionary.
 	owner := child currentTurn
 			ifNil: [ self currentTurn ]
@@ -703,38 +768,51 @@ GtLACPSession >> receiveSubagentUpdate: aDictionary [
 
 { #category : #updating }
 GtLACPSession >> receiveUpdate: aDictionary [
- | kind turn changedMessage |
- [
- updates add: (GtLACPSessionUpdate new data: aDictionary; timestamp: DateAndTime now; yourself).
- kind := aDictionary at: 'sessionUpdate'.
- kind = 'subagent_update' ifTrue: [
-  ^ (aDictionary includesKey: 'sessionId')
-   ifTrue: [ self receiveSubagentUpdate: aDictionary ]
-   ifFalse: [ self receiveLegacySubagentUpdate: aDictionary ] ].
- (#('subagent_spawned' 'subagent_state_update') includes: kind)
-  ifTrue: [ ^ self receiveLegacySubagentUpdate: aDictionary ].
- (#('session_message' 'session_message_chunk') includes: kind)
-  ifTrue: [ ^ self receiveInterSessionMessage: aDictionary ].
- kind = 'session_info_update' ifTrue: [
-  (aDictionary includesKey: 'title') ifTrue: [ conversationTitle := aDictionary at: 'title'. self announceConversationTreeChanged ] ].
- kind = 'config_option_update' ifTrue: [ configOptions := aDictionary at: 'configOptions' ].
- kind = 'current_mode_update' ifTrue: [ modes at: 'currentModeId' put: (aDictionary at: 'currentModeId') ].
- (#('agent_message_chunk' 'agent_thought_chunk' 'user_message_chunk' 'tool_call' 'tool_call_update') includes: kind)
-  ifFalse: [ ^ self ].
- turn := self currentTurn.
- (turn isNil or: [
-  (self isReplaying and: [ turn state ~= #replayed or: [
-   kind = 'user_message_chunk' and: [ turn activity notEmpty ] ] ]) or: [
-   self isSubagent and: [ self isReplaying not and: [ turn isActive not and: [ turn state ~= #observed ] ] ] ] ])
-  ifTrue: [ turn := self newObservedTurn.
-   self isSubagent ifFalse: [ turn state: #replayed ] ].
- (self isSubagent and: [ self isReplaying not ])
-  ifTrue: [ turn state: #running. state := #prompting ].
- turn receiveUpdate: aDictionary.
- changedMessage := kind = 'user_message_chunk'
-  ifTrue: [ turn userMessages ifEmpty: [ nil ] ifNotEmpty: #last ]
-  ifFalse: [ turn assistantMessage ]
- ] ensure: [ self announceMessageChanged: changedMessage ]
+	| kind turn changedMessage |
+	[ updates
+		add: (GtLACPSessionUpdate new
+				data: aDictionary;
+				timestamp: DateAndTime now;
+				yourself).
+	kind := aDictionary at: 'sessionUpdate'.
+	kind = 'available_commands_update'
+		ifTrue: [ ^ self updateAvailableCommands: (aDictionary at: 'availableCommands') ].
+	kind = 'subagent_update'
+		ifTrue: [ ^ (aDictionary includesKey: 'sessionId')
+				ifTrue: [ self receiveSubagentUpdate: aDictionary ]
+				ifFalse: [ self receiveLegacySubagentUpdate: aDictionary ] ].
+	(#('subagent_spawned' 'subagent_state_update') includes: kind)
+		ifTrue: [ ^ self receiveLegacySubagentUpdate: aDictionary ].
+	(#('session_message' 'session_message_chunk') includes: kind)
+		ifTrue: [ ^ self receiveInterSessionMessage: aDictionary ].
+	kind = 'session_info_update'
+		ifTrue: [ (aDictionary includesKey: 'title')
+				ifTrue: [ conversationTitle := aDictionary at: 'title'.
+					self announceConversationTreeChanged ] ].
+	kind = 'config_option_update'
+		ifTrue: [ configOptions := aDictionary at: 'configOptions' ].
+	kind = 'current_mode_update'
+		ifTrue: [ modes at: 'currentModeId' put: (aDictionary at: 'currentModeId') ].
+	(#('agent_message_chunk' 'agent_thought_chunk' 'user_message_chunk' 'tool_call' 'tool_call_update')
+		includes: kind) ifFalse: [ ^ self ].
+	turn := self currentTurn.
+	(turn isNil
+		or: [ (self isReplaying
+				and: [ turn state ~= #replayed
+						or: [ kind = 'user_message_chunk' and: [ turn activity notEmpty ] ] ])
+				or: [ self isSubagent
+						and: [ self isReplaying not
+								and: [ turn isActive not and: [ turn state ~= #observed ] ] ] ] ])
+		ifTrue: [ turn := self newObservedTurn.
+			self isSubagent ifFalse: [ turn state: #replayed ] ].
+	(self isSubagent and: [ self isReplaying not ])
+		ifTrue: [ turn state: #running.
+			state := #prompting ].
+	turn receiveUpdate: aDictionary.
+	changedMessage := kind = 'user_message_chunk'
+			ifTrue: [ turn userMessages ifEmpty: [ nil ] ifNotEmpty: #last ]
+			ifFalse: [ turn assistantMessage ] ]
+		ensure: [ self announceMessageChanged: changedMessage ]
 ]
 
 { #category : #accessing }
@@ -783,6 +861,11 @@ GtLACPSession >> setModel: anId [
  option := configOptions detect: [ :each | (each at: 'category' ifAbsent: [ '' ]) = 'model' ]
   ifNone: [ self error: 'Agent does not advertise a model configuration option' ].
  self setConfigOption: (option at: 'id') value: anId
+]
+
+{ #category : #accessing }
+GtLACPSession >> skills [
+	^ self availableCommands skills
 ]
 
 { #category : #accessing }
@@ -837,16 +920,50 @@ GtLACPSession >> turns: anObject [
  turns := anObject
 ]
 
+{ #category : #commands }
+GtLACPSession >> updateAvailableCommands: aCollection [
+	| previous |
+	availableCommands
+		ifNil: [ availableCommands := GtLACPCommandGroup new
+					session: self;
+					yourself ].
+	previous := Dictionary new.
+	availableCommands
+		do: [ :command | 
+			previous
+				at: {command name.
+						command class}
+				put: command ].
+	availableCommands
+		items: (aCollection
+				collect: [ :data | 
+					previous
+						at: {data at: 'name'.
+								client commandClassFor: data}
+						ifPresent: [ :command | 
+							command
+								data: data;
+								yourself ]
+						ifAbsent: [ client commandFrom: data for: self ] ]
+				as: Array).
+	self announcer
+		announce: (GtLACPCommandsChanged new
+				session: self;
+				yourself)
+]
+
 { #category : #updating }
 GtLACPSession >> updateConversationSummarizers [
  self updateToolSummarizers.
  self childSessions do: #updateConversationSummarizers
 ]
 
-{ #category : #accessing }
+{ #category : #updating }
 GtLACPSession >> updateSettingsFrom: aDictionary [
- modes := aDictionary at: 'modes' ifAbsent: [ modes ].
- configOptions := aDictionary at: 'configOptions' ifAbsent: [ configOptions ]
+	modes := aDictionary at: 'modes' ifAbsent: [ modes ].
+	configOptions := aDictionary at: 'configOptions' ifAbsent: [ configOptions ].
+	(aDictionary includesKey: 'availableCommands')
+		ifTrue: [ self updateAvailableCommands: (aDictionary at: 'availableCommands') ]
 ]
 
 { #category : #summarizers }

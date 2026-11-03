@@ -19,6 +19,19 @@ GtLACPClient >> applyPreferencesTo: aSession [
  configuration model ifNotNil: [ :value | aSession setModel: value ]
 ]
 
+{ #category : #commands }
+GtLACPClient >> commandClassFor: aDictionary [
+	^ GtLACPCommand
+]
+
+{ #category : #commands }
+GtLACPClient >> commandFrom: aDictionary for: aSession [
+	^ (self commandClassFor: aDictionary) new
+		session: aSession;
+		data: aDictionary;
+		yourself
+]
+
 { #category : #accessing }
 GtLACPClient >> configuration [
  ^ configuration

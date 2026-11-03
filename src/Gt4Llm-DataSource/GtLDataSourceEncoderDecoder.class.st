@@ -66,7 +66,8 @@ GtLDataSourceEncoderDecoder class >> saveClientHistory: aGtLRequestHistory toStr
 
 { #category : #'encoding - decoding' }
 GtLDataSourceEncoderDecoder class >> writeClientHistory: aGtLRequestHistory to: aClass selector: aSelector [
-	"Write the supplied history as a compressed data source to the specified selector"
+	"Write the supplied history as a compressed data source to the specified selector.
+	The method is compiled through a recorded change, so that it can be undone and keeps the undo history"
 	| compressedBytes source |
 
 	compressedBytes := ByteArray streamContents: [ :baStream |
@@ -88,9 +89,11 @@ GtLDataSourceEncoderDecoder class >> writeClientHistory: aGtLRequestHistory to: 
 			cr;
 			tab; << '^ '.
 		sourceStream nextPutAll: compressedBytes storeString. ].
-	aClass
-		compile: source
-		classified: #'private - data'.
+	GtRefactoryChangeManager instance
+		performChange: (RBAddMethodChange
+				compile: source
+				in: aClass
+				classified: #'private - data')
 ]
 
 { #category : #accessing }

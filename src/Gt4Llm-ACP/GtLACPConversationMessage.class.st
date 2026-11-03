@@ -36,19 +36,30 @@ GtLACPConversationMessage >> gtContentFor: aView [
 
 { #category : #views }
 GtLACPConversationMessage >> gtProtocolFor: aView [
- <gtView>
- ^ aView columnedList title: 'Protocol'; priority: 5;
-  items: [ { 'Role' -> role. 'Message ID' -> messageId.
-   'Phase' -> self phase. 'Metadata' -> self protocolMetadata } ];
-  column: 'Field' text: #key;
-  column: 'Value' text: [ :each | each value printString ];
-  send: #value
+	<gtView>
+	^ aView columnedList
+		title: 'Protocol';
+		priority: 5;
+		items: [ {'Role' -> role.
+				'Message ID' -> messageId.
+				'Metadata' -> self protocolMetadata} ];
+		column: 'Field' text: #key;
+		column: 'Value' text: [ :each | each value printString ];
+		send: #value
 ]
 
 { #category : #views }
 GtLACPConversationMessage >> gtTextFor: aView [
- <gtView>
- ^ aView textEditor title: 'Text'; priority: 20; text: [ self text ]; actionUpdateButtonTooltip: 'Refresh text'
+	<gtView>
+	^ aView textEditor
+		title: 'Text';
+		priority: 1;
+		text: [ | text styler |
+			text := self text asRopedText.
+			styler := GtLMessageStyler new.
+			styler privateStyle: text.
+			text ];
+		actionUpdateButtonTooltip: 'Refresh text'
 ]
 
 { #category : #accessing }
@@ -70,16 +81,6 @@ GtLACPConversationMessage >> messageId [
 { #category : #accessing }
 GtLACPConversationMessage >> messageId: anObject [
  messageId := anObject
-]
-
-{ #category : #accessing }
-GtLACPConversationMessage >> phase [
- | jetbrains air |
- jetbrains := self protocolMetadata at: 'jetbrains' ifAbsent: [ ^ nil ].
- (jetbrains isKindOf: Dictionary) ifFalse: [ ^ nil ].
- air := jetbrains at: 'air' ifAbsent: [ ^ nil ].
- (air isKindOf: Dictionary) ifFalse: [ ^ nil ].
- ^ air at: 'phase' ifAbsent: [ nil ]
 ]
 
 { #category : #accessing }

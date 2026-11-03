@@ -49,38 +49,62 @@ GtLACPSummarizerExamples >> assistantSummaryUsesSessionSpecifications [
 ]
 
 { #category : #examples }
-GtLACPSummarizerExamples >> assistantTabSurvivesStreaming [
- <gtExample>
- | session turn message chat scripter model |
- session := self session.
- turn := session prompt: 'Inspect Object'.
- message := self messageWithId: 'streaming-summary'.
- session mcpServer privateAddToolMessage: message.
- self addCallWithId: message toolCall id to: session.
- session receiveUpdate: { 'sessionUpdate' -> 'agent_message_chunk'.
-  '_meta' -> { 'jetbrains' -> { 'air' -> { 'phase' -> 'final_answer' } asDictionary } asDictionary } asDictionary.
-  'content' -> { 'type' -> 'text'. 'text' -> 'Partial reply' } asDictionary } asDictionary.
- chat := session asElement.
- scripter := BlScripter new extent: 1000 @ 700; model: session; element: chat; yourself.
- scripter click id: #'acp-final-toggle'; play.
- scripter clickStep: [ :step |
-  step id: #'acp-final-tabs'; // #tabbar;
-   onChildFromBlock: [ :bar | bar children detect: [ :tab | tab label asString = 'Grouped tools' ] ] ].
- model := chat viewModel messageViewModels last.
- self assert: model selectedFinalViewTitle equals: 'Grouped tools'.
- scripter doStep: [ :step | step block: [
-  session receiveUpdate: { 'sessionUpdate' -> 'agent_message_chunk'.
-   'content' -> { 'type' -> 'text'. 'text' -> ' continued' } asDictionary } asDictionary.
-  chat updateMessages ] ].
- scripter assertStep: [ :step | step id: #'acp-final-tabs'; satisfies: [ :tabs |
-  tabs viewModel selectedTab tabLabel text asString = 'Grouped tools' ] ].
- scripter assertStep: [ :step | step onPhlowCellWithString: '1'; exists ].
- self finish: turn in: session.
- scripter pulseUntilReady.
- scripter assertStep: [ :step | step id: #'acp-final-tabs'; satisfies: [ :tabs |
-  tabs viewModel selectedTab tabLabel text asString = 'Grouped tools' ] ].
- GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
- ^ scripter
+GtLACPSummarizerExamples >> assistantTabSurvivesMessageUpdates [
+	<gtExample>
+	| session turn message chat scripter model |
+	session := self session.
+	turn := session prompt: 'Inspect Object'.
+	message := self messageWithId: 'streaming-summary'.
+	session mcpServer privateAddToolMessage: message.
+	self addCallWithId: message toolCall id to: session.
+	session
+		receiveUpdate: {'sessionUpdate' -> 'agent_message_chunk'.
+				'content'
+					-> {'type' -> 'text'.
+							'text' -> 'Partial reply'} asDictionary} asDictionary.
+	self finish: turn in: session.
+	chat := session asElement.
+	scripter := BlScripter new
+			extent: 1000 @ 700;
+			model: session;
+			element: chat;
+			yourself.
+
+	scripter
+		clickStep: [ :step | 
+			step
+				id: #'acp-final-tabs';
+				// #tabbar;
+				onChildFromBlock: [ :bar | bar children detect: [ :tab | tab label asString = 'Grouped tools' ] ] ].
+	model := chat viewModel messageViewModels last.
+	self assert: model selectedFinalViewTitle equals: 'Grouped tools'.
+	scripter
+		doStep: [ :step | 
+			step
+				block: [ session
+						receiveUpdate: {'sessionUpdate' -> 'agent_message_chunk'.
+								'content'
+									-> {'type' -> 'text'.
+											'text' -> ' continued'} asDictionary} asDictionary.
+					chat updateMessages ] ].
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-final-tabs';
+				satisfies: [ :tabs | tabs viewModel selectedTab tabLabel text asString = 'Grouped tools' ] ].
+	scripter
+		assertStep: [ :step | 
+			step
+				onPhlowCellWithString: '1';
+				exists ].
+	scripter pulseUntilReady.
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-final-tabs';
+				satisfies: [ :tabs | tabs viewModel selectedTab tabLabel text asString = 'Grouped tools' ] ].
+	GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+	^ scripter
 ]
 
 { #category : #examples }

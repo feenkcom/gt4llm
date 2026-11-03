@@ -173,13 +173,25 @@ GtLACPChatElement >> messageViewport [
  ^ listElement childNamed: #scrollable
 ]
 
-{ #category : #lifecycle }
+{ #category : #updating }
 GtLACPChatElement >> onAddedToSceneGraph [
- super onAddedToSceneGraph.
- viewModel ifNotNil: [
-  viewModel session announcer unsubscribe: self.
-  viewModel session announcer weak when: GtLACPSessionChanged send: #onSessionChanged: to: self.
-  listUpdater requestUpdate ]
+	super onAddedToSceneGraph.
+	viewModel
+		ifNotNil: [ viewModel session announcer unsubscribe: self.
+			viewModel session announcer weak
+				when: GtLACPSessionChanged
+				send: #onSessionChanged:
+				to: self.
+			viewModel session announcer weak
+				when: GtLACPCommandsChanged
+				send: #onCommandsChanged:
+				to: self.
+			listUpdater requestUpdate ]
+]
+
+{ #category : #updating }
+GtLACPChatElement >> onCommandsChanged: anAnnouncement [
+	self enqueueTask: (BlTaskAction new action: [ self updateInputStyler ])
 ]
 
 { #category : #lifecycle }
@@ -243,6 +255,17 @@ GtLACPChatElement >> updateControls [
 ]
 
 { #category : #updating }
+GtLACPChatElement >> updateInputStyler [
+	| styler |
+	styler := GtLACPInputStyler new session: viewModel session.
+	inputElement
+		styler: (BlCompositeStyler new
+				stylers: {GtLMessageStyler new.
+						styler});
+		completionStrategy: styler completionStrategy
+]
+
+{ #category : #updating }
 GtLACPChatElement >> updateMessages [
  | items previous follow source oldCount changed |
  viewModel ifNil: [ ^ self ].
@@ -286,10 +309,17 @@ GtLACPChatElement >> viewModel [
 
 { #category : #accessing }
 GtLACPChatElement >> viewModel: aViewModel [
- viewModel ifNotNil: [ viewModel session announcer unsubscribe: self ].
- viewModel := aViewModel.
- inputElement text: viewModel draft.
- viewModel session announcer weak
-  when: GtLACPSessionChanged send: #onSessionChanged: to: self.
- self updateMessages
+	viewModel ifNotNil: [ viewModel session announcer unsubscribe: self ].
+	viewModel := aViewModel.
+	self updateInputStyler.
+	inputElement text: viewModel draft.
+	viewModel session announcer weak
+		when: GtLACPSessionChanged
+		send: #onSessionChanged:
+		to: self.
+	viewModel session announcer weak
+		when: GtLACPCommandsChanged
+		send: #onCommandsChanged:
+		to: self.
+	self updateMessages
 ]

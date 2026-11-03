@@ -175,6 +175,11 @@ GtLConnectionRegistry >> defaultConnection: aConnection [
 			self addConnection: aConnection ]
 ]
 
+{ #category : #accessing }
+GtLConnectionRegistry >> defaultConnectionWithModelName: aModelName [
+	self defaultConnection: (self connectionWithModelName: aModelName)
+]
+
 { #category : #'gt - extensions' }
 GtLConnectionRegistry >> gtConnectionsFor: aView [
 	<gtView>

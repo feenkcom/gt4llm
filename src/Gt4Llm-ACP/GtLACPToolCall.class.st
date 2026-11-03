@@ -37,6 +37,11 @@ GtLACPToolCall >> gtDataFor: aView [
   actionUpdateButtonTooltip: 'Refresh tool call data'
 ]
 
+{ #category : #printing }
+GtLACPToolCall >> gtDisplayOn: aStream [
+	aStream nextPutAll: self summary
+]
+
 { #category : #views }
 GtLACPToolCall >> gtInputFor: aView [
  <gtView>
@@ -140,13 +145,13 @@ GtLACPToolCall >> status [
 
 { #category : #accessing }
 GtLACPToolCall >> summary [
- | summary |
- summary := self shortDescription.
- (#('in_progress' 'running') includes: self status)
-  ifTrue: [ summary := summary, ' · working' ].
- (permissionRequests anySatisfy: [ :request | request state = #pending ])
-  ifTrue: [ summary := summary, ' · permission required' ].
- ^ summary
+	| summary |
+	summary := self shortDescription.
+	(#('in_progress' 'running') includes: self status)
+		ifTrue: [ summary := summary , ' · working' ].
+	(permissionRequests anySatisfy: [ :request | request state = #pending ])
+		ifTrue: [ summary := summary , ' · permission required' ].
+	^ summary
 ]
 
 { #category : #accessing }

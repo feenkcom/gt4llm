@@ -28,7 +28,7 @@ GtLACPAssistantMessageElement >> buildContent [
   self addChild: (self messageSection: #final
    header: [ :expander |
     (self textElementFor: self replyPreviewText)
-     id: #'acp-final-preview'; vExact: 24; yourself ]
+     id: #'acp-final-preview'; vFitContent; yourself ]
    content: [ self finalContent ]) ].
  viewModel turn error ifNotNil: [ :error |
   self addChild: (self textElementFor: error printString) ]

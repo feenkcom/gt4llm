@@ -226,3 +226,33 @@ GtLDataSourceEncoderDecoderExamples >> requestWithoutEntityEncodesWithoutFailure
 	self assert: ((json includesSubstring: '"entity"') not).
 	^ json
 ]
+
+{ #category : #examples }
+GtLDataSourceEncoderDecoderExamples >> writingClientHistoryCanBeUndone [
+	"Writing a client history to a method compiles it through a recorded change:
+	one undo restores the previous method and keeps the changes recorded before it"
+
+	<gtExample>
+	<return: #CompiledMethod>
+	^ GtRefactoryChangeManager
+		isolatedInstanceDuring: [ :aChangeManager |
+			| environment realClass |
+			environment := GtPharoDummiesGenerator withPackages: 1 classes: 1.
+			[ realClass := environment anyDummyClass realClass.
+			(RBAddMethodChange
+				compile: 'recordedHistory
+	^ #[]'
+				in: realClass
+				classified: 'private - data') gtExecuteWithUndo.
+
+			GtLDataSourceEncoderDecoder
+				writeClientHistory: #()
+				to: realClass
+				selector: #recordedHistory.
+			self assert: realClass new recordedHistory notEmpty.
+
+			aChangeManager undoChange.
+			self assert: realClass new recordedHistory isEmpty.
+			self assert: aChangeManager hasUndoableOperations.
+			realClass >> #recordedHistory ] ensure: [ environment removeFromSystem ] ]
+]

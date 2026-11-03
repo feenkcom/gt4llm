@@ -119,13 +119,10 @@ GtLACPPromptTurn >> fail: aReason [
 
 { #category : #accessing }
 GtLACPPromptTurn >> finalMessage [
- | candidates explicit |
- (#(failed cancelled closed disconnected) includes: state) ifTrue: [ ^ nil ].
- candidates := messages select: [ :message | message role = #agent ].
- explicit := candidates reversed detect: [ :message | message phase = 'final_answer' ] ifNone: [ nil ].
- explicit ifNotNil: [ ^ explicit ].
- (#(completed replayed idle) includes: state) ifFalse: [ ^ nil ].
- ^ candidates reversed detect: [ :message | message phase ~= 'commentary' ] ifNone: [ nil ]
+	(#(completed replayed idle) includes: state) ifFalse: [ ^ nil ].
+	^ messages reversed
+		detect: [ :message | message role = #agent ]
+		ifNone: [ nil ]
 ]
 
 { #category : #accessing }
