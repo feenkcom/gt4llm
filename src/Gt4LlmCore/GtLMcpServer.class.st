@@ -31,7 +31,8 @@ GtLMcpServer class >> current [
 { #category : #accessing }
 GtLMcpServer class >> current: anMcpServer [
 	<gsCode: '	SessionTemps current at: #GtLMcpServer_current put: anMcpServer'>
-	Current := anMcpServer
+	Current := anMcpServer.
+	^ Current
 ]
 
 { #category : #accessing }

@@ -12,14 +12,27 @@ Class {
 		'mcpServers',
 		'model',
 		'mode',
-		'authenticationMethod'
+		'authenticationMethod',
+		'adapter'
 	],
 	#category : #'Gt4Llm-ACP-Core'
 }
 
 { #category : #accessing }
+GtLACPCodexClientConfiguration >> adapter [
+	^ adapter ifNil: [ adapter := self defaultAdapter ]
+]
+
+{ #category : #accessing }
+GtLACPCodexClientConfiguration >> adapter: anAdapter [
+	adapter := anAdapter.
+	executable := nil.
+	arguments := nil
+]
+
+{ #category : #accessing }
 GtLACPCodexClientConfiguration >> arguments [
- ^ arguments
+	^ arguments ifNil: [ self adapter arguments ]
 ]
 
 { #category : #accessing }
@@ -38,6 +51,11 @@ GtLACPCodexClientConfiguration >> authenticationMethod: anObject [
 ]
 
 { #category : #accessing }
+GtLACPCodexClientConfiguration >> defaultAdapter [
+	^ GtLACPNpmAdapter package: '@agentclientprotocol/codex-acp'
+]
+
+{ #category : #accessing }
 GtLACPCodexClientConfiguration >> environment [
  ^ environment
 ]
@@ -49,12 +67,22 @@ GtLACPCodexClientConfiguration >> environment: anObject [
 
 { #category : #accessing }
 GtLACPCodexClientConfiguration >> executable [
- ^ executable
+	^ executable ifNil: [ self adapter executable ]
 ]
 
 { #category : #accessing }
 GtLACPCodexClientConfiguration >> executable: anObject [
  executable := anObject
+]
+
+{ #category : #views }
+GtLACPCodexClientConfiguration >> gtAdapterFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Adapter';
+		priority: 1;
+		object: [ self adapter ];
+		view: #gtLaunchFor:
 ]
 
 { #category : #views }
@@ -67,15 +95,17 @@ GtLACPCodexClientConfiguration >> gtEnvironmentFor: aView [
 
 { #category : #views }
 GtLACPCodexClientConfiguration >> gtLaunchFor: aView [
- <gtView>
- ^ aView columnedList title: 'Launch'; priority: 0;
-  items: [ {
-   'Executable' -> executable.
-   'Arguments' -> arguments.
-   'Request timeout (seconds)' -> requestTimeout } ];
-  column: 'Launch setting' text: #key;
-  column: 'Value' text: [ :entry | entry value printString ];
-  send: #value
+	<gtView>
+	^ aView columnedList
+		title: 'Launch';
+		priority: 0;
+		items: [ {'Adapter' -> self adapter.
+				'Executable' -> self executable.
+				'Arguments' -> self arguments.
+				'Request timeout (seconds)' -> requestTimeout} ];
+		column: 'Launch setting' text: #key;
+		column: 'Value' text: [ :entry | entry value gtDisplayString ];
+		send: #value
 ]
 
 { #category : #views }
@@ -95,14 +125,13 @@ GtLACPCodexClientConfiguration >> gtPreferencesFor: aView [
   send: #value
 ]
 
-{ #category : #accessing }
+{ #category : #initialization }
 GtLACPCodexClientConfiguration >> initialize [
- super initialize.
- executable := 'npx'.
- arguments := #('--yes' '@agentclientprotocol/codex-acp').
- environment := Dictionary new.
- requestTimeout := 30.
- mcpServers := #()
+	super initialize.
+	adapter := self defaultAdapter.
+	environment := Dictionary new.
+	requestTimeout := 30.
+	mcpServers := #()
 ]
 
 { #category : #accessing }
@@ -145,8 +174,9 @@ GtLACPCodexClientConfiguration >> requestTimeout: anObject [
  requestTimeout := anObject
 ]
 
-{ #category : #accessing }
+{ #category : #validation }
 GtLACPCodexClientConfiguration >> validate [
- executable isEmptyOrNil ifTrue: [ self error: 'An ACP adapter executable is required' ].
- requestTimeout > 0 ifFalse: [ self error: 'Request timeout must be positive' ]
+	self executable isEmptyOrNil
+		ifTrue: [ self error: 'An ACP adapter executable is required' ].
+	requestTimeout > 0 ifFalse: [ self error: 'Request timeout must be positive' ]
 ]

@@ -12,14 +12,27 @@ Class {
 		'mcpServers',
 		'model',
 		'mode',
-		'authenticationMethod'
+		'authenticationMethod',
+		'adapter'
 	],
 	#category : #'Gt4Llm-ACP-Core'
 }
 
 { #category : #accessing }
+GtLACPClaudeCodeClientConfiguration >> adapter [
+	^ adapter ifNil: [ adapter := self defaultAdapter ]
+]
+
+{ #category : #accessing }
+GtLACPClaudeCodeClientConfiguration >> adapter: anAdapter [
+	adapter := anAdapter.
+	executable := nil.
+	arguments := nil
+]
+
+{ #category : #accessing }
 GtLACPClaudeCodeClientConfiguration >> arguments [
- ^ arguments
+	^ arguments ifNil: [ self adapter arguments ]
 ]
 
 { #category : #accessing }
@@ -38,6 +51,11 @@ GtLACPClaudeCodeClientConfiguration >> authenticationMethod: anObject [
 ]
 
 { #category : #accessing }
+GtLACPClaudeCodeClientConfiguration >> defaultAdapter [
+	^ GtLACPNpmAdapter package: '@agentclientprotocol/claude-agent-acp'
+]
+
+{ #category : #accessing }
 GtLACPClaudeCodeClientConfiguration >> environment [
  ^ environment
 ]
@@ -49,12 +67,22 @@ GtLACPClaudeCodeClientConfiguration >> environment: anObject [
 
 { #category : #accessing }
 GtLACPClaudeCodeClientConfiguration >> executable [
- ^ executable
+	^ executable ifNil: [ self adapter executable ]
 ]
 
 { #category : #accessing }
 GtLACPClaudeCodeClientConfiguration >> executable: anObject [
  executable := anObject
+]
+
+{ #category : #views }
+GtLACPClaudeCodeClientConfiguration >> gtAdapterFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Adapter';
+		priority: 1;
+		object: [ self adapter ];
+		view: #gtLaunchFor:
 ]
 
 { #category : #views }
@@ -67,15 +95,17 @@ GtLACPClaudeCodeClientConfiguration >> gtEnvironmentFor: aView [
 
 { #category : #views }
 GtLACPClaudeCodeClientConfiguration >> gtLaunchFor: aView [
- <gtView>
- ^ aView columnedList title: 'Launch'; priority: 0;
-  items: [ {
-   'Executable' -> executable.
-   'Arguments' -> arguments.
-   'Request timeout (seconds)' -> requestTimeout } ];
-  column: 'Launch setting' text: #key;
-  column: 'Value' text: [ :entry | entry value printString ];
-  send: #value
+	<gtView>
+	^ aView columnedList
+		title: 'Launch';
+		priority: 0;
+		items: [ {'Adapter' -> self adapter.
+				'Executable' -> self executable.
+				'Arguments' -> self arguments.
+				'Request timeout (seconds)' -> requestTimeout} ];
+		column: 'Launch setting' text: #key;
+		column: 'Value' text: [ :entry | entry value gtDisplayString ];
+		send: #value
 ]
 
 { #category : #views }
@@ -95,14 +125,13 @@ GtLACPClaudeCodeClientConfiguration >> gtPreferencesFor: aView [
   send: #value
 ]
 
-{ #category : #accessing }
+{ #category : #initialization }
 GtLACPClaudeCodeClientConfiguration >> initialize [
- super initialize.
- executable := 'npx'.
- arguments := #('--yes' '@agentclientprotocol/claude-agent-acp').
- environment := Dictionary new.
- requestTimeout := 30.
- mcpServers := #()
+	super initialize.
+	adapter := self defaultAdapter.
+	environment := Dictionary new.
+	requestTimeout := 30.
+	mcpServers := #()
 ]
 
 { #category : #accessing }
@@ -145,8 +174,9 @@ GtLACPClaudeCodeClientConfiguration >> requestTimeout: anObject [
  requestTimeout := anObject
 ]
 
-{ #category : #accessing }
+{ #category : #validation }
 GtLACPClaudeCodeClientConfiguration >> validate [
- executable isEmptyOrNil ifTrue: [ self error: 'An ACP adapter executable is required' ].
- requestTimeout > 0 ifFalse: [ self error: 'Request timeout must be positive' ]
+	self executable isEmptyOrNil
+		ifTrue: [ self error: 'An ACP adapter executable is required' ].
+	requestTimeout > 0 ifFalse: [ self error: 'Request timeout must be positive' ]
 ]

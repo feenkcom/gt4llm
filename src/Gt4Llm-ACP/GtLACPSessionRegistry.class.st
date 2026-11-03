@@ -104,7 +104,7 @@ GtLACPSessionRegistry >> gtSessionsFor: aView [
 		items: [ self sessions ];
 		column: 'Title' text: #conversationTitle;
 		column: 'Client'
-			text: [ :aSession | aSession client displayName ]
+			text: [ :aSession | aSession client gtDisplayString ]
 			width: 110;
 		column: 'State'
 			text: #state
