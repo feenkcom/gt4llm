@@ -735,6 +735,19 @@ GtLChat >> reasoningEffort: aValue [
 	reasoningEffort := aValue.
 ]
 
+{ #category : #accessing }
+GtLChat >> removeFormatNamed: formatName [
+	self currentFormat removeFormatNamed: formatName
+]
+
+{ #category : #accessing }
+GtLChat >> removeMarkdownResponse [
+	"Workaround to remove structured markdown response for modeled that don't support structured (JSON-wrapped) markdown responses."
+
+	self removeFormatNamed: 'Markdown'.
+	^ self
+]
+
 { #category : #actions }
 GtLChat >> reset [
 	self buildDefaultProvider.
