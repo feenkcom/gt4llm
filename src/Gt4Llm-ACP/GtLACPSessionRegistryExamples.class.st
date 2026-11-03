@@ -28,6 +28,16 @@ GtLACPSessionRegistryExamples >> assertIn: aScripter cellExists: aString [
 ]
 
 { #category : #private }
+GtLACPSessionRegistryExamples >> assertIn: aScripter stateLabelExists: aString [
+	aScripter
+		assertStep: [ :step | 
+			step
+				// BrLabel;
+				@ [ :aLabel | aLabel text asString = aString ];
+				exists ]
+]
+
+{ #category : #private }
 GtLACPSessionRegistryExamples >> claudeClient [
 	^ GtLACPClaudeCodeClient new
 		transportFactory: [ :aConfiguration :aDirectory | GtLACPExamples new transport ];
@@ -243,6 +253,47 @@ GtLACPSessionRegistryExamples >> scripterOn: aRegistry view: aViewSelector [
 		yourself
 ]
 
+{ #category : #examples }
+GtLACPSessionRegistryExamples >> sessionStatePalette [
+	<gtExample>
+	| registry colors |
+	registry := self emptyRegistry.
+	colors := {#ready -> '2E7D32'.
+			#prompting -> '1976D2'.
+			#starting -> 'B77900'.
+			#loading -> 'B77900'.
+			#disconnected -> 'B77900'.
+			#failed -> 'C62828'.
+			#closed -> '757575'.
+			#new -> '757575'.
+			#observing -> '757575'.
+			#futureState -> '757575'}.
+	colors
+		do: [ :entry | 
+			self
+				assert: (registry colorForSessionState: entry key)
+				equals: (Color fromHexString: entry value) ].
+	^ registry
+]
+
+{ #category : #examples }
+GtLACPSessionRegistryExamples >> sessionStateVisuals [
+	<gtExample>
+	| registry scripter |
+	registry := self sessionStatePalette.
+	#(new starting loading ready prompting failed closed observing disconnected futureState)
+		do: [ :aState | 
+			| session |
+			session := self newSessionIn: registry.
+			session state: aState ].
+	scripter := self scripterOn: registry view: #gtSessionsFor:.
+	scripter pulseUntilReady.
+	#(new starting loading ready prompting failed closed observing disconnected futureState)
+		do: [ :aState | self assertIn: scripter stateLabelExists: aState asString ].
+	GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+	^ scripter
+]
+
 { #category : #'examples - model' }
 GtLACPSessionRegistryExamples >> sessionsAnswersACopy [
 	<gtExample>
@@ -253,7 +304,7 @@ GtLACPSessionRegistryExamples >> sessionsAnswersACopy [
 	^ registry
 ]
 
-{ #category : #'examples - views' }
+{ #category : #examples }
 GtLACPSessionRegistryExamples >> sessionsViewUpdatesLive [
 	<gtExample>
 	| registry session scripter |
@@ -262,9 +313,17 @@ GtLACPSessionRegistryExamples >> sessionsViewUpdatesLive [
 	scripter pulseUntilReady.
 	self in: scripter do: [ session := self newSessionIn: registry ].
 	self assertIn: scripter cellExists: 'Claude Code'.
-	self assertIn: scripter cellExists: 'ready'.
-	self in: scripter do: [ session close ].
-	self assertIn: scripter cellExists: 'closed'.
+	self assertIn: scripter stateLabelExists: 'ready'.
+	self
+		in: scripter
+		do: [ session state: #prompting.
+			session announceConversationTreeChanged ].
+	self assertIn: scripter stateLabelExists: 'prompting'.
+	self
+		in: scripter
+		do: [ session state: #ready.
+			session close ].
+	self assertIn: scripter stateLabelExists: 'closed'.
 	GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
 	^ scripter
 ]
