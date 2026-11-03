@@ -480,9 +480,3 @@ GtLModelProvider >> runningModels [
 	endpoint := model endpointAt: 'runningModels'.
 	^ (self client get: endpoint path) result at: 'models'.
 ]
-
-{ #category : #testing }
-GtLModelProvider >> structuredOutputIsAvailable [
-	"Markdown responses are wrapped as JSON rather than being returned as plain strings."
-	^ true
-]
