@@ -26,26 +26,20 @@ GtLACPToolCall >> data: anObject [
  data := anObject
 ]
 
-{ #category : #views }
+{ #category : #'gt - views' }
 GtLACPToolCall >> gtDataFor: aView [
- <gtView>
- ^ aView columnedList title: 'Data'; priority: 0;
-  items: [ data keys sorted collect: [ :key | key -> (data at: key) ] ];
-  column: 'Field' text: #key;
-  column: 'Value' text: [ :entry | entry value printString ];
-  send: #value;
-  actionUpdateButtonTooltip: 'Refresh tool call data'
+	"Expose the payload with the dictionary's expandable items view."
+
+	<gtView>
+	^ (data gtItemsFor: aView)
+		title: 'Data';
+		priority: 0;
+		actionUpdateButtonTooltip: 'Refresh tool call data'
 ]
 
 { #category : #printing }
 GtLACPToolCall >> gtDisplayOn: aStream [
 	aStream nextPutAll: self summary
-]
-
-{ #category : #views }
-GtLACPToolCall >> gtInputFor: aView [
- <gtView>
- ^ aView textEditor title: 'Input'; priority: 20; text: [ STONJSON toStringPretty: (data at: 'rawInput' ifAbsent: [ nil ]) ]; actionUpdateButtonTooltip: 'Refresh input'
 ]
 
 { #category : #views }
