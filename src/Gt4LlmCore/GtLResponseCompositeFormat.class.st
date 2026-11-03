@@ -162,7 +162,7 @@ GtLResponseCompositeFormat >> readDomainObjectsFrom: aString [
 
 { #category : #accessing }
 GtLResponseCompositeFormat >> removeFormatNamed: formatName [
-	^ self schemaDescriptions removeAllSuchThat: [ :format | format name = formatName ]
+	self schemaDescriptions removeAllSuchThat: [ :format | format name = formatName ]
 ]
 
 { #category : #'as yet unclassified' }
