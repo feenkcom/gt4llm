@@ -404,7 +404,7 @@ GtLACPWorkGraphExamples >> stoppedTurnWithoutReply [
 ]
 
 { #category : #examples }
-GtLACPWorkGraphExamples >> workGraphInChatTool [
+GtLACPWorkGraphExamples >> workGraphInSessionTool [
 	<gtExample>
 	| root element scripter |
 	root := self nestedWork session.
