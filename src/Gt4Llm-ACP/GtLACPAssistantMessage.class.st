@@ -57,21 +57,23 @@ GtLACPAssistantMessage >> finalReplyViewsInContext: aContext [
 
 { #category : #views }
 GtLACPAssistantMessage >> gtFinalReplyFor: aView inContext: aPhlowContext [
- <gtView>
- <gtLlmView>
- ^ aView explicit
-  title: 'Markdown';
-  priority: 5;
-  stencil: [
-   BrEditor new
-    id: #'acp-final-text';
-    aptitude: BrGlamorousRegularEditorAptitude;
-    beReadOnlyWithSelection;
-    hMatchParent;
-    vFitContentLimited;
-    styler: (GtLMessageStyler new objectRegistry: aPhlowContext objectRegistry; yourself);
-    text: self text;
-    yourself ]
+	<gtView>
+	<gtLlmView>
+	^ aView explicit
+		title: 'Markdown';
+		priority: 5;
+		stencil: [ | text |
+			text := GtLMessageStyler new
+					objectRegistry: aPhlowContext objectRegistry;
+					privateStyle: self text asRopedText.
+			BrEditor new
+				id: #'acp-final-text';
+				aptitude: BrGlamorousRegularEditorAptitude;
+				beReadOnlyWithSelection;
+				hMatchParent;
+				vFitContentLimited;
+				text: text;
+				yourself ]
 ]
 
 { #category : #views }

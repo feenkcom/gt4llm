@@ -172,46 +172,78 @@ GtLACPSummarizerExamples >> lateMessageRefresh [
 
 { #category : #examples }
 GtLACPSummarizerExamples >> markdownUsesProvidedPhlowContext [
- <gtExample>
- | message context element scripter |
- message := self twoAssistantMessagesWithSummaries currentTurn assistantMessage.
- context := GtPhlowContext new objectRegistry: GtLObjectStorage new; yourself.
- element := (message gtFinalReplyFor: GtPhlowView empty inContext: context)
-  asElementDo: [ :widget | widget ].
- scripter := BlScripter new model: message; element: element; yourself.
- self assert: element styler objectRegistry == context objectRegistry.
- GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
- ^ scripter
+	<gtExample>
+	| session turn context objectId message element scripter attributes |
+	session := self session.
+	context := GtPhlowContext new
+			objectRegistry: GtLObjectStorage new;
+			yourself.
+	objectId := context objectRegistry addNewObject: 47.
+	turn := session prompt: 'Show the object from the provided context'.
+	session
+		receiveUpdate: {'sessionUpdate' -> 'agent_message_chunk'.
+				'content'
+					-> {'type' -> 'text'.
+							'text' -> ('Value: {{gtObject:id=' , objectId , '}}.')} asDictionary}
+				asDictionary.
+	self finish: turn in: session.
+	message := turn assistantMessage.
+	element := (message gtFinalReplyFor: GtPhlowView empty inContext: context)
+			asElementDo: [ :widget | widget ].
+	self assert: (element styler isKindOf: BlTextNullStyler).
+	attributes := (1 to: element text size)
+			flatCollect: [ :index | element text attributesAt: index ].
+	self
+		assert: (attributes
+				anySatisfy: [ :attribute | attribute isKindOf: GtCachedTextExpandButtonAttribute ]).
+	scripter := BlScripter new
+			model: message;
+			element: element;
+			yourself.
+	GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+	^ scripter
 ]
 
 { #category : #examples }
 GtLACPSummarizerExamples >> markdownUsesSessionObjectRegistry [
- <gtExample>
- | session object objectId turn scripter |
- session := self session.
- object := Smalltalk globals allClasses size.
- objectId := session objectStorage addNewObject: object.
- self assert: session phlowContext objectRegistry == session mcpServer objectStorage.
- turn := session prompt: 'How many classes does the image contain?'.
- session receiveUpdate: {
-  'sessionUpdate' -> 'agent_message_chunk'.
-  'content' -> { 'type' -> 'text'.
-   'text' -> ('The image contains {{gtObject:id=', objectId, '}} classes.') } asDictionary } asDictionary.
- self finish: turn in: session.
- scripter := BlScripter new extent: 1000 @ 700; model: session; element: session asElement; yourself.
- scripter pulseUntilReady.
- scripter assertStep: [ :step | step id: #'acp-final-text'; satisfies: [ :editor |
-  | attributes |
-  attributes := (1 to: editor text size) flatCollect: [ :index | editor text attributesAt: index ].
-  editor styler objectRegistry == session mcpServer objectStorage and: [
-   (editor styler storedRegistryObjectForId: objectId
-    ifPresent: [ :stored | stored storedValue = object ]
-    ifAbsent: [ false ]) and: [
-   (attributes anySatisfy: [ :attribute | attribute isKindOf: GtButtonAttribute ]) and: [
-   (attributes anySatisfy: [ :attribute | attribute isKindOf: GtCachedTextExpandButtonAttribute ]) and: [
-   attributes anySatisfy: [ :attribute | attribute isKindOf: BrTextHideAttribute ] ] ] ] ] ] ].
- GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
- ^ scripter
+	<gtExample>
+	| session object objectId turn scripter |
+	session := self session.
+	object := Smalltalk globals allClasses size.
+	objectId := session objectStorage addNewObject: object.
+	self
+		assert: session phlowContext objectRegistry == session mcpServer objectStorage.
+	turn := session prompt: 'How many classes does the image contain?'.
+	session
+		receiveUpdate: {'sessionUpdate' -> 'agent_message_chunk'.
+				'content'
+					-> {'type' -> 'text'.
+							'text'
+								-> ('The image contains {{gtObject:id=' , objectId , '}} classes.')}
+							asDictionary} asDictionary.
+	self finish: turn in: session.
+	scripter := BlScripter new
+			extent: 1000 @ 700;
+			model: session;
+			element: session asElement;
+			yourself.
+	scripter pulseUntilReady.
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-final-text';
+				satisfies: [ :editor | 
+					| attributes |
+					attributes := (1 to: editor text size)
+							flatCollect: [ :index | editor text attributesAt: index ].
+					(editor styler isKindOf: BlTextNullStyler)
+						and: [ (attributes anySatisfy: [ :attribute | attribute isKindOf: GtButtonAttribute ])
+								and: [ (attributes
+										anySatisfy: [ :attribute | attribute isKindOf: GtCachedTextExpandButtonAttribute ])
+										and: [ attributes
+												anySatisfy: [ :attribute | attribute isKindOf: BrTextHideAttribute ] ] ] ] ] ].
+	GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+	^ scripter
 ]
 
 { #category : #fixtures }

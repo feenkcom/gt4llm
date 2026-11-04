@@ -925,6 +925,20 @@ GtLACPChatExamples >> permissionButtons [
 ]
 
 { #category : #examples }
+GtLACPChatExamples >> preStyledMessageText [
+	<gtExample>
+	| messageElement editor |
+	messageElement := self chatWithToolCalls viewModel session currentTurn
+			assistantMessage asElement.
+	editor := messageElement textElementFor: '**Already styled**'.
+	self assert: (editor styler isKindOf: BlTextNullStyler).
+	self
+		assert: ((editor text attributesAt: 3)
+				anySatisfy: [ :attribute | attribute isKindOf: BlFontWeightAttribute ]).
+	^ editor
+]
+
+{ #category : #examples }
 GtLACPChatExamples >> reasoningBetweenToolCalls [
  <gtExample>
  | session turn examples element items |

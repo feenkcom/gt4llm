@@ -54,11 +54,7 @@ GtLACPConversationMessage >> gtTextFor: aView [
 	^ aView textEditor
 		title: 'Text';
 		priority: 1;
-		text: [ | text styler |
-			text := self text asRopedText.
-			styler := GtLMessageStyler new.
-			styler privateStyle: text.
-			text ];
+		text: [ GtLMessageStyler new privateStyle: self text asRopedText ];
 		actionUpdateButtonTooltip: 'Refresh text'
 ]
 

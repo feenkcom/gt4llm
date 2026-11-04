@@ -172,7 +172,7 @@ GtLMessageStyler >> storedRegistryObjectForId: anIdString ifPresent: aPresentBlo
 		ifAbsent: anAbsentBlock
 ]
 
-{ #category : #generated }
+{ #category : #styling }
 GtLMessageStyler >> styleAutoHiding: leftRange and: rightRange whenOutside: nodeInterval [
 	| anAttribute marker1 marker2 cursorAttribute |
 	marker1 := BrTextInvisibleMarkerAttribute new.
@@ -188,6 +188,14 @@ GtLMessageStyler >> styleAutoHiding: leftRange and: rightRange whenOutside: node
 	anAttribute := BrTextAdornmentDynamicAttribute new
 			beReplace;
 			stencil: [ :aTBrTextEditorTextualPiece :anEditorElement | #() ].
+	self text
+		attribute: anAttribute
+		from: leftRange first
+		to: leftRange last.
+	self text
+		attribute: anAttribute
+		from: rightRange first
+		to: rightRange last.
 	cursorAttribute := BrTextCursorDynamicAttribute new
 			enterAction: [ :aTextEditor | 
 				| left right |

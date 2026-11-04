@@ -71,6 +71,16 @@ GtLACPSessionRegistry >> gtConversationTreeFor: aView [
 ]
 
 { #category : #'gt - extensions' }
+GtLACPSessionRegistry >> gtNewSessionFor: anAction [
+	<gtAction>
+	^ anAction dropdown
+		icon: BrGlamorousIcons add;
+		label: 'New session';
+		priority: 1;
+		menu: [ :aDropdown | self newSessionDropdownFor: aDropdown clients: self sessionClients ]
+]
+
+{ #category : #'gt - extensions' }
 GtLACPSessionRegistry >> gtOverviewFor: aView [
 	<gtView>
 	^ aView columnedList
@@ -90,6 +100,7 @@ GtLACPSessionRegistry >> gtOverviewFor: aView [
 GtLACPSessionRegistry >> gtRemoveClosedSessionsFor: anAction [
 	<gtAction>
 	^ anAction button
+		icon: BrGlamorousIcons remove;
 		label: 'Remove closed sessions';
 		priority: 30;
 		action: [ self removeClosedSessions ]
@@ -97,6 +108,8 @@ GtLACPSessionRegistry >> gtRemoveClosedSessionsFor: anAction [
 
 { #category : #'gt - extensions' }
 GtLACPSessionRegistry >> gtSessionsFor: aView [
+	"Keep session states readable while highlighting activity and failures."
+
 	<gtView>
 	^ aView columnedList
 		title: 'Sessions';
@@ -104,11 +117,41 @@ GtLACPSessionRegistry >> gtSessionsFor: aView [
 		items: [ self sessions ];
 		column: 'Title' text: #conversationTitle;
 		column: 'Client'
-			text: [ :aSession | aSession client gtDisplayString ]
+			text: [ :aSession | aSession client displayName ]
 			width: 110;
 		column: 'State'
-			text: #state
-			width: 100;
+			stencil: [ :aSession | 
+				| aState aColor aMarker |
+				aState := aSession state.
+				aColor := BrGlamorousColors neutralBackgroundColor.
+				aState = #ready
+					ifTrue: [ aColor := BrGlamorousColors successBackgroundColor ].
+				aState = #prompting ifTrue: [ aColor := Color fromHexString: '1976D2' ].
+				(#(#starting #loading #disconnected) includes: aState)
+					ifTrue: [ aColor := BrGlamorousColors failureBackgroundColor ].
+				aState = #failed
+					ifTrue: [ aColor := BrGlamorousColors errorBackgroundColor ].
+				aMarker := BlElement new
+						id: #'acp-session-state-marker';
+						size: 8 @ 8;
+						geometry: BlCircleGeometry new;
+						background: ((#(new observing disconnected) includes: aState)
+								ifTrue: [ Color transparent ]
+								ifFalse: [ aColor ]);
+						border: (BlBorder paint: aColor width: 1.5);
+						constraintsDo: [ :c | c linear vertical alignCenter ];
+						yourself.
+				BrHorizontalPane new
+					fitContent;
+					alignCenterLeft;
+					cellSpacing: 6;
+					addChild: aMarker;
+					addChild: (BrLabel new
+							aptitude: BrGlamorousLabelAptitude;
+							text: aState asString;
+							yourself);
+					yourself ]
+			width: 120;
 		column: 'Turns'
 			text: [ :aSession | aSession turns size ]
 			width: 60;
@@ -147,6 +190,23 @@ GtLACPSessionRegistry >> newClaudeCodeSessionIn: aDirectory [
 { #category : #'instance creation' }
 GtLACPSessionRegistry >> newCodexSessionIn: aDirectory [
 	^ self newSessionWithClient: GtLACPCodexClient new in: aDirectory
+]
+
+{ #category : #'private - interface' }
+GtLACPSessionRegistry >> newSessionDropdownFor: aDropdown clients: aCollection [
+	"Each client is a submenu containing the shared directory picker. Spawn from the outer action, which remains attached after the menus close."
+
+	| aMenu |
+	aMenu := BrMenuItems new.
+	aCollection
+		do: [ :aClient | 
+			aMenu
+				addItem: (BrMenuSubmenuItem new
+						id: aClient class name;
+						label: aClient displayName;
+						submenu: (BrMenuExplicit new
+								stencil: [ aClient newSessionDirectorySelectorFor: aDropdown registry: self ])) ].
+	^ aMenu
 ]
 
 { #category : #'instance creation' }
@@ -196,6 +256,12 @@ GtLACPSessionRegistry >> removeSession: aSession [
 							ifFalse: [ aSession connection announcer unsubscribe: self ] ].
 				aRemovedSession ].
 	removedSession ifNotNil: [ self announceRemovedSession: removedSession ]
+]
+
+{ #category : #'private - interface' }
+GtLACPSessionRegistry >> sessionClients [
+	^ {GtLACPClaudeCodeClient new.
+		GtLACPCodexClient new}
 ]
 
 { #category : #accessing }
