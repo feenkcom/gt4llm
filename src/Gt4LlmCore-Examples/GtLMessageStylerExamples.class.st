@@ -7,6 +7,62 @@ Class {
 	#category : #'Gt4LlmCore-Examples'
 }
 
+{ #category : #'examples - markdown' }
+GtLMessageStylerExamples >> boldDelimitersAreHiddenInitially [
+	<gtExample>
+	<return: #BlText>
+	| source text delimiterIndices |
+	source := '**something**'.
+	text := GtLMessageStyler new privateStyle: source asRopedText.
+	self assert: text asString equals: source.
+	self
+		assert: ((text attributesAt: 3)
+				anySatisfy: [ :attribute | attribute isKindOf: BlFontWeightAttribute ]).
+	delimiterIndices := (1 to: 2) , (text size - 2 + 1 to: text size).
+	delimiterIndices
+		do: [ :index | 
+			self
+				assert: ((text attributesAt: index)
+						anySatisfy: [ :attribute | attribute isKindOf: BrTextAdornmentDynamicAttribute ])
+				description: 'Markdown delimiter at position ' , index asString
+						, ' should be hidden immediately after styling' ].
+	(3 to: text size - 2)
+		do: [ :index | 
+			self
+				assert: ((text attributesAt: index)
+						anySatisfy: [ :attribute | attribute isKindOf: BrTextAdornmentDynamicAttribute ])
+						not ].
+	^ text
+]
+
+{ #category : #'examples - markdown' }
+GtLMessageStylerExamples >> doubleBacktickCodeDelimitersAreHiddenInitially [
+	<gtExample>
+	<return: #BlText>
+	| source text delimiterIndices |
+	source := '``something``'.
+	text := GtLMessageStyler new privateStyle: source asRopedText.
+	self assert: text asString equals: source.
+	self
+		assert: ((text attributesAt: 3)
+				anySatisfy: [ :attribute | attribute isKindOf: BlFontFamilyAttribute ]).
+	delimiterIndices := (1 to: 2) , (text size - 2 + 1 to: text size).
+	delimiterIndices
+		do: [ :index | 
+			self
+				assert: ((text attributesAt: index)
+						anySatisfy: [ :attribute | attribute isKindOf: BrTextAdornmentDynamicAttribute ])
+				description: 'Markdown delimiter at position ' , index asString
+						, ' should be hidden immediately after styling' ].
+	(3 to: text size - 2)
+		do: [ :index | 
+			self
+				assert: ((text attributesAt: index)
+						anySatisfy: [ :attribute | attribute isKindOf: BrTextAdornmentDynamicAttribute ])
+						not ].
+	^ text
+]
+
 { #category : #'examples - gtObject' }
 GtLMessageStylerExamples >> gtObjectStylingWithFallbackLabel [
 	<gtExample>
@@ -312,5 +368,61 @@ GtLMessageStylerExamples >> gtViewPragmaStylingWithoutFullName [
 	button := (buttonAttribute instVarNamed: 'stencilBuilder') build.
 	buttonColor := (button userData at: #brickLook) defaultColor.
 	self assert: buttonColor equals: BrGlamorousColors linkWithErrorColor.
+	^ text
+]
+
+{ #category : #'examples - markdown' }
+GtLMessageStylerExamples >> inlineCodeDelimitersAreHiddenInitially [
+	<gtExample>
+	<return: #BlText>
+	| source text delimiterIndices |
+	source := '`something`'.
+	text := GtLMessageStyler new privateStyle: source asRopedText.
+	self assert: text asString equals: source.
+	self
+		assert: ((text attributesAt: 2)
+				anySatisfy: [ :attribute | attribute isKindOf: BlFontFamilyAttribute ]).
+	delimiterIndices := (1 to: 1) , (text size - 1 + 1 to: text size).
+	delimiterIndices
+		do: [ :index | 
+			self
+				assert: ((text attributesAt: index)
+						anySatisfy: [ :attribute | attribute isKindOf: BrTextAdornmentDynamicAttribute ])
+				description: 'Markdown delimiter at position ' , index asString
+						, ' should be hidden immediately after styling' ].
+	(2 to: text size - 1)
+		do: [ :index | 
+			self
+				assert: ((text attributesAt: index)
+						anySatisfy: [ :attribute | attribute isKindOf: BrTextAdornmentDynamicAttribute ])
+						not ].
+	^ text
+]
+
+{ #category : #'examples - markdown' }
+GtLMessageStylerExamples >> italicDelimitersAreHiddenInitially [
+	<gtExample>
+	<return: #BlText>
+	| source text delimiterIndices |
+	source := '*something*'.
+	text := GtLMessageStyler new privateStyle: source asRopedText.
+	self assert: text asString equals: source.
+	self
+		assert: ((text attributesAt: 2)
+				anySatisfy: [ :attribute | attribute isKindOf: BlFontItalicAttribute ]).
+	delimiterIndices := (1 to: 1) , (text size - 1 + 1 to: text size).
+	delimiterIndices
+		do: [ :index | 
+			self
+				assert: ((text attributesAt: index)
+						anySatisfy: [ :attribute | attribute isKindOf: BrTextAdornmentDynamicAttribute ])
+				description: 'Markdown delimiter at position ' , index asString
+						, ' should be hidden immediately after styling' ].
+	(2 to: text size - 1)
+		do: [ :index | 
+			self
+				assert: ((text attributesAt: index)
+						anySatisfy: [ :attribute | attribute isKindOf: BrTextAdornmentDynamicAttribute ])
+						not ].
 	^ text
 ]
