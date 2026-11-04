@@ -257,7 +257,7 @@ GtLACPSessionRegistryExamples >> scripterOn: aRegistry view: aViewSelector [
 GtLACPSessionRegistryExamples >> sessionStateVisuals [
 	<gtExample>
 	| registry scripter |
-	registry := self sessionStatePalette.
+	registry := self emptyRegistry.
 	#(new starting loading ready prompting failed closed observing disconnected futureState)
 		do: [ :aState | 
 			| session |
