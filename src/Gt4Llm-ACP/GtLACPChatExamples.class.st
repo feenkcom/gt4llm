@@ -173,87 +173,242 @@ GtLACPChatExamples >> chatInspectorTool [
 
 { #category : #examples }
 GtLACPChatExamples >> chatToolChildCannotCloseSession [
- <gtExample>
- | root child element scripter |
- root := GtLACPSubagentExamples new nestedConversations.
- child := root childSessions first.
- element := (GtLACPChatTool forChat: child) asElementDo: [ :widget | widget ].
- scripter := BlScripter new extent: 1100 @ 800; model: child; element: element; yourself.
- self assert: child canClose not.
- scripter assertStep: [ :step | step id: #'acp-close-session';
-  satisfies: [ :button | button visibility = BlVisibility gone and: [ button isEnabled not ] ] ].
- self assert: root state equals: #ready.
- self assert: root connection state equals: #ready.
- self assertNoRenderingErrorsIn: scripter.
- ^ scripter
+	<gtExample>
+	| root child element scripter |
+	root := GtLACPSubagentExamples new nestedConversations.
+	child := root childSessions first.
+	element := (GtLACPChatTool forChat: child) asElementDo: [ :widget | widget ].
+	scripter := BlScripter new
+			extent: 1100 @ 800;
+			model: child;
+			element: element;
+			yourself.
+	self assert: child canClose not.
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-session-actions';
+				notExists ].
+	self assert: root state equals: #ready.
+	self assert: root connection state equals: #ready.
+	self assertNoRenderingErrorsIn: scripter.
+	^ scripter
+]
+
+{ #category : #examples }
+GtLACPChatExamples >> chatToolCloseAsksForConfirmation [
+	<gtExample>
+	| session element scripter |
+	session := GtLACPExamples new session.
+	element := (GtLACPChatTool forChat: session) asElementDo: [ :widget | widget ].
+	scripter := BlScripter new
+			extent: 1100 @ 800;
+			model: session;
+			element: element;
+			yourself.
+	self openCloseConfirmationIn: scripter.
+	scripter assert
+		exists;
+		onSpaceRoot;
+		// #'acp-close-session-confirmation';
+		play.
+	scripter assert
+		exists;
+		onSpaceRoot;
+		// #'acp-close-session-confirm';
+		play.
+	self assert: session state equals: #ready.
+	self assert: session connection state equals: #ready.
+	self assertNoRenderingErrorsIn: scripter.
+	^ scripter
 ]
 
 { #category : #examples }
 GtLACPChatExamples >> chatToolClosePreservesOtherSessions [
- <gtExample>
- | session other element scripter |
- session := GtLACPExamples new session.
- other := session client newSessionIn: session directory connection: session connection.
- other create.
- element := (GtLACPChatTool forChat: session) asElementDo: [ :widget | widget ].
- scripter := BlScripter new extent: 1100 @ 800; model: session; element: element; yourself.
- scripter click id: #'acp-close-session'; play.
- self assert: session state equals: #closed.
- self assert: other state equals: #ready.
- self assert: other canPrompt.
- self assert: session connection state equals: #ready.
- self assert: (session connection sessions at: other remoteSessionId) == other.
- self assertNoRenderingErrorsIn: scripter.
- ^ scripter
+	<gtExample>
+	| session other element scripter |
+	session := GtLACPExamples new session.
+	other := session client
+			newSessionIn: session directory
+			connection: session connection.
+	other create.
+	element := (GtLACPChatTool forChat: session) asElementDo: [ :widget | widget ].
+	scripter := BlScripter new
+			extent: 1100 @ 800;
+			model: session;
+			element: element;
+			yourself.
+	self closeSessionFromMenuIn: scripter.
+	self assert: session state equals: #closed.
+	self assert: other state equals: #ready.
+	self assert: other canPrompt.
+	self assert: session connection state equals: #ready.
+	self assert: (session connection sessions at: other remoteSessionId) == other.
+	self assertNoRenderingErrorsIn: scripter.
+	^ scripter
 ]
 
 { #category : #examples }
 GtLACPChatExamples >> chatToolClosesSession [
- <gtExample>
- | scripter session |
- scripter := self chatToolWithViews.
- session := scripter model.
- scripter assertStep: [ :step | step id: #'acp-close-session'; satisfies: #isEnabled ].
- scripter click id: #'acp-close-session'; play.
- self assert: session state equals: #closed.
- self assert: session connection state equals: #stopped.
- self assert: session connection pendingRequests isEmpty.
- self assert: (session currentTurn permissionRequests allSatisfy: [ :each | each state = #cancelled ]).
- scripter assertStep: [ :step | step id: #'acp-close-session';
-  satisfies: [ :button | button visibility = BlVisibility gone and: [ button isEnabled not ] ] ].
- scripter assertStep: [ :step | step id: #'acp-message-1'; exists ].
- self assertNoRenderingErrorsIn: scripter.
- ^ scripter
+	<gtExample>
+	| scripter session |
+	scripter := self chatToolWithViews.
+	session := scripter model.
+	self closeSessionFromMenuIn: scripter.
+	self assert: session state equals: #closed.
+	self assert: session connection state equals: #stopped.
+	self assert: session connection pendingRequests isEmpty.
+	self
+		assert: (session currentTurn permissionRequests
+				allSatisfy: [ :each | each state = #cancelled ]).
+	scripter pulseUntilReady.
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-session-actions';
+				notExists ].
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-message-1';
+				exists ].
+	self assertNoRenderingErrorsIn: scripter.
+	^ scripter
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> chatToolForClosedSessionHidesCloseButton [
- <gtExample>
- | session element scripter |
- session := GtLACPExamples new closedSession.
- element := (GtLACPChatTool forChat: session) asElementDo: [ :widget | widget ].
- scripter := BlScripter new extent: 1100 @ 800; model: session; element: element; yourself.
- self assert: session canClose not.
- scripter assertStep: [ :step | step id: #'acp-close-session';
-  satisfies: [ :button | button visibility = BlVisibility gone and: [ button isEnabled not ] ] ].
- self assertNoRenderingErrorsIn: scripter.
- ^ scripter
+GtLACPChatExamples >> chatToolForClosedSessionHidesSessionActions [
+	<gtExample>
+	| session element scripter |
+	session := GtLACPExamples new closedSession.
+	element := (GtLACPChatTool forChat: session) asElementDo: [ :widget | widget ].
+	scripter := BlScripter new
+			extent: 1100 @ 800;
+			model: session;
+			element: element;
+			yourself.
+	self assert: session canClose not.
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-session-actions';
+				notExists ].
+	self assertNoRenderingErrorsIn: scripter.
+	^ scripter
+]
+
+{ #category : #examples }
+GtLACPChatExamples >> chatToolHeaderFollowsConversationTitle [
+	<gtExample>
+	| session element scripter |
+	session := GtLACPExamples new session.
+	element := (GtLACPChatTool forChat: session) asElementDo: [ :widget | widget ].
+	scripter := BlScripter new
+			extent: 1100 @ 800;
+			model: session;
+			element: element;
+			yourself.
+	scripter
+		doStep: [ :step | 
+			step
+				block: [ session
+						receiveUpdate: (Dictionary new
+								at: 'sessionUpdate' put: 'session_info_update';
+								at: 'title' put: 'Renamed conversation';
+								yourself) ] ].
+	scripter pulseUntilReady.
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #titleLabel;
+				value: [ :label | label text asString ] equals: [ 'Renamed conversation' ] ].
+	self assertNoRenderingErrorsIn: scripter.
+	^ scripter
+]
+
+{ #category : #examples }
+GtLACPChatExamples >> chatToolHeaderKeepsSessionActionsVisibleForLongTitle [
+	<gtExample>
+	| session element scripter |
+	session := GtLACPExamples new session.
+	session
+		receiveUpdate: (Dictionary new
+				at: 'sessionUpdate' put: 'session_info_update';
+				at: 'title' put: (String new: 400 withAll: $x);
+				yourself).
+	element := (GtLACPChatTool forChat: session) asElementDo: [ :widget | widget ].
+	scripter := BlScripter new
+			extent: 600 @ 400;
+			model: session;
+			element: element;
+			yourself.
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #toolbar;
+				value: [ :toolbar | toolbar bounds inParent bounds right <= toolbar parent width ]
+					equals: [ true ] ].
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-session-actions';
+				exists ].
+	self assertNoRenderingErrorsIn: scripter.
+	^ scripter
+]
+
+{ #category : #examples }
+GtLACPChatExamples >> chatToolHeaderShowsConversationTitle [
+	<gtExample>
+	| session element scripter |
+	session := GtLACPExamples new session.
+	self assert: session header equals: session conversationTitle.
+	element := (GtLACPChatTool forChat: session) asElementDo: [ :widget | widget ].
+	scripter := BlScripter new
+			extent: 1100 @ 800;
+			model: session;
+			element: element;
+			yourself.
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #toolLabel;
+				value: [ :label | label text asString ] equals: [ 'ACP Chat' ] ].
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #titleLabel;
+				value: [ :label | label text asString ]
+					equals: [ session conversationTitle ] ].
+	self assertNoRenderingErrorsIn: scripter.
+	^ scripter
 ]
 
 { #category : #examples }
 GtLACPChatExamples >> chatToolReflectsExternalClose [
- <gtExample>
- | session element scripter |
- session := GtLACPExamples new session.
- element := (GtLACPChatTool forChat: session) asElementDo: [ :widget | widget ].
- scripter := BlScripter new extent: 1100 @ 800; model: session; element: element; yourself.
- scripter assertStep: [ :step | step id: #'acp-close-session'; satisfies: #isEnabled ].
- scripter doStep: [ :step | step block: [ session close ] ].
- scripter pulseUntilReady.
- scripter assertStep: [ :step | step id: #'acp-close-session';
-  satisfies: [ :button | button visibility = BlVisibility gone and: [ button isEnabled not ] ] ].
- self assertNoRenderingErrorsIn: scripter.
- ^ scripter
+	<gtExample>
+	| session element scripter |
+	session := GtLACPExamples new session.
+	element := (GtLACPChatTool forChat: session) asElementDo: [ :widget | widget ].
+	scripter := BlScripter new
+			extent: 1100 @ 800;
+			model: session;
+			element: element;
+			yourself.
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-session-actions';
+				exists ].
+	scripter doStep: [ :step | step block: [ session close ] ].
+	scripter pulseUntilReady.
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-session-actions';
+				notExists ].
+	self assertNoRenderingErrorsIn: scripter.
+	^ scripter
 ]
 
 { #category : #examples }
@@ -378,6 +533,15 @@ GtLACPChatExamples >> chatWithToolCallsStyledLayout [
   scripter assertStep: [ :step | step id: #'acp-messages'; satisfies: [ :list |
    (list childNamed: #scrollable) state isStartStep ] ] ].
  ^ scripter
+]
+
+{ #category : #examples }
+GtLACPChatExamples >> closeSessionFromMenuIn: aScripter [
+	self openCloseConfirmationIn: aScripter.
+	aScripter click
+		onSpaceRoot;
+		// #'acp-close-session-confirm';
+		play
 ]
 
 { #category : #examples }
@@ -911,6 +1075,18 @@ GtLACPChatExamples >> olderMessageChangeRefreshesOnlyItsRow [
 ]
 
 { #category : #examples }
+GtLACPChatExamples >> openCloseConfirmationIn: aScripter [
+	aScripter menuStep
+		openDropdownWithId: #'acp-session-actions';
+		assertMenuContainerExist;
+		play.
+	aScripter menuStep
+		hoverMenuItemWithId: #'acp-close-session';
+		onPopover;
+		play
+]
+
+{ #category : #examples }
 GtLACPChatExamples >> permissionButtons [
  <gtExample>
  | element scripter permission |
@@ -1114,6 +1290,21 @@ GtLACPChatExamples >> sendAndStop [
  scripter assertStep: [ :step | step id: #'acp-action'; satisfies: [ :action |
   action == button and: [ action isEnabled not and: [ action label asString = 'Stopping…' ] ] ] ].
  ^ scripter
+]
+
+{ #category : #examples }
+GtLACPChatExamples >> sessionActionsMenuCollectsTargetedActions [
+	<gtExample>
+	| session selectorsFor |
+	session := GtLACPExamples new session.
+	selectorsFor := [ :aTarget | 
+		(aTarget actionsForObject: session)
+			collect: [ :each | each definingMethod selector ] ].
+	self
+		assert: ((selectorsFor value: GtLACPSessionActionTarget) includes: #gtCloseFor:).
+	self
+		assert: ((selectorsFor value: GtPhlowObjectActionTarget) includes: #gtCloseFor:).
+	^ session
 ]
 
 { #category : #examples }

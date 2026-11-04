@@ -285,8 +285,9 @@ GtLACPSession >> conversationState [
 
 { #category : #accessing }
 GtLACPSession >> conversationTitle [
- self isSubagent ifTrue: [ ^ parentSubagent title ].
- ^ conversationTitle ifNil: [ client ifNil: [ 'ACP chat' ] ifNotNil: [ client displayName ] ]
+	self isSubagent ifTrue: [ ^ parentSubagent title ].
+	^ conversationTitle
+		ifNil: [ client ifNil: [ 'ACP chat' ] ifNotNil: [ client displayName ] ]
 ]
 
 { #category : #lifecycle }
@@ -348,10 +349,18 @@ GtLACPSession >> gtChatFor: aView [
 GtLACPSession >> gtCloseFor: anAction [
 	<gtAction>
 	self canClose ifFalse: [ ^ anAction noAction ].
-	^ anAction button
+	^ anAction dropdown
+		id: #'acp-close-session';
 		label: 'Close session';
 		priority: 50;
-		action: [ self close ]
+		target: GtPhlowObjectActionTarget;
+		addTarget: GtLACPSessionActionTarget;
+		menuItemGroup: BrMenuItemGroupConfiguration removal;
+		content: [ :anActionElement :aTargetElement :anExplicitMenu | 
+			GtLACPCloseSessionConfirmationStencil new
+				session: self;
+				menuModel: anExplicitMenu;
+				asElement ]
 ]
 
 { #category : #views }
@@ -439,6 +448,19 @@ GtLACPSession >> gtRefreshSummarizersFor: anAction [
   action: [ self updateToolSummarizers ]
 ]
 
+{ #category : #actions }
+GtLACPSession >> gtSessionActionsDropdownFor: anAction [
+	<gtToolAction>
+	(GtLACPSessionActionTarget actionsForObject: self)
+		ifEmpty: [ ^ anAction noAction ].
+	^ anAction dropdown
+		tooltip: 'Session actions';
+		icon: BrGlamorousVectorIcons hamburger;
+		id: #'acp-session-actions';
+		priority: 100;
+		menuItemsForObject: self fromTarget: GtLACPSessionActionTarget
+]
+
 { #category : #views }
 GtLACPSession >> gtSessionFor: aView [
  <gtView>
@@ -507,6 +529,11 @@ GtLACPSession >> gtWorkGraphFor: aView [
 		priority: 5;
 		stencil: [ self asWorkGraph asElement ];
 		actionUpdateButtonTooltip: 'Refresh agent work graph'
+]
+
+{ #category : #accessing }
+GtLACPSession >> header [
+	^ self conversationTitle
 ]
 
 { #category : #accessing }
