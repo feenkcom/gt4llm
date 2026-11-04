@@ -1,30 +1,45 @@
 "
-I present an ACP session using the Phlow chat tool structure: a labeled header, collected object views in tabs, and a collapsed playground. I specialize the ACP view collection and omit GtLChat-specific object storage and summarizer integration.
+I present an ACP session using the Phlow chat tool structure: a header with the tool label, the session header as title and a toolbar with the session's <gtToolAction> actions, collected object views in tabs, and a collapsed playground. I specialize the ACP view collection and omit GtLChat-specific object storage and summarizer integration.
 "
 Class {
 	#name : #GtLACPChatToolElement,
 	#superclass : #GtPhlowChatToolElement,
 	#instVars : [
-		'closeSessionButton',
-		'closeSessionButtonUpdater'
+		'titleLabel',
+		'toolbarElement',
+		'headerUpdater'
 	],
 	#category : #'Gt4Llm-ACP-UI'
 }
 
 { #category : #building }
 GtLACPChatToolElement >> buildHeaderElement [
- | header |
- closeSessionButton := BrButton new id: #'acp-close-session';
-  aptitude: BrGlamorousButtonWithLabelAptitude; beSmallSize;
-  label: 'Close session'; visibility: BlVisibility gone;
-  action: [ self chat close. self updateCloseSessionButton ]; yourself.
- header := BrHorizontalPane new padding: (BlInsets left: 5);
-  hMatchParent; vFitContent;
-  addChild: self buildToolLabel as: #toolLabel;
-  addChild: (BrFrame new hMatchParent; vExact: 0; yourself);
-  addChild: closeSessionButton;
-  yourself.
- ^ header
+	^ super buildHeaderElement
+		addChild: self buildTitleContainer as: #titleContainer;
+		yourself
+]
+
+{ #category : #building }
+GtLACPChatToolElement >> buildTitleContainer [
+	titleLabel := self buildTitleLabel.
+	toolbarElement := self buildToolbar.
+	^ BrHorizontalPane new
+		hMatchParent;
+		vFitContent;
+		alignCenterLeft;
+		addChild: titleLabel as: #titleLabel;
+		addChild: toolbarElement as: #toolbar;
+		yourself
+]
+
+{ #category : #building }
+GtLACPChatToolElement >> buildTitleLabel [
+	^ BrLabel new
+		aptitude: (BrGlamorousLabelAptitude new
+				bold;
+				fontSize: 18);
+		hMatchParent;
+		text: ''
 ]
 
 { #category : #initialization }
@@ -32,13 +47,33 @@ GtLACPChatToolElement >> buildToolLabel [
  ^ super buildToolLabel text: 'ACP Chat'; yourself
 ]
 
+{ #category : #building }
+GtLACPChatToolElement >> buildToolbar [
+	^ BrToolbar new
+		aptitude: BrGlamorousToolbarAptitude new;
+		fitContent
+]
+
 { #category : #accessing }
 GtLACPChatToolElement >> chat: aSession [
- chat ifNotNil: [ chat announcer unsubscribe: self ].
- super chat: aSession.
- aSession ifNotNil: [
-  aSession announcer weak when: GtLACPSessionChanged send: #onSessionChanged: to: self ].
- self updateCloseSessionButton
+	chat ifNotNil: [ chat announcer unsubscribe: self ].
+	super chat: aSession.
+	aSession
+		ifNotNil: [ aSession announcer weak
+				when: GtLACPSessionChanged
+				send: #onSessionChanged:
+				to: self ].
+	self updateHeader
+]
+
+{ #category : #updating }
+GtLACPChatToolElement >> collectToolActions [
+	chat ifNil: [ ^ #() ].
+	^ GtPhlowActionsCollector new
+		pragmaName: #gtToolAction;
+		fromObject: chat;
+		selectUsing: [ :anAction | (anAction isKindOf: GtPhlowNoAction) not ];
+		collect
 ]
 
 { #category : #views }
@@ -62,25 +97,20 @@ GtLACPChatToolElement >> gtInspectorTargetModels [
 
 { #category : #initialization }
 GtLACPChatToolElement >> initialize [
- super initialize.
- closeSessionButtonUpdater := BrElementUpdater new element: self selector: #updateCloseSessionButton;
-  postponedDuration: 150 milliseconds; yourself.
- self phlow
-  accessTool: (GtPhlowToolClassType forClass: GtLACPSession)
-  viewModel: #chat
-  object: #chat
+	super initialize.
+	headerUpdater := BrElementUpdater new
+			element: self selector: #updateHeader;
+			postponedDuration: 150 milliseconds;
+			yourself.
+	self phlow
+		accessTool: (GtPhlowToolClassType forClass: GtLACPSession)
+		viewModel: #chat
+		object: #chat
 ]
 
 { #category : #events }
 GtLACPChatToolElement >> onSessionChanged: anAnnouncement [
- BlTaskAction enqueueElement: self action: [ closeSessionButtonUpdater requestUpdate ]
-]
-
-{ #category : #updating }
-GtLACPChatToolElement >> updateCloseSessionButton [
- (chat notNil and: [ chat canClose ])
-  ifTrue: [ closeSessionButton visibility: BlVisibility visible; enable ]
-  ifFalse: [ closeSessionButton visibility: BlVisibility gone; disable ]
+	BlTaskAction enqueueElement: self action: [ headerUpdater requestUpdate ]
 ]
 
 { #category : #updating }
@@ -98,4 +128,28 @@ GtLACPChatToolElement >> updateContainedViews [
   session: self chat;
   yourself).
  self viewsContainerElement removeChildren; addChild: tabGroup
+]
+
+{ #category : #updating }
+GtLACPChatToolElement >> updateHeader [
+	self updateTitle.
+	self updateToolbarActions
+]
+
+{ #category : #updating }
+GtLACPChatToolElement >> updateTitle [
+	titleLabel text: (chat ifNil: [ '' ] ifNotNil: #header) asRopedText
+]
+
+{ #category : #updating }
+GtLACPChatToolElement >> updateToolbarActions [
+	| actions |
+	actions := self collectToolActions.
+	toolbarElement numberOfItems = actions size ifTrue: [ ^ self ].
+	toolbarElement removeAllItems.
+	actions
+		do: [ :anAction | 
+			anAction
+				asElement: [ :actionElement | toolbarElement addItem: actionElement ]
+				withHostElement: self ]
 ]
