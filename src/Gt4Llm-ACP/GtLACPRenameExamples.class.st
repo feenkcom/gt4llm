@@ -23,7 +23,7 @@ GtLACPRenameExamples >> sessionToolRenameApplied [
 	self assert: (toolSource includesSubstring: 'GtLACPSessionToolElement').
 	self assert: (toolSource includesSubstring: 'GtLACPChatToolElement') not.
 	exampleSource := ((model classFor: GtLACPSessionExamples)
-			methodFor: #chatInspectorTool) source.
+			methodFor: #sessionInspectorTool) source.
 	self assert: (exampleSource includesSubstring: 'GtLACPSessionTool forChat:').
 	self assert: (exampleSource includesSubstring: 'GtLACPSessionToolElement').
 	self assert: (exampleSource includesSubstring: 'GtLACPChatTool') not.

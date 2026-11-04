@@ -1023,13 +1023,14 @@ GtLACPSessionExamples >> sessionInspectorTool [
 	session := GtLACPExamples new session.
 	tool := GtLACPSessionTool forChat: session.
 	self assert: (tool isKindOf: GtPhlowChatTool).
+	self assert: tool name equals: 'ACP Session'.
 	self assert: tool object == session.
 	element := tool asElementDo: [ :widget | widget ].
 	self assert: (element isKindOf: GtLACPSessionToolElement).
 	self assert: element chat == session.
 	self
 		assert: ((element childNamed: #header) childNamed: #toolLabel) text asString
-		equals: 'ACP Chat'.
+		equals: 'ACP Session'.
 	self
 		assert: (element collectToolViews anySatisfy: [ :view | view title = 'Chat' ]).
 	self
@@ -1233,7 +1234,8 @@ GtLACPSessionExamples >> sessionToolHeaderShowsConversationTitle [
 	| session element scripter |
 	session := GtLACPExamples new session.
 	self assert: session header equals: session conversationTitle.
-	element := (GtLACPSessionTool forChat: session) asElementDo: [ :widget | widget ].
+	element := (GtLACPSessionTool forChat: session)
+			asElementDo: [ :widget | widget ].
 	scripter := BlScripter new
 			extent: 1100 @ 800;
 			model: session;
@@ -1243,7 +1245,7 @@ GtLACPSessionExamples >> sessionToolHeaderShowsConversationTitle [
 		assertStep: [ :step | 
 			step
 				id: #toolLabel;
-				value: [ :label | label text asString ] equals: [ 'ACP Chat' ] ].
+				value: [ :label | label text asString ] equals: [ 'ACP Session' ] ].
 	scripter
 		assertStep: [ :step | 
 			step
@@ -1470,18 +1472,47 @@ GtLACPSessionExamples >> sessionToolViewSwitching [
 
 { #category : #examples }
 GtLACPSessionExamples >> sessionToolWithViews [
- <gtExample>
- | session element scripter |
- session := self chatWithToolCalls viewModel session.
- element := (GtLACPSessionTool forChat: session) asElementDo: [ :widget | widget ].
- scripter := BlScripter new extent: 1100 @ 800; model: session; element: element; yourself.
- scripter assertStep: [ :step | step id: #toolLabel;
-  value: [ :label | label text asString ] equals: [ 'ACP Chat' ] ].
- scripter assertStep: [ :step | step id: #'acp-input'; exists ].
- scripter assertStep: [ :step | step id: #'acp-message-1'; exists ].
- scripter assertStep: [ :step | step id: #'acp-message-2'; exists ].
- self assertNoRenderingErrorsIn: scripter.
- ^ scripter
+	<gtExample>
+	| session element scripter |
+	session := self chatWithToolCalls viewModel session.
+	element := (GtLACPSessionTool forChat: session)
+			asElementDo: [ :widget | widget ].
+	scripter := BlScripter new
+			extent: 1100 @ 800;
+			model: session;
+			element: element;
+			yourself.
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #toolLabel;
+				value: [ :label | label text asString ] equals: [ 'ACP Session' ] ].
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-input';
+				exists ].
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-message-1';
+				exists ].
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-message-2';
+				exists ].
+	self assertNoRenderingErrorsIn: scripter.
+	^ scripter
+]
+
+{ #category : #examples }
+GtLACPSessionExamples >> sessionWithoutClientHasFallbackTitle [
+	<gtExample>
+	| session |
+	session := GtLACPSession new.
+	self assert: session conversationTitle equals: 'ACP session'.
+	^ session
 ]
 
 { #category : #examples }

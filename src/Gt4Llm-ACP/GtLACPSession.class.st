@@ -287,7 +287,7 @@ GtLACPSession >> conversationState [
 GtLACPSession >> conversationTitle [
 	self isSubagent ifTrue: [ ^ parentSubagent title ].
 	^ conversationTitle
-		ifNil: [ client ifNil: [ 'ACP chat' ] ifNotNil: [ client displayName ] ]
+		ifNil: [ client ifNil: [ 'ACP session' ] ifNotNil: [ client displayName ] ]
 ]
 
 { #category : #accessing }

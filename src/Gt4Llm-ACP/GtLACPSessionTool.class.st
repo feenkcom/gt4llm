@@ -1,5 +1,5 @@
 "
-I specialize GtPhlowChatTool for an ACP session. GtLACPChatToolElement reuses the Phlow chat tool header, object-view tabs and embedded playground, with ACP-specific view collection and the ACP Chat label.
+I specialize GtPhlowChatTool for an ACP session. GtLACPSessionToolElement reuses the Phlow chat tool header, object-view tabs and embedded playground, with ACP-specific view collection and the ACP Session label.
 "
 Class {
 	#name : #GtLACPSessionTool,
@@ -16,5 +16,5 @@ GtLACPSessionTool >> asElementDo: aBlock [
 
 { #category : #accessing }
 GtLACPSessionTool >> name [
- ^ 'ACP Chat'
+	^ 'ACP Session'
 ]

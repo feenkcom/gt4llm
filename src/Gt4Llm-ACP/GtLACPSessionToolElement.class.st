@@ -54,9 +54,11 @@ GtLACPSessionToolElement >> buildTitleLabel [
 		text: ''
 ]
 
-{ #category : #initialization }
+{ #category : #building }
 GtLACPSessionToolElement >> buildToolLabel [
- ^ super buildToolLabel text: 'ACP Chat'; yourself
+	^ super buildToolLabel
+		text: 'ACP Session';
+		yourself
 ]
 
 { #category : #building }
