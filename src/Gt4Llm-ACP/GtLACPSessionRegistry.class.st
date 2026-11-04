@@ -63,14 +63,6 @@ GtLACPSessionRegistry >> clearSessions [
 ]
 
 { #category : #'gt - extensions' }
-GtLACPSessionRegistry >> gtConversationTreeFor: aView [
-	<gtView>
-	^ (GtLACPSessionGroup conversationTreeFor: aView sessions: [ self sessions ])
-		priority: 20;
-		updateWhen: GtLACPSessionRegistryAnnouncement in: [ self announcer ]
-]
-
-{ #category : #'gt - extensions' }
 GtLACPSessionRegistry >> gtNewSessionFor: anAction [
 	<gtAction>
 	^ anAction dropdown
