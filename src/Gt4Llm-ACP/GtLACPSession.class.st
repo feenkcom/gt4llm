@@ -422,6 +422,22 @@ GtLACPSession >> gtDefaultInspectorTool [
   name: 'ACP: ', client gtDisplayString
 ]
 
+{ #category : #'gt - actions' }
+GtLACPSession >> gtInspectDirectoryFor: anAction [
+	<gtAction>
+	| aDirectory |
+	aDirectory := self directory.
+	(aDirectory isNotNil and: [ aDirectory isDirectory ])
+		ifFalse: [ ^ anAction noAction ].
+	^ anAction button
+		id: #'acp-inspect-directory';
+		label: 'Inspect directory';
+		priority: 30;
+		target: GtLACPSessionActionTarget;
+		menuItemGroup: BrMenuItemGroupConfiguration inspection;
+		action: [ :anElement | anElement phlow spawnObject: aDirectory ]
+]
+
 { #category : #views }
 GtLACPSession >> gtInspectorTargetModels [
  ^ self summarizersRegistry relevantCurrentSummarizers
