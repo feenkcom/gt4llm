@@ -17,7 +17,7 @@ GtLACPRenameSessionForm >> asElement [
 	^ (self asGtMagritteViewModel
 		focusFirstInputField) asElement
 		id: #'acp-rename-session-form';
-		padding: (BlInsets all: 8);
+		padding: (BlInsets all: 5);
 		yourself
 ]
 
