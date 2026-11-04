@@ -254,29 +254,6 @@ GtLACPSessionRegistryExamples >> scripterOn: aRegistry view: aViewSelector [
 ]
 
 { #category : #examples }
-GtLACPSessionRegistryExamples >> sessionStatePalette [
-	<gtExample>
-	| registry colors |
-	registry := self emptyRegistry.
-	colors := {#ready -> '2E7D32'.
-			#prompting -> '1976D2'.
-			#starting -> 'B77900'.
-			#loading -> 'B77900'.
-			#disconnected -> 'B77900'.
-			#failed -> 'C62828'.
-			#closed -> '757575'.
-			#new -> '757575'.
-			#observing -> '757575'.
-			#futureState -> '757575'}.
-	colors
-		do: [ :entry | 
-			self
-				assert: (registry colorForSessionState: entry key)
-				equals: (Color fromHexString: entry value) ].
-	^ registry
-]
-
-{ #category : #examples }
 GtLACPSessionRegistryExamples >> sessionStateVisuals [
 	<gtExample>
 	| registry scripter |
