@@ -154,9 +154,128 @@ GtLACPSessionRegistryExamples >> in: aScripter do: aBlock [
 	aScripter pulseUntilReady
 ]
 
+{ #category : #'examples - actions' }
+GtLACPSessionRegistryExamples >> newClaudeSessionFromRegistryDropdown [
+	<gtExample>
+	^ self newSessionFromRegistryDropdownWith: self claudeClient
+]
+
+{ #category : #'examples - actions' }
+GtLACPSessionRegistryExamples >> newCodexSessionFromRegistryDropdown [
+	<gtExample>
+	^ self
+		newSessionFromRegistryDropdownWith: (GtLACPCodexClient new
+				transportFactory: [ :aConfiguration :aDirectory | GtLACPExamples new transport ];
+				yourself)
+]
+
+{ #category : #'examples - actions' }
+GtLACPSessionRegistryExamples >> newSessionAction [
+	<gtExample>
+	| registry button scripter |
+	registry := self emptyRegistry.
+	self
+		assert: (registry sessionClients collect: #class)
+		equals: {GtLACPClaudeCodeClient.
+				GtLACPCodexClient}.
+	button := (registry gtNewSessionFor: GtPhlowAction noAction)
+			asElement: [ :anElement | anElement ]
+			withHostElement: nil.
+	scripter := BlScripter new
+			extent: 1000 @ 800;
+			model: registry;
+			element: (BrFrame new
+					matchParent;
+					addChild: button);
+			yourself.
+	scripter click
+		// BrButton;
+		play.
+	{GtLACPClaudeCodeClient.
+		GtLACPCodexClient}
+		do: [ :aClass | 
+			scripter assert
+				onSpaceRoot;
+				// aClass name;
+				exists;
+				play ].
+	^ scripter
+]
+
+{ #category : #private }
+GtLACPSessionRegistryExamples >> newSessionFromRegistryDropdownWith: aClient [
+	| registry button scripter |
+	registry := self emptyRegistry.
+	button := (GtPhlowAction noAction dropdown
+			label: 'New session';
+			menu: [ :aDropdown | registry newSessionDropdownFor: aDropdown clients: {aClient} ])
+			asElement: [ :anElement | anElement ]
+			withHostElement: nil.
+	scripter := BlScripter new
+			extent: 1000 @ 800;
+			model: registry;
+			element: (BrFrame new
+					matchParent;
+					addChild: button);
+			yourself.
+	scripter click
+		// BrButton;
+		play.
+	scripter click
+		onSpaceRoot;
+		// aClient class name;
+		play.
+	scripter assert
+		label: 'The nested picker starts in the image directory';
+		value: [ :aSelector | aSelector folder asFileReference fullName ]
+			equals: FileLocator imageDirectory asFileReference fullName;
+		onSpaceRoot;
+		// BrFileSelector;
+		play.
+	scripter do
+		action: [ :aList | aList selectOne: 1 ];
+		onSpaceRoot;
+		// BrFileSelector;
+		// BrColumnedList;
+		play.
+	scripter click
+		onSpaceRoot;
+		// #'acp-start-session-button';
+		play.
+	20 timesRepeat: [ registry hasSessions ifFalse: [ 100 milliSeconds wait ] ].
+	self assert: registry sessions size equals: 1.
+	self assert: registry lastSession client == aClient.
+	self assert: registry lastSession state equals: #ready.
+	self assert: registry lastSession directory isDirectory.
+	scripter pulseUntilReady.
+	scripter assert
+		onSpaceRoot;
+		// BrFileSelector;
+		notExists;
+		play.
+	^ scripter
+]
+
 { #category : #private }
 GtLACPSessionRegistryExamples >> newSessionIn: aRegistry [
 	^ aRegistry newSessionWithClient: self claudeClient in: FileLocator temp
+]
+
+{ #category : #'examples - actions' }
+GtLACPSessionRegistryExamples >> newSessionMenu [
+	<gtExample>
+	| registry menu |
+	registry := self emptyRegistry.
+	menu := registry
+			newSessionDropdownFor: BlElement new
+			clients: registry sessionClients.
+	self assert: (menu isKindOf: BrMenuItems).
+	self assert: menu items size equals: 2.
+	menu items
+		do: [ :anItem | 
+			self assert: (anItem isKindOf: BrMenuSubmenuItem).
+			self assert: (anItem submenu isKindOf: BrMenuExplicit) ].
+	^ menu
 ]
 
 { #category : #'examples - views' }
@@ -238,6 +357,55 @@ GtLACPSessionRegistryExamples >> removedSessionStaysOpen [
 	^ registry
 ]
 
+{ #category : #'examples - actions' }
+GtLACPSessionRegistryExamples >> resizableDirectoryPickerSubmenu [
+	<gtExample>
+	| scripter initialExtent |
+	scripter := self newSessionAction.
+	scripter click
+		onSpaceRoot;
+		// #GtLACPClaudeCodeClient;
+		play.
+	scripter do
+		label: 'Resize the directory submenu horizontally';
+		action: [ :aPicker | 
+			| aResizer |
+			initialExtent := aPicker extent.
+			aResizer := aPicker children
+					detect: [ :each | 
+						(each isKindOf: BrResizer)
+							and: [ each location isKindOf: BrResizerRightLocation ] ].
+			BlSpace simulateDragOn: aResizer by: (BlVector x: 80 y: 0) ];
+		onSpaceRoot;
+		// BrFileSelector;
+		play.
+	scripter pulseUntilReady.
+	scripter assert
+		value: [ :aPicker | aPicker extent ] equals: [ initialExtent + (80 @ 0) ];
+		onSpaceRoot;
+		// BrFileSelector;
+		play.
+	scripter do
+		label: 'Resize the directory submenu vertically';
+		action: [ :aPicker | 
+			| aResizer |
+			aResizer := aPicker children
+					detect: [ :each | 
+						(each isKindOf: BrResizer)
+							and: [ each location isKindOf: BrResizerBottomLocation ] ].
+			BlSpace simulateDragOn: aResizer by: (BlVector x: 0 y: 60) ];
+		onSpaceRoot;
+		// BrFileSelector;
+		play.
+	scripter pulseUntilReady.
+	scripter assert
+		value: [ :aPicker | aPicker extent ] equals: [ initialExtent + (80 @ 60) ];
+		onSpaceRoot;
+		// BrFileSelector;
+		play.
+	^ scripter
+]
+
 { #category : #private }
 GtLACPSessionRegistryExamples >> scripterOn: aRegistry view: aViewSelector [
 	| element |
@@ -250,6 +418,28 @@ GtLACPSessionRegistryExamples >> scripterOn: aRegistry view: aViewSelector [
 		extent: 1100 @ 700;
 		model: aRegistry;
 		element: element;
+		yourself
+]
+
+{ #category : #'examples - actions' }
+GtLACPSessionRegistryExamples >> sessionActionIcons [
+	<gtExample>
+	| registry addButton removeButton |
+	registry := self emptyRegistry.
+	addButton := (registry gtNewSessionFor: GtPhlowAction noAction)
+			asElement: [ :anElement | anElement ]
+			withHostElement: nil.
+	removeButton := (registry gtRemoveClosedSessionsFor: GtPhlowAction noAction)
+			asElement: [ :anElement | anElement ]
+			withHostElement: nil.
+	self assert: addButton icon notNil.
+	self assert: removeButton icon notNil.
+	self assert: addButton label asString equals: 'New session'.
+	self assert: removeButton label asString equals: 'Remove closed sessions'.
+	^ BrHorizontalPane new
+		fitContent;
+		addChildren: {addButton.
+				removeButton};
 		yourself
 ]
 
@@ -330,7 +520,7 @@ GtLACPSessionRegistryExamples >> sharedConnectionKeepsForwarding [
 	^ registry
 ]
 
-{ #category : #'examples - views' }
+{ #category : #'examples - actions' }
 GtLACPSessionRegistryExamples >> startSessionDropdownRegistersSession [
 	<gtExample>
 	| client button scripter registered |
@@ -350,9 +540,9 @@ GtLACPSessionRegistryExamples >> startSessionDropdownRegistersSession [
 		// BrButton;
 		play.
 	scripter assert
-		label: 'The picker starts in the home directory';
+		label: 'The picker starts in the image directory';
 		value: [ :aSelector | aSelector folder asFileReference fullName ]
-			equals: FileLocator home asFileReference fullName;
+			equals: FileLocator imageDirectory asFileReference fullName;
 		onSpaceRoot;
 		// BrFileSelector;
 		play.

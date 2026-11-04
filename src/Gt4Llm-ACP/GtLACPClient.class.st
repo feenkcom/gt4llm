@@ -98,23 +98,9 @@ GtLACPClient >> gtStartSessionFor: anAction [
 		label: 'Start session in directory';
 		priority: 1;
 		content: [ :aDropdown | 
-			BrFileSelector new
-				folder: FileLocator home;
-				hExact: 464;
-				vExact: 400;
-				padding: (BlInsets all: 10);
-				buttonLabel: 'Start session';
-				buttonId: #'acp-start-session-button';
-				fileFilterBlock: [ :aFile | aFile isDirectory ];
-				okAction: [ :aDirectory :anOkButton | 
-					anOkButton fireEvent: BrDropdownHideWish new.
-					[ | aSession |
-					aSession := GtLACPSessionRegistry current
-							newSessionWithClient: self
-							in: aDirectory.
-					aDropdown
-						enqueueTask: (BlTaskAction new action: [ aDropdown phlow spawnObject: aSession ]) ]
-						fork ] ]
+			self
+				newSessionDirectorySelectorFor: aDropdown
+				registry: GtLACPSessionRegistry current ]
 ]
 
 { #category : #actions }
@@ -145,6 +131,28 @@ GtLACPClient >> loadSession: anId in: aDirectory [
  aSession load: anId ]
  on: Error do: [ :ex | aConnection stop. ex pass ].
  ^ aSession
+]
+
+{ #category : #'private - interface' }
+GtLACPClient >> newSessionDirectorySelectorFor: aDropdown registry: aRegistry [
+	"Share the resizable directory picker between the client and registry actions."
+
+	^ BrFileSelector new
+		folder: FileLocator imageDirectory;
+		hExact: 464;
+		vExact: 400;
+		addAptitude: BrGlamorousPopoverResizableAptitude new;
+		padding: (BlInsets all: 10);
+		buttonLabel: 'Start session';
+		buttonId: #'acp-start-session-button';
+		fileFilterBlock: [ :aFile | aFile isDirectory ];
+		okAction: [ :aDirectory :anOkButton | 
+			anOkButton fireEvent: BrDropdownHideWish new.
+			[ | aSession |
+			aSession := aRegistry newSessionWithClient: self in: aDirectory.
+			aDropdown
+				enqueueTask: (BlTaskAction new action: [ aDropdown phlow spawnObject: aSession ]) ]
+				fork ]
 ]
 
 { #category : #sessions }

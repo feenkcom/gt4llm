@@ -71,6 +71,16 @@ GtLACPSessionRegistry >> gtConversationTreeFor: aView [
 ]
 
 { #category : #'gt - extensions' }
+GtLACPSessionRegistry >> gtNewSessionFor: anAction [
+	<gtAction>
+	^ anAction dropdown
+		icon: BrGlamorousIcons add;
+		label: 'New session';
+		priority: 1;
+		menu: [ :aDropdown | self newSessionDropdownFor: aDropdown clients: self sessionClients ]
+]
+
+{ #category : #'gt - extensions' }
 GtLACPSessionRegistry >> gtOverviewFor: aView [
 	<gtView>
 	^ aView columnedList
@@ -90,6 +100,7 @@ GtLACPSessionRegistry >> gtOverviewFor: aView [
 GtLACPSessionRegistry >> gtRemoveClosedSessionsFor: anAction [
 	<gtAction>
 	^ anAction button
+		icon: BrGlamorousIcons remove;
 		label: 'Remove closed sessions';
 		priority: 30;
 		action: [ self removeClosedSessions ]
@@ -181,6 +192,23 @@ GtLACPSessionRegistry >> newCodexSessionIn: aDirectory [
 	^ self newSessionWithClient: GtLACPCodexClient new in: aDirectory
 ]
 
+{ #category : #'private - interface' }
+GtLACPSessionRegistry >> newSessionDropdownFor: aDropdown clients: aCollection [
+	"Each client is a submenu containing the shared directory picker. Spawn from the outer action, which remains attached after the menus close."
+
+	| aMenu |
+	aMenu := BrMenuItems new.
+	aCollection
+		do: [ :aClient | 
+			aMenu
+				addItem: (BrMenuSubmenuItem new
+						id: aClient class name;
+						label: aClient displayName;
+						submenu: (BrMenuExplicit new
+								stencil: [ aClient newSessionDirectorySelectorFor: aDropdown registry: self ])) ].
+	^ aMenu
+]
+
 { #category : #'instance creation' }
 GtLACPSessionRegistry >> newSessionWithClient: aClient in: aDirectory [
 	^ self registerSession: (aClient startSessionIn: aDirectory)
@@ -228,6 +256,12 @@ GtLACPSessionRegistry >> removeSession: aSession [
 							ifFalse: [ aSession connection announcer unsubscribe: self ] ].
 				aRemovedSession ].
 	removedSession ifNotNil: [ self announceRemovedSession: removedSession ]
+]
+
+{ #category : #'private - interface' }
+GtLACPSessionRegistry >> sessionClients [
+	^ {GtLACPClaudeCodeClient new.
+		GtLACPCodexClient new}
 ]
 
 { #category : #accessing }
