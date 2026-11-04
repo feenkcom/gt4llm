@@ -1,20 +1,55 @@
-"
-I specialize GtPhlowChatTool for an ACP session. GtLACPSessionToolElement reuses the Phlow chat tool header, object-view tabs and embedded playground, with ACP-specific view collection and the ACP Session label.
-"
 Class {
 	#name : #GtLACPSessionTool,
-	#superclass : #GtPhlowChatTool,
+	#superclass : #GtPhlowTool,
+	#instVars : [
+		'session'
+	],
 	#category : #'Gt4Llm-ACP-UI'
 }
 
+{ #category : #'instance creation' }
+GtLACPSessionTool class >> forSession: aSession [
+	^ self new session: aSession
+]
+
 { #category : #converting }
 GtLACPSessionTool >> asElementDo: aBlock [
- | element |
- element := GtLACPSessionToolElement new chat: self chat.
- ^ aBlock cull: element cull: self
+	| element |
+	element := GtLACPSessionToolElement new chat: self session.
+	^ aBlock cull: element cull: self
+]
+
+{ #category : #converting }
+GtLACPSessionTool >> icon [
+	^ BrGlamorousVectorIcons chat
 ]
 
 { #category : #accessing }
 GtLACPSessionTool >> name [
 	^ 'ACP Session'
+]
+
+{ #category : #accessing }
+GtLACPSessionTool >> object [
+	^ self session
+]
+
+{ #category : #accessing }
+GtLACPSessionTool >> object: aSession [
+	self session: aSession
+]
+
+{ #category : #accessing }
+GtLACPSessionTool >> session [
+	^ session
+]
+
+{ #category : #accessing }
+GtLACPSessionTool >> session: aSession [
+	session := aSession
+]
+
+{ #category : #converting }
+GtLACPSessionTool >> tabLook [
+	^ BrGlamorousTabSwitcherWithIconAptitude
 ]

@@ -408,7 +408,8 @@ GtLACPWorkGraphExamples >> workGraphInSessionTool [
 	<gtExample>
 	| root element scripter |
 	root := self nestedWork session.
-	element := (GtLACPSessionTool forChat: root) asElementDo: [ :widget | widget ].
+	element := (GtLACPSessionTool forSession: root)
+			asElementDo: [ :widget | widget ].
 	scripter := BlScripter new
 			extent: 1400 @ 800;
 			model: root;

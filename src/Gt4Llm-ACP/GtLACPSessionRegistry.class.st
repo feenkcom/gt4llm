@@ -76,13 +76,11 @@ GtLACPSessionRegistry >> gtNewSessionFor: anAction [
 GtLACPSessionRegistry >> gtOverviewFor: aView [
 	<gtView>
 	^ aView columnedList
-		title: 'Overview';
+		title: 'By state';
 		priority: 30;
 		items: [ self sessionsByState ];
 		column: 'State' text: #key;
-		column: 'Sessions'
-			text: [ :anAssociation | anAssociation value size ]
-			width: 80;
+		column: 'Sessions' text: [ :anAssociation | anAssociation value size ];
 		send: [ :anAssociation | GtLACPSessionGroup withAll: anAssociation value ];
 		updateWhen: GtLACPSessionRegistryAnnouncement in: [ self announcer ];
 		actionUpdateButtonTooltip: 'Refresh overview'

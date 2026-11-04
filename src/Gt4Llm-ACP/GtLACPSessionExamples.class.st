@@ -1021,8 +1021,7 @@ GtLACPSessionExamples >> sessionInspectorTool [
 	<gtExample>
 	| session tool element |
 	session := GtLACPExamples new session.
-	tool := GtLACPSessionTool forChat: session.
-	self assert: (tool isKindOf: GtPhlowChatTool).
+	tool := GtLACPSessionTool forSession: session.
 	self assert: tool name equals: 'ACP Session'.
 	self assert: tool object == session.
 	element := tool asElementDo: [ :widget | widget ].
@@ -1046,7 +1045,8 @@ GtLACPSessionExamples >> sessionToolChildCannotCloseSession [
 	| root child element scripter |
 	root := GtLACPSubagentExamples new nestedConversations.
 	child := root childSessions first.
-	element := (GtLACPSessionTool forChat: child) asElementDo: [ :widget | widget ].
+	element := (GtLACPSessionTool forSession: child)
+			asElementDo: [ :widget | widget ].
 	scripter := BlScripter new
 			extent: 1100 @ 800;
 			model: child;
@@ -1065,7 +1065,8 @@ GtLACPSessionExamples >> sessionToolCloseAsksForConfirmation [
 	<gtExample>
 	| session element scripter |
 	session := GtLACPExamples new session.
-	element := (GtLACPSessionTool forChat: session) asElementDo: [ :widget | widget ].
+	element := (GtLACPSessionTool forSession: session)
+			asElementDo: [ :widget | widget ].
 	scripter := BlScripter new
 			extent: 1100 @ 800;
 			model: session;
@@ -1097,7 +1098,8 @@ GtLACPSessionExamples >> sessionToolClosePreservesOtherSessions [
 			newSessionIn: session directory
 			connection: session connection.
 	other create.
-	element := (GtLACPSessionTool forChat: session) asElementDo: [ :widget | widget ].
+	element := (GtLACPSessionTool forSession: session)
+			asElementDo: [ :widget | widget ].
 	scripter := BlScripter new
 			extent: 1100 @ 800;
 			model: session;
@@ -1142,7 +1144,7 @@ GtLACPSessionExamples >> sessionToolForClosedSessionHidesCloseAction [
 	<gtExample>
 	| session element scripter |
 	session := GtLACPExamples new closedSession.
-	element := (GtLACPSessionTool forChat: session)
+	element := (GtLACPSessionTool forSession: session)
 			asElementDo: [ :widget | widget ].
 	scripter := BlScripter new
 			extent: 1100 @ 800;
@@ -1160,7 +1162,8 @@ GtLACPSessionExamples >> sessionToolHeaderFollowsConversationTitle [
 	<gtExample>
 	| session element scripter |
 	session := GtLACPExamples new session.
-	element := (GtLACPSessionTool forChat: session) asElementDo: [ :widget | widget ].
+	element := (GtLACPSessionTool forSession: session)
+			asElementDo: [ :widget | widget ].
 	scripter := BlScripter new
 			extent: 1100 @ 800;
 			model: session;
@@ -1194,7 +1197,8 @@ GtLACPSessionExamples >> sessionToolHeaderKeepsSessionActionsVisibleForLongTitle
 				at: 'sessionUpdate' put: 'session_info_update';
 				at: 'title' put: (String new: 400 withAll: $x);
 				yourself).
-	element := (GtLACPSessionTool forChat: session) asElementDo: [ :widget | widget ].
+	element := (GtLACPSessionTool forSession: session)
+			asElementDo: [ :widget | widget ].
 	scripter := BlScripter new
 			extent: 600 @ 400;
 			model: session;
@@ -1234,7 +1238,7 @@ GtLACPSessionExamples >> sessionToolHeaderShowsConversationTitle [
 	| session element scripter |
 	session := GtLACPExamples new session.
 	self assert: session header equals: session conversationTitle.
-	element := (GtLACPSessionTool forChat: session)
+	element := (GtLACPSessionTool forSession: session)
 			asElementDo: [ :widget | widget ].
 	scripter := BlScripter new
 			extent: 1100 @ 800;
@@ -1261,7 +1265,8 @@ GtLACPSessionExamples >> sessionToolHeaderShowsSessionState [
 	<gtExample>
 	| session element scripter |
 	session := GtLACPExamples new session.
-	element := (GtLACPSessionTool forChat: session) asElementDo: [ :widget | widget ].
+	element := (GtLACPSessionTool forSession: session)
+			asElementDo: [ :widget | widget ].
 	scripter := BlScripter new
 			extent: 1100 @ 800;
 			model: session;
@@ -1295,7 +1300,8 @@ GtLACPSessionExamples >> sessionToolHeaderStateFollowsSession [
 	<gtExample>
 	| session element scripter |
 	session := GtLACPExamples new session.
-	element := (GtLACPSessionTool forChat: session) asElementDo: [ :widget | widget ].
+	element := (GtLACPSessionTool forSession: session)
+			asElementDo: [ :widget | widget ].
 	scripter := BlScripter new
 			extent: 1100 @ 800;
 			model: session;
@@ -1317,7 +1323,7 @@ GtLACPSessionExamples >> sessionToolReflectsExternalClose [
 	<gtExample>
 	| session element scripter |
 	session := GtLACPExamples new session.
-	element := (GtLACPSessionTool forChat: session)
+	element := (GtLACPSessionTool forSession: session)
 			asElementDo: [ :widget | widget ].
 	scripter := BlScripter new
 			extent: 1100 @ 800;
@@ -1347,7 +1353,8 @@ GtLACPSessionExamples >> sessionToolRenameFormAsksForTitle [
 	<gtExample>
 	| session element scripter form |
 	session := GtLACPExamples new session.
-	element := (GtLACPSessionTool forChat: session) asElementDo: [ :widget | widget ].
+	element := (GtLACPSessionTool forSession: session)
+			asElementDo: [ :widget | widget ].
 	scripter := BlScripter new
 			extent: 1100 @ 800;
 			model: session;
@@ -1475,7 +1482,7 @@ GtLACPSessionExamples >> sessionToolWithViews [
 	<gtExample>
 	| session element scripter |
 	session := self chatWithToolCalls viewModel session.
-	element := (GtLACPSessionTool forChat: session)
+	element := (GtLACPSessionTool forSession: session)
 			asElementDo: [ :widget | widget ].
 	scripter := BlScripter new
 			extent: 1100 @ 800;

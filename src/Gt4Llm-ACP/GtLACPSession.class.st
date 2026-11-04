@@ -414,12 +414,12 @@ GtLACPSession >> gtConversationTreeFor: aView [
 		view: #gtConversationTreeFor:
 ]
 
-{ #category : #ui }
+{ #category : #'gt - extensions' }
 GtLACPSession >> gtDefaultInspectorTool [
- ^ GtPhlowCompositeTool new
-  addTool: (GtLACPSessionTool forChat: self);
-  addTool: super gtDefaultInspectorTool;
-  name: 'ACP: ', client gtDisplayString
+	^ GtPhlowCompositeTool new
+		addTool: (GtLACPSessionTool forSession: self);
+		addTool: super gtDefaultInspectorTool;
+		name: 'ACP: ' , client gtDisplayString
 ]
 
 { #category : #'gt - actions' }

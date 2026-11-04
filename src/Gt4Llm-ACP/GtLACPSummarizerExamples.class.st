@@ -266,7 +266,8 @@ GtLACPSummarizerExamples >> refreshPreservesChat [
 	| session element scripter chat input tool |
 	session := self sessionWithSummaries.
 	tool := session mcpToolMessages first toolCall tool.
-	element := (GtLACPSessionTool forChat: session) asElementDo: [ :widget | widget ].
+	element := (GtLACPSessionTool forSession: session)
+			asElementDo: [ :widget | widget ].
 	scripter := BlScripter new
 			extent: 1100 @ 800;
 			model: session;
@@ -424,18 +425,34 @@ GtLACPSummarizerExamples >> sessionWithSummaries [
 
 { #category : #examples }
 GtLACPSummarizerExamples >> summariesDisplayed [
- <gtExample>
- | session element scripter |
- session := self sessionWithSummaries.
- element := (GtLACPSessionTool forChat: session) asElementDo: [ :widget | widget ].
- scripter := BlScripter new extent: 1100 @ 800; model: session; element: element; yourself.
- scripter assertStep: [ :step | step id: #'acp-input'; exists ].
- scripter clickStep: [ :step |
-  step // BrTabGroup; // #tabbar;
-   onChildFromBlock: [ :bar | bar children detect: [ :tab | tab label asString = 'Grouped tools' ] ] ].
- scripter assertStep: [ :step | step onPhlowCellWithString: 'lookupClass'; exists ].
- GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
- ^ scripter
+	<gtExample>
+	| session element scripter |
+	session := self sessionWithSummaries.
+	element := (GtLACPSessionTool forSession: session)
+			asElementDo: [ :widget | widget ].
+	scripter := BlScripter new
+			extent: 1100 @ 800;
+			model: session;
+			element: element;
+			yourself.
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-input';
+				exists ].
+	scripter
+		clickStep: [ :step | 
+			step
+				// BrTabGroup;
+				// #tabbar;
+				onChildFromBlock: [ :bar | bar children detect: [ :tab | tab label asString = 'Grouped tools' ] ] ].
+	scripter
+		assertStep: [ :step | 
+			step
+				onPhlowCellWithString: 'lookupClass';
+				exists ].
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
+	^ scripter
 ]
 
 { #category : #examples }
