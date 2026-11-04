@@ -290,6 +290,13 @@ GtLACPSession >> conversationTitle [
 		ifNil: [ client ifNil: [ 'ACP chat' ] ifNotNil: [ client displayName ] ]
 ]
 
+{ #category : #accessing }
+GtLACPSession >> conversationTitle: aString [
+	self requireRootSession.
+	conversationTitle := aString.
+	self announceMessageChanged: nil
+]
+
 { #category : #lifecycle }
 GtLACPSession >> create [
 	| result |
@@ -446,6 +453,23 @@ GtLACPSession >> gtRefreshSummarizersFor: anAction [
   icon: BrGlamorousVectorIcons refresh;
   tooltip: 'Refresh tool call summaries';
   action: [ self updateToolSummarizers ]
+]
+
+{ #category : #actions }
+GtLACPSession >> gtRenameFor: anAction [
+	<gtAction>
+	self canClose ifFalse: [ ^ anAction noAction ].
+	^ anAction dropdown
+		id: #'acp-rename-session';
+		label: 'Rename session';
+		priority: 40;
+		target: GtLACPSessionActionTarget;
+		menuItemGroup: BrMenuItemGroupConfiguration editing;
+		content: [ :anActionElement :aTargetElement :anExplicitMenu | 
+			GtLACPRenameSessionForm new
+				session: self;
+				menuModel: anExplicitMenu;
+				asElement ]
 ]
 
 { #category : #actions }

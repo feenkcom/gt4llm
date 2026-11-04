@@ -481,6 +481,87 @@ GtLACPChatExamples >> chatToolReflectsExternalClose [
 ]
 
 { #category : #examples }
+GtLACPChatExamples >> chatToolRenameFormAsksForTitle [
+	<gtExample>
+	| session element scripter form |
+	session := GtLACPExamples new session.
+	element := (GtLACPChatTool forChat: session) asElementDo: [ :widget | widget ].
+	scripter := BlScripter new
+			extent: 1100 @ 800;
+			model: session;
+			element: element;
+			yourself.
+	self openRenameFormIn: scripter.
+	form := GtLACPRenameSessionForm new
+			session: session;
+			yourself.
+	scripter assert
+		exists;
+		onSpaceRoot;
+		// #'acp-rename-session-form';
+		play.
+	scripter
+		assertStep: [ :step | 
+			step
+				label: 'Accept stays disabled until the title changes';
+				onSpaceRoot;
+				// (GtMagritteActionElementId new description: form magritteAcceptAction);
+				value: [ :button | button isEnabled ] equals: [ false ] ].
+	scripter
+		assertStep: [ :step | 
+			step
+				label: 'The form has no cancel button';
+				onSpaceRoot;
+				value: [ :root | 
+						(root query
+							// (GtMagritteActionElementId new description: Object new magritteCancelAction))
+							result size ]
+					equals: [ 0 ] ].
+	self assert: session conversationTitle equals: 'Codex'.
+	self assertNoRenderingErrorsIn: scripter.
+	^ scripter
+]
+
+{ #category : #examples }
+GtLACPChatExamples >> chatToolRenamesSession [
+	<gtExample>
+	| scripter session form field |
+	scripter := self chatToolRenameFormAsksForTitle.
+	session := scripter model.
+	form := GtLACPRenameSessionForm new
+			session: session;
+			yourself.
+	field := GtMagritteFieldElementId new description: form titleDescription.
+	scripter requestFocus
+		onSpaceRoot;
+		// field;
+		play.
+	scripter
+		typeStep: [ :step | 
+			step
+				text: ' renamed';
+				onSpaceRoot;
+				// field ].
+	scripter click
+		onSpaceRoot;
+		// (GtMagritteActionElementId new description: form magritteAcceptAction);
+		play.
+	scripter pulseUntilReady.
+	scripter menuStep
+		assertClosedMenuContainer;
+		play.
+	self assert: (session conversationTitle includesSubstring: 'renamed').
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #titleLabel;
+				value: [ :label | label text asString ]
+					equals: [ session conversationTitle ] ].
+	self assertNoRenderingErrorsIn: scripter.
+	^ scripter
+]
+
+{ #category : #examples }
 GtLACPChatExamples >> chatToolViewSwitching [
 	<gtExample>
 	| scripter |
@@ -1156,6 +1237,18 @@ GtLACPChatExamples >> openCloseConfirmationIn: aScripter [
 ]
 
 { #category : #examples }
+GtLACPChatExamples >> openRenameFormIn: aScripter [
+	aScripter menuStep
+		openDropdownWithId: #'acp-session-actions';
+		assertMenuContainerExist;
+		play.
+	aScripter menuStep
+		hoverMenuItemWithId: #'acp-rename-session';
+		onPopover;
+		play
+]
+
+{ #category : #examples }
 GtLACPChatExamples >> permissionButtons [
  <gtExample>
  | element scripter permission |
@@ -1371,6 +1464,8 @@ GtLACPChatExamples >> sessionActionsMenuCollectsTargetedActions [
 			collect: [ :each | each definingMethod selector ] ].
 	self
 		assert: ((selectorsFor value: GtLACPSessionActionTarget) includes: #gtCloseFor:).
+	self
+		assert: ((selectorsFor value: GtLACPSessionActionTarget) includes: #gtRenameFor:).
 	self
 		assert: ((selectorsFor value: GtPhlowObjectActionTarget) includes: #gtCloseFor:).
 	^ session
