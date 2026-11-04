@@ -65,6 +65,43 @@ GtLACPExamples >> codexClient [
 ]
 
 { #category : #examples }
+GtLACPExamples >> configurableMcpServer [
+	<gtExample>
+	| previousServer server session call message |
+	previousServer := GtLACPSession mcpServer.
+	server := GtLMcpServer new.
+	session := GtLACPSession new.
+	call := GtLACPToolCall new
+			data: {'toolCallId' -> 'acp-configured-server-example'} asDictionary;
+			yourself.
+	message := GtLToolMessage new
+			toolCall: (GtLFunctionToolCall new
+					id: call id;
+					name: 'example';
+					yourself);
+			yourself.
+	server privateAddToolMessage: message.
+	[ GtLACPSession mcpServer: nil.
+	self assert: GtLACPSession mcpServer == GtLMcpServer current.
+	GtLACPSession mcpServer: server.
+	self assert: GtLACPSession mcpServer == server.
+	self assert: session objectStorage == server objectStorage.
+	self assert: (session mcpToolMessagesFor: {call}) size equals: 1.
+	self assert: (session mcpToolMessagesFor: {call}) first == message.
+	self
+		assert: (call withMcpToolCallIfPresent: [ :each | each ] ifAbsent: [ nil ]) == message.
+	GtLACPSession mcpServer: GtLMcpServer new.
+	self assert: (session mcpToolMessagesFor: {call}) isEmpty.
+	self
+		assert: (call withMcpToolCallIfPresent: [ :each | each ] ifAbsent: [ #absent ])
+		equals: #absent.
+	GtLACPSession mcpServer: nil.
+	self assert: GtLACPSession mcpServer == GtLMcpServer current ]
+		ensure: [ GtLACPSession mcpServer: previousServer ].
+	^ session
+]
+
+{ #category : #examples }
 GtLACPExamples >> connectionHistory [
  <gtExample>
  | permission session connection entries |

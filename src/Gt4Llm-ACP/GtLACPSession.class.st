@@ -23,8 +23,23 @@ Class {
 		'conversationTitle',
 		'availableCommands'
 	],
+	#classVars : [
+		'McpServer'
+	],
 	#category : #'Gt4Llm-ACP-Core'
 }
+
+{ #category : #accessing }
+GtLACPSession class >> mcpServer [
+	^ McpServer ifNil: [ GtLMcpServer current ]
+]
+
+{ #category : #accessing }
+GtLACPSession class >> mcpServer: aServer [
+	"Use this MCP server instance. Pass nil to use the current default server."
+
+	McpServer := aServer
+]
 
 { #category : #accessing }
 GtLACPSession >> allToolCalls [
@@ -569,11 +584,11 @@ GtLACPSession >> mcpToolMessages [
  ^ self mcpToolMessagesFor: self allToolCalls
 ]
 
-{ #category : #summaries }
+{ #category : #accessing }
 GtLACPSession >> mcpToolMessagesFor: toolCalls [
- ^ self isSubagent
-  ifTrue: [ parentSubagent parentSession mcpToolMessagesFor: toolCalls ]
-  ifFalse: [ self mcpToolMessagesFor: toolCalls in: GtLMcpServer current ]
+	^ self isSubagent
+		ifTrue: [ parentSubagent parentSession mcpToolMessagesFor: toolCalls ]
+		ifFalse: [ self mcpToolMessagesFor: toolCalls in: self class mcpServer ]
 ]
 
 { #category : #summaries }
@@ -618,9 +633,9 @@ GtLACPSession >> newObservedTurn [
 
 { #category : #accessing }
 GtLACPSession >> objectStorage [
- ^ self isSubagent
-  ifTrue: [ parentSubagent parentSession objectStorage ]
-  ifFalse: [ GtLMcpServer current ifNotNil: #objectStorage ]
+	^ self isSubagent
+		ifTrue: [ parentSubagent parentSession objectStorage ]
+		ifFalse: [ self class mcpServer ifNotNil: #objectStorage ]
 ]
 
 { #category : #accessing }

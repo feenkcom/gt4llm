@@ -160,9 +160,9 @@ GtLACPToolCall >> updateFrom: aDictionary [
 
 { #category : #accessing }
 GtLACPToolCall >> withMcpToolCallIfPresent: aPresentBlock ifAbsent: anAbsentBlock [
- ^ (self mcpToolMessageIn: GtLMcpServer current)
-  ifNotNil: aPresentBlock
-  ifNil: anAbsentBlock
+	^ (self mcpToolMessageIn: GtLACPSession mcpServer)
+		ifNotNil: aPresentBlock
+		ifNil: anAbsentBlock
 ]
 
 { #category : #accessing }
