@@ -120,37 +120,7 @@ GtLACPSessionRegistry >> gtSessionsFor: aView [
 			text: [ :aSession | aSession client displayName ]
 			width: 110;
 		column: 'State'
-			stencil: [ :aSession | 
-				| aState aColor aMarker |
-				aState := aSession state.
-				aColor := BrGlamorousColors neutralBackgroundColor.
-				aState = #ready
-					ifTrue: [ aColor := BrGlamorousColors successBackgroundColor ].
-				aState = #prompting ifTrue: [ aColor := Color fromHexString: '1976D2' ].
-				(#(#starting #loading #disconnected) includes: aState)
-					ifTrue: [ aColor := BrGlamorousColors failureBackgroundColor ].
-				aState = #failed
-					ifTrue: [ aColor := BrGlamorousColors errorBackgroundColor ].
-				aMarker := BlElement new
-						id: #'acp-session-state-marker';
-						size: 8 @ 8;
-						geometry: BlCircleGeometry new;
-						background: ((#(new observing disconnected) includes: aState)
-								ifTrue: [ Color transparent ]
-								ifFalse: [ aColor ]);
-						border: (BlBorder paint: aColor width: 1.5);
-						constraintsDo: [ :c | c linear vertical alignCenter ];
-						yourself.
-				BrHorizontalPane new
-					fitContent;
-					alignCenterLeft;
-					cellSpacing: 6;
-					addChild: aMarker;
-					addChild: (BrLabel new
-							aptitude: BrGlamorousLabelAptitude;
-							text: aState asString;
-							yourself);
-					yourself ]
+			stencil: [ :aSession | GtLACPSessionStateElement new session: aSession ]
 			width: 120;
 		column: 'Turns'
 			text: [ :aSession | aSession turns size ]

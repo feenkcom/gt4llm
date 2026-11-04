@@ -346,13 +346,26 @@ GtLACPChatExamples >> chatToolHeaderKeepsSessionActionsVisibleForLongTitle [
 		assertStep: [ :step | 
 			step
 				id: #toolbar;
-				value: [ :toolbar | toolbar bounds inParent bounds right <= toolbar parent width ]
+				value: [ :toolbar | toolbar bounds inParent right <= toolbar parent width ]
 					equals: [ true ] ].
 	scripter
 		assertStep: [ :step | 
 			step
 				id: #'acp-session-actions';
 				exists ].
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #sessionState;
+				value: [ :state | 
+						state bounds inParent right
+							<= (state parent childNamed: #toolbar) bounds inParent left ]
+					equals: [ true ] ].
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #sessionState;
+				value: [ :state | state width > 30 ] equals: [ true ] ].
 	self assertNoRenderingErrorsIn: scripter.
 	^ scripter
 ]
@@ -380,6 +393,62 @@ GtLACPChatExamples >> chatToolHeaderShowsConversationTitle [
 				id: #titleLabel;
 				value: [ :label | label text asString ]
 					equals: [ session conversationTitle ] ].
+	self assertNoRenderingErrorsIn: scripter.
+	^ scripter
+]
+
+{ #category : #examples }
+GtLACPChatExamples >> chatToolHeaderShowsSessionState [
+	<gtExample>
+	| session element scripter |
+	session := GtLACPExamples new session.
+	element := (GtLACPChatTool forChat: session) asElementDo: [ :widget | widget ].
+	scripter := BlScripter new
+			extent: 1100 @ 800;
+			model: session;
+			element: element;
+			yourself.
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-session-state-label';
+				value: [ :label | label text asString ] equals: [ 'ready' ] ].
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-session-state-label';
+				value: [ :label | label parent id asSymbol ]
+					equals: [ #'acp-session-state-marker' ] ].
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #sessionState;
+				value: [ :state | 
+						state bounds inParent left
+							- (state parent childNamed: #titleLabel) bounds inParent right < 30 ]
+					equals: [ true ] ].
+	self assertNoRenderingErrorsIn: scripter.
+	^ scripter
+]
+
+{ #category : #examples }
+GtLACPChatExamples >> chatToolHeaderStateFollowsSession [
+	<gtExample>
+	| session element scripter |
+	session := GtLACPExamples new session.
+	element := (GtLACPChatTool forChat: session) asElementDo: [ :widget | widget ].
+	scripter := BlScripter new
+			extent: 1100 @ 800;
+			model: session;
+			element: element;
+			yourself.
+	scripter doStep: [ :step | step block: [ session close ] ].
+	scripter pulseUntilReady.
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-session-state-label';
+				value: [ :label | label text asString ] equals: [ 'closed' ] ].
 	self assertNoRenderingErrorsIn: scripter.
 	^ scripter
 ]

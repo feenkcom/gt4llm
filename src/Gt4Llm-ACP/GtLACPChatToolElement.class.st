@@ -20,6 +20,13 @@ GtLACPChatToolElement >> buildHeaderElement [
 ]
 
 { #category : #building }
+GtLACPChatToolElement >> buildStateElement [
+	^ GtLACPSessionStateElement new
+		margin: (BlInsets left: 10 right: 10);
+		yourself
+]
+
+{ #category : #building }
 GtLACPChatToolElement >> buildTitleContainer [
 	titleLabel := self buildTitleLabel.
 	toolbarElement := self buildToolbar.
@@ -28,6 +35,11 @@ GtLACPChatToolElement >> buildTitleContainer [
 		vFitContent;
 		alignCenterLeft;
 		addChild: titleLabel as: #titleLabel;
+		addChild: self buildStateElement as: #sessionState;
+		addChild: (BrFrame new
+				hMatchParent;
+				vExact: 0;
+				yourself);
 		addChild: toolbarElement as: #toolbar;
 		yourself
 ]
@@ -38,7 +50,7 @@ GtLACPChatToolElement >> buildTitleLabel [
 		aptitude: (BrGlamorousLabelAptitude new
 				bold;
 				fontSize: 18);
-		hMatchParent;
+		hFitContentLimited;
 		text: ''
 ]
 
@@ -63,6 +75,7 @@ GtLACPChatToolElement >> chat: aSession [
 				when: GtLACPSessionChanged
 				send: #onSessionChanged:
 				to: self ].
+	self stateElement session: aSession.
 	self updateHeader
 ]
 
@@ -111,6 +124,11 @@ GtLACPChatToolElement >> initialize [
 { #category : #events }
 GtLACPChatToolElement >> onSessionChanged: anAnnouncement [
 	BlTaskAction enqueueElement: self action: [ headerUpdater requestUpdate ]
+]
+
+{ #category : #accessing }
+GtLACPChatToolElement >> stateElement [
+	^ self childNamed: #sessionState
 ]
 
 { #category : #updating }
