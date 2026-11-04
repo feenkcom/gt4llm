@@ -417,7 +417,7 @@ GtLACPSession >> gtConversationTreeFor: aView [
 { #category : #ui }
 GtLACPSession >> gtDefaultInspectorTool [
  ^ GtPhlowCompositeTool new
-  addTool: (GtLACPChatTool forChat: self);
+  addTool: (GtLACPSessionTool forChat: self);
   addTool: super gtDefaultInspectorTool;
   name: 'ACP: ', client gtDisplayString
 ]

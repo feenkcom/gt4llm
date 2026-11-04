@@ -15,7 +15,7 @@ GtLACPAdapterExamples >> adapterViews [
 	{configuration.
 		configuration adapter.
 		GtLACPNpmAdapter package: '@agentclientprotocol/claude-agent-acp'}
-		do: [ :object | GtLACPChatExamples new assertObjectPhlowViewsFor: object ].
+		do: [ :object | GtLACPSessionExamples new assertObjectPhlowViewsFor: object ].
 	^ configuration
 ]
 
@@ -127,7 +127,7 @@ GtLACPAdapterExamples >> pythonLaunchDisplayed [
 			step
 				onPhlowCellWithString: 'Claude Code (Python)';
 				exists ].
-	GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
 	^ scripter
 ]
 

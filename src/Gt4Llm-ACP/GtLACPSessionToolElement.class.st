@@ -2,7 +2,7 @@
 I present an ACP session using the Phlow chat tool structure: a header with the tool label, the session header as title and a toolbar with the session's <gtToolAction> actions, collected object views in tabs, and a collapsed playground. I specialize the ACP view collection and omit GtLChat-specific object storage and summarizer integration.
 "
 Class {
-	#name : #GtLACPChatToolElement,
+	#name : #GtLACPSessionToolElement,
 	#superclass : #GtPhlowChatToolElement,
 	#instVars : [
 		'titleLabel',
@@ -13,21 +13,21 @@ Class {
 }
 
 { #category : #building }
-GtLACPChatToolElement >> buildHeaderElement [
+GtLACPSessionToolElement >> buildHeaderElement [
 	^ super buildHeaderElement
 		addChild: self buildTitleContainer as: #titleContainer;
 		yourself
 ]
 
 { #category : #building }
-GtLACPChatToolElement >> buildStateElement [
+GtLACPSessionToolElement >> buildStateElement [
 	^ GtLACPSessionStateElement new
 		margin: (BlInsets left: 10 right: 10);
 		yourself
 ]
 
 { #category : #building }
-GtLACPChatToolElement >> buildTitleContainer [
+GtLACPSessionToolElement >> buildTitleContainer [
 	titleLabel := self buildTitleLabel.
 	toolbarElement := self buildToolbar.
 	^ BrHorizontalPane new
@@ -45,7 +45,7 @@ GtLACPChatToolElement >> buildTitleContainer [
 ]
 
 { #category : #building }
-GtLACPChatToolElement >> buildTitleLabel [
+GtLACPSessionToolElement >> buildTitleLabel [
 	^ BrLabel new
 		aptitude: (BrGlamorousLabelAptitude new
 				bold;
@@ -55,19 +55,19 @@ GtLACPChatToolElement >> buildTitleLabel [
 ]
 
 { #category : #initialization }
-GtLACPChatToolElement >> buildToolLabel [
+GtLACPSessionToolElement >> buildToolLabel [
  ^ super buildToolLabel text: 'ACP Chat'; yourself
 ]
 
 { #category : #building }
-GtLACPChatToolElement >> buildToolbar [
+GtLACPSessionToolElement >> buildToolbar [
 	^ BrToolbar new
 		aptitude: BrGlamorousToolbarAptitude new;
 		fitContent
 ]
 
 { #category : #accessing }
-GtLACPChatToolElement >> chat: aSession [
+GtLACPSessionToolElement >> chat: aSession [
 	chat ifNotNil: [ chat announcer unsubscribe: self ].
 	super chat: aSession.
 	aSession
@@ -80,7 +80,7 @@ GtLACPChatToolElement >> chat: aSession [
 ]
 
 { #category : #updating }
-GtLACPChatToolElement >> collectToolActions [
+GtLACPSessionToolElement >> collectToolActions [
 	chat ifNil: [ ^ #() ].
 	^ GtPhlowActionsCollector new
 		pragmaName: #gtToolAction;
@@ -90,7 +90,7 @@ GtLACPChatToolElement >> collectToolActions [
 ]
 
 { #category : #views }
-GtLACPChatToolElement >> collectToolViews [
+GtLACPSessionToolElement >> collectToolViews [
  | views context |
  context := self chat phlowContext.
  views := (GtPhlowViewsCollector new
@@ -104,12 +104,12 @@ GtLACPChatToolElement >> collectToolViews [
 ]
 
 { #category : #views }
-GtLACPChatToolElement >> gtInspectorTargetModels [
+GtLACPSessionToolElement >> gtInspectorTargetModels [
  ^ { self chat }, self chat gtInspectorTargetModels
 ]
 
 { #category : #initialization }
-GtLACPChatToolElement >> initialize [
+GtLACPSessionToolElement >> initialize [
 	super initialize.
 	headerUpdater := BrElementUpdater new
 			element: self selector: #updateHeader;
@@ -122,17 +122,17 @@ GtLACPChatToolElement >> initialize [
 ]
 
 { #category : #events }
-GtLACPChatToolElement >> onSessionChanged: anAnnouncement [
+GtLACPSessionToolElement >> onSessionChanged: anAnnouncement [
 	BlTaskAction enqueueElement: self action: [ headerUpdater requestUpdate ]
 ]
 
 { #category : #accessing }
-GtLACPChatToolElement >> stateElement [
+GtLACPSessionToolElement >> stateElement [
 	^ self childNamed: #sessionState
 ]
 
 { #category : #updating }
-GtLACPChatToolElement >> updateContainedViews [
+GtLACPSessionToolElement >> updateContainedViews [
  | compositeView tabGroup listener |
  self chat ifNil: [
   self viewsContainerElement removeChildren.
@@ -149,18 +149,18 @@ GtLACPChatToolElement >> updateContainedViews [
 ]
 
 { #category : #updating }
-GtLACPChatToolElement >> updateHeader [
+GtLACPSessionToolElement >> updateHeader [
 	self updateTitle.
 	self updateToolbarActions
 ]
 
 { #category : #updating }
-GtLACPChatToolElement >> updateTitle [
+GtLACPSessionToolElement >> updateTitle [
 	titleLabel text: (chat ifNil: [ '' ] ifNotNil: #header) asRopedText
 ]
 
 { #category : #updating }
-GtLACPChatToolElement >> updateToolbarActions [
+GtLACPSessionToolElement >> updateToolbarActions [
 	| actions |
 	actions := self collectToolActions.
 	toolbarElement numberOfItems = actions size ifTrue: [ ^ self ].

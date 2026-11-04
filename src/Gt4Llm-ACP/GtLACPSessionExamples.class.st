@@ -2,13 +2,34 @@
 Executable ACP chat examples, including BlScripter tests for typing, sending, cancellation, keyboard shortcuts, automatic streamed text updates, permission choices and draft preservation on failure.
 "
 Class {
-	#name : #GtLACPChatExamples,
+	#name : #GtLACPSessionExamples,
 	#superclass : #Object,
 	#category : #'Gt4Llm-ACP-Examples'
 }
 
 { #category : #assertions }
-GtLACPChatExamples >> assertNoRenderingErrorsIn: aScripter [
+GtLACPSessionExamples >> assertCloseActionUnavailableIn: aScripter [
+	"The session menu remains available even when this session cannot be closed."
+
+	aScripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-session-actions';
+				exists ].
+	aScripter menuStep
+		openDropdownWithId: #'acp-session-actions';
+		assertMenuContainerExist;
+		play.
+	aScripter
+		assertStep: [ :step | 
+			step
+				onSpaceRoot;
+				// #'acp-close-session';
+				notExists ]
+]
+
+{ #category : #assertions }
+GtLACPSessionExamples >> assertNoRenderingErrorsIn: aScripter [
  aScripter assertStep: [ :step |
   step label: 'No rendering errors in the inspector or its children';
    value: [ :root |
@@ -21,7 +42,7 @@ GtLACPChatExamples >> assertNoRenderingErrorsIn: aScripter [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> assistantHeaderIndicatorDuringStreamingAndCancellation [
+GtLACPSessionExamples >> assistantHeaderIndicatorDuringStreamingAndCancellation [
  <gtExample>
  | scripter session |
  scripter := self workingAssistantHeader.
@@ -44,7 +65,7 @@ GtLACPChatExamples >> assistantHeaderIndicatorDuringStreamingAndCancellation [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> assistantHeaderIndicatorStopsOnCompletion [
+GtLACPSessionExamples >> assistantHeaderIndicatorStopsOnCompletion [
  <gtExample>
  | scripter session |
  scripter := self workingAssistantHeader.
@@ -61,7 +82,7 @@ GtLACPChatExamples >> assistantHeaderIndicatorStopsOnCompletion [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> assistantMessageElement [
+GtLACPSessionExamples >> assistantMessageElement [
  <gtExample>
  | turn message element |
  turn := GtLACPExamples new streamedTurn.
@@ -75,7 +96,7 @@ GtLACPChatExamples >> assistantMessageElement [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> assistantSectionChoicesSurviveMessageUpdates [
+GtLACPSessionExamples >> assistantSectionChoicesSurviveMessageUpdates [
 	<gtExample>
 	| element session scripter |
 	element := self completedChat.
@@ -127,7 +148,7 @@ GtLACPChatExamples >> assistantSectionChoicesSurviveMessageUpdates [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> assistantSectionsCollapseIndependently [
+GtLACPSessionExamples >> assistantSectionsCollapseIndependently [
  <gtExample>
  | element scripter |
  element := self reasoningBetweenToolCalls.
@@ -149,15 +170,15 @@ GtLACPChatExamples >> assistantSectionsCollapseIndependently [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> chatInspectorTool [
+GtLACPSessionExamples >> chatInspectorTool [
 	<gtExample>
 	| session tool element |
 	session := GtLACPExamples new session.
-	tool := GtLACPChatTool forChat: session.
+	tool := GtLACPSessionTool forChat: session.
 	self assert: (tool isKindOf: GtPhlowChatTool).
 	self assert: tool object == session.
 	element := tool asElementDo: [ :widget | widget ].
-	self assert: (element isKindOf: GtLACPChatToolElement).
+	self assert: (element isKindOf: GtLACPSessionToolElement).
 	self assert: element chat == session.
 	self
 		assert: ((element childNamed: #header) childNamed: #toolLabel) text asString
@@ -172,23 +193,19 @@ GtLACPChatExamples >> chatInspectorTool [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> chatToolChildCannotCloseSession [
+GtLACPSessionExamples >> chatToolChildCannotCloseSession [
 	<gtExample>
 	| root child element scripter |
 	root := GtLACPSubagentExamples new nestedConversations.
 	child := root childSessions first.
-	element := (GtLACPChatTool forChat: child) asElementDo: [ :widget | widget ].
+	element := (GtLACPSessionTool forChat: child) asElementDo: [ :widget | widget ].
 	scripter := BlScripter new
 			extent: 1100 @ 800;
 			model: child;
 			element: element;
 			yourself.
 	self assert: child canClose not.
-	scripter
-		assertStep: [ :step | 
-			step
-				id: #'acp-session-actions';
-				notExists ].
+	self assertCloseActionUnavailableIn: scripter.
 	self assert: root state equals: #ready.
 	self assert: root connection state equals: #ready.
 	self assertNoRenderingErrorsIn: scripter.
@@ -196,11 +213,11 @@ GtLACPChatExamples >> chatToolChildCannotCloseSession [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> chatToolCloseAsksForConfirmation [
+GtLACPSessionExamples >> chatToolCloseAsksForConfirmation [
 	<gtExample>
 	| session element scripter |
 	session := GtLACPExamples new session.
-	element := (GtLACPChatTool forChat: session) asElementDo: [ :widget | widget ].
+	element := (GtLACPSessionTool forChat: session) asElementDo: [ :widget | widget ].
 	scripter := BlScripter new
 			extent: 1100 @ 800;
 			model: session;
@@ -224,7 +241,7 @@ GtLACPChatExamples >> chatToolCloseAsksForConfirmation [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> chatToolClosePreservesOtherSessions [
+GtLACPSessionExamples >> chatToolClosePreservesOtherSessions [
 	<gtExample>
 	| session other element scripter |
 	session := GtLACPExamples new session.
@@ -232,7 +249,7 @@ GtLACPChatExamples >> chatToolClosePreservesOtherSessions [
 			newSessionIn: session directory
 			connection: session connection.
 	other create.
-	element := (GtLACPChatTool forChat: session) asElementDo: [ :widget | widget ].
+	element := (GtLACPSessionTool forChat: session) asElementDo: [ :widget | widget ].
 	scripter := BlScripter new
 			extent: 1100 @ 800;
 			model: session;
@@ -249,7 +266,7 @@ GtLACPChatExamples >> chatToolClosePreservesOtherSessions [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> chatToolClosesSession [
+GtLACPSessionExamples >> chatToolClosesSession [
 	<gtExample>
 	| scripter session |
 	scripter := self chatToolWithViews.
@@ -262,11 +279,7 @@ GtLACPChatExamples >> chatToolClosesSession [
 		assert: (session currentTurn permissionRequests
 				allSatisfy: [ :each | each state = #cancelled ]).
 	scripter pulseUntilReady.
-	scripter
-		assertStep: [ :step | 
-			step
-				id: #'acp-session-actions';
-				notExists ].
+	self assertCloseActionUnavailableIn: scripter.
 	scripter
 		assertStep: [ :step | 
 			step
@@ -277,32 +290,29 @@ GtLACPChatExamples >> chatToolClosesSession [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> chatToolForClosedSessionHidesSessionActions [
+GtLACPSessionExamples >> chatToolForClosedSessionHidesCloseAction [
 	<gtExample>
 	| session element scripter |
 	session := GtLACPExamples new closedSession.
-	element := (GtLACPChatTool forChat: session) asElementDo: [ :widget | widget ].
+	element := (GtLACPSessionTool forChat: session)
+			asElementDo: [ :widget | widget ].
 	scripter := BlScripter new
 			extent: 1100 @ 800;
 			model: session;
 			element: element;
 			yourself.
 	self assert: session canClose not.
-	scripter
-		assertStep: [ :step | 
-			step
-				id: #'acp-session-actions';
-				notExists ].
+	self assertCloseActionUnavailableIn: scripter.
 	self assertNoRenderingErrorsIn: scripter.
 	^ scripter
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> chatToolHeaderFollowsConversationTitle [
+GtLACPSessionExamples >> chatToolHeaderFollowsConversationTitle [
 	<gtExample>
 	| session element scripter |
 	session := GtLACPExamples new session.
-	element := (GtLACPChatTool forChat: session) asElementDo: [ :widget | widget ].
+	element := (GtLACPSessionTool forChat: session) asElementDo: [ :widget | widget ].
 	scripter := BlScripter new
 			extent: 1100 @ 800;
 			model: session;
@@ -327,7 +337,7 @@ GtLACPChatExamples >> chatToolHeaderFollowsConversationTitle [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> chatToolHeaderKeepsSessionActionsVisibleForLongTitle [
+GtLACPSessionExamples >> chatToolHeaderKeepsSessionActionsVisibleForLongTitle [
 	<gtExample>
 	| session element scripter |
 	session := GtLACPExamples new session.
@@ -336,7 +346,7 @@ GtLACPChatExamples >> chatToolHeaderKeepsSessionActionsVisibleForLongTitle [
 				at: 'sessionUpdate' put: 'session_info_update';
 				at: 'title' put: (String new: 400 withAll: $x);
 				yourself).
-	element := (GtLACPChatTool forChat: session) asElementDo: [ :widget | widget ].
+	element := (GtLACPSessionTool forChat: session) asElementDo: [ :widget | widget ].
 	scripter := BlScripter new
 			extent: 600 @ 400;
 			model: session;
@@ -371,12 +381,12 @@ GtLACPChatExamples >> chatToolHeaderKeepsSessionActionsVisibleForLongTitle [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> chatToolHeaderShowsConversationTitle [
+GtLACPSessionExamples >> chatToolHeaderShowsConversationTitle [
 	<gtExample>
 	| session element scripter |
 	session := GtLACPExamples new session.
 	self assert: session header equals: session conversationTitle.
-	element := (GtLACPChatTool forChat: session) asElementDo: [ :widget | widget ].
+	element := (GtLACPSessionTool forChat: session) asElementDo: [ :widget | widget ].
 	scripter := BlScripter new
 			extent: 1100 @ 800;
 			model: session;
@@ -398,11 +408,11 @@ GtLACPChatExamples >> chatToolHeaderShowsConversationTitle [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> chatToolHeaderShowsSessionState [
+GtLACPSessionExamples >> chatToolHeaderShowsSessionState [
 	<gtExample>
 	| session element scripter |
 	session := GtLACPExamples new session.
-	element := (GtLACPChatTool forChat: session) asElementDo: [ :widget | widget ].
+	element := (GtLACPSessionTool forChat: session) asElementDo: [ :widget | widget ].
 	scripter := BlScripter new
 			extent: 1100 @ 800;
 			model: session;
@@ -432,11 +442,11 @@ GtLACPChatExamples >> chatToolHeaderShowsSessionState [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> chatToolHeaderStateFollowsSession [
+GtLACPSessionExamples >> chatToolHeaderStateFollowsSession [
 	<gtExample>
 	| session element scripter |
 	session := GtLACPExamples new session.
-	element := (GtLACPChatTool forChat: session) asElementDo: [ :widget | widget ].
+	element := (GtLACPSessionTool forChat: session) asElementDo: [ :widget | widget ].
 	scripter := BlScripter new
 			extent: 1100 @ 800;
 			model: session;
@@ -454,38 +464,41 @@ GtLACPChatExamples >> chatToolHeaderStateFollowsSession [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> chatToolReflectsExternalClose [
+GtLACPSessionExamples >> chatToolReflectsExternalClose [
 	<gtExample>
 	| session element scripter |
 	session := GtLACPExamples new session.
-	element := (GtLACPChatTool forChat: session) asElementDo: [ :widget | widget ].
+	element := (GtLACPSessionTool forChat: session)
+			asElementDo: [ :widget | widget ].
 	scripter := BlScripter new
 			extent: 1100 @ 800;
 			model: session;
 			element: element;
 			yourself.
+	scripter menuStep
+		openDropdownWithId: #'acp-session-actions';
+		assertMenuContainerExist;
+		play.
 	scripter
 		assertStep: [ :step | 
 			step
-				id: #'acp-session-actions';
+				onSpaceRoot;
+				// #'acp-close-session';
 				exists ].
+	(scripter keyPress: BlKeyboardKey escape) play.
 	scripter doStep: [ :step | step block: [ session close ] ].
 	scripter pulseUntilReady.
-	scripter
-		assertStep: [ :step | 
-			step
-				id: #'acp-session-actions';
-				notExists ].
+	self assertCloseActionUnavailableIn: scripter.
 	self assertNoRenderingErrorsIn: scripter.
 	^ scripter
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> chatToolRenameFormAsksForTitle [
+GtLACPSessionExamples >> chatToolRenameFormAsksForTitle [
 	<gtExample>
 	| session element scripter form |
 	session := GtLACPExamples new session.
-	element := (GtLACPChatTool forChat: session) asElementDo: [ :widget | widget ].
+	element := (GtLACPSessionTool forChat: session) asElementDo: [ :widget | widget ].
 	scripter := BlScripter new
 			extent: 1100 @ 800;
 			model: session;
@@ -523,7 +536,7 @@ GtLACPChatExamples >> chatToolRenameFormAsksForTitle [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> chatToolRenamesSession [
+GtLACPSessionExamples >> chatToolRenamesSession [
 	<gtExample>
 	| scripter session form field |
 	scripter := self chatToolRenameFormAsksForTitle.
@@ -562,7 +575,7 @@ GtLACPChatExamples >> chatToolRenamesSession [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> chatToolViewSwitching [
+GtLACPSessionExamples >> chatToolViewSwitching [
 	<gtExample>
 	| scripter |
 	scripter := self chatToolWithViews.
@@ -609,11 +622,11 @@ GtLACPChatExamples >> chatToolViewSwitching [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> chatToolWithViews [
+GtLACPSessionExamples >> chatToolWithViews [
  <gtExample>
  | session element scripter |
  session := self chatWithToolCalls viewModel session.
- element := (GtLACPChatTool forChat: session) asElementDo: [ :widget | widget ].
+ element := (GtLACPSessionTool forChat: session) asElementDo: [ :widget | widget ].
  scripter := BlScripter new extent: 1100 @ 800; model: session; element: element; yourself.
  scripter assertStep: [ :step | step id: #toolLabel;
   value: [ :label | label text asString ] equals: [ 'ACP Chat' ] ].
@@ -625,7 +638,7 @@ GtLACPChatExamples >> chatToolWithViews [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> chatWithToolCalls [
+GtLACPSessionExamples >> chatWithToolCalls [
  <gtExample>
  | permission session turn element |
  permission := GtLACPExamples new pendingPermission.
@@ -642,7 +655,7 @@ GtLACPChatExamples >> chatWithToolCalls [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> chatWithToolCallsDisplayed [
+GtLACPSessionExamples >> chatWithToolCallsDisplayed [
  <gtExample>
  | element scripter |
  element := self chatWithToolCalls.
@@ -670,7 +683,7 @@ GtLACPChatExamples >> chatWithToolCallsDisplayed [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> chatWithToolCallsStyledLayout [
+GtLACPSessionExamples >> chatWithToolCallsStyledLayout [
  <gtExample>
  | element scripter |
  element := self chatWithToolCalls.
@@ -686,7 +699,7 @@ GtLACPChatExamples >> chatWithToolCallsStyledLayout [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> closeSessionFromMenuIn: aScripter [
+GtLACPSessionExamples >> closeSessionFromMenuIn: aScripter [
 	self openCloseConfirmationIn: aScripter.
 	aScripter click
 		onSpaceRoot;
@@ -695,7 +708,7 @@ GtLACPChatExamples >> closeSessionFromMenuIn: aScripter [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> commentaryBetweenToolCalls [
+GtLACPSessionExamples >> commentaryBetweenToolCalls [
  <gtExample>
  | session turn examples element assistant |
  examples := GtLACPExamples new.
@@ -734,7 +747,7 @@ GtLACPChatExamples >> commentaryBetweenToolCalls [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> commentaryRenderedBetweenTools [
+GtLACPSessionExamples >> commentaryRenderedBetweenTools [
  <gtExample>
  | element scripter |
  element := self commentaryBetweenToolCalls.
@@ -757,7 +770,7 @@ GtLACPChatExamples >> commentaryRenderedBetweenTools [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> compactAssistantHeaders [
+GtLACPSessionExamples >> compactAssistantHeaders [
  <gtExample>
  | element scripter |
  element := self reasoningBetweenToolCalls.
@@ -776,7 +789,7 @@ GtLACPChatExamples >> compactAssistantHeaders [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> compactFinalPreview [
+GtLACPSessionExamples >> compactFinalPreview [
  <gtExample>
  | session turn text element scripter |
  session := GtLACPExamples new session.
@@ -801,7 +814,7 @@ GtLACPChatExamples >> compactFinalPreview [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> completedChat [
+GtLACPSessionExamples >> completedChat [
  <gtExample>
  | turn |
  turn := GtLACPExamples new streamedTurn.
@@ -809,7 +822,7 @@ GtLACPChatExamples >> completedChat [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> completedReplyStartsExpanded [
+GtLACPSessionExamples >> completedReplyStartsExpanded [
  <gtExample>
  | chat scripter |
  chat := self completedChat.
@@ -821,7 +834,7 @@ GtLACPChatExamples >> completedReplyStartsExpanded [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> composerAppearance [
+GtLACPSessionExamples >> composerAppearance [
  <gtExample>
  | scripter |
  scripter := self typedMessage.
@@ -836,7 +849,7 @@ GtLACPChatExamples >> composerAppearance [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> composerReturnsToSend [
+GtLACPSessionExamples >> composerReturnsToSend [
  <gtExample>
  | scripter session turn button |
  scripter := self typedMessage.
@@ -855,7 +868,7 @@ GtLACPChatExamples >> composerReturnsToSend [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> disclosuresAlignWithText [
+GtLACPSessionExamples >> disclosuresAlignWithText [
  <gtExample>
  | element scripter |
  element := self reasoningBetweenToolCalls.
@@ -873,7 +886,7 @@ GtLACPChatExamples >> disclosuresAlignWithText [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> draftSurvivesFailure [
+GtLACPSessionExamples >> draftSurvivesFailure [
  <gtExample>
  | element session transport |
  element := self emptyChat.
@@ -888,7 +901,7 @@ GtLACPChatExamples >> draftSurvivesFailure [
 ]
 
 { #category : #asserting }
-GtLACPChatExamples >> editorsIn: anElement [
+GtLACPSessionExamples >> editorsIn: anElement [
  | editors |
  editors := OrderedCollection new.
  anElement withAllChildrenBreadthFirstDo: [ :each |
@@ -897,7 +910,7 @@ GtLACPChatExamples >> editorsIn: anElement [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> emptyChat [
+GtLACPSessionExamples >> emptyChat [
  <gtExample>
  | session element |
  session := GtLACPExamples new session.
@@ -908,7 +921,7 @@ GtLACPChatExamples >> emptyChat [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> explicitMessageObjects [
+GtLACPSessionExamples >> explicitMessageObjects [
  <gtExample>
  | element turn rows |
  element := self reasoningBetweenToolCalls.
@@ -926,7 +939,7 @@ GtLACPChatExamples >> explicitMessageObjects [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> finalReplyExpandsOnCompletion [
+GtLACPSessionExamples >> finalReplyExpandsOnCompletion [
  <gtExample>
  | chat session turn scripter |
  chat := self chatWithToolCalls.
@@ -951,7 +964,7 @@ GtLACPChatExamples >> finalReplyExpandsOnCompletion [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> finalReplyManualCollapsePersists [
+GtLACPSessionExamples >> finalReplyManualCollapsePersists [
  <gtExample>
  | scripter |
  scripter := self finalReplyExpandsOnCompletion.
@@ -963,7 +976,7 @@ GtLACPChatExamples >> finalReplyManualCollapsePersists [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> keyboardSend [
+GtLACPSessionExamples >> keyboardSend [
  <gtExample>
  | scripter |
  scripter := self typedMessage.
@@ -974,7 +987,7 @@ GtLACPChatExamples >> keyboardSend [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> lastMessageLayoutKeepsStreamEnd [
+GtLACPSessionExamples >> lastMessageLayoutKeepsStreamEnd [
  <gtExample>
  | scripter |
  scripter := self longStreamingChat.
@@ -992,7 +1005,7 @@ GtLACPChatExamples >> lastMessageLayoutKeepsStreamEnd [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> logicalScrollReachesEndOfTallReply [
+GtLACPSessionExamples >> logicalScrollReachesEndOfTallReply [
  <gtExample>
  | session turn text chat scripter |
  session := GtLACPExamples new session.
@@ -1014,7 +1027,7 @@ GtLACPChatExamples >> logicalScrollReachesEndOfTallReply [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> logicalScrollTargetSurvivesNewTurns [
+GtLACPSessionExamples >> logicalScrollTargetSurvivesNewTurns [
  <gtExample>
  | chat session scripter marker items row |
  chat := self completedChat.
@@ -1043,7 +1056,7 @@ GtLACPChatExamples >> logicalScrollTargetSurvivesNewTurns [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> longStreamingChat [
+GtLACPSessionExamples >> longStreamingChat [
 	<gtExample>
 	| session turn examples text element scripter |
 	examples := GtLACPExamples new.
@@ -1089,7 +1102,7 @@ GtLACPChatExamples >> longStreamingChat [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> messageAssignmentIsIdempotent [
+GtLACPSessionExamples >> messageAssignmentIsIdempotent [
  <gtExample>
  | chat models versions |
  chat := self chatWithToolCalls.
@@ -1105,7 +1118,7 @@ GtLACPChatExamples >> messageAssignmentIsIdempotent [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> messageAtRest [
+GtLACPSessionExamples >> messageAtRest [
  <gtExample>
  | element scripter |
  element := self completedChat.
@@ -1121,7 +1134,7 @@ GtLACPChatExamples >> messageAtRest [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> messageHoverLeaves [
+GtLACPSessionExamples >> messageHoverLeaves [
  <gtExample>
  | scripter |
  scripter := self messageHovered.
@@ -1136,7 +1149,7 @@ GtLACPChatExamples >> messageHoverLeaves [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> messageHovered [
+GtLACPSessionExamples >> messageHovered [
  <gtExample>
  | scripter |
  scripter := self messageAtRest.
@@ -1153,7 +1166,7 @@ GtLACPChatExamples >> messageHovered [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> messageSpecificRows [
+GtLACPSessionExamples >> messageSpecificRows [
  <gtExample>
  | element scripter models |
  element := self chatWithToolCalls.
@@ -1167,7 +1180,7 @@ GtLACPChatExamples >> messageSpecificRows [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> newTurnFollowsBottom [
+GtLACPSessionExamples >> newTurnFollowsBottom [
  <gtExample>
  | scripter session |
  scripter := self longStreamingChat.
@@ -1182,7 +1195,7 @@ GtLACPChatExamples >> newTurnFollowsBottom [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> newTurnPreservesReadingPosition [
+GtLACPSessionExamples >> newTurnPreservesReadingPosition [
  <gtExample>
  | scripter session anchor |
  scripter := self streamPreservesReadingPosition.
@@ -1205,7 +1218,7 @@ GtLACPChatExamples >> newTurnPreservesReadingPosition [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> olderMessageChangeRefreshesOnlyItsRow [
+GtLACPSessionExamples >> olderMessageChangeRefreshesOnlyItsRow [
  <gtExample>
  | scripter session firstRow secondRow lastRow |
  scripter := self unchangedRowsSurviveStreamingAndNewTurn.
@@ -1225,7 +1238,7 @@ GtLACPChatExamples >> olderMessageChangeRefreshesOnlyItsRow [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> openCloseConfirmationIn: aScripter [
+GtLACPSessionExamples >> openCloseConfirmationIn: aScripter [
 	aScripter menuStep
 		openDropdownWithId: #'acp-session-actions';
 		assertMenuContainerExist;
@@ -1237,7 +1250,7 @@ GtLACPChatExamples >> openCloseConfirmationIn: aScripter [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> openRenameFormIn: aScripter [
+GtLACPSessionExamples >> openRenameFormIn: aScripter [
 	aScripter menuStep
 		openDropdownWithId: #'acp-session-actions';
 		assertMenuContainerExist;
@@ -1249,7 +1262,7 @@ GtLACPChatExamples >> openRenameFormIn: aScripter [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> permissionButtons [
+GtLACPSessionExamples >> permissionButtons [
  <gtExample>
  | element scripter permission |
  element := self chatWithToolCalls.
@@ -1263,7 +1276,7 @@ GtLACPChatExamples >> permissionButtons [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> preStyledMessageText [
+GtLACPSessionExamples >> preStyledMessageText [
 	<gtExample>
 	| messageElement editor |
 	messageElement := self chatWithToolCalls viewModel session currentTurn
@@ -1277,7 +1290,7 @@ GtLACPChatExamples >> preStyledMessageText [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> reasoningBetweenToolCalls [
+GtLACPSessionExamples >> reasoningBetweenToolCalls [
  <gtExample>
  | session turn examples element items |
  examples := GtLACPExamples new.
@@ -1318,7 +1331,7 @@ GtLACPChatExamples >> reasoningBetweenToolCalls [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> reasoningRenderedBetweenTools [
+GtLACPSessionExamples >> reasoningRenderedBetweenTools [
  <gtExample>
  | element scripter |
  element := self reasoningBetweenToolCalls.
@@ -1344,7 +1357,7 @@ GtLACPChatExamples >> reasoningRenderedBetweenTools [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> recoveredCommentaryOrder [
+GtLACPSessionExamples >> recoveredCommentaryOrder [
  <gtExample>
  | element turn assistant |
  element := self commentaryBetweenToolCalls.
@@ -1359,7 +1372,7 @@ GtLACPChatExamples >> recoveredCommentaryOrder [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> recoveredReasoningOrder [
+GtLACPSessionExamples >> recoveredReasoningOrder [
  <gtExample>
  | element turn items |
  element := self reasoningBetweenToolCalls.
@@ -1375,7 +1388,7 @@ GtLACPChatExamples >> recoveredReasoningOrder [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> replayedConversationDisplayed [
+GtLACPSessionExamples >> replayedConversationDisplayed [
  <gtExample>
  | session chat scripter |
  session := GtLACPExamples new fixtureReplayConversation.
@@ -1396,7 +1409,7 @@ GtLACPChatExamples >> replayedConversationDisplayed [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> scrollingUpCancelsPendingFollow [
+GtLACPSessionExamples >> scrollingUpCancelsPendingFollow [
  <gtExample>
  | scripter |
  scripter := self longStreamingChat.
@@ -1408,7 +1421,7 @@ GtLACPChatExamples >> scrollingUpCancelsPendingFollow [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> selectionSurvivesUnrelatedUpdates [
+GtLACPSessionExamples >> selectionSurvivesUnrelatedUpdates [
  <gtExample>
  | chat session scripter editor |
  chat := self completedChat.
@@ -1435,7 +1448,7 @@ GtLACPChatExamples >> selectionSurvivesUnrelatedUpdates [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> sendAndStop [
+GtLACPSessionExamples >> sendAndStop [
  <gtExample>
  | scripter session button |
  scripter := self typedMessage.
@@ -1455,7 +1468,7 @@ GtLACPChatExamples >> sendAndStop [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> sessionActionsMenuCollectsTargetedActions [
+GtLACPSessionExamples >> sessionActionsMenuCollectsTargetedActions [
 	<gtExample>
 	| session selectorsFor |
 	session := GtLACPExamples new session.
@@ -1472,7 +1485,7 @@ GtLACPChatExamples >> sessionActionsMenuCollectsTargetedActions [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> shortToolCallLabels [
+GtLACPSessionExamples >> shortToolCallLabels [
 	<gtExample>
 	| permission session tool title input scripter |
 	permission := GtLACPExamples new pendingPermission.
@@ -1523,7 +1536,7 @@ GtLACPChatExamples >> shortToolCallLabels [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> stableAssistantGroup [
+GtLACPSessionExamples >> stableAssistantGroup [
  <gtExample>
  | element model first second session |
  element := self chatWithToolCalls.
@@ -1541,7 +1554,7 @@ GtLACPChatExamples >> stableAssistantGroup [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> streamFollowsBottom [
+GtLACPSessionExamples >> streamFollowsBottom [
  <gtExample>
  | scripter session |
  scripter := self longStreamingChat.
@@ -1556,7 +1569,7 @@ GtLACPChatExamples >> streamFollowsBottom [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> streamPreservesReadingPosition [
+GtLACPSessionExamples >> streamPreservesReadingPosition [
  <gtExample>
  | scripter session anchor |
  scripter := self longStreamingChat.
@@ -1580,7 +1593,7 @@ GtLACPChatExamples >> streamPreservesReadingPosition [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> streamRecreatesMessageElement [
+GtLACPSessionExamples >> streamRecreatesMessageElement [
  <gtExample>
  | chat session scripter originalRow originalModel |
  chat := self chatWithToolCalls.
@@ -1608,7 +1621,7 @@ GtLACPChatExamples >> streamRecreatesMessageElement [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> streamResumesFollowingAtBottom [
+GtLACPSessionExamples >> streamResumesFollowingAtBottom [
  <gtExample>
  | scripter session |
  scripter := self streamPreservesReadingPosition.
@@ -1624,7 +1637,7 @@ GtLACPChatExamples >> streamResumesFollowingAtBottom [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> streamingUpdatesVisibleText [
+GtLACPSessionExamples >> streamingUpdatesVisibleText [
  <gtExample>
  | scripter session turn |
  scripter := self typedMessage.
@@ -1654,7 +1667,7 @@ GtLACPChatExamples >> streamingUpdatesVisibleText [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> toolCallLineSurvivesStreaming [
+GtLACPSessionExamples >> toolCallLineSurvivesStreaming [
 	<gtExample>
 	| scripter session tool originalSummary |
 	scripter := self toolCallsShownAsLines.
@@ -1695,7 +1708,7 @@ GtLACPChatExamples >> toolCallLineSurvivesStreaming [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> toolCallOpensOnRight [
+GtLACPSessionExamples >> toolCallOpensOnRight [
  <gtExample>
  | chat session tool scripter |
  chat := self chatWithToolCalls.
@@ -1713,7 +1726,7 @@ GtLACPChatExamples >> toolCallOpensOnRight [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> toolCallWorkingLabel [
+GtLACPSessionExamples >> toolCallWorkingLabel [
 	<gtExample>
 	| scripter session tool |
 	scripter := self workingAssistantHeader.
@@ -1773,7 +1786,7 @@ GtLACPChatExamples >> toolCallWorkingLabel [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> toolCallsShownAsLines [
+GtLACPSessionExamples >> toolCallsShownAsLines [
 	<gtExample>
 	| element scripter tool |
 	element := self chatWithToolCalls.
@@ -1827,7 +1840,7 @@ GtLACPChatExamples >> toolCallsShownAsLines [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> typedMessage [
+GtLACPSessionExamples >> typedMessage [
  <gtExample>
  | element scripter |
  element := self emptyChat.
@@ -1842,7 +1855,7 @@ GtLACPChatExamples >> typedMessage [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> unchangedRowsSurviveStreamingAndNewTurn [
+GtLACPSessionExamples >> unchangedRowsSurviveStreamingAndNewTurn [
  <gtExample>
  | chat session scripter userRow assistantRow userChildren assistantChildren |
  chat := self completedChat.
@@ -1874,7 +1887,7 @@ GtLACPChatExamples >> unchangedRowsSurviveStreamingAndNewTurn [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> userMessageElement [
+GtLACPSessionExamples >> userMessageElement [
  <gtExample>
  | turn message element scripter |
  turn := GtLACPExamples new streamedTurn.
@@ -1890,7 +1903,7 @@ GtLACPChatExamples >> userMessageElement [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> viewModelCreatesMessageElement [
+GtLACPSessionExamples >> viewModelCreatesMessageElement [
  <gtExample>
  | chat model element originalChildren scripter |
  chat := self chatWithToolCalls.
@@ -1910,7 +1923,7 @@ GtLACPChatExamples >> viewModelCreatesMessageElement [
 ]
 
 { #category : #examples }
-GtLACPChatExamples >> workingAssistantHeader [
+GtLACPSessionExamples >> workingAssistantHeader [
  <gtExample>
  | permission session scripter |
  permission := GtLACPExamples new pendingPermission.
