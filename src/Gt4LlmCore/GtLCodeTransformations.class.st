@@ -22,3 +22,8 @@ GtLCodeTransformations >> contentOneLineMultiLabelSummaryWith: aBuilder [
 	self transformations
 		do: [ :each | each contentOneLineMultiLabelSummaryWith: aBuilder ]
 ]
+
+{ #category : #validation }
+GtLCodeTransformations >> gtProblems [
+	^transformations flatCollect: [:each | each gtProblems]
+]

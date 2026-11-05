@@ -42,6 +42,13 @@ GtLPushUpMethodSpecification >> gtDisplayOn: aStream [
 		nextPutAll: methodClassName
 ]
 
+{ #category : #validation }
+GtLPushUpMethodSpecification >> gtProblems [
+	^(selectors
+		flatCollect: [:each | self gtProblemsWithMethod: each inClassNamed: methodClassName])
+			, (self gtProblemsWithClassNamed: targetClassName)
+]
+
 { #category : #'as yet unclassified' }
 GtLPushUpMethodSpecification >> initialize [
 	super initialize.
