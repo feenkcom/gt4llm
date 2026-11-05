@@ -3,7 +3,7 @@ I present a session registry with a tool header, registry actions, live views in
 "
 Class {
 	#name : #GtLACPSessionRegistryToolElement,
-	#superclass : #BrVerticalPane,
+	#superclass : #BlElement,
 	#instVars : [
 		'registry'
 	],
@@ -81,13 +81,12 @@ GtLACPSessionRegistryToolElement >> gtInspectorTargetModels [
 { #category : #initialization }
 GtLACPSessionRegistryToolElement >> initialize [
 	super initialize.
-	self matchParent.
+	self layout: BlLinearLayout vertical.
 	self
-		padding: (BlInsets
-				top: 5
-				left: 5
-				bottom: 0
-				right: 5).
+		constraintsDo: [ :c | 
+			c horizontal matchParent.
+			c vertical matchParent ].
+	self padding: (BlInsets all: 5).
 	self addChild: self buildHeaderElement as: #header.
 	self addChild: BrFrame new matchParent as: #viewsContainer.
 	self addChild: self buildPlaygroundPageElement as: #playgroundPage.
