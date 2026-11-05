@@ -52,7 +52,7 @@ GtLACPElicitationRequest >> answers [
 
 { #category : #converting }
 GtLACPElicitationRequest >> asElement [
-	^ GtLACPInteractionElement new
+	^ GtLACPElicitationElement new
 		elicitation: self;
 		yourself
 ]

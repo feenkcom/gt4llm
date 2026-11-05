@@ -244,7 +244,7 @@ GtLACPAssistantMessage >> workSummaryCountLabels [
 	^ labels
 ]
 
-{ #category : #accessing }
+{ #category : #building }
 GtLACPAssistantMessage >> workSummaryDetails [
 	| latest string owner |
 	latest := self latestWorkItem.
@@ -258,9 +258,5 @@ GtLACPAssistantMessage >> workSummaryDetails [
 					copyReplaceAll: String lf
 					with: ' ' ].
 	string size > 140 ifTrue: [ string := (string first: 139) , '…' ].
-	(turn permissionRequests anySatisfy: [ :each | each state = #pending ])
-		ifTrue: [ string := string
-					ifEmpty: [ 'permission required' ]
-					ifNotEmpty: [ string , ' · permission required' ] ].
 	^ string
 ]

@@ -71,7 +71,7 @@ GtLACPAgentMessageElement >> messageViewModel [
  ^ messageViewModel
 ]
 
-{ #category : #accessing }
+{ #category : #building }
 GtLACPAgentMessageElement >> messageViewModel: aViewModel [
 	messageViewModel := aViewModel.
 	self
@@ -81,6 +81,7 @@ GtLACPAgentMessageElement >> messageViewModel: aViewModel [
 	((self childNamed: #sidebar) childNamed: #'expander--toggle')
 		id: messageViewModel agentToggleId.
 	self expanded: messageViewModel isAgentExpanded.
+	self isExpanded ifTrue: [ messageViewModel agentExpanded: true ].
 	self
 		whenExpandedDo: [ messageViewModel agentExpanded: true.
 			self updateContent ].
@@ -108,7 +109,7 @@ GtLACPAgentMessageElement >> onSessionChanged: anAnnouncement [
 	anAnnouncement message == messageViewModel message ifFalse: [ ^ self ].
 	self
 		enqueueTask: (BlTaskAction new
-				action: [ messageViewModel hasPendingQuestions
+				action: [ messageViewModel hasPendingInteraction
 						ifTrue: [ self expanded: messageViewModel isAgentExpanded ].
 					headerUpdater requestUpdate.
 					anAnnouncement sourceSession == messageViewModel turn session

@@ -153,14 +153,12 @@ GtLACPToolCall >> status [
  ^ data at: 'status' ifAbsent: [ 'pending' ]
 ]
 
-{ #category : #accessing }
+{ #category : #building }
 GtLACPToolCall >> summary [
 	| summary |
 	summary := self shortDescription.
 	(#('in_progress' 'running') includes: self status)
 		ifTrue: [ summary := summary , ' · working' ].
-	(permissionRequests anySatisfy: [ :request | request state = #pending ])
-		ifTrue: [ summary := summary , ' · permission required' ].
 	^ summary
 ]
 

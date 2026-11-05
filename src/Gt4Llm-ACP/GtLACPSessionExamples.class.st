@@ -171,19 +171,26 @@ GtLACPSessionExamples >> assistantSectionsCollapseIndependently [
 
 { #category : #examples }
 GtLACPSessionExamples >> chatWithToolCalls [
- <gtExample>
- | permission session turn element |
- permission := GtLACPExamples new pendingPermission.
- session := permission session.
- turn := session currentTurn.
- GtLACPExamples new sendUpdate: {
-  'sessionUpdate' -> 'agent_message_chunk'.
-  'content' -> { 'type' -> 'text'. 'text' -> 'I will **inspect the directory** using the following tool.' } asDictionary } asDictionary to: session.
- turn toolCalls first updateFrom: { 'rawInput' -> { 'path' -> session directory fullName } asDictionary } asDictionary.
- element := session asElement.
- self assert: element viewModel messageViewModels size equals: 2.
- self assert: element viewModel messageViewModels last toolCalls first == permission toolCall.
- ^ element
+	<gtExample>
+	| permission session turn element |
+	permission := GtLACPExamples new pendingPermission.
+	session := permission session.
+	turn := session currentTurn.
+	GtLACPExamples new
+		sendUpdate: {'sessionUpdate' -> 'agent_message_chunk'.
+				'content'
+					-> {'type' -> 'text'.
+							'text' -> 'I will **inspect the directory** using the following tool.'}
+							asDictionary} asDictionary
+		to: session.
+	turn toolCalls first
+		updateFrom: {'rawInput' -> {'path' -> session directory fullName} asDictionary} asDictionary.
+	element := session asElement.
+	element viewModel messageViewModels last workExpanded: false.
+	self assert: element viewModel messageViewModels size equals: 2.
+	self
+		assert: element viewModel messageViewModels last toolCalls first == permission toolCall.
+	^ element
 ]
 
 { #category : #examples }
@@ -1627,12 +1634,14 @@ GtLACPSessionExamples >> shortToolCallLabels [
 			model: session;
 			element: session asElement;
 			yourself.
+	scripter click
+		id: #'acp-work-toggle';
+		play.
 	scripter
 		assertStep: [ :step | 
 			step
 				id: #'acp-work-summary-text';
-				value: [ :label | label text asString ]
-					equals: [ tool shortDescription , ' · permission required' ] ].
+				value: [ :label | label text asString ] equals: [ tool shortDescription ] ].
 	scripter click
 		id: #'acp-work-summary';
 		play.
@@ -1641,8 +1650,7 @@ GtLACPSessionExamples >> shortToolCallLabels [
 			step
 				id: #'acp-tool-summary-tool-1';
 				value: [ :button | button label asString ] equals: [ tool summary ] ].
-	self assert: (tool summary beginsWith: tool shortDescription , ' · ').
-	self assert: (tool summary endsWith: 'permission required').
+	self assert: tool summary equals: tool shortDescription.
 	self assertNoRenderingErrorsIn: scripter.
 	^ scripter
 ]
@@ -1844,15 +1852,11 @@ GtLACPSessionExamples >> toolCallWorkingLabel [
 	scripter := self workingAssistantHeader.
 	session := scripter model.
 	tool := session currentTurn toolCalls first.
-	scripter click
-		id: #'acp-work-summary';
-		play.
 	scripter
 		assertStep: [ :step | 
 			step
 				id: #'acp-tool-summary-tool-1';
-				value: [ :label | label label asString ]
-					equals: [ tool shortDescription , ' · permission required' ] ].
+				value: [ :label | label label asString ] equals: [ tool shortDescription ] ].
 	scripter click
 		id: #'acp-permission-allow';
 		play.

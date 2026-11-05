@@ -53,14 +53,41 @@ GtLExampleWithResultStatuses >> failureResults [
 GtLExampleWithResultStatuses >> gtExampleWithStatusesFor: aView [
 	<gtView>
 	<gtLlmView>
-	
 	exampleWithStatuses ifNil: [ ^ aView empty ].
 	^ aView columnedList
 		title: 'Examples';
 		priority: 1;
 		items: [ self exampleWithStatuses ];
-		column: 'Status' stencil: [ :each | BlElement new background: each exampleWithResult color; size: 16@16 ] width: 50;		column: 'Class' text: [ :each | each exampleWithResult methodClass ];
-		column: 'Method' text: [ :each | each exampleWithResult selector ]
+		column: 'Status'
+			stencil: [ :each | 
+				BlElement new
+					background: each exampleWithResult color;
+					size: 16 @ 16 ]
+			width: 50;
+		column: 'Class' text: [ :each | each exampleWithResult methodClass ];
+		column: 'Method' text: [ :each | each exampleWithResult selector ];
+		actionStencil: [ GtSpotterDropdownButtonStencil new
+					object: self;
+					tooltip: 'Search examples by name';
+					objectActOn: [ :anEvent :anItem :aButton | 
+						anEvent beActed.
+						aButton phlow spawnObject: anEvent objectToSend ] ]
+			tooltip: 'Search examples by name'
+]
+
+{ #category : #'gt - extensions' }
+GtLExampleWithResultStatuses >> gtSearchExamplesFor: aSearch [
+	"Find example statuses by class and method name, preserving the status as the result."
+
+	<gtSearch>
+	^ aSearch list
+		title: 'Examples';
+		priority: 1;
+		items: [ self exampleWithStatuses ];
+		itemName: [ :each | 
+			each exampleWithResult methodClass name asString , '>>'
+				, each exampleWithResult selector asString ];
+		filterBySubstring
 ]
 
 { #category : #accessing }

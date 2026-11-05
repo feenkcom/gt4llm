@@ -208,6 +208,13 @@ GtLACPPromptTurn >> gtToolsFor: aView [
  ^ aView list title: 'Tool calls'; priority: 20; items: [ toolCalls copy ]; itemText: #title; actionUpdateButtonTooltip: 'Refresh tool calls'
 ]
 
+{ #category : #testing }
+GtLACPPromptTurn >> hasPendingInteraction [
+	^ (permissionRequests anySatisfy: [ :each | each state = #pending ])
+		or: [ (self elicitationRequests anySatisfy: [ :each | each state = #pending ])
+				or: [ self delegatedTurns anySatisfy: #hasPendingInteraction ] ]
+]
+
 { #category : #updates }
 GtLACPPromptTurn >> initialize [
  super initialize.

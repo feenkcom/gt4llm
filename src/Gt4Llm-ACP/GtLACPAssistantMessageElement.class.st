@@ -81,6 +81,7 @@ GtLACPAssistantMessageElement >> buildWorkSection [
 	((workExpander childNamed: #sidebar) childNamed: #'expander--toggle')
 		id: viewModel workToggleId.
 	workExpander expanded: viewModel isWorkExpanded.
+	workExpander isExpanded ifTrue: [ viewModel workExpanded: true ].
 	workExpander whenExpandedDo: [ viewModel workExpanded: true ].
 	workExpander whenCollapsedDo: [ viewModel workExpanded: false ].
 	self addChild: workExpander
@@ -158,9 +159,7 @@ GtLACPAssistantMessageElement >> onSessionChanged: anAnnouncement [
 
 { #category : #building }
 GtLACPAssistantMessageElement >> permissionElementFor: permission [
-	^ GtLACPInteractionElement new
-		permission: permission;
-		yourself
+	^ permission asElement
 ]
 
 { #category : #building }
@@ -225,9 +224,7 @@ GtLACPAssistantMessageElement >> toolElementFor: aTool [
 			addChild: line;
 			yourself.
 	aTool permissionRequests
-		do: [ :permission | 
-			permission state = #pending
-				ifTrue: [ pane addChild: (self permissionElementFor: permission) ] ].
+		do: [ :permission | pane addChild: (self permissionElementFor: permission) ].
 	^ pane
 ]
 

@@ -1,5 +1,5 @@
 "
-I adapt an assistant message and retain explicit work and final-reply expansion choices, the selected reply view, and cached delegated view models. Pending questions determine the default work expansion; a completed final reply expands once. I expose explicit semantic element IDs.
+I adapt an assistant message and retain explicit work and final-reply expansion choices, the selected reply view, and cached delegated view models. Pending user interactions determine the default work expansion; a completed final reply expands once. I expose explicit semantic element IDs.
 "
 Class {
 	#name : #GtLACPAssistantMessageViewModel,
@@ -76,9 +76,8 @@ GtLACPAssistantMessageViewModel >> finalToggleId [
 ]
 
 { #category : #testing }
-GtLACPAssistantMessageViewModel >> hasPendingQuestions [
-	^ (turn elicitationRequests anySatisfy: [ :each | each state = #pending ])
-		or: [ turn pendingDelegatedElicitations notEmpty ]
+GtLACPAssistantMessageViewModel >> hasPendingInteraction [
+	^ turn hasPendingInteraction
 ]
 
 { #category : #initialization }
@@ -96,7 +95,7 @@ GtLACPAssistantMessageViewModel >> isFinalReplyExpanded [
 { #category : #accessing }
 GtLACPAssistantMessageViewModel >> isWorkExpanded [
 	self migrateLegacyExpansionState.
-	^ workExpanded ifNil: [ self hasPendingQuestions ]
+	^ workExpanded ifNil: [ self hasPendingInteraction ]
 ]
 
 { #category : #accessing }

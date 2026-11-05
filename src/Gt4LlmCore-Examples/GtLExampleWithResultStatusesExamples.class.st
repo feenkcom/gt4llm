@@ -673,3 +673,62 @@ GtLExampleWithResultStatusesExamples >> runExampleMethod: aCompiledMethod [
 	example run.
 	^ example
 ]
+
+{ #category : #'examples - searching' }
+GtLExampleWithResultStatusesExamples >> searchEmptyExamples [
+	<gtExample>
+	| statuses search results |
+	statuses := self domainObjectWithEmptyStatuses.
+	search := statuses gtSearchExamplesFor: GtSpotterSearch new.
+	results := (search asStreamFor: (GtSpotterContext new searchQuery: 'example'))
+			toArray wait.
+	self assert: results isEmpty.
+	^ statuses
+]
+
+{ #category : #'examples - searching' }
+GtLExampleWithResultStatusesExamples >> searchExamplesByClassName [
+	<gtExample>
+	| statuses search results |
+	statuses := self domainObjectWithMixedStatuses.
+	search := statuses gtSearchExamplesFor: GtSpotterSearch new.
+	results := (search
+			asStreamFor: (GtSpotterContext new searchQuery: 'GtLExampleRunDummyExamples'))
+			toArray wait.
+	self assert: results size equals: statuses totalCount.
+	self
+		assert: (results
+				allSatisfy: [ :each | statuses exampleWithStatuses identityIncludes: each ]).
+	^ statuses
+]
+
+{ #category : #'examples - searching' }
+GtLExampleWithResultStatusesExamples >> searchExamplesByName [
+	<gtExample>
+	| statuses search results |
+	statuses := self domainObjectWithMixedStatuses.
+	self assert: (GtSpotterSearchPragmasFuture hasSpotterSearch: statuses).
+	search := statuses gtSearchExamplesFor: GtSpotterSearch new.
+	results := (search
+			asStreamFor: (GtSpotterContext new
+					searchQuery: 'successfulExampleWithObjectWithADataJsonView')) toArray wait.
+	self assert: results size equals: 1.
+	self assert: results first == statuses skippedResults first.
+	self
+		assert: (search itemNameFor: results first)
+		equals: 'GtLExampleRunDummyExamples>>successfulExampleWithObjectWithADataJsonView'.
+	^ statuses
+]
+
+{ #category : #'examples - searching' }
+GtLExampleWithResultStatusesExamples >> searchExamplesWithoutMatches [
+	<gtExample>
+	| statuses search results |
+	statuses := self domainObjectWithMixedStatuses.
+	search := statuses gtSearchExamplesFor: GtSpotterSearch new.
+	results := (search
+			asStreamFor: (GtSpotterContext new searchQuery: 'noSuchExampleName')) toArray
+			wait.
+	self assert: results isEmpty.
+	^ statuses
+]

@@ -88,7 +88,7 @@ GtLACPAgentMessageViewModel >> finalToggleId [
 
 { #category : #accessing }
 GtLACPAgentMessageViewModel >> isAgentExpanded [
-	^ agentExpanded ifNil: [ self hasPendingQuestions ]
+	^ agentExpanded ifNil: [ self hasPendingInteraction ]
 ]
 
 { #category : #'element ids' }

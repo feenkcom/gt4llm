@@ -23,6 +23,13 @@ GtLACPPermissionRequest >> abandon [
  ] ensure: [ session ifNotNil: [ session announcePermissionChanged: self ] ]
 ]
 
+{ #category : #converting }
+GtLACPPermissionRequest >> asElement [
+	^ GtLACPPermissionElement new
+		permission: self;
+		yourself
+]
+
 { #category : #actions }
 GtLACPPermissionRequest >> cancel [
  [
