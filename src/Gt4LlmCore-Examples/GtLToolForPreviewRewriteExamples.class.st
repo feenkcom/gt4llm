@@ -152,7 +152,7 @@ GtLToolForPreviewRewriteExamples >> previewRewriteWithMethodPattern [
 	self assert: targetObject changes first changeDescription
 		equals: 'GtLRewriteFixture>>sizeOf:'.
 	self assert: targetObject changes first newSource lines asArray
-		equals: #('sizeOf: aCollection' '	^0').
+		equals: #('sizeOf: aCollection' '	^ 0').
 	^call
 ]
 
