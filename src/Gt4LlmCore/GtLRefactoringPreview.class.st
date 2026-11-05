@@ -40,6 +40,20 @@ GtLRefactoringPreview >> changes [
 	^changes
 ]
 
+{ #category : #accessing }
+GtLRefactoringPreview >> changesCount [
+	^changes size
+]
+
+{ #category : #descriptions }
+GtLRefactoringPreview >> changesCountDescription [
+	<magritteDescription>
+	^(MANumberDescription new)
+		label: 'Changes count';
+		accessor: #changesCount;
+		beRequired
+]
+
 { #category : #descriptions }
 GtLRefactoringPreview >> changesDescription [
 	<magritteDescription>

@@ -58,6 +58,7 @@ GtLRefactoringPreviewExamples >> refactoringPreviewSerialization [
 										put: 'GtLRefactoringPreviewExamples>>previewedMethod';
 									at: #newSource put: 'previewedMethod ^ 42';
 									yourself));
+				at: #changesCount put: 1;
 				at: #objectId put: 'example-object-id';
 				at: #applied put: false;
 				yourself.

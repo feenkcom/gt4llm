@@ -15,7 +15,7 @@ Example JSON arguments:
 {"transformations": [{"PushUpMethod": {"methodClassName": "MySubclass", "methodNameToPushUp": "foo", "targetClassName": "MySuperclass"}}]}
 
 Example JSON response:
-{"changes": [{"changeDescription": "MySuperclass>>foo", "newSource": "foo\r\t^ 42"}, {"changeDescription": "Remove MySubclass>>#foo", "newSource": "Remove MySubclass>>#foo"}], "objectId": "abc123"}'
+{"changes": [{"changeDescription": "MySuperclass>>foo", "newSource": "foo ^ 42"}, {"changeDescription": "Remove MySubclass>>#foo", "newSource": "Remove MySubclass>>#foo"}], "changesCount": 2, "objectId": "abc123", "applied": false}'
 ]
 
 { #category : #accessing }

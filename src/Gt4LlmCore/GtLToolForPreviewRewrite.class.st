@@ -22,7 +22,7 @@ Example JSON arguments:
 {"from": "`@receiver foo", "to": "`@receiver bar", "isMethodPattern": false, "className": "MyClass", "packageName": ""}
 
 Example JSON response:
-{"changes": [{"changeDescription": "MyClass>>baz", "newSource": "baz ^ self bar"}], "objectId": "abc123", "applied": false}'
+{"changes": [{"changeDescription": "MyClass>>baz", "newSource": "baz ^ self bar"}], "changesCount": 1, "objectId": "abc123", "applied": false}'
 ]
 
 { #category : #descriptions }

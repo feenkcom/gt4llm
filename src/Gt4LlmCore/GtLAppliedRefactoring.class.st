@@ -14,7 +14,7 @@ GtLAppliedRefactoring class >> preview: aRefactoringPreview [
 
 { #category : #accessing }
 GtLAppliedRefactoring >> changesCount [
-	^preview changes size
+	^preview changesCount
 ]
 
 { #category : #descriptions }

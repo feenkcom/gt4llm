@@ -84,6 +84,7 @@ GtLToolForPreviewRefactoringExamples >> previewAddClassWithMethod [
 		assert: (targetObject changes collect: [:each | each changeDescription])
 				asArray
 		equals: #('GtLPreviewedExampleClass' 'GtLPreviewedExampleClass>>first').
+	self assert: targetObject changesCount equals: 2.
 	self assert: targetObject changes last newSource equals: 'first ^ first'.
 	self
 		assert: (Smalltalk globals includesKey: #GtLPreviewedExampleClass) not.

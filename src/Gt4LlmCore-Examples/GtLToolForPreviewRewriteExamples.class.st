@@ -209,6 +209,7 @@ GtLToolForPreviewRewriteExamples >> previewRewriteWithoutMatches [
 	targetObject := call result targetObject.
 	self assert: targetObject class equals: GtLRefactoringPreview.
 	self assert: targetObject changes isEmpty.
+	self assert: targetObject changesCount equals: 0.
 	^call
 ]
 
