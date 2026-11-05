@@ -153,7 +153,7 @@ GtLACPAssistantMessageElement >> toolElementFor: aTool [
 			id: ('acp-tool-' , aTool id asString) asSymbol;
 			hMatchParent;
 			vFitContent;
-			margin: (BlInsets top: 4 bottom: 4);
+			margin: (BlInsets top: 2 left: 5 bottom: 2 right: 5);
 			addChild: line;
 			yourself.
 	aTool permissionRequests
@@ -200,19 +200,27 @@ GtLACPAssistantMessageElement >> workContent [
 
 { #category : #building }
 GtLACPAssistantMessageElement >> workContentFor: anAssistantMessage [
- | pane |
- pane := BrVerticalPane new hMatchParent; vFitContent; yourself.
- anAssistantMessage == viewModel message ifTrue: [ pane id: (viewModel elementIdFor: 'work-content') ].
- anAssistantMessage localActivityItems do: [ :item |
-  (item isKindOf: GtLACPToolCall)
-   ifTrue: [ pane addChild: (self toolElementFor: item) ]
-   ifFalse: [
-    item isInterSessionMessage ifTrue: [
-     pane addChild: (BrLabel new aptitude: BrGlamorousLabelAptitude; text: item chatLabel; yourself) ].
-    pane addChild: (self textElementFor: item text) ] ].
- anAssistantMessage delegatedMessages do: [ :delegated |
-  pane addChild: (self agentWorkElementFor: delegated) ].
- ^ pane
+	| pane |
+	pane := BrVerticalPane new
+			hMatchParent;
+			vFitContent;
+			yourself.
+	anAssistantMessage == viewModel message
+		ifTrue: [ pane id: (viewModel elementIdFor: 'work-content') ].
+	anAssistantMessage localActivityItems
+		do: [ :item | 
+			(item isKindOf: GtLACPToolCall)
+				ifTrue: [ pane addChild: (self toolElementFor: item) ]
+				ifFalse: [ item isInterSessionMessage
+						ifTrue: [ pane
+								addChild: (BrLabel new
+										aptitude: BrGlamorousLabelAptitude;
+										text: item chatLabel;
+										yourself) ].
+					pane addChild: (self textElementFor: item text) ] ].
+	anAssistantMessage delegatedMessages
+		do: [ :delegated | pane addChild: (self agentWorkElementFor: delegated) ].
+	^ pane
 ]
 
 { #category : #building }
