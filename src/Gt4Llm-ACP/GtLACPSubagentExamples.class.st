@@ -71,7 +71,7 @@ GtLACPSubagentExamples >> agentHeaderOpensSessionOnRight [
 				onPagerPaneWithIndex: 1;
 				id: (prefix , '-header') asSymbol;
 				exists ].
-	GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
 	^ scripter
 ]
 
@@ -98,7 +98,7 @@ GtLACPSubagentExamples >> agentReplyTabSurvivesRefresh [
  { nestedTabs. #'acp-final-tabs' } do: [ :anId |
   scripter assertStep: [ :step | step id: anId;
    satisfies: [ :tabs | tabs viewModel selectedTab tabLabel text asString = 'Markdown' ] ] ].
- GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+ GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
  ^ scripter
 ]
 
@@ -138,9 +138,9 @@ GtLACPSubagentExamples >> agentReplyWithoutTools [
 			step
 				id: (prefix , '-final-content') asSymbol;
 				satisfies: [ :pane | 
-					(GtLACPChatExamples new editorsIn: pane)
+					(GtLACPSessionExamples new editorsIn: pane)
 						anySatisfy: [ :editor | editor text asString = 'Hello from the worker.' ] ] ].
-	GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
 	^ scripter
 ]
 
@@ -192,7 +192,7 @@ GtLACPSubagentExamples >> childCancelControlDisplayed [
  scripter assertStep: [ :step | step id: #'acp-composer'; satisfies: [ :pane | pane visibility = BlVisibility visible ] ].
  scripter assertStep: [ :step | step id: #'acp-input'; satisfies: [ :editor | editor visibility = BlVisibility gone ] ].
  scripter assertStep: [ :step | step id: #'acp-action'; satisfies: [ :button | button label asString = 'Stop' ] ].
- GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+ GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
  ^ scripter
 ]
 
@@ -204,11 +204,11 @@ GtLACPSubagentExamples >> childChatDisplayed [
  child := root childSessions first.
  scripter := BlScripter new extent: 1000 @ 700; model: child; element: child asElement; yourself.
  scripter assertStep: [ :step | step id: #'acp-final-content';
-  satisfies: [ :pane | (GtLACPChatExamples new editorsIn: pane)
+  satisfies: [ :pane | (GtLACPSessionExamples new editorsIn: pane)
    anySatisfy: [ :editor | editor text asString = 'The changes look consistent.' ] ] ].
  self assert: child asChatViewModel messageViewModels first label equals: 'From Codex'.
  scripter assertStep: [ :step | step id: #'acp-action'; satisfies: [ :button | button visibility = BlVisibility gone ] ].
- GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+ GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
  ^ scripter
 ]
 
@@ -285,7 +285,7 @@ GtLACPSubagentExamples >> childToolCallsDisplayed [
 	self assert: turn toolCalls first id equals: 'parent-call'.
 	self
 		assert: (turn assistantMessage activityItems includes: turn toolCalls first).
-	GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
 	^ scripter
 ]
 
@@ -436,7 +436,7 @@ GtLACPSubagentExamples >> collapsedAgentRefreshPreservesParent [
 				id: (prefix , '-counts') asSymbol;
 				value: [ :pane | pane children collect: [ :label | label text asString ] as: Array ]
 					equals: [ #('1 agent' '3 tools') ] ].
-	GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
 	^ scripter
 ]
 
@@ -451,16 +451,16 @@ GtLACPSubagentExamples >> collapsedAgentShowsLatestContentOnExpansion [
  scripter click id: (prefix, '-toggle') asSymbol; play.
  scripter click id: (prefix, '-work-toggle') asSymbol; play.
  scripter assertStep: [ :step | step id: (prefix, '-work-content') asSymbol;
-  satisfies: [ :pane | (GtLACPChatExamples new editorsIn: pane)
+  satisfies: [ :pane | (GtLACPSessionExamples new editorsIn: pane)
    anySatisfy: [ :editor | editor text asString = 'I am inspecting the worker result.' ] ] ].
  scripter doStep: [ :step | step block: [
   self reply: 'The worker is done.' in: child. self idle: child ] ].
  scripter pulseUntilReady.
  scripter assertStep: [ :step | step id: (prefix, '-final-section') asSymbol; satisfies: #isExpanded ].
  scripter assertStep: [ :step | step id: (prefix, '-final-content') asSymbol;
-  satisfies: [ :pane | (GtLACPChatExamples new editorsIn: pane)
+  satisfies: [ :pane | (GtLACPSessionExamples new editorsIn: pane)
    anySatisfy: [ :editor | editor text asString = 'The worker is done.' ] ] ].
- GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+ GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
  ^ scripter
 ]
 
@@ -498,7 +498,7 @@ GtLACPSubagentExamples >> conversationTreeAfterPromptResponse: response [
  scripter assertStep: [ :step |
   step label: 'The conversation returns to ready without a manual refresh';
    onPhlowCellWithString: 'ready'; exists ].
- GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+ GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
  ^ scripter
 ]
 
@@ -513,7 +513,7 @@ GtLACPSubagentExamples >> conversationTreeContentsDisplayed [
  #('Tree worker' 'Inspect project' 'Inspect class' 'Checking the class protocol'
   'Class inspection complete' 'Project inspection complete' 'Agent' 'Tool' 'Reasoning') do: [ :text |
   scripter assertStep: [ :step | step onPhlowCellWithString: text; exists ] ].
- GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+ GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
  ^ scripter
 ]
 
@@ -527,7 +527,7 @@ GtLACPSubagentExamples >> conversationTreeDisplayed [
  scripter := BlScripter new extent: 1100 @ 700; model: root; element: element; yourself.
  #('Codex' 'Code reviewer' 'Test investigator' 'API researcher') do: [ :title |
   scripter assertStep: [ :step | step onPhlowCellWithString: title; exists ] ].
- GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+ GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
  ^ scripter
 ]
 
@@ -542,7 +542,7 @@ GtLACPSubagentExamples >> conversationTreeUpdates [
  scripter doStep: [ :step | step block: [ self announce: 'live-child' title: 'New worker' in: root ] ].
  scripter pulseUntilReady.
  scripter assertStep: [ :step | step onPhlowCellWithString: 'New worker'; exists ].
- GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+ GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
  ^ scripter
 ]
 
@@ -586,7 +586,7 @@ GtLACPSubagentExamples >> conversationTreeUpdatesForMessagesAndTools [
  scripter pulseUntilReady.
  #('Inspecting the protocol' 'Live class checked' 'completed' 'final') do: [ :text |
   scripter assertStep: [ :step | step onPhlowCellWithString: text; exists ] ].
- GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+ GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
  ^ scripter
 ]
 
@@ -702,12 +702,12 @@ GtLACPSubagentExamples >> delegatedToolCallsInMainChat [
  #('main-call' 'worker-call' 'nested-call') do: [ :anId |
   scripter assertStep: [ :step | step id: ('acp-tool-summary-', anId) asSymbol; exists ] ].
  scripter assertStep: [ :step | step id: #'acp-final-content';
-  satisfies: [ :pane | (GtLACPChatExamples new editorsIn: pane)
+  satisfies: [ :pane | (GtLACPSessionExamples new editorsIn: pane)
    anySatisfy: [ :editor | editor text asString = 'Combined result' ] ] ].
  { child -> 'Worker result'. grandchild -> 'Nested result' } do: [ :pair |
   scripter assertStep: [ :step |
    step id: ('acp-agent-', pair key currentTurn identityHash asString, '-final-content') asSymbol;
-    satisfies: [ :pane | (GtLACPChatExamples new editorsIn: pane)
+    satisfies: [ :pane | (GtLACPSessionExamples new editorsIn: pane)
      anySatisfy: [ :editor | editor text asString = pair value ] ] ] ].
  self assert: root mcpToolMessages size equals: 3.
  self assert: turn assistantMessage mcpToolMessages size equals: 3.
@@ -715,7 +715,7 @@ GtLACPSubagentExamples >> delegatedToolCallsInMainChat [
  self assert: grandchild currentTurn assistantMessage mcpToolMessages size equals: 1.
  self assert: (root summarizersRegistry relevantCurrentSummarizers first relevantToolCalls size) equals: 3.
  self assert: (turn assistantMessage relevantToolCallsSummarizers first relevantToolCalls size) equals: 3.
- GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+ GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
  ^ scripter
 ]
 
@@ -746,7 +746,7 @@ GtLACPSubagentExamples >> delegatedToolCallsPreserveExpansion [
   satisfies: [ :section | section isExpanded not ] ].
  scripter assertStep: [ :step | step id: #'acp-tool-summary-worker-call'; exists ].
  scripter assertStep: [ :step | step id: #'acp-tool-summary-nested-call'; notExists ].
- GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+ GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
  ^ scripter
 ]
 
@@ -882,7 +882,7 @@ GtLACPSubagentExamples >> expandedAgentRefreshIsLocal [
 			step
 				id: (nestedPrefix , '-work-content') asSymbol;
 				satisfies: [ :pane | 
-					(GtLACPChatExamples new editorsIn: pane)
+					(GtLACPSessionExamples new editorsIn: pane)
 						anySatisfy: [ :editor | editor text asString = 'A new nested observation.' ] ] ].
 	scripter
 		assertStep: [ :step | 
@@ -894,7 +894,7 @@ GtLACPSubagentExamples >> expandedAgentRefreshIsLocal [
 			step
 				id: (nestedPrefix , '-header') asSymbol;
 				notExists ].
-	GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
 	^ scripter
 ]
 
@@ -917,9 +917,9 @@ GtLACPSubagentExamples >> hiddenNestedAgentReflectsStreaming [
  scripter click id: (prefix, '-toggle') asSymbol; play.
  scripter pulseUntilReady.
  scripter assertStep: [ :step | step id: (nestedPrefix, '-work-content') asSymbol;
-  satisfies: [ :pane | (GtLACPChatExamples new editorsIn: pane)
+  satisfies: [ :pane | (GtLACPSessionExamples new editorsIn: pane)
    anySatisfy: [ :editor | editor text asString includesSubstring: 'Updated while the outer agent was collapsed.' ] ] ].
- GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+ GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
  ^ scripter
 ]
 
@@ -1066,7 +1066,7 @@ GtLACPSubagentExamples >> reasoningStatusInHeaders [
    labels := OrderedCollection new.
    pane withAllChildrenBreadthFirstDo: [ :each |
     (each isKindOf: BrLabel) ifTrue: [ labels add: each text asString ] ].
-   editors := GtLACPChatExamples new editorsIn: pane.
+   editors := GtLACPSessionExamples new editorsIn: pane.
    (labels includes: 'Thinking') not and: [
     (editors anySatisfy: [ :each | each text asString = 'I will compare the results.' ]) and: [
      editors anySatisfy: [ :each | each text asString = 'I will inspect the class.' ] ] ] ] ].
@@ -1074,7 +1074,7 @@ GtLACPSubagentExamples >> reasoningStatusInHeaders [
  scripter pulseUntilReady.
  scripter assertStep: [ :step | step id: (prefix, '-work-indicator') asSymbol; notExists ].
  scripter assertStep: [ :step | step id: #'acp-work-indicator'; exists ].
- GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+ GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
  ^ scripter
 ]
 
@@ -1113,9 +1113,9 @@ GtLACPSubagentExamples >> reopenedAgentReflectsStreaming [
  scripter click id: (prefix, '-toggle') asSymbol; play.
  scripter pulseUntilReady.
  scripter assertStep: [ :step | step id: (prefix, '-work-content') asSymbol;
-  satisfies: [ :pane | (GtLACPChatExamples new editorsIn: pane)
+  satisfies: [ :pane | (GtLACPSessionExamples new editorsIn: pane)
    anySatisfy: [ :editor | editor text asString = 'An observation received while collapsed.' ] ] ].
- GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+ GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
  ^ scripter
 ]
 
@@ -1229,7 +1229,7 @@ GtLACPSubagentExamples >> runningAgentsChat [
  self mcpToolCallWithId: 'independent-sibling-call' in: sibling.
  scripter := BlScripter new extent: 1200 @ 1000; model: root; element: root asElement; yourself.
  scripter click id: #'acp-work-toggle'; play.
- GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+ GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
  ^ scripter
 ]
 
@@ -1305,7 +1305,7 @@ GtLACPSubagentExamples >> workSummaryDisplayed [
   value: [ :label | label text asString ] equals: [ 'Review worker: Inspect protocol' ] ].
  scripter assertStep: [ :step | step id: #'acp-work-summary-count-2';
   value: [ :label | label text asString ] equals: [ '3 tools' ] ].
- GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+ GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
  ^ scripter
 ]
 

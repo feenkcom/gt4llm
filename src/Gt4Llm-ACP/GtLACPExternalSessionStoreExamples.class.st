@@ -46,7 +46,7 @@ GtLACPExternalSessionStoreExamples >> claudeQueryInspector [
  scripter assertStep: [ :step | step onPhlowCellWithString: self firstId; exists ].
  scripter assertStep: [ :step |
   step onPhlowCellWithString: query sessions first createdAt asString; exists ].
- GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+ GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
  ^ scripter
 ]
 
@@ -285,7 +285,7 @@ GtLACPExternalSessionStoreExamples >> projectQueryInspector [
   step onChildFromBlock: [ :root | self tabNamed: 'Read problems' in: root ] ].
  scripter assertStep: [ :step |
   step onPhlowCellWithString: 'Compressed rollout: identity read from filename; metadata not decoded'; exists ].
- GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+ GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
  ^ scripter
 ]
 

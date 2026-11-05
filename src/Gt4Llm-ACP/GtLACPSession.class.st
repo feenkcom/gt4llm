@@ -287,7 +287,14 @@ GtLACPSession >> conversationState [
 GtLACPSession >> conversationTitle [
 	self isSubagent ifTrue: [ ^ parentSubagent title ].
 	^ conversationTitle
-		ifNil: [ client ifNil: [ 'ACP chat' ] ifNotNil: [ client displayName ] ]
+		ifNil: [ client ifNil: [ 'ACP session' ] ifNotNil: [ client displayName ] ]
+]
+
+{ #category : #accessing }
+GtLACPSession >> conversationTitle: aString [
+	self requireRootSession.
+	conversationTitle := aString.
+	self announceMessageChanged: nil
 ]
 
 { #category : #lifecycle }
@@ -407,12 +414,28 @@ GtLACPSession >> gtConversationTreeFor: aView [
 		view: #gtConversationTreeFor:
 ]
 
-{ #category : #ui }
+{ #category : #'gt - extensions' }
 GtLACPSession >> gtDefaultInspectorTool [
- ^ GtPhlowCompositeTool new
-  addTool: (GtLACPChatTool forChat: self);
-  addTool: super gtDefaultInspectorTool;
-  name: 'ACP: ', client gtDisplayString
+	^ GtPhlowCompositeTool new
+		addTool: (GtLACPSessionTool forSession: self);
+		addTool: super gtDefaultInspectorTool;
+		name: 'ACP: ' , client gtDisplayString
+]
+
+{ #category : #'gt - actions' }
+GtLACPSession >> gtInspectDirectoryFor: anAction [
+	<gtAction>
+	| aDirectory |
+	aDirectory := self directory.
+	(aDirectory isNotNil and: [ aDirectory isDirectory ])
+		ifFalse: [ ^ anAction noAction ].
+	^ anAction button
+		id: #'acp-inspect-directory';
+		label: 'Inspect directory';
+		priority: 30;
+		target: GtLACPSessionActionTarget;
+		menuItemGroup: BrMenuItemGroupConfiguration inspection;
+		action: [ :anElement | anElement phlow spawnObject: aDirectory ]
 ]
 
 { #category : #views }
@@ -446,6 +469,23 @@ GtLACPSession >> gtRefreshSummarizersFor: anAction [
   icon: BrGlamorousVectorIcons refresh;
   tooltip: 'Refresh tool call summaries';
   action: [ self updateToolSummarizers ]
+]
+
+{ #category : #actions }
+GtLACPSession >> gtRenameFor: anAction [
+	<gtAction>
+	self canClose ifFalse: [ ^ anAction noAction ].
+	^ anAction dropdown
+		id: #'acp-rename-session';
+		label: 'Rename session';
+		priority: 40;
+		target: GtLACPSessionActionTarget;
+		menuItemGroup: BrMenuItemGroupConfiguration editing;
+		content: [ :anActionElement :aTargetElement :anExplicitMenu | 
+			GtLACPRenameSessionForm new
+				session: self;
+				menuModel: anExplicitMenu;
+				asElement ]
 ]
 
 { #category : #actions }

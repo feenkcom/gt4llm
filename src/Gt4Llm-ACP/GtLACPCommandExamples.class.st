@@ -121,7 +121,7 @@ GtLACPCommandExamples >> advertisementsPreserveChatRows [
 				id: #'acp-message-2';
 				satisfies: [ :element | element == row and: [ element viewModel renderingVersion = version ] ] ].
 	self assert: session currentTurn == turn.
-	GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
 	^ scripter
 ]
 
@@ -239,7 +239,7 @@ GtLACPCommandExamples >> chatWithCommands [
 					composer
 						withAllChildrenBreadthFirstDo: [ :each | (each isKindOf: BrButton) ifTrue: [ buttons add: each ] ].
 					buttons size = 1 ] ].
-	GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
 	^ scripter
 ]
 
@@ -335,7 +335,7 @@ GtLACPCommandExamples >> completingEffortInChat [
 				satisfies: [ :editor | editor text asString = '/effort low' ] ].
 	self assert: scripter model turns isEmpty.
 	self assert: scripter element viewModel draft equals: '/effort low'.
-	GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
 	^ scripter
 ]
 
@@ -363,7 +363,7 @@ GtLACPCommandExamples >> completingEffortPrefix [
 				id: #'acp-input';
 				satisfies: [ :editor | editor text asString = '/effort xhigh' ] ].
 	self assert: scripter model turns isEmpty.
-	GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
 	^ scripter
 ]
 
@@ -393,7 +393,7 @@ GtLACPCommandExamples >> completingSkillInChat [
 				id: #'acp-input';
 				satisfies: [ :editor | editor text asString = '$explain-code' ] ].
 	self assert: scripter model turns isEmpty.
-	GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
 	^ scripter
 ]
 
@@ -416,7 +416,7 @@ GtLACPCommandExamples >> effortArgumentCompletionPopup [
 				satisfies: [ :list | 
 					(list items collect: #text) asArray
 						= #('low' 'medium' 'high' 'xhigh' 'max' 'auto') ] ].
-	GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
 	^ scripter
 ]
 
@@ -557,7 +557,7 @@ GtLACPCommandExamples >> sendPreparedCommand [
 		assert: (((session connection transport sentMessages last at: 'params') at: 'prompt')
 				first at: 'text')
 		equals: '/review the ACP package'.
-	GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
 	^ scripter
 ]
 
@@ -602,7 +602,7 @@ GtLACPCommandExamples >> skillViewUpdatesFromEmpty [
 			step
 				onPhlowCellWithString: '$explain-code';
 				notExists ].
-	GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
 	^ scripter
 ]
 
@@ -640,6 +640,6 @@ GtLACPCommandExamples >> slashCompletionInChat [
 	scripter pulseUntilReady.
 	scripter
 		assertStep: [ :step | step satisfies: [ :element | controller isShowingPopup ] ].
-	GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
 	^ scripter
 ]

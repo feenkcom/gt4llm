@@ -75,19 +75,19 @@ GtLACPMessagePresentationExamples >> claudeWorkDisplayed [
  scripter click id: #'acp-work-toggle'; play.
  scripter assertStep: [ :step | step id: #'acp-work-content';
   satisfies: [ :pane | | texts |
-   texts := (GtLACPChatExamples new editorsIn: pane) collect: [ :editor | editor text asString ].
+   texts := (GtLACPSessionExamples new editorsIn: pane) collect: [ :editor | editor text asString ].
    (texts includes: 'I will launch a worker.') and: [
     (texts includes: 'The worker is running.') and: [
      (texts includes: 'Async agent launched successfully.') not ] ] ] ].
  scripter doStep: [ :step | step block: [ self finishClaudeWork: root ] ].
  scripter pulseUntilReady.
  scripter assertStep: [ :step | step id: #'acp-final-content';
-  satisfies: [ :pane | (GtLACPChatExamples new editorsIn: pane)
+  satisfies: [ :pane | (GtLACPSessionExamples new editorsIn: pane)
    anySatisfy: [ :editor | editor text asString = 'The system is ready.' ] ] ].
  scripter assertStep: [ :step | step id: #'acp-work-content';
-  satisfies: [ :pane | (GtLACPChatExamples new editorsIn: pane)
+  satisfies: [ :pane | (GtLACPSessionExamples new editorsIn: pane)
    anySatisfy: [ :editor | editor text asString = 'The worker has finished.' ] ] ].
- GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+ GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
  ^ scripter
 ]
 

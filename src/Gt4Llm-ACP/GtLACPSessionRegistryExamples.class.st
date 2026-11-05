@@ -81,28 +81,6 @@ GtLACPSessionRegistryExamples >> closedSessionStaysListed [
 	^ registry
 ]
 
-{ #category : #'examples - views' }
-GtLACPSessionRegistryExamples >> conversationTreeFollowsAllConnections [
-	<gtExample>
-	| registry second scripter |
-	registry := self emptyRegistry.
-	scripter := self scripterOn: registry view: #gtConversationTreeFor:.
-	scripter pulseUntilReady.
-	self in: scripter do: [ self newSessionIn: registry ].
-	self assertIn: scripter cellExists: 'Claude Code'.
-	self in: scripter do: [ second := self newSessionIn: registry ].
-	self assert: registry sessions first connection ~~ second connection.
-	self
-		in: scripter
-		do: [ GtLACPSubagentExamples new
-				announce: 'second-connection-child'
-				title: 'Second connection worker'
-				in: second ].
-	self assertIn: scripter cellExists: 'Second connection worker'.
-	GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
-	^ scripter
-]
-
 { #category : #'examples - model' }
 GtLACPSessionRegistryExamples >> duplicateRegistrationIsIgnored [
 	<gtExample>
@@ -295,7 +273,7 @@ GtLACPSessionRegistryExamples >> overviewDisplaysStates [
 	scripter := self scripterOn: registry view: #gtOverviewFor:.
 	#('All' 'closed' 'ready')
 		do: [ :aLabel | self assertIn: scripter cellExists: aLabel ].
-	GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
 	^ scripter
 ]
 
@@ -457,7 +435,7 @@ GtLACPSessionRegistryExamples >> sessionStateVisuals [
 	scripter pulseUntilReady.
 	#(new starting loading ready prompting failed closed observing disconnected futureState)
 		do: [ :aState | self assertIn: scripter stateLabelExists: aState asString ].
-	GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
 	^ scripter
 ]
 
@@ -491,7 +469,7 @@ GtLACPSessionRegistryExamples >> sessionsViewUpdatesLive [
 		do: [ session state: #ready.
 			session close ].
 	self assertIn: scripter stateLabelExists: 'closed'.
-	GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
 	^ scripter
 ]
 

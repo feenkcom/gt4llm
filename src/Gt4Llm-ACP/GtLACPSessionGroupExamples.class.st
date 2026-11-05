@@ -40,7 +40,7 @@ GtLACPSessionGroupExamples >> connectionConversationTreeDisplayed [
 			step
 				onPhlowCellWithString: 'Group worker';
 				exists ].
-	GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
 	^ scripter
 ]
 
@@ -66,7 +66,7 @@ GtLACPSessionGroupExamples >> conversationTreeDisplayed [
 					step
 						onPhlowCellWithString: title;
 						exists ] ].
-	GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
 	^ scripter
 ]
 
@@ -87,7 +87,7 @@ GtLACPSessionGroupExamples >> emptyConversationTree [
 			element: element;
 			yourself.
 	scripter pulseUntilReady.
-	GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
 	^ scripter
 ]
 

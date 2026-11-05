@@ -30,7 +30,7 @@ GtLACPSummarizerExamples >> assistantSummaryTabs [
    onChildFromBlock: [ :bar | bar children detect: [ :tab | tab label asString = 'Grouped tools' ] ] ].
  scripter assertStep: [ :step | step onPhlowCellWithString: 'lookupClass'; exists ].
  scripter assertStep: [ :step | step onPhlowCellWithString: '1'; exists ].
- GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+ GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
  ^ scripter
 ]
 
@@ -103,7 +103,7 @@ GtLACPSummarizerExamples >> assistantTabSurvivesMessageUpdates [
 			step
 				id: #'acp-final-tabs';
 				satisfies: [ :tabs | tabs viewModel selectedTab tabLabel text asString = 'Grouped tools' ] ].
-	GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
 	^ scripter
 ]
 
@@ -200,7 +200,7 @@ GtLACPSummarizerExamples >> markdownUsesProvidedPhlowContext [
 			model: message;
 			element: element;
 			yourself.
-	GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
 	^ scripter
 ]
 
@@ -242,7 +242,7 @@ GtLACPSummarizerExamples >> markdownUsesSessionObjectRegistry [
 										anySatisfy: [ :attribute | attribute isKindOf: GtCachedTextExpandButtonAttribute ])
 										and: [ attributes
 												anySatisfy: [ :attribute | attribute isKindOf: BrTextHideAttribute ] ] ] ] ] ].
-	GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
 	^ scripter
 ]
 
@@ -266,7 +266,8 @@ GtLACPSummarizerExamples >> refreshPreservesChat [
 	| session element scripter chat input tool |
 	session := self sessionWithSummaries.
 	tool := session mcpToolMessages first toolCall tool.
-	element := (GtLACPChatTool forChat: session) asElementDo: [ :widget | widget ].
+	element := (GtLACPSessionTool forSession: session)
+			asElementDo: [ :widget | widget ].
 	scripter := BlScripter new
 			extent: 1100 @ 800;
 			model: session;
@@ -340,7 +341,7 @@ GtLACPSummarizerExamples >> refreshPreservesChat [
 			step
 				onPhlowCellWithString: '3';
 				exists ].
-	GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
 	^ scripter
 ]
 
@@ -424,18 +425,34 @@ GtLACPSummarizerExamples >> sessionWithSummaries [
 
 { #category : #examples }
 GtLACPSummarizerExamples >> summariesDisplayed [
- <gtExample>
- | session element scripter |
- session := self sessionWithSummaries.
- element := (GtLACPChatTool forChat: session) asElementDo: [ :widget | widget ].
- scripter := BlScripter new extent: 1100 @ 800; model: session; element: element; yourself.
- scripter assertStep: [ :step | step id: #'acp-input'; exists ].
- scripter clickStep: [ :step |
-  step // BrTabGroup; // #tabbar;
-   onChildFromBlock: [ :bar | bar children detect: [ :tab | tab label asString = 'Grouped tools' ] ] ].
- scripter assertStep: [ :step | step onPhlowCellWithString: 'lookupClass'; exists ].
- GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
- ^ scripter
+	<gtExample>
+	| session element scripter |
+	session := self sessionWithSummaries.
+	element := (GtLACPSessionTool forSession: session)
+			asElementDo: [ :widget | widget ].
+	scripter := BlScripter new
+			extent: 1100 @ 800;
+			model: session;
+			element: element;
+			yourself.
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-input';
+				exists ].
+	scripter
+		clickStep: [ :step | 
+			step
+				// BrTabGroup;
+				// #tabbar;
+				onChildFromBlock: [ :bar | bar children detect: [ :tab | tab label asString = 'Grouped tools' ] ] ].
+	scripter
+		assertStep: [ :step | 
+			step
+				onPhlowCellWithString: 'lookupClass';
+				exists ].
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
+	^ scripter
 ]
 
 { #category : #examples }

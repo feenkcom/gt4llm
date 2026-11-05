@@ -29,7 +29,7 @@ GtLACPWorkGraphExamples >> connectionsFlowDownward [
 														and: [ line toDirection y > 0
 																and: [ line geometry cornerRadius > 0
 																		and: [ line hasToHead not and: [ line hasFromHead not ] ] ] ] ] ] ] ] ] ].
-	GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
 	^ scripter
 ]
 
@@ -45,7 +45,7 @@ GtLACPWorkGraphExamples >> emptyConversation [
 			element: graph asElement;
 			yourself.
 	scripter pulseUntilReady.
-	GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
 	^ scripter
 ]
 
@@ -102,7 +102,7 @@ GtLACPWorkGraphExamples >> lazyScrolling [
 			step
 				id: #'acp-work-graph-row-501';
 				exists ].
-	GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
 	^ scripter
 ]
 
@@ -167,7 +167,7 @@ GtLACPWorkGraphExamples >> liveCompletion [
 			step
 				id: #'acp-work-graph-row-5';
 				satisfies: [ :element | element row kind = #reply ] ].
-	GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
 	^ scripter
 ]
 
@@ -289,7 +289,7 @@ GtLACPWorkGraphExamples >> nestedWorkDisplayed [
 										and: [ element parent children first == element
 												and: [ (element childNamed: #'acp-work-graph-marker') geometry class
 														= BlCircleGeometry ] ] ] ] ] ].
-	GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
 	^ scripter
 ]
 
@@ -329,7 +329,7 @@ GtLACPWorkGraphExamples >> reasoningDoesNotRebuildGraph [
 				id: #'acp-work-graph-row-1';
 				satisfies: [ :element | element == firstGraphElement ] ].
 	self assert: graph rows size equals: 1.
-	GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
 	^ scripter
 ]
 
@@ -384,7 +384,7 @@ GtLACPWorkGraphExamples >> selectingRowSelectsItsObject [
 		play.
 	self assert: selected last == (graph rows at: 5) object.
 	self assert: spawned isEmpty.
-	GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
 	^ scripter
 ]
 
@@ -404,11 +404,12 @@ GtLACPWorkGraphExamples >> stoppedTurnWithoutReply [
 ]
 
 { #category : #examples }
-GtLACPWorkGraphExamples >> workGraphInChatTool [
+GtLACPWorkGraphExamples >> workGraphInSessionTool [
 	<gtExample>
 	| root element scripter |
 	root := self nestedWork session.
-	element := (GtLACPChatTool forChat: root) asElementDo: [ :widget | widget ].
+	element := (GtLACPSessionTool forSession: root)
+			asElementDo: [ :widget | widget ].
 	scripter := BlScripter new
 			extent: 1400 @ 800;
 			model: root;
@@ -430,6 +431,6 @@ GtLACPWorkGraphExamples >> workGraphInChatTool [
 			step
 				id: #'acp-work-graph-list';
 				satisfies: [ :list | list items size = 12 ] ].
-	GtLACPChatExamples new assertNoRenderingErrorsIn: scripter.
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
 	^ scripter
 ]
