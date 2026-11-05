@@ -1,10 +1,11 @@
 "
-I present an ACP session using the Phlow chat tool structure: a header with the tool label, the session header as title and a toolbar with the session's <gtToolAction> actions, collected object views in tabs, and a collapsed playground. I specialize the ACP view collection and omit GtLChat-specific object storage and summarizer integration.
+I present an ACP session with a vertical layout, a header with the session title and actions, collected object views in tabs, and a collapsed playground. I manage session announcements and summarizer tab updates directly.
 "
 Class {
 	#name : #GtLACPSessionToolElement,
-	#superclass : #GtPhlowChatToolElement,
+	#superclass : #BlElement,
 	#instVars : [
+		'chat',
 		'titleLabel',
 		'toolbarElement',
 		'headerUpdater'
@@ -14,9 +15,22 @@ Class {
 
 { #category : #building }
 GtLACPSessionToolElement >> buildHeaderElement [
-	^ super buildHeaderElement
+	^ BrVerticalPane new
+		padding: (BlInsets left: 5);
+		vFitContent;
+		hMatchParent;
+		addChild: self buildToolLabel as: #toolLabel;
 		addChild: self buildTitleContainer as: #titleContainer;
 		yourself
+]
+
+{ #category : #building }
+GtLACPSessionToolElement >> buildPlaygroundPageElement [
+	| playgroundElement |
+	playgroundElement := (GtInspector environment
+			at: GtInspector embeddedPlaygroundName) new.
+	playgroundElement collapse.
+	^ playgroundElement
 ]
 
 { #category : #building }
@@ -56,9 +70,11 @@ GtLACPSessionToolElement >> buildTitleLabel [
 
 { #category : #building }
 GtLACPSessionToolElement >> buildToolLabel [
-	^ super buildToolLabel
-		text: 'ACP Session';
-		yourself
+	^ BrLabel new
+		aptitude: (BrGlamorousLabelAptitude new glamorousRegularFontAndSize
+				foreground: Color gray;
+				fontSize: 12);
+		text: 'ACP Session'
 ]
 
 { #category : #building }
@@ -68,10 +84,22 @@ GtLACPSessionToolElement >> buildToolbar [
 		fitContent
 ]
 
+{ #category : #building }
+GtLACPSessionToolElement >> buildViewsContainerElement [
+	^ BrFrame new matchParent
+]
+
+{ #category : #accessing }
+GtLACPSessionToolElement >> chat [
+	^ chat
+]
+
 { #category : #accessing }
 GtLACPSessionToolElement >> chat: aSession [
 	chat ifNotNil: [ chat announcer unsubscribe: self ].
-	super chat: aSession.
+	chat := aSession.
+	self updateContainedViews.
+	self updatePlayground.
 	aSession
 		ifNotNil: [ aSession announcer weak
 				when: GtLACPSessionChanged
@@ -113,6 +141,13 @@ GtLACPSessionToolElement >> gtInspectorTargetModels [
 { #category : #initialization }
 GtLACPSessionToolElement >> initialize [
 	super initialize.
+	self layout: BlLinearLayout vertical.
+	self
+		constraintsDo: [ :c | 
+			c horizontal matchParent.
+			c vertical matchParent ].
+	self padding: (BlInsets all: 5).
+	self initializeContent.
 	headerUpdater := BrElementUpdater new
 			element: self selector: #updateHeader;
 			postponedDuration: 150 milliseconds;
@@ -123,9 +158,21 @@ GtLACPSessionToolElement >> initialize [
 		object: #chat
 ]
 
+{ #category : #building }
+GtLACPSessionToolElement >> initializeContent [
+	self addChild: self buildHeaderElement as: #header.
+	self addChild: self buildViewsContainerElement as: #viewsContainer.
+	self addChild: self buildPlaygroundPageElement as: #playgroundPage
+]
+
 { #category : #events }
 GtLACPSessionToolElement >> onSessionChanged: anAnnouncement [
 	BlTaskAction enqueueElement: self action: [ headerUpdater requestUpdate ]
+]
+
+{ #category : #accessing }
+GtLACPSessionToolElement >> playgroundElement [
+	^ self childNamed: #playgroundPage
 ]
 
 { #category : #accessing }
@@ -157,6 +204,12 @@ GtLACPSessionToolElement >> updateHeader [
 ]
 
 { #category : #updating }
+GtLACPSessionToolElement >> updatePlayground [
+	self chat ifNil: [ ^ self ].
+	self playgroundElement objectHolder: (GtInspectorObject new object: self chat)
+]
+
+{ #category : #updating }
 GtLACPSessionToolElement >> updateTitle [
 	titleLabel text: (chat ifNil: [ '' ] ifNotNil: #header) asRopedText
 ]
@@ -172,4 +225,9 @@ GtLACPSessionToolElement >> updateToolbarActions [
 			anAction
 				asElement: [ :actionElement | toolbarElement addItem: actionElement ]
 				withHostElement: self ]
+]
+
+{ #category : #accessing }
+GtLACPSessionToolElement >> viewsContainerElement [
+	^ self childNamed: #viewsContainer
 ]

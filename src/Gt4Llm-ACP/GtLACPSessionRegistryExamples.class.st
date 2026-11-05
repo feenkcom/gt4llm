@@ -415,13 +415,19 @@ GtLACPSessionRegistryExamples >> registryToolUpdatesLive [
 			element: element;
 			yourself.
 	scripter pulseUntilReady.
-	self assert: element collectToolViews isEmpty.
 	self in: scripter do: [ session := self newSessionIn: registry ].
+	self assertIn: scripter cellExists: 'Claude Code'.
+	self assertIn: scripter stateLabelExists: 'ready'.
 	self
 		in: scripter
 		do: [ session state: #prompting.
 			session announceConversationTreeChanged ].
-	self assert: element collectToolViews isEmpty.
+	self assertIn: scripter stateLabelExists: 'prompting'.
+	self
+		in: scripter
+		do: [ session state: #ready.
+			session close ].
+	self assertIn: scripter stateLabelExists: 'closed'.
 	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
 	^ scripter
 ]
