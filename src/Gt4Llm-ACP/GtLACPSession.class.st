@@ -538,9 +538,13 @@ GtLACPSession >> gtSummarizersRegistryFor: aView [
 
 { #category : #views }
 GtLACPSession >> gtTurnsFor: aView [
- <gtView>
- <gtLlmView>
- ^ aView list title: 'Turns'; priority: 20; items: [ turns copy ]; itemText: #yourself; actionUpdateButtonTooltip: 'Refresh turns'
+	<gtView>
+	^ aView list
+		title: 'Turns';
+		priority: 20;
+		items: [ turns copy ];
+		itemText: #yourself;
+		actionUpdateButtonTooltip: 'Refresh turns'
 ]
 
 { #category : #views }

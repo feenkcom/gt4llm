@@ -63,9 +63,19 @@ GtLACPSessionRegistry >> clearSessions [
 ]
 
 { #category : #'gt - extensions' }
+GtLACPSessionRegistry >> gtDefaultInspectorTool [
+	^ GtPhlowCompositeTool new
+		addTool: (GtLACPSessionRegistryTool forRegistry: self);
+		addTool: super gtDefaultInspectorTool;
+		name: 'ACP Sessions'
+]
+
+{ #category : #'gt - extensions' }
 GtLACPSessionRegistry >> gtNewSessionFor: anAction [
 	<gtAction>
 	^ anAction dropdown
+		id: #'acp-registry-new-session';
+		addTarget: GtLACPSessionRegistryActionTarget;
 		icon: BrGlamorousIcons add;
 		label: 'New session';
 		priority: 1;
@@ -75,6 +85,7 @@ GtLACPSessionRegistry >> gtNewSessionFor: anAction [
 { #category : #'gt - extensions' }
 GtLACPSessionRegistry >> gtOverviewFor: aView [
 	<gtView>
+	<gtLlmView>
 	^ aView columnedList
 		title: 'By state';
 		priority: 30;
@@ -87,9 +98,24 @@ GtLACPSessionRegistry >> gtOverviewFor: aView [
 ]
 
 { #category : #'gt - extensions' }
+GtLACPSessionRegistry >> gtRegistryActionsDropdownFor: anAction [
+	<gtToolAction>
+	(GtLACPSessionRegistryActionTarget actionsForObject: self)
+		ifEmpty: [ ^ anAction noAction ].
+	^ anAction dropdown
+		tooltip: 'Registry actions';
+		icon: BrGlamorousVectorIcons hamburger;
+		id: #'acp-registry-actions';
+		priority: 100;
+		menuItemsForObject: self fromTarget: GtLACPSessionRegistryActionTarget
+]
+
+{ #category : #'gt - extensions' }
 GtLACPSessionRegistry >> gtRemoveClosedSessionsFor: anAction [
 	<gtAction>
 	^ anAction button
+		id: #'acp-registry-remove-closed-sessions';
+		addTarget: GtLACPSessionRegistryActionTarget;
 		icon: BrGlamorousIcons remove;
 		label: 'Remove closed sessions';
 		priority: 30;
@@ -98,9 +124,9 @@ GtLACPSessionRegistry >> gtRemoveClosedSessionsFor: anAction [
 
 { #category : #'gt - extensions' }
 GtLACPSessionRegistry >> gtSessionsFor: aView [
-	"Keep session states readable while highlighting activity and failures."
 
 	<gtView>
+	<gtLlmView>
 	^ aView columnedList
 		title: 'Sessions';
 		priority: 10;
