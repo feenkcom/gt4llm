@@ -7,6 +7,255 @@ Class {
 	#category : #'Gt4Llm-ACP-Examples'
 }
 
+{ #category : #helpers }
+GtLACPAttentionScripterExamples >> addLongWork: aLabel in: aSession [
+	GtLACPExamples new
+		sendUpdate: {'sessionUpdate' -> 'agent_thought_chunk'.
+				'content'
+					-> {'type' -> 'text'.
+							'text'
+								-> (String
+										streamContents: [ :stream | 
+											1
+												to: 80
+												do: [ :index | 
+													stream
+														nextPutAll: aLabel;
+														space;
+														print: index;
+														cr ] ])} asDictionary} asDictionary
+		to: aSession
+]
+
+{ #category : #assertions }
+GtLACPAttentionScripterExamples >> assertInteraction: aRequest visibleIn: aScripter [
+	aScripter
+		assertStep: [ :step | 
+			step
+				// GtLACPChatElement;
+				satisfies: [ :chat | 
+					| target |
+					chat
+						withAllChildrenBreadthFirstDo: [ :each | each id asSymbol = aRequest interactionElementId ifTrue: [ target := each ] ].
+					target notNil
+						and: [ target bounds inSpace top >= chat messageViewport bounds inSpace top
+								and: [ target bounds inSpace top < (chat messageViewport bounds inSpace bottom - 40) ] ] ] ]
+]
+
+{ #category : #assertions }
+GtLACPAttentionScripterExamples >> assertInteractionNearTop: aRequest in: scripter [
+	self assertInteraction: aRequest visibleIn: scripter.
+	scripter
+		assertStep: [ :step | 
+			step
+				// GtLACPChatElement;
+				satisfies: [ :chat | 
+					| target offset |
+					chat
+						withAllChildrenBreadthFirstDo: [ :each | each id asSymbol = aRequest interactionElementId ifTrue: [ target := each ] ].
+					target := target attentionTarget.
+					offset := target bounds inSpace top
+							- chat messageViewport bounds inSpace top.
+					offset >= 20 and: [ offset <= 45 ] ] ].
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter
+]
+
+{ #category : #examples }
+GtLACPAttentionScripterExamples >> badgeScrollsInsideLongSubagent [
+	<gtExample>
+	| scripter |
+	scripter := self
+			longSubagentWithInteraction: [ :child | 
+				GtLACPElicitationExamples new
+					receive: (GtLACPElicitationExamples new questionParametersFor: child)
+					id: 'long-subagent-question'
+					in: child.
+				child currentTurn elicitationRequests first ].
+	scripter clickStep: [ :step | step id: #'acp-session-state-marker' ].
+	scripter pulseUntilReady.
+	self assertInteractionNearTop: (scripter model at: 'request') in: scripter.
+	^ scripter
+]
+
+{ #category : #examples }
+GtLACPAttentionScripterExamples >> badgeScrollsToSubagentTool [
+	<gtExample>
+	| scripter |
+	scripter := self
+			longSubagentWithInteraction: [ :child | 
+				GtLACPPermissionScripterExamples new
+					receivePermissionIn: child
+					requestId: 'long-subagent-permission'.
+				child currentTurn permissionRequests first ].
+	scripter clickStep: [ :step | step id: #'acp-session-state-marker' ].
+	scripter pulseUntilReady.
+	self assertInteractionNearTop: (scripter model at: 'request') in: scripter.
+	^ scripter
+]
+
+{ #category : #examples }
+GtLACPAttentionScripterExamples >> dropdownRevealsCollapsedQuestion [
+	<gtExample>
+	| scripter request |
+	scripter := self twoPendingInteractionsInSessionTool.
+	request := scripter model at: 'request'.
+	scripter clickStep: [ :step | step id: #'acp-work-toggle' ].
+	scripter clickStep: [ :step | step id: #'acp-message-input-needed' ].
+	scripter
+		clickStep: [ :step | 
+			step
+				onSpaceRoot;
+				// #'acp-input-needed-item-2' ].
+	scripter pulseUntilReady.
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-work-section';
+				satisfies: #isExpanded ].
+	self assertInteraction: request visibleIn: scripter.
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
+	^ scripter
+]
+
+{ #category : #examples }
+GtLACPAttentionScripterExamples >> dropdownRevealsNestedQuestion [
+	<gtExample>
+	| scripter request |
+	scripter := self pendingInteractionsDropdown.
+	request := scripter model at: 'request'.
+	scripter
+		clickStep: [ :step | 
+			step
+				onSpaceRoot;
+				// #'acp-input-needed-item-2' ].
+	scripter pulseUntilReady.
+	scripter
+		assertStep: [ :step | 
+			step
+				onSpaceRoot;
+				// #'acp-input-needed-menu';
+				notExists ].
+	self assertInteraction: request visibleIn: scripter.
+	self assert: request state equals: #pending.
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
+	^ scripter
+]
+
+{ #category : #examples }
+GtLACPAttentionScripterExamples >> dropdownRevealsPermission [
+	<gtExample>
+	| scripter request |
+	scripter := self pendingInteractionsDropdown.
+	request := (scripter model at: 'session') currentTurn permissionRequests first.
+	scripter
+		clickStep: [ :step | 
+			step
+				onSpaceRoot;
+				// #'acp-input-needed-item-1' ].
+	scripter pulseUntilReady.
+	self assertInteraction: request visibleIn: scripter.
+	self assert: request state equals: #pending.
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
+	^ scripter
+]
+
+{ #category : #examples }
+GtLACPAttentionScripterExamples >> dropdownScrollsInsideLongSubagent [
+	<gtExample>
+	| scripter |
+	scripter := self
+			longSubagentWithInteraction: [ :child | 
+				GtLACPElicitationExamples new
+					receive: (GtLACPElicitationExamples new questionParametersFor: child)
+					id: 'long-subagent-question'
+					in: child.
+				child currentTurn elicitationRequests first ].
+	scripter
+		doStep: [ :step | 
+			step
+				block: [ GtLACPPermissionScripterExamples new
+						receivePermissionIn: (scripter model at: 'session')
+						requestId: 'root-dropdown-permission' ] ].
+	scripter pulseUntilReady.
+	scripter clickStep: [ :step | step id: #'acp-session-state-marker' ].
+	scripter
+		clickStep: [ :step | 
+			step
+				onSpaceRoot;
+				// #'acp-input-needed-item-2' ].
+	scripter pulseUntilReady.
+	self assertInteractionNearTop: (scripter model at: 'request') in: scripter.
+	^ scripter
+]
+
+{ #category : #helpers }
+GtLACPAttentionScripterExamples >> longSubagentWithInteraction: anInteractionBlock [
+	| context root child helper request scripter |
+	context := GtLACPAttentionExamples new context.
+	root := context at: 'session'.
+	root prompt: 'Delegate a question'.
+	helper := GtLACPSubagentExamples new.
+	child := helper
+			announce: 'long-attention-child'
+			title: 'Reviewer'
+			in: root.
+	helper
+		task: 'Choose a layout'
+		from: root
+		to: child
+		id: 'long-attention-task'.
+	self addLongWork: 'Prior work' in: child.
+	request := anInteractionBlock value: child.
+	context at: 'request' put: request.
+	self addLongWork: 'Following work' in: child.
+	scripter := BlScripter new
+			extent: 1200 @ 900;
+			model: context;
+			element: (GtLACPSessionToolElement new
+					chat: root;
+					yourself);
+			yourself.
+	scripter
+		doStep: [ :step | 
+			step
+				block: [ | chat rootModel childModel |
+					scripter element
+						withAllChildrenBreadthFirstDo: [ :each | (each isKindOf: GtLACPChatElement) ifTrue: [ chat := each ] ].
+					rootModel := chat viewModel messageViewModels
+							detect: [ :each | each message == root currentTurn assistantMessage ].
+					childModel := rootModel
+							delegatedViewModelFor: child currentTurn assistantMessage.
+					childModel
+						agentExpanded: false;
+						workExpanded: false.
+					rootModel changed ] ].
+	scripter pulseUntilReady.
+	^ scripter
+]
+
+{ #category : #examples }
+GtLACPAttentionScripterExamples >> messageBadgeDropdown [
+	<gtExample>
+	| scripter |
+	scripter := self twoPendingInteractionsInSessionTool.
+	scripter clickStep: [ :step | step id: #'acp-message-input-needed' ].
+	scripter
+		assertStep: [ :step | 
+			step
+				onSpaceRoot;
+				// #'acp-input-needed-menu';
+				exists ].
+	scripter
+		assertStep: [ :step | 
+			step
+				onSpaceRoot;
+				// #'acp-input-needed-item-2';
+				value: [ :card | card notification request ]
+					equals: [ scripter model at: 'request' ] ].
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
+	^ scripter
+]
+
 { #category : #examples }
 GtLACPAttentionScripterExamples >> nestedAttentionInSessionTool [
 	<gtExample>
@@ -177,6 +426,36 @@ GtLACPAttentionScripterExamples >> notificationOpensNestedInteraction [
 ]
 
 { #category : #examples }
+GtLACPAttentionScripterExamples >> pendingInteractionsDropdown [
+	<gtExample>
+	| scripter |
+	scripter := self twoPendingInteractionsInSessionTool.
+	scripter clickStep: [ :step | step id: #'acp-session-state-marker' ].
+	scripter
+		assertStep: [ :step | 
+			step
+				onSpaceRoot;
+				// #'acp-input-needed-menu';
+				exists ].
+	scripter
+		assertStep: [ :step | 
+			step
+				onSpaceRoot;
+				// #'acp-input-needed-item-1';
+				value: [ :card | card notification request ]
+					equals: [ (scripter model at: 'session') currentTurn permissionRequests first ] ].
+	scripter
+		assertStep: [ :step | 
+			step
+				onSpaceRoot;
+				// #'acp-input-needed-item-2';
+				value: [ :card | card notification request ]
+					equals: [ scripter model at: 'request' ] ].
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
+	^ scripter
+]
+
+{ #category : #examples }
 GtLACPAttentionScripterExamples >> registryDisplaysInputNeeded [
 	<gtExample>
 	| context registry root request scripter |
@@ -239,6 +518,12 @@ GtLACPAttentionScripterExamples >> registryWithTwoPendingInteractions [
 			step
 				onPagerPaneWithIndex: 1;
 				id: #'acp-session-state-marker' ].
+	scripter pulseUntilReady.
+	scripter
+		clickStep: [ :step | 
+			step
+				onSpaceRoot;
+				// #'acp-input-needed-item-1' ].
 	scripter pulseUntilReady.
 	scripter
 		assertStep: [ :step | 
@@ -370,6 +655,63 @@ GtLACPAttentionScripterExamples >> sessionBadgeWithTwoPendingInteractions [
 				id: #'acp-session-state-label';
 				value: [ :label | label text asString ] equals: [ 'input needed · 2' ] ].
 	self assert: (scripter model at: 'notifications') size equals: 2.
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
+	^ scripter
+]
+
+{ #category : #examples }
+GtLACPAttentionScripterExamples >> singleBadgeRevealsNestedQuestion [
+	<gtExample>
+	| context root request scripter |
+	context := GtLACPAttentionExamples new nestedContext.
+	root := context at: 'session'.
+	request := context at: 'request'.
+	scripter := BlScripter new
+			extent: 1200 @ 900;
+			model: context;
+			element: (GtLACPSessionToolElement new
+					chat: root;
+					yourself);
+			yourself.
+	scripter clickStep: [ :step | step id: #'acp-work-toggle' ].
+	scripter
+		doStep: [ :step | 
+			step
+				block: [ GtLACPExamples new
+						sendUpdate: {'sessionUpdate' -> 'agent_thought_chunk'.
+								'content'
+									-> {'type' -> 'text'.
+											'text'
+												-> (String
+														streamContents: [ :stream | 
+															1
+																to: 80
+																do: [ :index | 
+																	stream
+																		nextPutAll: 'Prior work ';
+																		print: index;
+																		cr ] ])} asDictionary} asDictionary
+						to: root ] ].
+	scripter
+		clickStep: [ :step | 
+			step
+				// BrTabGroup;
+				// #tabbar;
+				onChildFromBlock: [ :bar | bar children detect: [ :tab | tab label asString = 'Session' ] ] ].
+	scripter clickStep: [ :step | step id: #'acp-session-state-marker' ].
+	scripter pulseUntilReady.
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-input-needed-menu';
+				notExists ].
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-work-section';
+				satisfies: #isExpanded ].
+	self assertInteraction: request visibleIn: scripter.
+	self assert: request state equals: #pending.
 	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
 	^ scripter
 ]

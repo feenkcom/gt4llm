@@ -83,11 +83,10 @@ GtLACPInputNeededElement >> initialize [
 			postponedDuration: 150 milliseconds;
 			yourself.
 	self
-		when: BlClickEvent
-		do: [ :event | 
-			event consumed: true.
-			pendingBlock value
-				ifNotEmpty: [ :requests | self phlow spawnTool: requests first navigationTool ] ]
+		addAptitude: (GtLACPInputNeededNavigationAptitude new
+				pendingBlock: [ pendingBlock value ];
+				yourself).
+	self when: BlClickEvent do: [ :event | event consumed: true ]
 ]
 
 { #category : #events }

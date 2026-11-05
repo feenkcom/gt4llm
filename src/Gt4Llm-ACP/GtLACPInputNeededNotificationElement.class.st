@@ -4,6 +4,9 @@ I display an amber ACP input-needed notification. Inspect opens the root session
 Class {
 	#name : #GtLACPInputNeededNotificationElement,
 	#superclass : #GtObjectNotificationMessageElement,
+	#instVars : [
+		'inspectAction'
+	],
 	#category : #'Gt4Llm-ACP-UI'
 }
 
@@ -17,8 +20,14 @@ GtLACPInputNeededNotificationElement >> initialize [
 			border background: GtLACPInputNeededElement paleAmberColor ]
 ]
 
+{ #category : #accessing }
+GtLACPInputNeededNotificationElement >> inspectAction: aBlock [
+	inspectAction := aBlock
+]
+
 { #category : #actions }
 GtLACPInputNeededNotificationElement >> inspectObject [
+	inspectAction ifNotNil: [ ^ inspectAction value ].
 	self
 		notificationDo: [ :notification | self phlow spawnTool: notification navigationTool ]
 ]

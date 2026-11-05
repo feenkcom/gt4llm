@@ -221,18 +221,25 @@ GtLACPChatElement >> revealInteraction: aRequest [
 
 { #category : #navigation }
 GtLACPChatElement >> revealInteractionAfterLayout [
-	| target delta |
+	| target row index offset |
 	interactionToReveal ifNil: [ ^ self ].
 	self messageViewport
 		withAllChildrenBreadthFirstDo: [ :each | 
 			each id asSymbol = interactionToReveal interactionElementId
 				ifTrue: [ target := each ] ].
 	target ifNil: [ ^ self ].
+	target := target attentionTarget.
 	target height = 0 ifTrue: [ ^ self ].
+	row := target.
+	[ row hasParent and: [ row parent ~~ self messageViewport ] ]
+		whileTrue: [ row := row parent ].
+	row parent == self messageViewport ifFalse: [ ^ self ].
+	index := listElement items indexOf: row viewModel.
+	index = 0 ifTrue: [ ^ self ].
+	offset := target bounds inSpace top - row bounds inSpace top.
 	interactionToReveal := nil.
-	delta := target bounds inSpace top - self messageViewport bounds inSpace top
-			- 32.
-	self messageViewport scrollBy: 0 @ delta
+	followEndRequested := false.
+	listElement scrollToIndex: index offset: 32 - offset
 ]
 
 { #category : #actions }

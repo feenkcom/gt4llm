@@ -11,6 +11,11 @@ Class {
 	#category : #'Gt4Llm-ACP-UI'
 }
 
+{ #category : #navigation }
+GtLACPInteractionElement >> attentionTarget [
+	^ self
+]
+
 { #category : #building }
 GtLACPInteractionElement >> build [
 	self removeChildren.

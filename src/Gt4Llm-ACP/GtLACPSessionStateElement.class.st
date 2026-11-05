@@ -15,7 +15,7 @@ Class {
 	#category : #'Gt4Llm-ACP-UI'
 }
 
-{ #category : #building }
+{ #category : #initialization }
 GtLACPSessionStateElement >> initialize [
 	super initialize.
 	label := BrLabel new
@@ -44,13 +44,10 @@ GtLACPSessionStateElement >> initialize [
 		alignCenterLeft;
 		addChild: marker.
 	marker
-		when: BlClickEvent
-		do: [ :event | 
-			session
-				ifNotNil: [ session pendingInteractions
-						ifNotEmpty: [ :requests | 
-							event consumed: true.
-							self phlow spawnTool: requests first navigationTool ] ] ]
+		addAptitude: (GtLACPInputNeededNavigationAptitude new
+				pendingBlock: [ session ifNil: [ #() ] ifNotNil: [ session pendingInteractions ] ];
+				yourself).
+	marker when: BlClickEvent do: [ :event | event consumed: true ]
 ]
 
 { #category : #testing }
