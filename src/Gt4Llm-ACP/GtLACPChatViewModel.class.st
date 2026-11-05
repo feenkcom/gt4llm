@@ -63,21 +63,29 @@ GtLACPChatViewModel >> lastError: anObject [
 
 { #category : #accessing }
 GtLACPChatViewModel >> messageViewModels [
- ^ Array streamContents: [ :stream |
-  session turns copy do: [ :turn |
-   turn inputMessages do: [ :user |
-    | model |
-    model := messageCache at: user ifAbsentPut: [
-     GtLACPChatMessageViewModel new turn: turn; yourself ].
-    model message: user.
-    stream nextPut: model ].
-   (turn activity notEmpty
-    or: [ turn assistantMessage hasWork or: [ turn isActive or: [ turn state = #failed ] ] ])
-    ifTrue: [ | model |
-     model := messageCache at: turn ifAbsentPut: [
-      GtLACPChatMessageViewModel new turn: turn; yourself ].
-     model message: turn assistantMessage.
-     stream nextPut: model ] ] ]
+	^ Array
+		streamContents: [ :stream | 
+			session turns copy
+				do: [ :turn | 
+					turn inputMessages
+						do: [ :input | 
+							| model |
+							model := messageCache
+									at: input
+									ifAbsentPut: [ input asChatMessageViewModel
+											turn: turn;
+											yourself ].
+							model message: input.
+							stream nextPut: model ].
+					(turn activity notEmpty
+						or: [ turn assistantMessage hasWork
+								or: [ turn isActive or: [ turn state = #failed ] ] ])
+						ifTrue: [ | model |
+							model := messageCache
+									at: turn
+									ifAbsentPut: [ turn assistantMessage asChatMessageViewModel ].
+							model message: turn assistantMessage.
+							stream nextPut: model ] ] ]
 ]
 
 { #category : #updating }

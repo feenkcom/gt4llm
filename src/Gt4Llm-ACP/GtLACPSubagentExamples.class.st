@@ -10,11 +10,11 @@ Class {
 { #category : #examples }
 GtLACPSubagentExamples >> agentHeaderOpensSessionOnRight [
 	<gtExample>
-	| root child chat prefix scripter |
+	| root child chat hash scripter |
 	root := self conversationTreeWithMessagesAndTools.
 	child := root childSessions first.
 	chat := root asElement.
-	prefix := 'acp-agent-' , child currentTurn identityHash asString.
+	hash := child currentTurn identityHash asString.
 	scripter := BlScripter new
 			extent: 1600 @ 1000;
 			model: root;
@@ -26,10 +26,10 @@ GtLACPSubagentExamples >> agentHeaderOpensSessionOnRight [
 	scripter
 		assertStep: [ :step | 
 			step
-				id: (prefix , '-section') asSymbol;
+				id: ('acp-agent-section-' , hash) asSymbol;
 				satisfies: #isCollapsed ].
 	scripter click
-		id: (prefix , '-header') asSymbol;
+		id: ('acp-agent-header-' , hash) asSymbol;
 		play.
 	scripter
 		assertStep: [ :step | 
@@ -41,35 +41,35 @@ GtLACPSubagentExamples >> agentHeaderOpensSessionOnRight [
 		assertStep: [ :step | 
 			step
 				onPagerPaneWithIndex: 1;
-				id: (prefix , '-section') asSymbol;
+				id: ('acp-agent-section-' , hash) asSymbol;
 				satisfies: #isCollapsed ].
 	scripter
 		clickStep: [ :step | 
 			step
 				onPagerPaneWithIndex: 1;
-				id: (prefix , '-toggle') asSymbol ].
+				id: ('acp-agent-toggle-' , hash) asSymbol ].
 	scripter
 		assertStep: [ :step | 
 			step
 				onPagerPaneWithIndex: 1;
-				id: (prefix , '-section') asSymbol;
+				id: ('acp-agent-section-' , hash) asSymbol;
 				satisfies: #isExpanded ].
 	scripter
 		assertStep: [ :step | 
 			step
 				onPagerPaneWithIndex: 1;
-				id: (prefix , '-header') asSymbol;
+				id: ('acp-agent-header-' , hash) asSymbol;
 				notExists ].
 	scripter
 		clickStep: [ :step | 
 			step
 				onPagerPaneWithIndex: 1;
-				id: (prefix , '-toggle') asSymbol ].
+				id: ('acp-agent-toggle-' , hash) asSymbol ].
 	scripter
 		assertStep: [ :step | 
 			step
 				onPagerPaneWithIndex: 1;
-				id: (prefix , '-header') asSymbol;
+				id: ('acp-agent-header-' , hash) asSymbol;
 				exists ].
 	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
 	^ scripter
@@ -77,35 +77,53 @@ GtLACPSubagentExamples >> agentHeaderOpensSessionOnRight [
 
 { #category : #examples }
 GtLACPSubagentExamples >> agentReplyTabSurvivesRefresh [
- <gtExample>
- | scripter root child grandchild childTabs nestedTabs |
- scripter := self delegatedToolCallsInMainChat.
- root := scripter model.
- child := root childSessions first.
- grandchild := child childSessions first.
- childTabs := ('acp-agent-', child currentTurn identityHash asString, '-final-tabs') asSymbol.
- nestedTabs := ('acp-agent-', grandchild currentTurn identityHash asString, '-final-tabs') asSymbol.
- scripter clickStep: [ :step |
-  step id: childTabs; // #tabbar;
-   onChildFromBlock: [ :bar | bar children detect: [ :tab | tab label asString = 'Grouped tools' ] ] ].
- scripter doStep: [ :step |
-  step label: 'Refresh the parent while a worker summary is selected';
-   block: [ self update: { 'sessionUpdate' -> 'tool_call_update'.
-    'toolCallId' -> 'main-call'. 'status' -> 'completed' } asDictionary for: root ] ].
- scripter pulseUntilReady.
- scripter assertStep: [ :step | step id: childTabs;
-  satisfies: [ :tabs | tabs viewModel selectedTab tabLabel text asString = 'Grouped tools' ] ].
- { nestedTabs. #'acp-final-tabs' } do: [ :anId |
-  scripter assertStep: [ :step | step id: anId;
-   satisfies: [ :tabs | tabs viewModel selectedTab tabLabel text asString = 'Markdown' ] ] ].
- GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
- ^ scripter
+	<gtExample>
+	| scripter root child grandchild childTabs nestedTabs |
+	scripter := self delegatedToolCallsInMainChat.
+	root := scripter model.
+	child := root childSessions first.
+	grandchild := child childSessions first.
+	childTabs := ('acp-agent-final-tabs-' , child currentTurn identityHash asString)
+			asSymbol.
+	nestedTabs := ('acp-agent-final-tabs-'
+			, grandchild currentTurn identityHash asString) asSymbol.
+	scripter
+		clickStep: [ :step | 
+			step
+				id: childTabs;
+				// #tabbar;
+				onChildFromBlock: [ :bar | bar children detect: [ :tab | tab label asString = 'Grouped tools' ] ] ].
+	scripter
+		doStep: [ :step | 
+			step
+				label: 'Refresh the parent while a worker summary is selected';
+				block: [ self
+						update: {'sessionUpdate' -> 'tool_call_update'.
+								'toolCallId' -> 'main-call'.
+								'status' -> 'completed'} asDictionary
+						for: root ] ].
+	scripter pulseUntilReady.
+	scripter
+		assertStep: [ :step | 
+			step
+				id: childTabs;
+				satisfies: [ :tabs | tabs viewModel selectedTab tabLabel text asString = 'Grouped tools' ] ].
+	{nestedTabs.
+		#'acp-final-tabs'}
+		do: [ :anId | 
+			scripter
+				assertStep: [ :step | 
+					step
+						id: anId;
+						satisfies: [ :tabs | tabs viewModel selectedTab tabLabel text asString = 'Markdown' ] ] ].
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
+	^ scripter
 ]
 
 { #category : #examples }
 GtLACPSubagentExamples >> agentReplyWithoutTools [
 	<gtExample>
-	| root child prefix scripter |
+	| root child hash scripter |
 	root := GtLACPExamples new session.
 	root prompt: 'Ask a worker for a greeting'.
 	child := self
@@ -114,7 +132,7 @@ GtLACPSubagentExamples >> agentReplyWithoutTools [
 			in: root.
 	self reply: 'Hello from the worker.' in: child.
 	self idle: child.
-	prefix := 'acp-agent-' , child currentTurn identityHash asString.
+	hash := child currentTurn identityHash asString.
 	self assert: child currentTurn toolCalls isEmpty.
 	self assert: child currentTurn assistantMessage activityItems isEmpty.
 	scripter := BlScripter new
@@ -126,17 +144,17 @@ GtLACPSubagentExamples >> agentReplyWithoutTools [
 		id: #'acp-work-toggle';
 		play.
 	scripter click
-		id: (prefix , '-toggle') asSymbol;
+		id: ('acp-agent-toggle-' , hash) asSymbol;
 		play.
 	scripter
 		assertStep: [ :step | 
 			step
-				id: (prefix , '-header') asSymbol;
+				id: ('acp-agent-header-' , hash) asSymbol;
 				notExists ].
 	scripter
 		assertStep: [ :step | 
 			step
-				id: (prefix , '-final-content') asSymbol;
+				id: ('acp-agent-final-content-' , hash) asSymbol;
 				satisfies: [ :pane | 
 					(GtLACPSessionExamples new editorsIn: pane)
 						anySatisfy: [ :editor | editor text asString = 'Hello from the worker.' ] ] ].
@@ -346,13 +364,13 @@ GtLACPSubagentExamples >> closingRootDetachesChildren [
 { #category : #examples }
 GtLACPSubagentExamples >> collapsedAgentRefreshPreservesParent [
 	<gtExample>
-	| scripter root child sibling prefix siblingPrefix parentRow parentChildren localTool agent siblingHeader version |
+	| scripter root child sibling hash siblingHash parentRow parentChildren localTool agent siblingHeader version |
 	scripter := self runningAgentsChat.
 	root := scripter model.
 	child := root childSessions first.
 	sibling := root childSessions second.
-	prefix := 'acp-agent-' , child currentTurn identityHash asString.
-	siblingPrefix := 'acp-agent-' , sibling currentTurn identityHash asString.
+	hash := child currentTurn identityHash asString.
+	siblingHash := sibling currentTurn identityHash asString.
 	scripter
 		assertStep: [ :step | 
 			step
@@ -372,14 +390,14 @@ GtLACPSubagentExamples >> collapsedAgentRefreshPreservesParent [
 	scripter
 		assertStep: [ :step | 
 			step
-				id: (prefix , '-section') asSymbol;
+				id: ('acp-agent-section-' , hash) asSymbol;
 				satisfies: [ :element | 
 					agent := element.
 					element isExpanded not ] ].
 	scripter
 		assertStep: [ :step | 
 			step
-				id: (siblingPrefix , '-header') asSymbol;
+				id: ('acp-agent-header-' , siblingHash) asSymbol;
 				satisfies: [ :header | 
 					siblingHeader := header.
 					true ] ].
@@ -418,22 +436,22 @@ GtLACPSubagentExamples >> collapsedAgentRefreshPreservesParent [
 	scripter
 		assertStep: [ :step | 
 			step
-				id: (prefix , '-section') asSymbol;
+				id: ('acp-agent-section-' , hash) asSymbol;
 				satisfies: [ :element | element == agent and: [ element isExpanded not ] ] ].
 	scripter
 		assertStep: [ :step | 
 			step
-				id: (siblingPrefix , '-header') asSymbol;
+				id: ('acp-agent-header-' , siblingHash) asSymbol;
 				satisfies: [ :header | header == siblingHeader ] ].
 	scripter
 		assertStep: [ :step | 
 			step
-				id: (prefix , '-summary') asSymbol;
+				id: ('acp-agent-summary-' , hash) asSymbol;
 				notExists ].
 	scripter
 		assertStep: [ :step | 
 			step
-				id: (prefix , '-counts') asSymbol;
+				id: ('acp-agent-counts-' , hash) asSymbol;
 				value: [ :pane | pane children collect: [ :label | label text asString ] as: Array ]
 					equals: [ #('1 agent' '3 tools') ] ].
 	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
@@ -442,26 +460,45 @@ GtLACPSubagentExamples >> collapsedAgentRefreshPreservesParent [
 
 { #category : #examples }
 GtLACPSubagentExamples >> collapsedAgentShowsLatestContentOnExpansion [
- <gtExample>
- | scripter root child prefix |
- scripter := self collapsedAgentRefreshPreservesParent.
- root := scripter model.
- child := root childSessions first.
- prefix := 'acp-agent-', child currentTurn identityHash asString.
- scripter click id: (prefix, '-toggle') asSymbol; play.
- scripter click id: (prefix, '-work-toggle') asSymbol; play.
- scripter assertStep: [ :step | step id: (prefix, '-work-content') asSymbol;
-  satisfies: [ :pane | (GtLACPSessionExamples new editorsIn: pane)
-   anySatisfy: [ :editor | editor text asString = 'I am inspecting the worker result.' ] ] ].
- scripter doStep: [ :step | step block: [
-  self reply: 'The worker is done.' in: child. self idle: child ] ].
- scripter pulseUntilReady.
- scripter assertStep: [ :step | step id: (prefix, '-final-section') asSymbol; satisfies: #isExpanded ].
- scripter assertStep: [ :step | step id: (prefix, '-final-content') asSymbol;
-  satisfies: [ :pane | (GtLACPSessionExamples new editorsIn: pane)
-   anySatisfy: [ :editor | editor text asString = 'The worker is done.' ] ] ].
- GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
- ^ scripter
+	<gtExample>
+	| scripter root child hash |
+	scripter := self collapsedAgentRefreshPreservesParent.
+	root := scripter model.
+	child := root childSessions first.
+	hash := child currentTurn identityHash asString.
+	scripter click
+		id: ('acp-agent-toggle-' , hash) asSymbol;
+		play.
+	scripter click
+		id: ('acp-agent-work-toggle-' , hash) asSymbol;
+		play.
+	scripter
+		assertStep: [ :step | 
+			step
+				id: ('acp-agent-work-content-' , hash) asSymbol;
+				satisfies: [ :pane | 
+					(GtLACPSessionExamples new editorsIn: pane)
+						anySatisfy: [ :editor | editor text asString = 'I am inspecting the worker result.' ] ] ].
+	scripter
+		doStep: [ :step | 
+			step
+				block: [ self reply: 'The worker is done.' in: child.
+					self idle: child ] ].
+	scripter pulseUntilReady.
+	scripter
+		assertStep: [ :step | 
+			step
+				id: ('acp-agent-final-section-' , hash) asSymbol;
+				satisfies: #isExpanded ].
+	scripter
+		assertStep: [ :step | 
+			step
+				id: ('acp-agent-final-content-' , hash) asSymbol;
+				satisfies: [ :pane | 
+					(GtLACPSessionExamples new editorsIn: pane)
+						anySatisfy: [ :editor | editor text asString = 'The worker is done.' ] ] ].
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
+	^ scripter
 ]
 
 { #category : #examples }
@@ -660,94 +697,204 @@ GtLACPSubagentExamples >> delegatedToolCallsAreScopedToTurns [
 
 { #category : #examples }
 GtLACPSubagentExamples >> delegatedToolCallsInMainChat [
- <gtExample>
- | root turn child grandchild scripter |
- root := GtLACPSummarizerExamples new session.
- turn := root prompt: 'Delegate the lookup'.
- scripter := BlScripter new extent: 1100 @ 900; model: root; element: root asElement; yourself.
- scripter doStep: [ :step |
-  step label: 'Receive parent and nested worker tool calls';
-   block: [
-    self mcpToolCallWithId: 'main-call' in: root.
-    child := self announce: 'main-worker' title: 'Lookup worker' in: root.
-    self mcpToolCallWithId: 'worker-call' in: child.
-    grandchild := self announce: 'nested-worker' title: 'Nested worker' in: child.
-    self mcpToolCallWithId: 'nested-call' in: grandchild ] ].
- scripter pulseUntilReady.
- self assert: turn assistantMessage toolCalls size equals: 3.
- scripter assertStep: [ :step |
-  step id: #'acp-work-summary';
-   satisfies: [ :line | ((line children asArray first: 2) collect: [ :label | label text asString ] as: Array) = #('2 agents' '3 tools') ] ].
- scripter click id: #'acp-work-toggle'; play.
- scripter assertStep: [ :step | step id: #'acp-tool-summary-worker-call'; notExists ].
- scripter assertStep: [ :step |
-  step id: ('acp-agent-', child currentTurn identityHash asString, '-kind') asSymbol;
-   value: [ :label | label text asString ] equals: [ 'agent' ] ].
- scripter click id: ('acp-agent-', child currentTurn identityHash asString, '-toggle') asSymbol; play.
- scripter click id: ('acp-agent-', child currentTurn identityHash asString, '-work-toggle') asSymbol; play.
- scripter assertStep: [ :step | step id: #'acp-tool-summary-nested-call'; notExists ].
- scripter click id: ('acp-agent-', grandchild currentTurn identityHash asString, '-toggle') asSymbol; play.
- scripter click id: ('acp-agent-', grandchild currentTurn identityHash asString, '-work-toggle') asSymbol; play.
- #('main-call' 'worker-call' 'nested-call') do: [ :anId |
-  scripter assertStep: [ :step | step id: ('acp-tool-summary-', anId) asSymbol; exists ] ].
- scripter doStep: [ :step |
-  step label: 'Complete the workers and parent reply';
-   block: [
-    self reply: 'Nested result' in: grandchild. self idle: grandchild.
-    self reply: 'Worker result' in: child. self idle: child.
-    self reply: 'Combined result' in: root.
-    root connection transport receive: { 'jsonrpc' -> '2.0'. 'id' -> turn request id.
-     'result' -> { 'stopReason' -> 'end_turn' } asDictionary } asDictionary ] ].
- scripter pulseUntilReady.
- #('main-call' 'worker-call' 'nested-call') do: [ :anId |
-  scripter assertStep: [ :step | step id: ('acp-tool-summary-', anId) asSymbol; exists ] ].
- scripter assertStep: [ :step | step id: #'acp-final-content';
-  satisfies: [ :pane | (GtLACPSessionExamples new editorsIn: pane)
-   anySatisfy: [ :editor | editor text asString = 'Combined result' ] ] ].
- { child -> 'Worker result'. grandchild -> 'Nested result' } do: [ :pair |
-  scripter assertStep: [ :step |
-   step id: ('acp-agent-', pair key currentTurn identityHash asString, '-final-content') asSymbol;
-    satisfies: [ :pane | (GtLACPSessionExamples new editorsIn: pane)
-     anySatisfy: [ :editor | editor text asString = pair value ] ] ] ].
- self assert: root mcpToolMessages size equals: 3.
- self assert: turn assistantMessage mcpToolMessages size equals: 3.
- self assert: child currentTurn assistantMessage mcpToolMessages size equals: 2.
- self assert: grandchild currentTurn assistantMessage mcpToolMessages size equals: 1.
- self assert: (root summarizersRegistry relevantCurrentSummarizers first relevantToolCalls size) equals: 3.
- self assert: (turn assistantMessage relevantToolCallsSummarizers first relevantToolCalls size) equals: 3.
- GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
- ^ scripter
+	<gtExample>
+	| root turn child grandchild scripter |
+	root := GtLACPSummarizerExamples new session.
+	turn := root prompt: 'Delegate the lookup'.
+	scripter := BlScripter new
+			extent: 1100 @ 900;
+			model: root;
+			element: root asElement;
+			yourself.
+	scripter
+		doStep: [ :step | 
+			step
+				label: 'Receive parent and nested worker tool calls';
+				block: [ self mcpToolCallWithId: 'main-call' in: root.
+					child := self
+							announce: 'main-worker'
+							title: 'Lookup worker'
+							in: root.
+					self mcpToolCallWithId: 'worker-call' in: child.
+					grandchild := self
+							announce: 'nested-worker'
+							title: 'Nested worker'
+							in: child.
+					self mcpToolCallWithId: 'nested-call' in: grandchild ] ].
+	scripter pulseUntilReady.
+	self assert: turn assistantMessage toolCalls size equals: 3.
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-work-summary';
+				satisfies: [ :line | 
+					((line children asArray first: 2)
+						collect: [ :label | label text asString ]
+						as: Array) = #('2 agents' '3 tools') ] ].
+	scripter click
+		id: #'acp-work-toggle';
+		play.
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-tool-summary-worker-call';
+				notExists ].
+	scripter
+		assertStep: [ :step | 
+			step
+				id: ('acp-agent-kind-' , child currentTurn identityHash asString) asSymbol;
+				value: [ :label | label text asString ] equals: [ 'agent' ] ].
+	scripter click
+		id: ('acp-agent-toggle-' , child currentTurn identityHash asString) asSymbol;
+		play.
+	scripter click
+		id: ('acp-agent-work-toggle-' , child currentTurn identityHash asString) asSymbol;
+		play.
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-tool-summary-nested-call';
+				notExists ].
+	scripter click
+		id: ('acp-agent-toggle-' , grandchild currentTurn identityHash asString) asSymbol;
+		play.
+	scripter click
+		id: ('acp-agent-work-toggle-' , grandchild currentTurn identityHash asString)
+				asSymbol;
+		play.
+	#('main-call' 'worker-call' 'nested-call')
+		do: [ :anId | 
+			scripter
+				assertStep: [ :step | 
+					step
+						id: ('acp-tool-summary-' , anId) asSymbol;
+						exists ] ].
+	scripter
+		doStep: [ :step | 
+			step
+				label: 'Complete the workers and parent reply';
+				block: [ self reply: 'Nested result' in: grandchild.
+					self idle: grandchild.
+					self reply: 'Worker result' in: child.
+					self idle: child.
+					self reply: 'Combined result' in: root.
+					root connection transport
+						receive: {'jsonrpc' -> '2.0'.
+								'id' -> turn request id.
+								'result' -> {'stopReason' -> 'end_turn'} asDictionary} asDictionary ] ].
+	scripter pulseUntilReady.
+	#('main-call' 'worker-call' 'nested-call')
+		do: [ :anId | 
+			scripter
+				assertStep: [ :step | 
+					step
+						id: ('acp-tool-summary-' , anId) asSymbol;
+						exists ] ].
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-final-content';
+				satisfies: [ :pane | 
+					(GtLACPSessionExamples new editorsIn: pane)
+						anySatisfy: [ :editor | editor text asString = 'Combined result' ] ] ].
+	{child -> 'Worker result'.
+		grandchild -> 'Nested result'}
+		do: [ :pair | 
+			scripter
+				assertStep: [ :step | 
+					step
+						id: ('acp-agent-final-content-' , pair key currentTurn identityHash asString)
+								asSymbol;
+						satisfies: [ :pane | 
+							(GtLACPSessionExamples new editorsIn: pane)
+								anySatisfy: [ :editor | editor text asString = pair value ] ] ] ].
+	self assert: root mcpToolMessages size equals: 3.
+	self assert: turn assistantMessage mcpToolMessages size equals: 3.
+	self assert: child currentTurn assistantMessage mcpToolMessages size equals: 2.
+	self
+		assert: grandchild currentTurn assistantMessage mcpToolMessages size
+		equals: 1.
+	self
+		assert: root summarizersRegistry relevantCurrentSummarizers first relevantToolCalls size
+		equals: 3.
+	self
+		assert: turn assistantMessage relevantToolCallsSummarizers first relevantToolCalls size
+		equals: 3.
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
+	^ scripter
 ]
 
 { #category : #examples }
 GtLACPSubagentExamples >> delegatedToolCallsPreserveExpansion [
- <gtExample>
- | scripter root child grandchild childPrefix nestedPrefix |
- scripter := self delegatedToolCallsInMainChat.
- root := scripter model.
- child := root childSessions first.
- grandchild := child childSessions first.
- childPrefix := 'acp-agent-', child currentTurn identityHash asString.
- nestedPrefix := 'acp-agent-', grandchild currentTurn identityHash asString.
- scripter click id: (childPrefix, '-toggle') asSymbol; play.
- scripter assertStep: [ :step | step id: #'acp-tool-summary-worker-call'; notExists ].
- scripter assertStep: [ :step | step id: #'acp-tool-summary-nested-call'; notExists ].
- scripter click id: (childPrefix, '-toggle') asSymbol; play.
- scripter assertStep: [ :step | step id: #'acp-tool-summary-worker-call'; exists ].
- scripter assertStep: [ :step | step id: #'acp-tool-summary-nested-call'; exists ].
- scripter click id: (nestedPrefix, '-toggle') asSymbol; play.
- scripter doStep: [ :step |
-  step label: 'Refresh the parent message after a tool update';
-   block: [ self update: { 'sessionUpdate' -> 'tool_call_update'.
-    'toolCallId' -> 'main-call'. 'status' -> 'completed' } asDictionary for: root ] ].
- scripter pulseUntilReady.
- scripter assertStep: [ :step | step id: (childPrefix, '-section') asSymbol; satisfies: #isExpanded ].
- scripter assertStep: [ :step | step id: (nestedPrefix, '-section') asSymbol;
-  satisfies: [ :section | section isExpanded not ] ].
- scripter assertStep: [ :step | step id: #'acp-tool-summary-worker-call'; exists ].
- scripter assertStep: [ :step | step id: #'acp-tool-summary-nested-call'; notExists ].
- GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
- ^ scripter
+	<gtExample>
+	| scripter root child grandchild childHash nestedHash |
+	scripter := self delegatedToolCallsInMainChat.
+	root := scripter model.
+	child := root childSessions first.
+	grandchild := child childSessions first.
+	childHash := child currentTurn identityHash asString.
+	nestedHash := grandchild currentTurn identityHash asString.
+	scripter click
+		id: ('acp-agent-toggle-' , childHash) asSymbol;
+		play.
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-tool-summary-worker-call';
+				notExists ].
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-tool-summary-nested-call';
+				notExists ].
+	scripter click
+		id: ('acp-agent-toggle-' , childHash) asSymbol;
+		play.
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-tool-summary-worker-call';
+				exists ].
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-tool-summary-nested-call';
+				exists ].
+	scripter click
+		id: ('acp-agent-toggle-' , nestedHash) asSymbol;
+		play.
+	scripter
+		doStep: [ :step | 
+			step
+				label: 'Refresh the parent message after a tool update';
+				block: [ self
+						update: {'sessionUpdate' -> 'tool_call_update'.
+								'toolCallId' -> 'main-call'.
+								'status' -> 'completed'} asDictionary
+						for: root ] ].
+	scripter pulseUntilReady.
+	scripter
+		assertStep: [ :step | 
+			step
+				id: ('acp-agent-section-' , childHash) asSymbol;
+				satisfies: #isExpanded ].
+	scripter
+		assertStep: [ :step | 
+			step
+				id: ('acp-agent-section-' , nestedHash) asSymbol;
+				satisfies: [ :section | section isExpanded not ] ].
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-tool-summary-worker-call';
+				exists ].
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-tool-summary-nested-call';
+				notExists ].
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
+	^ scripter
 ]
 
 { #category : #examples }
@@ -795,26 +942,25 @@ GtLACPSubagentExamples >> disconnectedChildren [
 { #category : #examples }
 GtLACPSubagentExamples >> expandedAgentRefreshIsLocal [
 	<gtExample>
-	| scripter root child nested prefix nestedPrefix parentRow childElement nestedElement siblingHeader siblingPrefix |
+	| scripter root child nested hash nestedHash parentRow childElement nestedElement siblingHeader siblingHash |
 	scripter := self runningAgentsChat.
 	root := scripter model.
 	child := root childSessions first.
 	nested := child childSessions first.
-	prefix := 'acp-agent-' , child currentTurn identityHash asString.
-	nestedPrefix := 'acp-agent-' , nested currentTurn identityHash asString.
-	siblingPrefix := 'acp-agent-'
-			, root childSessions second currentTurn identityHash asString.
+	hash := child currentTurn identityHash asString.
+	nestedHash := nested currentTurn identityHash asString.
+	siblingHash := root childSessions second currentTurn identityHash asString.
 	scripter click
-		id: (prefix , '-toggle') asSymbol;
+		id: ('acp-agent-toggle-' , hash) asSymbol;
 		play.
 	scripter click
-		id: (prefix , '-work-toggle') asSymbol;
+		id: ('acp-agent-work-toggle-' , hash) asSymbol;
 		play.
 	scripter click
-		id: (nestedPrefix , '-toggle') asSymbol;
+		id: ('acp-agent-toggle-' , nestedHash) asSymbol;
 		play.
 	scripter click
-		id: (nestedPrefix , '-work-toggle') asSymbol;
+		id: ('acp-agent-work-toggle-' , nestedHash) asSymbol;
 		play.
 	scripter
 		assertStep: [ :step | 
@@ -826,7 +972,7 @@ GtLACPSubagentExamples >> expandedAgentRefreshIsLocal [
 	scripter
 		assertStep: [ :step | 
 			step
-				id: (prefix , '-section') asSymbol;
+				id: ('acp-agent-section-' , hash) asSymbol;
 				satisfies: [ :agent | 
 					childElement := agent messageElement.
 					childElement class = GtLACPAssistantMessageElement
@@ -834,7 +980,7 @@ GtLACPSubagentExamples >> expandedAgentRefreshIsLocal [
 	scripter
 		assertStep: [ :step | 
 			step
-				id: (nestedPrefix , '-section') asSymbol;
+				id: ('acp-agent-section-' , nestedHash) asSymbol;
 				satisfies: [ :agent | 
 					nestedElement := agent messageElement.
 					nestedElement class = GtLACPAssistantMessageElement
@@ -842,7 +988,7 @@ GtLACPSubagentExamples >> expandedAgentRefreshIsLocal [
 	scripter
 		assertStep: [ :step | 
 			step
-				id: (siblingPrefix , '-header') asSymbol;
+				id: ('acp-agent-header-' , siblingHash) asSymbol;
 				satisfies: [ :header | 
 					siblingHeader := header.
 					true ] ].
@@ -865,34 +1011,34 @@ GtLACPSubagentExamples >> expandedAgentRefreshIsLocal [
 	scripter
 		assertStep: [ :step | 
 			step
-				id: (prefix , '-section') asSymbol;
+				id: ('acp-agent-section-' , hash) asSymbol;
 				satisfies: [ :agent | agent messageElement == childElement ] ].
 	scripter
 		assertStep: [ :step | 
 			step
-				id: (nestedPrefix , '-section') asSymbol;
+				id: ('acp-agent-section-' , nestedHash) asSymbol;
 				satisfies: [ :agent | agent messageElement ~~ nestedElement ] ].
 	scripter
 		assertStep: [ :step | 
 			step
-				id: (siblingPrefix , '-header') asSymbol;
+				id: ('acp-agent-header-' , siblingHash) asSymbol;
 				satisfies: [ :header | header == siblingHeader ] ].
 	scripter
 		assertStep: [ :step | 
 			step
-				id: (nestedPrefix , '-work-content') asSymbol;
+				id: ('acp-agent-work-content-' , nestedHash) asSymbol;
 				satisfies: [ :pane | 
 					(GtLACPSessionExamples new editorsIn: pane)
 						anySatisfy: [ :editor | editor text asString = 'A new nested observation.' ] ] ].
 	scripter
 		assertStep: [ :step | 
 			step
-				id: (prefix , '-header') asSymbol;
+				id: ('acp-agent-header-' , hash) asSymbol;
 				notExists ].
 	scripter
 		assertStep: [ :step | 
 			step
-				id: (nestedPrefix , '-header') asSymbol;
+				id: ('acp-agent-header-' , nestedHash) asSymbol;
 				notExists ].
 	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
 	^ scripter
@@ -900,27 +1046,43 @@ GtLACPSubagentExamples >> expandedAgentRefreshIsLocal [
 
 { #category : #examples }
 GtLACPSubagentExamples >> hiddenNestedAgentReflectsStreaming [
- <gtExample>
- | scripter root child nested prefix nestedPrefix |
- scripter := self expandedAgentRefreshIsLocal.
- root := scripter model.
- child := root childSessions first.
- nested := child childSessions first.
- prefix := 'acp-agent-', child currentTurn identityHash asString.
- nestedPrefix := 'acp-agent-', nested currentTurn identityHash asString.
- scripter click id: (prefix, '-toggle') asSymbol; play.
- scripter doStep: [ :step | step block: [
-  self update: { 'sessionUpdate' -> 'agent_thought_chunk'.
-   'content' -> { 'type' -> 'text'. 'text' -> ' Updated while the outer agent was collapsed.' } asDictionary
-  } asDictionary for: nested ] ].
- scripter pulseUntilReady.
- scripter click id: (prefix, '-toggle') asSymbol; play.
- scripter pulseUntilReady.
- scripter assertStep: [ :step | step id: (nestedPrefix, '-work-content') asSymbol;
-  satisfies: [ :pane | (GtLACPSessionExamples new editorsIn: pane)
-   anySatisfy: [ :editor | editor text asString includesSubstring: 'Updated while the outer agent was collapsed.' ] ] ].
- GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
- ^ scripter
+	<gtExample>
+	| scripter root child nested hash nestedHash |
+	scripter := self expandedAgentRefreshIsLocal.
+	root := scripter model.
+	child := root childSessions first.
+	nested := child childSessions first.
+	hash := child currentTurn identityHash asString.
+	nestedHash := nested currentTurn identityHash asString.
+	scripter click
+		id: ('acp-agent-toggle-' , hash) asSymbol;
+		play.
+	scripter
+		doStep: [ :step | 
+			step
+				block: [ self
+						update: {'sessionUpdate' -> 'agent_thought_chunk'.
+								'content'
+									-> {'type' -> 'text'.
+											'text' -> ' Updated while the outer agent was collapsed.'}
+											asDictionary} asDictionary
+						for: nested ] ].
+	scripter pulseUntilReady.
+	scripter click
+		id: ('acp-agent-toggle-' , hash) asSymbol;
+		play.
+	scripter pulseUntilReady.
+	scripter
+		assertStep: [ :step | 
+			step
+				id: ('acp-agent-work-content-' , nestedHash) asSymbol;
+				satisfies: [ :pane | 
+					(GtLACPSessionExamples new editorsIn: pane)
+						anySatisfy: [ :editor | 
+							editor text asString
+								includesSubstring: 'Updated while the outer agent was collapsed.' ] ] ].
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
+	^ scripter
 ]
 
 { #category : #fixtures }
@@ -1040,42 +1202,82 @@ GtLACPSubagentExamples >> nestedConversations [
 
 { #category : #examples }
 GtLACPSubagentExamples >> reasoningStatusInHeaders [
- <gtExample>
- | root child prefix scripter |
- root := GtLACPExamples new session.
- root prompt: 'Compare the results'.
- child := self announce: 'reasoning-worker' title: 'Reasoning worker' in: root.
- prefix := 'acp-agent-', child currentTurn identityHash asString.
- self update: { 'sessionUpdate' -> 'agent_thought_chunk'.
-  'content' -> { 'type' -> 'text'. 'text' -> 'I will compare the results.' } asDictionary
- } asDictionary for: root.
- self update: { 'sessionUpdate' -> 'agent_thought_chunk'.
-  'content' -> { 'type' -> 'text'. 'text' -> 'I will inspect the class.' } asDictionary
- } asDictionary for: child.
- scripter := BlScripter new extent: 1100 @ 700; model: root; element: root asElement; yourself.
- scripter assertStep: [ :step | step id: #'acp-work-indicator';
-  value: [ :label | label text asString ] equals: [ 'Working…' ] ].
- scripter click id: #'acp-work-toggle'; play.
- scripter assertStep: [ :step | step id: (prefix, '-work-indicator') asSymbol;
-  satisfies: [ :label | label text asString = 'Working…'
-   and: [ label parent id asSymbol = (prefix, '-header') asSymbol ] ] ].
- scripter click id: (prefix, '-toggle') asSymbol; play.
- scripter click id: (prefix, '-work-toggle') asSymbol; play.
- scripter assertStep: [ :step | step id: #'acp-work-content';
-  satisfies: [ :pane | | labels editors |
-   labels := OrderedCollection new.
-   pane withAllChildrenBreadthFirstDo: [ :each |
-    (each isKindOf: BrLabel) ifTrue: [ labels add: each text asString ] ].
-   editors := GtLACPSessionExamples new editorsIn: pane.
-   (labels includes: 'Thinking') not and: [
-    (editors anySatisfy: [ :each | each text asString = 'I will compare the results.' ]) and: [
-     editors anySatisfy: [ :each | each text asString = 'I will inspect the class.' ] ] ] ] ].
- scripter doStep: [ :step | step block: [ self idle: child ] ].
- scripter pulseUntilReady.
- scripter assertStep: [ :step | step id: (prefix, '-work-indicator') asSymbol; notExists ].
- scripter assertStep: [ :step | step id: #'acp-work-indicator'; exists ].
- GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
- ^ scripter
+	<gtExample>
+	| root child hash scripter |
+	root := GtLACPExamples new session.
+	root prompt: 'Compare the results'.
+	child := self
+			announce: 'reasoning-worker'
+			title: 'Reasoning worker'
+			in: root.
+	hash := child currentTurn identityHash asString.
+	self
+		update: {'sessionUpdate' -> 'agent_thought_chunk'.
+				'content'
+					-> {'type' -> 'text'.
+							'text' -> 'I will compare the results.'} asDictionary} asDictionary
+		for: root.
+	self
+		update: {'sessionUpdate' -> 'agent_thought_chunk'.
+				'content'
+					-> {'type' -> 'text'.
+							'text' -> 'I will inspect the class.'} asDictionary} asDictionary
+		for: child.
+	scripter := BlScripter new
+			extent: 1100 @ 700;
+			model: root;
+			element: root asElement;
+			yourself.
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-work-indicator';
+				value: [ :label | label text asString ] equals: [ 'Working…' ] ].
+	scripter click
+		id: #'acp-work-toggle';
+		play.
+	scripter
+		assertStep: [ :step | 
+			step
+				id: ('acp-agent-work-indicator-' , hash) asSymbol;
+				satisfies: [ :label | 
+					label text asString = 'Working…'
+						and: [ label parent id asSymbol = ('acp-agent-header-' , hash) asSymbol ] ] ].
+	scripter click
+		id: ('acp-agent-toggle-' , hash) asSymbol;
+		play.
+	scripter click
+		id: ('acp-agent-work-toggle-' , hash) asSymbol;
+		play.
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-work-content';
+				satisfies: [ :pane | 
+					| labels editors |
+					labels := OrderedCollection new.
+					pane
+						withAllChildrenBreadthFirstDo: [ :each | (each isKindOf: BrLabel) ifTrue: [ labels add: each text asString ] ].
+					editors := GtLACPSessionExamples new editorsIn: pane.
+					(labels includes: 'Thinking') not
+						and: [ (editors
+								anySatisfy: [ :each | each text asString = 'I will compare the results.' ])
+								and: [ editors
+										anySatisfy: [ :each | each text asString = 'I will inspect the class.' ] ] ] ] ].
+	scripter doStep: [ :step | step block: [ self idle: child ] ].
+	scripter pulseUntilReady.
+	scripter
+		assertStep: [ :step | 
+			step
+				id: ('acp-agent-work-indicator-' , hash) asSymbol;
+				notExists ].
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-work-indicator';
+				exists ].
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
+	^ scripter
 ]
 
 { #category : #examples }
@@ -1096,27 +1298,45 @@ GtLACPSubagentExamples >> rejectCyclesAndReparenting [
 
 { #category : #examples }
 GtLACPSubagentExamples >> reopenedAgentReflectsStreaming [
- <gtExample>
- | scripter root child prefix |
- scripter := self runningAgentsChat.
- root := scripter model.
- child := root childSessions first.
- prefix := 'acp-agent-', child currentTurn identityHash asString.
- scripter click id: (prefix, '-toggle') asSymbol; play.
- scripter click id: (prefix, '-work-toggle') asSymbol; play.
- scripter click id: (prefix, '-toggle') asSymbol; play.
- scripter doStep: [ :step | step block: [
-  self update: { 'sessionUpdate' -> 'agent_thought_chunk'.
-   'content' -> { 'type' -> 'text'. 'text' -> 'An observation received while collapsed.' } asDictionary
-  } asDictionary for: child ] ].
- scripter pulseUntilReady.
- scripter click id: (prefix, '-toggle') asSymbol; play.
- scripter pulseUntilReady.
- scripter assertStep: [ :step | step id: (prefix, '-work-content') asSymbol;
-  satisfies: [ :pane | (GtLACPSessionExamples new editorsIn: pane)
-   anySatisfy: [ :editor | editor text asString = 'An observation received while collapsed.' ] ] ].
- GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
- ^ scripter
+	<gtExample>
+	| scripter root child hash |
+	scripter := self runningAgentsChat.
+	root := scripter model.
+	child := root childSessions first.
+	hash := child currentTurn identityHash asString.
+	scripter click
+		id: ('acp-agent-toggle-' , hash) asSymbol;
+		play.
+	scripter click
+		id: ('acp-agent-work-toggle-' , hash) asSymbol;
+		play.
+	scripter click
+		id: ('acp-agent-toggle-' , hash) asSymbol;
+		play.
+	scripter
+		doStep: [ :step | 
+			step
+				block: [ self
+						update: {'sessionUpdate' -> 'agent_thought_chunk'.
+								'content'
+									-> {'type' -> 'text'.
+											'text' -> 'An observation received while collapsed.'} asDictionary}
+								asDictionary
+						for: child ] ].
+	scripter pulseUntilReady.
+	scripter click
+		id: ('acp-agent-toggle-' , hash) asSymbol;
+		play.
+	scripter pulseUntilReady.
+	scripter
+		assertStep: [ :step | 
+			step
+				id: ('acp-agent-work-content-' , hash) asSymbol;
+				satisfies: [ :pane | 
+					(GtLACPSessionExamples new editorsIn: pane)
+						anySatisfy: [ :editor | editor text asString = 'An observation received while collapsed.' ] ] ].
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
+	^ scripter
 ]
 
 { #category : #examples }

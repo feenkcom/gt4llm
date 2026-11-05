@@ -32,6 +32,12 @@ GtLPushDownMethodSpecification >> descriptionContainer [
 		comment: 'The "Push down method" transformation pushes down one method from a super class to subclasses. The transformation must provide the methodClassName and methodNameToPushDown. The methodClassName is the name of the superclass that implements the methodNameToPushDown. The methodNameToPushDown is the version of the method that is being pushed down to the subclasses.'
 ]
 
+{ #category : #validation }
+GtLPushDownMethodSpecification >> gtProblems [
+	^self gtProblemsWithMethod: methodNameToPushDown
+		inClassNamed: methodClassName
+]
+
 { #category : #descriptions }
 GtLPushDownMethodSpecification >> methodClassNameDescription [
 	<magritteDescription>

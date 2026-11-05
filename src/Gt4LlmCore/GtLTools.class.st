@@ -20,7 +20,8 @@ GtLTools class >> files [
 
 { #category : #defaults }
 GtLTools class >> gt [
-	^ self gtSearch , self leSearch , self gtCodeChange , self leChange
+	^self gtSearch , self leSearch , self gtCodeChange
+		, self gtCodeRefactoring , self leChange
 		, self gtExamplesRun , self gtObjectsExecution
 ]
 
@@ -33,6 +34,16 @@ GtLTools class >> gtCodeChange [
 				GtLMagritteToolForMethodsCompilation new.
 				GtLMagritteToolForMethodsRemoval new.
 				GtLMagritteToolForClassRemoval new} asOrderedCollection
+]
+
+{ #category : #defaults }
+GtLTools class >> gtCodeRefactoring [
+	^self
+		withAll: (Array
+				with: GtLToolForListTransformations new
+				with: GtLToolForPreviewRefactoring new
+				with: GtLToolForApplyRefactoring new
+				with: GtLToolForPreviewRewrite new) asOrderedCollection
 ]
 
 { #category : #defaults }

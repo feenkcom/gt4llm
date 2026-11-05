@@ -60,6 +60,16 @@ GtLACPConnection >> authenticationMethods: anObject [
  authenticationMethods := anObject
 ]
 
+{ #category : #private }
+GtLACPConnection >> cancelInboundRequest: anId [
+	sessions
+		valuesDo: [ :aSession | 
+			aSession turns
+				do: [ :turn | 
+					turn elicitationRequests
+						do: [ :each | each requestId = anId ifTrue: [ each abandon ] ] ] ]
+]
+
 { #category : #accessing }
 GtLACPConnection >> capabilities [
  ^ capabilities
@@ -70,32 +80,39 @@ GtLACPConnection >> capabilities: anObject [
  capabilities := anObject
 ]
 
-{ #category : #protocol }
+{ #category : #accessing }
 GtLACPConnection >> clientCapabilities [
-	^ {'subagents' -> Dictionary new} asDictionary
+	^ {'subagents' -> Dictionary new.
+		'elicitation' -> {'form' -> Dictionary new} asDictionary} asDictionary
 ]
 
-{ #category : #receiving }
+{ #category : #private }
 GtLACPConnection >> dispatch: aDictionary [
 	| method params aSession |
 	method := aDictionary at: 'method'.
 	params := aDictionary at: 'params' ifAbsent: [ Dictionary new ].
 	method = 'session/update' ifTrue: [ ^ self receiveSessionUpdate: params ].
+	method = '$/cancel_request'
+		ifTrue: [ ^ self
+				cancelInboundRequest: (params at: 'requestId' ifAbsent: [ params at: 'id' ifAbsent: [ nil ] ]) ].
+	(aDictionary includesKey: 'id') ifFalse: [ ^ self ].
+	(#('session/request_permission' 'elicitation/create' 'session/create_elicitation')
+		includes: method)
+		ifFalse: [ ^ self
+				replyErrorTo: (aDictionary at: 'id')
+				code: -32601
+				message: 'Method not supported' ].
 	aSession := sessions
 			at: (params at: 'sessionId' ifAbsent: [ nil ])
 			ifAbsent: [ nil ].
-	(aDictionary includesKey: 'id') ifFalse: [ ^ self ].
+	aSession
+		ifNil: [ ^ self
+				replyErrorTo: (aDictionary at: 'id')
+				code: -32602
+				message: 'Unknown session' ].
 	method = 'session/request_permission'
-		ifTrue: [ aSession
-				ifNil: [ ^ self
-						replyErrorTo: (aDictionary at: 'id')
-						code: -32602
-						message: 'Unknown session' ].
-			^ aSession receivePermission: params requestId: (aDictionary at: 'id') ].
-	self
-		replyErrorTo: (aDictionary at: 'id')
-		code: -32601
-		message: 'Method not supported'
+		ifTrue: [ ^ aSession receivePermission: params requestId: (aDictionary at: 'id') ].
+	^ aSession receiveElicitation: params requestId: (aDictionary at: 'id')
 ]
 
 { #category : #lifecycle }

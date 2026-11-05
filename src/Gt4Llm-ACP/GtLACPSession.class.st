@@ -184,17 +184,19 @@ GtLACPSession >> canPrompt [
  ^ self isSubagent not and: [ state = #ready ]
 ]
 
-{ #category : #updating }
+{ #category : #private }
 GtLACPSession >> cancelTurn [
- | turn |
- [
- self canCancel ifFalse: [ ^ self ].
- turn := self currentTurn.
- turn ifNotNil: [
-  turn state: #cancelling.
-  turn permissionRequests do: #cancel ].
- connection notify: 'session/cancel' parameters: { 'sessionId' -> remoteSessionId } asDictionary
- ] ensure: [ self announceChanged ]
+	| turn |
+	[ self canCancel ifFalse: [ ^ self ].
+	turn := self currentTurn.
+	turn
+		ifNotNil: [ turn state: #cancelling.
+			turn permissionRequests do: #cancel.
+			turn elicitationRequests do: #cancel ].
+	connection
+		notify: 'session/cancel'
+		parameters: {'sessionId' -> remoteSessionId} asDictionary ]
+		ensure: [ self announceChanged ]
 ]
 
 { #category : #updating }
@@ -219,16 +221,21 @@ GtLACPSession >> close [
  connection sessions isEmpty ifTrue: [ connection stop ]
 ]
 
-{ #category : #updating }
+{ #category : #private }
 GtLACPSession >> closeLocally [
- self currentTurn ifNotNil: [ :turn |
-  turn permissionRequests do: #cancel.
-  turn isActive ifTrue: [ turn state: #closed; finishedAt: DateAndTime now ] ].
- self childSessions do: #closeLocally.
- connection sessions removeKey: remoteSessionId ifAbsent: [ ].
- state := #closed.
- self announceChanged.
- self announceConversationTreeChanged
+	self currentTurn
+		ifNotNil: [ :turn | 
+			turn permissionRequests do: #cancel.
+			turn elicitationRequests do: #cancel.
+			turn isActive
+				ifTrue: [ turn
+						state: #closed;
+						finishedAt: DateAndTime now ] ].
+	self childSessions do: #closeLocally.
+	connection sessions removeKey: remoteSessionId ifAbsent: [  ].
+	state := #closed.
+	self announceChanged.
+	self announceConversationTreeChanged
 ]
 
 { #category : #commands }
@@ -263,19 +270,28 @@ GtLACPSession >> connection: anObject [
  connection := anObject
 ]
 
-{ #category : #updating }
+{ #category : #private }
 GtLACPSession >> connectionClosed: aReason [
- [
- self isSubagent ifTrue: [
-  parentSubagent invalidateLiveState.
-  self currentTurn ifNotNil: [ :turn |
-   turn isActive ifTrue: [ turn state: #disconnected; finishedAt: DateAndTime now ].
-   turn permissionRequests do: #abandon ].
-  state := #disconnected ]
- ifFalse: [
-  self currentTurn ifNotNil: [ :turn | turn isActive ifTrue: [ turn fail: aReason ]. turn permissionRequests do: #abandon ].
-  state = #closed ifFalse: [ state := #failed ] ]
- ] ensure: [ self updateToolSummarizers. self announceChanged. self announceConversationTreeChanged ]
+	[ self isSubagent
+		ifTrue: [ parentSubagent invalidateLiveState.
+			self currentTurn
+				ifNotNil: [ :turn | 
+					turn isActive
+						ifTrue: [ turn
+								state: #disconnected;
+								finishedAt: DateAndTime now ].
+					turn permissionRequests do: #abandon.
+					turn elicitationRequests do: #abandon ].
+			state := #disconnected ]
+		ifFalse: [ self currentTurn
+				ifNotNil: [ :turn | 
+					turn isActive ifTrue: [ turn fail: aReason ].
+					turn permissionRequests do: #abandon.
+					turn elicitationRequests do: #abandon ].
+			state = #closed ifFalse: [ state := #failed ] ] ]
+		ensure: [ self updateToolSummarizers.
+			self announceChanged.
+			self announceConversationTreeChanged ]
 ]
 
 { #category : #accessing }
@@ -774,6 +790,44 @@ GtLACPSession >> promptText [
 { #category : #accessing }
 GtLACPSession >> promptText: anObject [
  promptText := anObject
+]
+
+{ #category : #private }
+GtLACPSession >> receiveElicitation: params requestId: anId [
+	| turn elicitation toolId |
+	[ turn := self currentTurn.
+	(self isSubagent and: [ self isReplaying not ])
+		ifTrue: [ (turn isNil or: [ turn isActive not and: [ turn state ~= #observed ] ])
+				ifTrue: [ turn := self newObservedTurn ].
+			turn state: #running.
+			state := #prompting ].
+	(turn isNil or: [ turn isActive not ])
+		ifTrue: [ ^ connection replyTo: anId result: {'action' -> 'cancel'} asDictionary ].
+	(turn elicitationRequests anySatisfy: [ :each | each requestId = anId ])
+		ifTrue: [ ^ self ].
+	elicitation := GtLACPElicitationRequest new
+			session: self;
+			turn: turn;
+			requestId: anId;
+			data: params;
+			yourself.
+	elicitation isSupported
+		ifFalse: [ ^ connection
+				replyErrorTo: anId
+				code: -32602
+				message: 'Unsupported elicitation form' ].
+	toolId := params at: 'toolCallId' ifAbsent: [ nil ].
+	toolId
+		ifNotNil: [ elicitation
+				toolCall: (turn toolCalls
+						detect: [ :call | call id = toolId ]
+						ifNone: [ turn
+								updateToolCall: {'toolCallId' -> toolId.
+										'title' -> 'User question'.
+										'status' -> 'pending'} asDictionary ]) ].
+	elicitation toolCall
+		ifNotNil: [ :call | call elicitationRequests add: elicitation ].
+	turn elicitationRequests add: elicitation ] ensure: [ self announceChanged ]
 ]
 
 { #category : #updating }

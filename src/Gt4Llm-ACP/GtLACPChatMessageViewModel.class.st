@@ -1,6 +1,3 @@
-"
-I create the element for an explicit user or assistant message. I retain work and reply expansion choices across element recreation, and expose a rendering key so the list can replace an outdated presentation.
-"
 Class {
 	#name : #GtLACPChatMessageViewModel,
 	#superclass : #GtLACPObject,
@@ -11,8 +8,7 @@ Class {
 		'renderingVersion',
 		'finalReplyAutoExpanded',
 		'selectedFinalViewTitle',
-		'delegatedMessageViewModels',
-		'elementIdPrefix'
+		'delegatedMessageViewModels'
 	],
 	#category : #'Gt4Llm-ACP-UI'
 }
@@ -24,7 +20,7 @@ GtLACPChatMessageViewModel >> activityItems [
 
 { #category : #converting }
 GtLACPChatMessageViewModel >> asElement [
-	^ message chatElementClass new
+	^ self chatElementClass new
 		viewModel: self;
 		build;
 		yourself
@@ -32,9 +28,14 @@ GtLACPChatMessageViewModel >> asElement [
 
 { #category : #updating }
 GtLACPChatMessageViewModel >> changed [
- "Invalidate only this row. Its view model retains presentation state."
- self expandCompletedFinalReply.
- renderingVersion := self renderingVersion + 1
+	"Invalidate only this row. Its view model retains presentation state."
+
+	renderingVersion := self renderingVersion + 1
+]
+
+{ #category : #accessing }
+GtLACPChatMessageViewModel >> chatElementClass [
+	^ self subclassResponsibility
 ]
 
 { #category : #accessing }
@@ -51,41 +52,9 @@ GtLACPChatMessageViewModel >> dateString [
   date minute printOn: stream base: 10 length: 2 padded: true ]
 ]
 
-{ #category : #updating }
-GtLACPChatMessageViewModel >> delegatedViewModelFor: anAssistantMessage [
- delegatedMessageViewModels ifNil: [ delegatedMessageViewModels := IdentityDictionary new ].
- ^ delegatedMessageViewModels at: anAssistantMessage ifAbsentPut: [
-  self class new turn: anAssistantMessage turn; message: anAssistantMessage;
-   elementIdPrefix: 'acp-agent-', anAssistantMessage turn identityHash asString;
-   subscribeToSession; yourself ]
-]
-
-{ #category : #accessing }
+{ #category : #'element ids' }
 GtLACPChatMessageViewModel >> elementIdAt: anIndex [
- ^ ('acp-message-', anIndex asString) asSymbol
-]
-
-{ #category : #accessing }
-GtLACPChatMessageViewModel >> elementIdFor: aSuffix [
- ^ (self elementIdPrefix, '-', aSuffix asString) asSymbol
-]
-
-{ #category : #accessing }
-GtLACPChatMessageViewModel >> elementIdPrefix [
- ^ elementIdPrefix ifNil: [ 'acp' ]
-]
-
-{ #category : #accessing }
-GtLACPChatMessageViewModel >> elementIdPrefix: aString [
- elementIdPrefix := aString
-]
-
-{ #category : #private }
-GtLACPChatMessageViewModel >> expandCompletedFinalReply [
- finalReplyAutoExpanded ifTrue: [ ^ self ].
- message hasCompletedReply ifFalse: [ ^ self ].
- finalReplyAutoExpanded := true.
- self section: #final expanded: true
+	^ ('acp-message-' , anIndex asString) asSymbol
 ]
 
 { #category : #views }
@@ -114,20 +83,13 @@ GtLACPChatMessageViewModel >> id [
 
 { #category : #initialization }
 GtLACPChatMessageViewModel >> initialize [
- super initialize.
- sectionExpansion := Dictionary new.
- renderingVersion := 0.
- finalReplyAutoExpanded := false
+	super initialize.
+	renderingVersion := 0
 ]
 
 { #category : #accessing }
 GtLACPChatMessageViewModel >> inspectionTarget [
  ^ message
-]
-
-{ #category : #accessing }
-GtLACPChatMessageViewModel >> isSectionExpanded: aName [
- ^ sectionExpansion at: aName ifAbsent: [ false ]
 ]
 
 { #category : #accessing }
@@ -142,10 +104,9 @@ GtLACPChatMessageViewModel >> message [
 
 { #category : #accessing }
 GtLACPChatMessageViewModel >> message: anObject [
- message == anObject ifTrue: [ ^ self ].
- message := anObject.
- finalReplyAutoExpanded := false.
- self changed
+	message == anObject ifTrue: [ ^ self ].
+	message := anObject.
+	self changed
 ]
 
 { #category : #accessing }
@@ -179,21 +140,6 @@ GtLACPChatMessageViewModel >> renderingVersion [
 { #category : #accessing }
 GtLACPChatMessageViewModel >> replyMessages [
  ^ message finalMessages
-]
-
-{ #category : #accessing }
-GtLACPChatMessageViewModel >> section: aName expanded: aBoolean [
- sectionExpansion at: aName put: aBoolean
-]
-
-{ #category : #accessing }
-GtLACPChatMessageViewModel >> selectedFinalViewTitle [
- ^ selectedFinalViewTitle ifNil: [ 'Markdown' ]
-]
-
-{ #category : #accessing }
-GtLACPChatMessageViewModel >> selectedFinalViewTitle: aString [
- selectedFinalViewTitle := aString
 ]
 
 { #category : #updating }

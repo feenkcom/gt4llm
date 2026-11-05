@@ -13,8 +13,15 @@ GtLACPUserMessage >> activityItems [
 ]
 
 { #category : #converting }
+GtLACPUserMessage >> asChatMessageViewModel [
+	^ GtLACPUserMessageViewModel new
+		message: self;
+		yourself
+]
+
+{ #category : #converting }
 GtLACPUserMessage >> asElement [
- ^ (GtLACPChatMessageViewModel new message: self; yourself) asElement
+	^ self asChatMessageViewModel asElement
 ]
 
 { #category : #converting }

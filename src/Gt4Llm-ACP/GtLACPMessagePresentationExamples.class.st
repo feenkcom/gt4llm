@@ -141,6 +141,30 @@ GtLACPMessagePresentationExamples >> codexCommentaryAndReasoning [
 ]
 
 { #category : #examples }
+GtLACPMessagePresentationExamples >> explicitAssistantElementIds [
+	<gtExample>
+	| model |
+	model := self specializedMessageViewModels messageViewModels last.
+	self assert: model workSectionId equals: #'acp-work-section'.
+	self assert: model workToggleId equals: #'acp-work-toggle'.
+	self assert: model finalSectionId equals: #'acp-final-section'.
+	self assert: model finalToggleId equals: #'acp-final-toggle'.
+	self assert: model workContentId equals: #'acp-work-content'.
+	self assert: model workSummaryId equals: #'acp-work-summary'.
+	self assert: model workSummaryTextId equals: #'acp-work-summary-text'.
+	self
+		assert: (model workSummaryCountIdAt: 1)
+		equals: #'acp-work-summary-count-1'.
+	self
+		assert: (model workSummaryCountIdAt: 2)
+		equals: #'acp-work-summary-count-2'.
+	self assert: model finalTabsId equals: #'acp-final-tabs'.
+	self assert: model finalContentId equals: #'acp-final-content'.
+	self assert: (model elementIdAt: 2) equals: #'acp-message-2'.
+	^ model
+]
+
+{ #category : #examples }
 GtLACPMessagePresentationExamples >> finishClaudeWork: root [
  | child examples |
  examples := GtLACPSubagentExamples new.
@@ -158,6 +182,20 @@ GtLACPMessagePresentationExamples >> finishClaudeWork: root [
  self assert: root currentTurn assistantMessage finalMessages isEmpty.
  root connection transport receive: { 'jsonrpc' -> '2.0'. 'id' -> root currentTurn request id.
   'result' -> { 'stopReason' -> 'end_turn' } asDictionary } asDictionary
+]
+
+{ #category : #examples }
+GtLACPMessagePresentationExamples >> interSessionInputViewModel [
+	<gtExample>
+	| child chat model |
+	child := GtLACPSubagentExamples new nestedConversations childSessions first.
+	chat := child asChatViewModel.
+	model := chat messageViewModels first.
+	self assert: model class equals: GtLACPInterSessionMessageViewModel.
+	self assert: model message == child currentTurn inputMessages first.
+	self assert: model asElement class equals: GtLACPInterSessionMessageElement.
+	self assert: chat messageViewModels first == model.
+	^ model
 ]
 
 { #category : #examples }
@@ -219,6 +257,44 @@ GtLACPMessagePresentationExamples >> replayedProgressAndAnswers [
   self assert: turn assistantMessage text equals: 'Answer ', name.
   self assert: turn assistantMessage localActivityItems first text equals: 'Progress ', name ].
  ^ root
+]
+
+{ #category : #examples }
+GtLACPMessagePresentationExamples >> specializedMessageViewModels [
+	<gtExample>
+	| root chat models assistant interSession |
+	root := self claudeWorkInProgress.
+	chat := root asChatViewModel.
+	models := chat messageViewModels.
+	self assert: models first class equals: GtLACPUserMessageViewModel.
+	self assert: models last class equals: GtLACPAssistantMessageViewModel.
+	self assert: models first asElement class equals: GtLACPUserMessageElement.
+	self assert: models last asElement class equals: GtLACPAssistantMessageElement.
+	self
+		assert: root currentTurn inputMessages first asElement viewModel class
+		equals: GtLACPUserMessageViewModel.
+	self
+		assert: root currentTurn assistantMessage asElement viewModel class
+		equals: GtLACPAssistantMessageViewModel.
+	interSession := root interSessionMessages first asElement.
+	self assert: interSession class equals: GtLACPInterSessionMessageElement.
+	self
+		assert: interSession viewModel class
+		equals: GtLACPInterSessionMessageViewModel.
+	assistant := models last.
+	assistant workExpanded: true.
+	assistant selectedFinalViewTitle: 'Text'.
+	self assert: chat messageViewModels first == models first.
+	self assert: chat messageViewModels last == assistant.
+	self
+		text: 'Another progress update.'
+		id: 'progress-3'
+		in: root.
+	self assert: chat messageViewModels last == assistant.
+	self assert: assistant isWorkExpanded.
+	self assert: assistant selectedFinalViewTitle equals: 'Text'.
+	self assert: assistant asElement viewModel == assistant.
+	^ chat
 ]
 
 { #category : #examples }

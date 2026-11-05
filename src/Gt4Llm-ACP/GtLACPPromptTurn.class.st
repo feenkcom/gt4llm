@@ -20,7 +20,8 @@ Class {
 		'assistantMessage',
 		'parentTurn',
 		'workUpdates',
-		'delegatedSessions'
+		'delegatedSessions',
+		'elicitationRequests'
 	],
 	#category : #'Gt4Llm-ACP-Core'
 }
@@ -76,12 +77,13 @@ GtLACPPromptTurn >> childCoordinationMessages [
   message isInterSessionMessage and: [ message isChildCoordination ] ]
 ]
 
-{ #category : #lifecycle }
+{ #category : #private }
 GtLACPPromptTurn >> complete: aReason [
- stopReason := aReason.
- state := aReason = 'cancelled' ifTrue: [ #cancelled ] ifFalse: [ #completed ].
- finishedAt := DateAndTime now.
- permissionRequests do: #cancel
+	stopReason := aReason.
+	state := aReason = 'cancelled' ifTrue: [ #cancelled ] ifFalse: [ #completed ].
+	finishedAt := DateAndTime now.
+	permissionRequests do: #cancel.
+	self elicitationRequests do: #cancel
 ]
 
 { #category : #accessing }
@@ -105,16 +107,22 @@ GtLACPPromptTurn >> delegatedTurns [
 ]
 
 { #category : #accessing }
+GtLACPPromptTurn >> elicitationRequests [
+	^ elicitationRequests ifNil: [ elicitationRequests := OrderedCollection new ]
+]
+
+{ #category : #accessing }
 GtLACPPromptTurn >> error [
  ^ error
 ]
 
-{ #category : #lifecycle }
+{ #category : #private }
 GtLACPPromptTurn >> fail: aReason [
- error := aReason.
- state := #failed.
- finishedAt := DateAndTime now.
- permissionRequests do: #abandon
+	error := aReason.
+	state := #failed.
+	finishedAt := DateAndTime now.
+	permissionRequests do: #abandon.
+	self elicitationRequests do: #abandon
 ]
 
 { #category : #accessing }
@@ -200,6 +208,13 @@ GtLACPPromptTurn >> gtToolsFor: aView [
  ^ aView list title: 'Tool calls'; priority: 20; items: [ toolCalls copy ]; itemText: #title; actionUpdateButtonTooltip: 'Refresh tool calls'
 ]
 
+{ #category : #testing }
+GtLACPPromptTurn >> hasPendingInteraction [
+	^ (permissionRequests anySatisfy: [ :each | each state = #pending ])
+		or: [ (self elicitationRequests anySatisfy: [ :each | each state = #pending ])
+				or: [ self delegatedTurns anySatisfy: #hasPendingInteraction ] ]
+]
+
 { #category : #updates }
 GtLACPPromptTurn >> initialize [
  super initialize.
@@ -246,6 +261,14 @@ GtLACPPromptTurn >> parentTurn [
 { #category : #accessing }
 GtLACPPromptTurn >> parentTurn: aTurn [
  parentTurn := aTurn
+]
+
+{ #category : #accessing }
+GtLACPPromptTurn >> pendingDelegatedElicitations [
+	^ self delegatedTurns
+		flatCollect: [ :child | 
+			(child elicitationRequests select: [ :each | each state = #pending ])
+				, child pendingDelegatedElicitations ]
 ]
 
 { #category : #accessing }

@@ -13,8 +13,16 @@ Class {
 }
 
 { #category : #converting }
+GtLACPInterSessionMessage >> asChatMessageViewModel [
+	^ GtLACPInterSessionMessageViewModel new
+		turn: turn;
+		message: self;
+		yourself
+]
+
+{ #category : #converting }
 GtLACPInterSessionMessage >> asElement [
- ^ (GtLACPChatMessageViewModel new turn: turn; message: self; yourself) asElement
+	^ self asChatMessageViewModel asElement
 ]
 
 { #category : #converting }
