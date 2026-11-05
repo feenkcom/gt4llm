@@ -42,8 +42,9 @@ GtLToolForPreviewRefactoringExamples >> previewAddMethod [
 		equals: 'GtLToolForPreviewRefactoringExamples>>previewedMethod'.
 	self assert: targetObject changes first newSource
 		equals: 'previewedMethod ^ 42'.
-	self assert: (objectStorage objectAt: targetObject objectId)
-				== targetObject namespace.
+	self assert: targetObject isApplied not.
+	self
+		assert: (objectStorage objectAt: targetObject objectId) == targetObject.
 	self assert: (self class includesSelector: #previewedMethod) not.
 	^call
 ]
@@ -64,8 +65,9 @@ GtLToolForPreviewRefactoringExamples >> previewPushUpMethod [
 	targetObject := call result targetObject.
 	self assert: targetObject class equals: GtLRefactoringPreview.
 	self assert: targetObject changes notEmpty.
-	self assert: (objectStorage objectAt: targetObject objectId)
-				== targetObject namespace.
+	self assert: targetObject isApplied not.
+	self
+		assert: (objectStorage objectAt: targetObject objectId) == targetObject.
 	self
 		assert: (GtLAbstractMagritteFunctionToolExamples
 				includesSelector: #argumentsWithTransformations:) not.

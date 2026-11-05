@@ -1,0 +1,200 @@
+Class {
+	#name : #GtLToolForApplyRefactoringExamples,
+	#superclass : #GtLAbstractMagritteFunctionToolExamples,
+	#traits : 'TGtLExceptionDomainObjectAssertions',
+	#classTraits : 'TGtLExceptionDomainObjectAssertions classTrait',
+	#category : #'Gt4LlmCore-Examples'
+}
+
+{ #category : #helpers }
+GtLToolForApplyRefactoringExamples >> addMethodTransformation [
+	^self addMethodTransformationTo: 'GtLToolForApplyRefactoringExamples'
+]
+
+{ #category : #helpers }
+GtLToolForApplyRefactoringExamples >> addMethodTransformationTo: aClassName [
+	^(Dictionary new)
+		at: 'AddMethod'
+			put: ((Dictionary new)
+					at: 'methodClassName' put: aClassName;
+					at: 'protocolName' put: 'examples';
+					at: 'sourceCodeOfMethodToAdd' put: 'appliedRefactoringMethod ^ 42';
+					yourself);
+		yourself
+]
+
+{ #category : #examples }
+GtLToolForApplyRefactoringExamples >> applyAddMethod [
+	<gtExample>
+	| objectStorage objectId |
+	self removeAppliedMethod.
+	objectStorage := GtLObjectStorage new.
+	objectId := self previewAddMethodIn: objectStorage.
+	
+	[| call targetObject |
+	call := self
+				executeTool: GtLToolForApplyRefactoring new
+				withArguments: (self argumentsWithObjectId: objectId)
+				inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
+	targetObject := call result targetObject.
+	self assert: targetObject == (objectStorage objectAt: objectId).
+	self assert: targetObject isApplied.
+	self assert: targetObject changes size equals: 1.
+	self assert: (self class includesSelector: #appliedRefactoringMethod).
+	self assert: (self class >> #appliedRefactoringMethod) sourceCode
+		equals: 'appliedRefactoringMethod ^ 42'.
+	^call]
+			ensure: [self removeAppliedMethod]
+]
+
+{ #category : #examples }
+GtLToolForApplyRefactoringExamples >> applyAfterClassRemoval [
+	<gtExample>
+	| environment objectStorage objectId call |
+	environment := GtPharoDummyEnvironment withPackages: 1 classes: 1.
+	objectStorage := GtLObjectStorage new.
+	
+	[objectId := self previewTransformation: (self
+						addMethodTransformationTo: environment anyDummyClass className asString)
+				in: objectStorage]
+			ensure: [environment removeFromSystem].
+	call := self
+				executeTool: GtLToolForApplyRefactoring new
+				withArguments: (self argumentsWithObjectId: objectId)
+				inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
+	self
+		assertExceptionDomainObject: call result targetObject
+		withExceptionClass: MessageNotUnderstood
+		messageSubstring: '#includesSelector: was sent to nil'.
+	self assert: (objectStorage objectAt: objectId) isApplied not.
+	^call
+]
+
+{ #category : #examples }
+GtLToolForApplyRefactoringExamples >> applyNonRefactoringObject [
+	<gtExample>
+	| objectStorage objectId call |
+	objectStorage := GtLObjectStorage new.
+	objectId := objectStorage addNewObject: 42 reason: 'example object'.
+	call := self
+				executeTool: GtLToolForApplyRefactoring new
+				withArguments: (self argumentsWithObjectId: objectId)
+				inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
+	self assertProblem: call result targetObject
+		withErrorMessage: objectId , ' is not a refactoring preview'.
+	^call
+]
+
+{ #category : #examples }
+GtLToolForApplyRefactoringExamples >> applyTwice [
+	<gtExample>
+	| objectStorage objectId context |
+	self removeAppliedMethod.
+	objectStorage := GtLObjectStorage new.
+	objectId := self previewAddMethodIn: objectStorage.
+	context := GtLToolExecutionContext new objectStorage: objectStorage.
+	
+	[| call |
+	self
+		executeTool: GtLToolForApplyRefactoring new
+		withArguments: (self argumentsWithObjectId: objectId)
+		inContext: context.
+	call := self
+				executeTool: GtLToolForApplyRefactoring new
+				withArguments: (self argumentsWithObjectId: objectId)
+				inContext: context.
+	self assertProblem: call result targetObject
+		withErrorMessage: objectId , ' was already applied'.
+	^call]
+			ensure: [self removeAppliedMethod]
+]
+
+{ #category : #examples }
+GtLToolForApplyRefactoringExamples >> applyWithEmptyObjectId [
+	<gtExample>
+	| call |
+	call := self
+				executeTool: GtLToolForApplyRefactoring new
+				withArguments: (self argumentsWithObjectId: '   ')
+				inContext: (GtLToolExecutionContext new objectStorage: GtLObjectStorage new).
+	self
+		assertMissingArgument: call result targetObject
+		withArgumentName: 'objectId'
+		errorMessage: 'Missing argument called objectId'.
+	^call
+]
+
+{ #category : #examples }
+GtLToolForApplyRefactoringExamples >> applyWithMissingObjectId [
+	<gtExample>
+	| call |
+	call := self
+				executeTool: GtLToolForApplyRefactoring new
+				withArguments: Dictionary new
+				inContext: (GtLToolExecutionContext new objectStorage: GtLObjectStorage new).
+	self
+		assertMissingRequiredProperties: call result targetObject
+		withPropertyNames: #('objectId')
+		path: #(nil)
+		errorMessage: 'required properties missing [objectId]'.
+	^call
+]
+
+{ #category : #examples }
+GtLToolForApplyRefactoringExamples >> applyWithUnknownObjectId [
+	<gtExample>
+	| call |
+	call := self
+				executeTool: GtLToolForApplyRefactoring new
+				withArguments: (self argumentsWithObjectId: 'missing-object-id')
+				inContext: (GtLToolExecutionContext new objectStorage: GtLObjectStorage new).
+	self
+		assertMissingObject: call result targetObject
+		withObjectName: 'missing-object-id'
+		errorMessage: 'missing-object-id is not found'.
+	^call
+]
+
+{ #category : #examples }
+GtLToolForApplyRefactoringExamples >> applyWithoutObjectStorage [
+	<gtExample>
+	| call |
+	call := self executeTool: GtLToolForApplyRefactoring new
+				withArguments: (self argumentsWithObjectId: 'missing-object-id').
+	self
+		assertMissingInformation: call result targetObject
+		withModelName: 'objectStorage'
+		errorMessage: 'Missing objectStorage'.
+	^call
+]
+
+{ #category : #helpers }
+GtLToolForApplyRefactoringExamples >> argumentsWithObjectId: aString [
+	^(Dictionary new)
+		at: 'objectId' put: aString;
+		yourself
+]
+
+{ #category : #helpers }
+GtLToolForApplyRefactoringExamples >> previewAddMethodIn: anObjectStorage [
+	^self previewTransformation: self addMethodTransformation
+		in: anObjectStorage
+]
+
+{ #category : #helpers }
+GtLToolForApplyRefactoringExamples >> previewTransformation: aTransformation in: anObjectStorage [
+	| call |
+	call := self
+				executeTool: GtLToolForPreviewRefactoring new
+				withArguments: ((Dictionary new)
+						at: 'transformations' put: (Array with: aTransformation);
+						yourself)
+				inContext: (GtLToolExecutionContext new objectStorage: anObjectStorage).
+	^call result targetObject objectId
+]
+
+{ #category : #helpers }
+GtLToolForApplyRefactoringExamples >> removeAppliedMethod [
+	(self class includesSelector: #appliedRefactoringMethod)
+		ifTrue: [self class removeSelector: #appliedRefactoringMethod]
+]

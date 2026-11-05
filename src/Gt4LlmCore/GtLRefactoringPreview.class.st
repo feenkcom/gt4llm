@@ -4,14 +4,35 @@ Class {
 	#instVars : [
 		'namespace',
 		'objectId',
-		'changes'
+		'changes',
+		'applied'
 	],
 	#category : #Gt4LlmCore
 }
 
 { #category : #'instance creation' }
-GtLRefactoringPreview class >> namespace: aNamespace objectId: aString [
-	^self new initializeNamespace: aNamespace objectId: aString
+GtLRefactoringPreview class >> namespace: aNamespace [
+	^self new initializeNamespace: aNamespace
+]
+
+{ #category : #accessing }
+GtLRefactoringPreview >> applied [
+	^applied
+]
+
+{ #category : #descriptions }
+GtLRefactoringPreview >> appliedDescription [
+	<magritteDescription>
+	^(MABooleanDescription new)
+		label: 'Applied';
+		accessor: #applied;
+		beRequired
+]
+
+{ #category : #applying }
+GtLRefactoringPreview >> apply [
+	GtRefactoryChangeManager instance performChange: namespace changes.
+	applied := true
 ]
 
 { #category : #accessing }
@@ -41,11 +62,16 @@ GtLRefactoringPreview >> gtChangesFor: aView [
 ]
 
 { #category : #initialization }
-GtLRefactoringPreview >> initializeNamespace: aNamespace objectId: aString [
+GtLRefactoringPreview >> initializeNamespace: aNamespace [
 	namespace := aNamespace.
-	objectId := aString.
+	applied := false.
 	changes := (aNamespace changes gtBasicChanges
 				collect: [:each | GtLRefactoringChange fromChange: each]) asArray
+]
+
+{ #category : #testing }
+GtLRefactoringPreview >> isApplied [
+	^applied
 ]
 
 { #category : #'llm views' }
@@ -62,6 +88,11 @@ GtLRefactoringPreview >> namespace [
 { #category : #accessing }
 GtLRefactoringPreview >> objectId [
 	^objectId
+]
+
+{ #category : #accessing }
+GtLRefactoringPreview >> objectId: aString [
+	objectId := aString
 ]
 
 { #category : #descriptions }

@@ -25,12 +25,14 @@ GtLToolForPreviewRefactoring >> name [
 
 { #category : #private }
 GtLToolForPreviewRefactoring >> previewTransformations: aTransformations inContext: anExecutionContext [
-	| namespace |
-	namespace := [aTransformations applyRefactoring] on: Error
-				do: [:anError | ^GtLExceptionDomainObject freeze: anError].
-	^GtLRefactoringPreview namespace: namespace
-		objectId: (anExecutionContext objectStorage addNewObject: namespace
-				reason: (GtLStoredObjectStringReason text: 'Refactoring preview'))
+	| preview |
+	preview := 
+			[GtLRefactoringPreview namespace: aTransformations applyRefactoring]
+					on: Error
+					do: [:anError | ^GtLExceptionDomainObject freeze: anError].
+	preview objectId: (anExecutionContext objectStorage addNewObject: preview
+				reason: (GtLStoredObjectStringReason text: 'Refactoring preview')).
+	^preview
 ]
 
 { #category : #execution }

@@ -16,15 +16,17 @@ GtLRefactoringPreviewExamples >> refactoringPreview [
 				yourself.
 	transformations := GtLCodeTransformations new
 				transformations: (Array with: specification).
-	preview := GtLRefactoringPreview
-				namespace: transformations applyRefactoring
-				objectId: 'example-object-id'.
+	preview := (GtLRefactoringPreview
+				namespace: transformations applyRefactoring)
+				objectId: 'example-object-id';
+				yourself.
 	self assert: preview changes size equals: 1.
 	self assert: preview changes first class equals: GtLRefactoringChange.
 	self assert: preview changes first changeDescription
 		equals: 'GtLRefactoringPreviewExamples>>previewedMethod'.
 	self assert: preview changes first newSource equals: 'previewedMethod ^ 42'.
 	self assert: preview objectId equals: 'example-object-id'.
+	self assert: preview isApplied not.
 	^preview
 ]
 
@@ -57,6 +59,7 @@ GtLRefactoringPreviewExamples >> refactoringPreviewSerialization [
 									at: #newSource put: 'previewedMethod ^ 42';
 									yourself));
 				at: #objectId put: 'example-object-id';
+				at: #applied put: false;
 				yourself.
 	self assertDataBlock: dataBlock hasLlmJsonData: expected.
 	^dataBlock
