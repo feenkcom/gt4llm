@@ -8,18 +8,18 @@ Class {
 GtLToolForApplyRefactoring >> applyPreview: aPreview [
 	[aPreview apply] on: Error
 		do: [:anError | ^GtLExceptionDomainObject freeze: anError].
-	^aPreview
+	^GtLAppliedRefactoring preview: aPreview
 ]
 
 { #category : #accessing }
 GtLToolForApplyRefactoring >> description [
-	^'Applies a refactoring previewed with previewRefactoring. Takes the objectId returned by previewRefactoring and executes the previewed changes on the live system. A preview can be applied only once.
+	^'Applies a refactoring previewed with previewRefactoring or previewRewrite. Takes the objectId returned by the preview and executes the previewed changes on the live system. A preview can be applied only once.
 
 Example JSON arguments:
 {"objectId": "abc123"}
 
 Example JSON response:
-{"changes": [{"changeDescription": "MySuperclass>>foo", "newSource": "foo\r\t^ 42"}], "objectId": "abc123", "applied": true}'
+{"status": "applied", "changesCount": 1}'
 ]
 
 { #category : #accessing }

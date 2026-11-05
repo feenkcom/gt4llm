@@ -7,6 +7,20 @@ Class {
 }
 
 { #category : #helpers }
+GtLToolForApplyRefactoringExamples >> addClassTransformation [
+	^(Dictionary new)
+		at: 'AddClass'
+			put: ((Dictionary new)
+					at: 'newClassName' put: 'GtLAppliedExampleClass';
+					at: 'superclassName' put: 'Object';
+					at: 'packageName' put: 'Gt4LlmCore-Examples';
+					at: 'slotNames' put: 'first second';
+					at: 'tagName' put: '';
+					yourself);
+		yourself
+]
+
+{ #category : #helpers }
 GtLToolForApplyRefactoringExamples >> addMethodTransformation [
 	^self addMethodTransformationTo: 'GtLToolForApplyRefactoringExamples'
 ]
@@ -24,6 +38,35 @@ GtLToolForApplyRefactoringExamples >> addMethodTransformationTo: aClassName [
 ]
 
 { #category : #examples }
+GtLToolForApplyRefactoringExamples >> applyAddClass [
+	<gtExample>
+	| objectStorage objectId |
+	self removeAppliedClass.
+	objectStorage := GtLObjectStorage new.
+	objectId := self previewTransformation: self addClassTransformation
+				in: objectStorage.
+	
+	[| call targetObject newClass |
+	call := self
+				executeTool: GtLToolForApplyRefactoring new
+				withArguments: (self argumentsWithObjectId: objectId)
+				inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
+	targetObject := call result targetObject.
+	self assert: targetObject class equals: GtLAppliedRefactoring.
+	self assert: targetObject status equals: 'applied'.
+	self assert: targetObject changesCount equals: 1.
+	self assert: targetObject preview == (objectStorage objectAt: objectId).
+	self assert: targetObject preview isApplied.
+	newClass := Smalltalk globals classNamed: #GtLAppliedExampleClass.
+	self assert: newClass notNil.
+	self assert: newClass superclass equals: Object.
+	self assert: newClass instVarNames asArray equals: #(#first #second).
+	self assert: newClass package name equals: 'Gt4LlmCore-Examples'.
+	^call]
+			ensure: [self removeAppliedClass]
+]
+
+{ #category : #examples }
 GtLToolForApplyRefactoringExamples >> applyAddMethod [
 	<gtExample>
 	| objectStorage objectId |
@@ -37,9 +80,11 @@ GtLToolForApplyRefactoringExamples >> applyAddMethod [
 				withArguments: (self argumentsWithObjectId: objectId)
 				inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
 	targetObject := call result targetObject.
-	self assert: targetObject == (objectStorage objectAt: objectId).
-	self assert: targetObject isApplied.
-	self assert: targetObject changes size equals: 1.
+	self assert: targetObject class equals: GtLAppliedRefactoring.
+	self assert: targetObject status equals: 'applied'.
+	self assert: targetObject changesCount equals: 1.
+	self assert: targetObject preview == (objectStorage objectAt: objectId).
+	self assert: targetObject preview isApplied.
 	self assert: (self class includesSelector: #appliedRefactoringMethod).
 	self assert: (self class >> #appliedRefactoringMethod) sourceCode
 		equals: 'appliedRefactoringMethod ^ 42'.
@@ -191,6 +236,12 @@ GtLToolForApplyRefactoringExamples >> previewTransformation: aTransformation in:
 						yourself)
 				inContext: (GtLToolExecutionContext new objectStorage: anObjectStorage).
 	^call result targetObject objectId
+]
+
+{ #category : #helpers }
+GtLToolForApplyRefactoringExamples >> removeAppliedClass [
+	(Smalltalk globals classNamed: #GtLAppliedExampleClass)
+		ifNotNil: [:aClass | aClass removeFromSystem]
 ]
 
 { #category : #helpers }

@@ -58,7 +58,11 @@ GtLRefactoringPreview >> gtChangesFor: aView [
 		title: 'Changes';
 		priority: 1;
 		object: [self namespace];
-		view: #gtApplyingChangesFor:
+		view: #gtApplyingChangesFor:;
+		actionButtonIcon: BrGlamorousVectorIcons inspect  
+			tooltip: 'Inspect preview object'
+			action: [ :aButton |
+				aButton phlow spawnObject:  self ]
 ]
 
 { #category : #initialization }

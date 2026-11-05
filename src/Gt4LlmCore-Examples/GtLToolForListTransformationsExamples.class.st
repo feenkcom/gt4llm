@@ -5,6 +5,16 @@ Class {
 }
 
 { #category : #examples }
+GtLToolForListTransformationsExamples >> gtToolsIncludeRefactoringTools [
+	<gtExample>
+	| names |
+	names := (GtLTools gt collect: [:each | each name]) asSet.
+	self assert: (names
+				includesAll: #('listTransformations' 'previewRefactoring' 'applyRefactoring' 'previewRewrite')).
+	^names
+]
+
+{ #category : #examples }
 GtLToolForListTransformationsExamples >> listTransformations [
 	<gtExample>
 	| call targetObject |
@@ -18,6 +28,24 @@ GtLToolForListTransformationsExamples >> listTransformations [
 	self assert: ((self transformationNamesIn: targetObject schema)
 				includes: 'PushUpInstanceVariable').
 	^call
+]
+
+{ #category : #examples }
+GtLToolForListTransformationsExamples >> listTransformationsSchemaEntries [
+	<gtExample>
+	| targetObject entries |
+	targetObject := (self executeTool: GtLToolForListTransformations new
+				withArguments: Dictionary new) result
+				targetObject.
+	entries := targetObject transformationSchemas.
+	self
+		assert: (entries
+				collect: [:each | targetObject nameOfTransformationSchema: each]) asSet
+		equals: #('AddClass' 'AddMethod' 'PushUpInstanceVariable' 'PushUpMethod' 'RemoveMethod')
+				asSet.
+	self assert: (entries
+				allSatisfy: [:each | (targetObject descriptionOfTransformationSchema: each) notEmpty]).
+	^targetObject
 ]
 
 { #category : #helpers }

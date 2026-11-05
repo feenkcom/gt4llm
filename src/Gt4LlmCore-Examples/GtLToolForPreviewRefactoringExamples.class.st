@@ -7,6 +7,20 @@ Class {
 }
 
 { #category : #helpers }
+GtLToolForPreviewRefactoringExamples >> addClassTransformation [
+	^(Dictionary new)
+		at: 'AddClass'
+			put: ((Dictionary new)
+					at: 'newClassName' put: 'GtLPreviewedExampleClass';
+					at: 'superclassName' put: 'Object';
+					at: 'packageName' put: 'Gt4LlmCore-Examples';
+					at: 'slotNames' put: 'first second';
+					at: 'tagName' put: '';
+					yourself);
+		yourself
+]
+
+{ #category : #helpers }
 GtLToolForPreviewRefactoringExamples >> addMethodTransformation [
 	^(Dictionary new)
 		at: 'AddMethod'
@@ -23,6 +37,57 @@ GtLToolForPreviewRefactoringExamples >> argumentsWithTransformations: aCollectio
 	^(Dictionary new)
 		at: 'transformations' put: aCollection asArray;
 		yourself
+]
+
+{ #category : #examples }
+GtLToolForPreviewRefactoringExamples >> previewAddClass [
+	<gtExample>
+	| call targetObject |
+	call := self
+				executeTool: GtLToolForPreviewRefactoring new
+				withArguments: (self
+						argumentsWithTransformations: (Array with: self addClassTransformation))
+				inContext: (GtLToolExecutionContext new objectStorage: GtLObjectStorage new).
+	targetObject := call result targetObject.
+	self assert: targetObject class equals: GtLRefactoringPreview.
+	self assert: targetObject changes size equals: 1.
+	self assert: targetObject changes first changeDescription
+		equals: 'GtLPreviewedExampleClass'.
+	self assert: targetObject changes first newSource
+		equals: 'Object subclass: #GtLPreviewedExampleClass instanceVariableNames: ''first second'' classVariableNames: '''' poolDictionaries: '''' category: ''Gt4LlmCore-Examples'''.
+	self
+		assert: (Smalltalk globals includesKey: #GtLPreviewedExampleClass) not.
+	^call
+]
+
+{ #category : #examples }
+GtLToolForPreviewRefactoringExamples >> previewAddClassWithMethod [
+	<gtExample>
+	| methodTransformation call targetObject |
+	methodTransformation := (Dictionary new)
+				at: 'AddMethod'
+					put: ((Dictionary new)
+							at: 'methodClassName' put: 'GtLPreviewedExampleClass';
+							at: 'protocolName' put: 'accessing';
+							at: 'sourceCodeOfMethodToAdd' put: 'first ^ first';
+							yourself);
+				yourself.
+	call := self
+				executeTool: GtLToolForPreviewRefactoring new
+				withArguments: (self
+						argumentsWithTransformations: (Array with: self addClassTransformation
+								with: methodTransformation))
+				inContext: (GtLToolExecutionContext new objectStorage: GtLObjectStorage new).
+	targetObject := call result targetObject.
+	self assert: targetObject class equals: GtLRefactoringPreview.
+	self
+		assert: (targetObject changes collect: [:each | each changeDescription])
+				asArray
+		equals: #('GtLPreviewedExampleClass' 'GtLPreviewedExampleClass>>first').
+	self assert: targetObject changes last newSource equals: 'first ^ first'.
+	self
+		assert: (Smalltalk globals includesKey: #GtLPreviewedExampleClass) not.
+	^call
 ]
 
 { #category : #examples }
