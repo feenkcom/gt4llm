@@ -40,6 +40,11 @@ GtLPushUpInstanceVariableSpecification >> gtDisplayOn: aStream [
 		nextPutAll: variableClassName
 ]
 
+{ #category : #validation }
+GtLPushUpInstanceVariableSpecification >> gtProblems [
+	^self gtProblemsWithClassNamed: self variableClassName
+]
+
 { #category : #description }
 GtLPushUpInstanceVariableSpecification >> variableClassNameDescription [
 	<magritteDescription>

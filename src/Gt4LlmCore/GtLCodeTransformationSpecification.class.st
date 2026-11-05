@@ -48,6 +48,32 @@ GtLCodeTransformationSpecification >> gtChangesFor: aView [
 		view: #gtApplyingChangesFor:
 ]
 
+{ #category : #validation }
+GtLCodeTransformationSpecification >> gtProblems [
+	^#()
+]
+
+{ #category : #validation }
+GtLCodeTransformationSpecification >> gtProblemsWithClassNamed: aString [
+	^(Smalltalk globals classNamed: aString) isNil
+		ifTrue: 
+			[Array
+				with: (GtLTransformationProblem description: 'Class not found: ' , aString)]
+		ifFalse: [#()]
+]
+
+{ #category : #validation }
+GtLCodeTransformationSpecification >> gtProblemsWithMethod: aSelectorString inClassNamed: aClassName [
+	| class |
+	class := Smalltalk globals classNamed: aClassName.
+	class isNil ifTrue: [^self gtProblemsWithClassNamed: aClassName].
+	^(class includesSelector: aSelectorString asSymbol)
+		ifTrue: [#()]
+		ifFalse: 
+			[Array with: (GtLTransformationProblem
+						description: aClassName , ' does not implement #' , aSelectorString)]
+]
+
 { #category : #accessing }
 GtLCodeTransformationSpecification >> namespaceWithAppliedRefactoring [
 	| namespace composite |

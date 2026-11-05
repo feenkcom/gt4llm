@@ -4,12 +4,6 @@ Class {
 	#category : #'Gt4LlmCore-Examples'
 }
 
-{ #category : #helpers }
-GtLToolForListTransformationsExamples >> expectedTransformationNames [
-	^(GtLCodeTransformations new allowedTransformationClasses
-		collect: [:each | each jsonSchemaLabel]) asSet
-]
-
 { #category : #examples }
 GtLToolForListTransformationsExamples >> listTransformations [
 	<gtExample>
@@ -18,12 +12,11 @@ GtLToolForListTransformationsExamples >> listTransformations [
 				withArguments: Dictionary new.
 	targetObject := call result targetObject.
 	self assert: targetObject class equals: GtLTransformationsSchema.
-	
 	self assert: (self transformationNamesIn: targetObject schema)
-		equals: self expectedTransformationNames.
+		equals: #('AddClass' 'AddMethod' 'PushUpInstanceVariable' 'PushUpMethod' 'RemoveMethod')
+				asSet.
 	self assert: ((self transformationNamesIn: targetObject schema)
 				includes: 'PushUpInstanceVariable').
-				
 	^call
 ]
 

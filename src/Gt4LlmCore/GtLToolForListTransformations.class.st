@@ -1,7 +1,7 @@
 Class {
 	#name : #GtLToolForListTransformations,
 	#superclass : #GtLAbstractMagritteFunctionTool,
-	#category : #Gt4LlmCore
+	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }
@@ -19,7 +19,7 @@ GtLToolForListTransformations >> privatePerformToolCall: aToolCall inContext: an
 	^GtLTransformationsSchema new
 		schema: ((GtLResponseMagritteFormat new)
 				name: 'Parameters';
-				modelClass: self transformationsClass) computeSchemaWithAllRequired
+				modelClass: self transformationsClass) computeSchema
 				json
 ]
 
