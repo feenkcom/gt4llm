@@ -16,8 +16,16 @@ GtLACPAssistantMessage >> activityItems [
 ]
 
 { #category : #converting }
+GtLACPAssistantMessage >> asChatMessageViewModel [
+	^ GtLACPAssistantMessageViewModel new
+		turn: turn;
+		message: self;
+		yourself
+]
+
+{ #category : #converting }
 GtLACPAssistantMessage >> asElement [
- ^ (GtLACPChatMessageViewModel new turn: turn; message: self; yourself) asElement
+	^ self asChatMessageViewModel asElement
 ]
 
 { #category : #converting }
@@ -132,7 +140,8 @@ GtLACPAssistantMessage >> hasCompletedReply [
 
 { #category : #testing }
 GtLACPAssistantMessage >> hasWork [
- ^ self localActivityItems notEmpty or: [ self delegatedMessages notEmpty ]
+	^ self localActivityItems notEmpty
+		or: [ self delegatedMessages notEmpty or: [ turn elicitationRequests notEmpty ] ]
 ]
 
 { #category : #accessing }

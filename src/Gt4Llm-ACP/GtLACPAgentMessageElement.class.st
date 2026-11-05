@@ -6,7 +6,6 @@ Class {
 	#superclass : #BrExpander,
 	#instVars : [
 		'messageViewModel',
-		'parentViewModel',
 		'agentHeader',
 		'messageElement',
 		'headerUpdater',
@@ -27,12 +26,18 @@ GtLACPAgentMessageElement >> buildContent [
 
 { #category : #building }
 GtLACPAgentMessageElement >> buildHeader [
- agentHeader := BrHorizontalPane new
-  id: (messageViewModel elementIdFor: 'header'); hMatchParent; vFitContent; yourself.
- self updateHeader.
- agentHeader when: BlClickEvent do: [ :event |
-  event consumed: true. agentHeader phlow spawnObject: messageViewModel turn session ].
- ^ agentHeader
+	agentHeader := BrHorizontalPane new
+			id: messageViewModel agentHeaderId;
+			hMatchParent;
+			vFitContent;
+			yourself.
+	self updateHeader.
+	agentHeader
+		when: BlClickEvent
+		do: [ :event | 
+			event consumed: true.
+			agentHeader phlow spawnObject: messageViewModel turn session ].
+	^ agentHeader
 ]
 
 { #category : #initialization }
@@ -66,22 +71,20 @@ GtLACPAgentMessageElement >> messageViewModel [
  ^ messageViewModel
 ]
 
-{ #category : #updating }
-GtLACPAgentMessageElement >> messageViewModel: aViewModel parentViewModel: aParentViewModel [
- | sectionName |
- messageViewModel := aViewModel.
- parentViewModel := aParentViewModel.
- sectionName := self sectionName.
- self id: (messageViewModel elementIdFor: 'section');
-  header: [ self buildHeader ];
-  content: [ self buildContent ].
- ((self childNamed: #sidebar) childNamed: #'expander--toggle')
-  id: (messageViewModel elementIdFor: 'toggle').
- self expanded: (parentViewModel isSectionExpanded: sectionName).
- self whenExpandedDo: [
-  parentViewModel section: sectionName expanded: true.
-  self updateContent ].
- self whenCollapsedDo: [ parentViewModel section: sectionName expanded: false ]
+{ #category : #accessing }
+GtLACPAgentMessageElement >> messageViewModel: aViewModel [
+	messageViewModel := aViewModel.
+	self
+		id: messageViewModel agentSectionId;
+		header: [ self buildHeader ];
+		content: [ self buildContent ].
+	((self childNamed: #sidebar) childNamed: #'expander--toggle')
+		id: messageViewModel agentToggleId.
+	self expanded: messageViewModel isAgentExpanded.
+	self
+		whenExpandedDo: [ messageViewModel agentExpanded: true.
+			self updateContent ].
+	self whenCollapsedDo: [ messageViewModel agentExpanded: false ]
 ]
 
 { #category : #updating }
@@ -102,16 +105,14 @@ GtLACPAgentMessageElement >> onRemovedFromSceneGraph [
 
 { #category : #updating }
 GtLACPAgentMessageElement >> onSessionChanged: anAnnouncement [
- anAnnouncement message == messageViewModel message ifFalse: [ ^ self ].
- self enqueueTask: (BlTaskAction new action: [
-  headerUpdater requestUpdate.
-  anAnnouncement sourceSession == messageViewModel turn session ifTrue: [
-   contentUpdater requestUpdate ] ])
-]
-
-{ #category : #accessing }
-GtLACPAgentMessageElement >> sectionName [
- ^ ('agent-', messageViewModel turn identityHash asString) asSymbol
+	anAnnouncement message == messageViewModel message ifFalse: [ ^ self ].
+	self
+		enqueueTask: (BlTaskAction new
+				action: [ messageViewModel hasPendingQuestions
+						ifTrue: [ self expanded: messageViewModel isAgentExpanded ].
+					headerUpdater requestUpdate.
+					anAnnouncement sourceSession == messageViewModel turn session
+						ifTrue: [ contentUpdater requestUpdate ] ])
 ]
 
 { #category : #updating }
@@ -126,9 +127,9 @@ GtLACPAgentMessageElement >> updateHeader [
 	| kind name counts |
 	agentHeader ifNil: [ ^ self ].
 	agentHeader removeChildren.
-	kind := self workBadge: 'agent' id: (messageViewModel elementIdFor: 'kind').
+	kind := self workBadge: 'agent' id: messageViewModel agentKindId.
 	name := BrButton new
-			id: (messageViewModel elementIdFor: 'name');
+			id: messageViewModel agentNameId;
 			aptitude: BrGlamorousButtonWithLabelAptitude - BrGlamorousButtonExteriorAptitude;
 			label: messageViewModel message chatLabel;
 			padding: BlInsets empty;
@@ -140,7 +141,7 @@ GtLACPAgentMessageElement >> updateHeader [
 	messageViewModel turn isActive
 		ifTrue: [ agentHeader
 				addChild: (BrLabel new
-						id: (messageViewModel elementIdFor: 'work-indicator');
+						id: messageViewModel agentWorkIndicatorId;
 						aptitude: (BrGlamorousLabelAptitude new
 								foreground: BrGlamorousColors disabledButtonTextColor);
 						text: (messageViewModel turn state = #cancelling
@@ -150,7 +151,7 @@ GtLACPAgentMessageElement >> updateHeader [
 						constraintsDo: [ :c | c linear vertical alignCenter ];
 						yourself) ].
 	counts := BrHorizontalPane new
-			id: (messageViewModel elementIdFor: 'counts');
+			id: messageViewModel agentCountsId;
 			hFitContent;
 			vFitContent;
 			margin: (BlInsets left: 8);
@@ -159,9 +160,7 @@ GtLACPAgentMessageElement >> updateHeader [
 	messageViewModel message workSummaryCountLabels
 		withIndexDo: [ :text :index | 
 			counts
-				addChild: (self
-						workBadge: text
-						id: (messageViewModel elementIdFor: 'count-' , index asString)) ].
+				addChild: (self workBadge: text id: (messageViewModel agentCountIdAt: index)) ].
 	agentHeader addChild: counts
 ]
 

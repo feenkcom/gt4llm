@@ -6,7 +6,8 @@ Class {
 	#superclass : #GtLACPObject,
 	#instVars : [
 		'data',
-		'permissionRequests'
+		'permissionRequests',
+		'elicitationRequests'
 	],
 	#category : #'Gt4Llm-ACP-Core'
 }
@@ -24,6 +25,11 @@ GtLACPToolCall >> data [
 { #category : #accessing }
 GtLACPToolCall >> data: anObject [
  data := anObject
+]
+
+{ #category : #accessing }
+GtLACPToolCall >> elicitationRequests [
+	^ elicitationRequests ifNil: [ elicitationRequests := OrderedCollection new ]
 ]
 
 { #category : #'gt - views' }
@@ -68,6 +74,16 @@ GtLACPToolCall >> gtOutputFor: aView [
 GtLACPToolCall >> gtPermissionsFor: aView [
  <gtView>
  ^ aView list title: 'Permissions'; priority: 20; items: [ permissionRequests copy ]; itemText: #yourself; actionUpdateButtonTooltip: 'Refresh permissions'
+]
+
+{ #category : #views }
+GtLACPToolCall >> gtQuestionsFor: aView [
+	<gtView>
+	^ aView list
+		title: 'Questions';
+		priority: 35;
+		items: [ self elicitationRequests ];
+		itemText: #message
 ]
 
 { #category : #testing }

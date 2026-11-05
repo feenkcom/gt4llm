@@ -78,32 +78,6 @@ GtLACPChatMessageElement >> initialize [
 		addAptitude: BlGlamorousExpanderShadowAptitude new
 ]
 
-{ #category : #building }
-GtLACPChatMessageElement >> messageSection: aName header: aHeaderBlock content: aBlock [
- ^ self messageSection: aName header: aHeaderBlock content: aBlock
-  aptitude: (BrGlamorousExpanderSubtleAptitude new
-   sidebarExtraPadding: (BlInsets top: (aName = #work ifTrue: [ 6 ] ifFalse: [ 9 ]));
-   yourself)
-]
-
-{ #category : #building }
-GtLACPChatMessageElement >> messageSection: aName header: aHeaderBlock content: aBlock aptitude: anAptitude [
- | expander model |
- model := viewModel.
- expander := BrExpander new.
- expander id: (model elementIdFor: aName asString, '-section');
-  aptitude: anAptitude;
-  hMatchParent; vFitContent; margin: (BlInsets top: 4 bottom: 4);
-  header: [ aHeaderBlock value: expander ];
-  content: aBlock; yourself.
- ((expander childNamed: #sidebar) childNamed: #'expander--toggle')
-  id: (model elementIdFor: aName asString, '-toggle').
- expander expanded: (model isSectionExpanded: aName).
- expander whenExpandedDo: [ model section: aName expanded: true ].
- expander whenCollapsedDo: [ model section: aName expanded: false ].
- ^ expander
-]
-
 { #category : #ui }
 GtLACPChatMessageElement >> replyPreviewText [
  | text |

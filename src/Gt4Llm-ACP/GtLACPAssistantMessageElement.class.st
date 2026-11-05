@@ -6,32 +6,53 @@ Class {
 	#superclass : #GtLACPChatMessageElement,
 	#instVars : [
 		'workSummaryElement',
-		'workSummaryUpdater'
+		'workSummaryUpdater',
+		'workExpander'
 	],
 	#category : #'Gt4Llm-ACP-UI'
 }
 
 { #category : #building }
 GtLACPAssistantMessageElement >> agentWorkElementFor: anAssistantMessage [
- ^ GtLACPAgentMessageElement new
-  messageViewModel: (viewModel delegatedViewModelFor: anAssistantMessage) parentViewModel: viewModel;
-  yourself
+	^ GtLACPAgentMessageElement new
+		messageViewModel: (viewModel delegatedViewModelFor: anAssistantMessage);
+		yourself
 ]
 
 { #category : #building }
 GtLACPAssistantMessageElement >> buildContent [
- viewModel message hasWork ifTrue: [
-  self addChild: (self messageSection: #work
-   header: [ :expander | self workSummaryElementFor: expander ]
-   content: [ self workContent ]) ].
- viewModel replyMessages ifNotEmpty: [
-  self addChild: (self messageSection: #final
-   header: [ :expander |
-    (self textElementFor: self replyPreviewText)
-     id: #'acp-final-preview'; vFitContent; yourself ]
-   content: [ self finalContent ]) ].
- viewModel turn error ifNotNil: [ :error |
-  self addChild: (self textElementFor: error printString) ]
+	self buildWorkSection.
+	self buildFinalReplySection.
+	self buildErrorContent
+]
+
+{ #category : #building }
+GtLACPAssistantMessageElement >> buildErrorContent [
+	viewModel turn error
+		ifNotNil: [ :error | self addChild: (self textElementFor: error printString) ]
+]
+
+{ #category : #building }
+GtLACPAssistantMessageElement >> buildFinalReplySection [
+	| expander |
+	viewModel replyMessages ifEmpty: [ ^ self ].
+	expander := BrExpander new
+			id: viewModel finalSectionId;
+			aptitude: (BrGlamorousExpanderSubtleAptitude new
+					sidebarExtraPadding: (BlInsets top: 9);
+					yourself);
+			hMatchParent;
+			vFitContent;
+			margin: (BlInsets top: 4 bottom: 4);
+			header: [ self finalReplyPreview ];
+			content: [ self finalContent ];
+			yourself.
+	((expander childNamed: #sidebar) childNamed: #'expander--toggle')
+		id: viewModel finalToggleId.
+	expander expanded: viewModel isFinalReplyExpanded.
+	expander whenExpandedDo: [ viewModel finalReplyExpanded: true ].
+	expander whenCollapsedDo: [ viewModel finalReplyExpanded: false ].
+	self addChild: expander
 ]
 
 { #category : #building }
@@ -44,29 +65,61 @@ GtLACPAssistantMessageElement >> buildHeader [
 ]
 
 { #category : #building }
+GtLACPAssistantMessageElement >> buildWorkSection [
+	viewModel message hasWork ifFalse: [ ^ self ].
+	workExpander := BrExpander new.
+	workExpander
+		id: viewModel workSectionId;
+		aptitude: (BrGlamorousExpanderSubtleAptitude new
+				sidebarExtraPadding: (BlInsets top: 6);
+				yourself);
+		hMatchParent;
+		vFitContent;
+		margin: (BlInsets top: 4 bottom: 4);
+		header: [ self workSummaryElementFor: workExpander ];
+		content: [ self workContent ].
+	((workExpander childNamed: #sidebar) childNamed: #'expander--toggle')
+		id: viewModel workToggleId.
+	workExpander expanded: viewModel isWorkExpanded.
+	workExpander whenExpandedDo: [ viewModel workExpanded: true ].
+	workExpander whenCollapsedDo: [ viewModel workExpanded: false ].
+	self addChild: workExpander
+]
+
+{ #category : #building }
 GtLACPAssistantMessageElement >> finalContent [
  ^ self finalContentFor: viewModel
 ]
 
 { #category : #building }
 GtLACPAssistantMessageElement >> finalContentFor: model [
- ^ self finalContentFor: model idPrefix: model elementIdPrefix
+	| pane tabs |
+	tabs := GtPhlowCompositeView new
+			views: (model message finalReplyViewsInContext: model phlowContext);
+			asElementDo: [ :element | 
+				element
+					hMatchParent;
+					vFitContentLimited ].
+	tabs id: model finalTabsId.
+	tabs selectTabWithLabelString: model selectedFinalViewTitle.
+	tabs viewModel
+		when: BrTabSelectedEvent
+		do: [ :event | model selectedFinalViewTitle: event tab tabLabel text asString ].
+	pane := BrVerticalPane new
+			id: model finalContentId;
+			hMatchParent;
+			vFitContentLimited;
+			addChild: tabs;
+			yourself.
+	^ pane
 ]
 
 { #category : #building }
-GtLACPAssistantMessageElement >> finalContentFor: model idPrefix: aPrefix [
- | pane tabs |
- tabs := (GtPhlowCompositeView new
-  views: (model message finalReplyViewsInContext: model phlowContext);
-  asElementDo: [ :element | element hMatchParent; vFitContentLimited ]).
- tabs id: (aPrefix, '-final-tabs') asSymbol.
- tabs selectTabWithLabelString: model selectedFinalViewTitle.
- tabs viewModel when: BrTabSelectedEvent do: [ :event |
-  model selectedFinalViewTitle: event tab tabLabel text asString ].
- pane := BrVerticalPane new
-  id: (aPrefix, '-final-content') asSymbol; hMatchParent; vFitContentLimited;
-  addChild: tabs; yourself.
- ^ pane
+GtLACPAssistantMessageElement >> finalReplyPreview [
+	^ (self textElementFor: self replyPreviewText)
+		id: viewModel finalPreviewId;
+		vFitContent;
+		yourself
 ]
 
 { #category : #initialization }
@@ -94,37 +147,48 @@ GtLACPAssistantMessageElement >> onRemovedFromSceneGraph [
 
 { #category : #updating }
 GtLACPAssistantMessageElement >> onSessionChanged: anAnnouncement [
- (anAnnouncement message == viewModel message
-  and: [ anAnnouncement sourceSession ~~ viewModel turn session ]) ifFalse: [ ^ self ].
- self enqueueTask: (BlTaskAction new action: [ workSummaryUpdater requestUpdate ])
+	(anAnnouncement message == viewModel message
+		and: [ anAnnouncement sourceSession ~~ viewModel turn session ])
+		ifFalse: [ ^ self ].
+	self
+		enqueueTask: (BlTaskAction new
+				action: [ workExpander ifNotNil: [ workExpander expanded: viewModel isWorkExpanded ].
+					workSummaryUpdater requestUpdate ])
 ]
 
-{ #category : #ui }
+{ #category : #building }
 GtLACPAssistantMessageElement >> permissionElementFor: permission [
- | pane choices |
- pane := BrVerticalPane new hMatchParent; vFitContent; yourself.
- permission state = #pending ifFalse: [
-  pane addChild: (BrLabel new aptitude: BrGlamorousLabelAptitude;
-   text: 'Permission: ', permission state asString; yourself).
-  ^ pane ].
- pane addChild: (BrLabel new aptitude: BrGlamorousLabelAptitude; text: 'Permission required'; yourself).
- choices := BrHorizontalPane new hMatchParent; vFitContent; yourself.
- permission options do: [ :option |
-  choices addChild: (BrButton new
-   id: ('acp-permission-', option id asString) asSymbol;
-   aptitude: BrGlamorousButtonWithLabelAptitude; label: option name;
-   action: [
-    [ option select ] on: Error do: [ :ex |
-     viewModel turn session announceChanged.
-     self phlow spawnObject: ex ] ];
-   yourself) ].
- pane addChild: choices.
- ^ pane
+	^ GtLACPInteractionElement new
+		permission: permission;
+		yourself
+]
+
+{ #category : #building }
+GtLACPAssistantMessageElement >> questionsElementFor: aTool [
+	| pane |
+	pane := BrVerticalPane new
+			id: ('acp-tool-' , aTool id asString) asSymbol;
+			hMatchParent;
+			vFitContent;
+			yourself.
+	aTool elicitationRequests
+		do: [ :question | 
+			pane
+				addChild: (question asElement
+						padding: BlInsets empty;
+						margin: (BlInsets
+								top: 2
+								left: 5
+								bottom: 2
+								right: 5);
+						yourself) ].
+	^ pane
 ]
 
 { #category : #building }
 GtLACPAssistantMessageElement >> toolElementFor: aTool [
 	| pane line kind summary |
+	aTool elicitationRequests ifNotEmpty: [ ^ self questionsElementFor: aTool ].
 	kind := self
 			workBadge: 'tool'
 			id: ('acp-tool-kind-' , aTool id asString) asSymbol.
@@ -153,7 +217,11 @@ GtLACPAssistantMessageElement >> toolElementFor: aTool [
 			id: ('acp-tool-' , aTool id asString) asSymbol;
 			hMatchParent;
 			vFitContent;
-			margin: (BlInsets top: 2 left: 5 bottom: 2 right: 5);
+			margin: (BlInsets
+					top: 2
+					left: 5
+					bottom: 2
+					right: 5);
 			addChild: line;
 			yourself.
 	aTool permissionRequests
@@ -165,31 +233,27 @@ GtLACPAssistantMessageElement >> toolElementFor: aTool [
 
 { #category : #updating }
 GtLACPAssistantMessageElement >> updateWorkSummary [
- workSummaryElement ifNil: [ ^ self ].
- workSummaryElement removeChildren.
- viewModel message workSummaryCountLabels withIndexDo: [ :text :index |
-  workSummaryElement addChild: (self workBadge: text
-   id: (viewModel elementIdFor: 'work-summary-count-', index asString)) ].
- workSummaryElement addChild: (BrLabel new
-  id: (viewModel elementIdFor: 'work-summary-text');
-  aptitude: BrGlamorousLabelAptitude; hMatchParent;
-  text: viewModel message workSummaryDetails;
-  constraintsDo: [ :c | c linear vertical alignCenter ]; yourself)
+	workSummaryElement ifNil: [ ^ self ].
+	workSummaryElement removeChildren.
+	viewModel message workSummaryCountLabels
+		withIndexDo: [ :text :index | 
+			workSummaryElement
+				addChild: (self workBadge: text id: (viewModel workSummaryCountIdAt: index)) ].
+	workSummaryElement
+		addChild: (BrLabel new
+				id: viewModel workSummaryTextId;
+				aptitude: BrGlamorousLabelAptitude;
+				hMatchParent;
+				text: viewModel message workSummaryDetails;
+				constraintsDo: [ :c | c linear vertical alignCenter ];
+				yourself)
 ]
 
 { #category : #building }
 GtLACPAssistantMessageElement >> workBadge: aString id: anId [
-	^ BrLabel new
+	^ GtLACPWorkBadgeElement new
 		id: anId;
-		aptitude: (BrGlamorousLabelAptitude new
-				foreground: "BrGlamorousColors disabledButtonTextColor" Color black);
-		beSmallSize;
 		text: aString;
-		background: self theme default backdropBackground;
-		geometry: (BlRoundedRectangleGeometry cornerRadius: 2);
-		padding: (BlInsets left: 2 right: 2);
-		margin: (BlInsets right: 6);
-		constraintsDo: [ :c | c linear vertical alignCenter ];
 		yourself
 ]
 
@@ -206,7 +270,7 @@ GtLACPAssistantMessageElement >> workContentFor: anAssistantMessage [
 			vFitContent;
 			yourself.
 	anAssistantMessage == viewModel message
-		ifTrue: [ pane id: (viewModel elementIdFor: 'work-content') ].
+		ifTrue: [ pane id: viewModel workContentId ].
 	anAssistantMessage localActivityItems
 		do: [ :item | 
 			(item isKindOf: GtLACPToolCall)
@@ -218,6 +282,9 @@ GtLACPAssistantMessageElement >> workContentFor: anAssistantMessage [
 										text: item chatLabel;
 										yourself) ].
 					pane addChild: (self textElementFor: item text) ] ].
+	anAssistantMessage turn elicitationRequests
+		select: [ :each | each toolCall isNil ]
+		thenDo: [ :each | pane addChild: each asElement ].
 	anAssistantMessage delegatedMessages
 		do: [ :delegated | pane addChild: (self agentWorkElementFor: delegated) ].
 	^ pane
@@ -236,10 +303,16 @@ GtLACPAssistantMessageElement >> workIndicatorFor: aTurn id: anId [
 
 { #category : #building }
 GtLACPAssistantMessageElement >> workSummaryElementFor: anExpander [
- workSummaryElement := BrHorizontalPane new
-  id: (viewModel elementIdFor: 'work-summary'); hMatchParent; vFitContent; yourself.
- self updateWorkSummary.
- workSummaryElement when: BlClickEvent do: [ :event |
-  event consumed: true. anExpander toggleExpanded ].
- ^ workSummaryElement
+	workSummaryElement := BrHorizontalPane new
+			id: viewModel workSummaryId;
+			hMatchParent;
+			vFitContent;
+			yourself.
+	self updateWorkSummary.
+	workSummaryElement
+		when: BlClickEvent
+		do: [ :event | 
+			event consumed: true.
+			anExpander toggleExpanded ].
+	^ workSummaryElement
 ]
