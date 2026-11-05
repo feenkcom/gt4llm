@@ -29,12 +29,11 @@ GtLACPInputNeededNotification >> inputMessage [
 	^ String
 		streamContents: [ :stream | 
 			stream
-				nextPutAll: 'Input needed';
-				cr;
+				nextPutAll: 'Input needed: ';
 				nextPutAll: root conversationTitle.
 			owner == root
 				ifFalse: [ stream
-						nextPutAll: ' / ';
+						cr;
 						nextPutAll: owner conversationTitle ].
 			stream
 				cr;

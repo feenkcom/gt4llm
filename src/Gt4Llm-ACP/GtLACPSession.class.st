@@ -21,7 +21,8 @@ Class {
 		'parentSubagent',
 		'interSessionMessages',
 		'conversationTitle',
-		'availableCommands'
+		'availableCommands',
+		'contextWindow'
 	],
 	#classVars : [
 		'McpServer'
@@ -296,6 +297,11 @@ GtLACPSession >> connectionClosed: aReason [
 ]
 
 { #category : #accessing }
+GtLACPSession >> contextWindow [
+	^ contextWindow
+]
+
+{ #category : #accessing }
 GtLACPSession >> conversationState [
  ^ self isSubagent ifTrue: [ parentSubagent workState ] ifFalse: [ state ]
 ]
@@ -518,17 +524,24 @@ GtLACPSession >> gtSessionActionsDropdownFor: anAction [
 		menuItemsForObject: self fromTarget: GtLACPSessionActionTarget
 ]
 
-{ #category : #views }
+{ #category : #'gt-views' }
 GtLACPSession >> gtSessionFor: aView [
- <gtView>
- <gtLlmView>
- ^ aView columnedList title: 'Session'; priority: 10;
-  items: [ { 'Project directory' -> directory. 'Remote session ID' -> remoteSessionId.
-   'Status' -> state. 'Client' -> client. 'Connection' -> connection } ];
-  column: 'Session' text: #key;
-  column: 'Value' text: [ :entry | entry value printString ];
-  send: #value;
-  actionUpdateButtonTooltip: 'Refresh session'
+	<gtView>
+	<gtLlmView>
+	^ aView columnedList
+		title: 'Session';
+		priority: 10;
+		items: [ {'Project directory' -> directory.
+				'Remote session ID' -> remoteSessionId.
+				'Status' -> state.
+				'Context window' -> (self contextWindow ifNil: [ 'Not reported' ]).
+				'Client' -> client.
+				'Connection' -> connection} ];
+		column: 'Session' text: #key;
+		column: 'Value' text: [ :entry | entry value printString ];
+		send: #value;
+		updateWhen: GtLACPSessionChanged in: [ self announcer ];
+		actionUpdateButtonTooltip: 'Refresh session'
 ]
 
 { #category : #views }
@@ -948,7 +961,7 @@ GtLACPSession >> receiveSubagentUpdate: aDictionary [
 	^ association
 ]
 
-{ #category : #updating }
+{ #category : #receiving }
 GtLACPSession >> receiveUpdate: aDictionary [
 	| kind turn changedMessage |
 	[ updates
@@ -957,6 +970,7 @@ GtLACPSession >> receiveUpdate: aDictionary [
 				timestamp: DateAndTime now;
 				yourself).
 	kind := aDictionary at: 'sessionUpdate'.
+	kind = 'usage_update' ifTrue: [ ^ self updateContextWindow: aDictionary ].
 	kind = 'available_commands_update'
 		ifTrue: [ ^ self updateAvailableCommands: (aDictionary at: 'availableCommands') ].
 	kind = 'subagent_update'
@@ -1132,6 +1146,11 @@ GtLACPSession >> updateAvailableCommands: aCollection [
 		announce: (GtLACPCommandsChanged new
 				session: self;
 				yourself)
+]
+
+{ #category : #updating }
+GtLACPSession >> updateContextWindow: aDictionary [
+	contextWindow := GtLACPContextWindow new initializeFrom: aDictionary
 ]
 
 { #category : #updating }
