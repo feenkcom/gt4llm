@@ -18,7 +18,8 @@ Class {
 		'requestTimeout',
 		'lock',
 		'announcer',
-		'pendingCommandAdvertisements'
+		'pendingCommandAdvertisements',
+		'notificationPublisher'
 	],
 	#category : #'Gt4Llm-ACP-Core'
 }
@@ -60,13 +61,13 @@ GtLACPConnection >> authenticationMethods: anObject [
  authenticationMethods := anObject
 ]
 
-{ #category : #private }
+{ #category : #protocol }
 GtLACPConnection >> cancelInboundRequest: anId [
 	sessions
 		valuesDo: [ :aSession | 
 			aSession turns
 				do: [ :turn | 
-					turn elicitationRequests
+					turn permissionRequests , turn elicitationRequests
 						do: [ :each | each requestId = anId ifTrue: [ each abandon ] ] ] ]
 ]
 
@@ -254,6 +255,13 @@ GtLACPConnection >> nextId: anObject [
  nextId := anObject
 ]
 
+{ #category : #accessing }
+GtLACPConnection >> notificationPublisher: aBlock [
+	"Allow isolated notification collections in examples and embedding clients."
+
+	notificationPublisher := aBlock
+]
+
 { #category : #requests }
 GtLACPConnection >> notify: aMethod parameters: aDictionary [
  self send: { 'jsonrpc' -> '2.0'. 'method' -> aMethod. 'params' -> aDictionary } asDictionary
@@ -273,6 +281,13 @@ GtLACPConnection >> pendingRequests [
 { #category : #accessing }
 GtLACPConnection >> pendingRequests: anObject [
  pendingRequests := anObject
+]
+
+{ #category : #notifications }
+GtLACPConnection >> publishInputNotification: aNotification [
+	notificationPublisher
+		ifNotNil: [ ^ notificationPublisher value: aNotification ].
+	aNotification registerNotifications
 ]
 
 { #category : #dispatching }

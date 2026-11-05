@@ -2,7 +2,8 @@ Class {
 	#name : #GtLACPSessionTool,
 	#superclass : #GtPhlowTool,
 	#instVars : [
-		'session'
+		'session',
+		'interactionToReveal'
 	],
 	#category : #'Gt4Llm-ACP-UI'
 }
@@ -15,13 +16,21 @@ GtLACPSessionTool class >> forSession: aSession [
 { #category : #converting }
 GtLACPSessionTool >> asElementDo: aBlock [
 	| element |
-	element := GtLACPSessionToolElement new chat: self session.
+	element := GtLACPSessionToolElement new
+			interactionToReveal: interactionToReveal;
+			chat: self session;
+			yourself.
 	^ aBlock cull: element cull: self
 ]
 
 { #category : #converting }
 GtLACPSessionTool >> icon [
 	^ BrGlamorousVectorIcons chat
+]
+
+{ #category : #accessing }
+GtLACPSessionTool >> interactionToReveal: aRequest [
+	interactionToReveal := aRequest
 ]
 
 { #category : #accessing }

@@ -86,6 +86,11 @@ GtLACPAgentMessageViewModel >> finalToggleId [
 	^ ('acp-agent-final-toggle-' , turn identityHash asString) asSymbol
 ]
 
+{ #category : #'element IDs' }
+GtLACPAgentMessageViewModel >> inputNeededId [
+	^ ('acp-message-input-needed-' , turn identityHash asString) asSymbol
+]
+
 { #category : #accessing }
 GtLACPAgentMessageViewModel >> isAgentExpanded [
 	^ agentExpanded ifNil: [ self hasPendingInteraction ]

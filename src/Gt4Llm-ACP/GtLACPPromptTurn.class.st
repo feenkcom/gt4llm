@@ -210,9 +210,15 @@ GtLACPPromptTurn >> gtToolsFor: aView [
 
 { #category : #testing }
 GtLACPPromptTurn >> hasPendingInteraction [
-	^ (permissionRequests anySatisfy: [ :each | each state = #pending ])
-		or: [ (self elicitationRequests anySatisfy: [ :each | each state = #pending ])
-				or: [ self delegatedTurns anySatisfy: #hasPendingInteraction ] ]
+	^ self pendingInteractions notEmpty
+]
+
+{ #category : #testing }
+GtLACPPromptTurn >> includesInteraction: aRequest [
+	^ (permissionRequests includes: aRequest)
+		or: [ (self elicitationRequests includes: aRequest)
+				or: [ self delegatedTurns
+						anySatisfy: [ :child | child includesInteraction: aRequest ] ] ]
 ]
 
 { #category : #updates }
@@ -269,6 +275,20 @@ GtLACPPromptTurn >> pendingDelegatedElicitations [
 		flatCollect: [ :child | 
 			(child elicitationRequests select: [ :each | each state = #pending ])
 				, child pendingDelegatedElicitations ]
+]
+
+{ #category : #accessing }
+GtLACPPromptTurn >> pendingInteractions [
+	| requests seen |
+	requests := OrderedCollection new.
+	seen := IdentitySet new.
+	permissionRequests , self elicitationRequests
+		, (self delegatedTurns flatCollect: #pendingInteractions)
+		do: [ :each | 
+			(each state = #pending and: [ (seen includes: each) not ])
+				ifTrue: [ seen add: each.
+					requests add: each ] ].
+	^ requests asArray
 ]
 
 { #category : #accessing }

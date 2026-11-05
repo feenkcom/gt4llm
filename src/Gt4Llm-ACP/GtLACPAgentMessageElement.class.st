@@ -20,6 +20,12 @@ Class {
 GtLACPAgentMessageElement >> buildContent [
 	messageViewModel expandCompletedFinalReply.
 	messageElement := messageViewModel asElement.
+	messageElement
+		margin: (BlInsets
+				top: 5
+				left: 0
+				bottom: 10
+				right: 5).
 	renderedVersion := messageViewModel renderingVersion.
 	^ messageElement
 ]
@@ -50,7 +56,11 @@ GtLACPAgentMessageElement >> initialize [
 	self
 		hMatchParent;
 		vFitContent;
-		margin: (BlInsets top: 4 bottom: 4).
+		margin: (BlInsets
+				top: 4
+				left: 5
+				bottom: 4
+				right: 5).
 	headerUpdater := BrElementUpdater new
 			element: self selector: #updateHeader;
 			postponedDuration: 150 milliseconds;
@@ -162,7 +172,13 @@ GtLACPAgentMessageElement >> updateHeader [
 		withIndexDo: [ :text :index | 
 			counts
 				addChild: (self workBadge: text id: (messageViewModel agentCountIdAt: index)) ].
-	agentHeader addChild: counts
+	agentHeader addChild: counts.
+	agentHeader
+		addChild: (GtLACPInputNeededElement new
+				id: ('acp-agent-input-needed-' , messageViewModel turn identityHash asString)
+						asSymbol;
+				forTurn: messageViewModel turn;
+				yourself)
 ]
 
 { #category : #building }

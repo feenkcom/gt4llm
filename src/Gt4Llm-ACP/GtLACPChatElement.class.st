@@ -13,7 +13,8 @@ Class {
 		'listUpdater',
 		'followEndRequested',
 		'renderedVersions',
-		'endMarker'
+		'endMarker',
+		'interactionToReveal'
 	],
 	#category : #'Gt4Llm-ACP-UI'
 }
@@ -138,11 +139,13 @@ GtLACPChatElement >> initialize [
 	self addChild: self buildComposer as: #'acp-composer'
 ]
 
-{ #category : #scrolling }
+{ #category : #building }
 GtLACPChatElement >> initializeScrollFollowing [
 	self messageViewport
 		when: BlElementLayoutComputedEvent
-		do: [ :event | self followStreamAfterLayout ].
+		do: [ :event | 
+			self followStreamAfterLayout.
+			self revealInteractionAfterLayout ].
 	self messageViewport
 		when: BlElementScrolledEvent
 		do: [ :event | event delta y < 0 ifTrue: [ followEndRequested := false ] ].
@@ -203,6 +206,33 @@ GtLACPChatElement >> onRemovedFromSceneGraph [
 { #category : #announcing }
 GtLACPChatElement >> onSessionChanged: anAnnouncement [
  self enqueueTask: (BlTaskAction new action: [ listUpdater requestUpdate ])
+]
+
+{ #category : #navigation }
+GtLACPChatElement >> revealInteraction: aRequest [
+	| index |
+	index := viewModel revealInteraction: aRequest.
+	index ifNil: [ ^ self ].
+	interactionToReveal := aRequest.
+	self updateMessages.
+	followEndRequested := false.
+	listElement scrollToIndex: index
+]
+
+{ #category : #navigation }
+GtLACPChatElement >> revealInteractionAfterLayout [
+	| target delta |
+	interactionToReveal ifNil: [ ^ self ].
+	self messageViewport
+		withAllChildrenBreadthFirstDo: [ :each | 
+			each id asSymbol = interactionToReveal interactionElementId
+				ifTrue: [ target := each ] ].
+	target ifNil: [ ^ self ].
+	target height = 0 ifTrue: [ ^ self ].
+	interactionToReveal := nil.
+	delta := target bounds inSpace top - self messageViewport bounds inSpace top
+			- 32.
+	self messageViewport scrollBy: 0 @ delta
 ]
 
 { #category : #actions }

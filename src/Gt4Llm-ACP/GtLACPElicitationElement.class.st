@@ -187,6 +187,12 @@ GtLACPElicitationElement >> questionHeader [
 					id: #'acp-question-kind';
 					text: 'question';
 					yourself);
+			addChild: (GtLACPInputNeededElement new
+					id: #'acp-question-input-needed';
+					margin: (BlInsets right: 6);
+					constraintsDo: [ :constraints | constraints linear vertical alignCenter ];
+					forRequest: request;
+					yourself);
 			addChild: question;
 			yourself.
 	line

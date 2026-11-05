@@ -8,7 +8,8 @@ Class {
 		'chat',
 		'titleLabel',
 		'toolbarElement',
-		'headerUpdater'
+		'headerUpdater',
+		'interactionToReveal'
 	],
 	#category : #'Gt4Llm-ACP-UI'
 }
@@ -119,18 +120,23 @@ GtLACPSessionToolElement >> collectToolActions [
 		collect
 ]
 
-{ #category : #views }
+{ #category : #building }
 GtLACPSessionToolElement >> collectToolViews [
- | views context |
- context := self chat phlowContext.
- views := (GtPhlowViewsCollector new
-  fromObject: self chat;
-  pragmaNames: GtLSettings messageViewPragmaNames;
-  context: context;
-  collect),
-  (self chat summarizerViewsFor: self chat gtInspectorTargetModels inContext: context).
- GtPhlowUtility sortByPriority: views.
- ^ views
+	| views context |
+	context := self chat phlowContext.
+	views := (GtPhlowViewsCollector new
+			fromObject: self chat;
+			pragmaNames: GtLSettings messageViewPragmaNames;
+			context: context;
+			collect)
+			, (self chat
+					summarizerViewsFor: self chat gtInspectorTargetModels
+					inContext: context).
+	interactionToReveal
+		ifNotNil: [ views := views
+					collect: [ :view | view title = 'Chat' ifTrue: [ self interactionChatView ] ifFalse: [ view ] ] ].
+	GtPhlowUtility sortByPriority: views.
+	^ views
 ]
 
 { #category : #views }
@@ -163,6 +169,22 @@ GtLACPSessionToolElement >> initializeContent [
 	self addChild: self buildHeaderElement as: #header.
 	self addChild: self buildViewsContainerElement as: #viewsContainer.
 	self addChild: self buildPlaygroundPageElement as: #playgroundPage
+]
+
+{ #category : #building }
+GtLACPSessionToolElement >> interactionChatView [
+	^ GtPhlowView empty explicit
+		title: 'Chat';
+		priority: 0;
+		stencil: [ | element |
+			element := self chat asElement.
+			element revealInteraction: interactionToReveal.
+			element ]
+]
+
+{ #category : #accessing }
+GtLACPSessionToolElement >> interactionToReveal: aRequest [
+	interactionToReveal := aRequest
 ]
 
 { #category : #events }

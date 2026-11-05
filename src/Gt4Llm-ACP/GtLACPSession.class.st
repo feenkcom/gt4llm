@@ -82,8 +82,9 @@ GtLACPSession >> announceConversationTreeChanged [
 
 { #category : #announcing }
 GtLACPSession >> announceMessageChanged: aMessage [
- self announceChatMessageChanged: aMessage.
- self announceConversationTreeChanged
+	self pendingInteractions do: #publishInputNeededNotification.
+	self announceChatMessageChanged: aMessage.
+	self announceConversationTreeChanged
 ]
 
 { #category : #announcing }
@@ -735,9 +736,20 @@ GtLACPSession >> parentSubagent: anAssociation [
  parentSubagent := anAssociation
 ]
 
+{ #category : #accessing }
+GtLACPSession >> pendingInteractions [
+	^ self currentTurn ifNil: [ #() ] ifNotNil: #pendingInteractions
+]
+
 { #category : #views }
 GtLACPSession >> phlowContext [
  ^ GtPhlowContext new objectRegistry: self objectStorage; yourself
+]
+
+{ #category : #accessing }
+GtLACPSession >> presentationState [
+	self pendingInteractions ifNotEmpty: [ ^ #inputNeeded ].
+	^ state
 ]
 
 { #category : #printing }
@@ -870,24 +882,37 @@ GtLACPSession >> receiveLegacySubagentUpdate: anUpdate [
  ^ self receiveSubagentUpdate: normalized
 ]
 
-{ #category : #updating }
+{ #category : #protocol }
 GtLACPSession >> receivePermission: params requestId: anId [
- | turn permission call |
- [
- turn := self currentTurn.
- (self isSubagent and: [ self isReplaying not ]) ifTrue: [
-  (turn isNil or: [ turn isActive not and: [ turn state ~= #observed ] ]) ifTrue: [ turn := self newObservedTurn ].
-  turn state: #running. state := #prompting ].
- (turn isNil or: [ turn isActive not ]) ifTrue: [
-  ^ connection replyTo: anId result: { 'outcome' -> { 'outcome' -> 'cancelled' } asDictionary } asDictionary ].
- call := turn updateToolCall: (params at: 'toolCall').
- permission := GtLACPPermissionRequest new
-  connection: connection; session: self; requestId: anId; toolCall: call; yourself.
- permission options: ((params at: 'options') collect: [ :each |
-  GtLACPPermissionOption new request: permission; data: each; yourself ]).
- call permissionRequests add: permission.
- turn permissionRequests add: permission
- ] ensure: [ self announceChanged ]
+	| turn permission call |
+	[ turn := self currentTurn.
+	(self isSubagent and: [ self isReplaying not ])
+		ifTrue: [ (turn isNil or: [ turn isActive not and: [ turn state ~= #observed ] ])
+				ifTrue: [ turn := self newObservedTurn ].
+			turn state: #running.
+			state := #prompting ].
+	(turn isNil or: [ turn isActive not ])
+		ifTrue: [ ^ connection
+				replyTo: anId
+				result: {'outcome' -> {'outcome' -> 'cancelled'} asDictionary} asDictionary ].
+	(turn permissionRequests anySatisfy: [ :each | each requestId = anId ])
+		ifTrue: [ ^ self ].
+	call := turn updateToolCall: (params at: 'toolCall').
+	permission := GtLACPPermissionRequest new
+			connection: connection;
+			session: self;
+			requestId: anId;
+			toolCall: call;
+			yourself.
+	permission
+		options: ((params at: 'options')
+				collect: [ :each | 
+					GtLACPPermissionOption new
+						request: permission;
+						data: each;
+						yourself ]).
+	call permissionRequests add: permission.
+	turn permissionRequests add: permission ] ensure: [ self announceChanged ]
 ]
 
 { #category : #lifecycle }

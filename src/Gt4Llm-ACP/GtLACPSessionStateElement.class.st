@@ -1,5 +1,5 @@
 "
-I show the state of a GtLACPSession as a label inside a colored rounded rectangle, and I follow the session as its state changes. I am used in the ACP chat tool header (GtLACPChatToolElement>>#buildTitleContainer) and in the sessions list (GtLACPSessionRegistry>>#gtSessionsFor:).
+I show a session's presentation state in a colored rounded badge. Pending input anywhere in the session's delegated work appears as amber input needed, including the pending count when there are multiple requests. I update independently of execution-state changes. The session tool header and registry share this element; clicking an input-needed badge opens the relevant interaction.
 "
 Class {
 	#name : #GtLACPSessionStateElement,
@@ -9,12 +9,13 @@ Class {
 		'state',
 		'marker',
 		'label',
-		'updater'
+		'updater',
+		'pendingCount'
 	],
 	#category : #'Gt4Llm-ACP-UI'
 }
 
-{ #category : #initialization }
+{ #category : #building }
 GtLACPSessionStateElement >> initialize [
 	super initialize.
 	label := BrLabel new
@@ -41,7 +42,15 @@ GtLACPSessionStateElement >> initialize [
 	self
 		fitContent;
 		alignCenterLeft;
-		addChild: marker
+		addChild: marker.
+	marker
+		when: BlClickEvent
+		do: [ :event | 
+			session
+				ifNotNil: [ session pendingInteractions
+						ifNotEmpty: [ :requests | 
+							event consumed: true.
+							self phlow spawnTool: requests first navigationTool ] ] ]
 ]
 
 { #category : #testing }
@@ -70,6 +79,7 @@ GtLACPSessionStateElement >> session: aSession [
 GtLACPSessionStateElement >> stateColor [
 	"Keep session states readable while highlighting activity and failures."
 
+	state = #inputNeeded ifTrue: [ ^ GtLACPInputNeededElement amberColor ].
 	state = #ready ifTrue: [ ^ BrGlamorousColors successBackgroundColor ].
 	state = #prompting ifTrue: [ ^ Color fromHexString: '69C0FF' ].
 	(#(#starting #loading #disconnected) includes: state)
@@ -80,15 +90,20 @@ GtLACPSessionStateElement >> stateColor [
 
 { #category : #updating }
 GtLACPSessionStateElement >> updateState [
-	"Session updates arrive while streaming, so I only touch the elements when the state really changes."
-
-	| newState color |
-	newState := session ifNotNil: #state.
-	newState = state ifTrue: [ ^ self ].
+	| newState count color text |
+	newState := session ifNotNil: #presentationState.
+	count := session ifNil: [ 0 ] ifNotNil: [ session pendingInteractions size ].
+	(newState = state and: [ count = pendingCount ]) ifTrue: [ ^ self ].
 	state := newState.
+	pendingCount := count.
 	color := self stateColor.
 	marker
 		background: (self isHollowState ifTrue: [ Color transparent ] ifFalse: [ color ]);
 		border: (BlBorder paint: color width: 1).
-	label text: state asString asRopedText
+	text := state = #inputNeeded
+			ifTrue: [ count > 1
+					ifTrue: [ 'input needed · ' , count asString ]
+					ifFalse: [ 'input needed' ] ]
+			ifFalse: [ state asString ].
+	label text: text asRopedText
 ]

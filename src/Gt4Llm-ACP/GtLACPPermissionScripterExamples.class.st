@@ -150,7 +150,7 @@ GtLACPPermissionScripterExamples >> manualCollapseSurvivesRefresh [
 	^ scripter
 ]
 
-{ #category : #examples }
+{ #category : #building }
 GtLACPPermissionScripterExamples >> pendingPermissionDisplayed [
 	<gtExample>
 	| permission scripter |
@@ -169,7 +169,9 @@ GtLACPPermissionScripterExamples >> pendingPermissionDisplayed [
 		assertStep: [ :step | 
 			step
 				id: #'acp-permission-toolbar-permission-1';
-				satisfies: [ :toolbar | toolbar class = BrToolbar and: [ toolbar numberOfItems = 2 ] ] ].
+				satisfies: [ :toolbar | 
+					toolbar class = BrToolbar
+						and: [ (toolbar items count: [ :item | item isKindOf: BrButton ]) = 2 ] ] ].
 	scripter
 		assertStep: [ :step | 
 			step

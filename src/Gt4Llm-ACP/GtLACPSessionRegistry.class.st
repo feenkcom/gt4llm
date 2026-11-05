@@ -255,13 +255,13 @@ GtLACPSessionRegistry >> sessions [
 	^ sessions lock: [ :theSessions | theSessions copy ]
 ]
 
-{ #category : #'gt - extensions' }
+{ #category : #examples }
 GtLACPSessionRegistry >> sessionsByState [
 	"Answer the total followed by one association per state in alphabetical order, for the overview view."
 
 	| allSessions byState |
 	allSessions := self sessions.
-	byState := (allSessions groupedBy: #state) associations
+	byState := (allSessions groupedBy: #presentationState) associations
 			sorted: [ :a :b | a key <= b key ].
 	^ {'All' -> allSessions} , byState
 ]
