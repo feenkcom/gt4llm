@@ -302,6 +302,130 @@ GtLACPSessionRegistryExamples >> registrationIsAnnounced [
 	^ registry
 ]
 
+{ #category : #examples }
+GtLACPSessionRegistryExamples >> registryInspectorTool [
+	<gtExample>
+	| registry composite tool element |
+	registry := self emptyRegistry.
+	composite := registry gtDefaultInspectorTool.
+	self assert: (composite isKindOf: GtPhlowCompositeTool).
+	self assert: composite tools size equals: 2.
+	tool := composite tools first.
+	self assert: tool class equals: GtLACPSessionRegistryTool.
+	self assert: GtLACPSessionRegistryTool superclass equals: GtPhlowTool.
+	self assert: tool registry == registry.
+	self assert: tool object == registry.
+	self assert: tool name equals: 'ACP Sessions'.
+	element := tool asElementDo: [ :widget | widget ].
+	self assert: element class equals: GtLACPSessionRegistryToolElement.
+	self assert: element registry == registry.
+	self
+		assert: ((element childNamed: #header) childNamed: #toolLabel) text asString
+		equals: 'ACP Sessions'.
+	self
+		assert: (element collectToolViews anySatisfy: [ :view | view title = 'Sessions' ]).
+	self
+		assert: (element collectToolViews
+				allSatisfy: [ :view | view definingMethod compiledMethod hasPragmaNamed: #gtLlmView ]).
+	self assert: element collectToolActions size equals: 1.
+	self
+		assert: ((element childNamed: #header) childNamed: #toolbar) numberOfItems
+		equals: 1.
+	^ tool
+]
+
+{ #category : #examples }
+GtLACPSessionRegistryExamples >> registryToolActionsMenu [
+	<gtExample>
+	| registry element scripter |
+	registry := self emptyRegistry.
+	self
+		assert: (GtLACPSessionRegistryActionTarget actionsForObject: registry) size
+		equals: 2.
+	element := (GtLACPSessionRegistryTool forRegistry: registry)
+			asElementDo: [ :widget | widget ].
+	scripter := BlScripter new
+			extent: 1100 @ 700;
+			model: registry;
+			element: element;
+			yourself.
+	scripter menuStep
+		openDropdownWithId: #'acp-registry-actions';
+		assertMenuContainerExist;
+		play.
+	#(#'acp-registry-new-session' #'acp-registry-remove-closed-sessions')
+		do: [ :anId | 
+			scripter assert
+				onSpaceRoot;
+				// anId;
+				exists;
+				play ].
+	scripter menuStep
+		hoverMenuItemWithId: #'acp-registry-new-session';
+		onPopover;
+		play.
+	{GtLACPClaudeCodeClient.
+		GtLACPCodexClient}
+		do: [ :aClass | 
+			scripter assert
+				onSpaceRoot;
+				// aClass name;
+				exists;
+				play ].
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
+	^ scripter
+]
+
+{ #category : #examples }
+GtLACPSessionRegistryExamples >> registryToolMenuWithoutLabel [
+	<gtExample>
+	| registry element header toolbar scripter |
+	registry := self emptyRegistry.
+	element := (GtLACPSessionRegistryTool forRegistry: registry)
+			asElementDo: [ :widget | widget ].
+	header := element childNamed: #header.
+	header removeChild: (header childNamed: #toolLabel).
+	toolbar := header childNamed: #toolbar.
+	scripter := BlScripter new
+			extent: 1100 @ 700;
+			model: registry;
+			element: element;
+			yourself.
+	scripter pulseUntilReady.
+	self assert: (toolbar bounds inParent right - header width) abs < 1.
+	self assert: toolbar bounds inParent top < 1.
+	scripter menuStep
+		openDropdownWithId: #'acp-registry-actions';
+		assertMenuContainerExist;
+		play.
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
+	^ scripter
+]
+
+{ #category : #examples }
+GtLACPSessionRegistryExamples >> registryToolUpdatesLive [
+	<gtExample>
+	| registry element scripter session |
+	registry := self emptyRegistry.
+	element := (GtLACPSessionRegistryTool forRegistry: registry)
+			asElementDo: [ :widget | widget ].
+	scripter := BlScripter new
+			extent: 1100 @ 700;
+			model: registry;
+			element: element;
+			yourself.
+	scripter pulseUntilReady.
+	self assert: element collectToolViews isEmpty.
+	self in: scripter do: [ session := self newSessionIn: registry ].
+	self
+		in: scripter
+		do: [ session state: #prompting.
+			session announceConversationTreeChanged ].
+	self assert: element collectToolViews isEmpty.
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
+	^ scripter
+]
+
 { #category : #'examples - model' }
 GtLACPSessionRegistryExamples >> registryWithClaudeSession [
 	<gtExample>
