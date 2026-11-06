@@ -470,6 +470,23 @@ GtLACPSessionExamples >> composerReturnsToSend [
 ]
 
 { #category : #examples }
+GtLACPSessionExamples >> copySessionIdActionAvailability [
+	<gtExample>
+	| session selectorsFor |
+	session := GtLACPSession new.
+	selectorsFor := [ (GtLACPSessionActionTarget actionsForObject: session)
+			collect: [ :each | each definingMethod selector ] ].
+	self assert: (selectorsFor value includes: #gtCopySessionIdFor:) not.
+	session remoteSessionId: ''.
+	self assert: (selectorsFor value includes: #gtCopySessionIdFor:) not.
+	session := GtLACPExamples new session.
+	self assert: (selectorsFor value includes: #gtCopySessionIdFor:).
+	session close.
+	self assert: (selectorsFor value includes: #gtCopySessionIdFor:).
+	^ session
+]
+
+{ #category : #examples }
 GtLACPSessionExamples >> disclosuresAlignWithText [
 	<gtExample>
 	| element scripter |
@@ -1118,6 +1135,33 @@ GtLACPSessionExamples >> sessionInspectorTool [
 				anySatisfy: [ :view | view title = 'Conversation tree' ]).
 	self assertObjectPhlowViewsFor: session.
 	^ tool
+]
+
+{ #category : #examples }
+GtLACPSessionExamples >> sessionMenuCopiesSessionId [
+	<gtExample>
+	| session element scripter previousClipboard |
+	session := GtLACPExamples new session.
+	element := (GtLACPSessionTool forSession: session)
+			asElementDo: [ :widget | widget ].
+	scripter := BlScripter new
+			extent: 1100 @ 700;
+			model: session;
+			element: element;
+			yourself.
+	previousClipboard := Clipboard clipboardText.
+	[ scripter menuStep
+		openDropdownWithId: #'acp-session-actions';
+		assertMenuContainerExist;
+		play.
+	scripter click
+		onSpaceRoot;
+		// #'acp-copy-session-id';
+		play.
+	self assert: Clipboard clipboardText asString equals: session remoteSessionId ]
+		ensure: [ Clipboard clipboardText: previousClipboard ].
+	self assertNoRenderingErrorsIn: scripter.
+	^ scripter
 ]
 
 { #category : #examples }

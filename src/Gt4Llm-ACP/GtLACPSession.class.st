@@ -375,13 +375,14 @@ GtLACPSession >> gtChatFor: aView [
 		stencil: [ self asElement ]
 ]
 
-{ #category : #actions }
+{ #category : #'gt - actions' }
 GtLACPSession >> gtCloseFor: anAction [
 	<gtAction>
 	self canClose ifFalse: [ ^ anAction noAction ].
 	^ anAction dropdown
 		id: #'acp-close-session';
 		label: 'Close session';
+		icon: BrGlamorousVectorIcons close;
 		priority: 50;
 		target: GtPhlowObjectActionTarget;
 		addTarget: GtLACPSessionActionTarget;
@@ -437,6 +438,22 @@ GtLACPSession >> gtConversationTreeFor: aView [
 		view: #gtConversationTreeFor:
 ]
 
+{ #category : #'gt - actions' }
+GtLACPSession >> gtCopySessionIdFor: anAction [
+	<gtAction>
+	(self remoteSessionId isNil or: [ self remoteSessionId isEmpty ])
+		ifTrue: [ ^ anAction noAction ].
+	^ anAction button
+		id: #'acp-copy-session-id';
+		label: 'Copy session id';
+		tooltip: 'Copy session id to the clipboard';
+		icon: BrGlamorousVectorIcons clipboard;
+		priority: 30;
+		target: GtLACPSessionActionTarget;
+		menuItemGroup: BrMenuItemGroupConfiguration editing;
+		action: [ Clipboard clipboardText: self remoteSessionId ]
+]
+
 { #category : #'gt - extensions' }
 GtLACPSession >> gtDefaultInspectorTool [
 	^ GtPhlowCompositeTool new
@@ -455,6 +472,7 @@ GtLACPSession >> gtInspectDirectoryFor: anAction [
 	^ anAction button
 		id: #'acp-inspect-directory';
 		label: 'Inspect directory';
+		icon: BrGlamorousVectorIcons folder;
 		priority: 30;
 		target: GtLACPSessionActionTarget;
 		menuItemGroup: BrMenuItemGroupConfiguration inspection;
@@ -494,13 +512,14 @@ GtLACPSession >> gtRefreshSummarizersFor: anAction [
   action: [ self updateToolSummarizers ]
 ]
 
-{ #category : #actions }
+{ #category : #'gt - actions' }
 GtLACPSession >> gtRenameFor: anAction [
 	<gtAction>
 	self canClose ifFalse: [ ^ anAction noAction ].
 	^ anAction dropdown
 		id: #'acp-rename-session';
 		label: 'Rename session';
+		icon: BrGlamorousVectorIcons edit;
 		priority: 40;
 		target: GtLACPSessionActionTarget;
 		menuItemGroup: BrMenuItemGroupConfiguration editing;

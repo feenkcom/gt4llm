@@ -124,6 +124,8 @@ GtLACPSessionRegistry >> gtRemoveClosedSessionsFor: anAction [
 
 { #category : #'gt - extensions' }
 GtLACPSessionRegistry >> gtSessionsFor: aView [
+	"Reuse the session actions and confirm registry removal in a submenu."
+
 	<gtView>
 	<gtLlmView>
 	^ aView columnedList
@@ -143,10 +145,8 @@ GtLACPSessionRegistry >> gtSessionsFor: aView [
 		column: 'Context used'
 			text: [ :aSession | aSession contextWindow usagePercentageString ]
 			width: 80;
-		contextItemLabel: 'Close session'
-			action: [ :anItem :aSession | aSession canClose ifTrue: [ aSession close ] ];
-		contextItemLabel: 'Remove from registry'
-			action: [ :anItem :aSession | self removeSession: aSession ];
+		dynamicContextItems: [ :anElement :aSession | GtLACPSessionActionTarget menuItemsForObject: aSession hostElement: anElement ];
+		dynamicContextItems: [ :anElement :aSession | {self removeSessionMenuItemFor: aSession hostElement: anElement} ];
 		updateWhen: GtLACPSessionRegistryAnnouncement in: [ self announcer ];
 		actionUpdateButtonTooltip: 'Refresh sessions'
 ]
@@ -243,6 +243,21 @@ GtLACPSessionRegistry >> removeSession: aSession [
 							ifFalse: [ aSession connection announcer unsubscribe: self ] ].
 				aRemovedSession ].
 	removedSession ifNotNil: [ self announceRemovedSession: removedSession ]
+]
+
+{ #category : #'private - menus' }
+GtLACPSessionRegistry >> removeSessionMenuItemFor: aSession hostElement: anElement [
+	^ (GtPhlowAction noAction dropdown
+		id: #'acp-remove-session';
+		label: 'Remove from registry';
+		icon: BrGlamorousVectorIcons remove;
+		menuItemGroup: BrMenuItemGroupConfiguration removal;
+		content: [ :anActionElement :aTargetElement :aMenu | 
+			GtLACPRemoveSessionConfirmationStencil new
+				registry: self;
+				session: aSession;
+				menuModel: aMenu;
+				asElement ]) asMenuItem: [ :anItem | anItem ] withHostElement: anElement
 ]
 
 { #category : #'private - interface' }
