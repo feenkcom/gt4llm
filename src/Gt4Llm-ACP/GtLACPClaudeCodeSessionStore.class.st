@@ -21,6 +21,11 @@ GtLACPClaudeCodeSessionStore >> defaultDirectory [
   ifFalse: [ configured asFileReference ]
 ]
 
+{ #category : #clients }
+GtLACPClaudeCodeSessionStore >> newClient [
+	^ GtLACPClaudeCodeClient new
+]
+
 { #category : #reading }
 GtLACPClaudeCodeSessionStore >> readSessions [
  | projects |

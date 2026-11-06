@@ -183,6 +183,41 @@ GtLACPExternalSessionStoreExamples >> compressedSessionIdentity [
 ]
 
 { #category : #examples }
+GtLACPExternalSessionStoreExamples >> conditionalSessionLookup [
+	<gtExample>
+	| stores |
+	stores := {self claudeStore.
+			self codexStore}.
+	stores
+		do: [ :store | 
+			| count present absent result |
+			count := store sessions size.
+			present := 0.
+			absent := 0.
+			result := store
+					sessionWithId: self firstId
+					ifPresent: [ :session | 
+						present := present + 1.
+						self assert: session == (store sessionWithId: self firstId).
+						nil ]
+					ifAbsent: [ absent := absent + 1.
+						#missing ].
+			self assert: result isNil.
+			self assert: present equals: 1.
+			self assert: absent equals: 0.
+			result := store
+					sessionWithId: 'missing'
+					ifPresent: [ :session | present := present + 1 ]
+					ifAbsent: [ absent := absent + 1.
+						#missing ].
+			self assert: result equals: #missing.
+			self assert: present equals: 1.
+			self assert: absent equals: 1.
+			self assert: store sessions size equals: count ].
+	^ stores
+]
+
+{ #category : #examples }
 GtLACPExternalSessionStoreExamples >> conflictingDirectoryIsReported [
  <gtExample>
  | root file store |
@@ -215,6 +250,39 @@ GtLACPExternalSessionStoreExamples >> filenameIdentityConflictIsReported [
 { #category : #fixtures }
 GtLACPExternalSessionStoreExamples >> firstId [
  ^ '11111111-1111-4111-8111-111111111111'
+]
+
+{ #category : #examples }
+GtLACPExternalSessionStoreExamples >> invalidStoredSessionsDoNotLaunchClients [
+	<gtExample>
+	| store configured |
+	store := self codexStore.
+	configured := false.
+	self
+		assert: ([ store
+				loadSession: 'missing'
+				configureClient: [ :client | configured := true ].
+			false ]
+				on: Error
+				do: [ :error | error messageText includesSubstring: 'Session not found' ]).
+	self
+		assert: ([ store
+				loadSession: self secondId
+				configureClient: [ :client | configured := true ].
+			false ]
+				on: Error
+				do: [ :error | error messageText includesSubstring: 'directory is unknown' ]).
+	(store sessionWithId: self firstId)
+		directory: FileSystem memory root / 'missing'.
+	self
+		assert: ([ store
+				loadSession: self firstId
+				configureClient: [ :client | configured := true ].
+			false ]
+				on: Error
+				do: [ :error | error messageText includesSubstring: 'directory no longer exists' ]).
+	self assert: configured not.
+	^ store
 ]
 
 { #category : #examples }
@@ -329,6 +397,78 @@ GtLACPExternalSessionStoreExamples >> reloadCompletesPartialTranscript [
 { #category : #fixtures }
 GtLACPExternalSessionStoreExamples >> secondId [
  ^ '22222222-2222-4222-8222-222222222222'
+]
+
+{ #category : #examples }
+GtLACPExternalSessionStoreExamples >> sessionLookupDoesNotCreateEntries [
+	<gtExample>
+	| store count |
+	store := self codexStore.
+	count := store sessions size.
+	self
+		assert: (store sessionWithId: self firstId) directory
+		equals: self projectDirectory.
+	self assert: (store sessionWithId: 'missing' ifAbsent: [ nil ]) isNil.
+	self
+		assert: ([ store sessionWithId: 'missing'.
+			false ]
+				on: Error
+				do: [ :error | error messageText includesSubstring: 'Session not found' ]).
+	self assert: store sessions size equals: count.
+	^ store
+]
+
+{ #category : #examples }
+GtLACPExternalSessionStoreExamples >> storesCreateAppropriateClients [
+	<gtExample>
+	| claude codex claudeClient codexClient |
+	claude := self claudeStore.
+	codex := self codexStore.
+	claudeClient := claude newClient.
+	codexClient := codex newClient.
+	self assert: claudeClient class equals: GtLACPClaudeCodeClient.
+	self assert: codexClient class equals: GtLACPCodexClient.
+	self assert: claudeClient connections isEmpty.
+	self assert: codexClient connections isEmpty.
+	self assert: claude newClient ~~ claudeClient.
+	self assert: codex newClient ~~ codexClient.
+	^ {claudeClient.
+		codexClient}
+]
+
+{ #category : #examples }
+GtLACPExternalSessionStoreExamples >> storesLoadSessionsUsingRecordedDirectory [
+	<gtExample>
+	| stores loaded |
+	stores := {self claudeStore.
+			self codexStore}.
+	loaded := OrderedCollection new.
+	stores
+		do: [ :store | 
+			| session recordedDirectory request |
+			recordedDirectory := FileLocator temp asFileReference asAbsolute.
+			(store sessionWithId: self firstId) directory: recordedDirectory.
+			session := store
+					loadSession: self firstId
+					configureClient: [ :client | 
+						client configuration requestTimeout: 180.
+						client
+							transportFactory: [ :configuration :directory | 
+								self assert: directory equals: recordedDirectory.
+								GtLACPExamples new transport ] ].
+			[ self assert: session state equals: #ready.
+			self assert: session remoteSessionId equals: self firstId.
+			self assert: session directory equals: recordedDirectory.
+			self assert: session client class equals: store newClient class.
+			self assert: session connection requestTimeout equals: 180.
+			request := session connection transport sentMessages
+					detect: [ :message | (message at: 'method' ifAbsent: [ '' ]) = 'session/load' ].
+			self assert: ((request at: 'params') at: 'sessionId') equals: self firstId.
+			self
+				assert: ((request at: 'params') at: 'cwd')
+				equals: recordedDirectory fullName.
+			loaded add: session ] ensure: [ session client stop ] ].
+	^ loaded
 ]
 
 { #category : #fixtures }

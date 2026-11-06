@@ -21,6 +21,11 @@ GtLACPCodexSessionStore >> defaultDirectory [
   ifFalse: [ configured asFileReference ]
 ]
 
+{ #category : #clients }
+GtLACPCodexSessionStore >> newClient [
+	^ GtLACPCodexClient new
+]
+
 { #category : #reading }
 GtLACPCodexSessionStore >> readCompressedRollout: aFile [
  | basename identifier session |

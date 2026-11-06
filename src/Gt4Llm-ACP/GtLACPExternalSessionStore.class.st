@@ -90,12 +90,40 @@ GtLACPExternalSessionStore >> issues [
  ^ issues
 ]
 
+{ #category : #sessions }
+GtLACPExternalSessionStore >> loadSession: anId [
+	^ self loadSession: anId configureClient: [ :client |  ]
+]
+
+{ #category : #sessions }
+GtLACPExternalSessionStore >> loadSession: anId configureClient: aBlock [
+	| storedSession directory client |
+	storedSession := self sessionWithId: anId.
+	directory := storedSession directory.
+	directory
+		ifNil: [ self
+				error: 'Session found, but its project directory is unknown: ' , anId asString ].
+	directory isDirectory
+		ifFalse: [ self
+				error: 'The recorded project directory no longer exists: ' , directory fullName ].
+	client := self newClient.
+	aBlock value: client.
+	^ client loadSession: storedSession sessionId in: directory
+]
+
 { #category : #reading }
 GtLACPExternalSessionStore >> metadataFrom: aDictionary keys: keys [
  | selected |
  selected := Dictionary new.
  keys do: [ :key | aDictionary at: key ifPresent: [ :value | selected at: key put: value ] ].
  ^ selected
+]
+
+{ #category : #clients }
+GtLACPExternalSessionStore >> newClient [
+	"Create the client that understands this store's native sessions."
+
+	^ self subclassResponsibility
 ]
 
 { #category : #printing }
@@ -155,6 +183,39 @@ GtLACPExternalSessionStore >> sessionAt: anId [
  (anId isString and: [ anId notEmpty ]) ifFalse: [ self error: 'Session ID must be a nonempty string' ].
  ^ sessions at: anId ifAbsentPut: [
   GtLACPStoredSession new store: self; sessionId: anId; yourself ]
+]
+
+{ #category : #querying }
+GtLACPExternalSessionStore >> sessionWithId: anId [
+	^ self
+		sessionWithId: anId
+		ifAbsent: [ self
+				error: 'Session not found in ' , self agentName , ' store: ' , anId asString ]
+]
+
+{ #category : #querying }
+GtLACPExternalSessionStore >> sessionWithId: anId ifAbsent: aBlock [
+	"Look up discovered metadata without creating a session entry. Send read first."
+
+	^ sessions at: anId ifAbsent: aBlock
+]
+
+{ #category : #querying }
+GtLACPExternalSessionStore >> sessionWithId: anId ifPresent: aBlock [
+	^ self
+		sessionWithId: anId
+		ifPresent: aBlock
+		ifAbsent: [ nil ]
+]
+
+{ #category : #querying }
+GtLACPExternalSessionStore >> sessionWithId: anId ifPresent: aPresentBlock ifAbsent: anAbsentBlock [
+	"Look up discovered metadata without creating an entry. Send read first."
+
+	^ sessions
+		at: anId
+		ifPresent: aPresentBlock
+		ifAbsent: anAbsentBlock
 ]
 
 { #category : #accessing }

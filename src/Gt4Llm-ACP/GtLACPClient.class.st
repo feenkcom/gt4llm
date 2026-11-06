@@ -157,10 +157,14 @@ GtLACPClient >> newSessionDirectorySelectorFor: aDropdown registry: aRegistry [
 
 { #category : #sessions }
 GtLACPClient >> newSessionIn: aDirectory connection: aConnection [
- | aSession |
- aSession := GtLACPSession new client: self; directory: aDirectory asFileReference asAbsolute; connection: aConnection; yourself.
- sessions add: aSession.
- ^ aSession
+	| aSession |
+	aSession := GtLACPSession new
+			client: self;
+			directory: aDirectory asFileReference asAbsolute;
+			connection: aConnection;
+			yourself.
+	sessions add: aSession.
+	^ aSession
 ]
 
 { #category : #accessing }
