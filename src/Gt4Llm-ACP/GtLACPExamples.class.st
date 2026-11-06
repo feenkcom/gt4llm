@@ -243,23 +243,29 @@ GtLACPExamples >> fixtureConversation [
 
 { #category : #examples }
 GtLACPExamples >> fixturePermission [
- <gtExample>
- | session turn deadline |
- session := self fixtureClient startSessionIn: FileLocator temp.
- [ turn := session prompt: 'permission'.
- deadline := Time millisecondClockValue + 5000.
- [ turn permissionRequests isEmpty and: [ Time millisecondClockValue < deadline ] ]
-  whileTrue: [ (Delay forMilliseconds: 10) wait ].
- self assert: turn permissionRequests size equals: 1.
- self assert: (GtPhlowViewTester new testView:
-  (session connection transport agentProcess gtPendingRequestsFor: GtPhlowView empty)) isOk.
- turn permissionRequests first options first select.
- turn waitForSeconds: 5.
- self assert: turn toolCalls first status equals: 'completed'.
- self assert: turn state equals: #completed.
- self assert: session connection transport agentProcess pendingRequests isEmpty ]
- ensure: [ session close ].
- ^ turn
+	<gtExample>
+	| session turn deadline notifications |
+	session := self fixtureClient startSessionIn: FileLocator temp.
+	notifications := GtNotifications new.
+	session connection
+		notificationPublisher: [ :notification | notifications addNotification: notification ].
+	[ turn := session prompt: 'permission'.
+	deadline := Time millisecondClockValue + 5000.
+	[ turn permissionRequests isEmpty
+		and: [ Time millisecondClockValue < deadline ] ]
+		whileTrue: [ (Delay forMilliseconds: 10) wait ].
+	self assert: turn permissionRequests size equals: 1.
+	self
+		assert: (GtPhlowViewTester new
+				testView: (session connection transport agentProcess
+						gtPendingRequestsFor: GtPhlowView empty)) isOk.
+	turn permissionRequests first options first select.
+	turn waitForSeconds: 5.
+	self assert: turn toolCalls first status equals: 'completed'.
+	self assert: turn state equals: #completed.
+	self assert: session connection transport agentProcess pendingRequests isEmpty ]
+		ensure: [ session close ].
+	^ turn
 ]
 
 { #category : #examples }
@@ -480,14 +486,21 @@ GtLACPExamples >> sendUpdate: update to: session [
 
 { #category : #examples }
 GtLACPExamples >> session [
- <gtExample>
- | client session |
- client := GtLACPCodexClient new transportFactory: [ :config :directory | self transport ]; yourself.
- session := client startSessionIn: FileLocator temp.
- self assert: session state equals: #ready.
- self assert: session directory equals: FileLocator temp asFileReference asAbsolute.
- self assert: session connection state equals: #ready.
- ^ session
+	<gtExample>
+	| client session notifications |
+	client := GtLACPCodexClient new
+			transportFactory: [ :config :directory | self transport ];
+			yourself.
+	session := client startSessionIn: FileLocator temp.
+	notifications := GtNotifications new.
+	session connection
+		notificationPublisher: [ :notification | notifications addNotification: notification ].
+	self assert: session state equals: #ready.
+	self
+		assert: session directory
+		equals: FileLocator temp asFileReference asAbsolute.
+	self assert: session connection state equals: #ready.
+	^ session
 ]
 
 { #category : #examples }

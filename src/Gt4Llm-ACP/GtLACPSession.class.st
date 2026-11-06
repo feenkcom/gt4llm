@@ -21,7 +21,8 @@ Class {
 		'parentSubagent',
 		'interSessionMessages',
 		'conversationTitle',
-		'availableCommands'
+		'availableCommands',
+		'contextWindow'
 	],
 	#classVars : [
 		'McpServer'
@@ -82,8 +83,9 @@ GtLACPSession >> announceConversationTreeChanged [
 
 { #category : #announcing }
 GtLACPSession >> announceMessageChanged: aMessage [
- self announceChatMessageChanged: aMessage.
- self announceConversationTreeChanged
+	self pendingInteractions do: #publishInputNeededNotification.
+	self announceChatMessageChanged: aMessage.
+	self announceConversationTreeChanged
 ]
 
 { #category : #announcing }
@@ -295,6 +297,11 @@ GtLACPSession >> connectionClosed: aReason [
 ]
 
 { #category : #accessing }
+GtLACPSession >> contextWindow [
+	^ contextWindow ifNil: [ contextWindow := GtLACPContextWindow new ]
+]
+
+{ #category : #accessing }
 GtLACPSession >> conversationState [
  ^ self isSubagent ifTrue: [ parentSubagent workState ] ifFalse: [ state ]
 ]
@@ -368,13 +375,14 @@ GtLACPSession >> gtChatFor: aView [
 		stencil: [ self asElement ]
 ]
 
-{ #category : #actions }
+{ #category : #'gt - actions' }
 GtLACPSession >> gtCloseFor: anAction [
 	<gtAction>
 	self canClose ifFalse: [ ^ anAction noAction ].
 	^ anAction dropdown
 		id: #'acp-close-session';
 		label: 'Close session';
+		icon: BrGlamorousVectorIcons close;
 		priority: 50;
 		target: GtPhlowObjectActionTarget;
 		addTarget: GtLACPSessionActionTarget;
@@ -430,6 +438,22 @@ GtLACPSession >> gtConversationTreeFor: aView [
 		view: #gtConversationTreeFor:
 ]
 
+{ #category : #'gt - actions' }
+GtLACPSession >> gtCopySessionIdFor: anAction [
+	<gtAction>
+	(self remoteSessionId isNil or: [ self remoteSessionId isEmpty ])
+		ifTrue: [ ^ anAction noAction ].
+	^ anAction button
+		id: #'acp-copy-session-id';
+		label: 'Copy session id';
+		tooltip: 'Copy session id to the clipboard';
+		icon: BrGlamorousVectorIcons clipboard;
+		priority: 30;
+		target: GtLACPSessionActionTarget;
+		menuItemGroup: BrMenuItemGroupConfiguration editing;
+		action: [ Clipboard clipboardText: self remoteSessionId ]
+]
+
 { #category : #'gt - extensions' }
 GtLACPSession >> gtDefaultInspectorTool [
 	^ GtPhlowCompositeTool new
@@ -448,6 +472,7 @@ GtLACPSession >> gtInspectDirectoryFor: anAction [
 	^ anAction button
 		id: #'acp-inspect-directory';
 		label: 'Inspect directory';
+		icon: BrGlamorousVectorIcons folder;
 		priority: 30;
 		target: GtLACPSessionActionTarget;
 		menuItemGroup: BrMenuItemGroupConfiguration inspection;
@@ -487,13 +512,14 @@ GtLACPSession >> gtRefreshSummarizersFor: anAction [
   action: [ self updateToolSummarizers ]
 ]
 
-{ #category : #actions }
+{ #category : #'gt - actions' }
 GtLACPSession >> gtRenameFor: anAction [
 	<gtAction>
 	self canClose ifFalse: [ ^ anAction noAction ].
 	^ anAction dropdown
 		id: #'acp-rename-session';
 		label: 'Rename session';
+		icon: BrGlamorousVectorIcons edit;
 		priority: 40;
 		target: GtLACPSessionActionTarget;
 		menuItemGroup: BrMenuItemGroupConfiguration editing;
@@ -517,17 +543,24 @@ GtLACPSession >> gtSessionActionsDropdownFor: anAction [
 		menuItemsForObject: self fromTarget: GtLACPSessionActionTarget
 ]
 
-{ #category : #views }
+{ #category : #'gt-views' }
 GtLACPSession >> gtSessionFor: aView [
- <gtView>
- <gtLlmView>
- ^ aView columnedList title: 'Session'; priority: 10;
-  items: [ { 'Project directory' -> directory. 'Remote session ID' -> remoteSessionId.
-   'Status' -> state. 'Client' -> client. 'Connection' -> connection } ];
-  column: 'Session' text: #key;
-  column: 'Value' text: [ :entry | entry value printString ];
-  send: #value;
-  actionUpdateButtonTooltip: 'Refresh session'
+	<gtView>
+	<gtLlmView>
+	^ aView columnedList
+		title: 'Session';
+		priority: 10;
+		items: [ {'Project directory' -> directory.
+				'Remote session ID' -> remoteSessionId.
+				'Status' -> state.
+				'Context window' -> self contextWindow.
+				'Client' -> client.
+				'Connection' -> connection} ];
+		column: 'Session' text: #key;
+		column: 'Value' text: [ :entry | entry value printString ];
+		send: #value;
+		updateWhen: GtLACPSessionChanged in: [ self announcer ];
+		actionUpdateButtonTooltip: 'Refresh session'
 ]
 
 { #category : #views }
@@ -735,9 +768,20 @@ GtLACPSession >> parentSubagent: anAssociation [
  parentSubagent := anAssociation
 ]
 
+{ #category : #accessing }
+GtLACPSession >> pendingInteractions [
+	^ self currentTurn ifNil: [ #() ] ifNotNil: #pendingInteractions
+]
+
 { #category : #views }
 GtLACPSession >> phlowContext [
  ^ GtPhlowContext new objectRegistry: self objectStorage; yourself
+]
+
+{ #category : #accessing }
+GtLACPSession >> presentationState [
+	self pendingInteractions ifNotEmpty: [ ^ #inputNeeded ].
+	^ state
 ]
 
 { #category : #printing }
@@ -870,24 +914,37 @@ GtLACPSession >> receiveLegacySubagentUpdate: anUpdate [
  ^ self receiveSubagentUpdate: normalized
 ]
 
-{ #category : #updating }
+{ #category : #protocol }
 GtLACPSession >> receivePermission: params requestId: anId [
- | turn permission call |
- [
- turn := self currentTurn.
- (self isSubagent and: [ self isReplaying not ]) ifTrue: [
-  (turn isNil or: [ turn isActive not and: [ turn state ~= #observed ] ]) ifTrue: [ turn := self newObservedTurn ].
-  turn state: #running. state := #prompting ].
- (turn isNil or: [ turn isActive not ]) ifTrue: [
-  ^ connection replyTo: anId result: { 'outcome' -> { 'outcome' -> 'cancelled' } asDictionary } asDictionary ].
- call := turn updateToolCall: (params at: 'toolCall').
- permission := GtLACPPermissionRequest new
-  connection: connection; session: self; requestId: anId; toolCall: call; yourself.
- permission options: ((params at: 'options') collect: [ :each |
-  GtLACPPermissionOption new request: permission; data: each; yourself ]).
- call permissionRequests add: permission.
- turn permissionRequests add: permission
- ] ensure: [ self announceChanged ]
+	| turn permission call |
+	[ turn := self currentTurn.
+	(self isSubagent and: [ self isReplaying not ])
+		ifTrue: [ (turn isNil or: [ turn isActive not and: [ turn state ~= #observed ] ])
+				ifTrue: [ turn := self newObservedTurn ].
+			turn state: #running.
+			state := #prompting ].
+	(turn isNil or: [ turn isActive not ])
+		ifTrue: [ ^ connection
+				replyTo: anId
+				result: {'outcome' -> {'outcome' -> 'cancelled'} asDictionary} asDictionary ].
+	(turn permissionRequests anySatisfy: [ :each | each requestId = anId ])
+		ifTrue: [ ^ self ].
+	call := turn updateToolCall: (params at: 'toolCall').
+	permission := GtLACPPermissionRequest new
+			connection: connection;
+			session: self;
+			requestId: anId;
+			toolCall: call;
+			yourself.
+	permission
+		options: ((params at: 'options')
+				collect: [ :each | 
+					GtLACPPermissionOption new
+						request: permission;
+						data: each;
+						yourself ]).
+	call permissionRequests add: permission.
+	turn permissionRequests add: permission ] ensure: [ self announceChanged ]
 ]
 
 { #category : #lifecycle }
@@ -923,7 +980,7 @@ GtLACPSession >> receiveSubagentUpdate: aDictionary [
 	^ association
 ]
 
-{ #category : #updating }
+{ #category : #receiving }
 GtLACPSession >> receiveUpdate: aDictionary [
 	| kind turn changedMessage |
 	[ updates
@@ -932,6 +989,7 @@ GtLACPSession >> receiveUpdate: aDictionary [
 				timestamp: DateAndTime now;
 				yourself).
 	kind := aDictionary at: 'sessionUpdate'.
+	kind = 'usage_update' ifTrue: [ ^ self updateContextWindow: aDictionary ].
 	kind = 'available_commands_update'
 		ifTrue: [ ^ self updateAvailableCommands: (aDictionary at: 'availableCommands') ].
 	kind = 'subagent_update'
@@ -1107,6 +1165,11 @@ GtLACPSession >> updateAvailableCommands: aCollection [
 		announce: (GtLACPCommandsChanged new
 				session: self;
 				yourself)
+]
+
+{ #category : #updating }
+GtLACPSession >> updateContextWindow: aDictionary [
+	self contextWindow updateFrom: aDictionary
 ]
 
 { #category : #updating }

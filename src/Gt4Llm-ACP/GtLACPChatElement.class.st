@@ -13,7 +13,8 @@ Class {
 		'listUpdater',
 		'followEndRequested',
 		'renderedVersions',
-		'endMarker'
+		'endMarker',
+		'interactionToReveal'
 	],
 	#category : #'Gt4Llm-ACP-UI'
 }
@@ -138,11 +139,13 @@ GtLACPChatElement >> initialize [
 	self addChild: self buildComposer as: #'acp-composer'
 ]
 
-{ #category : #scrolling }
+{ #category : #building }
 GtLACPChatElement >> initializeScrollFollowing [
 	self messageViewport
 		when: BlElementLayoutComputedEvent
-		do: [ :event | self followStreamAfterLayout ].
+		do: [ :event | 
+			self followStreamAfterLayout.
+			self revealInteractionAfterLayout ].
 	self messageViewport
 		when: BlElementScrolledEvent
 		do: [ :event | event delta y < 0 ifTrue: [ followEndRequested := false ] ].
@@ -203,6 +206,40 @@ GtLACPChatElement >> onRemovedFromSceneGraph [
 { #category : #announcing }
 GtLACPChatElement >> onSessionChanged: anAnnouncement [
  self enqueueTask: (BlTaskAction new action: [ listUpdater requestUpdate ])
+]
+
+{ #category : #navigation }
+GtLACPChatElement >> revealInteraction: aRequest [
+	| index |
+	index := viewModel revealInteraction: aRequest.
+	index ifNil: [ ^ self ].
+	interactionToReveal := aRequest.
+	self updateMessages.
+	followEndRequested := false.
+	listElement scrollToIndex: index
+]
+
+{ #category : #navigation }
+GtLACPChatElement >> revealInteractionAfterLayout [
+	| target row index offset |
+	interactionToReveal ifNil: [ ^ self ].
+	self messageViewport
+		withAllChildrenBreadthFirstDo: [ :each | 
+			each id asSymbol = interactionToReveal interactionElementId
+				ifTrue: [ target := each ] ].
+	target ifNil: [ ^ self ].
+	target := target attentionTarget.
+	target height = 0 ifTrue: [ ^ self ].
+	row := target.
+	[ row hasParent and: [ row parent ~~ self messageViewport ] ]
+		whileTrue: [ row := row parent ].
+	row parent == self messageViewport ifFalse: [ ^ self ].
+	index := listElement items indexOf: row viewModel.
+	index = 0 ifTrue: [ ^ self ].
+	offset := target bounds inSpace top - row bounds inSpace top.
+	interactionToReveal := nil.
+	followEndRequested := false.
+	listElement scrollToIndex: index offset: 32 - offset
 ]
 
 { #category : #actions }

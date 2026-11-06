@@ -7,6 +7,11 @@ Class {
 	#category : #'Gt4Llm-ACP-UI'
 }
 
+{ #category : #navigation }
+GtLACPPermissionElement >> attentionTarget [
+	^ self parent ifNil: [ self ]
+]
+
 { #category : #building }
 GtLACPPermissionElement >> buildHeader [
 	"The operation's existing tool header identifies this interaction."

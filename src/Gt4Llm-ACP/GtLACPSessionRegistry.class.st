@@ -124,6 +124,7 @@ GtLACPSessionRegistry >> gtRemoveClosedSessionsFor: anAction [
 
 { #category : #'gt - extensions' }
 GtLACPSessionRegistry >> gtSessionsFor: aView [
+	"Reuse the session actions and confirm registry removal in a submenu."
 
 	<gtView>
 	<gtLlmView>
@@ -141,11 +142,11 @@ GtLACPSessionRegistry >> gtSessionsFor: aView [
 		column: 'Turns'
 			text: [ :aSession | aSession turns size ]
 			width: 60;
-		column: 'Directory' text: [ :aSession | aSession directory fullName ];
-		contextItemLabel: 'Close session'
-			action: [ :anItem :aSession | aSession canClose ifTrue: [ aSession close ] ];
-		contextItemLabel: 'Remove from registry'
-			action: [ :anItem :aSession | self removeSession: aSession ];
+		column: 'Context used'
+			text: [ :aSession | aSession contextWindow usagePercentageString ]
+			width: 80;
+		dynamicContextItems: [ :anElement :aSession | GtLACPSessionActionTarget menuItemsForObject: aSession hostElement: anElement ];
+		dynamicContextItems: [ :anElement :aSession | {self removeSessionMenuItemFor: aSession hostElement: anElement} ];
 		updateWhen: GtLACPSessionRegistryAnnouncement in: [ self announcer ];
 		actionUpdateButtonTooltip: 'Refresh sessions'
 ]
@@ -244,6 +245,21 @@ GtLACPSessionRegistry >> removeSession: aSession [
 	removedSession ifNotNil: [ self announceRemovedSession: removedSession ]
 ]
 
+{ #category : #'private - menus' }
+GtLACPSessionRegistry >> removeSessionMenuItemFor: aSession hostElement: anElement [
+	^ (GtPhlowAction noAction dropdown
+		id: #'acp-remove-session';
+		label: 'Remove from registry';
+		icon: BrGlamorousVectorIcons remove;
+		menuItemGroup: BrMenuItemGroupConfiguration removal;
+		content: [ :anActionElement :aTargetElement :aMenu | 
+			GtLACPRemoveSessionConfirmationStencil new
+				registry: self;
+				session: aSession;
+				menuModel: aMenu;
+				asElement ]) asMenuItem: [ :anItem | anItem ] withHostElement: anElement
+]
+
 { #category : #'private - interface' }
 GtLACPSessionRegistry >> sessionClients [
 	^ {GtLACPClaudeCodeClient new.
@@ -255,13 +271,13 @@ GtLACPSessionRegistry >> sessions [
 	^ sessions lock: [ :theSessions | theSessions copy ]
 ]
 
-{ #category : #'gt - extensions' }
+{ #category : #examples }
 GtLACPSessionRegistry >> sessionsByState [
 	"Answer the total followed by one association per state in alphabetical order, for the overview view."
 
 	| allSessions byState |
 	allSessions := self sessions.
-	byState := (allSessions groupedBy: #state) associations
+	byState := (allSessions groupedBy: #presentationState) associations
 			sorted: [ :a :b | a key <= b key ].
 	^ {'All' -> allSessions} , byState
 ]

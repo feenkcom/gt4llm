@@ -446,6 +446,55 @@ GtLACPSessionRegistryExamples >> registryWithClaudeSession [
 	^ registry
 ]
 
+{ #category : #examples }
+GtLACPSessionRegistryExamples >> removeSessionRequiresConfirmation [
+	<gtExample>
+	| registry session view button scripter |
+	registry := self registryWithClaudeSession.
+	session := registry lastSession.
+	view := registry gtSessionsFor: GtPhlowView empty.
+	button := (GtPhlowAction noAction dropdown
+			id: #'acp-test-session-context-menu';
+			label: 'Session menu';
+			menu: [ :anActionElement :aTargetElement | 
+				view contextMenuItemsStencilFromActions
+					value: aTargetElement
+					value: session
+					value: 1 ])
+			asElement: [ :anElement | anElement ]
+			withHostElement: BlElement new.
+	scripter := BlScripter new
+			extent: 1100 @ 700;
+			model: registry;
+			element: (BrVerticalPane new
+					matchParent;
+					addChild: button;
+					yourself);
+			yourself.
+	scripter menuStep
+		openDropdownWithId: #'acp-test-session-context-menu';
+		assertMenuContainerExist;
+		play.
+	scripter menuStep
+		hoverMenuItemWithId: #'acp-remove-session';
+		onPopover;
+		play.
+	self assert: registry hasSessions.
+	scripter assert
+		onSpaceRoot;
+		// #'acp-remove-session-confirmation';
+		exists;
+		play.
+	scripter click
+		onSpaceRoot;
+		// #'acp-remove-session-accept';
+		play.
+	self assert: registry hasSessions not.
+	self assert: session state equals: #ready.
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
+	^ scripter
+]
+
 { #category : #'examples - model' }
 GtLACPSessionRegistryExamples >> removedSessionStaysOpen [
 	<gtExample>
@@ -552,6 +601,35 @@ GtLACPSessionRegistryExamples >> sessionActionIcons [
 ]
 
 { #category : #examples }
+GtLACPSessionRegistryExamples >> sessionMenuItemsHaveIcons [
+	<gtExample>
+	| registry session menu scripter |
+	registry := self registryWithClaudeSession.
+	session := registry lastSession.
+	menu := (registry gtSessionsFor: GtPhlowView empty)
+			contextMenuItemsStencilFromActions
+			value: BlElement new
+			value: session
+			value: 1.
+	#(#'acp-copy-session-id' #'acp-inspect-directory' #'acp-rename-session' #'acp-close-session' #'acp-remove-session')
+		do: [ :anId | 
+			| item |
+			item := menu items detect: [ :each | each id = anId ].
+			self assert: (item labelModel isKindOf: BrMenuIconTextLabelModel) ].
+	scripter := BlScripter new
+			extent: 1100 @ 700;
+			model: registry;
+			element: ((GtLACPSessionTool forSession: session) asElementDo: [ :widget | widget ]);
+			yourself.
+	scripter menuStep
+		openDropdownWithId: #'acp-session-actions';
+		assertMenuContainerExist;
+		play.
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
+	^ scripter
+]
+
+{ #category : #examples }
 GtLACPSessionRegistryExamples >> sessionStateVisuals [
 	<gtExample>
 	| registry scripter |
@@ -576,6 +654,42 @@ GtLACPSessionRegistryExamples >> sessionsAnswersACopy [
 	registry := self registryWithClaudeSession.
 	registry sessions removeAll.
 	self assert: registry sessions size equals: 1.
+	^ registry
+]
+
+{ #category : #examples }
+GtLACPSessionRegistryExamples >> sessionsViewReusesSessionActions [
+	<gtExample>
+	| registry session view menu sessionItems |
+	registry := self registryWithClaudeSession.
+	session := registry lastSession.
+	view := registry gtSessionsFor: GtPhlowView empty.
+	sessionItems := GtLACPSessionActionTarget
+			menuItemsForObject: session
+			hostElement: BlElement new.
+	self
+		assert: (sessionItems items anySatisfy: [ :each | each id = #'acp-rename-session' ]).
+	self
+		assert: (sessionItems items anySatisfy: [ :each | each id = #'acp-close-session' ]).
+	menu := view contextMenuItemsStencilFromActions
+			value: BlElement new
+			value: session
+			value: 1.
+	self assert: menu items size equals: sessionItems items size + 1.
+	self
+		assert: ((menu items first: sessionItems items size) collect: #id)
+		equals: (sessionItems items collect: #id).
+	session close.
+	sessionItems := GtLACPSessionActionTarget
+			menuItemsForObject: session
+			hostElement: BlElement new.
+	menu := view contextMenuItemsStencilFromActions
+			value: BlElement new
+			value: session
+			value: 1.
+	self assert: menu items size equals: sessionItems items size + 1.
+	self
+		assert: (menu items noneSatisfy: [ :each | each id = #'acp-close-session' ]).
 	^ registry
 ]
 

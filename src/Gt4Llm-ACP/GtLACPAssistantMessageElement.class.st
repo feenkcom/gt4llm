@@ -57,11 +57,19 @@ GtLACPAssistantMessageElement >> buildFinalReplySection [
 
 { #category : #building }
 GtLACPAssistantMessageElement >> buildHeader [
- | header |
- header := super buildHeader.
- viewModel turn isActive ifTrue: [
-  header addChild: (self workIndicatorFor: viewModel turn id: #'acp-work-indicator') at: 2 ].
- ^ header
+	| header |
+	header := super buildHeader.
+	viewModel turn isActive
+		ifTrue: [ header
+				addChild: (self workIndicatorFor: viewModel turn id: #'acp-work-indicator')
+				at: 2 ].
+	header
+		addChild: (GtLACPInputNeededElement new
+				id: viewModel inputNeededId;
+				forTurn: viewModel turn;
+				yourself)
+		at: 2.
+	^ header
 ]
 
 { #category : #building }
@@ -207,6 +215,15 @@ GtLACPAssistantMessageElement >> toolElementFor: aTool [
 			addChild: kind;
 			addChild: summary;
 			yourself.
+	aTool permissionRequests
+		ifNotEmpty: [ line
+				addChild: (GtLACPInputNeededElement new
+						id: ('acp-tool-input-needed-' , aTool id asString) asSymbol;
+						margin: (BlInsets right: 6);
+						constraintsDo: [ :constraints | constraints linear vertical alignCenter ];
+						forTool: aTool;
+						yourself)
+				at: 2 ].
 	line
 		when: BlClickEvent
 		do: [ :event | 
@@ -228,7 +245,7 @@ GtLACPAssistantMessageElement >> toolElementFor: aTool [
 	^ pane
 ]
 
-{ #category : #updating }
+{ #category : #building }
 GtLACPAssistantMessageElement >> updateWorkSummary [
 	workSummaryElement ifNil: [ ^ self ].
 	workSummaryElement removeChildren.
@@ -243,7 +260,13 @@ GtLACPAssistantMessageElement >> updateWorkSummary [
 				hMatchParent;
 				text: viewModel message workSummaryDetails;
 				constraintsDo: [ :c | c linear vertical alignCenter ];
-				yourself)
+				yourself).
+	viewModel hasPendingInteraction
+		ifTrue: [ workSummaryElement
+				addChild: (GtLACPInputNeededElement new
+						id: ('acp-work-input-needed-' , viewModel turn identityHash asString) asSymbol;
+						forTurn: viewModel turn;
+						yourself) ]
 ]
 
 { #category : #building }

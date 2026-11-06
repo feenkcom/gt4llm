@@ -96,6 +96,19 @@ GtLACPChatViewModel >> onSessionChanged: anAnnouncement [
   model message == anAnnouncement message ifTrue: [ model changed ] ]
 ]
 
+{ #category : #navigation }
+GtLACPChatViewModel >> revealInteraction: aRequest [
+	| models index |
+	models := self messageViewModels.
+	index := models
+			findFirst: [ :model | 
+				model message == model turn assistantMessage
+					and: [ model turn includesInteraction: aRequest ] ].
+	index = 0 ifTrue: [ ^ nil ].
+	(models at: index) revealInteraction: aRequest.
+	^ index
+]
+
 { #category : #actions }
 GtLACPChatViewModel >> send [
  | turn |

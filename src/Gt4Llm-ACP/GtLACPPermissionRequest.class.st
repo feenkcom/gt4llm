@@ -11,7 +11,8 @@ Class {
 		'toolCall',
 		'options',
 		'decision',
-		'state'
+		'state',
+		'inputNotification'
 	],
 	#category : #'Gt4Llm-ACP-Core'
 }
@@ -99,6 +100,29 @@ GtLACPPermissionRequest >> initialize [
 ]
 
 { #category : #accessing }
+GtLACPPermissionRequest >> inputDescription [
+	^ toolCall shortDescription
+]
+
+{ #category : #accessing }
+GtLACPPermissionRequest >> inputNotification [
+	^ inputNotification
+]
+
+{ #category : #accessing }
+GtLACPPermissionRequest >> interactionElementId [
+	^ ('acp-permission-' , requestId asString) asSymbol
+]
+
+{ #category : #converting }
+GtLACPPermissionRequest >> navigationTool [
+	^ GtLACPSessionTool new
+		session: session rootSession;
+		interactionToReveal: self;
+		yourself
+]
+
+{ #category : #accessing }
 GtLACPPermissionRequest >> options [
  ^ options
 ]
@@ -112,6 +136,19 @@ GtLACPPermissionRequest >> options: anObject [
 GtLACPPermissionRequest >> printOn: aStream [
  aStream nextPutAll: 'Permission ('; nextPutAll: state asString; nextPutAll: ')'.
  toolCall ifNotNil: [ aStream space; nextPutAll: toolCall title ]
+]
+
+{ #category : #notifications }
+GtLACPPermissionRequest >> publishInputNeededNotification [
+	| notification |
+	session isReplaying ifTrue: [ ^ self ].
+	notification := session connection lock
+			critical: [ state = #pending ifFalse: [ ^ self ].
+				inputNotification ifNotNil: [ ^ self ].
+				inputNotification := GtLACPInputNeededNotification new
+						request: self;
+						yourself ].
+	session connection publishInputNotification: notification
 ]
 
 { #category : #accessing }
@@ -166,4 +203,11 @@ GtLACPPermissionRequest >> toolCall [
 { #category : #accessing }
 GtLACPPermissionRequest >> toolCall: anObject [
  toolCall := anObject
+]
+
+{ #category : #accessing }
+GtLACPPermissionRequest >> turn [
+	^ session turns
+		detect: [ :each | each permissionRequests includes: self ]
+		ifNone: [ nil ]
 ]

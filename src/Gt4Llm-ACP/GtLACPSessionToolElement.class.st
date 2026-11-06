@@ -8,7 +8,8 @@ Class {
 		'chat',
 		'titleLabel',
 		'toolbarElement',
-		'headerUpdater'
+		'headerUpdater',
+		'interactionToReveal'
 	],
 	#category : #'Gt4Llm-ACP-UI'
 }
@@ -119,18 +120,22 @@ GtLACPSessionToolElement >> collectToolActions [
 		collect
 ]
 
-{ #category : #views }
+{ #category : #building }
 GtLACPSessionToolElement >> collectToolViews [
- | views context |
- context := self chat phlowContext.
- views := (GtPhlowViewsCollector new
-  fromObject: self chat;
-  pragmaNames: GtLSettings messageViewPragmaNames;
-  context: context;
-  collect),
-  (self chat summarizerViewsFor: self chat gtInspectorTargetModels inContext: context).
- GtPhlowUtility sortByPriority: views.
- ^ views
+	| views context |
+	context := self chat phlowContext.
+	views := (GtPhlowViewsCollector new
+			fromObject: self chat;
+			pragmaNames: GtLSettings messageViewPragmaNames;
+			context: context;
+			collect)
+			, (self chat
+					summarizerViewsFor: self chat gtInspectorTargetModels
+					inContext: context).
+	views := views
+			collect: [ :view | view title = 'Chat' ifTrue: [ self interactionChatView ] ifFalse: [ view ] ].
+	GtPhlowUtility sortByPriority: views.
+	^ views
 ]
 
 { #category : #views }
@@ -155,7 +160,14 @@ GtLACPSessionToolElement >> initialize [
 	self phlow
 		accessTool: (GtPhlowToolClassType forClass: GtLACPSession)
 		viewModel: #chat
-		object: #chat
+		object: #chat.
+	self
+		when: GtLACPRevealInteractionWish
+		do: [ :wish | 
+			(self chat notNil
+				and: [ self chat rootSession == wish request session rootSession ])
+				ifTrue: [ wish consumed: true.
+					self revealInteraction: wish request ] ]
 ]
 
 { #category : #building }
@@ -163,6 +175,24 @@ GtLACPSessionToolElement >> initializeContent [
 	self addChild: self buildHeaderElement as: #header.
 	self addChild: self buildViewsContainerElement as: #viewsContainer.
 	self addChild: self buildPlaygroundPageElement as: #playgroundPage
+]
+
+{ #category : #building }
+GtLACPSessionToolElement >> interactionChatView [
+	^ GtPhlowView empty explicit
+		title: 'Chat';
+		priority: 0;
+		stencil: [ | element |
+			element := self chat asElement.
+			interactionToReveal
+				ifNotNil: [ element revealInteraction: interactionToReveal.
+					interactionToReveal := nil ].
+			element ]
+]
+
+{ #category : #accessing }
+GtLACPSessionToolElement >> interactionToReveal: aRequest [
+	interactionToReveal := aRequest
 ]
 
 { #category : #events }
@@ -173,6 +203,19 @@ GtLACPSessionToolElement >> onSessionChanged: anAnnouncement [
 { #category : #accessing }
 GtLACPSessionToolElement >> playgroundElement [
 	^ self childNamed: #playgroundPage
+]
+
+{ #category : #navigation }
+GtLACPSessionToolElement >> revealInteraction: aRequest [
+	| tabGroup chatElement |
+	interactionToReveal := aRequest.
+	tabGroup := self viewsContainerElement children first.
+	tabGroup selectTabWithLabelString: 'Chat'.
+	self viewsContainerElement
+		withAllChildrenBreadthFirstDo: [ :each | (each isKindOf: GtLACPChatElement) ifTrue: [ chatElement := each ] ].
+	chatElement
+		ifNotNil: [ interactionToReveal := nil.
+			chatElement revealInteraction: aRequest ]
 ]
 
 { #category : #accessing }

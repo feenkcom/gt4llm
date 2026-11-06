@@ -47,17 +47,9 @@ GtLACPElicitationElement >> choiceTextFor: anOption [
 
 { #category : #building }
 GtLACPElicitationElement >> choices: options field: aField key: aKey [
-	| pane |
-	pane := BrVerticalPane new
-			hMatchParent;
-			vFitContent;
-			yourself.
-	self
-		fillChoices: pane
-		options: options
-		field: aField
-		key: aKey.
-	^ pane
+	(aField at: 'type') = 'array'
+		ifTrue: [ ^ self multipleChoices: options key: aKey ].
+	^ self singleChoices: options key: aKey
 ]
 
 { #category : #accessing }
@@ -116,36 +108,29 @@ GtLACPElicitationElement >> field: aField key: aKey [
 ]
 
 { #category : #building }
-GtLACPElicitationElement >> fillChoices: pane options: options field: aField key: aKey [
+GtLACPElicitationElement >> fillMultipleChoices: pane options: options key: aKey [
 	pane removeChildren.
 	options
 		withIndexDo: [ :option :index | 
 			| value selected checkbox row text toggle |
 			value := option at: 'const'.
-			selected := (aField at: 'type') = 'array'
-					ifTrue: [ ((request answerAt: aKey) ifNil: [ #() ]) includes: value ]
-					ifFalse: [ (request answerAt: aKey) = value ].
-			toggle := [ | answer |
-				answer := (aField at: 'type') = 'array'
-						ifTrue: [ | values |
-							values := ((request answerAt: aKey) ifNil: [ #() ]) asOrderedCollection.
-							selected
-								ifTrue: [ values remove: value ifAbsent: [  ] ]
-								ifFalse: [ values add: value ].
-							values asArray ]
-						ifFalse: [ selected ifTrue: [ nil ] ifFalse: [ value ] ].
-				request answerAt: aKey put: answer.
+			selected := ((request answerAt: aKey) ifNil: [ #() ]) includes: value.
+			toggle := [ | values |
+				values := ((request answerAt: aKey) ifNil: [ #() ]) asOrderedCollection.
+				selected
+					ifTrue: [ values remove: value ifAbsent: [  ] ]
+					ifFalse: [ values add: value ].
+				request answerAt: aKey put: values asArray.
 				self
-					fillChoices: pane
+					fillMultipleChoices: pane
 					options: options
-					field: aField
 					key: aKey ].
 			checkbox := BrCheckbox new
 					id: ('acp-question-' , aKey , '-option-' , index asString) asSymbol;
 					aptitude: BrGlamorousCheckboxAptitude;
 					checked: selected;
 					margin: (BlInsets right: 6);
-					constraintsDo: [ :c | c linear vertical alignCenter ];
+					constraintsDo: [ :constraints | constraints linear vertical alignCenter ];
 					whenCheckedDo: [ self performAction: toggle ];
 					whenUncheckedDo: [ self performAction: toggle ];
 					yourself.
@@ -168,6 +153,20 @@ GtLACPElicitationElement >> fillChoices: pane options: options field: aField key
 ]
 
 { #category : #building }
+GtLACPElicitationElement >> multipleChoices: options key: aKey [
+	| pane |
+	pane := BrVerticalPane new
+			hMatchParent;
+			vFitContent;
+			yourself.
+	self
+		fillMultipleChoices: pane
+		options: options
+		key: aKey.
+	^ pane
+]
+
+{ #category : #building }
 GtLACPElicitationElement >> questionHeader [
 	| line question |
 	question := BrButton new
@@ -186,6 +185,12 @@ GtLACPElicitationElement >> questionHeader [
 			addChild: (GtLACPWorkBadgeElement new
 					id: #'acp-question-kind';
 					text: 'question';
+					yourself);
+			addChild: (GtLACPInputNeededElement new
+					id: #'acp-question-input-needed';
+					margin: (BlInsets right: 6);
+					constraintsDo: [ :constraints | constraints linear vertical alignCenter ];
+					forRequest: request;
 					yourself);
 			addChild: question;
 			yourself.
@@ -210,6 +215,50 @@ GtLACPElicitationElement >> questionToolbar [
 				id: #'acp-question-skip'
 				action: [ request decline ]);
 		yourself
+]
+
+{ #category : #building }
+GtLACPElicitationElement >> singleChoices: options key: aKey [
+	| group |
+	group := BrRadioButtonGroup new
+			id: ('acp-question-' , aKey , '-choices') asSymbol;
+			layout: (BlGridLayout new columnCount: 2);
+			hMatchParent;
+			vFitContent;
+			yourself.
+	options
+		withIndexDo: [ :option :index | 
+			| radio text value |
+			value := option at: 'const'.
+			radio := BrRadioButton new
+					id: ('acp-question-' , aKey , '-option-' , index asString) asSymbol;
+					aptitude: BrGlamorousRadioButtonAptitude;
+					checked: (request answerAt: aKey) = value;
+					margin: (BlInsets
+							top: 5
+							left: 5
+							bottom: 5
+							right: 6);
+					constraintsDo: [ :constraints | constraints grid vertical alignCenter ];
+					whenCheckedDo: [ self performAction: [ request answerAt: aKey put: value ] ];
+					yourself.
+			text := (self text: (self choiceTextFor: option))
+					id: ('acp-question-' , aKey , '-option-text-' , index asString) asSymbol;
+					padding: (BlInsets
+							top: 5
+							left: 0
+							bottom: 5
+							right: 5);
+					yourself.
+			text
+				when: BlClickEvent
+				do: [ :event | 
+					event consumed: true.
+					radio check ].
+			group
+				addToggle: radio;
+				addChild: text ].
+	^ group
 ]
 
 { #category : #building }

@@ -86,6 +86,11 @@ GtLACPAssistantMessageViewModel >> initialize [
 	finalReplyAutoExpanded := false
 ]
 
+{ #category : #'element IDs' }
+GtLACPAssistantMessageViewModel >> inputNeededId [
+	^ #'acp-message-input-needed'
+]
+
 { #category : #accessing }
 GtLACPAssistantMessageViewModel >> isFinalReplyExpanded [
 	self migrateLegacyExpansionState.
@@ -122,6 +127,19 @@ GtLACPAssistantMessageViewModel >> migrateLegacyExpansionState [
 						at: ('agent-' , child turn identityHash asString) asSymbol
 						ifPresent: [ :expanded | child adoptLegacyAgentExpanded: expanded ] ] ].
 	sectionExpansion := nil
+]
+
+{ #category : #navigation }
+GtLACPAssistantMessageViewModel >> revealInteraction: aRequest [
+	self workExpanded: true.
+	message delegatedMessages
+		do: [ :childMessage | 
+			(childMessage turn includesInteraction: aRequest)
+				ifTrue: [ | child |
+					child := self delegatedViewModelFor: childMessage.
+					child agentExpanded: true.
+					child revealInteraction: aRequest ] ].
+	self changed
 ]
 
 { #category : #accessing }

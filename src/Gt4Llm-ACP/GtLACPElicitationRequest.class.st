@@ -12,7 +12,8 @@ Class {
 		'answers',
 		'state',
 		'lock',
-		'toolCall'
+		'toolCall',
+		'inputNotification'
 	],
 	#category : #'Gt4Llm-ACP-Core'
 }
@@ -116,6 +117,21 @@ GtLACPElicitationRequest >> initialize [
 	lock := Mutex new
 ]
 
+{ #category : #accessing }
+GtLACPElicitationRequest >> inputDescription [
+	^ self message
+]
+
+{ #category : #accessing }
+GtLACPElicitationRequest >> inputNotification [
+	^ inputNotification
+]
+
+{ #category : #accessing }
+GtLACPElicitationRequest >> interactionElementId [
+	^ ('acp-elicitation-' , requestId asString) asSymbol
+]
+
 { #category : #validation }
 GtLACPElicitationRequest >> isSupported [
 	^ [ self hasSupportedFields ] on: Error do: [ :ex | false ]
@@ -124,6 +140,14 @@ GtLACPElicitationRequest >> isSupported [
 { #category : #accessing }
 GtLACPElicitationRequest >> message [
 	^ data at: 'message' ifAbsent: [ 'Your input is needed' ]
+]
+
+{ #category : #converting }
+GtLACPElicitationRequest >> navigationTool [
+	^ GtLACPSessionTool new
+		session: session rootSession;
+		interactionToReveal: self;
+		yourself
 ]
 
 { #category : #accessing }
@@ -152,6 +176,19 @@ GtLACPElicitationRequest >> printOn: aStream [
 		nextPutAll: state asString;
 		nextPutAll: ') ';
 		nextPutAll: self message
+]
+
+{ #category : #notifications }
+GtLACPElicitationRequest >> publishInputNeededNotification [
+	| notification |
+	session isReplaying ifTrue: [ ^ self ].
+	notification := session connection lock
+			critical: [ state = #pending ifFalse: [ ^ self ].
+				inputNotification ifNotNil: [ ^ self ].
+				inputNotification := GtLACPInputNeededNotification new
+						request: self;
+						yourself ].
+	session connection publishInputNotification: notification
 ]
 
 { #category : #accessing }
