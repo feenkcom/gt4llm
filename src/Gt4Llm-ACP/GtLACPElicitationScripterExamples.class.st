@@ -262,3 +262,54 @@ GtLACPElicitationScripterExamples >> sessionQuestionDisplayedInWork [
 	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
 	^ scripter
 ]
+
+{ #category : #examples }
+GtLACPElicitationScripterExamples >> singleChoiceUsesRadioGroup [
+	<gtExample>
+	| scripter question |
+	scripter := self pendingQuestionDisplayed.
+	question := scripter model.
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-question-question_0-choices';
+				satisfies: [ :group | group isKindOf: BrRadioButtonGroup ] ].
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-question-question_0-option-1';
+				satisfies: [ :radio | (radio isKindOf: BrRadioButton) and: [ radio isUnchecked ] ] ].
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-question-question_1-option-1';
+				satisfies: [ :checkbox | checkbox isKindOf: BrCheckbox ] ].
+	scripter clickStep: [ :step | step id: #'acp-question-question_0-option-1' ].
+	self assert: (question answerAt: 'question_0') equals: 'List'.
+	scripter clickStep: [ :step | step id: #'acp-question-question_0-option-2' ].
+	self assert: (question answerAt: 'question_0') equals: 'Cards'.
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-question-question_0-option-1';
+				satisfies: #isUnchecked ].
+	scripter clickStep: [ :step | step id: #'acp-question-question_0-option-2' ].
+	self assert: (question answerAt: 'question_0') equals: 'Cards'.
+	scripter
+		clickStep: [ :step | step id: #'acp-question-question_0-option-text-1' ].
+	self assert: (question answerAt: 'question_0') equals: 'List'.
+	scripter doStep: [ :step | step block: [ question session announceChanged ] ].
+	scripter pulseUntilReady.
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-question-question_0-option-1';
+				satisfies: #isChecked ].
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-question-question_0-option-2';
+				satisfies: #isUnchecked ].
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
+	^ scripter
+]
