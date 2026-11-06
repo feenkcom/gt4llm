@@ -54,7 +54,7 @@ GtLACPContextWindow >> printOn: aStream [
 	aStream
 		nextPutAll: ' (';
 		nextPutAll: self usagePercentageString;
-		nextPutAll: '% used)'
+		nextPutAll: ' used)'
 ]
 
 { #category : #accessing }
