@@ -140,10 +140,9 @@ GtLACPSessionRegistry >> gtSessionsFor: aView [
 		column: 'Turns'
 			text: [ :aSession | aSession turns size ]
 			width: 60;
-		column: 'Context'
+		column: 'Context used'
 			text: [ :aSession | aSession contextWindow usagePercentageString ]
 			width: 80;
-		column: 'Directory' text: [ :aSession | aSession directory fullName ];
 		contextItemLabel: 'Close session'
 			action: [ :anItem :aSession | aSession canClose ifTrue: [ aSession close ] ];
 		contextItemLabel: 'Remove from registry'
