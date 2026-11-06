@@ -201,6 +201,31 @@ GtLACPContextWindowExamples >> unreportedSession [
 ]
 
 { #category : #examples }
+GtLACPContextWindowExamples >> usagePercentageString [
+	<gtExample>
+	| context |
+	context := GtLACPContextWindow new.
+	self assert: context usagePercentageString equals: ''.
+	context
+		updateFrom: {'used' -> 53000.
+				'size' -> 200000} asDictionary.
+	self assert: context usagePercentageString equals: '26.5%'.
+	context
+		updateFrom: {'used' -> 10000.
+				'size' -> 200000} asDictionary.
+	self assert: context usagePercentageString equals: '5.0%'.
+	context
+		updateFrom: {'used' -> 0.
+				'size' -> 200000} asDictionary.
+	self assert: context usagePercentageString equals: '0.0%'.
+	context
+		updateFrom: {'used' -> 0.
+				'size' -> 0} asDictionary.
+	self assert: context usagePercentageString equals: ''.
+	^ context
+]
+
+{ #category : #examples }
 GtLACPContextWindowExamples >> validUsageAfterMalformedUpdates [
 	<gtExample>
 	| session |

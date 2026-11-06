@@ -53,7 +53,7 @@ GtLACPContextWindow >> printOn: aStream [
 	totalTokens = 0 ifTrue: [ ^ self ].
 	aStream
 		nextPutAll: ' (';
-		print: (self usagePercentage roundTo: 0.1);
+		nextPutAll: self usagePercentageString;
 		nextPutAll: '% used)'
 ]
 
@@ -77,6 +77,13 @@ GtLACPContextWindow >> updateFrom: aDictionary [
 { #category : #accessing }
 GtLACPContextWindow >> usagePercentage [
 	^ usedTokens / totalTokens * 100.0
+]
+
+{ #category : #printing }
+GtLACPContextWindow >> usagePercentageString [
+	^ (self isReported and: [ self totalTokens > 0 ])
+		ifTrue: [ (self usagePercentage round: 1) printString , '%' ]
+		ifFalse: [ '' ]
 ]
 
 { #category : #accessing }

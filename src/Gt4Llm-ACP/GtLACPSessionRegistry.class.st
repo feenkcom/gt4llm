@@ -124,7 +124,6 @@ GtLACPSessionRegistry >> gtRemoveClosedSessionsFor: anAction [
 
 { #category : #'gt - extensions' }
 GtLACPSessionRegistry >> gtSessionsFor: aView [
-
 	<gtView>
 	<gtLlmView>
 	^ aView columnedList
@@ -141,6 +140,9 @@ GtLACPSessionRegistry >> gtSessionsFor: aView [
 		column: 'Turns'
 			text: [ :aSession | aSession turns size ]
 			width: 60;
+		column: 'Context'
+			text: [ :aSession | aSession contextWindow usagePercentageString ]
+			width: 80;
 		column: 'Directory' text: [ :aSession | aSession directory fullName ];
 		contextItemLabel: 'Close session'
 			action: [ :anItem :aSession | aSession canClose ifTrue: [ aSession close ] ];
