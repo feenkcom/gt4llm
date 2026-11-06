@@ -21,9 +21,92 @@ GtLACPContextWindowExamples >> contextUsageCanDecrease [
 	self assert: session contextWindow usedTokens equals: 12000.
 	self assert: session contextWindow remainingTokens equals: 188000.
 	self assert: session contextWindow usagePercentage equals: 6.0.
-	self assert: previous usedTokens equals: 53000.
+	self assert: session contextWindow == previous.
 	self assert: session turns isEmpty.
 	^ session
+]
+
+{ #category : #examples }
+GtLACPContextWindowExamples >> contextWindowHandlesMalformedUpdates [
+	<gtExample>
+	| window |
+	window := GtLACPContextWindow new.
+	self malformedUsageUpdates do: [ :update | window updateFrom: update ].
+	self assert: window isReported not.
+	self assert: window printString equals: 'Not reported'.
+	self assertObjectPhlowViewsFor: window.
+	window
+		updateFrom: {'used' -> 53000.
+				'size' -> 200000} asDictionary.
+	self malformedUsageUpdates do: [ :update | window updateFrom: update ].
+	self assert: window usedTokens equals: 53000.
+	self assert: window totalTokens equals: 200000.
+	window
+		updateFrom: {'used' -> 12000.
+				'size' -> 200000} asDictionary.
+	self assert: window usedTokens equals: 12000.
+	^ window
+]
+
+{ #category : #examples }
+GtLACPContextWindowExamples >> malformedUsageBeforeFirstValidUpdate [
+	<gtExample>
+	| session |
+	session := self unreportedSession.
+	self malformedUsageUpdates
+		do: [ :update | 
+			GtLACPExamples new sendUpdate: update to: session.
+			self assert: session contextWindow isReported not ].
+	self assert: session updates size equals: self malformedUsageUpdates size.
+	self assert: session turns isEmpty.
+	^ session
+]
+
+{ #category : #examples }
+GtLACPContextWindowExamples >> malformedUsagePreservesLastValidContext [
+	<gtExample>
+	| session previous |
+	session := self sessionWithContextWindow.
+	previous := session contextWindow.
+	self malformedUsageUpdates
+		do: [ :update | 
+			GtLACPExamples new sendUpdate: update to: session.
+			self assert: session contextWindow == previous ].
+	self assert: session contextWindow usedTokens equals: 53000.
+	self assert: session contextWindow totalTokens equals: 200000.
+	self assert: session turns isEmpty.
+	^ session
+]
+
+{ #category : #helpers }
+GtLACPContextWindowExamples >> malformedUsageUpdates [
+	^ {#().
+		{'used' -> 53000}.
+		{'size' -> 200000}.
+		{'used' -> nil.
+			'size' -> 200000}.
+		{'used' -> 53000.
+			'size' -> nil}.
+		{'used' -> '53000'.
+			'size' -> 200000}.
+		{'used' -> 53000.
+			'size' -> '200000'}.
+		{'used' -> -1.
+			'size' -> 200000}.
+		{'used' -> 53000.
+			'size' -> -1}.
+		{'used' -> 1.5.
+			'size' -> 200000}.
+		{'used' -> 53000.
+			'size' -> 200000.5}.
+		{'used' -> true.
+			'size' -> 200000}.
+		{'used' -> 53000.
+			'size' -> false}}
+		collect: [ :fields | 
+			fields asDictionary
+				at: 'sessionUpdate' put: 'usage_update';
+				yourself ]
 ]
 
 { #category : #examples }
@@ -44,7 +127,7 @@ GtLACPContextWindowExamples >> sessionViewBeforeUsage [
 	scripter
 		assertStep: [ :step | 
 			step
-				onPhlowCellWithString: 'Not reported' printString;
+				onPhlowCellWithString: 'Not reported';
 				exists ].
 	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
 	^ scripter
@@ -113,7 +196,23 @@ GtLACPContextWindowExamples >> unreportedSession [
 	<gtExample>
 	| session |
 	session := GtLACPExamples new session.
-	self assert: session contextWindow isNil.
+	self assert: session contextWindow isReported not.
+	^ session
+]
+
+{ #category : #examples }
+GtLACPContextWindowExamples >> validUsageAfterMalformedUpdates [
+	<gtExample>
+	| session |
+	session := self malformedUsagePreservesLastValidContext.
+	GtLACPExamples new
+		sendUpdate: {'sessionUpdate' -> 'usage_update'.
+				'used' -> 12000.
+				'size' -> 200000} asDictionary
+		to: session.
+	self assert: session contextWindow usedTokens equals: 12000.
+	self assert: session contextWindow remainingTokens equals: 188000.
+	self assert: session contextWindow usagePercentage equals: 6.0.
 	^ session
 ]
 
@@ -127,7 +226,7 @@ GtLACPContextWindowExamples >> zeroCapacity [
 				'used' -> 0.
 				'size' -> 0} asDictionary
 		to: session.
-	self assert: session contextWindow usagePercentage isNil.
+	self assert: session contextWindow remainingTokens equals: 0.
 	self assert: session contextWindow printString equals: '0 / 0 tokens'.
 	self assertObjectPhlowViewsFor: session contextWindow.
 	^ session

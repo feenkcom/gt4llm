@@ -412,7 +412,11 @@ GtLACPSubagentExamples >> collapsedAgentRefreshPreservesParent [
 											'text' -> 'I am inspecting the worker result.'} asDictionary}
 								asDictionary
 						for: child.
-					self update: {'sessionUpdate' -> 'usage_update'} asDictionary for: child.
+					self
+						update: {'sessionUpdate' -> 'usage_update'.
+								'used' -> 53000.
+								'size' -> 200000} asDictionary
+						for: child.
 					self
 						update: {'sessionUpdate' -> 'tool_call'.
 								'toolCallId' -> 'additional-nested-call'.
@@ -454,6 +458,10 @@ GtLACPSubagentExamples >> collapsedAgentRefreshPreservesParent [
 				id: ('acp-agent-counts-' , hash) asSymbol;
 				value: [ :pane | pane children collect: [ :label | label text asString ] as: Array ]
 					equals: [ #('1 agent' '3 tools') ] ].
+	self assert: child contextWindow usedTokens equals: 53000.
+	self assert: child contextWindow totalTokens equals: 200000.
+	self assert: root contextWindow isReported not.
+	self assert: sibling contextWindow isReported not.
 	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
 	^ scripter
 ]

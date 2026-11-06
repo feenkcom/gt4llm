@@ -298,7 +298,7 @@ GtLACPSession >> connectionClosed: aReason [
 
 { #category : #accessing }
 GtLACPSession >> contextWindow [
-	^ contextWindow
+	^ contextWindow ifNil: [ contextWindow := GtLACPContextWindow new ]
 ]
 
 { #category : #accessing }
@@ -534,7 +534,7 @@ GtLACPSession >> gtSessionFor: aView [
 		items: [ {'Project directory' -> directory.
 				'Remote session ID' -> remoteSessionId.
 				'Status' -> state.
-				'Context window' -> (self contextWindow ifNil: [ 'Not reported' ]).
+				'Context window' -> self contextWindow.
 				'Client' -> client.
 				'Connection' -> connection} ];
 		column: 'Session' text: #key;
@@ -1150,7 +1150,7 @@ GtLACPSession >> updateAvailableCommands: aCollection [
 
 { #category : #updating }
 GtLACPSession >> updateContextWindow: aDictionary [
-	contextWindow := GtLACPContextWindow new initializeFrom: aDictionary
+	self contextWindow updateFrom: aDictionary
 ]
 
 { #category : #updating }

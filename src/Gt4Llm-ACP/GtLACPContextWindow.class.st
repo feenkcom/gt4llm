@@ -14,37 +14,47 @@ Class {
 { #category : #'gt-views' }
 GtLACPContextWindow >> gtContextWindowFor: aView [
 	<gtView>
+	self isReported ifFalse: [ ^ aView empty ].
 	^ aView columnedList
 		title: 'Context window';
 		priority: 10;
 		items: [ {'Used tokens' -> usedTokens.
 				'Total tokens' -> totalTokens.
 				'Remaining tokens' -> self remainingTokens.
-				'Usage (%)' -> self usagePercentage} ];
+				'Usage (%)'
+					-> (totalTokens > 0 ifTrue: [ self usagePercentage ] ifFalse: [ nil ])} ];
 		column: 'Property' text: #key;
 		column: 'Value' text: [ :entry | entry value printString ];
 		send: #value
 ]
 
-{ #category : #initialization }
-GtLACPContextWindow >> initializeFrom: aDictionary [
-	usedTokens := aDictionary at: 'used'.
-	totalTokens := aDictionary at: 'size'
+{ #category : #testing }
+GtLACPContextWindow >> isReported [
+	^ usedTokens notNil and: [ totalTokens notNil ]
+]
+
+{ #category : #testing }
+GtLACPContextWindow >> isValidUpdate: aDictionary [
+	^ #('used' 'size')
+		allSatisfy: [ :key | 
+			| count |
+			count := aDictionary at: key ifAbsent: [ nil ].
+			count isInteger and: [ count >= 0 ] ]
 ]
 
 { #category : #printing }
 GtLACPContextWindow >> printOn: aStream [
+	self isReported ifFalse: [ ^ aStream nextPutAll: 'Not reported' ].
 	aStream
 		print: usedTokens;
 		nextPutAll: ' / ';
 		print: totalTokens;
 		nextPutAll: ' tokens'.
-	self usagePercentage
-		ifNotNil: [ :percentage | 
-			aStream
-				nextPutAll: ' (';
-				print: (percentage roundTo: 0.1);
-				nextPutAll: '% used)' ]
+	totalTokens = 0 ifTrue: [ ^ self ].
+	aStream
+		nextPutAll: ' (';
+		print: (self usagePercentage roundTo: 0.1);
+		nextPutAll: '% used)'
 ]
 
 { #category : #accessing }
@@ -57,10 +67,16 @@ GtLACPContextWindow >> totalTokens [
 	^ totalTokens
 ]
 
+{ #category : #updating }
+GtLACPContextWindow >> updateFrom: aDictionary [
+	(self isValidUpdate: aDictionary) ifFalse: [ ^ self ].
+	usedTokens := aDictionary at: 'used'.
+	totalTokens := aDictionary at: 'size'
+]
+
 { #category : #accessing }
 GtLACPContextWindow >> usagePercentage [
-	totalTokens = 0 ifTrue: [ ^ nil ].
-	^ ((usedTokens / totalTokens) * 100) roundTo: 0.1
+	^ usedTokens / totalTokens * 100.0
 ]
 
 { #category : #accessing }
