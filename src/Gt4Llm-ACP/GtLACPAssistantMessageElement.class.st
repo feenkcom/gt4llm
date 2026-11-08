@@ -1,5 +1,5 @@
 "
-I render an assistant response with work and final-reply disclosures. I retain one text editor per conversation-message object, whose identity is resolved from the protocol role and message ID by the turn. When message text changes, I assign freshly styled text to the existing editor. Unchanged text skips the update. Text-only updates retain the row and its structure; changes to tools, interactions, or turn state rebuild the necessary presentation while reusing message editors, including when the final reply moves out of work.
+I render an assistant response with work and final-reply disclosures. I retain one assistant comment element per message identity. Each comment element owns its editor and refreshes streamed text. Text-only updates retain the row and its structure; structural changes rebuild the presentation while reusing comment elements, including when the final reply moves out of work.
 "
 Class {
 	#name : #GtLACPAssistantMessageElement,
@@ -8,13 +8,31 @@ Class {
 		'workSummaryElement',
 		'workSummaryUpdater',
 		'workExpander',
-		'messageEditors',
+		'commentElements',
 		'structuralSnapshot',
 		'renderedVersion',
 		'workContents'
 	],
 	#category : #'Gt4Llm-ACP-UI'
 }
+
+{ #category : #building }
+GtLACPAssistantMessageElement >> addCommentElementFor: aMessage to: elements [
+	| comment |
+	comment := self commentElementFor: aMessage.
+	comment id: ('acp-text-' , aMessage identityHash asString) asSymbol.
+	elements add: comment.
+	^ comment
+]
+
+{ #category : #building }
+GtLACPAssistantMessageElement >> addInterSessionLabelFor: aMessage to: elements [
+	elements
+		add: (BrLabel new
+				aptitude: BrGlamorousLabelAptitude;
+				text: aMessage chatLabel;
+				yourself)
+]
 
 { #category : #building }
 GtLACPAssistantMessageElement >> agentWorkElementFor: anAssistantMessage [
@@ -107,11 +125,29 @@ GtLACPAssistantMessageElement >> buildWorkSection [
 ]
 
 { #category : #building }
+GtLACPAssistantMessageElement >> commentElementFor: aMessage [
+	| element |
+	element := self commentElements
+			at: aMessage
+			ifAbsentPut: [ GtLACPAssistantCommentElement new
+					phlowContext: viewModel phlowContext;
+					message: aMessage;
+					yourself ].
+	element refresh.
+	^ element
+]
+
+{ #category : #accessing }
+GtLACPAssistantMessageElement >> commentElements [
+	^ commentElements ifNil: [ commentElements := IdentityDictionary new ]
+]
+
+{ #category : #building }
 GtLACPAssistantMessageElement >> finalContent [
  ^ self finalContentFor: viewModel
 ]
 
-{ #category : #updating }
+{ #category : #building }
 GtLACPAssistantMessageElement >> finalContentFor: model [
 	| pane tabs views |
 	views := model message finalReplyViewsInContext: model phlowContext.
@@ -119,11 +155,12 @@ GtLACPAssistantMessageElement >> finalContentFor: model [
 			collect: [ :view | 
 				view title = 'Markdown'
 					ifTrue: [ view
-							stencil: [ | editor |
-								editor := self textEditorForMessage: model replyMessages first.
-								editor removeFromParent.
-								editor id: #'acp-final-text'.
-								editor ] ]
+							stencil: [ | element |
+								element := self commentElementFor: model replyMessages first.
+								element removeFromParent.
+								element id: #'acp-final-message'.
+								element editor id: #'acp-final-text'.
+								element ] ]
 					ifFalse: [ view ] ].
 	tabs := GtPhlowCompositeView new
 			views: views;
@@ -161,11 +198,6 @@ GtLACPAssistantMessageElement >> initialize [
   postponedDuration: 150 milliseconds; yourself
 ]
 
-{ #category : #updating }
-GtLACPAssistantMessageElement >> messageEditors [
-	^ messageEditors ifNil: [ messageEditors := IdentityDictionary new ]
-]
-
 { #category : #hooks }
 GtLACPAssistantMessageElement >> onAddedToSceneGraph [
  super onAddedToSceneGraph.
@@ -190,11 +222,6 @@ GtLACPAssistantMessageElement >> onSessionChanged: anAnnouncement [
 		enqueueTask: (BlTaskAction new
 				action: [ workExpander ifNotNil: [ workExpander expanded: viewModel isWorkExpanded ].
 					workSummaryUpdater requestUpdate ])
-]
-
-{ #category : #building }
-GtLACPAssistantMessageElement >> permissionElementFor: permission [
-	^ permission asElement
 ]
 
 { #category : #updating }
@@ -229,35 +256,12 @@ GtLACPAssistantMessageElement >> presentationStructure [
 		turn error}
 ]
 
-{ #category : #building }
-GtLACPAssistantMessageElement >> questionsElementFor: aTool [
-	| pane |
-	pane := BrVerticalPane new
-			id: ('acp-tool-' , aTool id asString) asSymbol;
-			hMatchParent;
-			vFitContent;
-			yourself.
-	aTool elicitationRequests
-		do: [ :question | 
-			pane
-				addChild: (question asElement
-						padding: BlInsets empty;
-						margin: (BlInsets
-								top: 2
-								left: 5
-								bottom: 2
-								right: 5);
-						yourself) ].
-	^ pane
-]
-
-{ #category : #private }
+{ #category : #updating }
 GtLACPAssistantMessageElement >> refresh [
 	| snapshot version |
 	version := viewModel renderingVersion.
 	renderedVersion = version ifTrue: [ ^ self ].
-	self messageEditors
-		keysAndValuesDo: [ :message :editor | self updateEditor: editor forMessage: message ].
+	self commentElements valuesDo: [ :element | element refresh ].
 	snapshot := self presentationStructure.
 	snapshot = structuralSnapshot
 		ifFalse: [ self removeChildren.
@@ -270,67 +274,11 @@ GtLACPAssistantMessageElement >> refresh [
 	renderedVersion := version
 ]
 
-{ #category : #private }
-GtLACPAssistantMessageElement >> textEditorForMessage: aMessage [
-	| editor |
-	editor := self messageEditors
-			at: aMessage
-			ifAbsentPut: [ self textElementFor: aMessage text ].
-	self updateEditor: editor forMessage: aMessage.
-	^ editor
-]
-
 { #category : #building }
 GtLACPAssistantMessageElement >> toolElementFor: aTool [
-	| pane line kind summary |
-	aTool elicitationRequests ifNotEmpty: [ ^ self questionsElementFor: aTool ].
-	kind := self
-			workBadge: 'tool'
-			id: ('acp-tool-kind-' , aTool id asString) asSymbol.
-	summary := BrButton new
-			id: ('acp-tool-summary-' , aTool id asString) asSymbol;
-			aptitude: BrGlamorousButtonWithLabelAptitude - BrGlamorousButtonExteriorAptitude;
-			hMatchParent;
-			alignCenterLeft;
-			padding: BlInsets empty;
-			label: aTool summary;
-			action: [ :button | button phlow spawnObject: aTool ];
-			yourself.
-	line := BrHorizontalPane new
-			id: ('acp-tool-line-' , aTool id asString) asSymbol;
-			hMatchParent;
-			vFitContent;
-			addChild: kind;
-			addChild: summary;
-			yourself.
-	aTool permissionRequests
-		ifNotEmpty: [ line
-				addChild: (GtLACPInputNeededElement new
-						id: ('acp-tool-input-needed-' , aTool id asString) asSymbol;
-						margin: (BlInsets right: 6);
-						constraintsDo: [ :constraints | constraints linear vertical alignCenter ];
-						forTool: aTool;
-						yourself)
-				at: 2 ].
-	line
-		when: BlClickEvent
-		do: [ :event | 
-			event consumed: true.
-			line phlow spawnObject: aTool ].
-	pane := BrVerticalPane new
-			id: ('acp-tool-' , aTool id asString) asSymbol;
-			hMatchParent;
-			vFitContent;
-			margin: (BlInsets
-					top: 2
-					left: 5
-					bottom: 2
-					right: 5);
-			addChild: line;
-			yourself.
-	aTool permissionRequests
-		do: [ :permission | pane addChild: (self permissionElementFor: permission) ].
-	^ pane
+	^ GtLACPToolCallElement new
+		toolCall: aTool;
+		yourself
 ]
 
 { #category : #private }
@@ -342,17 +290,6 @@ GtLACPAssistantMessageElement >> updateContentChildren: elements in: content [
 			(content children asArray identityIndexOf: child) = index
 				ifFalse: [ child hasParent ifTrue: [ child removeFromParent ].
 					content addChild: child at: index ] ]
-]
-
-{ #category : #private }
-GtLACPAssistantMessageElement >> updateEditor: anEditor forMessage: aMessage [
-	| text |
-	text := aMessage text.
-	text = anEditor text asString ifTrue: [ ^ self ].
-	anEditor
-		text: (GtLMessageStyler new
-				objectRegistry: viewModel phlowContext objectRegistry;
-				privateStyle: text asRopedText)
 ]
 
 { #category : #building }
@@ -392,38 +329,24 @@ GtLACPAssistantMessageElement >> workContent [
  ^ self workContentFor: viewModel message
 ]
 
-{ #category : #private }
+{ #category : #building }
 GtLACPAssistantMessageElement >> workContentFor: anAssistantMessage [
 	| elements content |
 	elements := OrderedCollection new.
 	anAssistantMessage localActivityItems
-		do: [ :item | 
-			(item isKindOf: GtLACPToolCall)
-				ifTrue: [ elements add: (self toolElementFor: item) ]
-				ifFalse: [ item isInterSessionMessage
-						ifTrue: [ elements
-								add: (BrLabel new
-										aptitude: BrGlamorousLabelAptitude;
-										text: item chatLabel;
-										yourself) ].
-					elements
-						add: ((self textEditorForMessage: item)
-								id: ('acp-text-' , item identityHash asString) asSymbol;
-								yourself) ] ].
+		do: [ :item | item addWorkElementsTo: elements in: self ].
 	anAssistantMessage turn elicitationRequests
 		select: [ :each | each toolCall isNil ]
 		thenDo: [ :each | elements add: each asElement ].
 	anAssistantMessage delegatedMessages
 		do: [ :delegated | elements add: (self agentWorkElementFor: delegated) ].
-	(elements size = 1 and: [ elements first isKindOf: BrEditor ])
-		ifTrue: [ content := elements first ]
-		ifFalse: [ content := self workContents
-					at: anAssistantMessage
-					ifAbsentPut: [ BrVerticalPane new
-							hMatchParent;
-							vFitContent;
-							yourself ].
-			self updateContentChildren: elements in: content ].
+	content := self workContents
+			at: anAssistantMessage
+			ifAbsentPut: [ BrVerticalPane new
+					hMatchParent;
+					vFitContent;
+					yourself ].
+	self updateContentChildren: elements in: content.
 	anAssistantMessage == viewModel message
 		ifTrue: [ content id: viewModel workContentId ].
 	^ content

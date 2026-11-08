@@ -13,6 +13,11 @@ Class {
 }
 
 { #category : #converting }
+GtLACPToolCall >> addWorkElementsTo: elements in: anAssistantElement [
+	elements add: (anAssistantElement toolElementFor: self)
+]
+
+{ #category : #converting }
 GtLACPToolCall >> asConversationTreeNode [
  ^ GtLACPToolCallTreeNode new object: self; yourself
 ]

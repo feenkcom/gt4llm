@@ -287,25 +287,43 @@ GtLACPSessionExamples >> commentaryBetweenToolCalls [
 
 { #category : #examples }
 GtLACPSessionExamples >> commentaryRenderedBetweenTools [
- <gtExample>
- | element scripter |
- element := self commentaryBetweenToolCalls.
- scripter := BlScripter new model: element viewModel session; element: element; yourself.
- scripter click id: #'acp-work-toggle'; play.
- scripter assertStep: [ :step |
-  step id: #'acp-work-content'; satisfies: [ :pane |
-   | children tools commentary |
-   children := pane children asArray.
-   tools := children select: [ :child | child id asSymbol asString beginsWith: 'acp-tool-' ].
-   commentary := children detect: [ :child | (child isKindOf: BrEditor) and: [
-    child text asString = 'The first result suggests checking the runtime version.' ] ].
-   tools size = 2 and: [
-    (children indexOf: tools first) < (children indexOf: commentary) and: [
-     (children indexOf: commentary) < (children indexOf: tools second) ] ] ] ].
- scripter assertStep: [ :step | step id: #'acp-final-content'; satisfies: [ :pane |
-  (self editorsIn: pane) anySatisfy: [ :child |
-   (child isKindOf: BrEditor) and: [ child text asString = 'The runtime is compatible.' ] ] ] ].
- ^ scripter
+	<gtExample>
+	| element scripter |
+	element := self commentaryBetweenToolCalls.
+	scripter := BlScripter new
+			model: element viewModel session;
+			element: element;
+			yourself.
+	scripter click
+		id: #'acp-work-toggle';
+		play.
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-work-content';
+				satisfies: [ :pane | 
+					| children tools commentary |
+					children := pane children asArray.
+					tools := children
+							select: [ :child | child id asSymbol asString beginsWith: 'acp-tool-' ].
+					commentary := children
+							detect: [ :child | 
+								(child isKindOf: GtLACPAssistantCommentElement)
+									and: [ child editor text asString
+											= 'The first result suggests checking the runtime version.' ] ].
+					tools size = 2
+						and: [ (children indexOf: tools first) < (children indexOf: commentary)
+								and: [ (children indexOf: commentary) < (children indexOf: tools second) ] ] ] ].
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-final-content';
+				satisfies: [ :pane | 
+					(self editorsIn: pane)
+						anySatisfy: [ :child | 
+							(child isKindOf: BrEditor)
+								and: [ child text asString = 'The runtime is compatible.' ] ] ] ].
+	^ scripter
 ]
 
 { #category : #examples }
@@ -669,13 +687,15 @@ GtLACPSessionExamples >> finalReplyManualCollapsePersists [
 { #category : #examples }
 GtLACPSessionExamples >> finalReplyRetainsStreamedEditor [
 	<gtExample>
-	| scripter session turn row editor |
+	| scripter session turn row editor element |
 	scripter := self streamAppendsToExistingCommentaryEditor.
 	session := scripter model.
 	turn := session currentTurn.
 	row := (scripter element query // #'acp-message-2') anyOne.
 	editor := (self editorsIn: row)
 			detect: [ :each | each text asString = 'Hello world' ].
+	element := editor parent.
+	self assert: element class equals: GtLACPAssistantCommentElement.
 	scripter
 		doStep: [ :step | 
 			step
@@ -687,6 +707,8 @@ GtLACPSessionExamples >> finalReplyRetainsStreamedEditor [
 	self assert: session isReady.
 	self assert: (scripter element query // #'acp-message-2') anyOne == row.
 	self assert: (row query // #'acp-final-text') anyOne == editor.
+	self assert: editor parent == element.
+	self assert: element message == turn assistantMessage finalMessages first.
 	self assert: editor text asString equals: 'Hello world'.
 	self assert: (row query // #'acp-final-section') anyOne isExpanded.
 	self assertNoRenderingErrorsIn: scripter.
@@ -1113,28 +1135,45 @@ GtLACPSessionExamples >> reasoningBetweenToolCalls [
 
 { #category : #examples }
 GtLACPSessionExamples >> reasoningRenderedBetweenTools [
- <gtExample>
- | element scripter |
- element := self reasoningBetweenToolCalls.
- scripter := BlScripter new model: element viewModel session; element: element; yourself.
- scripter click id: #'acp-work-toggle'; play.
- scripter assertStep: [ :step |
-  step id: #'acp-work-content'; satisfies: [ :pane |
-   | children tools firstThought secondThought |
-   children := pane children asArray.
-   tools := children select: [ :child | child id asSymbol asString beginsWith: 'acp-tool-' ].
-   firstThought := children detect: [ :child |
-    (child isKindOf: BrEditor) and: [ child text asString = 'The files suggest checking the configuration.' ] ].
-   secondThought := children detect: [ :child |
-    (child isKindOf: BrEditor) and: [ child text asString = 'Now I can explain the result.' ] ].
-   tools size = 2 and: [
-    (children indexOf: tools first) < (children indexOf: firstThought) and: [
-     (children indexOf: firstThought) < (children indexOf: tools second) and: [
-      (children indexOf: tools second) < (children indexOf: secondThought) ] ] ] ] ].
- scripter assertStep: [ :step | step id: #'acp-final-content'; satisfies: [ :pane |
-  (self editorsIn: pane) anySatisfy: [ :child |
-   (child isKindOf: BrEditor) and: [ child text asString beginsWith: 'Finished.' ] ] ] ].
- ^ scripter
+	<gtExample>
+	| element scripter |
+	element := self reasoningBetweenToolCalls.
+	scripter := BlScripter new
+			model: element viewModel session;
+			element: element;
+			yourself.
+	scripter click
+		id: #'acp-work-toggle';
+		play.
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-work-content';
+				satisfies: [ :pane | 
+					| children tools firstThought secondThought |
+					children := pane children asArray.
+					tools := children
+							select: [ :child | child id asSymbol asString beginsWith: 'acp-tool-' ].
+					firstThought := children
+							detect: [ :child | 
+								(child isKindOf: GtLACPAssistantCommentElement)
+									and: [ child editor text asString = 'The files suggest checking the configuration.' ] ].
+					secondThought := children
+							detect: [ :child | 
+								(child isKindOf: GtLACPAssistantCommentElement)
+									and: [ child editor text asString = 'Now I can explain the result.' ] ].
+					tools size = 2
+						and: [ (children indexOf: tools first) < (children indexOf: firstThought)
+								and: [ (children indexOf: firstThought) < (children indexOf: tools second)
+										and: [ (children indexOf: tools second) < (children indexOf: secondThought) ] ] ] ] ].
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-final-content';
+				satisfies: [ :pane | 
+					(self editorsIn: pane)
+						anySatisfy: [ :child | (child isKindOf: BrEditor) and: [ child text asString beginsWith: 'Finished.' ] ] ] ].
+	^ scripter
 ]
 
 { #category : #examples }
@@ -1201,12 +1240,14 @@ GtLACPSessionExamples >> scrollingUpCancelsPendingFollow [
  ^ scripter
 ]
 
-{ #category : #'examples - streaming' }
-GtLACPSessionExamples >> secondCommentaryGroupsExistingEditor [
+{ #category : #examples }
+GtLACPSessionExamples >> secondCommentaryKeepsWorkContent [
 	<gtExample>
-	| scripter editor content |
+	| scripter element editor content originalContent |
 	scripter := self singleCommentaryAppendsWithoutReparenting.
-	editor := (scripter element query // #'acp-work-content') anyOne.
+	originalContent := (scripter element query // #'acp-work-content') anyOne.
+	element := originalContent children first.
+	editor := element editor.
 	scripter
 		doStep: [ :step | 
 			step
@@ -1218,10 +1259,16 @@ GtLACPSessionExamples >> secondCommentaryGroupsExistingEditor [
 											'text' -> 'Another message'} asDictionary} asDictionary
 						to: scripter model ] ].
 	content := (scripter element query // #'acp-work-content') anyOne.
+	self assert: content == originalContent.
+	self assert: element parent == originalContent.
 	self assert: content children size equals: 2.
-	self assert: content children first == editor.
+	self assert: content children first == element.
+	self assert: element editor == editor.
+	self assert: editor parent == element.
 	self assert: editor text asString equals: 'Hello world'.
-	self assert: content children second text asString equals: 'Another message'.
+	self
+		assert: content children second editor text asString
+		equals: 'Another message'.
 	self assertNoRenderingErrorsIn: scripter.
 	^ scripter
 ]
@@ -1892,13 +1939,15 @@ GtLACPSessionExamples >> shortToolCallLabels [
 	^ scripter
 ]
 
-{ #category : #'examples - streaming' }
+{ #category : #examples }
 GtLACPSessionExamples >> singleCommentaryAppendsWithoutReparenting [
 	<gtExample>
-	| scripter editor parent |
-	scripter := self singleCommentaryUsesEditorAsContent.
-	editor := (scripter element query // #'acp-work-content') anyOne.
-	parent := editor parent.
+	| scripter content element editor parent |
+	scripter := self singleCommentaryInWorkContent.
+	content := (scripter element query // #'acp-work-content') anyOne.
+	element := content children first.
+	editor := element editor.
+	parent := element parent.
 	scripter
 		doStep: [ :step | 
 			step
@@ -1910,15 +1959,17 @@ GtLACPSessionExamples >> singleCommentaryAppendsWithoutReparenting [
 											'text' -> ' world'} asDictionary} asDictionary
 						to: scripter model ] ].
 
-	self assert: (scripter element query // #'acp-work-content') anyOne == editor.
-	self assert: editor parent == parent.
+	self assert: (scripter element query // #'acp-work-content') anyOne == content.
+	self assert: element parent == parent.
+	self assert: element editor == editor.
+	self assert: editor parent == element.
 	self assert: editor text asString equals: 'Hello world'.
 	self assertNoRenderingErrorsIn: scripter.
 	^ scripter
 ]
 
-{ #category : #'examples - streaming' }
-GtLACPSessionExamples >> singleCommentaryUsesEditorAsContent [
+{ #category : #examples }
+GtLACPSessionExamples >> singleCommentaryInWorkContent [
 	<gtExample>
 	| session chat scripter |
 	session := GtLACPExamples new session.
@@ -1941,7 +1992,11 @@ GtLACPSessionExamples >> singleCommentaryUsesEditorAsContent [
 		assertStep: [ :step | 
 			step
 				id: #'acp-work-content';
-				satisfies: [ :content | (content isKindOf: BrEditor) and: [ content text asString = 'Hello' ] ] ].
+				satisfies: [ :content | 
+					content class = BrVerticalPane
+						and: [ content children size = 1
+								and: [ content children first class = GtLACPAssistantCommentElement
+										and: [ content children first editor text asString = 'Hello' ] ] ] ] ].
 	self assertNoRenderingErrorsIn: scripter.
 	^ scripter
 ]
@@ -2400,6 +2455,47 @@ GtLACPSessionExamples >> typedMessage [
  scripter assertStep: [ :step |
   step id: #'acp-action'; satisfies: [ :button | button isEnabled ] ].
  ^ scripter
+]
+
+{ #category : #examples }
+GtLACPSessionExamples >> typedToolCallElement [
+	<gtExample>
+	| scripter tool |
+	scripter := self toolCallsShownAsLines.
+	tool := scripter model currentTurn toolCalls first.
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-tool-tool-1';
+				satisfies: [ :element | 
+					element class = GtLACPToolCallElement
+						and: [ element toolCall == tool
+								and: [ element children size = (1 + tool permissionRequests size)
+										and: [ element children first children first class = GtLACPWorkBadgeElement ] ] ] ] ].
+	^ scripter
+]
+
+{ #category : #examples }
+GtLACPSessionExamples >> typedToolCallsWithoutPermissions [
+	<gtExample>
+	| scripter |
+	scripter := self commentaryRenderedBetweenTools.
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-work-content';
+				satisfies: [ :content | 
+					| tools |
+					tools := content children
+							select: [ :child | child isKindOf: GtLACPToolCallElement ].
+					tools size = 2
+						and: [ tools
+								allSatisfy: [ :element | 
+									element toolCall permissionRequests isEmpty
+										and: [ element children size = 1
+												and: [ element children first children first class = GtLACPWorkBadgeElement ] ] ] ] ] ].
+	self assertNoRenderingErrorsIn: scripter.
+	^ scripter
 ]
 
 { #category : #examples }
